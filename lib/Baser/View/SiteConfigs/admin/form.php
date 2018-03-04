@@ -12,7 +12,17 @@
 
 /**
  * [管理画面] サイト設定 フォーム
+ * @var BcAppView $this
  */
+$this->BcBaser->i18nScript([
+    'alertMessage1' => __d('baser', '管理システムをSSLに切り替える場合には、SSL用のURLを登録してください。'),
+	'alertMessage2' => __d('baser', '機能制限のセーフモードで動作しています。テーマの切り替えを行う場合、あらかじめ切り替え対象のテーマ内に、データベースに登録されているページカテゴリ用のフォルダを作成しておき、書込権限を与えておく必要があります。\nページカテゴリ用のフォルダが存在しない状態でテーマの切り替えを実行すると、対象ページカテゴリ内のWebページは正常に表示できなくなりますのでご注意ください。'),
+	'alertMessage3' => __d('baser', 'テストメールを送信に失敗しました。'),
+    'confirmMessage1' => __d('baser', '管理システムをSSLに切り替えようとしています。よろしいですか？<br><br>サーバがSSLに対応していない場合、管理システムを表示する事ができなくなってしまいますのでご注意ください。<br><br>もし、表示する事ができなくなってしまった場合は、 /app/Config/install.php の、 BcEnv.sslUrl の値を調整するか、BcApp.adminSsl の値を false に書き換えて復旧してください。'),
+	'confirmMessage2' => __d('baser', 'テストメールを送信します。いいですか？'),
+    'infoMessage1' => __d('baser', 'テストメールを送信しました。'),
+    'confirmTitle1' => __d('baser', '管理システムSSL設定確認')
+]);
 $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsFormScript',
 	'data-safeModeOn' => (string) $safeModeOn,
 	'data-isAdminSsl' => (string) $this->request->data['SiteConfig']['admin_ssl']

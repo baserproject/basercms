@@ -27,17 +27,6 @@ class BcHtmlHelper extends HtmlHelper {
  * @var array
  */
 	public $helpers = ['Js'];
-
-/**
- * BcHtmlHelper constructor.
- *
- * @param \View $View
- * @param array $settings
- */
-	public function __construct(\View $View, array $settings = []) {
-		parent::__construct($View, $settings);
-		$this->scriptBlock('var bcI18n = {}', ['inline' => false]);
-	}
 	
 /**
  * タグにラッピングされていないパンくずデータを取得する
@@ -54,8 +43,13 @@ class BcHtmlHelper extends HtmlHelper {
  * @param array $value 値（連想配列）
  */
 	public function setScript($variable, $value, $options = []) {
-		$options = array_merge(['inline' => false], $options);
-		$code = h($variable) . ' = ' . json_encode(h($value));
+		$options = array_merge(['inline' => false, 'declaration' => true], $options);
+		$code = '';
+		if($options['declaration']) {
+			$code = 'var ';
+		}
+		$code .= h($variable) . ' = ' . json_encode(h($value)) . ';';
+		unset($options['declaration']);
 		$result = $this->scriptBlock($code, $options);
 		if($options['inline']) {
 			return $result;
@@ -64,6 +58,14 @@ class BcHtmlHelper extends HtmlHelper {
 	}
 
 /**
+ * i18n 用の変数を宣言する
+ * @return string
+ */
+	public function declarationI18n() {
+		return $this->setScript('bcI18n', [], ['inline' => true]);
+	}
+	
+/**
  * JavaScript に、翻訳データを引き渡す
  * `bcI18n.キー名` で参照可能
  * （例）bcI18n.alertMessage
@@ -71,7 +73,7 @@ class BcHtmlHelper extends HtmlHelper {
  * @param array $value 値（連想配列）
  */
 	public function i18nScript($data, $options = []) {
-		$options = array_merge(['inline' => false], $options);
+		$options = array_merge(['inline' => false, 'declaration' => false], $options);
 		if(is_array($data)) {
 			$result = '';
 			foreach($data as $key => $value) {

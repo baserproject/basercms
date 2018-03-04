@@ -2756,6 +2756,14 @@ END_FLASH;
 	}
 
 	/**
+	 * i18n 用の変数を宣言する
+	 * @return string
+	 */
+	public function declarationI18n() {
+		return $this->BcHtml->declarationI18n();
+	}
+	
+	/**
 	 * JavaScript に、翻訳データを引き渡す
 	 * `bcI18n.キー名` で参照可能
 	 * （例）bcI18n.alertMessage

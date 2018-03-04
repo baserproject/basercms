@@ -36,6 +36,17 @@
 		<?php endif ?>
 		<!--[if IE]><?php $this->BcBaser->js(['admin/vendors/excanvas']) ?><![endif]-->
 		<?php
+        echo $this->BcBaser->declarationI18n();
+        echo $this->BcBaser->i18nScript([
+			'commonCancel'              => __d('baser', 'キャンセル'),
+			'commonSave'                => __d('baser', '保存'),
+			'commonSaveFailedMessage'   => __d('baser', '保存に失敗しました。'),
+			'commonConfirmDeleteMessage'=> __d('baser', '本当に削除してもよろしいですか？'),
+            'favoriteTitle1'            => __d('baser', 'よく使う項目登録'),
+			'favoriteTitle2'            => __d('baser', 'よく使う項目編集'),
+            'favoriteAlertMessage1'     => __d('baser', '並び替えの保存に失敗しました。'),
+			'favoriteAlertMessage2'     => __d('baser', 'よく使う項目の追加に失敗しました。'),
+        ], ['inline' => true]);
 		$this->BcBaser->js([
 			'admin/vendors/jquery-2.1.4.min',
 			'admin/vendors/jquery-ui-1.11.4.min',

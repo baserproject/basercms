@@ -12,9 +12,15 @@
 
 /**
  * [ADMIN] 統合コンテンツ一覧
+ * @var BcAppView $this
  */
 $currentUser = BcUtil::loginUser('admin');
 $this->BcBaser->js('admin/vendors/jquery.jstree-3.3.1/jstree.min', false);
+$this->BcBaser->i18nScript([
+    'confirmMessage1' => __d('baser', 'コンテンツをゴミ箱に移動してもよろしいですか？'),
+	'confirmMessage2' => __d('baser', '選択したデータを全てゴミ箱に移動します。よろしいですか？\n※ エイリアスは直接削除します。'),
+	'infoMessage1' => __d('baser', 'ターゲットと同じフォルダにコピー「%s」を作成しました。一覧に表示されていない場合は検索してください。'),
+]);
 $this->BcBaser->js('admin/contents/index', false, [
 	'id' => 'AdminContentsIndexScript',
 	'data-isAdmin' => BcUtil::isAdminUser(),

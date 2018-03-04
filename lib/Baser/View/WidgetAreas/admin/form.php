@@ -12,7 +12,18 @@
 
 /**
  * [ADMIN] ウィジェットエリア編集
+ * @var BcAppView $this
  */
+$this->BcBaser->i18nScript([
+	'alertMessage1' => __d('baser', 'ウィジェットの削除に失敗しました。'),
+	'alertMessage2' => __d('baser', 'ウィジェットエリアの並び替えの保存に失敗しました。'),
+	'alertMessage3' => __d('baser', 'ウィジェットエリア名の保存に失敗しました。'),
+	'alertMessage4' => __d('baser', 'ウィジェットの保存に失敗しました。'),
+	'confirmMessage1' => __d('baser', '設定内容も削除されますが、本当に削除してもいいですか？'),
+	'infoMessage1' => __d('baser', 'ウィジェットを削除しました。'),
+	'infoMessage2' => __d('baser', 'ウィジェットエリア名を保存しました。'),
+	'infoMessage3' => __d('baser', 'ウィジェットを保存しました。'),
+]);
 $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormScript',
 	'data-delWidgetUrl' => $this->BcBaser->getUrl(['controller' => 'widget_areas', 'action' => 'del_widget', $this->BcForm->value('WidgetArea.id')]),
 	'data-currentAction' =>$this->request->action

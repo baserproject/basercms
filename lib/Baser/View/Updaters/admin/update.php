@@ -19,6 +19,9 @@ if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $sit
 } else {
 	$requireUpdate = false;
 }
+$this->BcBaser->i18nScript([
+	'confirmMessage1' => __d('baser', 'アップデートを実行します。よろしいですか？'),
+]);
 $this->BcBaser->js('admin/updaters/update', false);
 ?>
 
