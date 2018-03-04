@@ -549,6 +549,10 @@ msgstr ""
 msgid "無効な処理です。"
 msgstr ""
 
+#: Controller/ContentFoldersController.php:57
+msgid "フォルダ「%s」を追加しました。"
+msgstr ""
+
 #: Controller/ContentFoldersController.php:60
 #: Controller/ContentLinksController.php:53
 #: Controller/ContentsController.php:307
@@ -562,14 +566,26 @@ msgstr ""
 msgid "フォルダ編集"
 msgstr ""
 
+#: Controller/ContentFoldersController.php:81
+msgid "フォルダ「%s」を更新しました。"
+msgstr ""
+
 #: Controller/ContentFoldersController.php:89
 #: Controller/ContentLinksController.php:82
 #: Controller/ContentsController.php:338;375
 msgid "保存中にエラーが発生しました。入力内容を確認してください。"
 msgstr ""
 
+#: Controller/ContentLinksController.php:50
+msgid "リンク「%s」を追加しました。"
+msgstr ""
+
 #: Controller/ContentLinksController.php:64
 msgid "リンク編集"
+msgstr ""
+
+#: Controller/ContentLinksController.php:74
+msgid "リンク「%s」を更新しました。"
 msgstr ""
 
 #: Controller/ContentsController.php:59
@@ -767,6 +783,14 @@ msgstr ""
 
 #: Controller/InstallationsController.php:593
 msgid "データベースへの接続に成功しましたが、プレフィックスが重複するテーブルが存在します。"
+msgstr ""
+
+#: Controller/InstallationsController.php:597
+msgid "データベースへの接続でエラーが発生しました。"
+msgstr ""
+
+#: Controller/InstallationsController.php:603
+msgid "データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br>サーバー上に指定されたデータベースが存在しない可能性が高いです。"
 msgstr ""
 
 #: Controller/InstallationsController.php:661
@@ -1217,6 +1241,10 @@ msgstr ""
 msgid "初期データのバージョンが違うか、初期データの構造が壊れています。"
 msgstr ""
 
+#: Controller/ThemesController.php:202
+msgid "%s の初期データのロードに失敗しました。"
+msgstr ""
+
 #: Controller/ThemesController.php:215
 #: Controller/Component/BcManagerComponent.php:571
 msgid "コアの初期データのロードに失敗しました。"
@@ -1440,6 +1468,10 @@ msgstr ""
 msgid "新規ユーザーグループ登録"
 msgstr ""
 
+#: Controller/UsersController.php:133
+msgid "ようこそ、%s さん。"
+msgstr ""
+
 #: Controller/UsersController.php:136
 msgid "アカウント名、パスワードが間違っています。"
 msgstr ""
@@ -1600,6 +1632,10 @@ msgstr ""
 
 #: Controller/Component/BcManagerComponent.php:147
 msgid "エディタテンプレートイメージの配置に失敗しました。files フォルダの書き込み権限を確認してください。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:173
+msgid "コアプラグイン %s のインストールに失敗しました。"
 msgstr ""
 
 #: Controller/Component/BcManagerComponent.php:284
@@ -1833,6 +1869,10 @@ msgstr ""
 
 #: Model/ContentLink.php:38
 msgid "リンク先URLを入力してください。"
+msgstr ""
+
+#: Model/Dblog.php:50
+msgid "ログ内容を入力してください。"
 msgstr ""
 
 #: Model/EditorTemplate.php:57
@@ -2809,6 +2849,7 @@ msgid "概要"
 msgstr ""
 
 #: Plugin/Blog/View/BlogPosts/admin/form.php:132
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:46
 #: Plugin/Blog/View/Elements/admin/searches/blog_posts_index.php:28
 #: View/SiteConfigs/admin/form.php:255
 msgid "タグ"
@@ -2871,6 +2912,10 @@ msgstr ""
 
 #: Plugin/Blog/View/BlogTags/admin/index.php:25
 msgid "このデータを本当に削除してもいいですか？\\nこのタグに関連する記事は削除されません。"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/blog_comments.php:66
+msgid "認証画像"
 msgstr ""
 
 #: Plugin/Blog/View/Elements/admin/blog_categories/index_list.php:27
@@ -3099,6 +3144,10 @@ msgstr ""
 msgid "カテゴリ"
 msgstr ""
 
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:55
+msgid "コメント"
+msgstr ""
+
 #: Plugin/Blog/View/Elements/admin/blog_posts/index_row.php:29
 #: Plugin/Mail/View/Elements/admin/helps/mail_fields_index.php:22
 #: Plugin/Mail/View/Elements/admin/mail_fields/index_row.php:37
@@ -3247,6 +3296,10 @@ msgstr ""
 #: View/Elements/admin/searches/search_indices_index.php:37
 #: View/Elements/admin/searches/users_index.php:27
 msgid "クリア"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:20
+msgid "%s 管理メニュー"
 msgstr ""
 
 #: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:24
@@ -3752,12 +3805,12 @@ msgstr ""
 msgid "複数のカテゴリを指定する場合は、カテゴリ名を|（半角縦棒）で区切ります。"
 msgstr ""
 
-#: Plugin/Feed/View/Helper/FeedHelper.php:69
-msgid "メソッド：FeedHelper::saveCachetime()"
+#: Plugin/Feed/View/Helper/FeedHelper.php:69;75
+msgid "メソッド"
 msgstr ""
 
-#: Plugin/Feed/View/Helper/FeedHelper.php:75
-msgid "メソッド：FeedHelper::cacheHeader()"
+#: Plugin/Feed/View/Helper/FeedHelper.php:69;75
+msgid "このメソッドは非推奨となりました。代替機能はありません。この行を削除してください。"
 msgstr ""
 
 #: Plugin/Mail/config.php:13
@@ -4779,6 +4832,10 @@ msgstr ""
 msgid "保存者"
 msgstr ""
 
+#: Plugin/Uploader/View/Elements/admin/uploader_files/index.php:43
+msgid "ファイル情報編集"
+msgstr ""
+
 #: Plugin/Uploader/View/Elements/admin/uploader_files/index_list.php:31;59
 #: Plugin/Uploader/View/Elements/admin/uploader_files/index_panel.php:34
 msgid "カテゴリ指定なし"
@@ -4830,6 +4887,10 @@ msgstr ""
 msgid "携帯サイズ（大）"
 msgstr ""
 
+#: Plugin/Uploader/View/UploaderConfigs/admin/index.php:70
+msgid "携帯サイズ（小）"
+msgstr ""
+
 #: Plugin/Uploader/View/UploaderConfigs/admin/index.php:92
 msgid "レイアウトタイプ"
 msgstr ""
@@ -4866,6 +4927,11 @@ msgstr ""
 #: View/Pages/admin/form.php:50
 #: View/Tools/admin/index.php:29
 msgid "固定ページテンプレート"
+msgstr ""
+
+#: View/ContentLinks/admin/edit.php:21
+#: View/ThemeConfigs/admin/form.php:64;73;82;91;100;109
+msgid "リンク先URL"
 msgstr ""
 
 #: View/Contents/admin/ajax_contents_info.php:18
@@ -5036,7 +5102,7 @@ msgstr ""
 msgid "制限"
 msgstr ""
 
-#: View/Elements/admin/favorite_menu.php:24;25
+#: View/Elements/admin/favorite_menu.php:24;25;50
 msgid "よく使う項目"
 msgstr ""
 
@@ -5093,6 +5159,10 @@ msgstr ""
 msgid "次へ >"
 msgstr ""
 
+#: View/Elements/admin/permission.php:19
+msgid "アクセス制限登録"
+msgstr ""
+
 #: View/Elements/admin/permission.php:23
 #: View/Elements/admin/searches/users_index.php:21
 #: View/Permissions/admin/form.php:30
@@ -5127,6 +5197,14 @@ msgstr ""
 
 #: View/Elements/admin/toolbar.php:51
 msgid "baserCMS管理システム"
+msgstr ""
+
+#: View/Elements/admin/toolbar.php:64
+msgid "インストールモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。"
+msgstr ""
+
+#: View/Elements/admin/toolbar.php:66
+msgid "デバッグモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。"
 msgstr ""
 
 #: View/Elements/admin/toolbar.php:66
@@ -7176,7 +7254,7 @@ msgid "データベースのポートナンバーを入力してください。"
 msgstr ""
 
 #: View/Installations/admin/step3.php:172
-msgid "データベースサーバーの場合は、データベースの接続情報を入力し接続テストを実行してください。<br>MySQL / PostgreSQLの場合は、データベースが存在し初期化されている必要があります。<br><strong>既に用意したデータベースにデータが存在する場合は、初期データで上書きされてしまうので注意してください。<br>プレフィックスを活用しましょう。"
+msgid "データベースサーバーの場合は、データベースの接続情報を入力し接続テストを実行してください。<br>MySQL / PostgreSQLの場合は、データベースが存在し初期化されている必要があります。<br><strong>既に用意したデータベースにデータが存在する場合は、初期データで上書きされてしまうので注意してください。<br>プレフィックスを活用しましょう。</strong>"
 msgstr ""
 
 #: View/Installations/admin/step3.php:174
@@ -7768,10 +7846,6 @@ msgstr ""
 
 #: View/ThemeConfigs/admin/form.php:59
 msgid "ロゴ"
-msgstr ""
-
-#: View/ThemeConfigs/admin/form.php:64;73;82;91;100;109
-msgid "リンク先URL"
 msgstr ""
 
 #: View/ThemeConfigs/admin/form.php:68

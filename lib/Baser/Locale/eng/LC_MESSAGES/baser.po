@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-02-27 18:23+0900\n"
+"PO-Revision-Date: 2018-03-03 17:06+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -244,10 +244,12 @@ msgid ""
 "下記のパスに自動配置しますので書き込み権限を与えてください。また、既に存在す"
 "る場合には上書きされてしまいますのでご注意ください。"
 msgstr ""
+"Placing on following path, so please give write permission to it. Please "
+"note it will be overwritten if it already exists."
 
 #: Config/update/4.0.1/config.php:4
 msgid "カスタマイズされている方は、事前に退避させてください。"
-msgstr ""
+msgstr "Please evacuate it beforehand if you customized it."
 
 #: Config/update/4.0.1/config.php:10
 msgid ""
@@ -255,6 +257,9 @@ msgid ""
 "マイズしたいファイルだけ、テーマフォルダ内の同階層に配置するとそちらを優先す"
 "る仕様となっています。"
 msgstr ""
+"If you placed image files, css files, Javascript files that you want to "
+"customize on the same directory as Theme Folder, they will be prioritized, "
+"for your information."
 
 #: Config/update/4.0.1/updater.php:35
 msgid "contents テーブルのデータ更新に成功しました。"
@@ -469,11 +474,11 @@ msgstr "Couldn't give the write permission to /app/db/ ."
 
 #: Console/Command/BcManagerShell.php:186
 msgid "SQLite や CSV など、ファイルベースのデータベースを利用するには、"
-msgstr ""
+msgstr "To use file based database like SQLite or CSV,"
 
 #: Console/Command/BcManagerShell.php:187
 msgid "手動で書き込み権限を与えてください。"
-msgstr ""
+msgstr "please give write permission manually."
 
 #: Console/Command/BcManagerShell.php:192
 msgid "不明"
@@ -572,6 +577,10 @@ msgstr ""
 msgid "無効な処理です。"
 msgstr "Invalid process."
 
+#: Controller/ContentFoldersController.php:57
+msgid "フォルダ「%s」を追加しました。"
+msgstr "Added Folder \"%s\"."
+
 #: Controller/ContentFoldersController.php:60
 #: Controller/ContentLinksController.php:53
 #: Controller/ContentsController.php:307
@@ -585,21 +594,33 @@ msgstr "Error occurred during saving."
 msgid "フォルダ編集"
 msgstr "Edit Folder"
 
+#: Controller/ContentFoldersController.php:81
+msgid "フォルダ「%s」を更新しました。"
+msgstr "Updated Folder \"%s\"."
+
 #: Controller/ContentFoldersController.php:89
 #: Controller/ContentLinksController.php:82
 #: Controller/ContentsController.php:338;375
 msgid "保存中にエラーが発生しました。入力内容を確認してください。"
 msgstr "Error occurred during saving. Please check entry."
 
+#: Controller/ContentLinksController.php:50
+msgid "リンク「%s」を追加しました。"
+msgstr "Added Link \"%s\"."
+
 #: Controller/ContentLinksController.php:64
 msgid "リンク編集"
 msgstr "Edit Link"
+
+#: Controller/ContentLinksController.php:74
+msgid "リンク「%s」を更新しました。"
+msgstr "Updated Link \"%s\"."
 
 #: Controller/ContentsController.php:59
 #: Controller/Component/BcContentsComponent.php:201
 #: View/Elements/admin/submenus/contents.php:23
 msgid "コンテンツ一覧"
-msgstr "Contents List"
+msgstr "Content List"
 
 #: Controller/ContentsController.php:62
 #: View/Elements/admin/submenus/contents.php:27
@@ -608,11 +629,11 @@ msgstr "Trash"
 
 #: Controller/ContentsController.php:150
 msgid "ツリー形式"
-msgstr "Tree"
+msgstr "Tree Format"
 
 #: Controller/ContentsController.php:150
 msgid "表形式"
-msgstr "Table"
+msgstr "Table Format"
 
 #: Controller/ContentsController.php:300
 msgid "「%s」のエイリアス「%s」を追加しました。"
@@ -620,7 +641,7 @@ msgstr "Added “%s”’s Alias \"%s\"."
 
 #: Controller/ContentsController.php:318
 msgid "コンテンツ編集"
-msgstr "Edit Contents"
+msgstr "Edit Content"
 
 #: Controller/ContentsController.php:328
 msgid "「%s」を更新しました。"
@@ -800,6 +821,18 @@ msgid ""
 "します。"
 msgstr ""
 "Succeeded connecting to the database, but duplicated prefix tables exist."
+
+#: Controller/InstallationsController.php:597
+msgid "データベースへの接続でエラーが発生しました。"
+msgstr "Error has occurred when connecting to the database."
+
+#: Controller/InstallationsController.php:603
+msgid ""
+"データベースへの接続でエラーが発生しました。データベース設定を見直してくださ"
+"い。<br>サーバー上に指定されたデータベースが存在しない可能性が高いです。"
+msgstr ""
+"Error has occurred when connecting to the database. Please re-check the "
+"database config.<br>It’s likely specified database is not on server."
 
 #: Controller/InstallationsController.php:661
 msgid "baserCMSのインストールを開始できません"
@@ -1132,7 +1165,7 @@ msgstr "E-mail Template"
 
 #: Controller/ThemeFilesController.php:69
 msgid "コンテンツテンプレート"
-msgstr "Contents Template"
+msgstr "Content Template"
 
 #: Controller/ThemeFilesController.php:70
 msgid "スタイルシート"
@@ -1159,7 +1192,7 @@ msgstr "Failed creating File %s."
 
 #: Controller/ThemeFilesController.php:253
 msgid "[%s] %s 作成"
-msgstr "[%s] Create %s"
+msgstr "[%s] Add %s"
 
 #: Controller/ThemeFilesController.php:323
 msgid "ファイル %s を更新しました。"
@@ -1255,6 +1288,10 @@ msgstr ""
 msgid "初期データのバージョンが違うか、初期データの構造が壊れています。"
 msgstr ""
 "Initial data’s version is different, or initial data’s structure is broken."
+
+#: Controller/ThemesController.php:202
+msgid "%s の初期データのロードに失敗しました。"
+msgstr "Failed loading of %s’s initial data."
 
 #: Controller/ThemesController.php:215
 #: Controller/Component/BcManagerComponent.php:571
@@ -1519,6 +1556,10 @@ msgstr "User Group List"
 msgid "新規ユーザーグループ登録"
 msgstr "Add User Group"
 
+#: Controller/UsersController.php:133
+msgid "ようこそ、%s さん。"
+msgstr "Welcome, %s."
+
 #: Controller/UsersController.php:136
 msgid "アカウント名、パスワードが間違っています。"
 msgstr "Account name or password is wrong."
@@ -1715,6 +1756,10 @@ msgid ""
 msgstr ""
 "Failed placing Editor Template Image. Please check files folder's write "
 "permission."
+
+#: Controller/Component/BcManagerComponent.php:173
+msgid "コアプラグイン %s のインストールに失敗しました。"
+msgstr "Failed installing Core Plugin %s."
 
 #: Controller/Component/BcManagerComponent.php:284
 msgid "プラグインの有効化に失敗しました。"
@@ -1965,6 +2010,10 @@ msgstr "Follow Parent Folder’s settings (%s)"
 #: Model/ContentLink.php:38
 msgid "リンク先URLを入力してください。"
 msgstr "Please enter linked URL."
+
+#: Model/Dblog.php:50
+msgid "ログ内容を入力してください。"
+msgstr "Please enter log content."
 
 #: Model/EditorTemplate.php:57 Plugin/Feed/Model/FeedConfig.php:63
 msgid "テンプレート名を入力してください。"
@@ -2345,10 +2394,8 @@ msgid "複数設置可能なシンプルブログ"
 msgstr "Multi-Placable Simple Blog"
 
 #: Plugin/Blog/Config/setting.php:17
-#, fuzzy
-#| msgid "メールプラグイン"
 msgid "ブログプラグイン"
-msgstr "Mail Plugin"
+msgstr "Blog Plugin"
 
 #: Plugin/Blog/Config/setting.php:19
 #: Plugin/Blog/Controller/BlogTagsController.php:62
@@ -2357,8 +2404,6 @@ msgid "タグ一覧"
 msgstr "Tag List"
 
 #: Plugin/Blog/Config/setting.php:20
-#, fuzzy
-#| msgid "新規タグ登録"
 msgid "タグ登録"
 msgstr "Add Tag"
 
@@ -2904,7 +2949,7 @@ msgstr ""
 
 #: Plugin/Blog/View/BlogContents/admin/form.php:152
 msgid "コンテンツテンプレート名"
-msgstr "Contents Template Name"
+msgstr "Content Template Name"
 
 #: Plugin/Blog/View/BlogContents/admin/form.php:161
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:104
@@ -2977,6 +3022,7 @@ msgid "概要"
 msgstr "Summary"
 
 #: Plugin/Blog/View/BlogPosts/admin/form.php:132
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:46
 #: Plugin/Blog/View/Elements/admin/searches/blog_posts_index.php:28
 #: View/SiteConfigs/admin/form.php:255
 msgid "タグ"
@@ -3048,6 +3094,10 @@ msgid ""
 msgstr ""
 "Are you sure to delete this data?\n"
 "Articles related to thisTag won't be deleted."
+
+#: Plugin/Blog/View/Elements/blog_comments.php:66
+msgid "認証画像"
+msgstr "Authorization Image"
 
 #: Plugin/Blog/View/Elements/admin/blog_categories/index_list.php:27
 #: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:30
@@ -3275,6 +3325,10 @@ msgstr "Eye-catch"
 msgid "カテゴリ"
 msgstr "Category"
 
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:55
+msgid "コメント"
+msgstr "Comment"
+
 #: Plugin/Blog/View/Elements/admin/blog_posts/index_row.php:29
 #: Plugin/Mail/View/Elements/admin/helps/mail_fields_index.php:22
 #: Plugin/Mail/View/Elements/admin/mail_fields/index_row.php:37
@@ -3448,7 +3502,6 @@ msgstr ""
 "check Blog’s Comment."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_posts_index.php:24
-#, fuzzy
 msgid ""
 "ブログのカテゴリを登録するには、サブメニューの「新規ブログカテゴリを登録」を"
 "クリックします。"
@@ -3482,6 +3535,10 @@ msgstr "Search"
 #: View/Elements/admin/searches/users_index.php:27
 msgid "クリア"
 msgstr "Clear"
+
+#: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:20
+msgid "%s 管理メニュー"
+msgstr "%s Management Menu"
 
 #: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:24
 msgid "記事一覧"
@@ -3957,12 +4014,19 @@ msgid ""
 "取得したデータを保持し、指定した時間の間、フィードのリクエストを抑制する仕組"
 "みです。指定した時間内は、新しい記事に更新されません</small> "
 msgstr ""
+"Click “Option” on bottom screen and set cache time to enough amount to "
+"reduce other site’s server load if you load its feed (it’s the same for "
+"reducing load for your site).<br /><small>Caution: Cache is system to "
+"restrict requests to feed that save gotten data for specified period. It "
+"won’t be updated to new article for specified period.</small>"
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_details_form.php:24
 msgid ""
 "フィード内の特定のカテゴリの記事のみを取得するには、画面下の「オプション」を"
 "クリックし、カテゴリフィルターを登録します。"
 msgstr ""
+"Click “Option” on bottom screen and add Category Filter to get only Articles "
+"that has specified Category in Feed."
 
 #: Plugin/Feed/View/Elements/admin/submenus/feed_common.php:20
 msgid "フィード設定メニュー"
@@ -4005,6 +4069,8 @@ msgid ""
 "一つの表示フィードに対し、複数のフィードを読み込む際、フィードタイトルを表示"
 "させたい場合は、フィードタイトルを「|」で区切って入力してください。"
 msgstr ""
+"Please enter Feed Titles splitter by “|” to display Feed Title when loading "
+"multiple Feeds for one displaying Feed."
 
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:77
 msgid "テンプレート上で、「feed_title」として参照できるようになります。"
@@ -4024,10 +4090,12 @@ msgid ""
 "カテゴリにインデックス番号を割り当てたい場合は、カテゴリ名を「|」で区切って入"
 "力してください。"
 msgstr ""
+"Please enter Category Name splitter by “|” to assign index number to "
+"Category."
 
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:92
 msgid "先頭から順に「category_no」としてインデックス番号が割り振られます。"
-msgstr ""
+msgstr "Index numbers are assigned as “category_no” from top to bottom."
 
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:99
 #: View/EditorTemplates/admin/form.php:39
@@ -4050,23 +4118,26 @@ msgstr "Feed URL"
 #: Plugin/Feed/View/FeedDetails/admin/form.php:75
 msgid ""
 "負荷を軽減させる為、フィード情報をキャッシュさせる時間を選択してください。"
-msgstr ""
+msgstr "Please select cache time for Feed Information to reduce loading."
 
 #: Plugin/Feed/View/FeedDetails/admin/form.php:85
 msgid "特定のカテゴリのみ絞込みたい場合は、カテゴリ名を入力してください。"
-msgstr ""
+msgstr "Please enter Category Name to filter specific Category."
 
 #: Plugin/Feed/View/FeedDetails/admin/form.php:86
 msgid "複数のカテゴリを指定する場合は、カテゴリ名を|（半角縦棒）で区切ります。"
+msgstr "Split Category Name by | to specify multiple Categories."
+
+#: Plugin/Feed/View/Helper/FeedHelper.php:69;75
+msgid "メソッド"
+msgstr "Method"
+
+#: Plugin/Feed/View/Helper/FeedHelper.php:69;75
+msgid ""
+"このメソッドは非推奨となりました。代替機能はありません。この行を削除してくだ"
+"さい。"
 msgstr ""
-
-#: Plugin/Feed/View/Helper/FeedHelper.php:69
-msgid "メソッド：FeedHelper::saveCachetime()"
-msgstr "Method: FeedHelper::saveCachetime()"
-
-#: Plugin/Feed/View/Helper/FeedHelper.php:75
-msgid "メソッド：FeedHelper::cacheHeader()"
-msgstr "Method: FeedHelper::cacheHeader()"
+"This method is deprecated. There is no alternative. Please delete this line."
 
 #: Plugin/Mail/config.php:13 Plugin/Mail/Config/setting.php:24
 msgid "メールフォーム"
@@ -4205,149 +4276,151 @@ msgstr "Deleted %s’s Received Data No “%s” ."
 
 #: Plugin/Mail/Model/MailContent.php:61
 msgid "送信先名を入力してください。"
-msgstr ""
+msgstr "Please enter destination name."
 
 #: Plugin/Mail/Model/MailContent.php:62
 msgid "送信先名は50文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter destination name within 50 characters."
 
 #: Plugin/Mail/Model/MailContent.php:64
 msgid "自動返信メール件名[ユーザー宛]を入力してください。"
-msgstr ""
+msgstr "Please enter auto-reply mail title [to user]."
 
 #: Plugin/Mail/Model/MailContent.php:65
 msgid "自動返信メール件名[ユーザー宛]は50文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter auto-reply mail title [to user] within 50 characters."
 
 #: Plugin/Mail/Model/MailContent.php:67
 msgid "自動送信メール件名[管理者宛]を入力してください。"
-msgstr ""
+msgstr "Please enter auto-reply mail title [to admin]."
 
 #: Plugin/Mail/Model/MailContent.php:68
 msgid "自動返信メール件名[管理者宛]は50文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter auto-reply mail title [to admin] within 50 characters."
 
 #: Plugin/Mail/Model/MailContent.php:70
 msgid "メールフォームテンプレート名は半角のみで入力してください。"
-msgstr ""
+msgstr "Please enter Mail Form Template Name with only half-size characters."
 
 #: Plugin/Mail/Model/MailContent.php:71
 msgid "フォームテンプレート名は20文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Form Template Name within 20 characters."
 
 #: Plugin/Mail/Model/MailContent.php:73
 msgid "送信メールテンプレートは半角のみで入力してください。"
-msgstr ""
+msgstr "Please enter Sending Mail Template with only half-size characters."
 
 #: Plugin/Mail/Model/MailContent.php:74
 msgid "メールテンプレート名は20文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Mail Template Name within 20 characters."
 
 #: Plugin/Mail/Model/MailContent.php:76
 msgid "リダイレクトURLは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Redirect URL within 255 characters."
 
 #: Plugin/Mail/Model/MailContent.php:78;81
 msgid "送信先メールアドレスの形式が不正です。"
-msgstr ""
+msgstr "Destination Mail Address’ format is invalid."
 
 #: Plugin/Mail/Model/MailContent.php:79
 msgid "送信先メールアドレスは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Destination Mail Address within 255 characters."
 
 #: Plugin/Mail/Model/MailContent.php:82
 msgid "CC用送信先メールアドレスは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Destination Mail Address for CC within 255 characters."
 
 #: Plugin/Mail/Model/MailContent.php:84
 msgid ""
 "SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定し"
 "てください。"
 msgstr ""
+"Please specify Web site URL for SSL connection in System Settings before "
+"using SSL connection."
 
 #: Plugin/Mail/Model/MailContent.php:127
 msgid "送信先名を入力してください"
-msgstr ""
+msgstr "Please enter Destination Name"
 
 #: Plugin/Mail/Model/MailContent.php:128
 msgid "お問い合わせ頂きありがとうございます"
-msgstr ""
+msgstr "Thank you for inquiry"
 
 #: Plugin/Mail/Model/MailContent.php:129
 msgid "お問い合わせを頂きました"
-msgstr ""
+msgstr "Received inquiry"
 
 #: Plugin/Mail/Model/MailField.php:41
 msgid "項目名を入力してください。"
-msgstr ""
+msgstr "Please enter Item Name."
 
 #: Plugin/Mail/Model/MailField.php:42
 msgid "項目名は255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Item Name within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:44
 msgid "フィールド名は半角英数字のみで入力してください。"
-msgstr ""
+msgstr "Please enter Field Name with only half-size alphabets and numbers."
 
 #: Plugin/Mail/Model/MailField.php:45
 msgid "入力されたフィールド名は既に登録されています。"
-msgstr ""
+msgstr "Entered Field Name is already registered."
 
 #: Plugin/Mail/Model/MailField.php:46
 msgid "フィールド名は255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Field Name within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:48
 msgid "タイプを入力してください。"
-msgstr ""
+msgstr "Please enter Type."
 
 #: Plugin/Mail/Model/MailField.php:50
 msgid "項目見出しは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Field Header within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:52
 msgid "注意書きは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Caution within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:54
 msgid "前見出しは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Pre Header within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:56
 msgid "後見出しは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Post Header within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:58
 msgid "選択リストを入力してください。"
-msgstr ""
+msgstr "Please enter Selection List."
 
 #: Plugin/Mail/Model/MailField.php:60
 msgid "オプションは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Option within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:62
 msgid "クラス名は255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Class Name within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:64
 msgid "区切り文字は20文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Split Characters within 20 characters."
 
 #: Plugin/Mail/Model/MailField.php:66
 msgid "初期値は255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Default Value within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:68
 msgid "説明文は255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Description within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:70
 msgid "グループフィールドは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Group Field within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:72
 msgid "グループ入力チェックは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Group Input Check within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:84 View/Elements/admin/widgets/text.php:16
 msgid "テキスト"
@@ -4445,12 +4518,15 @@ msgstr "Half-width Character Conversion"
 #: Plugin/Mail/Model/MailMessage.php:621
 msgid "createTableNameの引数$mailContentIdはint型しか受けつけていません。"
 msgstr ""
+"Only int type is accepted for parameter $mailContentId to createTableName."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_configs_form.php:19
 msgid ""
 "メールフォームプラグイン共通の基本設定が行えます。<br />署名は、自動返信メー"
 "ルのフッターに挿入されます。"
 msgstr ""
+"You can do common basic settings for Mail Form Plugin.<br />Signature will "
+"be inserted on auto-reply mail’s footer."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_contents_form.php:19
 msgid ""
@@ -4461,32 +4537,42 @@ msgid ""
 "><a class=\"outside-link\" href=\"http://basercms.net/manuals/designers/6."
 "html\" target=\"_blank\">メールフォームのテンプレートを変更する"
 msgstr ""
+"Registering basic settings for Mail Form Content.<br />You can have "
+"different design for each Mail Form. If so, change Template Name by clicking "
+"“Option” on bottom screen.<br /><small>Caution: You have to create newly "
+"named Template and upload it to change Template Name.</small><br /><a "
+"class=“outside-link” href=“http://basercms.net/manuals/designers/6.html” "
+"target=“_blank”>メールフォームのテンプレートを変更する"
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_contents_index.php:19
 msgid "メールフォームプラグインでは複数のメールフォームの登録が可能です。"
-msgstr ""
+msgstr "You can register multiple Mail Forms in Mail Form Plugin."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_contents_index.php:21
 msgid ""
 "各メールフォームの表示を確認するには、操作欄の %s ボタンをクリックします。"
-msgstr ""
+msgstr "Click %s button on control filed to check each Mail Form’s display."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_contents_index.php:22
 msgid ""
 "各メールフォームの内容を変更するには、操作欄の %s ボタンをクリックします。"
-msgstr ""
+msgstr "Click %s button on control filed to change each Mail Form’s content."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_contents_index.php:23
 msgid ""
 "各メールフォームの送信先メールアドレスなど、基本設定を変更するには、操作欄の "
 "%s ボタンをクリックします。"
 msgstr ""
+"Click %s button on control field to change basic settings like each Mail "
+"Form’s destination mail address."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_contents_index.php:24
 msgid ""
 "メールフォームプラグインの基本設定を変更するには、サブメニューの「プラグイン"
 "基本設定」をクリックします。"
 msgstr ""
+"Click “Plugin Basic Settings” on Sub Menu to change Mail Form Plugin’s basic "
+"settings."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_fields_form.php:19
 msgid ""
@@ -4494,22 +4580,30 @@ msgid ""
 "め、入力チェックの設定等、便利な機能を用意しています。<br />各項目の詳細につ"
 "いては、各ヘルプメッセージを確認してください。"
 msgstr ""
+"Registering Mail Form’s Field (Item).<br />There are useful functions like "
+"Item’s Type and Input Check’s settings.<br />Please check each help message "
+"for each Item’s detail."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_fields_form.php:21
 msgid ""
 "一時的に利用しない場合には、画面下のオプションをクリックし、フィールドの利用"
 "状態を「無効」に設定します。"
 msgstr ""
+"Click Option on bottom screen and set Field’s Availability to “Disable” to "
+"not use it temporally."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_fields_index.php:19
 msgid "メールフォームの各フィールド（項目）の管理が行えます。"
-msgstr ""
+msgstr "You can manage Mail Form’s each Field (Item)."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_fields_index.php:21
 msgid ""
 "表左上の「並び替え」をクリックすると、各フィールドの操作欄に表示される%sマー"
 "クをドラッグアンドドロップして公開ページでの並び順を変更する事ができます。"
 msgstr ""
+"You can change ordering on Public Page by clicking “Sort” on upper left "
+"table and dragging & dropping %s mark displayed on each Field’s control "
+"field."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_fields_index.php:21
 #: Plugin/Mail/View/Elements/admin/mail_fields/index_list.php:28
@@ -4528,6 +4622,8 @@ msgid ""
 "フィールドの設定をそのままコピーするにはコピーしたいフィールドの操作欄にある "
 "%s をクリックします。"
 msgstr ""
+"Click %s on control field on the Filed to be copied, to copy Field’s setting "
+"as it is."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_fields_index.php:23
 msgid ""
@@ -4535,12 +4631,17 @@ msgid ""
 "よりダウンロードする事ができ、Microsoft Excel 等の表計算ソフトで確認する事が"
 "できます。"
 msgstr ""
+"You can download received content from Mail Form from “Download Received "
+"Mail CSV” in Sub Menu, and check it with spreadsheet software like Microsoft "
+"Excel etc."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_messages_index.php:19
 msgid ""
 "受信メールの詳細確認、削除が行えます。操作対象データの操作欄のボタンをクリッ"
 "クします。"
 msgstr ""
+"You can check detail and delete Received Mail. Click button on target data’s "
+"control field."
 
 #: Plugin/Mail/View/Elements/admin/mail_fields/index_list.php:30
 #: View/Elements/admin/permissions/index_list.php:31
@@ -4610,21 +4711,21 @@ msgstr "Add Mail Field"
 #: Plugin/Mail/View/Emails/text/mail_default.php:20
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:20
 msgid "お問い合わせを受け付けました"
-msgstr ""
+msgstr "Accepted inquiry"
 
 #: Plugin/Mail/View/Emails/text/mail_default.php:24
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:24
 msgid "この度は、お問い合わせいただきありがとうございます。"
-msgstr ""
+msgstr "Thank you for inquiry."
 
 #: Plugin/Mail/View/Emails/text/mail_default.php:25
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:25
 msgid "送信内容は下記のようになっております。"
-msgstr ""
+msgstr "Sending content is as follows."
 
 #: Plugin/Mail/View/Emails/text/mail_default.php:27
 msgid "%s へのお問い合わせを受け付けました。"
-msgstr ""
+msgstr "Accepted inquiry to %s"
 
 #: Plugin/Mail/View/Emails/text/mail_default.php:32
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:32
@@ -4634,31 +4735,31 @@ msgstr "Inquiry Content"
 #: Plugin/Mail/View/Emails/text/mail_default.php:41
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:41
 msgid "なお、このメールは自動返信メールとなっております。"
-msgstr ""
+msgstr "This mail is auto-replied mail, for your information."
 
 #: Plugin/Mail/View/Emails/text/mail_default.php:42
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:42
 msgid "メールを確認させて頂き次第、早急にご連絡させていただきます。"
-msgstr ""
+msgstr "We will contact you as soon as possible after checking mail."
 
 #: Plugin/Mail/View/Emails/text/mail_default.php:43
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:43
 msgid "恐れ入りますがしばらくお待ちください。"
-msgstr ""
+msgstr "Sorry, but please wait for a moment."
 
 #: Plugin/Mail/View/Emails/text/mail_default.php:45
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:45
 msgid "なお、このメールは自動転送システムです。"
-msgstr ""
+msgstr "This mail is auto-transferred mail, for you information."
 
 #: Plugin/Mail/View/Emails/text/mail_default.php:46
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:46
 msgid "受け付けた旨のメールもユーザーへ送られています。"
-msgstr ""
+msgstr "Mail that notify it was accepted is sent to user."
 
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:27
 msgid "%sへのお問い合わせを受け付けました。"
-msgstr ""
+msgstr "Accepted inquiry to %s."
 
 #: Plugin/Mail/View/Helper/MaildataHelper.php:129
 msgid "Y年 m月 d日"
@@ -4670,7 +4771,7 @@ msgstr "Signature: Web Site Name"
 
 #: Plugin/Mail/View/MailConfigs/admin/form.php:35;44;55;67;76
 msgid "自動送信メールの署名に挿入されます。"
-msgstr ""
+msgstr "Inserted to signature on auto-sending mail."
 
 #: Plugin/Mail/View/MailConfigs/admin/form.php:39
 msgid "署名：WEBサイトURL"
@@ -4714,7 +4815,7 @@ msgstr "Destination Name"
 
 #: Plugin/Mail/View/MailContents/admin/form.php:64
 msgid "自動返信メールの送信者に表示します。"
-msgstr ""
+msgstr "Displayed on Auto-Reply Mail Sender."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:68
 msgid "自動返信メール件名<br />[ユーザー宛]"
@@ -4722,7 +4823,7 @@ msgstr "Auto-Reply Mail Number<br />[To User]"
 
 #: Plugin/Mail/View/MailContents/admin/form.php:73
 msgid "ユーザー宛の自動返信メールの件名に表示します。"
-msgstr ""
+msgstr "Displayed on Auto-Reply Mail to User."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:77
 msgid "自動送信メール件名<br />[管理者宛]"
@@ -4730,7 +4831,7 @@ msgstr "Auto-Reply Mail Number<br />[To Admin]"
 
 #: Plugin/Mail/View/MailContents/admin/form.php:82
 msgid "管理者宛の自動送信メールの件名に表示します。"
-msgstr ""
+msgstr "Displayed on Auto-Reply Mail to Admin."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:86
 msgid "リダイレクトURL"
@@ -4738,11 +4839,11 @@ msgstr "Redirect URL"
 
 #: Plugin/Mail/View/MailContents/admin/form.php:93
 msgid "メール送信後、別のURLにリダイレクトする場合、ここにURLを指定します。"
-msgstr ""
+msgstr "Specify URL here to redirect to another URL after sending mail."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:94
 msgid "httpからの完全なURLを指定してください。"
-msgstr ""
+msgstr "Specify complete URL from http."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:107
 msgid "フォーム受付期間"
@@ -4753,6 +4854,9 @@ msgid ""
 "公開期間とは別にフォームの受付期間を設定する事ができます。受付期間外にはエ"
 "ラーではなく受付期間外のページを表示します。"
 msgstr ""
+"You can set receiving period for Form besides Public Period. It displays "
+"Page that shows it’s out of accepting period instead of error if it was out "
+"of accepting period."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:122
 msgid "データベース保存"
@@ -4771,12 +4875,16 @@ msgid ""
 "メールフォームから送信された情報をデータベースに保存するかどうかを指定できま"
 "す。"
 msgstr ""
+"You can specify whether it will save sent information from Mail Form to "
+"database or not."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:130
 msgid ""
 "メールフォームから送信された情報をデータベースに保存したくない場合は、保存し"
 "ないを指定してください。"
 msgstr ""
+"Please choose “Don’t Save” If you don’t want to save sent information from "
+"Mail Form to database"
 
 #: Plugin/Mail/View/MailContents/admin/form.php:136
 msgid "イメージ認証"
@@ -4786,6 +4894,8 @@ msgstr "Image Authentication"
 msgid ""
 "メールフォーム送信の際、表示された画像の文字入力させる事で認証を行ないます。"
 msgstr ""
+"Authorize with entering characters that are displayed image when sending "
+"Mail Form."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:150
 msgid "SSL通信"
@@ -4796,12 +4906,15 @@ msgid ""
 "SSL通信を利用するには、%s で、事前にSSL通信用のWebサイトURLを指定してくださ"
 "い。"
 msgstr ""
+"Please specify Web site URL for SSL connection before using SSL connecting."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:157
 msgid ""
 "管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。また、SSL"
 "通信で利用するURLをシステム設定で指定している必要があります。"
 msgstr ""
+"You have to request and set SSL before using SSL on Admin Page. Also, You "
+"have to specify URL used by SSL connection in System Settings."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:162
 msgid "BCC用送信先メールアドレス"
@@ -4809,17 +4922,19 @@ msgstr "Destination Mail Address for BCC"
 
 #: Plugin/Mail/View/MailContents/admin/form.php:168
 msgid "BCC（ブラインドカーボンコピー）用のメールアドレスを指定します。"
-msgstr ""
+msgstr "Specify mail address for BCC (Blind Carbon Copy)."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:169
 msgid "複数の送信先を指定するには、カンマで区切って入力します。"
-msgstr ""
+msgstr "Enter splitting by commas to specify multiple destinations."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:180
 msgid ""
 "メールコンテンツで利用するウィジェットエリアを指定します。<br />ウィジェット"
 "エリアは「%s」より追加できます。"
 msgstr ""
+"Specify Widget Area used by Mail Contents.<br />Widget Area can be added "
+"from “%s”."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:180
 #: View/SiteConfigs/admin/form.php:180
@@ -4832,7 +4947,7 @@ msgstr "Mail Form Template Name"
 
 #: Plugin/Mail/View/MailContents/admin/form.php:196
 msgid "メールフォーム本体のテンプレートを指定します。"
-msgstr ""
+msgstr "Specify Template for Mail Form body."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:203
 msgid "送信メールテンプレート名"
@@ -4847,14 +4962,18 @@ msgid ""
 "本当にこのデータを削除してもいいですか？\\n※ 現在このメールフォームに設定され"
 "ているフィールドは全て削除されます。"
 msgstr ""
+"Are you sure to delete this data?\\nCaution: All the Fields se to this Mail "
+"Form will be deleted."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:49
 msgid "重複しない半角英数字で入力してください。"
-msgstr ""
+msgstr "Please enter with half-size alphabets and numbers without duplicates."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:58
 msgid "項目を特定しやすいわかりやすい名前を入力してください。日本語可。"
 msgstr ""
+"Please enter understandable name that can be identify Item. Japanese are "
+"allowed."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:69
 msgid ""
@@ -4863,12 +4982,19 @@ msgid ""
 "\t\t\t\t\t\t\t<small>※ 前バージョンとの互換性の為、フィールド名を「email_1」"
 "とした場合、Eメールを選択しなくても自動返信メールを送信します。</small>"
 msgstr ""
+"It will send auto-reply mail to entered e-mail when sending Mail Form if you "
+"select E-mail.<br />\n"
+"\t\t\t\t\t\t\t<small>Caution: It will send auto-reply mail if you didn’t "
+"select E-mail if you set Field Name to “email_1” for compatibility to "
+"previous versions."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:71
 msgid ""
 "自動補完郵便番号の場合は、選択リストに都道府県のフィールドと住所のフィールド"
 "のリストを指定します。"
 msgstr ""
+"Specify Prefecture Field and Address Field List to Selection List for Auto-"
+"Completion Postal Number."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:77
 msgid "項目見出し"
@@ -4878,7 +5004,7 @@ msgstr "Item Header"
 msgid ""
 "グループとして設定する場合、同グループの２番目以降のフィールドについてこの項"
 "目の入力は不要です。"
-msgstr ""
+msgstr "This Item’s Input is unnecessary "
 
 #: Plugin/Mail/View/MailFields/admin/form.php:86
 msgid "必須マーク"
@@ -4922,17 +5048,19 @@ msgstr "Selection List"
 msgid ""
 "ラジオボタン、セレクトボックス、マルチチェックボックスの場合の選択リスト指定"
 "します。"
-msgstr ""
+msgstr "Specify Selection List for Radio Button, Select Box, Multi-check Box."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:136
 msgid ""
 "自動補完郵便番号の場合は、都道府県のフィールドと住所のフィールドのリストを指"
 "定します。"
 msgstr ""
+"Specify Prefecture Field and Address Field List for Auto-Completion Postal "
+"Number."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:137
 msgid "リストは　|　で区切って入力します。"
-msgstr ""
+msgstr "Enter List splitter by | ."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:143
 msgid "表示サイズ"
@@ -4944,7 +5072,7 @@ msgstr "Line Number"
 
 #: Plugin/Mail/View/MailFields/admin/form.php:155
 msgid "テキストボックスの場合の行数を指定します。"
-msgstr ""
+msgstr "Specify line number for Text Box."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:159
 msgid "最大値"
@@ -4963,16 +5091,18 @@ msgid ""
 "Eメール比較チェック：利用するには「Eメール」タイプのフィールドを二つ作成し、"
 "グループ入力チェックに任意の同じ値を入力します。"
 msgstr ""
+"Email Comparison Check: Create two “E-mail” Type Fields and Enter the same "
+"arbitrary value to Group Input Check to use it. "
 
 #: Plugin/Mail/View/MailFields/admin/form.php:182
 msgid ""
 "グループチェック：グループで連帯して入力チェックを行うには同じグループ名を入"
 "力します。"
-msgstr ""
+msgstr "Group Check: Enter the same Group Name to check input by Group."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:183
 msgid "日付チェック：日付形式かどうかのチェックです。"
-msgstr ""
+msgstr "Date Check: Checks whether it’s date format or not."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:184
 msgid ""
@@ -4980,6 +5110,8 @@ msgid ""
 "プション項目に、上限となるサイズを次の形式のように | 区切りで入力します。"
 "「maxFileSize|10（単位：MB）」"
 msgstr ""
+"File Upload Size Restriction: Select “File” Type and enter upper limit size "
+"to Option Item like this format: “maxFileSize|10” (unit: MB) to use it."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:185
 msgid ""
@@ -4987,10 +5119,12 @@ msgid ""
 "項目に、アップロードを許可する拡張子を次の形式のように | 区切りで入力します。"
 "「fileExt|jpg,pdf」"
 msgstr ""
+"File Extension Check: Select “File” Type and enter extensions allowed to be "
+"uploaded to Option Item like this format: “fileExt|jpg,pdf” to use it."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:198
 msgid "各項目を同じグループとするには同じグループ名を入力します。"
-msgstr ""
+msgstr "Enter the same Group Name to treat each item to be the same Group."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:199;214
 msgid "半角英数字で入力してください。"
@@ -5002,13 +5136,15 @@ msgstr "Group Input Check"
 
 #: Plugin/Mail/View/MailFields/admin/form.php:212
 msgid "グループで連帯して入力チェックを行うには同じグループ名を入力します。"
-msgstr ""
+msgstr "Enter the same Group Name to check input by Group."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:213
 msgid ""
 "グループ内の項目が一つでもエラーとなるとグループ内の全ての項目にエラーを意味"
 "する背景色が付きます。"
 msgstr ""
+"Background color that means error will be added to all Items in the Group if "
+"there is any error in Items in the Group."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:227
 msgid "クラス名"
@@ -5049,7 +5185,7 @@ msgstr "CSV Downloding"
 
 #: Plugin/Mail/View/MailMessages/admin/view.php:71
 msgid "受信メール NO「%s」を削除してもいいですか？"
-msgstr ""
+msgstr "Are you sure you want to delete Receiving Mail NO “%s@?"
 
 #: Plugin/Uploader/config.php:13
 msgid "アップローダー"
@@ -5057,11 +5193,11 @@ msgstr "Uploader"
 
 #: Plugin/Uploader/config.php:14
 msgid "Webページやブログ記事で、画像等のファイルを貼り付ける事ができます。"
-msgstr ""
+msgstr "You can paste files like images on Web Page or Blog Article."
 
 #: Plugin/Uploader/config.php:20
 msgid "登録ボタンをクリックする前に、サーバー上の "
-msgstr ""
+msgstr "Before clicking Add button, on server"
 
 #: Plugin/Uploader/Config/setting.php:17
 msgid "アップローダープラグイン"
@@ -5103,11 +5239,11 @@ msgstr "Saved Uploader settings."
 
 #: Plugin/Uploader/Controller/UploaderFilesController.php:119
 msgid "%sを作成し、書き込み権限を与えてください"
-msgstr ""
+msgstr "Please create %s and give write permission to it"
 
 #: Plugin/Uploader/Controller/UploaderFilesController.php:122
 msgid "作成し、%sに書き込み権限を与えてください"
-msgstr "Please Create %s and give write permission"
+msgstr "Please create %s and give write permission to it"
 
 #: Plugin/Uploader/Controller/UploaderFilesController.php:124;130
 msgid "%sに書き込み権限を与えてください"
@@ -5123,11 +5259,11 @@ msgstr "Name"
 
 #: Plugin/Uploader/View/Elements/admin/searches/uploader_files_index.php:25
 msgid "画像"
-msgstr ""
+msgstr "Image"
 
 #: Plugin/Uploader/View/Elements/admin/searches/uploader_files_index.php:25
 msgid "画像以外"
-msgstr ""
+msgstr "Non-Image"
 
 #: Plugin/Uploader/View/Elements/admin/submenus/uploader.php:16
 msgid "アップローダーメニュー"
@@ -5159,6 +5295,10 @@ msgstr "Public Period"
 #: Plugin/Uploader/View/Elements/admin/uploader_files/form.php:100
 msgid "保存者"
 msgstr "Saver"
+
+#: Plugin/Uploader/View/Elements/admin/uploader_files/index.php:43
+msgid "ファイル情報編集"
+msgstr "Edit File Info"
 
 #: Plugin/Uploader/View/Elements/admin/uploader_files/index_list.php:31;59
 #: Plugin/Uploader/View/Elements/admin/uploader_files/index_panel.php:34
@@ -5211,6 +5351,10 @@ msgstr "Crp to Square"
 msgid "携帯サイズ（大）"
 msgstr "Phone Size (Large)"
 
+#: Plugin/Uploader/View/UploaderConfigs/admin/index.php:70
+msgid "携帯サイズ（小）"
+msgstr "Phone Size (Small)"
+
 #: Plugin/Uploader/View/UploaderConfigs/admin/index.php:92
 msgid "レイアウトタイプ"
 msgstr "Layout Type"
@@ -5236,6 +5380,8 @@ msgid ""
 "管理者以外のユーザーは、自分がアップロードしたファイル以外、編集・削除をでき"
 "ないようにします。"
 msgstr ""
+"It will make it so that Users other than Admins will not be able to edit or "
+"delete files that are not uploaded by themselves."
 
 #: Plugin/Uploader/View/UploaderConfigs/admin/index.php:118
 msgid "更　新"
@@ -5249,6 +5395,11 @@ msgstr "Folder Template"
 #: View/Tools/admin/index.php:29
 msgid "固定ページテンプレート"
 msgstr "Static Page Template"
+
+#: View/ContentLinks/admin/edit.php:21
+#: View/ThemeConfigs/admin/form.php:64;73;82;91;100;109
+msgid "リンク先URL"
+msgstr "Linked URL"
 
 #: View/Contents/admin/ajax_contents_info.php:18
 msgid "公開中： %s ページ"
@@ -5272,7 +5423,7 @@ msgstr "Data is not registered."
 
 #: View/Dblogs/admin/ajax_index.php:36
 msgid "最近の動きのログを削除します。いいですか？"
-msgstr ""
+msgstr "Deleting Recent Activity’s log, are you sure?"
 
 #: View/EditorTemplates/admin/form.php:46
 msgid "アイコン画像"
@@ -5282,7 +5433,7 @@ msgstr "Icon Image"
 #: View/Elements/admin/helps/theme_files_index.php:34
 #: View/Elements/admin/submenus/theme_files.php:20
 msgid "コンテンツ"
-msgstr "Contents"
+msgstr "Content"
 
 #: View/Elements/crumbs.php:22
 msgid "ホーム"
@@ -5293,6 +5444,7 @@ msgid ""
 "Google Maps を読み込めません。管理画面で正しい住所が設定されているか確認して"
 "ください。"
 msgstr ""
+"Couldn’t load Google Maps. Please check right address is set in Admin Screen."
 
 #: View/Elements/site_search_form.php:29
 #: View/Elements/admin/widgets/search.php:16
@@ -5315,7 +5467,7 @@ msgstr "Last Updated Date"
 
 #: View/Elements/admin/content_fields.php:122
 msgid "関連コンテンツ"
-msgstr "Related Contents"
+msgstr "Related Content"
 
 #: View/Elements/admin/content_fields.php:124
 msgid "その他情報"
@@ -5332,11 +5484,11 @@ msgstr "Default"
 
 #: View/Elements/admin/content_fields.php:198
 msgid "親フォルダの設定を継承し非公開状態となっています"
-msgstr ""
+msgstr "It’s set to be Private by inheriting Parent Folder’s settings."
 
 #: View/Elements/admin/content_fields.php:202
 msgid "親フォルダの設定を継承し公開期間が設定されている状態となっています"
-msgstr ""
+msgstr "Public Period is set by inheriting Parent Folder’s settings."
 
 #: View/Elements/admin/content_fields.php:268
 msgid "その他設定"
@@ -5376,11 +5528,11 @@ msgstr "Main Site"
 
 #: View/Elements/admin/content_fields.php:346
 msgid "エイリアス作成"
-msgstr "Create Alias"
+msgstr "Add Alias"
 
 #: View/Elements/admin/content_fields.php:347
 msgid "コピー作成"
-msgstr "Create Copy"
+msgstr "Add Copy"
 
 #: View/Elements/admin/content_fields.php:364
 msgid "未登録"
@@ -5417,19 +5569,21 @@ msgid ""
 "けが外れてしまっている状態です。<br>プラグインがまだ存在する場合は有効にして"
 "ください。"
 msgstr ""
+"Type “Default” isn’t associated to Type because of disable process of Plugin."
+"<br>Enable Plugin if it still exists."
 
 #: View/Elements/admin/contents_menu.php:29
 #: View/Elements/admin/user_groups/index_row.php:22
 msgid "制限"
 msgstr "Restriction"
 
-#: View/Elements/admin/favorite_menu.php:24;25
+#: View/Elements/admin/favorite_menu.php:24;25;50
 msgid "よく使う項目"
 msgstr "Favorite Items"
 
 #: View/Elements/admin/favorite_menu.php:35
 msgid "新規登録ボタンよりよく使う項目を登録しておく事ができます。"
-msgstr ""
+msgstr "You can register Favorite Items by Add button."
 
 #: View/Elements/admin/favorite_menu.php:43
 msgid ""
@@ -5437,6 +5591,9 @@ msgid ""
 "事ができます。<br />また、登録済の項目を右クリックする事で編集・削除が行えま"
 "す。"
 msgstr ""
+"You can make it easier to link to currently opened Page by Add button in "
+"Favorite Items.<br />Also, you can edit or delete registered Item by right "
+"clicking it."
 
 #: View/Elements/admin/footer.php:24
 msgid "baserCMSロゴ"
@@ -5482,6 +5639,10 @@ msgstr "< Prev"
 msgid "次へ >"
 msgstr "Next >"
 
+#: View/Elements/admin/permission.php:19
+msgid "アクセス制限登録"
+msgstr "Register Access Restriction"
+
 #: View/Elements/admin/permission.php:23
 #: View/Elements/admin/searches/users_index.php:21
 #: View/Permissions/admin/form.php:30
@@ -5518,6 +5679,22 @@ msgstr "Update Manual"
 msgid "baserCMS管理システム"
 msgstr "baserCMS Management System"
 
+#: View/Elements/admin/toolbar.php:64
+msgid ""
+"インストールモードです。運営を開始する前にシステム設定よりノーマルモードに戻"
+"しましょう。"
+msgstr ""
+"Installation Mode now. Set back to Normal Mode in System Settings before "
+"starting operation."
+
+#: View/Elements/admin/toolbar.php:66
+msgid ""
+"デバッグモードです。運営を開始する前にシステム設定よりノーマルモードに戻しま"
+"しょう。"
+msgstr ""
+"Debug Mode now. Set back to Normal Mode in System Settings before starting "
+"operation."
+
 #: View/Elements/admin/toolbar.php:66
 msgid "デバッグモード"
 msgstr "Debug Mode"
@@ -5544,7 +5721,7 @@ msgstr "System Navigation"
 
 #: View/Elements/admin/contents/form_alias.php:34
 msgid "元コンテンツ"
-msgstr "Base Contents"
+msgstr "Base Content"
 
 #: View/Elements/admin/contents/index_list.php:18
 msgid "処理中にエラーが発生しました。"
@@ -5553,7 +5730,7 @@ msgstr "Error occurred during processing."
 #: View/Elements/admin/contents/index_list.php:79
 #: View/Elements/admin/search_indices/index_list.php:82
 msgid "コンテンツ内容"
-msgstr "Contents Body"
+msgstr "Content Body"
 
 #: View/Elements/admin/contents/index_list_table.php:36
 msgid " タイプ"
@@ -5609,6 +5786,8 @@ msgid ""
 "コンテンツ管理では、固定ページや、ブログやメールフォームなど、Webページを生成"
 "するコンテンツの新規追加や編集・削除などが行えます。"
 msgstr ""
+"You can add, edit or delete contents that generate Web page like Static "
+"Page, Blog, Mail Form in Manage Contents."
 
 #: View/Elements/admin/helps/contents_index.php:21
 msgid ""
@@ -5616,6 +5795,9 @@ msgid ""
 "行うには、ツリー形式を選択します。また、削除や公開設定についての一括処理や、"
 "コンテンツの検索を行うには、表形式を選択します。"
 msgstr ""
+"You can select “Tree Format” and “Table Format” in List. Select Tree Format "
+"to add new Content. Also, Select Table Format to Bulk Process deleting and "
+"publishing or searching Contents."
 
 #: View/Elements/admin/helps/contents_index.php:22
 msgid ""
@@ -5623,6 +5805,9 @@ msgid ""
 "た機能ボタン %s をクリックするか、フォルダを指定してサブメニューの「コンテン"
 "ツ新規追加」をクリックし機能メニューを表示します。"
 msgstr ""
+"Click function button %s placed on the right side of Folder’s name, or "
+"specify Folder and click “Add Content” in Sub Menu and display Function Menu "
+"in Tree Format to Add Contents."
 
 #: View/Elements/admin/helps/contents_index.php:23
 msgid ""
@@ -5630,6 +5815,9 @@ msgid ""
 "開・非公開切り替え、名称変更、編集画面への遷移、コピー、ゴミ箱に入れる等の機"
 "能が提供されています。"
 msgstr ""
+"You can add various Contents, and Function like Switching between Public and "
+"Private, Renaming, Moving to Edit Screen, Copying, Moving to Trash are "
+"provided for specified Contents in Function Menu."
 
 #: View/Elements/admin/helps/contents_index.php:24
 msgid ""
@@ -5639,6 +5827,11 @@ msgid ""
 "の権限を保つ場合のみです。<br>※ メニューとの連携はテーマがその機能に対応して"
 "いる必要があります。"
 msgstr ""
+"Structure and Order are cooperated to Front End side Menu in Tree "
+"structures. You can move by specifying target Content’s Icon by dragging & "
+"dropping to change order or folder.<br>Caution: You can only drag & drop if "
+"you hold permission.<br>Caution: Theme must be compatible to the function to "
+"cooperate with Menu."
 
 #: View/Elements/admin/helps/dashboard_index.php:19
 msgid ""
@@ -5646,6 +5839,9 @@ msgid ""
 "baserCMS公式の更新情報（baserCMSニュース）、現在のページ状況、管理画面の利用"
 "履歴（最近の動き）が表示されます。"
 msgstr ""
+"Dashboard is the first Page when you logged in. baserCMS official update "
+"info (baserCMS News), current Page status, Admin Screen’s usage (Recent "
+"Activity) are displayed by default."
 
 #: View/Elements/admin/helps/editor_templates_form.php:19
 msgid ""
@@ -5653,6 +5849,8 @@ msgid ""
 "には、画像も貼り付ける事ができます。<br />また、アイコン画像は、横幅100pxが推"
 "奨です。"
 msgstr ""
+"Register Editor’s Template used by Static Page.<br />You can paste images to "
+"Template.<br />Also, 100px width is recommended for icon image."
 
 #: View/Elements/admin/helps/editor_templates_index.php:19
 msgid ""
@@ -5660,64 +5858,77 @@ msgid ""
 "<br />あらかじめ、id や classを記述したHTMLのブロックを雛形として登録したい場"
 "合や、画像をレイアウトしたブロックを登録したい場合などに利用してください。"
 msgstr ""
+"You can mange Editor’s Template used by Static Page etc.<br />Use this if "
+"you want to register HTML blocks with id or class as template, or if you "
+"want to register blocks that lay out images."
 
 #: View/Elements/admin/helps/pages_form.php:19
 msgid "Webページとして表示させる「ページ」の登録を行います。"
-msgstr ""
+msgstr "Register “Page” that are displayed as Web page."
 
 #: View/Elements/admin/helps/pages_form.php:21
 msgid "ワード感覚でWebページの作成を行う事ができます。"
-msgstr ""
+msgstr "You can create Web page like creating with Word."
 
 #: View/Elements/admin/helps/pages_form.php:22
 msgid ""
 "タイトル・説明文には、ページを特徴づけるキーワードを入れましょう。検索エンジ"
 "ン対策として有用です。"
 msgstr ""
+"Enter keywords to illustrate Page on Title, Description. It’s useful as "
+"Search Engine Optimization."
 
 #: View/Elements/admin/helps/pages_form.php:23
 msgid ""
 "ページを作成してもすぐに公開しない場合は、公開状態を「非公開」にしておきま"
 "す。"
 msgstr ""
+"Set Public Status to “Private” if you don’t want to publish Page as soon as "
+"you created it."
 
 #: View/Elements/admin/helps/pages_form.php:24
 msgid ""
 "「非公開」にしたページを確認するには、画面下の「保存前確認」ボタンをクリック"
 "します。"
 msgstr ""
+"Click “Check Before Save” button on bottom screen to check “Private” Page."
 
 #: View/Elements/admin/helps/pages_form.php:25
 msgid ""
 "エディタをソースモードに切り替えると、記事本文中にPHPプログラムを記述できま"
 "す。"
 msgstr ""
+"You can write PHP program on Article body by switching Editor to Source Mode."
 
 #: View/Elements/admin/helps/pages_index.php:19
 msgid "ページ管理では、Webページの新規追加や編集・削除などが行えます。"
-msgstr ""
+msgstr "You can add, edit or delete Web page in Manage Page."
 
 #: View/Elements/admin/helps/pages_index.php:21
 msgid ""
 "新しいページを登録するには、一覧左上の「新規追加」ボタンをクリックします。"
-msgstr ""
+msgstr "Click “Add” button on upper left List to register new Page."
 
 #: View/Elements/admin/helps/pages_index.php:22
 msgid ""
 "公開状態を設定する事ができ、公開中のページを確認するには操作欄の %s ボタンを"
 "クリックします。"
 msgstr ""
+"You can set Public Status. Click %s button on control field to check Public "
+"Page."
 
 #: View/Elements/admin/helps/pages_index.php:23
 msgid ""
 "各ページは分類分け用の「カテゴリー」に属させる事ができ、階層構造のURLを実現で"
 "きます。"
 msgstr ""
+"Each Page can belongs to “Category” for grouping, and you can have directory "
+"structured URL."
 
 #: View/Elements/admin/helps/pages_index.php:24
 msgid ""
 "管理画面内では、公開状態、カテゴリ等によりページの検索を行う事ができます。"
-msgstr ""
+msgstr "You can search Page by Pubic Status, Category in Admin Screen."
 
 #: View/Elements/admin/helps/pages_index.php:25
 msgid ""
@@ -5726,6 +5937,10 @@ msgid ""
 "事ができます。<br /><small>※ この並び順はウィジェットのローカルナビゲーション"
 "等に反映されます。"
 msgstr ""
+"You can change displaying order of data on Public Page by dragging & "
+"dropping %s mark on each data’s control field by clicking “Sort” on upper "
+"left of List.<br /><small>Caution: This order applies to Widget’s Local "
+"Navigation etc."
 
 #: View/Elements/admin/helps/pages_index.php:26
 msgid ""
@@ -5736,31 +5951,38 @@ msgid ""
 "etc/5.html\" class=\"outside-link\" target=\"_blank\">ページテンプレートの読"
 "込について</a>"
 msgstr ""
+"You can upload files and import to database in bulk for creators familiar "
+"with Authoring Tool.<br />Upload Page Template to specific Folder, and run "
+"“Load Page Template” in Sub Menu to load Page.<br /><a href=“http://basercms."
+"net/manuals/etc/5.html” class=“outside-link” target=“_blank”>ページテンプレー"
+"トの読込について</a>"
 
 #: View/Elements/admin/helps/pages_index.php:29
 msgid "（例）ページ名「about」として作成したページを表示させる為のURL"
-msgstr ""
+msgstr "(Example) URL for displaying Page created as Page Name “about”."
 
 #: View/Elements/admin/helps/pages_index.php:30;32
 msgid "baserCMS設置URL"
-msgstr "baserCMS Deployed URL"
+msgstr "baserCMS Deploying URL"
 
 #: View/Elements/admin/helps/pages_index.php:31
 msgid ""
 "（例）カテゴリ名「company」に属する、ページ名「about」として作成したページを"
 "表示させる為のURL"
 msgstr ""
+"(Example) URL for displaying Page created as Page Name “about” that belongs "
+"to Category Name “company”."
 
 #: View/Elements/admin/helps/permissions_form.php:19
 msgid "ユーザーグループごとのアクセス制限を登録します。"
-msgstr ""
+msgstr "Register Access Restriction for each User Group."
 
 #: View/Elements/admin/helps/permissions_form.php:21
 #: View/Elements/admin/helps/permissions_index.php:21
 msgid ""
 "ルールを何も追加しない状態では、全てのユーザーが全てのコンテンツにアクセスで"
 "きるようになっています。"
-msgstr ""
+msgstr "Every User can access every Content when Rules were not added."
 
 #: View/Elements/admin/helps/permissions_form.php:22
 #: View/Elements/admin/helps/permissions_index.php:23
@@ -5768,14 +5990,16 @@ msgid ""
 "URL設定ではワイルドカード（*）を利用して一定のURL階層内のコンテンツに対し一度"
 "に設定を行う事ができます。"
 msgstr ""
+"You can do settings in bulk to Content in fixed URL directories by using "
+"wildcard (*) in URL Settings."
 
 #: View/Elements/admin/helps/permissions_form.php:25
 msgid "（例）ページ管理全体を許可しない設定"
-msgstr ""
+msgstr "(Example) Settings that disallow all Page Management"
 
 #: View/Elements/admin/helps/permissions_form.php:27
 msgid "（例）ブログコンテンツNO:2 の管理を許可しない設定"
-msgstr ""
+msgstr "(Example) Settings that disallow Blog Content NO:2’s Management"
 
 #: View/Elements/admin/helps/permissions_index.php:19
 msgid ""
@@ -5783,42 +6007,53 @@ msgid ""
 "のアクセス制限をかける事でシンプルでわかりやすいインターフェイスを実現する事"
 "ができます。<br />一覧左上の「新規追加」ボタンより新しいルールを追加します。"
 msgstr ""
+"You can have understandable interface by doing Access Restriction to each "
+"User Group like showing minimum menus to Site Operators.<br />Add new Rule "
+"by “Add” button on upper left of List."
 
 #: View/Elements/admin/helps/permissions_index.php:22
 msgid ""
 "複数のルールを追加した場合は、上から順に設定が上書きされ、下にいくほど優先さ"
 "れます。"
 msgstr ""
+"Lower one is prioritized by overwriting settings from top to bottom if "
+"multiple Rules were added."
 
 #: View/Elements/admin/helps/permissions_index.php:24
 msgid "管理者グループ「admins」には、アクセス制限の設定はできません。"
-msgstr ""
+msgstr "You can’t set Access Restriction to Admin Group “admins”."
 
 #: View/Elements/admin/helps/permissions_index.php:25
 msgid ""
 "一覧左上の「並び替え」をクリックすると、その際に各データの操作欄に表示される "
 "%s マークをドラッグアンドドロップして行の並び替えができます。"
 msgstr ""
+"You can sort rows by dragging & dropping %s mark on each data’s control "
+"field when clicking “Sort” on upper left of List."
 
 #: View/Elements/admin/helps/permissions_index.php:28
 msgid ""
 "（例）ページ管理全体は許可しないが、特定のページ「NO: ２」のみ許可を与える場"
 "合"
 msgstr ""
+"(Example) Give permission only to specific Page “NO: 2”, not all Page "
+"Management."
 
 #: View/Elements/admin/helps/permissions_index.php:30
 msgid "1つ目のルールとして、　/admin/pages/*　を「不可」として追加します。"
-msgstr ""
+msgstr "For the first Rule, add /admin/pages/* as “Disallowed”."
 
 #: View/Elements/admin/helps/permissions_index.php:31
 msgid "2つ目のルールとして、　/admin/pages/edit/2　を「可」として追加します。"
-msgstr ""
+msgstr "For the second Rule, add /admin/pages/* as “Allowed”."
 
 #: View/Elements/admin/helps/plugins_form.php:19
 msgid ""
 "プラグイン設定の登録を行います。<br />プラグインによってインストールメッセー"
 "ジが表示されている場合がありますので、内容に従います。"
 msgstr ""
+"Register Plugin Settings.<br />Follow content because installation message "
+"could be displayed by Plugin."
 
 #: View/Elements/admin/helps/plugins_index.php:19
 msgid ""
@@ -5827,6 +6062,9 @@ msgid ""
 "り、インストールも完了しています。各プラグインの%sから各プラグインの管理が行"
 "えます。"
 msgstr ""
+"Manage baserCMS Plugins<br />3 Plugins (Mail Form, Feed Reader, Blog) are "
+"included as standard Plugins and installation is done by default. You can "
+"manage each Plugin from each Plugin’s %s."
 
 #: View/Elements/admin/helps/plugins_index.php:21
 msgid "新しいプラグインのインストール方法"
@@ -5835,23 +6073,26 @@ msgstr "Method of installation of a new Plugin"
 #: View/Elements/admin/helps/plugins_index.php:23
 msgid ""
 "app/Plugin/ フォルダに、入手したプラグインのフォルダをアップロードします。"
-msgstr ""
+msgstr "Uploading acquired Plugin’s Folder to app/Plugin/ Folder."
 
 #: View/Elements/admin/helps/plugins_index.php:24
 msgid ""
 "プラグイン一覧に、新しいプラグインが表示されますので、その行の %s をクリック"
 "します。"
-msgstr ""
+msgstr "New Plugin will be displayed on Plugin List so click that row’s %s."
 
 #: View/Elements/admin/helps/plugins_index.php:25
 msgid ""
 "登録画面が表示されますので「登録」ボタンをクリックしてインストールを完了しま"
 "す。"
 msgstr ""
+"Register screen will be displayed, so complete installation by clicking "
+"“Register” button."
 
 #: View/Elements/admin/helps/search_indices_add.php:20
 msgid "baserCMSの管理システムで管理できないコンテンツの登録に利用します。"
 msgstr ""
+"Used to add Content that can’t be managed by baserCMS’s Management System."
 
 #: View/Elements/admin/helps/search_indices_add.php:22
 msgid ""
@@ -5859,10 +6100,12 @@ msgid ""
 "検索インデックスへの自動登録をサポートしていないプラグインのコンテンツURLを指"
 "します。"
 msgstr ""
+"“Un-Manageable Content” means new URL on customized baserCMS, or Plugin’s "
+"Content URL that doesn’t support auto-adding to search index."
 
 #: View/Elements/admin/helps/search_indices_add.php:23
 msgid "画像ファイルや、静的HTMLは登録できません。"
-msgstr ""
+msgstr "You can’t add image file or static HTML."
 
 #: View/Elements/admin/helps/search_indices_index.php:19
 msgid ""
@@ -5871,24 +6114,30 @@ msgid ""
 "ようになっています。<br />また、サイト内検索での検索結果の表示順は、優先度、"
 "更新日によって確定する事となっており、ここでは次の処理を行う事ができます。"
 msgstr ""
+"Data that is targeted to in-site search is managed as “Search Index” in "
+"baserCMS, and updated automatically when adding or updating Web page or "
+"Plugin Content.<br />Also, displaying order of search results in in-site "
+"search is determined by Priorities, Update Date and you can do processing as "
+"follows."
 
 #: View/Elements/admin/helps/search_indices_index.php:22
 msgid "優先度の変更（0.1&#xFF5E;1.0）"
-msgstr ""
+msgstr "Change Priorities (0.1&#xFF5E;1.0)"
 
 #: View/Elements/admin/helps/search_indices_index.php:23
 msgid "検索結果に表示されるコンテンツの削除"
-msgstr ""
+msgstr "Delete Content displayed on search result"
 
 #: View/Elements/admin/helps/search_indices_index.php:24
 msgid "baserCMSで管理できないコンテンツの検索インデックスへの登録"
-msgstr ""
+msgstr "Register un-manageable Content in baserCMS to Search Index"
 
 #: View/Elements/admin/helps/site_configs_form.php:19
 msgid ""
 "WEBサイトの基本設定を行います。<br />各項目のヘルプメッセージをご確認くださ"
 "い。"
 msgstr ""
+"Doing WEB site’s Basic Settings.<br />Please check help message on each Item."
 
 #: View/Elements/admin/helps/site_configs_form.php:21
 msgid ""
@@ -5897,12 +6146,18 @@ msgid ""
 "モード」をデバッグモードに切り替えると、サーバーキャッシュを削除した上で、新"
 "たに生成しないようにする事ができます。"
 msgstr ""
+"You can delete all cache files on server by “Delete Server Cache” on Utility "
+"on upper screen. Also, You can disable creating server cache after deleting "
+"it by switching to “Creation Development Mode” to Debug Mode on Option on "
+"bottom screen."
 
 #: View/Elements/admin/helps/site_configs_form.php:22
 msgid ""
 "画面上部ユーティリティの「データメンテナンス」から、データベースに格納された"
 "データのバックアップを行う事ができます。"
 msgstr ""
+"You can backup data stored to database from “Data Maintenance” on Utility on "
+"upper screen."
 
 #: View/Elements/admin/helps/site_configs_form.php:23
 msgid ""
@@ -5910,6 +6165,9 @@ msgid ""
 "install.php に書き込み権限がありません。書き込み権限を与えるか、該当ファイル"
 "を直接編集してください。"
 msgstr ""
+"There is no write permission to <?php echo $baseUrl ?>app/Config/install.php "
+"if Un-Editable Item. Please give write permission or edit target File "
+"directly."
 
 #: View/Elements/admin/helps/site_configs_form.php:24
 msgid ""
@@ -5917,127 +6175,160 @@ msgid ""
 "二つのファイルにも書き込み権限が必要です。変更後は、必ず権限を元に戻してくだ"
 "さい。"
 msgstr ""
+"Write permission are needed for following 2 files besides above install.php "
+"to switching Smart URL from Admin System. Please restore permission after "
+"changing."
 
 #: View/Elements/admin/helps/site_configs_form.php:25;26
 msgid "現在書き込み権限がありません"
-msgstr ""
+msgstr "No write permission currently."
 
 #: View/Elements/admin/helps/sites_form.php:19
 msgid ""
 "メインサイトに関連するサブサイトの登録を行います。<br>サブサイトのデザインを"
 "切り替えるには次の方法があります。"
 msgstr ""
+"Registering Subsite that is related to Main Site.<br>You can switch design "
+"of Subsite by following methods."
 
 #: View/Elements/admin/helps/sites_form.php:21
 msgid ""
 "テーマ設定：サブサイト用のテーマを準備し、サブサイトにテーマを設定する。"
-msgstr ""
+msgstr "Theme Settings: Prepare Theme for Subsite and set Theme to Subsite."
 
 #: View/Elements/admin/helps/sites_form.php:22
 msgid ""
 "レイアウトテンプレート設定：サブサイト用のレイアウトテンプレートを準備し、関"
 "連するフォルダ、コンテンツで個別にレイアウトテンプレートを設定する。"
 msgstr ""
+"Layout Template Settings: Parepare Layout Template for Subiste and set each "
+"Layout Template for related Folder and Content."
 
 #: View/Elements/admin/helps/sites_form.php:23
 msgid ""
 "サブフォルダ配置：サブサイト用の各種テンプレートを準備し、設定されいている"
 "テーマにサブサイト識別名称と同じフォルダを作成し配置する。"
 msgstr ""
+"Place Sub Folder: Prepare each Template for Subsite and create and place the "
+"same Folder as Subsite Identification Name to set Theme."
 
 #: View/Elements/admin/helps/sites_form.php:26
 msgid "サブフォルダ配置の設定例"
-msgstr ""
+msgstr "Example of placing Sub Folder."
 
 #: View/Elements/admin/helps/sites_form.php:28
 msgid ""
 "レイアウトテンプレートの場合・・・ theme/テーマフォルダ/Layouts/smartphone/"
 "default.php を配置"
 msgstr ""
+"For Layout Template: Place theme/{theme folder}/Layouts/smartphone/default."
+"php"
 
 #: View/Elements/admin/helps/sites_form.php:29
 msgid ""
 "エレメントテンプレートの場合・・・ theme/テーマフォルダ/Elements/smartphone/"
 "crumbs.php を配置"
 msgstr ""
+"For Element Template: Place theme/{theme folder}/Elements/smartphone/crumbs."
+"php"
 
 #: View/Elements/admin/helps/sites_form.php:30
 msgid ""
 "コンテンツテンプレートの場合・・・ theme/テーマフォルダ/Blog/smartphone/"
 "default/index.php を配置"
 msgstr ""
+"For Content Template: Place theme/{theme folder}/Blog/smartphone/default/"
+"index.php"
 
 #: View/Elements/admin/helps/theme_configs_form.php:19
 msgid ""
 "デザインテーマのロゴやメインイメージを変更する事ができます。<br />※ ロゴやメ"
 "インイメージを変更するには、適用しているテーマが対応している必要があります。"
 msgstr ""
+"You can change Design Theme’s Logo or Main Image.<br />Caution: Applied "
+"Theme must be compatible to change Logo or Main Image."
 
 #: View/Elements/admin/helps/theme_configs_form.php:22
 msgid ""
 "テーマがデフォルトのロゴやメインイメージを保有する場合、初期状態でデフォルト"
 "の画像が表示されています。"
 msgstr ""
+"Default image is displayed by default if Theme has default Logo or Main "
+"Image."
 
 #: View/Elements/admin/helps/theme_configs_form.php:23
 msgid ""
 "アップロードした画像を削除した場合、テーマがデフォルトの画像を保有している場"
 "合、デフォルトの画像が適用されます。"
 msgstr ""
+"Default image will be applied if uploaded image was deleted or Theme has "
+"default image."
 
 #: View/Elements/admin/helps/theme_files_form.php:19
 msgid "テーマファイルの作成・編集・削除が行えます。"
-msgstr ""
+msgstr "You can create, edit, or delete Theme File."
 
 #: View/Elements/admin/helps/theme_files_form.php:21
 msgid ""
 "ファイルを作成・編集するには、ファイル名、内容を入力して「作成」または、「更"
 "新」ボタンをクリックします。"
 msgstr ""
+"Enter File Name and Content and click “Add” or “Update” button to create or "
+"edit File."
 
 #: View/Elements/admin/helps/theme_files_form.php:22
 msgid "ファイルを削除するには、「削除」ボタンをクリックします。"
-msgstr ""
+msgstr "Click “Delete” button to delete File."
 
 #: View/Elements/admin/helps/theme_files_form.php:23
 msgid ""
 "現在のテーマにコピーするには、「現在のテーマにコピー」ボタンをクリックしま"
 "す。（core テーマのみ）"
 msgstr ""
+"Click “Copy to Current Theme” to copy to current Theme (core Theme only)."
 
 #: View/Elements/admin/helps/theme_files_form.php:25
 msgid ""
 "※ 画像ファイルの編集は行えません。新しい画像をアップロードするには、一覧より"
 "アップロードしてください"
 msgstr ""
+"Caution: You can’t edit image file. Upload from List to upload new image."
 
 #: View/Elements/admin/helps/theme_files_form_folder.php:19
 msgid "テーマファイルを分類する為のフォルダの作成・編集・削除が行えます。"
-msgstr ""
+msgstr "You can create, edit, or delete Folder for grouping Theme Files."
 
 #: View/Elements/admin/helps/theme_files_form_folder.php:21
 msgid ""
 "フォルダを作成するには、フォルダ名を半角で入力して「作成」ボタンをクリックし"
 "ます。"
 msgstr ""
+"Enter Folder Name with half-size characters and click “Add” button to create "
+"Folder."
 
 #: View/Elements/admin/helps/theme_files_form_folder.php:22
 msgid ""
 "フォルダ名を編集するには、新しいフォルダ名を半角で入力して「更新」ボタンをク"
 "リックします。"
 msgstr ""
+"Enter new Folder Name with half-size characters and click “Update” button to "
+"edit Folder Name."
 
 #: View/Elements/admin/helps/theme_files_form_folder.php:23
 msgid ""
 "フォルダを削除するには、「削除」ボタンをクリックします。フォルダ内のファイル"
 "は全て削除されるので注意が必要です。"
 msgstr ""
+"Click “Delete” button to delete Folder. Be aware that all Files in Folder "
+"will be deleted."
 
 #: View/Elements/admin/helps/theme_files_form_folder.php:24
 msgid ""
 "フォルダごと現在のテーマにコピーするには、「現在のテーマにコピー」ボタンをク"
 "リックします。（core テーマのみ）"
 msgstr ""
+"Click “Copy to Current Theme” to copy to current Theme together with Folder "
+"(core Theme only)."
 
 #: View/Elements/admin/helps/theme_files_index.php:19
 msgid ""
@@ -6046,12 +6337,17 @@ msgid ""
 "テーマファイルの編集、削除は行えませんが、現在のテーマへコピーする事ができま"
 "す。"
 msgstr ""
+"You can watch, edit, delete etc each Theme File here.<br />Core Template is "
+"a Template prepared by baserCMS Core, and you can’t edit or delete included "
+"Theme File, but you can copy to current Theme, for your information."
 
 #: View/Elements/admin/helps/theme_files_index.php:21
 msgid ""
 "上層のフォルダへ移動するには、 %s ボタンをクリックします。（現在の位置がテー"
 "マフォルダの最上層の場合は表示されません）"
 msgstr ""
+"Click %s button to move up to upper Folder (it will not be displayed if "
+"current position was Theme Folder’s top)."
 
 #: View/Elements/admin/helps/theme_files_index.php:21
 msgid "上へ"
@@ -6060,32 +6356,33 @@ msgstr "Up"
 #: View/Elements/admin/helps/theme_files_index.php:22
 msgid ""
 "新しいフォルダを作成するには、「フォルダ新規作成」ボタンをクリックします。"
-msgstr ""
+msgstr "Click “Add Folder” button to create new Folder."
 
 #: View/Elements/admin/helps/theme_files_index.php:23
 msgid ""
 "新しいテーマファイルを作成するには、「ファイル新規作成」ボタンをクリックしま"
 "す。"
-msgstr ""
+msgstr "Click “Add File”"
 
 #: View/Elements/admin/helps/theme_files_index.php:24
 msgid ""
 "ご自分のパソコン内のファイルをアップロードするには、「選択」ボタンをクリック"
 "し、対象のファイルを選択します。"
 msgstr ""
+"Click “Select” button and select target file to upload file in your PC."
 
 #: View/Elements/admin/helps/theme_files_index.php:25
 msgid "テーマファイルをコピーするには、対象ファイルの%sをクリックします。"
-msgstr ""
+msgstr "Click target file’s %s to copy Theme File."
 
 #: View/Elements/admin/helps/theme_files_index.php:26
 msgid ""
 "テーマファイルを閲覧、編集する場合は、対象ファイルの%sをクリックします。"
-msgstr ""
+msgstr "Click target file”s %s to watch and edit Theme File."
 
 #: View/Elements/admin/helps/theme_files_index.php:27
 msgid "テーマファイルを削除するには、対象ファイルの%sをクリックします。"
-msgstr ""
+msgstr "Click target file’s %s to delete Theme File."
 
 #: View/Elements/admin/helps/theme_files_index.php:28
 msgid ""
@@ -6093,10 +6390,12 @@ msgid ""
 "リックし、その後表示される画面下の「現在のテーマにコピー」をクリックします。"
 "（core テーマのみ）"
 msgstr ""
+"Click target file or folder’s %s and click “Copy to current Theme” on bottom "
+"screen to copy Theme File to current Theme (core Theme only)."
 
 #: View/Elements/admin/helps/theme_files_index.php:30
 msgid "テーマファイルの種類は次の６つとなります。"
-msgstr ""
+msgstr "Theme File types are following 6 types."
 
 #: View/Elements/admin/helps/theme_files_index.php:32
 #: View/Elements/admin/submenus/theme_files.php:17
@@ -6137,6 +6436,8 @@ msgid ""
 "テーマ情報の編集が行えます。編集内容は、テーマフォルダ名と、テーマ設定ファイ"
 "ルに反映されます。"
 msgstr ""
+"You can edit Theme Info. Edited content will be applied to Theme Folder Name "
+"and Theme Settings File."
 
 #: View/Elements/admin/helps/themes_form.php:20
 msgid "テーマフォルダ"
@@ -6153,24 +6454,28 @@ msgid ""
 "いるテンプレートで、内包しているテーマファイルの編集、削除は行えませんが、現"
 "在のテーマへコピーする事ができます。"
 msgstr ""
+"You can manage Theme like switching Theme, watching or editing Theme File "
+"here.<br />Core Template is a Template prepared by baserCMS Core, and you "
+"can't edit or delete included Theme File, but you can copy to current Theme, "
+"for your information."
 
 #: View/Elements/admin/helps/themes_index.php:21
 msgid "テーマを切り替えるには、対象テーマの %s ボタンをクリックします。"
-msgstr ""
+msgstr "Click %s button for target Theme to switch Theme."
 
 #: View/Elements/admin/helps/themes_index.php:22
 msgid "テーマを丸ごとコピーするには、対象テーマの %s ボタンをクリックします。"
-msgstr ""
+msgstr "Click %s button for target Theme to copy Theme entirely."
 
 #: View/Elements/admin/helps/themes_index.php:23
 msgid ""
 "テーマファイルを閲覧、編集する場合は、対象テーマの %s ボタンをクリックしま"
 "す。"
-msgstr ""
+msgstr "Click %s button for target Theme to watch or edit Theme File."
 
 #: View/Elements/admin/helps/themes_index.php:24
 msgid "テーマを削除するには、対象テーマの  %s ボタンをクリックします。"
-msgstr ""
+msgstr "Click %s button for target Theme to delete Theme."
 
 #: View/Elements/admin/helps/themes_index.php:26
 msgid ""
@@ -6179,34 +6484,41 @@ msgid ""
 "ファイル等を配置します。<br /><small>※ テーマ名には半角小文字のアルファベット"
 "を利用します。"
 msgstr ""
+"Create Theme Folder as /app/webroot/theme/{theme name}/ and place CakePHP "
+"template files, css, or javascript files inside that folder to add Theme."
+"<br /><small>Caution: Use half-size small alphabets for Theme Name."
 
 #: View/Elements/admin/helps/tools_load_schema.php:19
 msgid "スキーマファイルの読み込みテストを行えます。"
-msgstr ""
+msgstr "You can do loading test for Schema File."
 
 #: View/Elements/admin/helps/tools_load_schema.php:20
 msgid "※ 単一ファイルのみ対応"
-msgstr ""
+msgstr "Caution: Only for single File"
 
 #: View/Elements/admin/helps/tools_log.php:19
 msgid "ログのバックアップと削除が行えます。"
-msgstr ""
+msgstr "You can do log’s backup and deletion."
 
 #: View/Elements/admin/helps/tools_log.php:21
 msgid "エラーログが肥大化してディスクを圧迫する時などご利用ください。"
-msgstr ""
+msgstr "Use this when error log is fattened and oppressing disk."
 
 #: View/Elements/admin/helps/tools_log.php:22
 msgid ""
 "基本的には、エラーログの内容を確認してエラーが出ないように構築する事をお奨め"
 "します。"
 msgstr ""
+"Basically we recommend checking error log content and construct it to not "
+"produce errors."
 
 #: View/Elements/admin/helps/tools_maintenance.php:19
 msgid ""
 "データベースのバックアップと復元が行えますので、定期的にバックアップを保存し"
 "ておく事をおすすめします。"
 msgstr ""
+"You can backup and restore database, so we recommend saving backup "
+"priodically."
 
 #: View/Elements/admin/helps/tools_maintenance.php:21
 msgid "データベースのデータと構造をバックアップします。"
@@ -6215,61 +6527,73 @@ msgstr "Backup database's data and structures."
 #: View/Elements/admin/helps/tools_maintenance.php:22
 msgid "baserCMSのバージョンが違う場合は復元する事ができない場合があります。"
 msgstr ""
+"There may be cases that restoring is not possible when baserCMS's version is "
+"differernt."
 
 #: View/Elements/admin/helps/tools_maintenance.php:23
 msgid ""
 "環境によっては復元に失敗する可能性もあります。バックアップと復元は必ず自己責"
 "任で行ってください。"
 msgstr ""
+"There may be cases that restoring will fail depending on environment. Please "
+"do backup and restoring at your own risk."
 
 #: View/Elements/admin/helps/tools_maintenance.php:24
 msgid ""
 "※ 運用を開始する前に、バックアップと復元が正常に動作するかの確認をおすすめし"
 "ます。"
 msgstr ""
+"Caution: We recommend checking backup and restoring run normally before "
+"operating."
 
 #: View/Elements/admin/helps/tools_write_schema.php:19
 msgid ""
 "スキーマファイルは、データベースの構造を読み取り、CakePHPのスキーマファイルと"
 "して出力できます。"
 msgstr ""
+"Scheme File can read database's structures and output as a CakePHP's Schema "
+"File."
 
 #: View/Elements/admin/helps/tools_write_schema.php:20
 msgid ""
 "コアパッケージやプラグインの新規テーブル作成、テーブル構造変更の際に利用する"
 "と便利です。"
 msgstr ""
+"It's useful when creating new table for Core package and Plugin, or changing "
+"table structures."
 
 #: View/Elements/admin/helps/tools_write_schema.php:21
 msgid "新規インストール時に利用するファイルは、次のフォルダ内に配置します。"
-msgstr ""
+msgstr "Place files that are used when new installation to following Folders."
 
 #: View/Elements/admin/helps/tools_write_schema.php:23
 msgid "Baserコア・・・/baser/config/sql/"
-msgstr ""
+msgstr "Baser Core: /baser/config/sql"
 
 #: View/Elements/admin/helps/tools_write_schema.php:24
 msgid "プラグイン・・・/{プラグインフォルダ}/config/sql/"
-msgstr ""
+msgstr "Plugin: /{Plugin folder}/config/sql/"
 
 #: View/Elements/admin/helps/tools_write_schema.php:27
 msgid "アップデート時に利用するファイルは、次のフォルダ内に配置します。"
-msgstr ""
+msgstr "Place files used by update inside following folder."
 
 #: View/Elements/admin/helps/tools_write_schema.php:29
 msgid "Baserコア・・・/baser/config/update/{バージョン番号}/sql/"
-msgstr ""
+msgstr "Baser Core: /baser/config/update/{version number}/sql/"
 
 #: View/Elements/admin/helps/tools_write_schema.php:30
 msgid ""
 "プラグイン・・・/{プラグインフォルダ}/config/update/{バージョン番号}/sql/"
-msgstr ""
+msgstr "Plugin: /{Plugin folder}/config/update/{version number}/sql/"
 
 #: View/Elements/admin/helps/user_groups_form.php:19
 msgid ""
 "ログインするユーザーのグループを登録します。コンテンツへの権限内容がわかりや"
 "すい名称で登録します。"
 msgstr ""
+"Registering logging User's Group. Register understandable name that can "
+"recognize permission to Conent."
 
 #: View/Elements/admin/helps/user_groups_index.php:19
 msgid ""
@@ -6277,20 +6601,26 @@ msgid ""
 "します。<br />「サイト運営者にはニュースリリースの発信のみ行わせたい」といっ"
 "た場合などにログインユーザーのグループ分けを行うと便利です。"
 msgstr ""
+"User Group is used for Access Restriction to Conent by Group.<br />Login "
+"User's grouping is useful when you want to do \"let Site Operators only do "
+"news releasing\"."
 
 #: View/Elements/admin/helps/user_groups_index.php:21
 msgid ""
 "アクセス制限をかけるには各ユーザーグループの操作欄にある %s ボタンをクリック"
 "しておこないます。"
 msgstr ""
+"Click %s button to each User Group's control field to do Access Restriction."
 
 #: View/Elements/admin/helps/user_groups_index.php:22
 msgid "管理者グループのアクセス制限設定、削除、識別名の変更はできません。"
 msgstr ""
+"You can't set settings, delete, or rename identificatioon name on Access "
+"Restriction for Admin Group."
 
 #: View/Elements/admin/helps/users_form.php:20
 msgid "ログイン用のユーザーアカウントを登録する事ができます。"
-msgstr ""
+msgstr "You can register User Account for login."
 
 #: View/Elements/admin/helps/users_form.php:21
 msgid "パスワード欄は変更する場合のみ入力します。"
@@ -6301,6 +6631,8 @@ msgid ""
 "ユーザー管理ではログインする事ができるユーザーの管理を行う事ができます。<br /"
 ">新しいユーザーを登録するには一覧左上の「新規追加」ボタンをクリックします。"
 msgstr ""
+"You can manage Users that can login in Manage User.<br />Click \"Add\" "
+"button on upper left of List to add new User."
 
 #: View/Elements/admin/helps/users_index.php:20
 msgid ""
@@ -6308,6 +6640,9 @@ msgid ""
 "ユーザーとして再ログインする事ができます（代理ログイン）。<br />他のユーザー"
 "の「よく使う項目」を登録する場合などに便利です。"
 msgstr ""
+"You can re-login as another User from List's %s if you were logging in as a "
+"System Admin Group (Representative Login). <br />It's useful when "
+"registering other User's \"Favorite Items\"."
 
 #: View/Elements/admin/helps/users_index.php:21
 msgid ""
@@ -6315,36 +6650,48 @@ msgid ""
 "クリックします。<br /><small>※ 代理ログインの対象は、システム管理グループ以外"
 "のユーザーとなります。"
 msgstr ""
+"Click \"Back to Previous User\" on User name on upper screen to go back to "
+"previous User.<br /><small>Caution: Target Representative Login will be User "
+"that are not in System Admin Group."
 
 #: View/Elements/admin/helps/widget_areas_form.php:19
 msgid ""
 "一つのウィジェットエリアは、左側の「利用できるウィジェット」からお好きなウィ"
 "ジェットを複数選択して作成する事ができます。"
 msgstr ""
+"You can create a Wdiget Area by selecting multipl Widgets you like from left "
+"side of \"Available Widgets\"."
 
 #: View/Elements/admin/helps/widget_areas_form.php:21
 msgid ""
 "まず、わかりやすい「ウィジェットエリア名」を決めて入力します。（例）サイド"
 "バー等"
 msgstr ""
+"Enter understandable \"Wdiget Area Name\" first. (Example) Side Bar etc"
 
 #: View/Elements/admin/helps/widget_areas_form.php:22
 msgid ""
 "「エリア名を保存する」ボタンをクリックすると「利用できるウィジェット」と「利"
 "用中のウィジェット」の二つの領域が表示されます"
 msgstr ""
+"Two \"Available Widgets\" and \"Using Widgets\" regions are displayed if you "
+"clicked \"Save Area Name\"."
 
 #: View/Elements/admin/helps/widget_areas_form.php:23
 msgid ""
 "「利用できるウィジェット」の中から利用したいウィジェットをドラッグして「利用"
 "中のウィジェット」の中でドロップします。"
 msgstr ""
+"Drag Widget you want to use from \"Available Widgets\" and Drop inside "
+"\"Using Widgets\"."
 
 #: View/Elements/admin/helps/widget_areas_form.php:24
 msgid ""
 "ウィジェットの設定欄が開きますので必要に応じて入力し「保存」ボタンをクリック"
 "します。"
 msgstr ""
+"Widget setting area will open, so enter it if you need and click \"Save\" "
+"button."
 
 #: View/Elements/admin/helps/widget_areas_form.php:26
 msgid "ポイント"
@@ -6353,13 +6700,15 @@ msgstr "Point"
 #: View/Elements/admin/helps/widget_areas_form.php:28
 msgid ""
 "「利用中のウィジェット」はドラッグアンドドロップで並び替える事ができます。"
-msgstr ""
+msgstr "You can sort \"Using Widgets\" by dragging & dropping."
 
 #: View/Elements/admin/helps/widget_areas_form.php:29
 msgid ""
 "一時的に利用しない場合は、削除せずにウィジェット設定の「利用する」チェックを"
 "外しておくと同じ設定のまま後で利用する事ができます。"
 msgstr ""
+"You can use it afterwards by unchecking \"Use\" in Widget Settings without "
+"deleting it if you don't use it temporarily."
 
 #: View/Elements/admin/helps/widget_areas_form.php:31
 msgid ""
@@ -6367,6 +6716,9 @@ msgid ""
 "置する場合は、テンプレートや、ページ記事中（ソース）に次のコードを貼り付けま"
 "す。"
 msgstr ""
+"Paste following code to Source in Template or Page Article to place Widget "
+"individually besides Standard Widget Area other than settable settings from "
+"System Settings."
 
 #: View/Elements/admin/helps/widget_areas_index.php:19
 msgid ""
@@ -6374,6 +6726,9 @@ msgid ""
 "です。<br />その部品の一つ一つをウィジェットと呼び、ウィジェットが集まった一"
 "つのグループをウィジェットエリアと呼びます。"
 msgstr ""
+"Widget is method to add or delete components to specified WEB page easily."
+"<br />Each component is called Widget and group that gathers Widgets is "
+"called Widget Area."
 
 #: View/Elements/admin/helps/widget_areas_index.php:20
 msgid ""
@@ -6381,23 +6736,28 @@ msgid ""
 "ンである、ブログ、メールではそれぞれ別のウィジェットエリアを個別に指定する事"
 "もできます。"
 msgstr ""
+"You can set Widget Area for whole from “%s@. Also, you can set different "
+"Widget Area for Standard Plugin like Blog, Mail."
 
 #: View/Elements/admin/helps/widget_areas_index.php:22
 msgid ""
 "新しいウィジェットエリアを作成するには、「新規追加」ボタンをクリックします。"
-msgstr ""
+msgstr "Click “Add” button to create new Widget Area."
 
 #: View/Elements/admin/helps/widget_areas_index.php:23
 msgid ""
 "既存のウィジェットエリアを編集するには、対象のウィジェットエリアの操作欄にあ"
 "る%sをクリックします。"
 msgstr ""
+"Click %s on control field on target Widget Area to edit existing Widget Area."
 
 #: View/Elements/admin/helps/widget_areas_index.php:25
 msgid ""
 "※ なお、ウィジェットエリアを作成、編集する際には、サーバーキャッシュが削除さ"
 "れ、一時的に公開ページの表示速度が遅くなってしまいますのでご注意ください。"
 msgstr ""
+"Caution: Server cache will be deleted and Public Page’s loading will be slow "
+"temporarily when creating or editing Widget Area."
 
 #: View/Elements/admin/plugins/index_list.php:34
 msgid "一括無効"
@@ -6426,6 +6786,7 @@ msgstr "Developer"
 #: View/Elements/admin/themes/index_list_market.php:33
 msgid "baserマーケットは、2014年3月31日 17時に公開です。お楽しみに！"
 msgstr ""
+"baser Market will be released on 2014/3/31 17:00. Please look forward to it!"
 
 #: View/Elements/admin/plugins/index_list_market.php:41
 #: View/Elements/admin/themes/index_list_market.php:35
@@ -6479,6 +6840,9 @@ msgid ""
 "アンダースコア（_）のみが利用できます。エイリアスを入力しない場合は、URLにも"
 "利用されます。"
 msgstr ""
+"Enter Identification Name to identify Subsite. You can only use half-size "
+"alphabets and numbers, hyphen (-), underscore (_). It will be used for URL "
+"if you didn’t enter Alias."
 
 #: View/Elements/admin/sites/form.php:51
 msgid ""
@@ -6486,16 +6850,21 @@ msgid ""
 "リアスは半角英数に加えハイフン（-）・アンダースコア（_）・スラッシュ（/）・"
 "ドット（.）が利用できます。"
 msgstr ""
+"You can enter Alias if you want it to have different URL from Subsite "
+"Identification Name. You can use half-size alphabets and numbers, hyphen "
+"(-), underscore (_), slash (/), dot (.) for Alias."
 
 #: View/Elements/admin/sites/form.php:61
 msgid ""
 "サブサイト名を入力します。管理システムでの表示に利用されます。日本語の入力が"
 "可能ですのでわかりやすい名前をつけてください。"
 msgstr ""
+"Enter Subsite Name. It will be used for displaying in Admin System. Please "
+"name it understandable."
 
 #: View/Elements/admin/sites/form.php:70
 msgid "サブサイトのタイトルを入力します。タイトルタグに利用されます。"
-msgstr ""
+msgstr "Entering Subsite Title. It will be used for title tag."
 
 #: View/Elements/admin/sites/form.php:75 View/SiteConfigs/admin/form.php:62
 msgid "サイト基本キーワード"
@@ -6503,7 +6872,7 @@ msgstr "Site Basic Keyword"
 
 #: View/Elements/admin/sites/form.php:79;87 View/SiteConfigs/admin/form.php:56
 msgid "テンプレートで利用する場合は、<br />%sで出力します。"
-msgstr ""
+msgstr "To use it on Template,<br />Output with %s."
 
 #: View/Elements/admin/sites/form.php:83 View/SiteConfigs/admin/form.php:70
 msgid "サイト基本説明文"
@@ -6511,11 +6880,11 @@ msgstr "Site Basic Description"
 
 #: View/Elements/admin/sites/form.php:94
 msgid "エイリアスを利用してメインサイトと自動連携する"
-msgstr ""
+msgstr "Use alias to cooperate with Main Site automatically"
 
 #: View/Elements/admin/sites/form.php:97
 msgid "サブサイトの主として連携させたいサイトを選択します。"
-msgstr ""
+msgstr "Select main cooperation Site for Subsite."
 
 #: View/Elements/admin/sites/form.php:99
 msgid ""
@@ -6523,6 +6892,9 @@ msgid ""
 "メインサイトでコンテンツの追加や削除が発生した場合、<br>エイリアスを利用して"
 "自動的にサブサイトで同様の処理を実行します。"
 msgstr ""
+"When adding or deleting Content in Main Site has occurred, by checking “Use "
+"alias to cooperate with Main Site automatically”,<br>Same process will be "
+"run on Subsites automatically by using Alias."
 
 #: View/Elements/admin/sites/form.php:107
 msgid "デバイス・言語"
@@ -6537,6 +6909,8 @@ msgid ""
 "サブサイトにデバイス属性を持たせ、サイトアクセス時、ユーザーエージェントを判"
 "定し適切なサイトを表示する機能を利用します。"
 msgstr ""
+"Use function that displays appropriate site by giving device attribute to "
+"Subsite and judging user agent when site was accessed."
 
 #: View/Elements/admin/sites/form.php:117
 msgid "[言語]"
@@ -6547,6 +6921,8 @@ msgid ""
 "サブサイトに言語属性を持たせ、サイトアクセス時、ブラウザの言語設定を判定し適"
 "切なサイトを表示する機能を利用します。"
 msgstr ""
+"Use function that displays appropriate site by giving language attribute to "
+"Subsite and judging browser’s language settings when site was accessed."
 
 #: View/Elements/admin/sites/form.php:124
 msgid "[アクセス設定]"
@@ -6562,6 +6938,9 @@ msgid ""
 "トを表示します。このオプションをオフにした場合は、エイリアスを利用した別URLを"
 "利用したアクセスとなります。"
 msgstr ""
+"Display appropriate site by accessing with the same URL as Main Site and "
+"judging device settings or language settings. It will be access that use "
+"different URL using Alias if you turned this option off."
 
 #: View/Elements/admin/sites/form.php:131
 msgid "メインサイトから自動的にリダイレクト"
@@ -6572,6 +6951,8 @@ msgid ""
 "メインサイトと別URLでアクセスする際、デバイス設定や言語設定を判定し、適切なサ"
 "イトへリダイレクトします。"
 msgstr ""
+"Redirect to appropriate site by judging device settings or language setting "
+"when accessing with different URL from Main Site."
 
 #: View/Elements/admin/sites/form.php:135
 msgid "全てのリンクをサブサイト用に変換する"
@@ -6582,6 +6963,8 @@ msgid ""
 "メインサイトと別URLでアクセスし、エイリアスを利用して同一コンテンツを利用する"
 "場合、コンテンツ内の全てのリンクをサブサイト用に変換します。"
 msgstr ""
+"Convert all links in Contents to links for Sub Site when accessing with "
+"different URL from Main Site and using same Content by using Alias."
 
 #: View/Elements/admin/sites/form.php:146
 #: View/Elements/admin/sites/index_list.php:51
@@ -6594,6 +6977,9 @@ msgid ""
 "フォルダを作成する事で別途配置する事ができますが、テーマフォルダ自体を別にし"
 "たい場合はここでテーマを指定します。"
 msgstr ""
+"You can place Subsite Template by creating Sub Folder inside Folders that "
+"place each Template separately, but specify Theme if you want to separate "
+"Theme Folder itself here."
 
 #: View/Elements/admin/sites/form.php:157
 msgid "公開しない"
@@ -6646,6 +7032,8 @@ msgstr "Add Plugin"
 #: View/Elements/admin/submenus/search_indices.php:21
 msgid "現在の検索インデックスを消去して、再構築します。本当にいいですか？"
 msgstr ""
+"You are about to delete current Search Index and reconstruct it, are you "
+"sure?"
 
 #: View/Elements/admin/submenus/search_indices.php:41
 msgid "検索インデックスメニュー"
@@ -6682,7 +7070,7 @@ msgstr "Download Theme"
 
 #: View/Elements/admin/submenus/themes.php:29
 msgid "現在適用中のテーマをZIP圧縮してダウンロードします。よろしいですか？"
-msgstr ""
+msgstr "Downloading zipped current applied Theme. Are you sure?"
 
 #: View/Elements/admin/submenus/themes.php:32
 msgid "テーマ用初期データダウンロード"
@@ -6694,6 +7082,9 @@ msgid ""
 "す。よろしいですか？\\nダウンロードしたデータは、配布用テーマの Config/data/ "
 "内に配置してください。"
 msgstr ""
+"Creating initial data for Theme based on current database status and "
+"downloading it. Are you sure?\\nPlace data downloaded inside on Config/data "
+"for distributing Theme."
 
 #: View/Elements/admin/submenus/themes.php:36
 msgid "データリセット"
@@ -6706,6 +7097,10 @@ msgid ""
 "ますのでご注意ください。\\n※ 管理ログは読み込まれず、ユーザー情報はログインし"
 "ているユーザーのみに初期化されます。"
 msgstr ""
+"Resetting current data with baseCMS Core’s initial data. Are you sure?\\n"
+"\\nCaution: Please note currently registered all Article data and settings "
+"will be overwritten if you load initial data.\\nCaution: Management log "
+"won’t be loaded and User Info will be initialized only for logged User."
 
 #: View/Elements/admin/submenus/tools.php:20
 msgid "ユーティリティメニュー"
@@ -6784,11 +7179,11 @@ msgstr "There is no changeble Theme."
 
 #: View/Elements/admin/themes/index_list.php:74
 msgid "baserCMSの公式サイト</a>では無償のテーマが公開されています。"
-msgstr ""
+msgstr "baserCMS Official Site</a> Free Theme is available."
 
 #: View/Elements/admin/themes/index_list.php:76
 msgid "baserマーケット</a>でテーマをダウンロードしましょう。"
-msgstr ""
+msgstr "baser Market</a> Let’s download Theme."
 
 #: View/Elements/admin/themes/index_row.php:35
 msgid "テーマ情報設定"
@@ -6842,10 +7237,11 @@ msgstr "Local Navigation"
 msgid ""
 "ページ機能で作成されたページで同一カテゴリ内のタイトルリストを表示します。"
 msgstr ""
+"Display Title List of Pages in the same category created by Page function."
 
 #: View/Elements/admin/widgets/local_navi.php:23
 msgid "タイトルを表示する場合、カテゴリ名を表示します。"
-msgstr ""
+msgstr "Display Category Name when displaying Title."
 
 #: View/Elements/admin/widgets/php_template.php:16
 msgid "PHPテンプレート"
@@ -6853,7 +7249,7 @@ msgstr "PHP Template"
 
 #: View/Elements/admin/widgets/php_template.php:17
 msgid "PHPコードが書かれたテンプレートの読み込みが行えます。"
-msgstr ""
+msgstr "You can load Template written with PHP code."
 
 #: View/Elements/admin/widgets/php_template.php:21
 msgid "PHPテンプレート名"
@@ -6864,14 +7260,16 @@ msgid ""
 "テンプレートを利用中のテーマ内の次のパスに保存してください。<br />/app/"
 "webroot/theme/{テーマ名}/Elements/widgets/</small></p>"
 msgstr ""
+"Please save Template to following path in the currently using Theme.<br />/"
+"app/webroot/theme/{theme name}/Elements/widgets/</small></p>"
 
 #: View/Elements/admin/widgets/search.php:17
 msgid "サイト内検索フォームを表示します。"
-msgstr ""
+msgstr "Display in-site search form."
 
 #: View/Elements/admin/widgets/text.php:17
 msgid "テキストやHTMLの入力ができます。"
-msgstr ""
+msgstr "You can enter text or HTML."
 
 #: View/Elements/submenus/default.php:20
 msgid "ログインメニュー"
@@ -6913,15 +7311,15 @@ msgstr "Password"
 
 #: View/Emails/text/installed.php:35
 msgid "パスワードはユーザー管理より変更する事ができます。"
-msgstr ""
+msgstr "You can change password from Mange User."
 
 #: View/Emails/text/installed.php:39
 msgid "baserCMSでどんな事ができるの？"
-msgstr ""
+msgstr "What can be done with baserCMS?"
 
 #: View/Emails/text/installed.php:41
 msgid "baserCMS を初めてご利用される場合は次のページをご覧ください。"
-msgstr ""
+msgstr "Please watch following page if you use baserCMS for the first time."
 
 #: View/Emails/text/installed.php:43
 msgid "baserCMS公式サイト"
@@ -6955,6 +7353,7 @@ msgstr "About Case Study Publication"
 msgid ""
 "あなたが作った baserCMS の Webサイトを、公式サイトでアピールしませんか？"
 msgstr ""
+"Why don’t you appeal your Web site created by baserCMS on official site?"
 
 #: View/Emails/text/installed.php:67
 msgid "baserCMS導入事例"
@@ -6982,7 +7381,7 @@ msgstr "baserCMS Official Facebook"
 
 #: View/Emails/text/installed.php:83
 msgid "いいね！をクリックして普及にご協力ください。"
-msgstr ""
+msgstr "Please support spreading by clicking Like!"
 
 #: View/Emails/text/installed.php:85
 msgid "baserCMS公式Twitter"
@@ -6998,7 +7397,7 @@ msgstr "baserCMS's discussion place (Facebook)"
 
 #: View/Emails/text/installed.php:91
 msgid "ちょっとした雑談やつぶやきにどうぞ。初心者歓迎！"
-msgstr ""
+msgstr "For a chat and murmur."
 
 #: View/Emails/text/installed.php:93
 msgid "各地域のユーザーグループ（Facebook）"
@@ -7006,7 +7405,7 @@ msgstr "baserCMS Users Group in various region (Facebook)"
 
 #: View/Emails/text/installed.php:94
 msgid "ご自分のエリアのユーザーグループに参加して情報交換しましょう。"
-msgstr ""
+msgstr "Exchange info by joining User Group in your area."
 
 #: View/Emails/text/installed.php:95
 msgid "baserCMS UG 北海道"
@@ -7042,7 +7441,7 @@ msgstr "baserCMS Users Forum"
 
 #: View/Emails/text/installed.php:112
 msgid "不具合や改善報告はこちらよりどうぞ。"
-msgstr ""
+msgstr "Please send bugs or suggestions here."
 
 #: View/Emails/text/installed.php:114
 msgid "baserCMS開発プロジェクト"
@@ -7050,7 +7449,7 @@ msgstr "baserCMS Development Project"
 
 #: View/Emails/text/installed.php:116
 msgid "baserCMSの開発状況や、今後の開発タスクなどが確認できます。"
-msgstr ""
+msgstr "You can check baserCMS’s developing status and tasks for future."
 
 #: View/Errors/missing_class.php:20
 msgid "クラスが見つかりません"
@@ -7114,7 +7513,7 @@ msgstr "Inline"
 
 #: View/Helper/BcContentsHelper.php:184
 msgid "プラグインの BcContent 設定が間違っています。"
-msgstr ""
+msgstr "Plugin’s BcContent settings is wrong."
 
 #: View/Helper/BcFormHelper.php:1324
 msgid "追加"
@@ -7135,6 +7534,9 @@ msgid ""
 "\"https://developers.google.com/maps/web/\" target=\"_blank\">キーを取得</a>"
 "して、<a href=\"%s\">システム管理</a>より設定してください。"
 msgstr ""
+"You have to register Google Maps API’s key to use Google Maps.<a "
+"href=“https://developers.google.com/maps/web/“ target=“_blank”>Get key</a>, "
+"and set it from <a href=“%s”>System</a>."
 
 #: View/Helper/BcTextHelper.php:66
 msgid "無"
@@ -7357,16 +7759,20 @@ msgid ""
 "BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドット"
 "で区切って指定する必要があります。"
 msgstr ""
+"You must specify $fieldName by splitting Model and Field name by dot to use "
+"BcUploadHelper."
 
 #: View/Helper/BcUploadHelper.php:236
 msgid "フィールド名は、 ModelName.field_name で指定してください。"
-msgstr ""
+msgstr "Please specify Field Name with ModelName.field_name."
 
 #: View/Helper/BcUploadHelper.php:421
 msgid ""
 "BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要で"
 "す。"
 msgstr ""
+"You must set BcUploadBehavior’s using settings in Model to use "
+"BcUploadHelper."
 
 #: View/Installations/admin/alert.php:19
 msgid "インストールを開始するにはデバッグモードが -1 である必要があります。"
@@ -7374,45 +7780,50 @@ msgstr "You must set Debug Mode to -1 to start installing baserCMS."
 
 #: View/Installations/admin/alert.php:20
 msgid "デバッグモードを変更するには次の手順のとおり操作してください。"
-msgstr ""
+msgstr "Please do operation as following method to change Debug Mode."
 
 #: View/Installations/admin/alert.php:23
 msgid "次のファイルを開きます。"
-msgstr ""
+msgstr "Open following file."
 
 #: View/Installations/admin/alert.php:26
 msgid "install.phpより次の行を見つけます。"
-msgstr ""
+msgstr "Find following line in install.php."
 
 #: View/Installations/admin/alert.php:29
 msgid "0 の部分を、 -1 に書き換えます。"
-msgstr ""
+msgstr "Change 0 to -1."
 
 #: View/Installations/admin/alert.php:30
 msgid "編集したファイルをサーバーにアップロードします。"
-msgstr ""
+msgstr "Upload edited file to server."
 
 #: View/Installations/admin/alert.php:33
 msgid "baserCMSを初期化するにはコチラから"
-msgstr ""
+msgstr "Initialize baserCMS here"
 
 #: View/Installations/admin/index.php:21
 msgid ""
 "%sのインストールを開始します。<br />よろしければ「インストール開始」ボタンを"
 "クリックしてください。"
 msgstr ""
+"Installing %s.<br />Please click “Start Installation” button if you are ok."
 
 #: View/Installations/admin/index.php:23
 msgid ""
 "baserCMSではファイルベースのデータベースをサポートしています。SQLite３ を利用"
 "すれば、インストールにデータベースサーバーは必要ありません。"
 msgstr ""
+"baserCMS supports file based database. Database server won’t be needed for "
+"installation if you used SQLite 3."
 
 #: View/Installations/admin/index.php:25
 msgid ""
 "膨大なデータの操作、データベースによる複雑な処理が必要な場合は、MySQLなどの"
 "データベースサーバーの利用を推奨します。"
 msgstr ""
+"Use of Database server like MySQL is recommended if huge data manipulation "
+"or complex processing by database are needed."
 
 #: View/Installations/admin/index.php:30
 msgid "インストール開始"
@@ -7420,11 +7831,11 @@ msgstr "Start Installation"
 
 #: View/Installations/admin/reset.php:21
 msgid "本当にbaserCMSを初期化してもよろしいですか？"
-msgstr ""
+msgstr "Are you sure that you wan to initialize baserCMS?"
 
 #: View/Installations/admin/reset.php:39
 msgid "baserCMSを初期化します。データベースのデータも全て削除されます。"
-msgstr ""
+msgstr "Initializing baserCMS. All data on database will be deleted."
 
 #: View/Installations/admin/reset.php:41
 msgid ""
@@ -7458,6 +7869,8 @@ msgid ""
 "インストール環境の条件をチェックしました。<br />次に進む為には、「基本必須条"
 "件」の赤い項目を全て解決する必要があります。"
 msgstr ""
+"Checked installing environment’s requirements.<br />You must resolve all the "
+"red Items on “Basic Requirements” to proceed."
 
 #: View/Installations/admin/step2.php:48
 msgid "PHPのバージョン"
@@ -7469,13 +7882,15 @@ msgstr "Current PHP Version"
 
 #: View/Installations/admin/step2.php:52
 msgid "ご利用のサーバーでは残念ながらbaserCMSを動作させる事はできません"
-msgstr ""
+msgstr "Sorry, you can’t run baserCMS on using server"
 
 #: View/Installations/admin/step2.php:57
 msgid ""
 "/app/Config フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそ"
 "ちらに従ってください）"
 msgstr ""
+"Write permission to /app/Config folder (707 OR 777 etc. Follow server "
+"recommendations if they exist)"
 
 #: View/Installations/admin/step2.php:60;71;82;93;108;127;146;165;184;248
 msgid "書き込み可"
@@ -7487,145 +7902,171 @@ msgstr "Not Writable"
 
 #: View/Installations/admin/step2.php:63
 msgid "/app/Config フォルダに書き込み権限が必要です"
-msgstr ""
+msgstr "You need write permission to /app/Config folder"
 
 #: View/Installations/admin/step2.php:68
 msgid ""
 "/app/Plugin フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそ"
 "ちらに従ってください）"
 msgstr ""
+"Write permission to /app/Plugin folder (707 OR 777 etc. Follow server "
+"recommendations if they exist)"
 
 #: View/Installations/admin/step2.php:74
 msgid "/app/Plugin フォルダに書き込み権限が必要です"
-msgstr ""
+msgstr "You need write permission to /app/Plugin folder"
 
 #: View/Installations/admin/step2.php:79
 msgid ""
 "/app/tmp フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそち"
 "らに従ってください）"
 msgstr ""
+"Write permission to /app/tmp folder (707 OR 777 etc. Follow server "
+"recommendations if they exist)"
 
 #: View/Installations/admin/step2.php:85
 msgid "/app/tmp フォルダに書き込み権限が必要です。"
-msgstr ""
+msgstr "You need write permission to /app/tmp folder"
 
 #: View/Installations/admin/step2.php:90
 msgid ""
 "/app/View/Pages フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合"
 "はそちらに従ってください）"
 msgstr ""
+"Write permission to /app/View/Pages folder (707 OR 777 etc. Follow server "
+"recommendations if they exist)"
 
 #: View/Installations/admin/step2.php:96
 msgid "/app/View/Pages フォルダに書き込み権限が必要です。"
-msgstr ""
+msgstr "You need write permission to /app/View/Pages folder"
 
 #: View/Installations/admin/step2.php:102
 msgid ""
 "/app/webroot/files フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある"
 "場合はそちらに従ってください）"
 msgstr ""
+"Write permission to /app/webroot/files folder (707 OR 777 etc. Follow server "
+"recommendations if they exist)"
 
 #: View/Installations/admin/step2.php:104
 msgid ""
 "/files フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちら"
 "に従ってください）"
 msgstr ""
+"Write permission to /files folder (707 OR 777 etc. Follow server "
+"recommendations if they exist)"
 
 #: View/Installations/admin/step2.php:112
 msgid "/app/webroot/files フォルダに書き込み権限が必要です"
-msgstr ""
+msgstr "You need write permission to /app/webroot/files folder"
 
 #: View/Installations/admin/step2.php:114
 msgid "/files フォルダに書き込み権限が必要です"
-msgstr ""
+msgstr "You need write permission to /files folder"
 
 #: View/Installations/admin/step2.php:121
 msgid ""
 "/app/webroot/theme フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある"
 "場合はそちらに従ってください）"
 msgstr ""
+"Write permission to /app/webroot/theme folder (707 OR 777 etc. Follow server "
+"recommendations if they exist)"
 
 #: View/Installations/admin/step2.php:123
 msgid ""
 "/theme フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちら"
 "に従ってください）"
 msgstr ""
+"Write permission to /theme folder (707 OR 777 etc. Follow server "
+"recommendations if they exist)"
 
 #: View/Installations/admin/step2.php:131
 msgid "/app/webroot/theme フォルダに書き込み権限が必要です"
-msgstr ""
+msgstr "You need write permission to /app/webroot/theme folder"
 
 #: View/Installations/admin/step2.php:133
 msgid "/theme フォルダに書き込み権限が必要です"
-msgstr ""
+msgstr "You need write permission to /theme folder"
 
 #: View/Installations/admin/step2.php:140
 msgid ""
 "/app/webroot/img フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場"
 "合はそちらに従ってください）"
 msgstr ""
+"Write permission to /app/webroot/img folder (707 OR 777 etc. Follow server "
+"recommendations if they exist)"
 
 #: View/Installations/admin/step2.php:142
 msgid ""
 "/img フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに"
 "従ってください）"
 msgstr ""
+"Write permission to /img folder (707 OR 777 etc. Follow server "
+"recommendations if they exist)"
 
 #: View/Installations/admin/step2.php:150
 msgid "/app/webroot/img フォルダに書き込み権限が必要です"
-msgstr ""
+msgstr "You need write permission to /app/webroot/img folder"
 
 #: View/Installations/admin/step2.php:152
 msgid "/img フォルダに書き込み権限が必要です"
-msgstr ""
+msgstr "You need write permission to /img folder"
 
 #: View/Installations/admin/step2.php:159
 msgid ""
 "/app/webroot/css フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場"
 "合はそちらに従ってください）"
 msgstr ""
+"Write permission to /app/webroot/css folder (707 OR 777 etc. Follow server "
+"recommendations if they exist)"
 
 #: View/Installations/admin/step2.php:161
 msgid ""
 "/css フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに"
 "従ってください）"
 msgstr ""
+"Write permission to /css folder (707 OR 777 etc. Follow server "
+"recommendations if they exist)"
 
 #: View/Installations/admin/step2.php:169
 msgid "/app/webroot/css フォルダに書き込み権限が必要です"
-msgstr ""
+msgstr "You need write permission to /app/webroot/css folder"
 
 #: View/Installations/admin/step2.php:171
 msgid "/css フォルダに書き込み権限が必要です"
-msgstr ""
+msgstr "You need write permission to /css folder"
 
 #: View/Installations/admin/step2.php:178
 msgid ""
 "/app/webroot/js フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合"
 "はそちらに従ってください）"
 msgstr ""
+"Write permission to /app/webroot/js folder (707 OR 777 etc. Follow server "
+"recommendations if they exist)"
 
 #: View/Installations/admin/step2.php:180
 msgid ""
 "/js フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに"
 "従ってください）"
 msgstr ""
+"Write permission to /js folder (707 OR 777 etc. Follow server "
+"recommendations if they exist)"
 
 #: View/Installations/admin/step2.php:188
 msgid "/app/webroot/js フォルダに書き込み権限が必要です"
-msgstr ""
+msgstr "You need write permission to /app/webroot/js folder"
 
 #: View/Installations/admin/step2.php:190
 msgid "/js フォルダに書き込み権限が必要です"
-msgstr ""
+msgstr "You need write permission to /js folder"
 
 #: View/Installations/admin/step2.php:196
 msgid "文字エンコーディングの設定 = UTF-8"
-msgstr ""
+msgstr "Character encoding settings = UTF-8"
 
 #: View/Installations/admin/step2.php:200
 msgid "phpの内部文字エンコーディングがUTF-8である必要があります"
-msgstr ""
+msgstr "PHP’s internal character encoding must be UTF-8"
 
 #: View/Installations/admin/step2.php:202
 msgid "php.iniで「mbstring.internal_encoding」をUTF-8に設定してください"
@@ -7645,11 +8086,11 @@ msgstr "Not Available"
 
 #: View/Installations/admin/step2.php:213
 msgid "phpのGDモジュールでPNGが使える必要があります"
-msgstr ""
+msgstr "PNG must available in PHP’s GD module"
 
 #: View/Installations/admin/step2.php:215
 msgid "GDモジュールをインストールするか有効にしてください"
-msgstr ""
+msgstr "Install or enable GD module"
 
 #: View/Installations/admin/step2.php:220
 msgid "DOMDocumentの利用"
@@ -7657,11 +8098,11 @@ msgstr "Use of DOMDocument"
 
 #: View/Installations/admin/step2.php:226
 msgid "phpのxmlモジュールでDOMDocumentが使える必要があります"
-msgstr ""
+msgstr "DOMDocument in PHP’s xml module must be avalable"
 
 #: View/Installations/admin/step2.php:228
 msgid "xmlモジュールをインストールするか有効にしてください"
-msgstr ""
+msgstr "Install or enable xml module"
 
 #: View/Installations/admin/step2.php:241
 msgid "ファイルデータベース"
@@ -7673,16 +8114,20 @@ msgid ""
 "SQLite を利用できます。有効にするには、下記のフォルダへの書き込み権限が必要で"
 "す "
 msgstr ""
+"You can use SQLite that is file based database if you can’t use database "
+"server. You must set write permission to following folders to enable it"
 
 #: View/Installations/admin/step2.php:245
 msgid ""
 "/app/db/ の書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従っ"
 "てください）"
 msgstr ""
+"Write permission to /app/db/ folder (707 OR 777 etc. Follow server "
+"recommendations if they exist)"
 
 #: View/Installations/admin/step2.php:251
 msgid "SQLite を利用するには、/app/db/ フォルダに書き込み権限が必要です"
-msgstr ""
+msgstr "You need write permission to /app/db folder to use SQLite"
 
 #: View/Installations/admin/step2.php:259
 msgid "管理システムの参照ファイル配置"
@@ -7694,6 +8139,9 @@ msgid ""
 "ファイル、Javascriptファイルを、下記のパスに自動配置します。既に存在する場合"
 "には上書きされてしまいますのでご注意ください。"
 msgstr ""
+"Image files, CSS files, Javascript files referenced by Admin System will be "
+"placed on following paths automatically when installing in baserCMS. Please "
+"note they will be overwritten if they already exist."
 
 #: View/Installations/admin/step2.php:264
 msgid "/app/webroot/img/admin の存在"
@@ -7713,11 +8161,11 @@ msgstr "Exists"
 
 #: View/Installations/admin/step2.php:274
 msgid "/app/webroot/img/admin フォルダが上書きされますのでご注意ください。"
-msgstr ""
+msgstr "Please note /app/webroot/img/admin folder will be overwritten."
 
 #: View/Installations/admin/step2.php:276
 msgid "/img/admin フォルダが上書きされますのでご注意ください。"
-msgstr ""
+msgstr "Please note /img/admin folder will be overwritten."
 
 #: View/Installations/admin/step2.php:283
 msgid "/app/webroot/css/admin の存在"
@@ -7729,11 +8177,11 @@ msgstr "Existence of /css/admin"
 
 #: View/Installations/admin/step2.php:293
 msgid "/app/webroot/css/admin フォルダが上書きされますのでご注意ください。"
-msgstr ""
+msgstr "Please note /app/webroot/css/admin folder will be overwritten."
 
 #: View/Installations/admin/step2.php:295
 msgid "/css/admin フォルダが上書きされますのでご注意ください。"
-msgstr ""
+msgstr "Please note /css/admin folder will be overwritten."
 
 #: View/Installations/admin/step2.php:302
 msgid "/app/webroot/js/admin の存在"
@@ -7745,11 +8193,11 @@ msgstr "Existence of /js/admin"
 
 #: View/Installations/admin/step2.php:312
 msgid "/app/webroot/js/admin フォルダが上書きされますのでご注意ください。"
-msgstr ""
+msgstr "Please note /app/webroot/js/admin will be overwritten."
 
 #: View/Installations/admin/step2.php:314
 msgid "/js/admin フォルダが上書きされますのでご注意ください。"
-msgstr ""
+msgstr "Please note /js/admin will be overwritten."
 
 #: View/Installations/admin/step2.php:323
 msgid "PHPのメモリ"
@@ -7760,12 +8208,17 @@ msgid ""
 "PHPのメモリが %s より低い場合、baserCMSの全ての機能が正常に動作しない可能性が"
 "あります。"
 msgstr ""
+"There may be cases that all functions of baserCMS run normally if PHP’s "
+"memory was lower than %s."
 
 #: View/Installations/admin/step2.php:325
 msgid ""
 "サーバー環境によってはPHPのメモリ上限が取得できず「0MB」となっている場合もあ"
 "ります。その場合、サーバー業者等へサーバースペックを直接確認してください。"
 msgstr ""
+"There may be cases that it was set to “0MB” if PHP’s upper limit memory "
+"could not fetched, depending on server environment. Please check server spec "
+"to server hosting service etc directly if that was the case."
 
 #: View/Installations/admin/step2.php:328
 msgid "PHPのメモリ上限 >= %s"
@@ -7779,6 +8232,7 @@ msgstr "Current PHP's Upper Limit Memory >= %s"
 msgid ""
 "php.iniの設定変更が可能であれば、memory_limit の値を%s以上に設定してください"
 msgstr ""
+"Please set memory_limit value to over %s if you can change pho.ini settings."
 
 #: View/Installations/admin/step2.php:340;346
 msgid "PHPセーフモード"
@@ -7789,12 +8243,16 @@ msgid ""
 "セーフモードがOnの場合、PHPを「CGIモード」に切り替えないとbaserCMSの全ての機"
 "能を利用する事はできません。"
 msgstr ""
+"You must change PHP to “CGI mode” if Safe Mode was On to use all functions "
+"of baserCMS."
 
 #: View/Installations/admin/step2.php:342
 msgid ""
 "ページカテゴリ機能や、テーマ切り替え機能など、プログラム側でフォルダを自動生"
 "成する機能は、事前にFTPでの作業を併用する必要があります。"
 msgstr ""
+"You must work with FTP beforehand for functions that create folder "
+"automatically like Page Category function or Theme Switching function."
 
 #: View/Installations/admin/step2.php:358
 msgid ""
@@ -7804,12 +8262,19 @@ msgid ""
 "にある .htaccess ファイルに次の２行を記述する事でCGIモードに切り替える事がで"
 "きます。"
 msgstr ""
+"Please switch Safe Mode to Off before proceeding to next step.</strong><br /"
+">Please switch to CGI mode if you can’t set Safe Mode to Off when on Rental "
+"Server etc, before proceeding to next step.<br />You can switch to CGI mode "
+"if you write following 2 lines to .htaccess on the top folder depending on "
+"server."
 
 #: View/Installations/admin/step2.php:363
 msgid ""
 "インストール中にCGIモードに切り替えた場合は、クッキーを削除した上で、「再"
 "チェック」をクリックしてください。"
 msgstr ""
+"Please delete Cookies and Click “Re-check” if you want to switch to CGI mode "
+"during installation."
 
 #: View/Installations/admin/step2.php:366
 msgid ""
@@ -7821,19 +8286,27 @@ msgid ""
 "ださい）を与えます。<br />コピーと権限の変更が完了したら次のステップに進みイ"
 "ンストールを続けます。"
 msgstr ""
+"Please restore it if server error has occurred when you wrote above 2 lines "
+"because server doesn’t support CGI mode. baserCMS’s functions will be "
+"restricted, but you can install as Safe Mode by doing following steps.<br /"
+">Connect with FTP and copy following folder’s files and folders entirely, "
+"and give write permission (707 OR 777 etc. Follow server recommendations if "
+"they exist) to all folders.<br />Continue installation with next steps when "
+"copying and changing of permission have done."
 
 #: View/Installations/admin/step2.php:368
 msgid "/baser/config/safemode/tmp/ 内の全て　→　/app/tmp/"
-msgstr ""
+msgstr "Everything in /baser/config/safemode/tmp/ → /app/tmp/"
 
 #: View/Installations/admin/step2.php:369
 msgid ""
 "/baser/config/safemode/db/ 内の全て　→　/app/db/ （SQLite を利用する場合）"
 msgstr ""
+"Everything in /baser/config/safemode/db/ → /app/db/ (If you use SQLite)"
 
 #: View/Installations/admin/step2.php:370
 msgid "/baser/config/theme/ 内の全て　→　/app/webroot/theme/"
-msgstr ""
+msgstr "Everything in /baser/config/theme/ → /app/webroot/theme/"
 
 #: View/Installations/admin/step2.php:379
 msgid "再チェック"
@@ -7861,20 +8334,24 @@ msgid ""
 "他のアプリケーションと重複しないプレフィックスを入力してください。（例）"
 "mysite_"
 msgstr ""
+"Please enter prefix that are not duplicated with other applications. "
+"(Example) mysite_"
 
 #: View/Installations/admin/step3.php:24
 msgid "プレフィックスの末尾はアンダースコアにしてください。（例）mysite_"
-msgstr ""
+msgstr "Please set tail of prefix to be underscore. (Example) mysite_"
 
 #: View/Installations/admin/step3.php:25
 msgid ""
 "プレフィックスは英数字とアンダースコアの組み合わせにしてください。（例）"
 "mysite_"
 msgstr ""
+"Please set prefix to be combination of alphabets and numbers, and "
+"underscore. (Example) mysite_"
 
 #: View/Installations/admin/step3.php:26
 msgid "ドット（.）を含むデータベース名にはインストールできません。"
-msgstr ""
+msgstr "You can’t install to database that includes dot (.)."
 
 #: View/Installations/admin/step3.php:27
 msgid "データベースのポートナンバーを入力してください。"
@@ -7886,8 +8363,12 @@ msgid ""
 "してください。<br>MySQL / PostgreSQLの場合は、データベースが存在し初期化され"
 "ている必要があります。<br><strong>既に用意したデータベースにデータが存在する"
 "場合は、初期データで上書きされてしまうので注意してください。<br>プレフィック"
-"スを活用しましょう。"
+"スを活用しましょう。</strong>"
 msgstr ""
+"Please enter database’s connection info and do connection test if it’s "
+"database server.<br>Database must be exist and initialized if it’s MySQL or "
+"PostgreSQL.<br><strong>Please note data will be initialized by initial data "
+"if data exist in prepared database.<br>Use prefix.</strong>"
 
 #: View/Installations/admin/step3.php:174
 msgid "データベース設定"
@@ -7905,7 +8386,7 @@ msgstr "Database Type"
 msgid ""
 "MySQL・PostgreSQL・SQLiteの中で、このサーバーで利用できるものが表示されていま"
 "す。"
-msgstr ""
+msgstr "Available database out of MySQL, PostgreSQL, SQLite are displayed."
 
 #: View/Installations/admin/step3.php:183
 msgid "データベースホスト名"
@@ -7933,6 +8414,9 @@ msgid ""
 "してください。<br />※ ホスト名、データベース名、ポートは実際の環境に合わせて"
 "書き換えてください。"
 msgstr ""
+"Prefix must be combination of alphabets, numbers, and underscores, and tail "
+"must be underscore.<br />Caution: Change hostname, database name, port to "
+"actual environment."
 
 #: View/Installations/admin/step3.php:212
 msgid "初期データ"
@@ -7941,7 +8425,7 @@ msgstr "Initial Data"
 #: View/Installations/admin/step3.php:214
 msgid ""
 "コアパッケージや、テーマが保有するデモンストレーション用データを選択します。"
-msgstr ""
+msgstr "Select Core Package or demonstration data hold by Theme."
 
 #: View/Installations/admin/step3.php:216
 msgid "初めてインストールされる方は、%s を選択してください。"
@@ -7958,7 +8442,7 @@ msgstr "Connection Test"
 
 #: View/Installations/admin/step4.php:20
 msgid "管理用メールアドレスを入力してください。"
-msgstr ""
+msgstr "Enter mail address for Admin."
 
 #: View/Installations/admin/step4.php:21
 msgid "ユーザー名を入力してください。"
@@ -7967,10 +8451,12 @@ msgstr "Please enter username."
 #: View/Installations/admin/step4.php:22
 msgid "ユーザー名には半角英数字とハイフン、アンダースコアのみ利用可能です。"
 msgstr ""
+"You can only use half-size alphabets and numbers, hyphen, underscore for "
+"user name."
 
 #: View/Installations/admin/step4.php:23
 msgid "あなたのパスワードを６文字以上で入力してください。"
-msgstr ""
+msgstr "Please enter your password within 6 characters."
 
 #: View/Installations/admin/step4.php:24
 msgid "パスワードが確認欄のパスワードと同じではありません。"
@@ -7981,6 +8467,8 @@ msgid ""
 "最後に管理情報を登録します。<br />ここで入力した管理者アカウント名やパスワー"
 "ドは忘れないようにしておいてください。"
 msgstr ""
+"Registering Admin Info lastly.<br />Please don’t forget Admin Account Name "
+"or Password you entered here."
 
 #: View/Installations/admin/step4.php:67
 msgid "管理情報登録"
@@ -7998,6 +8486,7 @@ msgstr "Add Admin User"
 msgid ""
 "ここで設定した管理者名とパスワードは忘れないように控えておいてください。"
 msgstr ""
+"Please write down Admin Name and Password you set here to not forget them."
 
 #: View/Installations/admin/step4.php:83
 msgid "管理者アカウント名"
@@ -8005,13 +8494,15 @@ msgstr "Admin Account Name"
 
 #: View/Installations/admin/step4.php:83
 msgid "半角英数字（ハイフン、アンダースコア含む）"
-msgstr ""
+msgstr "Half-size alphabets and numbers (including hyphens, underscores)"
 
 #: View/Installations/admin/step4.php:87
 msgid ""
 "半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&amp;;{}!"
 "$*)"
 msgstr ""
+"half-size alphabets and numbers (alphabets are differentiated by small or "
+"large), spaces, symbols(._-:/()#,@[]+=&amp;;{}!$*)"
 
 #: View/Installations/admin/step4.php:93
 msgid "確認の為もう一度入力してください"
@@ -8026,10 +8517,12 @@ msgid ""
 "おめでとうございます！baserCMSのインストールが無事完了しました！ <br />管理用"
 "メールアドレスへインストール完了メールを送信しています。"
 msgstr ""
+"Congratulations! baserCMS installation completed!<br />Installation "
+"completion mail has been sent to mail address for Admin has sent."
 
 #: View/Installations/admin/step5.php:23
 msgid "次は何をしますか？"
-msgstr ""
+msgstr "What’s next?"
 
 #: View/Installations/admin/step5.php:27
 msgid "管理者ダッシュボードに移動する"
@@ -8045,15 +8538,15 @@ msgstr "Find Information on baserCMS Official Site"
 
 #: View/Installations/admin/step5.php:30
 msgid "フォーラムにインストールの不具合を報告する"
-msgstr ""
+msgstr "Report bug in installation to forum"
 
 #: View/Installations/admin/step5.php:31
 msgid "公式Twitterをフォローする"
-msgstr ""
+msgstr "Follow official Twitter"
 
 #: View/Installations/admin/step5.php:32
 msgid "Facebookでいいね！する"
-msgstr ""
+msgstr "Like! on Facebook"
 
 #: View/Layouts/admin/default.php:112
 msgid "baserCMSへようこそ。"
@@ -8064,18 +8557,23 @@ msgid ""
 "画面右上の「システムナビ」より管理システムの全ての機能にアクセスする事ができ"
 "ます。"
 msgstr ""
+"You can access all function of Admin System from “System Navigation” on "
+"upper left screen."
 
 #: View/Layouts/admin/default.php:115
 msgid ""
 "よく使う機能については、画面左側にある「よく使う項目」の「新規追加」をクリッ"
 "クして、お気に入りとして登録する事ができます。"
 msgstr ""
+"You can register frequently used function as Favorite by clicking “Add” on "
+"“Favorite Items” on left screen."
 
 #: View/Layouts/admin/default.php:116
 msgid ""
 "まずは、画面上部のメニュー、「コンテンツ管理」よりWebサイトの全体像を確認しま"
 "しょう。"
 msgstr ""
+"Let’s check big picture of Web site from “Content” menu on upper screen."
 
 #: View/Layouts/admin/default.php:142
 msgid "▲ トップへ"
@@ -8090,12 +8588,16 @@ msgid ""
 "ご迷惑をおかけしております。<br />現在メンテナンス中です。<br />もうしばらく"
 "お待ちください。"
 msgstr ""
+"Sorry for your inconvenience.<br />Under maintenance.<br />Please wait for a "
+"moment."
 
 #: View/Pages/admin/form.php:54
 msgid ""
 "テーマフォルダ内の、Pages/templates テンプレートを配置する事で、ここでテンプ"
 "レートを選択できます。"
 msgstr ""
+"You can select Template here by placing Pages/templates Template in Theme "
+"Folder."
 
 #: View/Pages/admin/form.php:70
 msgid ""
@@ -8104,22 +8606,28 @@ msgid ""
 "おく事もできます。<br />入力したコードは、自動的にコンテンツ本体の上部に差し"
 "込みます。"
 msgstr ""
+"You can inject PHP or Javascript code to Static Page’s body by switching to "
+"Source Code, but you can enter here to prevent accidental deletion by users."
+"<br />Entered code will be injected automatically to upper part of Content "
+"body."
 
 #: View/Permissions/admin/form.php:51
 msgid ""
 "ルール名には日本語が利用できます。特定しやすいわかりやすい名称を入力してくだ"
 "さい。"
-msgstr ""
+msgstr "Please enter identifiable and understandable name."
 
 #: View/Permissions/admin/form.php:63
 msgid ""
 "baserCMSの設置URLを除いたスラッシュから始まるURLを入力してください。<br /"
 ">（例）/admin/users/index"
 msgstr ""
+"Please enter URL starting with slash excluding baserCMS’s deployed URL.<br /"
+"> (Example) /admin/users/index"
 
 #: View/Permissions/admin/form.php:64
 msgid "管理画面など認証がかかっているURLしか登録できません。"
-msgstr ""
+msgstr "You can only register URLs that are authorized like System Screen."
 
 #: View/Permissions/admin/form.php:65
 msgid ""
@@ -8127,17 +8635,20 @@ msgid ""
 "（*）を利用します。<br />（例）ユーザー管理内のURL全てアクセスさせない場"
 "合： /admin/users* "
 msgstr ""
+"Use wildcard (*) to forbid access below specific folders.<br />(Example) "
+"Forbid access to all URLs below User Admin: /admin/users*"
 
 #: View/Plugins/admin/add.php:17
 msgid ""
 "プラグインをアップロードし、そのままインストールします。よろしいですか？"
-msgstr ""
+msgstr "Uploading and installing Plugin. Are you sure?"
 
 #: View/Plugins/admin/add.php:34
 msgid ""
 "ZIP 形式のプラグインファイルをお持ちの場合、こちらからアップロードしてインス"
 "トールできます。"
 msgstr ""
+"You can upload and install Plugin if you have zip-formatted Plugin File."
 
 #: View/Plugins/admin/form.php:20
 msgid "プラグインのデータを初期化します。よろしいですか？"
@@ -8164,18 +8675,24 @@ msgid ""
 "このデータを本当に無効にしてもいいですか？\\nプラグインフォルダ内のファイル、"
 "データベースに保存した情報は削除されずそのまま残ります。"
 msgstr ""
+"Are you sure that you wan to disable this data?\\nFiles in Plugin folder and "
+"saved information on database will not be deleted and remain there."
 
 #: View/Plugins/admin/index.php:29
 msgid ""
 "本当に削除してもいいですか？\\nプラグインフォルダ内のファイル、データベースの"
 "データも全て削除されます。"
 msgstr ""
+"Are you sure that you want to delete them?\\nAll files in Plugin folder and "
+"data on database will be deleted."
 
 #: View/Plugins/admin/index.php:30
 msgid ""
 "本当に無効にしてもいいですか？\\nプラグインフォルダ内のファイル、データベース"
 "に保存した情報は削除されずそのまま残ります。"
 msgstr ""
+"Are you sure that you want to disable it?\\nFiles in Plugin folder and saved "
+"information on database will not be deleted and remain there."
 
 #: View/Plugins/admin/index.php:74
 msgid "所有プラグイン"
@@ -8191,7 +8708,7 @@ msgstr "Applicable result was not found."
 
 #: View/SearchIndices/admin/add.php:39
 msgid "サイト内で検索インデックスとして登録したいURLを指定します。"
-msgstr ""
+msgstr "Specify URLs that you want to registered as Search Index in site."
 
 #: View/SearchIndices/admin/add.php:40
 msgid ""
@@ -8199,6 +8716,9 @@ msgid ""
 "company/index<br>\t→ /company/index<br><small>※ 省略時、スマートURLオフの場"
 "合、URL上の「/index.php」 は含めないようにします。</small>"
 msgstr ""
+"You can omit baserCMS deployed part of URL.<br>http://{baserCMS deployed "
+"URL}/company/index<br>\t→ /company/index<br><small>Caution: When omitting, "
+"don’t include “/index.php” in URL if Smart URL is off.</small>"
 
 #: View/SiteConfigs/admin/form.php:34
 msgid "WEBサイト名"
@@ -8206,11 +8726,11 @@ msgstr "Web Site Name"
 
 #: View/SiteConfigs/admin/form.php:41
 msgid "正式なWEBサイト名を指定します。"
-msgstr ""
+msgstr "Specify official WEB Site Name."
 
 #: View/SiteConfigs/admin/form.php:42
 msgid "メールの送信元等で利用します。"
-msgstr ""
+msgstr "Use for mail’s sender."
 
 #: View/SiteConfigs/admin/form.php:48
 msgid "WEBサイトタイトル"
@@ -8218,15 +8738,15 @@ msgstr "Web Site Title"
 
 #: View/SiteConfigs/admin/form.php:55
 msgid "Webサイトの基本タイトルとして利用されます。（タイトルタグに影響します）"
-msgstr ""
+msgstr "Used as Web site’s basic title (has effect on title tag)."
 
 #: View/SiteConfigs/admin/form.php:66
 msgid "テンプレートで利用する場合は、<br />で出力します。"
-msgstr ""
+msgstr "Output with <br />to use in Template."
 
 #: View/SiteConfigs/admin/form.php:74
 msgid "テンプレートで利用する場合は、<br />%sで出力します"
-msgstr ""
+msgstr "Output with <br />%s to use in Template"
 
 #: View/SiteConfigs/admin/form.php:78
 msgid "管理者メールアドレス"
@@ -8234,7 +8754,7 @@ msgstr "Admin Mail Address"
 
 #: View/SiteConfigs/admin/form.php:85
 msgid "管理システムの<br />初期一覧件数"
-msgstr ""
+msgstr "Admin System’s<br />Initial List Number"
 
 #: View/SiteConfigs/admin/form.php:89
 msgid "10件"
@@ -8263,15 +8783,16 @@ msgstr "Use"
 #: View/SiteConfigs/admin/form.php:111
 msgid ""
 "ログインページに表示されているクレジット表示を利用するかどうか設定します。"
-msgstr ""
+msgstr "Set whether credits displaying on login page will be used or not."
 
 #: View/SiteConfigs/admin/form.php:116
 msgid "管理システムサイドバーの<br />バナー表示"
-msgstr ""
+msgstr "Admin System Sidebar’s<br />Banner Display"
 
 #: View/SiteConfigs/admin/form.php:120
 msgid "管理システムのサイド部分にバナーを表示するかどうか設定します。"
 msgstr ""
+"Set whether banner will be displayed on side part of Admin System or not."
 
 #: View/SiteConfigs/admin/form.php:125
 msgid "WebサイトURL"
@@ -8282,6 +8803,8 @@ msgid ""
 "baserCMSを設置しているURLを指定します。管理画面等でSSL通信を利用する場合は、"
 "SSL通信で利用するURLも指定します。"
 msgstr ""
+"Specify baserCMS’s deployed URL. Also specify URL used for SSL connection if "
+"you use SSL connection in Admin Screen etc."
 
 #: View/SiteConfigs/admin/form.php:139
 msgid "管理画面SSL設定"
@@ -8296,6 +8819,8 @@ msgid ""
 "管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。<br />ま"
 "た、SSL用のWebサイトURLの指定が必要です。"
 msgstr ""
+"You must register and set SSL before using SSL in Admin Page.<br />Also, you "
+"must specify Web site URL for SSL."
 
 #: View/SiteConfigs/admin/form.php:148
 msgid "GoogleMaps住所"
@@ -8314,6 +8839,13 @@ msgid ""
 "入力しないと地図が表示されない場合があります。<a href=\"https://developers."
 "google.com/maps/web/\" target=\"_blank\">「ウェブ向け Google Maps API」</a>"
 msgstr ""
+"Please enter address that you want to display map to use GoogleMaps. Postal "
+"number is accepted.<br><br>Example 1) 福岡市中央区大名2-11-25<br>Example 2) "
+"〒819-0041 福岡県福岡市中央区大名2-11-25<br><br>It may not be displayed "
+"properly if you included building name.<br>If so, try omitting building name."
+"<br>Map may not be displayed if API key wasn’t entered<a href=“https://"
+"developers.google.com/maps/web/“ target=“_blank”>”Google Maps API for web”</"
+"a>"
 
 #: View/SiteConfigs/admin/form.php:154
 msgid "APIキー"
@@ -8329,22 +8861,29 @@ msgid ""
 "analytics/\" target=\"_blank\">Google Analytics</a> を利用される方は、取得し"
 "たトラッキングID (UA-000000-01 のような文字列）を入力してください。"
 msgstr ""
+"Please enter fetched Tracking ID (string like UA-000000-01) to use Google’s "
+"free access service <a href=“http://www.google.com/intl/ja/analytics/“ "
+"target=“_blank”>Google Analytics</a>."
 
 #: View/SiteConfigs/admin/form.php:166
 msgid ""
 "事前に<a href=\"http://www.google.com/intl/ja/analytics/\" target=\"_blank"
 "\">Google Analytics</a> で登録作業が必要です。"
 msgstr ""
+"Registering on <a href=“http://www.google.com/intl/ja/analytics/“ "
+"target=“_blank”>Google Analytics</a> is required beforehand."
 
 #: View/SiteConfigs/admin/form.php:167
 msgid ""
 "テンプレートで利用する場合は、 <pre>&lt;?php $this->BcBaser-"
 ">googleAnalytics() ?&gt;</pre> で出力します。"
 msgstr ""
+"Output with <pre>&lt;?php $this->BcBaser->googleAnalytics() ?&gt;</pre> to "
+"use in Template."
 
 #: View/SiteConfigs/admin/form.php:170
 msgid "ユニバーサルアナリティクスを%s"
-msgstr ""
+msgstr "%s Universal Analytics"
 
 #: View/SiteConfigs/admin/form.php:170
 msgid "利用していない"
@@ -8360,7 +8899,7 @@ msgstr "Standard Widget Area"
 
 #: View/SiteConfigs/admin/form.php:179
 msgid "公開ページ全般で利用するウィジェットエリアを指定します。"
-msgstr ""
+msgstr "Specify Widget Area used by general Public Pages."
 
 #: View/SiteConfigs/admin/form.php:180
 msgid "ウィジェットエリアは「%s」より追加できます。"
@@ -8372,7 +8911,7 @@ msgstr "Main Site Display Name"
 
 #: View/SiteConfigs/admin/form.php:189
 msgid "サブサイトを利用する際に、メインサイトを特定する識別名称を設定します。"
-msgstr ""
+msgstr "Set Identification Name to identify Main Site when using Subsite."
 
 #: View/SiteConfigs/admin/form.php:194
 msgid "デバイス・言語設定"
@@ -8397,6 +8936,9 @@ msgid ""
 "バッグモードに設定されている場合は、メンテナンス中にしていても公開ページが表"
 "示されてしまいますので注意が必要です。"
 msgstr ""
+"Set Public Status.<br />You must login to Admin Screen to check Public Pages "
+"in maintenance.<br>Please note Public Page will be displayed if Creation / "
+"Development Mode was set to Debug Mode."
 
 #: View/SiteConfigs/admin/form.php:217
 msgid "制作・開発モード"
@@ -8409,6 +8951,10 @@ msgid ""
 "baserCMSを初期化する場合にしか利用しませんので普段は利用しないようにしてくだ"
 "さい。"
 msgstr ""
+"Specify mode when creating or developing. Set it to Normal Mode for normal "
+"use.<br />Caution: It’s Debug Mode of CakePHP.<br />Caution: Don’t use "
+"Installation Mode for normal use since it’s only used for baserCMS "
+"initialization."
 
 #: View/SiteConfigs/admin/form.php:226
 msgid "エディタ設定関連"
@@ -8439,14 +8985,15 @@ msgid ""
 "固定ページなどで利用するエディタのスタイルセットをCSS形式で記述する事ができま"
 "す。"
 msgstr ""
+"You can write style set of editor used by Static Page etc by CSS format."
 
 #: View/SiteConfigs/admin/form.php:256
 msgid "プロパティ名：プロパティ値"
-msgstr ""
+msgstr "Property Name: Property Value"
 
 #: View/SiteConfigs/admin/form.php:259
 msgid "記述例"
-msgstr ""
+msgstr "Example of Writing"
 
 #: View/SiteConfigs/admin/form.php:260;268
 msgid "見出し"
@@ -8454,7 +9001,7 @@ msgstr "Header"
 
 #: View/SiteConfigs/admin/form.php:266
 msgid "タグにプロパティを設定しない場合は次のように記述します。"
-msgstr ""
+msgstr "Write as follows if you don’t set Property to Tag."
 
 #: View/SiteConfigs/admin/form.php:276
 msgid "メール設定関連"
@@ -8469,6 +9016,8 @@ msgid ""
 "送信メールの文字コードを選択します。<br />受信したメールが文字化けする場合に"
 "変更します。"
 msgstr ""
+"Select character code for sending mail.<br />Change it if received mail’s "
+"text is garbled."
 
 #: View/SiteConfigs/admin/form.php:289
 msgid "SMTP設定"
@@ -8480,13 +9029,15 @@ msgstr "host"
 
 #: View/SiteConfigs/admin/form.php:296;310;319
 msgid "メールの送信にSMTPサーバーを利用する場合指定します。"
-msgstr ""
+msgstr "Specify it if you use SMTP server for mail sending."
 
 #: View/SiteConfigs/admin/form.php:303
 msgid ""
 "メールの送信にSMTPサーバーを利用する場合指定します。入力を省略した場合、25番"
 "ポートを利用します。"
 msgstr ""
+"Specify it if you use SMTP server for mail sending. It will use port 25 if "
+"this was omitted."
 
 #: View/SiteConfigs/admin/form.php:306
 msgid "ユーザー"
@@ -8502,7 +9053,7 @@ msgstr "Use TLS Encryption"
 
 #: View/SiteConfigs/admin/form.php:326
 msgid "SMTPサーバーがTLS暗号化を利用する場合指定します。"
-msgstr ""
+msgstr "Specify it if SMTP server use TLS encryption."
 
 #: View/SiteConfigs/admin/info.php:19
 msgid "baserCMS環境"
@@ -8556,10 +9107,6 @@ msgstr "Text Hover"
 msgid "ロゴ"
 msgstr "Logo"
 
-#: View/ThemeConfigs/admin/form.php:64;73;82;91;100;109
-msgid "リンク先URL"
-msgstr "Linked URL"
-
 #: View/ThemeConfigs/admin/form.php:68
 msgid "メインイメージ１"
 msgstr "Main Image 1"
@@ -8606,12 +9153,16 @@ msgid ""
 "本当に現在のテーマ「 %s 」にコピーしてもいいですか？\\n既に存在するファイルは"
 "上書きされます。"
 msgstr ""
+"Are you sure you want to copy to current Theme “%s”?\\nExisting files will "
+"be overwritten."
 
 #: View/ThemeFiles/admin/form.php:111 View/ThemeFiles/admin/form_folder.php:85
 msgid ""
 "機能制限のセーフモードで動作していますので、現在のテーマへのコピーはできませ"
 "ん。"
 msgstr ""
+"You can’t copy to current Theme because it’s currently in function "
+"restricted Safe Mode."
 
 #: View/ThemeFiles/admin/form_folder.php:53
 msgid "フォルダ名は半角で入力してください。"
@@ -8637,15 +9188,15 @@ msgstr "You are about to upload Theme and apply it, are you sure?"
 msgid ""
 "ZIP 形式のテーマファイルをお持ちの場合、こちらからアップロードして適用できま"
 "す。"
-msgstr ""
+msgstr "You can upload and apply Theme File if you have zip-formatted one."
 
 #: View/Themes/admin/form.php:23
 msgid "テーマフォルダに書込権限がありません。"
-msgstr ""
+msgstr "You don’t have write permission to Theme Folder."
 
 #: View/Themes/admin/form.php:26
 msgid "テーマ設定ファイルに書込権限がありません。"
-msgstr ""
+msgstr "You don’t have write permission to Theme Setting File."
 
 #: View/Themes/admin/form.php:38
 msgid "テーマ名"
@@ -8669,6 +9220,8 @@ msgid ""
 "<br>これによりテンプレートを直接編集した際など、変更内容が反映されない場合が"
 "ありますので、その際には、サーバーサイドのキャッシュを削除します。"
 msgstr ""
+"baserCMS uses cache mechanism to speed up displaying.<br>Delete server side "
+"cache if changed content was not applied when you edited Template directly."
 
 #: View/Tools/admin/index.php:18
 msgid "サーバーキャッシュを削除する"
@@ -8680,6 +9233,9 @@ msgid ""
 "をリセットして正しいデータの状態に戻します。リセットを実行した場合、階層構造"
 "はリセットされてしまうのでご注意ください。"
 msgstr ""
+"Reset tree structures and reset to valid data status if Contents’ sort in "
+"Tree Structures can’t be done correctly. Please note directory structures "
+"will be reset if you did resetting."
 
 #: View/Tools/admin/index.php:24
 msgid "ツリー構造をチェックする"
@@ -8690,10 +9246,8 @@ msgid "ツリー構造リセット"
 msgstr "Reset Tree Structures"
 
 #: View/Tools/admin/index.php:25
-#, fuzzy
-#| msgid "コンテンツのツリー構造をリセットしました。"
 msgid "コンテンツ管理のツリー構造をリセットします。本当によろしいですか？"
-msgstr "Reset Content's tree structures."
+msgstr "Resetting Content's tree structures. Are you sure?"
 
 #: View/Tools/admin/index.php:30
 msgid ""
@@ -8701,6 +9255,9 @@ msgid ""
 "レート書出を実行してください。<br>また、固定ページテンプレートを直接編集した"
 "場合、データベースに反映する為には、固定ページテンプレート読込を実行します。"
 msgstr ""
+"Please run Static Template Export to run Static Page function properly when "
+"you moved to another server.<br>Run Static Page Export to reflect to "
+"database if you edited Static Page template directly."
 
 #: View/Tools/admin/index.php:31
 msgid "固定ページテンプレート書出"
@@ -8711,6 +9268,8 @@ msgid ""
 "データベース内のページデータを、ページテンプレートとして /app/View/Pages 内に"
 "全て書出します。本当によろしいですか？"
 msgstr ""
+"Exporting database’s Page data as Page Template to /app/View/Pages. Are you "
+"sure?"
 
 #: View/Tools/admin/index.php:32
 msgid "固定ページテンプレート読込"
@@ -8720,7 +9279,7 @@ msgstr "Import Static Page Template"
 msgid ""
 "/app/View/Pages フォルダ内のページテンプレートを全て読み込みます。本当によろ"
 "しいですか？"
-msgstr ""
+msgstr "Loading all Page Template in /app/View/Pages folder. Are you sure?"
 
 #: View/Tools/admin/index.php:36
 msgid "アセットファイル"
@@ -8733,30 +9292,31 @@ msgid ""
 "パッケージのアセットファイルを参照する事になりますが、表示速度が遅くなります"
 "ので注意が必要です。"
 msgstr ""
+"This will delete asset files (images, CSS, Javascript) for Admin System, or "
+"replace them to Site root folder from Core Package.<br>Asset files in Core "
+"Package will be referenced directly, but please note displaying speed will "
+"be slower if you delete them."
 
 #: View/Tools/admin/index.php:38
 msgid "アセットファイル削除"
 msgstr "Delete Asset File"
 
 #: View/Tools/admin/index.php:38
-#, fuzzy
-#| msgid "管理システム用のアセットファイルを削除しました。"
 msgid ""
 "サイトルートに配置された、管理システム用のアセットファイルを削除します。本当"
 "によろしいですか？"
-msgstr "Deleted Asset File for Admin System."
+msgstr ""
+"Deleting Asset File for Admin System placed on Site Root. Are you sure?"
 
 #: View/Tools/admin/index.php:39
 msgid "アセットファイル再配置"
 msgstr "Replace Asset File"
 
 #: View/Tools/admin/index.php:39
-#, fuzzy
-#| msgid "管理システム用のアセットファイルを再配置しました。"
 msgid ""
 "管理システム用のアセットファイルをサイトルートに再配置します。本当によろしい"
 "ですか？"
-msgstr "Replaced Asset File for Admin System."
+msgstr "Replacing Asset File for Admin System to Site Root. Are you sure?"
 
 #: View/Tools/admin/index.php:43
 msgid "スペシャルサンクスクレジット"
@@ -8765,6 +9325,8 @@ msgstr "Special Thanks Credits"
 #: View/Tools/admin/index.php:44
 msgid "baserCMSの開発や運営、普及にご協力頂いた方々をご紹介します。"
 msgstr ""
+"Let us introduce people who helped developing, operating, or spreading "
+"baserCMS."
 
 #: View/Tools/admin/index.php:45
 msgid "クレジットを表示"
@@ -8776,7 +9338,7 @@ msgstr "Scheme Type"
 
 #: View/Tools/admin/load_schema.php:28
 msgid "テーブル作成"
-msgstr "Create Table"
+msgstr "Add Table"
 
 #: View/Tools/admin/load_schema.php:28
 msgid "テーブル構造変更"
@@ -8809,7 +9371,7 @@ msgstr "Delete Error Log"
 #: View/Tools/admin/log.php:28
 msgid ""
 "エラーログを削除します。サーバの容量を圧迫する場合時などに利用ください。"
-msgstr ""
+msgstr "Delete error log. Use this if it is oppressing server capacity."
 
 #: View/Tools/admin/log.php:29
 msgid "エラーログのサイズは、%sbytesです。"
@@ -8826,7 +9388,7 @@ msgstr "Backup Data"
 #: View/Tools/admin/maintenance.php:27
 msgid ""
 "データベースのデータをバックアップファイルとしてPCにダウンロードします。"
-msgstr ""
+msgstr "Downloaddatabase’s data to PC as backup file."
 
 #: View/Tools/admin/maintenance.php:38
 msgid "データの復元"
@@ -8835,12 +9397,12 @@ msgstr "Restore Data"
 #: View/Tools/admin/maintenance.php:39
 msgid ""
 "バックアップファイルをアップロードし、データベースのデータを復元します。"
-msgstr ""
+msgstr "Upload backup file and restore database’s data."
 
 #: View/Tools/admin/maintenance.php:40
 msgid ""
 "ダウンロードしたバックアップファイルをZIPファイルのままアップロードします。"
-msgstr ""
+msgstr "Upload downloaded backup file as ZIP file as it is."
 
 #: View/Tools/admin/maintenance.php:42
 msgid "自動判別"
@@ -8856,7 +9418,7 @@ msgstr "Plugin Table Name"
 
 #: View/Tools/admin/write_schema.php:46
 msgid "生　成"
-msgstr "Create"
+msgstr "Add"
 
 #: View/Updaters/admin/exec_script.php:23
 msgid "実行"
@@ -8880,7 +9442,7 @@ msgstr "Current Database Version: <strong> %s </strong>"
 
 #: View/Updaters/admin/update.php:61
 msgid "α版の場合はアップデートサポート外です。"
-msgstr ""
+msgstr "There is no update support if version was α."
 
 #: View/Updaters/admin/update.php:64
 msgid "アップデートプログラムが <strong>%s つ</strong> あります。"
@@ -8900,20 +9462,24 @@ msgid ""
 "ファイルを前のバージョンに戻しシステム設定よりデータベースのバックアップを行"
 "いましょう。"
 msgstr ""
+"We recommend restore program files to previous version doing backup of "
+"database from System Settings if backup isn’t done before updating."
 
 #: View/Updaters/admin/update.php:88
 msgid ""
 "バックアップを行われていない場合は、アップデートを実行する前にデータベースの"
 "バックアップを行いましょう。"
 msgstr ""
+"We recommend doing backup of database before running update if backup isn’t "
+"done."
 
 #: View/Updaters/admin/update.php:90
 msgid "アップデート処理は必ず自己責任で行ってください。"
-msgstr ""
+msgstr "Please do update process at your won risk."
 
 #: View/Updaters/admin/update.php:94
 msgid "リリースノートのアップデート時の注意事項は読まれましたか？"
-msgstr ""
+msgstr "Did you read cautions about updating on release note?"
 
 #: View/Updaters/admin/update.php:95
 msgid ""
@@ -8922,12 +9488,16 @@ msgid ""
 "release\" target=\"_blank\" class=\"outside-link\">リリースノート</a> を必ず"
 "確認してください。"
 msgstr ""
+"Please note additional work will be needed depending on release version.<br /"
+">Please check <a href=“http://basercms.net/news/archives/category/release” "
+"target=“_blank” class=“outside-link”>release note</a> on official site for "
+"sure."
 
 #: View/Updaters/admin/update.php:102
 msgid ""
 "「アップデート実行」をクリックしてデータベースのアップデートを完了させてくだ"
 "さい。"
-msgstr ""
+msgstr "Complete database’s update by clicking “Run Update”"
 
 #: View/Updaters/admin/update.php:109
 msgid "アップデート実行"
@@ -8938,6 +9508,8 @@ msgid ""
 "baserCMSコアのアップデートがうまくいかない場合は、%sにご相談されるか、前の"
 "バージョンの baserCMS に戻す事をおすすめします。"
 msgstr ""
+"We recommend talk to %s or restore previous version of baserCMS if updating "
+"of baserCMS Core can’t be done."
 
 #: View/Updaters/admin/update.php:118
 msgid "プラグイン一覧に移動する"
@@ -8946,14 +9518,15 @@ msgstr "Move to Plugin List"
 #: View/UserGroups/admin/form.php:66
 msgid "重複しない識別名称を半角のみで入力してください。"
 msgstr ""
+"Please enter unique Identification Name with only half-size characters."
 
 #: View/UserGroups/admin/form.php:67
 msgid "admins の場合は変更できません。"
-msgstr ""
+msgstr "Can’t change if it’s admins"
 
 #: View/UserGroups/admin/form.php:77
 msgid "日本語が入力できますのでわかりやすい名称を入力します。"
-msgstr ""
+msgstr "Enter understandable name."
 
 #: View/UserGroups/admin/form.php:82
 msgid "その他"
@@ -8961,15 +9534,15 @@ msgstr "Misc"
 
 #: View/UserGroups/admin/form.php:86;91
 msgid "管理システムのグローバルメニューを利用する"
-msgstr ""
+msgstr "Use Global Menu of Admin System"
 
 #: View/UserGroups/admin/form.php:88
 msgid "管理システムのグローバルメニューを利用しない"
-msgstr ""
+msgstr "Don’t use Global Menu of Admin System"
 
 #: View/UserGroups/admin/form.php:95
 msgid "管理システムでグローバルメニューを利用するかどうか設定します。"
-msgstr ""
+msgstr "Set whether to use Global Menu in Admin System or not"
 
 #: View/UserGroups/admin/form.php:96
 msgid "管理グループの場合は変更できません。"
@@ -8977,13 +9550,15 @@ msgstr "You can't change it if it's Admin Group."
 
 #: View/UserGroups/admin/form.php:102
 msgid "コンテンツのドラッグ＆ドロップ移動機能を利用する"
-msgstr ""
+msgstr "Use Drag & Drop function of Content"
 
 #: View/UserGroups/admin/form.php:106
 msgid ""
 "コンテンツ一覧のツリー構造において、ドラッグ＆ドロップでコンテンツの移動を許"
 "可するかどうかを設定します。"
 msgstr ""
+"Set whether to allow moving Content by drag & drop in Content List Tree "
+"Structures or no."
 
 #: View/UserGroups/admin/form.php:114
 msgid "認証プレフィックス設定"
@@ -8994,6 +9569,8 @@ msgid ""
 "認証プレフィックスの設定を指定します。<br />ユーザーグループ名が admins の場"
 "合は編集できません。"
 msgstr ""
+"Specify Authentication Prefix.<br />It can’t be edited if User Group Name "
+"was admins."
 
 #: View/UserGroups/admin/form.php:145
 msgid "「よく使う項目」の初期データ"
@@ -9004,6 +9581,7 @@ msgid ""
 "このグループに新しいユーザーを登録した際、次の「よく使う項目」が登録されま"
 "す。\t"
 msgstr ""
+"Next “Favorite Item” will be registered if new User was added to this Group."
 
 #: View/UserGroups/admin/index.php:26
 msgid ""
@@ -9011,10 +9589,14 @@ msgid ""
 "除されませんが、関連するアクセス制限設定は全て削除されます。\\n※ 関連するユー"
 "ザーは管理者グループに所属する事になります。"
 msgstr ""
+"Are you sure that you want to delete this data?\\nRelated Users won’t be "
+"deleted but released Access Restriction Settings will all be deleted."
+"\\nCaution: Related User will belong to Admin Group."
 
 #: View/Users/admin/form.php:54
 msgid "半角英数字とハイフン、アンダースコアのみで入力してください。"
 msgstr ""
+"Please enter with only half-size alphabets and numbers, hyphens, underscores."
 
 #: View/Users/admin/form.php:58
 msgid "名前"
@@ -9034,16 +9616,16 @@ msgstr "Enter Lastname"
 
 #: View/Users/admin/form.php:64
 msgid "名を入力してください"
-msgstr "Enter Firstsname"
+msgstr "Enter Firstname"
 
 #: View/Users/admin/form.php:65
 msgid "「名」は省略する事ができます。"
-msgstr ""
+msgstr "“Firstname” can be omitted."
 
 #: View/Users/admin/form.php:74
 msgid ""
 "ニックネームを設定している場合は全ての表示にニックネームが利用されます。"
-msgstr ""
+msgstr "Nickname will be used for all displays when it was set."
 
 #: View/Users/admin/form.php:83
 msgid "グループを選択してください"
@@ -9054,12 +9636,16 @@ msgid ""
 "ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには%sより新"
 "しいグループを追加しアクセス制限の設定をおこないます。"
 msgstr ""
+"Add new Group and set Access Restriction from %s, if you want to set Access "
+"Restriction to Content for each User Group."
 
 #: View/Users/admin/form.php:98
 msgid ""
 "連絡用メールアドレスを入力します。<br /><small>※ パスワードを忘れた場合の新パ"
 "スワードの通知先等"
 msgstr ""
+"Enter mail address for contact.<br /><small>Caution: Destination for "
+"notifying new password if you forgot password etc."
 
 #: View/Users/admin/form.php:110
 msgid "パスワードは変更する場合のみ入力してください"
@@ -9067,7 +9653,7 @@ msgstr "Only enter password if you want to change it"
 
 #: View/Users/admin/form.php:119
 msgid "パスワードの変更をする場合は、"
-msgstr ""
+msgstr "If you change password,"
 
 #: View/Users/admin/form.php:121
 msgid "確認の為２回入力してください。"
@@ -9078,10 +9664,12 @@ msgid ""
 "半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)の"
 "みで入力してください"
 msgstr ""
+"Please enter only with half-size alphabets and numbers (alphabets are "
+"distinct by large or small), spaces, symbols (._-:/()#,@[]+=&;{}!$*)."
 
 #: View/Users/admin/form.php:123
 msgid "最低６文字以上で入力してください"
-msgstr ""
+msgstr "Please enter with over 6 characters."
 
 #: View/Users/admin/form.php:147
 msgid "登録されている「よく使う項目」"
@@ -9108,6 +9696,8 @@ msgid ""
 "パスワードを忘れた方は、登録されているメールアドレスを送信してください。<br /"
 ">新しいパスワードをメールでお知らせします。"
 msgstr ""
+"Please send registered mail address if you forgot password.<br />We will "
+"notify new password by mail."
 
 #: View/Users/admin/reset_password.php:32
 msgid "送信"
@@ -9132,6 +9722,12 @@ msgstr "Show Title"
 #: View/WidgetAreas/admin/form.php:116
 msgid "利用中のウィジェット"
 msgstr "Using Widgets"
+
+#~ msgid "メソッド：FeedHelper::saveCachetime()"
+#~ msgstr "Method: FeedHelper::saveCachetime()"
+
+#~ msgid "メソッド：FeedHelper::cacheHeader()"
+#~ msgstr "Method: FeedHelper::cacheHeader()"
 
 #~ msgid ""
 #~ "登録日<br />\n"
