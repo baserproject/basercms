@@ -255,7 +255,7 @@ class SiteConfigsController extends AppController {
 		)) {
 			exit();
 		} else {
-			$this->ajaxError(500, __d('baser', __d('baser', 'ログを確認してください。')));
+			$this->ajaxError(500, __d('baser', 'ログを確認してください。'));
 		}
 		
 	}

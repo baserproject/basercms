@@ -56,7 +56,7 @@ class MailContent extends MailAppModel {
 		parent::__construct($id, $table, $ds);
 		$this->validate = [
 			'id' => [
-				['rule' => 'numeric', 'on' => 'update', 'message' => __d('baser', __d('baser', 'IDに不正な値が利用されています。'))]],
+				['rule' => 'numeric', 'on' => 'update', 'message' => __d('baser', 'IDに不正な値が利用されています。')]],
 			'sender_name' => [
 				['rule' => ['notBlank'], 'message' => __d('baser', '送信先名を入力してください。')],
 				['rule' => ['maxLength', 50], 'message' => __d('baser', '送信先名は50文字以内で入力してください。')]],
