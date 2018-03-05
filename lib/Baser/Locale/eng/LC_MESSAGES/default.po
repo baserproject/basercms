@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-03 17:03+0900\n"
+"PO-Revision-Date: 2018-03-05 11:09+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -649,7 +649,7 @@ msgstr "The reception is suspended now."
 
 #: View/Errors/error400.php:17 View/Errors/error500.php:17;18
 msgid "baser"
-msgstr ""
+msgstr "baser"
 
 #~ msgid "コメントを受付けました"
 #~ msgstr "Accepted Comment"
