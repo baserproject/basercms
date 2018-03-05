@@ -35,7 +35,7 @@ class Plugin extends AppModel {
 		parent::__construct($id, $table, $ds);
 		$this->validate = [
 			'name' => [
-				['rule' => ['alphaNumericPlus'], 'message' => __d('baser', __d('baser', 'プラグイン名は半角英数字、ハイフン、アンダースコアのみが利用可能です。')), 'required' => true],
+				['rule' => ['alphaNumericPlus'], 'message' => __d('baser', 'プラグイン名は半角英数字、ハイフン、アンダースコアのみが利用可能です。'), 'required' => true],
 				['rule' => ['isUnique'], 'on' => 'create', 'message' => __d('baser', '指定のプラグインは既に使用されています。')],
 				['rule' => ['maxLength', 50], 'message' => __d('baser', 'プラグイン名は50文字以内としてください。')]],
 			'title' => [

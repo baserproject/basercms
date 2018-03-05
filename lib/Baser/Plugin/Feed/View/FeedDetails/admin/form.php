@@ -28,7 +28,7 @@ $this->BcBaser->js('Feed.admin/feed_details/form', false);
 <?php echo $this->BcForm->input('FeedDetail.feed_config_id', array('type' => 'hidden')) ?>
 
 <div class="section">
-	<h2><?php echo __d('baser', __d('baser', '基本項目'))?></h2>
+	<h2><?php echo __d('baser', '基本項目')?></h2>
 
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
 		<?php if ($this->action == 'admin_edit'): ?>
@@ -59,7 +59,7 @@ $this->BcBaser->js('Feed.admin/feed_details/form', false);
 </div>
 
 <div class="section">
-	<h2 class="btn-slide-form"><a href="javascript:void(0)" id="FormOption"><?php echo __d('baser', __d('baser', 'オプション'))?></a></h2>
+	<h2 class="btn-slide-form"><a href="javascript:void(0)" id="FormOption"><?php echo __d('baser', 'オプション')?></a></h2>
 	<table cellpadding="0" cellspacing="0" class="form-table slide-body" id="FormOptionBody">
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('FeedDetail.cache_time', __d('baser', 'キャッシュ時間')) ?></th>
