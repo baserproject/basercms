@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-05 12:01+0900\n"
+"PO-Revision-Date: 2018-03-05 13:31+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -3281,7 +3281,7 @@ msgstr "Couldn't find the data."
 #: View/Elements/admin/sites/index_row.php:32
 #: View/Elements/admin/submenus/search_indices.php:20
 msgid "確認"
-msgstr "Confirm"
+msgstr "Check"
 
 #: Plugin/Blog/View/Elements/admin/blog_categories/index_row.php:30
 #: Plugin/Blog/View/Elements/admin/blog_posts/index_row.php:28
