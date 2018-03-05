@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-05 13:31+0900\n"
+"PO-Revision-Date: 2018-03-05 14:59+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -9749,7 +9749,7 @@ msgstr "Backup Data"
 #: View/Tools/admin/maintenance.php:27
 msgid ""
 "データベースのデータをバックアップファイルとしてPCにダウンロードします。"
-msgstr "Downloaddatabase’s data to PC as backup file."
+msgstr "Download database’s data to PC as backup file."
 
 #: View/Tools/admin/maintenance.php:38
 msgid "データの復元"
