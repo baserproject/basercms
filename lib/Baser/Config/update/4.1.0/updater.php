@@ -34,3 +34,12 @@
     } else {
         $this->setUpdateLog('sites テーブルの構造変更に失敗しました。', true);
     }
+
+/**
+ * mail_contents テーブル構造変更
+ */
+	if($this->loadSchema('4.1.0', '', 'mail_contents', $filterType = 'alter')) {
+		$this->setUpdateLog('mail_contents テーブルの構造変更に成功しました。');
+	} else {
+		$this->setUpdateLog('mail_contents テーブルの構造変更に失敗しました。', true);
+	}

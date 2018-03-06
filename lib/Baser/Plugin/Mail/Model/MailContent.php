@@ -59,13 +59,13 @@ class MailContent extends MailAppModel {
 				['rule' => 'numeric', 'on' => 'update', 'message' => __d('baser', 'IDに不正な値が利用されています。')]],
 			'sender_name' => [
 				['rule' => ['notBlank'], 'message' => __d('baser', '送信先名を入力してください。')],
-				['rule' => ['maxLength', 50], 'message' => __d('baser', '送信先名は50文字以内で入力してください。')]],
+				['rule' => ['maxLength', 255], 'message' => __d('baser', '送信先名は255文字以内で入力してください。')]],
 			'subject_user' => [
 				['rule' => ['notBlank'], 'message' => __d('baser', '自動返信メール件名[ユーザー宛]を入力してください。')],
-				['rule' => ['maxLength', 50], 'message' => __d('baser', '自動返信メール件名[ユーザー宛]は50文字以内で入力してください。')]],
+				['rule' => ['maxLength', 255], 'message' => __d('baser', '自動返信メール件名[ユーザー宛]は255文字以内で入力してください。')]],
 			'subject_admin' => [
 				['rule' => ['notBlank'], 'message' => __d('baser', '自動送信メール件名[管理者宛]を入力してください。')],
-				['rule' => ['maxLength', 50], 'message' => __d('baser', '自動返信メール件名[管理者宛]は50文字以内で入力してください。')]],
+				['rule' => ['maxLength', 255], 'message' => __d('baser', '自動返信メール件名[管理者宛]は255文字以内で入力してください。')]],
 			'form_template' => [
 				['rule' => ['halfText'], 'message' => __d('baser', 'メールフォームテンプレート名は半角のみで入力してください。'), 'allowEmpty' => false],
 				['rule' => ['maxLength', 20], 'message' => __d('baser', 'フォームテンプレート名は20文字以内で入力してください。')]],
