@@ -44,7 +44,7 @@ $this->BcBaser->i18nScript([
     'bcTreeCopyTitle' => __d('baser', '%s のコピー'),
 	'bcTreeAliasTitle' => __d('baser', '%s のエイリアス'),
 	'bcTreeUnNamedTitle' => __d('baser', '名称未設定'),
-	'bcTreeNewTitle' => __d('baser', '新しい %'),
+	'bcTreeNewTitle' => __d('baser', '新しい %s'),
 
 ]);
 $this->BcBaser->js('admin/contents/index', false, [

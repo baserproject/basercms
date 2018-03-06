@@ -1077,46 +1077,36 @@ filter: gray;
   }
 }
 @font-face {
-  font-family: 'Titillium Web';
-  src: url('fonts/titillium/titilliumweb-extralight-webfont.eot');
-  src: url('fonts/titillium/titilliumweb-extralight-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/titillium/titilliumweb-extralight-webfont.woff') format('woff'), url('fonts/titillium/titilliumweb-extralight-webfont.ttf') format('truetype'), url('fonts/titillium/titilliumweb-extralight-webfont.svg#titillium_webthin') format('svg');
+  font-family: "Open Sans",sans-serif, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック";
   font-weight: 300;
   font-style: normal;
 }
 @font-face {
-  font-family: 'Titillium Web';
-  src: url('fonts/titillium/titilliumweb-regular-webfont.eot');
-  src: url('fonts/titillium/titilliumweb-regular-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/titillium/titilliumweb-regular-webfont.woff') format('woff'), url('fonts/titillium/titilliumweb-regular-webfont.ttf') format('truetype'), url('fonts/titillium/titilliumweb-regular-webfont.svg#titillium_webregular') format('svg');
+  font-family: "Open Sans",sans-serif, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック";
   font-weight: 400;
   font-style: normal;
 }
 @font-face {
-  font-family: 'Titillium Web';
-  src: url('fonts/titillium/titilliumweb-bold-webfont.eot');
-  src: url('fonts/titillium/titilliumweb-bold-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/titillium/titilliumweb-bold-webfont.woff') format('woff'), url('fonts/titillium/titilliumweb-bold-webfont.ttf') format('truetype'), url('fonts/titillium/titilliumweb-bold-webfont.svg#titillium_webbold') format('svg');
+  font-family: "Open Sans",sans-serif, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック";
   font-weight: 700;
   font-style: normal;
 }
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
-  @font-face {
-    font-family: 'Titillium Web';
-    src: url('fonts/titillium/titilliumweb-extralight-webfont.svg#titillium_webthin') format('svg');
+  @font-face {  font-family: "Open Sans",sans-serif, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック";
     font-weight: 300;
     font-style: normal;
   }
-  @font-face {
-    font-family: 'Titillium Web';
-    src: url('fonts/titillium/titilliumweb-regular-webfont.svg#titillium_webregular') format('svg');
+  @font-face {  
+    font-family: "Open Sans",sans-serif, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック";
     font-weight: 400;
     font-style: normal;
   }
   @font-face {
-    font-family: 'Titillium Web';
-    src: url('fonts/titillium/titilliumweb-bold-webfont.svg#titillium_webbold') format('svg');
+    font-family: "Open Sans",sans-serif, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック";
     font-weight: 700;
     font-style: normal;
   }
 }
 .jstree-proton {
-  font-family: 'Titillium Web', sans-serif, Arial, sans-serif;
+  font-family: "Open Sans",sans-serif, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック";
 }

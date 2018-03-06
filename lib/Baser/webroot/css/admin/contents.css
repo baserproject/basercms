@@ -668,7 +668,7 @@ table.sub-menu{
     width: 240px;
 	font-size: 10px;
 	font-weight: bold;
-	font-family:Verdana, Geneva, sans-serif;
+    font-family: "Open Sans",sans-serif, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック";
 }
 .waiting-box img {
 	margin-bottom: 10px;
@@ -942,7 +942,7 @@ background: #888;
 	-moz-opacity: 0.85;
 
 	color:#FFF;
-	font-family:Arial, Helvetica, sans-serif;
+    font-family: "Open Sans",sans-serif, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック";
 	text-align: center;
 	display: none;
 }

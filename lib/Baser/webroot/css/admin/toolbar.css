@@ -39,7 +39,7 @@ html, body {
 }
 #ToolbarInner li{
 	font-size: 12px;
-	font-family: Arial,Geneva,sans-serif,"メイリオ",Verdana,"Hiragino Kaku Gothic Pro","ヒラギノ角ゴ Pro W3","ＭＳ Ｐゴシック";
+    font-family: "Open Sans",sans-serif, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック";
 	color: #EEE;
 }
 #ToolBar a, #ToolBar span{
