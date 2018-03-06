@@ -39,6 +39,6 @@ if (isset($this->Paginator->params['paging'][$this->Paginator->defaultModel()]['
 		</div>
 	<?php endif ?>
 	<div class="page-result">
-		<?php echo $this->Paginator->counter(['format' => '<span class="page-start-num">%start%</span>～<span class="page-end-num">%end%</span> 件 ／ <span class="page-total-num">%count%</span> 件']) ?>
+		<?php echo $this->Paginator->counter(['format' => sprintf(__d('baser', '%s～%s 件'), '<span class="page-start-num">%start%</span>', '<span class="page-end-num">%end%</span>') . ' ／ ' . sprintf(__d('baser', '%s 件'), '<span class="page-total-num">%count%</span>')]) ?>
 	</div>
 </div>

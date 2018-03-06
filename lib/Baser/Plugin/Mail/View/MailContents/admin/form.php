@@ -184,7 +184,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 <?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpWidgetArea', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
 <?php echo $this->BcForm->error('MailContent.widget_area') ?>
 				<div id="helptextWidgetArea" class="helptext">
-                    <?php echo sprintf(__d('baser', 'メールコンテンツで利用するウィジェットエリアを指定します。<br />ウィジェットエリアは「%s」より追加できます。'), $this->BcBaser->link(__d('baser', 'ウィジェットエリア管理'), array('plugin' => null, 'controller' => 'widget_areas', 'action' => 'index'))) ?>)?>
+                    <?php echo sprintf(__d('baser', 'メールコンテンツで利用するウィジェットエリアを指定します。<br>ウィジェットエリアは「%s」より追加できます。'), $this->BcBaser->getLink(__d('baser', 'ウィジェットエリア管理'), array('plugin' => null, 'controller' => 'widget_areas', 'action' => 'index'))) ?>)?>
 				</div>
 			</td>
 		</tr>

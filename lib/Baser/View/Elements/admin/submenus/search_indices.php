@@ -12,22 +12,23 @@
 
 /**
  * [ADMIN] 検索インデックスメニュー
+ * @var \BcAppView $this
  */
 ?>
 
 <?php
-$this->BcBaser->i18nScript([
-	'title' => __d('baser', '確認'),
-    'message' => __d('baser', '現在の検索インデックスを消去して、再構築します。本当にいいですか？'),
-]);
+echo $this->BcBaser->i18nScript([
+	'reconstructSearchTitle' => __d('baser', '確認'),
+    'reconstructSearchMessage' => __d('baser', '現在の検索インデックスを消去して、再構築します。本当にいいですか？'),
+], ['inline' => true]);
 ?>
 
 <script>
 	$(function(){
 		$("#BtnReconstruct").click(function(){
 			$.bcConfirm.show({
-				title: bcI18n.title,
-				message: bcI18n.message,
+				title: bcI18n.reconstructSearchTitle,
+				message: bcI18n.reconstructSearchMessage,
 				ok: function(){
 					$.bcUtil.showLoader();
 					location.href = $("#BtnReconstruct").attr('href');

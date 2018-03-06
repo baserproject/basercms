@@ -187,7 +187,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpWidgetArea', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<div id="helptextWidgetArea" class="helptext">
                     <?php echo __d('baser', '公開ページ全般で利用するウィジェットエリアを指定します。')?><br />
-                    <?php echo sprintf(__d('baser', 'ウィジェットエリアは「%s」より追加できます。'), $this->BcBaser->link(__d('baser', 'ウィジェットエリア管理'), ['controller' => 'widget_areas', 'action' => 'index']))?>
+                    <?php echo sprintf(__d('baser', 'ウィジェットエリアは「%s」より追加できます。'), $this->BcBaser->getLink(__d('baser', 'ウィジェットエリア管理'), ['controller' => 'widget_areas', 'action' => 'index']))?>
 				</div>
 			</td>
 		</tr>

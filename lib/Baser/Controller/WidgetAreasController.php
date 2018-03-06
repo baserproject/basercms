@@ -42,15 +42,6 @@ class WidgetAreasController extends AppController {
 	public $uses = ['WidgetArea', 'Plugin'];
 
 /**
- * ぱんくずナビ
- *
- * @var array
- */
-	public $crumbs = [
-		['name' => 'ウィジェットエリア管理', 'url' => ['controller' => 'widget_areas', 'action' => 'index']]
-	];
-
-/**
  * サブメニューエレメント
  *
  * @var array
@@ -58,6 +49,19 @@ class WidgetAreasController extends AppController {
 	public $subMenuElements = ['widget_areas'];
 
 /**
+ * WidgetAreasController constructor.
+ *
+ * @param \CakeRequest $request
+ * @param \CakeRequest $response
+ */
+	public function __construct($request = null, $response = null) {
+		parent::__construct($request, $response);
+		$this->crumbs = [
+			['name' => __d('baser', 'ウィジェットエリア管理'), 'url' => ['controller' => 'widget_areas', 'action' => 'index']]
+		];
+	}
+
+	/**
  * beforeFilter
  * 
  * @return void

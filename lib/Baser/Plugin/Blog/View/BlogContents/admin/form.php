@@ -149,7 +149,7 @@ $this->BcBaser->js('Blog.admin/blog_contents/edit', false);
 <?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpWidgetArea', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 <?php echo $this->BcForm->error('BlogContent.widget_area') ?>
 				<div id="helptextWidgetArea" class="helptext">
-                    <?php echo sprintf(__d('baser', 'ブログコンテンツで利用するウィジェットエリアを指定します。<br />ウィジェットエリアは「%s」より追加できます。'), $this->BcBaser->link('ウィジェットエリア管理', ['plugin' => null, 'controller' => 'widget_areas', 'action' => 'index']))?>
+                    <?php echo sprintf(__d('baser', 'ブログコンテンツで利用するウィジェットエリアを指定します。<br>ウィジェットエリアは「%s」より追加できます。'), $this->BcBaser->getLink(__d('baser', 'ウィジェットエリア管理'), ['plugin' => null, 'controller' => 'widget_areas', 'action' => 'index']))?>
 				</div>
 			</td>
 		</tr>

@@ -39,7 +39,7 @@ if ($theme == 'core') {
 		<td>
 			<ul class="cleafix">
 				<?php foreach ($types as $key => $type): ?>
-					<li><?php $this->BcBaser->link($type . '一覧', ['action' => 'index', $theme, $themeFile['name'], $key]) ?></li>
+					<li><?php $this->BcBaser->link(sprintf(__d('baser', '%s 一覧'), $type), ['action' => 'index', $theme, $themeFile['name'], $key]) ?></li>
 				<?php endforeach ?>
 			</ul>
 		</td>

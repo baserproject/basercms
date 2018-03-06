@@ -12,6 +12,7 @@
 
 /**
  * [ADMIN] ブログカテゴリ フォーム
+ * @var \BcAppView $this
  */
 $this->BcBaser->js('Blog.admin/blog_categories/form', false);
 $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
@@ -21,7 +22,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 
 <?php if ($this->action == 'admin_edit'): ?>
 	<div class="em-box align-left">
-		<p><strong><?php echo sprintf(__d('baser', 'このカテゴリのURL：%s'), $this->BcBaser->link($fullUrl, $fullUrl, ['target' => '_blank']))?></strong></p>
+		<p><strong><?php echo sprintf(__d('baser', 'このカテゴリのURL：%s'), $this->BcBaser->getLink($fullUrl, $fullUrl, ['target' => '_blank']))?></strong></p>
 	</div>
 <?php endif ?>
 

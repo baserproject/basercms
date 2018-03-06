@@ -113,7 +113,7 @@ $this->BcBaser->js('admin/updaters/update', false);
 	<?php else: ?>
 		<p>
 			<?php if (!$plugin): ?>
-			<p><?php echo sprintf(__d('baser', 'baserCMSコアのアップデートがうまくいかない場合は、%sにご相談されるか、前のバージョンの baserCMS に戻す事をおすすめします。'), $this->BcBaser->link('baserCMSの制作・開発パートナー', 'http://basercms.net/partners/', ['target' => '_blank']))?></p>
+			<p><?php echo sprintf(__d('baser', 'baserCMSコアのアップデートがうまくいかない場合は、%sにご相談されるか、前のバージョンの baserCMS に戻す事をおすすめします。'), $this->BcBaser->getLink('baserCMSの制作・開発パートナー', 'http://basercms.net/partners/', ['target' => '_blank']))?></p>
 			<?php if (!$requireUpdate): ?>
 				<?php $this->BcBaser->link('≫ 管理画面に移動する', '/' . BcUtil::getAdminPrefix()) ?>
 			<?php endif ?>
