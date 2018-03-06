@@ -56,15 +56,15 @@ class MailContent extends MailAppModel {
 		],
 		'sender_name' => [
 			['rule' => ['notBlank'], 'message' => "送信先名を入力してください。"],
-			['rule' => ['maxLength', 50], 'message' => '送信先名は50文字以内で入力してください。']
+			['rule' => ['maxLength', 255], 'message' => '送信先名は255文字以内で入力してください。']
 		],
 		'subject_user' => [
 			['rule' => ['notBlank'], 'message' => "自動返信メール件名[ユーザー宛]を入力してください。"],
-			['rule' => ['maxLength', 50], 'message' => '自動返信メール件名[ユーザー宛]は50文字以内で入力してください。']
+			['rule' => ['maxLength', 255], 'message' => '自動返信メール件名[ユーザー宛]は255文字以内で入力してください。']
 		],
 		'subject_admin' => [
 			['rule' => ['notBlank'], 'message' => "自動送信メール件名[管理者宛]を入力してください。"],
-			['rule' => ['maxLength', 50], 'message' => '自動返信メール件名[管理者宛]は50文字以内で入力してください。']
+			['rule' => ['maxLength', 255], 'message' => '自動返信メール件名[管理者宛]は255文字以内で入力してください。']
 		],
 		'form_template' => [
 			['rule' => ['halfText'], 'message' => "メールフォームテンプレート名は半角のみで入力してください。", 'allowEmpty' => false],

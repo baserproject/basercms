@@ -1,22 +1,14 @@
 <?php
-
 /* MailContents schema generated on: 2011-08-20 02:08:54 : 1313774094 */
-
 class MailContentsSchema extends CakeSchema {
-
 	public $name = 'MailContents';
-
 	public $file = 'mail_contents.php';
-
 	public $connection = 'default';
-
 	public function before($event = array()) {
 		return true;
 	}
-
 	public function after($event = array()) {
 	}
-
 	public $mail_contents = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'),
 		'description' => array('type' => 'text', 'null' => true, 'default' => null),
@@ -39,5 +31,4 @@ class MailContentsSchema extends CakeSchema {
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci')
 	);
-
 }
