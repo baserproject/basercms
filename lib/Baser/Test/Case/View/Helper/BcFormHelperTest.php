@@ -637,7 +637,6 @@ class BcFormHelperTest extends BaserTestCase {
 			]],
 			'/div'
 		];
-		var_dump($result);
 		$this->assertTags($result, $expected);
 		$result = $this->BcForm->create('Contact', ['url' => '/contacts/add', 'id' => 'MyForm']);
 		$expected['form']['id'] = 'MyForm';

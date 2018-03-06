@@ -113,8 +113,8 @@ class BcTextHelperTest extends BaserTestCase {
 	public function testBooleanDoList() {
 		$result = $this->Helper->booleanDoList('baserCMSを');
 		$expect = [
-			0 => 'baserCMSをしない',
-			1 => 'baserCMSをする'
+			0 => 'baserCMSを しない',
+			1 => 'baserCMSを する'
 		];
 		$this->assertEquals($expect, $result);
 	}
@@ -125,8 +125,8 @@ class BcTextHelperTest extends BaserTestCase {
 	public function testBooleanDo() {
 		$result = $this->Helper->booleanDo(0, 'baserCMSを');
 		$result2 = $this->Helper->booleanDo(1, 'baserCMSを');
-		$this->assertEquals('baserCMSをしない', $result);
-		$this->assertEquals('baserCMSをする', $result2);
+		$this->assertEquals('baserCMSを しない', $result);
+		$this->assertEquals('baserCMSを する', $result2);
 	}
 
 /**

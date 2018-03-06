@@ -41,7 +41,7 @@ class BcThemeConfigReader implements ConfigReaderInterface {
  * @param string $path テーマディレクトリのパス. デフォルトは WWW_ROOT . 'theme' . DS
  */
 	public function __construct($path = null) {
-		$this->variables = [
+		self::$variables = [
 			'title' => __d('baser', 'タイトル'),
 			'description' => __d('baser', '説明'),
 			'author' => __d('baser', '制作者'),
