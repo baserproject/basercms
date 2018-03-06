@@ -19,8 +19,8 @@
 
 <div class="section">
 	<?php if (!empty($this->Paginator)): ?>
-		<div class="search-result corner5">		
-			<?php echo sprintf(__d('baser', $this->Paginator->counter(['format' => '<strong>' . implode(' ', $query) . '%s'])), '</strong> で検索した結果 <strong>%start%〜%end%</strong>件目 / %count% 件') ?>
+		<div class="search-result corner5">
+			<?php echo $this->Paginator->counter(['format' => sprintf(__d('baser', '<strong>%s</strong> で検索した結果 <strong>%start%〜%end%</strong>件目 / %count% 件'), implode(' ', $query))]) ?>
 		</div>
 	<?php endif ?>
 	<!-- list-num -->

@@ -101,15 +101,11 @@ $entryDates = $data['entryDates'];
 	print '<table class="blog-calendar"><tr><td colspan=7>';
 	print "<center>";
 	if ($data['prev']) {
-		print $this->BcBaser->getLink(sprintf(__("%s月"), $month3), $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $year3 . '/' . $month3, null, false);
-	} else {
-		print __($month3 . "月");
+		print $this->BcBaser->getLink('≪', $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $year3 . '/' . $month3, null, false);
 	}
 	print "　" . $year . "/" . $month . "　";
 	if ($data['next']) {
-		print $this->BcBaser->getLink(sprintf(__("%s月"), $month4), $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $year4 . '/' . $month4, null, false);
-	} else {
-		print sprintf(__("%s月"), $month4);
+		print $this->BcBaser->getLink('≫', $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $year4 . '/' . $month4, null, false);
 	}
 	print "</td></tr>";
 

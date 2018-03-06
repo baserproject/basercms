@@ -226,52 +226,47 @@ msgstr ""
 msgid "次へ"
 msgstr ""
 
-#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;118
-#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;118
-#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;120
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;114
+#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;114
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;116
 msgid "日"
 msgstr ""
 
-#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;119
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;115
 #: Config/theme/bc_sample/Elements/smartphone/widgets/blog_monthly_archives.php:51;53
+#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;115
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;117
+msgid "月"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;116
+#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;116
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;118
+msgid "火"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;117
+#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;117
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;119
+msgid "水"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;118
+#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;118
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;120
+msgid "木"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;119
 #: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;119
 #: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;121
-msgid "月"
+msgid "金"
 msgstr ""
 
 #: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;120
 #: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;120
 #: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;122
-msgid "火"
-msgstr ""
-
-#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;121
-#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;121
-#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;123
-msgid "水"
-msgstr ""
-
-#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;122
-#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;122
-#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;124
-msgid "木"
-msgstr ""
-
-#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;123
-#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;123
-#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;125
-msgid "金"
-msgstr ""
-
-#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;124
-#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;124
-#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;126
 msgid "土"
-msgstr ""
-
-#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:104;110;112
-#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:104;110;112
-msgid "%s月"
 msgstr ""
 
 #: Config/theme/bc_sample/Elements/smartphone/widgets/blog_monthly_archives.php:51;53
