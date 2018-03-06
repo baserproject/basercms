@@ -22,7 +22,7 @@ msgstr ""
 
 #: Console/Command/BaserTestShell.php:205 Console/Command/TestShell.php:372
 msgid "Test case %s cannot be run via this shell"
-msgstr "このシェルでテストケース ％s を実行することはできません"
+msgstr "このシェルでテストケース %s を実行することはできません"
 
 #: Console/Command/BaserTestShell.php:218;230;245
 #: Console/Command/TestShell.php:385;402

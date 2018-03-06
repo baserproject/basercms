@@ -10,7 +10,7 @@
 <p class="error">
 	<strong><?php echo __('エラー'); ?>: </strong>
 	<?php printf(
-		__('アドレス ％s に送信されたリクエストは無効です。'),
+		__('アドレス %s に送信されたリクエストは無効です。'),
 		"<strong>'{$url}'</strong>"
 	); ?>
 </p>
