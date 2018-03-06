@@ -79,7 +79,7 @@ $this->BcBaser->js('admin/theme_files/form_folder');
 		<?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', dirname($path))), ['class' => 'btn-gray button']); ?>
 		<?php if (!$safeModeOn): ?>
 			<?php if ($theme == 'core'): ?>
-				<?php $this->BcBaser->link(__d('baser', '現在のテーマにコピー'), array_merge(['action' => 'copy_folder_to_theme', $theme, $plugin, $type], $params), ['class' => 'submit-token btn-red button'], sprintf(__d('baser', '本当に現在のテーマ「 %s 」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。'), Inflector::camelize($siteConfig['theme']))); ?>
+				<?php $this->BcBaser->link(__d('baser', '現在のテーマにコピー'), array_merge(['action' => 'copy_folder_to_theme', $theme, $plugin, $type], $params), ['class' => 'submit-token btn-red button'], sprintf(__d('baser', "本当に現在のテーマ「 %s 」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。"), Inflector::camelize($siteConfig['theme']))); ?>
 			<?php endif ?>
 		<?php else: ?>
             <?php echo __d('baser', '機能制限のセーフモードで動作していますので、現在のテーマへのコピーはできません。')?>

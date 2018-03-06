@@ -200,7 +200,7 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
 	<?php elseif ($this->action == 'admin_edit'): ?>
 		<?php echo $this->BcForm->button(__d('baser', 'プレビュー'), ['div' => false, 'class' => 'button', 'id' => 'BtnPreview']) ?>
 		<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
-		<?php $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogPost.id')], ['class' => 'submit-token button', 'id' => 'BtnDelete'], sprintf(__d('baser', '%s を本当に削除してもいいですか？\n※ ブログ記事はゴミ箱に入らず完全に消去されます。'), $this->BcForm->value('BlogPost.name')), false); ?>
+		<?php $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogPost.id')], ['class' => 'submit-token button', 'id' => 'BtnDelete'], sprintf(__d('baser', "%s を本当に削除してもいいですか？\n※ ブログ記事はゴミ箱に入らず完全に消去されます。"), $this->BcForm->value('BlogPost.name')), false); ?>
 	<?php endif ?>
 </div>
 
