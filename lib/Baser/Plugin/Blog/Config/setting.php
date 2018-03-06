@@ -22,7 +22,7 @@ $config['BcApp.adminNavi.blog'] = [
 ];
 $config['BcContents']['items']['Blog'] = [
 	'BlogContent'	=> [
-		'title' => 'ブログ',
+		'title' => __d('baser', 'ブログ'),
 		'multiple'	=> true,
 		'preview'	=> true,
 		'icon'	=> 'admin/icon_blog.png',

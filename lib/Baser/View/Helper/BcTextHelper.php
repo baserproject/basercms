@@ -82,7 +82,10 @@ class BcTextHelper extends TextHelper {
  * @return array [〜する/〜しない]形式のリスト
  */
 	public function booleanDoList($doText = null) {
-		return [0 => $doText . __d('baser', 'しない'), 1 => $doText . __d('baser', 'する')];
+		return [
+			0 => sprintf(__d('baser', '%s しない'), $doText), 
+			1 => sprintf(__d('baser', '%s する'), $doText)
+		];
 	}
 
 /**

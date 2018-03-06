@@ -12,7 +12,11 @@
 
 /**
  * [ADMIN] アクセス制限設定一覧
+ * @var \BcAppView $this
  */
+$this->BcBaser->i18nScript([
+    'sorttableAlertMessage1' => __d('baser', '並び替えの保存に失敗しました。')
+]);
 $this->BcBaser->js('admin/libs/sorttable', false);
 $this->BcBaser->js([
 	'admin/libs/jquery.baser_ajax_data_list',
