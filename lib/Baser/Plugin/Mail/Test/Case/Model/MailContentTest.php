@@ -116,8 +116,6 @@ class MailContentTest extends BaserTestCase {
 			'form_template' => array('フォームテンプレート名は20文字以内で入力してください。'),
 			'mail_template' => array('メールテンプレート名は20文字以内で入力してください。'),
 			'redirect_url' => array('リダイレクトURLは255文字以内で入力してください。'),
-			'sender_1' => array('送信先メールアドレスは255文字以内で入力してください。'),
-			'sender_2' => array('CC用送信先メールアドレスは255文字以内で入力してください。')
 		);
 
 		$this->assertEquals($expected, $this->MailContent->validationErrors);
