@@ -545,8 +545,8 @@ msgstr ""
 msgid "非公開"
 msgstr ""
 
-#: Plugin/Feed/Controller/FeedConfigsController.php:237
-#: Plugin/Feed/Controller/FeedDetailsController.php:200
+#: Plugin/Feed/Controller/FeedConfigsController.php:241
+#: Plugin/Feed/Controller/FeedDetailsController.php:204
 msgid "無効な処理です。"
 msgstr ""
 
