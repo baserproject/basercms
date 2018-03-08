@@ -51,7 +51,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 					'legend' => false,
 					'separator' => '<br />'))
 				?><br />
-<?php echo $this->BcForm->input('MailContent.sender_1', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+<?php echo $this->BcForm->input('MailContent.sender_1', array('type' => 'text', 'size' => 40)) ?>
 				<?php echo $this->BcForm->error('MailContent.sender_1') ?>
 			</td>
 		</tr>
@@ -162,7 +162,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.sender_2', 'BCC用送信先メールアドレス') ?></th>
 			<td class="col-input">
-<?php echo $this->BcForm->input('MailContent.sender_2', array('type' => 'text', 'size' => 80, 'maxlength' => 255)) ?>
+<?php echo $this->BcForm->input('MailContent.sender_2', array('type' => 'text', 'size' => 80)) ?>
 <?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSender2', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 <?php echo $this->BcForm->error('MailContent.sender_2') ?>
 				<div id="helptextSender2" class="helptext">

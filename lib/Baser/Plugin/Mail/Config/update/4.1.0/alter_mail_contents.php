@@ -1,19 +1,25 @@
 <?php
-/* MailContents schema generated on: 2011-08-20 02:08:54 : 1313774094 */
+
 class MailContentsSchema extends CakeSchema {
+
 	public $name = 'MailContents';
+
 	public $file = 'mail_contents.php';
+
 	public $connection = 'default';
+
 	public function before($event = array()) {
 		return true;
 	}
+
 	public function after($event = array()) {
 	}
+
 	public $mail_contents = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'),
 		'description' => array('type' => 'text', 'null' => true, 'default' => null),
-		'sender_1' => array('type' => 'string', 'null' => true, 'default' => null),
-		'sender_2' => array('type' => 'string', 'null' => true, 'default' => null),
+		'sender_1' => array('type' => 'text', 'null' => true, 'default' => null),
+		'sender_2' => array('type' => 'text', 'null' => true, 'default' => null),
 		'sender_name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 255),
 		'subject_user' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 255),
 		'subject_admin' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 255),
@@ -31,4 +37,5 @@ class MailContentsSchema extends CakeSchema {
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci')
 	);
+
 }
