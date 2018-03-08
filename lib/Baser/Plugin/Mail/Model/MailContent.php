@@ -75,16 +75,14 @@ class MailContent extends MailAppModel {
 			'redirect_url' => [
 				['rule' => ['maxLength', 255], 'message' => __d('baser', 'リダイレクトURLは255文字以内で入力してください。')]],
 			'sender_1' => [
-				['rule' => ['emails'], 'allowEmpty' => true, 'message' => __d('baser', '送信先メールアドレスの形式が不正です。')],
-				['rule' => ['maxLength', 255], 'message' => __d('baser', '送信先メールアドレスは255文字以内で入力してください。')]],
+				['rule' => ['emails'], 'allowEmpty' => true, 'message' => __d('baser', '送信先メールアドレスの形式が不正です。')]],
 			'sender_2' => [
-				['rule' => ['emails'], 'allowEmpty' => true, 'message' => __d('baser', '送信先メールアドレスの形式が不正です。')],
-				['rule' => ['maxLength', 255], 'message' => __d('baser', 'CC用送信先メールアドレスは255文字以内で入力してください。')]],
+				['rule' => ['emails'], 'allowEmpty' => true, 'message' => __d('baser', '送信先メールアドレスの形式が不正です。')]],
 			'ssl_on' => [
 				['rule' => 'checkSslUrl', "message" => __d('baser', 'SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。')]]
 		];
 	}
-	
+
 /**
  * SSL用のURLが設定されているかチェックする
  * 
