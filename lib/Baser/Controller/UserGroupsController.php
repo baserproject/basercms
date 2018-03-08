@@ -52,16 +52,20 @@ class UserGroupsController extends AppController {
 	public $subMenuElements = ['site_configs', 'users'];
 
 /**
- * ぱんくずナビ
+ * UserGroupsController constructor.
  *
- * @var array
+ * @param \CakeRequest $request
+ * @param \CakeRequest $response
  */
-	public $crumbs = [
-		['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'form']],
-		['name' => 'ユーザーグループ管理', 'url' => ['controller' => 'user_groups', 'action' => 'index']]
-	];
+	public function __construct($request = null, $response = null) {
+		parent::__construct($request, $response);
+		$this->crumbs = [
+			['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
+			['name' => __d('baser', 'ユーザーグループ管理'), 'url' => ['controller' => 'user_groups', 'action' => 'index']]
+		];
+	}
 
-/**
+ /**
  * beforeFilter
  * @return void
  */
