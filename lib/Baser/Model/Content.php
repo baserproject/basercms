@@ -1091,8 +1091,11 @@ class Content extends AppModel {
  * @return string URL
  */
 	public function getUrlById($id, $full = false) {
-		if (!is_int((int) $id)) {
-			return '';
+		if (!is_int($id)) {
+			$id = (int) $id;
+			if($id === 0) {
+				return '';	
+			}
 		}
 		$data = $this->find('first', ['conditions' => ['Content.id' => $id]]);
 		if ($data) {

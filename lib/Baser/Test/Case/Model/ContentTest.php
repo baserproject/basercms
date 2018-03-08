@@ -363,10 +363,8 @@ class ContentTest extends BaserTestCase {
 	public function testGetUrlById($id, $full, $expects) {
 		$siteUrl = Configure::read('BcEnv.siteUrl');
 		Configure::write('BcEnv.siteUrl', 'http://main.com');
-
 		$result = $this->Content->getUrlById($id, $full);
 		$this->assertEquals($expects, $result);
-
 		Configure::write('BcEnv.siteUrl', $siteUrl);
 	}
 
