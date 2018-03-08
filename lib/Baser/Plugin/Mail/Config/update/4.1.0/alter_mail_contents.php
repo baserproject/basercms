@@ -1,7 +1,5 @@
 <?php
 
-/* MailContents schema generated on: 2011-08-20 02:08:54 : 1313774094 */
-
 class MailContentsSchema extends CakeSchema {
 
 	public $name = 'MailContents';
