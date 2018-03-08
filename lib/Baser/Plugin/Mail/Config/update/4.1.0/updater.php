@@ -18,7 +18,7 @@
  * mail_contents テーブル構造変更
  */
     if($this->loadSchema('4.1.0', 'Mail', 'mail_contents', $filterType = 'alter')) {
-        $this->setUpdateLog('mail_contents テーブルの構造変更に成功しました。');
+        $this->setUpdateLog('メールプラグイン mail_contents テーブルの構造変更に成功しました。');
     } else {
-        $this->setUpdateLog('mail_contents テーブルの構造変更に失敗しました。', true);
+        $this->setUpdateLog('メールプラグイン mail_contents テーブルの構造変更に失敗しました。', true);
     }
