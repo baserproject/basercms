@@ -36,13 +36,13 @@ $priorities = ['0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.4', '
 			'class' => 'priority',
 			'value' => $data['SearchIndex']['priority']])
 		?>
-<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => '削除', 'class' => 'btn']), ['action' => 'ajax_delete', $data['SearchIndex']['id']], ['title' => '削除', 'class' => 'btn-delete']) ?>
+<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => __d('baser', '削除'), 'class' => 'btn']), ['action' => 'ajax_delete', $data['SearchIndex']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete']) ?>
 <?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['id' => 'PriorityAjaxLoader' . $data['SearchIndex']['id'], 'style' => "vertical-align:middle;display:none"]) ?>
 	</td>
 	<td><?php echo $data['SearchIndex']['id'] ?></td>
 	<td style="width:15%">
 		<?php echo $data['SearchIndex']['type'] ?><br />
-		<?php echo $this->BcBaser->link($this->BcText->noValue($data['SearchIndex']['title'], '設定なし'), siteUrl() . preg_replace('/^\//', '', $data['SearchIndex']['url']), ['target' => '_blank']) ?>
+		<?php echo $this->BcBaser->link($this->BcText->noValue($data['SearchIndex']['title'], __d('baser', '設定なし')), siteUrl() . preg_replace('/^\//', '', $data['SearchIndex']['url']), ['target' => '_blank']) ?>
 	</td>
 	<td><?php echo $this->Text->truncate($data['SearchIndex']['detail'], 50) ?></td>
 	<td style="width:10%;text-align:center">

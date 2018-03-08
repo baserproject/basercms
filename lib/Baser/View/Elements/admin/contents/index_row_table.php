@@ -56,23 +56,23 @@ if($data['Content']['self_status']) {
 			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['Content']['id'], ['type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Content']['id']]) ?>
 		<?php endif ?>
 		<?php if($isPublish): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', ['width' => 32, 'height' => 32, 'alt' => '確認', 'class' => 'btn']), $fullUrl, ['title' => '確認', 'class' => 'btn-check', 'target' => '_blank']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', ['width' => 32, 'height' => 32, 'alt' => __d('baser', '確認'), 'class' => 'btn']), $fullUrl, ['title' => __d('baser', '確認'), 'class' => 'btn-check', 'target' => '_blank']) ?>
 		<?php endif ?>
 		<?php if(!$manageDisabled && !empty($this->BcContents->settings[$type]['routes']['manage'])): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', ['width' => 32, 'height' => 32, 'alt' => '管理', 'class' => 'btn']), array_merge($this->BcContents->settings[$type]['routes']['manage'], $urlParams), ['title' => '管理', 'class' => 'btn-manage']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', ['width' => 32, 'height' => 32, 'alt' => __d('baser', '管理'), 'class' => 'btn']), array_merge($this->BcContents->settings[$type]['routes']['manage'], $urlParams), ['title' => __d('baser', '管理'), 'class' => 'btn-manage']) ?>
 		<?php endif ?>
 		<?php if(!$isSiteRoot && !$isSiteRelated && !$editDisabled): ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_unpublish.png', ['width' => 32, 'height' => 32, 'alt' => '非公開', 'class' => 'btn']), ['action' => 'ajax_change_status'], ['title' => '非公開', 'class' => 'btn-unpublish']) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_publish.png', ['width' => 32, 'height' => 32, 'alt' => '公開', 'class' => 'btn']), ['action' => 'ajax_change_status'], ['title' => '公開', 'class' => 'btn-publish']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_unpublish.png', ['width' => 32, 'height' => 32, 'alt' => __d('baser', '非公開'), 'class' => 'btn']), ['action' => 'ajax_change_status'], ['title' => __d('baser', '非公開'), 'class' => 'btn-unpublish']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_publish.png', ['width' => 32, 'height' => 32, 'alt' => __d('baser', '公開'), 'class' => 'btn']), ['action' => 'ajax_change_status'], ['title' => __d('baser', '公開'), 'class' => 'btn-publish']) ?>
 		<?php endif ?>
 		<?php if(!$editDisabled && $type != 'ContentFolder' && !empty($this->BcContents->settings[$type]['routes']['copy'])): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', ['width' => 32, 'height' => 32, 'alt' => 'コピー', 'class' => 'btn']), array_merge($this->BcContents->settings[$type]['routes']['copy'], $urlParams), ['title' => 'コピー', 'class' => 'btn-copy']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', ['width' => 32, 'height' => 32, 'alt' => __d('baser', 'コピー'), 'class' => 'btn']), array_merge($this->BcContents->settings[$type]['routes']['copy'], $urlParams), ['title' => __d('baser', 'コピー'), 'class' => 'btn-copy']) ?>
 		<?php endif ?>
 		<?php if(!$editDisabled): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['width' => 32, 'height' => 32, 'alt' => '編集', 'class' => 'btn']), array_merge($this->BcContents->settings[$type]['routes']['edit'], $urlParams), ['title' => '編集', 'class' => 'btn-edit']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['width' => 32, 'height' => 32, 'alt' => __d('baser', '編集'), 'class' => 'btn']), array_merge($this->BcContents->settings[$type]['routes']['edit'], $urlParams), ['title' => __d('baser', '編集'), 'class' => 'btn-edit']) ?>
 		<?php endif ?>
 		<?php if(!$editDisabled && !$isSiteRoot): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['width' => 32, 'height' => 32, 'alt' => '削除', 'class' => 'btn']), ['action' => 'ajax_delete', $data['Content']['id']], ['title' => '削除', 'class' => 'btn-delete']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['width' => 32, 'height' => 32, 'alt' => __d('baser', '削除'), 'class' => 'btn']), ['action' => 'ajax_delete', $data['Content']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete']) ?>
 		<?php endif ?>
 		<form>
 			<input type="hidden" name="data[contentId]" value="<?php echo $data['Content']['id'] ?>">

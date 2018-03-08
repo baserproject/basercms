@@ -38,8 +38,8 @@ class SitesController extends AppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->crumbs = [
-			['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'form']],
-			['name' => 'サブサイト管理', 'url' => ['controller' => 'sites', 'action' => 'index']]
+			['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
+			['name' => __d('baser', 'サブサイト管理'), 'url' => ['controller' => 'sites', 'action' => 'index']]
 		];
 	}
 	
@@ -47,7 +47,7 @@ class SitesController extends AppController {
  * サブサイト一覧
  */
 	public function admin_index() {
-		$this->pageTitle = 'サブサイト一覧';
+		$this->pageTitle = __d('baser', 'サブサイト一覧');
 		$this->paginate = ['order' => 'id'];
 		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
 		$this->setViewConditions('Site', ['default' => $default, 'action' => 'admin_index']);
@@ -86,11 +86,11 @@ class SitesController extends AppController {
 				$this->setMessage('サブサイト「' . $this->request->data['Site']['name'] . '」を追加しました。', false, true);
 				$this->redirect(['action' => 'edit', $this->Site->id]);
 			} else {
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
 		}
-		$this->pageTitle = 'サブサイト新規登録';
-		$defaultThemeName = 'サイト基本設定に従う';
+		$this->pageTitle = __d('baser', 'サブサイト新規登録');
+		$defaultThemeName = __d('baser', 'サイト基本設定に従う');
 		if(!empty($this->siteConfigs['theme'])) {
 			$defaultThemeName .= '（' . $this->siteConfigs['theme'] . '）';
 		}
@@ -133,11 +133,11 @@ class SitesController extends AppController {
 				$this->setMessage('サブサイト「' . $this->request->data['Site']['name'] . '」を更新しました。', false, true);
 				$this->redirect(['action' => 'edit', $id]);
 			} else {
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
 		}
-		$this->pageTitle = 'サブサイト編集';
-		$defaultThemeName = 'サイト基本設定に従う';
+		$this->pageTitle = __d('baser', 'サブサイト編集');
+		$defaultThemeName = __d('baser', 'サイト基本設定に従う');
 		if(!empty($this->siteConfigs['theme'])) {
 			$defaultThemeName .= '（' . $this->siteConfigs['theme'] . '）';
 		}
@@ -160,7 +160,7 @@ class SitesController extends AppController {
 		$this->_checkSubmitToken();
 		$this->autoRender = false;
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		if ($this->_changeStatus($id, false)) {
 			return true;
@@ -180,7 +180,7 @@ class SitesController extends AppController {
 		$this->_checkSubmitToken();
 		$this->autoRender = false;
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		if ($this->_changeStatus($id, true)) {
 			return true;
@@ -198,7 +198,7 @@ class SitesController extends AppController {
  * @return boolean
  */
 	protected function _changeStatus($id, $status) {
-		$statusTexts = [0 => '非公開', 1 => '公開'];
+		$statusTexts = [0 => __d('baser', '非公開'), 1 => __d('baser', '公開')];
 		$data = $this->Site->find('first', ['conditions' => ['Site.id' => $id], 'recursive' => -1]);
 		$data['Site']['status'] = $status;
 		if ($this->Site->save($data)) {
@@ -221,7 +221,7 @@ class SitesController extends AppController {
 			$this->setMessage('サブサイト「' . $this->request->data['Site']['name'] . '」 を削除しました。', false, true);
 			$this->redirect(['action' => 'index']);
 		} else {
-			$this->setMessage('データベース処理中にエラーが発生しました。', true);
+			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
 			$this->redirect(['action' => 'edit', $this->request->data['Site']['id']]);
 		}
 	}

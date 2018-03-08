@@ -383,11 +383,11 @@ $(function(){
 	<form action="<?php echo $this->request->base ?>/installations/step2" method="post" id="checkenv">
 		<?php echo $this->BcForm->hidden('clicked') ?>
 		<div class="submit">
-			<?php echo $this->BcForm->button('再チェック', ['class' => 'btn-orange button', 'id' => 'btncheckagain']) ?>
+			<?php echo $this->BcForm->button(__d('baser', '再チェック'), ['class' => 'btn-orange button', 'id' => 'btncheckagain']) ?>
 <?php if (!$blRequirementsMet): ?>
-			<?php echo $this->BcForm->button('次のステップへ', ['class' => 'btn-red button', 'id' => 'btnnext', 'style' => 'display:none']) ?>
+			<?php echo $this->BcForm->button(__d('baser', '次のステップへ'), ['class' => 'btn-red button', 'id' => 'btnnext', 'style' => 'display:none']) ?>
 <?php else: ?>
-			<?php echo $this->BcForm->button('次のステップへ', ['class' => 'btn-red button', 'id' => 'btnnext']) ?>
+			<?php echo $this->BcForm->button(__d('baser', '次のステップへ'), ['class' => 'btn-red button', 'id' => 'btnnext']) ?>
 <?php endif ?>
 		</div>
 	</form>

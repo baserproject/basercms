@@ -181,7 +181,7 @@ class BcContentsHelper extends AppHelper {
 				try {
 					$pluginPath = CakePlugin::path($plugin) . 'webroot' . DS;
 				}catch(Exception $e) {
-					throw new ConfigureException('プラグインの BcContent 設定が間違っています。');
+					throw new ConfigureException(__d('baser', 'プラグインの BcContent 設定が間違っています。'));
 				}
 				$iconPath = $pluginPath . str_replace('/', DS, $imageBaseUrl) . $icon;
 				if(file_exists($iconPath)) {

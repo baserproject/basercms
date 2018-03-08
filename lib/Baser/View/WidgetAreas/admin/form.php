@@ -28,9 +28,9 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 
 <?php echo $this->BcForm->hidden('WidgetArea.id') ?>
 
-<?php echo $this->BcForm->label('WidgetArea.name', 'ウィジェットエリア名') ?>&nbsp;
+<?php echo $this->BcForm->label('WidgetArea.name', __d('baser', 'ウィジェットエリア名')) ?>&nbsp;
 <?php echo $this->BcForm->input('WidgetArea.name', ['type' => 'text', 'size' => 40, 'autofocus' => true]) ?>&nbsp;
-<span class="submit"><?php echo $this->BcForm->end(['label' => 'エリア名を保存する', 'div' => false, 'class' => 'button btn-red', 'id' => 'WidgetAreaUpdateTitleSubmit']) ?></span>
+<span class="submit"><?php echo $this->BcForm->end(['label' => __d('baser', 'エリア名を保存する'), 'div' => false, 'class' => 'button btn-red', 'id' => 'WidgetAreaUpdateTitleSubmit']) ?></span>
 <?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'WidgetAreaUpdateTitleLoader']) ?>
 <?php echo $this->BcForm->error('WidgetArea.name') ?>
 
@@ -95,13 +95,13 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 								<?php echo $this->BcForm->input('Widget.element', ['type' => 'hidden', 'value' => $widget['name']]) ?>
 								<?php echo $this->BcForm->input('Widget.plugin', ['type' => 'hidden', 'value' => $widgetInfo['plugin']]) ?>
 								<?php echo $this->BcForm->input('Widget.sort', ['type' => 'hidden']) ?>
-								<?php echo $this->BcForm->label('Widget.name', 'タイトル') ?>&nbsp;
+								<?php echo $this->BcForm->label('Widget.name', __d('baser', 'タイトル')) ?>&nbsp;
 								<?php echo $this->BcForm->input('Widget.name', ['type' => 'text', 'class' => 'name']) ?><br />
 								<?php echo $widget['setting'] ?><br />
 								<?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader', 'class' => 'loader']) ?>
-								<?php echo $this->BcForm->input('Widget.use_title', ['type' => 'checkbox', 'label' => 'タイトルを表示', 'class' => 'use_title', 'checked' => 'checked']) ?>
-								<?php echo $this->BcForm->input('Widget.status', ['type' => 'checkbox', 'label' => '利用する', 'class' => 'status']) ?>
-								<?php echo $this->BcForm->end(['label' => '保存', 'div' => false, 'id' => 'WidgetUpdateWidgetSubmit', 'class' => 'button']) ?>
+								<?php echo $this->BcForm->input('Widget.use_title', ['type' => 'checkbox', 'label' => __d('baser', 'タイトルを表示'), 'class' => 'use_title', 'checked' => 'checked']) ?>
+								<?php echo $this->BcForm->input('Widget.status', ['type' => 'checkbox', 'label' => __d('baser', '利用する'), 'class' => 'status']) ?>
+								<?php echo $this->BcForm->end(['label' => __d('baser', '保存'), 'div' => false, 'id' => 'WidgetUpdateWidgetSubmit', 'class' => 'button']) ?>
 							</div>
 						</div>
 					<?php endforeach ?>
@@ -142,13 +142,13 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 								<?php echo $this->BcForm->input($key . '.element', ['type' => 'hidden']) ?>
 								<?php echo $this->BcForm->input($key . '.plugin', ['type' => 'hidden']) ?>
 								<?php echo $this->BcForm->input($key . '.sort', ['type' => 'hidden']) ?>
-								<?php echo $this->BcForm->label($key . 'name', 'タイトル') ?>&nbsp;
+								<?php echo $this->BcForm->label($key . 'name', __d('baser', 'タイトル')) ?>&nbsp;
 								<?php echo $this->BcForm->input($key . '.name', ['type' => 'text', 'class' => 'name']) ?><br />
 								<?php $this->BcBaser->element('widgets/' . $widget[$key]['element'], ['key' => $key, 'plugin' => $widget[$key]['plugin'], 'mode' => 'edit'], ['plugin' => $widget[$key]['plugin']]) ?><br />
 								<?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader' . $widget[$key]['id'], 'class' => 'loader']) ?>
-								<?php echo $this->BcForm->input($key . '.use_title', ['type' => 'checkbox', 'label' => 'タイトルを表示', 'class' => 'use_title']) ?>
-								<?php echo $this->BcForm->input($key . '.status', ['type' => 'checkbox', 'label' => '利用する', 'class' => 'status']) ?>
-								<?php echo $this->BcForm->end(['label' => '保存', 'div' => false, 'id' => 'WidgetUpdateWidgetSubmit' . $widget[$key]['id'], 'class' => 'button']) ?>
+								<?php echo $this->BcForm->input($key . '.use_title', ['type' => 'checkbox', 'label' => __d('baser', 'タイトルを表示'), 'class' => 'use_title']) ?>
+								<?php echo $this->BcForm->input($key . '.status', ['type' => 'checkbox', 'label' => __d('baser', '利用する'), 'class' => 'status']) ?>
+								<?php echo $this->BcForm->end(['label' => __d('baser', '保存'), 'div' => false, 'id' => 'WidgetUpdateWidgetSubmit' . $widget[$key]['id'], 'class' => 'button']) ?>
 							</div>
 						</div>
 		<?php endforeach; ?>

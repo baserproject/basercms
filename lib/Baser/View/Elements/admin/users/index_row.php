@@ -18,10 +18,10 @@
 
 <tr>
 	<td class="row-tools">
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => '編集', 'class' => 'btn']), ['action' => 'edit', $data['User']['id']], ['title' => '編集']) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => '削除', 'class' => 'btn']), ['action' => 'ajax_delete', $data['User']['id']], ['title' => '削除', 'class' => 'btn-delete']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => __d('baser', '編集'), 'class' => 'btn']), ['action' => 'edit', $data['User']['id']], ['title' => __d('baser', '編集')]) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => __d('baser', '削除'), 'class' => 'btn']), ['action' => 'ajax_delete', $data['User']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete']) ?>
 		<?php if (!$this->BcBaser->isAdminUser($data['User']['user_group_id'])): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_login.png', ['alt' => 'ログイン', 'class' => 'btn']), ['action' => 'ajax_agent_login', $data['User']['id']], ['title' => 'ログイン', 'class' => 'btn-login']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_login.png', ['alt' => __d('baser', 'ログイン'), 'class' => 'btn']), ['action' => 'ajax_agent_login', $data['User']['id']], ['title' => __d('baser', 'ログイン'), 'class' => 'btn-login']) ?>
 		<?php endif ?>
 	</td>
 	<td><?php echo $data['User']['id'] ?></td>

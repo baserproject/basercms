@@ -2,18 +2,18 @@
 /**
  * ModelWriteTest file
  *
- * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) Tests <https://book.cakephp.org/2.0/en/development/testing.html>
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
  * @package       Cake.Test.Case.Model
  * @since         CakePHP(tm) v 1.2.0.4206
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('MockTransactionDboSource', 'Model/Datasource');
@@ -41,7 +41,7 @@ class TestAuthor extends Author {
 /**
  * Helper method to set a datasource object
  *
- * @param Object $object The datasource object
+ * @param DataSource $object The datasource object
  * @return void
  */
 	public function setDataSourceObject($object) {
@@ -81,7 +81,7 @@ class TestPost extends Post {
 /**
  * Helper method to set a datasource object
  *
- * @param Object $object The datasource object
+ * @param DataSource $object The datasource object
  * @return void
  */
 	public function setDataSourceObject($object) {
@@ -1673,8 +1673,19 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertFalse(empty($result));
 		$this->assertEquals($data['Tag'], $result['Tag']);
 
-		$TestModel->unbindModel(array('belongsTo' => array('User'), 'hasMany' => array('Comment')));
-		$result = $TestModel->find('first', array('fields' => array('id', 'user_id', 'title', 'body'), 'conditions' => array('Article.id' => 2)));
+		$TestModel->unbindModel(array(
+			'belongsTo' => array('User'),
+			'hasMany' => array('Comment'),
+		));
+		$TestModel->bindModel(array(
+			'hasAndBelongsToMany' => array(
+				'Tag' => array('order' => 'Tag.id'),
+			),
+		), false);
+		$result = $TestModel->find('first', array(
+			'fields' => array('id', 'user_id', 'title', 'body'),
+			'conditions' => array('Article.id' => 2),
+		));
 		$expected = array(
 			'Article' => array(
 				'id' => '2',
@@ -1694,7 +1705,9 @@ class ModelWriteTest extends BaseModelTest {
 					'tag' => 'tag2',
 					'created' => '2007-03-18 12:24:23',
 					'updated' => '2007-03-18 12:26:31'
-		)));
+				),
+			),
+		);
 		$this->assertEquals($expected, $result);
 
 		$data = array('Article' => array('id' => '2'), 'Tag' => array('Tag' => array(2, 3)));

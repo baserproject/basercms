@@ -59,7 +59,7 @@ class ThemeConfigsController extends AppController {
  * [ADMIN] 設定編集
  */
 	public function admin_form() {
-		$this->pageTitle = 'テーマ設定';
+		$this->pageTitle = __d('baser', 'テーマ設定');
 		$this->help = 'theme_configs_form';
 
 		if (empty($this->request->data)) {
@@ -68,7 +68,7 @@ class ThemeConfigsController extends AppController {
 
 			$this->ThemeConfig->set($this->request->data);
 			if (!$this->ThemeConfig->validates()) {
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			} else {
 				$this->ThemeConfig->updateColorConfig($this->request->data);
 				$data = $this->ThemeConfig->saveImage($this->request->data);
@@ -80,10 +80,10 @@ class ThemeConfigsController extends AppController {
 				}
 				if ($this->ThemeConfig->saveKeyValue($data)) {
 					clearViewCache();
-					$this->setMessage('システム設定を保存しました。');
+					$this->setMessage(__d('baser', 'システム設定を保存しました。'));
 					$this->redirect(['action' => 'form']);
 				} else {
-					$this->setMessage('保存中にエラーが発生しました。', true);
+					$this->setMessage(__d('baser', '保存中にエラーが発生しました。'), true);
 				}
 			}
 		}

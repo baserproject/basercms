@@ -43,11 +43,11 @@ $this->BcBaser->js('admin/theme_files/form_folder');
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('ThemeFolder.name', 'フォルダ名') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('ThemeFolder.name', __d('baser', 'フォルダ名')) ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php if ($this->request->action != 'admin_view_folder'): ?>
 					<?php echo $this->BcForm->input('ThemeFolder.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
-					<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
+					<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 					<div id="helptextName" class="helptext">
 						<ul>
 							<li>フォルダ名は半角で入力してください。</li>
@@ -67,19 +67,19 @@ $this->BcBaser->js('admin/theme_files/form_folder');
 
 <div class="submit">
 	<?php if ($this->request->action == 'admin_add_folder'): ?>
-		<?php $this->BcBaser->link('一覧に戻る', array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', $path)), ['class' => 'btn-gray button']); ?>
-		<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
+		<?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', $path)), ['class' => 'btn-gray button']); ?>
+		<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 	<?php elseif ($this->request->action == 'admin_edit_folder'): ?>
-		<?php $this->BcBaser->link('一覧に戻る', array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', $path)), ['class' => 'btn-gray button']); ?>
+		<?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', $path)), ['class' => 'btn-gray button']); ?>
 		<?php if($isWritable): ?>
-			<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
-			<?php $this->BcBaser->link('削除', array_merge(['action' => 'del', $theme, $type], $params), ['class' => 'submit-token button'], sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('ThemeFolder.name')), false	) ?>
+			<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
+			<?php $this->BcBaser->link(__d('baser', '削除'), array_merge(['action' => 'del', $theme, $type], $params), ['class' => 'submit-token button'], sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->value('ThemeFolder.name')), false	) ?>
 		<?php endif ?>	
 	<?php else: ?>
-		<?php $this->BcBaser->link('一覧に戻る', array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', dirname($path))), ['class' => 'btn-gray button']); ?>
+		<?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', dirname($path))), ['class' => 'btn-gray button']); ?>
 		<?php if (!$safeModeOn): ?>
 			<?php if ($theme == 'core'): ?>
-				<?php $this->BcBaser->link('現在のテーマにコピー', array_merge(['action' => 'copy_folder_to_theme', $theme, $plugin, $type], $params), ['class' => 'submit-token btn-red button'], '本当に現在のテーマ「' . Inflector::camelize($siteConfig['theme']) . "」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。"); ?>
+				<?php $this->BcBaser->link(__d('baser', '現在のテーマにコピー'), array_merge(['action' => 'copy_folder_to_theme', $theme, $plugin, $type], $params), ['class' => 'submit-token btn-red button'], '本当に現在のテーマ「' . Inflector::camelize($siteConfig['theme']) . "」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。"); ?>
 			<?php endif ?>
 		<?php else: ?>
 			機能制限のセーフモードで動作していますので、現在のテーマへのコピーはできません。

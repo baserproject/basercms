@@ -18,6 +18,6 @@
 
 <?php echo $this->BcForm->create() ?>
 <div class="submit">
-	<?php echo $this->BcForm->submit('保存', ['class' => 'button', 'div' => false]) ?>
+	<?php echo $this->BcForm->submit(__d('baser', '保存'), ['class' => 'button', 'div' => false]) ?>
 </div>
 <?php echo $this->BcForm->end() ?>

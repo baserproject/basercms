@@ -39,5 +39,5 @@ $this->BcGooglemaps->zoom = $_zoom;
 $this->BcGooglemaps->title = $this->BcBaser->siteConfig['name'];
 $this->BcGooglemaps->markerText = $_markerText;
 if (!$this->BcGooglemaps->load($_address, $_width, $_height)) {
-	echo 'Google Maps を読み込めません。管理画面で正しい住所が設定されているか確認してください。';
+	echo __('Google Maps を読み込めません。管理画面で正しい住所が設定されているか確認してください。');
 }

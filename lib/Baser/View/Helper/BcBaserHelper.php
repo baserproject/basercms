@@ -197,6 +197,10 @@ class BcBaserHelper extends AppHelper {
 			return $keywords;
 		}
 
+		if(!empty($this->request->params['Site']['keyword'])) {
+			return $this->request->params['Site']['keyword'];
+		}
+
 		if(!empty($this->siteConfig['keyword'])) {
 			return $this->siteConfig['keyword'];
 		}
@@ -214,6 +218,10 @@ class BcBaserHelper extends AppHelper {
 
 		if (!empty($description)) {
 			return $description;
+		}
+
+		if(!empty($this->request->params['Site']['description'])) {
+			return $this->request->params['Site']['description'];
 		}
 
 		if(!empty($this->siteConfig['description'])) {
@@ -1153,7 +1161,7 @@ class BcBaserHelper extends AppHelper {
 	 */
 	public function editLink() {
 		if ($this->existsEditLink()) {
-			$this->link('編集する', $this->_View->viewVars['editLink'], ['class' => 'tool-menu']);
+			$this->link(__d('baser', '編集する'), $this->_View->viewVars['editLink'], ['class' => 'tool-menu']);
 		}
 	}
 
@@ -1188,7 +1196,7 @@ class BcBaserHelper extends AppHelper {
 				$fullUrl = true;
 			}
 			$url = $this->BcContents->getUrl($this->_View->viewVars['publishLink'], $fullUrl, $useSubdomain, false);
-			$this->link('公開ページ', $url, ['class' => 'tool-menu']);
+			$this->link(__d('baser', '公開ページ'), $url, ['class' => 'tool-menu']);
 		}
 	}
 

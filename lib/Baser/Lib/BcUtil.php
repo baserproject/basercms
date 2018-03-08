@@ -18,7 +18,7 @@ App::uses('Router', 'Routing');
  *
  * @package Baser.Lib
  */
-class BcUtil extends Object {
+class BcUtil extends CakeObject {
 
 /**
  * 管理システムかチェック

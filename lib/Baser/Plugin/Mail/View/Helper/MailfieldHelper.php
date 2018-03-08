@@ -63,10 +63,8 @@ class MailfieldHelper extends AppHelper {
 
 			if ($data['type'] != "check") {
 				$values = explode("|", $data['source']);
-				$i = 0;
 				foreach ($values as $value) {
-					$i++;
-					$source[$i] = $value;
+					$source[$value] = $value;
 				}
 
 				return $source;

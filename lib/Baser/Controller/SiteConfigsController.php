@@ -82,7 +82,7 @@ class SiteConfigsController extends AppController {
 			$this->SiteConfig->set($this->request->data);
 
 			if (!$this->SiteConfig->validates()) {
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			} else {
 
 				$mode = 0;
@@ -132,7 +132,7 @@ class SiteConfigsController extends AppController {
 						'title'		=> $this->request->data['SiteConfig']['name']
 					]);
 
-					$this->setMessage('システム設定を保存しました。');
+					$this->setMessage(__d('baser', 'システム設定を保存しました。'));
 
 					// 環境設定を保存
 					if ($writableInstall) {
@@ -189,7 +189,7 @@ class SiteConfigsController extends AppController {
 				'baseUrl', 'userGroups', 'rewriteInstalled', 'writableInstall', 'writableHtaccess', 'writableHtaccess2', 'disableSettingInstallSetting'
 		));
 		$this->subMenuElements = ['site_configs'];
-		$this->pageTitle = 'サイト基本設定';
+		$this->pageTitle = __d('baser', 'サイト基本設定');
 		$this->help = 'site_configs_form';
 	}
 
@@ -199,7 +199,7 @@ class SiteConfigsController extends AppController {
 	public function admin_del_cache() {
 		$this->_checkReferer();
 		clearAllCache();
-		$this->setMessage('サーバーキャッシュを削除しました。');
+		$this->setMessage(__d('baser', 'サーバーキャッシュを削除しました。'));
 		$this->redirect($this->referer());
 	}
 
@@ -208,7 +208,7 @@ class SiteConfigsController extends AppController {
  */
 	public function admin_info() {
 		
-		$this->pageTitle = '環境情報';
+		$this->pageTitle = __d('baser', '環境情報');
 		$datasources = ['csv' => 'CSV', 'sqlite' => 'SQLite', 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL'];
 		$db = ConnectionManager::getDataSource('default');
 		list($type, $name) = explode('/', $db->config['datasource'], 2);
@@ -218,8 +218,8 @@ class SiteConfigsController extends AppController {
 		$this->set('cakeVersion', Configure::version());
 		$this->subMenuElements = ['site_configs', 'tools'];
 		$this->crumbs = [
-			['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'index']],
-			['name' => 'ユーティリティ', 'url' => ['controller' => 'tools', 'action' => 'index']]
+			['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'index']],
+			['name' => __d('baser', 'ユーティリティ'), 'url' => ['controller' => 'tools', 'action' => 'index']]
 		];
 
 	}
@@ -252,13 +252,13 @@ class SiteConfigsController extends AppController {
 	public function admin_check_sendmail () {
 		
 		if(empty( $this->request->data['SiteConfig'])) {
-			$this->ajaxError(500, 'データが送信できませんでした。');
+			$this->ajaxError(500, __d('baser', 'データが送信できませんでした。'));
 		}
 		$this->siteConfigs = $this->request->data['SiteConfig'];
-		if($this->sendMail($this->siteConfigs['email'], 'メール送信テスト', $this->siteConfigs['formal_name'] . " からのメール送信テストです。\n" . Configure::read('BcEnv.siteUrl'))) {
+		if($this->sendMail($this->siteConfigs['email'], __d('baser', 'メール送信テスト'), $this->siteConfigs['formal_name'] . " からのメール送信テストです。\n" . Configure::read('BcEnv.siteUrl'))) {
 			exit();
 		} else {
-			$this->ajaxError(500, 'ログを確認してください。');
+			$this->ajaxError(500, __d('baser', 'ログを確認してください。'));
 		}
 		
 	}
@@ -294,7 +294,7 @@ class SiteConfigsController extends AppController {
 		}
 		
 		if ($json == false) {
-			$this->ajaxError(500, 'スペシャルサンクスデータが取得できませんでした。');
+			$this->ajaxError(500, __d('baser', 'スペシャルサンクスデータが取得できませんでした。'));
 		}
 		$this->set('credits', $json);
 		

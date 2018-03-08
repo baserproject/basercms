@@ -198,7 +198,7 @@ class BcContentsComponent extends Component {
 		if(BcUtil::isAdminSystem()) {
 			$controller->set('contentsSettings', $this->settings['items']);
 			// パンくずをセット
-			array_unshift($controller->crumbs, ['name' => 'コンテンツ一覧', 'url' => ['plugin' => null, 'controller' => 'contents', 'action' => 'index']]);
+			array_unshift($controller->crumbs, ['name' => __d('baser', 'コンテンツ一覧'), 'url' => ['plugin' => null, 'controller' => 'contents', 'action' => 'index']]);
 			if($controller->subMenuElements && !in_array('contents', $controller->subMenuElements)) {
 				array_unshift($controller->subMenuElements, 'contents');
 			} else {

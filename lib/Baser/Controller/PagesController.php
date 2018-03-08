@@ -249,8 +249,10 @@ class PagesController extends AppController {
 /**
  * ビューを表示する
  *
- * @param mixed
  * @return void
+ * @throws ForbiddenException When a directory traversal attempt.
+ * @throws NotFoundException When the view file could not be found
+ *   or MissingViewException in debug mode.
  */
 	public function display() {
 		// CUSTOMIZE DELETE 2016/10/05 ryuring
@@ -273,12 +275,17 @@ class PagesController extends AppController {
 
 		$urlTmp = preg_replace('/^\//', '', $urlTmp);
 		$path = explode('/', $urlTmp);
-
+		// <<<
+		
 		$count = count($path);
 		if (!$count) {
-			$this->redirect('/');
+			return $this->redirect('/');
 		}
-		$page = $subpage = $titleForLayout = null;
+		if (in_array('..', $path, true) || in_array('.', $path, true)) {
+			throw new ForbiddenException();
+		}
+		$page = $subpage = $title_for_layout = null;
+
 		if (!empty($path[0])) {
 			$page = $path[0];
 		}
@@ -286,15 +293,9 @@ class PagesController extends AppController {
 			$subpage = $path[1];
 		}
 		if (!empty($path[$count - 1])) {
-			$titleForLayout = Inflector::humanize($path[$count - 1]);
+			$title_for_layout = Inflector::humanize($path[$count - 1]);
 		}
-		// <<<
-		
-		$this->set([
-			'page' => $page,
-			'subpage' => $subpage,
-			'title_for_layout' => $titleForLayout
-		]);
+		$this->set(compact('page', 'subpage', 'title_for_layout'));
 
 		// CUSTOMIZE ADD 2014/07/02 ryuring
 		// >>>

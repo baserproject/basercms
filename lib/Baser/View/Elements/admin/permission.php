@@ -20,15 +20,15 @@
 	<?php echo $this->BcForm->create('Permission', ['url' => ['plugin' => null, 'action' => 'ajax_add']]) ?>
 	<?php echo $this->BcForm->input('Permission.id') ?>
 	<dl>
-		<dt><?php echo $this->BcForm->label('Permission.user_group_id', 'ユーザーグループ') ?></dt>
+		<dt><?php echo $this->BcForm->label('Permission.user_group_id', __d('baser', 'ユーザーグループ')) ?></dt>
 		<dd class="col-input">
 			<?php echo $this->BcForm->input('Permission.user_group_id', ['type' => 'select', 'options' => $this->BcForm->getControlSource('Permission.user_group_id')]) ?>
 		</dd>
-		<dt><h4><?php echo $this->BcForm->label('Permission.name', 'ルール名') ?></h4></dt>
+		<dt><h4><?php echo $this->BcForm->label('Permission.name', __d('baser', 'ルール名')) ?></h4></dt>
 		<dd><?php echo $this->BcForm->input('Permission.name', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?></dd>
-		<dt><?php echo $this->BcForm->label('Permission.url', 'URL設定') ?></dt>
+		<dt><?php echo $this->BcForm->label('Permission.url', __d('baser', 'URL設定')) ?></dt>
 		<dd><strong id="PermissionAdmin">/<?php echo Configure::read('Routing.prefixes.0') ?>/</strong><?php echo $this->BcForm->input('Permission.url', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?></dd>
-		<dt><?php echo $this->BcForm->label('Permission.auth', 'アクセス') ?></dt>
+		<dt><?php echo $this->BcForm->label('Permission.auth', __d('baser', 'アクセス')) ?></dt>
 		<dd>
 			<?php
 			echo $this->BcForm->input('Permission.auth', [

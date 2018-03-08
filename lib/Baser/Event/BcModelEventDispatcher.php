@@ -20,7 +20,7 @@
  * 《イベント名の命名規則》
  * Model.ModelName.eventName
  */
-class BcModelEventDispatcher extends Object implements CakeEventListener {
+class BcModelEventDispatcher extends CakeObject implements CakeEventListener {
 
 /**
  * implementedEvents

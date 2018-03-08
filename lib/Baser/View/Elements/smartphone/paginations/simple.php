@@ -25,9 +25,9 @@ $this->request->params['action'] = str_replace('smartphone_', '', $this->request
 
 <?php if ((int) $this->Paginator->counter(['format' => '%pages%']) > 1): ?>
 	<div class="pagination clearfix">
-		<?php echo $this->Paginator->prev('< 前へ', ['class' => 'prev'], null, ['class' => 'disabled']) ?>
+		<?php echo $this->Paginator->prev(__d('baser', '< 前へ'), ['class' => 'prev'], null, ['class' => 'disabled']) ?>
 		<?php echo $this->Html->tag('span', $this->Paginator->numbers(['separator' => '', 'class' => 'number', 'modulus' => $modules], ['class' => 'page-numbers'])) ?>
-		<?php echo $this->Paginator->next('次へ >', ['class' => 'next'], null, ['class' => 'disabled']) ?>
+		<?php echo $this->Paginator->next(__d('baser', '次へ >'), ['class' => 'next'], null, ['class' => 'disabled']) ?>
 	</div>
 <?php endif; ?>
 <?php $this->request->params['action'] = 'smartphone_' . $this->request->params['action'] ?>

@@ -72,7 +72,7 @@ class ToolsController extends AppController {
  * ユーティリティ 
  */
 	public function admin_index() {
-		$this->pageTitle = 'ユーティリティトップ';
+		$this->pageTitle = __d('baser', 'ユーティリティトップ');
 	}
 	
 /**
@@ -95,17 +95,17 @@ class ToolsController extends AppController {
 				}
 				$messages = [];
 				if ($this->_restoreDb($this->request->data)) {
-					$messages[] = 'データの復元が完了しました。';
+					$messages[] = __d('baser', 'データの復元が完了しました。');
 					$error = false;
 				} else {
-					$messages[] = 'データの復元に失敗しました。ログの確認を行なって下さい。';
+					$messages[] = __d('baser', 'データの復元に失敗しました。ログの確認を行なって下さい。');
 					$error = true;
 				}
 				// Pageモデルがレストア処理でAppModelで初期化されClassRegistryにセットされている為
 				ClassRegistry::flush();
 				BcSite::flash();
 				if (!$error && !$this->Page->createAllPageTemplate()) {
-					$messages[] = 'ページテンプレートの生成に失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。';
+					$messages[] = __d('baser', 'ページテンプレートの生成に失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。');
 				}
 				if ($messages) {
 					$this->setMessage(implode('<br />', $messages), $error);
@@ -114,7 +114,7 @@ class ToolsController extends AppController {
 				$this->redirect(['action' => 'maintenance']);
 				break;
 		}
-		$this->pageTitle = 'データメンテナンス';
+		$this->pageTitle = __d('baser', 'データメンテナンス');
 		$this->help = 'tools_maintenance';
 	}
 
@@ -293,7 +293,7 @@ class ToolsController extends AppController {
 			$this->request->data['Tool']['connection'] = 'core';
 		} else {
 			if (empty($this->request->data['Tool'])) {
-				$this->setMessage('テーブルを選択してください。', true);
+				$this->setMessage(__d('baser', 'テーブルを選択してください。'), true);
 			} else {
 				if (!$this->_resetTmpSchemaFolder()) {
 					$this->setMessage('フォルダ：' . $path . ' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。', true);
@@ -305,13 +305,13 @@ class ToolsController extends AppController {
 					$Simplezip->download('schemas');
 					exit();
 				} else {
-					$this->setMessage('スキーマファイルの生成に失敗しました。', true);
+					$this->setMessage(__d('baser', 'スキーマファイルの生成に失敗しました。'), true);
 				}
 			}
 		}
 
 		/* 表示設定 */
-		$this->pageTitle = 'スキーマファイル生成';
+		$this->pageTitle = __d('baser', 'スキーマファイル生成');
 		$this->help = 'tools_write_schema';
 	}
 
@@ -331,17 +331,17 @@ class ToolsController extends AppController {
 					$this->redirect(['action' => 'load_schema']);
 				}
 				if ($this->Tool->loadSchemaFile($this->request->data, $path)) {
-					$this->setMessage('スキーマファイルの読み込みに成功しました。');
+					$this->setMessage(__d('baser', 'スキーマファイルの読み込みに成功しました。'));
 					$this->redirect(['action' => 'load_schema']);
 				} else {
-					$this->setMessage('スキーマファイルの読み込みに失敗しました。', true);
+					$this->setMessage(__d('baser', 'スキーマファイルの読み込みに失敗しました。'), true);
 				}
 			} else {
-				$this->setMessage('ファイルアップロードに失敗しました。', true);
+				$this->setMessage(__d('baser', 'ファイルアップロードに失敗しました。'), true);
 			}
 		}
 		/* 表示設定 */
-		$this->pageTitle = 'スキーマファイル読込';
+		$this->pageTitle = __d('baser', 'スキーマファイル読込');
 		$this->help = 'tools_load_schema';
 	}
 
@@ -369,7 +369,7 @@ class ToolsController extends AppController {
 				if($this->_downloadErrorLog()) {
 					exit();
 				} else {
-					$this->setMessage('エラーログが存在しません。', false);
+					$this->setMessage(__d('baser', 'エラーログが存在しません。'), false);
 				}
 				$this->redirect(['action' => 'log']);
 				break;
@@ -377,14 +377,14 @@ class ToolsController extends AppController {
 				$this->_checkSubmitToken();
 				if( file_exists($errorLogPath) ){
 					if( unlink($errorLogPath) ){
-						$messages[] = 'エラーログを削除しました。';
+						$messages[] = __d('baser', 'エラーログを削除しました。');
 						$error = false;
 					} else {
-						$messages[] = 'エラーログが削除できませんでした。';
+						$messages[] = __d('baser', 'エラーログが削除できませんでした。');
 						$error = true;
 					}
 				} else {
-					$messages[] = 'エラーログが存在しません。';
+					$messages[] = __d('baser', 'エラーログが存在しません。');
 					$error = false;
 				}
 
@@ -401,7 +401,7 @@ class ToolsController extends AppController {
 			$fileSize = filesize($errorLogPath);
 		}
 
-		$this->pageTitle = 'データメンテナンス';
+		$this->pageTitle = __d('baser', 'データメンテナンス');
 		$this->help = 'tools_log';
 		$this->set('fileSize', $fileSize);
 	}
@@ -432,9 +432,9 @@ class ToolsController extends AppController {
 	public function admin_delete_admin_assets() {
 		$this->_checkReferer();
 		if($this->BcManager->deleteAdminAssets()) {
-			$this->setMessage('管理システム用のアセットファイルを削除しました。', false, true);
+			$this->setMessage(__d('baser', '管理システム用のアセットファイルを削除しました。'), false, true);
 		} else {
-			$this->setMessage('管理システム用のアセットファイルの削除に失敗しました。アセットファイルの書込権限を見直してください。', true);
+			$this->setMessage(__d('baser', '管理システム用のアセットファイルの削除に失敗しました。アセットファイルの書込権限を見直してください。'), true);
 		}
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
@@ -445,9 +445,9 @@ class ToolsController extends AppController {
 	public function admin_deploy_admin_assets() {
 		$this->_checkReferer();
 		if($this->BcManager->deployAdminAssets()) {
-			$this->setMessage('管理システム用のアセットファイルを再配置しました。', false, true);
+			$this->setMessage(__d('baser', '管理システム用のアセットファイルを再配置しました。'), false, true);
 		} else {
-			$this->setMessage('管理システム用のアセットファイルの再配置に失敗しました。アセットファイルの書込権限を見直してください。', true);
+			$this->setMessage(__d('baser', '管理システム用のアセットファイルの再配置に失敗しました。アセットファイルの書込権限を見直してください。'), true);
 		}
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
@@ -459,9 +459,9 @@ class ToolsController extends AppController {
 		$this->_checkReferer();
 		$Content = ClassRegistry::init('Content');
 		if($Content->resetTree()) {
-			$this->setMessage('コンテンツのツリー構造をリセットしました。', false, true);
+			$this->setMessage(__d('baser', 'コンテンツのツリー構造をリセットしました。'), false, true);
 		} else {
-			$this->setMessage('コンテンツのツリー構造のリセットに失敗しました。', true);
+			$this->setMessage(__d('baser', 'コンテンツのツリー構造のリセットに失敗しました。'), true);
 		}
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
@@ -477,10 +477,10 @@ class ToolsController extends AppController {
 		$Content->Behaviors->unload('SoftDelete');
 		$result = $Content->verify();
 		if($result === true) {
-			$this->setMessage('コンテンツのツリー構造に問題はありません。', false, true);
+			$this->setMessage(__d('baser', 'コンテンツのツリー構造に問題はありません。'), false, true);
 		} else {
 			$this->log($result);
-			$this->setMessage('コンテンツのツリー構造に問題があります。ログを確認してください。', true);
+			$this->setMessage(__d('baser', 'コンテンツのツリー構造に問題があります。ログを確認してください。'), true);
 		}
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}

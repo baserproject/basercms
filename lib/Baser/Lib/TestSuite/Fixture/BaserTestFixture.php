@@ -50,7 +50,7 @@ class BaserTestFixture extends CakeTestFixture {
 		}
 
 		if ($schemaFile == null) {
-			throw new RuntimeException('Schemaファイルが見つかりません');
+			throw new RuntimeException(__d('baser', 'Schemaファイルが見つかりません'));
 		}
 
 		require_once $schemaFile;

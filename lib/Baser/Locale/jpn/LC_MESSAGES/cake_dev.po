@@ -1,101 +1,164 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
-"POT-Creation-Date: 2017-01-22 15:56+0900\n"
-"PO-Revision-Date: \n"
-"Last-Translator: ryuring\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2017-05-14 22:10+0900\n"
+"Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: ja_JP\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 1.5.7\n"
 "X-Poedit-Basepath: ../../..\n"
 "X-Poedit-SearchPath-0: .\n"
 
+#: Console/Command/BaserTestShell.php:45
+msgid "Please install PHPUnit framework <info>(http://www.phpunit.de)</info>"
+msgstr ""
+"PHPUnit framework をインストールしてください。 <info>(http://www.phpunit.de)"
+"</info>"
+
+#: Console/Command/BaserTestShell.php:205 Console/Command/TestShell.php:372
+msgid "Test case %s cannot be run via this shell"
+msgstr "このシェルでテストケース %s を実行することはできません"
+
+#: Console/Command/BaserTestShell.php:218;230;245
+#: Console/Command/TestShell.php:385;402
+msgid "Test case %s not found"
+msgstr "テストケース %s が見つかりません"
+
+#: Event/CakeEventManager.php:104 Event/CakeEventManager.php:102
+msgid "The eventKey variable is required"
+msgstr "このイベントキー変数は必要です。"
+
+#: Lib/TestSuite/Fixture/CakeFixtureManager.php:188
+msgid "Referenced fixture class %s (%s) not found"
+msgstr "参照しているフィクスチャクラス %s (%s) が見つかりません。"
+
+#: Lib/TestSuite/Fixture/CakeFixtureManager.php:296
+msgid "Referenced fixture class %s not found"
+msgstr "参照しているフィクスチャクラス %s が見つかりません。"
+
+#: Model/CakeSchema.php:619 Model/CakeSchema.php:613
+msgid ""
+"Schema generation error: invalid column type %s for %s.%s does not exist in "
+"DBO"
+msgstr ""
+
+#: Model/Datasource/DboSource.php:268 Model/Datasource/DboSource.php:255
+msgid "Selected driver is not enabled"
+msgstr "選択しているでドライバーは有効ではありません。"
+
+#: Model/Datasource/DboSource.php:1257 Model/Datasource/DboSource.php:1270
+msgid "Error in Model %s"
+msgstr "モデル %s でエラーです"
+
+#: Model/Datasource/DboSource.php:3207 Model/Datasource/DboSource.php:3236
+msgid "Invalid schema object"
+msgstr "無効なスキーマオブジェクト"
+
+#: Model/Datasource/DboSource.php:3317 Model/Datasource/DboSource.php:3346
+#: Model/Datasource/Database/Sqlite.php:410
+msgid "Column name or type not defined in schema"
+msgstr "カラム名、もしくは、型がスキーマに宣言されていません。"
+
+#: Model/Datasource/DboSource.php:3322 Model/Datasource/DboSource.php:3351
+#: Model/Datasource/Database/Sqlite.php:415
+msgid "Column type %s does not exist"
+msgstr "カラム型 %s が存在しません"
+
+#: Network/CakeRequest.php:492 Network/CakeRequest.php:469
+msgid "Method %s does not exist"
+msgstr "メソッド %s が存在しません"
+
+#: Routing/Router.php:233
+msgid "Route class not found, or route class is not a subclass of CakeRoute"
+msgstr ""
+
 #: Cache/Cache.php:173
 msgid "Cache engine %s is not available."
-msgstr ""
+msgstr "キャッシュエンジン %s が利用できません。"
 
 #: Cache/Cache.php:177
 msgid "Cache engines must use %s as a base class."
 msgstr ""
 
 #: Cache/Cache.php:181
-msgid "Cache engine %s is not properly configured."
+msgid ""
+"Cache engine \"%s\" is not properly configured. Ensure required extensions "
+"are installed, and credentials/permissions are correct"
 msgstr ""
 
-#: Cache/Cache.php:318
+#: Cache/Cache.php:321
 msgid "%s cache was unable to write '%s' to %s cache"
 msgstr ""
 
-#: Cache/Cache.php:542
-#, fuzzy
+#: Cache/Cache.php:543
 msgid "Invalid cache group %s"
-msgstr "無効なスキーマオブジェクト"
+msgstr "無効なキャッシュグループ %s"
 
-#: Cache/Engine/FileEngine.php:314
+#: Cache/Engine/FileEngine.php:313
 msgid "Files cannot be atomically decremented."
 msgstr ""
 
-#: Cache/Engine/FileEngine.php:326
+#: Cache/Engine/FileEngine.php:325
 msgid "Files cannot be atomically incremented."
 msgstr ""
 
-#: Cache/Engine/FileEngine.php:363
-#, fuzzy
+#: Cache/Engine/FileEngine.php:362
 msgid "Could not apply permission mask \"%s\" on cache file \"%s\""
-msgstr "%s にパーミッションを設定できません。"
+msgstr ""
 
-#: Cache/Engine/FileEngine.php:386
+#: Cache/Engine/FileEngine.php:385
 msgid "%s is not writable"
 msgstr "%s は書き込み可能ではありません"
 
-#: Cache/Engine/MemcacheEngine.php:168;185
-#, fuzzy
+#: Cache/Engine/MemcacheEngine.php:166;183
 msgid "Method %s not implemented for compressed cache in %s"
-msgstr "メソッド read() が %s に実装されていません"
+msgstr ""
 
-#: Configure/IniReader.php:102 Configure/PhpReader.php:64
-#, fuzzy
+#: Cache/Engine/MemcachedEngine.php:133
+msgid "Memcached extension is not build with SASL support"
+msgstr ""
+
+#: Cache/Engine/MemcachedEngine.php:160
+msgid "%s is not a valid serializer engine for Memcached"
+msgstr ""
+
+#: Cache/Engine/MemcachedEngine.php:166
+msgid "Memcached extension is not compiled with %s support"
+msgstr ""
+
+#: Configure/IniReader.php:101 Configure/PhpReader.php:64
 msgid "Cannot load configuration files with ../ in them."
-msgstr "データベース設定ファイルが存在します。"
+msgstr ""
 
-#: Configure/IniReader.php:107 Configure/PhpReader.php:69
-#, fuzzy
+#: Configure/IniReader.php:106 Configure/PhpReader.php:69
 msgid "Could not load configuration file: %s"
-msgstr "データベース設定ファイルは"
+msgstr "設定ファイルが読み込めません。 : %s"
 
 #: Configure/PhpReader.php:74
 msgid "No variable %s found in %s"
 msgstr ""
 
-#: Console/Command/TestShell.php:176
-msgid "Please install PHPUnit framework <info>(http://www.phpunit.de)</info>"
+#: Console/Command/TestShell.php:175
+msgid ""
+"Please install PHPUnit framework v3.7 <info>(http://www.phpunit.de)</info>"
 msgstr ""
 
-#: Console/Command/TestShell.php:372
-msgid "Test case %s cannot be run via this shell"
-msgstr ""
-
-#: Console/Command/TestShell.php:385;402
-#, fuzzy
-msgid "Test case %s not found"
-msgstr "%s が見つかりません"
-
-#: Console/Command/Task/PluginTask.php:182
+#: Console/Command/Task/PluginTask.php:185
 msgid "%s modified"
 msgstr ""
 
-#: Console/Command/Task/TestTask.php:324
-#, fuzzy
+#: Console/Command/Task/TestTask.php:322
 msgid "Invalid object type."
-msgstr "無効なスキーマオブジェクト"
+msgstr "無効なオブジェクト型"
 
-#: Console/Command/Task/TestTask.php:343
+#: Console/Command/Task/TestTask.php:341
 msgid "Invalid type name"
-msgstr ""
+msgstr "無効な型名"
 
 #: Controller/Component/AclComponent.php:67
 msgid "Could not find %s."
@@ -107,158 +170,139 @@ msgstr ""
 
 #: Controller/Component/AclComponent.php:162;176
 msgid "%s is deprecated, use %s instead"
-msgstr ""
+msgstr "%s は非推奨となりました。変わりに %s を利用してください。"
 
-#: Controller/Component/AuthComponent.php:493
+#: Controller/Component/AuthComponent.php:498
 msgid "Authorization adapter \"%s\" was not found."
 msgstr ""
 
-#: Controller/Component/AuthComponent.php:496
+#: Controller/Component/AuthComponent.php:501
 msgid "Authorization objects must implement an %s method."
 msgstr ""
 
-#: Controller/Component/AuthComponent.php:782
+#: Controller/Component/AuthComponent.php:800
 msgid "Authentication adapter \"%s\" was not found."
 msgstr ""
 
-#: Controller/Component/AuthComponent.php:785
+#: Controller/Component/AuthComponent.php:803
 msgid "Authentication objects must implement an %s method."
 msgstr ""
 
-#: Controller/Component/CookieComponent.php:370
-msgid "You must use cipher or rijndael for cookie encryption type"
+#: Controller/Component/CookieComponent.php:386
+msgid "You must use cipher, rijndael or aes for cookie encryption type"
 msgstr ""
 
-#: Controller/Component/RequestHandlerComponent.php:757
+#: Controller/Component/RequestHandlerComponent.php:761
 msgid "You must give a handler callback."
-msgstr ""
+msgstr "コールバック処理を設定してください。"
 
-#: Controller/Component/SecurityComponent.php:337;615
+#: Controller/Component/SecurityComponent.php:336;622
 msgid "The request has been black-holed"
 msgstr "システムエラーです。"
 
-#: Controller/Component/Acl/PhpAcl.php:102
+#: Controller/Component/Acl/PhpAcl.php:104
 msgid "\"roles\" section not found in configuration."
 msgstr ""
 
-#: Controller/Component/Acl/PhpAcl.php:106
+#: Controller/Component/Acl/PhpAcl.php:108
 msgid "Neither \"allow\" nor \"deny\" rules were provided in configuration."
 msgstr ""
 
-#: Controller/Component/Acl/PhpAcl.php:524
+#: Controller/Component/Acl/PhpAcl.php:526
 msgid "cycle detected when inheriting %s from %s. Path: %s"
 msgstr ""
 
-#: Controller/Component/Auth/BaseAuthenticate.php:156
-#, fuzzy
+#: Controller/Component/Auth/BaseAuthenticate.php:172
 msgid "Password hasher class \"%s\" was not found."
-msgstr "%2$s に設定されているコンポーネントクラス %1$s が見つかりません。"
+msgstr "パスワードハッシャ―クラス \"%s\" が見つかりませんでした。"
 
-#: Controller/Component/Auth/BaseAuthenticate.php:159
+#: Controller/Component/Auth/BaseAuthenticate.php:175
 msgid "Password hasher must extend AbstractPasswordHasher class."
 msgstr ""
+"パスワードハッシャ―は、 AbstractPasswordHasher クラスを継承する必要がありま"
+"す。"
 
-#: Controller/Component/Auth/BaseAuthorize.php:97
+#: Controller/Component/Auth/BaseAuthorize.php:95
 msgid "$controller needs to be an instance of Controller"
 msgstr ""
 
-#: Controller/Component/Auth/ControllerAuthorize.php:51
+#: Controller/Component/Auth/ControllerAuthorize.php:49
 msgid "$controller does not implement an %s method."
 msgstr ""
 
-#: Controller/Component/Auth/CrudAuthorize.php:85
-#, fuzzy
+#: Controller/Component/Auth/CrudAuthorize.php:83
 msgid ""
 "CrudAuthorize::authorize() - Attempted access of un-mapped action \"%1$s\" "
 "in controller \"%2$s\""
 msgstr ""
-"auth::startup() - コントローラ \"%2$s\" のマップされていないアクション \"%1$s"
-"\" にアクセスを試みます。"
 
 #: Core/Configure.php:73
-#, fuzzy
 msgid ""
 "Can't find application core file. Please create %s, and make sure it is "
 "readable by PHP."
 msgstr ""
-"アプリケーションのコアファイルが見つかりません。%score.php を作成し、それが"
-"PHPで読み込める必要があります。"
+"アプリケーションのコアファイルが見つかりません。%s を作成し、それがPHPで読み"
+"込める必要があります。"
 
-#: Core/Configure.php:93
-#, fuzzy
+#: Core/Configure.php:99
 msgid ""
 "Can't find application bootstrap file. Please create %s, and make sure it is "
 "readable by PHP."
 msgstr ""
-"アプリケーションのブートストラップファイルが見つかりません。%sbootstrap.php "
-"を作成し、それがPHPで読み込める必要があります。"
+"アプリケーションのブートストラップファイルが見つかりません。%s を作成し、それ"
+"がPHPで読み込める必要があります。"
 
-#: Core/Configure.php:340
+#: Core/Configure.php:371
 msgid "There is no \"%s\" adapter."
 msgstr ""
 
-#: Core/Configure.php:343
+#: Core/Configure.php:374
 msgid "The \"%s\" adapter, does not have a %s method."
 msgstr ""
 
-#: Event/CakeEventManager.php:105
-msgid "The eventKey variable is required"
+#: I18n/I18n.php:229
+msgid "You cannot use \"\" as a domain."
 msgstr ""
 
-#: I18n/I18n.php:166
-#, fuzzy
-msgid "You cannot use \"\" as a domain."
-msgstr "/ をエイリアスとして使うことはできません！"
-
-#: I18n/I18n.php:204
+#: I18n/I18n.php:268
 msgid ""
 "Missing plural form translation for \"%s\" in \"%s\" domain, \"%s\" locale.  "
 "Check your po file for correct plurals and valid Plural-Forms header."
 msgstr ""
 
-#: Log/CakeLog.php:192
+#: Log/CakeLog.php:194
 msgid "Invalid key name"
 msgstr ""
 
-#: Log/CakeLog.php:195
-#, fuzzy
-msgid "Missing logger classname"
-msgstr "ヘルパークラスがありません"
+#: Log/CakeLog.php:197
+msgid "Missing logger class name"
+msgstr "ロガークラス名がありません"
 
-#: Log/CakeLog.php:316;334;353
-#, fuzzy
+#: Log/CakeLog.php:318;336;355
 msgid "Stream %s not found"
-msgstr "%s が見つかりません"
+msgstr "ストリーム %s が見つかりません"
 
-#: Log/LogEngineCollection.php:46
+#: Log/LogEngineCollection.php:44
 msgid "logger class %s does not implement a %s method."
 msgstr ""
 
-#: Log/LogEngineCollection.php:71
-#, fuzzy
+#: Log/LogEngineCollection.php:69
 msgid "Could not load class %s"
-msgstr "%s が見つかりません。"
+msgstr "クラス %s が見つかりません。"
 
-#: Log/Engine/FileLog.php:152
-#, fuzzy
+#: Log/Engine/FileLog.php:150
 msgid "Could not apply permission mask \"%s\" on log file \"%s\""
-msgstr "%s にパーミッションを設定できません。"
+msgstr ""
 
 #: Model/AclNode.php:177
 msgid "AclNode::node() - Couldn't find %s node identified by \"%s\""
 msgstr ""
 
-#: Model/BehaviorCollection.php:231
+#: Model/BehaviorCollection.php:226
 msgid "%s - Method %s not found in any attached behavior"
 msgstr ""
 
-#: Model/CakeSchema.php:617
-msgid ""
-"Schema generation error: invalid column type %s for %s.%s does not exist in "
-"DBO"
-msgstr ""
-
-#: Model/Model.php:1376
+#: Model/Model.php:1413
 msgid ""
 "(Model::getColumnTypes) Unable to build model field data. If you are using a "
 "model without a database table, try implementing schema()"
@@ -267,51 +311,49 @@ msgstr ""
 "ベーステーブル無しのモデルを使用している場合、schema() を実行してみてくださ"
 "い。"
 
-#: Model/Model.php:3561
+#: Model/Model.php:3738
 msgid ""
 "Invalid join model settings in %s. The association parameter has the wrong "
 "type, expecting a string or array, but was passed type: %s"
 msgstr ""
 
-#: Model/Permission.php:87
+#: Model/Permission.php:84
 msgid ""
-"%s - Failed ARO/ACO node lookup in permissions check. Node references:\n"
+"%s - Failed ARO node lookup in permissions check. Node references:\n"
 "Aro: %s\n"
 "Aco: %s"
 msgstr ""
 
-#: Model/Permission.php:98
+#: Model/Permission.php:95
 msgid ""
 "%s - Failed ACO node lookup in permissions check. Node references:\n"
 "Aro: %s\n"
 "Aco: %s"
 msgstr ""
 
-#: Model/Permission.php:109
-#, fuzzy
+#: Model/Permission.php:106
 msgid "ACO permissions key %s does not exist in %s"
-msgstr "ACO のパーミッションキー %s が、 DbAcl::check() に存在しません"
+msgstr "ACO のパーミッションキー %s が、 %s に存在しません"
 
-#: Model/Permission.php:180
-#, fuzzy
+#: Model/Permission.php:179
 msgid "%s - Invalid node"
-msgstr "DbAcl::allow() - 無効なノード"
+msgstr "%s - 無効なノード"
 
-#: Model/Permission.php:198
+#: Model/Permission.php:197
 msgid "Invalid permission key \"%s\""
 msgstr ""
 
-#: Model/Behavior/AclBehavior.php:68
+#: Model/Behavior/AclBehavior.php:66
 msgid "Callback %s not defined in %s"
 msgstr ""
 
-#: Model/Behavior/AclBehavior.php:85
+#: Model/Behavior/AclBehavior.php:83
 msgid ""
 "AclBehavior is setup with more then one type, please specify type parameter "
 "for node()"
 msgstr ""
 
-#: Model/Behavior/ContainableBehavior.php:344
+#: Model/Behavior/ContainableBehavior.php:342
 msgid "Model \"%s\" is not associated with model \"%s\""
 msgstr "モデル \"%s\" はモデル \"%s\" とアソシエーションできません"
 
@@ -319,715 +361,652 @@ msgstr "モデル \"%s\" はモデル \"%s\" とアソシエーションでき�
 msgid "Datasource %s for TranslateBehavior of model %s is not connected"
 msgstr ""
 
-#: Model/Behavior/TranslateBehavior.php:590
+#: Model/Behavior/TranslateBehavior.php:606
 msgid "You cannot bind a translation named \"name\"."
 msgstr ""
 
-#: Model/Behavior/TranslateBehavior.php:612
+#: Model/Behavior/TranslateBehavior.php:628
 msgid "Association %s is already bound to model %s"
 msgstr ""
 
-#: Model/Datasource/CakeSession.php:489
+#: Model/Datasource/CakeSession.php:554
 msgid "Unable to configure the session, setting %s failed."
 msgstr ""
 
-#: Model/Datasource/CakeSession.php:523
+#: Model/Datasource/CakeSession.php:613
 msgid "Could not load %s to handle the session."
 msgstr ""
 
-#: Model/Datasource/CakeSession.php:529
+#: Model/Datasource/CakeSession.php:619
 msgid ""
 "Chosen SessionHandler does not implement CakeSessionHandlerInterface it "
 "cannot be used with an engine key."
 msgstr ""
 
-#: Model/Datasource/DboSource.php:257
-msgid "Selected driver is not enabled"
-msgstr ""
-
-#: Model/Datasource/DboSource.php:1189
-#, fuzzy
-msgid "Error in Model %s"
-msgstr "フィールド %s でエラーです"
-
-#: Model/Datasource/DboSource.php:2966
-msgid "Invalid schema object"
-msgstr "無効なスキーマオブジェクト"
-
-#: Model/Datasource/DboSource.php:3076 Model/Datasource/Database/Sqlite.php:403
-msgid "Column name or type not defined in schema"
-msgstr ""
-
-#: Model/Datasource/DboSource.php:3081 Model/Datasource/Database/Sqlite.php:408
-#, fuzzy
-msgid "Column type %s does not exist"
-msgstr "メソッド %1$s::%2$s が存在しません"
-
-#: Model/Datasource/Database/Mysql.php:335
-#: Model/Datasource/Database/Sqlserver.php:218
-#, fuzzy
+#: Model/Datasource/Database/Mysql.php:342
+#: Model/Datasource/Database/Sqlserver.php:227
 msgid "Could not describe table for %s"
-msgstr "%s にパーミッションを設定できません。"
-
-#: Model/Validator/CakeValidationRule.php:283
-#, fuzzy
-msgid "Could not find validation handler %s for %s"
-msgstr "\"%s\" を参照して親ノードを見つけることができませんでした"
-
-#: Network/CakeRequest.php:455
-#, fuzzy
-msgid "Method %s does not exist"
-msgstr "メソッド %1$s::%2$s が存在しません"
-
-#: Network/CakeResponse.php:624
-msgid "Unknown status code"
 msgstr ""
 
-#: Network/CakeResponse.php:668
-#, fuzzy
+#: Model/Validator/CakeValidationRule.php:281
+msgid "Could not find validation handler %s for %s"
+msgstr ""
+
+#: Network/CakeResponse.php:633
+msgid "Unknown status code"
+msgstr "不明なステータスコードです。"
+
+#: Network/CakeResponse.php:677
 msgid "Invalid status code"
-msgstr "無効なスキーマオブジェクト"
+msgstr "無効なステータスコードです。"
 
-#: Network/CakeResponse.php:1268
-#, fuzzy
+#: Network/CakeResponse.php:1340
+msgid "The requested file contains `..` and will not be read."
+msgstr ""
+
+#: Network/CakeResponse.php:1353
 msgid "The requested file %s was not found or not readable"
-msgstr "リクエストされたアドレス %s はこのサーバにありませんでした。"
+msgstr ""
+"リクエストされたファイル %s は見つかりませんでした。もしくは読み込めません。"
 
-#: Network/CakeSocket.php:306
+#: Network/CakeSocket.php:379
 msgid "Connection timed out"
 msgstr ""
 
-#: Network/CakeSocket.php:374
-#, fuzzy
+#: Network/CakeSocket.php:446
 msgid "Invalid encryption scheme chosen"
-msgstr "無効なスキーマオブジェクト"
+msgstr ""
 
-#: Network/CakeSocket.php:387
+#: Network/CakeSocket.php:460
 msgid "Unable to perform enableCrypto operation on CakeSocket"
 msgstr ""
 
-#: Network/Email/CakeEmail.php:370
+#: Network/Email/CakeEmail.php:387
 msgid "From requires only 1 email address."
 msgstr ""
 
-#: Network/Email/CakeEmail.php:385
+#: Network/Email/CakeEmail.php:403
 msgid "Sender requires only 1 email address."
 msgstr ""
 
-#: Network/Email/CakeEmail.php:400
+#: Network/Email/CakeEmail.php:419
 msgid "Reply-To requires only 1 email address."
 msgstr ""
 
-#: Network/Email/CakeEmail.php:415
+#: Network/Email/CakeEmail.php:435
 msgid "Disposition-Notification-To requires only 1 email address."
 msgstr ""
 
-#: Network/Email/CakeEmail.php:430
+#: Network/Email/CakeEmail.php:451
 msgid "Return-Path requires only 1 email address."
 msgstr ""
 
-#: Network/Email/CakeEmail.php:564;578;618;632
-#, fuzzy
+#: Network/Email/CakeEmail.php:626
 msgid "Invalid email: \"%s\""
-msgstr "無効なスキーマオブジェクト"
+msgstr "無効なEメール: \"%s\""
 
-#: Network/Email/CakeEmail.php:663;678
+#: Network/Email/CakeEmail.php:704;719
 msgid "$headers should be an array."
 msgstr ""
 
-#: Network/Email/CakeEmail.php:883
+#: Network/Email/CakeEmail.php:931
 msgid "Format not available."
 msgstr ""
 
-#: Network/Email/CakeEmail.php:918
-#, fuzzy
+#: Network/Email/CakeEmail.php:966
 msgid "Class \"%s\" not found."
-msgstr "%s が見つかりません"
+msgstr "クラス \"%s\" が見つかりません"
 
-#: Network/Email/CakeEmail.php:920
+#: Network/Email/CakeEmail.php:968
 msgid "The \"%s\" does not have a %s method."
 msgstr ""
 
-#: Network/Email/CakeEmail.php:941
+#: Network/Email/CakeEmail.php:989
 msgid ""
 "Invalid format for Message-ID. The text should be something like "
 "\"<uuid@server.com>\""
 msgstr ""
 
-#: Network/Email/CakeEmail.php:1020
+#: Network/Email/CakeEmail.php:1068
 msgid "No file or data specified."
 msgstr ""
 
-#: Network/Email/CakeEmail.php:1023
+#: Network/Email/CakeEmail.php:1071
 msgid "No filename specified."
 msgstr ""
 
-#: Network/Email/CakeEmail.php:1029
-#, fuzzy
+#: Network/Email/CakeEmail.php:1078
 msgid "File not found: \"%s\""
-msgstr "%s が見つかりません。"
+msgstr "ファイルが見つかりません。: \"%s\""
 
-#: Network/Email/CakeEmail.php:1112
+#: Network/Email/CakeEmail.php:1161
 msgid "From is not specified."
 msgstr ""
 
-#: Network/Email/CakeEmail.php:1115
+#: Network/Email/CakeEmail.php:1164
 msgid "You need to specify at least one destination for to, cc or bcc."
 msgstr ""
 
-#: Network/Email/CakeEmail.php:1190
-#, fuzzy
+#: Network/Email/CakeEmail.php:1241
 msgid "%s not found."
-msgstr "%s が見つかりません"
-
-#: Network/Email/CakeEmail.php:1194
-msgid "Unknown email configuration \"%s\"."
-msgstr ""
-
-#: Network/Email/MailTransport.php:66;70
-#, fuzzy
-msgid "Could not send email."
 msgstr "%s が見つかりません。"
 
-#: Network/Email/SmtpTransport.php:102
-#, fuzzy
-msgid "Unable to connect to SMTP server."
-msgstr "Cake はデータベースに接続可能です。"
+#: Network/Email/CakeEmail.php:1246
+msgid "Unknown email configuration \"%s\"."
+msgstr "不明なEメール設定です \"%s\"。 "
 
-#: Network/Email/SmtpTransport.php:123
+#: Network/Email/SmtpTransport.php:156
+msgid "Unable to connect to SMTP server."
+msgstr "SMTPサーバに接続できません。"
+
+#: Network/Email/SmtpTransport.php:177
 msgid ""
 "SMTP server did not accept the connection or trying to connect to non TLS "
 "SMTP server using TLS."
 msgstr ""
 
-#: Network/Email/SmtpTransport.php:128
+#: Network/Email/SmtpTransport.php:182
 msgid "SMTP server did not accept the connection."
 msgstr ""
 
-#: Network/Email/SmtpTransport.php:144
+#: Network/Email/SmtpTransport.php:200
 msgid "SMTP server did not accept the username."
 msgstr ""
 
-#: Network/Email/SmtpTransport.php:147
+#: Network/Email/SmtpTransport.php:205
 msgid "SMTP server did not accept the password."
 msgstr ""
 
-#: Network/Email/SmtpTransport.php:150
+#: Network/Email/SmtpTransport.php:208
 msgid ""
-"SMTP authentication method not allowed, check if SMTP server requires TLS"
+"SMTP authentication method not allowed, check if SMTP server requires TLS."
 msgstr ""
 
-#: Network/Email/SmtpTransport.php:152
-msgid "SMTP does not require authentication."
+#: Network/Email/SmtpTransport.php:210
+msgid ""
+"AUTH command not recognized or not implemented, SMTP server may not require "
+"authentication."
 msgstr ""
 
-#: Network/Email/SmtpTransport.php:244
+#: Network/Email/SmtpTransport.php:361
 msgid "SMTP timeout."
 msgstr ""
 
-#: Network/Email/SmtpTransport.php:255
-#, fuzzy
+#: Network/Email/SmtpTransport.php:374
 msgid "SMTP Error: %s"
-msgstr "エラー: "
+msgstr "SMTPエラー: %s"
 
-#: Network/Http/HttpResponse.php:23
+#: Network/Http/HttpResponse.php:21
 msgid ""
 "HttpResponse is deprecated due to naming conflicts. Use HttpSocketResponse "
 "instead."
 msgstr ""
 
-#: Network/Http/HttpSocket.php:246
+#: Network/Http/HttpSocket.php:244
 msgid "Invalid resource."
 msgstr ""
 
-#: Network/Http/HttpSocket.php:406
-#, fuzzy
+#: Network/Http/HttpSocket.php:410
 msgid "Class %s not found."
-msgstr "%s が見つかりません"
+msgstr "クラス %s が見つかりません"
 
-#: Network/Http/HttpSocket.php:604
+#: Network/Http/HttpSocket.php:635
 msgid "Unknown authentication method."
 msgstr ""
 
-#: Network/Http/HttpSocket.php:607
+#: Network/Http/HttpSocket.php:638
 msgid "The %s does not support authentication."
 msgstr ""
 
-#: Network/Http/HttpSocket.php:633
+#: Network/Http/HttpSocket.php:665
 msgid "Unknown authentication method for proxy."
 msgstr ""
 
-#: Network/Http/HttpSocket.php:636
+#: Network/Http/HttpSocket.php:668
 msgid "The %s does not support proxy authentication."
 msgstr ""
 
-#: Network/Http/HttpSocket.php:888
-#, fuzzy
+#: Network/Http/HttpSocket.php:899
 msgid ""
 "HttpSocket::_buildRequestLine - Passed an invalid request line string. "
 "Activate quirks mode to do this."
 msgstr ""
-"HttpSocket::buildRequestLine - 無効なリクエスト文字列を無視しました。Quirks"
-"モード を有効にしてください。"
 
-#: Network/Http/HttpSocket.php:906
-#, fuzzy
+#: Network/Http/HttpSocket.php:917
 msgid ""
 "HttpSocket::_buildRequestLine - The \"*\" asterisk character is only allowed "
 "for the following methods: %s. Activate quirks mode to work outside of "
 "HTTP/1.1 specs."
 msgstr ""
-"HttpSocket::buildRequestLine - \"*\" アスタリスク文字は次のメソッドだけに許可"
-"されます: %s。HTTP/1.1仕様以外で動かすにはQuirksモード を有効にしてください。"
 
-#: Network/Http/HttpSocketResponse.php:153
+#: Network/Http/HttpSocketResponse.php:151
 msgid "Invalid response."
-msgstr ""
+msgstr "無効なレスポンスです。"
 
-#: Network/Http/HttpSocketResponse.php:157
+#: Network/Http/HttpSocketResponse.php:155
 msgid "Invalid HTTP response."
-msgstr ""
+msgstr "無効な HTTPレスポンスです。"
 
-#: Network/Http/HttpSocketResponse.php:225
-#, fuzzy
-msgid "HttpSocket::_decodeChunkedBody - Could not parse malformed chunk."
-msgstr ""
-"HttpSocket::decodeChunkedBody - 異常なチャンクをパースできませんでした。"
-"Quirksモード を有効にしてください。"
-
-#: Routing/Router.php:205
-msgid "Route class not found, or route class is not a subclass of CakeRoute"
-msgstr ""
-
-#: Utility/CakeNumber.php:165
+#: Utility/CakeNumber.php:163
 msgid "No unit type."
 msgstr ""
 
-#: Utility/ClassRegistry.php:116
+#: Utility/ClassRegistry.php:117
 msgid ""
 "(ClassRegistry::init() Attempted to create instance of a class with a "
 "numeric name"
 msgstr "数字の名前でクラスのインスタンスを作成することを試みます"
 
-#: Utility/ClassRegistry.php:148
+#: Utility/ClassRegistry.php:149
 msgid "Cannot create instance of %s, as it is abstract or is an interface"
 msgstr ""
 
-#: Utility/ClassRegistry.php:189
-#, fuzzy
-msgid "(ClassRegistry::init() could not create instance of %s"
-msgstr ""
-"(ClassRegistry::init() クラス %2$s の %1$s インスタンスを作成できませんでし"
-"た。"
-
-#: Utility/Debugger.php:633
+#: Utility/Debugger.php:623
 msgid "Invalid Debugger output format."
 msgstr ""
 
-#: Utility/Debugger.php:849
-#, fuzzy
+#: Utility/Debugger.php:839
 msgid ""
 "Please change the value of %s in %s to a salt value specific to your "
 "application."
 msgstr ""
-"app/config/core.php の 'Security.salt' の値をアプリーション固有のランダムな値"
-"に変更してください。"
 
-#: Utility/Debugger.php:853
-#, fuzzy
+#: Utility/Debugger.php:843
 msgid ""
 "Please change the value of %s in %s to a numeric (digits only) seed value "
 "specific to your application."
 msgstr ""
-"app/config/core.php の 'Security.salt' の値をアプリーション固有のランダムな値"
-"に変更してください。"
 
-#: Utility/Folder.php:385;408
+#: Utility/Folder.php:440;463
 msgid "%s changed to %s"
 msgstr "%s は %s に変更されました"
 
-#: Utility/Folder.php:389;410
+#: Utility/Folder.php:444;465
 msgid "%s NOT changed to %s"
 msgstr "%s は %s に変更されませんでした"
 
-#: Utility/Folder.php:506
+#: Utility/Folder.php:568
 msgid "%s is a file"
 msgstr "%s はファイルです"
 
-#: Utility/Folder.php:517;695
+#: Utility/Folder.php:579;763
 msgid "%s created"
 msgstr "%s が作成されました"
 
-#: Utility/Folder.php:521
+#: Utility/Folder.php:583
 msgid "%s NOT created"
 msgstr "%s が作成されませんでした"
 
-#: Utility/Folder.php:593;601;613
+#: Utility/Folder.php:655;663;675
 msgid "%s removed"
 msgstr "%s は削除されました"
 
-#: Utility/Folder.php:595;603;615
+#: Utility/Folder.php:657;665;677
 msgid "%s NOT removed"
 msgstr "%s は削除されませんでした"
 
-#: Utility/Folder.php:653
+#: Utility/Folder.php:721
 msgid "%s not found"
 msgstr "%s が見つかりません"
 
-#: Utility/Folder.php:662
+#: Utility/Folder.php:730
 msgid "%s not writable"
 msgstr "%s は書き込み可能ではありません"
 
-#: Utility/Folder.php:678
+#: Utility/Folder.php:746
 msgid "%s copied to %s"
 msgstr "%s は %s にコピーされました"
 
-#: Utility/Folder.php:680
+#: Utility/Folder.php:748
 msgid "%s NOT copied to %s"
 msgstr "%s は %s にコピーされませんでした"
 
-#: Utility/Folder.php:699
+#: Utility/Folder.php:767
 msgid "%s not created"
 msgstr "%s は作成されませんでした"
 
-#: Utility/ObjectCollection.php:128
+#: Utility/Hash.php:53
+msgid "Invalid Parameter %s, should be dot separated path or array."
+msgstr ""
+
+#: Utility/Hash.php:414
+msgid "Hash::combine() needs an equal number of keys + values."
+msgstr ""
+
+#: Utility/Hash.php:1106
+msgid "Invalid data array to nest."
+msgstr ""
+
+#: Utility/ObjectCollection.php:124
 msgid "Cannot use modParams with indexes that do not exist."
 msgstr ""
 
-#: Utility/Security.php:160
+#: Utility/Security.php:161
 msgid "Invalid value, cost must be between %s and %s"
 msgstr ""
 
-#: Utility/Security.php:187;220
-#, fuzzy
+#: Utility/Security.php:219;252
 msgid "You cannot use an empty key for %s"
-msgstr "Security::cipher() に空のキーを使用することはできません"
+msgstr "%s に空のキーを使用することはできません"
 
-#: Utility/Security.php:224
+#: Utility/Security.php:256
 msgid ""
 "You must specify the operation for Security::rijndael(), either encrypt or "
 "decrypt"
 msgstr ""
 
-#: Utility/Security.php:228
-#, fuzzy
+#: Utility/Security.php:260
 msgid "You must use a key larger than 32 bytes for Security::rijndael()"
-msgstr "Security::cipher() に空のキーを使用することはできません"
+msgstr ""
 
-#: Utility/Security.php:282
+#: Utility/Security.php:319
 msgid ""
 "Invalid salt: %s for %s Please visit http://www.php.net/crypt and read the "
 "appropriate section for building %s salts."
 msgstr ""
 
-#: Utility/Validation.php:257
-#, fuzzy
+#: Utility/Security.php:372
+msgid "Invalid key for %s, key must be at least 256 bits (32 bytes) long."
+msgstr ""
+
+#: Utility/Security.php:388
+msgid "The data to decrypt cannot be empty."
+msgstr ""
+
+#: Utility/Validation.php:277
 msgid "You must define the $operator parameter for %s"
-msgstr "Validation::comparison() の $operator パラメータを定義してください"
+msgstr ""
 
-#: Utility/Validation.php:275
-#, fuzzy
+#: Utility/Validation.php:295
 msgid "You must define a regular expression for %s"
-msgstr "Validation::custom() の正規表現を定義してください"
+msgstr "%s の正規表現を定義してください"
 
-#: Utility/Validation.php:817
+#: Utility/Validation.php:861
 msgid "Could not find %s class, unable to complete validation."
 msgstr ""
 
-#: Utility/Validation.php:821
+#: Utility/Validation.php:865
 msgid "Method %s does not exist on %s unable to complete validation."
 msgstr ""
 
-#: Utility/Validation.php:915
+#: Utility/Validation.php:936
 msgid "Can not determine the mimetype."
 msgstr ""
 
-#: Utility/Xml.php:110;114;119
+#: Utility/Xml.php:112;116;121
 msgid "XML cannot be read."
 msgstr ""
 
-#: Utility/Xml.php:117;196
+#: Utility/Xml.php:119;198
 msgid "Invalid input."
 msgstr ""
 
-#: Utility/Xml.php:151
+#: Utility/Xml.php:153
 msgid "Xml cannot be read."
 msgstr ""
 
-#: Utility/Xml.php:200
+#: Utility/Xml.php:202
 msgid "The key of input must be alphanumeric"
 msgstr ""
 
-#: Utility/Xml.php:277;290
+#: Utility/Xml.php:279;292
 msgid "Invalid array"
 msgstr ""
 
-#: Utility/Xml.php:341
+#: Utility/Xml.php:343
 msgid "The input is not instance of SimpleXMLElement, DOMDocument or DOMNode."
 msgstr ""
 
-#: View/Helper.php:191
+#: View/Helper.php:231
 msgid "Method %1$s::%2$s does not exist"
 msgstr "メソッド %1$s::%2$s が存在しません"
 
-#: View/View.php:415
-#, fuzzy
+#: View/View.php:425
 msgid "Element Not Found: %s"
-msgstr "見つかりませんでした。"
+msgstr "エレメントが見つかりませんでした。 : %s"
 
-#: View/View.php:710
+#: View/View.php:741
 msgid "You cannot extend an element which does not exist (%s)."
 msgstr ""
 
-#: View/View.php:726
+#: View/View.php:757
 msgid "You cannot have views extend themselves."
 msgstr ""
 
-#: View/View.php:729
+#: View/View.php:760
 msgid "You cannot have views extend in a loop."
 msgstr ""
 
-#: View/View.php:912
+#: View/View.php:952
 msgid "The \"%s\" block was left open. Blocks are not allowed to cross files."
 msgstr ""
 
-#: View/Elements/sql_dump.ctp:83
+#: View/Elements/sql_dump.ctp:81
 msgid "Encountered unexpected %s. Cannot generate SQL log."
 msgstr ""
 
-#: View/Errors/fatal_error.ctp:21
-#, fuzzy
+#: View/Errors/fatal_error.ctp:18
 msgid "Fatal Error"
-msgstr "Scaffold エラー"
+msgstr "致命的なエラー"
 
-#: View/Errors/fatal_error.ctp:23 View/Errors/missing_action.ctp:22;26
-#: View/Errors/missing_behavior.ctp:24;28
-#: View/Errors/missing_component.ctp:24;28
-#: View/Errors/missing_connection.ctp:22;33
-#: View/Errors/missing_controller.ctp:24;28
-#: View/Errors/missing_database.ctp:22;26 View/Errors/missing_datasource.ctp:24
-#: View/Errors/missing_datasource_config.ctp:22
-#: View/Errors/missing_helper.ctp:24;28 View/Errors/missing_layout.ctp:22;26
-#: View/Errors/missing_plugin.ctp:22;26 View/Errors/missing_table.ctp:22
-#: View/Errors/missing_view.ctp:22;26 View/Errors/pdo_error.ctp:22
-#: View/Errors/private_action.ctp:22 View/Errors/scaffold_error.ctp:22
+#: View/Errors/fatal_error.ctp:20 View/Errors/missing_action.ctp:19;23
+#: View/Errors/missing_behavior.ctp:21;25
+#: View/Errors/missing_component.ctp:21;25
+#: View/Errors/missing_connection.ctp:19;30
+#: View/Errors/missing_controller.ctp:21;25
+#: View/Errors/missing_database.ctp:19;23
+#: View/Errors/missing_datasource.ctp:21
+#: View/Errors/missing_datasource_config.ctp:19
+#: View/Errors/missing_helper.ctp:21;25 View/Errors/missing_layout.ctp:19
+#: View/Errors/missing_plugin.ctp:19;23 View/Errors/missing_table.ctp:19
+#: View/Errors/missing_view.ctp:19 View/Errors/pdo_error.ctp:19
+#: View/Errors/private_action.ctp:19 View/Errors/scaffold_error.ctp:19
 msgid "Error"
 msgstr "エラー"
 
-#: View/Errors/fatal_error.ctp:27
+#: View/Errors/fatal_error.ctp:24
 msgid "File"
-msgstr ""
+msgstr "ファイル"
 
-#: View/Errors/fatal_error.ctp:31
+#: View/Errors/fatal_error.ctp:28
 msgid "Line"
-msgstr ""
+msgstr "行"
 
-#: View/Errors/fatal_error.ctp:35 View/Errors/missing_action.ctp:41
-#: View/Errors/missing_behavior.ctp:38 View/Errors/missing_component.ctp:38
-#: View/Errors/missing_connection.ctp:38 View/Errors/missing_controller.ctp:38
-#: View/Errors/missing_database.ctp:30 View/Errors/missing_datasource.ctp:31
-#: View/Errors/missing_datasource_config.ctp:26
-#: View/Errors/missing_helper.ctp:38 View/Errors/missing_layout.ctp:30
-#: View/Errors/missing_plugin.ctp:42 View/Errors/missing_table.ctp:26
-#: View/Errors/missing_view.ctp:30 View/Errors/pdo_error.ctp:36
-#: View/Errors/private_action.ctp:26 View/Errors/scaffold_error.ctp:26
+#: View/Errors/fatal_error.ctp:32 View/Errors/missing_action.ctp:38
+#: View/Errors/missing_behavior.ctp:35 View/Errors/missing_component.ctp:35
+#: View/Errors/missing_connection.ctp:35 View/Errors/missing_controller.ctp:35
+#: View/Errors/missing_database.ctp:27 View/Errors/missing_datasource.ctp:28
+#: View/Errors/missing_datasource_config.ctp:23
+#: View/Errors/missing_helper.ctp:35 View/Errors/missing_layout.ctp:40
+#: View/Errors/missing_plugin.ctp:39 View/Errors/missing_table.ctp:23
+#: View/Errors/missing_view.ctp:40 View/Errors/pdo_error.ctp:33
+#: View/Errors/private_action.ctp:23 View/Errors/scaffold_error.ctp:23
 msgid "Notice"
 msgstr "注意"
 
-#: View/Errors/fatal_error.ctp:36 View/Errors/missing_action.ctp:42
-#: View/Errors/missing_behavior.ctp:39 View/Errors/missing_component.ctp:39
-#: View/Errors/missing_connection.ctp:39 View/Errors/missing_controller.ctp:39
-#: View/Errors/missing_database.ctp:31 View/Errors/missing_datasource.ctp:32
-#: View/Errors/missing_datasource_config.ctp:27
-#: View/Errors/missing_helper.ctp:39 View/Errors/missing_layout.ctp:31
-#: View/Errors/missing_plugin.ctp:43 View/Errors/missing_table.ctp:27
-#: View/Errors/missing_view.ctp:31 View/Errors/pdo_error.ctp:37
-#: View/Errors/private_action.ctp:27 View/Errors/scaffold_error.ctp:27
+#: View/Errors/fatal_error.ctp:33 View/Errors/missing_action.ctp:39
+#: View/Errors/missing_behavior.ctp:36 View/Errors/missing_component.ctp:36
+#: View/Errors/missing_connection.ctp:36 View/Errors/missing_controller.ctp:36
+#: View/Errors/missing_database.ctp:28 View/Errors/missing_datasource.ctp:29
+#: View/Errors/missing_datasource_config.ctp:24
+#: View/Errors/missing_helper.ctp:36 View/Errors/missing_layout.ctp:41
+#: View/Errors/missing_plugin.ctp:40 View/Errors/missing_table.ctp:24
+#: View/Errors/missing_view.ctp:41 View/Errors/pdo_error.ctp:34
+#: View/Errors/private_action.ctp:24 View/Errors/scaffold_error.ctp:24
 msgid "If you want to customize this error message, create %s"
 msgstr "このエラーメッセージをカスタマイズしたい場合は、 %s を作成してください"
 
-#: View/Errors/missing_action.ctp:21
+#: View/Errors/missing_action.ctp:18
 msgid "Missing Method in %s"
 msgstr "%s にメソッドがありません"
 
-#: View/Errors/missing_action.ctp:23
+#: View/Errors/missing_action.ctp:20
 msgid "The action %1$s is not defined in controller %2$s"
 msgstr "アクション %1$s が、コントローラ %2$s に定義されていません"
 
-#: View/Errors/missing_action.ctp:27
+#: View/Errors/missing_action.ctp:24
 msgid "Create %1$s%2$s in file: %3$s."
 msgstr "%1$s%2$s を %3$s に作成してください。"
 
-#: View/Errors/missing_behavior.ctp:22
-#, fuzzy
+#: View/Errors/missing_behavior.ctp:19
 msgid "Missing Behavior"
-msgstr "レイアウトがありません"
+msgstr "ビヘイビアがありません"
 
-#: View/Errors/missing_behavior.ctp:25 View/Errors/missing_component.ctp:25
-#: View/Errors/missing_controller.ctp:25 View/Errors/missing_helper.ctp:25
+#: View/Errors/missing_behavior.ctp:22 View/Errors/missing_component.ctp:22
+#: View/Errors/missing_controller.ctp:22 View/Errors/missing_helper.ctp:22
 msgid "%s could not be found."
 msgstr "%s が見つかりません。"
 
-#: View/Errors/missing_behavior.ctp:29 View/Errors/missing_component.ctp:29
-#: View/Errors/missing_controller.ctp:29 View/Errors/missing_helper.ctp:29
+#: View/Errors/missing_behavior.ctp:26 View/Errors/missing_component.ctp:26
+#: View/Errors/missing_controller.ctp:26 View/Errors/missing_helper.ctp:26
 msgid "Create the class %s below in file: %s"
 msgstr "クラス %s を %s ファイル内に作成してください。"
 
-#: View/Errors/missing_component.ctp:22
-#, fuzzy
+#: View/Errors/missing_component.ctp:19
 msgid "Missing Component"
-msgstr "コンポーネントファイルがありません"
+msgstr "コンポーネントがありません"
 
-#: View/Errors/missing_connection.ctp:20 View/Errors/missing_database.ctp:20
+#: View/Errors/missing_connection.ctp:17 View/Errors/missing_database.ctp:17
 msgid "Missing Database Connection"
 msgstr "データベースへの接続がありません"
 
-#: View/Errors/missing_connection.ctp:23
+#: View/Errors/missing_connection.ctp:20
 msgid "A Database connection using \"%s\" was missing or unable to connect."
 msgstr ""
 
-#: View/Errors/missing_connection.ctp:27
+#: View/Errors/missing_connection.ctp:24
 msgid "The database server returned this error: %s"
 msgstr ""
 
-#: View/Errors/missing_connection.ctp:34
-#, fuzzy
+#: View/Errors/missing_connection.ctp:31
 msgid "%s driver is NOT enabled"
-msgstr " はデータベースに接続不可能"
+msgstr "%s ドライバーは利用できません。"
 
-#: View/Errors/missing_controller.ctp:22
+#: View/Errors/missing_controller.ctp:19
 msgid "Missing Controller"
 msgstr "コントローラがありません"
 
-#: View/Errors/missing_database.ctp:23
+#: View/Errors/missing_database.ctp:20
 msgid "Scaffold requires a database connection"
 msgstr "Scaffold にはデータベース接続が必要です"
 
-#: View/Errors/missing_database.ctp:27 View/Errors/missing_layout.ctp:27
-#: View/Errors/missing_view.ctp:27
+#: View/Errors/missing_database.ctp:24 View/Errors/missing_layout.ctp:24
+#: View/Errors/missing_view.ctp:24
 msgid "Confirm you have created the file: %s"
 msgstr "ファイル %s を作成したことを確認してください"
 
-#: View/Errors/missing_datasource.ctp:22
-#, fuzzy
+#: View/Errors/missing_datasource.ctp:19
 msgid "Missing Datasource"
-msgstr "データベースがありません"
+msgstr "データソースがありません"
 
-#: View/Errors/missing_datasource.ctp:25
-#, fuzzy
+#: View/Errors/missing_datasource.ctp:22
 msgid "Datasource class %s could not be found."
-msgstr "%s が見つかりません。"
+msgstr "データソースクラス %s が見つかりません。"
+
+#: View/Errors/missing_datasource_config.ctp:17
+msgid "Missing Datasource Configuration"
+msgstr "データベース設定が見つかりません。"
 
 #: View/Errors/missing_datasource_config.ctp:20
-#, fuzzy
-msgid "Missing Datasource Configuration"
-msgstr "データベースへの接続がありません"
-
-#: View/Errors/missing_datasource_config.ctp:23
-#, fuzzy
 msgid "The datasource configuration %1$s was not found in database.php."
-msgstr "データベース設定が見つかりませんでした。まずそれを作成してください。"
+msgstr ""
 
-#: View/Errors/missing_helper.ctp:22
-#, fuzzy
+#: View/Errors/missing_helper.ctp:19
 msgid "Missing Helper"
 msgstr "ヘルパーファイルがありません"
 
-#: View/Errors/missing_layout.ctp:20
+#: View/Errors/missing_layout.ctp:17
 msgid "Missing Layout"
 msgstr "レイアウトがありません"
 
-#: View/Errors/missing_layout.ctp:23
+#: View/Errors/missing_layout.ctp:20
 msgid "The layout file %s can not be found or does not exist."
 msgstr "レイアウトファイル %s が見つからないか、存在しません。"
 
-#: View/Errors/missing_plugin.ctp:20
-#, fuzzy
+#: View/Errors/missing_plugin.ctp:17
 msgid "Missing Plugin"
-msgstr "ビューがありません"
+msgstr "プラグインが見つかりません。"
 
-#: View/Errors/missing_plugin.ctp:23
+#: View/Errors/missing_plugin.ctp:20
 msgid "The application is trying to load a file from the %s plugin"
 msgstr ""
 
-#: View/Errors/missing_plugin.ctp:27
+#: View/Errors/missing_plugin.ctp:24
 msgid "Make sure your plugin %s is in the %s directory and was loaded"
 msgstr ""
 
-#: View/Errors/missing_plugin.ctp:35
+#: View/Errors/missing_plugin.ctp:32
 msgid "Loading all plugins"
 msgstr ""
 
-#: View/Errors/missing_plugin.ctp:36
+#: View/Errors/missing_plugin.ctp:33
 msgid ""
 "If you wish to load all plugins at once, use the following line in your %s "
 "file"
 msgstr ""
 
-#: View/Errors/missing_table.ctp:20
+#: View/Errors/missing_table.ctp:17
 msgid "Missing Database Table"
 msgstr "データベーステーブルがありません"
 
-#: View/Errors/missing_table.ctp:23
-#, fuzzy
+#: View/Errors/missing_table.ctp:20
 msgid "Table %1$s for model %2$s was not found in datasource %3$s."
-msgstr "モデル %2$s のデータベーステーブル %1$s が見つかりません。"
+msgstr ""
+"モデル %2$s のテーブル %1$s は、データソース %3$s に見つかりませんでした。"
 
-#: View/Errors/missing_view.ctp:20
+#: View/Errors/missing_view.ctp:17
 msgid "Missing View"
 msgstr "ビューがありません"
 
-#: View/Errors/missing_view.ctp:23
+#: View/Errors/missing_view.ctp:20
 msgid "The view for %1$s%2$s was not found."
 msgstr "ビュー %1$s%2$s が見つかりません。"
 
-#: View/Errors/pdo_error.ctp:20
-#, fuzzy
+#: View/Errors/pdo_error.ctp:17
 msgid "Database Error"
-msgstr "使用するデータベース設定"
+msgstr "データベースエラー"
 
-#: View/Errors/pdo_error.ctp:27
+#: View/Errors/pdo_error.ctp:24
 msgid "SQL Query"
 msgstr ""
 
-#: View/Errors/pdo_error.ctp:32
+#: View/Errors/pdo_error.ctp:29
 msgid "SQL Query Params"
 msgstr ""
 
-#: View/Errors/private_action.ctp:20
+#: View/Errors/private_action.ctp:17
 msgid "Private Method in %s"
 msgstr "%s のプライベートメソッド"
 
-#: View/Errors/private_action.ctp:23
+#: View/Errors/private_action.ctp:20
 msgid "%s%s cannot be accessed directly."
 msgstr "%s%s には直接アクセスできません。"
 
-#: View/Errors/scaffold_error.ctp:20
+#: View/Errors/scaffold_error.ctp:17
 msgid "Scaffold Error"
 msgstr "Scaffold エラー"
 
-#: View/Errors/scaffold_error.ctp:23
+#: View/Errors/scaffold_error.ctp:20
 msgid "Method _scaffoldError in was not found in the controller"
 msgstr "メソッド _scaffoldError がコントローラに見つかりません。"
 
-#: View/Helper/CacheHelper.php:158
+#: View/Helper/CacheHelper.php:161
 msgid "Unable to write view cache file: \"%s\" for \"%s\""
 msgstr ""
 
-#: View/Helper/FormHelper.php:1581
+#: View/Helper/FormHelper.php:1683
 msgid "Missing field name for FormHelper::%s"
 msgstr ""
 
-#: View/Helper/HtmlHelper.php:1220
+#: View/Helper/HtmlHelper.php:1243
 msgid "Cannot load the configuration file. Wrong \"configFile\" configuration."
 msgstr ""
 
-#: View/Helper/HtmlHelper.php:1226
-#, fuzzy
+#: View/Helper/HtmlHelper.php:1249
 msgid "Cannot load the configuration file. Unknown reader."
-msgstr "データベース設定ファイルが存在します。"
+msgstr "設定ファイルを読み込めません。不明なリーダーです。"
 
-#: View/Helper/JsHelper.php:154
+#: View/Helper/JsHelper.php:152
 msgid "JsHelper:: Missing Method %s is undefined"
 msgstr ""
 
@@ -1035,1338 +1014,11 @@ msgstr ""
 msgid "%s requires a \"drag\" option to properly function"
 msgstr "%s には「ドラッグ」オプションが必要です。"
 
-#: View/Helper/NumberHelper.php:65 View/Helper/TextHelper.php:80
-#: View/Helper/TimeHelper.php:63
+#: View/Helper/NumberHelper.php:63 View/Helper/TextHelper.php:78
+#: View/Helper/TimeHelper.php:61
 msgid "%s could not be found"
 msgstr "%s が見つかりません"
 
 #: View/Helper/PaginatorHelper.php:99
 msgid "%s does not implement a %s method, it is incompatible with %s"
 msgstr "%s は %s メソッドを実装していないので %s と互換性がありません。"
-
-msgid "Since the version of the program and the database are different, it forcibly terminates. Adjust the version of the database and try again."
-msgstr "プログラムとデータベースのバージョンが異なるため、強制終了します。データベースのバージョンを調整して、再実行してください。"
-
-msgid "ryuring"
-msgstr "江頭竜二"
-
-#~ msgid ""
-#~ "Since the version of the program and the database are different, it "
-#~ "forcibly terminates. Adjust the version of the database and try again.\""
-#~ msgstr ""
-#~ "プログラムとデータベースのバージョンが異なるため、強制終了します。データ"
-#~ "ベースのバージョンを調整して、再実行してください。"
-
-#~ msgid "DboCsv::describe : Can't find Connection"
-#~ msgstr "接続を見つける事ができませんでした。"
-
-#~ msgid "SQL Error in model %s:"
-#~ msgstr "モデル %s: でSQLエラー"
-
-#~ msgid "January"
-#~ msgstr "1月"
-
-#~ msgid "February"
-#~ msgstr "2月"
-
-#~ msgid "March"
-#~ msgstr "3月"
-
-#~ msgid "April"
-#~ msgstr "4月"
-
-#~ msgid "May"
-#~ msgstr "5月"
-
-#~ msgid "June"
-#~ msgstr "6月"
-
-#~ msgid "July"
-#~ msgstr "7月"
-
-#~ msgid "August"
-#~ msgstr "8月"
-
-#~ msgid "September"
-#~ msgstr "9月"
-
-#~ msgid "October"
-#~ msgstr "10月"
-
-#~ msgid "November"
-#~ msgstr "11月"
-
-#~ msgid "December"
-#~ msgstr "12月"
-
-#~ msgid "Debug setting does not allow access to this url."
-#~ msgstr "デバッグ設定はこのURLにアクセスすることを許可していません。"
-
-#~ msgid "Missing Controller '%s'"
-#~ msgstr "コントローラ '%s' がありません"
-
-#~ msgid "Missing Method '%s' in '%s'"
-#~ msgstr "メソッド '%s' が '%s' にありません"
-
-#~ msgid "Trying to access private method '%s' in '%s'"
-#~ msgstr "'%2$s' のプライベートメソッド '%1$s' にアクセスしようとしています"
-
-#~ msgid "Missing database table '%s' for model '%s'"
-#~ msgstr "モデル '%2$s' のデータベーステーブル '%1$s' がありません"
-
-#~ msgid "Missing View '%s' for '%s' in '%s'"
-#~ msgstr "'%3s' で '%2$s' のビュー '%1$s' がありません"
-
-#~ msgid "Missing Layout '%s'"
-#~ msgstr "レイアウト '%s' がありません"
-
-#~ msgid "Missing Database Connection. Try 'cake bake'"
-#~ msgstr "データベース接続がありません。'cake bake' を試してください"
-
-#~ msgid "Missing Helper file '%s' for '%s'"
-#~ msgstr "'%2$s' のヘルパーファイル '%1$s' がありません"
-
-#~ msgid "Missing Helper class '%s' in '%s'"
-#~ msgstr "ヘルパークラス '%s' が '%s' にありません"
-
-#~ msgid "Missing Component file '%s' for '%s'"
-#~ msgstr "'%2$s' のコンポーネントファイル '%1$s' がありません"
-
-#~ msgid "Missing Component class '%s' in '%s'"
-#~ msgstr "コンポーネントクラス '%s' が '%s' にありません"
-
-#~ msgid "Missing model '%s'"
-#~ msgstr "モデル '%s' がありません"
-
-#~ msgid "Error: Your current Cake configuration is set to"
-#~ msgstr "エラー: 現在のCakeの設定では、ACLの実装を"
-
-#~ msgid "an ACL implementation other than DB. Please change"
-#~ msgstr "データベース以外に設定されています。このスクリプトを"
-
-#~ msgid "your core config to reflect your decision to use"
-#~ msgstr "実行しようとする前に、DbAclを使うというあなたの決定を"
-
-#~ msgid "DbAcl before attempting to use this script"
-#~ msgstr "反映させるためにコア設定を変更してください。"
-
-#~ msgid "Current ACL Classname: %s"
-#~ msgstr "現在のACLクラス名: %s"
-
-#~ msgid "Available ACL commands:"
-#~ msgstr "利用可能なACLコマンド:"
-
-#~ msgid ""
-#~ "For help, run the 'help' command.  For help on a specific command, run "
-#~ "'help <command>'"
-#~ msgstr ""
-#~ "ヘルプを見るには、'help' コマンド。コマンド固有のヘルプを見るには、'help <"
-#~ "コマンド>'。"
-
-#~ msgid "\\t/ is the root, please supply a sub alias"
-#~ msgstr "\\t/ はルートです、別名を指定してください。"
-
-#~ msgid "New %s '%s' created.\n"
-#~ msgstr "新規 %s '%s' が作成されました\n"
-
-#~ msgid "There was a problem creating a new %s '%s'."
-#~ msgstr "新規 %s '%s' を作成中に問題がありました。"
-
-#~ msgid "Node Not Deleted"
-#~ msgstr "ノードは削除されませんでした"
-
-#~ msgid "There was an error deleting the %s. Check that the node exists"
-#~ msgstr ""
-#~ "%s を削除中にエラーがありました。ノードが存在するか確認してください。"
-
-#~ msgid "%s deleted"
-#~ msgstr "%s は削除されました"
-
-#~ msgid ""
-#~ "Error in setting new parent. Please make sure the parent node exists, and "
-#~ "is not a descendant of the node specified."
-#~ msgstr ""
-#~ "新しい親設定でエラーが発生しました。親ノードが存在していて、指定されたノー"
-#~ "ドの子でないことを確認してください。"
-
-#~ msgid "Node parent set to %s"
-#~ msgstr "ノードの親に %s を設定しました"
-
-#~ msgid "Supplied Node '%s' not found"
-#~ msgstr "指定されたノード '%s' が見つかりません"
-
-#~ msgid "No tree returned."
-#~ msgstr "ツリーがありませんでした。"
-
-#~ msgid "%s is allowed."
-#~ msgstr "%s は許可されています。"
-
-#~ msgid "%s is not allowed."
-#~ msgstr "%s は許可されていません。"
-
-#~ msgid "Permission granted."
-#~ msgstr "パーミッションが与えられました。"
-
-#~ msgid "Permission was not granted."
-#~ msgstr "パーミッションは与えられませんでした。"
-
-#~ msgid "Permission denied."
-#~ msgstr "パーミッションが拒否されました。"
-
-#~ msgid "Permission was not denied."
-#~ msgstr "パーミッションは拒否されませんでした。"
-
-#~ msgid "Permission inherited."
-#~ msgstr "パーミッションが継承されました。"
-
-#~ msgid "Permission was not inherited."
-#~ msgstr "パーミッションは継承されませんでした。"
-
-#~ msgid "Usage: cake acl <command> <arg1> <arg2>..."
-#~ msgstr "使用方法: cake acl <コマンド> <引数1> <引数2>"
-
-#~ msgid "Commands:"
-#~ msgstr "コマンド:"
-
-#~ msgid ""
-#~ "Creates a new ACL object <node> under the parent specified by <parent>, "
-#~ "an id/alias."
-#~ msgstr ""
-#~ "<親>(ID/エイリアス名)によって指定される親の下で、新しいACLオブジェクト<"
-#~ "ノード>を作成します。"
-
-#~ msgid ""
-#~ "The <parent> and <node> references can be in one of the following formats:"
-#~ msgstr "<親>と<ノード>の関係は、次のフォーマットの1つであることができます:"
-
-#~ msgid ""
-#~ "<model>.<id> - The node will be bound to a specific record of the given "
-#~ "model"
-#~ msgstr ""
-#~ "<モデル>.<ID> - ノードは、与えられたモデルの特定のレコードに結び付きます"
-
-#~ msgid ""
-#~ "<alias> - The node will be given a string alias (or path, in the case of "
-#~ "<parent>),"
-#~ msgstr ""
-#~ "<エイリアス> - ノードは、エイリアス名 (またはパス[<親>の場合])を与えられま"
-#~ "す"
-
-#~ msgid ""
-#~ "i.e. 'John'.  When used with <parent>, this takes the form of an alias "
-#~ "path,"
-#~ msgstr ""
-#~ "例えば、'John'。<親>として使用されるとき、これはエイリアスパスの形をとりま"
-#~ "す。"
-
-#~ msgid "i.e. <group>/<subgroup>/<parent>."
-#~ msgstr "<グループ>/<サブグループ>/<親>"
-
-#~ msgid ""
-#~ "To add a node at the root level, enter 'root' or '/' as the <parent> "
-#~ "parameter."
-#~ msgstr ""
-#~ "ルートレベルにノードを追加するには、<親>パラメータとして'root'または'/'に"
-#~ "入ってください。"
-
-#~ msgid ""
-#~ "Deletes the ACL object with the given <node> reference (see 'create' for "
-#~ "info on node references)."
-#~ msgstr ""
-#~ "ACLオブジェクトと与えられた <ノード> 参照を削除します。 (ノード参照の情報"
-#~ "は 'create' を見てください)"
-
-#~ msgid ""
-#~ "Moves the ACL object specified by <node> beneath the parent ACL object "
-#~ "specified by <parent>."
-#~ msgstr ""
-#~ "<親> で指定される親ACLオブジェクトの下に <ノード> で指定されるACLオブジェ"
-#~ "クトを移動します。"
-
-#~ msgid "To identify the node and parent, use the row id."
-#~ msgstr "ノードと親を特定するために列IDを使用してください。"
-
-#~ msgid "Returns the path to the ACL object specified by <node>. This command"
-#~ msgstr "<ノード>によって指定されるACLオブジェクトのパスを返します。"
-
-#~ msgid ""
-#~ "is useful in determining the inhertiance of permissions for a certain"
-#~ msgstr "このコマンドはツリーの特定のオブジェクトのパーミッションの継承を"
-
-#~ msgid "object in the tree."
-#~ msgstr "明らかにするのに役立ちます。"
-
-#~ msgid ""
-#~ "For more detailed parameter usage info, see help for the 'create' command."
-#~ msgstr ""
-#~ "より詳細なパラメータの使用方法は、'create' コマンドのヘルプを見てください"
-
-#~ msgid "or"
-#~ msgstr "or"
-
-#~ msgid "Use this command to check ACL permissions."
-#~ msgstr "ACLのパーミッションを調べるにはこのコマンドを使ってください。"
-
-#~ msgid "Use this command to grant ACL permissions. Once executed, the ARO"
-#~ msgstr "ACLのパーミッションを許可するには、このコマンドを使用してください。"
-
-#~ msgid "specified (and its children, if any) will have ALLOW access to the"
-#~ msgstr ""
-#~ "一度実行されると、指定されたARO(とその子)は、指定されたACOアクションにアク"
-#~ "セスを許可します。"
-
-#~ msgid "specified ACO action (and the ACO's children, if any)."
-#~ msgstr "(ACOの子があったとしても)"
-
-#~ msgid "Use this command to deny ACL permissions. Once executed, the ARO"
-#~ msgstr "ACLのパーミッションを拒否するには、このコマンドを使用してください。"
-
-#~ msgid "specified (and its children, if any) will have DENY access to the"
-#~ msgstr ""
-#~ "一度実行されると、指定されたARO(とその子)は、指定されたACOアクションにアク"
-#~ "セスを拒否します。"
-
-#~ msgid "Use this command to force a child ARO object to inherit its"
-#~ msgstr ""
-#~ "子のAROオブジェクトにその親からのパーミッション設定を継承させるには、"
-
-#~ msgid "permissions settings from its parent."
-#~ msgstr "このコマンドを使用してください。"
-
-#~ msgid "The view command will return the ARO or ACO tree. The optional"
-#~ msgstr "このビューコマンドはAROまたはACOツリーを返します。オプションの"
-
-#~ msgid ""
-#~ "id/alias parameter allows you to return only a portion of the requested "
-#~ "tree."
-#~ msgstr ""
-#~ "ID/エイリアス パラメータは指定された部分のツリーだけを返すことができます。"
-
-#~ msgid "Uses this command : cake schema run create DbAcl"
-#~ msgstr "このコマンドを使用 : Cakeスキーマが動き、 DbAcl を作成します"
-
-#~ msgid "Displays this help message, or a message on a specific command."
-#~ msgstr ""
-#~ "このヘルプメッセージまたは指定されたコマンドのメッセージを表示します。"
-
-#~ msgid "Command '%s' not found"
-#~ msgstr "コマンド '%s' が見つかりません"
-
-#~ msgid "Missing/Unknown node type: '%s'"
-#~ msgstr "存在しないか未知のノードタイプ: '%s'"
-
-#~ msgid "Please specify which ACL object type you wish to create."
-#~ msgstr "作成したいACLオブジェクトタイプについて指定してください。"
-
-#~ msgid "%s::%s() could not be found"
-#~ msgstr "%s::%s() が見つかりません"
-
-#~ msgid ""
-#~ "Select a number to see the more information about a specific method. q to "
-#~ "quit. l to list."
-#~ msgstr ""
-#~ "特定のメソッドについての詳細な情報を見るには、数字を選択してください。q で"
-#~ "終了。l で一覧。"
-
-#~ msgid "Done"
-#~ msgstr "完了"
-
-#~ msgid ""
-#~ "%s directory could not be found.\n"
-#~ "Be sure you have created %s"
-#~ msgstr ""
-#~ "%s ディレクトリが見つかりません。\n"
-#~ "%s が作成されていなければなりません。"
-
-#~ msgid "What would you like to Bake?"
-#~ msgstr "何をbakeしたいですか？"
-
-#~ msgid ""
-#~ "You have made an invalid selection. Please choose a type of class to Bake "
-#~ "by entering D, M, V, or C."
-#~ msgstr ""
-#~ "無効な選択がされました。D, M, V, C を押してクラスの種類を選択してくださ"
-#~ "い。"
-
-#~ msgid "%s Model was baked."
-#~ msgstr "%s モデルがbakeされました。"
-
-#~ msgid "%s Controller was baked."
-#~ msgstr "%s コントローラがbakeされました。"
-
-#~ msgid "Bake All complete"
-#~ msgstr "bakeが全て完了しました。"
-
-#~ msgid "Bake All could not continue without a valid model"
-#~ msgstr "bakeは有効なモデルなしでは続行できませんでした。"
-
-#~ msgid "I18n Shell"
-#~ msgstr "i18n シェル"
-
-#~ msgid "[E]xtract POT file from sources"
-#~ msgstr "[E]ソースからPOTファイルを抽出"
-
-#~ msgid "[I]nitialize i18n database table"
-#~ msgstr "[I]i18nデータベーステーブルを初期化"
-
-#~ msgid "[H]elp"
-#~ msgstr "[H]ヘルプ"
-
-#~ msgid "[Q]uit"
-#~ msgstr "[Q]終了"
-
-#~ msgid "What would you like to do?"
-#~ msgstr "何をしたいですか？"
-
-#~ msgid ""
-#~ "You have made an invalid selection. Please choose a command to execute by "
-#~ "entering E, I, H, or Q."
-#~ msgstr ""
-#~ "無効な選択がされました。E, I, H, Q を押して実行するコマンドを選択してくだ"
-#~ "さい。"
-
-#~ msgid "I18n Shell:"
-#~ msgstr "i18n シェル:"
-
-#~ msgid "I18n Shell initializes i18n database table for your application"
-#~ msgstr ""
-#~ "i18nシェルはi18nデータベーステーブルをアプリケーション用に初期化し、"
-
-#~ msgid "and generates .pot file(s) with translations."
-#~ msgstr "翻訳とともに .potファイル を生成します。"
-
-#~ msgid "usage:"
-#~ msgstr "使用方法: "
-
-#~ msgid "Schema could not be found"
-#~ msgstr "スキーマが見つかりません"
-
-#~ msgid "Schema file: %s generated"
-#~ msgstr "スキーマファイル %s が生成されました"
-
-#~ msgid "Schema could not be loaded"
-#~ msgstr "スキーマが読み込めませんでした"
-
-#~ msgid "SQL dump file created in %s"
-#~ msgstr "SQLダンプファイルが %s に作成されました"
-
-#~ msgid "SQL dump could not be created"
-#~ msgstr "SQLダンプファイルが作成されませんでした"
-
-#~ msgid "Performing a dry run."
-#~ msgstr "事前テストをしています。"
-
-#~ msgid "%s could not be loaded"
-#~ msgstr "%s が読み込めませんでした"
-
-#~ msgid "command not found"
-#~ msgstr "コマンドが見つかりません"
-
-#~ msgid "Schema is up to date."
-#~ msgstr "スキーマは最新です。"
-
-#~ msgid "The following table(s) will be dropped."
-#~ msgstr "以下のテーブルは削除されます。"
-
-#~ msgid "Are you sure you want to drop the table(s)?"
-#~ msgstr "本当にテーブルを削除しますか？"
-
-#~ msgid "The following table(s) will be created."
-#~ msgstr "以下のテーブルが作成されます。"
-
-#~ msgid "Are you sure you want to create the table(s)?"
-#~ msgstr "本当にテーブルを作成しますか？"
-
-#~ msgid "End create."
-#~ msgstr "作成が終了しました。"
-
-#~ msgid "The following statements will run."
-#~ msgstr "以下の一覧が実行されます。"
-
-#~ msgid "Are you sure you want to alter the tables?"
-#~ msgstr "本当にテーブルを更新しますか？"
-
-#~ msgid "Updating Database..."
-#~ msgstr "データベースを更新中…"
-
-#~ msgid "End update."
-#~ msgstr "更新が終了しました。"
-
-#~ msgid "Sql could not be run"
-#~ msgstr "SQLは実行されません"
-
-#~ msgid "%s is up to date."
-#~ msgstr "%s は最新です。"
-
-#~ msgid "Dry run for %s :"
-#~ msgstr "%s の事前テスト"
-
-#~ msgid "%s updated."
-#~ msgstr "%s は更新されました。"
-
-#~ msgid "Creating file %s"
-#~ msgstr "ファイル %s を作成しています"
-
-#~ msgid "File exists, overwrite?"
-#~ msgstr "ファイルが存在します、上書きしますか？"
-
-#~ msgid "Quitting."
-#~ msgstr "終了しています。"
-
-#~ msgid "Skip"
-#~ msgstr "スキップ"
-
-#~ msgid "Wrote"
-#~ msgstr "保存"
-
-#~ msgid "Error! Could not write to"
-#~ msgstr "エラー！書き込みできません: "
-
-#~ msgid "Would you like to build your controller interactively?"
-#~ msgstr "コントローラを対話式に作成したいですか？"
-
-#~ msgid "Warning: Choosing no will overwrite the %sController."
-#~ msgstr "警告: 何も選ばないと %sController が上書きされます。"
-
-#~ msgid "Would you like to use scaffolding?"
-#~ msgstr "scaffold を使用したいですか？"
-
-#~ msgid ""
-#~ "Would you like to include some basic class methods (index(), add(), "
-#~ "view(), edit())?"
-#~ msgstr ""
-#~ "いくつかの基本的なクラスメソッド（index(), add(), view(), edit()）を読み込"
-#~ "みたいですか？"
-
-#~ msgid "Would you like to create the methods for admin routing?"
-#~ msgstr "管理ルーティングのためのメソッドを作成したいですか？"
-
-#~ msgid ""
-#~ "Would you like this controller to use other helpers besides HtmlHelper "
-#~ "and FormHelper?"
-#~ msgstr ""
-#~ "このコントローラに HtmlHelper と FormHelper 以外の他のヘルパーを使用したい"
-#~ "ですか？"
-
-#~ msgid ""
-#~ "Please provide a comma separated list of the other helper names you'd "
-#~ "like to use.\n"
-#~ "Example: 'Ajax, Javascript, Time'"
-#~ msgstr ""
-#~ "使用したい他のヘルパー名をコンマ区切りで入力してください。（例: 'Ajax, "
-#~ "Javascript, Time'）"
-
-#~ msgid "Would you like this controller to use any components?"
-#~ msgstr "このコントローラにコンポーネントを使用したいですか？"
-
-#~ msgid ""
-#~ "Please provide a comma separated list of the component names you'd like "
-#~ "to use.\n"
-#~ "Example: 'Acl, Security, RequestHandler'"
-#~ msgstr ""
-#~ "使用したい他のコンポーネント名をコンマ区切りで入力してください。（例: "
-#~ "'Acl, Security, RequestHandler'）"
-
-#~ msgid "Would you like to use Sessions?"
-#~ msgstr "セッションを使用したいですか？"
-
-#~ msgid "Look okay?"
-#~ msgstr "これでいいですか？"
-
-#~ msgid ""
-#~ "You must have a model for this class to build scaffold methods. Please "
-#~ "try again."
-#~ msgstr ""
-#~ "このクラスにscaffoldメソッドを作成するには、モデルがなければなりません。や"
-#~ "り直してください。"
-
-#~ msgid "Your database does not have any tables."
-#~ msgstr "データベースにはテーブルがありません。"
-
-#~ msgid ""
-#~ "Enter a number from the list above, type in the name of another "
-#~ "controller, or 'q' to exit"
-#~ msgstr ""
-#~ "上のリストから数字を選択するか、他のコントローラ名を入力、または'q'で終了"
-#~ "してください"
-
-#~ msgid "Exit"
-#~ msgstr "終了"
-
-#~ msgid ""
-#~ "The Controller name you supplied was empty, or the number \n"
-#~ "you selected was not an option. Please try again."
-#~ msgstr ""
-#~ "入力されたコントローラ名が空か、または選択された数字が一覧にありません。\n"
-#~ "やり直してください。"
-
-#~ msgid ""
-#~ "Given your model named '%s', Cake would expect a database table named %s"
-#~ msgstr ""
-#~ "入力されたモデル名は '%s'、Cake がデータベーステーブル名を %s とするでしょ"
-#~ "う"
-
-#~ msgid "Do you want to use this table?"
-#~ msgstr "このテーブルを使用しますか？"
-
-#~ msgid "What is the name of the table (enter \"null\" to use NO table)?"
-#~ msgstr "テーブル名は何ですか？ (\"null\" でテーブルを使用しない)"
-
-#~ msgid ""
-#~ "Would you like to supply validation criteria for the fields in your model?"
-#~ msgstr "モデルのフィールドにバリデーションを設定したいですか？"
-
-#~ msgid "What is the primaryKey?"
-#~ msgstr "主キー (primaryKey) は何ですか？"
-
-#~ msgid ""
-#~ "Would you like to define model associations (hasMany, hasOne, belongsTo, "
-#~ "etc.)?"
-#~ msgstr ""
-#~ "モデルアソシエーション (hasMany, hasOne, belongsTo, 他) を定義したいです"
-#~ "か？"
-
-#~ msgid "The following Model will be created:"
-#~ msgstr "以下のモデルが作成されます。"
-
-#~ msgid "One moment while the associations are detected."
-#~ msgstr "アソシエーションが検出されるのは一瞬です。"
-
-#~ msgid "None found."
-#~ msgstr "見つかりません。"
-
-#~ msgid "Please confirm the following associations:"
-#~ msgstr "以下のアソシエーションを確認してください。"
-
-#~ msgid "This is a self join. Use %s as the alias"
-#~ msgstr "これは自己結合です。%s をエイリアスとして使用します。"
-
-#~ msgid "Specify an alternate alias."
-#~ msgstr "代替のエイリアスを指定してください。"
-
-#~ msgid "Would you like to define some additional model associations?"
-#~ msgstr "追加のモデルアソシエーションを定義しますか？"
-
-#~ msgid "What is the association type?"
-#~ msgstr "アソシエーションの種類は何ですか？"
-
-#~ msgid "Enter a number"
-#~ msgstr "数字を入力"
-
-#~ msgid ""
-#~ "The selection you entered was invalid. Please enter a number between 1 "
-#~ "and 4."
-#~ msgstr "入力された選択は無効です。1 ～ 4 の数字を入力してください。"
-
-#~ msgid ""
-#~ "For the following options be very careful to match your setup exactly. "
-#~ "Any spelling mistakes will cause errors."
-#~ msgstr ""
-#~ "以下のオプションは非常に注意して、正確にセットアップ環境に合わせてくださ"
-#~ "い。書き間違いがエラーを引き起こします。"
-
-#~ msgid "What is the alias for this association?"
-#~ msgstr "このアソシエーションのエイリアスは何ですか？"
-
-#~ msgid "What className will %s use?"
-#~ msgstr "%s はどんなクラス名 (className) を使いますか？"
-
-#~ msgid "What is the table for this model?"
-#~ msgstr "このモデルのためのテーブルは何ですか？"
-
-#~ msgid "A helpful List of possible keys"
-#~ msgstr "役に立つキーのリスト"
-
-#~ msgid "What is the foreignKey?"
-#~ msgstr "foreignKey は何ですか？"
-
-#~ msgid "What is the foreignKey? Specify your own."
-#~ msgstr "外部キー (foreignKey) は何ですか？自身を指定してください。"
-
-#~ msgid "What is the associationForeignKey?"
-#~ msgstr "associationForeignKey は何ですか？"
-
-#~ msgid "What is the joinTable?"
-#~ msgstr "joinTable は何ですか？"
-
-#~ msgid "Define another association?"
-#~ msgstr "他のアソシエーションを定義しますか？"
-
-#~ msgid "Possible Models based on your current database:"
-#~ msgstr "現在のデータベースに基づくモデル:"
-
-#~ msgid ""
-#~ "Enter a number from the list above, type in the name of another model, or "
-#~ "'q' to exit"
-#~ msgstr ""
-#~ "上のリストから数字を選択するか、他のモデル名を入力、または'q'で終了してく"
-#~ "ださい"
-
-#~ msgid ""
-#~ "The model name you supplied was empty, or the number you selected was not "
-#~ "an option. Please try again."
-#~ msgstr ""
-#~ "入力されたモデル名が空か、または選択された数字が一覧にありません。\n"
-#~ "やり直してください。"
-
-#~ msgid "Enter the name of the plugin in CamelCase format"
-#~ msgstr "プラグインの名前をCamelCaseフォーマットで入力してください"
-
-#~ msgid "An error occured trying to bake: %s in %s"
-#~ msgstr "bake中にエラーが発生しました: %2$s の %1$s"
-
-#~ msgid "Do you want verbose output?"
-#~ msgstr "処理内容の出力を行いたいですか？"
-
-#~ msgid "Created: %s in %s"
-#~ msgstr "作成: %2$s の %1$s"
-
-#~ msgid "Welcome page created"
-#~ msgstr "Welcomeページが作成されました"
-
-#~ msgid "The Welcome page was NOT created"
-#~ msgstr "Welcomeページが作成されませんでした"
-
-#~ msgid "Random hash key created for 'Security.salt'"
-#~ msgstr "'Security.salt' 用にランダムなハッシュキーが作成されました。"
-
-#~ msgid ""
-#~ "Unable to generate random hash for 'Security.salt', you should change it "
-#~ "in %s"
-#~ msgstr ""
-#~ "'Security.salt' 用のランダムなハッシュを生成できませんでした。%s のそれを"
-#~ "変更してください。"
-
-#~ msgid "CAKE_CORE_INCLUDE_PATH set to %s in webroot/index.php"
-#~ msgstr "webroot/index.php の CAKE_CORE_INCLUDE_PATH に %s を設定しました"
-
-#~ msgid "CAKE_CORE_INCLUDE_PATH set to %s in webroot/test.php"
-#~ msgstr "webroot/test.php の CAKE_CORE_INCLUDE_PATH に %s を設定しました"
-
-#~ msgid "Remember to check these value after moving to production server"
-#~ msgstr ""
-#~ "商用サーバに移動した後に、これらの値をチェックするのを忘れないでください"
-
-#~ msgid "Unable to set CAKE_CORE_INCLUDE_PATH, you should change it in %s"
-#~ msgstr ""
-#~ "CAKE_CORE_INCLUDE_PATH を設定できません。%s のそれを変更してください"
-
-#~ msgid "chmod -R 0777 %s"
-#~ msgstr "chmod -R 777 %s"
-
-#~ msgid ""
-#~ "What is the path to the directory layout you wish to copy?\n"
-#~ "Example: %s"
-#~ msgstr ""
-#~ "コピーしたいレイアウトディレクトリのパスは何ですか？\n"
-#~ "例: %s"
-
-#~ msgid "The directory path you supplied was empty. Please try again."
-#~ msgstr "入力されたディレクトリのパスは空です。やり直してください。"
-
-#~ msgid "Directory path does not exist please choose another:"
-#~ msgstr "ディレクトリのパスが存在しないので別の選択をしてください:"
-
-#~ msgid "Enter the class to test or (q)uit"
-#~ msgstr "テストするクラスに入るか、(q)終了"
-
-#~ msgid "Enter the name for the test or (q)uit"
-#~ msgstr "テストの名前を入力するか、(q)終了"
-
-#~ msgid "Enter a test case or (q)uit"
-#~ msgstr "テストケースに入るか、(q)終了"
-
-#, fuzzy
-#~ msgid "Test baked\n"
-#~ msgstr "テストbake完了"
-
-#~ msgid "Is this correct?"
-#~ msgstr "これは正しいですか？"
-
-#~ msgid "Controller not found"
-#~ msgstr "コントローラが見つかりません"
-
-#~ msgid ""
-#~ "The file '%s' could not be found.\n"
-#~ "In order to bake a view, you'll need to first create the controller."
-#~ msgstr ""
-#~ "ファイル '%s' が見つかりませんでした。\n"
-#~ "ビューをbakeするためには、はじめにコントローラを作成する必要があります。"
-
-#~ msgid "Template for %s could not be found"
-#~ msgstr "%s のテンプレートが見つかりませんでした"
-
-#~ msgid "CakePHP: the rapid development php framework:"
-#~ msgstr "CakePHP: PHP Rapid Development （高速開発）フレームワーク:"
-
-#~ msgid "CakePHP: the rapid development php framework"
-#~ msgstr "CakePHP: PHP Rapid Development （高速開発）フレームワーク"
-
-#~ msgid "Method write() not implemented in %s"
-#~ msgstr "メソッド write() が %s に実装されていません"
-
-#~ msgid "Configure::load() - no variable $config found in %s.php"
-#~ msgstr "Configure::load() - %s.php の中に 変数 $config がありません"
-
-#~ msgid "Missing Method in Controller"
-#~ msgstr "コントローラにメソッドがありません"
-
-#~ msgid "Trying to access private method in class"
-#~ msgstr "クラスのプライベートメソッドにアクセスしようとしています"
-
-#~ msgid "Scaffold Missing Database Connection"
-#~ msgstr "Scaffoldのデータベース接続がありません"
-
-#~ msgid "Missing Component Class"
-#~ msgstr "コンポーネントクラスがありません"
-
-#~ msgid "Missing Model"
-#~ msgstr "モデルがありません"
-
-#~ msgid ""
-#~ "HttpSocket::decodeBody - Unknown encoding: %s. Activate quirks mode to "
-#~ "surpress error."
-#~ msgstr ""
-#~ "HttpSocket::decodeBody - 不明なエンコード: %s。エラーを抑制するには Quirks"
-#~ "モード を有効にしてください。"
-
-#~ msgid "Magic method handler call__ not defined in %s"
-#~ msgstr "マジックメソッドハンドラ call__ が %s で定義されていません"
-
-#~ msgid ""
-#~ "You must set the all Configure::write('Session.*') in core.php to use "
-#~ "database storage"
-#~ msgstr ""
-#~ "core.php の全ての Configure::write('Session.*') にデータベースストレージを"
-#~ "設定しなければなりません"
-
-#~ msgid ""
-#~ "Controller::__construct() : Can not get or parse my own class name, "
-#~ "exiting."
-#~ msgstr ""
-#~ "Controller::__construct() : このクラスの名前を取得、またはパースできませ"
-#~ "ん。終了します。"
-
-#~ msgid "%s::isAuthorized() is not defined."
-#~ msgstr "%s::isAuthorized() は定義されていません。"
-
-#~ msgid ""
-#~ "Controller::paginate() - can't find model %1$s in controller "
-#~ "%2$sController"
-#~ msgstr ""
-#~ "Controller::paginate() - モデル %1$s がコントローラ %2$sController に見つ"
-#~ "かりません"
-
-#~ msgid "Scaffold :: "
-#~ msgstr "Scaffold :: "
-
-#~ msgid "No id set for %s::view()"
-#~ msgstr "%s::view() の id が設定されていません"
-
-#~ msgid "updated"
-#~ msgstr "更新"
-
-#~ msgid "saved"
-#~ msgstr "保存"
-
-#~ msgid "Invalid id for %s::edit()"
-#~ msgstr "%s::edit() の 無効なidです"
-
-#~ msgid "The %1$s has been %2$s"
-#~ msgstr "%1$s は %2$s されました"
-
-#~ msgid "Please correct errors below."
-#~ msgstr "下記のエラーを修正してください。"
-
-#~ msgid "No id set for %s::delete()"
-#~ msgstr "%s::delete() の id が設定されていません"
-
-#~ msgid "The %1$s with id: %2$d has been deleted."
-#~ msgstr "%1$s with id: %2$d は削除されました。"
-
-#~ msgid "There was an error deleting the %1$s with id: %2$d"
-#~ msgstr "削除の時、エラーが起きました。 the %1$s with id: %2$d"
-
-#~ msgid ""
-#~ "[acl_base] The AclBase class constructor has been called, or the class "
-#~ "was instantiated. This class must remain abstract. Please refer to the "
-#~ "Cake docs for ACL configuration."
-#~ msgstr ""
-#~ "[acl_base] AclBase クラスのコンストラクタが呼ばれたか、クラスのインスタン"
-#~ "スが作成されました。このクラスは abstract のままにしなければなりません。"
-#~ "Cake ドキュメントの ACL 設定を設定してください。"
-
-#~ msgid ""
-#~ "Could not find AclComponent. Please include Acl in Controller::"
-#~ "$components."
-#~ msgstr ""
-#~ "AclComponent が見つかりません。Acl に Controller::$components をインクルー"
-#~ "ドしてください。"
-
-#~ msgid ""
-#~ "Could not find $userModel. Please set AuthComponent::$userModel in "
-#~ "beforeFilter()."
-#~ msgstr ""
-#~ "$userModel が見つかりません。beforeFilter() に AuthComponent::$userModel "
-#~ "をセットしてください。"
-
-#~ msgid "Login failed. Invalid username or password."
-#~ msgstr "ログイン失敗。ユーザ名またはパスワードが無効です。"
-
-#~ msgid "You are not authorized to access that location."
-#~ msgstr "その場所にアクセスする許可がありません。"
-
-#~ msgid ""
-#~ "Could not find %s. Set AuthComponent::$object in beforeFilter() or pass a "
-#~ "valid object"
-#~ msgstr ""
-#~ "%s が見つかりません。beforeFilter() に AuthComponent::$object をセットする"
-#~ "か、有効なオブジェクトを通してください。"
-
-#~ msgid ""
-#~ "Auth::isAuthorized() - $authorize is set to an incorrect value.  Allowed "
-#~ "settings are: \"actions\", \"crud\", \"model\" or null."
-#~ msgstr ""
-#~ "Auth::isAuthorized() - $authorize に不正な値が設定されています。許された設"
-#~ "定: \"actions\", \"crud\", \"model\" または null"
-
-#~ msgid "Auth::getModel() - Model is not set or could not be found"
-#~ msgstr "Auth::getModel() - モデルが設定されていないか、見つかりません。"
-
-#~ msgid ""
-#~ "SecurityComponent::loginCredentials() - Server does not support digest "
-#~ "authentication"
-#~ msgstr ""
-#~ "SecurityComponent::loginCredentials() - サーバがダイジェスト認証をサポート"
-#~ "していません"
-
-#~ msgid "ConnectionManager::getDataSource - Non-existent data source %s"
-#~ msgstr "ConnectionManager::getDataSource - データソース %s が存在しません"
-
-#~ msgid "Unable to load DataSource file %s.php"
-#~ msgstr "データソースファイル %s.php を読むことができません"
-
-#~ msgid "This field cannot be left blank"
-#~ msgstr "このフィールドは空白にはできません"
-
-#~ msgid "Invalid join model settings in %s"
-#~ msgstr "%s で無効なJOINモデル設定です"
-
-#~ msgid "Must specify table to operate on constraints"
-#~ msgstr "制約を作用させるためには、テーブルを指定してけなければなりません"
-
-#~ msgid "DboOracle::constraint() accepts only enable, disable, or list"
-#~ msgstr "DboOracle::constraint() enableまたは disable, list のみ受け付けます"
-
-#~ msgid "Error in view %s, got: <blockquote>%s</blockquote>"
-#~ msgstr "ビュー %s でエラーです： <blockquote>%s</blockquote>"
-
-#~ msgid "Error in layout %s, got: <blockquote>%s</blockquote>"
-#~ msgstr "レイアウト %s でエラーです： <blockquote>%s</blockquote>"
-
-#~ msgid "Controller dump:"
-#~ msgstr "コントローラのダンプ:"
-
-#~ msgid "If you want to customize this error message, create %s."
-#~ msgstr ""
-#~ "このエラーメッセージをカスタマイズしたい場合は、 %s を作成してください。"
-
-#~ msgid "Create the class %s in file: %s"
-#~ msgstr "クラス %s を %s に作成してください。"
-
-#~ msgid "The component file was not found."
-#~ msgstr "コンポーネントファイルが見つかりません。"
-
-#~ msgid "Confirm you have created the file : %s."
-#~ msgstr "ファイル %s を作成したことを確認してください。"
-
-#~ msgid "The helper class <em>%s</em> can not be found or does not exist."
-#~ msgstr "ヘルパークラス <em>%s</em> が見つからないか、存在しません。"
-
-#~ msgid "Create the class below in file: %s"
-#~ msgstr "ファイル %s に下記のクラスを作成してください"
-
-#~ msgid "The helper file %s can not be found or does not exist."
-#~ msgstr "ヘルパーファイル %s が見つからないか、存在しません。"
-
-#~ msgid "<em>%s</em> could not be found."
-#~ msgstr "<em>%s</em> が見つかりません。"
-
-#~ msgid "Submit"
-#~ msgstr "実行"
-
-#~ msgid "New"
-#~ msgstr "新規"
-
-#~ msgid "Edit"
-#~ msgstr "編集"
-
-#~ msgid "You can not write to a Session from the view"
-#~ msgstr "ビューからのセッションを書き込むことができません"
-
-#~ msgid ""
-#~ "(TextHelper::flay) Deprecated: the Flay library is no longer supported "
-#~ "and will be removed in a future version."
-#~ msgstr ""
-#~ "(TextHelper::flay) 非推奨: Flayライブラリは長くサポートされず、将来のバー"
-#~ "ジョンでは削除されるでしょう。"
-
-#~ msgid "Today, %s"
-#~ msgstr "本日"
-
-#~ msgid "Yesterday, %s"
-#~ msgstr "昨日"
-
-#~ msgid "on %s"
-#~ msgstr " - %s の %s (%s:%d)"
-
-#~ msgid "%s ago"
-#~ msgstr "%s前"
-
-#~ msgid "days"
-#~ msgstr "日"
-
-#, fuzzy
-#~ msgid "year"
-#~ msgid_plural "years"
-#~ msgstr[0] "年"
-#~ msgstr[1] "年"
-
-#, fuzzy
-#~ msgid "month"
-#~ msgid_plural "months"
-#~ msgstr[0] "月毎"
-#~ msgstr[1] "月毎"
-
-#, fuzzy
-#~ msgid "week"
-#~ msgid_plural "weeks"
-#~ msgstr[0] "週日"
-#~ msgstr[1] "週日"
-
-#, fuzzy
-#~ msgid "day"
-#~ msgid_plural "days"
-#~ msgstr[0] "%s 日"
-#~ msgstr[1] "%s 日"
-
-#, fuzzy
-#~ msgid "hour"
-#~ msgid_plural "hours"
-#~ msgstr[0] "%s 時間"
-#~ msgstr[1] "%s 時間"
-
-#, fuzzy
-#~ msgid "minute"
-#~ msgid_plural "minutes"
-#~ msgstr[0] "1 分"
-#~ msgstr[1] "1 分"
-
-#, fuzzy
-#~ msgid "second"
-#~ msgid_plural "seconds"
-#~ msgstr[0] "第２"
-#~ msgstr[1] "第２"
-
-#~ msgid "Release Notes for CakePHP %s."
-#~ msgstr "CakePHP %s リリースノート"
-
-#~ msgid "Read the release notes and get the latest version"
-#~ msgstr "リリースノートを読んで最新版を取得する"
-
-#~ msgid "Your tmp directory is writable."
-#~ msgstr "tmp ディレクトリに書き込めます。"
-
-#~ msgid "Your tmp directory is NOT writable."
-#~ msgstr "tmp ディレクトリに書き込めません。"
-
-#~ msgid ""
-#~ "The %s is being used for caching. To change the config edit APP/config/"
-#~ "core.php "
-#~ msgstr ""
-#~ "%s がキャッシュに使われています。設定を変更するには APP/config/core.php を"
-#~ "編集してください。"
-
-#~ msgid ""
-#~ "Your cache is NOT working. Please check the settings in APP/config/core."
-#~ "php"
-#~ msgstr ""
-#~ "キャッシュが働いていません。APP/config/core.php 内の設定を確認してくださ"
-#~ "い。"
-
-#~ msgid "Your database configuration file is NOT present."
-#~ msgstr "データベース設定ファイルが存在しません。"
-
-#~ msgid "Rename config/database.php.default to config/database.php"
-#~ msgstr ""
-#~ "config/database.php.default を config/database.php にリネームしてくださ"
-#~ "い。"
-
-#~ msgid "Cake is NOT able to connect to the database."
-#~ msgstr "Cake はデータベースに接続不可能です。"
-
-#~ msgid "Editing this Page"
-#~ msgstr "このページを編集"
-
-#~ msgid ""
-#~ "To change the content of this page, edit: APP/views/pages/home.ctp.<br /"
-#~ ">\n"
-#~ "To change its layout, edit: APP/views/layouts/default.ctp.<br />\n"
-#~ "You can also add some CSS styles for your pages at: APP/webroot/css."
-#~ msgstr ""
-#~ "このページの内容を変更するには、APP/views/pages/home.ctp を編集してくださ"
-#~ "い。<br />\n"
-#~ "レイアウトを変更するには、APP/views/layouts/default.ctp を編集してくださ"
-#~ "い。<br />\n"
-#~ "CSS スタイルシートを APP/webroot/css. に追加できます。"
-
-#~ msgid "Getting Started"
-#~ msgstr "はじめに"
-
-#~ msgid "The 15 min Blog Tutorial"
-#~ msgstr "15分ブログチュートリアル"
-
-#~ msgid "More about Cake"
-#~ msgstr "Cake に関するその他の情報"
-
-#~ msgid ""
-#~ "CakePHP is a rapid development framework for PHP which uses commonly "
-#~ "known design patterns like Active Record, Association Data Mapping, Front "
-#~ "Controller and MVC."
-#~ msgstr ""
-#~ "CakePHP は、 PHP の rapid development フレームワークです。Active Record, "
-#~ "Association Data Mapping, Front Controller, MVC といった、よく知られている"
-#~ "デザインパターンを使用しています。"
-
-#~ msgid ""
-#~ "Our primary goal is to provide a structured framework that enables PHP "
-#~ "users at all levels to rapidly develop robust web applications, without "
-#~ "any loss to flexibility."
-#~ msgstr ""
-#~ "私たちの主要な目標は、すべてのレベルの PHP ユーザが、堅牢な WEB アプリケー"
-#~ "ションをすばやく開発でき、しかも柔軟性を失わないような、構造化されたフレー"
-#~ "ムワークを提供することです。"
-
-#~ msgid "Cake Software Foundation"
-#~ msgstr "Cake Software Foundation"
-
-#~ msgid "Promoting development related to CakePHP"
-#~ msgstr "CakePHP による開発の振興"
-
-#~ msgid "The Show"
-#~ msgstr "The Show"
-
-#~ msgid ""
-#~ "The Show is a weekly live internet radio broadcast where we discuss "
-#~ "CakePHP-related topics and answer questions live via IRC, Skype, and "
-#~ "telephone."
-#~ msgstr ""
-#~ "私たちがCakePHP関連の話題を議論し、IRC、Skype、電話などによって質問に答え"
-#~ "る、毎週のインターネットラジオ放送番組。"
-
-#~ msgid "The Bakery"
-#~ msgstr "The Bakery"
-
-#~ msgid "Everything CakePHP"
-#~ msgstr "CakePHP の関連情報サイト"
-
-#~ msgid "Book Store"
-#~ msgstr "ブックストア"
-
-#~ msgid "Recommended Software Books"
-#~ msgstr "お勧めのソフトウェア書籍"
-
-#~ msgid "CakeSchwag"
-#~ msgstr "CakeSchwag"
-
-#~ msgid "Get your own CakePHP gear - Doughnate to Cake"
-#~ msgstr "CakePHP グッズを購入できます - Cake に寄付。"
-
-#~ msgid "CakePHP"
-#~ msgstr "CakePHP"
-
-#~ msgid "The Rapid Development Framework"
-#~ msgstr "Rapid Development （高速開発）フレームワーク"
-
-#~ msgid "CakePHP Manual"
-#~ msgstr "CakePHP マニュアル"
-
-#~ msgid "Your Rapid Development Cookbook"
-#~ msgstr "高速開発のクッキングブック"
-
-#~ msgid "CakePHP API"
-#~ msgstr "CakePHP API"
-
-#~ msgid "Docblock Your Best Friend"
-#~ msgstr "開発の最良の友"
-
-#~ msgid "CakeForge"
-#~ msgstr "CakeForge"
-
-#~ msgid "Open Development for CakePHP"
-#~ msgstr "CakePHP のオープン開発"
-
-#~ msgid "CakePHP Trac"
-#~ msgstr "CakePHP Trac"
-
-#~ msgid ""
-#~ "For the Development of CakePHP (Tickets, SVN browser, Roadmap, Changelogs)"
-#~ msgstr "CakePHP の開発用 (Tickets, SVN browser, Roadmap, Changelogs)"
-
-#~ msgid "CakePHP Google Group"
-#~ msgstr "CakePHP Google グループ"
-
-#~ msgid "Community mailing list"
-#~ msgstr "コミュニティメーリングリスト"
-
-#~ msgid "Live chat about CakePHP"
-#~ msgstr "CakePHP の Live chat"
-
-#~ msgid "Delete"
-#~ msgstr "削除"
-
-#~ msgid "Are you sure you want to delete"
-#~ msgstr "本当に削除しますか"
-
-#~ msgid "List"
-#~ msgstr "リスト"
-
-#~ msgid "List %s"
-#~ msgstr "%s の一覧を表示"
-
-#~ msgid "New %s"
-#~ msgstr "%s を新規作成"
-
-#~ msgid "Actions"
-#~ msgstr "アクション"
-
-#~ msgid "View"
-#~ msgstr "表示"
-
-#~ msgid "previous"
-#~ msgstr "戻る"
-
-#~ msgid "next"
-#~ msgstr "次へ"
-
-#~ msgid "View %s"
-#~ msgstr "%s を表示"
-
-#~ msgid "Edit %s"
-#~ msgstr "%s を編集"
-
-#~ msgid "Delete %s"
-#~ msgstr "%s を削除"
-
-#~ msgid "Related %s"
-#~ msgstr "%s に関連"
-
-#~ msgid "[FileTest] Skipping %s because \"%s\" not writeable!"
-#~ msgstr ""
-#~ "[ファイルテスト] \"%2$s\" が書込み可能でないため、 %s をスキップしていま"
-#~ "す。"
-
-#~ msgid "No Translation needed"
-#~ msgstr "翻訳は必要ありません"
-
-#~ msgid "this is a \"quoted string\""
-#~ msgstr "パスが文字列でありません"
-
-#~ msgid "Plural Rule 1"
-#~ msgstr "複数形の規則"
-
-#~ msgid "Plural Rule 1 (from core)"
-#~ msgstr "複数形の規則1 (コアより)"
-
-#, fuzzy
-#~ msgid "%d = 1"
-#~ msgid_plural "%d = 0 or > 1"
-#~ msgstr[0] "%d = 1"
-#~ msgstr[1] "%d = 1"
-
-#, fuzzy
-#~ msgid "%d = 1 (from core)"
-#~ msgid_plural "%d = 0 or > 1 (from core)"
-#~ msgstr[0] "%d = 1 (コアより)"
-#~ msgstr[1] "%d = 1 (コアより)"
-
-#~ msgid "Le login doit contenir au moins 2 caractères"
-#~ msgstr " "
-
-#~ msgid ""
-#~ "To change the content of this page, edit: %s\n"
-#~ "\t\tTo change its layout, edit: %s\n"
-#~ "\t\tYou can also add some CSS styles for your pages at: %s"
-#~ msgstr ""
-#~ "このページの内容を編集するには、%s を編集\n"
-#~ "\t\tレイアウトを変更するには、%s を編集\n"
-#~ "\t\tCSSスタイルシートを %s に追加することもできます"
-
-#~ msgid "Your tmp directory is "
-#~ msgstr "tmp ディレクトリは"
-
-#~ msgid "writable."
-#~ msgstr "書込可能です。"
-
-#~ msgid "NOT writable."
-#~ msgstr "書込可能ではありません。"
-
-#~ msgid "Your cache is "
-#~ msgstr "キャッシュは"
-
-#~ msgid "set up and initialized properly."
-#~ msgstr "セットアップされ、正しく初期化されます。"
-
-#~ msgid " is being used to cache, to change this edit config/core.php "
-#~ msgstr ""
-#~ "がキャッシュに使われています。変更するには、config/core.php を編集してくだ"
-#~ "さい"
-
-#~ msgid "NOT working."
-#~ msgstr "働いていません。"
-
-#~ msgid ""
-#~ "Edit: config/core.php to insure you have the newset version of this file "
-#~ "and the variable $cakeCache set properly"
-#~ msgstr ""
-#~ "編集: config/core.php このファイルの最新のバージョンを変数 $cakeCache に"
-#~ "セットしていることを保障します"
-
-#~ msgid "present."
-#~ msgstr "存在します。"
-
-#~ msgid "NOT present."
-#~ msgstr "存在しません。"
-
-#~ msgid "Cake"
-#~ msgstr "Cake"
-
-#~ msgid " is able to "
-#~ msgstr " はデータベースに接続可能"
-
-#~ msgid "connect to the database."
-#~ msgstr "です。"
-
-#~ msgid ""
-#~ "To change the content of this page, create: /app/views/pages/home.ctp."
-#~ msgstr ""
-#~ "このページの内容を変更するには、/app/views/pages/home.ctp を作成してくださ"
-#~ "い。"
-
-#~ msgid "To change its layout, create: /app/views/layouts/default.ctp."
-#~ msgstr ""
-#~ "レイアウトを変更するには、/app/views/layouts/default.ctp を作成してくださ"
-#~ "い。"
-
-#~ msgid "See the views section of the manual for more info."
-#~ msgstr "詳細な情報はマニュアルのビューの項目を見てください。"
-
-#~ msgid ""
-#~ "You can also add some CSS styles for your pages at: app/webroot/css/."
-#~ msgstr "CSSスタイルシートを app/webroot/css/ に追加することもできます。"
-
-#~ msgid "Cook up Web sites fast with CakePHP"
-#~ msgstr "CakePHPで早くWebサイトを作ってください"
-
-#~ msgid "Create an interactive production wiki using PHP"
-#~ msgstr "PHPを使ってインタラクティブな製品wikiを作ってください"

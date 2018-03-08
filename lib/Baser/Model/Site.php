@@ -510,7 +510,7 @@ class Site extends AppModel {
  */
 	public function getSelectableDevices($mainSiteId, $currentSiteId) {
 		$agents = Configure::read('BcAgent');
-		$devices = ['' => '指定しない'];
+		$devices = ['' => __d('baser', '指定しない')];
 		$selected = $this->find('list', [
 			'fields' => ['id', 'device'],
 			'conditions' => [
@@ -536,7 +536,7 @@ class Site extends AppModel {
  */
 	public function getSelectableLangs($mainSiteId, $currentSiteId) {
 		$langs = Configure::read('BcLang');
-		$devices = ['' => '指定しない'];
+		$devices = ['' => __d('baser', '指定しない')];
 		$selected = $this->find('list', [
 			'fields' => ['id', 'lang'],
 			'conditions' => [

@@ -58,7 +58,7 @@ class BcAppModel extends Model {
 				// 初期化ページにリダイレクトする
 				$AppController = new AppController();
 				session_start();
-				$_SESSION['Message']['flash'] = ['message' => 'インストールに失敗している可能性があります。<br />インストールを最初からやり直すにはbaserCMSを初期化してください。', 'layout' => 'default'];
+				$_SESSION['Message']['flash'] = ['message' => __d('baser', 'インストールに失敗している可能性があります。<br />インストールを最初からやり直すにはbaserCMSを初期化してください。'), 'layout' => 'default'];
 				$AppController->redirect(BC_BASE_URL . 'installations/reset');
 			}
 		}

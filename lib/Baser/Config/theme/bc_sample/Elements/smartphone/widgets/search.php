@@ -19,6 +19,6 @@ if (!empty($this->passedArgs['num'])) {
 	<?php echo $this->BcForm->hidden('SearchIndex.s', ['value' => 0]) ?>
 	<br>
 	<?php echo $this->BcForm->input('SearchIndex.q') ?>
-	<?php echo $this->BcForm->submit('検索', array('div' => false, 'class' => 'button-small')) ?>
+	<?php echo $this->BcForm->submit(__('検索'), array('div' => false, 'class' => 'button-small')) ?>
 	<?php echo $this->BcForm->end() ?>
 </div>

@@ -36,28 +36,28 @@ $this->BcBaser->js('admin/editor_templates/form', false);
 			</tr>
 		<?php endif ?>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('EditorTemplate.name', 'テンプレート名') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('EditorTemplate.name', __d('baser', 'テンプレート名')) ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('EditorTemplate.name', ['type' => 'text', 'size' => 20, 'maxlength' => 50]) ?>
 				<?php echo $this->BcForm->error('EditorTemplate.name') ?>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('EditorTemplate.image', 'アイコン画像') ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('EditorTemplate.image', __d('baser', 'アイコン画像')) ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->file('EditorTemplate.image') ?>
 				<?php echo $this->BcForm->error('EditorTemplate.image') ?>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('EditorTemplate.description', '説明文') ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('EditorTemplate.description', __d('baser', '説明文')) ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('EditorTemplate.description', ['type' => 'textarea', 'cols' => 60, 'rows' => 2]) ?>
 				<?php echo $this->BcForm->error('EditorTemplate.description') ?>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('EditorTemplate.html', 'コンテンツ') ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('EditorTemplate.html', __d('baser', 'コンテンツ')) ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->ckeditor('EditorTemplate.html', ['editorWidth' => 'auto', 'editorUseTemplates' => false]) ?>
 				<?php echo $this->BcForm->error('EditorTemplate.html') ?>
@@ -71,10 +71,10 @@ $this->BcBaser->js('admin/editor_templates/form', false);
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit section">
-	<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
+	<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 	<?php if ($this->action == 'admin_edit'): ?>
 		<?php
-		$this->BcBaser->link('削除', ['action' => 'delete', $this->BcForm->value('EditorTemplate.id')], ['class' => 'button submit-token', 'id' => 'BtnDelete'], sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('EditorTemplate.name')), false);
+		$this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $this->BcForm->value('EditorTemplate.id')], ['class' => 'button submit-token', 'id' => 'BtnDelete'], sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->value('EditorTemplate.name')), false);
 		?>
 	<?php endif ?>
 </div>

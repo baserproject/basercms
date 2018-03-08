@@ -20,8 +20,8 @@
 	<th>ウィジェットエリア管理メニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $this->BcBaser->link('ウィジェットエリア一覧', ['controller' => 'widget_areas', 'action' => 'index']) ?></li>
-			<li><?php $this->BcBaser->link('ウィジェットエリア新規追加', ['controller' => 'widget_areas', 'action' => 'add']) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'ウィジェットエリア一覧'), ['controller' => 'widget_areas', 'action' => 'index']) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'ウィジェットエリア新規追加'), ['controller' => 'widget_areas', 'action' => 'add']) ?></li>
 		</ul>
 	</td>
 </tr>

@@ -67,7 +67,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.subject_user', '自動返信メール件名<br />[ユーザー宛]') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-<?php echo $this->BcForm->input('MailContent.subject_user', array('type' => 'text', 'size' => 80)) ?>
+<?php echo $this->BcForm->input('MailContent.subject_user', array('type' => 'text', 'size' => 80, 'maxlength' => 255)) ?>
 <?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSubjectUser', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 <?php echo $this->BcForm->error('MailContent.subject_user') ?>
 				<div id="helptextSubjectUser" class="helptext">ユーザー宛の自動返信メールの件名に表示します。</div>
@@ -76,7 +76,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.subject_admin', '自動送信メール件名<br />[管理者宛]') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-<?php echo $this->BcForm->input('MailContent.subject_admin', array('type' => 'text', 'size' => 80)) ?>
+<?php echo $this->BcForm->input('MailContent.subject_admin', array('type' => 'text', 'size' => 80, 'maxlength' => 255)) ?>
 <?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSubjectAdmin', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 <?php echo $this->BcForm->error('MailContent.subject_admin') ?>
 				<div id="helptextSubjectAdmin" class="helptext">管理者宛の自動送信メールの件名に表示します。</div>

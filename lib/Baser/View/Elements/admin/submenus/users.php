@@ -20,10 +20,10 @@
 	<th>ユーザー管理メニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $this->BcBaser->link('ユーザー一覧', ['controller' => 'users', 'action' => 'index']) ?></li>
-			<li><?php $this->BcBaser->link('ユーザー新規追加', ['controller' => 'users', 'action' => 'add']) ?></li>
-			<li><?php $this->BcBaser->link('ユーザーグループ一覧', ['controller' => 'user_groups', 'action' => 'index']) ?></li>
-			<li><?php $this->BcBaser->link('ユーザーグループ新規登録', ['controller' => 'user_groups', 'action' => 'add']) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'ユーザー一覧'), ['controller' => 'users', 'action' => 'index']) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'ユーザー新規追加'), ['controller' => 'users', 'action' => 'add']) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'ユーザーグループ一覧'), ['controller' => 'user_groups', 'action' => 'index']) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'ユーザーグループ新規登録'), ['controller' => 'user_groups', 'action' => 'add']) ?></li>
 		</ul>
 	</td>
 </tr>

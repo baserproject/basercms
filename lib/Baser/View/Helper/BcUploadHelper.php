@@ -47,7 +47,7 @@ class BcUploadHelper extends BcAppHelper {
 		extract($options);
 
 		if(strpos($fieldName, '.') === false) {
-			throw new BcException('BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドットで区切って指定する必要があります。');
+			throw new BcException(__d('baser', 'BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドットで区切って指定する必要があります。'));
 		}
 		$this->setEntity($fieldName);
 		$field = $this->field();
@@ -233,7 +233,7 @@ class BcUploadHelper extends BcAppHelper {
 		}
 
 		if (strpos($fieldName, '.') === false) {
-			trigger_error('フィールド名は、 ModelName.field_name で指定してください。', E_USER_WARNING);
+			trigger_error(__d('baser', 'フィールド名は、 ModelName.field_name で指定してください。'), E_USER_WARNING);
 			return false;
 		}
 
@@ -418,7 +418,7 @@ class BcUploadHelper extends BcAppHelper {
 		$modelName = $this->model();
 		$Model = ClassRegistry::init($modelName);
 		if (empty($Model->Behaviors->BcUpload)) {
-			throw new BcException('BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。');
+			throw new BcException(__d('baser', 'BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。'));
 		}
 		return $Model;
 	}

@@ -47,7 +47,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 <div class="section">
 	<table cellpadding="0" cellspacing="0" class="form-table">
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('Page.page_template', '固定ページテンプレート') ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('Page.page_template', __d('baser', '固定ページテンプレート')) ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('Page.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
 				<div class="helptext">
@@ -57,7 +57,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('Page.code', 'コード') ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('Page.code', __d('baser', 'コード')) ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('Page.code', [
 					'type' => 'textarea',
@@ -65,7 +65,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 					'rows' => 5,
 					'style' => 'font-size:14px;font-family:Verdana,Arial,sans-serif;'
 				]); ?>
-				<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => 'ヘルプ']) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<div class="helptext">
 					固定ページの本文には、ソースコードに切り替えてPHPやJavascriptのコードを埋め込む事ができますが、ユーザーが間違って削除してしまわないようにこちらに入力しておく事もできます。<br />
 					入力したコードは、自動的にコンテンツ本体の上部に差し込みます。
@@ -81,7 +81,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit">
-	<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
+	<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 </div>
 
 <?php echo $this->BcForm->end(); ?>

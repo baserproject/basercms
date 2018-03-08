@@ -72,7 +72,7 @@ class BcManagerComponent extends Component {
 			}
 			$Folder = new Folder();
 			if (!is_writable($dbFolderPath) && !$Folder->create($dbFolderPath, 0777)) {
-				$this->log('データベースの保存フォルダの作成に失敗しました。db フォルダの書き込み権限を見なおしてください。');
+				$this->log(__d('baser', 'データベースの保存フォルダの作成に失敗しました。db フォルダの書き込み権限を見なおしてください。'));
 				$result = false;
 			}
 		}
@@ -83,68 +83,68 @@ class BcManagerComponent extends Component {
 
 		// インストールファイル作成
 		if (!$this->createInstallFile($securitySalt, $securityCipherSeed, $siteUrl)) {
-			$this->log('インストールファイル生成に失敗しました。設定フォルダの書き込み権限を見なおしてください。');
+			$this->log(__d('baser', 'インストールファイル生成に失敗しました。設定フォルダの書き込み権限を見なおしてください。'));
 			$result = false;
 		}
 
 		// データベース設定ファイル生成
 		if (!$this->createDatabaseConfig($dbConfig)) {
-			$this->log('データベースの設定ファイル生成に失敗しました。設定フォルダの書き込み権限を見なおしてください。');
+			$this->log(__d('baser', 'データベースの設定ファイル生成に失敗しました。設定フォルダの書き込み権限を見なおしてください。'));
 			$result = false;
 		}
 
 		// データベース初期化
 		if (!$this->constructionDb($dbConfig, $dbDataPattern)) {
-			$this->log('データベースの初期化に失敗しました。データベースの設定を見なおしてください。');
+			$this->log(__d('baser', 'データベースの初期化に失敗しました。データベースの設定を見なおしてください。'));
 			$result = false;
 		}
 
 		if ($adminUser) {
 			// サイト基本設定登録
 			if (!$this->setAdminEmail($adminUser['email'])) {
-				$this->log('サイト基本設定への管理者メールアドレスの設定処理が失敗しました。データベースの設定を見なおしてください。');
+				$this->log(__d('baser', 'サイト基本設定への管理者メールアドレスの設定処理が失敗しました。データベースの設定を見なおしてください。'));
 			}
 			// ユーザー登録
 			$adminUser['password_1'] = $adminUser['password'];
 			$adminUser['password_2'] = $adminUser['password'];
 			if (!$this->addDefaultUser($adminUser)) {
-				$this->log('初期ユーザーの作成に失敗しました。データベースの設定を見なおしてください。');
+				$this->log(__d('baser', '初期ユーザーの作成に失敗しました。データベースの設定を見なおしてください。'));
 				$result = false;
 			}
 		}
 
 		// データベースの初期更新
 		if (!$this->executeDefaultUpdates($dbConfig)) {
-			$this->log('データベースのデータ更新に失敗しました。データベースの設定を見なおしてください。');
+			$this->log(__d('baser', 'データベースのデータ更新に失敗しました。データベースの設定を見なおしてください。'));
 			$result = false;
 		}
 
 		// コアプラグインのインストール
 		if(!$this->installCorePlugin($dbConfig, $dbDataPattern)) {
-			$this->log('コアプラグインのインストールに失敗しました。');
+			$this->log(__d('baser', 'コアプラグインのインストールに失敗しました。'));
 			$result = false;
 		}
 
 		// テーマを配置
 		if (!$this->deployTheme()) {
-			$this->log('テーマの配置に失敗しました。テーマフォルダの書き込み権限を確認してください。');
+			$this->log(__d('baser', 'テーマの配置に失敗しました。テーマフォルダの書き込み権限を確認してください。'));
 			$result = false;
 		}
 
 		// テーマに管理画面のアセットへのシンボリックリンクを作成する
 		if (!$this->deployAdminAssets()) {
-			$this->log('管理システムのアセットファイルの配置に失敗しました。テーマフォルダの書き込み権限を確認してください。');
+			$this->log(__d('baser', '管理システムのアセットファイルの配置に失敗しました。テーマフォルダの書き込み権限を確認してください。'));
 		}
 
 		// アップロード用初期フォルダを作成する
 		if (!$this->createDefaultFiles()) {
-			$this->log('アップロード用初期フォルダの作成に失敗しました。files フォルダの書き込み権限を確認してください。');
+			$this->log(__d('baser', 'アップロード用初期フォルダの作成に失敗しました。files フォルダの書き込み権限を確認してください。'));
 			$result = false;
 		}
 
 		// エディタテンプレート用の画像を配置
 		if (!$this->deployEditorTemplateImage()) {
-			$this->log('エディタテンプレートイメージの配置に失敗しました。files フォルダの書き込み権限を確認してください。');
+			$this->log(__d('baser', 'エディタテンプレートイメージの配置に失敗しました。files フォルダの書き込み権限を確認してください。'));
 			$result = false;
 		}
 
@@ -281,11 +281,11 @@ class BcManagerComponent extends Component {
 	public function executeDefaultUpdates($dbConfig) {
 		$result = true;
 		if (!$this->_updatePluginStatus($dbConfig)) {
-			$this->log('プラグインの有効化に失敗しました。');
+			$this->log(__d('baser', 'プラグインの有効化に失敗しました。'));
 			$result = false;
 		}
 		if(!$this->_updateContents()) {
-			$this->log('コンテンツの更新に失敗しました。');
+			$this->log(__d('baser', 'コンテンツの更新に失敗しました。'));
 			$result = false;
 		}
 		return $result;
@@ -556,24 +556,24 @@ class BcManagerComponent extends Component {
 		}
 
 		if (strpos($dbDataPattern, '.') === false) {
-			$this->log("データパターンの形式が不正です。");
+			$this->log(__d('baser', 'データパターンの形式が不正です。'));
 			return false;
 		}
 
 		list($theme, $pattern) = explode('.', $dbDataPattern);
 
 		if (!$this->constructionTable('Core', 'default', $dbConfig)) {
-			$this->log("コアテーブルの構築に失敗しました。");
+			$this->log(__d('baser', 'コアテーブルの構築に失敗しました。'));
 			return false;
 		}
 
 		if (!$this->loadDefaultDataPattern('default', $dbConfig, $pattern, $theme, 'core', $coreExcludes)) {
-			$this->log("コアの初期データのロードに失敗しました。");
+			$this->log(__d('baser', 'コアの初期データのロードに失敗しました。'));
 			return false;
 		}
 
 		if (!$this->initSystemData($dbConfig)) {
-			$this->log('システムデータの初期化に失敗しました。');
+			$this->log(__d('baser', 'システムデータの初期化に失敗しました。'));
 			return false;
 		}
 
@@ -646,7 +646,7 @@ class BcManagerComponent extends Component {
 				include $themePath . 'config.php';
 			}
 		} else {
-			$title = 'コア';
+			$title = __d('baser', 'コア');
 		}
 
 		if (!$title) {
@@ -768,7 +768,7 @@ class BcManagerComponent extends Component {
 		//======================================================================
 		if(!$options['excludeUsers']) {
 			if (!$db->truncate('users')) {
-				$this->log('users テーブルの初期化に失敗。');
+				$this->log(__d('baser', 'users テーブルの初期化に失敗。'));
 				$result = false;
 			}
 		}
@@ -779,7 +779,7 @@ class BcManagerComponent extends Component {
 			!$SiteConfig->updateAll(['SiteConfig.value' => null], ['SiteConfig.name' => 'google_analytics_id']) ||
 			!$SiteConfig->updateAll(['SiteConfig.value' => true], ['SiteConfig.name' => 'first_access']) ||
 			!$SiteConfig->deleteAll(['SiteConfig.name' => 'version'], false)) {
-			$this->log('site_configs テーブルの初期化に失敗');
+			$this->log(__d('baser', 'site_configs テーブルの初期化に失敗'));
 			$result = false;
 		}
 
@@ -1194,37 +1194,37 @@ class BcManagerComponent extends Component {
 			// 設定ファイルを初期化
 			if (!$this->resetSetting()) {
 				$result = false;
-				$this->log('設定ファイルを正常に初期化できませんでした。');
+				$this->log(__d('baser', '設定ファイルを正常に初期化できませんでした。'));
 			}
 			// テーブルを全て削除
 			if (!$this->deleteTables('default', $dbConfig)) {
 				$result = false;
-				$this->log('データベースを正常に初期化できませんでした。');
+				$this->log(__d('baser', 'データベースを正常に初期化できませんでした。'));
 			}
 		}
 
 		// テーマのテンプレートを初期化
 			if (!$this->resetTheme()) {
 			$result = false;
-			$this->log('テーマフォルダを初期化できませんでした。');
+			$this->log(__d('baser', 'テーマフォルダを初期化できませんでした。'));
 		}
 
 		// 固定ページテンプレートを初期化
 		if (!$this->resetPages()) {
 			$result = false;
-			$this->log('固定ページテンプレートを初期化できませんでした。');
+			$this->log(__d('baser', '固定ページテンプレートを初期化できませんでした。'));
 		}
 		
 		// files フォルダの初期化
 		if (!$this->resetFiles()) {
 			$result = false;
-			$this->log('files フォルダを初期化できませんでした。');
+			$this->log(__d('baser', 'files フォルダを初期化できませんでした。'));
 		}
 		
 		// files フォルダの初期化
 		if (!$this->resetAdminAssets()) {
 			$result = false;
-			$this->log('img / css / js フォルダを初期化できませんでした。');
+			$this->log(__d('baser', 'img / css / js フォルダを初期化できませんでした。'));
 		}
 		
 		ClassRegistry::flush();
@@ -1439,12 +1439,12 @@ class BcManagerComponent extends Component {
 				// すでにある場合
 				if (file_exists($database)) {
 					if (!is_writable($database)) {
-						throw new Exception("データベースファイルに書き込み権限がありません。");
+						throw new Exception(__d('baser', "データベースファイルに書き込み権限がありません。"));
 					}
 					// ない場合
 				} else {
 					if (!is_writable(dirname($database))) {
-						throw new Exception("データベースの保存フォルダに書き込み権限がありません。");
+						throw new Exception(__d('baser', 'データベースの保存フォルダに書き込み権限がありません。'));
 					}
 				}
 				$dsn = "sqlite:" . $database;
@@ -1453,10 +1453,10 @@ class BcManagerComponent extends Component {
 				if (is_writable($database)) {
 					return true;
 				}
-				throw new Exception("データベースの保存フォルダに書き込み権限がありません。");
+				throw new Exception(__d('baser', 'データベースの保存フォルダに書き込み権限がありません。'));
 			} else {
 				// ドライバが見つからない
-				throw new Exception("ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite|CSV)");
+				throw new Exception(__d('baser', 'ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite|CSV)'));
 			}
 		} catch (PDOException $e) {
 			throw new PDOException($e);

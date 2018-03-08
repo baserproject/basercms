@@ -52,7 +52,7 @@ class MaintenanceController extends AppController {
  * @access	public
  */
 	public function index() {
-		$this->pageTitle = 'メンテナンス中';
+		$this->pageTitle = __d('baser', 'メンテナンス中');
 	}
 
 /**

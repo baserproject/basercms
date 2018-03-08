@@ -2,18 +2,18 @@
 /**
  * The Front Controller for handling every request
  *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP(tm) Project
  * @package       app.webroot
  * @since         CakePHP(tm) v 0.2.9
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 // CUSTOMIZE ADD 2012/10/27 ryuring
 // >>>
@@ -119,18 +119,23 @@ if (!defined('WEBROOT_DIR')) {
 	// CUSTOMIZE MODIFY 2014/03/23 ryuring
 	// webroot 配置の絡みがあるので webroot 固定とする
 	// >>>
-	//define('WEBROOT_DIR', basename(dirname($fileName)));
+	//define('WEBROOT_DIR', basename(dirname(__FILE__)));
 	// ---
 	define('WEBROOT_DIR', 'webroot');
 	// <<<
 }
 if (!defined('WWW_ROOT')) {
+	// CUSTOMIZE MODIFY 201X/XX/XX ryuring
+	// >>>
+	//define('WWW_ROOT', dirname(__FILE__) . DS);
+	// ---
 	define('WWW_ROOT', dirname($fileName) . DS);
+	// <<<
 }
 
 // For the built-in server
 if (PHP_SAPI === 'cli-server') {
-	if ($_SERVER['REQUEST_URI'] !== '/' && file_exists(WWW_ROOT . $_SERVER['PHP_SELF'])) {
+	if ($_SERVER['PHP_SELF'] !== '/' . basename(__FILE__) && file_exists(WWW_ROOT . $_SERVER['PHP_SELF'])) {
 		return false;
 	}
 	$_SERVER['PHP_SELF'] = '/' . basename(__FILE__);

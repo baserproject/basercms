@@ -3,7 +3,7 @@
  * ブログアーカイブ一覧（スマホ用）
  * 呼出箇所：カテゴリ別ブログ記事一覧、タグ別ブログ記事一覧、年別ブログ記事一覧、月別ブログ記事一覧、日別ブログ記事一覧
  */
-$this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() . 'のアーカイブ一覧です。');
+$this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() . __('のアーカイブ一覧です。'));
 ?>
 
 
@@ -28,7 +28,7 @@ $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser-
 </article>
 	<?php endforeach; ?>
 <?php else: ?>
-	<p class="no-data">記事がありません。</p>
+	<p class="no-data"><?php echo __('記事がありません。'); ?></p>
 <?php endif; ?>
 
 <!-- /Elements/smartphone/paginations/simple.php -->

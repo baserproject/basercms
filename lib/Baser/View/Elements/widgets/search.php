@@ -33,6 +33,6 @@ $folders = $this->BcContents->getContentFolderList($this->request->params['Site'
 	<?php echo $this->BcForm->create('SearchIndex', ['type' => 'get', 'url' => $url]) ?>
 	<?php echo $this->BcForm->input('SearchIndex.q') ?>
 	<?php echo $this->BcForm->hidden('SearchIndex.s', ['value' => $this->request->params['Site']['id']]) ?>
-	<?php echo $this->BcForm->submit('検索', ['div' => false, 'class' => 'submit_button']) ?>
+	<?php echo $this->BcForm->submit(__d('baser', '検索'), ['div' => false, 'class' => 'submit_button']) ?>
 	<?php echo $this->BcForm->end() ?>
 </div>

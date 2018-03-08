@@ -69,8 +69,8 @@ class SearchIndicesController extends AppController {
 
 		if (!empty($this->request->params['admin'])) {
 			$this->crumbs = [
-				['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'form']],
-				['name' => '検索インデックス管理', 'url' => ['controller' => 'search_indices', 'action' => 'index']]
+				['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
+				['name' => __d('baser', '検索インデックス管理'), 'url' => ['controller' => 'search_indices', 'action' => 'index']]
 			];
 		}
 		
@@ -122,7 +122,7 @@ class SearchIndicesController extends AppController {
 		}
 		$this->set('query', $query);
 		$this->set('datas', $datas);
-		$this->pageTitle = '検索結果一覧';
+		$this->pageTitle = __d('baser', '検索結果一覧');
 	}
 
 /**
@@ -199,7 +199,7 @@ class SearchIndicesController extends AppController {
  * @return void
  */
 	public function admin_index() {
-		$this->pageTitle = '検索インデックス一覧';
+		$this->pageTitle = __d('baser', '検索インデックス一覧');
 
 		/* 画面情報設定 */
 		$default = [
@@ -322,7 +322,7 @@ class SearchIndicesController extends AppController {
 	public function admin_ajax_delete($id = null) {
 		$this->_checkSubmitToken();
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		/* 削除処理 */
@@ -487,10 +487,10 @@ class SearchIndicesController extends AppController {
 		}
 		if($result) {
 			$this->SearchIndex->commit();
-			$this->setMessage('検索インデックスの再構築に成功しました。', false, true);
+			$this->setMessage(__d('baser', '検索インデックスの再構築に成功しました。'), false, true);
 		} else {
 			$this->SearchIndex->roleback();
-			$this->setMessage('検索インデックスの再構築に失敗しました。', true, true);
+			$this->setMessage(__d('baser', '検索インデックスの再構築に失敗しました。'), true, true);
 		}
 		$this->redirect(['action' => 'index']);
 	}

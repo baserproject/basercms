@@ -30,7 +30,7 @@ if (!$userModel) {
 	<?php endif ?>
 	<div class="submit">
 		<?php echo $this->BcForm->input($userModel . '.email', ['type' => 'text', 'size' => 60]) ?>
-		<?php echo $this->BcForm->submit('送信', ['div' => false, 'class' => 'btn-red button']) ?>
+		<?php echo $this->BcForm->submit(__d('baser', '送信'), ['div' => false, 'class' => 'btn-red button']) ?>
 	</div>
 	<?php echo $this->BcForm->end() ?>
 </div>

@@ -19,12 +19,12 @@
 <tr>
 	<td class="row-tools">
 		<?php if ($data['UserGroup']['name'] != 'admins'): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_permission.png', ['alt' => '制限', 'class' => 'btn']), ['controller' => 'permissions', 'action' => 'index', $data['UserGroup']['id']], ['title' => '制限']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_permission.png', ['alt' => __d('baser', '制限'), 'class' => 'btn']), ['controller' => 'permissions', 'action' => 'index', $data['UserGroup']['id']], ['title' => __d('baser', '制限')]) ?>
 		<?php endif ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => '編集', 'class' => 'btn']), ['action' => 'edit', $data['UserGroup']['id']], ['title' => '編集']) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', ['alt' => 'コピー', 'class' => 'btn']), ['action' => 'ajax_copy', $data['UserGroup']['id']], ['title' => 'コピー', 'class' => 'btn-copy']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => __d('baser', '編集'), 'class' => 'btn']), ['action' => 'edit', $data['UserGroup']['id']], ['title' => __d('baser', '編集')]) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', ['alt' => __d('baser', 'コピー'), 'class' => 'btn']), ['action' => 'ajax_copy', $data['UserGroup']['id']], ['title' => __d('baser', 'コピー'), 'class' => 'btn-copy']) ?>
 		<?php if ($data['UserGroup']['name'] != 'admins'): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => '削除', 'class' => 'btn']), ['action' => 'ajax_delete', $data['UserGroup']['id']], ['title' => '削除', 'class' => 'btn-delete']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => __d('baser', '削除'), 'class' => 'btn']), ['action' => 'ajax_delete', $data['UserGroup']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete']) ?>
 		<?php endif ?>
 	</td>
 	<td><?php echo $data['UserGroup']['id'] ?></td>

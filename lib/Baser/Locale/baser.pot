@@ -1,0 +1,290 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: Config/bootstrap.php:288
+msgid "プログラムとデータベースのバージョンが異なるため、強制終了します。データベースのバージョンを調整して、再実行してください。"
+msgstr ""
+
+#: Config/setting.php:29
+#: View/Elements/admin/footer.php:31
+#: View/Elements/admin/header.php:32
+msgid "コンテンツ管理"
+msgstr ""
+
+#: Config/setting.php:30
+#: View/Elements/admin/footer.php:32
+#: View/Elements/admin/header.php:33
+msgid "ウィジェット管理"
+msgstr ""
+
+#: Config/setting.php:31
+#: View/Elements/admin/footer.php:33
+#: View/Elements/admin/header.php:34
+msgid "テーマ管理"
+msgstr ""
+
+#: Config/setting.php:32
+#: View/Elements/admin/footer.php:34
+#: View/Elements/admin/header.php:35
+msgid "プラグイン管理"
+msgstr ""
+
+#: Config/setting.php:33
+msgid "システム設定"
+msgstr ""
+
+#: Config/setting.php:34
+msgid "ユーザー管理"
+msgstr ""
+
+#: Config/setting.php:35
+msgid "ユーザーグループ管理"
+msgstr ""
+
+#: Config/setting.php:36
+msgid "検索インデックス管理"
+msgstr ""
+
+#: Config/setting.php:37
+msgid "エディタテンプレート管理"
+msgstr ""
+
+#: Config/setting.php:38
+msgid "サブサイト管理"
+msgstr ""
+
+#: Config/setting.php:39
+msgid "ユーティリティ"
+msgstr ""
+
+#: Config/setting.php:40
+msgid "サーバーキャッシュ削除"
+msgstr ""
+
+#: Config/setting.php:40
+msgid "サーバーキャッシュを削除します。いいですか？"
+msgstr ""
+
+#: Config/setting.php:50
+msgid "なし"
+msgstr ""
+
+#: Config/setting.php:107
+msgid "管理システム"
+msgstr ""
+
+#: Config/setting.php:113
+msgid "管理システムログイン"
+msgstr ""
+
+#: Config/setting.php:162
+msgid "ケータイ"
+msgstr ""
+
+#: Config/setting.php:177
+msgid "スマートフォン"
+msgstr ""
+
+#: Config/setting.php:214
+msgid "無所属コンテンツ"
+msgstr ""
+
+#: Config/setting.php:242
+msgid "フォルダー"
+msgstr ""
+
+#: Config/setting.php:268
+msgid "エイリアス"
+msgstr ""
+
+#: Config/setting.php:286
+msgid "リンク"
+msgstr ""
+
+#: Config/setting.php:312
+msgid "固定ページ"
+msgstr ""
+
+#: Config/update/4.0.1/config.php:2
+msgid "アップデート実行時には、管理システムより参照する、画像ファイル、CSSファイル、Javascriptファイルを、"
+msgstr ""
+
+#: Config/update/4.0.1/config.php:3
+msgid "下記のパスに自動配置しますので書き込み権限を与えてください。また、既に存在する場合には上書きされてしまいますのでご注意ください。"
+msgstr ""
+
+#: Config/update/4.0.1/config.php:4
+msgid "カスタマイズされている方は、事前に退避させてください。"
+msgstr ""
+
+#: Config/update/4.0.1/config.php:10
+msgid "なお、管理システム用の画像ファイル、CSSファイル、Javascriptファイルは、カスタマイズしたいファイルだけ、テーマフォルダ内の同階層に配置するとそちらを優先する仕様となっています。"
+msgstr ""
+
+#: Config/update/4.0.1/updater.php:35
+msgid "contents テーブルのデータ更新に成功しました。"
+msgstr ""
+
+#: Config/update/4.0.1/updater.php:37
+msgid "contents テーブルのデータ更新に失敗しました。"
+msgstr ""
+
+#: Config/update/4.0.1/updater.php:44
+msgid "sites テーブルの構造変更に成功しました。"
+msgstr ""
+
+#: Config/update/4.0.1/updater.php:46
+msgid "sites テーブルの構造変更に失敗しました。"
+msgstr ""
+
+#: Configure/BcThemeConfigReader.php:78
+msgid "テーマの %s が設定されていません : %s"
+msgstr ""
+
+#: Configure/BcThemeConfigReader.php:126
+msgid "指定されたテーマ名のディレクトリが存在しません: %s"
+msgstr ""
+
+#: Console/Command/BaserTestShell.php:130
+msgid "有効なテストケースがありません。 \n\n"
+msgstr ""
+
+#: Console/Command/BaserTestShell.php:144
+msgid "何のテストケースを実行したいですか？"
+msgstr ""
+
+#: Console/Command/BaserTestShell.php:289
+msgid "baserCMS テストシェル"
+msgstr ""
+
+#: Console/Command/BaserTestShell.php:314
+msgid "<info>baserCMS %s コンソールへようこそ</info>"
+msgstr ""
+
+#: Controller/ContentsController.php:59
+#: View/Elements/admin/submenus/contents.php:23
+msgid "コンテンツ一覧"
+msgstr ""
+
+#: Controller/ContentsController.php:62
+#: View/Elements/admin/submenus/contents.php:27
+msgid "ゴミ箱"
+msgstr ""
+
+#: Controller/ContentsController.php:150
+msgid "ツリー形式"
+msgstr ""
+
+#: Controller/ContentsController.php:150
+msgid "表形式"
+msgstr ""
+
+#: View/Elements/admin/footer.php:35
+#: View/Elements/admin/header.php:36
+msgid "システム管理"
+msgstr ""
+
+#: View/Elements/admin/footer.php:43
+msgid "baserCMS 公式サイト"
+msgstr ""
+
+#: View/Elements/admin/footer.php:44
+msgid "baserCMS ユーザー会"
+msgstr ""
+
+#: View/Elements/admin/footer.php:45
+msgid "baserCMS ユーザーズフォーラム"
+msgstr ""
+
+#: View/Elements/admin/footer.php:46
+msgid "baserCMS コア開発プロジェクト"
+msgstr ""
+
+#: View/Elements/admin/footer.php:47
+msgid "baserCMS Facebook"
+msgstr ""
+
+#: View/Elements/admin/footer.php:48
+msgid "baserCMS Twitter"
+msgstr ""
+
+#: View/Elements/admin/toolbar.php:64
+msgid "インストールモード"
+msgstr ""
+
+#: View/Elements/admin/toolbar.php:66
+msgid "デバッグモード"
+msgstr ""
+
+#: View/Elements/admin/toolbar.php:102
+msgid "システムナビ"
+msgstr ""
+
+#: View/Elements/admin/contents/index_view_setting.php:23
+msgid "サイト"
+msgstr ""
+
+#: View/Elements/admin/contents/index_view_setting.php:27
+msgid "表示設定"
+msgstr ""
+
+#: View/Elements/admin/contents/index_view_setting.php:30
+msgid "全て展開"
+msgstr ""
+
+#: View/Elements/admin/contents/index_view_setting.php:31
+msgid "全て閉じる"
+msgstr ""
+
+#: View/Elements/admin/searches/contents_index.php:23
+msgid "フォルダ"
+msgstr ""
+
+#: View/Elements/admin/searches/contents_index.php:24;32;36;40
+msgid "指定しない"
+msgstr ""
+
+#: View/Elements/admin/searches/contents_index.php:27
+msgid "コンテンツ名"
+msgstr ""
+
+#: View/Elements/admin/searches/contents_index.php:31
+msgid "コンテンツタイプ"
+msgstr ""
+
+#: View/Elements/admin/searches/contents_index.php:35
+msgid "公開状態"
+msgstr ""
+
+#: View/Elements/admin/searches/contents_index.php:39
+msgid "作成者"
+msgstr ""
+
+#: View/Elements/admin/searches/contents_index.php:45
+msgid "検索"
+msgstr ""
+
+#: View/Elements/admin/searches/contents_index.php:46
+msgid "クリア"
+msgstr ""
+
+#: View/Elements/admin/submenus/contents.php:20
+msgid "コンテンツメニュー"
+msgstr ""
+
+#: View/Elements/admin/submenus/contents.php:25
+msgid "コンテンツ新規登録"
+msgstr ""
+

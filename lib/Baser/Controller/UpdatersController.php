@@ -130,10 +130,10 @@ class UpdatersController extends AppController {
 				$this->Plugin->save();
 			}
 
-			$this->setUpdateLog('アップデート処理を開始します。');
+			$this->setUpdateLog(__d('baser', 'アップデート処理を開始します。'));
 			foreach ($targets as $target) {
 				if (!$this->_update($target)) {
-					$this->setUpdateLog('アップデート処理が途中で失敗しました。');
+					$this->setUpdateLog(__d('baser', 'アップデート処理が途中で失敗しました。'));
 				}
 			}
 
@@ -148,7 +148,7 @@ class UpdatersController extends AppController {
 
 			clearAllCache();
 
-			$this->setMessage('全てのアップデート処理が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。');
+			$this->setMessage(__d('baser', '全てのアップデート処理が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。'));
 			$this->_writeUpdateLog();
 			$this->redirect(['action' => 'index']);
 		}
@@ -161,9 +161,9 @@ class UpdatersController extends AppController {
 
 		$targetVersion = $this->getBaserVersion();
 		$sourceVersion = $this->getSiteVersion();
-		$this->pageTitle = 'データベースアップデート（baserCMSコア）';
+		$this->pageTitle = __d('baser', 'データベースアップデート（baserCMSコア）');
 		$this->set('log', $updateLog);
-		$this->set('updateTarget', 'baserCMSコア');
+		$this->set('updateTarget', __d('baser', 'baserCMSコア'));
 		$this->set('siteVer', $sourceVersion);
 		$this->set('baserVer', $targetVersion);
 		$this->set('siteVerPoint', verpoint(preg_replace('/-beta$/', '', $sourceVersion)));
@@ -181,16 +181,16 @@ class UpdatersController extends AppController {
  */
 	public function admin_exec_script() {
 		if ($this->request->data) {
-			$this->setUpdateLog('アップデートスクリプトの実行します。');
+			$this->setUpdateLog(__d('baser', 'アップデートスクリプトの実行します。'));
 			if ($this->_execScript($this->request->data['Updater']['plugin'], $this->request->data['Updater']['version'])) {
 				clearAllCache();
 				$this->BcManager->deployAdminAssets();
-				$this->setUpdateLog('アップデートスクリプトの実行が完了しました。');
+				$this->setUpdateLog(__d('baser', 'アップデートスクリプトの実行が完了しました。'));
 				$this->_writeUpdateLog();
-				$this->setMessage('アップデートスクリプトの実行が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。');
+				$this->setMessage(__d('baser', 'アップデートスクリプトの実行が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。'));
 				$this->redirect(['action' => 'exec_script']);
 			} else {
-				$this->setMessage('アップデートスクリプトが見つかりません。', true);
+				$this->setMessage(__d('baser', 'アップデートスクリプトが見つかりません。'), true);
 			}
 		}
 
@@ -201,7 +201,7 @@ class UpdatersController extends AppController {
 			$updateLog = $File->read();
 		}
 
-		$this->pageTitle = 'アップデートスクリプト実行';
+		$this->pageTitle = __d('baser', 'アップデートスクリプト実行');
 		$plugins = $this->Plugin->find('list', ['fields' => ['name', 'title']]);
 		$this->set('plugins', $plugins);
 		$this->set('log', $updateLog);
@@ -232,7 +232,7 @@ class UpdatersController extends AppController {
 		if ($this->request->data) {
 			clearAllCache();
 			$this->_update($name);
-			$this->setMessage('アップデート処理が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。');
+			$this->setMessage(__d('baser', 'アップデート処理が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。'));
 			$this->_writeUpdateLog();
 			clearAllCache();
 			$this->redirect(['action' => 'plugin', $name]);

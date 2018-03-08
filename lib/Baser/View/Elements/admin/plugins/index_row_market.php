@@ -18,7 +18,7 @@
 
 <tr>
 	<td class="row-tools">
-		<div><?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_down.png', ['title' => 'ダウンロード', 'alt' => 'ダウンロード']), $data['link'], ['target' => '_blank']) ?></div>
+		<div><?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_down.png', ['title' => __d('baser', 'ダウンロード'), 'alt' => __d('baser', 'ダウンロード')]), $data['link'], ['target' => '_blank']) ?></div>
 	</td>
 	<td>
 		<?php echo $data['title'] ?>

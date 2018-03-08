@@ -35,7 +35,7 @@ class BaserTestShell extends TestShell {
 		$currentTheme = Configure::read('BcSite.theme');
 		$testTheme = Configure::read('BcApp.testTheme');
 //		if($currentTheme != $testTheme) {
-//			trigger_error('CLIでのユニットテストは、' . $testTheme . ' テーマを利用する前提となっています。再インストール後にユニットテストを実行してください。', E_USER_ERROR);
+//			trigger_error(sprintf(__d('baser', 'CLIでのユニットテストは、%s テーマを利用する前提となっています。再インストール後にユニットテストを実行してください。'), $testTheme), E_USER_ERROR);
 //			exit();
 //		}
 		// <<<
@@ -127,7 +127,7 @@ class BaserTestShell extends TestShell {
 		}
 
 		if (empty($testCases)) {
-			$this->out(__d('cake_console', "No test cases available \n\n"));
+			$this->out(__d('baser', "有効なテストケースがありません。 \n\n"));
 			return $this->out($this->OptionParser->help());
 		}
 
@@ -141,7 +141,7 @@ class BaserTestShell extends TestShell {
 			$i++;
 		}
 
-		while ($choice = $this->in(__d('cake_console', 'What test case would you like to run?'), null, 'q')) {
+		while ($choice = $this->in(__d('baser', '何のテストケースを実行したいですか？'), null, 'q')) {
 			if (is_numeric($choice) && isset($cases[$choice])) {
 				$this->args[0] = $category;
 				$this->args[1] = $cases[$choice];
@@ -286,7 +286,7 @@ class BaserTestShell extends TestShell {
 		// >>>
 		//$this->out(__d('cake_console', 'CakePHP Test Shell'));
 		// ---
-		$this->out(__d('cake_console', 'baserCMS Test Shell'));
+		$this->out(__d('baser', 'baserCMS テストシェル'));
 		// <<<
 		
 		$this->hr();
@@ -311,7 +311,7 @@ class BaserTestShell extends TestShell {
 		// >>>
 		//$this->out(__d('cake_console', '<info>Welcome to CakePHP %s Console</info>', 'v' . Configure::version()));
 		// ---
-		$this->out(__d('cake_console', '<info>Welcome to baserCMS %s Console</info>', 'v' . getVersion()));
+		$this->out(__d('baser', '<info>baserCMS %s コンソールへようこそ</info>', 'v' . getVersion()));
 		// <<<
 		
 		$this->hr();

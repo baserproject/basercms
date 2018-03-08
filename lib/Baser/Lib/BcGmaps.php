@@ -15,7 +15,7 @@
  *
  * @package Baser.Lib
  */
-class BcGmaps extends Object {
+class BcGmaps extends CakeObject {
 
 /**
  * 接続試行回数
@@ -97,7 +97,7 @@ class BcGmaps extends Object {
 		} elseif(!empty($xml['result'][0])) {
 			$result = $xml['result'][0];
 		}
-
+		
 		if (isset($result['geometry']['location'])) {
 			$point = $result['geometry']['location'];
 			if (!empty($point)) {

@@ -50,14 +50,14 @@ class ContentFoldersController extends AppController {
  */
 	public function admin_add() {
 		if(!$this->request->data) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		$data = $this->ContentFolder->save($this->request->data); 
 		if ($data) {
 			$this->setMessage("フォルダ「{$this->request->data['Content']['title']}」を追加しました。", false, true, false);
 			echo json_encode($data['Content']);
 		} else {
-			$this->ajaxError(500, '保存中にエラーが発生しました。');
+			$this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
 		}
 		exit();
 	}
@@ -68,11 +68,11 @@ class ContentFoldersController extends AppController {
  * @return void
  */
 	public function admin_edit($entityId) {
-		$this->pageTitle = 'フォルダ編集';
+		$this->pageTitle = __d('baser', 'フォルダ編集');
 		if(!$this->request->data) {
 			$this->request->data = $this->ContentFolder->read(null, $entityId);
 			if(!$this->request->data) {
-				$this->setMessage('無効な処理です。', true);
+				$this->setMessage(__d('baser', '無効な処理です。'), true);
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
 		} else {
@@ -86,7 +86,7 @@ class ContentFoldersController extends AppController {
 					$entityId
 				]);
 			} else {
-				$this->setMessage('保存中にエラーが発生しました。入力内容を確認してください。', true, true);
+				$this->setMessage(__d('baser', '保存中にエラーが発生しました。入力内容を確認してください。'), true, true);
 			}
 		}
 

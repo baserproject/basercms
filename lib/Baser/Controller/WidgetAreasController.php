@@ -72,7 +72,7 @@ class WidgetAreasController extends AppController {
  * @return void
  */
 	public function admin_index() {
-		$this->pageTitle = 'ウィジェットエリア一覧';
+		$this->pageTitle = __d('baser', 'ウィジェットエリア一覧');
 		$widgetAreas = $this->WidgetArea->find('all');
 		if ($widgetAreas) {
 			foreach ($widgetAreas as $key => $widgetArea) {
@@ -94,15 +94,15 @@ class WidgetAreasController extends AppController {
  * @return void
  */
 	public function admin_add() {
-		$this->pageTitle = '新規ウィジェットエリア登録';
+		$this->pageTitle = __d('baser', '新規ウィジェットエリア登録');
 
 		if ($this->request->data) {
 			$this->WidgetArea->set($this->request->data);
 			if ($this->WidgetArea->save()) {
-				$this->setMessage('新しいウィジェットエリアを保存しました。');
+				$this->setMessage(__d('baser', '新しいウィジェットエリアを保存しました。'));
 				$this->redirect(['action' => 'edit', $this->WidgetArea->getInsertID()]);
 			} else {
-				$this->setMessage('新しいウィジェットエリアの保存に失敗しました。', true);
+				$this->setMessage(__d('baser', '新しいウィジェットエリアの保存に失敗しました。'), true);
 			}
 		}
 		$this->help = 'widget_areas_form';
@@ -115,7 +115,7 @@ class WidgetAreasController extends AppController {
  * @return void
  */
 	public function admin_edit($id) {
-		$this->pageTitle = 'ウィジェットエリア編集';
+		$this->pageTitle = __d('baser', 'ウィジェットエリア編集');
 
 		$widgetArea = $this->WidgetArea->read(null, $id);
 		if ($widgetArea['WidgetArea']['widgets']) {
@@ -128,7 +128,7 @@ class WidgetAreasController extends AppController {
 		}
 		$this->request->data = $widgetArea;
 
-		$widgetInfos = [0 => ['title' => 'コアウィジェット', 'plugin' => '', 'paths' => [BASER_VIEWS . 'Elements' . DS . 'admin' . DS . 'widgets']]];
+		$widgetInfos = [0 => ['title' => __d('baser', 'コアウィジェット'), 'plugin' => '', 'paths' => [BASER_VIEWS . 'Elements' . DS . 'admin' . DS . 'widgets']]];
 		if (is_dir(APP . 'View' . DS . 'Elements' . DS . 'admin' . DS . 'widgets')) {
 			$widgetInfos[0]['paths'][] = APP . 'View' . DS . 'Elements' . DS . 'admin' . DS . 'widgets';
 		}
@@ -176,7 +176,7 @@ class WidgetAreasController extends AppController {
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		// メッセージ用にデータを取得
@@ -349,7 +349,7 @@ class WidgetAreasController extends AppController {
  * @deprecated 4.1.0 since 4.0.0 BcWidgetAreaHelper::showWidgets() に移行
  */
 	public function get_widgets($id) {
-		trigger_error(deprecatedMessage('メソッド：WidgetAreaController::get_widgets()', '4.0.0', '4.1.0', 'このメソッドは非推奨となりました。BcWidgetAreaHelper::showWidgets() に移行してください。'), E_USER_DEPRECATED);
+		trigger_error(deprecatedMessage(__d('baser', 'メソッド：WidgetAreaController::get_widgets()'), '4.0.0', '4.1.0', __d('baser', 'このメソッドは非推奨となりました。BcWidgetAreaHelper::showWidgets() に移行してください。')), E_USER_DEPRECATED);
 		$widgetArea = $this->WidgetArea->read(null, $id);
 		if (!empty($widgetArea['WidgetArea']['widgets'])) {
 			$widgets = BcUtil::unserialize($widgetArea['WidgetArea']['widgets']);
