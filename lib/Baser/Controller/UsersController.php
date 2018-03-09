@@ -55,14 +55,18 @@ class UsersController extends AppController {
 	public $subMenuElements = [];
 
 /**
- * ぱんくずナビ
+ * UsersController constructor.
  *
- * @var array
+ * @param \CakeRequest $request
+ * @param \CakeRequest $response
  */
-	public $crumbs = [
-		['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'form']],
-		['name' => 'ユーザー管理', 'url' => ['controller' => 'users', 'action' => 'index']]
-	];
+	public function __construct($request = null, $response = null) {
+		parent::__construct($request, $response);
+		$this->crumbs = [
+			['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
+			['name' => __d('baser', 'ユーザー管理'), 'url' => ['controller' => 'users', 'action' => 'index']]
+		];
+	}
 
 /**
  * beforeFilter
