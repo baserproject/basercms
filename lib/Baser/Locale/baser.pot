@@ -6271,14 +6271,18 @@ msgstr ""
 msgid "サイト基本キーワード"
 msgstr ""
 
-#: View/Elements/admin/sites/form.php:79;87
-#: View/SiteConfigs/admin/form.php:66
-msgid "テンプレートで利用する場合は、<br />%sで出力します。"
+#: View/Elements/admin/sites/form.php:79
+#: View/SiteConfigs/admin/form.php:76
+msgid "テンプレートで利用する場合は、<br />&lt;?php $this->BcBaser->keywords() ?&gt; で出力します。"
 msgstr ""
 
 #: View/Elements/admin/sites/form.php:83
 #: View/SiteConfigs/admin/form.php:80
 msgid "サイト基本説明文"
+msgstr ""
+
+#: View/Elements/admin/sites/form.php:87
+msgid "テンプレートで利用する場合は、<br />&lt;?php $this->BcBaser->description() ?&gt; で出力します。"
 msgstr ""
 
 #: View/Elements/admin/sites/form.php:94
@@ -7961,12 +7965,12 @@ msgstr ""
 msgid "Webサイトの基本タイトルとして利用されます。（タイトルタグに影響します）"
 msgstr ""
 
-#: View/SiteConfigs/admin/form.php:76
-msgid "テンプレートで利用する場合は、<br />で出力します。"
+#: View/SiteConfigs/admin/form.php:66
+msgid "テンプレートで利用する場合は、<br />&lt;?php $this->BcBaser->title() ?&gt; で出力します。"
 msgstr ""
 
 #: View/SiteConfigs/admin/form.php:84
-msgid "テンプレートで利用する場合は、<br />%sで出力します"
+msgid "テンプレートで利用する場合は、<br />&lt;?php $this->BcBaser->description() ?&gt; で出力します"
 msgstr ""
 
 #: View/SiteConfigs/admin/form.php:88
