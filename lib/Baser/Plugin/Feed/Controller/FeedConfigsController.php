@@ -49,20 +49,24 @@ class FeedConfigsController extends FeedAppController {
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
 /**
- * ぱんくずナビ
- *
- * @var array
- */
-	public $crumbs = [
-		['name' => 'フィード管理', 'url' => ['controller' => 'feed_configs', 'action' => 'index']]
-	];
-
-/**
  * サブメニューエレメント
  *
  * @var array
  */
 	public $subMenuElements = [];
+
+/**
+ * FeedConfigsController constructor.
+ *
+ * @param \CakeRequest $request
+ * @param \CakeRequest $response
+ */
+	public function __construct($request = null, $response = null) {
+		parent::__construct($request, $response);
+		$this->crumbs = [
+            ['name' => __d('baser', 'フィード管理'), 'url' => ['controller' => 'feed_configs', 'action' => 'index']]
+		];
+	}
 
 /**
  * before_filter

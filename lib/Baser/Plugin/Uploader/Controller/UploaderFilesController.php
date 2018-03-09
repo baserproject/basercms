@@ -51,15 +51,7 @@ class UploaderFilesController extends AppController {
  * @access	public
  */
 	public $uses = array('Plugin','Uploader.UploaderFile', 'Uploader.UploaderConfig');
-/**
- * ぱんくずナビ
- *
- * @var array
- */
-	public $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
-		array('name' => 'アップロードファイル管理', 'url' => array('controller' => 'uploader_files', 'action' => 'index'))
-	);
+
 /**
  * サブメニューエレメント
  *
@@ -67,6 +59,21 @@ class UploaderFilesController extends AppController {
  * @access 	public
  */
 	public $subMenuElements = array('uploader');
+
+/**
+ * UploaderFilesController constructor.
+ *
+ * @param \CakeRequest $request
+ * @param \CakeRequest $response
+ */
+	public function __construct($request = null, $response = null) {
+		parent::__construct($request, $response);
+		$this->crumbs = [
+			array('name' => __d('baser', 'プラグイン管理'), 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
+			array('name' => __d('baser', 'アップロードファイル管理'), 'url' => array('controller' => 'uploader_files', 'action' => 'index'))
+		];
+	}
+
 	public function beforeFilter() {
 		$this->BcAuth->allow('view_limited_file');
 		parent::beforeFilter();

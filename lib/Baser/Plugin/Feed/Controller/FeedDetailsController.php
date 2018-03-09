@@ -49,13 +49,17 @@ class FeedDetailsController extends FeedAppController {
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
 /**
- * ぱんくずナビ
+ * FeedDetailsController constructor.
  *
- * @var array
+ * @param \CakeRequest $request
+ * @param \CakeRequest $response
  */
-	public $crumbs = [
-		['name' => 'フィード管理', 'url' => ['controller' => 'feed_configs', 'action' => 'index']]
-	];
+	public function __construct($request = null, $response = null) {
+		parent::__construct($request, $response);
+		$this->crumbs = [
+			['name' => __d('baser', 'フィード管理'), 'url' => ['controller' => 'feed_configs', 'action' => 'index']]
+		];
+	}
 
 /**
  * サブメニューエレメント
