@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-09 07:43+0900\n"
+"PO-Revision-Date: 2018-03-09 12:55+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -7212,13 +7212,25 @@ msgstr "Entering Subsite Title. It will be used for title tag."
 msgid "サイト基本キーワード"
 msgstr "Site Basic Keyword"
 
-#: View/Elements/admin/sites/form.php:79;87 View/SiteConfigs/admin/form.php:66
-msgid "テンプレートで利用する場合は、<br />%sで出力します。"
-msgstr "To use it on Template,<br />Output with %s."
+#: View/Elements/admin/sites/form.php:79 View/SiteConfigs/admin/form.php:76
+msgid ""
+"テンプレートで利用する場合は、<br />&lt;?php $this->BcBaser->keywords() ?"
+"&gt; で出力します。"
+msgstr ""
+"To use in Template,<br />output with &lt;?php $this->BcBaser->keywords() ?"
+"&gt;."
 
 #: View/Elements/admin/sites/form.php:83 View/SiteConfigs/admin/form.php:80
 msgid "サイト基本説明文"
 msgstr "Site Basic Description"
+
+#: View/Elements/admin/sites/form.php:87
+msgid ""
+"テンプレートで利用する場合は、<br />&lt;?php $this->BcBaser->description() ?"
+"&gt; で出力します。"
+msgstr ""
+"To use in Template,<br />output with &lt;?php $this->BcBaser->description() ?"
+"&gt;."
 
 #: View/Elements/admin/sites/form.php:94
 msgid "エイリアスを利用してメインサイトと自動連携する"
@@ -9236,13 +9248,20 @@ msgstr "Web Site Title"
 msgid "Webサイトの基本タイトルとして利用されます。（タイトルタグに影響します）"
 msgstr "Used as Web site’s basic title (has effect on title tag)."
 
-#: View/SiteConfigs/admin/form.php:76
-msgid "テンプレートで利用する場合は、<br />で出力します。"
-msgstr "Output with <br />to use in Template."
+#: View/SiteConfigs/admin/form.php:66
+msgid ""
+"テンプレートで利用する場合は、<br />&lt;?php $this->BcBaser->title() ?&gt; で"
+"出力します。"
+msgstr ""
+"To use in Template,<br />output with &lt;?php $this->BcBaser->title() ?&gt;."
 
 #: View/SiteConfigs/admin/form.php:84
-msgid "テンプレートで利用する場合は、<br />%sで出力します"
-msgstr "Output with <br />%s to use in Template"
+msgid ""
+"テンプレートで利用する場合は、<br />&lt;?php $this->BcBaser->description() ?"
+"&gt; で出力します"
+msgstr ""
+"To use in Template,<br />output with &lt;?php $this->BcBaser->description() ?"
+"&gt;."
 
 #: View/SiteConfigs/admin/form.php:88
 msgid "管理者メールアドレス"
@@ -10325,6 +10344,15 @@ msgstr "Show Title"
 #: View/WidgetAreas/admin/form.php:127
 msgid "利用中のウィジェット"
 msgstr "Using Widgets"
+
+#~ msgid "テンプレートで利用する場合は、<br />%sで出力します。"
+#~ msgstr "To use it on Template,<br />Output with %s."
+
+#~ msgid "テンプレートで利用する場合は、<br />で出力します。"
+#~ msgstr "Output with <br />to use in Template."
+
+#~ msgid "テンプレートで利用する場合は、<br />%sで出力します"
+#~ msgstr "Output with <br />%s to use in Template"
 
 #~ msgid "送信先メールアドレスは255文字以内で入力してください。"
 #~ msgstr "Please enter Destination Mail Address within 255 characters."
