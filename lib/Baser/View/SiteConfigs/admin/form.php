@@ -63,7 +63,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 			<div id="helptextName" class="helptext">
 				<ul>
 					<li><?php echo __d('baser', 'Webサイトの基本タイトルとして利用されます。（タイトルタグに影響します）')?></li>
-					<li><?php echo sprintf(__d('baser', 'テンプレートで利用する場合は、<br />%sで出力します。'), $this->BcBaser->title())?></li>
+					<li><?php echo sprintf(__d('baser', 'テンプレートで利用する場合は、<br />%sで出力します。'), $this->BcBaser->getTitle())?></li>
 				</ul>
 			</div>
 		</td>
