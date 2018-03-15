@@ -7902,7 +7902,7 @@ msgid "baserマーケット"
 msgstr ""
 
 #: View/SearchIndices/search.php:23
-msgid "<strong>%s</strong> で検索した結果 <strong>%start%〜%end%</strong>件目 / %count% 件"
+msgid "<strong>%s</strong> で検索した結果 <strong>%%start%%〜%%end%%</strong>件目 / %%count%% 件"
 msgstr ""
 
 #: View/SearchIndices/search.php:40
