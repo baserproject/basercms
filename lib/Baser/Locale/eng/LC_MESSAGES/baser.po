@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-09 12:55+0900\n"
+"PO-Revision-Date: 2018-03-15 12:16+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -9158,10 +9158,11 @@ msgstr "baser Market"
 
 #: View/SearchIndices/search.php:23
 msgid ""
-"<strong>%s</strong> で検索した結果 <strong>%start%〜%end%</strong>件目 / "
-"%count% 件"
+"<strong>%s</strong> で検索した結果 <strong>%%start%%〜%%end%%</strong>件目 / "
+"%%count%% 件"
 msgstr ""
-"Results searched with <strong>%s</strong>%start%～%end%</strong> / %count%"
+"Results searched with <strong>%s</strong> <strong>%%start%%～%%end%%</"
+"strong> / %%count%%"
 
 #: View/SearchIndices/search.php:40
 msgid "該当する結果が存在しませんでした。"
