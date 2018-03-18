@@ -12,6 +12,7 @@
 
 /**
  * [MOBILE] メールフィールド
+ * @var \BcAppView $this
  */
 $group_field = null;
 $iteration = 0;
@@ -21,18 +22,21 @@ if (!isset($blockEnd)) {
 ?>
 
 <?php foreach ($mailFields as $key => $record): ?>
-	<?php $iteration++; ?>
-	<?php if ($record['MailField']['use_field']): ?>
+    <?php
+    $field = $record['MailField'];
+	$iteration++;
+	?>
+	<?php if ($field['use_field']): ?>
 		<?php if ($blockStart && $iteration >= $blockStart): ?>
 			<?php if (!$blockEnd || $iteration <= $blockEnd): ?>
 				<?php $next_key = $key + 1 ?>
 				<?php /* 項目名 */ ?>
-				<?php $description = $record['MailField']['description'] ?>
-				<?php if ($group_field != $record['MailField']['group_field'] || (!$group_field && !$record['MailField']['group_field'])): ?>
+				<?php $description = $field['description'] ?>
+				<?php if ($group_field != $field['group_field'] || (!$group_field && !$field['group_field'])): ?>
 					<br />
 					<br />
-					<span style="color:#8ABE08">■</span> <?php echo $this->Mailform->label("MailMessage." . $record['MailField']['field_name'] . "", $record['MailField']['head']) ?>
-					<?php if ($record['MailField']['not_empty']): ?>
+					<span style="color:#8ABE08">■</span> <?php echo $this->Mailform->label("MailMessage." . $field['field_name'] . "", $field['head']) ?>
+					<?php if ($field['not_empty']): ?>
 						<font color="#FF0000">*</font>
 					<?php endif; ?>
 					<br />
@@ -42,8 +46,8 @@ if (!isset($blockEnd)) {
 					<font size="1"><?php echo $description ?></font>
 				<?php endif; ?>
 				<?php /* 入力欄 */ ?>
-				<?php if (!$freezed || $this->Mailform->value("MailMessage." . $record['MailField']['field_name'])): ?>
-					<font size="1"><?php echo $record['MailField']['before_attachment'] ?></font>
+				<?php if (!$freezed || $this->Mailform->value("MailMessage." . $field['field_name'])): ?>
+					<font size="1"><?php echo $field['before_attachment'] ?></font>
 				<?php endif; ?>
 
 				<?php
@@ -54,44 +58,44 @@ if (!isset($blockEnd)) {
 				// 本来であれば、not_display_confirm 等のオプションを別途準備し、そちらを利用するべきだが、
 				// 後方互換のため残す
 				// =========================================================================================================
-				if ($freezed && $field['MailField']['no_send']) {
-					echo $this->Mailform->control('hidden', "MailMessage." . $field['MailField']['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
+				if ($freezed && $field['no_send']) {
+					echo $this->Mailform->control('hidden', "MailMessage." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
 				} else {
-					echo $this->Mailform->control($field['MailField']['type'], "MailMessage." . $field['MailField']['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
+					echo $this->Mailform->control($field['type'], "MailMessage." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
 				}
 				?>
 					
-				<?php if (!$freezed || $this->Mailform->value("MailMessage." . $record['MailField']['field_name'])): ?>
-					<font size="1"><?php echo $record['MailField']['after_attachment'] ?></font>
+				<?php if (!$freezed || $this->Mailform->value("MailMessage." . $field['field_name'])): ?>
+					<font size="1"><?php echo $field['after_attachment'] ?></font>
 				<?php endif; ?>
 				<?php if (!$freezed): ?>
-					<font size="1"><?php echo $record['MailField']['attention'] ?></font>
+					<font size="1"><?php echo $field['attention'] ?></font>
 				<?php endif; ?>
-				<?php if (!$record['MailField']['group_valid']): ?>
-					<?php if ($this->Mailform->error("MailMessage." . $record['MailField']['field_name'] . "_format", "check")): ?>
-						<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $record['MailField']['field_name'] . "_format", __("形式が無効です。"), array('wrap' => false)); ?></font>
+				<?php if (!$field['group_valid']): ?>
+					<?php if ($this->Mailform->error("MailMessage." . $field['field_name'] . "_format", "check")): ?>
+						<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $field['field_name'] . "_format", __("形式が無効です。"), array('wrap' => false)); ?></font>
 					<?php else: ?>
-						<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $record['MailField']['field_name'] . "", __("必須項目です。"), array('wrap' => false)); ?></font>
+						<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $field['field_name'] . "", __("必須項目です。"), array('wrap' => false)); ?></font>
 					<?php endif; ?>
 				<?php endif; ?>
 				<?php /* 説明欄 */ ?>
 				<?php if (($this->BcArray->last($mailFields, $key)) ||
-					($record['MailField']['group_field'] != $mailFields[$next_key]['MailField']['group_field']) ||
-					(!$record['MailField']['group_field'] && !$mailFields[$next_key]['MailField']['group_field']) ||
-					($record['MailField']['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $this->BcArray->first($mailFields, $key))): ?>
-					<?php if ($record['MailField']['group_valid']): ?>
-						<?php if ($this->Mailform->error("MailMessage." . $record['MailField']['group_field'] . "_format", "check")): ?>
-							<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $record['MailField']['group_field'] . "_format", __("形式が無効です。"), array('wrap' => false)) ?></font>
+					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field']) ||
+					(!$field['group_field'] && !$mailFields[$next_key]['MailField']['group_field']) ||
+					($field['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $this->BcArray->first($mailFields, $key))): ?>
+					<?php if ($field['group_valid']): ?>
+						<?php if ($this->Mailform->error("MailMessage." . $field['group_field'] . "_format", "check")): ?>
+							<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $field['group_field'] . "_format", __("形式が無効です。"), array('wrap' => false)) ?></font>
 						<?php else: ?>
-							<?php if ($record['MailField']['valid']) : ?>
-								<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $record['MailField']['group_field'] . "", __("必須項目です。"), array('wrap' => false)) ?></font>
+							<?php if ($field['valid']) : ?>
+								<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $field['group_field'] . "", __("必須項目です。"), array('wrap' => false)) ?></font>
 							<?php endif; ?>
 						<?php endif; ?>
-						<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $record['MailField']['group_field'] . "_not_same", __("入力データが一致していません"), array('wrap' => false)) ?></font>
-						<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $record['MailField']['group_field'] . "_not_complate", __("入力データが不完全です"), array('wrap' => false)) ?></font>
+						<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $field['group_field'] . "_not_same", __("入力データが一致していません"), array('wrap' => false)) ?></font> 
+						<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $field['group_field'] . "_not_complate", __("入力データが不完全です"), array('wrap' => false)) ?></font>
 					<?php endif; ?>
 				<?php endif; ?>
-				<?php $group_field = $record['MailField']['group_field'] ?>
+				<?php $group_field = $field['group_field'] ?>
 			<?php endif; ?>
 		<?php endif; ?>
 	<?php endif; ?>
