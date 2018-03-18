@@ -88,18 +88,4 @@ class MailControllerTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * [ajax] Tokenのkeyを取得
- */
-	public function testAjax_get_token() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-/**
- * [ajax] Tokenのkeyを取得
- */
-	public function testSmartphone_ajax_get_token() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
 }
