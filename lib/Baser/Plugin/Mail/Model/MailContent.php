@@ -78,12 +78,10 @@ class MailContent extends MailAppModel {
 			['rule' => ['maxLength', 255], 'message' => 'リダイレクトURLは255文字以内で入力してください。']
 		],
 		'sender_1' => [
-			['rule' => ['emails'], 'allowEmpty' => true, 'message' => '送信先メールアドレスの形式が不正です。'],
-			['rule' => ['maxLength', 255], 'message' => '送信先メールアドレスは255文字以内で入力してください。']
+			['rule' => ['emails'], 'allowEmpty' => true, 'message' => '送信先メールアドレスの形式が不正です。']
 		],
 		'sender_2' => [
-			['rule' => ['emails'], 'allowEmpty' => true, 'message' => '送信先メールアドレスの形式が不正です。'],
-			['rule' => ['maxLength', 255], 'message' => 'CC用送信先メールアドレスは255文字以内で入力してください。']
+			['rule' => ['emails'], 'allowEmpty' => true, 'message' => '送信先メールアドレスの形式が不正です。']
 		],
 		'ssl_on' => [
 			['rule' => 'checkSslUrl', "message" => 'SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。']

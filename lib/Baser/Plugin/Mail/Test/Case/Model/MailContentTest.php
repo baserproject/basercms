@@ -96,9 +96,9 @@ class MailContentTest extends BaserTestCase {
 	public function test桁数チェック() {
 		$this->MailContent->create(array(
 			'MailContent' => array(
-				'sender_name' => '012345678901234567890123456789012345678901234567890',
-				'subject_user' => '012345678901234567890123456789012345678901234567890',
-				'subject_admin' => '012345678901234567890123456789012345678901234567890',
+				'sender_name' => '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789001234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@example.co.jp',
+				'subject_user' => '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789001234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@example.co.jp',
+				'subject_admin' => '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789001234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890@example.co.jp',
 				'form_template' => '012345678901234567890123456789012345678901234567890',
 				'mail_template' => '012345678901234567890123456789012345678901234567890',
 				'redirect_url' => 'http://01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789001234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890.co.jp',
@@ -110,16 +110,13 @@ class MailContentTest extends BaserTestCase {
 		$this->assertFalse($this->MailContent->validates());
 
 		$expected = array(
-			'sender_name' => array('送信先名は50文字以内で入力してください。'),
-			'subject_user' => array('自動返信メール件名[ユーザー宛]は50文字以内で入力してください。'),
-			'subject_admin' => array('自動返信メール件名[管理者宛]は50文字以内で入力してください。'),
+			'sender_name' => array('送信先名は255文字以内で入力してください。'),
+			'subject_user' => array('自動返信メール件名[ユーザー宛]は255文字以内で入力してください。'),
+			'subject_admin' => array('自動返信メール件名[管理者宛]は255文字以内で入力してください。'),
 			'form_template' => array('フォームテンプレート名は20文字以内で入力してください。'),
 			'mail_template' => array('メールテンプレート名は20文字以内で入力してください。'),
 			'redirect_url' => array('リダイレクトURLは255文字以内で入力してください。'),
-			'sender_1' => array('送信先メールアドレスは255文字以内で入力してください。'),
-			'sender_2' => array('CC用送信先メールアドレスは255文字以内で入力してください。')
 		);
-
 		$this->assertEquals($expected, $this->MailContent->validationErrors);
 	}
 
@@ -132,14 +129,14 @@ class MailContentTest extends BaserTestCase {
 			)
 		));
 		$this->assertFalse($this->MailContent->validates());
-		
+
 		$expected = array(
 			'form_template' => array('メールフォームテンプレート名は半角のみで入力してください。'),
 			'mail_template' => array('送信メールテンプレートは半角のみで入力してください。')
 		);
 		$this->assertEquals($expected, $this->MailContent->validationErrors);
 	}
-	
+
 	public function test形式チェック() {
 		$this->MailContent->create(array(
 			'MailContent' => array(
@@ -150,7 +147,7 @@ class MailContentTest extends BaserTestCase {
 			)
 		));
 		$this->assertFalse($this->MailContent->validates());
-		
+
 		$expected =  array(
 			'sender_1' => array('送信先メールアドレスの形式が不正です。'),
 			'sender_2' => array('送信先メールアドレスの形式が不正です。')
@@ -257,11 +254,11 @@ class MailContentTest extends BaserTestCase {
 		$contents = $this->MailContent->find('all');
 		$this->MailField = ClassRegistry::init('MailField');
 		$fields = $this->MailField->find('all');
-	
+
 		// Mail関連チェック
 		$this->assertEmpty($contents, 'メールコンテンツデータを削除できません');
 		$this->assertEmpty($fields, '関連したメールフィールドデータを削除できません');
-		
+
 		// SearchIndexチェック
 		$this->SearchIndex = ClassRegistry::init('SearchIndex');
 		$result = $this->SearchIndex->find('all', array(
@@ -323,7 +320,7 @@ class MailContentTest extends BaserTestCase {
 
 /**
  * メールコンテンツデータをコピーする
- * 
+ *
  * @param int $id
  * @param int $newParentId 新しい親コンテンツID
  * @param string $newTitle 新しいタイトル
@@ -341,7 +338,7 @@ class MailContentTest extends BaserTestCase {
 				$command = '.schema';
 			default :
 		}
-		
+
 		$result = $this->MailContent->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
 
 		if (!is_null($id)) {
@@ -351,7 +348,7 @@ class MailContentTest extends BaserTestCase {
 			$field = $this->MailField->find('first',
 				array('conditions' => array('id' => 19)
 			));
-			
+
 			$this->assertEquals(2, $field['MailField']['mail_content_id'], 'メールフィールドデータをコピーできません');
 		}
 	}
