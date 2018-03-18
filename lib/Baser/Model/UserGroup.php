@@ -14,6 +14,7 @@
  * ユーザーグループモデル
  *
  * @package Baser.Model
+ * @property \Permission $Permission
  */
 class UserGroup extends AppModel {
 
