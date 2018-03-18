@@ -10,9 +10,9 @@
 　　　　　　　　◆◇　<?php echo __('コメントが投稿されました') ?>　◇◆ 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-<?php echo $Content['name'] ?><?php echo __('さんが、') ?>
+<?php echo $BlogComment['name'] ?><?php echo __('さんが、') ?>
 「<?php echo $BlogPost['name'] ?>」<?php echo __('にコメントしました。') ?>
-<?php echo $this->BcBaser->getUri($Content['url'] . '/archives/' . $BlogPost['no'], false) ?>　
+<?php echo $this->BcBaser->getUri($Content['url'] . 'archives/' . $BlogPost['no'], false) ?>　
  
 <?php echo ($BlogComment['message']) ?>　
 　

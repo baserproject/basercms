@@ -13,6 +13,7 @@
  * ユーザーグループコントローラー
  *
  * @package Baser.Controller
+ * @property \UserGroup $UserGroup
  */
 class UserGroupsController extends AppController {
 
