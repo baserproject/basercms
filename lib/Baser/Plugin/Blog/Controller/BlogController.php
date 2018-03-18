@@ -467,7 +467,8 @@ class BlogController extends BlogAppController {
 		}
 
 		if ($this->BlogPost->BlogComment->add($this->request->data, $this->contentId, $postId, $this->blogContent['BlogContent']['comment_approve'])) {
-
+			$content = $this->BlogPost->BlogContent->Content->findByType('Blog.BlogContent', $this->blogContent['BlogContent']['id']);
+			$this->request->data['Content'] = $content['Content'];
 			$this->_sendCommentAdmin($postId, $this->request->data);
 			// コメント承認機能を利用していない場合は、公開されているコメント投稿者にアラートを送信
 			if (!$this->blogContent['BlogContent']['comment_approve']) {
