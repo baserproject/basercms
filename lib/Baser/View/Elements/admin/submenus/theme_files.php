@@ -35,11 +35,11 @@ if ($theme == 'core') {
 
 <?php foreach ($themeFiles as $themeFile): ?>
 	<tr>
-		<th>[<?php echo $themeFile['title'] ?>] テーマ管理メニュー</th>
+		<th>[<?php echo $themeFile['title'] ?>] <?php echo __d('baser', 'テーマ管理メニュー')?></th>
 		<td>
 			<ul class="cleafix">
 				<?php foreach ($types as $key => $type): ?>
-					<li><?php $this->BcBaser->link($type . '一覧', ['action' => 'index', $theme, $themeFile['name'], $key]) ?></li>
+					<li><?php $this->BcBaser->link(sprintf(__d('baser', '%s 一覧'), $type), ['action' => 'index', $theme, $themeFile['name'], $key]) ?></li>
 				<?php endforeach ?>
 			</ul>
 		</td>

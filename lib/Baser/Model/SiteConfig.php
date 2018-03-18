@@ -25,48 +25,33 @@ class SiteConfig extends AppModel {
 	public $actsAs = ['BcCache'];
 
 /**
- * バリデーション
+ * SiteConfig constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'formal_name' => [
-			'rule' => ['notBlank'],
-			'message' => 'Webサイト名を入力してください。',
-			'required' => true
-		],
-		'name' => [
-			'rule' => ['notBlank'],
-			'message' => 'Webサイトタイトルを入力してください。',
-			'required' => true
-		],
-		'email' => [
-			['rule' => ['emails'],
-				'message' => '管理者メールアドレスの形式が不正です。'],
-			['rule' => ['notBlank'],
-				'message' => '管理者メールアドレスを入力してください。']
-		],
-		'mail_encode' => [
-			'rule' => ['notBlank'],
-			'message' => "メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。",
-			'required' => true
-		],
-		'site_url' => [
-			'rule' => ['notBlank'],
-			'message' => "WebサイトURLを入力してください。",
-			'required' => true
-		],
-		'admin_ssl' => [
-			'rule' => ['sslUrlExists'],
-			'message' => "管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。"
-		],
-		'main_site_display_name' => [
-			'rule' => ['notBlank'],
-			'message' => "メインサイト表示名を入力してください。",
-			'required' => false
-		]
-	];
-
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'formal_name' => [
+				'rule' => ['notBlank'], 'message' => __d('baser', 'Webサイト名を入力してください。'), 'required' => true],
+			'name' => [
+				'rule' => ['notBlank'], 'message' => __d('baser', 'Webサイトタイトルを入力してください。'), 'required' => true],
+			'email' => [
+				['rule' => ['emails'], 'message' => __d('baser', '管理者メールアドレスの形式が不正です。')],
+				['rule' => ['notBlank'], 'message' => __d('baser', '管理者メールアドレスを入力してください。')]],
+			'mail_encode' => [
+				'rule' => ['notBlank'], 'message' => __d('baser', 'メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。'), 'required' => true],
+			'site_url' => [
+				'rule' => ['notBlank'], 'message' => __d('baser', 'WebサイトURLを入力してください。'), 'required' => true],
+			'admin_ssl' => [
+				'rule' => ['sslUrlExists'], 'message' => __d('baser', '管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。')],
+			'main_site_display_name' => [
+				'rule' => ['notBlank'], 'message' => __d('baser', 'メインサイト表示名を入力してください。'), 'required' => false]
+		];
+	}
+	
 /**
  * テーマの一覧を取得する
  *

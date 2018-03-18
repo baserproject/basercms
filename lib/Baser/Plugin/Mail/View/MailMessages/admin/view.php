@@ -19,7 +19,7 @@
 <!-- view -->
 <table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
 	<tr><th>NO</th><td><?php echo $message['MailMessage']['id'] ?></td></tr>
-	<tr><th>受信日時</th><td><?php echo $this->BcTime->format('Y/m/d H:i:s', $message['MailMessage']['created']) ?></td></tr>
+	<tr><th><?php echo __d('baser', '受信日時')?></th><td><?php echo $this->BcTime->format('Y/m/d H:i:s', $message['MailMessage']['created']) ?></td></tr>
 	<?php
 	$groupField = null;
 	foreach ($mailFields as $key => $mailField) {
@@ -68,5 +68,5 @@
 
 <!-- button -->
 <p class="submit">
-<?php $this->BcBaser->link('削除', array('action' => 'delete', $mailContent['MailContent']['id'], $message['MailMessage']['id']), array('class' => 'submit-token btn-gray button'), sprintf('受信メール NO「%s」を削除してもいいですか？', $message['MailMessage']['id']), false); ?>
+<?php $this->BcBaser->link(__d('baser', '削除'), array('action' => 'delete', $mailContent['MailContent']['id'], $message['MailMessage']['id']), array('class' => 'submit-token btn-gray button'), sprintf(__d('baser', '受信メール NO「%s」を削除してもいいですか？'), $message['MailMessage']['id']), false); ?>
 </p>

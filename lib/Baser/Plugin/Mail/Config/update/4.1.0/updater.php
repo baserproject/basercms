@@ -94,9 +94,9 @@ if ($mailContents) {
 			$MailMessage->set($message);
 			$result = $MailMessage->save(null, false);
 			if($result) {
-				$this->setUpdateLog('メールプラグイン mail_message_' . $mailContentId . 'テーブルのデータ更新に成功しました。');
+				$this->setUpdateLog(sprintf(__d('baser', 'メールプラグイン mail_message_ %s テーブルのデータ更新に成功しました。'), $mailContentId));
 			} else {
-				$this->setUpdateLog('メールプラグイン mail_message_' . $mailContentId . 'テーブルのデータ更新に失敗しました。', true);
+				$this->setUpdateLog(sprintf(__d('baser', 'メールプラグイン mail_message_ %s テーブルのデータ更新に失敗しました。'), $mailContentId), true);
 			}
 		}
 	}

@@ -297,7 +297,7 @@ class ContentsController extends AppController {
 		if($data) {
 			if($alias) {
 				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') .
-					'「' . $srcContent['title'] . '」のエイリアス「' . $this->request->data['Content']['title'] . '」を追加しました。';
+					sprintf(__d('baser', '「%s」のエイリアス「%s」を追加しました。'), $srcContent['title'], $this->request->data['Content']['title']);
 			} else {
 				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') . '「' . $this->request->data['Content']['title'] . '」を追加しました。';
 			}
@@ -324,7 +324,8 @@ class ContentsController extends AppController {
 			}
 		} else {
 			if($this->Content->save($this->request->data)) {
-				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') . '「' . $this->request->data['Content']['title'] . '」を更新しました。';
+				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') . 
+					sprintf(__d('baser', '「%s」を更新しました。'), $this->request->data['Content']['title']);
 				$this->setMessage($message, false, true);
 				$this->redirect([
 					'plugin'	=> null,
@@ -362,7 +363,7 @@ class ContentsController extends AppController {
 				$srcContent = $this->Content->find('first', ['conditions' => ['Content.id' => $this->request->data['Content']['alias_id']], 'recursive' => -1]);
 				$srcContent = $srcContent['Content'];
 				$message = Configure::read('BcContents.items.' . $srcContent['plugin'] . '.' . $srcContent['type'] . '.title') .
-					'「' . $srcContent['title'] . '」のエイリアス「' . $this->request->data['Content']['title'] . '」を編集しました。';
+					sprintf(__d('baser', '「%s」のエイリアス「%s」を編集しました。'), $srcContent['title'], $this->request->data['Content']['title']);
 				$this->setMessage($message, false, true);
 				$this->redirect([
 					'plugin'	=> null,
@@ -439,13 +440,13 @@ class ContentsController extends AppController {
 		
 		if(!$content['alias_id']) {
 			$result = $this->Content->softDeleteFromTree($id);
-			$message = $typeName . '「' . $content['title'] . '」をゴミ箱に移動しました。';
+			$message = $typeName . sprintf(__d('baser', '「%s」をゴミ箱に移動しました。'), $content['title']);
 		} else {
 			$softDelete = $this->Content->softDelete(null);
 			$this->Content->softDelete(false);
 			$result = $this->Content->removeFromTree($id, true);
 			$this->Content->softDelete($softDelete);
-			$message = $typeName . 'のエイリアス「' . $content['title'] . '」を削除しました。';
+			$message = sprintf(__d('baser', '%s のエイリアス「%s」を削除しました。'), $typeName, $content['title']);
 		}
 		if($result) {
 			$this->setMessage($message, false, true, $useFlashMessage);
@@ -637,7 +638,7 @@ class ContentsController extends AppController {
 		]];
 		if($this->Content->save($data, ['firstCreate' => !empty($this->request->data['first'])])) {
 			$message = Configure::read('BcContents.items.' . $this->request->data['plugin'] . '.' . $this->request->data['type'] . '.title') .
-						'「' . $this->request->data['oldTitle'] . '」を「' . $this->request->data['newTitle'] . '」に名称変更しました。';
+						sprintf(__d('baser', '「%s」を「%s」に名称変更しました。'), $this->request->data['oldTitle'], $this->request->data['newTitle']);
 			$this->setMessage($message, false, true, false);
 			Configure::write('debug', 0);
 			return $this->Content->getUrlById($this->Content->id);

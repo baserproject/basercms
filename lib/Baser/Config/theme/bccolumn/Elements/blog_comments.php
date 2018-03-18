@@ -52,14 +52,14 @@
 
 			<?php if ($blogContent['BlogContent']['auth_captcha']): ?>
 				<div class="auth-captcha clearfix">
-					<img src="" alt="認証画象" class="auth-captcha-image" id="AuthCaptchaImage" style="display:none" />
+					<img src="" alt="<?php echo __('認証画象') ?>" class="auth-captcha-image" id="AuthCaptchaImage" style="display:none" />
 					<?php $this->BcBaser->img('admin/captcha_loader.gif', array('alt' => 'Loading...', 'class' => 'auth-captcha-image', 'id' => 'CaptchaLoader')) ?>
 					<?php echo $this->BcForm->text('BlogComment.auth_captcha') ?><br />
 					&nbsp;<?php echo __('画像の文字を入力してください') ?><br />
 				</div>
 			<?php endif ?>
 
-			<?php echo $this->BcForm->end(array('label' => '送信する', 'id' => 'BlogCommentAddButton', 'class' => 'button')) ?>
+			<?php echo $this->BcForm->end(array('label' => __('送信する'), 'id' => 'BlogCommentAddButton', 'class' => 'button')) ?>
 			<div id="ResultMessage" class="message" style="display:none;text-align:center">&nbsp;</div>
 		</div>
 	</div>

@@ -25,20 +25,21 @@ class ThemeFile extends AppModel {
 	public $useTable = false;
 
 /**
- * バリデーション
+ * ThemeFile constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'name' => [
-			['rule' => ['notBlank'],
-				'message' => "テーマファイル名を入力してください。",
-				'required' => true],
-			['rule' => ['duplicateThemeFile'],
-				'message' => '入力されたテーマファイル名は、同一階層に既に存在します。']
-		]
-	];
-
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'テーマファイル名を入力してください。'), 'required' => true],
+				['rule' => ['duplicateThemeFile'], 'message' => __d('baser', '入力されたテーマファイル名は、同一階層に既に存在します。')]]
+		];
+	}
+	
 /**
  * ファイルの重複チェック
  * 

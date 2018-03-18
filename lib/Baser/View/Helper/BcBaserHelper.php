@@ -2745,4 +2745,33 @@ END_FLASH;
 		return $this->BcContents->isParentId($id, $parentId);
 	}
 
+	/**
+	 * JavaScript に変数を引き渡す
+	 *
+	 * @param string $variable 変数名（グローバル変数）
+	 * @param array $value 値（連想配列）
+	 */
+	public function setScript($variable, $value, $options = []) {
+		return $this->BcHtml->scriptBlock($variable, $value);
+	}
+
+	/**
+	 * i18n 用の変数を宣言する
+	 * @return string
+	 */
+	public function declarationI18n() {
+		return $this->BcHtml->declarationI18n();
+	}
+	
+	/**
+	 * JavaScript に、翻訳データを引き渡す
+	 * `bcI18n.キー名` で参照可能
+	 * （例）bcI18n.alertMessage
+	 *
+	 * @param array $value 値（連想配列）
+	 */
+	public function i18nScript($data, $options = []) {
+		return $this->BcHtml->i18nScript($data, $options);
+	}
+
 }

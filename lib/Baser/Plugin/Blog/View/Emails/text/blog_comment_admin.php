@@ -16,28 +16,28 @@
 $adminPrefix = BcUtil::getAdminPrefix();
 ?>
 
-                                           <?php echo date('Y-m-d H:i:s') ?> 
+                                           <?php echo date('Y-m-d H:i:s') ?>　
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-　　　　　　　　◆◇　コメントを受付けました　◇◆ 
+　　　　　　　　◆◇　<?php echo __d('baser', 'コメントを受付けました')?>　◇◆
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-　<?php echo $Content['title'] ?> へのコメントを受け付けました。
-　受信内容は下記のとおりです。
+　<?php echo sprintf(__d('baser', '%sへのコメントを受け付けました。'), $Content['title'])?>　
+　<?php echo __d('baser', '受信内容は下記のとおりです。')?>　
 
-　「<?php echo $BlogPost['name'] ?>」
+　「<?php echo $BlogPost['name'] ?>」　
 　<?php echo $this->BcBaser->getUri($Content['url'] . '/archives/' . $BlogPost['no'], false) ?>　
 
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-　◆ コメント内容 
+　◆ <?php echo __d('baser', 'コメント内容 ')?>　
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
 
-送信者名： <?php echo ($BlogComment['name']) ?>　
-Ｅメール： <?php echo ($BlogComment['email']) ?>　
+<?php echo __d('baser', '送信者名')?>： <?php echo ($BlogComment['name']) ?>　
+<?php echo __d('baser', 'Ｅメール')?>： <?php echo ($BlogComment['email']) ?>　
 ＵＲＬ　： <?php echo ($BlogComment['url']) ?>　
 
 <?php echo ($BlogComment['message']) ?>　
 
-コメントの公開状態を変更する場合は次のURLよりご確認ください。
+<?php echo __d('baser', 'コメントの公開状態を変更する場合は次のURLよりご確認ください。')?>　
 <?php echo $this->BcBaser->getUri('/' . $adminPrefix . '/blog/blog_comments/index/' . $BlogContent['id'], false) ?>　
 　
 　

@@ -21,10 +21,16 @@ $this->BcBaser->js(array(
 ));
 ?>
 
+<?php
+$this->BcBaser->i18nScript([
+	'message1' => __d('baser', "本当にこのデータを削除してもいいですか？\n※ 現在このメールフォームに設定されているフィールドは全て削除されます。")
+]);
+?>
+
 
 <script type="text/javascript">
 $(function(){
-	$.baserAjaxDataList.config.methods.del.confirm = '本当にこのデータを削除してもいいですか？\n※ 現在このメールフォームに設定されているフィールドは全て削除されます。';
+	$.baserAjaxDataList.config.methods.del.confirm = bcI18n.message1;
 	$.baserAjaxDataList.init();
 	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
 });

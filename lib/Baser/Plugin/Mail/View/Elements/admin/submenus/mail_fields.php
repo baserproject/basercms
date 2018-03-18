@@ -17,14 +17,14 @@
 
 
 <tr>
-	<th>メールフォーム管理メニュー</th>
+	<th><?php echo __d('baser', 'メールフォーム管理メニュー')?></th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $this->BcBaser->link($this->request->params['Content']['title'] . '設定', array('controller' => 'mail_contents', 'action' => 'edit', $mailContent['MailContent']['id'])) ?></li>
-			<li><?php $this->BcBaser->link('メールフィールド一覧', array('controller' => 'mail_fields', 'action' => 'index', $mailContent['MailContent']['id'])) ?></li>
-			<li><?php $this->BcBaser->link('メールフィールド新規追加', array('controller' => 'mail_fields', 'action' => 'add', $mailContent['MailContent']['id'])) ?></li>
-			<li><?php $this->BcBaser->link('受信メール一覧', array('controller' => 'mail_messages', 'action' => 'index', $mailContent['MailContent']['id'])) ?></li>
-			<li><?php $this->BcBaser->link('メールプラグイン基本設定', array('controller' => 'mail_configs', 'action' => 'form')) ?></li>
+			<li><?php $this->BcBaser->link(sprintf(__d('baser', '%s 設定'), $this->request->params['Content']['title']), array('controller' => 'mail_contents', 'action' => 'edit', $mailContent['MailContent']['id'])) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'メールフィールド一覧'), array('controller' => 'mail_fields', 'action' => 'index', $mailContent['MailContent']['id'])) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'メールフィールド新規追加'), array('controller' => 'mail_fields', 'action' => 'add', $mailContent['MailContent']['id'])) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', '受信メール一覧'), array('controller' => 'mail_messages', 'action' => 'index', $mailContent['MailContent']['id'])) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'メールプラグイン基本設定'), array('controller' => 'mail_configs', 'action' => 'form')) ?></li>
 		</ul>
 	</td>
 </tr>

@@ -10,8 +10,8 @@
  * @license			http://basercms.net/license/index.html
  */
 
-$title = 'フィードリーダー';
-$description = 'RSSフィードをWebページに貼り付ける事ができるフィードリーダー';
+$title = __d('baser', 'フィードリーダー');
+$description = __d('baser', 'RSSフィードをWebページに貼り付ける事ができるフィードリーダー');
 $author = 'ryuring';
 $url = 'http://ryuring.com';
 $adminLink = array('plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'index');

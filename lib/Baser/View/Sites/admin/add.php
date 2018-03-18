@@ -12,7 +12,13 @@
 
 /**
  * サブサイト新規登録
+ * @var BcAppView $this
  */
+$this->BcBaser->i18nScript([
+	'confirmMessage1' => __d('baser', "サブサイトを削除してもよろしいですか？\nサブサイトに関連しているコンテンツは全てゴミ箱に入ります。"),
+	'confirmMessage2' => __d('baser', 'エイリアスを本当に変更してもいいですか？<br><br>エイリアスを変更する場合、サイト全体のURLが変更となる為、保存に時間がかかりますのでご注意ください。'),
+	'confirmTitle1' => __d('baser', 'エイリアス変更') 
+]);
 $this->BcBaser->js('admin/sites/edit', false);
 ?>
 

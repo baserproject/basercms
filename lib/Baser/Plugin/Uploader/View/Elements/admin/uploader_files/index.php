@@ -9,6 +9,22 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
+/**
+ * index
+ * 
+ * @var \BcAppView $this
+ */
+$this->BcBaser->i18nScript([
+    'uploaderCancel' => __d('baser', 'キャンセル'),
+    'uploaderSave' => __d('baser', '保存'),
+	'uploaderEdit' => __d('baser', '編集'),
+	'uplaoderDelete' => __d('baser', '削除'),
+    'uploaderAlertMessage1' => __d('baser', '更新に失敗しました。入力内容を見直してください。'),
+    'uploaderAlertMessage2' => __d('baser', 'アップロードに失敗しました。ファイルサイズを確認してください。'),
+	'uploaderAlertMessage3' => __d('baser', 'このファイルの編集・削除はできません。'),
+	'uploaderAlertMessage4' => __d('baser', 'サーバーでの処理に失敗しました。'),
+    'uploaderConfirmMessage1' => __d('baser', '本当に削除してもよろしいですか？')
+], ['inline', true]);
 $this->BcBaser->js(array('Uploader.admin/uploader_files/uploader_list'));
 if(!isset($listId)) {
 	$listId = '';
@@ -40,6 +56,6 @@ if(!isset($listId)) {
 <?php endif ?>
 
 <!-- 編集ダイアログ -->
-<div id="EditDialog" title="ファイル情報編集">
+<div id="EditDialog" title="<?php echo __d('baser', 'ファイル情報編集') ?>">
 	<?php $this->BcBaser->element('uploader_files/form', array('listId', $listId, 'popup' => true)) ?>
 </div>

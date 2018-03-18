@@ -63,55 +63,6 @@ class Content extends AppModel {
 	];
 
 /**
- * バリデーション
- *
- * @var array
- */
-	public $validate = [
-		'id' => [
-			['rule' => 'numeric', 'on' => 'update', 'message' => 'IDに不正な値が利用されています。']
-		],
-		'name' => [
-			['rule' => ['notBlank'],
-				'message' => 'URLを入力してください。'],
-			['rule' => ['bcUtileUrlencodeBlank'],
-				'message' => 'URLはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。'],
-			['rule' => ['notBlank'],
-				'message' => 'スラッグを入力してください。'],
-			['rule' => ['maxLength', 2083],
-				'message' => 'タイトルは230文字以内で入力してください。'],
-			['rule' => ['duplicateRelatedSiteContent'],
-				'message' => '連携しているサブサイトでスラッグが重複するコンテンツが存在します。重複するコンテンツのスラッグ名を先に変更してください。']
-		],
-		'title' => [
-			['rule' => ['bcUtileUrlencodeBlank'],
-				'message' => 'タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。'],
-			['rule' => ['notBlank'],
-				'message' => 'タイトルを入力してください。'],
-			['rule' => ['maxLength', 230],
-				'message' => 'タイトルは230文字以内で入力してください。'],
-		],
-		'self_publish_begin' => [
-			['rule' => ['checkDate'],
-				'message' => '公開開始日に不正な文字列が入っています。']
-		],
-		'self_publish_end' => [
-			['rule' => ['checkDate'],
-				'message' => '公開終了日に不正な文字列が入っています。'],
-			['rule' => ['checkDateAfterThan', 'self_publish_begin'],
-				'message' => '公開終了日は、公開開始日より新しい日付で入力してください。'],
-		],
-		'created_date' => [
-			['rule' => ['checkDate'],
-				'message' => '作成日に不正な文字列が入っています。'],
-		],
-		'modified_date' => [
-			['rule' => ['checkDate'],
-				'message' => '更新日に不正な文字列が入っています。']
-		],
-	];
-
-/**
  * 関連データを更新する
  * 
  * @var bool
@@ -163,6 +114,40 @@ class Content extends AppModel {
 	}
 
 /**
+ * Content constructor.
+ *
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
+ */
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'id' => [
+				['rule' => 'numeric', 'on' => 'update', 'message' => __d('baser', 'IDに不正な値が利用されています。')]],
+			'name' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'URLを入力してください。')],
+				['rule' => ['bcUtileUrlencodeBlank'], 'message' => __d('baser', 'URLはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')],
+				['rule' => ['notBlank'], 'message' => __d('baser', 'スラッグを入力してください。')],
+				['rule' => ['maxLength', 2083], 'message' => __d('baser', 'タイトルは230文字以内で入力してください。')],
+				['rule' => ['duplicateRelatedSiteContent'], 'message' => __d('baser', '連携しているサブサイトでスラッグが重複するコンテンツが存在します。重複するコンテンツのスラッグ名を先に変更してください。')]],
+			'title' => [
+				['rule' => ['bcUtileUrlencodeBlank'], 'message' => __d('baser', 'タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')],
+				['rule' => ['notBlank'], 'message' => __d('baser', 'タイトルを入力してください。')],
+				['rule' => ['maxLength', 230], 'message' => __d('baser', 'タイトルは230文字以内で入力してください。')]],
+			'self_publish_begin' => [
+				['rule' => ['checkDate'], 'message' => __d('baser', '公開開始日に不正な文字列が入っています。')]],
+			'self_publish_end' => [
+				['rule' => ['checkDate'], 'message' => __d('baser', '公開終了日に不正な文字列が入っています。')],
+				['rule' => ['checkDateAfterThan', 'self_publish_begin'], 'message' => __d('baser', '公開終了日は、公開開始日より新しい日付で入力してください。')]],
+			'created_date' => [
+				['rule' => ['checkDate'], 'message' => __d('baser', '作成日に不正な文字列が入っています。')]],
+			'modified_date' => [
+				['rule' => ['checkDate'], 'message' => __d('baser', '更新日に不正な文字列が入っています。')]],
+		];
+	}
+
+	/**
  * サイト設定にて、エイリアスを利用してメインサイトと自動連携するオプションを利用時に、
  * 関連するサブサイトで、関連コンテンツを作成する際、同階層に重複名称のコンテンツがないか確認する
  *
@@ -1265,7 +1250,7 @@ class Content extends AppModel {
 		if($newTitle) {
 			$data['Content']['title'] = $newTitle;
 		} else {
-			$data['Content']['title'] .= 'のコピー';
+			$data['Content']['title'] = sprintf(__d('baser', '%s のコピー'), $data['Content']['title']);
 		}
 		$data['Content']['self_publish_begin'] = null;
 		$data['Content']['self_publish_end'] = null;

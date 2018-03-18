@@ -486,7 +486,7 @@ class ContentTest extends BaserTestCase {
 	public function copyDataProvider(){
 		return[
 			[1, 2, 'hoge', 3, 4, 'hoge'],
-			[1, 2, '', 3, 4, 'baserCMS inc. [デモ]のコピー'],
+			[1, 2, '', 3, 4, 'baserCMS inc. [デモ] のコピー'],
 		];
 	}
 

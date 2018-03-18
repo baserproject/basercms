@@ -20,4 +20,4 @@ echo $this->BcForm->hidden($key . '.cache', ['value' => true]);
 
 
 <br />
-<small>タイトルを表示する場合、カテゴリ名を表示します。</small>
+<small><?php echo __d('baser', 'タイトルを表示する場合、カテゴリ名を表示します。')?></small>

@@ -170,7 +170,7 @@ class BcManagerComponent extends Component {
 		foreach ($corePlugins as $corePlugin) {
 			CakePlugin::load($corePlugin);
 			if (!$this->installPlugin($corePlugin, $dbDataPattern)) {
-				$this->log("コアプラグイン" . $corePlugin . "のインストールに失敗しました。");
+				$this->log(sprintf(__d('baser', 'コアプラグイン %s のインストールに失敗しました。'), $corePlugin));
 				$result = false;
 			}
 		}
@@ -716,7 +716,7 @@ class BcManagerComponent extends Component {
 					$table = basename($file, '.csv');
 					if ($table == $targetTable) {
 						if (!$db->loadCsv(['path' => $file, 'encoding' => 'auto'])) {
-							$this->log($file . ' の読み込みに失敗。');
+							$this->log(sprintf(__d('baser', '%s の読み込みに失敗。'), $file));
 							$result = false;
 						} else {
 							$loaded = true;
@@ -727,7 +727,7 @@ class BcManagerComponent extends Component {
 				// 存在しなかった場合は、コアのファイルを読み込む
 				if (!$loaded && $corePath) {
 					if (!$db->loadCsv(['path' => $corePath . DS . $targetTable . '.csv', 'encoding' => 'auto'])) {
-						$this->log($corePath . DS . $targetTable . ' の読み込みに失敗。');
+						$this->log(sprintf(__d('baser', '%s の読み込みに失敗。'), $corePath . DS . $targetTable));
 						$result = false;
 					}
 				}

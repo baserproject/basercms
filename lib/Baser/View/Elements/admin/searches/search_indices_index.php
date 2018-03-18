@@ -32,8 +32,8 @@ $types = BcUtil::unserialize($this->BcBaser->siteConfig['content_types']);
 	<span><?php echo $this->BcForm->label('SearchIndex.priority', __d('baser', '優先度')) ?> 
 		<?php echo $this->BcForm->input('SearchIndex.priority', ['type' => 'select', 'options' => $priorities, 'empty' => __d('baser', '指定なし')]) ?></span>
 </p>
-<div class="button">
-	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_search.png', ['alt' => __d('baser', '検索'), 'class' => 'btn']), "javascript:void(0)", ['id' => 'BtnSearchSubmit']) ?> 
-	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_clear.png', ['alt' => __d('baser', 'クリア'), 'class' => 'btn']), "javascript:void(0)", ['id' => 'BtnSearchClear']) ?> 
+<div class="submit">
+	<?php echo $this->BcForm->button(__d('baser', '検索'), ['class' => 'button', 'id' => 'BtnSearchSubmit']) ?>
+	<?php echo $this->BcForm->button(__d('baser', 'クリア'), ['class' => 'button', 'id' => 'BtnSearchClear']) ?>
 </div>
 <?php $this->BcForm->end() ?>

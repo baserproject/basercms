@@ -327,7 +327,7 @@ class SearchIndicesController extends AppController {
 
 		/* 削除処理 */
 		if ($this->SearchIndex->delete($id)) {
-			$message = '検索インデックスより NO.' . $id . ' を削除しました。';
+			$message = sprintf(__d('baser', '検索インデックスより NO.%s を削除しました。'), $id);
 			$this->SearchIndex->saveDbLog($message);
 			exit(true);
 		}
@@ -348,7 +348,7 @@ class SearchIndicesController extends AppController {
 
 				/* 削除処理 */
 				if ($this->SearchIndex->delete($id)) {
-					$message = '検索インデックスより NO.' . $id . ' を削除しました。';
+					$message = sprintf(__d('baser', '検索インデックスより NO.%s を削除しました。'), $id);
 					$this->SearchIndex->saveDbLog($message);
 				}
 			}

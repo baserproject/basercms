@@ -191,7 +191,7 @@ body > #Page {
 }
 
 #FavoriteMenu h2 img {
-    margin: 0 0 -9px;
+    margin: 0 0 -15px;
 }
 
 ul.favorite-menu-list a{
@@ -231,6 +231,16 @@ ul.favorite-menu-list li.ui-sortable-helper {
 	padding: 50px 0 10px 15px;
 	float: left;
 	margin-right:5px;
+}
+.favolite-menu-tools li img {
+	margin-right:5px;
+	vertical-align: text-bottom;
+}
+.favolite-menu-tools li a {
+	font-weight:bold;
+}
+.favolite-menu-tools li a:hover {
+	color: #9C0!important;
 }
 #FavoriteMenu .no-data {
 	padding:10px 10px;
@@ -439,7 +449,7 @@ ul.favorite-menu-list li.ui-sortable-helper {
 	padding-right:20px;
 	text-align:right;
 	font-size:12px;
-	font-family:Tahoma, Geneva, sans-serif;
+    font-family: "Open Sans",sans-serif, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック";
 	margin-bottom:15px;
 }
 

@@ -28,13 +28,13 @@ if (!$data['BlogComment']['status']) {
 			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['BlogComment']['id'], ['type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['BlogComment']['id']]) ?>
 		<?php endif ?>
 		<?php if (!empty($this->params['pass'][1])): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_unpublish.png', ['alt' => '非公開', 'class' => 'btn']), ['action' => 'ajax_unpublish', $blogContent['BlogContent']['id'], $data['BlogComment']['blog_post_id'], $data['BlogComment']['id']], ['title' => '非公開', 'class' => 'btn-unpublish']) ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_publish.png', ['alt' => '公開', 'class' => 'btn']), ['action' => 'ajax_publish', $blogContent['BlogContent']['id'], $data['BlogComment']['blog_post_id'], $data['BlogComment']['id']], ['title' => '公開', 'class' => 'btn-publish']) ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => '削除', 'class' => 'btn']), ['action' => 'ajax_delete', $blogContent['BlogContent']['id'], $data['BlogComment']['blog_post_id'], $data['BlogComment']['id']], ['title' => '削除', 'class' => 'btn-delete']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_unpublish.png', ['alt' => __d('baser', '非公開'), 'class' => 'btn']), ['action' => 'ajax_unpublish', $blogContent['BlogContent']['id'], $data['BlogComment']['blog_post_id'], $data['BlogComment']['id']], ['title' => __d('baser', '非公開'), 'class' => 'btn-unpublish']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_publish.png', ['alt' => __d('baser', '公開'), 'class' => 'btn']), ['action' => 'ajax_publish', $blogContent['BlogContent']['id'], $data['BlogComment']['blog_post_id'], $data['BlogComment']['id']], ['title' => __d('baser', '公開'), 'class' => 'btn-publish']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => __d('baser', '削除'), 'class' => 'btn']), ['action' => 'ajax_delete', $blogContent['BlogContent']['id'], $data['BlogComment']['blog_post_id'], $data['BlogComment']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete']) ?>
 		<?php else: ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_unpublish.png', ['alt' => '非公開', 'class' => 'btn']), ['action' => 'ajax_unpublish', $blogContent['BlogContent']['id'], 0, $data['BlogComment']['id']], ['title' => '非公開', 'class' => 'btn-unpublish']) ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_publish.png', ['alt' => '公開', 'class' => 'btn']), ['action' => 'ajax_publish', $blogContent['BlogContent']['id'], 0, $data['BlogComment']['id']], ['title' => '公開', 'class' => 'btn-publish']) ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => '削除', 'class' => 'btn']), ['action' => 'ajax_delete', $blogContent['BlogContent']['id'], 0, $data['BlogComment']['id']], ['title' => '削除', 'class' => 'btn-delete']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_unpublish.png', ['alt' => __d('baser', '非公開'), 'class' => 'btn']), ['action' => 'ajax_unpublish', $blogContent['BlogContent']['id'], 0, $data['BlogComment']['id']], ['title' => __d('baser', '非公開'), 'class' => 'btn-unpublish']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_publish.png', ['alt' => __d('baser', '公開'), 'class' => 'btn']), ['action' => 'ajax_publish', $blogContent['BlogContent']['id'], 0, $data['BlogComment']['id']], ['title' => __d('baser', '公開'), 'class' => 'btn-publish']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => __d('baser', '削除'), 'class' => 'btn']), ['action' => 'ajax_delete', $blogContent['BlogContent']['id'], 0, $data['BlogComment']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete']) ?>
 		<?php endif ?>
 	</td>
 	<td><?php echo $data['BlogComment']['no'] ?></td>

@@ -23,8 +23,8 @@
 </script>
 
 <div class="section">
-	<h2>データのバックアップ</h2>
-	<p>データベースのデータをバックアップファイルとしてPCにダウンロードします。</p>
+	<h2><?php echo __d('baser', 'データのバックアップ')?></h2>
+	<p><?php echo __d('baser', 'データベースのデータをバックアップファイルとしてPCにダウンロードします。')?></p>
 	<?php echo $this->BcForm->create('Tool', ['type' => 'get', 'url' => ['action' => 'maintenance', 'backup']]) ?>
 	<p>
 		<?php echo $this->BcForm->input('Tool.backup_encoding', ['type' => 'radio', 'options' => ['UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'UTF-8']) ?>
@@ -35,9 +35,9 @@
 </div>
 	
 <div class="section">
-	<h2>データの復元</h2>
-	<p>バックアップファイルをアップロードし、データベースのデータを復元します。<br />
-		<small>ダウンロードしたバックアップファイルをZIPファイルのままアップロードします。</small></p>
+	<h2><?php echo __d('baser', 'データの復元')?></h2>
+	<p><?php echo __d('baser', 'バックアップファイルをアップロードし、データベースのデータを復元します。')?><br />
+		<small><?php echo __d('baser', 'ダウンロードしたバックアップファイルをZIPファイルのままアップロードします。')?></small></p>
 	<?php echo $this->BcForm->create('Tool', ['url' => ['action' => 'maintenance', 'restore'], 'type' => 'file']) ?>	
 	<p><?php echo $this->BcForm->input('Tool.encoding', ['type' => 'radio', 'options' => ['auto' => __d('baser', '自動判別'), 'UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'auto']) ?>
 		<?php echo $this->BcForm->error('Tool.encoding') ?></p>

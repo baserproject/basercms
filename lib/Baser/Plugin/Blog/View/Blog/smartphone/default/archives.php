@@ -14,7 +14,7 @@
  * [PUBLISH] ブログアーカイブ一覧
  */
 $this->BcBaser->css(['Blog.style'], ['inline' => false]);
-$this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() . 'のアーカイブ一覧です。');
+$this->BcBaser->setDescription(sprintf(__d('baser', '%s｜%sのアーカイブ一覧です。'), $this->Blog->getTitle(), $this->BcBaser->getContentsTitle()));
 ?>
 
 
@@ -37,7 +37,7 @@ $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser-
 			<?php endforeach; ?>
 		</ul>
 	<?php else: ?>
-		<p class="no-data">記事がありません。</p>
+		<p class="no-data"><?php echo __d('baser', '記事がありません。')?></p>
 	<?php endif; ?>
 </section>
 

@@ -18,18 +18,16 @@
 
 <div class="step-1">
 
-	<div class="em-box"><?php echo Configure::read('BcApp.title') ?>のインストールを開始します。<br />
-		よろしければ「インストール開始」ボタンをクリックしてください。</div>
-
+	<div class="em-box"><?php echo sprintf(__d('baser', '%sのインストールを開始します。<br />よろしければ「インストール開始」ボタンをクリックしてください。'), Configure::read('BcApp.title'))?></div>
 	<div class="section">
-		<p>baserCMSではファイルベースのデータベースをサポートしています。SQLite３ を利用すれば、インストールにデータベースサーバーは必要ありません。</p>
+		<p><?php echo __d('baser', 'baserCMSではファイルベースのデータベースをサポートしています。SQLite３ を利用すれば、インストールにデータベースサーバーは必要ありません。')?></p>
 
-		<p><small>※ 膨大なデータの操作、データベースによる複雑な処理が必要な場合は、MySQLなどのデータベースサーバーの利用を推奨します。</small></p>
+		<p><small>※ <?php echo __d('baser', '膨大なデータの操作、データベースによる複雑な処理が必要な場合は、MySQLなどのデータベースサーバーの利用を推奨します。')?></small></p>
 	</div>
 
 	<div class="submit">
 		<form action="<?php echo $this->request->base ?>/installations/step2" method="post">
-			<button class='btn-red button' id='startbtn' type='submit' ><span>インストール開始</span></button>
+			<button class='btn-red button' id='startbtn' type='submit' ><span><?php echo __d('baser', 'インストール開始')?></span></button>
 		</form>
 	</div>
 

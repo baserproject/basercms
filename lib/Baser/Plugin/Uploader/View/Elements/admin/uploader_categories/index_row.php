@@ -21,9 +21,9 @@
 <?php if($this->BcBaser->isAdminUser()): ?>
 		<?php echo $this->BcForm->checkbox('ListTool.batch_targets.'.$data['UploaderCategory']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['UploaderCategory']['id'])) ?>
 <?php endif ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['UploaderCategory']['id']), array('title' => '編集')) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', array('alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $data['UploaderCategory']['id']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['UploaderCategory']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => __d('baser', '編集'), 'class' => 'btn')), array('action' => 'edit', $data['UploaderCategory']['id']), array('title' => __d('baser', '編集'))) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', array('alt' => __d('baser', 'コピー'), 'class' => 'btn')), array('action' => 'ajax_copy', $data['UploaderCategory']['id']), array('title' => __d('baser', 'コピー'), 'class' => 'btn-copy')) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => __d('baser', '削除'), 'class' => 'btn')), array('action' => 'ajax_delete', $data['UploaderCategory']['id']), array('title' => __d('baser', '削除'), 'class' => 'btn-delete')) ?>
 	</td>
 	<td><?php echo $data['UploaderCategory']['id'] ?></td>
 	<td><?php echo $data['UploaderCategory']['name'] ?></td>

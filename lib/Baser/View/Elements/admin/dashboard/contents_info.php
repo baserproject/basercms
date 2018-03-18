@@ -18,5 +18,5 @@ $(function(){
 });
 </script>
 
-<h2>コンテンツ情報</h2>
+<h2><?php echo __d('baser', 'コンテンツ情報') ?></h2>
 <div id="ContentInfo"></div>

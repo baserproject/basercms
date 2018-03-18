@@ -141,27 +141,27 @@ class BcManagerShell extends AppShell {
 		$this->hr();
 		$this->out('* PHP mbstring (' . $checkResult['encoding'] . ')：' . (($checkResult['encodingOk']) ? 'OK' : 'NG'));
 		if (!$checkResult['encodingOk']) {
-			$this->out(__d('baser', '　mbstring.internal_encoding を UTF-8 に設定してください。'));
+			$this->out('　' . __d('baser', 'mbstring.internal_encoding を UTF-8 に設定してください。'));
 		}
 		$this->out('* PHP Version (' . $checkResult['phpVersion'] . ')：' . (($checkResult['phpVersionOk']) ? 'OK' : 'NG'));
 		if (!$checkResult['phpVersionOk']) {
-			$this->out(__d('baser', '　古いバージョンのPHPです。動作保証はありません。'));
+			$this->out('　' . __d('baser', '古いバージョンのPHPです。動作保証はありません。'));
 		}
 		$this->out('* PHP Memory Limit (' . $checkResult['phpMemory'] . 'MB)：' . (($checkResult['phpMemoryOk']) ? 'OK' : 'NG'));
 		if (!$checkResult['phpMemoryOk']) {
-			$this->out('　memoty_limit の設定値を ' . Configure::read('BcRequire.phpMemory') . 'MB 以上に変更してください。');
+			$this->out('　' . sprintf(__d('baser', 'memoty_limit の設定値を %s MB 以上に変更してください。'), Configure::read('BcRequire.phpMemory')));
 		}
 		$this->out('* Writable /app/Config/ (' . (($checkResult['configDirWritable']) ? 'True' : 'False') . ')：' . (($checkResult['configDirWritable']) ? 'OK' : 'NG'));
 		if (!$checkResult['configDirWritable']) {
-			$this->out(__d('baser', '　/app/Config/ に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。'));
+			$this->out('　' . __d('baser', '/app/Config/ に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。'));
 		}
 		$this->out('* Writable /app/webroot/theme/ (' . (($checkResult['themeDirWritable']) ? 'True' : 'False') . ')：' . (($checkResult['themeDirWritable']) ? 'OK' : 'NG'));
 		if (!$checkResult['themeDirWritable']) {
-			$this->out(__d('baser', '　/app/webroot/theme/ に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。'));
+			$this->out('　' . __d('baser', '/app/webroot/theme/ に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。'));
 		}
 		$this->out('* PHP GD (' . (($checkResult['phpGd']) ? 'True' : 'False') . ')');
 		if (!$checkResult['phpGd']) {
-			$this->out(__d('baser', '　PHP の GD は、必須モジュールです。GDが利用可能な状態にしてください。'));
+			$this->out('　' . __d('baser', 'PHP の GD は、必須モジュールです。GDが利用可能な状態にしてください。'));
 		}
 
 		$this->hr();
@@ -170,21 +170,21 @@ class BcManagerShell extends AppShell {
 
 		$this->out('* PHP Safe Mode (' . (!($checkResult['safeModeOff']) ? 'On' : 'Off') . ')');
 		if (!$checkResult['safeModeOff']) {
-			$this->out(__d('baser', '　Safe Mode が On の場合、動作保証はありません。'));
+			$this->out('　' . __d('baser', 'Safe Mode が On の場合、動作保証はありません。'));
 		}
 		$this->out('* PHP GD (' . (($checkResult['phpGd']) ? 'True' : 'False') . ')');
 		if (!$checkResult['phpGd']) {
-			$this->out(__d('baser', '　PHP の GD は、推奨モジュールです。インストールされていない場合、画像処理ができません。'));
+			$this->out('　' . __d('baser', 'PHP の GD は、推奨モジュールです。インストールされていない場合、画像処理ができません。'));
 		}
 		$this->out('* PHP PDO (' . (($checkResult['phpPdo']) ? 'True' : 'False') . ')');
 		if (!$checkResult['phpPdo']) {
-			$this->out(__d('baser', '　PHP の PDO は推奨モジュールです。インストールされていない場合、SQLite は利用できません。'));
+			$this->out('　' . __d('baser', 'PHP の PDO は推奨モジュールです。インストールされていない場合、SQLite は利用できません。'));
 		}
 		$this->out('* Writable /app/db/ (' . (($checkResult['dbDirWritable']) ? 'True' : 'False') . ')');
 		if (!$checkResult['dbDirWritable']) {
-			$this->out(__d('baser', '　/app/db/ に書き込み権限を与える事ができませんでした。'));
-			$this->out(__d('baser', '　SQLite や CSV など、ファイルベースのデータベースを利用するには、'));
-			$this->out(__d('baser', '　手動で書き込み権限を与えてください。'));
+			$this->out('　' . __d('baser', '/app/db/ に書き込み権限を与える事ができませんでした。'));
+			$this->out('　' . __d('baser', 'SQLite や CSV など、ファイルベースのデータベースを利用するには、'));
+			$this->out('　' . __d('baser', '手動で書き込み権限を与えてください。'));
 		}
 		if ($checkResult['apacheRewrite']) {
 			$apacheRewrite = 'True';
@@ -195,7 +195,7 @@ class BcManagerShell extends AppShell {
 		}
 		$this->out('* Apache Rewrite (' . $apacheRewrite . ')');
 		if ($checkResult['apacheRewrite'] > 0) {
-			$this->out(__d('baser', '　Apache の Rewrite モジュール がインストールされていない場合、スマートURLは利用できません。'));
+			$this->out('　' . __d('baser', 'Apache の Rewrite モジュール がインストールされていない場合、スマートURLは利用できません。'));
 		}
 		$this->hr();
 	}

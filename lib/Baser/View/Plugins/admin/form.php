@@ -15,11 +15,17 @@
  * @var BcAppView $this
  */
 ?>
+<?php
+$this->BcBaser->i18nScript([
+	'message1' => __d('baser', 'プラグインのデータを初期化します。よろしいですか？'),
+]);
+?>
+
 <?php echo $this->BcForm->input('ResetDbUrl', ['type' => 'hidden', 'value' => $this->BcBaser->getUrl(['action' => 'reset_db'])]) ?>
 <script>
 $(function(){
 	$("#BtnReset").click(function(){
-        if(confirm('プラグインのデータを初期化します。よろしいですか？')) {
+        if(confirm(bcI18n.message1)) {
             $("#PluginAdminInstallForm").attr('action', $("#ResetDbUrl").val());
             $.bcUtil.showLoader();
         } else {

@@ -56,7 +56,7 @@ td {
 	padding: 0;
 }
 body {
-	font-family: Arial,Geneva,sans-serif,"メイリオ",Verdana,"Hiragino Kaku Gothic Pro","ヒラギノ角ゴ Pro W3","ＭＳ Ｐゴシック";
+	font-family: "Open Sans",sans-serif,"メイリオ","Hiragino Kaku Gothic Pro","ヒラギノ角ゴ Pro W3","ＭＳ Ｐゴシック";
 	text-align:center;
 }
 table {
@@ -162,7 +162,7 @@ form {
 	display:inline;
 }
 input, textarea, select, option {
-	font-family: "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック", Sans-Serif;
+	font-family: "Open Sans",sans-serif, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック";
 }
 input[type=text], textarea, select, input[type=password] {
 	margin:3px 2px;
@@ -185,7 +185,7 @@ input[type=checkbox] {
 input[type=submit],
 input[type=reset],
 input[type=button] {
-	font-family: "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック", Sans-Serif;
+	font-family: "Open Sans",sans-serif, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック";
 }
 input[type=text], textarea, input[type=password] {
 	font-size: 1.2em;

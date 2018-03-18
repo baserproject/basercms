@@ -5,13 +5,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-10-23 10:09+0900\n"
+"PO-Revision-Date: 2018-03-05 11:09+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: Config/theme/bc_sample/Blog/default/archives.php:6
 #: Config/theme/bc_sample/Blog/smartphone/default/archives.php:6
@@ -21,7 +22,7 @@ msgstr ""
 #: Config/theme/nada-icons/Blog/tags.php:19
 #: Config/theme/nada-icons/Blog/default/archives.php:7
 msgid "のアーカイブ一覧です。"
-msgstr ""
+msgstr "Archive List."
 
 #: Config/theme/bc_sample/Blog/default/archives.php:31
 #: Config/theme/bc_sample/Blog/default/index.php:33
@@ -42,12 +43,12 @@ msgstr ""
 #: Config/theme/nada-icons/Blog/default/archives.php:44
 #: Config/theme/nada-icons/Blog/default/index.php:46
 msgid "記事がありません。"
-msgstr ""
+msgstr "There is no Article."
 
 #: Config/theme/bc_sample/Contents/search.php:13
 #: Config/theme/bc_sample/Contents/smartphone/search.php:14
 msgid "で検索した結果"
-msgstr ""
+msgstr "Result searched by"
 
 #: Config/theme/bc_sample/Contents/search.php:13
 #: Config/theme/bc_sample/Contents/smartphone/search.php:14
@@ -62,7 +63,7 @@ msgstr ""
 #: Config/theme/bc_sample/Contents/search.php:30
 #: Config/theme/bc_sample/Contents/smartphone/search.php:31
 msgid "該当する結果が存在しませんでした。"
-msgstr ""
+msgstr "Correspond result doesn’t exist."
 
 #: Config/theme/bc_sample/Elements/blog_comments.php:17
 #: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:17
@@ -93,6 +94,7 @@ msgid "ニックネーム"
 msgstr "Nickname"
 
 #: Config/theme/bc_sample/Elements/blog_comments.php:39
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:39
 #: Config/theme/bccolumn/Elements/blog_comments.php:36
 #: Plugin/Blog/View/Elements/blog_comments.php:48
 #: Plugin/Blog/View/Elements/mobile/blog_comments.php:44
@@ -107,11 +109,18 @@ msgid "Eメールは公開されません"
 msgstr "Email will not be published"
 
 #: Config/theme/bc_sample/Elements/blog_comments.php:50
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:50
 #: Config/theme/bccolumn/Elements/blog_comments.php:47
 #: Plugin/Blog/View/Elements/blog_comments.php:59
 #: Plugin/Blog/View/Elements/mobile/blog_comments.php:50
 msgid "コメント"
 msgstr "Comment"
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:57
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:57
+#: Config/theme/bccolumn/Elements/blog_comments.php:55
+msgid "認証画象"
+msgstr "Authentication Image"
 
 #: Config/theme/bc_sample/Elements/blog_comments.php:60
 #: Config/theme/bc_sample/Elements/mail_form.php:41
@@ -124,6 +133,17 @@ msgstr "Comment"
 msgid "画像の文字を入力してください"
 msgstr "Please enter the letters of the image"
 
+#: Config/theme/bc_sample/Elements/blog_comments.php:64
+#: Config/theme/bc_sample/Elements/mail_form.php:54
+#: Config/theme/bc_sample/Elements/smartphone/mail_form.php:52
+#: Config/theme/bccolumn/Elements/blog_comments.php:62
+#: Plugin/Blog/View/Elements/blog_comments.php:73
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:53
+#: Plugin/Mail/View/Elements/mail_form.php:65
+#: Plugin/Mail/View/Elements/mobile/mail_form.php:37
+msgid "送信する"
+msgstr "Submit"
+
 #: Config/theme/bc_sample/Elements/blog_tag.php:11
 #: Config/theme/bc_sample/Elements/smartphone/blog_tag.php:11
 #: Plugin/Blog/View/Elements/blog_tag.php:21
@@ -134,7 +154,7 @@ msgstr "Tag"
 #: Config/theme/bccolumn/Elements/crumbs.php:6;22
 #: Config/theme/nada-icons/Elements/crumbs.php:6;22
 msgid "ホーム"
-msgstr ""
+msgstr "Home"
 
 #: Config/theme/bc_sample/Elements/google_maps.php:42
 #: Config/theme/bc_sample/Elements/smartphone/google_maps.php:45
@@ -142,11 +162,13 @@ msgid ""
 "Google Maps を読み込めません。管理画面で正しい住所が設定されているか確認して"
 "ください。"
 msgstr ""
+"Couldn’t load Google Maps. Please check correct address is set in Admin "
+"Screen."
 
 #: Config/theme/bc_sample/Elements/list_num.php:33
 #: Config/theme/bc_sample/Elements/smartphone/list_num.php:34
 msgid "表示件数"
-msgstr ""
+msgstr "Displaying Number"
 
 #: Config/theme/bc_sample/Elements/mail_form.php:42
 #: Config/theme/bc_sample/Elements/smartphone/mail_form.php:38
@@ -160,15 +182,6 @@ msgstr "The entered characters are incorrect. Please try input again."
 msgid "書き直す"
 msgstr "Rewrite"
 
-#: Config/theme/bc_sample/Elements/mail_form.php:54
-#: Config/theme/bc_sample/Elements/smartphone/mail_form.php:52
-#: Plugin/Blog/View/Elements/blog_comments.php:73
-#: Plugin/Blog/View/Elements/mobile/blog_comments.php:53
-#: Plugin/Mail/View/Elements/mail_form.php:65
-#: Plugin/Mail/View/Elements/mobile/mail_form.php:37
-msgid "送信する"
-msgstr "Submit"
-
 #: Config/theme/bc_sample/Elements/mail_form.php:57
 #: Config/theme/bc_sample/Elements/smartphone/mail_form.php:54
 #: Plugin/Mail/View/Elements/mail_form.php:68
@@ -179,44 +192,44 @@ msgstr "Submit"
 msgid "入力内容を確認する"
 msgstr "Confirm"
 
-#: Config/theme/bc_sample/Elements/mail_input.php:39
-#: Plugin/Mail/View/Elements/mail_input.php:41
+#: Config/theme/bc_sample/Elements/mail_input.php:35
+#: Plugin/Mail/View/Elements/mail_input.php:46
 msgid "必須"
 msgstr "Required"
 
-#: Config/theme/bc_sample/Elements/mail_input.php:41
-#: Plugin/Mail/View/Elements/mail_input.php:43
+#: Config/theme/bc_sample/Elements/mail_input.php:37
+#: Plugin/Mail/View/Elements/mail_input.php:48
 msgid "任意"
 msgstr "Any"
 
-#: Config/theme/bc_sample/Elements/mail_input.php:80
-#: Config/theme/bc_sample/Elements/smartphone/mail_input.php:71
+#: Config/theme/bc_sample/Elements/mail_input.php:82
+#: Config/theme/bc_sample/Elements/smartphone/mail_input.php:82
 #: Plugin/Mail/Model/MailMessage.php:177;184;256
-#: Plugin/Mail/Test/Case/Model/MailMessageTest.php:120;121;124;130
-#: Plugin/Mail/View/Elements/mail_input.php:82
-#: Plugin/Mail/View/Elements/mobile/mail_input.php:61;74
+#: Plugin/Mail/Test/Case/Model/MailMessageTest.php:134;135;138;144
+#: Plugin/Mail/View/Elements/mail_input.php:93
+#: Plugin/Mail/View/Elements/mobile/mail_input.php:74;87
 msgid "必須項目です。"
 msgstr "It is required."
 
-#: Config/theme/bc_sample/Elements/mail_input.php:82
-#: Plugin/Mail/View/Elements/mail_input.php:84
+#: Config/theme/bc_sample/Elements/mail_input.php:84
+#: Plugin/Mail/View/Elements/mail_input.php:95
 msgid "入力データが一致していません。"
 msgstr "Input data do not match."
 
-#: Config/theme/bc_sample/Elements/mail_input.php:83
-#: Plugin/Mail/View/Elements/mail_input.php:85
+#: Config/theme/bc_sample/Elements/mail_input.php:85
+#: Plugin/Mail/View/Elements/mail_input.php:96
 msgid "入力データが不完全です。"
 msgstr "Input data is incomplete."
 
 #: Config/theme/bc_sample/Elements/paginations/simple.php:20
 #: Config/theme/bc_sample/Elements/smartphone/paginations/simple.php:21
 msgid "前へ"
-msgstr ""
+msgstr "Previous"
 
 #: Config/theme/bc_sample/Elements/paginations/simple.php:22
 #: Config/theme/bc_sample/Elements/smartphone/paginations/simple.php:23
 msgid "次へ"
-msgstr ""
+msgstr "Next"
 
 #: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;118
 #: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;118
@@ -261,129 +274,92 @@ msgstr "Fri"
 msgid "土"
 msgstr "Sat"
 
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:104;110;112
+#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:104;110;112
+msgid "%s月"
+msgstr "Month %s"
+
 #: Config/theme/bc_sample/Elements/smartphone/widgets/blog_monthly_archives.php:51;53
 msgid "年"
-msgstr ""
+msgstr "Year"
 
 #: Config/theme/bc_sample/Elements/smartphone/widgets/search.php:22
 #: Config/theme/bc_sample/Elements/widgets/search.php:41
 msgid "検索"
-msgstr ""
+msgstr "Search"
 
 #: Config/theme/bc_sample/Elements/widgets/search.php:33
 msgid "サイト内検索"
-msgstr ""
+msgstr "In-site Search"
 
 #: Config/theme/bc_sample/Elements/widgets/search.php:36
 msgid "カテゴリ"
-msgstr ""
+msgstr "Category"
 
 #: Config/theme/bc_sample/Elements/widgets/search.php:37
 msgid "指定しない"
-msgstr ""
+msgstr "Don’t Specify"
 
 #: Config/theme/bc_sample/Elements/widgets/search.php:39
 msgid "キーワード"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:11
-msgid "コメントを受付けました"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:14
-msgid "へのコメントを受け付けました。"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:15
-#: Config/theme/bc_sample/Emails/text/mail_default.php:18
-#: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:18
-msgid "受信内容は下記のとおりです。"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:21
-msgid "コメント内容"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:24
-msgid "送信者名"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:25
-msgid "Ｅメール"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:26
-msgid "ＵＲＬ"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:30
-msgid "コメントの公開状態を変更する場合は次のURLよりご確認ください。"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_contributor.php:10
-msgid "コメントが投稿されました"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_contributor.php:13
-msgid "さんが、"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_contributor.php:14
-msgid "にコメントしました。"
-msgstr ""
+msgstr "Keyword"
 
 #: Config/theme/bc_sample/Emails/text/mail_default.php:10
 #: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:10
 msgid "お問合せを受付けました"
-msgstr ""
+msgstr "Accepted Inquiry"
 
 #: Config/theme/bc_sample/Emails/text/mail_default.php:14
 #: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:14
 msgid "この度は、お問い合わせいただきありがとうございます。"
-msgstr ""
+msgstr "Thank you for inquiry"
 
 #: Config/theme/bc_sample/Emails/text/mail_default.php:15
 #: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:15
 msgid "送信内容は下記のようになっております。"
-msgstr ""
+msgstr "Sent content is as follows."
 
 #: Config/theme/bc_sample/Emails/text/mail_default.php:17
 #: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:17
 msgid "へのお問い合わせを受け付けました。"
-msgstr ""
+msgstr "Accepted Inquiry to"
+
+#: Config/theme/bc_sample/Emails/text/mail_default.php:18
+#: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:18
+msgid "受信内容は下記のとおりです。"
+msgstr "Received content is as follows."
 
 #: Config/theme/bc_sample/Emails/text/mail_default.php:22
 #: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:22
 msgid "お問い合わせ内容"
-msgstr ""
+msgstr "Inquiry Content"
 
 #: Config/theme/bc_sample/Emails/text/mail_default.php:31
 #: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:31
 msgid "なお、このメールは自動返信メールとなっております。"
-msgstr ""
+msgstr "This mail is auto-replied mail, for your information."
 
 #: Config/theme/bc_sample/Emails/text/mail_default.php:32
 #: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:32
 msgid "メールを確認させて頂き次第、早急にご連絡させていただきます。"
-msgstr ""
+msgstr "We will contact you as soon as possible after checking the mail."
 
 #: Config/theme/bc_sample/Emails/text/mail_default.php:33
 #: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:33
 msgid "恐れ入りますがしばらくお待ちください。"
-msgstr ""
+msgstr "Sorry for inconvenience but wait for a moment."
 
 #: Config/theme/bc_sample/Emails/text/mail_default.php:35
 #: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:35
 msgid "なお、このメールは自動転送システムです。"
-msgstr ""
+msgstr "This mail is auto-transferred mail, for your information."
 
 #: Config/theme/bc_sample/Emails/text/mail_default.php:36
 #: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:36
 msgid "受け付けた旨のメールもユーザーへ送られています。"
-msgstr ""
+msgstr "Mail that informs it was received is also sent to user."
 
-#: Config/theme/bc_sample/Errors/error400.php:11 View/Errors/error400.php:17
-#: View/Errors/error500.php:17 View/Errors/missing_class.php:22;25
+#: Config/theme/bc_sample/Errors/error400.php:11
 msgid "エラー"
 msgstr "Error"
 
@@ -469,7 +445,7 @@ msgstr "If you can not move, please click here."
 
 #: Config/theme/bc_sample/Mail/default/unpublish.php:11
 msgid "受付中止"
-msgstr ""
+msgstr "Stop Reception"
 
 #: Config/theme/bc_sample/Mail/default/unpublish.php:13
 msgid "現在、受付を中止しています。"
@@ -478,22 +454,22 @@ msgstr "The reception is suspended now."
 #: Config/theme/bc_sample/Maintenance/index.php:9
 #: Config/theme/bc_sample/Maintenance/smartphone/index.php:9
 msgid "メンテナンス中"
-msgstr ""
+msgstr "Under Maintenance"
 
 #: Config/theme/bc_sample/Maintenance/index.php:12
 #: Config/theme/bc_sample/Maintenance/smartphone/index.php:12
 msgid "ご迷惑をおかけしております。"
-msgstr ""
+msgstr "Sorry for your inconvenience."
 
 #: Config/theme/bc_sample/Maintenance/index.php:13
 #: Config/theme/bc_sample/Maintenance/smartphone/index.php:13
 msgid "現在メンテナンス中です。"
-msgstr ""
+msgstr "It’s under maintenance."
 
 #: Config/theme/bc_sample/Maintenance/index.php:14
 #: Config/theme/bc_sample/Maintenance/smartphone/index.php:14
 msgid "もうしばらくお待ちください。"
-msgstr ""
+msgstr "Please wait for a moment."
 
 #: Config/theme/bccolumn/Blog/default/index.php:20
 #: Config/theme/bccolumn/Blog/topics/archives.php:29
@@ -501,37 +477,66 @@ msgstr ""
 #: Config/theme/bccolumn/Blog/works/archives.php:33
 #: Config/theme/bccolumn/Blog/works/index.php:31
 msgid "詳細ページへ"
-msgstr ""
+msgstr "To Detail Page"
 
 #: Config/theme/bccolumn/Blog/default/single.php:39
 #: Config/theme/bccolumn/Blog/topics/single.php:39
 #: Config/theme/bccolumn/Blog/works/single.php:31
 msgid "前の記事"
-msgstr ""
+msgstr "Previous Article"
 
 #: Config/theme/bccolumn/Blog/default/single.php:41
 #: Config/theme/bccolumn/Blog/topics/single.php:41
 #: Config/theme/bccolumn/Blog/works/single.php:33
 msgid "一覧へ"
-msgstr ""
+msgstr "To List"
 
 #: Config/theme/bccolumn/Blog/default/single.php:42
 #: Config/theme/bccolumn/Blog/topics/single.php:42
 #: Config/theme/bccolumn/Blog/works/single.php:35
 msgid "後の記事"
-msgstr ""
+msgstr "Next Article"
 
 #: Config/theme/bccolumn/Elements/toppage.php:12
 msgid "実績"
-msgstr ""
+msgstr "Achievements"
 
 #: Config/theme/nada-icons/Layouts/default.php:64
 msgid "ページトップへ戻る"
-msgstr ""
+msgstr "Back to Page Top"
 
-#: Controller/BcAppController.php:982
-msgid "送信元のメールアドレスが不正です。"
-msgstr "The sender's email address is invalid."
+#: Plugin/Blog/Controller/BlogAppController.php:76
+msgid "【%s】コメントが投稿されました"
+msgstr "【%s】Comment Posted"
+
+#: Plugin/Blog/Controller/BlogController.php:342
+msgid "%s年%s月%s日"
+msgstr "%s/%s/%s"
+
+#: Plugin/Blog/Controller/BlogController.php:344
+msgid "%s年%s月"
+msgstr "%s/%s"
+
+#: Plugin/Blog/Controller/BlogController.php:346
+#: Plugin/Blog/View/Elements/widgets/blog_category_archives.php:53
+msgid "%s年"
+msgstr "Year %s"
+
+#: Plugin/Blog/Controller/BlogController.php:477
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:10
+msgid "送信が完了しました。送信された内容は確認後公開させて頂きます。"
+msgstr ""
+"Submission has been completed. After confirming the contents we will make it "
+"public."
+
+#: Plugin/Blog/Controller/BlogController.php:479
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:11
+msgid "コメントの送信が完了しました。"
+msgstr "Comment submission has been completed."
+
+#: Plugin/Blog/Controller/BlogController.php:484
+msgid "コメントの送信に失敗しました。"
+msgstr "Comment submission has been failed."
 
 #: Plugin/Blog/View/Elements/blog_comments_scripts.php:7
 msgid "お名前を入力してください"
@@ -540,16 +545,6 @@ msgstr "Please enter your name"
 #: Plugin/Blog/View/Elements/blog_comments_scripts.php:8
 msgid "コメントを入力してください"
 msgstr "Please enter comments"
-
-#: Plugin/Blog/View/Elements/blog_comments_scripts.php:10
-msgid "送信が完了しました。送信された内容は確認後公開させて頂きます。"
-msgstr ""
-"Submission has been completed. After confirming the contents we will make it "
-"public."
-
-#: Plugin/Blog/View/Elements/blog_comments_scripts.php:11
-msgid "コメントの送信が完了しました。"
-msgstr "Comment submission has been completed."
 
 #: Plugin/Blog/View/Elements/blog_comments_scripts.php:12
 msgid "コメントの送信に失敗しました。入力内容を見なおしてください。"
@@ -563,25 +558,34 @@ msgstr "Related article"
 msgid "非公開"
 msgstr "Do not publish"
 
-#: Plugin/Mail/Controller/MailController.php:232
+#: Plugin/Feed/Controller/FeedConfigsController.php:237
+#: Plugin/Feed/Controller/FeedDetailsController.php:200
+msgid "無効な処理です。"
+msgstr "Invalid process."
+
+#: Plugin/Mail/Controller/MailController.php:106
+msgid "お問い合わせ"
+msgstr "Inquiry"
+
+#: Plugin/Mail/Controller/MailController.php:236
 msgid "ファイルのアップロードサイズが上限を超えています。"
 msgstr "The upload size of the file exceeds the maximum limit."
 
-#: Plugin/Mail/Controller/MailController.php:272
+#: Plugin/Mail/Controller/MailController.php:276
 msgid "エラー : 入力内容を確認して再度送信してください。"
 msgstr "Error : Confirm your entries and send again."
 
-#: Plugin/Mail/Controller/MailController.php:359
+#: Plugin/Mail/Controller/MailController.php:363
 msgid ""
-"Error : 送信中にエラーが発生しました。しばらくたってから再度送信お願いしま"
+"エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いしま"
 "す。"
 msgstr ""
-"Error : An error occurred during submission. Please wait for a while Please "
-"send."
+"Error : An error occurred during submission. Please wait for a while before "
+"send it again."
 
 #: Plugin/Mail/Model/MailMessage.php:192
-#: Plugin/Mail/Test/Case/Model/MailMessageTest.php:122;123
-#: Plugin/Mail/View/Elements/mobile/mail_input.php:59;71
+#: Plugin/Mail/Test/Case/Model/MailMessageTest.php:136;137
+#: Plugin/Mail/View/Elements/mobile/mail_input.php:72;84
 msgid "形式が無効です。"
 msgstr "Invalid format"
 
@@ -602,19 +606,23 @@ msgstr "Invalid file format."
 msgid "日付の形式が無効です。"
 msgstr "Invalid date format."
 
+#: Plugin/Mail/Model/MailMessage.php:268
+msgid "全て全角カタカナで入力してください。"
+msgstr "Please enter all with full-size katakana."
+
 #: Plugin/Mail/View/Elements/mail_form.php:67
 msgid "クリア"
 msgstr "Clear"
 
-#: Plugin/Mail/View/Elements/mobile/mail_input.php:77
+#: Plugin/Mail/View/Elements/mobile/mail_input.php:90
 msgid "入力データが一致していません"
 msgstr "Input data does not match"
 
-#: Plugin/Mail/View/Elements/mobile/mail_input.php:78
+#: Plugin/Mail/View/Elements/mobile/mail_input.php:91
 msgid "入力データが不完全です"
 msgstr "Input data is incomplete"
 
-#: Plugin/Mail/View/Helper/MailformHelper.php:228
+#: Plugin/Mail/View/Helper/MailformHelper.php:245
 msgid "認証画像"
 msgstr "Authentication image"
 
@@ -639,10 +647,40 @@ msgstr "The reception is suspended."
 msgid "現在、受付を停止しています。"
 msgstr "The reception is suspended now."
 
-#: View/Errors/error500.php:18
-msgid "内部エラーが発生しました。"
-msgstr "An Internal Error Has Occurred."
+#: View/Errors/error400.php:17 View/Errors/error500.php:17;18
+msgid "baser"
+msgstr "baser"
 
-#: View/Errors/missing_class.php:29
-msgid "注意"
-msgstr "Notice"
+#~ msgid "コメントを受付けました"
+#~ msgstr "Accepted Comment"
+
+#~ msgid "へのコメントを受け付けました。"
+#~ msgstr "Accepted Comment t"
+
+#~ msgid "コメント内容"
+#~ msgstr "Comment body"
+
+#~ msgid "送信者名"
+#~ msgstr "Sender"
+
+#~ msgid "Ｅメール"
+#~ msgstr "E-mail"
+
+#~ msgid "ＵＲＬ"
+#~ msgstr "URL"
+
+#~ msgid "コメントの公開状態を変更する場合は次のURLよりご確認ください。"
+#~ msgstr ""
+#~ "Please check following URL if you want to change Comment’s public status."
+
+#~ msgid "にコメントしました。"
+#~ msgstr "Commented to"
+
+#~ msgid "送信元のメールアドレスが不正です。"
+#~ msgstr "The sender's email address is invalid."
+
+#~ msgid "内部エラーが発生しました。"
+#~ msgstr "An Internal Error Has Occurred."
+
+#~ msgid "注意"
+#~ msgstr "Notice"

@@ -31,71 +31,36 @@ class Site extends AppModel {
  * @var bool
  */
 	private $__changedAlias = false;
-	
-/**
- * バリデーション
- *
- * @var array
- */
-	public $validate = [
-		'name' => [
-			[
-				'rule' => ['notBlank'],
-				'message' => '識別名称を入力してください。'
-			],
-			[
-				'rule' => ['maxLength', 50],
-				'message' => '識別名称は50文字以内で入力してください。'
-			],
-            [
-            	'rule' => ['alphaNumericPlus'],
-                'message' => '識別名称は、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。'
-            ],
-            [
-            	'rule' => ['duplicate'],
-            	'message' => '既に利用されている識別名称です。別の名称に変更してください。'
-			]
-		],
-		'display_name' => [
-			[
-				'rule' => ['notBlank'],
-				'message' => 'サブサイト名を入力してください。'
-			],
-			[
-				'rule' => ['maxLength', 50],
-				'message' => 'サブサイト名は50文字以内で入力してください。'
-			]
-		],
-		'alias' => [
-			[
-				'rule' => ['maxLength', 50],
-				'message' => 'エイリアスは50文字以内で入力してください。'
-			],
-            [
-            	'rule' => ['alphaNumericPlus', ['/', '.']],
-                'message' => 'エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・スラッシュ（/）・ドット（.）で入力してください。'
- 			],
-            [
-            	'rule' => ['duplicate'],
-            	'message' => '既に利用されているエイリアス名です。別の名称に変更してください。'
-			],
-			[
-				'rule' => ['aliasSlashChecks'],
-				'message' => 'エイリアスには先頭と末尾にスラッシュ（/）は入力できず、また、連続して入力する事もできません。'
-			]
-		],
-		'title' => [
-			[
-				'rule' => ['notBlank'],
-				'message' => 'サブサイトタイトルを入力してください。'
-			],
-			[
-				'rule' => ['maxLength', 255],
-				'message' => 'サブサイトタイトルは255文字以内で入力してください。'
-			]
-		]
-	];
 
+/**
+ * Site constructor.
+ *
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
+ */
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', '識別名称を入力してください。')],
+				['rule' => ['maxLength', 50], 'message' => __d('baser', '識別名称は50文字以内で入力してください。')],
+				['rule' => ['alphaNumericPlus'], 'message' => __d('baser', '識別名称は、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。')],
+				['rule' => ['duplicate'], 'message' => __d('baser', '既に利用されている識別名称です。別の名称に変更してください。')]],
+			'display_name' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'サブサイト名を入力してください。') ],
+				['rule' => ['maxLength', 50], 'message' => __d('baser', 'サブサイト名は50文字以内で入力してください。') ]],
+			'alias' => [
+				['rule' => ['maxLength', 50], 'message' => __d('baser', 'エイリアスは50文字以内で入力してください。')],
+				['rule' => ['alphaNumericPlus', ['/', '.']], 'message' => __d('baser', 'エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・スラッシュ（/）・ドット（.）で入力してください。')],
+				['rule' => ['duplicate'], 'message' => __d('baser', '既に利用されているエイリアス名です。別の名称に変更してください。')],
+				['rule' => ['aliasSlashChecks'], 'message' => __d('baser', 'エイリアスには先頭と末尾にスラッシュ（/）は入力できず、また、連続して入力する事もできません。')]],
+			'title' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'サブサイトタイトルを入力してください。')],
+				['rule' => ['maxLength', 255], 'message' => __d('baser', 'サブサイトタイトルは255文字以内で入力してください。')]]
+		];
+	}
+	
 /**
  * エイリアスのスラッシュをチェックする
  * 

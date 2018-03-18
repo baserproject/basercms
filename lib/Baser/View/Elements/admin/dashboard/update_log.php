@@ -9,9 +9,16 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * @var BcAppView $this
+ */
+$this->BcBaser->i18nScript([
+   'alertMessage1' => __d('baser', '処理に失敗しました。')     
+]);
 $this->BcBaser->js('admin/dblogs/ajax_index', false);
 ?>
 
 
-<h2>最近の動き</h2>
+<h2><?php echo __d('baser', '最近の動き') ?></h2>
 <div id="DblogList"></div>

@@ -20,11 +20,11 @@
 <div class="update-info clearfix">
 	<dl>
 <?php if($createdDate): ?>
-		<dt>作成日</dt>
+		<dt><?php echo __d('baser', '作成日')?></dt>
 		<dd><?php echo $createdDate ?></dd>
 <?php endif ?>
 <?php if($modifiedDate): ?>
-		<dt>最終更新日</dt>
+		<dt><?php echo __d('baser', '最終更新日')?></dt>
 		<dd><?php echo $modifiedDate ?></dd>
 <?php endif ?>
 	</dl>

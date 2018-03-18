@@ -63,8 +63,8 @@ $(window).load(function() {
 				<?php echo $this->BcForm->error('UserGroup.name') ?>
 				<div id="helptextName" class="helptext">
 					<ul>
-						<li>重複しない識別名称を半角のみで入力してください。</li>
-						<li>admins の場合は変更できません。</li>
+						<li><?php echo __d('baser', '重複しない識別名称を半角のみで入力してください。')?></li>
+						<li><?php echo __d('baser', 'admins の場合は変更できません。')?></li>
 					</ul>
 				</div>
 			</td>
@@ -74,7 +74,7 @@ $(window).load(function() {
 			<td class="col-input">
 				<?php echo $this->BcForm->input('UserGroup.title', ['type' => 'text', 'size' => 20, 'maxlength' => 255]) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpTitle', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
-				<div id="helptextTitle" class="helptext">日本語が入力できますのでわかりやすい名称を入力します。</div>
+				<div id="helptextTitle" class="helptext"><?php echo __d('baser', '日本語が入力できますのでわかりやすい名称を入力します。')?></div>
 				<?php echo $this->BcForm->error('UserGroup.title') ?>
 			</td>
 		</tr>
@@ -83,17 +83,17 @@ $(window).load(function() {
 			<td class="col-input">
 				<?php if ($this->BcForm->value('UserGroup.name') == 'admins' && $this->request->action == 'admin_edit'): ?>
 					<?php if ($this->BcForm->value('UserGroup.use_admin_globalmenu')): ?>
-						管理システムのグローバルメニューを利用する
+                        <?php echo __d('baser', '管理システムのグローバルメニューを利用する')?>
 					<?php else: ?>
-						管理システムのグローバルメニューを利用しない
+                        <?php echo __d('baser', '管理システムのグローバルメニューを利用しない')?>
 					<?php endif ?>
 				<?php else: ?>
 					<span style="white-space: nowrap"><?php echo $this->BcForm->input('UserGroup.use_admin_globalmenu', ['type' => 'checkbox', 'label' => __d('baser', '管理システムのグローバルメニューを利用する')]) ?>　</span>
 					<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 					<div id="helptextName" class="helptext">
 						<ul>
-							<li>管理システムでグローバルメニューを利用するかどうか設定します。</li>
-							<li>管理グループの場合は変更できません。</li>
+							<li><?php echo __d('baser', '管理システムでグローバルメニューを利用するかどうか設定します。')?></li>
+							<li><?php echo __d('baser', '管理グループの場合は変更できません。')?></li>
 						</ul>
 					</div>
 					<?php echo $this->BcForm->error('UserGroup.use_admin_globalmenu') ?>
@@ -103,7 +103,7 @@ $(window).load(function() {
 				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<div id="helptextName" class="helptext">
 					<span>
-						コンテンツ一覧のツリー構造において、ドラッグ＆ドロップでコンテンツの移動を許可するかどうかを設定します。
+                        <?php echo __d('baser', 'コンテンツ一覧のツリー構造において、ドラッグ＆ドロップでコンテンツの移動を許可するかどうかを設定します。')?>
 					</span>
 				</div>
 				<?php echo $this->BcForm->error('UserGroup.use_move_contents') ?>
@@ -117,8 +117,7 @@ $(window).load(function() {
 					<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpAuthPrefix', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 					<?php echo $this->BcForm->error('UserGroup.auth_prefix') ?>
 					<div id="helptextAuthPrefix" class="helptext">
-						認証プレフィックスの設定を指定します。<br />
-						ユーザーグループ名が admins の場合は編集できません。
+                        <?php echo __d('baser', '認証プレフィックスの設定を指定します。<br />ユーザーグループ名が admins の場合は編集できません。')?>
 					</div>
 				</td>
 			</tr>
@@ -133,7 +132,7 @@ $(window).load(function() {
 	<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 	<?php if ($this->request->action == 'admin_edit'): ?>
 		<?php if ($this->BcForm->value('UserGroup.name') != 'admins'): ?>
-			<?php $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $this->BcForm->value('UserGroup.id')], ['class' => 'submit-token button', __d('baser', sprintf("%s を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。", $this->BcForm->value(')UserGroup.name')), false)]); ?>
+			<?php $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $this->BcForm->value('UserGroup.id')], ['class' => 'submit-token button'], sprintf(__d('baser', "%s を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。"), $this->BcForm->value('UserGroup.name'))) ?>
 		<?php endif; ?>
 	<?php endif; ?>
 </div>
@@ -143,9 +142,9 @@ $(window).load(function() {
 <?php if ($this->request->action == 'admin_edit'): ?>
 	<div class="section">
 		<div class="panel-box corner10">
-			<h2>「よく使う項目」の初期データ</h2>
+			<h2><?php echo __d('baser', '「よく使う項目」の初期データ')?></h2>
 			<p>
-				<small>このグループに新しいユーザーを登録した際、次の「よく使う項目」が登録されます。	</small>
+				<small><?php echo __d('baser', 'このグループに新しいユーザーを登録した際、次の「よく使う項目」が登録されます。	')?></small>
 			</p>
 			<?php $favorites = BcUtil::unserialize($this->request->data['UserGroup']['default_favorites']) ?>
 			<?php if ($favorites): ?>

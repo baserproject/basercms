@@ -75,13 +75,6 @@ class MailController extends MailAppController {
 	public $css = array('mail/form');
 
 /**
- * ページタイトル
- *
- * @var string
- */
-	public $pageTitle = 'お問い合わせ';
-
-/**
  * サブメニューエレメント
  *
  * @var array
@@ -103,6 +96,17 @@ class MailController extends MailAppController {
 	public $crumbs = array();
 
 /**
+ * MailController constructor.
+ *
+ * @param \CakeRequest $request
+ * @param \CakeResponse $response
+ */
+	public function __construct($request = null, $response = null) {
+		parent::__construct($request, $response);
+		$this->pageTitle = __('お問い合わせ');
+	}
+
+	/**
  * beforeFilter.
  *
  * @return void
@@ -356,7 +360,7 @@ class MailController extends MailAppController {
 					));
 				} else {
 
-					$this->setMessage(__('Error : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。'), true);
+					$this->setMessage(__('エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。'), true);
 					$this->set('sendError', true);
 				}
 

@@ -17,7 +17,7 @@
 
 
 <tr>
-	<th>ユーティリティメニュー</th>
+	<th><?php echo __d('baser', 'ユーティリティメニュー')?></th>
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link(__d('baser', 'ユーティリティトップ'), ['controller' => 'tools', 'action' => 'index', 'plugin' => null]) ?></li>

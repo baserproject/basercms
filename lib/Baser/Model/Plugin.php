@@ -25,27 +25,24 @@ class Plugin extends AppModel {
 	public $actsAs = ['BcCache'];
 
 /**
- * バリデーション
+ * Plugin constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'name' => [
-			['rule' => ['alphaNumericPlus'],
-				'message' => 'プラグイン名は半角英数字、ハイフン、アンダースコアのみが利用可能です。',
-				'required' => true],
-			['rule' => ['isUnique'],
-				'on' => 'create',
-				'message' => '指定のプラグインは既に使用されています。'],
-			['rule' => ['maxLength', 50],
-				'message' => 'プラグイン名は50文字以内としてください。']
-		],
-		'title' => [
-			['rule' => ['maxLength', 50],
-				'message' => 'プラグインタイトルは50文字以内とします。']
-		]
-	];
-
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				['rule' => ['alphaNumericPlus'], 'message' => __d('baser', 'プラグイン名は半角英数字、ハイフン、アンダースコアのみが利用可能です。'), 'required' => true],
+				['rule' => ['isUnique'], 'on' => 'create', 'message' => __d('baser', '指定のプラグインは既に使用されています。')],
+				['rule' => ['maxLength', 50], 'message' => __d('baser', 'プラグイン名は50文字以内としてください。')]],
+			'title' => [
+				['rule' => ['maxLength', 50], 'message' => __d('baser', 'プラグインタイトルは50文字以内とします。')]]
+		];
+	}
+	
 /**
  * データベースを初期化する
  * 既存のテーブルは上書きしない
@@ -60,7 +57,7 @@ class Plugin extends AppModel {
 	public function initDb($pluginName = '', $options = []) {
 		if(!is_array($options)) {
 			// @deprecated 5.0.0 since 4.0.0 baserCMS３まで第二引数がプラグイン名だったが、第一引数にプラグイン名を設定するように変更。元の第一引数は不要
-			$this->log('メソッド：Plugin::initDb()は、バージョン 4.0.0 より引数が変更になりました。第一引数にプラグイン名を設定してください。元の第一引数は不要です。', LOG_ALERT);
+			$this->log(__d('baser', 'メソッド：Plugin::initDb()は、バージョン 4.0.0 より引数が変更になりました。第一引数にプラグイン名を設定してください。元の第一引数は不要です。'), LOG_ALERT);
 			$pluginName = $options;
 			$options = [];
 		}
@@ -451,7 +448,7 @@ class Plugin extends AppModel {
 		}
 
 		$favorite = [
-			'name' => $pluginInfo['Plugin']['title'] . '管理',
+			'name' => sprintf('%s 管理', $pluginInfo['Plugin']['title']),
 			'url' => $adminLinkUrl,
 			'sort' => $this->Favorite->getMax('sort') + 1,
 			'user_id' => $user['id'],

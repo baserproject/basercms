@@ -115,52 +115,36 @@ class BlogPost extends BlogAppModel {
 	]];
 
 /**
- * validate
+ * BlogPost constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'name' => [
-			['rule' => ['notBlank'],
-				'message' => 'タイトルを入力してください。',
-				'required' => true],
-			['rule' => ['maxLength', 255],
-				'message' => 'タイトルは255文字以内で入力してください。']
-		],
-		'detail' => [
-			['rule' => ['maxByte', 64000],
-			'message' => '本稿欄に保存できるデータ量を超えています。']
-		],
-		'detail_draft' => [
-			['rule' => ['maxByte', 64000],
-			'message' => '草稿欄に保存できるデータ量を超えています。']
-		],
-		'publish_begin' => [
-			['rule' => ['checkDate'],
-				'message' => '公開開始日の形式が不正です。'],
-			['rule' => ['checkDateRenge', 'publish_begin', 'publish_end'],
-				'message' => '公開期間が不正です。']
-			
-		],
-		'publish_end' => [
-			['rule' => ['checkDate'],
-				'message' => '公開終了日の形式が不正です。'],
-			['rule' => ['checkDateRenge', 'publish_begin', 'publish_end'],
-				'message' => '公開期間が不正です。']
-		],
-		'posts_date' => [
-			['rule' => ['notBlank'],
-				'message' => '投稿日を入力してください。',
-				'required' => true],
-			['rule' => ['checkDate'],
-				'message' => '投稿日の形式が不正です。']
-		],
-		'user_id' => [
-			['rule' => ['notBlank'],
-				'message' => '投稿者を選択してください。']
-		]
-	];
-
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'タイトルを入力してください。'), 'required' => true],
+				['rule' => ['maxLength', 255], 'message' => __d('baser', 'タイトルは255文字以内で入力してください。')]],
+			'detail' => [
+				['rule' => ['maxByte', 64000], 'message' => __d('baser', '本稿欄に保存できるデータ量を超えています。')]],
+			'detail_draft' => [
+				['rule' => ['maxByte', 64000], 'message' => __d('baser', '草稿欄に保存できるデータ量を超えています。')]],
+			'publish_begin' => [
+				['rule' => ['checkDate'], 'message' => __d('baser', '公開開始日の形式が不正です。')],
+				['rule' => ['checkDateRenge', 'publish_begin', 'publish_end'], 'message' => __d('baser', '公開期間が不正です。')]],
+			'publish_end' => [
+				['rule' => ['checkDate'], 'message' => __d('baser', '公開終了日の形式が不正です。')],
+				['rule' => ['checkDateRenge', 'publish_begin', 'publish_end'], 'message' => __d('baser', '公開期間が不正です。')]],
+			'posts_date' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', '投稿日を入力してください。'), 'required' => true],
+				['rule' => ['checkDate'], 'message' => __d('baser', '投稿日の形式が不正です。')]],
+			'user_id' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', '投稿者を選択してください。')]]
+		];
+	}
+	
 /**
  * アップロードビヘイビアの設定
  *
@@ -577,7 +561,7 @@ class BlogPost extends BlogAppModel {
 			return [];
 		}
 		$_data = [];
-		$_data['SearchIndex']['type'] = 'ブログ';
+		$_data['SearchIndex']['type'] = __d('baser', 'ブログ');
 		$_data['SearchIndex']['model_id'] = $this->id;
 		$_data['SearchIndex']['content_filter_id'] = '';
 		if (!empty($data['blog_category_id'])) {
@@ -865,7 +849,7 @@ class BlogPost extends BlogAppModel {
 			// NO
 			if ($query['id'] || $query['no']) {
 				if(!$query['contentId'] && !$query['contentUrl'] && !$query['force']) {
-					trigger_error('contentId を指定してください。', E_USER_WARNING);
+					trigger_error(__d('baser', 'contentId を指定してください。'), E_USER_WARNING);
 				}
 				if($query['no'] && !$query['id']) {
 					$query['id'] = $query['no'];
@@ -936,7 +920,7 @@ class BlogPost extends BlogAppModel {
 		} elseif($contentUrl) {
 			$categoryConditions['BlogCategory.blog_content_id'] = $this->BlogContent->Content->field('entity_id', ['Content.url' => $contentUrl]);
 		} elseif(!$force) {
-			trigger_error('contentId を指定してください。', E_USER_WARNING);
+			trigger_error(__d('baser', 'contentId を指定してください。'), E_USER_WARNING);
 		}
 		$categoryId = $this->BlogCategory->field('id', $categoryConditions);
 		if ($categoryId === false) {

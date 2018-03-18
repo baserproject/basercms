@@ -21,11 +21,11 @@ $params = explode('/', $path);
 
 
 <div class="em-box align-left">
-	現在の位置：<?php echo $currentPath ?>
+<?php echo __d('baser', '現在の位置')?>：<?php echo $currentPath ?>
 </div>
 
 <?php if($theme	!= 'core' && !$isWritable): ?>
-<div id="AlertMessage">ファイルに書き込み権限がないので編集できません。</div>
+<div id="AlertMessage"><?php echo __d('baser', 'ファイルに書き込み権限がないので編集できません。')?></div>
 <?php endif ?>
 
 <?php if ($this->request->action == 'admin_add'): ?>
@@ -53,7 +53,7 @@ $params = explode('/', $path);
 					<?php echo $this->BcForm->error('ThemeFile.name') ?>
 					<div id="helptextName" class="helptext">
 						<ul>
-							<li>ファイル名は半角で入力してください。</li>
+							<li><?php echo __d('baser', 'ファイル名は半角で入力してください。')?></li>
 						</ul>
 					</div>
 				<?php else: ?>
@@ -105,10 +105,10 @@ $params = explode('/', $path);
 		<?php if (!$safeModeOn): ?>
 			<?php //if($theme == 'core' && !(($type == 'css' || $type == 'js' || $type == 'img') && $plugin)): ?>
 			<?php if ($theme == 'core'): ?>
-				<?php $this->BcBaser->link(__d('baser', '現在のテーマにコピー'), array_merge(['action' => 'copy_to_theme', $theme, $plugin, $type], explode('/', $path)), ['class' => 'submit-token btn-red button'], '本当に現在のテーマ「' . Inflector::camelize($siteConfig['theme']) . "」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。"); ?>
+				<?php $this->BcBaser->link(__d('baser', '現在のテーマにコピー'), array_merge(['action' => 'copy_to_theme', $theme, $plugin, $type], explode('/', $path)), ['class' => 'submit-token btn-red button'], sprintf(__d('baser', "本当に現在のテーマ「 %s 」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。"), Inflector::camelize($siteConfig['theme']))); ?>
 			<?php endif; ?>
 		<?php else: ?>
-			機能制限のセーフモードで動作していますので、現在のテーマへのコピーはできません。
+            <?php echo __d('baser', '機能制限のセーフモードで動作していますので、現在のテーマへのコピーはできません。')?>
 		<?php endif; ?>
 	<?php endif; ?>
 </div>

@@ -81,6 +81,14 @@
 	margin-left: 10px;
 	padding:0;
 	background: none;
+	font-weight:bold
+}
+#ContentsMenu ul li a:hover{
+	text-decoration: none;
+}
+#ContentsMenu ul li img {
+	margin-right:5px;
+	vertical-align: text-bottom;
 }
 
 /* Help,Search,Limit共通設定
@@ -88,6 +96,13 @@
 #Help .head, #Search .head, #Limit .head{
 	padding: 0;
 	margin: 0;
+}
+#Help .head, #Search .head {
+	color:#690;
+}
+#Help .head img, #Search .head img{
+	vertical-align: text-bottom;
+	margin-right:5px;
 }
 #Help .body, #Search .body, #Limit .body{
 	margin: 10px auto;
@@ -411,6 +426,17 @@ table.sub-menu{
 	padding:0px 7px;
 	cursor: pointer;
 }
+.list-tool img {
+	margin-right:5px;
+	vertical-align: text-bottom!important;
+}
+.list-tool a {
+	color: #9C0!important;
+	font-weight:bold;
+}
+.list-tool a:hover {
+	color: #9C0!important;
+}
 /* form-table
 ----------------------------------------------- */
 
@@ -642,7 +668,7 @@ table.sub-menu{
     width: 240px;
 	font-size: 10px;
 	font-weight: bold;
-	font-family:Verdana, Geneva, sans-serif;
+    font-family: "Open Sans",sans-serif, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック";
 }
 .waiting-box img {
 	margin-bottom: 10px;
@@ -703,6 +729,14 @@ table.sub-menu{
 #ToTop a:hover {
     background-color: #8DC71C;
     color: #FFF;
+}
+
+/* ListTable
+----------------------------------------------- */
+
+#ListTable th img {
+	margin-right:5px;
+	vertical-align: text-bottom;
 }
 
 /* flashMessage
@@ -908,7 +942,7 @@ background: #888;
 	-moz-opacity: 0.85;
 
 	color:#FFF;
-	font-family:Arial, Helvetica, sans-serif;
+    font-family: "Open Sans",sans-serif, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック";
 	text-align: center;
 	display: none;
 }

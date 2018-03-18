@@ -313,7 +313,7 @@ class BlogHelper extends AppHelper {
  */
 	public function getPostContent($post, $moreText = true, $moreLink = false, $cut = false) {
 		if ($moreLink === true) {
-			$moreLink = '≫ 続きを読む';
+			$moreLink = __d('baser', '≫ 続きを読む');
 		}
 		$out = '';
 		if ($this->blogContent['use_content']) {
@@ -1505,7 +1505,7 @@ class BlogHelper extends AppHelper {
 		], $options);
 
 		if(!$contentsName && empty($options['contentsTemplate'])) {
-			trigger_error('$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定してください。', E_USER_WARNING);
+			trigger_error(__d('baser', '$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定してください。'), E_USER_WARNING);
 			return;
 		}
 

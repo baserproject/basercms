@@ -33,12 +33,7 @@ class BcThemeConfigReader implements ConfigReaderInterface {
  * 保存する変数
  * @var array
  */
-	static public $variables = [
-		'title' => 'タイトル',
-		'description' => '説明',
-		'author' => '制作者',
-		'url' => 'URL'
-	];
+	static public $variables = [];
 
 /**
  * コンストラクタ
@@ -46,6 +41,12 @@ class BcThemeConfigReader implements ConfigReaderInterface {
  * @param string $path テーマディレクトリのパス. デフォルトは WWW_ROOT . 'theme' . DS
  */
 	public function __construct($path = null) {
+		self::$variables = [
+			'title' => __d('baser', 'タイトル'),
+			'description' => __d('baser', '説明'),
+			'author' => __d('baser', '制作者'),
+			'url' => 'URL'
+		];
 		if (!$path) {
 			$path = WWW_ROOT . 'theme' . DS;
 		}

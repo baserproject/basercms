@@ -50,78 +50,39 @@ class User extends AppModel {
 	]];
 
 /**
- * validate
+ * User constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'name' => [
-			'notBlank' => [
-				'rule' => ['notBlank'],
-				'message' => 'アカウント名を入力してください。'
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				'notBlank' => ['rule' => ['notBlank'], 'message' => __d('baser', 'アカウント名を入力してください。')],
+				'alphaNumericPlus' => ['rule' => 'alphaNumericPlus', 'message' => __d('baser', 'アカウント名は半角英数字とハイフン、アンダースコアのみで入力してください。')],
+				'duplicate' => ['rule' => ['duplicate', 'name'], 'message' => __d('baser', '既に登録のあるアカウント名です。')],
+				'maxLength' => ['rule' => ['maxLength', 255], 'message' => __d('baser', 'アカウント名は255文字以内で入力してください。')]
 			],
-			'alphaNumericPlus' => [
-				'rule' => 'alphaNumericPlus',
-				'message' => 'アカウント名は半角英数字とハイフン、アンダースコアのみで入力してください。'
-			],
-			'duplicate' => [
-				'rule' => ['duplicate', 'name'],
-				'message' => '既に登録のあるアカウント名です。'
-			],
-			'maxLength' => [
-				'rule' => ['maxLength', 255],
-				'message' => 'アカウント名は255文字以内で入力してください。'
-			]
-		],
-		'real_name_1' => [
-			'notBlank' => [
-				'rule' => ['notBlank'],
-				'message' => '名前[姓]を入力してください。'],
-			'maxLength' => [
-				'rule' => ['maxLength', 50],
-				'message' => '名前[姓]は50文字以内で入力してください。'
-			]
-		],
-		'real_name_2' => [
-			'maxLength' => [
-				'rule' => ['maxLength', 50],
-				'message' => '名前[名]は50文字以内で入力してください。'
-			]
-		],
-		'password' => [
-			'minLength' => [
-				'rule' => ['minLength', 6],
-				'allowEmpty' => false,
-				'message' => 'パスワードは6文字以上で入力してください。'
-			],
-			'maxLength' => [
-				'rule' => ['maxLength', 255],
-				'message' => 'パスワードは255文字以内で入力してください。'
-			],
-			'alphaNumericPlus' => [
-				'rule' => ['alphaNumericPlus',[' \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*']],
-				'message' => 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。'
-			],
-			'confirm' => [
-				'rule' => ['confirm', ['password_1', 'password_2']],
-				'message' => 'パスワードが同じものではありません。'
-			]
-		],
-		'email' => [
+			'real_name_1' => [
+				'notBlank' => ['rule' => ['notBlank'], 'message' => __d('baser', '名前[姓]を入力してください。')],
+				'maxLength' => ['rule' => ['maxLength', 50], 'message' => __d('baser', '名前[姓]は50文字以内で入力してください。')]],
+			'real_name_2' => [
+				'maxLength' => ['rule' => ['maxLength', 50], 'message' => __d('baser', '名前[名]は50文字以内で入力してください。')]],
+			'password' => [
+				'minLength' => ['rule' => ['minLength', 6], 'allowEmpty' => false, 'message' => __d('baser', 'パスワードは6文字以上で入力してください。')],
+				'maxLength' => ['rule' => ['maxLength', 255], 'message' => __d('baser', 'パスワードは255文字以内で入力してください。')],
+				'alphaNumericPlus' => ['rule' => ['alphaNumericPlus',[' \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*']], 'message' => __d('baser', 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。')],
+				'confirm' => ['rule' => ['confirm', ['password_1', 'password_2']], 'message' => __d('baser', 'パスワードが同じものではありません。')]],
 			'email' => [
-				'rule' => ['email'],
-				'message' => 'Eメールの形式が不正です。',
-				'allowEmpty' => true],
-			'maxLength' => [
-				'rule' => ['maxLength', 255],
-				'message' => 'Eメールは255文字以内で入力してください。']
-		],
-		'user_group_id' => [
-			'rule' => ['notBlank'],
-			'message' => 'グループを選択してください。'
-		]
-	];
-
+				'email' => ['rule' => ['email'], 'message' => __d('baser', 'Eメールの形式が不正です。'), 'allowEmpty' => true],
+				'maxLength' => ['rule' => ['maxLength', 255], 'message' => __d('baser', 'Eメールは255文字以内で入力してください。')]],
+			'user_group_id' => [
+				'rule' => ['notBlank'], 'message' => __d('baser', 'グループを選択してください。')]
+		];
+	}
+	
 /**
  * validates
  *

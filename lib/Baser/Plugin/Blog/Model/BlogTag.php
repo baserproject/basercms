@@ -58,24 +58,23 @@ class BlogTag extends BlogAppModel {
  * @var array
  */
 	public $findMethods = ['customParams' =>  true];
-	
-/**
- * validate
- *
- * @var array
- */
-	public $validate = [
-		'name' => [
-			'notBlank' => [
-				'rule' => ['notBlank'],
-				'message' => 'ブログタグを入力してください。'
-			],
-			'duplicate' => [
-				'rule' => ['duplicate', 'name'],
-				'message' => '既に登録のあるタグです。'
-			]
-	]];
 
+/**
+ * BlogTag constructor.
+ *
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
+ */
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				'notBlank' => ['rule' => ['notBlank'], 'message' => __d('baser', 'ブログタグを入力してください。')],
+				'duplicate' => ['rule' => ['duplicate', 'name'], 'message' => __d('baser', '既に登録のあるタグです。')]]
+		];
+	}
+	
 /**
  * カスタムパラメーター検索
  * ※ カスタムファインダーメソッド

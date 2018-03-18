@@ -52,17 +52,17 @@ class UploaderConfigsController extends AppController {
  */
 	public function admin_index() {
 		
-		$this->pageTitle = 'アップローダー設定';
+		$this->pageTitle = __d('baser', 'アップローダー設定');
 		if(!$this->request->data) {
 			$this->request->data['UploaderConfig'] = $this->UploaderConfig->findExpanded();
 		} else {
 			$this->UploaderConfig->set($this->request->data);
 			if($this->UploaderConfig->validates()) {
 				$this->UploaderConfig->saveKeyValue($this->request->data);
-				$this->setMessage('アップローダー設定を保存しました。');
+				$this->setMessage(__d('baser', 'アップローダー設定を保存しました。'));
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
 		}
 		

@@ -15,7 +15,7 @@
  */
 $config['BcApp'] = array(
 	// デフォルトタイトル設定（インストールの際のエラー時等DB接続まえのエラーで利用）
-	'title' => 'コーポレートサイトにちょうどいいCMS - baserCMS - ',
+	'title' => __d('baser', 'コーポレートサイトにちょうどいいCMS - baserCMS - '),
 	// 初期テーマ
 	'defaultTheme' => 'bc_sample',
 	// 管理システムテーマ（キャメルケース）
@@ -24,7 +24,7 @@ $config['BcApp'] = array(
 	'templateExt' => '.php',
 	// システムナビ
 	'adminNavi' => array('core' => array(
-			'name' => 'baserCMSコア',
+			'name' => __d('baser', 'baserCMSコア'),
 			'contents' => array(
 				array('name' => __d('baser', 'コンテンツ管理'), 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'index')),
 				array('name' => __d('baser', 'ウィジェット管理'), 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index')),
@@ -124,7 +124,7 @@ $config['BcAuthPrefix'] = array(
 	)
 	// フロント（例）
 /* 'front' => array(
-	  'name'			=> 'フロント',
+	  'name'			=> __d('baser', 'フロント'),
 	  'loginRedirect'	=> '/',
 	  'userModel'		=> 'User',
 	  'loginAction'	=> '/users/login',
@@ -134,10 +134,10 @@ $config['BcAuthPrefix'] = array(
 	), */
 	// マイページ（例）
 /* 'mypage' => array(
-	  'name'			=> 'マイページ',
+	  'name'			=> __d('baser', 'マイページ'),
 	  'alias'			=> 'mypage',
 	  'loginRedirect'	=> '/mypage/members/index',
-	  'loginTitle'	=> 'マイページログイン',
+	  'loginTitle'	=> __d('baser', 'マイページログイン'),
 	  'userModel'		=> 'Member',
 	  'loginAction'	=> '/mypage/members/login',
 	  'logoutAction'=> '/mypage/members/logout',
@@ -197,7 +197,7 @@ $config['BcAgent'] = array(
 //p($_SERVER['HTTP_ACCEPT_LANGUAGE']);
 $config['BcLang'] = [
 	'english' => [
-		'name' => '英語',
+		'name' => __d('baser', '英語'),
 		'langs' => [
 			'en'
 		]	

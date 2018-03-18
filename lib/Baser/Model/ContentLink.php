@@ -23,15 +23,20 @@ class ContentLink extends AppModel {
  * @var array
  */
 	public $actsAs = ['BcContents'];
-
-	/**
-	 * バリデーション
-	 *
-	 * @var array
-	 */
-	public $validate = [
-		'url' => [
-			['rule' => ['notBlank'],
-			 'message' => 'リンク先URLを入力してください。']
-	]];
+	
+/**
+ * ContentLink constructor.
+ *
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
+ */
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'url' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'リンク先URLを入力してください。')]]
+		];
+	}
+	
 }

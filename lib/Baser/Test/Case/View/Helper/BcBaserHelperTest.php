@@ -1971,7 +1971,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGoogleAnalytics() {
-		$this->expectOutputRegex('/<script>.*ga\(\'create\', \'hoge\', \'auto\'\)\;/s', $this->BcBaser->googleAnalytics());
+		$this->expectOutputRegex('/<script>.*gtag\(\'config\', \'hoge\'\)\;/s', $this->BcBaser->googleAnalytics());
 	}
 
 /**

@@ -11,11 +11,16 @@
  */
 ?>
 
+<?php
+$this->BcBaser->i18nScript([
+	'message1' => __d('baser', 'テーマをアップロードし、そのまま適用します。よろしいですか？')
+]);
+?>
 
 <script>
 $(function(){
 	$("#BtnSave").click(function(){
-		if(confirm('テーマをアップロードし、そのまま適用します。よろしいですか？')) {
+		if(confirm(bcI18n.message1)) {
 			$.bcUtil.showLoader();
 			return true;
 		}
@@ -25,7 +30,7 @@ $(function(){
 </script>
 
 
-<p>ZIP 形式のテーマファイルをお持ちの場合、こちらからアップロードして適用できます。</p>
+<p><?php echo __d('baser', 'ZIP 形式のテーマファイルをお持ちの場合、こちらからアップロードして適用できます。')?></p>
 <?php echo $this->BcForm->create('Theme', ['type' => 'file']) ?>
 
 <div class="submit">

@@ -265,7 +265,7 @@ class InstallationsController extends AppController {
                     if ( !empty($User->validationErrors) ) {
                         $errMsg = implode('<br />', Hash::extract($User->validationErrors, '{s}.{n}'));
                     }
-					$this->setMessage('管理ユーザーを作成できませんでした。<br />' . $errMsg, true);
+					$this->setMessage(__d('baser', '管理ユーザーを作成できませんでした。') . '<br>' . $errMsg, true);
 				}
 			}
 		}
@@ -559,7 +559,7 @@ class InstallationsController extends AppController {
 				case 'BcMysql' :
 					$result = $db->query("SELECT version() as version");
 					if( version_compare($result[0][0]['version'], Configure::read('BcRequire.MySQLVersion')) == -1 ) {
-						$this->setMessage("データベースのバージョンが " . Configure::read('BcRequire.MySQLVersion') . " 以上か確認してください。", true);
+						$this->setMessage(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.MySQLVersion')), true);
 						return false ;
 					}
 					break;
@@ -567,7 +567,7 @@ class InstallationsController extends AppController {
 					$result = $db->query("SELECT version() as version");
 					list(,$version) = explode(" ",$result[0][0]['version']);
 					if( version_compare( trim($version), Configure::read('BcRequire.PostgreSQLVersion')) == -1 ) {
-						$this->setMessage("データベースのバージョンが " . Configure::read('BcRequire.PostgreSQLVersion') . " 以上か確認してください。", true);
+						$this->setMessage(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.PostgreSQLVersion')), true);
 						return false ;
 					}
 					break;
@@ -594,13 +594,13 @@ class InstallationsController extends AppController {
 				}
 				return true;
 			} else {
-				$this->setMessage("データベースへの接続でエラーが発生しました。<br />" . $db->error, true);
+				$this->setMessage(__d('baser', 'データベースへの接続でエラーが発生しました。') . '<br>' . $db->error, true);
 			}
 		} else {
 
 			if (!$this->Session->read('Message.flash.message')) {
 				if ($db->connection) {
-					$this->setMessage("データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br />サーバー上に指定されたデータベースが存在しない可能性が高いです。", true);
+					$this->setMessage(__d('baser', 'データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br>サーバー上に指定されたデータベースが存在しない可能性が高いです。'), true);
 				} else {
 					$this->setMessage(__d('baser', 'データベースへの接続でエラーが発生しました。データベース設定を見直してください。'), true);
 				}

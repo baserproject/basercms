@@ -24,25 +24,25 @@ $this->BcListTable->setColumnNumber(5);
 		<tr>
 			<th style="width:160px" class="list-tool">
                 <div>
-                    <?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn']), ['action' => 'add', $blogContent['BlogContent']['id']]) ?>
+                	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['alt' => __d('baser', '新規追加')]) . __d('baser', '新規追加'), ['action' => 'add', $blogContent['BlogContent']['id']]) ?>　
                 </div>
 <?php if ($this->BcBaser->isAdminUser()): ?>
                 <div>
-                    <?php echo $this->BcForm->checkbox('ListTool.checkall', ['title' => '一括選択']) ?>
-                    <?php echo $this->BcForm->input('ListTool.batch', ['type' => 'select', 'options' => ['del' => '削除'], 'empty' => '一括処理']) ?>
-                    <?php echo $this->BcForm->button('適用', ['id' => 'BtnApplyBatch', 'disabled' => 'disabled']) ?>
+                    <?php echo $this->BcForm->checkbox('ListTool.checkall', ['title' => __d('baser', '一括選択')]) ?>
+                    <?php echo $this->BcForm->input('ListTool.batch', ['type' => 'select', 'options' => ['del' => __d('baser', '削除')], 'empty' => __d('baser', '一括処理')]) ?>
+                    <?php echo $this->BcForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled']) ?>
                 </div>
 <?php endif ?>
             </th>
             <th>NO</th>
-            <th>ブログカテゴリ名
+            <th><?php echo __d('baser', 'ブログカテゴリ名')?>
                 <?php if ($this->BcBaser->siteConfig['category_permission']): ?>
-                    <br />管理グループ
+                    <br /><?php echo __d('baser', '管理グループ')?>
                 <?php endif ?>
             </th>
-            <th>ブログカテゴリタイトル</th>
+            <th><?php echo __d('baser', 'ブログカテゴリタイトル')?></th>
             <?php echo $this->BcListTable->dispatchShowHead() ?>
-            <th>登録日<br />更新日</th>
+            <th><?php echo __d('baser', '登録日')?><br /><?php echo __d('baser', '更新日')?></th>
         </tr>
     </thead>
     <tbody>
@@ -71,7 +71,7 @@ $this->BcListTable->setColumnNumber(5);
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
-			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p></td>
+			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。')?></p></td>
 		</tr>
 	<?php endif; ?>
     </tbody>

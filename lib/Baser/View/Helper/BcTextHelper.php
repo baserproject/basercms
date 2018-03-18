@@ -63,7 +63,7 @@ class BcTextHelper extends TextHelper {
  * @return array 「有」「無」リスト
  */
 	public function booleanExistsList() {
-		return [0 => "無", 1 => "有"];
+		return [0 => __d('baser', '無'), 1 => __d('baser', '有')];
 	}
 
 /**
@@ -72,7 +72,7 @@ class BcTextHelper extends TextHelper {
  * @return array 可/不可リスト
  */
 	public function booleanAllowList() {
-		return [0 => "不可", 1 => "可"];
+		return [0 => __d('baser', '不可'), 1 => __d('baser', '可')];
 	}
 
 /**
@@ -82,7 +82,10 @@ class BcTextHelper extends TextHelper {
  * @return array [〜する/〜しない]形式のリスト
  */
 	public function booleanDoList($doText = null) {
-		return [0 => $doText . "しない", 1 => $doText . "する"];
+		return [
+			0 => sprintf(__d('baser', '%s しない'), $doText), 
+			1 => sprintf(__d('baser', '%s する'), $doText)
+		];
 	}
 
 /**
@@ -102,22 +105,23 @@ class BcTextHelper extends TextHelper {
  *
  * @return array 都道府県リスト
  */
-	public function prefList($empty = '都道府県') {
-		$pref = [];
+	public function prefList($empty = '') {
 		if ($empty) {
 			$pref = ["" => $empty];
-		} elseif ($pref !== false) {
+		} elseif ($empty === false) {
 			$pref = ["" => ""];
+		} else {
+			$pref = ["" => __d('baser', '都道府県')];
 		}
 
 		$pref = $pref + [
-			1 => "北海道", 2 => "青森県", 3 => "岩手県", 4 => "宮城県", 5 => "秋田県", 6 => "山形県", 7 => "福島県",
-			8 => "茨城県", 9 => "栃木県", 10 => "群馬県", 11 => "埼玉県", 12 => "千葉県", 13 => "東京都", 14 => "神奈川県",
-			15 => "新潟県", 16 => "富山県", 17 => "石川県", 18 => "福井県", 19 => "山梨県", 20 => "長野県", 21 => "岐阜県",
-			22 => "静岡県", 23 => "愛知県", 24 => "三重県", 25 => "滋賀県", 26 => "京都府", 27 => "大阪府", 28 => "兵庫県",
-			29 => "奈良県", 30 => "和歌山県", 31 => "鳥取県", 32 => "島根県", 33 => "岡山県", 34 => "広島県", 35 => "山口県",
-			36 => "徳島県", 37 => "香川県", 38 => "愛媛県", 39 => "高知県", 40 => "福岡県", 41 => "佐賀県", 42 => "長崎県",
-			43 => "熊本県", 44 => "大分県", 45 => "宮崎県", 46 => "鹿児島県", 47 => "沖縄県"
+			1 => __d('baser', '北海道'), 2 => __d('baser', '青森県'), 3 => __d('baser', '岩手県'), 4 => __d('baser', '宮城県'), 5 => __d('baser', '秋田県'), 6 => __d('baser', '山形県'), 7 => __d('baser', '福島県'),
+			8 => __d('baser', '茨城県'), 9 => __d('baser', '栃木県'), 10 => __d('baser', '群馬県'), 11 => __d('baser', '埼玉県'), 12 => __d('baser', '千葉県'), 13 => __d('baser', '東京都'), 14 => __d('baser', '神奈川県'),
+			15 => __d('baser', '新潟県'), 16 => __d('baser', '富山県'), 17 => __d('baser', '石川県'), 18 => __d('baser', '福井県'), 19 => __d('baser', '山梨県'), 20 => __d('baser', '長野県'), 21 => __d('baser', '岐阜県'),
+			22 => __d('baser', '静岡県'), 23 => __d('baser', '愛知県'), 24 => __d('baser', '三重県'), 25 => __d('baser', '滋賀県'), 26 => __d('baser', '京都府'), 27 => __d('baser', '大阪府'), 28 => __d('baser', '兵庫県'),
+			29 => __d('baser', '奈良県'), 30 => __d('baser', '和歌山県'), 31 => __d('baser', '鳥取県'), 32 => __d('baser', '島根県'), 33 => __d('baser', '岡山県'), 34 => __d('baser', '広島県'), 35 => __d('baser', '山口県'),
+			36 => __d('baser', '徳島県'), 37 => __d('baser', '香川県'), 38 => __d('baser', '愛媛県'), 39 => __d('baser', '高知県'), 40 => __d('baser', '福岡県'), 41 => __d('baser', '佐賀県'), 42 => __d('baser', '長崎県'),
+			43 => __d('baser', '熊本県'), 44 => __d('baser', '大分県'), 45 => __d('baser', '宮崎県'), 46 => __d('baser', '鹿児島県'), 47 => __d('baser', '沖縄県')
 		];
 		return $pref;
 	}
@@ -381,7 +385,7 @@ class BcTextHelper extends TextHelper {
  * @return array 可/不可リスト
  */
 	public function booleanStatusList() {
-		return [0 => "無効", 1 => "有効"];
+		return [0 => __d('baser', '無効'), 1 => __d('baser', '有効')];
 	}
 
 /**

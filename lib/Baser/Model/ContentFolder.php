@@ -39,17 +39,6 @@ class ContentFolder extends AppModel implements CakeEventListener {
 	public $isMovableTemplate = true;
 
 /**
- * バリデーション
- *
- * @var array
- */
-	public $validate = [
-		'id' => [
-			['rule' => 'numeric', 'on' => 'update', 'message' => 'IDに不正な値が利用されています。']
-		]
-	];
-
-/**
  * Implemented Events
  *
  * @return array
@@ -59,6 +48,21 @@ class ContentFolder extends AppModel implements CakeEventListener {
 			'Controller.Contents.beforeMove' => ['callable' => 'beforeMove'],
 			'Controller.Contents.afterMove' => ['callable' => 'afterMove']
 		]);
+	}
+
+/**
+ * ContentFolder constructor.
+ *
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
+ */
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'id' => [
+				['rule' => 'numeric', 'on' => 'update', 'message' => __d('baser', 'IDに不正な値が利用されています。')]
+		]];
 	}
 
 /**
@@ -206,7 +210,7 @@ class ContentFolder extends AppModel implements CakeEventListener {
 			if($searchKey !== false) {
 				unset($folderTemplates[$searchKey]);
 			}
-			$folderTemplates = ['' => '親フォルダの設定に従う（' . $parentTemplate . '）'] + $folderTemplates;
+			$folderTemplates = ['' => sprintf(__d('baser', '親フォルダの設定に従う（%s）'), $parentTemplate)] + $folderTemplates;
 		}
 		return $folderTemplates;
 	}

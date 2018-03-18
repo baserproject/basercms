@@ -373,7 +373,7 @@ class BcFreezeHelper extends BcFormHelper {
 				if (!is_array($value)) {
 					$delValue = $this->value($fieldName . '_delete');
 					if ($delValue) {
-						return parent::hidden($fieldName, ['value' => $value]) . parent::hidden($fieldName . '_delete', ['value' => true]) . $this->BcUpload->fileLink($fieldName, $options) . '<br />削除する';
+						return parent::hidden($fieldName, ['value' => $value]) . parent::hidden($fieldName . '_delete', ['value' => true]) . $this->BcUpload->fileLink($fieldName, $options) . '<br>' . __d('baser', '削除する');
 					} else {
 						return parent::hidden($fieldName, ['value' => $value]) . $this->BcUpload->fileLink($fieldName, $options);
 					}

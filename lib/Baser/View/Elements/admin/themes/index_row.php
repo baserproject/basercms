@@ -36,8 +36,8 @@
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', ['alt' => __d('baser', 'テーマコピー'), 'class' => 'btn']), ['action' => 'ajax_copy', $data['name']], ['title' => __d('baser', 'テーマコピー'), 'class' => 'btn-copy']) ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => __d('baser', 'テーマ削除'), 'class' => 'btn']), ['action' => 'ajax_delete', $data['name']], ['title' => __d('baser', 'テーマ削除'), 'class' => 'btn-delete']) ?>
 </p>
-<p class="theme-version">バージョン：<?php echo $data['version'] ?></p>
-<p class="theme-author">制作者：
+<p class="theme-version"><?php echo __d('baser', 'バージョン')?>：<?php echo $data['version'] ?></p>
+<p class="theme-author"><?php echo __d('baser', '制作者')?>：
 	<?php if (!empty($data['url']) && !empty($data['author'])): ?>
 		<?php $this->BcBaser->link($data['author'], $data['url'], ['target' => '_blank']) ?>
 	<?php else: ?>
@@ -54,8 +54,8 @@
 			<?php endif ?>
 		</div>
 		<div class="theme-name"><strong><?php echo $data['title'] ?></strong>&nbsp;(&nbsp;<?php echo $data['name'] ?>&nbsp;)</div>
-		<div class="theme-version">バージョン：<?php echo $data['version'] ?></div>
-		<div class="theme-author">制作者：
+		<div class="theme-version"><?php echo __d('baser', 'バージョン')?>：<?php echo $data['version'] ?></div>
+		<div class="theme-author"><?php echo __d('baser', '制作者')?>：
 			<?php if (!empty($data['url']) && !empty($data['author'])): ?>
 				<?php $this->BcBaser->link($data['author'], $data['url'], ['target' => '_blank']) ?>
 			<?php else: ?>

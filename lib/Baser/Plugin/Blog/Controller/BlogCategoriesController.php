@@ -71,7 +71,7 @@ class BlogCategoriesController extends BlogAppController {
 		$this->request->params['Content'] = $content['Content'];
 		$this->request->params['Site'] = $content['Site'];
 		$this->blogContent = $this->BlogContent->read(null, $this->params['pass'][0]);
-		$this->crumbs[] = ['name' => $this->request->params['Content']['title'] . '管理', 'url' => ['controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0]]];
+		$this->crumbs[] = ['name' => sprintf(__d('baser', '%s 管理'), $this->request->params['Content']['title']), 'url' => ['controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0]]];
 
 		if ($this->params['prefix'] == 'admin') {
 			$this->subMenuElements = ['blog_posts'];
@@ -115,7 +115,7 @@ class BlogCategoriesController extends BlogAppController {
 		/* 表示設定 */
 		$this->set('owners', $this->BlogCategory->getControlSource('owner_id'));
 		$this->set('dbDatas', $dbDatas);
-		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] カテゴリ一覧';
+		$this->pageTitle = sprintf(__d('baser', '[%s] カテゴリ一覧'), $this->request->params['Content']['title']);
 		$this->help = 'blog_categories_index';
 	}
 
@@ -127,7 +127,7 @@ class BlogCategoriesController extends BlogAppController {
  */
 	public function admin_add($blogContentId) {
 		if (!$blogContentId) {
-			$this->setMessage('無効なIDです。', true);
+			$this->setMessage(__d('baser', '無効なIDです。'), true);
 			$this->redirect(['controller' => 'blog_contents', 'action' => 'index']);
 		}
 
@@ -146,10 +146,10 @@ class BlogCategoriesController extends BlogAppController {
 
 			// データを保存
 			if ($this->BlogCategory->save()) {
-				$this->setMessage('カテゴリー「' . $this->request->data['BlogCategory']['name'] . '」を追加しました。', false, true);
+				$this->setMessage(sprintf(__d('baser', 'カテゴリー「%s」を追加しました。'), $this->request->data['BlogCategory']['name']), false, true);
 				$this->redirect(['action' => 'index', $blogContentId]);
 			} else {
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
 		}
 
@@ -161,12 +161,12 @@ class BlogCategoriesController extends BlogAppController {
 		}
 		$parents = $this->BlogCategory->getControlSource('parent_id', $catOptions);
 		if ($parents) {
-			$parents = ['' => '指定しない'] + $parents;
+			$parents = ['' => __d('baser', '指定しない')] + $parents;
 		} else {
-			$parents = ['' => '指定しない'];
+			$parents = ['' => __d('baser', '指定しない')];
 		}
 		$this->set('parents', $parents);
-		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] 新規カテゴリ登録';
+		$this->pageTitle = sprintf(__d('baser', '[%s] 新規カテゴリ登録'), $this->request->params['Content']['title']);
 		$this->help = 'blog_categories_form';
 		$this->render('form');
 	}
@@ -181,7 +181,7 @@ class BlogCategoriesController extends BlogAppController {
 	public function admin_edit($blogContentId, $id) {
 		/* 除外処理 */
 		if (!$id && empty($this->request->data)) {
-			$this->setMessage('無効なIDです。', true);
+			$this->setMessage(__d('baser', '無効なIDです。'), true);
 			$this->redirect(['action' => 'index']);
 		}
 
@@ -191,10 +191,10 @@ class BlogCategoriesController extends BlogAppController {
 
 			/* 更新処理 */
 			if ($this->BlogCategory->save($this->request->data)) {
-				$this->setMessage('カテゴリー「' . $this->request->data['BlogCategory']['name'] . '」を更新しました。', false, true);
+				$this->setMessage(sprintf(__d('baser', 'カテゴリー「%s」を更新しました。'), $this->request->data['BlogCategory']['name']), false, true);
 				$this->redirect(['action' => 'index', $blogContentId]);
 			} else {
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
 		}
 
@@ -209,12 +209,12 @@ class BlogCategoriesController extends BlogAppController {
 		}
 		$parents = $this->BlogCategory->getControlSource('parent_id', $catOptions);
 		if ($parents) {
-			$parents = ['' => '指定しない'] + $parents;
+			$parents = ['' => __d('baser', '指定しない')] + $parents;
 		} else {
-			$parents = ['' => '指定しない'];
+			$parents = ['' => __d('baser', '指定しない')];
 		}
 		$this->set('parents', $parents);
-		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] カテゴリ編集';
+		$this->pageTitle = sprintf(__d('baser', '[%s] カテゴリ編集'), $this->request->params['Content']['title']);
 		$this->help = 'blog_categories_form';
 		$this->render('form');
 	}
@@ -246,7 +246,7 @@ class BlogCategoriesController extends BlogAppController {
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		if ($this->_del($id)) {
@@ -268,7 +268,7 @@ class BlogCategoriesController extends BlogAppController {
 		$data = $this->BlogCategory->read(null, $id);
 		/* 削除処理 */
 		if ($this->BlogCategory->removeFromTreeRecursive($id)) {
-			$this->BlogCategory->saveDbLog('カテゴリー「' . $data['BlogCategory']['name'] . '」を削除しました。');
+			$this->BlogCategory->saveDbLog(sprintf(__d('baser', 'カテゴリー「%s」を削除しました。'), $data['BlogCategory']['name']));
 			return true;
 		} else {
 			return false;
@@ -286,7 +286,7 @@ class BlogCategoriesController extends BlogAppController {
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
-			$this->setMessage('無効なIDです。', true);
+			$this->setMessage(__d('baser', '無効なIDです。'), true);
 			$this->redirect(['action' => 'index']);
 		}
 
@@ -295,9 +295,9 @@ class BlogCategoriesController extends BlogAppController {
 
 		/* 削除処理 */
 		if ($this->BlogCategory->removeFromTreeRecursive($id)) {
-			$this->setMessage($post['BlogCategory']['name'] . ' を削除しました。', false, true);
+			$this->setMessage(sprintf(__d('baser', '%s を削除しました。'), $post['BlogCategory']['name']), false, true);
 		} else {
-			$this->setMessage('データベース処理中にエラーが発生しました。', true);
+			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
 		}
 
 		$this->redirect(['action' => 'index', $blogContentId]);
@@ -311,7 +311,7 @@ class BlogCategoriesController extends BlogAppController {
 	public function admin_ajax_add($blogContentId) {
 
 		if (empty($this->request->data)) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 			return;
 		}
 

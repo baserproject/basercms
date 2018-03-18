@@ -26,83 +26,53 @@ class MailField extends MailAppModel {
 	public $actsAs = array('BcCache');
 
 /**
- * validate
+ * MailField constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'id' => [
-			['rule' => 'numeric', 'on' => 'update', 'message' => 'IDに不正な値が利用されています。']
-		],
-		'name' => [
-			['rule' => ['notBlank'],
-				'message' => "項目名を入力してください。"],
-			['rule' => ['maxLength', 255],
-				'message' => '項目名は255文字以内で入力してください。']
-		],
-		'field_name' => [
-			['rule' => ['halfTextMailField'],
-				'message' => 'フィールド名は半角英数字のみで入力してください。',
-				'allowEmpty' => false],
-			['rule' => 'duplicateMailField',
-				'message' => '入力されたフィールド名は既に登録されています。'],
-			['rule' => ['maxLength', 255],
-				'message' => 'フィールド名は255文字以内で入力してください。']
-		],
-		'type' => [
-			['rule' => ['notBlank'],
-				'message' => "タイプを入力してください。"]
-		],
-		'head' => [
-			['rule' => ['maxLength', 255],
-				'message' => '項目見出しは255文字以内で入力してください。']
-		],
-		'attention' => [
-			['rule' => ['maxLength', 255],
-				'message' => '注意書きは255文字以内で入力してください。']
-		],
-		'before_attachment' => [
-			['rule' => ['maxLength', 255],
-				'message' => '前見出しは255文字以内で入力してください。']
-		],
-		'after_attachment' => [
-			['rule' => ['maxLength', 255],
-				'message' => '後見出しは255文字以内で入力してください。']
-		],
-		'source' => [
-			['rule' => ['sourceMailField'],
-				'message' => '選択リストを入力してください。']
-		],
-		'options' => [
-			['rule' => ['maxLength', 255],
-				'message' => 'オプションは255文字以内で入力してください。']
-		],
-		'class' => [
-			['rule' => ['maxLength', 255],
-				'message' => 'クラス名は255文字以内で入力してください。']
-		],
-		'separator' => [
-			['rule' => ['maxLength', 20],
-				'message' => '区切り文字は20文字以内で入力してください。']
-		],
-		'default_value' => [
-			['rule' => ['maxLength', 255],
-				'message' => '初期値は255文字以内で入力してください。']
-		],
-		'description' => [
-			['rule' => ['maxLength', 255],
-				'message' => '説明文は255文字以内で入力してください。']
-		],
-		'group_field' => [
-			['rule' => ['maxLength', 255],
-				'message' => 'グループフィールドは255文字以内で入力してください。']
-		],
-		'group_valid' => [
-			['rule' => ['maxLength', 255],
-				'message' => 'グループ入力チェックは255文字以内で入力してください。']
-		]
-	];
-
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'id' => [
+				['rule' => 'numeric', 'on' => 'update', 'message' => __d('baser', 'IDに不正な値が利用されています。')]],
+			'name' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', '項目名を入力してください。')],
+				['rule' => ['maxLength', 255], 'message' => __d('baser', '項目名は255文字以内で入力してください。')]],
+			'field_name' => [
+				['rule' => ['halfTextMailField'], 'message' => __d('baser', 'フィールド名は半角英数字のみで入力してください。'), 'allowEmpty' => false],
+				['rule' => 'duplicateMailField', 'message' => __d('baser', '入力されたフィールド名は既に登録されています。')],
+				['rule' => ['maxLength', 255], 'message' => __d('baser', 'フィールド名は255文字以内で入力してください。')]],
+			'type' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'タイプを入力してください。')]],
+			'head' => [
+				['rule' => ['maxLength', 255], 'message' => __d('baser', '項目見出しは255文字以内で入力してください。')]],
+			'attention' => [
+				['rule' => ['maxLength', 255], 'message' => __d('baser', '注意書きは255文字以内で入力してください。')]],
+			'before_attachment' => [
+				['rule' => ['maxLength', 255], 'message' => __d('baser', '前見出しは255文字以内で入力してください。')]],
+			'after_attachment' => [
+				['rule' => ['maxLength', 255], 'message' => __d('baser', '後見出しは255文字以内で入力してください。')]],
+			'source' => [
+				['rule' => ['sourceMailField'], 'message' => __d('baser', '選択リストを入力してください。')]],
+			'options' => [
+				['rule' => ['maxLength', 255], 'message' => __d('baser', 'オプションは255文字以内で入力してください。')]],
+			'class' => [
+				['rule' => ['maxLength', 255], 'message' => __d('baser', 'クラス名は255文字以内で入力してください。')]],
+			'separator' => [
+				['rule' => ['maxLength', 20], 'message' => __d('baser', '区切り文字は20文字以内で入力してください。')]],
+			'default_value' => [
+				['rule' => ['maxLength', 255], 'message' => __d('baser', '初期値は255文字以内で入力してください。')]],
+			'description' => [
+				['rule' => ['maxLength', 255], 'message' => __d('baser', '説明文は255文字以内で入力してください。')]],
+			'group_field' => [
+				['rule' => ['maxLength', 255], 'message' => __d('baser', 'グループフィールドは255文字以内で入力してください。')]],
+			'group_valid' => [
+				['rule' => ['maxLength', 255], 'message' => __d('baser', 'グループ入力チェックは255文字以内で入力してください。')]]
+		];
+	}
+	
 /**
  * コントロールソースを取得する
  *
@@ -111,35 +81,35 @@ class MailField extends MailAppModel {
  */
 	public function getControlSource($field = null) {
 		$source['type'] = [
-			'text'				=> 'テキスト',
-			'textarea'			=> 'テキストエリア',
-			'radio'				=> 'ラジオボタン',
-			'select'			=> 'セレクトボックス',
-			'email'				=> 'Eメール',
-			'multi_check'		=> 'マルチチェックボックス',
-			'file'				=> 'ファイル',
-			'autozip'			=> '自動補完郵便番号',
-			'pref'				=> '都道府県リスト',
-			'date_time_wareki'	=> '和暦日付',
-			'date_time_calender'=> 'カレンダー',
-			'hidden'			=> '隠しフィールド'
+			'text'				=> __d('baser', 'テキスト'),
+			'textarea'			=> __d('baser', 'テキストエリア'),
+			'radio'				=> __d('baser', 'ラジオボタン'),
+			'select'			=> __d('baser', 'セレクトボックス'),
+			'email'				=> __d('baser', 'Eメール'),
+			'multi_check'		=> __d('baser', 'マルチチェックボックス'),
+			'file'				=> __d('baser', 'ファイル'),
+			'autozip'			=> __d('baser', '自動補完郵便番号'),
+			'pref'				=> __d('baser', '都道府県リスト'),
+			'date_time_wareki'	=> __d('baser', '和暦日付'),
+			'date_time_calender'=> __d('baser', 'カレンダー'),
+			'hidden'			=> __d('baser', '隠しフィールド')
 		];
 		$source['valid'] = [
-			'VALID_NOT_EMPTY'	=> '入力必須',
-			'VALID_EMAIL'		=> 'Eメールチェック（入力必須）',
-			'/^(|[0-9]+)$/'		=> '数値チェック',
-			'/^([0-9]+)$/'		=> '数値チェック（入力必須）'
+			'VALID_NOT_EMPTY'	=> __d('baser', '入力必須'),
+			'VALID_EMAIL'		=> __d('baser', 'Eメールチェック（入力必須）'),
+			'/^(|[0-9]+)$/'		=> __d('baser', '数値チェック'),
+			'/^([0-9]+)$/'		=> __d('baser', '数値チェック（入力必須）')
 		];
 		$source['valid_ex'] = [
-			'VALID_EMAIL_CONFIRM'	=> 'Eメール比較チェック',
-			'VALID_GROUP_COMPLATE'	=> 'グループチェック',
-			'VALID_NOT_UNCHECKED'	=> 'チェックボックス未入力チェック',
-			'VALID_DATETIME'		=> '日付チェック',
-			'VALID_MAX_FILE_SIZE'	=> 'ファイルアップロードサイズ制限',
-			'VALID_FILE_EXT'		=> 'ファイル拡張子チェック',
-			'VALID_ZENKAKU_KATAKANA' 		=> '全角カタカナチェック'
+			'VALID_EMAIL_CONFIRM'	=> __d('baser', 'Eメール比較チェック'),
+			'VALID_GROUP_COMPLATE'	=> __d('baser', 'グループチェック'),
+			'VALID_NOT_UNCHECKED'	=> __d('baser', 'チェックボックス未入力チェック'),
+			'VALID_DATETIME'		=> __d('baser', '日付チェック'),
+			'VALID_MAX_FILE_SIZE'	=> __d('baser', 'ファイルアップロードサイズ制限'),
+			'VALID_FILE_EXT'		=> __d('baser', 'ファイル拡張子チェック'),
+			'VALID_ZENKAKU_KATAKANA' 		=> __d('baser', '全角カタカナチェック')
 		];
-		$source['auto_convert'] = ['CONVERT_HANKAKU' => '半角変換'];
+		$source['auto_convert'] = ['CONVERT_HANKAKU' => __d('baser', '半角変換')];
 		if ($field) {
 			return $source[$field];
 		} else {

@@ -34,7 +34,7 @@ $this->BcBaser->js('Blog.admin/blog_tags/form', false);
 			</tr>
 		<?php endif; ?>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('BlogTag.name', 'ブログタグ名') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('BlogTag.name', __d('baser', 'ブログタグ名')) ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('BlogTag.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
 				<?php echo $this->BcForm->error('BlogTag.name') ?>
@@ -48,10 +48,10 @@ $this->BcBaser->js('Blog.admin/blog_tags/form', false);
 
 <!-- button -->
 <div class="submit">
-	<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
+	<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 	<?php if ($this->action == 'admin_edit'): ?>
 		<?php
-		$this->BcBaser->link('削除', ['action' => 'delete', $this->BcForm->value('BlogTag.id')], ['class' => 'submit-token button'], sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogTag.name')), false);
+		$this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $this->BcForm->value('BlogTag.id')], ['class' => 'submit-token button'], sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->value('BlogTag.name')), false);
 		?>
 	<?php endif ?>
 </div>

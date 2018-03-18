@@ -24,11 +24,11 @@ $this->BcListTable->setColumnNumber(5);
 		<tr>
 			<th class="list-tool">
 	<div>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['width' => 69, 'height' => 18, 'alt' => __d('baser', '新規追加'), 'class' => 'btn']), ['action' => 'add', $this->request->params['pass'][0]]) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['alt' => __d('baser', '新規追加')]) . __d('baser', '新規追加'), ['action' => 'add', $this->request->params['pass'][0]]) ?>　
 		<?php if (!$sortmode): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_sort.png', ['width' => 65, 'height' => 14, 'alt' => __d('baser', '並び替え'), 'class' => 'btn']), ['sortmode' => 1, $this->request->params['pass'][0]]) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_sort.png', ['alt' => __d('baser', '並び替え')]) . __d('baser', '並び替え'), ['sortmode' => 1, $this->request->params['pass'][0]]) ?>
 		<?php else: ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_normal.png', ['width' => 65, 'height' => 14, 'alt' => __d('baser', 'ノーマル'), 'class' => 'btn']), ['sortmode' => 0, $this->request->params['pass'][0]]) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_sort.png', ['alt' => __d('baser', 'ノーマル')]) . __d('baser', 'ノーマル'), ['sortmode' => 0, $this->request->params['pass'][0]]) ?>
 		<?php endif ?>
 	</div>
 	<?php if ($this->BcBaser->isAdminUser()): ?>
@@ -40,10 +40,10 @@ $this->BcListTable->setColumnNumber(5);
 	<?php endif ?>
 </th>
 <th>NO</th>
-<th>ルール名<br />URL設定</th>
-<th>アクセス</th>
+<th><?php echo __d('baser', 'ルール名')?><br><?php echo __d('baser', 'URL設定')?></th>
+<th><?php echo __d('baser', 'アクセス')?></th>
 <?php echo $this->BcListTable->dispatchShowHead() ?>
-<th>登録日<br />更新日</th>
+<th><?php echo __d('baser', '登録日')?><br><?php echo __d('baser', '更新日')?></th>
 </tr>
 </thead>
 <tbody>
@@ -53,7 +53,7 @@ $this->BcListTable->setColumnNumber(5);
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
-			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p></td>
+			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。')?></p></td>
 		</tr>
 	<?php endif; ?>
 </tbody>

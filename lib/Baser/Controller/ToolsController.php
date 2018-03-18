@@ -59,14 +59,18 @@ class ToolsController extends AppController {
 	public $subMenuElements = ['site_configs', 'tools'];
 
 /**
- * ぱんくずナビ
+ * ToolsController constructor.
  *
- * @var array
+ * @param \CakeRequest $request
+ * @param \CakeRequest $response
  */
-	public $crumbs = [
-		['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'index']],
-		['name' => 'ユーティリティ', 'url' => ['controller' => 'tools', 'action' => 'index']]
-	];
+	public function __construct($request = null, $response = null) {
+		parent::__construct($request, $response);
+		$this->crumbs = [
+			['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'index']],
+			['name' => __d('baser', 'ユーティリティ'), 'url' => ['controller' => 'tools', 'action' => 'index']]
+		];
+	}
 
 /**
  * ユーティリティ 

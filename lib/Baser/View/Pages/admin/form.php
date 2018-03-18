@@ -51,7 +51,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 			<td class="col-input">
 				<?php echo $this->BcForm->input('Page.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
 				<div class="helptext">
-					テーマフォルダ内の、Pages/templates テンプレートを配置する事で、ここでテンプレートを選択できます。
+	                <?php echo __d('baser', 'テーマフォルダ内の、Pages/templates テンプレートを配置する事で、ここでテンプレートを選択できます。')?>
 				</div>
 				<?php echo $this->BcForm->error('Page.page_template') ?>
 			</td>
@@ -67,8 +67,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 				]); ?>
 				<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<div class="helptext">
-					固定ページの本文には、ソースコードに切り替えてPHPやJavascriptのコードを埋め込む事ができますが、ユーザーが間違って削除してしまわないようにこちらに入力しておく事もできます。<br />
-					入力したコードは、自動的にコンテンツ本体の上部に差し込みます。
+	                <?php echo __d('baser', '固定ページの本文には、ソースコードに切り替えてPHPやJavascriptのコードを埋め込む事ができますが、ユーザーが間違って削除してしまわないようにこちらに入力しておく事もできます。<br />入力したコードは、自動的にコンテンツ本体の上部に差し込みます。')?>
 				</div>
 				<?php echo $this->BcForm->error('Page.code') ?>
 			</td>

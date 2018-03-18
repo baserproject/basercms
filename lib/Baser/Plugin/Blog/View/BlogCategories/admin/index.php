@@ -25,6 +25,11 @@ $this->BcBaser->js([
 ]);
 ?>
 
+<?php
+$this->BcBaser->i18nScript([
+	'message1' => __d('baser', "このデータを本当に削除してもいいですか？\nこのカテゴリに関連する記事は、どのカテゴリにも関連しない状態として残ります。")
+]);
+?>
 
 <script type="text/javascript">
 $(function(){
@@ -33,7 +38,7 @@ $(function(){
 		 */
 		$.baserAjaxDataList.config.methods.del = {
 			button: '.btn-delete',
-			confirm: 'このデータを本当に削除してもいいですか？\nこのカテゴリに関連する記事は、どのカテゴリにも関連しない状態として残ります。',
+			confirm: bcI18n.message1,
 			result: function(row, result) {
 				var config = $.baserAjaxDataList.config;
 			if(result) {

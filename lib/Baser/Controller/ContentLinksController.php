@@ -47,7 +47,7 @@ class ContentLinksController extends AppController {
 		}
 		$data = $this->ContentLink->save($this->request->data);
 		if ($data) {
-			$this->setMessage("リンク「{$this->request->data['Content']['title']}」を追加しました。", false, true, false);
+			$this->setMessage(sprintf(__d('baser', 'リンク「%s」を追加しました。'), $this->request->data['Content']['title']), false, true, false);
 			echo json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
@@ -71,7 +71,7 @@ class ContentLinksController extends AppController {
 		} else {
 			if ($this->ContentLink->save($this->request->data)) {
 				clearViewCache();
-				$this->setMessage("リンク「{$this->request->data['Content']['title']}」を更新しました。", false, true);
+				$this->setMessage(sprintf(__d('baser', 'リンク「%s」を更新しました。'), $this->request->data['Content']['title']), false, true);
 				$this->redirect([
 					'plugin' => '',
 					'controller' => 'content_links',

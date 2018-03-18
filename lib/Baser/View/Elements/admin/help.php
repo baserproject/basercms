@@ -22,7 +22,7 @@ if (empty($help)) {
 <div id="Help" class="clearfix">
 
 	<h2 class="head">
-		<?php $this->BcBaser->img('admin/head_help.png', ['width' => 69, 'height' => 16, 'alt' => __d('baser', 'ヘルプ')]) ?>
+		<?php echo $this->BcBaser->getImg('admin/head_help.png', ['alt' => __d('baser', 'ヘルプ')]) . __d('baser', 'ヘルプ') ?>
 	</h2>
 
 	<div class="body">

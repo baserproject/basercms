@@ -18,39 +18,50 @@ App::uses('Simplezip', 'Vendor');
  * @property BcManagerComponent $BcManager
  */
 class ThemesController extends AppController {
-	/**
-	 * コントローラー名
-	 * @var string
-	 * @access	public
-	 */
+	
+/**
+ * コントローラー名
+ * @var string
+ * @access	public
+ */
 	public $name = 'Themes';
-	/**
-	 * モデル
-	 * @var array
-	 */
+	
+/**
+ * モデル
+ * @var array
+ */
 	public $uses = ['Theme', 'Page', 'SiteConfig'];
-	/**
-	 * コンポーネント
-	 *
-	 * @var array
-	 */
+	
+/**
+ * コンポーネント
+ *
+ * @var array
+ */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager'];
-	/**
-	 * ヘルパー
-	 *
-	 * @var array
-	 */
+	
+/**
+ * ヘルパー
+ *
+ * @var array
+ */
 	public $helpers = ['BcForm'];
-	/**
-	 * パンくずナビ
-	 * @var array
-	 */
-	public $crumbs = [
-		['name' => 'テーマ管理', 'url' => ['controller' => 'themes', 'action' => 'index']]
-	];
-	/**
-	 * テーマをアップロードして適用する
-	 */
+
+/**
+ * ThemesController constructor.
+ *
+ * @param \CakeRequest $request
+ * @param \CakeRequest $response
+ */
+	public function __construct($request = null, $response = null) {
+		parent::__construct($request, $response);
+		$this->crumbs = [
+			['name' => __d('baser', 'テーマ管理'), 'url' => ['controller' => 'themes', 'action' => 'index']]
+		];
+	}
+	
+/**
+ * テーマをアップロードして適用する
+ */
 	public function admin_add() {
 		$this->pageTitle = __d('baser', 'テーマアップロード');
 		$this->subMenuElements = ['themes'];
@@ -80,11 +91,11 @@ class ThemesController extends AppController {
 		}
 	}
 
-	/**
-	 * テーマ一覧
-	 *
-	 * @return void
-	 */
+/**
+ * テーマ一覧
+ *
+ * @return void
+ */
 	public function admin_index() {
 		$this->pageTitle = __d('baser', 'テーマ一覧');
 		$path = WWW_ROOT . 'theme';
@@ -109,9 +120,9 @@ class ThemesController extends AppController {
 		$this->help = 'themes_index';
 	}
 
-	/**
-	 * baserマーケットのテーマデータを取得する
-	 */
+/**
+ * baserマーケットのテーマデータを取得する
+ */
 	public function admin_ajax_get_market_themes() {
 
 		$baserThemes = [];
@@ -141,11 +152,12 @@ class ThemesController extends AppController {
 		$this->set('baserThemes', $baserThemes);
 
 	}
-	/**
-	 * 初期データセットを読み込む
-	 *
-	 * @return void
-	 */
+	
+/**
+ * 初期データセットを読み込む
+ *
+ * @return void
+ */
 	public function admin_load_default_data_pattern() {
 		if (empty($this->request->data['Theme']['default_data_pattern'])) {
 			$this->setMessage(__d('baser', '不正な操作です。'), true);
@@ -161,11 +173,12 @@ class ThemesController extends AppController {
 		}
 		$this->redirect('index');
 	}
-	/**
-	 * コアの初期データを読み込む
-	 *
-	 * @return void
-	 */
+	
+/**
+ * コアの初期データを読み込む
+ *
+ * @return void
+ */
 	public function admin_reset_data() {
 		$this->_checkSubmitToken();
 		$result = $this->_load_default_data_pattern('core.default', $this->siteConfigs['theme']);
@@ -178,13 +191,13 @@ class ThemesController extends AppController {
 
 	}
 
-	/**
-	 * 初期データを読み込む
-	 *
-	 * @param string $dbDataPattern 初期データのパターン
-	 * @param string $currentTheme テーマ名
-	 * @return bool
-	 */
+/**
+ * 初期データを読み込む
+ *
+ * @param string $dbDataPattern 初期データのパターン
+ * @param string $currentTheme テーマ名
+ * @return bool
+ */
 	protected function _load_default_data_pattern($dbDataPattern, $currentTheme = '') {
 		list($theme, $pattern) = explode('.', $dbDataPattern);
 		if(!$this->BcManager->checkDefaultDataPattern($pattern, $theme)) {
@@ -199,7 +212,7 @@ class ThemesController extends AppController {
 		/* コアデータ */
 		if (!$this->BcManager->loadDefaultDataPattern('default', null, $pattern, $theme, 'core', $excludes)) {
 			$result = false;
-			$this->log($dbDataPattern . " の初期データのロードに失敗しました。");
+			$this->log(sprintf(__d('baser', '%s の初期データのロードに失敗しました。'), $dbDataPattern));
 		}
 
 		/* プラグインデータ */
@@ -297,12 +310,12 @@ class ThemesController extends AppController {
 
 	}
 
-	/**
-	 * テーマ情報を読み込む
-	 *
-	 * @param string $themename テーマ名
-	 * @return array
-	 */
+/**
+ * テーマ情報を読み込む
+ *
+ * @param string $themename テーマ名
+ * @return array
+ */
 	protected function _loadThemeInfo($themename) {
 		$path = WWW_ROOT . 'theme';
 		$title = $description = $author = $url = $screenshot = '';
@@ -323,12 +336,13 @@ class ThemesController extends AppController {
 		$theme['version'] = $this->getThemeVersion($theme['name']);
 		return $theme;
 	}
-	/**
-	 * テーマ名編集
-	 *
-	 * @param string $theme
-	 * @return void
-	 */
+	
+/**
+ * テーマ名編集
+ *
+ * @param string $theme
+ * @return void
+ */
 	public function admin_edit($theme) {
 		if (!$theme) {
 			$this->notFound();
@@ -375,12 +389,13 @@ class ThemesController extends AppController {
 		$this->help = 'themes_form';
 		$this->render('form');
 	}
-	/**
-	 * テーマをコピーする
-	 *
-	 * @param string $theme
-	 * @return void
-	 */
+	
+/**
+ * テーマをコピーする
+ *
+ * @param string $theme
+ * @return void
+ */
 	public function admin_ajax_copy($theme) {
 		$this->_checkSubmitToken();
 		if (!$theme) {
@@ -393,12 +408,13 @@ class ThemesController extends AppController {
 			$this->ajaxError(500, __d('baser', 'テーマフォルダのアクセス権限を見直してください。'));
 		}
 	}
-	/**
-	 * テーマをコピーする
-	 *
-	 * @param string $theme
-	 * @return boolean
-	 */
+	
+/**
+ * テーマをコピーする
+ *
+ * @param string $theme
+ * @return boolean
+ */
 	protected function _copy($theme) {
 		$basePath = WWW_ROOT . 'theme' . DS;
 		$newTheme = $theme . '_copy';
@@ -416,12 +432,13 @@ class ThemesController extends AppController {
 			return false;
 		}
 	}
-	/**
-	 * テーマを削除する　(ajax)
-	 *
-	 * @param string $theme
-	 * @return void
-	 */
+	
+/**
+ * テーマを削除する　(ajax)
+ *
+ * @param string $theme
+ * @return void
+ */
 	public function admin_ajax_delete($theme) {
 		$this->_checkSubmitToken();
 		if (!$theme) {
@@ -435,12 +452,13 @@ class ThemesController extends AppController {
 		}
 		exit();
 	}
-	/**
-	 * データを削除する
-	 *
-	 * @param string $theme テーマ名
-	 * @return bool
-	 */
+	
+/**
+ * データを削除する
+ *
+ * @param string $theme テーマ名
+ * @return bool
+ */
 	protected function _del($theme) {
 		$path = WWW_ROOT . 'theme' . DS . $theme;
 		$folder = new Folder();
@@ -455,12 +473,13 @@ class ThemesController extends AppController {
 			return false;
 		}
 	}
-	/**
-	 * テーマを削除する
-	 *
-	 * @param string $theme
-	 * @return void
-	 */
+	
+/**
+ * テーマを削除する
+ *
+ * @param string $theme
+ * @return void
+ */
 	public function admin_del($theme) {
 		$this->_checkSubmitToken();
 		if (!$theme) {
@@ -478,12 +497,13 @@ class ThemesController extends AppController {
 		$this->setMessage('テーマ「' . $theme . '」を削除しました。');
 		$this->redirect(['action' => 'index']);
 	}
-	/**
-	 * テーマを適用する
-	 *
-	 * @param string $theme
-	 * @return void
-	 */
+	
+/**
+ * テーマを適用する
+ *
+ * @param string $theme
+ * @return void
+ */
 	public function admin_apply($theme) {
 		$this->_checkSubmitToken();
 		if (!$theme) {
@@ -561,9 +581,10 @@ class ThemesController extends AppController {
 		return true;
 
 	}
-	/**
-	 * 初期データセットをダウンロードする
-	 */
+	
+/**
+ * 初期データセットをダウンロードする
+ */
 	public function admin_download_default_data_pattern() {
 		/* コアのCSVを生成 */
 		$tmpDir = TMP . 'csv' . DS;
@@ -601,13 +622,14 @@ class ThemesController extends AppController {
 		emptyFolder($tmpDir);
 		exit();
 	}
-	/**
-	 * CSVファイルを書きだす
-	 *
-	 * @param string $configKeyName
-	 * @param string $path
-	 * @return boolean
-	 */
+	
+/**
+ * CSVファイルを書きだす
+ *
+ * @param string $configKeyName
+ * @param string $path
+ * @return boolean
+ */
 	function _writeCsv($plugin, $path, $exclude = []) {
 
 		$pluginTables = [];
@@ -652,9 +674,10 @@ class ThemesController extends AppController {
 		}
 		return $result;
 	}
-	/**
-	 * ダウンロード
-	 */
+	
+/**
+ * ダウンロード
+ */
 	public function admin_download() {
 		$this->autoRender = false;
 		$tmpDir = TMP . 'theme' . DS;

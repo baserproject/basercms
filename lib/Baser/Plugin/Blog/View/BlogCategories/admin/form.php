@@ -12,6 +12,7 @@
 
 /**
  * [ADMIN] ブログカテゴリ フォーム
+ * @var \BcAppView $this
  */
 $this->BcBaser->js('Blog.admin/blog_categories/form', false);
 $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
@@ -21,7 +22,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 
 <?php if ($this->action == 'admin_edit'): ?>
 	<div class="em-box align-left">
-		<p><strong>このカテゴリのURL：<?php $this->BcBaser->link($fullUrl, $fullUrl, ['target' => '_blank']) ?></strong></p>
+		<p><strong><?php echo sprintf(__d('baser', 'このカテゴリのURL：%s'), $this->BcBaser->getLink($fullUrl, $fullUrl, ['target' => '_blank']))?></strong></p>
 	</div>
 <?php endif ?>
 
@@ -50,21 +51,21 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 			</tr>
 		<?php endif; ?>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.name', 'ブログカテゴリ名') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.name', __d('baser', 'ブログカテゴリ名')) ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('BlogCategory.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
-				<?php echo $this->BcHtml->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<?php echo $this->BcForm->error('BlogCategory.name') ?>
 				<div id="helptextName" class="helptext">
 					<ul>
-						<li>URLに利用されます</li>
-						<li>半角のみで入力してください</li>
+						<li><?php echo __d('baser', 'URLに利用されます')?></li>
+						<li><?php echo __d('baser', '半角のみで入力してください')?></li>
 					</ul>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.title', 'ブログカテゴリタイトル') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.title', __d('baser', 'ブログカテゴリタイトル')) ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('BlogCategory.title', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
 				<?php echo $this->BcForm->error('BlogCategory.title') ?>
@@ -72,7 +73,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 		</tr>
 		<?php if ($parents): ?>
 			<tr>
-				<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.parent_id', '親カテゴリ') ?></th>
+				<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.parent_id', __d('baser', '親カテゴリ')) ?></th>
 				<td class="col-input">
 					<?php
 					echo $this->BcForm->input('BlogCategory.parent_id', [
@@ -88,16 +89,16 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 		<?php endif ?>
 		<?php if ($this->BcBaser->siteConfig['category_permission']): ?>
 			<tr>
-				<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.owner_id', '管理グループ') ?></th>
+				<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.owner_id', __d('baser', '管理グループ')) ?></th>
 				<td class="col-input">
 					<?php if ($this->BcAdmin->isSystemAdmin()): ?>
 						<?php
 						echo $this->BcForm->input('BlogCategory.owner_id', [
 							'type' => 'select',
 							'options' => $owners,
-							'empty' => '指定しない'])
+							'empty' => __d('baser', '指定しない')])
 						?>
-						<?php echo $this->BcHtml->image('admin/icn_help.png', ['id' => 'helpOwnerId', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
+						<?php echo $this->BcHtml->image('admin/icn_help.png', ['id' => 'helpOwnerId', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 						<?php echo $this->BcForm->error('BlogCategory.owner_id') ?>
 					<?php else: ?>
 						<?php echo $this->BcText->arrayValue($this->request->data['BlogCategory']['owner_id'], $owners) ?>
@@ -105,7 +106,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 					<?php endif ?>
 					<div id="helptextOwnerId" class="helptext">
 						<ul>
-							<li>管理グループを指定した場合、このカテゴリに属した記事は、管理グループのユーザーしか編集する事ができなくなります。</li>
+							<li><?php echo __d('baser', '管理グループを指定した場合、このカテゴリに属した記事は、管理グループのユーザーしか編集する事ができなくなります。')?></li>
 						</ul>
 					</div>
 				</td>
@@ -119,10 +120,10 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 
 <!-- button -->
 <div class="submit">
-	<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
+	<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 	<?php if ($this->action == 'admin_edit'): ?>
 		<?php
-		$this->BcBaser->link('削除', ['action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id')], ['class' => 'submit-token button'], sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogCategory.name')), false);
+		$this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id')], ['class' => 'submit-token button'], sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->value('BlogCategory.name')), false);
 		?>
 	<?php endif ?>
 </div>

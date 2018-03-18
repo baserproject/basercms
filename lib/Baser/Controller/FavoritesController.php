@@ -106,7 +106,7 @@ class FavoritesController extends AppController {
 		if ($this->request->data) {
 			$name = $this->Favorite->field('name', ['Favorite.id' => $this->request->data['Favorite']['id']]);
 			if ($this->Favorite->delete($this->request->data['Favorite']['id'])) {
-				$this->Favorite->saveDbLog('よく使う項目: ' . $name . ' を削除しました。');
+				$this->Favorite->saveDbLog(sprintf(__d('baser', 'よく使う項目: %s を削除しました。'), $name));
 				exit(true);
 			}
 		} else {

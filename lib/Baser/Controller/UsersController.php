@@ -55,14 +55,18 @@ class UsersController extends AppController {
 	public $subMenuElements = [];
 
 /**
- * ぱんくずナビ
+ * UsersController constructor.
  *
- * @var array
+ * @param \CakeRequest $request
+ * @param \CakeRequest $response
  */
-	public $crumbs = [
-		['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'form']],
-		['name' => 'ユーザー管理', 'url' => ['controller' => 'users', 'action' => 'index']]
-	];
+	public function __construct($request = null, $response = null) {
+		parent::__construct($request, $response);
+		$this->crumbs = [
+			['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
+			['name' => __d('baser', 'ユーザー管理'), 'url' => ['controller' => 'users', 'action' => 'index']]
+		];
+	}
 
 /**
  * beforeFilter
@@ -130,7 +134,7 @@ class UsersController extends AppController {
 				}
 				App::uses('BcBaserHelper', 'View/Helper');
 				$BcBaser = new BcBaserHelper(new View());
-				$this->setMessage("ようこそ、" . $BcBaser->getUserName($user) . "　さん。");
+				$this->setMessage(sprintf(__d('baser', 'ようこそ、%s さん。'), $BcBaser->getUserName($user)));
 				$this->redirect($this->BcAuth->redirect());
 			} else {
 				$this->setMessage(__d('baser', 'アカウント名、パスワードが間違っています。'), true);

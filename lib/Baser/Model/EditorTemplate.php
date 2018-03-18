@@ -44,14 +44,18 @@ class EditorTemplate extends AppModel {
 	];
 
 /**
- * バリデーション
+ * EditorTemplate constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'name' => [
-			['rule' => ['notBlank'],
-				'message' => 'テンプレート名を入力してください。']
-		]
-	];
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'テンプレート名を入力してください。')]]
+		];
+	}
+	
 }

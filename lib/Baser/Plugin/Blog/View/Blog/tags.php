@@ -16,7 +16,7 @@
  * @var BcAppView $this
  */
 $this->BcBaser->css(['Blog.style'], ['inline' => false]);
-$this->BcBaser->setDescription($this->BcBaser->getContentsTitle() . 'のアーカイブ一覧です。');
+$this->BcBaser->setDescription(sprintf(__d('baser', '%s のアーカイブ一覧です。'), $this->BcBaser->getContentsTitle()));
 ?>
 
 
@@ -48,7 +48,7 @@ $(function(){
 		</div>
 	<?php endforeach; ?>
 <?php else: ?>
-	<p class="no-data">記事がありません。</p>
+	<p class="no-data"><?php echo __d('baser', '記事がありません。')?></p>
 <?php endif; ?>
 
 

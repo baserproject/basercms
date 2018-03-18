@@ -752,7 +752,7 @@ class BlogControllerEventListener extends BcControllerEventListener {
  */
 	public function testDeprecatedMessage() {
 		$result = deprecatedMessage('target', 'since', 'remove', 'note');
-		$expect = 'targetは、バージョン since より非推奨となりました。バージョン remove で削除される予定です。note';
+		$expect = 'target は、バージョン since より非推奨となりました。バージョン remove で削除される予定です。note';
 		$this->assertEquals($expect, $result);
 
 		// デバックモードではない場合

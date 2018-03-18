@@ -36,7 +36,7 @@
 				<td><?php echo $this->BcForm->input('BlogComment.name', array('type' => 'text', 'size' => 12)) ?></td>
 			</tr>
 			<tr>
-				<th><?php echo $this->BcForm->label('BlogComment.email', 'Eメール') ?></th>
+				<th><?php echo $this->BcForm->label('BlogComment.email', __('Eメール')) ?></th>
 				<td>
 					<?php echo $this->BcForm->input('BlogComment.email', array('type' => 'text', 'size' => 12)) ?>&nbsp;
 					<br><small>※ <?php echo __('Eメールは公開されません') ?></small>
@@ -47,21 +47,21 @@
 				<td><?php echo $this->BcForm->input('BlogComment.url', array('type' => 'text', 'size' => 12)) ?></td>
 			</tr>
 			<tr>
-				<th><?php echo $this->BcForm->label('BlogComment.message', 'コメント') ?></th>
+				<th><?php echo $this->BcForm->label('BlogComment.message', __('コメント')) ?></th>
 				<td><?php echo $this->BcForm->input('BlogComment.message', array('type' => 'textarea', 'rows' => 8, 'cols' => 30)) ?></td>
 			</tr>
 		</table>
 
 		<?php if ($blogContent['BlogContent']['auth_captcha']): ?>
 			<div class="auth-captcha clearfix">
-				<img src="" alt="認証画象" class="auth-captcha-image" id="AuthCaptchaImage" style="display:none">
+				<img src="" alt="<?php echo __('認証画象') ?>" class="auth-captcha-image" id="AuthCaptchaImage" style="display:none">
 				<?php $this->BcBaser->img('admin/captcha_loader.gif', array('alt' => 'Loading...', 'class' => 'auth-captcha-image', 'id' => 'CaptchaLoader')) ?>
 				<?php echo $this->BcForm->text('BlogComment.auth_captcha') ?><br>
 				&nbsp;<?php echo __('画像の文字を入力してください') ?><br>
 			</div>
 		<?php endif ?>
 
-		<?php echo $this->BcForm->end(array('label' => '送信する', 'id' => 'BlogCommentAddButton', 'class' => 'button')) ?>
+		<?php echo $this->BcForm->end(array('label' => __d('baser', '送信する'), 'id' => 'BlogCommentAddButton', 'class' => 'button')) ?>
 
 		<div id="ResultMessage" class="message" style="display:none;text-align:center">&nbsp;</div>
 

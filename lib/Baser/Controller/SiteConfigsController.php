@@ -56,18 +56,12 @@ class SiteConfigsController extends AppController {
 	public $helpers = ['BcForm', 'BcPage'];
 
 /**
- * ぱんくずナビ
- *
- * @var array
- */
-	public $crumbs = [['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'form']]];
-
-/**
  * beforeFilter
  */
 	public function beforeFilter() {
 		$this->BcAuth->allow('admin_ajax_credit', 'jquery_base_url', 'ajax_get_token');
 		parent::beforeFilter();
+		$this->crumbs = [['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']]];
 	}
 
 /**
@@ -255,7 +249,10 @@ class SiteConfigsController extends AppController {
 			$this->ajaxError(500, __d('baser', 'データが送信できませんでした。'));
 		}
 		$this->siteConfigs = $this->request->data['SiteConfig'];
-		if($this->sendMail($this->siteConfigs['email'], __d('baser', 'メール送信テスト'), $this->siteConfigs['formal_name'] . " からのメール送信テストです。\n" . Configure::read('BcEnv.siteUrl'))) {
+		if($this->sendMail(
+				$this->siteConfigs['email'], __d('baser', 'メール送信テスト'), 
+				sprintf('%s からのメール送信テストです。', $this->siteConfigs['formal_name']) ."\n" . Configure::read('BcEnv.siteUrl')
+		)) {
 			exit();
 		} else {
 			$this->ajaxError(500, __d('baser', 'ログを確認してください。'));

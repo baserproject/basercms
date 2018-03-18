@@ -13,13 +13,13 @@
 
 
 <tr>
-	<th>アップローダーメニュー</th>
+	<th><?php echo __d('baser', 'アップローダーメニュー')?></th>
 	<td>
 		<ul>
-			<li><?php $this->BcBaser->link('アップロードファイル一覧', array('plugin' => 'uploader', 'controller' => 'uploader_files', 'action' => 'index')) ?></li>
-			<li><?php $this->BcBaser->link('カテゴリ一覧', array('plugin' => 'uploader', 'controller' => 'uploader_categories', 'action' => 'index')) ?></li>
-			<li><?php $this->BcBaser->link('カテゴリ新規登録', array('plugin' => 'uploader', 'controller' => 'uploader_categories', 'action' => 'add')) ?></li>
-			<li><?php $this->BcBaser->link('プラグイン基本設定', array('plugin' => 'uploader', 'controller' => 'uploader_configs', 'action' => 'index')) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'アップロードファイル一覧'), array('plugin' => 'uploader', 'controller' => 'uploader_files', 'action' => 'index')) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'カテゴリ一覧'), array('plugin' => 'uploader', 'controller' => 'uploader_categories', 'action' => 'index')) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'カテゴリ新規登録'), array('plugin' => 'uploader', 'controller' => 'uploader_categories', 'action' => 'add')) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'プラグイン基本設定'), array('plugin' => 'uploader', 'controller' => 'uploader_configs', 'action' => 'index')) ?></li>
 		</ul>
 	</td>
 </tr>

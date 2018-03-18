@@ -14,10 +14,8 @@
  * [PUBLISH] メンテナンス
  */
 ?>
-<h2 class="contents-head">メンテナンス中</h2>
+<h2 class="contents-head"><?php echo __d('baser', 'メンテナンス中')?></h2>
 <div class="box">
 	<p>
-		ご迷惑をおかけしております。<br />
-		現在メンテナンス中です。<br />
-		もうしばらくお待ちください。</p>
+<?php echo __d('baser', 'ご迷惑をおかけしております。<br />現在メンテナンス中です。<br />もうしばらくお待ちください。')?></p>
 </div>

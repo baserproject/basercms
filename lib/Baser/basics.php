@@ -769,10 +769,10 @@ function sendUpdateMail() {
 		$BcEmail->delivery = "mail";
 	}
 	$BcEmail->to = $bcSite['email'];
-	$BcEmail->subject = 'baserCMSアップデート';
+	$BcEmail->subject = __d('baser', 'baserCMSアップデート');
 	$BcEmail->from = $bcSite['name'] . ' <' . $bcSite['email'] . '>';
 	$message = array();
-	$message[] = '下記のURLよりbaserCMSのアップデートを完了してください。';
+	$message[] = __d('baser', '下記のURLよりbaserCMSのアップデートを完了してください。');
 	$message[] = topLevelUrl(false) . baseUrl() . 'updaters/index/' . $bcSite['update_id'];
 	$BcEmail->send($message);
 }
@@ -935,9 +935,9 @@ function deprecatedMessage($target, $since, $remove = null, $note = null) {
 	if(Configure::read('debug') == 0) {
 		return;
 	}
-	$message = $target . 'は、バージョン ' . $since . ' より非推奨となりました。';
+	$message = sprintf(__d('baser', '%s は、バージョン %s より非推奨となりました。'), $target, $since);
 	if($remove) {
-		$message .= 'バージョン ' . $remove . ' で削除される予定です。';
+		$message .= sprintf(__d('baser', 'バージョン %s で削除される予定です。'), $remove);
 	}
 	if($note) {
 		$message .= $note;
@@ -1080,7 +1080,7 @@ function getTableList() {
 function retry($times, callable $callback, $interval = 0) {
 
 	if ($times <= 0) {
-		throw new \InvalidArgumentException('リトライ回数は正の整数値で指定してください。');
+		throw new \InvalidArgumentException(__d('baser', 'リトライ回数は正の整数値で指定してください。'));
 	}
 
 	$times--;

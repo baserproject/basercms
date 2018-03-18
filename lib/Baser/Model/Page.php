@@ -72,25 +72,27 @@ class Page extends AppModel {
  * @var int
  */
 	private $__pageInsertID = null;
-
+	
 /**
- * バリデーション
+ * Page constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'id' => [
-			['rule' => 'numeric', 'on' => 'update', 'message' => 'IDに不正な値が利用されています。']
-		],
-		'contents' => [
-			['rule' => 'phpValidSyntax', 'message' => 'PHPの構文エラーが発生しました。'],
-			['rule' => ['maxByte', 64000], 'message' => '本稿欄に保存できるデータ量を超えています。']
-		],
-		'draft' => [
-			['rule' => 'phpValidSyntax', 'message' => 'PHPの構文エラーが発生しました。'],
-			['rule' => ['maxByte', 64000], 'message' => '草稿欄に保存できるデータ量を超えています。']
-		]
-	];
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'id' => [
+				['rule' => 'numeric', 'on' => 'update', 'message' => __d('baser', 'IDに不正な値が利用されています。')]],
+			'contents' => [
+				['rule' => 'phpValidSyntax', 'message' => __d('baser', 'PHPの構文エラーが発生しました。')],
+				['rule' => ['maxByte', 64000], 'message' => __d('baser', '本稿欄に保存できるデータ量を超えています。')]],
+			'draft' => [
+				['rule' => 'phpValidSyntax', 'message' => __d('baser', 'PHPの構文エラーが発生しました。')],
+				['rule' => ['maxByte', 64000], 'message' => __d('baser', '草稿欄に保存できるデータ量を超えています。')]]
+		];
+	}
 
 /**
  * beforeSave
@@ -808,7 +810,7 @@ class Page extends AppModel {
 		if($exit === 0) {
 			return true;
 		}
-		$message = 'PHPの構文エラーです： ' . PHP_EOL . implode(' ' . PHP_EOL, $output);
+		$message = __d('baser', 'PHPの構文エラーです') . '： ' . PHP_EOL . implode(' ' . PHP_EOL, $output);
 		return $message;
 	}
 
@@ -839,7 +841,7 @@ class Page extends AppModel {
 			if ($searchKey !== false) {
 				unset($pageTemplates[$searchKey]);
 			}
-			$pageTemplates = ['' => '親フォルダの設定に従う（' . $parentTemplate . '）'] + $pageTemplates;
+			$pageTemplates = ['' => sprintf(__d('baser', '親フォルダの設定に従う（%s）'), $parentTemplate)] + $pageTemplates;
 		}
 		return $pageTemplates;
 	}

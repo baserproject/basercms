@@ -17,7 +17,7 @@
 
 
 <tr>
-	<th>ウィジェットエリア管理メニュー</th>
+	<th><?php echo __d('baser', 'ウィジェットエリア管理メニュー')?></th>
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link(__d('baser', 'ウィジェットエリア一覧'), ['controller' => 'widget_areas', 'action' => 'index']) ?></li>

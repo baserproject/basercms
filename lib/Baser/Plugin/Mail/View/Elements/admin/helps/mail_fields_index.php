@@ -16,9 +16,9 @@
 ?>
 
 
-<p>メールフォームの各フィールド（項目）の管理が行えます。</p>
+<p><?php echo __d('baser', 'メールフォームの各フィールド（項目）の管理が行えます。')?></p>
 <ul>
-	<li>表左上の「並び替え」をクリックすると、各フィールドの操作欄に表示される<?php $this->BcBaser->img('admin/sort.png', array('alt' => '並び替え')); ?>マークをドラッグアンドドロップして公開ページでの並び順を変更する事ができます。</li>
-	<li>フィールドの設定をそのままコピーするにはコピーしたいフィールドの操作欄にある <?php $this->BcBaser->img('admin/icn_tool_copy.png', array('alt' => 'コピー')); ?> をクリックします。</li>
-	<li>メールフォームより受信した内容は、サブメニューの「受信メールCSVダウンロード」よりダウンロードする事ができ、Microsoft Excel 等の表計算ソフトで確認する事ができます。</li>
+	<li><?php echo sprintf(__d('baser', '表左上の「並び替え」をクリックすると、各フィールドの操作欄に表示される%sマークをドラッグアンドドロップして公開ページでの並び順を変更する事ができます。'), $this->BcBaser->getImg('admin/sort.png', array('alt' => __d('baser', '並び替え'))))?></li>
+	<li><?php echo sprintf(__d('baser', 'フィールドの設定をそのままコピーするにはコピーしたいフィールドの操作欄にある %s をクリックします。'), $this->BcBaser->img('admin/icn_tool_copy.png', array('alt' => __d('baser', 'コピー'))))?></li>
+	<li><?php echo __d('baser', 'メールフォームより受信した内容は、サブメニューの「受信メールCSVダウンロード」よりダウンロードする事ができ、Microsoft Excel 等の表計算ソフトで確認する事ができます。')?></li>
 </ul>

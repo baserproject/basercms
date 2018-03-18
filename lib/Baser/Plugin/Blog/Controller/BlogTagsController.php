@@ -59,7 +59,7 @@ class BlogTagsController extends BlogAppController {
 		];
 		$this->set('datas', $this->paginate('BlogTag'));
 
-		$this->pageTitle = 'タグ一覧';
+		$this->pageTitle = __d('baser', 'タグ一覧');
 	}
 
 /**
@@ -71,13 +71,13 @@ class BlogTagsController extends BlogAppController {
 		if (!empty($this->request->data)) {
 			$this->BlogTag->create($this->request->data);
 			if ($this->BlogTag->save()) {
-				$this->setMessage('タグ「' . $this->request->data['BlogTag']['name'] . '」を追加しました。', false, true);
+				$this->setMessage(sprintf(__d('baser', 'タグ「%s」を追加しました。'), $this->request->data['BlogTag']['name']), false, true);
 				$this->redirect(['action' => 'index']);
 			} else {
-				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
+				$this->setMessage(__d('baser', 'エラーが発生しました。内容を確認してください。'), true);
 			}
 		}
-		$this->pageTitle = '新規タグ登録';
+		$this->pageTitle = __d('baser', '新規タグ登録');
 		$this->render('form');
 	}
 
@@ -89,7 +89,7 @@ class BlogTagsController extends BlogAppController {
  */
 	public function admin_edit($id) {
 		if (!$id) {
-			$this->setMessage('無効な処理です。', true);
+			$this->setMessage(__d('baser', '無効な処理です。'), true);
 			$this->redirect(['action' => 'index']);
 		}
 		if (empty($this->request->data)) {
@@ -97,13 +97,13 @@ class BlogTagsController extends BlogAppController {
 		} else {
 			$this->BlogTag->set($this->request->data);
 			if ($this->BlogTag->save()) {
-				$this->setMessage('タグ「' . $this->request->data['BlogTag']['name'] . '」を更新しました。', false, true);
+				$this->setMessage(sprintf(__d('baser', 'タグ「%s」を更新しました。'), $this->request->data['BlogTag']['name']), false, true);
 				$this->redirect(['action' => 'index']);
 			} else {
-				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
+				$this->setMessage(__d('baser', 'エラーが発生しました。内容を確認してください。'), true);
 			}
 		}
-		$this->pageTitle = 'タグ編集： ' . $this->request->data['BlogTag']['name'];
+		$this->pageTitle = sprintf(__d('baser', 'タグ編集： %s'), $this->request->data['BlogTag']['name']);
 		$this->render('form');
 	}
 
@@ -116,16 +116,16 @@ class BlogTagsController extends BlogAppController {
 	public function admin_delete($id = null) {
 		$this->_checkSubmitToken();
 		if (!$id) {
-			$this->setMessage('無効な処理です。', true);
+			$this->setMessage(__d('baser', '無効な処理です。'), true);
 			$this->redirect(['action' => 'index']);
 		}
 
 		$data = $this->BlogTag->read(null, $id);
 
 		if ($this->BlogTag->delete($id)) {
-			$this->setMessage('タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。', false, true);
+			$this->setMessage(sprintf(__d('baser', 'タグ「%s」を削除しました。'), $this->BlogTag->data['BlogTag']['name']), false, true);
 		} else {
-			$this->setMessage('データベース処理中にエラーが発生しました。', true);
+			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
 		}
 
 		$this->redirect(['action' => 'index']);
@@ -140,12 +140,12 @@ class BlogTagsController extends BlogAppController {
 	public function admin_ajax_delete($id = null) {
 		$this->_checkSubmitToken();
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		$data = $this->BlogTag->read(null, $id);
 		if ($this->BlogTag->delete($id)) {
-			$message = 'タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。';
+			$message = sprintf(__d('baser', 'タグ「%s」を削除しました。'), $this->BlogTag->data['BlogTag']['name']);
 			$this->BlogTag->saveDbLog($message);
 			exit(true);
 		}
@@ -163,7 +163,7 @@ class BlogTagsController extends BlogAppController {
 			foreach ($ids as $id) {
 				$data = $this->BlogTag->read(null, $id);
 				if ($this->BlogTag->delete($id)) {
-					$message = 'タグ「' . $this->BlogTag->data['BlogTag']['name'] . '」を削除しました。';
+					$message = sprintf(__d('baser', 'タグ「%s」を削除しました。'), $this->BlogTag->data['BlogTag']['name']);
 					$this->BlogTag->saveDbLog($message);
 				}
 			}
@@ -186,7 +186,7 @@ class BlogTagsController extends BlogAppController {
 				$this->ajaxError(500, $this->BlogTag->validationErrors);
 			}
 		} else {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 	}
 

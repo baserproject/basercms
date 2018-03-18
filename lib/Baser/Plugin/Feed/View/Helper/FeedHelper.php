@@ -66,13 +66,13 @@ class FeedHelper extends AppHelper {
  * @deprecated 4.1.0 since 4.0.0 
  */
 	public function saveCachetime() {
-		trigger_error(deprecatedMessage('メソッド：FeedHelper::saveCachetime()', '4.0.0', '4.1.0', 'このメソッドは非推奨となりました。代替機能はありません。この行を削除してください。'), E_USER_DEPRECATED);
+		trigger_error(deprecatedMessage(__d('baser', 'メソッド') . '：FeedHelper::saveCachetime()', '4.0.0', '4.1.0', __d('baser', 'このメソッドは非推奨となりました。代替機能はありません。この行を削除してください。')), E_USER_DEPRECATED);
 	}
 /**
  * @deprecated 4.1.0 since 4.0.0
  */
 	public function cacheHeader() {
-		trigger_error(deprecatedMessage('メソッド：FeedHelper::cacheHeader()', '4.0.0', '4.1.0', 'このメソッドは非推奨となりました。代替機能はありません。この行を削除してください。'), E_USER_DEPRECATED);
+		trigger_error(deprecatedMessage(__d('baser', 'メソッド') . '：FeedHelper::cacheHeader()', '4.0.0', '4.1.0', __d('baser', 'このメソッドは非推奨となりました。代替機能はありません。この行を削除してください。')), E_USER_DEPRECATED);
 	}
 
 }

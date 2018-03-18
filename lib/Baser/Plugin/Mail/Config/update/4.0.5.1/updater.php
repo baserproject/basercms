@@ -25,7 +25,7 @@ if($mailContents) {
 	}
 }
 if($result) {
-	$this->setUpdateLog('メールプラグインのアップロードファイルのパス変更に成功しました。');
+	$this->setUpdateLog(__d('baser', 'メールプラグインのアップロードファイルのパス変更に成功しました。'));
 } else {
-	$this->setUpdateLog('メールプラグインのアップロードファイルのパス変更に失敗しました。', true);
+	$this->setUpdateLog(__d('baser', 'メールプラグインのアップロードファイルのパス変更に失敗しました。', true));
 }

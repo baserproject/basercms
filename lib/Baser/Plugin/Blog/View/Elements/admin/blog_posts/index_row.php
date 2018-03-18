@@ -22,12 +22,12 @@
 		<?php if ($this->BcBaser->isAdminUser()): ?>
 			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['BlogPost']['id'], ['type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['BlogPost']['id']]) ?>
 		<?php endif ?>		
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_unpublish.png', ['alt' => '非公開', 'class' => 'btn']), ['action' => 'ajax_unpublish', $data['BlogContent']['id'], $data['BlogPost']['id']], ['title' => '非公開', 'class' => 'btn-unpublish']) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_publish.png', ['alt' => '公開', 'class' => 'btn']), ['action' => 'ajax_publish', $data['BlogContent']['id'], $data['BlogPost']['id']], ['title' => '公開', 'class' => 'btn-publish']) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', ['alt' => '確認', 'class' => 'btn']), $this->BcBaser->getContentsUrl($this->request->params['Content']['url'] . 'archives/' . $data['BlogPost']['no'], true, $this->request->params['Site']['use_subdomain']), ['title' => '確認', 'target' => '_blank']) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => '編集', 'class' => 'btn']), ['action' => 'edit', $data['BlogContent']['id'], $data['BlogPost']['id']], ['title' => '編集']) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', ['alt' => 'コピー', 'class' => 'btn']), ['action' => 'ajax_copy', $data['BlogContent']['id'], $data['BlogPost']['id']], ['title' => 'コピー', 'class' => 'btn-copy']) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => '削除', 'class' => 'btn']), ['action' => 'ajax_delete', $data['BlogContent']['id'], $data['BlogPost']['id']], ['title' => '削除', 'class' => 'btn-delete']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_unpublish.png', ['alt' => __d('baser', '非公開'), 'class' => 'btn']), ['action' => 'ajax_unpublish', $data['BlogContent']['id'], $data['BlogPost']['id']], ['title' => __d('baser', '非公開'), 'class' => 'btn-unpublish']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_publish.png', ['alt' => __d('baser', '公開'), 'class' => 'btn']), ['action' => 'ajax_publish', $data['BlogContent']['id'], $data['BlogPost']['id']], ['title' => __d('baser', '公開'), 'class' => 'btn-publish']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', ['alt' => __d('baser', '確認'), 'class' => 'btn']), $this->BcBaser->getContentsUrl($this->request->params['Content']['url'] . 'archives/' . $data['BlogPost']['no'], true, $this->request->params['Site']['use_subdomain']), ['title' => __d('baser', '確認'), 'target' => '_blank']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => __d('baser', '編集'), 'class' => 'btn']), ['action' => 'edit', $data['BlogContent']['id'], $data['BlogPost']['id']], ['title' => __d('baser', '編集')]) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', ['alt' => __d('baser', 'コピー'), 'class' => 'btn']), ['action' => 'ajax_copy', $data['BlogContent']['id'], $data['BlogPost']['id']], ['title' => __d('baser', 'コピー'), 'class' => 'btn-copy']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => __d('baser', '削除'), 'class' => 'btn']), ['action' => 'ajax_delete', $data['BlogContent']['id'], $data['BlogPost']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete']) ?>
 	</td>
 	<td><?php echo $data['BlogPost']['no']; ?></td>
 	<td style="white-space:nowrap"><?php echo $this->BcTime->format('Y-m-d', $data['BlogPost']['posts_date']); ?></td>

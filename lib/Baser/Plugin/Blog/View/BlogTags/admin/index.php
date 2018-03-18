@@ -20,11 +20,15 @@ $this->BcBaser->js([
 	'admin/libs/baser_ajax_batch_config'
 ]);
 ?>
-
+<?php
+$this->BcBaser->i18nScript([
+	'message1' => __d('baser', "このデータを本当に削除してもいいですか？\nこのタグに関連する記事は削除されません。")
+]);
+?>
 
 <script type="text/javascript">
 $(function(){
-	$.baserAjaxDataList.config.methods.del.confirm = 'このデータを本当に削除してもいいですか？\nこのタグに関連する記事は削除されません。';
+	$.baserAjaxDataList.config.methods.del.confirm = bcI18n.message1;
 	$.baserAjaxDataList.init();
 	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
 });

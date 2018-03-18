@@ -21,10 +21,15 @@ $this->BcBaser->js([
 ]);
 ?>
 
+<?php
+$this->BcBaser->i18nScript([
+	'message1' => __d('baser', "このデータを本当に削除してもいいですか？\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。")
+]);
+?>
 
 <script type="text/javascript">
 	$(function(){
-		$.baserAjaxDataList.config.methods.del.confirm = 'このデータを本当に削除してもいいですか？\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。';
+		$.baserAjaxDataList.config.methods.del.confirm = bcI18n.message1;
 		$.baserAjaxDataList.init();
 		$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
 	});

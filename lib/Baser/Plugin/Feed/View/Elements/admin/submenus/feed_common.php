@@ -17,13 +17,13 @@
 
 
 <tr>
-	<th>フィード設定メニュー</th>
+	<th><?php echo __d('baser', 'フィード設定メニュー')?></th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $this->BcBaser->link('フィード設定一覧', array('action' => 'index')) ?></li>
-			<li><?php $this->BcBaser->link('フィード設定新規追加', array('action' => 'add')) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'フィード設定一覧'), array('action' => 'index')) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'フィード設定新規追加'), array('action' => 'add')) ?></li>
 <?php if ($this->params['controller'] == 'feed_configs' && $this->action == 'admin_index'): ?>
-			<li><?php $this->BcBaser->link('フィードキャッシュ削除', array('action' => 'delete_cache'), ['class' => 'submit-token'], 'フィードのキャッシュを削除します。いいですか？') ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'フィードキャッシュ削除'), array('action' => 'delete_cache'), ['class' => 'submit-token'], __d('baser', 'フィードのキャッシュを削除します。いいですか？')) ?></li>
 <?php endif ?>
 		</ul>
 	</td>

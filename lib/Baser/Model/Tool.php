@@ -41,7 +41,7 @@ class Tool extends AppModel {
  */
 	public function getControlSource($field) {
 		// スキーマ用モデルリスト
-		$controlSources['connection'] = ['core' => 'baser（コア）', 'plugin' => 'plugin（プラグイン）'];
+		$controlSources['connection'] = ['core' => __d('baser', 'baser（コア）'), 'plugin' => __d('baser', 'plugin（プラグイン）')];
 		$controlSources = $this->getListModels($field);
 		if (isset($controlSources)) {
 			return $controlSources;

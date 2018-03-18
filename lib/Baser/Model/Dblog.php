@@ -42,17 +42,15 @@ class Dblog extends AppModel {
 			'foreignKey' => 'user_id'
 	]];
 
-/**
- * バリデーション
- *
- * @var array
- */
-	public $validate = [
-		'name' => [
-			['rule' => ['notBlank'],
-				'message' => "ログ内容を入力してください。",
-				'required' => true]
-		]
-	];
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				['rule' => ['notBlank'],
+					'message' => __d('baser', 'ログ内容を入力してください。'),
+					'required' => true]
+			]
+		];
+	}
 
 }

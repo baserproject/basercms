@@ -45,16 +45,19 @@ class ThemeConfigsController extends AppController {
  * @var array
  */
 	public $subMenuElements = ['themes'];
-
+	
 /**
- * ぱんくずナビ
+ * Before Filter
  *
- * @var array
+ * @return void
  */
-	public $crumbs = [
-		['name' => 'テーマ管理', 'url' => ['controller' => 'themes', 'action' => 'index']]
-	];
-
+	public function beforeFilter() {
+		parent::beforeFilter();
+		$this->crumbs = [
+			['name' => __d('baser', 'テーマ管理'), 'url' => ['controller' => 'themes', 'action' => 'index']]
+		];
+	}
+	
 /**
  * [ADMIN] 設定編集
  */

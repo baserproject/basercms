@@ -14,7 +14,7 @@
 body
 {
 	/* Font */
-	font-family: Arial, Verdana, sans-serif;
+    font-family: "Open Sans",sans-serif, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック";
 	font-size: 16px;
 
 	/* Text color */

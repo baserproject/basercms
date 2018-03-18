@@ -17,7 +17,7 @@
 
 
 <tr>
-	<th>ユーザー管理メニュー</th>
+	<th><?php echo __d('baser', 'ユーザー管理メニュー')?></th>
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link(__d('baser', 'ユーザー一覧'), ['controller' => 'users', 'action' => 'index']) ?></li>

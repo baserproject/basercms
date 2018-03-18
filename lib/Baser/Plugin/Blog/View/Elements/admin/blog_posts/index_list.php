@@ -27,37 +27,37 @@ $this->BcListTable->setColumnNumber(9);
 	<tr>
 		<th class="list-tool">
 			<div>
-				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn']), ['action' => 'add', $blogContent['BlogContent']['id']]) ?>
+				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['alt' => __d('baser', '新規追加')]) . __d('baser', '新規追加'), ['action' => 'add', $blogContent['BlogContent']['id']]) ?>　
 			</div>
 			<?php if ($this->BcBaser->isAdminUser()): ?>
 			<div>
-				<?php echo $this->BcForm->checkbox('ListTool.checkall', ['title' => '一括選択']) ?>
-				<?php echo $this->BcForm->input('ListTool.batch', ['type' => 'select', 'options' => ['publish' => '公開', 'unpublish' => '非公開', 'del' => '削除'], 'empty' => '一括処理']) ?>
-				<?php echo $this->BcForm->button('適用', ['id' => 'BtnApplyBatch', 'disabled' => 'disabled']) ?>
+				<?php echo $this->BcForm->checkbox('ListTool.checkall', ['title' => __d('baser', '一括選択')]) ?>
+				<?php echo $this->BcForm->input('ListTool.batch', ['type' => 'select', 'options' => ['publish' => __d('baser', '公開'), 'unpublish' => __d('baser', '非公開'), 'del' => __d('baser', '削除')], 'empty' => __d('baser', '一括処理')]) ?>
+				<?php echo $this->BcForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled']) ?>
 			</div>
 			<?php endif ?>
 		</th>
-		<th><?php echo $this->Paginator->sort('no', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => '昇順', 'title' => '昇順']) . ' NO', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => '降順', 'title' => '降順']) . ' NO'], ['escape' => false, 'class' => 'btn-direction']) ?></th>
-		<th><?php echo $this->Paginator->sort('posts_date', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => '昇順', 'title' => '昇順']) . ' 投稿日', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => '降順', 'title' => '降順']) . ' 投稿日'], ['escape' => false, 'class' => 'btn-direction']) ?></th>
-		<th><?php echo $this->Paginator->sort('eye_catch', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => '昇順', 'title' => '昇順']) . ' アイキャッチ', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => '降順', 'title' => '降順']) . ' アイキャッチ'], ['escape' => false, 'class' => 'btn-direction']) ?></th>
+		<th><?php echo $this->Paginator->sort('no', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . 'NO', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . 'NO'], ['escape' => false, 'class' => 'btn-direction']) ?></th>
+		<th><?php echo $this->Paginator->sort('posts_date', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . __d('baser', '投稿日'), 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . __d('baser', '投稿日')], ['escape' => false, 'class' => 'btn-direction']) ?></th>
+		<th><?php echo $this->Paginator->sort('eye_catch', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . __d('baser', 'アイキャッチ'), 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . __d('baser', 'アイキャッチ')], ['escape' => false, 'class' => 'btn-direction']) ?></th>
 		<th>
-			<?php echo $this->Paginator->sort('BlogCategory.name', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => '昇順', 'title' => '昇順']) . ' カテゴリ', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => '降順', 'title' => '降順']) . ' カテゴリ'], ['escape' => false, 'class' => 'btn-direction']) ?>
+			<?php echo $this->Paginator->sort('BlogCategory.name', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . __d('baser', 'カテゴリ'), 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . __d('baser', 'カテゴリ')], ['escape' => false, 'class' => 'btn-direction']) ?>
 			<?php if ($blogContent['BlogContent']['tag_use']): ?>
-			<span class="tag">タグ</span>
+			<span class="tag"><?php echo __d('baser', 'タグ') ?></span>
 			<?php endif ?><br />
-			<?php echo $this->Paginator->sort('name', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => '昇順', 'title' => '昇順']) . ' タイトル', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => '降順', 'title' => '降順']) . ' タイトル'], ['escape' => false, 'class' => 'btn-direction']) ?>
+			<?php echo $this->Paginator->sort('name', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . __d('baser', 'タイトル'), 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . __d('baser', 'タイトル')], ['escape' => false, 'class' => 'btn-direction']) ?>
 		</th>
 		<th>
-            <?php echo $this->Paginator->sort('user_id', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => '昇順', 'title' => '昇順']) . ' 作成者', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => '降順', 'title' => '降順']) . ' 作成者'], ['escape' => false, 'class' => 'btn-direction']) ?><br>
-			<?php echo $this->Paginator->sort('status', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => '昇順', 'title' => '昇順']) . ' 公開状態', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => '降順', 'title' => '降順']) . ' 公開状態'], ['escape' => false, 'class' => 'btn-direction']) ?>
+            <?php echo $this->Paginator->sort('user_id', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . __d('baser', '作成者'), 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . __d('baser', '作成者')], ['escape' => false, 'class' => 'btn-direction']) ?><br>
+			<?php echo $this->Paginator->sort('status', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . __d('baser', '公開状態'), 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . __d('baser', '公開状態')], ['escape' => false, 'class' => 'btn-direction']) ?>
         </th>
 		<?php if ($blogContent['BlogContent']['comment_use']): ?>
-			<th>コメント</th>
+			<th><?php echo __d('baser', 'コメント') ?></th>
 		<?php endif ?>
 		<?php echo $this->BcListTable->dispatchShowHead() ?>
 		<th>
-			<?php echo $this->Paginator->sort('created', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => '昇順', 'title' => '昇順']) . ' 登録日', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => '降順', 'title' => '降順']) . ' 登録日'], ['escape' => false, 'class' => 'btn-direction']) ?><br />
-			<?php echo $this->Paginator->sort('modified', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => '昇順', 'title' => '昇順']) . ' 更新日', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => '降順', 'title' => '降順']) . ' 更新日'], ['escape' => false, 'class' => 'btn-direction']) ?>
+			<?php echo $this->Paginator->sort('created', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . __d('baser', '登録日'), 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . __d('baser', '登録日')], ['escape' => false, 'class' => 'btn-direction']) ?><br />
+			<?php echo $this->Paginator->sort('modified', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . __d('baser', '更新日'), 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . __d('baser', '更新日')], ['escape' => false, 'class' => 'btn-direction']) ?>
 		</th>
 	</tr>
 </thead>
@@ -68,7 +68,7 @@ $this->BcListTable->setColumnNumber(9);
 	<?php endforeach; ?>
 	<?php else: ?>
 	<tr>
-		<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p></td>
+		<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。')?></p></td>
 	</tr>
 <?php endif; ?>
 </tbody>

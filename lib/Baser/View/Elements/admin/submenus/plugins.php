@@ -17,7 +17,7 @@
 
 
 <tr>
-	<th>プラグイン管理メニュー</th>
+	<th><?php echo __d('baser', 'プラグイン管理メニュー')?></th>
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link(__d('baser', 'プラグイン一覧'), ['plugin' => null, 'controller' => 'plugins', 'action' => 'index']) ?></li>

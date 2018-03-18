@@ -20,10 +20,10 @@ $this->BcBaser->js('admin/themes/form');
 
 
 <?php if ($folderDisabled): ?>
-	<p><span class="required">テーマフォルダに書込権限がありません。</span></p>
+	<p><span class="required"><?php echo __d('baser', 'テーマフォルダに書込権限がありません。')?></span></p>
 <?php endif ?>
 <?php if ($configDisabled): ?>
-	<p><span class="required">テーマ設定ファイルに書込権限がありません。</span></p>
+	<p><span class="required"><?php echo __d('baser', 'テーマ設定ファイルに書込権限がありません。')?></span></p>
 <?php endif ?>
 
 
@@ -40,7 +40,7 @@ $this->BcBaser->js('admin/themes/form');
 				<?php echo $this->BcForm->input('Theme.name', ['type' => 'text', 'size' => 20, 'maxlength' => 255, 'autofocus' => true, 'disabled' => $folderDisabled]) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<?php echo $this->BcForm->error('Theme.name') ?>
-				<div id="helptextName" class="helptext"> 半角英数字のみで入力してください。 </div>
+				<div id="helptextName" class="helptext"> <?php echo __d('baser', '半角英数字のみで入力してください。')?> </div>
 			</td>
 		</tr>
 		<tr>
@@ -72,8 +72,8 @@ $this->BcBaser->js('admin/themes/form');
 				<?php echo $this->BcForm->error('Theme.url') ?>
 				<div id="helptextUrl" class="helptext">
 					<ul>
-						<li>制作者のWEBサイトのURL。</li>
-						<li>半角英数字のみで入力してください。</li>
+						<li><?php echo __d('baser', '制作者のWEBサイトのURL。')?></li>
+						<li><?php echo __d('baser', '半角英数字のみで入力してください。')?></li>
 					</ul>
 				</div>
 			</td>
