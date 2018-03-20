@@ -8851,3 +8851,6 @@ msgstr ""
 msgid "利用中のウィジェット"
 msgstr ""
 
+#: View/Errors/error400.php:19
+msgid "アドレス %s に送信されたリクエストは無効です。"
+msgstr ""

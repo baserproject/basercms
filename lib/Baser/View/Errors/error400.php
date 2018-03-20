@@ -14,9 +14,9 @@
 
 <h2><?php echo $message; ?></h2>
 <p class="error">
-	<strong><?php echo __('baser', 'エラー'); ?>: </strong>
+	<strong><?php echo __d('baser', 'エラー'); ?>: </strong>
 	<?php printf(
-		__('アドレス %s に送信されたリクエストは無効です。'),
+		__d('baser', 'アドレス %s に送信されたリクエストは無効です。'),
 		"<strong>'{$url}'</strong>"
 	); ?>
 </p>

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-15 12:16+0900\n"
+"PO-Revision-Date: 2018-03-20 15:39+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -10345,6 +10345,10 @@ msgstr "Show Title"
 #: View/WidgetAreas/admin/form.php:127
 msgid "利用中のウィジェット"
 msgstr "Using Widgets"
+
+#: View/Errors/error400.php:19
+msgid "アドレス %s に送信されたリクエストは無効です。"
+msgstr "The request sent to the address %s was invalid."
 
 #~ msgid "テンプレートで利用する場合は、<br />%sで出力します。"
 #~ msgstr "To use it on Template,<br />Output with %s."

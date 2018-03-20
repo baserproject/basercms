@@ -354,7 +354,6 @@ msgid "エラー"
 msgstr ""
 
 #: Config/theme/bc_sample/Errors/error400.php:13
-#: View/Errors/error400.php:19
 msgid "アドレス %s に送信されたリクエストは無効です。"
 msgstr ""
 

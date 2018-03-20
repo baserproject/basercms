@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-05 11:09+0900\n"
+"PO-Revision-Date: 2018-03-20 15:40+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -363,7 +363,7 @@ msgstr "Mail that informs it was received is also sent to user."
 msgid "エラー"
 msgstr "Error"
 
-#: Config/theme/bc_sample/Errors/error400.php:13 View/Errors/error400.php:19
+#: Config/theme/bc_sample/Errors/error400.php:13
 msgid "アドレス %s に送信されたリクエストは無効です。"
 msgstr "The request sent to the address %s was invalid."
 

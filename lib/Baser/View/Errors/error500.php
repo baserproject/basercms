@@ -14,8 +14,8 @@
 
 <h2><?php echo $message; ?></h2>
 <p class="error">
-	<strong><?php echo __('baser', 'エラー'); ?>: </strong>
-	<?php echo __('baser', '内部エラーが発生しました。'); ?>
+	<strong><?php echo __d('baser', 'エラー'); ?>: </strong>
+	<?php echo __d('baser', '内部エラーが発生しました。'); ?>
 </p>
 <?php
 if (Configure::read('debug') > 0):
