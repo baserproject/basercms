@@ -56,7 +56,7 @@ $this->BcBaser->js('admin/updaters/update', false);
 	<h2><?php echo __d('baser', '現在のバージョン状況')?></h2>
 	<ul class="version">
 		<li><?php echo sprintf(__d('baser', '%1$sのバージョン： <strong>%2$s</strong>'), $updateTarget, $baserVer)?></li>
-		<li><?php echo sprintf(__d('baser', '現在のデータベースのバージョン：<strong> %s </strong>'), $siteVer)?>/li>
+		<li><?php echo sprintf(__d('baser', '現在のデータベースのバージョン：<strong> %s </strong>'), $siteVer)?></li>
 	</ul>
 <?php if ($scriptNum || $scriptMessages): ?>
 	<div class="em-box">
