@@ -11,7 +11,7 @@
  */
 
 /**
- * 管理用コントローラー
+ * フォーム管理用コントローラー
  *
  * @package Baser.Controller
  * @property CakeRequest $request
