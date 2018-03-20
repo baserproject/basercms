@@ -3833,7 +3833,7 @@ class DboSource extends DataSource {
 		$models = array();
 		$tableList = getTableList();
 		foreach ($tables as $table) {
-			if(in_array($table, $tableList['core']) || in_array($table, $tableList['plugin'])) {
+			if((!empty($tableList['core']) && in_array($table, $tableList['core'])) || (!empty($tableList['plugin']) && in_array($table, $tableList['plugin']))) {
 				$models[] = Inflector::classify(Inflector::singularize(str_replace($this->config['prefix'], '', $table)));
 			}
 		}
