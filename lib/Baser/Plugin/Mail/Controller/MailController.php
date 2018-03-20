@@ -113,6 +113,7 @@ class MailController extends MailAppController {
  */
 	public function beforeFilter() {
 		/* 認証設定 */
+		// @deprecated 5.0.0 since 4.0.0 ajax_get_token は、BcFormController に移行した為、次のバージョンで削除
 		$this->BcAuth->allow(
 			'index', 'mobile_index', 'smartphone_index', 'confirm', 'mobile_confirm', 'smartphone_confirm', 'submit', 'mobile_submit', 'smartphone_submit', 'captcha', 'smartphone_captcha', 'ajax_get_token', 'smartphone_ajax_get_token'
 		);

@@ -59,6 +59,7 @@ class SiteConfigsController extends AppController {
  * beforeFilter
  */
 	public function beforeFilter() {
+		// @deprecated 5.0.0 since 4.0.0 ajax_get_token は、BcFormController に移行した為、次のバージョンで削除
 		$this->BcAuth->allow('admin_ajax_credit', 'jquery_base_url', 'ajax_get_token');
 		parent::beforeFilter();
 		$this->crumbs = [['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']]];
@@ -301,6 +302,7 @@ class SiteConfigsController extends AppController {
  * admin用Token取得アクション
  *
  * @return string
+ * @deprecated 5.0.0 since 4.0.0 ajax_get_token は、BcFormController に移行した為、次のバージョンで削除
  */
 	public function admin_ajax_get_token() {
 		$this->autoRender = false;
@@ -311,6 +313,7 @@ class SiteConfigsController extends AppController {
  * セキュリティトークンを取得する
  *
  * @return mixed
+ * @deprecated 5.0.0 since 4.0.0 ajax_get_token は、BcFormController に移行した為、次のバージョンで削除
  */
 	public function ajax_get_token() {
 		return $this->setAction(('admin_ajax_get_token'));
