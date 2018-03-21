@@ -86,13 +86,23 @@ if (!isset($blockEnd)) {
 					<?php if ($field['group_valid']): ?>
 						<?php if ($this->Mailform->error("MailMessage." . $field['group_field'] . "_format", "check")): ?>
 							<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $field['group_field'] . "_format", __("形式が無効です。"), array('wrap' => false)) ?></font>
-						<?php else: ?>
-							<?php if ($field['valid']) : ?>
-								<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $field['group_field'] . "", __("必須項目です。"), array('wrap' => false)) ?></font>
-							<?php endif; ?>
 						<?php endif; ?>
 						<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $field['group_field'] . "_not_same", __("入力データが一致していません"), array('wrap' => false)) ?></font> 
 						<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $field['group_field'] . "_not_complate", __("入力データが不完全です"), array('wrap' => false)) ?></font>
+
+						<?php
+						if (!$this->Mailform->error("MailMessage." . $field['group_field'] . "_not_same")
+							&& !$this->Mailform->error("MailMessage." . $field['group_field'] . "_not_complate")) {
+							$groupValidErrors = $this->Mailform->getGroupValidErrors($mailFields, $field['group_valid'], array('wrap' => false));
+							if ($groupValidErrors) {
+								foreach ($groupValidErrors as $groupValidError) {
+									echo '<font color="#FF0000">' . $groupValidError . '</font>';
+								}
+							} else {
+								echo '<font color="#FF0000">'. $this->Mailform->error("MailMessage." . $field['group_field'], __("必須項目です。"), array('wrap' => false)) . '</font>';
+							}
+						}
+						?>
 					<?php endif; ?>
 				<?php endif; ?>
 				<?php $group_field = $field['group_field'] ?>

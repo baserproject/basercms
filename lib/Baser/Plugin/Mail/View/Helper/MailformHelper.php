@@ -248,4 +248,34 @@ class MailformHelper extends BcFreezeHelper {
 		echo $output;
 	}
 
+/**
+ * 指定したgroup_validをもつフィールドのエラーを取得する
+ *
+ * @param array $mailFields
+ * @param string $groupValid
+ * @param array $options
+ * @param bool $distinct 同じエラーメッセージをまとめる
+ * @return array
+ */
+	public function getGroupValidErrors($mailFields, $groupValid, $options = [], $distinct = true) {
+		$errors = [];
+
+		foreach ($mailFields as $mailField) {
+			if ($mailField['MailField']['group_valid'] != $groupValid) {
+				continue;
+			}
+
+			$errorMessage = null;
+			if ($this->value("MailMessage." . $mailField['MailField']['field_name'])) {
+				$errorMessage = $this->error("MailMessage." . $mailField['MailField']['field_name'], null, $options);
+			}
+
+			if ($errorMessage && (!$distinct || !array_search($errorMessage, $errors))) {
+				$errors[$mailField['MailField']['field_name']] = $errorMessage;
+			}
+		}
+
+		return $errors;
+	}
+
 }

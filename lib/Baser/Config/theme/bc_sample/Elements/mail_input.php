@@ -78,11 +78,20 @@ if (!empty($mailFields)) {
 				($field['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $this->BcArray->first($mailFields, $key))) {
 
 				if ($field['group_valid']) {
-					if ($field['valid']) {
-						echo $this->Mailform->error("MailMessage." . $field['group_field'], __("必須項目です。"));
-					}
 					echo $this->Mailform->error("MailMessage." . $field['group_field'] . "_not_same", __("入力データが一致していません。"));
 					echo $this->Mailform->error("MailMessage." . $field['group_field'] . "_not_complate", __("入力データが不完全です。"));
+
+					if (!$this->Mailform->error("MailMessage." . $field['group_field'] . "_not_same")
+						&& !$this->Mailform->error("MailMessage." . $field['group_field'] . "_not_complate")) {
+						$groupValidErrors = $this->Mailform->getGroupValidErrors($mailFields, $field['group_valid']);
+						if ($groupValidErrors) {
+							foreach ($groupValidErrors as $groupValidError) {
+								echo $groupValidError;
+							}
+						} else {
+							echo $this->Mailform->error("MailMessage." . $field['group_field'], __("必須項目です。"));
+						}
+					}
 				}
 
 				echo '</span>';
