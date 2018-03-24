@@ -267,6 +267,20 @@ class MailMessage extends MailAppModel {
 					if(!preg_match('/^(|[ァ-ヾ]+)$/u', $data['MailMessage'][$mailField['field_name']])) {
 						$this->invalidate($mailField['field_name'], __('全て全角カタカナで入力してください。'));
 					}
+				} elseif (in_array('VALID_MAX_FILE_SIZE', $valids)) {
+					// ファイルアップロードサイズ制限のチェック
+					$filesErrorCode = Hash::get($_FILES, 'data.error.MailMessage.' . $mailField['field_name']);
+					if ($filesErrorCode) {
+						// フィールド設定の必須指定に任せるため、4のときは何もしない
+						if ($filesErrorCode !== 4) {
+							$message = $this->getFileUploadErrorMessage($filesErrorCode, $this->validate[$mailField['field_name']]['fileSize']['message']);
+							if ($message) {
+								// MAX_FILE_SIZEによりアップロードできなかった場合は「必須項目です」と出るため削除する
+								unset($this->validationErrors[$mailField['field_name']]);
+								$this->invalidate($mailField['field_name'], $message);
+							}
+						}
+					}
 				}
 			}
 		}
