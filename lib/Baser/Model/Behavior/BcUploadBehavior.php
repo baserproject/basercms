@@ -175,8 +175,6 @@ class BcUploadBehavior extends ModelBehavior {
 			if (!empty($data[$field['name']]) && is_array($data[$field['name']]) && $data[$field['name']]['size'] != 0) {
 				if (!empty($data[$field['name']]['name'])) {
 					$upload = true;
-				} else {
-					unset($Model->data[$Model->name][$field['name']]);
 				}
 			} else {
 				if (!empty($Model->data[$Model->name][$field['name'] . '_tmp'])) {
@@ -189,8 +187,6 @@ class BcUploadBehavior extends ModelBehavior {
 					// 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
 					$Model->data[$Model->name][$field['name']] = $Model->data[$Model->name][$field['name'] . '_'];
 					unset($Model->data[$Model->name][$field['name'] . '_']);
-				} elseif(!empty($Model->data[$Model->name][$field['name']]) && is_array($Model->data[$Model->name][$field['name']])) {
-					unset($Model->data[$Model->name][$field['name']]);
 				}
 			}
 			if ($upload) {
