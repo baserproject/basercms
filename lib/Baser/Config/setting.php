@@ -53,7 +53,7 @@ $config['BcApp'] = array(
 	'testTheme' => 'nada-icons',
 	'marketThemeRss' => 'https://market.basercms.net/themes.rss',
 	'marketPluginRss' => 'https://market.basercms.net/plugins.rss',
-	'specialThanks'	=> 'http://basercms.net/special_thanks/special_thanks/ajax_users'
+	'specialThanks' => 'https://basercms.net/special_thanks/special_thanks/ajax_users'
 );
 
 /**
