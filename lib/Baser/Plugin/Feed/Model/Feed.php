@@ -214,6 +214,7 @@ class Feed extends FeedAppModel {
 
 			$tmp['encoded']['value'] = $data->get_content();
 			$tmp['img'] = $this->extractImg($tmp['encoded']['value']);
+			$tmp['eye_catch'] = $this->getEyeCatchImg($data);
 
 			$feed['Items'][] = $tmp;
 		}
@@ -267,4 +268,32 @@ class Feed extends FeedAppModel {
 		}
 		return $img;
 	}
+
+/**
+ * ブログ記事のアイキャッチ画像のURLを取得する
+ * 
+ * @param Object $data
+ * @return array
+ */
+	public function getEyeCatchImg($data) {
+		$eyeCatchData = array();
+
+		$tmpEyeCatch = array();
+		foreach ($data->data['child'] as $child) {
+			if (!empty($child['eye_catch'])) {
+				$tmpEyeCatch = $child['eye_catch'];
+			}
+		}
+
+		if ($tmpEyeCatch) {
+			foreach ($tmpEyeCatch as $eyeCatch) {
+				$eyeCatchData[] = array(
+					'url' => $eyeCatch['data'],
+				);
+			}
+		}
+
+		return $eyeCatchData;
+	}
+
 }
