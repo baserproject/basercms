@@ -214,7 +214,7 @@ class Feed extends FeedAppModel {
 
 			$tmp['encoded']['value'] = $data->get_content();
 			$tmp['img'] = $this->extractImg($tmp['encoded']['value']);
-			$tmp['eye_catch'] = $this->getEyeCatchImg($data);
+			$tmp['enclosure'] = $this->getEyeCatchImg($data);
 
 			$feed['Items'][] = $tmp;
 		}
@@ -276,22 +276,12 @@ class Feed extends FeedAppModel {
  * @return array
  */
 	public function getEyeCatchImg($data) {
-		$eyeCatchData = array();
+		$image = $data->get_enclosure();
 
-		$tmpEyeCatch = array();
-		foreach ($data->data['child'] as $child) {
-			if (!empty($child['eye_catch'])) {
-				$tmpEyeCatch = $child['eye_catch'];
-			}
-		}
-
-		if ($tmpEyeCatch) {
-			foreach ($tmpEyeCatch as $eyeCatch) {
-				$eyeCatchData[] = array(
-					'url' => $eyeCatch['data'],
-				);
-			}
-		}
+		$eyeCatchData['url']		 = $image->get_link();
+		$eyeCatchData['length']		 = $image->get_size();
+		$eyeCatchData['type']		 = $image->get_type();
+		$eyeCatchData['yj:caption']	 = $image->get_caption();
 
 		return $eyeCatchData;
 	}

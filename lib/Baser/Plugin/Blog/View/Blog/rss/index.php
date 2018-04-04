@@ -24,10 +24,9 @@ function transformRSS($data) {
 	$blogHelper = new BlogHelper($view);
 	$bcBaserhelper = new BcBaserHelper($view);
 	$url = $bcBaserhelper->getContentsUrl() . 'archives/' . $data['BlogPost']['no'];
+	$eyeCatch = array();
 	if (!empty($data['BlogPost']['eye_catch'])) {
-		$data['BlogPost']['eye_catch'] = Router::url($blogHelper->getEyeCatch($data, array('imgsize' => '', 'output' => 'url')), true);
-	} else {
-		$data['BlogPost']['eye_catch'] = '';
+		$eyeCatch['url'] = Router::url($blogHelper->getEyeCatch($data, array('imgsize' => '', 'output' => 'url')), true);
 	}
 	return [
 		'title' => $data['BlogPost']['name'],
@@ -36,7 +35,7 @@ function transformRSS($data) {
 		'category' => $data['BlogCategory']['title'],
 		'description' => $blogHelper->removeCtrlChars($data['BlogPost']['content'] . $data['BlogPost']['detail']),
 		'pubDate' => $data['BlogPost']['posts_date'],
-		'eye_catch' => $data['BlogPost']['eye_catch'],
+		'enclosure' => $eyeCatch,
 	];
 }
 ?>
