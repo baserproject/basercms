@@ -278,10 +278,12 @@ class Feed extends FeedAppModel {
 	public function getEyeCatchImg($data) {
 		$image = $data->get_enclosure();
 
-		$eyeCatchData['url']		 = $image->get_link();
-		$eyeCatchData['length']		 = $image->get_size();
-		$eyeCatchData['type']		 = $image->get_type();
-		$eyeCatchData['yj:caption']	 = $image->get_caption();
+		$eyeCatchData = [
+			'url' => $image->get_link(),
+			'type' => $image->get_type(),
+			'length' => $image->get_size(),
+			'yj:caption' => $image->get_caption(),
+		];
 
 		return $eyeCatchData;
 	}
