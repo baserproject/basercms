@@ -28,7 +28,6 @@ function transformRSS($data) {
 		'url' => '',
 		'type' => '',
 		'length' => '',
-		'yj:caption' => '',
 	];
 	if (!empty($data['BlogPost']['eye_catch'])) {
 		$eyeCatch['url'] = Router::url($blogHelper->getEyeCatch($data, ['imgsize' => 'mobile_thumb', 'output' => 'url']), true);
