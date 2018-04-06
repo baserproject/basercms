@@ -267,9 +267,82 @@ class MailMessage extends MailAppModel {
 					if(!preg_match('/^(|[ァ-ヾ]+)$/u', $data['MailMessage'][$mailField['field_name']])) {
 						$this->invalidate($mailField['field_name'], __('全て全角カタカナで入力してください。'));
 					}
+				} elseif (in_array('VALID_MAX_FILE_SIZE', $valids)) {
+					// ファイルアップロードサイズ制限のチェック
+					$filesErrorCode = Hash::get($_FILES, 'data.error.MailMessage.' . $mailField['field_name']);
+					if ($filesErrorCode) {
+						// フィールド設定の必須指定に任せるため、4のときは何もしない
+						if ($filesErrorCode !== 4) {
+							// MAX_FILE_SIZEによりアップロードできなかった場合は「必須項目です」と出るため削除する
+							unset($this->validationErrors[$mailField['field_name']]);
+							$message = $this->getFileUploadErrorMessage($filesErrorCode);
+							if ($message) {
+								$this->invalidate($mailField['field_name'], __($message));
+							} else {
+								$this->invalidate($mailField['field_name'], $this->validate[$mailField['field_name']]['fileSize']['message']);
+							}
+						}
+					}
 				}
 			}
 		}
+	}
+
+/**
+ * ファイルアップロード時のエラーメッセージを取得する
+ * 
+ * @link http://php.net/manual/ja/features.file-upload.errors.php
+ * @param int $code
+ * @param string $errorMessage
+ * @return string
+ */
+	public function getFileUploadErrorMessage($code) {
+		if (!$code) {
+			return '';
+		}
+
+		$message = '';
+		switch ($code) {
+			case 1:
+				// UPLOAD_ERR_INI_SIZE
+				// アップロードされたファイルは、php.ini の upload_max_filesize ディレクティブの値を超えています。
+				$this->log('CODE: ' . $code . ' ファイルサイズがアップロード可能なサイズをオーバーしています。');
+				break;
+			case 2:
+				// UPLOAD_ERR_FORM_SIZE
+				// アップロードされたファイルは、HTMLで指定された MAX_FILE_SIZE を超えています。
+				$message = 'ファイルサイズが指定容量をオーバーしています。';
+				$this->log('CODE: ' . $code . ' ファイルサイズがHTMLで指定された MAX_FILE_SIZE をオーバーしています。');
+				break;
+			case 3:
+				// UPLOAD_ERR_PARTIAL
+				// アップロードされたファイルは一部のみしかアップロードされていません。
+				$this->log('CODE: ' . $code . ' アップロードされたファイルは一部のみしかアップロードされていません。');
+				break;
+			case 4:
+				// UPLOAD_ERR_NO_FILE
+				// ファイルはアップロードされませんでした。
+				break;
+			case 6:
+				// UPLOAD_ERR_NO_TMP_DIR
+				// テンポラリフォルダがありません。
+				$this->log('CODE: ' . $code . ' 一時書込み用のフォルダがありません。');
+				break;
+			case 7:
+				// UPLOAD_ERR_CANT_WRITE
+				// ディスクへの書き込みに失敗しました。
+				$this->log('CODE: ' . $code . ' ディスクへの書き込みに失敗しました。');
+				break;
+			case 8:
+				// UPLOAD_ERR_EXTENSION
+				// PHPの拡張モジュールがファイルのアップロードを中止しました。
+				$this->log('CODE: ' . $code . ' PHPの拡張モジュールがファイルのアップロードを中止しました。');
+				break;
+			default:
+				break;
+		}
+
+		return $message;
 	}
 
 /**
