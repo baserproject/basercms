@@ -684,7 +684,7 @@ class ThemesController extends AppController {
 		$Folder = new Folder();
 		$Folder->create($tmpDir);
 		$path = BASER_THEMES . $this->siteConfigs['theme'] . DS;
-		$Folder->move([
+		$Folder->copy([
 			'from' => $path,
 			'to' => $tmpDir . $this->siteConfigs['theme'],
 			'chmod' => 0777
