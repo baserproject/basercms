@@ -586,7 +586,7 @@ class BcAppTest extends BaserTestCase {
  * ファイルの拡張子チェック
  * 
  * @param string $fileName チェック対象ファイル名
- * @param string $fileSize チェック対象ファイルタイプ
+ * @param string $fileType チェック対象ファイルタイプ
  * @param boolean $expect
  * @dataProvider fileExtDataProvider
  */
