@@ -1043,8 +1043,10 @@ class BcUploadBehavior extends ModelBehavior {
 				 * ファイル名重複回避処理対応
 				 * 元画像ファイルと同様コピー画像ファイルにも適用
 				 */
-				if ($fileName !== $Model->data[$Model->alias]['name']['name']) {
-					$Model->data[$Model->alias]['name']['name'] = $fileName;
+				if (isset($Model->data[$Model->alias]['name']['name'])) {
+					if ($fileName !== $Model->data[$Model->alias]['name']['name']) {
+						$Model->data[$Model->alias]['name']['name'] = $fileName;
+					}
 				}
 				$copy['name'] = $field['name'];
 				$copy['ext'] = $field['ext'];
