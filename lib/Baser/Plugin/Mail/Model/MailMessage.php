@@ -216,10 +216,12 @@ class MailMessage extends MailAppModel {
 					switch ($valid) {
 						case 'VALID_MAX_FILE_SIZE':
 							if(!empty($options['maxFileSize'])) {
-								$this->validate[$mailField['field_name']]['fileSize'] = array(
-									'rule'	=> array('fileSize', $options['maxFileSize'] * 1000 * 1000),
+								$this->validate[$mailField['field_name']]['fileCheck'] = array(
+									'rule'	=> array('fileCheck', $options['maxFileSize'] * 1000 * 1000),
 									'message'	=> __('ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', $options['maxFileSize'])
 								);
+								// 必須入力としている場合、必須エラーが優先され、ファイルサイズオーバーのエラーメッセージとならないため、バリデーションエラーの優先度を入れ替える
+								$this->validate[$mailField['field_name']] = array_reverse($this->validate[$mailField['field_name']]);
 							}
 							break;
 						case 'VALID_FILE_EXT':
