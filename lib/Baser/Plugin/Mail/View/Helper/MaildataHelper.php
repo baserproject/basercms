@@ -59,18 +59,8 @@ class MaildataHelper extends BcTextHelper {
 			case 'check':
 			case 'radio':
 			case 'select':
-				return $value;
-
 			case 'pref':
-				$prefs = $this->prefList();
-				$options = array();
-				foreach($prefs as $pref) {
-					$options[$pref] = $pref;
-				}
-				if (isset($options[$value])) {
-					return $options[$value];
-				}
-				return '';
+				return $value;
 
 			case 'multi_check':
 				if (empty($value)) {

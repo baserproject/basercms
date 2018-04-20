@@ -324,7 +324,47 @@ class MailController extends MailAppController {
 			if (!$this->_checkDirectoryRraversal()) {
 				$this->redirect($this->request->params['Content']['url'] . '/index');
 			}
-			
+
+			foreach($this->request->data['MailMessage'] as $key => $mailMessage) {
+				$mailField = current(Hash::extract($this->dbDatas['mailFields'], '{n}.MailField[field_name='. $key .']'));
+				switch ($mailField['type']) {
+					case 'date_time_calender':
+					case 'date_time_wareki':
+						if (is_array($mailMessage)) {
+							if (isset($mailMessage['year']) && empty($mailMessage['year']) && 
+								isset($mailMessage['month']) && empty($mailMessage['month']) && 
+								isset($mailMessage['day']) && empty($mailMessage['day'])) {
+								$this->request->data['MailMessage'][$key] = '';
+							}
+						}
+						break;
+					case 'pref':
+						App::uses('BcTextHelper', 'View/Helper');
+						$BcText = new BcTextHelper(new View());
+						$source = $BcText->prefList();
+					case 'radio':
+					case 'select':
+						$source = explode('|', $mailField['source']);
+						if (isset($source[$mailMessage])) {
+							$this->request->data['MailMessage'][$key] = $source[$mailMessage];
+						}
+						break;
+
+					case 'multi_check':
+						$source = explode('|', $mailField['source']);
+						$values = array();
+						foreach($mailMessage as $value):
+							if (isset($source[$value-1])) {
+								$values[] = $source[$value-1];
+							}
+						endforeach;
+						$this->request->data['MailMessage'][$key] = $values;
+						break;
+					default;
+						break;
+				}
+			}
+
 			$this->MailMessage->create($this->request->data);
 
 			// データの入力チェックを行う

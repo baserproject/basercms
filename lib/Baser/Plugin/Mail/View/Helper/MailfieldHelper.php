@@ -56,15 +56,15 @@ class MailfieldHelper extends AppHelper {
 			$data = $data['MailField'];
 		}
 
-		$attributes = $this->getAttributes($data);
-
 		// コントロールソースを変換
 		if (!empty($data['source'])) {
 
 			if ($data['type'] != "check") {
 				$values = explode("|", $data['source']);
+				$i = 0;
 				foreach ($values as $value) {
-					$source[$value] = $value;
+					$i++;
+					$source[$i] = $value;
 				}
 
 				return $source;

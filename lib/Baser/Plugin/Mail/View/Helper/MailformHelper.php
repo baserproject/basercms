@@ -91,7 +91,7 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['maxlength']);
 				unset($attributes['separator']);
 				unset($attributes['empty']);
-				$out = $this->prefTag($fieldName, null, $attributes, true);
+				$out = $this->prefTag($fieldName, null, $attributes, false);
 				break;
 
 			case 'autozip':
