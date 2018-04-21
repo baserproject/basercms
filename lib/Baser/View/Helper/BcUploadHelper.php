@@ -42,6 +42,7 @@ class BcUploadHelper extends BcAppHelper {
 			'force' => false,
 			'width' => '', // 横幅
 			'height' => '', // 高さ
+			'timestamp' => false,
 			], $options);
 
 		extract($options);
@@ -124,6 +125,10 @@ class BcUploadHelper extends BcAppHelper {
 					$out = $this->uploadImage($fieldName, $value, $options) . '<br /><span class="file-name">' . mb_basename($value) . '</span>';
 				} else {
 					$filePath = $basePath . $value;
+					if ($options['timestamp']) {
+						$options['output'] = 'url';
+						$filePath = $this->uploadImage($fieldName, $value, $options);
+					}
 					$out = $this->Html->link(__d('baser', 'ダウンロード') . ' ≫', $filePath, ['target' => '_blank']) . '<br /><span class="file-name">' . mb_basename($value) . '</span>';
 				}
 			} else {
@@ -171,7 +176,8 @@ class BcUploadHelper extends BcAppHelper {
 			'tmp' => false,
 			'force' => false,
 			'output' => '', // 出力タイプ tag ,url を指定、未指定(or false)の場合は、tagで出力(互換性のため)
-			'limited' => false // 公開制限フォルダを利用する場合にフォルダ名を設定する
+			'limited' => false, // 公開制限フォルダを利用する場合にフォルダ名を設定する
+			'timestamp' => false,
 		], $options);
 
 		$this->setEntity($fieldName);
