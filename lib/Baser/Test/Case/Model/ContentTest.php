@@ -688,4 +688,18 @@ class ContentTest extends BaserTestCase {
 		];
 	}
 
+/**
+ * タイプ別のコンテンツを取得する
+ */
+	public function testGetContentType() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * タイプ別のコンテンツリストを取得する
+ */
+	public function testGetContentTypeList() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }

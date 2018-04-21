@@ -22,6 +22,7 @@ if (!empty($this->passedArgs['num'])) {
 	$url = ['plugin' => null, 'controller' => 'search_indices', 'action' => 'search'];
 }
 $folders = $this->BcContents->getContentFolderList($this->request->params['Site']['id'], ['excludeId' => $this->BcContents->getSiteRootId($this->request->params['Site']['id'])]);
+$contentList = $this->BcContents->getContentTypeList($this->request->params['Site']['id']);
 ?>
 
 
@@ -32,6 +33,11 @@ $folders = $this->BcContents->getContentFolderList($this->request->params['Site'
 		<?php echo $this->BcForm->label('SearchIndex.f', __d('baser', 'カテゴリ')) ?><br>
 		<?php echo $this->BcForm->input('SearchIndex.f', ['type' => 'select', 'options' => $folders, 'empty' => __d('baser', '指定しない'), 'escape' => false]) ?><br>
 	<?php endif ?>
+	<?php if ($contentList): ?>
+		<?php echo $this->BcForm->label('SearchIndex.ci', __d('baser', 'コンテンツ')); ?><br>
+		<?php echo $this->BcForm->input('SearchIndex.ci', ['type' => 'select', 'options' => $contentList, 'empty' => __d('baser', '指定しない'), 'escape' => false]); ?><br>
+	<?php endif; ?>
+		
 	<?php echo $this->BcForm->input('SearchIndex.q', ['placeholder' => __d('baser', 'キーワード')]) ?>
 	<?php echo $this->BcForm->hidden('SearchIndex.s', ['value' => $this->request->params['Site']['id']]) ?>
 	<?php echo $this->BcForm->submit(__d('baser', '検索'), ['div' => false, 'class' => 'submit_button']) ?>
