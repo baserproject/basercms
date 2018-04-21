@@ -229,10 +229,10 @@ class Site extends AppModel {
 			$conditions['or'] = [
 				['Site.main_site_id' => $data['Site']['main_site_id']],
 				['Site.id' => $data['Site']['main_site_id']]
-		];
-		if($isMainSite) {
-			$conditions['or'][] = ['Site.main_site_id' => $data['Site']['id']];
-		}
+			];
+			if($isMainSite) {
+				$conditions['or'][] = ['Site.main_site_id' => $data['Site']['id']];
+			}
 			if($data['Content']['main_site_content_id']) {
 			$mainSiteContentId = $data['Content']['main_site_content_id'];
 			} else {
