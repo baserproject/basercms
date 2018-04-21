@@ -1503,6 +1503,7 @@ DOC_END;
  * link		大きいサイズへの画像へのリンク有無
  * delCheck	削除用チェックボックスの利用可否
  * force	ファイルの存在有無に関わらず強制的に画像タグを表示するかどうか
+ * timestamp	ファイルリンクにCache Bustingを適用するかどうか
  *
  * @param string $fieldName
  * @param array $options
@@ -1526,7 +1527,8 @@ DOC_END;
 			'delCheck' => true,
 			'force' => false,
 			'width' => '',
-			'height' => ''
+			'height' => '',
+			'timestamp' => false,
 			], $options);
 
 		extract($options);
@@ -1539,6 +1541,7 @@ DOC_END;
 		unset($options['force']);
 		unset($options['width']);
 		unset($options['height']);
+		unset($options['timestamp']);
 
 		$linkOptions = [
 			'imgsize' => $imgsize,
@@ -1548,7 +1551,8 @@ DOC_END;
 			'delCheck' => $delCheck,
 			'force' => $force,
 			'width' => $width,
-			'height' => $height
+			'height' => $height,
+			'timestamp' => $timestamp,
 		];
 
 		$fileLinkTag = $this->BcUpload->fileLink($fieldName, $linkOptions);
