@@ -933,12 +933,12 @@ class Content extends AppModel {
 			'Content.plugin',
 			'Content.title',
 		];
-		$contentType = $this->find('all', array(
+		$contentType = $this->find('all', [
 			'conditions' => $conditions,
 			'fields'	 => $fields,
 			'order'		 => $options['order'],
 			'recursive'	 => $options['recursive'],
-		));
+		]);
 
 		return $contentType;
 	}
