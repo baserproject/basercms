@@ -895,6 +895,81 @@ class Content extends AppModel {
 	}
 
 /**
+ * タイプ別のコンテンツを取得する
+ *
+ * @param int $siteId
+ * @param array $options
+ * @return array|bool
+ */
+	public function getContentType($siteId = null, $options = []) {
+		$options = array_merge([
+			'excludeId'		 => null,
+			'excludeType'	 => ['ContentFolder', 'Page'],
+			'unpublish'		 => false,
+			'order'			 => 'Content.id ASC',
+			'recursive'		 => -1,
+			], $options);
+
+		$conditions = ['alias_id' => null];
+		if (!is_null($siteId)) {
+			$conditions['site_id'] = $siteId;
+		}
+		if ($options['excludeId']) {
+			$conditions['id <>'] = $options['excludeId'];
+		}
+		if ($options['excludeType']) {
+			$conditions['type <>'] = $options['excludeType'];
+		}
+		if (!$options['unpublish']) {
+			$conditions = array_merge($conditions, $this->getConditionAllowPublish());
+		}
+
+		if (!empty($options['conditions'])) {
+			$conditions = array_merge($conditions, $options['conditions']);
+		}
+
+		$fields = [
+			'DISTINCT Content.type',
+			'Content.id',
+			'Content.name',
+			'Content.plugin',
+			'Content.title',
+		];
+		$contentType = $this->find('all', [
+			'conditions' => $conditions,
+			'fields'	 => $fields,
+			'order'		 => $options['order'],
+			'recursive'	 => $options['recursive'],
+		]);
+
+		return $contentType;
+	}
+
+/**
+ * タイプ別のコンテンツリストを取得する
+ * コンボボックス用
+ * 
+ * @param int $siteId
+ * @param array $options
+ * @return array|bool
+ */
+	public function getContentTypeList($siteId = null, $options = []) {
+		$options = array_merge([
+			'key'	 => 'id',
+			'value'	 => 'title',
+			'group'	 => null,
+			], $options);
+
+		$contentType	 = $this->getContentType($siteId, $options);
+		$contentTypeList = Hash::combine($contentType,
+			"{n}.Content.{$options['key']}",
+			"{n}.Content.{$options['value']}",
+			"{n}.Content.{$options['group']}");
+
+		return $contentTypeList;
+	}
+
+/**
  * ツリー構造のデータを コンボボックスのデータ用に変換する
  * @param $nodes
  * @return array

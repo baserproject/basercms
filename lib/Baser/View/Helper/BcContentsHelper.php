@@ -430,7 +430,29 @@ class BcContentsHelper extends AppHelper {
 	public function getContentFolderList($siteId = null, $options = []) {
 		return $this->_Content->getContentFolderList($siteId, $options);
 	}
-	
+
+/**
+ * タイプ別のコンテンツを取得する
+ * 
+ * @param int $siteId
+ * @param array $options
+ * @return array|bool
+ */
+	public function getContentType($siteId = null, $options = []) {
+		return $this->_Content->getContentType($siteId, $options);
+	}
+
+/**
+ * タイプ別のコンテンツリストを取得する
+ * 
+ * @param int $siteId
+ * @param array $options
+ * @return array|bool
+ */
+	public function getContentTypeList($siteId = null, $options = []) {
+		return $this->_Content->getContentTypeList($siteId, $options);
+	}
+
 /**
  * サイトIDからサイトルートとなるコンテンツを取得する
  * 

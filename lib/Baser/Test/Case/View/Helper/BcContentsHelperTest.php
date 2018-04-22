@@ -506,4 +506,18 @@ class BcContentsHelperTest extends BaserTestCase {
 	public function test_getIconUrl(){
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
+
+/**
+ * タイプ別のコンテンツを取得する
+ */
+	public function testGetContentType(){
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * タイプ別のコンテンツリストを取得する
+ */
+	public function testGetContentTypeList(){
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 }
