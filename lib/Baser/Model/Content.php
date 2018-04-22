@@ -905,13 +905,12 @@ class Content extends AppModel {
 		$options = array_merge([
 			'excludeId'		 => null,
 			'excludeType'	 => ['ContentFolder', 'Page'],
+			'unpublish'		 => false,
 			'order'			 => 'Content.id ASC',
 			'recursive'		 => -1,
 			], $options);
 
-		$conditions = [
-			'alias_id' => null
-		];
+		$conditions = ['alias_id' => null];
 		if (!is_null($siteId)) {
 			$conditions['site_id'] = $siteId;
 		}
@@ -920,6 +919,9 @@ class Content extends AppModel {
 		}
 		if ($options['excludeType']) {
 			$conditions['type <>'] = $options['excludeType'];
+		}
+		if (!$options['unpublish']) {
+			$conditions = array_merge($conditions, $this->getConditionAllowPublish());
 		}
 
 		if (!empty($options['conditions'])) {
