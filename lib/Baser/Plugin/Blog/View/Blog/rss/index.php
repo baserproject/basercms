@@ -23,7 +23,7 @@ function transformRSS($data) {
 	$view = new View();
 	$blogHelper = new BlogHelper($view);
 	$bcBaserhelper = new BcBaserHelper($view);
-	$url = $bcBaserhelper->getContentsUrl() . 'archives/' . $data['BlogPost']['no'];
+	$url = $bcBaserhelper->getContentsUrl(null, false, null, false) . 'archives/' . $data['BlogPost']['no'];
 	$eyeCatch = [
 		'url' => '',
 		'type' => '',
