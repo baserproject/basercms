@@ -530,36 +530,7 @@ class BcAppTest extends BaserTestCase {
  * @param string $fileName チェック対象ファイル名
  * @param string $fileSize チェック対象ファイルサイズ
  * @param boolean $expect
- * @dataProvider fileSizeDataProvider
- */
-	public function testFileSize($fileName, $fileSize, $expect) {
-		$check = [[
-				"name" => $fileName,
-				"size" => $fileSize,
-			]
-		];
-		$size = 1000;
-
-		$result = $this->BcApp->fileSize($check, $size);
-		$this->assertEquals($expect, $result);		
-	}
-
-	public function fileSizeDataProvider() {
-		return [
-			["test.jpg", 1000, true],
-			["test.jpg", 1001, false],
-			["", 1000, true],
-			["test.jpg", null, false],
-		];
-	}
-
-/**
- * ファイルサイズチェック
- * 
- * @param string $fileName チェック対象ファイル名
- * @param string $fileSize チェック対象ファイルサイズ
- * @param boolean $expect
- * @dataProvider fileSizeDataProvider
+ * @dataProvider fileCheckDataProvider
  */
 	public function testFileCheck($fileName, $fileSize, $expect) {
 		$check = [[
