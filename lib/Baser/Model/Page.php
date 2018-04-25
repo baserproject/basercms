@@ -781,11 +781,12 @@ class Page extends AppModel {
 		if(empty($check[key($check)])) {
 			return true;
 		}
-
+		if(!Configure::read('BcApp.validSyntaxWithPage')) {
+			return true;
+		}
 		if(!function_exists('exec')) {
 			return true;
 		}
-
 		// CL版 php がインストールされてない場合はシンタックスチェックできないので true を返す
 		exec('php --version 2>&1', $output, $exit);
 		if($exit !== 0) {
