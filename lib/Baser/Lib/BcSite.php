@@ -290,7 +290,11 @@ class BcSite {
 		if(!is_null(self::$_sites)) {
 			return self::$_sites;
 		}
-		$Site = ClassRegistry::init('Site');
+		try{
+			$Site = ClassRegistry::init('Site');
+		} catch(Exception $e) {
+			return [];
+		}
 		$sites = $Site->find('all', ['recursive' => -1]);
 		array_unshift($sites, $Site->getRootMain());
 		self::$_sites = [];
