@@ -55,6 +55,7 @@ class BcShortCodeEventListener extends CakeObject implements CakeEventListener {
 		if(!is_array($shortCodes)) {
 			$shortCodes = [$shortCodes];
 		}
+
 		foreach($shortCodes as $plugin => $values) {
 			foreach ($values as $shortCode) {
 				$func = explode('.', $shortCode);
@@ -62,35 +63,41 @@ class BcShortCodeEventListener extends CakeObject implements CakeEventListener {
 					continue;
 				}
 				$regex = '/(\[' . preg_quote($shortCode, '/') . '(|\s(.*?))\])/';
-				if (preg_match($regex, $output, $matches)) {
-					$target = $matches[1];
-					$args = [];
-					if (!empty($matches[3])) {
-						$args = explode(',', $matches[3]);
-						foreach ($args as $key => $value) {
-							if (strpos($value, '|') !== false) {
-								$args[$key] = call_user_func_array('aa', explode("|", $value));
+
+				if (preg_match_all($regex, $output, $matches)) {
+
+					foreach($matches[1] as $k => $match){
+						$target = $match;
+						$args = [];
+						if (!empty($matches[3][$k])) {
+							$args = explode(',', $matches[3][$k]);
+							foreach ($args as $key => $value) {
+								if (strpos($value, '|') !== false) {
+									$args[$key] = call_user_func_array('aa', explode("|", $value));
+								}
 							}
 						}
-					}
-					if (isset($View->{$func[0]})) {
-						$Helper = $View->{$func[0]};
-					} else {
-						if($plugin == 'Core') {
-							$plugin = '';
+
+
+						if (isset($View->{$func[0]})) {
+							$Helper = $View->{$func[0]};
 						} else {
-							$plugin .= '.';
+							if($plugin == 'Core') {
+								$plugin = '';
+							} else {
+								$plugin .= '.';
+							}
+							$className = $func[0] . 'Helper';
+							App::uses($className, $plugin . 'View/Helper');
+							$Helper = new $className($View);
 						}
-						$className = $func[0] . 'Helper';
-						App::uses($className, $plugin . 'View/Helper');
-						$Helper = new $className($View);
+						$result = call_user_func_array(array($Helper, $func[1]), $args);
+						$output = str_replace($target, $result, $output);
 					}
-					$result = call_user_func_array([$Helper, $func[1]], $args);
-					$output = str_replace($target, $result, $output);
 				}
 			}
-		}	
+		}
 		$View->output = $output;
 	}
-
+	
 }
