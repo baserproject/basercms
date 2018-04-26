@@ -1664,27 +1664,32 @@ EOD;
 	 * @param mixed $id コンテンツID（初期値：null）
 	 * @param int $level 階層（初期値：null）※ null の場合は階層指定なし
 	 * @param string $currentId 現在のページのコンテンツID（初期値：null）
+	 * @param array $options  オプション（初期値 : array()）
+	 *	※ その他のパラメータについては、View::element() を参照
 	 * @return string コンテンツメニュー
 	 */
-	public function getContentsMenu($id = null, $level = null, $currentId = null) {
+	public function getContentsMenu($id = null, $level = null, $currentId = null, $options = []) {
 		if(!$id) {
 			$Content = ClassRegistry::init('Content');
 			$siteRoot = $Content->getSiteRoot($this->request->params['Content']['site_id']);
 			$id = $siteRoot['Content']['id'];
 		}
-		$params = [
+		$options = array_merge([
 			'tree' => $this->BcContents->getTree($id, $level),
 			'currentId' => $currentId
-		];
-		$params['tree'] = $this->_unsetIndexInContentsMenu($params['tree']);
-		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
-			$params = array_merge($params, [
+		], $options);
+		$options['tree'] = $this->_unsetIndexInContentsMenu($options['tree']);
+		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]) && $options['cache'] === false) {
+			$options = array_merge($options, [
 					'cache' => [
 						'time' => Configure::read('BcCache.duration'),
 						'key' => $id]]
 			);
 		}
-		return $this->getElement('contents_menu', $params);
+		if($options['cache'] === false) {
+			unset($options['cache']);
+		}
+		return $this->getElement('contents_menu', $options);
 	}
 
 	/**
@@ -1745,12 +1750,15 @@ EOD;
 			'currentId' => $currentId,
 			'data' => []
 		], $options);
-		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
+		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]) && $options['cache'] === false) {
 			$options = array_merge($options, [
 					'cache' => [
 						'time' => Configure::read('BcCache.duration'),
 						'key' => $id]]
 			);
+		}
+		if($options['cache'] === false) {
+			unset($options['cache']);
 		}
 		$data = array_merge([
 			'tree' => $options['tree'],
