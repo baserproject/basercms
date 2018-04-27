@@ -33,7 +33,7 @@ class BcGmaps extends CakeObject {
  * APIのベースとなるURL 
  * @var string
  */
-	const GMAPS_API_BASE_URL = "http://maps.googleapis.com/maps/api/geocode/xml";
+	const GMAPS_API_BASE_URL = "https://maps.googleapis.com/maps/api/geocode/xml";
 
 /**
  * API URL
