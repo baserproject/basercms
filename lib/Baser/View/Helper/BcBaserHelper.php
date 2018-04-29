@@ -1676,10 +1676,11 @@ EOD;
 		}
 		$options = array_merge([
 			'tree' => $this->BcContents->getTree($id, $level),
-			'currentId' => $currentId
+			'currentId' => $currentId,
+			'cache' => false
 		], $options);
 		$options['tree'] = $this->_unsetIndexInContentsMenu($options['tree']);
-		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]) && $options['cache'] === false) {
+		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]) && $options['cache'] !== false) {
 			$options = array_merge($options, [
 					'cache' => [
 						'time' => Configure::read('BcCache.duration'),
@@ -1748,9 +1749,10 @@ EOD;
 		$options = array_merge([
 			'tree' => $this->BcContents->getTree($id, $level),
 			'currentId' => $currentId,
-			'data' => []
+			'data' => [],
+			'cache' => true
 		], $options);
-		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]) && $options['cache'] === false) {
+		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]) && $options['cache'] !== false) {
 			$options = array_merge($options, [
 					'cache' => [
 						'time' => Configure::read('BcCache.duration'),
