@@ -20,7 +20,8 @@ class UploaderConfigsSchema extends CakeSchema {
 		'value' => array('type' => 'text', 'null' => false),
 		'created' => array('type' => 'datetime', 'null' => true),
 		'modified' => array('type' => 'datetime', 'null' => true),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
+		'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB']
 	);
 }
 ?>
