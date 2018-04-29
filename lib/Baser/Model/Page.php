@@ -745,12 +745,10 @@ class Page extends AppModel {
 		$this->create(['Content' => $data['Content'], 'Page' => $data['Page']]);
 		if ($data = $this->save()) {
 			if ($eyeCatch) {
-				$data['Content']['id'] = $this->Content->getLastInsertID();
 				$data['Content']['eyecatch'] = $eyeCatch;
 				$this->Content->set(['Content' => $data['Content']]);
 				$result = $this->Content->renameToBasenameFields(true);
-				$this->Content->set($result);
-				$result = $this->Content->save();
+				$result = $this->Content->save($result, ['validate' => false, 'callbacks' => false]);
 				$data['Content'] = $result['Content'];
 			}
 
