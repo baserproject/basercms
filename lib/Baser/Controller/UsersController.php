@@ -134,7 +134,7 @@ class UsersController extends AppController {
 				}
 				App::uses('BcBaserHelper', 'View/Helper');
 				$BcBaser = new BcBaserHelper(new View());
-				$this->setMessage(sprintf(__d('baser', 'ようこそ、%s さん。'), $BcBaser->getUserName($user)));
+				$this->setMessage(sprintf(__d('baser', 'ようこそ、%s さん。'), h($BcBaser->getUserName($user))));
 				$this->redirect($this->BcAuth->redirect());
 			} else {
 				$this->setMessage(__d('baser', 'アカウント名、パスワードが間違っています。'), true);

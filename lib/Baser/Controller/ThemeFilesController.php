@@ -813,7 +813,7 @@ class ThemeFilesController extends AppController {
 		if (copy($fullpath, $themePath)) {
 			chmod($themePath, 0666);
 			$_themePath = str_replace(ROOT, '', $themePath);
-			$this->setMessage('コアファイル ' . basename($path) . ' を テーマ ' . Inflector::camelize($this->siteConfigs['theme']) . ' の次のパスとしてコピーしました。<br />' . $_themePath);
+			$this->setMessage('コアファイル ' . basename($path) . ' を テーマ ' . Inflector::camelize($this->siteConfigs['theme']) . " の次のパスとしてコピーしました。\n" . $_themePath);
 			// 現在のテーマにリダイレクトする場合、混乱するおそれがあるのでとりあえずそのまま
 			//$this->redirect(array_merge(array('action' => 'edit', $this->siteConfigs['theme'], $type), explode('/', $path)));
 		} else {
@@ -851,7 +851,7 @@ class ThemeFilesController extends AppController {
 		$folder->create(dirname($themePath), 0777);
 		if ($folder->copy(['from' => $fullpath, 'to' => $themePath, 'chmod' => 0777, 'skip' => ['_notes']])) {
 			$_themePath = str_replace(ROOT, '', $themePath);
-			$this->setMessage('コアフォルダ ' . basename($path) . ' を テーマ ' . Inflector::camelize($this->siteConfigs['theme']) . ' の次のパスとしてコピーしました。<br />' . $_themePath);
+			$this->setMessage('コアフォルダ ' . basename($path) . ' を テーマ ' . Inflector::camelize($this->siteConfigs['theme']) . " の次のパスとしてコピーしました。\n" . $_themePath);
 			// 現在のテーマにリダイレクトする場合、混乱するおそれがあるのでとりあえずそのまま
 			//$this->redirect(array('action' => 'edit', $this->siteConfigs['theme'], $type, $path));
 		} else {

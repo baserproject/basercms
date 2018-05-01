@@ -148,7 +148,7 @@ class UpdatersController extends AppController {
 
 			clearAllCache();
 
-			$this->setMessage(__d('baser', '全てのアップデート処理が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。'));
+			$this->setMessage(__d('baser', '全てのアップデート処理が完了しました。画面下部のアップデートログを確認してください。'));
 			$this->_writeUpdateLog();
 			$this->redirect(['action' => 'index']);
 		}
@@ -232,7 +232,7 @@ class UpdatersController extends AppController {
 		if ($this->request->data) {
 			clearAllCache();
 			$this->_update($name);
-			$this->setMessage(__d('baser', 'アップデート処理が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。'));
+			$this->setMessage(__d('baser', 'アップデート処理が完了しました。画面下部のアップデートログを確認してください。'));
 			$this->_writeUpdateLog();
 			clearAllCache();
 			$this->redirect(['action' => 'plugin', $name]);

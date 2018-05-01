@@ -112,7 +112,7 @@ class ToolsController extends AppController {
 					$messages[] = __d('baser', 'ページテンプレートの生成に失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。');
 				}
 				if ($messages) {
-					$this->setMessage(implode('<br />', $messages), $error);
+					$this->setMessage(implode("\n", $messages), $error);
 				}
 				clearAllCache();
 				$this->redirect(['action' => 'maintenance']);
@@ -393,7 +393,7 @@ class ToolsController extends AppController {
 				}
 
 				if ($messages) {
-					$this->setMessage(implode('<br />', $messages), $error);
+					$this->setMessage(implode("\n", $messages), $error);
 				}
 				$this->redirect(['action' => 'log']);
 				break;

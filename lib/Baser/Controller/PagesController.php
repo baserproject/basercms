@@ -242,7 +242,7 @@ class PagesController extends AppController {
 		if ($this->Page->createAllPageTemplate()) {
 			$this->setMessage(__d('baser', '固定ページテンプレートの書き出しに成功しました。'));
 		} else {
-			$this->setMessage(__d('baser', '固定ページテンプレートの書き出しに失敗しました。<br />表示できないページは固定ページ管理より更新処理を行ってください。'), true);
+			$this->setMessage(__d('baser', "固定ページテンプレートの書き出しに失敗しました。\n表示できないページは固定ページ管理より更新処理を行ってください。"), true);
 		}
 		clearViewCache();
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);

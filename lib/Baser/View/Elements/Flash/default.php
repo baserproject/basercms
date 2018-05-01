@@ -20,4 +20,4 @@ if (!empty($params['class'])) {
 ?>
 
 
-<div id="<?php echo h($key) ?>Message" class="<?php echo h($class) ?>"><?php echo str_replace(['&lt;br /&gt;', '&lt;br/&gt;', '&lt;br&gt;'], '<br>', h($message)) ?></div>
+<div id="<?php echo h($key) ?>Message" class="<?php echo h($class) ?>"><?php echo str_replace("\n", '<br>', h($message)) ?></div>
