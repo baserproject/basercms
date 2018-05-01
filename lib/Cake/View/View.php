@@ -1231,9 +1231,6 @@ class View extends CakeObject {
 		$this->_current = $current;
 
 		if (isset($options['cache'])) {
-			if($this->elementCacheSettings['key'] == 'element__widgets/text_subDir_cache_callbacks_widget_id_type_element_plugin_sort_name_text_use_title_status_8_3') {
-				$a = '';
-			}
 			Cache::write($this->elementCacheSettings['key'], $element, $this->elementCacheSettings['config']);
 		}
 		return $element;
