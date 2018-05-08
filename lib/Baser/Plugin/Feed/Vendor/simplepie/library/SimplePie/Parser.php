@@ -113,7 +113,12 @@ class SimplePie_Parser
 		{
 			$data = substr($data, 3);
 		}
-
+		// CUSTOMIZE ADD 2018/05/08 ryuring
+		// 制御文字によりパースが失敗するので空文字に置き換え
+		// TODO SimplePieプロジェクトにプルリクエストを送る
+		// >>>
+    	$data = preg_replace('/[\x08]/', '', $data);
+    	// <<<
 		if (substr($data, 0, 5) === '<?xml' && strspn(substr($data, 5, 1), "\x09\x0A\x0D\x20") && ($pos = strpos($data, '?>')) !== false)
 		{
 			$declaration = $this->registry->create('XML_Declaration_Parser', array(substr($data, 5, $pos - 5)));
