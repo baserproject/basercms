@@ -95,6 +95,7 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener {
 			return;
 		}
 		$Controller = $event->subject();
+		$this->Page->Behaviors->unload('BcCache');
 		$contents = $Controller->Content->children($event->data['data']['Content']['id'], false, ['type', 'entity_id'], 'Content.lft', null, 1, 1);
 		foreach($contents as $content) {
 			if($content['Content']['type'] !== 'Page') {
@@ -104,6 +105,7 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener {
 			$this->Page->createPageTemplate($page);
 			$this->Page->saveSearchIndex($this->Page->createSearchIndex($page));
 		}
+		$this->Page->Behaviors->load('BcCache');
 		$Folder = new Folder($this->oldPath);
 		$Folder->delete();
 	}
