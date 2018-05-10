@@ -1722,7 +1722,7 @@ EOD;
 	 *	※ その他のパラメータについては、View::element() を参照
 	 * @return void
 	 */
-	public function globalMenu($level = 1, $options = []) {
+	public function globalMenu($level = 1, $options = ['cache'=>true]) {
 		echo $this->getGlobalMenu($level, $options);
 	}
 
