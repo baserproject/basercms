@@ -40,7 +40,7 @@ class BcContentsRoute extends CakeRoute {
 
 		//管理システムにログインしているかつプレビューの場合は公開状態のステータスは無視する
 		$publish = true;
-		if((!empty($request->query['preview']) || !empty($request->query['force'])) && !BcUtil::loginUser()) {
+		if((!empty($request->query['preview']) || !empty($request->query['force'])) && BcUtil::loginUser()) {
 			$publish = false;
 		}
 		
