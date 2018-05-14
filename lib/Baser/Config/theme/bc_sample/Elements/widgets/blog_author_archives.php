@@ -40,13 +40,13 @@ $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/author/';
 					$class = '';
 				}
 				if ($view_count) {
-					$title = $this->BcBaser->getUserName($author['User']) . ' (' . $author['count'] . ')';
+					$title = h($this->BcBaser->getUserName($author['User'])) . ' (' . $author['count'] . ')';
 				} else {
-					$title = $this->BcBaser->getUserName($author['User']);
+					$title = h($this->BcBaser->getUserName($author['User']));
 				}
 				?>
 				<li<?php echo $class ?>>
-					<?php $this->BcBaser->link($title, $baseCurrentUrl . $author['User']['name']) ?>
+					<?php $this->BcBaser->link($title, $baseCurrentUrl . $author['User']['name'], ['escape' => true]) ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>

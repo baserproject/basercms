@@ -17,7 +17,7 @@
 
 
 <li>
-	<p class="theme-name"><strong><?php echo $data['title'] ?></strong>&nbsp;(&nbsp;<?php echo $data['name'] ?>&nbsp;)</p>
+	<p class="theme-name"><strong><?php echo h($data['title']) ?></strong>&nbsp;(&nbsp;<?php echo $data['name'] ?>&nbsp;)</p>
 	<p class="theme-screenshot">
 		<a class="theme-popup" href="<?php echo '#Contents' . Inflector::camelize($data['name']) ?>">
 			<?php if ($data['screenshot']): ?>
@@ -39,9 +39,9 @@
 <p class="theme-version"><?php echo __d('baser', 'バージョン')?>：<?php echo $data['version'] ?></p>
 <p class="theme-author"><?php echo __d('baser', '制作者')?>：
 	<?php if (!empty($data['url']) && !empty($data['author'])): ?>
-		<?php $this->BcBaser->link($data['author'], $data['url'], ['target' => '_blank']) ?>
+		<?php $this->BcBaser->link($data['author'], $data['url'], ['target' => '_blank', 'escape' => true]) ?>
 	<?php else: ?>
-		<?php echo $data['author'] ?>
+		<?php echo h($data['author']) ?>
 	<?php endif ?>
 </p>
 <div style='display:none'>
@@ -53,16 +53,16 @@
 				<?php $this->BcBaser->img('admin/no-screenshot.png', ['alt' => $data['title']]) ?>
 			<?php endif ?>
 		</div>
-		<div class="theme-name"><strong><?php echo $data['title'] ?></strong>&nbsp;(&nbsp;<?php echo $data['name'] ?>&nbsp;)</div>
+		<div class="theme-name"><strong><?php echo h($data['title']) ?></strong>&nbsp;(&nbsp;<?php echo $data['name'] ?>&nbsp;)</div>
 		<div class="theme-version"><?php echo __d('baser', 'バージョン')?>：<?php echo $data['version'] ?></div>
 		<div class="theme-author"><?php echo __d('baser', '制作者')?>：
 			<?php if (!empty($data['url']) && !empty($data['author'])): ?>
 				<?php $this->BcBaser->link($data['author'], $data['url'], ['target' => '_blank']) ?>
 			<?php else: ?>
-				<?php echo $data['author'] ?>
+				<?php echo h($data['author']) ?>
 			<?php endif ?>
 		</div>
-		<div class="theme-description"><?php echo nl2br($data['description']) ?></div>
+		<div class="theme-description"><?php echo nl2br(h($data['description'])) ?></div>
 	</div>
 </div>
 </li>

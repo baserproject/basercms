@@ -406,9 +406,9 @@ class BcSite {
 	public function makeUrl(CakeRequest $request) {
 		$here = $request->here(false);
 		if($this->alias) {
-			return "/{$this->alias}{$here}";
+			return h("/{$this->alias}{$here}");
 		} else {
-			return $here;
+			return h($here);
 		}
 	}
 

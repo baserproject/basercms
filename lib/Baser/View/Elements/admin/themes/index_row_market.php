@@ -60,7 +60,7 @@ if(empty($data['authorUrl'])) {
 	<?php if (!empty($data['authorLink']) && !empty($data['author'])): ?>
 		<?php $this->BcBaser->link($data['author'], $data['authorLink'], ['target' => '_blank']) ?>
 	<?php else: ?>
-		<?php echo $data['author'] ?>
+		<?php echo h($data['author']) ?>
 	<?php endif ?>
 		</div>
 		<div class="theme-description"><?php echo nl2br($data['description']) ?></div>

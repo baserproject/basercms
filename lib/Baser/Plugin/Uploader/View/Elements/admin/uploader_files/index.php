@@ -14,17 +14,17 @@
  * 
  * @var \BcAppView $this
  */
-$this->BcBaser->i18nScript([
+echo $this->BcBaser->i18nScript([
     'uploaderCancel' => __d('baser', 'キャンセル'),
     'uploaderSave' => __d('baser', '保存'),
 	'uploaderEdit' => __d('baser', '編集'),
 	'uplaoderDelete' => __d('baser', '削除'),
     'uploaderAlertMessage1' => __d('baser', '更新に失敗しました。入力内容を見直してください。'),
-    'uploaderAlertMessage2' => __d('baser', 'アップロードに失敗しました。ファイルサイズを確認してください。'),
+    'uploaderAlertMessage2' => __d('baser', 'アップロードに失敗しました。ファイルサイズが大きいか、許可されていない形式です。'),
 	'uploaderAlertMessage3' => __d('baser', 'このファイルの編集・削除はできません。'),
 	'uploaderAlertMessage4' => __d('baser', 'サーバーでの処理に失敗しました。'),
     'uploaderConfirmMessage1' => __d('baser', '本当に削除してもよろしいですか？')
-], ['inline', true]);
+], ['inline' => true]);
 $this->BcBaser->js(array('Uploader.admin/uploader_files/uploader_list'));
 if(!isset($listId)) {
 	$listId = '';

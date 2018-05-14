@@ -31,7 +31,7 @@
 	<td><?php $this->BcBaser->link($data['UserGroup']['name'], ['action' => 'edit', $data['UserGroup']['id']]) ?>
 		<?php if (!empty($data['User'])): ?><br />
 			<?php foreach ($data['User'] as $user): ?>
-				<span class="tag"><?php $this->BcBaser->link($this->BcBaser->getUserName($user), ['controller' => 'users', 'action' => 'edit', $user['id']]) ?></span>
+				<span class="tag"><?php $this->BcBaser->link(h($this->BcBaser->getUserName($user)), ['controller' => 'users', 'action' => 'edit', $user['id']]) ?></span>
 			<?php endforeach ?>
 		<?php endif ?>
 	</td>

@@ -86,11 +86,16 @@ class Page extends AppModel {
 			'id' => [
 				['rule' => 'numeric', 'on' => 'update', 'message' => __d('baser', 'IDに不正な値が利用されています。')]],
 			'contents' => [
-				['rule' => 'phpValidSyntax', 'message' => __d('baser', 'PHPの構文エラーが発生しました。')],
-				['rule' => ['maxByte', 64000], 'message' => __d('baser', '本稿欄に保存できるデータ量を超えています。')]],
+				['rule' => 'phpValidSyntax', 'message' => __d('baser', '本稿欄でPHPの構文エラーが発生しました。')],
+				['rule' => ['maxByte', 64000], 'message' => __d('baser', '本稿欄に保存できるデータ量を超えています。')],
+				['rule' => 'containsScript', 'message' => __d('baser', '本稿欄でスクリプトの入力は許可されていません。')]],
 			'draft' => [
+				['rule' => 'phpValidSyntax', 'message' => __d('baser', '草稿欄でPHPの構文エラーが発生しました。')],
+				['rule' => ['maxByte', 64000], 'message' => __d('baser', '草稿欄に保存できるデータ量を超えています。')],
+				['rule' => 'containsScript', 'message' => __d('baser', '草稿欄でスクリプトの入力は許可されていません。')]],
+			'code' => [
 				['rule' => 'phpValidSyntax', 'message' => __d('baser', 'PHPの構文エラーが発生しました。')],
-				['rule' => ['maxByte', 64000], 'message' => __d('baser', '草稿欄に保存できるデータ量を超えています。')]]
+				['rule' => 'containsScript', 'message' => __d('baser', 'スクリプトの入力は許可されていません。')]]
 		];
 	}
 

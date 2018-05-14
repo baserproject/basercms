@@ -496,6 +496,7 @@ class BcManagerComponent extends Component {
 			"Configure::write('BcEnv.sslUrl', '');",
 			"Configure::write('BcEnv.mainDomain', '');",
 			"Configure::write('BcApp.adminSsl', false);",
+			"Configure::write('BcApp.allowedPhpOtherThanAdmins', false);",
 			"Cache::config('default', array('engine' => 'File'));",
 			"Configure::write('debug', 0);"
 		];

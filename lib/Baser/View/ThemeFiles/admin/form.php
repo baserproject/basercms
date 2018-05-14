@@ -21,7 +21,7 @@ $params = explode('/', $path);
 
 
 <div class="em-box align-left">
-<?php echo __d('baser', '現在の位置')?>：<?php echo $currentPath ?>
+<?php echo __d('baser', '現在の位置')?>：<?php echo h($currentPath) ?>
 </div>
 
 <?php if($theme	!= 'core' && !$isWritable): ?>
@@ -47,7 +47,7 @@ $params = explode('/', $path);
 				<?php if ($this->request->action != 'admin_view'): ?>
 					<?php echo $this->BcForm->input('ThemeFile.name', ['type' => 'text', 'size' => 30, 'maxlength' => 255, 'autofocus' => true]) ?>
 					<?php if ($this->BcForm->value('ThemeFile.ext')): ?>.<?php endif ?>
-					<?php echo $this->BcForm->value('ThemeFile.ext') ?>
+					<?php echo h($this->BcForm->value('ThemeFile.ext')) ?>
 					<?php echo $this->BcForm->input('ThemeFile.ext', ['type' => 'hidden']) ?>
 					<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 					<?php echo $this->BcForm->error('ThemeFile.name') ?>
