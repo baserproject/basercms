@@ -123,7 +123,13 @@ $config['BcAuthPrefix'] = array(
 		// モデル
 		'userModel' => 'User',
 		// セッションキー
-		'sessionKey' => 'Admin'
+		'sessionKey' => 'Admin',
+		// preview及びforce指定時に管理画面へログインしていない状況下での挙動判別
+		// true：ログイン画面へリダイレクト
+		// false：ログイン画面へリダイレクトしない
+		// @see /lib/Baser/Routing/Route/BcContentsRoute.php
+		'previewRedirect' => true
+
 	)
 	// フロント（例）
 /* 'front' => array(
