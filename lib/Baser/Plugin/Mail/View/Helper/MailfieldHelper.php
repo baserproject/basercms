@@ -28,7 +28,7 @@ class MailfieldHelper extends AppHelper {
 		if (isset($data['MailField'])) {
 			$data = $data['MailField'];
 		}
-
+		if(!empty($data['value']))$attributes['value'] = $data['value'];
 		$attributes['size'] = $data['size'];
 		$attributes['rows'] = $data['rows'];
 		$attributes['maxlength'] = $data['maxlength'];
