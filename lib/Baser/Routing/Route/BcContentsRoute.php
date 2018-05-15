@@ -40,7 +40,7 @@ class BcContentsRoute extends CakeRoute {
 
 		//管理システムにログインしているかつプレビューの場合は公開状態のステータスは無視する
 		$publish = true;
-		if(!empty($request->query['preview']) || !empty($request->query['force'])) {
+		if((!empty($request->query['preview']) || !empty($request->query['force'])) && BcUtil::loginUser()) {
 			$publish = false;
 		}
 		
@@ -89,11 +89,15 @@ class BcContentsRoute extends CakeRoute {
 			return false;
 		}
 
-		// データが存在してもプレビューで管理システムにログインしていない場合はログイン画面に遷移
-		if((!empty($request->query['preview']) || !empty($request->query['force'])) && !BcUtil::loginUser()) {
-			$_SESSION['Auth']['redirect'] = $_SERVER['REQUEST_URI'];
-			header('Location: ' . topLevelUrl(false) . baseUrl() . Configure::read('BcAuthPrefix.admin.alias') . '/users/login');
-			exit();
+		// 管理画面にログインしていないとき、リダイレクトする設定ならば処理をする
+		$redirect = Configure::read('BcAuthPrefix.admin.previewRedirect');
+		if ($redirect) {
+			// データが存在してもプレビューで管理システムにログインしていない場合はログイン画面に遷移
+			if((!empty($request->query['preview']) || !empty($request->query['force'])) && !BcUtil::loginUser()) {
+				$_SESSION['Auth']['redirect'] = $_SERVER['REQUEST_URI'];
+				header('Location: ' . topLevelUrl(false) . baseUrl() . Configure::read('BcAuthPrefix.admin.alias') . '/users/login');
+				exit();
+			}
 		}
 		
 		if($content['Content']['alias_id'] && !$Content->isPublishById($content['Content']['alias_id'])) {
