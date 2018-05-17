@@ -106,8 +106,12 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener {
 			$this->Page->saveSearchIndex($this->Page->createSearchIndex($page));
 		}
 		$this->Page->Behaviors->load('BcCache');
-		$Folder = new Folder($this->oldPath);
-		$Folder->delete();
+		// 別の階層に移動の時は元の固定ページファイルを削除（同一階層の移動の時は削除しない）
+		$nowPath = $this->Page->getContentFolderPath($event->data['data']['Content']['id']);
+		if ($this->oldPath != $nowPath) {
+			$Folder = new Folder($this->oldPath);
+			$Folder->delete();
+		}
 	}
 
 /**
