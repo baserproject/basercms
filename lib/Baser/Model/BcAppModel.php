@@ -1524,5 +1524,131 @@ class BcAppModel extends Model {
 		}
 		return true;
 	}
+
+	public function exists($id = null) {
+		if ($this->Behaviors->loaded('SoftDelete')) {
+			return $this->existsAndNotDeleted($id);
+		} else {
+			return parent::exists($id);
+		}
+	}
+	public function delete($id = null, $cascade = true) {
+		$result = parent::delete($id, $cascade);
+		if ($result === false && $this->Behaviors->enabled('SoftDelete')) {
+			return (bool)$this->field('deleted', ['deleted' => 1]);
+		}
+		return $result;
+	}
+
+	public function dataIter(&$results, $callback) {
+		if (! $isVector = isset($results[0])) {
+			$results = array($results);
+		}
+		$modeled = array_key_exists($this->alias, $results[0]);
+		foreach ($results as &$value) {
+			if (! $modeled) {
+				$value = array($this->alias => $value);
+			}
+			$continue = $callback($value, $this);
+			if (! $modeled) {
+				$value = $value[$this->alias];
+			}
+			if (! is_null($continue) && ! $continue) {
+				break;
+			}
+		}
+		if (! $isVector) {
+			$results = $results[0];
+		}
+	}
+
+/**
+ * 指定した日付よりも新しい日付かどうかチェックする
+ *
+ * @param $check
+ * @param $target
+ * @return bool
+ * @unittest yet
+ */
+	public function checkDateAfterThan($check, $target) {
+		$check = (is_array($check)) ? current($check) : $check;
+		if($check && !empty($this->data[$this->alias][$target])) {
+			if(strtotime($check) <= strtotime($this->data[$this->alias][$target])) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+/**
+ * コンテンツのURLにマッチする候補を取得する
+ *
+ * @param $url
+ * @return array
+ */
+	public function getUrlPattern($url) {
+		$parameter = preg_replace('/^\//', '', $url);
+		$paths = [];
+		$paths[] = '/' . $parameter;
+		if(preg_match('/\/$/', $paths[0])) {
+			$paths[] = $paths[0] . 'index';
+		} elseif(preg_match('/^(.*?\/)index$/', $paths[0], $matches)) {
+			$paths[] = $matches[1];
+		} elseif (preg_match('/^(.+?)\.html$/', $paths[0], $matches)) {
+			$paths[] = $matches[1];
+			if(preg_match('/^(.*?\/)index$/', $matches[1], $matches)) {
+				$paths[] = $matches[1];
+			}
+		}
+		return $paths;
+	}
+
+/**
+ * レコードデータの消毒をおこなう
+ * @return array
+ */
+	public function sanitizeRecord($datas) {
+		foreach ($datas as $key => $data) {
+				$datas[$key] = $this->sanitize($data);
+		}
+		return $datas;
+	}
+
+/**
+ * 単体データの消毒を行う
+ * 配列には対応しない
+ * @param $data
+ * @return mixed|string
+ */
+	public function sanitize($data) {
+		if (!is_array($data)) {
+			// エラー時用のサニタイズ処理を一旦元の形式に復元した上で再度サイニタイズ処理をかける。
+			$data = str_replace("&lt;!--", "<!--", $data);
+
+			$data = htmlspecialchars($data);
+			//$data = str_replace("\n","<br />",$data);
+			return $data;
+		}else {
+			return $data;
+		}
+	}
 	
+/**
+ * スクリプトがが埋め込まれているかチェックする
+ * - 管理グループの場合は無条件に true を返却
+ * - 管理グループ以外の場合に許可されている場合は無条件に true を返却
+ * @param array $check
+ * @return bool
+ */
+	public function containsScript($check) {
+		if(BcUtil::isAdminUser() || Configure::read('BcApp.allowedPhpOtherThanAdmins')) {
+			return true;
+		}
+		$value = $check[key($check)];
+		if(preg_match('/(<\?=|<\?php|<script)/', $value)) {
+			return false;
+		}
+		return true;
+	}
+
 }

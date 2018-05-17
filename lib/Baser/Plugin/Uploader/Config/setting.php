@@ -25,7 +25,10 @@
 					'url' => array('admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_categories', 'action' => 'add')),
 				array('name' => '基本設定', 
 					'url' => array('admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_configs', 'action' => 'index')),
-		)
+		),
 	);
-
+	$config['Uploader'] = array(
+		// システム管理者グループ以外のユーザーがアップロード可能なファイル（拡張子をカンマ区切りで指定する）
+		'allowedExt' => 'gif,jpg,png,pdf,zip,doc,docx,xls,xlsx,ppt,pptx'
+	);
 ?>

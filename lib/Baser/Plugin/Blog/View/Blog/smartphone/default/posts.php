@@ -25,7 +25,7 @@
 				<?php $class[] = 'last' ?>
 			<?php endif ?>
 			<li class="<?php echo implode(' ', $class) ?>">
-				<?php $this->Blog->postLink($post, '<span class="date">' . $this->Blog->getPostDate($post, 'Y.m.d') . '</span><br />' . '<span class="title">' . $this->Blog->getPostTitle($post, false) . '</span>') ?>
+				<?php $this->Blog->postLink($post, '<span class="date">' . $this->Blog->getPostDate($post, 'Y.m.d') . '</span><br />' . '<span class="title">' . $this->Blog->getPostTitle($post, false) . '</span>', array('escape' => false)) ?>
 			</li>
 		<?php endforeach ?>
 	</ul>

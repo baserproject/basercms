@@ -43,12 +43,12 @@ $(function(){
 		</div>
 
 		<div class="theme-info">
-			<p class="theme-name"><strong><?php echo $currentTheme['title'] ?></strong>&nbsp;(&nbsp;<?php echo $currentTheme['name'] ?>&nbsp;)</p>
+			<p class="theme-name"><strong><?php echo h($currentTheme['title']) ?></strong>&nbsp;(&nbsp;<?php echo $currentTheme['name'] ?>&nbsp;)</p>
 			<p class="theme-version">バージョン：<?php echo $currentTheme['version'] ?></p>
 			<p class="theme-author">制作者：<?php if (!empty($currentTheme['url']) && !empty($currentTheme['author'])): ?>
-					<?php $this->BcBaser->link($currentTheme['author'], $currentTheme['url'], array('target' => '_blank')) ?>
+					<?php $this->BcBaser->link($currentTheme['author'], $currentTheme['url'], array('target' => '_blank', 'escape' => true)) ?>
 				<?php else: ?>
-					<?php echo $currentTheme['author'] ?>
+					<?php echo h($currentTheme['author']) ?>
 				<?php endif ?>
 			</p>
 		</div>
@@ -60,7 +60,7 @@ $(function(){
 			<?php echo $this->BcForm->end() ?>
 		<?php endif ?>
 		<br /><br /><br /><br />
-		<div class="theme-description"><?php echo nl2br($currentTheme['description']) ?></div>
+		<div class="theme-description"><?php echo nl2br(h($currentTheme['description'])) ?></div>
 	<?php else: ?>
 		<p>現在、テーマが選択されていません。</p>
 	<?php endif ?>

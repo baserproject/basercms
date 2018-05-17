@@ -105,6 +105,9 @@ class Page extends AppModel {
  * @var array
  */
 	public $validate = array(
+		'id' => array(
+			array('rule' => 'numeric', 'on' => 'update', 'message' => 'IDに不正な値が利用されています。')
+		),
 		'name' => array(
 			array('rule' => array('notEmpty'),
 				'message' => 'ページ名を入力してください。',
@@ -127,17 +130,20 @@ class Page extends AppModel {
 				'message' => '説明文は255文字以内で入力してください。')
 		),
 		'contents' => array(
-			array('rule' => array('phpValidSyntax'),
-				'message' => 'PHPの構文エラーが発生しました。'),
-			array('rule' => array('maxByte', 64000),
-				'message' => '本稿欄に保存できるデータ量を超えています。')
+			array('rule' => 'phpValidSyntax', 'message' => '本稿欄でPHPの構文エラーが発生しました。'),
+			array('rule' => array('maxByte', 64000), 'message' => '本稿欄に保存できるデータ量を超えています。'),
+			array('rule' => 'containsScript', 'message' => '本稿欄でスクリプトの入力は許可されていません。')
 		),
 		'draft' => array(
-			array('rule' => array('phpValidSyntax'),
-				'message' => 'PHPの構文エラーが発生しました。'),
-			array('rule' => array('maxByte', 64000),
-				'message' => '草稿欄に保存できるデータ量を超えています。')
+			array('rule' => 'phpValidSyntax', 'message' => '草稿欄でPHPの構文エラーが発生しました。'),
+			array('rule' => array('maxByte', 64000), 'message' => '草稿欄に保存できるデータ量を超えています。'),
+			array('rule' => 'containsScript', 'message' => '草稿欄でスクリプトの入力は許可されていません。'),
 		),
+		'code' => array(
+			array('rule' => 'phpValidSyntax', 'message' => 'PHPの構文エラーが発生しました。'),
+			array('rule' => array('maxByte', 64000), 'message' => '草稿欄に保存できるデータ量を超えています。'),
+			array('rule' => 'containsScript', 'message' => 'スクリプトの入力は許可されていません。')
+		)
 	);
 
 /**

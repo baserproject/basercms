@@ -42,17 +42,17 @@ $class = ' class="' . implode(' ', $classies) . '"';
 <?php endif ?>
 	<td>
 		<?php if (!empty($data['BlogCategory']['title'])): ?>
-			<?php echo $data['BlogCategory']['title']; ?>
+			<?php echo h($data['BlogCategory']['title']); ?>
 		<?php endif; ?>
 		<?php if ($data['BlogContent']['tag_use'] && !empty($data['BlogTag'])): ?>
 			<?php $tags = Hash::extract($data['BlogTag'], '{n}.name') ?>
-			<span class="tag"><?php echo implode('</span><span class="tag">', $tags) ?></span>
+			<span class="tag"><?php echo h(implode('</span><span class="tag">', $tags)) ?></span>
 		<?php endif ?>
 		<br />
-		<?php $this->BcBaser->link($data['BlogPost']['name'], array('action' => 'edit', $data['BlogContent']['id'], $data['BlogPost']['id'])) ?>
+		<?php $this->BcBaser->link($data['BlogPost']['name'], array('action' => 'edit', $data['BlogContent']['id'], $data['BlogPost']['id']), array('escape' => true)) ?>
 	</td>
 	<td>
-		<?php echo $this->BcBaser->getUserName($data['User']) ?>
+		<?php echo h($this->BcBaser->getUserName($data['User'])) ?>
 	</td>
 	<td style="text-align:center" class="status"><?php echo $this->BcText->booleanMark($data['BlogPost']['status']); ?></td>
 	<?php if ($data['BlogContent']['comment_use']): ?>

@@ -73,8 +73,31 @@ class UploaderFilesController extends BcPluginAppController {
 	public $subMenuElements = array('uploader');
 	public function beforeFilter() {
 		$this->BcAuth->allow('view_limited_file');
+		$this->_checkEnv();
 		parent::beforeFilter();
 	}
+
+/**
+ * プラグインの環境をチェックする 
+ */
+	protected function _checkEnv() {
+		$savePath = WWW_ROOT . 'files' . DS . $this->UploaderFile->actsAs['BcUpload']['saveDir'] . DS;
+		if(!is_dir($savePath . 'limited')) {
+			$Folder = new Folder();
+			$Folder->create($savePath . 'limited', 0777);
+			if(!is_dir($savePath . 'limited')) {
+				$this->setMessage('現在、アップロードファイルの公開期間の指定ができません。指定できるようにするには、' . $savePath . ' に書き込み権限を与えてください。', true);
+			}
+			$File = new File($savePath . 'limited' . DS . '.htaccess');
+			$htaccess = "Order allow,deny\nDeny from all";
+			$File->write($htaccess);
+			$File->close();
+			if(!file_exists($savePath . 'limited' . DS . '.htaccess')) {
+				$this->setMessage('現在、アップロードファイルの公開期間の指定ができません。指定できるようにするには、' . $savePath . 'limited/ に書き込み権限を与えてください。', true);
+			}
+		}
+	}
+	
 /**
  * [ADMIN] ファイル一覧
  *

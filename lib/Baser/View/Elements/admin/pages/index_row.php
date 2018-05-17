@@ -70,7 +70,7 @@ $url = preg_replace('/index$/', '', $data['Page']['url']);
 	</td>
 	<td style="width:15%">
 		<?php if (isset($users[$data['Page']['author_id']])) : ?>
-			<?php echo $users[$data['Page']['author_id']] ?>
+			<?php echo h($users[$data['Page']['author_id']]) ?>
 		<?php endif ?>
 	</td>
 	<td style="width:10%;white-space: nowrap">

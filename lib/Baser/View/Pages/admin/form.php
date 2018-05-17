@@ -472,6 +472,7 @@ function pageTypeChengeHandler() {
 		'editorEnterBr' => @$siteConfig['editor_enter_br']
 			), $editorOptions)); ?>
 	<?php echo $this->BcForm->error('Page.contents') ?>
+	<?php echo $this->BcForm->error('Page.draft') ?>
 </div>
 
 <div class="section">
@@ -498,7 +499,7 @@ function pageTypeChengeHandler() {
 					<?php echo $this->BcForm->error('Page.author_id') ?>
 				<?php else: ?>
 					<?php if (isset($users[$this->BcForm->value('Page.author_id')])): ?>
-						<?php echo $users[$this->BcForm->value('Page.author_id')] ?>
+						<?php echo h($users[$this->BcForm->value('Page.author_id')]) ?>
 					<?php endif; ?>
 				<?php echo $this->BcForm->hidden('Page.author_id') ?>
 				<?php endif; ?>

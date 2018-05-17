@@ -58,7 +58,14 @@ class UploaderFile extends BcPluginAppModel {
  * @param	string	$ds
  */
 	public function __construct($id = false, $table = null, $ds = null) {
-		
+		if(!BcUtil::isAdminUser()) {
+			$this->validate['name'] = array(
+				'fileExt' => array(
+					'rule' => array('fileExt', Configure::read('Uploader.allowedExt')),
+					'message' => '許可されていないファイル形式です。'
+				)
+			);
+		}
 		parent::__construct($id, $table, $ds);
 		$sizes = array('large', 'midium', 'small', 'mobile_large', 'mobile_small');
 		$UploaderConfig = ClassRegistry::init('Uploader.UploaderConfig');

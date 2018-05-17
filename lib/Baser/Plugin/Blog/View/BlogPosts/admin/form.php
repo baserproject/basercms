@@ -330,7 +330,7 @@ $(function(){
 					<?php echo $this->BcForm->error('BlogPost.user_id') ?>
 				<?php else: ?>
 					<?php if (isset($users[$this->BcForm->value('BlogPost.user_id')])): ?>
-					<?php echo $users[$this->BcForm->value('BlogPost.user_id')] ?>
+					<?php echo h($users[$this->BcForm->value('BlogPost.user_id')]) ?>
 					<?php endif ?>
 					<?php echo $this->BcForm->hidden('BlogPost.user_id') ?>
 				<?php endif ?>

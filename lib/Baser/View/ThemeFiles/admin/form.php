@@ -23,7 +23,7 @@ $(window).load(function() {
 
 <!-- current -->
 <div class="em-box align-left">
-	現在の位置：<?php echo $currentPath ?>
+	現在の位置：<?php echo h($currentPath) ?>
 </div>
 
 <?php if ($this->request->action == 'admin_add'): ?>

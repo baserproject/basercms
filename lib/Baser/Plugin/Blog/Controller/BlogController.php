@@ -272,8 +272,7 @@ class BlogController extends BlogAppController {
 				$data = $this->BlogPost->User->find('first', array('fields' => array('real_name_1', 'real_name_2', 'nickname'), 'conditions' => array('User.name' => $author)));
 				App::uses('BcBaserHelper', 'View/Helper');
 				$BcBaser = new BcBaserHelper(new View());
-				$userName = $BcBaser->getUserName($data);
-				$this->pageTitle = urldecode($userName);
+				$this->pageTitle = $BcBaser->getUserName($data);
 				$template = $this->blogContent['BlogContent']['template'] . DS . 'archives';
 				$this->set('blogArchiveType', $type);
 				break;

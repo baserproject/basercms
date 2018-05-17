@@ -193,6 +193,9 @@ class BlogHelper extends AppHelper {
  * @return string 記事へのリンク
  */
 	public function getPostLink($post, $title, $options = array()) {
+		$options = array_merge([
+			'escape' => true
+		], $options);
 		$url = $this->getPostLinkUrl($post, false);
 
 		// EVENT beforeGetPostLink
@@ -417,7 +420,7 @@ class BlogHelper extends AppHelper {
 					'controller' => $post['BlogContent']['name'],
 					'action' => 'archives', 'tag', $tag['name']
 				);
-				$tagLinks[] = $this->BcBaser->getLink($tag['name'], $url);
+				$tagLinks[] = $this->BcBaser->getLink($tag['name'], $url, array('escape' => true));
 			}
 		}
 		if ($tagLinks) {
@@ -499,7 +502,7 @@ class BlogHelper extends AppHelper {
  * @return void
  */
 	public function author($post) {
-		echo $this->BcBaser->getUserName($post['User']);
+		echo h($this->BcBaser->getUserName($post['User']));
 	}
 
 /**

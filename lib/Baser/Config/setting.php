@@ -58,6 +58,12 @@ $config['BcApp'] = array(
 		'none' => 'なし',
 		'BcCkeditor' => 'CKEditor'
 	),
+	'testTheme' => 'nada-icons',
+	// 固定ページでシンタックスエラーチェックを行うかどうか
+	// お名前ドットコムの場合、CLI版PHPの存在確認の段階で固まってしまう
+	'validSyntaxWithPage' => true,
+	// 管理者以外のPHPコードを許可するかどうか
+	'allowedPhpOtherThanAdmins' => true,
 	'marketThemeRss' => 'https://market.basercms.net/themes.rss',
 	'marketPluginRss' => 'https://market.basercms.net/plugins.rss',
 	'specialThanks'	=> 'http://basercms.net/special_thanks/special_thanks/ajax_users'

@@ -55,11 +55,11 @@ $ (function (){
 					<?php
 					$userName = $this->BcBaser->getUserName($record['User']);
 					if ($userName) {
-						echo '[' . $userName . ']';
+						echo '[' . h($userName) . ']';
 					}
 					?>
 				</small><br />
-				<?php echo $record['Dblog']['name'] ?></li>
+				<?php echo h($record['Dblog']['name']) ?></li>
 		<?php endforeach; ?>
 	</ul>
 	<?php $this->BcBaser->element('list_num') ?>

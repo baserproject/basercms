@@ -38,9 +38,9 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'] . '/archives/';
 					$class = '';
 				}
 				if ($view_count) {
-					$title = $this->BcBaser->getUserName($author['User']) . ' (' . $author['count'] . ')';
+					$title = h($this->BcBaser->getUserName($author['User'])) . ' (' . $author['count'] . ')';
 				} else {
-					$title = $this->BcBaser->getUserName($author['User']);
+					$title = h($this->BcBaser->getUserName($author['User']));
 				}
 				?>
 				<li<?php echo $class ?>>
@@ -51,7 +51,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'] . '/archives/';
 						'action' => 'archives',
 						'author',
 						$author['User']['name']
-					))
+					), array('escape' => true))
 					?>
 				</li>
 			<?php endforeach; ?>
