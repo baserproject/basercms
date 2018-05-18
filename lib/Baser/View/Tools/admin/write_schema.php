@@ -42,7 +42,7 @@
 		</td>
 	</tr>
 </table>
-
+<p>テーブルを選択して「生成」ボタンを押してください。</p>
 <div class="submit"><?php echo $this->BcForm->submit(__d('baser', '生　成'), ['div' => false, 'class' => 'btn-red button']) ?></div>
 
 <?php echo $this->BcForm->end() ?>
