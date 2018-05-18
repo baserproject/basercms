@@ -555,7 +555,7 @@ table.sub-menu{
 	background:-webkit-gradient(linear,left top,left bottom,from(#FFF),color-stop(100%,#F3F3F3));
 	background:-o-linear-gradient(top,#FFF,#F3F3F3);
 	margin:10px;
-	padding:8px 40px;
+	padding:3px 40px;
 	font-weight: bold;
 	font-size: 1.2em;
 	white-space: nowrap;
@@ -584,8 +584,8 @@ table.sub-menu{
 }
 .submit a.button,
 .ui-widget-content a.button{
-	padding-top:12px;
-	padding-bottom:12px;
+	padding-top:5px;
+	padding-bottom:5.5px;
 }
 *:first-child+html .submit a.button,
 .ui-widget-content a.button{
