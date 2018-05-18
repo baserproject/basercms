@@ -190,7 +190,7 @@ input[type=button] {
 input[type=text], textarea, input[type=password] {
 	font-size: 1.2em;
 	color:#535A62;
-	padding: 3px 3px;
+	padding: 8px 8px;
 }
 input[type=text], input[type=password] {
 	height:1.4em;

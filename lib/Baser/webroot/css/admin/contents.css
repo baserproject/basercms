@@ -184,7 +184,7 @@ table.sub-menu{
 #SubMenu .sub-menu th{
 	text-align: left;
 	background-color:#EFEFEF;
-	padding: 5px 10px;
+	padding: 10px 10px;
 	font-weight: bold;
 	border: 1px solid #DDD;
 	white-space:nowrap;
@@ -192,7 +192,7 @@ table.sub-menu{
 }
 #SubMenu .sub-menu td{
 	background-color: #FFF;
-	padding: 5px 10px;
+	padding: 10px 10px;
 	border: 1px solid #DDD;
 }
 .sub-menu li{
@@ -317,7 +317,7 @@ table.sub-menu{
 	/*background-image: url(../../img/admin/bg_list.png);*/
 	background-repeat: repeat-y;
 	background-color: #EFEFEF;
-	padding:5px 10px;
+	padding:10px 10px;
 	border: 1px solid #DDD;
 	white-space: nowrap;
 	color:#535A62;
@@ -335,10 +335,10 @@ table.sub-menu{
 }
 .contents-body .list-table th a {
 	line-height: 20px;
-	color:#690;
+	color:#9C0!important;
 }
 .contents-body .list-table td{
-	padding: 5px 10px;
+	padding: 10px 10px;
 	border-left: 1px solid #DDD;
 	border-right: 1px solid #DDD;
 	border-top: 1px dotted #DDD;
@@ -451,7 +451,7 @@ table.sub-menu{
 	text-align: left;
 	background-repeat: repeat-x;
 	background-color: #EFEFEF;
-	padding:5px 10px;
+	padding:10px 10px;
 	white-space: nowrap;
 	width:20%;
 	border: 1px solid #DDD;
@@ -470,7 +470,7 @@ table.sub-menu{
 	line-height: 20px;
 }
 .contents-body .form-table td{
-	padding: 5px 10px;
+	padding: 10px 10px;
 	border-left: 1px solid #DDD;
 	border-right: 1px solid #DDD;
 	border-top: 1px dotted #DDD;
@@ -524,7 +524,7 @@ table.sub-menu{
 }
 
 .contents-body .form-table th {
-    font-size: 12px;
+    font-size: 13px;
 }
 
     /* edit form
@@ -555,7 +555,7 @@ table.sub-menu{
 	background:-webkit-gradient(linear,left top,left bottom,from(#FFF),color-stop(100%,#F3F3F3));
 	background:-o-linear-gradient(top,#FFF,#F3F3F3);
 	margin:10px;
-	padding:3px 40px;
+	padding:8px 40px;
 	font-weight: bold;
 	font-size: 1.2em;
 	white-space: nowrap;
@@ -584,8 +584,8 @@ table.sub-menu{
 }
 .submit a.button,
 .ui-widget-content a.button{
-	padding-top:5px;
-	padding-bottom:5.5px;
+	padding-top:12px;
+	padding-bottom:12px;
 }
 *:first-child+html .submit a.button,
 .ui-widget-content a.button{
