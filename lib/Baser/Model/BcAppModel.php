@@ -1749,5 +1749,23 @@ class BcAppModel extends Model {
 			return $value;
 		}
 	}
+	
+/**
+ * スクリプトがが埋め込まれているかチェックする
+ * - 管理グループの場合は無条件に true を返却
+ * - 管理グループ以外の場合に許可されている場合は無条件に true を返却
+ * @param array $check
+ * @return bool
+ */
+	public function containsScript($check) {
+		if(BcUtil::isAdminUser() || Configure::read('BcApp.allowedPhpOtherThanAdmins')) {
+			return true;
+		}
+		$value = $check[key($check)];
+		if(preg_match('/(<\?=|<\?php|<script)/', $value)) {
+			return false;
+		}
+		return true;
+	}
 
 }

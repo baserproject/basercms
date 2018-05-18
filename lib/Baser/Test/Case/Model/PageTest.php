@@ -77,6 +77,7 @@ class PageTest extends BaserTestCase {
 	}
 
 	public function testPHP構文チェック正常系() {
+		Configure::write('BcApp.allowedPhpOtherThanAdmins', true);
 		$this->Page->create([
 			'Page' => [
 				'name' => 'test',
@@ -84,6 +85,7 @@ class PageTest extends BaserTestCase {
 			]
 		]);
 		$this->assertTrue($this->Page->validates());
+		Configure::write('BcApp.allowedPhpOtherThanAdmins', false);
 	}
 
 	public function testPHP構文チェック異常系() {

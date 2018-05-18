@@ -4991,7 +4991,7 @@ msgid "更新に失敗しました。入力内容を見直してください。"
 msgstr ""
 
 #: Plugin/Uploader/View/Elements/admin/uploader_files/index.php:23
-msgid "アップロードに失敗しました。ファイルサイズを確認してください。"
+msgid "アップロードに失敗しました。ファイルサイズが大きいか、許可されていない形式です。"
 msgstr ""
 
 #: Plugin/Uploader/View/Elements/admin/uploader_files/index.php:24

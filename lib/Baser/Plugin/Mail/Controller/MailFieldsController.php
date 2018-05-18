@@ -63,6 +63,7 @@ class MailFieldsController extends MailAppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
+		$this->_checkEnv();
 		$this->MailContent->recursive = -1;
 		$mailContentId = $this->params['pass'][0];
 		$this->mailContent = $this->MailContent->read(null, $mailContentId);
@@ -70,6 +71,27 @@ class MailFieldsController extends MailAppController {
 		$this->crumbs[] = array('name' => sprintf('%s 設定', $this->request->params['Content']['title']), 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId));
 		if($this->request->params['Content']['status']) {
 			$this->set('publishLink', $this->request->params['Content']['url']);
+		}
+	}
+
+/**
+ * プラグインの環境をチェックする
+ */
+	protected function _checkEnv() {
+		$savePath = WWW_ROOT . 'files' . DS . "mail" . DS . 'limited';
+		if(!is_dir($savePath)) {
+			$Folder = new Folder();
+			$Folder->create($savePath, 0777);
+			if(!is_dir($savePath)) {
+				$this->setMessage('ファイルフィールドを利用している場合、現在、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにする為には、' . WWW_ROOT . 'files/mail/ に書き込み権限を与えてください。', true);
+			}
+			$File = new File($savePath . DS . '.htaccess');
+			$htaccess = "Order allow,deny\nDeny from all";
+			$File->write($htaccess);
+			$File->close();
+			if(!file_exists($savePath . DS . '.htaccess')) {
+				$this->setMessage('ファイルフィールドを利用している場合、現在、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにする為には、' . WWW_ROOT . 'files/mail/limited/ に書き込み権限を与えてください。', true);
+			}
 		}
 	}
 

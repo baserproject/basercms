@@ -38,7 +38,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
 			[<?php echo __d('baser', '公開状態') ?>：<?php echo $this->BcText->booleanMark($statusPublish); ?>]&nbsp;<?php echo $this->BcTime->format('Y.m.d',$file['UploaderFile']['created']) ?>
 		</span>
 	</div>
-	<div class="user-name" style="text-align:right"><span><?php echo $this->BcText->arrayValue($file['UploaderFile']['user_id'], $users) ?></span></div>
+	<div class="user-name" style="text-align:right"><span><?php echo h($this->BcText->arrayValue($file['UploaderFile']['user_id'], $users)) ?></span></div>
 	<div style="display:none">
 		<span class="modified"><?php echo $this->BcTime->format('Y.m.d',$file['UploaderFile']['modified']) ?></span>
 		<span class="small"><?php echo $file['UploaderFile']['small'] ?></span>

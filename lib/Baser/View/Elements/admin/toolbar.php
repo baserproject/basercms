@@ -72,7 +72,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 			<ul class="clearfix">
 				<li>
 					<?php if (!empty($user)): ?>
-						<?php $this->BcBaser->link($this->BcBaser->getUserName($user) . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title']) ?>
+						<?php $this->BcBaser->link(h($this->BcBaser->getUserName($user)) . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title']) ?>
 						<ul>
 							<?php if ($this->Session->check('AuthAgent')): ?>
 								<li><?php $this->BcBaser->link(__d('baser', '元のユーザーに戻る'), '/users/back_agent') ?></li>

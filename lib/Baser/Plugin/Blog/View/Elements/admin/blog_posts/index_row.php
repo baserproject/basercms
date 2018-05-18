@@ -34,17 +34,17 @@
 	<td class="eye_catch"><?php echo $this->BcUpload->uploadImage('BlogPost.eye_catch',  $data['BlogPost']['eye_catch'], ['imgsize' => 'mobile_thumb']) ?></td>
 	<td>
 		<?php if (!empty($data['BlogCategory']['title'])): ?>
-			<?php echo $data['BlogCategory']['title']; ?>
+			<?php echo h($data['BlogCategory']['title']); ?>
 		<?php endif; ?>
 		<?php if ($data['BlogContent']['tag_use'] && !empty($data['BlogTag'])): ?>
 			<?php $tags = Hash::extract($data['BlogTag'], '{n}.name') ?>
 			<span class="tag"><?php echo implode('</span><span class="tag">', h($tags)) ?></span>
 		<?php endif ?>
 		<br />
-		<?php $this->BcBaser->link($data['BlogPost']['name'], ['action' => 'edit', $data['BlogContent']['id'], $data['BlogPost']['id']]) ?>
+		<?php $this->BcBaser->link($data['BlogPost']['name'], ['action' => 'edit', $data['BlogContent']['id'], $data['BlogPost']['id']], ['escape' => true]) ?>
 	</td>
 	<td style="text-align:center" class="status">
-		<?php echo $this->BcBaser->getUserName($data['User']) ?><br>
+		<?php echo h($this->BcBaser->getUserName($data['User'])) ?><br>
         <?php echo $this->BcText->booleanMark($data['BlogPost']['status']); ?>
 	</td>
 	

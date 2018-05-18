@@ -23,10 +23,10 @@ if ($this->BcBaser->isHome()) {
 			}
 			if ($this->BcArray->last($crumbs, $key)) {
 				if ($this->viewPath != 'home' && $crumb['name']) {
-					$this->BcBaser->addCrumb('<strong>' . $crumb['name'] . '</strong>');
+					$this->BcBaser->addCrumb('<strong>' . h($crumb['name']) . '</strong>');
 				}
 			} else {
-				$this->BcBaser->addCrumb($crumb['name'], $crumb['url']);
+				$this->BcBaser->addCrumb(h($crumb['name']), $crumb['url']);
 			}
 		}
 	}

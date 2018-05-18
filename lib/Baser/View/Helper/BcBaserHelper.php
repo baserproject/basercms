@@ -382,7 +382,7 @@ class BcBaserHelper extends AppHelper {
 	 * @return void
 	 */
 	public function contentsTitle() {
-		echo $this->getContentsTitle();
+		echo h($this->getContentsTitle());
 	}
 
 	/**

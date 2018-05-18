@@ -41,6 +41,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 		'editorEnterBr' => @$siteConfig['editor_enter_br']
 			], $editorOptions)); ?>
 	<?php echo $this->BcForm->error('Page.contents') ?>
+	<?php echo $this->BcForm->error('Page.draft') ?>
 </div>
 
 <?php if (BcUtil::isAdminUser()): ?>

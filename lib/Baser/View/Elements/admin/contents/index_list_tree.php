@@ -63,12 +63,12 @@
 	"contentType":"<?php echo $type ?>",
 	"contentAliasId":"<?php echo $data['Content']['alias_id'] ?>",
 	"contentPlugin":"<?php echo $data['Content']['plugin'] ?>",
-	"contentTitle":"<?php echo addslashes(strip_tags(h($data['Content']['title']))) ?>",
+	"contentTitle":"<?php echo addslashes(strip_tags($data['Content']['title'])) ?>",
 	"contentSiteRoot":"<?php echo (bool) $data['Content']['site_root'] ?>",
 	"editDisabled":"<?php echo $editDisabled ?>",
 	"manageDisabled":"<?php echo $manageDisabled ?>"
 }'<?php if($open): ?> class="jstree-open"<?php endif ?>>
-			<span><?php echo strip_tags(h($data['Content']['title'])) ?></span>
+			<span><?php echo h($data['Content']['title']) ?></span>
 			<?php if(!empty($data['children'])): ?>
 				<?php $this->BcBaser->element('admin/contents/index_list_tree', ['datas' => $data['children']]) ?>
 			<?php endif ?>

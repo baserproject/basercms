@@ -38,13 +38,13 @@ $baseCurrentUrl = $this->request->params['Content']['url'] . '/archives/';
 					$class = '';
 				}
 				if ($view_count) {
-					$title = $this->BcBaser->getUserName($author['User']) . ' (' . $author['count'] . ')';
+					$title = h($this->BcBaser->getUserName($author['User'])) . ' (' . $author['count'] . ')';
 				} else {
-					$title = $this->BcBaser->getUserName($author['User']);
+					$title = h($this->BcBaser->getUserName($author['User']));
 				}
 				?>
 				<li<?php echo $class ?>>
-					<?php $this->BcBaser->link($title, $this->request->params['Content']['name'] . '/archives/author/' . $author['User']['name']) ?>
+					<?php $this->BcBaser->link($title, $this->request->params['Content']['name'] . '/archives/author/' . $author['User']['name'], ['escape' => true]) ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>

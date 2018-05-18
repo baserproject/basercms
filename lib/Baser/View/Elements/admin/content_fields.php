@@ -368,7 +368,7 @@ if($this->BcContents->isEditable()) {
 				</td>
 				<td>
 					<?php if(!empty($relatedContent['Content'])): ?>
-						<?php echo $relatedContent['Content']['title'] ?>
+						<?php echo h($relatedContent['Content']['title']) ?>
 						<?php if(!empty($relatedContent['Content'])): ?>
 							<small>（<?php echo $this->BcContents->settings[$relatedContent['Content']['type']]['title'] ?>）</small>
 						<?php endif ?>

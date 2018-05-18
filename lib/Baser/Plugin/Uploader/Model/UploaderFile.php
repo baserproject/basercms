@@ -37,26 +37,6 @@ class UploaderFile extends AppModel {
 	]]];
 
 /**
- * バリデーション
- *
- * @var array
- */
-	public $validate = [
-		'publish_begin' => [
-			'checkPeriod' => [
-				'rule' => 'checkPeriod',
-				'message' => '公開期間が不正です。'
-			]
-		],
-		'publish_end' => [
-			'checkPeriod' => [
-				'rule' => 'checkPeriod',
-				'message' => '公開期間が不正です。'
-			]
-		]
-	];
-
-/**
  * 公開期間をチェックする
  *
  * @return bool
@@ -78,6 +58,28 @@ class UploaderFile extends AppModel {
  * @param	string	$ds
  */
 	public function __construct($id = false, $table = null, $ds = null) {
+		$this->validate = [
+			'publish_begin' => [
+				'checkPeriod' => [
+					'rule' => 'checkPeriod',
+					'message' => __d('baser', '公開期間が不正です。')
+				]
+			],
+			'publish_end' => [
+				'checkPeriod' => [
+					'rule' => 'checkPeriod',
+					'message' => __d('baser', '公開期間が不正です。')
+				]
+			]
+		];
+		if(!BcUtil::isAdminUser()) {
+			$this->validate['name'] = [
+				'fileExt' => [
+					'rule' => ['fileExt', Configure::read('Uploader.allowedExt')],
+					'message' => __d('baser', '許可されていないファイル形式です。')
+				]
+			];
+		}
 		parent::__construct($id, $table, $ds);
 		$sizes = array('large', 'midium', 'small', 'mobile_large', 'mobile_small');
 		$UploaderConfig = ClassRegistry::init('Uploader.UploaderConfig');
