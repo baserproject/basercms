@@ -25,7 +25,7 @@
 <div class="section">
 	<h2><?php echo __d('baser', 'データのバックアップ')?></h2>
 	<p><?php echo __d('baser', 'データベースのデータをバックアップファイルとしてPCにダウンロードします。')?></p>
-	<?php echo $this->BcForm->create('Tool', ['type' => 'get', 'url' => ['action' => 'maintenance', 'backup']]) ?>
+	<?php echo $this->BcForm->create('Tool', ['type' => 'get', 'url' => ['action' => 'maintenance', 'backup'], 'target' => '_blank']) ?>
 	<p>
 		<?php echo $this->BcForm->input('Tool.backup_encoding', ['type' => 'radio', 'options' => ['UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'UTF-8']) ?>
 		<?php echo $this->BcForm->error('Tool.backup_encoding') ?>
