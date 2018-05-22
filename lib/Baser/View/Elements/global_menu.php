@@ -37,9 +37,9 @@ if(!isset($currentId)) {
 					if($content['Content']['id'] == $currentId || $this->BcBaser->isContentsParentId($currentId, $content['Content']['id'])) {
 						$liClass .= ' current';
 					}
-					$options = [];
+					$options = ['escape' => true];
 					if(!empty($content['Content']['blank_link'])) {
-						$options = ['target' => '_blank'];
+						$options['target'] = '_blank';
 					}
 					?>
 					<li class="nav-item <?php echo $liClass ?>">

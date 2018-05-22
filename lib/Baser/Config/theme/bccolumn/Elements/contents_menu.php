@@ -38,10 +38,10 @@ if(!isset($currentId)) {
                     if($content['Content']['id'] == $currentId) {
                         $liClass .= ' current';
                     }
-                    $options = [];
-                    if(!empty($content['Content']['blank_link'])) {
-                        $options = ['target' => '_blank'];
-                    }
+					$options = ['escape' => true];
+					if(!empty($content['Content']['blank_link'])) {
+						$options['target'] = '_blank';
+					}
                     // トップページは HOME に変更
                     if ($content['Content']['title'] == __d('baser', 'トップページ')) {
                         $content['Content']['title'] = 'HOME';
