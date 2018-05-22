@@ -63,7 +63,7 @@
 	"contentType":"<?php echo $type ?>",
 	"contentAliasId":"<?php echo $data['Content']['alias_id'] ?>",
 	"contentPlugin":"<?php echo $data['Content']['plugin'] ?>",
-	"contentTitle":"<?php echo addslashes(strip_tags($data['Content']['title'])) ?>",
+	"contentTitle":"<?php echo h($data['Content']['title']) ?>",
 	"contentSiteRoot":"<?php echo (bool) $data['Content']['site_root'] ?>",
 	"editDisabled":"<?php echo $editDisabled ?>",
 	"manageDisabled":"<?php echo $manageDisabled ?>"
