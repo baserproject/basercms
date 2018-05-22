@@ -120,6 +120,7 @@ class BcPageHelper extends Helper {
  *	- `arrow` : 表示文字列（初期値 : ' ≫'）
  *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
  * 		※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
+ * 	- `escape` : エスケープするかどうか
  * @return mixed コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
  */
 	public function getNextLink($title = '', $options = []) {
@@ -131,6 +132,7 @@ class BcPageHelper extends Helper {
 			'class'			=> 'next-link',
 			'arrow'			=> ' ≫',
 			'overCategory'	=> false,
+			'escape'		=> true
 		], $options);
 		
 		$arrow = $options['arrow'];
@@ -174,6 +176,7 @@ class BcPageHelper extends Helper {
  *	- `class` : CSSのクラス名（初期値 : 'prev-link'）
  *	- `arrow` : 表示文字列（初期値 : ' ≫'）
  *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
+ * 	- `escape` : エスケープするかどうか
  * @return string|false
  */
 	public function getPrevLink($title = '', $options = []) {
@@ -184,6 +187,7 @@ class BcPageHelper extends Helper {
 			'class'			=> 'prev-link',
 			'arrow'			=> '≪ ',
 			'overCategory'	=> false,
+			'escape'		=> true
 		], $options);
 
 		$arrow = $options['arrow'];
