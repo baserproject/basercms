@@ -37,3 +37,6 @@ vendors/*
 /plugins
 Plugin/*
 composer.lock
+Dockerfile
+docker-compose.yml
+volumes/
