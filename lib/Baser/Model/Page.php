@@ -141,7 +141,6 @@ class Page extends AppModel {
 		),
 		'code' => array(
 			array('rule' => 'phpValidSyntax', 'message' => 'PHPの構文エラーが発生しました。'),
-			array('rule' => array('maxByte', 64000), 'message' => '草稿欄に保存できるデータ量を超えています。'),
 			array('rule' => 'containsScript', 'message' => 'スクリプトの入力は許可されていません。')
 		)
 	);
