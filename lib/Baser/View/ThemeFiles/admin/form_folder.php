@@ -15,8 +15,11 @@
  *
  * @var BcAppView $this
  */
-$params = explode('/', $path);
 $this->BcBaser->js('admin/theme_files/form_folder');
+$parentPrams = $params = explode('/', $path);
+if ($this->request->action !== 'admin_add_folder') {
+	unset($parentPrams[count($parentPrams)-1]);
+}
 ?>
 
 
@@ -67,16 +70,16 @@ $this->BcBaser->js('admin/theme_files/form_folder');
 
 <div class="submit">
 	<?php if ($this->request->action == 'admin_add_folder'): ?>
-		<?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', $path)), ['class' => 'btn-gray button']); ?>
+		<?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], $parentPrams), ['class' => 'btn-gray button']); ?>
 		<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 	<?php elseif ($this->request->action == 'admin_edit_folder'): ?>
-		<?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', $path)), ['class' => 'btn-gray button']); ?>
+		<?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], $parentPrams), ['class' => 'btn-gray button']); ?>
 		<?php if($isWritable): ?>
 			<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 			<?php $this->BcBaser->link(__d('baser', '削除'), array_merge(['action' => 'del', $theme, $type], $params), ['class' => 'submit-token button'], sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->value('ThemeFolder.name')), false	) ?>
 		<?php endif ?>	
 	<?php else: ?>
-		<?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', dirname($path))), ['class' => 'btn-gray button']); ?>
+		<?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], $parentPrams), ['class' => 'btn-gray button']); ?>
 		<?php if (!$safeModeOn): ?>
 			<?php if ($theme == 'core'): ?>
 				<?php $this->BcBaser->link(__d('baser', '現在のテーマにコピー'), array_merge(['action' => 'copy_folder_to_theme', $theme, $plugin, $type], $params), ['class' => 'submit-token btn-red button'], sprintf(__d('baser', "本当に現在のテーマ「 %s 」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。"), Inflector::camelize($siteConfig['theme']))); ?>
