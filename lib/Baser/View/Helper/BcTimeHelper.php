@@ -136,10 +136,10 @@ class BcTimeHelper extends TimeHelper {
 	}
 
 /**
- * 和暦変換(配列で返す)
+ * 日付を配列に分解した形で和暦変換する
  *
- * @param string $date 日付
- * @return array 和暦データ
+ * @param string|array $date 文字列形式の日付 (例: '2018/05/28')、または配列形式の和暦データ
+ * @return array|string 配列形式の和暦データ、または日付フォーマットが正しくない場合は空文字
  */
 	public function convertToWarekiArray($date) {
 		if (!$date) {
