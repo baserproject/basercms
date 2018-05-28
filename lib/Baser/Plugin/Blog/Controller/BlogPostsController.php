@@ -303,6 +303,7 @@ class BlogPostsController extends BlogAppController {
 			// データを保存
 			if ($this->BlogPost->saveAll($this->request->data)) {
 				clearViewCache();
+				clearDataCache();
 				$id = $this->BlogPost->getLastInsertId();
 				$this->setMessage(sprintf(__d('baser', '記事「%s」を追加しました。'), $this->request->data['BlogPost']['name']), false, true);
 
@@ -389,6 +390,7 @@ class BlogPostsController extends BlogAppController {
 			// データを保存
 			if ($this->BlogPost->saveAll($this->request->data)) {
 				clearViewCache();
+				clearDataCache();
 				$this->setMessage(sprintf(__d('baser', '記事「%s」を更新しました。'), $this->request->data['BlogPost']['name']), false, true);
 
 				// EVENT BlogPosts.afterEdit
