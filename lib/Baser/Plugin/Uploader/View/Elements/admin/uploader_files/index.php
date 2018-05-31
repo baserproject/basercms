@@ -18,7 +18,7 @@ echo $this->BcBaser->i18nScript([
     'uploaderCancel' => __d('baser', 'キャンセル'),
     'uploaderSave' => __d('baser', '保存'),
 	'uploaderEdit' => __d('baser', '編集'),
-	'uplaoderDelete' => __d('baser', '削除'),
+	'uploaderDelete' => __d('baser', '削除'),
     'uploaderAlertMessage1' => __d('baser', '更新に失敗しました。入力内容を見直してください。'),
     'uploaderAlertMessage2' => __d('baser', 'アップロードに失敗しました。ファイルサイズが大きいか、許可されていない形式です。'),
 	'uploaderAlertMessage3' => __d('baser', 'このファイルの編集・削除はできません。'),
