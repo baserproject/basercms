@@ -886,7 +886,7 @@ DOC_END;
 		// CUSTOMIZE ADD 2016/01/28 ryuring
 		// checkboxのdivを外せるオプションを追加
 		// >>>
-		$div = $this->_extractOption('div', $attributes);
+		$div = (bool)$this->_extractOption('div', $attributes);
 		unset($attributes['div']);
 		// <<<
 
