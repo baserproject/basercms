@@ -23,10 +23,10 @@
 		<?php endif ?>
 	</td>
 	<td><?php echo $data['User']['id'] ?></td>
-	<td><?php $this->BcBaser->link(h($data['User']['name'], array('action' => 'edit', $data['User']['id']))) ?></td>
+	<td><?php $this->BcBaser->link(h($data['User']['name']), array('action' => 'edit', $data['User']['id'])) ?></td>
 	<td><?php echo h($data['User']['nickname']) ?></td>
 	<td><?php echo $this->BcText->listValue('User.user_group_id', $data['User']['user_group_id']); ?><br />
-		<?php echo h($data['User']['real_name_1']); ?>&nbsp;<?php echo $data['User']['real_name_2'] ?></td>
+		<?php echo h($data['User']['real_name_1']); ?>&nbsp;<?php echo h($data['User']['real_name_2']) ?></td>
 	<td><?php echo $this->BcTime->format('Y-m-d', $data['User']['created']) ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['User']['modified']) ?></td>
 </tr>
