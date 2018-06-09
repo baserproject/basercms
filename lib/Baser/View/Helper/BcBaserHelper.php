@@ -1941,8 +1941,7 @@ END_FLASH;
 		if (empty($this->_View->subDir)) {
 			$url = '/../Pages' . $url;
 		} else {
-			$dirArr = explode('/', $this->_View->subDir);
-			$url = str_repeat('/..', count($dirArr)) . '/../Pages' . $url;
+			$url = '../Pages' . $url;
 		}
 
 		$this->element($url, $params, ['subDir' => $subDir]);
