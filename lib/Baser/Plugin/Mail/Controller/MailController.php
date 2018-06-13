@@ -187,6 +187,10 @@ class MailController extends MailAppController {
  * @return void
  */
 	public function index($id = null) {
+		if (!isset($this->dbDatas['mailContent']['MailContent'])) {
+			$this->notFound();
+		}
+
 		if (!$this->MailContent->isAccepting($this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
 			$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
 			return;
