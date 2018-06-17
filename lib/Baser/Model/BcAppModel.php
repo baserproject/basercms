@@ -1535,7 +1535,7 @@ class BcAppModel extends Model {
 	public function delete($id = null, $cascade = true) {
 		$result = parent::delete($id, $cascade);
 		if ($result === false && $this->Behaviors->enabled('SoftDelete')) {
-			return (bool)$this->field('deleted', ['deleted' => 1]);
+			return (bool)$this->field('deleted', array('deleted' => 1));
 		}
 		return $result;
 	}
@@ -1588,7 +1588,7 @@ class BcAppModel extends Model {
  */
 	public function getUrlPattern($url) {
 		$parameter = preg_replace('/^\//', '', $url);
-		$paths = [];
+		$paths = array();
 		$paths[] = '/' . $parameter;
 		if(preg_match('/\/$/', $paths[0])) {
 			$paths[] = $paths[0] . 'index';
