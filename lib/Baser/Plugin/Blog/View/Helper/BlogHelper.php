@@ -193,9 +193,9 @@ class BlogHelper extends AppHelper {
  * @return string 記事へのリンク
  */
 	public function getPostLink($post, $title, $options = array()) {
-		$options = array_merge([
+		$options = array_merge(array(
 			'escape' => true
-		], $options);
+		), $options);
 		$url = $this->getPostLinkUrl($post, false);
 
 		// EVENT beforeGetPostLink
