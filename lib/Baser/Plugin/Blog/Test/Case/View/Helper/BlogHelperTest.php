@@ -158,12 +158,12 @@ class BlogHelperTest extends BaserTestCase {
 	}
 
 /**
- * ブログアカウント名を取得する
+ * ブログのコンテンツ名を取得する
  */
 	public function testGetBlogName() {
 		$result = $this->Blog->getBlogName();
 		$expects = 'news';
-		$this->assertEquals($expects, $result, 'ブログアカウント名を正しく取得できません');
+		$this->assertEquals($expects, $result, 'ブログのコンテンツ名を正しく取得できません');
 	}
 
 /**
