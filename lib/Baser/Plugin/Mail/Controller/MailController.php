@@ -523,6 +523,9 @@ class MailController extends MailAppController {
 				'attachments'	=> $attachments,
 				'additionalParameters'	 => '-f ' . $fromAdmin,
 			);
+			if (!empty($mailContent['sender_cc'])) {
+				$options['cc'] = $mailContent['sender_cc'];
+			}
 			$this->sendMail($adminMail, $mailContent['subject_admin'], $data, $options);
 		}
 	}
