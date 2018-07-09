@@ -305,7 +305,7 @@ class MailController extends MailAppController {
 				$this->set('freezed', false);
 				$this->set('error', true);
 
-				$this->setMessage('【入力エラーです】<br />入力内容を確認して再度送信してください。', true);
+				$this->setMessage('【入力エラーです】入力内容を確認して再度送信してください。', true);
 			}
 			$this->request->data['Message'] = $this->Message->sanitizeData($this->request->data['Message']);
 		}
@@ -422,7 +422,7 @@ class MailController extends MailAppController {
 					));
 				} else {
 
-					$this->setMessage('【送信エラーです】<br />送信中にエラーが発生しました。しばらくたってから再度送信お願いします。', true);
+					$this->setMessage('【送信エラーです】送信中にエラーが発生しました。しばらくたってから再度送信お願いします。', true);
 					$this->set('sendError', true);
 				}
 
@@ -434,7 +434,7 @@ class MailController extends MailAppController {
 				$this->set('freezed', false);
 				$this->set('error', true);
 
-				$this->setMessage('【入力エラーです】<br />入力内容を確認して再度送信してください。', true);
+				$this->setMessage('【入力エラーです】入力内容を確認して再度送信してください。', true);
 				$this->request->data['Message'] = $this->Message->sanitizeData($this->request->data['Message']);
 				$this->action = 'index'; //viewのボタンの表示の切り替えに必要なため変更
 				if ($this->dbDatas['mailFields']) {
