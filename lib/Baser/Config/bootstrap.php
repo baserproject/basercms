@@ -324,7 +324,7 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 /**
  * テーマの bootstrap を実行する
  */
- 	if(!BcUtil::isAdminSystem()) {
+ 	if(!BcUtil::isAdminSystem($parameter)) {
 		$themePath = WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS;
 		$themeBootstrap = $themePath . 'Config' . DS . 'bootstrap.php';
 		if (file_exists($themeBootstrap)) {
@@ -394,4 +394,12 @@ if (BC_INSTALLED || isConsole()) {
 	App::build(array(
 		'View/Helper' => array(BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Helper' . DS)
 	), App::PREPEND);
+}
+
+/**
+ * 言語設定
+ */
+$lang = BcLang::findCurrent();
+if(isset($lang->decisionKeys[0])) {
+	Configure::write('Config.language', $lang->decisionKeys[0]);
 }
