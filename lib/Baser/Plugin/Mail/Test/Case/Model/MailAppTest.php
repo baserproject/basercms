@@ -37,21 +37,4 @@ class MailAppTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
-/**
- * データの消毒をおこなう
- * @return array
- */
-	public function testSanitizeAndRestoreData() {
-		
-		$datas = array('<!--', '<a href="test">Test</a>');
-		$expected = array('&lt;!--', '&lt;a href=&quot;test&quot;&gt;Test&lt;/a&gt;');
-
-		$resultSanitized = $this->MailApp->sanitizeData($datas);
-		$this->assertEquals($expected, $resultSanitized, 'データのサニタイズを正しく行えません');
-
-		$resultRestored = $this->MailApp->restoreData($expected);
-		$this->assertEquals($datas, $resultRestored, 'サニタイズされたデータを正しく復元できません');
-	
-	}
-
 }
