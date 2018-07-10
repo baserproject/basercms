@@ -205,7 +205,9 @@ $config['BcAgent'] = array(
 	)
 );
 
-//p($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+/**
+ * 言語設定
+ */
 $config['BcLang'] = [
 	'english' => [
 		'name' => __d('baser', '英語'),

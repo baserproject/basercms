@@ -149,6 +149,11 @@ App::uses('BcPluginAppModel', 'Model');
 // <<<
 
 /**
+ * 言語設定
+ */
+Configure::write('Config.language', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+
+/**
  * 設定ファイル読み込み
  * install.php で設定している為、一旦読み込んで再設定
  */
@@ -394,12 +399,4 @@ if (BC_INSTALLED || isConsole()) {
 	App::build(array(
 		'View/Helper' => array(BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Helper' . DS)
 	), App::PREPEND);
-}
-
-/**
- * 言語設定
- */
-$lang = BcLang::findCurrent();
-if(isset($lang->decisionKeys[0])) {
-	Configure::write('Config.language', $lang->decisionKeys[0]);
 }
