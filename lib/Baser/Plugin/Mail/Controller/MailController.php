@@ -346,12 +346,16 @@ class MailController extends MailAppController {
 					$event = $this->dispatchEvent('beforeSendEmail', array(
 						'data' => $this->request->data
 					));
+					$sendEmailOptions = array();
 					if ($event !== false) {
 						$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+						if (!empty($event->data['options'])) {
+							$sendEmailOptions = $event->data['options'];
+						}
 					}
 
 					// メール送信
-					$this->_sendEmail();
+					$this->_sendEmail($sendEmailOptions);
 
 					$this->Session->delete('Mail.valid');
 
@@ -428,7 +432,15 @@ class MailController extends MailAppController {
  * 
  * @return void
  */
-	protected function _sendEmail() {
+	protected function _sendEmail($options) {
+		$options = array_merge(
+			array(
+				'toUser' => array(),
+				'toAdmin' => array(),
+			),
+			$options
+		);
+
 		$mailConfig = $this->dbDatas['mailConfig']['MailConfig'];
 		$mailContent = $this->dbDatas['mailContent']['MailContent'];
 		$userMail = '';
@@ -495,15 +507,18 @@ class MailController extends MailAppController {
 				$agentTemplate = true;
 			}
 			$data['other']['mode'] = 'user';
-			$options = array(
-				'fromName'	=> $mailContent['sender_name'],
-				'from'		=> $fromAdmin,
-				'template'	=> 'Mail.' . $mailContent['mail_template'],
-				'replyTo'		=> $fromAdmin,
-				'agentTemplate' => $agentTemplate,
-				'additionalParameters'	 => '-f ' . $fromAdmin,
+			$toUserOptions = array_merge(
+				array(
+					'fromName' => $mailContent['sender_name'],
+					'from' => $fromAdmin,
+					'template' => 'Mail.' . $mailContent['mail_template'],
+					'replyTo' => $fromAdmin,
+					'agentTemplate' => $agentTemplate,
+					'additionalParameters' => '-f ' . $fromAdmin,
+				),
+				$options['toUser']
 			);
-			$this->sendMail($userMail, $mailContent['subject_user'], $data, $options);
+			$this->sendMail($userMail, $mailContent['subject_user'], $data, $toUserOptions);
 		}
 
 		// 管理者に送信
@@ -513,20 +528,20 @@ class MailController extends MailAppController {
 				list($userMail) = explode(',', $userMail);
 			}
 			$data['other']['mode'] = 'admin';
-			$options = array(
-				'fromName' => $mailContent['sender_name'],
-				'replyTo' => $userMail,
-				'from' => $fromAdmin,
-				'template' => 'Mail.' . $mailContent['mail_template'],
-				'bcc' => $mailContent['sender_2'],
-				'agentTemplate' => false,
-				'attachments'	=> $attachments,
-				'additionalParameters'	 => '-f ' . $fromAdmin,
+			$toAdminOptions = array_merge(
+				array(
+					'fromName' => $mailContent['sender_name'],
+					'replyTo' => $userMail,
+					'from' => $fromAdmin,
+					'template' => 'Mail.' . $mailContent['mail_template'],
+					'bcc' => $mailContent['sender_2'],
+					'agentTemplate' => false,
+					'attachments' => $attachments,
+					'additionalParameters' => '-f ' . $fromAdmin,
+				),
+				$options['toAdmin']
 			);
-			if (!empty($mailContent['sender_cc'])) {
-				$options['cc'] = $mailContent['sender_cc'];
-			}
-			$this->sendMail($adminMail, $mailContent['subject_admin'], $data, $options);
+			$this->sendMail($adminMail, $mailContent['subject_admin'], $data, $toAdminOptions);
 		}
 	}
 	
