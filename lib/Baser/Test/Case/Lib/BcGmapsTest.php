@@ -42,7 +42,8 @@ class BcGmapsTest extends BaserTestCase {
  * getInfoLocation
  * 2018/07/09 ryuring TravisCI環境にて、タイミングにより、データを取得できず処理に失敗するので一旦コメントアウト
  */
-//	public function testGetInfoLocation() {
+	public function testGetInfoLocation() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 //		$result = $this->BcGmaps->getInfoLocation('日本');
 //		$this->assertNotEmpty($result, 'getInfoLocationで情報を取得できません');
 //
@@ -54,6 +55,6 @@ class BcGmapsTest extends BaserTestCase {
 //
 //		$result = $this->BcGmaps->getInfoLocation('');
 //		$this->assertNull($result, 'getInfoLocationに空のアドレスに値が返ってきます');
-//	}
+	}
 
 }
