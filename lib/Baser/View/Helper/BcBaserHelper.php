@@ -1053,7 +1053,8 @@ class BcBaserHelper extends AppHelper {
 		// //(スラッシュスラッシュ)から始まるSSL、非SSL共有URLも除外する
 		if (($this->isSSL() || $ssl)
 			&& !(preg_match('/^(javascript|https?|ftp|tel):/', $_url))
-			&& !(strpos($_url, '//') === 0)) {
+			&& !(strpos($_url, '//') === 0)
+			&& !preg_match('/^#/', $_url)) {
 
 			$_url = preg_replace("/^\//", "", $_url);
 			if (preg_match('/^' . $adminAlias . '\//', $_url)) {
