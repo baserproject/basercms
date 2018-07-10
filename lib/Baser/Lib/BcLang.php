@@ -70,7 +70,7 @@ class BcLang extends BcAbstractDetector {
  * @return bool
  */
 	public function isMatchDecisionKey() {
-		$key = $this->_parseLang(@$_SERVER['HTTP_ACCEPT_LANGUAGE']);
+		$key = self::parseLang(@$_SERVER['HTTP_ACCEPT_LANGUAGE']);
 		$regex = $this->getDetectorRegex();
 		return (bool)preg_match($regex, $key);
 	}
@@ -83,7 +83,7 @@ class BcLang extends BcAbstractDetector {
  * @param $acceptLanguage
  * @return array|string
  */
-	protected function _parseLang($acceptLanguage) {
+	static public function parseLang($acceptLanguage) {
 		$keys = explode(',', $acceptLanguage);
 		$langs = [];
 		if($keys) {
