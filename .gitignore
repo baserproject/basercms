@@ -46,4 +46,4 @@ package.json
 /volumes/*
 /.docker-sync/
 /lib/Baser/View/Themed/*
-
+/phpmyadmin/

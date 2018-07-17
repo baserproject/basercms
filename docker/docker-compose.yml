@@ -32,3 +32,17 @@ services:
     ports:
       - "1080:1080"
       - "1025:1025"
+  basercms-pma:
+    container_name: basercms-pma
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=basercms-database
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+    links:
+      - basercms-database
+    ports:
+     - 8080:80
+    volumes:
+       - ./phpmyadmin/sessions:/sessions
