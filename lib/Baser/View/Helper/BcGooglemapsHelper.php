@@ -82,14 +82,8 @@ class BcGooglemapsHelper extends AppHelper {
  * @return boolean
  */
 	public function load($address = '', $width = null, $height = null) {
-
-		if ($address)
+		if ($address) {
 			$this->address = $address;
-
-		if (!$this->longitude || !$this->latitude) {
-			if (!$this->loadLocation()) {
-				return false;
-			}
 		}
 		$script = $this->_getScript();
 		if ($script) {
@@ -98,7 +92,7 @@ class BcGooglemapsHelper extends AppHelper {
 			} else {
 				echo '<div id="' . $this->mapId . '"><noscript>※ ' . __d('baser', 'JavaScript を有効にしてください。') . '</noscript></div>';
 			}
-			echo $this->_getScript();
+			echo $script;
 			return true;
 		} else {
 			return false;
@@ -107,57 +101,66 @@ class BcGooglemapsHelper extends AppHelper {
 
 /**
  * Google マップ読み込み用のjavascriptを生成する
- *
+ * @todo リファクタリング
  * @return string
  */
 	protected function _getScript() {
 
-		if (!$this->longitude || !$this->latitude || !$this->mapId) {
+		if (!$this->mapId) {
 			return false;
 		}
-
+		$apiKey = empty($this->BcBaser->siteConfig['google_maps_api_key']) ? "" : h($this->BcBaser->siteConfig['google_maps_api_key']);
+		$address = $this->address;
 		$script = <<< DOC_END
-			var latlng = new google.maps.LatLng({$this->latitude},{$this->longitude});
-			var options = {
-				zoom: {$this->zoom},
-				center: latlng,
-				mapTypeId: google.maps.MapTypeId.ROADMAP,
-				navigationControl: true,
-				mapTypeControl: true,
-				scaleControl: true,
-				scrollwheel: false,
-			};
-			var map = new google.maps.Map(document.getElementById("{$this->mapId}"), options);
-			var marker = new google.maps.Marker({
-				position: latlng,
-				map: map,
-				title:"{$this->title}"
-			});
+			var geo = new google.maps.Geocoder();
+			var lat = '{$this->latitude}';
+			var lng = '{$this->longitude}';
+			if(!lat || !lng) {
+				geo.geocode({ address: '{$address}' }, function(results, status) {
+					if(status === 'OK') {
+						lat = results[0].geometry.location.lat();
+						lng = results[0].geometry.location.lng();
+						loadMap(lat, lng);
+					}
+				});
+			} else {
+				loadMap(lat, lng)
+			}
+			function loadMap(lat, lng){
+				var latlng = new google.maps.LatLng(lat,lng);
+				var options = {
+					zoom: {$this->zoom},
+					center: latlng,
+					mapTypeId: google.maps.MapTypeId.ROADMAP,
+					navigationControl: true,
+					mapTypeControl: true,
+					scaleControl: true,
+					scrollwheel: false,
+				};
+				var map = new google.maps.Map(document.getElementById("{$this->mapId}"), options);
+				var marker = new google.maps.Marker({
+					position: latlng,
+					map: map,
+					title:"{$this->title}"
+				});
+				if('{$this->markerText}') {
+					var infowindow = new google.maps.InfoWindow({
+						content: '{$this->markerText}'
+					});
+					infowindow.open(map,marker);
+					google.maps.event.addListener(marker, 'click', function() {
+						infowindow.open(map,marker);
+					});
+				}	
+			}
 DOC_END;
-
-		if ($this->markerText) {
-			$script .=
-				<<< INFO_END
-			var infowindow = new google.maps.InfoWindow({
-				content: '{$this->markerText}'
-			});
-			infowindow.open(map,marker);
-			google.maps.event.addListener(marker, 'click', function() {
-				infowindow.open(map,marker);
-			});
-INFO_END;
-		}
 		$apiKey = empty($this->BcBaser->siteConfig['google_maps_api_key']) ? "" : $this->BcBaser->siteConfig['google_maps_api_key'];
 		if (empty($apiKey)) {
 			$adminLink = $this->BcBaser->getUrl(["admin"=>true, 'plugin' => '', 'controller' => 'site_configs', 'action'=>'form']);
 			echo sprintf(__d('baser', 'Googleマップを利用するには、Google Maps APIのキーの登録が必要です。<a href="https://developers.google.com/maps/web/" target="_blank">キーを取得</a>して、<a href="%s">システム管理</a>より設定してください。'), $adminLink);
 		}
-		if($this->request->is('ssl')) {
-			$apiUrl = 'https://maps.google.com/maps/api/js';
-		} else {
-			$apiUrl = 'http://maps.google.com/maps/api/js';
-		}
-		$googleScript = '<script src="' . $apiUrl . '?key=' . h($apiKey) . '"></script>';
+		$apiUrl = 'https://maps.google.com/maps/api/js';
+		$googleScript = '<script src="' . $apiUrl . '?key=' . $apiKey . '"></script>';
 		return $googleScript . '<script>' . $script . '</script>';
 	}
 
@@ -165,6 +168,9 @@ INFO_END;
  * 位置情報を読み込む
  *
  * @return boolean
+ * @deprecated GoogleMapsAPIキーの利用制限をかける場合、BcGmapsが利用できない為、非推奨
+ * 地図取得は、Javascript なので、利用制限はリファラ制限となる。BcGmapsの場合、IP制限しか利用できない為、
+ * 両方の制限を利用する場合、APIキーが二つ必要となり現実的ではない。
  */
 	public function loadLocation() {
 
@@ -186,6 +192,9 @@ INFO_END;
  *
  * @param string $address
  * @return array|boolean
+ * @deprecated GoogleMapsAPIキーの利用制限をかける場合、BcGmapsが利用できない為、非推奨
+ * 地図取得は、Javascript なので、利用制限はリファラ制限となる。BcGmapsの場合、IP制限しか利用できない為、
+ * 両方の制限を利用する場合、APIキーが二つ必要となり現実的ではない。
  */
 	public function getLocation($address) {
 		App::uses('BcGmaps', 'Lib');

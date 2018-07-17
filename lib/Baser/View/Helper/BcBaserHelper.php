@@ -1053,7 +1053,8 @@ class BcBaserHelper extends AppHelper {
 		// //(スラッシュスラッシュ)から始まるSSL、非SSL共有URLも除外する
 		if (($this->isSSL() || $ssl)
 			&& !(preg_match('/^(javascript|https?|ftp|tel):/', $_url))
-			&& !(strpos($_url, '//') === 0)) {
+			&& !(strpos($_url, '//') === 0)
+			&& !preg_match('/^#/', $_url)) {
 
 			$_url = preg_replace("/^\//", "", $_url);
 			if (preg_match('/^' . $adminAlias . '\//', $_url)) {
@@ -1680,16 +1681,21 @@ EOD;
 			'cache' => false
 		], $options);
 		$options['tree'] = $this->_unsetIndexInContentsMenu($options['tree']);
-		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]) && $options['cache'] !== false) {
-			$options = array_merge($options, [
-					'cache' => [
-						'time' => Configure::read('BcCache.duration'),
-						'key' => $id]]
-			);
-		}
-		if($options['cache'] === false) {
+
+		if(BcUtil::loginUser()) {
 			unset($options['cache']);
+		} else {
+			if($options['cache'] === false) {
+				unset($options['cache']);
+			} else {
+				$options = array_merge($options, [
+						'cache' => [
+							'time' => Configure::read('BcCache.duration'),
+							'key' => $id]]
+				);
+			}
 		}
+
 		return $this->getElement('contents_menu', $options);
 	}
 
@@ -1752,16 +1758,21 @@ EOD;
 			'data' => [],
 			'cache' => true
 		], $options);
-		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]) && $options['cache'] !== false) {
-			$options = array_merge($options, [
-					'cache' => [
-						'time' => Configure::read('BcCache.duration'),
-						'key' => $id]]
-			);
-		}
-		if($options['cache'] === false) {
+
+		if(BcUtil::loginUser()) {
 			unset($options['cache']);
+		} else {
+			if($options['cache'] === false) {
+				unset($options['cache']);
+			} else {
+				$options = array_merge($options, [
+						'cache' => [
+							'time' => Configure::read('BcCache.duration'),
+							'key' => $id]]
+				);
+			}
 		}
+
 		$data = array_merge([
 			'tree' => $options['tree'],
 			'currentId' => $options['currentId']

@@ -42,16 +42,16 @@ class MailController extends MailAppController {
  *
  * @var array
  */
-	public $uses = array('Mail.MailMessage', 'Mail.MailContent', 'Mail.MailField', 'Mail.MailConfig');
+	public $uses = ['Mail.MailMessage', 'Mail.MailContent', 'Mail.MailField', 'Mail.MailConfig'];
 
 /**
  * ヘルパー
  *
  * @var array
  */
-	public $helpers = array(
+	public $helpers = [
 		'BcFreeze', 'BcArray', 'BcTime', 'Mail.Mailform', 'Mail.Maildata', 'Mail.Mailfield', 'Mail.Mail', 'Js'
-	);
+	];
 
 /**
  * Array of components a controller will use
@@ -65,21 +65,21 @@ class MailController extends MailAppController {
 	//
 	// 2013/03/14 ryuring
 	// baserCMS２系より必須要件をPHP5以上とした為、SecurityComponent を標準で設定する方針に変更
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'Email', 'BcEmail', 'BcCaptcha', 'Security', 'BcContents');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'Email', 'BcEmail', 'BcCaptcha', 'Security', 'BcContents'];
 
 /**
  * CSS
  *
  * @var array
  */
-	public $css = array('mail/form');
+	public $css = ['mail/form'];
 
 /**
  * サブメニューエレメント
  *
  * @var array
  */
-	public $subMenuElements = array();
+	public $subMenuElements = [];
 
 /**
  * データベースデータ
@@ -93,7 +93,7 @@ class MailController extends MailAppController {
  *
  * @var array
  */
-	public $crumbs = array();
+	public $crumbs = [];
 
 /**
  * MailController constructor.
@@ -136,7 +136,7 @@ class MailController extends MailAppController {
 			$this->contentId = isset($this->request->params['entityId']) ? $this->request->params['entityId'] : null;
 		}
 
-		$this->subMenuElements = array('default');
+		$this->subMenuElements = ['default'];
 
 		// 2013/03/14 ryuring
 		// baserCMS２系より必須要件をPHP5以上とした為、SecurityComponent を標準で設定する方針に変更
@@ -146,7 +146,7 @@ class MailController extends MailAppController {
 		} else {
 			// PHP4でセキュリティコンポーネントがうまくいかなかったので利用停止
 			// 詳細はコンポーネント設定のコメントを参照
-			$disabledFields = array('MailMessage.mode', 'x', 'y', 'MAX_FILE_SIZE');
+			$disabledFields = ['MailMessage.mode', 'x', 'y', 'MAX_FILE_SIZE'];
 			// type="file" を除外
 			foreach($this->MailMessage->mailFields as $field) {
 				if (isset($field['MailField']['type']) && $field['MailField']['type'] == 'file') {
@@ -159,7 +159,7 @@ class MailController extends MailAppController {
 			// SSL設定
 			if ($this->dbDatas['mailContent']['MailContent']['ssl_on']) {
 				$this->Security->blackHoleCallback = 'sslFail';
-				$this->Security->requireSecure = am($this->Security->requireSecure, array('index', 'confirm', 'submit'));
+				$this->Security->requireSecure = am($this->Security->requireSecure, ['index', 'confirm', 'submit']);
 			}
 		}
 
@@ -221,7 +221,7 @@ class MailController extends MailAppController {
 
 		$user = BcUtil::loginUser('admin');
 		if (!empty($user)) {
-			$this->set('editLink', array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']));
+			$this->set('editLink', ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']]);
 		}
 		$this->set('mailContent', $this->dbDatas['mailContent']);
 		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'index');
@@ -287,7 +287,7 @@ class MailController extends MailAppController {
 		}
 		$user = BcUtil::loginUser('admin');
 		if (!empty($user)) {
-			$this->set('editLink', array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']));
+			$this->set('editLink', ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']]);
 		}
 		$this->set('mailContent', $this->dbDatas['mailContent']);
 		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'confirm');
@@ -346,22 +346,26 @@ class MailController extends MailAppController {
 					$this->request->data = $result;
 					
 					/*** Mail.beforeSendEmail ***/
-					$event = $this->dispatchEvent('beforeSendEmail', array(
+					$event = $this->dispatchEvent('beforeSendEmail', [
 						'data' => $this->request->data
-					));
+					]);
+					$sendEmailOptions = [];
 					if ($event !== false) {
 						$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+						if (!empty($event->data['sendEmailOptions'])) {
+							$sendEmailOptions = $event->data['sendEmailOptions'];
+						}
 					}
 
 					// メール送信
-					$this->_sendEmail();
+					$this->_sendEmail($sendEmailOptions);
 
 					$this->Session->delete('Mail.valid');
 
 					/*** Mail.afterSendEmail ***/
-					$this->dispatchEvent('afterSendEmail', array(
+					$this->dispatchEvent('afterSendEmail', [
 						'data' => $this->request->data
-					));
+					]);
 				} else {
 
 					$this->setMessage(__('エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。'), true);
@@ -391,7 +395,7 @@ class MailController extends MailAppController {
 		}
 		$user = BcUtil::loginUser('admin');
 		if (!empty($user)) {
-			$this->set('editLink', array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']));
+			$this->set('editLink', ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']]);
 		}
 	}
 
@@ -420,7 +424,7 @@ class MailController extends MailAppController {
 		// <<<
 		$user = BcUtil::loginUser('admin');
 		if (!empty($user)) {
-			$this->set('editLink', array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']));
+			$this->set('editLink', ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']]);
 		}
 		$this->set('mailContent', $this->dbDatas['mailContent']);
 		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'index');
@@ -431,7 +435,15 @@ class MailController extends MailAppController {
  * 
  * @return void
  */
-	protected function _sendEmail() {
+	protected function _sendEmail($options) {
+		$options = array_merge(
+			[
+				'toUser' => [],
+				'toAdmin' => [],
+			],
+			$options
+		);
+
 		$mailConfig = $this->dbDatas['mailConfig']['MailConfig'];
 		$mailContent = $this->dbDatas['mailContent']['MailContent'];
 		$userMail = '';
@@ -458,7 +470,7 @@ class MailController extends MailAppController {
 			$fromAdmin = $adminMail;
 		}
 
-		$attachments = array();
+		$attachments = [];
 		$settings = $this->MailMessage->Behaviors->BcUpload->settings['MailMessage'];
 		foreach ($this->dbDatas['mailFields'] as $mailField) {
 			$field = $mailField['MailField']['field_name'];
@@ -498,15 +510,18 @@ class MailController extends MailAppController {
 				$agentTemplate = true;
 			}
 			$data['other']['mode'] = 'user';
-			$options = array(
-				'fromName'	=> $mailContent['sender_name'],
-				'from'		=> $fromAdmin,
-				'template'	=> 'Mail.' . $mailContent['mail_template'],
-				'replyTo'		=> $fromAdmin,
-				'agentTemplate' => $agentTemplate,
-				'additionalParameters'	 => '-f ' . $fromAdmin,
+			$toUserOptions = array_merge(
+				[
+					'fromName' => $mailContent['sender_name'],
+					'from' => $fromAdmin,
+					'template' => 'Mail.' . $mailContent['mail_template'],
+					'replyTo' => $fromAdmin,
+					'agentTemplate' => $agentTemplate,
+					'additionalParameters' => '-f ' . $fromAdmin,
+				],
+				$options['toUser']
 			);
-			$this->sendMail($userMail, $mailContent['subject_user'], $data, $options);
+			$this->sendMail($userMail, $mailContent['subject_user'], $data, $toUserOptions);
 		}
 
 		// 管理者に送信
@@ -516,17 +531,20 @@ class MailController extends MailAppController {
 				list($userMail) = explode(',', $userMail);
 			}
 			$data['other']['mode'] = 'admin';
-			$options = array(
-				'fromName' => $mailContent['sender_name'],
-				'replyTo' => $userMail,
-				'from' => $fromAdmin,
-				'template' => 'Mail.' . $mailContent['mail_template'],
-				'bcc' => $mailContent['sender_2'],
-				'agentTemplate' => false,
-				'attachments'	=> $attachments,
-				'additionalParameters'	 => '-f ' . $fromAdmin,
+			$toAdminOptions = array_merge(
+				[
+					'fromName' => $mailContent['sender_name'],
+					'replyTo' => $userMail,
+					'from' => $fromAdmin,
+					'template' => 'Mail.' . $mailContent['mail_template'],
+					'bcc' => $mailContent['sender_2'],
+					'agentTemplate' => false,
+					'attachments' => $attachments,
+					'additionalParameters' => '-f ' . $fromAdmin,
+				],
+				$options['toAdmin']
 			);
-			$this->sendMail($adminMail, $mailContent['subject_admin'], $data, $options);
+			$this->sendMail($adminMail, $mailContent['subject_admin'], $data, $toAdminOptions);
 		}
 	}
 	

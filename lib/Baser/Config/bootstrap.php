@@ -149,6 +149,11 @@ App::uses('BcPluginAppModel', 'Model');
 // <<<
 
 /**
+ * 言語設定
+ */
+Configure::write('Config.language', BcLang::parseLang($_SERVER['HTTP_ACCEPT_LANGUAGE']));
+
+/**
  * 設定ファイル読み込み
  * install.php で設定している為、一旦読み込んで再設定
  */
@@ -324,7 +329,7 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 /**
  * テーマの bootstrap を実行する
  */
- 	if(!BcUtil::isAdminSystem()) {
+ 	if(!BcUtil::isAdminSystem($parameter)) {
 		$themePath = WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS;
 		$themeBootstrap = $themePath . 'Config' . DS . 'bootstrap.php';
 		if (file_exists($themeBootstrap)) {
