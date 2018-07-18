@@ -95,7 +95,14 @@ class BcContentsEventListener extends CakeObject implements CakeEventListener {
 			} else {
 				$deleteText = __d('baser', 'ゴミ箱へ移動');
 			}
-			$output .= $View->BcForm->button($deleteText, ['class' => 'button', 'id' => 'BtnDelete']);
+
+			// アクセス制限設定で「/admin/contents/delete」を指定できるようにするため
+			$contentsDeleteUrl	 = Router::url(['admin' => true, 'plugin' => false, 'controller' => 'contents', 'action' => 'delete']);
+			$PermissionModel	 = ClassRegistry::init('Permission');
+			$checkedPermission	 = $PermissionModel->check($contentsDeleteUrl, $View->viewVars['user']['user_group_id']);
+			if ($checkedPermission) {
+				$output .= $View->BcForm->button($deleteText, ['class' => 'button', 'id' => 'BtnDelete']);
+			}
 		}
 		$event->data['out'] = $output;
 		return $output;
