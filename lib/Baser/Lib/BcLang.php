@@ -84,6 +84,9 @@ class BcLang extends BcAbstractDetector {
  * @return array|string
  */
 	static public function parseLang($acceptLanguage) {
+		if(!$acceptLanguage) {
+			return 'ja';
+		}
 		$keys = explode(',', $acceptLanguage);
 		$langs = [];
 		if($keys) {

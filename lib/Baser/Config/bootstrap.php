@@ -151,7 +151,7 @@ App::uses('BcPluginAppModel', 'Model');
 /**
  * 言語設定
  */
-Configure::write('Config.language', BcLang::parseLang($_SERVER['HTTP_ACCEPT_LANGUAGE']));
+Configure::write('Config.language', BcLang::parseLang(@$_SERVER['HTTP_ACCEPT_LANGUAGE']));
 
 /**
  * 設定ファイル読み込み
