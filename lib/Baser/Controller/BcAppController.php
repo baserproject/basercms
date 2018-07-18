@@ -833,7 +833,11 @@ class BcAppController extends Controller {
  * 	- bool agentTemplate : テンプレートの配置場所についてサイト名をサブフォルダとして利用するかどうか（初期値：true）
  * @return bool 送信結果
  */
-		protected function sendMail($to, $title = '', $body = '', $options = []) {
+	public function sendMail($to, $title = '', $body = '', $options = []) {
+  		$dbg = debug_backtrace();
+  		if(!empty($dbg[1]['function']) && $dbg[1]['function'] == 'invokeArgs') {
+  			$this->notFound();
+  		}
 		$options = array_merge([
 			'agentTemplate' => true,
 			'template' => 'default'
