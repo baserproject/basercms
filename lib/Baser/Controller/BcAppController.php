@@ -700,17 +700,21 @@ class BcAppController extends Controller {
 			$currentPrefix = 'front';
 		}
 		$this->set('currentPrefix', $currentPrefix);
+
+		$user = BcUtil::loginUser();
+		$sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
+
 		$authPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);
-		$user = null;
-		if($authPrefix) {
-			$sessionKey = BcUtil::getLoginUserSessionKey();
-			$user = BcUtil::loginUser($currentPrefix);
-		} else {
-			$sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
-			$user = BcUtil::loginUser('admin');
+		if ($authPrefix) {
+			$currentPrefixUser = BcUtil::loginUser($currentPrefix);
+			if ($currentPrefixUser) {
+				// フロント認証設定が有効化されている場合、公開側（front）ログイン中のユーザーとする
+				$user = $currentPrefixUser;
+				$sessionKey = BcUtil::getLoginUserSessionKey();
+			}
 		}
+
 		/* ログインユーザー */
-		
 		if (BC_INSTALLED && $user && $this->name != 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name != 'CakeError') {
 			$this->set('user', $user);
 			if (!empty($this->request->params['admin'])) {
