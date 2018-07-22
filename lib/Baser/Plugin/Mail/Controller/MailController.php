@@ -126,6 +126,18 @@ class MailController extends MailAppController {
 		$this->MailMessage->setup($this->request->params['entityId']);
 		$this->dbDatas['mailContent'] = $this->MailMessage->mailContent;
 		$this->dbDatas['mailFields'] = $this->MailMessage->mailFields;
+
+		$usedMailFieldList = [];
+		if ($this->dbDatas['mailFields']) {
+			foreach ($this->dbDatas['mailFields'] as $mailFieldList) {
+				if ($mailFieldList['MailField']['use_field']) {
+					$usedMailFieldList[] = $mailFieldList;
+				}
+			}
+			$usedMailFieldList = Hash::sort($usedMailFieldList, '{n}.MailField.sort', 'asc');
+			$this->dbDatas['mailFields'] = $usedMailFieldList;
+		}
+
 		$this->dbDatas['mailConfig'] = $this->MailConfig->find();
 		
 		// ページタイトルをセット
