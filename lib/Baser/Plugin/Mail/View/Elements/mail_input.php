@@ -78,7 +78,11 @@ if (!empty($mailFields)) {
 			if (!$freezed) {
 				echo '<span class="mail-attention">' . $field['attention'] . '</span>';
 			}
-			if (!$field['group_valid']) {
+			// email比較チェックでは何故か「必須項目です」が表示されないので追記」
+			if($this->data['MailMessage'][$field['field_name']] == "") {
+				echo $this->Mailform->error("MailMessage." . $field['field_name'] , __("必須項目です。"));
+			} else {
+				// 必須以外のメッセージも表示
 				echo $this->Mailform->error("MailMessage." . $field['field_name']);
 			}
 
@@ -89,7 +93,8 @@ if (!empty($mailFields)) {
 				($field['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $this->BcArray->first($mailFields, $key))) {
 
 				if ($field['group_valid']) {
-					echo $this->Mailform->error("MailMessage." . $field['group_field'] . "_not_same", __("入力データが一致していません。"));
+					// email比較チェックは'group_field'ではなく'group_valid'
+					echo $this->Mailform->error("MailMessage." . $field['group_valid'] . "_not_same", __("入力データが一致していません。"));
 					echo $this->Mailform->error("MailMessage." . $field['group_field'] . "_not_complate", __("入力データが不完全です。"));
 
 					if (!$this->Mailform->error("MailMessage." . $field['group_field'] . "_not_same")
@@ -97,10 +102,14 @@ if (!empty($mailFields)) {
 						$groupValidErrors = $this->Mailform->getGroupValidErrors($mailFields, $field['group_valid']);
 						if ($groupValidErrors) {
 							foreach ($groupValidErrors as $groupValidError) {
-								echo $groupValidError;
+								// email比較チェックではグループ全体でメール形式のチェックを行う必要はない
+								echo $groupValidError == '<div class="error-message">形式が無効です。</div>' ? '':$groupValidError;
 							}
+						//必須判定は個別に行うので、'group_valid'の処理はここまで
 						} else {
-							echo $this->Mailform->error("MailMessage." . $field['group_field'], __("必須項目です。"));
+							if(!$field['group_valid']){
+								echo $this->Mailform->error("MailMessage." . $field['group_field'], __("必須項目です。"));
+							}
 						}
 					}
 				}
