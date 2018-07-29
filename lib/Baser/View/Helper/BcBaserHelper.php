@@ -980,7 +980,7 @@ class BcBaserHelper extends AppHelper {
 			'escape' => false,
 			'prefix' => false,
 			'forceTitle' => false,
-			'ssl' => false
+			'ssl' => $this->isSSL()
 		], $options);
 
 		/*** beforeGetLink ***/
