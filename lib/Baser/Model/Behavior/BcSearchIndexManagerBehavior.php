@@ -45,7 +45,7 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
 			return;
 		}
 
-		if($data['SearchIndex']['content_id']) {
+		if(!empty($data['SearchIndex']['content_id'])) {
 			$Content = ClassRegistry::init('Content');
 			$content = $Content->find('first', ['fields' => ['lft', 'rght'], 'conditions' => ['Content.id' => $data['SearchIndex']['content_id']],'recursive' => 1]);
 			$data['SearchIndex']['lft'] = $content['Content']['lft'];
