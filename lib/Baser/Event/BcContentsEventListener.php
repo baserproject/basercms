@@ -95,7 +95,10 @@ class BcContentsEventListener extends CakeObject implements CakeEventListener {
 			} else {
 				$deleteText = __d('baser', 'ゴミ箱へ移動');
 			}
-			$output .= $View->BcForm->button($deleteText, ['class' => 'button', 'id' => 'BtnDelete']);
+			$PermissionModel = ClassRegistry::init('Permission');
+			if ($PermissionModel->check('/' . Configure::read('Routing.prefixes.0') . '/contents/delete', $View->viewVars['user']['user_group_id'])) {
+				$output .= $View->BcForm->button($deleteText, ['class' => 'button', 'id' => 'BtnDelete']);
+			}
 		}
 		$event->data['out'] = $output;
 		return $output;
