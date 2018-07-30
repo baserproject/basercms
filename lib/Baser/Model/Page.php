@@ -730,6 +730,7 @@ class Page extends AppModel {
 		$siteId = $data['Content']['site_id'];
 		$name = $data['Content']['name'];
 		$eyeCatch = $data['Content']['eyecatch'];
+		$description = $data['Content']['description'];
 		unset($data['Page']['id']);
 		unset($data['Page']['created']);
 		unset($data['Page']['modified']);
@@ -740,7 +741,7 @@ class Page extends AppModel {
 			'title'		=> $newTitle,
 			'author_id' => $newAuthorId,
 			'site_id' 	=> $newSiteId,
-			'description' => ''
+			'description' => $description
 		];
 		if(!is_null($newSiteId) && $siteId != $newSiteId) {
 			$data['Content']['site_id'] = $newSiteId;
