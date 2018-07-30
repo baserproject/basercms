@@ -730,7 +730,7 @@ class Page extends AppModel {
 		$siteId = $data['Content']['site_id'];
 		$name = $data['Content']['name'];
 		$eyeCatch = $data['Content']['eyecatch'];
-		$description = !empty($data['Content']['description']) ? __d('baser', $data['Content']['description'].'のコピー') : '';
+		$description = $data['Content']['description'];
 		unset($data['Page']['id']);
 		unset($data['Page']['created']);
 		unset($data['Page']['modified']);
