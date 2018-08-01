@@ -314,6 +314,7 @@ class BcCkeditorHelper extends AppHelper {
 		$jscode .= "CKEDITOR.config.extraPlugins = 'draft,showprotected';";
 		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = '" . $editorStylesSet . "';";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
+		$jscode .= 'CKEDITOR.dtd.$removeEmpty["i"] = false;'; //　空「i」タグを消さないようにする
 
 		if ($editorEnterBr) {
 			$jscode .= "CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;";
