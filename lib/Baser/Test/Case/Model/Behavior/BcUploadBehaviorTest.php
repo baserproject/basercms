@@ -14,6 +14,8 @@
  * BcUploadBehaviorTest class
  * 
  * @package Baser.Test.Case.Model
+ * @property BcUploadBehavior $BcUploadBehavior
+ * @property EditorTemplate $EditorTemplate
  */
 class BcUploadBehaviorTest extends BaserTestCase {
 
@@ -28,7 +30,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @return void
  */
 	public function setUp() {
-		@session_start();
 		parent::setUp();
 		$this->EditorTemplate = ClassRegistry::init('EditorTemplate');
 		$this->BcUploadBehavior = ClassRegistry::init('BcUploadBehavior');
@@ -40,7 +41,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @return void
  */
 	public function tearDown() {
-		@session_destroy();
+		session_unset();
 		unset($this->EditorTemplate);
 		unset($this->BcUploadBehavior);
 		parent::tearDown();
@@ -413,8 +414,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		$file = new File($tmpPath);
 		$file->write('dummy');
 		$file->close();
-			
-		session_id('baser');  // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
 
 		// セッションを設定
 		$this->EditorTemplate->saveFile($field);
@@ -494,8 +493,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 		// ダミーファイルの作成
 		touch($tmpPath);
-
-		session_id('baser');  // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
 
 		// ファイル保存を実行
 		$result = $this->EditorTemplate->saveFile($field);

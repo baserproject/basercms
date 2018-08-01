@@ -37,7 +37,6 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 	public $components = ['BcAuthConfigure'];
 	
 	public function setUp() {
-		@session_start();
 		parent::setUp();
 		
 		// コンポーネントと偽のコントローラをセットアップする
@@ -60,7 +59,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 	}
 	
 	public function tearDown() {
-		@session_destroy();
+		session_unset();
 		parent::tearDown();
 		unset($this->Controller);
 		unset($this->BcAuthConfigure);
@@ -93,8 +92,6 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
  * @dataProvider settingCheckValueDataProvider
  */
 	public function testSettingCheckValue($loginAction, $requestedPrefix, $userScope, $auth_prefix) {
-		
-		session_id('baser');  // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
 
 		// 初期化
 		$this->Controller->BcAuthConfigure->initialize($this->Controller);

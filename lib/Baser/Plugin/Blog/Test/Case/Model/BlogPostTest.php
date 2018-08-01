@@ -345,9 +345,9 @@ public function testGetDefaultValue() {
 			['0000-00-00 00:00:00', '0000-00-00 00:00:00', false, false],
 			['0000-00-00 00:00:00', '0000-00-00 00:00:00', true, true],
 			['0000-00-00 00:00:00', date('Y-m-d H:i:s'), true, false],
-			['0000-00-00 00:00:00', date('Y-m-d H:i:s')+1, true, true],
+			['0000-00-00 00:00:00', date('Y-m-d H:i:s', strtotime("+1 hour")), true, true],
 			[date('Y-m-d H:i:s'), '0000-00-00 00:00:00', true, true],
-			[date('Y-m-d H:i:s')+1, '0000-00-00 00:00:00', true, false],
+			[date('Y-m-d H:i:s', strtotime("+1 hour")), '0000-00-00 00:00:00', true, false],
 			[date('Y-m-d H:i:s'), date('Y-m-d H:i:s'), true, false]
 		];
 	}

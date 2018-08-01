@@ -358,12 +358,11 @@ if ($memoryLimit < 32 && $memoryLimit != -1) {
 setlocale(LC_ALL, 'ja_JP.UTF-8');
 
 /**
- * セッションスタート 
+ * セッションスタート
  */
-if (!isConsole()) {
-	$Session = new CakeSession();
-	$Session->start();
-}
+$Session = new CakeSession();
+$Session->start();
+
 
 /**
  * Viewのキャッシュ設定・ログの設定

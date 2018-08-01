@@ -535,10 +535,10 @@ class ContentTest extends BaserTestCase {
 			[false, '', '', false],
 			[true, '0000-00-00 00:00:00', '', true],
 			[true, '0000-00-00 00:00:01', '', true],
-			[true, date('Y-m-d H:i:s')+1, '', false],
+			[true, date('Y-m-d H:i:s', strtotime("+1 hour")), '', false],
 			[true, '', '0000-00-00 00:00:00', true],
 			[true, '', '0000-00-00 00:00:01', false],
-			[true, '', date('Y-m-d H:i:s')+1, true],
+			[true, '', date('Y-m-d H:i:s', strtotime("+1 hour")), true],
 		];
 	}
 

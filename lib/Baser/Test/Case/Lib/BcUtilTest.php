@@ -40,12 +40,11 @@ class BcUtilTest extends BaserTestCase {
 		// 前のテストで変更されている為
 		$BcAuth = new BcAuthComponent(new ComponentCollection([]));
 		$BcAuth->setSessionKey('Auth.User');
-		@session_start();
 		parent::setUp();
 	}
 
 	public function tearDown() {
-		@session_destroy();
+		session_unset();
 		parent::tearDown();
 	}
 
@@ -116,7 +115,6 @@ class BcUtilTest extends BaserTestCase {
 		$this->assertNull($result, 'ログインユーザーのデータを正しく取得できません');
 
 		// ログインしている場合
-		session_id('baser');  // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
 		$Session = new CakeSession();
 		$Session->write('Auth.' . BcUtil::authSessionKey() . '.name', 'admin');
 		$result = BcUtil::loginUser();
@@ -139,7 +137,6 @@ class BcUtilTest extends BaserTestCase {
 		$this->assertEmpty($result, 'ログインユーザーのデータを正しく取得できません');
 
 		// ログインしている場合
-		session_id('baser'); // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
 		$Session = new CakeSession();
 		$Session->write('Auth.' . BcUtil::authSessionKey() . '.name', 'hoge');
 		$result = BcUtil::loginUserName();
