@@ -45,10 +45,15 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
 			return;
 		}
 
-		$Content = ClassRegistry::init('Content');
-		$content = $Content->find('first', ['fields' => ['lft', 'rght'], 'conditions' => ['Content.id' => $data['SearchIndex']['content_id']],'recursive' => 1]);
-		$data['SearchIndex']['lft'] = $content['Content']['lft'];
-		$data['SearchIndex']['rght'] = $content['Content']['rght'];
+		if(!empty($data['SearchIndex']['content_id'])) {
+			$Content = ClassRegistry::init('Content');
+			$content = $Content->find('first', ['fields' => ['lft', 'rght'], 'conditions' => ['Content.id' => $data['SearchIndex']['content_id']],'recursive' => 1]);
+			$data['SearchIndex']['lft'] = $content['Content']['lft'];
+			$data['SearchIndex']['rght'] = $content['Content']['rght'];
+		} else {
+			$data['SearchIndex']['lft'] = 0;
+			$data['SearchIndex']['rght'] = 0;
+		}
 		$data['SearchIndex']['model'] = $model->alias;
 		// タグ、空白を除外
 		$data['SearchIndex']['detail'] = str_replace(array("\r\n", "\r", "\n", "\t", "\s"), '', trim(strip_tags($data['SearchIndex']['detail'])));
