@@ -388,7 +388,7 @@ class BcAppController extends Controller {
 			// ログイン中のユーザーを管理側で削除した場合、ログイン状態を削除する必要がある為
 			// =================================================================
 			$user = $this->BcAuth->user();
-			if ($user && (empty($authConfig['type']) || $authConfig['type'] === 'Form')) {
+			if ($user && $authConfig && (empty($authConfig['type']) || $authConfig['type'] === 'Form')) {
 				$userModel = $authConfig['userModel'];
 				$User = ClassRegistry::init($userModel);
 				if (strpos($userModel, '.') !== false) {
