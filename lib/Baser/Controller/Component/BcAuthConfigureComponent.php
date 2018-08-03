@@ -67,7 +67,10 @@ class BcAuthConfigureComponent extends Component {
 			'userScope'			=> '',
 			'sessionKey'		=> Configure::read('BcAuthPrefix.admin.sessionKey')
 			], $config);
-		
+		if (empty($config['type'])) {
+			$config['type'] = 'Form';
+		}
+
 		// ログインアクション
 		if (!$config['loginAction']) {
 			if ($requestedPrefix) {
@@ -104,7 +107,7 @@ class BcAuthConfigureComponent extends Component {
 		
 		// フォームの認証設定
 		$BcAuth->authenticate = [
-			'Form' => [
+			$config['type'] => [
 				'userModel' => $config['userModel'],
 				'fields' => [
 					'username' => $config['username'],
