@@ -3,9 +3,20 @@
 [Docker for Mac](https://www.docker.com/docker-mac) を利用する事で、簡単に開発環境の構築を行う事ができます。  
 事前に Docker for Mac をインストールしておきます。
 
+## docker フォルダへ移動
+
+```
+cd docker
+```
+
 ## 設定ファイルの配置
 
-docker/docker-compose.yml をプロジェクトディレクトリの直下にコピーします。
+docker/docker-compose.yml.default を docker-compose.yml として同階層にコピーします。
+※ このファイルは自由に編集可能です。
+
+```
+cp docker-compose.yml.default docker-compose.yml
+```
  
 ## コンテナを作成して起動する
 
@@ -94,10 +105,20 @@ docker exec -it basercms /bin/bash
 - PathToClass : テスト対象のクラスまでのパスを含めた名称を指定
 - filterMethod : 特定のメソッドのみ実行する場合に、メソッド名称を指定
 
+## データベース（MySQL）を確認する
+データベースの内容は、MySQLで確認する事ができます。  
+`http://localhost:8080/`
+
+
 ## 送信メールを確認する
 
 baserCMSが送信したメールは、MailCatcher で確認する事ができます。  
 `http://localhost:1080/`
+
+
+## SSL通信でサイトを確認する
+自己証明書によってSSL通信で確認する事ができます。  
+`https://localhost/`
 
 
 ## Xdebug によるデバッグ（PhpStorm on Mac）
