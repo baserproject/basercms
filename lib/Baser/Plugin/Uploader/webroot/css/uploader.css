@@ -218,7 +218,6 @@
 	/*border: 1px solid #CCC;*/
 	/*background-color: #FFFFFF;*/
 	padding:2px;
-	width:107px;
 }
 #UploaderForm .uploader-file input {
 	font-size:14px;
@@ -227,8 +226,11 @@
 .file-list select{
 	font-size:14px!important;
 }
-#UploaderForm div{
+#UploaderForm > div{
 	float:left;
+}
+#UploaderForm div div.upload-file{ 
+	display: inline;
 }
 
 /* contextMenu
