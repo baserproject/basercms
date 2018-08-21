@@ -67,9 +67,7 @@ if (!empty($mailFields)) {
 			if (!$freezed) {
 				echo '<span class="mail-attention">' . $field['attention'] . '</span>';
 			}
-			if (!$field['group_valid']) {
-				echo $this->Mailform->error("MailMessage." . $field['field_name']);
-			}
+			echo $this->Mailform->error("MailMessage." . $field['field_name']);
 
 			/* 説明欄 */
 			if (($this->BcArray->last($mailFields, $key)) ||
@@ -85,8 +83,6 @@ if (!empty($mailFields)) {
 						foreach ($groupValidErrors as $groupValidError) {
 							echo $groupValidError;
 						}
-					} else {
-						echo $this->Mailform->error("MailMessage." . $field['group_field'], __("必須項目です。"));
 					}
 				}
 

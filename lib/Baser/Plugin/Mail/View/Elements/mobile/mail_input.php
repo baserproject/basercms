@@ -71,12 +71,10 @@ if (!isset($blockEnd)) {
 				<?php if (!$freezed): ?>
 					<font size="1"><?php echo $field['attention'] ?></font>
 				<?php endif; ?>
-				<?php if (!$field['group_valid']): ?>
-					<?php if ($this->Mailform->error("MailMessage." . $field['field_name'] . "_format", "check")): ?>
-						<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $field['field_name'] . "_format", __("形式が無効です。"), array('wrap' => false)); ?></font>
-					<?php else: ?>
-						<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $field['field_name'] . "", __("必須項目です。"), array('wrap' => false)); ?></font>
-					<?php endif; ?>
+				<?php if ($this->Mailform->error("MailMessage." . $field['field_name'] . "_format", "check")): ?>
+					<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $field['field_name'] . "_format", __("形式が無効です。"), array('wrap' => false)); ?></font>
+				<?php else: ?>
+					<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $field['field_name'] . "", __("必須項目です。"), array('wrap' => false)); ?></font>
 				<?php endif; ?>
 				<?php /* 説明欄 */ ?>
 				<?php if (($this->BcArray->last($mailFields, $key)) ||
@@ -96,8 +94,6 @@ if (!isset($blockEnd)) {
 							foreach ($groupValidErrors as $groupValidError) {
 								echo '<font color="#FF0000">' . $groupValidError . '</font>';
 							}
-						} else {
-							echo '<font color="#FF0000">'. $this->Mailform->error("MailMessage." . $field['group_field'], __("必須項目です。"), array('wrap' => false)) . '</font>';
 						}
 						?>
 					<?php endif; ?>
