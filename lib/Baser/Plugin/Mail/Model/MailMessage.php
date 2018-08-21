@@ -336,10 +336,7 @@ class MailMessage extends MailAppModel {
 			}
 			$count = count($dist);
 			if ($i > 0 && $i < $count) {
-				$this->invalidate($key . '_not_complate');
-				for ($j = 1; $j <= $count; $j++) {
-					$this->invalidate($key . '_' . $j);
-				}
+				$this->invalidate($key . '_not_complate', __('入力データが不完全です。'));
 			}
 		}
 	}
@@ -356,12 +353,13 @@ class MailMessage extends MailAppModel {
 		// 対象フィールドを取得
 		foreach ($this->mailFields as $mailField) {
 			$mailField = $mailField['MailField'];
+			if(empty($mailField['use_field'])) {
+				continue;
+			}
 			$valids = explode(',', $mailField['valid_ex']);
 			// 対象フィールドがあれば、バリデートグループごとに配列に格納する
 			if (in_array('VALID_EMAIL_CONFIRM', $valids)) {
-				if (isset($data['MailMessage'][$mailField['field_name']])) {
-					$dists[$mailField['group_valid']][] = $data['MailMessage'][$mailField['field_name']];
-				}
+				$dists[$mailField['group_valid']][] = $data['MailMessage'][$mailField['field_name']];
 			}
 		}
 		// チェック
@@ -373,9 +371,7 @@ class MailMessage extends MailAppModel {
 			list($a, $b) = $dist;
 			if(count($dist) == 2){
 				if ($a != $b) {
-					$this->invalidate($key . '_not_same');
-					$this->invalidate($key . '_1');
-					$this->invalidate($key . '_2');
+					$this->invalidate($key . '_not_same', __('入力データが一致していません。'));
 				}
 			}
 		}
