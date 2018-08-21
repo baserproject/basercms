@@ -27,7 +27,7 @@ class MailformHelper extends BcFreezeHelper {
  * 
  * @var array
  */
-	public $helpers = ['Html', 'BcTime', 'BcText', 'Js', 'BcUpload', 'BcCkeditor', 'BcBaser', 'BcContents'];
+	public $helpers = ['Html', 'BcTime', 'BcText', 'Js', 'BcUpload', 'BcCkeditor', 'BcBaser', 'BcContents', 'BcArray'];
 
 /**
  * メールフィールドのデータよりコントロールを生成する
@@ -259,23 +259,47 @@ class MailformHelper extends BcFreezeHelper {
  */
 	public function getGroupValidErrors($mailFields, $groupValid, $options = [], $distinct = true) {
 		$errors = [];
-
 		foreach ($mailFields as $mailField) {
-			if ($mailField['MailField']['group_valid'] != $groupValid) {
+			if ($mailField['MailField']['group_valid'] !== $groupValid || !in_array('VALID_GROUP_COMPLATE', explode(',', $mailField['MailField']['valid_ex']))) {
 				continue;
 			}
-
-			$errorMessage = null;
-			if ($this->value("MailMessage." . $mailField['MailField']['field_name'])) {
-				$errorMessage = $this->error("MailMessage." . $mailField['MailField']['field_name'], null, $options);
+			if(!empty($this->validationErrors['MailMessage'][$mailField['MailField']['field_name']])) {
+				foreach($this->validationErrors['MailMessage'][$mailField['MailField']['field_name']] as $key => $error) {
+					if($error === true) {
+						unset($this->validationErrors['MailMessage'][$mailField['MailField']['field_name']][$key]);
+					}
+				}
 			}
-
+			$errorMessage = $this->error("MailMessage." . $mailField['MailField']['field_name'], null, $options);
 			if ($errorMessage && (!$distinct || !array_search($errorMessage, $errors))) {
 				$errors[$mailField['MailField']['field_name']] = $errorMessage;
 			}
 		}
-
 		return $errors;
 	}
 
+/**
+ * メールフィールドのグループの最後か判定する
+ * @param array $mailFields
+ * @param array $currentMailField
+ * @return bool
+ */
+	public function isGroupLastField($mailFields, $currentMailField) {
+		if (empty($currentMailField['group_field'])) {
+			return false;
+		}
+		if (isset($currentMailField['MailField'])) {
+			$currentMailField = $currentMailField['MailField'];
+		}
+		foreach($mailFields as $key => $mailField) {
+			if ($currentMailField === $mailField['MailField']) {
+				break;
+			}
+		}
+		if(empty($mailFields[$key + 1]['MailField']['group_field']) ||
+			$currentMailField['group_field'] !== $mailFields[$key + 1]['MailField']['group_field']) {
+			return true;
+		}
+		return false;
+	}
 }
