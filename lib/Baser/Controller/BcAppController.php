@@ -708,7 +708,6 @@ class BcAppController extends Controller {
 		if ($authPrefix) {
 			$currentPrefixUser = BcUtil::loginUser($currentPrefix);
 			if ($currentPrefixUser) {
-				// フロント認証設定が有効化されている場合、公開側（front）ログイン中のユーザーとする
 				$user = $currentPrefixUser;
 				$sessionKey = BcUtil::getLoginUserSessionKey();
 			}
