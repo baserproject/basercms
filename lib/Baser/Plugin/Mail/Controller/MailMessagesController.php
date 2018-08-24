@@ -134,7 +134,7 @@ class MailMessagesController extends MailAppController {
 			'order' => 'created DESC'
 		));
 		$mailFields = $this->MailField->find('all', array(
-			'conditions' => array('MailField.mail_content_id' => $mailContentId),
+			'conditions' => array('MailField.mail_content_id' => $mailContentId, 'MailField.use_field' => true),
 			'order' => 'MailField.sort'
 		));
 		$this->crumbs[] = array('name' => __d('baser', '受信メール一覧'), 'url' => array('controller' => 'mail_messages', 'action' => 'index', $this->params['pass'][0]));
