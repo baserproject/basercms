@@ -59,7 +59,7 @@ class MailMessage extends MailAppModel {
  * 
  * MailMessageモデルは利用前にこのメソッドを呼び出しておく必要あり
  * 
- * @param type $mailContentId
+ * @param int $mailContentId
  * @return boolean
  */
 	public function setup($mailContentId) {
@@ -323,7 +323,7 @@ class MailMessage extends MailAppModel {
 			if (in_array('VALID_GROUP_COMPLATE', $valids) && !empty($mailField['use_field'])) {
 				$dists[$mailField['group_valid']][] = [
 					'name' => $mailField['field_name'],
-					'value' => $data['MailMessage'][$mailField['field_name']]
+					'value' => @$data['MailMessage'][$mailField['field_name']]
 				];
 			}
 		}
@@ -367,7 +367,7 @@ class MailMessage extends MailAppModel {
 			if (in_array('VALID_EMAIL_CONFIRM', $valids)) {
 				$dists[$mailField['group_valid']][] = [
 					'name' => $mailField['field_name'],
-					'value' => $data['MailMessage'][$mailField['field_name']],
+					'value' => @$data['MailMessage'][$mailField['field_name']],
 					'isGroupValidComplate' => in_array('VALID_GROUP_COMPLATE', explode(',', $mailField['valid_ex']))
 				];
 			}
