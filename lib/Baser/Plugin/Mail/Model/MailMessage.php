@@ -71,11 +71,16 @@ class MailMessage extends MailAppModel {
 		$MailContent = ClassRegistry::init('Mail.MailContent');
 		$mailContent = $MailContent->find('first', ['conditions' => ['MailContent.id' => $mailContentId], 'recursive' => 1]);
 		$this->mailContent = ['MailContent' => $mailContent['MailContent']];
-		if(!empty($mailContent['MailField'])) {
-			foreach($mailContent['MailField'] as $value) {
-				$this->mailFields[]	= ['MailField' => $value];
-			}
+
+		$MailField = ClassRegistry::init('Mail.MailField');
+ 		$mailFields = $MailField->find('all', array(
+			'conditions' => array('MailField.mail_content_id' => $mailContentId, 'MailField.use_field' => true),
+ 			'order' => 'MailField.sort ASC',
+ 		));
+		if ($mailFields) {
+			$this->mailFields = $mailFields;
 		}
+
 		// アップロード設定
 		$this->setupUpload($mailContentId);
 		return true;
