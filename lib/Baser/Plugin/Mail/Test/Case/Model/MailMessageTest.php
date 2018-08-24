@@ -92,7 +92,9 @@ class MailMessageTest extends BaserTestCase {
 			'name_1' => "\xE2\x85\xA0\xE2\x85\xA1\xE3\x8D\x8D\xE3\x88\xB9",
 			'name_2' => 'hoge',
 			'root' => '2',
-			'category' => '2'
+			'category' => '2',
+			'email_1' => 'hoge@hoge.com',
+			'email_2' => 'hoge@hoge.com'
 		));
 		$result = $this->MailMessage->save();
 		$this->MailMessage->dropTable(1);
