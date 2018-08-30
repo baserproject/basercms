@@ -172,10 +172,10 @@ class Page extends AppModel {
  */
 	public function afterSave($created, $options = []) {
 
-		$data = $this->data;
-		// タイトルタグと説明文を追加
 		if (empty($data['Page']['id'])) {
-			$data['Page']['id'] = $this->id;
+			$data = $this->read(null, $this->id);
+		} else {
+			$data = $this->read(null, $data['Page']['id']);
 		}
 
 		if ($this->fileSave) {
