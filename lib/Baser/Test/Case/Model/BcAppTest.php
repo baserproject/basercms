@@ -745,10 +745,10 @@ class BcAppTest extends BaserTestCase {
  * @param array $auguments アソシエーションを除外しないモデル
  * @param array $expectedHasKey 期待する存在するキー
  * @param array $expectedNotHasKey 期待する存在しないキー
- * @dataProvider expectsDataProvider
+ * @dataProvider reduceAssociationsDataProvider
  */
-	public function testExpects($arguments, $expectedHasKeys, $expectedNotHasKeys) {
-		$this->User->expects($arguments);
+	public function testReduceAssociations($arguments, $expectedHasKeys, $expectedNotHasKeys) {
+		$this->User->reduceAssociations($arguments);
 		$result = $this->User->find('first', ['recursive' => 1]);
 
 		// 存在するキー
@@ -762,7 +762,7 @@ class BcAppTest extends BaserTestCase {
 		}
 	}
 
-	public function expectsDataProvider() {
+	public function reduceAssociationsDataProvider() {
 		return [
 			[[], ['User'], ['UserGroup', 'Favorite']],
 			[['UserGroup'], ['User', 'UserGroup'], ['Favorite']],
@@ -999,6 +999,21 @@ class BcAppTest extends BaserTestCase {
 			[["aa", "\"", "<", ">"], ['aa', '&quot;', '&lt;', '&gt;']],
 			[[["aa", "\"", "<", ">"], '\"', '<', '>'], [['aa', '"', '<', '>'], '\&quot;', '&lt;', '&gt;']],
 		];
+	}
+
+/**
+ * @test モデルのモックが作成できるかテスト
+ */
+	public function testGetMock() {
+		$expect = 'do not save!';
+		$Model = $this->getMockForModel('BcAppModel', ['save']);
+		$Model->expects($this->any())
+			->method('save')
+			->will($this->returnValue($expect));
+
+		$actual = $Model->save(['Hoge' => ['name' => 'fuga']]);
+		$this->assertEquals($expect, $actual, 'スタブが正しく実行されること');
+
 	}
 
 }

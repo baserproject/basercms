@@ -101,7 +101,7 @@ class BlogHelperTest extends BaserTestCase {
 		$this->Blog = new BlogHelper($this->View);
 
 		$this->BlogContent = ClassRegistry::init('Blog.BlogContent');
-		$this->BlogContent->expects([]);
+		$this->BlogContent->reduceAssociations([]);
 		$this->Blog->setContent(1);
 	}
 
