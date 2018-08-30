@@ -20,6 +20,7 @@ App::uses('Content', 'Model');
  * @property Page $Page
  * @property SiteConfig $SiteConfig
  * @property Content $Content
+ * @property User $User
  */
 
 class BcAppTest extends BaserTestCase {
@@ -749,7 +750,7 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testReduceAssociations($arguments, $expectedHasKeys, $expectedNotHasKeys) {
 		$this->User->reduceAssociations($arguments);
-		$result = $this->User->find('first', ['recursive' => 1]);
+		$result = $this->User->find('first', ['conditions' => ['User.id' => 2], 'recursive' => 2]);
 
 		// 存在するキー
 		foreach ($expectedHasKeys as $key) {
@@ -766,6 +767,8 @@ class BcAppTest extends BaserTestCase {
 		return [
 			[[], ['User'], ['UserGroup', 'Favorite']],
 			[['UserGroup'], ['User', 'UserGroup'], ['Favorite']],
+			[['UserGroup.Permission'], [], ['Permission']],
+			[['User', 'UserGroup', 'Favorite'], [], ['Permission']],
 		];
 	}
 
