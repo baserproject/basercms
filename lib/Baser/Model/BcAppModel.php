@@ -1236,11 +1236,13 @@ class BcAppModel extends Model {
 /**
  * 指定したモデル以外のアソシエーションを除外する
  *
- * @param array $auguments アソシエーションを除外しないモデル
+ * @param array $auguments アソシエーションを除外しないモデル。
+ * 　「.（ドット）」で区切る事により、対象モデルにアソシエーションしているモデルがさらに定義しているアソシエーションを対象とする事ができる
+ * 　（例）UserGroup.Permission
  * @param boolean $reset バインド時に１回の find でリセットするかどうか
  * @return void
  */
-	public function expects($arguments, $reset = true) {
+	public function reduceAssociations($arguments, $reset = true) {
 		$models = [];
 
 		foreach ($arguments as $index => $argument) {
@@ -1300,7 +1302,7 @@ class BcAppModel extends Model {
 					$this->__backInnerAssociation = [];
 				}
 				$this->__backInnerAssociation[] = $model;
-				$this->$model->expects(true, $children);
+				$this->$model->reduceAssociations($children, $reset);
 			}
 		}
 

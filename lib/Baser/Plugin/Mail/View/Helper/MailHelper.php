@@ -49,7 +49,7 @@ class MailHelper extends AppHelper {
 		}
 		if ($mailContentId) {
 			$MailContent = ClassRegistry::init('Mail.MailContent');
-			$MailContent->expects(array());
+			$MailContent->reduceAssociations([]);
 			$this->mailContent = Hash::extract($MailContent->read(null, $mailContentId), 'MailContent');
 		} elseif (isset($this->_View->viewVars['mailContent'])) {
 			$this->mailContent = $this->_View->viewVars['mailContent']['MailContent'];
