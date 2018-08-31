@@ -200,7 +200,7 @@ class Page extends AppModel {
  * @return array
  */
 	public function createSearchIndex($data) {
-		if (!isset($data['Page']) || !isset($data['Content'])) {
+		if (!isset($data['Page']['id']) || !isset($data['Content']['id'])) {
 			return false;
 		}
 		$page = $data['Page'];
