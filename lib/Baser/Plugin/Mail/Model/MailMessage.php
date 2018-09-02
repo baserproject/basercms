@@ -69,9 +69,17 @@ class MailMessage extends MailAppModel {
 		// 利用するメールフィールド取得
 		App::uses('MailField', 'Mail.Model');
 		$MailContent = ClassRegistry::init('Mail.MailContent');
-		$MailContent->hasMany['MailField']['conditions'] = ['MailField.mail_content_id' => $mailContentId, 'MailField.use_field' => true];
-		$MailContent->hasMany['MailField']['order'] = 'MailField.sort ASC';
-		$mailContent = $MailContent->find('first', ['conditions' => ['MailContent.id' => $mailContentId], 'recursive' => 1]);
+		$mailContent = $MailContent->find('first', [
+			'conditions' => ['MailContent.id' => $mailContentId, 'MailField.use_field' => true],
+			'order' => 'MailField.sort ASC',
+			'recursive' => 1,
+			'joins' => [[
+				'type' => 'inner',
+				'table' => 'mail_fields',
+				'alias' => 'MailField',
+				'conditions' => 'MailContent.id = MailField.mail_content_id'
+			]]
+		]);
 		$this->mailContent = ['MailContent' => $mailContent['MailContent']];
 		if(!empty($mailContent['MailField'])) {
 			foreach($mailContent['MailField'] as $value) {
