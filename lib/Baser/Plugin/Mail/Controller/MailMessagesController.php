@@ -101,12 +101,9 @@ class MailMessagesController extends MailAppController {
 			'limit' => $this->passedArgs['num']
 		);
 		$messages = $this->paginate('MailMessage');
-		$mailFields = $this->MailField->find('all', array(
-			'conditions' => array('MailField.mail_content_id' => $mailContentId),
-			'order' => 'MailField.sort'
-		));
-		$this->set(compact('mailFields'));
-		$this->set(compact('messages'));
+		$mailFields = $this->MailMessage->mailFields;
+
+		$this->set(compact('messages', 'mailFields'));
 
 		if ($this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
 			$this->render('ajax_index');
@@ -133,13 +130,10 @@ class MailMessagesController extends MailAppController {
 			'conditions' => array('MailMessage.id' => $messageId),
 			'order' => 'created DESC'
 		));
-		$mailFields = $this->MailField->find('all', array(
-			'conditions' => array('MailField.mail_content_id' => $mailContentId),
-			'order' => 'MailField.sort'
-		));
+		$mailFields = $this->MailMessage->mailFields;
+
 		$this->crumbs[] = array('name' => __d('baser', '受信メール一覧'), 'url' => array('controller' => 'mail_messages', 'action' => 'index', $this->params['pass'][0]));
-		$this->set(compact('mailFields'));
-		$this->set(compact('message'));
+		$this->set(compact('message', 'mailFields'));
 		$this->pageTitle = __d('baser', '受信メール詳細');
 	}
 
