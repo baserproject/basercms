@@ -69,6 +69,8 @@ class MailMessage extends MailAppModel {
 		// 利用するメールフィールド取得
 		App::uses('MailField', 'Mail.Model');
 		$MailContent = ClassRegistry::init('Mail.MailContent');
+		$MailContent->hasMany['MailField']['conditions'] = ['MailField.mail_content_id' => $mailContentId, 'MailField.use_field' => true];
+		$MailContent->hasMany['MailField']['order'] = 'MailField.sort ASC';
 		$mailContent = $MailContent->find('first', ['conditions' => ['MailContent.id' => $mailContentId], 'recursive' => 1]);
 		$this->mailContent = ['MailContent' => $mailContent['MailContent']];
 		if(!empty($mailContent['MailField'])) {
@@ -76,6 +78,7 @@ class MailMessage extends MailAppModel {
 				$this->mailFields[]	= ['MailField' => $value];
 			}
 		}
+
 		// アップロード設定
 		$this->setupUpload($mailContentId);
 		return true;
