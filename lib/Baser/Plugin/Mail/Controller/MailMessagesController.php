@@ -66,7 +66,6 @@ class MailMessagesController extends MailAppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->MailContent->recursive = -1;
 		$this->mailContent = $this->MailContent->read(null, $this->params['pass'][0]);
 		App::uses('MailMessage', 'Mail.Model');
 		$this->MailMessage = new MailMessage();
@@ -203,7 +202,7 @@ class MailMessagesController extends MailAppController {
 			$this->notFound();
 		}
 		if ($this->MailMessage->delete($messageId)) {
-			$this->setMessage(sprintf(__d('baser', '%s への受信データ NO「%s」 を削除しました。'), $this->mailContent['MailContent']['title'], $messageId), false, true);
+			$this->setMessage(sprintf(__d('baser', '%s への受信データ NO「%s」 を削除しました。'), $this->mailContent['Content']['title'], $messageId), false, true);
 		} else {
 			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
 		}
