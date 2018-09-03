@@ -172,10 +172,10 @@ class Page extends AppModel {
  */
 	public function afterSave($created, $options = []) {
 
-		$data = $this->data;
-		// タイトルタグと説明文を追加
 		if (empty($data['Page']['id'])) {
-			$data['Page']['id'] = $this->id;
+			$data = $this->read(null, $this->id);
+		} else {
+			$data = $this->read(null, $data['Page']['id']);
 		}
 
 		if ($this->fileSave) {
@@ -200,7 +200,7 @@ class Page extends AppModel {
  * @return array
  */
 	public function createSearchIndex($data) {
-		if (!isset($data['Page']) || !isset($data['Content'])) {
+		if (!isset($data['Page']['id']) || !isset($data['Content']['id'])) {
 			return false;
 		}
 		$page = $data['Page'];
