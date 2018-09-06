@@ -673,7 +673,7 @@ class BcUploadBehavior extends ModelBehavior {
 					$file = $Model->data[$Model->name][$field['name']];
 
 					// DBに保存されているファイル名から拡張子を取得する
-					preg_match('/\.(.+)\z/', $file, $match);
+					preg_match('/\.([^.]+)\z/', $file, $match);
 					if (!empty($match[1])) {
 						$field['ext'] = $match[1];
 					}
