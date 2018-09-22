@@ -302,7 +302,14 @@ if (BC_INSTALLED) {
  */
 
 if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
-	App::build(array('Plugin' => array(BASER_THEMES . $bcSite['theme'] . DS . 'Plugin' . DS)), App::PREPEND);
+	$sites = BcSite::findAll();
+	$pluginPaths = [];
+	foreach($sites as $site) {
+		if($site->theme) {
+			$pluginPaths[] = BASER_THEMES . $site->theme . DS . 'Plugin' . DS;
+		}
+	}
+	App::build(['Plugin' => $pluginPaths], App::PREPEND);
 	$plugins = getEnablePlugins();
 	foreach ($plugins as $plugin) {
 		loadPlugin($plugin['Plugin']['name'], $plugin['Plugin']['priority']);
