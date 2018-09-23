@@ -58,7 +58,7 @@ $(function(){
 			<?php echo $this->BcForm->end() ?>
 		<?php endif ?>
 		<br /><br /><br /><br />
-		<div class="theme-description"><?php echo nl2br(h($currentTheme['description'])) ?></div>
+		<div class="theme-description clearfix"><?php echo nl2br($this->BcText->autoLinkUrls($currentTheme['description'])) ?></div>
 	<?php else: ?>
 		<p><?php echo __d('baser', '現在、テーマが選択されていません。')?></p>
 	<?php endif ?>
