@@ -599,19 +599,9 @@ class BcAppController extends Controller {
  * @throws BadRequestException
  */
 	public function _blackHoleCallback($err) {
-		//SSL制限違反は別処理
-		if ($err === 'secure') {
-			$this->sslFail($err);
-			return;
-		}
 
 		$errorMessages = [
 			'auth' => __d('baser', 'バリデーションエラーまたはコントローラ/アクションの不一致によるエラーです。'),
-			'csrf' => __d('baser', 'CSRF対策によるエラーです。リクエストに含まれるCSRFトークンが不正または無効である可能性があります。'),
-			'get' => __d('baser', 'HTTPメソッド制限違反です。リクエストはHTTP GETである必要があります。'),
-			'post' => __d('baser', 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。'),
-			'put' => __d('baser', 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。'),
-			'delete' => __d('baser', 'HTTPメソッド制限違反です。リクエストはHTTP DELETEである必要があります。')
 		];
 
 		$message = __d('baser', '不正なリクエストと判断されました。');
@@ -621,30 +611,6 @@ class BcAppController extends Controller {
 		}
 
 		throw new BadRequestException($message);
-	}
-
-/**
- * SSLエラー処理
- *
- * SSL通信が必要なURLの際にSSLでない場合、
- * SSLのURLにリダイレクトさせる
- *
- * @param string $err エラーの種類
- * @return	void
- * @access	protected
- */
-	public function sslFail($err) {
-		if ($err === 'secure') {
-			// 共用SSLの場合、設置URLがサブディレクトリになる場合があるので、$this->request->here は利用せずURLを生成する
-			$url = $this->request->url;
-			if (Configure::read('App.baseUrl')) {
-				$url = 'index.php/' . $url;
-			}
-
-			$url = Configure::read('BcEnv.sslUrl') . $url;
-			$this->redirect($url);
-			exit();
-		}
 	}
 
 /**
