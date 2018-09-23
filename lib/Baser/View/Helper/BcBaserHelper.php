@@ -840,7 +840,7 @@ class BcBaserHelper extends AppHelper {
 	 * @return void
 	 */
 	public function xmlHeader($attrib = []) {
-		if (empty($attrib['encoding']) && @$this->request->params['Site']['device'] == 'mobile') {
+		if (empty($attrib['encoding']) && !empty($this->request->params['Site']['device']) && $this->request->params['Site']['device'] == 'mobile') {
 			$attrib['encoding'] = 'Shift-JIS';
 		}
 		echo $this->BcXml->header($attrib) . "\n";
@@ -1116,7 +1116,7 @@ class BcBaserHelper extends AppHelper {
 	 * @return void
 	 */
 	public function charset($charset = null) {
-		if (!$charset && @$this->request->params['Site']['device'] == 'mobile') {
+		if (!$charset && !empty($this->request->params['Site']['device']) && $this->request->params['Site']['device'] == 'mobile') {
 			$charset = 'Shift-JIS';
 		}
 		echo $this->BcHtml->charset($charset);
@@ -1314,7 +1314,7 @@ class BcBaserHelper extends AppHelper {
 
 		$url = explode('/', h($this->request->url));
 
-		if (@$this->request->params['Site']['alias']) {
+		if (!empty($this->request->params['Site']['alias'])) {
 			array_shift($url);
 		}
 
