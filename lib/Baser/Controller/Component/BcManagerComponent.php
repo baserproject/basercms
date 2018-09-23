@@ -1693,5 +1693,25 @@ class BcManagerComponent extends Component {
 		}
 		return true;
 	}
+
+/**
+ * テーマに梱包されているプラグインをインストールする
+ *
+ * @param string $theme テーマ名
+ * @return bool
+ */
+	public function installThemesPlugins($theme) {
+		$plugins = BcUtil::getThemesPlugins($theme);
+		$result = true;
+		if($plugins) {
+			App::build(['Plugin' => array_merge([BASER_THEMES . $theme . DS . 'Plugin' . DS], App::path('Plugin'))]);
+			foreach($plugins as $plugin) {
+				if(!$this->installPlugin($plugin)) {
+					$result = false;
+				}
+			}
+		}
+		return $result;
+	}
 	
 }

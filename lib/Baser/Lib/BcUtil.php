@@ -122,12 +122,21 @@ class BcUtil extends CakeObject {
 	}
 
 /**
- * テーマ梱包プラグインのリストを取得する
- * 
- * @return array
+ * 現在適用しているテーマ梱包プラグインのリストを取得する
+ *
+ * @return array プラグインリスト
  */
 	public static function getCurrentThemesPlugins() {
-		$theme = Configure::read('BcSite.theme');
+		return BcUtil::getThemesPlugins(Configure::read('BcSite.theme'));
+	}
+
+/**
+ * テーマ梱包プラグインのリストを取得する
+ *
+ * @param string $theme テーマ名
+ * @return array プラグインリスト
+ */
+	public static function getThemesPlugins($theme) {
 		$path = BASER_THEMES . $theme . DS . 'Plugin';
 		if(is_dir($path)) {
 			$Folder = new Folder($path);

@@ -673,9 +673,24 @@ function getEnablePlugins() {
 		$pluginTable = $db->config['prefix'] . 'plugins';
 		$enablePlugins = array();
 		if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
-			$enablePlugins = $Plugin->find('all', array('conditions' => array('Plugin.status' => true), 'order' => 'Plugin.priority'));
+			$enablePlugins = $Plugin->find('all', ['conditions' => ['Plugin.status' => true], 'order' => 'Plugin.priority']);
 			ClassRegistry::removeObject('Plugin');
 			if ($enablePlugins) {
+				foreach($enablePlugins as $key => $enablePlugin) {
+					$pluginExists = false;
+					foreach(App::path('plugins') as $path) {
+						if (is_dir($path . $enablePlugin['Plugin']['name'])) {
+							$pluginExists = true;
+						}
+						$underscored = Inflector::underscore($enablePlugin['Plugin']['name']);
+						if (is_dir($path . $underscored)) {
+							$pluginExists = true;
+						}
+					}
+					if(!$pluginExists) {
+						unset($enablePlugins[$key]);
+					}
+				}
 				if (!Configure::read('Cache.disable')) {
 					Cache::write('enable_plugins', $enablePlugins, '_cake_env_');
 				}
@@ -869,7 +884,7 @@ function mb_basename($str, $suffix=null){
  * プラグインを読み込む
  * 
  * @param string $plugin
- * @return type
+ * @return bool
  */
 function loadPlugin($plugin, $priority) {
 	if(CakePlugin::loaded($plugin)) {

@@ -299,6 +299,7 @@ if (BC_INSTALLED) {
  * プラグインをCake側で有効化
  * 
  * カレントテーマのプラグインも読み込む
+ * サブサイトに適用されているプラグインも読み込む
  */
 
 if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
