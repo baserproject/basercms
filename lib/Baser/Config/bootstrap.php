@@ -303,7 +303,7 @@ if (BC_INSTALLED) {
 
 if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	$sites = BcSite::findAll();
-	$pluginPaths = [];
+	$pluginPaths = [ROOT . DS . 'Plugin' . DS];
 	foreach($sites as $site) {
 		if($site->theme) {
 			$pluginPaths[] = BASER_THEMES . $site->theme . DS . 'Plugin' . DS;

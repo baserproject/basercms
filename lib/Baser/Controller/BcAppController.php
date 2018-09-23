@@ -234,6 +234,11 @@ class BcAppController extends Controller {
 			} catch(Exception $e) {}
 		}
 
+		// DebugKit プラグインが有効な場合、DebugKit Toolbar を表示
+		if(CakePlugin::loaded('DebugKit') && !in_array('DebugKit.Toolbar', $this->components)) {
+			$this->components[] = 'DebugKit.Toolbar';
+		}
+
 		/* 携帯用絵文字のモデルとコンポーネントを設定 */
 		// TODO 携帯をコンポーネントなどで判別し、携帯からのアクセスのみ実行させるようにする
 		// ※ コンストラクト時点で、$this->request->params['prefix']を利用できない為。
@@ -249,6 +254,9 @@ class BcAppController extends Controller {
  * @return	void
  */
 	public function beforeFilter() {
+
+
+
 		parent::beforeFilter();
 
 		$isRequestView = $this->request->is('requestview');
