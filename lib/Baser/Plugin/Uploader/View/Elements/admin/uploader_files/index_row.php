@@ -37,14 +37,14 @@ $class = ' class="' . implode(' ', $classies) . '"';
 			<span class="url"><?php echo $this->BcHtml->url($this->Uploader->getFileUrl($file['UploaderFile']['name'])) ?></span>
 			<span class="user-id"><?php echo $file['UploaderFile']['user_id'] ?></span>
 			<span class="name"><?php echo $file['UploaderFile']['name'] ?></span>
-			<span class="alt"><?php echo $file['UploaderFile']['alt'] ?></span>
+			<span class="alt"><?php echo h($file['UploaderFile']['alt']) ?></span>
 		</div>
 	</td>
-	<td class="img"><?php echo $this->Uploader->file($file,array('size'=>'small','alt'=>$file['UploaderFile']['alt'],'style'=>'width:80px')) ?></td>
+	<td class="img"><?php echo $this->Uploader->file($file,array('size'=>'small','alt'=>h($file['UploaderFile']['alt']),'style'=>'width:80px')) ?></td>
 	<td><span class="uploader-category-id"><?php echo $this->BcText->arrayValue($file['UploaderFile']['uploader_category_id'], $uploaderCategories) ?></td>
 	<td width="30%">
 		<span><?php echo $file['UploaderFile']['name'] ?></span>
-		<?php if ($file['UploaderFile']['alt']): ?><br /><span><?php echo $this->BcText->truncate($file['UploaderFile']['alt'], 40) ?><span><?php endif ?>
+		<?php if ($file['UploaderFile']['alt']): ?><br /><span><?php echo $this->BcText->truncate(h($file['UploaderFile']['alt']), 40) ?><span><?php endif ?>
 	</td>
 	<td class="align-center"><?php echo $this->BcText->booleanMark($statusPublish); ?></td>
 	<td class="user-name"><?php echo h($this->BcText->arrayValue($file['UploaderFile']['user_id'], $users)) ?></td>
