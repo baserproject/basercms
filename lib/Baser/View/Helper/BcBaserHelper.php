@@ -1756,7 +1756,7 @@ EOD;
 			'tree' => $this->BcContents->getTree($id, $level),
 			'currentId' => $currentId,
 			'data' => [],
-			'cache' => true
+			'cache' => false
 		], $options);
 
 		if(BcUtil::loginUser()) {
