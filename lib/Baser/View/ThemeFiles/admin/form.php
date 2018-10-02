@@ -90,7 +90,7 @@ if ($this->request->action !== 'admin_add') {
 		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
-<?php var_dump($this->data) ?>
+
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit">
