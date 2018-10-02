@@ -169,16 +169,20 @@ class BcUtilTest extends BaserTestCase {
  * テーマ梱包プラグインのリストを取得する
  */
 	public function testGetThemesPlugins() {
-		// プラグインが存在しない場合
 		$theme = Configure::read('BcSite.theme');
+		$path = BASER_THEMES . $theme . DS . 'Plugin';
+
+		// ダミーのプラグインディレクトリを削除
+		$Folder = new Folder();
+		$Folder->delete($path);
+
+		// プラグインが存在しない場合
 		$result = BcUtil::getThemesPlugins($theme);
 		$expect = [];
 		$this->assertEquals($expect, $result, 'テーマ梱包プラグインのリストを正しく取得できません');
 
 		// プラグインが存在する場合
 		// ダミーのプラグインディレクトリを作成
-		$path = BASER_THEMES . $theme . DS . 'Plugin';
-		$Folder = new Folder();
 		$Folder->create($path . DS . 'dummy1');
 		$Folder->create($path . DS . 'dummy2');
 
@@ -194,6 +198,10 @@ class BcUtilTest extends BaserTestCase {
  * 現在適用しているテーマ梱包プラグインのリストを取得する
  */
 	public function testGetCurrentThemesPlugins() {
+		$theme = Configure::read('BcSite.theme');
+		$path = BASER_THEMES . $theme . DS . 'Plugin';
+		$Folder = new Folder();
+		$Folder->delete($path);
 		$this->assertEquals([], BcUtil::getCurrentThemesPlugins(), '現在適用しているテーマ梱包プラグインのリストを正しく取得できません。');
 	}
 	
