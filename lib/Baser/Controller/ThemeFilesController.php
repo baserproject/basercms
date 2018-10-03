@@ -62,15 +62,8 @@ class ThemeFilesController extends AppController {
  */
 	public function __construct(CakeRequest $request, CakeResponse $response) {
 		parent::__construct($request, $response);
-		$this->_tempalteTypes = [
-			'Layouts'	=> __d('baser', 'レイアウトテンプレート'),
-			'Elements'	=> __d('baser', 'エレメントテンプレート'),
-			'Emails'	=> __d('baser', 'Eメールテンプレート'),
-			'etc'		=> __d('baser', 'コンテンツテンプレート'),
-			'css'		=> __d('baser', 'スタイルシート'),
-			'js'		=> 'Javascript',
-			'img'		=> __d('baser', 'イメージ')
-		];
+
+		$this->_tempalteTypes = $this->_getTemplateTypes();
 		$this->crumbs = [
 			['name' => __d('baser', 'テーマ管理'), 'url' => ['admin' => true, 'controller' => 'themes', 'action' => 'index']]
 		];
@@ -133,21 +126,9 @@ class ThemeFilesController extends AppController {
 			$themeFiles = [];
 			$folders = [];
 			$excludeFolderList = [];
-			$excludeFileList = ['screenshot.png', 'VERSION.txt', 'config.php', 'AppView.php', 'BcAppView.php'];
+			$excludeFileList = $this->_getExcludeFileList();
 			if (!$path) {
-				$excludeFolderList = [
-					'Layouts', 
-					'Elements', 
-					'Emails',
-					'Pages', 
-					'Helper', 
-					'Config',
-					'Plugin',					
-					'img', 
-					'css',
-					'js',
-					'_notes'
-				];
+				$excludeFolderList = $this->_getExcludeFolderList();
 			}
 			foreach ($files[0] as $file) {
 				if (!in_array($file, $excludeFolderList)) {
@@ -188,15 +169,68 @@ class ThemeFilesController extends AppController {
  * @return mixed false / type 
  */
 	protected function _getFileType($file) {
-		if (preg_match('/^(.+?)(\.ctp|\.php|\.css|\.js)$/is', $file)) {
+		if (preg_match($this->_getFileTypePattern('text'), $file)) {
 			return 'text';
-		} elseif (preg_match('/^(.+?)(\.png|\.gif|\.jpg|\.jpeg)$/is', $file)) {
+		} elseif (preg_match($this->_getFileTypePattern('image'), $file)) {
 			return 'image';
 		} else {
 			return 'file';
 		}
 		return false;
 	}
+
+/**
+ * ファイルタイプに対してファイル名を探すパターン文字列を入手する
+ * 
+ * @param string $type ファイルタイプ名(text/image)
+ * @return string preg_match()で用いるパターン文字列
+ */
+	public function _getFileTypePattern($type) {
+	    //typeに対応する拡張子を入手する
+	    $extensions = $this->_getFileTypeExtensions($type);
+
+	    //拡張子が得られない場合はヒットしないパターン
+	    if (empty($extensions)) {
+	        return '/^$/';
+        }
+
+		//pregのパターン作成
+		$pattern = '';
+		foreach ($extensions as $extension) {
+			$pattern .= ($pattern === '' ? '' : '|') . "\.{$extension}";
+		}
+		$pattern = '/^(.+?)(' . $pattern . ')$/is';
+
+		return $pattern;
+	}
+
+    /**
+     * ファイルタイプに対応する拡張子のリストを入手
+     * 設定からリストを入手し、存在しなかったらデフォルト値を得ます
+     *
+     * @param string $type タイプ(text|image)
+     * @return array 指定したタイプに対応する拡張子のリスト
+     */
+	public function _getFileTypeExtensions($type) {
+        //デフォルトの拡張子
+        $default = [
+            'text' => ['ctp', 'php', 'css', 'js'],
+            'image' => ['png', 'gif', 'jpg', 'jpeg'],
+        ];
+
+        //設定に拡張子登録があったら読み込む
+        $extensions = Configure::read("ThemeFile.fileType.{$type}");
+        if ($extensions === null) {
+            //なかったらデフォルトを読み込む
+            $extensions = Hash::get($default, $type);
+            //ファイルタイプが見つからない場合は何もマッチしない
+            if ($extensions === null) {
+                return [];
+            }
+        }
+
+        return $extensions;
+    }
 
 /**
  * テーマファイル作成
@@ -259,6 +293,7 @@ class ThemeFilesController extends AppController {
 		$this->set('plugin', $plugin);
 		$this->set('type', $type);
 		$this->set('path', $path);
+        $this->set('createTextExtensionList', $this->_getCreateTextExtensions());
 		$this->help = 'theme_files_form';
 		$this->render('form');
 	}
@@ -281,9 +316,10 @@ class ThemeFilesController extends AppController {
 
 			$file = new File($fullpath);
 			$pathinfo = pathinfo($fullpath);
-			$this->request->data['ThemeFile']['name'] = urldecode(basename($file->name, '.' . $pathinfo['extension']));
+			$extension = Hash::get($pathinfo, 'extension');
+			$this->request->data['ThemeFile']['name'] = urldecode(basename($file->name, '.' . $extension));
 			$this->request->data['ThemeFile']['type'] = $this->_getFileType(urldecode(basename($file->name)));
-			$this->request->data['ThemeFile']['ext'] = $pathinfo['extension'];
+			$this->request->data['ThemeFile']['ext'] = $extension;
 			$this->request->data['ThemeFile']['parent'] = dirname($fullpath) . DS;
 			if ($this->request->data['ThemeFile']['type'] == 'text') {
 				$this->request->data['ThemeFile']['contents'] = $file->read();
@@ -337,6 +373,7 @@ class ThemeFilesController extends AppController {
 		$this->set('plugin', $plugin);
 		$this->set('type', $type);
 		$this->set('path', $path);
+		$this->set('createTextExtensionList', $this->_getCreateTextExtensions());
 		$this->help = 'theme_files_form';
 		$this->render('form');
 	}
@@ -748,7 +785,11 @@ class ThemeFilesController extends AppController {
 		}
 
 		if (empty($data['type'])) {
-			$data['type'] = 'Layouts';
+		    //設定でデフォルトタイプがあったらそれを採用する
+            $data['type'] = Configure::read('ThemeFile.defaultType');
+            if (empty($data['type'])) {
+                $data['type'] = 'Layouts';
+            }
 		}
 
 		if (!empty($args)) {
@@ -928,4 +969,89 @@ class ThemeFilesController extends AppController {
 		exit();
 	}
 
+	/**
+	 * 除外ファイルのリストを入手
+	 * 設定からリストを入手し、存在しなかったらデフォルト値を得ます
+	 * @return array 除外するファイルの列挙
+	 */
+	public function _getExcludeFileList() {
+		$list = Configure::read('ThemeFile.excludeEtcFileList');
+		if ($list === null) {
+			$list = [
+				'screenshot.png',
+				'VERSION.txt',
+				'config.php',
+				'AppView.php',
+				'BcAppView.php'
+			];
+		}
+
+		return $list;
+	}
+
+	/**
+	 * 除外フォルダのリストを入手
+	 * 設定からリストを入手し、存在しなかったらデフォルト値を得ます
+	 * @return array 除外するフォルダの列挙
+	 */
+	public function _getExcludeFolderList() {
+		$list = Configure::read('ThemeFile.excludeEtcFolderList');
+		if ($list === null) {
+			$list = [
+				'Layouts',
+				'Elements',
+				'Emails',
+				'Pages',
+				'Helper',
+				'Config',
+				'Plugin',
+				'img',
+				'css',
+				'js',
+				'_notes',
+			];
+		}
+
+		return $list;
+	}
+
+    /**
+     * テンプレートタイプの入手
+     * 設定からリストを入手し、存在しなかったらデフォルト値を得ます
+     *
+     * @return array
+     */
+	public function _getTemplateTypes() {
+		$list = Configure::read('ThemeFile.templateTypes');
+		if ($list === null) {
+			$list = [
+				'Layouts'	=> __d('baser', 'レイアウトテンプレート'),
+				'Elements'	=> __d('baser', 'エレメントテンプレート'),
+				'Emails'	=> __d('baser', 'Eメールテンプレート'),
+				'etc'		=> __d('baser', 'コンテンツテンプレート'),
+				'css'		=> __d('baser', 'スタイルシート'),
+				'js'		=> 'Javascript',
+				'img'		=> __d('baser', 'イメージ')
+			];
+		}
+
+		return $list;
+	}
+
+    /**
+     * テキストタイプで有効な拡張子を入手
+     * 設定からリストを入手し、存在しなかったらデフォルト値を得ます
+     *
+     * @return array
+     */
+	public function _getCreateTextExtensions() {
+        $list = [];
+        $extensions = $this->_getFileTypeExtensions('text');
+        foreach ($extensions as $extension) {
+            $dot = empty($extension) ? '' : '.';
+            $list[$extension] = "{$dot}{$extension}";
+        }
+
+        return $list;
+    }
 }

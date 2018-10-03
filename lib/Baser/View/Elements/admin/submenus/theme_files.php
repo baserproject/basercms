@@ -13,15 +13,18 @@
 /**
  * [ADMIN] テーマファイル管理メニュー
  */
-$types = [
-	'Layouts'	=> __d('baser', 'レイアウト'),
-	'Elements'	=> __d('baser', 'エレメント'),
-	'Emails'	=> __d('baser', 'Eメール'),
-	'etc'		=> __d('baser', 'コンテンツ'),
-	'css'		=> 'CSS',
-	'img'		=> __d('baser', 'イメージ'),
-	'js'		=> 'Javascript'
-];
+$types = Configure::read('ThemeFile.templateTypes');
+if ($types === null) {
+	$types = [
+		'Layouts'	=> __d('baser', 'レイアウト'),
+		'Elements'	=> __d('baser', 'エレメント'),
+		'Emails'	=> __d('baser', 'Eメール'),
+		'etc'		=> __d('baser', 'コンテンツ'),
+		'css'		=> 'CSS',
+		'img'		=> __d('baser', 'イメージ'),
+		'js'		=> 'Javascript'
+	];
+}
 if ($theme == 'core') {
 	$themeFiles = [0 => ['name' => '', 'title' => __d('baser', 'コア')]];
 	$Plugin = ClassRegistry::init('Plugin');

@@ -145,4 +145,290 @@ class ThemeFilesControllerTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
+/**
+ * @test [functional] ファイルタイプに対応する拡張子のリストを入手するテスト
+ * @dataProvider provider_getFileTypePattern
+ * @param string $type タイプ名
+ * @param array $setting Configureで設定する値。nullの場合は設定しない(デフォルトを使うため)
+ * @param string $expect 結果で得られる正規表現パターン
+ */
+	public function test_getFileTypePattern($type, $setting, $expect) {
+		//コントローラを作成
+		$Controller = new ThemeFilesController(new CakeRequest(), new CakeResponse());
+
+		//$settingがnullでなければ設定を登録
+		if ($setting !== null) {
+			Configure::write("ThemeFile.fileType.{$type}", $setting);
+		}
+		$actual = $Controller->_getFileTypePattern($type);
+		$this->assertEquals($expect, $actual);
+	}
+
+/**
+ * @param array
+ */
+	public function provider_getFileTypePattern() {
+		return [
+			'デフォルトのtextの拡張子リストが入手できること' => [
+				'text',
+				null,
+				'/^(.+?)(\.ctp|\.php|\.css|\.js)$/is',
+			],
+			'デフォルトのimageの拡張子リストが入手できること' => [
+				'image',
+				null,
+				'/^(.+?)(\.png|\.gif|\.jpg|\.jpeg)$/is',
+			],
+			'カスタマイズしたtextの拡張子リストが入手できること' => [
+				'text',
+				['php'],
+				'/^(.+?)(\.php)$/is',
+			],
+			'デフォルトのimageの拡張子リストが入手できること' => [
+				'image',
+				['jpg'],
+				'/^(.+?)(\.jpg)$/is',
+			],
+			'存在しないタイプの場合はデフォルトではマッチしないパターンが入手できること' => [
+				'css',
+				null,
+				'/^$/',
+			],
+		];
+	}
+
+/**
+ * @test [functional] ファイルタイプに対応する拡張子のリストを入手するテスト
+ * @dataProvider provider_getFileTypeExtensions
+ * @param string $type タイプ名
+ * @param array $setting Configureで設定する値。nullの場合は設定しない(デフォルトを使うため)
+ * @param string $expect 結果で得られる拡張子の列挙
+ */
+	public function test_getFileTypeExtensions($type, $setting, $expect) {
+		//コントローラを作成
+		$Controller = new ThemeFilesController(new CakeRequest(), new CakeResponse());
+
+		//$settingがnullでなければ設定を登録
+		if ($setting !== null) {
+			Configure::write("ThemeFile.fileType.{$type}", $setting);
+		}
+		$actual = $Controller->_getFileTypeExtensions($type);
+		$this->assertEquals($expect, $actual);
+	}
+
+/**
+ * @param array
+ */
+	public function provider_getFileTypeExtensions() {
+		return [
+			'デフォルトのtextの拡張子リストが入手できること' => [
+				'text',
+				null,
+				['ctp', 'php', 'css', 'js'],
+			],
+			'デフォルトのimageの拡張子リストが入手できること' => [
+				'image',
+				null,
+				['png', 'gif', 'jpg', 'jpeg'],
+			],
+			'カスタマイズしたtextの拡張子リストが入手できること' => [
+				'text',
+				['php'],
+				['php'],
+			],
+			'カスタマイズしたimageの拡張子リストが入手できること' => [
+				'image',
+				['jpg'],
+				['jpg'],
+			],
+			'存在しないタイプの場合はデフォルトではemptyが入手できること' => [
+				'css',
+				null,
+				[],
+			],
+		];
+	}
+
+/**
+ * @test [functional] 除外ファイルのリストを入手するテスト
+ * @dataProvider provider_getExcludeFileList
+ * @param array $setting Configureで設定する値。nullの場合は設定しない(デフォルトを使うため)
+ * @param string $expect 結果で得られる除外リスト
+ */
+	public function test_getExcludeFileList($setting, $expect) {
+		//コントローラを作成
+		$Controller = new ThemeFilesController(new CakeRequest(), new CakeResponse());
+
+		//$settingがnullでなければ設定を登録
+		if ($setting !== null) {
+			Configure::write('ThemeFile.excludeEtcFileList', $setting);
+		}
+		$actual = $Controller->_getExcludeFileList();
+		$this->assertEquals($expect, $actual);
+	}
+
+/**
+ * @param array
+ */
+	public function provider_getExcludeFileList() {
+		return [
+			'デフォルトの除外リストが入手できること' => [
+				null,
+				[
+					'screenshot.png',
+					'VERSION.txt',
+					'config.php',
+					'AppView.php',
+					'BcAppView.php'
+				],
+			],
+			'カスタマイズした除外リストが入手できること' => [
+				[
+					'screenshot.png',
+					'VERSION.txt',
+				],
+				[
+					'screenshot.png',
+					'VERSION.txt',
+				],
+			],
+		];
+	}
+
+/**
+ * @test [functional] 除外フォルダのリストを入手するテスト
+ * @dataProvider provider_getExcludeFolderList
+ * @param array $setting Configureで設定する値。nullの場合は設定しない(デフォルトを使うため)
+ * @param string $expect 結果で得られる除外リスト
+ */
+	public function test_getExcludeFolderList($setting, $expect) {
+		//コントローラを作成
+		$Controller = new ThemeFilesController(new CakeRequest(), new CakeResponse());
+
+		//$settingがnullでなければ設定を登録
+		if ($setting !== null) {
+			Configure::write('ThemeFile.excludeEtcFolderList', $setting);
+		}
+		$actual = $Controller->_getExcludeFolderList();
+		$this->assertEquals($expect, $actual);
+	}
+
+/**
+ * @param array
+ */
+	public function provider_getExcludeFolderList() {
+		return [
+			'デフォルトの除外リストが入手できること' => [
+				null,
+				[
+					'Layouts',
+					'Elements',
+					'Emails',
+					'Pages',
+					'Helper',
+					'Config',
+					'Plugin',
+					'img',
+					'css',
+					'js',
+					'_notes',
+				],
+			],
+			'カスタマイズした除外リストが入手できること' => [
+				[
+					'_notes',
+				],
+				[
+					'_notes',
+				],
+			],
+		];
+	}
+
+/**
+ * @test [functional] テンプレートタイプの入手するテスト
+ * @dataProvider provider_getTemplateTypes
+ * @param array $setting Configureで設定する値。nullの場合は設定しない(デフォルトを使うため)
+ * @param string $expect 結果で得られる除外リスト
+ */
+	public function test_getTemplateTypes($setting, $expect) {
+		//コントローラを作成
+		$Controller = new ThemeFilesController(new CakeRequest(), new CakeResponse());
+
+		//$settingがnullでなければ設定を登録
+		if ($setting !== null) {
+			Configure::write('ThemeFile.templateTypes', $setting);
+		}
+		$actual = $Controller->_getTemplateTypes();
+		$this->assertEquals($expect, $actual);
+	}
+
+/**
+ * @param array
+ */
+	public function provider_getTemplateTypes() {
+		return [
+			'デフォルトのテンプレートタイプが入手できること' => [
+				null,
+				[
+					'Layouts'	=> __d('baser', 'レイアウトテンプレート'),
+					'Elements'	=> __d('baser', 'エレメントテンプレート'),
+					'Emails'	=> __d('baser', 'Eメールテンプレート'),
+					'etc'		=> __d('baser', 'コンテンツテンプレート'),
+					'css'		=> __d('baser', 'スタイルシート'),
+					'js'		=> 'Javascript',
+					'img'		=> __d('baser', 'イメージ')
+				],
+			],
+			'カスタマイズしたテンプレートタイプが入手できること' => [
+				[
+					'etc' => 'テーマファイル',
+				],
+				[
+					'etc' => 'テーマファイル',
+				],
+			],
+		];
+	}
+
+/**
+ * @test [functional] テキストタイプで選択可能な拡張子のプルダウンリストを入手するテスト
+ * @dataProvider provider_getCreateTextExtensions
+ * @param string $type タイプ名
+ * @param array $setting Configureで設定する値。nullの場合は設定しない(デフォルトを使うため)
+ * @param string $expect 結果で得られる拡張子リスト
+ */
+	public function test_getCreateTextExtensions($setting, $expect) {
+		//コントローラを作成
+		$Controller = new ThemeFilesController(new CakeRequest(), new CakeResponse());
+
+		//$settingがnullでなければ設定を登録
+		if ($setting !== null) {
+			Configure::write("ThemeFile.fileType.text", $setting);
+		}
+		$actual = $Controller->_getCreateTextExtensions();
+		$this->assertEquals($expect, $actual);
+	}
+
+/**
+ * @param array
+ */
+	public function provider_getCreateTextExtensions() {
+		return [
+			'デフォルトのtextのプルダウンリストが入手できること' => [
+				null,
+				[
+					'ctp' => '.ctp',
+					'php' => '.php',
+					'css' => '.css',
+					'js' => '.js'
+				],
+			],
+			'カスタマイズしたtextのプルダウンリストが入手できること' => [
+				['php'],
+				['php' => '.php'],
+			],
+		];
+	}
+
 }
