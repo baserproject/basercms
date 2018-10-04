@@ -186,13 +186,13 @@ class ThemeFilesController extends AppController {
  * @return string preg_match()で用いるパターン文字列
  */
 	public function _getFileTypePattern($type) {
-	    //typeに対応する拡張子を入手する
-	    $extensions = $this->_getFileTypeExtensions($type);
+		//typeに対応する拡張子を入手する
+		$extensions = $this->_getFileTypeExtensions($type);
 
-	    //拡張子が得られない場合はヒットしないパターン
-	    if (empty($extensions)) {
-	        return '/^$/';
-        }
+		//拡張子が得られない場合はヒットしないパターン
+		if (empty($extensions)) {
+			return '/^$/';
+		}
 
 		//pregのパターン作成
 		$pattern = '';
@@ -204,33 +204,33 @@ class ThemeFilesController extends AppController {
 		return $pattern;
 	}
 
-    /**
-     * ファイルタイプに対応する拡張子のリストを入手
-     * 設定からリストを入手し、存在しなかったらデフォルト値を得ます
-     *
-     * @param string $type タイプ(text|image)
-     * @return array 指定したタイプに対応する拡張子のリスト
-     */
+	/**
+	 * ファイルタイプに対応する拡張子のリストを入手
+	 * 設定からリストを入手し、存在しなかったらデフォルト値を得ます
+	 *
+	 * @param string $type タイプ(text|image)
+	 * @return array 指定したタイプに対応する拡張子のリスト
+	 */
 	public function _getFileTypeExtensions($type) {
-        //デフォルトの拡張子
-        $default = [
-            'text' => ['ctp', 'php', 'css', 'js'],
-            'image' => ['png', 'gif', 'jpg', 'jpeg'],
-        ];
+		//デフォルトの拡張子
+		$default = [
+			'text' => ['ctp', 'php', 'css', 'js'],
+			'image' => ['png', 'gif', 'jpg', 'jpeg'],
+		];
 
-        //設定に拡張子登録があったら読み込む
-        $extensions = Configure::read("ThemeFile.fileType.{$type}");
-        if ($extensions === null) {
-            //なかったらデフォルトを読み込む
-            $extensions = Hash::get($default, $type);
-            //ファイルタイプが見つからない場合は何もマッチしない
-            if ($extensions === null) {
-                return [];
-            }
-        }
+		//設定に拡張子登録があったら読み込む
+		$extensions = Configure::read("ThemeFile.fileType.{$type}");
+		if ($extensions === null) {
+			//なかったらデフォルトを読み込む
+			$extensions = Hash::get($default, $type);
+			//ファイルタイプが見つからない場合は何もマッチしない
+			if ($extensions === null) {
+				return [];
+			}
+		}
 
-        return $extensions;
-    }
+		return $extensions;
+	}
 
 /**
  * テーマファイル作成
@@ -293,7 +293,7 @@ class ThemeFilesController extends AppController {
 		$this->set('plugin', $plugin);
 		$this->set('type', $type);
 		$this->set('path', $path);
-        $this->set('createTextExtensionList', $this->_getCreateTextExtensions());
+		$this->set('createTextExtensionList', $this->_getCreateTextExtensions());
 		$this->help = 'theme_files_form';
 		$this->render('form');
 	}
@@ -785,11 +785,11 @@ class ThemeFilesController extends AppController {
 		}
 
 		if (empty($data['type'])) {
-		    //設定でデフォルトタイプがあったらそれを採用する
-            $data['type'] = Configure::read('ThemeFile.defaultType');
-            if (empty($data['type'])) {
-                $data['type'] = 'Layouts';
-            }
+			//設定でデフォルトタイプがあったらそれを採用する
+			$data['type'] = Configure::read('ThemeFile.defaultType');
+			if (empty($data['type'])) {
+				$data['type'] = 'Layouts';
+			}
 		}
 
 		if (!empty($args)) {
@@ -1015,12 +1015,12 @@ class ThemeFilesController extends AppController {
 		return $list;
 	}
 
-    /**
-     * テンプレートタイプの入手
-     * 設定からリストを入手し、存在しなかったらデフォルト値を得ます
-     *
-     * @return array
-     */
+	/**
+	 * テンプレートタイプの入手
+	 * 設定からリストを入手し、存在しなかったらデフォルト値を得ます
+	 *
+	 * @return array
+	 */
 	public function _getTemplateTypes() {
 		$list = Configure::read('ThemeFile.templateTypes');
 		if ($list === null) {
@@ -1038,20 +1038,20 @@ class ThemeFilesController extends AppController {
 		return $list;
 	}
 
-    /**
-     * テキストタイプで有効な拡張子を入手
-     * 設定からリストを入手し、存在しなかったらデフォルト値を得ます
-     *
-     * @return array
-     */
+	/**
+	 * テキストタイプで有効な拡張子を入手
+	 * 設定からリストを入手し、存在しなかったらデフォルト値を得ます
+	 *
+	 * @return array
+	 */
 	public function _getCreateTextExtensions() {
-        $list = [];
-        $extensions = $this->_getFileTypeExtensions('text');
-        foreach ($extensions as $extension) {
-            $dot = empty($extension) ? '' : '.';
-            $list[$extension] = "{$dot}{$extension}";
-        }
+		$list = [];
+		$extensions = $this->_getFileTypeExtensions('text');
+		foreach ($extensions as $extension) {
+			$dot = empty($extension) ? '' : '.';
+			$list[$extension] = "{$dot}{$extension}";
+		}
 
-        return $list;
-    }
+		return $list;
+	}
 }

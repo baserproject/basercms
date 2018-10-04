@@ -349,7 +349,7 @@ class ThemeFilesControllerTest extends BaserTestCase {
  * @test [functional] テンプレートタイプの入手するテスト
  * @dataProvider provider_getTemplateTypes
  * @param array $setting Configureで設定する値。nullの場合は設定しない(デフォルトを使うため)
- * @param string $expect 結果で得られる除外リスト
+ * @param string $expect 結果で得られるテンプレートタイプのリスト
  */
 	public function test_getTemplateTypes($setting, $expect) {
 		//コントローラを作成
