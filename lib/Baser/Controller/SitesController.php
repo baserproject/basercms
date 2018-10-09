@@ -88,7 +88,7 @@ class SitesController extends AppController {
 					$this->BcManager->installThemesPlugins($data['Site']['theme']);
 				}
 				$this->setMessage(sprintf(__d('baser', 'サブサイト「%s」を追加しました。'), $this->request->data['Site']['name']), false, true);
-				$this->redirect(['action' => 'edit', $this->Site->id]);
+				$this->redirect(['controller' => 'sites', 'action' => 'edit', $this->Site->id]);
 			} else {
 				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
@@ -139,7 +139,7 @@ class SitesController extends AppController {
 					$this->BcManager->installThemesPlugins($data['Site']['theme']);
 				}
 				$this->setMessage(sprintf(__d('baser', 'サブサイト「%s」を更新しました。'), $this->request->data['Site']['name']), false, true);
-				$this->redirect(['action' => 'edit', $id]);
+				$this->redirect(['controller' => 'sites', 'action' => 'edit', $id]);
 			} else {
 				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
