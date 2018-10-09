@@ -605,8 +605,12 @@ function addSessionId($url, $force = false) {
 	if(!$sessionId) {
 		return $url;
 	}
+
+	$site = null;
+	if(!Configure::read('BcRequest.isUpdater')) {
+		$site = BcSite::findCurrent();
+	}
 	// use_trans_sid が有効になっている場合、２重で付加されてしまう
-	$site = BcSite::findCurrent();
 	if ($site && $site->device == 'mobile' && Configure::read('BcAgent.mobile.sessionId') && (!ini_get('session.use_trans_sid') || $force)) {
 		if (is_array($url)) {
 			$url["?"][session_name()] = $sessionId;
