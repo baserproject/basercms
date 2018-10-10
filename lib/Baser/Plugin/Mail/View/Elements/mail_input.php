@@ -104,6 +104,7 @@ if (!empty($mailFields)) {
 				echo "</td>\n    </tr>\n";
 			}
 			$group_field = $field['group_field'];
+			echo !$group_field ? "</td>\n    </tr>\n": '';
 		}
 	}
 }
