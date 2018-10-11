@@ -74,7 +74,7 @@ class BcCkeditorHelper extends AppHelper {
 				'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', '-',
 				'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',
 				'Smiley', 'Table', 'HorizontalRule', '-'],
-			['Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor', '-', 'Link', 'Unlink', '-', 'Image'],
+			['Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor', '-', 'Link', 'Unlink', 'Anchor', '-', 'Image'],
 			['Maximize', 'ShowBlocks', 'Source']
 		]
 	];
