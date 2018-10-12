@@ -891,7 +891,7 @@ class BlogPost extends BlogAppModel {
 				$query['preview'], $query['sort'], $query['direction'], $query['num'], 
 				$query['force'],$query['no'], $query['siteId'], $query['contentUrl']);
 
-			$this->expects($expects, false);
+			$this->reduceAssociations($expects, false);
 			
 			$this->BlogContent->unbindModel([
 				'hasMany' => ['BlogPost', 'BlogCategory']

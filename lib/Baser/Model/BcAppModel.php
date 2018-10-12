@@ -1244,7 +1244,7 @@ class BcAppModel extends Model {
  * @param boolean $reset バインド時に１回の find でリセットするかどうか
  * @return void
  */
-	public function expects($arguments, $reset = true) {
+	public function reduceAssociations($arguments, $reset = true) {
 		$models = [];
 
 		foreach ($arguments as $index => $argument) {
@@ -1304,7 +1304,7 @@ class BcAppModel extends Model {
 					$this->__backInnerAssociation = [];
 				}
 				$this->__backInnerAssociation[] = $model;
-				$this->$model->expects($children, $reset);
+				$this->$model->reduceAssociations($children, $reset);
 			}
 		}
 
