@@ -234,6 +234,11 @@ class BcAppController extends Controller {
 			} catch(Exception $e) {}
 		}
 
+		// DebugKit プラグインが有効な場合、DebugKit Toolbar を表示
+		if(CakePlugin::loaded('DebugKit') && !in_array('DebugKit.Toolbar', $this->components)) {
+			$this->components[] = 'DebugKit.Toolbar';
+		}
+
 		/* 携帯用絵文字のモデルとコンポーネントを設定 */
 		// TODO 携帯をコンポーネントなどで判別し、携帯からのアクセスのみ実行させるようにする
 		// ※ コンストラクト時点で、$this->request->params['prefix']を利用できない為。
@@ -249,6 +254,9 @@ class BcAppController extends Controller {
  * @return	void
  */
 	public function beforeFilter() {
+
+
+
 		parent::beforeFilter();
 
 		$isRequestView = $this->request->is('requestview');
@@ -591,19 +599,9 @@ class BcAppController extends Controller {
  * @throws BadRequestException
  */
 	public function _blackHoleCallback($err) {
-		//SSL制限違反は別処理
-		if ($err === 'secure') {
-			$this->sslFail($err);
-			return;
-		}
 
 		$errorMessages = [
 			'auth' => __d('baser', 'バリデーションエラーまたはコントローラ/アクションの不一致によるエラーです。'),
-			'csrf' => __d('baser', 'CSRF対策によるエラーです。リクエストに含まれるCSRFトークンが不正または無効である可能性があります。'),
-			'get' => __d('baser', 'HTTPメソッド制限違反です。リクエストはHTTP GETである必要があります。'),
-			'post' => __d('baser', 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。'),
-			'put' => __d('baser', 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。'),
-			'delete' => __d('baser', 'HTTPメソッド制限違反です。リクエストはHTTP DELETEである必要があります。')
 		];
 
 		$message = __d('baser', '不正なリクエストと判断されました。');
@@ -613,30 +611,6 @@ class BcAppController extends Controller {
 		}
 
 		throw new BadRequestException($message);
-	}
-
-/**
- * SSLエラー処理
- *
- * SSL通信が必要なURLの際にSSLでない場合、
- * SSLのURLにリダイレクトさせる
- *
- * @param string $err エラーの種類
- * @return	void
- * @access	protected
- */
-	public function sslFail($err) {
-		if ($err === 'secure') {
-			// 共用SSLの場合、設置URLがサブディレクトリになる場合があるので、$this->request->here は利用せずURLを生成する
-			$url = $this->request->url;
-			if (Configure::read('App.baseUrl')) {
-				$url = 'index.php/' . $url;
-			}
-
-			$url = Configure::read('BcEnv.sslUrl') . $url;
-			$this->redirect($url);
-			exit();
-		}
 	}
 
 /**

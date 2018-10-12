@@ -49,6 +49,9 @@ class BcRequestFilter extends DispatcherFilter {
 			Configure::write('BcRequest.asset', true);
 			return;
 		}
+		if(Configure::read('BcRequest.isUpdater')) {
+			return;
+		}
 
 		// URLからエージェントを取得
 		$site = BcSite::findCurrent(true);

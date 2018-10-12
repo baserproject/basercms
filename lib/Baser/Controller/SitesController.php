@@ -15,6 +15,7 @@
  *
  * @package Baser.Controller
  * @property Site $Site
+ * @property BcManagerComponent $BcManager
  */
 class SitesController extends AppController {
 
@@ -23,7 +24,7 @@ class SitesController extends AppController {
  *
  * @var array
  */
-	public $components = ['Cookie', 'BcAuth', 'BcAuthConfigure'];
+	public $components = ['Cookie', 'BcAuth', 'BcAuthConfigure', 'BcManager'];
 
 /**
  * サブメニュー
@@ -83,8 +84,11 @@ class SitesController extends AppController {
 				$this->dispatchEvent('afterAdd', [
 					'data' => $data
 				]);
+				if(!empty($data['Site']['theme'])) {
+					$this->BcManager->installThemesPlugins($data['Site']['theme']);
+				}
 				$this->setMessage(sprintf(__d('baser', 'サブサイト「%s」を追加しました。'), $this->request->data['Site']['name']), false, true);
-				$this->redirect(['action' => 'edit', $this->Site->id]);
+				$this->redirect(['controller' => 'sites', 'action' => 'edit', $this->Site->id]);
 			} else {
 				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
@@ -125,13 +129,17 @@ class SitesController extends AppController {
 			if ($event !== false) {
 				$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
 			}
+			$beforeSite = $this->Site->find('first', ['conditions' => ['Site.id' => $this->request->data['Site']['id']]]);
 			if($data = $this->Site->save($this->request->data)) {
 				/*** Sites.afterEdit ***/
 				$this->dispatchEvent('afterEdit', [
 					'data' => $data
 				]);
+				if(!empty($data['Site']['theme']) && $beforeSite['Site']['theme'] !== $data['Site']['theme']) {
+					$this->BcManager->installThemesPlugins($data['Site']['theme']);
+				}
 				$this->setMessage(sprintf(__d('baser', 'サブサイト「%s」を更新しました。'), $this->request->data['Site']['name']), false, true);
-				$this->redirect(['action' => 'edit', $id]);
+				$this->redirect(['controller' => 'sites', 'action' => 'edit', $id]);
 			} else {
 				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}

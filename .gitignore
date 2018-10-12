@@ -44,7 +44,6 @@ package.json
 /docker-compose.yml
 /Dockerfile
 /docker/phpmyadmin/
-/docker/ssl/
 /docker/volumes/
 /docker/docker-compose.yml
 /volumes/*

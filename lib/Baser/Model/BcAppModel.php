@@ -848,10 +848,12 @@ class BcAppModel extends Model {
  * @param array $check チェック対象データ
  * @param string $ext 許可する拡張子
  */
-	public function fileExt($check, $ext) {
+	public function fileExt($check, $exts) {
 		$file = $check[key($check)];
 		if (!empty($file['name'])) {
-			$exts = explode(',', $ext);
+			if(!is_array($exts)) {
+				$exts = explode(',', $exts);
+			}
 			$ext = decodeContent($file['type'], $file['name']);
 			if(in_array($ext, $exts)) {
 				return true;

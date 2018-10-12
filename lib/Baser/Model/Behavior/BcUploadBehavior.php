@@ -671,6 +671,13 @@ class BcUploadBehavior extends ModelBehavior {
 			if (!$fieldName || ($fieldName && $fieldName == $field['name'])) {
 				if (!empty($Model->data[$Model->name][$field['name']])) {
 					$file = $Model->data[$Model->name][$field['name']];
+
+					// DBに保存されているファイル名から拡張子を取得する
+					preg_match('/\.([^.]+)\z/', $file, $match);
+					if (!empty($match[1])) {
+						$field['ext'] = $match[1];
+					}
+
 					$this->delFile($Model, $file, $field);
 				}
 			}
