@@ -85,7 +85,7 @@ if (!empty($mailFields)) {
 				}
 				echo $this->Mailform->error("MailMessage." . $field['group_valid'] . "_not_same", __("入力データが一致していません。"));
 				echo $this->Mailform->error("MailMessage." . $field['group_valid'] . "_not_complate", __("入力データが不完全です。"));
-			} else {
+			} elseif(!empty($field['group_field'])) {
 				$isRequiredToClose = false;
 			}
 			echo '</span>';
