@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-10-14 10:55+0900\n"
+"PO-Revision-Date: 2018-10-16 17:48+0900\n"
 "Last-Translator: ryuring\n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -7675,13 +7675,13 @@ msgstr "You can load Template written with PHP code."
 msgid "PHPテンプレート名"
 msgstr "PHP Template Name"
 
-#: View/Elements/admin/widgets/php_template.php:23
+#: View/Elements/admin/widgets/php_template.php:26
 msgid ""
-"テンプレートを利用中のテーマ内の次のパスに保存してください。<br />/theme/"
-"{テーマ名}/Elements/widgets/</small></p>"
+"テンプレートを利用中のテーマ内の次のパスに保存してください。<br />%stheme/"
+"{テーマ名}/Elements/widgets/"
 msgstr ""
-"Please save Template to following path in the currently using Theme.<br />/"
-"theme/{theme name}/Elements/widgets/</small></p>"
+"Please save Template to following path in the currently using Theme.<br />"
+"%stheme/{theme name}/Elements/widgets/"
 
 #: View/Elements/admin/widgets/search.php:17
 msgid "サイト内検索フォームを表示します。"

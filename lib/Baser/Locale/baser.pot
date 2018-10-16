@@ -6634,8 +6634,8 @@ msgstr ""
 msgid "PHPテンプレート名"
 msgstr ""
 
-#: View/Elements/admin/widgets/php_template.php:23
-msgid "テンプレートを利用中のテーマ内の次のパスに保存してください。<br />/theme/{テーマ名}/Elements/widgets/</small></p>"
+#: View/Elements/admin/widgets/php_template.php:26
+msgid "テンプレートを利用中のテーマ内の次のパスに保存してください。<br />%stheme/{テーマ名}/Elements/widgets/"
 msgstr ""
 
 #: View/Elements/admin/widgets/search.php:17
