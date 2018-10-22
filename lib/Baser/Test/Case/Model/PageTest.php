@@ -76,19 +76,41 @@ class PageTest extends BaserTestCase {
 		$this->assertTrue($this->Page->validates());
 	}
 
-	public function testPHP構文チェック正常系() {
-		Configure::write('BcApp.allowedPhpOtherThanAdmins', true);
+/**
+ * スクリプトがが埋め込まれているかチェックする
+ * - 管理グループの場合は無条件に true を返却
+ * - 管理グループ以外の場合に許可されている場合は無条件に true を返却
+ * @param array $check
+ * @param bool $expected
+ * @dataProvider cotainsScriptRegularDataProvider
+ */
+	public function testCotainsScriptRegular($check, $expected) {
+		$allowedPhpOtherThanAdmins = Configure::read('BcApp.allowedPhpOtherThanAdmins');
+		Configure::write('BcApp.allowedPhpOtherThanAdmins', false);
 		$this->Page->create([
 			'Page' => [
 				'name' => 'test',
-				'contents' => '<?php echo "正しい"; ?>',
+				'contents' => $check,
 			]
 		]);
-		$this->assertTrue($this->Page->validates());
-		Configure::write('BcApp.allowedPhpOtherThanAdmins', false);
+		$this->assertEquals($expected, $this->Page->validates());
+		Configure::write('BcApp.allowedPhpOtherThanAdmins', $allowedPhpOtherThanAdmins);
 	}
 
-	public function testPHP構文チェック異常系() {
+	public function cotainsScriptRegularDataProvider() {
+		return [
+			['<?php echo "正しい"; ?>', false],
+			['<?PHP echo "正しい"; ?>', false],
+			['<script></script>', false],
+			['<a onclick="alert(\'test\')>"', false],
+			['<img onMouseOver="">', false],
+			['<a href="javascript:alert(\'test\')">', false],
+			['<a href=\'javascript:alert("test")\'>', false],
+			['<a href="http://basercms.net">baserCMS<\/a>', true]
+		];
+	}
+
+	public function testCotainsScriptIrregular() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$this->Page->create([
 			'Page' => [
