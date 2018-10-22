@@ -1762,11 +1762,20 @@ class BcAppModel extends Model {
  * @return bool
  */
 	public function containsScript($check) {
+		$events = ['onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmouseover', 'onmousemove',
+					'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup', 'onload', 'onunload',
+					'onfocus', 'onblur', 'onsubmit', 'onreset', 'onselect', 'onchange'];
 		if(BcUtil::isAdminUser() || Configure::read('BcApp.allowedPhpOtherThanAdmins')) {
 			return true;
 		}
 		$value = $check[key($check)];
-		if(preg_match('/(<\?=|<\?php|<script)/', $value)) {
+		if(preg_match('/(<\?=|<\?php|<script)/i', $value)) {
+			return false;
+		}
+		if(preg_match('/<[^>]+?(' . implode('|', $events) . ')=("|\')[^>]*?>/i', $value)) {
+			return false;
+		}
+		if(preg_match('/href=\s*?("|\')[^"\']*?javascript\s*?:/i', $value)) {
 			return false;
 		}
 		return true;
