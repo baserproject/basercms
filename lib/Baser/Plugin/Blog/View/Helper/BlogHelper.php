@@ -205,7 +205,7 @@ class BlogHelper extends AppHelper {
 		if ($link) {
 			return $this->getPostLink($post, $post['BlogPost']['name']);
 		} else {
-			return $post['BlogPost']['name'];
+			return h($post['BlogPost']['name']);
 		}
 	}
 
