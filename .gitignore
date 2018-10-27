@@ -42,3 +42,9 @@ nbproject/*
 /docker-compose.yml
 /Dockerfile
 
+# baserCMS
+######################
+# docker
+/docker/phpmyadmin
+/docker/volumes
+

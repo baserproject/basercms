@@ -16,7 +16,7 @@ docker-compose up -d
 ## コンテナにログインしてコンポーザーを実行
 
 ```
-docker exex -it basercms3 /bin/bash
+docker exec -it basercake3 /bin/bash
 composer install
 ```
 

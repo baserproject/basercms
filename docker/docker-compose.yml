@@ -13,20 +13,38 @@ services:
       MYSQL_USER: "root"
       MYSQL_PASSWORD: "root"
       MYSQL_DATABASE: "basercms"
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
   basercake3:
     container_name: basercake3
     image: baserproject/basercms
     volumes:
-#      - sync-volume:/var/www/html
-      - .:/var/www/html:cached
+      - ../:/var/www/html:cached
+      - /var/www/html/.git
+      - /var/www/html/docker/volumes
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
-#    command:
-#      composer install   # うまく動作しない
+      COMPOSER_ALLOW_SUPERUSER: 1
     ports:
       - "80:80"
     depends_on:
       - basercake3-database
-#volumes:
-#  sync-volume:
-#    external: true
+  basercake3-smtp:
+    container_name: basercake3-smtp
+    image: schickling/mailcatcher
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+  basercake3-pma:
+    container_name: basercake3-pma
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=basercake3-database
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+    links:
+      - basercake3-database
+    ports:
+     - 8080:80
+    volumes:
+       - ./phpmyadmin/sessions:/sessions
