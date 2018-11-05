@@ -637,11 +637,11 @@ class ContentTest extends BaserTestCase {
 	public function testGetCacheTime($data, $cacheTime) {
 		// publish_end が viewDuration より早い場合
 		if ($cacheTime == 'oneHourlater') {
-			Configure::write('BcCache.viewDuration', '+2 hour');
+			Configure::write('BcCache.viewDuration', '+1 hour');
 			$result = $this->Content->getCacheTime($data);
 			// テスト実行時間により左右されるのでバッファをもって前後5分以内であればgreen
-			$later = strtotime('+5 min', strtotime('+5 min')) - time();
-			$ago =  strtotime('-5 min', strtotime('+5 min')) - time();
+			$later = strtotime('+5 min', strtotime($data['Content']['publish_end'])) - time();
+			$ago =  strtotime('-5 min', strtotime($data['Content']['publish_end'])) - time();
 			$this->assertGreaterThan($result, $later);
 			$this->assertLessThan($result, $ago);
 			
@@ -650,8 +650,8 @@ class ContentTest extends BaserTestCase {
 			Configure::write('BcCache.viewDuration', '+1 hour');
 			$result = $this->Content->getCacheTime($data);
 			// テスト実行時間により左右されるのでバッファをもって前後5分以内であればgreen
-			$later = strtotime('+5 min', strtotime('+2 hour')) - time();
-			$ago =  strtotime('-5 min', strtotime('+2 hour')) - time();
+			$later = strtotime('+5 min', strtotime($data['Content']['publish_end'])) - time();
+			$ago =  strtotime('-5 min', strtotime($data['Content']['publish_end'])) - time();
 			$this->assertGreaterThan($result, $later);
 			$this->assertGreaterThan($result, $ago);
 		} else {
