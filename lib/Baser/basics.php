@@ -1118,3 +1118,12 @@ function retry($times, callable $callback, $interval = 0) {
 		}
 	}
 }
+
+/**
+* @url string URLに利用する文字列
+* @return string エンコード・実体参照化された文字列
+*/
+function hurl($url) {
+	$encodedUrl = rawurlencode($url);
+	return h($encodedUrl);
+}
