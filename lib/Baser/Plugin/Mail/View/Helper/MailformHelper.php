@@ -62,7 +62,9 @@ class MailformHelper extends BcFreezeHelper {
 				} else {
 					$attributes['separator'] = "&nbsp;&nbsp;";
 				}
-				$out = $this->hidden($fieldName, array('value' => ''));
+				// hiddenFieldは独自で出すため、falseを明示的に指定
+				$attributes['hiddenField'] = false;
+				$out = $this->hidden($fieldName, array(['value' => '']));
 				$out .= $this->radio($fieldName, $options, $attributes);
 				break;
 
