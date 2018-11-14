@@ -209,8 +209,6 @@ class MailController extends MailAppController {
 				}
 			}
 			$this->request->data = $this->MailMessage->getDefaultValue($this->request->params['named']);
-		} else {
-			$this->request->data['MailMessage'] = $this->MailMessage->sanitizeData($this->request->data['MailMessage']);
 		}
 
 		$this->set('freezed', false);
@@ -279,7 +277,6 @@ class MailController extends MailAppController {
 				$this->request->data['MailMessage']['captcha_id'] = null;
 				$this->setMessage(__('エラー : 入力内容を確認して再度送信してください。'), true);
 			}
-			$this->request->data['MailMessage'] = $this->MailMessage->sanitizeData($this->request->data['MailMessage']);
 		}
 
 		if ($this->dbDatas['mailFields']) {
@@ -383,7 +380,6 @@ class MailController extends MailAppController {
 				$this->setMessage('Error : Confirm your entries and send again.', true);
 				$this->request->data['MailMessage']['auth_captcha'] = null;
 				$this->request->data['MailMessage']['captcha_id'] = null;
-				$this->request->data['MailMessage'] = $this->MailMessage->sanitizeData($this->request->data['MailMessage']);
 				$this->action = 'index'; //viewのボタンの表示の切り替えに必要なため変更
 				if ($this->dbDatas['mailFields']) {
 					$this->set('mailFields', $this->dbDatas['mailFields']);
@@ -469,7 +465,7 @@ class MailController extends MailAppController {
 		$userMail = '';
 
 		// データを整形
-		$data = $this->MailMessage->restoreData($this->MailMessage->convertToDb($this->request->data));
+		$data = $this->MailMessage->convertToDb($this->request->data);
 		$data['message'] = $data['MailMessage'];
 		unset($data['MailMessage']);
 		$data['mailFields'] = $this->dbDatas['mailFields'];
