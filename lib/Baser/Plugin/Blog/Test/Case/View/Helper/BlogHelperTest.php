@@ -187,21 +187,31 @@ class BlogHelperTest extends BaserTestCase {
 
 /**
  * 記事タイトルを取得する
+ * @param string $name タイトル
+ * @param bool $link リンクをつけるかどうか
+ * @param array $options オプション
+ * @param string $expected 期待値
+ * @dataProvider getPostTitleDataProvider
  */
-	public function testGetPostTitle() {
+	public function testGetPostTitle($name, $link, $options, $expected) {
 		$post = ['BlogPost' => [
 			'blog_content_id' => 1,
-			'name' => 'test-name',
+			'name' => $name,
 			'no' => 4,
 		]];
+		$result = $this->Blog->getPostTitle($post, $link, $options);
+		$this->assertEquals($expected, $result, '記事タイトルを正しく取得できません');
+	}
 
-		// $link = true
-		$result = $this->Blog->getPostTitle($post);
-		$this->assertEquals('<a href="/news/archives/4">test-name</a>', $result, '記事タイトルを正しく取得できません');
-
-		// $link = false
-		$result  = $this->Blog->getPostTitle($post, false);
-		$this->assertEquals('test-name', $result, '記事タイトルを正しく取得できません');
+	public function getPostTitleDataProvider() {
+		return [
+			['test-name', true, [], '<a href="/news/archives/4">test-name</a>'],
+			['test-name', false, [], 'test-name'],
+			['<script></script>', false, [], '&lt;script&gt;&lt;/script&gt;'],
+			['<script></script>', true, [], '<a href="/news/archives/4">&lt;script&gt;&lt;/script&gt;</a>'],
+			['test-name<br>2行目', false, ['escape' => false], 'test-name<br>2行目'],
+			['test-name<br>2行目', true, ['escape' => false], '<a href="/news/archives/4">test-name<br>2行目</a>'],
+		];
 	}
 
 /**

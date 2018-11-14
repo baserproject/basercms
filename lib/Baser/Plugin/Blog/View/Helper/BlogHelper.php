@@ -190,8 +190,8 @@ class BlogHelper extends AppHelper {
  * @param boolean $link 詳細ページへのリンクをつける場合には、true を指定する（初期値 : true）
  * @return void
  */
-	public function postTitle($post, $link = true) {
-		echo $this->getPostTitle($post, $link);
+	public function postTitle($post, $link = true, $options = []) {
+		echo $this->getPostTitle($post, $link, $options);
 	}
 
 /**
@@ -199,14 +199,24 @@ class BlogHelper extends AppHelper {
  *
  * @param array $post ブログ記事データ
  * @param boolean $link 詳細ページへのリンクをつける場合には、true を指定する（初期値 : true）
+ * @param array $options オプション（初期値：arary()）
+ * 	- `escape` : エスケープ処理を行うかどうか
+ * 	※ その他のオプションについては、HtmlHelper::link() を参照
  * @return string 記事タイトル
  */
-	public function getPostTitle($post, $link = true) {
+	public function getPostTitle($post, $link = true, $options = []) {
+		$options = array_merge([
+			'escape' => true
+		], $options);
+		$title = $post['BlogPost']['name'];
 		if ($link) {
-			return $this->getPostLink($post, $post['BlogPost']['name']);
+			$title = $this->getPostLink($post, $title, $options);
 		} else {
-			return $post['BlogPost']['name'];
+			if(!empty($options['escape'])) {
+				$title = h($title);
+			}
 		}
+		return $title;
 	}
 
 /**
