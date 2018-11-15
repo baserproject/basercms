@@ -62,7 +62,7 @@
 				<?php echo h($data['author']) ?>
 			<?php endif ?>
 		</div>
-		<div class="theme-description"><?php echo nl2br(h($data['description'])) ?></div>
+		<div class="theme-description"><?php echo nl2br($this->BcText->autoLinkUrls($data['description'])) ?></div>
 	</div>
 </div>
 </li>

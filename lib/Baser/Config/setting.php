@@ -108,6 +108,8 @@ $adminPrefix = $prefixes[0];
 $config['BcAuthPrefix'] = array(
 	// 管理画面
 	'admin' => array(
+		// 認証タイプ
+		'type' => 'Form',
 		// 認証設定名
 		'name' => __d('baser', '管理システム'),
 		// URLにおけるエイリアス

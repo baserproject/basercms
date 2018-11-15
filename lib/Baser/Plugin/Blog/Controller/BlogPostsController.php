@@ -368,7 +368,12 @@ class BlogPostsController extends BlogAppController {
 
 		$this->BlogPost->recursive = 2;
 		if (empty($this->request->data)) {
-			$this->request->data = $this->BlogPost->read(null, $id);
+			$this->request->data = $this->BlogPost->find('first', array(
+				'conditions' => array(
+					'BlogPost.id' => $id,
+					'BlogPost.blog_content_id' => $blogContentId
+				)
+			));
 			if(!$this->request->data) {
 				$this->setMessage(__d('baser', '無効な処理です。'), true);
 				$this->redirect(['plugin' => 'blog', 'admin' => true, 'controller' => 'blog_posts', 'action' => 'index', $blogContentId]);

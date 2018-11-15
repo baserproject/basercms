@@ -307,6 +307,7 @@ class UploaderFilesController extends AppController {
 		if(!empty($user['id'])) {
 			$this->request->data['UploaderFile']['user_id'] = $user['id'];
 		}
+		$this->request->data['UploaderFile']['file']['name'] = str_replace(['/', '&', '?', '=', '#', ':'], '', h($this->request->data['UploaderFile']['file']['name']));
 		$this->request->data['UploaderFile']['name'] = $this->request->data['UploaderFile']['file'];
 		$this->request->data['UploaderFile']['alt'] = $this->request->data['UploaderFile']['name']['name'];
 		$this->UploaderFile->create($this->request->data);

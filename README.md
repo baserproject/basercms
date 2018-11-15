@@ -28,6 +28,8 @@ Contributing
 -------------
 
 - See [CONTRIBUTING.md](https://github.com/baserproject/basercms/blob/master/CONTRIBUTING.md)
+- See [docker/README.md](https://github.com/baserproject/basercms/blob/master/docker/README.md)
+
 
 License
 -------

@@ -43,7 +43,10 @@ node_modules/
 package.json
 /docker-compose.yml
 /Dockerfile
+/docker/phpmyadmin/
+/docker/volumes/
+/docker/docker-compose.yml
 /volumes/*
 /.docker-sync/
 /lib/Baser/View/Themed/*
-
+/phpmyadmin/

@@ -221,7 +221,7 @@ class ThemeFilesController extends AppController {
 			$this->request->data['ThemeFile']['parent'] = $fullpath;
 		} else {
 
-			$this->ThemeFile->set($this->request->data);
+			$this->ThemeFile->create($this->request->data);
 			if ($this->ThemeFile->validates()) {
 				$fullpath = $fullpath . $this->request->data['ThemeFile']['name'] . '.' . $this->request->data['ThemeFile']['ext'];
 				if (!is_dir(dirname($fullpath))) {
@@ -284,6 +284,7 @@ class ThemeFilesController extends AppController {
 			$this->request->data['ThemeFile']['name'] = urldecode(basename($file->name, '.' . $pathinfo['extension']));
 			$this->request->data['ThemeFile']['type'] = $this->_getFileType(urldecode(basename($file->name)));
 			$this->request->data['ThemeFile']['ext'] = $pathinfo['extension'];
+			$this->request->data['ThemeFile']['parent'] = dirname($fullpath) . DS;
 			if ($this->request->data['ThemeFile']['type'] == 'text') {
 				$this->request->data['ThemeFile']['contents'] = $file->read();
 			}
@@ -484,6 +485,7 @@ class ThemeFilesController extends AppController {
 		$this->crumbs[] = ['name' => $this->_tempalteTypes[$type], 'url' => ['controller' => 'theme_files', 'action' => 'index', $theme, $type]];
 		$this->subMenuElements = ['theme_files'];
 		$this->set('currentPath', str_replace(ROOT, '', dirname($fullpath)) . '/');
+		$this->set('isWritable', is_writable($fullpath));
 		$this->set('theme', $theme);
 		$this->set('plugin', $plugin);
 		$this->set('type', $type);
@@ -595,10 +597,10 @@ class ThemeFilesController extends AppController {
 		}
 
 		if (!$this->request->data) {
-			$this->request->data['ThemeFolder']['parent'] = dirname($fullpath);
+			$this->request->data['ThemeFolder']['parent'] = $fullpath;
 		} else {
 			$folder = new Folder();
-			$this->ThemeFolder->set($this->request->data);
+			$this->ThemeFolder->create($this->request->data);
 			if ($this->ThemeFolder->validates() && $folder->create($fullpath . $this->request->data['ThemeFolder']['name'], 0777)) {
 				$this->setMessage('フォルダ ' . $this->request->data['ThemeFolder']['name'] . ' を作成しました。');
 				$this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', $path)));
@@ -634,7 +636,7 @@ class ThemeFilesController extends AppController {
 
 		if (!$this->request->data) {
 			$this->request->data['ThemeFolder']['name'] = basename($path);
-			$this->request->data['ThemeFolder']['parent'] = dirname($fullpath);
+			$this->request->data['ThemeFolder']['parent'] = dirname($fullpath) . DS;
 			$this->request->data['ThemeFolder']['pastname'] = basename($path);
 		} else {
 			$newPath = dirname($fullpath) . DS . $this->request->data['ThemeFolder']['name'] . DS;

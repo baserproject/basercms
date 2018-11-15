@@ -36,7 +36,7 @@ class ThemeFile extends AppModel {
 		$this->validate = [
 			'name' => [
 				['rule' => ['notBlank'], 'message' => __d('baser', 'テーマファイル名を入力してください。'), 'required' => true],
-				['rule' => ['duplicateThemeFile'], 'message' => __d('baser', '入力されたテーマファイル名は、同一階層に既に存在します。')]]
+				['rule' => ['duplicateThemeFile'], 'on' => 'create', 'message' => __d('baser', '入力されたテーマファイル名は、同一階層に既に存在します。')]]
 		];
 	}
 	
@@ -56,6 +56,20 @@ class ThemeFile extends AppModel {
 		} else {
 			return true;
 		}
+	}
+
+/**
+ * データの存在確認
+ * validates の、on オプションを動作する為に定義
+ * @param int $id
+ * @return bool
+ */
+	public function exists($id = null) {
+		$data = $this->data['ThemeFile'];
+		if(empty($data['parent']) || empty($data['name']) || empty($data['ext'])) {
+			return false;
+		}
+		return (is_file($data['parent'] . $data['name'] . '.' . $data['ext']) && $this->id !== false);
 	}
 
 }

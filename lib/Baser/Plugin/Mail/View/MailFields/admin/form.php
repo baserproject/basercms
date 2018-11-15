@@ -178,8 +178,8 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 				<?php echo $this->BcForm->error('MailField.valid_ex') ?>
 				<div id="helptextValidEx" class="helptext">
 					<ul>
-						<li><?php echo __d('baser', 'Eメール比較チェック：利用するには「Eメール」タイプのフィールドを二つ作成し、グループ入力チェックに任意の同じ値を入力します。')?></li>
-						<li><?php echo __d('baser', 'グループチェック：グループで連帯して入力チェックを行うには同じグループ名を入力します。')?></li>
+						<li><?php echo __d('baser', 'Eメール比較チェック：利用するには「Eメール」タイプのフィールドを二つ作成し、入力チェックグループ名に任意の同じ値を入力します。')?></li>
+						<li><?php echo __d('baser', 'グループチェック：グループで連帯して入力チェックを行うには入力チェックグループ名に同じ値を入力します。')?></li>
 						<li><?php echo __d('baser', '日付チェック：日付形式かどうかのチェックです。')?></li>
 						<li><?php echo __d('baser', 'ファイルアップロードサイズ制限：利用するには、「ファイル」タイプを選択し、オプション項目に、上限となるサイズを次の形式のように | 区切りで入力します。「maxFileSize|10（単位：MB）」')?></li>
 						<li><?php echo __d('baser', 'ファイル拡張子チェック：利用するには、「ファイル」タイプを選択し、オプション項目に、アップロードを許可する拡張子を次の形式のように | 区切りで入力します。「fileExt|jpg,pdf」')?></li>
@@ -202,7 +202,7 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 			</td>
 		</tr>
 		<tr id="RowGroupValid">
-			<th class="col-head"><?php echo $this->BcForm->label('MailField.group_valid', __d('baser', 'グループ入力チェック')) ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('MailField.group_valid', __d('baser', '入力チェックグループ名')) ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailField.group_valid', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
 				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpGroupValid', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>

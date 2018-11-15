@@ -66,7 +66,6 @@ class MailMessagesController extends MailAppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->MailContent->recursive = -1;
 		$this->mailContent = $this->MailContent->read(null, $this->params['pass'][0]);
 		App::uses('MailMessage', 'Mail.Model');
 		$this->MailMessage = new MailMessage();
@@ -101,12 +100,9 @@ class MailMessagesController extends MailAppController {
 			'limit' => $this->passedArgs['num']
 		);
 		$messages = $this->paginate('MailMessage');
-		$mailFields = $this->MailField->find('all', array(
-			'conditions' => array('MailField.mail_content_id' => $mailContentId),
-			'order' => 'MailField.sort'
-		));
-		$this->set(compact('mailFields'));
-		$this->set(compact('messages'));
+		$mailFields = $this->MailMessage->mailFields;
+
+		$this->set(compact('messages', 'mailFields'));
 
 		if ($this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
 			$this->render('ajax_index');
@@ -133,13 +129,10 @@ class MailMessagesController extends MailAppController {
 			'conditions' => array('MailMessage.id' => $messageId),
 			'order' => 'created DESC'
 		));
-		$mailFields = $this->MailField->find('all', array(
-			'conditions' => array('MailField.mail_content_id' => $mailContentId),
-			'order' => 'MailField.sort'
-		));
+		$mailFields = $this->MailMessage->mailFields;
+
 		$this->crumbs[] = array('name' => __d('baser', '受信メール一覧'), 'url' => array('controller' => 'mail_messages', 'action' => 'index', $this->params['pass'][0]));
-		$this->set(compact('mailFields'));
-		$this->set(compact('message'));
+		$this->set(compact('message', 'mailFields'));
 		$this->pageTitle = __d('baser', '受信メール詳細');
 	}
 
@@ -209,7 +202,7 @@ class MailMessagesController extends MailAppController {
 			$this->notFound();
 		}
 		if ($this->MailMessage->delete($messageId)) {
-			$this->setMessage(sprintf(__d('baser', '%s への受信データ NO「%s」 を削除しました。'), $this->mailContent['MailContent']['title'], $messageId), false, true);
+			$this->setMessage(sprintf(__d('baser', '%s への受信データ NO「%s」 を削除しました。'), $this->mailContent['Content']['title'], $messageId), false, true);
 		} else {
 			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
 		}

@@ -115,7 +115,7 @@ class MailController extends MailAppController {
 		/* 認証設定 */
 		// @deprecated 5.0.0 since 4.0.0 ajax_get_token は、BcFormController に移行した為、次のバージョンで削除
 		$this->BcAuth->allow(
-			'index', 'mobile_index', 'smartphone_index', 'confirm', 'mobile_confirm', 'smartphone_confirm', 'submit', 'mobile_submit', 'smartphone_submit', 'captcha', 'smartphone_captcha', 'ajax_get_token', 'smartphone_ajax_get_token'
+			'index', 'mobile_index', 'smartphone_index', 'confirm', 'mobile_confirm', 'smartphone_confirm', 'submit', 'mobile_submit', 'smartphone_submit', 'thanks', 'captcha', 'smartphone_captcha', 'ajax_get_token', 'smartphone_ajax_get_token'
 		);
 
 		parent::beforeFilter();
@@ -209,8 +209,6 @@ class MailController extends MailAppController {
 				}
 			}
 			$this->request->data = $this->MailMessage->getDefaultValue($this->request->params['named']);
-		} else {
-			$this->request->data['MailMessage'] = $this->MailMessage->sanitizeData($this->request->data['MailMessage']);
 		}
 
 		$this->set('freezed', false);
@@ -279,7 +277,6 @@ class MailController extends MailAppController {
 				$this->request->data['MailMessage']['captcha_id'] = null;
 				$this->setMessage(__('エラー : 入力内容を確認して再度送信してください。'), true);
 			}
-			$this->request->data['MailMessage'] = $this->MailMessage->sanitizeData($this->request->data['MailMessage']);
 		}
 
 		if ($this->dbDatas['mailFields']) {
@@ -372,8 +369,8 @@ class MailController extends MailAppController {
 					$this->set('sendError', true);
 				}
 
-				$this->set('mailContent', $this->dbDatas['mailContent']);
-				$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'submit');
+				$this->Session->write('Mail.MailContent', $this->dbDatas['mailContent']);
+				$this->redirect($this->request->params['Content']['url'] . '/thanks');
 
 				// 入力検証エラー
 			} else {
@@ -383,7 +380,6 @@ class MailController extends MailAppController {
 				$this->setMessage('Error : Confirm your entries and send again.', true);
 				$this->request->data['MailMessage']['auth_captcha'] = null;
 				$this->request->data['MailMessage']['captcha_id'] = null;
-				$this->request->data['MailMessage'] = $this->MailMessage->sanitizeData($this->request->data['MailMessage']);
 				$this->action = 'index'; //viewのボタンの表示の切り替えに必要なため変更
 				if ($this->dbDatas['mailFields']) {
 					$this->set('mailFields', $this->dbDatas['mailFields']);
@@ -397,6 +393,26 @@ class MailController extends MailAppController {
 		if (!empty($user)) {
 			$this->set('editLink', ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']]);
 		}
+	}
+
+/**
+ * [PUBIC] メール送信完了
+ *
+ * @return void
+ */
+	public function thanks() {
+		if (!$this->MailContent->isAccepting($this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
+			$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
+			return;
+		}
+
+		$mailContent = $this->Session->consume('Mail.MailContent');
+		if (!$mailContent) {
+			$this->notFound();
+		}
+
+		$this->set('mailContent', $mailContent);
+		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'submit');
 	}
 
 /**
@@ -449,7 +465,7 @@ class MailController extends MailAppController {
 		$userMail = '';
 
 		// データを整形
-		$data = $this->MailMessage->restoreData($this->MailMessage->convertToDb($this->request->data));
+		$data = $this->MailMessage->convertToDb($this->request->data);
 		$data['message'] = $data['MailMessage'];
 		unset($data['MailMessage']);
 		$data['mailFields'] = $this->dbDatas['mailFields'];

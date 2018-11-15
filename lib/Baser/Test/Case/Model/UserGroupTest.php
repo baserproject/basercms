@@ -22,6 +22,7 @@ App::uses('Permission', 'Model');
  * }
  * 
  * @package Baser.Test.Case.Model
+ * @property UserGroup $UserGroup
  */
 class UserGroupTest extends BaserTestCase {
 
@@ -130,8 +131,7 @@ class UserGroupTest extends BaserTestCase {
 		// 削除したユーザグループに属していたユーザーを取得
 		$data = $this->UserGroup->User->find('all', [
 			'conditions' => ['User.id' => 2],
-			'fields' => 'User.user_group_id',
-			'recursive' => 'User.user_group_id',
+			'fields' => 'User.user_group_id'
 			]
 		);
 		$result = $data[0]['User']['user_group_id'];

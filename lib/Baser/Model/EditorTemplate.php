@@ -54,7 +54,9 @@ class EditorTemplate extends AppModel {
 		parent::__construct($id, $table, $ds);
 		$this->validate = [
 			'name' => [
-				['rule' => ['notBlank'], 'message' => __d('baser', 'テンプレート名を入力してください。')]]
+				['rule' => ['notBlank'], 'message' => __d('baser', 'テンプレート名を入力してください。')]],
+			'image' => [
+				['rule' => ['fileExt', ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png']], 'message' => __d('baser', '許可されていないファイルです。')]]
 		];
 	}
 	

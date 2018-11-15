@@ -36,7 +36,11 @@ class BcRedirectSubSiteFilter extends DispatcherFilter {
  * @return void
  */
 	public function beforeDispatch(CakeEvent $event) {
+
 		$request = $event->data['request'];
+		if(Configure::read('BcRequest.isUpdater')) {
+			return;
+		}
 		$response = $event->data['response'];
 		if($request->is('admin')) {
 			return;

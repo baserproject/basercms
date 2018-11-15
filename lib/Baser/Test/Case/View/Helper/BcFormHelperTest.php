@@ -222,7 +222,9 @@ class BcFormHelperTest extends BaserTestCase {
 
 	public function testInput($optionsField, $optionsData, $fieldName, $options, $expected) {
 		$this->attachEvent(['Helper.Form.beforeInput' => ['callable' => function(CakeEvent $event) use ( $optionsField, $optionsData) {
-			$event->data['options'][$optionsField] = $optionsData;
+			if(!empty($optionsField)) {
+				$event->data['options'][$optionsField] = $optionsData;
+			}
 		}]]);
 		$result = $this->BcForm->Input($fieldName, $options);
 		$this->assertRegExp('/' . $expected . '/s', $result);
@@ -253,9 +255,9 @@ class BcFormHelperTest extends BaserTestCase {
 			['value', 'hoge', 'User.id', ['type' => 'radio', 'between' => '', 'options' => [1]], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>'],
 			['value', 'hoge', 'User.id', ['type' => 'input', 'div' => 'true'], '<div class="true"><input type="hidden" name="data\[User\]\[id\]" div="true" value="hoge" id="UserId"\/><\/div>'],
 			['value', 'hoge', 'User.id', ['type' => 'input', 'counter' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" counter="true" value="hoge" id="UserId"\/><span id="UserIdCounter" class="size-counter"><\/span><script.*<span id="UserIdCounter".*<\/span><script.*<\/script>'],
-			['', '', 'BlogTag.BlogTag', '', '<input type="hidden" name="data\[BlogTag\]\[BlogTag\]" value="" id="BlogTagBlogTag_"\/>\n<select name="data\[BlogTag\]\[BlogTag\]\[\]" ="" multiple="multiple" id="BlogTagBlogTag">\n<\/select>'],
-			['', '', 'hoge', '', '<input name="data\[hoge\]" ="" type="text" id="hoge"\/>'],
-			['', '', 'hoge', ['a' => 'hogege'], '<input name="data\[hoge\]" a="hogege" ="" type="text" id="hoge"\/>']
+			['', '', 'BlogTag.BlogTag', '', "<input type=\"hidden\" name=\"data\[BlogTag\]\[BlogTag\]\" value=\"\" id=\"BlogTagBlogTag_\"\/>\n<select name=\"data\[BlogTag\]\[BlogTag\]\[\]\" multiple=\"multiple\" id=\"BlogTagBlogTag\">\n<\/select>"],
+			['', '', 'hoge', '', "<input name=\"data\[hoge\]\" type=\"text\" id=\"hoge\"\/>"],
+			['', '', 'hoge', ['a' => 'hogege'], "<input name=\"data\[hoge\]\" a=\"hogege\" type=\"text\" id=\"hoge\"\/>"]
 		];
 	}
 

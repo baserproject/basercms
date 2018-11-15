@@ -15,7 +15,7 @@
  */
 $currentNum = '';
 if (empty($nums)) {
-	$nums = ['10', '20', '50', '100'];
+	$nums = ['10', '30', '50', '100'];
 }
 if (!is_array($nums)) {
 	$nums = [$nums];

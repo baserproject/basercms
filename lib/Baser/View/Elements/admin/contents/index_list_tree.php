@@ -13,6 +13,11 @@
 /**
  * [ADMIN] 統合コンテンツ一覧
  */
+$PermissionModel = ClassRegistry::init('Permission');
+$deleteDisabled = false;
+if (!$PermissionModel->check('/' . Configure::read('Routing.prefixes.0') . '/contents/delete', $this->viewVars['user']['user_group_id'])) {
+	$deleteDisabled = true;
+}
 ?>
 
 
@@ -66,7 +71,8 @@
 	"contentTitle":"<?php echo h($data['Content']['title']) ?>",
 	"contentSiteRoot":"<?php echo (bool) $data['Content']['site_root'] ?>",
 	"editDisabled":"<?php echo $editDisabled ?>",
-	"manageDisabled":"<?php echo $manageDisabled ?>"
+	"manageDisabled":"<?php echo $manageDisabled ?>",
+	"deleteDisabled":"<?php echo $deleteDisabled ?>"
 }'<?php if($open): ?> class="jstree-open"<?php endif ?>>
 			<span><?php echo h($data['Content']['title']) ?></span>
 			<?php if(!empty($data['children'])): ?>

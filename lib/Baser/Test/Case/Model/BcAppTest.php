@@ -20,6 +20,7 @@ App::uses('Content', 'Model');
  * @property Page $Page
  * @property SiteConfig $SiteConfig
  * @property Content $Content
+ * @property User $User
  */
 
 class BcAppTest extends BaserTestCase {
@@ -745,11 +746,11 @@ class BcAppTest extends BaserTestCase {
  * @param array $auguments アソシエーションを除外しないモデル
  * @param array $expectedHasKey 期待する存在するキー
  * @param array $expectedNotHasKey 期待する存在しないキー
- * @dataProvider expectsDataProvider
+ * @dataProvider reduceAssociationsDataProvider
  */
-	public function testExpects($arguments, $expectedHasKeys, $expectedNotHasKeys) {
-		$this->User->expects($arguments);
-		$result = $this->User->find('first', ['recursive' => 1]);
+	public function testReduceAssociations($arguments, $expectedHasKeys, $expectedNotHasKeys) {
+		$this->User->reduceAssociations($arguments);
+		$result = $this->User->find('first', ['conditions' => ['User.id' => 2], 'recursive' => 2]);
 
 		// 存在するキー
 		foreach ($expectedHasKeys as $key) {
@@ -762,10 +763,12 @@ class BcAppTest extends BaserTestCase {
 		}
 	}
 
-	public function expectsDataProvider() {
+	public function reduceAssociationsDataProvider() {
 		return [
 			[[], ['User'], ['UserGroup', 'Favorite']],
 			[['UserGroup'], ['User', 'UserGroup'], ['Favorite']],
+			[['UserGroup.Permission'], [], ['Permission']],
+			[['User', 'UserGroup', 'Favorite'], [], ['Permission']],
 		];
 	}
 
@@ -962,43 +965,18 @@ class BcAppTest extends BaserTestCase {
 	}
 
 /**
- * 単体データをサニタイズ処理する関数
- *
- * @param $data
- * @param $expect
- * @dataProvider sanitizeDataProvider
+ * @test モデルのモックが作成できるかテスト
  */
-	public function testSanitize($data, $expect) {
-		$result = $this->BcApp->sanitize($data);
-		$this->assertEquals($expect, $result);
-	}
+	public function testGetMock() {
+		$expect = 'do not save!';
+		$Model = $this->getMockForModel('BcAppModel', ['save']);
+		$Model->expects($this->any())
+			->method('save')
+			->will($this->returnValue($expect));
 
-	public function sanitizeDataProvider() {
-		return[
-			['<', '&lt;'],
-			['>', '&gt;'],
-			['"', '&quot;'],
-			['\\', '\\']
-		];
-	}
+		$actual = $Model->save(['Hoge' => ['name' => 'fuga']]);
+		$this->assertEquals($expect, $actual, 'スタブが正しく実行されること');
 
-/**
- * レコードデータをサニタイズ処理する関数
- * @param $data
- * @param $expect
- * @dataProvider sanitizeRecordDataProvider
- */
-	public function testSanitizeRecord($data, $expect) {
-		$result = $this->BcApp->sanitizeRecord($data);
-		$this->assertEquals($expect, $result);
-	}
-
-	public function sanitizeRecordDataProvider() {
-		return[
-			[['aa', '\"', '<', '>'], ['aa', '\&quot;', '&lt;', '&gt;']],
-			[["aa", "\"", "<", ">"], ['aa', '&quot;', '&lt;', '&gt;']],
-			[[["aa", "\"", "<", ">"], '\"', '<', '>'], [['aa', '"', '<', '>'], '\&quot;', '&lt;', '&gt;']],
-		];
 	}
 
 }

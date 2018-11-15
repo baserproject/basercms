@@ -222,6 +222,9 @@ class BcFormHelper extends FormHelper {
 		], ['class' => 'Form', 'plugin' => '']);
 		if ($event !== false) {
 			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+			if(!$options) {
+				$options = [];
+			}
 		}
 
 		$type = '';

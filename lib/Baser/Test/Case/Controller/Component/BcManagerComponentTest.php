@@ -878,7 +878,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * プラグインをインストール/アンインストールする
  * 
  * @param string $name
- * @return boolean
  */
 	public function testInstallAndUninstallPlugin() {
 		
@@ -916,7 +915,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * 設定ファイルなどを読み込む場合
  * 
  * @param string $name
- * @return boolean
  */
 	public function testInstallPluginInclude() {
 		
@@ -954,14 +952,29 @@ class BcManagerComponentTest extends BaserTestCase {
 	
 	}
 
+/**
+ * テーマに梱包されているプラグインをインストールする
+ */
+	public function testInstallThemesPlugins() {
+		$theme = Configure::read('BcSite.theme');
+		$Folder = new Folder();
+		$path = BASER_THEMES . $theme . DS . 'Plugin';
+		$Folder->delete($path);
+
+		$result = $this->BcManager->installThemesPlugins($theme);
+		$this->assertTrue($result, 'デフォルトテーマのプラグインのインストールに失敗しました。');
+
+		$Folder->create($path . DS . 'dummy1');
+		$result = $this->BcManager->installThemesPlugins($theme);
+		$this->assertTrue($result, 'デフォルトテーマのプラグインのインストールに失敗しました。');
+	}
+
 	public function testStartup() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
 	}
 
 	public function testUninstallPlugin() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
 	}
 
 }

@@ -127,10 +127,14 @@ class BlogPost extends BlogAppModel {
 			'name' => [
 				['rule' => ['notBlank'], 'message' => __d('baser', 'タイトルを入力してください。'), 'required' => true],
 				['rule' => ['maxLength', 255], 'message' => __d('baser', 'タイトルは255文字以内で入力してください。')]],
+			'content' => [
+				['rule' => 'containsScript', 'message' => __d('baser', '概要欄でスクリプトの入力は許可されていません。')]],
 			'detail' => [
-				['rule' => ['maxByte', 64000], 'message' => __d('baser', '本稿欄に保存できるデータ量を超えています。')]],
+				['rule' => ['maxByte', 64000], 'message' => __d('baser', '本稿欄に保存できるデータ量を超えています。')],
+				['rule' => 'containsScript', 'message' => __d('baser', '本稿欄でスクリプトの入力は許可されていません。')]],
 			'detail_draft' => [
-				['rule' => ['maxByte', 64000], 'message' => __d('baser', '草稿欄に保存できるデータ量を超えています。')]],
+				['rule' => ['maxByte', 64000], 'message' => __d('baser', '草稿欄に保存できるデータ量を超えています。')],
+				['rule' => 'containsScript', 'message' => __d('baser', '草稿欄でスクリプトの入力は許可されていません。')]],
 			'publish_begin' => [
 				['rule' => ['checkDate'], 'message' => __d('baser', '公開開始日の形式が不正です。')],
 				['rule' => ['checkDateRenge', 'publish_begin', 'publish_end'], 'message' => __d('baser', '公開期間が不正です。')]],
@@ -141,7 +145,10 @@ class BlogPost extends BlogAppModel {
 				['rule' => ['notBlank'], 'message' => __d('baser', '投稿日を入力してください。'), 'required' => true],
 				['rule' => ['checkDate'], 'message' => __d('baser', '投稿日の形式が不正です。')]],
 			'user_id' => [
-				['rule' => ['notBlank'], 'message' => __d('baser', '投稿者を選択してください。')]]
+				['rule' => ['notBlank'], 'message' => __d('baser', '投稿者を選択してください。')]],
+			'eye_catch' => [
+				['rule' => ['fileExt', ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png']], 'message' => __d('baser', '許可されていないファイルです。')]
+			]
 		];
 	}
 	
@@ -888,7 +895,7 @@ class BlogPost extends BlogAppModel {
 				$query['preview'], $query['sort'], $query['direction'], $query['num'], 
 				$query['force'],$query['no'], $query['siteId'], $query['contentUrl']);
 
-			$this->expects($expects, false);
+			$this->reduceAssociations($expects, false);
 			
 			$this->BlogContent->unbindModel([
 				'hasMany' => ['BlogPost', 'BlogCategory']

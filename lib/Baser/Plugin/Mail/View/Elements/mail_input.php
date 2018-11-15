@@ -78,37 +78,30 @@ if (!empty($mailFields)) {
 			if (!$freezed) {
 				echo '<span class="mail-attention">' . $field['attention'] . '</span>';
 			}
-			if (!$field['group_valid']) {
-				echo $this->Mailform->error("MailMessage." . $field['field_name']);
-			}
 
 			/* 説明欄 */
-			if (($this->BcArray->last($mailFields, $key)) ||
-				($field['group_field'] != $mailFields[$next_key]['MailField']['group_field']) ||
-				(!$field['group_field'] && !$mailFields[$next_key]['MailField']['group_field']) ||
-				($field['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $this->BcArray->first($mailFields, $key))) {
-
-				if ($field['group_valid']) {
-					echo $this->Mailform->error("MailMessage." . $field['group_field'] . "_not_same", __("入力データが一致していません。"));
-					echo $this->Mailform->error("MailMessage." . $field['group_field'] . "_not_complate", __("入力データが不完全です。"));
-
-					if (!$this->Mailform->error("MailMessage." . $field['group_field'] . "_not_same")
-						&& !$this->Mailform->error("MailMessage." . $field['group_field'] . "_not_complate")) {
-						$groupValidErrors = $this->Mailform->getGroupValidErrors($mailFields, $field['group_valid']);
-						if ($groupValidErrors) {
-							foreach ($groupValidErrors as $groupValidError) {
-								echo $groupValidError;
-							}
-						} else {
-							echo $this->Mailform->error("MailMessage." . $field['group_field'], __("必須項目です。"));
+			$isGroupValidComplate = in_array('VALID_GROUP_COMPLATE', explode(',', $field['valid_ex']));
+			if(!$isGroupValidComplate) {
+				echo $this->Mailform->error("MailMessage." . $field['field_name']);
+			}
+			$isRequiredToClose = true;
+			if ($this->Mailform->isGroupLastField($mailFields, $field)) {
+				if($isGroupValidComplate) {
+					$groupValidErrors = $this->Mailform->getGroupValidErrors($mailFields, $field['group_valid']);
+					if ($groupValidErrors) {
+						foreach($groupValidErrors as $groupValidError) {
+							echo $groupValidError;
 						}
 					}
 				}
-
-				echo '</span>';
+				echo $this->Mailform->error("MailMessage." . $field['group_valid'] . "_not_same", __("入力データが一致していません。"));
+				echo $this->Mailform->error("MailMessage." . $field['group_valid'] . "_not_complate", __("入力データが不完全です。"));
+			} elseif(!empty($field['group_field'])) {
+				$isRequiredToClose = false;
+			}
+			echo '</span>';
+			if($isRequiredToClose) {
 				echo "</td>\n    </tr>\n";
-			} else {
-				echo '</span>';
 			}
 			$group_field = $field['group_field'];
 		}

@@ -37,13 +37,12 @@ class FavoriteTest extends BaserTestCase {
 	public $components = ["Auth","Cookie","Session"];
 
 	public function setUp() {
-		@session_start();
 		parent::setUp();
 		$this->Favorite = ClassRegistry::init('Favorite');
 	}
 
 	public function tearDown() {
-		@session_destroy();
+		session_unset();
 		unset($this->Favorite);
 		parent::tearDown();
 	}
@@ -56,7 +55,6 @@ class FavoriteTest extends BaserTestCase {
  * - 2 サイト運営
  */
 	public function login($id) {
-		session_id('baser');  // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
 		$this->Favorite->setSession(new SessionComponent(new ComponentCollection()));
 		$prefix = BcUtil::authSessionKey('admin');
 		$this->Favorite->_Session->write('Auth.' . $prefix . '.id', $id);

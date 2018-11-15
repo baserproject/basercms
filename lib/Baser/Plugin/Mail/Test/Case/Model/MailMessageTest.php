@@ -92,7 +92,9 @@ class MailMessageTest extends BaserTestCase {
 			'name_1' => "\xE2\x85\xA0\xE2\x85\xA1\xE3\x8D\x8D\xE3\x88\xB9",
 			'name_2' => 'hoge',
 			'root' => '2',
-			'category' => '2'
+			'category' => '2',
+			'email_1' => 'hoge@hoge.com',
+			'email_2' => 'hoge@hoge.com'
 		));
 		$result = $this->MailMessage->save();
 		$this->MailMessage->dropTable(1);
@@ -133,11 +135,11 @@ class MailMessageTest extends BaserTestCase {
 			array(
 				'name_1' => array(__('必須項目です。')),
 				'name_2' => array(__('必須項目です。')),
-				'email_1' => array(__('形式が無効です。'), true),
-				'email_2' => array(__('形式が無効です。'), true),
+				'email_1' => array(__('形式が無効です。')),
+				'email_2' => array(__('形式が無効です。')),
 				'root' => array(__('必須項目です。')),
-				'email_not_same' => array(true),
-				'tel_not_complate' => array(true),
+				'email_not_same' => array(__('入力データが一致していません。')),
+				'tel_not_complate' => array(__('入力データが不完全です。')),
 				'tel_1' => array(true),
 				'tel_2' => array(true),
 				'tel_3' => array(true),

@@ -151,7 +151,7 @@ App::uses('BcPluginAppModel', 'Model');
 /**
  * 言語設定
  */
-Configure::write('Config.language', BcLang::parseLang($_SERVER['HTTP_ACCEPT_LANGUAGE']));
+Configure::write('Config.language', BcLang::parseLang(@$_SERVER['HTTP_ACCEPT_LANGUAGE']));
 
 /**
  * 設定ファイル読み込み
@@ -299,10 +299,18 @@ if (BC_INSTALLED) {
  * プラグインをCake側で有効化
  * 
  * カレントテーマのプラグインも読み込む
+ * サブサイトに適用されているプラグインも読み込む
  */
 
 if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
-	App::build(array('Plugin' => array(BASER_THEMES . $bcSite['theme'] . DS . 'Plugin' . DS)), App::PREPEND);
+	$sites = BcSite::findAll();
+	$pluginPaths = [ROOT . DS . 'Plugin' . DS];
+	foreach($sites as $site) {
+		if($site->theme) {
+			$pluginPaths[] = BASER_THEMES . $site->theme . DS . 'Plugin' . DS;
+		}
+	}
+	App::build(['Plugin' => $pluginPaths], App::PREPEND);
 	$plugins = getEnablePlugins();
 	foreach ($plugins as $plugin) {
 		loadPlugin($plugin['Plugin']['name'], $plugin['Plugin']['priority']);
@@ -358,12 +366,11 @@ if ($memoryLimit < 32 && $memoryLimit != -1) {
 setlocale(LC_ALL, 'ja_JP.UTF-8');
 
 /**
- * セッションスタート 
+ * セッションスタート
  */
-if (!isConsole()) {
-	$Session = new CakeSession();
-	$Session->start();
-}
+$Session = new CakeSession();
+$Session->start();
+
 
 /**
  * Viewのキャッシュ設定・ログの設定

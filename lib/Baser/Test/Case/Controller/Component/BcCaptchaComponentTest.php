@@ -48,7 +48,6 @@ class BcCaptchaComponentTest extends BaserTestCase {
 	public $components = ['BcCaptcha'];
 
 	public function setUp() {
-		@session_start();
 		parent::setUp();
 
 		// コンポーネントと偽のテストコントローラをセットアップする
@@ -69,7 +68,7 @@ class BcCaptchaComponentTest extends BaserTestCase {
 	}
 
 	public function tearDown() {
-		@session_destroy();
+		session_unset();
 		parent::tearDown();
 		unset($this->Controller);
 		unset($this->BcCaptcha);

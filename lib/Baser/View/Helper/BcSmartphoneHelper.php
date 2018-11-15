@@ -71,16 +71,24 @@ class BcSmartphoneHelper extends Helper {
 			}
 			// 内部リンクの自動変換
 			if ($site->autoLink) {
-				$bcBaseUrl = BC_BASE_URL;
-				if ($this->_View->BcBaser->isSSL()) {
-					$bcBaseUrl = Configure::read('BcEnv.siteUrl');
-				}
+				$siteUrl = Configure::read('BcEnv.siteUrl');
+				$sslUrl = Configure::read('BcEnv.sslUrl');
 				$currentAlias = $this->request->params['Site']['alias'];
+				$regBaseUrls = [
+					preg_quote(BC_BASE_URL, '/'),
+					preg_quote(preg_replace('/\/$/', '', $siteUrl) . BC_BASE_URL, '/'),
+				];
+				if($sslUrl) {
+					$regBaseUrls[] = preg_quote(preg_replace('/\/$/', '', $sslUrl) . BC_BASE_URL, '/');
+				}
+				$regBaseUrl = implode('|', $regBaseUrls);
+
 				// 一旦プレフィックスを除外
-				$reg = '/a(.*?)href="' . preg_quote($bcBaseUrl, '/') . '(' . $currentAlias . '\/([^\"]*?))\"/';
+				$reg = '/a(.*?)href="((' . $regBaseUrl . ')(' . $currentAlias . '\/([^\"]*?)))\"/';
 				$this->_View->output = preg_replace_callback($reg, [$this, '_removePrefix'], $this->_View->output);
+
 				// プレフィックス追加
-				$reg = '/a(.*?)href=\"' . preg_quote($bcBaseUrl, '/') . '([^\"]*?)\"/';
+				$reg = '/a(.*?)href=\"(' . $regBaseUrl . ')([^\"]*?)\"/';
 				$this->_View->output = preg_replace_callback($reg, [$this, '_addPrefix'], $this->_View->output);
 			}
 		}
@@ -95,21 +103,14 @@ class BcSmartphoneHelper extends Helper {
  * @access protected 
  */
 	protected function _removePrefix($matches) {
-		$bcBaseUrl = BC_BASE_URL;
-		if ($this->_View->BcBaser->isSSL()) {
-			$bcBaseUrl = Configure::read('BcEnv.siteUrl');
-		}
 		$etc = $matches[1];
-		if (strpos($matches[2], 'smartphone=off') === false) {
-			$url = $matches[3];
-		} else {
+		$baseUrl = $matches[3];
+		if (strpos($matches[2], 'smartphone=off') !== false) {
 			$url = $matches[2];
-		}
-		if (strpos($matches[1], 'smartphone=off') === false) {
-			return 'a' . $etc . 'href="' . $bcBaseUrl . $url . '"';
 		} else {
-			return 'a' . $etc . 'href="' . $bcBaseUrl . $url . '"';
+			$url = $matches[5];
 		}
+		return 'a' . $etc . 'href="' . $baseUrl . $url . '"';
 	}
 
 /**
@@ -120,17 +121,14 @@ class BcSmartphoneHelper extends Helper {
  * @return string 
  */
 	protected function _addPrefix($matches) {
-		$bcBaseUrl = BC_BASE_URL;
-		if ($this->_View->BcBaser->isSSL()) {
-			$bcBaseUrl = Configure::read('BcEnv.siteUrl');
-		}
 		$currentAlias = $this->request->params['Site']['alias'];
+		$baseUrl = $matches[2];
 		$etc = $matches[1];
-		$url = $matches[2];
-		if (strpos($url, 'smartphone=off') === false) {
-			return 'a' . $etc . 'href="' . $bcBaseUrl . $currentAlias . '/' . $url . '"';
+		$url = $matches[3];
+		if (strpos($url, 'smartphone=off') !== false) {
+			return 'a' . $etc . 'href="' . $baseUrl . $url . '"';
 		} else {
-			return 'a' . $etc . 'href="' . $bcBaseUrl . $url . '"';
+			return 'a' . $etc . 'href="' . $baseUrl . $currentAlias . '/' . $url . '"';
 		}
 	}
 

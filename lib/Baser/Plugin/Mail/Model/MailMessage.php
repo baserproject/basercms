@@ -59,7 +59,7 @@ class MailMessage extends MailAppModel {
  * 
  * MailMessageモデルは利用前にこのメソッドを呼び出しておく必要あり
  * 
- * @param type $mailContentId
+ * @param int $mailContentId
  * @return boolean
  */
 	public function setup($mailContentId) {
@@ -69,13 +69,24 @@ class MailMessage extends MailAppModel {
 		// 利用するメールフィールド取得
 		App::uses('MailField', 'Mail.Model');
 		$MailContent = ClassRegistry::init('Mail.MailContent');
-		$mailContent = $MailContent->find('first', ['conditions' => ['MailContent.id' => $mailContentId], 'recursive' => 1]);
+		$mailContent = $MailContent->find('first', [
+			'conditions' => ['MailContent.id' => $mailContentId, 'MailField.use_field' => true],
+			'order' => 'MailField.sort ASC',
+			'recursive' => 1,
+			'joins' => [[
+				'type' => 'inner',
+				'table' => 'mail_fields',
+				'alias' => 'MailField',
+				'conditions' => 'MailContent.id = MailField.mail_content_id'
+			]]
+		]);
 		$this->mailContent = ['MailContent' => $mailContent['MailContent']];
 		if(!empty($mailContent['MailField'])) {
 			foreach($mailContent['MailField'] as $value) {
 				$this->mailFields[]	= ['MailField' => $value];
 			}
 		}
+
 		// アップロード設定
 		$this->setupUpload($mailContentId);
 		return true;
@@ -169,7 +180,7 @@ class MailMessage extends MailAppModel {
 			$mailField = $mailField['MailField'];
 			if ($mailField['valid'] && !empty($mailField['use_field'])) {
 				// 必須項目
-				if ($mailField['valid'] == 'VALID_NOT_EMPTY') {
+				if ($mailField['valid'] == 'VALID_NOT_EMPTY' || $mailField['valid'] == 'VALID_EMAIL') {
 					if($mailField['type'] == 'file') {
 						if(!isset($this->data['MailMessage'][$mailField['field_name'] . '_tmp'])) {
 							$this->validate[$mailField['field_name']] = array('notBlank' => array(
@@ -185,12 +196,6 @@ class MailMessage extends MailAppModel {
 								'required' => true
 						));
 					}
-				// メール形式
-				} elseif ($mailField['valid'] == 'VALID_EMAIL') {
-					$this->validate[$mailField['field_name']] = array('email' => array(
-							'rule' => array('email'),
-							'message' => __('形式が無効です。')
-					));
 				// 半角数字
 				} elseif ($mailField['valid'] == '/^(|[0-9]+)$/') {
 					$this->validate[$mailField['field_name']] = array(
@@ -205,6 +210,12 @@ class MailMessage extends MailAppModel {
 					);
 				} else {
 					$this->validate[$mailField['field_name']] = $mailField['valid'];
+				}
+				if (!empty($this->data['MailMessage'][$mailField['field_name']]) && $mailField['valid'] == 'VALID_EMAIL') {
+					$this->validate[$mailField['field_name']] = array('email' => array(
+						'rule' => array('email'),
+						'message' => __('形式が無効です。')
+					));
 				}
 			}
 			// ### 拡張バリデーション
@@ -321,7 +332,10 @@ class MailMessage extends MailAppModel {
 			// 対象フィールドがあれば、バリデートグループごとに配列に格納する
 			$valids = explode(',', $mailField['valid_ex']);
 			if (in_array('VALID_GROUP_COMPLATE', $valids) && !empty($mailField['use_field'])) {
-				$dists[$mailField['group_valid']][] = @$data['MailMessage'][$mailField['field_name']];
+				$dists[$mailField['group_valid']][] = [
+					'name' => $mailField['field_name'],
+					'value' => @$data['MailMessage'][$mailField['field_name']]
+				];
 			}
 		}
 		// チェック
@@ -330,16 +344,16 @@ class MailMessage extends MailAppModel {
 		foreach ($dists as $key => $dist) {
 			$i = 0;
 			foreach ($dist as $data) {
-				if ($data) {
+				if (!empty($data['value'])) {
 					$i++;
 				}
 			}
 			$count = count($dist);
 			if ($i > 0 && $i < $count) {
-				$this->invalidate($key . '_not_complate');
-				for ($j = 1; $j <= $count; $j++) {
-					$this->invalidate($key . '_' . $j);
-				}
+ 				$this->invalidate($key . '_not_complate', __('入力データが不完全です。'));
+ 				for ($j = 0; $j < $count; $j++) {
+ 					$this->invalidate($dist[$j]['name']);
+ 				}
 			}
 		}
 	}
@@ -356,12 +370,17 @@ class MailMessage extends MailAppModel {
 		// 対象フィールドを取得
 		foreach ($this->mailFields as $mailField) {
 			$mailField = $mailField['MailField'];
+			if(empty($mailField['use_field'])) {
+				continue;
+			}
 			$valids = explode(',', $mailField['valid_ex']);
 			// 対象フィールドがあれば、バリデートグループごとに配列に格納する
 			if (in_array('VALID_EMAIL_CONFIRM', $valids)) {
-				if (isset($data['MailMessage'][$mailField['field_name']])) {
-					$dists[$mailField['group_valid']][] = $data['MailMessage'][$mailField['field_name']];
-				}
+				$dists[$mailField['group_valid']][] = [
+					'name' => $mailField['field_name'],
+					'value' => @$data['MailMessage'][$mailField['field_name']],
+					'isGroupValidComplate' => in_array('VALID_GROUP_COMPLATE', explode(',', $mailField['valid_ex']))
+				];
 			}
 		}
 		// チェック
@@ -370,12 +389,15 @@ class MailMessage extends MailAppModel {
 			if(count($dist) < 2) {
 				continue;
 			}
-			list($a, $b) = $dist;
 			if(count($dist) == 2){
-				if ($a != $b) {
-					$this->invalidate($key . '_not_same');
-					$this->invalidate($key . '_1');
-					$this->invalidate($key . '_2');
+				if ($dist[0]['value'] !== $dist[1]['value']) {
+					$this->invalidate($key . '_not_same', __('入力データが一致していません。'));
+					if($dist[0]['isGroupValidComplate']) {
+						$this->invalidate($dist[0]['name']);
+					}
+					if($dist[1]['isGroupValidComplate']) {
+						$this->invalidate($dist[1]['name']);
+					}
 				}
 			}
 		}

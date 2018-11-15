@@ -33,7 +33,7 @@ $this->BcBaser->setDescription(sprintf(__d('baser', '%s｜%sのアーカイブ�
 	<?php if (!empty($posts)): ?>
 		<ul>
 			<?php foreach ($posts as $post): ?>
-				<li><?php $this->Blog->postLink($post, '<span class="date">' . $this->Blog->getPostDate($post) . '</span><br />' . $this->Blog->getPostTitle($post)) ?></li>
+				<li><?php $this->Blog->postLink($post, '<span class="date">' . $this->Blog->getPostDate($post) . '</span><br />' . $this->Blog->getPostTitle($post), ['escape' => false]) ?></li>
 			<?php endforeach; ?>
 		</ul>
 	<?php else: ?>
