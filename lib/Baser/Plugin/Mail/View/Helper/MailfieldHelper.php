@@ -36,6 +36,8 @@ class MailfieldHelper extends AppHelper {
 		$attributes['class'] = $data['class'];
 		if($data['type'] == 'multi_check') {
 			$attributes['multiple'] = true;
+		} elseif ($data['type'] == 'tel') {
+			$attributes['type'] = 'tel';
 		}
 		if (!empty($data['options'])) {
 			$options = explode("|", $data['options']);

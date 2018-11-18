@@ -197,6 +197,15 @@ class MailformHelper extends BcFreezeHelper {
 				}
 				$out = $this->textarea($fieldName, $attributes);
 				break;
+
+			case 'tel':
+				unset($attributes['separator']);
+				unset($attributes['rows']);
+				unset($attributes['empty']);
+				$attributes['type'] = 'tel';
+				$out = $this->tel($fieldName, $attributes);
+				break;
+				
 			case 'hidden':
 				unset($attributes['separator']);
 				unset($attributes['rows']);
