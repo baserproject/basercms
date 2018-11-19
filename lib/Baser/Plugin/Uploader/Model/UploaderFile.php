@@ -212,22 +212,6 @@ class UploaderFile extends AppModel {
 		$sizes = array('large', 'midium', 'small', 'mobile_large', 'mobile_small');
 		return preg_replace('/__(' . implode('|', $sizes) . ')\./', '.', $fileName);
 	}
-
-/**
- * Before Delete
- *
- * @param bool $cascade
- * @return bool
- */
-	public function beforeDelete($cascade = true) {
-		$data = $this->read(null, $this->id);
-		if(!empty($data['UploaderFile']['publish_begin']) || !empty($data['UploaderFile']['publish_end'])) {
-			$this->Behaviors->BcUpload->savePath .= 'limited' . DS;
-		} else {
-			$this->Behaviors->BcUpload->savePath = preg_replace('/' . preg_quote('limited' . DS, '/') . '$/', '', $this->Behaviors->BcUpload->savePath);
-		}
-		return parent::beforeDelete($cascade);
-	}
 	
 }
 

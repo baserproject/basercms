@@ -422,6 +422,10 @@ class UploaderFilesController extends AppController {
 			}
 		}
 
+		if(!empty($uploaderFile['UploaderFile']['publish_begin']) || !empty($uploaderFile['UploaderFile']['publish_end'])) {
+			$this->UploaderFile->Behaviors->BcUpload->savePath['UploaderFile'] .= 'limited' . DS;
+		}
+
 		$result = $this->UploaderFile->delete($id);
 		if ($this->RequestHandler->isAjax()) {
 			echo $result;
