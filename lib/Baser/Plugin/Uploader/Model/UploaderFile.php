@@ -36,6 +36,25 @@ class UploaderFile extends AppModel {
 				'name' => ['type'	=> 'all']
 	]]];
 
+///**
+// * Returns a list of all events that will fire in the model during it's lifecycle.
+// * You can override this function to add your own listener callbacks
+// *
+// * @return array
+// */
+//	public function implementedEvents() {
+//		return array(
+//			'Model.beforeFind' => array('callable' => 'beforeFind', 'passParams' => true),
+//			'Model.afterFind' => array('callable' => 'afterFind', 'passParams' => true),
+//			'Model.beforeValidate' => array('callable' => 'beforeValidate', 'passParams' => true),
+//			'Model.afterValidate' => array('callable' => 'afterValidate'),
+//			'Model.beforeSave' => array('callable' => 'beforeSave', 'passParams' => true),
+//			'Model.afterSave' => array('callable' => 'afterSave', 'passParams' => true),
+//			'Model.beforeDelete' => array('callable' => 'beforeDelete', 'passParams' => true, 'priority' => 9),
+//			'Model.afterDelete' => array('callable' => 'afterDelete'),
+//		);
+//	}
+
 /**
  * 公開期間をチェックする
  *
@@ -101,6 +120,11 @@ class UploaderFile extends AppModel {
 		$settings = $this->actsAs['BcUpload'];
 		$settings['fields']['name']['imagecopy'] = $imagecopy;
 		$this->Behaviors->attach('BcUpload', $settings);
+
+		// BcUploadBehavior より優先順位をあげる為登録、イベントを登録しなおす
+		$this->getEventManager()->detach([$this, 'beforeDelete'], 'Model.beforeDelete');
+		$this->getEventManager()->attach([$this, 'beforeDelete'], 'Model.beforeDelete', ['priority' => 5]);
+
 	}
 
 /**
@@ -222,9 +246,9 @@ class UploaderFile extends AppModel {
 	public function beforeDelete($cascade = true) {
 		$data = $this->read(null, $this->id);
 		if(!empty($data['UploaderFile']['publish_begin']) || !empty($data['UploaderFile']['publish_end'])) {
-			$this->Behaviors->BcUpload->savePath .= 'limited' . DS;
+			$this->Behaviors->BcUpload->savePath['UploaderFile'] .= 'limited' . DS;
 		} else {
-			$this->Behaviors->BcUpload->savePath = preg_replace('/' . preg_quote('limited' . DS, '/') . '$/', '', $this->Behaviors->BcUpload->savePath);
+			$this->Behaviors->BcUpload->savePath['UploaderFile'] = preg_replace('/' . preg_quote('limited' . DS, '/') . '$/', '', $this->Behaviors->BcUpload->savePath);
 		}
 		return parent::beforeDelete($cascade);
 	}
