@@ -31,7 +31,8 @@ class UploaderFile extends AppModel {
  */
 	public $actsAs = [
 		'BcUpload' => [
-			'saveDir' => "uploads",
+			'saveDir' => 'uploads',
+			'existsCheckDirs' => ['uploads/limited'],
 			'fields' => [
 				'name' => ['type'	=> 'all']
 	]]];
