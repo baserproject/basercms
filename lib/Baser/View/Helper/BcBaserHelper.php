@@ -220,8 +220,7 @@ class BcBaserHelper extends AppHelper {
 			return $description;
 		}
 
-		if (!empty($this->request->params['Content']['site_root']) &&
-			$this->request->params['Content']['site_root']) {
+		if (!empty($this->request->params['Content']['site_root'])) {
 
 			if (!empty($this->request->params['Site']['description'])) {
 				return $this->request->params['Site']['description'];
