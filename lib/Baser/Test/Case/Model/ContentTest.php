@@ -631,10 +631,48 @@ class ContentTest extends BaserTestCase {
 
 /**
  * キャッシュ時間を取得する
+ * @param array viewCacheを利用できるModelデータ
+ * @param mixed $cacheTime
+ * 	- oneHourlater:publish_end が viewDuration より早い場合
+ * 	- twoHourlater:viewDuration が publish_end より早い場合
+ *	- false:上記以外
+ * @dataProvider getCacheTimeDataProvider
  */
-	public function testGetCacheTime() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetCacheTime($data, $cacheTime) {
+		// publish_end が viewDuration より早い場合
+		if ($cacheTime == 'oneHourlater') {
+			Configure::write('BcCache.viewDuration', '+1 hour');
+			$result = $this->Content->getCacheTime($data);
+			// テスト実行時間により左右されるのでバッファをもって前後5分以内であればgreen
+			$later = strtotime('+5 min', strtotime($data['Content']['publish_end'])) - time();
+			$ago =  strtotime('-5 min', strtotime($data['Content']['publish_end'])) - time();
+			$this->assertGreaterThan($result, $later);
+			$this->assertLessThan($result, $ago);
+			
+		// viewDuration が publish_end より早い場合
+		} elseif ($cacheTime == 'twoHourlater') {
+			Configure::write('BcCache.viewDuration', '+1 hour');
+			$result = $this->Content->getCacheTime($data);
+			// テスト実行時間により左右されるのでバッファをもって前後5分以内であればgreen
+			$later = strtotime('+5 min', strtotime($data['Content']['publish_end'])) - time();
+			$ago =  strtotime('-5 min', strtotime($data['Content']['publish_end'])) - time();
+			$this->assertGreaterThan($result, $later);
+			$this->assertGreaterThan($result, $ago);
+		} else {
+			$result = $this->Content->getCacheTime($data);
+			$this->assertEquals($result, $cacheTime);
+		}
 	}
+	public function getCacheTimeDataProvider() {
+		return [
+			[1, Configure::read('BcCache.viewDuration')],
+			[['Content' => []], false],
+			[['Content' => ['status' => true, 'publish_end' => date('Y-m-d H:i:s', strtotime('+5 min'))]], 'oneHourlater'],
+			[['Content' => ['status' => true, 'publish_end' => date('Y-m-d H:i:s', strtotime('+2 hour'))]], 'twoHourlater'],
+		];
+	}
+	
+	
 
 /**
  * 全てのURLをデータの状況に合わせ更新する
