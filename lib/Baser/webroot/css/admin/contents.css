@@ -772,26 +772,6 @@ table.sub-menu{
 	color:#F23561;
 	background: #F7E9EC url(../../img/admin/warning.png) no-repeat 10px 13px;
 }
-
-.message-box .message {
-	padding:10px 10px 10px 36px;
-	margin:20px 0;
-	font-size:16px;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-	font-weight:bold;
-}
-.message-box .message,
-.message-box .notice-message {
-	color:#5C8A01;
-	background: #EBF5E1 url(../../img/admin/icn_info.png) no-repeat 10px 13px;
-}
-.message-box .alert-message {
-	color:#F23561;
-	background: #F7E9EC url(../../img/admin/warning.png) no-repeat 10px 13px;
-}
-
 #Login #flashMessage {
     border-radius: 0px;
     -webkit-border-radius: 0px;

@@ -24,6 +24,7 @@ App::uses('Controller', 'Controller');
  * @package Baser.Controller
  * @property BcAuthConfigureComponent $BcAuthConfigure
  * @property BcAuthComponent $BcAuth
+ * @property BcMessageComponent $BcMessage
  */
 class BcAppController extends Controller {
 
@@ -76,7 +77,7 @@ class BcAppController extends Controller {
  * @var		array
  * @access	public
  */
-	public $components = ['RequestHandler', 'Security', 'Session', 'BcManager', 'Email', 'Flash', 'BcEmail'];
+	public $components = ['RequestHandler', 'Security', 'Session', 'BcManager', 'Email', 'Flash', 'BcEmail', 'BcMessage'];
 
 /**
  * サブディレクトリ
@@ -1537,28 +1538,11 @@ class BcAppController extends Controller {
  * @param bool $alert 警告かどうか
  * @param bool $saveDblog Dblogに保存するか
  * @param bool $setFlash flash message に保存するか
- * @param array $options オプション ※FlashComponent の $_defaultConfig 参照
  * @return void
+ * @deprecated 5.0.0 since 4.1.5 BcMessage に移行
  */
-	public function setMessage($message, $alert = false, $saveDblog = false, $setFlash = true, $options = array()) {
-		if (!isset($this->Session)) {
-			return;
-		}
-
-		$options = Hash::merge($this->Flash->_defaultConfig, ['params' => ['class' => 'notice-message']], $options);
-
-		if ($alert) {
-			$options['params']['class'] = 'alert-message';
-		}
-
-		if ($setFlash) {
-			$this->Flash->set($message, $options);
-		}
-
-		if ($saveDblog) {
-			$AppModel = ClassRegistry::init('AppModel');
-			$AppModel->saveDblog($message);
-		}
+	public function setMessage($message, $alert = false, $saveDblog = false, $setFlash = true) {
+		$this->BcMessage->set($message, $alert, $saveDblog, $setFlash);
 	}
 
 /**
