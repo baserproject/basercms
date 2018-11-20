@@ -632,6 +632,10 @@ class ContentTest extends BaserTestCase {
 /**
  * キャッシュ時間を取得する
  * @param array viewCacheを利用できるModelデータ
+ * @param mixed $cacheTime
+ * 	- oneHourlater:publish_end が viewDuration より早い場合
+ * 	- twoHourlater:viewDuration が publish_end より早い場合
+ *	- false:上記以外
  * @dataProvider getCacheTimeDataProvider
  */
 	public function testGetCacheTime($data, $cacheTime) {
