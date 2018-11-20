@@ -62,7 +62,10 @@ class MailformHelper extends BcFreezeHelper {
 				} else {
 					$attributes['separator'] = "&nbsp;&nbsp;";
 				}
-				// hiddenFieldは独自で出すため、falseを明示的に指定
+				// CakePHPでは、初期値を指定していない場合に、hiddenタグを出力する仕様
+				// 初期値が設定されている、かつ、空の選択肢を選択して送信する場合に、
+				// フィールド自身が送信されないため、validatePost に引っかかってしまう
+				// hiddenタグを強制的に出すため、falseを明示的に指定
 				$attributes['hiddenField'] = false;
 				$out = $this->hidden($fieldName, array(['value' => '']));
 				$out .= $this->radio($fieldName, $options, $attributes);
