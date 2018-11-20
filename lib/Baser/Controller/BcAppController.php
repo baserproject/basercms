@@ -1537,22 +1537,24 @@ class BcAppController extends Controller {
  * @param bool $alert 警告かどうか
  * @param bool $saveDblog Dblogに保存するか
  * @param bool $setFlash flash message に保存するか
+ * @param array $options オプション ※FlashComponent の $_defaultConfig 参照
  * @return void
  */
-	public function setMessage($message, $alert = false, $saveDblog = false, $setFlash = true) {
+	public function setMessage($message, $alert = false, $saveDblog = false, $setFlash = true, $options = array()) {
 		if (!isset($this->Session)) {
 			return;
 		}
-		$class = 'notice-message';
+
+		$options = Hash::merge($this->Flash->_defaultConfig, ['params' => ['class' => 'notice-message']], $options);
+
 		if ($alert) {
-			$class = 'alert-message';
+			$options['params']['class'] = 'alert-message';
 		}
-		if($setFlash) {
-			$this->Flash->set($message, [
-				'element' => 'default',
-				'params' => ['class' => $class]
-			]);
+
+		if ($setFlash) {
+			$this->Flash->set($message, $options);
 		}
+
 		if ($saveDblog) {
 			$AppModel = ClassRegistry::init('AppModel');
 			$AppModel->saveDblog($message);
