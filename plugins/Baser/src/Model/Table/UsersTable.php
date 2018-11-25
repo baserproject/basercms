@@ -1,7 +1,15 @@
 <?php
+/**
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ *
+ * @copyright     Copyright (c) baserCMS Users Community
+ * @link          https://cakephp.org CakePHP(tm) Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
+ */
 namespace Baser\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -10,7 +18,6 @@ use Cake\Validation\Validator;
  * Users Model
  *
  * @property \Cake\ORM\Association\BelongsTo $UserGroups
- *
  * @method \Baser\Model\Entity\User get($primaryKey, $options = [])
  * @method \Baser\Model\Entity\User newEntity($data = null, array $options = [])
  * @method \Baser\Model\Entity\User[] newEntities(array $data, array $options = [])
@@ -18,28 +25,24 @@ use Cake\Validation\Validator;
  * @method \Baser\Model\Entity\User patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Baser\Model\Entity\User[] patchEntities($entities, array $data, array $options = [])
  * @method \Baser\Model\Entity\User findOrCreate($search, callable $callback = null, $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class UsersTable extends Table
 {
 
     /**
-     * Initialize method
+     * Initialize
      *
-     * @param array $config The configuration for the Table.
+     * @param array $config テーブル設定
      * @return void
      */
     public function initialize(array $config)
     {
         parent::initialize($config);
-
         $this->setTable('users');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
-
         $this->addBehavior('Timestamp');
-
         $this->belongsTo('UserGroups', [
             'foreignKey' => 'user_group_id',
             'className' => 'Baser.UserGroups'
@@ -47,9 +50,9 @@ class UsersTable extends Table
     }
 
     /**
-     * Default validation rules.
+     * Validation Default
      *
-     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @param \Cake\Validation\Validator $validator
      * @return \Cake\Validation\Validator
      */
     public function validationDefault(Validator $validator)
@@ -57,41 +60,32 @@ class UsersTable extends Table
         $validator
             ->integer('id')
             ->allowEmpty('id', 'create');
-
         $validator
             ->allowEmpty('name');
-
         $validator
             ->allowEmpty('password');
-
         $validator
             ->allowEmpty('real_name_1');
-
         $validator
             ->allowEmpty('real_name_2');
-
         $validator
             ->email('email')
             ->allowEmpty('email');
-
         $validator
             ->allowEmpty('nickname');
-
         return $validator;
     }
 
     /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
+     * Build Rules
      *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @param \Cake\ORM\RulesChecker $rules
      * @return \Cake\ORM\RulesChecker
      */
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['email']));
         $rules->add($rules->existsIn(['user_group_id'], 'UserGroups'));
-
         return $rules;
     }
 }

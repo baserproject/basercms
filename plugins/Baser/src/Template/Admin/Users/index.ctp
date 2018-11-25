@@ -1,8 +1,22 @@
 <?php
 /**
-  * @var \App\View\AppView $this
-  */
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ *
+ * @copyright     Copyright (c) baserCMS Users Community
+ * @link          https://cakephp.org CakePHP(tm) Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
+ */
+
+/**
+ * @var \App\View\AppView $this
+ * @var array $users
+ * @var \Baser\Model\Entity\User $user
+ */
 ?>
+
+
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>

@@ -1,4 +1,13 @@
 <?php
+/**
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ *
+ * @copyright     Copyright (c) baserCMS Users Community
+ * @link          https://cakephp.org CakePHP(tm) Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
+ */
 namespace Baser\Controller\Admin;
 
 use Baser\Controller\AppController;
@@ -14,7 +23,7 @@ class UsersController extends AppController
     /**
      * Index method
      *
-     * @return \Cake\Network\Response|null
+     * @return void
      */
     public function index()
     {
@@ -22,7 +31,6 @@ class UsersController extends AppController
             'contain' => ['UserGroups']
         ];
         $users = $this->paginate($this->Users);
-
         $this->set(compact('users'));
         $this->set('_serialize', ['users']);
     }
@@ -31,15 +39,14 @@ class UsersController extends AppController
      * View method
      *
      * @param string|null $id User id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @return void
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
      */
     public function view($id = null)
     {
         $user = $this->Users->get($id, [
             'contain' => ['UserGroups']
         ]);
-
         $this->set('user', $user);
         $this->set('_serialize', ['user']);
     }
@@ -47,7 +54,7 @@ class UsersController extends AppController
     /**
      * Add method
      *
-     * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
+     * @return \Cake\Http\Response
      */
     public function add()
     {
@@ -56,7 +63,6 @@ class UsersController extends AppController
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
@@ -70,8 +76,8 @@ class UsersController extends AppController
      * Edit method
      *
      * @param string|null $id User id.
-     * @return \Cake\Network\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     * @return void|\Cake\Http\Response
+     * @throws \Cake\Network\Exception\NotFoundException
      */
     public function edit($id = null)
     {
@@ -82,7 +88,6 @@ class UsersController extends AppController
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
@@ -96,8 +101,8 @@ class UsersController extends AppController
      * Delete method
      *
      * @param string|null $id User id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @return \Cake\Network\Response
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
      */
     public function delete($id = null)
     {
@@ -108,7 +113,6 @@ class UsersController extends AppController
         } else {
             $this->Flash->error(__('The user could not be deleted. Please, try again.'));
         }
-
         return $this->redirect(['action' => 'index']);
     }
 }
