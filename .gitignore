@@ -47,4 +47,4 @@ nbproject/*
 # docker
 /docker/phpmyadmin
 /docker/volumes
-
+/docker/docker-compose.yml

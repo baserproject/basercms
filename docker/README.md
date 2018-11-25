@@ -5,7 +5,7 @@
 
 ## 設定ファイルの配置
 
-docker/docker-compose.yml をプロジェクトディレクトリの直下にコピーします。
+docker/docker-compose.default.yml を同ディレクトリ内に `docker-compose.yml` としてコピーします。
  
 ## コンテナを作成して起動する
 
