@@ -92,6 +92,7 @@ class MailField extends MailAppModel {
 			'pref'				=> __d('baser', '都道府県リスト'),
 			'date_time_wareki'	=> __d('baser', '和暦日付'),
 			'date_time_calender'=> __d('baser', 'カレンダー'),
+			'tel'				=> __d('baser', '電話番号'),
 			'hidden'			=> __d('baser', '隠しフィールド')
 		];
 		$source['valid'] = [

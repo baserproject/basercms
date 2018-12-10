@@ -225,7 +225,7 @@ if($this->BcContents->isEditable()) {
 				<th><?php echo $this->BcForm->label('Content.description', __d('baser', '説明文')) ?></th>
 				<td>
 					<?php if(!$disableEdit): ?>
-						<?php echo $this->BcForm->input('Content.description', ['type' => 'textarea', 'rows' => 2, 'placeholder' => $this->BcBaser->siteConfig['description']]) ?>　
+						<?php echo $this->BcForm->input('Content.description', ['type' => 'textarea', 'rows' => 2]) ?>　
 					<?php else: ?>
 						<?php if($this->BcForm->value('Content.exclude_search')): ?>
 							<?php echo $this->BcForm->value('Content.description') ?>

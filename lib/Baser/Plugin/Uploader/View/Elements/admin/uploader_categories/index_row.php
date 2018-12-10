@@ -26,7 +26,7 @@
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => __d('baser', '削除'), 'class' => 'btn')), array('action' => 'ajax_delete', $data['UploaderCategory']['id']), array('title' => __d('baser', '削除'), 'class' => 'btn-delete')) ?>
 	</td>
 	<td><?php echo $data['UploaderCategory']['id'] ?></td>
-	<td><?php echo $data['UploaderCategory']['name'] ?></td>
+	<td><?php echo h($data['UploaderCategory']['name']) ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td>
 		<?php echo $data['UploaderCategory']['created'] ?><br />

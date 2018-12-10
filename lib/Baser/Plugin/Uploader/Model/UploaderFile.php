@@ -31,7 +31,8 @@ class UploaderFile extends AppModel {
  */
 	public $actsAs = [
 		'BcUpload' => [
-			'saveDir' => "uploads",
+			'saveDir' => 'uploads',
+			'existsCheckDirs' => ['uploads/limited'],
 			'fields' => [
 				'name' => ['type'	=> 'all']
 	]]];
@@ -101,6 +102,11 @@ class UploaderFile extends AppModel {
 		$settings = $this->actsAs['BcUpload'];
 		$settings['fields']['name']['imagecopy'] = $imagecopy;
 		$this->Behaviors->attach('BcUpload', $settings);
+
+		// BcUploadBehavior より優先順位をあげる為登録、イベントを登録しなおす
+		$this->getEventManager()->detach([$this, 'beforeDelete'], 'Model.beforeDelete');
+		$this->getEventManager()->attach([$this, 'beforeDelete'], 'Model.beforeDelete', ['priority' => 5]);
+
 	}
 
 /**
@@ -222,9 +228,9 @@ class UploaderFile extends AppModel {
 	public function beforeDelete($cascade = true) {
 		$data = $this->read(null, $this->id);
 		if(!empty($data['UploaderFile']['publish_begin']) || !empty($data['UploaderFile']['publish_end'])) {
-			$this->Behaviors->BcUpload->savePath .= 'limited' . DS;
+			$this->Behaviors->BcUpload->savePath['UploaderFile'] .= 'limited' . DS;
 		} else {
-			$this->Behaviors->BcUpload->savePath = preg_replace('/' . preg_quote('limited' . DS, '/') . '$/', '', $this->Behaviors->BcUpload->savePath);
+			$this->Behaviors->BcUpload->savePath['UploaderFile'] = preg_replace('/' . preg_quote('limited' . DS, '/') . '$/', '', $this->Behaviors->BcUpload->savePath);
 		}
 		return parent::beforeDelete($cascade);
 	}

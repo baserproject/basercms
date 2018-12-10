@@ -441,6 +441,35 @@ class BcFreezeHelper extends BcFormHelper {
 	}
 
 /**
+ * TELボックスを表示する
+ * 
+ * @param string $fieldName フィールド文字列
+ * @param array $attributes html属性
+ * @return	string	htmlタグ
+ * @access	public
+ */
+	public function tel($fieldName, $attributes = []) {
+
+		if ($this->freezed) {
+			list($model, $field) = explode('.', $fieldName);
+			if (isset($attributes)) {
+				$attributes = $attributes + ['type' => 'hidden'];
+			} else {
+				$attributes = ['type' => 'hidden'];
+			}
+			if (isset($attributes["value"])) {
+				$value = $attributes["value"];
+			} else {
+				$value = $this->request->data[$model][$field];
+			}
+			$attributes['type'] = 'hidden';
+			return parent::tel($fieldName, $attributes) . $value;
+		} else {
+			return parent::tel($fieldName, $attributes);
+		}
+	}
+
+/**
  * JsonList
  * TODO 確認画面用の実装は全くしてない
  * 

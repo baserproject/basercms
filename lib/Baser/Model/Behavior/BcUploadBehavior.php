@@ -53,6 +53,13 @@ class BcUploadBehavior extends ModelBehavior {
 	public $savePath = [];
 
 /**
+ * 保存時にファイルの重複確認を行うディレクトリ
+ * 
+ * @var array
+ */
+	public $existsCheckDirs = [];
+
+/**
  * 設定
  * 
  * @var array
@@ -99,6 +106,7 @@ class BcUploadBehavior extends ModelBehavior {
 	public function setup(Model $Model, $settings = array()) {
 		$this->settings[$Model->alias] = Hash::merge([
 			'saveDir' => '',
+			'existsCheckDirs' => [],
 			'fields' => []
 		], $settings);
 		foreach ($this->settings[$Model->alias]['fields'] as $key => $field) {
@@ -122,6 +130,8 @@ class BcUploadBehavior extends ModelBehavior {
 			$Folder->create($this->savePath[$Model->alias]);
 			$Folder->chmod($this->savePath[$Model->alias], 0777, true);
 		}
+
+		$this->existsCheckDirs[$Model->alias] = $this->getExistsCheckDirs($Model);
 
 		App::uses('SessionComponent', 'Controller/Component');
 		$this->Session = new SessionComponent(new ComponentCollection());
@@ -483,7 +493,14 @@ class BcUploadBehavior extends ModelBehavior {
 		if (!$this->tmpId) {
 			$basename = preg_replace("/\." . $field['ext'] . "$/is", '', $name);
 			$fileName = $prefix . $basename . $suffix . '.' . $field['ext'];
-			if(file_exists($this->savePath[$Model->alias] . $fileName)) {
+			$existsFile = false;
+			foreach ($this->existsCheckDirs[$Model->alias] as $existsCheckDir) {
+				if (file_exists($existsCheckDir . $fileName)) {
+					$existsFile = true;
+					break;
+				}
+			}
+			if ($existsFile) {
 				if(preg_match('/(.+_)([0-9]+)$/', $basename, $matches)) {
 					$basename = $matches[1] . ((int) $matches[2] + 1);
 				} else {
@@ -996,6 +1013,26 @@ class BcUploadBehavior extends ModelBehavior {
 			$saveDir = $basePath;
 		}
 		return $saveDir;
+	}
+
+/**
+ * 保存時にファイルの重複確認を行うディレクトリのリストを取得する
+ * 
+ * @param Model $Model
+ * @return array $existsCheckDirs
+ */
+	private function getExistsCheckDirs(Model $Model) {
+		$existsCheckDirs = [];
+		$existsCheckDirs[] = $this->savePath[$Model->alias];
+
+		$basePath = WWW_ROOT . 'files' . DS;
+		if ($this->settings[$Model->alias]['existsCheckDirs']) {
+			foreach ($this->settings[$Model->alias]['existsCheckDirs'] as $existsCheckDir) {
+				$existsCheckDirs[] = $basePath . $existsCheckDir . DS;
+			}
+		}
+		
+		return $existsCheckDirs;
 	}
 
 /**

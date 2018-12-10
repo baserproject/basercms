@@ -53,6 +53,7 @@ class MaildataHelper extends BcTextHelper {
 
 		switch ($type) {
 			case 'text':
+			case 'tel':
 			case 'textarea':
 			case 'email':
 			case 'hidden':
