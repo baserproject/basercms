@@ -54,7 +54,6 @@ class BcGooglemapsHelperTest extends BaserTestCase
  * @param int $width
  * @param int $height
  * @param string $expected 期待値
- * @dataProvider loadDataProvider
  * 2018/07/19 ryuring GoogleMapsAPIがAPIキー必須となった為コメントアウト
  * @todo 処理内容を変える等の検討が必要
  */
