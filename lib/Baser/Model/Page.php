@@ -1168,11 +1168,14 @@ class Page extends AppModel {
 		if ($result) {
 			return $result;
 		} else {
-			if (isset($this->validationErrors['name']) && $this->validationErrors['name'] != 'ページ名は50文字以内で入力してください。') {
-				return $this->copy(null, $data);
-			} else {
-				return false;
+			if (isset($this->validationErrors['name'])) {
+				foreach ($this->validationErrors['name'] as $validationErrorName) {
+					if ($validationErrorName != 'ページ名は50文字以内で入力してください。') {
+						return $this->copy(null, $data);
+					}
+				}
 			}
+			return false;
 		}
 	}
 
