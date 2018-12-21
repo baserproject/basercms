@@ -1168,15 +1168,18 @@ class Page extends AppModel {
 		if ($result) {
 			return $result;
 		} else {
-			if (isset($this->validationErrors['name'])) {
-				foreach ($this->validationErrors['name'] as $validationErrorName) {
-					if ($validationErrorName != 'ページ名は50文字以内で入力してください。') {
-						return $this->copy(null, $data);
-					}
+			$isAvairableCopy = true;
+			foreach ($this->validationErrors['name'] as $validationErrorName) {
+				if ($validationErrorName === 'ページ名は50文字以内で入力してください。') {
+					$isAvairableCopy = false;
 				}
 			}
-			return false;
+			if ($isAvairableCopy) {
+				return $this->copy(null, $data);
+			}
 		}
+
+		return false;
 	}
 
 /**
