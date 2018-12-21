@@ -60,7 +60,7 @@ class MailformHelper extends BcFreezeHelper {
 				if (!empty($attributes['separator'])) {
 					$attributes['separator'] = $attributes['separator'];
 				} else {
-					$attributes['separator'] = "&nbsp;&nbsp;";
+					$attributes['separator'] = '';
 				}
 				// CakePHPでは、初期値を指定していない場合に、hiddenタグを出力する仕様
 				// 初期値が設定されている、かつ、空の選択肢を選択して送信する場合に、
