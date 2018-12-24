@@ -57,7 +57,8 @@ class BcGooglemapsHelperTest extends BaserTestCase
  * 2018/07/19 ryuring GoogleMapsAPIがAPIキー必須となった為コメントアウト
  * @todo 処理内容を変える等の検討が必要
  */
-	public function testLoad($address, $width, $height, $expected)
+	public function testLoad()
+//	public function testLoad($address, $width, $height, $expected)
 	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 //		ob_start();
