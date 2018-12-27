@@ -350,21 +350,23 @@ class BcBaserHelper extends AppHelper {
 
 		// カレントのページを追加
 		$contentsTitle = $this->getContentsTitle();
-		$useCurrent = false;
-		if ($contentsTitle) {
-			if(!empty($this->request->params['Content'])) {
-				if($this->request->params['Content']['type'] != 'ContentFolder' && $this->request->params['Content']['name'] == 'index') {
-					if($this->_categoryTitleOn === false) {
-						$useCurrent = true;
-					}
-				} else {
-					$useCurrent = true;
-				}
-			} else {
-				$useCurrent = true;
+		$useCurrentTitle = true;
+		// インデックスページで親カテゴリとタイトルが被る場合は重複しないようにする
+		if(!empty($this->request->params['Content']) &&
+				$this->request->params['Content']['type'] !== 'ContentFolder' &&
+				$this->request->params['Content']['name'] === 'index' &&
+				$this->_categoryTitleOn) {
+			$parentTitle = '';
+			if($this->_categoryTitle === true && $crumbs) {
+				$parentTitle = $crumbs[count($crumbs)-1]['name'];
+			} elseif($this->_categoryTitle) {
+				$parentTitle = $this->_categoryTitle;
+			}
+			if($parentTitle === $contentsTitle) {
+				$useCurrentTitle = false;
 			}
 		}
-		if($useCurrent) {
+		if($contentsTitle && $useCurrentTitle) {
 			$crumbs[] = ['name' => $contentsTitle, 'url' => ''];
 		}
 		return $crumbs;
