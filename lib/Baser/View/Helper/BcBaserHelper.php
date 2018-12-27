@@ -68,14 +68,17 @@ class BcBaserHelper extends AppHelper {
 /**
  * カテゴリタイトル設定
  *
- * パンくず用の配列を取得する際、カテゴリのタイトルを取得するかどうかの判定を保持
- *
+ * タイトルタグとパンくず用の配列を取得する際にカテゴリのタイトルを取得するかどうかの判定を保持
+ * getCrumbs() と、setTitle() で設定を変更できる
  * @var mixed boolean or null
  */
 	protected $_categoryTitleOn = true;
 
 /**
- * カテゴリタイトル
+ * タイトルタグとパンくず用の配列を取得する際に取得するカテゴリタイトル
+ * $_categoryTitleOn が true の場合に取得するが、
+ * $_categoryTitle が、true の場合は、パンくず用配列に格納された値を利用する
+ * setCategoryTitle() で設定を変更できる
  *
  * @var mixed boolean or string
  */
@@ -170,7 +173,7 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * タイトルへのカテゴリタイトルの出力有無を設定する
+ * タイトルとパンくずへのカテゴリタイトルの出力有無を設定する
  *
  * コンテンツごとに個別設定をする為に利用する。
  * パンくずにも影響する。
