@@ -234,7 +234,14 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 			<th class="col-head"><?php echo $this->BcForm->label('MailField.separator', __d('baser', '区切り文字')) ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailField.separator', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpSeparator', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
 				<?php echo $this->BcForm->error('MailField.separator') ?>
+				<div id="helpSeparator" class="helptext">
+					<ul>
+						<li><?php echo __d('baser', '空白の場合は自動で「＆nbsp;＆nbsp;」が挿入されます')?></li>
+						<li><?php echo __d('baser', '空にしたいときは半角スペースを入力してください。')?></li>
+					</ul>
+				</div>
 			</td>
 		</tr>
 		<tr id="RowDefault">
