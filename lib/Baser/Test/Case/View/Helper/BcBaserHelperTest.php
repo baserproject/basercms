@@ -352,7 +352,8 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->setTitle('会社沿革');
 		$expected = [
 			['name' => '会社案内', 'url' => '/company/index'],
-			['name' => '会社データ', 'url' => '/company/data']
+			['name' => '会社データ', 'url' => '/company/data'],
+			['name' => '会社沿革', 'url' => '']
 		];
 		$this->assertEquals($expected, $this->BcBaser->getCrumbs(true));
 
