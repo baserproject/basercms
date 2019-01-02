@@ -7,10 +7,24 @@
 
 docker/docker-compose.default.yml を同ディレクトリ内に `docker-compose.yml` としてコピーします。
  
-## コンテナを作成して起動する
+```
+cd docker
+cp docker-compose.default.yml docker-compose.yml
+```
+
+## コンテナ環境を構築する
+
+### コンテナを作成して起動する
 
 ```
 docker-compose up -d
+```
+
+### ライブラリをインストール
+
+```
+docker exec -it basercake3 /bin/bash
+composer install
 ```
 
 ### データベース情報
@@ -47,5 +61,13 @@ docker-compose restart
 ```
 docker exec -it basercake3 /bin/bash
 ```
+## データベース（MySQL）を確認する
+データベースの内容は、MySQLで確認する事ができます。  
+`http://localhost:8080/`
 
+
+## 送信メールを確認する
+
+baserCMSが送信したメールは、MailCatcher で確認する事ができます。  
+`http://localhost:1080/`
 

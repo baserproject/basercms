@@ -665,12 +665,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ryuring/baser-core.git",
-                "reference": "96247f1fc63c3d335fd7362666a153fab961f20f"
+                "reference": "74ab9a0a56454ab4798df3b24b9a495f59f45e5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ryuring/baser-core/zipball/96247f1fc63c3d335fd7362666a153fab961f20f",
-                "reference": "96247f1fc63c3d335fd7362666a153fab961f20f",
+                "url": "https://api.github.com/repos/ryuring/baser-core/zipball/74ab9a0a56454ab4798df3b24b9a495f59f45e5a",
+                "reference": "74ab9a0a56454ab4798df3b24b9a495f59f45e5a",
                 "shasum": ""
             },
             "require": {
@@ -687,7 +687,7 @@
                 "cakephp/debug_kit": "^3.2",
                 "psy/psysh": "@stable"
             },
-            "type": "project",
+            "type": "cakephp-plugin",
             "autoload": {
                 "psr-4": {
                     "BaserCore\\": "src"
@@ -699,7 +699,7 @@
             ],
             "description": "baserCMS plugin for CakePHP",
             "homepage": "https://basercms.net",
-            "time": "2019-01-02T03:52:38+00:00"
+            "time": "2019-01-02T05:20:21+00:00"
         },
         {
             "name": "sentry/sentry",

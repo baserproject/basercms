@@ -9,9 +9,8 @@ baserCMSをCakePHP3化するためのブランチです。
 
 1. [/docker/README.md](https://github.com/baserproject/basercms/blob/dev-5-cake3/docker/README.md) に従い、Docker環境を準備し、コンテナを起動します。
 2. [phpMyAdmin](http://localhost:8080) にアクセスし、`/.assets/basercake3.sql` をデータベースに流し込みます。
-3. `/config/app.default.php` を、`/config/app.php` としてコピーします。 
-4. [/docker/README.md](https://github.com/baserproject/basercms/blob/dev-5-cake3/docker/README.md) のデータベース情報を元に、`/config/app.php` でデータベースへの接続設定を更新します。
-5. ブラウザで、[http://localhost/baser/admin/users/index](http://localhost/baser/admin/users/index) にアクセスして表示を確認します。
+3. [/docker/README.md](https://github.com/baserproject/basercms/blob/dev-5-cake3/docker/README.md) のデータベース情報を元に、`/config/app.php` へデータベースへの接続設定を更新します。
+4. ブラウザで、[http://localhost/baser/admin/users/index](http://localhost/baser/admin/users/index) にアクセスして表示を確認します。
 
 ## 現在の状態
 
