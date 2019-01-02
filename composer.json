@@ -12,7 +12,7 @@
         "connehito/cake-sentry": "^1.0",
         "josegonzalez/dotenv": "2.*",
         "mobiledetect/mobiledetectlib": "2.*",
-        "ryuring/baser-core": "dev-dev-5-base-pattern"
+        "baserproject/baser-core": "dev-dev-5-base-pattern"
     },
     "require-dev": {
         "cakephp/bake": "^1.1",
@@ -55,7 +55,7 @@
     "config": {
         "sort-packages": true,
         "preferred-install": {
-            "ryuring/baser-core": "source",
+            "baserproject/baser-core": "source",
             "*": "dist"
         }
     },

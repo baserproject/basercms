@@ -1,6 +1,6 @@
 # Project to migrate baserCMS to CakePHP3
 
-[![License](https://img.shields.io/packagist/l/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/ryuring/basercake3)
+[![License](https://img.shields.io/packagist/l/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/baserproject/basercms)
 
 baserCMSをCakePHP3化するためのブランチです。  
 ソースコードはこちらから確認できます。: [baserproject/basercms:dev-5-cake3](https://github.com/baserproject/basercms/tree/dev-5-cake3)

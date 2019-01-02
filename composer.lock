@@ -660,16 +660,16 @@
             "time": "2017-06-05T13:30:19+00:00"
         },
         {
-            "name": "ryuring/baser-core",
+            "name": "baserproject/baser-core",
             "version": "dev-dev-5-base-pattern",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ryuring/baser-core.git",
+                "url": "https://github.com/baserproject/baser-core.git",
                 "reference": "74ab9a0a56454ab4798df3b24b9a495f59f45e5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ryuring/baser-core/zipball/74ab9a0a56454ab4798df3b24b9a495f59f45e5a",
+                "url": "https://api.github.com/repos/baserproject/baser-core/zipball/74ab9a0a56454ab4798df3b24b9a495f59f45e5a",
                 "reference": "74ab9a0a56454ab4798df3b24b9a495f59f45e5a",
                 "shasum": ""
             },
@@ -2836,7 +2836,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "ryuring/baser-core": 20,
+        "baserproject/baser-core": 20,
         "psy/psysh": 0
     },
     "prefer-stable": true,
