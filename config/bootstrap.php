@@ -214,5 +214,4 @@ Type::build('timestamp')
 if (Configure::read('debug')) {
     Plugin::load('DebugKit', ['bootstrap' => true]);
 }
-
-Plugin::load('Baser', ['autoload' => true, 'bootstrap' => false, 'routes' => true]);
+Plugin::load('BaserCore', ['autoload' => true, 'bootstrap' => false, 'routes' => true]);

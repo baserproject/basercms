@@ -9,8 +9,10 @@
         "cakephp/cakephp": "3.6.13",
         "cakephp/migrations": "^1.0",
         "cakephp/plugin-installer": "^1.0",
+        "connehito/cake-sentry": "^1.0",
         "josegonzalez/dotenv": "2.*",
-        "mobiledetect/mobiledetectlib": "2.*"
+        "mobiledetect/mobiledetectlib": "2.*",
+        "ryuring/baser-core": "dev-dev-5-base-pattern"
     },
     "require-dev": {
         "cakephp/bake": "^1.1",
@@ -27,12 +29,14 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/",
-            "Baser\\": "plugins/Baser/src/"
+            "BaserCore\\": "plugins/baser-core/src/",
+            "Baser-core\\": "./plugins/Baser-core/src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Baser\\Test\\": "plugins/Baser/tests/"
+            "BaserCore\\Test\\": "plugins/baser-core/tests/",
+            "Baser-core\\Test\\": "./plugins/Baser-core/tests/"
         }
     },
     "scripts": {
@@ -49,6 +53,11 @@
     },
     "prefer-stable": true,
     "config": {
-        "sort-packages": true
-    }
+        "sort-packages": true,
+        "preferred-install": {
+            "ryuring/baser-core": "source",
+            "*": "dist"
+        }
+    },
+    "minimum-stability": "dev"
 }
