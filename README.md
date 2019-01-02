@@ -3,7 +3,9 @@
 [![License](https://img.shields.io/packagist/l/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/baserproject/basercms)
 
 baserCMSをCakePHP3化するためのブランチです。  
-ソースコードはこちらから確認できます。: [baserproject/basercms:dev-5-cake3](https://github.com/baserproject/basercms/tree/dev-5-cake3)
+- [BaserApp ソースコード / baserproject/basercms:dev-5-cake3](https://github.com/baserproject/basercms/tree/dev-5-cake3)
+- [BaserCore ソースコード / baserproject/baser-core:dev-5-base-pattern](https://github.com/baserproject/baser-core/tree/dev-5-base-pattern)
+- [開発方針](https://docs.google.com/document/d/1QAmScc65CwMyn8QuwWKE9q_8HnSKcW9oefI9RrHoUYY/edit)
 
 ## 開発に協力する準備
 
@@ -14,7 +16,8 @@ baserCMSをCakePHP3化するためのブランチです。
 
 ## 現在の状態
 
-- baserCMSのコアは、CakePHPのプラグインとして開発を前提とする為、plugins 内に配置
+- baserCMSのコア（BaserCore）は、CakePHPのプラグインとして開発を前提とし、composer で、vendor 配下内にインストールする仕様とした。 `vendor/baserproject/baser-core/`
+- BaserCoreは、.git フォルダを含むようにし、上記パス内のプログラムを直接改修し、コミットできるようにした。
 - baserCMS4 の一部のテーブルを SQLファイルで移行し、Bake を利用して、ユーザー情報の CRUD を作成した。
 - Docker環境がすぐに作れる準備を行った。
 - 直下の src フォルダは利用しないため削除
