@@ -6,13 +6,13 @@
     "license": "MIT",
     "require": {
         "php": ">=5.6",
+        "baserproject/baser-core": "dev-dev-5-base-pattern",
         "cakephp/cakephp": "3.6.13",
         "cakephp/migrations": "^1.0",
         "cakephp/plugin-installer": "^1.0",
         "connehito/cake-sentry": "^1.0",
         "josegonzalez/dotenv": "2.*",
-        "mobiledetect/mobiledetectlib": "2.*",
-        "baserproject/baser-core": "dev-dev-5-base-pattern"
+        "mobiledetect/mobiledetectlib": "2.*"
     },
     "require-dev": {
         "cakephp/bake": "^1.1",

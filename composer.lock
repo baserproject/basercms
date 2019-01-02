@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4962d33f9588dcbc5f06b1a0c14dc19d",
+    "content-hash": "07613fb64916081dfa2fc15bfc88ce69",
     "packages": [
         {
             "name": "aura/intl",
@@ -51,6 +51,48 @@
                 "localization"
             ],
             "time": "2017-01-20T05:00:11+00:00"
+        },
+        {
+            "name": "baserproject/baser-core",
+            "version": "dev-dev-5-base-pattern",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/baserproject/baser-core.git",
+                "reference": "8b481328a8957ae0b559b6ef3238a5a606b284e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/baserproject/baser-core/zipball/8b481328a8957ae0b559b6ef3238a5a606b284e8",
+                "reference": "8b481328a8957ae0b559b6ef3238a5a606b284e8",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/cakephp": "3.6.13",
+                "cakephp/migrations": "^1.0",
+                "cakephp/plugin-installer": "^1.0",
+                "josegonzalez/dotenv": "2.*",
+                "mobiledetect/mobiledetectlib": "2.*",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "cakephp/bake": "^1.1",
+                "cakephp/cakephp-codesniffer": "^3.0",
+                "cakephp/debug_kit": "^3.2",
+                "psy/psysh": "@stable"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "BaserCore\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "baserCMS plugin for CakePHP",
+            "homepage": "https://basercms.net",
+            "time": "2019-01-02T06:26:21+00:00"
         },
         {
             "name": "cakephp/cakephp",
@@ -658,48 +700,6 @@
                 "phinx"
             ],
             "time": "2017-06-05T13:30:19+00:00"
-        },
-        {
-            "name": "baserproject/baser-core",
-            "version": "dev-dev-5-base-pattern",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/baserproject/baser-core.git",
-                "reference": "74ab9a0a56454ab4798df3b24b9a495f59f45e5a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/baserproject/baser-core/zipball/74ab9a0a56454ab4798df3b24b9a495f59f45e5a",
-                "reference": "74ab9a0a56454ab4798df3b24b9a495f59f45e5a",
-                "shasum": ""
-            },
-            "require": {
-                "cakephp/cakephp": "3.6.13",
-                "cakephp/migrations": "^1.0",
-                "cakephp/plugin-installer": "^1.0",
-                "josegonzalez/dotenv": "2.*",
-                "mobiledetect/mobiledetectlib": "2.*",
-                "php": ">=5.6"
-            },
-            "require-dev": {
-                "cakephp/bake": "^1.1",
-                "cakephp/cakephp-codesniffer": "^3.0",
-                "cakephp/debug_kit": "^3.2",
-                "psy/psysh": "@stable"
-            },
-            "type": "cakephp-plugin",
-            "autoload": {
-                "psr-4": {
-                    "BaserCore\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "baserCMS plugin for CakePHP",
-            "homepage": "https://basercms.net",
-            "time": "2019-01-02T05:20:21+00:00"
         },
         {
             "name": "sentry/sentry",
