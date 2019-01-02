@@ -48,3 +48,6 @@ nbproject/*
 /docker/phpmyadmin
 /docker/volumes
 /docker/docker-compose.yml
+# plugins
+/plugins/*
+*
