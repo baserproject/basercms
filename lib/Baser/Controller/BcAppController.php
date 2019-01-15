@@ -820,6 +820,17 @@ class BcAppController extends Controller {
 			'template' => 'default'
 		], $options);
 
+		/*** Controller.beforeSendEmail ***/
+		$event = $this->dispatchEvent('beforeSendMail', [
+			'options' => $options
+		]);
+		if ($event !== false) {
+			$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+			if (!empty($event->data['options'])) {
+				$options = $event->data['options'];
+			}
+		}
+
 		if (!empty($this->siteConfigs['smtp_host'])) {
 			$transport = 'Smtp';
 			$host = $this->siteConfigs['smtp_host'];
