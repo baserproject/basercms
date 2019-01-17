@@ -63,7 +63,7 @@ class ThemeConfig extends AppModel {
 			if (!empty($data['ThemeConfig'][$image]['tmp_name'])) {
 				@unlink($saveDir . $old[$image]);
 				$pathinfo = pathinfo($old[$image]);
-				@unlink($saveDir . $pathinfo['filename'] . $thumbSuffix . $pathinfo['extension']);
+				@unlink($saveDir . $pathinfo['filename'] . $thumbSuffix . '.' . $pathinfo['extension']);
 				$fileName = $data['ThemeConfig'][$image]['name'];
 				$ext = pathinfo($fileName, PATHINFO_EXTENSION);
 				$filePath = $saveDir . $image . '.' . $ext;
@@ -94,7 +94,7 @@ class ThemeConfig extends AppModel {
 			if (!empty($data['ThemeConfig'][$image . '_delete'])) {
 				@unlink($saveDir . $old[$image]);
 				$pathinfo = pathinfo($old[$image]);
-				@unlink($saveDir . $pathinfo['filename'] . $thumbSuffix . $pathinfo['extension']);
+				@unlink($saveDir . $pathinfo['filename'] . $thumbSuffix . '.' . $pathinfo['extension']);
 				$data['ThemeConfig'][$image] = '';
 			}
 		}
