@@ -273,7 +273,8 @@ class BcAppController extends Controller {
 				$siteUrl = Configure::read('BcEnv.siteUrl');				
 			}
 			if($siteUrl && siteUrl() != $siteUrl) {
-				$this->redirect($siteUrl . preg_replace('/^\//', '', Router::reverse($this->request, false)));
+				$webrootReg = '/^' . preg_quote($this->request->webroot, '/') . '/';
+				$this->redirect($siteUrl . preg_replace($webrootReg, '', Router::reverse($this->request, false)));
 			}
 		}
 
