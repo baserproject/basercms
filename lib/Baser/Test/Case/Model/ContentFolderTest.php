@@ -38,7 +38,7 @@ class ContentFolderTest extends BaserTestCase {
 		'plugin.mail.Default/MailContent',
 		'plugin.mail.Default/MailContent',
 		'plugin.feed.Default/FeedConfig',
-		'plugin.feed.Default/FeedDetail',
+		'baser.Default.FeedDetail',
 	];
 	
 /**

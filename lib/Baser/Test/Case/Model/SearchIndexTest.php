@@ -37,7 +37,7 @@ class SearchIndexTest extends BaserTestCase {
 		'plugin.mail.Default/MailContent',
 		'plugin.mail.Default/MailContent',
 		'plugin.feed.Default/FeedConfig',
-		'plugin.feed.Default/FeedDetail',
+		'baser.Default.FeedDetail',
 	];
 
 	public function setUp() {
