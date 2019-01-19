@@ -15,9 +15,9 @@ services:
       MYSQL_PASSWORD: "root"
       MYSQL_DATABASE: "basercms"
     command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
-  bc-php7.2:
-    container_name: bc-php7.2
-    image: baserproject/basercms:4.1-php7.2
+  bc-php7.1:
+    container_name: bc-php7.1
+    image: baserproject/basercms:4.1-php7.1
     volumes:
       - ../:/var/www/html:cached
     environment:
