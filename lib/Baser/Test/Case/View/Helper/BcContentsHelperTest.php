@@ -263,7 +263,10 @@ class BcContentsHelperTest extends BaserTestCase {
 		$this->BcContents->request = $this->_getRequest('/');
 		$_SERVER['HTTP_USER_AGENT'] = 'iPhone';
 		$result = $this->BcContents->getRelatedSiteContents($id, $options);
-		$this->assertEquals($expect, $result[1]['Content']['id']);                       
+		if(!empty($result[1]['Content']['id'])) {
+			$result = $result[1]['Content']['id'];
+		}
+		$this->assertEquals($expect, $result);                       
 	}
 	public function getRelatedSiteContentsDataProvider() {
 		return [
@@ -276,8 +279,8 @@ class BcContentsHelperTest extends BaserTestCase {
 			['', ['excludeIds' => [2]], 9],
 			['', ['excludeIds' => [99]], 9],
 			// コンテンツIDに値が入っていれば、false
-			['1', ['excludeIds' => [1]], false],
-			['hoge', [], false],
+			['1', ['excludeIds' => []], 2],
+			['hoge', [], []],
 		];
 	}
 

@@ -383,15 +383,17 @@ class BcContentsHelper extends AppHelper {
 			'excludeIds' => []
 		], $options);
 		$this->_Content->unbindModel(['belongsTo' => ['User']]);
-		if(!$id && !empty($this->request->params['Content'])) {
-			$content = $this->request->params['Content'];
-			if($content['main_site_content_id']) {
-				$id = $content['main_site_content_id'];
+		if(!$id) {
+			if(!empty($this->request->params['Content'])) {
+				$content = $this->request->params['Content'];
+				if ($content['main_site_content_id']) {
+					$id = $content['main_site_content_id'];
+				} else {
+					$id = $content['id'];
+				}
 			} else {
-				$id = $content['id'];
-			}
-		} else {
-			return false;
+				return false;	
+			}	
 		}
 		return $this->_Content->getRelatedSiteContents($id, $options);
 	}
