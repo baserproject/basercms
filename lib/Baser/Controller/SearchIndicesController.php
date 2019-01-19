@@ -18,6 +18,7 @@ App::uses('HttpSocket', 'Core.Network/Http');
  * @package	Baser.Controller
  * @property Content $Content
  * @property Site $Site
+ * @property SearchIndex $SearchIndex
  */
 class SearchIndicesController extends AppController {
 
@@ -455,44 +456,9 @@ class SearchIndicesController extends AppController {
  */
 	public function admin_reconstruct() {
 		set_time_limit(0);
-		$contents = $this->Content->find('all', [
-			'conditions' => [
-				'OR' => [
-					['Site.status' => null],
-					['Site.status' => true],
-		]], 'order' => 'lft', 'recursive' => 2]);
-		$models = [];
-		$db = $this->SearchIndex->getDataSource();
-		$this->SearchIndex->begin();
-		$db->truncate('search_indices');
-		$result = true;
-		if($contents) {
-			foreach($contents as $content) {
-				if(isset($models[$content['Content']['type']])) {
-					$Model = $models[$content['Content']['type']];
-				} else {
-					if(ClassRegistry::isKeySet($content['Content']['type'])) {
-						$models[$content['Content']['type']] = $Model = ClassRegistry::getObject($content['Content']['type']);
-					} else {
-						if($content['Content']['plugin'] == 'Core') {
-							$modelName = $content['Content']['type'];
-						} else {
-							$modelName = $content['Content']['plugin'] . '.' . $content['Content']['type'];
-						}
-						$models[$content['Content']['type']] = $Model = ClassRegistry::init($modelName);
-					}
-				}
-				$entity = $Model->find('first', ['conditions' => [$Model->name . '.id' => $content['Content']['entity_id']], 'recursive' => 0]);
-				if(!$Model->save($entity, false)) {
-					$result = false;
-				}
-			}
-		}
-		if($result) {
-			$this->SearchIndex->commit();
+		if($this->SearchIndex->reconstruct()) {
 			$this->setMessage(__d('baser', '検索インデックスの再構築に成功しました。'), false, true);
 		} else {
-			$this->SearchIndex->roleback();
 			$this->setMessage(__d('baser', '検索インデックスの再構築に失敗しました。'), true, true);
 		}
 		$this->redirect(['action' => 'index']);

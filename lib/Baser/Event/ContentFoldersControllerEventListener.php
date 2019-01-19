@@ -29,7 +29,8 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener {
 	public $events = [
 		'Contents.beforeMove',
 		'Contents.afterMove',
-		'Contents.beforeDelete'
+		'Contents.beforeDelete',
+		'Contents.afterChangeStatus'
 	];
 
 /**
@@ -138,6 +139,23 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener {
 				$this->Page->deleteSearchIndex($page['Page']['id']);
 			}
 		}
+	}
+
+/**
+ * Contents After Change Status
+ *
+ * 一覧から公開設定を変更した場合に検索インデックスを更新する事が目的
+ *
+ * @param CakeEvent $event
+ */
+	public function contentsAfterChangeStatus(CakeEvent $event) {
+		if(empty($event->data['result'])) {
+			return;
+		}
+		$id = $event->data['id'];
+		/* @var SearchIndex $searchIndexModel */
+		$searchIndexModel = ClassRegistry::init('SearchIndex');
+		$searchIndexModel->reconstruct($id);
 	}
 	
 }
