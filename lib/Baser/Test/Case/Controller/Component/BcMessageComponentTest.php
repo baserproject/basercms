@@ -71,18 +71,25 @@ class BcMessageComponentTest extends BaserTestCase {
 		$this->BcMessage->set('test');
 		$this->assertEquals('test', $_SESSION['Message']['flash'][0]['message']);
 		$this->assertEquals('notice-message', $_SESSION['Message']['flash'][0]['params']['class']);
+
+		// multi message
+		$this->BcMessage->set('test');
+		$this->assertEquals(2, count($_SESSION['Message']['flash']));
 		$_SESSION['Message'] = null;
+
 		// alert message
 		$this->BcMessage->set('test', true);
 		$this->assertEquals('alert-message', $_SESSION['Message']['flash'][0]['params']['class']);
 		$this->BcMessage->set('test', false, true);
 		$_SESSION['Message'] = null;
+
 		// set db log
 		/* @var Dblog $dbLogModel */
 		$dbLogModel = ClassRegistry::init('DbLog');
 		$dbLogModel->field('name', [], 'id DESC');
 		$this->assertEquals('test', $dbLogModel->field('name', [], 'id DESC'));
 		$_SESSION['Message'] = null;
+
 		// not flash message
 		$this->BcMessage->set('test', false, false, false);
 		$this->assertEquals(null, $_SESSION['Message']);
