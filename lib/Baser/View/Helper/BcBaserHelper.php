@@ -737,10 +737,15 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function flash($key = 'flash') {
-		if ($this->Session->check('Message.' . $key)) {
-			echo '<div id="MessageBox">';
-			echo $this->Flash->render($key, ['escape' => false]);
-			echo '</div>';
+		$sessionMessageList = $this->Session->read('Message');
+		if ($sessionMessageList) {
+			foreach ($sessionMessageList as $messageKey => $sessionMessage) {
+				if ($this->Session->check('Message.' . $messageKey)) {
+					echo '<div id="MessageBox" class="message-box">';
+					echo $this->Flash->render($messageKey, ['escape' => false]);
+					echo '</div>';
+				}
+			}
 		}
 	}
 
