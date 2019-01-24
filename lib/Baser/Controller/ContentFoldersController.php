@@ -76,7 +76,7 @@ class ContentFoldersController extends AppController {
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
 		} else {
-			if ($this->ContentFolder->save($this->request->data)) {
+			if ($this->ContentFolder->save($this->request->data, ['reconstructSearchIndices' => true])) {
 				clearViewCache();
 				$this->setMessage(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $this->request->data['Content']['title']), false, true);
 				$this->redirect([

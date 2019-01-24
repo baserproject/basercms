@@ -60,7 +60,7 @@ class BcFreezeHelper extends BcFormHelper {
 			} else {
 				$value = $this->request->data[$model][$field];
 			}
-			return parent::text($fieldName, $attributes) . $value;
+			return parent::text($fieldName, $attributes) . h($value);
 		} else {
 			return parent::text($fieldName, $attributes);
 		}
@@ -329,7 +329,7 @@ class BcFreezeHelper extends BcFormHelper {
 				$value = $this->request->data[$model][$field];
 			}
 			if ($value) {
-				return parent::text($fieldName, $attributes) . nl2br($value);
+				return parent::text($fieldName, $attributes) . nl2br(h($value));
 			} else {
 				return "&nbsp;";
 			}
@@ -463,7 +463,7 @@ class BcFreezeHelper extends BcFormHelper {
 				$value = $this->request->data[$model][$field];
 			}
 			$attributes['type'] = 'hidden';
-			return parent::tel($fieldName, $attributes) . $value;
+			return parent::tel($fieldName, $attributes) . h($value);
 		} else {
 			return parent::tel($fieldName, $attributes);
 		}

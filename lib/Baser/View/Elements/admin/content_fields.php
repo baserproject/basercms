@@ -84,16 +84,16 @@ if($this->request->data['Site']['use_subdomain']) {
 
 $pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'], $this->request->data['Site']['id']);
 $this->BcBaser->i18nScript([
-    'confirmMessage1' => __d('baser', 'コンテンツをゴミ箱に移動してもよろしいですか？'),
-    'confirmMessage2' => __d('baser', "エイリアスを削除してもよろしいですか？\nエイリアスはゴミ箱に入らず完全に削除されます。"),
-    'confirmMessage3' => __d('baser', 'このコンテンツを元に %s にエイリアスを作成します。よろしいですか？'),
-	'confirmMessage4' => __d('baser', 'このコンテンツを元に %s にコピーを作成します。よろしいですか？'),
-    'infoMessage1' => __d('baser', 'エイリアスを作成しました。作成先の編集画面に移動しますのでしばらくお待ち下さい。'),
-    'infoMessage2' => __d('baser', 'コピーを作成しました。作成先の編集画面に移動しますのでしばらくお待ち下さい。'),
-    'alertMessage1' => __d('baser', 'エイリアスの作成に失敗しました。'),
-    'alertMessage2' => __d('baser', '指定したサイトの同じ階層上にフォルダではない同名のコンテンツが存在します。エイリアスの作成を実行する前に、指定したサイト上の同名コンテンツを確認し名称を変更してください。'),
-	'alertMessage3' => __d('baser', '指定したサイトの同じ階層上にフォルダではない同名のコンテンツが存在します。コピーの作成を実行する前に、指定したサイト上の同名コンテンツを確認し名称を変更してください。'),
-    'alertmessage4' => __d('baser', 'コピーの作成に失敗しました。')
+    'contentsEditConfirmMessage1' => __d('baser', 'コンテンツをゴミ箱に移動してもよろしいですか？'),
+    'contentsEditConfirmMessage2' => __d('baser', "エイリアスを削除してもよろしいですか？\nエイリアスはゴミ箱に入らず完全に削除されます。"),
+    'contentsEditConfirmMessage3' => __d('baser', 'このコンテンツを元に %s にエイリアスを作成します。よろしいですか？'),
+	'contentsEditConfirmMessage4' => __d('baser', 'このコンテンツを元に %s にコピーを作成します。よろしいですか？'),
+    'contentsEditInfoMessage1' => __d('baser', 'エイリアスを作成しました。作成先の編集画面に移動しますのでしばらくお待ち下さい。'),
+    'contentsEditInfoMessage2' => __d('baser', 'コピーを作成しました。作成先の編集画面に移動しますのでしばらくお待ち下さい。'),
+    'contentsEditAlertMessage1' => __d('baser', 'エイリアスの作成に失敗しました。'),
+    'contentsEditAlertMessage2' => __d('baser', '指定したサイトの同じ階層上にフォルダではない同名のコンテンツが存在します。エイリアスの作成を実行する前に、指定したサイト上の同名コンテンツを確認し名称を変更してください。'),
+	'contentsEditAlertMessage3' => __d('baser', '指定したサイトの同じ階層上にフォルダではない同名のコンテンツが存在します。コピーの作成を実行する前に、指定したサイト上の同名コンテンツを確認し名称を変更してください。'),
+    'contentsEditAlertmessage4' => __d('baser', 'コピーの作成に失敗しました。')
 ]);
 $this->BcBaser->js('admin/contents/edit', false, ['id' => 'AdminContentsEditScript',
 	'data-previewurl' => $previewUrl,

@@ -25,7 +25,26 @@ class ThemeConfig extends AppModel {
  * @var array
  */
 	public $actsAs = ['BcCache'];
-	
+
+/**
+ * ThemeConfig constructor.
+ *
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
+ */
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'logo' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]],
+			'main_image_1' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]],
+			'main_image_2' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]],
+			'main_image_3' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]],
+			'main_image_4' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]],
+			'main_image_5' => [['rule' => ['fileExt', 'gif,jpg,jpeg,jpe,jfif,png'], 'message' => __d('baser', '許可されていないファイルです。')]]
+		];
+	}
+
 /**
  * 画像を保存する
  * 
@@ -44,7 +63,7 @@ class ThemeConfig extends AppModel {
 			if (!empty($data['ThemeConfig'][$image]['tmp_name'])) {
 				@unlink($saveDir . $old[$image]);
 				$pathinfo = pathinfo($old[$image]);
-				@unlink($saveDir . $pathinfo['filename'] . $thumbSuffix . $pathinfo['extension']);
+				@unlink($saveDir . $pathinfo['filename'] . $thumbSuffix . '.' . $pathinfo['extension']);
 				$fileName = $data['ThemeConfig'][$image]['name'];
 				$ext = pathinfo($fileName, PATHINFO_EXTENSION);
 				$filePath = $saveDir . $image . '.' . $ext;
@@ -75,7 +94,7 @@ class ThemeConfig extends AppModel {
 			if (!empty($data['ThemeConfig'][$image . '_delete'])) {
 				@unlink($saveDir . $old[$image]);
 				$pathinfo = pathinfo($old[$image]);
-				@unlink($saveDir . $pathinfo['filename'] . $thumbSuffix . $pathinfo['extension']);
+				@unlink($saveDir . $pathinfo['filename'] . $thumbSuffix . '.' . $pathinfo['extension']);
 				$data['ThemeConfig'][$image] = '';
 			}
 		}

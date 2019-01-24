@@ -538,8 +538,8 @@ class UsersController extends AppController {
 				$this->setMessage(__d('baser', '新しいパスワードをデータベースに保存できませんでした。'), true, false);
 				return;
 			}
-			$body = $email . ' の新しいパスワードは、 ' . $password . ' です。';
-			if (!$this->sendMail($email, __d('baser', 'パスワードを変更しました'), $body)) {
+			$body = ['email' => $email, 'password' => $password];
+			if (!$this->sendMail($email, __d('baser', 'パスワードを変更しました'), $body, ['template' => 'reset_password'])) {
 				$this->setMessage(__d('baser', 'メール送信時にエラーが発生しました。'), true, false);
 				return;
 			}

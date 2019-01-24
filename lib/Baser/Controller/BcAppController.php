@@ -274,7 +274,8 @@ class BcAppController extends Controller {
 				$siteUrl = Configure::read('BcEnv.siteUrl');				
 			}
 			if($siteUrl && siteUrl() != $siteUrl) {
-				$this->redirect($siteUrl . preg_replace('/^\//', '', Router::reverse($this->request, false)));
+				$webrootReg = '/^' . preg_quote($this->request->webroot, '/') . '/';
+				$this->redirect($siteUrl . preg_replace($webrootReg, '', Router::reverse($this->request, false)));
 			}
 		}
 
@@ -820,6 +821,17 @@ class BcAppController extends Controller {
 			'agentTemplate' => true,
 			'template' => 'default'
 		], $options);
+
+		/*** Controller.beforeSendEmail ***/
+		$event = $this->dispatchEvent('beforeSendMail', [
+			'options' => $options
+		]);
+		if ($event !== false) {
+			$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+			if (!empty($event->data['options'])) {
+				$options = $event->data['options'];
+			}
+		}
 
 		if (!empty($this->siteConfigs['smtp_host'])) {
 			$transport = 'Smtp';

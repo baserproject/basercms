@@ -54,11 +54,11 @@ class BcGooglemapsHelperTest extends BaserTestCase
  * @param int $width
  * @param int $height
  * @param string $expected 期待値
- * @dataProvider loadDataProvider
  * 2018/07/19 ryuring GoogleMapsAPIがAPIキー必須となった為コメントアウト
  * @todo 処理内容を変える等の検討が必要
  */
-	public function testLoad($address, $width, $height, $expected)
+	public function testLoad()
+//	public function testLoad($address, $width, $height, $expected)
 	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 //		ob_start();
@@ -78,15 +78,15 @@ class BcGooglemapsHelperTest extends BaserTestCase
 
 	}
 
-	public function loadDataProvider()
-	{
-		return [
-			['福岡', null, null, '<div id="map">'],
-			['福岡', 100, null, '<div id="map" style="width: 100px; height:px">'],
-			['福岡', null, 100, '<div id="map" style="width: px; height:100px">'],
-			['福岡', 100, 100, '<div id="map" style="width: 100px; height:100px">'],
-			['', 100, 100, '^$'],
-		];
-	}
+//	public function loadDataProvider()
+//	{
+//		return [
+//			['福岡', null, null, '<div id="map">'],
+//			['福岡', 100, null, '<div id="map" style="width: 100px; height:px">'],
+//			['福岡', null, 100, '<div id="map" style="width: px; height:100px">'],
+//			['福岡', 100, 100, '<div id="map" style="width: 100px; height:100px">'],
+//			['', 100, 100, '^$'],
+//		];
+//	}
 
 }

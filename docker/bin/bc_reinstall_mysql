@@ -1,4 +1,4 @@
 /var/www/html/docker/bin/bc_change_install
 cd /var/www/html
 /var/www/html/app/Console/cake  bc_manager reset
-/var/www/html/app/Console/cake bc_manager install "http://localhost" "mysql" "admin" "basercms" "webmaster@example.org" --host "basercms-database" --database "basercms" --login "root" --password "root" --prefix "mysite_" --data "nada-icons.default"
+/var/www/html/app/Console/cake bc_manager install "http://localhost" "mysql" "admin" "basercms" "webmaster@example.org" --host "bc-db" --database "basercms" --login "root" --password "root" --prefix "mysite_" --data "nada-icons.default"
