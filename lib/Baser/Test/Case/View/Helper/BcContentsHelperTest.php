@@ -311,7 +311,7 @@ class BcContentsHelperTest extends BaserTestCase {
 			[0, ['excludeIds' => [3]], [['prefix' => '','name' => 'パソコン', 'url'=>'/index'],['prefix' => 'mobile','name' => 'ケータイ', 'url'=>'/m/index'],['prefix' => 'smartphone','name' => 'スマートフォン', 'url'=>'/s/index']]],
 			[0, ['excludeIds' => [99]], [['prefix' => '','name' => 'パソコン', 'url'=>'/index'],['prefix' => 'mobile','name' => 'ケータイ', 'url'=>'/m/index'],['prefix' => 'smartphone','name' => 'スマートフォン', 'url'=>'/s/index']]],
 			// IDに値が入っていれば、false
-			[1, ['excludeIds' => [0]], []],
+			[1, ['excludeIds' => [0]], [['prefix' => 'mobile','name' => 'ケータイ', 'url'=>'/m/'],['prefix' => 'smartphone','name' => 'スマートフォン', 'url'=>'/s/']]],
 			['hoge', [], []],
 		];
 	}	
