@@ -279,8 +279,8 @@ class BcContentsHelperTest extends BaserTestCase {
 			['', ['excludeIds' => [2]], 9],
 			['', ['excludeIds' => [99]], 9],
 			// コンテンツIDに値が入っていれば、false
-			['1', ['excludeIds' => []], 2],
-			['hoge', [], []],
+			[1, ['excludeIds' => []], 2],
+			[99, [], []],
 		];
 	}
 
