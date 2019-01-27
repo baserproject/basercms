@@ -33,7 +33,7 @@ class BcMessageComponentTest extends BaserTestCase {
  * @var array
  */
 	public $fixtures = [
-		'baser.Default.DbLog',
+		'baser.Default.Dblog',
 	];
 
 /**
