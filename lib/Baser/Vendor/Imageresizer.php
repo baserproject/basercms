@@ -17,13 +17,13 @@ class Imageresizer {
  * @param 	array	圧縮レベル (JPEG: 100 (0-100), PNG: 6 (0-9))
  * @return 	boolean
  */
-	function resize($imgPath, $savePath = null, $newWidth=null, $newHeight=null, $trimming = false, $quality = array()) {
+	function resize($imgPath, $savePath = null, $newWidth=null, $newHeight=null, $trimming = false, $quality = []) {
 
 		// 画像種類別の圧縮レベルのデフォルト値
-		$quality = $quality + array(
+		$quality = $quality + [
 			IMAGETYPE_JPEG => 100,	//  0 - 100
 			IMAGETYPE_PNG => 6,		// 	0 - 9
-		);
+		];
 
 		// 元画像のサイズを取得
 		$imginfo = getimagesize($imgPath);
