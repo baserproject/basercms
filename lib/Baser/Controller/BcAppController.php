@@ -271,7 +271,7 @@ class BcAppController extends Controller {
 			$cmsUrl = Configure::read('BcEnv.cmsUrl');
 			if($cmsUrl) {
 				$siteUrl = Configure::read('BcEnv.cmsUrl');
-			} elseif($this->request->is('ssl')) {
+			} elseif ($this->request->is('ssl')) {
 				$siteUrl = Configure::read('BcEnv.sslUrl');
 			} else {
 				$siteUrl = Configure::read('BcEnv.siteUrl');				
