@@ -154,9 +154,9 @@ class BlogContentsController extends BlogAppController {
 			}
 			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->request->data);
 		}
-
+		$site = BcSite::findById($this->request->data['Content']['site_id']);
 		if($this->request->data['Content']['status']) {
-			$this->set('publishLink', $this->request->data['Content']['url']);
+			$this->set('publishLink', $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain));
 		}
 		$this->request->params['Content'] = $this->BcContents->getContent($id)['Content'];
 		$this->set('blogContent', $this->request->data);

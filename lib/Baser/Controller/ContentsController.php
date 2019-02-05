@@ -338,7 +338,8 @@ class ContentsController extends AppController {
 				$this->setMessage(__d('baser', '保存中にエラーが発生しました。入力内容を確認してください。'), true, true);
 			}
 		}
-		$this->set('publishLink', $this->request->data['Content']['url']);
+		$site = BcSite::findById($this->request->data['Content']['site_id']);
+		$this->set('publishLink', $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain));
 	}
 
 	/**
@@ -379,7 +380,8 @@ class ContentsController extends AppController {
 
 		$this->set('srcContent', $srcContent);
 		$this->BcContents->settingForm($this, $this->request->data['Content']['site_id'], $this->request->data['Content']['id']);
-		$this->set('publishLink', $this->request->data['Content']['url']);
+		$site = BcSite::findById($this->request->data['Content']['site_id']);
+		$this->set('publishLink', $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain));
 
 	}
 

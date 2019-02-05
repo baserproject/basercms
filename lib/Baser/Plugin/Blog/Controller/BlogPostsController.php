@@ -179,7 +179,7 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		if ($this->request->params['Content']['status']) {
-			$this->set('publishLink', $this->request->params['Content']['url']);
+			$this->set('publishLink', $this->Content->getUrl($this->request->params['Content']['url'], true, $this->request->params['Site']['use_subdomain']));
 		}
 		$this->pageTitle = sprintf(__d('baser', '[%s] 記事一覧'), strip_tags($this->request->params['Content']['title']));
 		$this->search = 'blog_posts_index';
@@ -423,7 +423,7 @@ class BlogPostsController extends BlogAppController {
 		]);
 
 		if ($this->request->data['BlogPost']['status']) {
-			$this->set('publishLink', $this->request->params['Content']['url'] . 'archives/' . $this->request->data['BlogPost']['no']);
+			$this->set('publishLink', $this->Content->getUrl($this->request->params['Content']['url'] . 'archives/' . $this->request->data['BlogPost']['no'], true, $this->request->params['Site']['use_subdomain']));
 		}
 
 		$editorOptions = ['editorDisableDraft' => false];

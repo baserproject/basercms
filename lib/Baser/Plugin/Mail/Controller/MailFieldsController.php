@@ -70,7 +70,8 @@ class MailFieldsController extends MailAppController {
 		$this->request->params['Content'] = $this->BcContents->getContent($mailContentId)['Content'];
 		$this->crumbs[] = array('name' => sprintf('%s 設定', $this->request->params['Content']['title']), 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId));
 		if($this->request->params['Content']['status']) {
-			$this->set('publishLink', $this->request->params['Content']['url']);
+			$site = BcSite::findById($this->request->pramas['Content']['site_id']);
+			$this->set('publishLink', $this->Content->getUrl($this->request->params['Content']['url'], true, $site->useSubDomain));
 		}
 	}
 

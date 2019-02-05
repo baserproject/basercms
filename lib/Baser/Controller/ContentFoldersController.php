@@ -95,9 +95,10 @@ class ContentFoldersController extends AppController {
 		if(!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
 			$theme[] = $site->theme;
 		}
+		$site = BcSite::findById($this->request->data['Content']['site_id']);
 		$this->set('folderTemplateList', $this->ContentFolder->getFolderTemplateList($this->request->data['Content']['id'], $theme));
 		$this->set('pageTemplateList', $this->Page->getPageTemplateList($this->request->data['Content']['id'], $theme));
-		$this->set('publishLink', $this->request->data['Content']['url']);
+		$this->set('publishLink', $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain));
 	}
 
 /**

@@ -177,7 +177,8 @@ class MailContentsController extends MailAppController {
 
 		$this->request->params['Content'] = $this->BcContents->getContent($id)['Content'];
 		if($this->request->data['Content']['status']) {
-			$this->set('publishLink', $this->request->data['Content']['url']);
+			$site = BcSite::findById($this->request->data['Content']['site_id']);
+			$this->set('publishLink', $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain));
 		}
 		$this->set('mailContent', $this->request->data);
 		$this->subMenuElements = ['mail_fields'];
