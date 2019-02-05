@@ -766,7 +766,10 @@ class BcAppModel extends Model {
  * @deprecated 5.0.0 since 4.1.0.2 アップロードしたファイルのサイズチェックに加えて、アップロード時のエラーコードをログに取るようにするため
  */
 	public function fileSize($check, $size) {
-		$this->log(__d('baser', deprecatedMessage('メソッド：BcAppModel::fileSize()', '4.1.0.2', '5.0.0', 'BcAppModel::fileCheck() を利用してください。')), LOG_ALERT);
+
+		$this->log(deprecatedMessage(
+			__d('baser', 'メソッド：BcAppModel::fileSize()'), '4.1.0.2', '5.0.0', __d('baser', 'BcAppModel::fileCheck() を利用してください。')
+		), LOG_ALERT);
 		$file = $check[key($check)];
 		if (!empty($file['name'])) {
 			// サイズが空の場合は、HTMLのMAX_FILE_SIZEの制限によりサイズオーバー
