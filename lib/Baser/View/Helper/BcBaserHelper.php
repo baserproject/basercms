@@ -960,7 +960,7 @@ class BcBaserHelper extends AppHelper {
  *	- `forceTitle` : 許可されていないURLの際にタイトルを強制的に出力するかどうか（初期値 : false）
  *	- `ssl` : SSL用のURLをして出力するかどうか（初期値 : false）
  *	 ※ その他のパラメータについては、HtmlHelper::link() を参照。
- * @param bool $confirmMessage 確認メッセージ（初期値 : false）
+ * @param string $confirmMessage 確認メッセージ（初期値 : false）
  *	リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
  * @return void
  */
