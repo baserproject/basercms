@@ -335,7 +335,7 @@ class MailController extends MailAppController {
 					// validation OK
 					$result = $this->MailMessage->save(null, false);
 				} else {
-					$result = $this->request->data;
+					$result = $this->MailMessage->saveFiles($this->MailMessage->data);
 				}
 
 				if ($result) {
