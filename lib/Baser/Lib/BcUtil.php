@@ -53,7 +53,7 @@ class BcUtil extends CakeObject {
 		if (empty($user['UserGroup']['name'])) {
 			return false;
 		}
-		return ($user['UserGroup']['name'] == 'admins');
+		return ($user['UserGroup']['id'] == Configure::read('BcApp.adminGroupId'));
 	}
 
 /**
