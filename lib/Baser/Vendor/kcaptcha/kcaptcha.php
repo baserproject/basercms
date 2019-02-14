@@ -19,7 +19,7 @@
 class KCAPTCHA{
 
 	// generates keystring and image
-	function KCAPTCHA(){
+	function __construct(){
 
 		require(dirname(__FILE__).'/kcaptcha_config.php');
 		$fonts=array();
