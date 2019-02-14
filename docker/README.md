@@ -27,7 +27,7 @@ docker-compose up -d
 ## composer を実行する
 
 ```
-docker-compose exec basercms composer install
+docker-compose exec bc-php7.1 composer install
 ```
 
 ## baserCMS を起動する
@@ -37,7 +37,7 @@ composer によるライブラリのインストールが完了したら、 `htt
 ### データベース情報
 | name | value |
 |-----------|:------------|
-| host | basercms-database |
+| host | bc-db |
 | user | root |
 | password | root |
 | database | basercms |
@@ -66,7 +66,7 @@ docker-compose restart
 ### コンテナにログインする
 
 ```
-docker exec -it basercms /bin/bash
+docker exec bc-php7.1 /bin/bash
 ```
 
 ## コンテナ上でbaserCMSを操作する
