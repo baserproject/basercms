@@ -81,14 +81,14 @@ class BcUtilTest extends BaserTestCase {
 /**
  * 管理ユーザーかチェック
  * 
- * @param string $usergroup ユーザーグループ名
+ * @param string $userGroupId ユーザーグループ名
  * @param bool $expect 期待値
  * @dataProvider isAdminUserDataProvider
  */
-	public function testIsAdminUser($usergroup, $expect) {
+	public function testIsAdminUser($userGroupId, $expect) {
 		$Session = new CakeSession();
 		$sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
-		$Session->write('Auth.' . $sessionKey . '.UserGroup.name', $usergroup);
+		$Session->write('Auth.' . $sessionKey . '.UserGroup.id', $userGroupId);
 		$result = BcUtil::isAdminUser();
 		$this->assertEquals($expect, $result, '正しく管理ユーザーがチェックできません');
 	}
@@ -100,7 +100,7 @@ class BcUtilTest extends BaserTestCase {
  */
 	public function isAdminUserDataProvider() {
 		return [
-			['admins', true],
+			[Configure::read('BcApp.adminGroupId'), true],
 			['hoge', false],
 			['', false],
 		];
