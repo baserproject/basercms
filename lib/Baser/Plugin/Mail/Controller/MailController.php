@@ -357,6 +357,23 @@ class MailController extends MailAppController {
 					// メール送信
 					$this->_sendEmail($sendEmailOptions);
 
+					if (!$this->dbDatas['mailContent']['MailContent']['save_info']) {
+						$fileRecords = [];
+						foreach($this->dbDatas['mailFields'] as $key => $field) {
+							if($field['MailField']['type'] === 'file') {
+								// 削除フラグをセット
+								$fileRecords['MailMessage'] = [
+									$field['MailField']['field_name'] => $this->request->data['MailMessage'][$field['MailField']['field_name']],
+									$field['MailField']['field_name'] . '_delete' => true,
+								];
+								// BcUploadBehavior::deleteFiles() はデータベースのデータを削除する前提となっているため、
+								// Model->data['MailMessage']['field_name'] に、配列ではなく、文字列がセットされている状態を想定しているので状態を模倣する
+								$this->MailMessage->data['MailMessage'][$field['MailField']['field_name']] = $this->request->data['MailMessage'][$field['MailField']['field_name']];
+							}
+						}
+						$this->MailMessage->deleteFiles($fileRecords);
+					}
+
 					$this->Session->delete('Mail.valid');
 
 					/*** Mail.afterSendEmail ***/

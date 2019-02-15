@@ -292,7 +292,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @param string $oldValue
  * @return array $requestData
  */
-	public function deleteFileWhileChecking(Model $Model, $fieldSetting, $requestData, $oldValue) {
+	public function deleteFileWhileChecking(Model $Model, $fieldSetting, $requestData, $oldValue = null) {
 		$fieldName = $fieldSetting['name'];
 		if (!empty($requestData[$Model->name][$fieldName . '_delete'])) {
 			if (!$this->tmpId) {
