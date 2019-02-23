@@ -72,7 +72,13 @@ class DashboardController extends AppController {
 		$plugins = CakePlugin::loaded();
 		if($plugins) {
 			foreach($plugins as $plugin) {
-				$panels[$plugin] = BcUtil::getTemplateList('Elements/admin/dashboard', $plugin, $this->siteConfigs['theme']);
+				$templates = BcUtil::getTemplateList('Elements/admin/dashboard', $plugin, $this->siteConfigs['theme']);
+				foreach($templates as $key => $template) {
+					if(in_array($template, $panels['Core'])) {
+						unset($templates[$key]);
+					}
+				}
+				$panels[$plugin] = $templates;
 			}
 		}
 		$this->set('panels', $panels);
