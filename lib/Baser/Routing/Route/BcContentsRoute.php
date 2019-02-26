@@ -46,6 +46,8 @@ class BcContentsRoute extends CakeRoute {
 		
 		if(!empty($request->query['host'])) {
 			Configure::write('BcEnv.host', $request->query['host']);
+		} else {
+			Configure::write('BcEnv.host', '');
 		}
 		
 		$sameUrl = false;
