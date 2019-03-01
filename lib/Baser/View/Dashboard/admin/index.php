@@ -13,7 +13,7 @@
 /**
  * [ADMIN] ダッシュボード
  */
-$this->BcBaser->js('admin/libs/jquery.bcDashboard', false);
+$this->BcBaser->js(['admin/libs/jquery.bcDashboard', 'admin/dashboard/index'], false);
 ?>
 
 

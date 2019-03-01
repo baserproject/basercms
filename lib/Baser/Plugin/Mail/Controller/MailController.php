@@ -244,7 +244,8 @@ class MailController extends MailAppController {
 			return;
 		}
 		if (!$this->Session->read('Mail.valid')) {
-			$this->notFound();
+			$this->BcMessage->setError('エラーが発生しました。もう一度操作してください。');
+			$this->redirect($this->request->params['Content']['url'] . '/index');
 		}
 
 		if (!$this->request->data) {
@@ -302,6 +303,7 @@ class MailController extends MailAppController {
 			return;
 		}
 		if (!$this->Session->read('Mail.valid')) {
+			$this->BcMessage->setError('エラーが発生しました。もう一度操作してください。');
 			$this->redirect($this->request->params['Content']['url'] . '/index');
 		}
 
