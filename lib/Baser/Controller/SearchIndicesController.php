@@ -183,8 +183,8 @@ class SearchIndicesController extends AppController {
 		}
 		if (!empty($data['SearchIndex']['f'])) {
 			$content = $this->Content->find('first', ['fields' => ['lft', 'rght'], 'conditions' => ['Content.id' => $data['SearchIndex']['f']], 'recursive' => -1]);
-			$conditions['SearchIndex.rght <'] = $content['Content']['rght'];
-			$conditions['SearchIndex.lft >'] = $content['Content']['lft'];
+			$conditions['SearchIndex.rght <='] = $content['Content']['rght'];
+			$conditions['SearchIndex.lft >='] = $content['Content']['lft'];
 		}
 		if ($query) {
 			$query = $this->_parseQuery($query);
