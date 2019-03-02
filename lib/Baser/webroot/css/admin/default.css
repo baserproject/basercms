@@ -195,6 +195,17 @@ input[type=text], textarea, input[type=password] {
 input[type=text], input[type=password] {
 	height:1.4em;
 }
+::-webkit-input-placeholder {
+	color: #c9c8c8;
+}
+
+::-moz-placeholder {
+	color: #c9c8c8;
+}
+
+:-ms-input-placeholder {
+	color: #c9c8c8;
+}
 select[disabled],
 input[type="text"][disabled],
 input[type="radio"][disabled]{
