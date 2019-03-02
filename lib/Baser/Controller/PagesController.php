@@ -98,7 +98,7 @@ class PagesController extends AppController {
 				'data' => $data
 			]);
 			
-			$message = sprintf(__d('baser', '固定ページ「%s」を追加しました。'), $this->request->data['Content']['title']);
+			$message = sprintf(__d('baser', '固定ページ「%s」を追加しました。(%s)'), $this->request->data['Content']['title'], $this->request->data['Content']['url']);
 			$this->setMessage($message, false, true, false);
 			return json_encode($data['Content']);
 		} else {
@@ -150,7 +150,7 @@ class PagesController extends AppController {
 				}
 
 				// 完了メッセージ
-				$this->setMessage(sprintf(__d('baser', '固定ページ「%s」を更新しました。'), $this->request->data['Content']['name']), false, true);
+				$this->setMessage(sprintf(__d('baser', '固定ページ「%s」を更新しました。(%s)'), $this->request->data['Content']['name'], $this->request->data['Content']['url']), false, true);
 
 				// EVENT Pages.afterEdit
 				$this->dispatchEvent('afterEdit', [
