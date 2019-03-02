@@ -26,7 +26,7 @@
 					}
 					?>
 				</small><br />
-				<?php echo h($record['Dblog']['name']) ?></li>
+				<?php echo nl2br(h($record['Dblog']['name'])) ?></li>
 		<?php endforeach; ?>
 	</ul>
 	<?php $this->BcBaser->element('list_num') ?>
