@@ -109,7 +109,7 @@ class MailMessagesController extends MailAppController {
 			return;
 		}
 
-		$this->pageTitle = __d('baser', '受信メール一覧');
+		$this->pageTitle = sprintf(__d('baser', '[%s] 受信メール一覧'), $this->request->params['Content']['title']);
 		$this->help = 'mail_messages_index';
 	}
 
