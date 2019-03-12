@@ -41,6 +41,9 @@ class MailformHelper extends BcFreezeHelper {
 	public function control($type, $fieldName, $options, $attributes = array()) {
 		$attributes['escape'] = true;
 		$out = '';
+		if ($this->freezed) {
+			unset($attributes['type']);
+		}
 		switch ($type) {
 
 			case 'text':
