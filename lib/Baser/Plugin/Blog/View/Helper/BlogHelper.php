@@ -1118,7 +1118,7 @@ class BlogHelper extends AppHelper {
  * @param array $post ブログ記事
  * @return array
  */
-	private function getNextPost($post) {
+	public function getNextPost($post) {
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
 		// 投稿日が年月日時分秒が同一のデータの対応の為、投稿日が同じでIDが小さいデータを検索
 		$conditions = [];
@@ -1158,7 +1158,7 @@ class BlogHelper extends AppHelper {
  * @param array $post ブログ記事
  * @return array 
  */
-	private function getPrevPost($post) {
+	public function getPrevPost($post) {
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
 		// 投稿日が年月日時分秒が同一のデータの対応の為、投稿日が同じでIDが大きいデータを検索
 		$conditions = [];
