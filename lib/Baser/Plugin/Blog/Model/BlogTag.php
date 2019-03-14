@@ -164,7 +164,7 @@ class BlogTag extends BlogAppModel {
 	}
 
 /**
- * アクセス制限としてブログの新規追加ができるか確認する
+ * アクセス制限としてブログタグの新規追加ができるか確認する
  * 
  * Ajaxを利用する箇所にて BcBaserHelper::link() が利用できない場合に利用
  * 
