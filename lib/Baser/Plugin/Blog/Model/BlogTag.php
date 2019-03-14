@@ -163,4 +163,21 @@ class BlogTag extends BlogAppModel {
 		return $results;
 	}
 
+/**
+ * アクセス制限としてブログタグの新規追加ができるか確認する
+ * 
+ * Ajaxを利用する箇所にて BcBaserHelper::link() が利用できない場合に利用
+ * 
+ * @param int $userGroupId ユーザーグループID
+ * @param int $blogContentId ブログコンテンツID
+ */
+	public function hasNewTagAddablePermission($userGroupId, $blogContentId) {
+		if (ClassRegistry::isKeySet('Permission')) {
+			$Permission = ClassRegistry::getObject('Permission');
+		} else {
+			$Permission = ClassRegistry::init('Permission');
+		}
+		$ajaxAddUrl = preg_replace('|^/index.php|', '', Router::url(['plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'ajax_add', $blogContentId]));
+		return $Permission->check($ajaxAddUrl, $userGroupId);
+	}
 }
