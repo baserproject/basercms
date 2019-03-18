@@ -15,29 +15,14 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-// CUSTOMIZE ADD 2012/10/27 ryuring
-// >>>
-/**
- * 実行ファイル名を取得する
- */
-$fileName = $_SERVER['SCRIPT_FILENAME'];
-/**
- * タイムゾーンを設定する
- */
-ini_set('date.timezone', 'Asia/Tokyo');
-@putenv("TZ=JST-9");
-// <<<
+
+include_once(__DIR__ . '/define_for_basercms.php');
 /**
  * Use the DS to separate the directories in other defines
  */
 if (!defined('DS')) {
 	define('DS', DIRECTORY_SEPARATOR);
 }
-
-// CUSTOMIZE ADD 2016/08/30 katokaisya
-// >>>
-$fileName = str_replace('/', DS, $fileName);
-// <<<
 
 /**
  * These defines should only be edited if you have CakePHP installed in
@@ -49,40 +34,21 @@ $fileName = str_replace('/', DS, $fileName);
  * The full path to the directory which holds "app", WITHOUT a trailing DS.
  */
 if (!defined('ROOT')) {
-	// CUSTOMIZE MODIFY 2012/10/27 ryuring
-	// 基本的には、cake が配置されているディレクトリをROOTとみなす。
-	// >>>
-	//define('ROOT', dirname(dirname(dirname(__FILE__))));
-	// ---
-
-	/* 通常パターン */
-	if (@is_dir(dirname(dirname(dirname($fileName))) . DS . 'lib' . DS . 'Cake')) {
-		define('ROOT', dirname(dirname(dirname($fileName))));
-	// app内にcakeを配置
-	// チカッパでは、DocumentoRoot のひとつ上の階層にcake を配置していた為、
-	// そちらをターゲットとして ROOT を決定した為、うまく動作しなかった。
-	/*}elseif(is_dir(dirname(dirname($fileName)).DS.'cake')){
-		define('ROOT', dirname(dirname($fileName)));*/
-
-	// WEBROOT配置
-	} elseif (is_dir(dirname($fileName) . DS . 'lib' . DS . 'Cake')) {
-		define('ROOT', dirname($fileName));
-	}
-	// <<<
+	define('ROOT', dirname(dirname(dirname(__FILE__))));
 }
 
 /**
  * The actual directory name for the "app".
  */
 if (!defined('APP_DIR')) {
-	// CUSTOMIZE MODIFY 2012/10/27 ryuring
-	// app ディレクトリは「WEBROOT配置」の絡みがあるので[app]固定とする
-	// app ディレクトリの名称を変更する場合は、以下を変更する。
-	// >>>
-	//define('APP_DIR', basename(dirname(dirname(__FILE__))));
-	// ---
-	define('APP_DIR', 'app');
-	// <<<
+	define('APP_DIR', basename(dirname(dirname(__FILE__))));
+}
+
+/**
+ * Config Directory
+ */
+if (!defined('CONFIG')) {
+//	define('CONFIG', ROOT . DS . APP_DIR . DS . 'Config' . DS);
 }
 
 /**
@@ -116,21 +82,10 @@ if (!defined('CAKE_CORE_INCLUDE_PATH') && file_exists($vendorPath . DS . $dispat
  * Change at your own risk.
  */
 if (!defined('WEBROOT_DIR')) {
-	// CUSTOMIZE MODIFY 2014/03/23 ryuring
-	// webroot 配置の絡みがあるので webroot 固定とする
-	// >>>
-	//define('WEBROOT_DIR', basename(dirname(__FILE__)));
-	// ---
-	define('WEBROOT_DIR', 'webroot');
-	// <<<
+	define('WEBROOT_DIR', basename(dirname(__FILE__)));
 }
 if (!defined('WWW_ROOT')) {
-	// CUSTOMIZE MODIFY 201X/XX/XX ryuring
-	// >>>
-	//define('WWW_ROOT', dirname(__FILE__) . DS);
-	// ---
-	define('WWW_ROOT', dirname($fileName) . DS);
-	// <<<
+	define('WWW_ROOT', dirname(__FILE__) . DS);
 }
 
 // For the built-in server
