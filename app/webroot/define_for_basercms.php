@@ -5,10 +5,6 @@
 ini_set('date.timezone', 'Asia/Tokyo');
 @putenv("TZ=JST-9");
 
-if (!defined('DS')) {
-	define('DS', DIRECTORY_SEPARATOR);
-}
-
 // CUSTOMIZE ADD 2012/10/27 ryuring
 /**
  * 実行ファイル名を取得する

@@ -16,13 +16,14 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
-include_once(__DIR__ . '/define_for_basercms.php');
 /**
  * Use the DS to separate the directories in other defines
  */
 if (!defined('DS')) {
 	define('DS', DIRECTORY_SEPARATOR);
 }
+
+include_once(dirname(__FILE__) . DS . 'define_for_basercms.php');
 
 /**
  * These defines should only be edited if you have CakePHP installed in
