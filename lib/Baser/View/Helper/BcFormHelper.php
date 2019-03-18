@@ -271,6 +271,8 @@ class BcFormHelper extends FormHelper {
 		if ($options['type'] === 'radio' && isset($options['options'])) {
 			$radioOptions = (array)$options['options'];
 			unset($options['options']);
+		} else {
+			$radioOptions = array();
 		}
 		
 		// CUSTOMIZE MODIFY 2014/10/27 ryuring
@@ -301,6 +303,9 @@ class BcFormHelper extends FormHelper {
 			$dateFormat = $this->_extractOption('dateFormat', $options, 'MDY');
 			$timeFormat = $this->_extractOption('timeFormat', $options, 12);
 			unset($options['dateFormat'], $options['timeFormat']);
+		} else {
+			$dateFormat = 'MDY';
+			$timeFormat = 12;
 		}
 
 		$type = $options['type'];
