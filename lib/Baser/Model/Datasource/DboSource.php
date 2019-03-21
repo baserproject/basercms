@@ -4139,7 +4139,9 @@ class DboSource extends DataSource {
 		}
 		$return = true;
 		if($schema) {
+		$cr = ClassRegistry::getInstance();
 			$sql = $this->dropSchema($schema);
+			$cr = ClassRegistry::getInstance();
 			$return = $this->execute($sql);
 		}
 		// とりあえずキャッシュを全て削除
@@ -4353,6 +4355,7 @@ class DboSource extends DataSource {
 			$model = [$model];
 		}
 		$schema = $CakeSchema->read(['models' => $model]);
+		ClassRegistry::flush();
 		if($this->configKeyName != 'default' && !empty($schema['tables']['missing'])) {
 			// CakeSchema::read() について、configKeyName が default の場合以外は、
 			// 全て、missing キーに格納されてしまう為の応急策
