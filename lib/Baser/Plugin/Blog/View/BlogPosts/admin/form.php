@@ -142,9 +142,11 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
 					<?php echo $this->BcForm->input('BlogTag.BlogTag', ['type' => 'select', 'multiple' => 'checkbox', 'options' => $this->BcForm->getControlSource('BlogPost.blog_tag_id')]); ?>
 				</div>
 				<?php echo $this->BcForm->error('BlogTag.BlogTag') ?>
-				<?php echo $this->BcForm->input('BlogTag.name', ['type' => 'text']) ?>
-				<?php echo $this->BcForm->button(__d('baser', '新しいタグを追加'), ['id' => 'BtnAddBlogTag']) ?>
-				<?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'TagLoader', 'class' => 'loader']) ?>
+				<?php if($hasNewTagAddablePermission): ?>
+					<?php echo $this->BcForm->input('BlogTag.name', ['type' => 'text']) ?>
+					<?php echo $this->BcForm->button(__d('baser', '新しいタグを追加'), ['id' => 'BtnAddBlogTag']) ?>
+					<?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'TagLoader', 'class' => 'loader']) ?>
+				<?php endif; ?>
 			</td>
 		</tr>
 		<?php endif ?>

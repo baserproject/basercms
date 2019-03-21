@@ -343,6 +343,7 @@ class BlogPostsController extends BlogAppController {
 		}
 		$this->crumbs[] = ['name' => sprintf(__d('baser', '%s 記事一覧'), $this->request->params['Content']['title']), 'url' => ['controller' => 'blog_posts', 'action' => 'index', $blogContentId]];
 		$this->set('hasNewCategoryAddablePermission', $this->BlogPost->BlogCategory->hasNewCategoryAddablePermission($user['user_group_id'], $blogContentId));
+		$this->set('hasNewTagAddablePermission', $this->BlogPost->BlogTag->hasNewTagAddablePermission($user['user_group_id'], $blogContentId));
 		$this->set('editable', true);
 		$this->set('categories', $categories);
 		$this->set('previewId', 'add_' . mt_rand(0, 99999999));
@@ -439,6 +440,7 @@ class BlogPostsController extends BlogAppController {
 
 		$this->crumbs[] = ['name' => sprintf(__d('baser', '%s 記事一覧'), $this->request->params['Content']['title']), 'url' => ['controller' => 'blog_posts', 'action' => 'index', $blogContentId]];
 		$this->set('hasNewCategoryAddablePermission', $this->BlogPost->BlogCategory->hasNewCategoryAddablePermission($user['user_group_id'], $blogContentId));
+		$this->set('hasNewTagAddablePermission', $this->BlogPost->BlogTag->hasNewTagAddablePermission($user['user_group_id'], $blogContentId));
 		$this->set('categories', $categories);
 		$this->set('previewId', $this->request->data['BlogPost']['id']);
 		$this->set('users', $this->BlogPost->User->getUserList());
