@@ -42,9 +42,6 @@ class BcContentsRoute extends CakeRoute {
 		$publish = true;
 		if((!empty($request->query['preview']) || !empty($request->query['force'])) && BcUtil::loginUser()) {
 			$publish = false;
-		}
-		
-		if(!empty($request->query['preview'])) {
 			if(!empty($request->query['host'])) {
 				Configure::write('BcEnv.host', $request->query['host']);
 			} else {
