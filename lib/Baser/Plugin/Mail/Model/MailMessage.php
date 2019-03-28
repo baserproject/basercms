@@ -80,6 +80,9 @@ class MailMessage extends MailAppModel {
 				'conditions' => 'MailContent.id = MailField.mail_content_id'
 			]]
 		]);
+		if(!$mailContent) {
+			return false;
+		}
 		$this->mailContent = ['MailContent' => $mailContent['MailContent']];
 		if(!empty($mailContent['MailField'])) {
 			foreach($mailContent['MailField'] as $value) {
