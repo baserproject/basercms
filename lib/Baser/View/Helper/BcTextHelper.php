@@ -224,7 +224,7 @@ class BcTextHelper extends TextHelper {
  * @param array $arrDate
  * 	− `wareki`:和暦に変換する場合は、trueを設定、設定しない場合何も返さない
  *	- `year` :和暦のキーを付与した年。
- * 		h: 平成 / s: 昭和 / t: 大正 / m: 明治
+ * 		r: 令和 / h: 平成 / s: 昭和 / t: 大正 / m: 明治
  * 		（例）h-27
  * 	- `month` : 月
  * 	- `day` : 日

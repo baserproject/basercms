@@ -26,7 +26,7 @@ class BcTimeHelper extends TimeHelper {
  *
  * @var array
  */
-	public $nengos = ["m" => "明治", "t" => "大正", "s" => "昭和", "h" => "平成"];
+	public $nengos = ["m" => "明治", "t" => "大正", "s" => "昭和", "h" => "平成", "r" => "令和"];
 	
 /**
  * 日本語曜日リスト
@@ -40,12 +40,12 @@ class BcTimeHelper extends TimeHelper {
  *
  * @var string
  */
-	public $warekiRegex = '!^(?<nengo>[mtsh])-(?<year>[0-9]{1,2})([/\-])(?<month>0?[0-9]|1[0-2])([/\-])(?<day>[0-2][0-9]|3[01])$!';
+	public $warekiRegex = '!^(?<nengo>[mtshr])-(?<year>[0-9]{1,2})([/\-])(?<month>0?[0-9]|1[0-2])([/\-])(?<day>[0-2][0-9]|3[01])$!';
 
 /**
  * 年号を取得
  *
- * @param string $w 年号のローマ字表記の頭文字 m (明治） / t（大正) / s（昭和） / h（平成）
+ * @param string $w 年号のローマ字表記の頭文字 m (明治） / t（大正) / s（昭和） / h（平成） / r（令和）
  * @return string 年号をあらわすアルファベット
  */
 	public function nengo($w) {
@@ -102,8 +102,12 @@ class BcTimeHelper extends TimeHelper {
 			return ['s-' . ($year - 1925)];
 		} elseif ($year == 1989) {
 			return ['s-' . ($year - 1925), 'h-' . ($year - 1988)];
-		} elseif ($year >= 1990) {
+		} elseif ($year >= 1990 && $year <= 2018) {
 			return ['h-' . ($year - 1988)];
+		} elseif ($year == 2019) {
+			return ['h-' . ($year - 1988), 'r-' . ($year - 2018)];
+		} elseif ($year >= 2020) {
+			return ['r-' . ($year - 2018)];
 		} else {
 			return false;
 		}
@@ -130,6 +134,8 @@ class BcTimeHelper extends TimeHelper {
 				return $year + 1925;
 			case 'h':
 				return $year + 1988;
+			case 'r':
+				return $year + 2018;
 			default:
 				return false;
 		}
@@ -171,9 +177,12 @@ class BcTimeHelper extends TimeHelper {
 		} elseif ($ymd >= "19261225" && $ymd <= "19890107") {
 			$w = "s";
 			$y = $y - 1925;
-		} elseif ($ymd >= "19890108") {
+		} elseif ($ymd >= "19890108" && $ymd <= "20190430") {
 			$w = "h";
 			$y = $y - 1988;
+		} elseif ($ymd >= "20190501") {
+			$w = "r";
+			$y = $y - 2018;
 		}
 
 		$dataWareki = [

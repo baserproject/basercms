@@ -91,6 +91,7 @@ class MaildataHelperTest extends BaserTestCase {
             ['date_time_calender', '2100/08/32', $options, '1970年 01月 01日'],
             ['date_time_calender', '', $options, ''],
             ['date_time_wareki', 'hoge', $options, ''],
+            ['date_time_wareki', '20200828', $options, '令和 2年 08月 28日'],
             ['date_time_wareki', '19950828', $options, '平成 7年 08月 28日'],
             ['date_time_wareki', '19500828', $options, '昭和 25年 08月 28日'],
             ['date_time_wareki', '1950/08/28', $options, '昭和 25年 08月 28日'],
