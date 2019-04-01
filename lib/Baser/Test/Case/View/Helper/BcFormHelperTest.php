@@ -354,11 +354,11 @@ class BcFormHelperTest extends BaserTestCase {
 			['test', null, null, null, [], true, '<input type="hidden" name="data\[test\]\[wareki\].*<option value="h-', 'wyear()がされません	'],
 			['test', 2010, null, null, [], true, '<option value="h-22">平成 22<\/option>.<\/select>$', '最小の年を指定できません'],
 			['test', null, 2010, null, [], true, 'id="testYear">.<option value=""><\/option>.<option value="h-22">', '最大の年を指定できません'],
-			['test', null, null, '2035-1-1', [], true, 'value="h-47" selected', '要素を選択状態にできません(Y-m-d形式)'],
-			['test', null, null, 'h-47', [], true, 'value="h-47" selected', '要素を選択状態にできません(和暦形式)'],
+			['test', null, null, '2035-1-1', [], true, 'value="r-17" selected', '要素を選択状態にできません(Y-m-d形式)'],
+			['test', null, null, 'r-17', [], true, 'value="r-17" selected', '要素を選択状態にできません(和暦形式)'],
 			['test', null, null, null, ['class' => 'testclass'], true, 'class="testclass"', '属性を付与できません'],
 			['test', null, null, null, ['class' => 'testclass', 'size' => '5'], true, 'size="5"', '属性を複数付与できません'],
-			['test', null, null, null, [], false, 'id="testYear">.<option value="h-', '空の要素を非表示にできません'],
+			['test', null, null, null, [], false, 'id="testYear">.<option value="r-', '空の要素を非表示にできません'],
 		];
 	}
 

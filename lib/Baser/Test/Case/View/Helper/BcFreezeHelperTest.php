@@ -182,14 +182,14 @@ class BcFreezeHelperTest extends BaserTestCase {
 
 	public function wyearDataProvider() {
 		return [
-			[false, 'test', null, null, null, [], true, 'id="testYear">.*<option value="h-47">'],
+			[false, 'test', null, null, null, [], true, 'id="testYear">.*<option value="r-17">'],
 			[false, 'test', 2010, null, null, [], true, '<option value="h-22">平成 22<\/option>.<\/select>$'],
 			[false, 'test', null, 2010, null, [], true, '<option value=""><\/option>.<option value="h-22">'],
-			[false, 'test', null, null, 'h-47', [], true, 'value="h-47" selected="selected"'],
+			[false, 'test', null, null, 'r-17', [], true, 'value="r-17" selected="selected"'],
 			[false, 'test', null, null, null, ['type' => 'hidden'], true, 'type="hidden"'],
-			[false, 'test', null, null, null, [], false, 'id="testYear">.*<option value="h-47">'],
+			[false, 'test', null, null, null, [], false, 'id="testYear">.*<option value="r-17">'],
 			[true, 'test', null, null, null, [], true, 'type="hidden"'],
-			[true, 'test', null, null, '2035-1-1', [], true, '平成 47'],
+			[true, 'test', null, null, '2035-1-1', [], true, '令和 17'],
 		];
 	}
 
