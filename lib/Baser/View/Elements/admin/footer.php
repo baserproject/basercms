@@ -55,7 +55,7 @@
 				<li><?php $this->BcBaser->link($this->BcBaser->getImg('cake.power.gif', ['alt' => 'CakePHP Power']), 'https://cakephp.org/jp/', ['target' => '_blank', 'title' => 'CakePHP Power']) ?></li>
 			</ul>
 			<p id="BaserVersion">baserCMS <?php echo $baserVersion ?></p>
-			<div id="Copyright">Copyright (C) baserCMS Users Community <?php $this->BcBaser->copyYear(2009) ?> All rights reserved.</div>
+			<div id="Copyright">Copyright (C) baserCMS Users Community <?php $this->BcBaser->copyYear(2009) ?>.</div>
 		</div>
 
 		<!-- / #FooterInner --></div>
