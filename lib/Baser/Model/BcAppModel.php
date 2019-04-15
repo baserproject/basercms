@@ -883,6 +883,19 @@ class BcAppModel extends Model {
 	}
 
 /**
+ * 半角英数字+アンダーバー＋ハイフンのチェック
+ * 
+ * @param array $check 確認する値を含む配列。先頭の要素のみチェックされる
+ * @return boolean
+ */
+	public function alphaNumericDashUnderscore($check) {
+		$value = array_values($check);
+		$value = $value[0];
+
+		return preg_match('|^[0-9a-zA-Z_-]*$|', $value);
+	}
+
+/**
  * 一つ位置を上げる
  * @param string	$id
  * @param array		$conditions
