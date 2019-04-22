@@ -59,7 +59,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 				<div id="helptextName" class="helptext">
 					<ul>
 						<li><?php echo __d('baser', 'URLに利用されます')?></li>
-						<li><?php echo __d('baser', '半角のみで入力してください')?></li>
+						<li><?php echo __d('baser', '半角（半角英数字、ハイフン、アンダーバー）のみで入力してください')?></li>
 					</ul>
 				</div>
 			</td>

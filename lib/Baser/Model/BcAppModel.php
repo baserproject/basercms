@@ -255,6 +255,7 @@ class BcAppModel extends Model {
 			"\xE3\x8F\x8D" => "K.K.",
 			"\xE2\x84\xA1" => "TEL",
 			"\xE2\x84\x96" => "No.",
+			"\xE3\x8B\xBF" => "令和",
 			"\xE3\x8D\xBB" => "平成",
 			"\xE3\x8D\xBC" => "昭和",
 			"\xE3\x8D\xBD" => "大正",
@@ -880,6 +881,19 @@ class BcAppModel extends Model {
 			return false;
 		}
 		return true;
+	}
+
+/**
+ * 半角英数字+アンダーバー＋ハイフンのチェック
+ * 
+ * @param array $check 確認する値を含む配列。先頭の要素のみチェックされる
+ * @return boolean
+ */
+	public function alphaNumericDashUnderscore($check) {
+		$value = array_values($check);
+		$value = $value[0];
+
+		return preg_match('|^[0-9a-zA-Z_-]*$|', $value);
 	}
 
 /**
