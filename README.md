@@ -12,7 +12,7 @@ Copyright (c) baserCMS Users Community
 Documentation
 -------------
 
-- See [baserCMS Core Development Project](http://project.e-catchup.jp/projects/basercms/issues)
+- See [baserCMS Issues](https://github.com/baserproject/basercms/issues)
 - See [baserCMS Official](http://basercms.net/)
 - See [baserCMS Users Community](http://basercms.net/community)
 - See [baserCMS Users Manual](http://doc.basercms.net/)
