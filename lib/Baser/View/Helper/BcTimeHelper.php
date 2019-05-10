@@ -242,6 +242,40 @@ class BcTimeHelper extends TimeHelper {
 	}
 
 /**
+ * 西暦 年月日 → 和暦 年月日 変換（元年対応）
+ * 
+ * @param string $date 西暦 年月日(時分秒)
+ * @param string $format 和暦以外の変換フォーマット(date関数のフォーマットに準拠)
+ * @param boolean $gannen 1年 → 元年 にするかどうか
+ * @return string 和暦 年月日(時分秒)
+ */
+	public function formatWareki($date, $format = '年n月j日', $gannen = true) {
+
+		// 月日(時分秒)
+		$monthDay = date($format, strtotime($date));
+
+		// 和暦年（アルファベット）月日
+		$wdate = $this->convertToWareki($date);
+
+		// 和暦年（アルファベット）
+		$nengo = $this->wareki($wdate);
+
+		// 和暦年（アルファベット）→和暦（漢字）
+		$nengoKanji = $this->nengo($nengo);
+
+		// 和暦年
+		$wyear = $this->wyear($wdate);
+
+		if ($gannen && $wyear == '1') { // 元年対応
+			$wyear = '元';
+		}
+
+		// 和暦 月日(時分秒)
+		return $nengoKanji . $wyear . $monthDay;
+
+	}
+
+/**
  * format 拡張
  *
  * @param array $format
