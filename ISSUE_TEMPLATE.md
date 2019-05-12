@@ -1,5 +1,7 @@
 ## 概要
 Issueの概要を What・Why も含めて書きます。
+
+baserCMS version : 
  
 ## TODO
 - [ ]
