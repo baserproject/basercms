@@ -36,4 +36,4 @@ $types = BcUtil::unserialize($this->BcBaser->siteConfig['content_types']);
 	<?php echo $this->BcForm->button(__d('baser', '検索'), ['class' => 'button', 'id' => 'BtnSearchSubmit']) ?>
 	<?php echo $this->BcForm->button(__d('baser', 'クリア'), ['class' => 'button', 'id' => 'BtnSearchClear']) ?>
 </div>
-<?php $this->BcForm->end() ?>
+<?php echo $this->BcForm->end() ?>
