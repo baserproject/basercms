@@ -97,8 +97,8 @@ class PagesController extends AppController {
 			$this->dispatchEvent('afterAdd', [
 				'data' => $data
 			]);
-			
-			$message = sprintf(__d('baser', "固定ページ「%s」を追加しました。\n%s"), $this->request->data['Content']['title'], $this->request->data['Content']['url']);
+
+			$message = sprintf(__d('baser', "固定ページ「%s」を追加しました。\n%s"), $this->request->data['Content']['title'], $data['Content']['url']);
 			$this->setMessage($message, false, true, false);
 			return json_encode($data['Content']);
 		} else {
