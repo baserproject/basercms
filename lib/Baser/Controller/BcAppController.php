@@ -425,6 +425,14 @@ class BcAppController extends Controller {
 					}
 				}
 			}
+
+			// ログイン時のキャッシュ対策
+			if ($user) {
+				$this->response->header([
+					'Cache-Control' => 'no-cache, must-revalidate, post-check=0, pre-check=0',
+					'Pragma'        => 'no-cache',
+				]);
+			}
 		}
 
 		if($isRequestView) {
