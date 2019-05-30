@@ -341,14 +341,6 @@ class BcAppController extends Controller {
 			return;
 		}
 
-		// Ajax ヘッダー
-		if ($this->request->is('ajax')) {
-			// キャッシュ対策
-			header("Cache-Control: no-cache, must-revalidate");
-			header("Cache-Control: post-check=0, pre-check=0", false);
-			header("Pragma: no-cache");
-		}
-
 		// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
 		// ===============================================================================
 		// 実際には、プラグインの場合も下記パスがテンプレートの検索対象となっている為不要だが、
@@ -425,6 +417,14 @@ class BcAppController extends Controller {
 					}
 				}
 			}
+		}
+
+		if ($this->request->is('ajax') || isset($this->BcAuth) && $this->BcAuth->user()) {
+			// キャッシュ対策
+			$this->response->header([
+				'Cache-Control' => 'no-cache, must-revalidate, post-check=0, pre-check=0',
+				'Pragma'        => 'no-cache',
+			]);
 		}
 
 		if($isRequestView) {
