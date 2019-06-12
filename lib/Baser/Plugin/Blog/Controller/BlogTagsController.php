@@ -103,7 +103,7 @@ class BlogTagsController extends BlogAppController {
 				$this->setMessage(__d('baser', 'エラーが発生しました。内容を確認してください。'), true);
 			}
 		}
-		$this->pageTitle = sprintf(__d('baser', 'タグ編集： %s'), $this->request->data['BlogTag']['name']);
+		$this->pageTitle = __d('baser', 'タグ編集');
 		$this->render('form');
 	}
 

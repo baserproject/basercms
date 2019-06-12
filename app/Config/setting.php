@@ -1,2 +1,18 @@
 <?php
-$config = array();
+/**
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ *
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Blog.Config
+ * @since			baserCMS v 0.1.0
+ * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * メニューを非表示にする例
+ * $config['BcApp.adminNavigation.Contents.Contents.menus.ContentsTrash.disable'] = true;
+ */
+$config = [];
+

@@ -1,0 +1,8 @@
+node_modules
+npm-debug.log
+!gulpfile.js
+!package.json
+script/scraper/config.json
+script/scraper/ss/*
+!script/scraper/ss/empty
+proxy.json

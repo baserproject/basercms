@@ -1,0 +1,15 @@
+
+.bca-size-counter {
+  display: inline-block;
+  vertical-align: bottom;
+  padding-left: 0.5em;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #CCC;
+  small {
+    display: inline-block;
+    padding-left: 0.2em;
+    font-size: 1.4rem;
+    color: #CCC;
+  }
+}

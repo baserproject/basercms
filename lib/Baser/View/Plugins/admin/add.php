@@ -35,7 +35,7 @@ $(function(){
 <?php echo $this->BcForm->create('Plugin', ['type' => 'file']) ?>
 
 <div class="submit">
-	<?php echo $this->BcForm->file('Plugin.file', ['type' => 'file']) ?>
+	<?php echo $this->BcForm->input('Plugin.file', ['type' => 'file']) ?>
 	<?php echo $this->BcForm->submit(__d('baser', 'インストール'), ['class' => 'button', 'div' => false, 'id' => 'BtnSave']) ?>
 </div>
 			

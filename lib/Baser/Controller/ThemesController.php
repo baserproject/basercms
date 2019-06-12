@@ -84,7 +84,7 @@ class ThemesController extends AppController {
 					$this->redirect(['action' => 'index']);
 				} else {
 					$msg = __d('baser', 'アップロードしたZIPファイルの展開に失敗しました。');
-					$msg .= '<br />'.$BcZip->error;
+					$msg .= "\n" . $BcZip->error;
 					$this->setMessage($msg, true);
 				}
 			}
@@ -98,12 +98,10 @@ class ThemesController extends AppController {
  */
 	public function admin_index() {
 		$this->pageTitle = __d('baser', 'テーマ一覧');
-		$path = WWW_ROOT . 'theme';
-		$folder = new Folder($path);
-		$files = $folder->read(true, true);
+		$themes = BcUtil::getThemeList();
 		$datas = [];
-		$currentTheme = [];
-		foreach ($files[0] as $themename) {
+		$currentTheme = null;
+		foreach ($themes as $themename) {
 			if ($themename != 'core' && $themename != '_notes') {
 				if ($themename == $this->siteConfigs['theme']) {
 					$currentTheme = $this->_loadThemeInfo($themename);
@@ -187,8 +185,7 @@ class ThemesController extends AppController {
 		} else {
 			$this->setMessage(__d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'), true);
 		}
-		$this->redirect('index');
-
+		$this->redirect('/admin');
 	}
 
 /**
@@ -204,7 +201,7 @@ class ThemesController extends AppController {
 			$this->setMessage(__d('baser', '初期データのバージョンが違うか、初期データの構造が壊れています。'), true);
 			return false;
 		}
-
+		$adminTheme = Configure::read('BcSite.admin_theme');
 		$excludes = ['plugins', 'dblogs', 'users'];
 		/* データを削除する */
 		$this->BcManager->resetAllTables(null, $excludes);
@@ -271,7 +268,7 @@ class ThemesController extends AppController {
 		// TODO $this->BcManager->initSystemData() は、$this->Page->createAllPageTemplate() の
 		// 後に呼出さないと $this->Page の実体が何故か AppModel にすりかわってしまい、
 		// createAllPageTemplate メソッドが呼び出せないので注意
-		if (!$this->BcManager->initSystemData(null, ['excludeUsers' => true])) {
+		if (!$this->BcManager->initSystemData(null, ['excludeUsers' => true, 'adminTheme' => $adminTheme])) {
 			$result = false;
 			$this->log(__d('baser', 'システムデータの初期化に失敗しました。'));
 		}
@@ -664,7 +661,7 @@ class ThemesController extends AppController {
 				}
 				if (!$db->writeCsv([
 					'path' => $path . $table . '.csv',
-					'encoding' => 'SJIS',
+					'encoding' => 'UTF-8',
 					'init' => false,
 					'plugin' => ($plugin == 'core') ? null : $plugin
 				])) {

@@ -1,0 +1,85 @@
+.bca-main {
+  font-size: $label_font_size_small;
+  position: relative;
+  flex-basis: 100%;
+  overflow: auto;
+  background: $color_background_primary;
+  line-height:1.4;
+  // border-top: 1px solid #ccc;
+
+  // ❗ .contents-body と同じ要素 ❗
+  &__body {
+    padding: 0;
+    //a:link {
+    //  color:$color_primary;
+    //}
+    //a:hover {
+    //  color:$color_secondary;
+    //}
+  }
+  &__contents {
+    padding: 20px;
+    margin: 20px;
+    background-color: $color_background_secondary;
+    border: 1px solid $color_main_contents_border_color;
+  }
+  &__header {
+    padding: 10px 20px;
+    //background-color:#F4F5F1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $color_background_secondary;
+    border-bottom: 1px solid $color_main_contents_border_color;
+    &-title {
+      flex: 0 0 auto;
+      margin: 0 1em 0 0;
+      font-size: 2rem;
+      font-weight: 900;
+      color: $color_main_title;
+      line-height: 40px;
+    }
+
+    &-actions {
+      display: inline-block;
+      vertical-align: top;
+      flex: 1 1 auto;
+    }
+
+    &-menu {
+      flex: 0 1 auto;
+    }
+  }
+  &__section {
+    margin-bottom: 30px;
+  }
+  &__heading {
+    display: inline-block;
+    margin: 0 1em 1em 0;
+    padding: 0.25em 0 0.25em;
+    font-weight: normal;
+    &[data-bca-heading-size=lg] {
+      font-size: $label_font_size_large;
+    }
+    &[data-bca-heading-size=md] {
+      font-size: $label_font_size_medium;
+    }
+  }
+  &__text {
+    margin: 0 0 1em;
+    line-height: 1.5;
+  }
+  pre {
+    background-color: #efefef;
+    padding:5px 10px;
+  }
+  code {
+    background-color: #efefef;
+    padding:2px 5px;
+  }
+  &__number-list {
+    li {
+      margin:20px 0;
+    }
+  }
+}

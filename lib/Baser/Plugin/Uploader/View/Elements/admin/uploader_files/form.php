@@ -62,7 +62,7 @@ $(function(){
 		</td>
 	</tr>
 <?php if(empty($popup)): ?>
-	<tr><th><?php echo __d('baser', 'アップロードファイル')?></th><td><?php echo $this->BcForm->file('UploaderFile.name', array('delCheck' => false, 'imgsize' => 'midium', 'force' => 'true')) ?></td></tr>
+	<tr><th><?php echo __d('baser', 'アップロードファイル')?></th><td><?php echo $this->BcForm->input('UploaderFile.name', array('type' => 'file', 'delCheck' => false, 'imgsize' => 'midium', 'force' => 'true')) ?></td></tr>
 <?php else: ?>
 	<tr>
 		<th class="col-head"><!--<span class="required">*</span>&nbsp;--><?php echo $this->BcForm->label('UploaderFile.name', __d('baser', 'ファイル名')) ?></th>
@@ -81,9 +81,21 @@ $(function(){
 	<tr>
 		<th class="col-head"><?php echo $this->BcForm->label('UploaderFile.publish_begin_date', __d('baser', '公開期間')) ?></th>
 		<td class="col-input">
-			<?php echo $this->BcForm->dateTimePicker('UploaderFile.publish_begin', array('size' => 12, 'maxlength' => 10)) ?>
+			<?php echo $this->BcForm->input('UploaderFile.publish_begin', [
+			        'type' => 'dateTimePicker', 
+                    'size' => 12, 
+                    'maxlength' => 10,
+					'dateLabel' => ['text' => '開始日付'],
+					'timeLabel' => ['text' => '開始時間']
+            ]) ?>
 			&nbsp;〜&nbsp;
-			<?php echo $this->BcForm->dateTimePicker('UploaderFile.publish_end', array('size' => 12, 'maxlength' => 10)) ?>
+			<?php echo $this->BcForm->input('UploaderFile.publish_end', [
+			        'type' => 'dateTimePicker', 
+                    'size' => 12, 
+                    'maxlength' => 10,
+					'dateLabel' => ['text' => '終了日付'],
+					'timeLabel' => ['text' => '終了時間']
+            ]) ?>
 			<?php echo $this->BcForm->error('UploaderFile.publish_begin') ?>
 			<?php echo $this->BcForm->error('UploaderFile.publish_end') ?>
 		</td>

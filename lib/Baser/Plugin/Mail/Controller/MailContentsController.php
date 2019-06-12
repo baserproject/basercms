@@ -128,7 +128,7 @@ class MailContentsController extends MailAppController {
 				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
 		}
-		$this->subMenuElements = array('mail_common');
+		$this->subMenuElements = ['mail_common'];
 		$this->help = 'mail_contents_form';
 		$this->render('form');
 	}
@@ -182,7 +182,7 @@ class MailContentsController extends MailAppController {
 		}
 		$this->set('mailContent', $this->request->data);
 		$this->subMenuElements = ['mail_fields'];
-		$this->pageTitle = sprintf(__d('baser', 'メールフォーム設定編集：%s'), $this->request->data['Content']['title']);
+		$this->pageTitle = __d('baser', 'メールフォーム設定編集');
 		$this->help = 'mail_contents_form';
 		$this->render('form');
 	}

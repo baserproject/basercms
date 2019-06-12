@@ -1,0 +1,10 @@
+.bca-icon--blog::before {
+    content: "\f15c";
+    font-weight: 400;
+}
+.jstree-proton .bca-icon--blog {
+    color:#7faa00;
+}
+.jstree-proton-contextmenu .bca-icon--blog{
+    color:#7faa00;
+}

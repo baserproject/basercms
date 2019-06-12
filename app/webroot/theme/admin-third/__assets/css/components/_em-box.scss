@@ -1,0 +1,15 @@
+.bca-em-box {
+  padding: 20px;
+  background: #FFFFFF;
+  font-size: $label_font_size_medium;
+  margin: 15px auto;
+  text-align: center;
+  line-height: 2;
+  a {
+    color: #690;
+    &:hover {
+      color: #9C0;
+      text-decoration: none;
+    }
+  }
+}

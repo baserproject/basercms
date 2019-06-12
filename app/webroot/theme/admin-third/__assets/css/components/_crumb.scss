@@ -1,0 +1,70 @@
+// @deplicated
+// このコンポーネントは廃止されます。
+
+/* Crumb
+----------------------------------------------- */
+//#Crumb{
+//	color: #CCC;
+//	vertical-align: middle;
+//	background-color: #333;
+//	padding: 8px 10px 7px;
+//	vertical-align:middle;
+//	font-size:11px;
+//	line-height:15px;
+//}
+//#Crumb  a{
+//	color: #BBB;
+//	text-decoration: none;
+//	vertical-align:baseline;
+//}
+//#Crumb a:hover{
+//	color: #EEE;
+//}
+//#Crumb strong {
+//	color:#FFF;
+//}
+
+// @import '../vender/Font-Awesome/font-awesome';
+
+// .bca-crumb {
+// 	color: $color_text_secondary;
+// 	padding: 7px 0 7px;
+// 	vertical-align: middle;
+// 	font-size: 13px;
+// 	line-height: 15px;
+// 	ol {
+// 		li {
+// 			//float: left;
+// 			display: inline-block;
+// 			vertical-align: middle;
+// 			a {
+// 				position: relative;
+// 				display: inline-block;
+// 				padding: 0 1.6em 0 0;
+// 				color: $color_text_secondary;
+// 				text-decoration: none;
+// 				vertical-align: baseline;
+// 				line-height:18px;
+// 				@extend .#{$fa-css-prefix};
+// 				@extend .#{$fa-css-prefix}-angle-right;
+// 				&:before {
+// 					position: absolute;
+// 					top: -.1em;
+// 					right: 0.4em;
+// 					font-size: 16px;
+// 				}
+// 				a:hover {
+// 					//color: #EEE;
+// 				}
+// 			}
+// 			strong {
+// 				color: $color_text_secondary;
+// 			}
+// 		}
+// 	}
+
+// 	.bca-icon--home {
+// 		font-size:18px;
+// 		vertical-align: middle;
+// 	}
+// }

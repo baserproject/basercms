@@ -359,7 +359,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 		return [
 			[false, null, null, 'test.image', [], [], '<input type="file" name="data\[test\]\[image\]" id="testImage"'],
 			[false, null, null, 'test.image', ['size' => 100], [], 'size="100"'],
-			[false, null, 'testexist', 'test.image', [], [], 'src="\/\/tests.*label="削除する"'],
+			[false, null, 'testexist', 'test.image', [], [], 'src="\/\/tests.*<label.+?削除する<'],
 			[false, null, 'testexist', 'test.image', [], ['dir'=>'testdir'], 'src="\/testdir\/tests'],
 			[true, null, null, 'test.image', [], [], '&nbsp;'],
 			[true, 'testname', null, 'test.image', [], [], 'id="testImageExists".*src="tmp\/test\/img'],

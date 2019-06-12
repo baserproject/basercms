@@ -1,0 +1,124 @@
+/*
+.list-panel li{
+	padding:15px;
+	margin:12px;
+	background: none;
+	background-color:#efefef;
+	width:244px;
+	float:left;
+	height:340px;
+}
+.list-panel .row-tools {
+	text-align: center;
+	margin-top:5px;
+	margin-bottom: 5px;
+	border:3px solid #ccc;
+	padding:3px;
+}
+.list-panel .theme-screenshot {
+	border:1px solid #e2e2e2;
+}
+.list-panel .theme-screenshot img {
+	width:242px;
+}
+.list-panel .theme-version,
+.list-panel .theme-author {
+	margin-bottom: 3px;
+}
+.list-panel .theme-author a {
+	color: #000;
+	text-decoration: underline;
+}
+.list-panel .theme-author a:hover {
+	text-decoration: none;
+}
+.list-panel li {
+	position: relative;
+}
+.list-panel .error-message {
+	margin:0;
+	white-space:normal;
+	display: block;
+	line-height: 16px;
+	top:44px;
+	position: absolute;
+	padding:7px;
+	width:230px;
+}
+.list-panel .no-data {
+	float:none;
+	width:auto;
+	margin:0;
+	text-align: center;
+	height: auto;
+}
+*/
+
+.bca-list-panel {
+  //display: flex;
+  //flex-wrap: wrap;
+
+  display: grid;
+  //grid-auto-rows: 300px;
+  grid-template-columns: repeat(auto-fill, 300px);
+  grid-row-gap: 20px;
+  grid-column-gap: 20px;
+
+  margin: 0;
+  padding: 0;
+
+  & > li {
+    position: relative;
+    margin: 0;
+    padding: 15px;
+    background: #fff;
+    list-style: none;
+    border:1px solid $color_border;
+  }
+  .row-tools {
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: 1px solid $color_border;
+    padding: 3px;
+  }
+  .theme {
+    &-name {
+      margin-top: 0;
+    }
+    &-screenshot {
+      border: 1px solid #e2e2e2;
+    }
+    &-screenshot img {
+      width: 242px;
+    }
+    &-version,
+    &-author {
+      margin:10px 0 5px;
+    }
+    &-author a {
+      color: #000;
+      text-decoration: underline;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+  .error-message {
+    margin: 0;
+    white-space: normal;
+    display: block;
+    line-height: 16px;
+    top: 44px;
+    position: absolute;
+    padding: 7px;
+    width: 230px;
+  }
+  .no-data {
+    float: none;
+    width: auto;
+    margin: 0;
+    text-align: center;
+    height: auto;
+  }
+}

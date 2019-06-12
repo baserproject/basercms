@@ -176,11 +176,9 @@ class BcContentsHelperTest extends BaserTestCase {
 		return [
 			// 管理ユーザー
 			['Default', 'admin_index', 1, 1, false], // 存在しないアクション
-			['ContentFolder', 'icon', 1, 1, true], // 存在するアクション
 			['ContentFolder', 'add', 1, 1, true], // 存在するアクション
 			['ContentFolder', 'edit', 1, 1, true], // 存在するアクション
 			['ContentFolder', 'delete', 1, 1, true], // 存在するアクション
-			['ContentAlias', 'icon', 1, 1, true], // 存在するアクション
 			['BlogContent', 'manage', 1, 1, true], // 存在するアクション
 			['MailContent', 'manage', 1, 1, true], // 存在するアクション
 			['Page', 'copy', 1, 1, true], // 存在するアクション

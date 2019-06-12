@@ -14,17 +14,16 @@
  * [ADMIN] 検索インデックスメニュー
  * @var \BcAppView $this
  */
-?>
-
-<?php
 echo $this->BcBaser->i18nScript([
 	'reconstructSearchTitle' => __d('baser', '確認'),
     'reconstructSearchMessage' => __d('baser', '現在の検索インデックスを消去して、再構築します。本当にいいですか？'),
 ], ['inline' => true]);
 ?>
 
+
 <script>
 	$(function(){
+		p(bcI18n.reconstructSearchTitle);
 		$("#BtnReconstruct").click(function(){
 			$.bcConfirm.show({
 				title: bcI18n.reconstructSearchTitle,

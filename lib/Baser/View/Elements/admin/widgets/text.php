@@ -15,4 +15,4 @@
  */
 $title = __d('baser', 'テキスト');
 $description = __d('baser', 'テキストやHTMLの入力ができます。');
-echo $this->BcForm->textarea($key . '.text', ['cols' => 38, 'rows' => 14]);
+echo $this->BcForm->input($key . '.text', ['type' => 'textarea', 'cols' => 38, 'rows' => 14]);

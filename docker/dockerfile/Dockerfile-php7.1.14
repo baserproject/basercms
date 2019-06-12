@@ -1,5 +1,8 @@
 FROM php:7.1.14-apache-jessie
 
+RUN echo "deb http://deb.debian.org/debian jessie main" > /etc/apt/sources.list &&\
+    echo "deb http://security.debian.org jessie/updates main" >> /etc/apt/sources.list
+
 # install
 RUN apt-get update \
     && apt-get install -y \
@@ -44,7 +47,7 @@ RUN echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail
     
 # ssmtp
 RUN echo "FromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
- 	&& echo "Mailhub=basercms-smtp:1025" >> /etc/ssmtp/ssmtp.conf
+ 	&& echo "Mailhub=bc-smtp:1025" >> /etc/ssmtp/ssmtp.conf
  	
 # composer
 RUN curl -sS https://getcomposer.org/installer | php \

@@ -1,0 +1,93 @@
+.bca-panel {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  & > * {
+    width: calc(33.33% - 20px);
+  }
+
+  &-box {
+    padding: 25px 20px;
+    margin: 0 0 20px;
+    background: #fff;
+    border: 1px solid $color_border;
+    &__title {
+      margin: 0 0 30px 0;
+      font-size: $label_font_size_large;
+      font-weight: normal;
+    }
+
+    &__inline-fields {
+      display: flex;
+      justify-content: flex-start;
+      align-items: stretch;
+
+      &-item {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        white-space: nowrap;
+
+        .bca-radio-group {
+          margin-bottom: 0;
+        }
+      }
+
+      &-title {
+        font-weight: bold;
+        display: inline-block;
+        margin-right: 0.5em;
+        white-space: nowrap;
+      }
+
+      &-separator {
+        width: 1px;
+        background: $color_border;
+        margin: 0 2em;
+
+        &::before {
+          content: "";
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+/* 古いスタイル インストール画面など
+----------------------------------------------- */
+.bca-main__body div.float-left {
+  float: left;
+  width: 33%;
+}
+
+//.panel-box {
+//	border:5px solid $color_border;
+//	padding:10px 20px;
+//	margin:20px 0;
+//}
+//.panel-box li .date {
+//	/*font-weight: bold;*/
+//}
+//.panel-box ul {
+//	list-style-type: none;
+//	padding-inline-start: 0;
+//}
+//#Installations .panel-box {
+//	margin:0 auto 20px auto;
+//}
+//#Installations .panel-box ul li {
+//	margin-bottom: 10px;
+//	border-left:5px solid $color_border;
+//	padding:3px 10px;
+//	background: none;
+//}
+//#AdminDashboard .panel-box {
+//	margin:10px;
+//}
+//#AdminDashboard .panel-box li{
+//	margin-bottom: 5px;
+//	border-left:5px solid $color_border;
+//	padding:3px 10px;
+//	background: none;
+//}

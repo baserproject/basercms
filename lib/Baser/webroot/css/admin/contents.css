@@ -1741,3 +1741,16 @@ div.jstree-publish-even{
     border-radius: 0;
     background: #f5f5f5;
 }
+
+.required label {
+	color: #535A62;
+	font-size:13px;
+}
+.required input[type=file] {
+    color: #535A62;
+    font-size:13px;
+}
+.required figcaption {
+    color: #535A62;
+    font-size:13px;
+}

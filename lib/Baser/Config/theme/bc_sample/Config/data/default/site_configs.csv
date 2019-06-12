@@ -1,27 +1,27 @@
-﻿id,name,value,created,modified
-,name,baserCMS inc.,,
-,keyword,"baser,CMS,コンテンツマネジメントシステム,開発支援",,
-,description,baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。WEBサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。,,
-,address,福岡県,,
-,theme,bc_sample,,
-,email,,,
-,widget_area,1,,
-,maintenance,0,,
-,mail_encode,UTF-8,,
-,smtp_host,,,
-,smtp_user,cmsadmin,,
-,smtp_password,demodemo,,
-,smtp_port,,,
-,formal_name,baserCMS inc.,,
-,admin_list_num,10,,
-,google_analytics_id,,,
-,content_types,YToyOntzOjk6IuODmuODvOOCuCI7czo5OiLjg5rjg7zjgrgiO3M6OToi44Oh44O844OrIjtzOjk6IuODoeODvOODqyI7fQ==,,
-,category_permission,,,
-,admin_theme,,,
-,login_credit,1,,
-,first_access,,,
-,editor,BcCkeditor,,
-,editor_styles,"#青見出し
+"﻿"id"","name","value","created","modified"
+"1","name","baserCMS inc.","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"2","keyword","baser,CMS,コンテンツマネジメントシステム,開発支援","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"3","description","baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。WEBサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"4","address","福岡県","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"5","theme","bc_sample","2019-06-11 12:24:32",""
+"6","email","","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"7","widget_area","1","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"8","maintenance","0","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"9","mail_encode","UTF-8","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"10","smtp_host","","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"11","smtp_user","cmsadmin","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"12","smtp_password","demodemo","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"13","smtp_port","","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"14","formal_name","baserCMS inc.","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"15","admin_list_num","10","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"16","google_analytics_id","","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"17","content_types","YToyOntzOjk6IuODmuODvOOCuCI7czo5OiLjg5rjg7zjgrgiO3M6OToi44Oh44O844OrIjtzOjk6IuODoeODvOODqyI7fQ==","2019-06-11 12:24:32",""
+"18","category_permission","","2019-06-11 12:24:32",""
+"19","admin_theme","admin-third","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"20","login_credit","1","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"21","first_access","","2019-06-11 12:24:32","2019-06-11 12:24:53"
+"22","editor","BcCkeditor","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"23","editor_styles","#青見出し
 h3 {
 color:Blue;
 }
@@ -50,11 +50,13 @@ ins {}
 #引用
 cite {}
 #インライン
-q {}",,
-,editor_enter_br,0,,
-,admin_side_banner,1,,
-,smtp_tls,0,,
-,version,,,
-,main_site_display_name,パソコン,,
-,"use_site_device_setting","1","",""
-,"use_site_lang_setting","0","",""
+q {}","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"24","editor_enter_br","0","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"25","admin_side_banner","1","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"26","smtp_tls","0","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"28","main_site_display_name","パソコン","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"29","use_site_device_setting","1","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"30","use_site_lang_setting","0","2019-06-11 12:24:32","2019-06-11 12:27:01"
+"31","version","","2019-06-11 12:24:53","2019-06-11 12:24:53"
+"32","google_maps_api_key","","2019-06-11 12:27:01","2019-06-11 12:27:01"
+"33","use_universal_analytics","","2019-06-11 12:27:01","2019-06-11 12:27:01"

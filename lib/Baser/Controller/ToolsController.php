@@ -67,7 +67,7 @@ class ToolsController extends AppController {
 	public function __construct($request = null, $response = null) {
 		parent::__construct($request, $response);
 		$this->crumbs = [
-			['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'index']],
+			['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
 			['name' => __d('baser', 'ユーティリティ'), 'url' => ['controller' => 'tools', 'action' => 'index']]
 		];
 	}
@@ -109,7 +109,7 @@ class ToolsController extends AppController {
 				ClassRegistry::flush();
 				BcSite::flash();
 				if (!$error && !$this->Page->createAllPageTemplate()) {
-					$messages[] = __d('baser', 'ページテンプレートの生成に失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。');
+					$messages[] = __d('baser', "ページテンプレートの生成に失敗しました。\n表示できないページはページ管理より更新処理を行ってください。");
 				}
 				if ($messages) {
 					$this->setMessage(implode("\n", $messages), $error);

@@ -14,7 +14,7 @@
  * 
  * @var \BcAppView $this
  */
-echo $this->BcBaser->i18nScript([
+$this->BcBaser->i18nScript([
     'uploaderCancel' => __d('baser', 'キャンセル'),
     'uploaderSave' => __d('baser', '保存'),
 	'uploaderEdit' => __d('baser', '編集'),
@@ -24,7 +24,7 @@ echo $this->BcBaser->i18nScript([
 	'uploaderAlertMessage3' => __d('baser', 'このファイルの編集・削除はできません。'),
 	'uploaderAlertMessage4' => __d('baser', 'サーバーでの処理に失敗しました。'),
     'uploaderConfirmMessage1' => __d('baser', '本当に削除してもよろしいですか？')
-], ['inline' => true]);
+]);
 $this->BcBaser->js(array('Uploader.admin/uploader_files/uploader_list'));
 if(!isset($listId)) {
 	$listId = '';

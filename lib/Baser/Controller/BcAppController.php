@@ -338,6 +338,9 @@ class BcAppController extends Controller {
 
 		// コンソールから利用される場合、$isInstall だけでは判定できないので、BC_INSTALLED も判定に入れる
 		if(!BC_INSTALLED || $isInstall || $isUpdate) {
+			if(!BC_INSTALLED || $isInstall) {
+				$this->theme = array_keys(Configure::read('BcApp.adminNewThemeName'))[0];
+			}
 			return;
 		}
 
@@ -469,7 +472,7 @@ class BcAppController extends Controller {
  * $this->theme にセットする事
  * 
  * 優先順位
- * $this->request->params['Site']['theme'] > $site->theme > $this->siteConfigs['theme'] > Configure::read('BcApp.adminTheme')
+ * $this->request->params['Site']['theme'] > $site->theme > $this->siteConfigs['theme']
  *
  * @return void
  */
@@ -487,8 +490,8 @@ class BcAppController extends Controller {
 		if (!$theme && !empty($this->siteConfigs['theme'])) {
 			$theme = $this->siteConfigs['theme'];
 		}
-		if(!$theme) {
-			$theme = Configure::read('BcApp.adminTheme');	
+		if(!$theme && BcUtil::isAdminSystem() && $this->adminTheme) {
+			$theme = $this->adminTheme;
 		}
 		$this->theme = $theme;
 	}
@@ -503,12 +506,9 @@ class BcAppController extends Controller {
  * @return void
  */
 	protected function setAdminTheme() {
-		$adminTheme = null;
-		if (!empty($this->siteConfigs['admin_theme'])) {
+		$adminTheme = Configure::read('BcApp.adminTheme');
+		if (!$adminTheme && !empty($this->siteConfigs['admin_theme'])) {
 			$adminTheme = $this->siteConfigs['admin_theme'];
-		}
-		if(!$adminTheme) {
-			$adminTheme = Configure::read('BcApp.adminTheme');	
 		}
 		$this->adminTheme = $this->siteConfigs['admin_theme'] = $adminTheme;
 	}
@@ -1044,7 +1044,7 @@ class BcAppController extends Controller {
 
 			$subDir = $plugin = '';
 			// インストール時にSiteは参照できない
-			if ($options['agentTemplate'] && @$this->request->params['Site']['name']) {
+			if ($options['agentTemplate'] && !empty($this->request->params['Site']['name'])) {
 				$subDir = $this->request->params['Site']['name'];
 			}
 

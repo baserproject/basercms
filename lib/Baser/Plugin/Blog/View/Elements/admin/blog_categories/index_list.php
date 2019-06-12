@@ -34,13 +34,13 @@ $this->BcListTable->setColumnNumber(5);
                 </div>
 <?php endif ?>
             </th>
-            <th>NO</th>
-            <th><?php echo __d('baser', 'ブログカテゴリ名')?>
+            <th>No</th>
+            <th><?php echo __d('baser', 'カテゴリ名')?>
                 <?php if ($this->BcBaser->siteConfig['category_permission']): ?>
                     <br /><?php echo __d('baser', '管理グループ')?>
                 <?php endif ?>
             </th>
-            <th><?php echo __d('baser', 'ブログカテゴリタイトル')?></th>
+            <th><?php echo __d('baser', 'カテゴリタイトル')?></th>
             <?php echo $this->BcListTable->dispatchShowHead() ?>
             <th><?php echo __d('baser', '登録日')?><br /><?php echo __d('baser', '更新日')?></th>
         </tr>

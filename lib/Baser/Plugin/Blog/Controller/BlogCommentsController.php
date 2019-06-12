@@ -105,10 +105,10 @@ class BlogCommentsController extends BlogAppController {
 		/* 検索条件 */
 		if ($blogPostId) {
 			$conditions['BlogComment.blog_post_id'] = $blogPostId;
-			$this->pageTitle = sprintf(__d('baser', '[%s] コメント一覧'), $this->blogPost['BlogPost']['name']);
+			$this->pageTitle = sprintf(__d('baser', '%s｜コメント一覧'), $this->blogPost['BlogPost']['name']);
 		} else {
 			$conditions['BlogComment.blog_content_id'] = $blogContentId;
-			$this->pageTitle = sprintf(__d('baser', '[%s] コメント一覧'), $this->request->params['Content']['title']);
+			$this->pageTitle = sprintf(__d('baser', '%s｜コメント一覧'), $this->request->params['Content']['title']);
 		}
 
 		/* 画面情報設定 */

@@ -732,7 +732,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testScripts() {
 		$themeConfigTag = '<link rel="stylesheet" type="text/css" href="/files/theme_configs/config.css" />';
 		// CSS
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/layout.css"/>';
+		$expected = '<link rel="stylesheet" type="text/css" href="/blog/css/admin/blog_admin.css"/><link rel="stylesheet" type="text/css" href="/feed/css/admin/feed_admin.css"/><link rel="stylesheet" type="text/css" href="/mail/css/admin/mail_admin.css"/><link rel="stylesheet" type="text/css" href="/uploader/css/admin/uploader_admin.css"/><link rel="stylesheet" type="text/css" href="/css/admin/layout.css"/>';
 		$this->BcBaser->css('admin/layout', ['inline' => false]);
 		ob_start();
 		$this->BcBaser->scripts();
@@ -741,7 +741,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('css', '');
 		// Javascript
-		$expected = '<script type="text/javascript" src="/js/admin/startup.js"></script>';
+		$expected = '<link rel="stylesheet" type="text/css" href="/blog/css/admin/blog_admin.css"/><link rel="stylesheet" type="text/css" href="/feed/css/admin/feed_admin.css"/><link rel="stylesheet" type="text/css" href="/mail/css/admin/mail_admin.css"/><link rel="stylesheet" type="text/css" href="/uploader/css/admin/uploader_admin.css"/><script type="text/javascript" src="/js/admin/startup.js"></script>';
 		$this->BcBaser->js('admin/startup', false);
 		ob_start();
 		$this->BcBaser->scripts();
@@ -750,7 +750,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('script', '');
 		// meta
-		$expected = '<meta name="description" content="説明文"/>';
+		$expected = '<link rel="stylesheet" type="text/css" href="/blog/css/admin/blog_admin.css"/><link rel="stylesheet" type="text/css" href="/feed/css/admin/feed_admin.css"/><link rel="stylesheet" type="text/css" href="/mail/css/admin/mail_admin.css"/><link rel="stylesheet" type="text/css" href="/uploader/css/admin/uploader_admin.css"/><meta name="description" content="説明文"/>';
 		App::uses('BcHtmlHelper', 'View/Helper');
 		$BcHtml = new BcHtmlHelper($this->_View);
 		$BcHtml->meta('description', '説明文', ['inline' => false]);
@@ -761,7 +761,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('meta', '');
 		// ツールバー
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/toolbar.css"/>';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/toolbar.css"/><link rel="stylesheet" type="text/css" href="/blog/css/admin/blog_admin.css"/><link rel="stylesheet" type="text/css" href="/feed/css/admin/feed_admin.css"/><link rel="stylesheet" type="text/css" href="/mail/css/admin/mail_admin.css"/><link rel="stylesheet" type="text/css" href="/uploader/css/admin/uploader_admin.css"/>';
 		$this->BcBaser->set('user', ['User']);
 		ob_start();
 		$this->BcBaser->scripts();
@@ -1140,7 +1140,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$result = ob_get_clean();
 		$this->assertEquals($expected, $result);
 		// リンクあり
-		$expected = '<a href="/" class="tool-menu">公開ページ</a>';
+		$expected = '<a href="/" class="tool-menu">サイト確認</a>';
 		$this->_View->viewVars['currentUserAuthPrefixes'] = [Configure::read('Routing.prefixes.0')];
 		$this->_View->viewVars['publishLink'] = '/';
 		ob_start();

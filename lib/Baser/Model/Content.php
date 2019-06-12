@@ -136,14 +136,14 @@ class Content extends AppModel {
 				['rule' => ['notBlank'], 'message' => __d('baser', 'タイトルを入力してください。')],
 				['rule' => ['maxLength', 230], 'message' => __d('baser', 'タイトルは230文字以内で入力してください。')]],
 			'self_publish_begin' => [
-				['rule' => ['checkDate'], 'message' => __d('baser', '公開開始日に不正な文字列が入っています。')]],
+				['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '公開開始日に不正な文字列が入っています。')]],
 			'self_publish_end' => [
-				['rule' => ['checkDate'], 'message' => __d('baser', '公開終了日に不正な文字列が入っています。')],
+				['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '公開終了日に不正な文字列が入っています。')],
 				['rule' => ['checkDateAfterThan', 'self_publish_begin'], 'message' => __d('baser', '公開終了日は、公開開始日より新しい日付で入力してください。')]],
 			'created_date' => [
-				['rule' => ['checkDate'], 'message' => __d('baser', '作成日に不正な文字列が入っています。')]],
+				['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '作成日に不正な文字列が入っています。')]],
 			'modified_date' => [
-				['rule' => ['checkDate'], 'message' => __d('baser', '更新日に不正な文字列が入っています。')]],
+				['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '更新日に不正な文字列が入っています。')]],
 		];
 	}
 

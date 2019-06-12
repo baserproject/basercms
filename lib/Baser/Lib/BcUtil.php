@@ -346,18 +346,54 @@ class BcUtil extends CakeObject {
 	}
 
 /**
+ * 全てのテーマを取得する
+ * @return array
+ */
+	public static function getAllThemeList() {
+		$paths = [WWW_ROOT . 'theme', BASER_VIEWS . 'Themed'];
+		$themes = [];
+		foreach($paths as $path) {
+			$folder = new Folder($path);
+			$files = $folder->read(true, true);
+			if($files[0]) {
+				foreach($files[0] as $theme) {
+					if ($theme !== 'core' && $theme !== '_notes') {
+						$themes[$theme] = $theme;
+					}
+				}
+			}
+		}
+		return $themes;
+	}
+
+/**
  * テーマリストを取得する
  *
  * @return array
  */
 	public static function getThemeList() {
-		$path = WWW_ROOT . 'theme';
-		$folder = new Folder($path);
-		$files = $folder->read(true, true);
-		$themes = [];
-		foreach ($files[0] as $theme) {
-			if ($theme != 'core' && $theme != '_notes') {
-				$themes[$theme] = $theme;
+		$themes = self::getAllThemeList();
+		foreach ($themes as $key => $theme) {
+			if(preg_match('/^admin\-/', $theme)) {
+				unset($themes[$key]);
+			}
+		}
+		return $themes;
+	}
+
+/**
+ * テーマリストを取得する
+ *
+ * @return array
+ */
+	public static function getAdminThemeList() {
+		$themes = self::getAllThemeList();
+		foreach ($themes as $key => $theme) {
+			if(!preg_match('/^admin\-/', $theme)) {
+				unset($themes[$key]);
+			}
+			if($theme === array_keys(Configure::read('BcApp.adminNewThemeName'))[0]) {
+				$themes[$key] = Configure::read('BcApp.adminNewThemeName')[array_keys(Configure::read('BcApp.adminNewThemeName'))[0]];
 			}
 		}
 		return $themes;

@@ -787,6 +787,17 @@ class BcBaserHelper extends AppHelper {
 			}
 		}
 
+		$plugins = CakePlugin::loaded();
+		if($plugins) {
+			foreach($plugins as $plugin) {
+				$cssName = 'admin' . DS . Inflector::underscore($plugin) . '_admin';
+				$path = CakePlugin::path($plugin) . 'webroot' . DS . 'css' . DS . $cssName . '.css';
+				if(file_exists($path)) {
+					$this->css($plugin . '.' . $cssName);
+				}
+			}
+		}
+
 		// ### テーマ用CSS出力
 		// 《表示条件》
 		// - インストーラーではない
@@ -928,7 +939,7 @@ class BcBaserHelper extends AppHelper {
 /**
  * 画像タグを出力する
  *
- * @param array $path 画像のパス（img フォルダからの相対パス）
+ * @param string $path 画像のパス（img フォルダからの相対パス）
  * @param array $options オプション（主にHTML属性）
  *	※ パラメータについては、HtmlHelper::image() を参照。
  * @return void
@@ -940,7 +951,7 @@ class BcBaserHelper extends AppHelper {
 /**
  * 画像タグを取得する
  *
- * @param string $path 画像のパス（img フォルダからの相対パス）
+ * @param mixed $path 画像のパス（img フォルダからの相対パス）
  * @param array $options オプション（主にHTML属性）
  * ※ パラメータについては、HtmlHelper::image() を参照。
  * @return string 画像タグ
@@ -1211,7 +1222,7 @@ class BcBaserHelper extends AppHelper {
 				$fullUrl = true;
 			}
 			$url = $this->BcContents->getUrl($this->_View->viewVars['publishLink'], $fullUrl, $useSubdomain, false);
-			$this->link(__d('baser', '公開ページ'), $url, ['class' => 'tool-menu']);
+			$this->link(__d('baser', 'サイト確認'), $url, ['class' => 'tool-menu']);
 		}
 	}
 

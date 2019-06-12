@@ -60,7 +60,6 @@ $(function(){
 		<td>
 			<p><?php $this->BcBaser->logo(['thumb' => true, 'popup' => true, 'class' => 'photo', 'maxWidth' => 320, 'maxHeight' => 320]) ?></p>
 			<p><?php echo $this->BcForm->input('logo', ['type' => 'file']) ?><?php if ($this->BcForm->value('logo')): ?><?php echo $this->BcForm->input('logo_delete', ['type' => 'checkbox', 'label' => __d('baser', '削除する'), 'value' => false]) ?><?php endif ?><?php echo $this->BcForm->error('logo') ?></p>
-
 			<?php echo $this->BcForm->input('logo_alt', ['type' => 'text', 'size' => 50]) ?> <small>[<?php echo __d('baser', '説明文')?>]</small><br />
 			<?php echo $this->BcForm->input('logo_link', ['type' => 'text', 'size' => 50]) ?> <small>[<?php echo __d('baser', 'リンク先URL')?>]</small>
 		</td>

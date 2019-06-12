@@ -114,9 +114,21 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.publish_begin', __d('baser', 'フォーム受付期間')) ?></th>
 			<td class="col-input">
 				&nbsp;&nbsp;
-				<?php echo $this->BcForm->dateTimePicker('MailContent.publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>
+				<?php echo $this->BcForm->input('MailContent.publish_begin', [
+				        'type' => 'dateTimePicker', 
+                        'size' => 12, 
+                        'maxlength' => 10,
+						'dateLabel' => ['text' => '開始日付'],
+						'timeLabel' => ['text' => '開始時間']
+                ]) ?>
 				&nbsp;〜&nbsp;
-				<?php echo $this->BcForm->dateTimePicker('MailContent.publish_end', array('size' => 12, 'maxlength' => 10), true) ?>
+				<?php echo $this->BcForm->input('MailContent.publish_end', [
+				        'type' => 'dateTimePicker', 
+                        'size' => 12, 
+                        'maxlength' => 10,
+						'dateLabel' => ['text' => '終了日付'],
+						'timeLabel' => ['text' => '終了時間']
+                ]) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
 				<div class="helptext">
 					<p><?php echo __d('baser', '公開期間とは別にフォームの受付期間を設定する事ができます。受付期間外にはエラーではなく受付期間外のページを表示します。')?></p>

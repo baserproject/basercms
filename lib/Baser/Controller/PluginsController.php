@@ -92,7 +92,7 @@ class PluginsController extends AppController {
 		$BcZip = new BcZip();
 		if (!$BcZip->extract(TMP . $zippedName, APP . 'Plugin' . DS)) {
 			$msg = __d('baser', 'アップロードしたZIPファイルの展開に失敗しました。');
-			$msg .= '<br />' . $BcZip->error;
+			$msg .= "\n" . $BcZip->error;
 			$this->setMessage($msg, true);
 			$this->redirect(['action' => 'add']);
 			return;
