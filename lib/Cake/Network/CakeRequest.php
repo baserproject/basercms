@@ -25,6 +25,11 @@ App::uses('Hash', 'Utility');
  *
  * `$request['controller']` or `$request->controller`.
  *
+ * @property string $plugin     The plugin handling the request. Will be `null` when there is no plugin.
+ * @property string $controller The controller handling the current request.
+ * @property string $action     The action handling the current request.
+ * @property array $named       Array of named parameters parsed from the URL.
+ * @property array $pass        Array of passed arguments parsed from the URL.
  * @package       Cake.Network
  */
 class CakeRequest implements ArrayAccess {
@@ -241,6 +246,7 @@ class CakeRequest implements ArrayAccess {
  * @return string URI The CakePHP request path that is being accessed.
  */
 	protected function _url() {
+		$uri = '';
 		if (!empty($_SERVER['PATH_INFO'])) {
 			return $_SERVER['PATH_INFO'];
 		} elseif (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '://') === false) {
@@ -303,7 +309,7 @@ class CakeRequest implements ArrayAccess {
 			return $this->base = $base;
 		}
 
-		if (!$baseUrl) {
+		if (empty($baseUrl)) {
 			$base = dirname(env('PHP_SELF'));
 			// Clean up additional / which cause following code to fail..
 			$base = preg_replace('#/+#', '/', $base);

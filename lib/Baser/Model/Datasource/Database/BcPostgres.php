@@ -108,7 +108,7 @@ class BcPostgres extends Postgres {
 					'default' => preg_replace(
 						"/^'(.*)'$/",
 						"$1",
-						preg_replace('/::.*/', '', $c->default)
+						preg_replace('/::[\w\s]+/', '', $c->default)
 					),
 					'length' => $length,
 				);
