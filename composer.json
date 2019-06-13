@@ -49,6 +49,7 @@
         "sort-packages": true,
         "preferred-install": {
             "baserproject/baser-core": "source",
+            "baserproject/bc-admin-third": "source",
             "*": "dist"
         }
     },
