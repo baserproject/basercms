@@ -224,7 +224,7 @@ $(document).ready( function() {
 
 	<div class="submit bca-actions">
 		<?php echo $this->BcForm->button(__d('baser', '戻る'), ['type' => 'button', 'class' => 'btn-gray button bca-btn bca-actions__item', 'id' => 'btnback']) ?>
-		<?php echo $this->BcForm->button(__d('baser', '接続テスト'), ['type' => 'button', 'class' => 'btn-orange button bca-btn bca-actions__item', 'id' => 'checkdb']) ?>
+		<?php echo $this->BcForm->button(__d('baser', '接続テスト'), ['type' => 'button', 'class' => 'btn-orange button bca-btn bca-actions__item', 'id' => 'checkdb', 'data-bca-btn-type' => 'save']) ?>
 		<?php if (!isset($blDBSettingsOK) || !$blDBSettingsOK): ?>
 			<?php echo $this->BcForm->button(__d('baser', '次のステップへ'), ['type' => 'button', 'class' => 'btn-red button bca-btn bca-actions__item', 'id' => 'btnnext', 'name' => 'btnnext', 'disabled' => 'disabled']) ?>
 		<?php else: ?>
