@@ -31,3 +31,11 @@ baserCMSをCakePHP3化するためのブランチです。
 - アーキテクチャーは、API による JSON 出力を前提とする
 - 管理システムの新しいデザイン版をリリース後、適用する
 - ユーザー管理が一通りできたら、それをベースとして他の管理機能を作成していく
+
+## 気づき
+- composer プラグインをで呼び出すには packagist に登録が必要
+- プラグインには、composer.json を定義する必要がある
+- プラグインの、composer.json で、type を cakephp-plugin にしようが、vendor に登録される
+- composer update を実施した場合、 vendor/cakephp-plugins.php が自動更新される
+- vendor/cakephp-pluigins.php が更新されないとプラグインの名前解決ができない
+- プラグインの定義は、src/Application.php で行わなければならない
