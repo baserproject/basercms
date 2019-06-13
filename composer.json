@@ -7,9 +7,10 @@
     "require": {
         "php": ">=5.6",
         "baserproject/baser-core": "dev-dev-5-base-pattern",
-        "cakephp/cakephp": "3.6.13",
+        "baserproject/bc-admin-third": "dev-dev-5-base-pattern",
+        "cakephp/cakephp": "3.7.8",
         "cakephp/migrations": "^1.0",
-        "cakephp/plugin-installer": "^1.0",
+        "cakephp/plugin-installer": "*",
         "connehito/cake-sentry": "^1.0",
         "josegonzalez/dotenv": "2.*",
         "mobiledetect/mobiledetectlib": "2.*"
@@ -17,7 +18,7 @@
     "require-dev": {
         "cakephp/bake": "^1.1",
         "cakephp/cakephp-codesniffer": "^3.0",
-        "cakephp/debug_kit": "^3.2",
+        "cakephp/debug_kit": "^3.19.0",
         "psy/psysh": "@stable"
     },
     "suggest": {
@@ -28,15 +29,7 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/",
-            "BaserCore\\": "plugins/baser-core/src/",
-            "Baser-core\\": "./plugins/Baser-core/src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "BaserCore\\Test\\": "plugins/baser-core/tests/",
-            "Baser-core\\Test\\": "./plugins/Baser-core/tests/"
+            "App\\": "src/"
         }
     },
     "scripts": {
