@@ -7,7 +7,7 @@ baserCMSをCakePHP3化するためのブランチです。
 baserCMSのアプリケーションフレームを提供
 - [BaserCore ソースコード / baserproject/baser-core:dev-5-base-pattern](https://github.com/baserproject/baser-core/tree/dev-5-base-pattern)  
 baserCMSの本体、主にURLに紐づくルーティングと、RESTfull API を提供
-- [BcAdminThird ソースコード / baserproject/bc-admin-third:dev-5-base-pattern](https://github.com/baserproject/bc-admin-third/tree/dev-5-base-pattern)
+- [BcAdminThird ソースコード / baserproject/bc-admin-third:dev-5-base-pattern](https://github.com/baserproject/bc-admin-third/tree/dev-5-base-pattern)  
 baserCMSの画面表示をテーマとして提供
 - [開発方針](https://docs.google.com/document/d/1QAmScc65CwMyn8QuwWKE9q_8HnSKcW9oefI9RrHoUYY/edit)
 
