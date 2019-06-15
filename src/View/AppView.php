@@ -26,6 +26,13 @@ class AppView extends View
 {
 
     /**
+     * File extension. Defaults to CakePHP's template ".ctp".
+     *
+     * @var string
+     */
+    protected $_ext = '.php';
+
+    /**
      * Initialization hook method.
      *
      * Use this method to add common initialization code like loading helpers.
