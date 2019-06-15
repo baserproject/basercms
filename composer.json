@@ -6,8 +6,6 @@
     "license": "MIT",
     "require": {
         "php": ">=5.6",
-        "baserproject/baser-core": "dev-dev-5-base-pattern",
-        "baserproject/bc-admin-third": "dev-dev-5-base-pattern",
         "cakephp/cakephp": "3.7.8",
         "cakephp/migrations": "^1.0",
         "cakephp/plugin-installer": "*",
@@ -48,8 +46,6 @@
     "config": {
         "sort-packages": true,
         "preferred-install": {
-            "baserproject/baser-core": "source",
-            "baserproject/bc-admin-third": "source",
             "*": "dist"
         }
     },

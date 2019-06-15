@@ -50,4 +50,6 @@ nbproject/*
 /docker/docker-compose.yml
 # plugins
 /plugins/*
+!/vendor/baserproject/baser-core/*
+!/vendor/baserproject/bc-admin-third/*
 
