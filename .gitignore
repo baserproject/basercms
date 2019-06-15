@@ -50,4 +50,4 @@ nbproject/*
 /docker/docker-compose.yml
 # plugins
 /plugins/*
-*
+
