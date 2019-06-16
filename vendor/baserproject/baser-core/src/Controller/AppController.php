@@ -14,6 +14,9 @@ use App\Controller\AppController as BaseController;
 
 class AppController extends BaseController
 {
+
+//	public $helpers = ['BcAdmin'];
+
 	public function beforeRender(\Cake\Event\Event $event)
 	{
 		$this->viewBuilder()->setTheme('BcAdminThird');

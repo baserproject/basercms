@@ -22,7 +22,9 @@ class BcBaserHelper extends Helper
 {
 
 	public $helpers = ['Html'];
-
+	public $siteConfig = [
+		'formal_name' => 'baserCMS'
+	];
 	public function js($url, $inline = true, $options = []) {
 		$options = array_merge(['inline' => $inline], $options);
 		$result = $this->Html->script($url, $options);
@@ -54,6 +56,17 @@ class BcBaserHelper extends Helper
 	}
 
 	public function isAdminUser () {
+
+	}
+	public function existsEditLink() {
+
+	}
+
+	public function existsPublishLink() {
+
+	}
+
+	public function url() {
 
 	}
 
