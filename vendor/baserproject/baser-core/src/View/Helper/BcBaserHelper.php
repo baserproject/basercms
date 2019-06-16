@@ -23,7 +23,8 @@ class BcBaserHelper extends Helper
 
 	public $helpers = ['Html'];
 	public $siteConfig = [
-		'formal_name' => 'baserCMS'
+		'formal_name' => 'baserCMS',
+		'admin_side_banner' => true
 	];
 	public function js($url, $inline = true, $options = []) {
 		$options = array_merge(['inline' => $inline], $options);

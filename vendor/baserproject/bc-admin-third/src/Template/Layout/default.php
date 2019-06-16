@@ -9,7 +9,7 @@
  * @since			baserCMS v 2.0.0
  * @license			https://basercms.net/license/index.html
  */
-
+use Cake\Core\Configure;
 /**
  * @var Cake\View\View $this
  */
@@ -39,6 +39,11 @@ $this->assign('title', $title);
 <?php echo $this->element('Admin/header') ?>
 
 		<div id="Wrap" class="bca-container">
+
+<?php // TMP cake3 ?>
+<?php //if ($this->name != 'Installations' && $this->name != 'Updaters' && ('/' . $this->request->url != Configure::read('BcAuthPrefix.admin.loginAction')) && !empty($user)): ?>
+			<?php $this->BcBaser->element('admin/sidebar') ?>
+<?php //endif ?>
 
 				<main id="Contents" class="bca-main">
 
