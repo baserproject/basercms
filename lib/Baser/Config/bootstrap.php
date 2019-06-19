@@ -287,6 +287,7 @@ if (BC_INSTALLED) {
 		$isUpdater = true;
 	} elseif (BC_INSTALLED && !$isMaintenance && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
 		if(!isConsole()) {
+			CakeLog::write(LOG_ERR, 'プログラムとデータベースのバージョンが異なります。');
 			header('Location: ' . topLevelUrl(false) . baseUrl() . 'maintenance/index');
 			exit();
 		} else {
