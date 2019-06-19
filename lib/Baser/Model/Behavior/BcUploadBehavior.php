@@ -340,6 +340,13 @@ class BcUploadBehavior extends ModelBehavior {
 		$options = array_merge([
 			'deleteTmpFiles' => true
 		], $options);
+
+		if (empty($requestData[$Model->name][$fieldSetting['name']])
+			|| !is_array($requestData[$Model->name][$fieldSetting['name']])
+		) {
+			return $requestData;
+		}
+
 		if(!$this->tmpId && empty($fieldSetting['upload'])) {
 			if(!empty($requestData[$Model->name][$fieldSetting['name']]) && is_array($requestData[$Model->name][$fieldSetting['name']])) {
 				unset($requestData[$Model->name][$fieldSetting['name']]);
