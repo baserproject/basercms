@@ -34,7 +34,7 @@
 			</ul>
 		</div>
 
-		<div class="bca-nav__system" v-bind:data-content-is-expanded="isSystemSettingPage" v-bind:data-bca-state="systemExpanded">
+		<div v-if="systemList.length" class="bca-nav__system" v-bind:data-content-is-expanded="isSystemSettingPage" v-bind:data-bca-state="systemExpanded">
 			<h3 class="bca-nav__system-title">
 				<button class="bca-nav__sub-title-label" @click="openSystem"><span><?php echo __d('baser', '設定') ?></span>  <i class="bca-icon--chevron-down bca-nav__system-title-icon"></i></button>
 			</h3>
