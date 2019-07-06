@@ -1464,7 +1464,7 @@ class BcManagerComponent extends Component {
 				throw new Exception(__d('baser', 'ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite|CSV)'));
 			}
 		} catch (PDOException $e) {
-			throw new PDOException($e);
+			throw new PDOException($e->getMessage());
 		}
 
 		// 接続できたよ
