@@ -834,6 +834,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		switch ($datasource) {
 			case 'Database/BcPostgres' :
 				$datasource = 'postgres';
+				$this->markTestIncomplete('sqliteは、このテストの対象外です');
 				break;
 			case 'Database/BcMysql' :
 				$datasource = 'mysql';
