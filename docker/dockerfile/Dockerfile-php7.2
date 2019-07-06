@@ -5,14 +5,18 @@ RUN echo "deb http://deb.debian.org/debian jessie main" > /etc/apt/sources.list 
 
 # install
 RUN apt-get update \
-    && apt-get install -y \
+    && apt-get install -y --allow-downgrades \
+    	zlib1g=1:1.2.8.dfsg-2+b1 \
+    	zlib1g-dev \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
         libpng-dev \
         openssl libssl-dev \
+        libxml2=2.9.1+dfsg1-5+deb8u7 \
         libxml2-dev \
-        unzip \
+        zip unzip \
+        libzip-dev \
         git \
         vim \
         libicu-dev \
@@ -39,11 +43,12 @@ RUN echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail
     && echo "post_max_size = 256M" >> /usr/local/etc/php/php.ini \
     && echo "upload_max_filesize = 256M" >> /usr/local/etc/php/php.ini \
     && echo "date.timezone = Asia/Tokyo" >> /usr/local/etc/php/php.ini \
-	&& yes | pecl install xdebug mcrypt \
+	&& yes | pecl install xdebug mcrypt-1.0.1 \
     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini
+    && echo "xdebug.remote_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "extension=mcrypt.so" >> /usr/local/etc/php/conf.d/mcrypt.ini
     
 # ssmtp
 RUN echo "FromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
