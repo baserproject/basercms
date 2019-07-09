@@ -175,7 +175,8 @@ class Site extends AppModel {
 			$SiteConfig = ClassRegistry::init('SiteConfig');
 			$siteConfigs = $SiteConfig->findExpanded();
 		} else {
-			$siteConfigs = Configure::read('BcSite');	
+			loadSiteConfig();
+			$siteConfigs = Configure::read('BcSite');
 		}
 		$site = ['Site' => [
 			'id' => 0,

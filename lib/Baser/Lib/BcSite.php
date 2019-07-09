@@ -291,6 +291,7 @@ class BcSite {
 			return self::$_sites;
 		}
 		try{
+			/* @var Site $Site */
 			$Site = ClassRegistry::init('Site');
 		} catch(Exception $e) {
 			return [];

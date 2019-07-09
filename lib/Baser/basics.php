@@ -707,10 +707,14 @@ function getEnablePlugins() {
 
 /**
  * サイト基本設定をConfigureへ読み込む
- * 
- * @return void
+ *
+ * @var bool $force 強制的に読み込み直す
+ * @return bool
  */
-function loadSiteConfig() {
+function loadSiteConfig($force = false) {
+	if(Configure::read('BcSite') && !$force) {
+		return true;
+	}
 	// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
 	try {
 		$SiteConfig = ClassRegistry::init('SiteConfig');
@@ -719,6 +723,7 @@ function loadSiteConfig() {
 	}
 	Configure::write('BcSite', $SiteConfig->findExpanded());
 	ClassRegistry::removeObject('SiteConfig');
+	return true;
 }
 
 /**

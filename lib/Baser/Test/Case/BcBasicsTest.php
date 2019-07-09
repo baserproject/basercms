@@ -587,9 +587,19 @@ class BcBasicsTest extends BaserTestCase {
  * サイト基本設定をConfigureへ読み込む
  */
 	public function testLoadSiteConfig() {
+		// 通常読み込み
 		Configure::write('BcSite', null);
 		loadSiteConfig();
 		$this->assertArrayHasKey('name', Configure::read('BcSite'));
+		// 強制読み込み
+		/* @var SiteConfig $SiteConfig */
+		$SiteConfig = ClassRegistry::init('SiteConfig');
+		$siteConfigs = $SiteConfig->findExpanded();
+		$siteConfigs['SiteConfig']['name'] = 'hoge';
+		$SiteConfig->saveKeyValue($siteConfigs);
+		$this->assertNotEquals('hoge', Configure::read('BcSite.name'));
+		loadSiteConfig(true);
+		$this->assertEquals('hoge', Configure::read('BcSite.name'));
 	}
 
 /**
