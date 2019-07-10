@@ -231,6 +231,7 @@ class MailMessage extends MailAppModel {
 						case 'VALID_MAX_FILE_SIZE':
 							if (!empty($options['maxFileSize']) && $this->data['MailMessage'][$mailField['field_name']]['error'] !== UPLOAD_ERR_NO_FILE) {
 								switch ($this->data['MailMessage'][$mailField['field_name']]['error']) {
+									case UPLOAD_ERR_OK:
 									case UPLOAD_ERR_INI_SIZE:
 									case UPLOAD_ERR_FORM_SIZE:
 										$errorMessage = __('ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。',
