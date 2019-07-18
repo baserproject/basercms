@@ -37,12 +37,10 @@ $this->BcBaser->js('admin/users/login', false);
 		<div id="AlertMessage" class="message" style="display:none"></div>
 		<?php echo $this->BcForm->create($userModel, ['url' => ['action' => 'login']]) ?>
 		<div class="float-left login-input">
-			<?php echo $this->BcForm->label($userModel . '.name', __d('baser', 'アカウント名')) ?>
-			<?php echo $this->BcForm->input($userModel . '.name', ['type' => 'text', 'size' => 16, 'tabindex' => 1, 'autofocus' => true]) ?>
+			<?php echo $this->BcForm->input($userModel . '.name', ['type' => 'text', 'size' => 16, 'tabindex' => 1, 'autofocus' => true, 'placeholder' => __d('baser', 'アカウント名')]) ?>
 		</div>
 		<div class="float-left login-input">
-			<?php echo $this->BcForm->label($userModel . '.password', __d('baser', 'パスワード')) ?>
-			<?php echo $this->BcForm->input($userModel . '.password', ['type' => 'password', 'size' => 16, 'tabindex' => 2]) ?>
+			<?php echo $this->BcForm->input($userModel . '.password', ['type' => 'password', 'size' => 16, 'tabindex' => 2, 'placeholder' => __d('baser', 'パスワード')]) ?>
 		</div>
 		<div class="float-left submit">
 			<?php echo $this->BcForm->submit(__d('baser', 'ログイン'), ['div' => false, 'class' => 'btn-red button', 'id' => 'BtnLogin', 'tabindex' => 4]) ?>
