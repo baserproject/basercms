@@ -90,12 +90,12 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 		</div>
 		<div id="ToolMenu" class="bca-toolbar__tools">
 			<?php if ($this->BcBaser->existsEditLink() && !isset($this->request->query['preview'])): ?>
-				<div class="bca-toolbar__tools-edit">
+				<div class="bca-toolbar__tools-button bca-toolbar__tools-button-edit">
 					<?php $this->BcBaser->editLink() ?>
 				</div>
 			<?php endif ?>
 			<?php if ($this->BcBaser->existsPublishLink()): ?>
-				<div class="bca-toolbar__tools-edit">
+				<div class="bca-toolbar__tools-button bca-toolbar__tools-button-publish">
 					<?php $this->BcBaser->publishLink() ?>
 				</div>
 			<?php endif ?>
