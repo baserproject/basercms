@@ -684,7 +684,7 @@ class BcUploadBehavior extends ModelBehavior {
 	public function beforeDelete(Model $Model, $cascade = true) {
 		$Model->data = $Model->find('first', [
 			'conditions' => [
-				$Model->primaryKey => $Model->id
+				$Model->alias . '.' . $Model->primaryKey => $Model->id
 			]
 		]);
 		$this->delFiles($Model);
