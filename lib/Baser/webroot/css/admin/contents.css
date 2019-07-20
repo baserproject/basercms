@@ -1023,14 +1023,14 @@ background: #888;
 	margin-bottom: 5px;
 	margin-right:3px;
 }
-.login-input label {
-	position: absolute;
-	z-index: 1;
-	margin:2px;
-	padding:6px 10px;
-	color:#CCC;
-	font-size:16px;
-	cursor: text;
+.login-input input::placeholder {
+	color: #ccc;
+}
+.login-input input::-ms-input-placeholder {
+	color: #ccc;
+}
+.login-input input:-ms-input-placeholder {
+	color: #ccc;
 }
 #LoginInner .logo {
 	margin-bottom: 20px;
