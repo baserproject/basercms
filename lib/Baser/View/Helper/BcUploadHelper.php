@@ -87,7 +87,11 @@ class BcUploadHelper extends BcAppHelper {
 
 		if (is_array($value)) {
 			if (empty($value['session_key']) && empty($value['name'])) {
-				$data = $Model->findById($Model->id);
+				$data = $Model->find('first', [
+					'conditions' => [
+						$Model->alias . '.' . $Model->primaryKey => $Model->id
+					]
+				]);
 				if (!empty($data[$Model->alias][$field])) {
 					$value = $data[$Model->alias][$field];
 				} else {
