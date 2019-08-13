@@ -687,18 +687,24 @@ class BlogController extends BlogAppController {
  *
  * @param int $id
  * @param mixed $count
+ * @param bool $options //カテゴリ・タグを表示するかどうか 初期値: false
  * @return array
  */
-	public function get_recent_entries($id, $limit = 5) {
+	public function get_recent_entries($id, $limit = 5, $options = false) {
 		if ($limit === '0') {
 			$limit = false;
 		}
 		$data['blogContent'] = $this->BlogContent->find('first', ['conditions' => ['BlogContent.id' => $id], 'recursive' => 0]);
 		$conditions = array_merge(['BlogPost.blog_content_id' => $id], $this->BlogPost->getConditionAllowPublish());
-		$this->BlogPost->unbindModel([
-			'belongsTo' => ['BlogCategory', 'User'],
-			'hasAndBelongsToMany' => ['BlogTag']
-		]);
+		if (!$options) {
+			$this->BlogPost->unbindModel([
+				'belongsTo' => ['BlogCategory', 'User'],
+				'hasAndBelongsToMany' => ['BlogTag']
+			]);
+			$recursive = 2;
+		} else {
+			$recursive = 0;
+		}
 		$this->BlogPost->BlogContent->unbindModel([
 			'hasMany' => ['BlogPost', 'BlogCategory']
 		]);
@@ -707,7 +713,7 @@ class BlogController extends BlogAppController {
 			'conditions' => $conditions,
 			'limit' => $limit,
 			'order' => 'posts_date DESC',
-			'recursive' => 2,
+			'recursive' => $recursive,
 			'cache' => false
 		]);
 		return $data;
