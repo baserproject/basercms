@@ -161,7 +161,7 @@ class UpdatersController extends AppController {
 
 		$targetVersion = $this->getBaserVersion();
 		$sourceVersion = $this->getSiteVersion();
-		$this->pageTitle = __d('baser', 'データベースアップデート（baserCMSコア）');
+		$this->pageTitle = __d('baser', 'baserCMSコア｜データベースアップデート');
 		$this->set('log', $updateLog);
 		$this->set('updateTarget', __d('baser', 'baserCMSコア'));
 		$this->set('siteVer', $sourceVersion);
@@ -248,7 +248,7 @@ class UpdatersController extends AppController {
 		$targetVersion = $this->getBaserVersion($name);
 		$sourceVersion = $this->getSiteVersion($name);
 		$title = $this->Plugin->field('title', ['name' => $name]) . 'プラグイン';
-		$this->pageTitle = 'データベースアップデート（' . $title . '）';
+		$this->pageTitle = sprintf(__d('baser', '%s｜データベースアップデート'), $title);
 
 		$this->set('updateTarget', $title);
 		$this->set('siteVer', $sourceVersion);

@@ -105,6 +105,13 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 <?php echo $this->BcForm->error('SiteConfig.admin_list_num') ?>
 		</td>
 	</tr>
+	<tr>
+		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.admin_list_num', __d('baser', '管理システムの<br>テーマ')) ?>&nbsp;<span class="required">*</span></th>
+		<td class="col-input">
+			<?php echo $this->BcForm->input('SiteConfig.admin_theme', ['type' => 'select', 'options' => $themes]) ?>
+			<?php echo $this->BcForm->error('SiteConfig.admin_theme') ?>
+		</td>
+	</tr>
 	<?php echo $this->BcForm->dispatchAfterForm() ?>
 </table>
 </div>

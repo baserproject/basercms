@@ -67,7 +67,7 @@ class UploaderViewEventListener extends BcViewEventListener {
 					'ckeditorRight' => __d('baser', '右'),
 					'ckeditorTextTop' => __d('baser', 'テキスト上部'),
 					'ckeditorTop' => __d('baser', '上'),
-					'ckeditorSizeLabel' => __('baser', 'サイズ'),
+					'ckeditorSizeLabel' => __d('baser', 'サイズ'),
 					'ckeditorOriginSize' => __d('baser', '元サイズ'),
 					'ckeditorSmall' => __d('baser', '小'),
 					'ckeditorMidium' => __d('baser', '中'),

@@ -26,10 +26,10 @@ $adminPrefix = Configure::read('Routing.prefixes.0');
 			<ul>
 				<li><a href="<?php echo $this->request->base . '/' . $adminPrefix ?>/dashboard/"><?php echo __d('baser', '管理者ダッシュボードに移動する')?></a></li>
 				<li><a href="<?php echo str_replace('/index.php', '', $this->request->base . '/') ?>" target="_blank" class="outside-link"><?php echo __d('baser', 'トップページを確認する')?></a></li>
-				<li><a href="http://basercms.net" title="baserCMS公式サイト" target="_blank" class="outside-link"><?php echo __d('baser', 'baserCMS公式サイトで情報を探す')?></a></li>
-				<li><a href="http://forum.basercms.net" title="baserCMSユーザーズフォーラム" target="_blank" class="outside-link"><?php echo __d('baser', 'フォーラムにインストールの不具合を報告する')?></a></li>
-				<li><a href="http://twitter.com/#!/basercms" title="baserCMS公式Twitter" target="_blank" class="outside-link"><?php echo __d('baser', '公式Twitterをフォローする')?></a></li>
-				<li><a href="http://facebook.com/basercms" title="baserCMS公式Facebookページ" target="_blank" class="outside-link"><?php echo __d('baser', 'Facebookでいいね！する')?></a></li>
+				<li><a href="https://basercms.net" title="baserCMS公式サイト" target="_blank" class="outside-link"><?php echo __d('baser', 'baserCMS公式サイトで情報を探す')?></a></li>
+				<li><a href="https://forum.basercms.net" title="baserCMSユーザーズフォーラム" target="_blank" class="outside-link"><?php echo __d('baser', 'フォーラムにインストールの不具合を報告する')?></a></li>
+				<li><a href="https://twitter.com/#!/basercms" title="baserCMS公式Twitter" target="_blank" class="outside-link"><?php echo __d('baser', '公式Twitterをフォローする')?></a></li>
+				<li><a href="https://facebook.com/basercms" title="baserCMS公式Facebookページ" target="_blank" class="outside-link"><?php echo __d('baser', 'Facebookでいいね！する')?></a></li>
 			</ul>
 		</div>
 	</div>

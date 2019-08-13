@@ -1,0 +1,71 @@
+/* Help,Search,Limit共通設定
+----------------------------------------------- */
+#Help .head, #Limit .head {
+  padding: 0;
+  margin: 0;
+}
+
+#Help .body, #Limit .body {
+  margin: 10px auto;
+  text-align: center;
+  vertical-align: middle;
+}
+
+#Help .close, #Limit .close {
+  float: right;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+#Help h2, #Limit h2 {
+  border: none;
+  margin: 0;
+  padding: 10px;
+  font-size: $label_font_size_medium;
+  font-weight: normal;
+}
+
+/* Help
+----------------------------------------------- */
+
+#Help {
+  display: none;
+  border-bottom: 1px solid $color_border;
+  padding: 20px;
+  background-color: #FFF;
+  overflow: hidden;
+  line-height: 1.6;
+}
+
+#Help .body {
+  text-align: left;
+}
+
+#Help .example-box {
+  padding: 15px;
+  border: 3px solid #DDD;
+  margin-bottom: 20px;
+  color: #000;
+}
+
+#Help .example-box .head {
+  font-weight: bold;
+}
+
+#Help ul,
+#Help ol {
+  margin-left: 0;
+  padding-left: 20px;
+  list-style-position: outside;
+}
+
+#Help li {
+  /*padding: 0 20px;*/
+  margin: 5px 0;
+  line-height: 1.6;
+}
+
+#Help li img {
+  vertical-align: middle;
+}

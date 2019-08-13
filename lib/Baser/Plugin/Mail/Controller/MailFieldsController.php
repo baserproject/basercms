@@ -129,7 +129,7 @@ class MailFieldsController extends MailAppController {
 			return;
 		}
 		$this->subMenuElements = array('mail_fields');
-		$this->pageTitle = sprintf(__d('baser', '[%s] メールフィールド一覧'), $this->request->params['Content']['title']);
+		$this->pageTitle = sprintf(__d('baser', '%s｜メールフィールド一覧'), $this->request->params['Content']['title']);
 		$this->help = 'mail_fields_index';
 	}
 
@@ -193,9 +193,9 @@ class MailFieldsController extends MailAppController {
 				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
 		}
-
+		
 		$this->subMenuElements = array('mail_fields');
-		$this->pageTitle = sprintf(__d('baser', '[%s] 新規メールフィールド登録'), $this->request->params['Content']['title']);
+		$this->pageTitle = sprintf(__d('baser', '%s｜新規メールフィールド登録'), $this->request->params['Content']['title']);
 		$this->help = 'mail_fields_form';
 		$this->render('form');
 	}
@@ -248,7 +248,7 @@ class MailFieldsController extends MailAppController {
 
 		/* 表示設定 */
 		$this->subMenuElements = array('mail_fields');
-		$this->pageTitle = sprintf(__d('baser', '[%s] メールフィールド編集： %s'), $this->request->params['Content']['title'], $this->request->data['MailField']['name']);
+		$this->pageTitle = sprintf(__d('baser', '%s｜メールフィールド編集'), $this->request->params['Content']['title']);
 		$this->help = 'mail_fields_form';
 		$this->render('form');
 	}

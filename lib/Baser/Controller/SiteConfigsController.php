@@ -110,7 +110,11 @@ class SiteConfigsController extends AppController {
 				if($this->request->data['SiteConfig']['use_site_lang_setting'] === "0" && $this->SiteConfig->isChange('use_site_lang_setting', "0")) {
 					$this->Site->resetLang();
 				}
-
+				if(Configure::read('BcSite.admin_theme') !== $this->request->data['SiteConfig']['admin_theme']) {
+					Configure::write('BcSite.admin_theme', $this->request->data['SiteConfig']['admin_theme']);
+					$this->BcManager->deleteAdminAssets();
+					$this->BcManager->deployAdminAssets();
+				}
 				unset($this->request->data['SiteConfig']['id']);
 				unset($this->request->data['SiteConfig']['mode']);
 				unset($this->request->data['SiteConfig']['site_url']);
@@ -179,9 +183,10 @@ class SiteConfigsController extends AppController {
 		if (!$writableInstall) {
 			$disableSettingInstallSetting = ['disabled' => 'disabled'];
 		}
-
+		$themes = array_merge(['' => '標準テーマ'], BcUtil::getAdminThemeList());
 		$this->set(compact(
-				'baseUrl', 'userGroups', 'rewriteInstalled', 'writableInstall', 'writableHtaccess', 'writableHtaccess2', 'disableSettingInstallSetting'
+			'baseUrl', 'userGroups', 'rewriteInstalled', 'writableInstall', 'writableHtaccess',
+			'writableHtaccess2', 'disableSettingInstallSetting', 'themes'
 		));
 		$this->subMenuElements = ['site_configs'];
 		$this->pageTitle = __d('baser', 'サイト基本設定');

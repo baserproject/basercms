@@ -155,14 +155,14 @@ class BlogContentsController extends BlogAppController {
 			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->request->data);
 		}
 		$site = BcSite::findById($this->request->data['Content']['site_id']);
-		if($this->request->data['Content']['status']) {
+		if(!empty($this->request->data['Content']['status'])) {
 			$this->set('publishLink', $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain));
 		}
 		$this->request->params['Content'] = $this->BcContents->getContent($id)['Content'];
 		$this->set('blogContent', $this->request->data);
 		$this->subMenuElements = ['blog_posts'];
 		$this->set('themes', $this->SiteConfig->getThemes());
-		$this->pageTitle = sprintf(__d('baser', 'ブログ設定編集：%s'), $this->request->data['Content']['title']);
+		$this->pageTitle = __d('baser', 'ブログ設定編集');
 		$this->help = 'blog_contents_form';
 		$this->render('form');
 	}

@@ -73,6 +73,13 @@ class RequestHandlerComponent extends Component {
 	public $ext = null;
 
 /**
+ * Array of parameters parsed from the URL.
+ *
+ * @var array|null
+ */
+	public $params = null;
+
+/**
  * The template to use when rendering the given content type.
  *
  * @var string
@@ -132,7 +139,7 @@ class RequestHandlerComponent extends Component {
 		if (empty($this->ext) || $this->ext === 'html') {
 			$this->_setExtension();
 		}
-		$this->params = $controller->params;
+		$this->params = $controller->request->params;
 		if (!empty($this->settings['viewClassMap'])) {
 			$this->viewClassMap($this->settings['viewClassMap']);
 		}
@@ -264,8 +271,10 @@ class RequestHandlerComponent extends Component {
 		}
 		if (!empty($status)) {
 			$statusCode = $this->response->httpCodes($status);
-			$code = key($statusCode);
-			$this->response->statusCode($code);
+			if (is_array($statusCode)) {
+				$code = key($statusCode);
+				$this->response->statusCode($code);
+			}
 		}
 		$this->response->body($this->requestAction($url, array('return', 'bare' => false)));
 		$this->response->send();

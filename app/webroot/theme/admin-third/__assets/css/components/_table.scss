@@ -1,0 +1,63 @@
+// table系
+
+.bca-table {
+  &[data-bca-table-type=type1] {
+    thead {
+      text-align: center;
+      font-weight: normal;
+    }
+    tbody {
+      th, td {
+        padding: 5px;
+      }
+      th {
+        padding-left: 0;
+        text-align: left;
+        font-weight: normal;
+      }
+      td {
+
+      }
+    }
+  }
+
+  &[data-bca-table-type=type2] {
+    border-collapse: collapse;
+    width: 100%;
+
+    th, td {
+      padding: 1em;
+      border: 1px solid #ddd;
+    }
+
+    thead {
+      th {
+        text-align: left;
+        font-weight: normal;
+        font-size: 1.4rem;
+        background-color: $color_background_menu;
+      }
+    }
+    tbody {
+      th, td {
+        vertical-align: top;
+      }
+      th {
+        padding-left: 0;
+        text-align: left;
+        font-weight: normal;
+      }
+      td {
+
+      }
+    }
+    .cel1 {
+      width: 120px;
+    }
+    .bca-currentrow {
+      th, td {
+        background: $color_background_menu_current_primary;
+      }
+    }
+  }
+}

@@ -234,7 +234,7 @@ class BcContentsComponent extends Component {
  * @param Controller $controller
  * @return void
  */
-	public function settingForm(Controller $controller, $currentSiteId, $currentContentId = null) {
+public function settingForm(Controller $controller, $currentSiteId, $currentContentId = null) {
 
 		// コントロールソースを設定
 		$options = [];
@@ -270,7 +270,7 @@ class BcContentsComponent extends Component {
 		} else {
 			$mainSiteId = 0;
 		}
-		$siteList = ['' => ''] + $controller->Content->Site->find('list', ['fields' => ['id', 'display_name']]);
+		$siteList = [0 => ''] + $controller->Content->Site->find('list', ['fields' => ['id', 'display_name']]);
 		$controller->set('sites', $siteList);
 		$controller->set('mainSiteDisplayName', $controller->siteConfigs['main_site_display_name']);
 		$data['Site'] = $site['Site'];
@@ -281,9 +281,19 @@ class BcContentsComponent extends Component {
 			$data['Site']['relate_main_site'] && $data['Content']['main_site_content_id'] && $data['Content']['type'] == 'ContentFolder') {
 			$related = true;
 		}
-		$controller->set('related', $related);
+		$disableEditContent = false;
 		$controller->request->data = $data;
-
+		if(!BcUtil::isAdminUser() || ($controller->request->data['Site']['relate_main_site'] && $controller->request->data['Content']['main_site_content_id'] &&
+				($controller->request->data['Content']['alias_id'] || $controller->request->data['Content']['type'] == 'ContentFolder'))) {
+			$disableEditContent = true;
+		}
+		$currentSiteId = $siteId = $controller->request->data['Site']['id'];
+		if(is_null($currentSiteId)) {
+			$currentSiteId = 0;
+		}
+		$controller->set('currentSiteId', $currentSiteId);	
+		$controller->set('disableEditContent', $disableEditContent);
+		$controller->set('related', $related);	
 	}
 
 /**

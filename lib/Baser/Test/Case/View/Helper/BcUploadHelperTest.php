@@ -16,6 +16,7 @@ App::uses('BcUploadHelper', 'View/Helper');
  * test for BcUploadHelper
  *
  * @package			Baser.Test.Case.View.Helper
+ * @property  BcUploadHelper $BcUpload
  */
 class BcUploadHelperTest extends BaserTestCase {
 	

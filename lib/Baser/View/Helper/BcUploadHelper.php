@@ -16,6 +16,7 @@ App::uses('BcAppHelper', 'View/Helper');
  * アップロードヘルパー
  *
  * @package Baser.View.Helper
+ * @property HtmlHelper $Html
  */
 class BcUploadHelper extends BcAppHelper {
 
@@ -42,9 +43,10 @@ class BcUploadHelper extends BcAppHelper {
 			'force' => false,
 			'width' => '', // 横幅
 			'height' => '', // 高さ
+			'figure' => null,
+			'img' => ['class' => ''],
+			'figcaption' => null
 			], $options);
-
-		extract($options);
 
 		if(strpos($fieldName, '.') === false) {
 			throw new BcException(__d('baser', 'BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドットで区切って指定する必要があります。'));
@@ -85,7 +87,11 @@ class BcUploadHelper extends BcAppHelper {
 
 		if (is_array($value)) {
 			if (empty($value['session_key']) && empty($value['name'])) {
-				$data = $Model->findById($Model->id);
+				$data = $Model->find('first', [
+					'conditions' => [
+						$Model->alias . '.' . $Model->primaryKey => $Model->id
+					]
+				]);
 				if (!empty($data[$Model->alias][$field])) {
 					$value = $data[$Model->alias][$field];
 				} else {
@@ -108,23 +114,39 @@ class BcUploadHelper extends BcAppHelper {
 			if ($value && !is_array($value)) {
 				$uploadSettings = $settings['fields'][$field];
 				$ext = decodeContent('', $value);
+				$figureOptions = $figcaptionOptions = [];
+				if(!empty($options['figcaption'])) {
+					$figcaptionOptions = $options['figcaption'];
+				}
+				if(!empty($options['figure'])) {
+					$figureOptions = $options['figure'];
+				}
+				if(!empty($figcaptionOptions['class'])) {
+					$figcaptionOptions['class'] .= ' file-name';
+				} else {
+					$figcaptionOptions['class'] = 'file-name';
+				}
 				if ($uploadSettings['type'] == 'image' || in_array($ext, $Model->Behaviors->BcUpload->imgExts)) {
-					$options = [
-						'imgsize' => $imgsize, 
-						'rel' => $rel, 
-						'title' => $title, 
-						'link' => $link, 
-						'force' => $force,
-						'width' => $width, // 横幅
-						'height' => $height // 高さ
-					];
+					$imgOptions = array_merge([
+						'imgsize' => $options['imgsize'], 
+						'rel' => $options['rel'], 
+						'title' => $options['title'], 
+						'link' => $options['link'], 
+						'force' => $options['force'],
+						'width' => $options['width'], // 横幅
+						'height' => $options['height'] // 高さ
+					], $options['img']);
 					if ($tmp) {
-						$options['tmp'] = true;
+						$imgOptions['tmp'] = true;
 					}
-					$out = $this->uploadImage($fieldName, $value, $options) . '<br /><span class="file-name">' . mb_basename($value) . '</span>';
+					$out = $this->Html->tag('figure', $this->uploadImage($fieldName, $value, $imgOptions) . '<br>' . $this->Html->tag('figcaption', mb_basename($value), $figcaptionOptions), $figureOptions);
 				} else {
 					$filePath = $basePath . $value;
-					$out = $this->Html->link(__d('baser', 'ダウンロード') . ' ≫', $filePath, ['target' => '_blank']) . '<br /><span class="file-name">' . mb_basename($value) . '</span>';
+					$linkOptions = ['target' => '_blank'];
+					if(is_array($options['link'])) {
+						$linkOptions = array_merge($linkOptions, $options['link']);
+					}
+					$out = $this->Html->tag('figure', $this->Html->link(__d('baser', 'ダウンロード') . ' ≫', $filePath, $linkOptions) . '<br>' . $this->Html->tag('figcaption', mb_basename($value), $figcaptionOptions), $figureOptions);
 				}
 			} else {
 				$out = $value;
@@ -161,7 +183,6 @@ class BcUploadHelper extends BcAppHelper {
 	public function uploadImage($fieldName, $fileName, $options = []) {
 		$options = array_merge([
 			'imgsize' => 'medium', // 画像サイズ
-			'link' => true, // 大きいサイズの画像へのリンク有無
 			'escape' => false, // エスケープ
 			'mobile' => false, // モバイル
 			'alt' => '', // alt属性
@@ -171,7 +192,10 @@ class BcUploadHelper extends BcAppHelper {
 			'tmp' => false,
 			'force' => false,
 			'output' => '', // 出力タイプ tag ,url を指定、未指定(or false)の場合は、tagで出力(互換性のため)
-			'limited' => false // 公開制限フォルダを利用する場合にフォルダ名を設定する
+			'limited' => false,  // 公開制限フォルダを利用する場合にフォルダ名を設定する
+			'link' => true, // 大きいサイズの画像へのリンク有無
+			'img' => null,
+			'class' => ''
 		], $options);
 
 		$this->setEntity($fieldName);
@@ -200,8 +224,12 @@ class BcUploadHelper extends BcAppHelper {
 		$imgOptions = [
 			'alt' => $options['alt'],
 			'width' => $options['width'],
-			'height' => $options['height']
+			'height' => $options['height'],
+			'class' => $options['class']
 		];
+		if(empty($imgOptions['class'])) {
+			unset($imgOptions['class']);	
+		}
 		if ($imgOptions['width'] === '') {
 			unset($imgOptions['width']);
 		}
@@ -212,7 +240,12 @@ class BcUploadHelper extends BcAppHelper {
 			'rel' => 'colorbox',
 			'escape' => $options['escape']
 		];
-
+		if(!empty($options['link']) && is_array($options['link'])) {
+			$linkOptions = array_merge($linkOptions, $options['link']);
+		}
+		if(empty($linkOptions['class'])) {
+			unset($linkOptions['class']);
+		}
 		if (is_array($fileName)) {
 			if (isset($fileName['session_key'])) {
 				$fileName = $fileName['session_key'];
@@ -346,6 +379,7 @@ class BcUploadHelper extends BcAppHelper {
 		unset($options['tmp']);
 		unset($options['force']);
 		unset($options['output']);
+		unset($options['class']);
 		
 		switch($output){
 			case 'url' :

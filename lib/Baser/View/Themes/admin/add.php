@@ -34,7 +34,7 @@ $(function(){
 <?php echo $this->BcForm->create('Theme', ['type' => 'file']) ?>
 
 <div class="submit">
-	<?php echo $this->BcForm->file('Theme.file', ['type' => 'file']) ?>
+	<?php echo $this->BcForm->input('Theme.file', ['type' => 'file']) ?>
 	<?php echo $this->BcForm->submit(__d('baser', '適用'), ['class' => 'button', 'div' => false, 'id' => 'BtnSave']) ?>
 </div>
 			

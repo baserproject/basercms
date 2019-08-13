@@ -45,7 +45,7 @@ $this->BcBaser->js('admin/editor_templates/form', false);
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('EditorTemplate.image', __d('baser', 'アイコン画像')) ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->file('EditorTemplate.image') ?>
+				<?php echo $this->BcForm->input('EditorTemplate.image', ['type' => 'file']) ?>
 				<?php echo $this->BcForm->error('EditorTemplate.image') ?>
 			</td>
 		</tr>

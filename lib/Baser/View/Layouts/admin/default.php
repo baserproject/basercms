@@ -25,7 +25,7 @@
 		<?php
 		$this->BcBaser->css([
 			'admin/jquery-ui/jquery-ui.min',
-			'../js/admin/vendors/jquery.jstree-3.3.1/themes/proton/style.min',
+			'../js/admin/vendors/jquery.jstree-3.3.8/themes/proton/style.min',
 			'../js/admin/vendors/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
 			'admin/import',
 			'admin/colorbox/colorbox-1.6.1',

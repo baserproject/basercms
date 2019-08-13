@@ -165,7 +165,7 @@ class UserGroupsController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->pageTitle = 'ユーザーグループ編集：' . $this->request->data['UserGroup']['title'];
+		$this->pageTitle = __d('baser', 'ユーザーグループ編集');
 		$this->help = 'user_groups_form';
 		$this->render('form');
 	}

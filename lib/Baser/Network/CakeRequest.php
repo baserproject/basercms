@@ -241,6 +241,7 @@ class CakeRequest implements ArrayAccess {
  * @return string URI The CakePHP request path that is being accessed.
  */
 	protected function _url() {
+		$uri = '';
 		if (!empty($_SERVER['PATH_INFO'])) {
 			return $_SERVER['PATH_INFO'];
 		} elseif (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '://') === false) {
@@ -319,7 +320,7 @@ class CakeRequest implements ArrayAccess {
 			return $this->base = $base;
 		}
 
-		if (!$baseUrl) {
+		if (empty($baseUrl)) {
 			$base = dirname(env('PHP_SELF'));
 			// Clean up additional / which cause following code to fail..
 			$base = preg_replace('#/+#', '/', $base);

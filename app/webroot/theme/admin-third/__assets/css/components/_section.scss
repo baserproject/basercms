@@ -1,0 +1,59 @@
+.bca-section {
+  &__post-detail {
+    margin-bottom: 1.5em;
+  }
+
+  // &__submit {
+  //   display: flex;
+  //   flex-wrap: nowrap;
+  //   justify-content: center;
+  //   align-items: center;
+  //   margin-top: 1.5em;
+  //   text-align: center;
+
+  //   &__main {
+
+  //     .bca-btn[data-bca-btn-type="save"] {
+  //       width: 200px;
+  //     }
+  //   }
+  //   &__sub {
+  //     margin-left: 40px;
+  //     padding-left: 40px;
+  //     border-left: 1px solid #ccc;
+
+  //   }
+
+  //   [data-bca-btn-type] {
+  //     margin-right: 20px;
+  //   }
+  //   [data-bca-btn-type="delete"] {
+  //     //margin-right: 100px;
+  //   }
+  // }
+
+  // ブログ新着記事の上部
+  &__post-top {
+    //display: flex;
+    //justify-content: flex-end;
+    float:right;
+    margin-bottom: 0.8em;
+    .bca-post__no {
+      margin-right: 2em;
+      font-size: 1.4rem;
+    }
+    .bca-post__url {
+      display: block;
+      margin-top: 0.2em;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    .bca-text-url {
+      margin-right: 0.5em;
+    }
+  }
+
+  &[data-bca-section-type=form-group] {
+    margin-bottom: 60px;
+  }
+}

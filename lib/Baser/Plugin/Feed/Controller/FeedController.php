@@ -180,6 +180,10 @@ class FeedController extends FeedAppController {
 			unset($this->request->query['_']);
 		}
 
+		if(!empty($this->request->query['admin_theme']) && $this->adminTheme) {
+			$this->theme = $this->adminTheme;
+		}
+
 		$this->set('cachetime', $cachetime);
 		$this->set('items', $items);
 		$this->render($feedConfig['FeedConfig']['template']);
@@ -215,12 +219,13 @@ class FeedController extends FeedAppController {
 		if (strpos($id, '.js') !== false) {
 			$id = str_replace('.js', '', $id);
 		}
-
+		if(!empty($this->request->query['admin_theme'])) {
+			$this->theme = '';
+		}
 		$this->cacheAction = Configure::read('BcCache.duration');
 		$this->layout = "ajax";
-
-		// idを設定
 		$this->set('id', $id);
+		$this->set('feedAdminTheme', (!empty($this->request->query['admin_theme'])));
 		$this->render('ajax');
 	}
 

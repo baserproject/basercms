@@ -136,18 +136,18 @@ class BlogPost extends BlogAppModel {
 				['rule' => ['maxByte', 64000], 'message' => __d('baser', '草稿欄に保存できるデータ量を超えています。')],
 				['rule' => 'containsScript', 'message' => __d('baser', '草稿欄でスクリプトの入力は許可されていません。')]],
 			'publish_begin' => [
-				['rule' => ['checkDate'], 'message' => __d('baser', '公開開始日の形式が不正です。')],
-				['rule' => ['checkDateRenge', 'publish_begin', 'publish_end'], 'message' => __d('baser', '公開期間が不正です。')]],
+				['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '公開開始日の形式が不正です。')],
+				['rule' => ['checkDateRenge', 'allowEmpty' => true, 'publish_begin', 'publish_end'], 'message' => __d('baser', '公開期間が不正です。')]],
 			'publish_end' => [
-				['rule' => ['checkDate'], 'message' => __d('baser', '公開終了日の形式が不正です。')],
-				['rule' => ['checkDateRenge', 'publish_begin', 'publish_end'], 'message' => __d('baser', '公開期間が不正です。')]],
+				['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '公開終了日の形式が不正です。')],
+				['rule' => ['checkDateRenge', 'allowEmpty' => true, 'publish_begin', 'publish_end'], 'message' => __d('baser', '公開期間が不正です。')]],
 			'posts_date' => [
-				['rule' => ['notBlank'], 'message' => __d('baser', '投稿日を入力してください。'), 'required' => true],
+				['rule' => ['notBlank'], 'allowEmpty' => true, 'message' => __d('baser', '投稿日を入力してください。'), 'required' => true],
 				['rule' => ['checkDate'], 'message' => __d('baser', '投稿日の形式が不正です。')]],
 			'user_id' => [
 				['rule' => ['notBlank'], 'message' => __d('baser', '投稿者を選択してください。')]],
 			'eye_catch' => [
-				['rule' => ['fileExt', ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png']], 'message' => __d('baser', '許可されていないファイルです。')]
+				['rule' => ['fileExt', ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png']], 'allowEmpty' => true, 'message' => __d('baser', '許可されていないファイルです。')]
 			]
 		];
 	}

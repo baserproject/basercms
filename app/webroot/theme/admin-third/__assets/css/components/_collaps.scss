@@ -1,0 +1,72 @@
+// 折りたたみ
+.bca-collapse {
+  display: none;
+  overflow: hidden;
+  //max-height: 0;
+  //transition: 0.4s all;
+  &__btn-icon {
+    font-size: $button_font_size_large;
+  }
+  // 非表示
+  .bca-collapse__inner {
+    //overflow: hidden;
+    //line-height: 0;
+    //opacity: 0;
+    //visibility: hidden;
+    //transition: 0.4s all;
+    //margin-top: -100%;
+    //transform: translateY(-100%);
+  }
+
+  // 表示
+  &[data-bca-state=open] {
+    //max-height: inherit;
+    .bca-collapse__inner {
+      //line-height: 1.4;
+      //opacity: 1;
+      //visibility: visible;
+      //overflow: inherit;
+      //transform: translateY(0%);
+      //margin-top: 0%;
+    }
+  }
+
+  &__action {
+    display: block;
+    margin: 30px 0;
+    //text-align: center;
+  }
+
+  // 専用ボタン
+  &__btn {
+    border: none;
+    background: none;
+    display: inline-block;
+    width: auto;
+    font-size: $button_font_size_x_large;
+    line-height: 1.2;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    color: $color_primary;
+    padding-left:0;
+    outline: none;
+    &:hover {
+      text-decoration: none;
+      color: $color_secondary;
+    }
+
+    &-icon {
+      display: inline-block;
+      margin: 0;
+      transition: 0.4s all;
+      &:before {
+        margin: 0;
+      }
+    }
+    // 展開時に上下回転
+    [data-bca-state=open] &-icon {
+      transform: rotate(180deg);
+    }
+  }
+}

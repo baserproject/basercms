@@ -319,10 +319,30 @@ class BcUtilTest extends BaserTestCase {
 	}
 
 /**
+ * 全てのテーマリストを取得する
+ */
+	public function testGetAllThemeList() {
+		$themes = BcUtil::getAllThemeList();
+		$this->assertTrue(in_array('nada-icons', $themes));
+		$this->assertTrue(in_array('admin-third', $themes));
+	}
+
+/**
  * テーマリストを取得する
  */
 	public function testGetThemeList() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$themes = BcUtil::getThemeList();
+		$this->assertTrue(in_array('nada-icons', $themes));
+		$this->assertFalse(in_array('admin-third', $themes));
+	}
+
+/**
+ * 管理画面用のテーマリストを取得する
+ */
+	public function testGetAdminThemeList() {
+		$themes = BcUtil::getAdminThemeList();
+		$this->assertFalse(in_array('nada-icons', $themes));
+		$this->assertTrue(array_key_exists('admin-third', $themes));
 	}
 
 /**

@@ -144,7 +144,12 @@ class FileEngine extends CacheEngine {
 		if ($this->settings['lock']) {
 			$this->_File->flock(LOCK_UN);
 		}
+
+		// CUSTOMIZE ADD 2019/03/24 yama
+		// windowsで正常にキャッシュファイルの削除が行われない問題を改善
+		// >>>
 		$this->_File = null;
+		// <<<
 
 		return $success;
 	}

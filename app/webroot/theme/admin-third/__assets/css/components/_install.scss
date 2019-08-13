@@ -1,0 +1,42 @@
+.step-1 {
+  .bca-section {
+    text-align: center;
+  }
+}
+.step2 {
+  .check {
+    .check-result {
+      color:#ddd;
+    }
+  }
+  .failed {
+    .check-result {
+      color:$color_danger;
+    }
+  }
+  .check-result {
+    margin:20px 0;
+    font-size:2rem;
+  }
+}
+.step-3,
+.step-4 {
+  div.float-left {
+    width:auto;
+  }
+  ul {
+    li {
+      margin:20px 0;
+      label {
+        font-weight: bold;
+        margin-bottom:5px;
+        display: block;
+      }
+    }
+  }
+}
+.step-5 {
+  li {
+    margin:20px 0;
+  }
+}

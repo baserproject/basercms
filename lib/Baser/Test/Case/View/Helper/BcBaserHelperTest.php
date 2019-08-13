@@ -282,8 +282,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	public function getDescriptionDataProvider() {
 		return [
-			['baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。WEBサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。', 'baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。WEBサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。'],
-			['', ''],
+			['baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。WEBサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。', ''],
 			['国産オープンソースのホームページです', '国産オープンソースのホームページです']
 		];
 	}
@@ -1140,7 +1139,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$result = ob_get_clean();
 		$this->assertEquals($expected, $result);
 		// リンクあり
-		$expected = '<a href="/" class="tool-menu">公開ページ</a>';
+		$expected = '<a href="/" class="tool-menu">サイト確認</a>';
 		$this->_View->viewVars['currentUserAuthPrefixes'] = [Configure::read('Routing.prefixes.0')];
 		$this->_View->viewVars['publishLink'] = '/';
 		ob_start();

@@ -15,7 +15,7 @@
  * @var BcAppView $this
  */
 $currentUser = BcUtil::loginUser('admin');
-$this->BcBaser->js('admin/vendors/jquery.jstree-3.3.1/jstree.min', false);
+$this->BcBaser->js('admin/vendors/jquery.jstree-3.3.8/jstree.min', false);
 $this->BcBaser->i18nScript([
     'confirmMessage1' => __d('baser', 'コンテンツをゴミ箱に移動してもよろしいですか？'),
 	'confirmMessage2' => __d('baser', "選択したデータを全てゴミ箱に移動します。よろしいですか？\n※ エイリアスは直接削除します。"),

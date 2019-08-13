@@ -548,7 +548,7 @@ class BcManagerComponent extends Component {
  * @param string $dbDataPattern データパターン
  * @return boolean
  */
-	public function constructionDb($dbConfig, $dbDataPattern = '') {
+	public function constructionDb($dbConfig, $dbDataPattern = '', $adminTheme = '') {
 
 		$coreExcludes = ['users', 'dblogs', 'plugins'];
 
@@ -573,7 +573,7 @@ class BcManagerComponent extends Component {
 			return false;
 		}
 
-		if (!$this->initSystemData($dbConfig)) {
+		if (!$this->initSystemData($dbConfig, ['adminTheme' => $adminTheme])) {
 			$this->log(__d('baser', 'システムデータの初期化に失敗しました。'));
 			return false;
 		}
@@ -745,7 +745,10 @@ class BcManagerComponent extends Component {
  */
 	public function initSystemData($dbConfig = null, $options = []) {
 		
-		$options = array_merge(['excludeUsers' => false], $options);
+		$options = array_merge([
+			'excludeUsers' => false,
+			'adminTheme' => ''
+		], $options);
 		
 		$db = $this->_getDataSource('default', $dbConfig);
 		$corePath = BASER_CONFIGS . 'data' . DS . 'default';
@@ -779,6 +782,7 @@ class BcManagerComponent extends Component {
 		if (!$SiteConfig->updateAll(['SiteConfig.value' => null], ['SiteConfig.name' => 'email']) ||
 			!$SiteConfig->updateAll(['SiteConfig.value' => null], ['SiteConfig.name' => 'google_analytics_id']) ||
 			!$SiteConfig->updateAll(['SiteConfig.value' => true], ['SiteConfig.name' => 'first_access']) ||
+			!$SiteConfig->updateAll(['SiteConfig.value' => "'" . $options['adminTheme'] . "'"], ['SiteConfig.name' => 'admin_theme']) ||
 			!$SiteConfig->deleteAll(['SiteConfig.name' => 'version'], false)) {
 			$this->log(__d('baser', 'site_configs テーブルの初期化に失敗'));
 			$result = false;
@@ -1460,7 +1464,7 @@ class BcManagerComponent extends Component {
 				throw new Exception(__d('baser', 'ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite|CSV)'));
 			}
 		} catch (PDOException $e) {
-			throw new PDOException($e);
+			throw new PDOException($e->getMessage());
 		}
 
 		// 接続できたよ
@@ -1477,35 +1481,61 @@ class BcManagerComponent extends Component {
  * @return boolean
  */
 	public function deployAdminAssets() {
+		$adminTheme = Configure::read('BcSite.admin_theme');
 		$viewPath = WWW_ROOT;
-		$adminCss = BASER_WEBROOT . 'css' . DS . 'admin';
-		$adminJs = BASER_WEBROOT . 'js' . DS . 'admin';
-		$adminImg = BASER_WEBROOT . 'img' . DS . 'admin';
+		$baserWebroot = BASER_WEBROOT;
+		if($adminTheme) {
+			if(is_dir(BASER_THEMES . $adminTheme)) {
+				return true;
+			} elseif (is_dir(BASER_VIEWS . 'Themed' . DS . $adminTheme)) {
+				$baserWebroot = BASER_VIEWS . 'Themed' . DS . $adminTheme . DS;
+			}
+		}
+		$adminCss = $baserWebroot . 'css' . DS . 'admin';
+		$adminJs = $baserWebroot . 'js' . DS . 'admin';
+		$adminImg = $baserWebroot . 'img' . DS . 'admin';
+		$adminFonts = $baserWebroot . 'fonts' . DS . 'admin';
 		$css = $viewPath . 'css' . DS . 'admin';
 		$js = $viewPath . 'js' . DS . 'admin';
 		$img = $viewPath . 'img' . DS . 'admin';
+		$fonts = $viewPath . 'fonts' . DS . 'admin';
 		$result = true;
 		$Folder = new Folder();
-		if(!$Folder->copy([
-			'from'	=> $adminCss,
-			'to'	=> $css,
-			'mode'	=> 0777
-		])) {
-			$result = false;
+		if(is_dir($adminCss)) {
+			if(!$Folder->copy([
+					'from'	=> $adminCss,
+					'to'	=> $css,
+					'mode'	=> 0777
+				])) {
+				$result = false;
+			}
 		}
-		if(!$Folder->copy([
-			'from'	=> $adminJs,
-			'to'	=> $js,
-			'mode'	=> 0777
-		])) {
-			
+		if(is_dir($adminJs)) {
+			if (!$Folder->copy([
+				'from' => $adminJs,
+				'to' => $js,
+				'mode' => 0777
+			])) {
+				$result = false;
+			}
 		}
-		if(!$Folder->copy([
-			'from'	=> $adminImg,
-			'to'	=> $img,
-			'mode'	=> 0777
-		])) {
-			$result = false;
+		if(is_dir($adminImg)) {
+			if (!$Folder->copy([
+				'from' => $adminImg,
+				'to' => $img,
+				'mode' => 0777
+			])) {
+				$result = false;
+			}
+		}
+		if(is_dir($adminFonts)) {
+			if (!$Folder->copy([
+				'from' => $adminFonts,
+				'to' => $fonts,
+				'mode' => 0777
+			])) {
+				$result = false;
+			}
 		}
 		return $result;
 	}
@@ -1520,6 +1550,7 @@ class BcManagerComponent extends Component {
 		$css = $viewPath . 'css' . DS . 'admin';
 		$js = $viewPath . 'js' . DS . 'admin';
 		$img = $viewPath . 'img' . DS . 'admin';
+		$fonts = $viewPath . 'fonts' . DS . 'admin';
 		$result = true;
 		$Folder = new Folder();
 		if(!$Folder->delete($css)) {
@@ -1529,6 +1560,9 @@ class BcManagerComponent extends Component {
 			$result = false;
 		}
 		if(!$Folder->delete($img)) {
+			$result = false;
+		}
+		if(!$Folder->delete($fonts)) {
 			$result = false;
 		}
 		return $result;

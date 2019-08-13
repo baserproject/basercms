@@ -1,0 +1,4 @@
+.bca-icon--uploader::before {
+    content: "\f03e";
+    font-weight: 400;
+}

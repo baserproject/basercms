@@ -14,7 +14,7 @@ App::uses('Imageresizer', 'Vendor');
 
 /**
  * ファイルアップロードビヘイビア
- * 
+ *
  * 《設定例》
  * public $actsAs = array(
  *  'BcUpload' => array(
@@ -40,50 +40,50 @@ App::uses('Imageresizer', 'Vendor');
  *     )
  *   )
  * );
- *  
+ *
  * @package Baser.Model.Behavior
  */
 class BcUploadBehavior extends ModelBehavior {
 
 /**
  * 保存ディレクトリ
- * 
+ *
  * @var string[]
  */
 	public $savePath = [];
 
 /**
  * 保存時にファイルの重複確認を行うディレクトリ
- * 
+ *
  * @var array
  */
 	public $existsCheckDirs = [];
 
 /**
  * 設定
- * 
+ *
  * @var array
  */
 	public $settings = null;
 
 /**
  * 一時ID
- * 
+ *
  * @var string
  */
 	public $tmpId = null;
 
 /**
  * Session
- * 
+ *
  * @var \SessionComponent
  */
 	public $Session = null;
 
 /**
  * 画像拡張子
- * 
- * @var array 
+ *
+ * @var array
  */
 	public $imgExts = array('gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png');
 
@@ -99,7 +99,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * セットアップ
- * 
+ *
  * @param Model	$Model
  * @param array	$settings actsAsの設定
  */
@@ -151,7 +151,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * Before save
- * 
+ *
  * @param Model $Model
  * @param array $options
  * @return boolean
@@ -161,6 +161,7 @@ class BcUploadBehavior extends ModelBehavior {
 			$this->deleteExistingFiles($Model);
 		}
 		$Model->data = $this->deleteFiles($Model, $Model->data);
+
 		$result = $this->saveFiles($Model, $Model->data);
 		if ($result) {
 			$Model->data = $result;
@@ -221,7 +222,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * After save
- * 
+ *
  * @param Model $Model
  * @param bool $created
  * @param array $options
@@ -241,7 +242,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * 一時ファイルとして保存する
- * 
+ *
  * @param Model $Model
  * @param array $data
  * @param string $tmpId
@@ -270,7 +271,12 @@ class BcUploadBehavior extends ModelBehavior {
  * @return array
  */
 	public function deleteFiles(Model $Model, $requestData) {
-		$oldData = $Model->findById($Model->id);
+
+		$oldData = $Model->find('first', [
+			'conditions' => [
+				$Model->alias . '.' . $Model->primaryKey => $Model->id
+			]
+		]);
 		foreach ($this->settings[$Model->alias]['fields'] as $key => $field) {
 			$oldValue = '';
 			if($oldData && !empty($oldData[$Model->name][$field['name']])) {
@@ -307,7 +313,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * ファイル群を保存する
- * 
+ *
  * @param Model $Model
  * @param array $requestData
  * @return mixed false|array
@@ -340,6 +346,13 @@ class BcUploadBehavior extends ModelBehavior {
 		$options = array_merge([
 			'deleteTmpFiles' => true
 		], $options);
+
+		if (empty($requestData[$Model->name][$fieldSetting['name']])
+			|| !is_array($requestData[$Model->name][$fieldSetting['name']])
+		) {
+			return $requestData;
+		}
+
 		if(!$this->tmpId && empty($fieldSetting['upload'])) {
 			if(!empty($requestData[$Model->name][$fieldSetting['name']]) && is_array($requestData[$Model->name][$fieldSetting['name']])) {
 				unset($requestData[$Model->name][$fieldSetting['name']]);
@@ -379,7 +392,7 @@ class BcUploadBehavior extends ModelBehavior {
 			if($this->tmpId) {
 				return $requestData;
 			} else {
-				return false;	
+				return false;
 			}
 		}
 		return $requestData;
@@ -387,7 +400,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * セッションに保存されたファイルデータをファイルとして保存する
- * 
+ *
  * @param Model $Model
  * @param string $fieldName
  * @return boolean
@@ -433,7 +446,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * ファイルを保存する
- * 
+ *
  * @param Model $Model
  * @param array $field 画像保存対象フィールドの設定
  * @return mixed false|ファイル名
@@ -521,7 +534,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * 画像をExif情報を元に正しい確度に回転する
- * 
+ *
  * @param $file
  * @return bool
  */
@@ -583,7 +596,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * 画像をコピーする
- * 
+ *
  * @param Model $Model
  * @param array $field 画像保存対象フィールドの設定
  * @return boolean
@@ -620,7 +633,7 @@ class BcUploadBehavior extends ModelBehavior {
 /**
  * 画像ファイルをコピーする
  * リサイズ可能
- * 
+ *
  * @param string $source コピー元のパス
  * @param string $distination コピー先のパス
  * @param int $width 横幅
@@ -645,9 +658,9 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * 画像のサイズを取得
- * 
+ *
  * 指定したパスにある画像のサイズを配列(高さ、横幅)で返す
- * 
+ *
  * @param string $path 画像のパス
  * @return mixed array / false
  */
@@ -663,20 +676,24 @@ class BcUploadBehavior extends ModelBehavior {
  * Before delete
  * 画像ファイルの削除を行う
  * 削除に失敗してもデータの削除は行う
- * 
+ *
  * @param Model $Model
  * @param bool $cascade
  * @return bool
  */
 	public function beforeDelete(Model $Model, $cascade = true) {
-		$Model->data = $Model->findById($Model->id);
+		$Model->data = $Model->find('first', [
+			'conditions' => [
+				$Model->alias . '.' . $Model->primaryKey => $Model->id
+			]
+		]);
 		$this->delFiles($Model);
 		return true;
 	}
 
 /**
  * 画像ファイル群を削除する
- * 
+ *
  * @param Model $Model
  * @param string $fieldName フィールド名
  */
@@ -703,14 +720,14 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * ファイルを削除する
- * 
+ *
  * @param Model $Model
  * @param string $file
  * @param array $field 保存対象フィールドの設定
  * - ext 対象のファイル拡張子
  * - prefix 対象のファイルの接頭辞
  * - suffix 対象のファイルの接尾辞
- * @param boolean $delImagecopy 
+ * @param boolean $delImagecopy
  * @return boolean
  */
 	public function delFile(Model $Model, $file, $field, $delImagecopy = true) {
@@ -754,7 +771,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * 全フィールドのファイル名をフィールド値ベースのファイル名に変更する
- * 
+ *
  * @param Model $Model
  * @param bool $copy
  * @return array
@@ -767,7 +784,7 @@ class BcUploadBehavior extends ModelBehavior {
 			}
 			$value = $this->renameToBasenameField($Model, $setting, $copy);
 			if($value !== false) {
-				$data[$Model->alias][$setting['name']] = $value;	
+				$data[$Model->alias][$setting['name']] = $value;
 			}
 		}
 		return $data;
@@ -775,7 +792,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * ファイル名をフィールド値ベースのファイル名に変更する
- * 
+ *
  * @param \Model $Model
  * @param array $setting
  * @param bool $copy
@@ -784,7 +801,7 @@ class BcUploadBehavior extends ModelBehavior {
 	public function renameToBasenameField(Model $Model, $setting, $copy = false) {
 		if (empty($setting['namefield']) || empty($Model->data[$Model->alias][$setting['name']])) {
 			return false;
-		}	
+		}
 		$oldName = $Model->data[$Model->alias][$setting['name']];
 		if(is_array($oldName)) {
 			return false;
@@ -799,7 +816,7 @@ class BcUploadBehavior extends ModelBehavior {
 		}
 		if (!file_exists($oldSaveDir . $oldName)) {
 			return '';
-		}	
+		}
 		$pathinfo = pathinfo($oldName);
 		$newName = $this->getFieldBasename($Model, $setting, $pathinfo['extension']);
 		if (!$newName) {
@@ -890,7 +907,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * ベースファイル名からプレフィックス付のファイル名を取得する
- * 
+ *
  * @param Model $Model
  * @param array $setting
  * @param string $filename
@@ -919,7 +936,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * ファイル名からベースファイル名を取得する
- * 
+ *
  * @param Model $Model
  * @param array $setting
  * @param string $filename
@@ -936,7 +953,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * 一意のファイル名を取得する
- * 
+ *
  * @param string $fieldName 一意の名前を取得する元となるフィールド名
  * @param string $fileName 対象のファイル名
  * @return string
@@ -965,7 +982,7 @@ class BcUploadBehavior extends ModelBehavior {
 			}
 			if($numbers) {
 				$prefixNo = 1;
-				while(true) { 
+				while(true) {
 					if(!isset($numbers[$prefixNo])) {
 						break;
 					}
@@ -982,12 +999,12 @@ class BcUploadBehavior extends ModelBehavior {
 		} else {
 			return $basename . '.' . $ext;
 		}
-		
+
 	}
 
 /**
  * 保存先のフォルダを取得する
- * 
+ *
  * @param Model $Model
  * @param bool $isTheme
  * @return string $saveDir
@@ -1017,7 +1034,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * 保存時にファイルの重複確認を行うディレクトリのリストを取得する
- * 
+ *
  * @param Model $Model
  * @return array $existsCheckDirs
  */
@@ -1031,13 +1048,13 @@ class BcUploadBehavior extends ModelBehavior {
 				$existsCheckDirs[] = $basePath . $existsCheckDir . DS;
 			}
 		}
-		
+
 		return $existsCheckDirs;
 	}
 
 /**
  * 既に存在するデータのファイルを削除する
- * 
+ *
  * @param Model $Model
  */
 	public function deleteExistingFiles(Model $Model) {
@@ -1053,7 +1070,7 @@ class BcUploadBehavior extends ModelBehavior {
 			return;
 		}
 		$Model->set($Model->find('first', [
-			'conditions' => [$Model->alias . '.id' => $Model->data[$Model->alias]['id']],
+			'conditions' => [$Model->alias . '.' . $Model->primaryKey => $Model->data[$Model->alias][$Model->primaryKey]],
 			'recursive' => -1
 		]));
 		foreach($targetFields as $field) {
@@ -1099,5 +1116,5 @@ class BcUploadBehavior extends ModelBehavior {
 		}
 		return true;
 	}
-	
+
 }
