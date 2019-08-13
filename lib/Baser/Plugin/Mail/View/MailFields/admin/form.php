@@ -96,11 +96,16 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 				<?php echo $this->BcForm->error('MailField.valid') ?>
 			</td>
 		</tr>
-		<tr id="RowAttention">
-			<th class="col-head"><?php echo $this->BcForm->label('MailField.attention', __d('baser', '注意書き')) ?></th>
+		<tr id="RowDescription">
+			<th class="col-head">
+				<?php echo $this->BcForm->label('MailField.description', __d('baser', '説明文')) ?>
+				<br><small>※ 送信しない前見出し</small>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpDescription', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
+				<div id="helptextDescription" class="helptext"> <?php echo __d('baser', '姓・名などメール本文に入れない内容を入力してください。')?> </div>
+			</th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailField.attention', array('type' => 'textarea', 'cols' => 35, 'rows' => 3)) ?>
-				<?php echo $this->BcForm->error('MailField.attention') ?>
+				<?php echo $this->BcForm->input('MailField.description', array('type' => 'textarea', 'cols' => 35, 'rows' => 3)) ?>
+				<?php echo $this->BcForm->error('MailField.description') ?>
 			</td>
 		</tr>
 		<tr id="RowBeforeAttachment">
@@ -117,11 +122,16 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 				<?php echo $this->BcForm->error('MailField.after_attachment') ?>
 			</td>
 		</tr>
-		<tr id="RowDescription">
-			<th class="col-head"><?php echo $this->BcForm->label('MailField.description', __d('baser', '説明文')) ?></th>
+		<tr id="RowAttention">
+			<th class="col-head">
+				<?php echo $this->BcForm->label('MailField.attention', __d('baser', '注意書き')) ?>
+				<br><small>※ 送信しない後見出し</small>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpAttention', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
+				<div id="helptextAttention" class="helptext"> <?php echo __d('baser', '「確認のためもう一度入力してください」などメール本文に入れない内容を入力してください。')?> </div>
+			</th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailField.description', array('type' => 'textarea', 'cols' => 35, 'rows' => 3)) ?>
-				<?php echo $this->BcForm->error('MailField.description') ?>
+				<?php echo $this->BcForm->input('MailField.attention', array('type' => 'textarea', 'cols' => 35, 'rows' => 3)) ?>
+				<?php echo $this->BcForm->error('MailField.attention') ?>
 			</td>
 		</tr>
 		<tr id="RowSource">
