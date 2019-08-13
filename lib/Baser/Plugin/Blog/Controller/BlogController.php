@@ -687,7 +687,7 @@ class BlogController extends BlogAppController {
  *
  * @param int $id
  * @param mixed $count
- * @param bool $options //カテゴリ・タグを表示するかどうか 初期値: false
+ * @param mixed $options //カテゴリ・ユーザー・タグを表示するかどうか 初期値: false
  * @return array
  */
 	public function get_recent_entries($id, $limit = 5, $options = false) {
@@ -701,10 +701,30 @@ class BlogController extends BlogAppController {
 				'belongsTo' => ['BlogCategory', 'User'],
 				'hasAndBelongsToMany' => ['BlogTag']
 			]);
-			$recursive = 2;
 		} else {
-			$recursive = 0;
+			/* BlogCategory 有効 */
+			if (strrpos($options, 'BlogCategory') !== false) {
+				/* BlogPostのカテゴリを読み込みBlogCategoryのBlogPostを外す */
+				$this->BlogPost->BlogCategory->unbindModel(['hasMany' => ['BlogPost']]);
+			} else {
+				$this->BlogPost->unbindModel(['belongsTo' => ['BlogCategory']]);
+			}
+			/* User 有効 */
+			if (strrpos($options, 'User') !== false) {
+				/* BlogPostのUserを読み込みUserのBlogPostを外す */
+				$this->BlogPost->User->unbindModel(['hasMany' => ['BlogPost']]);
+			} else {
+				$this->BlogPost->unbindModel(['belongsTo' => ['User']]);
+			}
+			/* BlogTag 有効 */
+			if (strrpos($options, 'BlogTag') !== false) {
+				/* BlogPostのBlogTagを読み込みBlogTagのBlogPostを外す */
+				$this->BlogPost->BlogTag->unbindModel(['hasAndBelongsToMany' => ['BlogPost']]);
+			} else {
+				$this->BlogPost->unbindModel(['hasAndBelongsToMany' => ['BlogTag']]);
+			}
 		}
+		
 		$this->BlogPost->BlogContent->unbindModel([
 			'hasMany' => ['BlogPost', 'BlogCategory']
 		]);
@@ -713,7 +733,7 @@ class BlogController extends BlogAppController {
 			'conditions' => $conditions,
 			'limit' => $limit,
 			'order' => 'posts_date DESC',
-			'recursive' => $recursive,
+			'recursive' => 2,
 			'cache' => false
 		]);
 		return $data;
