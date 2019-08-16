@@ -6238,7 +6238,9 @@ body {
       padding: 4px 7px 4px 4px !important;
       margin-right: 8px !important;
       border-right: 1px solid #ccc !important;
-      box-sizing: content-box !important; }
+      box-sizing: content-box !important;
+      width: 24px;
+      height: 21px; }
     .bca-toolbar .bca-toolbar__logo-text {
       display: inline !important;
       padding: 0 !important;
