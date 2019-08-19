@@ -79,7 +79,7 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 		<th class="bca-form-table__label"><?php echo $this->BcForm->label('Site.keyword', __d('baser', 'サイト基本キーワード')) ?></th>
 		<td class="bca-form-table__input"><?php echo $this->BcForm->input('Site.keyword', ['type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true, 'class' => 'bca-textbox__input full-width']) ?>
 			<i class="bca-icon--question-circle btn help bca-help"></i>
-			<div id="helptextKeyword" class="helptext"><?php echo __d('baser', 'テンプレートで利用する場合は、<br>&lt;?php $this->BcBaser->keywords() ?&gt; で出力します。')?></div>
+			<div id="helptextKeyword" class="helptext"><?php echo __d('baser', 'テンプレートで利用する場合は、<br>&lt;?php $this->BcBaser->metaKeywords() ?&gt; で出力します。')?></div>
 			<?php echo $this->BcForm->error('Site.keyword') ?>
 		</td>
 	</tr>
@@ -87,7 +87,7 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 		<th class="bca-form-table__label"><?php echo $this->BcForm->label('Site.description', __d('baser', 'サイト基本説明文')) ?></th>
 		<td class="bca-form-table__input"><?php echo $this->BcForm->input('Site.description', ['type' => 'textarea', 'cols' => 20, 'rows' => 6, 'maxlength' => 255, 'counter' => true]) ?>
 			<i class="bca-icon--question-circle btn help bca-help"></i>
-			<div id="helptextDescription" class="helptext"><?php echo __d('baser', 'テンプレートで利用する場合は、<br>&lt;?php $this->BcBaser->description() ?&gt; で出力します。')?></div>
+			<div id="helptextDescription" class="helptext"><?php echo __d('baser', 'テンプレートで利用する場合は、<br>&lt;?php $this->BcBaser->metaDescription() ?&gt; で出力します。')?></div>
 			<?php echo $this->BcForm->error('Site.description') ?>
 		</td>
 	</tr>

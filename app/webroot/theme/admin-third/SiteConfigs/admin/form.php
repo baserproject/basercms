@@ -71,7 +71,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
       <td class="col-input bca-form-table__input"><?php echo $this->BcForm->input('SiteConfig.keyword', ['type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true]) ?>
         <i class="bca-icon--question-circle btn help bca-help"></i>
         <?php echo $this->BcForm->error('SiteConfig.keyword') ?>
-        <div id="helptextKeyword" class="helptext"><?php echo __d('baser', 'テンプレートで利用する場合は、<br />&lt;?php $this->BcBaser->keywords() ?&gt; で出力します。')?></div>
+        <div id="helptextKeyword" class="helptext"><?php echo __d('baser', 'テンプレートで利用する場合は、<br />&lt;?php $this->BcBaser->metaKeywords() ?&gt; で出力します。')?></div>
       </td>
     </tr>
     <tr>
@@ -79,7 +79,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
       <td class="col-input bca-form-table__input"><?php echo $this->BcForm->input('SiteConfig.description', ['type' => 'textarea', 'cols' => 36, 'rows' => 5, 'counter' => true, 'data-input-text-size' => 'full-counter']) ?>
         <i class="bca-icon--question-circle btn help bca-help"></i>
         <?php echo $this->BcForm->error('SiteConfig.description') ?>
-        <div id="helptextDescription" class="helptext"><?php echo __d('baser', 'テンプレートで利用する場合は、<br />&lt;?php $this->BcBaser->description() ?&gt; で出力します')?></div>
+        <div id="helptextDescription" class="helptext"><?php echo __d('baser', 'テンプレートで利用する場合は、<br />&lt;?php $this->BcBaser->metaDescription() ?&gt; で出力します')?></div>
       </td>
     </tr>
     <tr>
