@@ -1018,10 +1018,8 @@ class BcAppController extends Controller {
 		//Return-Path
 		if (!empty($options['returnPath'])) {
 			$returnPath = $options['returnPath'];
-		} else {
-			$returnPath = $from;
+			$cakeEmail->returnPath($returnPath);
 		}
-		$cakeEmail->returnPath($returnPath);
 
 		//$sender
 		if (!empty($options['sender'])) {
