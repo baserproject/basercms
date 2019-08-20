@@ -354,7 +354,7 @@ h2 {}
 				<?php echo $this->BcForm->input('SiteConfig.mail_additional_parameters', ['type' => 'input', 'size' => 35, 'maxlength' => 255, 'placeholder' => '-f webmaster@mail.example.com']) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpEncode', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<div id="helptextEncode" class="helptext"><?php echo __d('baser', '標準機能によるメール送信時にオプションを追加します。')?></div>
-				<?php echo $this->BcForm->error('SiteConfig.mail_encode') ?>
+				<?php echo $this->BcForm->error('SiteConfig.mail_additional_parameters') ?>
 			</td>
 		</tr>
 		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
