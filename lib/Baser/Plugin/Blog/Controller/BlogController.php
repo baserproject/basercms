@@ -687,10 +687,9 @@ class BlogController extends BlogAppController {
  *
  * @param int $id
  * @param mixed $count
- * @param mixed $options //カテゴリ・ユーザー・タグを表示するかどうか 初期値: false
  * @return array
  */
-	public function get_recent_entries($id, $limit = 5, $options = false) {
+	public function get_recent_entries($id, $limit = 5) {
 		if ($limit === '0') {
 			$limit = false;
 		}
