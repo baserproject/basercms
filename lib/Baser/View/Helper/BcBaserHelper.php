@@ -1705,9 +1705,12 @@ EOD;
 		$options = array_merge([
 			'tree' => $this->BcContents->getTree($id, $level),
 			'currentId' => $currentId,
+			'excludeIndex' => true,
 			'cache' => false
 		], $options);
-		$options['tree'] = $this->_unsetIndexInContentsMenu($options['tree']);
+		if ($options['excludeIndex']) {
+			$options['tree'] = $this->_unsetIndexInContentsMenu($options['tree']);
+		}
 
 		if(BcUtil::loginUser()) {
 			unset($options['cache']);
