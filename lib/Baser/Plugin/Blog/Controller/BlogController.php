@@ -696,38 +696,16 @@ class BlogController extends BlogAppController {
 		}
 		$data['blogContent'] = $this->BlogContent->find('first', ['conditions' => ['BlogContent.id' => $id], 'recursive' => 0]);
 		$conditions = array_merge(['BlogPost.blog_content_id' => $id], $this->BlogPost->getConditionAllowPublish());
-		if (!$options) {
-			$this->BlogPost->unbindModel([
-				'belongsTo' => ['BlogCategory', 'User'],
-				'hasAndBelongsToMany' => ['BlogTag']
-			]);
-		} else {
-			/* BlogCategory 有効 */
-			if (strrpos($options, 'BlogCategory') !== false) {
-				/* BlogPostのカテゴリを読み込みBlogCategoryのBlogPostを外す */
-				$this->BlogPost->BlogCategory->unbindModel(['hasMany' => ['BlogPost']]);
-			} else {
-				$this->BlogPost->unbindModel(['belongsTo' => ['BlogCategory']]);
-			}
-			/* User 有効 */
-			if (strrpos($options, 'User') !== false) {
-				/* BlogPostのUserを読み込みUserのBlogPostを外す */
-				$this->BlogPost->User->unbindModel(['hasMany' => ['BlogPost']]);
-			} else {
-				$this->BlogPost->unbindModel(['belongsTo' => ['User']]);
-			}
-			/* BlogTag 有効 */
-			if (strrpos($options, 'BlogTag') !== false) {
-				/* BlogPostのBlogTagを読み込みBlogTagのBlogPostを外す */
-				$this->BlogPost->BlogTag->unbindModel(['hasAndBelongsToMany' => ['BlogPost']]);
-			} else {
-				$this->BlogPost->unbindModel(['hasAndBelongsToMany' => ['BlogTag']]);
-			}
-		}
-		
-		$this->BlogPost->BlogContent->unbindModel([
-			'hasMany' => ['BlogPost', 'BlogCategory']
-		]);
+
+		/* BlogCategoryのBlogPostを外す */
+		$this->BlogPost->BlogCategory->unbindModel(['hasMany' => ['BlogPost']]);
+		/* UserのBlogPostとFavoriteを外す */
+		$this->BlogPost->User->unbindModel(['hasMany' => ['BlogPost', 'Favorite']]);
+		/* BlogTagのBlogPostを外す */
+		$this->BlogPost->BlogTag->unbindModel(['hasAndBelongsToMany' => ['BlogPost']]);
+		/* BlogContentのBlogPostとBlogCategoryを外す */
+		$this->BlogPost->BlogContent->unbindModel(['hasMany' => ['BlogPost', 'BlogCategory']]);
+
 		// 毎秒抽出条件が違うのでキャッシュしない
 		$data['recentEntries'] = $this->BlogPost->find('all', [
 			'conditions' => $conditions,

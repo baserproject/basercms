@@ -21,8 +21,7 @@ if (isset($blogContent)) {
 } else {
 	$id = $blog_content_id;
 }
-$options = false;/* カテゴリ・タグを表示したい場合はtrueにする */
-$data = $this->requestAction('/blog/blog/get_recent_entries/' . $id . '/' . $count . '/' . $options, ['entityId' => $id]);
+$data = $this->requestAction('/blog/blog/get_recent_entries/' . $id . '/' . $count, ['entityId' => $id]);
 $recentEntries = $data['recentEntries'];
 $blogContent = $data['blogContent'];
 $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/';
