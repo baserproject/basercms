@@ -20,7 +20,7 @@ App::uses('BlogTag', 'Blog.Model');
 class BlogTagTest extends BaserTestCase {
 
 	public $fixtures = [
-		'plugin.blog.Model/BlogTag/BlogPostsBlogTagFindCustomPrams',
+		'plugin.blog.Model/BlogTag/BlogPostBlogTagFindCustomPrams',
 		'plugin.blog.Model/BlogTag/BlogPostsBlogTagBlogTagFindCustomPrams',
 		'plugin.blog.Model/BlogTag/BlogTagBlogTagFindCustomPrams',
 		'plugin.blog.Model/BlogTag/BlogContentBlogTagFindCustomPrams',
