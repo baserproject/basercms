@@ -43,6 +43,8 @@ class BcBaserHelperTest extends BaserTestCase {
 		'baser.Default.BlogContent',
 		'baser.Default.BlogPost',
 		'baser.Default.BlogCategory',
+		'baser.Default.BlogTag',
+		'baser.Default.BlogPostsBlogTag',
 		'baser.Default.Site',
 		'baser.Default.BlogComment',
 		'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
