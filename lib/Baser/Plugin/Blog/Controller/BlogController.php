@@ -700,8 +700,6 @@ class BlogController extends BlogAppController {
 		$this->BlogPost->BlogCategory->unbindModel(['hasMany' => ['BlogPost']]);
 		/* UserのBlogPostとFavoriteを外す */
 		$this->BlogPost->User->unbindModel(['hasMany' => ['BlogPost', 'Favorite']]);
-		/* BlogTagのBlogPostを外す */
-		$this->BlogPost->BlogTag->unbindModel(['hasAndBelongsToMany' => ['BlogPost']]);
 		/* BlogContentのBlogPostとBlogCategoryを外す */
 		$this->BlogPost->BlogContent->unbindModel(['hasMany' => ['BlogPost', 'BlogCategory']]);
 
