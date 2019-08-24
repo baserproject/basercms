@@ -1692,7 +1692,11 @@ EOD;
  * @param mixed $id コンテンツID（初期値：null）
  * @param int $level 階層（初期値：null）※ null の場合は階層指定なし
  * @param string $currentId 現在のページのコンテンツID（初期値：null）
- * @param array $options  オプション（初期値 : array()）
+ * @param array $options  オプション（初期値 : []）
+ * 	- `tree` : ツリーデータを指定する
+ *  - `currentId` : 現在表示しているページのID
+ * 	- `excludeIndex` : インデックスページを除外しない場合に false を指定
+ * 	- `cache` : キャッシュを有効にする場合に true を指定
  *	※ その他のパラメータについては、View::element() を参照
  * @return string コンテンツメニュー
  */
@@ -1705,9 +1709,12 @@ EOD;
 		$options = array_merge([
 			'tree' => $this->BcContents->getTree($id, $level),
 			'currentId' => $currentId,
+			'excludeIndex' => true,
 			'cache' => false
 		], $options);
-		$options['tree'] = $this->_unsetIndexInContentsMenu($options['tree']);
+		if ($options['excludeIndex']) {
+			$options['tree'] = $this->_unsetIndexInContentsMenu($options['tree']);
+		}
 
 		if(BcUtil::loginUser()) {
 			unset($options['cache']);

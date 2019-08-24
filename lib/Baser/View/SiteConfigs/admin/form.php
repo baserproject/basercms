@@ -73,7 +73,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 		<td class="col-input"><?php echo $this->BcForm->input('SiteConfig.keyword', ['type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true, 'class' => 'full-width']) ?>
 			<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpKeyword', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 			<?php echo $this->BcForm->error('SiteConfig.keyword') ?>
-			<div id="helptextKeyword" class="helptext"><?php echo __d('baser', 'テンプレートで利用する場合は、<br />&lt;?php $this->BcBaser->keywords() ?&gt; で出力します。')?></div>
+			<div id="helptextKeyword" class="helptext"><?php echo __d('baser', 'テンプレートで利用する場合は、<br />&lt;?php $this->BcBaser->metaKeywords() ?&gt; で出力します。')?></div>
 		</td>
 	</tr>
 	<tr>
@@ -81,7 +81,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 		<td class="col-input"><?php echo $this->BcForm->input('SiteConfig.description', ['type' => 'textarea', 'cols' => 36, 'rows' => 5, 'counter' => true]) ?>
 			<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpDescription', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 			<?php echo $this->BcForm->error('SiteConfig.description') ?>
-			<div id="helptextDescription" class="helptext"><?php echo __d('baser', 'テンプレートで利用する場合は、<br />&lt;?php $this->BcBaser->description() ?&gt; で出力します')?></div>
+			<div id="helptextDescription" class="helptext"><?php echo __d('baser', 'テンプレートで利用する場合は、<br />&lt;?php $this->BcBaser->metaDescription() ?&gt; で出力します')?></div>
 		</td>
 	</tr>
 	<tr>

@@ -559,7 +559,7 @@ class MailController extends MailAppController {
 					'bcc' => $mailContent['sender_2'],
 					'agentTemplate' => false,
 					'attachments' => $attachments,
-					'additionalParameters' => '-f ' . $fromAdmin,
+					// 'additionalParameters' => '-f ' . $fromAdmin,
 				],
 				$options['toAdmin']
 			);
@@ -584,7 +584,7 @@ class MailController extends MailAppController {
 					'template' => 'Mail.' . $mailContent['mail_template'],
 					'replyTo' => $fromAdmin,
 					'agentTemplate' => $agentTemplate,
-					'additionalParameters' => '-f ' . $fromAdmin,
+					// 'additionalParameters' => '-f ' . $fromAdmin,
 				],
 				$options['toUser']
 			);
