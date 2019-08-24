@@ -1710,7 +1710,8 @@ EOD;
 			'tree' => $this->BcContents->getTree($id, $level),
 			'currentId' => $currentId,
 			'excludeIndex' => true,
-			'cache' => false
+			'cache' => false,
+			'element' => 'contents_menu',
 		], $options);
 		if ($options['excludeIndex']) {
 			$options['tree'] = $this->_unsetIndexInContentsMenu($options['tree']);
@@ -1730,7 +1731,7 @@ EOD;
 			}
 		}
 
-		return $this->getElement('contents_menu', $options);
+		return $this->getElement($options['element'], $options);
 	}
 
 /**
