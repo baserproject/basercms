@@ -695,13 +695,14 @@ class BlogController extends BlogAppController {
 		}
 		$data['blogContent'] = $this->BlogContent->find('first', ['conditions' => ['BlogContent.id' => $id], 'recursive' => 0]);
 		$conditions = array_merge(['BlogPost.blog_content_id' => $id], $this->BlogPost->getConditionAllowPublish());
-		$this->BlogPost->unbindModel([
-			'belongsTo' => ['BlogCategory', 'User'],
-			'hasAndBelongsToMany' => ['BlogTag']
-		]);
-		$this->BlogPost->BlogContent->unbindModel([
-			'hasMany' => ['BlogPost', 'BlogCategory']
-		]);
+
+		/* BlogCategoryのBlogPostを外す */
+		$this->BlogPost->BlogCategory->unbindModel(['hasMany' => ['BlogPost']]);
+		/* UserのBlogPostとFavoriteを外す */
+		$this->BlogPost->User->unbindModel(['hasMany' => ['BlogPost', 'Favorite']]);
+		/* BlogContentのBlogPostとBlogCategoryを外す */
+		$this->BlogPost->BlogContent->unbindModel(['hasMany' => ['BlogPost', 'BlogCategory']]);
+
 		// 毎秒抽出条件が違うのでキャッシュしない
 		$data['recentEntries'] = $this->BlogPost->find('all', [
 			'conditions' => $conditions,
