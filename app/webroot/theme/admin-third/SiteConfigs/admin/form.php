@@ -14,7 +14,9 @@
  * [管理画面] サイト設定 フォーム
  *
  * @var BcAppView $this
- * @var array $themes
+ * @var array $disableSettingInstallSetting install.php について、 disabled を設定するかどうか
+ * @var array $themes テーマ一覧
+ * @var bool $safeModeOn セーフモードかどうか
  */
 $this->BcBaser->i18nScript([
     'alertMessage1' => __d('baser', '管理システムをSSLに切り替える場合には、SSL用のURLを登録してください。'),
@@ -37,7 +39,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 <?php echo $this->BcForm->hidden('SiteConfig.id') ?>
 
-  <table cellpadding="0" cellspacing="0" class="form-table bca-form-table section" data-bca-table-type="type2">
+  <table class="form-table bca-form-table section" data-bca-table-type="type2">
     <tr>
       <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.formal_name', __d('baser', 'WEBサイト名')) ?>&nbsp;<span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
       <td class="col-input bca-form-table__input">
@@ -134,7 +136,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
     <button type="button" class="bca-collapse__btn" data-bca-collapse="collapse" data-bca-target="#formAdminSettingBody" aria-expanded="false" aria-controls="formAdminSettingBody"><?php echo __d('baser', '管理画面設定') ?>&nbsp;&nbsp;<i class="bca-icon--chevron-down bca-collapse__btn-icon"></i></button>
   </div>
   <div class="bca-collapse" id="formAdminSettingBody" data-bca-state="">
-	  <table cellpadding="0" cellspacing="0" class="form-table bca-form-table section" data-bca-table-type="type2">
+	  <table class="form-table bca-form-table section" data-bca-table-type="type2">
 		<tr>
 		  <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.admin_ssl', __d('baser', '管理画面SSL設定')) ?></th>
 		  <td class="col-input bca-form-table__input">
@@ -195,7 +197,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
     <button type="button" class="bca-collapse__btn" data-bca-collapse="collapse" data-bca-target="#formOuterServiceSettingBody" aria-expanded="false" aria-controls="formOuterServiceSettingBody">外部サービス設定&nbsp;&nbsp;<i class="bca-icon--chevron-down bca-collapse__btn-icon"></i></button>
   </div>
   <div class="bca-collapse" id="formOuterServiceSettingBody" data-bca-state="">
-	<table cellpadding="0" cellspacing="0" class="form-table bca-form-table"data-bca-table-type="type2">
+	<table class="form-table bca-form-table" data-bca-table-type="type2">
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.address', __d('baser', 'GoogleMaps住所')) ?></th>
 			<td class="col-input bca-form-table__input">
@@ -231,7 +233,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
     <button type="button" class="bca-collapse__btn" data-bca-collapse="collapse" data-bca-target="#formSubSiteSettingBody" aria-expanded="false" aria-controls="formSubSiteSettingBody">サブサイト設定&nbsp;&nbsp;<i class="bca-icon--chevron-down bca-collapse__btn-icon"></i></button>
   </div>
   <div class="bca-collapse" id="formSubSiteSettingBody" data-bca-state="">
-  <table cellpadding="0" cellspacing="0" class="form-table bca-form-table section" data-bca-table-type="type2">
+  <table class="form-table bca-form-table section" data-bca-table-type="type2">
     <tr>
       <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.main_site_display_name', __d('baser', 'メインサイト表示名称')) ?>&nbsp;<span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
       <td class="col-input bca-form-table__input">
@@ -263,7 +265,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
     <button type="button" class="bca-collapse__btn" data-bca-collapse="collapse" data-bca-target="#formEditorSettingBody" aria-expanded="false" aria-controls="formEditorSettingBody"><?php echo __d('baser', 'エディタ設定') ?>&nbsp;&nbsp;<i class="bca-icon--chevron-down bca-collapse__btn-icon"></i></button>
   </div>
   <div class="bca-collapse" id="formEditorSettingBody" data-bca-state="">
-  <table cellpadding="0" cellspacing="0" class="form-table bca-form-table section" data-bca-table-type="type2">
+  <table class="form-table bca-form-table section" data-bca-table-type="type2">
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.editor_enter_br', __d('baser', 'エディタタイプ')) ?></th>
 			<td class="col-input bca-form-table__input">
@@ -317,7 +319,7 @@ h2 {}
     <button type="button" class="bca-collapse__btn" data-bca-collapse="collapse" data-bca-target="#formMailSettingBody" aria-expanded="false" aria-controls="formMailSettingBody">メール設定&nbsp;&nbsp;<i class="bca-icon--chevron-down bca-collapse__btn-icon"></i></button>
   </div>
   <div class="bca-collapse" id="formMailSettingBody" data-bca-state="">
-	<table cellpadding="0" cellspacing="0" class="form-table bca-form-table" data-bca-table-type="type2">
+	<table class="form-table bca-form-table" data-bca-table-type="type2">
 		<tr>
 			<th class="bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.mail_encode', __d('baser', 'メール送信文字コード')) ?></th>
 			<td class="col-input bca-form-table__input">
@@ -392,7 +394,7 @@ h2 {}
         </table>
 				<div class="bca-form-table__inner-submit">
 					<?php echo $this->BcForm->button('<i class="bca-icon--mail"></i>' . __d('baser', 'メール送信テスト'), ['type' => 'button', 'class' => 'button-small bca-btn', 'id' => 'BtnCheckSendmail']) ?>　<span id=ResultCheckSendmail></span>
-					<?php echo $this->BcBaser->img('admin/ajax-loader-s.gif', ['id' => 'AjaxLoaderCheckSendmail', 'style' => 'display:none']) ?>
+					<?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['id' => 'AjaxLoaderCheckSendmail', 'style' => 'display:none']) ?>
 				</div>
 			</td>
 		</tr>
@@ -401,10 +403,11 @@ h2 {}
 			<td class="col-input bca-form-table__input">
         <?php echo $this->BcForm->input('SiteConfig.mail_additional_parameters', ['type' => 'input', 'size' => 35, 'maxlength' => 255, 'placeholder' => '-f webmaster@mail.example.com']) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
-				<div id="helptextEncode" class="helptext"><?php echo __d('baser', '標準機能によるメール送信時にオプションを追加します。')?></div>
+				<div class="helptext"><?php echo __d('baser', '標準機能によるメール送信時にオプションを追加します。')?></div>
 				<?php echo $this->BcForm->error('SiteConfig.mail_encode') ?>
 			</td>
 		</tr>
+		
 		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 
 	</table>
