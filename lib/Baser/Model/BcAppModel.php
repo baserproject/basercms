@@ -793,13 +793,24 @@ class BcAppModel extends Model {
  * @link http://php.net/manual/ja/features.file-upload.errors.php
  */
 	public function fileCheck($check, $size) {
+		// post_max_size オーバーチェック
+		// POSTを前提の検証としているため全ての受信データを検証
+		if (empty($_POST)) {
+			$this->log('アップロードされたファイルは、PHPの設定 post_max_size ディレクティブの値を超えています。');
+			return false;
+		}
 		$file = $check[key($check)];
+		// input[type=file] 自体が送信されていない場合サイズ検証を終了
+		if ($file === null) {
+			return true;
+		}
+
 
 		$fileErrorCode = Hash::get($file, 'error');
 		if ($fileErrorCode) {
 			// ファイルアップロード時のエラーメッセージを取得する
 			switch ($fileErrorCode) {
-				case 1:	
+				case 1:
 					// UPLOAD_ERR_INI_SIZE
 					$this->log('CODE: ' . $fileErrorCode . ' アップロードされたファイルは、php.ini の upload_max_filesize ディレクティブの値を超えています。');
 					break;
@@ -811,10 +822,11 @@ class BcAppModel extends Model {
 					// UPLOAD_ERR_PARTIAL
 					$this->log('CODE: ' . $fileErrorCode . ' アップロードされたファイルが不完全です。');
 					break;
-				case 4:
-					// UPLOAD_ERR_NO_FILE
-					$this->log('CODE: ' . $fileErrorCode . ' ファイルがアップロードされませんでした。');
-					break;
+				// アップロードされなかった場合の検証は必須チェックを仕様すること
+				// case 4:
+				// 	// UPLOAD_ERR_NO_FILE
+				// 	$this->log('CODE: ' . $fileErrorCode . ' ファイルがアップロードされませんでした。');
+				// 	break;
 				case 6:
 					// UPLOAD_ERR_NO_TMP_DIR
 					$this->log('CODE: ' . $fileErrorCode . ' 一時書込み用のフォルダがありません。テンポラリフォルダの書込み権限を見直してください。');
@@ -835,7 +847,6 @@ class BcAppModel extends Model {
 
 		if (!empty($file['name'])) {
 			// サイズが空の場合は、HTMLのMAX_FILE_SIZEの制限によりサイズオーバー
-			// だが、post_max_size を超えた場合は、ここまで処理がこない可能性がある
 			if (!$file['size']) {
 				return false;
 			}
