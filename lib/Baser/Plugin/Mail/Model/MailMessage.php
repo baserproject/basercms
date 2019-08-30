@@ -229,7 +229,9 @@ class MailMessage extends MailAppModel {
 					$options = call_user_func_array('aa', $options);
 					switch ($valid) {
 						case 'VALID_MAX_FILE_SIZE':
-							if (!empty($options['maxFileSize']) && $this->data['MailMessage'][$mailField['field_name']]['error'] !== UPLOAD_ERR_NO_FILE) {
+							if (!empty($options['maxFileSize']) &&
+								(isset($this->data['MailMessage'][$mailField['field_name']]['error']) &&
+								$this->data['MailMessage'][$mailField['field_name']]['error'] !== UPLOAD_ERR_NO_FILE)) {
 								switch ($this->data['MailMessage'][$mailField['field_name']]['error']) {
 									case UPLOAD_ERR_OK:
 									case UPLOAD_ERR_INI_SIZE:
