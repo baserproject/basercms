@@ -139,7 +139,6 @@ class ThemeFilesController extends AppController {
 					'Layouts', 
 					'Elements', 
 					'Emails',
-					'Pages', 
 					'Helper', 
 					'Config',
 					'Plugin',					
