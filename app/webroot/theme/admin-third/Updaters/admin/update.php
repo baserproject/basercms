@@ -110,7 +110,15 @@ $this->BcBaser->js('admin/updaters/update', false);
 			<?php echo $this->BcForm->create('Updater', ['url' => ['action' => $this->request->action, $plugin]]) ?>
 		<?php endif ?>
 		<?php echo $this->BcForm->input('Installation.update', ['type' => 'hidden', 'value' => true]) ?>
-		<?php echo $this->BcForm->end(['label' => __d('baser', 'アップデート実行'), 'class' => 'button btn-red', 'id' => 'BtnUpdate']) ?>
+		<div class="bca-actions">
+		<?php echo $this->BcForm->submit(__d('baser', 'アップデート実行'), [
+			'class' => 'button bca-btn bca-actions__item', 
+			'data-bca-btn-size' => 'lg', 
+			'data-bca-btn-width' => 'lg', 
+			'id' => 'BtnUpdate', 
+			'div' => false
+		]) ?>
+		</div>
 	<?php else: ?>
 		<p>
 			<?php if (!$plugin): ?>
