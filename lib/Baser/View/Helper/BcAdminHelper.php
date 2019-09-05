@@ -162,7 +162,9 @@ class BcAdminHelper extends AppHelper {
 			} else {
 				$adminMenuGroup['menus'] = [];
 			}
-			$covertedAdminMenuGroups[] = $adminMenuGroup;
+			if($adminMenuGroup['url'] || $adminMenuGroup['menus']) {
+				$covertedAdminMenuGroups[] = $adminMenuGroup;
+			}
 		}
 
 		if($currentOn === false) {
