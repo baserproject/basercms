@@ -150,7 +150,7 @@ class PagesController extends AppController {
 				}
 
 				// 完了メッセージ
-				$this->setMessage(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), $this->request->data['Content']['name'], urldecode($this->request->data['Content']['url'])), false, true);
+				$this->setMessage(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), $data['Content']['name'], urldecode($data['Content']['url'])), false, true);
 
 				// EVENT Pages.afterEdit
 				$this->dispatchEvent('afterEdit', [
