@@ -251,7 +251,17 @@ class CakeRequest implements ArrayAccess {
 			if ($qPosition !== false && strpos($_SERVER['REQUEST_URI'], '://') > $qPosition) {
 				$uri = $_SERVER['REQUEST_URI'];
 			} else {
-				$uri = substr($_SERVER['REQUEST_URI'], strlen(Configure::read('App.fullBaseUrl')));
+				// CUSTOMIZE MODIFY 2019/09/18 CUiwamoto
+				// urlのアクション部分にフルパスが来るとトップページに遷移してしまう為、404となるように修正
+				// >>>
+				// $uri = substr($_SERVER['REQUEST_URI'], strlen(Configure::read('App.fullBaseUrl')));
+				// ---
+				if (strpos($_SERVER['REQUEST_URI'], Configure::read('App.fullBaseUrl')) === 0) {
+					$uri = substr($_SERVER['REQUEST_URI'], strlen(Configure::read('App.fullBaseUrl')));
+				} else {
+					$uri = $_SERVER['REQUEST_URI'];
+				}
+				// <<<
 			}
 		} elseif (isset($_SERVER['PHP_SELF']) && isset($_SERVER['SCRIPT_NAME'])) {
 			$uri = str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['PHP_SELF']);
