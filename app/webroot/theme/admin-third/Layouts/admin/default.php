@@ -76,7 +76,6 @@
 			'admin/vendors/jquery.validate.min',
       		'admin/vendors/jquery.colorbox-1.6.1.min',
 			'admin/vendors/bootstrap-4.1.3/bootstrap.bundle.min',
-			'admin/libs/jquery.mScroll',
 			'admin/libs/jquery.baseUrl',
 			'admin/libs/jquery.bcConfirm',
 			'admin/libs/credit',
