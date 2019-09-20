@@ -805,44 +805,46 @@ class BcAppModel extends Model {
 			return true;
 		}
 
-
 		$fileErrorCode = Hash::get($file, 'error');
 		if ($fileErrorCode) {
 			// ファイルアップロード時のエラーメッセージを取得する
 			switch ($fileErrorCode) {
+				// アップロード成功
+				case 0:
+					// UPLOAD_ERR_OK
+					break;
 				case 1:
 					// UPLOAD_ERR_INI_SIZE
 					$this->log('CODE: ' . $fileErrorCode . ' アップロードされたファイルは、php.ini の upload_max_filesize ディレクティブの値を超えています。');
-					break;
+					return false;
 				case 2:
 					// UPLOAD_ERR_FORM_SIZE
 					$this->log('CODE: ' . $fileErrorCode . ' アップロードされたファイルは、HTMLで指定された MAX_FILE_SIZE を超えています。');
-					break;
+					return false;
 				case 3:
 					// UPLOAD_ERR_PARTIAL
 					$this->log('CODE: ' . $fileErrorCode . ' アップロードされたファイルが不完全です。');
-					break;
+					return false;
 				// アップロードされなかった場合の検証は必須チェックを仕様すること
-				// case 4:
-				// 	// UPLOAD_ERR_NO_FILE
-				// 	$this->log('CODE: ' . $fileErrorCode . ' ファイルがアップロードされませんでした。');
-				// 	break;
+				case 4:
+					// UPLOAD_ERR_NO_FILE
+					// 	$this->log('CODE: ' . $fileErrorCode . ' ファイルがアップロードされませんでした。');
+					break;
 				case 6:
 					// UPLOAD_ERR_NO_TMP_DIR
 					$this->log('CODE: ' . $fileErrorCode . ' 一時書込み用のフォルダがありません。テンポラリフォルダの書込み権限を見直してください。');
-					break;
+					return false;
 				case 7:
 					// UPLOAD_ERR_CANT_WRITE
 					$this->log('CODE: ' . $fileErrorCode . ' ディスクへの書き込みに失敗しました。');
-					break;
+					return false;
 				case 8:
 					// UPLOAD_ERR_EXTENSION
 					$this->log('CODE: ' . $fileErrorCode . ' PHPの拡張モジュールがファイルのアップロードを中止しました。');
-					break;
+					return false;
 				default:
 					break;
 			}
-			return false;
 		}
 
 		if (!empty($file['name'])) {
