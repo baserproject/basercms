@@ -1889,7 +1889,9 @@ DOC_END;
  * @return string html
  */
 	public function datepicker($fieldName, $attributes = []) {
-
+		if (!isset($attributes['autocomplete'])) {
+			$attributes['autocomplete'] = 'off';
+		}
 		if (!isset($attributes['value'])) {
 			$value = $this->value($fieldName);
 		} else {
@@ -1950,13 +1952,15 @@ DOC_END;
 		$dateOptions = array_merge($options, [
 			'type' => 'datepicker',
 			'div' => $options['dateDiv'],
-			'label' => $options['dateLabel']
+			'label' => $options['dateLabel'],
+			'autocomplete' => 'off'
 		], $options['dateInput']);
 
 		$timeOptions = array_merge($options, [
 			'type' => 'text',
 			'div' => $options['timeDiv'],
 			'label' => $options['timeLabel'],
+			'autocomplete' => 'off',
 			'size' => 8, 
 			'maxlength' => 8, 
 			'escape' => true
