@@ -1346,8 +1346,10 @@ class Content extends AppModel {
  * 
  * @param string $url
  * @return bool
+ * @deprecated 5.0.0 since 4.2.2 Content::findByUrl() を利用してください。
  */
 	public function existsPublishUrl($url) {
+		trigger_error(deprecatedMessage('メソッド：Content::existsPublishUrl()', '4.2.2', '5.0.0', 'Content::findByUrl() を利用してください。'), E_USER_DEPRECATED);
 		$conditions = $this->getConditionAllowPublish();
 		$conditions['url'] = $url;
 		return (boolean) $this->find('count', ['conditions' => $conditions]);
@@ -1831,12 +1833,12 @@ class Content extends AppModel {
 /**
  * URLに関連するコンテンツ情報を取得する
  *
- * @param string $url
- * @param bool $publish
- * @param bool $extend
- * @param bool $sameUrl
- * @param bool $useSubDomain
- * @return mixed false|array
+ * @param string $url 検索対象のURL
+ * @param bool $publish 公開状態かどうか
+ * @param bool $extend 拡張URLに対応するかどうか /news/ というコンテンツが存在する場合、/news/archives/1 で検索した際にヒットさせる
+ * @param bool $sameUrl 対象をメインサイトと同一URLで表示するサイト設定内のコンテンツするかどうか
+ * @param bool $useSubDomain 対象をサブドメインを利用しているサイト設定内のコンテンツをするかどうか
+ * @return mixed false|array Content データ
  */
 	public function findByUrl($url, $publish = true, $extend = false, $sameUrl = false, $useSubDomain = false) {
 		$url = preg_replace('/^\//', '', $url);
