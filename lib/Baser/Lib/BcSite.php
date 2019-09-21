@@ -395,7 +395,11 @@ class BcSite {
 		$url = $this->makeUrl($request);
 		/* @var Content $Content */
 		$Content = ClassRegistry::init('Content');
-		return (bool) $Content->findByUrl($url, true, true, $this->sameMainUrl, $this->useSubDomain);
+		if($Content->findByUrl($url, true, false, $this->sameMainUrl, $this->useSubDomain) || 
+			$Content->findByUrl($url, true, true, $this->sameMainUrl, $this->useSubDomain)) {
+			return true;
+		} 
+		return false;
 	}
 
 /**
