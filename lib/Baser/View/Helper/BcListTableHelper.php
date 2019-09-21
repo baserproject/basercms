@@ -55,7 +55,7 @@ class BcListTableHelper extends AppHelper {
 		if ($event !== false) {
 			if(!empty($event->data['fields'])) {
 				foreach($event->data['fields'] as $field) {
-					$output .= "<th>" . $field . "</th>\n";
+					$output .= "<th class=\"bca-table-listup__thead-th\">" . $field . "</th>\n";
 				}
 				$this->_columnNumber += count($event->data['fields']);
 			}
@@ -77,7 +77,7 @@ class BcListTableHelper extends AppHelper {
 		if ($event !== false) {
 			if(!empty($event->data['fields'])) {
 				foreach($event->data['fields'] as $field) {
-					$output .= "<td>" . $field . "</td>\n";
+					$output .= "<td class=\"bca-table-listup__tbody-td\">" . $field . "</td>\n";
 				}
 			}
 		}

@@ -237,7 +237,7 @@ class BcFormHelper extends FormHelper {
 		}
 
 		$class = 'bca-hidden__input';
-		$divClass = 'bca-hidden'; 
+		$divClass = 'bca-hidden';
 		$labelClass = $childDivClass = $label = '';
 		switch ($type) {
 			default :
@@ -277,7 +277,7 @@ class BcFormHelper extends FormHelper {
 				break;
 			case 'text':
 			case 'password':
-			case 'datepicker':	
+			case 'datePicker':
 				if (!isset($options['label'])) {
 					$options['label'] = false;
 				}
@@ -360,9 +360,9 @@ class BcFormHelper extends FormHelper {
 		// >>>
 		//unset($options['div']);
 		// ---
-		if ($childDivClass) {
+		if ($childDivClass && $options['div'] !== false) {
 			$options['div']['class'] = $childDivClass;
-		} else {
+		} elseif($options['div'] !== false) {
 			unset($options['div']);
 		}
 		$counter = false;
@@ -574,7 +574,7 @@ DOC_END;
 		// チェックボックスをラベルで囲う仕様に変更
 		// CUSTOMIZE MODIRY 2017/2/19 ryuring
 		// チェックボックスをラベルタグで囲わない仕様に変更した
-		// >>> 
+		// >>>
 		//return $output . $this->Html->useTag('checkbox', $options['name'], array_diff_key($options, array('name' => null)));
 		// ---
 		if (!empty($label)) {
@@ -1265,9 +1265,9 @@ DOC_END;
 								$tag = 'div';
 								if(!empty($divOptions['tag'])) {
 									$tag = $divOptions['tag'];
-								}	
+								}
 								unset($divOptions['tag'], $divOptions['errorClass']);
-								$select[] = $this->Html->tag($tag, $item, $divOptions);								
+								$select[] = $this->Html->tag($tag, $item, $divOptions);
 							} else {
 								$select[] = $this->Html->div($attributes['class'], $item);
 							}
@@ -1581,7 +1581,7 @@ DOC_END;
 				}
 			} else {
 				$out[] = $radio;
-			}	
+			}
 			// <<<
 		}
 		$hidden = null;
@@ -1643,8 +1643,8 @@ DOC_END;
  * フォームのIDを取得する
  *
  * BcFormHelper::create() の後に呼び出される事を前提とする
- * 
- * @return string フォームID 
+ *
+ * @return string フォームID
  */
 	public function getId() {
 		return $this->__id;
@@ -2011,7 +2011,7 @@ DOC_END;
 				$tag = $dateDivOptions['tag'];
 				unset($dateDivOptions['tag']);
 			}
-			$dateTag = $this->Html->tag($tag, $dateTag, $dateDivOptions);	
+			$dateTag = $this->Html->tag($tag, $dateTag, $dateDivOptions);
 		}
 		$timeTag = $this->text($fieldName . '_time', $timeOptions);
 		if($timeLabelOptions['label']) {
@@ -2287,8 +2287,8 @@ DOC_END;
 			if(!empty($event->data['fields'])) {
 				foreach($event->data['fields'] as $field) {
 					$out .= "<tr>";
-					$out .= "<th class=\"col-head\">" . $field['title'] . "</th>\n";
-					$out .= "<td class=\"col-input\">" . $field['input'] . "</td>\n";
+					$out .= "<th class=\"col-head bca-form-table__label\">" . $field['title'] . "</th>\n";
+					$out .= "<td class=\"col-input bca-form-table__input\">" . $field['input'] . "</td>\n";
 					$out .= "</tr>";
 				}
 			}
