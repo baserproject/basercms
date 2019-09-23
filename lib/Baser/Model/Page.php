@@ -489,7 +489,7 @@ class Page extends AppModel {
 				$folderNames = explode('/', $url);
 				foreach ($folderNames as $key => $value) {
 					if (isset($folderTitles[$value])) {
-						if (count($folderNames) == ($key + 1)) {
+						if (count($folderNames) == ($key + 2)) {
 							$folderTitle = $folderTitles[$value]['title'];
 						} elseif (isset($folderTitles[$value]['children'])) {
 							$folderTitles = $folderTitles[$value]['children'];
