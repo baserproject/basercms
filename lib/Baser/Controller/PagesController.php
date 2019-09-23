@@ -228,7 +228,7 @@ class PagesController extends AppController {
 		$result = $this->Page->entryPageFiles($pagesPath);
 		clearAllCache();
 		$this->setMessage(
-			sprintf(__d('baser', '%s ページ中 %s ページの新規登録、 %s ページの更新に成功しました。'), $result['all'], $result['insert'], $result['update'])
+			sprintf(__d('baser', '%s ページ中 %s ページの新規登録、 %s ページの更新、 %s フォルダの新規登録、 %s フォルダの更新に成功しました。'), $result['all'], $result['insert'], $result['update'], $result['insert_folder'], $result['update_folder'])
 		);
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
