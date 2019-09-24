@@ -606,8 +606,8 @@ class BcFormHelperTest extends BaserTestCase {
 
 	public function dispatchAfterFormDataProvider() {
 		return [
-			['Hoge', [['title' => '1', 'input' => '2']], true, '<tr><th class="col-head">1<\/th>\n<td class="col-input">2<\/td>\n<\/tr>'],
-			['Hoge', [['title' => '1', 'input' => '2']], false, '<tr><th class="col-head">1<\/th>\n<td class="col-input">2<\/td>\n<\/tr>'],
+			['Hoge', [['title' => '1', 'input' => '2']], true, '<tr><th class="col-head bca-form-table__label">1<\/th>\n<td class="col-input bca-form-table__input">2<\/td>\n<\/tr>'],
+			['Hoge', [['title' => '1', 'input' => '2']], false, '<tr><th class="col-head bca-form-table__label">1<\/th>\n<td class="col-input bca-form-table__input">2<\/td>\n<\/tr>'],
 			['Hoge', '', true, ''],
 			['Hoge', '', false, ''],
 		];
