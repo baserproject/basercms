@@ -543,7 +543,9 @@ class BcAppTest extends BaserTestCase {
 		$size = 1000;
 
 		$_POST = ['fileCheck require $_POST' => true];
+		CakeLog::disable('stderr');
 		$result = $this->BcApp->fileCheck($check, $size);
+		CakeLog::enable('stderr');
 		$this->assertEquals($expect, $result);		
 	}
 
