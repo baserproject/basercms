@@ -94,7 +94,7 @@ class BcListTableHelper extends AppHelper {
  */
 	public function rowClass($isPublish, $record = [], $options = []) {
 		$options = array_merge([
-			'class' => []
+			'class' => ['bca-table-listup__tbody-tr']
 		], $options);
 		if (!$isPublish) {
 			$classies = ['unpublish', 'disablerow'];
