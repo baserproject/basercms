@@ -51,8 +51,8 @@ class BcLIstTableHelperTest extends CakeTestCase {
 
 	public function rowClassDataProvider() {
 		return [
-			[true, 'class="publish"'],
-			[false,'class="unpublish disablerow"']
+			[true, 'class="publish bca-table-listup__tbody-tr"'],
+			[false,'class="unpublish disablerow bca-table-listup__tbody-tr"']
 		];
 	}
 
