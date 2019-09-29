@@ -681,6 +681,9 @@ class ContentsController extends AppController {
 		}
 		
 		$data = $this->request->data;
+		
+		$beforeUrl = $this->Content->field('url', ['Content.id' => $data['currentId']]);
+		
 		$result = $this->Content->move(
 			$data['currentId'],
 			$data['currentParentId'],
@@ -700,6 +703,13 @@ class ContentsController extends AppController {
 			$this->dispatchEvent('afterMove', [
 				'data' => $result
 			]);
+			$this->BcMessage->set(
+				sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"),
+					$result['Content']['title'], 
+					urldecode($beforeUrl), 
+					urldecode($result['Content']['url'])
+				),
+			false, true, false);
 			
 			return json_encode($this->Content->getUrlById($result['Content']['id'], true));
 		} else {

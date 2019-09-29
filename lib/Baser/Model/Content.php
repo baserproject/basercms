@@ -1501,6 +1501,7 @@ class Content extends AppModel {
 			$data = $this->save(['Content' => [
 				'id'		=> $currentId,
 				'name'		=> $data['Content']['name'],
+				'title'		=> $data['Content']['title'],
 				'plugin'	=> $data['Content']['plugin'],
 				'type' 		=> $data['Content']['type'],
 				'parent_id' => $targetParentId,
