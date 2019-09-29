@@ -2301,6 +2301,11 @@ END_FLASH;
 				$link = $originUrl;
 			} elseif ($options['link']) {
 				$link = $options['link'];
+				if(!empty($this->request->params['Site']['alias'])) {
+					if(empty($this->request->params['Site']['same_main_url'])) {
+						$link = '/' . $this->request->params['Site']['alias'] . $link;
+					}
+				}
 			}
 			if ($options['alt']) {
 				$linkOptions['title'] = $options['alt'];

@@ -79,16 +79,25 @@ class BlogHelper extends AppHelper {
 				}
 			} elseif (isset($this->_View->viewVars['blogContent']['BlogContent'])) {
 				$this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
-				$blogContentUpdated = true;
+				$this->content = $this->request->params['Content'];
 			}
 		}
 		if ($this->blogContent) {
 			if($blogContentUpdated) {
 				$Content = ClassRegistry::init('Content');
+				// 現在のサイトにエイリアスが存在するのであればそちらを優先する
 				$content = $Content->find('first', ['conditions' => [
 					'Content.entity_id' => $this->blogContent['id'],
-					'Content.type' => 'BlogContent'
+					'Content.type' => 'BlogContent',
+					'alias_id <>' => null,
+					'site_id' => $this->request->params['Site']['id']
 				], 'recursive' => -1]);
+				if(!$content) {
+					$content = $Content->find('first', ['conditions' => [
+						'Content.entity_id' => $this->blogContent['id'],
+						'Content.type' => 'BlogContent'
+					], 'recursive' => -1]);
+				}
 				$this->content = Hash::extract($content, 'Content');
 			}
 			$BlogPost = ClassRegistry::init('Blog.BlogPost');
