@@ -57,7 +57,11 @@ $config['BcApp'] = [
 				'title' => __d('baser', 'サブサイト管理'),
 				'type' => 'system',
 				'menus' => [
-					'Sites' => ['title' => __d('baser', 'サブサイト'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'sites', 'action' => 'index']],
+					'Sites' => [
+						'title' => __d('baser', 'サブサイト'), 
+						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'sites', 'action' => 'index'],
+						'currentRegex' => '/\/sites\/.+?/s'						
+					],
 				]
 			],
 			'Theme' => [
