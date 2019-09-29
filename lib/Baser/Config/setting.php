@@ -134,7 +134,9 @@ $config['BcApp'] = [
 	'marketPluginRss' => 'https://market.basercms.net/plugins.rss',
 	'specialThanks'	=> 'https://basercms.net/special_thanks/special_thanks/ajax_users',
 	// 管理システムの新しいテーマ名
-	'adminNewThemeName' => ['admin-third' => 'admin-third（ベータ版）']
+	'adminNewThemeName' => ['admin-third' => 'admin-third（ベータ版）'],
+	// コンテンツの作成日を自動で更新する
+	'autoUpdateContentCreatedDate' => true
 ];
 
 /**

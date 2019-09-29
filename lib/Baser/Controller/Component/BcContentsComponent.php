@@ -260,6 +260,9 @@ public function settingForm(Controller $controller, $currentSiteId, $currentCont
 			array_unshift($templates, ['' => __d('baser', '親フォルダの設定に従う') . '（' . $parentTemplate . '）']);
 		}
 		$data['Content']['name'] = urldecode($data['Content']['name']);
+		if(Configure::read('BcApp.autoUpdateContentCreatedDate')) {
+			$data['Content']['modified_date'] = date('Y-m-d H:i:s');
+		}
 		$controller->set('layoutTemplates', $templates);
 		$controller->set('parentContents', $controller->Content->getContentFolderList($currentSiteId, $options));
 		$controller->set('authors', $controller->User->getUserList());
