@@ -39,7 +39,6 @@
 			'admin/vendors/jquery.form-2.94',
 			'admin/vendors/jquery.validate.min',
 			'admin/vendors/jquery.colorbox-1.6.1.min',
-			'admin/libs/jquery.mScroll',
 			'admin/libs/jquery.baseUrl',
 			'admin/libs/credit',
 			'admin/vendors/validate_messages_ja',
