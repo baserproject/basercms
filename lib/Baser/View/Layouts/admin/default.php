@@ -46,7 +46,7 @@
 			'commonBatchExecFailedMessage'  => __d('baser', '一括処理に失敗しました。'),
 			'commonGetDataFailedMessage'    => __d('baser', 'データ取得に失敗しました。'),
 			'commonSortSaveFailedMessage'   => __d('baser', '並び替えの保存に失敗しました。'),
-			'commonSortSaveConfirmMessage'	=> __d('baser', 'コンテンツを移動しますよろしいですか？'),
+			'commonSortSaveConfirmMessage'	=> __d('baser', 'コンテンツを移動します。よろしいですか？'),
 			'commonNotFoundProgramMessage'  => __d('baser', '送信先のプログラムが見つかりません。'),
 			'commonSelectDataFailedMessage' => __d('baser', 'データが選択されていません。'),
 			'commonConfirmDeleteMessage'    => __d('baser', '本当に削除してもよろしいですか？'),

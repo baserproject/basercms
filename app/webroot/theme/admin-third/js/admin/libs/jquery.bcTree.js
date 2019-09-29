@@ -59,6 +59,16 @@
 	 * 一覧を表示した時間 
 	 */
 		listDisplayed: null,
+		
+	/**
+	 * ノードを移動する場合の直前の親ID
+	 */
+		beforeParentId: null,
+
+	/**
+	 * ノードを移動する場合の直前のポジション
+	 */		
+		beforePosition: null,
 
 	/**
 	 * 設定
@@ -135,6 +145,11 @@
 			$.bcTree.createTree();
 			$.bcTree.jsTree = $.bcTree.treeDom.jstree(true);
 
+			$.bcTree.treeDom.bind("move_node.jstree", function(e, data){
+				$.bcTree.beforeParent = data.old_parent;
+				$.bcTree.beforePosition = data.old_position;
+			});
+			
 			// ダブルクリックイベント
 			$.bcTree.treeDom.bind("dblclick", $.bcTree.updateShiftAndCtrlOnAnchor);
 			
@@ -1152,15 +1167,13 @@
 	 */
 		orderContent: function(e, data) {
 			$.bcTree.changeNormalCursor();
+			var cancel = false;
 			var node = $.bcTree.jsTree.get_node(data.element);
 			if(!node) {
 				node = $.bcTree.dragTarget;
 			}
 			if(!node) {
-				return;
-			}
-			if($.bcTree.dropTarget) {
-				$.bcTree.jsTree.open_node($.bcTree.dropTarget);
+				cancel = true;
 			}
 			var oldSort = node.data.jstree.sort;
 			$.bcTree.refreshTree();
@@ -1168,12 +1181,22 @@
 			var offset = newSort - oldSort;
 			if(offset == 0) {
 				if(!$.bcTree.dropTarget) {
-					return;
+					cancel = true;
 				}
 				if(node.data.jstree.contentParentId == $.bcTree.dropTarget.data.jstree.contentId) {
-					return;
+					cancel = true;
 				}
 			}
+			
+			if(cancel || !confirm(bcI18n.commonSortSaveConfirmMessage)) {
+				$.bcTree.jsTree.move_node(node, $.bcTree.beforeParent, $.bcTree.beforePosition);
+				return false;
+			}
+		
+			if($.bcTree.dropTarget) {
+				$.bcTree.jsTree.open_node($.bcTree.dropTarget);
+			}
+			
 			var nextNode = $.bcTree.jsTree.get_node($.bcTree.jsTree.get_next_dom (node, true));
 			var targetId = null;
 			if(nextNode) {
