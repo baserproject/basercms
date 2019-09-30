@@ -135,6 +135,7 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 						<li><?php echo __d('baser', 'ラジオボタン、セレクトボックス、マルチチェックボックスの場合の選択リスト指定します。')?></li>
 						<li><?php echo __d('baser', '自動補完郵便番号の場合は、都道府県のフィールドと住所のフィールドのリストを指定します。')?></li>
 						<li><?php echo __d('baser', 'リストは　|　で区切って入力します。')?></li>
+						<li><?php echo __d('baser', '改行とリスト前後の半角スペースは入力できません。')?></li>
 					</ul>
 				</div>
 			</td>
