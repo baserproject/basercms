@@ -8247,6 +8247,14 @@ table.cake-sql-log tr td {
       box-shadow: 0 0 4px 0px #6fa83d;
       border-color: #6fa83d;
       border-width: 1px; }
+    .bca-textbox__input::-webkit-input-placeholder {
+      color: #c9c8c8; }
+    .bca-textbox__input::-moz-placeholder {
+      color: #c9c8c8; }
+    .bca-textbox__input::-ms-input-placeholder {
+      color: #c9c8c8; }
+    .bca-textbox__input::placeholder {
+      color: #c9c8c8; }
 
 .bca-textarea {
   display: inline;
@@ -8275,6 +8283,14 @@ table.cake-sql-log tr td {
       box-shadow: 0 0 4px 0px #6fa83d;
       border-color: #6fa83d;
       border-width: 1px; }
+    .bca-textarea__textarea::-webkit-input-placeholder {
+      color: #c9c8c8; }
+    .bca-textarea__textarea::-moz-placeholder {
+      color: #c9c8c8; }
+    .bca-textarea__textarea::-ms-input-placeholder {
+      color: #c9c8c8; }
+    .bca-textarea__textarea::placeholder {
+      color: #c9c8c8; }
 
 .bca-file__delete {
   display: inline-block;
@@ -8767,6 +8783,8 @@ table.cake-sql-log tr td {
   margin-bottom: 10px; }
 
 .bca-file-list {
+  display: flex;
+  flex-wrap: wrap;
   background: #eeeeee;
   padding: 10px; }
   .bca-file-list__item {
