@@ -229,6 +229,7 @@ class UsersController extends AppController {
 				$cookie[$key] = $val;
 			}
 		}
+		$this->Cookie->httpOnly = true;
 		$this->Cookie->write(Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)), $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
 	}
 
