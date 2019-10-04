@@ -192,10 +192,6 @@ $(function(){
 		}
 	});
 /**
- * トップへ
- */
-	$('#ToTop a').mScroll({du:300});
-/**
  * 検索ボックス
  */
 	changeSearchBox($("#SearchBoxOpened").html());

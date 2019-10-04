@@ -29,7 +29,6 @@
 			'admin/vendors/jquery-ui-1.11.4.min',
 			'admin/vendors/jquery.colorbox-1.6.1.min',
 			'admin/vendors/jquery-accessibleMegaMenu',
-			'admin/libs/jquery.mScroll',
 			'admin/libs/jquery.bcToken',
 			'admin/functions',
 			'admin/startup',
