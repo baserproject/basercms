@@ -244,6 +244,21 @@ class MailField extends MailAppModel {
 			return false;
 		}
 	}
+	
+/**
+ * 選択リストを整形する
+ * 
+ * @param string $source コントロールソース入力文字列
+ * @return string $formatedSource 整形後コントロールソース文字列
+ */
+	public function formatSource($source) {
+		$sourceList = [];
+		$values = explode('|', $source);
+		foreach ($values as $value) {
+			$sourceList[] = preg_replace("/(^\s+|\r|\n|\s+$)/", '', $value);
+		}
+		return implode('|', $sourceList);
+	}
 
 /**
  * After Delete 

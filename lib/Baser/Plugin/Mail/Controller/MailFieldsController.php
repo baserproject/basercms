@@ -176,6 +176,7 @@ class MailFieldsController extends MailAppController {
 			$data['MailField']['mail_content_id'] = $mailContentId;
 			$data['MailField']['no'] = $this->MailField->getMax('no', array('MailField.mail_content_id' => $mailContentId)) + 1;
 			$data['MailField']['sort'] = $this->MailField->getMax('sort') + 1;
+			$data['MailField']['source'] = $this->MailField->formatSource($data['MailField']['source']);
 			$this->MailField->create($data);
 			if ($this->MailField->validates()) {
 				if ($this->MailMessage->addMessageField($this->mailContent['MailContent']['id'], $data['MailField']['field_name'])) {
@@ -223,6 +224,7 @@ class MailFieldsController extends MailAppController {
 			if (is_array($data['MailField']['valid_ex'])) {
 				$data['MailField']['valid_ex'] = implode(',', $data['MailField']['valid_ex']);
 			}
+			$data['MailField']['source'] = $this->MailField->formatSource($data['MailField']['source']);
 
 			$this->MailField->set($data);
 			if ($this->MailField->validates()) {
