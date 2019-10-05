@@ -2,7 +2,7 @@
 
 ## 概要
 admin-thirdは、新しい管理システムのテーマです。  
-baserCMS 4.2 で、パッケージに同梱され、テーマの切り替えが可能となり、 baserCMS 5 でデフォルトの管理システムテーマとなる予定です。
+baserCMS 5 でデフォルトの管理システムテーマとなる予定です。
 
 ## 開発への参加
 [開発タスク](https://docs.google.com/spreadsheets/d/1LqDuPntPkR-2XHKR1B42vrXQhJz02UHzaURvaPCbgj8/edit#gid=0) はGoogleスプレッドシートで管理していますので、開発環境を整えてから参加ください。
@@ -16,7 +16,7 @@ git clone https://github.com/baserproject/basercamp
 ```
 
 ### 開発ブランチ
-開発ブランチは、 `dev-4.2-admin-design` を利用します。
+開発ブランチは、 `dev-4` を利用します。
 
 ### Docker環境の構築
 

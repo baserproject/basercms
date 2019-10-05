@@ -9,8 +9,9 @@
 $color_primary: #6fa83d;
 //$color_primary: #FF6F61;
 $color_secondary: #424f44;
-$color_light_primary: #ff000;
+// $color_light_primary: #ff000;
 $color_lightest: #fff;
+$color_dim: #c9c8c8;
 $color_darkest: $color_secondary;
 $color_notification: #0087bc;
 $color_danger: #f20014;
@@ -21,6 +22,9 @@ $color_disabled: #ccc;
 // text
 $color_text_primary: $color_darkest;
 $color_text_secondary: $color_darkest;
+
+// placeholder
+$color_text_placeholder: $color_dim;
 
 // link
 $color_text_link: $color_primary;

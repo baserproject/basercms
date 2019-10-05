@@ -445,6 +445,8 @@ class Page extends AppModel {
 		$Folder = null;
 		$insert = 0;
 		$update = 0;
+		$insert_folder = 0;
+		$update_folder = 0;
 		$all = 0;
 
 		// フォルダの取得・登録
@@ -489,7 +491,7 @@ class Page extends AppModel {
 				$folderNames = explode('/', $url);
 				foreach ($folderNames as $key => $value) {
 					if (isset($folderTitles[$value])) {
-						if (count($folderNames) == ($key + 1)) {
+						if (count($folderNames) == ($key + 2)) {
 							$folderTitle = $folderTitles[$value]['title'];
 						} elseif (isset($folderTitles[$value]['children'])) {
 							$folderTitles = $folderTitles[$value]['children'];
@@ -500,13 +502,19 @@ class Page extends AppModel {
 
 			$ContentFolder = ClassRegistry::init('ContentFolder');
 			$entityId = $this->Content->field('entity_id', ['Content.url' => $url, 'Content.type' => 'ContentFolder']);
+			$beforeFolderTitle = '';
 			if ($entityId) {
 				$content = $ContentFolder->find('first', ['conditions' => ['ContentFolder.id' => $entityId], 'recursive' => 0]);
 				$contentId = $content['Content']['id'];
 				if ($folderTitle != -1) {
+					$beforeFolderTitle = $content['Content']['title'];
 					$content['Content']['title'] = $folderTitle;
 					$ContentFolder->set($content);
-					$ContentFolder->save();
+					if ($ContentFolder->save()) {
+						if ($beforeFolderTitle !== $folderTitle) {
+							$update_folder++;
+						}
+					}
 				}
 			} else {
 				$content = ['Content' => [
@@ -523,6 +531,7 @@ class Page extends AppModel {
 				$ContentFolder->create($content);
 				if ($ContentFolder->save()) {
 					$contentId = $ContentFolder->Content->id;
+					$insert_folder++;
 				}
 			}
 		} else {
@@ -628,10 +637,12 @@ class Page extends AppModel {
 				$result = $this->entryPageFiles($file, $contentId);
 				$insert += $result['insert'];
 				$update += $result['update'];
+				$insert_folder += $result['insert_folder'];
+				$update_folder += $result['update_folder'];
 				$all += $result['all'];
 			}
 		}
-		return ['all' => $all, 'insert' => $insert, 'update' => $update];
+		return ['all' => $all, 'insert' => $insert, 'update' => $update, 'insert_folder' => $insert_folder, 'update_folder' => $update_folder];
 	}
 
 /**
