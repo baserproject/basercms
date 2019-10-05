@@ -165,14 +165,15 @@ class BcAuthConfigureComponent extends Component {
 				// ===================================================================================
 				if (!empty($cookie) && $cookie != 'deleted') {					
 					if(is_array($cookie)) {
-						if(!empty($Controller->request->data[$config['userModel']])) {
-							$requestData = $Controller->request->data[$config['userModel']];	
+						list($plugin, $userModel) = pluginSplit($config['userModel']);
+						if(!empty($Controller->request->data[$userModel])) {
+							$requestData = $Controller->request->data[$userModel];
 						}
-						$Controller->request->data[$config['userModel']] = $cookie;
+						$Controller->request->data[$userModel] = $cookie;
 						$loginResult = $BcAuth->login();
-						unset($Controller->request->data[$config['userModel']]);
+						unset($Controller->request->data[$userModel]);
 						if(!empty($requestData)) {
-							$Controller->request->data[$config['userModel']] = $requestData;
+							$Controller->request->data[$userModel] = $requestData;
 						}
 						if ($loginResult) {
 							return true;
