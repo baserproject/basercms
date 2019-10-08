@@ -504,9 +504,9 @@ class MailMessage extends MailAppModel {
  * @return array $dbDatas
  */
 	public function convertToDb($dbData) {
-		// マルチチェックのデータを｜区切りに変換
 		foreach ($this->mailFields as $mailField) {
 			$mailField = $mailField['MailField'];
+			// マルチチェックのデータを｜区切りに変換
 			if ($mailField['type'] == 'multi_check' && $mailField['use_field']) {
 				if (!empty($dbData['MailMessage'][$mailField['field_name']])) {
 					if (is_array($dbData['MailMessage'][$mailField['field_name']])) {
@@ -514,6 +514,13 @@ class MailMessage extends MailAppModel {
 					} else {
 						$dbData['MailMessage'][$mailField['field_name']] = $dbData['MailMessage'][$mailField['field_name']];
 					}
+				}
+			}
+			// パスワードのデータをハッシュ化
+			if ($mailField['type'] == 'password') {
+				if (!empty($dbData['MailMessage'][$mailField['field_name']])) {
+					App::uses('AuthComponent', 'Controller/Component');
+					$dbData['MailMessage'][$mailField['field_name']] = AuthComponent::password($dbData['MailMessage'][$mailField['field_name']]);
 				}
 			}
 		}

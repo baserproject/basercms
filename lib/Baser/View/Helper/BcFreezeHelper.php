@@ -470,6 +470,36 @@ class BcFreezeHelper extends BcFormHelper {
 	}
 
 /**
+ * パスワードボックスを表示する
+ * 
+ * @param string $fieldName フィールド文字列
+ * @param array $attributes html属性
+ * - 凍結時に、valueはマスクして表示する。
+ * @return	string	htmlタグ
+ * @access	public
+ */
+	public function password($fieldName, $attributes = []) {
+
+		if ($this->freezed) {
+			list($model, $field) = explode('.', $fieldName);
+			if (isset($attributes)) {
+				$attributes = $attributes + ['type' => 'hidden'];
+			} else {
+				$attributes = ['type' => 'hidden'];
+			}
+			if (isset($attributes["value"])) {
+				$value = $attributes["value"];
+			} else {
+				$value = $this->request->data[$model][$field];
+			}
+			$value = preg_replace('/./', '*', $value);
+			return parent::password($fieldName, $attributes) . h($value);
+		} else {
+			return parent::password($fieldName, $attributes);
+		}
+	}
+
+/**
  * JsonList
  * TODO 確認画面用の実装は全くしてない
  * 

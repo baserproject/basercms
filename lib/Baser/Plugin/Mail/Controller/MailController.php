@@ -344,9 +344,18 @@ class MailController extends MailAppController {
 				}
 
 				if ($result) {
-					
+
+					// メール送信用にハッシュ化前のパスワードをマスクして保持
+					$sendEmailPasswords = [];
+					foreach ($this->dbDatas['mailFields'] as $key => $field) {
+						if ($field['MailField']['type'] === 'password') {
+							$maskedPassword = preg_replace('/./', '*', $this->request->data['MailMessage'][$field['MailField']['field_name']]);
+							$sendEmailPasswords[$field['MailField']['field_name']] = $maskedPassword;
+						}
+					}
+
 					$this->request->data = $result;
-					
+
 					/*** Mail.beforeSendEmail ***/
 					$event = $this->dispatchEvent('beforeSendEmail', [
 						'data' => $this->request->data
@@ -357,6 +366,9 @@ class MailController extends MailAppController {
 						if (!empty($event->data['sendEmailOptions'])) {
 							$sendEmailOptions = $event->data['sendEmailOptions'];
 						}
+					}
+					if (!empty($sendEmailPasswords)) {
+						$sendEmailOptions['maskedPasswords'] = $sendEmailPasswords;
 					}
 
 					// メール送信
@@ -490,6 +502,7 @@ class MailController extends MailAppController {
 
 		// データを整形
 		$data = $this->MailMessage->convertToDb($this->request->data);
+
 		$data['message'] = $data['MailMessage'];
 		unset($data['MailMessage']);
 		$data['mailFields'] = $this->dbDatas['mailFields'];
@@ -530,6 +543,10 @@ class MailController extends MailAppController {
 			}
 			if($mailField['MailField']['type'] == 'file' && $value) {
 				$attachments[] = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . $value;
+			}
+			// パスワードは入力値をマスクした値を表示
+			if ($mailField['MailField']['type'] == 'password' && $value && !empty($options['maskedPasswords'][$field])) {
+				$data['message'][$field] = $options['maskedPasswords'][$field];
 			}
 		}
 

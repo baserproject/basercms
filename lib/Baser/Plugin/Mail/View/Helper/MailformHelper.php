@@ -214,7 +214,14 @@ class MailformHelper extends BcFreezeHelper {
 				$attributes['type'] = 'tel';
 				$out = $this->tel($fieldName, $attributes);
 				break;
-				
+
+			case 'password':
+				unset($attributes['separator']);
+				unset($attributes['rows']);
+				unset($attributes['empty']);
+				$out = $this->password($fieldName, $attributes);
+				break;
+
 			case 'hidden':
 				unset($attributes['separator']);
 				unset($attributes['rows']);
