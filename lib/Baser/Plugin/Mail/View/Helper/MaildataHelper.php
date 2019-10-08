@@ -30,10 +30,12 @@ class MaildataHelper extends BcTextHelper {
  * @param string $type コントロールタイプ
  * @param mixed $value 変換前の値
  * @param array|string $options コントロールソース
+ * @param bool $escape エスケープ処理を行うかどうか （初期値 : true）
  * @return string メール用データ
  */
-	public function control($type, $value, $options = "") {
-		return ' ' . $this->toDisplayString($type, $value, $options);
+	public function control($type, $value, $options = "", $escape = true) {
+		$toDisplayString = $this->toDisplayString($type, $value, $options));
+		return $escape ? ' ' . h($toDisplayString) : ' ' . $toDisplayString;
 	}
 
 /**
