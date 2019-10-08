@@ -34,7 +34,7 @@ class MaildataHelper extends BcTextHelper {
  * @return string メール用データ
  */
 	public function control($type, $value, $options = "", $escape = true) {
-		$toDisplayString = $this->toDisplayString($type, $value, $options));
+		$toDisplayString = $this->toDisplayString($type, $value, $options);
 		return $escape ? ' ' . h($toDisplayString) : ' ' . $toDisplayString;
 	}
 
