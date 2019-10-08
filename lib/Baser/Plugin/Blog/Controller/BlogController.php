@@ -123,6 +123,10 @@ class BlogController extends BlogAppController {
 			}
 		}
 
+		if (!$blogContentId) {
+			$this->notFound();
+		}
+
 		if(empty($this->request->params['Content'])) {
 			// ウィジェット系の際にコンテンツ管理上のURLでないので自動取得できない
 			$content = $this->BcContents->getContent($blogContentId);
