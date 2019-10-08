@@ -1,5 +1,9 @@
 version: '3'
 
+# volumes:
+#  sync-volume:
+#    external: true
+    
 services:
   bc-db:
     container_name: bc-db
@@ -20,6 +24,7 @@ services:
     image: baserproject/basercms:4.2-php7.3
     volumes:
       - ../:/var/www/html:cached
+#      - sync-volume:/var/www/html
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
       COMPOSER_ALLOW_SUPERUSER: 1

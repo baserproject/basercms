@@ -141,4 +141,43 @@ PHP Remote Debug を追加します。
 ブラウザでプログラムを実行し、ブレークポイントで動作が止まれば成功です。  
 なお、ユニットテストでもブラウザと同様にブレークポイントでプログラムを止める事ができます。
 
+## docker-sync を利用する
 
+### docker-sync をインストール
+
+```
+sudo gem install docker-sync
+```
+
+### ボリュームの定義
+docker-compose.yml の次の２箇所の調整を行います。
+
+```
+#volumes:
+#  sync-volume:
+#    external: true
+
+↓
+
+volumes:
+  sync-volume:
+    external: true
+```
+
+```
+    volumes:
+      - ../:/var/www/html:cached
+#      - sync-volume:/var/www/html
+
+↓
+
+    volumes:
+#      - ../:/var/www/html:cached
+      - sync-volume:/var/www/html
+```
+
+### docker-sync をスタート
+
+```
+docker-sync-stack start
+```
