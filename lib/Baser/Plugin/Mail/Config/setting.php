@@ -32,7 +32,11 @@ foreach ($mailContents as $mailContent) {
 		'icon' => 'bca-icon--mail',
 		'menus' => [
 			'MailMessages' . $mail['id'] => ['title' => '受信メール', 'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_messages', 'action' => 'index', $mail['id']]],
-			'MailFields' . $mail['id'] => ['title' => 'フィールド', 'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mail['id']]],
+			'MailFields' . $mail['id'] => [
+				'title' => 'フィールド', 
+				'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mail['id']],
+				'currentRegex' => '/\/mail\/mail_fields\/[^\/]+?\/' . $mail['id'] . '/s'
+			],
 			'MailContents' . $mail['id'] => ['title' => '設定', 'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $mail['id']]]
 		]
 	];
