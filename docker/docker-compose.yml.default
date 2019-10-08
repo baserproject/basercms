@@ -24,7 +24,7 @@ services:
     image: baserproject/basercms:4.2-php7.3
     volumes:
       - ../:/var/www/html:cached
-#      - sync-volume:/var/www/html
+#      - sync-volume:/var/www/html:nocopy
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
       COMPOSER_ALLOW_SUPERUSER: 1
