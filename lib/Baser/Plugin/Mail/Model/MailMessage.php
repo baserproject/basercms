@@ -286,10 +286,23 @@ class MailMessage extends MailAppModel {
 					$dists[$mailField['field_name']][] = @$data['MailMessage'][$mailField['field_name']];
 					// datetimeの空チェック
 				} elseif (in_array('VALID_DATETIME', $valids)) {
-					if (empty($data['MailMessage'][$mailField['field_name']]['year']) ||
-						empty($data['MailMessage'][$mailField['field_name']]['month']) ||
-						empty($data['MailMessage'][$mailField['field_name']]['day'])) {
-						$this->invalidate($mailField['field_name'], __('日付の形式が無効です。'));
+					if (is_array($data['MailMessage'][$mailField['field_name']])) {
+						if (empty($data['MailMessage'][$mailField['field_name']]['year']) ||
+							empty($data['MailMessage'][$mailField['field_name']]['month']) ||
+							empty($data['MailMessage'][$mailField['field_name']]['day'])) {
+							$this->invalidate($mailField['field_name'], __('日付の形式が無効です。'));
+						}
+					}
+					if (is_string($data['MailMessage'][$mailField['field_name']])) {
+						// カレンダー入力利用時は yyyy/mm/dd で入ってくる
+						// yyyy/mm/dd 以外の文字列入力も可能であり、そうした際は日付データとして 1970-01-01 となるため認めない
+						$inputValue = date('Y-m-d', strtotime($data['MailMessage'][$mailField['field_name']]));
+						if ($inputValue === '1970-01-01') {
+							$this->invalidate($mailField['field_name'], __('日付の形式が無効です。'));
+						}
+						if (!$this->checkDate(array($mailField['field_name'] => $inputValue))) {
+							$this->invalidate($mailField['field_name'], __('日付の形式が無効です。'));
+						}
 					}
 				} elseif (in_array('VALID_ZENKAKU_KATAKANA', $valids)) {
 					if(!preg_match('/^(|[ァ-ヾ]+)$/u', $data['MailMessage'][$mailField['field_name']])) {
