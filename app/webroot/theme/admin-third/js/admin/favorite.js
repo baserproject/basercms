@@ -260,7 +260,6 @@ $(function(){
 		var i = 1;
 		$(".favorite-menu-list li").each(function(){
 			// アクセス制限によってリンクが出力されていない場合はLIごと削除する
-			p($(this).attr('class'));
 			if(!$(this).attr('class').match(/no-data/) && $(this).find('a').html() == null) {
 				$(this).remove();
 			} else {
