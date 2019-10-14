@@ -128,6 +128,25 @@ class BcSmartphoneHelper extends Helper {
 		if (strpos($url, 'smartphone=off') !== false) {
 			return 'a' . $etc . 'href="' . $baseUrl . $url . '"';
 		} else {
+			// 指定した絶対URLを記載しているリンクは変換しない
+			$excludeList = Configure::read('Baser.excludeAbsoluteUrlAddPrefix');
+			if ($excludeList) {
+				foreach ($excludeList as $exclude) {
+					if (strpos($baseUrl, $exclude) !== false) {
+						return 'a' . $etc . 'href="' . $baseUrl . $url . '"';
+					}
+				}
+			}
+			// 指定したディレクトリURLを記載しているリンクは変換しない
+			$excludeList = Configure::read('Baser.excludeListAddPrefix');
+			if ($excludeList) {
+				foreach ($excludeList as $exclude) {
+					if (strpos($url, $exclude) !== false) {
+						return 'a' . $etc . 'href="' . $baseUrl . $url . '"';
+					}
+				}
+			}
+
 			return 'a' . $etc . 'href="' . $baseUrl . $currentAlias . '/' . $url . '"';
 		}
 	}
