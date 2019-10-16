@@ -20,8 +20,9 @@ $config['BcApp.adminNavigation'] = [
 		]
 	]
 ];
+/* @var MailContent $MailContent */
 $MailContent = ClassRegistry::init('Mail.MailContent');
-$mailContents = $MailContent->find('all', ['recursive' => 0]);
+$mailContents = $MailContent->find('all', ['conditions' => [$MailContent->Content->getConditionAllowPublish()], 'recursive' => 0]);
 foreach ($mailContents as $mailContent) {
 	$mail = $mailContent['MailContent'];
 	$content = $mailContent['Content'];

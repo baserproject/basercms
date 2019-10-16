@@ -19,8 +19,9 @@ $config['BcApp.adminNavigation'] = [
 			'BlogTags' => ['title' => 'ブログタグ設定', 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'index']],
 		]
 ]];
+/* @var BlogContent $BlogContent */
 $BlogContent = ClassRegistry::init('Blog.BlogContent');
-$blogContents = $BlogContent->find('all', ['recursive' => 0]);
+$blogContents = $BlogContent->find('all', ['conditions' => [$BlogContent->Content->getConditionAllowPublish()], 'recursive' => 0]);
 foreach ($blogContents as $blogContent) {
 	$blog = $blogContent['BlogContent'];
 	$content = $blogContent['Content'];
