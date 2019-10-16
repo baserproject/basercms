@@ -1186,6 +1186,7 @@ class Content extends AppModel {
 		}
 		unset($path[0]);
 		$parentId = $this->Site->getRootContentId($targetSiteId);
+		/* @var ContentFolder $ContentFolder */
 		$ContentFolder = ClassRegistry::init('ContentFolder');
 		foreach($path as $currentContentFolder) {
 			if($currentContentFolder['Content']['type'] != 'ContentFolder') {
