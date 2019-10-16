@@ -33,8 +33,8 @@ class MaildataHelper extends BcTextHelper {
  * @param bool $escape エスケープ処理を行うかどうか （初期値 : true）
  * @return string メール用データ
  */
-	public function control($type, $value, $options = "", $escape = true) {
-		$toDisplayString = $this->toDisplayString($type, $value, $options);
+	public function control($type, $value, $escape = true) {
+		$toDisplayString = $this->toDisplayString($type, $value);
 		return $escape ? ' ' . h($toDisplayString) : ' ' . $toDisplayString;
 	}
 
@@ -46,13 +46,7 @@ class MaildataHelper extends BcTextHelper {
  * @param array|string $options コントロールソース
  * @return string メール用データ
  */
-	public function toDisplayString($type, $value, $options = "") {
-		// コントロールソースの配列変換
-		if (!is_array($options)) {
-			$options = explode("|", $options);
-		}
-		$options = am(array(0 => ""), $options);
-
+	public function toDisplayString($type, $value) {
 		switch ($type) {
 			case 'text':
 			case 'tel':
