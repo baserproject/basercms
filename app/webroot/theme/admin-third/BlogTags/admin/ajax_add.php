@@ -17,7 +17,7 @@
 		'type' => 'select',
 		'multiple' => 'checkbox',
 		'options' => $result,
-		'hidden' => false,
+		'hiddenField' => false,
 		'value' => true
 	]); ?>
 <?php endif ?>
