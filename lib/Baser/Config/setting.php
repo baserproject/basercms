@@ -88,7 +88,11 @@ $config['BcApp'] = [
 				'menus' => [
 					'Tools' => ['title' => __d('baser', 'ユーティリティトップ'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'index']],
 					'EditorTemplates' => ['title' => __d('baser', 'エディタテンプレート'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index']],
-					'WidgetAreas' => ['title' => __d('baser', 'ウィジェットエリア'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index']],
+					'WidgetAreas' => [
+						'title' => __d('baser', 'ウィジェットエリア'), 
+						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index'],
+						'currentRegex' => '/\/widget_areas\/[^\/]+?\/[0-9]+/s'
+					],
 					'SearchIndices' => ['title' => __d('baser', '検索インデックス'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'index']],
 					'SiteConfigsInfo' => ['title' => __d('baser', '環境情報'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'info']],
 					'ThemeFiles' => ['title' => __d('baser', 'コアテンプレート確認'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'theme_files', 'action' => 'index', 'core']],
