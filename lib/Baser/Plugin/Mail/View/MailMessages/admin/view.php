@@ -24,6 +24,9 @@
 	$groupField = null;
 	foreach ($mailFields as $key => $mailField) {
 		$field = $mailField['MailField'];
+		if ($field['no_send']) { // 送信しないフィールドはスキップ
+			continue;
+		}
 		if ($field['use_field']) {
 			$nextKey = $key + 1;
 			/* 項目名 */
