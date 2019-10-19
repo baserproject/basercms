@@ -252,6 +252,7 @@ class BlogController extends BlogAppController {
 		$crumbs = $posts = [];
 		$single = false;
 		$posts = [];
+		$blogArchiveTypeData = [];
 
 		if ($pass[0] == 'category') {
 			$type = 'category';
@@ -287,7 +288,7 @@ class BlogController extends BlogAppController {
 
 				// 記事を取得
 				$posts = $this->_getBlogPosts(['category' => urlencode($category)]);
-				$blogCategories = $this->BlogCategory->getPath($categoryId, ['name', 'title']);
+				$blogCategories = $this->BlogCategory->getPath($categoryId);
 				if (count($blogCategories) > 1) {
 					foreach ($blogCategories as $key => $blogCategory) {
 						if ($key < count($blogCategories) - 1) {
@@ -299,7 +300,7 @@ class BlogController extends BlogAppController {
 				$template = $this->blogContent['BlogContent']['template'] . DS . 'archives';
 
 				$this->set('blogArchiveType', $type);
-
+				$blogArchiveTypeData = $blogCategories;
 				break;
 
 			case 'author':
@@ -431,6 +432,7 @@ class BlogController extends BlogAppController {
 
 		// 表示設定
 		$this->crumbs = array_merge($this->crumbs, $crumbs);
+		$this->set('blogArchiveTypeData', $blogArchiveTypeData);
 		$this->set('single', $single);
 		$this->set('posts', $posts);
 		$this->set('year', $year);
