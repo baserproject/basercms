@@ -294,7 +294,7 @@ class BcUtil extends CakeObject {
  */
 	public static function urlencode($value) {
 		$value = str_replace([
-			' ', '　', '\\', '\'','|', '`', '^', '"', ')', '(', '}', '{', ']', '[', ';',
+			' ', '　', '	', '\\', '\'','|', '`', '^', '"', ')', '(', '}', '{', ']', '[', ';',
 			'/', '?', ':', '@', '&', '=', '+', '$', ',', '%', '<', '>', '#', '!'
 		], '_', $value);
 		$value = preg_replace('/\_{2,}/', '_', $value);

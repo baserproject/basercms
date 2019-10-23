@@ -133,6 +133,7 @@ class Content extends AppModel {
 				['rule' => ['duplicateRelatedSiteContent'], 'message' => __d('baser', '連携しているサブサイトでスラッグが重複するコンテンツが存在します。重複するコンテンツのスラッグ名を先に変更してください。')]],
 			'title' => [
 				['rule' => ['bcUtileUrlencodeBlank'], 'message' => __d('baser', 'タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')],
+				['rule' => '/\A(?!.*(\t)).*\z/', 'message' => __d('baser', 'タイトルはタブを含む名前は付けられません。')],
 				['rule' => ['notBlank'], 'message' => __d('baser', 'タイトルを入力してください。')],
 				['rule' => ['maxLength', 230], 'message' => __d('baser', 'タイトルは230文字以内で入力してください。')]],
 			'self_publish_begin' => [
