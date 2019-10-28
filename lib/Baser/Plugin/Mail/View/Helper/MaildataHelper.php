@@ -50,8 +50,9 @@ class MaildataHelper extends BcTextHelper {
 		switch ($type) {
 			case 'text':
 			case 'tel':
-			case 'textarea':
 			case 'email':
+				return str_replace(PHP_EOL, '', $value);
+			case 'textarea':
 			case 'hidden':
 			case 'check':
 			case 'radio':
