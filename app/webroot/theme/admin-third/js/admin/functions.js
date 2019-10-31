@@ -199,15 +199,6 @@ function p(data) {
    */
 $(function(){
   var fullUrl = $.bcUtil.frontFullUrl;
-  $("input[type=text]").each(function(){
-    $(this).keypress(function(e){
-      if(e.which && e.which === 13) {
-        return false;
-      }
-      return true;
-    });
-  });
-
   if (!document.queryCommandSupported('copy')) {
     $("#BtnCopyUrl").hide();
   } else if(fullUrl) {

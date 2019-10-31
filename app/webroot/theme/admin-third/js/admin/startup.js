@@ -191,6 +191,19 @@ $(function(){
 			$(this).parent().parent().remove();
 		}
 	});
+	
+/**
+ * フォームでエンターキーを押しても送信しないようにする 
+ */
+	$(".bca-form-table input[type=text]").each(function(){
+		$(this).keypress(function(e){
+			if(e.which && e.which === 13) {
+				return false;
+			}
+			return true;
+		});
+	});
+
 /**
  * 検索ボックス
  */
