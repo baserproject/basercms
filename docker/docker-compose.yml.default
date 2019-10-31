@@ -1,6 +1,7 @@
 version: '3'
 
 # volumes:
+#  db-volume: # windowsの場合はコメントを外す
 #  sync-volume:
 #    external: true
     
@@ -10,6 +11,7 @@ services:
     image: mysql/mysql-server:5.7
     volumes:
       - ./volumes/mysql:/var/lib/mysql
+      # - db-volume:/var/lib/mysql # windowsの場合はコメントを外し、上の行をコメントアウトする
       - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     ports:
       - 3306:3306
