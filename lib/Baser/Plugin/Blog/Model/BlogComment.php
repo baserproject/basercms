@@ -88,11 +88,6 @@ class BlogComment extends BlogAppModel {
 			$data = $data['BlogComment'];
 		}
 
-		// サニタイズ
-		foreach ($data as $key => $value) {
-			$data[$key] = Sanitize::html($value);
-		}
-
 		// Modelのバリデートに引っかからない為の対処
 		$data['url'] = str_replace('&#45;', '-', $data['url']);
 		$data['email'] = str_replace('&#45;', '-', $data['email']);

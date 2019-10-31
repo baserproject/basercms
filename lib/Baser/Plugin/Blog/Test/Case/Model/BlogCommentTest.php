@@ -124,10 +124,10 @@ class BlogCommentTest extends BaserTestCase {
 		]);
 
 		$message = 'コメントを正しく追加できません';
-		$this->assertEquals($result['BlogComment']['name'], 'test_name&lt;', $message);
+		$this->assertEquals($result['BlogComment']['name'], 'test_name<', $message);
 		$this->assertEquals($result['BlogComment']['email'], '-@example.com', $message);
 		$this->assertEquals($result['BlogComment']['url'], 'http://example.com/-', $message);
-		$this->assertEquals($result['BlogComment']['message'], 'test_message&lt;', $message);
+		$this->assertEquals($result['BlogComment']['message'], 'test_message<', $message);
 		$this->assertEquals($result['BlogComment']['no'], 2, $message);
 		$this->assertEquals($result['BlogComment']['status'], 1, $message);
 
