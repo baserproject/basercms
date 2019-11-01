@@ -307,54 +307,61 @@ class PluginsController extends AppController {
 		$name = urldecode($name);
 		$dbInited = false;
 		$installMessage = '';
-		$isInstallable = true;
 
-		if (!$this->canInstall($name)) {
+		try {
+			if ($this->canInstall($name)) {
+				$isInstallable = true;
+			}
+		} catch (BcException $e){
 			$isInstallable = false;
-			$installMessage = 'このプラグインはインストールできません。プラグインのフォルダ名が正しいか確認してください。';
-		} elseif (!$this->request->data) {
-			$paths = App::path('Plugin');
-			foreach ($paths as $path) {
-				$path .= $name . DS . 'config.php';
-				if (file_exists($path)) {
-					include $path;
-					break;
+			$installMessage = __($e->getMessage());
+		}
+
+		if ($isInstallable) {
+			if (!$this->request->data) {
+				$paths = App::path('Plugin');
+				foreach ($paths as $path) {
+					$path .= $name . DS . 'config.php';
+					if (file_exists($path)) {
+						include $path;
+						break;
+					}
 				}
-			}
 
-			if (!isset($title)) {
-				$title = $name;
-			}
-			$corePlugins = Configure::read('BcApp.corePlugins');
-			if (in_array($name, $corePlugins)) {
-				$version = $this->getBaserVersion();
+				if (!isset($title)) {
+					$title = $name;
+				}
+				$corePlugins = Configure::read('BcApp.corePlugins');
+				if (in_array($name, $corePlugins)) {
+					$version = $this->getBaserVersion();
+				} else {
+					$version = $this->getBaserVersion($name);
+				}
+
+				$this->request->data = ['Plugin' => [
+					'name' => $name,
+					'title'	=> $title,
+					'status' => true,
+					'version' => $version,
+					'permission' => 1
+				]];
+
+				$data = $this->Plugin->find('first', ['conditions' => ['name' => $this->request->data['Plugin']['name']]]);
+				if ($data) {
+					$dbInited = $data['Plugin']['db_inited'];
+				}
 			} else {
-				$version = $this->getBaserVersion($name);
-			}
+				// プラグインをインストール
+				if ($this->BcManager->installPlugin($this->request->data['Plugin']['name'])) {
+					$this->setMessage(sprintf(__d('baser', '新規プラグイン「%s」を baserCMS に登録しました。'), $name), false, true);
 
-			$this->request->data = ['Plugin' => [
-				'name' => $name,
-				'title'	=> $title,
-				'status' => true,
-				'version' => $version,
-				'permission' => 1
-			]];
+					$this->Plugin->addFavoriteAdminLink($name, $this->BcAuth->user());
+					$this->_addPermission($this->request->data);
 
-			$data = $this->Plugin->find('first', ['conditions' => ['name' => $this->request->data['Plugin']['name']]]);
-			if ($data) {
-				$dbInited = $data['Plugin']['db_inited'];
-			}
-		} else {
-			// プラグインをインストール
-			if ($this->BcManager->installPlugin($this->request->data['Plugin']['name'])) {
-				$this->setMessage(sprintf(__d('baser', '新規プラグイン「%s」を baserCMS に登録しました。'), $name), false, true);
-
-				$this->Plugin->addFavoriteAdminLink($name, $this->BcAuth->user());
-				$this->_addPermission($this->request->data);
-
-				$this->redirect(['action' => 'index']);
-			} else {
-				$this->setMessage(__d('baser', 'プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。'), true);
+					$this->redirect(['action' => 'index']);
+				} else {
+					$this->setMessage(__d('baser', 'プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。'), true);
+				}
 			}
 		}
 
@@ -372,7 +379,7 @@ class PluginsController extends AppController {
  * プラグインがインストール可能か判定する
  *
  * @param string $pluginName プラグイン名
- * @return void
+ * @return boolean
  */
 	private function canInstall($pluginName) {
 		$installedPlugin = $this->Plugin->find('first', [
@@ -383,7 +390,7 @@ class PluginsController extends AppController {
 		]);
 		// 既にプラグインがインストール済み
 		if ($installedPlugin) {
-			return false;
+			throw new BcException('既にインストール済のプラグインです。');
 		}
 
 		$paths = App::path('Plugin');
@@ -402,12 +409,12 @@ class PluginsController extends AppController {
 
 		// プラグインのフォルダが存在しない
 		if (!$existsPluginFolder) {
-			return false;
+			throw new BcException('インストールしようとしているプラグインのフォルダが存在しません。');
 		}
 
 		// インストールしようとしているプラグイン名と、設定ファイル内のプラグイン名が違う
 		if (!empty($name) && $pluginName !== $name) {
-			return false;
+			throw new BcException('このプラグイン名のフォルダ名を' . $name . 'にしてください。');
 		}
 
 		return true;
