@@ -307,11 +307,13 @@ class PluginsController extends AppController {
 		$name = urldecode($name);
 		$dbInited = false;
 		$installMessage = '';
+		$isInstallable = true;
 
-		$paths = App::path('Plugin');
-
-		if (!$this->request->data) {
-
+		if (!$this->canInstall($name)) {
+			$isInstallable = false;
+			$installMessage = 'このプラグインはインストールできません。プラグインのフォルダ名が正しいか確認してください。';
+		} elseif (!$this->request->data) {
+			$paths = App::path('Plugin');
 			foreach ($paths as $path) {
 				$path .= $name . DS . 'config.php';
 				if (file_exists($path)) {
@@ -358,11 +360,57 @@ class PluginsController extends AppController {
 
 		/* 表示設定 */
 		$this->set('installMessage', $installMessage);
+		$this->set('isInstallable', $isInstallable);
 		$this->set('dbInited', $dbInited);
 		$this->subMenuElements = ['plugins'];
 		$this->pageTitle = __d('baser', '新規プラグイン登録');
 		$this->help = 'plugins_form';
 		$this->render('form');
+	}
+
+/**
+ * プラグインがインストール可能か判定する
+ *
+ * @param string $pluginName プラグイン名
+ * @return void
+ */
+	private function canInstall($pluginName) {
+		$installedPlugin = $this->Plugin->find('first', [
+			'conditions' => [
+				'name' => $pluginName,
+				'status' => 1,
+			],
+		]);
+		// 既にプラグインがインストール済み
+		if ($installedPlugin) {
+			return false;
+		}
+
+		$paths = App::path('Plugin');
+		$existsPluginFolder = false;
+		foreach ($paths as $path) {
+			if (!is_dir($path . $pluginName)) {
+				continue;
+			}
+			$existsPluginFolder = true;
+			$configPath = $path . $pluginName . DS . 'config.php';
+			if (file_exists($configPath)) {
+				include $configPath;
+			}
+			break;
+		}
+
+		// プラグインのフォルダが存在しない
+		if (!$existsPluginFolder) {
+			return false;
+		}
+
+		// インストールしようとしているプラグイン名と、設定ファイル内のプラグイン名が違う
+		if (!empty($name) && $pluginName !== $name) {
+			return false;
+		}
+
+		return true;
 	}
 
 /**
