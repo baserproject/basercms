@@ -252,7 +252,7 @@ class BlogController extends BlogAppController {
 		$crumbs = $posts = [];
 		$single = false;
 		$posts = [];
-		$blogArchiveTypeData = []; // 各アーカイブ別の情報（例: category時はブログカテゴリ情報、tag時はブログタグ情報）
+		$blogArchiveTypeData = [];
 
 		if ($pass[0] == 'category') {
 			$type = 'category';
