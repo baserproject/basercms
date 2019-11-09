@@ -1022,5 +1022,13 @@ class BlogHelperTest extends BaserTestCase {
 			['/another.com/news/', true, '', '/news/?host=another.com']
 		];
 	}
-	
+
+/**
+ * testGetBlogArchiveCategoryData
+ *
+ */
+	public function testGetBlogArchiveCategoryData() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
