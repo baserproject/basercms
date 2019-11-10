@@ -1832,7 +1832,7 @@ class BlogHelper extends AppHelper {
  */
 	public function getBlogArchiveCategoryData($blogContentId, $options = []) {
 		if ($this->getBlogArchiveType() !== 'category') {
-			return array();
+			return [];
 		}
 
 		$pass = $this->request->params['pass'];
@@ -1846,7 +1846,7 @@ class BlogHelper extends AppHelper {
 		], $options);
 
 		$BlogCategoryModel = ClassRegistry::init('Blog.BlogCategory');
-		$BlogCategoryModel->unbindModel(array('hasMany' => array('BlogPost')));
+		$BlogCategoryModel->unbindModel(['hasMany' => ['BlogPost']]);
 		$data = $BlogCategoryModel->find('first', $options);
 		return $data;
 	}
