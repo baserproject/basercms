@@ -1190,7 +1190,7 @@ class BcAppModel extends Model {
 
 				// >>> CUSTOMIZE ADD 2013/11/10 ryuring	和暦対応
 				if ($val == 'wareki' && !empty($data['wareki'])) {
-					$warekis = ['m' => 1867, 't' => 1911, 's' => 1925, 'h' => 1988];
+					$warekis = ['m' => 1867, 't' => 1911, 's' => 1925, 'h' => 1988, 'r' => 2018];
 					if (!empty($data['year'])) {
 						list($wareki, $year) = explode('-', $data['year']);
 						$data['year'] = $year + $warekis[$wareki];
