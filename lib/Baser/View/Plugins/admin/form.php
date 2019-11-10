@@ -42,36 +42,38 @@ $(function(){
 <div id="UpdateMessage"><?php echo $installMessage ?></div>
 <?php endif ?> 
 
-<?php echo $this->BcForm->create('Plugin', ['url' => [$this->request->data['Plugin']['name']]]) ?>
-<?php echo $this->BcForm->input('Plugin.name', ['type' => 'hidden']) ?>
-<?php echo $this->BcForm->input('Plugin.title', ['type' => 'hidden']) ?>
-<?php echo $this->BcForm->input('Plugin.status', ['type' => 'hidden']) ?>
-<?php echo $this->BcForm->input('Plugin.version', ['type' => 'hidden']) ?>
+<?php if ($isInstallable): ?>
+	<?php echo $this->BcForm->create('Plugin', ['url' => [$this->request->data['Plugin']['name']]]) ?>
+	<?php echo $this->BcForm->input('Plugin.name', ['type' => 'hidden']) ?>
+	<?php echo $this->BcForm->input('Plugin.title', ['type' => 'hidden']) ?>
+	<?php echo $this->BcForm->input('Plugin.status', ['type' => 'hidden']) ?>
+	<?php echo $this->BcForm->input('Plugin.version', ['type' => 'hidden']) ?>
 
-<div class="em-box">
-	<?php echo h($this->BcForm->value('Plugin.name')) . ' ' . $this->BcForm->value('Plugin.version') ?>
-	<?php if ($this->BcForm->value('Plugin.title')): ?>
-		（<?php echo h($this->BcForm->value('Plugin.title')) ?>）
-	<?php endif ?>
-</div>
+	<div class="em-box">
+		<?php echo h($this->BcForm->value('Plugin.name')) . ' ' . $this->BcForm->value('Plugin.version') ?>
+		<?php if ($this->BcForm->value('Plugin.title')): ?>
+			（<?php echo h($this->BcForm->value('Plugin.title')) ?>）
+		<?php endif ?>
+	</div>
 
-<div class="align-center">
-	<?php echo $this->BcForm->input('Plugin.permission', ['type' => 'radio', 'options' => ['1' => __d('baser', '全てのユーザーで利用'), '2' => __d('baser', '管理ユーザーのみ利用')]]) ?>
-</div>
+	<div class="align-center">
+		<?php echo $this->BcForm->input('Plugin.permission', ['type' => 'radio', 'options' => ['1' => __d('baser', '全てのユーザーで利用'), '2' => __d('baser', '管理ユーザーのみ利用')]]) ?>
+	</div>
 
-<div>
-	<?php echo $this->BcForm->error('Plugin.name') ?>
-	<?php echo $this->BcForm->error('Plugin.title') ?>
-</div>
-	
+	<div>
+		<?php echo $this->BcForm->error('Plugin.name') ?>
+		<?php echo $this->BcForm->error('Plugin.title') ?>
+	</div>
+		
 
-<div class="submit">
-<?php if ($dbInited): ?>
-		<?php echo $this->BcForm->submit(__d('baser', 'プラグインのデータを初期化する'), ['div' => false, 'class' => 'button', 'id' => 'BtnReset']) ?>
-		<?php echo $this->BcForm->submit(__d('baser', '有効化'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
-<?php else: ?> 
-		<?php echo $this->BcForm->submit(__d('baser', 'インストール'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
-<?php endif; ?>
-</div>
+	<div class="submit">
+	<?php if ($dbInited): ?>
+			<?php echo $this->BcForm->submit(__d('baser', 'プラグインのデータを初期化する'), ['div' => false, 'class' => 'button', 'id' => 'BtnReset']) ?>
+			<?php echo $this->BcForm->submit(__d('baser', '有効化'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
+	<?php else: ?> 
+			<?php echo $this->BcForm->submit(__d('baser', 'インストール'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
+	<?php endif; ?>
+	</div>
 
-<?php echo $this->BcForm->end() ?>
+	<?php echo $this->BcForm->end() ?>
+<?php endif ?>
