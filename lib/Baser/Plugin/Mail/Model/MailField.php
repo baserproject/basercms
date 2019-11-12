@@ -256,7 +256,7 @@ class MailField extends MailAppModel {
 		$sourceList = [];
 		$values = explode('|', $source);
 		foreach ($values as $value) {
-			$sourceList[] = preg_replace("/(^\s+|\r|\n|\s+$)/", '', $value);
+			$sourceList[] = preg_replace("/(^\s+|\||\r|\n|\s+$)/u", '', $value);
 		}
 		return implode('|', $sourceList);
 	}
