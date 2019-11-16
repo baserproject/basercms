@@ -177,7 +177,7 @@ class MailController extends MailAppController {
 		}
 		
 		// キャッシュ対策
-		if (!isConsole()) {
+		if (!isConsole() && empty($this->request->params['requested'])) {
 			header("Cache-Control: no-cache, no-store, must-revalidate");
 			header("Pragma: no-cache");
 			header("Expires: ". date(DATE_RFC1123, strtotime("-1 day")));
