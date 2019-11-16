@@ -520,6 +520,9 @@ class UsersController extends AppController {
 		}
 		$this->pageTitle = __d('baser', 'パスワードのリセット');
 		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
+		if(strpos($userModel, '.') !== false) {
+			list(, $userModel) = explode('.', $userModel);
+		}
 		if ($this->request->data) {
 
 			if (empty($this->request->data[$userModel]['email'])) {
@@ -535,7 +538,7 @@ class UsersController extends AppController {
 			$password = $this->generatePassword();
 			$user[$userModel]['password'] = $password;
 			$this->{$userModel}->set($user);
-			if (!$this->{$userModel}->save()) {
+			if (!$this->{$userModel}->save(null, ['validate' => false])) {
 				$this->setMessage(__d('baser', '新しいパスワードをデータベースに保存できませんでした。'), true, false);
 				return;
 			}
