@@ -148,12 +148,18 @@ class BcReplacePrefixComponent extends Component {
 		}
 	}
 	
+/**
+ * Before Render
+ * パラメータ `prefix` に `front` が設定されていた場合、空に再設定
+ * @param Controller $controller
+ */
 	public function beforeRender(Controller $controller) {
 		parent::beforeRender($controller);
-		if($controller->request->params['prefix'] == 'front') {
+		if(!empty($controller->request->params['prefix']) && $controller->request->params['prefix'] == 'front') {
 			$controller->request->params['prefix'] = '';
 		}
 	}
+	
 /**
  * Return all possible paths to find view files in order
  *
