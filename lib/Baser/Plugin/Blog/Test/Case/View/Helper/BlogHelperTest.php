@@ -67,7 +67,7 @@ class BlogHelperTest extends BaserTestCase {
  * 
  * @var View
  */
-	protected $_View;
+	protected $View;
 
 /**
  * __construct
@@ -89,6 +89,7 @@ class BlogHelperTest extends BaserTestCase {
 		parent::setUp();
 		$this->View = new BcAppView();
 		$this->View->request->params['Site'] = [
+			'id' => null,
 			'use_subdomain' => null,
 			'name' => null,
 			'alias' => null,
@@ -1024,11 +1025,23 @@ class BlogHelperTest extends BaserTestCase {
 	}
 
 /**
- * testGetBlogArchiveCategoryData
- *
+ * testGetCategoryByName
+ * @dataProvider getCategoryByName
  */
-	public function testGetBlogArchiveCategoryData() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetCategoryByName($blogCategoryId, $type, $pass, $name, $expects) {
+		$this->Blog->request = $this->_getRequest('/');
+		$this->View->set('blogArchiveType', $type);
+		$this->Blog->request->params['pass'][1] = $pass;
+		$result = $this->Blog->getCategoryByName($blogCategoryId, $name);
+		$this->assertEquals($expects, (bool) $result);
+	}
+	
+	public function getCategoryByName() {
+		return [
+			[1, 'category', 'child', '', true],
+			[1, 'hoge', '', 'child', true],
+			[1, 'hoge', '', '', false]
+		];
 	}
 
 }

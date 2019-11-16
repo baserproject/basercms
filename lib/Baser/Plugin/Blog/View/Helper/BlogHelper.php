@@ -1823,32 +1823,21 @@ class BlogHelper extends AppHelper {
 	}
 
 /**
- * ブログのカテゴリアーカイブデータを取得する
+ * ブログのカテゴリを取得する
  * - 例: $this->Blog->getBlogArchiveCategoryData($this->Blog->getCurrentBlogId());
+ * 現在のページがカテゴリ一覧の場合、$categoryName は省略可
  *
  * @param int $blogContentId
+ * @param string $categoryName
  * @param array $options
  * @return array
  */
-	public function getBlogArchiveCategoryData($blogContentId, $options = []) {
-		if ($this->getBlogArchiveType() !== 'category') {
-			return [];
+	public function getCategoryByName($blogContentId, $categoryName = '', $options = []) {
+		if(!$categoryName && $this->getBlogArchiveType() === 'category') {
+			$pass = $this->request->params['pass'];
+			$categoryName = $pass[count($pass) - 1];
 		}
-
-		$pass = $this->request->params['pass'];
-		$category = $pass[count($pass) - 1];
-
-		$options = array_merge([
-			'conditions' => [
-				'BlogCategory.blog_content_id' => $blogContentId,
-				'BlogCategory.name' => urlencode($category),
-			],
-		], $options);
-
-		$BlogCategoryModel = ClassRegistry::init('Blog.BlogCategory');
-		$BlogCategoryModel->unbindModel(['hasMany' => ['BlogPost']]);
-		$data = $BlogCategoryModel->find('first', $options);
-		return $data;
+		return ClassRegistry::init('Blog.BlogCategory')->getByName($blogContentId, $categoryName, $options);
 	}
 
 }

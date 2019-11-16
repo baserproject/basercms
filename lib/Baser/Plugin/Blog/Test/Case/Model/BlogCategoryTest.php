@@ -256,5 +256,25 @@ class BlogCategoryTest extends BaserTestCase {
 		$this->assertFalse($this->BlogCategory->hasChild(2));
 		$this->assertTrue($this->BlogCategory->hasChild(1));
 	}
-
+	
+/**
+ * カテゴリ名よりカテゴリを取得する
+ * @dataProvider getByNameDataProvider
+ * @param int $blogCategoryId
+ * @param string $name
+ * @param bool $expects
+ */
+	public function testGetByName($blogCategoryId, $name, $expects) {
+		$result = $this->BlogCategory->getByName($blogCategoryId, $name);
+		$this->assertEquals($expects, (bool) $result);
+	}
+	
+	public function getByNameDataProvider() {
+		return [
+			[1, 'child', true],
+			[1, 'hoge', false],
+			[2, 'child', false]
+		];
+	}
+	
 }

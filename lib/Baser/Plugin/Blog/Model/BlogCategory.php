@@ -352,5 +352,25 @@ class BlogCategory extends BlogAppModel {
 	public function hasChild($id) {
 		return (bool) $this->childCount($id);
 	}
-
+	
+/**
+ * カテゴリ名よりカテゴリを取得
+ * 
+ * @param int $blogContentId
+ * @param string $name
+ * @param array $options
+ * @return array|null
+ */
+	public function getByName($blogContentId, $name, $options = []) {
+		$options = array_merge([
+			'conditions' => [
+				'BlogCategory.blog_content_id' => $blogContentId,
+				'BlogCategory.name' => urlencode($name),
+			],
+			'recursive' => -1
+		], $options);
+		$this->unbindModel(['hasMany' => ['BlogPost']]);
+		return $this->find('first', $options);
+	}
+	
 }
