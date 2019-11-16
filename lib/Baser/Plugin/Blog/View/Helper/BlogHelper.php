@@ -1822,4 +1822,33 @@ class BlogHelper extends AppHelper {
 		}
 	}
 
+/**
+ * ブログのカテゴリアーカイブデータを取得する
+ * - 例: $this->Blog->getBlogArchiveCategoryData($this->Blog->getCurrentBlogId());
+ *
+ * @param int $blogContentId
+ * @param array $options
+ * @return array
+ */
+	public function getBlogArchiveCategoryData($blogContentId, $options = []) {
+		if ($this->getBlogArchiveType() !== 'category') {
+			return [];
+		}
+
+		$pass = $this->request->params['pass'];
+		$category = $pass[count($pass) - 1];
+
+		$options = array_merge([
+			'conditions' => [
+				'BlogCategory.blog_content_id' => $blogContentId,
+				'BlogCategory.name' => urlencode($category),
+			],
+		], $options);
+
+		$BlogCategoryModel = ClassRegistry::init('Blog.BlogCategory');
+		$BlogCategoryModel->unbindModel(['hasMany' => ['BlogPost']]);
+		$data = $BlogCategoryModel->find('first', $options);
+		return $data;
+	}
+
 }
