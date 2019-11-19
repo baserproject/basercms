@@ -147,19 +147,20 @@ class BcCsvHelper extends AppHelper {
  */
 	public function download($fileName, $debug = false) {
 
-		if ($this->exportCsvHead) {
-			$exportData = $this->csvHead . $this->csvBody;
-		} else {
-			$exportData = $this->csvBody;
-		}
 
 		if (!$debug) {
 			Header("Content-disposition: attachment; filename=" . $fileName . ".csv");
 			Header("Content-type: application/octet-stream; name=" . $fileName . ".csv");
-			echo $exportData;
+			if ($this->exportCsvHead) {
+				echo $this->csvHead;
+			}
+			echo $this->csvBody;
 			exit();
 		} else {
-			return $exportData;
+			if ($this->exportCsvHead) {
+				echo $this->csvHead;
+			}
+			echo $this->csvBody;
 		}
 	}
 
