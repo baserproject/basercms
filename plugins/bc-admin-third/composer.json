@@ -1,0 +1,24 @@
+{
+    "name": "baserproject/bc-admin-third",
+    "description": "theme for baserCMS",
+    "homepage": "https://basercms.net",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "require": {
+        "cakephp/cakephp": "^3.8"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "BcAdminThird\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BcAdminThird\\Test\\": "tests/",
+            "Cake\\Test\\": "vendor/cakephp/cakephp/tests/"
+        }
+    }
+}
