@@ -17,3 +17,6 @@ parameters:
     "autoload":
         "psr-4":
             "App\\": "src/"
+  directories_to_repositories:
+    packages/baser-core: git@github.com:baserproject/baser-core.git
+    packages/bc-admin-third: git@github.com:baserproject/bc-admin-third.git
