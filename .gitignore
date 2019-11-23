@@ -54,3 +54,5 @@ nbproject/*
 !/plugins/bc-admin-third
 /plugins/*/vendor
 /plugins/*/composer.lock
+# docker
+/docker/.docker-sync

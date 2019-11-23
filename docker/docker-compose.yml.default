@@ -1,8 +1,13 @@
 version: '3'
 
+# volumes:
+#  db-volume: # windowsの場合はコメントを外す
+#  bc5-sync:
+#    external: true
+
 services:
-  basercake3-database:
-    container_name: basercake3-database
+  bc5-db:
+    container_name: bc5-db
     image: mysql/mysql-server:5.7
     volumes:
       - ./volumes/mysql:/var/lib/mysql
@@ -15,13 +20,12 @@ services:
       MYSQL_PASSWORD: "root"
       MYSQL_DATABASE: "basercms"
     command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
-  basercake3:
-    container_name: basercake3
-    image: baserproject/basercms:4.1
+  bc5-php:
+    container_name: bc5-php
+    image: baserproject/basercms:5-php7.3
     volumes:
       - ../:/var/www/html:cached
-      - /var/www/html/.git
-      - /var/www/html/docker/volumes
+#      - bc5-sync:/var/www/html:nocopy
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
       COMPOSER_ALLOW_SUPERUSER: 1
@@ -29,23 +33,23 @@ services:
       - "80:80"
       - "443:443"
     depends_on:
-      - basercake3-database
-  basercake3-smtp:
-    container_name: basercake3-smtp
+      - bc5-db
+  bc5-smtp:
+    container_name: bc5-smtp
     image: schickling/mailcatcher
     ports:
       - "1080:1080"
       - "1025:1025"
-  basercake3-pma:
-    container_name: basercake3-pma
+  bc5-pma:
+    container_name: bc5-pma
     image: phpmyadmin/phpmyadmin
     environment:
       - PMA_ARBITRARY=1
-      - PMA_HOST=basercake3-database
+      - PMA_HOST=bc5-db
       - PMA_USER=root
       - PMA_PASSWORD=root
     links:
-      - basercake3-database
+      - bc5-db
     ports:
      - 8080:80
     volumes:

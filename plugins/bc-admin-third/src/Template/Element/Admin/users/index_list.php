@@ -18,7 +18,7 @@ $this->BcListTable->setColumnNumber(7);
 ?>
 
 <!-- pagination -->
-<?php $this->BcBaser->element('admin/pagination') ?>
+<?php $this->BcBaser->element('Admin/pagination') ?>
 
 <table cellpadding="0" cellspacing="0" class="list-table bca-table-listup" id="ListTable">
 	<thead class="bca-table-listup__thead">
@@ -84,7 +84,7 @@ $this->BcListTable->setColumnNumber(7);
 	<tbody>
 	<?php if ($users->count()): ?>
 		<?php foreach($users as $user): ?>
-			<?php $this->BcBaser->element('admin/users/index_row', ['user' => $user]) ?>
+			<?php $this->BcBaser->element('Admin/users/index_row', ['user' => $user]) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
@@ -96,4 +96,4 @@ $this->BcListTable->setColumnNumber(7);
 </table>
 
 <!-- list-num -->
-<?php $this->BcBaser->element('admin/list_num') ?>
+<?php $this->BcBaser->element('Admin/list_num') ?>
