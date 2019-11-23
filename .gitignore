@@ -53,3 +53,5 @@ nbproject/*
 !/vendor/baserproject/baser-core/*
 !/vendor/baserproject/bc-admin-third/*
 
+/packages/*/vendor
+/packages/*/composer.lock
