@@ -50,8 +50,7 @@ nbproject/*
 /docker/docker-compose.yml
 # plugins
 /plugins/*
-!/plugins/baser-core/*
-!/plugins/bc-admin-third/*
-
-/packages/*/vendor
-/packages/*/composer.lock
+!/plugins/baser-core
+!/plugins/bc-admin-third
+/plugins/*/vendor
+/plugins/*/composer.lock
