@@ -53,3 +53,6 @@ BaserCore、BcAdminThird のコードは、`/vendor/baserproject/` 内に、レ�
 - composer update を実施した場合、 vendor/cakephp-plugins.php が自動更新される
 - vendor/cakephp-pluigins.php が更新されないとプラグインの名前解決ができない
 - プラグインの定義は、src/Application.php で行わなければならない
+
+## そのほかのドキュメント
+- [プラグインの呼び出し](/documents/call-plugin.md)
