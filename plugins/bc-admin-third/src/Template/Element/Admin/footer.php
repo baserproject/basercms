@@ -1,19 +1,17 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 2.0.0
- * @license			https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS Users Community
+ * @link          http://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-/**
- * [ADMIN] フッター
- */
 ?>
+
+
 <div id="Footer" class="bca-footer" data-loggedin="">
   <div class="bca-footer__inner--full">
     <div class="bca-footer__main">
@@ -27,4 +25,4 @@
       <div class="bca-footer__copyright">Copyright &copy; baserCMS Users Community All rights reserved.</div>
     </div>
   </div>
-<!-- / #Footer --></div>
+</div>

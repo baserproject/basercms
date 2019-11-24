@@ -1,11 +1,14 @@
 <?php
 /**
- * Test suite bootstrap for ContactManager.
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * This function is used to find the location of CakePHP whether CakePHP
- * has been installed as a dependency of the plugin, or the plugin is itself
- * installed as a dependency of an application.
+ * @copyright     Copyright (c) baserCMS Users Community
+ * @link          http://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+
 $findRoot = function ($root) {
     do {
         $lastRoot = $root;

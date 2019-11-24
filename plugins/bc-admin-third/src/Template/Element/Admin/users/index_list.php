@@ -1,23 +1,21 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 4.0.0
- * @license			https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS Users Community
+ * @link          http://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
 /**
- * [ADMIN] ユーザー一覧　テーブル
  * @var Cake\ORM\ResultSet $users
  */
 $this->BcListTable->setColumnNumber(7);
 ?>
 
-<!-- pagination -->
+
 <?php $this->BcBaser->element('Admin/pagination') ?>
 
 <table cellpadding="0" cellspacing="0" class="list-table bca-table-listup" id="ListTable">
@@ -95,5 +93,5 @@ $this->BcListTable->setColumnNumber(7);
 	</tbody>
 </table>
 
-<!-- list-num -->
+
 <?php $this->BcBaser->element('Admin/list_num') ?>
