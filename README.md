@@ -56,3 +56,4 @@ BaserCore、BcAdminThird のコードは、`/vendor/baserproject/` 内に、レ�
 
 ## そのほかのドキュメント
 - [プラグインの呼び出し](/documents/call-plugin.md)
+- [モノレポによるパッケージ管理](/documents/monorepo.md)
