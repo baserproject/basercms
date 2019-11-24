@@ -60,20 +60,20 @@ class UsersTable extends Table
     {
         $validator
             ->integer('id')
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id', 'create');
         $validator
-            ->allowEmpty('name');
+            ->allowEmptyString('name');
         $validator
-            ->allowEmpty('password');
+            ->allowEmptyString('password');
         $validator
-            ->allowEmpty('real_name_1');
+            ->allowEmptyString('real_name_1');
         $validator
-            ->allowEmpty('real_name_2');
+            ->allowEmptyString('real_name_2');
         $validator
             ->email('email')
-            ->allowEmpty('email');
+            ->allowEmptyString('email');
         $validator
-            ->allowEmpty('nickname');
+            ->allowEmptyString('nickname');
         return $validator;
     }
 

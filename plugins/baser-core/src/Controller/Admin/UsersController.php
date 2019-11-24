@@ -25,7 +25,7 @@ class UsersController extends AppController
 	public function beforeFilter(Event $event) {
 		// ダミーデータ
 		$this->siteConfigs['admin_list_num'] = 20;
-		$this->passedArgs['num'] = 20;
+		$this->request = $this->request->withParam('pass', ['num' => 20]);
 	}
 
 	/**
@@ -37,9 +37,10 @@ class UsersController extends AppController
     {
 		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
 		$this->setViewConditions('User', ['default' => $default]);
-		$users = $this->paginate($this->Users->find('all')
-			->limit($this->passedArgs['num'])
-			->order('Users.user_group_id, Users.id')
+		$users = $this->paginate(
+		    $this->Users->find('all')
+			    ->limit($this->request->getParam('pass')['num'])
+			    ->order('Users.user_group_id, Users.id')
 		);
         $this->set([
             'users' => $users,
