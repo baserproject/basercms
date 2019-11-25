@@ -44,6 +44,9 @@ class MailformHelper extends BcFreezeHelper {
 		if ($this->freezed) {
 			unset($attributes['type']);
 		}
+
+		unset($attributes['regex']);
+
 		switch ($type) {
 
 			case 'text':

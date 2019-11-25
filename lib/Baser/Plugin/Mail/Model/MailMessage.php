@@ -225,7 +225,7 @@ class MailMessage extends MailAppModel {
 			if($mailField['valid_ex'] && !empty($mailField['use_field'])) {
 				$valids = explode(',', $mailField['valid_ex']);
 				foreach($valids as $valid) {
-					$options = explode('|', $mailField['options']);
+					$options = preg_split('/(?<!\\\)\|/', $mailField['options']);
 					$options = call_user_func_array('aa', $options);
 					switch ($valid) {
 						case 'VALID_MAX_FILE_SIZE':
@@ -256,6 +256,17 @@ class MailMessage extends MailAppModel {
 									'rule'	=> array('fileExt', $options['fileExt']),
 									'message'	=> __('ファイル形式が無効です。')
 								);
+							}
+							break;
+						case 'VALID_REGEX':
+							if (!empty($options['regex'])) {
+								$options['regex'] = str_replace('\|', '|', $options['regex']);
+								$options['regex'] = str_replace("\0", '', $options['regex']); // ヌルバイト除去
+								$this->validate[$mailField['field_name']]['regex'] = [
+									'rule' => '/\A' . $options['regex'] . '\z/us',
+									'message' => __('形式が無効です。'),
+									'allowEmpty' => true,
+								];
 							}
 							break;
 					}

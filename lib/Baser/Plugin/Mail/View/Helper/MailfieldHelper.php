@@ -40,7 +40,7 @@ class MailfieldHelper extends AppHelper {
 			$attributes['type'] = 'tel';
 		}
 		if (!empty($data['options'])) {
-			$options = explode("|", $data['options']);
+			$options = preg_split('/(?<!\\\)\|/', $data['options']);
 			$options = call_user_func_array('aa', $options);
 			$attributes = am($attributes, $options);
 		}
