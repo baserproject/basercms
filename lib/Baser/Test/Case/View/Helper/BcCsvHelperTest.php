@@ -191,8 +191,8 @@ class BcCsvHelperTest extends BaserTestCase {
 			]
 		];
 		$this->BcCsv->addModelData($modelName, $data);
-		// $result = $this->BcCsv->download($fileName, $debug);
-		// $this->assertEquals($expected, $result);
+		$result = $this->BcCsv->download($fileName, $debug);
+		$this->assertEquals($expected, $result);
 	}
 
 	public function downloadDataProvider() {

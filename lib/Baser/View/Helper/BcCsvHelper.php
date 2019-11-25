@@ -185,15 +185,17 @@ class BcCsvHelper extends AppHelper {
 			}
 			exit();
 		} else {
+			$output = '';
 			if ($this->exportCsvHead) {
-				echo $this->csvHead;
+				$output .= $this->csvHead;
 			}
 			if ($this->_csvTmpDataFp !== null) {
 				rewind($this->_csvTmpDataFp);
 				while ($line = fgets($this->_csvTmpDataFp)) {
-					echo $line;
+					$output .= $line;
 				}
 			}
+			return $output;
 		}
 	}
 
