@@ -53,7 +53,15 @@ class BcCsvHelper extends AppHelper {
 			$this->_csvTmpDataFp = tmpfile();
 		}
 	}
-
+	
+/**
+ * 一時ファイルのポインタを取得
+ */
+	public function getCsvTmpDataFp() {
+		$this->_createTmpFp();
+		return $this->_csvTmpDataFp;
+	}
+	
 /**
  * データを追加する（単数）
  *
