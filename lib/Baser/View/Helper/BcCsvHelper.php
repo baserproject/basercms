@@ -212,7 +212,7 @@ class BcCsvHelper extends AppHelper {
 		}
 		if ($this->_csvTmpDataFp !== null) {
 			rewind($this->_csvTmpDataFp);
-			while ($line = fgets($this->_csvTmpDataFple)) {
+			while ($line = fgets($this->_csvTmpDataFp)) {
 				fputs($fp, $line, 1024 * 1000 * 10);
 			}
 		}

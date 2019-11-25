@@ -214,7 +214,7 @@ class BcCsvHelperTest extends BaserTestCase {
  *
  * @param $fileName
  */
-	public function atestSave() {
+	public function testSave() {
 
 		// csvのデータを作成
 		$modelName = 'sample';
