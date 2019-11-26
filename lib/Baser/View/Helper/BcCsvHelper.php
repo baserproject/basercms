@@ -25,13 +25,6 @@ class BcCsvHelper extends AppHelper {
 	public $csvHead = '';
 
 /**
- * CSVボディ
- *
- * @var string
- */
-	public $csvBody = '';
-
-/**
  * CSVヘッドの出力
  *
  * @var boolean
@@ -46,6 +39,30 @@ class BcCsvHelper extends AppHelper {
 	public $encoding = 'UTF-8';
 
 /**
+ * 出力データテンポラリファイルポインタ
+ * @private string
+ */
+	private $_csvTmpDataFp = null;
+
+
+/**
+ * テンポラリファイルを生成する
+ */
+	private function _createTmpFp() {
+		if ($this->_csvTmpDataFp === null) {
+			$this->_csvTmpDataFp = tmpfile();
+		}
+	}
+	
+/**
+ * 一時ファイルのポインタを取得
+ */
+	public function getCsvTmpDataFp() {
+		$this->_createTmpFp();
+		return $this->_csvTmpDataFp;
+	}
+	
+/**
  * データを追加する（単数）
  *
  * @param string $modelName
@@ -53,16 +70,20 @@ class BcCsvHelper extends AppHelper {
  * @return void
  */
 	public function addModelData($modelName, $data) {
-
-		if (!$modelName)
+		if (!$modelName) {
 			return false;
-		if (!isset($data[$modelName]))
+		}
+		if (!isset($data[$modelName])) {
 			return false;
+		}
+		$this->_createTmpFp();
 
 		if (!$this->csvHead) {
 			$this->csvHead = $this->_perseKey($data[$modelName]);
 		}
-		$this->csvBody .= $this->_perseValue($data[$modelName]);
+		fputs($this->_csvTmpDataFp, $this->_perseValue($data[$modelName]));
+
+		// echo memory_get_usage() / (1024 * 1024)."MB\n";
 		return true;
 	}
 
@@ -74,11 +95,12 @@ class BcCsvHelper extends AppHelper {
  * @return $csv
  */
 	public function addModelDatas($modelName, $datas) {
-
-		if (!$modelName)
+		if (!$modelName) {
 			return false;
-		if (!isset($datas[0][$modelName]))
+		}
+		if (!isset($datas[0][$modelName])) {
 			return false;
+		}
 
 		foreach ($datas as $data) {
 			$this->addModelData($modelName, $data);
@@ -146,20 +168,34 @@ class BcCsvHelper extends AppHelper {
  * @return void|string
  */
 	public function download($fileName, $debug = false) {
-
-		if ($this->exportCsvHead) {
-			$exportData = $this->csvHead . $this->csvBody;
-		} else {
-			$exportData = $this->csvBody;
-		}
-
 		if (!$debug) {
+			for($i = 0; $i < ob_get_level(); $i++) {
+				ob_end_flush();
+			}
 			Header("Content-disposition: attachment; filename=" . $fileName . ".csv");
 			Header("Content-type: application/octet-stream; name=" . $fileName . ".csv");
-			echo $exportData;
+			if ($this->exportCsvHead) {
+				echo $this->csvHead;
+			}
+			if ($this->_csvTmpDataFp !== null) {
+				rewind($this->_csvTmpDataFp);
+				while ($line = fgets($this->_csvTmpDataFp)) {
+					echo $line;
+				}
+			}
 			exit();
 		} else {
-			return $exportData;
+			$output = '';
+			if ($this->exportCsvHead) {
+				$output .= $this->csvHead;
+			}
+			if ($this->_csvTmpDataFp !== null) {
+				rewind($this->_csvTmpDataFp);
+				while ($line = fgets($this->_csvTmpDataFp)) {
+					$output .= $line;
+				}
+			}
+			return $output;
 		}
 	}
 
@@ -170,15 +206,16 @@ class BcCsvHelper extends AppHelper {
  * @return void
  */
 	public function save($fileName) {
-
-		if ($this->exportCsvHead) {
-			$exportData = $this->csvHead . $this->csvBody;
-		} else {
-			$exportData = $this->csvBody;
-		}
-
 		$fp = fopen($fileName, "w");
-		fputs($fp, $exportData, 1024 * 1000 * 10);
+		if ($this->exportCsvHead) {
+			fputs($fp, $this->csvHead, 1024 * 1000 * 10);
+		}
+		if ($this->_csvTmpDataFp !== null) {
+			rewind($this->_csvTmpDataFp);
+			while ($line = fgets($this->_csvTmpDataFp)) {
+				fputs($fp, $line, 1024 * 1000 * 10);
+			}
+		}
 		fclose($fp);
 	}
 
