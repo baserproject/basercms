@@ -63,7 +63,7 @@ class MailMessage extends MailAppModel {
  * @return boolean
  */
 	public function setup($mailContentId) {
-		
+		$this->mailFields = [];
 		// テーブル名の設定
 		$this->setUseTable($mailContentId);
 		// 利用するメールフィールド取得
