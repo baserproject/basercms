@@ -43,7 +43,7 @@ if (isset($user['user_group_id'])) {
 			<?php echo $this->BcText->arrayValue($data['BlogCategory']['owner_id'], $owners) ?>
 		<?php endif ?>
 	</td>
-	<td><?php echo $data['BlogCategory']['title'] ?></td>
+	<td><?php echo h($data['BlogCategory']['title']) ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td><?php echo $this->BcTime->format('Y-m-d', $data['BlogCategory']['created']); ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['BlogCategory']['modified']); ?></td>
