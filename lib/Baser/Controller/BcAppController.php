@@ -403,9 +403,13 @@ class BcAppController extends Controller {
 					list($plugin, $userModel) = explode('.', $userModel);
 				}
 				if ($userModel && !empty($this->{$userModel})) {
+					$nameField = 'name';
+					if(!empty($authConfig['username'])) {
+						$nameField = $authConfig['username'];
+					}
 					$conditions = [
-						$userModel . '.id'				=> $user['id'],
-						$userModel . '.name'			=> $user['name']
+						$userModel . '.id' => $user['id'],
+						$userModel . '.' . $nameField => $user[$nameField]
 					];
 					if (isset($User->belongsTo['UserGroup'])) {
 						$UserGroup = ClassRegistry::init('UserGroup');
