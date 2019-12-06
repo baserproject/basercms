@@ -929,15 +929,20 @@ class BlogPost extends BlogAppModel {
 		} elseif(!$force) {
 			trigger_error(__d('baser', 'contentId を指定してください。'), E_USER_WARNING);
 		}
-		$categoryId = $this->BlogCategory->field('id', $categoryConditions);
-		if ($categoryId === false) {
+
+		$categoryData = $this->BlogCategory->find('all', array(
+			'conditions' => $categoryConditions,
+		));
+		$categoryIds = Hash::extract($categoryData, '{n}.BlogCategory.id');
+		if (!$categoryIds) {
 			$categoryIds = false;
 		} else {
-			$categoryIds = [$categoryId];
 			// 指定したカテゴリ名にぶら下がる子カテゴリを取得
-			$catChildren = $this->BlogCategory->children($categoryId);
-			if ($catChildren) {
-				$categoryIds = am($categoryIds, Hash::extract($catChildren, '{n}.BlogCategory.id'));
+			foreach ($categoryIds as $categoryId) {
+				$catChildren = $this->BlogCategory->children($categoryId);
+				if ($catChildren) {
+					$categoryIds = am($categoryIds, Hash::extract($catChildren, '{n}.BlogCategory.id'));
+				}
 			}
 		}
 		if($categoryIds === false) {
