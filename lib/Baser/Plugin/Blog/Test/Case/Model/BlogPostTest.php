@@ -526,7 +526,7 @@ public function testGetDefaultValue() {
 			['count', ['preview' => true], 8],							// 非公開も含めて全件取得
 			['count', ['contentId' => 1, 'category' => 'release'], 3],	// 親カテゴリ
 			['count', ['contentId' => 1, 'category' => 'child'], 2],	// 子カテゴリ
-			['count', ['category' => 'release', 'force' => true], 3],	// 親カテゴリ contentId指定なし、強制取得（カテゴリ名に最初にマッチしたカテゴリIDに紐づくデータを取得）
+			['count', ['category' => 'release', 'force' => true], 4],	// 親カテゴリ contentId指定なし、強制取得（カテゴリ名にマッチしたカテゴリIDに紐づくデータを取得）
 			['count', ['category' => 'hoge'], 0],						// 存在しないカテゴリ
 			['count', ['num' => 2], 2],									// 件数指定
 			['count', ['listCount' => 3], 3],							// 件数指定（非推奨）
