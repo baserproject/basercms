@@ -183,7 +183,7 @@ class SiteConfigsController extends AppController {
 		if (!$writableInstall) {
 			$disableSettingInstallSetting = ['disabled' => 'disabled'];
 		}
-		$themes = array_merge(['' => '標準テーマ'], BcUtil::getAdminThemeList());
+		$themes = array_merge(['' => 'admin-second'], BcUtil::getAdminThemeList());
 		$this->set(compact(
 			'baseUrl', 'userGroups', 'rewriteInstalled', 'writableInstall', 'writableHtaccess',
 			'writableHtaccess2', 'disableSettingInstallSetting', 'themes'

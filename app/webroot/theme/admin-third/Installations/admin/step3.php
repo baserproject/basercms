@@ -213,10 +213,6 @@ $(document).ready( function() {
 						※ <?php echo sprintf(__d('baser', '初めてインストールされる方は、%s を選択してください。'), $dbDataPatterns[$this->request->data['Installation']['dbDataPattern']])?></small>
 <?php endif; ?>
 				</li>
-				<li><label><?php echo __d('baser', '管理システムテーマ')?></label>
-                    <p class="bca-main__text"><?php echo __d('baser', '管理システム用のデザインテーマを選択します。')?></p>
-					<?php echo $this->BcForm->input('Installation.adminTheme', ['type' => 'select', 'options' => $adminThemes]) ?>
-				</li>
 			</ul>
 		</div>
 

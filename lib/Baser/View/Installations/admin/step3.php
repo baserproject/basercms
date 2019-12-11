@@ -13,7 +13,6 @@
 /**
  * [PUBLISH] インストーラー Step3
  * @var BcAppView $this
- * @var array $adminThemes 管理システムテーマリスト
  */
 ?>
 
@@ -217,11 +216,6 @@ $(document).ready( function() {
 <?php if (isset($dbDataPatterns[$this->request->data['Installation']['dbDataPattern']])): ?>
 						※ <?php echo sprintf(__d('baser', '初めてインストールされる方は、%s を選択してください。'), $dbDataPatterns[$this->request->data['Installation']['dbDataPattern']])?></small>
 <?php endif; ?>
-				</li>
-				<li>
-					<?php echo $this->BcForm->label('Installation.adminTheme', __d('baser', '管理システムテーマ')) ?><br>
-					<?php echo $this->BcForm->input('Installation.adminTheme', ['type' => 'select', 'options' => $adminThemes]) ?><br>
-					<small>※ <?php echo __d('baser', '管理システムのデザインテーマを選択します。これまでのbaserCMSに慣れている場合は、 標準テーマ を選択してください。')?></small>
 				</li>
 			</ul>
 		</div>

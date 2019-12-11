@@ -197,7 +197,7 @@ class InstallationsController extends AppController {
 				$errorMessage = __d('baser', 'データベースの構築中にエラーが発生しました。');
 				try {
 					$this->_deleteAllTables();
-					$result = $this->_constructionDb($dbDataPattern, @$this->request->data['Installation']['adminTheme']);
+					$result = $this->_constructionDb($dbDataPattern, Configure::read('BcApp.defaultAdminTheme'));
 				} catch(Exception $e) {
 					$errorMessage .= "\n" . $e->getMessage();
 				}
@@ -211,7 +211,6 @@ class InstallationsController extends AppController {
 		}
 
 		$this->set('dbDataPatterns', $this->BcManager->getAllDefaultDataPatterns());
-		$this->set('adminThemes', array_merge(['' => '標準テーマ'], BcUtil::getAdminThemeList()));
 		$this->pageTitle = __d('baser', 'baserCMSのインストール｜ステップ３');
 		$this->set('dbsource', $dbsource);
 	}

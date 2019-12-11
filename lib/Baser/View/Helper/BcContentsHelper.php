@@ -93,7 +93,7 @@ class BcContentsHelper extends AppHelper {
 				}
 			} else {
 				// 後方互換のため判定を入れる（v4.2.0）
-				if(Configure::read('BcSite.admin_theme') === array_keys(Configure::read('BcApp.adminNewThemeName'))[0]) {
+				if(Configure::read('BcSite.admin_theme') === Configure::read('BcApp.defaultAdminTheme')) {
 					$setting['icon'] = $setting['icon'] = 'bca-icon--file';
 				} else {
 					$setting['url']['icon'] = $this->_getIconUrl($setting['plugin'], $setting['type'], null);
