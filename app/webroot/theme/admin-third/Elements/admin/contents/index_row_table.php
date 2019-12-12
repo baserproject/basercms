@@ -38,8 +38,12 @@ if(!empty($this->BcContents->settings[$type]['icon'])) {
 } else {
 	$iconPath = $this->BcContents->settings['Default']['icon'];
 }
-if($data['Content']['plugin'] != 'Core' && $type != 'Default') {
-	$iconPath = $data['Content']['plugin'] . '.' . $iconPath;
+$isImageIcon = false;
+if(preg_match('/^admin\//', $iconPath)) {
+	$isImageIcon = true;
+	if($data['Content']['plugin'] != 'Core' && $type != 'Default') {
+		$iconPath = $data['Content']['plugin'] . '.' . $iconPath;
+	}
 }
 $urlParams = ['content_id' => $data['Content']['id']];
 if($data['Content']['entity_id']) {
@@ -61,7 +65,11 @@ if($data['Content']['self_status']) {
 	</td>
 	<td class="bca-table-listup__tbody-td" style="width:5%"><?php echo $data['Content']['id'] ?></td>
 	<td class="bca-table-listup__tbody-td" style="width:5%">
+		<?php if($isImageIcon): ?>
 		<?php $this->BcBaser->img($iconPath, ['title' => $typeTitle]) ?>
+		<?php else: ?>
+		<i class="<?php echo $iconPath ?>"></i>
+		<?php endif ?>
 		<?php if($data['Content']['alias_id']): ?>
 		<span class="alias"></span>
 		<?php endif ?>
