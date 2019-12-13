@@ -178,6 +178,9 @@ class BlogController extends BlogAppController {
  * @return void
  */
 	public function index() {
+		if (isset($this->request->params['pass'][0]) && $this->request->params['pass'][0] !== 'index') {
+			$this->notFound();
+		}
 		if($this->BcContents->preview == 'default' && $this->request->data) {
 			$this->blogContent['BlogContent'] = $this->request->data['BlogContent'];
 		}
