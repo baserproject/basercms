@@ -6378,7 +6378,7 @@ body {
       font-weight: bold;
       cursor: pointer; }
       .bca-nav__sub-title-label {
-        display: block;
+        display: flex;
         vertical-align: middle;
         padding: 12px 10px 12px 10px;
         font-weight: 900; }
@@ -6541,7 +6541,10 @@ body {
         transition: 0.1s all;
         vertical-align: middle;
         margin-right: 6px;
+        margin-left: 6px;
         float: right; }
+        .bca-nav__system-title-icon::before {
+          margin: 0; }
     .bca-nav__system-list-item {
       padding: 0;
       position: relative; }
@@ -6565,7 +6568,7 @@ body {
         margin: 0;
         padding: 0; }
         .bca-nav__system-list-item-title-label {
-          display: block;
+          display: flex;
           vertical-align: middle;
           padding: 12px 10px 12px 10px; }
           .bca-nav__system-list-item-title-label:before {

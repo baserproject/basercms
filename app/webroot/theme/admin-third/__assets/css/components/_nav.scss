@@ -36,7 +36,7 @@
       font-weight: bold;
       cursor: pointer;
       &-label {
-        display: block;
+        display: flex;
         vertical-align: middle;
         padding: 12px 10px 12px 10px;
         font-weight: 900;
@@ -279,7 +279,11 @@
         transition: 0.1s all;
         vertical-align: middle;
         margin-right: 6px;
+        margin-left:6px;
         float: right;
+        &::before {
+        	margin:0;
+        }
       }
     }
 
@@ -316,7 +320,7 @@
           margin: 0;
           padding: 0;
           &-label {
-            display: block;
+            display: flex;
             vertical-align: middle;
             padding: 12px 10px 12px 10px;
             &:before {
