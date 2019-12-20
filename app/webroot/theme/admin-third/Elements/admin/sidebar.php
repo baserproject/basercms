@@ -21,7 +21,7 @@
 
 	<nav class="bca-nav__main" data-js-tmpl="AdminMenu" hidden>
 		<h2 class="bca-nav__main-title"><?php echo __d('baser', '管理メニュー') ?></h2>
-		<div v-for="content in contentList" class="bca-nav__sub" v-bind:data-content-type="content.type" v-bind:data-content-is-current="content.current" v-bind:data-content-is-expanded="content.expanded">
+		<div v-for="content in contentList" class="bca-nav__sub" v-if="content.siteId === currentSiteId || content.siteId === null" v-bind:data-content-type="content.type" v-bind:data-content-is-current="content.current" v-bind:data-content-is-expanded="content.expanded">
 			<h3 class="bca-nav__sub-title">
 				<a v-bind:href="baseURL + content.url" v-bind:class="'bca-nav__sub-title-label ' + content.icon"><span>{{ content.title }}</span></a>
 			</h3>
