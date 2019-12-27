@@ -1532,7 +1532,7 @@ class BlogHelper extends AppHelper {
 			'direction' => 'DESC',
 			'page' => 1,
 			'sort' => 'posts_date',
-			'autoSetCurrentBlog' => true
+			'autoSetCurrentBlog' => true,
 			'data' => [],
 		], $options);
 
