@@ -43,7 +43,8 @@ foreach ($blogContents as $blogContent) {
 			],
 			'BlogTags' . $blog['id'] => [
 				'title' => 'タグ', 
-				'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'index']
+				'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'index'],
+				'currentRegex' => '/\/blog\/blog_tags\/[^\/]+?\//s'
 			],	
 			'BlogComments' . $blog['id'] => [
 				'title' => 'コメント',

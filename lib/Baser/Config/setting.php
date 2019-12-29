@@ -49,8 +49,16 @@ $config['BcApp'] = [
 				'title' => __d('baser', 'ユーザー管理'),
 				'type' => 'system',
 				'menus' => [
-					'Users' => ['title' => __d('baser', 'ユーザー'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'index']],
-					'UserGroups' => ['title' => __d('baser', 'ユーザーグループ'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index']],
+					'Users' => [
+						'title' => __d('baser', 'ユーザー'), 
+						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'index'],
+						'currentRegex' => '/\/users\/[^\/]+?/s'
+					],
+					'UserGroups' => [
+						'title' => __d('baser', 'ユーザーグループ'), 
+						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index'],
+						'currentRegex' => '/\/user_groups\/[^\/]+?/s'
+					],
 				]
 			],
 			'Sites' => [
@@ -68,7 +76,11 @@ $config['BcApp'] = [
 				'title' => __d('baser', 'テーマ管理'),
 				'type' => 'system',
 				'menus' => [
-					'Themes' => ['title' => __d('baser', 'テーマ'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'index']],
+					'Themes' => [
+						'title' => __d('baser', 'テーマ'), 
+						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'index'],
+						'currentRegex' => '/\/themes\/[^\/]+?/s'
+					],
 					'ThemeConfigs' => ['title' => __d('baser', '設定'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'theme_configs', 'action' => 'form']],
 					'ThemeAdd' => ['title' => __d('baser', '新規追加'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'add']],
 					'ThemesDownload' => ['title' => __d('baser', '利用中テーマダウンロード'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'download']],
@@ -79,7 +91,11 @@ $config['BcApp'] = [
 				'title' => __d('baser', 'プラグイン管理'),
 				'type' => 'system',
 				'menus' => [
-					'Plugins' => ['title' => __d('baser', 'プラグイン'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'plugins', 'action' => 'index']],
+					'Plugins' => [
+						'title' => __d('baser', 'プラグイン'), 
+						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'plugins', 'action' => 'index'],
+						'currentRegex' => '/\/plugins\/[^\/]+?/s'
+					],
 				]
 			],
 			'Tools' => [
@@ -87,7 +103,11 @@ $config['BcApp'] = [
 				'type' => 'system',
 				'menus' => [
 					'Tools' => ['title' => __d('baser', 'ユーティリティトップ'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'index']],
-					'EditorTemplates' => ['title' => __d('baser', 'エディタテンプレート'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index']],
+					'EditorTemplates' => [
+						'title' => __d('baser', 'エディタテンプレート'), 
+						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index'],
+						'currentRegex' => '/\/editor_templates\/[^\/]+?/s'
+					],
 					'WidgetAreas' => [
 						'title' => __d('baser', 'ウィジェットエリア'), 
 						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index'],
@@ -95,7 +115,11 @@ $config['BcApp'] = [
 					],
 					'SearchIndices' => ['title' => __d('baser', '検索インデックス'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'index']],
 					'SiteConfigsInfo' => ['title' => __d('baser', '環境情報'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'info']],
-					'ThemeFiles' => ['title' => __d('baser', 'コアテンプレート確認'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'theme_files', 'action' => 'index', 'core']],
+					'ThemeFiles' => [
+						'title' => __d('baser', 'コアテンプレート確認'), 
+						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'theme_files', 'action' => 'index', 'core'],
+						'currentRegex' => '/\/theme_files\/[^\/]+?/s'
+					],
 					'ToolsMaintenance' => ['title' => __d('baser', 'データメンテナンス'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'maintenance']],
 					'ToolsLog' => ['title' => __d('baser', 'ログメンテナンス'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'log']],
 					'ToolsWriteSchema' => ['title' => __d('baser', 'スキーマファイル生成'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'write_schema']],

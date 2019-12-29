@@ -26,7 +26,11 @@ $config['BcApp.adminNavigation'] = [
 			'icon' => 'bca-icon--uploader',
 			'menus' => [
 				'UplaoderFiles' => ['title' => __d('baser', 'アップロードファイル'), 'url' => ['admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_files', 'action' => 'index']],
-				'UploaderCategories' => ['title' => __d('baser', 'カテゴリ'), 'url' => ['admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_categories', 'action' => 'index']],
+				'UploaderCategories' => [
+					'title' => __d('baser', 'カテゴリ'), 
+					'url' => ['admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_categories', 'action' => 'index'],
+					'currentRegex' => '/\/uploader\/uploader_categories\/[^\/]+?/s'
+				],
 			]
 		],
 	],
