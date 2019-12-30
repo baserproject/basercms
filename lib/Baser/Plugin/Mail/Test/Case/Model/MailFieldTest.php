@@ -12,6 +12,9 @@
 
 App::uses('MailField', 'Mail.Model');
 
+/**
+ * @property MailField $MailField
+ */
 class MailFieldTest extends BaserTestCase {
 
 	public $fixtures = array(
@@ -240,6 +243,24 @@ class MailFieldTest extends BaserTestCase {
  */
 	public function testAfterSave() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * testFormatSource
+ * @dataProvider formatSourceDataProvider
+ */
+	public function testFormatSource($source, $expected) {
+		$result = $this->MailField->formatSource($source);
+		$this->assertEquals($expected, $result);
+	}
+	public function formatSourceDataProvider() {
+		return [
+			["  １|２|３|４|５", "１\n２\n３\n４\n５"],
+			["１|２ ３|４|５", "１\n２ ３\n４\n５"],
+			["\r１|\r２|３|４|５", "１\n２\n３\n４\n５"],
+			["１\n２\n３\n４\n５", "１\n２\n３\n４\n５"],
+			["１|\n２|３|４|５", "１\n\n２\n３\n４\n５"]
+		];
 	}
 
 }

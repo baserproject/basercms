@@ -248,18 +248,20 @@ class MailField extends MailAppModel {
 	}
 	
 /**
- * 選択リストを整形する
- * 
- * @param string $source コントロールソース入力文字列
- * @return string $formatedSource 整形後コントロールソース文字列
+ * 選択リストのソースを整形する
+ * 空白と \r を除外し、改行で結合する
+ * | の対応は後方互換として残しておく
+ * @param string $source 選択リストソース
+ * @return string 整形後選択リストソース
  */
 	public function formatSource($source) {
+		$source = str_replace('|', "\n", $source);
+		$values = explode("\n", $source);
 		$sourceList = [];
-		$values = explode('|', $source);
 		foreach ($values as $value) {
-			$sourceList[] = preg_replace("/(^\s+|\||\r|\n|\s+$)/u", '', $value);
+			$sourceList[] = preg_replace("/(^\s+|\r|\n\s+$)/u", '', $value);
 		}
-		return implode('|', $sourceList);
+		return implode("\n", $sourceList);
 	}
 
 /**

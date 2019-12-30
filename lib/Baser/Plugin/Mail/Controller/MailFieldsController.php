@@ -15,7 +15,7 @@
  *
  * @package Mail.Controller
  * @property BcContentsComponent $BcContents
- * @property MailField $BcMailField
+ * @property MailField $MailField
  * @property MailContent $MailContent
  * @property MailMessage $MailMessage
  */
