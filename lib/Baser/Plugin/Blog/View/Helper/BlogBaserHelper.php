@@ -71,6 +71,7 @@ class BlogBaserHelper extends AppHelper {
  *	- `page` : ページ数を指定（初期値 : null）
  *	- `sort` : 並び替えの基準となるフィールドを指定（初期値 : null）
  *	- `autoSetCurrentBlog` : $contentsName を指定していない場合、現在のコンテンツより自動でブログを指定する（初期値：true）
+ *	- `data` : エレメントに渡したい変数（初期値 : array）
  * @return void
  */
 	public function blogPosts($contentsName = [], $num = 5, $options = []) {

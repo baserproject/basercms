@@ -1507,6 +1507,7 @@ class BlogHelper extends AppHelper {
  *	- `page` : ページ数を指定（初期値 : null）
  *	- `sort` : 並び替えの基準となるフィールドを指定（初期値 : null）
  *	- `autoSetCurrentBlog` : $contentsName を指定していない場合、現在のコンテンツより自動でブログを指定する（初期値：true）
+ *	- `data` : エレメントに渡したい変数（初期値 : array）
  * @return void
  */
 	public function posts($contentsName = [], $num = 5, $options = []) {
@@ -1531,7 +1532,8 @@ class BlogHelper extends AppHelper {
 			'direction' => 'DESC',
 			'page' => 1,
 			'sort' => 'posts_date',
-			'autoSetCurrentBlog' => true
+			'autoSetCurrentBlog' => true,
+			'data' => [],
 		], $options);
 
 		if(!$contentsName && empty($options['contentsTemplate'])) {
@@ -1568,7 +1570,12 @@ class BlogHelper extends AppHelper {
 		if(!empty($this->request->params['Site']['device'])) {
 			$this->_View->subDir = $this->request->params['Site']['device'];
 		}
-		$this->BcBaser->element($template, ['posts' => $blogPosts], $params);
+		if (is_array($options['data'])) {
+			$data =  array_merge(['posts' => $blogPosts], $options['data']);
+		} else {
+			$data = ['posts' => $blogPosts];
+		}
+		$this->BcBaser->element($template, $data, $params);
 	}
 
 /**
