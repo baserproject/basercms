@@ -1570,7 +1570,11 @@ class BlogHelper extends AppHelper {
 		if(!empty($this->request->params['Site']['device'])) {
 			$this->_View->subDir = $this->request->params['Site']['device'];
 		}
-		$data = array_merge(['posts' => $blogPosts], ['data' => $options['data']]);
+		if (is_array($options['data'])) {
+			$data =  array_merge(['posts' => $blogPosts], $options['data']);
+		} else {
+			$data = ['posts' => $blogPosts];
+		}
 		$this->BcBaser->element($template, $data, $params);
 	}
 
