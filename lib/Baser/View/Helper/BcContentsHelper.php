@@ -511,9 +511,9 @@ class BcContentsHelper extends AppHelper {
 /**
  * エンティティIDからコンテンツの情報を取得
  *
+ * @param int $id エンティティID
  * @param string $contentType コンテンツタイプ
  * ('Page','MailContent','BlogContent','ContentFolder')
- * @param int $id エンティティID
  * @param string $field 取得したい値
  *  'name','url','title'など　初期値：Null 
  *  省略した場合配列を取得
@@ -527,9 +527,9 @@ class BcContentsHelper extends AppHelper {
 /**
  * urlからコンテンツの情報を取得
  *
+ * @param string $url
  * @param string $contentType コンテンツタイプ
  * ('Page','MailContent','BlogContent','ContentFolder')
- * @param int $url
  * @param string $field 取得したい値
  *  'name','url','title'など　初期値：Null 
  *  省略した場合配列を取得
@@ -541,7 +541,7 @@ class BcContentsHelper extends AppHelper {
 	}
 
 	private function _getContent($conditions, $field) {
-			$content = $this->_Content->find('first', ['conditions' => $conditions, 'order' => ['Content.id'], 'cache' => false]);
+		$content = $this->_Content->find('first', ['conditions' => $conditions, 'order' => ['Content.id'], 'cache' => false]);
 		if(!empty($content)){
 			if($field){
 				return $content ['Content'][$field];
@@ -551,7 +551,6 @@ class BcContentsHelper extends AppHelper {
 		} else {
 			return false;
 		}
-
 	}
 
 
