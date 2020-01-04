@@ -481,6 +481,40 @@ class BcContentsHelperTest extends BaserTestCase {
 	}
 
 /**
+ * urlからコンテンツの情報を取得
+ * getContentByUrl
+ * 
+ * @param string $contentType コンテンツタイプ
+ * ('Page','MailContent','BlogContent','ContentFolder')
+ * @param string $url
+ * @param string $field 取得したい値
+ *  'name','url','title'など　初期値：Null 
+ *  省略した場合配列を取得
+ * @param string|bool $expect 期待値
+ * @dataProvider getContentByUrlDataProvider
+ */	
+	public function testgetContentByUrl($expect, $url, $contentType, $field) {
+		$result = $this->BcContents->getContentByUrl($url, $contentType, $field);
+		$this->assertEquals($expect, $result);                       
+	}
+	
+	public function getContentByUrlDataProvider() {
+		return [
+			// 存在するURL（0~2）を指定した場合
+			['1', '/news/', 'BlogContent', 'entity_id'],
+			['/contact/', '/contact/', 'MailContent', 'url'],
+			['1', '/index', 'Page', 'entity_id'],
+			['4', '/service/', 'ContentFolder', 'entity_id'],
+			['14', '/service/sub_service/sub_service_1', 'Page', 'entity_id'],
+			['サービス２', '/service/service2', 'Page', 'title'],
+			// 存在しないURLを指定した場合
+			[false, '/blog/', 'BlogContent', 'name'],
+			//指定がおかしい場合
+			[false, '/blog/', 'Blog', 'url'],
+		];
+	}
+
+/**
  * IDがコンテンツ自身の親のIDかを判定する
  * @param $id
  * @param $parentId

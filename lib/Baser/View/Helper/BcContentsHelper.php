@@ -511,16 +511,36 @@ class BcContentsHelper extends AppHelper {
 /**
  * エンティティIDからコンテンツの情報を取得
  *
+ * @param int $id エンティティID
  * @param string $contentType コンテンツタイプ
  * ('Page','MailContent','BlogContent','ContentFolder')
- * @param int $id エンティティID
  * @param string $field 取得したい値
  *  'name','url','title'など　初期値：Null 
  *  省略した場合配列を取得
  * @return array|string|bool
  */
-	public function getContentByEntityId($id, $contentType, $field = null){
+	public function getContentByEntityId($id, $contentType, $field = null) {
 		$conditions = array_merge($this->_Content->getConditionAllowPublish(), ['type' => $contentType, 'entity_id' => $id]);
+		return $this->_getContent($conditions, $field);
+	}
+
+/**
+ * urlからコンテンツの情報を取得
+ *
+ * @param string $url
+ * @param string $contentType コンテンツタイプ
+ * ('Page','MailContent','BlogContent','ContentFolder')
+ * @param string $field 取得したい値
+ *  'name','url','title'など　初期値：Null 
+ *  省略した場合配列を取得
+ * @return array|string|bool
+ */
+	public function getContentByUrl($url, $contentType, $field = null) {
+		$conditions = array_merge($this->_Content->getConditionAllowPublish(), ['type' => $contentType, 'url' => $url]);
+		return $this->_getContent($conditions, $field);
+	}
+
+	private function _getContent($conditions, $field) {
 		$content = $this->_Content->find('first', ['conditions' => $conditions, 'order' => ['Content.id'], 'cache' => false]);
 		if(!empty($content)){
 			if($field){
@@ -532,6 +552,7 @@ class BcContentsHelper extends AppHelper {
 			return false;
 		}
 	}
+
 
 /**
  * IDがコンテンツ自身の親のIDかを判定する
