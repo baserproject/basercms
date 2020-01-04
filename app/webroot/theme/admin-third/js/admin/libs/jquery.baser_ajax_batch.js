@@ -58,12 +58,17 @@
 				}
 
 				var method = $(config.methodSelect).val();
-				if(config.methods[method] != undefined　&& !confirm(config.methods[method].confirm)) {
+				if(config.methods[method] !== undefined　&& config.methods[method].confirm && !confirm(config.methods[method].confirm)) {
 					return false;
 				}
 
 				var form = $('<form/>').append($(config.targetCheckbox+":checked").clone());
 				form.append($(config.methodSelect).clone().val($(config.methodSelect).val()));
+				
+				if(config.methods[method] !== undefined　&& config.methods[method].beforeSend && !config.methods[method].beforeSend(form)) {
+					return false;
+				}
+				
 				$.bcToken.check(function(){
 					form.append($('<input name="data[_Token][key]" type="hidden">').val($.bcToken.key));
 					return $.ajax({
@@ -81,10 +86,9 @@
 							$(config.loader).hide();
 							form.remove();
 							if(result) {
-								if(config.methods[result].result != undefined) {
+								if(config.methods[result].result !== undefined) {
 									config.methods[result].result();
 									$(config.checkAll).prop('checked', false);
-
 								} else {
 									$.baserAjaxDataList.load(document.location.href, function(){
 										$(config.flashBox).html(bcI18n.commonExecCompletedMessage);
@@ -99,7 +103,7 @@
 						error: function(XMLHttpRequest, textStatus, errorThrown){
 							$.bcToken.key = null;
 							var errorMessage = '';
-							if(XMLHttpRequest.status == 404) {
+							if(XMLHttpRequest.status === 404) {
 								errorMessage = '<br>' + bcI18n.commonNotFoundProgramMessage;
 							} else {
 								if(XMLHttpRequest.responseText) {
@@ -133,7 +137,7 @@
 			});
 			
 			$(config.listTable + " tbody td a").click(function(e){
-				if($(this).attr('rel') != 'colorbox') {
+				if($(this).attr('rel') !== 'colorbox') {
 					e.stopPropagation();
 				}
 			});
@@ -188,7 +192,7 @@
 })(jQuery);
 
 function changeRow(checkbox) {
-	if(checkbox.attr('checked') != undefined) {
+	if(checkbox.attr('checked') !== undefined) {
 		$(checkbox).parent().parent().addClass('selectedrow');
 	} else {
 		$(checkbox).parent().parent().removeClass('selectedrow');
