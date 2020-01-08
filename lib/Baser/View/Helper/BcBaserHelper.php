@@ -2136,11 +2136,11 @@ END_FLASH;
  * ロゴを出力する
  *
  * @param array $options オプション（初期値 : array()）
- *	※ パラメーターは、 BcBaserHelper->_getThemeImage() を参照
+ *	※ パラメーターは、 BcBaserHelper->getThemeImage() を参照
  * @return void
  */
 	public function logo($options = []) {
-		echo $this->_getThemeImage('logo', $options);
+		echo $this->getThemeImage('logo', $options);
 	}
 
 /**
@@ -2153,7 +2153,7 @@ END_FLASH;
  *	- `num`: 指定した番号の画像を出力する。all を true とした場合は、出力する枚数となる。
  *	- `id` : all を true とした場合、UL タグの id 属性を指定できる。
  *	- `class` : all を true とした場合、UL タグの class 属性を指定できる。
- *	※ その他の、パラメーターは、 BcBaserHelper->_getThemeImage() を参照
+ *	※ その他の、パラメーターは、 BcBaserHelper->getThemeImage() を参照
  * @return void
  */
 	public function mainImage($options = []) {
@@ -2173,7 +2173,7 @@ END_FLASH;
 			$tag = '';
 			for ($i = 1; $i <= $num; $i++) {
 				$options['num'] = $i;
-				$themeImage = $this->_getThemeImage('main_image', $options);
+				$themeImage = $this->getThemeImage('main_image', $options);
 				if ($themeImage) {
 					$tag .= '<li>' . $themeImage . '</li>' . "\n";
 				}
@@ -2187,7 +2187,7 @@ END_FLASH;
 			}
 			echo '<ul' . $ulAttr . '>' . "\n" . $tag . "\n" . '</ul>';
 		} else {
-			echo $this->_getThemeImage('main_image', $options);
+			echo $this->getThemeImage('main_image', $options);
 		}
 	}
 
@@ -2206,9 +2206,11 @@ END_FLASH;
  *	- `maxHeight: 最大高さ（初期値 : ''）
  *	- `width : 最大横幅（初期値 : ''）
  *	- `height: 最大高さ（初期値 : ''）
+ *	- `noimage: 
+ *	- `output: 
  * @return string $tag テーマ画像のHTMLタグ
  */
-	protected function _getThemeImage($name, $options = []) {
+	public function getThemeImage($name, $options = []) {
 		$ThemeConfig = ClassRegistry::init('ThemeConfig');
 		$data = $ThemeConfig->findExpanded();
 
@@ -2229,7 +2231,9 @@ END_FLASH;
 			'maxWidth' => '',
 			'maxHeight' => '',
 			'width' => '',
-			'height' => ''
+			'height' => '',
+			'noimage' => '', // 画像がなかった場合に表示する画像
+			'output' => '', // 出力タイプ tag ,url を指定、未指定(or false)の場合は、tagで出力(互換性のため)
 		], $options);
 		$name = $name . $num;
 
@@ -2267,8 +2271,17 @@ END_FLASH;
 			}
 		}
 
+		// noimage が設定されていれば、画像がなくても処理を続ける
 		if (!$url) {
-			return '';
+			if ($options['noimage']){
+				$url = $options['noimage'];
+			} else {
+				return '';
+			}
+		}
+		// outputがURLなら、URLを返す
+		if ($options['output'] == 'url') {
+			return $url;
 		}
 
 		$imgOptions = [];
