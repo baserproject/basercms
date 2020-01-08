@@ -1778,7 +1778,7 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * mainImage用のデータプロバイダ
  * 
- * このテストは、_getThemeImage()のテストも併せて行っています。
+ * このテストは、getThemeImage()のテストも併せて行っています。
  * 1. $optionに指定なし
  * 2. numに指定した番号の画像を表示
  * 3. allをtrue、numに番号を入力し、画像を複数表示
