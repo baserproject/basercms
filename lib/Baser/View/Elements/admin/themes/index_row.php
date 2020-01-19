@@ -32,7 +32,6 @@
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_apply.png', ['alt' => __d('baser', '適用'), 'class' => 'btn']), ['action' => 'apply', $data['name']], ['title' => __d('baser', '適用'), 'class' => 'submit-token']) ?>
 		<?php endif ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', ['alt' => __d('baser', 'テンプレート編集'), 'class' => 'btn']), ['controller' => 'theme_files', 'action' => 'index', $data['name']], ['title' => __d('baser', 'テンプレート編集')]) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => __d('baser', 'テーマ情報設定'), 'class' => 'btn']), ['action' => 'edit', $data['name']], ['title' => __d('baser', 'テーマ情報設定')]) ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', ['alt' => __d('baser', 'テーマコピー'), 'class' => 'btn']), ['action' => 'ajax_copy', $data['name']], ['title' => __d('baser', 'テーマコピー'), 'class' => 'btn-copy']) ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => __d('baser', 'テーマ削除'), 'class' => 'btn']), ['action' => 'ajax_delete', $data['name']], ['title' => __d('baser', 'テーマ削除'), 'class' => 'btn-delete']) ?>
 </p>
