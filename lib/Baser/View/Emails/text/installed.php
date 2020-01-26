@@ -29,7 +29,7 @@ $adminPrefix = BcUtil::getAdminPrefix();
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 　◆ <?php echo __d('baser', 'ログイン情報')?>　
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
-<?php echo __d('baser', '管理ページ')?>： <?php echo topLevelUrl(false) . Configure::read('App.baseUrl').'/' . $adminPrefix . '/users/login' ?>　
+<?php echo __d('baser', '管理ページ')?>： <?php echo $siteUrl . $adminPrefix . '/users/login' ?>　
 <?php echo __d('baser', 'アカウント')?>： <?php echo $name ?>　
 <?php echo __d('baser', 'パスワード')?>： <?php echo $password ?>　
 ※ <?php echo __d('baser', 'パスワードはユーザー管理より変更する事ができます。')?>　
