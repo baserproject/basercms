@@ -26,7 +26,7 @@
 		<?php if ($data['EditorTemplate']['image']): ?>
 			<?php $this->BcBaser->img('/files/editor/' . $data['EditorTemplate']['image'], ['url' => ['action' => 'edit', $data['EditorTemplate']['id']], 'alt' => $data['EditorTemplate']['name'], 'title' => $data['EditorTemplate']['name'], 'style' => 'float:left;margin-right:10px;height:36px']) ?>
 		<?php endif ?>
-		<?php $this->BcBaser->link($data['EditorTemplate']['name'], ['action' => 'edit', $data['EditorTemplate']['id']]) ?>
+		<?php $this->BcBaser->link($data['EditorTemplate']['name'], ['action' => 'edit', $data['EditorTemplate']['id']], ['escape' => true]) ?>
 	</td>
 	<td><?php echo $data['EditorTemplate']['description']; ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
