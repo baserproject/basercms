@@ -542,6 +542,11 @@ class BlogController extends BlogAppController {
 		}
 		if($options['num']) {
 			$options['limit'] = $options['num'];
+			// Cakeコア側で、maxLimit で 100の制限があるため
+			// https://book.cakephp.org/2.0/ja/core-libraries/components/pagination.html#id5
+			if (100 < intval($options['limit'])) {
+				$options['maxLimit'] = $options['limit'];
+			}
 		}
 		unset($options['listCount'], $options['num']);
 
