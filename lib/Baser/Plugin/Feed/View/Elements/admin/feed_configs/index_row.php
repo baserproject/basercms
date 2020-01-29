@@ -27,7 +27,7 @@
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => __d('baser', '削除'), 'class' => 'btn']), ['action' => 'ajax_delete', $data['FeedConfig']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete']) ?>
 	</td>
 	<td><?php echo $data['FeedConfig']['id']; ?></td>
-	<td><?php $this->BcBaser->link($data['FeedConfig']['name'], ['action' => 'edit', $data['FeedConfig']['id']]) ?></td>
+	<td><?php $this->BcBaser->link($data['FeedConfig']['name'], ['action' => 'edit', $data['FeedConfig']['id']], ['escape' => true]) ?></td>
 	<td><?php echo $data['FeedConfig']['display_number'] ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td><?php echo $this->BcTime->format('Y-m-d', $data['FeedConfig']['created']); ?><br />

@@ -23,7 +23,7 @@
 		<?php endif ?>
 	</td>
 	<td class="bca-table-listup__tbody-td"><?php echo $data['FeedConfig']['id']; ?></td>
-	<td class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['FeedConfig']['name'], ['action' => 'edit', $data['FeedConfig']['id']]) ?></td>
+	<td class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['FeedConfig']['name'], ['action' => 'edit', $data['FeedConfig']['id']], ['escape' => true]) ?></td>
 	<td class="bca-table-listup__tbody-td"><?php echo $data['FeedConfig']['display_number'] ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format('Y-m-d', $data['FeedConfig']['created']); ?><br />
