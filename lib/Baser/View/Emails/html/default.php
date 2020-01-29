@@ -11,6 +11,8 @@
  */
 
 /**
- * [EMAIL] 空レイアウト (text)
+ * [EMAIL] 送信メール(html)
  */
-echo $content_for_layout;
+?>
+<p style="text-align:right"><?php echo date('Y-m-d H:i:s') ?></p>  
+<?php echo $body ?>
