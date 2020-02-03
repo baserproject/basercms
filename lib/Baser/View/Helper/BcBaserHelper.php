@@ -1189,6 +1189,11 @@ class BcBaserHelper extends AppHelper {
  */
 	public function editLink() {
 		if ($this->existsEditLink()) {
+			// ブログindexのときは、管理画面記事一覧へリンク
+			if ($editLink['plugin'] == 'blog' && $editLink['controller'] == 'blog_contents') {
+				$editLink['controller'] = 'blog_posts';
+				$editLink['action'] = 'index';
+			}
 			$this->link(__d('baser', '編集する'), $this->_View->viewVars['editLink'], ['class' => 'tool-menu']);
 		}
 	}
