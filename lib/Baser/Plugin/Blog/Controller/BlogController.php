@@ -216,7 +216,7 @@ class BlogController extends BlogAppController {
 
 		$datas = $this->_getBlogPosts(['num' => $listCount]);
 		if (BcUtil::loginUser('admin')) {
-			$this->set('editLink', ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_contents', 'action' => 'edit', $this->blogContent['BlogContent']['id']]);
+			$this->set('editLink', ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']]);
 		}
 		$this->set('posts', $datas);
 		$this->set('single', false);
