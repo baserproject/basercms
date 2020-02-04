@@ -67,21 +67,24 @@ class BcAdminHelper extends AppHelper {
 
 /**
  * JSON形式でメニューデータを取得する
+ * # siteId の仕様
+ * - null：全てのサイトで表示
+ * - 数値：対象のサイトのみ表示（javascript で扱いやすいよう文字列に変換）
  * @return string
  */
 	public function getJsonMenu() {
 		$adminMenuGroups = Configure::read('BcApp.adminNavigation');
-		$currentSiteId = $this->Session->read('ContentsAdminIndex.named.site_id');
+		$currentSiteId = (string) $this->Session->read('Baser.viewConditions.ContentsAdminIndex.named.site_id');
 		if(!$adminMenuGroups) {
 			return null;
 		}
 		if(empty($this->_View->viewVars['user']['user_group_id'])) {
 			return null;
 		}
-		if(!is_null($currentSiteId)) {
-			$currentSiteId = (int) $currentSiteId;
+		if(!is_null($currentSiteId) && $currentSiteId) {
+			$currentSiteId = (string) $currentSiteId;
 		} else {
-			$currentSiteId = 0;
+			$currentSiteId = "0";
 		}
 		$currentUrl = '/' . $this->request->url;
 		$params = null;
@@ -116,7 +119,7 @@ class BcAdminHelper extends AppHelper {
 			if(!isset($adminMenuGroup['siteId'])) {
 				$adminMenuGroup = array_merge(['siteId' => null], $adminMenuGroup);
 			} else {
-				$adminMenuGroup['siteId'] = (int) $adminMenuGroup['siteId'];
+				$adminMenuGroup['siteId'] = (string) $adminMenuGroup['siteId'];
 			}
 			if(!isset($adminMenuGroup['type'])) {
 				$adminMenuGroup = array_merge(['type' => null], $adminMenuGroup);

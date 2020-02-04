@@ -335,59 +335,6 @@ class ThemesController extends AppController {
 	}
 	
 /**
- * テーマ名編集
- *
- * @param string $theme
- * @return void
- */
-	public function admin_edit($theme) {
-		if (!$theme) {
-			$this->notFound();
-		}
-		$themePath = WWW_ROOT . 'theme' . DS . $theme . DS;
-		$title = $description = $author = $url = '';
-		include $themePath . 'config.php';
-		if (!$this->request->data) {
-			$this->request->data['Theme']['name'] = $theme;
-			$this->request->data['Theme']['title'] = $title;
-			$this->request->data['Theme']['description'] = $description;
-			$this->request->data['Theme']['author'] = $author;
-			$this->request->data['Theme']['url'] = $url;
-		} else {
-			$this->request->data['Theme']['old_name'] = $theme;
-			$this->Theme->set($this->request->data);
-			if ($this->Theme->save()) {
-				$this->setMessage('テーマ「' . $this->request->data['Theme']['name'] . '」を更新しました。');
-				$this->redirect(['action' => 'index']);
-			} else {
-				$this->setMessage(__d('baser', 'テーマ情報の変更に失敗しました。入力内容を確認してください。'), true);
-			}
-		}
-		if (is_writable($themePath)) {
-			$folderDisabled = '';
-		} else {
-			$folderDisabled = 'disabled';
-			$this->request->data['Theme']['name'] = $theme;
-		}
-		if (is_writable($themePath . 'config.php')) {
-			$configDisabled = '';
-		} else {
-			$configDisabled = 'disabled';
-			$this->request->data['Theme']['title'] = $title;
-			$this->request->data['Theme']['description'] = $description;
-			$this->request->data['Theme']['author'] = $author;
-			$this->request->data['Theme']['url'] = $url;
-		}
-		$this->pageTitle = __d('baser', 'テーマ情報編集');
-		$this->subMenuElements = ['themes'];
-		$this->set('theme', $theme);
-		$this->set('configDisabled', $configDisabled);
-		$this->set('folderDisabled', $folderDisabled);
-		$this->help = 'themes_form';
-		$this->render('form');
-	}
-	
-/**
  * テーマをコピーする
  *
  * @param string $theme

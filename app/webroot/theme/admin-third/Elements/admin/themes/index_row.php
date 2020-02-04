@@ -32,7 +32,6 @@
 		<?php $this->BcBaser->link('', ['action' => 'apply', $data['name']], ['title' => __d('baser', '適用'), 'class' => 'submit-token bca-btn-icon', 'data-bca-btn-type' => 'apply', 'data-bca-btn-size' => 'lg']) ?>
 <?php endif ?>
 		<?php $this->BcBaser->link('', ['controller' => 'theme_files', 'action' => 'index', $data['name']], ['title' => __d('baser', 'テンプレート編集'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'file-list', 'data-bca-btn-size' => 'lg']) ?>
-		<?php $this->BcBaser->link('', ['action' => 'edit', $data['name']], ['title' => __d('baser', 'テーマ情報設定'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
 		<?php $this->BcBaser->link('', ['action' => 'ajax_copy', $data['name']], ['title' => __d('baser', 'テーマコピー'), 'class' => 'btn-copy bca-btn-icon', 'data-bca-btn-type' => 'copy', 'data-bca-btn-size' => 'lg']) ?>
 		<?php $this->BcBaser->link('', ['action' => 'ajax_delete', $data['name']], ['title' => __d('baser', 'テーマ削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
 	</p>
