@@ -2506,7 +2506,7 @@ END_FLASH;
 	}
 
 /**
- * WEBサイト名を出力する
+ * Webサイト名を出力する
  *
  * @return void
  */
@@ -2515,9 +2515,9 @@ END_FLASH;
 	}
 
 /**
- * WEBサイト名を取得する
+ * Webサイト名を取得する
  *
- * @return string サイト基本設定のWEBサイト名
+ * @return string サイト基本設定のWebサイト名
  */
 	public function getSiteName() {
 		if (!empty($this->_View->viewVars['siteConfig']['formal_name'])) {
@@ -2532,7 +2532,7 @@ END_FLASH;
 	}
 
 /**
- * WEBサイトURLを出力する
+ * WebサイトURLを出力する
  *
  * @param boolean ssl （初期値 : false）
  * @return void
@@ -2542,10 +2542,10 @@ END_FLASH;
 	}
 
 /**
- * WEBサイトURLを取得する
+ * WebサイトURLを取得する
  *
  * @param boolean ssl （初期値 : false）
- * @return string サイト基本設定のWEBサイト名
+ * @return string サイト基本設定のWebサイト名
  */
 	public function getSiteUrl($ssl = false) {
 		if ($ssl) {

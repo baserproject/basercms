@@ -21,7 +21,7 @@ class PageBcPageHelperFixture extends BaserTestFixture {
 			'id' => 1,
 			'contents' => '<section class="mainHeadline">
 <h2>シングルページデザインで<br />
-<span class="fcGreen">見やすくカッコいい</span>WEBサイトへ！</h2>
+<span class="fcGreen">見やすくカッコいい</span>Webサイトへ！</h2>
 </section>
 <!-- /mainHeadline -->
 
@@ -64,7 +64,7 @@ class PageBcPageHelperFixture extends BaserTestFixture {
 	<dd>092-000-55555</dd>
 	<dt>事業内容</dt>
 	<dd>インターネットサービス業（ダミー）<br />
-	WEBサイト制作事業（ダミー）<br />
+	Webサイト制作事業（ダミー）<br />
 	WEBシステム開発事業（ダミー）</dd>
 </dl>
 </div>
@@ -124,7 +124,7 @@ class PageBcPageHelperFixture extends BaserTestFixture {
 </tr>
 <tr>
 <th>事業内容</th>
-<td>インターネットサービス業（ダミー）、WEBサイト制作事業（ダミー）、WEBシステム開発事業（ダミー）</td>
+<td>インターネットサービス業（ダミー）、Webサイト制作事業（ダミー）、WEBシステム開発事業（ダミー）</td>
 </tr>
 <tr>
 <th>給与</th>
@@ -213,7 +213,7 @@ class PageBcPageHelperFixture extends BaserTestFixture {
 <tr><th>設立</th><td>2009年11月</td></tr>
 <tr><th>所在地</th><td>福岡県福岡市博多区博多駅前（ダミー）</td></tr>
 <tr><th>事業内容</th><td>インターネットサービス業（ダミー）<br />
-WEBサイト制作事業（ダミー）<br />
+Webサイト制作事業（ダミー）<br />
 WEBシステム開発事業（ダミー）</td></tr>
 </table>
 </div>
@@ -383,7 +383,7 @@ WEBシステム開発事業（ダミー）</td></tr>
 <tr><th>設立</th><td>2009年11月</td></tr>
 <tr><th>所在地</th><td>福岡県福岡市博多区博多駅前（ダミー）</td></tr>
 <tr><th>事業内容</th><td>インターネットサービス業（ダミー）<br />
-WEBサイト制作事業（ダミー）<br />
+Webサイト制作事業（ダミー）<br />
 WEBシステム開発事業（ダミー）</td></tr>
 </table>
 </div>

@@ -44,21 +44,21 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 <div class="section">
 <table cellpadding="0" cellspacing="0" class="form-table section">
 	<tr>
-		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.formal_name', __d('baser', 'WEBサイト名')) ?>&nbsp;<span class="required">*</span></th>
+		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.formal_name', __d('baser', 'Webサイト名')) ?>&nbsp;<span class="required">*</span></th>
 		<td class="col-input">
 			<?php echo $this->BcForm->input('SiteConfig.formal_name', ['type' => 'text', 'size' => 55, 'maxlength' => 255, 'autofocus' => true, 'class' => 'full-width']) ?>
 			<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpFormalName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 			<?php echo $this->BcForm->error('SiteConfig.formal_name') ?>
 			<div id="helptextFormalName" class="helptext">
 				<ul>
-					<li><?php echo __d('baser', '正式なWEBサイト名を指定します。')?></li>
+					<li><?php echo __d('baser', '正式なWebサイト名を指定します。')?></li>
 					<li><?php echo __d('baser', 'メールの送信元等で利用します。')?></li>
 				</ul>
 			</div>
 		</td>
 	</tr>
 	<tr>
-		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.name', __d('baser', 'WEBサイトタイトル')) ?>&nbsp;<span class="required">*</span></th>
+		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.name', __d('baser', 'Webサイトタイトル')) ?>&nbsp;<span class="required">*</span></th>
 		<td class="col-input">
 			<?php echo $this->BcForm->input('SiteConfig.name', ['type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true, 'class' => 'full-width']) ?>
 			<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>

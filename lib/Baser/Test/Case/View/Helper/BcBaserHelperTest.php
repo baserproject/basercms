@@ -284,7 +284,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	public function getDescriptionDataProvider() {
 		return [
-			['baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。WEBサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。', ''],
+			['baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。Webサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。', ''],
 			['国産オープンソースのホームページです', '国産オープンソースのホームページです']
 		];
 	}
@@ -2031,7 +2031,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 
 /**
- * WEBサイト名を取得する
+ * Webサイト名を取得する
  *
  * @return void
  */
@@ -2040,7 +2040,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * WEBサイト名を出力する
+ * Webサイト名を出力する
  * BcBaserHelper:getSiteName()のラッパーのため、テスト不要
  *
  * @return void
@@ -2049,7 +2049,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 
 /**
- * WEBサイトURLを取得する
+ * WebサイトURLを取得する
  *
  * @return void
  */
@@ -2066,7 +2066,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 
 /**
- * WEBサイトURLを出力する
+ * WebサイトURLを出力する
  * BcBaserHelper:getSiteUrl()のラッパーの為、テスト不要
  * @return void
  *

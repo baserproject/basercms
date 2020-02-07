@@ -39,7 +39,7 @@ class BcBasicsTest extends BaserTestCase {
 	}
 
 /**
- * WEBサイトのベースとなるURLを取得する
+ * WebサイトのベースとなるURLを取得する
  * TODO BC_DEPLOY_PATTERNで分岐した場合のテストの追加
  * 
  * @param	string $script App.baseUrlの値
@@ -55,7 +55,7 @@ class BcBasicsTest extends BaserTestCase {
 			$_SERVER['SCRIPT_NAME'] = APP . 'Console' . DS . 'cake.php';
 		}
 		$result = baseUrl();
-		$this->assertEquals($expect, $result, 'WEBサイトのベースとなるURLを正しく取得できません');
+		$this->assertEquals($expect, $result, 'WebサイトのベースとなるURLを正しく取得できません');
 
 	}
 
