@@ -23,7 +23,7 @@ App::uses('CakeText', 'Utility');
  */
 
 /**
- * WEBサイトのベースとなるURLを取得する
+ * WebサイトのベースとなるURLを取得する
  * 
  * コントローラーが初期化される前など {$this->base} が利用できない場合に利用する
  * / | /index.php/ | /subdir/ | /subdir/index.php/

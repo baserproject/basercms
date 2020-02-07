@@ -4872,7 +4872,7 @@ msgid "Y年 m月 d日"
 msgstr "Y/m/d"
 
 #: Plugin/Mail/View/MailConfigs/admin/form.php:30
-msgid "署名：WEBサイト名"
+msgid "署名：Webサイト名"
 msgstr "Signature: Web Site Name"
 
 #: Plugin/Mail/View/MailConfigs/admin/form.php:35;44;55;67;76
@@ -4880,7 +4880,7 @@ msgid "自動送信メールの署名に挿入されます。"
 msgstr "Inserted to signature on auto-sending mail."
 
 #: Plugin/Mail/View/MailConfigs/admin/form.php:39
-msgid "署名：WEBサイトURL"
+msgid "署名：WebサイトURL"
 msgstr "Signature: Web Site URL"
 
 #: Plugin/Mail/View/MailConfigs/admin/form.php:48
@@ -6538,10 +6538,10 @@ msgstr "Register un-manageable Content in baserCMS to Search Index"
 
 #: View/Elements/admin/helps/site_configs_form.php:19
 msgid ""
-"WEBサイトの基本設定を行います。<br />各項目のヘルプメッセージをご確認くださ"
+"Webサイトの基本設定を行います。<br />各項目のヘルプメッセージをご確認くださ"
 "い。"
 msgstr ""
-"Doing WEB site’s Basic Settings.<br />Please check help message on each Item."
+"Doing Web site’s Basic Settings.<br />Please check help message on each Item."
 
 #: View/Elements/admin/helps/site_configs_form.php:21
 msgid ""
@@ -7126,11 +7126,11 @@ msgstr ""
 
 #: View/Elements/admin/helps/widget_areas_index.php:20
 msgid ""
-"ウィジェットとは簡単にWEBページの指定した場所に部品の追加・削除ができる仕組み"
+"ウィジェットとは簡単にWebページの指定した場所に部品の追加・削除ができる仕組み"
 "です。<br />その部品の一つ一つをウィジェットと呼び、ウィジェットが集まった一"
 "つのグループをウィジェットエリアと呼びます。"
 msgstr ""
-"Widget is method to add or delete components to specified WEB page easily."
+"Widget is method to add or delete components to specified Web page easily."
 "<br />Each component is called Widget and group that gathers Widgets is "
 "called Widget Area."
 
@@ -9299,19 +9299,19 @@ msgid "管理システムSSL設定確認"
 msgstr "Check Admin System SSL Settings"
 
 #: View/SiteConfigs/admin/form.php:44
-msgid "WEBサイト名"
+msgid "Webサイト名"
 msgstr "Web Site Name"
 
 #: View/SiteConfigs/admin/form.php:51
-msgid "正式なWEBサイト名を指定します。"
-msgstr "Specify official WEB Site Name."
+msgid "正式なWebサイト名を指定します。"
+msgstr "Specify official Web Site Name."
 
 #: View/SiteConfigs/admin/form.php:52
 msgid "メールの送信元等で利用します。"
 msgstr "Use for mail’s sender."
 
 #: View/SiteConfigs/admin/form.php:58
-msgid "WEBサイトタイトル"
+msgid "Webサイトタイトル"
 msgstr "Web Site Title"
 
 #: View/SiteConfigs/admin/form.php:65
@@ -9812,7 +9812,7 @@ msgid "半角英数字のみで入力してください。"
 msgstr "Please enter with only half-sized alphabets and numbers."
 
 #: View/Themes/admin/form.php:75
-msgid "制作者のWEBサイトのURL。"
+msgid "制作者のWebサイトのURL。"
 msgstr "Creator's URL of Web Site"
 
 #: View/Themes/admin/index.php:21

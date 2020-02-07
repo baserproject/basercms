@@ -24,7 +24,7 @@ $this->BcBaser->js('Mail.admin/mail_configs/form', false);
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table bca-form-table">
 		<tr>
-			<th class="bca-form-table__label"><?php echo $this->BcForm->label('MailConfig.site_name', __d('baser', '署名：WEBサイト名')) ?></th>
+			<th class="bca-form-table__label"><?php echo $this->BcForm->label('MailConfig.site_name', __d('baser', '署名：Webサイト名')) ?></th>
 			<td class="col-input bca-form-table__input">
 				<?php echo $this->BcForm->input('MailConfig.site_name', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'autofocus' => true]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
@@ -33,7 +33,7 @@ $this->BcBaser->js('Mail.admin/mail_configs/form', false);
 			</td>
 		</tr>
 		<tr>
-			<th class="bca-form-table__label"><?php echo $this->BcForm->label('MailConfig.site_url', __d('baser', '署名：WEBサイトURL')) ?></th>
+			<th class="bca-form-table__label"><?php echo $this->BcForm->label('MailConfig.site_url', __d('baser', '署名：WebサイトURL')) ?></th>
 			<td class="col-input bca-form-table__input">
 				<?php echo $this->BcForm->input('MailConfig.site_url', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>

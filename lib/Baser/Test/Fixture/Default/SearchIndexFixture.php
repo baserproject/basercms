@@ -21,7 +21,7 @@ class SearchIndexFixture extends BaserTestFixture {
       'lft' => null,
       'rght' => null,
       'title' => '会社案内',
-      'detail' => 'baserCMS inc.の会社案内ページ 会社案内会社データ会社名baserCMS inc.  [デモ]設立2009年11月所在地福岡県福岡市博多区博多駅前（ダミー）事業内容インターネットサービス業（ダミー）WEBサイト制作事業（ダミー）WEBシステム開発事業（ダミー）アクセスマップ※ JavaScript を有効にしてください。var latlng = new google.maps.LatLng(33.6065756,130.4182970);var options = {zoom: 16,center: latlng,mapTypeId: google.maps.MapTypeId.ROADMAP,navigationControl: true,mapTypeControl: true,scaleControl: true,scrollwheel: false,};var map = new google.maps.Map(document.getElementById("map"), options);var marker = new google.maps.Marker({position: latlng,map: map,title:"baserCMS inc. [デモ]"});var infowindow = new google.maps.InfoWindow({content: "baserCMS inc. [デモ]福岡県""});infowindow.open(map,marker);google.maps.event.addListener(marker, "click", function() {infowindow.open(map,marker);});',
+      'detail' => 'baserCMS inc.の会社案内ページ 会社案内会社データ会社名baserCMS inc.  [デモ]設立2009年11月所在地福岡県福岡市博多区博多駅前（ダミー）事業内容インターネットサービス業（ダミー）Webサイト制作事業（ダミー）WEBシステム開発事業（ダミー）アクセスマップ※ JavaScript を有効にしてください。var latlng = new google.maps.LatLng(33.6065756,130.4182970);var options = {zoom: 16,center: latlng,mapTypeId: google.maps.MapTypeId.ROADMAP,navigationControl: true,mapTypeControl: true,scaleControl: true,scrollwheel: false,};var map = new google.maps.Map(document.getElementById("map"), options);var marker = new google.maps.Marker({position: latlng,map: map,title:"baserCMS inc. [デモ]"});var infowindow = new google.maps.InfoWindow({content: "baserCMS inc. [デモ]福岡県""});infowindow.open(map,marker);google.maps.event.addListener(marker, "click", function() {infowindow.open(map,marker);});',
       'url' => '/about',
       'status' => 1,
       'priority' => 0.5,

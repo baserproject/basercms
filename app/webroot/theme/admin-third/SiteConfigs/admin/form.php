@@ -41,21 +41,21 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 
   <table class="form-table bca-form-table section" data-bca-table-type="type2">
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.formal_name', __d('baser', 'WEBサイト名')) ?>&nbsp;<span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.formal_name', __d('baser', 'Webサイト名')) ?>&nbsp;<span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcForm->input('SiteConfig.formal_name', ['type' => 'text', 'size' => 55, 'maxlength' => 255, 'autofocus' => true]) ?>
         <i class="bca-icon--question-circle btn help bca-help"></i>
         <?php echo $this->BcForm->error('SiteConfig.formal_name') ?>
         <div id="helptextFormalName" class="helptext">
           <ul>
-            <li><?php echo __d('baser', '正式なWEBサイト名を指定します。') ?></li>
+            <li><?php echo __d('baser', '正式なWebサイト名を指定します。') ?></li>
             <li><?php echo __d('baser', 'メールの送信元等で利用します。') ?></li>
           </ul>
         </div>
       </td>
     </tr>
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.name', __d('baser', 'WEBサイトタイトル')) ?>&nbsp;<span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.name', __d('baser', 'Webサイトタイトル')) ?>&nbsp;<span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcForm->input('SiteConfig.name', ['type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true]) ?>
         <i class="bca-icon--question-circle btn help bca-help"></i>

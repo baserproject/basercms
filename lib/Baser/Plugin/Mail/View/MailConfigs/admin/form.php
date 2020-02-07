@@ -27,7 +27,7 @@ $this->BcBaser->js('Mail.admin/mail_configs/form', false);
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
 		<tr>
-			<th><?php echo $this->BcForm->label('MailConfig.site_name', __d('baser', '署名：WEBサイト名')) ?></th>
+			<th><?php echo $this->BcForm->label('MailConfig.site_name', __d('baser', '署名：Webサイト名')) ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailConfig.site_name', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'autofocus' => true)) ?>
 				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpSiteName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
@@ -36,7 +36,7 @@ $this->BcBaser->js('Mail.admin/mail_configs/form', false);
 			</td>
 		</tr>
 		<tr>
-			<th><?php echo $this->BcForm->label('MailConfig.site_url', __d('baser', '署名：WEBサイトURL')) ?></th>
+			<th><?php echo $this->BcForm->label('MailConfig.site_url', __d('baser', '署名：WebサイトURL')) ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailConfig.site_url', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
 				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpSiteUrl', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
