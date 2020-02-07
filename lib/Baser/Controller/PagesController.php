@@ -53,7 +53,7 @@ class PagesController extends AppController {
  * @var array
  * @access	public
  */
-	public $uses = ['Page'];
+	public $uses = ['Page', 'Content'];
 
 /**
  * beforeFilter
@@ -310,6 +310,7 @@ class PagesController extends AppController {
 			// 一度データをセッションに退避する
 			if($this->BcContents->preview === 'default') {
 				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->data['Content']['entity_id'];
+				$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
 				$this->Session->write($sessionKey,  $this->request->data);
 				$query = [];
 				if($this->request->query) {
@@ -329,6 +330,9 @@ class PagesController extends AppController {
 			}
 
 			if($this->BcContents->preview == 'draft') {
+				$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
+				$this->request->params['Content']['eyecatch'] = $this->request->data['Content']['eyecatch'];
+
 				$uuid = $this->_createPreviewTemplate($this->request->data);
 				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
 				$previewCreated = true;
@@ -340,6 +344,7 @@ class PagesController extends AppController {
 			if($this->BcContents->preview === 'default') {
 				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->params['Content']['entity_id'];
 				$previewData = $this->Session->read($sessionKey);
+				$this->request->params['Content']['eyecatch'] = $previewData['Content']['eyecatch'];
 
 				if(!is_null($previewData)) {
 					$this->Session->delete($sessionKey);
