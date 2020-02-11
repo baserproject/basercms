@@ -305,15 +305,22 @@ class BlogController extends BlogAppController {
 
 				break;
 
+			/* 投稿者別記事一覧 */
 			case 'author':
+
 				$author = h($pass[count($pass) - 1]);
+				if (empty($author) || empty($this->User->hasAny(['name' => $author]))) {
+					$this->notFound();
+				}
 				$posts = $this->_getBlogPosts(['author' => $author]);
 				$data = $this->BlogPost->User->find('first', ['fields' => ['real_name_1', 'real_name_2', 'nickname'], 'conditions' => ['User.name' => $author]]);
 				App::uses('BcBaserHelper', 'View/Helper');
 				$BcBaser = new BcBaserHelper(new View());
 				$this->pageTitle = $BcBaser->getUserName($data);
 				$template = $this->blogContent['BlogContent']['template'] . DS . 'archives';
+
 				$this->set('blogArchiveType', $type);
+
 				break;
 
 			/* タグ別記事一覧 */
