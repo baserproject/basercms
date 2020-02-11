@@ -39,7 +39,7 @@ class BlogController extends BlogAppController {
  *
  * @var array
  */
-	public $uses = ['Blog.BlogCategory', 'Blog.BlogPost', 'Blog.BlogContent'];
+	public $uses = ['Blog.BlogCategory', 'Blog.BlogPost', 'Blog.BlogContent', 'Blog.BlogTag'];
 
 /**
  * ヘルパー
@@ -320,7 +320,7 @@ class BlogController extends BlogAppController {
 			case 'tag':
 
 				$tag = h($pass[count($pass) - 1]);
-				if (empty($this->blogContent['BlogContent']['tag_use']) || empty($tag)) {
+				if (empty($this->blogContent['BlogContent']['tag_use']) || empty($tag) || empty($this->BlogTag->hasAny(['name' => urldecode($tag)]))) {
 					$this->notFound();
 				}
 				$posts = $this->_getBlogPosts(['tag' => $tag]);
