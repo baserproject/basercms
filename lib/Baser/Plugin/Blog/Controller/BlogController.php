@@ -309,7 +309,8 @@ class BlogController extends BlogAppController {
 			case 'author':
 
 				$author = h($pass[count($pass) - 1]);
-				if (empty($author) || empty($this->User->hasAny(['name' => $author]))) {
+				$existsAuthor = $this->User->hasAny(['name' => $author]);
+				if (empty($author) || empty($existsAuthor)) {
 					$this->notFound();
 				}
 				$posts = $this->_getBlogPosts(['author' => $author]);
@@ -327,7 +328,8 @@ class BlogController extends BlogAppController {
 			case 'tag':
 
 				$tag = h($pass[count($pass) - 1]);
-				if (empty($this->blogContent['BlogContent']['tag_use']) || empty($tag) || empty($this->BlogTag->hasAny(['name' => urldecode($tag)]))) {
+				$existsTag = $this->BlogTag->hasAny(['name' => urldecode($tag)]);
+				if (empty($this->blogContent['BlogContent']['tag_use']) || empty($tag) || empty($existsTag)) {
 					$this->notFound();
 				}
 				$posts = $this->_getBlogPosts(['tag' => $tag]);
