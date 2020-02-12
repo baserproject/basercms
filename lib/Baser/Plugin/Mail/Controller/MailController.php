@@ -42,7 +42,7 @@ class MailController extends MailAppController {
  *
  * @var array
  */
-	public $uses = ['Mail.MailMessage', 'Mail.MailContent', 'Mail.MailField', 'Mail.MailConfig'];
+	public $uses = ['Mail.MailMessage', 'Mail.MailContent', 'Mail.MailField', 'Mail.MailConfig', 'Content'];
 
 /**
  * ヘルパー
@@ -200,6 +200,8 @@ class MailController extends MailAppController {
 
 		if($this->BcContents->preview == 'default' && $this->request->data && empty($this->request->params['requested'])) {
 			$this->dbDatas['mailContent']['MailContent'] = $this->request->data['MailContent'];
+			$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
+			$this->request->params['Content']['eyecatch'] = $this->request->data['Content']['eyecatch'];
 		}
 		
 		$this->Session->write('Mail.valid', true);
