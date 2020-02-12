@@ -25,7 +25,7 @@
 	<td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--no"><?php // No ?><?php echo $data['BlogPost']['no']; ?></td>
 	<td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--title"><?php // アイキャッチ＋タイトル ?>
     <div class="eye_catch-wrap">
-      <?php if (!empty($data['BlogCategory']['eye_catch'])): ?>
+      <?php if (!empty($data['BlogPost']['eye_catch'])): ?>
       <div class="eye_catch"><?php echo $this->BcUpload->uploadImage('BlogPost.eye_catch',  $data['BlogPost']['eye_catch'], ['imgsize' => 'mobile_thumb']) ?></div>
       <?php endif; ?>
       <?php $this->BcBaser->link($data['BlogPost']['name'], ['action' => 'edit', $data['BlogContent']['id'], $data['BlogPost']['id']]) ?>
