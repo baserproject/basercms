@@ -39,7 +39,7 @@ class BlogController extends BlogAppController {
  *
  * @var array
  */
-	public $uses = ['Blog.BlogCategory', 'Blog.BlogPost', 'Blog.BlogContent', 'Blog.BlogTag'];
+	public $uses = ['Blog.BlogCategory', 'Blog.BlogPost', 'Blog.BlogContent', 'Content', 'Blog.BlogTag'];
 
 /**
  * ヘルパー
@@ -183,6 +183,8 @@ class BlogController extends BlogAppController {
 		}
 		if($this->BcContents->preview == 'default' && $this->request->data) {
 			$this->blogContent['BlogContent'] = $this->request->data['BlogContent'];
+			$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
+			$this->request->params['Content']['eyecatch'] = $this->request->data['Content']['eyecatch'];
 		}
 		if ($this->RequestHandler->isRss()) {
 			Configure::write('debug', 0);
