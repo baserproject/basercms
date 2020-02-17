@@ -206,9 +206,16 @@ class BcAppView extends View {
 		// CUSTOMIZE ADD 2012/04/11 ryuring
 		// CakeErrorの場合はサブフォルダを除外
 		// >>>
-		if ($this->name == 'CakeError' && $this->viewPath == 'Errors') {
+		if ($this->name == 'CakeError' && preg_match('/^Errors\/?/', $this->viewPath)) {
 			$subDir = $this->subDir . DS;
 			$this->subDir = null;
+
+			if ($this->layoutPath == 'rss') {
+				$this->layoutPath = null;
+				$this->viewPath = 'Errors';
+				$this->response->type('html');
+			}
+
 			$exception = $this->get('error');
 			if($exception && $exception instanceof MissingConnectionException) {
 				$this->layout = 'missing_connection';
