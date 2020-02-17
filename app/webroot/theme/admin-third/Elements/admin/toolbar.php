@@ -104,7 +104,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 					<?php if (Configure::read('debug') == -1 && $this->name != "Installations"): ?>
 						<span id="DebugMode" class="bca-debug-mode" title="<?php echo __d('baser', 'インストールモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。') ?>"><?php echo __d('baser', 'インストールモード') ?></span>
 					<?php elseif (Configure::read('debug') > 0): ?>
-						<span id="DebugMode" class="bca-debug-mode" title="<?php echo __d('baser', 'デバッグモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。') ?>"><?php echo __d('baser', 'デバッグモード') ?><?php echo mb_convert_kana(Configure::read('debug'), 'N') ?>
+						<span id="DebugMode" class="bca-debug-mode" title="<?php echo __d('baser', 'デバッグモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。') ?>"><?php echo __d('baser', 'デバッグモード') ?><?php echo mb_convert_kana(Configure::read('debug'), 'N') ?></span>
 					<?php endif; ?>
 				</div>
 			<?php endif ?>
