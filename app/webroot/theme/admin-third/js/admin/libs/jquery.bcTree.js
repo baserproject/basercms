@@ -146,7 +146,7 @@
 			$.bcTree.jsTree = $.bcTree.treeDom.jstree(true);
 
 			$.bcTree.treeDom.bind("move_node.jstree", function(e, data){
-				$.bcTree.beforeParent = data.old_parent;
+				$.bcTree.beforeParentId = data.old_parent;
 				$.bcTree.beforePosition = data.old_position;
 			});
 			
@@ -1189,7 +1189,14 @@
 			}
 			
 			if(cancel || !confirm(bcI18n.commonSortSaveConfirmMessage)) {
-				$.bcTree.jsTree.move_node(node, $.bcTree.beforeParent, $.bcTree.beforePosition);
+				// コンテンツを別のフォルダに移動するか、コンテンツを上から下に移動
+				if (node.parent != $.bcTree.beforeParentId || offset >= 0) {
+					$.bcTree.jsTree.move_node(node, $.bcTree.beforeParentId, $.bcTree.beforePosition);
+				// コンテンツを下から上に移動
+				} else {
+					$.bcTree.jsTree.move_node(node, $.bcTree.beforeParentId, $.bcTree.beforePosition + 1);
+				}
+				$.bcTree.refreshTree();
 				return false;
 			}
 		

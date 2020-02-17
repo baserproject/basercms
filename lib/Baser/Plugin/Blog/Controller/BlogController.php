@@ -39,7 +39,7 @@ class BlogController extends BlogAppController {
  *
  * @var array
  */
-	public $uses = ['Blog.BlogCategory', 'Blog.BlogPost', 'Blog.BlogContent'];
+	public $uses = ['Blog.BlogCategory', 'Blog.BlogPost', 'Blog.BlogContent', 'Content', 'Blog.BlogTag'];
 
 /**
  * ヘルパー
@@ -183,6 +183,8 @@ class BlogController extends BlogAppController {
 		}
 		if($this->BcContents->preview == 'default' && $this->request->data) {
 			$this->blogContent['BlogContent'] = $this->request->data['BlogContent'];
+			$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
+			$this->request->params['Content']['eyecatch'] = $this->request->data['Content']['eyecatch'];
 		}
 		if ($this->RequestHandler->isRss()) {
 			Configure::write('debug', 0);
@@ -305,22 +307,31 @@ class BlogController extends BlogAppController {
 
 				break;
 
+			/* 投稿者別記事一覧 */
 			case 'author':
+
 				$author = h($pass[count($pass) - 1]);
+				$existsAuthor = $this->User->hasAny(['name' => $author]);
+				if (empty($author) || empty($existsAuthor)) {
+					$this->notFound();
+				}
 				$posts = $this->_getBlogPosts(['author' => $author]);
 				$data = $this->BlogPost->User->find('first', ['fields' => ['real_name_1', 'real_name_2', 'nickname'], 'conditions' => ['User.name' => $author]]);
 				App::uses('BcBaserHelper', 'View/Helper');
 				$BcBaser = new BcBaserHelper(new View());
 				$this->pageTitle = $BcBaser->getUserName($data);
 				$template = $this->blogContent['BlogContent']['template'] . DS . 'archives';
+
 				$this->set('blogArchiveType', $type);
+
 				break;
 
 			/* タグ別記事一覧 */
 			case 'tag':
 
 				$tag = h($pass[count($pass) - 1]);
-				if (empty($this->blogContent['BlogContent']['tag_use']) || empty($tag)) {
+				$existsTag = $this->BlogTag->hasAny(['name' => urldecode($tag)]);
+				if (empty($this->blogContent['BlogContent']['tag_use']) || empty($tag) || empty($existsTag)) {
 					$this->notFound();
 				}
 				$posts = $this->_getBlogPosts(['tag' => $tag]);
