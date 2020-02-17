@@ -35,7 +35,7 @@
 			<p class="result-link"><small><?php $this->BcBaser->link(fullUrl(urldecode($data['SearchIndex']['url'])), $data['SearchIndex']['url']) ?></small></p>
 		</div>
 	<?php endforeach ?>
-<?php elseif (empty($this->request->query['q'])): ?>
+<?php elseif (!isset($this->request->query['q'][0])): ?>
 	<div class="section">
 		<p class="no-data"><?php echo __d('baser', '検索キーワードを入力してください。')?></p>
 	</div>
