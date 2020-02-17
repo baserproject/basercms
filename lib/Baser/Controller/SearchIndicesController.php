@@ -114,7 +114,7 @@ class SearchIndicesController extends AppController {
 				$this->request->data['SearchIndex'][$key] = h($value);
 			}
 		}
-		if (!empty($this->request->query['q'])) {
+		if (isset($this->request->query['q'][0])) {
 			$this->paginate = [
 				'conditions' => $this->_createSearchConditions($this->request->data),
 				'order' => 'SearchIndex.priority DESC, SearchIndex.modified DESC, SearchIndex.id',
