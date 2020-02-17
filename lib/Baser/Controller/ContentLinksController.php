@@ -108,8 +108,15 @@ class ContentLinksController extends AppController {
  * @return void
  */
 	public function view() {
+		if(empty($this->request->params['entityId'])) {
+			$this->notFound();
+		}
 		$data = $this->ContentLink->find('first', ['conditions' => ['ContentLink.id' => $this->request->params['entityId']]]);
-		$this->set(compact('data'));
+		if($data) {
+			$this->set(compact('data'));
+		} else {
+			$this->notFound();
+		}
 	}
 
 }
