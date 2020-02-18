@@ -40,14 +40,14 @@ if (!$data['BlogComment']['status']) {
 	<td><?php echo $data['BlogComment']['no'] ?></td>
 	<td>
 		<?php if (!empty($data['BlogComment']['url'])): ?>
-			<?php $this->BcBaser->link($data['BlogComment']['name'], $data['BlogComment']['url'], ['target' => '_blank']) ?>
+			<?php $this->BcBaser->link($data['BlogComment']['name'], $data['BlogComment']['url'], ['target' => '_blank', 'escape' => true]) ?>
 		<?php else: ?>
-			<?php echo $data['BlogComment']['name'] ?>
+			<?php echo h($data['BlogComment']['name']) ?>
 		<?php endif ?>
 	</td>
 	<td>
 		<?php if (!empty($data['BlogComment']['email'])): ?>
-			<?php $this->BcBaser->link($data['BlogComment']['email'], 'mailto:' . $data['BlogComment']['email']) ?>
+			<?php $this->BcBaser->link($data['BlogComment']['email'], 'mailto:' . $data['BlogComment']['email'], ['escape' => true]) ?>
 		<?php endif; ?>
 		<br />
 		<?php echo $this->BcText->autoLinkUrls($data['BlogComment']['url']) ?>
