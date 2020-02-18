@@ -276,8 +276,10 @@ class PagesController extends AppController {
 			}
 		}
 
-		$urlTmp = preg_replace('/^\//', '', $urlTmp);
-		$path = explode('/', $urlTmp);
+		if (isset($urlTmp)) {
+			$urlTmp = preg_replace('/^\//', '', $urlTmp);
+			$path = explode('/', $urlTmp);
+		}
 		// <<<
 		
 		$count = count($path);
