@@ -275,10 +275,7 @@ class BlogController extends BlogAppController {
 			/* カテゴリ一覧 */
 			case 'category':
 
-				$category = $pass[count($pass) - 1];
-				if (empty($category)) {
-					//$this->notFound();
-				}
+				$category = isset($pass[1]) ? $pass[1] : '';
 
 				// ナビゲーションを設定
 				$categoryId = $this->BlogCategory->field('id', [
@@ -291,7 +288,7 @@ class BlogController extends BlogAppController {
 				}
 
 				// 記事を取得
-				$posts = $this->_getBlogPosts(['category' => urlencode($category)]);
+				$posts = $this->_getBlogPosts(['category' => $category]);
 				$blogCategories = $this->BlogCategory->getPath($categoryId, ['name', 'title']);
 				if (count($blogCategories) > 1) {
 					foreach ($blogCategories as $key => $blogCategory) {
