@@ -63,6 +63,18 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 			</td>
 		</tr>
 		<tr>
+			<th class="col-head"><?php echo $this->BcForm->label('MailContent.sender_2', __d('baser', 'BCC用送信先メールアドレス')) ?></th>
+			<td class="col-input">
+<?php echo $this->BcForm->input('MailContent.sender_2', array('type' => 'text', 'size' => 80)) ?>
+<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSender2', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
+<?php echo $this->BcForm->error('MailContent.sender_2') ?>
+				<div id="helptextSender2" class="helptext">
+					<ul><li><?php echo __d('baser', 'BCC（ブラインドカーボンコピー）用のメールアドレスを指定します。')?></li>
+						<li><?php echo __d('baser', '複数の送信先を指定するには、カンマで区切って入力します。')?></li></ul>
+				</div>
+			</td>
+		</tr>
+		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.sender_name', __d('baser', '送信先名')) ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 <?php echo $this->BcForm->input('MailContent.sender_name', array('type' => 'text', 'size' => 80, 'maxlength' => 255)) ?>
@@ -174,18 +186,6 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 ?>
 				<div id="helptextSslOn" class="helptext">
                     <?php echo __d('baser', '管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。また、SSL通信で利用するURLをシステム設定で指定している必要があります。')?>
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('MailContent.sender_2', __d('baser', 'BCC用送信先メールアドレス')) ?></th>
-			<td class="col-input">
-<?php echo $this->BcForm->input('MailContent.sender_2', array('type' => 'text', 'size' => 80)) ?>
-<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSender2', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
-<?php echo $this->BcForm->error('MailContent.sender_2') ?>
-				<div id="helptextSender2" class="helptext">
-					<ul><li><?php echo __d('baser', 'BCC（ブラインドカーボンコピー）用のメールアドレスを指定します。')?></li>
-						<li><?php echo __d('baser', '複数の送信先を指定するには、カンマで区切って入力します。')?></li></ul>
 				</div>
 			</td>
 		</tr>

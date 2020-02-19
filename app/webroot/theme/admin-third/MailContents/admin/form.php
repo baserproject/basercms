@@ -60,6 +60,18 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 			</td>
 		</tr>
 		<tr>
+			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.sender_2', __d('baser', 'BCC用送信先メールアドレス')) ?></th>
+			<td class="col-input bca-form-table__input">
+<?php echo $this->BcForm->input('MailContent.sender_2', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
+<i class="bca-icon--question-circle btn help bca-help"></i>
+<?php echo $this->BcForm->error('MailContent.sender_2') ?>
+				<div id="helptextSender2" class="helptext">
+					<ul><li><?php echo __d('baser', 'BCC（ブラインドカーボンコピー）用のメールアドレスを指定します。') ?></li>
+						<li><?php echo __d('baser', '複数の送信先を指定するには、カンマで区切って入力します。') ?></li></ul>
+				</div>
+			</td>
+		</tr>
+		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.sender_name', __d('baser', '送信先名')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
 			<td class="col-input bca-form-table__input">
 <?php echo $this->BcForm->input('MailContent.sender_name', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
@@ -173,18 +185,6 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<div id="helptextSslOn" class="helptext"><?php echo __d('baser', '管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。また、SSL通信で利用するURLをシステム設定で指定している必要があります。') ?></div>
 				<?php echo $this->BcForm->error('MailContent.ssl_on', sprintf(__d('baser', 'SSL通信を利用するには、%s で、事前にSSL通信用のWebサイトURLを指定してください。'), $this->BcBaser->getLink(__d('baser', 'システム設定'), ['controller' => 'site_configs', 'action' => 'form', 'plugin' => null], ['target' => '_blank'])), ['escape' => false]) ?>
-			</td>
-		</tr>
-		<tr>
-			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.sender_2', __d('baser', 'BCC用送信先メールアドレス')) ?></th>
-			<td class="col-input bca-form-table__input">
-<?php echo $this->BcForm->input('MailContent.sender_2', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
-<i class="bca-icon--question-circle btn help bca-help"></i>
-<?php echo $this->BcForm->error('MailContent.sender_2') ?>
-				<div id="helptextSender2" class="helptext">
-					<ul><li><?php echo __d('baser', 'BCC（ブラインドカーボンコピー）用のメールアドレスを指定します。') ?></li>
-						<li><?php echo __d('baser', '複数の送信先を指定するには、カンマで区切って入力します。') ?></li></ul>
-				</div>
 			</td>
 		</tr>
 		<tr>
