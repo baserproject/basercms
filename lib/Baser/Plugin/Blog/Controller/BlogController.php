@@ -329,9 +329,9 @@ class BlogController extends BlogAppController {
 			/* タグ別記事一覧 */
 			case 'tag':
 
-				$tag = h($pass[count($pass) - 1]);
+				$tag = isset($pass[1]) ? $pass[1] : '';
 				$existsTag = $this->BlogTag->hasAny(['name' => urldecode($tag)]);
-				if (empty($this->blogContent['BlogContent']['tag_use']) || empty($tag) || empty($existsTag)) {
+				if (empty($this->blogContent['BlogContent']['tag_use']) || $existsTag === false) {
 					$this->notFound();
 				}
 				$posts = $this->_getBlogPosts(['tag' => $tag]);
