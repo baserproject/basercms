@@ -114,6 +114,11 @@ class BlogController extends BlogAppController {
 				// 後方互換の為 pass もチェック
 				$blogContentId = $this->request->params['pass'];
 			}
+
+			if (!$blogContentId) {
+				$this->notFound();
+			}
+
 			$this->BlogContent->recursive = -1;
 			if ($this->contentId) {
 				$this->blogContent = $this->BlogContent->read(null, $this->contentId);
@@ -121,10 +126,6 @@ class BlogController extends BlogAppController {
 				$this->blogContent = $this->BlogContent->read(null, $blogContentId);
 				$this->contentId = $blogContentId;
 			}
-		}
-
-		if (!$blogContentId) {
-			$this->notFound();
 		}
 
 		if(empty($this->request->params['Content'])) {
@@ -785,7 +786,7 @@ class BlogController extends BlogAppController {
  * 全体タグ一覧
  * @param $name
  */
-	public function tags($name) {
+	public function tags($name=null) {
 		if (empty($name)) {
 			$this->notFound();
 		}
@@ -793,7 +794,7 @@ class BlogController extends BlogAppController {
 		if(!empty($this->request->params['named']['num'])) {
 			$num = $this->request->params['named']['num'];
 		}
-		$tag = h($name);
+		$tag = $name;
 		$posts = $this->_getBlogPosts([
 			'tag' => $tag,
 			'num' => $num
