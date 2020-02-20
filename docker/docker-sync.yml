@@ -1,9 +1,0 @@
-version: '2'
-syncs:
-  sync-volume:
-    src: '../'
-    sync_strategy: 'native_osx'
-    monit_interval: 1
-    sync_userid: '33'
-    sync_excludes: ['node_modules', '.git']
-    watch_excludes: ['.*/.git', '.*/node_modules']
