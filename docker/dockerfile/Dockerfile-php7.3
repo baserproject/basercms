@@ -36,6 +36,7 @@ COPY apache/ssl/ssl-cert-snakeoil.key /etc/ssl/private/
 COPY apache/ssl/ssl-cert-snakeoil.pem /etc/ssl/certs/
 RUN chmod 400 /etc/ssl/private/ssl-cert-snakeoil.key \
 	&& chmod 400 /etc/ssl/certs/ssl-cert-snakeoil.pem
+RUN groupmod -g 1000 www-data && usermod -u 1000 www-data
     
 # php
 RUN echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail.ini \

@@ -141,43 +141,7 @@ PHP Remote Debug を追加します。
 ブラウザでプログラムを実行し、ブレークポイントで動作が止まれば成功です。  
 なお、ユニットテストでもブラウザと同様にブレークポイントでプログラムを止める事ができます。
 
-## docker-sync を利用する
+## Vagrant on Docker を利用する
 
-### docker-sync をインストール
-
-```
-sudo gem install docker-sync
-```
-
-### ボリュームの定義
-docker-compose.yml の次の２箇所の調整を行います。
-
-```
-#volumes:
-#  sync-volume:
-#    external: true
-
-↓
-
-volumes:
-  sync-volume:
-    external: true
-```
-
-```
-    volumes:
-      - ../:/var/www/html:cached
-#      - sync-volume:/var/www/html
-
-↓
-
-    volumes:
-#      - ../:/var/www/html:cached
-      - sync-volume:/var/www/html
-```
-
-### docker-sync をスタート
-
-```
-docker-sync-stack start
-```
+Docker for Mac でのファイルの読み込みが遅い場合、Docker on Vagrant を利用することで、速度改善が見込めます。
+Docker on Vagrant を利用するには、[vagrant/README.md](https://github.com/baserproject/basercms/blob/master/vagrant/README.md) を参考にしてください。
