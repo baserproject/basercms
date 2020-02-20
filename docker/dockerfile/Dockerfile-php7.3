@@ -6,14 +6,14 @@ RUN echo "deb http://deb.debian.org/debian jessie main" > /etc/apt/sources.list 
 # install
 RUN apt-get update \
     && apt-get install -y --allow-downgrades \
-    	zlib1g=1:1.2.8.dfsg-2+b1 \
+    	zlib1g=1:1.2.8.dfsg-2+deb8u1 \
     	zlib1g-dev \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
         libpng-dev \
         openssl libssl-dev \
-        libxml2=2.9.1+dfsg1-5+deb8u7 \
+        libxml2=2.9.1+dfsg1-5+deb8u8 \
         libxml2-dev \
         zip unzip \
         libzip-dev \
