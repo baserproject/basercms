@@ -669,7 +669,7 @@ class ContentsController extends AppController {
 		}
 		
 		if(!$this->Content->isMovable($this->request->data['currentId'], $this->request->data['targetParentId'])) {
-			$this->ajaxError(500, __d('baser', '同一URLのコンテンツが存在するため処理に失敗しました。'));
+			$this->ajaxError(500, __d('baser', '同一URLのコンテンツが存在するため処理に失敗しました。（現在のサイトに存在しない場合は、関連サイトに存在します）'));
 		}
 		
 		// EVENT Contents.beforeMove

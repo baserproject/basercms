@@ -1399,19 +1399,34 @@ class Content extends AppModel {
 			'recursive' => -1
 		]);
 		
-		// 指定コンテンツがない
+		// 指定コンテンツが存在しない
 		if (!$currentContent || !$parentCuntent) {
 			return false;
 		}
 		
-		// 移動先に同一コンテンツが存在する
-		$movedUrl = $parentCuntent['Content']['url'] . $currentContent['Content']['name'];
-		if(preg_match('/\/$/', $currentContent['Content']['url'])) {
-			$movedUrl .= '/';
+		$parentId[] = $parentCuntent['Content']['id'];
+		
+		// 関連コンテンツで移動先と同じ階層のフォルダを確認
+		$childrenSite = $this->Site->children($currentContent['Content']['site_id'], [
+			'conditions' => ['relate_main_site' => true]
+		]);
+		if($childrenSite) {
+			$pureUrl = $this->pureUrl($parentCuntent['Content']['url'], $parentCuntent['Content']['site_id']);
+			foreach($childrenSite as $site) {
+				$site = BcSite::findById($site['Site']['id']);
+				$url = $site->makeUrl(new CakeRequest($pureUrl));
+				$id = $this->field('id', ['url' => $url]);
+				if($id) {
+					$parentId[] = $id;
+				}
+			}
 		}
+		
+		// 移動先に同一コンテンツが存在するか確認
 		$movedContent = $this->find('first', [
 			'conditions' => [
-				'url' => $movedUrl,
+				'parent_id' => $parentId,
+				'name' => $currentContent['Content']['name'],
 				'id !=' => $currentContent['Content']['id']
 			],
 			'recursive' => -1
@@ -1419,7 +1434,6 @@ class Content extends AppModel {
 		if ($movedContent) {
 			return false;
 		}
-		
 		return true;
 	}
 
