@@ -851,27 +851,26 @@ class BcManagerComponentTest extends BaserTestCase {
 	
 /**
  * テーマに管理システム用アセットを配置する
- * 
- * @return boolean
  */
 	public function testDeployAdminAssets() {
-
 		// 初期化
 		$this->BcManager->resetAdminAssets();
-
 		// 配置
 		$this->BcManager->deployAdminAssets();
-
+		
+		if(is_dir(BASER_THEMES . Configure::read('BcSite.admin_theme'))) {
+			$assetRoot = BASER_THEMES . Configure::read('BcSite.admin_theme') . DS;
+		} else {
+			$assetRoot = WWW_ROOT;
+		}
 		$paths = [
-			WWW_ROOT . 'img' . DS . 'admin',
-			WWW_ROOT . 'css' . DS . 'admin',
-			WWW_ROOT . 'js' . DS . 'admin'
+			$assetRoot . 'img' . DS . 'admin',
+			$assetRoot . 'css' . DS . 'admin',
+			$assetRoot . 'js' . DS . 'admin'
 		];
 		foreach ($paths as $path) {
 			$this->assertFileExists($path, '管理画面用のアセットフォルダを配置きません');
 		}
-
-
 	}
 	
 /**

@@ -49,7 +49,7 @@ before_script:
   - composer install;
   - cd app
   - php ./Console/cake.php bc_manager checkenv
-  - php ./Console/cake.php bc_manager install "http://localhost" "$DB" "admin" "basercms" "webmaster@example.org" --host "localhost" --database "basercms" --login "basercms" --password "basercms" --prefix "mysite_" --data "nada-icons.default"
+  - php ./Console/cake.php bc_manager install "http://localhost" "$DB" "admin" "basercms" "webmaster@example.org" --host "localhost" --database "basercms" --login "basercms" --password "basercms" --prefix "mysite_" --data "bc_sample.default"
 
 script:
   - php ./Console/cake.php baser_test baser BcAll

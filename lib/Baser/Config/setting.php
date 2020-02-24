@@ -156,7 +156,7 @@ $config['BcApp'] = [
 		'none' => __d('baser', 'なし'),
 		'BcCkeditor' => 'CKEditor'
 	],
-	'testTheme' => 'nada-icons',
+	'testTheme' => 'bc_sample',
 	// 固定ページでシンタックスエラーチェックを行うかどうか
 	// お名前ドットコムの場合、CLI版PHPの存在確認の段階で固まってしまう
 	'validSyntaxWithPage' => true,
