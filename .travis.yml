@@ -31,6 +31,12 @@ cache:
     - vendors
     - $HOME/.composer/cache
 
+addons:
+  apt:
+    packages:
+      - libmcrypt-dev
+    update: true
+
 before_script:
   - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then phpenv config-add travis.php.ini; fi;
   - |
