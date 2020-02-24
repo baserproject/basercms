@@ -45,7 +45,7 @@ before_script:
     fi;"
   - composer self-update;
   - if [ -n "$GITHUB_TOKEN" ]; then composer config github-oauth.github.com ${GITHUB_TOKEN}; fi;
-  - composer install --dev;
+  - composer install;
   - cd app
   - php ./Console/cake.php bc_manager checkenv
   - php ./Console/cake.php bc_manager install "http://localhost" "$DB" "admin" "basercms" "webmaster@example.org" --host "localhost" --database "basercms" --login "basercms" --password "basercms" --prefix "mysite_" --data "nada-icons.default"
