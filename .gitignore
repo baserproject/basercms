@@ -56,3 +56,5 @@ nbproject/*
 /plugins/*/composer.lock
 # docker
 /docker/.docker-sync
+/docss/baserproject.github.io
+
