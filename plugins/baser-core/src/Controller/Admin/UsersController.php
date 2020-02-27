@@ -29,8 +29,31 @@ class UsersController extends AppController
 	}
 
 	/**
-	 * ユーザーリスト
-	 *
+	 * ログインユーザーリスト
+	 * 
+	 * 管理画面にログインすることができるユーザーの一覧を表示する
+	 * - 新規登録画面への動線が存在する
+	 * - カラムの定義：ID、名前、
+	 * - 
+	 * 
+	 * [例]
+	 * - list head
+	 *	- add button
+	 * 
+	 * 
+	 * - list view
+	 *	- User.name
+	 *  - User.mail
+	 *  - User.zip
+	 *  - User.pref
+	 *  - User.addres
+	 * 
+	 * - search input
+	 *	- User.name
+	 *	- User.name
+	 * 
+	 * - pagination
+	 * - view num
 	 * @return void
 	 */
     public function index()
