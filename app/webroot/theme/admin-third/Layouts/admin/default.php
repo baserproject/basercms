@@ -22,6 +22,7 @@
 		<meta charset="UTF-8">
 		<meta name="robots" content="noindex,nofollow" />
 		<?php $this->BcBaser->title() ?>
+		<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 		<?php
 		$this->BcBaser->css([
       		'../js/admin/vendors/bootstrap-4.1.3/bootstrap.min',

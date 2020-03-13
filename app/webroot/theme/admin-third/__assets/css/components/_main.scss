@@ -22,6 +22,9 @@
     margin: 20px;
     background-color: $color_background_secondary;
     border: 1px solid $color_main_contents_border_color;
+    @include mq(sp) {
+    	margin:0;
+    }
   }
   &__header {
     padding: 10px 20px;
