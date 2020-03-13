@@ -343,9 +343,16 @@ class BlogController extends BlogAppController {
 			/* 月別アーカイブ一覧 */
 			case 'date':
 
-				$year = h($pass[1]);
-				$month = h(@$pass[2]);
-				$day = h(@$pass[3]);
+				$year = $month = $day = null;
+				if (isset($pass[1]) && preg_match('/^\d{4}$/', $pass[1])) {
+					$year = $pass[1];
+					if ($year && isset($pass[2]) && preg_match('/^((0?[1-9])|(1[0-2]))$/', $pass[2])) {
+						$month = $pass[2];
+						if ($month && isset($pass[3]) && preg_match('/^((0?[1-9])|([1-2][0-9])|(3[0-1]))$/', $pass[3])) {
+							$day = $pass[3];
+						}
+					}
+				}
 				if (!$year && !$month && !$day) {
 					$this->notFound();
 				}
