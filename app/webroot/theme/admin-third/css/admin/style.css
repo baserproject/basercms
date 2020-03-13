@@ -5076,7 +5076,11 @@ a {
 body {
   min-width: 960px;
   height: 100%;
-  line-height: 1.15; }
+  line-height: 1.15;
+  background-color: #2a332c; }
+  @media screen and (max-width: 768px) {
+    body {
+      min-width: auto; } }
 
 body * {
   box-sizing: border-box; }
@@ -5293,6 +5297,9 @@ body * {
 #CreditScrollerInner {
   width: 600px;
   margin: 0 auto; }
+  @media screen and (max-width: 768px) {
+    #CreditScrollerInner {
+      width: 100%; } }
 
 /* WidgetSetting
 ----------------------------------------------- */
@@ -5688,6 +5695,9 @@ body * {
   display: grid;
   min-height: 100vh;
   grid-template-rows: auto 1fr auto; }
+  @media screen and (max-width: 768px) {
+    .bca-app {
+      display: block; } }
 
 .bca-container {
   position: relative;
@@ -5708,6 +5718,9 @@ body * {
     margin: 20px;
     background-color: #fff;
     border: 1px solid #eeeeea; }
+    @media screen and (max-width: 768px) {
+      .bca-main__contents {
+        margin: 0; } }
   .bca-main__header {
     padding: 10px 20px;
     display: flex;
@@ -6112,6 +6125,9 @@ body * {
     min-width: 960px;
     padding-top: 37px;
     padding-bottom: 15px; }
+    @media screen and (max-width: 768px) {
+      .bca-footer__inner {
+        min-width: auto; } }
   .bca-footer__header {
     text-align: center; }
   .bca-footer__logo {
@@ -7439,6 +7455,9 @@ body {
   .bca-login *::before,
   .bca-login *::after {
     box-sizing: border-box; }
+  @media screen and (max-width: 768px) {
+    .bca-login {
+      max-width: none !important; } }
   .bca-login__title {
     margin-top: 0;
     margin-bottom: 40px;

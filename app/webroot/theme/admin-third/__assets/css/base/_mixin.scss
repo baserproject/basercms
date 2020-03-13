@@ -1,0 +1,26 @@
+$smallRange: 768px;
+$mediumRange: 768px;
+$largeRange: 1000px;
+$mediumRangeForModal: 1110px;
+@mixin mq($media) {
+    @if $media == sp {
+        @media screen and (max-width: #{$smallRange}) {
+            @content;
+        }
+    }
+    @if $media == md {
+        @media screen and (max-width: #{$mediumRange}) {
+            @content;
+        }
+    }
+    @if $media == pc {
+        @media screen and (max-width: #{$largeRange}) {
+            @content;
+        }
+    }
+    @if $media == spModal {
+        @media screen and (max-width: #{$mediumRangeForModal}) {
+            @content;
+        }
+    }
+}

@@ -17,7 +17,9 @@
   border-radius: 5px;
   background: $color_lightest;
   font-size: 1.4rem;
-
+  @include mq(sp) {
+  	max-width: none!important;
+  }
   &__title {
     margin-top: 0;
     margin-bottom: 40px;
