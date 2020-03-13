@@ -310,9 +310,9 @@ class BlogController extends BlogAppController {
 			/* 投稿者別記事一覧 */
 			case 'author':
 
-				$author = h($pass[count($pass) - 1]);
+				$author = isset($pass[1]) ? $pass[1] : '';
 				$existsAuthor = $this->User->hasAny(['name' => $author]);
-				if (empty($author) || empty($existsAuthor)) {
+				if ($existsAuthor === false) {
 					$this->notFound();
 				}
 				$posts = $this->_getBlogPosts(['author' => $author]);
