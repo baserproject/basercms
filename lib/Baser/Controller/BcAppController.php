@@ -1558,7 +1558,7 @@ class BcAppController extends Controller {
  * @return void
  * @deprecated 5.0.0 since 4.1.5 BcMessage に移行
  */
-	public function setMessage($message, $alert = false, $saveDblog = false, $setFlash = true) {
+	protected function setMessage($message, $alert = false, $saveDblog = false, $setFlash = true) {
 		$this->BcMessage->set($message, $alert, $saveDblog, $setFlash);
 	}
 
