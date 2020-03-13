@@ -228,15 +228,6 @@ class BlogController extends BlogAppController {
 	}
 
 /**
- * [MOBILE] ブログ記事を一覧表示する
- *
- * @return void
- */
-	public function mobile_index() {
-		$this->setAction('index');
-	}
-
-/**
  * [SMARTPHONE] ブログ記事を一覧表示する
  *
  * @return void
@@ -511,15 +502,6 @@ class BlogController extends BlogAppController {
 	}
 
 /**
- * [MOBILE] ブログアーカイブを表示する
- *
- * @return void
- */
-	public function mobile_archives() {
-		$this->setAction('archives');
-	}
-
-/**
  * [SMARTPHONE] ブログアーカイブを表示する
  *
  * @return void
@@ -705,18 +687,6 @@ class BlogController extends BlogAppController {
 		$this->set('posts', $datas);
 
 		$this->render($this->blogContent['BlogContent']['template'] . DS . $template);
-	}
-
-/**
- * [MOBILE] 記事リストを出力
- *
- * requestAction用
- *
- * @param int $blogContentId
- * @param mixed $num
- */
-	public function mobile_posts($blogContentId, $limit = 5) {
-		$this->setAction('posts', $blogContentId, $limit);
 	}
 
 /**

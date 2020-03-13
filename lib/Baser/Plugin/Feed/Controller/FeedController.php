@@ -190,16 +190,6 @@ class FeedController extends FeedAppController {
 	}
 
 /**
- * [MOBILE] フィードを一覧表示する
- *
- * @param int $id
- * @return void
- */
-	public function mobile_index($id) {
-		$this->setAction('index', $id);
-	}
-
-/**
  * [SMARTPHONE] フィードを一覧表示する
  *
  * @param int $id

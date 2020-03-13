@@ -66,7 +66,7 @@ class SearchIndicesController extends AppController {
 		parent::beforeFilter();
 
 		// 認証設定
-		$this->BcAuth->allow('search', 'mobile_search', 'smartphone_search');
+		$this->BcAuth->allow('search', 'smartphone_search');
 
 		if (!empty($this->request->params['admin'])) {
 			$this->crumbs = [
@@ -127,13 +127,6 @@ class SearchIndicesController extends AppController {
 		$this->set('query', $query);
 		$this->set('datas', $datas);
 		$this->pageTitle = __d('baser', '検索結果一覧');
-	}
-
-/**
- * [MOBILE] コンテンツ検索
- */
-	public function mobile_search() {
-		$this->setAction('search');
 	}
 	
 /**
