@@ -94,7 +94,7 @@ class BcManagerComponent extends Component {
 		}
 
 		// データベース初期化
-		if (!$this->constructionDb($dbConfig, $dbDataPattern)) {
+		if (!$this->constructionDb($dbConfig, $dbDataPattern, Configure::read('BcApp.defaultAdminTheme'))) {
 			$this->log(__d('baser', 'データベースの初期化に失敗しました。データベースの設定を見なおしてください。'));
 			$result = false;
 		}

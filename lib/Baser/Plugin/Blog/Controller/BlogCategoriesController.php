@@ -103,7 +103,7 @@ class BlogCategoriesController extends BlogAppController {
 		foreach ($_dbDatas as $key => $dbData) {
 			$category = $this->BlogCategory->find('first', ['conditions' => ['BlogCategory.id' => $key]]);
 			if (preg_match("/^([_]+)/i", $dbData, $matches)) {
-				$prefix = str_replace('_', '&nbsp&nbsp&nbsp', $matches[1]);
+				$prefix = str_replace('_', '   ', $matches[1]);
 				$category['BlogCategory']['title'] = $prefix . '└' . $category['BlogCategory']['title'];
 				$category['BlogCategory']['depth'] = strlen($matches[1]);
 			} else {

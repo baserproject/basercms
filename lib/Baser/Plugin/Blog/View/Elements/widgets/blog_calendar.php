@@ -68,7 +68,12 @@ $entryDates = $data['entryDates'];
 		} else {
 			$day = 1;
 		}
-		$time = mktime(0, 0, 0, $month, $day, $year);
+		if ($_time = mktime(0, 0, 0, $month, $day, $year)) {
+			$time = $_time;
+		}
+		$year = date("Y", $time);
+		$month = date("n", $time);
+		$day = date("j", $time);
 	}
 
 //今月の日付の数
@@ -109,6 +114,7 @@ $entryDates = $data['entryDates'];
 	if ($data['next']) {
 		print $this->BcBaser->getLink('≫', $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $year4 . '/' . $month4, null, false);
 	}
+	print "</center>";
 	print "</td></tr>";
 
 	print '

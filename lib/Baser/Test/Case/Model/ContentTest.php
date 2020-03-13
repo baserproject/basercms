@@ -21,6 +21,7 @@ App::uses('Content', 'Model');
 class ContentTest extends BaserTestCase {
 
 	public $fixtures = [
+		'baser.Model.Content.ContentIsMovable',
 		'baser.Model.Content.ContentStatusCheck',
 		'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',
 		'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',
@@ -541,12 +542,36 @@ class ContentTest extends BaserTestCase {
 			[true, '', date('Y-m-d H:i:s', strtotime("+1 hour")), true],
 		];
 	}
-
+	
 /**
  * 移動元のコンテンツと移動先のディレクトリから移動が可能かチェックする
+ * @throws Exception
+ * @dataProvider isMovableDataProvider
  */
-	public function testIsMovable() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testIsMovable($siteRelated, $currentId, $parentId, $expects) {
+		$this->loadFixtures('ContentIsMovable');
+		if(!$siteRelated) {
+			$site = $this->Content->Site->find('first', [
+				'conditions' => ['id' => 2], 
+				'recursive' => -1
+			]);
+			$site['Site']['relate_main_site'] = false;
+			$this->Content->Site->save($site, ['callbacks' => false]);
+		}
+		$this->assertEquals($expects, $this->Content->isMovable($currentId, $parentId));
+	}
+	
+	public function isMovableDataProvider() {
+		return [
+			[false, 2, 3, false],	// ファイルを移動、同じファイル名が存在
+			[false, 2, 5, false],	// ファイルを移動、同じフォルダ名が存在
+			[false, 2, 7, true],	// ファイルを移動、同じ名称が存在しない
+			[false, 6, 1, false],	// フォルダを移動、同じファイル名が存在
+			[false, 8, 1, false],	// フォルダを移動、同じフォルダ名が存在
+			[false, 6, 7, true],	// フォルダを移動、同じ名称が存在しない
+			[true, 2, 7, false],	// ファイルを移動、別サイトに同じファイル名が存在
+			[true, 6, 7, false],	// フォルダを移動、別サイトに同じファイル名が存在
+		];
 	}
 
 /**

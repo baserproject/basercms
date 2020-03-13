@@ -546,27 +546,30 @@ class BcBasicsTest extends BaserTestCase {
  */
 	public function testAddSessionId() {
 		// 初期化
-		session_id('baser');
-		session_name('BASERCMS');
+		$sessionId = session_id();
+		$sessionName = session_name();
 		$_SERVER['REQUEST_URI'] = '/m/';
 		$message = 'URLにセッションIDを正しく付加できません';
-		$this->assertEquals('/?BASERCMS=baser', addSessionId('/', true), $message);
-		$this->assertEquals('/?id=1&BASERCMS=baser', addSessionId('/?id=1', true), $message);
-		$this->assertEquals('/?id=1&BASERCMS=baser', addSessionId('/?id=1&BASERCMS=1', true), $message);
-		$this->assertEquals('/?id=1&BASERCMS=baser', addSessionId('/?id=1&BASERCMS=1', true), $message);
+		$this->assertEquals('/?' . $sessionName . '=' . $sessionId, addSessionId('/', true), $message);
+		$this->assertEquals('/?id=1&' . $sessionName . '=' . $sessionId, addSessionId('/?id=1', true), $message);
+		$this->assertEquals('/?id=1&' . $sessionName . '=' . $sessionId, addSessionId('/?id=1&BASERCMS=1', true), $message);
 		
 		// urlが配列の場合
 		$url = [
 			0 => '/',
-			'?' => ['id' => 1, 'BASERCMS' => 1]
+			'?' => [
+				'id' => 1, 
+				'BASERCMS' => 1
+			]
 		];
 		$expect = [
 			0 => '/',
-			'?' => ['id' => 1, 'BASERCMS' => 'baser']
+			'?' => [
+				'id' => 1, 
+				$sessionName => $sessionId
+			]
 		];
-
 		$this->assertEquals($expect, addSessionId($url, true), $message);
-
 	}
 
 /**

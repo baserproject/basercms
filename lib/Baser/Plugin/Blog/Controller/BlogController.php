@@ -114,6 +114,11 @@ class BlogController extends BlogAppController {
 				// 後方互換の為 pass もチェック
 				$blogContentId = $this->request->params['pass'];
 			}
+
+			if (!$blogContentId) {
+				$this->notFound();
+			}
+
 			$this->BlogContent->recursive = -1;
 			if ($this->contentId) {
 				$this->blogContent = $this->BlogContent->read(null, $this->contentId);
@@ -121,10 +126,6 @@ class BlogController extends BlogAppController {
 				$this->blogContent = $this->BlogContent->read(null, $blogContentId);
 				$this->contentId = $blogContentId;
 			}
-		}
-
-		if (!$blogContentId) {
-			$this->notFound();
 		}
 
 		if(empty($this->request->params['Content'])) {
@@ -275,10 +276,7 @@ class BlogController extends BlogAppController {
 			/* カテゴリ一覧 */
 			case 'category':
 
-				$category = $pass[count($pass) - 1];
-				if (empty($category)) {
-					//$this->notFound();
-				}
+				$category = isset($pass[1]) ? $pass[1] : '';
 
 				// ナビゲーションを設定
 				$categoryId = $this->BlogCategory->field('id', [
@@ -291,7 +289,7 @@ class BlogController extends BlogAppController {
 				}
 
 				// 記事を取得
-				$posts = $this->_getBlogPosts(['category' => urlencode($category)]);
+				$posts = $this->_getBlogPosts(['category' => $category]);
 				$blogCategories = $this->BlogCategory->getPath($categoryId, ['name', 'title']);
 				if (count($blogCategories) > 1) {
 					foreach ($blogCategories as $key => $blogCategory) {
@@ -310,9 +308,9 @@ class BlogController extends BlogAppController {
 			/* 投稿者別記事一覧 */
 			case 'author':
 
-				$author = h($pass[count($pass) - 1]);
+				$author = isset($pass[1]) ? $pass[1] : '';
 				$existsAuthor = $this->User->hasAny(['name' => $author]);
-				if (empty($author) || empty($existsAuthor)) {
+				if ($existsAuthor === false) {
 					$this->notFound();
 				}
 				$posts = $this->_getBlogPosts(['author' => $author]);
@@ -329,9 +327,9 @@ class BlogController extends BlogAppController {
 			/* タグ別記事一覧 */
 			case 'tag':
 
-				$tag = h($pass[count($pass) - 1]);
+				$tag = isset($pass[1]) ? $pass[1] : '';
 				$existsTag = $this->BlogTag->hasAny(['name' => urldecode($tag)]);
-				if (empty($this->blogContent['BlogContent']['tag_use']) || empty($tag) || empty($existsTag)) {
+				if (empty($this->blogContent['BlogContent']['tag_use']) || $existsTag === false) {
 					$this->notFound();
 				}
 				$posts = $this->_getBlogPosts(['tag' => $tag]);
@@ -345,9 +343,16 @@ class BlogController extends BlogAppController {
 			/* 月別アーカイブ一覧 */
 			case 'date':
 
-				$year = h($pass[1]);
-				$month = h(@$pass[2]);
-				$day = h(@$pass[3]);
+				$year = $month = $day = null;
+				if (isset($pass[1]) && preg_match('/^\d{4}$/', $pass[1])) {
+					$year = $pass[1];
+					if ($year && isset($pass[2]) && preg_match('/^((0?[1-9])|(1[0-2]))$/', $pass[2])) {
+						$month = $pass[2];
+						if ($month && isset($pass[3]) && preg_match('/^((0?[1-9])|([1-2][0-9])|(3[0-1]))$/', $pass[3])) {
+							$day = $pass[3];
+						}
+					}
+				}
 				if (!$year && !$month && !$day) {
 					$this->notFound();
 				}
@@ -730,7 +735,7 @@ class BlogController extends BlogAppController {
  * 全体タグ一覧
  * @param $name
  */
-	public function tags($name) {
+	public function tags($name=null) {
 		if (empty($name)) {
 			$this->notFound();
 		}
@@ -738,7 +743,7 @@ class BlogController extends BlogAppController {
 		if(!empty($this->request->params['named']['num'])) {
 			$num = $this->request->params['named']['num'];
 		}
-		$tag = h($name);
+		$tag = $name;
 		$posts = $this->_getBlogPosts([
 			'tag' => $tag,
 			'num' => $num

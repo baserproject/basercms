@@ -273,6 +273,9 @@
 #CreditScrollerInner {
   width: 600px;
   margin: 0 auto;
+  @include mq(sp) {
+  	width:100%;
+  }
 }
 
 /* WidgetSetting

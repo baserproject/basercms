@@ -100,6 +100,9 @@
     min-width: 960px;
     padding-top: 37px;
     padding-bottom: 15px;
+    @include mq(sp) {
+    	min-width: auto;
+    }
   }
 
   // ログイン前

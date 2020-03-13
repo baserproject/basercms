@@ -78,12 +78,14 @@ docker exec -it bc-php /bin/bash
 ```
 /var/www/html/docker/bin/bc_install_mysql
 ```
+※ 現在このコマンドは、Vagrant用にカスタマイズされており、 `install.php` の、`siteUrl` は、`https://192.168.33.10/` となるようになっていますのでご注意ください。 Docker for Mac で直接利用する場合は、コマンド実行後、`/app/Config/install.php` の `siteUrl` を、`https://localhost/` に書き換えます。
 
 ### baserCMSを再インストールする（MySQL環境）
 
 ```
 /var/www/html/docker/bin/bc_reinstall_mysql
 ```
+※ 現在このコマンドは、Vagrant用にカスタマイズされており、 `install.php` の、`siteUrl` は、`https://192.168.33.10/` となるようになっていますのでご注意ください。 Docker for Mac で直接利用する場合は、コマンド実行後、`/app/Config/install.php` の `siteUrl` を、`https://localhost/` に書き換えます。
 
 ### baserCMSをリセットする
 
