@@ -398,11 +398,6 @@ class BlogController extends BlogAppController {
 						$this->notFound();
 					}
 
-					// コメント送信
-					//if (isset($this->request->data['BlogComment'])) {
-					//	$this->add_comment($id);
-					//}
-
 					$post = $this->_getBlogPosts(['no' => $id]);
 					if (!empty($post[0])) {
 						$post = $post[0];
@@ -451,56 +446,6 @@ class BlogController extends BlogAppController {
 		$this->set('month', $month);
 		$this->render($template);
 	}
-
-/**
- * コメントを送信する
- *
- * @param int $id
- * @return void
- */
-	//public function add_comment($id) {
-		// blog_post_idを取得
-	//	$conditions = [
-	//		'BlogPost.no' => $id,
-	//		'BlogPost.blog_content_id' => $this->contentId
-	//	];
-	//	$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
-
-		// 毎秒抽出条件が違うのでキャッシュしない
-	//	$data = $this->BlogPost->find('first', [
-	//		'conditions' => $conditions,
-	//		'fields' => ['BlogPost.id'],
-	//		'cache' => false,
-	//		'recursive' => -1
-	//	]);
-	//	$postId = null;
-	//	if (empty($data['BlogPost']['id'])) {
-	//		$this->notFound();
-	//	} else {
-	//		$postId = $data['BlogPost']['id'];
-	//	}
-
-	//	if ($this->BlogPost->BlogComment->add($this->request->data, $this->contentId, $postId, $this->blogContent['BlogContent']['comment_approve'])) {
-	//		$content = $this->BlogPost->BlogContent->Content->findByType('Blog.BlogContent', $this->blogContent['BlogContent']['id']);
-	//		$this->request->data['Content'] = $content['Content'];
-	//		$this->_sendCommentAdmin($postId, $this->request->data);
-			// コメント承認機能を利用していない場合は、公開されているコメント投稿者にアラートを送信
-	//		if (!$this->blogContent['BlogContent']['comment_approve']) {
-	//			$this->_sendCommentContributor($postId, $this->request->data);
-	//		}
-	//		if ($this->blogContent['BlogContent']['comment_approve']) {
-	//			$commentMessage = __('送信が完了しました。送信された内容は確認後公開させて頂きます。');
-	//		} else {
-	//			$commentMessage = __('コメントの送信が完了しました。');
-	//		}
-	//		$this->request->data = null;
-	//	} else {
-
-	//		$commentMessage = __('コメントの送信に失敗しました。');
-	//	}
-	//	clearViewCache();
-	//	$this->set('commentMessage', $commentMessage);
-	//}
 
 /**
  * ブログ記事を取得する
