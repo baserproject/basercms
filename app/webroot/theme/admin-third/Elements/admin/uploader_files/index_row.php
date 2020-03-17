@@ -30,7 +30,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
 			<span class="url"><?php echo $this->BcHtml->url($this->Uploader->getFileUrl($file['UploaderFile']['name'])) ?></span>
 			<span class="user-id"><?php echo $file['UploaderFile']['user_id'] ?></span>
 			<span class="name"><?php echo $file['UploaderFile']['name'] ?></span>
-			<span class="alt"><?php echo h(file['UploaderFile']['alt']) ?></span>
+			<span class="alt"><?php echo h($file['UploaderFile']['alt']) ?></span>
 		</div>
 	</td>
 	<td class="img bca-table-listup__tbody-td"><?php echo $this->Uploader->file($file,['size' => 'small', 'alt' => h($file['UploaderFile']['alt']), 'style' => 'width:80px']) ?></td>
