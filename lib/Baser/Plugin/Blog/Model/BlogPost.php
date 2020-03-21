@@ -160,6 +160,9 @@ class BlogPost extends BlogAppModel {
  * @return mixed bool|string チェック結果
  */
 	public function fileError($check) {
+		// ファイルアップロード時は配列なのでそれ以外はエラーチェックしない
+		if (!is_array($check[key($check)])) return true;
+
 		$maxsize = $this->ConvertSizeToBytes(ini_get('upload_max_filesize'));
 		if ($this->fileCheck($check, $maxsize)) {
 			return true;
