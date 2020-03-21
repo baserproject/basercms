@@ -147,11 +147,35 @@ class BlogPost extends BlogAppModel {
 			'user_id' => [
 				['rule' => ['notBlank'], 'message' => __d('baser', '投稿者を選択してください。')]],
 			'eye_catch' => [
+				['rule' => ['fileError'], 'message' => __d('baser', 'ファイルのアップロードに失敗しました。')],
 				['rule' => ['fileExt', ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png']], 'allowEmpty' => true, 'message' => __d('baser', '許可されていないファイルです。')]
 			]
 		];
 	}
 	
+/**
+ * ファイルアップロードのエラーチェック
+ *
+ * @param  array $check      チェック対象データ
+ * @return mixed bool|string チェック結果
+ */
+	public function fileError($check) {
+		$maxsize = $this->ConvertSizeToBytes(ini_get('upload_max_filesize'));
+		if ($this->fileCheck($check, $maxsize)) {
+			return true;
+		} else {
+			switch ($check[key($check)]['error']) {
+				case UPLOAD_ERR_INI_SIZE:
+				case UPLOAD_ERR_FORM_SIZE:
+					return __d('baser', 'ファイルサイズが大きいです。');
+					break;
+				default:
+					return __d('baser', 'ファイルのアップロードに失敗しました。');
+					break;
+			}
+		}
+	}
+
 /**
  * アップロードビヘイビアの設定
  *

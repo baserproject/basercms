@@ -975,6 +975,7 @@ msgid "プラグインアップロード"
 msgstr "Upload Plugin"
 
 #: Controller/PluginsController.php:85 Controller/ThemesController.php:70
+#: Plugin/Blog/Model/BlogPost.php:150;172
 msgid "ファイルのアップロードに失敗しました。"
 msgstr "Failed uploading the file."
 
@@ -2730,6 +2731,10 @@ msgstr "Post Date's format is invalid."
 #: Plugin/Blog/Model/BlogPost.php:144
 msgid "投稿者を選択してください。"
 msgstr "Please select Poster."
+
+#: Plugin/Blog/Model/BlogPost.php:169
+msgid "ファイルサイズが大きいです。"
+msgstr "Please check file size."
 
 #: Plugin/Blog/Model/BlogPost.php:855;926
 msgid "contentId を指定してください。"

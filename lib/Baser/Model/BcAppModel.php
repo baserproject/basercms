@@ -1815,4 +1815,38 @@ class BcAppModel extends Model {
 		return true;
 	}
 
+/**
+ * サイズの単位をbytesに変換する
+ * @param  string $size
+ * @return int
+ */
+	public function convertSizeToBytes($size) {
+		preg_match('/\A\d+(\.\d+)?/', $size, $num);
+		$sizeNum = (isset($num[0])) ? $num[0] : 0;
+
+		preg_match('/(B|K|M|G|T)B?\z/i', $size, $ext);
+		$sizeExt = isset($ext[0]) ? strtoupper($ext[0]) : 'B';
+
+		switch ($sizeExt) {
+			case 'B':
+			default:
+				$index = 0;
+				break;
+			case 'K':
+				$index = 1;
+				break;
+			case 'M':
+				$index = 2;
+				break;
+			case 'G':
+				$index = 3;
+				break;
+			case 'T':
+				$index = 4;
+				break;
+		}
+		$sizeBytes = pow(1024, $index) * $sizeNum;
+		return $sizeBytes;
+	}
+
 }
