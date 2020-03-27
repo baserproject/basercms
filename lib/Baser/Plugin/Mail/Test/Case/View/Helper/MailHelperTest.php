@@ -105,7 +105,6 @@ class MailHelperTest extends BaserTestCase {
         $result = $this->Mail->getFormTemplates();
         $expected = array (
                         'default' => 'default',
-                        'mobile' => 'mobile',
                         'smartphone' => 'smartphone'
                     );
         $this->assertEquals($result, $expected, 'フォームテンプレートの取得結果が違います。');
