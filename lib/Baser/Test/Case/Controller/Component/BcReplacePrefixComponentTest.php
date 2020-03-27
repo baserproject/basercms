@@ -28,6 +28,8 @@ class BcReplacePrefixTestController extends Controller {
 
 /**
  * BcReplacePrefixComponentのテスト
+ * @property BcReplacePrefixTestController $Controller
+ * @property BcReplacePrefixComponent $BcReplacePrefix
  */
 class BcReplacePrefixComponentTest extends BaserTestCase {
 
@@ -105,7 +107,12 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
  * @dataProvider startupDataProvider
  */
 	public function testStartup($pre, $action, $methods, $view, $expected) {
-
+		
+		Configure::write('BcAuthPrefix', array_merge(Configure::read('BcAuthPrefix'), [
+			'pre' => ['alias' => 'pre'],
+			'front' => []
+		]));
+		
 		// 初期化
 		$this->Controller->params['prefix'] = $pre;
 		$this->Controller->action = $action;
@@ -145,6 +152,7 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
 			['pre', 'pre_action', null, false, ['pre_action', null, null]],
 			['pre', 'pre_action', 'admin_action', true, ['admin_action', 'pre', 'pre']],
 			[null, 'action', 'admin_action', true, ['admin_action', null, null]],
+			['dummy', 'action', 'admin_action', true, ['action', null, null]],
 		];
 	}
 
