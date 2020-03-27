@@ -95,7 +95,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
       <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.site_url', __d('baser', 'WebサイトURL')) ?>&nbsp;<span class="required bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
       <td class="col-input bca-form-table__input">
         <!-- ↓↓↓自動入力を防止する為のダミーフィールド↓↓↓ -->
-        <input type="password" name="dummytext1" style="display: none;">
+        <input type="password" name="dummypass" style="display: none;">
         <?php echo $this->BcForm->input('SiteConfig.site_url', array_merge(['type' => 'text', 'size' => 35, 'maxlength' => 255,'data-margin'=>'bottom'], $disableSettingInstallSetting)) ?><br />
         <?php echo $this->BcForm->input('SiteConfig.ssl_url', array_merge(['type' => 'text', 'size' => 35, 'maxlength' => 255, 'after' => ' <small>[SSL]</small>'], $disableSettingInstallSetting)) ?>
         <i class="bca-icon--question-circle btn help bca-help"></i>
