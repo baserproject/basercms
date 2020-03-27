@@ -44,10 +44,6 @@ class UploadsController extends AppController {
 		$this->output(func_get_args(), func_num_args());
 	}
 	
-	public function mobile_tmp(){
-		$this->output(func_get_args(), func_num_args());
-	}
-	
 	protected function output($args, $funcNum) {
 		$size = '';
 		if ($funcNum > 1) {

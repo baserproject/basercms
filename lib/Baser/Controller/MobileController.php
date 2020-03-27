@@ -16,6 +16,7 @@ App::uses('ga', 'Vendor');
  * モバイルコントローラー
  *
  * @package Baser.Controller
+ * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
  */
 class MobileController extends AppController {
 
@@ -31,7 +32,7 @@ class MobileController extends AppController {
  * モバイル GoogleAnalytics 用 ライブラリを読み込む
  * 
  * return void
- * access public
+ * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
  */
 	public function ga () {
 		if (empty($this->siteConfigs['google_analytics_id']) || !version_compare(preg_replace('/[a-z-]/', '', phpversion()), '5', '>=')) {
@@ -58,7 +59,7 @@ class MobileController extends AppController {
  * モバイル GoogleAnalytics 用 ライブラリを読み込む
  * 
  * return void
- * access public
+ * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
  */
 	public function mobile_ga() {
 		$this->setAction('ga');

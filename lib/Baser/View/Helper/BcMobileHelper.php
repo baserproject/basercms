@@ -14,6 +14,7 @@
  * モバイルヘルパー
  *
  * @package Baser.View.Helper
+ * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
  */
 class BcMobileHelper extends Helper {
 
@@ -28,6 +29,7 @@ class BcMobileHelper extends Helper {
  * After Render
  *
  * @param string $viewFile
+ * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
  */
 	public function afterRender($viewFile) {
 		parent::afterRender($viewFile);
@@ -56,6 +58,7 @@ class BcMobileHelper extends Helper {
  * afterLayout
  *
  * @return void
+ * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
  */
 	public function afterLayout($layoutFile) {
 
@@ -98,6 +101,7 @@ class BcMobileHelper extends Helper {
  * コンテンツタイプを出力
  * 
  * @return void
+ * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
  */
 	public function header() {
 		if ($this->request->params['Site']['device'] == 'mobile') {
@@ -112,7 +116,7 @@ class BcMobileHelper extends Helper {
  * 
  * @param array $matches
  * @return string
- * @access protected 
+ * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
  */
 	protected function _removeMobilePrefix($matches) {
 		if (strpos($matches[1], 'mobile=off') === false) {
@@ -128,6 +132,7 @@ class BcMobileHelper extends Helper {
  * 
  * @param array $matches
  * @return string 
+ * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
  */
 	protected function _addMobilePrefix($matches) {
 		$currentAlias = $this->request->params['Site']['alias'];

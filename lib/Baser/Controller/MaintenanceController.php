@@ -56,16 +56,6 @@ class MaintenanceController extends AppController {
 	}
 
 /**
- * [モバイル] メンテナンス中ページを表示する
- *
- * @return void
- * @access	public
- */
-	public function mobile_index() {
-		$this->setAction('index');
-	}
-
-/**
  * [スマートフォン] メンテナンス中ページを表示する
  * 
  * @return void
