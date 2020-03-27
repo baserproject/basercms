@@ -107,6 +107,18 @@ class BcReplacePrefixComponent extends Component {
 			$requestedPrefix = $Controller->request->params['prefix'];
 		}
 
+		$prefix = [];
+		foreach(Configure::read('BcAuthPrefix') as $authPrefix) {
+			if(isset($authPrefix['alias'])) {
+				$prefix[] = $authPrefix['alias'];
+			} else {
+				$prefix[] = '';
+			}
+		}
+		if(!in_array($requestedPrefix, $prefix)) {
+			return;
+		}
+		
 		$pureAction = preg_replace('/^' . $requestedPrefix . '_/', '', $Controller->action);
 
 		if (!in_array($pureAction, $this->allowedPureActions)) {
