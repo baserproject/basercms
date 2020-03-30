@@ -393,6 +393,9 @@ class BcSite {
  */
 	public function existsUrl(CakeRequest $request) {
 		$url = $this->makeUrl($request);
+		if (strpos($url, '?') !== false) {
+			$url = explode('?', $url)[0];
+		}
 		/* @var Content $Content */
 		$Content = ClassRegistry::init('Content');
 		if($Content->findByUrl($url, true, false, $this->sameMainUrl, $this->useSubDomain) || 
