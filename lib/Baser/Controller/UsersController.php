@@ -524,29 +524,41 @@ class UsersController extends AppController {
 			list(, $userModel) = explode('.', $userModel);
 		}
 		if ($this->request->data) {
+			$email = isset($this->request->data[$userModel]['email']) ? $this->request->data[$userModel]['email'] : '';
 
-			if (empty($this->request->data[$userModel]['email'])) {
+			if (mb_strlen($email) === 0) {
 				$this->setMessage(__d('baser', 'メールアドレスを入力してください。'), true, false);
 				return;
 			}
-			$email = trim($this->request->data[$userModel]['email']);
 			$user = $this->{$userModel}->findByEmail($email);
-			if (!$user) {
+			if ($user) {
+				$email = $user[$userModel]['email'];
+			}
+			if (!$user || mb_strlen($email) === 0) {
 				$this->setMessage(__d('baser', '送信されたメールアドレスは登録されていません。'), true, false);
 				return;
 			}
 			$password = $this->generatePassword();
 			$user[$userModel]['password'] = $password;
 			$this->{$userModel}->set($user);
+
+			$dataSource = $this->{$userModel}->getDataSource();
+			$dataSource->begin();
+
 			if (!$this->{$userModel}->save(null, ['validate' => false])) {
+				$dataSource->roolback();
 				$this->setMessage(__d('baser', '新しいパスワードをデータベースに保存できませんでした。'), true, false);
 				return;
 			}
 			$body = ['email' => $email, 'password' => $password];
 			if (!$this->sendMail($email, __d('baser', 'パスワードを変更しました'), $body, ['template' => 'reset_password'])) {
+				$dataSource->roolback();
 				$this->setMessage(__d('baser', 'メール送信時にエラーが発生しました。'), true, false);
 				return;
 			}
+
+			$dataSource->commit();
+
 			$this->setMessage($email . ' 宛に新しいパスワードを送信しました。', false, true);
 			$this->request->data = [];
 		}
