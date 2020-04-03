@@ -14,6 +14,11 @@
  * @var \BcAppView $this
  * @var int $blogContentId
  */
+if (isset($blogContent)) {
+	$blogContentId = $blogContent['BlogContent']['id'];
+} else {
+	$blogContentId = $blog_content_id;
+}
 ?>
 
 
