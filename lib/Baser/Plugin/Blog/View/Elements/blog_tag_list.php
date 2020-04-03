@@ -13,24 +13,26 @@
 /**
  * @var \BcAppView $this
  * @var int $blogContentId
+ * @var bool $postCount
  */
-if (isset($blogContent)) {
+if (!isset($blogContentId) && isset($blogContent['BlogContent']['id'])) {
 	$blogContentId = $blogContent['BlogContent']['id'];
-} else {
-	$blogContentId = $blog_content_id;
+}
+if(!isset($postCount)) {
+	$postCount = false;
 }
 ?>
 
 
 <?php if(!empty($tags)): ?> 
 <ul class="bc-blog-tags">
-    <?php foreach($tags as $tag): ?> 
-        <li>
-        	<?php $this->Blog->tagLink($blogContentId, $tag) ?>
-        	<?php if($postCount): ?>
-        		(<?php echo $tag['BlogTag']['post_count'] ?>)
-        	<?php endif ?>
-        </li>
+	<?php foreach($tags as $tag): ?> 
+	<li>
+		<?php $this->Blog->tagLink($blogContentId, $tag) ?>
+		<?php if($postCount): ?>
+			(<?php echo $tag['BlogTag']['post_count'] ?>)
+		<?php endif ?>
+	</li>
 	<?php endforeach ?> 
 </ul>
 <?php endif ?>

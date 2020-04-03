@@ -1346,7 +1346,11 @@ class BlogHelper extends AppHelper {
 				$blogContentId = $Content->field('entity_id', ['Content.url' => $url]);
 			}
 		}
-		$this->BcBaser->element('Blog.blog_tag_list', ['tags' => $tags, 'blogContentId' => $blogContentId, 'postCount' => $options['postCount']]);
+		$this->BcBaser->element('Blog.blog_tag_list', [
+			'tags' => $tags, 
+			'blogContentId' => $blogContentId, 
+			'postCount' => $options['postCount']
+		]);
 	}
 
 /**
