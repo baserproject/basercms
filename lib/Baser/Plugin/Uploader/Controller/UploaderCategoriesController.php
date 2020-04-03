@@ -75,11 +75,11 @@ class UploaderCategoriesController extends AppController {
 			$this->UploaderCategory->set($this->request->data);
 			if($this->UploaderCategory->save()) {
 				$message = sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を追加しました。'), $this->request->data['UploaderCategory']['name']);
-				$this->setMessage($message);
+				$this->BcMessage->setInfo($message);
 				$this->UploaderCategory->saveDbLog($message);
 				$this->redirect(array('action'=>'index'));
 			}else {
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
 		$this->pageTitle = __d('baser', 'カテゴリ新規登録');
@@ -97,7 +97,7 @@ class UploaderCategoriesController extends AppController {
 
 		/* 除外処理 */
 		if(!$id && empty($this->request->data)) {
-			$this->setMessage(__d('baser', '無効なIDです。'), true);
+			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(array('action'=>'index'));
 		}
 
@@ -107,10 +107,10 @@ class UploaderCategoriesController extends AppController {
 
 			$this->UploaderCategory->set($this->request->data);
 			if($this->UploaderCategory->save()) {
-				$this->setMessage(sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を更新しました。'), $this->request->data['UploaderCategory']['name']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を更新しました。'), $this->request->data['UploaderCategory']['name']));
 				$this->redirect(array('action'=>'edit', $id));
 			}else {
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 
 		}
@@ -129,7 +129,7 @@ class UploaderCategoriesController extends AppController {
 	public function admin_delete($id = null) {
 		$this->_checkSubmitToken();
 		if(!$id) {
-			$this->setMessage(__d('baser', '無効なIDです。'), true);
+			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(array('action'=>'index'));
 		}
 
@@ -137,9 +137,9 @@ class UploaderCategoriesController extends AppController {
 		$name = $this->UploaderCategory->field('name', array('UploaderCategory.id' => $id));
 
 		if($this->UploaderCategory->delete($id)) {
-			$this->setMessage(sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を削除しました。'), $name), false, true);
+			$this->BcMessage->setSuccess(sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を削除しました。'), $name));
 		}else {
-			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
+			$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 		}
 
 		$this->redirect('index');

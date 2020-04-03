@@ -242,10 +242,10 @@ class ThemeFilesController extends AppController {
 
 			if ($result) {
 				clearViewCache();
-				$this->setMessage(sprintf(__d('baser', 'ファイル %s を作成しました。'), basename($fullpath)));
+				$this->BcMessage->setInfo(sprintf(__d('baser', 'ファイル %s を作成しました。'), basename($fullpath)));
 				$this->redirect(array_merge(['action' => 'edit', $theme, $type], explode('/', $path), [$this->request->data['ThemeFile']['name'] . '.' . $this->request->data['ThemeFile']['ext']]));
 			} else {
-				$this->setMessage(sprintf(__d('baser', 'ファイル %s の作成に失敗しました。'), basename($fullpath)), true);
+				$this->BcMessage->setError(sprintf(__d('baser', 'ファイル %s の作成に失敗しました。'), basename($fullpath)));
 			}
 		}
 
@@ -320,10 +320,10 @@ class ThemeFilesController extends AppController {
 
 			if ($result) {
 				clearViewCache();
-				$this->setMessage(sprintf(__d('baser', 'ファイル %s を更新しました。'), $filename));
+				$this->BcMessage->setInfo(sprintf(__d('baser', 'ファイル %s を更新しました。'), $filename));
 				$this->redirect(array_merge([$theme, $plugin, $type], explode('/', dirname($path)), [basename($newPath)]));
 			} else {
-				$this->setMessage(sprintf(__d('baser', 'ファイル %s の更新に失敗しました。'), $filename), true);
+				$this->BcMessage->setError(sprintf(__d('baser', 'ファイル %s の更新に失敗しました。'), $filename));
 			}
 		}
 
@@ -363,9 +363,9 @@ class ThemeFilesController extends AppController {
 		}
 
 		if ($result) {
-			$this->setMessage($target . ' ' . sprintf(__d('baser', '%s を削除しました。'), $path));
+			$this->BcMessage->setInfo($target . ' ' . sprintf(__d('baser', '%s を削除しました。'), $path));
 		} else {
-			$this->setMessage($target . ' ' . sprintf(__d('baser', '%s の削除に失敗しました。'), $path), true);
+			$this->BcMessage->setError($target . ' ' . sprintf(__d('baser', '%s の削除に失敗しました。'), $path));
 		}
 
 		$this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', dirname($path))));
@@ -576,9 +576,9 @@ class ThemeFilesController extends AppController {
 		$Folder->create(dirname($filePath), 0777);
 
 		if (@move_uploaded_file($this->request->data['ThemeFile']['file']['tmp_name'], $filePath)) {
-			$this->setMessage(__d('baser', 'アップロードに成功しました。'));
+			$this->BcMessage->setInfo(__d('baser', 'アップロードに成功しました。'));
 		} else {
-			$this->setMessage(__d('baser', 'アップロードに失敗しました。'), true);
+			$this->BcMessage->setError(__d('baser', 'アップロードに失敗しました。'));
 		}
 		$this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', $path)));
 	}
@@ -601,10 +601,10 @@ class ThemeFilesController extends AppController {
 			$folder = new Folder();
 			$this->ThemeFolder->create($this->request->data);
 			if ($this->ThemeFolder->validates() && $folder->create($fullpath . $this->request->data['ThemeFolder']['name'], 0777)) {
-				$this->setMessage('フォルダ ' . $this->request->data['ThemeFolder']['name'] . ' を作成しました。');
+				$this->BcMessage->setInfo('フォルダ ' . $this->request->data['ThemeFolder']['name'] . ' を作成しました。');
 				$this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', $path)));
 			} else {
-				$this->setMessage(__d('baser', 'フォルダの作成に失敗しました。'), true);
+				$this->BcMessage->setError(__d('baser', 'フォルダの作成に失敗しました。'));
 			}
 		}
 
@@ -644,17 +644,17 @@ class ThemeFilesController extends AppController {
 			if ($this->ThemeFolder->validates()) {
 				if ($fullpath != $newPath) {
 					if ($folder->move(['from' => $fullpath, 'to' => $newPath, 'chmod' => 0777, 'skip' => ['_notes']])) {
-						$this->setMessage('フォルダ名を ' . $this->request->data['ThemeFolder']['name'] . ' に変更しました。');
+						$this->BcMessage->setInfo('フォルダ名を ' . $this->request->data['ThemeFolder']['name'] . ' に変更しました。');
 						$this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', dirname($path))));
 					} else {
-						$this->setMessage(__d('baser', 'フォルダ名の変更に失敗しました。'), true);
+						$this->BcMessage->setError(__d('baser', 'フォルダ名の変更に失敗しました。'));
 					}
 				} else {
-					$this->setMessage(__d('baser', 'フォルダ名に変更はありませんでした。'), true);
+					$this->BcMessage->setError(__d('baser', 'フォルダ名に変更はありませんでした。'));
 					$this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', dirname($path))));
 				}
 			} else {
-				$this->setMessage(__d('baser', 'フォルダ名の変更に失敗しました。'), true);
+				$this->BcMessage->setError(__d('baser', 'フォルダ名の変更に失敗しました。'));
 			}
 		}
 
@@ -818,7 +818,7 @@ class ThemeFilesController extends AppController {
 			// 現在のテーマにリダイレクトする場合、混乱するおそれがあるのでとりあえずそのまま
 			//$this->redirect(array_merge(array('action' => 'edit', $this->siteConfigs['theme'], $type), explode('/', $path)));
 		} else {
-			$this->setMessage('コアファイル ' . basename($path) . ' のコピーに失敗しました。', true);
+			$this->BcMessage->setError('コアファイル ' . basename($path) . ' のコピーに失敗しました。');
 		}
 		$this->redirect(array_merge(['action' => 'view', $theme, $plugin, $type], explode('/', $path)));
 	}
@@ -852,11 +852,11 @@ class ThemeFilesController extends AppController {
 		$folder->create(dirname($themePath), 0777);
 		if ($folder->copy(['from' => $fullpath, 'to' => $themePath, 'chmod' => 0777, 'skip' => ['_notes']])) {
 			$_themePath = str_replace(ROOT, '', $themePath);
-			$this->setMessage('コアフォルダ ' . basename($path) . ' を テーマ ' . Inflector::camelize($this->siteConfigs['theme']) . " の次のパスとしてコピーしました。\n" . $_themePath);
+			$this->BcMessage->setInfo('コアフォルダ ' . basename($path) . ' を テーマ ' . Inflector::camelize($this->siteConfigs['theme']) . " の次のパスとしてコピーしました。\n" . $_themePath);
 			// 現在のテーマにリダイレクトする場合、混乱するおそれがあるのでとりあえずそのまま
 			//$this->redirect(array('action' => 'edit', $this->siteConfigs['theme'], $type, $path));
 		} else {
-			$this->setMessage('コアフォルダ ' . basename($path) . ' のコピーに失敗しました。', true);
+			$this->BcMessage->setError('コアフォルダ ' . basename($path) . ' のコピーに失敗しました。');
 		}
 		$this->redirect(array_merge(['action' => 'view_folder', $theme, $plugin, $type], explode('/', $path)));
 	}

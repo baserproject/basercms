@@ -202,10 +202,10 @@ class InstallationsController extends AppController {
 					$errorMessage .= "\n" . $e->getMessage();
 				}
 				if ($result) {
-					$this->setMessage(__d('baser', 'データベースの構築に成功しました。'));
+					$this->BcMessage->setInfo(__d('baser', 'データベースの構築に成功しました。'));
 					$this->redirect('step4');
 				} else {
-					$this->setMessage($errorMessage, true);
+					$this->BcMessage->setError($errorMessage);
 				}
 			}
 		}
@@ -264,8 +264,8 @@ class InstallationsController extends AppController {
                     if ( !empty($User->validationErrors) ) {
                         $errMsg = implode("\n", Hash::extract($User->validationErrors, '{s}.{n}'));
                     }
-					$this->setMessage(__d('baser', '管理ユーザーを作成できませんでした。'), true);
-					$this->setMessage($errMsg, true);
+					$this->BcMessage->setError(__d('baser', '管理ユーザーを作成できませんでした。'));
+					$this->BcMessage->setError($errMsg);
 				}
 			}
 		}
@@ -545,7 +545,7 @@ class InstallationsController extends AppController {
 			if (preg_match('/with message \'(.+?)\' in/s', $e->getMessage(), $matches)) {
 				$message .= "\n" . $matches[1];
 			}
-					$this->setMessage(__d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。"), true);
+					$this->BcMessage->setError(__d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。"));
 			return false;
 		}
 
@@ -559,7 +559,7 @@ class InstallationsController extends AppController {
 				case 'BcMysql' :
 					$result = $db->query("SELECT version() as version");
 					if( version_compare($result[0][0]['version'], Configure::read('BcRequire.MySQLVersion')) == -1 ) {
-						$this->setMessage(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.MySQLVersion')), true);
+						$this->BcMessage->setError(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.MySQLVersion')));
 						return false ;
 					}
 					break;
@@ -567,7 +567,7 @@ class InstallationsController extends AppController {
 					$result = $db->query("SELECT version() as version");
 					list(,$version) = explode(" ",$result[0][0]['version']);
 					if( version_compare( trim($version), Configure::read('BcRequire.PostgreSQLVersion')) == -1 ) {
-						$this->setMessage(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.PostgreSQLVersion')), true);
+						$this->BcMessage->setError(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.PostgreSQLVersion')));
 						return false ;
 					}
 					break;
@@ -580,7 +580,7 @@ class InstallationsController extends AppController {
 
 			if ($result) {
 				$db->execute("drop TABLE $randomtablename");
-				$this->setMessage(__d('baser', 'データベースへの接続に成功しました。'));
+				$this->BcMessage->setInfo(__d('baser', 'データベースへの接続に成功しました。'));
 
 				// データベースのテーブルをチェック
 				$tableNames = $db->listSources();
@@ -590,19 +590,19 @@ class InstallationsController extends AppController {
 				});
 
 				if (count($duplicateTableNames) > 0) {
-					$this->setMessage(__d('baser', 'データベースへの接続に成功しましたが、プレフィックスが重複するテーブルが存在します。') . join(', ', $duplicateTableNames));
+					$this->BcMessage->setInfo(__d('baser', 'データベースへの接続に成功しましたが、プレフィックスが重複するテーブルが存在します。') . join(', ', $duplicateTableNames));
 				}
 				return true;
 			} else {
-				$this->setMessage(__d('baser', "データベースへの接続でエラーが発生しました。\n") . $db->error, true);
+				$this->BcMessage->setError(__d('baser', "データベースへの接続でエラーが発生しました。\n") . $db->error);
 			}
 		} else {
 
 			if (!$this->Session->read('Message.flash.message')) {
 				if ($db->connection) {
-					$this->setMessage(__d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。"), true);
+					$this->BcMessage->setError(__d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。"));
 				} else {
-					$this->setMessage(__d('baser', 'データベースへの接続でエラーが発生しました。データベース設定を見直してください。'), true);
+					$this->BcMessage->setError(__d('baser', 'データベースへの接続でエラーが発生しました。データベース設定を見直してください。'));
 				}
 			}
 		}
@@ -682,9 +682,9 @@ class InstallationsController extends AppController {
 			}
 
 			if (!$this->BcManager->reset($dbConfig)) {
-				$this->setMessage(__d('baser', 'baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。'), true);
+				$this->BcMessage->setError(__d('baser', 'baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。'));
 			} else {
-				$this->setMessage(__d('baser', 'baserCMSを初期化しました。'));
+				$this->BcMessage->setInfo(__d('baser', 'baserCMSを初期化しました。'));
 			}
 			$this->redirect('reset');
 

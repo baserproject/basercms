@@ -81,10 +81,10 @@ class EditorTemplatesController extends AppController {
 				$this->dispatchEvent('afterAdd', [
 					'data' => $result
 				]);
-				$this->setMessage(__d('baser', '保存完了'));
+				$this->BcMessage->setInfo(__d('baser', '保存完了'));
 				$this->redirect(['action' => 'index']);
 			} else {
-				$this->setMessage(__d('baser', '保存中にエラーが発生しました。'), true);
+				$this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
 			}
 		}
 		$this->render('form');
@@ -109,10 +109,10 @@ class EditorTemplatesController extends AppController {
 				$this->dispatchEvent('afterEdit', [
 					'data' => $result
 				]);
-				$this->setMessage(__d('baser', '保存完了'));
+				$this->BcMessage->setInfo(__d('baser', '保存完了'));
 				$this->redirect(['action' => 'index']);
 			} else {
-				$this->setMessage(__d('baser', '保存中にエラーが発生しました。'), true);
+				$this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
 			}
 		}
 
@@ -127,14 +127,14 @@ class EditorTemplatesController extends AppController {
 	public function admin_delete($id) {
 		$this->_checkSubmitToken();
 		if (!$id) {
-			$this->setMessage(__d('baser', '無効なIDです。'), true);
+			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(['action' => 'index']);
 		}
 		$data = $this->EditorTemplate->read(null, $id);
 		if ($this->EditorTemplate->delete($id)) {
-			$this->setMessage(sprintf(__d('baser', 'エディタテンプレート「%s」を削除しました。'), $data['EditorTemplate']['name']), false, true);
+			$this->BcMessage->setSuccess(sprintf(__d('baser', 'エディタテンプレート「%s」を削除しました。'), $data['EditorTemplate']['name']));
 		} else {
-			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
+			$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 		}
 		$this->redirect(['action' => 'index']);
 	}

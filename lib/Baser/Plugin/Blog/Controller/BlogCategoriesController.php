@@ -127,7 +127,7 @@ class BlogCategoriesController extends BlogAppController {
  */
 	public function admin_add($blogContentId) {
 		if (!$blogContentId) {
-			$this->setMessage(__d('baser', '無効なIDです。'), true);
+			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(['controller' => 'blog_contents', 'action' => 'index']);
 		}
 
@@ -146,10 +146,10 @@ class BlogCategoriesController extends BlogAppController {
 
 			// データを保存
 			if ($this->BlogCategory->save()) {
-				$this->setMessage(sprintf(__d('baser', 'カテゴリー「%s」を追加しました。'), $this->request->data['BlogCategory']['name']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'カテゴリー「%s」を追加しました。'), $this->request->data['BlogCategory']['name']));
 				$this->redirect(['action' => 'index', $blogContentId]);
 			} else {
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
 
@@ -181,7 +181,7 @@ class BlogCategoriesController extends BlogAppController {
 	public function admin_edit($blogContentId, $id) {
 		/* 除外処理 */
 		if (!$id && empty($this->request->data)) {
-			$this->setMessage(__d('baser', '無効なIDです。'), true);
+			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(['action' => 'index']);
 		}
 
@@ -191,10 +191,10 @@ class BlogCategoriesController extends BlogAppController {
 
 			/* 更新処理 */
 			if ($this->BlogCategory->save($this->request->data)) {
-				$this->setMessage(sprintf(__d('baser', 'カテゴリー「%s」を更新しました。'), $this->request->data['BlogCategory']['name']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'カテゴリー「%s」を更新しました。'), $this->request->data['BlogCategory']['name']));
 				$this->redirect(['action' => 'index', $blogContentId]);
 			} else {
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
 
@@ -287,7 +287,7 @@ class BlogCategoriesController extends BlogAppController {
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
-			$this->setMessage(__d('baser', '無効なIDです。'), true);
+			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(['action' => 'index']);
 		}
 
@@ -296,9 +296,9 @@ class BlogCategoriesController extends BlogAppController {
 
 		/* 削除処理 */
 		if ($this->BlogCategory->removeFromTreeRecursive($id)) {
-			$this->setMessage(sprintf(__d('baser', '%s を削除しました。'), $post['BlogCategory']['name']), false, true);
+			$this->BcMessage->setSuccess(sprintf(__d('baser', '%s を削除しました。'), $post['BlogCategory']['name']));
 		} else {
-			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
+			$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 		}
 
 		$this->redirect(['action' => 'index', $blogContentId]);

@@ -50,10 +50,10 @@ class MailConfigsController extends MailAppController {
 
 			/* 更新処理 */
 			if ($this->MailConfig->save($this->request->data)) {
-				$this->setMessage(__d('baser', 'メールフォーム設定を保存しました。'));
+				$this->BcMessage->setInfo(__d('baser', 'メールフォーム設定を保存しました。'));
 				$this->redirect(array('action' => 'form'));
 			} else {
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
 		

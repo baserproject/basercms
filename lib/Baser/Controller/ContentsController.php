@@ -301,7 +301,7 @@ class ContentsController extends AppController {
 			} else {
 				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') . '「' . $this->request->data['Content']['title'] . '」を追加しました。';
 			}
-			$this->setMessage($message, false, true, false);
+			$this->BcMessage->setSuccess($message, true, false);
 			echo json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
@@ -319,14 +319,14 @@ class ContentsController extends AppController {
 		if(!$this->request->data) {
 			$this->request->data = $this->Content->find('first', ['conditions' => ['Content.id' => $this->request->params['named']['content_id']]]);
 			if(!$this->request->data) {
-				$this->setMessage(__d('baser', '無効な処理です。'), true);
+				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
 		} else {
 			if($this->Content->save($this->request->data)) {
 				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') . 
 					sprintf(__d('baser', '「%s」を更新しました。'), $this->request->data['Content']['title']);
-				$this->setMessage($message, false, true);
+				$this->BcMessage->setSuccess($message);
 				$this->redirect([
 					'plugin'	=> null,
 					'controller'=> 'contents',
@@ -335,7 +335,7 @@ class ContentsController extends AppController {
 					'parent_id' => $this->request->params['named']['parent_id']
 				]);
 			} else {
-				$this->setMessage(__d('baser', '保存中にエラーが発生しました。入力内容を確認してください。'), true, true);
+				$this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
 			}
 		}
 		$site = BcSite::findById($this->request->data['Content']['site_id']);
@@ -354,7 +354,7 @@ class ContentsController extends AppController {
 		if(!$this->request->data) {
 			$this->request->data = $this->Content->find('first', ['conditions' => ['Content.id' => $id]]);
 			if(!$this->request->data) {
-				$this->setMessage(__d('baser', '無効な処理です。'), true);
+				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
 			$srcContent = $this->Content->find('first', ['conditions' => ['Content.id' => $this->request->data['Content']['alias_id']], 'recursive' => -1]);
@@ -365,7 +365,7 @@ class ContentsController extends AppController {
 				$srcContent = $srcContent['Content'];
 				$message = Configure::read('BcContents.items.' . $srcContent['plugin'] . '.' . $srcContent['type'] . '.title') .
 					sprintf(__d('baser', '「%s」のエイリアス「%s」を編集しました。'), $srcContent['title'], $this->request->data['Content']['title']);
-				$this->setMessage($message, false, true);
+				$this->BcMessage->setSuccess($message);
 				$this->redirect([
 					'plugin'	=> null,
 					'controller'=> 'contents',
@@ -373,7 +373,7 @@ class ContentsController extends AppController {
 					$id
 				]);
 			} else {
-				$this->setMessage(__d('baser', '保存中にエラーが発生しました。入力内容を確認してください。'), true, true);
+				$this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
 			}
 
 		}
@@ -413,7 +413,7 @@ class ContentsController extends AppController {
 		if($this->_delete($this->request->data['Content']['id'], true)) {
 			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 		} else {
-			$this->setMessage(__d('baser', '削除中にエラーが発生しました。'), true, true);
+			$this->BcMessage->setError('削除中にエラーが発生しました。');
 		}
 	}
 
@@ -451,7 +451,7 @@ class ContentsController extends AppController {
 			$message = sprintf(__d('baser', '%s のエイリアス「%s」を削除しました。'), $typeName, $content['title']);
 		}
 		if($result) {
-			$this->setMessage($message, false, true, $useFlashMessage);
+			$this->BcMessage->setSuccess($message, true, $useFlashMessage);
 		}
 
 		// EVENT Contents.afterDelete
@@ -641,7 +641,7 @@ class ContentsController extends AppController {
 		if($this->Content->save($data, ['firstCreate' => !empty($this->request->data['first'])])) {
 			$message = Configure::read('BcContents.items.' . $this->request->data['plugin'] . '.' . $this->request->data['type'] . '.title') .
 						sprintf(__d('baser', '「%s」を「%s」に名称変更しました。'), $this->request->data['oldTitle'], $this->request->data['newTitle']);
-			$this->setMessage($message, false, true, false);
+			$this->BcMessage->setSuccess($message, true, false);
 			Configure::write('debug', 0);
 			return $this->Content->getUrlById($this->Content->id);
 		} else {

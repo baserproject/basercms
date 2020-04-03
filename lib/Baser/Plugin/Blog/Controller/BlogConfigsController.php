@@ -93,10 +93,10 @@ class BlogConfigsController extends BlogAppController {
 //
 //			/* 更新処理 */
 //			if ($this->BlogConfig->save($this->request->data)) {
-//				$this->setMessage('ブログ設定を保存しました。', false, true);
+//				$this->BcMessage->setSuccess('ブログ設定を保存しました。');
 //				$this->redirect(array('action' => 'form'));
 //			} else {
-//				$this->setMessage('入力エラーです。内容を修正してください。', true);
+//				$this->BcMessage->setError('入力エラーです。内容を修正してください。');
 //			}
 //		}
 //

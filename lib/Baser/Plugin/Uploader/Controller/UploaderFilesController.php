@@ -89,14 +89,14 @@ class UploaderFilesController extends AppController {
 			$Folder = new Folder();
 			$Folder->create($savePath . 'limited', 0777);
 			if(!is_dir($savePath . 'limited')) {
-				$this->setMessage('現在、アップロードファイルの公開期間の指定ができません。指定できるようにするには、' . $savePath . ' に書き込み権限を与えてください。', true);
+				$this->BcMessage->setError('現在、アップロードファイルの公開期間の指定ができません。指定できるようにするには、' . $savePath . ' に書き込み権限を与えてください。');
 			}
 			$File = new File($savePath . 'limited' . DS . '.htaccess');
 			$htaccess = "Order allow,deny\nDeny from all";
 			$File->write($htaccess);
 			$File->close();
 			if(!file_exists($savePath . 'limited' . DS . '.htaccess')) {
-				$this->setMessage('現在、アップロードファイルの公開期間の指定ができません。指定できるようにするには、' . $savePath . 'limited/ に書き込み権限を与えてください。', true);
+				$this->BcMessage->setError('現在、アップロードファイルの公開期間の指定ができません。指定できるようにするには、' . $savePath . 'limited/ に書き込み権限を与えてください。');
 			}
 		}
 	}
@@ -385,10 +385,10 @@ class UploaderFilesController extends AppController {
 				}
 			} else {
 				if($result) {
-					$this->setMessage(__d('baser', 'ファイルの内容を保存しました。'));
+					$this->BcMessage->setInfo(__d('baser', 'ファイルの内容を保存しました。'));
 					$this->redirect(array('action' => 'index'));
 				} else {
-					$this->setMessage(__d('baser', '保存中にエラーが発生しました。'));
+					$this->BcMessage->setInfo(__d('baser', '保存中にエラーが発生しました。'));
 				}
 			}	
 		}
@@ -428,9 +428,9 @@ class UploaderFilesController extends AppController {
 			exit();
 		} else {
 			if($result) {
-				$this->setMessage(sprintf(__d('baser','%s を削除しました。'), $uploaderFile['UploaderFile']['name']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser','%s を削除しました。'), $uploaderFile['UploaderFile']['name']));
 			} else {
-				$this->setMessage(__d('baser', '削除中にエラーが発生しました。'), true);
+				$this->BcMessage->setError(__d('baser', '削除中にエラーが発生しました。'));
 			}
 			$this->redirect(array('action' => 'index'));
 		}

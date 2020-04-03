@@ -54,7 +54,7 @@ class ContentFoldersController extends AppController {
 		}
 		$data = $this->ContentFolder->save($this->request->data); 
 		if ($data) {
-			$this->setMessage(sprintf(__d('baser', 'フォルダ「%s」を追加しました。'), $this->request->data['Content']['title']), false, true, false);
+			$this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を追加しました。'), $this->request->data['Content']['title']), true, false);
 			echo json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
@@ -72,13 +72,13 @@ class ContentFoldersController extends AppController {
 		if(!$this->request->data) {
 			$this->request->data = $this->ContentFolder->read(null, $entityId);
 			if(!$this->request->data) {
-				$this->setMessage(__d('baser', '無効な処理です。'), true);
+				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
 		} else {
 			if ($this->ContentFolder->save($this->request->data, ['reconstructSearchIndices' => true])) {
 				clearViewCache();
-				$this->setMessage(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $this->request->data['Content']['title']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $this->request->data['Content']['title']));
 				$this->redirect([
 					'plugin' => '',
 					'controller' => 'content_folders',
@@ -86,7 +86,7 @@ class ContentFoldersController extends AppController {
 					$entityId
 				]);
 			} else {
-				$this->setMessage(__d('baser', '保存中にエラーが発生しました。入力内容を確認してください。'), true, true);
+				$this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
 			}
 		}
 

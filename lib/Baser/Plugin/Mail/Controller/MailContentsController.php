@@ -87,7 +87,7 @@ class MailContentsController extends MailAppController {
 		if ($data) {
 			$this->MailMessage->createTable($data['MailContent']['id']);
 			$message = sprintf(__d('baser', 'メールフォーム「%s」を追加しました。'), $this->request->data['Content']['title']);
-			$this->setMessage($message, false, true, false);
+			$this->BcMessage->setSuccess($message, true, false);
 			return json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, $this->MailContent->validationErrors);
@@ -116,16 +116,16 @@ class MailContentsController extends MailAppController {
 				if ($this->MailMessage->createTable($this->request->data['MailContent']['id'])) {
 					/* データを保存 */
 					if ($this->MailContent->save(null, false)) {
-						$this->setMessage(sprintf(__d('baser', '新規メールフォーム「%s」を追加しました。'), $this->request->data['MailContent']['title']), false, true);
+						$this->BcMessage->setSuccess(sprintf(__d('baser', '新規メールフォーム「%s」を追加しました。'), $this->request->data['MailContent']['title']));
 						$this->redirect(array('action' => 'edit', $this->MailContent->id));
 					} else {
-						$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
+						$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 					}
 				} else {
-					$this->setMessage(__d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの作成に失敗しました。'), true);
+					$this->BcMessage->setError(__d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの作成に失敗しました。'));
 				}
 			} else {
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
 		$this->subMenuElements = ['mail_common'];
@@ -142,14 +142,14 @@ class MailContentsController extends MailAppController {
 	public function admin_edit($id) {
 
 		if (!$id && empty($this->request->data)) {
-			$this->setMessage(__d('baser', '無効なIDです。'), true);
+			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 		}
 
 		if (empty($this->request->data['MailContent']['id'])) {
 			$this->request->data = $this->MailContent->read(null, $id);
 			if(!$this->request->data) {
-				$this->setMessage(__d('baser', '無効な処理です。'), true);
+				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
 		} else {
@@ -158,7 +158,7 @@ class MailContentsController extends MailAppController {
 			}
 			$this->MailContent->set($this->request->data);
 			if ($this->MailContent->save()) {
-				$this->setMessage(sprintf(__d('baser', 'メールフォーム「%s」を更新しました。'), $this->request->data['Content']['title']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'メールフォーム「%s」を更新しました。'), $this->request->data['Content']['title']));
 				if ($this->request->data['MailContent']['edit_mail_form']) {
 					$this->redirectEditForm($this->request->data['MailContent']['form_template']);
 				} elseif ($this->request->data['MailContent']['edit_mail']) {
@@ -168,9 +168,9 @@ class MailContentsController extends MailAppController {
 				}
 			} else {
 				if ($this->MailContent->validationErrors || $this->MailContent->Content->validationErrors) {
-					$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+					$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 				} else {
-					$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
+					$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 				}
 			}
 		}
@@ -231,7 +231,7 @@ class MailContentsController extends MailAppController {
 			$path = str_replace(DS, '/', $path);
 			$this->redirect(array_merge(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], $type), explode('/', $path)));
 		} else {
-			$this->setMessage(__d('baser', '現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。'), true);
+			$this->BcMessage->setError(__d('baser', '現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。'));
 			$this->redirect(array('action' => 'index'));
 		}
 	}
@@ -260,7 +260,7 @@ class MailContentsController extends MailAppController {
 			$path = str_replace(DS, '/', $path);
 			$this->redirect(array_merge(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc'), explode('/', $path . '/index' . $this->ext)));
 		} else {
-			$this->setMessage(__d('baser', '現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。'), true);
+			$this->BcMessage->setError(__d('baser', '現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。'));
 			$this->redirect(array('action' => 'index'));
 		}
 	}
@@ -279,7 +279,7 @@ class MailContentsController extends MailAppController {
 		$data = $this->MailContent->copy($this->request->data['entityId'], $this->request->data['parentId'], $this->request->data['title'], $user['id'], $this->request->data['siteId']);
 		if ($data) {
 			$message = sprintf(__d('baser', 'メールフォームのコピー「%s」を追加しました。'), $this->request->data['title']);
-			$this->setMessage($message, false, true, false);
+			$this->BcMessage->setSuccess($message, true, false);
 			return json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, $this->MailContent->validationErrors);

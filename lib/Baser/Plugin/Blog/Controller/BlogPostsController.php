@@ -112,7 +112,7 @@ class BlogPostsController extends BlogAppController {
  */
 	public function admin_index($blogContentId) {
 		if (!$blogContentId || !$this->blogContent) {
-			$this->setMessage(__d('baser', '無効な処理です。'), true);
+			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->redirect(['plugin' => '', 'controller' => 'contents', 'action' => 'index']);
 		}
 
@@ -280,7 +280,7 @@ class BlogPostsController extends BlogAppController {
  */
 	public function admin_add($blogContentId) {
 		if (!$blogContentId || !$this->blogContent) {
-			$this->setMessage(__d('baser', '無効な処理です。'), true);
+			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->redirect(['controller' => 'blog_contents', 'action' => 'index']);
 		}
 
@@ -304,7 +304,7 @@ class BlogPostsController extends BlogAppController {
 			if ($this->BlogPost->saveAll($this->request->data)) {
 				clearViewCache();
 				$id = $this->BlogPost->getLastInsertId();
-				$this->setMessage(sprintf(__d('baser', '記事「%s」を追加しました。'), $this->request->data['BlogPost']['name']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', '記事「%s」を追加しました。'), $this->request->data['BlogPost']['name']));
 
 				// 下のBlogPost::read()で、BlogTagデータ無しのキャッシュを作ってしまわないように
 				// recursiveを設定
@@ -318,7 +318,7 @@ class BlogPostsController extends BlogAppController {
 				// 編集画面にリダイレクト
 				$this->redirect(['action' => 'edit', $blogContentId, $id]);
 			} else {
-				$this->setMessage(__d('baser', 'エラーが発生しました。内容を確認してください。'), true);
+				$this->BcMessage->setError(__d('baser', 'エラーが発生しました。内容を確認してください。'));
 			}
 		}
 
@@ -363,7 +363,7 @@ class BlogPostsController extends BlogAppController {
  */
 	public function admin_edit($blogContentId, $id) {
 		if (!$blogContentId || !$id) {
-			$this->setMessage(__d('baser', '無効な処理です。'), true);
+			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->redirect(['plugin' => 'blog', 'admin' => true, 'controller' => 'blog_posts', 'action' => 'index', $blogContentId]);
 		}
 
@@ -376,7 +376,7 @@ class BlogPostsController extends BlogAppController {
 				)
 			));
 			if(!$this->request->data) {
-				$this->setMessage(__d('baser', '無効な処理です。'), true);
+				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 				$this->redirect(['plugin' => 'blog', 'admin' => true, 'controller' => 'blog_posts', 'action' => 'index', $blogContentId]);
 			}
 		} else {
@@ -395,7 +395,7 @@ class BlogPostsController extends BlogAppController {
 			// データを保存
 			if ($this->BlogPost->saveAll($this->request->data)) {
 				clearViewCache();
-				$this->setMessage(sprintf(__d('baser', '記事「%s」を更新しました。'), $this->request->data['BlogPost']['name']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', '記事「%s」を更新しました。'), $this->request->data['BlogPost']['name']));
 
 				// EVENT BlogPosts.afterEdit
 				$this->dispatchEvent('afterEdit', [
@@ -404,7 +404,7 @@ class BlogPostsController extends BlogAppController {
 
 				$this->redirect(['action' => 'edit', $blogContentId, $id]);
 			} else {
-				$this->setMessage(__d('baser', 'エラーが発生しました。内容を確認してください。'), true);
+				$this->BcMessage->setError(__d('baser', 'エラーが発生しました。内容を確認してください。'));
 			}
 		}
 
@@ -516,7 +516,7 @@ class BlogPostsController extends BlogAppController {
 	public function admin_delete($blogContentId, $id = null) {
 		$this->_checkSubmitToken();
 		if (!$blogContentId || !$id) {
-			$this->setMessage(__d('baser', '無効な処理です。'), true);
+			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->redirect(['controller' => 'blog_contents', 'action' => 'index']);
 		}
 
@@ -526,9 +526,9 @@ class BlogPostsController extends BlogAppController {
 		// 削除実行
 		if ($this->BlogPost->delete($id)) {
 			clearViewCache();
-			$this->setMessage(sprintf(__d('baser', '%s を削除しました。'), $post['BlogPost']['name']), false, true);
+			$this->BcMessage->setSuccess(sprintf(__d('baser', '%s を削除しました。'), $post['BlogPost']['name']));
 		} else {
-			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
+			$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 		}
 
 		$this->redirect(['action' => 'index', $blogContentId]);
@@ -577,7 +577,7 @@ class BlogPostsController extends BlogAppController {
 //
 //		// 送信内容に問題がある場合には元のページにリダイレクト
 //		if (!$check) {
-//			$this->setMessage($message, true);
+//			$this->BcMessage->setError($message);
 //			$this->redirect(array('controller' => 'blog_configs', 'action' => 'form'));
 //		}
 //
@@ -630,7 +630,7 @@ class BlogPostsController extends BlogAppController {
 //			}
 //		}
 //
-//		$this->setMessage($count . ' 件の記事を取り込みました');
+//		$this->BcMessage->setInfo($count . ' 件の記事を取り込みました');
 //		$this->redirect(array('controller' => 'blog_configs', 'action' => 'form'));
 //	}
 

@@ -77,7 +77,7 @@ class PermissionsController extends AppController {
 	public function admin_index($userGroupId = null) {
 		/* セッション処理 */
 		if (!$userGroupId) {
-			$this->setMessage(__d('baser', '無効な処理です。'), true);
+			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->redirect(['controller' => 'user_groups', 'action' => 'index']);
 		}
 
@@ -141,11 +141,11 @@ class PermissionsController extends AppController {
 			$this->request->data['Permission']['sort'] = $this->Permission->getMax('sort', ['user_group_id' => $userGroupId]) + 1;
 			$this->Permission->create($this->request->data);
 			if ($this->Permission->save()) {
-				$this->setMessage(sprintf(__d('baser', '新規アクセス制限設定「%s」を追加しました。'), $this->request->data['Permission']['name']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', '新規アクセス制限設定「%s」を追加しました。'), $this->request->data['Permission']['name']));
 				$this->redirect(['action' => 'index', $userGroupId]);
 			} else {
 				$this->request->data['Permission']['url'] = preg_replace('/^(\/' . $permissionAuthPrefix . '\/|\/)/', '', $this->request->data['Permission']['url']);
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
 
@@ -194,7 +194,7 @@ class PermissionsController extends AppController {
 	public function admin_edit($userGroupId, $id) {
 		/* 除外処理 */
 		if (!$userGroupId || !$id) {
-			$this->setMessage(__d('baser', '無効なIDです。'), true);
+			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(['action' => 'index']);
 		}
 
@@ -214,11 +214,11 @@ class PermissionsController extends AppController {
 			$this->request->data['Permission']['url'] = '/' . $authPrefix . '/' . $this->request->data['Permission']['url'];
 
 			if ($this->Permission->save($this->request->data)) {
-				$this->setMessage(sprintf(__d('baser', 'アクセス制限設定「%s」を更新しました。'), $this->request->data['Permission']['name']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'アクセス制限設定「%s」を更新しました。'), $this->request->data['Permission']['name']));
 				$this->redirect(['action' => 'index', $userGroupId]);
 			} else {
 				$this->request->data['Permission']['url'] = preg_replace('/^(\/' . $authPrefix . '\/|\/)/', '', $this->request->data['Permission']['url']);
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
 
@@ -283,7 +283,7 @@ class PermissionsController extends AppController {
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
-			$this->setMessage(__d('baser', '無効なIDです。'), true);
+			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(['action' => 'index']);
 		}
 
@@ -292,9 +292,9 @@ class PermissionsController extends AppController {
 
 		/* 削除処理 */
 		if ($this->Permission->delete($id)) {
-			$this->setMessage(sprintf(__d('baser', 'アクセス制限設定「%s」 を削除しました。'), $post['Permission']['name']), false, true);
+			$this->BcMessage->setSuccess(sprintf(__d('baser', 'アクセス制限設定「%s」 を削除しました。'), $post['Permission']['name']));
 		} else {
-			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true, false);
+			$this->BcMessage->setError('データベース処理中にエラーが発生しました。');
 		}
 
 		$this->redirect(['action' => 'index', $userGroupId]);

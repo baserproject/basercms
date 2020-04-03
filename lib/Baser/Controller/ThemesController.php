@@ -71,7 +71,7 @@ class ThemesController extends AppController {
 				if($this->request->data['Theme']['file']['error'] == 1) {
 					$message .= __d('baser', 'サーバに設定されているサイズ制限を超えています。');
 				}
-				$this->setMessage($message, true);
+				$this->BcMessage->setError($message);
 			} else {
 				$name = $this->request->data['Theme']['file']['name'];
 				move_uploaded_file($this->request->data['Theme']['file']['tmp_name'], TMP . $name);
@@ -80,12 +80,12 @@ class ThemesController extends AppController {
 				if ($BcZip->extract(TMP . $name, BASER_THEMES)) {
 					$theme = $BcZip->topArchiveName;
 					unlink(TMP . $name);
-					$this->setMessage('テーマファイル「' . $name. '」を追加しました。');
+					$this->BcMessage->setInfo('テーマファイル「' . $name. '」を追加しました。');
 					$this->redirect(['action' => 'index']);
 				} else {
 					$msg = __d('baser', 'アップロードしたZIPファイルの展開に失敗しました。');
 					$msg .= "\n" . $BcZip->error;
-					$this->setMessage($msg, true);
+					$this->BcMessage->setError($msg);
 				}
 			}
 		}
@@ -158,15 +158,15 @@ class ThemesController extends AppController {
  */
 	public function admin_load_default_data_pattern() {
 		if (empty($this->request->data['Theme']['default_data_pattern'])) {
-			$this->setMessage(__d('baser', '不正な操作です。'), true);
+			$this->BcMessage->setError(__d('baser', '不正な操作です。'));
 			$this->redirect('index');
 		}
 		$result = $this->_load_default_data_pattern($this->request->data['Theme']['default_data_pattern']);
 		if ($result) {
-			$this->setMessage(__d('baser', '初期データの読み込みが完了しました。'));
+			$this->BcMessage->setInfo(__d('baser', '初期データの読み込みが完了しました。'));
 		} else {
 			if(!CakeSession::check('Message.flash.message')) {
-				$this->setMessage(__d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'), true);
+				$this->BcMessage->setError(__d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
 			}
 		}
 		$this->redirect('index');
@@ -181,9 +181,9 @@ class ThemesController extends AppController {
 		$this->_checkSubmitToken();
 		$result = $this->_load_default_data_pattern('core.default', $this->siteConfigs['theme']);
 		if ($result) {
-			$this->setMessage(__d('baser', '初期データの読み込みが完了しました。'));
+			$this->BcMessage->setInfo(__d('baser', '初期データの読み込みが完了しました。'));
 		} else {
-			$this->setMessage(__d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'), true);
+			$this->BcMessage->setError(__d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
 		}
 		$this->redirect('/admin');
 	}
@@ -198,7 +198,7 @@ class ThemesController extends AppController {
 	protected function _load_default_data_pattern($dbDataPattern, $currentTheme = '') {
 		list($theme, $pattern) = explode('.', $dbDataPattern);
 		if(!$this->BcManager->checkDefaultDataPattern($pattern, $theme)) {
-			$this->setMessage(__d('baser', '初期データのバージョンが違うか、初期データの構造が壊れています。'), true);
+			$this->BcMessage->setError(__d('baser', '初期データのバージョンが違うか、初期データの構造が壊れています。'));
 			return false;
 		}
 		$adminTheme = Configure::read('BcSite.admin_theme');
@@ -232,9 +232,9 @@ class ThemesController extends AppController {
 				}
 			}
 			if ($result) {
-				$this->setMessage(__d('baser', '初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込みました。'), true);
+				$this->BcMessage->setError(__d('baser', '初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込みました。'));
 			} else {
-				$this->setMessage(__d('baser', '初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。'), true);
+				$this->BcMessage->setError(__d('baser', '初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。'));
 			}
 		}
 
@@ -438,7 +438,7 @@ class ThemesController extends AppController {
 			$this->SiteConfig->saveKeyValue($siteConfig);
 		}
 		clearViewCache();
-		$this->setMessage('テーマ「' . $theme . '」を削除しました。');
+		$this->BcMessage->setInfo('テーマ「' . $theme . '」を削除しました。');
 		$this->redirect(['action' => 'index']);
 	}
 	
@@ -513,14 +513,13 @@ class ThemesController extends AppController {
 			if($info) {
 				$message = array_merge($message, [''], $info );
 			}
-			$this->setMessage(implode("\n", $message), true);
+			$this->BcMessage->setError(implode("\n", $message));
 		} else {
 			$message = ['テーマ「' . $theme . '」を適用しました。'];
 			if($info) {
 				$message = array_merge($message, [''], $info );
 			}
-
-			$this->setMessage(implode("\n", $message));
+			$this->BcMessage->setInfo(implode("\n", $message));
 		}
 		return true;
 

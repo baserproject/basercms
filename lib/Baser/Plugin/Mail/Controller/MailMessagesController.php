@@ -122,7 +122,7 @@ class MailMessagesController extends MailAppController {
  */
 	public function admin_view($mailContentId, $messageId) {
 		if (!$mailContentId || !$messageId) {
-			$this->setMessage(__d('baser', '無効な処理です。'), true);
+			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->notFound();
 		}
 		$message = $this->MailMessage->find('first', array(
@@ -198,13 +198,13 @@ class MailMessagesController extends MailAppController {
 	public function admin_delete($mailContentId, $messageId) {
 		$this->_checkSubmitToken();
 		if (!$mailContentId || !$messageId) {
-			$this->setMessage(__d('baser', '無効な処理です。'), true);
+			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->notFound();
 		}
 		if ($this->MailMessage->delete($messageId)) {
-			$this->setMessage(sprintf(__d('baser', '%s への受信データ NO「%s」 を削除しました。'), $this->mailContent['Content']['title'], $messageId), false, true);
+			$this->BcMessage->setSuccess(sprintf(__d('baser', '%s への受信データ NO「%s」 を削除しました。'), $this->mailContent['Content']['title'], $messageId));
 		} else {
-			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
+			$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 		}
 		$this->redirect(array('action' => 'index', $mailContentId));
 	}

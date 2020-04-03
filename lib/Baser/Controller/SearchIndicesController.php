@@ -292,18 +292,18 @@ class SearchIndicesController extends AppController {
 //					));
 //					$this->SearchIndex->create($data);
 //					if ($this->SearchIndex->save()) {
-//						$this->setMessage('検索インデックスに ' . $url . ' を追加しました。');
+//						$this->BcMessage->setInfo('検索インデックスに ' . $url . ' を追加しました。');
 //						$this->redirect(array('action' => 'index'));
 //					} else {
-//						$this->setMessage('保存中にエラーが発生しました。', true);
+//						$this->BcMessage->setError('保存中にエラーが発生しました。');
 //					}
 //				} else {
 //					$this->SearchIndex->invalidate('url', '入力したURLは存在しないか、検索インデックスに登録できるURLではありません。');
-//					$this->setMessage('保存中にエラーが発生しました。', true);
+//					$this->BcMessage->setError('保存中にエラーが発生しました。');
 //				}
 //			} else {
 //				$this->SearchIndex->invalidate('url', '既に登録済のURLです。');
-//				$this->setMessage('入力エラーです。内容を修正してください。', true);
+//				$this->BcMessage->setError('入力エラーです。内容を修正してください。');
 //			}
 //		}
 //		$this->help = 'search_indices_add';
@@ -450,9 +450,9 @@ class SearchIndicesController extends AppController {
 	public function admin_reconstruct() {
 		set_time_limit(0);
 		if($this->SearchIndex->reconstruct()) {
-			$this->setMessage(__d('baser', '検索インデックスの再構築に成功しました。'), false, true);
+			$this->BcMessage->setSuccess('検索インデックスの再構築に成功しました。');
 		} else {
-			$this->setMessage(__d('baser', '検索インデックスの再構築に失敗しました。'), true, true);
+			$this->BcMessage->setError('検索インデックスの再構築に失敗しました。');
 		}
 		$this->redirect(['action' => 'index']);
 	}

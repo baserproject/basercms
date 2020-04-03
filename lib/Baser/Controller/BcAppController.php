@@ -459,7 +459,7 @@ class BcAppController extends Controller {
 					$Permission = ClassRegistry::init('Permission');
 					if ($user) {
 						if (!$Permission->check($this->request->url, $user['user_group_id'])) {
-							$this->setMessage(__d('baser', '指定されたページへのアクセスは許可されていません。'), true);
+							$this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));
 							$this->redirect($this->BcAuth->loginRedirect);
 						}
 					}
@@ -972,7 +972,7 @@ class BcAppController extends Controller {
 				$cakeEmail->addTo($to);
 			}
 		} catch(Exception $e) {
-			$this->setMessage($e->getMessage() . ' ' . __d('baser', '送信先のメールアドレスが不正です。'),true, false, true);
+			$this->BcMessage->setError($e->getMessage() . ' ' . __d('baser', '送信先のメールアドレスが不正です。'));
 			return false;
 		}
 

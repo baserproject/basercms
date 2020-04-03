@@ -47,7 +47,7 @@ class ContentLinksController extends AppController {
 		}
 		$data = $this->ContentLink->save($this->request->data);
 		if ($data) {
-			$this->setMessage(sprintf(__d('baser', 'リンク「%s」を追加しました。'), $this->request->data['Content']['title']), false, true, false);
+			$this->BcMessage->setSuccess(sprintf(__d('baser', 'リンク「%s」を追加しました。'), $this->request->data['Content']['title']), true, false);
 			echo json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
@@ -65,13 +65,13 @@ class ContentLinksController extends AppController {
 		if(!$this->request->data) {
 			$this->request->data = $this->ContentLink->read(null, $entityId);
 			if(!$this->request->data) {
-				$this->setMessage(__d('baser', '無効な処理です。'), true);
+				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
 		} else {
 			if ($this->ContentLink->save($this->request->data)) {
 				clearViewCache();
-				$this->setMessage(sprintf(__d('baser', 'リンク「%s」を更新しました。'), $this->request->data['Content']['title']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'リンク「%s」を更新しました。'), $this->request->data['Content']['title']));
 				$this->redirect([
 					'plugin' => '',
 					'controller' => 'content_links',
@@ -79,7 +79,7 @@ class ContentLinksController extends AppController {
 					$entityId
 				]);
 			} else {
-				$this->setMessage(__d('baser', '保存中にエラーが発生しました。入力内容を確認してください。'), true, true);
+				$this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
 			}
 		}
 		$site = BcSite::findById($this->request->data['Content']['site_id']);

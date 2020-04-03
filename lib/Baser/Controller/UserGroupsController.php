@@ -119,10 +119,10 @@ class UserGroupsController extends AppController {
 			}
 			$this->UserGroup->create($this->request->data);
 			if ($this->UserGroup->save()) {
-				$this->setMessage('新規ユーザーグループ「' . $this->request->data['UserGroup']['title'] . '」を追加しました。', false, true);
+				$this->BcMessage->setSuccess('新規ユーザーグループ「' . $this->request->data['UserGroup']['title'] . '」を追加しました。');
 				$this->redirect(['action' => 'index']);
 			} else {
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
 
@@ -141,7 +141,7 @@ class UserGroupsController extends AppController {
 	public function admin_edit($id) {
 		/* 除外処理 */
 		if (!$id) {
-			$this->setMessage(__d('baser', '無効なIDです。'), true);
+			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(['action' => 'index']);
 		}
 
@@ -156,11 +156,11 @@ class UserGroupsController extends AppController {
 				$this->request->data['UserGroup']['auth_prefix'] = implode(',', $this->request->data['UserGroup']['auth_prefix']);
 			}
 			if ($this->UserGroup->save($this->request->data)) {
-				$this->setMessage('ユーザーグループ「' . $this->request->data['UserGroup']['name'] . '」を更新しました。', false, true);
+				$this->BcMessage->setSuccess('ユーザーグループ「' . $this->request->data['UserGroup']['name'] . '」を更新しました。');
 				$this->BcAuth->relogin();
 				$this->redirect(['action' => 'index', $id]);
 			} else {
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
 
@@ -205,7 +205,7 @@ class UserGroupsController extends AppController {
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
-			$this->setMessage(__d('baser', '無効なIDです。'), true);
+			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(['action' => 'index']);
 		}
 
@@ -214,9 +214,9 @@ class UserGroupsController extends AppController {
 
 		/* 削除処理 */
 		if ($this->UserGroup->delete($id)) {
-			$this->setMessage('ユーザーグループ「' . $post['UserGroup']['title'] . '」 を削除しました。', false, true);
+			$this->BcMessage->setSuccess('ユーザーグループ「' . $post['UserGroup']['title'] . '」 を削除しました。');
 		} else {
-			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
+			$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 		}
 
 		$this->redirect(['action' => 'index']);

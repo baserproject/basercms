@@ -71,10 +71,10 @@ class BlogTagsController extends BlogAppController {
 		if (!empty($this->request->data)) {
 			$this->BlogTag->create($this->request->data);
 			if ($this->BlogTag->save()) {
-				$this->setMessage(sprintf(__d('baser', 'タグ「%s」を追加しました。'), $this->request->data['BlogTag']['name']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'タグ「%s」を追加しました。'), $this->request->data['BlogTag']['name']));
 				$this->redirect(['action' => 'index']);
 			} else {
-				$this->setMessage(__d('baser', 'エラーが発生しました。内容を確認してください。'), true);
+				$this->BcMessage->setError(__d('baser', 'エラーが発生しました。内容を確認してください。'));
 			}
 		}
 		$this->pageTitle = __d('baser', '新規タグ登録');
@@ -89,7 +89,7 @@ class BlogTagsController extends BlogAppController {
  */
 	public function admin_edit($id) {
 		if (!$id) {
-			$this->setMessage(__d('baser', '無効な処理です。'), true);
+			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->redirect(['action' => 'index']);
 		}
 		if (empty($this->request->data)) {
@@ -97,10 +97,10 @@ class BlogTagsController extends BlogAppController {
 		} else {
 			$this->BlogTag->set($this->request->data);
 			if ($this->BlogTag->save()) {
-				$this->setMessage(sprintf(__d('baser', 'タグ「%s」を更新しました。'), $this->request->data['BlogTag']['name']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'タグ「%s」を更新しました。'), $this->request->data['BlogTag']['name']));
 				$this->redirect(['action' => 'index']);
 			} else {
-				$this->setMessage(__d('baser', 'エラーが発生しました。内容を確認してください。'), true);
+				$this->BcMessage->setError(__d('baser', 'エラーが発生しました。内容を確認してください。'));
 			}
 		}
 		$this->pageTitle = __d('baser', 'タグ編集');
@@ -116,16 +116,16 @@ class BlogTagsController extends BlogAppController {
 	public function admin_delete($id = null) {
 		$this->_checkSubmitToken();
 		if (!$id) {
-			$this->setMessage(__d('baser', '無効な処理です。'), true);
+			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->redirect(['action' => 'index']);
 		}
 
 		$data = $this->BlogTag->read(null, $id);
 
 		if ($this->BlogTag->delete($id)) {
-			$this->setMessage(sprintf(__d('baser', 'タグ「%s」を削除しました。'), $this->BlogTag->data['BlogTag']['name']), false, true);
+			$this->BcMessage->setSuccess(sprintf(__d('baser', 'タグ「%s」を削除しました。'), $this->BlogTag->data['BlogTag']['name']));
 		} else {
-			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
+			$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 		}
 
 		$this->redirect(['action' => 'index']);

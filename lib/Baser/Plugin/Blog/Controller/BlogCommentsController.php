@@ -98,7 +98,7 @@ class BlogCommentsController extends BlogAppController {
  */
 	public function admin_index($blogContentId, $blogPostId = null) {
 		if (!$blogContentId || empty($this->blogContent['BlogContent'])) {
-			$this->setMessage(__d('baser', '無効な処理です。'), true);
+			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->redirect('/admin');
 		}
 

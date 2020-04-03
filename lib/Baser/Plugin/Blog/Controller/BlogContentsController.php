@@ -79,7 +79,7 @@ class BlogContentsController extends BlogAppController {
 		$data = $this->BlogContent->save($this->request->data);
 		if ($data) {
 			$message = sprintf(__d('baser', 'ブログ「%s」を追加しました。'), $this->request->data['Content']['title']);
-			$this->setMessage($message, false, true, false);
+			$this->BcMessage->setSuccess($message, true, false);
 			return json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, $this->BlogContent->validationErrors);
@@ -106,10 +106,10 @@ class BlogContentsController extends BlogAppController {
 			if ($this->BlogContent->save()) {
 
 				$id = $this->BlogContent->getLastInsertId();
-				$this->setMessage(sprintf(__d('baser', '新規ブログ「%s」を追加しました。'), $this->request->data['BlogContent']['title']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', '新規ブログ「%s」を追加しました。'), $this->request->data['BlogContent']['title']));
 				$this->redirect(['action' => 'edit', $id]);
 			} else {
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 
 			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->request->data);
@@ -128,14 +128,14 @@ class BlogContentsController extends BlogAppController {
  */
 	public function admin_edit($id) {
 		if (!$id && empty($this->request->data)) {
-			$this->setMessage(__d('baser', '無効なIDです。'), true);
+			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 		}
 
 		if (empty($this->request->data)) {
 			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->BlogContent->read(null, $id));
 			if(!$this->request->data) {
-				$this->setMessage(__d('baser', '無効な処理です。'), true);
+				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
 		} else {
@@ -143,14 +143,14 @@ class BlogContentsController extends BlogAppController {
 			$this->BlogContent->set($this->request->data);
 
 			if ($this->BlogContent->save()) {
-				$this->setMessage(sprintf(__d('baser', 'ブログ「%s」を更新しました。'), $this->request->data['Content']['title']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'ブログ「%s」を更新しました。'), $this->request->data['Content']['title']));
 				if ($this->request->data['BlogContent']['edit_blog_template']) {
 					$this->redirectEditBlog($this->request->data['BlogContent']['template']);
 				} else {
 					$this->redirect(['action' => 'edit', $id]);
 				}
 			} else {
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->request->data);
 		}
@@ -189,7 +189,7 @@ class BlogContentsController extends BlogAppController {
 			}
 			$this->redirect(['plugin' => null, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'Layouts', $template . $this->ext]);
 		} else {
-			$this->setMessage(__d('baser', '現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。'), true);
+			$this->BcMessage->setError(__d('baser', '現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。'));
 			$this->redirect(['action' => 'index']);
 		}
 	}
@@ -218,7 +218,7 @@ class BlogContentsController extends BlogAppController {
 			$path = str_replace(DS, '/', $path);
 			$this->redirect(array_merge(['plugin' => null, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc'], explode('/', $path . '/index' . $this->ext)));
 		} else {
-			$this->setMessage(__d('baser', '現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。'), true);
+			$this->BcMessage->setError(__d('baser', '現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。'));
 			$this->redirect(['action' => 'index']);
 		}
 	}
@@ -254,7 +254,7 @@ class BlogContentsController extends BlogAppController {
 		$data = $this->BlogContent->copy($this->request->data['entityId'], $this->request->data['parentId'], $this->request->data['title'], $user['id'], $this->request->data['siteId']);
 		if ($data) {
 			$message = sprintf(__d('baser', 'ブログのコピー「%s」を追加しました。'), $this->request->data['title']);
-			$this->setMessage($message, false, true, false);
+			$this->BcMessage->setSuccess($message, true, false);
 			return json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, $this->BlogContent->validationErrors);

@@ -94,7 +94,7 @@ class FeedDetailsController extends FeedAppController {
 	public function admin_add($feedConfigId) {
 		/* 除外処理 */
 		if (!$feedConfigId) {
-			$this->setMessage(__d('baser', '無効なIDです'), true);
+			$this->BcMessage->setError(__d('baser', '無効なIDです'));
 			$this->redirect(['controller' => 'feed_configs', 'action' => 'index']);
 		}
 
@@ -113,11 +113,11 @@ class FeedDetailsController extends FeedAppController {
 			if ($this->FeedDetail->save()) {
 
 				$id = $this->FeedDetail->getLastInsertId();
-				$this->setMessage(sprintf(__d('baser', 'フィード「%s」を追加しました。'), $this->request->data['FeedDetail']['name']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'フィード「%s」を追加しました。'), $this->request->data['FeedDetail']['name']));
 				$this->redirect(['controller' => 'feed_configs', 'action' => 'edit', $feedConfigId, $id, '#' => 'headFeedDetail']);
 			} else {
 
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
 
@@ -136,7 +136,7 @@ class FeedDetailsController extends FeedAppController {
  */
 	public function admin_edit($feedConfigId, $id) {
 		if (!$id && empty($this->request->data)) {
-			$this->setMessage(__d('baser', '無効なIDです。'), true);
+			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(['controller' => 'feed_configs', 'action' => 'index']);
 		}
 
@@ -155,11 +155,11 @@ class FeedDetailsController extends FeedAppController {
 			if ($this->FeedDetail->save()) {
 
 				$this->requestAction(['controller' => 'feed_configs', 'action' => 'clear_cache'], ['pass' => [$this->request->data['FeedDetail']['feed_config_id'], $this->request->data['FeedDetail']['url']]]);
-				$this->setMessage(sprintf(__d('baser', 'フィード詳細「%s」を更新しました。'), $this->request->data['FeedDetail']['name']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'フィード詳細「%s」を更新しました。'), $this->request->data['FeedDetail']['name']));
 				$this->redirect(['controller' => 'feed_configs', 'action' => 'edit', $feedConfigId, $id, '#' => 'headFeedDetail']);
 			} else {
 
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
 
@@ -221,7 +221,7 @@ class FeedDetailsController extends FeedAppController {
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
-			$this->setMessage(__d('baser', '無効なIDです。'), true);
+			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(array('controller' => 'feed_configs', 'action' => 'index'));
 		}
 
@@ -230,9 +230,9 @@ class FeedDetailsController extends FeedAppController {
 
 		// 削除実行
 		if ($this->FeedDetail->delete($id)) {
-			$this->setMessage(sprintf(__d('baser', '%s を削除しました。'), $FeedDetail['FeedDetail']['name']), false, true);
+			$this->BcMessage->setSuccess(sprintf(__d('baser', '%s を削除しました。'), $FeedDetail['FeedDetail']['name']));
 		} else {
-			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
+			$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 		}
 
 		$this->redirect(array('controller' => 'feed_configs', 'action' => 'edit', $feedConfigId, $id, '#' => 'headFeedDetail'));

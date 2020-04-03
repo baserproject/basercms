@@ -70,8 +70,8 @@ class BcMessageComponent extends Component {
  * @param $message
  * @param bool $log DBログに保存するかどうか（初期値 : true）
  */
-	public function setSuccess($message, $log = true) {
-		$this->set($message, false, $log, true);
+	public function setSuccess($message, $log = true, $setFlash = true) {
+		$this->set($message, false, $log, $setFlash);
 	}
 
 /**
@@ -80,8 +80,8 @@ class BcMessageComponent extends Component {
  * @param $message
  * @param bool $log DBログに保存するかどうか（初期値 : false）
  */
-	public function setError($message, $log = false) {
-		$this->set($message, true, $log, true, 'alert-message');
+	public function setError($message, $log = false, $setFlash = true) {
+		$this->set($message, true, $log, $setFlash, 'alert-message');
 	}
 
 /**
@@ -90,8 +90,8 @@ class BcMessageComponent extends Component {
  * @param $message
  * @param bool $log DBログに保存するかどうか（初期値 : false）
  */
-	public function setWarning($message, $log = false) {
-		$this->set($message, true, $log, true, 'warning-message');
+	public function setWarning($message, $log = false, $setFlash = true) {
+		$this->set($message, true, $log, $setFlash, 'warning-message');
 	}
 
 /**
@@ -100,8 +100,8 @@ class BcMessageComponent extends Component {
  * @param $message
  * @param bool $log DBログに保存するかどうか（初期値 : false）
  */
-	public function setInfo($message, $log = false) {
-		$this->set($message, false, $log, true, 'info-message');
+	public function setInfo($message, $log = false, $setFlash = true) {
+		$this->set($message, false, $log, $setFlash, 'info-message');
 	}
 
 }

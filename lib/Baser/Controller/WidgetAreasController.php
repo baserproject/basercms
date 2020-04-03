@@ -103,10 +103,10 @@ class WidgetAreasController extends AppController {
 		if ($this->request->data) {
 			$this->WidgetArea->set($this->request->data);
 			if ($this->WidgetArea->save()) {
-				$this->setMessage(__d('baser', '新しいウィジェットエリアを保存しました。'));
+				$this->BcMessage->setInfo(__d('baser', '新しいウィジェットエリアを保存しました。'));
 				$this->redirect(['action' => 'edit', $this->WidgetArea->getInsertID()]);
 			} else {
-				$this->setMessage(__d('baser', '新しいウィジェットエリアの保存に失敗しました。'), true);
+				$this->BcMessage->setError(__d('baser', '新しいウィジェットエリアの保存に失敗しました。'));
 			}
 		}
 		$this->help = 'widget_areas_form';

@@ -77,7 +77,7 @@ class SiteConfigsController extends AppController {
 			$this->SiteConfig->set($this->request->data);
 
 			if (!$this->SiteConfig->validates()) {
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			} else {
 
 				$mode = 0;
@@ -131,7 +131,7 @@ class SiteConfigsController extends AppController {
 						'title'		=> $this->request->data['SiteConfig']['name']
 					]);
 
-					$this->setMessage(__d('baser', 'システム設定を保存しました。'));
+					$this->BcMessage->setInfo(__d('baser', 'システム設定を保存しました。'));
 
 					// 環境設定を保存
 					if ($writableInstall) {
@@ -199,7 +199,7 @@ class SiteConfigsController extends AppController {
 	public function admin_del_cache() {
 		$this->_checkReferer();
 		clearAllCache();
-		$this->setMessage(__d('baser', 'サーバーキャッシュを削除しました。'));
+		$this->BcMessage->setInfo(__d('baser', 'サーバーキャッシュを削除しました。'));
 		$this->redirect($this->referer());
 	}
 

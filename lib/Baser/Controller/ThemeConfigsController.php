@@ -71,7 +71,7 @@ class ThemeConfigsController extends AppController {
 
 			$this->ThemeConfig->set($this->request->data);
 			if (!$this->ThemeConfig->validates()) {
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			} else {
 				$this->ThemeConfig->updateColorConfig($this->request->data);
 				$data = $this->ThemeConfig->saveImage($this->request->data);
@@ -83,10 +83,10 @@ class ThemeConfigsController extends AppController {
 				}
 				if ($this->ThemeConfig->saveKeyValue($data)) {
 					clearViewCache();
-					$this->setMessage(__d('baser', 'システム設定を保存しました。'));
+					$this->BcMessage->setInfo(__d('baser', 'システム設定を保存しました。'));
 					$this->redirect(['action' => 'form']);
 				} else {
-					$this->setMessage(__d('baser', '保存中にエラーが発生しました。'), true);
+					$this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
 				}
 			}
 		}

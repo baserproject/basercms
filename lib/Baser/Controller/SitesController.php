@@ -87,10 +87,10 @@ class SitesController extends AppController {
 				if(!empty($data['Site']['theme'])) {
 					$this->BcManager->installThemesPlugins($data['Site']['theme']);
 				}
-				$this->setMessage(sprintf(__d('baser', 'サブサイト「%s」を追加しました。'), $this->request->data['Site']['name']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'サブサイト「%s」を追加しました。'), $this->request->data['Site']['name']));
 				$this->redirect(['controller' => 'sites', 'action' => 'edit', $this->Site->id]);
 			} else {
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
 		$this->pageTitle = __d('baser', 'サブサイト新規登録');
@@ -138,10 +138,10 @@ class SitesController extends AppController {
 				if(!empty($data['Site']['theme']) && $beforeSite['Site']['theme'] !== $data['Site']['theme']) {
 					$this->BcManager->installThemesPlugins($data['Site']['theme']);
 				}
-				$this->setMessage(sprintf(__d('baser', 'サブサイト「%s」を更新しました。'), $this->request->data['Site']['name']), false, true);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'サブサイト「%s」を更新しました。'), $this->request->data['Site']['name']));
 				$this->redirect(['controller' => 'sites', 'action' => 'edit', $id]);
 			} else {
-				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
+				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
 		$this->pageTitle = __d('baser', 'サブサイト編集');
@@ -211,7 +211,7 @@ class SitesController extends AppController {
 		$data['Site']['status'] = $status;
 		if ($this->Site->save($data)) {
 			$statusText = $statusTexts[$status];
-			$this->setMessage(sprintf(__d('baser', 'サブサイト「%s」 を、%s に設定しました。'), $data['Site']['name'], $statusText), false, true, false);
+			$this->BcMessage->setSuccess(sprintf(__d('baser', 'サブサイト「%s」 を、%s に設定しました。'), $data['Site']['name'], $statusText), true, false);
 			return true;
 		} else {
 			return false;
@@ -226,10 +226,10 @@ class SitesController extends AppController {
 			$this->notFound();
 		}
 		if($this->Site->delete($this->request->data['Site']['id'])) {
-			$this->setMessage(sprintf(__d('baser', 'サブサイト「%s」 を削除しました。'), $this->request->data['Site']['name']), false, true);
+			$this->BcMessage->setSuccess(sprintf(__d('baser', 'サブサイト「%s」 を削除しました。'), $this->request->data['Site']['name']));
 			$this->redirect(['action' => 'index']);
 		} else {
-			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
+			$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 			$this->redirect(['action' => 'edit', $this->request->data['Site']['id']]);
 		}
 	}

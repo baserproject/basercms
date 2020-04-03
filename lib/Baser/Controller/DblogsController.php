@@ -41,9 +41,9 @@ class DblogsController extends AppController {
 	public function admin_del() {
 		$this->_checkSubmitToken();
 		if ($this->Dblog->deleteAll('1 = 1')) {
-			$this->setMessage(__d('baser', '最近の動きのログを削除しました。'));
+			$this->BcMessage->setInfo(__d('baser', '最近の動きのログを削除しました。'));
 		} else {
-			$this->setMessage(__d('baser', '最近の動きのログ削除に失敗しました。'), true);
+			$this->BcMessage->setError(__d('baser', '最近の動きのログ削除に失敗しました。'));
 		}
 		$this->redirect(['controller' => 'dashboard', 'action' => 'index']);
 	}
