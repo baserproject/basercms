@@ -168,7 +168,16 @@ $config['BcApp'] = [
 	// 管理システムのデフォルトテーマ
 	'defaultAdminTheme' => 'admin-third',
 	// コンテンツの作成日を自動で更新する
-	'autoUpdateContentCreatedDate' => true
+	'autoUpdateContentCreatedDate' => true,
+	// オートプレフィックス除外設定（絶対URL）
+	// 「すべてのリンクをサブサイト用に変換する」指定時、全てのリンクに対してプレフィックスを備える箇所に除外指定できる
+	// 指定した絶対URLを記載しているリンクは変換しない
+	// 例: 'https://basercms.net/'と記載 → https://basercms.net/s/ は s が付かなくなる
+	'excludeAbsoluteUrlAddPrefix' => [],
+	// オートプレフィックス除外設定（ディレクトリ）
+	// 指定したディレクトリURLを記載しているリンクは変換しない
+	// 例: 'test/' と記載 → https://basercms.net/s/test/ は s が付かなくなる
+	'excludeListAddPrefix' => [],
 ];
 
 /**
