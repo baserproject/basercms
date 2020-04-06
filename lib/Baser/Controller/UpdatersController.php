@@ -187,7 +187,7 @@ class UpdatersController extends AppController {
 				$this->BcManager->deployAdminAssets();
 				$this->setUpdateLog(__d('baser', 'アップデートスクリプトの実行が完了しました。'));
 				$this->_writeUpdateLog();
-				$this->BcMessage->setInfo('アップデートスクリプトの実行が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。'));
+				$this->BcMessage->setInfo(__d('baser', 'アップデートスクリプトの実行が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。'));
 				$this->redirect(['action' => 'exec_script']);
 			} else {
 				$this->BcMessage->setError(__d('baser', 'アップデートスクリプトが見つかりません。'));
