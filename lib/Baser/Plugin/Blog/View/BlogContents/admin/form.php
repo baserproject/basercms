@@ -63,6 +63,7 @@ $this->BcBaser->js('Blog.admin/blog_contents/edit', false);
 					<ul>
 						<li><?php echo __d('baser', '公開サイトの一覧に表示する件数を指定します。')?></li>
 						<li><?php echo __d('baser', '半角数字で入力してください。')?></li>
+						<li><?php echo __d('baser', '100以下の数値で入力してください。')?></li>
 					</ul>
 				</div>
 			</td>

@@ -75,7 +75,9 @@ class BlogContent extends BlogAppModel {
 				['rule' => 'halfText', 'message' => __d('baser', 'コンテンツテンプレート名は半角で入力してください。'), 'allowEmpty' => false],
 				['rule' => ['maxLength', 20], 'message' => __d('baser', 'レイアウトテンプレート名は20文字以内で入力してください。')]],
 			'list_count' => [
-				['rule' => 'halfText', 'message' => __d('baser', '一覧表示件数は半角で入力してください。'), 'allowEmpty' => false]],
+				['rule' => 'halfText', 'message' => __d('baser', '一覧表示件数は半角で入力してください。'), 'allowEmpty' => false],
+				['rule' => ['range', 0, 101], 'message' => __d('baser', '一覧表示件数は100までの数値で入力してください。')]
+			],
 			'list_direction' => [
 				['rule' => ['notBlank'], 'message' => __d('baser', '一覧に表示する順番を指定してください。')]],
 			'eye_catch_size' => [
