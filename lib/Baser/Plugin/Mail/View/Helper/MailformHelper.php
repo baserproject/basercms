@@ -167,7 +167,7 @@ class MailformHelper extends BcFreezeHelper {
 				}
 				$attributes['delCheck'] = false;
 				if(!empty($attributes['maxFileSize'])) {
-					$out = '<input type="hidden" name="MAX_FILE_SIZE" value="' . $attributes['maxFileSize'] * 1000 * 1000 . '" />';
+					$out = '<input type="hidden" name="MAX_FILE_SIZE" value="' . $attributes['maxFileSize'] * 1024 * 1024 . '" />';
 				}
 				unset($attributes['maxFileSize']);
 				unset($attributes['fileExt']);
