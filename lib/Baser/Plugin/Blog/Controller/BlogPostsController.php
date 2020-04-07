@@ -392,13 +392,6 @@ class BlogPostsController extends BlogAppController {
 				$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
 			}
 
-			// アイキャッチ画像のサイズがupload_max_filesizeを超える場合sizeが0になる為、エラー判定用に1を設定
-			if (!empty($this->request->data['BlogPost']['eye_catch_'])) {
-				if ($this->request->data['BlogPost']['eye_catch']['size'] === 0 && $this->request->data['BlogPost']['eye_catch']['error'] !== UPLOAD_ERR_NO_FILE) {
-					$this->request->data['BlogPost']['eye_catch']['size'] = 1;
-				}
-			}
-
 			// データを保存
 			if ($this->BlogPost->saveAll($this->request->data)) {
 				clearViewCache();
