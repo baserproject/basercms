@@ -226,19 +226,9 @@ class MailMessage extends MailAppModel {
 							if (!empty($options['maxFileSize']) &&
 								(isset($this->data['MailMessage'][$mailField['field_name']]['error']) &&
 								$this->data['MailMessage'][$mailField['field_name']]['error'] !== UPLOAD_ERR_NO_FILE)) {
-								switch ($this->data['MailMessage'][$mailField['field_name']]['error']) {
-									case UPLOAD_ERR_OK:
-									case UPLOAD_ERR_INI_SIZE:
-									case UPLOAD_ERR_FORM_SIZE:
-										$errorMessage = __('ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。',
-											$options['maxFileSize']);
-										break;
-									default:
-										$errorMessage = __('何らかの原因でファイルをアップロードできませんでした。Webサイトの管理者に連絡してください。');
-								}
 								$this->validate[$mailField['field_name']]['fileCheck'] = [
-									'rule' => ['fileCheck', $options['maxFileSize'] * 1000 * 1000],
-									'message' => $errorMessage
+									'rule' => ['fileCheck', $this->convertSize($options['maxFileSize'], 'B', 'M')],
+									'message' => __d('baser', 'ファイルのアップロードに失敗しました。')
 								];
 								// 必須入力としている場合、必須エラーが優先され、ファイルサイズオーバーのエラーメッセージとならないため、バリデーションエラーの優先度を入れ替える
 								$this->validate[$mailField['field_name']] = array_reverse($this->validate[$mailField['field_name']]);

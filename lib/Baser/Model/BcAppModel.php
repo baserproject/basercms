@@ -801,9 +801,13 @@ class BcAppModel extends Model {
 		}
 		$file = $check[key($check)];
 		// input[type=file] 自体が送信されていない場合サイズ検証を終了
-		if ($file === null) {
+		if ($file === null || !is_array($file)) {
 			return true;
 		}
+
+		// upload_max_filesizeと$sizeを比較し小さい数値でファイルサイズチェック
+		$uploadMaxSize = $this->convertSize(ini_get('upload_max_filesize'));
+		$size = min([$size, $uploadMaxSize]);
 
 		$fileErrorCode = Hash::get($file, 'error');
 		if ($fileErrorCode) {
@@ -816,15 +820,15 @@ class BcAppModel extends Model {
 				case 1:
 					// UPLOAD_ERR_INI_SIZE
 					$this->log('CODE: ' . $fileErrorCode . ' アップロードされたファイルは、php.ini の upload_max_filesize ディレクティブの値を超えています。');
-					return false;
+					return __('ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', $this->convertSize($size, 'M'));
 				case 2:
 					// UPLOAD_ERR_FORM_SIZE
 					$this->log('CODE: ' . $fileErrorCode . ' アップロードされたファイルは、HTMLで指定された MAX_FILE_SIZE を超えています。');
-					return false;
+					return __('ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', $this->convertSize($size, 'M'));
 				case 3:
 					// UPLOAD_ERR_PARTIAL
 					$this->log('CODE: ' . $fileErrorCode . ' アップロードされたファイルが不完全です。');
-					return false;
+					return __('何らかの原因でファイルをアップロードできませんでした。Webサイトの管理者に連絡してください。');
 				// アップロードされなかった場合の検証は必須チェックを仕様すること
 				case 4:
 					// UPLOAD_ERR_NO_FILE
@@ -833,15 +837,15 @@ class BcAppModel extends Model {
 				case 6:
 					// UPLOAD_ERR_NO_TMP_DIR
 					$this->log('CODE: ' . $fileErrorCode . ' 一時書込み用のフォルダがありません。テンポラリフォルダの書込み権限を見直してください。');
-					return false;
+					return __('何らかの原因でファイルをアップロードできませんでした。Webサイトの管理者に連絡してください。');
 				case 7:
 					// UPLOAD_ERR_CANT_WRITE
 					$this->log('CODE: ' . $fileErrorCode . ' ディスクへの書き込みに失敗しました。');
-					return false;
+					return __('何らかの原因でファイルをアップロードできませんでした。Webサイトの管理者に連絡してください。');
 				case 8:
 					// UPLOAD_ERR_EXTENSION
 					$this->log('CODE: ' . $fileErrorCode . ' PHPの拡張モジュールがファイルのアップロードを中止しました。');
-					return false;
+					return __('何らかの原因でファイルをアップロードできませんでした。Webサイトの管理者に連絡してください。');
 				default:
 					break;
 			}
@@ -850,10 +854,10 @@ class BcAppModel extends Model {
 		if (!empty($file['name'])) {
 			// サイズが空の場合は、HTMLのMAX_FILE_SIZEの制限によりサイズオーバー
 			if (!$file['size']) {
-				return false;
+				return __('ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', $this->convertSize($size, 'M'));
 			}
 			if ($file['size'] > $size) {
-				return false;
+				return __('ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', $this->convertSize($size, 'M'));
 			}
 		}
 		return true;
@@ -1813,6 +1817,31 @@ class BcAppModel extends Model {
 			return false;
 		}
 		return true;
+	}
+
+/**
+ * サイズの単位を変換する
+ * @param  string $size   変換前のサイズ
+ * @param  string $outExt 変換後の単位
+ * @param  string $inExt  変換元の単位
+ * @return int            変換後のサイズ
+ */
+	public function convertSize($size, $outExt = 'B', $inExt = null) {
+		preg_match('/\A\d+(\.\d+)?/', $size, $num);
+		$sizeNum = (isset($num[0])) ? $num[0] : 0;
+
+		$extArray = ['B', 'K', 'M', 'G', 'T'];
+		$extRegex = implode('|', $extArray);
+		if (empty($inExt)) {
+			$inExt = (preg_match("/($extRegex)B?\z/i", $size, $ext)) ? strtoupper($ext[1]) : 'B';
+		}
+		$inExt  = (preg_match("/\A($extRegex)B?\z/i", $inExt,  $ext)) ? strtoupper($ext[1]) : 'B';
+		$outExt = (preg_match("/\A($extRegex)B?\z/i", $outExt, $ext)) ? strtoupper($ext[1]) : 'B';
+
+		$index = array_search($inExt, $extArray) - array_search($outExt, $extArray);
+
+		$outSize = pow(1024, $index) * $sizeNum;
+		return $outSize;
 	}
 
 }

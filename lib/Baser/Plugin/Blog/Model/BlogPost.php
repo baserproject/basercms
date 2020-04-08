@@ -147,11 +147,12 @@ class BlogPost extends BlogAppModel {
 			'user_id' => [
 				['rule' => ['notBlank'], 'message' => __d('baser', '投稿者を選択してください。')]],
 			'eye_catch' => [
+				['rule' => ['fileCheck', $this->convertSize(ini_get('upload_max_filesize'))], 'message' => __d('baser', 'ファイルのアップロードに失敗しました。')],
 				['rule' => ['fileExt', ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png']], 'allowEmpty' => true, 'message' => __d('baser', '許可されていないファイルです。')]
 			]
 		];
 	}
-	
+
 /**
  * アップロードビヘイビアの設定
  *

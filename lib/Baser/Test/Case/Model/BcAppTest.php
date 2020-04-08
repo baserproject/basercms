@@ -540,7 +540,7 @@ class BcAppTest extends BaserTestCase {
 				"error" => $errorCode,
 			]
 		];
-		$size = 1000;
+		$size = 1048576;
 
 		$_POST = ['fileCheck require $_POST' => true];
 		CakeLog::disable('stderr');
@@ -551,11 +551,11 @@ class BcAppTest extends BaserTestCase {
 
 	public function fileCheckDataProvider() {
 		return [
-			["test.jpg", 1000, 0, true],
-			["test.jpg", 1001, 0, false], // filecheck制限オーバー
-			["", 1000, 0, true], // ファイル名なし
-			[null, null, 1, false], // upload_max_filesizeオーバー
-			["test.jpg", null, 2, false], // HTMLのMAX_FILE_SIZEオーバー
+			["test.jpg", 1048576, 0, true],
+			["test.jpg", 1048577, 0, 'ファイルサイズがオーバーしています。 1 MB以内のファイルをご利用ください。'], // filecheck制限オーバー
+			["", 1048576, 0, true], // ファイル名なし
+			[null, null, 1, 'ファイルサイズがオーバーしています。 1 MB以内のファイルをご利用ください。'], // upload_max_filesizeオーバー
+			["test.jpg", null, 2, 'ファイルサイズがオーバーしています。 1 MB以内のファイルをご利用ください。'], // HTMLのMAX_FILE_SIZEオーバー
 			[null, null, 4, true], // ファイルアップロードなし
 		];
 	}
