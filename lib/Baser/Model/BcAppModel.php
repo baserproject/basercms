@@ -795,7 +795,8 @@ class BcAppModel extends Model {
 	public function fileCheck($check, $size) {
 		// post_max_size オーバーチェック
 		// POSTを前提の検証としているため全ての受信データを検証
-		if (empty($_POST)) {
+		// データの更新時は必ず$_POSTにデータが入っていることを前提とする
+		if (!isConsole() && empty($_POST)) {
 			$this->log('アップロードされたファイルは、PHPの設定 post_max_size ディレクティブの値を超えています。');
 			return false;
 		}
