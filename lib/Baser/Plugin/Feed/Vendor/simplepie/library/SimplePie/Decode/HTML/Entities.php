@@ -5,7 +5,7 @@
  * A PHP-Based RSS and Atom Feed Framework.
  * Takes the hard work out of managing a complete RSS/Atom solution.
  *
- * Copyright (c) 2004-2012, Ryan Parman, Geoffrey Sneddon, Ryan McCue, and contributors
+ * Copyright (c) 2004-2016, Ryan Parman, Geoffrey Sneddon, Ryan McCue, and contributors
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are
@@ -33,8 +33,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package SimplePie
- * @version 1.3.1
- * @copyright 2004-2012 Ryan Parman, Geoffrey Sneddon, Ryan McCue
+ * @copyright 2004-2016 Ryan Parman, Geoffrey Sneddon, Ryan McCue
  * @author Ryan Parman
  * @author Geoffrey Sneddon
  * @author Ryan McCue
@@ -56,28 +55,32 @@ class SimplePie_Decode_HTML_Entities
 	/**
 	 * Data to be parsed
 	 *
-		 * @var string
+	 * @access private
+	 * @var string
 	 */
 	var $data = '';
 
 	/**
 	 * Currently consumed bytes
 	 *
-		 * @var string
+	 * @access private
+	 * @var string
 	 */
 	var $consumed = '';
 
 	/**
 	 * Position of the current byte being parsed
 	 *
-		 * @var int
+	 * @access private
+	 * @var int
 	 */
 	var $position = 0;
 
 	/**
 	 * Create an instance of the class with the input data
 	 *
-		 * @param string $data Input data
+	 * @access public
+	 * @param string $data Input data
 	 */
 	public function __construct($data)
 	{
@@ -87,7 +90,8 @@ class SimplePie_Decode_HTML_Entities
 	/**
 	 * Parse the input data
 	 *
-		 * @return string Output data
+	 * @access public
+	 * @return string Output data
 	 */
 	public function parse()
 	{
@@ -103,7 +107,8 @@ class SimplePie_Decode_HTML_Entities
 	/**
 	 * Consume the next byte
 	 *
-		 * @return mixed The next byte, or false, if there is no more data
+	 * @access private
+	 * @return mixed The next byte, or false, if there is no more data
 	 */
 	public function consume()
 	{
@@ -121,7 +126,8 @@ class SimplePie_Decode_HTML_Entities
 	/**
 	 * Consume a range of characters
 	 *
-		 * @param string $chars Characters to consume
+	 * @access private
+	 * @param string $chars Characters to consume
 	 * @return mixed A series of characters that match the range, or false
 	 */
 	public function consume_range($chars)
@@ -142,7 +148,8 @@ class SimplePie_Decode_HTML_Entities
 	/**
 	 * Unconsume one byte
 	 *
-		 */
+	 * @access private
+	 */
 	public function unconsume()
 	{
 		$this->consumed = substr($this->consumed, 0, -1);
@@ -152,14 +159,14 @@ class SimplePie_Decode_HTML_Entities
 	/**
 	 * Decode an entity
 	 *
-		 */
+	 * @access private
+	 */
 	public function entity()
 	{
 		switch ($this->consume())
 		{
 			case "\x09":
 			case "\x0A":
-			case "\x0B":
 			case "\x0B":
 			case "\x0C":
 			case "\x20":

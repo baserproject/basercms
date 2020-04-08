@@ -5,7 +5,7 @@
  * A PHP-Based RSS and Atom Feed Framework.
  * Takes the hard work out of managing a complete RSS/Atom solution.
  *
- * Copyright (c) 2004-2012, Ryan Parman, Geoffrey Sneddon, Ryan McCue, and contributors
+ * Copyright (c) 2004-2016, Ryan Parman, Geoffrey Sneddon, Ryan McCue, and contributors
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are
@@ -33,8 +33,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package SimplePie
- * @version 1.3.1
- * @copyright 2004-2012 Ryan Parman, Geoffrey Sneddon, Ryan McCue
+ * @copyright 2004-2016 Ryan Parman, Geoffrey Sneddon, Ryan McCue
  * @author Ryan Parman
  * @author Geoffrey Sneddon
  * @author Ryan McCue
@@ -55,7 +54,8 @@ class SimplePie_gzdecode
 	/**
 	 * Compressed data
 	 *
-		 * @var string
+	 * @access private
+	 * @var string
 	 * @see gzdecode::$data
 	 */
 	var $compressed_data;
@@ -63,35 +63,40 @@ class SimplePie_gzdecode
 	/**
 	 * Size of compressed data
 	 *
-		 * @var int
+	 * @access private
+	 * @var int
 	 */
 	var $compressed_size;
 
 	/**
 	 * Minimum size of a valid gzip string
 	 *
-		 * @var int
+	 * @access private
+	 * @var int
 	 */
 	var $min_compressed_size = 18;
 
 	/**
 	 * Current position of pointer
 	 *
-		 * @var int
+	 * @access private
+	 * @var int
 	 */
 	var $position = 0;
 
 	/**
 	 * Flags (FLG)
 	 *
-		 * @var int
+	 * @access private
+	 * @var int
 	 */
 	var $flags;
 
 	/**
 	 * Uncompressed data
 	 *
-		 * @see gzdecode::$compressed_data
+	 * @access public
+	 * @see gzdecode::$compressed_data
 	 * @var string
 	 */
 	var $data;
@@ -99,28 +104,32 @@ class SimplePie_gzdecode
 	/**
 	 * Modified time
 	 *
-		 * @var int
+	 * @access public
+	 * @var int
 	 */
 	var $MTIME;
 
 	/**
 	 * Extra Flags
 	 *
-		 * @var int
+	 * @access public
+	 * @var int
 	 */
 	var $XFL;
 
 	/**
 	 * Operating System
 	 *
-		 * @var int
+	 * @access public
+	 * @var int
 	 */
 	var $OS;
 
 	/**
 	 * Subfield ID 1
 	 *
-		 * @see gzdecode::$extra_field
+	 * @access public
+	 * @see gzdecode::$extra_field
 	 * @see gzdecode::$SI2
 	 * @var string
 	 */
@@ -129,7 +138,8 @@ class SimplePie_gzdecode
 	/**
 	 * Subfield ID 2
 	 *
-		 * @see gzdecode::$extra_field
+	 * @access public
+	 * @see gzdecode::$extra_field
 	 * @see gzdecode::$SI1
 	 * @var string
 	 */
@@ -138,7 +148,8 @@ class SimplePie_gzdecode
 	/**
 	 * Extra field content
 	 *
-		 * @see gzdecode::$SI1
+	 * @access public
+	 * @see gzdecode::$SI1
 	 * @see gzdecode::$SI2
 	 * @var string
 	 */
@@ -147,14 +158,16 @@ class SimplePie_gzdecode
 	/**
 	 * Original filename
 	 *
-		 * @var string
+	 * @access public
+	 * @var string
 	 */
 	var $filename;
 
 	/**
 	 * Human readable comment
 	 *
-		 * @var string
+	 * @access public
+	 * @var string
 	 */
 	var $comment;
 

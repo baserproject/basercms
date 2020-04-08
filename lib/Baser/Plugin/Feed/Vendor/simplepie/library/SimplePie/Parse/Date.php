@@ -5,7 +5,7 @@
  * A PHP-Based RSS and Atom Feed Framework.
  * Takes the hard work out of managing a complete RSS/Atom solution.
  *
- * Copyright (c) 2004-2012, Ryan Parman, Geoffrey Sneddon, Ryan McCue, and contributors
+ * Copyright (c) 2004-2016, Ryan Parman, Geoffrey Sneddon, Ryan McCue, and contributors
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are
@@ -33,8 +33,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package SimplePie
- * @version 1.3.1
- * @copyright 2004-2012 Ryan Parman, Geoffrey Sneddon, Ryan McCue
+ * @copyright 2004-2016 Ryan Parman, Geoffrey Sneddon, Ryan McCue
  * @author Ryan Parman
  * @author Geoffrey Sneddon
  * @author Ryan McCue
@@ -54,14 +53,16 @@ class SimplePie_Parse_Date
 	/**
 	 * Input data
 	 *
-		 * @var string
+	 * @access protected
+	 * @var string
 	 */
 	var $date;
 
 	/**
 	 * List of days, calendar day name => ordinal day number in the week
 	 *
-		 * @var array
+	 * @access protected
+	 * @var array
 	 */
 	var $day = array(
 		// English
@@ -149,7 +150,8 @@ class SimplePie_Parse_Date
 	/**
 	 * List of months, calendar month name => calendar month number
 	 *
-		 * @var array
+	 * @access protected
+	 * @var array
 	 */
 	var $month = array(
 		// English
@@ -170,7 +172,7 @@ class SimplePie_Parse_Date
 		'aug' => 8,
 		'august' => 8,
 		'sep' => 9,
-		'september' => 8,
+		'september' => 9,
 		'oct' => 10,
 		'october' => 10,
 		'nov' => 11,
@@ -293,7 +295,8 @@ class SimplePie_Parse_Date
 	/**
 	 * List of timezones, abbreviation => offset from UTC
 	 *
-		 * @var array
+	 * @access protected
+	 * @var array
 	 */
 	var $timezone = array(
 		'ACDT' => 37800,
@@ -327,6 +330,7 @@ class SimplePie_Parse_Date
 		'CCT' => 23400,
 		'CDT' => -18000,
 		'CEDT' => 7200,
+		'CEST' => 7200,
 		'CET' => 3600,
 		'CGST' => -7200,
 		'CGT' => -10800,
@@ -500,28 +504,32 @@ class SimplePie_Parse_Date
 	/**
 	 * Cached PCRE for SimplePie_Parse_Date::$day
 	 *
-		 * @var string
+	 * @access protected
+	 * @var string
 	 */
 	var $day_pcre;
 
 	/**
 	 * Cached PCRE for SimplePie_Parse_Date::$month
 	 *
-		 * @var string
+	 * @access protected
+	 * @var string
 	 */
 	var $month_pcre;
 
 	/**
 	 * Array of user-added callback methods
 	 *
-		 * @var array
+	 * @access private
+	 * @var array
 	 */
 	var $built_in = array();
 
 	/**
 	 * Array of user-added callback methods
 	 *
-		 * @var array
+	 * @access private
+	 * @var array
 	 */
 	var $user = array();
 
@@ -529,7 +537,8 @@ class SimplePie_Parse_Date
 	 * Create new SimplePie_Parse_Date object, and set self::day_pcre,
 	 * self::month_pcre, and self::built_in
 	 *
-		 */
+	 * @access private
+	 */
 	public function __construct()
 	{
 		$this->day_pcre = '(' . implode(array_keys($this->day), '|') . ')';
@@ -558,7 +567,8 @@ class SimplePie_Parse_Date
 	/**
 	 * Get the object
 	 *
-		 */
+	 * @access public
+	 */
 	public static function get()
 	{
 		static $object;
@@ -573,7 +583,8 @@ class SimplePie_Parse_Date
 	 * Parse a date
 	 *
 	 * @final
-		 * @param string $date Date to parse
+	 * @access public
+	 * @param string $date Date to parse
 	 * @return int Timestamp corresponding to date string, or false on failure
 	 */
 	public function parse($date)
@@ -601,7 +612,8 @@ class SimplePie_Parse_Date
 	 * Add a callback method to parse a date
 	 *
 	 * @final
-		 * @param callback $callback
+	 * @access public
+	 * @param callback $callback
 	 */
 	public function add_callback($callback)
 	{
@@ -618,9 +630,10 @@ class SimplePie_Parse_Date
 	/**
 	 * Parse a superset of W3C-DTF (allows hyphens and colons to be omitted, as
 	 * well as allowing any of upper or lower case "T", horizontal tabs, or
-	 * spaces to be used as the time seperator (including more than one))
+	 * spaces to be used as the time separator (including more than one))
 	 *
-		 * @return int Timestamp
+	 * @access protected
+	 * @return int Timestamp
 	 */
 	public function date_w3cdtf($date)
 	{
@@ -677,7 +690,7 @@ class SimplePie_Parse_Date
 			}
 
 			// Convert the number of seconds to an integer, taking decimals into account
-			$second = round($match[6] + $match[7] / pow(10, strlen($match[7])));
+			$second = round((int)$match[6] + (int)$match[7] / pow(10, strlen($match[7])));
 
 			return gmmktime($match[4], $match[5], $second, $match[2], $match[3], $match[1]) - $timezone;
 		}
@@ -690,7 +703,8 @@ class SimplePie_Parse_Date
 	/**
 	 * Remove RFC822 comments
 	 *
-		 * @param string $data Data to strip comments from
+	 * @access protected
+	 * @param string $data Data to strip comments from
 	 * @return string Comment stripped string
 	 */
 	public function remove_rfc2822_comments($string)
@@ -706,7 +720,7 @@ class SimplePie_Parse_Date
 		{
 			$output .= substr($string, $position, $pos - $position);
 			$position = $pos + 1;
-			if ($string[$pos - 1] !== '\\')
+			if ($pos === 0 || $string[$pos - 1] !== '\\')
 			{
 				$depth++;
 				while ($depth && $position < $length)
@@ -750,7 +764,8 @@ class SimplePie_Parse_Date
 	/**
 	 * Parse RFC2822's date format
 	 *
-		 * @return int Timestamp
+	 * @access protected
+	 * @return int Timestamp
 	 */
 	public function date_rfc2822($date)
 	{
@@ -842,7 +857,8 @@ class SimplePie_Parse_Date
 	/**
 	 * Parse RFC850's date format
 	 *
-		 * @return int Timestamp
+	 * @access protected
+	 * @return int Timestamp
 	 */
 	public function date_rfc850($date)
 	{
@@ -906,7 +922,8 @@ class SimplePie_Parse_Date
 	/**
 	 * Parse C99's asctime()'s date format
 	 *
-		 * @return int Timestamp
+	 * @access protected
+	 * @return int Timestamp
 	 */
 	public function date_asctime($date)
 	{
@@ -947,7 +964,8 @@ class SimplePie_Parse_Date
 	/**
 	 * Parse dates using strtotime()
 	 *
-		 * @return int Timestamp
+	 * @access protected
+	 * @return int Timestamp
 	 */
 	public function date_strtotime($date)
 	{
