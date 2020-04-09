@@ -122,6 +122,9 @@ class PagesController extends AppController {
 		if (empty($this->request->data)) {
 			$this->Page->recursive = 2;
 			$this->request->data = $this->Page->read(null, $id);
+			if ($this->Page->isOverPostSize()) {
+				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+			}
 			if(!$this->request->data) {
 				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);

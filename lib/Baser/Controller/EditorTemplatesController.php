@@ -86,6 +86,10 @@ class EditorTemplatesController extends AppController {
 			} else {
 				$this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
 			}
+		} else {
+			if ($this->EditorTemplate->isOverPostSize()) {
+				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+			}
 		}
 		$this->render('form');
 	}
@@ -101,6 +105,9 @@ class EditorTemplatesController extends AppController {
 
 		if (!$this->request->data) {
 			$this->request->data = $this->EditorTemplate->read(null, $id);
+			if ($this->EditorTemplate->isOverPostSize()) {
+				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+			}
 		} else {
 			$this->EditorTemplate->set($this->request->data);
 			$result = $this->EditorTemplate->save();

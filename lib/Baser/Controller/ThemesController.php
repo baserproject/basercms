@@ -88,6 +88,10 @@ class ThemesController extends AppController {
 					$this->BcMessage->setError($msg);
 				}
 			}
+		} else {
+			if ($this->Theme->isOverPostSize()) {
+				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+			}
 		}
 	}
 

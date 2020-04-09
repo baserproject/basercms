@@ -562,6 +562,19 @@ msgstr ""
 msgid "無効な処理です。"
 msgstr "Invalid process."
 
+#: Controller/EditorTemplatesControlle.php:91;109
+#: Controller/PagesController.php:126
+#: Controller/PluginsController.php:81
+#: Controller/ThemeConfigsController.php:71
+#: Controller/ThemeFilesController.php:569
+#: Controller/ThemesController.php:93
+#: Controller/ToolController.php:100;339
+#: Plugin/Blog/Controller/BlogContentsController.php:138
+#: Plugin/Blog/Controller/BlogPostsController.php:290;382
+#: Plugin/Mail/Controller/MailContentsController.php:152
+msgid "送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。"
+msgstr "Exceeding sendable data size. Please send data size within %s."
+
 #: Controller/ContentFoldersController.php:57
 msgid "フォルダ「%s」を追加しました。"
 msgstr "Added Folder \"%s\"."

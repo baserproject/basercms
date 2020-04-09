@@ -1845,4 +1845,18 @@ class BcAppModel extends Model {
 		return $outSize;
 	}
 
+/**
+ * 送信されたPOSTがpost_max_sizeを超えているかチェックする
+ * @return boolean
+ */
+	public function isOverPostSize() {
+		if (empty($_POST) &&
+			env('REQUEST_METHOD') === 'POST' &&
+			env('CONTENT_LENGTH') > $this->convertSize(ini_get('post_max_size'))) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

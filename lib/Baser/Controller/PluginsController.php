@@ -77,6 +77,9 @@ class PluginsController extends AppController {
 
 		//データなし
 		if (empty($this->request->data)) {
+			if ($this->Plugin->isOverPostSize()) {
+				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+			}
 			return;
 		}
 

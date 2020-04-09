@@ -94,10 +94,14 @@ class ToolsController extends AppController {
 				break;
 			case 'restore':
 				set_time_limit(0);
-				if (!$this->request->data) {
-					$this->notFound();
-				}
 				$messages = [];
+				if (!$this->request->data) {
+					if ($this->Tool->isOverPostSize()) {
+						$messages[] = __d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size'));
+					} else {
+						$this->notFound();
+					}
+				}
 				if ($this->_restoreDb($this->request->data)) {
 					$messages[] = __d('baser', 'データの復元が完了しました。');
 					$error = false;
@@ -331,6 +335,9 @@ class ToolsController extends AppController {
 	public function admin_load_schema() {
 		if (!$this->request->data) {
 			$this->request->data['Tool']['schema_type'] = 'create';
+			if ($this->Tool->isOverPostSize()) {
+				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+			}
 		} else {
 			if (is_uploaded_file($this->request->data['Tool']['schema_file']['tmp_name'])) {
 				$path = TMP . 'schemas' . DS;

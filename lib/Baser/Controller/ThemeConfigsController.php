@@ -67,6 +67,9 @@ class ThemeConfigsController extends AppController {
 
 		if (empty($this->request->data)) {
 			$this->request->data = ['ThemeConfig' => $this->ThemeConfig->findExpanded()];
+			if ($this->ThemeConfig->isOverPostSize()) {
+				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+			}
 		} else {
 
 			$this->ThemeConfig->set($this->request->data);

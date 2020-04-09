@@ -134,6 +134,9 @@ class BlogContentsController extends BlogAppController {
 
 		if (empty($this->request->data)) {
 			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->BlogContent->read(null, $id));
+			if ($this->BlogContent->isOverPostSize()) {
+				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+			}
 			if(!$this->request->data) {
 				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
