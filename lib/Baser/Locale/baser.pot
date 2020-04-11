@@ -541,6 +541,9 @@ msgstr ""
 msgid "無効な処理です。"
 msgstr ""
 
+#: Controller/ContentFoldersController.php:75
+#: Controller/ContentLinksController.php:68
+#: Controller/ContentsController.php:357
 #: Controller/EditorTemplatesControlle.php:91;109
 #: Controller/PagesController.php:126
 #: Controller/PluginsController.php:81

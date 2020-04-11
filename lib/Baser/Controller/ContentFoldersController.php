@@ -71,6 +71,9 @@ class ContentFoldersController extends AppController {
 		$this->pageTitle = __d('baser', 'フォルダ編集');
 		if(!$this->request->data) {
 			$this->request->data = $this->ContentFolder->read(null, $entityId);
+			if ($this->ContentFolder->isOverPostSize()) {
+				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+			}
 			if(!$this->request->data) {
 				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
