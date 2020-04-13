@@ -196,7 +196,7 @@ class BcUploadBehavior extends ModelBehavior {
 					}
 				} elseif (!empty($Model->data[$Model->name][$field['name'] . '_'])) {
 					// 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
-					if ($data[$field['name']]['error'] == UPLOAD_ERR_NO_FILE) {
+					if (isset($data[$field['name']]['error']) && $data[$field['name']]['error'] == UPLOAD_ERR_NO_FILE) {
 						$Model->data[$Model->name][$field['name']] = $Model->data[$Model->name][$field['name'] . '_'];
 						unset($Model->data[$Model->name][$field['name'] . '_']);
 					}
