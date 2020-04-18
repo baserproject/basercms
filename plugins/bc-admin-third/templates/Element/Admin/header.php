@@ -14,22 +14,5 @@ use Cake\Core\Configure;
 
 
 <header id="Header" class="bca-header">
-<!--	--><?php //$this->BcBaser->element('admin/toolbar') ?>
-	<?php if ($this->name == 'Installations' || ('/' . $this->request->getPath() == Configure::read('BcAuthPrefix.admin.loginAction')) || (@$this->request->getParam('prefix') == 'admin' && $this->BcAdmin->isAdminGlobalmenuUsed())): ?>
-		<div id="HeaderInner" hidden>
-
-			<?php if ($this->name != 'Installations' && ('/' . $this->request->url != Configure::read('BcAuthPrefix.admin.loginAction'))): ?>
-				<div id="GlobalMenu" hidden></div>
-			<?php endif ?>
-
-			<div id="Logo">
-				<?php if (!empty($user)): ?>
-					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/logo_header.png', ['width' => 153, 'height' => 30, 'alt' => 'baserCMS']), ['plugin' => null, 'controller' => 'dashboard', 'action' => 'index']) ?>
-				<?php else: ?>
-					<?php $this->BcBaser->img('admin/logo_header.png', ['width' => 153, 'height' => 30, 'alt' => 'baserCMS']) ?>
-				<?php endif ?>
-			</div>
-
-		</div>
-	<?php endif ?>
+	<?php $this->BcBaser->element('Admin/toolbar') ?>
 </header>

@@ -20,8 +20,8 @@ use BaserCore\View\Helper\BcHtmlHelper;
  */
 class BcBaserHelper extends Helper
 {
-
 	public $helpers = ['Html'];
+	// TODO 取り急ぎ
 	public $siteConfig = [
 		'formal_name' => 'baserCMS',
 		'admin_side_banner' => true
@@ -69,6 +69,16 @@ class BcBaserHelper extends Helper
 
 	public function url() {
 
+	}
+    
+    /**
+     * ユーザー名を取得する
+     * @todo 実装要
+     * @param $user
+     * @return string
+     */
+	public function getUserName($user) {
+	    return 'basercms';
 	}
 
 }

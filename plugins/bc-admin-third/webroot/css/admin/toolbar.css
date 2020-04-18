@@ -1,0 +1,147 @@
+@charset "UTF-8";
+body {
+  margin-top: 40px !important; }
+
+.bca-toolbar {
+  line-height: 1.15 !important;
+  font-family: Arial, Geneva, sans-serif, "メイリオ", Verdana, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック" !important;
+  font-size: 12px !important;
+  height: 40px !important;
+  position: fixed !important;
+  z-index: 150 !important;
+  width: 100% !important;
+  top: 0 !important;
+  left: 0 !important; }
+  .bca-toolbar,
+  .bca-toolbar * {
+    box-sizing: border-box !important; }
+  .bca-toolbar__body {
+    height: 40px !important;
+    background-color: #2a332c !important;
+    display: flex !important;
+    justify-content: space-between !important; }
+  .bca-toolbar .bca-toolbar__logo {
+    flex: 0 1 auto !important;
+    display: flex !important;
+    padding: 0 0 0 12px !important; }
+    .bca-toolbar .bca-toolbar__logo-link {
+      display: flex !important;
+      justify-content: flex-start !important;
+      align-items: center !important;
+      color: currentColor !important;
+      text-decoration: none !important; }
+    .bca-toolbar .bca-toolbar__logo-symbol {
+      padding: 4px 7px 4px 4px !important;
+      margin-right: 8px !important;
+      border-right: 1px solid #ccc !important;
+      box-sizing: content-box !important;
+      width: 24px;
+      height: 21px; }
+    .bca-toolbar .bca-toolbar__logo-text {
+      display: inline !important;
+      padding: 0 !important;
+      color: #fff !important;
+      vertical-align: top !important; }
+  .bca-toolbar__tools {
+    flex: 1 0 auto !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: center !important; }
+    .bca-toolbar__tools-button a {
+      margin: 8px 1em !important;
+      padding: 3px 8px 3px 5px !important;
+      background: #fff !important;
+      border-radius: 22px !important;
+      color: #333;
+      text-decoration: none !important; }
+      .bca-toolbar__tools-button a::before {
+        margin: 0 0.4em 0 0.2em !important;
+        content: "";
+        display: inline-block !important;
+        color: #F00 !important;
+        background-repeat: no-repeat; }
+      .bca-toolbar__tools-button a:hover {
+        background: #ccc !important;
+        color: #333 !important; }
+    .bca-toolbar__tools-button-edit a::before {
+      background-image: url(../../img/admin/icon/pencil-alt-solid.svg) !important;
+      width: 10px !important;
+      height: 13px !important;
+      background-position: 0 3px; }
+    .bca-toolbar__tools-button-publish a::before {
+      background-image: url(../../img/admin/icon/eye-regular.svg) !important;
+      width: 13px !important;
+      height: 13px !important;
+      background-position: 0 2px; }
+    .bca-toolbar__tools-mode span {
+      margin: 8px !important;
+      padding: 3px 8px 3px 5px !important;
+      border-radius: 22px !important;
+      background-color: #f20014 !important;
+      font-weight: bold !important;
+      color: #fff !important; }
+  .bca-toolbar__users .bc-btn {
+    margin-left: 5px; }
+  .bca-toolbar__users > ul {
+    display: flex !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100% !important; }
+    .bca-toolbar__users > ul > li {
+      list-style: none !important;
+      display: block !important;
+      height: 100% !important; }
+      .bca-toolbar__users > ul > li > a {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        height: 100% !important;
+        position: relative !important;
+        z-index: 1;
+        box-shadow: 0 0 0 #ccc !important;
+        border: 0 !important;
+        width: 100% !important;
+        padding: 2px 20px !important;
+        color: #fff !important;
+        text-decoration: none !important; }
+        .bca-toolbar__users > ul > li > a:hover, .bca-toolbar__users > ul > li > a:focus {
+          background-color: #444 !important; }
+      .bca-toolbar__users > ul > li > ul {
+        display: none !important; }
+    .bca-toolbar__users > ul > li.active {
+      position: relative !important; }
+      .bca-toolbar__users > ul > li.active > a {
+        color: #ccc !important;
+        background-color: #fff !important;
+        border-bottom: 0 !important; }
+      .bca-toolbar__users > ul > li.active > ul {
+        display: block !important;
+        margin: -1px 0 0 !important;
+        padding: 0;
+        position: absolute !important;
+        right: 0 !important;
+        border: 1px solid #ccc !important;
+        box-shadow: 0 1px 3px #ccc !important;
+        background-color: #fff !important; }
+        .bca-toolbar__users > ul > li.active > ul li {
+          list-style: none !important;
+          display: block !important;
+          white-space: nowrap !important; }
+        .bca-toolbar__users > ul > li.active > ul a {
+          box-shadow: 0 0 0 #ccc !important;
+          color: #535a62 !important;
+          border: 0 !important;
+          width: 100% !important;
+          display: flex !important;
+          justify-content: flex-start !important;
+          align-items: center !important;
+          padding: 2px 20px !important;
+          text-decoration: none !important;
+          height: 40px !important;
+          position: relative !important;
+          z-index: 1 !important; }
+          .bca-toolbar__users > ul > li.active > ul a:hover {
+            background-color: #6fa83d !important;
+            color: #fff !important; }
+
+/*# sourceMappingURL=map/toolbar.css.map */

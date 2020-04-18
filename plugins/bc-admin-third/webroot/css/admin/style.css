@@ -395,7 +395,7 @@ template {
  * Font Awesome Free 5.8.1 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  */
-.fa, .bca-icon--dashboard::before, .bca-nav__sub[data-content-type="dashboard"] .bca-nav__sub-title > a::before, .bca-icon--contents::before, .bca-nav__sub[data-content-type="contents"] .bca-nav__sub-title > a::before, .bca-icon--system::before, .bca-nav__sub[data-content-type="system"] .bca-nav__sub-title > a::before, .bca-nav__system-title button::before, .bca-nav__system-list-item[data-system-type] .bca-nav__system-item-list-title > a::before, .bca-icon--siteconfigs::before, .bca-nav__system-list-item[data-system-type="siteconfigs"] .bca-nav__system-list-item-title > a::before, .bca-icon--users::before, .bca-nav__system-list-item[data-system-type="users"] .bca-nav__system-list-item-title > a::before, .bca-icon--sites::before, .bca-nav__system-list-item[data-system-type="sites"] .bca-nav__system-list-item-title > a::before, .bca-icon--theme::before, .bca-nav__system-list-item[data-system-type="theme"] .bca-nav__system-list-item-title > a::before, .bca-icon--plugin::before, .bca-nav__system-list-item[data-system-type="plugin"] .bca-nav__system-list-item-title > a::before, .bca-icon--tools::before, .bca-nav__system-list-item[data-system-type="tools"] .bca-nav__system-list-item-title > a::before, .bca-icon--publish::before, .bca-btn-icon[data-bca-btn-type=publish]::before, .bca-btn-icon-text[data-bca-btn-type=publish]::before, .bca-btn[data-bca-btn-type=publish]::before, .bca-icon--unpublish::before, .bca-btn-icon[data-bca-btn-type=unpublish]::before, .bca-btn-icon-text[data-bca-btn-type=unpublish]::before, .bca-btn[data-bca-btn-type=unpublish]::before, .bca-icon--preview::before, .bca-btn-icon[data-bca-btn-type=preview]::before, .bca-btn-icon-text[data-bca-btn-type=preview]::before, .context-menu-icon-edit::before, .bca-icon--edit::before, .bca-toolbar__tools-edit a::before, .bca-btn-icon[data-bca-btn-type=edit]::before, .bca-btn-icon-text[data-bca-btn-type=edit]::before, .bca-btn[data-bca-btn-type=edit]::before, .bca-icon--copy::before, .bca-btn-icon[data-bca-btn-type=copy]::before, .bca-btn-icon-text[data-bca-btn-type=copy]::before, .bca-btn[data-bca-btn-type=copy]::before, .context-menu-icon-delete::before, .bca-icon--delete::before, .bca-btn-icon[data-bca-btn-type=delete]::before, .bca-btn-icon-text[data-bca-btn-type=delete]::before, .bca-btn[data-bca-btn-type=delete]::before, .bca-icon--rename::before, .bca-icon--link::before, .bca-icon--alias::before, .bca-icon--th-list::before, .bca-btn-icon[data-bca-btn-type=th-list]::before, .bca-btn-icon-text[data-bca-btn-type=th-list]::before, .bca-icon--back-to-list::before, .bca-btn-icon[data-bca-btn-type=back-to-list]::before, .bca-btn-icon-text[data-bca-btn-type=back-to-list]::before, .bca-btn[data-bca-btn-type=back-to-list]::before, .bca-icon--favorite::before, .bca-nav-favorite-title-button::before, .bca-btn-icon[data-bca-btn-type=favorite]::before, .bca-btn-icon-text[data-bca-btn-type=favorite]::before, .bca-btn[data-bca-btn-type=favorite]::before, .bca-icon--menuitem::before, .bca-btn-icon[data-bca-btn-type=menuitem]::before, .bca-btn-icon-text[data-bca-btn-type=menuitem]::before, .bca-btn[data-bca-btn-type=menuitem]::before, .bca-icon--add::before, .bca-nav-favorite-functions-add::before, .bca-btn-icon[data-bca-btn-type=add]::before, .bca-btn-icon-text[data-bca-btn-type=add]::before, .bca-btn[data-bca-btn-type=add]::before, .bca-icon--help::before, .bca-nav-favorite-functions-help::before, .bca-btn-icon[data-bca-btn-type=help]::before, .bca-btn-icon-text[data-bca-btn-type=help]::before, .bca-btn[data-bca-btn-type=help]::before, .bca-icon--permission::before, .bca-btn-icon[data-bca-btn-type=permission]::before, .bca-btn-icon-text[data-bca-btn-type=permission]::before, .bca-btn[data-bca-btn-type=permission]::before, .bca-icon--apply::before, .bca-btn-icon[data-bca-btn-type=apply]::before, .bca-icon--home::before, .bca-btn-icon[data-bca-btn-type=home]::before, .bca-btn-icon-text[data-bca-btn-type=home]::before, .bca-btn[data-bca-btn-type=home]::before, .bca-icon--switch::before, .bca-btn-icon[data-bca-btn-type=switch]::before, .bca-icon--open::before, .bca-btn-icon[data-bca-btn-type=open]::before, .bca-btn-icon-text[data-bca-btn-type=open]::before, .bca-icon--textcopy::before, .bca-btn-icon[data-bca-btn-type=textcopy]::before, .bca-btn-icon-text[data-bca-btn-type=textcopy]::before, .bca-btn[data-bca-btn-type=textcopy]::before, .bca-icon--download::before, .bca-btn-icon[data-bca-btn-type=download]::before, .bca-btn-icon-text[data-bca-btn-type=download]::before, .bca-btn[data-bca-btn-type=download]::before, .bca-icon--draggable::before, .bca-btn-icon[data-bca-btn-type=draggable]::before, .bca-btn-icon-text[data-bca-btn-type=draggable]::before, .bca-btn[data-bca-btn-type=draggable]::before, .bca-icon--folder::before, .bca-btn-icon[data-bca-btn-type=folder]::before, .jstree-proton .jstree-container-ul .jstree-open > .jstree-anchor .bca-icon--folder::before, .bca-icon--file::before, .bca-btn-icon[data-bca-btn-type=file]::before, .bca-icon--up-directory::before, .bca-btn-icon[data-bca-btn-type=up-directory]::before, .bca-icon--arrow-right::before, .bca-btn-icon[data-bca-btn-type=arrow-right]::before, .bca-icon--arrow-left::before, .bca-btn-icon[data-bca-btn-type=arrow-left]::before, .bca-icon--arrow-up::before, .bca-btn-icon[data-bca-btn-type=arrow-up]::before, .bca-icon--arrow-down::before, .bca-btn-icon[data-bca-btn-type=arrow-down]::before, .bca-icon--file-list::before, .bca-btn-icon[data-bca-btn-type=file-list]::before, .bca-icon--update::before, .bca-btn-icon[data-bca-btn-type=update]::before, .bca-icon--setting::before, .bca-btn-icon[data-bca-btn-type=setting]::before, .bca-icon--search::before, .bca-btn[data-bca-btn-type=search]::before, .bca-icon--clear::before, .bca-btn[data-bca-btn-type=clear]::before, .bca-icon--datetimepicker-date::before, .bca-datetimepicker__date-label::before, .bca-icon--datetimepicker-time::before, .bca-datetimepicker__time-label::before, .bca-icon--list-default::before, .bca-list__item::before, .bca-icon--list-circle::before, .bca-list[data-bca-list-type=circle] .bca-list__item::before, .bca-icon--error::before, .ui-dialog label.error::before, .error-message::before, .bca-icon--alert::before, #MessageBox .alert-message::before,
+.fa, .bca-icon--dashboard::before, .bca-nav__sub[data-content-type="dashboard"] .bca-nav__sub-title > a::before, .bca-icon--contents::before, .bca-nav__sub[data-content-type="contents"] .bca-nav__sub-title > a::before, .bca-icon--system::before, .bca-nav__sub[data-content-type="system"] .bca-nav__sub-title > a::before, .bca-nav__system-title button::before, .bca-nav__system-list-item[data-system-type] .bca-nav__system-item-list-title > a::before, .bca-icon--siteconfigs::before, .bca-nav__system-list-item[data-system-type="siteconfigs"] .bca-nav__system-list-item-title > a::before, .bca-icon--users::before, .bca-nav__system-list-item[data-system-type="users"] .bca-nav__system-list-item-title > a::before, .bca-icon--sites::before, .bca-nav__system-list-item[data-system-type="sites"] .bca-nav__system-list-item-title > a::before, .bca-icon--theme::before, .bca-nav__system-list-item[data-system-type="theme"] .bca-nav__system-list-item-title > a::before, .bca-icon--plugin::before, .bca-nav__system-list-item[data-system-type="plugin"] .bca-nav__system-list-item-title > a::before, .bca-icon--tools::before, .bca-nav__system-list-item[data-system-type="tools"] .bca-nav__system-list-item-title > a::before, .bca-icon--publish::before, .bca-btn-icon[data-bca-btn-type=publish]::before, .bca-btn-icon-text[data-bca-btn-type=publish]::before, .bca-btn[data-bca-btn-type=publish]::before, .bca-icon--unpublish::before, .bca-btn-icon[data-bca-btn-type=unpublish]::before, .bca-btn-icon-text[data-bca-btn-type=unpublish]::before, .bca-btn[data-bca-btn-type=unpublish]::before, .bca-icon--preview::before, .bca-btn-icon[data-bca-btn-type=preview]::before, .bca-btn-icon-text[data-bca-btn-type=preview]::before, .context-menu-icon-edit::before, .bca-icon--edit::before, .bca-btn-icon[data-bca-btn-type=edit]::before, .bca-btn-icon-text[data-bca-btn-type=edit]::before, .bca-btn[data-bca-btn-type=edit]::before, .bca-icon--copy::before, .bca-btn-icon[data-bca-btn-type=copy]::before, .bca-btn-icon-text[data-bca-btn-type=copy]::before, .bca-btn[data-bca-btn-type=copy]::before, .context-menu-icon-delete::before, .bca-icon--delete::before, .bca-btn-icon[data-bca-btn-type=delete]::before, .bca-btn-icon-text[data-bca-btn-type=delete]::before, .bca-btn[data-bca-btn-type=delete]::before, .bca-icon--rename::before, .bca-icon--link::before, .bca-icon--alias::before, .bca-icon--th-list::before, .bca-btn-icon[data-bca-btn-type=th-list]::before, .bca-btn-icon-text[data-bca-btn-type=th-list]::before, .bca-icon--back-to-list::before, .bca-btn-icon[data-bca-btn-type=back-to-list]::before, .bca-btn-icon-text[data-bca-btn-type=back-to-list]::before, .bca-btn[data-bca-btn-type=back-to-list]::before, .bca-icon--favorite::before, .bca-nav-favorite-title-button::before, .bca-btn-icon[data-bca-btn-type=favorite]::before, .bca-btn-icon-text[data-bca-btn-type=favorite]::before, .bca-btn[data-bca-btn-type=favorite]::before, .bca-icon--menuitem::before, .bca-btn-icon[data-bca-btn-type=menuitem]::before, .bca-btn-icon-text[data-bca-btn-type=menuitem]::before, .bca-btn[data-bca-btn-type=menuitem]::before, .bca-icon--add::before, .bca-nav-favorite-functions-add::before, .bca-btn-icon[data-bca-btn-type=add]::before, .bca-btn-icon-text[data-bca-btn-type=add]::before, .bca-btn[data-bca-btn-type=add]::before, .bca-icon--help::before, .bca-nav-favorite-functions-help::before, .bca-btn-icon[data-bca-btn-type=help]::before, .bca-btn-icon-text[data-bca-btn-type=help]::before, .bca-btn[data-bca-btn-type=help]::before, .bca-icon--permission::before, .bca-btn-icon[data-bca-btn-type=permission]::before, .bca-btn-icon-text[data-bca-btn-type=permission]::before, .bca-btn[data-bca-btn-type=permission]::before, .bca-icon--apply::before, .bca-btn-icon[data-bca-btn-type=apply]::before, .bca-icon--home::before, .bca-btn-icon[data-bca-btn-type=home]::before, .bca-btn-icon-text[data-bca-btn-type=home]::before, .bca-btn[data-bca-btn-type=home]::before, .bca-icon--switch::before, .bca-btn-icon[data-bca-btn-type=switch]::before, .bca-icon--open::before, .bca-btn-icon[data-bca-btn-type=open]::before, .bca-btn-icon-text[data-bca-btn-type=open]::before, .bca-icon--textcopy::before, .bca-btn-icon[data-bca-btn-type=textcopy]::before, .bca-btn-icon-text[data-bca-btn-type=textcopy]::before, .bca-btn[data-bca-btn-type=textcopy]::before, .bca-icon--download::before, .bca-btn-icon[data-bca-btn-type=download]::before, .bca-btn-icon-text[data-bca-btn-type=download]::before, .bca-btn[data-bca-btn-type=download]::before, .bca-icon--draggable::before, .bca-btn-icon[data-bca-btn-type=draggable]::before, .bca-btn-icon-text[data-bca-btn-type=draggable]::before, .bca-btn[data-bca-btn-type=draggable]::before, .bca-icon--folder::before, .bca-btn-icon[data-bca-btn-type=folder]::before, .jstree-proton .jstree-container-ul .jstree-open > .jstree-anchor .bca-icon--folder::before, .bca-icon--file::before, .bca-btn-icon[data-bca-btn-type=file]::before, .bca-icon--up-directory::before, .bca-btn-icon[data-bca-btn-type=up-directory]::before, .bca-icon--arrow-right::before, .bca-btn-icon[data-bca-btn-type=arrow-right]::before, .bca-icon--arrow-left::before, .bca-btn-icon[data-bca-btn-type=arrow-left]::before, .bca-icon--arrow-up::before, .bca-btn-icon[data-bca-btn-type=arrow-up]::before, .bca-icon--arrow-down::before, .bca-btn-icon[data-bca-btn-type=arrow-down]::before, .bca-icon--file-list::before, .bca-btn-icon[data-bca-btn-type=file-list]::before, .bca-icon--update::before, .bca-btn-icon[data-bca-btn-type=update]::before, .bca-icon--setting::before, .bca-btn-icon[data-bca-btn-type=setting]::before, .bca-icon--search::before, .bca-btn[data-bca-btn-type=search]::before, .bca-icon--clear::before, .bca-btn[data-bca-btn-type=clear]::before, .bca-icon--datetimepicker-date::before, .bca-datetimepicker__date-label::before, .bca-icon--datetimepicker-time::before, .bca-datetimepicker__time-label::before, .bca-icon--list-default::before, .bca-list__item::before, .bca-icon--list-circle::before, .bca-list[data-bca-list-type=circle] .bca-list__item::before, .bca-icon--error::before, .ui-dialog label.error::before, .error-message::before, .bca-icon--alert::before, #MessageBox .alert-message::before,
 #authMessage::before,
 #AlertMessage::before,
 #BcMessageBox .alert-message::before, .bca-icon--notification::before, #MessageBox .message::before,
@@ -484,7 +484,7 @@ template {
 .fa-pull-right {
   float: right; }
 
-.fa.fa-pull-left, .fa-pull-left.bca-icon--dashboard::before, .bca-nav__sub[data-content-type="dashboard"] .bca-nav__sub-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--contents::before, .bca-nav__sub[data-content-type="contents"] .bca-nav__sub-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--system::before, .bca-nav__sub[data-content-type="system"] .bca-nav__sub-title > a.fa-pull-left::before, .bca-nav__system-title button.fa-pull-left::before, .bca-nav__system-list-item[data-system-type] .bca-nav__system-item-list-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--siteconfigs::before, .bca-nav__system-list-item[data-system-type="siteconfigs"] .bca-nav__system-list-item-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--users::before, .bca-nav__system-list-item[data-system-type="users"] .bca-nav__system-list-item-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--sites::before, .bca-nav__system-list-item[data-system-type="sites"] .bca-nav__system-list-item-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--theme::before, .bca-nav__system-list-item[data-system-type="theme"] .bca-nav__system-list-item-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--plugin::before, .bca-nav__system-list-item[data-system-type="plugin"] .bca-nav__system-list-item-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--tools::before, .bca-nav__system-list-item[data-system-type="tools"] .bca-nav__system-list-item-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--publish::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=publish]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=publish]::before, .fa-pull-left.bca-btn[data-bca-btn-type=publish]::before, .fa-pull-left.bca-icon--unpublish::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=unpublish]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=unpublish]::before, .fa-pull-left.bca-btn[data-bca-btn-type=unpublish]::before, .fa-pull-left.bca-icon--preview::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=preview]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=preview]::before, .fa-pull-left.context-menu-icon-edit::before, .fa-pull-left.bca-icon--edit::before, .bca-toolbar__tools-edit a.fa-pull-left::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=edit]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=edit]::before, .fa-pull-left.bca-btn[data-bca-btn-type=edit]::before, .fa-pull-left.bca-icon--copy::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=copy]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=copy]::before, .fa-pull-left.bca-btn[data-bca-btn-type=copy]::before, .fa-pull-left.context-menu-icon-delete::before, .fa-pull-left.bca-icon--delete::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=delete]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=delete]::before, .fa-pull-left.bca-btn[data-bca-btn-type=delete]::before, .fa-pull-left.bca-icon--rename::before, .fa-pull-left.bca-icon--link::before, .fa-pull-left.bca-icon--alias::before, .fa-pull-left.bca-icon--th-list::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=th-list]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=th-list]::before, .fa-pull-left.bca-icon--back-to-list::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=back-to-list]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=back-to-list]::before, .fa-pull-left.bca-btn[data-bca-btn-type=back-to-list]::before, .fa-pull-left.bca-icon--favorite::before, .fa-pull-left.bca-nav-favorite-title-button::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=favorite]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=favorite]::before, .fa-pull-left.bca-btn[data-bca-btn-type=favorite]::before, .fa-pull-left.bca-icon--menuitem::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=menuitem]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=menuitem]::before, .fa-pull-left.bca-btn[data-bca-btn-type=menuitem]::before, .fa-pull-left.bca-icon--add::before, .fa-pull-left.bca-nav-favorite-functions-add::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=add]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=add]::before, .fa-pull-left.bca-btn[data-bca-btn-type=add]::before, .fa-pull-left.bca-icon--help::before, .fa-pull-left.bca-nav-favorite-functions-help::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=help]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=help]::before, .fa-pull-left.bca-btn[data-bca-btn-type=help]::before, .fa-pull-left.bca-icon--permission::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=permission]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=permission]::before, .fa-pull-left.bca-btn[data-bca-btn-type=permission]::before, .fa-pull-left.bca-icon--apply::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=apply]::before, .fa-pull-left.bca-icon--home::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=home]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=home]::before, .fa-pull-left.bca-btn[data-bca-btn-type=home]::before, .fa-pull-left.bca-icon--switch::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=switch]::before, .fa-pull-left.bca-icon--open::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=open]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=open]::before, .fa-pull-left.bca-icon--textcopy::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=textcopy]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=textcopy]::before, .fa-pull-left.bca-btn[data-bca-btn-type=textcopy]::before, .fa-pull-left.bca-icon--download::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=download]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=download]::before, .fa-pull-left.bca-btn[data-bca-btn-type=download]::before, .fa-pull-left.bca-icon--draggable::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=draggable]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=draggable]::before, .fa-pull-left.bca-btn[data-bca-btn-type=draggable]::before, .fa-pull-left.bca-icon--folder::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=folder]::before, .jstree-proton .jstree-container-ul .jstree-open > .jstree-anchor .fa-pull-left.bca-icon--folder::before, .fa-pull-left.bca-icon--file::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=file]::before, .fa-pull-left.bca-icon--up-directory::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=up-directory]::before, .fa-pull-left.bca-icon--arrow-right::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=arrow-right]::before, .fa-pull-left.bca-icon--arrow-left::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=arrow-left]::before, .fa-pull-left.bca-icon--arrow-up::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=arrow-up]::before, .fa-pull-left.bca-icon--arrow-down::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=arrow-down]::before, .fa-pull-left.bca-icon--file-list::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=file-list]::before, .fa-pull-left.bca-icon--update::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=update]::before, .fa-pull-left.bca-icon--setting::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=setting]::before, .fa-pull-left.bca-icon--search::before, .fa-pull-left.bca-btn[data-bca-btn-type=search]::before, .fa-pull-left.bca-icon--clear::before, .fa-pull-left.bca-btn[data-bca-btn-type=clear]::before, .fa-pull-left.bca-icon--datetimepicker-date::before, .fa-pull-left.bca-datetimepicker__date-label::before, .fa-pull-left.bca-icon--datetimepicker-time::before, .fa-pull-left.bca-datetimepicker__time-label::before, .fa-pull-left.bca-icon--list-default::before, .fa-pull-left.bca-list__item::before, .fa-pull-left.bca-icon--list-circle::before, .bca-list[data-bca-list-type=circle] .fa-pull-left.bca-list__item::before, .fa-pull-left.bca-icon--error::before, .ui-dialog label.fa-pull-left.error::before, .fa-pull-left.error-message::before, .fa-pull-left.bca-icon--alert::before, #MessageBox .fa-pull-left.alert-message::before,
+.fa.fa-pull-left, .fa-pull-left.bca-icon--dashboard::before, .bca-nav__sub[data-content-type="dashboard"] .bca-nav__sub-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--contents::before, .bca-nav__sub[data-content-type="contents"] .bca-nav__sub-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--system::before, .bca-nav__sub[data-content-type="system"] .bca-nav__sub-title > a.fa-pull-left::before, .bca-nav__system-title button.fa-pull-left::before, .bca-nav__system-list-item[data-system-type] .bca-nav__system-item-list-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--siteconfigs::before, .bca-nav__system-list-item[data-system-type="siteconfigs"] .bca-nav__system-list-item-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--users::before, .bca-nav__system-list-item[data-system-type="users"] .bca-nav__system-list-item-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--sites::before, .bca-nav__system-list-item[data-system-type="sites"] .bca-nav__system-list-item-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--theme::before, .bca-nav__system-list-item[data-system-type="theme"] .bca-nav__system-list-item-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--plugin::before, .bca-nav__system-list-item[data-system-type="plugin"] .bca-nav__system-list-item-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--tools::before, .bca-nav__system-list-item[data-system-type="tools"] .bca-nav__system-list-item-title > a.fa-pull-left::before, .fa-pull-left.bca-icon--publish::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=publish]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=publish]::before, .fa-pull-left.bca-btn[data-bca-btn-type=publish]::before, .fa-pull-left.bca-icon--unpublish::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=unpublish]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=unpublish]::before, .fa-pull-left.bca-btn[data-bca-btn-type=unpublish]::before, .fa-pull-left.bca-icon--preview::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=preview]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=preview]::before, .fa-pull-left.context-menu-icon-edit::before, .fa-pull-left.bca-icon--edit::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=edit]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=edit]::before, .fa-pull-left.bca-btn[data-bca-btn-type=edit]::before, .fa-pull-left.bca-icon--copy::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=copy]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=copy]::before, .fa-pull-left.bca-btn[data-bca-btn-type=copy]::before, .fa-pull-left.context-menu-icon-delete::before, .fa-pull-left.bca-icon--delete::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=delete]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=delete]::before, .fa-pull-left.bca-btn[data-bca-btn-type=delete]::before, .fa-pull-left.bca-icon--rename::before, .fa-pull-left.bca-icon--link::before, .fa-pull-left.bca-icon--alias::before, .fa-pull-left.bca-icon--th-list::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=th-list]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=th-list]::before, .fa-pull-left.bca-icon--back-to-list::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=back-to-list]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=back-to-list]::before, .fa-pull-left.bca-btn[data-bca-btn-type=back-to-list]::before, .fa-pull-left.bca-icon--favorite::before, .fa-pull-left.bca-nav-favorite-title-button::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=favorite]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=favorite]::before, .fa-pull-left.bca-btn[data-bca-btn-type=favorite]::before, .fa-pull-left.bca-icon--menuitem::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=menuitem]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=menuitem]::before, .fa-pull-left.bca-btn[data-bca-btn-type=menuitem]::before, .fa-pull-left.bca-icon--add::before, .fa-pull-left.bca-nav-favorite-functions-add::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=add]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=add]::before, .fa-pull-left.bca-btn[data-bca-btn-type=add]::before, .fa-pull-left.bca-icon--help::before, .fa-pull-left.bca-nav-favorite-functions-help::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=help]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=help]::before, .fa-pull-left.bca-btn[data-bca-btn-type=help]::before, .fa-pull-left.bca-icon--permission::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=permission]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=permission]::before, .fa-pull-left.bca-btn[data-bca-btn-type=permission]::before, .fa-pull-left.bca-icon--apply::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=apply]::before, .fa-pull-left.bca-icon--home::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=home]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=home]::before, .fa-pull-left.bca-btn[data-bca-btn-type=home]::before, .fa-pull-left.bca-icon--switch::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=switch]::before, .fa-pull-left.bca-icon--open::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=open]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=open]::before, .fa-pull-left.bca-icon--textcopy::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=textcopy]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=textcopy]::before, .fa-pull-left.bca-btn[data-bca-btn-type=textcopy]::before, .fa-pull-left.bca-icon--download::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=download]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=download]::before, .fa-pull-left.bca-btn[data-bca-btn-type=download]::before, .fa-pull-left.bca-icon--draggable::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=draggable]::before, .fa-pull-left.bca-btn-icon-text[data-bca-btn-type=draggable]::before, .fa-pull-left.bca-btn[data-bca-btn-type=draggable]::before, .fa-pull-left.bca-icon--folder::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=folder]::before, .jstree-proton .jstree-container-ul .jstree-open > .jstree-anchor .fa-pull-left.bca-icon--folder::before, .fa-pull-left.bca-icon--file::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=file]::before, .fa-pull-left.bca-icon--up-directory::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=up-directory]::before, .fa-pull-left.bca-icon--arrow-right::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=arrow-right]::before, .fa-pull-left.bca-icon--arrow-left::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=arrow-left]::before, .fa-pull-left.bca-icon--arrow-up::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=arrow-up]::before, .fa-pull-left.bca-icon--arrow-down::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=arrow-down]::before, .fa-pull-left.bca-icon--file-list::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=file-list]::before, .fa-pull-left.bca-icon--update::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=update]::before, .fa-pull-left.bca-icon--setting::before, .fa-pull-left.bca-btn-icon[data-bca-btn-type=setting]::before, .fa-pull-left.bca-icon--search::before, .fa-pull-left.bca-btn[data-bca-btn-type=search]::before, .fa-pull-left.bca-icon--clear::before, .fa-pull-left.bca-btn[data-bca-btn-type=clear]::before, .fa-pull-left.bca-icon--datetimepicker-date::before, .fa-pull-left.bca-datetimepicker__date-label::before, .fa-pull-left.bca-icon--datetimepicker-time::before, .fa-pull-left.bca-datetimepicker__time-label::before, .fa-pull-left.bca-icon--list-default::before, .fa-pull-left.bca-list__item::before, .fa-pull-left.bca-icon--list-circle::before, .bca-list[data-bca-list-type=circle] .fa-pull-left.bca-list__item::before, .fa-pull-left.bca-icon--error::before, .ui-dialog label.fa-pull-left.error::before, .fa-pull-left.error-message::before, .fa-pull-left.bca-icon--alert::before, #MessageBox .fa-pull-left.alert-message::before,
 .fa-pull-left#authMessage::before,
 .fa-pull-left#AlertMessage::before,
 #BcMessageBox .fa-pull-left.alert-message::before, .fa-pull-left.bca-icon--notification::before, #MessageBox .fa-pull-left.message::before,
@@ -497,7 +497,7 @@ template {
 .fab.fa-pull-left {
   margin-right: .3em; }
 
-.fa.fa-pull-right, .fa-pull-right.bca-icon--dashboard::before, .bca-nav__sub[data-content-type="dashboard"] .bca-nav__sub-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--contents::before, .bca-nav__sub[data-content-type="contents"] .bca-nav__sub-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--system::before, .bca-nav__sub[data-content-type="system"] .bca-nav__sub-title > a.fa-pull-right::before, .bca-nav__system-title button.fa-pull-right::before, .bca-nav__system-list-item[data-system-type] .bca-nav__system-item-list-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--siteconfigs::before, .bca-nav__system-list-item[data-system-type="siteconfigs"] .bca-nav__system-list-item-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--users::before, .bca-nav__system-list-item[data-system-type="users"] .bca-nav__system-list-item-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--sites::before, .bca-nav__system-list-item[data-system-type="sites"] .bca-nav__system-list-item-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--theme::before, .bca-nav__system-list-item[data-system-type="theme"] .bca-nav__system-list-item-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--plugin::before, .bca-nav__system-list-item[data-system-type="plugin"] .bca-nav__system-list-item-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--tools::before, .bca-nav__system-list-item[data-system-type="tools"] .bca-nav__system-list-item-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--publish::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=publish]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=publish]::before, .fa-pull-right.bca-btn[data-bca-btn-type=publish]::before, .fa-pull-right.bca-icon--unpublish::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=unpublish]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=unpublish]::before, .fa-pull-right.bca-btn[data-bca-btn-type=unpublish]::before, .fa-pull-right.bca-icon--preview::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=preview]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=preview]::before, .fa-pull-right.context-menu-icon-edit::before, .fa-pull-right.bca-icon--edit::before, .bca-toolbar__tools-edit a.fa-pull-right::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=edit]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=edit]::before, .fa-pull-right.bca-btn[data-bca-btn-type=edit]::before, .fa-pull-right.bca-icon--copy::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=copy]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=copy]::before, .fa-pull-right.bca-btn[data-bca-btn-type=copy]::before, .fa-pull-right.context-menu-icon-delete::before, .fa-pull-right.bca-icon--delete::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=delete]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=delete]::before, .fa-pull-right.bca-btn[data-bca-btn-type=delete]::before, .fa-pull-right.bca-icon--rename::before, .fa-pull-right.bca-icon--link::before, .fa-pull-right.bca-icon--alias::before, .fa-pull-right.bca-icon--th-list::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=th-list]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=th-list]::before, .fa-pull-right.bca-icon--back-to-list::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=back-to-list]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=back-to-list]::before, .fa-pull-right.bca-btn[data-bca-btn-type=back-to-list]::before, .fa-pull-right.bca-icon--favorite::before, .fa-pull-right.bca-nav-favorite-title-button::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=favorite]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=favorite]::before, .fa-pull-right.bca-btn[data-bca-btn-type=favorite]::before, .fa-pull-right.bca-icon--menuitem::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=menuitem]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=menuitem]::before, .fa-pull-right.bca-btn[data-bca-btn-type=menuitem]::before, .fa-pull-right.bca-icon--add::before, .fa-pull-right.bca-nav-favorite-functions-add::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=add]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=add]::before, .fa-pull-right.bca-btn[data-bca-btn-type=add]::before, .fa-pull-right.bca-icon--help::before, .fa-pull-right.bca-nav-favorite-functions-help::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=help]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=help]::before, .fa-pull-right.bca-btn[data-bca-btn-type=help]::before, .fa-pull-right.bca-icon--permission::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=permission]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=permission]::before, .fa-pull-right.bca-btn[data-bca-btn-type=permission]::before, .fa-pull-right.bca-icon--apply::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=apply]::before, .fa-pull-right.bca-icon--home::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=home]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=home]::before, .fa-pull-right.bca-btn[data-bca-btn-type=home]::before, .fa-pull-right.bca-icon--switch::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=switch]::before, .fa-pull-right.bca-icon--open::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=open]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=open]::before, .fa-pull-right.bca-icon--textcopy::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=textcopy]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=textcopy]::before, .fa-pull-right.bca-btn[data-bca-btn-type=textcopy]::before, .fa-pull-right.bca-icon--download::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=download]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=download]::before, .fa-pull-right.bca-btn[data-bca-btn-type=download]::before, .fa-pull-right.bca-icon--draggable::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=draggable]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=draggable]::before, .fa-pull-right.bca-btn[data-bca-btn-type=draggable]::before, .fa-pull-right.bca-icon--folder::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=folder]::before, .jstree-proton .jstree-container-ul .jstree-open > .jstree-anchor .fa-pull-right.bca-icon--folder::before, .fa-pull-right.bca-icon--file::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=file]::before, .fa-pull-right.bca-icon--up-directory::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=up-directory]::before, .fa-pull-right.bca-icon--arrow-right::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=arrow-right]::before, .fa-pull-right.bca-icon--arrow-left::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=arrow-left]::before, .fa-pull-right.bca-icon--arrow-up::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=arrow-up]::before, .fa-pull-right.bca-icon--arrow-down::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=arrow-down]::before, .fa-pull-right.bca-icon--file-list::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=file-list]::before, .fa-pull-right.bca-icon--update::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=update]::before, .fa-pull-right.bca-icon--setting::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=setting]::before, .fa-pull-right.bca-icon--search::before, .fa-pull-right.bca-btn[data-bca-btn-type=search]::before, .fa-pull-right.bca-icon--clear::before, .fa-pull-right.bca-btn[data-bca-btn-type=clear]::before, .fa-pull-right.bca-icon--datetimepicker-date::before, .fa-pull-right.bca-datetimepicker__date-label::before, .fa-pull-right.bca-icon--datetimepicker-time::before, .fa-pull-right.bca-datetimepicker__time-label::before, .fa-pull-right.bca-icon--list-default::before, .fa-pull-right.bca-list__item::before, .fa-pull-right.bca-icon--list-circle::before, .bca-list[data-bca-list-type=circle] .fa-pull-right.bca-list__item::before, .fa-pull-right.bca-icon--error::before, .ui-dialog label.fa-pull-right.error::before, .fa-pull-right.error-message::before, .fa-pull-right.bca-icon--alert::before, #MessageBox .fa-pull-right.alert-message::before,
+.fa.fa-pull-right, .fa-pull-right.bca-icon--dashboard::before, .bca-nav__sub[data-content-type="dashboard"] .bca-nav__sub-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--contents::before, .bca-nav__sub[data-content-type="contents"] .bca-nav__sub-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--system::before, .bca-nav__sub[data-content-type="system"] .bca-nav__sub-title > a.fa-pull-right::before, .bca-nav__system-title button.fa-pull-right::before, .bca-nav__system-list-item[data-system-type] .bca-nav__system-item-list-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--siteconfigs::before, .bca-nav__system-list-item[data-system-type="siteconfigs"] .bca-nav__system-list-item-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--users::before, .bca-nav__system-list-item[data-system-type="users"] .bca-nav__system-list-item-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--sites::before, .bca-nav__system-list-item[data-system-type="sites"] .bca-nav__system-list-item-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--theme::before, .bca-nav__system-list-item[data-system-type="theme"] .bca-nav__system-list-item-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--plugin::before, .bca-nav__system-list-item[data-system-type="plugin"] .bca-nav__system-list-item-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--tools::before, .bca-nav__system-list-item[data-system-type="tools"] .bca-nav__system-list-item-title > a.fa-pull-right::before, .fa-pull-right.bca-icon--publish::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=publish]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=publish]::before, .fa-pull-right.bca-btn[data-bca-btn-type=publish]::before, .fa-pull-right.bca-icon--unpublish::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=unpublish]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=unpublish]::before, .fa-pull-right.bca-btn[data-bca-btn-type=unpublish]::before, .fa-pull-right.bca-icon--preview::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=preview]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=preview]::before, .fa-pull-right.context-menu-icon-edit::before, .fa-pull-right.bca-icon--edit::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=edit]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=edit]::before, .fa-pull-right.bca-btn[data-bca-btn-type=edit]::before, .fa-pull-right.bca-icon--copy::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=copy]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=copy]::before, .fa-pull-right.bca-btn[data-bca-btn-type=copy]::before, .fa-pull-right.context-menu-icon-delete::before, .fa-pull-right.bca-icon--delete::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=delete]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=delete]::before, .fa-pull-right.bca-btn[data-bca-btn-type=delete]::before, .fa-pull-right.bca-icon--rename::before, .fa-pull-right.bca-icon--link::before, .fa-pull-right.bca-icon--alias::before, .fa-pull-right.bca-icon--th-list::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=th-list]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=th-list]::before, .fa-pull-right.bca-icon--back-to-list::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=back-to-list]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=back-to-list]::before, .fa-pull-right.bca-btn[data-bca-btn-type=back-to-list]::before, .fa-pull-right.bca-icon--favorite::before, .fa-pull-right.bca-nav-favorite-title-button::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=favorite]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=favorite]::before, .fa-pull-right.bca-btn[data-bca-btn-type=favorite]::before, .fa-pull-right.bca-icon--menuitem::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=menuitem]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=menuitem]::before, .fa-pull-right.bca-btn[data-bca-btn-type=menuitem]::before, .fa-pull-right.bca-icon--add::before, .fa-pull-right.bca-nav-favorite-functions-add::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=add]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=add]::before, .fa-pull-right.bca-btn[data-bca-btn-type=add]::before, .fa-pull-right.bca-icon--help::before, .fa-pull-right.bca-nav-favorite-functions-help::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=help]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=help]::before, .fa-pull-right.bca-btn[data-bca-btn-type=help]::before, .fa-pull-right.bca-icon--permission::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=permission]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=permission]::before, .fa-pull-right.bca-btn[data-bca-btn-type=permission]::before, .fa-pull-right.bca-icon--apply::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=apply]::before, .fa-pull-right.bca-icon--home::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=home]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=home]::before, .fa-pull-right.bca-btn[data-bca-btn-type=home]::before, .fa-pull-right.bca-icon--switch::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=switch]::before, .fa-pull-right.bca-icon--open::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=open]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=open]::before, .fa-pull-right.bca-icon--textcopy::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=textcopy]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=textcopy]::before, .fa-pull-right.bca-btn[data-bca-btn-type=textcopy]::before, .fa-pull-right.bca-icon--download::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=download]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=download]::before, .fa-pull-right.bca-btn[data-bca-btn-type=download]::before, .fa-pull-right.bca-icon--draggable::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=draggable]::before, .fa-pull-right.bca-btn-icon-text[data-bca-btn-type=draggable]::before, .fa-pull-right.bca-btn[data-bca-btn-type=draggable]::before, .fa-pull-right.bca-icon--folder::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=folder]::before, .jstree-proton .jstree-container-ul .jstree-open > .jstree-anchor .fa-pull-right.bca-icon--folder::before, .fa-pull-right.bca-icon--file::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=file]::before, .fa-pull-right.bca-icon--up-directory::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=up-directory]::before, .fa-pull-right.bca-icon--arrow-right::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=arrow-right]::before, .fa-pull-right.bca-icon--arrow-left::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=arrow-left]::before, .fa-pull-right.bca-icon--arrow-up::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=arrow-up]::before, .fa-pull-right.bca-icon--arrow-down::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=arrow-down]::before, .fa-pull-right.bca-icon--file-list::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=file-list]::before, .fa-pull-right.bca-icon--update::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=update]::before, .fa-pull-right.bca-icon--setting::before, .fa-pull-right.bca-btn-icon[data-bca-btn-type=setting]::before, .fa-pull-right.bca-icon--search::before, .fa-pull-right.bca-btn[data-bca-btn-type=search]::before, .fa-pull-right.bca-icon--clear::before, .fa-pull-right.bca-btn[data-bca-btn-type=clear]::before, .fa-pull-right.bca-icon--datetimepicker-date::before, .fa-pull-right.bca-datetimepicker__date-label::before, .fa-pull-right.bca-icon--datetimepicker-time::before, .fa-pull-right.bca-datetimepicker__time-label::before, .fa-pull-right.bca-icon--list-default::before, .fa-pull-right.bca-list__item::before, .fa-pull-right.bca-icon--list-circle::before, .bca-list[data-bca-list-type=circle] .fa-pull-right.bca-list__item::before, .fa-pull-right.bca-icon--error::before, .ui-dialog label.fa-pull-right.error::before, .fa-pull-right.error-message::before, .fa-pull-right.bca-icon--alert::before, #MessageBox .fa-pull-right.alert-message::before,
 .fa-pull-right#authMessage::before,
 .fa-pull-right#AlertMessage::before,
 #BcMessageBox .fa-pull-right.alert-message::before, .fa-pull-right.bca-icon--notification::before, #MessageBox .fa-pull-right.message::before,
@@ -4718,7 +4718,7 @@ readers do not read off random characters that represent icons */
   src: url("../../fonts/admin/fa-solid-900.eot");
   src: url("../../fonts/admin/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("../../fonts/admin/fa-solid-900.woff2") format("woff2"), url("../../fonts/admin/fa-solid-900.woff") format("woff"), url("../../fonts/admin/fa-solid-900.ttf") format("truetype"), url("../../fonts/admin/fa-solid-900.svg#fontawesome") format("svg"); }
 
-.fa, .bca-icon--dashboard::before, .bca-nav__sub[data-content-type="dashboard"] .bca-nav__sub-title > a::before, .bca-icon--contents::before, .bca-nav__sub[data-content-type="contents"] .bca-nav__sub-title > a::before, .bca-icon--system::before, .bca-nav__sub[data-content-type="system"] .bca-nav__sub-title > a::before, .bca-nav__system-title button::before, .bca-nav__system-list-item[data-system-type] .bca-nav__system-item-list-title > a::before, .bca-icon--siteconfigs::before, .bca-nav__system-list-item[data-system-type="siteconfigs"] .bca-nav__system-list-item-title > a::before, .bca-icon--users::before, .bca-nav__system-list-item[data-system-type="users"] .bca-nav__system-list-item-title > a::before, .bca-icon--sites::before, .bca-nav__system-list-item[data-system-type="sites"] .bca-nav__system-list-item-title > a::before, .bca-icon--theme::before, .bca-nav__system-list-item[data-system-type="theme"] .bca-nav__system-list-item-title > a::before, .bca-icon--plugin::before, .bca-nav__system-list-item[data-system-type="plugin"] .bca-nav__system-list-item-title > a::before, .bca-icon--tools::before, .bca-nav__system-list-item[data-system-type="tools"] .bca-nav__system-list-item-title > a::before, .bca-icon--publish::before, .bca-btn-icon[data-bca-btn-type=publish]::before, .bca-btn-icon-text[data-bca-btn-type=publish]::before, .bca-btn[data-bca-btn-type=publish]::before, .bca-icon--unpublish::before, .bca-btn-icon[data-bca-btn-type=unpublish]::before, .bca-btn-icon-text[data-bca-btn-type=unpublish]::before, .bca-btn[data-bca-btn-type=unpublish]::before, .bca-icon--preview::before, .bca-btn-icon[data-bca-btn-type=preview]::before, .bca-btn-icon-text[data-bca-btn-type=preview]::before, .context-menu-icon-edit::before, .bca-icon--edit::before, .bca-toolbar__tools-edit a::before, .bca-btn-icon[data-bca-btn-type=edit]::before, .bca-btn-icon-text[data-bca-btn-type=edit]::before, .bca-btn[data-bca-btn-type=edit]::before, .bca-icon--copy::before, .bca-btn-icon[data-bca-btn-type=copy]::before, .bca-btn-icon-text[data-bca-btn-type=copy]::before, .bca-btn[data-bca-btn-type=copy]::before, .context-menu-icon-delete::before, .bca-icon--delete::before, .bca-btn-icon[data-bca-btn-type=delete]::before, .bca-btn-icon-text[data-bca-btn-type=delete]::before, .bca-btn[data-bca-btn-type=delete]::before, .bca-icon--rename::before, .bca-icon--link::before, .bca-icon--alias::before, .bca-icon--th-list::before, .bca-btn-icon[data-bca-btn-type=th-list]::before, .bca-btn-icon-text[data-bca-btn-type=th-list]::before, .bca-icon--back-to-list::before, .bca-btn-icon[data-bca-btn-type=back-to-list]::before, .bca-btn-icon-text[data-bca-btn-type=back-to-list]::before, .bca-btn[data-bca-btn-type=back-to-list]::before, .bca-icon--favorite::before, .bca-nav-favorite-title-button::before, .bca-btn-icon[data-bca-btn-type=favorite]::before, .bca-btn-icon-text[data-bca-btn-type=favorite]::before, .bca-btn[data-bca-btn-type=favorite]::before, .bca-icon--menuitem::before, .bca-btn-icon[data-bca-btn-type=menuitem]::before, .bca-btn-icon-text[data-bca-btn-type=menuitem]::before, .bca-btn[data-bca-btn-type=menuitem]::before, .bca-icon--add::before, .bca-nav-favorite-functions-add::before, .bca-btn-icon[data-bca-btn-type=add]::before, .bca-btn-icon-text[data-bca-btn-type=add]::before, .bca-btn[data-bca-btn-type=add]::before, .bca-icon--help::before, .bca-nav-favorite-functions-help::before, .bca-btn-icon[data-bca-btn-type=help]::before, .bca-btn-icon-text[data-bca-btn-type=help]::before, .bca-btn[data-bca-btn-type=help]::before, .bca-icon--permission::before, .bca-btn-icon[data-bca-btn-type=permission]::before, .bca-btn-icon-text[data-bca-btn-type=permission]::before, .bca-btn[data-bca-btn-type=permission]::before, .bca-icon--apply::before, .bca-btn-icon[data-bca-btn-type=apply]::before, .bca-icon--home::before, .bca-btn-icon[data-bca-btn-type=home]::before, .bca-btn-icon-text[data-bca-btn-type=home]::before, .bca-btn[data-bca-btn-type=home]::before, .bca-icon--switch::before, .bca-btn-icon[data-bca-btn-type=switch]::before, .bca-icon--open::before, .bca-btn-icon[data-bca-btn-type=open]::before, .bca-btn-icon-text[data-bca-btn-type=open]::before, .bca-icon--textcopy::before, .bca-btn-icon[data-bca-btn-type=textcopy]::before, .bca-btn-icon-text[data-bca-btn-type=textcopy]::before, .bca-btn[data-bca-btn-type=textcopy]::before, .bca-icon--download::before, .bca-btn-icon[data-bca-btn-type=download]::before, .bca-btn-icon-text[data-bca-btn-type=download]::before, .bca-btn[data-bca-btn-type=download]::before, .bca-icon--draggable::before, .bca-btn-icon[data-bca-btn-type=draggable]::before, .bca-btn-icon-text[data-bca-btn-type=draggable]::before, .bca-btn[data-bca-btn-type=draggable]::before, .bca-icon--folder::before, .bca-btn-icon[data-bca-btn-type=folder]::before, .jstree-proton .jstree-container-ul .jstree-open > .jstree-anchor .bca-icon--folder::before, .bca-icon--file::before, .bca-btn-icon[data-bca-btn-type=file]::before, .bca-icon--up-directory::before, .bca-btn-icon[data-bca-btn-type=up-directory]::before, .bca-icon--arrow-right::before, .bca-btn-icon[data-bca-btn-type=arrow-right]::before, .bca-icon--arrow-left::before, .bca-btn-icon[data-bca-btn-type=arrow-left]::before, .bca-icon--arrow-up::before, .bca-btn-icon[data-bca-btn-type=arrow-up]::before, .bca-icon--arrow-down::before, .bca-btn-icon[data-bca-btn-type=arrow-down]::before, .bca-icon--file-list::before, .bca-btn-icon[data-bca-btn-type=file-list]::before, .bca-icon--update::before, .bca-btn-icon[data-bca-btn-type=update]::before, .bca-icon--setting::before, .bca-btn-icon[data-bca-btn-type=setting]::before, .bca-icon--search::before, .bca-btn[data-bca-btn-type=search]::before, .bca-icon--clear::before, .bca-btn[data-bca-btn-type=clear]::before, .bca-icon--datetimepicker-date::before, .bca-datetimepicker__date-label::before, .bca-icon--datetimepicker-time::before, .bca-datetimepicker__time-label::before, .bca-icon--list-default::before, .bca-list__item::before, .bca-icon--list-circle::before, .bca-list[data-bca-list-type=circle] .bca-list__item::before, .bca-icon--error::before, .ui-dialog label.error::before, .error-message::before, .bca-icon--alert::before, #MessageBox .alert-message::before,
+.fa, .bca-icon--dashboard::before, .bca-nav__sub[data-content-type="dashboard"] .bca-nav__sub-title > a::before, .bca-icon--contents::before, .bca-nav__sub[data-content-type="contents"] .bca-nav__sub-title > a::before, .bca-icon--system::before, .bca-nav__sub[data-content-type="system"] .bca-nav__sub-title > a::before, .bca-nav__system-title button::before, .bca-nav__system-list-item[data-system-type] .bca-nav__system-item-list-title > a::before, .bca-icon--siteconfigs::before, .bca-nav__system-list-item[data-system-type="siteconfigs"] .bca-nav__system-list-item-title > a::before, .bca-icon--users::before, .bca-nav__system-list-item[data-system-type="users"] .bca-nav__system-list-item-title > a::before, .bca-icon--sites::before, .bca-nav__system-list-item[data-system-type="sites"] .bca-nav__system-list-item-title > a::before, .bca-icon--theme::before, .bca-nav__system-list-item[data-system-type="theme"] .bca-nav__system-list-item-title > a::before, .bca-icon--plugin::before, .bca-nav__system-list-item[data-system-type="plugin"] .bca-nav__system-list-item-title > a::before, .bca-icon--tools::before, .bca-nav__system-list-item[data-system-type="tools"] .bca-nav__system-list-item-title > a::before, .bca-icon--publish::before, .bca-btn-icon[data-bca-btn-type=publish]::before, .bca-btn-icon-text[data-bca-btn-type=publish]::before, .bca-btn[data-bca-btn-type=publish]::before, .bca-icon--unpublish::before, .bca-btn-icon[data-bca-btn-type=unpublish]::before, .bca-btn-icon-text[data-bca-btn-type=unpublish]::before, .bca-btn[data-bca-btn-type=unpublish]::before, .bca-icon--preview::before, .bca-btn-icon[data-bca-btn-type=preview]::before, .bca-btn-icon-text[data-bca-btn-type=preview]::before, .context-menu-icon-edit::before, .bca-icon--edit::before, .bca-btn-icon[data-bca-btn-type=edit]::before, .bca-btn-icon-text[data-bca-btn-type=edit]::before, .bca-btn[data-bca-btn-type=edit]::before, .bca-icon--copy::before, .bca-btn-icon[data-bca-btn-type=copy]::before, .bca-btn-icon-text[data-bca-btn-type=copy]::before, .bca-btn[data-bca-btn-type=copy]::before, .context-menu-icon-delete::before, .bca-icon--delete::before, .bca-btn-icon[data-bca-btn-type=delete]::before, .bca-btn-icon-text[data-bca-btn-type=delete]::before, .bca-btn[data-bca-btn-type=delete]::before, .bca-icon--rename::before, .bca-icon--link::before, .bca-icon--alias::before, .bca-icon--th-list::before, .bca-btn-icon[data-bca-btn-type=th-list]::before, .bca-btn-icon-text[data-bca-btn-type=th-list]::before, .bca-icon--back-to-list::before, .bca-btn-icon[data-bca-btn-type=back-to-list]::before, .bca-btn-icon-text[data-bca-btn-type=back-to-list]::before, .bca-btn[data-bca-btn-type=back-to-list]::before, .bca-icon--favorite::before, .bca-nav-favorite-title-button::before, .bca-btn-icon[data-bca-btn-type=favorite]::before, .bca-btn-icon-text[data-bca-btn-type=favorite]::before, .bca-btn[data-bca-btn-type=favorite]::before, .bca-icon--menuitem::before, .bca-btn-icon[data-bca-btn-type=menuitem]::before, .bca-btn-icon-text[data-bca-btn-type=menuitem]::before, .bca-btn[data-bca-btn-type=menuitem]::before, .bca-icon--add::before, .bca-nav-favorite-functions-add::before, .bca-btn-icon[data-bca-btn-type=add]::before, .bca-btn-icon-text[data-bca-btn-type=add]::before, .bca-btn[data-bca-btn-type=add]::before, .bca-icon--help::before, .bca-nav-favorite-functions-help::before, .bca-btn-icon[data-bca-btn-type=help]::before, .bca-btn-icon-text[data-bca-btn-type=help]::before, .bca-btn[data-bca-btn-type=help]::before, .bca-icon--permission::before, .bca-btn-icon[data-bca-btn-type=permission]::before, .bca-btn-icon-text[data-bca-btn-type=permission]::before, .bca-btn[data-bca-btn-type=permission]::before, .bca-icon--apply::before, .bca-btn-icon[data-bca-btn-type=apply]::before, .bca-icon--home::before, .bca-btn-icon[data-bca-btn-type=home]::before, .bca-btn-icon-text[data-bca-btn-type=home]::before, .bca-btn[data-bca-btn-type=home]::before, .bca-icon--switch::before, .bca-btn-icon[data-bca-btn-type=switch]::before, .bca-icon--open::before, .bca-btn-icon[data-bca-btn-type=open]::before, .bca-btn-icon-text[data-bca-btn-type=open]::before, .bca-icon--textcopy::before, .bca-btn-icon[data-bca-btn-type=textcopy]::before, .bca-btn-icon-text[data-bca-btn-type=textcopy]::before, .bca-btn[data-bca-btn-type=textcopy]::before, .bca-icon--download::before, .bca-btn-icon[data-bca-btn-type=download]::before, .bca-btn-icon-text[data-bca-btn-type=download]::before, .bca-btn[data-bca-btn-type=download]::before, .bca-icon--draggable::before, .bca-btn-icon[data-bca-btn-type=draggable]::before, .bca-btn-icon-text[data-bca-btn-type=draggable]::before, .bca-btn[data-bca-btn-type=draggable]::before, .bca-icon--folder::before, .bca-btn-icon[data-bca-btn-type=folder]::before, .jstree-proton .jstree-container-ul .jstree-open > .jstree-anchor .bca-icon--folder::before, .bca-icon--file::before, .bca-btn-icon[data-bca-btn-type=file]::before, .bca-icon--up-directory::before, .bca-btn-icon[data-bca-btn-type=up-directory]::before, .bca-icon--arrow-right::before, .bca-btn-icon[data-bca-btn-type=arrow-right]::before, .bca-icon--arrow-left::before, .bca-btn-icon[data-bca-btn-type=arrow-left]::before, .bca-icon--arrow-up::before, .bca-btn-icon[data-bca-btn-type=arrow-up]::before, .bca-icon--arrow-down::before, .bca-btn-icon[data-bca-btn-type=arrow-down]::before, .bca-icon--file-list::before, .bca-btn-icon[data-bca-btn-type=file-list]::before, .bca-icon--update::before, .bca-btn-icon[data-bca-btn-type=update]::before, .bca-icon--setting::before, .bca-btn-icon[data-bca-btn-type=setting]::before, .bca-icon--search::before, .bca-btn[data-bca-btn-type=search]::before, .bca-icon--clear::before, .bca-btn[data-bca-btn-type=clear]::before, .bca-icon--datetimepicker-date::before, .bca-datetimepicker__date-label::before, .bca-icon--datetimepicker-time::before, .bca-datetimepicker__time-label::before, .bca-icon--list-default::before, .bca-list__item::before, .bca-icon--list-circle::before, .bca-list[data-bca-list-type=circle] .bca-list__item::before, .bca-icon--error::before, .ui-dialog label.error::before, .error-message::before, .bca-icon--alert::before, #MessageBox .alert-message::before,
 #authMessage::before,
 #AlertMessage::before,
 #BcMessageBox .alert-message::before, .bca-icon--notification::before, #MessageBox .message::before,
@@ -4826,7 +4826,7 @@ readers do not read off random characters that represent icons */
     content: "\f28b"; }
   .bca-icon--preview::before, .bca-btn-icon[data-bca-btn-type=preview]::before, .bca-btn-icon-text[data-bca-btn-type=preview]::before {
     content: "\f06e"; }
-  .context-menu-icon-edit::before, .bca-icon--edit::before, .bca-toolbar__tools-edit a::before, .bca-btn-icon[data-bca-btn-type=edit]::before, .bca-btn-icon-text[data-bca-btn-type=edit]::before, .bca-btn[data-bca-btn-type=edit]::before {
+  .context-menu-icon-edit::before, .bca-icon--edit::before, .bca-btn-icon[data-bca-btn-type=edit]::before, .bca-btn-icon-text[data-bca-btn-type=edit]::before, .bca-btn[data-bca-btn-type=edit]::before {
     content: "\f303"; }
   .bca-icon--copy::before, .bca-btn-icon[data-bca-btn-type=copy]::before, .bca-btn-icon-text[data-bca-btn-type=copy]::before, .bca-btn[data-bca-btn-type=copy]::before {
     content: "\f0c5"; }
@@ -5076,7 +5076,11 @@ a {
 body {
   min-width: 960px;
   height: 100%;
-  line-height: 1.15; }
+  line-height: 1.15;
+  background-color: #2a332c; }
+  @media screen and (max-width: 768px) {
+    body {
+      min-width: auto; } }
 
 body * {
   box-sizing: border-box; }
@@ -5293,6 +5297,9 @@ body * {
 #CreditScrollerInner {
   width: 600px;
   margin: 0 auto; }
+  @media screen and (max-width: 768px) {
+    #CreditScrollerInner {
+      width: 100%; } }
 
 /* WidgetSetting
 ----------------------------------------------- */
@@ -5688,6 +5695,9 @@ body * {
   display: grid;
   min-height: 100vh;
   grid-template-rows: auto 1fr auto; }
+  @media screen and (max-width: 768px) {
+    .bca-app {
+      display: block; } }
 
 .bca-container {
   position: relative;
@@ -5708,6 +5718,9 @@ body * {
     margin: 20px;
     background-color: #fff;
     border: 1px solid #eeeeea; }
+    @media screen and (max-width: 768px) {
+      .bca-main__contents {
+        margin: 0; } }
   .bca-main__header {
     padding: 10px 20px;
     display: flex;
@@ -6112,6 +6125,9 @@ body * {
     min-width: 960px;
     padding-top: 37px;
     padding-bottom: 15px; }
+    @media screen and (max-width: 768px) {
+      .bca-footer__inner {
+        min-width: auto; } }
   .bca-footer__header {
     text-align: center; }
   .bca-footer__logo {
@@ -6207,129 +6223,146 @@ body {
   margin-top: 40px !important; }
 
 .bca-toolbar {
-  font-size: 12px;
-  height: 40px;
-  position: fixed;
-  z-index: 150;
-  width: 100%;
-  top: 0;
-  left: 0; }
+  line-height: 1.15 !important;
+  font-family: Arial, Geneva, sans-serif, "メイリオ", Verdana, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック" !important;
+  font-size: 12px !important;
+  height: 40px !important;
+  position: fixed !important;
+  z-index: 150 !important;
+  width: 100% !important;
+  top: 0 !important;
+  left: 0 !important; }
   .bca-toolbar,
   .bca-toolbar * {
-    box-sizing: border-box; }
+    box-sizing: border-box !important; }
   .bca-toolbar__body {
-    height: 40px;
-    background-color: #2a332c;
-    display: flex;
-    justify-content: space-between; }
+    height: 40px !important;
+    background-color: #2a332c !important;
+    display: flex !important;
+    justify-content: space-between !important; }
   .bca-toolbar .bca-toolbar__logo {
-    flex: 0 1 auto;
-    display: flex;
-    padding: 0 0 0 12px; }
+    flex: 0 1 auto !important;
+    display: flex !important;
+    padding: 0 0 0 12px !important; }
     .bca-toolbar .bca-toolbar__logo-link {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      color: currentColor;
-      text-decoration: none; }
+      display: flex !important;
+      justify-content: flex-start !important;
+      align-items: center !important;
+      color: currentColor !important;
+      text-decoration: none !important; }
     .bca-toolbar .bca-toolbar__logo-symbol {
-      padding: 4px 7px 4px 4px;
-      margin-right: 8px;
-      border-right: 1px solid #ccc;
-      box-sizing: content-box; }
+      padding: 4px 7px 4px 4px !important;
+      margin-right: 8px !important;
+      border-right: 1px solid #ccc !important;
+      box-sizing: content-box !important;
+      width: 24px;
+      height: 21px; }
     .bca-toolbar .bca-toolbar__logo-text {
-      display: inline;
-      padding: 0;
-      color: #fff;
-      vertical-align: top; }
+      display: inline !important;
+      padding: 0 !important;
+      color: #fff !important;
+      vertical-align: top !important; }
   .bca-toolbar__tools {
-    flex: 1 0 auto;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center; }
-    .bca-toolbar__tools-edit a {
-      margin: 8px 1em;
-      padding: 3px 8px 3px 5px;
-      background: #fff;
-      border-radius: 22px;
+    flex: 1 0 auto !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: center !important; }
+    .bca-toolbar__tools-button a {
+      margin: 8px 1em !important;
+      padding: 3px 8px 3px 5px !important;
+      background: #fff !important;
+      border-radius: 22px !important;
       color: #333;
-      text-decoration: none; }
-      .bca-toolbar__tools-edit a::before {
-        font-size: 95%;
-        font-stretch: normal;
-        margin: 0 .3em 0 0;
-        margin: 0 .3em 0 0; }
-      .bca-toolbar__tools-edit a:hover {
-        background: #ccc;
-        color: #333; }
+      text-decoration: none !important; }
+      .bca-toolbar__tools-button a::before {
+        margin: 0 0.4em 0 0.2em !important;
+        content: "";
+        display: inline-block !important;
+        color: #F00 !important;
+        background-repeat: no-repeat; }
+      .bca-toolbar__tools-button a:hover {
+        background: #ccc !important;
+        color: #333 !important; }
+    .bca-toolbar__tools-button-edit a::before {
+      background-image: url(../../img/admin/icon/pencil-alt-solid.svg) !important;
+      width: 10px !important;
+      height: 13px !important;
+      background-position: 0 3px; }
+    .bca-toolbar__tools-button-publish a::before {
+      background-image: url(../../img/admin/icon/eye-regular.svg) !important;
+      width: 13px !important;
+      height: 13px !important;
+      background-position: 0 2px; }
     .bca-toolbar__tools-mode span {
-      margin: 8px;
-      padding: 3px 8px 3px 5px;
-      border-radius: 22px;
-      background-color: #f20014;
-      font-weight: bold;
-      color: #fff; }
+      margin: 8px !important;
+      padding: 3px 8px 3px 5px !important;
+      border-radius: 22px !important;
+      background-color: #f20014 !important;
+      font-weight: bold !important;
+      color: #fff !important; }
+  .bca-toolbar__users .bc-btn {
+    margin-left: 5px; }
   .bca-toolbar__users > ul {
-    display: flex;
-    margin: 0;
-    padding: 0;
-    height: 100%; }
+    display: flex !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100% !important; }
     .bca-toolbar__users > ul > li {
-      list-style: none;
-      display: block;
-      height: 100%; }
+      list-style: none !important;
+      display: block !important;
+      height: 100% !important; }
       .bca-toolbar__users > ul > li > a {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        position: relative;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        height: 100% !important;
+        position: relative !important;
         z-index: 1;
-        box-shadow: 0 0 0 #ccc;
-        border: 0;
-        width: 100%;
-        padding: 2px 20px;
-        color: #fff;
-        text-decoration: none; }
+        box-shadow: 0 0 0 #ccc !important;
+        border: 0 !important;
+        width: 100% !important;
+        padding: 2px 20px !important;
+        color: #fff !important;
+        text-decoration: none !important; }
         .bca-toolbar__users > ul > li > a:hover, .bca-toolbar__users > ul > li > a:focus {
-          background-color: #444; }
+          background-color: #444 !important; }
       .bca-toolbar__users > ul > li > ul {
-        display: none; }
+        display: none !important; }
     .bca-toolbar__users > ul > li.active {
-      position: relative; }
+      position: relative !important; }
       .bca-toolbar__users > ul > li.active > a {
-        color: #ccc;
-        background-color: #fff;
-        border-bottom: 0; }
+        color: #ccc !important;
+        background-color: #fff !important;
+        border-bottom: 0 !important; }
       .bca-toolbar__users > ul > li.active > ul {
-        display: block;
-        margin: -1px 0 0;
+        display: block !important;
+        margin: -1px 0 0 !important;
         padding: 0;
-        position: absolute;
-        right: 0;
+        position: absolute !important;
+        right: 0 !important;
         border: 1px solid #ccc !important;
-        box-shadow: 0 1px 3px #ccc;
-        background-color: #fff; }
+        box-shadow: 0 1px 3px #ccc !important;
+        background-color: #fff !important; }
         .bca-toolbar__users > ul > li.active > ul li {
-          list-style: none;
-          display: block;
-          white-space: nowrap; }
+          list-style: none !important;
+          display: block !important;
+          white-space: nowrap !important; }
         .bca-toolbar__users > ul > li.active > ul a {
-          box-shadow: 0 0 0 #ccc;
-          color: #535a62;
-          border: 0;
-          width: 100%;
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
-          padding: 2px 20px;
-          text-decoration: none;
-          height: 40px;
-          position: relative;
-          z-index: 1; }
+          box-shadow: 0 0 0 #ccc !important;
+          color: #535a62 !important;
+          border: 0 !important;
+          width: 100% !important;
+          display: flex !important;
+          justify-content: flex-start !important;
+          align-items: center !important;
+          padding: 2px 20px !important;
+          text-decoration: none !important;
+          height: 40px !important;
+          position: relative !important;
+          z-index: 1 !important; }
           .bca-toolbar__users > ul > li.active > ul a:hover {
-            background-color: #6fa83d;
-            color: #fff; }
+            background-color: #6fa83d !important;
+            color: #fff !important; }
 
 .bca-nav {
   font-size: 1.4rem;
@@ -6361,7 +6394,7 @@ body {
       font-weight: bold;
       cursor: pointer; }
       .bca-nav__sub-title-label {
-        display: block;
+        display: flex;
         vertical-align: middle;
         padding: 12px 10px 12px 10px;
         font-weight: 900; }
@@ -6524,7 +6557,10 @@ body {
         transition: 0.1s all;
         vertical-align: middle;
         margin-right: 6px;
+        margin-left: 6px;
         float: right; }
+        .bca-nav__system-title-icon::before {
+          margin: 0; }
     .bca-nav__system-list-item {
       padding: 0;
       position: relative; }
@@ -6548,7 +6584,7 @@ body {
         margin: 0;
         padding: 0; }
         .bca-nav__system-list-item-title-label {
-          display: block;
+          display: flex;
           vertical-align: middle;
           padding: 12px 10px 12px 10px; }
           .bca-nav__system-list-item-title-label:before {
@@ -7419,6 +7455,9 @@ body {
   .bca-login *::before,
   .bca-login *::after {
     box-sizing: border-box; }
+  @media screen and (max-width: 768px) {
+    .bca-login {
+      max-width: none !important; } }
   .bca-login__title {
     margin-top: 0;
     margin-bottom: 40px;
@@ -8230,6 +8269,14 @@ table.cake-sql-log tr td {
       box-shadow: 0 0 4px 0px #6fa83d;
       border-color: #6fa83d;
       border-width: 1px; }
+    .bca-textbox__input::-webkit-input-placeholder {
+      color: #c9c8c8; }
+    .bca-textbox__input::-moz-placeholder {
+      color: #c9c8c8; }
+    .bca-textbox__input::-ms-input-placeholder {
+      color: #c9c8c8; }
+    .bca-textbox__input::placeholder {
+      color: #c9c8c8; }
 
 .bca-textarea {
   display: inline;
@@ -8258,6 +8305,14 @@ table.cake-sql-log tr td {
       box-shadow: 0 0 4px 0px #6fa83d;
       border-color: #6fa83d;
       border-width: 1px; }
+    .bca-textarea__textarea::-webkit-input-placeholder {
+      color: #c9c8c8; }
+    .bca-textarea__textarea::-moz-placeholder {
+      color: #c9c8c8; }
+    .bca-textarea__textarea::-ms-input-placeholder {
+      color: #c9c8c8; }
+    .bca-textarea__textarea::placeholder {
+      color: #c9c8c8; }
 
 .bca-file__delete {
   display: inline-block;
