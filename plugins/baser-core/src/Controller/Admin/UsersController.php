@@ -43,9 +43,6 @@ class UsersController extends AppController
 	 *
 	 * 管理画面にログインすることができるユーザーの一覧を表示する
 	 *
-	 * - list head
-	 *	- add button
-	 *
 	 * - list view
      *  - User.id
 	 *	- User.name
