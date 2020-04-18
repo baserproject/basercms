@@ -18,9 +18,12 @@ use Cake\Routing\Route\DashedRoute;
  */
 Router::plugin(
     'BaserCore',
-    ['path' => '/baser'],
+    ['path' =>  env('BC_BASER_CORE_PATH', '/baser')],
     function (RouteBuilder $routes) {
-		$routes->prefix('admin', function (RouteBuilder $routes) {
+		$routes->prefix(
+            'Admin',
+            ['path' => env('BC_ADMIN_PREFIX', '/admin')],
+            function (RouteBuilder $routes) {
 			$routes->fallbacks(DashedRoute::class);
 		});
 		$routes->prefix('api', function (RouteBuilder $routes) {
