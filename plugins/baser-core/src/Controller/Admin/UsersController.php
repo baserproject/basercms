@@ -74,9 +74,6 @@ class UsersController extends BcAdminAppController
 	 */
     public function index()
     {
-        var_dump($_SESSION);
-        exit;
-
 		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
 		$this->setViewConditions('User', ['default' => $default]);
 		$users = $this->paginate(
