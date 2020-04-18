@@ -23,38 +23,43 @@ use Cake\Event\EventInterface;
 class UsersController extends AppController
 {
 	public $siteConfigs = [];
+    
+    /**
+     * Before Filter
+     * @param EventInterface $event
+     * @return \Cake\Http\Response|void|null
+     */
 	public function beforeFilter(EventInterface $event)
     {
+        // TODO 取り急ぎ動作させるためのコード
+        // >>>
 		$this->siteConfigs['admin_list_num'] = 20;
 		$this->request = $this->request->withParam('pass', ['num' => 20]);
+		// <<<
     }
 
 	/**
 	 * ログインユーザーリスト
 	 *
 	 * 管理画面にログインすることができるユーザーの一覧を表示する
-	 * - 新規登録画面への動線が存在する
-	 * - カラムの定義：ID、名前、
-	 * -
 	 *
-	 * [例]
 	 * - list head
 	 *	- add button
 	 *
-	 *
 	 * - list view
+     *  - User.id
 	 *	- User.name
-	 *  - User.mail
-	 *  - User.zip
-	 *  - User.pref
-	 *  - User.addres
+     *  - User.nickname
+     *  - User.user_group_id
+     *  - User.real_name_1 && User.real_name_2
+     *  - User.created && User.modified
 	 *
 	 * - search input
-	 *	- User.name
-	 *	- User.name
+	 *	- User.user_group_id
 	 *
 	 * - pagination
 	 * - view num
+     *
 	 * @return void
 	 */
     public function index()
