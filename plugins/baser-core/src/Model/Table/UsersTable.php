@@ -60,20 +60,37 @@ class UsersTable extends Table
     {
         $validator
             ->integer('id')
-            ->allowEmptyString('id', 'create');
+            ->allowEmptyString('id', null, 'create');
+
         $validator
-            ->allowEmptyString('name');
+            ->scalar('name')
+            ->maxLength('name', 255)
+            ->notEmptyString('name');
+
         $validator
-            ->allowEmptyString('password');
+            ->scalar('password')
+            ->maxLength('password', 255)
+            ->notEmptyString('password');
+
         $validator
-            ->allowEmptyString('real_name_1');
+            ->scalar('real_name_1')
+            ->maxLength('real_name_1', 50)
+            ->notEmptyString('real_name_1');
+
         $validator
+            ->scalar('real_name_2')
+            ->maxLength('real_name_2', 50)
             ->allowEmptyString('real_name_2');
+
         $validator
             ->email('email')
-            ->allowEmptyString('email');
+            ->notEmptyString('email');
+
         $validator
+            ->scalar('nickname')
+            ->maxLength('nickname', 255)
             ->allowEmptyString('nickname');
+
         return $validator;
     }
 
@@ -87,6 +104,7 @@ class UsersTable extends Table
     {
         $rules->add($rules->isUnique(['email']));
         $rules->add($rules->existsIn(['user_group_id'], 'UserGroups'));
+
         return $rules;
     }
 }

@@ -81,4 +81,7 @@ class BcBaserHelper extends Helper
 	    return 'basercms';
 	}
 
+    public function i18nScript() {
+
+    }
 }
