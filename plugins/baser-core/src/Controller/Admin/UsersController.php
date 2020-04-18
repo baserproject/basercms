@@ -11,18 +11,20 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Controller\AppController;
+use BaserCore\Controller\Admin\BcAdminAppController;
 use Cake\Event\Event;
 use Cake\Event\EventInterface;
+use Cake\ORM\TableRegistry;
 
 /**
  * Users Controller
  *
  * @property \BaserCore\Model\Table\UsersTable $Users
  */
-class UsersController extends AppController
+class UsersController extends BcAdminAppController
 {
-	public $siteConfigs = [];
+    public $siteConfigs = [];
+
 	public function beforeFilter(EventInterface $event)
     {
 		$this->siteConfigs['admin_list_num'] = 20;
@@ -71,5 +73,64 @@ class UsersController extends AppController
             '_serialize' => ['users']
         ]);
         $this->set('title', 'ユーザー一覧');
+    }
+
+    /**
+     * 管理画面へログインする
+	 * - link
+     *	- パスワード再発行
+     *
+     * - viewVars
+     *  - title
+	 *
+	 * - input
+	 *	- User.name or User.email
+     *	- User.password
+     *  - remember login
+     *  - submit
+     *
+     * @return void
+     */
+    public function login()
+    {
+
+        $this->set('title', 'ログイン');
+        if ($this->request->is('post')) {
+            // $user = $this->Auth->identify();
+            // var_dump($user);exit;
+            // if ($user) {
+            //     $this->Auth->setUser($user);
+            //     return $this->redirect($this->Auth->redirectUrl());
+            // }
+            // $this->Flash->error(__('Invalid username or password, try again'));
+        } else {
+            // $userTable = TableRegistry::getTableLocator()->get('users');
+            // // $user = $userTable->newEntity(
+            // $user = $this->Users->newEntity(
+            //     [
+            //         'name' => 'test',
+            //         'password' => 'password',
+            //         'real_name_1' => 'test',
+            //         'email' => 'admin@example.com',
+            //         'user_group_id' => 1,
+            //     ]
+            );
+            // var_dump($user);exit;
+            // $userTable->save($user);
+            // var_dump($userTable->save($user));
+            // exit;
+        }
+    }
+
+    /**
+     * ログイン状態のセッションを破棄する
+     *
+     * - redirect
+     *   - login
+     * @return void
+     */
+    public function logout()
+    {
+
     }
 }
