@@ -14,7 +14,7 @@ module.exports = {
     },
     optimization: {
         splitChunks: {
-			name: 'vendor',
+			name: 'admin/vendor',
 			chunks: 'initial',
         }
     },
@@ -29,7 +29,14 @@ module.exports = {
                         presets: ['@babel/preset-env']
                     }
                 }
-            }
+            },
+			{
+				test: /\.(sc|c|sa)ss$/,
+				use: [
+				    'style-loader',
+					'css-loader'
+				]
+			}
         ]
     }
 };

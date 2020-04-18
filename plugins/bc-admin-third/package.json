@@ -9,12 +9,16 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "jquery": "^3.5.0"
+    "bootstrap": "^4.4.1",
+    "jquery": "^3.5.0",
+    "popper.js": "^1.16.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
     "babel-loader": "^8.1.0",
+    "css-loader": "^3.5.2",
+    "style-loader": "^1.1.4",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
     "webpack-stream": "^5.2.1"

@@ -25,14 +25,14 @@ $this->assign('title', $title);
 		<?php echo $this->fetch('css') ?>
 		<?php echo $this->fetch('script') ?>
 		<?php
-		echo $this->Html->css([
-      		'../js/admin/vendors/bootstrap-4.1.3/bootstrap.min',
-			'admin/style.css',
-			'admin/jquery-ui/jquery-ui.min'
+		echo $this->BcBaser->js([
+      		'admin/vendor.bundle',
+      		'admin/common.bundle'
 		]) ?>
 		<?php
-		echo $this->BcBaser->js([
-      		'vendor.bundle'
+		echo $this->Html->css([
+			'admin/style.css',
+			'admin/jquery-ui/jquery-ui.min'
 		]) ?>
 <?php //echo $this->Html->script(['https://unpkg.com/vue', 'https://unpkg.com/axios/dist/axios.min.js', 'admin/app']) ?>
 	</head>
