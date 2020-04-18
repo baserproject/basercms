@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
--- ホスト: bc5-db
--- 生成日時: 2020 年 4 月 18 日 14:26
--- サーバのバージョン： 5.7.29
--- PHP のバージョン: 7.4.4
+-- Host: basercake3-database
+-- Generation Time: 2019 年 6 月 15 日 06:26
+-- サーバのバージョン： 5.7.23
+-- PHP Version: 7.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- データベース: `basercms`
+-- Database: `basercms`
 --
 
 -- --------------------------------------------------------
@@ -122,6 +123,28 @@ INSERT INTO `pages` (`id`, `contents`, `draft`, `page_template`, `code`, `modifi
 -- --------------------------------------------------------
 
 --
+-- テーブルの構造 `recipes`
+--
+
+DROP TABLE IF EXISTS `recipes`;
+CREATE TABLE `recipes` (
+  `id` int(8) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `created` date DEFAULT NULL,
+  `modified` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `recipes`
+--
+
+INSERT INTO `recipes` (`id`, `name`, `created`, `modified`) VALUES
+(1, 'recipes test', '2019-06-13', '2019-06-13'),
+(2, 'recipes 2 test', '2019-06-13', '2019-06-13');
+
+-- --------------------------------------------------------
+
+--
 -- テーブルの構造 `users`
 --
 
@@ -144,7 +167,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `password`, `real_name_1`, `real_name_2`, `email`, `user_group_id`, `nickname`, `created`, `modified`) VALUES
-(1, 'admin', '$2y$10$x6WQstawmuyS7XrqutyDjOSOLxJp3dv72O73B7lhqzP8XvVlmcx4G', 'basercake3', '', 'basercake3@example.com', 1, '', '2017-05-03 14:22:08', '2017-05-03 10:59:12');
+(1, 'basercake3', '$2y$10$x6WQstawmuyS7XrqutyDjOSOLxJp3dv72O73B7lhqzP8XvVlmcx4G', 'basercake4', '', 'admin@example.com', 1, '', '2017-05-03 14:22:08', '2017-05-03 10:59:12');
 
 -- --------------------------------------------------------
 
@@ -174,69 +197,75 @@ INSERT INTO `user_groups` (`id`, `name`, `title`, `auth_prefix`, `use_admin_glob
 (2, 'operators', 'サイト運営', 'admin', 0, 'YTo3OntpOjA7YToyOntzOjQ6Im5hbWUiO3M6MjE6IuOCs+ODs+ODhuODs+ODhOeuoeeQhiI7czozOiJ1cmwiO3M6MjE6Ii9hZG1pbi9jb250ZW50cy9pbmRleCI7fWk6MTthOjI6e3M6NDoibmFtZSI7czoxODoi5paw552A5oOF5aCx566h55CGIjtzOjM6InVybCI7czozMDoiL2FkbWluL2Jsb2cvYmxvZ19wb3N0cy9pbmRleC8xIjt9aToyO2E6Mjp7czo0OiJuYW1lIjtzOjMwOiLmlrDnnYDmg4XloLHjgrPjg6Hjg7Pjg4jkuIDopqciO3M6MzoidXJsIjtzOjMzOiIvYWRtaW4vYmxvZy9ibG9nX2NvbW1lbnRzL2luZGV4LzEiO31pOjM7YToyOntzOjQ6Im5hbWUiO3M6MjQ6IuOBiuWVj+OBhOWQiOOCj+OBm+ioreWumiI7czozOiJ1cmwiO3M6MzE6Ii9hZG1pbi9tYWlsL21haWxfZmllbGRzL2luZGV4LzEiO31pOjQ7YToyOntzOjQ6Im5hbWUiO3M6MjQ6IuOBiuWVj+OBhOWQiOOCj+OBm+S4gOimpyI7czozOiJ1cmwiO3M6MzM6Ii9hZG1pbi9tYWlsL21haWxfbWVzc2FnZXMvaW5kZXgvMSI7fWk6NTthOjI6e3M6NDoibmFtZSI7czoyNDoi44Ki44OD44OX44Ot44O844OJ566h55CGIjtzOjM6InVybCI7czozMToiL2FkbWluL3VwbG9hZGVyL3VwbG9hZGVyX2ZpbGVzLyI7fWk6NjthOjI6e3M6NDoibmFtZSI7czoxNToi44Kv44Os44K444OD44OIIjtzOjM6InVybCI7czoyMDoiamF2YXNjcmlwdDpjcmVkaXQoKTsiO319', 0, NULL, '2015-06-26 20:34:07');
 
 --
--- ダンプしたテーブルのインデックス
+-- Indexes for dumped tables
 --
 
 --
--- テーブルのインデックス `contents`
+-- Indexes for table `contents`
 --
 ALTER TABLE `contents`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `content_folders`
+-- Indexes for table `content_folders`
 --
 ALTER TABLE `content_folders`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `pages`
+-- Indexes for table `pages`
 --
 ALTER TABLE `pages`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `users`
+-- Indexes for table `recipes`
+--
+ALTER TABLE `recipes`
+  ADD PRIMARY KEY (`id`) USING BTREE;
+
+--
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `user_groups`
+-- Indexes for table `user_groups`
 --
 ALTER TABLE `user_groups`
   ADD PRIMARY KEY (`id`);
 
 --
--- ダンプしたテーブルのAUTO_INCREMENT
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- テーブルのAUTO_INCREMENT `contents`
+-- AUTO_INCREMENT for table `contents`
 --
 ALTER TABLE `contents`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- テーブルのAUTO_INCREMENT `content_folders`
+-- AUTO_INCREMENT for table `content_folders`
 --
 ALTER TABLE `content_folders`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- テーブルのAUTO_INCREMENT `pages`
+-- AUTO_INCREMENT for table `pages`
 --
 ALTER TABLE `pages`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- テーブルのAUTO_INCREMENT `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- テーブルのAUTO_INCREMENT `user_groups`
+-- AUTO_INCREMENT for table `user_groups`
 --
 ALTER TABLE `user_groups`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;

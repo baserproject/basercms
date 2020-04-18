@@ -69,6 +69,8 @@ $this->assign('title', $title);
 
 						<div id="BcMessageBox"><div id="BcSystemMessage" class="notice-message"></div></div>
 
+                        <?= $this->Flash->render() ?>
+
 						<div class="bca-main__contents clearfix">
                             <?= $this->Flash->render() ?>
 							<?= $this->fetch('content') ?>
