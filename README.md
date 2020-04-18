@@ -26,6 +26,7 @@ baserCMSの画面表示をテーマとして提供
 6. composer を実行し、CakePHPなどのライブラリをインストールします。  
 `composer install`
 7. ブラウザで、[http://localhost/baser/admin/users/index](http://localhost/baser/admin/users/index) にアクセスして表示を確認します。
+8. admin@example.com / password でログインします。
 
 ## 現在の状態
 
