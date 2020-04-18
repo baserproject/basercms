@@ -13,6 +13,7 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Controller\AppController;
 use Cake\Event\Event;
+use Cake\Event\EventInterface;
 
 /**
  * Users Controller
@@ -22,36 +23,36 @@ use Cake\Event\Event;
 class UsersController extends AppController
 {
 	public $siteConfigs = [];
-	public function beforeFilter(Event $event) {
-		// ダミーデータ
+	public function beforeFilter(EventInterface $event)
+    {
 		$this->siteConfigs['admin_list_num'] = 20;
 		$this->request = $this->request->withParam('pass', ['num' => 20]);
-	}
+    }
 
 	/**
 	 * ログインユーザーリスト
-	 * 
+	 *
 	 * 管理画面にログインすることができるユーザーの一覧を表示する
 	 * - 新規登録画面への動線が存在する
 	 * - カラムの定義：ID、名前、
-	 * - 
-	 * 
+	 * -
+	 *
 	 * [例]
 	 * - list head
 	 *	- add button
-	 * 
-	 * 
+	 *
+	 *
 	 * - list view
 	 *	- User.name
 	 *  - User.mail
 	 *  - User.zip
 	 *  - User.pref
 	 *  - User.addres
-	 * 
+	 *
 	 * - search input
 	 *	- User.name
 	 *	- User.name
-	 * 
+	 *
 	 * - pagination
 	 * - view num
 	 * @return void

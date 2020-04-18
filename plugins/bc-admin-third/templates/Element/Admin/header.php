@@ -15,7 +15,7 @@ use Cake\Core\Configure;
 
 <header id="Header" class="bca-header">
 <!--	--><?php //$this->BcBaser->element('admin/toolbar') ?>
-	<?php if ($this->name == 'Installations' || ('/' . $this->request->getPath() == Configure::read('BcAuthPrefix.admin.loginAction')) || (@$this->request->params['prefix'] == 'admin' && $this->BcAdmin->isAdminGlobalmenuUsed())): ?>
+	<?php if ($this->name == 'Installations' || ('/' . $this->request->getPath() == Configure::read('BcAuthPrefix.admin.loginAction')) || (@$this->request->getParam('prefix') == 'admin' && $this->BcAdmin->isAdminGlobalmenuUsed())): ?>
 		<div id="HeaderInner" hidden>
 
 			<?php if ($this->name != 'Installations' && ('/' . $this->request->url != Configure::read('BcAuthPrefix.admin.loginAction'))): ?>

@@ -9,6 +9,7 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 namespace BaserCore\Controller;
+use Cake\Event\EventInterface;
 use Cake\Utility\Inflector;
 use App\Controller\AppController as BaseController;
 
@@ -25,7 +26,7 @@ use App\Controller\AppController as BaseController;
 class AppController extends BaseController
 {
 
-	public function beforeRender(\Cake\Event\Event $event)
+	public function beforeRender(EventInterface $event)
 	{
 		$this->viewBuilder()->setTheme('BcAdminThird');
 	}
