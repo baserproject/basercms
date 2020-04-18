@@ -22,11 +22,11 @@ use Cake\Core\Configure;
 				<div id="GlobalMenu" hidden></div>
 			<?php endif ?>
 
-			<div id="Logo" hidden>
+			<div id="Logo">
 				<?php if (!empty($user)): ?>
-					<?php //$this->BcBaser->link($this->BcBaser->getImg('admin/logo_header.png', ['width' => 153, 'height' => 30, 'alt' => 'baserCMS']), ['plugin' => null, 'controller' => 'dashboard', 'action' => 'index']) ?>
+					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/logo_header.png', ['width' => 153, 'height' => 30, 'alt' => 'baserCMS']), ['plugin' => null, 'controller' => 'dashboard', 'action' => 'index']) ?>
 				<?php else: ?>
-					<?php //$this->BcBaser->img('admin/logo_header.png', ['width' => 153, 'height' => 30, 'alt' => 'baserCMS']) ?>
+					<?php $this->BcBaser->img('admin/logo_header.png', ['width' => 153, 'height' => 30, 'alt' => 'baserCMS']) ?>
 				<?php endif ?>
 			</div>
 
