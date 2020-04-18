@@ -61,4 +61,4 @@ nbproject/*
 /.c9
 # vagrant
 /.vagrant
-Vagrantfile
+/Vagrantfile
