@@ -9,6 +9,8 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+
+$this->BcBaser->js('admin/users/index.bundle');
 // TODO 一覧をどうやって読み込ませるか検討が必要
 //$this->BcBaser->js([
 //	'admin/libs/jquery.baser_ajax_data_list',

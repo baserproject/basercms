@@ -30,6 +30,10 @@ $this->assign('title', $title);
 			'admin/style.css',
 			'admin/jquery-ui/jquery-ui.min'
 		]) ?>
+		<?php
+		echo $this->BcBaser->js([
+      		'vendor.bundle'
+		]) ?>
 <?php //echo $this->Html->script(['https://unpkg.com/vue', 'https://unpkg.com/axios/dist/axios.min.js', 'admin/app']) ?>
 	</head>
 

@@ -10,7 +10,7 @@
  */
 use Cake\Core\Configure;
 // JSの出力について、ツールバーはフロントエンドでも利用するため、inlineに出力する
-$this->BcBaser->js(['admin/vendors/outerClick', 'admin/vendors/jquery.fixedMenu', 'admin/toolbar']);
+$this->BcBaser->js('admin/toolbar.bundle');
 $isCurrentUserAdminAvailable = $this->BcAuth->isCurrentUserAdminAvailable();
 $authName = $this->BcAuth->getCurrentName();
 $loginUrl = $this->BcAuth->getCurrentLoginUrl();
