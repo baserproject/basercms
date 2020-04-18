@@ -2,30 +2,26 @@ version: '3'
 
 # volumes:
 #  db-volume: # windowsの場合はコメントを外す
-#  bc5-sync:
-#    external: true
 
 services:
   bc5-db:
     container_name: bc5-db
-    image: mysql/mysql-server:5.7
+    image: mysql:5.7
     volumes:
       - ./volumes/mysql:/var/lib/mysql
+      # - db-volume:/var/lib/mysql # windowsの場合はコメントを外し、上の行をコメントアウトする
       - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     ports:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: "root"
-      MYSQL_USER: "root"
-      MYSQL_PASSWORD: "root"
       MYSQL_DATABASE: "basercms"
-    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci --innodb-use-native-aio=0
   bc5-php:
     container_name: bc5-php
     image: baserproject/basercms:5-php7.3
     volumes:
       - ../:/var/www/html:cached
-#      - bc5-sync:/var/www/html:nocopy
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
       COMPOSER_ALLOW_SUPERUSER: 1
