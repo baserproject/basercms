@@ -11,19 +11,32 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Controller\AppController;
+use BaserCore\Controller\Admin\BcAdminAppController;
 use Cake\Event\Event;
 use Cake\Event\EventInterface;
+use Cake\ORM\TableRegistry;
 
 /**
  * Users Controller
  *
  * @property \BaserCore\Model\Table\UsersTable $Users
  */
-class UsersController extends AppController
+class UsersController extends BcAdminAppController
 {
 	public $siteConfigs = [];
-    
+
+    /**
+     * initialize
+     * ログインページ認証除外
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['login']);
+    }
+
     /**
      * Before Filter
      * @param EventInterface $event
@@ -61,6 +74,9 @@ class UsersController extends AppController
 	 */
     public function index()
     {
+        var_dump($_SESSION);
+        exit;
+
 		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
 		$this->setViewConditions('User', ['default' => $default]);
 		$users = $this->paginate(
@@ -73,5 +89,47 @@ class UsersController extends AppController
             '_serialize' => ['users']
         ]);
         $this->set('title', 'ユーザー一覧');
+    }
+
+    /**
+     * 管理画面へログインする
+	 * - link
+     *	- パスワード再発行
+     *
+     * - viewVars
+     *  - title
+	 *
+	 * - input
+	 *	- User.name or User.email
+     *	- User.password
+     *  - remember login
+     *  - submit
+     *
+     * @return void
+     */
+    public function login()
+    {
+        $this->set('title', 'ログイン');
+        $result = $this->Authentication->getResult();
+        if ($result->isValid()) {
+            $target = $this->Authentication->getLoginRedirect() ?? env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX') . '/';
+            return $this->redirect($target);
+        }
+        if ($this->request->is('post') && !$result->isValid()) {
+            $this->Flash->error('Invalid username or password');
+        }
+    }
+
+    /**
+     * ログイン状態のセッションを破棄する
+     *
+     * - redirect
+     *   - login
+     * @return void
+     */
+    public function logout()
+    {
+        $this->Authentication->logout();
+        return $this->redirect(['action' => 'login']);
     }
 }

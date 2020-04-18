@@ -26,11 +26,6 @@ use App\Controller\AppController as BaseController;
 class AppController extends BaseController
 {
 
-	public function beforeRender(EventInterface $event)
-	{
-		$this->viewBuilder()->setTheme('BcAdminThird');
-	}
-
 	/**
 	 * 画面の情報をセットする
 	 *
