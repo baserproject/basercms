@@ -9,11 +9,6 @@ parameters:
   data_to_append:
     require-dev:
       "symplify/monorepo-builder": "^6.1"
-      "cakephp/bake": "^1.9.0"
-      "cakephp/cakephp-codesniffer": "^3.0"
-      "cakephp/debug_kit": "^3.17.0"
-      "josegonzalez/dotenv": "3.*"
-      "phar-io/version": "2.0.1"
     "autoload":
         "psr-4":
             "App\\": "src/"
