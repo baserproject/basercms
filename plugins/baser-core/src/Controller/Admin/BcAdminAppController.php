@@ -28,24 +28,25 @@ class BcAdminAppController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('Auth', [
-            'authenticate' => [
-                'Form' => [
-                    'fields' => [
-                        'username' => 'email',
-                        'password' => 'password'
-                    ]
-                ]
-            ],
-            'loginAction' => [
-                'prefix' => 'Admin',
-                'controller' => 'Users',
-                'action' => 'login'
-            ],
-            // コントローラーで isAuthorized を使用します
-            // 'authorize' => ['Controller'],
-            'unauthorizedRedirect' => $this->referer()
-        ]);
+        $this->loadComponent('Authentication.Authentication');
+        // $this->loadComponent('Auth', [
+        //     'authenticate' => [
+        //         'Form' => [
+        //             'fields' => [
+        //                 'username' => 'email',
+        //                 'password' => 'password'
+        //             ]
+        //         ]
+        //     ],
+        //     'loginAction' => [
+        //         'prefix' => 'Admin',
+        //         'controller' => 'Users',
+        //         'action' => 'login'
+        //     ],
+        //     // コントローラーで isAuthorized を使用します
+        //     // 'authorize' => ['Controller'],
+        //     'unauthorizedRedirect' => $this->referer()
+        // ]);
     }
 
 	public function beforeRender(EventInterface $event)

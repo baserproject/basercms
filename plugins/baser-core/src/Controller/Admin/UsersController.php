@@ -23,44 +23,60 @@ use Cake\ORM\TableRegistry;
  */
 class UsersController extends BcAdminAppController
 {
-    public $siteConfigs = [];
+	public $siteConfigs = [];
 
+    /**
+     * initialize
+     * ログインページ認証除外
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['login']);
+    }
+
+    /**
+     * Before Filter
+     * @param EventInterface $event
+     * @return \Cake\Http\Response|void|null
+     */
 	public function beforeFilter(EventInterface $event)
     {
+        // TODO 取り急ぎ動作させるためのコード
+        // >>>
 		$this->siteConfigs['admin_list_num'] = 20;
 		$this->request = $this->request->withParam('pass', ['num' => 20]);
+		// <<<
     }
 
 	/**
 	 * ログインユーザーリスト
 	 *
 	 * 管理画面にログインすることができるユーザーの一覧を表示する
-	 * - 新規登録画面への動線が存在する
-	 * - カラムの定義：ID、名前、
-	 * -
-	 *
-	 * [例]
-	 * - list head
-	 *	- add button
-	 *
 	 *
 	 * - list view
+     *  - User.id
 	 *	- User.name
-	 *  - User.mail
-	 *  - User.zip
-	 *  - User.pref
-	 *  - User.addres
+     *  - User.nickname
+     *  - User.user_group_id
+     *  - User.real_name_1 && User.real_name_2
+     *  - User.created && User.modified
 	 *
 	 * - search input
-	 *	- User.name
-	 *	- User.name
+	 *	- User.user_group_id
 	 *
 	 * - pagination
 	 * - view num
+     *
 	 * @return void
 	 */
     public function index()
     {
+        var_dump($_SESSION);
+        exit;
+
 		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
 		$this->setViewConditions('User', ['default' => $default]);
 		$users = $this->paginate(
@@ -93,32 +109,14 @@ class UsersController extends BcAdminAppController
      */
     public function login()
     {
-
         $this->set('title', 'ログイン');
-        if ($this->request->is('post')) {
-            // $user = $this->Auth->identify();
-            // var_dump($user);exit;
-            // if ($user) {
-            //     $this->Auth->setUser($user);
-            //     return $this->redirect($this->Auth->redirectUrl());
-            // }
-            // $this->Flash->error(__('Invalid username or password, try again'));
-        } else {
-            // $userTable = TableRegistry::getTableLocator()->get('users');
-            // // $user = $userTable->newEntity(
-            // $user = $this->Users->newEntity(
-            //     [
-            //         'name' => 'test',
-            //         'password' => 'password',
-            //         'real_name_1' => 'test',
-            //         'email' => 'admin@example.com',
-            //         'user_group_id' => 1,
-            //     ]
-            );
-            // var_dump($user);exit;
-            // $userTable->save($user);
-            // var_dump($userTable->save($user));
-            // exit;
+        $result = $this->Authentication->getResult();
+        if ($result->isValid()) {
+            $target = $this->Authentication->getLoginRedirect() ?? env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX') . '/';
+            return $this->redirect($target);
+        }
+        if ($this->request->is('post') && !$result->isValid()) {
+            $this->Flash->error('Invalid username or password');
         }
     }
 
@@ -131,6 +129,7 @@ class UsersController extends BcAdminAppController
      */
     public function logout()
     {
-
+        $this->Authentication->logout();
+        return $this->redirect(['action' => 'login']);
     }
 }

@@ -11,7 +11,7 @@
 
 namespace BaserCore\Model\Entity;
 
-use Cake\Auth\DefaultPasswordHasher;
+use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\ORM\Entity;
 
 /**
@@ -61,5 +61,5 @@ class User extends Entity
 		$hasher = new DefaultPasswordHasher();
 		return $hasher->hash($value);
 	}
-	
+
 }
