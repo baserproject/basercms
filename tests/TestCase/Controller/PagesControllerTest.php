@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,19 +16,19 @@
  */
 namespace App\Test\TestCase\Controller;
 
-use App\Controller\PagesController;
-use Cake\Core\App;
 use Cake\Core\Configure;
-use Cake\Http\Response;
-use Cake\Http\ServerRequest;
-use Cake\TestSuite\IntegrationTestCase;
-use Cake\View\Exception\MissingTemplateException;
+use Cake\TestSuite\IntegrationTestTrait;
+use Cake\TestSuite\TestCase;
 
 /**
  * PagesControllerTest class
+ *
+ * @uses \App\Controller\PagesController
  */
-class PagesControllerTest extends IntegrationTestCase
+class PagesControllerTest extends TestCase
 {
+    use IntegrationTestTrait;
+
     /**
      * testMultipleGet method
      *
@@ -80,7 +82,7 @@ class PagesControllerTest extends IntegrationTestCase
         $this->assertResponseFailure();
         $this->assertResponseContains('Missing Template');
         $this->assertResponseContains('Stacktrace');
-        $this->assertResponseContains('not_existing.ctp');
+        $this->assertResponseContains('not_existing.php');
     }
 
     /**
@@ -93,5 +95,32 @@ class PagesControllerTest extends IntegrationTestCase
         $this->get('/pages/../Layout/ajax');
         $this->assertResponseCode(403);
         $this->assertResponseContains('Forbidden');
+    }
+
+    /**
+     * Test that CSRF protection is applied to page rendering.
+     *
+     * @reutrn void
+     */
+    public function testCsrfAppliedError()
+    {
+        $this->post('/pages/home', ['hello' => 'world']);
+
+        $this->assertResponseCode(403);
+        $this->assertResponseContains('CSRF');
+    }
+
+    /**
+     * Test that CSRF protection is applied to page rendering.
+     *
+     * @reutrn void
+     */
+    public function testCsrfAppliedOk()
+    {
+        $this->enableCsrfToken();
+        $this->post('/pages/home', ['hello' => 'world']);
+
+        $this->assertResponseCode(200);
+        $this->assertResponseContains('CakePHP');
     }
 }

@@ -1,6 +1,6 @@
 # CakePHP specific files #
 ##########################
-/config/app.php
+/config/app_local.php
 /config/.env
 /logs/*
 /tmp/*
@@ -16,9 +16,12 @@
 Icon?
 ehthumbs.db
 Thumbs.db
+.directory
 
 # Tool specific files #
 #######################
+# PHPUnit
+.phpunit.result.cache
 # vim
 *~
 *.swp
@@ -38,9 +41,7 @@ nbproject/*
 .vscode
 # Sass preprocessor
 .sass-cache/
-/volumes/*
-/docker-compose.yml
-/Dockerfile
+
 
 # baserCMS
 ######################
