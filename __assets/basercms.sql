@@ -167,7 +167,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `password`, `real_name_1`, `real_name_2`, `email`, `user_group_id`, `nickname`, `created`, `modified`) VALUES
-(1, 'basercake3', '$2y$10$QJANUS5uCoqk0msOXu0MjeE8DindYSrv6zWkDdMSXvKU0dZd35BOu', 'basercake3', '', 'basercake3@example.com', 1, '', '2017-05-03 14:22:08', '2017-05-03 10:59:12');
+(1, 'basercake3', '$2y$10$x6WQstawmuyS7XrqutyDjOSOLxJp3dv72O73B7lhqzP8XvVlmcx4G', 'basercake4', '', 'admin@example.com', 1, '', '2017-05-03 14:22:08', '2017-05-03 10:59:12');
 
 -- --------------------------------------------------------
 
