@@ -27,7 +27,7 @@ docker-compose up -d
 ## composer を実行する
 
 ```
-docker exec bc5-php composer install
+docker exec bc-php composer install
 ```
 
 ## baserCMS を起動する
@@ -37,7 +37,7 @@ composer によるライブラリのインストールが完了したら、 `htt
 ### データベース情報
 | name | value |
 |-----------|:------------|
-| host | bc5-db |
+| host | bc-db |
 | user | root |
 | password | root |
 | database | basercms |
@@ -68,6 +68,44 @@ docker-compose restart
 ```
 docker exec -it bc-php /bin/bash
 ```
+
+## コンテナ上でbaserCMSを操作する
+
+コンテナにログインした状態で、baserCMSのインストール等を簡単に実行する事ができます。
+
+### baserCMSをインストールする（MySQL環境）
+
+```
+/var/www/html/docker/bin/bc_install_mysql
+```
+※ 現在このコマンドは、Vagrant用にカスタマイズされており、 `install.php` の、`siteUrl` は、`https://192.168.33.10/` となるようになっていますのでご注意ください。 Docker for Mac で直接利用する場合は、コマンド実行後、`/app/Config/install.php` の `siteUrl` を、`https://localhost/` に書き換えます。
+
+### baserCMSを再インストールする（MySQL環境）
+
+```
+/var/www/html/docker/bin/bc_reinstall_mysql
+```
+※ 現在このコマンドは、Vagrant用にカスタマイズされており、 `install.php` の、`siteUrl` は、`https://192.168.33.10/` となるようになっていますのでご注意ください。 Docker for Mac で直接利用する場合は、コマンド実行後、`/app/Config/install.php` の `siteUrl` を、`https://localhost/` に書き換えます。
+
+### baserCMSをリセットする
+
+```
+/var/www/html/docker/bin/bc_reset
+```
+
+### baserCMSのユニットテストを実行する
+
+```
+/var/www/html/docker/bin/bc_test [-c] type PathToClass filterMethod
+
+# 例
+/var/www/html/docker/bin/bc_test baser View/Helper/BcBaserHelper testGetLink
+```
+
+- -c : カバレッジを確認する為のHTMLを `app/tmp/coverage` に作成
+- type : コアのテストの場合、`baser` そうでない場合、プラグイン名を指定
+- PathToClass : テスト対象のクラスまでのパスを含めた名称を指定
+- filterMethod : 特定のメソッドのみ実行する場合に、メソッド名称を指定
 
 ## データベース（MySQL）を確認する
 データベースの内容は、MySQLで確認する事ができます。  
@@ -105,43 +143,7 @@ PHP Remote Debug を追加します。
 ブラウザでプログラムを実行し、ブレークポイントで動作が止まれば成功です。  
 なお、ユニットテストでもブラウザと同様にブレークポイントでプログラムを止める事ができます。
 
-## docker-sync を利用する
+## Vagrant on Docker を利用する
 
-### docker-sync をインストール
-
-```
-sudo gem install docker-sync
-```
-
-### ボリュームの定義
-docker-compose.yml の次の２箇所の調整を行います。
-
-```
-#volumes:
-#  sync-volume:
-#    external: true
-
-↓
-
-volumes:
-  sync-volume:
-    external: true
-```
-
-```
-    volumes:
-      - ../:/var/www/html:cached
-#      - sync-volume:/var/www/html
-
-↓
-
-    volumes:
-#      - ../:/var/www/html:cached
-      - sync-volume:/var/www/html
-```
-
-### docker-sync をスタート
-
-```
-docker-sync-stack start
-```
+Docker for Mac でのファイルの読み込みが遅い場合、Docker on Vagrant を利用することで、速度改善が見込めます。
+Docker on Vagrant を利用するには、[vagrant/README.md](https://github.com/baserproject/basercms/blob/master/vagrant/README.md) を参考にしてください。

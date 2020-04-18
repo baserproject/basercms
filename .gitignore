@@ -59,4 +59,6 @@ nbproject/*
 /docker/.docker-sync
 /docs/baserproject.github.io
 /.c9
-
+# vagrant
+/.vagrant
+Vagrantfile
