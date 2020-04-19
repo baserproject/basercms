@@ -136,6 +136,8 @@ class Content extends AppModel {
 				['rule' => '/\A(?!.*(\t)).*\z/', 'message' => __d('baser', 'タイトルはタブを含む名前は付けられません。')],
 				['rule' => ['notBlank'], 'message' => __d('baser', 'タイトルを入力してください。')],
 				['rule' => ['maxLength', 230], 'message' => __d('baser', 'タイトルは230文字以内で入力してください。')]],
+			'eyecatch' => [
+				['rule' => ['fileCheck', $this->convertSize(ini_get('upload_max_filesize'))], 'message' => __d('baser', 'ファイルのアップロードに失敗しました。')]],
 			'self_publish_begin' => [
 				['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '公開開始日に不正な文字列が入っています。')]],
 			'self_publish_end' => [

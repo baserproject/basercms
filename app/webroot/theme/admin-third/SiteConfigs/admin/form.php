@@ -26,7 +26,7 @@ $this->BcBaser->i18nScript([
 	'confirmMessage2' => __d('baser', 'テストメールを送信します。いいですか？'),
     'infoMessage1' => __d('baser', 'テストメールを送信しました。'),
     'confirmTitle1' => __d('baser', '管理システムSSL設定確認')
-]);
+], ['escape' => false]);
 $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsFormScript',
 	'data-safeModeOn' => (string) $safeModeOn,
 	'data-isAdminSsl' => (string) $this->request->data['SiteConfig']['admin_ssl']
