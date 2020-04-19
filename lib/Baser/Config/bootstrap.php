@@ -350,7 +350,9 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 /**
  * 文字コードの検出順を指定
  */
-mb_detect_order(Configure::read('BcEncode.detectOrder'));
+if(function_exists('mb_detect_order')) {
+	mb_detect_order(Configure::read('BcEncode.detectOrder'));
+}
 
 /**
  * メモリー設定
