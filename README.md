@@ -1,6 +1,6 @@
 # Project to migrate baserCMS to CakePHP4
 
-[![License](https://img.shields.io/packagist/l/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/baserproject/ucmitz)
+[![License](https://img.shields.io/packagist/l/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/baserproject/basercms)
 
 baserCMSをCakePHP3化するためのブランチです。  
 BaserApp を親パッケージとして、BaserCore、BcAdminThirdは、子パッケージとしてモノレポで管理します。
