@@ -1,24 +1,39 @@
 # BcAdminThird
 
+baserCMSの管理画面テーマのプロジェクト
+
 ## Javascriptの開発
-Gulp と Webpack を利用して開発します。
 
-bc-admin-third 直下で、gulp コマンドを実行します。
+Javascript の開発は、Gulp でファイルを監視し Webpack を利用して開発します。
 
-webroot/js/src/ 配下の javascript ファイルを変更すると、webroot/js/ 配下に展開されます。
+### 事前準備
+事前に Node.js をインストールしておき、npm コマンドが利用できるようにしておきます。
 
+### 開発環境の構築
+```shell script
+npm install
 ```
-webroot/js/src/admin/users/index.js 
+
+### ファイル監視
+bc-admin-third ディレクトリの直下で、gulp を実行し、ファイル監視を開始します。
+```shell script
+gulp
+```
+監視対象は、`/webroot/js/src/` 配下の javascript ファイルとなります。  
+監視対象のファイルを更新すると、`/webroot/js/` 配下のディレクトリ構造を維持した同階層展に、`bundle` というサフィックス付のファイルにコンパイルします。
+```
+/webroot/js/src/admin/users/index.js 
 ↓
-webroot/js/admin/users/index.bundle.js
+/webroot/js/admin/users/index.bundle.js
 ```
 
-外部ライブラリはできるだけ、npm でインストールして利用します。
+### ライブラリの導入方針
+外部ライブラリはできるだけ、npm でインストールして利用します。  
+npm でインストールできないものは、`/webroot/js/vendor/` フォルダに配置して import や require で読み込みます。  
+外部ライブラリは、自動で `webroot/js/admin/vendor.bundle.js` に出力します。
 
-npm でインストールできないものは、webroot/js/vendor フォルダに配置して import や require で読み込みます。
-
-外部ライブラリは、webroot/js/admin/vendor.bundle.js に出力されます。
-
-共通処理は、webroot/js/src/admin/common.js を利用し、webroot/js/admin/common.bundle.js に出力されます。
+### 共通処理
+全ての画面で読み込む共通処理などは、`/webroot/js/src/admin/common.js` を利用します。
+共通処理は、自動で `webroot/js/admin/common.bundle.js` に出力します。
 
 

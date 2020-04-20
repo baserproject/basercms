@@ -1,4 +1,4 @@
-# Cloud9 上で、Docker を動作させる
+# Cloud9 上で Docker を動作させる
 
 ## docker-compose をインストールする
 
