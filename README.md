@@ -13,7 +13,7 @@ baserCMSの画面表示をテーマとして提供
 
 ## ドキュメント
 - [開発方針](https://docs.google.com/document/d/1QAmScc65CwMyn8QuwWKE9q_8HnSKcW9oefI9RrHoUYY/edit)
-- [ucmitz（github.io）](https://baserproject.github.io/ucmitz/)
+- [ucmitz 仕様（github.io）](https://baserproject.github.io/ucmitz/)
 - [開発への貢献方法](https://github.com/baserproject/ucmitz/blob/dev/CONTRIBUTING.md) 
 - [開発状況](https://github.com/baserproject/ucmitz/blob/dev/DEVELOPMENTAL_STATUS.md)
 - [プラグインの呼び出し](https://github.com/baserproject/ucmitz/blob/dev/docs/call-plugin.md)
