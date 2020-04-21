@@ -351,19 +351,12 @@ class ContentsController extends AppController {
 	public function admin_edit_alias($id) {
 
 		$this->pageTitle = __d('baser', 'エイリアス編集');
-		if(!$this->request->data) {
-			$this->request->data = $this->Content->find('first', ['conditions' => ['Content.id' => $id]]);
+		if ($this->request->is(['post', 'put'])) {
 			if ($this->Content->isOverPostSize()) {
 				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+				$this->redirect(['action' => 'edit_alias', $id]);
 			}
-			if(!$this->request->data) {
-				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
-				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
-			}
-			$srcContent = $this->Content->find('first', ['conditions' => ['Content.id' => $this->request->data['Content']['alias_id']], 'recursive' => -1]);
-			$srcContent = $srcContent['Content'];
-		} else {
-			if($this->Content->save($this->request->data)) {
+			if ($this->Content->save($this->request->data)) {
 				$srcContent = $this->Content->find('first', ['conditions' => ['Content.id' => $this->request->data['Content']['alias_id']], 'recursive' => -1]);
 				$srcContent = $srcContent['Content'];
 				$message = Configure::read('BcContents.items.' . $srcContent['plugin'] . '.' . $srcContent['type'] . '.title') .
@@ -378,7 +371,14 @@ class ContentsController extends AppController {
 			} else {
 				$this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
 			}
-
+		} else {
+			$this->request->data = $this->Content->find('first', ['conditions' => ['Content.id' => $id]]);
+			if(!$this->request->data) {
+				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
+				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+			}
+			$srcContent = $this->Content->find('first', ['conditions' => ['Content.id' => $this->request->data['Content']['alias_id']], 'recursive' => -1]);
+			$srcContent = $srcContent['Content'];
 		}
 
 		$this->set('srcContent', $srcContent);

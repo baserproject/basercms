@@ -581,7 +581,7 @@ class ThemeFilesController extends AppController {
 		$Folder->create(dirname($filePath), 0777);
 
 		if (@move_uploaded_file($this->request->data['ThemeFile']['file']['tmp_name'], $filePath)) {
-			$messages[] = __d('baser', 'アップロードに成功しました。');
+			$messages = [__d('baser', 'アップロードに成功しました。')];
 		} else {
 			$messages[] = __d('baser', 'アップロードに失敗しました。');
 		}

@@ -65,13 +65,11 @@ class ThemeConfigsController extends AppController {
 		$this->pageTitle = __d('baser', 'テーマ設定');
 		$this->help = 'theme_configs_form';
 
-		if (empty($this->request->data)) {
-			$this->request->data = ['ThemeConfig' => $this->ThemeConfig->findExpanded()];
+		if ($this->request->is(['post', 'put'])) {
 			if ($this->ThemeConfig->isOverPostSize()) {
 				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+				$this->redirect(['action' => 'form']);
 			}
-		} else {
-
 			$this->ThemeConfig->set($this->request->data);
 			if (!$this->ThemeConfig->validates()) {
 				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
@@ -92,6 +90,8 @@ class ThemeConfigsController extends AppController {
 					$this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
 				}
 			}
+		} else {
+			$this->request->data = ['ThemeConfig' => $this->ThemeConfig->findExpanded()];
 		}
 	}
 

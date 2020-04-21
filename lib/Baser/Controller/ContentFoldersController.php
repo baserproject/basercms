@@ -69,16 +69,11 @@ class ContentFoldersController extends AppController {
  */
 	public function admin_edit($entityId) {
 		$this->pageTitle = __d('baser', 'フォルダ編集');
-		if(!$this->request->data) {
-			$this->request->data = $this->ContentFolder->read(null, $entityId);
+		if ($this->request->is(['post', 'put'])) {
 			if ($this->ContentFolder->isOverPostSize()) {
 				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+				$this->redirect(['action' => 'edit', $entityId]);
 			}
-			if(!$this->request->data) {
-				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
-				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
-			}
-		} else {
 			if ($this->ContentFolder->save($this->request->data, ['reconstructSearchIndices' => true])) {
 				clearViewCache();
 				$this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $this->request->data['Content']['title']));
@@ -90,6 +85,12 @@ class ContentFoldersController extends AppController {
 				]);
 			} else {
 				$this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
+			}
+		} else {
+			$this->request->data = $this->ContentFolder->read(null, $entityId);
+			if(!$this->request->data) {
+				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
+				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
 		}
 

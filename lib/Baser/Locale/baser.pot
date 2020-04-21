@@ -541,18 +541,18 @@ msgstr ""
 msgid "無効な処理です。"
 msgstr ""
 
-#: Controller/ContentFoldersController.php:75
-#: Controller/ContentLinksController.php:68
-#: Controller/ContentsController.php:357
-#: Controller/EditorTemplatesControlle.php:91;109
-#: Controller/PagesController.php:126
+#: Controller/ContentFoldersController.php:74
+#: Controller/ContentLinksController.php:67
+#: Controller/ContentsController.php:356
+#: Controller/EditorTemplatesController.php:78;108
+#: Controller/PagesController.php:124
 #: Controller/PluginsController.php:81
-#: Controller/ThemeConfigsController.php:71
+#: Controller/ThemeConfigsController.php:70
 #: Controller/ThemeFilesController.php:569
-#: Controller/ThemesController.php:93
-#: Controller/ToolController.php:100;339
-#: Plugin/Blog/Controller/BlogContentsController.php:138
-#: Plugin/Blog/Controller/BlogPostsController.php:290;382
+#: Controller/ThemesController.php:70
+#: Controller/ToolsController.php:100;338
+#: Plugin/Blog/Controller/BlogContentsController.php:137
+#: Plugin/Blog/Controller/BlogPostsController.php:289;377
 #: Plugin/Mail/Controller/MailContentsController.php:152
 msgid "送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。"
 msgstr ""

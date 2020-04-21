@@ -284,12 +284,11 @@ class BlogPostsController extends BlogAppController {
 			$this->redirect(['controller' => 'blog_contents', 'action' => 'index']);
 		}
 
-		if (empty($this->request->data)) {
-			$this->request->data = $this->BlogPost->getDefaultValue($this->BcAuth->user());
+		if ($this->request->is(['post', 'put'])) {
 			if ($this->BlogPost->isOverPostSize()) {
 				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+				$this->redirect(['action' => 'add', $blogContentId]);
 			}
-		} else {
 
 			$this->request->data['BlogPost']['blog_content_id'] = $blogContentId;
 			$this->request->data['BlogPost']['no'] = $this->BlogPost->getMax('no', ['BlogPost.blog_content_id' => $blogContentId]) + 1;
@@ -323,6 +322,8 @@ class BlogPostsController extends BlogAppController {
 			} else {
 				$this->BcMessage->setError(__d('baser', 'エラーが発生しました。内容を確認してください。'));
 			}
+		} else {
+			$this->request->data = $this->BlogPost->getDefaultValue($this->BcAuth->user());
 		}
 
 		// 表示設定
@@ -371,21 +372,11 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		$this->BlogPost->recursive = 2;
-		if (empty($this->request->data)) {
-			$this->request->data = $this->BlogPost->find('first', array(
-				'conditions' => array(
-					'BlogPost.id' => $id,
-					'BlogPost.blog_content_id' => $blogContentId
-				)
-			));
+		if ($this->request->is(['post', 'put'])) {
 			if ($this->BlogPost->isOverPostSize()) {
 				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+				$this->redirect(['action' => 'edit', $blogContentId, $id]);
 			}
-			if(!$this->request->data) {
-				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
-				$this->redirect(['plugin' => 'blog', 'admin' => true, 'controller' => 'blog_posts', 'action' => 'index', $blogContentId]);
-			}
-		} else {
 			if (!empty($this->request->data['BlogPost']['posts_date'])) {
 				$this->request->data['BlogPost']['posts_date'] = str_replace('/', '-', $this->request->data['BlogPost']['posts_date']);
 			}
@@ -411,6 +402,17 @@ class BlogPostsController extends BlogAppController {
 				$this->redirect(['action' => 'edit', $blogContentId, $id]);
 			} else {
 				$this->BcMessage->setError(__d('baser', 'エラーが発生しました。内容を確認してください。'));
+			}
+		} else {
+			$this->request->data = $this->BlogPost->find('first', array(
+				'conditions' => array(
+					'BlogPost.id' => $id,
+					'BlogPost.blog_content_id' => $blogContentId
+				)
+			));
+			if(!$this->request->data) {
+				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
+				$this->redirect(['plugin' => 'blog', 'admin' => true, 'controller' => 'blog_posts', 'action' => 'index', $blogContentId]);
 			}
 		}
 
