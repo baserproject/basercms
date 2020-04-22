@@ -75,7 +75,7 @@ $this->BcBaser->js('admin/users/edit', false);
             <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('user_group_id', __d('baser', 'グループ')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
             <td class="col-input bca-form-table__input">
                 <?php if ($editable): ?>
-                    <?php echo $this->BcForm->input('user_group_id', ['type' => 'select', 'options' => $userGroups]) ?>
+                    <?php echo $this->BcForm->multiCheckbox('user_groups._ids', $userGroups); ?>
                     <i class="bca-icon--question-circle btn help bca-help"></i>
                     <?php echo $this->BcForm->error('user_group_id', __d('baser', 'グループを選択してください')) ?>
                     <div id="helptextUserGroupId" class="helptext"><?php echo sprintf(__d('baser', 'ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには%sより新しいグループを追加しアクセス制限の設定をおこないます。'), $this->BcBaser->getLink(__d('baser', 'ユーザーグループ管理'), ['controller' => 'user_groups', 'action' => 'index']))?></div>

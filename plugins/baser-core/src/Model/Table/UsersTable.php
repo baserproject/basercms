@@ -40,13 +40,18 @@ class UsersTable extends Table
     public function initialize(array $config): void
     {
         parent::initialize($config);
+
         $this->setTable('users');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
+
         $this->addBehavior('Timestamp');
-        $this->belongsTo('UserGroups', [
-            'foreignKey' => 'user_group_id',
-            'className' => 'BaserCore.UserGroups'
+
+        $this->belongsToMany('UserGroups', [
+            'className' => 'BaserCore.UserGroups',
+            'foreignKey' => 'user_id',
+            'targetForeignKey' => 'user_group_id',
+            'joinTable' => 'users_user_groups',
         ]);
     }
 
@@ -103,7 +108,6 @@ class UsersTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->isUnique(['email']));
-        $rules->add($rules->existsIn(['user_group_id'], 'UserGroups'));
 
         return $rules;
     }

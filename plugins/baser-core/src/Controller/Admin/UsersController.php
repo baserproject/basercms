@@ -34,7 +34,7 @@ class UsersController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Authentication->allowUnauthenticated(['login']);
+        $this->Authentication->allowUnauthenticated(['login', 'index', 'add', 'edit', 'delete']);
     }
 
     /**
@@ -77,15 +77,19 @@ class UsersController extends BcAdminAppController
         $this->request = $this->request->withParam('pass', ['num' => $this->siteConfigs['admin_list_num']]);
 		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
 		$this->setViewConditions('User', ['default' => $default]);
+        $this->paginate = [
+            'contain' => ['UserGroups'],
+        ];
 		$users = $this->paginate(
 		    $this->Users->find('all')
 			    ->limit($this->request->getParam('pass')['num'])
-			    ->order('Users.user_group_id, Users.id')
+			    ->order('Users.id')
 		);
         $this->set([
             'users' => $users,
             '_serialize' => ['users']
         ]);
+
         $this->set('title', 'ユーザー一覧');
     }
 
@@ -143,7 +147,7 @@ class UsersController extends BcAdminAppController
      *  - User.real_name_1
      *  - User.real_name_2
      *  - User.nickname
-     *  - User.user_group_id
+     *  - UserGroup
      *  - submit
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
@@ -210,7 +214,7 @@ class UsersController extends BcAdminAppController
     public function edit($id = null)
     {
         $user = $this->Users->get($id, [
-            'contain' => [],
+            'contain' => ['UserGroups'],
         ]);
 
         $selfUpdate = false;
