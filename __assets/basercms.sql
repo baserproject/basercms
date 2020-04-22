@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: bc5-db
--- 生成日時: 2020 年 4 月 18 日 14:37
+-- 生成日時: 2020 年 4 月 22 日 10:29
 -- サーバのバージョン： 5.7.29
 -- PHP のバージョン: 7.4.4
 
@@ -133,7 +133,6 @@ CREATE TABLE `users` (
   `real_name_1` varchar(50) DEFAULT NULL,
   `real_name_2` varchar(50) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `user_group_id` int(4) DEFAULT NULL,
   `nickname` varchar(255) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
@@ -143,8 +142,30 @@ CREATE TABLE `users` (
 -- テーブルのデータのダンプ `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `password`, `real_name_1`, `real_name_2`, `email`, `user_group_id`, `nickname`, `created`, `modified`) VALUES
-(1, 'basercake3', '$2y$10$x6WQstawmuyS7XrqutyDjOSOLxJp3dv72O73B7lhqzP8XvVlmcx4G', 'basercake4', '', 'admin@example.com', 1, '', '2017-05-03 14:22:08', '2017-05-03 10:59:12');
+INSERT INTO `users` (`id`, `name`, `password`, `real_name_1`, `real_name_2`, `email`, `nickname`, `created`, `modified`) VALUES
+(1, 'basercake3', '$2y$10$x6WQstawmuyS7XrqutyDjOSOLxJp3dv72O73B7lhqzP8XvVlmcx4G', 'basercake4', '', 'admin@example.com', '', '2017-05-03 14:22:08', '2020-04-22 10:24:08');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `users_user_groups`
+--
+
+DROP TABLE IF EXISTS `users_user_groups`;
+CREATE TABLE `users_user_groups` (
+  `id` int(8) NOT NULL COMMENT 'ID',
+  `user_id` int(8) DEFAULT NULL COMMENT 'ユーザーID',
+  `user_group_id` int(8) DEFAULT NULL COMMENT 'ユーザーグループID',
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `users_user_groups`
+--
+
+INSERT INTO `users_user_groups` (`id`, `user_id`, `user_group_id`, `created`, `modified`) VALUES
+(1, 1, 1, '2020-04-01 19:28:31', '2020-04-01 19:28:31');
 
 -- --------------------------------------------------------
 
@@ -202,6 +223,12 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
+-- テーブルのインデックス `users_user_groups`
+--
+ALTER TABLE `users_user_groups`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- テーブルのインデックス `user_groups`
 --
 ALTER TABLE `user_groups`
@@ -234,6 +261,12 @@ ALTER TABLE `pages`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- テーブルのAUTO_INCREMENT `users_user_groups`
+--
+ALTER TABLE `users_user_groups`
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT COMMENT 'ID', AUTO_INCREMENT=2;
 
 --
 -- テーブルのAUTO_INCREMENT `user_groups`
