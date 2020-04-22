@@ -3,8 +3,15 @@
 開発は、Vagrant 上に Docker コンテナを立ち上げる、Docker on Vagrant で行います。  
 
 ## 事前準備
-[VirtualBox](https://www.virtualbox.org/) と [Vagrant](https://www.vagrantup.com/) をインストールします。
+[VirtualBox](https://www.virtualbox.org/) と [Vagrant](https://www.vagrantup.com/) をインストールします。  
 
+
+## Vagrant のプラグインのインストール
+ucmitz プロジェクトのディレクトリに移動しプラグインのインストールコマンドを実行します。
+```shell script
+vagrant plugin install vagrant-vbguest
+vagrant plugin install vagrant-docker-compose
+```
 
 ## Vagrantfile をコピーする
 Vagrant の設定ファイルをコピーし、メモリ等、必要があれば設定を修正します。
