@@ -1,7 +1,15 @@
 <?php
-declare(strict_types=1);
+/**
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ *
+ * @copyright     Copyright (c) baserCMS Users Community
+ * @link          http://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
+ */
 
-namespace App\Model\Table;
+namespace BaserCore\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
@@ -11,7 +19,7 @@ use Cake\Validation\Validator;
 /**
  * UserGroups Model
  *
- * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\HasMany $Users
+ * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsToMany $Users
  *
  * @method \App\Model\Entity\UserGroup newEmptyEntity()
  * @method \App\Model\Entity\UserGroup newEntity(array $data, array $options = [])
@@ -47,8 +55,10 @@ class UserGroupsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->hasMany('Users', [
+        $this->belongsToMany('Users', [
             'foreignKey' => 'user_group_id',
+            'targetForeignKey' => 'user_id',
+            'joinTable' => 'users_user_groups',
         ]);
     }
 

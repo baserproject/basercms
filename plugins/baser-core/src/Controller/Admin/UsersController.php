@@ -60,7 +60,7 @@ class UsersController extends BcAdminAppController
      *  - User.id
 	 *	- User.name
      *  - User.nickname
-     *  - User.user_group_id
+     *  - UserGroup.title
      *  - User.real_name_1 && User.real_name_2
      *  - User.created && User.modified
 	 *
@@ -80,11 +80,10 @@ class UsersController extends BcAdminAppController
         $this->paginate = [
             'contain' => ['UserGroups'],
         ];
-		$users = $this->paginate(
-		    $this->Users->find('all')
-			    ->limit($this->request->getParam('pass')['num'])
-			    ->order('Users.id')
-		);
+        $users = $this->paginate(
+            $this->Users->find('all')
+                ->limit($this->request->getParam('pass')['num'])
+        );
         $this->set([
             'users' => $users,
             '_serialize' => ['users']
