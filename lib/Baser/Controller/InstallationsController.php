@@ -640,7 +640,7 @@ class InstallationsController extends AppController {
 					$dbsource['sqlite'] = 'SQLite';
 				} elseif (class_exists('SQLite3')) {
 					$info = SQLite3::version();
-					if(version_compare($info['versionString'], '3.7.16', '>')) {
+					if(version_compare($info['versionString'], Configure::read('BcRequire.winSQLiteVersion'), '>')) {
 						$dbsource['sqlite'] = 'SQLite';
 					}
 				}
