@@ -42,7 +42,7 @@ foreach ($mailContents as $mailContent) {
 			'MailFields' . $mail['id'] => [
 				'title' => 'フィールド', 
 				'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mail['id']],
-				'currentRegex' => '/\/mail\/mail_fields\/[^\/]+?\/' . $mail['id'] . '/s'
+				'currentRegex' => '/\/mail\/mail_fields\/[^\/]+?\/' . $mail['id'] . '($|\/)/s'
 			],
 			'MailContents' . $mail['id'] => ['title' => '設定', 'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $mail['id']]]
 		]

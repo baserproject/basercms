@@ -40,12 +40,12 @@ foreach ($blogContents as $blogContent) {
 			'BlogPosts' . $blog['id'] => [
 				'title' => '記事',
 				'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_posts', 'action' => 'index', $blog['id']],
-				'currentRegex' => '/\/blog\/blog_posts\/[^\/]+?\/' . $blog['id'] . '/s'
+				'currentRegex' => '/\/blog\/blog_posts\/[^\/]+?\/' . $blog['id'] . '($|\/)/s'
 			],
 			'BlogCategories' . $blog['id'] => [
 				'title' => 'カテゴリ',
 				'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'index', $blog['id']],
-				'currentRegex' => '/\/blog\/blog_categories\/[^\/]+?\/' . $blog['id'] . '/s'
+				'currentRegex' => '/\/blog\/blog_categories\/[^\/]+?\/' . $blog['id'] . '($|\/)/s'
 			],
 			'BlogTags' . $blog['id'] => [
 				'title' => 'タグ', 
