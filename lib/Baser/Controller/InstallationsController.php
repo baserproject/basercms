@@ -633,12 +633,16 @@ class InstallationsController extends AppController {
 		}
 
 		/* SQLite利用可否チェック */
-		// windowsは一旦非サポート
-		if (version_compare(preg_replace('/[a-z-]/', '', phpversion()), '5', '>=') && (DS != '\\')) {
-			if (in_array('sqlite', $pdoDrivers)) {
-				$dbFolderPath = APP . 'db' . DS . 'sqlite';
-				if (is_writable(dirname($dbFolderPath)) && $folder->create($dbFolderPath, 0777)) {
+		if (in_array('sqlite', $pdoDrivers)) {
+			$dbFolderPath = APP . 'db' . DS . 'sqlite';
+			if (is_writable(dirname($dbFolderPath)) && $folder->create($dbFolderPath, 0777)) {
+				if(DS != '\\') {
 					$dbsource['sqlite'] = 'SQLite';
+				} elseif (class_exists('SQLite3')) {
+					$info = SQLite3::version();
+					if(version_compare($info['versionString'], '3.7.16', '>')) {
+						$dbsource['sqlite'] = 'SQLite';
+					}
 				}
 			}
 		}
