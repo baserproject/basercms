@@ -1393,18 +1393,10 @@ class CakeEmail {
 				continue;
 			}
 			if (!preg_match('/<[a-z]+.*>/i', $line)) {
-				// >>> CUSTOMIZE MODIFY 2019/09/26 gondoh
-				// マルチバイトの改行が文字化けする問題の改善
-				// $formatted = array_merge(
-				// 	$formatted,
-				// 	explode("\n", wordwrap($line, $wrapLength, "\n", $cut))
-				// );
-				// ---
 				$formatted = array_merge(
 					$formatted,
-					explode("\n", CakeText::wordwrap($line, $wrapLength, "\n", $cut))
+					explode("\n", wordwrap($line, $wrapLength, "\n", $cut))
 				);
-				// <<<
 				continue;
 			}
 
@@ -1422,17 +1414,10 @@ class CakeEmail {
 							$tmpLineLength += $tagLength;
 						} else {
 							if ($tmpLineLength > 0) {
-								// >>> CUSTOMIZE MODIFY 2019/09/26 gondoh
-								// $formatted = array_merge(
-								// 	$formatted,
-								// 	explode("\n", wordwrap(trim($tmpLine), $wrapLength, "\n", $cut))
-								// );
-								// ---
 								$formatted = array_merge(
 									$formatted,
-									explode("\n", CakeText::wordwrap(trim($tmpLine), $wrapLength, "\n", $cut))
+									explode("\n", wordwrap(trim($tmpLine), $wrapLength, "\n", $cut))
 								);
-								// <<<
 								$tmpLine = '';
 								$tmpLineLength = 0;
 							}
