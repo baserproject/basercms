@@ -1396,6 +1396,9 @@ class Content extends AppModel {
 			'conditions' => ['id' => $currentId],
 			'recursive' => -1
 		]);
+		if($currentContent['Content']['parent_id'] === $targetParentId) {
+			return true;
+		}
 		$parentCuntent = $this->find('first', [
 			'conditions' => ['id' => $targetParentId],
 			'recursive' => -1
