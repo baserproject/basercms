@@ -65,7 +65,10 @@ class ThemesController extends AppController {
 	public function admin_add() {
 		$this->pageTitle = __d('baser', 'テーマアップロード');
 		$this->subMenuElements = ['themes'];
-		if($this->request->data) {
+		if ($this->request->is(['post', 'put'])) {
+			if ($this->Theme->isOverPostSize()) {
+				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+			}
 			if(empty($this->request->data['Theme']['file']['tmp_name'])) {
 				$message = __d('baser', 'ファイルのアップロードに失敗しました。');
 				if($this->request->data['Theme']['file']['error'] == 1) {

@@ -187,6 +187,7 @@ $config['BcRequire'] = array(
 	'phpVersion' => "5.4.0",
 	'phpMemory' => "128",
 	'MySQLVersion' => "5.0.0",
+	'winSQLiteVersion' => "3.7.16",
 	'PostgreSQLVersion' => "8.4.0"
 );
 

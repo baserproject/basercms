@@ -94,10 +94,14 @@ class ToolsController extends AppController {
 				break;
 			case 'restore':
 				set_time_limit(0);
-				if (!$this->request->data) {
-					$this->notFound();
-				}
 				$messages = [];
+				if (!$this->request->data) {
+					if ($this->Tool->isOverPostSize()) {
+						$messages[] = __d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size'));
+					} else {
+						$this->notFound();
+					}
+				}
 				if ($this->_restoreDb($this->request->data)) {
 					$messages[] = __d('baser', 'データの復元が完了しました。');
 					$error = false;
@@ -329,9 +333,11 @@ class ToolsController extends AppController {
  * @return void
  */
 	public function admin_load_schema() {
-		if (!$this->request->data) {
-			$this->request->data['Tool']['schema_type'] = 'create';
-		} else {
+		if ($this->request->is(['post', 'put'])) {
+			if ($this->Tool->isOverPostSize()) {
+				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+				$this->redirect(['action' => 'load_schema']);
+			}
 			if (is_uploaded_file($this->request->data['Tool']['schema_file']['tmp_name'])) {
 				$path = TMP . 'schemas' . DS;
 				if (!$this->_resetTmpSchemaFolder()) {
@@ -347,6 +353,8 @@ class ToolsController extends AppController {
 			} else {
 				$this->BcMessage->setError(__d('baser', 'ファイルアップロードに失敗しました。'));
 			}
+		} else {
+			$this->request->data['Tool']['schema_type'] = 'create';
 		}
 		/* 表示設定 */
 		$this->pageTitle = __d('baser', 'スキーマファイル読込');
