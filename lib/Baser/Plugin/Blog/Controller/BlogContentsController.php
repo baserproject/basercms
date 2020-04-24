@@ -132,13 +132,12 @@ class BlogContentsController extends BlogAppController {
 			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 		}
 
-		if (empty($this->request->data)) {
-			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->BlogContent->read(null, $id));
-			if(!$this->request->data) {
-				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
-				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+		if ($this->request->is(['post', 'put'])) {
+			if ($this->BlogContent->isOverPostSize()) {
+				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+				$this->redirect(['action' => 'edit', $id]);
 			}
-		} else {
+
 			$this->request->data = $this->BlogContent->deconstructEyeCatchSize($this->request->data);
 			$this->BlogContent->set($this->request->data);
 
@@ -153,6 +152,12 @@ class BlogContentsController extends BlogAppController {
 				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->request->data);
+		} else {
+			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->BlogContent->read(null, $id));
+			if(!$this->request->data) {
+				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
+				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+			}
 		}
 		$site = BcSite::findById($this->request->data['Content']['site_id']);
 		if(!empty($this->request->data['Content']['status'])) {
