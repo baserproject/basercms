@@ -244,17 +244,22 @@ class UserGroupsController extends AppController {
 
 /**
  * ユーザーグループのよく使う項目の初期値を登録する
+ * ユーザー編集画面よりAjaxで呼び出される
  * 
  * @return boolean 
  */
 	public function admin_set_default_favorites($id) {
-		if (!$this->request->data) {
+		if (!$this->request->is(['post', 'put'])) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
+		}
+		$defaultFavorites = null;
+		if($this->request->data) {
+			$defaultFavorites = BcUtil::serialize($this->request->data);
 		}
 		$this->UserGroup->id = $id;
 		$this->UserGroup->recursive = -1;
 		$data = $this->UserGroup->read();
-		$data['UserGroup']['default_favorites'] = BcUtil::serialize($this->request->data);
+		$data['UserGroup']['default_favorites'] = $defaultFavorites;
 		$this->UserGroup->set($data);
 		if ($this->UserGroup->save()) {
 			echo true;
