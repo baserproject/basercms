@@ -1,0 +1,43 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version.
+VAGRANTFILE_API_VERSION = "2"
+
+# 利用するIPアドレスを設定します
+SERVER_IP_NETWORK = "192.168.33."
+SERVER_IP_ADDRESS = SERVER_IP_NETWORK + "10"
+SERVER_IP_SUBNETMASK = "255.255.255.0"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # OSイメージ
+  config.vm.box = "bento/centos-7.7"
+  
+  # ポートフォワード
+  config.vm.network :"forwarded_port", guest: 80, host: 80
+  config.vm.network :"forwarded_port", guest: 443, host: 443
+  config.vm.network :"forwarded_port", guest: 1080, host: 1080
+  config.vm.network :"forwarded_port", guest: 8080, host: 8080
+  
+  # プライベートネットワーク
+  config.vm.network "private_network", ip: SERVER_IP_ADDRESS
+  
+  # 共有フォルダ
+  config.vm.synced_folder "./", "/vagrant", :create => true, :mount_options => ['dmode=777','fmode=777']
+  
+  # メモリ
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "2048"
+  end
+  
+  # Docker
+  config.vm.provision :docker, run: "always"
+  
+  # Docker Compose
+  config.vm.provision :docker_compose,
+    yml: "/vagrant/docker/docker-compose.yml",
+    compose_version: "1.25.4",
+    run: "always"
+  
+end
