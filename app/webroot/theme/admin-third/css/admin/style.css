@@ -7247,7 +7247,6 @@ body {
     background-color: #ccc; }
   .bca-table-listup .eye_catch-wrap {
     display: flex;
-    justify-content: space-between;
     flex-wrap: nowrap; }
   .bca-table-listup .eye_catch {
     margin-right: 10px;
