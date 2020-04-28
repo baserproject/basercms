@@ -97,7 +97,7 @@ class BcAdminHelper extends AppHelper {
 		}
 		$contents = $adminMenuGroups['Contents'];
 		$systems = $adminMenuGroups['Systems'];
-		$plugins = $adminMenuGroups['Plugins'];
+		$plugins = (isset($adminMenuGroups['Plugins']))? $adminMenuGroups['Plugins'] : [];
 		unset($adminMenuGroups['Contents'], $adminMenuGroups['Systems'], $adminMenuGroups['Plugins']);
 		if($plugins) {
 			foreach($plugins['menus'] as $plugin) {
