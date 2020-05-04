@@ -507,6 +507,7 @@ class MailController extends MailAppController {
 
 		$data['message'] = $data['MailMessage'];
 		unset($data['MailMessage']);
+		$data['content'] = $this->request->params['Content'];
 		$data['mailFields'] = $this->dbDatas['mailFields'];
 		$data['mailContents'] = $this->dbDatas['mailContent']['MailContent'];
 		$data['mailConfig'] = $this->dbDatas['mailConfig']['MailConfig'];
