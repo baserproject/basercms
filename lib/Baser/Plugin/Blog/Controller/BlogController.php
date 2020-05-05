@@ -267,7 +267,7 @@ class BlogController extends BlogAppController {
 			/* カテゴリ一覧 */
 			case 'category':
 
-				$category = isset($pass[1]) ? $pass[1] : '';
+				$category = isset($pass[count($pass) - 1]) ? $pass[count($pass) - 1] : '';
 
 				// ナビゲーションを設定
 				$categoryId = $this->BlogCategory->field('id', [
