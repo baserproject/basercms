@@ -150,7 +150,7 @@
 							<?php echo __d('baser', 'baserCMSへようこそ。') ?><br>
 							<ul style="font-weight:normal;font-size:14px;">
 								<li><?php echo __d('baser', 'お気に入り機能については、画面右側にある「お気に入りに追加」をクリックして、お気に入りとして登録する事ができます。') ?></li>
-								<li><?php echo __d('baser', 'まずは、画面上部のメニュー、「コンテンツ管理」よりWebサイトの全体像を確認しましょう。') ?></li>
+								<li><?php echo __d('baser', 'まずは、画面左のメニュー、「コンテンツ管理」よりWebサイトの全体像を確認しましょう。') ?></li>
 							</ul>
 						</div>
 <?php endif ?>
