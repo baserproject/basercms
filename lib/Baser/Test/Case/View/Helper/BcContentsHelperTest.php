@@ -541,4 +541,28 @@ class BcContentsHelperTest extends BaserTestCase {
 	public function test_getIconUrl(){
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
+	
+/**
+ * 現在のページがコンテンツフォルダかどうか確認する
+ * @param $url
+ * @param $expects
+ * @dataProvider isFolderDataProvider
+ */
+	public function testIsFolder($url, $expects) {
+		$this->BcContents->request = $this->_getRequest($url);
+		$this->assertEquals($expects, $this->BcContents->isFolder());
+	}
+	
+	public function isFolderDataProvider() {
+		return [
+			['/', false],	// index あり
+			['/about', false],
+			['/service/', false],	// index あり
+			['/service/index', false],
+			['/contact/', false],
+			['/service/sub_service/', true],	// index なし
+			['/service/hoge', false]	// 存在しない
+		];
+	}
+	
 }

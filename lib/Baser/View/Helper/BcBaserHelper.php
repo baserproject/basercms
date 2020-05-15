@@ -2857,5 +2857,13 @@ END_FLASH;
 	public function i18nScript($data, $options = []) {
 		return $this->BcHtml->i18nScript($data, $options);
 	}
+	
+/**
+ * 現在のページがコンテンツフォルダかどうか確認する
+ * @return bool
+ */
+	public function isContentFolder() {
+		return $this->BcContents->isFolder();
+	}
 
 }

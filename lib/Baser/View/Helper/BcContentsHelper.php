@@ -626,5 +626,16 @@ class BcContentsHelper extends AppHelper {
 		}
 		return $folderLinkedUrl;
 	}
+	
+/**
+ * フォルダかどうか確認する
+ * @return bool
+ */
+	public function isFolder() {
+		if(BcUtil::isAdminSystem() || !isset($this->request->params['Content']['type'])) {
+			return false;
+		}
+		return ($this->request->params['Content']['type'] === 'ContentFolder');
+	}
 
 }
