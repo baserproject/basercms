@@ -145,6 +145,13 @@ class FileEngine extends CacheEngine {
 			$this->_File->flock(LOCK_UN);
 		}
 
+		// CUSTOMIZE ADD 2019/03/24 yama
+		// Windowsで正常にキャッシュファイルの削除が行われない場合がある問題を修正
+		// CakePHP3では対応済み
+		// >>>
+		$this->_File = null;
+		// <<<
+
 		return $success;
 	}
 
