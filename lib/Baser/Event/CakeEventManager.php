@@ -15,6 +15,7 @@
  */
 
 App::uses('CakeEventListener', 'Event');
+App::uses('CakeEvent', 'Event'); // issue#1428 Reflection from CakePHP v 2.10.20
 
 /**
  * The event manager is responsible for keeping track of event listeners, passing the correct

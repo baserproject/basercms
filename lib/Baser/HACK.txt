@@ -9,7 +9,7 @@ CakePHP Hacking File List (Replace Or Override)
 
 - /lib/Baser/Controller/PagesController.php
 	− [上書] /lib/Cake/Console/Templates/skel/PagesController.php
-- /lib/Baser/Event/CakeEventManager.php
+- /lib/Baser/Event/CakeEventManager.php issue#1428 (2020-05-17)
 	- [上書] /lib/Cake/Event/CakeEventManager.php
 - /lib/Baser/Lib/TestSuite/Fixture/CakeFixtureManager.php
 	- [上書] /lib/Cake/TestSuite/Fixture/CakeFixtureManager.php
