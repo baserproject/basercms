@@ -139,7 +139,9 @@ class CakeSocket {
 			'tlsv1_1_client' => 'STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT',
 			'tlsv1_2_client' => 'STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT',
 			'tlsv1_1_server' => 'STREAM_CRYPTO_METHOD_TLSv1_1_SERVER',
-			'tlsv1_2_server' => 'STREAM_CRYPTO_METHOD_TLSv1_2_SERVER'
+			'tlsv1_2_server' => 'STREAM_CRYPTO_METHOD_TLSv1_2_SERVER',
+			'tlsv1_3_server' => 'STREAM_CRYPTO_METHOD_TLSv1_3_SERVER',
+			'tlsv1_3_client' => 'STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT'
 		);
 		foreach ($conditionalCrypto as $key => $const) {
 			if (defined($const)) {
@@ -153,6 +155,18 @@ class CakeSocket {
 		}
 		if (isset($this->_encryptMethods['tlsv1_2_server'])) {
 			$this->_encryptMethods['tls_server'] = STREAM_CRYPTO_METHOD_TLS_SERVER | STREAM_CRYPTO_METHOD_TLSv1_1_SERVER | STREAM_CRYPTO_METHOD_TLSv1_2_SERVER;
+		}
+		if (isset($this->_encryptMethods['tlsv1_3_client'])) {
+			$this->_encryptMethods['tls_client'] = STREAM_CRYPTO_METHOD_TLS_CLIENT |
+				STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT |
+				STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT |
+				STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT;
+		}
+		if (isset($this->_encryptMethods['tlsv1_3_server'])) {
+			$this->_encryptMethods['tls_server'] = STREAM_CRYPTO_METHOD_TLS_SERVER |
+				STREAM_CRYPTO_METHOD_TLSv1_1_SERVER |
+				STREAM_CRYPTO_METHOD_TLSv1_2_SERVER |
+				STREAM_CRYPTO_METHOD_TLSv1_3_SERVER;
 		}
 		// @codingStandardsIgnoreEnd
 	}
