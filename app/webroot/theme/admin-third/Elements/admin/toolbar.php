@@ -24,7 +24,7 @@ if (!empty($currentAuthPrefix['loginAction'])) {
 if (in_array('admin', $currentUserAuthPrefixes)) {
 	$logoutAction = Configure::read('BcAuthPrefix.admin.logoutAction');
 } else {
-	$logoutAction = $currentAuthPrefix['logoutAction'];
+	$logoutAction = Hash::get((array)$currentAuthPrefix, 'logoutAction');
 }
 if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 	$authName = $currentAuthPrefix['name'];
