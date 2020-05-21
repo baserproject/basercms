@@ -153,14 +153,18 @@ class UpdatersController extends AppController {
 			$this->redirect(['action' => 'index']);
 		}
 
+        $targetVersion = $this->getBaserVersion();
+        $sourceVersion = $this->getSiteVersion();
+        if ($targetVersion === $sourceVersion) {
+            throw new NotFoundException(__d('baser', '見つかりませんでした。'));
+        }
+
 		$updateLog = '';
 		if (file_exists($updateLogFile)) {
 			$File = new File(TMP . 'logs' . DS . 'update.log');
 			$updateLog = $File->read();
 		}
 
-		$targetVersion = $this->getBaserVersion();
-		$sourceVersion = $this->getSiteVersion();
 		$this->pageTitle = __d('baser', 'baserCMSコア｜データベースアップデート');
 		$this->set('log', $updateLog);
 		$this->set('updateTarget', __d('baser', 'baserCMSコア'));
