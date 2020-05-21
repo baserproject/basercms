@@ -153,11 +153,11 @@ class UpdatersController extends AppController {
 			$this->redirect(['action' => 'index']);
 		}
 
-        $targetVersion = $this->getBaserVersion();
-        $sourceVersion = $this->getSiteVersion();
-        if ($targetVersion === $sourceVersion) {
-            throw new NotFoundException(__d('baser', '見つかりませんでした。'));
-        }
+		$targetVersion = $this->getBaserVersion();
+		$sourceVersion = $this->getSiteVersion();
+		if ($targetVersion === $sourceVersion) {
+			throw new NotFoundException(__d('baser', '見つかりませんでした。'));
+		}
 
 		$updateLog = '';
 		if (file_exists($updateLogFile)) {
