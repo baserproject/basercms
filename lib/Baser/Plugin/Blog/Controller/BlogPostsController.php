@@ -294,6 +294,11 @@ class BlogPostsController extends BlogAppController {
 			$this->request->data['BlogPost']['no'] = $this->BlogPost->getMax('no', ['BlogPost.blog_content_id' => $blogContentId]) + 1;
 			$this->request->data['BlogPost']['posts_date'] = str_replace('/', '-', $this->request->data['BlogPost']['posts_date']);
 
+			if(!BcUtil::isAdminUser()) {
+				$user = $this->BcAuth->user();
+				$this->request->data['BlogPost']['user_id'] = $user['id'];
+			}
+
 			// EVENT BlogPosts.beforeAdd
 			$event = $this->dispatchEvent('beforeAdd', [
 				'data' => $this->request->data
@@ -379,6 +384,10 @@ class BlogPostsController extends BlogAppController {
 			}
 			if (!empty($this->request->data['BlogPost']['posts_date'])) {
 				$this->request->data['BlogPost']['posts_date'] = str_replace('/', '-', $this->request->data['BlogPost']['posts_date']);
+			}
+
+			if (!BcUtil::isAdminUser()) {
+				unset($this->request->data['BlogPost']['user_id']);
 			}
 
 			// EVENT BlogPosts.beforeEdit
