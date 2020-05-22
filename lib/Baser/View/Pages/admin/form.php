@@ -76,6 +76,8 @@ $this->BcBaser->js('admin/pages/edit', false);
 		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
+<?php else: ?>
+	<?php echo $this->BcForm->input('Page.code', ['type' => 'hidden']) ?>
 <?php endif ?>
 
 <?php echo $this->BcFormTable->dispatchAfter() ?>
