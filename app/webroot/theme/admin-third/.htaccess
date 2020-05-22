@@ -1,3 +1,0 @@
-<Files ~ "^phpinfo\.php$">
-deny from all
-</Files>
