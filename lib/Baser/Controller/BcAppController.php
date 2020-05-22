@@ -879,7 +879,7 @@ class BcAppController extends Controller {
 		if (!empty($this->siteConfigs['mail_encode'])) {
 			$encode = $this->siteConfigs['mail_encode'];
 		} else {
-			$encode = 'ISO-2022-JP';
+			$encode = 'UTF-8';
 		}
 
 		// ISO-2022-JPの場合半角カナが文字化けしてしまうので全角に変換する
