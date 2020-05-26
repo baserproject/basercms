@@ -71,7 +71,7 @@ class ThemesController extends AppController {
 			}
 			if(empty($this->request->data['Theme']['file']['tmp_name'])) {
 				$message = __d('baser', 'ファイルのアップロードに失敗しました。');
-				if($this->request->data['Theme']['file']['error'] == 1) {
+				if(!empty($this->request->data['Theme']['file']['error']) && $this->request->data['Theme']['file']['error'] == 1) {
 					$message .= __d('baser', 'サーバに設定されているサイズ制限を超えています。');
 				}
 				$this->BcMessage->setError($message);
@@ -81,7 +81,6 @@ class ThemesController extends AppController {
 				App::uses('BcZip', 'Lib');
 				$BcZip = new BcZip();
 				if ($BcZip->extract(TMP . $name, BASER_THEMES)) {
-					$theme = $BcZip->topArchiveName;
 					unlink(TMP . $name);
 					$this->BcMessage->setInfo('テーマファイル「' . $name. '」を追加しました。');
 					$this->redirect(['action' => 'index']);
