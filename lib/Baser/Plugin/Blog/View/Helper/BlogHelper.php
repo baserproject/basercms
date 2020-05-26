@@ -79,7 +79,14 @@ class BlogHelper extends AppHelper {
 				}
 			} elseif (isset($this->_View->viewVars['blogContent']['BlogContent'])) {
 				$this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
-				$this->content = $this->request->params['Content'];
+				if($this->request->params['Content']['type'] === 'BlogContent') {
+					$this->content = $this->request->params['Content'];
+				} else {
+					$content = $this->BcContents->getContentByEntityId($this->blogContent['id'], 'BlogContent');
+					if(!empty($content['Content'])) {
+						$this->content = $content['Content'];
+					}
+				}
 			}
 		}
 		if ($this->blogContent) {
