@@ -19,79 +19,78 @@ $this->BcListTable->setColumnNumber(7);
 <?php $this->BcBaser->element('Admin/pagination') ?>
 
 <table class="list-table bca-table-listup" id="ListTable">
-	<thead class="bca-table-listup__thead">
-	<tr>
-		<th class="bca-table-listup__thead-th">
-			<?php echo $this->Paginator->sort('id',
-				[
-					'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', 'No'),
-					'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'No')
-				],
-				['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
-		</th>
-		<th class="bca-table-listup__thead-th">
-			<?php echo $this->Paginator->sort('name',
-				[
-					'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', 'アカウント名'),
-					'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'アカウント名')
-				],
-				['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
-		</th>
-		<th class="bca-table-listup__thead-th">
-			<?php echo $this->Paginator->sort('nickname',
-				[
-					'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', 'ニックネーム'),
-					'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'ニックネーム')
-				],
-				['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
-		</th>
-		<th class="bca-table-listup__thead-th">
-			<?php echo $this->Paginator->sort('user_group_id',
-				[
-					'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', 'グループ'),
-					'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'グループ')
-				],
-				['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
-		</th>
-		<th class="bca-table-listup__thead-th">
-			<?php echo $this->Paginator->sort('real_name_1',
-				[
-					'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', '氏名'),
-					'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', '氏名')
-				],
-				['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
-		</th>
-		<?php echo $this->BcListTable->dispatchShowHead() ?>
-		<th class="bca-table-listup__thead-th">
-			<?php echo $this->Paginator->sort('created',
-				[
-					'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', '登録日'),
-					'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', '登録日')
-				],
-				['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?><br/>
-			<?php echo $this->Paginator->sort('modified',
-				[
-					'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', '更新日'),
-					'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', '更新日')
-				],
-				['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
-		</th>
-		<th class="bca-table-listup__thead-th"><?php echo __d('baser', 'アクション') ?></th>
-	</tr>
-	</thead>
-	<tbody>
-	<?php if ($users->count()): ?>
-		<?php foreach($users as $user): ?>
-			<?php $this->BcBaser->element('Admin/users/index_row', ['user' => $user]) ?>
-		<?php endforeach; ?>
-	<?php else: ?>
-		<tr>
-			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>">
-				<p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p></td>
-		</tr>
-	<?php endif; ?>
-	</tbody>
+    <thead class="bca-table-listup__thead">
+    <tr>
+        <th class="bca-table-listup__thead-th">
+            <?php echo $this->Paginator->sort('id',
+                [
+                    'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', 'No'),
+                    'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'No')
+                ],
+                ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
+        </th>
+        <th class="bca-table-listup__thead-th">
+            <?php echo $this->Paginator->sort('name',
+                [
+                    'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', 'アカウント名'),
+                    'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'アカウント名')
+                ],
+                ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
+        </th>
+        <th class="bca-table-listup__thead-th">
+            <?php echo $this->Paginator->sort('nickname',
+                [
+                    'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', 'ニックネーム'),
+                    'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'ニックネーム')
+                ],
+                ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
+        </th>
+        <th class="bca-table-listup__thead-th">
+            <?php echo $this->Paginator->sort('user_group_id',
+                [
+                    'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', 'グループ'),
+                    'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', 'グループ')
+                ],
+                ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
+        </th>
+        <th class="bca-table-listup__thead-th">
+            <?php echo $this->Paginator->sort('real_name_1',
+                [
+                    'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', '氏名'),
+                    'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', '氏名')
+                ],
+                ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
+        </th>
+        <?php echo $this->BcListTable->dispatchShowHead() ?>
+        <th class="bca-table-listup__thead-th">
+            <?php echo $this->Paginator->sort('created',
+                [
+                    'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', '登録日'),
+                    'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', '登録日')
+                ],
+                ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?><br/>
+            <?php echo $this->Paginator->sort('modified',
+                [
+                    'asc' => '<i class="bca-icon--asc"></i>' . __d('baser', '更新日'),
+                    'desc' => '<i class="bca-icon--desc"></i>' . __d('baser', '更新日')
+                ],
+                ['escape' => false, 'class' => 'btn-direction bca-table-listup__a']) ?>
+        </th>
+        <th class="bca-table-listup__thead-th"><?php echo __d('baser', 'アクション') ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php if ($users->count()): ?>
+        <?php foreach($users as $user): ?>
+            <?php $this->BcBaser->element('Admin/users/index_row', ['user' => $user]) ?>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>">
+                <p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p></td>
+        </tr>
+    <?php endif; ?>
+    </tbody>
 </table>
-
 
 <?php $this->BcBaser->element('Admin/list_num') ?>

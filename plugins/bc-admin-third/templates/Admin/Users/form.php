@@ -160,6 +160,8 @@ $this->BcBaser->js('admin/users/edit', false);
 
 <?php echo $this->BcForm->end() ?>
 
+<?= $this->fetch('postLink') ?>
+
 <?php // TODO: よく使うメニュー関連 ?>
 <?php /* if ($this->request->action == 'admin_edit'): ?>
 	<div class="panel-box bca-panel-box corner10">
