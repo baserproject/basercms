@@ -26,6 +26,18 @@ class UserGroupsController extends BcAdminAppController
 {
     public $siteConfigs = [];
 
+
+    /**
+     * initialize
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        // $this->Authentication->allowUnauthenticated([]);
+    }
+
     /**
      * Before Filter
      * @param EventInterface $event
@@ -77,5 +89,76 @@ class UserGroupsController extends BcAdminAppController
         // TODO: help
         // $this->help = 'user_groups_index';
         $this->set('title', __d('baser', 'ユーザーグループ一覧'));
+    }
+
+    /**
+     * ユーザーグループ新規追加
+     *
+     * ユーザーグループの各種情報を新規追加する
+     *
+     * - input
+     *  - UserGroup.name
+     *  - UserGroup.title
+     *  - UserGroup.use_admin_globalmenu
+     *  - UserGroup.use_move_contents
+     *  - submit
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     */
+    public function add()
+    {
+
+        $userGroup = [];
+        $title = __d('baser', '新規ユーザーグループ登録');
+        // TODO: help
+        // $this->help = 'user_groups_form';
+        $this->set(compact('userGroup', 'title'));
+        $this->render('form');
+    }
+
+    /**
+     * ユーザーグループ編集
+     *
+     * ユーザーグループの各種情報を編集する
+     *
+     * - viewVars
+     *  - UserGroup.id
+     *  - UserGroup.name
+     *  - UserGroup.title
+     *  - UserGroup.use_admin_globalmenu
+     *  - UserGroup.use_move_contents
+     *
+     * - input
+     *  - UserGroup.name
+     *  - UserGroup.title
+     *  - UserGroup.use_admin_globalmenu
+     *  - UserGroup.use_move_contents
+     *  - submit
+     *
+     * @param string|null $id User Group id.
+     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function edit($id = null)
+    {
+        $userGroup = [];
+        $title = __d('baser', 'ユーザーグループ編集');
+        // TODO: help
+        // $this->help = 'user_groups_form';
+        $this->set(compact('userGroup', 'title'));
+        $this->render('form');
+    }
+
+    /**
+     * ユーザーグループ削除
+     *
+     * ユーザーグループを削除する
+     *
+     * @param string|null $id User Group id.
+     * @return \Cake\Http\Response|null|void Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function delete($id = null)
+    {
     }
 }
