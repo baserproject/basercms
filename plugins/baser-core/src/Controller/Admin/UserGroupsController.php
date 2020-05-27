@@ -107,8 +107,16 @@ class UserGroupsController extends BcAdminAppController
      */
     public function add()
     {
+        $userGroup = $this->UserGroups->newEmptyEntity();
+        if ($this->request->is('post')) {
+            $userGroup = $this->UserGroups->patchEntity($userGroup, $this->request->getData());
+            if ($this->UserGroups->save($userGroup)) {
+                $this->BcMessage->setSuccess(__d('baser', '新規ユーザーグループ「{0}」を追加しました。', $userGroup->name));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+        }
 
-        $userGroup = [];
         $title = __d('baser', '新規ユーザーグループ登録');
         // TODO: help
         // $this->help = 'user_groups_form';
@@ -141,7 +149,18 @@ class UserGroupsController extends BcAdminAppController
      */
     public function edit($id = null)
     {
-        $userGroup = [];
+        $userGroup = $this->UserGroups->get($id, [
+            'contain' => ['users'],
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $userGroup = $this->UserGroups->patchEntity($userGroup, $this->request->getData());
+            if ($this->UserGroups->save($userGroup)) {
+                $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+        }
+
         $title = __d('baser', 'ユーザーグループ編集');
         // TODO: help
         // $this->help = 'user_groups_form';
@@ -160,5 +179,13 @@ class UserGroupsController extends BcAdminAppController
      */
     public function delete($id = null)
     {
+        $this->request->allowMethod(['post', 'delete']);
+        $userGroup = $this->UserGroups->get($id);
+        if ($this->UserGroups->delete($userGroup)) {
+            $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」を削除しました。', $userGroup->name));
+        } else {
+            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+        }
+        return $this->redirect(['action' => 'index']);
     }
 }
