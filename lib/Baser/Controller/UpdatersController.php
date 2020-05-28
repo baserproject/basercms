@@ -148,9 +148,9 @@ class UpdatersController extends AppController {
 
 			clearAllCache();
 
-			$this->BcMessage->setInfo(__d('baser', '全てのアップデート処理が完了しました。画面下部のアップデートログを確認してください。'));
+			$this->BcMessage->setInfo(__d('baser', '全てのアップデート処理が完了しました。/app/tmp/logs/update.log にログを出力しています。'));
 			$this->_writeUpdateLog();
-			$this->redirect(['action' => 'index']);
+			$this->redirect('/');
 		}
 
 		$targetVersion = $this->getBaserVersion();
