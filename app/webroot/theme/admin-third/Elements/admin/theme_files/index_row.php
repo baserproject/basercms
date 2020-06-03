@@ -56,11 +56,19 @@ array_push($params, $data['name']);
 			['class' => '']
 		) ?>/
 <?php else: ?>
+	<?php if ($writable): ?>
 		<?php $this->BcBaser->link(
 			'<i class="bca-icon--file" data-bca-icon-size="md"></i>'.$data['name'],
 			array_merge(['action' => 'edit', $theme, $type], $params),
         	['class' => '']
 		) ?>
+	<?php else: ?>
+		<?php $this->BcBaser->link(
+			'<i class="bca-icon--file" data-bca-icon-size="md"></i>'.$data['name'],
+			array_merge(['action' => 'view', $theme, $type], $params),
+        	['class' => '']
+		) ?>
+	<?php endif ?>
 <?php endif ?>
 	</td>
 	<td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
