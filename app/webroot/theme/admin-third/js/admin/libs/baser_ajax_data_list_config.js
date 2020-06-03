@@ -23,19 +23,7 @@ $.extend($.baserAjaxDataList.config, {
 			result: function(row, result) {
 				var config = $.baserAjaxDataList.config;
 				if(result) {
-					$(config.pageTotalNum).html(Number($(config.pageTotalNum).html()) - 1);
-					$(config.pageEndNum).html(Number($(config.pageEndNum).html()) - 1);
-					row.fadeOut(300, function(){
-						row.remove();
-						if($(config.dataList+" tbody td").length) {
-							$.baserAjaxDataList.initList();
-							// $(config.dataList+" tbody tr").removeClass('even odd');
-							// $.yuga.stripe();
-						} else {
-							$.baserAjaxDataList.load(document.location.href);
-						}
-					});
-
+					$.baserAjaxDataList.load(document.location.href);
 				} else {
 					$(config.alertBox).html(bcI18n.commonDeleteFailedMessage);
 					$(config.alertBox).fadeIn(500);
