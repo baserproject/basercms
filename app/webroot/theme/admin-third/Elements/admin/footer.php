@@ -14,11 +14,11 @@
  * [ADMIN] フッター
  */
 ?>
-<div id="Footer" class="bca-footer" data-loggedin="<?php if(BcUtil::isAdminUser()): ?>true<?php else: ?>false<?php endif;?>">
-<?php if(BcUtil::isAdminUser()): //ログイン後 ?>
+<div id="Footer" class="bca-footer" data-loggedin="<?php if (BcUtil::isAdminUser()): ?>true<?php else: ?>false<?php endif;?>">
+<?php if (BcUtil::isAdminUser()): //ログイン後 ?>
   <div class="bca-footer__inner--full">
     <div class="bca-footer__main">
-      <div class="bca-footer__baser-version">baserCMS <strong><?php echo $baserVersion ?></strong></div>
+      <div class="bca-footer__baser-version">baserCMS <strong><?php echo h($baserVersion) ?></strong></div>
       <ul class="bca-footer__banner">
         <li class="bca-footer__banner__item"><?php $this->BcBaser->link($this->BcBaser->getImg('baser.power.gif', ['alt' => 'baserCMS Power']), 'https://basercms.net/', ['target' => '_blank', 'title' => 'baserCMS Power']) ?></li>
         <li class="bca-footer__banner__item"><?php $this->BcBaser->link($this->BcBaser->getImg('cake.power.gif', ['alt' => 'CakePHP Power']), 'https://cakephp.org/', ['target' => '_blank', 'title' => 'CakePHP Power']) ?></li>
