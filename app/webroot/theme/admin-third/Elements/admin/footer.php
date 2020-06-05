@@ -32,7 +32,7 @@
   <div class="bca-footer__inner">
     <div class="bca-footer__header">
       <?php $this->BcBaser->link($this->BcBaser->getImg('admin/logo_icon.svg', ['alt' => '', 'class'=>'bca-footer__logo']), ['controller' => 'dashboard', 'action' => 'index']) ?>
-      <div class="bca-footer__baser-version">baserCMS</strong></div>
+      <div class="bca-footer__baser-version">baserCMS</div>
     </div>
 
     <ul class="bca-footer__sns">
