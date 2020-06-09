@@ -4620,7 +4620,7 @@ class DboSource extends DataSource {
 
 		$datas = $this->query($sql);
 
-		$fp = fopen($options['path'], 'a');
+		$fp = fopen($options['path'], 'w');
 		ftruncate($fp, 0);
 
 		// ヘッダを書込
