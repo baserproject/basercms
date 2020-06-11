@@ -54,7 +54,7 @@
 				<li><?php $this->BcBaser->link($this->BcBaser->getImg('baser.power.gif', ['alt' => 'baserCMS Power']), 'https://basercms.net/', ['target' => '_blank', 'title' => 'baserCMS Power']) ?></li>
 				<li><?php $this->BcBaser->link($this->BcBaser->getImg('cake.power.gif', ['alt' => 'CakePHP Power']), 'https://cakephp.org/jp/', ['target' => '_blank', 'title' => 'CakePHP Power']) ?></li>
 			</ul>
-			<p id="BaserVersion">baserCMS <?php echo $baserVersion ?></p>
+			<p id="BaserVersion">baserCMS <?php if (BcUtil::isAdminUser()) echo h($baserVersion); ?></p>
 			<div id="Copyright">Copyright (C) baserCMS Users Community <?php $this->BcBaser->copyYear(2009) ?>.</div>
 		</div>
 
