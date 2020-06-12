@@ -1469,7 +1469,7 @@ DOC_END;
 			$legend = $attributes['legend'];
 			unset($attributes['legend']);
 		} elseif (count($options) > 1) {
-			$legend = __(Inflector::humanize($this->field()));
+			$legend = Inflector::humanize($this->field());
 		}
 
 		$fieldsetAttrs = '';

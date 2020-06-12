@@ -317,7 +317,7 @@ class PluginsController extends AppController {
 			}
 		} catch (BcException $e){
 			$isInstallable = false;
-			$installMessage = __($e->getMessage());
+			$installMessage = $e->getMessage();
 		}
 
 		if ($isInstallable) {
