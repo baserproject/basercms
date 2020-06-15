@@ -164,6 +164,16 @@ class BlogContent extends BlogAppModel {
 		if (!$this->data['Content']['exclude_search'] && $this->data['Content']['status']) {
 			$this->saveSearchIndex($this->createSearchIndex($this->data));
 			clearDataCache();
+			if (empty($options['skipBlogPostSearchIndexSave'])) {
+				$datas = $this->BlogPost->find('all', [
+					'conditions' => ['BlogPost.blog_content_id' => $this->data['BlogContent']['id']],
+					'recursive' => -1
+				]);
+				foreach($datas as $data) {
+					$this->BlogPost->set($data);
+					$this->BlogPost->afterSave(true);
+				}
+			}
 		} else {
 			$this->deleteSearchIndex($this->data['BlogContent']['id']);
 		}
