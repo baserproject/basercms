@@ -114,6 +114,8 @@ $this->BcBaser->js('admin/users/edit', false);
 			</th>
 			<td class="col-input bca-form-table__input">
 				<?php if ($this->request->action == "admin_edit"): ?><small>[<?php echo __d('baser', 'パスワードは変更する場合のみ入力してください') ?>]</small><br /><?php endif ?>
+				<!-- ↓↓↓自動入力を防止する為のダミーフィールド↓↓↓ -->
+        <input type="password" name="dummypass" style="top:-100px;left:-100px;position:fixed;" />
 				<?php echo $this->BcForm->input('User.password_1', ['type' => 'password', 'size' => 20, 'maxlength' => 255]) ?>
 				<?php echo $this->BcForm->input('User.password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
