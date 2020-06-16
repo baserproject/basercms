@@ -403,7 +403,7 @@ h2 {}
 		<tr>
 			<th class="bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.mail_additional_parameters', __d('baser', 'additional_parameters（オプション）')) ?></th>
 			<td class="col-input bca-form-table__input">
-        <?php echo $this->BcForm->input('SiteConfig.mail_additional_parameters', ['type' => 'input', 'size' => 35, 'maxlength' => 255, 'placeholder' => '-f webmaster@mail.example.com']) ?>
+        <?php echo $this->BcForm->input('SiteConfig.mail_additional_parameters', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'placeholder' => '-f webmaster@mail.example.com']) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<div class="helptext"><?php echo __d('baser', '標準機能によるメール送信時にオプションを追加します。')?></div>
 				<?php echo $this->BcForm->error('SiteConfig.mail_encode') ?>
