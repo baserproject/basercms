@@ -1155,6 +1155,10 @@ class Content extends AppModel {
 			if($full) {
 				$mainDomain = BcUtil::getMainDomain();
 				$fullUrlArray = explode('//', Configure::read('BcEnv.siteUrl'));
+				$siteDomain = preg_replace('/\/$/', '', $fullUrlArray[1]);
+				if(preg_match('/^www\./', $siteDomain) && str_replace('www.', '', $siteDomain) === $mainDomain) {
+					$mainDomain = $siteDomain;
+				}
 				$url = $fullUrlArray[0] . '//' . $mainDomain . Router::url($url);
 			}
 		}
