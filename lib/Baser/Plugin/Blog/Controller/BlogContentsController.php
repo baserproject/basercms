@@ -151,7 +151,7 @@ class BlogContentsController extends BlogAppController {
 					$blogContentData['Content']['self_status'] != $this->request->data['Content']['self_status'] ||
 					$blogContentData['Content']['self_publish_begin'] != $this->request->data['Content']['self_publish_begin'] ||
 					$blogContentData['Content']['self_publish_end'] != $this->request->data['Content']['self_publish_end']
-                ) {
+				) {
 					$successMessage = sprintf(__d('baser', 'ブログ「%s」を更新しました。サイト内検索機能を使用している場合は検索インデックスの再構築を行ってください。'), $this->request->data['Content']['title']);
 				}
 				$this->BcMessage->setSuccess($successMessage);
