@@ -319,6 +319,7 @@ class BcContentsHelperTest extends BaserTestCase {
  * getJsonSettings
 */
 	public function testGetJsonSettings() {
+		$this->_loginAdmin();
 		App::uses('BcContentsComponent', 'Controller/Component');
 		$BcContentsComponent = new BcContentsComponent(new ComponentCollection());
 		$BcContentsComponent->setupAdmin();
@@ -337,6 +338,7 @@ class BcContentsHelperTest extends BaserTestCase {
  * @dataProvider getJsonSettingsDataProvider
 */
 	public function testGetJsonSettingsEquals($expect,$no) {
+		$this->_loginAdmin();
 		App::uses('BcContentsComponent', 'Controller/Component');
 		$BcContentsComponent = new BcContentsComponent(new ComponentCollection());
 		$BcContentsComponent->setupAdmin();

@@ -37,7 +37,10 @@ class BcContentsRoute extends CakeRoute {
 		}
 
 		$request = Router::getRequest(true);
-
+		if(!$request) {
+			return false;
+		}
+		
 		//管理システムにログインしているかつプレビューの場合は公開状態のステータスは無視する
 		$publish = true;
 		if((!empty($request->query['preview']) || !empty($request->query['force'])) && BcUtil::loginUser()) {
@@ -104,7 +107,7 @@ class BcContentsRoute extends CakeRoute {
 		if($content['Content']['alias_id'] && !$Content->isPublishById($content['Content']['alias_id'])) {
 			return false;
 		}
-		$request->params['Content'] = $content['Content'];
+		$request->params['Content'] = isset($content['Content'])? $content['Content'] : null;
 		$request->params['Site'] = $content['Site'];
 		$url = $site->getPureUrl($url);
 		$params = $this->getParams($url, $content['Content']['url'], $content['Content']['plugin'], $content['Content']['type'], $content['Content']['entity_id'], $site->alias);
