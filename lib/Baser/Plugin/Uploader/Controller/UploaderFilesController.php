@@ -318,6 +318,11 @@ class UploaderFilesController extends AppController {
 
 		if($this->UploaderFile->save()) {
 			echo true;
+		} else {
+			// バリデーションエラーメッセージをjs側で動的に取得できるようにするため
+			if ($this->UploaderFile->validationErrors) {
+				echo json_encode($this->UploaderFile->validationErrors);
+			}
 		}
 		
 		exit();
