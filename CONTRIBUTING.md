@@ -26,53 +26,53 @@ baserCMS５の開発コードは、`ucmitz` です。開発については、`uc
 
 開発状況は都度変化していきます。随時、[baserCMS５開発状況](https://github.com/baserproject/ucmitz/blob/dev/DEVELOPMENTAL_STATUS.md) を確認します。
 
-## 開発に取り掛かる
+## 開発の手順
 
-### 実装する機能を選択する
+### 1. 実装する機能を選択する
 
 [機能要件一覧](https://docs.google.com/spreadsheets/d/1YT5PuZQdDNU0wrZdqYbh74KuLSw1SIt4_EKwPWOfDKA/edit#gid=0) を確認し、取りかかれそうな機能を選択します。
 
-### 仕様を確認する
+### 2. 仕様を確認する
 
 [ucmitz仕様](https://baserproject.github.io/ucmitz/) より上記機能の仕様を確認します。
 
-### Issue を立てる
+### 3. Issue を立てる
 
 [Issue](https://github.com/baserproject/ucmitz/issues) に実装対象がすでに存在するか確認しなければ作成します。
 
-### ブランチを切る
+### 4. ブランチを切る
 
 Issue番号にもとづいた名称でブランチを作成し切り替えます。（例） dev-#1
 
-### 詳細仕様をメソッドのコメントに転記する
+### 5. 詳細仕様をメソッドのコメントに転記する
 
 仕様書を元に詳細仕様を作成しメソッドのヘッダーコメントに記載します。
 
-### 機能を実装する
+### 6. 機能を実装する
 
 ヘッダーコメントの仕様に従って機能を実装します。
 
-### ユニットテストの作成
+### 7. ユニットテストの作成
 
 テスト可能なメソッドを作成した場合は、ユニットテストも作成しておきます。
 ※ 現時点（2020/06/24）ではコントローラーのテストは作成しません。
 
-### プルリクエストを作成する
+### 8. プルリクエストを作成する
 
 実装とテストが完了したら、自身のレポジトリにプッシュしプルリクエストを作成し、[機能要件一覧](https://docs.google.com/spreadsheets/d/1YT5PuZQdDNU0wrZdqYbh74KuLSw1SIt4_EKwPWOfDKA/edit#gid=0) の「状況」を「レビュー待ち」に更新します。
 
-### マージ確認
+### 9. マージ確認
 
 プルリクエストがマージされたら、[機能要件一覧](https://docs.google.com/spreadsheets/d/1YT5PuZQdDNU0wrZdqYbh74KuLSw1SIt4_EKwPWOfDKA/edit#gid=0) の「状況」を「完了」に更新します。
 
 ## 仕様定義の手順
 
-### github.io へ定義を記載
+### 1. github.io へ定義を記載
 
 仕様の定義者は、 [ucmitz仕様](https://baserproject.github.io/ucmitz/) で閲覧できるように仕様を定義していきます。
 定義の際には、 `git@github.com:baserproject/baserproject.github.io.git` より clone し、マークダウンで定義を記載します。
 
-### 機能要件一覧へ要件を追加
+### 2. 機能要件一覧へ要件を追加
 
 定義した仕様が、 [機能要件一覧](https://docs.google.com/spreadsheets/d/1YT5PuZQdDNU0wrZdqYbh74KuLSw1SIt4_EKwPWOfDKA/edit#gid=0) 存在するか確認し、なければ追加します。
 
