@@ -40,9 +40,10 @@ baserCMS５の開発コードは、`ucmitz` です。開発については、`uc
 
 Issue番号にもとづいた名称でブランチを作成し切り替えます。（例） dev-#1
 
-### 4. 詳細仕様をメソッドのコメントに転記する
+### 4. 詳細仕様をメソッドのヘッダーコメントに転記する
 
-仕様書を元に詳細仕様を作成しメソッドのヘッダーコメントに記載します。
+詳細仕様を作成しメソッドのヘッダーコメントに記載します。
+仕様定義については、[ドキュメントキーワード定義](https://github.com/baserproject/ucmitz/blob/dev/docs/keyword.md) を参考にアルファベットで定義を簡潔に記述する
 
 ### 5. 機能を実装する
 
@@ -70,6 +71,8 @@ Issue番号にもとづいた名称でブランチを作成し切り替えます
 `/docs/` に、マークダウン形式でファイルを作成します。
 
 ## その他の開発に必要なドキュメント
+- [システム要件](https://github.com/baserproject/ucmitz/blob/dev/docs/system.md)
+- [データベースの定義](https://github.com/baserproject/ucmitz/blob/dev/docs/database.md)
 - [プラグインの呼び出し](https://github.com/baserproject/ucmitz/blob/dev/docs/call-plugin.md)
 - [BcAdminThirdの開発](https://github.com/baserproject/ucmitz/blob/dev/plugins/bc-admin-third/README.md)
 - [モノレポによるパッケージ管理](https://github.com/baserproject/ucmitz/blob/dev/docs/monorepo.md)
