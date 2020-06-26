@@ -387,7 +387,10 @@ class BlogPostsController extends BlogAppController {
 			}
 
 			if (!BcUtil::isAdminUser()) {
-				unset($this->request->data['BlogPost']['user_id']);
+				$this->request->data['BlogPost']['user_id'] = $this->BlogPost->field('user_id', [
+					'BlogPost.id' => $id,
+					'BlogPost.blog_content_id' => $blogContentId
+				]);
 			}
 
 			// EVENT BlogPosts.beforeEdit
