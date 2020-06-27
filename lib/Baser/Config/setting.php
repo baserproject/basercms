@@ -498,3 +498,10 @@ $config['BcShortCode']['Core'] = [
 $config['BcSecurity'] = [
 	'csrfExpires' => '+4 hours'
 ];
+
+/**
+ * フロントからのウィジェット編集リンク
+ */
+$config['BcWidjet'] = [
+	'linkAtFront' => false
+];
