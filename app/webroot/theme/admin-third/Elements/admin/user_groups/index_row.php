@@ -19,7 +19,7 @@
 <tr>
 	<td class="bca-table-listup__tbody-td"><?php echo $data['UserGroup']['id'] ?></td>
 	<td class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['UserGroup']['name'], ['action' => 'edit', $data['UserGroup']['id']], ['escape' => true]) ?>
-		<?php if ($data['User']): ?><br>
+		<?php if (!empty($data['User'])): ?><br>
 			<?php foreach($data['User'] as $user): ?>
 				<span class="tag"><?php $this->BcBaser->link($this->BcBaser->getUserName($user), ['controller' => 'users', 'action' => 'edit', $user['id']], ['escape' => true]) ?></span>
 			<?php endforeach ?>
