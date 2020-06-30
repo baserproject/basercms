@@ -84,11 +84,11 @@ class BcSmartphoneHelper extends Helper {
 				$regBaseUrl = implode('|', $regBaseUrls);
 
 				// 一旦プレフィックスを除外
-				$reg = '/a(.*?)href="((' . $regBaseUrl . ')(' . $currentAlias . '\/([^\"]*?)))\"/';
+				$reg = '/<a([^<]*?)href="((' . $regBaseUrl . ')(' . $currentAlias . '\/([^\"]*?)))\"/';
 				$this->_View->output = preg_replace_callback($reg, [$this, '_removePrefix'], $this->_View->output);
 
 				// プレフィックス追加
-				$reg = '/a(.*?)href=\"(' . $regBaseUrl . ')([^\"]*?)\"/';
+				$reg = '/<a([^<]*?)href=\"(' . $regBaseUrl . ')([^\"]*?)\"/';
 				$this->_View->output = preg_replace_callback($reg, [$this, '_addPrefix'], $this->_View->output);
 			}
 		}
@@ -110,7 +110,7 @@ class BcSmartphoneHelper extends Helper {
 		} else {
 			$url = $matches[5];
 		}
-		return 'a' . $etc . 'href="' . $baseUrl . $url . '"';
+		return '<a' . $etc . 'href="' . $baseUrl . $url . '"';
 	}
 
 /**
@@ -126,14 +126,14 @@ class BcSmartphoneHelper extends Helper {
 		$etc = $matches[1];
 		$url = $matches[3];
 		if (strpos($url, 'smartphone=off') !== false) {
-			return 'a' . $etc . 'href="' . $baseUrl . $url . '"';
+			return '<a' . $etc . 'href="' . $baseUrl . $url . '"';
 		} else {
 			// 指定した絶対URLを記載しているリンクは変換しない
 			$excludeList = Configure::read('BcApp.excludeAbsoluteUrlAddPrefix');
 			if ($excludeList) {
 				foreach ($excludeList as $exclude) {
 					if (strpos($baseUrl, $exclude) !== false) {
-						return 'a' . $etc . 'href="' . $baseUrl . $url . '"';
+						return '<a' . $etc . 'href="' . $baseUrl . $url . '"';
 					}
 				}
 			}
@@ -142,12 +142,12 @@ class BcSmartphoneHelper extends Helper {
 			if ($excludeList) {
 				foreach ($excludeList as $exclude) {
 					if (strpos($url, $exclude) !== false) {
-						return 'a' . $etc . 'href="' . $baseUrl . $url . '"';
+						return '<a' . $etc . 'href="' . $baseUrl . $url . '"';
 					}
 				}
 			}
 
-			return 'a' . $etc . 'href="' . $baseUrl . $currentAlias . '/' . $url . '"';
+			return '<a' . $etc . 'href="' . $baseUrl . $currentAlias . '/' . $url . '"';
 		}
 	}
 
