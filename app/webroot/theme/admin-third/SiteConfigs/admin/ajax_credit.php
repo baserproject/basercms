@@ -26,6 +26,7 @@ $types = ['designers', 'developers', 'supporters', 'publishers'];
 
 				<h1>Special Thanks Credit</h1>
 				<?php foreach ($types as $type) : ?>
+					<?php if(isset($credits->{$type})): ?>
 					<div class="section">
 						<h2><?php echo Inflector::camelize($type) ?></h2>
 						<?php $i = 0 ?>
@@ -51,6 +52,7 @@ $types = ['designers', 'developers', 'supporters', 'publishers'];
 							<?php endif ?>
 						<?php endforeach ?>
 					</div>
+					<?php endif ?>
 				<?php endforeach ?>
 
 				<h1 style="margin-top:400px;">baserCMS Users Community</h1>
