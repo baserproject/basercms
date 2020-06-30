@@ -178,6 +178,9 @@ class ThemeFilesController extends AppController {
 		$this->set('plugin', $plugin);
 		$this->set('type', $type);
 		$this->help = 'theme_files_index';
+		if($this->request->is('ajax')) {
+			$this->render('ajax_index');
+		}
 	}
 
 /**
