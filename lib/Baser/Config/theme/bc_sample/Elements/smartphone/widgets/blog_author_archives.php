@@ -22,7 +22,7 @@ if (isset($blogContent)) {
 $data = $this->requestAction('/blog/blog/get_authors/' . $id . '/' . $view_count, ['entityId' => $id]);
 $authors = $data['authors'];
 $blogContent = $data['blogContent'];
-$baseCurrentUrl = $this->request->params['Content']['url'] . '/archives/';
+$baseCurrentUrl = $this->request->params['Content']['url'] . 'archives/';
 ?>
 <div class="widget widget-blog-authors widget-blog-authors-<?php echo $id ?> blog-widget">
 	<?php if ($name && $use_title): ?>
@@ -44,7 +44,7 @@ $baseCurrentUrl = $this->request->params['Content']['url'] . '/archives/';
 				}
 				?>
 				<li<?php echo $class ?>>
-					<?php $this->BcBaser->link($title, $this->request->params['Content']['name'] . '/archives/author/' . $author['User']['name'], ['escape' => true]) ?>
+					<?php $this->BcBaser->link($title, $this->request->params['Content']['url'] . 'archives/author/' . $author['User']['name'], ['escape' => true]) ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>
