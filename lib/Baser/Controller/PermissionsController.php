@@ -66,7 +66,9 @@ class PermissionsController extends AppController {
 		if ($this->request->params['prefix'] == 'admin') {
 			$this->set('usePermission', true);
 		}
-		$this->crumbs[] = ['name' => __d('baser', 'アクセス制限設定管理'), 'url' => ['controller' => 'permissions', 'action' => 'index', $this->request->params['pass'][0]]];
+		if(!$this->request->is('ajax')) {
+			$this->crumbs[] = ['name' => __d('baser', 'アクセス制限設定管理'), 'url' => ['controller' => 'permissions', 'action' => 'index', $this->request->params['pass'][0]]];
+		}
 	}
 
 /**
