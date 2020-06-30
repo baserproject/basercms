@@ -43,7 +43,6 @@ $(function(){
 	}
 	// 一括処理設定
 	$.baserAjaxBatch.config.methods.del.confirm = bcI18n.message3;
-	$.baserAjaxBatch.config.methods.del.result = null;
 	$.baserAjaxDataList.init();
 	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
 	$.baserAjaxSortTable.init({ url: $("#AjaxSorttableUrl").html()});
