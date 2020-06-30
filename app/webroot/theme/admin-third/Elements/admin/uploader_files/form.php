@@ -18,12 +18,12 @@ if(!isset($listId)) {
 if(empty($popup)) {
 	$users = $this->BcForm->getControlSource("UploaderFile.user_id");
 }
-$url = $this->BcBaser->getUri($this->Uploader->getFileUrl($this->request->data['UploaderFile']['name']));
 ?>
 
 
-<?php if(empty($popup)): ?>
-
+<?php if(empty($popup)):
+$url = $this->BcBaser->getUri($this->Uploader->getFileUrl($this->request->data['UploaderFile']['name']));
+?>
 <div id="AdminPrefix" style="display:none;"><?php echo Configure::read('Routing.prefixes.0'); ?></div>
 <script type="text/javascript">
 $(function(){
