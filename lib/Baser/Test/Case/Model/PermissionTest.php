@@ -20,7 +20,7 @@ App::uses('Permission', 'Model');
  *  public $hasMany = array();
  * }
  * 
- * @package Baser.Test.Case.Model
+ * @property Permission $Permission
  */
 class PermissionTest extends BaserTestCase {
 
@@ -90,6 +90,7 @@ class PermissionTest extends BaserTestCase {
 	}
 
 	public function testアクセス拒否チェック異常系() {
+		$this->_getRequest('/admin');
 		$this->Permission->create([
 			'Permission' => [
 				'user_group_id' => '1',
@@ -267,8 +268,12 @@ class PermissionTest extends BaserTestCase {
  * @dataProvider copyDataProvider
  */
 	public function testCopy($id, $data, $expected, $message = null) {
-		$result = $this->Permission->copy($id, $data);
-		$this->assertEquals($expected, $result['Permission']['name'], $message);
+		$record = $this->Permission->copy($id, $data);
+		$result = null;
+		if(isset($record['Permission']['name'])) {
+			$result = $record['Permission']['name'];
+		}
+		$this->assertEquals($expected, $result, $message);
 	}
 
 	public function copyDataProvider() {

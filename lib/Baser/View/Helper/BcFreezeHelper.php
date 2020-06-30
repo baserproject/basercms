@@ -594,7 +594,7 @@ class BcFreezeHelper extends BcFormHelper {
 			if (!empty($attributes["multiple"]) && $attributes["multiple"] !== 'checkbox') {
 				$_value = "";
 				foreach ($value as $data) {
-					if (isset($options[$data['id']])) {
+					if (isset($data['id']) && isset($options[$data['id']])) {
 						$_value .= sprintf($this->Html->_tags['li'], null, $options[$data['id']]);
 					}
 				}
@@ -628,7 +628,7 @@ class BcFreezeHelper extends BcFormHelper {
 
 				// datetime
 			} else {
-				if ($value[$detail]) {
+				if (!empty($value[$detail])) {
 					$value = $options[$value[$detail]];
 				} else {
 					$value = "";

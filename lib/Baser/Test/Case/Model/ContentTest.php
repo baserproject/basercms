@@ -186,6 +186,7 @@ class ContentTest extends BaserTestCase {
  * Content data を作成して保存する
  */
 	public function testCreateContent() {
+		$this->_loginAdmin();
 		$content = ['title' => 'hoge', 'parent_id' => ''];
 		$type = 'Content';
 		$result = $this->Content->createContent($content, '', $type);
@@ -476,6 +477,7 @@ class ContentTest extends BaserTestCase {
  * @dataProvider copyDataProvider
  */
 	public function testCopy($id, $entityId, $newTitle, $newAuthorId, $newSiteId, $titleExpected) {
+		$this->_loginAdmin();
 		$result = $this->Content->copy($id, $entityId, $newTitle, $newAuthorId, $newSiteId)['Content'];
 		$this->assertEquals($result['site_id'], $newSiteId);
 		$this->assertEquals($result['entity_id'], $entityId);

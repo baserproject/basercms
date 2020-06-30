@@ -89,6 +89,12 @@ class BlogContentTest extends BaserTestCase {
 			'BlogContent' => [
 				'template' => 'テスト',
 				'list_count' => 'テスト',
+				'eye_catch_size' => BcUtil::serialize([
+					'thumb_width' => 300,
+					'thumb_height' => 200,
+					'mobile_thumb_width' => 30,
+					'mobile_thumb_height' => 20
+				])
 			]
 		]);
 
@@ -103,7 +109,12 @@ class BlogContentTest extends BaserTestCase {
 		// eye_catch_sizeチェック
 		$this->BlogContent->create([
 			'BlogContent' => [
-				'eye_catch_size' => '',
+				'eye_catch_size' => BcUtil::serialize([
+					'thumb_width' => 0,
+					'thumb_height' => 0,
+					'mobile_thumb_width' => 0,
+					'mobile_thumb_height' => 0
+				])
 			]
 		]);
 
@@ -205,6 +216,7 @@ class BlogContentTest extends BaserTestCase {
  * @dataProvider afterSaveDataProvider
  */
 	public function testAfterSave($id, $exclude_search) {
+		$this->_loginAdmin();
 		$this->BlogContent->create([
 			'BlogContent' => [
 				'id' => $id,	
@@ -289,6 +301,7 @@ class BlogContentTest extends BaserTestCase {
  * ブログコンテンツデータをコピーする
  */
 	public function testCopy() {
+		$this->_loginAdmin();
 		$this->BlogContent->copy(1, 1, 'hoge1', 1, 0);
 		$result = $this->BlogContent->find('first', [
 			'conditions' => ['BlogContent.id' => $this->BlogContent->getLastInsertID()]

@@ -1206,7 +1206,7 @@ class BcAppModel extends Model {
 				/* if (!isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || $data[$val][0] === '-')) {
 				  return null; */
 				// ---
-				if ($val != 'wareki' && !isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || $data[$val][0] === '-')) {
+				if ($val != 'wareki' && !isset($data[$val]) || isset($data[$val]) && (empty($data[$val]) || (isset($data[$val][0]) && $data[$val][0] === '-'))) {
 					if ($type == 'text' || $type == 'string') {
 						return $data;
 					} else {
