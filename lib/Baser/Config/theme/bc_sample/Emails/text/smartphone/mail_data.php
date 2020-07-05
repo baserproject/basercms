@@ -30,7 +30,7 @@
 	<?php endif; ?>
 	<?php if (!empty($message[$fields['MailField']['field_name']]) && !$fields['MailField']['no_send']): ?>
 		<?php if ($field['type'] != 'file'): ?>
-		<?php echo $this->Maildata->control($fields['MailField']['type'], $message[$fields['MailField']['field_name']], $this->Mailfield->getOptions($fields)); ?>
+		<?php echo $this->Maildata->control($fields['MailField']['type'], $message[$fields['MailField']['field_name']]); ?>
 		<?php else: ?>
 			<?php if($message[$field['field_name']]): ?>
 		<?php echo '添付あり' ?>
