@@ -294,6 +294,10 @@ class UploaderFilesController extends AppController {
 		Configure::write('debug',0);
 
 		if(!$this->request->data) {
+			if ($this->UploaderFile->isOverPostSize()) {
+				echo null;
+				die;
+			}
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		

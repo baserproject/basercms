@@ -563,8 +563,13 @@ class ThemeFilesController extends AppController {
  * @return void
  */
 	public function admin_upload() {
+		$messages = [];
 		if (!$this->request->data) {
-			$this->notFound();
+			if ($this->ThemeFile->isOverPostSize()) {
+				$messages[] = __d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size'));
+			} else {
+				$this->notFound();
+			}
 		}
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
@@ -576,10 +581,11 @@ class ThemeFilesController extends AppController {
 		$Folder->create(dirname($filePath), 0777);
 
 		if (@move_uploaded_file($this->request->data['ThemeFile']['file']['tmp_name'], $filePath)) {
-			$this->BcMessage->setInfo(__d('baser', 'アップロードに成功しました。'));
+			$messages = [__d('baser', 'アップロードに成功しました。')];
 		} else {
-			$this->BcMessage->setError(__d('baser', 'アップロードに失敗しました。'));
+			$messages[] = __d('baser', 'アップロードに失敗しました。');
 		}
+		$this->BcMessage->setError(implode("\n", $messages));
 		$this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', $path)));
 	}
 

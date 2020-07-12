@@ -541,6 +541,22 @@ msgstr ""
 msgid "無効な処理です。"
 msgstr ""
 
+#: Controller/ContentFoldersController.php:74
+#: Controller/ContentLinksController.php:67
+#: Controller/ContentsController.php:356
+#: Controller/EditorTemplatesController.php:78;108
+#: Controller/PagesController.php:124
+#: Controller/PluginsController.php:81
+#: Controller/ThemeConfigsController.php:70
+#: Controller/ThemeFilesController.php:569
+#: Controller/ThemesController.php:70
+#: Controller/ToolsController.php:100;338
+#: Plugin/Blog/Controller/BlogContentsController.php:137
+#: Plugin/Blog/Controller/BlogPostsController.php:289;377
+#: Plugin/Mail/Controller/MailContentsController.php:152
+msgid "送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。"
+msgstr ""
+
 #: Controller/ContentFoldersController.php:57
 msgid "フォルダ「%s」を追加しました。"
 msgstr ""
