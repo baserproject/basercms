@@ -644,10 +644,6 @@ class MailMessage extends MailAppModel {
 			if($mailField['no_send']) {
 				unset($dbData['message'][$mailField['field_name']]);
 			}
-			if (!empty($dbData['message'][$mailField['field_name']])) {
-				$dbData['message'][$mailField['field_name']] = str_replace(array("<br />", "<br>"), "\n", $dbData['message'][$mailField['field_name']]);
-				//$dbData['message'][$mailField['field_name']] = mb_convert_kana($dbData['message'][$mailField['field_name']], "K", "UTF-8");
-			}
 			if ($mailField['type'] == 'multi_check') {
 				if (!empty($dbData['message'][$mailField['field_name']]) && !is_array($dbData['message'][$mailField['field_name']])) {
 					$dbData['message'][$mailField['field_name']] = explode("|", $dbData['message'][$mailField['field_name']]);

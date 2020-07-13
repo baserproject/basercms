@@ -29,7 +29,7 @@ foreach ($mailFields as $field) {
 	}
 	if (isset($message[$field['field_name']]) && !$field['no_send'] && $field['use_field']) {
 		if($field['type'] != 'file') {
-			echo $this->Maildata->control($field['type'], $message[$field['field_name']], $this->Mailfield->getOptions($field));
+			echo $this->Maildata->control($field['type'], $message[$field['field_name']]);
 		} else {
 			if($message[$field['field_name']]) {
 				echo '添付あり';

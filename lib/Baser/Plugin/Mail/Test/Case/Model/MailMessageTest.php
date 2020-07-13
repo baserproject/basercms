@@ -340,7 +340,7 @@ class MailMessageTest extends BaserTestCase {
 				);
 				$this->assertEquals($expectedMailField, $result['mailFields']['key1']['MailField'], 'mailFieldsに正しい値を格納できていません');
 
-				$expectedMessage = "\n\nhoge";
+				$expectedMessage = "<br><br />hoge";
 				$this->assertEquals($expectedMessage, $result['message']['value']);
 
 			} else {
@@ -348,7 +348,7 @@ class MailMessageTest extends BaserTestCase {
 			}
 
 		} else if ($type == 'multi_check') {
-			$expectedMessage = "\n\nhoge";
+			$expectedMessage = "<br><br />hoge";
 			$this->assertEquals($expectedMessage, $result['message']['value'][0]);
 
 		} else if ($type == 'file') {
