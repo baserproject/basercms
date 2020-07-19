@@ -300,7 +300,7 @@ class MailMessage extends MailAppModel {
 						}
 					}
 				} elseif (in_array('VALID_ZENKAKU_KATAKANA', $valids)) {
-					if(!preg_match('/^(|[ァ-ヾ]+)$/u', $data['MailMessage'][$mailField['field_name']])) {
+					if(!preg_match('/^(|[ァ-ヾ 　]+)$/u', $data['MailMessage'][$mailField['field_name']])) {
 						$this->invalidate($mailField['field_name'], __('全て全角カタカナで入力してください。'));
 					}
 				}
