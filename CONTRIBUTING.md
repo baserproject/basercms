@@ -77,3 +77,4 @@ Issue番号にもとづいた名称でブランチを作成し切り替えます
 - [BcAdminThirdの開発](https://github.com/baserproject/ucmitz/blob/dev/plugins/bc-admin-third/README.md)
 - [モノレポによるパッケージ管理](https://github.com/baserproject/ucmitz/blob/dev/docs/monorepo.md)
 - [Cloud9 上で Docker を動作させる](https://github.com/baserproject/ucmitz/blob/dev/docs/cloud9.md)
+- [開発メモ](https://github.com/baserproject/ucmitz/blob/dev/DEVELOPMENTAL_MEMO.md)
