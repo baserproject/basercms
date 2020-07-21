@@ -1,14 +1,21 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright     Copyright (c) baserCMS Users Community
- * @link          http://basercms.net baserCMS Project
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
+
 use Cake\Core\Configure;
+
+/**
+ * toolbar
+ * @var \BaserCore\View\AppView $this
+ */
+
 // JSの出力について、ツールバーはフロントエンドでも利用するため、inlineに出力する
 $this->BcBaser->js('admin/toolbar.bundle');
 $isCurrentUserAdminAvailable = $this->BcAuth->isCurrentUserAdminAvailable();
@@ -72,7 +79,7 @@ $user = $this->BcAuth->getCurrentLoginUser();
 			<?php endif ?>
 		</div>
 		<div id="ToolMenu" class="bca-toolbar__tools">
-			<?php if ($this->BcBaser->existsEditLink() && !isset($this->request->query['preview'])): ?>
+			<?php if ($this->BcBaser->existsEditLink() && !isset($this->request->getQuery['preview'])): ?>
 				<div class="bca-toolbar__tools-button bca-toolbar__tools-button-edit">
 					<?php $this->BcBaser->editLink() ?>
 				</div>

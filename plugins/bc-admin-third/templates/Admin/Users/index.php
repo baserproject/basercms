@@ -1,14 +1,18 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright     Copyright (c) baserCMS Users Community
- * @link          http://basercms.net baserCMS Project
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+/**
+ * Users index
+ * @var \BaserCore\View\AppView $this
+ */
 
 $this->BcBaser->js('admin/users/index.bundle');
 // TODO 一覧をどうやって読み込ませるか検討が必要

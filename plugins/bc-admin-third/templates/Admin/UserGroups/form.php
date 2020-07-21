@@ -1,18 +1,19 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
 /**
- * [ADMIN] ユーザーグループ登録/編集フォーム
+ * UsersGrops form
+ * @var \BaserCore\View\AppView $this
  */
+
 $this->BcBaser->js('admin/user_groups/form', false);
 $authPrefixes = [];
 // TODO

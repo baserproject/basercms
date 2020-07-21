@@ -9,24 +9,17 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\View\Helper;
+namespace BaserCore\View;
+use Cake\View\View;
 
 /**
- * Class BcListTableHelper
- * @package BaserCore\View\Helper
- * @uses BcListTableHelper
+ * Class AppView
+ * @package BaserCore\View
+ * @property \BaserCore\View\Helper\BcBaserHelper $BcBaser
+ * @property \BaserCore\View\Helper\BcFormHelper $BcForm
+ * @property \BaserCore\View\Helper\BcAdminFormHelper $BcAdminForm
+ * @property \BaserCore\View\Helper\BcTimeHelper $BcTime
  */
-class BcListTableHelper extends \Cake\View\Helper {
-	public function setColumnNumber ()
-	{
-	}
-	public function dispatchShowHead ()
-	{
-	}
-	public function dispatchShowRow ()
-	{
-	}
-	public function getColumnNumber()
-	{
-	}
+class AppView extends View {
+
 }

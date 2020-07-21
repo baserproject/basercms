@@ -1,13 +1,14 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright     Copyright (c) baserCMS Users Community
- * @link          http://basercms.net baserCMS Project
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
+
 namespace BaserCore\View\Helper;
 use Cake\Core\Configure;
 use Cake\View\Helper;
@@ -16,15 +17,16 @@ use Cake\View\Helper;
  * Class BcAuthHelper
  * @package BaserCore\View\Helper
  * @property BcBaserHelper $BcBaser
+ * @uses BcAuthHelper
  */
 class BcAuthHelper extends Helper {
-    
+
     /**
      * Helper
      * @var array
      */
     public $helpers = ['BcBaser'];
-    
+
     /**
      * 現在認証プレフィックスを取得する
      * @return string currentPrefix
@@ -37,7 +39,7 @@ class BcAuthHelper extends Helper {
 		}
 		return $currentPrefix;
     }
-    
+
     /**
      * 現在の認証プレフィックスの設定を取得
      * @return array 認証プレフィックス設定
@@ -45,7 +47,7 @@ class BcAuthHelper extends Helper {
     public function getCurrentPrefixSetting() {
         return Configure::read('BcAuthPrefix.' . $this->getCurrentPrefix());
     }
-    
+
     /**
      * 現在の認証プレフィックスのログインURLを取得
      * @return string
@@ -53,7 +55,7 @@ class BcAuthHelper extends Helper {
     public function getCurrentLoginUrl() {
         return preg_replace('/^\//', '', $this->getCurrentPrefixSetting()['loginAction']);
     }
-    
+
     /**
      * 現在のユーザーに許可された認証プレフィックスを取得する
      * @return array
@@ -74,7 +76,7 @@ class BcAuthHelper extends Helper {
         // <<<
         return $currentUserPrefixes;
     }
-    
+
     /**
      * 現在のユーザーが管理画面の利用が許可されているかどうか
      * @return bool
@@ -82,7 +84,7 @@ class BcAuthHelper extends Helper {
     public function isCurrentUserAdminAvailable() {
         return in_array('admin', $this->getCurrentUserPrefixSettings());
     }
-    
+
     /**
      * 現在のユーザーのログインアクションを取得する
      * @return string
@@ -96,7 +98,7 @@ class BcAuthHelper extends Helper {
         }
         return $logoutAction;
     }
-    
+
     /**
      * 認証名を取得する
      * フロントの場合はサイト名
@@ -112,7 +114,7 @@ class BcAuthHelper extends Helper {
         }
         return $name;
     }
-    
+
     /**
      * 管理画面にログインしているかどうか
      * @return bool
@@ -121,7 +123,7 @@ class BcAuthHelper extends Helper {
         // TODO 実装要
         return true;
     }
-    
+
     /**
      * 現在のログアウトURL
      * @return mixed
@@ -129,7 +131,7 @@ class BcAuthHelper extends Helper {
     public function getCurrentLogoutUrl() {
         return $this->getCurrentPrefixSetting()['logoutAction'];
     }
-    
+
     /**
      * 現在のログイン後のリダイレクトURL
      * @return mixed
@@ -137,7 +139,7 @@ class BcAuthHelper extends Helper {
     public function getCurrentLoginRedirectUrl() {
         return $this->getCurrentPrefixSetting()['loginRedirect'];
     }
-    
+
     /**
      * 現在のログインユーザー
      * @return array
@@ -146,5 +148,5 @@ class BcAuthHelper extends Helper {
     public function getCurrentLoginUser() {
         return [true];
     }
-    
+
 }

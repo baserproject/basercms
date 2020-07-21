@@ -1,28 +1,22 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright     Copyright (c) baserCMS Users Community
- * @link          https://cakephp.org CakePHP(tm) Project
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
+
 namespace BaserCore\Controller\Admin;
 use Cake\Event\EventInterface;
-use Cake\Utility\Inflector;
 use BaserCore\Controller\AppController;
 
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
- *
- * @copyright     Copyright (c) baserCMS Users Community
- * @link          http://basercms.net baserCMS Project
- * @since         5.0.0
- * @license       http://basercms.net/license/index.html MIT License
+ * Class BcAdminAppController
+ * @package BaserCore\Controller\Admin
  */
-
 class BcAdminAppController extends AppController
 {
     public function initialize(): void

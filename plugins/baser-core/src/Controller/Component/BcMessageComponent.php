@@ -1,24 +1,21 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller.Component
- * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
 namespace BaserCore\Controller\Component;
 use Cake\Controller\Component;
 
 /**
- * baserCMS Contents Component
- *
+ * Class BcMessageComponent
  * 表示面へのメッセージをコントロールする為のコンポーネント
- *
- * @package Baser.Controller.Component
+ * @package BaserCore\Controller\Component
  */
 class BcMessageComponent extends Component {
 

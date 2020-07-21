@@ -1,18 +1,16 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright     Copyright (c) baserCMS Users Community
- * @link          http://basercms.net baserCMS Project
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
 
 namespace BaserCore\View\Helper;
 use \Cake\View\Helper;
-use \Cake\Core\Configure;
-use BaserCore\View\Helper\BcHtmlHelper;
 
 /**
  * Class BcBaserHelper
@@ -67,10 +65,10 @@ class BcBaserHelper extends Helper
 
 	}
 
-	public function url() {
+	public function url($url = null, $full = false, $sessionId = true) {
 
 	}
-    
+
     /**
      * ユーザー名を取得する
      * @todo 実装要
@@ -81,7 +79,7 @@ class BcBaserHelper extends Helper
 	    return 'basercms';
 	}
 
-    public function i18nScript() {
+    public function i18nScript($data, $options = []) {
 
     }
 }

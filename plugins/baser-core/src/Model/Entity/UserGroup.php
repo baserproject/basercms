@@ -1,13 +1,21 @@
 <?php
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ *
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
+ */
+
 declare(strict_types=1);
-
 namespace App\Model\Entity;
-
 use Cake\ORM\Entity;
 
 /**
- * UserGroup Entity
- *
+ * Class UserGroup
+ * @package App\Model\Entity
  * @property int $id
  * @property string|null $name
  * @property string|null $title
@@ -17,7 +25,6 @@ use Cake\ORM\Entity;
  * @property bool|null $use_move_contents
  * @property \Cake\I18n\FrozenTime|null $modified
  * @property \Cake\I18n\FrozenTime|null $created
- *
  * @property \App\Model\Entity\User[] $users
  */
 class UserGroup extends Entity

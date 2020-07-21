@@ -10,29 +10,29 @@
  */
 
 namespace BaserCore\View\Helper;
-use \Cake\View\Helper;
+use \Cake\View\Helper\FormHelper;
 
 /**
- * Class BcFormTableHelper
+ * Class BcAdminFormHelper
  * @package BaserCore\View\Helper
- * @uses BcFormTableHelper
  */
-class BcFormTableHelper extends Helper {
+class BcAdminFormHelper extends FormHelper
+{
+    /**
+     * Other helpers used by FormHelper
+     *
+     * @var array
+     */
+    public $helpers = ['Url', 'Html', 'BcTime', 'BcText', 'Js'];
 
     /**
-     * テーブル前発火
-     *
+     * widget
+     * @param string $name
+     * @param array $data
      * @return string
      */
-    public function dispatchBefore() {
+    public function widget(string $name, array $data = []): string
+    {
+        return parent::widget($name, $data);
     }
-
-    /**
-     * テーブル後発火
-     *
-     * @return string
-     */
-    public function dispatchAfter() {
-    }
-
 }

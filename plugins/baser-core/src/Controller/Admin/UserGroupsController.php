@@ -1,25 +1,21 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright     Copyright (c) baserCMS Users Community
- * @link          http://basercms.net baserCMS Project
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
 
 namespace BaserCore\Controller\Admin;
-
-use BaserCore\Controller\Admin\BcAdminAppController;
-use Cake\Event\Event;
 use Cake\Event\EventInterface;
-use Cake\ORM\TableRegistry;
 
 /**
- * UserGroups Controller
- *
- * @property \App\Model\Table\UserGroupsTable $UserGroups
+ * Class UserGroupsController
+ * @package BaserCore\Controller\Admin
+ * @property \BaserCore\Model\Table\UserGroupsTable $UserGroups
  * @method \App\Model\Entity\UserGroup[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class UserGroupsController extends BcAdminAppController

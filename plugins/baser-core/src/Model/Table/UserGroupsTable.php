@@ -1,26 +1,22 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright     Copyright (c) baserCMS Users Community
- * @link          http://basercms.net baserCMS Project
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
 
 namespace BaserCore\Model\Table;
-
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * UserGroups Model
- *
+ * Class UserGroupsTable
+ * @package BaserCore\Model\Table
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsToMany $Users
- *
  * @method \App\Model\Entity\UserGroup newEmptyEntity()
  * @method \App\Model\Entity\UserGroup newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\UserGroup[] newEntities(array $data, array $options = [])
@@ -34,8 +30,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\UserGroup[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
  * @method \App\Model\Entity\UserGroup[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\UserGroup[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @uses UserGroupsTable
  */
 class UserGroupsTable extends Table
 {

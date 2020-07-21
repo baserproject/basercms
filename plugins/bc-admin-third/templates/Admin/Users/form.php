@@ -1,18 +1,21 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
 /**
- * [ADMIN] ユーザー フォーム
+ * Users form
+ * @var \BaserCore\View\AppView $this
+ * @var bool $selfUpdate
+ * @var array $user
  */
+
 $this->BcBaser->i18nScript([
 	'alertMessage1' => __d('baser', '処理に失敗しました。'),
 	'alertMessage2' => __d('baser', '送信先のプログラムが見つかりません。'),
@@ -32,7 +35,7 @@ $this->BcBaser->js('admin/users/edit', false);
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
 <div class="section">
-    <table cellpadding="0" cellspacing="0" id="FormTable" class="form-table bca-form-table">
+    <table id="FormTable" class="form-table bca-form-table">
         <?php if ($this->request->getParam('action') == 'edit'): ?>
             <tr>
                 <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('id', 'No') ?></th>

@@ -1,13 +1,12 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View.Helper
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
 namespace BaserCore\View\Helper;
@@ -36,5 +35,16 @@ class BcFormHelper extends FormHelper
 
     public function dispatchAfterForm($type = '') {
 
+    }
+
+    /**
+     * widget
+     * @param string $name
+     * @param array $data
+     * @return string
+     */
+    public function widget(string $name, array $data = []): string
+    {
+        return parent::widget($name, $data);
     }
 }
