@@ -45,6 +45,7 @@ class BcAdminAppController extends AppController
 
 	public function beforeRender(EventInterface $event)
 	{
+	    $this->viewBuilder()->setClassName('BaserCore.App');
 		$this->viewBuilder()->setTheme('BcAdminThird');
 	}
 }

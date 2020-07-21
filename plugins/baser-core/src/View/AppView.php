@@ -21,5 +21,9 @@ use Cake\View\View;
  * @property \BaserCore\View\Helper\BcTimeHelper $BcTime
  */
 class AppView extends View {
-
+    public function initialize():void
+    {
+        parent::initialize();
+        $this->loadHelper('BaserCore.BcAdminForm', ['templates' => 'BaserCore.bc_form']);
+    }
 }

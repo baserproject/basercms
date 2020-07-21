@@ -17,12 +17,19 @@
 
 
 <div class="users form">
-<?= $this->Form->create() ?>
+<?= $this->BcAdminForm->create() ?>
     <fieldset>
         <legend><?= __('Add User') ?></legend>
-        <?= $this->Form->control('email') ?>
-        <?= $this->Form->control('password') ?>
+        <?= $this->BcAdminForm->control('email', ['type' => 'text']) ?>
+        <?= $this->BcAdminForm->control('password', ['type' => 'password']) ?>
    </fieldset>
-<?= $this->Form->button(__('Submit')); ?>
-<?= $this->Form->end() ?>
+<?= $this->BcAdminForm->button(__d('baser', 'ログイン'),
+         ['div' => false,
+         'class' => 'button bca-btn bca-actions__item',
+         'data-bca-btn-type' => 'save',
+         'data-bca-btn-size' => 'lg',
+         'data-bca-btn-width' => 'lg',
+         'id' => 'BtnSave']
+); ?>
+<?= $this->BcAdminForm->end() ?>
 </div>
