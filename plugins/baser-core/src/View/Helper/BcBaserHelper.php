@@ -82,4 +82,53 @@ class BcBaserHelper extends Helper
     public function i18nScript($data, $options = []) {
 
     }
+
+    public function flash() {
+
+    }
+
+    public function getContentsTitle() {
+
+    }
+
+/**
+ * コンテンツを特定する文字列を出力する
+ *
+ * URL を元に、第一階層までの文字列をキャメルケースで取得する
+ * ※ 利用例、出力例については BcBaserHelper::getContentsName() を参照
+ *
+ * @param bool $detail 詳細モード true にした場合は、ページごとに一意となる文字列をキャメルケースで出力する（初期値 : false）
+ * @param array $options オプション（初期値 : array()）
+ *	※ オプションの詳細については、BcBaserHelper::getContentsName() を参照
+ * @return void
+ */
+	public function contentsName($detail = false, $options = []) {
+		echo $this->getContentsName($detail, $options);
+	}
+
+
+/**
+ * コンテンツを特定する文字列を取得する
+ *
+ * URL を元に、第一階層までの文字列をキャメルケースで取得する
+ *
+ * 《利用例》
+ * $this->BcBaser->contentsName()
+ *
+ * 《出力例》
+ * - トップページの場合 : Home
+ * - about ページの場合 : About
+ *
+ * @param bool $detail 詳細モード true にした場合は、ページごとに一意となる文字列をキャメルケースで取得する（初期値 : false）
+ * @param array $options オプション（初期値 : array()）
+ *	- `home` : トップページの場合に出力する文字列（初期値 : Home）
+ *	- `default` : ルート直下の下層ページの場合に出力する文字列（初期値 : Default）
+ *	- `error` : エラーページの場合に出力する文字列（初期値 : Error）
+ *  - `underscore` : キャメルケースではなく、アンダースコア区切りで出力する（初期値 : false）
+ * @return string
+ */
+	public function getContentsName($detail = false, $options = []) {
+	    return 'AdminUsersLogin';
+	}
+
 }

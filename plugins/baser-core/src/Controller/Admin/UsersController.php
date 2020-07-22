@@ -109,7 +109,7 @@ class UsersController extends BcAdminAppController
      */
     public function login()
     {
-        $this->set('title', 'ログイン');
+        $this->set('title', '管理システムログイン');
         $result = $this->Authentication->getResult();
         if ($result->isValid()) {
             $target = $this->Authentication->getLoginRedirect() ?? env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX') . '/';

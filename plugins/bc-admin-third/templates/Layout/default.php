@@ -36,7 +36,7 @@ $this->assign('title', $title);
 <?php //echo $this->Html->script(['https://unpkg.com/vue', 'https://unpkg.com/axios/dist/axios.min.js', 'admin/app']) ?>
 	</head>
 
-	<body class="normal">
+	<body id="<?php $this->BcBaser->contentsName(true) ?>" class="normal">
 
 	<div id="Page" class="bca-app">
 <?php echo $this->element('Admin/header') ?>
