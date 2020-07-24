@@ -34,8 +34,7 @@ class UsersTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.baser.users',
-        'plugin.baser.user_groups'
+        'plugin.BaserCore.users'
     ];
 
     /**
@@ -43,7 +42,7 @@ class UsersTableTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $config = TableRegistry::exists('Users') ? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
@@ -55,7 +54,7 @@ class UsersTableTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Users);
 

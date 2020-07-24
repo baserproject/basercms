@@ -25,7 +25,7 @@ return [
      *   You should treat it as extremely sensitive data.
      */
     'Security' => [
-        'salt' => env('SECURITY_SALT', '__SALT__'),
+        'salt' => env('SECURITY_SALT', '9acb9000c0c688e2c687e391f0bf983ca4f2131a20cfc216d7de6495cd2b52a2'),
     ],
 
     /*
@@ -36,7 +36,7 @@ return [
      */
     'Datasources' => [
         'default' => [
-            'host' => 'localhost',
+            'host' => 'bc5-db',
             /*
              * CakePHP will use the default DB port based on the driver selected
              * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
@@ -44,10 +44,10 @@ return [
              */
             //'port' => 'non_standard_port_number',
 
-            'username' => 'my_app',
-            'password' => 'secret',
+            'username' => 'root',
+            'password' => 'root',
 
-            'database' => 'my_app',
+            'database' => 'basercms',
             /**
              * If not using the default 'public' schema with the PostgreSQL driver
              * set it here.
@@ -64,13 +64,12 @@ return [
          * The test connection is used during the test suite.
          */
         'test' => [
-            'host' => 'localhost',
+            'host' => 'bc5-db',
             //'port' => 'non_standard_port_number',
-            'username' => 'my_app',
-            'password' => 'secret',
-            'database' => 'test_myapp',
-            //'schema' => 'myapp',
-            'url' => env('DATABASE_TEST_URL', null),
+            'username' => 'root',
+            'password' => 'root',
+            'database' => 'basercms',
+            //'schema' => 'test_basercms',
         ],
     ],
 

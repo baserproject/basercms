@@ -16,6 +16,9 @@
             <directory>tests/TestCase/</directory>
         </testsuite>
         <!-- Add plugin test suites here. -->
+        <testsuite name="BaserCore">
+            <directory>./plugins/baser-core/tests/TestCase/</directory>
+        </testsuite>
     </testsuites>
 
     <!-- Setup a listener for fixtures -->
