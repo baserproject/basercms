@@ -787,6 +787,12 @@ class BcBaserHelper extends AppHelper {
 			}
 		}
 
+		if (empty($this->_View->viewVars['preview']) && Configure::read('BcWidjet.editLinkAtFront')) {
+			if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
+				$this->css('admin/widget_link');
+			}
+		}
+
 		if(BcUtil::isAdminSystem()) {
 			$plugins = CakePlugin::loaded();
 			if($plugins) {

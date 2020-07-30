@@ -1,0 +1,32 @@
+div.bca-widget-edit-link a {
+	top: -25px;
+	right: -10px;
+	display: inline-block;
+	padding: 6px 12px;
+	margin-bottom: 0;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	color: #FFFFFF;
+	background-color: rgba(48, 48, 48, 0.3);
+	border: 1px solid rgba(48, 48, 48, 0.7);
+	border-radius: 4px;
+	z-index: 99;
+}
+
+div.bca-widget-edit-link a:hover, div.bca-widget-edit-link a:focus, div.bca-widget-edit-link a:active {
+	color: #FFFFFF;
+	background-color: rgba(48, 48, 48, 0.7);
+	border-color: #333333;
+	text-decoration: none;
+	opacity: 1;
+}
+
+div.bca-widget-edit-link .fa {
+	position: relative;
+	top: 2px;
+	font-size: 20px;
+}
