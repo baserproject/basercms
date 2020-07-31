@@ -48,7 +48,7 @@ class Content extends AppModel {
 
 /**
  * Belongs To
- * 
+ *
  * @var array
  */
 	public $belongsTo = [
@@ -59,35 +59,35 @@ class Content extends AppModel {
 		'User' => [
 			'className' => 'User',
 			'foreignKey' => 'author_id'
-		]	
+		]
 	];
 
 /**
  * 関連データを更新する
- * 
+ *
  * @var bool
  */
 	public $updatingRelated = true;
 
 /**
  * システムデータを更新する
- * 
+ *
  * @var bool
  */
 	public $updatingSystemData = true;
 	
 /**
  * 保存前の親ID
- * 
+ *
  * IDの変更比較に利用
- * 
+ *
  * @var null
  */
 	public $beforeSaveParentId = null;
 	
 /**
  * 削除時の削除対象レコード
- * 
+ *
  * afterDelete で利用する為、beforeDelete で取得し保存する
  * @var []
  */
@@ -267,7 +267,7 @@ class Content extends AppModel {
 	}
 
 /**
- * After Validate 
+ * After Validate
  */
 	public function afterValidate() {
 		parent::afterValidate();
@@ -299,10 +299,9 @@ class Content extends AppModel {
 
 		if ($datas) {
 			foreach($datas as $data) {
-				$lastPrefix = preg_replace('/^' . preg_quote($name, '/') . '/', '', $data);
-				if(!$lastPrefix) {
+				if($name === $data) {
 					$numbers[1] = 1;
-				} elseif (preg_match("/^_([0-9]+)$/s", $lastPrefix, $matches)) {
+				} elseif (preg_match("/^" . preg_quote($name, '/') . "_([0-9]+)$/s", $data, $matches)) {
 					$numbers[$matches[1]] = true;
 				}
 			}
@@ -330,13 +329,13 @@ class Content extends AppModel {
 
 /**
  * Before Save
- * 
+ *
  * @param array $options
  * @return bool
  */
 	public function beforeSave($options = []) {
 		if(!empty($this->data['Content']['id'])) {
-			$this->beforeSaveParentId = $this->field('parent_id', ['Content.id' => $this->data['Content']['id']]);	
+			$this->beforeSaveParentId = $this->field('parent_id', ['Content.id' => $this->data['Content']['id']]);
 		}
 		return parent::beforeSave($options);
 	}
@@ -352,7 +351,7 @@ class Content extends AppModel {
 		parent::afterSave($created, $options);
 		$this->deleteAssocCache($this->data);
 		if($this->updatingSystemData) {
-			$this->updateSystemData($this->data);	
+			$this->updateSystemData($this->data);
 		}
 		if($this->updatingRelated) {
 			// ゴミ箱から戻す場合、 type の定義がないが問題なし
@@ -386,14 +385,14 @@ class Content extends AppModel {
 		$AssocModel = ClassRegistry::init($assoc);
 		if($AssocModel && !empty($AssocModel->actsAs) && in_array('BcCache', $AssocModel->actsAs)) {
 			if($AssocModel->Behaviors->hasMethod('delCache')) {
-				$AssocModel->delCache();	
+				$AssocModel->delCache();
 			}
 		}
 	}
 
 /**
  * Before Delete
- * 
+ *
  * 論理削除の場合、
  * @param bool $cascade
  * @return bool
@@ -415,7 +414,7 @@ class Content extends AppModel {
 /**
  * After Delete
  *
- * 関連コンテンツのキャッシュを削除する 
+ * 関連コンテンツのキャッシュを削除する
  */
 	public function afterDelete() {
 		parent::afterDelete();
@@ -432,7 +431,7 @@ class Content extends AppModel {
  * 自データのエイリアスを削除する
  *
  * 全サイトにおけるエイリアスを全て削除
- * 
+ *
  * @param $data
  */
 	public function deleteAlias($data) {
@@ -441,7 +440,7 @@ class Content extends AppModel {
 			return;
 		}
 		$contents = $this->find('all', [
-			'fields' => ['Content.id'], 
+			'fields' => ['Content.id'],
 			'conditions' => [
 				'Content.alias_id' => $data['Content']['id']
 		], 'recursive' => -1]);
@@ -654,7 +653,7 @@ class Content extends AppModel {
 		$content['type'] = $type;
 		$content['entity_id'] = $entityId;
 		if(!isset($content['deleted'])) {
-			$content['deleted'] = false;	
+			$content['deleted'] = false;
 		}
 		if(!isset($content['site_root'])) {
 			$content['site_root'] = 0;
@@ -671,7 +670,7 @@ class Content extends AppModel {
 	
 /**
  * コンテンツデータよりURLを生成する
- * 
+ *
  * @param int $id コンテンツID
  * @param string $plugin プラグイン
  * @param string $type タイプ
@@ -703,8 +702,8 @@ class Content extends AppModel {
 			} else {
 				$content = $content[0][0];
 			}
-			$sql = "SELECT name, plugin, type FROM {$this->tablePrefix}contents AS Content " . 
-					"WHERE lft <= {$db->value($content['lft'], 'integer')} AND rght >= {$db->value($content['rght'], 'integer')} AND deleted =  " . $db->value(false, 'boolean') . " " . 
+			$sql = "SELECT name, plugin, type FROM {$this->tablePrefix}contents AS Content " .
+					"WHERE lft <= {$db->value($content['lft'], 'integer')} AND rght >= {$db->value($content['rght'], 'integer')} AND deleted =  " . $db->value(false, 'boolean') . " " .
 					"ORDER BY lft ASC";
 			$parents = $db->query($sql, false);
 			unset($parents[0]);
@@ -744,7 +743,7 @@ class Content extends AppModel {
 	public function updateSystemData($data) {
 		if(empty($data['Content']['name'])) {
 			if($data['Content']['id'] != 1) {
-				return false;	
+				return false;
 			}
 		}
 
@@ -755,7 +754,7 @@ class Content extends AppModel {
 
 		// 親フォルダの公開状態に合わせて公開状態を更新（自身も含める）
 		if(isset($data['Content']['self_status'])) {
-			$data['Content']['status'] = $data['Content']['self_status'];	
+			$data['Content']['status'] = $data['Content']['self_status'];
 		}
 		// null の場合、isset で判定できないので array_key_exists を利用
 		if(array_key_exists('self_publish_begin', $data['Content'])) {
@@ -766,8 +765,8 @@ class Content extends AppModel {
 		}
 		if(!empty($data['Content']['parent_id'])) {
 			$parent = $this->find('first', [
-				'fields' => ['name', 'status', 'publish_begin', 'publish_end'], 
-				'conditions' => ['Content.id' => $data['Content']['parent_id']], 
+				'fields' => ['name', 'status', 'publish_begin', 'publish_end'],
+				'conditions' => ['Content.id' => $data['Content']['parent_id']],
 				'recursive' => -1
 			]);
 			if(!$parent['Content']['status'] || $parent['Content']['publish_begin'] || $parent['Content']['publish_begin']) {
@@ -818,7 +817,7 @@ class Content extends AppModel {
 
 /**
  * 子ノードのURLを全て更新する
- * 
+ *
  * @param $id
  * @return bool
  */
@@ -878,7 +877,7 @@ class Content extends AppModel {
 		], $options);
 
 		$conditions = [
-			'type' => 'ContentFolder', 
+			'type' => 'ContentFolder',
 			'alias_id' => null
 		];
 		if(!is_null($siteId)) {
@@ -1082,7 +1081,7 @@ class Content extends AppModel {
 		if (!is_int($id)) {
 			$id = (int) $id;
 			if($id === 0) {
-				return '';	
+				return '';
 			}
 		}
 		$data = $this->find('first', ['conditions' => ['Content.id' => $id]]);
@@ -1094,12 +1093,12 @@ class Content extends AppModel {
 
 /**
  * コンテンツ管理上のURLを元に正式なURLを取得する
- * 
+ *
  * ドメインからのフルパスでない場合、デフォルトでは、
  * サブフォルダ設置時等の baseUrl（サブフォルダまでのパス）は含まない
  *
- * @param string $url コンテンツ管理上のURL 
- * @param bool $full http からのフルのURLかどうか 
+ * @param string $url コンテンツ管理上のURL
+ * @param bool $full http からのフルのURLかどうか
  * @param bool $useSubDomain サブドメインを利用しているかどうか
  * @param bool $base $full が false の場合、ベースとなるURLを含めるかどうか
  * @return string URL
@@ -1347,7 +1346,7 @@ class Content extends AppModel {
 
 /**
  * 公開されたURLが存在するか確認する
- * 
+ *
  * @param string $url
  * @return bool
  * @deprecated 5.0.0 since 4.2.2 Content::findByUrl() を利用してください。
@@ -1386,7 +1385,7 @@ class Content extends AppModel {
 	
 /**
  * 移動元のコンテンツと移動先のディレクトリから移動が可能かチェックする
- * 
+ *
  * @param $currentId int 移動元コンテンツID
  * @param $targetParentId int 移動先コンテンツID (ContentFolder)
  * @return bool
@@ -1463,14 +1462,14 @@ class Content extends AppModel {
 
 /**
  * サイトルートコンテンツを取得する
- * 
+ *
  * @param $siteId
  * @return array|null
  */
 	public function getSiteRoot($siteId) {
 		return $this->find('first', [
 			'conditions' => [
-				'Content.site_id' => $siteId, 
+				'Content.site_id' => $siteId,
 				'Content.site_root' => true
 		], 'recursive' => -1]);
 	}
@@ -1499,10 +1498,10 @@ class Content extends AppModel {
 
 /**
  * コンテンツを移動する
- * 
+ *
  * 基本的に targetId の上に移動する前提となる
  * targetId が空の場合は、同親中、一番下に移動する
- * 
+ *
  * @param $currentId
  * @param $type
  * @param $targetSiteId
@@ -1534,7 +1533,7 @@ class Content extends AppModel {
 			}
 			$currentSort = $this->getOrderSameParent(null, $targetParentId);
 		} else {
-			$currentSort = $this->getOrderSameParent($currentId, $targetParentId);	
+			$currentSort = $this->getOrderSameParent($currentId, $targetParentId);
 		}
 		// 親変更後のオフセットを取得
 		$offset = $targetSort - $currentSort;
@@ -1582,7 +1581,7 @@ class Content extends AppModel {
 				if($target) {
 					$targetId = $target['Content']['id'];
 					$targetParentId = $target['Content']['parent_id'];
-				}	
+				}
 			}
 			if(!$target) {
 				// ターゲットが見つからない場合は親IDより取得
@@ -1597,7 +1596,7 @@ class Content extends AppModel {
 			$targetSiteId = $target['Content']['site_id'];
 			if(!$this->move($currentId, $currentParentId, $targetSiteId, $targetParentId, $targetId)) {
 				$result = false;
-			}	
+			}
 		}
 		// 退避したデータを戻す
 		$this->data = $dataTmp;
@@ -1633,9 +1632,9 @@ class Content extends AppModel {
 
 /**
  * 同じ階層における並び順を取得
- * 
+ *
  * id が空の場合は、一番最後とみなす
- * 
+ *
  * @param $id
  * @param $parentId
  * @return bool|int|null|string
@@ -1667,7 +1666,7 @@ class Content extends AppModel {
 
 /**
  * 関連サイトの関連コンテンツを取得する
- * 
+ *
  * @param int $id
  * @return array|false
  */
@@ -1723,7 +1722,7 @@ class Content extends AppModel {
 			return false;
 		}
 		// #10680 Modify 2016/01/22 gondoh
-		// 3.0.10 で追加されたViewキャッシュ分離の設定値を、後方互換のため存在しない場合は旧情報で取り込む 
+		// 3.0.10 で追加されたViewキャッシュ分離の設定値を、後方互換のため存在しない場合は旧情報で取り込む
 		$duration = Configure::read('BcCache.viewDuration');
 		if (empty($duration)) {
 			$duration = Configure::read('BcCache.duration');
@@ -1739,7 +1738,7 @@ class Content extends AppModel {
 
 /**
  * 全てのURLをデータの状況に合わせ更新する
- * 
+ *
  * @return bool
  */
 	public function updateAllUrl() {
