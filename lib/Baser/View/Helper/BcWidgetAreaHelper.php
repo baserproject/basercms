@@ -42,7 +42,7 @@ class BcWidgetAreaHelper extends AppHelper {
 			return;
 		}
 
-		if ($this->_View->BcBaser->isAdminUser() && Configure::read('BcWidjet.editLinkAtFront')) {
+		if ($this->_View->BcBaser->isAdminUser() && Configure::read('BcWidget.editLinkAtFront')) {
 			$editLink = $this->url(['admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'edit', $no]);
 			$this->_View->BcBaser->element('widget_link', ['editLink' => $editLink, 'name' => $widgetArea['WidgetArea']['name']], ['subDir' => false]);
 		}

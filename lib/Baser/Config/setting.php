@@ -502,6 +502,6 @@ $config['BcSecurity'] = [
 /**
  * フロントからのウィジェット編集リンク
  */
-$config['BcWidjet'] = [
+$config['BcWidget'] = [
 	'editLinkAtFront' => false
 ];
