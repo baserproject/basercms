@@ -1,32 +1,42 @@
+/**
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ *
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Config
+ * @since			baserCMS v 4.4.0
+ * @license			http://basercms.net/license/index.html
+ */
+
+
+div.bca-widget-edit-link {
+    position: absolute;
+    margin: 5px 5px !important;
+}
 div.bca-widget-edit-link a {
-	top: -25px;
-	right: -10px;
-	display: inline-block;
-	padding: 6px 12px;
-	margin-bottom: 0;
-	font-size: 12px;
-	font-weight: 400;
-	line-height: 1.42857143;
-	text-align: center;
-	white-space: nowrap;
-	vertical-align: middle;
-	color: #FFFFFF;
-	background-color: rgba(48, 48, 48, 0.3);
-	border: 1px solid rgba(48, 48, 48, 0.7);
-	border-radius: 4px;
-	z-index: 99;
-}
+    padding: 3px 8px 3px 5px !important;
+    background: #fff !important;
+    border-radius: 22px !important;
+    color: #333;
+    text-decoration: none !important;
+    border:1px solid #2a332c;
+    font-size: 12px !important;
+    line-height: 1.15 !important;
+    font-family: Arial, Geneva, sans-serif, "メイリオ", Verdana, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック" !important;
 
-div.bca-widget-edit-link a:hover, div.bca-widget-edit-link a:focus, div.bca-widget-edit-link a:active {
-	color: #FFFFFF;
-	background-color: rgba(48, 48, 48, 0.7);
-	border-color: #333333;
-	text-decoration: none;
-	opacity: 1;
 }
-
-div.bca-widget-edit-link .fa {
-	position: relative;
-	top: 2px;
-	font-size: 20px;
+div.bca-widget-edit-link a::before {
+	background-image: url(../../img/admin/pencil-alt-solid.svg) !important;
+    width: 10px !important;
+    height: 13px !important;
+    background-position: 0 3px;
+    margin: 0 0.4em 0 0.2em !important;
+    content: "";
+    display: inline-block !important;
+    background-repeat: no-repeat;
+}
+div.bca-widget-edit-link a:hover{
+    background: #ccc !important;
+    color: #333 !important;
 }

@@ -50,12 +50,12 @@ $config['BcApp'] = [
 				'type' => 'system',
 				'menus' => [
 					'Users' => [
-						'title' => __d('baser', 'ユーザー'), 
+						'title' => __d('baser', 'ユーザー'),
 						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'index'],
 						'currentRegex' => '/\/users\/[^\/]+?/s'
 					],
 					'UserGroups' => [
-						'title' => __d('baser', 'ユーザーグループ'), 
+						'title' => __d('baser', 'ユーザーグループ'),
 						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index'],
 						'currentRegex' => '/\/user_groups\/[^\/]+?/s'
 					],
@@ -66,9 +66,9 @@ $config['BcApp'] = [
 				'type' => 'system',
 				'menus' => [
 					'Sites' => [
-						'title' => __d('baser', 'サブサイト'), 
+						'title' => __d('baser', 'サブサイト'),
 						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'sites', 'action' => 'index'],
-						'currentRegex' => '/\/sites\/.+?/s'						
+						'currentRegex' => '/\/sites\/.+?/s'
 					],
 				]
 			],
@@ -77,7 +77,7 @@ $config['BcApp'] = [
 				'type' => 'system',
 				'menus' => [
 					'Themes' => [
-						'title' => __d('baser', 'テーマ'), 
+						'title' => __d('baser', 'テーマ'),
 						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'index'],
 						'currentRegex' => '/\/themes\/[^\/]+?/s'
 					],
@@ -92,7 +92,7 @@ $config['BcApp'] = [
 				'type' => 'system',
 				'menus' => [
 					'Plugins' => [
-						'title' => __d('baser', 'プラグイン'), 
+						'title' => __d('baser', 'プラグイン'),
 						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'plugins', 'action' => 'index'],
 						'currentRegex' => '/\/plugins\/[^\/]+?/s'
 					],
@@ -104,19 +104,19 @@ $config['BcApp'] = [
 				'menus' => [
 					'Tools' => ['title' => __d('baser', 'ユーティリティトップ'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'index']],
 					'EditorTemplates' => [
-						'title' => __d('baser', 'エディタテンプレート'), 
+						'title' => __d('baser', 'エディタテンプレート'),
 						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index'],
 						'currentRegex' => '/\/editor_templates\/[^\/]+?/s'
 					],
 					'WidgetAreas' => [
-						'title' => __d('baser', 'ウィジェットエリア'), 
+						'title' => __d('baser', 'ウィジェットエリア'),
 						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index'],
 						'currentRegex' => '/\/widget_areas\/[^\/]+?\/[0-9]+/s'
 					],
 					'SearchIndices' => ['title' => __d('baser', '検索インデックス'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'index']],
 					'SiteConfigsInfo' => ['title' => __d('baser', '環境情報'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'info']],
 					'ThemeFiles' => [
-						'title' => __d('baser', 'コアテンプレート確認'), 
+						'title' => __d('baser', 'コアテンプレート確認'),
 						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'theme_files', 'action' => 'index', 'core'],
 						'currentRegex' => '/\/theme_files\/[^\/]+?/s'
 					],
@@ -181,7 +181,7 @@ $config['BcApp'] = [
 ];
 
 /**
- * システム要件 
+ * システム要件
  */
 $config['BcRequire'] = array(
 	'phpVersion' => "5.4.0",
@@ -192,7 +192,7 @@ $config['BcRequire'] = array(
 );
 
 /**
- * 環境設定 
+ * 環境設定
  */
 $config['BcEnv'] = array(
 	// テストDBプレフィックス
@@ -335,7 +335,7 @@ $config['BcLang'] = [
 		'name' => __d('baser', '英語'),
 		'langs' => [
 			'en'
-		]	
+		]
 	]
 ];
 
@@ -500,8 +500,9 @@ $config['BcSecurity'] = [
 ];
 
 /**
- * フロントからのウィジェット編集リンク
+ * ウィジェット
  */
 $config['BcWidget'] = [
+	// フロントにウィジェットエリアの編集リンクを表示するかどうか
 	'editLinkAtFront' => false
 ];

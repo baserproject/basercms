@@ -2212,8 +2212,8 @@ END_FLASH;
  *	- `maxHeight: 最大高さ（初期値 : ''）
  *	- `width : 最大横幅（初期値 : ''）
  *	- `height: 最大高さ（初期値 : ''）
- *	- `noimage: 
- *	- `output: 
+ *	- `noimage:
+ *	- `output:
  * @return string $tag テーマ画像のHTMLタグ
  */
 	public function getThemeImage($name, $options = []) {

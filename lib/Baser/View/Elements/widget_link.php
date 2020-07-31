@@ -1,1 +1,0 @@
-<?php echo '<div class="bca-widget-edit-link">' . $this->BcBaser->getLink('ウィジェットエリア「' . h($name) . '」編集', $editLink, ['target' => '_blank']) . '</div>'; ?>
