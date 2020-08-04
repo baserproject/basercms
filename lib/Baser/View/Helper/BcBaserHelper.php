@@ -771,7 +771,9 @@ class BcBaserHelper extends AppHelper {
 		if (isset($authPrefix['toolbar'])) {
 			$toolbar = $authPrefix['toolbar'];
 		}
-
+		
+		$this->_View->append('meta', "\n<meta name=\"generator\" content=\"basercms\"/>");
+		
 		// ### ツールバー用CSS出力
 		// 《表示条件》
 		// - プレビューでない
