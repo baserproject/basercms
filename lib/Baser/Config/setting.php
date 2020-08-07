@@ -178,6 +178,8 @@ $config['BcApp'] = [
 	// 指定したディレクトリURLを記載しているリンクは変換しない
 	// 例: 'test/' と記載 → https://basercms.net/s/test/ は s が付かなくなる
 	'excludeListAddPrefix' => [],
+	// generator のメタタグを出力するかどうか
+	'outputMetaGenerator' => true
 ];
 
 /**

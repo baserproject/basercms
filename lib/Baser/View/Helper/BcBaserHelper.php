@@ -813,8 +813,13 @@ class BcBaserHelper extends AppHelper {
 		if (!BcUtil::isAdminSystem() && $this->params['controller'] != 'installations' && file_exists(WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css')) {
 			$this->css('/files/theme_configs/config');
 		}
+		
+		$scripts = $this->_View->fetch('meta') . $this->_View->fetch('css') . $this->_View->fetch('script');
+		
+		if(Configure::read('BcApp.outputMetaGenerator')) {
+			$scripts = "\n<meta name=\"generator\" content=\"basercms\"/>" . $scripts;
+		}
 
-		$scripts = "\n<meta name=\"generator\" content=\"basercms\"/>" . $this->_View->fetch('meta') . $this->_View->fetch('css') . $this->_View->fetch('script');
 		echo $scripts;
 	}
 

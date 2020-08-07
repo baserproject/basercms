@@ -732,6 +732,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testScripts() {
 		$themeConfigTag = '<link rel="stylesheet" type="text/css" href="/files/theme_configs/config.css" />';
+		
 		// CSS
 		$expected = "\n" . '<meta name="generator" content="basercms"/><link rel="stylesheet" type="text/css" href="/css/admin/layout.css"/>';
 		$this->BcBaser->css('admin/layout', ['inline' => false]);
@@ -741,8 +742,11 @@ class BcBaserHelperTest extends BaserTestCase {
 		$result = str_replace($themeConfigTag, '', $result);
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('css', '');
+		
+		Configure::write('BcApp.outputMetaGenerator', false);
+		
 		// Javascript
-		$expected = "\n" . '<meta name="generator" content="basercms"/><script type="text/javascript" src="/js/admin/startup.js"></script>';
+		$expected = '<script type="text/javascript" src="/js/admin/startup.js"></script>';
 		$this->BcBaser->js('admin/startup', false);
 		ob_start();
 		$this->BcBaser->scripts();
@@ -750,8 +754,9 @@ class BcBaserHelperTest extends BaserTestCase {
 		$result = str_replace($themeConfigTag, '', $result);
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('script', '');
+		
 		// meta
-		$expected = "\n" . '<meta name="generator" content="basercms"/><meta name="description" content="説明文"/>';
+		$expected = '<meta name="description" content="説明文"/>';
 		App::uses('BcHtmlHelper', 'View/Helper');
 		$BcHtml = new BcHtmlHelper($this->_View);
 		$BcHtml->meta('description', '説明文', ['inline' => false]);
@@ -761,8 +766,9 @@ class BcBaserHelperTest extends BaserTestCase {
 		$result = str_replace($themeConfigTag, '', $result);
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('meta', '');
+		
 		// ツールバー
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/toolbar.css"/>' . "\n" . '<meta name="generator" content="basercms"/>';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/toolbar.css"/>';
 		$this->BcBaser->set('user', ['User']);
 		ob_start();
 		$this->BcBaser->scripts();
