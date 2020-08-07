@@ -772,8 +772,6 @@ class BcBaserHelper extends AppHelper {
 			$toolbar = $authPrefix['toolbar'];
 		}
 		
-		$this->_View->append('meta', "\n<meta name=\"generator\" content=\"basercms\"/>");
-		
 		// ### ツールバー用CSS出力
 		// 《表示条件》
 		// - プレビューでない
@@ -816,7 +814,7 @@ class BcBaserHelper extends AppHelper {
 			$this->css('/files/theme_configs/config');
 		}
 
-		$scripts = $this->_View->fetch('meta') . $this->_View->fetch('css') . $this->_View->fetch('script');
+		$scripts = "\n<meta name=\"generator\" content=\"basercms\"/>" . $this->_View->fetch('meta') . $this->_View->fetch('css') . $this->_View->fetch('script');
 		echo $scripts;
 	}
 

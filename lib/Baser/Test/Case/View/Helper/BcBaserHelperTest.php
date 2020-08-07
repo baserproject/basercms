@@ -23,7 +23,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * Fixtures
- * @var array 
+ * @var array
  */
 	public $fixtures = [
 		'baser.Default.Page',	// メソッド内で読み込む
@@ -52,14 +52,14 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * View
- * 
+ *
  * @var View
  */
 	protected $_View;
 
 /**
  * __construct
- * 
+ *
  * @param string $name
  * @param array $data
  * @param string $dataName
@@ -544,7 +544,7 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * baserCMSが設置されているパスを出力する
  * BcBaserHelper:rootのラッパーの為、テスト不要
- * 
+ *
  * public function testRoot($expected, $baseUrl) {}
  */
 
@@ -645,7 +645,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * エレメントテンプレートを出力する
- * 
+ *
  * BcBaserHelper::getElement() をラッパーの為、テスト不要
  *
  * @return void
@@ -733,7 +733,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testScripts() {
 		$themeConfigTag = '<link rel="stylesheet" type="text/css" href="/files/theme_configs/config.css" />';
 		// CSS
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/layout.css"/>';
+		$expected = "\n" . '<meta name="generator" content="basercms"/><link rel="stylesheet" type="text/css" href="/css/admin/layout.css"/>';
 		$this->BcBaser->css('admin/layout', ['inline' => false]);
 		ob_start();
 		$this->BcBaser->scripts();
@@ -742,7 +742,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('css', '');
 		// Javascript
-		$expected = '<script type="text/javascript" src="/js/admin/startup.js"></script>';
+		$expected = "\n" . '<meta name="generator" content="basercms"/><script type="text/javascript" src="/js/admin/startup.js"></script>';
 		$this->BcBaser->js('admin/startup', false);
 		ob_start();
 		$this->BcBaser->scripts();
@@ -751,7 +751,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('script', '');
 		// meta
-		$expected = '<meta name="description" content="説明文"/>';
+		$expected = "\n" . '<meta name="generator" content="basercms"/><meta name="description" content="説明文"/>';
 		App::uses('BcHtmlHelper', 'View/Helper');
 		$BcHtml = new BcHtmlHelper($this->_View);
 		$BcHtml->meta('description', '説明文', ['inline' => false]);
@@ -762,7 +762,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('meta', '');
 		// ツールバー
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/toolbar.css"/>';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/toolbar.css"/>' . "\n" . '<meta name="generator" content="basercms"/>';
 		$this->BcBaser->set('user', ['User']);
 		ob_start();
 		$this->BcBaser->scripts();
@@ -807,7 +807,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * サブメニューを設定する
- * 
+ *
  * @param array $elements サブメニューエレメント名を配列で指定
  * @param array $expects 期待するサブメニュータイトル
  * @return void
@@ -868,7 +868,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * ドキュメントタイプを指定するタグを出力する
- * 
+ *
  * @param string $docType ドキュメントタイプ
  * @param string $expected ドキュメントタイプを指定するタグ
  * @return void
@@ -962,7 +962,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * 画像タグを取得する
- * 
+ *
  * @param string $path 画像のパス
  * @param array $options オプション
  * @param string $expected 結果
@@ -992,7 +992,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * アンカータグを取得する
- * 
+ *
  * @param string $title タイトル
  * @param string $url URL
  * @param array $option オプション
@@ -1088,7 +1088,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * 編集画面へのリンクを出力する
- * 
+ *
  * setPageEditLink のテストも兼ねる
  *
  * @return void
@@ -1166,7 +1166,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * アップデート処理が必要かチェックする
- * 
+ *
  * @param string $baserVersion baserCMSのバージョン
  * @param string $dbVersion データベースのバージョン
  * @param bool $expected 結果
@@ -1199,7 +1199,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @param string $expects コンテンツ名
  * @return void*
  * @dataProvider getContentsNameDataProvider
- * 
+ *
  * http://192.168.33.10/test.php?case=View%2FHelper%2FBcBaserHelper&baser=true&filter=testGetContentsName
  */
 	public function testGetContentsName($expects, $url, $detail = false, $options =[]) {
@@ -1390,7 +1390,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * 文字列を検索しマークとしてタグをつける
- * 
+ *
  * @param string $search 検索文字列
  * @param string $text 検索対象文字列
  * @param string $name マーク用タグ
@@ -1416,9 +1416,9 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * サイトマップを出力する
- * 
+ *
  * TODO : 階層($recursive)を指定した場合のテスト
- * 
+ *
  * @param mixed $pageCategoryId 固定ページカテゴリID（初期値 : null）
  *	- 0 : 仕様確認要
  *	- null : 仕様確認要
@@ -1609,12 +1609,12 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	/**
  * ウィジェットエリアを出力する
- * 
+ *
  * TODO: $noが指定されてない(null)場合のテストを記述する
  * $noを指定していない場合、ウィジェットが出力されません。
  *
  * @param string $url 現在のURL
- * @param int $no 
+ * @param int $no
  * @param string $expected 期待値
  * @dataProvider getWidgetAreaDataProvider
  */
@@ -1711,7 +1711,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * コアテンプレートを読み込む
- * 
+ *
  * @param boolean $selectPlugin ダミーのプラグインを作るかどうか
  * @param string $name テンプレート名
  * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
@@ -1765,7 +1765,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * メインイメージを出力する
- * 
+ *
  * @param array $options 指定するオプション
  * @param string $expect
  * @dataProvider mainImageDataProvider
@@ -1777,7 +1777,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * mainImage用のデータプロバイダ
- * 
+ *
  * このテストは、getThemeImage()のテストも併せて行っています。
  * 1. $optionに指定なし
  * 2. numに指定した番号の画像を表示
@@ -1872,7 +1872,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @param string $url アクセスした時のURL
  * @param string $expects 期待値
  * @return void
- * 
+ *
  * @dataProvider getBaseUrlDataProvider
  */
 	public function testGetBaseUrl($baseUrl, $url, $expects) {
@@ -1969,7 +1969,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * Google Analytics のトラッキングコードを出力する
- *  
+ *
  * @return void
  */
 	public function testGoogleAnalytics() {
@@ -2116,7 +2116,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 
 /**
- * コンテンツ管理用のURLより、正式なURLを取得する 
+ * コンテンツ管理用のURLより、正式なURLを取得する
  */
 	public function testGetContentsUrl() {
 		BcSite::flash();
