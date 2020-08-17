@@ -11,8 +11,15 @@
  */
 
 /**
- * メニューを非表示にする例
- * $config['BcApp.adminNavigation.Contents.Contents.menus.ContentsTrash.disable'] = true;
+ * baserCMS アプリケーション設定
+ *
+ * `/lib/Baser/Config/setting.php` に全ての設定が記述されています。
+ * 必要な設定をこのファイルに記述するとこちらが優先されます。
+ *
+ * （例）
+ * $config['BcApp'] = [
+ *	'title' => __d('baser', 'Custom baserCMS')
+ * ];
  */
 $config = [];
 

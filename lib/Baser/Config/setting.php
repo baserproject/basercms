@@ -23,6 +23,20 @@ $config['BcApp'] = [
 	// テンプレートの基本となる拡張子（.php 推奨）
 	'templateExt' => '.php',
 	// システムナビ
+	//
+	// 初期状態で表示するメニューは、`Contents` キー配下に定義し、「設定」内に格納する場合は、`Systems` キー配下に定義する
+	//
+	// ■ メインメニュー
+	// `title` : 表示名称
+	// `type` : `system` または、コンテンツを特定する任意の文字列を指定。「設定」内に格納する場合は、`system` を指定
+	// `url` : リンク先URL
+	// `menus` : サブメニューが存在する場合に配列で指定
+	// `disable` : 非表示にする場合に `true` を指定
+	//
+	// ■ サブメニュー
+	// `title` : 表示名称
+	// `url` : リンク先URL
+	// `disable` : 非表示にする場合に `true` を指定
 	'adminNavigation' => [
 		'Contents' => [
 			'Dashboard' => [
