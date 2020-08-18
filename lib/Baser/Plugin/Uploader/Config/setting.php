@@ -46,6 +46,10 @@ $config['BcApp.adminNavi.uploader'] = [
 	]
 ];
 $config['Uploader'] = [
+		// システム管理者によるアップロードでいかなる拡張子も許可する
+		'allowedAdmin' => false,
 		// システム管理者グループ以外のユーザーがアップロード可能なファイル（拡張子をカンマ区切りで指定する）
-		'allowedExt' => 'gif,jpg,png,pdf,zip,doc,docx,xls,xlsx,ppt,pptx'
+		'allowedExt' => 'gif,jpg,jpeg,png,ico,pdf,zip,doc,docx,xls,xlsx,ppt,pptx,txt',
+		// 'allowedExt' => 'mp4,mp3,mpg,mpeg,avi,wmv' // メディア例
+		// 'allowedExt' => 'fon,ttf,ttc' // フォント例
 ];
