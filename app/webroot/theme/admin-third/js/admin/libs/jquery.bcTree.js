@@ -903,6 +903,13 @@
 			});
 			var node = $.bcTree.jsTree.get_node(nodeId);
 			$.bcTree.jsTree.edit(node, data.contentTitle, function (editNode) {
+				var newTitle = editNode.text;
+				$.bcTree.jsTree.rename_node(editNode, newTitle.replace(/&/g,'&amp;')
+                   			.replace(/"/g,'&quot;')
+                   			.replace(/'/g,'&#039;')
+                   			.replace(/</g,'&lt;')
+                   			.replace(/>/g,'&gt;')
+				);
 				$.bcToken.check(function(){
 					return $.ajax({
 						url: url,
@@ -1087,10 +1094,10 @@
 			$.bcTree.jsTree.edit(node, oldTitle, function (editNode) {
 				var newTitle = editNode.text;
 				$.bcTree.jsTree.rename_node(editNode, newTitle.replace(/&/g,'&amp;')
-                   			.replace(/"/g,'&quot;')
-                   			.replace(/'/g,'&#039;')
-                   			.replace(/</g,'&lt;')
-                   			.replace(/>/g,'&gt;')
+					.replace(/"/g,'&quot;')
+					.replace(/'/g,'&#039;')
+					.replace(/</g,'&lt;')
+					.replace(/>/g,'&gt;')
 				);
 				if (oldTitle === newTitle) {
 					return false;
