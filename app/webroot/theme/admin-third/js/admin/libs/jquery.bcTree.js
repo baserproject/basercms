@@ -903,13 +903,17 @@
 			});
 			var node = $.bcTree.jsTree.get_node(nodeId);
 			$.bcTree.jsTree.edit(node, data.contentTitle, function (editNode) {
-				var newTitle = editNode.text;
-				$.bcTree.jsTree.rename_node(editNode, newTitle.replace(/&/g,'&amp;')
-                   			.replace(/"/g,'&quot;')
-                   			.replace(/'/g,'&#039;')
-                   			.replace(/</g,'&lt;')
-                   			.replace(/>/g,'&gt;')
-				);
+				var orgTitle = editNode.text
+					.replace(/\&quot;/g, '"')
+					.replace(/\&lt;/g, '<')
+					.replace(/\&gt;/g, '>');
+				var newTitle = orgTitle
+					.replace(/&/g,'&amp;')
+					.replace(/"/g,'&quot;')
+					.replace(/'/g,'&#039;')
+					.replace(/</g,'&lt;')
+					.replace(/>/g,'&gt;');
+				$.bcTree.jsTree.rename_node(editNode, newTitle);
 				$.bcToken.check(function(){
 					return $.ajax({
 						url: url,
@@ -918,7 +922,7 @@
 							data: {
 								Content: {
 									parent_id: data.contentParentId,
-									title: editNode.text,
+									title: orgTitle,
 									plugin: data.contentPlugin,
 									type: data.contentType,
 									site_id: data.contentSiteId,
@@ -1092,16 +1096,19 @@
 				.replace(/&lt;/g, '<')
 				.replace(/&gt;/g, '>');
 			$.bcTree.jsTree.edit(node, oldTitle, function (editNode) {
-				var newTitle = editNode.text;
-				$.bcTree.jsTree.rename_node(editNode, newTitle.replace(/&/g,'&amp;')
+				var newTitle = editNode.text
+					.replace(/&amp;/g, '&')
+					.replace(/&quot;/g, '"')
+					.replace(/&#039;/g, "'")
+					.replace(/&lt;/g, '<')
+					.replace(/&gt;/g, '>');
+				var viewTitle = newTitle
+					.replace(/&/g,'&amp;')
 					.replace(/"/g,'&quot;')
 					.replace(/'/g,'&#039;')
 					.replace(/</g,'&lt;')
-					.replace(/>/g,'&gt;')
-				);
-				if (oldTitle === newTitle) {
-					return false;
-				}
+					.replace(/>/g,'&gt;');
+				$.bcTree.jsTree.rename_node(editNode, viewTitle);
 				$.bcToken.check(function(){
 					return $.ajax({
 						url: $.baseUrl + '/' + $.bcTree.config.adminPrefix + '/contents/ajax_rename',
