@@ -47,12 +47,12 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 				<?php elseif (Configure::read('BcRequest.isUpdater')): ?>
 					<li><?php $this->BcBaser->link(__d('baser', 'アップデートマニュアル'), 'http://wiki.basercms.net/%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%A2%E3%83%83%E3%83%97%E3%82%AC%E3%82%A4%E3%83%89', ['target' => '_blank', 'class' => 'tool-menu']) ?></li>
 				<?php elseif (!empty($this->request->params['admin']) || ('/' . $this->request->url) == $loginUrl): ?>	
-					<li><?php $this->BcBaser->link($this->BcBaser->siteConfig['formal_name'], '/') ?></li>
+					<li><?php $this->BcBaser->link($this->BcBaser->siteConfig['formal_name'], '/', ['escape' => true]) ?></li>
 				<?php else: ?>
 					<?php if (in_array('admin', $currentUserAuthPrefixes)): ?>
 						<li><?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_logo.png', ['alt' => __d('baser', 'baserCMS管理システム'), 'class' => 'bc-btn']), ['plugin' => null, 'admin' => true, 'controller' => 'dashboard', 'action' => 'index'], ['title' => __d('baser', 'baserCMS管理システム')]) ?></li>
 					<?php else: ?>
-						<li><?php $this->BcBaser->link($authName, Configure::read('BcAuthPrefix.' . $currentPrefix . '.loginRedirect'), ['title' => $authName]) ?></li>
+						<li><?php $this->BcBaser->link($authName, Configure::read('BcAuthPrefix.' . $currentPrefix . '.loginRedirect'), ['title' => $authName, 'escape' => ture]) ?></li>
 					<?php endif ?>
 				<?php endif ?>
 				<?php if ($this->BcBaser->existsEditLink() && !isset($this->request->query['preview'])): ?>
