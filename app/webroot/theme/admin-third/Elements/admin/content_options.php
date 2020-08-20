@@ -36,9 +36,9 @@ if($this->BcContents->isEditable()) {
           <?php echo $this->BcForm->input('Content.description', ['type' => 'textarea', 'cols' => 36, 'rows' => 4,'data-input-text-size' => 'full-counter']) ?>
 				<?php else: ?>
 					<?php if($this->BcForm->value('Content.exclude_search')): ?>
-						<?php echo $this->BcForm->value('Content.description') ?>
+						<?php echo h($this->BcForm->value('Content.description')) ?>
 					<?php else: ?>
-						<?php echo $this->BcBaser->siteConfig['description'] ?>
+						<?php echo h($this->BcBaser->siteConfig['description']) ?>
 					<?php endif ?>
 					<?php echo $this->BcForm->hidden('Content.description') ?>
 				<?php endif ?>
@@ -64,7 +64,7 @@ if($this->BcContents->isEditable()) {
 					<small>[<?php echo __d('baser', '作成日') ?>]</small> <?php echo $this->BcForm->input('Content.created_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10]) ?>　
 					<small>[<?php echo __d('baser', '更新日') ?>]</small> <?php echo $this->BcForm->input('Content.modified_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10]) ?>
 				<?php else: ?>
-					<?php echo $this->BcText->arrayValue($this->BcForm->value('Content.author_id'), $authors) ?>　
+					<?php echo h($this->BcText->arrayValue($this->BcForm->value('Content.author_id'), $authors)) ?>　
 
 					<small>[<?php echo __d('baser', '作成日') ?>]</small> <?php echo $this->BcTime->format('Y/m/d H:i', $this->BcForm->value('Content.created_date')) ?>　
 					<small>[<?php echo __d('baser', '更新日') ?>]</small> <?php echo $this->BcTime->format('Y/m/d H:i', $this->BcForm->value('Content.modified_date')) ?>
