@@ -217,6 +217,8 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
             ], true) ?>
             </span>
         </span>
+		<?php echo $this->BcForm->error('BlogPost.publish_begin') ?>
+		<?php echo $this->BcForm->error('BlogPost.publish_end') ?>
       </td>
     </tr>
 
@@ -227,8 +229,6 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
           'type' => 'checkbox',
           'label' => __d('baser', 'サイト内検索の検索結果より除外する')
         ]) ?>
-        <?php echo $this->BcForm->error('BlogPost.publish_begin') ?>
-        <?php echo $this->BcForm->error('BlogPost.publish_end') ?>
       </td>
     </tr>
 
