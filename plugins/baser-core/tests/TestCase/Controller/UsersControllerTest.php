@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller;
 
+use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -18,6 +19,7 @@ use Cake\TestSuite\TestCase;
  */
 class UsersControllerTest extends TestCase
 {
+    use IntegrationTestTrait;
 
     /**
      * Fixtures
@@ -25,8 +27,21 @@ class UsersControllerTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.BaserCore.users'
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.UserGroups',
     ];
+
+    /**
+     * set up
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $config = $this->getTableLocator()->exists('Users') ? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
+        $Users = $this->getTableLocator()->get('Users', $config);
+        $this->session(['AuthAdmin' => $Users->get(1)]);
+    }
 
     /**
      * Test index method
@@ -35,17 +50,8 @@ class UsersControllerTest extends TestCase
      */
     public function testIndex()
     {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test view method
-     *
-     * @return void
-     */
-    public function testView()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->get('/baser/admin/users/');
+        $this->assertResponseOk();
     }
 
     /**
@@ -55,7 +61,20 @@ class UsersControllerTest extends TestCase
      */
     public function testAdd()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $data = [
+            'name' => 'Lorem ipsum dolor sit amet',
+            'password_1' => 'Lorem ipsum dolor sit amet',
+            'password_2' => 'Lorem ipsum dolor sit amet',
+            'real_name_1' => 'Lorem ipsum dolor sit amet',
+            'real_name_2' => 'Lorem ipsum dolor sit amet',
+            'email' => 'Lorem ipsum dolor sit amet',
+            'nickname' => 'Lorem ipsum dolor sit amet',
+        ];
+        $this->post('/baser/admin/users/add', $data);
+        $this->assertResponseSuccess();
+        $users = $this->getTableLocator()->get('Users');
+        $query = $users->find()->where(['name' => $data['name']]);
+        $this->assertEquals(1, $query->count());
     }
 
     /**

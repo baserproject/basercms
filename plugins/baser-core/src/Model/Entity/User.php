@@ -56,9 +56,13 @@ class User extends EntityAlias
 	 * @return bool|string
 	 */
 	protected function _setPassword($value)
-	{
-		$hasher = new DefaultPasswordHasher();
-		return $hasher->hash($value);
+    {
+        if ($value) {
+            $hasher = new DefaultPasswordHasher();
+            return $hasher->hash($value);
+        } else {
+            return false;
+        }
 	}
 
 }

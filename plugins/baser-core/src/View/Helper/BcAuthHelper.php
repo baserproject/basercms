@@ -11,14 +11,12 @@
 
 namespace BaserCore\View\Helper;
 use Cake\Core\Configure;
-use Cake\Http\ServerRequest;
 use Cake\View\Helper;
 
 /**
  * Class BcAuthHelper
  * @package BaserCore\View\Helper
  * @property BcBaserHelper $BcBaser
- * @property ServerRequest $request
  * @uses BcAuthHelper
  */
 class BcAuthHelper extends Helper {
@@ -34,11 +32,15 @@ class BcAuthHelper extends Helper {
      * @return string currentPrefix
      */
     public function getCurrentPrefix () {
-		if (!empty($this->request->getParam('prefix'))) {
-			$currentPrefix = $this->request->getParam('prefix');
-		} else {
-			$currentPrefix = 'front';
-		}
+        $currentPrefix = '';
+        $request = $this->_View->getRequest();
+        if (!empty($request)) {
+            if (!empty($request->getParam('prefix'))) {
+                $currentPrefix = $request->getParam('prefix');
+            } else {
+                $currentPrefix = 'front';
+            }
+        }
 		return $currentPrefix;
     }
 
@@ -150,7 +152,9 @@ class BcAuthHelper extends Helper {
      * @todo 実装要
      */
     public function getCurrentLoginUser() {
-        return [true];
+        return [
+            'id' => 1
+        ];
     }
 
 }
