@@ -57,7 +57,7 @@ $this->assign('title', $title);
 							<h1 class="bca-main__header-title"><?= h($this->fetch('title')) ?></h1>
 
 							<div class="bca-main__header-actions">
-
+                                <?php $this->BcBaser->element('Admin/main_body_header_links'); ?>
 							</div>
 
 							<div class="bca-main__header-menu">

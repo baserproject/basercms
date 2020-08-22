@@ -21,4 +21,19 @@ class BcAdminHelper extends Helper {
     public function isAdminGlobalmenuUsed() {
         return true;
     }
+
+/**
+ * 管理画面の画面タイトルの横に配置するボタンをを追加する
+ *
+ * @param array $links ['url' => string or array, 'confirm' => 'confirm message', 'something attributes' => 'attr value']
+ */
+	public function addAdminMainBodyHeaderLinks($links) {
+		$mainBodyHeaderLinks = $this->_View->get('mainBodyHeaderLinks');
+		if($mainBodyHeaderLinks === null) {
+			$mainBodyHeaderLinks = [];
+		}
+		$mainBodyHeaderLinks[] = $links;
+		$this->_View->set('mainBodyHeaderLinks', $mainBodyHeaderLinks);
+	}
+
 }

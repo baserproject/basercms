@@ -13,7 +13,10 @@
  * Users index
  * @var \BaserCore\View\AppView $this
  */
-
+$this->BcAdmin->addAdminMainBodyHeaderLinks([
+	'url' => ['action' => 'add'],
+	'title' => __d('baser', '新規追加'),
+]);
 $this->BcBaser->js('admin/users/index.bundle');
 // TODO 一覧をどうやって読み込ませるか検討が必要
 //$this->BcBaser->js([

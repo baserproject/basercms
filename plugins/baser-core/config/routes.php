@@ -9,9 +9,9 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use Cake\Routing\Route\InflectedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
-use Cake\Routing\Route\DashedRoute;
 
 /**
  * Admin Prefix
@@ -24,10 +24,10 @@ Router::plugin(
             'Admin',
             ['path' => env('BC_ADMIN_PREFIX', '/admin')],
             function (RouteBuilder $routes) {
-			$routes->fallbacks(DashedRoute::class);
+			$routes->fallbacks(InflectedRoute::class);
 		});
 		$routes->prefix('api', function (RouteBuilder $routes) {
-			$routes->fallbacks(DashedRoute::class);
+			$routes->fallbacks(InflectedRoute::class);
     		$routes->setExtensions(['json']);
 		});
     }

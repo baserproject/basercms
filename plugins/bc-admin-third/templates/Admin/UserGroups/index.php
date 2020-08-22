@@ -31,8 +31,10 @@
 // 	'title' => __d('baser', '新規追加'),
 // ]);
 
-// TODO：仮
-echo $this->html->link(__d('baser', '新規追加'), ['action' => 'add', 'class' => 'bca-btn']);
+$this->BcAdmin->addAdminMainBodyHeaderLinks([
+	'url' => ['action' => 'add'],
+	'title' => __d('baser', '新規追加'),
+]);
 ?>
 
 <!-- TODO 一覧をどうやって 読み込ませるか検討が必要 -->
