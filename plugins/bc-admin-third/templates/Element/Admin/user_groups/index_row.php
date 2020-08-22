@@ -9,9 +9,13 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\Model\Entity\UserGroup;
+use BaserCore\View\AppView;
+
 /**
  * user groups index row
- * @var \BaserCore\View\AppView $this
+ * @var AppView $this
+ * @var UserGroup $userGroup
  */
 ?>
 

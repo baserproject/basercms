@@ -9,9 +9,11 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\View\AppView;
+
 /**
  * login
- * @var \BaserCore\View\AppView $this
+ * @var AppView $this
  */
 ?>
 
@@ -42,7 +44,7 @@
         </div>
         <div class="clear login-etc bca-login-form-ctrl">
             <div class="bca-login-form-checker">
-                <?php echo $this->BcForm->input('saved', [
+                <?php echo $this->BcForm->control('saved', [
                     'type' => 'checkbox',
                     'label' => __d('baser', 'ログイン状態を保存する'),
                     'class' => 'bca-checkbox__input bca-login-form-checkbox ',

@@ -19,10 +19,10 @@ use Cake\ORM\Entity;
  * Class UserGroup
  * @package BaserCore\Model\Entity
  * @property int $id
- * @property string|null $name
+ * @property string $name
  * @property string|null $title
  * @property string|null $auth_prefix
- * @property bool|null $use_admin_globalmenu
+ * @property bool $use_admin_globalmenu
  * @property string|null $default_favorites
  * @property bool|null $use_move_contents
  * @property FrozenTime|null $modified

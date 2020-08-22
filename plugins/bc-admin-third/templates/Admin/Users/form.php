@@ -9,13 +9,18 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\Model\Entity\User;
+use BaserCore\View\AppView;
+
 /**
  * Users form
- * @var \BaserCore\View\AppView $this
+ * @var AppView $this
  * @var bool $selfUpdate
- * @var array $user
+ * @var User $user
+ * @var array $userGroups
+ * @var bool $editable
+ * @var bool $deletable
  */
-
 $this->BcBaser->i18nScript([
 	'alertMessage1' => __d('baser', '処理に失敗しました。'),
 	'alertMessage2' => __d('baser', '送信先のプログラムが見つかりません。'),
@@ -84,7 +89,7 @@ $this->BcBaser->js('admin/users/edit', false);
                     <?php echo $this->BcAdminForm->error('user_group_id', __d('baser', 'グループを選択してください')) ?>
                     <div id="helptextUserGroupId" class="helptext"><?php echo sprintf(__d('baser', 'ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには%sより新しいグループを追加しアクセス制限の設定をおこないます。'), $this->BcBaser->getLink(__d('baser', 'ユーザーグループ管理'), ['controller' => 'user_groups', 'action' => 'index']))?></div>
                 <?php else: ?>
-                    <?php echo $this->BcText->arrayValue($this->request->getData('user_group_id'), $userGroups) ?>
+                    <?php echo $this->BcText->arrayValue($user->user_group_id, $userGroups) ?>
                     <?php echo $this->BcAdminForm->control('user_group_id', ['type' => 'hidden']) ?>
                 <?php endif ?>
             </td>
@@ -92,7 +97,7 @@ $this->BcBaser->js('admin/users/edit', false);
         <tr>
             <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('email', __d('baser', 'Eメール')) ?></th>
             <td class="col-input bca-form-table__input">
-                <input type="text" name="dumy-email" style="top:-100px;left:-100px;position:fixed;">
+                <input type="text" name="dummy-email" style="top:-100px;left:-100px;position:fixed;">
                 <?php echo $this->BcAdminForm->control('email', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
                 <?php echo $this->BcAdminForm->error('email') ?>

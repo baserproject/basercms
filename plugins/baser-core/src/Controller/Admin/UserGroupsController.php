@@ -154,7 +154,7 @@ class UserGroupsController extends BcAdminAppController
     public function edit($id = null)
     {
         $userGroup = $this->UserGroups->get($id, [
-            'contain' => ['users'],
+            'contain' => ['Users'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $userGroup = $this->UserGroups->patchEntity($userGroup, $this->request->getData());

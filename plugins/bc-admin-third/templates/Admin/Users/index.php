@@ -9,10 +9,13 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\View\{AppView as AppViewAlias};
+
 /**
  * Users index
- * @var \BaserCore\View\AppView $this
+ * @var AppViewAlias $this
  */
+
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
 	'url' => ['action' => 'add'],
 	'title' => __d('baser', '新規追加'),
@@ -32,8 +35,7 @@ $this->BcBaser->js('admin/users/index.bundle');
 // 	'title' => __d('baser', '新規追加'),
 // ]);
 
-// TODO：仮
-echo $this->html->link(__d('baser', '新規追加'), ['action' => 'add', 'class' => 'bca-btn']);
+echo $this->BcHtml->link(__d('baser', '新規追加'), ['action' => 'add', 'class' => 'bca-btn']);
 ?>
 
 <!-- TODO 一覧をどうやって 読み込ませるか検討が必要 -->

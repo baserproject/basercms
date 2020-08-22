@@ -9,9 +9,11 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\View\AppView;
+
 /**
  * footer
- * @var \BaserCore\View\AppView $this
+ * @var AppView $this
  */
 ?>
 

@@ -19,13 +19,13 @@ use Cake\View\Helper;
  * @uses BcListTableHelper
  */
 class BcListTableHelper extends Helper {
-	public function setColumnNumber ()
+	public function setColumnNumber ($number)
 	{
 	}
 	public function dispatchShowHead ()
 	{
 	}
-	public function dispatchShowRow ()
+	public function dispatchShowRow ($data)
 	{
 	}
 	public function getColumnNumber()

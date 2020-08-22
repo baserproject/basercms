@@ -10,10 +10,11 @@
  */
 
 use Cake\Core\Configure;
+use BaserCore\View\AppView;
 
 /**
  * toolbar
- * @var \BaserCore\View\AppView $this
+ * @var AppView $this
  */
 
 // JSの出力について、ツールバーはフロントエンドでも利用するため、inlineに出力する
@@ -89,7 +90,7 @@ $user = $this->BcAuth->getCurrentLoginUser();
 					<?php $this->BcBaser->publishLink() ?>
 				</div>
 			<?php endif ?>
-			<?php if (!$loginUrl || $this->request->url != $loginUrl): ?>
+			<?php if (!$loginUrl || $this->request->getUri() != $loginUrl): ?>
 				<div class="bca-toolbar__tools-mode">
 					<?php if (Configure::read('debug') == -1 && $this->name != "Installations"): ?>
 						<span id="DebugMode" class="bca-debug-mode" title="<?php echo __d('baser', 'インストールモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。') ?>"><?php echo __d('baser', 'インストールモード') ?></span>

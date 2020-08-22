@@ -9,9 +9,11 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\View\AppView;
+
 /**
  * user groups index list
- * @var \BaserCore\View\AppView $this
+ * @var AppView $this
  */
 
 $this->BcListTable->setColumnNumber(5);
@@ -25,7 +27,7 @@ $this->BcListTable->setColumnNumber(5);
 
 <?php $this->BcBaser->element('Admin/pagination') ?>
 
-<table cellpadding="0" cellspacing="0" class="list-table bca-form-table" id="ListTable">
+<table class="list-table bca-form-table" id="ListTable">
     <thead>
     <tr>
         <th class="bca-table-listup__thead-th"><?php echo $this->Paginator->sort('id',

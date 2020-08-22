@@ -11,8 +11,14 @@
 
 namespace BaserCore\View;
 use BaserCore\View\Helper\BcAdminFormHelper;
+use BaserCore\View\Helper\BcAdminHelper;
+use BaserCore\View\Helper\BcAuthHelper;
 use BaserCore\View\Helper\BcBaserHelper;
 use BaserCore\View\Helper\BcFormHelper;
+use BaserCore\View\Helper\BcFormTableHelper;
+use BaserCore\View\Helper\BcHtmlHelper;
+use BaserCore\View\Helper\BcListTableHelper;
+use BaserCore\View\Helper\BcTextHelper;
 use BaserCore\View\Helper\BcTimeHelper;
 use Cake\View\View;
 
@@ -23,6 +29,12 @@ use Cake\View\View;
  * @property BcFormHelper $BcForm
  * @property BcAdminFormHelper $BcAdminForm
  * @property BcTimeHelper $BcTime
+ * @property BcFormTableHelper $BcFormTable
+ * @property BcAdminHelper $BcAdmin
+ * @property BcTextHelper $BcText
+ * @property BcHtmlHelper $BcHtml
+ * @property BcListTableHelper $BcListTable
+ * @property BcAuthHelper $BcAuth
  */
 class AppView extends View {
     public function initialize():void

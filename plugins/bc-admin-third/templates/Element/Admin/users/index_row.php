@@ -9,11 +9,14 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\Model\Entity\User;
+use BaserCore\View\AppView;
+
 /**
  * users index row
- * @var \BaserCore\View\AppView $this
+ * @var AppView $this
+ * @var User $user
  */
-
 ?>
 
 <tr>

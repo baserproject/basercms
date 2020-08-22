@@ -9,9 +9,13 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\View\AppView;
+
 /**
- * @var \BaserCore\View\AppView $this
+ * @var AppView $this
+ * @var string $title
  */
+
 $this->assign('title', $title);
 ?>
 <!DOCTYPE html>

@@ -18,6 +18,10 @@ use Cake\View\Helper;
  * @package BaserCore\View\Helper
  */
 class BcTextHelper extends Helper {
-	public  function listValue () {
+	public  function listValue ()
+	{
 	}
+	public function arrayValue ($key, $array, $noValue = '')
+    {
+    }
 }

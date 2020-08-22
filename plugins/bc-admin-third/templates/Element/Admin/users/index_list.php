@@ -9,9 +9,11 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\View\AppView;
+
 /**
  * users index list
- * @var \BaserCore\View\AppView $this
+ * @var AppView $this
  * @var Cake\ORM\ResultSet $users
  */
 

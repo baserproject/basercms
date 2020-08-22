@@ -11,7 +11,7 @@
 
 /**
  * UserGroups index
- * @var \BaserCore\View\AppView $this
+ * @var AppView $this
  */
 
 // TODO 一覧をどうやって読み込ませるか検討が必要
@@ -30,6 +30,8 @@
 // 	'url' => ['action' => 'add'],
 // 	'title' => __d('baser', '新規追加'),
 // ]);
+
+use BaserCore\View\AppView;
 
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
 	'url' => ['action' => 'add'],

@@ -9,9 +9,13 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\Model\Entity\UserGroup;
+use BaserCore\View\AppView;
+
 /**
- * UsersGrops form
- * @var \BaserCore\View\AppView $this
+ * UsersGroups form
+ * @var AppView $this
+ * @var UserGroup $userGroup
  */
 
 $this->BcBaser->js('admin/user_groups/form', false);
@@ -26,7 +30,7 @@ $authPrefixes = [];
 <script type="text/javascript">
 /*
 $(window).load(function() {
-<?php if ($this->BcAdminForm->value('name') == 'admins'): ?>
+<?php if ($userGroup->name == 'admins'): ?>
 	$("#UserGroupAuthPrefixAdmin").prop('disabled', true);
 <?php endif ?>
 	$("#UserGroupAdminEditForm").submit(function(){
@@ -42,7 +46,7 @@ $(window).load(function() {
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
 <div class="section">
-    <table cellpadding="0" cellspacing="0" id="FormTable" class="form-table bca-form-table">
+    <table id="FormTable" class="form-table bca-form-table">
         <?php if ($this->request->getParam('action') == 'edit'): ?>
             <tr>
                 <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('id', 'No') ?></th>
@@ -84,7 +88,7 @@ $(window).load(function() {
             <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('use_admin_globalmenu', __d('baser', 'その他')) ?></th>
             <td class="col-input bca-form-table__input">
                 <?php if ($userGroup->name == 'admins' && $this->request->getParam('action') == 'edit'): ?>
-                    <?php if ($this->BcAdminForm->value('use_admin_globalmenu')): ?>
+                    <?php if ($userGroup->use_admin_globalmenu): ?>
                         <?php echo __d('baser', '管理システムのグローバルメニューを利用する')?>
                     <?php else: ?>
                         <?php echo __d('baser', '管理システムのグローバルメニューを利用しない')?>
@@ -113,7 +117,7 @@ $(window).load(function() {
             <tr>
                 <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('auth_prefix', __d('baser', '認証プレフィックス設定')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
                 <td class="col-input bca-form-table__input">
-                    <?php echo $this->BcAdminForm->control('auth_prefix', ['type' => 'select', 'multiple' => 'checkbox', 'options' => $authPrefixes, 'value' => explode(',', $this->BcAdminForm->value('auth_prefix'))]) ?>
+                    <?php echo $this->BcAdminForm->control('auth_prefix', ['type' => 'select', 'multiple' => 'checkbox', 'options' => $authPrefixes, 'value' => explode(',', $userGroup->auth_prefix)]) ?>
                     <i class="bca-icon--question-circle btn help bca-help"></i>
                     <?php echo $this->BcAdminForm->error('auth_prefix') ?>
                     <div id="helptextAuthPrefix" class="helptext">
