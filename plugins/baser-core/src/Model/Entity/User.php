@@ -11,7 +11,8 @@
 
 namespace BaserCore\Model\Entity;
 use Authentication\PasswordHasher\DefaultPasswordHasher;
-use Cake\ORM\Entity;
+use Cake\I18n\Time as TimeAlias;
+use Cake\ORM\Entity as EntityAlias;
 
 /**
  * Class User
@@ -24,12 +25,11 @@ use Cake\ORM\Entity;
  * @property string $email
  * @property int $user_group_id
  * @property string $nickname
- * @property \Cake\I18n\Time $created
- * @property \Cake\I18n\Time $modified
+ * @property TimeAlias $created
+ * @property TimeAlias $modified
  */
-class User extends Entity
+class User extends EntityAlias
 {
-
     /**
      * Accessible
      *

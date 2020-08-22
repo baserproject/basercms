@@ -12,6 +12,7 @@
 namespace BaserCore\Controller\Admin;
 use Cake\Event\EventInterface;
 use BaserCore\Controller\AppController;
+use Exception;
 
 /**
  * Class BcAdminAppController
@@ -22,7 +23,10 @@ class BcAdminAppController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('Authentication.Authentication');
+        try {
+            $this->loadComponent('Authentication.Authentication');
+        } catch (Exception $e) {
+        }
         // $this->loadComponent('Auth', [
         //     'authenticate' => [
         //         'Form' => [

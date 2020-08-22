@@ -10,13 +10,21 @@
  */
 
 namespace BaserCore\Controller\Admin;
+
+use BaserCore\Model\Entity\UserGroup;
+use BaserCore\Controller\Component\BcMessageComponent;
+use BaserCore\Model\Table\UserGroupsTable;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Datasource\ResultSetInterface;
 use Cake\Event\EventInterface;
+use Cake\Http\Response;
 
 /**
  * Class UserGroupsController
  * @package BaserCore\Controller\Admin
- * @property \BaserCore\Model\Table\UserGroupsTable $UserGroups
- * @method \App\Model\Entity\UserGroup[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @property UserGroupsTable $UserGroups
+ * @property BcMessageComponent $BcMessage
+ * @method UserGroup[]|ResultSetInterface paginate($object = null, array $settings = [])
  */
 class UserGroupsController extends BcAdminAppController
 {
@@ -37,7 +45,7 @@ class UserGroupsController extends BcAdminAppController
     /**
      * Before Filter
      * @param EventInterface $event
-     * @return \Cake\Http\Response|void|null
+     * @return Response|void|null
      */
     public function beforeFilter(EventInterface $event)
     {
@@ -66,7 +74,7 @@ class UserGroupsController extends BcAdminAppController
      * - pagination
      * - view num
      *
-     * @return \Cake\Http\Response|null|void Renders view
+     * @return Response|null|void Renders view
      */
     public function index()
     {
@@ -99,7 +107,7 @@ class UserGroupsController extends BcAdminAppController
      *  - UserGroup.use_move_contents
      *  - submit
      *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     * @return Response|null|void Redirects on successful add, renders view otherwise.
      */
     public function add()
     {
@@ -140,8 +148,8 @@ class UserGroupsController extends BcAdminAppController
      *  - submit
      *
      * @param string|null $id User Group id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @return Response|null|void Redirects on successful edit, renders view otherwise.
+     * @throws RecordNotFoundException When record not found.
      */
     public function edit($id = null)
     {
@@ -170,8 +178,8 @@ class UserGroupsController extends BcAdminAppController
      * ユーザーグループを削除する
      *
      * @param string|null $id User Group id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @return Response|null|void Redirects to index.
+     * @throws RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {

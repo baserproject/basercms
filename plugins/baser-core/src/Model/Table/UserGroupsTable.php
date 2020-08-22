@@ -10,27 +10,31 @@
  */
 
 namespace BaserCore\Model\Table;
+use BaserCore\Model\Entity\UserGroup;
+use Cake\ORM\Association\BelongsToMany;
+use Cake\ORM\Behavior\TimestampBehavior as TimestampBehaviorAlias;
+use Cake\Datasource\{EntityInterface, ResultSetInterface as ResultSetInterfaceAlias};
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
  * Class UserGroupsTable
  * @package BaserCore\Model\Table
- * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsToMany $Users
- * @method \App\Model\Entity\UserGroup newEmptyEntity()
- * @method \App\Model\Entity\UserGroup newEntity(array $data, array $options = [])
- * @method \App\Model\Entity\UserGroup[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\UserGroup get($primaryKey, $options = [])
- * @method \App\Model\Entity\UserGroup findOrCreate($search, ?callable $callback = null, $options = [])
- * @method \App\Model\Entity\UserGroup patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\UserGroup[] patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\UserGroup|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\UserGroup saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\UserGroup[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\UserGroup[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \App\Model\Entity\UserGroup[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\UserGroup[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
- * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @property UsersTable&BelongsToMany $Users
+ * @method UserGroup newEmptyEntity()
+ * @method UserGroup newEntity(array $data, array $options = [])
+ * @method UserGroup[] newEntities(array $data, array $options = [])
+ * @method UserGroup get($primaryKey, $options = [])
+ * @method UserGroup findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method UserGroup patchEntity(EntityInterface $entity, array $data, array $options = [])
+ * @method UserGroup[] patchEntities(iterable $entities, array $data, array $options = [])
+ * @method UserGroup|false save(EntityInterface $entity, $options = [])
+ * @method UserGroup saveOrFail(EntityInterface $entity, $options = [])
+ * @method UserGroup[]|ResultSetInterfaceAlias|false saveMany(iterable $entities, $options = [])
+ * @method UserGroup[]|ResultSetInterfaceAlias saveManyOrFail(iterable $entities, $options = [])
+ * @method UserGroup[]|ResultSetInterfaceAlias|false deleteMany(iterable $entities, $options = [])
+ * @method UserGroup[]|ResultSetInterfaceAlias deleteManyOrFail(iterable $entities, $options = [])
+ * @mixin TimestampBehaviorAlias
  * @uses UserGroupsTable
  */
 class UserGroupsTable extends Table
@@ -61,8 +65,8 @@ class UserGroupsTable extends Table
     /**
      * Default validation rules.
      *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
+     * @param Validator $validator Validator instance.
+     * @return Validator
      */
     public function validationDefault(Validator $validator): Validator
     {

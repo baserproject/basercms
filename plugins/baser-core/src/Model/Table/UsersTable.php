@@ -11,6 +11,10 @@
 
 namespace BaserCore\Model\Table;
 
+use BaserCore\Model\Entity\User;
+use Cake\Datasource\EntityInterface;
+use Cake\ORM\Association\BelongsTo;
+use Cake\ORM\Behavior\TimestampBehavior;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -18,15 +22,15 @@ use Cake\Validation\Validator;
 /**
  * Class UsersTable
  * @package BaserCore\Model\Table
- * @property \Cake\ORM\Association\BelongsTo $UserGroups
- * @method \BaserCore\Model\Entity\User get($primaryKey, $options = [])
- * @method \BaserCore\Model\Entity\User newEntity($data = null, array $options = [])
- * @method \BaserCore\Model\Entity\User[] newEntities(array $data, array $options = [])
- * @method \BaserCore\Model\Entity\User|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \BaserCore\Model\Entity\User patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \BaserCore\Model\Entity\User[] patchEntities($entities, array $data, array $options = [])
- * @method \BaserCore\Model\Entity\User findOrCreate($search, callable $callback = null, $options = [])
- * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @property BelongsTo $UserGroups
+ * @method User get($primaryKey, $options = [])
+ * @method User newEntity($data = null, array $options = [])
+ * @method User[] newEntities(array $data, array $options = [])
+ * @method User|bool save(EntityInterface $entity, $options = [])
+ * @method User patchEntity(EntityInterface $entity, array $data, array $options = [])
+ * @method User[] patchEntities($entities, array $data, array $options = [])
+ * @method User findOrCreate($search, callable $callback = null, $options = [])
+ * @mixin TimestampBehavior
  */
 class UsersTable extends Table
 {
@@ -40,13 +44,10 @@ class UsersTable extends Table
     public function initialize(array $config): void
     {
         parent::initialize($config);
-
         $this->setTable('users');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
-
         $this->addBehavior('Timestamp');
-
         $this->belongsToMany('UserGroups', [
             'className' => 'BaserCore.UserGroups',
             'foreignKey' => 'user_id',
@@ -58,57 +59,60 @@ class UsersTable extends Table
     /**
      * Validation Default
      *
-     * @param \Cake\Validation\Validator $validator
-     * @return \Cake\Validation\Validator
+     * @param Validator $validator
+     * @return Validator
      */
     public function validationDefault(Validator $validator): Validator
     {
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create');
-
         $validator
             ->scalar('name')
             ->maxLength('name', 255)
             ->notEmptyString('name');
-
         $validator
             ->scalar('password')
             ->maxLength('password', 255)
             ->notEmptyString('password');
-
         $validator
             ->scalar('real_name_1')
             ->maxLength('real_name_1', 50)
             ->notEmptyString('real_name_1');
-
         $validator
             ->scalar('real_name_2')
             ->maxLength('real_name_2', 50)
             ->allowEmptyString('real_name_2');
-
         $validator
             ->email('email')
             ->notEmptyString('email');
-
         $validator
             ->scalar('nickname')
             ->maxLength('nickname', 255)
             ->allowEmptyString('nickname');
-
         return $validator;
     }
 
     /**
      * Build Rules
      *
-     * @param \Cake\ORM\RulesChecker $rules
-     * @return \Cake\ORM\RulesChecker
+     * @param RulesChecker $rules
+     * @return RulesChecker
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->isUnique(['email']));
-
         return $rules;
+    }
+
+    /**
+     * 初期化されたエンティティを取得する
+     */
+    public function getNew()
+    {
+        return $this->newEntity([
+                'user_groups' => [
+                    '_ids' => [1]
+        ]]);
     }
 }

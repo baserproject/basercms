@@ -11,11 +11,13 @@
 
 namespace BaserCore\View\Helper;
 
+use Cake\View\Helper;
+
 /**
  * Class BcTextHelper
  * @package BaserCore\View\Helper
  */
-class BcTextHelper extends \Cake\View\Helper {
+class BcTextHelper extends Helper {
 	public  function listValue () {
 	}
 }

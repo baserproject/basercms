@@ -11,10 +11,12 @@
 
 namespace BaserCore\View\Helper;
 use \Cake\View\Helper;
+use Cake\View\Helper\HtmlHelper;
 
 /**
  * Class BcBaserHelper
  * @package BaserCore\View\Helper
+ * @property HtmlHelper $Html
  */
 class BcBaserHelper extends Helper
 {
@@ -37,8 +39,7 @@ class BcBaserHelper extends Helper
 	}
 
 	public function getElement($name, $data = [], $options = []) {
-		$out = $this->_View->element($name, $data, $options);
-		return $out;
+		return $this->_View->element($name, $data, $options);
 	}
 
 	public function getImg($path, $options = []) {
@@ -50,8 +51,10 @@ class BcBaserHelper extends Helper
 	}
 
 	public function getLink($title, $url = null, $options = [], $confirmMessage = false) {
-		$out = $this->Html->link($title, $url, $options, $confirmMessage);
-		return $out;
+	    if($confirmMessage) {
+	        $options['confirm'] = $confirmMessage;
+	    }
+		return $this->Html->link($title, $url, $options);
 	}
 
 	public function isAdminUser () {

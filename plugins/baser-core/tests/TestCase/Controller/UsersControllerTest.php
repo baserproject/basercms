@@ -1,23 +1,22 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright     Copyright (c) baserCMS Users Community
- * @link          http://basercms.net baserCMS Project
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
 
 namespace BaserCore\Test\TestCase\Controller;
 
-use BaserCore\Controller\admin\UsersController;
-use Cake\TestSuite\IntegrationTestCase;
+use Cake\TestSuite\TestCase;
 
 /**
  * BaserCore\Controller\UsersController Test Case
  */
-class UsersControllerTest extends IntegrationTestCase
+class UsersControllerTest extends TestCase
 {
 
     /**

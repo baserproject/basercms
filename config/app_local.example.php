@@ -46,7 +46,6 @@ return [
 
             'username' => 'root',
             'password' => 'root',
-
             'database' => 'basercms',
             /**
              * If not using the default 'public' schema with the PostgreSQL driver
@@ -68,8 +67,8 @@ return [
             //'port' => 'non_standard_port_number',
             'username' => 'root',
             'password' => 'root',
-            'database' => 'basercms',
-            //'schema' => 'test_basercms',
+            'database' => 'test_basercms',
+            //'schema' => 'myapp',
         ],
     ],
 

@@ -10,12 +10,14 @@
  */
 
 declare(strict_types=1);
-namespace App\Model\Entity;
+
+namespace BaserCore\Model\Entity;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
 
 /**
  * Class UserGroup
- * @package App\Model\Entity
+ * @package BaserCore\Model\Entity
  * @property int $id
  * @property string|null $name
  * @property string|null $title
@@ -23,9 +25,9 @@ use Cake\ORM\Entity;
  * @property bool|null $use_admin_globalmenu
  * @property string|null $default_favorites
  * @property bool|null $use_move_contents
- * @property \Cake\I18n\FrozenTime|null $modified
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \App\Model\Entity\User[] $users
+ * @property FrozenTime|null $modified
+ * @property FrozenTime|null $created
+ * @property User[] $users
  */
 class UserGroup extends Entity
 {

@@ -11,28 +11,30 @@
 
 namespace BaserCore\Controller\Component;
 use Cake\Controller\Component;
+use Cake\Controller\Component\FlashComponent;
 
 /**
  * Class BcMessageComponent
  * 表示面へのメッセージをコントロールする為のコンポーネント
  * @package BaserCore\Controller\Component
+ * @property FlashComponent $Flash
  */
 class BcMessageComponent extends Component {
 
     /**
-     * @var FlashComponent FlashComponent
+     * @var array
      */
-    // public $Flash;
     public $components = ['Flash'];
 
     /**
      * Initialize
      *
-     * @param Controller $controller Controller with components to initialize
+     * @param array $config
      * @return void
      */
     public function initialize(array $config): void
     {
+        parent::initialize($config);
         // Todo: BcException 未定義
         // if(!isset($controller->Flash)) {
         //    throw new BcException(__d('baser', 'BcMessageComponent を利用するには、コントローラーで FlashComponent の利用設定が必要です。'));
@@ -47,6 +49,7 @@ class BcMessageComponent extends Component {
      * @param bool $alert 警告かどうか
      * @param bool $saveDblog Dblogに保存するか
      * @param bool $setFlash flash message に保存するか
+     * @param null|string $class 付与するクラス名
      */
     public function set($message, $alert = false, $saveDblog = false, $setFlash = true, $class = null)
     {
@@ -62,18 +65,20 @@ class BcMessageComponent extends Component {
                 'params' => ['class' => $class]
             ]);
         }
-        // TODO: DbLogの仕組み
-        // if ($saveDblog) {
-        //     $AppModel = ClassRegistry::init('AppModel');
-        //     $AppModel->saveDblog($message);
-        // }
+
+         if ($saveDblog) {
+            // TODO: DbLogの仕組み
+            // $AppModel = ClassRegistry::init('AppModel');
+            // $AppModel->saveDblog($message);
+         }
     }
 
     /**
      * 成功メッセージをセットする
      *
-     * @param $message
+     * @param string $message
      * @param bool $log DBログに保存するかどうか（初期値 : true）
+     * @param bool $setFlash
      */
     public function setSuccess($message, $log = true, $setFlash = true)
     {
@@ -83,8 +88,9 @@ class BcMessageComponent extends Component {
     /**
      * 失敗メッセージをセットする
      *
-     * @param $message
+     * @param string $message メッセージ
      * @param bool $log DBログに保存するかどうか（初期値 : false）
+     * @param bool $setFlash フラッシュメッセージにセットするかどうか
      */
     public function setError($message, $log = false, $setFlash = true)
     {
@@ -94,8 +100,9 @@ class BcMessageComponent extends Component {
     /**
      * 警告メッセージをセットする
      *
-     * @param $message
+     * @param string $message メッセージ
      * @param bool $log DBログに保存するかどうか（初期値 : false）
+     * @param bool $setFlash フラッシュメッセージにセットするかどうか
      */
     public function setWarning($message, $log = false, $setFlash = true)
     {
@@ -105,8 +112,9 @@ class BcMessageComponent extends Component {
     /**
      * インフォメーションメッセージをセットする
      *
-     * @param $message
+     * @param string $message メッセージ
      * @param bool $log DBログに保存するかどうか（初期値 : false）
+     * @param bool $setFlash フラッシュメッセージにセットするかどうか
      */
     public function setInfo($message, $log = false, $setFlash = true)
     {

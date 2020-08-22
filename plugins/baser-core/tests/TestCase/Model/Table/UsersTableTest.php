@@ -1,10 +1,10 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright     Copyright (c) baserCMS Users Community
- * @link          http://basercms.net baserCMS Project
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
@@ -12,7 +12,6 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\UsersTable;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -24,7 +23,7 @@ class UsersTableTest extends TestCase
     /**
      * Test subject
      *
-     * @var \BaserCore\Model\Table\UsersTable
+     * @var UsersTable
      */
     public $Users;
 
@@ -33,8 +32,8 @@ class UsersTableTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
-        'plugin.BaserCore.users'
+    protected $fixtures = [
+        'plugin.BaserCore.Users'
     ];
 
     /**
@@ -45,8 +44,8 @@ class UsersTableTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = TableRegistry::exists('Users') ? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
-        $this->Users = TableRegistry::get('Users', $config);
+        $config = $this->getTableLocator()->exists('Users') ? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
+        $this->Users = $this->getTableLocator()->get('Users', $config);
     }
 
     /**
@@ -57,7 +56,6 @@ class UsersTableTest extends TestCase
     public function tearDown(): void
     {
         unset($this->Users);
-
         parent::tearDown();
     }
 
@@ -68,7 +66,11 @@ class UsersTableTest extends TestCase
      */
     public function testInitialize()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->assertEquals('users', $this->Users->getTable());
+        $this->assertEquals('name', $this->Users->getDisplayField());
+        $this->assertEquals('id', $this->Users->getPrimaryKey());
+        $this->assertIsBool($this->Users->hasBehavior('Timestamp'));
+        $this->assertEquals('UserGroups', $this->Users->getAssociation('UserGroups')->getName());
     }
 
     /**

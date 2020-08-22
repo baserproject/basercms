@@ -21,16 +21,12 @@ class BcFormTableHelper extends Helper {
 
     /**
      * テーブル前発火
-     *
-     * @return string
      */
     public function dispatchBefore() {
     }
 
     /**
      * テーブル後発火
-     *
-     * @return string
      */
     public function dispatchAfter() {
     }

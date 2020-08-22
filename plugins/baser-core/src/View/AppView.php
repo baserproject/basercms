@@ -10,15 +10,19 @@
  */
 
 namespace BaserCore\View;
+use BaserCore\View\Helper\BcAdminFormHelper;
+use BaserCore\View\Helper\BcBaserHelper;
+use BaserCore\View\Helper\BcFormHelper;
+use BaserCore\View\Helper\BcTimeHelper;
 use Cake\View\View;
 
 /**
  * Class AppView
  * @package BaserCore\View
- * @property \BaserCore\View\Helper\BcBaserHelper $BcBaser
- * @property \BaserCore\View\Helper\BcFormHelper $BcForm
- * @property \BaserCore\View\Helper\BcAdminFormHelper $BcAdminForm
- * @property \BaserCore\View\Helper\BcTimeHelper $BcTime
+ * @property BcBaserHelper $BcBaser
+ * @property BcFormHelper $BcForm
+ * @property BcAdminFormHelper $BcAdminForm
+ * @property BcTimeHelper $BcTime
  */
 class AppView extends View {
     public function initialize():void

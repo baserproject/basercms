@@ -10,16 +10,22 @@
  */
 
 namespace BaserCore\Controller\Admin;
-use BaserCore\Controller\Admin\BcAdminAppController;
-use Cake\Event\Event;
+
+use Authentication\Controller\Component\AuthenticationComponent;
+use BaserCore\Controller\Component\BcMessageComponent;
+use BaserCore\Model\Table\UsersTable;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\EventInterface;
-use Cake\ORM\TableRegistry;
+use Cake\Http\Response;
 
 /**
  * Class UsersController
  * @package BaserCore\Controller\Admin
- * @property \BaserCore\Model\Table\UsersTable $Users
+ * @property UsersTable $Users
+ * @property AuthenticationComponent $Authentication
+ * @property BcMessageComponent $BcMessage
  */
+
 class UsersController extends BcAdminAppController
 {
 	public $siteConfigs = [];
@@ -39,7 +45,7 @@ class UsersController extends BcAdminAppController
     /**
      * Before Filter
      * @param EventInterface $event
-     * @return \Cake\Http\Response|void|null
+     * @return Response|void|null
      */
 	public function beforeFilter(EventInterface $event)
     {
@@ -113,7 +119,8 @@ class UsersController extends BcAdminAppController
         $result = $this->Authentication->getResult();
         if ($result->isValid()) {
             $target = $this->Authentication->getLoginRedirect() ?? env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX') . '/';
-            return $this->redirect($target);
+            $this->redirect($target);
+            return;
         }
         if ($this->request->is('post') && !$result->isValid()) {
             $this->Flash->error('Invalid username or password');
@@ -130,7 +137,7 @@ class UsersController extends BcAdminAppController
     public function logout()
     {
         $this->Authentication->logout();
-        return $this->redirect(['action' => 'login']);
+        $this->redirect(['action' => 'login']);
     }
 
     /**
@@ -148,7 +155,7 @@ class UsersController extends BcAdminAppController
      *  - UserGroup
      *  - submit
      *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     * @return Response|null|void Redirects on successful add, renders view otherwise.
      */
     public function add()
     {
@@ -162,8 +169,7 @@ class UsersController extends BcAdminAppController
             }
             $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
         } else {
-            // TODO: 初期値セット
-            // $this->request->data = $this->User->getDefaultValue();
+            $user = $this->Users->getNew();
         }
 
         /* 表示設定 */
@@ -206,11 +212,12 @@ class UsersController extends BcAdminAppController
      *  - delete
      *
      * @param string|null $id User id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @return Response|null|void Redirects on successful edit, renders view otherwise.
+     * @throws RecordNotFoundException When record not found.
      */
     public function edit($id = null)
     {
+
         $user = $this->Users->get($id, [
             'contain' => ['UserGroups'],
         ]);
@@ -264,21 +271,17 @@ class UsersController extends BcAdminAppController
                 }
             }
         } else {
-            // TODO: 初期値セット
-            // $this->request->data = $this->User->getDefaultValue();
-
-            // TODO: ログイン中のユーザーが自分の場合の処理
-            // if ($user->id == $this->request->getData('id')) {
-            //     $selfUpdate = true;
-            // }
+            // ログイン中のユーザーが自分の場合の処理
+            if ($user->id == $this->request->getData('id')) {
+                 $selfUpdate = true;
+            }
         }
 
-        /* 表示設定 */
         $userGroups = $this->Users->UserGroups->find('list', ['keyField' => 'id', 'valueField' => 'title']);
-
         $editable = true;
         $deletable = true;
 
+        // TODO
         // if (@$user['user_group_id'] != Configure::read('BcApp.adminGroupId') && Configure::read('debug') !== -1) {
         //     $editable = false;
         // } elseif ($selfUpdate && @$user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
@@ -298,8 +301,8 @@ class UsersController extends BcAdminAppController
      * 管理画面にログインすることができるユーザーを削除する
      *
      * @param string|null $id User id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @return Response|null|void Redirects to index.
+     * @throws RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {

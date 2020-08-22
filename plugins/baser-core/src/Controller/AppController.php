@@ -10,20 +10,27 @@
  */
 
 namespace BaserCore\Controller;
-use Cake\Event\EventInterface;
+
+use Cake\Http\Session;
 use Cake\Utility\Inflector;
 use App\Controller\AppController as BaseController;
+use Exception;
 
 /**
  * Class AppController
  * @package BaserCore\Controller
+ * @property Session $Session
  */
 class AppController extends BaseController
 {
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('BaserCore.BcMessage');
+        try {
+            $this->loadComponent('BaserCore.BcMessage');
+        } catch (Exception $e) {
+        }
+        $this->Session = $this->request->getSession();
     }
 
 	/**
@@ -36,12 +43,14 @@ class AppController extends BaseController
 	 */
 	protected function setViewConditions($filterModels = [], $options = [])
 	{
-		$_options = ['type' => 'post', 'session' => true];
-		$options = array_merge($_options, $options);
-		extract($options);
-		if ($type == 'post' && $session == true) {
+		$options = array_merge([
+		    'type' => 'post',
+		    'session' => true
+		], $options);
+
+		if ($options['type'] == 'post' && $options['session'] == true) {
 			$this->_saveViewConditions($filterModels, $options);
-		} elseif ($type == 'get') {
+		} elseif ($options['type'] == 'get') {
 			$options['session'] = false;
 		}
 		$this->_loadViewConditions($filterModels, $options);
@@ -57,21 +66,22 @@ class AppController extends BaseController
 	 */
 	protected function _saveViewConditions($filterModels = [], $options = [])
 	{
-		$_options = ['action' => '', 'group' => ''];
-		$options = array_merge($_options, $options);
-		extract($options);
+		$options = array_merge([
+		    'action' => '',
+		    'group' => ''
+		], $options);
 
 		if (!is_array($filterModels)) {
 			$filterModels = [$filterModels];
 		}
 
-		if (!$action) {
-			$action = $this->request->getParam('action');
+		if (!$options['action']) {
+			$options['action'] = $this->request->getParam('action');
 		}
 
-		$contentsName = $this->name . Inflector::classify($action);
-		if ($group) {
-			$contentsName .= "." . $group;
+		$contentsName = $this->name . Inflector::classify($options['action']);
+		if ($options['group']) {
+			$contentsName .= "." . $options['group'];
 		}
 
 		foreach($filterModels as $model) {
@@ -82,9 +92,9 @@ class AppController extends BaseController
 
 		if (!empty($this->request->getParam('named'))) {
 			if ($this->Session->check("Baser.viewConditions.{$contentsName}.named")) {
-				$named = array_merge($this->Session->read("Baser.viewConditions.{$contentsName}.named"), $this->request->getParams('named'));
+				$named = array_merge($this->Session->read("Baser.viewConditions.{$contentsName}.named"), $this->request->getParam('named'));
 			} else {
-				$named = $this->request->getParams['named'];
+				$named = $this->request->getParam('named');
 			}
 			$this->Session->write("Baser.viewConditions.{$contentsName}.named", $named);
 		}
@@ -100,19 +110,7 @@ class AppController extends BaseController
 	 */
 	protected function _loadViewConditions($filterModels = [], $options = [])
 	{
-		$_options = ['default' => [], 'action' => '', 'group' => '', 'type' => 'post', 'session' => true];
-		$options = array_merge($_options, $options);
-		$named = [];
-		$filter = [];
-		extract($options);
-
-		if (!is_array($filterModels)) {
-			$model = (string)$filterModels;
-			$filterModels = [$filterModels];
-		} else {
-			$model = (string)$filterModels[0];
-		}
-
+	    // TODO : 未実装
 	}
 
 }

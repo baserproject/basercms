@@ -11,12 +11,14 @@
 
 namespace BaserCore\View\Helper;
 
+use Cake\View\Helper;
+
 /**
  * Class BcListTableHelper
  * @package BaserCore\View\Helper
  * @uses BcListTableHelper
  */
-class BcListTableHelper extends \Cake\View\Helper {
+class BcListTableHelper extends Helper {
 	public function setColumnNumber ()
 	{
 	}

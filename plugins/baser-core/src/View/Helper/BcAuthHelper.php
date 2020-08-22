@@ -11,12 +11,14 @@
 
 namespace BaserCore\View\Helper;
 use Cake\Core\Configure;
+use Cake\Http\ServerRequest;
 use Cake\View\Helper;
 
 /**
  * Class BcAuthHelper
  * @package BaserCore\View\Helper
  * @property BcBaserHelper $BcBaser
+ * @property ServerRequest $request
  * @uses BcAuthHelper
  */
 class BcAuthHelper extends Helper {
@@ -32,8 +34,8 @@ class BcAuthHelper extends Helper {
      * @return string currentPrefix
      */
     public function getCurrentPrefix () {
-		if (!empty($this->request->params['prefix'])) {
-			$currentPrefix = $this->request->params['prefix'];
+		if (!empty($this->request->getParam('prefix'))) {
+			$currentPrefix = $this->request->getParam('prefix');
 		} else {
 			$currentPrefix = 'front';
 		}
@@ -64,17 +66,17 @@ class BcAuthHelper extends Helper {
         // TODO: 現在のログインユーザーのセッションキーを取得
         // $sessionKey = BcUtil::getLoginUserSessionKey();
         // >>>
-        $sessionKey = 'admin';
+//        $sessionKey = 'admin';
         // <<<
-		$currentUserPrefixes = [];
+//		$currentUserPrefixes = [];
 		// TODO 取り急ぎ
 		// >>>
 //		if ($this->Session->check('Auth.' . $sessionKey . '.UserGroup.auth_prefix')) {
 //			$currentUserAuthPrefixes = explode(',', $this->Session->read('Auth.' . $sessionKey . '.UserGroup.auth_prefix'));
 //		}
-        $currentUserPrefixes = ['admin'];
+//        $currentUserPrefixes = ['admin'];
         // <<<
-        return $currentUserPrefixes;
+        return ['admin'];
     }
 
     /**
@@ -87,16 +89,18 @@ class BcAuthHelper extends Helper {
 
     /**
      * 現在のユーザーのログインアクションを取得する
+     * TODO: 未実装
      * @return string
      */
     public function getCurrentLoginAction() {
-        $currentAuthPrefixSetting = $this->BcAuth->getCurrentPrefixSetting();
-        if ($this->isCurrentUserAdminAvailable()) {
-            $logoutAction = Configure::read('BcAuthPrefix.admin.logoutAction');
-        } else {
-            $logoutAction = $currentAuthPrefixSetting['logoutAction'];
-        }
-        return $logoutAction;
+//        $currentAuthPrefixSetting = $this->BcAuth->getCurrentPrefixSetting();
+//        if ($this->isCurrentUserAdminAvailable()) {
+//            $logoutAction = Configure::read('BcAuthPrefix.admin.logoutAction');
+//        } else {
+//            $logoutAction = $currentAuthPrefixSetting['logoutAction'];
+//        }
+//        return $logoutAction;
+        return '';
     }
 
     /**

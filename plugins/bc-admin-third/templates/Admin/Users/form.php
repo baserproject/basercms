@@ -79,6 +79,7 @@ $this->BcBaser->js('admin/users/edit', false);
             <td class="col-input bca-form-table__input">
                 <?php if ($editable): ?>
                     <?php echo $this->BcAdminForm->control('user_groups._ids', ['type' => 'multiCheckbox', 'options' => $userGroups]); ?>
+
                     <i class="bca-icon--question-circle btn help bca-help"></i>
                     <?php echo $this->BcAdminForm->error('user_group_id', __d('baser', 'グループを選択してください')) ?>
                     <div id="helptextUserGroupId" class="helptext"><?php echo sprintf(__d('baser', 'ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには%sより新しいグループを追加しアクセス制限の設定をおこないます。'), $this->BcBaser->getLink(__d('baser', 'ユーザーグループ管理'), ['controller' => 'user_groups', 'action' => 'index']))?></div>
@@ -91,6 +92,7 @@ $this->BcBaser->js('admin/users/edit', false);
         <tr>
             <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('email', __d('baser', 'Eメール')) ?></th>
             <td class="col-input bca-form-table__input">
+                <input type="text" name="dumy-email" style="top:-100px;left:-100px;position:fixed;">
                 <?php echo $this->BcAdminForm->control('email', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
                 <?php echo $this->BcAdminForm->error('email') ?>
@@ -109,6 +111,8 @@ $this->BcBaser->js('admin/users/edit', false);
             </th>
             <td class="col-input bca-form-table__input">
                 <?php if ($this->request->getParam('action') == 'edit'): ?><small>[<?php echo __d('baser', 'パスワードは変更する場合のみ入力してください') ?>]</small><br /><?php endif ?>
+                <!-- ↓↓↓自動入力を防止する為のダミーフィールド↓↓↓ -->
+                <input type="password" name="dummy-pass" style="top:-100px;left:-100px;position:fixed;">
                 <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => 20, 'maxlength' => 255]) ?>
                 <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255]) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
