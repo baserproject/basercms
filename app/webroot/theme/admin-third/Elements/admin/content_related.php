@@ -72,13 +72,13 @@ $pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'],
 				<tr<?php echo $class ?> id="Row<?php echo $relatedContent['Site']['id'] ?>">
 					<td class="cel2 bca-table-listup__tbody-td"><?php echo h($relatedContent['Site']['display_name']) ?></td>
 					<td class="cel3 bca-table-listup__tbody-td">
-						<?php echo $this->BcText->arrayValue($relatedContent['Site']['main_site_id'], $sites,  $mainSiteDisplayName) ?>
+						<?php echo h($this->BcText->arrayValue($relatedContent['Site']['main_site_id'], $sites,  $mainSiteDisplayName)) ?>
 					</td>
 					<td class="cel4 bca-table-listup__tbody-td">
 						<?php if(!empty($relatedContent['Content'])): ?>
-							<?php echo $relatedContent['Content']['title'] ?>
+							<?php echo h($relatedContent['Content']['title']) ?>
 							<?php if(!empty($relatedContent['Content'])): ?>
-								<small>（<?php echo $this->BcContents->settings[$relatedContent['Content']['type']]['title'] ?>）</small>
+								<small>（<?php echo h($this->BcContents->settings[$relatedContent['Content']['type']]['title']) ?>）</small>
 							<?php endif ?>
 						<?php else: ?>
 							<small><?php echo __d('baser', '未登録')?></small>

@@ -39,7 +39,7 @@ if (!$PermissionModel->check('/' . Configure::read('Routing.prefixes.0') . '/con
 		$open = false;
 		if(!empty($this->BcContents->settings[$type]['icon'])) {
 		    if(!empty($this->BcContents->settings[$type]['url']['icon'])) {
-				$icon = $this->BcContents->settings[$type]['url']['icon'];    
+				$icon = $this->BcContents->settings[$type]['url']['icon'];
             } else {
 				$icon = $this->BcContents->settings[$type]['icon'];
             }
@@ -82,7 +82,7 @@ if (!$PermissionModel->check('/' . Configure::read('Routing.prefixes.0') . '/con
 	"manageDisabled":"<?php echo $manageDisabled ?>",
 	"deleteDisabled":"<?php echo $deleteDisabled ?>"
 }'<?php if($open): ?> class="jstree-open"<?php endif ?>>
-			<span><?php echo h($data['Content']['title']) ?></span>
+			<?php echo h($data['Content']['title']) ?>
 			<?php if(!empty($data['children'])): ?>
 				<?php $this->BcBaser->element('admin/contents/index_list_tree', ['datas' => $data['children']]) ?>
 			<?php endif ?>

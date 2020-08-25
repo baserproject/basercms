@@ -35,7 +35,7 @@
       <li class="bca-list__item"><span><?php echo __d('baser', 'タイプ') ?></span>：
       <?php if(!$this->BcForm->value('Content.alias_id')): ?>
         <?php if(!empty($this->BcContents->settings[$this->BcForm->value('Content.type')])): ?>
-          <?php echo $this->BcContents->settings[$this->BcForm->value('Content.type')]['title'] ?>
+          <?php echo h($this->BcContents->settings[$this->BcForm->value('Content.type')]['title']) ?>
         <?php else: ?>
           <?php echo __d('baser', 'デフォルト') ?>
         <?php endif ?>

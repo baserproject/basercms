@@ -14,7 +14,7 @@
 
 (function($){
 	$.bcTree = {
-		
+	
 	/**
 	 * リンクをクリックする際にShiftキーを押しているかどうか
 	 */
@@ -31,12 +31,12 @@
 		contextmenuAddOnly: false,
 		
 	/**
-	 * 設定 BcManageContent より値を取得 
+	 * 設定 BcManageContent より値を取得
 	 */
 		settings: [],
 		
 	/**
-	 * ドラッグターゲット 
+	 * ドラッグターゲット
 	 */
 		dropTarget: null,
 		
@@ -46,17 +46,17 @@
 		dragTarget: null,
 		
 	/**
-	 * ツリー構造のDOM（jQueryオブジェクト） 
+	 * ツリー構造のDOM（jQueryオブジェクト）
 	 */
 		treeDom: null,
 		
 	/**
-	 * jsTree実体 
+	 * jsTree実体
 	 */
 		jsTree: null,
 
 	/**
-	 * 一覧を表示した時間 
+	 * 一覧を表示した時間
 	 */
 		listDisplayed: null,
 		
@@ -67,7 +67,7 @@
 
 	/**
 	 * ノードを移動する場合の直前のポジション
-	 */		
+	 */
 		beforePosition: null,
 
 	/**
@@ -97,7 +97,7 @@
 		},
 
 	/**
-	 * ツリーを読み込む 
+	 * ツリーを読み込む
 	 */
 		load: function () {
 			if(!$.bcTree._inited) {
@@ -136,7 +136,7 @@
 		},
 		
 	/**
-	 * ツリーを初期化する 
+	 * ツリーを初期化する
 	 */
 		_init: function() {
 			
@@ -144,7 +144,7 @@
 			$.bcTree.treeDom = $('#ContentsTreeList');
 			$.bcTree.createTree();
 			$.bcTree.jsTree = $.bcTree.treeDom.jstree(true);
-
+			$.bcTree.jsTree.settings.core.force_text = true;
 			$.bcTree.treeDom.bind("move_node.jstree", function(e, data){
 				$.bcTree.beforeParentId = data.old_parent;
 				$.bcTree.beforePosition = data.old_position;
@@ -176,7 +176,7 @@
 						} else {
 							$.bcTree.openUrl($.baseUrl + '/' + $.bcTree.config.adminPrefix + '/contents/edit_alias/' + data.contentId);
 						}
-					}	
+					}
 				}
 			});
 			
@@ -212,7 +212,7 @@
 		},
 
 	/**
-	 * ツリーを破棄する 
+	 * ツリーを破棄する
 	 */
 		destroy: function() {
 			if($.bcTree.treeDom) {
@@ -235,7 +235,7 @@
 		},
 
 	/**
-	 * ツリー構造を生成する 
+	 * ツリー構造を生成する
 	 */
 		createTree: function() {
 			// ツリービュー生成
@@ -282,7 +282,7 @@
 				},
 				"state": {
 					"key": 'jstree-' + $("#ViewSettingSiteId").val(),
-					"events": "open_all.jstree close_all.jstree changed.jstree open_node.jstree close_node.jstree check_node.jstree uncheck_node.jstree"	
+					"events": "open_all.jstree close_all.jstree changed.jstree open_node.jstree close_node.jstree check_node.jstree uncheck_node.jstree"
 				},
 				"contextmenu": {
 					"show_at_node": false,
@@ -601,7 +601,7 @@
 									}
 								} else {
 									if(!val.addDisabled) {
-										addMenu['Etc']['submenu'][i] = $.bcTree.createMenu(val, parent, data, counter);	
+										addMenu['Etc']['submenu'][i] = $.bcTree.createMenu(val, parent, data, counter);
 									}
 								}
 								counter++;
@@ -693,7 +693,7 @@
 				// TODO D&Dの際、子コンテンツのURLを返却し全てのコンテンツの確認ができるようにする
 				// =====================================================================================================
 				if(disableCheck) {
-					node.data.jstree.contentFullUrl = false;	
+					node.data.jstree.contentFullUrl = false;
 				}
 				
 				$(this).find('div.jstree-wholerow').each(function(){
@@ -1076,22 +1076,10 @@
 			if (first === undefined) {
 				first = false;
 			}
-			var oldTitle = defaultTitle
-				.replace(/^<span>/, '')
-				.replace(/<\/span>$/, '')
-				.replace(/&amp;/g, '&')
-				.replace(/&quot;/g, '"')
-				.replace(/&#039;/g, "'")
-				.replace(/&lt;/g, '<')
-				.replace(/&gt;/g, '>');
+			var oldTitle = defaultTitle;
 			$.bcTree.jsTree.edit(node, oldTitle, function (editNode) {
 				var newTitle = editNode.text;
-				$.bcTree.jsTree.rename_node(editNode, newTitle.replace(/&/g,'&amp;')
-                   			.replace(/"/g,'&quot;')
-                   			.replace(/'/g,'&#039;')
-                   			.replace(/</g,'&lt;')
-                   			.replace(/>/g,'&gt;')
-				);
+				$.bcTree.jsTree.rename_node(editNode, newTitle);
 				if (oldTitle === newTitle) {
 					return false;
 				}
@@ -1161,7 +1149,7 @@
 
 	/**
 	 * コンテンツを並び替える
-	 * 
+	 *
 	 * @param e
 	 * @param data
 	 */
@@ -1253,7 +1241,7 @@
 
 	/**
 	 * 外部よりメニューを表示する
-	 * 
+	 *
 	 * @param e
 	 * @returns {boolean}
 	 */
@@ -1270,7 +1258,7 @@
 
 	/**
 	 * Shift / Ctrl キーの押印状態を更新する
-	 * 
+	 *
 	 * @param e
 	 */
 		updateShiftAndCtrlOnAnchor: function(e) {

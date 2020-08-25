@@ -88,7 +88,7 @@ if($this->BcContents->isEditable()) {
 
 <div class="bca-section bca-section__post-top">
   <span class="bca-post__url">
-	  <a href="<?php echo $fullUrl ?>" class="bca-text-url" target="_blank" data-toggle="tooltip"
+	  <a href="<?php echo h($fullUrl) ?>" class="bca-text-url" target="_blank" data-toggle="tooltip"
 		 data-placement="top" title="<?php echo __d('baser', '公開URLを開きます') ?>"><i class="bca-icon--globe"></i><?php echo urldecode($fullUrl) ?></a>
 	  <?php echo $this->BcForm->button('', [
 		  'id' => 'BtnCopyUrl',
@@ -119,7 +119,7 @@ if($this->BcContents->isEditable()) {
 				<?php echo $this->BcForm->error('Content.name') ?>
 				<?php echo $this->BcForm->error('Content.parent_id') ?>
 				<span class="bca-post__url">
-          			<?php echo $linkedFullUrl ?>
+          			<?php echo h($linkedFullUrl) ?>
         		</span>
 			</td>
 		</tr>
