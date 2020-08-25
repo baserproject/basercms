@@ -24,7 +24,7 @@ if ($this->request->action !== 'admin_add_folder') {
 
 
 <div class="em-box align-left">
-<?php echo __d('baser', '現在の位置')?>：<?php echo $currentPath ?>
+<?php echo __d('baser', '現在の位置')?>：<?php echo h($currentPath) ?>
 </div>
 
 <?php if ($this->request->action == 'admin_add_folder'): ?>

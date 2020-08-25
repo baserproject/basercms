@@ -44,7 +44,7 @@ $(function(){
 <div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
 
 <!-- current -->
-<div class="em-box align-left"><?php echo __d('baser', '現在の位置')?>：<?php echo $currentPath ?>
+<div class="em-box align-left"><?php echo __d('baser', '現在の位置')?>：<?php echo h($currentPath) ?>
 	<?php if (!$writable): ?>
 		　<span style="color:#FF3300">[<?php echo __d('baser', '書込不可')?>]</span>
 	<?php endif ?>

@@ -73,7 +73,7 @@ class UploaderFile extends AppModel {
 				]
 			]
 		];
-		if(!BcUtil::isAdminUser()) {
+		if(!BcUtil::isAdminUser() || !Configure::read('Uploader.allowedAdmin')) {
 			$this->validate['name'] = [
 				'fileExt' => [
 					'rule' => ['fileExt', Configure::read('Uploader.allowedExt')],
