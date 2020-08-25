@@ -142,7 +142,7 @@ class BlogPost extends BlogAppModel {
 				['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '公開終了日の形式が不正です。')],
 				['rule' => ['checkDateRenge', 'allowEmpty' => true, 'publish_begin', 'publish_end'], 'message' => __d('baser', '公開期間が不正です。')]],
 			'posts_date' => [
-				['rule' => ['notBlank'], 'allowEmpty' => true, 'message' => __d('baser', '投稿日を入力してください。'), 'required' => true],
+				['rule' => ['notBlank'], 'message' => __d('baser', '投稿日を入力してください。'), 'required' => true],
 				['rule' => ['checkDate'], 'message' => __d('baser', '投稿日の形式が不正です。')]],
 			'user_id' => [
 				['rule' => ['notBlank'], 'message' => __d('baser', '投稿者を選択してください。')]],
