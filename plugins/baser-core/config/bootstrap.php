@@ -11,6 +11,10 @@
 
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
+use Cake\Core\Plugin;
 
 Configure::config('baser', new PhpConfig());
 Configure::load('BaserCore.setting', 'baser');
+
+// DebugKit が重すぎるので削除
+Plugin::getCollection()->remove('DebugKit');
