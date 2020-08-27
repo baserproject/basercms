@@ -53,13 +53,13 @@ array_push($params, $data['name']);
 			$this->BcBaser->link(
 				$this->BcBaser->getImg(array_merge(['action' => 'img_thumb', 100, 100, $theme, $plugin, $type], $params), ['alt' => $data['name']]), array_merge(['action' => 'img', $theme, $plugin, $type], explode('/', $path), [$data['name']]), ['rel' => 'colorbox', 'title' => $data['name'], 'style' => 'display:block;padding:5px;important;float:left;background-color:#FFFFFF'], null, false)
 			?>&nbsp;
-			<?php echo $data['name'] ?>
+			<?php echo h($data['name']) ?>
 		<?php elseif ($data['type'] == 'folder'): ?>
 			<?php $this->BcBaser->img('admin/icon_folder.png', ['alt' => $data['name']]) ?>
-			<?php echo $data['name'] ?>/
+			<?php echo h($data['name']) ?>/
 		<?php else: ?>
 			<?php $this->BcBaser->img('admin/icon_content.png', ['alt' => $data['name']]) ?>
-			<?php echo $data['name'] ?>
+			<?php echo h($data['name']) ?>
 		<?php endif ?>
 	</td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
