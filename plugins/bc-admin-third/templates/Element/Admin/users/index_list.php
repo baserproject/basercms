@@ -87,7 +87,7 @@ $this->BcListTable->setColumnNumber(7);
     <tbody>
     <?php if ($users->count()): ?>
         <?php foreach($users as $user): ?>
-            <?php $this->BcBaser->element('Admin/users/index_row', ['user' => $user]) ?>
+            <?php $this->BcBaser->element('Admin/Users/index_row', ['user' => $user]) ?>
         <?php endforeach; ?>
     <?php else: ?>
         <tr>

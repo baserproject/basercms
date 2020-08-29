@@ -125,7 +125,6 @@ class UserGroupsController extends BcAdminAppController
         // TODO: help
         // $this->help = 'user_groups_form';
         $this->set(compact('userGroup', 'title'));
-        $this->render('form');
     }
 
     /**
@@ -169,7 +168,6 @@ class UserGroupsController extends BcAdminAppController
         // TODO: help
         // $this->help = 'user_groups_form';
         $this->set(compact('userGroup', 'title'));
-        $this->render('form');
     }
 
     /**

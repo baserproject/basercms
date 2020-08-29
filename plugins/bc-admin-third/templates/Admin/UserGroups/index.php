@@ -24,13 +24,6 @@
 // 	'admin/lib/baser_ajax_data_list_config',
 // 	'admin/lib/baser_ajax_batch_config'
 // ]);
-
-// 新規作成ボタン
-// $this->BcAdmin->addAdminMainBodyHeaderLinks([
-// 	'url' => ['action' => 'add'],
-// 	'title' => __d('baser', '新規追加'),
-// ]);
-
 use BaserCore\View\AppView;
 
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
@@ -52,4 +45,4 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 <div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(['controller' => 'user_groups', 'action' => 'ajax_batch']) ?></div>
 <div id="AlertMessage" class="message" hidden></div>
 <div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
-<div id="DataList" class="bca-data-list"><?php $this->BcBaser->element('Admin/user_groups/index_list') ?></div>
+<div id="DataList" class="bca-data-list"><?php $this->BcBaser->element('Admin/UserGroups/index_list') ?></div>

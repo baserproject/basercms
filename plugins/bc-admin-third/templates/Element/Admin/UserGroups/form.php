@@ -13,7 +13,7 @@ use BaserCore\Model\Entity\UserGroup;
 use BaserCore\View\AppView;
 
 /**
- * UsersGroups form
+ * UserGroups Form
  * @var AppView $this
  * @var UserGroup $userGroup
  */
@@ -40,8 +40,6 @@ $(window).load(function() {
 */
 </script>
 
-<!-- form -->
-<?php echo $this->BcAdminForm->create($userGroup) ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
@@ -87,24 +85,6 @@ $(window).load(function() {
         <tr>
             <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('use_admin_globalmenu', __d('baser', 'その他')) ?></th>
             <td class="col-input bca-form-table__input">
-                <?php if ($userGroup->name == 'admins' && $this->request->getParam('action') == 'edit'): ?>
-                    <?php if ($userGroup->use_admin_globalmenu): ?>
-                        <?php echo __d('baser', '管理システムのグローバルメニューを利用する')?>
-                    <?php else: ?>
-                        <?php echo __d('baser', '管理システムのグローバルメニューを利用しない')?>
-                    <?php endif ?>
-                <?php else: ?>
-                    <span style="white-space: nowrap"><?php echo $this->BcAdminForm->control('use_admin_globalmenu', ['type' => 'checkbox', 'label' => __d('baser', '管理システムのグローバルメニューを利用する')]) ?></span>
-                    <i class="bca-icon--question-circle btn help bca-help"></i>
-                    <div id="helptextName" class="helptext">
-                        <ul>
-                            <li><?php echo __d('baser', '管理システムでグローバルメニューを利用するかどうか設定します。') ?></li>
-                            <li><?php echo __d('baser', '管理グループの場合は変更できません。') ?></li>
-                        </ul>
-                    </div>
-                    <?php echo $this->BcAdminForm->error('use_admin_globalmenu') ?>
-                <?php endif ?>
-                <br>
                 <span style="white-space: nowrap"><?php echo $this->BcAdminForm->control('use_move_contents', ['type' => 'checkbox', 'label' => __d('baser', 'コンテンツのドラッグ＆ドロップ移動機能を利用する')]) ?></span>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
                 <div id="helptextName" class="helptext">
@@ -131,58 +111,4 @@ $(window).load(function() {
 </div>
 
 <?php echo $this->BcFormTable->dispatchAfter() ?>
-
-<div class="submit bc-align-center section bca-actions">
-    <div class="bca-actions__main">
-        <?= $this->BcAdminForm->button(
-                __d('baser', '保存'),
-                 ['div' => false,
-                 'class' => 'button bca-btn bca-actions__item',
-                 'data-bca-btn-type' => 'save',
-                 'data-bca-btn-size' => 'lg',
-                 'data-bca-btn-width' => 'lg',
-                 'id' => 'BtnSave']
-            ) ?>
-    </div>
-<?php if ($this->request->getParam('action') == 'edit'): ?>
-    <div class="bca-actions__sub">
-    <?php if ($userGroup->name != 'admins'): ?>
-        <?= $this->BcAdminForm->postLink(
-            __d('baser', '削除'),
-            ['action' => 'delete', $userGroup->id],
-            ['block' => true,
-            'confirm' => __d('baser', "{0} を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。", $userGroup->name),
-            'class' => 'submit-token button bca-btn bca-actions__item',
-            'data-bca-btn-type' => 'delete',
-            'data-bca-btn-size' => 'sm']
-        ) ?>
-    <?php endif; ?>
-    </div>
-<?php endif; ?>
-</div>
-
-<?php echo $this->BcAdminForm->end() ?>
-
-<?= $this->fetch('postLink') ?>
-
-<?php /* ?>
-<?php if ($this->request->getParam('action') == 'edit'): ?>
-	<div class="section">
-		<div class="panel-box bca-panel-box corner10">
-			<h2><?php echo __d('baser', '「よく使う項目」の初期データ') ?></h2>
-			<p>
-				<small><?php echo __d('baser', 'このグループに新しいユーザーを登録した際、次の「よく使う項目」が登録されます。	') ?></small>
-			</p>
-			<?php $favorites = BcUtil::unserialize($this->request->data['UserGroup']['default_favorites']) ?>
-			<?php if ($favorites): ?>
-			<ul class="bca-list" data-bca-list-layout="horizon">
-				<?php foreach ($favorites as $favorite): ?>
-					<li class="bca-list__item"><?php $this->BcBaser->link($favorite['name'], $favorite['url']) ?></li>
-				<?php endforeach; ?>
-			</ul>
-			<?php endif ?>
-		</div>
-	</div>
-<?php endif; ?>
-<?php */ ?>
 

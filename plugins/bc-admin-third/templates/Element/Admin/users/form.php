@@ -13,7 +13,7 @@ use BaserCore\Model\Entity\User;
 use BaserCore\View\AppView;
 
 /**
- * Users form
+ * Users Form
  * @var AppView $this
  * @var bool $selfUpdate
  * @var User $user
@@ -35,7 +35,6 @@ $this->BcBaser->js('admin/users/edit', false);
 <div id="AlertMessage" style="display: none"></div>
 <div id="UserGroupSetDefaultFavoritesUrl" style="display:none"><?php $this->BcBaser->url(['plugin' => null, 'controller' => 'user_groups', 'action' => 'set_default_favorites', @$this->request->getData('UserGroup.id')]) ?></div>
 
-<?php echo  $this->BcAdminForm->create($user) ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
@@ -53,7 +52,7 @@ $this->BcBaser->js('admin/users/edit', false);
         <tr>
             <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('name', __d('baser', 'アカウント名')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
             <td class="col-input bca-form-table__input">
-                <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 20, 'maxlength' => 255, 'autofocus' => true]) ?>
+                <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 20, 'maxlength' => 255, 'autofocus' => true, 'error' => false]) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
                 <?php echo $this->BcAdminForm->error('name') ?>
                 <div id="helptextName" class="helptext"><?php echo __d('baser', '半角英数字とハイフン、アンダースコアのみで入力してください。') ?></div>
@@ -62,8 +61,8 @@ $this->BcBaser->js('admin/users/edit', false);
         <tr>
             <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('real_name_1', __d('baser', '名前')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
             <td class="col-input bca-form-table__input">
-                <small>[<?php echo __d('baser', '姓') ?>]</small> <?php echo $this->BcAdminForm->control('real_name_1', ['type' => 'text', 'size' => 12, 'maxlength' => 255]) ?>
-                <small>[<?php echo __d('baser', '名') ?>]</small> <?php echo $this->BcAdminForm->control('real_name_2', ['type' => 'text', 'size' => 12, 'maxlength' => 255]) ?>
+                <small>[<?php echo __d('baser', '姓') ?>]</small> <?php echo $this->BcAdminForm->control('real_name_1', ['type' => 'text', 'size' => 12, 'maxlength' => 255, 'error' => false]) ?>
+                <small>[<?php echo __d('baser', '名') ?>]</small> <?php echo $this->BcAdminForm->control('real_name_2', ['type' => 'text', 'size' => 12, 'maxlength' => 255, 'error' => false]) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
                 <?php echo $this->BcAdminForm->error('real_name_1', __d('baser', '姓を入力してください')) ?>
                 <?php echo $this->BcAdminForm->error('real_name_2', __d('baser', '名を入力してください')) ?>
@@ -95,10 +94,10 @@ $this->BcBaser->js('admin/users/edit', false);
             </td>
         </tr>
         <tr>
-            <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('email', __d('baser', 'Eメール')) ?></th>
+            <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('email', __d('baser', 'Eメール')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
             <td class="col-input bca-form-table__input">
                 <input type="text" name="dummy-email" style="top:-100px;left:-100px;position:fixed;">
-                <?php echo $this->BcAdminForm->control('email', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
+                <?php echo $this->BcAdminForm->control('email', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'error' => false]) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
                 <?php echo $this->BcAdminForm->error('email') ?>
                 <div id="helptextEmail" class="helptext">
@@ -109,10 +108,10 @@ $this->BcBaser->js('admin/users/edit', false);
         </tr>
         <tr>
             <th class="col-head bca-form-table__label">
+                <?php echo $this->BcAdminForm->label('password_1', __d('baser', 'パスワード')) ?>
                 <?php if ($this->request->getParam('action') == 'add'): ?>
                     <span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>&nbsp;
                 <?php endif; ?>
-                <?php echo $this->BcAdminForm->label('password_1', __d('baser', 'パスワード')) ?>
             </th>
             <td class="col-input bca-form-table__input">
                 <?php if ($this->request->getParam('action') == 'edit'): ?><small>[<?php echo __d('baser', 'パスワードは変更する場合のみ入力してください') ?>]</small><br /><?php endif ?>
@@ -141,56 +140,4 @@ $this->BcBaser->js('admin/users/edit', false);
 
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
-<div class="submit section bca-actions">
-    <div class="bca-actions__main">
-        <?= $this->BcAdminForm->button(
-                __d('baser', '保存'),
-                 ['div' => false,
-                 'class' => 'button bca-btn bca-actions__item',
-                 'data-bca-btn-type' => 'save',
-                 'data-bca-btn-size' => 'lg',
-                 'data-bca-btn-width' => 'lg',
-                 'id' => 'BtnSave']
-            ) ?>
-    </div>
-<?php if ($editable): ?>
-    <div class="bca-actions__sub">
-        <?php if ($this->request->getParam('action') == 'edit' && $deletable): ?>
-            <?= $this->BcAdminForm->postLink(
-                    __d('baser', '削除'),
-                    ['action' => 'delete', $user->id],
-                    ['block' => true,
-                    'confirm' => __d('baser', '{0} を本当に削除してもいいですか？', $user->name),
-                    'class' => 'submit-token button bca-btn bca-actions__item',
-                    'data-bca-btn-type' => 'delete',
-                    'data-bca-btn-size' => 'sm']
-                ) ?>
-        <?php endif; ?>
-    </div>
-<?php endif; ?>
-</div>
 
-<?php echo $this->BcAdminForm->end() ?>
-
-<?= $this->fetch('postLink') ?>
-
-<?php // TODO: よく使うメニュー関連 ?>
-<?php /* if ($this->request->action == 'admin_edit'): ?>
-	<div class="panel-box bca-panel-box corner10">
-		<h2><?php echo __d('baser', '登録されている「よく使う項目」') ?></h2>
-		<?php if ($this->request->data['Favorite']): ?>
-			<ul class="bca-list" data-bca-list-layout="horizon" id="DefaultFavorites">
-				<?php foreach ($this->request->data['Favorite'] as $key => $favorite): ?>
-					<li class="bca-list__item">
-						<?php $this->BcBaser->link($favorite['name'], $favorite['url']) ?>
-						<?php echo $this->BcAdminForm->control('Favorite.name.' . $key, ['type' => 'hidden', 'value' => $favorite['name'], 'class' => 'favorite-name']) ?>
-						<?php echo $this->BcAdminForm->control('Favorite.url.' . $key, ['type' => 'hidden', 'value' => $favorite['url'], 'class' => 'favorite-url']) ?>
-					</li>
-				<?php endforeach; ?>
-			</ul>
-		<?php endif ?>
-		<?php if ($this->Session->check('AuthAgent') || $this->BcBaser->isAdminUser()): ?>
-			<div class="submit"><?php echo $this->BcAdminForm->button($this->request->data['UserGroup']['title'] . 'グループの初期値に設定', ['label' => __d('baser', 'グループ初期データに設定'), 'id' => 'btnSetUserGroupDefault', 'class' => 'button bca-btn']) ?></div>
-		<?php endif ?>
-	</div>
-<?php endif*/ ?>

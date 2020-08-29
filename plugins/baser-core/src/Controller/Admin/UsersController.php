@@ -182,7 +182,6 @@ class UsersController extends BcAdminAppController
         // TODO: help
         // $this->help = 'users_form';
         $this->set(compact('user', 'userGroups', 'editable', 'selfUpdate', 'deletable', 'title'));
-        $this->render('form');
     }
 
     /**
@@ -292,7 +291,6 @@ class UsersController extends BcAdminAppController
         // TODO: help
         // $this->help = 'users_form';
         $this->set(compact('user', 'userGroups', 'editable', 'selfUpdate', 'deletable', 'title'));
-        $this->render('form');
     }
 
     /**

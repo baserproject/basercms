@@ -41,4 +41,4 @@ $this->BcBaser->js('admin/users/index.bundle');
 <div id="AjaxBatchUrl" hidden><?php $this->BcBaser->url(['controller' => 'users', 'action' => 'ajax_batch']) ?></div>
 <div id="AlertMessage" class="message" hidden></div>
 <div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
-<div id="DataList"><?php $this->BcBaser->element('Admin/users/index_list') ?></div>
+<div id="DataList"><?php $this->BcBaser->element('Admin/Users/index_list') ?></div>
