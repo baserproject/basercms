@@ -24,8 +24,11 @@ Router::plugin(
             'Admin',
             ['path' => env('BC_ADMIN_PREFIX', '/admin')],
             function (RouteBuilder $routes) {
-			$routes->fallbacks(InflectedRoute::class);
-		});
+                // CakePHPのデフォルトで /index が省略する仕様のため、URLを生成する際は、強制的に /index を付ける仕様に変更
+                $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
+			    $routes->fallbacks(InflectedRoute::class);
+		    }
+		);
 		$routes->prefix('api', function (RouteBuilder $routes) {
 			$routes->fallbacks(InflectedRoute::class);
     		$routes->setExtensions(['json']);
