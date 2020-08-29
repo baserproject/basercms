@@ -26,7 +26,7 @@ array_push($params, $data['name']);
 <tr>
 	<td class="row-tools">
 		<?php if ($this->BcBaser->isAdminUser()): ?>
-			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . str_replace('.', '_', $data['name']), ['type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['name']]) ?>
+			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . str_replace('.', '_', h($data['name'])), ['type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['name']]) ?>
 		<?php endif ?>
 		<?php if ($data['type'] == 'folder'): ?>
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_open_folder.png', ['alt' => __d('baser', '開く'), 'class' => 'btn']), array_merge(['action' => 'index', $theme, $plugin, $type], $params), ['title' => __d('baser', '開く')]) ?>
