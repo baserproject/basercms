@@ -133,7 +133,13 @@ class BcBaserHelper extends Helper
      * @return string
      */
 	public function getContentsName($detail = false, $options = []) {
-	    return 'AdminUsersLogin';
+	    // TODO : 一時対応。実装要
+	    $request = $this->_View->getRequest();
+	    if($request->getParam('action') === 'login') {
+            return 'AdminUsersLogin';
+        } else {
+            return '';
+        }
 	}
 
     /**

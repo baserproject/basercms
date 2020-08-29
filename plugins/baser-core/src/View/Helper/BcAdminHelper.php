@@ -70,7 +70,7 @@ class BcAdminHelper extends Helper {
 		if(strpos($currentUrl, '?') !== false) {
 			list($currentUrl, $params) = explode('?', $currentUrl);
 		}
-		$currentUrl = preg_replace('/\/index$/', '/', $currentUrl);
+//		$currentUrl = preg_replace('/\/index$/', '/', $currentUrl);
 		if($params) {
 			$currentUrl .= '?' . $params;
 		}
