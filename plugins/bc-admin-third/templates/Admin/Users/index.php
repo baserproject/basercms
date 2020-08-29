@@ -23,10 +23,10 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 $this->BcBaser->js('admin/users/index.bundle');
 // TODO 一覧をどうやって読み込ませるか検討が必要
 //$this->BcBaser->js([
-//	'admin/libs/jquery.baser_ajax_data_list',
-//	'admin/libs/jquery.baser_ajax_batch',
-//	'admin/libs/baser_ajax_data_list_config',
-//	'admin/libs/baser_ajax_batch_config'
+//	'admin/lib/jquery.baser_ajax_data_list',
+//	'admin/lib/jquery.baser_ajax_batch',
+//	'admin/lib/baser_ajax_data_list_config',
+//	'admin/lib/baser_ajax_batch_config'
 //]);
 
 // 新規作成ボタン

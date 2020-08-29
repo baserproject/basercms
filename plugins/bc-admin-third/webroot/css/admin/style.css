@@ -5061,6 +5061,11 @@ readers do not read off random characters that represent icons */
 /*.full-width {
 	width:100%;
 }*/
+#vakata-dnd {
+  background-color: #fff; }
+  #vakata-dnd div {
+    padding-right: 14px !important; }
+
 a {
   color: #6fa83d;
   text-decoration: none; }
@@ -7247,7 +7252,6 @@ body {
     background-color: #ccc; }
   .bca-table-listup .eye_catch-wrap {
     display: flex;
-    justify-content: space-between;
     flex-wrap: nowrap; }
   .bca-table-listup .eye_catch {
     margin-right: 10px;

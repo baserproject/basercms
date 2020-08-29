@@ -19,10 +19,10 @@
 // 	'message1' => __d('baser', "このデータを本当に削除してもいいですか？\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。")
 // ]);
 // $this->BcBaser->js([
-// 	'admin/libs/jquery.baser_ajax_data_list',
-// 	'admin/libs/jquery.baser_ajax_batch',
-// 	'admin/libs/baser_ajax_data_list_config',
-// 	'admin/libs/baser_ajax_batch_config'
+// 	'admin/lib/jquery.baser_ajax_data_list',
+// 	'admin/lib/jquery.baser_ajax_batch',
+// 	'admin/lib/baser_ajax_data_list_config',
+// 	'admin/lib/baser_ajax_batch_config'
 // ]);
 
 // 新規作成ボタン

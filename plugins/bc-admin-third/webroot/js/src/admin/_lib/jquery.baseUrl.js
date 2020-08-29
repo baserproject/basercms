@@ -8,8 +8,13 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+/**
+ * baseUrl プラグイン
+ */
+(function( $ ){
+    $.baseUrl = function() {
+        return $("#AdminScript").attr('data-baseUrl');
+    };
+})( jQuery );
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap";
-import "./_lib/jquery.baseUrl.js";
-import "./_module/sidebar.js";
+

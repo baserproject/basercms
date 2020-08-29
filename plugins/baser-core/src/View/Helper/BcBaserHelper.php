@@ -12,15 +12,17 @@
 namespace BaserCore\View\Helper;
 use \Cake\View\Helper;
 use Cake\View\Helper\HtmlHelper;
+use Cake\View\Helper\UrlHelper;
 
 /**
  * Class BcBaserHelper
  * @package BaserCore\View\Helper
  * @property HtmlHelper $Html
+ * @property UrlHelper $Url
  */
 class BcBaserHelper extends Helper
 {
-	public $helpers = ['Html'];
+	public $helpers = ['Html', 'Url'];
 	// TODO 取り急ぎ
 	public $siteConfig = [
 		'formal_name' => 'baserCMS',
@@ -153,4 +155,22 @@ class BcBaserHelper extends Helper
 	public function publishLink() {
 		// TODO: 未実装
 	}
+
+    /**
+     * baserCMSの設置フォルダを考慮したURLを取得する
+     *
+     * 《利用例》
+     * <a href="<?php echo $this->BcBaser->getUrl('/about') ?>">会社概要</a>
+     *
+     * @param mixed $url baserCMS設置フォルダからの絶対URL、もしくは配列形式のURL情報
+     *		省略した場合には、PC用のトップページのURLを取得する
+     * @param bool $full httpから始まるURLを取得するかどうか
+     * @param bool $sessionId セションIDを付加するかどうか
+     * @return string URL
+     */
+	public function getUrl($url = null, $full = false, $sessionId = true) {
+	    // TODO $sessionId について実装要
+	    return $this->Url->build($url, ['fullBase' => $full]);
+	}
+
 }

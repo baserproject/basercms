@@ -3,7 +3,7 @@
  * @webSite: http://www.jqueryload.com
  * jquery top fixed menu
  */
-const jQuery = require('jQuery');
+// const jQuery = require('jQuery');
 (function($){
     $.fn.fixedMenu=function(){
         return this.each(function(){

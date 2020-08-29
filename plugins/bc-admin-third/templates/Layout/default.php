@@ -17,6 +17,9 @@ use BaserCore\View\AppView;
  */
 
 $this->assign('title', $title);
+$request = $this->getRequest();
+$attributes = $request->getAttributes();
+$base = $attributes['base'];
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -27,13 +30,15 @@ $this->assign('title', $title);
 		<?php echo $this->fetch('meta') ?>
 		<?php echo $this->fetch('css') ?>
 		<?php echo $this->fetch('script') ?>
-		<?php
-		echo $this->BcBaser->js([
-      		'admin/vendor.bundle',
-      		'admin/common.bundle'
+		<?php echo $this->BcBaser->js([
+            'admin/vendor.bundle',
+            'vendor/vue.min'
 		]) ?>
-		<?php
-		echo $this->Html->css([
+		<?php echo $this->BcBaser->js('admin/common.bundle', true, [
+		    'id' => 'AdminScript',
+		    'data-baseUrl' => h($base)
+        ]) ?>
+		<?php echo $this->Html->css([
 			'admin/style.css',
 			'admin/jquery-ui/jquery-ui.min'
 		]) ?>
