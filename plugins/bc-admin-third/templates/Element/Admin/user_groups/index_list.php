@@ -27,8 +27,8 @@ $this->BcListTable->setColumnNumber(5);
 
 <?php $this->BcBaser->element('Admin/pagination') ?>
 
-<table class="list-table bca-form-table" id="ListTable">
-    <thead>
+<table class="list-table bca-table-listup" id="ListTable">
+    <thead class="bca-table-listup__thead">
     <tr>
         <th class="bca-table-listup__thead-th"><?php echo $this->Paginator->sort('id',
                 [
