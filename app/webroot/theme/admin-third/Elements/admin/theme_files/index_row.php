@@ -32,7 +32,7 @@ array_push($params, $data['name']);
 <tr>
 	<td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--select">
 <?php if ($this->BcBaser->isAdminUser() && $theme != 'core'): ?>
-		<?php echo $this->BcForm->input('ListTool.batch_targets.' . str_replace('.', '_', $data['name']), [
+		<?php echo $this->BcForm->input('ListTool.batch_targets.' . str_replace('.', '_', h($data['name'])), [
 			'type' => 'checkbox',
 			'label'=> '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
 			'class' => 'batch-targets bca-checkbox__input',
@@ -51,20 +51,20 @@ array_push($params, $data['name']);
 		<?php echo $data['name'] ?>
 <?php elseif ($data['type'] == 'folder'): ?>
 		<?php $this->BcBaser->link(
-			'<i class="bca-icon--folder" data-bca-icon-size="md"></i>' . $data['name'],
+			'<i class="bca-icon--folder" data-bca-icon-size="md"></i>' . h($data['name']),
 			array_merge(['action' => 'index', $theme, $plugin, $type], $params),
 			['class' => '']
 		) ?>/
 <?php else: ?>
 	<?php if ($writable): ?>
 		<?php $this->BcBaser->link(
-			'<i class="bca-icon--file" data-bca-icon-size="md"></i>'.$data['name'],
+			'<i class="bca-icon--file" data-bca-icon-size="md"></i>' . h($data['name']),
 			array_merge(['action' => 'edit', $theme, $type], $params),
         	['class' => '']
 		) ?>
 	<?php else: ?>
 		<?php $this->BcBaser->link(
-			'<i class="bca-icon--file" data-bca-icon-size="md"></i>'.$data['name'],
+			'<i class="bca-icon--file" data-bca-icon-size="md"></i>' . h($data['name']),
 			array_merge(['action' => 'view', $theme, $type], $params),
         	['class' => '']
 		) ?>
