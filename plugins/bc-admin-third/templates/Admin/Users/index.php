@@ -28,14 +28,6 @@ $this->BcBaser->js('admin/users/index.bundle');
 //	'admin/lib/baser_ajax_data_list_config',
 //	'admin/lib/baser_ajax_batch_config'
 //]);
-
-// 新規作成ボタン
-// $this->BcAdmin->addAdminMainBodyHeaderLinks([
-// 	'url' => ['action' => 'add'],
-// 	'title' => __d('baser', '新規追加'),
-// ]);
-
-echo $this->BcHtml->link(__d('baser', '新規追加'), ['action' => 'add', 'class' => 'bca-btn']);
 ?>
 
 <!-- TODO 一覧をどうやって 読み込ませるか検討が必要 -->
