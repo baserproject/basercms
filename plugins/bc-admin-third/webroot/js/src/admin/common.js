@@ -9,7 +9,7 @@
  */
 
 
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap";
 import "./_lib/jquery.baseUrl.js";
 import "./_module/sidebar.js";

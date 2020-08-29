@@ -39,7 +39,8 @@ $base = $attributes['base'];
 		    'data-baseUrl' => h($base)
         ]) ?>
 		<?php echo $this->Html->css([
-			'admin/style.css',
+		    'vendor/bootstrap-4.1.3/bootstrap',
+			'admin/style',
 			'admin/jquery-ui/jquery-ui.min'
 		]) ?>
 <?php //echo $this->Html->script(['https://unpkg.com/vue', 'https://unpkg.com/axios/dist/axios.min.js', 'admin/app']) ?>
