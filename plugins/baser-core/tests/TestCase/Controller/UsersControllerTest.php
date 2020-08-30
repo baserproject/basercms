@@ -30,7 +30,10 @@ class UsersControllerTest extends TestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.Controller/UsersController/UsersPagination',
     ];
+
+    public $autoFixtures = false;
 
     /**
      * set up
@@ -38,6 +41,14 @@ class UsersControllerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->loadFixtures('UsersUserGroups', 'UserGroups');
+        if ($this->getName() == 'testIndex_pagination') {
+            $this->loadFixtures('Controller\UsersController\UsersPagination');
+        } else {
+            $this->loadFixtures('Users');
+        }
+
         $config = $this->getTableLocator()->exists('Users') ? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
         $Users = $this->getTableLocator()->get('Users', $config);
         $this->session(['AuthAdmin' => $Users->get(1)]);
@@ -51,6 +62,17 @@ class UsersControllerTest extends TestCase
     public function testIndex()
     {
         $this->get('/baser/admin/users/');
+        $this->assertResponseOk();
+    }
+
+    /**
+     * Test index pagination
+     *
+     * @return void
+     */
+    public function testIndex_pagination()
+    {
+        $this->get('/baser/admin/users/?page=2');
         $this->assertResponseOk();
     }
 
