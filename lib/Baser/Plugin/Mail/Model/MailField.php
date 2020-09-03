@@ -110,6 +110,7 @@ class MailField extends MailAppModel {
 			'VALID_MAX_FILE_SIZE'	=> __d('baser', 'ファイルアップロードサイズ制限'),
 			'VALID_FILE_EXT'		=> __d('baser', 'ファイル拡張子チェック'),
 			'VALID_ZENKAKU_KATAKANA' 		=> __d('baser', '全角カタカナチェック'),
+			'VALID_ZENKAKU_HIRAGANA' 		=> __d('baser', '全角ひらがなチェック'),
 			'VALID_REGEX' 			=> __d('baser', '正規表現チェック'),
 		];
 		$source['auto_convert'] = ['CONVERT_HANKAKU' => __d('baser', '半角変換')];

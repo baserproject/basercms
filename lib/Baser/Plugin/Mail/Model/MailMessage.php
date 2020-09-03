@@ -303,6 +303,10 @@ class MailMessage extends MailAppModel {
 					if(!preg_match('/^(|[ァ-ヾ 　]+)$/u', $data['MailMessage'][$mailField['field_name']])) {
 						$this->invalidate($mailField['field_name'], __('全て全角カタカナで入力してください。'));
 					}
+				} elseif (in_array('VALID_ZENKAKU_HIRAGANA', $valids)) {
+					if (!preg_match('/^([　 \t\r\n]|[ぁ-ん]|[ー])+$/u', $data['MailMessage'][$mailField['field_name']])) {
+						$this->invalidate($mailField['field_name'], __('全て全角ひらがなで入力してください。'));
+					}
 				}
 			}
 		}
