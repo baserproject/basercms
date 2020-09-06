@@ -432,7 +432,7 @@ class CakeSession {
  * Writes value to given session variable name.
  *
  * @param string|array $name Name of variable
- * @param string|array $value Value to write
+ * @param mixed $value Value to write
  * @return bool True if the write was successful, false if the write failed
  */
 	public static function write($name, $value = null) {
@@ -587,16 +587,18 @@ class CakeSession {
 		if (!empty($sessionConfig['handler']) && !isset($sessionConfig['handler']['engine'])) {
 			call_user_func_array('session_set_save_handler', $sessionConfig['handler']);
 		}
-		if (!empty($sessionConfig['handler']['engine']) && !headers_sent() && (!function_exists('session_status') || session_status() !== PHP_SESSION_ACTIVE)) {
+		if (!empty($sessionConfig['handler']['engine']) && !headers_sent()) {
 			$handler = static::_getHandler($sessionConfig['handler']['engine']);
-			session_set_save_handler(
-				array($handler, 'open'),
-				array($handler, 'close'),
-				array($handler, 'read'),
-				array($handler, 'write'),
-				array($handler, 'destroy'),
-				array($handler, 'gc')
-			);
+			if (!function_exists('session_status') || session_status() !== PHP_SESSION_ACTIVE) {
+				session_set_save_handler(
+					array($handler, 'open'),
+					array($handler, 'close'),
+					array($handler, 'read'),
+					array($handler, 'write'),
+					array($handler, 'destroy'),
+					array($handler, 'gc')
+				);
+			}
 		}
 		Configure::write('Session', $sessionConfig);
 		static::$sessionTime = static::$time;
