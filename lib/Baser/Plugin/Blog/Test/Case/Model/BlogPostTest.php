@@ -491,7 +491,6 @@ public function testGetDefaultValue() {
 			'conditions' => ['BlogPost.id' => $this->BlogPost->getLastInsertID()]
 		]);
 		$this->assertEquals($result['BlogPost']['name'], 'ホームページをオープンしました_copy');
-		var_dump($result['BlogPost']['posts_date']);
 		$this->assertEquals(date('Y/m/d', strtotime($result['BlogPost']['posts_date'])), date('Y/m/d'));
 	}
 
