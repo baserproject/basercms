@@ -25,24 +25,32 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
 	public $SearchIndex = null;
 
 /**
- * コンテンツデータを登録する
- * コンテンツデータを次のように作成して引き渡す
- * array('SearchIndex' =>
- * 			array(	'model_id'	=> 'モデルでのID'
- * 					'category'	=> 'カテゴリ名',
- * 					'title'		=> 'コンテンツタイトル',		// 検索対象
- * 					'detail'	=> 'コンテンツ内容',		// 検索対象
- * 					'url'		=> 'URL',
- * 					'status' => '公開ステータス'
- * ))
+ * 検索インデクスデータを登録する
+ * 
+ * 検索インデクスデータを次のように作成して引き渡す
+ * 
+ * ['SearchIndex' => [
+ * 		'type' => 'コンテンツのタイプ',
+ * 		'model_id' => 'モデルでのID',
+ * 		'content_id' => 'コンテンツID',
+ * 		'site_id' => 'サブサイトID',
+ * 		'content_filter_id' => 'フィルターID' // カテゴリIDなど
+ * 		'category' => 'カテゴリ名',
+ * 		'title' => 'コンテンツタイトル', // 検索対象
+ * 		'detail' => 'コンテンツ内容', // 検索対象
+ * 		'url' => 'URL',
+ * 		'status' => '公開ステータス',
+ * 		'publish_begin' => '公開開始日',
+ * 		'publish_end' => '公開終了日'
+ * ]]
  *
  * @param Model $model
  * @param array $data
- * @return boolean
+ * @return bool
  */
 	public function saveSearchIndex(Model $model, $data) {
 		if (!$data) {
-			return;
+			return false;
 		}
 
 		if(!empty($data['SearchIndex']['content_id'])) {

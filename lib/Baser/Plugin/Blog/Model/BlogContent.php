@@ -191,7 +191,7 @@ class BlogContent extends BlogAppModel {
  * 検索用データを生成する
  *
  * @param array $data
- * @return array
+ * @return array|false
  */
 	public function createSearchIndex($data) {
 		if (!isset($data['BlogContent']) || !isset($data['Content'])) {
@@ -200,14 +200,16 @@ class BlogContent extends BlogAppModel {
 		$blogContent = $data['BlogContent'];
 		$content = $data['Content'];
 		return ['SearchIndex' => [
-			'type'	=> __d('baser', 'ブログ'),
-			'model_id'	=> (!empty($blogContent['id'])) ? $blogContent['id'] : $this->id,
+			'type' => __d('baser', 'ブログ'),
+			'model_id' => (!empty($blogContent['id'])) ? $blogContent['id'] : $this->id,
 			'content_id'=> $content['id'],
 			'site_id'=> $content['site_id'],
-			'title'		=> $content['title'],
-			'detail'	=> $blogContent['description'],
-			'url'		=> $content['url'],
-			'status'	=> $content['status']
+			'title' => $content['title'],
+			'detail' => $blogContent['description'],
+			'url' => $content['url'],
+			'status' => $content['status'],
+			'publish_begin' => $content['publish_begin'],
+			'publish_end' => $content['publish_end']
 		]];
 	}
 

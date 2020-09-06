@@ -14,6 +14,8 @@
  * [ADMIN] メールフィールド 一覧　行
  *
  * @var BcAppView $this
+ * @var array $data
+ * @var int $count 
  */
 $priorities = [
 	'0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.4', '0.5' => '0.5',
@@ -22,12 +24,7 @@ $priorities = [
 ?>
 
 
-<?php if (!$data['SearchIndex']['status']): ?>
-	<?php $class = ' class="disablerow"' ?>
-<?php else: ?>
-	<?php $class = '' ?>
-<?php endif; ?>
-<tr id="Row<?php echo $count + 1 ?>" <?php echo $class; ?>>
+<tr id="Row<?php echo $count + 1 ?>"<?php $this->BcListTable->rowClass($this->BcSearchIndex->allowPublish($data), $data) ?>>
 	<td class="row-tools bca-table-listup__tbody-td">
 		<?php if ($this->BcBaser->isAdminUser()): ?>
 			<?php echo $this->BcForm->input('ListTool.batch_targets.' . $data['SearchIndex']['id'], ['type' => 'checkbox', 'label'=> '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['SearchIndex']['id']]) ?>
@@ -42,9 +39,13 @@ $priorities = [
 	<td class="bca-table-listup__tbody-td" style="width:10%;text-align:center">
 		<?php echo $this->BcText->booleanMark($data['SearchIndex']['status']); ?><br>
 	</td>
+	<td class="bca-table-listup__tbody-td" nowrap>
+		<?php echo $this->BcTime->format('Y-m-d', $data['SearchIndex']['publish_begin']) ?><br>
+		<?php echo $this->BcTime->format('Y-m-d', $data['SearchIndex']['publish_end']) ?>
+	</td>
 	<td class="bca-table-listup__tbody-td" style="width:10%;white-space: nowrap">
-<?php echo $this->BcTime->format('Y-m-d', $data['SearchIndex']['created']) ?><br>
-<?php echo $this->BcTime->format('Y-m-d', $data['SearchIndex']['modified']) ?>
+		<?php echo $this->BcTime->format('Y-m-d', $data['SearchIndex']['created']) ?><br>
+		<?php echo $this->BcTime->format('Y-m-d', $data['SearchIndex']['modified']) ?>
 	</td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td class="bca-table-listup__tbody-td">

@@ -15,6 +15,8 @@
  * 
  * @package Baser.Model
  * @property Content $Content
+ * @method array|false saveSearchIndex($data)
+ * @method array|false deleteSearchIndex($id)
  */
 class Page extends AppModel {
 
@@ -168,10 +170,12 @@ class Page extends AppModel {
  * 
  * @param boolean $created
  * @param array $options
- * @return boolean
+ * @return void
  */
 	public function afterSave($created, $options = []) {
-
+		
+		parent::afterSave($created, $options);
+		
 		if (empty($data['Page']['id'])) {
 			$data = $this->read(null, $this->id);
 		} else {
@@ -190,14 +194,14 @@ class Page extends AppModel {
 				$this->deleteSearchIndex($data['Page']['id']);
 			}
 		}
-
+		
 	}
 
 /**
  * 検索用データを生成する
  *
  * @param array $data
- * @return array
+ * @return array|false
  */
 	public function createSearchIndex($data) {
 		if (!isset($data['Page']['id']) || !isset($data['Content']['id'])) {
@@ -244,17 +248,18 @@ class Page extends AppModel {
 		if(!empty($content['description'])) {
 			$description = $content['description'];
 		}
-		$searchIndex = ['SearchIndex' => [
-			'model_id'	=> $modelId,
-			'type'		=> __d('baser', 'ページ'),
-			'content_id'=> $content['id'],
-			'site_id'=> $content['site_id'],
-			'title'		=> $content['title'],
-			'detail'	=> $description . ' ' . $detail,
-			'url'		=> $url,
-			'status'	=> $this->isPublish($content['status'], $content['publish_begin'], $content['publish_end'])
+		return ['SearchIndex' => [
+			'model_id' => $modelId,
+			'type' => __d('baser', 'ページ'),
+			'content_id' => $content['id'],
+			'site_id' => $content['site_id'],
+			'title' => $content['title'],
+			'detail' => $description . ' ' . $detail,
+			'url' => $url,
+			'status' => $content['status'],
+			'publish_begin' => $content['publish_begin'],
+			'publish_end' => $content['publish_end']
 		]];
-		return $searchIndex;
 	}
 
 /**

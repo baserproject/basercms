@@ -163,7 +163,7 @@ class MailContent extends MailAppModel {
  * 検索用データを生成する
  *
  * @param array $data
- * @return array
+ * @return array|false
  */
 	public function createSearchIndex($data) {
 		if (!isset($data['MailContent']) || !isset($data['Content'])) {
@@ -172,14 +172,16 @@ class MailContent extends MailAppModel {
 		$mailContent = $data['MailContent'];
 		$content = $data['Content'];
 		return ['SearchIndex' => [
-			'type'		=> __d('baser', 'メール'),
-			'model_id'	=> (!empty($mailContent['id'])) ? $mailContent['id'] : $this->id,
-			'content_id'=> $content['id'],
-			'site_id'	=> $content['site_id'],
-			'title'		=> $content['title'],
-			'detail'	=> $mailContent['description'],
-			'url'		=> $content['url'],
-			'status'	=> $content['status']
+			'type' => __d('baser', 'メール'),
+			'model_id' => (!empty($mailContent['id'])) ? $mailContent['id'] : $this->id,
+			'content_id' => $content['id'],
+			'site_id' => $content['site_id'],
+			'title' => $content['title'],
+			'detail' => $mailContent['description'],
+			'url' => $content['url'],
+			'status' => $content['status'],
+			'publish_begin' => $content['publish_begin'],
+			'publish_end' => $content['publish_end']
 		]];
 	}
 

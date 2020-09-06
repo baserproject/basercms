@@ -48,7 +48,7 @@ class SearchIndicesController extends AppController {
  *
  * @var array
  */
-	public $helpers = ['BcText', 'BcForm'];
+	public $helpers = ['BcText', 'BcForm', 'BcSearchIndex'];
 
 /**
  * サブメニュー
@@ -160,7 +160,7 @@ class SearchIndicesController extends AppController {
  * @access	protected
  */
 	protected function _createSearchConditions($data) {
-		$conditions = ['SearchIndex.status' => true];
+		$conditions = $this->SearchIndex->getConditionAllowPublish();
 		$query = '';
 		if (!empty($data['SearchIndex']['q'])) {
 			$query = $data['SearchIndex']['q'];
