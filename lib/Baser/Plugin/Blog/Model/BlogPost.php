@@ -624,6 +624,7 @@ class BlogPost extends BlogAppModel {
 		$data['BlogPost']['name'] .= '_copy';
 		$data['BlogPost']['no'] = $this->getMax('no', ['BlogPost.blog_content_id' => $data['BlogPost']['blog_content_id']]) + 1;
 		$data['BlogPost']['status'] = '0'; // TODO intger の為 false では正常に保存できない（postgreSQLで確認）
+		$data['BlogPost']['posts_date'] = date('Y-m-d H:i:s');
 
 		unset($data['BlogPost']['id']);
 		unset($data['BlogPost']['created']);
