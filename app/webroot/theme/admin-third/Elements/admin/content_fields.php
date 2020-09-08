@@ -119,7 +119,7 @@ if($this->BcContents->isEditable()) {
 				<?php echo $this->BcForm->error('Content.name') ?>
 				<?php echo $this->BcForm->error('Content.parent_id') ?>
 				<span class="bca-post__url">
-          			<?php echo h($linkedFullUrl) ?>
+          			<?php echo strip_tags($linkedFullUrl, '<a>') ?>
         		</span>
 			</td>
 		</tr>
