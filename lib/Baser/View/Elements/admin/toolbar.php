@@ -43,9 +43,9 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 		<div id="ToolMenu">
 			<ul>
 				<?php if ($this->name == 'Installations'): ?>
-					<li><?php $this->BcBaser->link(__d('baser', 'インストールマニュアル'), 'http://wiki.basercms.net/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%82%AC%E3%82%A4%E3%83%89', ['target' => '_blank', 'class' => 'tool-menu']) ?></li>
+					<li><?php $this->BcBaser->link(__d('baser', 'インストールマニュアル'), Configure::read('BcApp.outerLinks.installManual'), ['target' => '_blank', 'class' => 'tool-menu']) ?></li>
 				<?php elseif (Configure::read('BcRequest.isUpdater')): ?>
-					<li><?php $this->BcBaser->link(__d('baser', 'アップデートマニュアル'), 'http://wiki.basercms.net/%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%A2%E3%83%83%E3%83%97%E3%82%AC%E3%82%A4%E3%83%89', ['target' => '_blank', 'class' => 'tool-menu']) ?></li>
+					<li><?php $this->BcBaser->link(__d('baser', 'アップデートマニュアル'), Configure::read('BcApp.outerLinks.updateManual'), ['target' => '_blank', 'class' => 'tool-menu']) ?></li>
 				<?php elseif (!empty($this->request->params['admin']) || ('/' . $this->request->url) == $loginUrl): ?>	
 					<li><?php $this->BcBaser->link($this->BcBaser->siteConfig['formal_name'], '/', ['escape' => true]) ?></li>
 				<?php else: ?>

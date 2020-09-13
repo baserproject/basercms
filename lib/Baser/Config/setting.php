@@ -193,7 +193,14 @@ $config['BcApp'] = [
 	// 例: 'test/' と記載 → https://basercms.net/s/test/ は s が付かなくなる
 	'excludeListAddPrefix' => [],
 	// generator のメタタグを出力するかどうか
-	'outputMetaGenerator' => true
+	'outputMetaGenerator' => true,
+	// 外部リンク
+	'outerLinks' => [
+		// インストールマニュアル
+		'installManual' => 'http://wiki.basercms.net/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%82%AC%E3%82%A4%E3%83%89',
+		// アップデートマニュアル
+		'updateManual' => 'http://wiki.basercms.net/%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%A2%E3%83%83%E3%83%97%E3%82%AC%E3%82%A4%E3%83%89'
+	]
 ];
 
 /**
