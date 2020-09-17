@@ -84,6 +84,8 @@ class UsersController extends BcAdminAppController
 		$this->setViewConditions('User', ['default' => $default]);
         $this->paginate = [
             'contain' => ['UserGroups'],
+            'order' => ['Users.id'],
+            'limit' => $this->request->getParam('pass')['num'],
         ];
         $users = $this->paginate(
             $this->Users->find('all')
