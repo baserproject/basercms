@@ -6,7 +6,7 @@
     "license": "MIT",
     "require": {
         "cakephp/cakephp": "^4.1",
-        "baserproject/baser-core": "5.0.0-alpha"
+        "baserproject/baser-core": "5.0.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.5"
