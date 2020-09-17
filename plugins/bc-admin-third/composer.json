@@ -5,7 +5,8 @@
     "type": "cakephp-plugin",
     "license": "MIT",
     "require": {
-        "cakephp/cakephp": "^3.8"
+        "cakephp/cakephp": "^4.1",
+        "baserproject/baser-core": "5.0.0-alpha"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.5"
