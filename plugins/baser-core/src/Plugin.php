@@ -10,12 +10,11 @@
  */
 
 namespace BaserCore;
-use Cake\Core\BasePlugin;
 
 /**
- * Class Plugin
+ * Class plugin
  * @package BaserCore
  */
-class Plugin extends BasePlugin
+class Plugin extends BcAdminPlugin
 {
 }

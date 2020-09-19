@@ -52,6 +52,7 @@ nbproject/*
 # plugins
 /plugins/*
 !/plugins/baser-core
+!/plugins/bc-blog
 !/plugins/bc-admin-third
 /plugins/*/vendor
 /plugins/*/composer.lock
