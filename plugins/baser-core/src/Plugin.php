@@ -15,6 +15,6 @@ namespace BaserCore;
  * Class plugin
  * @package BaserCore
  */
-class Plugin extends BcAdminPlugin
+class Plugin extends BcPlugin
 {
 }

@@ -4,7 +4,7 @@ baserCMSの管理画面を適用するには次を実行します。
 
 ## Plugin クラスの継承先を変更
 
-`/src/Plugin.php` について、 `BaserCore\BcAdminPlugin` を継承します。
+`/src/Plugin.php` について、 `BaserCore\BcPlugin` を継承します。
 
 ## Controller を Admin フォルダに配置
 

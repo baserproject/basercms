@@ -20,7 +20,7 @@ use Cake\Utility\Inflector;
  * Class plugin
  * @package BaserCore
  */
-class BcAdminPlugin extends BasePlugin
+class BcPlugin extends BasePlugin
 {
     /**
      * @param \Cake\Routing\RouteBuilder $routes

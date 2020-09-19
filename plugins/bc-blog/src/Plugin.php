@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace BcBlog;
 
-use BaserCore\BcAdminPlugin;
+use BaserCore\BcPlugin;
 
 /**
  * plugin for ContactManager
  */
-class Plugin extends BcAdminPlugin
+class Plugin extends BcPlugin
 {
 }
