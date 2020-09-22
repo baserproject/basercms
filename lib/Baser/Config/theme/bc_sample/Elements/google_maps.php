@@ -1,6 +1,6 @@
 <?php
 /**
- * グールグルマップ：スマホ用
+ * グーグルマップ
  *
  * $this->BcBaser->googleMaps() で呼び出す
  */
@@ -8,8 +8,8 @@ $_width = 600;
 $_height = 400;
 $_zoom = 16;
 $_mapId = 'map';
-$_address = $this->BcBaser->siteConfig['address'];
-$_markerText = '<span class="sitename">' . $this->BcBaser->siteConfig['name'] . '</span><br><span class="address">' . $_address . '</span>';
+$_address = h($this->BcBaser->siteConfig['address']);
+$_markerText = '<span class="sitename">' . h($this->BcBaser->siteConfig['name']) . '</span><br><span class="address">' . $_address . '</span>';
 if (isset($width)) {
 	$_width = $width;
 }
