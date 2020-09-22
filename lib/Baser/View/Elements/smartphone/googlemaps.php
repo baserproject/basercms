@@ -11,7 +11,7 @@
  */
 
 /**
- * [SMARTPHONE] グールグルマップ
+ * [SMARTPHONE] グーグルマップ
  */
 $width = 294;
 $height = 400;
