@@ -567,4 +567,29 @@ class BcContentsHelperTest extends BaserTestCase {
 		];
 	}
 	
+/**
+ * 対象コンテンツが属するフォルダまでのフルパスを取得する
+ * フォルダ名称部分にはフォルダ編集画面へのリンクを付与する
+ * @param int $id コンテンツID
+ * @param string $expected 期待値
+ * @dataProvider getFolderLinkedUrlDataProvider
+ */
+	public function testGetFolderLinkedUrl($url, $expected) {
+		$content = ClassRegistry::init('Content')->find('first', [
+			'conditions' => ['url' => $url], 
+			'recursive' => 0
+		]);
+		$this->assertEquals($expected, $this->BcContents->getFolderLinkedUrl($content));
+	}
+	
+	public function getFolderLinkedUrlDataProvider()
+	{
+		return [
+			['/', 'http://localhost/'],
+			['/about', 'http://localhost/'],
+			['/service/index', 'http://localhost/<a href="/admin/content_folders/edit/4">service</a>/'],
+			['/s/service/index', 'http://localhost/<a href="/admin/content_folders/edit/3">s</a>/<a href="/admin/content_folders/edit/6">service</a>/'],
+		];
+	}
+	
 }

@@ -609,12 +609,8 @@ class BcContentsHelper extends AppHelper {
 		} else {
 			$host = $this->getUrl('/', true, $content['Site']['use_subdomain']);
 		}
-		/* サブサイトであっても、urlが「/エイリアス/」のときは、検索条件に追加しない */
-		if($content['Site']['alias'] && $content['Site']['alias'] !== $urlArray[0]) {
-			$checkUrl = '/' . $content['Site']['alias'] . '/';
-		} else {
-			$checkUrl = '/';
-		}
+
+		$checkUrl = '/';
 		$Content = ClassRegistry::init('Content');
 		foreach($urlArray as $key => $value) {
 			$checkUrl .= $value . '/';
