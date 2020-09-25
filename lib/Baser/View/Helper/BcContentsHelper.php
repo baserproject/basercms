@@ -609,11 +609,8 @@ class BcContentsHelper extends AppHelper {
 		} else {
 			$host = $this->getUrl('/', true, $content['Site']['use_subdomain']);
 		}
-		if($content['Site']['alias']) {
-			$checkUrl = '/' . $content['Site']['alias'] . '/';
-		} else {
-			$checkUrl = '/';
-		}
+
+		$checkUrl = '/';
 		$Content = ClassRegistry::init('Content');
 		foreach($urlArray as $key => $value) {
 			$checkUrl .= $value . '/';
