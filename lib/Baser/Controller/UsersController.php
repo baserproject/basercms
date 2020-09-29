@@ -116,7 +116,15 @@ class UsersController extends AppController {
 		if ($this->BcAuth->loginAction != ('/' . $this->request->url)) {
 			$this->notFound();
 		}
-		
+
+		// EVENT Users.beforeLogin
+		$event = $this->dispatchEvent('beforeLogin', [
+			'data' => $this->request->data
+		]);
+		if ($event !== false) {
+			$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+		}
+
 		if ($this->request->data) {
 			$this->BcAuth->login();
 			$user = $this->BcAuth->user();
@@ -135,6 +143,13 @@ class UsersController extends AppController {
 				App::uses('BcBaserHelper', 'View/Helper');
 				$BcBaser = new BcBaserHelper(new View());
 				$this->BcMessage->setInfo(sprintf(__d('baser', 'ようこそ、%s さん。'), h($BcBaser->getUserName($user))));
+
+				// EVENT Users.afterLogin
+				$this->dispatchEvent('afterLogin', [
+					'data' => $this->request->data,
+					'user' => $this->BcAuth->user(),
+				]);
+
 				$this->redirect($this->BcAuth->redirect());
 			} else {
 				$this->BcMessage->setError(__d('baser', 'アカウント名、パスワードが間違っています。'));
@@ -170,6 +185,12 @@ class UsersController extends AppController {
 			$this->Session->write('AuthAgent', $user);
 		}
 
+		// EVENT Users.beforeAgentLogin
+		$event = $this->dispatchEvent('beforeAgentLogin', [
+			'data' => $id,
+			'user' => $user,
+		]);
+
 		$result = $this->User->find('first', ['conditions' => ['User.id' => $id], 'recursive' => 0]);
 		$user = $result['User'];
 		unset($user['password']);
@@ -179,6 +200,13 @@ class UsersController extends AppController {
 		if ($user) {
 			$this->Session->renew();
 			$this->Session->write(BcAuthComponent::$sessionKey, $user);
+
+			// EVENT Users.afterAgentLogin
+			$this->dispatchEvent('afterAgentLogin', [
+				'data' => $id,
+				'user' => $user,
+			]);
+
 			exit(Router::url($this->BcAuth->redirect()));
 		}
 	}
@@ -192,6 +220,13 @@ class UsersController extends AppController {
 		$configs = Configure::read('BcAuthPrefix');
 		if ($this->Session->check('AuthAgent')) {
 			$data = $this->Session->read('AuthAgent');
+
+			// EVENT Users.beforeBackAgent
+			$event = $this->dispatchEvent('beforeBackAgent', [
+				'data' => $data,
+				'user' => $this->BcAuth->user(),
+			]);
+
 			$this->Session->write(BcAuthComponent::$sessionKey, $data);
 			$this->Session->delete('AuthAgent');
 			$this->BcMessage->setInfo(__d('baser', '元のユーザーに戻りました。'));
@@ -205,6 +240,13 @@ class UsersController extends AppController {
 				$authPrefix = 'front';
 			}
 		}
+
+		// EVENT Users.afterBackAgent
+		$event = $this->dispatchEvent('afterBackAgent', [
+			'data' => $authPrefix,
+			'user' => $this->BcAuth->user(),
+		]);
+
 		if (!empty($configs[$authPrefix])) {
 			$redirect = $configs[$authPrefix]['loginRedirect'];
 		} else {
@@ -239,9 +281,27 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_logout() {
+
+		// EVENT Users.beforeLogout
+		$event = $this->dispatchEvent('beforeLogout', [
+			'data' => $this->BcAuth->user(),
+		]);
+		if ($event !== false) {
+			$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+		}
+
 		$logoutRedirect = $this->BcAuth->logout();
 		$this->Cookie->delete(Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)));
 		$this->BcMessage->setInfo(__d('baser', 'ログアウトしました'));
+
+		// EVENT Users.afterLogout
+		$event = $this->dispatchEvent('afterLogout', [
+			'data' => $logoutRedirect,
+		]);
+		if ($event !== false) {
+			$logoutRedirect = $event->result === true ? $event->data['data'] : $event->result;
+		}
+
 		$this->redirect($logoutRedirect);
 	}
 
