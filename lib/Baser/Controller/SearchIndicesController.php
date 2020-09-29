@@ -93,9 +93,7 @@ class SearchIndicesController extends AppController {
 			}
 			$this->request->params['Content'] = $content['Content'];
 			$this->request->params['Site'] = $content['Site'];
-
-			// 検索ボタンがtype=imageで作成されている場合、座標情報のパラメータはセキュリティコンポーネントにより制限されるため
-			$this->set('unlockedFields', array_merge($this->Security->unlockedFields, ['x', 'y']));
+			
 		}
 		
 	}
