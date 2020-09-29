@@ -985,4 +985,18 @@ class BcAppTest extends BaserTestCase {
 
 	}
 
+/**
+ * 公開済の conditions を取得
+ */
+	public function testGetConditionAllowPublish() {
+		$result = $this->BcApp->getConditionAllowPublish();
+		$pattern = '/' . '([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})' . '/';
+		$this->assertRegExp($pattern, $result[0]['or']['0']['BcApp.publish_begin <=']);
+		$this->assertEquals($result[0]['or']['1']['BcApp.publish_begin'], null);
+		$this->assertEquals($result[0]['or']['2']['BcApp.publish_begin'], '0000-00-00 00:00:00');
+		$this->assertRegExp($pattern, $result[1]['or']['0']['BcApp.publish_end >=']);
+		$this->assertEquals($result[1]['or']['1']['BcApp.publish_end'], null);
+		$this->assertEquals($result[1]['or']['2']['BcApp.publish_end'], '0000-00-00 00:00:00');
+	}
+	
 }

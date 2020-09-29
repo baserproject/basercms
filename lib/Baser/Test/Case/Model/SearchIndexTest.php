@@ -103,5 +103,28 @@ class SearchIndexTest extends BaserTestCase {
 		$searchIndex = $searchIndexModel->find('first', ['conditions' => ['id' => 8]]);
 		$this->assertTrue($searchIndex['SearchIndex']['status']);
 	}
+	
+/**
+ * 公開状態を取得する
+ *
+ * @dataProvider allowPublishDataProvider
+ */
+	public function testAllowPublish($publish_begin, $publish_end, $status, $expected) {
+		$data['publish_begin'] = $publish_begin;
+		$data['publish_end'] = $publish_end;
+		$data['status'] = $status;
+		$this->assertEquals($this->SearchIndex->allowPublish($data), $expected);
+	}
+	public function allowPublishDataProvider() {
+		return[
+			['0000-00-00 00:00:00', '0000-00-00 00:00:00', false, false],
+			['0000-00-00 00:00:00', '0000-00-00 00:00:00', true, true],
+			['0000-00-00 00:00:00', date('Y-m-d H:i:s'), true, false],
+			['0000-00-00 00:00:00', date('Y-m-d H:i:s', strtotime("+1 hour")), true, true],
+			[date('Y-m-d H:i:s'), '0000-00-00 00:00:00', true, true],
+			[date('Y-m-d H:i:s', strtotime("+1 hour")), '0000-00-00 00:00:00', true, false],
+			[date('Y-m-d H:i:s'), date('Y-m-d H:i:s'), true, false]
+		];
+	}
 
 }

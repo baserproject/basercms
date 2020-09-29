@@ -5,14 +5,24 @@
  *
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
+ * @package			Blog.View.Helper
+ * @since			baserCMS v 4.4.0
  * @license			http://basercms.net/license/index.html
  */
 
 /**
- * [SMARTPHONE] グーグルマップ
+ * Class BcSearchIndexHelper
  */
-$width = 294;
-$height = 400;
-include BASER_VIEWS . 'Elements' . DS . 'googlemaps' . $this->ext;
+class BcSearchIndexHelper extends AppHelper {
+
+/**
+ * 公開状態確認
+ * 
+ * @param array $data
+ * @return bool
+ */
+	public function allowPublish($data) {
+		return ClassRegistry::init('SearchIndex')->allowPublish($data);
+	}
+	
+}

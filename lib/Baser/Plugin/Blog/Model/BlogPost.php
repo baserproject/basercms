@@ -142,7 +142,7 @@ class BlogPost extends BlogAppModel {
 				['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '公開終了日の形式が不正です。')],
 				['rule' => ['checkDateRenge', 'allowEmpty' => true, 'publish_begin', 'publish_end'], 'message' => __d('baser', '公開期間が不正です。')]],
 			'posts_date' => [
-				['rule' => ['notBlank'], 'allowEmpty' => true, 'message' => __d('baser', '投稿日を入力してください。'), 'required' => true],
+				['rule' => ['notBlank'], 'message' => __d('baser', '投稿日を入力してください。'), 'required' => true],
 				['rule' => ['checkDate'], 'message' => __d('baser', '投稿日の形式が不正です。')]],
 			'user_id' => [
 				['rule' => ['notBlank'], 'message' => __d('baser', '投稿者を選択してください。')]],
@@ -499,23 +499,6 @@ class BlogPost extends BlogAppModel {
 	}
 
 /**
- * 公開済の conditions を取得
- * 
- * @return array
- * @access public 
- */
-	public function getConditionAllowPublish() {
-		$conditions[$this->alias . '.status'] = true;
-		$conditions[] = ['or' => [[$this->alias . '.publish_begin <=' => date('Y-m-d H:i:s')],
-				[$this->alias . '.publish_begin' => null],
-				[$this->alias . '.publish_begin' => '0000-00-00 00:00:00']]];
-		$conditions[] = ['or' => [[$this->alias . '.publish_end >=' => date('Y-m-d H:i:s')],
-				[$this->alias . '.publish_end' => null],
-				[$this->alias . '.publish_end' => '0000-00-00 00:00:00']]];
-		return $conditions;
-	}
-
-/**
  * 公開状態の記事を取得する
  *
  * @param array $options
@@ -558,7 +541,7 @@ class BlogPost extends BlogAppModel {
  * 検索用データを生成する
  *
  * @param array $data
- * @return array
+ * @return array|false
  */
 	public function createSearchIndex($data) {
 		if (isset($data['BlogPost'])) {
@@ -566,23 +549,60 @@ class BlogPost extends BlogAppModel {
 		}
 		$content = $this->BlogContent->Content->findByType('Blog.BlogContent', $data['blog_content_id']);
 		if(!$content) {
-			return [];
+			return false;
 		}
-		$_data = [];
-		$_data['SearchIndex']['type'] = __d('baser', 'ブログ');
-		$_data['SearchIndex']['model_id'] = $this->id;
-		$_data['SearchIndex']['content_filter_id'] = '';
-		if (!empty($data['blog_category_id'])) {
-			$_data['SearchIndex']['content_filter_id'] = $data['blog_category_id'];
+		
+		$status = $data['status'];
+		$publishBegin = $data['publish_begin'];
+		$publishEnd = $data['publish_end'];
+		// コンテンツのステータスを優先する
+		if(!$content['Content']['status']) {
+			$status = false;
 		}
-		$_data['SearchIndex']['content_id'] = $content['Content']['id'];
-		$_data['SearchIndex']['site_id'] = $content['Content']['site_id'];
-		$_data['SearchIndex']['title'] = $data['name'];
-		$_data['SearchIndex']['detail'] = $data['content'] . ' ' . $data['detail'];
-		$_data['SearchIndex']['url'] = $content['Content']['url'] . 'archives/' . $data['no'];
-		$_data['SearchIndex']['status'] = $this->allowPublish($data);
-		$_data['SearchIndex']['content_filter_id'] = $data['blog_category_id'];
-		return $_data;
+		
+		if($publishBegin) {
+			if((!empty($content['Content']['publish_begin']) && $content['Content']['publish_begin'] > $publishBegin)) {
+				// コンテンツの公開開始の方が遅い場合
+				$publishBegin = $content['Content']['publish_begin'];
+			} elseif(!empty($content['Content']['publish_end']) && $content['Content']['publish_end'] < $publishBegin) {
+				// 記事の公開開始より、コンテンツの公開終了が早い場合
+				$publishBegin = $content['Content']['publish_end'];
+			}
+		} else {
+			if(!empty($content['Content']['publish_begin'])) {
+				// 記事の公開開始が定められていない
+				$publishBegin = $content['Content']['publish_begin'];
+			}
+		}
+		if($publishEnd) {
+			if(!empty($content['Content']['publish_end']) && $content['Content']['publish_end'] < $publishEnd) {
+				// コンテンツの公開終了の方が早い場合
+				$publishEnd = $content['Content']['publish_end'];
+			} elseif(!empty($content['Content']['publish_begin']) && $content['Content']['publish_begin'] < $publishEnd) {
+				// 記事の公開終了より、コンテンツの公開開始が早い場合
+				$publishEnd = $content['Content']['publish_begin'];
+			}
+		} else {
+			if(!empty($content['Content']['publish_end'])) {
+				// 記事の公開終了が定められていない
+				$publishEnd = $content['Content']['publish_end'];
+			}
+		}
+		
+		return ['SearchIndex' => [
+			'type' => __d('baser', 'ブログ'),
+			'model_id' => $this->id,
+			'content_filter_id' => !empty($data['blog_category_id']) ? $data['blog_category_id'] : '',
+			'content_id' => $content['Content']['id'],
+			'site_id' => $content['Content']['site_id'],
+			'title' => $data['name'],
+			'detail' => $data['content'] . ' ' . $data['detail'],
+			'url' => $content['Content']['url'] . 'archives/' . $data['no'],
+			'status' => $status,
+			'publish_begin' => $publishBegin,
+			'publish_end' => $publishEnd
+		]];
+		
 	}
 
 /**
@@ -624,6 +644,7 @@ class BlogPost extends BlogAppModel {
 		$data['BlogPost']['name'] .= '_copy';
 		$data['BlogPost']['no'] = $this->getMax('no', ['BlogPost.blog_content_id' => $data['BlogPost']['blog_content_id']]) + 1;
 		$data['BlogPost']['status'] = '0'; // TODO intger の為 false では正常に保存できない（postgreSQLで確認）
+		$data['BlogPost']['posts_date'] = date('Y-m-d H:i:s');
 
 		unset($data['BlogPost']['id']);
 		unset($data['BlogPost']['created']);

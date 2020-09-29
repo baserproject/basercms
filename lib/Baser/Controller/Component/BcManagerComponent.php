@@ -491,7 +491,6 @@ class BcManagerComponent extends Component {
 			"Configure::write('Security.cipherSeed', '{$secrityCipherSeed}');",
 			"Configure::write('Cache.disable', false);",
 			"Configure::write('Cache.check', true);",
-			"Configure::write('Session.save', 'session');",
 			"Configure::write('BcEnv.siteUrl', '{$siteUrl}');",
 			"Configure::write('BcEnv.sslUrl', '');",
 			"Configure::write('BcEnv.mainDomain', '');",

@@ -15,7 +15,8 @@
  *
  * @var BcAppView $this
  * @var array $parentContents
- * @var bool $related
+ * @var bool $related 親サイトに連携する設定で、エイリアス、もしくはフォルダであるかどうか
+ * 										上記に一致する場合、URLに関わるコンテンツ名は編集できない
  * @var bool $disableEditContent コンテンツ編集不可かどうか
  */
 if($this->request->data['Site']['use_subdomain']) {
@@ -113,7 +114,10 @@ if($this->BcContents->isEditable()) {
 					<?php echo $this->BcForm->input('Content.name', ['type' => 'text', 'size' => 20, 'autofocus' => true]) ?>
 					<?php if (!$isOmitViewAction && $this->request->data['Content']['url'] != '/'): ?>/<?php endif ?>　
 				<?php else: ?>
+					<?php if (!$this->request->data['Content']['site_root']): ?>
+					<?php // サイトルートの場合はコンテンツ名を表示しない ?>
 					<?php echo h($contentsName) ?>
+					<?php endif ?>
 					<?php echo $this->BcForm->hidden('Content.name') ?>
 				<?php endif ?>
 				<?php echo $this->BcForm->error('Content.name') ?>

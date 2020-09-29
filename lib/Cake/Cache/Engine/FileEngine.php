@@ -146,7 +146,8 @@ class FileEngine extends CacheEngine {
 		}
 
 		// CUSTOMIZE ADD 2019/03/24 yama
-		// windowsで正常にキャッシュファイルの削除が行われない問題を改善
+		// Windowsで正常にキャッシュファイルの削除が行われない場合がある問題を修正
+		// CakePHP3では対応済み
 		// >>>
 		$this->_File = null;
 		// <<<
@@ -358,7 +359,11 @@ class FileEngine extends CacheEngine {
 		if (!$createKey && !$path->isFile()) {
 			return false;
 		}
-		if (empty($this->_File) || $this->_File->getBaseName() !== $key) {
+		if (
+			empty($this->_File) ||
+			$this->_File->getBaseName() !== $key ||
+			$this->_File->valid() === false
+		) {
 			$exists = file_exists($path->getPathname());
 			try {
 				$this->_File = $path->openFile('c+');

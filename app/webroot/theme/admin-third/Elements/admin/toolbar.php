@@ -44,7 +44,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 				<?php $this->BcBaser->link(
 						$this->BcBaser->getImg('admin/logo_icon.svg', ['alt' => '', 'width' => '24', 'height' => '21', 'class' => 'bca-toolbar__logo-symbol']) . 
 				        '<span class="bca-toolbar__logo-text">' . __d('baser', 'インストールマニュアル') . '</span>', 
-						'https://basercms.net/manuals/introductions/4.html',
+						Configure::read('BcApp.outerLinks.installManual'),
 						['target' => '_blank', 'class' => 'bca-toolbar__logo-link']
 				) ?>
 						
@@ -53,7 +53,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 				<?php $this->BcBaser->link(
 						$this->BcBaser->getImg('admin/logo_icon.svg', ['alt' => '', 'width' => '24', 'height' => '21', 'class' => 'bca-toolbar__logo-symbol']) .
 						'<span class="bca-toolbar__logo-text">' . __d('baser', 'アップデートマニュアル') . '</span>', 
-						'https://basercms.net/manuals/introductions/8.html',
+						Configure::read('BcApp.outerLinks.updateManual'),
 						['target' => '_blank', 'class' => 'bca-toolbar__logo-link']
 				) ?>
 						

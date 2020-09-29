@@ -1,7 +1,4 @@
 <?php
-
-/* SearchIndices schema generated on: 2011-08-20 02:08:53 : 1313774093 */
-
 class SearchIndicesSchema extends CakeSchema {
 
 	public $name = 'SearchIndices';

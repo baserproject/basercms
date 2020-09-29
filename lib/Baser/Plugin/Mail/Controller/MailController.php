@@ -146,7 +146,7 @@ class MailController extends MailAppController {
 		} else {
 			// PHP4でセキュリティコンポーネントがうまくいかなかったので利用停止
 			// 詳細はコンポーネント設定のコメントを参照
-			$disabledFields = ['MailMessage.mode', 'x', 'y', 'MAX_FILE_SIZE'];
+			$disabledFields = ['MailMessage.mode'];
 			// type="file" を除外
 			foreach($this->MailMessage->mailFields as $field) {
 				if (isset($field['MailField']['type']) && $field['MailField']['type'] == 'file') {

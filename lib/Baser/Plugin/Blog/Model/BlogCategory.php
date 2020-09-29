@@ -201,7 +201,7 @@ class BlogCategory extends BlogAppModel {
 			'limit' => false,
 			'viewCount' => false,
 			'parentId' => null,
-			'fields' => ['BlogCategory.id', 'BlogCategory.name', 'BlogCategory.title'],
+			'fields' => ['BlogCategory.id', 'BlogCategory.name', 'BlogCategory.title', 'BlogCategory.lft', 'BlogCategory.rght'],
 		], $options);
 		$fields = $options['fields'];
 		$depth = $options['depth'];
@@ -306,10 +306,22 @@ class BlogCategory extends BlogAppModel {
 		if ($datas && $findType == 'all') {
 			foreach ($datas as $key => $data) {
 				if ($viewCount) {
+					$childrenIds = $this->find('list', array(
+						'fields' => ['id'],
+						'conditions' => array(
+							['BlogCategory.lft > ' => $data['BlogCategory']['lft']],
+							['BlogCategory.rght < ' => $data['BlogCategory']['rght']],
+						),
+						'recursive' => -1
+					));
+					$categoryId = [$data['BlogCategory']['id']];
+					if($childrenIds){
+						$categoryId = array_merge($categoryId, $childrenIds);
+					}
 					$datas[$key]['BlogCategory']['count'] = $this->BlogPost->find('count', [
 						'conditions' =>
 						array_merge(
-							['BlogPost.blog_category_id' => $data['BlogCategory']['id']], $this->BlogPost->getConditionAllowPublish()
+							['BlogPost.blog_category_id' => $categoryId], $this->BlogPost->getConditionAllowPublish()
 						),
 						'cache' => false
 					]);

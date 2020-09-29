@@ -33,6 +33,26 @@ class BcAppModel extends Model {
  * @var string
  */
 	public $useDbConfig = 'default';
+	
+/**
+ * 公開状態のフィールド
+ * BcAppModel::getConditionAllowPublish() で利用
+ * @var string 
+ */
+	public $publishStatusField = 'status';
+/**
+ * 公開開始日のフィールド
+ * BcAppModel::getConditionAllowPublish() で利用
+ * @var string 
+ */
+	public $publishBeginField = 'publish_begin';
+
+/**
+ * 公開終了日のフィールド
+ * BcAppModel::getConditionAllowPublish() で利用
+ * @var string 
+ */
+	public $publishEndField = 'publish_end';
 
 /**
  * コンストラクタ
@@ -1857,6 +1877,22 @@ class BcAppModel extends Model {
 		} else {
 			return false;
 		}
+	}
+	
+/**
+ * 公開済データを取得するための conditions を生成取得
+ * 
+ * @return array array
+ */
+	public function getConditionAllowPublish() {
+		$conditions[$this->alias . '.' . $this->publishStatusField] = true;
+		$conditions[] = ['or' => [[$this->alias . '.' . $this->publishBeginField . ' <=' => date('Y-m-d H:i:s')],
+				[$this->alias . '.' . $this->publishBeginField => null],
+				[$this->alias . '.' . $this->publishBeginField => '0000-00-00 00:00:00']]];
+		$conditions[] = ['or' => [[$this->alias . '.' . $this->publishEndField . ' >=' => date('Y-m-d H:i:s')],
+				[$this->alias . '.' . $this->publishEndField  => null],
+				[$this->alias . '.' . $this->publishEndField => '0000-00-00 00:00:00']]];
+		return $conditions;
 	}
 
 }

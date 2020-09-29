@@ -321,7 +321,11 @@ class BcAppController extends Controller {
 				}
 			}
 		}
-		//$this->Security->validatePost = false;
+		// 検索ボタンがtype=imageで作成されている場合は座標情報のパラメータ、
+		// fileアップロードボタンにサイズ制限指定がなされている場合はhiddenで生成されるMAX_FILE_SIZE値が、
+		// セキュリティコンポーネントにより制限されるため解除対象フィールドに設定する
+		$this->Security->unlockedFields = array_merge($this->Security->unlockedFields, ['x', 'y', 'MAX_FILE_SIZE']);
+
 		// 送信データの文字コードを内部エンコーディングに変換
 		$this->__convertEncodingHttpInput();
 

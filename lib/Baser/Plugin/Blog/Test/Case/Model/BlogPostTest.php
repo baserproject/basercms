@@ -351,20 +351,6 @@ public function testGetDefaultValue() {
 			[date('Y-m-d H:i:s'), date('Y-m-d H:i:s'), true, false]
 		];
 	}
-/**
- * 公開済の conditions を取得
- */
-	public function testGetConditionAllowPublish() {
-		$result = $this->BlogPost->getConditionAllowPublish();
-		$pattern = '/' . '([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})' . '/';
-
-		$this->assertRegExp($pattern, $result[0]['or']['0']['BlogPost.publish_begin <=']);
-		$this->assertEquals($result[0]['or']['1']['BlogPost.publish_begin'], null);
-		$this->assertEquals($result[0]['or']['2']['BlogPost.publish_begin'], '0000-00-00 00:00:00');
-		$this->assertRegExp($pattern, $result[1]['or']['0']['BlogPost.publish_end >=']);
-		$this->assertEquals($result[1]['or']['1']['BlogPost.publish_end'], null);
-		$this->assertEquals($result[1]['or']['2']['BlogPost.publish_end'], '0000-00-00 00:00:00');
-	}
 
 /**
  * 公開状態の記事を取得する
@@ -431,39 +417,109 @@ public function testGetDefaultValue() {
  * 検索用データを生成する
  */
 	public function testCreateSearchIndex() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		// 戻り値の型チェック
 		$data = [
-			'name' => 'test-name',
-			'content' => 'test-content',
-			'detail' => 'test-detail',
-			'blog_content_id' => 1,
-			'no' => 1,
-			'status' => true,
-			'publish_begin' => '2020-01-27 12:57:59',
-			'publish_end' => '2020-01-27 12:57:59',
-		];
-		$expected = [
-		'Content' => [
-			'type' => 'ブログ',
-			'model_id' => false,
-			'category' => '',
-			'title' => 'test-name',
-			'detail' => 'test-content test-detail',
-			'url' => '/news/archives/1',
-			'status' => false
+			'BlogPost' => [
+				'blog_content_id' => 1,
+				'no' => 1,
+				'name' => 'test-name',
+				'content' => 'test-content',
+				'detail' => 'test-detail',
+				'status' => true,
+				'publish_begin' => '',
+				'publish_end' => ''
 		]];
-
-		$result = $this->BlogPost->createContent($data);
-		$this->assertEquals($expected, $result, '正しく検索用データを生成できません');
-
-		// blog_category_idを指定
-		$data['blog_category_id'] = 1;
-		$expected['Content']['category'] = 'プレスリリース';
-		$result = $this->BlogPost->createContent($data);
-
-		$this->assertEquals($expected, $result, '正しく検索用データを生成できません');
-
+		$expected = [
+			'SearchIndex' => [
+				'type' => 'ブログ',
+				'model_id' => false,
+				'site_id' => '0',
+				'title' => 'test-name',
+				'detail' => 'test-content test-detail',
+				'url' => '/news/archives/1',
+				'status' => true,
+				'content_filter_id' => '',
+				'content_id' => '4',
+				'publish_begin' => null,
+				'publish_end' => null
+		]];
+		$result = $this->BlogPost->createSearchIndex($data);
+		$this->assertEquals($expected, $result, 'ブログ記事用の検索用データを正しく生成できません');
 	}
+	
+	/**
+	 * 検索用データ生成、ステータス設定
+	 * @dataProvider createSearchIndexStatusDataProvider
+	 */
+	public function testCreateSearchIndexStatus($blogPostStatus, $contentStatus, $expected) {
+		$blogContentId = 1;
+		$blogPost = [
+			'BlogPost' => [
+				'blog_content_id' => $blogContentId,
+				'no' => 1,
+				'name' => 'test-name',
+				'content' => 'test-content',
+				'detail' => 'test-detail',
+				'publish_begin' => '',
+				'publish_end' => '',
+				'status' => $blogPostStatus
+		]];
+		$data = $this->BlogPost->BlogContent->find('first', ['conditions' => ['BlogContent.id' => $blogContentId]]);
+		$data['Content']['self_status'] = $contentStatus;
+		$this->BlogPost->BlogContent->Content->save($data);
+		$result = $this->BlogPost->createSearchIndex($blogPost);
+		$this->assertEquals($expected, $result['SearchIndex']['status'], 'ブログ記事用の検索用データを正しく生成できません');
+	}
+	public function createSearchIndexStatusDataProvider() {
+		return [
+			[true, true, true],
+			[true, false, false],
+			[false, true, false],
+			[false, false, false],
+		];
+	}
+	
+	/**
+	 * 検索用データ生成、公開期間設定
+	 * @dataProvider createSearchIndexPublishDataProvider
+	 */
+	public function testCreateSearchIndexPublish($blogPostPublish, $contentPublish, $expected) {
+		$blogContentId = 1;
+		$blogPost = [
+			'BlogPost' => [
+				'blog_content_id' => $blogContentId,
+				'no' => 1,
+				'name' => 'test-name',
+				'content' => 'test-content',
+				'detail' => 'test-detail',
+				'publish_begin' => $blogPostPublish['begin'],
+				'publish_end' => $blogPostPublish['end'],
+				'status' => true
+		]];
+		$data = $this->BlogPost->BlogContent->find('first', ['conditions' => ['BlogContent.id' => $blogContentId]]);
+		$data['Content']['self_publish_begin'] = $contentPublish['begin'];
+		$data['Content']['self_publish_end'] = $contentPublish['end'];
+		$this->BlogPost->BlogContent->Content->save($data);
+		$result = $this->BlogPost->createSearchIndex($blogPost);
+		$this->assertEquals($expected, [
+			'begin' => ($result['SearchIndex']['publish_begin']) ? date('Y-m-d', strtotime($result['SearchIndex']['publish_begin'])) : '',
+			'end' => ($result['SearchIndex']['publish_end']) ? date('Y-m-d', strtotime($result['SearchIndex']['publish_end'])) : ''
+		], 'ブログ記事用の検索用データを正しく生成できません');
+	}
+	public function createSearchIndexPublishDataProvider() {
+		return [
+			[['begin' => '', 'end' => ''], ['begin' => '', 'end' => ''], ['begin' => '', 'end' => '']],
+			[['begin' => '2020-09-01', 'end' => '2020-09-30'], ['begin' => '', 'end' => ''], ['begin' => '2020-09-01', 'end' => '2020-09-30']],	// 記事に設定
+			[['begin' => '', 'end' => ''], ['begin' => '2020-09-01', 'end' => '2020-09-30'], ['begin' => '2020-09-01', 'end' => '2020-09-30']],	// コンテンツに設定
+			[['begin' => '2020-08-01', 'end' => ''], ['begin' => '2020-09-01', 'end' => ''], ['begin' => '2020-09-01', 'end' => '']],	// 記事の開始日が早い
+			[['begin' => '2020-10-01', 'end' => ''], ['begin' => '2020-09-01', 'end' => ''], ['begin' => '2020-10-01', 'end' => '']],	// 記事の開始日が遅い
+			[['begin' => '', 'end' => '2020-08-30'], ['begin' => '', 'end' => '2020-09-30'], ['begin' => '', 'end' => '2020-08-30']],	// 記事の終了日が早い
+			[['begin' => '', 'end' => '2020-10-30'], ['begin' => '', 'end' => '2020-09-30'], ['begin' => '', 'end' => '2020-09-30']],	// 記事の終了日が遅い
+			[['begin' => '2020-10-30', 'end' => ''], ['begin' => '', 'end' => '2020-09-30'], ['begin' => '2020-09-30', 'end' => '2020-09-30']],	// 記事の開始日がコンテンツの終了日より遅い
+			[['begin' => '', 'end' => '2020-8-30'], ['begin' => '2020-09-01', 'end' => ''], ['begin' => '2020-09-01', 'end' => '2020-09-01']],	// 記事の終了日がコンテンツの開始日より早い
+		];
+	}
+	
 
 /**
  * beforeDelete
@@ -491,6 +547,7 @@ public function testGetDefaultValue() {
 			'conditions' => ['BlogPost.id' => $this->BlogPost->getLastInsertID()]
 		]);
 		$this->assertEquals($result['BlogPost']['name'], 'ホームページをオープンしました_copy');
+		$this->assertEquals(date('Y/m/d', strtotime($result['BlogPost']['posts_date'])), date('Y/m/d'));
 	}
 
 /**
