@@ -139,7 +139,9 @@
 	 * ツリーを初期化する
 	 */
 		_init: function() {
-			
+			if (!$('#ContentsTreeList').length) {
+				return false;
+			}
 			$.bcTree.settings = $.parseJSON($("#BcManageContent").val());
 			$.bcTree.treeDom = $('#ContentsTreeList');
 			$.bcTree.createTree();
