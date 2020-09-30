@@ -489,10 +489,12 @@ class BcSqlite extends Sqlite {
 					$metaType = trim($metaData['sqlite:decl_type']);
 				}
 
+				// CUSTOMIZE MODIFY 2020/10/01 yamamoto
+				// SQLite運用環境で Undefined offset noticeが発生する #1544
 				// CUSTOMIZE ADD 2017/02/21 ryuring
 				// 型情報が取得できない問題を改善
 				// >>>
-				if($metaData[0] === false) {
+				if(!$metaType) {
 					if (strpos($columnName, '.')) {
 						list($table, $column) = explode('.', $columnName);
 						if(!empty($columnMeta[$table][$column]['type'])) {
