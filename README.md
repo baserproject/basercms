@@ -12,7 +12,7 @@
     </a>
 </p>
 
-Based Website Development Project  
+Based on An Amazing Website Development Project  
 Copyright (c) baserCMS Users Community
 
 Documentation
