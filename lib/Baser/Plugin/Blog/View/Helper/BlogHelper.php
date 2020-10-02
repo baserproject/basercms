@@ -36,11 +36,11 @@ class BlogHelper extends AppHelper {
 
 /**
  * コンテンツ
- * 
+ *
  * @var array
  */
 	public $content = null;
-	
+
 /**
  * コンストラクタ
  *
@@ -248,7 +248,7 @@ class BlogHelper extends AppHelper {
 		$options = array_merge([
 			'escape' => true
 		], $options);
-		
+
 		$url = $this->getPostLinkUrl($post, false);
 
 		// EVENT beforeGetPostLink
@@ -469,7 +469,7 @@ class BlogHelper extends AppHelper {
  * 複数所属する場合は複数取得する
  *
  * @param array $post 記事データ
- * @param string $options 
+ * @param string $options
  * 	- `separator` : 区切り文字（初期値 :  , ）
  * 	- `tag` : リンク付きのタグで出力するかどうか（初期値 : true）
  * 		※ link に統合予定
@@ -501,7 +501,7 @@ class BlogHelper extends AppHelper {
 		if (!empty($post['BlogTag'])) {
 			foreach ($post['BlogTag'] as $tag) {
 				if($options['link']) {
-					$tags[] = $this->BcBaser->getLink($tag['name'], $this->getTagLinkUrl($crossingId, $tag, false), ['escape' => true]);	
+					$tags[] = $this->BcBaser->getLink($tag['name'], $this->getTagLinkUrl($crossingId, $tag, false), ['escape' => true]);
 				} else {
 					$tags[] = [
 						'name' => $tag['name'],
@@ -515,7 +515,7 @@ class BlogHelper extends AppHelper {
 				return implode($options['separator'], $tags);
 			} else {
 				return $tags;
-			}	
+			}
 		} else {
 			return '';
 		}
@@ -631,7 +631,7 @@ class BlogHelper extends AppHelper {
 		}
 
 		if ($categories) {
-			$out = '<ul class="depth-' . $current . '">';
+			$out = '<ul class="bc-blog-category-list depth-' . $current . '">';
 			$current++;
 			foreach ($categories as $category) {
 				if ($count && isset($category['BlogCategory']['count'])) {
@@ -639,15 +639,13 @@ class BlogHelper extends AppHelper {
 				}
 				$url = $this->getCategoryUrl($category['BlogCategory']['id'], ['base' => false]);
 				$url = preg_replace('/^\//', '', $url);
-
+				$class = ['bc-blog-category-list__item'];
 				if ($this->_View->request->url == $url) {
-					$class = ' class="current"';
+					$class[] = 'current';
 				} elseif (!empty($this->_View->params['named']['category']) && $this->_View->params['named']['category'] == $category['BlogCategory']['name']) {
-					$class = ' class="selected"';
-				} else {
-					$class = '';
+					$class[] = 'selected';
 				}
-				$out .= '<li' . $class . '>' . $this->getCategory($category, $options);
+				$out .= '<li class="' . implode(' ', $class) . '">' . $this->getCategory($category, $options);
 				if (!empty($category['BlogCategory']['children'])) {
 					$out .= $this->_getCategoryList($category['BlogCategory']['children'], $depth, $current, $count, $options);
 				}
@@ -696,7 +694,7 @@ class BlogHelper extends AppHelper {
 		}
 		return false;
 	}
-	
+
 /**
  * 次の記事へのリンクを出力する
  *
@@ -719,7 +717,7 @@ class BlogHelper extends AppHelper {
 			echo $this->getPostLink($nextPost, $title, $htmlAttributes);
 		}
 	}
-	
+
 /**
  * 次の記事へのリンクが存在するかチェックする
  *
@@ -922,13 +920,13 @@ class BlogHelper extends AppHelper {
 			'conditions' => ['BlogTag.name' => $tagNames],
 			'recursive' => 1
 		]);
-		
+
 		if (!isset($tags[0]['BlogPost'][0]['id'])) {
 			return [];
 		}
 
 		$ids = array_unique(Hash::extract($tags, '{n}.BlogPost.{n}.id'));
-		
+
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
 
 		$conditions = [
@@ -1134,7 +1132,7 @@ class BlogHelper extends AppHelper {
 		# fixes #10683
 		return preg_replace('/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/', '', $string);
 	}
-	
+
 /**
  * 次の記事を取得する
  *
@@ -1174,12 +1172,12 @@ class BlogHelper extends AppHelper {
 		}
 		return $nextPost;
 	}
-	
+
 /**
  * 前の記事を取得する
  *
  * @param array $post ブログ記事
- * @return array 
+ * @return array
  */
 	public function getPrevPost($post) {
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
@@ -1216,7 +1214,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * 記事が属するカテゴリ名を取得
- * 
+ *
  * @param array $post
  * @return string
  */
@@ -1230,7 +1228,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * 記事が属するカテゴリタイトルを取得
- * 
+ *
  * @param array $post
  * @return string
  */
@@ -1244,7 +1242,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * 記事のIDを取得
- * 
+ *
  * @param array $post
  * @return string
  */
@@ -1258,7 +1256,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * カテゴリを取得する
- * 
+ *
  * @param array $options
  * @return mixed
  */
@@ -1275,7 +1273,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * 子カテゴリを持っているかどうか
- * 
+ *
  * @param int $id
  * @return mixed
  */
@@ -1286,7 +1284,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * ブログタグリストを取得する
- * 
+ *
  * @param mixed $name
  * @param array $options
  * 	- `conditions` : CakePHP形式の検索条件
@@ -1329,7 +1327,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * タグリストを出力する
- * 
+ *
  * @param mixed $name
  * @param array $options
  * 	※ オプションのパラーメーターは、BlogHelper::getTagList() に準ずる
@@ -1354,8 +1352,8 @@ class BlogHelper extends AppHelper {
 			}
 		}
 		$this->BcBaser->element('Blog.blog_tag_list', [
-			'tags' => $tags, 
-			'blogContentId' => $blogContentId, 
+			'tags' => $tags,
+			'blogContentId' => $blogContentId,
 			'postCount' => $options['postCount']
 		]);
 	}
@@ -1826,7 +1824,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * プレビュー用のURLを取得する
- * 
+ *
  * @param string $url 元となるURL
  * @param bool $useSubDomain サブドメインを利用してるかどうか
  * @return string

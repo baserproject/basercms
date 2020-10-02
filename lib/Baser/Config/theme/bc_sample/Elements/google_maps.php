@@ -1,15 +1,28 @@
 <?php
 /**
- * グーグルマップ
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ *
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			https://basercms.net baserCMS Project
+ * @package			Baser.View
+ * @since			baserCMS v 4.4.0
+ * @license			https://basercms.net/license/index.html
+ */
+
+/**
+ * グールグルマップ：スマホ用
  *
  * $this->BcBaser->googleMaps() で呼び出す
+ *
+ * @var BcAppView $this
  */
 $_width = 600;
 $_height = 400;
 $_zoom = 16;
 $_mapId = 'map';
-$_address = h($this->BcBaser->siteConfig['address']);
-$_markerText = '<span class="sitename">' . h($this->BcBaser->siteConfig['name']) . '</span><br><span class="address">' . $_address . '</span>';
+$_address = $this->BcBaser->siteConfig['address'];
+$_markerText = '<span class="sitename">' . $this->BcBaser->siteConfig['name'] . '</span><br><span class="address">' . $_address . '</span>';
 if (isset($width)) {
 	$_width = $width;
 }

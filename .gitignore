@@ -38,9 +38,7 @@ vendors/*
 /plugins
 Plugin/*
 composer.lock
-gulpfile.js
 node_modules/
-package.json
 /docker-compose.yml
 /Dockerfile
 /docker/phpmyadmin/
@@ -58,4 +56,3 @@ app/webroot/theme/admin-third/css/admin/map/
 app/webroot/fonts/*
 yarn.lock
 LOCAL_TODO.md
-

@@ -1,11 +1,29 @@
 ﻿"id","contents","draft","page_template","code","modified","created"
-"1","<div class=""clearfix"" id=""NewsList"">
-<h2>新着情報</h2>
-<?php $this->BcBaser->blogPosts('news', 5) ?></div>
+"1","<h2>baserCMSサンプルテーマ</h2>
 
-<div id=""BaserFeed"">
-<h2>baserCMS</h2>
-<?php $this->BcBaser->js('/feed/ajax/1') ?></div>","","","","2015-06-27 15:10:03","2015-06-26 20:34:06"
+<p>これは、baserCMSのサンプルテーマです。<br />
+トップページのこの部分は、固定ページで作られており、NEWS と baserCMS最新情報の部分は、テンプレートで作成されています。<br />
+変更する場合は、/Elements/top_info.php を変更してください。</p>
+
+<h3>グローバルメニューについて</h3>
+
+<p>グローバルメニューは、管理画面の [コンテンツ管理] のツリー構造と連動しています。ツリー構造上においてドラック＆ドロップで並び替えることができ、グローバルメニューに表示したくない場合は、対象コンテンツの編集画面より、[オプション] を開き、[公開ページのメニューより除外する] を選択し保存してください。</p>
+
+<p>また、グローバルメニュー部分を変更する場合は、/Elements/header.php を編集してください。</p>
+
+<h3>サイドバーについて</h3>
+
+<p>サイドバーはウィジェットエリア機能を利用して作られています。管理画面の [設定] &rarr; [ユーティリティ] &rarr; [ウィジェットエリア] より、カスタマイズが可能です。ブログでは「ブログサイドバー」を利用していますが、それ以外のコンテンツでは、「標準サイドバー」を利用しています。</p>
+
+<p>サイト基本設定は、各ブログの [設定] より利用するウィジェットエリアを変更することができます。</p>
+
+<p>また、サイドバー部分を変更する場合は、/Elements/widget_area.php を編集してください。</p>
+
+<h3>初期データについて</h3>
+
+<p>このサンプルテーマは２つの初期データを提供しています。現在利用しているものは「default」でサンプルのデータが入っているものになります。</p>
+
+<p>サンプルデータを入っていないものを利用したい場合は、テーマ管理より「empty」を選択し「初期データ読込」ボタンをクリックしてください。</p>","","","","2020-10-02 20:33:09","2015-06-26 20:34:06"
 "2","<h2>会社案内</h2>
 
 <h3>会社データ</h3>
@@ -14,27 +32,31 @@
 	<tbody>
 		<tr>
 			<th>会社名</th>
-			<td>コンテストサンプル</td>
+			<td>baserCMSサンプル</td>
 		</tr>
 		<tr>
 			<th>設立</th>
-			<td>2015年6月</td>
+			<td>2020年9月</td>
 		</tr>
 		<tr>
 			<th>所在地</th>
-			<td>住所が入ります。住所が入ります。住所が入ります。</td>
+			<td>福岡県福岡市</td>
 		</tr>
 		<tr>
 			<th>事業内容</th>
-			<td>事業内容１が入ります。<br />
-			事業内容２が入ります。<br />
-			事業内容３が入ります。</td>
+			<td>
+			<ul>
+				<li>事業内容１</li>
+				<li>事業内容２</li>
+				<li>事業内容３</li>
+			</ul>
+			</td>
 		</tr>
 	</tbody>
 </table>
 
 <h3>アクセスマップ</h3>
-<?php $this->BcBaser->googleMaps(array(""width"" => 585)) ?>","","","","2016-08-12 00:57:41","2015-06-26 20:34:06"
+<?php $this->BcBaser->googleMaps(array(""width"" => 585)) ?>","","","","2020-09-14 19:53:48","2015-06-26 20:34:06"
 "3","<h2>サービス１</h2>
 
 <p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>
@@ -42,29 +64,13 @@
 <p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>
 
 <p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>","","","","2016-08-12 00:58:02","2015-06-26 20:34:06"
-"4","<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
-<div style=""text-align:center;background-color:#8ABE08;""> <span style=""color:white;"">メインメニュー</span> </div>
-<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
-<span style=""color:#8ABE08"">■</span>
-<?php $this->BcBaser->link(""ニュースリリース"",array(""controller""=>""news"",""action""=>""index"")) ?>
-<br />
-<span style=""color:#8ABE08"">■</span>
-<?php $this->BcBaser->link(""お問い合わせ"",array(""controller""=>""contact"",""action""=>""index"")) ?>
-<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
-<div style=""text-align:center;background-color:#8ABE08;""> <span style=""color:white;"">NEWS RELEASE</span> </div>
-<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
-<?php $this->BcBaser->blogPosts('news', 5) ?> <div>&nbsp;</div>
-<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
-<div style=""text-align:center;background-color:#8ABE08;""> <span style=""color:white;"">baserCMS NEWS</span> </div>
-<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
-<?php $this->BcBaser->feed(1) ?>","","","","","2015-06-26 20:34:06"
 "5","<h1>見出し１</h1>
 
-<p>段落の文章が入ります。<span style=""line-height: 20.7999992370605px;"">段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。</span></p>
+<p>段落の文章が入ります。<span>段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。</span></p>
 
 <h2>見出し２</h2>
 
-<ul style=""line-height: 20.7999992370605px;"">
+<ul>
 	<li>リスト１</li>
 	<li>リスト２</li>
 	<li>リスト３</li>
@@ -72,46 +78,44 @@
 
 <h3>見出し３</h3>
 
-<ol style=""line-height: 20.7999992370605px;"">
+<ol>
 	<li>連番リスト１</li>
-	<li><span style=""line-height: 20.7999992370605px;"">連番リスト２</span></li>
-	<li><span style=""line-height: 20.7999992370605px;"">連番リスト３</span></li>
+	<li><span>連番リスト２</span></li>
+	<li><span>連番リスト３</span></li>
 </ol>
 
 <h4>見出し４</h4>
 
-<p><strong style=""line-height: 20.7999992370605px;"">太字文章が入ります。太字文章が入ります。太字文章が入ります。太字文章が入ります。</strong></p>
+<p><strong>太字文章が入ります。太字文章が入ります。太字文章が入ります。太字文章が入ります。</strong></p>
 
 <h5>見出し５</h5>
 
-<p><em style=""line-height: 20.7999992370605px;"">斜体文章が入ります。斜体文章が入ります。斜体文章が入ります。斜体文章が入ります。</em></p>
+<p><em>斜体文章が入ります。斜体文章が入ります。斜体文章が入ります。斜体文章が入ります。</em></p>
 
 <h6>見出し６</h6>
 
-<p><u style=""line-height: 20.7999992370605px;"">下線付文章が入ります。下線付文章が入ります。下線付文章が入ります。下線付文章が入ります。</u></p>
+<p><u>下線付文章が入ります。下線付文章が入ります。下線付文章が入ります。下線付文章が入ります。</u></p>
 
 <table>
-	<thead>
-		<tr>
-			<th scope=""col"">表見出し</th>
-			<th scope=""col"">表見出し</th>
-		</tr>
-	</thead>
 	<tbody>
 		<tr>
-			<td>表の文章が入ります。</td>
-			<td><span style=""line-height: 20.7999992370605px;"">表の文章が入ります。</span></td>
+			<th>表見出し</th>
+			<td><span>表の文章が入ります。</span></td>
 		</tr>
 		<tr>
-			<td><span style=""line-height: 20.7999992370605px;"">表の文章が入ります。</span></td>
-			<td><span style=""line-height: 20.7999992370605px;"">表の文章が入ります。</span></td>
+			<th>表見出し</th>
+			<td>表の文章が入ります。</td>
+		</tr>
+		<tr>
+			<th>表見出し</th>
+			<td><span>表の文章が入ります。</span></td>
 		</tr>
 	</tbody>
 </table>
 
 <p>&nbsp;</p>
 
-<p>&nbsp;</p>","","","","2016-08-12 00:57:32","2015-06-27 12:40:09"
+<p>&nbsp;</p>","","","","2020-09-14 22:30:21","2015-06-27 12:40:09"
 "6","<h2>サービス２</h2>
 
 <p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>

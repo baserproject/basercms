@@ -1,7 +1,21 @@
 <?php
 /**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ *
+ * @copyright        Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package            Baser.View
+ * @since            baserCMS v 4.4.0
+ * @license            https://basercms.net/license/index.html
+ */
+
+/**
  * メールフォーム送信メール内容
  * 呼出箇所：送信メール
+ *
+ * @var BcAppView $this
+ * @var array $mailFields メールフィールドリスト
  */
 $group_field = null;
 foreach ($mailFields as $field) {
@@ -19,7 +33,7 @@ foreach ($mailFields as $field) {
 	}
 	if (isset($message[$field['field_name']]) && !$field['no_send'] && $field['use_field']) {
 		if($field['type'] != 'file') {
-			echo $this->Maildata->control($field['type'], $message[$field['field_name']]);
+			echo $this->Maildata->control($field['type'], $message[$field['field_name']], $this->Mailfield->getOptions($field));
 		} else {
 			if($message[$field['field_name']]) {
 				echo '添付あり';

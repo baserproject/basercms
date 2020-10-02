@@ -771,7 +771,7 @@ class BcBaserHelper extends AppHelper {
 		if (isset($authPrefix['toolbar'])) {
 			$toolbar = $authPrefix['toolbar'];
 		}
-		
+
 		// ### ツールバー用CSS出力
 		// 《表示条件》
 		// - プレビューでない
@@ -813,9 +813,9 @@ class BcBaserHelper extends AppHelper {
 		if (!BcUtil::isAdminSystem() && $this->params['controller'] != 'installations' && file_exists(WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css')) {
 			$this->css('/files/theme_configs/config');
 		}
-		
+
 		$scripts = $this->_View->fetch('meta') . $this->_View->fetch('css') . $this->_View->fetch('script');
-		
+
 		if(Configure::read('BcApp.outputMetaGenerator')) {
 			$scripts = "\n<meta name=\"generator\" content=\"basercms\"/>" . $scripts;
 		}
@@ -1651,7 +1651,7 @@ EOD;
  * 《取得例》
  * <strong>強調</strong>します<strong>強調</strong>します<strong>強調</strong>します
  *
- * @param string $search 検索文字列
+ * @param string|array $search 検索文字列
  * @param string $text 検索対象文字列
  * @param string $name マーク用タグ（初期値 : strong）
  * @param array $attributes タグの属性（初期値 : array()）
@@ -2857,7 +2857,7 @@ END_FLASH;
 	public function declarationI18n() {
 		return $this->BcHtml->declarationI18n();
 	}
-	
+
 /**
  * JavaScript に、翻訳データを引き渡す
  * `bcI18n.キー名` で参照可能
@@ -2868,7 +2868,7 @@ END_FLASH;
 	public function i18nScript($data, $options = []) {
 		return $this->BcHtml->i18nScript($data, $options);
 	}
-	
+
 /**
  * 現在のページがコンテンツフォルダかどうか確認する
  * @return bool

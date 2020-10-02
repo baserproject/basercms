@@ -21,7 +21,7 @@ class BcWidgetAreaHelper extends AppHelper {
 /**
  * ウィジェットエリアを表示する
  *
- * @param $no ウィジェットエリアNO
+ * @param int $no ウィジェットエリアNO
  * @param array $options オプション
  *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
  *  ※ その他のパラメータについては、View::element() を参照

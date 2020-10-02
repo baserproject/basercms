@@ -1,14 +1,27 @@
 <?php
 /**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ *
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			https://basercms.net baserCMS Project
+ * @package			Baser.View
+ * @since			baserCMS v 4.4.0
+ * @license			https://basercms.net/license/index.html
+ */
+
+/**
  * パンくずナビゲーション
  *
  * BcBaserHelper::crumbsList() で呼び出す
  * （例）<?php $this->BcBaser->crumbsList() ?>
+ *
+ * @var BcAppView $this
  */
 ?>
 
 
-<div id="Crumbs">
+<div class="bs-crumbs">
 <?php
 if ($this->BcBaser->isHome()) {
 	echo '<strong>'. __('ホーム').'</strong>';

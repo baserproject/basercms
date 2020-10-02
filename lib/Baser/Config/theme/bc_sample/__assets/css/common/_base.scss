@@ -1,0 +1,45 @@
+/**
+ * Base
+ */
+
+html {
+  @include mq() {
+    position: relative;
+    width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+body {
+  text-align: center;
+  font-family: Arial, Verdana, "游ゴシック", YuGothic, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+  color: #000;
+  background-color: #fff;
+  -webkit-font-smoothing: antialiased;
+
+  @include mq() {
+    position: relative;
+    width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+/* clear
+----------------------------------------------- */
+
+.clear {
+  clear: both;
+}
+
+.clearfix {
+  display: block;
+
+  &:after {
+    content: " ";
+    display: block;
+    clear: both;
+    height: 0;
+  }
+}

@@ -1,6 +1,17 @@
 <?php
 /**
- * [PUBLISH] サイトマップ
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ *
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			https://basercms.net baserCMS Project
+ * @package			Baser.View
+ * @since			baserCMS v 4.4.0
+ * @license			https://basercms.net/license/index.html
+ */
+
+/**
+ * サイトマップ
  * @var BcAppView $this
  */
 
@@ -19,7 +30,7 @@ if(!isset($currentId)) {
 
 
 <?php if (isset($tree)): ?>
-	<ul class="ul-level-<?php echo $level ?><?php echo ($level > 1) ? ' sub-nav-group': ' nav-menu'?>">
+	<ul class="ul-level-<?php echo $level ?><?php echo ($level > 1) ? ' sub-group': ' bs-header-nav__menu'?>">
 		<?php if (isset($tree)): ?>
 			<?php foreach ($tree as $content): ?>
 				<?php if ($content['Content']['title']): ?>
@@ -27,18 +38,19 @@ if(!isset($currentId)) {
 					if(!empty($content['Content']['exclude_menu'])) {
 						continue;
 					}
-					$liClass = 'menu-content li-level-' . $level;
+					$liClass = 'li-level-' . $level;
 					if($content['Content']['id'] == $currentId || $this->BcBaser->isContentsParentId($currentId, $content['Content']['id'])) {
 						$liClass .= ' current';
 					}
-					$options = ['escape' => true];
+					$options = ['class' => 'bs-header-nav__menu__item--link', 'escape' => true];
 					if(!empty($content['Content']['blank_link'])) {
 						$options['target'] = '_blank';
 					}
 					?>
-					<li class="nav-item <?php echo $liClass ?>"><?php $this->BcBaser->link($content['Content']['title'], $this->BcBaser->getContentsUrl($content['Content']['url'], false, null, false), $options) ?>
+					<li class="bs-header-nav__menu__item <?php echo $liClass ?>">
+						<?php $this->BcBaser->link($content['Content']['title'], $this->BcBaser->getContentsUrl($content['Content']['url'], false, null, false), $options) ?>
 						<?php if (!empty($content['children'])): ?>
-							<div class="sub-nav">
+							<div class="bs-header-nav__sub">
 								<?php $this->BcBaser->element('contents_menu', array('tree' => $content['children'], 'level' => $level + 1, 'currentId' => $currentId)) ?>
 							</div>
 						<?php endif ?>
