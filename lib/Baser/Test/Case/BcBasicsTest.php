@@ -12,14 +12,14 @@
 
 /**
  * test for basics.php
- * 
+ *
  * @package Baser.Test.Case
  */
 class BcBasicsTest extends BaserTestCase {
 
 /**
  * Fixtures
- * @var array 
+ * @var array
  */
 	public $fixtures = [
 		'baser.Default.BlogContent',
@@ -32,6 +32,7 @@ class BcBasicsTest extends BaserTestCase {
 
 	public function setUp() {
 		parent::setUp();
+		BcSite::flash();
 	}
 
 	public function tearDown() {
@@ -41,7 +42,7 @@ class BcBasicsTest extends BaserTestCase {
 /**
  * WebサイトのベースとなるURLを取得する
  * TODO BC_DEPLOY_PATTERNで分岐した場合のテストの追加
- * 
+ *
  * @param	string $script App.baseUrlの値
  * @param	string $script $_SERVER['SCRIPT_FILENAME']の値
  * @param	string $expect 期待値
@@ -77,8 +78,8 @@ class BcBasicsTest extends BaserTestCase {
 
 		if(isConsole()) {
 			$expected = str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $_SERVER['SCRIPT_NAME']);
-		
-		} else {	
+
+		} else {
 			$path = explode('/', $_SERVER['SCRIPT_NAME']);
 			krsort($path);
 			$expected = $_SERVER['SCRIPT_FILENAME'];
@@ -107,7 +108,7 @@ class BcBasicsTest extends BaserTestCase {
 		$version = 'baserCMS 3.0.6.1';
 		$result = verpoint($version);
 		$this->assertEquals(3000006001, $result, '正しくバージョンを特定する一意の数値を取得できません');
-		
+
 		$version = 'baserCMS 3.0.6.1 beta';
 		$result = verpoint($version);
 		$this->assertEquals(false, $result, '正しくバージョンを特定する一意の数値を取得できません');
@@ -115,7 +116,7 @@ class BcBasicsTest extends BaserTestCase {
 
 /**
  * 拡張子を取得する
- * 
+ *
  * @param	string $content mimeタイプ
  * @param	string $fileName ファイル名
  * @param	string $expect 期待値
@@ -137,7 +138,7 @@ class BcBasicsTest extends BaserTestCase {
 
 /**
  * 環境変数よりURLパラメータを取得する
- * 
+ *
  * @param string $agentAlias BcRequest.agentAliasの値
  * @param string $url URL
  * @param string $expect 期待値
@@ -159,7 +160,7 @@ class BcBasicsTest extends BaserTestCase {
 
 /**
  * 環境変数よりURLを取得する
- * 
+ *
  * @param string $url $_GET['url']の値
  * @param string $request $_SERVER['REQUEST_URI']の値
  * @param string $baseUrl App.BaseUrlの値
@@ -200,7 +201,7 @@ class BcBasicsTest extends BaserTestCase {
  * Viewキャッシュを削除する
  * TODO basics.php 295行目 $homesにバグ？あり
  * 			app/tmp/cache/views/のキャッシュファイルを複数回削除している
- * 
+ *
  * @param string $url
  * @param string $ext
  * @dataProvider clearViewCacheDataProvider
@@ -232,7 +233,7 @@ class BcBasicsTest extends BaserTestCase {
 				$replacedCache->delete();
 				$replacedCache->close();
 			}
-		
+
 		} else {
 			// ダミーのキャッシュファイルを生成
 			$cache = new File($viewCachePath . DS . 'cache', true);
@@ -352,7 +353,7 @@ class BcBasicsTest extends BaserTestCase {
 		} else {
 			$this->markTestIncomplete('app/Config/database.php のファイル名変更に失敗したのでテストをスキップしました。');
 		}
-		
+
 	}
 
 /**
@@ -383,7 +384,7 @@ class BcBasicsTest extends BaserTestCase {
 			}
 		}
 		$this->assertTrue($result, '一時フォルダが正しく生成されていません');
-		
+
 	}
 
 /**
@@ -448,7 +449,7 @@ class BcBasicsTest extends BaserTestCase {
 
 /**
  * ファイルポインタから行を取得し、CSVフィールドを処理する
- * 
+ *
  * @param string $content CSVの内容
  * @param	int $length length
  * @param	string $d delimiter
@@ -531,7 +532,7 @@ class BcBasicsTest extends BaserTestCase {
 		// 1次元配列
 		$this->assertEquals(['b1','b2', 'a3'], amr($a, $b));
 
-		// 2次元配列	
+		// 2次元配列
 		$b = [['b1']];
 		$this->assertEquals([['b1'], 'a2', 'a3'], amr($a, $b));
 
@@ -553,19 +554,19 @@ class BcBasicsTest extends BaserTestCase {
 		$this->assertEquals('/?' . $sessionName . '=' . $sessionId, addSessionId('/', true), $message);
 		$this->assertEquals('/?id=1&' . $sessionName . '=' . $sessionId, addSessionId('/?id=1', true), $message);
 		$this->assertEquals('/?id=1&' . $sessionName . '=' . $sessionId, addSessionId('/?id=1&BASERCMS=1', true), $message);
-		
+
 		// urlが配列の場合
 		$url = [
 			0 => '/',
 			'?' => [
-				'id' => 1, 
+				'id' => 1,
 				'BASERCMS' => 1
 			]
 		];
 		$expect = [
 			0 => '/',
 			'?' => [
-				'id' => 1, 
+				'id' => 1,
 				$sessionName => $sessionId
 			]
 		];
@@ -690,8 +691,8 @@ class BcBasicsTest extends BaserTestCase {
  * プラグインを読み込む
  * Blogプラグインでテストする前提
  * TODO 一部未完成 引数$priorityが機能していないバグ？があります
- * 
- * 
+ *
+ *
  * @param	string	$plugin プラグイン名
  * @dataProvider loadPluginDataProvider
  */
@@ -731,14 +732,14 @@ class BlogControllerEventListener extends BcControllerEventListener {
 			// プラグインが読み込めているか
 			$this->assertContains($plugin, CakePlugin::loaded(), 'プラグインを読み込めません');
 			$this->assertNotNull(Configure::read('BcApp.adminNavi.blog'), 'プラグインの設定が正しく設定されていません');
-			
+
 			$this->Event = new CakeEventManager();
 			$EventListeners = $this->Event->listeners('Controller.hogeFunction');
-			
+
 			// イベントリスナーに登録されているか
 			$this->assertContains('hogeFunction', $EventListeners[0]['callable'], 'プラグインイベントを正しく登録できません');
 
-			// プライオリティを設定できているか 
+			// プライオリティを設定できているか
 			if (!is_null($priority)) {
 				$this->assertEquals($priority, $EventListeners[1]['callable'][0]->events['hogeFunction']['priority']);
 			}
@@ -749,7 +750,7 @@ class BlogControllerEventListener extends BcControllerEventListener {
 		foreach ($buckupPlugins as $key => $value) {
 			CakePlugin::load($value);
 		}
-		
+
 	}
 
 	public function loadPluginDataProvider() {
