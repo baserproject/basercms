@@ -16,6 +16,8 @@ composeer install
 
 `/plugins/baser-core/tests/[Type]` ディレクトリ
 
+`[type]` は、 `TestCase` か、`Fixture` となります。
+
 ### テストのファイル名
 
 ファイル名の最後を `Test.php` とします。
@@ -31,6 +33,17 @@ composeer install
 ### メソッド名
 
 テストを含むメソッドは、先頭を `test` とします。
+
+```php
+// （例）BcTestHelper の hoge メソッド
+// /plugins/baser-core/tests/TestCase/View/Helper/BcTestHelperTest.php
+
+class BcTestHelperTest extends Cake\TestSuite\TestCase {
+    public function testHoge() {
+
+    }
+}
+```
 
 ## テストの実行
 
