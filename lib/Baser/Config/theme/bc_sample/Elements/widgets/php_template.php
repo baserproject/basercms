@@ -30,5 +30,5 @@ if(!isset($subDir)) {
 	<?php if ($name && $use_title): ?>
 		<h2 class="bs-widget-list"><?php echo $name ?></h2>
 	<?php endif ?>
-	<?php $this->BcBaser->element('widgets' . DS . $template, [], array('subDir' => $subDir)) ?>
+	<?php $this->BcBaser->element('widgets' . DS . $template, [], ['subDir' => $subDir]) ?>
 </div>

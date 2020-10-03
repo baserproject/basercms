@@ -2,9 +2,9 @@
  * Top Page
  */
 
-/* News List
+/* Main Image
 ----------------------------------------------- */
-#MainImage {
+.bs-main-image {
   margin: 0 auto;
   padding: 0;
   display: none;
@@ -12,11 +12,17 @@
 }
 
 .bx-wrapper {
+  margin: 0 auto;
   max-height: 560px;
   overflow: hidden;
 }
 
-/* bs-top-post
+.bx-controls {
+  display: none;
+}
+
+
+/* Info
 ----------------------------------------------- */
 .bs-info {
   width: 100%;
@@ -26,10 +32,13 @@
     font-size: 14px !important;
     font-weight: bold !important;
   }
-  @include mq() {
+  @include bs-mq() {
     margin-bottom: 100px;
   }
 }
+
+/* Top Post
+----------------------------------------------- */
 
 .bs-top-post {
   margin: 0 0 20px 0 !important;
@@ -80,7 +89,7 @@
       color: #a0a2a8;
       font-style: italic;
       font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif;
-      @include mq() {
+      @include bs-mq() {
         margin-bottom: 6px !important;;
       }
     }
@@ -106,14 +115,16 @@
     &-detail {
       color: #a0a2a8;
     }
-
   }
 }
+
+/* Top Post To List
+----------------------------------------------- */
 
 .bs-top-post-to-list {
   text-align: right;
 
-  @include mq() {
+  @include bs-mq() {
     text-align: center;
   }
 
@@ -126,7 +137,7 @@
     background-color: #001800;
     color: #fff !important;
     text-decoration: none;
-    @include mq() {
+    @include bs-mq() {
       font-size: 12px;
       padding: 12px 60px;
     }
@@ -141,6 +152,9 @@
     }
   }
 }
+
+/* Bge Contents
+----------------------------------------------- */
 
 #Home .bge-contents {
   margin-bottom: 100px;

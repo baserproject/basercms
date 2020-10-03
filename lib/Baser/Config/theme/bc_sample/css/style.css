@@ -323,7 +323,7 @@ template {
 /**
  * Base
  */
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
   html {
     position: relative;
     width: 100%;
@@ -337,33 +337,17 @@ body {
   color: #000;
   background-color: #fff;
   -webkit-font-smoothing: antialiased; }
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 768px) {
     body {
       position: relative;
       width: 100%;
       overflow-x: hidden; } }
 
-/* clear
------------------------------------------------ */
-.clear {
-  clear: both; }
-
-.clearfix {
-  display: block; }
-  .clearfix:after {
-    content: " ";
-    display: block;
-    clear: both;
-    height: 0; }
-
-/**
- * Main
- */
 .bs-container {
   text-align: left;
   margin: 0 auto;
   min-width: 1260px; }
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 768px) {
     .bs-container {
       min-width: 100%; } }
 
@@ -372,95 +356,60 @@ body {
   margin: 0 auto;
   padding: 0 20px;
   box-sizing: border-box; }
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 768px) {
     .bs-wrap {
       box-sizing: border-box;
       width: 100%; } }
 
+/**
+ * Main
+ */
 .bs-main-contents {
   float: left;
   width: 860px;
   margin: 49px 0 160px;
   padding: 0; }
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 768px) {
     .bs-main-contents {
       width: 100%; } }
 
 #Home .bs-main-contents {
   margin: 100px 0; }
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 768px) {
     #Home .bs-main-contents {
       float: none;
       padding: 0;
       margin: 40px 0; } }
 
-/* bx slider
------------------------------------------------ */
-.bx-wrapper {
-  margin: 0 auto; }
-
-.bx-controls {
-  display: none; }
-
-/* Crumbs
------------------------------------------------ */
-.bs-crumbs {
-  font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
-  width: 1260px;
-  margin: 0 auto;
-  padding: 15px 20px;
-  font-size: 12px;
-  color: #CCC;
-  box-sizing: border-box; }
-  @media screen and (max-width: 1024px) {
-    .bs-crumbs {
-      box-sizing: border-box;
-      width: 100%;
-      padding: 15px 20px; } }
-  .bs-crumbs strong {
-    font-weight: bold; }
-  .bs-crumbs a {
-    color: #000;
-    text-decoration: none; }
-    .bs-crumbs a:visited {
-      color: #000; }
-    .bs-crumbs a:hover {
-      color: #555; }
-
-.eyecatch-list li {
-  float: left;
-  list-style: none !important;
-  margin: 15px; }
-  .eyecatch-list li img {
-    width: 250px; }
-
 /**
  * Header
  */
+/* Header
+----------------------------------------------- */
 .bs-header {
   background-color: #FFF; }
-  .bs-header .bs-header-inner {
+  .bs-header__inner {
     width: 1260px;
     margin: 0 auto;
     padding: 0 20px;
     box-sizing: border-box; }
-    @media screen and (max-width: 1024px) {
-      .bs-header .bs-header-inner {
+    @media screen and (max-width: 768px) {
+      .bs-header__inner {
         width: 100%; } }
-    .bs-header .bs-header-inner__logo {
-      margin-top: 40px;
-      margin-bottom: 40px;
-      vertical-align: bottom;
-      max-height: 36px;
-      max-width: 200px; }
-      .bs-header .bs-header-inner__logo:hover {
-        opacity: 0.7;
-        transition: all 300ms 0s ease; }
-      @media screen and (max-width: 1024px) {
-        .bs-header .bs-header-inner__logo {
-          margin-top: 30px;
-          margin-bottom: 30px; } }
-  .bs-header .bs-header-btn {
+  .bs-header__logo {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    vertical-align: bottom;
+    max-height: 36px;
+    max-width: 200px; }
+    .bs-header__logo:hover {
+      opacity: 0.7;
+      transition: all 300ms 0s ease; }
+    @media screen and (max-width: 768px) {
+      .bs-header__logo {
+        margin-top: 30px;
+        margin-bottom: 30px; } }
+  .bs-header__menu-button {
     display: none;
     position: absolute;
     top: 24px;
@@ -468,156 +417,166 @@ body {
     width: 36px;
     height: 28px;
     cursor: pointer; }
-    .bs-header .bs-header-btn span {
+    .bs-header__menu-button span {
       position: absolute;
       width: 100%;
       height: 3px;
       border-radius: 9999px;
       background-color: #555;
       transition: all 300ms 0s ease; }
-      .bs-header .bs-header-btn span:nth-child(2) {
+      .bs-header__menu-button span:nth-child(2) {
         top: 50%;
         transform: translateY(-50%); }
-      .bs-header .bs-header-btn span:nth-child(3) {
+      .bs-header__menu-button span:nth-child(3) {
         bottom: 0; }
-    .bs-header .bs-header-btn.bs-open span:nth-child(1) {
+    .bs-header__menu-button.bs-open span:nth-child(1) {
       transform-origin: left;
       transform: rotate(45deg); }
-    .bs-header .bs-header-btn.bs-open span:nth-child(2) {
+    .bs-header__menu-button.bs-open span:nth-child(2) {
       background-color: rgba(255, 255, 255, 0); }
-    .bs-header .bs-header-btn.bs-open span:nth-child(3) {
+    .bs-header__menu-button.bs-open span:nth-child(3) {
       transform-origin: left;
       transform: rotate(-45deg); }
-    @media screen and (max-width: 1024px) {
-      .bs-header .bs-header-btn {
+    @media screen and (max-width: 768px) {
+      .bs-header__menu-button {
         display: block; } }
-  .bs-header-nav {
+  .bs-header__nav {
     font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
     background-color: #001800; }
-    @media screen and (max-width: 1024px) {
-      .bs-header-nav {
+    @media screen and (max-width: 768px) {
+      .bs-header__nav {
         position: absolute;
         transform: translateX(100%);
         width: 100vw;
         transition: all 300ms 0s ease;
-        background-color: #f0f0f0;
         z-index: 9999; }
-        .bs-header-nav.bs-open {
+        .bs-header__nav.bs-open {
           transform: translateX(0); } }
-    .bs-header-nav__menu {
-      width: 1260px;
-      display: block;
-      position: relative;
-      list-style: none;
-      margin: 0 auto;
-      padding: 0;
-      z-index: 15; }
-      @media screen and (max-width: 1024px) {
-        .bs-header-nav__menu {
-          width: 100%; } }
-      .bs-header-nav__menu__item {
-        list-style: none;
-        display: inline-block;
-        padding: 0;
-        margin: 0; }
-        @media screen and (max-width: 1024px) {
-          .bs-header-nav__menu__item {
-            display: block; } }
-        .bs-header-nav__menu__item a {
-          display: block;
-          font-size: 14px;
-          padding: 25px 10px;
-          text-decoration: none;
-          font-weight: bold; }
-          @media screen and (max-width: 1024px) {
-            .bs-header-nav__menu__item a {
-              width: 100%;
-              padding: 25px 0;
-              text-align: center; } }
-        .bs-header-nav__menu__item a:link,
-        .bs-header-nav__menu__item a:visited {
-          color: #fff; }
-          @media screen and (max-width: 1024px) {
-            .bs-header-nav__menu__item a:link,
-            .bs-header-nav__menu__item a:visited {
-              color: #fff; } }
-        .bs-header-nav__menu__item > a {
-          position: relative;
-          display: inline-block;
-          padding: 25px 15px;
-          margin: 0 0 -1px 0;
-          border: 1px solid transparent; }
-          @media screen and (max-width: 1024px) {
-            .bs-header-nav__menu__item > a {
-              display: block;
-              width: 100%;
-              padding: 25px 0;
-              text-align: center; } }
-        .bs-header-nav__menu__item a:hover {
-          color: #999; }
-        .bs-header-nav__menu__item > a:focus,
-        .bs-header-nav__menu__item > a.open {
-          border: 1px solid #dedede; }
-          @media screen and (max-width: 1024px) {
-            .bs-header-nav__menu__item > a:focus,
-            .bs-header-nav__menu__item > a.open {
-              border: 1px solid transparent; } }
-        .bs-header-nav__menu__item > a.open {
-          background-color: #fff;
-          border-bottom: none;
-          z-index: 2;
-          color: #000; }
-          @media screen and (max-width: 1024px) {
-            .bs-header-nav__menu__item > a.open {
-              background-color: transparent;
-              border: 1px solid transparent;
-              z-index: auto;
-              color: #999; } }
-    .bs-header-nav__sub {
-      position: absolute;
-      display: none;
-      padding: 20px;
-      border: 1px solid #dedede;
-      background-color: #fff;
-      z-index: 1; }
-      .bs-header-nav__sub ul {
-        display: inline-block;
-        vertical-align: top;
-        margin: 0 1em 0 0;
-        padding: 0; }
-      .bs-header-nav__sub li {
-        display: block;
-        list-style-type: none;
-        margin: 0;
-        padding: 0; }
-      .bs-header-nav__sub.open {
-        display: block; }
-        @media screen and (max-width: 1024px) {
-          .bs-header-nav__sub.open {
-            display: none; } }
-    .bs-header-nav .ul-level-2 a {
-      padding: 10px 20px !important; }
-      .bs-header-nav .ul-level-2 a:link, .bs-header-nav .ul-level-2 a:visited {
+
+/* Global Menu
+----------------------------------------------- */
+.bs-global-menu {
+  width: 1260px;
+  display: block;
+  position: relative;
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  z-index: 15; }
+  @media screen and (max-width: 768px) {
+    .bs-global-menu {
+      width: 100%; } }
+  .bs-global-menu .ul-level-2 a {
+    padding: 10px 20px !important; }
+    .bs-global-menu .ul-level-2 a:link, .bs-global-menu .ul-level-2 a:visited {
+      color: #000; }
+    .bs-global-menu .ul-level-2 a:hover {
+      color: #555; }
+  .bs-global-menu .ul-level-3 {
+    margin-left: 80px !important;
+    margin-bottom: 20px !important; }
+    .bs-global-menu .ul-level-3 a {
+      padding: 0 !important; }
+      .bs-global-menu .ul-level-3 a:link, .bs-global-menu .ul-level-3 a:visited {
         color: #000; }
-      .bs-header-nav .ul-level-2 a:hover {
+      .bs-global-menu .ul-level-3 a:hover {
         color: #555; }
-    .bs-header-nav .ul-level-3 {
-      margin-left: 80px !important;
-      margin-bottom: 20px !important; }
-      .bs-header-nav .ul-level-3 a {
-        padding: 0 !important; }
-        .bs-header-nav .ul-level-3 a:link, .bs-header-nav .ul-level-3 a:visited {
-          color: #000; }
-        .bs-header-nav .ul-level-3 a:hover {
-          color: #555; }
+
+/* Global Menu Item
+----------------------------------------------- */
+.bs-global-menu-item {
+  list-style: none;
+  display: inline-block;
+  padding: 0;
+  margin: 0; }
+  @media screen and (max-width: 768px) {
+    .bs-global-menu-item {
+      display: block; } }
+  .bs-global-menu-item a {
+    display: block;
+    font-size: 14px;
+    padding: 25px 10px;
+    text-decoration: none;
+    font-weight: bold; }
+    @media screen and (max-width: 768px) {
+      .bs-global-menu-item a {
+        width: 100%;
+        padding: 25px 0;
+        text-align: center; } }
+  .bs-global-menu-item a:link,
+  .bs-global-menu-item a:visited {
+    color: #fff; }
+    @media screen and (max-width: 768px) {
+      .bs-global-menu-item a:link,
+      .bs-global-menu-item a:visited {
+        color: #fff; } }
+  .bs-global-menu-item > a {
+    position: relative;
+    display: inline-block;
+    padding: 25px 15px;
+    margin: 0 0 -1px 0;
+    border: 1px solid transparent; }
+    @media screen and (max-width: 768px) {
+      .bs-global-menu-item > a {
+        display: block;
+        width: 100%;
+        padding: 25px 0;
+        text-align: center; } }
+  .bs-global-menu-item a:hover {
+    color: #999; }
+  .bs-global-menu-item > a:focus,
+  .bs-global-menu-item > a.open {
+    border: 1px solid #dedede; }
+    @media screen and (max-width: 768px) {
+      .bs-global-menu-item > a:focus,
+      .bs-global-menu-item > a.open {
+        border: 1px solid transparent; } }
+  .bs-global-menu-item > a.open {
+    background-color: #fff;
+    border-bottom: none;
+    z-index: 2;
+    color: #000; }
+    @media screen and (max-width: 768px) {
+      .bs-global-menu-item > a.open {
+        background-color: transparent;
+        border: 1px solid transparent;
+        z-index: auto;
+        color: #999; } }
+
+/* Global Menu Sub
+----------------------------------------------- */
+.bs-global-menu-sub {
+  position: absolute;
+  display: none;
+  padding: 20px;
+  border: 1px solid #dedede;
+  background-color: #fff;
+  z-index: 1; }
+  .bs-global-menu-sub ul {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 1em 0 0;
+    padding: 0; }
+  .bs-global-menu-sub li {
+    display: block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0; }
+  .bs-global-menu-sub.open {
+    display: block; }
+    @media screen and (max-width: 768px) {
+      .bs-global-menu-sub.open {
+        display: none; } }
 
 /**
  * Footer
  */
+/* Footer
+----------------------------------------------- */
 .bs-footer {
   background-color: #001800;
   padding: 80px 0; }
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 768px) {
     .bs-footer {
       padding: 80px 20px; } }
   .bs-footer__copyright {
@@ -625,23 +584,23 @@ body {
     color: #999;
     width: 1260px;
     margin: 0 auto; }
-    @media screen and (max-width: 1024px) {
+    @media screen and (max-width: 768px) {
       .bs-footer__copyright {
         width: 100%;
         text-align: center;
         font-size: 12px;
         line-height: 1.8; } }
-    .bs-footer__copyright-link img {
-      border: 0;
-      vertical-align: text-bottom; }
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 768px) {
     .bs-footer__banner {
       display: block; } }
+  .bs-footer__banner-link img {
+    border: 0;
+    vertical-align: text-bottom; }
 
 /**
  * Sub
  */
-/* Side Box
+/* Sub Contents
 ----------------------------------------------- */
 .bs-sub-contents {
   float: right;
@@ -649,7 +608,7 @@ body {
   padding: 49px 60px 100px 60px; }
   .bs-sub-contents h2 {
     font-weight: bold; }
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 768px) {
     .bs-sub-contents {
       width: 100%;
       margin: 0 auto;
@@ -658,13 +617,13 @@ body {
 
 #Home .bs-sub-contents {
   padding: 100px 60px !important; }
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 768px) {
     #Home .bs-sub-contents {
       float: none;
       padding: 40px 0 0 0 !important;
       border-top: 1px solid #ddd; } }
 
-/* widget
+/* Widget Area
 ----------------------------------------------- */
 .bs-widget-area {
   font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif"; }
@@ -713,6 +672,8 @@ body {
       .bs-widget-area ul ul:first-child {
         margin-top: 0; }
 
+/* Widget Text
+----------------------------------------------- */
 .bs-widget-text ul {
   margin: 0;
   border-top: 1px solid #ddd;
@@ -730,12 +691,14 @@ body {
       display: block;
       color: #000;
       text-decoration: none; }
-      @media screen and (max-width: 1024px) {
+      @media screen and (max-width: 768px) {
         .bs-widget-text ul li a {
           text-align: center; } }
       .bs-widget-text ul li a:hover {
         color: #555; }
 
+/* Widget Local Navigation
+----------------------------------------------- */
 .bs-widget-local-navi h2 {
   font-size: 14px;
   background-color: #001800;
@@ -764,7 +727,7 @@ body {
     .bs-widget-local-navi ul li:before {
       content: none; }
 
-/* calendar
+/* Widget Blog Calendar
 ----------------------------------------------- */
 .bs-widget-blog-calendar table {
   width: 100%; }
@@ -796,7 +759,7 @@ body {
   .bs-widget-blog-calendar table .today {
     background-color: #e2e2e2; }
 
-/* site search
+/* Widget Site Search
 ----------------------------------------------- */
 .bs-widget-search-box label {
   font-size: 12px; }
@@ -814,7 +777,7 @@ body {
 /**
  * Parts
  */
-/* list num
+/* List Number
 ----------------------------------------------- */
 .bs-list-num {
   text-align: right;
@@ -832,9 +795,9 @@ body {
   .bs-list-num__number {
     font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif; }
 
-/* button small
+/* Button Small
 ----------------------------------------------- */
-.button-small {
+.bs-button-small {
   padding: 8px 15px;
   margin-bottom: 0;
   font-size: 1em;
@@ -859,13 +822,13 @@ body {
   border-radius: 4px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25); }
-  .button-small:hover {
+  .bs-button-small:hover {
     color: #333;
     text-decoration: none;
     background-color: #e6e6e6;
     background-position: 0 -15px;
     transition: background-position .1s linear; }
-  .button-small:active {
+  .bs-button-small:active {
     color: #333;
     border: 1px solid #CCC;
     text-decoration: none;
@@ -874,7 +837,7 @@ body {
     background: -webkit-gradient(linear, left top, left bottom, from(#cdcdcd), color-stop(100%, #eee));
     background: -o-linear-gradient(top, #cdcdcd, #eee 100%); }
 
-/* pagination
+/* Pagination
 ----------------------------------------------- */
 .bs-pagination {
   display: -ms-flexbox;
@@ -903,12 +866,12 @@ body {
     border-radius: 5px 0 0 5px; }
   .bs-pagination__next a, .bs-pagination__next.disabled {
     border-radius: 0 5px 5px 0; }
-    @media screen and (max-width: 1024px) {
+    @media screen and (max-width: 768px) {
       .bs-pagination__next a, .bs-pagination__next.disabled {
         border-left: none; } }
   .bs-pagination__number {
     display: inline-block; }
-    @media screen and (max-width: 1024px) {
+    @media screen and (max-width: 768px) {
       .bs-pagination__number {
         display: none; } }
     .bs-pagination__number:not(:last-child) {
@@ -917,7 +880,7 @@ body {
     .bs-pagination__number a {
       display: inline-block;
       padding: 4px 11px; }
-      @media screen and (max-width: 1024px) {
+      @media screen and (max-width: 768px) {
         .bs-pagination__number.current,
         .bs-pagination__number a {
           display: none; } }
@@ -927,40 +890,32 @@ body {
       color: #000;
       font-weight: bold; }
 
-/* baserCMS parts
+/* Crumbs
 ----------------------------------------------- */
-.edit-link {
-  margin-bottom: 10px;
-  text-align: right;
-  font-size: 12px; }
-  .edit-link a {
-    border: 1px solid #1C98D4;
-    color: #1C98D4;
-    padding: 5px 10px;
-    text-decoration: none; }
-    .edit-link a:hover {
-      color: #1C98D4;
-      text-decoration: underline; }
-
-.upload-file input[type=file] {
-  margin-bottom: 5px; }
-
-.upload-file a {
-  padding: 5px;
-  background-color: #F1F1F1;
-  display: inline-block; }
-
-#flashMessage,
-#ResultMessage {
+.bs-crumbs {
   font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
-  padding: 10px 20px;
-  margin: 20px auto 40px !important;
-  color: #fff;
-  background-color: #C30;
-  font-weight: normal;
-  border-radius: 10px; }
+  width: 1260px;
+  margin: 0 auto;
+  padding: 15px 20px;
+  font-size: 12px;
+  color: #CCC;
+  box-sizing: border-box; }
+  @media screen and (max-width: 768px) {
+    .bs-crumbs {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 15px 20px; } }
+  .bs-crumbs strong {
+    font-weight: bold; }
+  .bs-crumbs a {
+    color: #000;
+    text-decoration: none; }
+    .bs-crumbs a:visited {
+      color: #000; }
+    .bs-crumbs a:hover {
+      color: #555; }
 
-/* Contents Navi
+/* Contents Navigation
 ----------------------------------------------- */
 .bs-contents-navi {
   border-top: 1px solid #ddd;
@@ -973,7 +928,7 @@ body {
     width: 47%;
     display: block;
     text-decoration: none; }
-    @media screen and (max-width: 1024px) {
+    @media screen and (max-width: 768px) {
       .bs-contents-navi a {
         font-size: 12px; } }
     .bs-contents-navi a:link, .bs-contents-navi a:visited {
@@ -989,7 +944,63 @@ body {
     float: left;
     text-align: right; }
 
-/* CakePHP parts
+/* Toolbar
+----------------------------------------------- */
+.bca-toolbar {
+  letter-spacing: 0;
+  -webkit-font-smoothing: subpixel-antialiased; }
+
+/* Edit Link
+----------------------------------------------- */
+.edit-link {
+  margin-bottom: 10px;
+  text-align: right;
+  font-size: 12px; }
+  .edit-link a {
+    border: 1px solid #1C98D4;
+    color: #1C98D4;
+    padding: 5px 10px;
+    text-decoration: none; }
+    .edit-link a:hover {
+      color: #1C98D4;
+      text-decoration: underline; }
+
+/* Upload File
+----------------------------------------------- */
+.upload-file input[type=file] {
+  margin-bottom: 5px; }
+
+.upload-file a {
+  padding: 5px;
+  background-color: #F1F1F1;
+  display: inline-block; }
+
+/* Message
+----------------------------------------------- */
+#flashMessage,
+#ResultMessage {
+  font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+  padding: 10px 20px;
+  margin: 20px auto 40px !important;
+  color: #fff;
+  background-color: #C30;
+  font-weight: normal;
+  border-radius: 10px; }
+
+/* Clear
+----------------------------------------------- */
+.clear {
+  clear: both; }
+
+.clearfix {
+  display: block; }
+  .clearfix:after {
+    content: " ";
+    display: block;
+    clear: both;
+    height: 0; }
+
+/* Sql Log
 ----------------------------------------------- */
 table.cake-sql-log {
   width: 90%;
@@ -1039,26 +1050,26 @@ table.cake-sql-log {
     border-bottom-color: #ccc;
     font-size: 0.8em; }
 
-.bca-toolbar {
-  letter-spacing: 0;
-  -webkit-font-smoothing: subpixel-antialiased; }
-
 /**
  * Top Page
  */
-/* News List
+/* Main Image
 ----------------------------------------------- */
-#MainImage {
+.bs-main-image {
   margin: 0 auto;
   padding: 0;
   display: none;
   z-index: 0; }
 
 .bx-wrapper {
+  margin: 0 auto;
   max-height: 560px;
   overflow: hidden; }
 
-/* bs-top-post
+.bx-controls {
+  display: none; }
+
+/* Info
 ----------------------------------------------- */
 .bs-info {
   width: 100%;
@@ -1066,10 +1077,12 @@ table.cake-sql-log {
   .bs-info h2 {
     font-size: 14px !important;
     font-weight: bold !important; }
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 768px) {
     .bs-info {
       margin-bottom: 100px; } }
 
+/* Top Post
+----------------------------------------------- */
 .bs-top-post {
   margin: 0 0 20px 0 !important;
   padding: 0 !important; }
@@ -1103,7 +1116,7 @@ table.cake-sql-log {
       color: #a0a2a8;
       font-style: italic;
       font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif; }
-      @media screen and (max-width: 1024px) {
+      @media screen and (max-width: 768px) {
         .bs-top-post__item-date {
           margin-bottom: 6px !important; } }
     .bs-top-post__item-category {
@@ -1123,9 +1136,11 @@ table.cake-sql-log {
     .bs-top-post__item-detail {
       color: #a0a2a8; }
 
+/* Top Post To List
+----------------------------------------------- */
 .bs-top-post-to-list {
   text-align: right; }
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 768px) {
     .bs-top-post-to-list {
       text-align: center; } }
   .bs-top-post-to-list a {
@@ -1137,7 +1152,7 @@ table.cake-sql-log {
     background-color: #001800;
     color: #fff !important;
     text-decoration: none; }
-    @media screen and (max-width: 1024px) {
+    @media screen and (max-width: 768px) {
       .bs-top-post-to-list a {
         font-size: 12px;
         padding: 12px 60px; } }
@@ -1146,12 +1161,16 @@ table.cake-sql-log {
     .bs-top-post-to-list a:hover {
       background-color: #555; }
 
+/* Bge Contents
+----------------------------------------------- */
 #Home .bge-contents {
   margin-bottom: 100px; }
 
 /**
  * Blog
  */
+/* Blog Title
+----------------------------------------------- */
 .bs-blog-category-title,
 .bs-blog-post-title {
   font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
@@ -1159,15 +1178,17 @@ table.cake-sql-log {
   background: none !important;
   font-size: 24px !important; }
 
+/* Blog Post Title
+----------------------------------------------- */
 .bs-blog-post-title {
   margin: 56px 0 5px 0 !important; }
 
-/* blog description
+/* Blog Description
 ----------------------------------------------- */
 .bs-blog-description {
   margin-bottom: 60px; }
 
-/* post
+/* Blog Post
 ----------------------------------------------- */
 .bs-blog-post {
   letter-spacing: .05rem;
@@ -1216,16 +1237,18 @@ table.cake-sql-log {
       color: #a0a2a8;
       font-style: italic;
       font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif; }
-      @media screen and (max-width: 1024px) {
+      @media screen and (max-width: 768px) {
         .bs-blog-post__item-date {
           margin-bottom: 6px !important; } }
 
+/* Blog Single Post
+----------------------------------------------- */
 .bs-single-post {
   margin-bottom: 80px; }
   .bs-single-post__meta {
     text-align: right;
     margin-bottom: 30px; }
-    @media screen and (max-width: 1024px) {
+    @media screen and (max-width: 768px) {
       .bs-single-post__meta {
         margin-bottom: 40px;
         padding-right: 10px; } }
@@ -1251,7 +1274,7 @@ table.cake-sql-log {
       color: #a0a2a8;
       font-style: italic;
       font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif; }
-      @media screen and (max-width: 1024px) {
+      @media screen and (max-width: 768px) {
         .bs-single-post__meta-date {
           padding-left: 10px; } }
   .bs-single-post__eye-catch img {
@@ -1262,6 +1285,8 @@ table.cake-sql-log {
     .bs-single-post__eye-catch img:hover {
       opacity: 0.7; }
 
+/* Blog Contents Navigation
+----------------------------------------------- */
 .bs-blog-contents-navi {
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
@@ -1273,7 +1298,7 @@ table.cake-sql-log {
     width: 47%;
     display: block;
     text-decoration: none; }
-    @media screen and (max-width: 1024px) {
+    @media screen and (max-width: 768px) {
       .bs-blog-contents-navi a {
         font-size: 12px; } }
     .bs-blog-contents-navi a:link, .bs-blog-contents-navi a:visited {
@@ -1289,7 +1314,7 @@ table.cake-sql-log {
     float: left;
     text-align: right; }
 
-/* Comment
+/* Blog Comment
 ----------------------------------------------- */
 .bs-blog-comment {
   margin-top: 160px; }
@@ -1317,6 +1342,8 @@ table.cake-sql-log {
     text-align: center;
     padding: 20px 0; }
 
+/* Blog Comment Add Form
+----------------------------------------------- */
 #BlogCommentAddForm .required {
   color: #FFF;
   font-size: 10px;
@@ -1387,110 +1414,118 @@ table.cake-sql-log {
 /**
  * Mail Form
  */
-#MailMessageIndexForm .required,
-#MailMessageSubmitForm .required,
-#MailMessageConfirmForm .required {
-  color: #FFF;
-  font-size: 10px;
-  background-color: #C30;
-  padding: 4px 5px;
-  font-weight: bold;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  white-space: nowrap;
-  margin-left: 5px;
-  margin-right: 5px;
-  vertical-align: middle; }
-
-#MailMessageIndexForm .normal,
-#MailMessageSubmitForm .normal,
-#MailMessageConfirmForm .normal {
-  color: #FFF;
-  font-size: 10px;
-  background-color: #CCC;
-  padding: 4px 5px;
-  font-weight: bold;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  white-space: nowrap;
-  margin-left: 5px;
-  margin-right: 5px;
-  vertical-align: middle; }
-
-.form-error {
-  background-color: #FCF5EB; }
-
-.error-message {
-  color: #C30;
-  font-weight: bold;
-  font-size: small;
-  font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
-  padding: 5px; }
-  .error-message:before {
-    content: "！"; }
-
+/* Mail Title Sub
+----------------------------------------------- */
 .bs-mail-title-sub {
   font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
   padding: 0 !important;
   background: none !important;
   font-size: 24px !important; }
 
-.bs-mail-form {
+/* Mail Form
+----------------------------------------------- */
+.bs-mail-form .form-error {
+  background-color: #FCF5EB; }
+
+.bs-mail-form .error-message {
+  color: #C30;
+  font-weight: bold;
+  font-size: small;
   font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
-  /* submit
-  ----------------------------------------------- */ }
-  .bs-mail-form input[type=text],
-  .bs-mail-form textarea {
+  padding: 5px; }
+  .bs-mail-form .error-message:before {
+    content: "！"; }
+
+/* Mail Form Body
+----------------------------------------------- */
+.bs-mail-form-body {
+  font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif"; }
+  .bs-mail-form-body input[type=text],
+  .bs-mail-form-body textarea {
     box-sizing: border-box;
     width: 100% !important; }
-  .bs-mail-form__submit {
+  .bs-mail-form-body .required {
+    color: #FFF;
+    font-size: 10px;
+    background-color: #C30;
+    padding: 4px 5px;
+    font-weight: bold;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    white-space: nowrap;
+    margin-left: 5px;
+    margin-right: 5px;
+    vertical-align: middle; }
+  .bs-mail-form-body .normal {
+    color: #FFF;
+    font-size: 10px;
+    background-color: #CCC;
+    padding: 4px 5px;
+    font-weight: bold;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    white-space: nowrap;
+    margin-left: 5px;
+    margin-right: 5px;
+    vertical-align: middle; }
+
+.bs-mail-form-auth-captcha .auth-captcha-image {
+  vertical-align: middle; }
+
+/* Mail Form Submit
+----------------------------------------------- */
+.bs-mail-form-submit {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px; }
+  .bs-mail-form-submit input[type=submit],
+  .bs-mail-form-submit input[type=reset] {
+    vertical-align: middle;
+    cursor: pointer;
+    margin: 10px;
+    padding: 8px 40px;
+    font-weight: bold;
+    font-size: 16px;
+    white-space: nowrap;
+    line-height: 24px;
+    font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+    text-decoration: none !important;
+    display: inline-block;
     text-align: center;
-    margin-top: 20px;
-    margin-bottom: 20px; }
-    .bs-mail-form__submit .button {
-      vertical-align: middle;
-      cursor: pointer;
-      margin: 10px;
-      padding: 8px 40px;
-      font-weight: bold;
-      font-size: 16px;
-      white-space: nowrap;
-      line-height: 24px;
-      font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
-      text-decoration: none !important;
-      display: inline-block;
-      text-align: center;
-      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-      background-color: #f5f5f5;
-      background-image: -ms-linear-gradient(top, #fff, #e6e6e6);
-      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#e6e6e6));
-      background-image: -webkit-linear-gradient(top, #fff, #e6e6e6);
-      background-image: -o-linear-gradient(top, #fff, #e6e6e6);
-      background-image: linear-gradient(top, #fff, #e6e6e6);
-      background-image: -moz-linear-gradient(top, #fff, #e6e6e6);
-      background-repeat: repeat-x;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-      border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25); }
-      .bs-mail-form__submit .button:hover {
-        color: #333;
-        text-decoration: none;
-        background-color: #e6e6e6;
-        background-position: 0 -15px;
-        transition: background-position .1s linear; }
-      .bs-mail-form__submit .button:active {
-        color: #333;
-        border: 1px solid #CCC;
-        text-decoration: none;
-        background: #cdcdcd;
-        background: -moz-linear-gradient(top, #cdcdcd, #eee 100%);
-        background: -webkit-gradient(linear, left top, left bottom, from(#cdcdcd), color-stop(100%, #eee));
-        background: -o-linear-gradient(top, #cdcdcd, #eee 100%); }
-      @media screen and (max-width: 1024px) {
-        .bs-mail-form__submit .button {
-          width: 100%;
-          margin: 10px 0; } }
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    background-color: #f5f5f5;
+    background-image: -ms-linear-gradient(top, #fff, #e6e6e6);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#e6e6e6));
+    background-image: -webkit-linear-gradient(top, #fff, #e6e6e6);
+    background-image: -o-linear-gradient(top, #fff, #e6e6e6);
+    background-image: linear-gradient(top, #fff, #e6e6e6);
+    background-image: -moz-linear-gradient(top, #fff, #e6e6e6);
+    background-repeat: repeat-x;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25); }
+    .bs-mail-form-submit input[type=submit]:hover,
+    .bs-mail-form-submit input[type=reset]:hover {
+      color: #333;
+      text-decoration: none;
+      background-color: #e6e6e6;
+      background-position: 0 -15px;
+      transition: background-position .1s linear; }
+    .bs-mail-form-submit input[type=submit]:active,
+    .bs-mail-form-submit input[type=reset]:active {
+      color: #333;
+      border: 1px solid #CCC;
+      text-decoration: none;
+      background: #cdcdcd;
+      background: -moz-linear-gradient(top, #cdcdcd, #eee 100%);
+      background: -webkit-gradient(linear, left top, left bottom, from(#cdcdcd), color-stop(100%, #eee));
+      background: -o-linear-gradient(top, #cdcdcd, #eee 100%); }
+    @media screen and (max-width: 768px) {
+      .bs-mail-form-submit input[type=submit],
+      .bs-mail-form-submit input[type=reset] {
+        width: 100%;
+        margin: 10px 0; } }
 
 /**
  * Search
@@ -1500,13 +1535,13 @@ table.cake-sql-log {
 .bs-search-header {
   font-size: 12px;
   font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif"; }
-  .bs-search-header .bs-search-result-text {
+  .bs-search-header__result-text {
     background: #efefef;
     padding: 10px 20px;
     text-align: right;
     margin-bottom: 20px;
     border-radius: 10px; }
-    .bs-search-header .bs-search-result-text strong {
+    .bs-search-header__result-text strong {
       font-weight: bold; }
 
 .bs-search-result__item {

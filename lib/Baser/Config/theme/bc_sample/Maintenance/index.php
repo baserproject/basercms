@@ -17,7 +17,7 @@
 ?>
 
 
-<h2 class="bs-maintenance-head"><?php echo __('メンテナンス中') ?></h2>
+<h2 class="bs-maintenance-title"><?php echo __('メンテナンス中') ?></h2>
 <section class="bs-maintenance-body">
 	<p>
 		<?php echo __('ご迷惑をおかけしております。') ?><br>

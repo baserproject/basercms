@@ -53,11 +53,11 @@ if (!empty($mailFields)) {
 
 			echo '<span id="FieldMessage' . Inflector::camelize($record['MailField']['field_name']) . '">';
 			if (!$freezed && $description) {
-				echo '<span class="mail-description">' . $description . '</span>';
+				echo '<span class="bs-mail-description">' . $description . '</span>';
 			}
 			/* 入力欄 */
 			if (!$freezed || $this->Mailform->value("MailMessage." . $field['field_name']) !== '') {
-				echo '<span class="mail-before-attachment">' . $field['before_attachment'] . '</span>';
+				echo '<span class="bs-mail-before-attachment">' . $field['before_attachment'] . '</span>';
 			}
 
 			// =========================================================================================================
@@ -74,10 +74,10 @@ if (!empty($mailFields)) {
 			}
 
 			if (!$freezed || $this->Mailform->value("MailMessage." . $field['field_name']) !== '') {
-				echo '<span class="mail-after-attachment">' . $field['after_attachment'] . '</span>';
+				echo '<span class="bs-mail-after-attachment">' . $field['after_attachment'] . '</span>';
 			}
 			if (!$freezed) {
-				echo '<span class="mail-attention">' . $field['attention'] . '</span>';
+				echo '<span class="bs-mail-attention">' . $field['attention'] . '</span>';
 			}
 
 			/* 説明欄 */

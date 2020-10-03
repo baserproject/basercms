@@ -3,7 +3,7 @@
  */
 
 html {
-  @include mq() {
+  @include bs-mq() {
     position: relative;
     width: 100%;
     overflow-x: hidden;
@@ -19,27 +19,31 @@ body {
   background-color: #fff;
   -webkit-font-smoothing: antialiased;
 
-  @include mq() {
+  @include bs-mq() {
     position: relative;
     width: 100%;
     overflow-x: hidden;
   }
 }
 
-/* clear
------------------------------------------------ */
+.bs-container {
+  text-align: left;
+  margin: 0 auto;
+  min-width: 1260px;
 
-.clear {
-  clear: both;
+  @include bs-mq() {
+    min-width: 100%;
+  }
 }
 
-.clearfix {
-  display: block;
+.bs-wrap {
+  width: 1260px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
 
-  &:after {
-    content: " ";
-    display: block;
-    clear: both;
-    height: 0;
+  @include bs-mq() {
+    box-sizing: border-box;
+    width: 100%;
   }
 }

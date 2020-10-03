@@ -2,11 +2,14 @@
  * Footer
  */
 
+/* Footer
+----------------------------------------------- */
+
 .bs-footer {
   background-color: #001800;
   padding: 80px 0;
 
-  @include mq() {
+  @include bs-mq() {
     padding: 80px 20px;
   }
 
@@ -15,26 +18,28 @@
     color: #999;
     width: 1260px;
     margin: 0 auto;
-    @include mq() {
+    @include bs-mq() {
       width: 100%;
       text-align: center;
       font-size: 12px;
       line-height: 1.8;
     }
 
-    &-link {
-      img {
-        border: 0;
-        vertical-align: text-bottom;
-      }
-    }
   }
 
   &__banner {
-    @include mq() {
+    @include bs-mq() {
       display: block;
     }
   }
+
+  &__banner-link {
+    img {
+      border: 0;
+      vertical-align: text-bottom;
+    }
+  }
+
 }
 
 

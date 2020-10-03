@@ -25,13 +25,13 @@
 	<?php $this->BcBaser->metaDescription() ?>
 	<?php $this->BcBaser->metaKeywords() ?>
 	<?php $this->BcBaser->icon() ?>
-	<?php $this->BcBaser->css(array(
+	<?php $this->BcBaser->css([
 		'style',
 		'jquery-ui/jquery-ui-1.11.4',
 		'colorbox/colorbox-1.6.1',
 		'editor'
-	)) ?>
-	<?php $this->BcBaser->js(array(
+	]) ?>
+	<?php $this->BcBaser->js([
 		'jquery-1.11.3.min',
 		'jquery-ui-1.11.4.min',
 		'jquery.bxslider-4.12.min',
@@ -39,7 +39,7 @@
 		'i18n/ui.datepicker-ja',
 		'jquery-accessibleMegaMenu',
 		'startup'
-	)); ?>
+	]); ?>
 	<?php $this->BcBaser->scripts() ?>
 	<!-- /Elements/google_analytics.php -->
 	<?php $this->BcBaser->googleAnalytics() ?>
@@ -52,7 +52,7 @@
 	<?php $this->BcBaser->header() ?>
 
 	<?php if ($this->BcBaser->isHome()): ?>
-		<?php $this->BcBaser->mainImage(['all' => true, 'num' => 5, 'width' => "100%"]) ?>
+		<?php $this->BcBaser->mainImage(['all' => true, 'num' => 5, 'width' => '100%', 'class' => 'bs-main-image']) ?>
 	<?php else: ?>
 		<!-- /Elements/crumbs.php -->
 		<?php $this->BcBaser->crumbsList(); ?>

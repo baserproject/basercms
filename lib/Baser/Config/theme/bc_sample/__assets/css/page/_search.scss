@@ -8,7 +8,7 @@
   font-size: 12px;
   font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
 
-  .bs-search-result-text {
+  &__result-text {
     background: #efefef;
     padding: 10px 20px;
     text-align: right;

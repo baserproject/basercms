@@ -19,11 +19,11 @@
 ?>
 
 
-<h2 class="bs-search-head"><?php $this->BcBaser->contentsTitle() ?></h2>
+<h2 class="bs-search-title"><?php $this->BcBaser->contentsTitle() ?></h2>
 
 <section class="bs-search-header">
 	<?php if (!empty($this->Paginator)): ?>
-		<div class="bs-search-result-text">
+		<div class="bs-search__result-text">
 			<?php echo $this->Paginator->counter(['format' => sprintf(__d('baser', '<strong>%s</strong> で検索した結果 <strong>%%start%%〜%%end%%</strong>件目 / %%count%% 件'), implode(' ', $query))]) ?>
 		</div>
 	<?php endif ?>
@@ -47,7 +47,7 @@
 <?php endif ?>
 </section>
 
-<div class="bs-search-result__pagination">
+<div class="bs-search-pagination">
 	<!-- /Elements/paginations/simple.php -->
 	<?php $this->BcBaser->pagination('simple', [], ['subDir' => false]) ?>
 </div>

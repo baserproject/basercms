@@ -2,7 +2,7 @@
  * Sub
  */
 
-/* Side Box
+/* Sub Contents
 ----------------------------------------------- */
 
 .bs-sub-contents {
@@ -14,7 +14,7 @@
     font-weight: bold;
   }
 
-  @include mq() {
+  @include bs-mq() {
     width: 100%;
     margin: 0 auto;
     padding: 40px 0 0 0;
@@ -24,16 +24,15 @@
 
 #Home .bs-sub-contents {
   padding: 100px 60px !important;
-  @include mq() {
+  @include bs-mq() {
     float: none;
     padding: 40px 0 0 0 !important;
     border-top: 1px solid #ddd;
   }
 }
 
-/* widget
+/* Widget Area
 ----------------------------------------------- */
-
 
 .bs-widget-area {
   font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
@@ -105,6 +104,9 @@
   }
 }
 
+/* Widget Text
+----------------------------------------------- */
+
 .bs-widget-text {
   ul {
     margin: 0;
@@ -125,7 +127,7 @@
         display: block;
         color: #000;
         text-decoration: none;
-        @include mq() {
+        @include bs-mq() {
           text-align: center;
         }
 
@@ -136,6 +138,9 @@
     }
   }
 }
+
+/* Widget Local Navigation
+----------------------------------------------- */
 
 .bs-widget-local-navi {
   h2 {
@@ -177,7 +182,7 @@
   }
 }
 
-/* calendar
+/* Widget Blog Calendar
 ----------------------------------------------- */
 
 .bs-widget-blog-calendar {
@@ -228,8 +233,7 @@
   }
 }
 
-
-/* site search
+/* Widget Site Search
 ----------------------------------------------- */
 .bs-widget-search-box {
   label {

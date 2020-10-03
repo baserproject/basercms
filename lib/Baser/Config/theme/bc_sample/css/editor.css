@@ -19,6 +19,8 @@
 .cke_editable {
   padding: 15px; }
 
+/* Editor Parts
+----------------------------------------------- */
 .bs-main-contents,
 .bge-contents,
 .cke_editable {
@@ -448,6 +450,8 @@
       color: #ccc;
       font-size: 3em; }
 
+/* Form Parts
+----------------------------------------------- */
 .bs-main-contents form,
 .bge-contents form,
 .cke_editable form,

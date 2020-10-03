@@ -23,32 +23,19 @@ $isSmartphone = $this->request->is('smartphone');
 
 
 <header class="bs-header">
-	<div class="bs-header-inner">
-		<?php $this->BcBaser->logo(['class' => 'bs-header-inner__logo']) ?>
+	<div class="bs-header__inner">
+		<?php $this->BcBaser->logo(['class' => 'bs-header__logo']) ?>
 	</div>
 
-	<script>
-		let isOpen = false
-		function clickMenuBtn() {
-			if(isOpen) {
-				isOpen = false;
-				$("#bs-menu-btn").removeClass("bs-open")
-				$("#bs-menu-content").removeClass("bs-open")
-			} else {
-				isOpen = true;
-				$("#bs-menu-btn").addClass("bs-open")
-				$("#bs-menu-content").addClass("bs-open")
-			}
-		}
-	</script>
-
-	<div class="bs-header-btn" id="bs-menu-btn" onclick="clickMenuBtn()">
+	<div class="bs-header__menu-button" id="BsMenuBtn">
 		<span></span>
 		<span></span>
 		<span></span>
 	</div>
 
-	<!-- /Elements/global_menu.php -->
-	<nav class="bs-header-nav<?php echo ($isSmartphone)? '' : ' use-mega-menu' ?>" id="bs-menu-content"><?php $this->BcBaser->globalMenu(2) ?></nav>
+	<nav class="bs-header__nav<?php echo ($isSmartphone)? '' : ' use-mega-menu' ?>" id="BsMenuContent">
+		<!-- /Elements/global_menu.php -->
+		<?php $this->BcBaser->globalMenu(2) ?>
+	</nav>
 
 </header>

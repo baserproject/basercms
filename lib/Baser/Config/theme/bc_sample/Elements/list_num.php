@@ -21,18 +21,18 @@
  */
 $currentNum = '';
 if (empty($nums)) {
-	$nums = array('10', '20', '50', '100');
+	$nums = ['10', '20', '50', '100'];
 }
 if (!is_array($nums)) {
-	$nums = array($nums);
+	$nums = [$nums];
 }
 if (!empty($this->passedArgs['num'])) {
 	$currentNum = $this->passedArgs['num'];
 }
-$links = array();
+$links = [];
 foreach ($nums as $num) {
 	if ($currentNum != $num) {
-		$links[] = '<span>' . $this->BcBaser->getLink($num, am($this->passedArgs, array('num' => $num, 'page' => null))) . '</span>';
+		$links[] = '<span>' . $this->BcBaser->getLink($num, am($this->passedArgs, ['num' => $num, 'page' => null])) . '</span>';
 	} else {
 		$links[] = '<span class="current">' . $num . '</span>';
 	}

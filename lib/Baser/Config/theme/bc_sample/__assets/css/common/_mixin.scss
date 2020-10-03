@@ -3,17 +3,17 @@
  */
 
 $breakpoints: (
-  // 'md': 'screen and (max-width: 768px)',
-  'lg': 'screen and (max-width: 1024px)',
+  'md': 'screen and (max-width: 768px)',
+  'lg': 'screen and (max-width: 1024px)'
 ) !default;
 
-@mixin mq($breakpoint: lg) {
+@mixin bs-mq($breakpoint: md) {
   @media #{map-get($breakpoints, $breakpoint)} {
     @content;
   }
 }
 
-@mixin button() {
+@mixin bs-button() {
   vertical-align: middle;
   cursor: pointer;
   margin: 10px;

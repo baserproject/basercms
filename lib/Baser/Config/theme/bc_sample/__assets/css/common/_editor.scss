@@ -8,6 +8,9 @@ $breakPoint: 768px;
   padding: 15px;
 }
 
+/* Editor Parts
+----------------------------------------------- */
+
 .bs-main-contents,
 .bge-contents,
 .cke_editable {
@@ -275,7 +278,6 @@ $breakPoint: 768px;
     }
   }
 
-
   fieldset {
     border: 0;
   }
@@ -296,7 +298,6 @@ $breakPoint: 768px;
   del, ins {
     text-decoration: none;
   }
-
 
   a {
     &:link, &:visited {
@@ -393,6 +394,9 @@ $breakPoint: 768px;
   }
 
 }
+
+/* Form Parts
+----------------------------------------------- */
 
 .bs-main-contents,
 .bge-contents,

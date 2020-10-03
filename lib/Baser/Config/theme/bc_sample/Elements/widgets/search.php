@@ -30,9 +30,9 @@ if(!empty($this->request->params['Site']['id'])) {
 	$siteId = $this->request->params['Site']['id'];
 }
 if (!empty($this->passedArgs['num'])) {
-	$url = array('plugin' => null, 'controller' => 'search_indices', 'action' => 'search', 'num' => $this->passedArgs['num']);
+	$url = ['plugin' => null, 'controller' => 'search_indices', 'action' => 'search', 'num' => $this->passedArgs['num']];
 } else {
-	$url = array('plugin' => null, 'controller' => 'search_indices', 'action' => 'search');
+	$url = ['plugin' => null, 'controller' => 'search_indices', 'action' => 'search'];
 }
 $folders = $this->BcContents->getContentFolderList($siteId, ['excludeId' => $this->BcContents->getSiteRootId($siteId)]);
 ?>
@@ -48,7 +48,7 @@ $folders = $this->BcContents->getContentFolderList($siteId, ['excludeId' => $thi
 	<?php endif ?>
 	<?php echo $this->BcForm->input('SearchIndex.q', ['placeholder' => __('キーワード')]) ?>
 	<?php echo $this->BcForm->hidden('SearchIndex.s', ['value' => $siteId]) ?>
-	<?php echo $this->BcForm->submit(__('検索'), array('div' => false, 'class' => 'button-small')) ?>
+	<?php echo $this->BcForm->submit(__('検索'), ['div' => false, 'class' => 'bs-button-small']) ?>
 	<?php echo $this->BcForm->end() ?>
 	</div>
 </div>

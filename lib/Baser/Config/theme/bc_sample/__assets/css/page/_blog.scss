@@ -2,6 +2,9 @@
  * Blog
  */
 
+/* Blog Title
+----------------------------------------------- */
+
 .bs-blog-category-title,
 .bs-blog-post-title {
   font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
@@ -10,19 +13,21 @@
   font-size: 24px !important;
 }
 
+/* Blog Post Title
+----------------------------------------------- */
+
 .bs-blog-post-title {
   margin: 56px 0 5px 0 !important;
 }
 
-/* blog description
+/* Blog Description
 ----------------------------------------------- */
 
 .bs-blog-description {
   margin-bottom: 60px;
 }
 
-
-/* post
+/* Blog Post
 ----------------------------------------------- */
 
 .bs-blog-post {
@@ -90,12 +95,15 @@
       color: #a0a2a8;
       font-style: italic;
       font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif;
-      @include mq() {
+      @include bs-mq() {
         margin-bottom: 6px !important;;
       }
     }
   }
 }
+
+/* Blog Single Post
+----------------------------------------------- */
 
 .bs-single-post {
   margin-bottom: 80px;
@@ -103,7 +111,7 @@
   &__meta {
     text-align: right;
     margin-bottom: 30px;
-    @include mq() {
+    @include bs-mq() {
       margin-bottom: 40px;
       padding-right: 10px;
     }
@@ -139,7 +147,7 @@
       color: #a0a2a8;
       font-style: italic;
       font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif;
-      @include mq() {
+      @include bs-mq() {
         padding-left: 10px;
       }
     }
@@ -157,6 +165,9 @@
   }
 }
 
+/* Blog Contents Navigation
+----------------------------------------------- */
+
 .bs-blog-contents-navi {
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
@@ -169,7 +180,7 @@
     width: 47%;
     display: block;
     text-decoration: none;
-    @include mq() {
+    @include bs-mq() {
       font-size: 12px;
     }
 
@@ -197,7 +208,7 @@
 }
 
 
-/* Comment
+/* Blog Comment
 ----------------------------------------------- */
 
 .bs-blog-comment {
@@ -245,6 +256,9 @@
   }
 }
 
+/* Blog Comment Add Form
+----------------------------------------------- */
+
 #BlogCommentAddForm {
   .required {
     color: #FFF;
@@ -275,6 +289,6 @@
   }
 
   .button {
-    @include button();
+    @include bs-button();
   }
 }

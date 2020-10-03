@@ -30,7 +30,7 @@ if(!isset($currentId)) {
 
 
 <?php if (isset($tree)): ?>
-	<ul class="ul-level-<?php echo $level ?><?php echo ($level > 1) ? ' sub-group': ' bs-header-nav__menu'?>">
+	<ul class="ul-level-<?php echo $level ?><?php echo ($level > 1) ? ' sub-group': ' bs-global-menu'?>">
 		<?php if (isset($tree)): ?>
 			<?php foreach ($tree as $content): ?>
 				<?php if ($content['Content']['title']): ?>
@@ -42,16 +42,16 @@ if(!isset($currentId)) {
 					if($content['Content']['id'] == $currentId || $this->BcBaser->isContentsParentId($currentId, $content['Content']['id'])) {
 						$liClass .= ' current';
 					}
-					$options = ['class' => 'bs-header-nav__menu__item--link', 'escape' => true];
+					$options = ['class' => 'bs-global-menu-item--link', 'escape' => true];
 					if(!empty($content['Content']['blank_link'])) {
 						$options['target'] = '_blank';
 					}
 					?>
-					<li class="bs-header-nav__menu__item <?php echo $liClass ?>">
+					<li class="bs-global-menu-item <?php echo $liClass ?>">
 						<?php $this->BcBaser->link($content['Content']['title'], $this->BcBaser->getContentsUrl($content['Content']['url'], false, null, false), $options) ?>
 						<?php if (!empty($content['children'])): ?>
-							<div class="bs-header-nav__sub">
-								<?php $this->BcBaser->element('contents_menu', array('tree' => $content['children'], 'level' => $level + 1, 'currentId' => $currentId)) ?>
+							<div class="bs-global-menu-sub">
+								<?php $this->BcBaser->element('contents_menu', ['tree' => $content['children'], 'level' => $level + 1, 'currentId' => $currentId]) ?>
 							</div>
 						<?php endif ?>
 					</li>
