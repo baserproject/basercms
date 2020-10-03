@@ -1,0 +1,6 @@
+﻿"id","name","plugin","type","entity_id","url","site_id","alias_id","main_site_content_id","parent_id","lft","rght","level","title","description","eyecatch","author_id","layout_template","status","publish_begin","publish_end","self_status","self_publish_begin","self_publish_end","exclude_search","created_date","modified_date","site_root","deleted_date","deleted","exclude_menu","blank_link","created","modified"
+"1","","Core","ContentFolder","1","/","0","","","","1","10","0","サンプル","","","1","default","1","","","1","","","","","","1","","","","","",""
+"2","index","Core","Page","1","/index","0","","","1","2","3","1","トップページ","","","1","","1","","","1","","","","","","","","","","","",""
+"3","about","Core","Page","2","/about","0","","","1","4","5","1","会社案内","","","1","","1","","","1","","","","","","","","","","","",""
+"4","contact","Mail","MailContent","1","/contact/","0","","","1","6","7","1","お問い合わせ","","","1","","1","","","1","","","","","","","","","","","",""
+"5","news","Blog","BlogContent","1","/news/","0","","","1","8","9","1","NEWS","","","1","","1","","","1","","","","","","","","","","","",""

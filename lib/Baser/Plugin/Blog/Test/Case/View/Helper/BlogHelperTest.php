@@ -31,7 +31,7 @@ class BlogHelperTest extends BaserTestCase {
 
 /**
  * Fixtures
- * @var array 
+ * @var array
  */
 	public $fixtures = [
 		'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',	// メソッド内で読み込む
@@ -64,14 +64,14 @@ class BlogHelperTest extends BaserTestCase {
 
 /**
  * View
- * 
+ *
  * @var View
  */
 	protected $View;
 
 /**
  * __construct
- * 
+ *
  * @param string $name
  * @param array $data
  * @param string $dataName
@@ -120,13 +120,13 @@ class BlogHelperTest extends BaserTestCase {
 
 /**
  * ブログコンテンツデータをセットする
- * 
+ *
  * @param int $blogContentId ブログコンテンツID
  * @param bool $viewVars viewVarsを設定
  * @dataProvider setContentDataProvider
  */
 	public function testSetContent($blogContentId, $viewVars, $expected) {
-		if ($viewVars) {		
+		if ($viewVars) {
 			$View = new View();
 			$View->viewVars = ['blogContent' => [
 				'BlogContent' => [
@@ -174,7 +174,7 @@ class BlogHelperTest extends BaserTestCase {
 		$result = $this->Blog->getTitle();
 		$expects = '新着情報';
 		$this->assertEquals($expects, $result, 'タイトルを正しく取得できません');
-		
+
 	}
 
 /**
@@ -229,7 +229,7 @@ class BlogHelperTest extends BaserTestCase {
 
 /**
  * ブログ記事のURLを取得する
- * 
+ *
  * @param int $blogContentId ブログコンテンツID
  * @param int $no ブログ記事NO
  * @param string $expects 期待値
@@ -249,7 +249,7 @@ class BlogHelperTest extends BaserTestCase {
 		Configure::write('BcEnv.siteUrl', $siteUrl);
 		$this->assertEquals($expects, $result, '記事へのリンクを正しく取得できません');
 	}
-	
+
 	public function getPostLinkUrlDataProvider() {
 		return [
 			[10, 3, '', false, false],
@@ -341,7 +341,7 @@ class BlogHelperTest extends BaserTestCase {
 
 /**
  * タグを取得する
- * 
+ *
  * @dataProvider getTagDataProvider
  */
 	public function testGetTag($options, $expects) {
@@ -364,7 +364,7 @@ class BlogHelperTest extends BaserTestCase {
 			[['tag' => false], [
 				['name' => 'test1', 'url' => '/news/archives/tag/test1'],
 				['name' => 'test2', 'url' => '/news/archives/tag/test2']
-			]]	
+			]]
 		];
 	}
 
@@ -418,7 +418,7 @@ class BlogHelperTest extends BaserTestCase {
 
 /**
  * カテゴリーの一覧をリストタグで取得する
- * 
+ *
  * @param int $depth 階層
  * @param boolean $count 件数を表示するかどうか
  * @param array $options オプション
@@ -435,16 +435,16 @@ class BlogHelperTest extends BaserTestCase {
 
 	public function getCategoryListDataProvider() {
 		return [
-			[3, false, [], '<ul class="depth-1"><li><a href="/news/archives/category/release">プレスリリース</a><ul class="depth-2"><li><a href="/news/archives/category/release/child">子カテゴリ</a></li></ul></li><li><a href="/news/archives/category/child-no-parent">親子関係なしカテゴリ</a></li></ul>'],
-			[1, false, [], '<ul class="depth-1"><li><a href="/news/archives/category/release">プレスリリース</a></li><li><a href="/news/archives/category/child-no-parent">親子関係なしカテゴリ</a></li></ul>'],
+			[3, false, [], '<ul class="bc-blog-category-list depth-1"><li class="bc-blog-category-list__item"><a href="/news/archives/category/release">プレスリリース</a><ul class="bc-blog-category-list depth-2"><li class="bc-blog-category-list__item"><a href="/news/archives/category/release/child">子カテゴリ</a></li></ul></li><li class="bc-blog-category-list__item"><a href="/news/archives/category/child-no-parent">親子関係なしカテゴリ</a></li></ul>'],
+			[1, false, [], '<ul class="bc-blog-category-list depth-1"><li class="bc-blog-category-list__item"><a href="/news/archives/category/release">プレスリリース</a></li><li class="bc-blog-category-list__item"><a href="/news/archives/category/child-no-parent">親子関係なしカテゴリ</a></li></ul>'],
 			[0, false, [], ''],
-			[3, true, [], '<ul class="depth-1"><li><a href="/news/archives/category/release">プレスリリース(3)</a><ul class="depth-2"><li><a href="/news/archives/category/release/child">子カテゴリ(2)</a></li></ul></li><li><a href="/news/archives/category/child-no-parent">親子関係なしカテゴリ(0)</a></li></ul>'],
+			[3, true, [], '<ul class="bc-blog-category-list depth-1"><li class="bc-blog-category-list__item"><a href="/news/archives/category/release">プレスリリース(3)</a><ul class="bc-blog-category-list depth-2"><li class="bc-blog-category-list__item"><a href="/news/archives/category/release/child">子カテゴリ(2)</a></li></ul></li><li class="bc-blog-category-list__item"><a href="/news/archives/category/child-no-parent">親子関係なしカテゴリ(0)</a></li></ul>'],
 		];
 	}
 
 /**
  * 前の記事へのリンクを出力する
- * 
+ *
  * @param int $blogContentId ブログコンテンツID
  * @param int $id 記事ID
  * @param int $posts_date 日付
@@ -498,7 +498,7 @@ class BlogHelperTest extends BaserTestCase {
 
 /**
  * ブログテンプレートを取得
- * 
+ *
  * @param string $theme テーマ名
  * @param array $expected 期待値
  * @dataProvider getBlogTemplatesDataProvider
@@ -534,7 +534,7 @@ class BlogHelperTest extends BaserTestCase {
 
 /**
  * 記事中の画像を取得する
- * 
+ *
  * @param int $num 何枚目の画像か順番を指定
  * @param boolean $link 詳細ページへのリンクをつけるかどうか
  * @param array $expected 期待値
@@ -692,7 +692,7 @@ class BlogHelperTest extends BaserTestCase {
 /**
  * 子カテゴリを持っているかどうか
  *
- * BlogCategory::hasChild() のラッピングの為、テストはスルー 
+ * BlogCategory::hasChild() のラッピングの為、テストはスルー
  *
 	public function testHasChildCategory() {
 		$this->markTestIncomplete('このメソッドは、BlogCategory::hasChild() をラッピングしているメソッドの為スキップします。');
@@ -701,7 +701,7 @@ class BlogHelperTest extends BaserTestCase {
 
 /**
  * タグリストを取得する
- * 
+ *
  * @param mixed $expected
  * @param mixed $name
  * @param array $options
@@ -715,11 +715,11 @@ class BlogHelperTest extends BaserTestCase {
 		$this->loadFixtures('ContentBlogTagFindCustomPrams');
 		$result = $this->Blog->getTagList($name, $options);
 		if($result) {
-			$result = Hash::extract($result, '{n}.BlogTag.name');	
+			$result = Hash::extract($result, '{n}.BlogTag.name');
 		}
 		$this->assertEquals($expected, $result);
 	}
-	
+
 	public function getTagListDataProvider() {
 		return [
 			[['タグ１'], 'blog1'],
@@ -732,7 +732,7 @@ class BlogHelperTest extends BaserTestCase {
 
 /**
  * タグリストを出力する
- * 
+ *
  * @param string $expected
  * @param mixed $name
  * @param array $options
@@ -747,7 +747,7 @@ class BlogHelperTest extends BaserTestCase {
 		$this->expectOutputRegex($expected);
 		$this->Blog->tagList($name, $options);
 	}
-	
+
 	public function tagListDataProvider() {
 		return [
 			['/(?=\/tag\/タグ１).*?(?!.*\/tag\/タグ２).*?(?!.*\/tag\/タグ３)/s', 'blog1'],
@@ -996,7 +996,7 @@ class BlogHelperTest extends BaserTestCase {
 
 /**
  * testGetPreviewUrl
- * 
+ *
  * @param string $url
  * @param bool $useSubdomain
  * @param string $expects
@@ -1013,7 +1013,7 @@ class BlogHelperTest extends BaserTestCase {
 		Configure::write('BcEnv.siteUrl', $siteUrl);
 		$this->assertEquals($expects, $result);
 	}
-	
+
 	public function getPreviewUrlDataProvider() {
 		return [
 			['/news/', false, '', '/news/'],
@@ -1035,7 +1035,7 @@ class BlogHelperTest extends BaserTestCase {
 		$result = $this->Blog->getCategoryByName($blogCategoryId, $name);
 		$this->assertEquals($expects, (bool) $result);
 	}
-	
+
 	public function getCategoryByName() {
 		return [
 			[1, 'category', 'child', '', true],

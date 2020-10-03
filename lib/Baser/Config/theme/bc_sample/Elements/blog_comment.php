@@ -1,22 +1,38 @@
 <?php
 /**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ *
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			https://basercms.net baserCMS Project
+ * @package			Baser.View
+ * @since			baserCMS v 4.4.0
+ * @license			https://basercms.net/license/index.html
+ */
+
+/**
  * ブログコメント
  * 呼出箇所：ブログ記事詳細
+ *
+ * @var BcAppView $this
+ * @var array $dbData コメントデータ
  */
 ?>
 
 
 <?php if (!empty($dbData)): ?>
 	<?php if ($dbData['status']): ?>
-<div class="comment" id="Comment<?php echo $dbData['no'] ?>">
-	<span class="comment-name">≫
+<div class="bs-blog-comment__list-item" id="Comment<?php echo $dbData['no'] ?>">
+	<div class="bs-blog-comment__list-item-name">
 		<?php if ($dbData['url']): ?>
-			<?php echo $this->BcBaser->link($dbData['name'], $dbData['url'], array('target' => '_blank')) ?>
+			<?php $this->BcBaser->link($dbData['name'], $dbData['url'], ['target' => '_blank']) ?>
 		<?php else: ?>
 			<?php echo $dbData['name'] ?>
 		<?php endif ?>
-	</span><br>
-	<span class="comment-message"><?php echo nl2br($this->BcText->autoLinkUrls($dbData['message'])) ?></span>
+	</div>
+	<div class="bs-blog-comment__list-item-message">
+		<?php echo nl2br($this->BcText->autoLinkUrls($dbData['message'])) ?>
+	</div>
 </div>
 	<?php endif ?>
 <?php endif ?>

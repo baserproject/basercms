@@ -1,24 +1,38 @@
 /**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ *
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			https://basercms.net baserCMS Project
+ * @package			Baser.View
+ * @since			baserCMS v 4.4.0
+ * @license			https://basercms.net/license/index.html
+ */
+
+/**
  * テーマ設定用CSS
  * 呼出箇所：全てのページ
  */
 
-#Header,
-#Footer {
-	background:MAIN;
+.bs-header-nav,
+.bs-footer{
+	background-color:MAIN;
 }
-#GlobalMenu {
-	background:SUB;
+.bs-pagination a,
+.bs-top-post-to-list a,
+.bs-widget-local-navi h2{
+	background-color:SUB;
 }
-#SideBox  a:link,
-#SideBox  a:visited,
-.contents-body a:link,
-.contents-body a:visited {
+.bs-main-contents a:link,
+.bs-main-contents a:visited,
+.bge-contents a:link,
+.bge-contents a:visited,
+.cke_editable a:link,
+.cke_editable a:visited {
 	color:LINK;
 }
-#SideBox  a:hover,
-#SideBox  a:active,
-.contents-body a:hover,
-.contents-body a:active {
+.bs-main-contents a:hover,
+.bge-contents a:hover,
+.cke_editable a:hover {
 	color:HOVER;
 }

@@ -1,15 +1,23 @@
 <?php
 /**
- * [PUBLISH] ブログ最近の投稿
- *
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @link			https://basercms.net baserCMS Project
+ * @package			Baser.View
+ * @since			baserCMS v 4.4.0
+ * @license			https://basercms.net/license/index.html
+ */
+
+/**
+ * ブログ最近の投稿
+ * 呼出箇所：ウィジェット
+ *
+ * @var BcAppView $this
+ * @var int $blog_content_id ブログコンテンツID
+ * @var string $name タイトル
+ * @var bool $use_title タイトルを利用するかどうか
  */
 if (!isset($count)) {
 	$count = 5;
@@ -24,20 +32,23 @@ $recentEntries = $data['recentEntries'];
 $blogContent = $data['blogContent'];
 $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/';
 ?>
-<div class="widget widget-blog-recent-entries widget-blog-recent-entries-<?php echo $id ?> blog-widget">
+
+
+<div class="bs-widget bs-widget-blog-recent-entries bs-widget-blog-recent-entries-<?php echo $id ?> bs-blog-widget">
 	<?php if ($name && $use_title): ?>
-		<h2><?php echo $name ?></h2>
+		<h2 class="bs-widget-head"><?php echo $name ?></h2>
 	<?php endif ?>
 	<?php if ($recentEntries): ?>
-		<ul>
+		<ul class="bs-widget-list">
 			<?php foreach ($recentEntries as $recentEntry): ?>
-				<?php if ($this->request->url == $baseCurrentUrl . $recentEntry['BlogPost']['no']): ?>
-					<?php $class = ' class="current"' ?>
-				<?php else: ?>
-					<?php $class = '' ?>
-				<?php endif ?>
-				<li<?php echo $class ?>>
-					<?php $this->Blog->postTitle($recentEntry) ?>
+				<?php
+				$class = ['bs-widget-list__item'];
+				if ('/' . $this->request->url == $baseCurrentUrl . $recentEntry['BlogPost']['no']) {
+					$class[] = 'current';
+				}
+				?>
+				<li class="<?php echo implode(' ', $class) ?>">
+					<?php $this->Blog->postTitle($recentEntry, true, ['class' => 'bs-widget-list__item-title']) ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>

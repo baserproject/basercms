@@ -1,36 +1,45 @@
 <?php
 /**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ *
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			https://basercms.net baserCMS Project
+ * @package			Baser.View
+ * @since			baserCMS v 4.4.0
+ * @license			https://basercms.net/license/index.html
+ */
+
+/**
  * ブログ記事詳細ページ
  * 呼出箇所：ブログ記事詳細ページ
+ *
+ * @var BcAppView $this
+ * @var array $post ブログ記事データ
  */
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
 ?>
 
 
-<h2><?php $this->Blog->title() ?></h2>
+<h2 class="bs-blog-title"><?php $this->Blog->title() ?></h2>
 
-<h3><?php $this->BcBaser->contentsTitle() ?></h3>
+<h3 class="bs-blog-post-title"><?php $this->BcBaser->contentsTitle() ?></h3>
 
-<div class="eye-catch">
-	<?php $this->Blog->eyeCatch($post, array('width' => 300)) ?>
-</div>
-
-<article class="post">
-	<?php $this->Blog->postContent($post) ?>
-	<div class="meta">
-		<?php $this->Blog->category($post) ?>
-		&nbsp;
-		<?php $this->Blog->postDate($post) ?>
-		&nbsp;
-		<?php $this->Blog->author($post) ?>
-		<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
+<article class="bs-single-post">
+	<div class="bs-single-post__meta">
+		<?php $this->Blog->category($post, ['class' => 'bs-single-post__meta-category']) ?>
+		<span class="bs-single-post__meta-date">
+		<?php $this->Blog->postDate($post, 'Y.m.d') ?>
+		</span>
 	</div>
+	<div class="bs-single-post__eye-catch">
+		<?php $this->Blog->eyeCatch($post) ?>
+	</div>
+	<?php $this->Blog->postContent($post) ?>
 </article>
 
-<div class="contents-navi">
-	<?php $this->Blog->prevLink($post) ?>
-	&nbsp;｜&nbsp;
-	<?php $this->Blog->nextLink($post) ?>
+<div class="bs-blog-contents-navi clearfix">
+	<?php $this->Blog->prevLink($post) ?><?php $this->Blog->nextLink($post) ?>
 </div>
 
 <!-- /Elements/blog_related_posts.php -->

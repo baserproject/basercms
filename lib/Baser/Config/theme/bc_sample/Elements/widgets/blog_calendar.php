@@ -1,15 +1,23 @@
 <?php
 /**
- * [PUBLISH] ブログカレンダー
- *
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @link			https://basercms.net baserCMS Project
+ * @package			Baser.View
+ * @since			baserCMS v 4.4.0
+ * @license			https://basercms.net/license/index.html
+ */
+
+/**
+ * ブログカレンダー
+ * 呼出箇所：ウィジェット
+ *
+ * @var BcAppView $this
+ * @var int $blog_content_id ブログコンテンツID
+ * @var string $name タイトル
+ * @var bool $use_title タイトルを利用するかどうか
  */
 if (isset($blogContent)) {
 	$id = $blogContent['BlogContent']['id'];
@@ -29,9 +37,9 @@ $entryDates = $data['entryDates'];
 ?>
 <?php // TODO コード整理する事  ?>
 
-<div class="widget widget-blog-calendar widget-blog-calendar-<?php echo $id ?> blog-widget">
+<div class="bs-widget bs-widget-blog-calendar bs-widget-blog-calendar-<?php echo $id ?> bs-blog-widget">
 	<?php if ($name && $use_title): ?>
-		<h2><?php echo $name ?></h2>
+		<h2 class="bs-widget-head"><?php echo $name ?></h2>
 	<?php endif ?>
 	<?php
 	//本日の日付を取得する
@@ -76,7 +84,7 @@ $entryDates = $data['entryDates'];
 	$today = mktime(0, 0, 0, $month, $day, $year);
 
 	//曜日の配列
-	$date = array(__('日'), __('月'), __('火'), __('水'), __('木'), __('金'), __('土'));
+	$date = [__('日'), __('月'), __('火'), __('水'), __('木'), __('金'), __('土')];
 
 	//カレンダーを表示する
 	//先月の場合
@@ -98,7 +106,7 @@ $entryDates = $data['entryDates'];
 	}
 
 	//カレンダーを表示するHTML
-	print '<table class="blog-calendar"><tr><td colspan=7>';
+	print '<table class="bs-widget-body"><tr><td colspan=7>';
 	print "<center>";
 	if ($data['prev']) {
 		print $this->BcBaser->getLink('≪', $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $year3 . '/' . $month3, null, false);
@@ -110,7 +118,7 @@ $entryDates = $data['entryDates'];
 	print "</td></tr>";
 
 	print '
-<tr> 
+<tr>
 <th class="sunday">' . __('日') . '</th>
 <th>' . __('月') . '</th>
 <th>' . __('火') . '</th>

@@ -1,20 +1,25 @@
 <?php
 /**
- * [PUBLISH] サイト内検索フォームウィジェット
- *
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @since			baserCMS v 4.4.0
+ * @license			https://basercms.net/license/index.html
  */
 
+
 /**
+ * サイト検索フォーム
+ * 呼出箇所：ウィジェット
+ *
  * $this->BcBaser->widgetArea('ウィジェットエリアNO') で呼び出す
  * 管理画面で設定されたウィジェットエリアNOは、 $widgetArea で参照できる
+ *
+ * @var BcAppView $this
+ * @var int $id ウィジェットID
  */
 
 if (Configure::read('BcRequest.isMaintenance')) {
@@ -25,16 +30,17 @@ if(!empty($this->request->params['Site']['id'])) {
 	$siteId = $this->request->params['Site']['id'];
 }
 if (!empty($this->passedArgs['num'])) {
-	$url = array('plugin' => null, 'controller' => 'search_indices', 'action' => 'search', 'num' => $this->passedArgs['num']);
+	$url = ['plugin' => null, 'controller' => 'search_indices', 'action' => 'search', 'num' => $this->passedArgs['num']];
 } else {
-	$url = array('plugin' => null, 'controller' => 'search_indices', 'action' => 'search');
+	$url = ['plugin' => null, 'controller' => 'search_indices', 'action' => 'search'];
 }
 $folders = $this->BcContents->getContentFolderList($siteId, ['excludeId' => $this->BcContents->getSiteRootId($siteId)]);
 ?>
 
 
-<div class="widget widget-search-box widget-search-box-<?php echo $id ?>">
-	<h2><?php echo __('サイト内検索') ?></h2>
+<div class="bs-widget bs-widget-search-box bs-widget-search-box-<?php echo $id ?>">
+	<h2 class="bs-widget-head"><?php echo __('サイト内検索') ?></h2>
+	<div class="bs-widget-form">
 	<?php echo $this->BcForm->create('SearchIndex', ['type' => 'get', 'url' => $url]) ?>
 	<?php if($folders): ?>
 		<?php echo $this->BcForm->label('SearchIndex.f', __('カテゴリ')) ?><br>
@@ -42,6 +48,7 @@ $folders = $this->BcContents->getContentFolderList($siteId, ['excludeId' => $thi
 	<?php endif ?>
 	<?php echo $this->BcForm->input('SearchIndex.q', ['placeholder' => __('キーワード')]) ?>
 	<?php echo $this->BcForm->hidden('SearchIndex.s', ['value' => $siteId]) ?>
-	<?php echo $this->BcForm->submit(__('検索'), array('div' => false, 'class' => 'submit_button')) ?>
+	<?php echo $this->BcForm->submit(__('検索'), ['div' => false, 'class' => 'bs-button-small']) ?>
 	<?php echo $this->BcForm->end() ?>
+	</div>
 </div>

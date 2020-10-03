@@ -1,18 +1,26 @@
 <?php
 /**
- * [PUBLISH] ブログカテゴリー一覧
- *
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @link			https://basercms.net baserCMS Project
+ * @package			Baser.View
+ * @since			baserCMS v 4.4.0
+ * @license			https://basercms.net/license/index.html
  */
+
 App::uses('BlogHelper', 'Blog.View/Helper');
 
+/**
+ * ブログカテゴリ一覧
+ * 呼出箇所：ウィジェット
+ *
+ * @var BcAppView $this
+ * @var int $blog_content_id ブログコンテンツID
+ * @var string $name タイトル
+ * @var bool $use_title タイトルを利用するかどうか
+ */
 if (empty($view_count)) {
 	$view_count = '0';
 }
@@ -41,15 +49,23 @@ $this->Blog = new BlogHelper($this);
 ?>
 
 
-<div class="widget widget-blog-categories-archives widget-blog-categories-archives-<?php echo $id ?> blog-widget">
+<div class="bs-widget bs-widget-blog-categories-archives bs-widget-blog-categories-archives-<?php echo $id ?> bs-blog-widget">
 	<?php if ($name && $use_title): ?>
-		<h2><?php echo $name ?></h2>
+		<h2 class="bs-widget-head"><?php echo $name ?></h2>
 	<?php endif ?>
 	<?php if ($by_year): ?>
-		<ul>
+		<ul class="bs-widget-list-by-year">
 			<?php foreach ($categories as $key => $category): ?>
-				<li class="category-year"><span><?php $this->BcBaser->link($key . '年', array('plugin' => null, 'controller' => $this->request->params['Content']['url'], 'action' => 'archives', 'date', $key)) ?></span>
-					<?php echo $this->Blog->getCategoryList($category, $depth, $view_count, array('named' => array('year' => $key))) ?>
+				<li class="bs-widget-list-by-year__item">
+					<span>
+						<?php $this->BcBaser->link($key . '年', [
+							'plugin' => null,
+							'controller' => $this->request->params['Content']['url'],
+							'action' => 'archives',
+							'date', $key
+						], ['class' => 'bs-widget-list-by-year__item-title']) ?>
+					</span>
+					<?php echo $this->Blog->getCategoryList($category, $depth, $view_count, ['named' => ['year' => $key]]) ?>
 				</li>
 			<?php endforeach ?>
 		</ul>

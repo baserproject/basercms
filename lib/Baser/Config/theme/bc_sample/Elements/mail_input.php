@@ -1,11 +1,23 @@
 <?php
 /**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ *
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			https://basercms.net baserCMS Project
+ * @package			Baser.View
+ * @since			baserCMS v 4.4.0
+ * @license			https://basercms.net/license/index.html
+ */
+
+/**
  * メールフォーム入力欄
  * 呼出箇所：メールフォーム入力ページ、メールフォーム入力内容確認ページ
  *
  * @var int $blockStart 表示するフィールドの開始NO
  * @var int $blockEnd 表示するフィールドの終了NO
  * @var bool $freezed 確認画面かどうか
+ * @var array $mailFields メールフィールドリスト
  */
 $group_field = null;
 $iteration = 0;
@@ -41,11 +53,11 @@ if (!empty($mailFields)) {
 
 			echo '<span id="FieldMessage' . Inflector::camelize($record['MailField']['field_name']) . '">';
 			if (!$freezed && $description) {
-				echo '<span class="mail-description">' . $description . '</span>';
+				echo '<span class="bs-mail-description">' . $description . '</span>';
 			}
 			/* 入力欄 */
 			if (!$freezed || $this->Mailform->value("MailMessage." . $field['field_name']) !== '') {
-				echo '<span class="mail-before-attachment">' . $field['before_attachment'] . '</span>';
+				echo '<span class="bs-mail-before-attachment">' . $field['before_attachment'] . '</span>';
 			}
 
 			// =========================================================================================================
@@ -62,10 +74,10 @@ if (!empty($mailFields)) {
 			}
 
 			if (!$freezed || $this->Mailform->value("MailMessage." . $field['field_name']) !== '') {
-				echo '<span class="mail-after-attachment">' . $field['after_attachment'] . '</span>';
+				echo '<span class="bs-mail-after-attachment">' . $field['after_attachment'] . '</span>';
 			}
 			if (!$freezed) {
-				echo '<span class="mail-attention">' . $field['attention'] . '</span>';
+				echo '<span class="bs-mail-attention">' . $field['attention'] . '</span>';
 			}
 
 			/* 説明欄 */
