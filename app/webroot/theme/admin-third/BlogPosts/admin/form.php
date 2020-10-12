@@ -51,29 +51,29 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
   <?php echo $this->BcForm->hidden('BlogPost.content') ?>
 <?php endif ?>
 
-<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 
 <?php if ($this->action == 'admin_edit'): ?>
-  <div class="bca-section bca-section__post-top">
+<div class="bca-section bca-section__post-top">
   <span class="bca-post__no">
-  <?php echo $this->BcForm->label('BlogPost.no', 'No') ?> : <strong><?php echo $this->BcForm->value('BlogPost.no') ?></strong>
+    <?php echo $this->BcForm->label('BlogPost.no', 'No') ?> : <strong><?php echo $this->BcForm->value('BlogPost.no') ?></strong>
     <?php echo $this->BcForm->input('BlogPost.no', ['type' => 'hidden']) ?>
   </span>
 
-    <span class="bca-post__url">
-  <?php //echo $this->BcForm->label('BlogPost.url', 'URL') ?>
-      <a href="<?php echo $this->BcBaser->getUri(urldecode($this->request->params['Content']['url']) . '/archives/' . $this->BcForm->value('BlogPost.no')) ?>" class="bca-text-url" target="_blank" data-toggle="tooltip" data-placement="top" title="公開URLを開きます"><i class="bca-icon--globe"></i><?php echo $this->BcBaser->getUri(urldecode($this->request->params['Content']['url']) . '/archives/' . $this->BcForm->value('BlogPost.no')) ?></a>
-      <?php echo $this->BcForm->button('', [
+  <span class="bca-post__url">
+    <?php //echo $this->BcForm->label('BlogPost.url', 'URL') ?>
+    <a href="<?php echo $this->BcBaser->getUri(urldecode($this->request->params['Content']['url']) . '/archives/' . $this->BcForm->value('BlogPost.no')) ?>" class="bca-text-url" target="_blank" data-toggle="tooltip" data-placement="top" title="公開URLを開きます"><i class="bca-icon--globe"></i><?php echo $this->BcBaser->getUri(urldecode($this->request->params['Content']['url']) . '/archives/' . $this->BcForm->value('BlogPost.no')) ?></a>
+    <?php echo $this->BcForm->button('', [
         'id' => 'BtnCopyUrl',
         'class' => 'bca-btn',
         'type' => 'button',
         'data-bca-btn-type' => 'textcopy',
         'data-bca-btn-category' => 'text',
         'data-bca-btn-size' => 'sm'
-      ]) ?>
-  </div>
+    ]) ?>
+  </span>
+</div>
 <?php endif; ?>
-
 
 <!-- form -->
 <section class="bca-section">
@@ -122,6 +122,8 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
     </tr>
   </table>
 </section>
+
+<?php echo $this->BcFormTable->dispatchBefore() ?>
 
 <?php if (!empty($blogContent['BlogContent']['use_content'])): ?>
 <section class="bca-section bca-section__post-content">
