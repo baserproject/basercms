@@ -249,7 +249,6 @@ class BlogController extends BlogAppController {
 		$crumbs = $posts = [];
 		$single = false;
 		$posts = [];
-		$blogArchiveTypeData = [];
 
 		if ($pass[0] == 'category') {
 			$type = 'category';
@@ -330,12 +329,6 @@ class BlogController extends BlogAppController {
 
 				$this->set('blogArchiveType', $type);
 
-				$this->BlogTag->unbindModel(['hasAndBelongsToMany' => ['BlogPost']]);
-				$blogArchiveTypeData = $this->BlogTag->find('first', [
-					'conditions' => [
-						'BlogTag.name' => urldecode($tag),
-					],
-				]);
 				break;
 
 			/* 月別アーカイブ一覧 */
@@ -447,7 +440,6 @@ class BlogController extends BlogAppController {
 		$this->set('posts', $posts);
 		$this->set('year', $year);
 		$this->set('month', $month);
-		$this->set('blogArchiveTypeData', $blogArchiveTypeData);
 		$this->render($template);
 	}
 
