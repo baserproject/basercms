@@ -116,4 +116,11 @@ class BlogTagTest extends BaserTestCase {
 		];
 	}
 	
+/**
+ * 指定した名称のブログタグ情報を取得する
+ */
+	public function testGetBlogTag() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }

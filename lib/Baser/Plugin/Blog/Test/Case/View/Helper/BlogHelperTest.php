@@ -1044,4 +1044,11 @@ class BlogHelperTest extends BaserTestCase {
 		];
 	}
 
+/**
+ * 現在のブログタグアーカイブのブログタグ情報を取得する
+ */
+	public function testGetCurrentArchiveBlogTag() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }

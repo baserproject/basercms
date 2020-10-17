@@ -1851,4 +1851,20 @@ class BlogHelper extends AppHelper {
 		return ClassRegistry::init('Blog.BlogCategory')->getByName($blogContentId, $categoryName, $options);
 	}
 
+/**
+ * 現在のブログタグアーカイブのブログタグ情報を取得する
+ *
+ * @return array
+ */
+	public function getCurrentArchiveBlogTag() {
+		$blogTag = [];
+		if ($this->isTag()) {
+			$pass = $this->request->params['pass'];
+			$tag = isset($pass[1]) ? $pass[1] : '';
+			$BlogTagModel = ClassRegistry::init('Blog.BlogTag');
+			$blogTag = $BlogTagModel->getBlogTag(urldecode($tag));
+		}
+		return $blogTag;
+	}
+
 }
