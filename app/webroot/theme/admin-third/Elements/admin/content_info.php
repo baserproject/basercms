@@ -31,7 +31,7 @@
       <li class="bca-list__item"><span><?php echo __d('baser', 'コンテンツタイプ') ?></span>：<?php echo $this->request->data['Content']['type'] ?></li>
       <li class="bca-list__item"><span><?php echo __d('baser', 'データ作成日') ?></span>：<?php echo $this->BcTime->format('Y/m/d H:i:s', $this->request->data['Content']['created']) ?></li>
       <li class="bca-list__item"><span><?php echo __d('baser', 'データ更新日') ?></span>：<?php echo $this->BcTime->format('Y/m/d H:i:s', $this->request->data['Content']['modified']) ?></li>
-      <li class="bca-list__item"><span><?php echo __d('baser', 'サイト') ?></span>：<?php echo $this->BcText->noValue($this->request->data['Site']['display_name'], $mainSiteDisplayName) ?></li>
+      <li class="bca-list__item"><span><?php echo __d('baser', 'サイト') ?></span>：<?php echo $this->BcText->noValue(h($this->request->data['Site']['display_name']), h($mainSiteDisplayName)) ?></li>
       <li class="bca-list__item"><span><?php echo __d('baser', 'タイプ') ?></span>：
       <?php if(!$this->BcForm->value('Content.alias_id')): ?>
         <?php if(!empty($this->BcContents->settings[$this->BcForm->value('Content.type')])): ?>
