@@ -153,10 +153,11 @@ class BlogHelper extends AppHelper {
 /**
  * ブログタイトルを出力する
  *
+ * @param boolean $escape エスケープ処理を行うかどうか(初期値 : v4.4.3まではfalse)
  * @return void
  */
-	public function title() {
-		echo $this->getTitle();
+	public function title($escape = false) {
+		echo $escape ? h($this->getTitle($escape)) : $this->getTitle($escape);
 	}
 
 /**
