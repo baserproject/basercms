@@ -86,7 +86,7 @@ if($data['Content']['self_status']) {
 		<?php echo $this->BcText->booleanMark($data['Content']['status']); ?>
 	</td>
 	<td class="bca-table-listup__tbody-td" style="width:8%;text-align:center">
-		<?php echo $this->BcText->arrayValue($data['Content']['author_id'], $authors); ?>
+		<?php echo h($this->BcText->arrayValue($data['Content']['author_id'], $authors)); ?>
 	</td>
 
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
