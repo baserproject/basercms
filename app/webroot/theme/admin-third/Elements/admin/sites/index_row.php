@@ -26,7 +26,7 @@ $url = $this->BcContents->getUrl('/' . $data['Site']['alias'] . '/', true, $data
 
 <tr id="Row<?php echo $count ?>" <?php echo $class; ?>>
 	<td class="bca-table-listup__tbody-td" style="width:5%"><?php echo $data['Site']['id']; ?></td>
-	<td class="bca-table-listup__tbody-td"><?php echo $data['Site']['display_name'] ?></td>
+	<td class="bca-table-listup__tbody-td"><?php echo h($data['Site']['display_name']) ?></td>
 	<td class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['Site']['name'], ['action' => 'edit', $data['Site']['id']]); ?><br>
 		<?php echo $data['Site']['alias'] ?>
 	</td>

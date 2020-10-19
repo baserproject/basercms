@@ -34,7 +34,7 @@ $url = $this->BcContents->getUrl('/' . $data['Site']['alias'] . '/', true, $data
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => __d('baser', '編集'), 'class' => 'btn']), ['action' => 'edit', $data['Site']['id']], ['title' => __d('baser', '編集')]) ?>
 	</td>
 	<td style="width:5%"><?php echo $data['Site']['id']; ?></td>
-	<td><?php echo $data['Site']['display_name'] ?></td>
+	<td><?php echo h($data['Site']['display_name']) ?></td>
 	<td><?php $this->BcBaser->link($data['Site']['name'], ['action' => 'edit', $data['Site']['id']]); ?><br>
 		<?php echo $data['Site']['alias'] ?>
 	</td>
