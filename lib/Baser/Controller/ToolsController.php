@@ -475,7 +475,7 @@ class ToolsController extends AppController {
 		$this->_checkReferer();
 		$Content = ClassRegistry::init('Content');
 		if($Content->resetTree()) {
-			$this->BcMessage->setError(__d('baser', 'コンテンツのツリー構造をリセットしました。'));
+			$this->BcMessage->setSuccess(__d('baser', 'コンテンツのツリー構造をリセットしました。'));
 		} else {
 			$this->BcMessage->setError(__d('baser', 'コンテンツのツリー構造のリセットに失敗しました。'));
 		}
@@ -493,7 +493,7 @@ class ToolsController extends AppController {
 		$Content->Behaviors->unload('SoftDelete');
 		$result = $Content->verify();
 		if($result === true) {
-			$this->BcMessage->setError(__d('baser', 'コンテンツのツリー構造に問題はありません。'), false);
+			$this->BcMessage->setSuccess(__d('baser', 'コンテンツのツリー構造に問題はありません。'), false);
 		} else {
 			$this->log($result);
 			$this->BcMessage->setError(__d('baser', 'コンテンツのツリー構造に問題があります。ログを確認してください。'));
