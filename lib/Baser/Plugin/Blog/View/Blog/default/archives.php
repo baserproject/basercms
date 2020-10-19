@@ -26,7 +26,7 @@ $(function(){
 
 <!-- title -->
 <h1 class="contents-head">
-<?php $this->Blog->title() ?>
+<?php $this->Blog->title(true) ?>
 </h1>
 
 <!-- archives title -->

@@ -26,7 +26,7 @@ $(function(){
 
 <!-- blog title -->
 <h1 class="contents-head">
-<?php $this->Blog->title() ?>
+<?php $this->Blog->title(true) ?>
 </h1>
 
 <!-- post title -->

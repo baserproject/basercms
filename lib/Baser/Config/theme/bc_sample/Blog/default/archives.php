@@ -20,7 +20,7 @@ $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser-
 ?>
 
 
-<h2 class="bs-blog-title"><?php $this->Blog->title() ?></h2>
+<h2 class="bs-blog-title"><?php $this->Blog->title(true) ?></h2>
 
 <h3 class="bs-blog-category-title"><?php $this->BcBaser->contentsTitle() ?></h3>
 
