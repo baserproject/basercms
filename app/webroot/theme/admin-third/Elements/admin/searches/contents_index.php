@@ -26,7 +26,7 @@
 <p class="bca-search__input-list">
 	<span class="bca-search__input-item">
 		<?php echo $this->BcForm->label('Content.folder_id', __d('baser', 'フォルダ'), ['class' => 'bca-search__input-item-label']) ?>
-		<?php echo $this->BcForm->input('Content.folder_id', ['type' => 'select', 'options' => $folders, 'empty' => __d('baser', '指定なし'), 'escape' => false]) ?>
+		<?php echo $this->BcForm->input('Content.folder_id', ['type' => 'select', 'options' => $folders, 'empty' => __d('baser', '指定なし')]) ?>
 	</span>
 	<span class="bca-search__input-item">
 		<?php echo $this->BcForm->label('Content.name', __d('baser', '名称'), ['class' => 'bca-search__input-item-label']) ?>

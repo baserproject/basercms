@@ -21,7 +21,7 @@
 <p>
 	<span>
 		<?php echo $this->BcForm->label('Content.folder_id', __d('baser', 'フォルダ')) ?>
-		<?php echo $this->BcForm->input('Content.folder_id', ['type' => 'select', 'options' => $folders, 'empty' => __d('baser', '指定しない'), 'escape' => false]) ?>　
+		<?php echo $this->BcForm->input('Content.folder_id', ['type' => 'select', 'options' => $folders, 'empty' => __d('baser', '指定しない')]) ?>　
 	</span>
 	<span>
 		<?php echo $this->BcForm->label('Content.name', __d('baser', 'コンテンツ名')) ?>
