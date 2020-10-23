@@ -74,6 +74,24 @@ class ThemeFilesController extends AppController {
 		$this->crumbs = [
 			['name' => __d('baser', 'テーマ管理'), 'url' => ['admin' => true, 'controller' => 'themes', 'action' => 'index']]
 		];
+
+		// テーマ編集機能が制限されている場合はアクセス禁止
+		if (Configure::read('BcApp.allowedThemeEdit') == false) {
+			$denyList = [
+				'admin_index',
+				'admin_add',
+				'admin_edit',
+				'admin_add_folder',
+				'admin_edit_folder',
+			];
+			// coreのindexはアクセス可能
+			if ($this->request->params['pass'][0] === 'core') {
+				unset($denyList[array_search('admin_index', $denyList)]);
+			}
+			if (in_array($this->request->action, $denyList)) {
+				$this->notfound();
+			}
+		}
 	}
 
 	/**
@@ -136,13 +154,13 @@ class ThemeFilesController extends AppController {
 			$excludeFileList = ['screenshot.png', 'VERSION.txt', 'config.php', 'AppView.php', 'BcAppView.php'];
 			if (!$path) {
 				$excludeFolderList = [
-					'Layouts', 
-					'Elements', 
+					'Layouts',
+					'Elements',
 					'Emails',
-					'Helper', 
+					'Helper',
 					'Config',
-					'Plugin',					
-					'img', 
+					'Plugin',
+					'img',
 					'css',
 					'js',
 					'_notes'
@@ -185,9 +203,9 @@ class ThemeFilesController extends AppController {
 
 /**
  * ファイルタイプを取得する
- * 
+ *
  * @param string $file
- * @return mixed false / type 
+ * @return mixed false / type
  */
 	protected function _getFileType($file) {
 		if (preg_match('/^(.+?)(\.ctp|\.php|\.css|\.js)$/is', $file)) {
@@ -873,7 +891,7 @@ class ThemeFilesController extends AppController {
 /**
  * 画像を表示する
  * コアの画像等も表示可
- * 
+ *
  * @param array パス情報
  * @return void
  */
@@ -901,7 +919,7 @@ class ThemeFilesController extends AppController {
 /**
  * 画像を表示する
  * コアの画像等も表示可
- * 
+ *
  * @param int $width
  * @param int $height
  * @param array パス情報
