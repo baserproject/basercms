@@ -11,7 +11,7 @@
   &__inner {
     width: 1260px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 40px;
     box-sizing: border-box;
 
     @include bs-mq() {
@@ -20,8 +20,8 @@
   }
 
   &__logo {
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin-top: 30px;
+    margin-bottom: 30px;
     vertical-align: bottom;
     max-height: 36px;
     max-width: 200px;
@@ -32,8 +32,8 @@
     }
 
     @include bs-mq() {
-      margin-top: 30px;
-      margin-bottom: 30px;
+      margin-top: 20px;
+      margin-bottom: 20px;
     }
   }
 
@@ -111,7 +111,7 @@
   position: relative;
   list-style: none;
   margin: 0 auto;
-  padding: 0;
+  padding: 0 40px;
   z-index: 15;
 
   @include bs-mq() {

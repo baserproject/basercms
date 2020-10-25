@@ -354,7 +354,7 @@ body {
 .bs-wrap {
   width: 1260px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 40px;
   box-sizing: border-box; }
   @media screen and (max-width: 768px) {
     .bs-wrap {
@@ -391,14 +391,14 @@ body {
   .bs-header__inner {
     width: 1260px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 40px;
     box-sizing: border-box; }
     @media screen and (max-width: 768px) {
       .bs-header__inner {
         width: 100%; } }
   .bs-header__logo {
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin-top: 30px;
+    margin-bottom: 30px;
     vertical-align: bottom;
     max-height: 36px;
     max-width: 200px; }
@@ -407,8 +407,8 @@ body {
       transition: all 300ms 0s ease; }
     @media screen and (max-width: 768px) {
       .bs-header__logo {
-        margin-top: 30px;
-        margin-bottom: 30px; } }
+        margin-top: 20px;
+        margin-bottom: 20px; } }
   .bs-header__menu-button {
     display: none;
     position: absolute;
@@ -461,7 +461,7 @@ body {
   position: relative;
   list-style: none;
   margin: 0 auto;
-  padding: 0;
+  padding: 0 40px;
   z-index: 15; }
   @media screen and (max-width: 768px) {
     .bs-global-menu {
@@ -631,8 +631,8 @@ body {
     margin-bottom: 60px; }
   .bs-widget-area h2 {
     font-weight: bold;
-    font-size: 14px;
-    padding: 22px 0 22px 0;
+    font-size: 20px;
+    padding: 10px 0 10px 0;
     margin: 0; }
     .bs-widget-area h2:nth-of-type(1) {
       padding-top: 0; }
@@ -1075,7 +1075,6 @@ table.cake-sql-log {
   width: 100%;
   margin-bottom: 100px; }
   .bs-info h2 {
-    font-size: 14px !important;
     font-weight: bold !important; }
   @media screen and (max-width: 768px) {
     .bs-info {
@@ -1130,7 +1129,7 @@ table.cake-sql-log {
       font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
       display: block;
       padding: 10px 0;
-      font-size: 14px;
+      font-size: 16px;
       line-height: 1.6 !important;
       font-weight: bold; }
     .bs-top-post__item-detail {
@@ -1219,7 +1218,7 @@ table.cake-sql-log {
       font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
       display: block;
       padding: 10px 0;
-      font-size: 14px;
+      font-size: 16px;
       line-height: 1.6 !important;
       font-weight: bold; }
     .bs-blog-post__item-category {
