@@ -33,24 +33,24 @@ class BcAppModel extends Model {
  * @var string
  */
 	public $useDbConfig = 'default';
-	
+
 /**
  * 公開状態のフィールド
  * BcAppModel::getConditionAllowPublish() で利用
- * @var string 
+ * @var string
  */
 	public $publishStatusField = 'status';
 /**
  * 公開開始日のフィールド
  * BcAppModel::getConditionAllowPublish() で利用
- * @var string 
+ * @var string
  */
 	public $publishBeginField = 'publish_begin';
 
 /**
  * 公開終了日のフィールド
  * BcAppModel::getConditionAllowPublish() で利用
- * @var string 
+ * @var string
  */
 	public $publishEndField = 'publish_end';
 
@@ -61,13 +61,17 @@ class BcAppModel extends Model {
  */
 	public function __construct($id = false, $table = null, $ds = null) {
 		$db = ConnectionManager::getDataSource('default');
+		if(Configure::read('BcRequest.asset')) {
+			parent::__construct($id, $table, $ds);
+			return;
+		}
 		$request = new CakeRequest();
 		if (isset($db->config['datasource'])) {
 			if ($db->config['datasource'] != '') {
-				// @deprecated 5.0.0 since 4.0.0 
+				// @deprecated 5.0.0 since 4.0.0
 				if($this->useDbConfig == 'plugin') {
 					$this->useDbConfig = 'default';
-					$this->log(sprintf(__d('baser', 'モデル：%s BcPluginAppModelの 継承は、バージョン 4.0.0 より非推奨となりました。バージョン 5.0.0 で BcPluginAppModel は削除される予定です。プラグインは AppModel を直接継承してください。'), $this->name), LOG_ALERT);	
+					$this->log(sprintf(__d('baser', 'モデル：%s BcPluginAppModelの 継承は、バージョン 4.0.0 より非推奨となりました。バージョン 5.0.0 で BcPluginAppModel は削除される予定です。プラグインは AppModel を直接継承してください。'), $this->name), LOG_ALERT);
 				}
 				parent::__construct($id, $table, $ds);
 			} elseif ($db->config['login'] == 'dummy' &&
@@ -320,7 +324,7 @@ class BcAppModel extends Model {
 		} elseif(!empty($_SESSION['dbDataPattern'])) {
 			$dbDataPattern = $_SESSION['dbDataPattern'];
 			unset($_SESSION['dbDataPattern']);
-		}	
+		}
 		if ($this->loadSchema($this->useDbConfig, $path, $options['filterTable'], $options['filterType'], [], $dropField = false)) {
 			if ($options['loadCsv']) {
 				$theme = $pattern = null;
@@ -494,7 +498,7 @@ class BcAppModel extends Model {
 		$byte = strlen($check);
 		return ($byte <= $max);
 	}
-	
+
 /**
  * 最大のバイト数チェック
  * - 対象となる値のサイズが、指定した最大値より短い場合、true を返す
@@ -506,7 +510,7 @@ class BcAppModel extends Model {
 	public function checkDateRenge($check, $begin, $end) {
 		if(!empty($this->data[$this->alias][$begin]) &&
 			!empty($this->data[$this->alias][$end])) {
-			if (strtotime($this->data[$this->alias][$begin]) >= 
+			if (strtotime($this->data[$this->alias][$begin]) >=
 				strtotime($this->data[$this->alias][$end])) {
 				return false;
 			}
@@ -781,7 +785,7 @@ class BcAppModel extends Model {
 
 /**
  * ファイルサイズチェック
- * 
+ *
  * @param array $check チェック対象データ
  * @param int $size 最大のファイルサイズ
  * @deprecated 5.0.0 since 4.1.0.2 アップロードしたファイルのサイズチェックに加えて、アップロード時のエラーコードをログに取るようにするため
@@ -807,7 +811,7 @@ class BcAppModel extends Model {
 
 /**
  * ファイルサイズチェック
- * 
+ *
  * @param array $check チェック対象データ
  * @param int $size 最大のファイルサイズ
  * @link http://php.net/manual/ja/features.file-upload.errors.php
@@ -886,7 +890,7 @@ class BcAppModel extends Model {
 
 /**
  * ファイルの拡張子チェック
- * 
+ *
  * @param array $check チェック対象データ
  * @param string $ext 許可する拡張子
  */
@@ -907,7 +911,7 @@ class BcAppModel extends Model {
 	}
 /**
  * 半角チェック
- * 
+ *
  * @param array $check 確認する値を含む配列。先頭の要素のみチェックされる
  * @return boolean
  */
@@ -923,7 +927,7 @@ class BcAppModel extends Model {
 
 /**
  * 半角英数字+アンダーバー＋ハイフンのチェック
- * 
+ *
  * @param array $check 確認する値を含む配列。先頭の要素のみチェックされる
  * @return boolean
  */
@@ -956,7 +960,7 @@ class BcAppModel extends Model {
 
 /**
  * 並び順を変更する
- * @param string	$id 
+ * @param string	$id
  * @param int			$offset
  * @param array		$conditions
  * @return boolean
@@ -1085,7 +1089,7 @@ class BcAppModel extends Model {
 		if (isset($data[$this->alias])) {
 			$data = $data[$this->alias];
 		}
-		
+
 		if ($this->Behaviors->loaded('BcCache')) {
 			$this->Behaviors->disable('BcCache');
 		}
@@ -1390,9 +1394,9 @@ class BcAppModel extends Model {
 
 /**
  * 複数のEメールチェック（カンマ区切り）
- * 
+ *
  * @param array $check 複数のメールアドレス
- * @return boolean 
+ * @return boolean
  */
 	public function emails($check) {
 		$emails = [];
@@ -1595,7 +1599,7 @@ class BcAppModel extends Model {
 
 /**
  * イベントを発火
- * 
+ *
  * @param string $name
  * @param array $params
  * @return mixed
@@ -1627,7 +1631,7 @@ class BcAppModel extends Model {
 
 /**
  * 日付の正当性チェック
- * 
+ *
  * @param array $check 確認する値
  * @return boolean
  */
@@ -1675,7 +1679,7 @@ class BcAppModel extends Model {
 
 /**
  * ツリーより再帰的に削除する
- * 
+ *
  * @param int $id
  * @return boolean
  */
@@ -1692,7 +1696,7 @@ class BcAppModel extends Model {
 
 /**
  * ファイルが送信されたかチェックするバリデーション
- * 
+ *
  * @param array $check
  * @return boolean
  */
@@ -1812,7 +1816,7 @@ class BcAppModel extends Model {
 			return $value;
 		}
 	}
-	
+
 /**
  * スクリプトがが埋め込まれているかチェックする
  * - 管理グループの場合は無条件に true を返却
@@ -1878,10 +1882,10 @@ class BcAppModel extends Model {
 			return false;
 		}
 	}
-	
+
 /**
  * 公開済データを取得するための conditions を生成取得
- * 
+ *
  * @return array array
  */
 	public function getConditionAllowPublish() {

@@ -99,26 +99,34 @@ if (!defined('BC_DEPLOY_PATTERN')) {
 define('BC_BASE_URL', baseUrl());
 
 /**
- * 静的ファイルの読み込みの場合はスキップ
- */
-$assetRegex = '/^' . preg_quote(BC_BASE_URL, '/') . '(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
-$assetRegexTheme = '/^' . preg_quote(BC_BASE_URL, '/') . 'theme\/[^\/]+?\/(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
-$uri = @$_SERVER['REQUEST_URI'];
-if (preg_match($assetRegex, $uri) || preg_match($assetRegexTheme, $uri)) {
-	Configure::write('BcRequest.asset', true);
-	return;
-}
-
-/**
  * インストール状態
  */
 define('BC_INSTALLED', isInstalled());
 Configure::write('BcRequest.isInstalled', BC_INSTALLED); // UnitTest用
 
 /**
+ * 静的ファイルの読み込みの場合はスキップ
+ */
+$assetRegex = '/^' . preg_quote(BC_BASE_URL, '/') . '.*?(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
+$assetRegexTheme = '/^' . preg_quote(BC_BASE_URL, '/') . 'theme\/[^\/]+?\/(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
+$uri = @$_SERVER['REQUEST_URI'];
+if (preg_match($assetRegex, $uri) || preg_match($assetRegexTheme, $uri)) {
+	Configure::write('BcRequest.asset', true);
+	App::uses('ClassRegistry', 'Utility');
+	$plugins = getEnablePlugins();
+	foreach ($plugins as $plugin) {
+		// プラグインのパスを取得するため２回ロード
+		CakePlugin::load($plugin['Plugin']['name']);
+		CakePlugin::load($plugin['Plugin']['name'], [
+			'bootstrap' => file_exists(CakePlugin::path($plugin['Plugin']['name']) . 'Config' . DS . 'bootstrap.php')
+		]);
+	}
+	return;
+}
+
+/**
  * クラスローダー設定
  */
-App::uses('AppModel', 'Model');
 App::uses('BcAppModel', 'Model');
 App::uses('BcCache', 'Model/Behavior');
 App::uses('ClassRegistry', 'Utility');
@@ -298,7 +306,7 @@ if (BC_INSTALLED) {
 }
 /**
  * プラグインをCake側で有効化
- * 
+ *
  * カレントテーマのプラグインも読み込む
  * サブサイトに適用されているプラグインも読み込む
  */
@@ -403,7 +411,7 @@ if(Configure::read('Cache.check')) {
 }
 
 /**
- * テーマヘルパーのパスを追加する 
+ * テーマヘルパーのパスを追加する
  */
 if (BC_INSTALLED || isConsole()) {
 	App::build(array(
