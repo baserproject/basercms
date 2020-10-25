@@ -359,7 +359,8 @@ body {
   @media screen and (max-width: 768px) {
     .bs-wrap {
       box-sizing: border-box;
-      width: 100%; } }
+      width: 100%;
+      padding: 0 20px; } }
 
 /**
  * Main
@@ -395,7 +396,8 @@ body {
     box-sizing: border-box; }
     @media screen and (max-width: 768px) {
       .bs-header__inner {
-        width: 100%; } }
+        width: 100%;
+        padding: 0 20px; } }
   .bs-header__logo {
     margin-top: 30px;
     margin-bottom: 30px;
@@ -465,7 +467,8 @@ body {
   z-index: 15; }
   @media screen and (max-width: 768px) {
     .bs-global-menu {
-      width: 100%; } }
+      width: 100%;
+      padding: 0; } }
   .bs-global-menu .ul-level-2 a {
     padding: 10px 20px !important; }
     .bs-global-menu .ul-level-2 a:link, .bs-global-menu .ul-level-2 a:visited {
