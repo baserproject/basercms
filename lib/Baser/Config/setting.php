@@ -176,6 +176,8 @@ $config['BcApp'] = [
 	'validSyntaxWithPage' => true,
 	// 管理者以外のPHPコードを許可するかどうか
 	'allowedPhpOtherThanAdmins' => true,
+	// テーマ編集機能の利用を許可するかどうか
+	'allowedThemeEdit' => false,
 	'marketThemeRss' => 'https://market.basercms.net/themes.rss',
 	'marketPluginRss' => 'https://market.basercms.net/plugins.rss',
 	'specialThanks'	=> 'https://basercms.net/special_thanks/special_thanks/ajax_users',

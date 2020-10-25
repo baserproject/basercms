@@ -35,7 +35,9 @@ $(function(){
           <?php endif ?>
         </div>
         <div class="row-tools">
-          <?php $this->BcBaser->link('', ['controller' => 'theme_files', 'action' => 'index', $currentTheme['name']], ['title' => __d('baser', 'テンプレート編集'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'file-list', 'data-bca-btn-size' => 'lg']) ?>
+			<?php if (Configure::read('BcApp.allowedThemeEdit')): ?>
+        		<?php $this->BcBaser->link('', ['controller' => 'theme_files', 'action' => 'index', $currentTheme['name']], ['title' => __d('baser', 'テンプレート編集'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'file-list', 'data-bca-btn-size' => 'lg']) ?>
+			<?php endif; ?>
           <?php $this->BcBaser->link('', ['action' => 'ajax_copy', $currentTheme['name']], ['title' => __d('baser', 'テーマコピー'), 'class' => 'btn-copy bca-btn-icon', 'data-bca-btn-type' => 'copy', 'data-bca-btn-size' => 'lg']) ?>
         </div>
       </div>
