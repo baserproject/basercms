@@ -97,8 +97,9 @@ class PagesController extends AppController {
 			$this->dispatchEvent('afterAdd', [
 				'data' => $data
 			]);
-
-			$message = sprintf(__d('baser', "固定ページ「%s」を追加しました。\n%s"), $this->request->data['Content']['title'], urldecode($data['Content']['url']));
+			$site = BcSite::findById($data['Content']['site_id']);
+			$url = $this->Content->getUrl($data['Content']['url'], true, $site->useSubDomain);
+			$message = sprintf(__d('baser', "固定ページ「%s」を追加しました。\n%s"), $this->request->data['Content']['title'], urldecode($url));
 			$this->BcMessage->setSuccess($message, true, false);
 			return json_encode($data['Content']);
 		} else {
@@ -147,7 +148,9 @@ class PagesController extends AppController {
 				}
 
 				// 完了メッセージ
-				$this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), $data['Content']['name'], urldecode($data['Content']['url'])));
+				$site = BcSite::findById($data['Content']['site_id']);
+				$url = $this->Content->getUrl($data['Content']['url'], true, $site->useSubDomain);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), $data['Content']['name'], urldecode($url)));
 
 				// EVENT Pages.afterEdit
 				$this->dispatchEvent('afterEdit', [
