@@ -25,7 +25,7 @@
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => __d('baser', '削除'), 'class' => 'btn']), ['action' => 'ajax_delete', $data['WidgetArea']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete']) ?>
 	</td>
 	<td><?php echo $data['WidgetArea']['id']; ?></td>
-	<td><?php $this->BcBaser->link($data['WidgetArea']['name'], ['action' => 'edit', $data['WidgetArea']['id']]); ?></td>
+	<td><?php $this->BcBaser->link($data['WidgetArea']['name'], ['action' => 'edit', $data['WidgetArea']['id']], ['escape' => true]); ?></td>
 	<td><?php echo $data['WidgetArea']['count']; ?></td>
 	<td><?php echo $this->BcTime->format('Y-m-d', $data['WidgetArea']['created']); ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['WidgetArea']['modified']); ?></td>
