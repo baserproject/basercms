@@ -27,7 +27,7 @@
 		<?php if ($dbData['url']): ?>
 			<?php $this->BcBaser->link($dbData['name'], $dbData['url'], ['target' => '_blank']) ?>
 		<?php else: ?>
-			<?php echo $dbData['name'] ?>
+			<?php echo h($dbData['name']) ?>
 		<?php endif ?>
 	</div>
 	<div class="bs-blog-comment__list-item-message">
