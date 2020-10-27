@@ -25,7 +25,7 @@
 <div class="bs-blog-comment__list-item" id="Comment<?php echo $dbData['no'] ?>">
 	<div class="bs-blog-comment__list-item-name">
 		<?php if ($dbData['url']): ?>
-			<?php $this->BcBaser->link($dbData['name'], $dbData['url'], ['target' => '_blank']) ?>
+			<?php $this->BcBaser->link($dbData['name'], $dbData['url'], ['target' => '_blank', 'escape' => true]) ?>
 		<?php else: ?>
 			<?php echo h($dbData['name']) ?>
 		<?php endif ?>
