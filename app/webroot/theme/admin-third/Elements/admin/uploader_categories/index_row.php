@@ -19,7 +19,7 @@
 <?php endif ?>
 	</td>
 	<td class="bca-table-listup__tbody-td"><?php echo $data['UploaderCategory']['id'] ?></td>
-	<td class="bca-table-listup__tbody-td"><?php echo $data['UploaderCategory']['name'] ?></td>
+	<td class="bca-table-listup__tbody-td"><?php echo h($data['UploaderCategory']['name']) ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td class="bca-table-listup__tbody-td">
 		<?php echo $data['UploaderCategory']['created'] ?><br />

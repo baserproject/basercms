@@ -20,13 +20,13 @@
 	<td class="bca-table-listup__tbody-td" class="row-tools bca-table-listup__tbody-td">
 		<?php if ($this->BcBaser->isAdminUser()): ?>
 			<?php echo $this->BcForm->input('ListTool.batch_targets.' . $data['id'], ['type' => 'checkbox', 'label'=> '<span class="bca-visually-hidden">チェックする</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['id']]) ?>
-		<?php endif ?>		
+		<?php endif ?>
 	</td>
 	<td class="bca-table-listup__tbody-td">
 		<?php if ($data['url']): ?>
-			<?php $this->BcBaser->link($data['name'], ['controller' => 'feed_details', 'action' => 'edit', $this->BcForm->value('FeedConfig.id'), $data['id']]) ?>
+			<?php $this->BcBaser->link($data['name'], ['controller' => 'feed_details', 'action' => 'edit', $this->BcForm->value('FeedConfig.id'), $data['id']], ['escape' => true]) ?>
 		<?php else: ?>
-			<?php echo $data['name'] ?>
+			<?php echo h($data['name']) ?>
 		<?php endif; ?>
 	</td>
 	<td class="bca-table-listup__tbody-td"><?php echo $data['category_filter'] ?></td>

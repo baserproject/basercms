@@ -58,7 +58,7 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 
 				<h2><?php echo __d('baser', '利用できるウィジェット') ?></h2>
 				<?php foreach ($widgetInfos as $widgetInfo) : ?>
-					<h3><?php echo $widgetInfo['title'] ?></h3>
+					<h3><?php echo h($widgetInfo['title']) ?></h3>
 					<?php
 					$widgets = [];
 					foreach ($widgetInfo['paths'] as $path) {
@@ -85,20 +85,20 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 					<?php foreach ($widgets as $widget): ?>
 
 						<div class="ui-widget-content draggable widget" id="Widget<?php echo Inflector::camelize($widget['name']) ?>">
-							<div class="head"><?php echo $widget['title'] ?></div>
+							<div class="head"><?php echo h($widget['title']) ?></div>
 						</div>
 
-						<div class="description"><?php echo $widget['description'] ?></div>
+						<div class="description"><?php echo h($widget['description']) ?></div>
 
-						<div class="ui-widget-content sortable widget template <?php echo $widget['name'] ?>" id="<?php echo Inflector::camelize($widget['name']) ?>">
+						<div class="ui-widget-content sortable widget template <?php echo h($widget['name']) ?>" id="<?php echo Inflector::camelize($widget['name']) ?>">
 							<div class="clearfix">
-								<div class="widget-name display-none"><?php echo $widget['name'] ?></div>
+								<div class="widget-name display-none"><?php echo h($widget['name']) ?></div>
 								<div class="del"><?php echo __d('baser', '削除') ?></div>
 								<div class="action"><?php echo __d('baser', '設定') ?></div>
-								<div class="head"><?php echo $widget['title'] ?></div>
+								<div class="head"><?php echo h($widget['title']) ?></div>
 							</div>
 							<div class="content" style="text-align:right">
-								<p class="widget-name"><small><?php echo $widget['title'] ?></small></p>
+								<p class="widget-name"><small><?php echo h($widget['title']) ?></small></p>
 								<?php echo $this->BcForm->create('Widget', ['url' => ['controller' => 'widget_areas', 'action' => 'update_widget', $this->BcForm->value('WidgetArea.id')], 'class' => 'form']) ?>
 								<?php echo $this->BcForm->input('Widget.id', ['type' => 'hidden', 'class' => 'id']) ?>
 								<?php echo $this->BcForm->input('Widget.type', ['type' => 'hidden', 'value' => $widget['title']]) ?>
@@ -134,15 +134,15 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 						<?php $key = key($widget) ?>
 						<?php $enabled = '' ?>
 						<?php if ($widget[$key]['status']): ?>
-				<?php $enabled = ' enabled' ?>
-			<?php endif ?>
+							<?php $enabled = ' enabled' ?>
+						<?php endif ?>
 
-						<div class="ui-widget-content sortable widget setting <?php echo $widget[$key]['element'] ?><?php echo $enabled ?>" id="Setting<?php echo $widget[$key]['id'] ?>">
+						<div class="ui-widget-content sortable widget setting <?php echo h($widget[$key]['element']) ?><?php echo $enabled ?>" id="Setting<?php echo $widget[$key]['id'] ?>">
 							<div class="clearfix">
-								<div class="widget-name display-none"><?php echo $widget[$key]['element'] ?></div>
+								<div class="widget-name display-none"><?php echo h($widget[$key]['element']) ?></div>
 								<div class="del"><?php echo __d('baser', '削除') ?></div>
 								<div class="action"><?php echo __d('baser', '設定') ?></div>
-								<div class="head"><?php echo $widget[$key]['name'] ?></div>
+								<div class="head"><?php echo h($widget[$key]['name']) ?></div>
 							</div>
 							<div class="content" style="text-align:right">
 								<p><small><?php echo $widget[$key]['type'] ?></small></p>
@@ -161,8 +161,8 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 								<?php echo $this->BcForm->end(['label' => __d('baser', '保存'), 'div' => false, 'id' => 'WidgetUpdateWidgetSubmit' . $widget[$key]['id'], 'class' => 'button bca-btn', 'data-bca-btn-type' => 'save']) ?></p>
 							</div>
 						</div>
-		<?php endforeach; ?>
-	<?php endif; ?>
+					<?php endforeach; ?>
+				<?php endif; ?>
 			</div>
 		</div>
 	</div>
