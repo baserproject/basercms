@@ -11,7 +11,7 @@
 	'data-alertMessageComplate' => __('コメントの送信が完了しました。'),
 	'data-alertMessageError' => __('コメントの送信に失敗しました。入力内容を見なおしてください。'),
 ]); ?>
-<div id="BaseUrl" style="display: none"><?php echo $this->request->base; ?></div>
+<div id="BaseUrl" style="display: none"><?php echo h($this->request->base); ?></div>
 
 <script>
 	authCaptcha = <?php echo $blogContent['BlogContent']['auth_captcha'] ? 'true' : 'false'; ?>;
