@@ -346,13 +346,13 @@ body {
 .bs-container {
   text-align: left;
   margin: 0 auto;
-  min-width: 1260px; }
+  min-width: 1300px; }
   @media screen and (max-width: 768px) {
     .bs-container {
       min-width: 100%; } }
 
 .bs-wrap {
-  width: 1260px;
+  width: 1300px;
   margin: 0 auto;
   padding: 0 40px;
   box-sizing: border-box; }

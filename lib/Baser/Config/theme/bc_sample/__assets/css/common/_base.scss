@@ -29,7 +29,7 @@ body {
 .bs-container {
   text-align: left;
   margin: 0 auto;
-  min-width: 1260px;
+  min-width: 1300px;
 
   @include bs-mq() {
     min-width: 100%;
@@ -37,7 +37,7 @@ body {
 }
 
 .bs-wrap {
-  width: 1260px;
+  width: 1300px;
   margin: 0 auto;
   padding: 0 40px;
   box-sizing: border-box;
