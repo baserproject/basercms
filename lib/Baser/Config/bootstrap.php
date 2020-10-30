@@ -127,6 +127,7 @@ if (preg_match($assetRegex, $uri) || preg_match($assetRegexTheme, $uri)) {
 /**
  * クラスローダー設定
  */
+App::uses('AppModel', 'Model');
 App::uses('BcAppModel', 'Model');
 App::uses('BcCache', 'Model/Behavior');
 App::uses('ClassRegistry', 'Utility');
