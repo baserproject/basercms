@@ -19,7 +19,7 @@
 	<td class="bca-table-listup__tbody-td"><?php echo $data['User']['id'] ?></td>
 	<td class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['User']['name'], ['action' => 'edit', $data['User']['id']], ['escape' => true]) ?></td>
 	<td class="bca-table-listup__tbody-td"><?php echo h($data['User']['nickname']) ?></td>
-	<td class="bca-table-listup__tbody-td"><?php echo $this->BcText->listValue('User.user_group_id', $data['User']['user_group_id']); ?></td>
+	<td class="bca-table-listup__tbody-td"><?php echo h($this->BcText->listValue('User.user_group_id', $data['User']['user_group_id'])); ?></td>
 	<td class="bca-table-listup__tbody-td"><?php echo h($data['User']['real_name_1']) ?>
 		&nbsp;<?php echo h($data['User']['real_name_2']) ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>

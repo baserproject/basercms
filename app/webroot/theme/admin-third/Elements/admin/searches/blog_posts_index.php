@@ -26,13 +26,13 @@ $users = $this->BcForm->getControlSource("BlogPost.user_id");
 <?php if ($this->BlogCategories): ?>
 	<span class="bca-search__input-item">
 		<?php echo $this->BcForm->label('BlogPost.blog_category_id', __d('baser', 'カテゴリー'), ['class' => 'bca-search__input-item-label']) ?>
-		<?php echo $this->BcForm->input('BlogPost.blog_category_id', ['type' => 'select', 'options' => $this->BlogCategories, 'escape' => false, 'empty' => __d('baser', '指定なし')]) ?>
+		<?php echo $this->BcForm->input('BlogPost.blog_category_id', ['type' => 'select', 'options' => $this->BlogCategories, 'empty' => __d('baser', '指定なし')]) ?>
 	</span>
 <?php endif ?>
 <?php if ($blogContent['BlogContent']['tag_use'] && $this->BlogTags): ?>
 	<span class="bca-search__input-item">
 		<?php echo $this->BcForm->label('BlogPost.blog_tag_id', __d('baser', 'タグ'), ['class' => 'bca-search__input-item-label']) ?>
-		<?php echo $this->BcForm->input('BlogPost.blog_tag_id', ['type' => 'select', 'options' => $this->BlogTags, 'escape' => false, 'empty' => __d('baser', '指定なし')]) ?>
+		<?php echo $this->BcForm->input('BlogPost.blog_tag_id', ['type' => 'select', 'options' => $this->BlogTags, 'empty' => __d('baser', '指定なし')]) ?>
 	</span>
 <?php endif ?>
 	<span class="bca-search__input-item">

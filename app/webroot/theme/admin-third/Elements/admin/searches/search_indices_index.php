@@ -40,7 +40,7 @@ $types = BcUtil::unserialize($this->BcBaser->siteConfig['content_types']);
 	<?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'SearchIndexSiteIdLoader']) ?>
 	<span class="bca-search__input-item">
 		<?php echo $this->BcForm->label('SearchIndex.folder_id', __d('baser', 'フォルダ'), ['class' => 'bca-search__input-item-label']) ?>
-		<?php echo $this->BcForm->input('SearchIndex.folder_id', ['type' => 'select', 'options' => $folders, 'empty' => __d('baser', '指定なし'), 'escape' => false]) ?>
+		<?php echo $this->BcForm->input('SearchIndex.folder_id', ['type' => 'select', 'options' => $folders, 'empty' => __d('baser', '指定なし')]) ?>
 	</span>
 	<span class="bca-search__input-item">
 		<?php echo $this->BcForm->label('SearchIndex.keyword', __d('baser', 'キーワード'), ['class' => 'bca-search__input-item-label']) ?>
