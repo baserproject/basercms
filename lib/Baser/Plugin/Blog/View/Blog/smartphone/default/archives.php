@@ -20,7 +20,7 @@ $this->BcBaser->setDescription(sprintf(__d('baser', '%s｜%sのアーカイブ�
 
 <!-- title -->
 <h1 class="contents-head">
-	<?php $this->Blog->title() ?>
+	<?php echo h($this->Blog->getTitle()) ?>
 </h1>
 
 <!-- archives title -->
