@@ -72,7 +72,7 @@ $(function(){
 	<div id="PageTitle">
 	    <div class="body-wrap">
 	    <?php if (!empty($this->Blog)): ?>
-	        <h1><?php $this->Blog->title() ?></h1>
+	        <h1><?php echo h($this->Blog->getTitle()) ?></h1>
     	<?php else: ?>
 	        <h1><?php $this->BcBaser->contentsTitle() ?></h1>
 	    <?php endif ?>

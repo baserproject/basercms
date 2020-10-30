@@ -21,7 +21,7 @@ $this->BcBaser->setDescription($this->Blog->getDescription());
 ?>
 
 
-<h2 class="bs-blog-title"><?php $this->Blog->title() ?></h2>
+<h2 class="bs-blog-title"><?php echo h($this->Blog->getTitle()) ?></h2>
 
 <?php if ($this->Blog->descriptionExists()): ?>
 <div class="bs-blog-description"><?php $this->Blog->description() ?></div>

@@ -21,7 +21,7 @@ $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->ge
 ?>
 
 
-<h2 class="bs-blog-title"><?php $this->Blog->title() ?></h2>
+<h2 class="bs-blog-title"><?php echo h($this->Blog->getTitle()) ?></h2>
 
 <h3 class="bs-blog-post-title"><?php $this->BcBaser->contentsTitle() ?></h3>
 
