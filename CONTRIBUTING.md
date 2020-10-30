@@ -28,9 +28,9 @@ baserCMS５の開発コードは、`ucmitz` です。開発については、`uc
 
 ## 開発の手順
 
-### 1. 実装する機能を選択する
+### 1. 実装する機能、または課題を選択する
 
-[機能要件一覧](https://docs.google.com/spreadsheets/d/1YT5PuZQdDNU0wrZdqYbh74KuLSw1SIt4_EKwPWOfDKA/edit#gid=0) にて各機能の仕様を確認し、取りかかれそうな機能な選択します。
+[機能要件一覧](https://docs.google.com/spreadsheets/d/1YT5PuZQdDNU0wrZdqYbh74KuLSw1SIt4_EKwPWOfDKA/edit#gid=0) にて各機能の仕様を確認し、取りかかれそうな機能な選択します。もしくは、同ファイル内のバージョンごとの課題タブより対応する課題を選択します。
 
 ### 2. Issue を立てる
 
@@ -57,11 +57,11 @@ Issue番号にもとづいた名称でブランチを作成し切り替えます
 
 ### 7. プルリクエストを作成する
 
-実装とテストが完了したら、自身のレポジトリにプッシュしプルリクエストを作成し、[機能要件一覧](https://docs.google.com/spreadsheets/d/1YT5PuZQdDNU0wrZdqYbh74KuLSw1SIt4_EKwPWOfDKA/edit#gid=0) の「状況」を「レビュー待ち」に更新します。
+実装とテストが完了したら、自身のレポジトリにプッシュしプルリクエストを作成し、[機能要件一覧](https://docs.google.com/spreadsheets/d/1YT5PuZQdDNU0wrZdqYbh74KuLSw1SIt4_EKwPWOfDKA/edit#gid=0) （もしくは同ファイル内課題タブの課題）の「状況」を「レビュー待ち」に更新します。
 
 ### 8. マージ確認
 
-プルリクエストがマージされたら、[機能要件一覧](https://docs.google.com/spreadsheets/d/1YT5PuZQdDNU0wrZdqYbh74KuLSw1SIt4_EKwPWOfDKA/edit#gid=0) の「状況」を「完了」に更新します。
+プルリクエストがマージされたら、[機能要件一覧](https://docs.google.com/spreadsheets/d/1YT5PuZQdDNU0wrZdqYbh74KuLSw1SIt4_EKwPWOfDKA/edit#gid=0) （もしくは同ファイル内課題タブの課題）の「状況」を「完了」に更新します。
 
 ## 新しい仕様の定義について
 
