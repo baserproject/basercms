@@ -117,36 +117,40 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
     }
 
     /**
-     * Returns a service provider instance.
-     * https://book.cakephp.org/authentication/2/en/index.html
+     * 認証サービスプロバイダ生成
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request Request
      * @return \Authentication\AuthenticationServiceInterface
      */
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
     {
+        $prefix = $request->getParam('prefix');
+        $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
         $service = new AuthenticationService();
         $service->setConfig([
-            'unauthenticatedRedirect' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX') . '/users/login',
+            'unauthenticatedRedirect' => $authSetting['loginAction'],
             'queryParam' => 'redirect',
         ]);
 
         $fields = [
-            'username' => 'email',
-            'password' => 'password'
+            'username' => $authSetting['username'],
+            'password' => $authSetting['password']
         ];
 
-        // Load the authenticators, you want session first
         $service->loadAuthenticator('Authentication.Session', [
-            'sessionKey' => 'AuthAdmin',
+            'sessionKey' => $authSetting['sessionKey'],
         ]);
-        $service->loadAuthenticator('Authentication.Form', [
+        $service->loadAuthenticator('Authentication.' . $authSetting['type'], [
             'fields' => $fields,
-            'loginUrl' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX') . '/users/login',
+            'loginUrl' => $authSetting['loginAction'],
         ]);
-
-        // Load identifiers
-        $service->loadIdentifier('Authentication.Password', compact('fields'));
+        $service->loadIdentifier('Authentication.Password', [
+            'fields' => $fields,
+            'resolver' => [
+                'className' => 'Authentication.Orm',
+                'userModel' => $authSetting['userModel']
+            ],
+        ]);
 
         return $service;
     }

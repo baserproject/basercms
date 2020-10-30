@@ -20,33 +20,20 @@ use Exception;
  */
 class BcAdminAppController extends AppController
 {
+    /**
+     * Initialize
+     */
     public function initialize(): void
     {
         parent::initialize();
-        try {
-            $this->loadComponent('Authentication.Authentication');
-        } catch (Exception $e) {
-        }
-        // $this->loadComponent('Auth', [
-        //     'authenticate' => [
-        //         'Form' => [
-        //             'fields' => [
-        //                 'username' => 'email',
-        //                 'password' => 'password'
-        //             ]
-        //         ]
-        //     ],
-        //     'loginAction' => [
-        //         'prefix' => 'Admin',
-        //         'controller' => 'Users',
-        //         'action' => 'login'
-        //     ],
-        //     // コントローラーで isAuthorized を使用します
-        //     // 'authorize' => ['Controller'],
-        //     'unauthorizedRedirect' => $this->referer()
-        // ]);
+        $this->loadComponent('Authentication.Authentication');
     }
 
+    /**
+     * Before Render
+     * @param EventInterface $event
+     * @return \Cake\Http\Response|void|null
+     */
 	public function beforeRender(EventInterface $event)
 	{
 	    $this->viewBuilder()->setClassName('BaserCore.BcAdminApp');

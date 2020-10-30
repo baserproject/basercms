@@ -132,7 +132,7 @@ $user = $this->BcAuth->getCurrentLoginUser();
 				</li>
 				<?php if ($this->BcAuth->isAdminLogin() && $isCurrentUserAdminAvailable): ?>
 					<li>
-						<?php $this->BcBaser->link(__d('baser', 'キャッシュクリア'), ['admin' => true, 'controller' => 'site_configs', 'action' => 'del_cache'], ['confirm' => __d('baser', 'キャッシュクリアします。いいですか？')]) ?>　
+						<?php $this->BcBaser->link(__d('baser', 'キャッシュクリア'), ['admin' => true, 'controller' => 'Utilities', 'action' => 'clear_cache'], ['confirm' => __d('baser', 'キャッシュクリアします。いいですか？')]) ?>　
 					</li>
 				<?php endif ?>
 			</ul>

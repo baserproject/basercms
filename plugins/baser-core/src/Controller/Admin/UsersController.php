@@ -14,6 +14,7 @@ namespace BaserCore\Controller\Admin;
 use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\UsersTable;
+use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
@@ -120,7 +121,7 @@ class UsersController extends BcAdminAppController
         $this->set('title', '管理システムログイン');
         $result = $this->Authentication->getResult();
         if ($result->isValid()) {
-            $target = $this->Authentication->getLoginRedirect() ?? env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX') . '/';
+            $target = $this->Authentication->getLoginRedirect() ?? Configure::read('BcPrefixAuth.Admin.loginRedirect');
             $this->redirect($target);
             return;
         }
