@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\View\Helper;
+use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\View\Helper;
 
@@ -68,7 +69,7 @@ class BcAdminHelper extends Helper {
 		$currentUrl = '/' . $url;
 		$params = null;
 		if(strpos($currentUrl, '?') !== false) {
-			list($currentUrl, $params) = explode('?', $currentUrl);
+			[$currentUrl, $params] = explode('?', $currentUrl);
 		}
 //		$currentUrl = preg_replace('/\/index$/', '/', $currentUrl);
 		if($params) {
@@ -196,6 +197,27 @@ class BcAdminHelper extends Helper {
 		}
 		$mainBodyHeaderLinks[] = $links;
 		$this->_View->set('mainBodyHeaderLinks', $mainBodyHeaderLinks);
+	}
+
+    /**
+     * サイドバーが利用可能か確認する
+     * @return bool
+     */
+	public function isAvailableSideBar()
+    {
+        // TODO 実装要
+        // >>>
+        // $loginAction = Configure::read('BcAuthPrefix.admin.loginAction');
+        // ---
+        $loginAction = '/baser/admin/users/login';
+        // <<<
+        $name = $this->_View->getName();
+        $url = $this->_View->getRequest()->getPath();
+        if (!in_array($name, ['Installations', 'Updaters']) && ($loginAction !== $url && !empty(BcUtil::loginUser()))) {
+            return true;
+        } else {
+            return false;
+        }
 	}
 
 }

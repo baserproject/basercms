@@ -49,14 +49,13 @@ $base = $attributes['base'];
 	<body id="<?php $this->BcBaser->contentsName(true) ?>" class="normal">
 
 	<div id="Page" class="bca-app">
-<?php echo $this->element('Admin/header') ?>
+        <?php echo $this->element('Admin/header') ?>
 
 		<div id="Wrap" class="bca-container">
 
-<?php // TMP cake3 ?>
-<?php //if ($this->name != 'Installations' && $this->name != 'Updaters' && ('/' . $this->request->url != Configure::read('BcAuthPrefix.admin.loginAction')) && !empty($user)): ?>
+<?php if($this->BcAdmin->isAvailableSideBar()): ?>
 			<?php $this->BcBaser->element('Admin/sidebar') ?>
-<?php //endif ?>
+<?php endif ?>
 
 				<main id="Contents" class="bca-main">
 
