@@ -81,6 +81,10 @@ class UserGroupsController extends BcAdminAppController
         $this->request = $this->request->withParam('pass', ['num' => $this->siteConfigs['admin_list_num']]);
         $default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
         $this->setViewConditions('UserGroup', ['default' => $default]);
+        $this->paginate = [
+            'order' => ['UserGroups.id'],
+            'limit' => $this->request->getParam('pass')['num'],
+        ];
         $userGroups = $this->paginate(
             $this->UserGroups->find('all')
                 ->limit($this->request->getParam('pass')['num'])
