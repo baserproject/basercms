@@ -122,11 +122,13 @@ class UsersController extends BcAdminAppController
         $result = $this->Authentication->getResult();
         if ($result->isValid()) {
             $target = $this->Authentication->getLoginRedirect() ?? Configure::read('BcPrefixAuth.Admin.loginRedirect');
+            $user = $result->getData();
+            $this->BcMessage->setInfo(__d('baser', 'ようこそ、' . $user->name . 'さん。'));
             $this->redirect($target);
             return;
         }
         if ($this->request->is('post') && !$result->isValid()) {
-            $this->Flash->error('Invalid username or password');
+            $this->BcMessage->setError(__d('baser', 'Eメール、または、パスワードが間違っています。'));
         }
     }
 

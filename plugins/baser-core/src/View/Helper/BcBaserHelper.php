@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 use \Cake\View\Helper;
+use Cake\View\Helper\FlashHelper;
 use Cake\View\Helper\HtmlHelper;
 use Cake\View\Helper\UrlHelper;
 
@@ -19,10 +20,11 @@ use Cake\View\Helper\UrlHelper;
  * @package BaserCore\View\Helper
  * @property HtmlHelper $Html
  * @property UrlHelper $Url
+ * @property FlashHelper $Flash
  */
 class BcBaserHelper extends Helper
 {
-	public $helpers = ['Html', 'Url'];
+	public $helpers = ['Html', 'Url', 'Flash'];
 	// TODO 取り急ぎ
 	public $siteConfig = [
 		'formal_name' => 'baserCMS',
@@ -88,8 +90,26 @@ class BcBaserHelper extends Helper
 
     }
 
-    public function flash() {
-
+    /**
+     * セッションに保存したメッセージを出力する
+     *
+     * メールフォームのエラーメッセージ等を出力します。
+     *
+     * @param string $key 出力するメッセージのキー（初期状態では省略可）
+     */
+    public function flash($key = 'flash'): void
+    {
+        $session = $this->_View->getRequest()->getSession();
+		$sessionMessageList = $session->read('Flash');
+		if ($sessionMessageList) {
+		    echo '<div id="MessageBox" class="message-box">';
+			foreach ($sessionMessageList as $messageKey => $sessionMessage) {
+				if ($key === $messageKey && $session->check('Flash.' . $messageKey)) {
+					echo $this->Flash->render($messageKey, ['escape' => false]);
+				}
+			}
+			echo '</div>';
+		}
     }
 
     public function getContentsTitle() {

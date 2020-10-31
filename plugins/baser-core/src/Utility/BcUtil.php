@@ -11,6 +11,8 @@
 
 namespace BaserCore\Utility;
 
+use Cake\Core\Configure;
+use Cake\ORM\Entity;
 use Cake\Routing\Router;
 
 /**
@@ -23,23 +25,17 @@ class BcUtil {
 /**
  * ログインユーザーのデータを取得する
  *
- * @return array
+ * @return Entity
  */
-	public static function loginUser($prefix = 'admin') {
+	public static function loginUser($prefix = 'Admin') {
 	    $session = Router::getRequest()->getSession();
-	    // TODO 実装要
-	    // >>>
-		//$sessionKey = BcUtil::authSessionKey($prefix);
-//		$user = $session->read('Auth.' . $sessionKey);
-//		if (!$user) {
-//			if (!empty($_SESSION['Auth'][$sessionKey])) {
-//				$user = $_SESSION['Auth'][$sessionKey];
-//			}
-//		}
-		// ---
-		$sessionKey = 'AuthAdmin';
+	    $sessionKey = Configure::read('BcPrefixAuth.' . $prefix . '.sessionKey');
 		$user = $session->read($sessionKey);
-		// <<<
+		if (!$user) {
+			if (!empty($_SESSION[$sessionKey])) {
+				$user = $_SESSION[$sessionKey];
+			}
+		}
 		return $user;
 	}
 
