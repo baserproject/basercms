@@ -16,11 +16,13 @@ namespace BaserCore\Controller\Admin;
  * @package BaserCore\Controller\Admin
  */
 class DashboardController extends BcAdminAppController {
+
     /**
      * ダッシュボード
-     * TODO ： 未実装
      */
     public function index() {
+        // TODO 未実装
         $this->set('title', 'ダッシュボード');
     }
+
 }

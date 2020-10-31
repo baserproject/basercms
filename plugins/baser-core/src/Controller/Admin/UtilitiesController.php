@@ -19,6 +19,8 @@ class UtilitiesController extends BcAdminAppController {
      * サーバーキャッシュを削除する
      */
     public function clear_cache() {
+        // TODO 未実装
+        $this->BcMessage->setError("おっと、まだ処理は実装されていませんよ！！！ \n\n/tmp/cache/ 内を削除するだけなので簡単です＾＾");
         $this->redirect($this->referer());
     }
 }

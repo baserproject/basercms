@@ -16,10 +16,13 @@ namespace BaserCore\Controller\Admin;
  * @package BaserCore\Controller\Admin
  */
 class PluginsController extends BcAdminAppController {
+
     /**
      * プラグイン一覧
      */
     public function index() {
+        // TODO 未実装
         $this->set('title', 'プラグイン一覧');
     }
+
 }
