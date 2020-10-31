@@ -33,12 +33,16 @@ $base = $attributes['base'];
 		<?php echo $this->BcBaser->js([
             'admin/vendor.bundle',
             'vendor/vue.min',
-            'vendor/jquery-3.5.1.min'
+            'vendor/jquery-3.5.1.min',
+            'vendor/jquery.bt.min',
 		]) ?>
 		<?php echo $this->BcBaser->js('admin/common.bundle', true, [
 		    'id' => 'AdminScript',
 		    'data-baseUrl' => h($base)
         ]) ?>
+		<?php echo $this->BcBaser->js([
+            'admin/startup.bundle'
+		]) ?>
 		<?php echo $this->Html->css([
 		    'vendor/bootstrap-4.1.3/bootstrap',
 			'admin/style',
