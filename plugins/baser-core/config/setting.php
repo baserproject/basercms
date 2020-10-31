@@ -148,7 +148,7 @@ return [
             // ログインページURL
             'loginAction' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX', '/admin') . '/users/login',
             // ログアウトページURL
-            'logoutAction'=> '/' . env('BC_ADMIN_PREFIX') . '/users/logout',
+            'logoutAction'=> env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX') . '/users/logout',
             // ユーザー名フィールド
             'username' => 'email',
             // パスワードフィールド

@@ -39,4 +39,12 @@ class BcUtil {
 		return $user;
 	}
 
+    /**
+     * インストールモードか判定する
+     * @return bool|string|null
+     */
+	public static function isInstallMode() {
+        return env('INSTALL_MODE');
+	}
+
 }

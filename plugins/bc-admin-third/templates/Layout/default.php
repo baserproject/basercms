@@ -32,7 +32,8 @@ $base = $attributes['base'];
 		<?php echo $this->fetch('script') ?>
 		<?php echo $this->BcBaser->js([
             'admin/vendor.bundle',
-            'vendor/vue.min'
+            'vendor/vue.min',
+            'vendor/jquery-3.5.1.min'
 		]) ?>
 		<?php echo $this->BcBaser->js('admin/common.bundle', true, [
 		    'id' => 'AdminScript',

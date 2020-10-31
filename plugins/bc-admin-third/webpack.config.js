@@ -28,12 +28,6 @@ module.exports = {
     	path: path.resolve(__dirname, './webroot/js'),
 		filename: "[name].bundle.js"
     },
-    plugins: [
-        new webpack.ProvidePlugin({
-          $: 'jquery',
-          jQuery: 'jquery'
-        })
-    ],
     optimization: {
         splitChunks: {
 			name: 'admin/vendor',

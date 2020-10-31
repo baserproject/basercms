@@ -10,7 +10,9 @@
  */
 
 namespace BaserCore\View\Helper;
+use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
+use Cake\ORM\Entity;
 use Cake\View\Helper;
 
 /**
@@ -49,7 +51,7 @@ class BcAuthHelper extends Helper {
      * @return array 認証プレフィックス設定
      */
     public function getCurrentPrefixSetting() {
-        return Configure::read('BcAuthPrefix.' . $this->getCurrentPrefix());
+        return Configure::read('BcPrefixAuth.' . $this->getCurrentPrefix());
     }
 
     /**
@@ -57,7 +59,7 @@ class BcAuthHelper extends Helper {
      * @return string
      */
     public function getCurrentLoginUrl() {
-        return preg_replace('/^\//', '', $this->getCurrentPrefixSetting()['loginAction']);
+        return $this->getCurrentPrefixSetting()['loginAction'];
     }
 
     /**
@@ -126,8 +128,7 @@ class BcAuthHelper extends Helper {
      * @return bool
      */
     public function isAdminLogin() {
-        // TODO 実装要
-        return true;
+        return (bool) BcUtil::loginUser();
     }
 
     /**
@@ -148,13 +149,10 @@ class BcAuthHelper extends Helper {
 
     /**
      * 現在のログインユーザー
-     * @return array
-     * @todo 実装要
+     * @return Entity
      */
     public function getCurrentLoginUser() {
-        return [
-            'id' => 1
-        ];
+        return BcUtil::loginUser();
     }
 
 }

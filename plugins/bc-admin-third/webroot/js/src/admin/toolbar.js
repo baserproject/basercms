@@ -9,18 +9,8 @@
  */
 
 
-import fixedMenu from '../../vendor/jquery.fixedMenu';
-
 $(function(){
-	// $('#UserMenu').fixedMenu();
-	$('#SystemMenu h2').click(function(){
-		if($(this).next().css('display')=='none') {
-			$(this).next().slideDown(200);
-		} else {
-			$(this).next().slideUp(200);
-		}
-	});
-	$('#SystemMenu ul:first').show();
+	$('#UserMenu').fixedMenu();
 	$("#UserMenu ul li div ul li").each(function(){
 		if(!$(this).html().replace(/(^\s+)|(\s+$)/g, "")) {
 			$(this).remove();

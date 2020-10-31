@@ -19,21 +19,27 @@ bc-admin-third ディレクトリの直下で、gulp を実行し、ファイル
 ```shell script
 gulp
 ```
-監視対象は、`/webroot/js/src/` 配下の javascript ファイルとなります。  
+監視対象は、`/webroot/js/src/` 配下の javascript ファイルとなります。
 監視対象のファイルを更新すると、`/webroot/js/` 配下のディレクトリ構造を維持した同階層展に、`bundle` というサフィックス付のファイルにコンパイルします。
 ```
-/webroot/js/src/admin/users/index.js 
+/webroot/js/src/admin/users/index.js
 ↓
 /webroot/js/admin/users/index.bundle.js
 ```
 
 ### ライブラリの導入方針
-外部ライブラリはできるだけ、npm でインストールして利用します。  
-npm でインストールできないものは、`/webroot/js/vendor/` フォルダに配置して import や require で読み込みます。  
+外部ライブラリはできるだけ、npm でインストールして利用します。
+npm でインストールできないものは、`/webroot/js/vendor/` フォルダに配置して import や require で読み込みます。
 外部ライブラリは、自動で `webroot/js/admin/vendor.bundle.js` に出力します。
+
 
 ### 共通処理
 全ての画面で読み込む共通処理などは、`/webroot/js/src/admin/common.js` を利用します。
 共通処理は、自動で `webroot/js/admin/common.bundle.js` に出力します。
 
 
+## jQueryの利用について
+
+`bootstrap` の読み込みにおいて jQueryが必要となるため、`package.json` に定義しているが、こちらを利用する場合に、`vendor` い配置した jQuery プラグインがうまく動作しない。
+（どうやら、プラグインで読み込む `$` と、endpoint で参照する `$` が別のインスタンスを指している様子。
+解決方法が分からないため、vendor に配置した jquery を、テンプレートから直接読み込んでいる。

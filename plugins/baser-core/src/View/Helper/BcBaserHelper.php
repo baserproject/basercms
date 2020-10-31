@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\View\Helper;
+use Cake\ORM\Entity;
 use \Cake\View\Helper;
 use Cake\View\Helper\FlashHelper;
 use Cake\View\Helper\HtmlHelper;
@@ -77,13 +78,28 @@ class BcBaserHelper extends Helper
 	}
 
     /**
-     * ユーザー名を取得する
-     * @todo 実装要
-     * @param $user
-     * @return string
+     * ユーザー名を整形して取得する
+     *
+     * 姓と名を結合して取得
+     * ニックネームがある場合にはニックネームを優先する
+     *
+     * @param Entity $user ユーザーデータ
+     * @return string $userName ユーザー名
      */
-	public function getUserName($user) {
-	    return 'basercms';
+	public function getUserName($user)
+	{
+		if (!empty($user->nickname)) {
+			return $user->nickname;
+		}
+		$userName = [];
+		if (!empty($user->real_name_1)) {
+			$userName[] = $user->real_name_1;
+		}
+		if (!empty($user->real_name_2)) {
+			$userName[] = $user->real_name_2;
+		}
+		$userName = implode(' ', $userName);
+		return $userName;
 	}
 
     public function i18nScript($data, $options = []) {
