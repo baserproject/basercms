@@ -65,7 +65,7 @@ use BaserCore\View\AppView;
 	<div id="BannerArea" class="bca-banners">
 		<ul class="bca-banners__ul">
 			<li class="bca-banners__li"><a href="https://market.basercms.net/" target="_blank"><img src="https://basercms.net/img/banner_baser_market.png" width="205" alt="baserマーケット" title="baserマーケット" /></a></li>
-			<li class="bca-banners__li"><a href="http://magazine.basercms.net/" target="_blank"><img src="https://basercms.net/img/banner_basers_magazine.png" width="205" alt="basersマガジン" title="baserマーケット" /></a></li>
+			<li class="bca-banners__li"><a href="https://magazine.basercms.net/" target="_blank"><img src="https://basercms.net/img/banner_basers_magazine.png" width="205" alt="basersマガジン" title="basersマガジン" /></a></li>
 		</ul>
 	</div>
 <?php endif ?>
