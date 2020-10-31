@@ -20,7 +20,7 @@ Template は、`/src/Template/Admin/{コントローラー名}/` 内に配置し
 
 ## プラグインを有効化
 
-`Application::bootstrap()` 内に、`$this->addPlugin('PluginName')` を追記します。
+`BaserCore\BcApplication::bootstrap()` 内に、`$this->addPlugin('PluginName')` を追記します。
 
 ## 表示を確認
 

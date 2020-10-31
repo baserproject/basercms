@@ -64,7 +64,7 @@ $loginUrl = $this->BcAuth->getCurrentLoginUrl();
 $currentPrefix = $this->BcAuth->getCurrentPrefix();
 $loginUser = $this->BcAuth->getCurrentLoginUser();
 $session = $this->getRequest()->getSession();
-$currentUrl = $this->request->getRequestTarget();
+$currentUrl = $this->request->getPath();
 $isLoginUrl = false;
 if($currentUrl === $loginUrl) {
     $isLoginUrl = true;
@@ -98,10 +98,12 @@ if (!$loginUrl || $isLoginUrl) {
 if($isFront) {
     $loginUrl = ['controller' => 'users', 'action' => 'login'];
 }
-if($isCurrentUserAdminAvailable) {
-    $accountEditUrl = ['admin' => true, 'controller' => 'users', 'action' => 'edit', $loginUser->id];
-} else {
-    $accountEditUrl = [$currentPrefix => true, 'controller' => 'users', 'action' => 'edit', $loginUser->id];
+if($loginUser) {
+    if($isCurrentUserAdminAvailable) {
+        $accountEditUrl = ['admin' => true, 'controller' => 'users', 'action' => 'edit', $loginUser->id];
+    } else {
+        $accountEditUrl = [$currentPrefix => true, 'controller' => 'users', 'action' => 'edit', $loginUser->id];
+    }
 }
 ?>
 

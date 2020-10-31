@@ -13,5 +13,4 @@ baserCMSの画面表示をテーマとして提供
 
 ## Documentation
 - [開発方針](https://docs.google.com/document/d/1QAmScc65CwMyn8QuwWKE9q_8HnSKcW9oefI9RrHoUYY/edit)
-- [将来的に追加したい機能](https://docs.google.com/document/d/1AwJQ0h0xQ5utFB1tVzLh1b1UhZp-lxQbM2fDjxtDc9I/edit#)
 - [開発への貢献方法](https://github.com/baserproject/ucmitz/blob/dev/CONTRIBUTING.md)

@@ -30,8 +30,8 @@ return [
     ]
 ];
 ```
-## Application に呼び出し定義
-`src/Application.php` の bootstrap メソッドに呼び出すプラグインを定義することで呼び出しが可能になる。
+## BcApplication に呼び出し定義
+`plugins/baser-core/src/BcApplication.php` の `bootstrap` メソッドに呼び出すプラグインを定義することで呼び出しが可能になる。
 ```php
 $this->addPlugin('BaserCore');
 $this->addPlugin('BcAdminThird');
