@@ -139,7 +139,7 @@ class UsersTable extends Table
 	public function createAdminIndexWhere($query): array
     {
         $conditions = ['UserGroups' => []];
-        if(isset($query['user_group_id'])) {
+        if(!empty($query['user_group_id'])) {
             $conditions['UserGroups']['UserGroups.id'] = $query['user_group_id'];
         }
         return $conditions;
