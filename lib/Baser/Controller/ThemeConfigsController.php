@@ -45,7 +45,7 @@ class ThemeConfigsController extends AppController {
  * @var array
  */
 	public $subMenuElements = ['themes'];
-	
+
 /**
  * Before Filter
  *
@@ -57,7 +57,7 @@ class ThemeConfigsController extends AppController {
 			['name' => __d('baser', 'テーマ管理'), 'url' => ['controller' => 'themes', 'action' => 'index']]
 		];
 	}
-	
+
 /**
  * [ADMIN] 設定編集
  */

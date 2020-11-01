@@ -43,7 +43,7 @@ class SitesController extends AppController {
 			['name' => __d('baser', 'サブサイト管理'), 'url' => ['controller' => 'sites', 'action' => 'index']]
 		];
 	}
-	
+
 /**
  * サブサイト一覧
  */
@@ -236,7 +236,7 @@ class SitesController extends AppController {
 
 /**
  * 選択可能なデバイスと言語の一覧を取得する
- * 
+ *
  * @param int $mainSiteId メインサイトID
  * @param int $currentSiteId 現在のサイトID
  * @return string

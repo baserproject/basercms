@@ -42,7 +42,7 @@ class ContentFoldersController extends AppController {
 		parent::beforeFilter();
 		$this->BcAuth->allow('view');
 	}
-	
+
 /**
  * コンテンツを登録する
  *
@@ -52,7 +52,7 @@ class ContentFoldersController extends AppController {
 		if(!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
-		$data = $this->ContentFolder->save($this->request->data); 
+		$data = $this->ContentFolder->save($this->request->data);
 		if ($data) {
 			$this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を追加しました。'), $this->request->data['Content']['title']), true, false);
 			echo json_encode($data['Content']);

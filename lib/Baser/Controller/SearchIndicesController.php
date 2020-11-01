@@ -56,7 +56,7 @@ class SearchIndicesController extends AppController {
  * @var array
  */
 	public $subMenuElements = ['site_configs', 'search_indices'];
-	
+
 /**
  * beforeFilter
  *
@@ -74,7 +74,7 @@ class SearchIndicesController extends AppController {
 				['name' => __d('baser', '検索インデックス管理'), 'url' => ['controller' => 'search_indices', 'action' => 'index']]
 			];
 		}
-		
+
 		if(!BcUtil::isAdminSystem()) {
 			$Content = ClassRegistry::init('Content');
 			$currentSite = BcSite::findCurrent(true);
@@ -93,9 +93,9 @@ class SearchIndicesController extends AppController {
 			}
 			$this->request->params['Content'] = $content['Content'];
 			$this->request->params['Site'] = $content['Site'];
-			
+
 		}
-		
+
 	}
 
 /**
@@ -129,14 +129,14 @@ class SearchIndicesController extends AppController {
 		$this->set('datas', $datas);
 		$this->pageTitle = __d('baser', '検索結果一覧');
 	}
-	
+
 /**
  * [SMARTPHONE] コンテンツ検索
  */
 	public function smartphone_search() {
 		$this->setAction('search');
 	}
-	
+
 /**
  * 検索キーワードを分解し配列に変換する
  *
@@ -196,7 +196,7 @@ class SearchIndicesController extends AppController {
 
 /**
  * [ADMIN] 検索インデックス
- * 
+ *
  * @return void
  */
 	public function admin_index() {
@@ -230,13 +230,13 @@ class SearchIndicesController extends AppController {
 
 /**
  * [ADMIN] 検索インデックス登録
- * 
+ *
  * TODO 2013/8/8 ryuring
  * この機能は、URLより、baserCMSで管理されたコンテンツのタイトルとコンテンツ本体を取得し、検索インデックスに登録する為の機能だったが、
  * CakePHP２より、Viewの扱いが変更となった（ClassRegistryで管理されなくなった）為、requestAction 時のタイトルを取得できなくなった。
  * よって機能自体を一旦廃止する事とする。
  * 実装の際は、自動取得ではなく、手動で、タイトルとコンテンツ本体等を取得する仕様に変更する。
- * 
+ *
  * @return	void
  * @access 	public
  */
@@ -359,7 +359,7 @@ class SearchIndicesController extends AppController {
 
 /**
  * [AJAX] 優先順位を変更する
- * 
+ *
  * @return boolean
  */
 	public function admin_ajax_change_priority() {
@@ -388,7 +388,7 @@ class SearchIndicesController extends AppController {
 
 		$type = $status = $keyword = $folderId = $siteId = null;
 		if(isset($data['SearchIndex']['type'])) {
-			$type = $data['SearchIndex']['type'];	
+			$type = $data['SearchIndex']['type'];
 		}
 		if(isset($data['SearchIndex']['status'])) {
 			$status = $data['SearchIndex']['status'];
@@ -449,7 +449,7 @@ class SearchIndicesController extends AppController {
 	}
 
 /**
- * 検索インデックスを再構築する 
+ * 検索インデックスを再構築する
  */
 	public function admin_reconstruct() {
 		set_time_limit(0);

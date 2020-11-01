@@ -18,27 +18,27 @@ App::uses('Simplezip', 'Vendor');
  * @property BcManagerComponent $BcManager
  */
 class ThemesController extends AppController {
-	
+
 /**
  * コントローラー名
  * @var string
  * @access	public
  */
 	public $name = 'Themes';
-	
+
 /**
  * モデル
  * @var array
  */
 	public $uses = ['Theme', 'Page', 'SiteConfig'];
-	
+
 /**
  * コンポーネント
  *
  * @var array
  */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager'];
-	
+
 /**
  * ヘルパー
  *
@@ -58,7 +58,7 @@ class ThemesController extends AppController {
 			['name' => __d('baser', 'テーマ管理'), 'url' => ['controller' => 'themes', 'action' => 'index']]
 		];
 	}
-	
+
 /**
  * テーマをアップロードして適用する
  */
@@ -152,7 +152,7 @@ class ThemesController extends AppController {
 		$this->set('baserThemes', $baserThemes);
 
 	}
-	
+
 /**
  * 初期データセットを読み込む
  *
@@ -173,7 +173,7 @@ class ThemesController extends AppController {
 		}
 		$this->redirect('index');
 	}
-	
+
 /**
  * コアの初期データを読み込む
  *
@@ -335,7 +335,7 @@ class ThemesController extends AppController {
 		$theme['version'] = $this->getThemeVersion($theme['name']);
 		return $theme;
 	}
-	
+
 /**
  * テーマをコピーする
  *
@@ -354,7 +354,7 @@ class ThemesController extends AppController {
 			$this->ajaxError(500, __d('baser', 'テーマフォルダのアクセス権限を見直してください。'));
 		}
 	}
-	
+
 /**
  * テーマをコピーする
  *
@@ -378,7 +378,7 @@ class ThemesController extends AppController {
 			return false;
 		}
 	}
-	
+
 /**
  * テーマを削除する　(ajax)
  *
@@ -398,7 +398,7 @@ class ThemesController extends AppController {
 		}
 		exit();
 	}
-	
+
 /**
  * データを削除する
  *
@@ -419,7 +419,7 @@ class ThemesController extends AppController {
 			return false;
 		}
 	}
-	
+
 /**
  * テーマを削除する
  *
@@ -443,7 +443,7 @@ class ThemesController extends AppController {
 		$this->BcMessage->setInfo('テーマ「' . $theme . '」を削除しました。');
 		$this->redirect(['action' => 'index']);
 	}
-	
+
 /**
  * テーマを適用する
  *
@@ -526,7 +526,7 @@ class ThemesController extends AppController {
 		return true;
 
 	}
-	
+
 /**
  * 初期データセットをダウンロードする
  */
@@ -567,7 +567,7 @@ class ThemesController extends AppController {
 		emptyFolder($tmpDir);
 		exit();
 	}
-	
+
 /**
  * CSVファイルを書きだす
  *
@@ -619,7 +619,7 @@ class ThemesController extends AppController {
 		}
 		return $result;
 	}
-	
+
 /**
  * ダウンロード
  */

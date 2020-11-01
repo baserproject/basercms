@@ -33,7 +33,7 @@ class PagesController extends AppController {
  * @var array
  */
 	public $helpers = [
-		'Html', 'Session', 'BcGooglemaps', 
+		'Html', 'Session', 'BcGooglemaps',
 		'BcXml', 'BcText',
 		'BcFreeze', 'BcPage'
 	];
@@ -73,7 +73,7 @@ class PagesController extends AppController {
 
 /**
  * 固定ページ情報登録
- * 
+ *
  * @return mixed json|false
  */
 	public function admin_ajax_add() {
@@ -197,7 +197,7 @@ class PagesController extends AppController {
 		}
 		$pageTemplateList = $this->Page->getPageTemplateList($this->request->data['Content']['id'], $theme);
 		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink'));
-		
+
 		if (!empty($this->request->data['Content']['title'])) {
 			$this->pageTitle = __d('baser', '固定ページ情報編集');
 		} else {
@@ -209,7 +209,7 @@ class PagesController extends AppController {
 
 /**
  * 削除
- * 
+ *
  * Controller::requestAction() で呼び出される
  *
  * @return bool
@@ -288,7 +288,7 @@ class PagesController extends AppController {
 			$path = explode('/', $urlTmp);
 		}
 		// <<<
-		
+
 		$count = count($path);
 		if (!$count) {
 			return $this->redirect('/');
@@ -371,7 +371,7 @@ class PagesController extends AppController {
 				$previewCreated = true;
 			}
 		}
-		
+
 		$page = $this->Page->find('first', ['conditions' => ['Page.id' => $this->request->params['Content']['entity_id']], 'recursive' => -1]);
 		$template = $page['Page']['page_template'];
 		$pagePath = implode('/', $path);
@@ -380,9 +380,9 @@ class PagesController extends AppController {
 			$template = $ContentFolder->getParentTemplate($this->request->params['Content']['id'], 'page');
 		}
 		$this->set('pagePath', $pagePath);
-		
+
 		// <<<
-		
+
 		try {
 			// CUSTOMIZE MODIFY 2014/07/02 ryuring
 			// >>>
@@ -403,7 +403,7 @@ class PagesController extends AppController {
 
 /**
  * プレビュー用テンプレートを生成する
- * 
+ *
  * 一時ファイルとしてビューを保存
  * タグ中にPHPタグが入る為、ファイルに保存する必要がある
  *
@@ -457,7 +457,7 @@ class PagesController extends AppController {
 
 /**
  * 一覧の表示用データをセットする
- * 
+ *
  * @return void
  */
 	protected function _setAdminIndexViewData() {

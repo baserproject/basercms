@@ -20,7 +20,7 @@ class FavoritesController extends AppController {
 
 /**
  * クラス名
- * 
+ *
  * @var string
  */
 	public $name = 'Favorites';
@@ -42,7 +42,7 @@ class FavoritesController extends AppController {
 
 /**
  * [ADMIN] よく使う項目を追加する（AJAX）
- *  
+ *
  * @return void
  */
 	public function admin_ajax_add() {
@@ -72,7 +72,7 @@ class FavoritesController extends AppController {
 
 /**
  * [ADMIN] よく使う項目編集
- * 
+ *
  * @param int $id
  * @return void
  */
@@ -99,8 +99,8 @@ class FavoritesController extends AppController {
 
 /**
  * [ADMIN] 削除
- * 
- * @param int $id 
+ *
+ * @param int $id
  */
 	public function admin_ajax_delete() {
 		if ($this->request->data) {

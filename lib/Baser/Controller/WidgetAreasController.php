@@ -63,7 +63,7 @@ class WidgetAreasController extends AppController {
 
 	/**
  * beforeFilter
- * 
+ *
  * @return void
  */
 	public function beforeFilter() {
@@ -94,7 +94,7 @@ class WidgetAreasController extends AppController {
 
 /**
  * 新規登録
- * 
+ *
  * @return void
  */
 	public function admin_add() {
@@ -115,7 +115,7 @@ class WidgetAreasController extends AppController {
 
 /**
  * 編集
- * 
+ *
  * @return void
  */
 	public function admin_edit($id) {
@@ -143,7 +143,7 @@ class WidgetAreasController extends AppController {
 			$pluginWidgets = [];
 			$paths = App::path('Plugin');
 			foreach ($plugins as $plugin) {
-				
+
 				$pluginWidget['paths'] = [];
 				foreach($paths as $path) {
 					$path .= $plugin['Plugin']['name'] . DS . 'View' . DS . 'Elements' . DS . 'admin' . DS . 'widgets';
@@ -151,7 +151,7 @@ class WidgetAreasController extends AppController {
 						$pluginWidget['paths'][] = $path;
 					}
 				}
-				
+
 				if (!$pluginWidget['paths']) {
 					continue;
 				} else {
@@ -197,7 +197,7 @@ class WidgetAreasController extends AppController {
 
 /**
  * 一括削除
- * 
+ *
  * @param array $ids
  * @return boolean
  */
@@ -216,7 +216,7 @@ class WidgetAreasController extends AppController {
 
 /**
  * [AJAX] タイトル更新
- * 
+ *
  * @return boolean
  */
 	public function admin_update_title() {
@@ -233,7 +233,7 @@ class WidgetAreasController extends AppController {
 
 /**
  * [AJAX] ウィジェット更新
- * 
+ *
  * @param int $widgetAreaId
  * @return boolean
  */
@@ -311,7 +311,7 @@ class WidgetAreasController extends AppController {
 
 /**
  * [AJAX] ウィジェットを削除
- * 
+ *
  * @param int $widgetAreaId
  * @param int $id
  * @return void
@@ -370,7 +370,7 @@ class WidgetAreasController extends AppController {
 /**
  * ウィジェットの並べ替えを行う
  * usortのコールバックメソッド
- * 
+ *
  * @param array $a
  * @param array $b
  * @return int

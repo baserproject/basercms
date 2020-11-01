@@ -57,7 +57,7 @@ class PluginsController extends AppController {
 	public $subMenuElements = [];
 
 /**
- * Before Filter 
+ * Before Filter
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -425,7 +425,7 @@ class PluginsController extends AppController {
 
 /**
  * アクセス制限設定を追加する
- * 
+ *
  * @param array $data リクエストデータ
  * @return void
  */
@@ -519,7 +519,7 @@ class PluginsController extends AppController {
 
 /**
  * 一括無効
- * 
+ *
  * @param array $ids プラグインIDの配列
  * @return bool
  */

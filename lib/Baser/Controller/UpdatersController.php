@@ -14,7 +14,7 @@
  * アップデーターコントローラー
  *
  * baserCMSのコアや、プラグインのアップデートを行います
- * 
+ *
  * @package	Baser.Controller
  */
 class UpdatersController extends AppController {
@@ -213,7 +213,7 @@ class UpdatersController extends AppController {
 
 /**
  * プラグインのアップデート実行
- * 
+ *
  * @param string $name
  * @return void
  */
@@ -231,7 +231,7 @@ class UpdatersController extends AppController {
 		/* スクリプトの有無を確認 */
 		$scriptNum = count($this->_getUpdaters($name));
 		$scriptMessages = $this->_getScriptMessages($name);
-		
+
 		/* スクリプト実行 */
 		if ($this->request->data) {
 			clearAllCache();
@@ -275,7 +275,7 @@ class UpdatersController extends AppController {
  * @return array $updates
  */
 	protected function _getUpdaters($plugin = '') {
-		
+
 		$targetVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getBaserVersion($plugin)));
 		$sourceVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getSiteVersion($plugin)));
 
@@ -382,7 +382,7 @@ class UpdatersController extends AppController {
 		}
 		return $messages;
 	}
-	
+
 /**
  * アップデートフォルダのパスを取得する
  *
@@ -393,7 +393,7 @@ class UpdatersController extends AppController {
 		if (!$plugin) {
 			return BASER_CONFIGS . 'update' . DS;
 		} else {
-			
+
 			$paths = App::path('Plugin');
 			foreach($paths as $path) {
 				$path .= $plugin . DS . 'Config' . DS . 'update' . DS;
@@ -402,7 +402,7 @@ class UpdatersController extends AppController {
 				}
 			}
 			return false;
-			
+
 		}
 	}
 
@@ -464,9 +464,9 @@ class UpdatersController extends AppController {
 		} else {
 			$result = true;
 		}
-		
+
 		$this->BcManager->deployAdminAssets();
-		
+
 		$this->setUpdateLog($name . ' ' . $targetVersion . ' へのアップデートが完了しました。');
 
 		return $result;
@@ -563,7 +563,7 @@ class UpdatersController extends AppController {
  * @return string $path or ''
  */
 	protected function _getUpdatePath($version, $plugin = '') {
-		
+
 		if ($plugin) {
 			$paths = App::path('Plugin');
 			foreach($paths as $path) {
@@ -581,7 +581,7 @@ class UpdatersController extends AppController {
 				return false;
 			}
 		}
-		
+
 	}
 
 /**

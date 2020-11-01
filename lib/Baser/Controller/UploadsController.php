@@ -43,7 +43,7 @@ class UploadsController extends AppController {
 	public function smartphone_tmp(){
 		$this->output(func_get_args(), func_num_args());
 	}
-	
+
 	protected function output($args, $funcNum) {
 		$size = '';
 		if ($funcNum > 1) {

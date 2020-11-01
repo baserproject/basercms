@@ -12,7 +12,7 @@
 
 /**
  * インストーラーコントローラー
- * 
+ *
  * @package Baser.Controller
  * @property BcManagerComponent $BcManager
  */
@@ -67,7 +67,7 @@ class InstallationsController extends AppController {
 
 /**
  * テーマ
- * 
+ *
  * @var string
  */
 	public $theme = 'Baseradmin';
@@ -162,7 +162,7 @@ class InstallationsController extends AppController {
 
 /**
  * Step 3: データベースの接続設定
- * 
+ *
  * @return void
  */
 	public function step3() {
@@ -224,7 +224,7 @@ class InstallationsController extends AppController {
 		if (!$this->request->data) {
 			$this->request->data = $this->_getDefaultValuesStep4();
 		} else {
-            
+
 			// ユーザー情報をセッションに保存
 			$this->Session->write('Installation.admin_email', $this->request->data['Installation']['admin_email']);
 			$this->Session->write('Installation.admin_username', $this->request->data['Installation']['admin_username']);
@@ -292,7 +292,7 @@ class InstallationsController extends AppController {
  * Step 5: 設定ファイルの生成
  * データベース設定ファイル[database.php]
  * インストールファイル[install.php]
- * 
+ *
  * @return void
  */
 	public function step5() {
@@ -312,7 +312,7 @@ class InstallationsController extends AppController {
 			$secritySalt = $this->Session->read('Installation.salt');
 			$secrityCipherSeed = $this->Session->read('Installation.cipherSeed');
 			$this->BcManager->createInstallFile($secritySalt, $secrityCipherSeed);
-			
+
 			//==================================================================
 			// BcManagerComponent::createPageTemplates() を実行する際、
 			// 固定ページでプラグインを利用している場合あり、プラグインがロードされていないとエラーになる為、
@@ -322,10 +322,10 @@ class InstallationsController extends AppController {
 
 			// データベースのデータを初期設定に更新
 			$this->BcManager->executeDefaultUpdates($dbConfig);
-			
+
 			// テーマを配置する
 			$this->BcManager->deployTheme();
-		
+
 			$dbDataPattern = $this->Session->read('Installation.dbDataPattern');
 			list($theme, $pattern) = explode('.', $dbDataPattern);
 			loadSiteConfig();
@@ -362,7 +362,7 @@ class InstallationsController extends AppController {
 
 		// ログイン
 		$this->_login();
-		
+
 		// テーマに管理画面のアセットへのシンボリックリンクを作成する
 		$this->BcManager->deployAdminAssets();
 
@@ -371,7 +371,7 @@ class InstallationsController extends AppController {
 
 		// エディタテンプレート用の画像を配置
 		$this->BcManager->deployEditorTemplateImage();
-		
+
 		// Pagesファイルを生成する
 		$this->BcManager->createPageTemplates();
 
@@ -398,7 +398,7 @@ class InstallationsController extends AppController {
 
 /**
  * データベースを構築する
- * 
+ *
  * @param type $dbDataPattern データパターン
  * @return boolean
  */
@@ -701,7 +701,7 @@ class InstallationsController extends AppController {
  * 全てのテーブルを削除する
  *
  * @return void
- * @access public 
+ * @access public
  */
 	public function _deleteAllTables() {
 		$dbConfig = $this->_readDbSetting();

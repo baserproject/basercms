@@ -186,7 +186,7 @@ class BcAppController extends Controller {
 		if(!(BC_INSTALLED || isConsole()) && !$isInstall) {
 			$this->redirect('/');
 		}
-		
+
 		// コンソールベースのインストールの際のページテンプレート生成において、
 		// BC_INSTALLEDが true でない為、コンソールの場合も実行する
 		if ((BC_INSTALLED || isConsole()) && $isRequestView) {
@@ -274,7 +274,7 @@ class BcAppController extends Controller {
 			} elseif ($this->request->is('ssl')) {
 				$siteUrl = Configure::read('BcEnv.sslUrl');
 			} else {
-				$siteUrl = Configure::read('BcEnv.siteUrl');				
+				$siteUrl = Configure::read('BcEnv.siteUrl');
 			}
 			if($siteUrl && siteUrl() != $siteUrl) {
 				$webrootReg = '/^' . preg_quote($this->request->webroot, '/') . '/';
@@ -476,7 +476,7 @@ class BcAppController extends Controller {
 /**
  * テーマをセットする
  * $this->theme にセットする事
- * 
+ *
  * 優先順位
  * $this->request->params['Site']['theme'] > $site->theme > $this->siteConfigs['theme']
  *
@@ -505,7 +505,7 @@ class BcAppController extends Controller {
 /**
  * 管理画面用テーマをセットする
  * $this->adminTheme にセットする事
- * 
+ *
  * 優先順位
  * $this->siteConfigs['admin_theme'] > Configure::read('BcApp.adminTheme')
  *
@@ -705,7 +705,7 @@ class BcAppController extends Controller {
 				$this->set('favorites', $this->Favorite->find('all', ['conditions' => ['Favorite.user_id' => $user['id']], 'order' => 'Favorite.sort', 'recursive' => -1]));
 			}
 		}
-		
+
 		$currentUserAuthPrefixes = [];
 		if ($this->Session->check('Auth.' . $sessionKey . '.UserGroup.auth_prefix')) {
 			$currentUserAuthPrefixes = explode(',', $this->Session->read('Auth.' . $sessionKey . '.UserGroup.auth_prefix'));
@@ -1007,7 +1007,7 @@ class BcAppController extends Controller {
 				$fromName = Configure::read('BcApp.title');
 			}
 		}
-		
+
 		try {
 			$cakeEmail->from($from, $fromName);
 		} catch (Exception $e) {
@@ -1315,7 +1315,7 @@ class BcAppController extends Controller {
 			$currentPrefix = 'front';
 		}
 		return (in_array($currentPrefix, $authPrefix));
-		
+
 	}
 
 /**
@@ -1598,9 +1598,9 @@ class BcAppController extends Controller {
 
 /**
  * リクエストメソッドとトークンをチェックする
- * 
+ *
  * - GETでのアクセスの場合 not found
- * - トークンが送信されていない場合 not found 
+ * - トークンが送信されていない場合 not found
  */
 	protected function _checkSubmitToken() {
 		if(strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' || empty($_POST['_Token']['key']) && empty($_POST['data']['_Token']['key'])) {

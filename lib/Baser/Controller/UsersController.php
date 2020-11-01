@@ -94,7 +94,7 @@ class UsersController extends AppController {
  * ログイン処理を行う
  * ・リダイレクトは行わない
  * ・requestActionから呼び出す
- * 
+ *
  * @return boolean
  */
 	public function admin_login_exec() {
@@ -116,7 +116,7 @@ class UsersController extends AppController {
 		if ($this->BcAuth->loginAction != ('/' . $this->request->url)) {
 			$this->notFound();
 		}
-		
+
 		if ($this->request->data) {
 			$this->BcAuth->login();
 			$user = $this->BcAuth->user();
@@ -145,7 +145,7 @@ class UsersController extends AppController {
 				$this->redirect($this->BcAuth->redirectUrl());
 			}
 		}
-		
+
 		$pageTitle = __d('baser', 'ログイン');
 		$prefixAuth = Configure::read('BcAuthPrefix.' . $this->request->params['prefix']);
 		if ($prefixAuth && isset($prefixAuth['loginTitle'])) {
@@ -160,8 +160,8 @@ class UsersController extends AppController {
 
 /**
  * [ADMIN] 代理ログイン
- * 
- * @param int $id 
+ *
+ * @param int $id
  * @return ダッシュボードへのURL
  */
 	public function admin_ajax_agent_login($id) {
@@ -185,7 +185,7 @@ class UsersController extends AppController {
 
 /**
  * 代理ログインをしている場合、元のユーザーに戻る
- * 
+ *
  * @return void
  */
 	public function back_agent() {

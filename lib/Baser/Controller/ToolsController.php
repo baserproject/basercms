@@ -45,16 +45,16 @@ class ToolsController extends AppController {
 
 /**
  * ヘルパ
- * 
+ *
  * @var array
  */
 	public $helpers = ['BcForm'];
 
 /**
  * サブメニュー
- * 
+ *
  * @var type
- * @access public 
+ * @access public
  */
 	public $subMenuElements = ['site_configs', 'tools'];
 
@@ -73,12 +73,12 @@ class ToolsController extends AppController {
 	}
 
 /**
- * ユーティリティ 
+ * ユーティリティ
  */
 	public function admin_index() {
 		$this->pageTitle = __d('baser', 'ユーティリティトップ');
 	}
-	
+
 /**
  * データメンテナンス
  *
@@ -137,7 +137,7 @@ class ToolsController extends AppController {
  * @return boolean
  */
 	protected function _restoreDb($data) {
-		
+
 		if (empty($data['Tool']['backup']['tmp_name'])) {
 			return false;
 		}
@@ -172,7 +172,7 @@ class ToolsController extends AppController {
 		}
 		$this->_resetTmpSchemaFolder();
 		clearAllCache();
-		
+
 		return $result;
 	}
 
@@ -409,7 +409,7 @@ class ToolsController extends AppController {
 				}
 				$this->redirect(['action' => 'log']);
 				break;
-			
+
 		}
 
 		$fileSize = 0 ;
@@ -469,7 +469,7 @@ class ToolsController extends AppController {
 	}
 
 /**
- * コンテンツ管理のツリー構造をリセットする 
+ * コンテンツ管理のツリー構造をリセットする
  */
 	public function admin_reset_contents_tree() {
 		$this->_checkReferer();
@@ -484,7 +484,7 @@ class ToolsController extends AppController {
 
 /**
  * コンテンツ管理のツリー構造のチェックを行う
- * 
+ *
  * 問題がある場合にはログを出力する
  */
 	public function admin_verity_contents_tree() {

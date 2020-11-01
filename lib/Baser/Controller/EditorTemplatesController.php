@@ -12,7 +12,7 @@
 
 /**
  * エディタテンプレートコントローラー
- * 
+ *
  * エディタテンプレートの管理を行う
  *
  * @package Baser.Controller
@@ -21,14 +21,14 @@ class EditorTemplatesController extends AppController {
 
 /**
  * コントローラー名
- * 
+ *
  * @var string
  */
 	public $name = 'EditorTemplates';
 
 /**
  * サブメニュー
- * 
+ *
  * @var array
  */
 	public $subMenuElements = ['site_configs', 'editor_templates'];
@@ -57,17 +57,16 @@ class EditorTemplatesController extends AppController {
 	}
 
 /**
- * [ADMIN] 一覧 
+ * [ADMIN] 一覧
  */
 	public function admin_index() {
 		$this->pageTitle = __d('baser', 'エディタテンプレート一覧');
 		$this->help = 'editor_templates_index';
-
 		$this->set('datas', $this->EditorTemplate->find('all'));
 	}
 
 /**
- * [ADMIN] 新規登録 
+ * [ADMIN] 新規登録
  */
 	public function admin_add() {
 		$this->pageTitle = __d('baser', 'エディタテンプレート新規登録');
@@ -96,8 +95,8 @@ class EditorTemplatesController extends AppController {
 
 /**
  * [ADMIN] 編集
- * 
- * @param int $id 
+ *
+ * @param int $id
  */
 	public function admin_edit($id) {
 		$this->pageTitle = __d('baser', 'エディタテンプレート編集');
@@ -129,7 +128,7 @@ class EditorTemplatesController extends AppController {
 
 /**
  * [ADMIN] 削除
- * 
+ *
  * @param int $id
  */
 	public function admin_delete($id) {
@@ -149,7 +148,7 @@ class EditorTemplatesController extends AppController {
 
 /**
  * [ADMIN AJAX] 削除
- * @param int $id 
+ * @param int $id
  */
 	public function admin_ajax_delete($id) {
 		$this->_checkSubmitToken();
@@ -165,7 +164,7 @@ class EditorTemplatesController extends AppController {
 	}
 
 /**
- * [ADMIN] CKEditor用テンプレート用のjavascriptを出力する 
+ * [ADMIN] CKEditor用テンプレート用のjavascriptを出力する
  */
 	public function admin_js() {
 		header('Content-Type: text/javascript; name="editor_templates.js"');

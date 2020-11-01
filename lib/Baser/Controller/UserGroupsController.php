@@ -224,8 +224,8 @@ class UserGroupsController extends AppController {
 
 /**
  * [ADMIN] データコピー（AJAX）
- * 
- * @param int $id 
+ *
+ * @param int $id
  * @return void
  */
 	public function admin_ajax_copy($id) {
@@ -245,8 +245,8 @@ class UserGroupsController extends AppController {
 /**
  * ユーザーグループのよく使う項目の初期値を登録する
  * ユーザー編集画面よりAjaxで呼び出される
- * 
- * @return boolean 
+ *
+ * @return boolean
  */
 	public function admin_set_default_favorites($id) {
 		if (!$this->request->is(['post', 'put'])) {
