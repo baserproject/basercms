@@ -75,23 +75,23 @@ class UsersController extends BcAdminAppController
 	 *
 	 * - pagination
 	 * - view num
-     *
-	 * @return void
 	 */
-    public function index()
+    public function index(): void
     {
         $this->setViewConditions('', ['default' => ['named' => ['num' => $this->siteConfigs['admin_list_num']]]]);
         $query = $this->request->getQuery();
+        $queryExp = $this->Users->find()
+            ->order(['Users.id'])
+            ->limit($this->request->getParam('pass')['num'])
+            ->contain('UserGroups');
+        $userGroupsWhere = $this->Users->createWhere($query)['UserGroups'];
+        if($userGroupsWhere) {
+            $queryExp->matching('UserGroups', function($q) use($userGroupsWhere) {
+                return $q->where($userGroupsWhere);
+            });
+        }
         $this->set([
-            'users' => $this->paginate(
-                $this->Users->find()
-                    ->matching('UserGroups', function($q) use($query) {
-                        return $q->where($this->Users->createAdminIndexWhere($query)['UserGroups']);
-                    })
-                    ->order(['Users.id'])
-                    ->limit($this->request->getParam('pass')['num'])
-                    ->contain('UserGroups')
-            )
+            'users' => $this->paginate($queryExp)
         ]);
         $this->request = $this->request->withParsedBody($query);
     }

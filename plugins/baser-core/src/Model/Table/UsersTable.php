@@ -53,6 +53,7 @@ class UsersTable extends Table
             'foreignKey' => 'user_id',
             'targetForeignKey' => 'user_group_id',
             'joinTable' => 'users_user_groups',
+            'joinType' => 'left'
         ]);
     }
 
@@ -136,7 +137,7 @@ class UsersTable extends Table
 		}
 	}
 
-	public function createAdminIndexWhere($query): array
+	public function createWhere($query): array
     {
         $conditions = ['UserGroups' => []];
         if(!empty($query['user_group_id'])) {
