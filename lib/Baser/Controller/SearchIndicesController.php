@@ -75,26 +75,27 @@ class SearchIndicesController extends AppController {
 			];
 		}
 
-		if(!BcUtil::isAdminSystem()) {
-			$Content = ClassRegistry::init('Content');
-			$currentSite = BcSite::findCurrent(true);
-			$url = '/';
-			if($this->request->params['action'] !== 'search') {
-				$prefix = str_replace('_search', '', $this->request->params['action']);
-				if($prefix == $currentSite->name) {
-					$url = '/' . $currentSite->alias . '/';
-					$this->request->params['action'] = 'search';
-					$this->action = 'search';
-				}
-			}
-			$content = $Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
-			if (is_null($content['Site']['id'])) {
-				$content['Site'] = $this->Site->getRootMain()['Site'];
-			}
-			$this->request->params['Content'] = $content['Content'];
-			$this->request->params['Site'] = $content['Site'];
-
+		if(BcUtil::isAdminSystem()) {
+			return;
 		}
+
+		$Content = ClassRegistry::init('Content');
+		$currentSite = BcSite::findCurrent(true);
+		$url = '/';
+		if ($this->request->params['action'] !== 'search') {
+			$prefix = str_replace('_search', '', $this->request->params['action']);
+			if ($prefix == $currentSite->name) {
+				$url = '/' . $currentSite->alias . '/';
+				$this->request->params['action'] = 'search';
+				$this->action = 'search';
+			}
+		}
+		$content = $Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
+		if (is_null($content['Site']['id'])) {
+			$content['Site'] = $this->Site->getRootMain()['Site'];
+		}
+		$this->request->params['Content'] = $content['Content'];
+		$this->request->params['Site'] = $content['Site'];
 
 	}
 
@@ -343,15 +344,15 @@ class SearchIndicesController extends AppController {
  * @access 	public
  */
 	protected function _batch_del($ids) {
-		if ($ids) {
+		if (!$ids) {
+			return true;
+		}
+		foreach ($ids as $id) {
 
-			foreach ($ids as $id) {
-
-				/* 削除処理 */
-				if ($this->SearchIndex->delete($id)) {
-					$message = sprintf(__d('baser', '検索インデックスより NO.%s を削除しました。'), $id);
-					$this->SearchIndex->saveDbLog($message);
-				}
+			/* 削除処理 */
+			if ($this->SearchIndex->delete($id)) {
+				$message = sprintf(__d('baser', '検索インデックスより NO.%s を削除しました。'), $id);
+				$this->SearchIndex->saveDbLog($message);
 			}
 		}
 		return true;

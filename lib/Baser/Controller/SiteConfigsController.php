@@ -255,15 +255,15 @@ class SiteConfigsController extends AppController {
 			$this->ajaxError(500, __d('baser', 'データが送信できませんでした。'));
 		}
 		$this->siteConfigs = $this->request->data['SiteConfig'];
-		if($this->sendMail(
-				$this->siteConfigs['email'], __d('baser', 'メール送信テスト'),
-				sprintf('%s からのメール送信テストです。', $this->siteConfigs['formal_name']) ."\n" . Configure::read('BcEnv.siteUrl')
+		if(!$this->sendMail(
+			$this->siteConfigs['email'], __d('baser', 'メール送信テスト'),
+			sprintf('%s からのメール送信テストです。', $this->siteConfigs['formal_name']) . "\n" . Configure::read('BcEnv.siteUrl')
 		)) {
-			exit();
-		} else {
 			$this->ajaxError(500, __d('baser', 'ログを確認してください。'));
+			return;
 		}
 
+		exit();
 	}
 
 /**

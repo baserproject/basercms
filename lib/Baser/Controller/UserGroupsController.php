@@ -109,26 +109,34 @@ class UserGroupsController extends AppController {
  * @return void
  */
 	public function admin_add() {
-		if ($this->request->data) {
-
-			/* 登録処理 */
-			if (empty($this->request->data['UserGroup']['auth_prefix'])) {
-				$this->request->data['UserGroup']['auth_prefix'] = 'admin';
-			} else {
-				$this->request->data['UserGroup']['auth_prefix'] = implode(',', $this->request->data['UserGroup']['auth_prefix']);
-			}
-			$this->UserGroup->create($this->request->data);
-			if ($this->UserGroup->save()) {
-				$this->BcMessage->setSuccess('新規ユーザーグループ「' . $this->request->data['UserGroup']['title'] . '」を追加しました。');
-				$this->redirect(['action' => 'index']);
-			} else {
-				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
-			}
-		}
-
 		/* 表示設定 */
 		$this->pageTitle = __d('baser', '新規ユーザーグループ登録');
 		$this->help = 'user_groups_form';
+		if (!$this->request->data) {
+			$this->render('form');
+			return;
+		}
+
+		/* 登録処理 */
+		if (empty($this->request->data['UserGroup']['auth_prefix'])) {
+			$this->request->data['UserGroup']['auth_prefix'] = 'admin';
+		} else {
+			$this->request->data['UserGroup']['auth_prefix'] = implode(
+				','
+				, $this->request->data['UserGroup']['auth_prefix']
+			);
+		}
+		$this->UserGroup->create($this->request->data);
+		if (!$this->UserGroup->save()) {
+			$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+			$this->render('form');
+			return;
+		}
+
+		$this->BcMessage->setSuccess(
+			'新規ユーザーグループ「' . $this->request->data['UserGroup']['title'] . '」を追加しました。'
+		);
+		$this->redirect(['action' => 'index']);
 		$this->render('form');
 	}
 
@@ -145,29 +153,31 @@ class UserGroupsController extends AppController {
 			$this->redirect(['action' => 'index']);
 		}
 
-		if (empty($this->request->data)) {
-			$this->request->data = $this->UserGroup->read(null, $id);
-		} else {
-
-			/* 更新処理 */
-			if (empty($this->request->data['UserGroup']['auth_prefix'])) {
-				$this->request->data['UserGroup']['auth_prefix'] = 'admin';
-			} else {
-				$this->request->data['UserGroup']['auth_prefix'] = implode(',', $this->request->data['UserGroup']['auth_prefix']);
-			}
-			if ($this->UserGroup->save($this->request->data)) {
-				$this->BcMessage->setSuccess('ユーザーグループ「' . $this->request->data['UserGroup']['name'] . '」を更新しました。');
-				$this->BcAuth->relogin();
-				$this->redirect(['action' => 'index', $id]);
-			} else {
-				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
-			}
-		}
-
 		/* 表示設定 */
 		$this->pageTitle = __d('baser', 'ユーザーグループ編集');
 		$this->help = 'user_groups_form';
-		$this->render('form');
+		if (empty($this->request->data)) {
+			$this->request->data = $this->UserGroup->read(null, $id);
+			$this->render('form');
+			return;
+		}
+
+		/* 更新処理 */
+		if (empty($this->request->data['UserGroup']['auth_prefix'])) {
+			$this->request->data['UserGroup']['auth_prefix'] = 'admin';
+		} else {
+			$this->request->data['UserGroup']['auth_prefix'] = implode(',', $this->request->data['UserGroup']['auth_prefix']);
+		}
+		if (!$this->UserGroup->save($this->request->data)) {
+			$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+			$this->render('form');
+			return;
+		}
+		$this->BcMessage->setSuccess(
+			'ユーザーグループ「' . $this->request->data['UserGroup']['name'] . '」を更新しました。'
+		);
+		$this->BcAuth->relogin();
+		$this->redirect(['action' => 'index', $id]);
 	}
 
 /**
@@ -187,12 +197,13 @@ class UserGroupsController extends AppController {
 		$post = $this->UserGroup->read(null, $id);
 
 		/* 削除処理 */
-		if ($this->UserGroup->delete($id)) {
-			$message = 'ユーザーグループ「' . $post['UserGroup']['title'] . '」 を削除しました。';
-			$this->UserGroup->saveDbLog($message);
-			exit(true);
+		if (!$this->UserGroup->delete($id)) {
+			exit;
 		}
-		exit();
+
+		$message = 'ユーザーグループ「' . $post['UserGroup']['title'] . '」 を削除しました。';
+		$this->UserGroup->saveDbLog($message);
+		exit(true);
 	}
 
 /**
@@ -213,10 +224,10 @@ class UserGroupsController extends AppController {
 		$post = $this->UserGroup->read(null, $id);
 
 		/* 削除処理 */
-		if ($this->UserGroup->delete($id)) {
-			$this->BcMessage->setSuccess('ユーザーグループ「' . $post['UserGroup']['title'] . '」 を削除しました。');
-		} else {
+		if (!$this->UserGroup->delete($id)) {
 			$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+		} else {
+			$this->BcMessage->setSuccess('ユーザーグループ「' . $post['UserGroup']['title'] . '」 を削除しました。');
 		}
 
 		$this->redirect(['action' => 'index']);
@@ -235,10 +246,10 @@ class UserGroupsController extends AppController {
 		}
 
 		$result = $this->UserGroup->copy($id);
-		if ($result) {
-			$this->set('data', $result);
-		} else {
+		if (!$result) {
 			$this->ajaxError(500, $this->UserGroup->validationErrors);
+		} else {
+			$this->set('data', $result);
 		}
 	}
 

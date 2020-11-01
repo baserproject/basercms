@@ -255,9 +255,6 @@ class BcAppController extends Controller {
  * @return	void
  */
 	public function beforeFilter() {
-
-
-
 		parent::beforeFilter();
 
 		$isRequestView = $this->request->is('requestview');
@@ -286,13 +283,13 @@ class BcAppController extends Controller {
 		if (!$this->request->is('ajax') && !empty($this->siteConfigs['maintenance']) && (Configure::read('debug') < 1) && !$isMaintenance && !$isAdmin && !BcUtil::isAdminUser()) {
 			if (!empty($this->request->params['return']) && !empty($this->request->params['requested'])) {
 				return;
-			} else {
-				$redirectUrl = '/maintenance';
-				if ($this->request->params['Site']['alias']) {
-					$redirectUrl = '/' . $this->request->params['Site']['alias'] . $redirectUrl;
-				}
-				$this->redirect($redirectUrl);
 			}
+
+			$redirectUrl = '/maintenance';
+			if ($this->request->params['Site']['alias']) {
+				$redirectUrl = '/' . $this->request->params['Site']['alias'] . $redirectUrl;
+			}
+			$this->redirect($redirectUrl);
 		}
 
 		// セキュリティ設定
@@ -436,41 +433,59 @@ class BcAppController extends Controller {
 			]);
 		}
 
-		if($isRequestView) {
-			// テーマ、レイアウトとビュー用サブディレクトリの設定
-			$this->setAdminTheme();
-			$this->setTheme();
-			if (isset($this->request->params['prefix']) && $this->name !== 'CakeError') {
-				$this->layoutPath = str_replace('_', '/', $this->request->params['prefix']);
-				$this->subDir = str_replace('_', '/', $this->request->params['prefix']);
-			}
-			if (!$isAdmin && !empty($this->request->params['Site']['name'])) {
-				$agentSetting = Configure::read('BcAgent.' . $this->request->params['Site']['device']);
-				if ($agentSetting && !empty($agentSetting['helper'])) {
-					$this->helpers[] = $agentSetting['helper'];
-				}
-				if (isset($this->request->params['Site'])) {
-					$this->layoutPath = $this->request->params['Site']['name'];
-					$this->subDir = $this->request->params['Site']['name'];
-				}
-			}
+		if(!$isRequestView) {
+			return;
+		}
 
-			// 権限チェック
-			if (isset($User->belongsTo['UserGroup']) && isset($this->BcAuth) && isset($this->request->params['prefix']) &&
-					empty($this->request->params['Site']['name']) && isset($this->request->params['action']) && empty($this->request->params['requested'])) {
-				if (!$this->BcAuth->allowedActions || !in_array($this->request->params['action'], $this->BcAuth->allowedActions)) {
-					$user = $this->BcAuth->user();
-					$Permission = ClassRegistry::init('Permission');
-					if ($user) {
-						if (!$Permission->check($this->request->url, $user['user_group_id'])) {
-							$this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));
-							$this->redirect($this->BcAuth->loginRedirect);
-						}
-					}
-				}
+		// テーマ、レイアウトとビュー用サブディレクトリの設定
+		$this->setAdminTheme();
+		$this->setTheme();
+		if (isset($this->request->params['prefix']) && $this->name !== 'CakeError') {
+			$this->layoutPath = str_replace('_', '/', $this->request->params['prefix']);
+			$this->subDir = str_replace('_', '/', $this->request->params['prefix']);
+		}
+		if (!$isAdmin && !empty($this->request->params['Site']['name'])) {
+			$agentSetting = Configure::read('BcAgent.' . $this->request->params['Site']['device']);
+			if ($agentSetting && !empty($agentSetting['helper'])) {
+				$this->helpers[] = $agentSetting['helper'];
+			}
+			if (isset($this->request->params['Site'])) {
+				$this->layoutPath = $this->request->params['Site']['name'];
+				$this->subDir = $this->request->params['Site']['name'];
 			}
 		}
 
+		// 権限チェック
+		if (!isset($this->BcAuth)) {
+			return;
+		}
+		if (!isset($User->belongsTo['UserGroup'])) {
+			return;
+		}
+		if (!isset($this->request->params['prefix'])) {
+			return;
+		}
+		if (!isset($this->request->params['action'])) {
+			return;
+		}
+		if (!empty($this->request->params['Site']['name']) || !empty($this->request->params['requested'])) {
+			return;
+		}
+
+		if ($this->BcAuth->allowedActions && in_array($this->request->params['action'], $this->BcAuth->allowedActions)) {
+			return;
+		}
+
+		$user = $this->BcAuth->user();
+		$Permission = ClassRegistry::init('Permission');
+		if (!$user) {
+			return;
+		}
+
+		if (!$Permission->check($this->request->url, $user['user_group_id'])) {
+			$this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));
+			$this->redirect($this->BcAuth->loginRedirect);
+		}
 	}
 
 /**
@@ -541,8 +556,7 @@ class BcAppController extends Controller {
 		if(BcUtil::isAdminSystem()) {
 			$this->__updateFirstAccess();
 			if (!empty($this->BcAuth) && !empty($this->request->url) && $this->request->url !== 'update') {
-				$user = $this->BcAuth->user();
-				if ($user) {
+				if ($this->BcAuth->user()) {
 					if ($this->Session->check('Baser.favorite_box_opened')) {
 						$favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
 					} else {
@@ -646,20 +660,20 @@ class BcAppController extends Controller {
 
 			if (is_array($value)) {
 				$data[$key] = $this->_autoConvertEncodingByArray($value, $outenc);
+				continue;
+			}
+
+			if (!isset($this->request->params['prefix']) || $this->request->params['prefix'] !== 'mobile') {
+				$inenc = mb_detect_encoding($value);
 			} else {
+				$inenc = 'SJIS';
+			}
 
-				if (isset($this->request->params['prefix']) && $this->request->params['prefix'] === 'mobile') {
-					$inenc = 'SJIS';
-				} else {
-					$inenc = mb_detect_encoding($value);
-				}
-
-				if ($inenc != $outenc) {
-					// 半角カナは一旦全角に変換する
-					$value = mb_convert_kana($value, "KV", $inenc);
-					$value = mb_convert_encoding($value, $outenc, $inenc);
-					$data[$key] = $value;
-				}
+			if ($inenc != $outenc) {
+				// 半角カナは一旦全角に変換する
+				$value = mb_convert_kana($value, "KV", $inenc);
+				$value = mb_convert_encoding($value, $outenc, $inenc);
+				$data[$key] = $value;
 			}
 		}
 
@@ -744,11 +758,11 @@ class BcAppController extends Controller {
 		$versionFile = new File($path);
 		$versionData = $versionFile->read();
 		$aryVersionData = explode("\n", $versionData);
-		if (!empty($aryVersionData[0])) {
-			return $aryVersionData[0];
-		} else {
+		if (empty($aryVersionData[0])) {
 			return false;
 		}
+
+		return $aryVersionData[0];
 	}
 
 /**
@@ -759,15 +773,13 @@ class BcAppController extends Controller {
  */
 	protected function getSiteVersion($plugin = '') {
 		if (!$plugin) {
-			if (isset($this->siteConfigs['version'])) {
-				return preg_replace("/baserCMS ([0-9\.]+?[\sa-z]*)/is", "$1", $this->siteConfigs['version']);
-			} else {
+			if (!isset($this->siteConfigs['version'])) {
 				return '';
 			}
-		} else {
-			$Plugin = ClassRegistry::init('Plugin');
-			return $Plugin->field('version', ['name' => $plugin]);
+			return preg_replace("/baserCMS ([0-9\.]+?[\sa-z]*)/is", "$1", $this->siteConfigs['version']);
 		}
+		$Plugin = ClassRegistry::init('Plugin');
+		return $Plugin->field('version', ['name' => $plugin]);
 	}
 
 /**
@@ -786,11 +798,10 @@ class BcAppController extends Controller {
 				break;
 			}
 		}
-		if ($version) {
-			return $version;
-		} else {
+		if (!$version) {
 			return false;
 		}
+		return $version;
 	}
 
 /**
@@ -887,7 +898,7 @@ class BcAppController extends Controller {
 		}
 
 		// ISO-2022-JPの場合半角カナが文字化けしてしまうので全角に変換する
-		if ($encode == 'ISO-2022-JP') {
+		if ($encode === 'ISO-2022-JP') {
 			$title = mb_convert_kana($title, 'KV', "UTF-8");
 			if (is_string($body)) {
 				$body = mb_convert_kana($body, 'KV', "UTF-8");
@@ -1341,7 +1352,9 @@ class BcAppController extends Controller {
 					$return = '/' . $return;
 				}
 				return $return;
-			} elseif (!$local) {
+			}
+
+			if (!$local) {
 				return $ref;
 			}
 		}
@@ -1361,11 +1374,11 @@ class BcAppController extends Controller {
 		if (!isset($this->BcAuth)) {
 			return false;
 		}
-		if (isset($this->BcAuth->authenticate['Form']['userModel'])) {
-			return $this->BcAuth->authenticate['Form']['userModel'];
-		} else {
+		if (!isset($this->BcAuth->authenticate['Form']['userModel'])) {
 			return false;
 		}
+
+		return $this->BcAuth->authenticate['Form']['userModel'];
 	}
 
 /**
@@ -1518,11 +1531,13 @@ class BcAppController extends Controller {
 		$themeHelpersPath = WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS . 'Helper';
 		$Folder = new Folder($themeHelpersPath);
 		$files = $Folder->read(true, true);
-		if (!empty($files[1])) {
-			foreach ($files[1] as $file) {
-				$file = str_replace('-', '_', $file);
-				$this->helpers[] = Inflector::camelize(basename($file, 'Helper.php'));
-			}
+		if (empty($files[1])) {
+			return;
+		}
+
+		foreach ($files[1] as $file) {
+			$file = str_replace('-', '_', $file);
+			$this->helpers[] = Inflector::camelize(basename($file, 'Helper.php'));
 		}
 	}
 
@@ -1535,21 +1550,23 @@ class BcAppController extends Controller {
  */
 	public function ajaxError($errorNo = 500, $message = '') {
 		header('HTTP/1.1 ' . $errorNo);
-		if ($message) {
-			if (is_array($message)) {
-				$aryMessage = [];
-				foreach ($message as $value) {
-					if (is_array($value)) {
-						$aryMessage[] = implode('<br />', $value);
-					} else {
-						$aryMessage[] = $value;
-					}
-				}
-				$message = implode('<br />', $aryMessage);
-			}
-			echo $message;
+		if (!$message) {
+			exit;
 		}
-		exit();
+
+		if (!is_array($message)) {
+			exit($message);
+		}
+
+		$aryMessage = [];
+		foreach ($message as $value) {
+			if (is_array($value)) {
+				$aryMessage[] = implode('<br />', $value);
+			} else {
+				$aryMessage[] = $value;
+			}
+		}
+		$message = exit(implode('<br />', $aryMessage));
 	}
 
 /**

@@ -298,11 +298,11 @@ class UsersController extends AppController {
 		if (isset($data['User']['user_group_id']) && $data['User']['user_group_id'] !== '') {
 			$conditions['User.user_group_id'] = $data['User']['user_group_id'];
 		}
-		if ($conditions) {
-			return $conditions;
-		} else {
+		if (!$conditions) {
 			return [];
 		}
+
+		return $conditions;
 	}
 
 /**

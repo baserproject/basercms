@@ -392,18 +392,16 @@ class UpdatersController extends AppController {
 	protected function _getUpdateFolder($plugin = '') {
 		if (!$plugin) {
 			return BASER_CONFIGS . 'update' . DS;
-		} else {
-
-			$paths = App::path('Plugin');
-			foreach($paths as $path) {
-				$path .= $plugin . DS . 'Config' . DS . 'update' . DS;
-				if(is_dir($path)) {
-					return $path;
-				}
-			}
-			return false;
-
 		}
+
+		$paths = App::path('Plugin');
+		foreach($paths as $path) {
+			$path .= $plugin . DS . 'Config' . DS . 'update' . DS;
+			if(is_dir($path)) {
+				return $path;
+			}
+		}
+		return false;
 	}
 
 /**
@@ -547,12 +545,11 @@ class UpdatersController extends AppController {
 		if (!$path) {
 			return false;
 		}
-		if ($plugin) {
-			$dbConfigName = 'plugin';
-		} else {
-			$dbConfigName = 'baser';
-		}
-		return $this->Updater->loadCsv($dbConfigName, $path, ['filterTable' => $filterTable]);
+		return $this->Updater->loadCsv(
+			$plugin ? 'plugin' : 'baser'
+			, $path
+			, ['filterTable' => $filterTable]
+		);
 	}
 
 /**
@@ -573,14 +570,14 @@ class UpdatersController extends AppController {
 				}
 			}
 			return false;
-		} else {
-			$corePath = BASER_CONFIGS . 'update' . DS . $version;
-			if (is_dir($corePath)) {
-				return $corePath;
-			} else {
-				return false;
-			}
 		}
+
+		$corePath = BASER_CONFIGS . 'update' . DS . $version;
+		if (!is_dir($corePath)) {
+			return false;
+		}
+
+		return $corePath;
 
 	}
 

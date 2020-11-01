@@ -65,32 +65,41 @@ class ThemesController extends AppController {
 	public function admin_add() {
 		$this->pageTitle = __d('baser', 'テーマアップロード');
 		$this->subMenuElements = ['themes'];
-		if ($this->request->is(['post', 'put'])) {
-			if ($this->Theme->isOverPostSize()) {
-				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
-			}
-			if(empty($this->request->data['Theme']['file']['tmp_name'])) {
-				$message = __d('baser', 'ファイルのアップロードに失敗しました。');
-				if(!empty($this->request->data['Theme']['file']['error']) && $this->request->data['Theme']['file']['error'] == 1) {
-					$message .= __d('baser', 'サーバに設定されているサイズ制限を超えています。');
-				}
-				$this->BcMessage->setError($message);
-			} else {
-				$name = $this->request->data['Theme']['file']['name'];
-				move_uploaded_file($this->request->data['Theme']['file']['tmp_name'], TMP . $name);
-				App::uses('BcZip', 'Lib');
-				$BcZip = new BcZip();
-				if ($BcZip->extract(TMP . $name, BASER_THEMES)) {
-					unlink(TMP . $name);
-					$this->BcMessage->setInfo('テーマファイル「' . $name. '」を追加しました。');
-					$this->redirect(['action' => 'index']);
-				} else {
-					$msg = __d('baser', 'アップロードしたZIPファイルの展開に失敗しました。');
-					$msg .= "\n" . $BcZip->error;
-					$this->BcMessage->setError($msg);
-				}
-			}
+		if (!$this->request->is(['post', 'put'])) {
+			return;
 		}
+
+		if ($this->Theme->isOverPostSize()) {
+			$this->BcMessage->setError(
+				__d(
+					'baser'
+					, '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。'
+					, ini_get('post_max_size')
+				)
+			);
+		}
+		if (empty($this->request->data['Theme']['file']['tmp_name'])) {
+			$message = __d('baser', 'ファイルのアップロードに失敗しました。');
+			if (!empty($this->request->data['Theme']['file']['error']) && $this->request->data['Theme']['file']['error'] == 1) {
+				$message .= __d('baser', 'サーバに設定されているサイズ制限を超えています。');
+			}
+			$this->BcMessage->setError($message);
+			return;
+		}
+
+		$name = $this->request->data['Theme']['file']['name'];
+		move_uploaded_file($this->request->data['Theme']['file']['tmp_name'], TMP . $name);
+		App::uses('BcZip', 'Lib');
+		$BcZip = new BcZip();
+		if (!$BcZip->extract(TMP . $name, BASER_THEMES)) {
+			$msg = __d('baser', 'アップロードしたZIPファイルの展開に失敗しました。');
+			$msg .= "\n" . $BcZip->error;
+			$this->BcMessage->setError($msg);
+			return;
+		}
+		unlink(TMP . $name);
+		$this->BcMessage->setInfo('テーマファイル「' . $name . '」を追加しました。');
+		$this->redirect(['action' => 'index']);
 	}
 
 /**
@@ -162,15 +171,18 @@ class ThemesController extends AppController {
 		if (empty($this->request->data['Theme']['default_data_pattern'])) {
 			$this->BcMessage->setError(__d('baser', '不正な操作です。'));
 			$this->redirect('index');
+			return;
 		}
 		$result = $this->_load_default_data_pattern($this->request->data['Theme']['default_data_pattern']);
-		if ($result) {
-			$this->BcMessage->setInfo(__d('baser', '初期データの読み込みが完了しました。'));
-		} else {
-			if(!CakeSession::check('Message.flash.message')) {
+		if (!$result) {
+			if (!CakeSession::check('Message.flash.message')) {
 				$this->BcMessage->setError(__d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
 			}
+			$this->redirect('index');
+			return;
 		}
+
+		$this->BcMessage->setInfo(__d('baser', '初期データの読み込みが完了しました。'));
 		$this->redirect('index');
 	}
 
@@ -182,11 +194,13 @@ class ThemesController extends AppController {
 	public function admin_reset_data() {
 		$this->_checkSubmitToken();
 		$result = $this->_load_default_data_pattern('core.default', $this->siteConfigs['theme']);
-		if ($result) {
-			$this->BcMessage->setInfo(__d('baser', '初期データの読み込みが完了しました。'));
-		} else {
+		if (!$result) {
 			$this->BcMessage->setError(__d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
+			$this->redirect('/admin');
+			return;
 		}
+
+		$this->BcMessage->setInfo(__d('baser', '初期データの読み込みが完了しました。'));
 		$this->redirect('/admin');
 	}
 
@@ -348,11 +362,12 @@ class ThemesController extends AppController {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		$result = $this->_copy($theme);
-		if ($result) {
-			exit(true);
-		} else {
+		if (!$result) {
 			$this->ajaxError(500, __d('baser', 'テーマフォルダのアクセス権限を見直してください。'));
+			return;
 		}
+
+		exit(true);
 	}
 
 /**
@@ -371,12 +386,18 @@ class ThemesController extends AppController {
 			$newTheme .= '_copy';
 		}
 		$folder = new Folder();
-		if ($folder->copy(['from' => $basePath . $theme, 'to' => $basePath . $newTheme, 'mode' => 0777, 'skip' => ['_notes']])) {
-			$this->Theme->saveDblog('テーマ「' . $theme . '」をコピーしました。');
-			return $this->_loadThemeInfo($newTheme);
-		} else {
+		$result = $folder->copy([
+			'from' => $basePath . $theme,
+			'to'   => $basePath . $newTheme,
+			'mode' => 0777,
+			'skip' => ['_notes']
+		]);
+		if (!$result) {
 			return false;
 		}
+
+		$this->Theme->saveDblog('テーマ「' . $theme . '」をコピーしました。');
+		return $this->_loadThemeInfo($newTheme);
 	}
 
 /**
@@ -390,13 +411,12 @@ class ThemesController extends AppController {
 		if (!$theme) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
-		if ($this->_del($theme)) {
-			clearViewCache();
-			exit(true);
-		} else {
+		if (!$this->_del($theme)) {
 			$this->ajaxError(500, __d('baser', 'テーマフォルダを手動で削除してください。'));
+			exit;
 		}
-		exit();
+		clearViewCache();
+		exit(true);
 	}
 
 /**
@@ -408,16 +428,15 @@ class ThemesController extends AppController {
 	protected function _del($theme) {
 		$path = WWW_ROOT . 'theme' . DS . $theme;
 		$folder = new Folder();
-		if ($folder->delete($path)) {
-			$siteConfig = ['SiteConfig' => $this->siteConfigs];
-			if ($theme == $siteConfig['SiteConfig']['theme']) {
-				$siteConfig['SiteConfig']['theme'] = '';
-				$this->SiteConfig->saveKeyValue($siteConfig);
-			}
-			return true;
-		} else {
+		if (!$folder->delete($path)) {
 			return false;
 		}
+		$siteConfig = ['SiteConfig' => $this->siteConfigs];
+		if ($theme == $siteConfig['SiteConfig']['theme']) {
+			$siteConfig['SiteConfig']['theme'] = '';
+			$this->SiteConfig->saveKeyValue($siteConfig);
+		}
+		return true;
 	}
 
 /**
@@ -516,13 +535,14 @@ class ThemesController extends AppController {
 				$message = array_merge($message, [''], $info );
 			}
 			$this->BcMessage->setError(implode("\n", $message));
-		} else {
-			$message = ['テーマ「' . $theme . '」を適用しました。'];
-			if($info) {
-				$message = array_merge($message, [''], $info );
-			}
-			$this->BcMessage->setInfo(implode("\n", $message));
+			return true;
 		}
+
+		$message = ['テーマ「' . $theme . '」を適用しました。'];
+		if($info) {
+			$message = array_merge($message, [''], $info );
+		}
+		$this->BcMessage->setInfo(implode("\n", $message));
 		return true;
 
 	}

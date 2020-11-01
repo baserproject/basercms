@@ -170,12 +170,11 @@ class SitesController extends AppController {
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
-		if ($this->_changeStatus($id, false)) {
-			return true;
-		} else {
+		if (!$this->_changeStatus($id, false)) {
 			$this->ajaxError(500, $this->Site->validationErrors);
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 /**
@@ -190,12 +189,11 @@ class SitesController extends AppController {
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
-		if ($this->_changeStatus($id, true)) {
-			return true;
-		} else {
+		if (!$this->_changeStatus($id, true)) {
 			$this->ajaxError(500, $this->Site->validationErrors);
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 /**
@@ -209,13 +207,21 @@ class SitesController extends AppController {
 		$statusTexts = [0 => __d('baser', '非公開'), 1 => __d('baser', '公開')];
 		$data = $this->Site->find('first', ['conditions' => ['Site.id' => $id], 'recursive' => -1]);
 		$data['Site']['status'] = $status;
-		if ($this->Site->save($data)) {
-			$statusText = $statusTexts[$status];
-			$this->BcMessage->setSuccess(sprintf(__d('baser', 'サブサイト「%s」 を、%s に設定しました。'), $data['Site']['name'], $statusText), true, false);
-			return true;
-		} else {
+		if (!$this->Site->save($data)) {
 			return false;
 		}
+
+		$statusText = $statusTexts[$status];
+		$this->BcMessage->setSuccess(
+			sprintf(
+				__d('baser', 'サブサイト「%s」 を、%s に設定しました。')
+				, $data['Site']['name']
+				, $statusText
+			)
+			, true
+			, false
+		);
+		return true;
 	}
 
 /**
@@ -225,13 +231,13 @@ class SitesController extends AppController {
 		if(empty($this->request->data['Site']['id'])) {
 			$this->notFound();
 		}
-		if($this->Site->delete($this->request->data['Site']['id'])) {
-			$this->BcMessage->setSuccess(sprintf(__d('baser', 'サブサイト「%s」 を削除しました。'), $this->request->data['Site']['name']));
-			$this->redirect(['action' => 'index']);
-		} else {
+		if(!$this->Site->delete($this->request->data['Site']['id'])) {
 			$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 			$this->redirect(['action' => 'edit', $this->request->data['Site']['id']]);
+			return;
 		}
+		$this->BcMessage->setSuccess(sprintf(__d('baser', 'サブサイト「%s」 を削除しました。'), $this->request->data['Site']['name']));
+		$this->redirect(['action' => 'index']);
 	}
 
 /**

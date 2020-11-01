@@ -72,25 +72,36 @@ class EditorTemplatesController extends AppController {
 		$this->pageTitle = __d('baser', 'エディタテンプレート新規登録');
 		$this->help = 'editor_templates_form';
 
-		if ($this->request->is(['post', 'put'])) {
-			if ($this->EditorTemplate->isOverPostSize()) {
-				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
-				$this->redirect(['action' => 'add']);
-			}
-			$this->EditorTemplate->create($this->request->data);
-			$result = $this->EditorTemplate->save();
-			if ($result) {
-				// EVENT EditorTemplates.afterAdd
-				$this->dispatchEvent('afterAdd', [
-					'data' => $result
-				]);
-				$this->BcMessage->setInfo(__d('baser', '保存完了'));
-				$this->redirect(['action' => 'index']);
-			} else {
-				$this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
-			}
+		if (!$this->request->is(['post', 'put'])) {
+			$this->render('form');
+			return;
 		}
-		$this->render('form');
+
+		if ($this->EditorTemplate->isOverPostSize()) {
+			$this->BcMessage->setError(
+				__d(
+					'baser'
+					, '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。'
+					, ini_get('post_max_size')
+				)
+			);
+			$this->redirect(['action' => 'add']);
+		}
+		$this->EditorTemplate->create($this->request->data);
+		$result = $this->EditorTemplate->save();
+		if (!$result) {
+			$this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
+			$this->render('form');
+			return;
+		}
+
+		// EVENT EditorTemplates.afterAdd
+		$this->dispatchEvent('afterAdd', [
+			'data' => $result
+		]);
+		$this->BcMessage->setInfo(__d('baser', '保存完了'));
+		$this->redirect(['action' => 'index']);
+//		$this->render('form');
 	}
 
 /**
@@ -102,28 +113,31 @@ class EditorTemplatesController extends AppController {
 		$this->pageTitle = __d('baser', 'エディタテンプレート編集');
 		$this->help = 'editor_templates_form';
 
-		if ($this->request->is(['post', 'put'])) {
-			if ($this->EditorTemplate->isOverPostSize()) {
-				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
-				$this->redirect(['action' => 'edit', $id]);
-			}
-			$this->EditorTemplate->set($this->request->data);
-			$result = $this->EditorTemplate->save();
-			if ($result) {
-				// EVENT EditorTemplates.afterEdit
-				$this->dispatchEvent('afterEdit', [
-					'data' => $result
-				]);
-				$this->BcMessage->setInfo(__d('baser', '保存完了'));
-				$this->redirect(['action' => 'index']);
-			} else {
-				$this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
-			}
-		} else {
+		if (!$this->request->is(['post', 'put'])) {
 			$this->request->data = $this->EditorTemplate->read(null, $id);
+			$this->render('form');
+			return;
 		}
 
-		$this->render('form');
+		if ($this->EditorTemplate->isOverPostSize()) {
+			$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+			$this->redirect(['action' => 'edit', $id]);
+		}
+		$this->EditorTemplate->set($this->request->data);
+		$result = $this->EditorTemplate->save();
+		if (!$result) {
+			$this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
+			$this->render('form');
+			return;
+		}
+
+	// EVENT EditorTemplates.afterEdit
+		$this->dispatchEvent('afterEdit', [
+			'data' => $result
+		]);
+		$this->BcMessage->setInfo(__d('baser', '保存完了'));
+		$this->redirect(['action' => 'index']);
+//		$this->render('form');
 	}
 
 /**

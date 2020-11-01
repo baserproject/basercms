@@ -102,11 +102,11 @@ class WidgetAreasController extends AppController {
 
 		if ($this->request->data) {
 			$this->WidgetArea->set($this->request->data);
-			if ($this->WidgetArea->save()) {
+			if (!$this->WidgetArea->save()) {
+				$this->BcMessage->setError(__d('baser', '新しいウィジェットエリアの保存に失敗しました。'));
+			} else {
 				$this->BcMessage->setInfo(__d('baser', '新しいウィジェットエリアを保存しました。'));
 				$this->redirect(['action' => 'edit', $this->WidgetArea->getInsertID()]);
-			} else {
-				$this->BcMessage->setError(__d('baser', '新しいウィジェットエリアの保存に失敗しました。'));
 			}
 		}
 		$this->help = 'widget_areas_form';
@@ -154,11 +154,11 @@ class WidgetAreasController extends AppController {
 
 				if (!$pluginWidget['paths']) {
 					continue;
-				} else {
-					$pluginWidget['title'] = $plugin['Plugin']['title'] . 'ウィジェット';
-					$pluginWidget['plugin'] = $plugin['Plugin']['name'];
-					$pluginWidgets[] = $pluginWidget;
 				}
+
+				$pluginWidget['title'] = $plugin['Plugin']['title'] . 'ウィジェット';
+				$pluginWidget['plugin'] = $plugin['Plugin']['name'];
+				$pluginWidgets[] = $pluginWidget;
 			}
 			if ($pluginWidgets) {
 				$widgetInfos = am($widgetInfos, $pluginWidgets);
@@ -355,13 +355,13 @@ class WidgetAreasController extends AppController {
 	public function get_widgets($id) {
 		trigger_error(deprecatedMessage(__d('baser', 'メソッド：WidgetAreaController::get_widgets()'), '4.0.0', '4.1.0', __d('baser', 'このメソッドは非推奨となりました。BcWidgetAreaHelper::showWidgets() に移行してください。')), E_USER_DEPRECATED);
 		$widgetArea = $this->WidgetArea->read(null, $id);
-		if (!empty($widgetArea['WidgetArea']['widgets'])) {
-			$widgets = BcUtil::unserialize($widgetArea['WidgetArea']['widgets']);
-			usort($widgets, 'widgetSort');
-			return $widgets;
-		} else {
+		if (empty($widgetArea['WidgetArea']['widgets'])) {
 			return [];
 		}
+
+		$widgets = BcUtil::unserialize($widgetArea['WidgetArea']['widgets']);
+		usort($widgets, 'widgetSort');
+		return $widgets;
 	}
 
 
@@ -383,7 +383,7 @@ function widgetSort($a, $b) {
 	}
 	if ($a[$aKey]['sort'] < $b[$bKey]['sort']) {
 		return -1;
-	} else {
-		return 1;
 	}
+
+	return 1;
 }

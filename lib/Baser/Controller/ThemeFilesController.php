@@ -210,12 +210,13 @@ class ThemeFilesController extends AppController {
 	protected function _getFileType($file) {
 		if (preg_match('/^(.+?)(\.ctp|\.php|\.css|\.js)$/is', $file)) {
 			return 'text';
-		} elseif (preg_match('/^(.+?)(\.png|\.gif|\.jpg|\.jpeg)$/is', $file)) {
-			return 'image';
-		} else {
-			return 'file';
 		}
-		return false;
+
+		if (preg_match('/^(.+?)(\.png|\.gif|\.jpg|\.jpeg)$/is', $file)) {
+			return 'image';
+		}
+
+		return 'file';
 	}
 
 /**
@@ -410,11 +411,11 @@ class ThemeFilesController extends AppController {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
-		if ($this->_del($args)) {
-			exit(true);
-		} else {
+		if (!$this->_del($args)) {
 			exit();
 		}
+
+		exit(true);
 	}
 
 /**
@@ -432,12 +433,12 @@ class ThemeFilesController extends AppController {
 			$result = @unlink($fullpath);
 			$target = __d('baser', 'ファイル');
 		}
-		if ($result) {
-			$this->ThemeFile->saveDblog($target . ' ' . sprintf(__d('baser', '%s を削除しました。'), $path));
-			return true;
-		} else {
+		if (!$result) {
 			return false;
 		}
+
+		$this->ThemeFile->saveDblog($target . ' ' . sprintf(__d('baser', '%s を削除しました。'), $path));
+		return true;
 	}
 
 /**
@@ -446,31 +447,32 @@ class ThemeFilesController extends AppController {
  * @return void
  */
 	protected function _batch_del($ids) {
-		if ($ids) {
+		if (!$ids) {
+			return true;
+		}
 
-			$result = true;
-			foreach ($ids as $id) {
-				$args = $this->request->params['pass'];
-				$args[] = $id;
-				$args = $this->_parseArgs($args);
-				extract($args);
-				if (!isset($this->_tempalteTypes[$type])) {
-					exit();
-				}
+		$result = true;
+		foreach ($ids as $id) {
+			$args = $this->request->params['pass'];
+			$args[] = $id;
+			$args = $this->_parseArgs($args);
+			extract($args);
+			if (!isset($this->_tempalteTypes[$type])) {
+				exit();
+			}
 
-				if (is_dir($fullpath)) {
-					$folder = new Folder();
-					$result = $folder->delete($fullpath);
-					$target = __d('baser', 'フォルダ');
-				} else {
-					$result = @unlink($fullpath);
-					$target = __d('baser', 'ファイル');
-				}
-				if ($result) {
-					$this->ThemeFile->saveDblog($target . ' ' . sprintf(__d('baser', '%s を削除しました。'), $path));
-				} else {
-					$result = false;
-				}
+			if (is_dir($fullpath)) {
+				$folder = new Folder();
+				$result = $folder->delete($fullpath);
+				$target = __d('baser', 'フォルダ');
+			} else {
+				$result = @unlink($fullpath);
+				$target = __d('baser', 'ファイル');
+			}
+			if ($result) {
+				$this->ThemeFile->saveDblog($target . ' ' . sprintf(__d('baser', '%s を削除しました。'), $path));
+			} else {
+				$result = false;
 			}
 		}
 
@@ -564,18 +566,19 @@ class ThemeFilesController extends AppController {
 			$themeFile['type'] = $this->_getFileType($themeFile['name']);
 		}
 
-		if ($result) {
-			$this->ThemeFile->saveDblog($target . ' ' . urldecode($path) . ' をコピーしました。');
-			$this->set('fullpath', $fullpath);
-			$this->set('path', dirname($path));
-			$this->set('theme', $theme);
-			$this->set('plugin', $plugin);
-			$this->set('type', $type);
-			$this->set('data', $themeFile);
-		} else {
+		if (!$result) {
 			$this->ThemeFile->saveDblog($target . ' ' . urldecode($path) . ' のコピーに失敗しました。');
 			$this->ajaxError(500, __d('baser', '上位フォルダのアクセス権限を見直してください。'));
+			return;
 		}
+
+		$this->ThemeFile->saveDblog($target . ' ' . urldecode($path) . ' をコピーしました。');
+		$this->set('fullpath', $fullpath);
+		$this->set('path', dirname($path));
+		$this->set('theme', $theme);
+		$this->set('plugin', $plugin);
+		$this->set('type', $type);
+		$this->set('data', $themeFile);
 	}
 
 /**
@@ -877,14 +880,16 @@ class ThemeFilesController extends AppController {
 		}
 		$folder = new Folder();
 		$folder->create(dirname($themePath), 0777);
-		if ($folder->copy(['from' => $fullpath, 'to' => $themePath, 'chmod' => 0777, 'skip' => ['_notes']])) {
-			$_themePath = str_replace(ROOT, '', $themePath);
-			$this->BcMessage->setInfo('コアフォルダ ' . basename($path) . ' を テーマ ' . Inflector::camelize($this->siteConfigs['theme']) . " の次のパスとしてコピーしました。\n" . $_themePath);
-			// 現在のテーマにリダイレクトする場合、混乱するおそれがあるのでとりあえずそのまま
-			//$this->redirect(array('action' => 'edit', $this->siteConfigs['theme'], $type, $path));
-		} else {
+		if (!$folder->copy(['from' => $fullpath, 'to' => $themePath, 'chmod' => 0777, 'skip' => ['_notes']])) {
 			$this->BcMessage->setError('コアフォルダ ' . basename($path) . ' のコピーに失敗しました。');
+			$this->redirect(array_merge(['action' => 'view_folder', $theme, $plugin, $type], explode('/', $path)));
+			return;
 		}
+
+		$_themePath = str_replace(ROOT, '', $themePath);
+		$this->BcMessage->setInfo('コアフォルダ ' . basename($path) . ' を テーマ ' . Inflector::camelize($this->siteConfigs['theme']) . " の次のパスとしてコピーしました。\n" . $_themePath);
+		// 現在のテーマにリダイレクトする場合、混乱するおそれがあるのでとりあえずそのまま
+		//$this->redirect(array('action' => 'edit', $this->siteConfigs['theme'], $type, $path));
 		$this->redirect(array_merge(['action' => 'view_folder', $theme, $plugin, $type], explode('/', $path)));
 	}
 
@@ -906,14 +911,15 @@ class ThemeFilesController extends AppController {
 		}
 
 		$file = new File($fullpath);
-		if ($file->open('r')) {
-			header("Content-Length: " . $file->size());
-			header("Content-type: image/" . $contents[$pathinfo['extension']]);
-			echo $file->read();
-			exit();
-		} else {
+		if (!$file->open('r')) {
 			$this->notFound();
+			return;
 		}
+
+		header("Content-Length: " . $file->size());
+		header("Content-type: image/" . $contents[$pathinfo['extension']]);
+		echo $file->read();
+		exit();
 	}
 
 /**

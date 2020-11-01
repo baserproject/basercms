@@ -301,30 +301,33 @@ class ToolsController extends AppController {
 	public function admin_write_schema() {
 		$path = TMP . 'schemas' . DS;
 
-		if (!$this->request->data) {
-			$this->request->data['Tool']['connection'] = 'core';
-		} else {
-			if (empty($this->request->data['Tool'])) {
-				$this->BcMessage->setError(__d('baser', 'テーブルを選択してください。'));
-			} else {
-				if (!$this->_resetTmpSchemaFolder()) {
-					$this->BcMessage->setError('フォルダ：' . $path . ' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
-					$this->redirect(['action' => 'write_schema']);
-				}
-				if ($this->Tool->writeSchema($this->request->data, $path)) {
-					$Simplezip = new Simplezip();
-					$Simplezip->addFolder($path);
-					$Simplezip->download('schemas');
-					exit();
-				} else {
-					$this->BcMessage->setError(__d('baser', 'スキーマファイルの生成に失敗しました。'));
-				}
-			}
-		}
-
 		/* 表示設定 */
 		$this->pageTitle = __d('baser', 'スキーマファイル生成');
 		$this->help = 'tools_write_schema';
+
+		if (!$this->request->data) {
+			$this->request->data['Tool']['connection'] = 'core';
+			return;
+		}
+
+		if (empty($this->request->data['Tool'])) {
+			$this->BcMessage->setError(__d('baser', 'テーブルを選択してください。'));
+			return;
+		}
+
+		if (!$this->_resetTmpSchemaFolder()) {
+			$this->BcMessage->setError('フォルダ：' . $path . ' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
+			$this->redirect(['action' => 'write_schema']);
+		}
+		if (!$this->Tool->writeSchema($this->request->data, $path)) {
+			$this->BcMessage->setError(__d('baser', 'スキーマファイルの生成に失敗しました。'));
+			return;
+		}
+
+		$Simplezip = new Simplezip();
+		$Simplezip->addFolder($path);
+		$Simplezip->download('schemas');
+		exit();
 	}
 
 /**
@@ -333,32 +336,37 @@ class ToolsController extends AppController {
  * @return void
  */
 	public function admin_load_schema() {
-		if ($this->request->is(['post', 'put'])) {
-			if ($this->Tool->isOverPostSize()) {
-				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
-				$this->redirect(['action' => 'load_schema']);
-			}
-			if (is_uploaded_file($this->request->data['Tool']['schema_file']['tmp_name'])) {
-				$path = TMP . 'schemas' . DS;
-				if (!$this->_resetTmpSchemaFolder()) {
-					$this->BcMessage->setError('フォルダ：' . $path . ' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
-					$this->redirect(['action' => 'load_schema']);
-				}
-				if ($this->Tool->loadSchemaFile($this->request->data, $path)) {
-					$this->BcMessage->setInfo(__d('baser', 'スキーマファイルの読み込みに成功しました。'));
-					$this->redirect(['action' => 'load_schema']);
-				} else {
-					$this->BcMessage->setError(__d('baser', 'スキーマファイルの読み込みに失敗しました。'));
-				}
-			} else {
-				$this->BcMessage->setError(__d('baser', 'ファイルアップロードに失敗しました。'));
-			}
-		} else {
-			$this->request->data['Tool']['schema_type'] = 'create';
-		}
 		/* 表示設定 */
 		$this->pageTitle = __d('baser', 'スキーマファイル読込');
 		$this->help = 'tools_load_schema';
+		if (!$this->request->is(['post', 'put'])) {
+			$this->request->data['Tool']['schema_type'] = 'create';
+			return;
+		}
+
+		if ($this->Tool->isOverPostSize()) {
+			$this->BcMessage->setError(
+				__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size'))
+			);
+			$this->redirect(['action' => 'load_schema']);
+		}
+		if (!is_uploaded_file($this->request->data['Tool']['schema_file']['tmp_name'])) {
+			$this->BcMessage->setError(__d('baser', 'ファイルアップロードに失敗しました。'));
+			return;
+		}
+
+		$path = TMP . 'schemas' . DS;
+		if (!$this->_resetTmpSchemaFolder()) {
+			$this->BcMessage->setError('フォルダ：' . $path . ' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
+			$this->redirect(['action' => 'load_schema']);
+		}
+		if (!$this->Tool->loadSchemaFile($this->request->data, $path)) {
+			$this->BcMessage->setError(__d('baser', 'スキーマファイルの読み込みに失敗しました。'));
+			return;
+		}
+
+		$this->BcMessage->setInfo(__d('baser', 'スキーマファイルの読み込みに成功しました。'));
+		$this->redirect(['action' => 'load_schema']);
 	}
 
 /**
@@ -384,9 +392,8 @@ class ToolsController extends AppController {
 				set_time_limit(0);
 				if($this->_downloadErrorLog()) {
 					exit();
-				} else {
-					$this->BcMessage->setInfo('エラーログが存在しません。');
 				}
+				$this->BcMessage->setInfo('エラーログが存在しません。');
 				$this->redirect(['action' => 'log']);
 				break;
 			case 'delete':
@@ -447,11 +454,13 @@ class ToolsController extends AppController {
  */
 	public function admin_delete_admin_assets() {
 		$this->_checkReferer();
-		if($this->BcManager->deleteAdminAssets()) {
-			$this->BcMessage->setSuccess(__d('baser', '管理システム用のアセットファイルを削除しました。'));
-		} else {
+		if(!$this->BcManager->deleteAdminAssets()) {
 			$this->BcMessage->setError(__d('baser', '管理システム用のアセットファイルの削除に失敗しました。アセットファイルの書込権限を見直してください。'));
+			$this->redirect(['controller' => 'tools', 'action' => 'index']);
+			return;
 		}
+
+		$this->BcMessage->setSuccess(__d('baser', '管理システム用のアセットファイルを削除しました。'));
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
 
@@ -460,10 +469,10 @@ class ToolsController extends AppController {
  */
 	public function admin_deploy_admin_assets() {
 		$this->_checkReferer();
-		if($this->BcManager->deployAdminAssets()) {
-			$this->BcMessage->setSuccess(__d('baser', '管理システム用のアセットファイルを再配置しました。'));
-		} else {
+		if(!$this->BcManager->deployAdminAssets()) {
 			$this->BcMessage->setError(__d('baser', '管理システム用のアセットファイルの再配置に失敗しました。アセットファイルの書込権限を見直してください。'));
+		} else {
+			$this->BcMessage->setSuccess(__d('baser', '管理システム用のアセットファイルを再配置しました。'));
 		}
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
@@ -492,11 +501,11 @@ class ToolsController extends AppController {
 		$Content = ClassRegistry::init('Content');
 		$Content->Behaviors->unload('SoftDelete');
 		$result = $Content->verify();
-		if($result === true) {
-			$this->BcMessage->setSuccess(__d('baser', 'コンテンツのツリー構造に問題はありません。'), false);
-		} else {
+		if($result !== true) {
 			$this->log($result);
 			$this->BcMessage->setError(__d('baser', 'コンテンツのツリー構造に問題があります。ログを確認してください。'));
+		} else {
+			$this->BcMessage->setSuccess(__d('baser', 'コンテンツのツリー構造に問題はありません。'), false);
 		}
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}

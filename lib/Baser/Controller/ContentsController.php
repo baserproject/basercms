@@ -294,18 +294,19 @@ class ContentsController extends AppController {
 		$this->request->data['Content']['author_id'] = $user['id'];
 		$this->Content->create(false);
 		$data = $this->Content->save($this->request->data);
-		if($data) {
-			if($alias) {
-				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') .
-					sprintf(__d('baser', '「%s」のエイリアス「%s」を追加しました。'), $srcContent['title'], $this->request->data['Content']['title']);
-			} else {
-				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') . '「' . $this->request->data['Content']['title'] . '」を追加しました。';
-			}
-			$this->BcMessage->setSuccess($message, true, false);
-			echo json_encode($data['Content']);
-		} else {
+		if(!$data) {
 			$this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
+			exit;
 		}
+
+		if ($alias) {
+			$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') .
+				sprintf(__d('baser', '「%s」のエイリアス「%s」を追加しました。'), $srcContent['title'], $this->request->data['Content']['title']);
+		} else {
+			$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') . '「' . $this->request->data['Content']['title'] . '」を追加しました。';
+		}
+		$this->BcMessage->setSuccess($message, true, false);
+		exit(json_encode($data['Content']));
 		exit();
 	}
 
@@ -398,12 +399,12 @@ class ContentsController extends AppController {
 		if(empty($this->request->data['contentId'])) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
-		if($this->_delete($this->request->data['contentId'], false)) {
-			return true;
-		} else {
+		if(!$this->_delete($this->request->data['contentId'], false)) {
 			$this->ajaxError(500, __d('baser', '削除中にエラーが発生しました。'));
+			return false;
 		}
-		return false;
+
+		return true;
 	}
 
 /**

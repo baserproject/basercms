@@ -113,6 +113,7 @@ class InstallationsController extends AppController {
 					if (empty($installationData['lastStep'])) {
 						if (Configure::read('debug') == 0) {
 							$this->redirect(['action' => 'alert']);
+							return;
 						}
 					}
 				}
@@ -145,6 +146,7 @@ class InstallationsController extends AppController {
 	public function step2() {
 		if ($this->request->data && $this->request->data['clicked'] === 'next') {
 			$this->redirect('step3');
+			return;
 		}
 
 		$checkResult = $this->BcManager->checkEnv();
@@ -171,43 +173,50 @@ class InstallationsController extends AppController {
 		if (!$this->request->data) {
 			clearAllCache();
 			$this->request->data = $this->_getDefaultValuesStep3();
-		} else {
+			$this->set('dbDataPatterns', $this->BcManager->getAllDefaultDataPatterns());
+			$this->pageTitle = __d('baser', 'baserCMSのインストール｜ステップ３');
+			$this->set('dbsource', $dbsource);
+			return;
+		}
 
-			$this->_writeDbSettingToSession($this->request->data['Installation']);
+		$this->_writeDbSettingToSession($this->request->data['Installation']);
 
-			/* 戻るボタンクリック時 */
-			if ($this->request->data['buttonclicked'] === 'back') {
-				$this->redirect('step2');
+		/* 戻るボタンクリック時 */
+		if ($this->request->data['buttonclicked'] === 'back') {
+			$this->redirect('step2');
+			return;
 
-				/* 接続テスト */
-			} elseif ($this->request->data['buttonclicked'] === 'checkdb') {
+			/* 接続テスト */
+		}
 
-				$this->set('blDBSettingsOK', $this->_testConnectDb($this->_readDbSetting()));
+		if ($this->request->data['buttonclicked'] === 'checkdb') {
 
-				/* 「次のステップへ」クリック時 */
-			} elseif ($this->request->data['buttonclicked'] === 'createdb') {
+			$this->set('blDBSettingsOK', $this->_testConnectDb($this->_readDbSetting()));
 
-				ini_set("max_execution_time", 180);
+			/* 「次のステップへ」クリック時 */
+		} elseif ($this->request->data['buttonclicked'] === 'createdb') {
 
-				$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
-				if (isset($this->request->data['Installation']['dbDataPattern'])) {
-					$dbDataPattern = $this->request->data['Installation']['dbDataPattern'];
-				}
-				$result = false;
-				$errorMessage = __d('baser', 'データベースの構築中にエラーが発生しました。');
-				try {
-					$this->_deleteAllTables();
-					$result = $this->_constructionDb($dbDataPattern, Configure::read('BcApp.defaultAdminTheme'));
-				} catch(Exception $e) {
-					$errorMessage .= "\n" . $e->getMessage();
-				}
-				if ($result) {
-					$this->BcMessage->setInfo(__d('baser', 'データベースの構築に成功しました。'));
-					$this->redirect('step4');
-				} else {
-					$this->BcMessage->setError($errorMessage);
-				}
+			ini_set("max_execution_time", 180);
+
+			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
+			if (isset($this->request->data['Installation']['dbDataPattern'])) {
+				$dbDataPattern = $this->request->data['Installation']['dbDataPattern'];
 			}
+			$result = false;
+			$errorMessage = __d('baser', 'データベースの構築中にエラーが発生しました。');
+			try {
+				$this->_deleteAllTables();
+				$result = $this->_constructionDb($dbDataPattern, Configure::read('BcApp.defaultAdminTheme'));
+			} catch(Exception $e) {
+				$errorMessage .= "\n" . $e->getMessage();
+			}
+			if ($result) {
+				$this->BcMessage->setInfo(__d('baser', 'データベースの構築に成功しました。'));
+				$this->redirect('step4');
+				return;
+			}
+
+			$this->BcMessage->setError($errorMessage);
 		}
 
 		$this->set('dbDataPatterns', $this->BcManager->getAllDefaultDataPatterns());
@@ -223,53 +232,57 @@ class InstallationsController extends AppController {
 	public function step4() {
 		if (!$this->request->data) {
 			$this->request->data = $this->_getDefaultValuesStep4();
-		} else {
-
-			// ユーザー情報をセッションに保存
-			$this->Session->write('Installation.admin_email', $this->request->data['Installation']['admin_email']);
-			$this->Session->write('Installation.admin_username', $this->request->data['Installation']['admin_username']);
-			$this->Session->write('Installation.admin_password', $this->request->data['Installation']['admin_password']);
-
-			if ($this->request->data['Installation']['clicked'] === 'back') {
-
-				$this->redirect('step3');
-			} elseif ($this->request->data['Installation']['clicked'] === 'finish') {
-
-				// DB接続
-				$db = $this->BcManager->connectDb($this->_readDbSetting());
-
-				// サイト基本設定登録
-				$this->BcManager->setAdminEmail($this->request->data['Installation']['admin_email']);
-
-				// SecuritySalt設定
-				$salt = $this->BcManager->setSecuritySalt();
-				$this->Session->write('Installation.salt', $salt);
-				// SecurityCipherSeed設定
-				$cipherSeed = $this->BcManager->setSecurityCipherSeed();
-				$this->Session->write('Installation.cipherSeed', $cipherSeed);
-
-				// 管理ユーザー登録
-				$user = [
-					'name' => $this->request->data['Installation']['admin_username'],
-					'password_1' => $this->request->data['Installation']['admin_password'],
-					'password_2' => $this->request->data['Installation']['admin_confirmpassword'],
-					'email' => $this->request->data['Installation']['admin_email']
-				];
-
-				if ($this->BcManager->addDefaultUser($user)) {
-					$this->_sendCompleteMail($user['email'], $user['name'], $user['password_1']);
-					$this->redirect('step5');
-				} else {
-                    $User = ClassRegistry::init('User', 'Model');
-                    if ( !empty($User->validationErrors) ) {
-                        $errMsg = implode("\n", Hash::extract($User->validationErrors, '{s}.{n}'));
-                    }
-					$this->BcMessage->setError(__d('baser', '管理ユーザーを作成できませんでした。'));
-					$this->BcMessage->setError($errMsg);
-				}
-			}
+			$this->pageTitle = __d('baser', 'baserCMSのインストール｜ステップ４');
+			return;
 		}
 
+// ユーザー情報をセッションに保存
+		$this->Session->write('Installation.admin_email', $this->request->data['Installation']['admin_email']);
+		$this->Session->write('Installation.admin_username', $this->request->data['Installation']['admin_username']);
+		$this->Session->write('Installation.admin_password', $this->request->data['Installation']['admin_password']);
+
+		if ($this->request->data['Installation']['clicked'] === 'back') {
+
+			$this->redirect('step3');
+			return;
+		}
+
+		if ($this->request->data['Installation']['clicked'] === 'finish') {
+
+			// DB接続
+			$db = $this->BcManager->connectDb($this->_readDbSetting());
+
+			// サイト基本設定登録
+			$this->BcManager->setAdminEmail($this->request->data['Installation']['admin_email']);
+
+			// SecuritySalt設定
+			$salt = $this->BcManager->setSecuritySalt();
+			$this->Session->write('Installation.salt', $salt);
+			// SecurityCipherSeed設定
+			$cipherSeed = $this->BcManager->setSecurityCipherSeed();
+			$this->Session->write('Installation.cipherSeed', $cipherSeed);
+
+			// 管理ユーザー登録
+			$user = [
+				'name' => $this->request->data['Installation']['admin_username'],
+				'password_1' => $this->request->data['Installation']['admin_password'],
+				'password_2' => $this->request->data['Installation']['admin_confirmpassword'],
+				'email' => $this->request->data['Installation']['admin_email']
+			];
+
+			if ($this->BcManager->addDefaultUser($user)) {
+				$this->_sendCompleteMail($user['email'], $user['name'], $user['password_1']);
+				$this->redirect('step5');
+				return;
+			}
+
+			$User = ClassRegistry::init('User', 'Model');
+			if ( !empty($User->validationErrors) ) {
+			$errMsg = implode("\n", Hash::extract($User->validationErrors, '{s}.{n}'));
+			}
+			$this->BcMessage->setError(__d('baser', '管理ユーザーを作成できませんでした。'));
+			$this->BcMessage->setError($errMsg);
+		}
 		$this->pageTitle = __d('baser', 'baserCMSのインストール｜ステップ４');
 	}
 
@@ -353,11 +366,12 @@ class InstallationsController extends AppController {
 				opcache_reset();
 			}
 			$this->redirect('step5');
-		} else {
-			$installationData = Cache::read('Installation', 'default');
-			if (empty($installationData['lastStep'])) {
-				return;
-			}
+			return;
+		}
+
+		$installationData = Cache::read('Installation', 'default');
+		if (empty($installationData['lastStep'])) {
+			return;
 		}
 
 		// ログイン
@@ -419,27 +433,28 @@ class InstallationsController extends AppController {
 	protected function _getDefaultValuesStep3() {
 		$defaultTheme = Configure::read('BcApp.defaultTheme');
 		$data = [];
-		if ($this->Session->read('Installation.dbType')) {
-			$_data = $this->_readDbSetting();
-			$data['Installation']['dbType'] = $_data['datasource'];
-			$data['Installation']['dbHost'] = $_data['host'];
-			$data['Installation']['dbPort'] = $_data['port'];
-			$data['Installation']['dbPrefix'] = $_data['prefix'];
-			$_data['database'] = basename($_data['database']);
-			$_data['database'] = str_replace(['.csv', '.db'], '', $_data['database']);
-			$_data['database'] = basename($_data['database']);
-			$data['Installation']['dbName'] = $_data['database'];
-			$data['Installation']['dbUsername'] = $_data['login'];
-			$data['Installation']['dbPassword'] = $_data['password'];
-			$data['Installation']['dbDataPattern'] = $_data['dataPattern'];
-		} else {
+		if (!$this->Session->read('Installation.dbType')) {
 			$data['Installation']['dbType'] = 'mysql';
 			$data['Installation']['dbHost'] = 'localhost';
 			$data['Installation']['dbPort'] = '3306';
 			$data['Installation']['dbPrefix'] = 'mysite_';
 			$data['Installation']['dbName'] = 'basercms';
 			$data['Installation']['dbDataPattern'] = $defaultTheme . '.default';
+			return $data;
 		}
+
+		$_data = $this->_readDbSetting();
+		$data['Installation']['dbType'] = $_data['datasource'];
+		$data['Installation']['dbHost'] = $_data['host'];
+		$data['Installation']['dbPort'] = $_data['port'];
+		$data['Installation']['dbPrefix'] = $_data['prefix'];
+		$_data['database'] = basename($_data['database']);
+		$_data['database'] = str_replace(['.csv', '.db'], '', $_data['database']);
+		$_data['database'] = basename($_data['database']);
+		$data['Installation']['dbName'] = $_data['database'];
+		$data['Installation']['dbUsername'] = $_data['login'];
+		$data['Installation']['dbPassword'] = $_data['password'];
+		$data['Installation']['dbDataPattern'] = $_data['dataPattern'];
 
 		return $data;
 	}
@@ -674,27 +689,27 @@ class InstallationsController extends AppController {
 		$this->layout = 'default';
 		$this->subDir = 'admin';
 
-		if (!empty($this->request->data['Installation']['reset'])) {
-
-			$dbConfig = $this->_readDbSetting();
-			if (!$dbConfig) {
-				$dbConfig = getDbConfig('default');
-			}
-
-			if (!$this->BcManager->reset($dbConfig)) {
-				$this->BcMessage->setError(__d('baser', 'baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。'));
-			} else {
-				$this->BcMessage->setInfo(__d('baser', 'baserCMSを初期化しました。'));
-			}
-			$this->redirect('reset');
-
-		} elseif (!BC_INSTALLED) {
-			$complete = true;
-		} else {
-			$complete = false;
+		if (empty($this->request->data['Installation']['reset'])) {
+			$this->set('complete', !BC_INSTALLED ? true : false);
+			return;
 		}
 
-		$this->set('complete', $complete);
+		$dbConfig = $this->_readDbSetting();
+		if (!$dbConfig) {
+			$dbConfig = getDbConfig('default');
+		}
+
+		if (!$this->BcManager->reset($dbConfig)) {
+			$this->BcMessage->setError(
+				__d(
+					'baser'
+					, 'baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。'
+				)
+			);
+		} else {
+			$this->BcMessage->setInfo(__d('baser', 'baserCMSを初期化しました。'));
+		}
+		$this->redirect('reset');
 	}
 
 /**
