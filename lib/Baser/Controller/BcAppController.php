@@ -216,7 +216,7 @@ class BcAppController extends Controller {
 		}
 
 		// TODO beforeFilterでも定義しているので整理する
-		if ($this->name == 'CakeError') {
+		if ($this->name === 'CakeError') {
 
 			$this->uses = null;
 
@@ -226,9 +226,9 @@ class BcAppController extends Controller {
 				$site = $Site->findByUrl($this->request->url);
 				if (!empty($site['Site']['name'])) {
 					$this->layoutPath = $site['Site']['name'];
-					if ($site['Site']['name'] == 'mobile') {
+					if ($site['Site']['name'] === 'mobile') {
 						$this->helpers[] = 'BcMobile';
-					} elseif ($site['Site']['name'] == 'smartphone') {
+					} elseif ($site['Site']['name'] === 'smartphone') {
 						$this->helpers[] = 'BcSmartphone';
 					}
 				}
@@ -341,7 +341,7 @@ class BcAppController extends Controller {
 		}
 
 		// コンソールから利用される場合、$isInstall だけでは判定できないので、BC_INSTALLED も判定に入れる
-		if((!BC_INSTALLED || $isInstall || $isUpdate) && $this->name != 'CakeError') {
+		if((!BC_INSTALLED || $isInstall || $isUpdate) && $this->name !== 'CakeError') {
 			$this->theme = Configure::read('BcApp.defaultAdminTheme');
 			return;
 		}
@@ -440,7 +440,7 @@ class BcAppController extends Controller {
 			// テーマ、レイアウトとビュー用サブディレクトリの設定
 			$this->setAdminTheme();
 			$this->setTheme();
-			if (isset($this->request->params['prefix']) && $this->name != 'CakeError') {
+			if (isset($this->request->params['prefix']) && $this->name !== 'CakeError') {
 				$this->layoutPath = str_replace('_', '/', $this->request->params['prefix']);
 				$this->subDir = str_replace('_', '/', $this->request->params['prefix']);
 			}
@@ -540,7 +540,7 @@ class BcAppController extends Controller {
 		$favoriteBoxOpened = false;
 		if(BcUtil::isAdminSystem()) {
 			$this->__updateFirstAccess();
-			if (!empty($this->BcAuth) && !empty($this->request->url) && $this->request->url != 'update') {
+			if (!empty($this->BcAuth) && !empty($this->request->url) && $this->request->url !== 'update') {
 				$user = $this->BcAuth->user();
 				if ($user) {
 					if ($this->Session->check('Baser.favorite_box_opened')) {
@@ -569,7 +569,7 @@ class BcAppController extends Controller {
 		// エラーが発生した場合には、afterLayoutでは、エラー用のビューを持ったviewクラスを取得できない。
 		// 原因は、エラーが発生する前のcontrollerがviewを登録してしまっている為。
 		// エラー時のview登録にフックする場所はここしかないのでここでviewの登録を削除する
-		if ($this->name == 'CakeError') {
+		if ($this->name === 'CakeError') {
 			ClassRegistry::removeObject('view');
 			$this->response->disableCache();
 		}
@@ -648,7 +648,7 @@ class BcAppController extends Controller {
 				$data[$key] = $this->_autoConvertEncodingByArray($value, $outenc);
 			} else {
 
-				if (isset($this->request->params['prefix']) && $this->request->params['prefix'] == 'mobile') {
+				if (isset($this->request->params['prefix']) && $this->request->params['prefix'] === 'mobile') {
 					$inenc = 'SJIS';
 				} else {
 					$inenc = mb_detect_encoding($value);
@@ -699,7 +699,7 @@ class BcAppController extends Controller {
 		}
 
 		/* ログインユーザー */
-		if (BC_INSTALLED && $user && $this->name != 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name != 'CakeError') {
+		if (BC_INSTALLED && $user && $this->name !== 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name !== 'CakeError') {
 			$this->set('user', $user);
 			if (!empty($this->request->params['admin'])) {
 				$this->set('favorites', $this->Favorite->find('all', ['conditions' => ['Favorite.user_id' => $user['id']], 'order' => 'Favorite.sort', 'recursive' => -1]));
@@ -823,7 +823,7 @@ class BcAppController extends Controller {
  */
 	public function sendMail($to, $title = '', $body = '', $options = []) {
   		$dbg = debug_backtrace();
-  		if(!empty($dbg[1]['function']) && $dbg[1]['function'] == 'invokeArgs') {
+  		if(!empty($dbg[1]['function']) && $dbg[1]['function'] === 'invokeArgs') {
   			$this->notFound();
   		}
 		$options = array_merge([
@@ -1111,9 +1111,9 @@ class BcAppController extends Controller {
 		$_options = ['type' => 'post', 'session' => true];
 		$options = am($_options, $options);
 		extract($options);
-		if ($type == 'post' && $session == true) {
+		if ($type === 'post' && $session == true) {
 			$this->_saveViewConditions($filterModels, $options);
-		} elseif ($type == 'get') {
+		} elseif ($type === 'get') {
 			$options['session'] = false;
 		}
 		$this->_loadViewConditions($filterModels, $options);
@@ -1192,7 +1192,7 @@ class BcAppController extends Controller {
 			$contentsName .= "." . $group;
 		}
 
-		if ($type == 'post' && $session) {
+		if ($type === 'post' && $session) {
 			foreach ($filterModels as $model) {
 				if ($this->Session->check("Baser.viewConditions.{$contentsName}.filter.{$model}")) {
 					$filter = $this->Session->read("Baser.viewConditions.{$contentsName}.filter.{$model}");
@@ -1210,7 +1210,7 @@ class BcAppController extends Controller {
 			if ($this->Session->check("Baser.viewConditions.{$contentsName}.named")) {
 				$named = array_merge($named, $this->Session->read("Baser.viewConditions.{$contentsName}.named"));
 			}
-		} elseif ($type == 'get') {
+		} elseif ($type === 'get') {
 			if (!empty($this->request->query)) {
 				$url = $this->request->query;
 				unset($url['url']);
@@ -1247,7 +1247,7 @@ class BcAppController extends Controller {
 		$conditions = [];
 		extract($options);
 
-		if ($type == 'string' && !is_array($value)) {
+		if ($type === 'string' && !is_array($value)) {
 			$values = explode(',', str_replace('\'', '', $values));
 		}
 		if (!empty($values) && is_array($values)) {
@@ -1337,7 +1337,7 @@ class BcAppController extends Controller {
 			// <<<
 			if (strpos($ref, $base) === 0) {
 				$return = substr($ref, strlen($base));
-				if ($return[0] != '/') {
+				if ($return[0] !== '/') {
 					$return = '/' . $return;
 				}
 				return $return;
@@ -1603,7 +1603,7 @@ class BcAppController extends Controller {
  * - トークンが送信されていない場合 not found
  */
 	protected function _checkSubmitToken() {
-		if(strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' || empty($_POST['_Token']['key']) && empty($_POST['data']['_Token']['key'])) {
+		if(strtoupper($_SERVER['REQUEST_METHOD']) === 'GET' || empty($_POST['_Token']['key']) && empty($_POST['data']['_Token']['key'])) {
 			throw new NotFoundException();
 		}
 	}

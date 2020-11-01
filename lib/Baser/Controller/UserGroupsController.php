@@ -72,7 +72,7 @@ class UserGroupsController extends AppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		if ($this->request->params['prefix'] == 'admin') {
+		if ($this->request->params['prefix'] === 'admin') {
 			$this->set('usePermission', $this->UserGroup->checkOtherAdmins());
 		}
 

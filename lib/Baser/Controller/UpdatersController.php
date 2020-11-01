@@ -63,7 +63,7 @@ class UpdatersController extends AppController {
 		$this->Updater = ClassRegistry::init('Updater');
 		$this->Plugin = ClassRegistry::init('Plugin');
 		$this->SiteConfig = ClassRegistry::init('SiteConfig');
-		if ($this->request->action == 'admin_plugin') {
+		if ($this->request->action === 'admin_plugin') {
 			$this->Favorite = ClassRegistry::init('Favorite');
 		}
 		$this->BcAuth->allow('index');
@@ -313,7 +313,7 @@ class UpdatersController extends AppController {
 			}
 			asort($updateVerPoints);
 			foreach ($updateVerPoints as $key => $updateVerPoint) {
-				if (($updateVerPoint > $sourceVerPoint && $updateVerPoint <= $targetVerPoint) || $key == 'test') {
+				if (($updateVerPoint > $sourceVerPoint && $updateVerPoint <= $targetVerPoint) || $key === 'test') {
 					if (file_exists($path . DS . $key . DS . 'updater.php')) {
 						$updaters[$key] = $updateVerPoint;
 					}
@@ -370,7 +370,7 @@ class UpdatersController extends AppController {
 			asort($updateVerPoints);
 			foreach ($updateVerPoints as $key => $updateVerPoint) {
 				$updateMessage = '';
-				if (($updateVerPoint > $sourceVerPoint && $updateVerPoint <= $targetVerPoint) || $key == 'test') {
+				if (($updateVerPoint > $sourceVerPoint && $updateVerPoint <= $targetVerPoint) || $key === 'test') {
 					if (file_exists($path . DS . $key . DS . 'config.php')) {
 						include $path . DS . $key . DS . 'config.php';
 						if($updateMessage) {
@@ -453,7 +453,7 @@ class UpdatersController extends AppController {
 			} else {
 				// 1.6.7 では plugins テーブルの構造が変わったので、find でデータが取得できないのでスキップする
 				// DB の再接続を行えば取得できるかも
-				if ($targetVersion == '1.6.7') {
+				if ($targetVersion === '1.6.7') {
 					$result = true;
 				} else {
 					$data = $this->Plugin->find('first', ['conditions' => ['name' => $plugin]]);

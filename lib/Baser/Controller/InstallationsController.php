@@ -104,8 +104,8 @@ class InstallationsController extends AppController {
 				}
 				break;
 			default:
-				if ($installed == 'complete') {
-					if ($this->request->action != 'step5') {
+				if ($installed === 'complete') {
+					if ($this->request->action !== 'step5') {
 						$this->notFound();
 					}
 				} else {
@@ -143,7 +143,7 @@ class InstallationsController extends AppController {
  * @return void
  */
 	public function step2() {
-		if ($this->request->data && $this->request->data['clicked'] == 'next') {
+		if ($this->request->data && $this->request->data['clicked'] === 'next') {
 			$this->redirect('step3');
 		}
 
@@ -176,16 +176,16 @@ class InstallationsController extends AppController {
 			$this->_writeDbSettingToSession($this->request->data['Installation']);
 
 			/* 戻るボタンクリック時 */
-			if ($this->request->data['buttonclicked'] == 'back') {
+			if ($this->request->data['buttonclicked'] === 'back') {
 				$this->redirect('step2');
 
 				/* 接続テスト */
-			} elseif ($this->request->data['buttonclicked'] == 'checkdb') {
+			} elseif ($this->request->data['buttonclicked'] === 'checkdb') {
 
 				$this->set('blDBSettingsOK', $this->_testConnectDb($this->_readDbSetting()));
 
 				/* 「次のステップへ」クリック時 */
-			} elseif ($this->request->data['buttonclicked'] == 'createdb') {
+			} elseif ($this->request->data['buttonclicked'] === 'createdb') {
 
 				ini_set("max_execution_time", 180);
 
@@ -230,10 +230,10 @@ class InstallationsController extends AppController {
 			$this->Session->write('Installation.admin_username', $this->request->data['Installation']['admin_username']);
 			$this->Session->write('Installation.admin_password', $this->request->data['Installation']['admin_password']);
 
-			if ($this->request->data['Installation']['clicked'] == 'back') {
+			if ($this->request->data['Installation']['clicked'] === 'back') {
 
 				$this->redirect('step3');
-			} elseif ($this->request->data['Installation']['clicked'] == 'finish') {
+			} elseif ($this->request->data['Installation']['clicked'] === 'finish') {
 
 				// DB接続
 				$db = $this->BcManager->connectDb($this->_readDbSetting());
@@ -344,7 +344,7 @@ class InstallationsController extends AppController {
 			}
 
 			$Db = ConnectionManager::getDataSource('default');
-			if($Db->config['datasource'] == 'Database/BcPostgres') {
+			if($Db->config['datasource'] === 'Database/BcPostgres') {
 				$Db->updateSequence();
 			}
 
@@ -509,12 +509,12 @@ class InstallationsController extends AppController {
 		$data['dbEncoding'] = 'utf8';
 
 		/* dbSchema */
-		if ($data['dbType'] == 'postgres') {
+		if ($data['dbType'] === 'postgres') {
 			$data['dbSchema'] = 'public'; // TODO とりあえずpublic固定
 		} else {
 			$data['dbSchema'] = '';
 		}
-		if ($data['dbType'] == 'csv') {
+		if ($data['dbType'] === 'csv') {
 			$data['dbEncoding'] = 'sjis';
 		}
 

@@ -104,7 +104,7 @@ class ThemesController extends AppController {
 		$datas = [];
 		$currentTheme = null;
 		foreach ($themes as $themename) {
-			if ($themename != 'core' && $themename != '_notes') {
+			if ($themename !== 'core' && $themename !== '_notes') {
 				if ($themename == $this->siteConfigs['theme']) {
 					$currentTheme = $this->_loadThemeInfo($themename);
 				} else {
@@ -292,7 +292,7 @@ class ThemesController extends AppController {
 			}
 		}
 		$Db = ConnectionManager::getDataSource('default');
-		if($Db->config['datasource'] == 'Database/BcPostgres') {
+		if($Db->config['datasource'] === 'Database/BcPostgres') {
 			$Db->updateSequence();
 		}
 		// システム基本設定の更新
@@ -578,7 +578,7 @@ class ThemesController extends AppController {
 	function _writeCsv($plugin, $path, $exclude = []) {
 
 		$pluginTables = [];
-		if($plugin != 'core') {
+		if($plugin !== 'core') {
 			$pluginPath = BcUtil::getSchemaPath($plugin);
 			$Folder = new Folder($pluginPath);
 			$files = $Folder->read(true, true, false);
@@ -599,19 +599,19 @@ class ThemesController extends AppController {
 		$tableList = getTableList();
 		$result = true;
 		foreach ($tables as $table) {
-			if(($plugin == 'core' && in_array($table, $tableList['core'])) || ($plugin != 'core' && in_array($table, $tableList['plugin']))) {
+			if(($plugin === 'core' && in_array($table, $tableList['core'])) || ($plugin !== 'core' && in_array($table, $tableList['plugin']))) {
 				$table = str_replace($db->config['prefix'], '', $table);
 				if (in_array($table, $exclude)) {
 					continue;
 				}
-				if ($pluginKey != 'core' && !in_array($table, $pluginTables)) {
+				if ($pluginKey !== 'core' && !in_array($table, $pluginTables)) {
 					continue;
 				}
 				if (!$db->writeCsv([
 					'path' => $path . $table . '.csv',
 					'encoding' => 'UTF-8',
 					'init' => false,
-					'plugin' => ($plugin == 'core') ? null : $plugin
+					'plugin' => ($plugin === 'core') ? null : $plugin
 				])) {
 					$result = false;
 				}

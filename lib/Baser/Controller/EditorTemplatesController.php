@@ -51,7 +51,7 @@ class EditorTemplatesController extends AppController {
 			['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
 			['name' => __d('baser', 'エディタテンプレート管理'), 'url' => ['controller' => 'editor_templates', 'action' => 'index']]
 		];
-		if (!empty($this->siteConfigs['editor']) && $this->siteConfigs['editor'] != 'none') {
+		if (!empty($this->siteConfigs['editor']) && $this->siteConfigs['editor'] !== 'none') {
 			$this->helpers[] = $this->siteConfigs['editor'];
 		}
 	}

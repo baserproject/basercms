@@ -63,7 +63,7 @@ class PermissionsController extends AppController {
 			['name' => __d('baser', 'ユーザー管理'), 'url' => ['controller' => 'users', 'action' => 'index']],
 			['name' => __d('baser', 'ユーザーグループ管理'), 'url' => ['controller' => 'user_groups', 'action' => 'index']]
 		];
-		if ($this->request->params['prefix'] == 'admin') {
+		if ($this->request->params['prefix'] === 'admin') {
 			$this->set('usePermission', true);
 		}
 		if(!$this->request->is('ajax')) {
@@ -152,7 +152,7 @@ class PermissionsController extends AppController {
 		}
 
 		/* 表示設定 */
-		if ($permissionAuthPrefix == 'admin') {
+		if ($permissionAuthPrefix === 'admin') {
 			$permissionAuthPrefix = Configure::read('Routing.prefixes.0');
 		}
 		$this->pageTitle = sprintf(__d('baser', '%s｜新規アクセス制限設定登録'), $userGroup['UserGroup']['title']);

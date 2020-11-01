@@ -79,7 +79,7 @@ class SearchIndicesController extends AppController {
 			$Content = ClassRegistry::init('Content');
 			$currentSite = BcSite::findCurrent(true);
 			$url = '/';
-			if($this->request->params['action'] != 'search') {
+			if($this->request->params['action'] !== 'search') {
 				$prefix = str_replace('_search', '', $this->request->params['action']);
 				if($prefix == $currentSite->name) {
 					$url = '/' . $currentSite->alias . '/';

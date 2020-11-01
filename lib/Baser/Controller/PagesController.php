@@ -66,7 +66,7 @@ class PagesController extends AppController {
 		// 認証設定
 		$this->BcAuth->allow('display');
 
-		if (!empty($this->siteConfigs['editor']) && $this->siteConfigs['editor'] != 'none') {
+		if (!empty($this->siteConfigs['editor']) && $this->siteConfigs['editor'] !== 'none') {
 			$this->helpers[] = $this->siteConfigs['editor'];
 		}
 	}
@@ -338,7 +338,7 @@ class PagesController extends AppController {
 				return;
 			}
 
-			if($this->BcContents->preview == 'draft') {
+			if($this->BcContents->preview === 'draft') {
 				$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
 				$this->request->params['Content']['eyecatch'] = $this->request->data['Content']['eyecatch'];
 
@@ -364,7 +364,7 @@ class PagesController extends AppController {
 			}
 
 			// 草稿アクセス
-			if($this->BcContents->preview == 'draft') {
+			if($this->BcContents->preview === 'draft') {
 				$data = $this->Page->find('first', ['conditions' => ['Page.id' => $this->request->params['Content']['entity_id']]]);
 				$uuid = $this->_createPreviewTemplate($data, true);
 				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);

@@ -117,7 +117,7 @@ class ThemeFilesController extends AppController {
 			$this->pageTitle .= sprintf(__d('baser', '｜%s一覧'), $this->_tempalteTypes[$type]);
 		}
 
-		if ($type != 'etc') {
+		if ($type !== 'etc') {
 
 			/* レイアウト／エレメント */
 			$folder = new Folder($fullpath);
@@ -127,7 +127,7 @@ class ThemeFilesController extends AppController {
 			$excludeList = ['_notes'];
 			foreach ($files[0] as $file) {
 				if (!in_array($file, $excludeList)) {
-					if ($file == 'admin' && is_link($fullpath . $file)) {
+					if ($file === 'admin' && is_link($fullpath . $file)) {
 						continue;
 					}
 					$folder = [];
@@ -232,7 +232,7 @@ class ThemeFilesController extends AppController {
 
 		if (!$this->request->data) {
 
-			if ($type == 'css' || $type == 'js') {
+			if ($type === 'css' || $type === 'js') {
 				$ext = $type;
 			} else {
 				$ext = 'php';
@@ -305,7 +305,7 @@ class ThemeFilesController extends AppController {
 			$this->request->data['ThemeFile']['type'] = $this->_getFileType(urldecode(basename($file->name)));
 			$this->request->data['ThemeFile']['ext'] = $pathinfo['extension'];
 			$this->request->data['ThemeFile']['parent'] = dirname($fullpath) . DS;
-			if ($this->request->data['ThemeFile']['type'] == 'text') {
+			if ($this->request->data['ThemeFile']['type'] === 'text') {
 				$this->request->data['ThemeFile']['contents'] = $file->read();
 			}
 		} else {
@@ -319,7 +319,7 @@ class ThemeFilesController extends AppController {
 					$newPath .= '.' . $this->request->data['ThemeFile']['ext'];
 				}
 				$this->request->data['ThemeFile']['type'] = $this->_getFileType(basename($newPath));
-				if ($this->request->data['ThemeFile']['type'] == 'text') {
+				if ($this->request->data['ThemeFile']['type'] === 'text') {
 					$file = new File($oldPath);
 					if ($file->open('w')) {
 						$file->append($this->request->data['ThemeFile']['contents']);
@@ -790,7 +790,7 @@ class ThemeFilesController extends AppController {
 			} else {
 				$viewPath = BASER_PLUGINS . $data['plugin'] . DS . 'View' . DS;
 			}
-		} elseif ($data['theme'] == 'core') {
+		} elseif ($data['theme'] === 'core') {
 			if (in_array($data['type'], $assets)) {
 				$data['assets'] = true;
 				$viewPath = BASER_WEBROOT;
@@ -801,7 +801,7 @@ class ThemeFilesController extends AppController {
 			$viewPath = WWW_ROOT . 'theme' . DS . $data['theme'] . DS;
 		}
 
-		if ($data['type'] != 'etc') {
+		if ($data['type'] !== 'etc') {
 			$data['fullpath'] = $viewPath . $data['type'] . DS . $data['path'];
 		} else {
 			$data['fullpath'] = $viewPath . $data['path'];
@@ -827,7 +827,7 @@ class ThemeFilesController extends AppController {
 			$this->notFound();
 		}
 
-		if ($type != 'etc') {
+		if ($type !== 'etc') {
 			if ($plugin && $assets) {
 				$themePath = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $plugin . DS . $type . DS . $path;
 			} else {
@@ -863,7 +863,7 @@ class ThemeFilesController extends AppController {
 			$this->notFound();
 		}
 
-		if ($type != 'etc') {
+		if ($type !== 'etc') {
 			if ($plugin && $assets) {
 				$themePath = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $plugin . DS . $type . DS;
 			} else {
