@@ -18,7 +18,7 @@ use Cake\View\Helper;
  * Class BcAdminHelper
  * @package BaserCore\View\Helper
  * @uses BcAdminHelper
- * @params BcBaserHelper $BcBaser
+ * @property BcBaserHelper $BcBaser
  */
 class BcAdminHelper extends Helper {
 
@@ -205,12 +205,8 @@ class BcAdminHelper extends Helper {
      */
 	public function isAvailableSideBar()
     {
-        // TODO 実装要
-        // >>>
-        // $loginAction = Configure::read('BcAuthPrefix.admin.loginAction');
-        // ---
-        $loginAction = '/baser/admin/users/login';
-        // <<<
+        $prefix = $this->_View->getRequest()->getParam('prefix');
+        $loginAction = Configure::read('BcPrefixAuth.' . $prefix . '.loginAction');
         $name = $this->_View->getName();
         $url = $this->_View->getRequest()->getPath();
         if (!in_array($name, ['Installations', 'Updaters']) && ($loginAction !== $url && !empty(BcUtil::loginUser()))) {
@@ -219,5 +215,84 @@ class BcAdminHelper extends Helper {
             return false;
         }
 	}
+
+    /**
+     * Set Title
+     * @param string $title
+     */
+	public function setTitle($title): void
+	{
+	    $this->_View->set('title', $title);
+	}
+
+    /**
+     * Set Help
+     * @param string $template
+     */
+	public function setHelp($template): void
+	{
+	    $this->_View->set('help', $template);
+	}
+
+    /**
+     * Set Search
+     * @param string $template
+     */
+	public function setSearch($template):void
+	{
+	    $this->_View->set('search', $template);
+	}
+
+    /**
+     * Title
+     */
+    public function title(): void
+    {
+        echo h($this->_View->fetch('title'));
+    }
+
+    /**
+     * Help
+     */
+	public function help():void
+	{
+        $template = $this->_View->get('help');
+        if($template) {
+            echo $this->_View->element('Admin/help', ['help' => $template]);
+        }
+	}
+
+    /**
+     * Search
+     */
+	public function search():void
+	{
+        $template = $this->_View->get('search');
+        $contentsName = $this->BcBaser->getContentsName(true);
+        $adminSearchOpened = $this->_View->getRequest()->getSession()->read('BcApp.adminSearchOpened.' . $contentsName);
+        $adminSearchOpenedSaveUrl = $this->BcBaser->getUrl([
+            'controller' => 'Utilities',
+            'action' => 'ajax_save_search_box',
+            $contentsName
+        ]);
+        if($template) {
+            echo $this->_View->element('Admin/search', [
+                'search' => $template,
+                'adminSearchOpened' => $adminSearchOpened,
+                'adminSearchOpenedSaveUrl' => $adminSearchOpenedSaveUrl
+            ]);
+        }
+	}
+
+    /**
+     * Contents Menu
+     */
+	public function contentsMenu(): void
+    {
+        echo $this->_View->element('Admin/contents_menu', [
+            'isHelp' => (bool)($this->_View->get('help')),
+            'isLogin' => (bool)(BcUtil::loginUser())
+        ]);
+    }
 
 }

@@ -32,7 +32,7 @@ class BcBaserHelper extends Helper
 		'admin_side_banner' => true
 	];
 	public function js($url, $inline = true, $options = []) {
-		$options = array_merge(['inline' => $inline], $options);
+		$options = array_merge(['block' => !$inline], $options);
 		$result = $this->Html->script($url, $options);
 		if ($inline) {
 			echo $result;
@@ -174,7 +174,7 @@ class BcBaserHelper extends Helper
 	    if($request->getParam('action') === 'login') {
             return 'AdminUsersLogin';
         } else {
-            return '';
+            return 'Admin';
         }
 	}
 

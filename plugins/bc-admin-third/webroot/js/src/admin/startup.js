@@ -1,4 +1,15 @@
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ *
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
+ */
+
 $(function() {
+
     /**
      * ヘルプ用バルーンチップ設定
      *
@@ -45,5 +56,20 @@ $(function() {
             contentSelector: "$(this).next('.helptext').html()"
         });
     }
+
+    /**
+     * ヘルプ
+     */
+	$('#BtnMenuHelp').click(function(){
+		if($('#Help').css('display')=='none'){
+			$('#Help').fadeIn(300);
+		} else {
+			$('#Help').fadeOut(300);
+		}
+	});
+	$('#CloseHelp').click(function(){
+		$('#Help').fadeOut(300);
+	});
+
 });
 

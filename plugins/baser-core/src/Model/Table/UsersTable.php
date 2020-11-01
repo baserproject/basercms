@@ -115,4 +115,34 @@ class UsersTable extends Table
                     '_ids' => [1]
         ]]);
     }
+
+    /**
+     * コントロールソースを取得する
+     *
+     * @param string $field フィールド名
+     * @param array $options オプション
+     * @return array コントロールソース
+     */
+	public function getControlSource($field, $options) {
+		switch ($field) {
+			case 'user_group_id':
+				$controlSources['user_group_id'] = $this->UserGroups->find('list');
+				break;
+		}
+		if (isset($controlSources[$field])) {
+			return $controlSources[$field];
+		} else {
+			return [];
+		}
+	}
+
+	public function createAdminIndexWhere($query): array
+    {
+        $conditions = ['UserGroups' => []];
+        if(isset($query['user_group_id'])) {
+            $conditions['UserGroups']['UserGroups.id'] = $query['user_group_id'];
+        }
+        return $conditions;
+    }
+
 }

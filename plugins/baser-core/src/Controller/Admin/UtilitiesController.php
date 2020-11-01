@@ -19,6 +19,22 @@ class UtilitiesController extends BcAdminAppController {
      * サーバーキャッシュを削除する
      */
     public function clear_cache() {
+        // TODO 未実装
+        $this->BcMessage->setError("おっと、まだ処理は実装されていませんよ！！！ \n\n/tmp/cache/ 内を削除するだけなので簡単です＾＾");
         $this->redirect($this->referer());
     }
+
+    /**
+     * 検索ボックスの表示状態を保存する
+     *
+     * @param string $key キー
+     * @param mixed $open 1 Or ''
+     * @return void
+     */
+	public function ajax_save_search_box($key, $open = '') {
+	    $this->autoRender = false;
+		$this->request->getSession()->write('BcApp.adminSearchOpened.' . $key, $open);
+		echo true;
+	}
+
 }

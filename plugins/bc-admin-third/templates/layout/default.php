@@ -1,4 +1,4 @@
-<?php
+<?
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS User Community <https://basercms.net/community/>
@@ -23,81 +23,88 @@ $base = $attributes['base'];
 ?>
 <!DOCTYPE html>
 <html lang="ja">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="robots" content="noindex,nofollow" />
-		<title><?= h($this->fetch('title')) ?></title>
-		<?php echo $this->fetch('meta') ?>
-		<?php echo $this->fetch('css') ?>
-		<?php echo $this->fetch('script') ?>
-		<?php echo $this->BcBaser->js([
-            'admin/vendor.bundle',
-            'vendor/vue.min',
-            'vendor/jquery-3.5.1.min',
-            'vendor/jquery.bt.min',
-		]) ?>
-		<?php echo $this->BcBaser->js('admin/common.bundle', true, [
-		    'id' => 'AdminScript',
-		    'data-baseUrl' => h($base)
-        ]) ?>
-		<?php echo $this->BcBaser->js([
-            'admin/startup.bundle'
-		]) ?>
-		<?php echo $this->Html->css([
-		    'vendor/bootstrap-4.1.3/bootstrap',
-			'admin/style',
-			'admin/jquery-ui/jquery-ui.min'
-		]) ?>
-<?php //echo $this->Html->script(['https://unpkg.com/vue', 'https://unpkg.com/axios/dist/axios.min.js', 'admin/app']) ?>
-	</head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex,nofollow"/>
+    <title><?= h($this->fetch('title')) ?></title>
+    <? echo $this->fetch('meta') ?>
+    <? echo $this->fetch('css') ?>
+    <? echo $this->fetch('script') ?>
+    <? echo $this->BcBaser->js([
+        'admin/vendor.bundle',
+        'vendor/vue.min',
+        'vendor/jquery-3.5.1.min',
+        'vendor/jquery.bt.min',
+    ]) ?>
+    <? echo $this->BcBaser->js('admin/common.bundle', true, [
+        'id' => 'AdminScript',
+        'data-baseUrl' => h($base)
+    ]) ?>
+    <? echo $this->BcBaser->js([
+        'admin/startup.bundle'
+    ]) ?>
+    <? echo $this->Html->css([
+        'vendor/bootstrap-4.1.3/bootstrap',
+        'admin/style',
+        'admin/jquery-ui/jquery-ui.min'
+    ]) ?>
+    <? //echo $this->Html->script(['https://unpkg.com/vue', 'https://unpkg.com/axios/dist/axios.min.js', 'admin/app']) ?>
+</head>
 
-	<body id="<?php $this->BcBaser->contentsName(true) ?>" class="normal">
+<body id="<? $this->BcBaser->contentsName(true) ?>" class="normal">
 
-	<div id="Page" class="bca-app">
-        <?php echo $this->element('Admin/header') ?>
+<div id="Page" class="bca-app">
 
-		<div id="Wrap" class="bca-container">
+    <? echo $this->element('Admin/header') ?>
 
-<?php if($this->BcAdmin->isAvailableSideBar()): ?>
-			<?php $this->BcBaser->element('Admin/sidebar') ?>
-<?php endif ?>
+    <div id="Wrap" class="bca-container">
 
-				<main id="Contents" class="bca-main">
+        <? if ($this->BcAdmin->isAvailableSideBar()): ?>
+            <? $this->BcBaser->element('Admin/sidebar') ?>
+        <? endif ?>
 
-					<article id="ContentsBody" class="contents-body bca-main__body">
+        <main id="Contents" class="bca-main">
 
-						<div class="bca-main__header">
+            <article id="ContentsBody" class="contents-body bca-main__body">
 
-							<h1 class="bca-main__header-title"><?= h($this->fetch('title')) ?></h1>
+                <div class="bca-main__header">
 
-							<div class="bca-main__header-actions">
-                                <?php $this->BcBaser->element('Admin/main_body_header_links'); ?>
-							</div>
+                    <h1 class="bca-main__header-title"><? $this->BcAdmin->title() ?></h1>
 
-							<div class="bca-main__header-menu">
+                    <div class="bca-main__header-actions">
+                        <? $this->BcBaser->element('Admin/main_body_header_links'); ?>
+                    </div>
 
-							</div>
+                    <div class="bca-main__header-menu">
+                        <? $this->BcAdmin->contentsMenu() ?>
+                    </div>
 
-						</div>
+                </div>
 
-                        <? $this->BcBaser->flash() ?>
+                <? $this->BcAdmin->help() ?>
 
-						<div id="BcMessageBox"><div id="BcSystemMessage" class="notice-message"></div></div>
+                <? $this->BcAdmin->search() ?>
 
-						<div class="bca-main__contents clearfix">
-							<?= $this->fetch('content') ?>
-						</div>
+                <? $this->BcBaser->flash() ?>
 
-					<!-- / bca-main__body --></article>
+                <div id="BcMessageBox">
+                    <div id="BcSystemMessage" class="notice-message"></div>
+                </div>
 
-				<!-- / .bca-main --></main>
+                <div class="bca-main__contents clearfix">
+                    <?= $this->fetch('content') ?>
+                </div>
 
-			<!-- / #Wrap --></div>
+                <!-- / bca-main__body --></article>
 
-<?php echo $this->element('Admin/footer') ?>
+            <!-- / .bca-main --></main>
 
-	<!-- / #Page --></div>
+        <!-- / #Wrap --></div>
 
-	</body>
+        <? echo $this->element('Admin/footer') ?>
+
+    <!-- / #Page --></div>
+
+</body>
 
 </html>

@@ -80,24 +80,20 @@ class UsersController extends BcAdminAppController
 	 */
     public function index()
     {
-        $this->request = $this->request->withParam('pass', ['num' => $this->siteConfigs['admin_list_num']]);
-		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
-		$this->setViewConditions('User', ['default' => $default]);
-        $this->paginate = [
-            'contain' => ['UserGroups'],
-            'order' => ['Users.id'],
-            'limit' => $this->request->getParam('pass')['num'],
-        ];
-        $users = $this->paginate(
-            $this->Users->find('all')
-                ->limit($this->request->getParam('pass')['num'])
-        );
+        $this->setViewConditions('', ['default' => ['named' => ['num' => $this->siteConfigs['admin_list_num']]]]);
+        $query = $this->request->getQuery();
         $this->set([
-            'users' => $users,
-            '_serialize' => ['users']
+            'users' => $this->paginate(
+                $this->Users->find()
+                    ->matching('UserGroups', function($q) use($query) {
+                        return $q->where($this->Users->createAdminIndexWhere($query)['UserGroups']);
+                    })
+                    ->order(['Users.id'])
+                    ->limit($this->request->getParam('pass')['num'])
+                    ->contain('UserGroups')
+            )
         ]);
-
-        $this->set('title', 'ユーザー一覧');
+        $this->request = $this->request->withParsedBody($query);
     }
 
     /**

@@ -86,8 +86,59 @@ $request->getRequestTarget();
 ### フォームコントロールのテンプレート
 `/baser-core/config/bc_form.php` で定義できる
 
+　
+
+## モデル関連
+
+### モデルの取得
+
+```php
+ClassRegistry::init('User');
+ ↓
+TableRegistry::getTableLocator()->get('Users');
+```
+
+　
+
+## baserCMS関連
+
 ### フォームコントロールの出力
 `$this->BcForm->input()` から、`$this->BcAdminForm->control()` に変更
+
+### 検索フォーム、ヘルプの設定
+
+#### コントロールの場合
+
+```php
+$this->search = $templateName;  // 旧
+$this->help = $templateName;  // 旧
+　↓
+$this->setSearch($templateName);    // 新
+$this->setHelp($templateName);    // 新
+```
+
+#### ビューの場合
+
+```php
+$this->BcAdmin->setSearch($templateName);
+$this->BcAdmin->setHelp($templateName);
+```
+
+### タイトルの設定
+
+#### コントロールの場合
+
+```php
+$this->pageTitle = $title;  // 旧
+　↓
+$this->setTitle($title);    // 新
+```
+
+#### ビューの場合
+
+```php
+$this->BcAdmin->setTitle($title);
+```
 
 　
 

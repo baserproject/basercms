@@ -10,6 +10,8 @@
  */
 
 namespace BaserCore\View\Helper;
+use Cake\ORM\Locator\TableLocator;
+use Cake\ORM\TableRegistry;
 use \Cake\View\Helper\FormHelper;
 
 /**
@@ -40,4 +42,36 @@ class BcFormHelper extends FormHelper
     {
         return parent::widget($name, $data);
     }
+
+/**
+ * コントロールソースを取得する
+ * Model側でメソッドを用意しておく必要がある
+ *
+ * @param string $field フィールド名
+ * @param array $options
+ * @return array コントロールソース
+ */
+	public function getControlSource($field, $options = []) {
+		$count = preg_match_all('/\./is', $field, $matches);
+		if ($count === 1) {
+			[$modelName, $field] = explode('.', $field);
+			$plugin = $this->_View->getPlugin();
+            if($plugin) {
+                $modelName = $plugin . '.' . $modelName;
+            }
+		} elseif ($count === 2) {
+			[$plugin, $modelName, $field] = explode('.', $field);
+			$modelName = $plugin . '.' . $modelName;
+		}
+		if (empty($modelName)) {
+			return [];
+		}
+		$model = TableRegistry::getTableLocator()->get($modelName);
+		if ($model && method_exists($model, 'getControlSource')) {
+			return $model->getControlSource($field, $options);
+		} else {
+			return [];
+		}
+	}
+
 }
