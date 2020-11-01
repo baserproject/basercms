@@ -15,6 +15,7 @@ use BaserCore\Model\Entity\User;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Association\BelongsTo;
 use Cake\ORM\Behavior\TimestampBehavior;
+use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -137,13 +138,15 @@ class UsersTable extends Table
 		}
 	}
 
-	public function createWhere($query): array
+	public function createWhere($query, $request): Query
     {
-        $conditions = ['UserGroups' => []];
-        if(!empty($query['user_group_id'])) {
-            $conditions['UserGroups']['UserGroups.id'] = $query['user_group_id'];
+        $get = $request->getQuery();
+        if(!empty($get['user_group_id'])) {
+            $query->matching('UserGroups', function($q) use($get) {
+                return $q->where(['UserGroups.id' => $get['user_group_id']]);
+            });
         }
-        return $conditions;
+        return $query;
     }
 
 }
