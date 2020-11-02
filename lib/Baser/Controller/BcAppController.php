@@ -1566,7 +1566,7 @@ class BcAppController extends Controller {
 				$aryMessage[] = $value;
 			}
 		}
-		$message = exit(implode('<br />', $aryMessage));
+		exit(implode('<br />', $aryMessage));
 	}
 
 /**
