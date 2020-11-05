@@ -307,7 +307,6 @@ class ContentsController extends AppController {
 		}
 		$this->BcMessage->setSuccess($message, true, false);
 		exit(json_encode($data['Content']));
-		exit();
 	}
 
 /**
@@ -346,8 +345,8 @@ class ContentsController extends AppController {
 	/**
 	 * エイリアスを編集する
 	 *
-	 * @param string $plugin
-	 * @param string $type
+	 * @param $id
+	 * @throws Exception
 	 */
 	public function admin_edit_alias($id) {
 
@@ -421,16 +420,15 @@ class ContentsController extends AppController {
 		}
 	}
 
-/**
- * コンテンツを削除する（論理削除）
- *
- * ※ エイリアスの場合は直接削除
- *
- * @param int $id
- * @param bool $isAlias
- * @param bool $useFlashMessage
- * @return bool
- */
+	/**
+	 * コンテンツを削除する（論理削除）
+	 *
+	 * ※ エイリアスの場合は直接削除
+	 *
+	 * @param int $id
+	 * @param bool $useFlashMessage
+	 * @return bool
+	 */
 	protected function _delete($id, $useFlashMessage = false) {
 		$content = $this->Content->find('first', ['conditions' => ['Content.id' => $id], 'recursive' => -1]);
 		if(!$content) {

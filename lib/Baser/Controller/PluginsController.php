@@ -62,7 +62,14 @@ class PluginsController extends AppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->crumbs = [
-			['name' => __d('baser', 'プラグイン管理'), 'url' => ['plugin' => '', 'controller' => 'plugins', 'action' => 'index']]
+			[
+				'name' => __d('baser', 'プラグイン管理'),
+				'url' => [
+					'plugin' => '',
+					'controller' => 'plugins',
+					'action' => 'index'
+				]
+			]
 		];
 	}
 

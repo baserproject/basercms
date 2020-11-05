@@ -266,14 +266,12 @@ class UpdatersController extends AppController {
 		$this->render('update');
 	}
 
-/**
- * アップデータのパスを取得する
- *
- * @param string $sourceVersion
- * @param string $targetVersion
- * @param string $plugin
- * @return array $updates
- */
+	/**
+	 * アップデータのパスを取得する
+	 *
+	 * @param string $plugin
+	 * @return array $updates
+	 */
 	protected function _getUpdaters($plugin = '') {
 
 		$targetVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getBaserVersion($plugin)));
@@ -323,14 +321,12 @@ class UpdatersController extends AppController {
 		return $updaters;
 	}
 
-/**
- * アップデータのパスを取得する
- *
- * @param string $sourceVersion
- * @param string $targetVersion
- * @param string $plugin
- * @return array $updates
- */
+	/**
+	 * アップデータのパスを取得する
+	 *
+	 * @param string $plugin
+	 * @return array $updates
+	 */
 	protected function _getScriptMessages($plugin = '') {
 		$targetVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getBaserVersion($plugin)));
 		$sourceVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getSiteVersion($plugin)));
@@ -404,18 +400,16 @@ class UpdatersController extends AppController {
 		return false;
 	}
 
-/**
- * アップデートを実行する
- *
- * アップデートスクリプトを読み込む為、
- * よく使われるような変数名はダブらないように
- * アンダースコアを二つつける
- *
- * @param string $targetVersion
- * @param string $sourceVersion
- * @param string $plugin
- * @return boolean
- */
+	/**
+	 * アップデートを実行する
+	 *
+	 * アップデートスクリプトを読み込むため、
+	 * よく使われるような変数名はダブらないように
+	 * アンダースコアを二つつける
+	 *
+	 * @param string $plugin
+	 * @return boolean
+	 */
 	protected function _update($plugin = '') {
 		$targetVersion = $this->getBaserVersion($plugin);
 		$sourceVersion = $this->getSiteVersion($plugin);
@@ -470,13 +464,13 @@ class UpdatersController extends AppController {
 		return $result;
 	}
 
-/**
- * アップデートスクリプトを実行する
- *
- * @param string $__plugin
- * @param string $__version
- * @return void
- */
+	/**
+	 * アップデートスクリプトを実行する
+	 *
+	 * @param string $__plugin
+	 * @param string $__version
+	 * @return bool
+	 */
 	public function _execScript($__plugin, $__version) {
 		ClassRegistry::flush();
 		BcSite::flash();
@@ -496,30 +490,28 @@ class UpdatersController extends AppController {
 		return true;
 	}
 
-/**
- * アップデートメッセージをセットする
- *
- * @param string $message
- * @param boolean $head 見出しとして設定する
- * @param boolean $beforeBreak 前の行で改行する
- * @return void
- */
+	/**
+	 * アップデートメッセージをセットする
+	 *
+	 * @param string $message
+	 * @return void
+	 */
 	public function setUpdateLog($message) {
 		$this->_updateMessage[] = $message;
 	}
 
-/**
- * スキーマファイルを読み込みデータベースのテーブル構造を変更する
- *
- * @param string $version アップデート対象のバージョン番号を指定します。（例）'4.0.0'
- * @param tring $plugin プラグイン内のスキーマを読み込むにはプラグイン名を指定します。（例）'Mail'
- * @param string $filterTable 指定したテーブルのみを追加・更新する場合は、プレフィックス部分を除外したテーブル名を指定します。（例）'permissions'
- *		指定しない場合は全てのスキーマファイルが対象となります。
- * @param string $filterType 指定した更新タイプ（create / alter / drop）のみを対象とする場合は更新タイプを指定します。（例）'create'
- *		指定しない場合は全てのスキーマファイルが対象となります。
- * @return boolean
- * @access	public
- */
+	/**
+	 * スキーマファイルを読み込みデータベースのテーブル構造を変更する
+	 *
+	 * @param string $version アップデート対象のバージョン番号を指定します。（例）'4.0.0'
+	 * @param string $plugin プラグイン内のスキーマを読み込むにはプラグイン名を指定します。（例）'Mail'
+	 * @param string $filterTable 指定したテーブルのみを追加・更新する場合は、プレフィックス部分を除外したテーブル名を指定します。（例）'permissions'
+	 *        指定しない場合は全てのスキーマファイルが対象となります。
+	 * @param string $filterType 指定した更新タイプ（create / alter / drop）のみを対象とする場合は更新タイプを指定します。（例）'create'
+	 *        指定しない場合は全てのスキーマファイルが対象となります。
+	 * @return boolean
+	 * @access    public
+	 */
 	public function loadSchema($version, $plugin = '', $filterTable = '', $filterType = '') {
 		$path = $this->_getUpdatePath($version, $plugin);
 		if (!$path) {

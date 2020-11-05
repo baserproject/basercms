@@ -43,7 +43,7 @@ class PagesController extends AppController {
  *
  * @var array
  * @deprecated useViewCache 5.0.0 since 4.0.0
- * 	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
+ * 	CakePHP3では、ビューキャッシュは廃止となるため、別の方法に移行する
  */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['useForm' => true, 'useViewCache' => true]];
 
@@ -403,15 +403,16 @@ class PagesController extends AppController {
 		}
 	}
 
-/**
- * プレビュー用テンプレートを生成する
- *
- * 一時ファイルとしてビューを保存
- * タグ中にPHPタグが入る為、ファイルに保存する必要がある
- *
- * @param mixed	$id 固定ページID
- * @return string uuid
- */
+	/**
+	 * プレビュー用テンプレートを生成する
+	 *
+	 * 一時ファイルとしてビューを保存
+	 * タグ中にPHPタグが入る為、ファイルに保存する必要がある
+	 *
+	 * @param $data
+	 * @param bool $isDraft
+	 * @return string uuid
+	 */
 	protected function _createPreviewTemplate($data, $isDraft = false) {
 		if(!$isDraft) {
 			// postで送信される前提

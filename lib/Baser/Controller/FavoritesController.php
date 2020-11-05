@@ -115,11 +115,11 @@ class FavoritesController extends AppController {
 		exit();
 	}
 
-/**
- * [ADMIN] 並び替えを更新する
- *
- * @return bool
- */
+	/**
+	 * [ADMIN] 並び替えを更新する
+	 *
+	 * @return void
+	 */
 	public function admin_update_sort() {
 		$user = $this->BcAuth->user();
 		if ($this->request->data) {

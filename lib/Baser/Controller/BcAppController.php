@@ -1250,7 +1250,7 @@ class BcAppController extends Controller {
  * @param string $fieldName フィールド名
  * @param mixed $values 値
  * @param array $options オプション
- * @return	string
+ * @return    array
  */
 	protected function convertSelectTextCondition($fieldName, $values, $options = []) {
 		$_options = array('type' => 'string', 'conditionType' => 'or');
@@ -1274,7 +1274,7 @@ class BcAppController extends Controller {
  *
  * @param string $fieldName フィールド名
  * @param mixed $value 値
- * @return array
+ * @return array|false
  */
 	protected function convertBetweenCondition($fieldName, $value) {
 		if (strpos($value, '-') === false) {
@@ -1388,7 +1388,7 @@ class BcAppController extends Controller {
  * @param mixed $url A string or array-based URL pointing to another location within the app, or an absolute URL
  * @param int $status Optional HTTP status code (eg: 404)
  * @param bool $exit If true, exit() will be called after the redirect
- * @return mixed void if $exit = false. Terminates script if $exit = true
+ * @return void if $exit = false. Terminates script if $exit = true
  */
 	public function redirect($url, $status = null, $exit = true) {
 		$url = addSessionId($url, true);

@@ -53,7 +53,7 @@ class ToolsController extends AppController {
 /**
  * サブメニュー
  *
- * @var type
+ * @var array
  * @access public
  */
 	public $subMenuElements = ['site_configs', 'tools'];
@@ -176,13 +176,13 @@ class ToolsController extends AppController {
 		return $result;
 	}
 
-/**
- * データベースをレストア
- *
- * @param string $path スキーマファイルのパス
- * @param string $configKeyName DB接続名
- * @return boolean
- */
+	/**
+	 * データベースをレストア
+	 *
+	 * @param string $path スキーマファイルのパス
+	 * @param $encoding
+	 * @return boolean
+	 */
 	protected function _loadBackup($path, $encoding) {
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
@@ -267,13 +267,14 @@ class ToolsController extends AppController {
 		exit();
 	}
 
-/**
- * バックアップファイルを書きだす
- *
- * @param string $configKeyName
- * @param string $path
- * @return boolean
- */
+	/**
+	 * バックアップファイルを書きだす
+	 *
+	 * @param string $path
+	 * @param string $plugin
+	 * @param $encoding
+	 * @return boolean
+	 */
 	protected function _writeBackup($path, $plugin = '', $encoding) {
 		$db = ConnectionManager::getDataSource('default');
 		$db->cacheSources = false;

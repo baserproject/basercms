@@ -158,12 +158,12 @@ class UsersController extends AppController {
 		$this->pageTitle = $pageTitle;
 	}
 
-/**
- * [ADMIN] 代理ログイン
- *
- * @param int $id
- * @return ダッシュボードへのURL
- */
+	/**
+	 * [ADMIN] 代理ログイン
+	 *
+	 * @param int $id
+	 * @return void
+	 */
 	public function admin_ajax_agent_login($id) {
 		if (!$this->Session->check('AuthAgent')) {
 			$user = $this->BcAuth->user();

@@ -922,15 +922,12 @@ class ThemeFilesController extends AppController {
 		exit();
 	}
 
-/**
- * 画像を表示する
- * コアの画像等も表示可
- *
- * @param int $width
- * @param int $height
- * @param array パス情報
- * @return void
- */
+	/**
+	 * 画像を表示する
+	 * コアの画像等も表示可
+	 *
+	 * @return void
+	 */
 	public function admin_img_thumb() {
 		$args = func_get_args();
 		$width = $args[0];

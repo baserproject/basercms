@@ -373,13 +373,13 @@ class SearchIndicesController extends AppController {
 		exit();
 	}
 
-/**
- * 管理画面ページ一覧の検索条件を取得する
- *
- * @param	array		$data
- * @return	string
- * @access	protected
- */
+	/**
+	 * 管理画面ページ一覧の検索条件を取得する
+	 *
+	 * @param array $data
+	 * @return array
+	 * @access    protected
+	 */
 	protected function _createAdminIndexConditions($data) {
 		if (empty($data['SearchIndex'])) {
 			return [];

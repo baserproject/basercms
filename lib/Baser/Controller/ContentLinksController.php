@@ -91,11 +91,11 @@ class ContentLinksController extends AppController {
 		$this->set('publishLink', $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain));
 	}
 
-/**
- * コンテンツを削除する
- *
- * @param $entityId
- */
+	/**
+	 * コンテンツを削除する
+	 *
+	 * @return bool
+	 */
 	public function admin_delete() {
 		if(empty($this->request->data['entityId'])) {
 			return false;
@@ -106,12 +106,11 @@ class ContentLinksController extends AppController {
 		return false;
 	}
 
-/**
- * コンテンツを表示する
- *
- * @param $entityId
- * @return void
- */
+	/**
+	 * コンテンツを表示する
+	 *
+	 * @return void
+	 */
 	public function view() {
 		if(empty($this->request->params['entityId'])) {
 			$this->notFound();

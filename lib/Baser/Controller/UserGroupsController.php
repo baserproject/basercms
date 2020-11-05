@@ -253,12 +253,14 @@ class UserGroupsController extends AppController {
 		}
 	}
 
-/**
- * ユーザーグループのよく使う項目の初期値を登録する
- * ユーザー編集画面よりAjaxで呼び出される
- *
- * @return boolean
- */
+	/**
+	 * ユーザーグループのよく使う項目の初期値を登録する
+	 * ユーザー編集画面よりAjaxで呼び出される
+	 *
+	 * @param $id
+	 * @return void
+	 * @throws Exception
+	 */
 	public function admin_set_default_favorites($id) {
 		if (!$this->request->is(['post', 'put'])) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));

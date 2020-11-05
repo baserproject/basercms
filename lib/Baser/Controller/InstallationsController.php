@@ -413,7 +413,7 @@ class InstallationsController extends AppController {
 /**
  * データベースを構築する
  *
- * @param type $dbDataPattern データパターン
+ * @param string $dbDataPattern データパターン
  * @return boolean
  */
 	protected function _constructionDb($dbDataPattern = null, $adminTheme = '') {

@@ -214,11 +214,11 @@ class WidgetAreasController extends AppController {
 		return true;
 	}
 
-/**
- * [AJAX] タイトル更新
- *
- * @return boolean
- */
+	/**
+	 * [AJAX] タイトル更新
+	 *
+	 * @return void
+	 */
 	public function admin_update_title() {
 		if (!$this->request->data) {
 			$this->notFound();
@@ -231,12 +231,12 @@ class WidgetAreasController extends AppController {
 		exit();
 	}
 
-/**
- * [AJAX] ウィジェット更新
- *
- * @param int $widgetAreaId
- * @return boolean
- */
+	/**
+	 * [AJAX] ウィジェット更新
+	 *
+	 * @param int $widgetAreaId
+	 * @return void
+	 */
 	public function admin_update_widget($widgetAreaId) {
 		if (!$widgetAreaId || !$this->request->data) {
 			exit();
@@ -278,11 +278,11 @@ class WidgetAreasController extends AppController {
 		exit();
 	}
 
-/**
- * 並び順を更新する
- * @param int $widgetAreaId
- * @return boolean
- */
+	/**
+	 * 並び順を更新する
+	 * @param int $widgetAreaId
+	 * @return void
+	 */
 	public function admin_update_sort($widgetAreaId) {
 		if (!$widgetAreaId || !$this->request->data) {
 			exit();

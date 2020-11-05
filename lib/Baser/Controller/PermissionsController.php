@@ -236,12 +236,12 @@ class PermissionsController extends AppController {
 		$this->render('form');
 	}
 
-/**
- * [ADMIN] 削除処理　(ajax)
- *
- * @param int $id
- * @return boolean
- */
+	/**
+	 * [ADMIN] 削除処理　(ajax)
+	 *
+	 * @param $ids
+	 * @return boolean
+	 */
 	protected function _batch_del($ids) {
 		if ($ids) {
 			foreach ($ids as $id) {
@@ -311,12 +311,13 @@ class PermissionsController extends AppController {
 		$this->redirect(['action' => 'index', $userGroupId]);
 	}
 
-/**
- * 並び替えを更新する [AJAX]
- *
- * @return boolean
- * @access	public
- */
+	/**
+	 * 並び替えを更新する [AJAX]
+	 *
+	 * @access    public
+	 * @param $userGroupId
+	 * @return void
+	 */
 	public function admin_ajax_update_sort($userGroupId) {
 		if (!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -331,12 +332,12 @@ class PermissionsController extends AppController {
 		echo true;
 	}
 
-/**
- * 管理画面ページ一覧の検索条件を取得する
- *
- * @param array $data
- * @return string
- */
+	/**
+	 * 管理画面ページ一覧の検索条件を取得する
+	 *
+	 * @param $userGroupId
+	 * @return array
+	 */
 	protected function _createAdminIndexConditions($userGroupId) {
 		/* 条件を生成 */
 		$conditions = [];
@@ -374,14 +375,12 @@ class PermissionsController extends AppController {
 		}
 	}
 
-/**
- * [ADMIN] 無効状態にする（AJAX）
- *
- * @param string $blogContentId
- * @param string $blogPostId beforeFilterで利用
- * @param string $blogCommentId
- * @return void
- */
+	/**
+	 * [ADMIN] 無効状態にする（AJAX）
+	 *
+	 * @param $id
+	 * @return void
+	 */
 	public function admin_ajax_unpublish($id) {
 		$this->_checkSubmitToken();
 		if (!$id) {
@@ -394,14 +393,12 @@ class PermissionsController extends AppController {
 		exit(true);
 	}
 
-/**
- * [ADMIN] 有効状態にする（AJAX）
- *
- * @param string $blogContentId
- * @param string $blogPostId beforeFilterで利用
- * @param string $blogCommentId
- * @return void
- */
+	/**
+	 * [ADMIN] 有効状態にする（AJAX）
+	 *
+	 * @param $id
+	 * @return void
+	 */
 	public function admin_ajax_publish($id) {
 		$this->_checkSubmitToken();
 		if (!$id) {
