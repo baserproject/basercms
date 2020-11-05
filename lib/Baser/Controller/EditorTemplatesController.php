@@ -80,9 +80,9 @@ class EditorTemplatesController extends AppController {
 		if ($this->EditorTemplate->isOverPostSize()) {
 			$this->BcMessage->setError(
 				__d(
-					'baser'
-					, '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。'
-					, ini_get('post_max_size')
+					'baser',
+					'送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
+					ini_get('post_max_size')
 				)
 			);
 			$this->redirect(['action' => 'add']);

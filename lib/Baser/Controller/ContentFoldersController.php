@@ -60,11 +60,11 @@ class ContentFoldersController extends AppController {
 
 		$this->BcMessage->setSuccess(
 			sprintf(
-				__d('baser', 'フォルダ「%s」を追加しました。')
-				, $this->request->data['Content']['title']
-			)
-			, true
-			, false
+				__d('baser', 'フォルダ「%s」を追加しました。'),
+				$this->request->data['Content']['title']
+			),
+			true,
+			false
 		);
 		exit(json_encode($data['Content']));
 	}

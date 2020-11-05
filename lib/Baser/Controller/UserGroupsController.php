@@ -122,8 +122,8 @@ class UserGroupsController extends AppController {
 			$this->request->data['UserGroup']['auth_prefix'] = 'admin';
 		} else {
 			$this->request->data['UserGroup']['auth_prefix'] = implode(
-				','
-				, $this->request->data['UserGroup']['auth_prefix']
+				',',
+				$this->request->data['UserGroup']['auth_prefix']
 			);
 		}
 		$this->UserGroup->create($this->request->data);

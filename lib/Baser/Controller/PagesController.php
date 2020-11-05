@@ -104,11 +104,11 @@ class PagesController extends AppController {
 		$url = $this->Content->getUrl($data['Content']['url'], true, $site->useSubDomain);
 		$message = sprintf(
 			__d(
-				'baser'
-				, "固定ページ「%s」を追加しました。\n%s"
-			)
-			, $this->request->data['Content']['title']
-			, urldecode($url)
+				'baser',
+				"固定ページ「%s」を追加しました。\n%s"
+			),
+			$this->request->data['Content']['title'],
+			urldecode($url)
 		);
 		$this->BcMessage->setSuccess($message, true, false);
 		return json_encode($data['Content']);
@@ -269,7 +269,7 @@ class PagesController extends AppController {
  */
 	public function display() {
 		// CUSTOMIZE DELETE 2016/10/05 ryuring
-		 $path = func_get_args();
+		$path = func_get_args();
 
 		// CUSTOMIZE ADD 2014/07/02 ryuring
 		// >>>
@@ -424,11 +424,11 @@ class PagesController extends AppController {
 			$contents = $data['Page']['draft'];
 		}
 		$contents = $this->Page->addBaserPageTag(
-			null
-			, $contents
-			, $data['Content']['title']
-			, $data['Content']['description']
-			, @$data['Page']['code']
+			null,
+			$contents,
+			$data['Content']['title'],
+			$data['Content']['description'],
+			$data['Page']['code']
 		);
 		$uuid = CakeText::uuid();
 		$path = TMP . 'pages_preview_' . $uuid . $this->ext;
@@ -453,11 +453,11 @@ class PagesController extends AppController {
 		}
 		$user = $this->BcAuth->user();
 		$data = $this->Page->copy(
-			$this->request->data['entityId']
-			, $this->request->data['parentId']
-			, $this->request->data['title']
-			, $user['id']
-			, $this->request->data['siteId']
+			$this->request->data['entityId'],
+			$this->request->data['parentId'],
+			$this->request->data['title'],
+			$user['id'],
+			$this->request->data['siteId']
 		);
 		if (!$data) {
 			$this->ajaxError(500, $this->Page->validationErrors);

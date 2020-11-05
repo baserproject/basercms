@@ -465,9 +465,9 @@ class PermissionsController extends AppController {
 		$statusText = $statusTexts[$status];
 		$this->Permission->saveDbLog(
 			sprintf(
-				'アクセス制限設定「%s」 を %s に設定しました。'
-				, $data['Permission']['name']
-				, $statusText
+				'アクセス制限設定「%s」 を %s に設定しました。',
+				$data['Permission']['name'],
+				$statusText
 			)
 		);
 		return true;

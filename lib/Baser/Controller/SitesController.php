@@ -214,12 +214,12 @@ class SitesController extends AppController {
 		$statusText = $statusTexts[$status];
 		$this->BcMessage->setSuccess(
 			sprintf(
-				__d('baser', 'サブサイト「%s」 を、%s に設定しました。')
-				, $data['Site']['name']
-				, $statusText
-			)
-			, true
-			, false
+				__d('baser', 'サブサイト「%s」 を、%s に設定しました。'),
+				$data['Site']['name'],
+				$statusText
+			),
+			true,
+			false
 		);
 		return true;
 	}

@@ -546,9 +546,9 @@ class UpdatersController extends AppController {
 			return false;
 		}
 		return $this->Updater->loadCsv(
-			$plugin ? 'plugin' : 'baser'
-			, $path
-			, ['filterTable' => $filterTable]
+			$plugin ? 'plugin' : 'baser',
+			$path,
+			['filterTable' => $filterTable]
 		);
 	}
 

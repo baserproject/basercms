@@ -447,8 +447,8 @@ class PluginsController extends AppController {
 			$permissionAuthPrefix = 'admin';
 			$url = '/' . $permissionAuthPrefix . '/' . Inflector::underscore($data['Plugin']['name']) . '/*';
 			$permission = $Permission->find(
-				'first'
-				, [
+				'first',
+				[
 					'conditions' => ['Permission.url' => $url],
 					'recursive' => -1
 				]

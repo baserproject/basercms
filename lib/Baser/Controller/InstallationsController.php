@@ -702,8 +702,8 @@ class InstallationsController extends AppController {
 		if (!$this->BcManager->reset($dbConfig)) {
 			$this->BcMessage->setError(
 				__d(
-					'baser'
-					, 'baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。'
+					'baser',
+					'baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。'
 				)
 			);
 		} else {
