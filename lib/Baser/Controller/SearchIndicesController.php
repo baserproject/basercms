@@ -336,19 +336,18 @@ class SearchIndicesController extends AppController {
 		exit();
 	}
 
-/**
- * [ADMIN] 検索インデックス一括削除
- *
- * @param	int		$id
- * @return	void
- * @access 	public
- */
+	/**
+	 * [ADMIN] 検索インデックス一括削除
+	 *
+	 * @param $ids
+	 * @return bool
+	 * @access    public
+	 */
 	protected function _batch_del($ids) {
 		if (!$ids) {
 			return true;
 		}
 		foreach ($ids as $id) {
-
 			/* 削除処理 */
 			if ($this->SearchIndex->delete($id)) {
 				$message = sprintf(__d('baser', '検索インデックスより NO.%s を削除しました。'), $id);
@@ -358,11 +357,12 @@ class SearchIndicesController extends AppController {
 		return true;
 	}
 
-/**
- * [AJAX] 優先順位を変更する
- *
- * @return boolean
- */
+	/**
+	 * [AJAX] 優先順位を変更する
+	 *
+	 * @return void
+	 * @throws Exception
+	 */
 	public function admin_ajax_change_priority() {
 		if ($this->request->data) {
 			$this->SearchIndex->set($this->request->data);

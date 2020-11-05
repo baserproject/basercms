@@ -633,23 +633,41 @@ class ContentsController extends AppController {
 		if(!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
-		$data = ['Content' => [
-			'id'		=> $this->request->data['id'],
-			'title'		=> $this->request->data['newTitle'],
-			'parent_id' => $this->request->data['parentId'],
-			'type'		=> $this->request->data['type'],
-			'site_id'	=> $this->request->data['siteId']
-		]];
-		if($this->Content->save($data, ['firstCreate' => !empty($this->request->data['first'])])) {
-			$message = Configure::read('BcContents.items.' . $this->request->data['plugin'] . '.' . $this->request->data['type'] . '.title') .
-						sprintf(__d('baser', '「%s」を「%s」に名称変更しました。'), $this->request->data['oldTitle'], $this->request->data['newTitle']);
-			$this->BcMessage->setSuccess($message, true, false);
-			Configure::write('debug', 0);
-			return $this->Content->getUrlById($this->Content->id);
-		} else {
+		$data = [
+			'Content' => [
+				'id'		=> $this->request->data['id'],
+				'title'		=> $this->request->data['newTitle'],
+				'parent_id' => $this->request->data['parentId'],
+				'type'		=> $this->request->data['type'],
+				'site_id'	=> $this->request->data['siteId']
+			]
+		];
+		if(!$this->Content->save($data, ['firstCreate' => !empty($this->request->data['first'])])) {
 			$this->ajaxError(500, __d('baser', '名称変更中にエラーが発生しました。'));
+			return false;
 		}
-		return false;
+
+		$this->BcMessage->setSuccess(
+			sprintf(
+				'%s%s',
+				Configure::read(
+					sprintf(
+						'BcContents.items.%s.%s.title',
+						$this->request->data['plugin'],
+						$this->request->data['type']
+					)
+				),
+				sprintf(
+					__d('baser', '「%s」を「%s」に名称変更しました。'),
+					$this->request->data['oldTitle'],
+					$this->request->data['newTitle']
+				)
+			),
+			true,
+			false
+		);
+		Configure::write('debug', 0);
+		return $this->Content->getUrlById($this->Content->id);
 	}
 
 /**
@@ -699,24 +717,27 @@ class ContentsController extends AppController {
 			$this->SiteConfig->updateContentsSortLastModified();
 		}
 
-		if($result) {
-
-			// EVENT Contents.afterAdd
-			$this->dispatchEvent('afterMove', [
-				'data' => $result
-			]);
-			$this->BcMessage->set(
-				sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"),
-					$result['Content']['title'],
-					urldecode($beforeUrl),
-					urldecode($result['Content']['url'])
-				),
-			false, true, false);
-
-			return json_encode($this->Content->getUrlById($result['Content']['id'], true));
-		} else {
+		if(!$result) {
 			$this->ajaxError(500, __d('baser', 'データ保存中にエラーが発生しました。'));
+			return false;
 		}
+
+		// EVENT Contents.afterAdd
+		$this->dispatchEvent('afterMove', [
+			'data' => $result
+		]);
+		$this->BcMessage->set(
+			sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"),
+				$result['Content']['title'],
+				urldecode($beforeUrl),
+				urldecode($result['Content']['url'])
+			),
+			false,
+			true,
+			false
+		);
+
+		return json_encode($this->Content->getUrlById($result['Content']['id'], true));
 
 	}
 
@@ -771,7 +792,14 @@ class ContentsController extends AppController {
 	public function admin_ajax_get_content_folder_list($siteId) {
 		$this->autoRender = false;
 		Configure::write('debug', 0);
-		return json_encode($this->Content->getContentFolderList((int) $siteId, ['conditions' => ['Content.site_root' => false]]));
+		return json_encode(
+			$this->Content->getContentFolderList(
+				(int) $siteId,
+				[
+					'conditions' => ['Content.site_root' => false]
+				]
+			)
+		);
 	}
 
 /**
@@ -781,8 +809,14 @@ class ContentsController extends AppController {
 		$this->autoLayout = false;
 		$sites = $this->Site->getPublishedAll();
 		foreach($sites as $key => $site) {
-			$sites[$key]['published'] = $this->Content->find('count', ['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => true]]);
-			$sites[$key]['unpublished'] = $this->Content->find('count', ['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => false]]);
+			$sites[$key]['published'] = $this->Content->find(
+				'count',
+				['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => true]]
+			);
+			$sites[$key]['unpublished'] = $this->Content->find(
+				'count',
+				['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => false]]
+			);
 			$sites[$key]['total'] = $sites[$key]['published'] + $sites[$key]['unpublished'];
 		}
 		$this->set('sites', $sites);

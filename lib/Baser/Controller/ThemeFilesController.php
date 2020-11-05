@@ -418,11 +418,12 @@ class ThemeFilesController extends AppController {
 		exit(true);
 	}
 
-/**
- * 削除
- *
- * @return void
- */
+	/**
+	 * 削除
+	 *
+	 * @param $args
+	 * @return bool
+	 */
 	protected function _del($args) {
 		extract($args);
 		if (is_dir($fullpath)) {
@@ -441,11 +442,12 @@ class ThemeFilesController extends AppController {
 		return true;
 	}
 
-/**
- * 一括削除
- *
- * @return void
- */
+	/**
+	 * 一括削除
+	 *
+	 * @param $ids
+	 * @return bool
+	 */
 	protected function _batch_del($ids) {
 		if (!$ids) {
 			return true;
@@ -887,10 +889,22 @@ class ThemeFilesController extends AppController {
 		}
 
 		$_themePath = str_replace(ROOT, '', $themePath);
-		$this->BcMessage->setInfo('コアフォルダ ' . basename($path) . ' を テーマ ' . Inflector::camelize($this->siteConfigs['theme']) . " の次のパスとしてコピーしました。\n" . $_themePath);
+		$this->BcMessage->setInfo(
+			sprintf(
+				'コアフォルダ %s を テーマ %s の次のパスとしてコピーしました。 %s',
+				basename($path),
+				Inflector::camelize($this->siteConfigs['theme']),
+				$_themePath
+			)
+		);
 		// 現在のテーマにリダイレクトする場合、混乱するおそれがあるのでとりあえずそのまま
 		//$this->redirect(array('action' => 'edit', $this->siteConfigs['theme'], $type, $path));
-		$this->redirect(array_merge(['action' => 'view_folder', $theme, $plugin, $type], explode('/', $path)));
+		$this->redirect(
+			array_merge(
+				['action' => 'view_folder', $theme, $plugin, $type],
+				explode('/', $path)
+			)
+		);
 	}
 
 /**

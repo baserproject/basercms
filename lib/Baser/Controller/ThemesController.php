@@ -374,7 +374,7 @@ class ThemesController extends AppController {
  * テーマをコピーする
  *
  * @param string $theme
- * @return boolean
+ * @return array|bool
  */
 	protected function _copy($theme) {
 		$basePath = WWW_ROOT . 'theme' . DS;

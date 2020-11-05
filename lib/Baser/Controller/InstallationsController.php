@@ -560,69 +560,78 @@ class InstallationsController extends AppController {
 			if (preg_match('/with message \'(.+?)\' in/s', $e->getMessage(), $matches)) {
 				$message .= "\n" . $matches[1];
 			}
-					$this->BcMessage->setError(__d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。"));
+			$this->BcMessage->setError(__d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。"));
 			return false;
 		}
 
 		/* データベース接続生成 */
 		$db = $this->BcManager->connectDb($config);
 
-		if ($db->connected) {
-			//version check
-
-			switch (get_class($db)) {
-				case 'BcMysql' :
-					$result = $db->query("SELECT version() as version");
-					if( version_compare($result[0][0]['version'], Configure::read('BcRequire.MySQLVersion')) == -1 ) {
-						$this->BcMessage->setError(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.MySQLVersion')));
-						return false ;
-					}
-					break;
-				case 'BcPostgres' :
-					$result = $db->query("SELECT version() as version");
-					list(,$version) = explode(" ",$result[0][0]['version']);
-					if( version_compare( trim($version), Configure::read('BcRequire.PostgreSQLVersion')) == -1 ) {
-						$this->BcMessage->setError(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.PostgreSQLVersion')));
-						return false ;
-					}
-					break;
-			}
-
-			/* 一時的にテーブルを作成できるかテスト */
-			$randomtablename = 'deleteme' . rand(100, 100000);
-			$result = $db->execute("CREATE TABLE $randomtablename (a varchar(10))");
-
-
-			if ($result) {
-				$db->execute("drop TABLE $randomtablename");
-				$this->BcMessage->setInfo(__d('baser', 'データベースへの接続に成功しました。'));
-
-				// データベースのテーブルをチェック
-				$tableNames = $db->listSources();
-				$prefix = Hash::get($config, 'prefix');
-				$duplicateTableNames = array_filter($tableNames, function($tableName) use ($prefix) {
-					return strpos($tableName, $prefix) === 0;
-				});
-
-				if (count($duplicateTableNames) > 0) {
-					$this->BcMessage->setInfo(__d('baser', 'データベースへの接続に成功しましたが、プレフィックスが重複するテーブルが存在します。') . join(', ', $duplicateTableNames));
-				}
-				return true;
-			} else {
-				$this->BcMessage->setError(__d('baser', "データベースへの接続でエラーが発生しました。\n") . $db->error);
-			}
-		} else {
+		if (!$db->connected) {
 
 			if (!$this->Session->read('Message.flash.message')) {
-				if ($db->connection) {
-					$this->BcMessage->setError(__d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。"));
-				} else {
-					$this->BcMessage->setError(__d('baser', 'データベースへの接続でエラーが発生しました。データベース設定を見直してください。'));
+				if (!$db->connection) {
+					$this->BcMessage->setError(
+						__d('baser', 'データベースへの接続でエラーが発生しました。データベース設定を見直してください。')
+					);
+					return false;
 				}
+
+				$this->BcMessage->setError(
+					__d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。")
+				);
 			}
+			return false;
 		}
 
-		return false;
+		//version check
+		switch (get_class($db)) {
+			case 'BcMysql' :
+				$result = $db->query("SELECT version() as version");
+				if (version_compare($result[0][0]['version'], Configure::read('BcRequire.MySQLVersion')) == -1) {
+					$this->BcMessage->setError(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.MySQLVersion')));
+					return false;
+				}
+				break;
+			case 'BcPostgres' :
+				$result = $db->query("SELECT version() as version");
+				list(, $version) = explode(" ", $result[0][0]['version']);
+				if (version_compare(trim($version), Configure::read('BcRequire.PostgreSQLVersion')) == -1) {
+					$this->BcMessage->setError(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.PostgreSQLVersion')));
+					return false;
+				}
+				break;
+		}
+
+		/* 一時的にテーブルを作成できるかテスト */
+		$randomtablename = 'deleteme' . rand(100, 100000);
+		$result = $db->execute("CREATE TABLE $randomtablename (a varchar(10))");
+
+
+		if (!$result) {
+			$this->BcMessage->setError(__d('baser', "データベースへの接続でエラーが発生しました。\n") . $db->error);
+			return false;
+		}
+
+		$db->execute('drop TABLE ' . $randomtablename);
+		$this->BcMessage->setInfo(__d('baser', 'データベースへの接続に成功しました。'));
+
+		// データベースのテーブルをチェック
+		$tableNames = $db->listSources();
+		$prefix = Hash::get($config, 'prefix');
+		$duplicateTableNames = array_filter($tableNames, function ($tableName) use ($prefix) {
+			return strpos($tableName, $prefix) === 0;
+		});
+
+		if (count($duplicateTableNames) > 0) {
+			$this->BcMessage->setInfo(
+				__d(
+					'baser',
+					'データベースへの接続に成功しましたが、プレフィックスが重複するテーブルが存在します。') . implode(', ', $duplicateTableNames)
+			);
+		}
+
+		return true;
 	}
 
 /**
