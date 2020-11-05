@@ -13,11 +13,11 @@
 /**
  * [ADMIN] パンくずナビゲーション
  */
-if ($this->viewPath != 'dashboard') {
+if ($this->viewPath !== 'dashboard') {
 	$this->BcBaser->addCrumb('<span itemprop="title" class="bca-icon--home"><span class="bca-icon-label">' . __d('baser', 'ホーム') . '</span></span>', ['plugin' => null, 'controller' => 'dashboard']);
 }
 $crumbs = $this->BcBaser->getCrumbs();
-if ($this->name == 'CakeError') {
+if ($this->name === 'CakeError') {
 	$this->BcBaser->addCrumb('404 NOT FOUND');
 }
 if (!empty($crumbs)) {
@@ -28,7 +28,7 @@ if (!empty($crumbs)) {
 			}
 		}
 		if ($this->BcArray->last($crumbs, $key)) {
-			if ($this->viewPath != 'home' && $crumb['name']) {
+			if ($this->viewPath !== 'home' && $crumb['name']) {
 				$this->BcBaser->addCrumb(h($crumb['name']));
 			}
 		} else {
