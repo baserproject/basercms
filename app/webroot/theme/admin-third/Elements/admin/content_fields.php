@@ -51,7 +51,7 @@ if($this->request->data['Site']['use_subdomain']) {
 	$contentsName = '';
 	if(!$this->request->data['Content']['site_root']) {
 		$contentsName = $this->BcForm->value('Content.name');
-		if(!$isOmitViewAction && $this->request->data['Content']['url'] != '/') {
+		if(!$isOmitViewAction && $this->request->data['Content']['url'] !== '/') {
 			$contentsName .= '/';
 		}
 	}
@@ -61,7 +61,7 @@ if($this->request->data['Site']['use_subdomain']) {
 	} else {
 		$contentsName = $this->BcForm->value('Content.name');
 	}
-	if(!$isOmitViewAction && $this->request->data['Content']['url'] != '/' && $contentsName) {
+	if(!$isOmitViewAction && $this->request->data['Content']['url'] !== '/' && $contentsName) {
 		$contentsName .= '/';
 	}
 }
@@ -112,7 +112,7 @@ if($this->BcContents->isEditable()) {
 				<?php endif ?>
 				<?php if (!$this->request->data['Content']['site_root'] && !$related): ?>
 					<?php echo $this->BcForm->input('Content.name', ['type' => 'text', 'size' => 20, 'autofocus' => true]) ?>
-					<?php if (!$isOmitViewAction && $this->request->data['Content']['url'] != '/'): ?>/<?php endif ?>　
+					<?php if (!$isOmitViewAction && $this->request->data['Content']['url'] !== '/'): ?>/<?php endif ?>　
 				<?php else: ?>
 					<?php if (!$this->request->data['Content']['site_root']): ?>
 					<?php // サイトルートの場合はコンテンツ名を表示しない ?>
