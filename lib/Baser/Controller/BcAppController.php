@@ -541,7 +541,7 @@ class BcAppController extends Controller {
  * @return bool
  */
 	protected function _adminSslMethods($var) {
-		return preg_match('/^admin_/', $var);
+		return strpos($var, 'admin_') === 0;
 	}
 
 /**
@@ -671,7 +671,7 @@ class BcAppController extends Controller {
 
 			if ($inenc != $outenc) {
 				// 半角カナは一旦全角に変換する
-				$value = mb_convert_kana($value, "KV", $inenc);
+				$value = mb_convert_kana($value, 'KV', $inenc);
 				$value = mb_convert_encoding($value, $outenc, $inenc);
 				$data[$key] = $value;
 			}
@@ -776,7 +776,7 @@ class BcAppController extends Controller {
 			if (!isset($this->siteConfigs['version'])) {
 				return '';
 			}
-			return preg_replace("/baserCMS ([0-9\.]+?[\sa-z]*)/is", "$1", $this->siteConfigs['version']);
+			return preg_replace("/baserCMS ([0-9.]+?[\sa-z]*)/is", "$1", $this->siteConfigs['version']);
 		}
 		$Plugin = ClassRegistry::init('Plugin');
 		return $Plugin->field('version', ['name' => $plugin]);
@@ -793,7 +793,7 @@ class BcAppController extends Controller {
 		$lines = explode("\n", $versionData);
 		$version = null;
 		foreach ($lines as $line) {
-			if (preg_match('/^([0-9\.]+)$/', $line, $matches)) {
+			if (preg_match('/^([0-9.]+)$/', $line, $matches)) {
 				$version = $matches[1];
 				break;
 			}
@@ -899,13 +899,13 @@ class BcAppController extends Controller {
 
 		// ISO-2022-JPの場合半角カナが文字化けしてしまうので全角に変換する
 		if ($encode === 'ISO-2022-JP') {
-			$title = mb_convert_kana($title, 'KV', "UTF-8");
+			$title = mb_convert_kana($title, 'KV', 'UTF-8');
 			if (is_string($body)) {
-				$body = mb_convert_kana($body, 'KV', "UTF-8");
+				$body = mb_convert_kana($body, 'KV', 'UTF-8');
 			} elseif (isset($body['message']) && is_array($body['message'])) {
 				foreach ($body['message'] as $key => $val) {
 					if (is_string($val)) {
-						$body['message'][$key] = mb_convert_kana($val, 'KV', "UTF-8");
+						$body['message'][$key] = mb_convert_kana($val, 'KV', 'UTF-8');
 					}
 				}
 			}
@@ -1274,7 +1274,7 @@ class BcAppController extends Controller {
  *
  * @param string $fieldName フィールド名
  * @param mixed $value 値
- * @return array|false
+ * @return array
  */
 	protected function convertBetweenCondition($fieldName, $value) {
 		if (strpos($value, '-') === false) {
