@@ -6239,7 +6239,8 @@ body {
   left: 0 !important; }
   .bca-toolbar,
   .bca-toolbar * {
-    box-sizing: border-box !important; }
+    box-sizing: border-box !important;
+    font-size: 12px; }
   .bca-toolbar__body {
     height: 40px !important;
     background-color: #2a332c !important;
