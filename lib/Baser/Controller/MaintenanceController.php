@@ -58,9 +58,9 @@ class MaintenanceController extends AppController {
 
 /**
  * [スマートフォン] メンテナンス中ページを表示する
- * 
+ *
  * @return void
- * @access public 
+ * @access public
  */
 	public function smartphone_index() {
 		$this->setAction('index');

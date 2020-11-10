@@ -14,7 +14,7 @@
  * アップデーターコントローラー
  *
  * baserCMSのコアや、プラグインのアップデートを行います
- * 
+ *
  * @package	Baser.Controller
  */
 class UpdatersController extends AppController {
@@ -63,7 +63,7 @@ class UpdatersController extends AppController {
 		$this->Updater = ClassRegistry::init('Updater');
 		$this->Plugin = ClassRegistry::init('Plugin');
 		$this->SiteConfig = ClassRegistry::init('SiteConfig');
-		if ($this->request->action == 'admin_plugin') {
+		if ($this->request->action === 'admin_plugin') {
 			$this->Favorite = ClassRegistry::init('Favorite');
 		}
 		$this->BcAuth->allow('index');
@@ -213,7 +213,7 @@ class UpdatersController extends AppController {
 
 /**
  * プラグインのアップデート実行
- * 
+ *
  * @param string $name
  * @return void
  */
@@ -231,7 +231,7 @@ class UpdatersController extends AppController {
 		/* スクリプトの有無を確認 */
 		$scriptNum = count($this->_getUpdaters($name));
 		$scriptMessages = $this->_getScriptMessages($name);
-		
+
 		/* スクリプト実行 */
 		if ($this->request->data) {
 			clearAllCache();
@@ -266,16 +266,14 @@ class UpdatersController extends AppController {
 		$this->render('update');
 	}
 
-/**
- * アップデータのパスを取得する
- *
- * @param string $sourceVersion
- * @param string $targetVersion
- * @param string $plugin
- * @return array $updates
- */
+	/**
+	 * アップデータのパスを取得する
+	 *
+	 * @param string $plugin
+	 * @return array $updates
+	 */
 	protected function _getUpdaters($plugin = '') {
-		
+
 		$targetVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getBaserVersion($plugin)));
 		$sourceVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getSiteVersion($plugin)));
 
@@ -313,7 +311,7 @@ class UpdatersController extends AppController {
 			}
 			asort($updateVerPoints);
 			foreach ($updateVerPoints as $key => $updateVerPoint) {
-				if (($updateVerPoint > $sourceVerPoint && $updateVerPoint <= $targetVerPoint) || $key == 'test') {
+				if (($updateVerPoint > $sourceVerPoint && $updateVerPoint <= $targetVerPoint) || $key === 'test') {
 					if (file_exists($path . DS . $key . DS . 'updater.php')) {
 						$updaters[$key] = $updateVerPoint;
 					}
@@ -323,14 +321,12 @@ class UpdatersController extends AppController {
 		return $updaters;
 	}
 
-/**
- * アップデータのパスを取得する
- *
- * @param string $sourceVersion
- * @param string $targetVersion
- * @param string $plugin
- * @return array $updates
- */
+	/**
+	 * アップデータのパスを取得する
+	 *
+	 * @param string $plugin
+	 * @return array $updates
+	 */
 	protected function _getScriptMessages($plugin = '') {
 		$targetVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getBaserVersion($plugin)));
 		$sourceVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getSiteVersion($plugin)));
@@ -370,7 +366,7 @@ class UpdatersController extends AppController {
 			asort($updateVerPoints);
 			foreach ($updateVerPoints as $key => $updateVerPoint) {
 				$updateMessage = '';
-				if (($updateVerPoint > $sourceVerPoint && $updateVerPoint <= $targetVerPoint) || $key == 'test') {
+				if (($updateVerPoint > $sourceVerPoint && $updateVerPoint <= $targetVerPoint) || $key === 'test') {
 					if (file_exists($path . DS . $key . DS . 'config.php')) {
 						include $path . DS . $key . DS . 'config.php';
 						if($updateMessage) {
@@ -382,7 +378,7 @@ class UpdatersController extends AppController {
 		}
 		return $messages;
 	}
-	
+
 /**
  * アップデートフォルダのパスを取得する
  *
@@ -392,32 +388,28 @@ class UpdatersController extends AppController {
 	protected function _getUpdateFolder($plugin = '') {
 		if (!$plugin) {
 			return BASER_CONFIGS . 'update' . DS;
-		} else {
-			
-			$paths = App::path('Plugin');
-			foreach($paths as $path) {
-				$path .= $plugin . DS . 'Config' . DS . 'update' . DS;
-				if(is_dir($path)) {
-					return $path;
-				}
-			}
-			return false;
-			
 		}
+
+		$paths = App::path('Plugin');
+		foreach($paths as $path) {
+			$path .= $plugin . DS . 'Config' . DS . 'update' . DS;
+			if(is_dir($path)) {
+				return $path;
+			}
+		}
+		return false;
 	}
 
-/**
- * アップデートを実行する
- *
- * アップデートスクリプトを読み込む為、
- * よく使われるような変数名はダブらないように
- * アンダースコアを二つつける
- *
- * @param string $targetVersion
- * @param string $sourceVersion
- * @param string $plugin
- * @return boolean
- */
+	/**
+	 * アップデートを実行する
+	 *
+	 * アップデートスクリプトを読み込むため、
+	 * よく使われるような変数名はダブらないように
+	 * アンダースコアを二つつける
+	 *
+	 * @param string $plugin
+	 * @return boolean
+	 */
 	protected function _update($plugin = '') {
 		$targetVersion = $this->getBaserVersion($plugin);
 		$sourceVersion = $this->getSiteVersion($plugin);
@@ -453,7 +445,7 @@ class UpdatersController extends AppController {
 			} else {
 				// 1.6.7 では plugins テーブルの構造が変わったので、find でデータが取得できないのでスキップする
 				// DB の再接続を行えば取得できるかも
-				if ($targetVersion == '1.6.7') {
+				if ($targetVersion === '1.6.7') {
 					$result = true;
 				} else {
 					$data = $this->Plugin->find('first', ['conditions' => ['name' => $plugin]]);
@@ -464,21 +456,21 @@ class UpdatersController extends AppController {
 		} else {
 			$result = true;
 		}
-		
+
 		$this->BcManager->deployAdminAssets();
-		
+
 		$this->setUpdateLog($name . ' ' . $targetVersion . ' へのアップデートが完了しました。');
 
 		return $result;
 	}
 
-/**
- * アップデートスクリプトを実行する
- *
- * @param string $__plugin
- * @param string $__version
- * @return void
- */
+	/**
+	 * アップデートスクリプトを実行する
+	 *
+	 * @param string $__plugin
+	 * @param string $__version
+	 * @return bool
+	 */
 	public function _execScript($__plugin, $__version) {
 		ClassRegistry::flush();
 		BcSite::flash();
@@ -498,30 +490,28 @@ class UpdatersController extends AppController {
 		return true;
 	}
 
-/**
- * アップデートメッセージをセットする
- *
- * @param string $message
- * @param boolean $head 見出しとして設定する
- * @param boolean $beforeBreak 前の行で改行する
- * @return void
- */
+	/**
+	 * アップデートメッセージをセットする
+	 *
+	 * @param string $message
+	 * @return void
+	 */
 	public function setUpdateLog($message) {
 		$this->_updateMessage[] = $message;
 	}
 
-/**
- * スキーマファイルを読み込みデータベースのテーブル構造を変更する
- *
- * @param string $version アップデート対象のバージョン番号を指定します。（例）'4.0.0'
- * @param tring $plugin プラグイン内のスキーマを読み込むにはプラグイン名を指定します。（例）'Mail'
- * @param string $filterTable 指定したテーブルのみを追加・更新する場合は、プレフィックス部分を除外したテーブル名を指定します。（例）'permissions'
- *		指定しない場合は全てのスキーマファイルが対象となります。
- * @param string $filterType 指定した更新タイプ（create / alter / drop）のみを対象とする場合は更新タイプを指定します。（例）'create'
- *		指定しない場合は全てのスキーマファイルが対象となります。
- * @return boolean
- * @access	public
- */
+	/**
+	 * スキーマファイルを読み込みデータベースのテーブル構造を変更する
+	 *
+	 * @param string $version アップデート対象のバージョン番号を指定します。（例）'4.0.0'
+	 * @param string $plugin プラグイン内のスキーマを読み込むにはプラグイン名を指定します。（例）'Mail'
+	 * @param string $filterTable 指定したテーブルのみを追加・更新する場合は、プレフィックス部分を除外したテーブル名を指定します。（例）'permissions'
+	 *        指定しない場合は全てのスキーマファイルが対象となります。
+	 * @param string $filterType 指定した更新タイプ（create / alter / drop）のみを対象とする場合は更新タイプを指定します。（例）'create'
+	 *        指定しない場合は全てのスキーマファイルが対象となります。
+	 * @return boolean
+	 * @access    public
+	 */
 	public function loadSchema($version, $plugin = '', $filterTable = '', $filterType = '') {
 		$path = $this->_getUpdatePath($version, $plugin);
 		if (!$path) {
@@ -547,12 +537,11 @@ class UpdatersController extends AppController {
 		if (!$path) {
 			return false;
 		}
-		if ($plugin) {
-			$dbConfigName = 'plugin';
-		} else {
-			$dbConfigName = 'baser';
-		}
-		return $this->Updater->loadCsv($dbConfigName, $path, ['filterTable' => $filterTable]);
+		return $this->Updater->loadCsv(
+			$plugin ? 'plugin' : 'baser',
+			$path,
+			['filterTable' => $filterTable]
+		);
 	}
 
 /**
@@ -563,7 +552,7 @@ class UpdatersController extends AppController {
  * @return string $path or ''
  */
 	protected function _getUpdatePath($version, $plugin = '') {
-		
+
 		if ($plugin) {
 			$paths = App::path('Plugin');
 			foreach($paths as $path) {
@@ -573,15 +562,15 @@ class UpdatersController extends AppController {
 				}
 			}
 			return false;
-		} else {
-			$corePath = BASER_CONFIGS . 'update' . DS . $version;
-			if (is_dir($corePath)) {
-				return $corePath;
-			} else {
-				return false;
-			}
 		}
-		
+
+		$corePath = BASER_CONFIGS . 'update' . DS . $version;
+		if (!is_dir($corePath)) {
+			return false;
+		}
+
+		return $corePath;
+
 	}
 
 /**

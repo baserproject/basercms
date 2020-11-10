@@ -46,12 +46,13 @@ class ContentLinksController extends AppController {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		$data = $this->ContentLink->save($this->request->data);
-		if ($data) {
-			$this->BcMessage->setSuccess(sprintf(__d('baser', 'リンク「%s」を追加しました。'), $this->request->data['Content']['title']), true, false);
-			echo json_encode($data['Content']);
-		} else {
+		if (!$data) {
 			$this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
+			exit;
 		}
+
+		$this->BcMessage->setSuccess(sprintf(__d('baser', 'リンク「%s」を追加しました。'), $this->request->data['Content']['title']), true, false);
+		echo json_encode($data['Content']);
 		exit();
 	}
 
@@ -90,11 +91,11 @@ class ContentLinksController extends AppController {
 		$this->set('publishLink', $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain));
 	}
 
-/**
- * コンテンツを削除する
- *
- * @param $entityId
- */
+	/**
+	 * コンテンツを削除する
+	 *
+	 * @return bool
+	 */
 	public function admin_delete() {
 		if(empty($this->request->data['entityId'])) {
 			return false;
@@ -105,12 +106,11 @@ class ContentLinksController extends AppController {
 		return false;
 	}
 
-/**
- * コンテンツを表示する
- *
- * @param $entityId
- * @return void
- */
+	/**
+	 * コンテンツを表示する
+	 *
+	 * @return void
+	 */
 	public function view() {
 		if(empty($this->request->params['entityId'])) {
 			$this->notFound();

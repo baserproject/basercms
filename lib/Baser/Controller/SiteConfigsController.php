@@ -207,7 +207,7 @@ class SiteConfigsController extends AppController {
  * [ADMIN] PHPINFOを表示する
  */
 	public function admin_info() {
-		
+
 		$this->pageTitle = __d('baser', '環境情報');
 		$datasources = ['csv' => 'CSV', 'sqlite' => 'SQLite', 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL'];
 		$db = ConnectionManager::getDataSource('default');
@@ -250,22 +250,22 @@ class SiteConfigsController extends AppController {
  * メールの送信テストを実行する
  */
 	public function admin_check_sendmail () {
-		
+
 		if(empty( $this->request->data['SiteConfig'])) {
 			$this->ajaxError(500, __d('baser', 'データが送信できませんでした。'));
 		}
 		$this->siteConfigs = $this->request->data['SiteConfig'];
-		if($this->sendMail(
-				$this->siteConfigs['email'], __d('baser', 'メール送信テスト'), 
-				sprintf('%s からのメール送信テストです。', $this->siteConfigs['formal_name']) ."\n" . Configure::read('BcEnv.siteUrl')
+		if(!$this->sendMail(
+			$this->siteConfigs['email'], __d('baser', 'メール送信テスト'),
+			sprintf('%s からのメール送信テストです。', $this->siteConfigs['formal_name']) . "\n" . Configure::read('BcEnv.siteUrl')
 		)) {
-			exit();
-		} else {
 			$this->ajaxError(500, __d('baser', 'ログを確認してください。'));
+			return;
 		}
-		
+
+		exit();
 	}
-	
+
 /**
  * クレジット表示用データをレンダリング
  */
@@ -273,12 +273,12 @@ class SiteConfigsController extends AppController {
 
 		$this->layout = 'ajax';
 		Configure::write('debug', 0);
-		
+
 		$specialThanks = [];
 		if (!Configure::read('Cache.disable') && Configure::read('debug') == 0) {
 			$specialThanks = Cache::read('special_thanks', '_cake_env_');
 		}
-	
+
 		if($specialThanks) {
 			$json = json_decode($specialThanks);
 		} else {
@@ -295,12 +295,12 @@ class SiteConfigsController extends AppController {
 			}
 
 		}
-		
+
 		if ($json == false) {
 			$this->ajaxError(500, __d('baser', 'スペシャルサンクスデータが取得できませんでした。'));
 		}
 		$this->set('credits', $json);
-		
+
 	}
 
 /**
@@ -323,5 +323,5 @@ class SiteConfigsController extends AppController {
 	public function ajax_get_token() {
 		return $this->setAction(('admin_ajax_get_token'));
 	}
-	
+
 }

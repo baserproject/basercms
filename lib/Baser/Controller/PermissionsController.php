@@ -63,7 +63,7 @@ class PermissionsController extends AppController {
 			['name' => __d('baser', 'ユーザー管理'), 'url' => ['controller' => 'users', 'action' => 'index']],
 			['name' => __d('baser', 'ユーザーグループ管理'), 'url' => ['controller' => 'user_groups', 'action' => 'index']]
 		];
-		if ($this->request->params['prefix'] == 'admin') {
+		if ($this->request->params['prefix'] === 'admin') {
 			$this->set('usePermission', true);
 		}
 		if(!$this->request->is('ajax')) {
@@ -152,7 +152,7 @@ class PermissionsController extends AppController {
 		}
 
 		/* 表示設定 */
-		if ($permissionAuthPrefix == 'admin') {
+		if ($permissionAuthPrefix === 'admin') {
 			$permissionAuthPrefix = Configure::read('Routing.prefixes.0');
 		}
 		$this->pageTitle = sprintf(__d('baser', '%s｜新規アクセス制限設定登録'), $userGroup['UserGroup']['title']);
@@ -167,23 +167,28 @@ class PermissionsController extends AppController {
  * @return void
  */
 	public function admin_ajax_add() {
-		if ($this->request->data) {
-			// TODO 現在 admin 固定、今後、mypage 等にも対応する
-			$authPrefix = 'admin';
-			$this->request->data['Permission']['url'] = '/' . $authPrefix . '/' . $this->request->data['Permission']['url'];
-			$this->request->data['Permission']['no'] = $this->Permission->getMax('no', ['user_group_id' => $this->request->data['Permission']['user_group_id']]) + 1;
-			$this->request->data['Permission']['sort'] = $this->Permission->getMax('sort', ['user_group_id' => $this->request->data['Permission']['user_group_id']]) + 1;
-			$this->request->data['Permission']['status'] = true;
-			$this->Permission->create($this->request->data);
-			if ($this->Permission->save()) {
-				$this->Permission->saveDbLog(sprintf(__d('baser', '新規アクセス制限設定「%s」を追加しました。'), $this->request->data['Permission']['name']));
-				exit(true);
-			} else {
-				$this->ajaxError(500, $this->Page->validationErrors);
-			}
-		} else {
+		if (!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
+			exit;
 		}
+
+// TODO 現在 admin 固定、今後、mypage 等にも対応する
+		$authPrefix = 'admin';
+		$this->request->data['Permission']['url'] = '/' . $authPrefix . '/' . $this->request->data['Permission']['url'];
+		$this->request->data['Permission']['no'] = $this->Permission->getMax('no', ['user_group_id' => $this->request->data['Permission']['user_group_id']]) + 1;
+		$this->request->data['Permission']['sort'] = $this->Permission->getMax('sort', ['user_group_id' => $this->request->data['Permission']['user_group_id']]) + 1;
+		$this->request->data['Permission']['status'] = true;
+		$this->Permission->create($this->request->data);
+		if (!$this->Permission->save()) {
+			$this->ajaxError(500, $this->Page->validationErrors);
+			exit;
+		}
+
+		$this->Permission->saveDbLog(
+			sprintf(
+				__d('baser', '新規アクセス制限設定「%s」を追加しました。'), $this->request->data['Permission']['name']
+			)
+		);
 		exit();
 	}
 
@@ -231,12 +236,12 @@ class PermissionsController extends AppController {
 		$this->render('form');
 	}
 
-/**
- * [ADMIN] 削除処理　(ajax)
- *
- * @param int $id
- * @return boolean
- */
+	/**
+	 * [ADMIN] 削除処理　(ajax)
+	 *
+	 * @param $ids
+	 * @return boolean
+	 */
 	protected function _batch_del($ids) {
 		if ($ids) {
 			foreach ($ids as $id) {
@@ -294,7 +299,11 @@ class PermissionsController extends AppController {
 
 		/* 削除処理 */
 		if ($this->Permission->delete($id)) {
-			$this->BcMessage->setSuccess(sprintf(__d('baser', 'アクセス制限設定「%s」 を削除しました。'), $post['Permission']['name']));
+			$this->BcMessage->setSuccess(
+				sprintf(
+					__d('baser', 'アクセス制限設定「%s」 を削除しました。'), $post['Permission']['name']
+				)
+			);
 		} else {
 			$this->BcMessage->setError('データベース処理中にエラーが発生しました。');
 		}
@@ -302,32 +311,33 @@ class PermissionsController extends AppController {
 		$this->redirect(['action' => 'index', $userGroupId]);
 	}
 
-/**
- * 並び替えを更新する [AJAX]
- *
- * @return boolean
- * @access	public
- */
+	/**
+	 * 並び替えを更新する [AJAX]
+	 *
+	 * @access    public
+	 * @param $userGroupId
+	 * @return void
+	 */
 	public function admin_ajax_update_sort($userGroupId) {
-		if ($this->request->data) {
-			$conditions = $this->_createAdminIndexConditions($userGroupId);
-			if ($this->Permission->changeSort($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'], $conditions)) {
-				echo true;
-			} else {
-				$this->ajaxError(500, $this->Permission->validationErrors);
-			}
-		} else {
+		if (!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
+			exit;
 		}
-		exit();
+
+		$conditions = $this->_createAdminIndexConditions($userGroupId);
+		if (!$this->Permission->changeSort($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'], $conditions)) {
+			$this->ajaxError(500, $this->Permission->validationErrors);
+			exit;
+		}
+		echo true;
 	}
 
-/**
- * 管理画面ページ一覧の検索条件を取得する
- *
- * @param array $data
- * @return string
- */
+	/**
+	 * 管理画面ページ一覧の検索条件を取得する
+	 *
+	 * @param $userGroupId
+	 * @return array
+	 */
 	protected function _createAdminIndexConditions($userGroupId) {
 		/* 条件を生成 */
 		$conditions = [];
@@ -365,46 +375,41 @@ class PermissionsController extends AppController {
 		}
 	}
 
-/**
- * [ADMIN] 無効状態にする（AJAX）
- *
- * @param string $blogContentId
- * @param string $blogPostId beforeFilterで利用
- * @param string $blogCommentId
- * @return void
- */
+	/**
+	 * [ADMIN] 無効状態にする（AJAX）
+	 *
+	 * @param $id
+	 * @return void
+	 */
 	public function admin_ajax_unpublish($id) {
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
-		if ($this->_changeStatus($id, false)) {
-			exit(true);
-		} else {
+		if (!$this->_changeStatus($id, false)) {
 			$this->ajaxError(500, $this->Permission->validationErrors);
+			exit;
 		}
-		exit();
+		exit(true);
 	}
 
-/**
- * [ADMIN] 有効状態にする（AJAX）
- *
- * @param string $blogContentId
- * @param string $blogPostId beforeFilterで利用
- * @param string $blogCommentId
- * @return void
- */
+	/**
+	 * [ADMIN] 有効状態にする（AJAX）
+	 *
+	 * @param $id
+	 * @return void
+	 */
 	public function admin_ajax_publish($id) {
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
-		if ($this->_changeStatus($id, true)) {
-			exit(true);
-		} else {
+		if (!$this->_changeStatus($id, true)) {
 			$this->ajaxError(500, $this->Permission->validationErrors);
+			exit;
 		}
-		exit();
+
+		exit(true);
 	}
 
 /**
@@ -450,13 +455,18 @@ class PermissionsController extends AppController {
 		$data['Permission']['status'] = $status;
 		$this->Permission->set($data);
 
-		if ($this->Permission->save()) {
-			$statusText = $statusTexts[$status];
-			$this->Permission->saveDbLog(sprintf('アクセス制限設定「%s」 を %s に設定しました。', $data['Permission']['name'], $statusText));
-			return true;
-		} else {
+		if (!$this->Permission->save()) {
 			return false;
 		}
-	}
 
+		$statusText = $statusTexts[$status];
+		$this->Permission->saveDbLog(
+			sprintf(
+				'アクセス制限設定「%s」 を %s に設定しました。',
+				$data['Permission']['name'],
+				$statusText
+			)
+		);
+		return true;
+	}
 }

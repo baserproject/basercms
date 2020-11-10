@@ -30,7 +30,7 @@ class MobileController extends AppController {
 
 /**
  * モバイル GoogleAnalytics 用 ライブラリを読み込む
- * 
+ *
  * return void
  * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
  */
@@ -54,10 +54,10 @@ class MobileController extends AppController {
 		$_GET["utmac"] = str_replace('UA', 'MO', $this->siteConfigs['google_analytics_id']);
 		exit();
 	}
-	
+
 /**
  * モバイル GoogleAnalytics 用 ライブラリを読み込む
- * 
+ *
  * return void
  * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
  */

@@ -42,7 +42,7 @@ class ContentFoldersController extends AppController {
 		parent::beforeFilter();
 		$this->BcAuth->allow('view');
 	}
-	
+
 /**
  * コンテンツを登録する
  *
@@ -52,14 +52,21 @@ class ContentFoldersController extends AppController {
 		if(!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
-		$data = $this->ContentFolder->save($this->request->data); 
-		if ($data) {
-			$this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を追加しました。'), $this->request->data['Content']['title']), true, false);
-			echo json_encode($data['Content']);
-		} else {
+		$data = $this->ContentFolder->save($this->request->data);
+		if (!$data) {
 			$this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
+			exit;
 		}
-		exit();
+
+		$this->BcMessage->setSuccess(
+			sprintf(
+				__d('baser', 'フォルダ「%s」を追加しました。'),
+				$this->request->data['Content']['title']
+			),
+			true,
+			false
+		);
+		exit(json_encode($data['Content']));
 	}
 
 /**
@@ -105,11 +112,11 @@ class ContentFoldersController extends AppController {
 		$this->set('publishLink', $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain));
 	}
 
-/**
- * コンテンツを削除する
- *
- * @param $entityId
- */
+	/**
+	 * コンテンツを削除する
+	 *
+	 * @return bool
+	 */
 	public function admin_delete() {
 		if(empty($this->request->data['entityId'])) {
 			return false;
@@ -120,12 +127,11 @@ class ContentFoldersController extends AppController {
 		return false;
 	}
 
-/**
- * コンテンツを表示する
- *
- * @param $entityId
- * @return void
- */
+	/**
+	 * コンテンツを表示する
+	 *
+	 * @return void
+	 */
 	public function view() {
 		if(empty($this->request->params['entityId'])) {
 			$this->notFound();

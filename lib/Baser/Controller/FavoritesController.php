@@ -20,7 +20,7 @@ class FavoritesController extends AppController {
 
 /**
  * クラス名
- * 
+ *
  * @var string
  */
 	public $name = 'Favorites';
@@ -42,37 +42,37 @@ class FavoritesController extends AppController {
 
 /**
  * [ADMIN] よく使う項目を追加する（AJAX）
- *  
+ *
  * @return void
  */
 	public function admin_ajax_add() {
 		$this->autoRender = false;
-		if ($this->request->data) {
-			$user = $this->BcAuth->user();
-			if (!$user) {
-				exit();
-			}
-			$this->request->data['Favorite']['sort'] = $this->Favorite->getMax('sort') + 1;
-			$this->request->data['Favorite']['user_id'] = $user['id'];
-
-			$this->Favorite->create($this->request->data);
-			$data = $this->Favorite->save();
-			if ($data) {
-				$this->autoLayout = false;
-				$data['Favorite']['id'] = $this->Favorite->id;
-				$this->set('favorite', $data);
-				$this->render('ajax_form');
-				return;
-			} else {
-				$this->ajaxError(500, $this->Favorite->validationErrors);
-			}
+		if (!$this->request->data) {
+			return;
 		}
-		return;
+
+		$user = $this->BcAuth->user();
+		if (!$user) {
+			exit();
+		}
+		$this->request->data['Favorite']['sort'] = $this->Favorite->getMax('sort') + 1;
+		$this->request->data['Favorite']['user_id'] = $user['id'];
+
+		$this->Favorite->create($this->request->data);
+		$data = $this->Favorite->save();
+		if (!$data) {
+			$this->ajaxError(500, $this->Favorite->validationErrors);
+			return;
+		}
+		$this->autoLayout = false;
+		$data['Favorite']['id'] = $this->Favorite->id;
+		$this->set('favorite', $data);
+		$this->render('ajax_form');
 	}
 
 /**
  * [ADMIN] よく使う項目編集
- * 
+ *
  * @param int $id
  * @return void
  */
@@ -82,44 +82,44 @@ class FavoritesController extends AppController {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
-		if ($this->request->data) {
-			$this->Favorite->set($this->request->data);
-			$data = $this->Favorite->save();
-			if ($data) {
-				$this->autoLayout = false;
-				$this->set('favorite', $data);
-				$this->render('ajax_form');
-				return;
-			} else {
-				$this->ajaxError(500, $this->Favorite->validationErrors);
-			}
+		if (!$this->request->data) {
+			return;
 		}
-		return;
+
+		$this->Favorite->set($this->request->data);
+		$data = $this->Favorite->save();
+		if (!$data) {
+			$this->ajaxError(500, $this->Favorite->validationErrors);
+			return;
+		}
+		$this->autoLayout = false;
+		$this->set('favorite', $data);
+		$this->render('ajax_form');
 	}
 
 /**
  * [ADMIN] 削除
- * 
- * @param int $id 
+ *
+ * @param int $id
  */
 	public function admin_ajax_delete() {
-		if ($this->request->data) {
-			$name = $this->Favorite->field('name', ['Favorite.id' => $this->request->data['Favorite']['id']]);
-			if ($this->Favorite->delete($this->request->data['Favorite']['id'])) {
-				$this->Favorite->saveDbLog(sprintf(__d('baser', 'よく使う項目: %s を削除しました。'), $name));
-				exit(true);
-			}
-		} else {
+		if (!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
+			exit;
+		}
+
+		$name = $this->Favorite->field('name', ['Favorite.id' => $this->request->data['Favorite']['id']]);
+		if ($this->Favorite->delete($this->request->data['Favorite']['id'])) {
+			$this->Favorite->saveDbLog(sprintf(__d('baser', 'よく使う項目: %s を削除しました。'), $name));
 		}
 		exit();
 	}
 
-/**
- * [ADMIN] 並び替えを更新する
- *
- * @return bool
- */
+	/**
+	 * [ADMIN] 並び替えを更新する
+	 *
+	 * @return void
+	 */
 	public function admin_update_sort() {
 		$user = $this->BcAuth->user();
 		if ($this->request->data) {

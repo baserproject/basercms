@@ -45,7 +45,7 @@ class ContentsController extends AppController {
 		parent::beforeFilter();
 		$this->BcAuth->allow('view');
 	}
-	
+
 /**
  * コンテンツ一覧
  *
@@ -62,7 +62,7 @@ class ContentsController extends AppController {
 				$this->pageTitle = __d('baser', 'ゴミ箱');
 				break;
 		}
-		
+
 		$this->setViewConditions('Content', ['default' => [
 			'named' => [
 				'num'		=> $this->siteConfigs['admin_list_num'],
@@ -72,14 +72,14 @@ class ContentsController extends AppController {
 				'direction' => 'asc'
 			]
 		]]);
-		
+
 		if(empty($this->request->params['named']['sort'])) {
 			$this->request->params['named']['sort'] = $this->passedArgs['sort'];
 		}
 		if(empty($this->request->params['named']['direction'])) {
 			$this->request->params['named']['direction'] = $this->passedArgs['direction'];
 		}
-		
+
 		$sites = $this->Site->getSiteList();
 		if($sites) {
 			if(!$this->passedArgs['site_id'] || !in_array($this->passedArgs['site_id'], array_keys($sites))) {
@@ -89,7 +89,7 @@ class ContentsController extends AppController {
 		} else {
 			$this->passedArgs['site_id'] = null;
 		}
-		
+
 		$this->request->data['ViewSetting']['site_id'] = $currentSiteId = $this->passedArgs['site_id'];
 		$this->request->data['ViewSetting']['list_type'] = $currentListType = $this->passedArgs['list_type'];
 
@@ -174,7 +174,7 @@ class ContentsController extends AppController {
 
 /**
  * テーブル表示用の検索条件を生成する
- *	
+ *
  * @return array
  */
 	protected function _createAdminIndexConditionsByTable($currentSiteId, $data) {
@@ -185,7 +185,7 @@ class ContentsController extends AppController {
 			'self_status' => '',
 			'type' => ''
 		], $data['Content']);
-		
+
 		$conditions = ['Content.site_id' => $currentSiteId];
 		if($data['Content']['name']) {
 			$conditions['or'] = [
@@ -199,7 +199,7 @@ class ContentsController extends AppController {
 			$conditions['Content.lft >'] = $content['Content']['lft'];
 		}
 		if($data['Content']['author_id']) {
-			$conditions['Content.author_id'] = $data['Content']['author_id']; 
+			$conditions['Content.author_id'] = $data['Content']['author_id'];
 		}
 		if($data['Content']['self_status'] !== '') {
 			$conditions['Content.self_status'] = $data['Content']['self_status'];
@@ -246,14 +246,14 @@ class ContentsController extends AppController {
 		$this->dispatchEvent('beforeTrashReturn', [
 			'data' => $this->request->data['id']
 		]);
-		
+
 		$siteId = $this->Content->trashReturn($this->request->data['id']);
 
 		// EVENT Contents.afterTrashReturn
 		$this->dispatchEvent('afterTrashReturn', [
 			'data' => $this->request->data['id']
 		]);
-		
+
 		return $siteId;
 	}
 
@@ -294,19 +294,19 @@ class ContentsController extends AppController {
 		$this->request->data['Content']['author_id'] = $user['id'];
 		$this->Content->create(false);
 		$data = $this->Content->save($this->request->data);
-		if($data) {
-			if($alias) {
-				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') .
-					sprintf(__d('baser', '「%s」のエイリアス「%s」を追加しました。'), $srcContent['title'], $this->request->data['Content']['title']);
-			} else {
-				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') . '「' . $this->request->data['Content']['title'] . '」を追加しました。';
-			}
-			$this->BcMessage->setSuccess($message, true, false);
-			echo json_encode($data['Content']);
-		} else {
+		if(!$data) {
 			$this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
+			exit;
 		}
-		exit();
+
+		if ($alias) {
+			$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') .
+				sprintf(__d('baser', '「%s」のエイリアス「%s」を追加しました。'), $srcContent['title'], $this->request->data['Content']['title']);
+		} else {
+			$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') . '「' . $this->request->data['Content']['title'] . '」を追加しました。';
+		}
+		$this->BcMessage->setSuccess($message, true, false);
+		exit(json_encode($data['Content']));
 	}
 
 /**
@@ -324,7 +324,7 @@ class ContentsController extends AppController {
 			}
 		} else {
 			if($this->Content->save($this->request->data)) {
-				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') . 
+				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') .
 					sprintf(__d('baser', '「%s」を更新しました。'), $this->request->data['Content']['title']);
 				$this->BcMessage->setSuccess($message);
 				$this->redirect([
@@ -345,8 +345,8 @@ class ContentsController extends AppController {
 	/**
 	 * エイリアスを編集する
 	 *
-	 * @param string $plugin
-	 * @param string $type
+	 * @param $id
+	 * @throws Exception
 	 */
 	public function admin_edit_alias($id) {
 
@@ -398,12 +398,12 @@ class ContentsController extends AppController {
 		if(empty($this->request->data['contentId'])) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
-		if($this->_delete($this->request->data['contentId'], false)) {
-			return true;
-		} else {
+		if(!$this->_delete($this->request->data['contentId'], false)) {
 			$this->ajaxError(500, __d('baser', '削除中にエラーが発生しました。'));
+			return false;
 		}
-		return false;
+
+		return true;
 	}
 
 /**
@@ -420,16 +420,15 @@ class ContentsController extends AppController {
 		}
 	}
 
-/**
- * コンテンツを削除する（論理削除）
- * 
- * ※ エイリアスの場合は直接削除
- * 
- * @param int $id
- * @param bool $isAlias
- * @param bool $useFlashMessage
- * @return bool
- */
+	/**
+	 * コンテンツを削除する（論理削除）
+	 *
+	 * ※ エイリアスの場合は直接削除
+	 *
+	 * @param int $id
+	 * @param bool $useFlashMessage
+	 * @return bool
+	 */
 	protected function _delete($id, $useFlashMessage = false) {
 		$content = $this->Content->find('first', ['conditions' => ['Content.id' => $id], 'recursive' => -1]);
 		if(!$content) {
@@ -442,7 +441,7 @@ class ContentsController extends AppController {
 		$this->dispatchEvent('beforeDelete', [
 			'data' => $id
 		]);
-		
+
 		if(!$content['alias_id']) {
 			$result = $this->Content->softDeleteFromTree($id);
 			$message = $typeName . sprintf(__d('baser', '「%s」をゴミ箱に移動しました。'), $content['title']);
@@ -461,10 +460,10 @@ class ContentsController extends AppController {
 		$this->dispatchEvent('afterDelete', [
 			'data' => $id
 		]);
-		
+
 		return $result;
 	}
-	
+
 /**
  * 一括削除
  *
@@ -536,7 +535,7 @@ class ContentsController extends AppController {
 
 /**
  * 公開状態を変更する
- * 
+ *
  * @param int $id
  * @param bool $status
  * @return bool|mixed
@@ -561,7 +560,7 @@ class ContentsController extends AppController {
 
 		return $result;
 	}
-	
+
 /**
  * ゴミ箱を空にする
  *
@@ -580,11 +579,11 @@ class ContentsController extends AppController {
 		$this->dispatchEvent('beforeTrashEmpty', [
 			'data' => $contents
 		]);
-		
+
 		if($contents) {
 			foreach($contents as $content) {
 				if(!empty($this->BcContents->settings['items'][$content['Content']['type']]['routes']['delete'])) {
-					$route = $this->BcContents->settings['items'][$content['Content']['type']]['routes']['delete'];	
+					$route = $this->BcContents->settings['items'][$content['Content']['type']]['routes']['delete'];
 				} else {
 					$route = $this->BcContents->settings['items']['Default']['routes']['delete'];
 				}
@@ -601,7 +600,7 @@ class ContentsController extends AppController {
 		$this->dispatchEvent('afterTrashEmpty', [
 			'data' => $result
 		]);
-		
+
 		return $result;
 	}
 
@@ -634,23 +633,41 @@ class ContentsController extends AppController {
 		if(!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
-		$data = ['Content' => [
-			'id'		=> $this->request->data['id'],
-			'title'		=> $this->request->data['newTitle'],
-			'parent_id' => $this->request->data['parentId'],
-			'type'		=> $this->request->data['type'],
-			'site_id'	=> $this->request->data['siteId']
-		]];
-		if($this->Content->save($data, ['firstCreate' => !empty($this->request->data['first'])])) {
-			$message = Configure::read('BcContents.items.' . $this->request->data['plugin'] . '.' . $this->request->data['type'] . '.title') .
-						sprintf(__d('baser', '「%s」を「%s」に名称変更しました。'), $this->request->data['oldTitle'], $this->request->data['newTitle']);
-			$this->BcMessage->setSuccess($message, true, false);
-			Configure::write('debug', 0);
-			return $this->Content->getUrlById($this->Content->id);
-		} else {
+		$data = [
+			'Content' => [
+				'id'		=> $this->request->data['id'],
+				'title'		=> $this->request->data['newTitle'],
+				'parent_id' => $this->request->data['parentId'],
+				'type'		=> $this->request->data['type'],
+				'site_id'	=> $this->request->data['siteId']
+			]
+		];
+		if(!$this->Content->save($data, ['firstCreate' => !empty($this->request->data['first'])])) {
 			$this->ajaxError(500, __d('baser', '名称変更中にエラーが発生しました。'));
+			return false;
 		}
-		return false;
+
+		$this->BcMessage->setSuccess(
+			sprintf(
+				'%s%s',
+				Configure::read(
+					sprintf(
+						'BcContents.items.%s.%s.title',
+						$this->request->data['plugin'],
+						$this->request->data['type']
+					)
+				),
+				sprintf(
+					__d('baser', '「%s」を「%s」に名称変更しました。'),
+					$this->request->data['oldTitle'],
+					$this->request->data['newTitle']
+				)
+			),
+			true,
+			false
+		);
+		Configure::write('debug', 0);
+		return $this->Content->getUrlById($this->Content->id);
 	}
 
 /**
@@ -670,11 +687,11 @@ class ContentsController extends AppController {
 		if($this->SiteConfig->isChangedContentsSortLastModified($this->request->data['listDisplayed'])) {
 			$this->ajaxError(500, __d('baser', 'コンテンツ一覧を表示後、他のログインユーザーがコンテンツの並び順を更新しました。<br>一度リロードしてから並び替えてください。'));
 		}
-		
+
 		if(!$this->Content->isMovable($this->request->data['currentId'], $this->request->data['targetParentId'])) {
 			$this->ajaxError(500, __d('baser', '同一URLのコンテンツが存在するため処理に失敗しました。（現在のサイトに存在しない場合は、関連サイトに存在します）'));
 		}
-		
+
 		// EVENT Contents.beforeMove
 		$event = $this->dispatchEvent('beforeMove', [
 			'data' => $this->request->data
@@ -682,11 +699,11 @@ class ContentsController extends AppController {
 		if ($event !== false) {
 			$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
 		}
-		
+
 		$data = $this->request->data;
-		
+
 		$beforeUrl = $this->Content->field('url', ['Content.id' => $data['currentId']]);
-		
+
 		$result = $this->Content->move(
 			$data['currentId'],
 			$data['currentParentId'],
@@ -697,27 +714,30 @@ class ContentsController extends AppController {
 
 		if($data['currentParentId'] == $data['targetParentId']) {
 			// 親が違う場合は、Contentモデルで更新してくれるが同じ場合更新しない仕様の為ここで更新する
-			$this->SiteConfig->updateContentsSortLastModified();	
+			$this->SiteConfig->updateContentsSortLastModified();
 		}
-		
-		if($result) {
 
-			// EVENT Contents.afterAdd
-			$this->dispatchEvent('afterMove', [
-				'data' => $result
-			]);
-			$this->BcMessage->set(
-				sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"),
-					$result['Content']['title'], 
-					urldecode($beforeUrl), 
-					urldecode($result['Content']['url'])
-				),
-			false, true, false);
-			
-			return json_encode($this->Content->getUrlById($result['Content']['id'], true));
-		} else {
+		if(!$result) {
 			$this->ajaxError(500, __d('baser', 'データ保存中にエラーが発生しました。'));
+			return false;
 		}
+
+		// EVENT Contents.afterAdd
+		$this->dispatchEvent('afterMove', [
+			'data' => $result
+		]);
+		$this->BcMessage->set(
+			sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"),
+				$result['Content']['title'],
+				urldecode($beforeUrl),
+				urldecode($result['Content']['url'])
+			),
+			false,
+			true,
+			false
+		);
+
+		return json_encode($this->Content->getUrlById($result['Content']['id'], true));
 
 	}
 
@@ -749,7 +769,7 @@ class ContentsController extends AppController {
 
 /**
  * プラグイン等と関連付けられていない素のコンテンツをゴミ箱より消去する
- * 
+ *
  * @param $id
  * @return bool
  */
@@ -772,7 +792,14 @@ class ContentsController extends AppController {
 	public function admin_ajax_get_content_folder_list($siteId) {
 		$this->autoRender = false;
 		Configure::write('debug', 0);
-		return json_encode($this->Content->getContentFolderList((int) $siteId, ['conditions' => ['Content.site_root' => false]]));
+		return json_encode(
+			$this->Content->getContentFolderList(
+				(int) $siteId,
+				[
+					'conditions' => ['Content.site_root' => false]
+				]
+			)
+		);
 	}
 
 /**
@@ -782,13 +809,19 @@ class ContentsController extends AppController {
 		$this->autoLayout = false;
 		$sites = $this->Site->getPublishedAll();
 		foreach($sites as $key => $site) {
-			$sites[$key]['published'] = $this->Content->find('count', ['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => true]]);
-			$sites[$key]['unpublished'] = $this->Content->find('count', ['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => false]]);
+			$sites[$key]['published'] = $this->Content->find(
+				'count',
+				['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => true]]
+			);
+			$sites[$key]['unpublished'] = $this->Content->find(
+				'count',
+				['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => false]]
+			);
 			$sites[$key]['total'] = $sites[$key]['published'] + $sites[$key]['unpublished'];
 		}
 		$this->set('sites', $sites);
 	}
-	
+
 	public function admin_ajax_get_full_url($id) {
 		$this->autoRender = false;
 		Configure::write('debug', 0);

@@ -22,7 +22,7 @@ class BcFormController extends AppController {
  * @var array
  */
 	public $uses = [];
-	
+
 /**
  * セキュリティトークンを取得する
  *
@@ -32,5 +32,5 @@ class BcFormController extends AppController {
 		$this->autoRender = false;
 		return $this->getToken();
 	}
-	
+
 }
