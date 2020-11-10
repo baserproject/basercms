@@ -33,7 +33,7 @@ class PagesController extends AppController {
  * @var array
  */
 	public $helpers = [
-		'Html', 'Session', 'BcGooglemaps', 
+		'Html', 'Session', 'BcGooglemaps',
 		'BcXml', 'BcText',
 		'BcFreeze', 'BcPage'
 	];
@@ -43,7 +43,7 @@ class PagesController extends AppController {
  *
  * @var array
  * @deprecated useViewCache 5.0.0 since 4.0.0
- * 	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
+ * 	CakePHP3では、ビューキャッシュは廃止となるため、別の方法に移行する
  */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['useForm' => true, 'useViewCache' => true]];
 
@@ -66,14 +66,15 @@ class PagesController extends AppController {
 		// 認証設定
 		$this->BcAuth->allow('display');
 
-		if (!empty($this->siteConfigs['editor']) && $this->siteConfigs['editor'] != 'none') {
-			$this->helpers[] = $this->siteConfigs['editor'];
+		if (empty($this->siteConfigs['editor']) || $this->siteConfigs['editor'] === 'none') {
+			return;
 		}
+		$this->helpers[] = $this->siteConfigs['editor'];
 	}
 
 /**
  * 固定ページ情報登録
- * 
+ *
  * @return mixed json|false
  */
 	public function admin_ajax_add() {
@@ -91,21 +92,26 @@ class PagesController extends AppController {
 		}
 
 		$data = $this->Page->save($this->request->data);
-		if ($data) {
-
-			// EVENT Pages.afterAdd
-			$this->dispatchEvent('afterAdd', [
-				'data' => $data
-			]);
-			$site = BcSite::findById($data['Content']['site_id']);
-			$url = $this->Content->getUrl($data['Content']['url'], true, $site->useSubDomain);
-			$message = sprintf(__d('baser', "固定ページ「%s」を追加しました。\n%s"), $this->request->data['Content']['title'], urldecode($url));
-			$this->BcMessage->setSuccess($message, true, false);
-			return json_encode($data['Content']);
-		} else {
+		if (!$data) {
 			$this->ajaxError(500, $this->Page->validationErrors);
+			return false;
 		}
-		return false;
+		// EVENT Pages.afterAdd
+		$this->dispatchEvent('afterAdd', [
+			'data' => $data
+		]);
+		$site = BcSite::findById($data['Content']['site_id']);
+		$url = $this->Content->getUrl($data['Content']['url'], true, $site->useSubDomain);
+		$message = sprintf(
+			__d(
+				'baser',
+				"固定ページ「%s」を追加しました。\n%s"
+			),
+			$this->request->data['Content']['title'],
+			urldecode($url)
+		);
+		$this->BcMessage->setSuccess($message, true, false);
+		return json_encode($data['Content']);
 	}
 
 /**
@@ -159,9 +165,10 @@ class PagesController extends AppController {
 
 				// 同固定ページへリダイレクト
 				$this->redirect(['action' => 'edit', $id]);
-			} else {
-				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+				return;
 			}
+
+			$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 		} else {
 			$this->Page->recursive = 2;
 			$this->request->data = $this->Page->read(null, $id);
@@ -197,19 +204,15 @@ class PagesController extends AppController {
 		}
 		$pageTemplateList = $this->Page->getPageTemplateList($this->request->data['Content']['id'], $theme);
 		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink'));
-		
-		if (!empty($this->request->data['Content']['title'])) {
-			$this->pageTitle = __d('baser', '固定ページ情報編集');
-		} else {
-			$this->pageTitle = __d('baser', '固定ページ情報編集');
-		}
+
+		$this->pageTitle = __d('baser', '固定ページ情報編集');
 		$this->help = 'pages_form';
 		$this->render('form');
 	}
 
 /**
  * 削除
- * 
+ *
  * Controller::requestAction() で呼び出される
  *
  * @return bool
@@ -266,7 +269,7 @@ class PagesController extends AppController {
  */
 	public function display() {
 		// CUSTOMIZE DELETE 2016/10/05 ryuring
-		 $path = func_get_args();
+		$path = func_get_args();
 
 		// CUSTOMIZE ADD 2014/07/02 ryuring
 		// >>>
@@ -288,7 +291,7 @@ class PagesController extends AppController {
 			$path = explode('/', $urlTmp);
 		}
 		// <<<
-		
+
 		$count = count($path);
 		if (!$count) {
 			return $this->redirect('/');
@@ -314,7 +317,6 @@ class PagesController extends AppController {
 
 		$previewCreated = false;
 		if($this->request->data) {
-
 			// POSTパラメータのコードに含まれるscriptタグをそのままHTMLに出力するとブラウザによりXSSと判定される
 			// 一度データをセッションに退避する
 			if($this->BcContents->preview === 'default') {
@@ -338,7 +340,7 @@ class PagesController extends AppController {
 				return;
 			}
 
-			if($this->BcContents->preview == 'draft') {
+			if($this->BcContents->preview === 'draft') {
 				$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
 				$this->request->params['Content']['eyecatch'] = $this->request->data['Content']['eyecatch'];
 
@@ -364,14 +366,14 @@ class PagesController extends AppController {
 			}
 
 			// 草稿アクセス
-			if($this->BcContents->preview == 'draft') {
+			if($this->BcContents->preview === 'draft') {
 				$data = $this->Page->find('first', ['conditions' => ['Page.id' => $this->request->params['Content']['entity_id']]]);
 				$uuid = $this->_createPreviewTemplate($data, true);
 				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
 				$previewCreated = true;
 			}
 		}
-		
+
 		$page = $this->Page->find('first', ['conditions' => ['Page.id' => $this->request->params['Content']['entity_id']], 'recursive' => -1]);
 		$template = $page['Page']['page_template'];
 		$pagePath = implode('/', $path);
@@ -380,9 +382,9 @@ class PagesController extends AppController {
 			$template = $ContentFolder->getParentTemplate($this->request->params['Content']['id'], 'page');
 		}
 		$this->set('pagePath', $pagePath);
-		
+
 		// <<<
-		
+
 		try {
 			// CUSTOMIZE MODIFY 2014/07/02 ryuring
 			// >>>
@@ -401,15 +403,16 @@ class PagesController extends AppController {
 		}
 	}
 
-/**
- * プレビュー用テンプレートを生成する
- * 
- * 一時ファイルとしてビューを保存
- * タグ中にPHPタグが入る為、ファイルに保存する必要がある
- *
- * @param mixed	$id 固定ページID
- * @return string uuid
- */
+	/**
+	 * プレビュー用テンプレートを生成する
+	 *
+	 * 一時ファイルとしてビューを保存
+	 * タグ中にPHPタグが入る為、ファイルに保存する必要がある
+	 *
+	 * @param $data
+	 * @param bool $isDraft
+	 * @return string uuid
+	 */
 	protected function _createPreviewTemplate($data, $isDraft = false) {
 		if(!$isDraft) {
 			// postで送信される前提
@@ -421,7 +424,13 @@ class PagesController extends AppController {
 		} else {
 			$contents = $data['Page']['draft'];
 		}
-		$contents = $this->Page->addBaserPageTag(null, $contents, $data['Content']['title'], $data['Content']['description'], @$data['Page']['code']);
+		$contents = $this->Page->addBaserPageTag(
+			null,
+			$contents,
+			$data['Content']['title'],
+			$data['Content']['description'],
+			$data['Page']['code']
+		);
 		$uuid = CakeText::uuid();
 		$path = TMP . 'pages_preview_' . $uuid . $this->ext;
 		$file = new File($path);
@@ -444,20 +453,26 @@ class PagesController extends AppController {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		$user = $this->BcAuth->user();
-		$data = $this->Page->copy($this->request->data['entityId'], $this->request->data['parentId'], $this->request->data['title'], $user['id'], $this->request->data['siteId']);
-		if ($data) {
-			$message = sprintf(__d('baser', '固定ページのコピー「%s」を追加しました。'), $this->request->data['title']);
-			$this->BcMessage->setSuccess($message, true, false);
-			return json_encode($data['Content']);
-		} else {
+		$data = $this->Page->copy(
+			$this->request->data['entityId'],
+			$this->request->data['parentId'],
+			$this->request->data['title'],
+			$user['id'],
+			$this->request->data['siteId']
+		);
+		if (!$data) {
 			$this->ajaxError(500, $this->Page->validationErrors);
+			return false;
 		}
-		return false;
+
+		$message = sprintf(__d('baser', '固定ページのコピー「%s」を追加しました。'), $this->request->data['title']);
+		$this->BcMessage->setSuccess($message, true, false);
+		return json_encode($data['Content']);
 	}
 
 /**
  * 一覧の表示用データをセットする
- * 
+ *
  * @return void
  */
 	protected function _setAdminIndexViewData() {

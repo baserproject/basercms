@@ -186,7 +186,7 @@ class BcAppController extends Controller {
 		if(!(BC_INSTALLED || isConsole()) && !$isInstall) {
 			$this->redirect('/');
 		}
-		
+
 		// コンソールベースのインストールの際のページテンプレート生成において、
 		// BC_INSTALLEDが true でない為、コンソールの場合も実行する
 		if ((BC_INSTALLED || isConsole()) && $isRequestView) {
@@ -216,7 +216,7 @@ class BcAppController extends Controller {
 		}
 
 		// TODO beforeFilterでも定義しているので整理する
-		if ($this->name == 'CakeError') {
+		if ($this->name === 'CakeError') {
 
 			$this->uses = null;
 
@@ -226,9 +226,9 @@ class BcAppController extends Controller {
 				$site = $Site->findByUrl($this->request->url);
 				if (!empty($site['Site']['name'])) {
 					$this->layoutPath = $site['Site']['name'];
-					if ($site['Site']['name'] == 'mobile') {
+					if ($site['Site']['name'] === 'mobile') {
 						$this->helpers[] = 'BcMobile';
-					} elseif ($site['Site']['name'] == 'smartphone') {
+					} elseif ($site['Site']['name'] === 'smartphone') {
 						$this->helpers[] = 'BcSmartphone';
 					}
 				}
@@ -255,9 +255,6 @@ class BcAppController extends Controller {
  * @return	void
  */
 	public function beforeFilter() {
-
-
-
 		parent::beforeFilter();
 
 		$isRequestView = $this->request->is('requestview');
@@ -274,7 +271,7 @@ class BcAppController extends Controller {
 			} elseif ($this->request->is('ssl')) {
 				$siteUrl = Configure::read('BcEnv.sslUrl');
 			} else {
-				$siteUrl = Configure::read('BcEnv.siteUrl');				
+				$siteUrl = Configure::read('BcEnv.siteUrl');
 			}
 			if($siteUrl && siteUrl() != $siteUrl) {
 				$webrootReg = '/^' . preg_quote($this->request->webroot, '/') . '/';
@@ -286,13 +283,13 @@ class BcAppController extends Controller {
 		if (!$this->request->is('ajax') && !empty($this->siteConfigs['maintenance']) && (Configure::read('debug') < 1) && !$isMaintenance && !$isAdmin && !BcUtil::isAdminUser()) {
 			if (!empty($this->request->params['return']) && !empty($this->request->params['requested'])) {
 				return;
-			} else {
-				$redirectUrl = '/maintenance';
-				if ($this->request->params['Site']['alias']) {
-					$redirectUrl = '/' . $this->request->params['Site']['alias'] . $redirectUrl;
-				}
-				$this->redirect($redirectUrl);
 			}
+
+			$redirectUrl = '/maintenance';
+			if ($this->request->params['Site']['alias']) {
+				$redirectUrl = '/' . $this->request->params['Site']['alias'] . $redirectUrl;
+			}
+			$this->redirect($redirectUrl);
 		}
 
 		// セキュリティ設定
@@ -341,7 +338,7 @@ class BcAppController extends Controller {
 		}
 
 		// コンソールから利用される場合、$isInstall だけでは判定できないので、BC_INSTALLED も判定に入れる
-		if((!BC_INSTALLED || $isInstall || $isUpdate) && $this->name != 'CakeError') {
+		if((!BC_INSTALLED || $isInstall || $isUpdate) && $this->name !== 'CakeError') {
 			$this->theme = Configure::read('BcApp.defaultAdminTheme');
 			return;
 		}
@@ -436,47 +433,65 @@ class BcAppController extends Controller {
 			]);
 		}
 
-		if($isRequestView) {
-			// テーマ、レイアウトとビュー用サブディレクトリの設定
-			$this->setAdminTheme();
-			$this->setTheme();
-			if (isset($this->request->params['prefix']) && $this->name != 'CakeError') {
-				$this->layoutPath = str_replace('_', '/', $this->request->params['prefix']);
-				$this->subDir = str_replace('_', '/', $this->request->params['prefix']);
-			}
-			if (!$isAdmin && !empty($this->request->params['Site']['name'])) {
-				$agentSetting = Configure::read('BcAgent.' . $this->request->params['Site']['device']);
-				if ($agentSetting && !empty($agentSetting['helper'])) {
-					$this->helpers[] = $agentSetting['helper'];
-				}
-				if (isset($this->request->params['Site'])) {
-					$this->layoutPath = $this->request->params['Site']['name'];
-					$this->subDir = $this->request->params['Site']['name'];
-				}
-			}
+		if(!$isRequestView) {
+			return;
+		}
 
-			// 権限チェック
-			if (isset($User->belongsTo['UserGroup']) && isset($this->BcAuth) && isset($this->request->params['prefix']) &&
-					empty($this->request->params['Site']['name']) && isset($this->request->params['action']) && empty($this->request->params['requested'])) {
-				if (!$this->BcAuth->allowedActions || !in_array($this->request->params['action'], $this->BcAuth->allowedActions)) {
-					$user = $this->BcAuth->user();
-					$Permission = ClassRegistry::init('Permission');
-					if ($user) {
-						if (!$Permission->check($this->request->url, $user['user_group_id'])) {
-							$this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));
-							$this->redirect($this->BcAuth->loginRedirect);
-						}
-					}
-				}
+		// テーマ、レイアウトとビュー用サブディレクトリの設定
+		$this->setAdminTheme();
+		$this->setTheme();
+		if (isset($this->request->params['prefix']) && $this->name !== 'CakeError') {
+			$this->layoutPath = str_replace('_', '/', $this->request->params['prefix']);
+			$this->subDir = str_replace('_', '/', $this->request->params['prefix']);
+		}
+		if (!$isAdmin && !empty($this->request->params['Site']['name'])) {
+			$agentSetting = Configure::read('BcAgent.' . $this->request->params['Site']['device']);
+			if ($agentSetting && !empty($agentSetting['helper'])) {
+				$this->helpers[] = $agentSetting['helper'];
+			}
+			if (isset($this->request->params['Site'])) {
+				$this->layoutPath = $this->request->params['Site']['name'];
+				$this->subDir = $this->request->params['Site']['name'];
 			}
 		}
 
+		// 権限チェック
+		if (!isset($this->BcAuth)) {
+			return;
+		}
+		if (!isset($User->belongsTo['UserGroup'])) {
+			return;
+		}
+		if (!isset($this->request->params['prefix'])) {
+			return;
+		}
+		if (!isset($this->request->params['action'])) {
+			return;
+		}
+		if (!empty($this->request->params['Site']['name']) || !empty($this->request->params['requested'])) {
+			return;
+		}
+
+		if ($this->BcAuth->allowedActions && in_array($this->request->params['action'], $this->BcAuth->allowedActions)) {
+			return;
+		}
+
+		$user = $this->BcAuth->user();
+		$Permission = ClassRegistry::init('Permission');
+		if (!$user) {
+			return;
+		}
+
+		if (!$Permission->check($this->request->url, $user['user_group_id'])) {
+			$this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));
+			$this->redirect($this->BcAuth->loginRedirect);
+		}
 	}
 
 /**
  * テーマをセットする
  * $this->theme にセットする事
- * 
+ *
  * 優先順位
  * $this->request->params['Site']['theme'] > $site->theme > $this->siteConfigs['theme']
  *
@@ -505,7 +520,7 @@ class BcAppController extends Controller {
 /**
  * 管理画面用テーマをセットする
  * $this->adminTheme にセットする事
- * 
+ *
  * 優先順位
  * $this->siteConfigs['admin_theme'] > Configure::read('BcApp.adminTheme')
  *
@@ -526,7 +541,7 @@ class BcAppController extends Controller {
  * @return bool
  */
 	protected function _adminSslMethods($var) {
-		return preg_match('/^admin_/', $var);
+		return strpos($var, 'admin_') === 0;
 	}
 
 /**
@@ -540,9 +555,8 @@ class BcAppController extends Controller {
 		$favoriteBoxOpened = false;
 		if(BcUtil::isAdminSystem()) {
 			$this->__updateFirstAccess();
-			if (!empty($this->BcAuth) && !empty($this->request->url) && $this->request->url != 'update') {
-				$user = $this->BcAuth->user();
-				if ($user) {
+			if (!empty($this->BcAuth) && !empty($this->request->url) && $this->request->url !== 'update') {
+				if ($this->BcAuth->user()) {
 					if ($this->Session->check('Baser.favorite_box_opened')) {
 						$favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
 					} else {
@@ -569,7 +583,7 @@ class BcAppController extends Controller {
 		// エラーが発生した場合には、afterLayoutでは、エラー用のビューを持ったviewクラスを取得できない。
 		// 原因は、エラーが発生する前のcontrollerがviewを登録してしまっている為。
 		// エラー時のview登録にフックする場所はここしかないのでここでviewの登録を削除する
-		if ($this->name == 'CakeError') {
+		if ($this->name === 'CakeError') {
 			ClassRegistry::removeObject('view');
 			$this->response->disableCache();
 		}
@@ -646,20 +660,20 @@ class BcAppController extends Controller {
 
 			if (is_array($value)) {
 				$data[$key] = $this->_autoConvertEncodingByArray($value, $outenc);
+				continue;
+			}
+
+			if (!isset($this->request->params['prefix']) || $this->request->params['prefix'] !== 'mobile') {
+				$inenc = mb_detect_encoding($value);
 			} else {
+				$inenc = 'SJIS';
+			}
 
-				if (isset($this->request->params['prefix']) && $this->request->params['prefix'] == 'mobile') {
-					$inenc = 'SJIS';
-				} else {
-					$inenc = mb_detect_encoding($value);
-				}
-
-				if ($inenc != $outenc) {
-					// 半角カナは一旦全角に変換する
-					$value = mb_convert_kana($value, "KV", $inenc);
-					$value = mb_convert_encoding($value, $outenc, $inenc);
-					$data[$key] = $value;
-				}
+			if ($inenc != $outenc) {
+				// 半角カナは一旦全角に変換する
+				$value = mb_convert_kana($value, 'KV', $inenc);
+				$value = mb_convert_encoding($value, $outenc, $inenc);
+				$data[$key] = $value;
 			}
 		}
 
@@ -699,13 +713,13 @@ class BcAppController extends Controller {
 		}
 
 		/* ログインユーザー */
-		if (BC_INSTALLED && $user && $this->name != 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name != 'CakeError') {
+		if (BC_INSTALLED && $user && $this->name !== 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name !== 'CakeError') {
 			$this->set('user', $user);
 			if (!empty($this->request->params['admin'])) {
 				$this->set('favorites', $this->Favorite->find('all', ['conditions' => ['Favorite.user_id' => $user['id']], 'order' => 'Favorite.sort', 'recursive' => -1]));
 			}
 		}
-		
+
 		$currentUserAuthPrefixes = [];
 		if ($this->Session->check('Auth.' . $sessionKey . '.UserGroup.auth_prefix')) {
 			$currentUserAuthPrefixes = explode(',', $this->Session->read('Auth.' . $sessionKey . '.UserGroup.auth_prefix'));
@@ -744,11 +758,11 @@ class BcAppController extends Controller {
 		$versionFile = new File($path);
 		$versionData = $versionFile->read();
 		$aryVersionData = explode("\n", $versionData);
-		if (!empty($aryVersionData[0])) {
-			return $aryVersionData[0];
-		} else {
+		if (empty($aryVersionData[0])) {
 			return false;
 		}
+
+		return $aryVersionData[0];
 	}
 
 /**
@@ -759,15 +773,13 @@ class BcAppController extends Controller {
  */
 	protected function getSiteVersion($plugin = '') {
 		if (!$plugin) {
-			if (isset($this->siteConfigs['version'])) {
-				return preg_replace("/baserCMS ([0-9\.]+?[\sa-z]*)/is", "$1", $this->siteConfigs['version']);
-			} else {
+			if (!isset($this->siteConfigs['version'])) {
 				return '';
 			}
-		} else {
-			$Plugin = ClassRegistry::init('Plugin');
-			return $Plugin->field('version', ['name' => $plugin]);
+			return preg_replace("/baserCMS ([0-9.]+?[\sa-z]*)/is", "$1", $this->siteConfigs['version']);
 		}
+		$Plugin = ClassRegistry::init('Plugin');
+		return $Plugin->field('version', ['name' => $plugin]);
 	}
 
 /**
@@ -781,16 +793,15 @@ class BcAppController extends Controller {
 		$lines = explode("\n", $versionData);
 		$version = null;
 		foreach ($lines as $line) {
-			if (preg_match('/^([0-9\.]+)$/', $line, $matches)) {
+			if (preg_match('/^([0-9.]+)$/', $line, $matches)) {
 				$version = $matches[1];
 				break;
 			}
 		}
-		if ($version) {
-			return $version;
-		} else {
+		if (!$version) {
 			return false;
 		}
+		return $version;
 	}
 
 /**
@@ -823,7 +834,7 @@ class BcAppController extends Controller {
  */
 	public function sendMail($to, $title = '', $body = '', $options = []) {
   		$dbg = debug_backtrace();
-  		if(!empty($dbg[1]['function']) && $dbg[1]['function'] == 'invokeArgs') {
+  		if(!empty($dbg[1]['function']) && $dbg[1]['function'] === 'invokeArgs') {
   			$this->notFound();
   		}
 		$options = array_merge([
@@ -887,14 +898,14 @@ class BcAppController extends Controller {
 		}
 
 		// ISO-2022-JPの場合半角カナが文字化けしてしまうので全角に変換する
-		if ($encode == 'ISO-2022-JP') {
-			$title = mb_convert_kana($title, 'KV', "UTF-8");
+		if ($encode === 'ISO-2022-JP') {
+			$title = mb_convert_kana($title, 'KV', 'UTF-8');
 			if (is_string($body)) {
-				$body = mb_convert_kana($body, 'KV', "UTF-8");
+				$body = mb_convert_kana($body, 'KV', 'UTF-8');
 			} elseif (isset($body['message']) && is_array($body['message'])) {
 				foreach ($body['message'] as $key => $val) {
 					if (is_string($val)) {
-						$body['message'][$key] = mb_convert_kana($val, 'KV', "UTF-8");
+						$body['message'][$key] = mb_convert_kana($val, 'KV', 'UTF-8');
 					}
 				}
 			}
@@ -1007,7 +1018,7 @@ class BcAppController extends Controller {
 				$fromName = Configure::read('BcApp.title');
 			}
 		}
-		
+
 		try {
 			$cakeEmail->from($from, $fromName);
 		} catch (Exception $e) {
@@ -1111,9 +1122,9 @@ class BcAppController extends Controller {
 		$_options = ['type' => 'post', 'session' => true];
 		$options = am($_options, $options);
 		extract($options);
-		if ($type == 'post' && $session == true) {
+		if ($type === 'post' && $session == true) {
 			$this->_saveViewConditions($filterModels, $options);
-		} elseif ($type == 'get') {
+		} elseif ($type === 'get') {
 			$options['session'] = false;
 		}
 		$this->_loadViewConditions($filterModels, $options);
@@ -1192,7 +1203,7 @@ class BcAppController extends Controller {
 			$contentsName .= "." . $group;
 		}
 
-		if ($type == 'post' && $session) {
+		if ($type === 'post' && $session) {
 			foreach ($filterModels as $model) {
 				if ($this->Session->check("Baser.viewConditions.{$contentsName}.filter.{$model}")) {
 					$filter = $this->Session->read("Baser.viewConditions.{$contentsName}.filter.{$model}");
@@ -1210,7 +1221,7 @@ class BcAppController extends Controller {
 			if ($this->Session->check("Baser.viewConditions.{$contentsName}.named")) {
 				$named = array_merge($named, $this->Session->read("Baser.viewConditions.{$contentsName}.named"));
 			}
-		} elseif ($type == 'get') {
+		} elseif ($type === 'get') {
 			if (!empty($this->request->query)) {
 				$url = $this->request->query;
 				unset($url['url']);
@@ -1239,7 +1250,7 @@ class BcAppController extends Controller {
  * @param string $fieldName フィールド名
  * @param mixed $values 値
  * @param array $options オプション
- * @return	string
+ * @return    array
  */
 	protected function convertSelectTextCondition($fieldName, $values, $options = []) {
 		$_options = array('type' => 'string', 'conditionType' => 'or');
@@ -1247,7 +1258,7 @@ class BcAppController extends Controller {
 		$conditions = [];
 		extract($options);
 
-		if ($type == 'string' && !is_array($value)) {
+		if ($type === 'string' && !is_array($value)) {
 			$values = explode(',', str_replace('\'', '', $values));
 		}
 		if (!empty($values) && is_array($values)) {
@@ -1315,7 +1326,7 @@ class BcAppController extends Controller {
 			$currentPrefix = 'front';
 		}
 		return (in_array($currentPrefix, $authPrefix));
-		
+
 	}
 
 /**
@@ -1337,11 +1348,13 @@ class BcAppController extends Controller {
 			// <<<
 			if (strpos($ref, $base) === 0) {
 				$return = substr($ref, strlen($base));
-				if ($return[0] != '/') {
+				if ($return[0] !== '/') {
 					$return = '/' . $return;
 				}
 				return $return;
-			} elseif (!$local) {
+			}
+
+			if (!$local) {
 				return $ref;
 			}
 		}
@@ -1361,11 +1374,11 @@ class BcAppController extends Controller {
 		if (!isset($this->BcAuth)) {
 			return false;
 		}
-		if (isset($this->BcAuth->authenticate['Form']['userModel'])) {
-			return $this->BcAuth->authenticate['Form']['userModel'];
-		} else {
+		if (!isset($this->BcAuth->authenticate['Form']['userModel'])) {
 			return false;
 		}
+
+		return $this->BcAuth->authenticate['Form']['userModel'];
 	}
 
 /**
@@ -1375,7 +1388,7 @@ class BcAppController extends Controller {
  * @param mixed $url A string or array-based URL pointing to another location within the app, or an absolute URL
  * @param int $status Optional HTTP status code (eg: 404)
  * @param bool $exit If true, exit() will be called after the redirect
- * @return mixed void if $exit = false. Terminates script if $exit = true
+ * @return void if $exit = false. Terminates script if $exit = true
  */
 	public function redirect($url, $status = null, $exit = true) {
 		$url = addSessionId($url, true);
@@ -1518,11 +1531,13 @@ class BcAppController extends Controller {
 		$themeHelpersPath = WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS . 'Helper';
 		$Folder = new Folder($themeHelpersPath);
 		$files = $Folder->read(true, true);
-		if (!empty($files[1])) {
-			foreach ($files[1] as $file) {
-				$file = str_replace('-', '_', $file);
-				$this->helpers[] = Inflector::camelize(basename($file, 'Helper.php'));
-			}
+		if (empty($files[1])) {
+			return;
+		}
+
+		foreach ($files[1] as $file) {
+			$file = str_replace('-', '_', $file);
+			$this->helpers[] = Inflector::camelize(basename($file, 'Helper.php'));
 		}
 	}
 
@@ -1535,21 +1550,23 @@ class BcAppController extends Controller {
  */
 	public function ajaxError($errorNo = 500, $message = '') {
 		header('HTTP/1.1 ' . $errorNo);
-		if ($message) {
-			if (is_array($message)) {
-				$aryMessage = [];
-				foreach ($message as $value) {
-					if (is_array($value)) {
-						$aryMessage[] = implode('<br />', $value);
-					} else {
-						$aryMessage[] = $value;
-					}
-				}
-				$message = implode('<br />', $aryMessage);
-			}
-			echo $message;
+		if (!$message) {
+			exit;
 		}
-		exit();
+
+		if (!is_array($message)) {
+			exit($message);
+		}
+
+		$aryMessage = [];
+		foreach ($message as $value) {
+			if (is_array($value)) {
+				$aryMessage[] = implode('<br />', $value);
+			} else {
+				$aryMessage[] = $value;
+			}
+		}
+		exit(implode('<br />', $aryMessage));
 	}
 
 /**
@@ -1598,12 +1615,12 @@ class BcAppController extends Controller {
 
 /**
  * リクエストメソッドとトークンをチェックする
- * 
+ *
  * - GETでのアクセスの場合 not found
- * - トークンが送信されていない場合 not found 
+ * - トークンが送信されていない場合 not found
  */
 	protected function _checkSubmitToken() {
-		if(strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' || empty($_POST['_Token']['key']) && empty($_POST['data']['_Token']['key'])) {
+		if(strtoupper($_SERVER['REQUEST_METHOD']) === 'GET' || empty($_POST['_Token']['key']) && empty($_POST['data']['_Token']['key'])) {
 			throw new NotFoundException();
 		}
 	}

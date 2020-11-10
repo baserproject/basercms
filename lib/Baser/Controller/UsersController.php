@@ -94,7 +94,7 @@ class UsersController extends AppController {
  * ログイン処理を行う
  * ・リダイレクトは行わない
  * ・requestActionから呼び出す
- * 
+ *
  * @return boolean
  */
 	public function admin_login_exec() {
@@ -116,7 +116,7 @@ class UsersController extends AppController {
 		if ($this->BcAuth->loginAction != ('/' . $this->request->url)) {
 			$this->notFound();
 		}
-		
+
 		if ($this->request->data) {
 			$this->BcAuth->login();
 			$user = $this->BcAuth->user();
@@ -145,7 +145,7 @@ class UsersController extends AppController {
 				$this->redirect($this->BcAuth->redirectUrl());
 			}
 		}
-		
+
 		$pageTitle = __d('baser', 'ログイン');
 		$prefixAuth = Configure::read('BcAuthPrefix.' . $this->request->params['prefix']);
 		if ($prefixAuth && isset($prefixAuth['loginTitle'])) {
@@ -158,12 +158,12 @@ class UsersController extends AppController {
 		$this->pageTitle = $pageTitle;
 	}
 
-/**
- * [ADMIN] 代理ログイン
- * 
- * @param int $id 
- * @return ダッシュボードへのURL
- */
+	/**
+	 * [ADMIN] 代理ログイン
+	 *
+	 * @param int $id
+	 * @return void
+	 */
 	public function admin_ajax_agent_login($id) {
 		if (!$this->Session->check('AuthAgent')) {
 			$user = $this->BcAuth->user();
@@ -185,7 +185,7 @@ class UsersController extends AppController {
 
 /**
  * 代理ログインをしている場合、元のユーザーに戻る
- * 
+ *
  * @return void
  */
 	public function back_agent() {
@@ -298,11 +298,11 @@ class UsersController extends AppController {
 		if (isset($data['User']['user_group_id']) && $data['User']['user_group_id'] !== '') {
 			$conditions['User.user_group_id'] = $data['User']['user_group_id'];
 		}
-		if ($conditions) {
-			return $conditions;
-		} else {
+		if (!$conditions) {
 			return [];
 		}
+
+		return $conditions;
 	}
 
 /**
@@ -523,45 +523,47 @@ class UsersController extends AppController {
 		if(strpos($userModel, '.') !== false) {
 			list(, $userModel) = explode('.', $userModel);
 		}
-		if ($this->request->data) {
-			$email = isset($this->request->data[$userModel]['email']) ? $this->request->data[$userModel]['email'] : '';
-
-			if (mb_strlen($email) === 0) {
-				$this->BcMessage->setError('メールアドレスを入力してください。');
-				return;
-			}
-			$user = $this->{$userModel}->findByEmail($email);
-			if ($user) {
-				$email = $user[$userModel]['email'];
-			}
-			if (!$user || mb_strlen($email) === 0) {
-				$this->BcMessage->setError('送信されたメールアドレスは登録されていません。');
-				return;
-			}
-			$password = $this->generatePassword();
-			$user[$userModel]['password'] = $password;
-			$this->{$userModel}->set($user);
-
-			$dataSource = $this->{$userModel}->getDataSource();
-			$dataSource->begin();
-
-			if (!$this->{$userModel}->save(null, ['validate' => false])) {
-				$dataSource->roolback();
-				$this->BcMessage->setError('新しいパスワードをデータベースに保存できませんでした。');
-				return;
-			}
-			$body = ['email' => $email, 'password' => $password];
-			if (!$this->sendMail($email, __d('baser', 'パスワードを変更しました'), $body, ['template' => 'reset_password'])) {
-				$dataSource->roolback();
-				$this->BcMessage->setError('メール送信時にエラーが発生しました。');
-				return;
-			}
-
-			$dataSource->commit();
-
-			$this->BcMessage->setSuccess($email . ' 宛に新しいパスワードを送信しました。');
-			$this->request->data = [];
+		if (!$this->request->data) {
+			return;
 		}
+
+		$email = isset($this->request->data[$userModel]['email']) ? $this->request->data[$userModel]['email'] : '';
+
+		if (mb_strlen($email) === 0) {
+			$this->BcMessage->setError('メールアドレスを入力してください。');
+			return;
+		}
+		$user = $this->{$userModel}->findByEmail($email);
+		if ($user) {
+			$email = $user[$userModel]['email'];
+		}
+		if (!$user || mb_strlen($email) === 0) {
+			$this->BcMessage->setError('送信されたメールアドレスは登録されていません。');
+			return;
+		}
+		$password = $this->generatePassword();
+		$user[$userModel]['password'] = $password;
+		$this->{$userModel}->set($user);
+
+		$dataSource = $this->{$userModel}->getDataSource();
+		$dataSource->begin();
+
+		if (!$this->{$userModel}->save(null, ['validate' => false])) {
+			$dataSource->roolback();
+			$this->BcMessage->setError('新しいパスワードをデータベースに保存できませんでした。');
+			return;
+		}
+		$body = ['email' => $email, 'password' => $password];
+		if (!$this->sendMail($email, __d('baser', 'パスワードを変更しました'), $body, ['template' => 'reset_password'])) {
+			$dataSource->roolback();
+			$this->BcMessage->setError('メール送信時にエラーが発生しました。');
+			return;
+		}
+
+		$dataSource->commit();
+
+		$this->BcMessage->setSuccess($email . ' 宛に新しいパスワードを送信しました。');
+		$this->request->data = [];
 	}
 
 }

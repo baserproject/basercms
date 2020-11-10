@@ -18,7 +18,7 @@ class DblogsController extends AppController {
  * @var array
  */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
-	
+
 /**
  * 一覧を取得
  */
@@ -47,5 +47,5 @@ class DblogsController extends AppController {
 		}
 		$this->redirect(['controller' => 'dashboard', 'action' => 'index']);
 	}
-	
+
 }

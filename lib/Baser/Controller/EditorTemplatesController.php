@@ -12,7 +12,7 @@
 
 /**
  * エディタテンプレートコントローラー
- * 
+ *
  * エディタテンプレートの管理を行う
  *
  * @package Baser.Controller
@@ -21,14 +21,14 @@ class EditorTemplatesController extends AppController {
 
 /**
  * コントローラー名
- * 
+ *
  * @var string
  */
 	public $name = 'EditorTemplates';
 
 /**
  * サブメニュー
- * 
+ *
  * @var array
  */
 	public $subMenuElements = ['site_configs', 'editor_templates'];
@@ -51,85 +51,98 @@ class EditorTemplatesController extends AppController {
 			['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
 			['name' => __d('baser', 'エディタテンプレート管理'), 'url' => ['controller' => 'editor_templates', 'action' => 'index']]
 		];
-		if (!empty($this->siteConfigs['editor']) && $this->siteConfigs['editor'] != 'none') {
+		if (!empty($this->siteConfigs['editor']) && $this->siteConfigs['editor'] !== 'none') {
 			$this->helpers[] = $this->siteConfigs['editor'];
 		}
 	}
 
 /**
- * [ADMIN] 一覧 
+ * [ADMIN] 一覧
  */
 	public function admin_index() {
 		$this->pageTitle = __d('baser', 'エディタテンプレート一覧');
 		$this->help = 'editor_templates_index';
-
 		$this->set('datas', $this->EditorTemplate->find('all'));
 	}
 
 /**
- * [ADMIN] 新規登録 
+ * [ADMIN] 新規登録
  */
 	public function admin_add() {
 		$this->pageTitle = __d('baser', 'エディタテンプレート新規登録');
 		$this->help = 'editor_templates_form';
 
-		if ($this->request->is(['post', 'put'])) {
-			if ($this->EditorTemplate->isOverPostSize()) {
-				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
-				$this->redirect(['action' => 'add']);
-			}
-			$this->EditorTemplate->create($this->request->data);
-			$result = $this->EditorTemplate->save();
-			if ($result) {
-				// EVENT EditorTemplates.afterAdd
-				$this->dispatchEvent('afterAdd', [
-					'data' => $result
-				]);
-				$this->BcMessage->setInfo(__d('baser', '保存完了'));
-				$this->redirect(['action' => 'index']);
-			} else {
-				$this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
-			}
+		if (!$this->request->is(['post', 'put'])) {
+			$this->render('form');
+			return;
 		}
-		$this->render('form');
+
+		if ($this->EditorTemplate->isOverPostSize()) {
+			$this->BcMessage->setError(
+				__d(
+					'baser',
+					'送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。',
+					ini_get('post_max_size')
+				)
+			);
+			$this->redirect(['action' => 'add']);
+		}
+		$this->EditorTemplate->create($this->request->data);
+		$result = $this->EditorTemplate->save();
+		if (!$result) {
+			$this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
+			$this->render('form');
+			return;
+		}
+
+		// EVENT EditorTemplates.afterAdd
+		$this->dispatchEvent('afterAdd', [
+			'data' => $result
+		]);
+		$this->BcMessage->setInfo(__d('baser', '保存完了'));
+		$this->redirect(['action' => 'index']);
+//		$this->render('form');
 	}
 
 /**
  * [ADMIN] 編集
- * 
- * @param int $id 
+ *
+ * @param int $id
  */
 	public function admin_edit($id) {
 		$this->pageTitle = __d('baser', 'エディタテンプレート編集');
 		$this->help = 'editor_templates_form';
 
-		if ($this->request->is(['post', 'put'])) {
-			if ($this->EditorTemplate->isOverPostSize()) {
-				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
-				$this->redirect(['action' => 'edit', $id]);
-			}
-			$this->EditorTemplate->set($this->request->data);
-			$result = $this->EditorTemplate->save();
-			if ($result) {
-				// EVENT EditorTemplates.afterEdit
-				$this->dispatchEvent('afterEdit', [
-					'data' => $result
-				]);
-				$this->BcMessage->setInfo(__d('baser', '保存完了'));
-				$this->redirect(['action' => 'index']);
-			} else {
-				$this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
-			}
-		} else {
+		if (!$this->request->is(['post', 'put'])) {
 			$this->request->data = $this->EditorTemplate->read(null, $id);
+			$this->render('form');
+			return;
 		}
 
-		$this->render('form');
+		if ($this->EditorTemplate->isOverPostSize()) {
+			$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+			$this->redirect(['action' => 'edit', $id]);
+		}
+		$this->EditorTemplate->set($this->request->data);
+		$result = $this->EditorTemplate->save();
+		if (!$result) {
+			$this->BcMessage->setError(__d('baser', '保存中にエラーが発生しました。'));
+			$this->render('form');
+			return;
+		}
+
+	// EVENT EditorTemplates.afterEdit
+		$this->dispatchEvent('afterEdit', [
+			'data' => $result
+		]);
+		$this->BcMessage->setInfo(__d('baser', '保存完了'));
+		$this->redirect(['action' => 'index']);
+//		$this->render('form');
 	}
 
 /**
  * [ADMIN] 削除
- * 
+ *
  * @param int $id
  */
 	public function admin_delete($id) {
@@ -149,7 +162,7 @@ class EditorTemplatesController extends AppController {
 
 /**
  * [ADMIN AJAX] 削除
- * @param int $id 
+ * @param int $id
  */
 	public function admin_ajax_delete($id) {
 		$this->_checkSubmitToken();
@@ -165,7 +178,7 @@ class EditorTemplatesController extends AppController {
 	}
 
 /**
- * [ADMIN] CKEditor用テンプレート用のjavascriptを出力する 
+ * [ADMIN] CKEditor用テンプレート用のjavascriptを出力する
  */
 	public function admin_js() {
 		header('Content-Type: text/javascript; name="editor_templates.js"');

@@ -26,21 +26,21 @@ class ContentFolder extends AppModel implements CakeEventListener {
 
 /**
  * 変更前URL
- * 
+ *
  * @var array
  */
 	public $beforeUrl = null;
 
 /**
  * 変更前ステータス
- * 
+ *
  * @var bool|null
  */
 	private $beforeStatus = null;
-	
+
 /**
  * テンプレートを移動可能かどうか
- * 
+ *
  * @var bool
  */
 	public $isMovableTemplate = true;
@@ -74,7 +74,7 @@ class ContentFolder extends AppModel implements CakeEventListener {
 
 /**
  * Before Move
- * 
+ *
  * @param \CakeEvent $event
  */
 	public function beforeMove(CakeEvent $event) {
@@ -85,18 +85,18 @@ class ContentFolder extends AppModel implements CakeEventListener {
 
 /**
  * After Move
- * 
+ *
  * @param \CakeEvent $event
  */
 	public function afterMove(CakeEvent $event) {
 		if(!empty($event->data['data']['Content']) && $event->data['data']['Content']['type'] == 'ContentFolder') {
-			$this->movePageTemplates($event->data['data']['Content']['url']);			
+			$this->movePageTemplates($event->data['data']['Content']['url']);
 		}
 	}
-	
+
 /**
  * Before Save
- * 
+ *
  * @param array $options
  */
 	public function beforeSave($options = []) {
@@ -110,7 +110,7 @@ class ContentFolder extends AppModel implements CakeEventListener {
 
 /**
  * After Save
- * 
+ *
  * @param bool $created
  * @param array $options
  * @param bool
@@ -140,10 +140,10 @@ class ContentFolder extends AppModel implements CakeEventListener {
 			$this->beforeStatus = $record['Content']['status'];
 		}
 	}
-	
+
 /**
  * 固定ページテンプレートを移動する
- * 
+ *
  * @param string $afterUrl
  * @return bool
  */
@@ -177,7 +177,7 @@ class ContentFolder extends AppModel implements CakeEventListener {
 			$data['Content'] = $_data;
 		}
 		if(!is_null($siteId)) {
-			
+
 			// エイリアスが変更となっているかどうかの判定が必要
 			$_data = $this->find('first', ['conditions' => [
 				'Content.site_id' => $siteId,
@@ -193,7 +193,7 @@ class ContentFolder extends AppModel implements CakeEventListener {
 		if($this->save()) {
 			// エイリアスを変更した場合だけ更新
 			if($isUpdateChildrenUrl) {
-				$this->Content->updateChildrenUrl($data['Content']['id']);				
+				$this->Content->updateChildrenUrl($data['Content']['id']);
 			}
 			return true;
 		} else {
@@ -241,8 +241,9 @@ class ContentFolder extends AppModel implements CakeEventListener {
 						'foreignKey' => 'entity_id'
 					]
 				]
-			]
-		, false);
+			],
+			false
+		);
 		$contents = $this->Content->getPath($id, null, 0);
 		$this->Content->unbindModel(
 			['belongsTo' => [

@@ -12,7 +12,7 @@
 
 /**
  * インストーラーコントローラー
- * 
+ *
  * @package Baser.Controller
  * @property BcManagerComponent $BcManager
  */
@@ -67,7 +67,7 @@ class InstallationsController extends AppController {
 
 /**
  * テーマ
- * 
+ *
  * @var string
  */
 	public $theme = 'Baseradmin';
@@ -104,8 +104,8 @@ class InstallationsController extends AppController {
 				}
 				break;
 			default:
-				if ($installed == 'complete') {
-					if ($this->request->action != 'step5') {
+				if ($installed === 'complete') {
+					if ($this->request->action !== 'step5') {
 						$this->notFound();
 					}
 				} else {
@@ -113,6 +113,7 @@ class InstallationsController extends AppController {
 					if (empty($installationData['lastStep'])) {
 						if (Configure::read('debug') == 0) {
 							$this->redirect(['action' => 'alert']);
+							return;
 						}
 					}
 				}
@@ -143,8 +144,9 @@ class InstallationsController extends AppController {
  * @return void
  */
 	public function step2() {
-		if ($this->request->data && $this->request->data['clicked'] == 'next') {
+		if ($this->request->data && $this->request->data['clicked'] === 'next') {
 			$this->redirect('step3');
+			return;
 		}
 
 		$checkResult = $this->BcManager->checkEnv();
@@ -162,7 +164,7 @@ class InstallationsController extends AppController {
 
 /**
  * Step 3: データベースの接続設定
- * 
+ *
  * @return void
  */
 	public function step3() {
@@ -171,43 +173,50 @@ class InstallationsController extends AppController {
 		if (!$this->request->data) {
 			clearAllCache();
 			$this->request->data = $this->_getDefaultValuesStep3();
-		} else {
+			$this->set('dbDataPatterns', $this->BcManager->getAllDefaultDataPatterns());
+			$this->pageTitle = __d('baser', 'baserCMSのインストール｜ステップ３');
+			$this->set('dbsource', $dbsource);
+			return;
+		}
 
-			$this->_writeDbSettingToSession($this->request->data['Installation']);
+		$this->_writeDbSettingToSession($this->request->data['Installation']);
 
-			/* 戻るボタンクリック時 */
-			if ($this->request->data['buttonclicked'] == 'back') {
-				$this->redirect('step2');
+		/* 戻るボタンクリック時 */
+		if ($this->request->data['buttonclicked'] === 'back') {
+			$this->redirect('step2');
+			return;
 
-				/* 接続テスト */
-			} elseif ($this->request->data['buttonclicked'] == 'checkdb') {
+			/* 接続テスト */
+		}
 
-				$this->set('blDBSettingsOK', $this->_testConnectDb($this->_readDbSetting()));
+		if ($this->request->data['buttonclicked'] === 'checkdb') {
 
-				/* 「次のステップへ」クリック時 */
-			} elseif ($this->request->data['buttonclicked'] == 'createdb') {
+			$this->set('blDBSettingsOK', $this->_testConnectDb($this->_readDbSetting()));
 
-				ini_set("max_execution_time", 180);
+			/* 「次のステップへ」クリック時 */
+		} elseif ($this->request->data['buttonclicked'] === 'createdb') {
 
-				$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
-				if (isset($this->request->data['Installation']['dbDataPattern'])) {
-					$dbDataPattern = $this->request->data['Installation']['dbDataPattern'];
-				}
-				$result = false;
-				$errorMessage = __d('baser', 'データベースの構築中にエラーが発生しました。');
-				try {
-					$this->_deleteAllTables();
-					$result = $this->_constructionDb($dbDataPattern, Configure::read('BcApp.defaultAdminTheme'));
-				} catch(Exception $e) {
-					$errorMessage .= "\n" . $e->getMessage();
-				}
-				if ($result) {
-					$this->BcMessage->setInfo(__d('baser', 'データベースの構築に成功しました。'));
-					$this->redirect('step4');
-				} else {
-					$this->BcMessage->setError($errorMessage);
-				}
+			ini_set("max_execution_time", 180);
+
+			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
+			if (isset($this->request->data['Installation']['dbDataPattern'])) {
+				$dbDataPattern = $this->request->data['Installation']['dbDataPattern'];
 			}
+			$result = false;
+			$errorMessage = __d('baser', 'データベースの構築中にエラーが発生しました。');
+			try {
+				$this->_deleteAllTables();
+				$result = $this->_constructionDb($dbDataPattern, Configure::read('BcApp.defaultAdminTheme'));
+			} catch(Exception $e) {
+				$errorMessage .= "\n" . $e->getMessage();
+			}
+			if ($result) {
+				$this->BcMessage->setInfo(__d('baser', 'データベースの構築に成功しました。'));
+				$this->redirect('step4');
+				return;
+			}
+
+			$this->BcMessage->setError($errorMessage);
 		}
 
 		$this->set('dbDataPatterns', $this->BcManager->getAllDefaultDataPatterns());
@@ -223,53 +232,57 @@ class InstallationsController extends AppController {
 	public function step4() {
 		if (!$this->request->data) {
 			$this->request->data = $this->_getDefaultValuesStep4();
-		} else {
-            
-			// ユーザー情報をセッションに保存
-			$this->Session->write('Installation.admin_email', $this->request->data['Installation']['admin_email']);
-			$this->Session->write('Installation.admin_username', $this->request->data['Installation']['admin_username']);
-			$this->Session->write('Installation.admin_password', $this->request->data['Installation']['admin_password']);
-
-			if ($this->request->data['Installation']['clicked'] == 'back') {
-
-				$this->redirect('step3');
-			} elseif ($this->request->data['Installation']['clicked'] == 'finish') {
-
-				// DB接続
-				$db = $this->BcManager->connectDb($this->_readDbSetting());
-
-				// サイト基本設定登録
-				$this->BcManager->setAdminEmail($this->request->data['Installation']['admin_email']);
-
-				// SecuritySalt設定
-				$salt = $this->BcManager->setSecuritySalt();
-				$this->Session->write('Installation.salt', $salt);
-				// SecurityCipherSeed設定
-				$cipherSeed = $this->BcManager->setSecurityCipherSeed();
-				$this->Session->write('Installation.cipherSeed', $cipherSeed);
-
-				// 管理ユーザー登録
-				$user = [
-					'name' => $this->request->data['Installation']['admin_username'],
-					'password_1' => $this->request->data['Installation']['admin_password'],
-					'password_2' => $this->request->data['Installation']['admin_confirmpassword'],
-					'email' => $this->request->data['Installation']['admin_email']
-				];
-
-				if ($this->BcManager->addDefaultUser($user)) {
-					$this->_sendCompleteMail($user['email'], $user['name'], $user['password_1']);
-					$this->redirect('step5');
-				} else {
-                    $User = ClassRegistry::init('User', 'Model');
-                    if ( !empty($User->validationErrors) ) {
-                        $errMsg = implode("\n", Hash::extract($User->validationErrors, '{s}.{n}'));
-                    }
-					$this->BcMessage->setError(__d('baser', '管理ユーザーを作成できませんでした。'));
-					$this->BcMessage->setError($errMsg);
-				}
-			}
+			$this->pageTitle = __d('baser', 'baserCMSのインストール｜ステップ４');
+			return;
 		}
 
+// ユーザー情報をセッションに保存
+		$this->Session->write('Installation.admin_email', $this->request->data['Installation']['admin_email']);
+		$this->Session->write('Installation.admin_username', $this->request->data['Installation']['admin_username']);
+		$this->Session->write('Installation.admin_password', $this->request->data['Installation']['admin_password']);
+
+		if ($this->request->data['Installation']['clicked'] === 'back') {
+
+			$this->redirect('step3');
+			return;
+		}
+
+		if ($this->request->data['Installation']['clicked'] === 'finish') {
+
+			// DB接続
+			$db = $this->BcManager->connectDb($this->_readDbSetting());
+
+			// サイト基本設定登録
+			$this->BcManager->setAdminEmail($this->request->data['Installation']['admin_email']);
+
+			// SecuritySalt設定
+			$salt = $this->BcManager->setSecuritySalt();
+			$this->Session->write('Installation.salt', $salt);
+			// SecurityCipherSeed設定
+			$cipherSeed = $this->BcManager->setSecurityCipherSeed();
+			$this->Session->write('Installation.cipherSeed', $cipherSeed);
+
+			// 管理ユーザー登録
+			$user = [
+				'name' => $this->request->data['Installation']['admin_username'],
+				'password_1' => $this->request->data['Installation']['admin_password'],
+				'password_2' => $this->request->data['Installation']['admin_confirmpassword'],
+				'email' => $this->request->data['Installation']['admin_email']
+			];
+
+			if ($this->BcManager->addDefaultUser($user)) {
+				$this->_sendCompleteMail($user['email'], $user['name'], $user['password_1']);
+				$this->redirect('step5');
+				return;
+			}
+
+			$User = ClassRegistry::init('User', 'Model');
+			if ( !empty($User->validationErrors) ) {
+			$errMsg = implode("\n", Hash::extract($User->validationErrors, '{s}.{n}'));
+			}
+			$this->BcMessage->setError(__d('baser', '管理ユーザーを作成できませんでした。'));
+			$this->BcMessage->setError($errMsg);
+		}
 		$this->pageTitle = __d('baser', 'baserCMSのインストール｜ステップ４');
 	}
 
@@ -292,7 +305,7 @@ class InstallationsController extends AppController {
  * Step 5: 設定ファイルの生成
  * データベース設定ファイル[database.php]
  * インストールファイル[install.php]
- * 
+ *
  * @return void
  */
 	public function step5() {
@@ -312,7 +325,7 @@ class InstallationsController extends AppController {
 			$secritySalt = $this->Session->read('Installation.salt');
 			$secrityCipherSeed = $this->Session->read('Installation.cipherSeed');
 			$this->BcManager->createInstallFile($secritySalt, $secrityCipherSeed);
-			
+
 			//==================================================================
 			// BcManagerComponent::createPageTemplates() を実行する際、
 			// 固定ページでプラグインを利用している場合あり、プラグインがロードされていないとエラーになる為、
@@ -322,10 +335,10 @@ class InstallationsController extends AppController {
 
 			// データベースのデータを初期設定に更新
 			$this->BcManager->executeDefaultUpdates($dbConfig);
-			
+
 			// テーマを配置する
 			$this->BcManager->deployTheme();
-		
+
 			$dbDataPattern = $this->Session->read('Installation.dbDataPattern');
 			list($theme, $pattern) = explode('.', $dbDataPattern);
 			loadSiteConfig();
@@ -344,7 +357,7 @@ class InstallationsController extends AppController {
 			}
 
 			$Db = ConnectionManager::getDataSource('default');
-			if($Db->config['datasource'] == 'Database/BcPostgres') {
+			if($Db->config['datasource'] === 'Database/BcPostgres') {
 				$Db->updateSequence();
 			}
 
@@ -353,16 +366,17 @@ class InstallationsController extends AppController {
 				opcache_reset();
 			}
 			$this->redirect('step5');
-		} else {
-			$installationData = Cache::read('Installation', 'default');
-			if (empty($installationData['lastStep'])) {
-				return;
-			}
+			return;
+		}
+
+		$installationData = Cache::read('Installation', 'default');
+		if (empty($installationData['lastStep'])) {
+			return;
 		}
 
 		// ログイン
 		$this->_login();
-		
+
 		// テーマに管理画面のアセットへのシンボリックリンクを作成する
 		$this->BcManager->deployAdminAssets();
 
@@ -371,7 +385,7 @@ class InstallationsController extends AppController {
 
 		// エディタテンプレート用の画像を配置
 		$this->BcManager->deployEditorTemplateImage();
-		
+
 		// Pagesファイルを生成する
 		$this->BcManager->createPageTemplates();
 
@@ -398,8 +412,8 @@ class InstallationsController extends AppController {
 
 /**
  * データベースを構築する
- * 
- * @param type $dbDataPattern データパターン
+ *
+ * @param string $dbDataPattern データパターン
  * @return boolean
  */
 	protected function _constructionDb($dbDataPattern = null, $adminTheme = '') {
@@ -419,27 +433,28 @@ class InstallationsController extends AppController {
 	protected function _getDefaultValuesStep3() {
 		$defaultTheme = Configure::read('BcApp.defaultTheme');
 		$data = [];
-		if ($this->Session->read('Installation.dbType')) {
-			$_data = $this->_readDbSetting();
-			$data['Installation']['dbType'] = $_data['datasource'];
-			$data['Installation']['dbHost'] = $_data['host'];
-			$data['Installation']['dbPort'] = $_data['port'];
-			$data['Installation']['dbPrefix'] = $_data['prefix'];
-			$_data['database'] = basename($_data['database']);
-			$_data['database'] = str_replace(['.csv', '.db'], '', $_data['database']);
-			$_data['database'] = basename($_data['database']);
-			$data['Installation']['dbName'] = $_data['database'];
-			$data['Installation']['dbUsername'] = $_data['login'];
-			$data['Installation']['dbPassword'] = $_data['password'];
-			$data['Installation']['dbDataPattern'] = $_data['dataPattern'];
-		} else {
+		if (!$this->Session->read('Installation.dbType')) {
 			$data['Installation']['dbType'] = 'mysql';
 			$data['Installation']['dbHost'] = 'localhost';
 			$data['Installation']['dbPort'] = '3306';
 			$data['Installation']['dbPrefix'] = 'mysite_';
 			$data['Installation']['dbName'] = 'basercms';
 			$data['Installation']['dbDataPattern'] = $defaultTheme . '.default';
+			return $data;
 		}
+
+		$_data = $this->_readDbSetting();
+		$data['Installation']['dbType'] = $_data['datasource'];
+		$data['Installation']['dbHost'] = $_data['host'];
+		$data['Installation']['dbPort'] = $_data['port'];
+		$data['Installation']['dbPrefix'] = $_data['prefix'];
+		$_data['database'] = basename($_data['database']);
+		$_data['database'] = str_replace(['.csv', '.db'], '', $_data['database']);
+		$_data['database'] = basename($_data['database']);
+		$data['Installation']['dbName'] = $_data['database'];
+		$data['Installation']['dbUsername'] = $_data['login'];
+		$data['Installation']['dbPassword'] = $_data['password'];
+		$data['Installation']['dbDataPattern'] = $_data['dataPattern'];
 
 		return $data;
 	}
@@ -509,12 +524,12 @@ class InstallationsController extends AppController {
 		$data['dbEncoding'] = 'utf8';
 
 		/* dbSchema */
-		if ($data['dbType'] == 'postgres') {
+		if ($data['dbType'] === 'postgres') {
 			$data['dbSchema'] = 'public'; // TODO とりあえずpublic固定
 		} else {
 			$data['dbSchema'] = '';
 		}
-		if ($data['dbType'] == 'csv') {
+		if ($data['dbType'] === 'csv') {
 			$data['dbEncoding'] = 'sjis';
 		}
 
@@ -545,69 +560,78 @@ class InstallationsController extends AppController {
 			if (preg_match('/with message \'(.+?)\' in/s', $e->getMessage(), $matches)) {
 				$message .= "\n" . $matches[1];
 			}
-					$this->BcMessage->setError(__d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。"));
+			$this->BcMessage->setError(__d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。"));
 			return false;
 		}
 
 		/* データベース接続生成 */
 		$db = $this->BcManager->connectDb($config);
 
-		if ($db->connected) {
-			//version check
-
-			switch (get_class($db)) {
-				case 'BcMysql' :
-					$result = $db->query("SELECT version() as version");
-					if( version_compare($result[0][0]['version'], Configure::read('BcRequire.MySQLVersion')) == -1 ) {
-						$this->BcMessage->setError(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.MySQLVersion')));
-						return false ;
-					}
-					break;
-				case 'BcPostgres' :
-					$result = $db->query("SELECT version() as version");
-					list(,$version) = explode(" ",$result[0][0]['version']);
-					if( version_compare( trim($version), Configure::read('BcRequire.PostgreSQLVersion')) == -1 ) {
-						$this->BcMessage->setError(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.PostgreSQLVersion')));
-						return false ;
-					}
-					break;
-			}
-
-			/* 一時的にテーブルを作成できるかテスト */
-			$randomtablename = 'deleteme' . rand(100, 100000);
-			$result = $db->execute("CREATE TABLE $randomtablename (a varchar(10))");
-
-
-			if ($result) {
-				$db->execute("drop TABLE $randomtablename");
-				$this->BcMessage->setInfo(__d('baser', 'データベースへの接続に成功しました。'));
-
-				// データベースのテーブルをチェック
-				$tableNames = $db->listSources();
-				$prefix = Hash::get($config, 'prefix');
-				$duplicateTableNames = array_filter($tableNames, function($tableName) use ($prefix) {
-					return strpos($tableName, $prefix) === 0;
-				});
-
-				if (count($duplicateTableNames) > 0) {
-					$this->BcMessage->setInfo(__d('baser', 'データベースへの接続に成功しましたが、プレフィックスが重複するテーブルが存在します。') . join(', ', $duplicateTableNames));
-				}
-				return true;
-			} else {
-				$this->BcMessage->setError(__d('baser', "データベースへの接続でエラーが発生しました。\n") . $db->error);
-			}
-		} else {
+		if (!$db->connected) {
 
 			if (!$this->Session->read('Message.flash.message')) {
-				if ($db->connection) {
-					$this->BcMessage->setError(__d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。"));
-				} else {
-					$this->BcMessage->setError(__d('baser', 'データベースへの接続でエラーが発生しました。データベース設定を見直してください。'));
+				if (!$db->connection) {
+					$this->BcMessage->setError(
+						__d('baser', 'データベースへの接続でエラーが発生しました。データベース設定を見直してください。')
+					);
+					return false;
 				}
+
+				$this->BcMessage->setError(
+					__d('baser', "データベースへの接続でエラーが発生しました。データベース設定を見直してください。\nサーバー上に指定されたデータベースが存在しない可能性が高いです。")
+				);
 			}
+			return false;
 		}
 
-		return false;
+		//version check
+		switch (get_class($db)) {
+			case 'BcMysql' :
+				$result = $db->query("SELECT version() as version");
+				if (version_compare($result[0][0]['version'], Configure::read('BcRequire.MySQLVersion')) == -1) {
+					$this->BcMessage->setError(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.MySQLVersion')));
+					return false;
+				}
+				break;
+			case 'BcPostgres' :
+				$result = $db->query("SELECT version() as version");
+				list(, $version) = explode(" ", $result[0][0]['version']);
+				if (version_compare(trim($version), Configure::read('BcRequire.PostgreSQLVersion')) == -1) {
+					$this->BcMessage->setError(sprintf(__d('baser', 'データベースのバージョンが %s 以上か確認してください。'), Configure::read('BcRequire.PostgreSQLVersion')));
+					return false;
+				}
+				break;
+		}
+
+		/* 一時的にテーブルを作成できるかテスト */
+		$randomtablename = 'deleteme' . rand(100, 100000);
+		$result = $db->execute("CREATE TABLE $randomtablename (a varchar(10))");
+
+
+		if (!$result) {
+			$this->BcMessage->setError(__d('baser', "データベースへの接続でエラーが発生しました。\n") . $db->error);
+			return false;
+		}
+
+		$db->execute('drop TABLE ' . $randomtablename);
+		$this->BcMessage->setInfo(__d('baser', 'データベースへの接続に成功しました。'));
+
+		// データベースのテーブルをチェック
+		$tableNames = $db->listSources();
+		$prefix = Hash::get($config, 'prefix');
+		$duplicateTableNames = array_filter($tableNames, function ($tableName) use ($prefix) {
+			return strpos($tableName, $prefix) === 0;
+		});
+
+		if (count($duplicateTableNames) > 0) {
+			$this->BcMessage->setInfo(
+				__d(
+					'baser',
+					'データベースへの接続に成功しましたが、プレフィックスが重複するテーブルが存在します。') . implode(', ', $duplicateTableNames)
+			);
+		}
+
+		return true;
 	}
 
 /**
@@ -674,34 +698,34 @@ class InstallationsController extends AppController {
 		$this->layout = 'default';
 		$this->subDir = 'admin';
 
-		if (!empty($this->request->data['Installation']['reset'])) {
-
-			$dbConfig = $this->_readDbSetting();
-			if (!$dbConfig) {
-				$dbConfig = getDbConfig('default');
-			}
-
-			if (!$this->BcManager->reset($dbConfig)) {
-				$this->BcMessage->setError(__d('baser', 'baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。'));
-			} else {
-				$this->BcMessage->setInfo(__d('baser', 'baserCMSを初期化しました。'));
-			}
-			$this->redirect('reset');
-
-		} elseif (!BC_INSTALLED) {
-			$complete = true;
-		} else {
-			$complete = false;
+		if (empty($this->request->data['Installation']['reset'])) {
+			$this->set('complete', !BC_INSTALLED ? true : false);
+			return;
 		}
 
-		$this->set('complete', $complete);
+		$dbConfig = $this->_readDbSetting();
+		if (!$dbConfig) {
+			$dbConfig = getDbConfig('default');
+		}
+
+		if (!$this->BcManager->reset($dbConfig)) {
+			$this->BcMessage->setError(
+				__d(
+					'baser',
+					'baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。'
+				)
+			);
+		} else {
+			$this->BcMessage->setInfo(__d('baser', 'baserCMSを初期化しました。'));
+		}
+		$this->redirect('reset');
 	}
 
 /**
  * 全てのテーブルを削除する
  *
  * @return void
- * @access public 
+ * @access public
  */
 	public function _deleteAllTables() {
 		$dbConfig = $this->_readDbSetting();

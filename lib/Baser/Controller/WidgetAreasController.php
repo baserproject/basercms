@@ -63,7 +63,7 @@ class WidgetAreasController extends AppController {
 
 	/**
  * beforeFilter
- * 
+ *
  * @return void
  */
 	public function beforeFilter() {
@@ -94,7 +94,7 @@ class WidgetAreasController extends AppController {
 
 /**
  * 新規登録
- * 
+ *
  * @return void
  */
 	public function admin_add() {
@@ -102,11 +102,11 @@ class WidgetAreasController extends AppController {
 
 		if ($this->request->data) {
 			$this->WidgetArea->set($this->request->data);
-			if ($this->WidgetArea->save()) {
+			if (!$this->WidgetArea->save()) {
+				$this->BcMessage->setError(__d('baser', '新しいウィジェットエリアの保存に失敗しました。'));
+			} else {
 				$this->BcMessage->setInfo(__d('baser', '新しいウィジェットエリアを保存しました。'));
 				$this->redirect(['action' => 'edit', $this->WidgetArea->getInsertID()]);
-			} else {
-				$this->BcMessage->setError(__d('baser', '新しいウィジェットエリアの保存に失敗しました。'));
 			}
 		}
 		$this->help = 'widget_areas_form';
@@ -115,7 +115,7 @@ class WidgetAreasController extends AppController {
 
 /**
  * 編集
- * 
+ *
  * @return void
  */
 	public function admin_edit($id) {
@@ -143,7 +143,7 @@ class WidgetAreasController extends AppController {
 			$pluginWidgets = [];
 			$paths = App::path('Plugin');
 			foreach ($plugins as $plugin) {
-				
+
 				$pluginWidget['paths'] = [];
 				foreach($paths as $path) {
 					$path .= $plugin['Plugin']['name'] . DS . 'View' . DS . 'Elements' . DS . 'admin' . DS . 'widgets';
@@ -151,14 +151,14 @@ class WidgetAreasController extends AppController {
 						$pluginWidget['paths'][] = $path;
 					}
 				}
-				
+
 				if (!$pluginWidget['paths']) {
 					continue;
-				} else {
-					$pluginWidget['title'] = $plugin['Plugin']['title'] . 'ウィジェット';
-					$pluginWidget['plugin'] = $plugin['Plugin']['name'];
-					$pluginWidgets[] = $pluginWidget;
 				}
+
+				$pluginWidget['title'] = $plugin['Plugin']['title'] . 'ウィジェット';
+				$pluginWidget['plugin'] = $plugin['Plugin']['name'];
+				$pluginWidgets[] = $pluginWidget;
 			}
 			if ($pluginWidgets) {
 				$widgetInfos = am($widgetInfos, $pluginWidgets);
@@ -197,7 +197,7 @@ class WidgetAreasController extends AppController {
 
 /**
  * 一括削除
- * 
+ *
  * @param array $ids
  * @return boolean
  */
@@ -214,11 +214,11 @@ class WidgetAreasController extends AppController {
 		return true;
 	}
 
-/**
- * [AJAX] タイトル更新
- * 
- * @return boolean
- */
+	/**
+	 * [AJAX] タイトル更新
+	 *
+	 * @return void
+	 */
 	public function admin_update_title() {
 		if (!$this->request->data) {
 			$this->notFound();
@@ -231,12 +231,12 @@ class WidgetAreasController extends AppController {
 		exit();
 	}
 
-/**
- * [AJAX] ウィジェット更新
- * 
- * @param int $widgetAreaId
- * @return boolean
- */
+	/**
+	 * [AJAX] ウィジェット更新
+	 *
+	 * @param int $widgetAreaId
+	 * @return void
+	 */
 	public function admin_update_widget($widgetAreaId) {
 		if (!$widgetAreaId || !$this->request->data) {
 			exit();
@@ -278,11 +278,11 @@ class WidgetAreasController extends AppController {
 		exit();
 	}
 
-/**
- * 並び順を更新する
- * @param int $widgetAreaId
- * @return boolean
- */
+	/**
+	 * 並び順を更新する
+	 * @param int $widgetAreaId
+	 * @return void
+	 */
 	public function admin_update_sort($widgetAreaId) {
 		if (!$widgetAreaId || !$this->request->data) {
 			exit();
@@ -311,7 +311,7 @@ class WidgetAreasController extends AppController {
 
 /**
  * [AJAX] ウィジェットを削除
- * 
+ *
  * @param int $widgetAreaId
  * @param int $id
  * @return void
@@ -355,13 +355,13 @@ class WidgetAreasController extends AppController {
 	public function get_widgets($id) {
 		trigger_error(deprecatedMessage(__d('baser', 'メソッド：WidgetAreaController::get_widgets()'), '4.0.0', '4.1.0', __d('baser', 'このメソッドは非推奨となりました。BcWidgetAreaHelper::showWidgets() に移行してください。')), E_USER_DEPRECATED);
 		$widgetArea = $this->WidgetArea->read(null, $id);
-		if (!empty($widgetArea['WidgetArea']['widgets'])) {
-			$widgets = BcUtil::unserialize($widgetArea['WidgetArea']['widgets']);
-			usort($widgets, 'widgetSort');
-			return $widgets;
-		} else {
+		if (empty($widgetArea['WidgetArea']['widgets'])) {
 			return [];
 		}
+
+		$widgets = BcUtil::unserialize($widgetArea['WidgetArea']['widgets']);
+		usort($widgets, 'widgetSort');
+		return $widgets;
 	}
 
 
@@ -370,7 +370,7 @@ class WidgetAreasController extends AppController {
 /**
  * ウィジェットの並べ替えを行う
  * usortのコールバックメソッド
- * 
+ *
  * @param array $a
  * @param array $b
  * @return int
@@ -383,7 +383,7 @@ function widgetSort($a, $b) {
 	}
 	if ($a[$aKey]['sort'] < $b[$bKey]['sort']) {
 		return -1;
-	} else {
-		return 1;
 	}
+
+	return 1;
 }
