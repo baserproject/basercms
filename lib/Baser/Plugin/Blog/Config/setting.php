@@ -31,36 +31,46 @@ $blogContents = $BlogContent->find('all', [
 foreach ($blogContents as $blogContent) {
 	$blog = $blogContent['BlogContent'];
 	$content = $blogContent['Content'];
+	$menus = function ($blog) {
+		$menus = [];
+		$route = [
+				'admin' => true, 'plugin' => 'blog', 'action' => 'index', $blog['id']
+		];
+		$menus['BlogPosts' . $blog['id']] = [
+			'title' => '記事',
+			'url'   => array_merge($route,['controller'=>'blog_posts']),
+			'currentRegex' => '{/blog/blog_posts/[^/]+?/' . $blog['id'] . '($|/)}s'
+		];
+		$menus['BlogCategories' . $blog['id']] = [
+			'title' => 'カテゴリ',
+			'url'   => array_merge($route,['controller'=>'blog_categories']),
+			'currentRegex' => '{/blog/blog_categories/[^/]+?/' . $blog['id'] . '($|/)}s'
+		];
+		if ($blog['tag_use']) {
+			$menus['BlogTags' . $blog['id']] = [
+				'title' => 'タグ',
+				'url'   => array_merge($route,['controller'=>'blog_tags']),
+				'currentRegex' => '{/blog/blog_tags/[^/]+?/}s'
+			];
+		}
+		if ($blog['comment_use']) {
+			$menus['BlogComments' . $blog['id']] = [
+				'title' => 'コメント',
+				'url'   => array_merge($route,['controller'=>'blog_comments'])
+			];
+		}
+		$menus['BlogContentsEdit' . $blog['id']] = [
+			'title' => '設定',
+			'url'   => array_merge($route,['controller'=>'blog_contents', 'action' => 'edit'])
+		];
+		return $menus;
+	};
 	$config['BcApp.adminNavigation.Contents.' . 'BlogContent' . $blog['id']] = [
 		'siteId' => $content['site_id'],
 		'title' => $content['title'],
 		'type' => 'blog-content',
 		'icon' => 'bca-icon--blog',
-		'menus' => [
-			'BlogPosts' . $blog['id'] => [
-				'title' => '記事',
-				'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_posts', 'action' => 'index', $blog['id']],
-				'currentRegex' => '/\/blog\/blog_posts\/[^\/]+?\/' . $blog['id'] . '($|\/)/s'
-			],
-			'BlogCategories' . $blog['id'] => [
-				'title' => 'カテゴリ',
-				'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'index', $blog['id']],
-				'currentRegex' => '/\/blog\/blog_categories\/[^\/]+?\/' . $blog['id'] . '($|\/)/s'
-			],
-			'BlogTags' . $blog['id'] => [
-				'title' => 'タグ', 
-				'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'index'],
-				'currentRegex' => '/\/blog\/blog_tags\/[^\/]+?\//s'
-			],	
-			'BlogComments' . $blog['id'] => [
-				'title' => 'コメント',
-				'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_comments', 'action' => 'index', $blog['id']]
-			],
-			'BlogContentsEdit' . $blog['id'] => [
-				'title' => '設定',
-				'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_contents', 'action' => 'edit', $blog['id']]
-			]
-		]
+		'menus' => $menus($blog)
 	];
 }
 // @deprecated 5.0.0 since 4.2.0 BcApp.adminNavigation の形式に変更
