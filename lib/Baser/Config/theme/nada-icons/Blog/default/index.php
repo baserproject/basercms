@@ -14,7 +14,7 @@ $(function(){
 	});
 </script>
 <h2 class="contents-head">
-<?php $this->Blog->title() ?>
+<?php echo h($this->Blog->getTitle()) ?>
 </h2>
 <!-- blog description -->
 <?php if ($this->Blog->descriptionExists()): ?>

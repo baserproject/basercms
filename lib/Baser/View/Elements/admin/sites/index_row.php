@@ -45,7 +45,7 @@ $url = $this->BcContents->getUrl('/' . $data['Site']['alias'] . '/', true, $data
 		<?php echo $this->BcText->arrayValue($data['Site']['device'], $devices, ''); ?><br>
 		<?php echo $this->BcText->arrayValue($data['Site']['lang'], $langs, ''); ?>
 	</td>
-	<td><?php echo $this->BcText->arrayValue($data['Site']['main_site_id'], $mainSites, ''); ?><br>
+	<td><?php echo h($this->BcText->arrayValue($data['Site']['main_site_id'], $mainSites, '')); ?><br>
 		<?php echo $this->BcText->noValue($data['Site']['theme'], $this->BcBaser->siteConfig['theme']) ?>
 	</td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>

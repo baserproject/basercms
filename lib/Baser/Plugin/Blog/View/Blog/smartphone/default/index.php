@@ -20,7 +20,7 @@ $this->BcBaser->setDescription($this->Blog->getDescription());
 
 <!-- title -->
 <h1 class="contents-head">
-	<?php $this->Blog->title() ?>
+	<?php echo h($this->Blog->getTitle()) ?>
 </h1>
 
 <!-- description -->

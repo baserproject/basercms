@@ -169,7 +169,7 @@ $this->BcBaser->js('admin/users/edit', false);
 			</ul>
 		<?php endif ?>
 		<?php if ($this->Session->check('AuthAgent') || $this->BcBaser->isAdminUser()): ?>
-			<div class="submit"><?php echo $this->BcForm->button($this->request->data['UserGroup']['title'] . 'グループの初期値に設定', ['label' => __d('baser', 'グループ初期データに設定'), 'id' => 'btnSetUserGroupDefault', 'class' => 'button bca-btn']) ?></div>
+			<div class="submit"><?php echo $this->BcForm->button(h($this->request->data['UserGroup']['title']) . 'グループの初期値に設定', ['label' => __d('baser', 'グループ初期データに設定'), 'id' => 'btnSetUserGroupDefault', 'class' => 'button bca-btn']) ?></div>
 		<?php endif ?>
 	</div>
 <?php endif ?>

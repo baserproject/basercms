@@ -16,7 +16,7 @@ $(function(){
 
 
 <h2 class="contents-head">
-<?php $this->Blog->title() ?>
+<?php echo h($this->Blog->getTitle()) ?>
 </h2>
 <h3 class="contents-head">
 <?php $this->BcBaser->contentsTitle() ?>

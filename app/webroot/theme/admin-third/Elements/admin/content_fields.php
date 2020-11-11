@@ -137,7 +137,7 @@ if($this->BcContents->isEditable()) {
 					<?php echo $this->BcForm->input('Content.title', ['type' => 'text', 'size' => 50]) ?>　
 					<?php echo $this->BcForm->error('Content.title') ?>
 				<?php else: ?>
-					<?php echo $this->BcForm->value('Content.title') ?>　
+					<?php echo h($this->BcForm->value('Content.title')) ?>　
 					<?php echo $this->BcForm->hidden('Content.title') ?>
 				<?php endif ?>
 			</td>

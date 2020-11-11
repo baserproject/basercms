@@ -140,7 +140,7 @@ if($this->BcContents->isEditable()) {
 			<tr>
 				<th><?php echo $this->BcForm->label('Content.name', 'URL') ?>&nbsp;<span class="required">*</span></th>
 				<td>
-					<smalL>[<?php echo __d('baser', 'サイト')?>]</smalL> <?php echo $this->BcText->noValue($this->request->data['Site']['display_name'], $mainSiteDisplayName) ?>　
+					<smalL>[<?php echo __d('baser', 'サイト')?>]</smalL> <?php echo h($this->BcText->noValue($this->request->data['Site']['display_name'], $mainSiteDisplayName)) ?>　
 					<?php if(!$this->request->data['Content']['site_root']): ?>
 					<small>[<?php echo __d('baser', 'フォルダ')?>]</small>
 					<?php echo $this->BcForm->input('Content.parent_id', ['type' => 'select', 'options' => $parentContents, 'escape' => true]) ?>　
@@ -166,7 +166,7 @@ if($this->BcContents->isEditable()) {
 						<?php echo $this->BcForm->input('Content.title', ['size' => 50]) ?>　
 						<?php echo $this->BcForm->error('Content.title') ?>
 					<?php else: ?>
-						<?php echo $this->BcForm->value('Content.title') ?>　
+						<?php echo h($this->BcForm->value('Content.title')) ?>　
 						<?php echo $this->BcForm->hidden('Content.title') ?>
 					<?php endif ?>
 					<small>[<?php echo __d('baser', 'タイプ')?>]</small>

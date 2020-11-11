@@ -25,7 +25,7 @@ $types = BcUtil::unserialize($this->BcBaser->siteConfig['content_types']);
 	<span><?php echo $this->BcForm->label('SearchIndex.type', __d('baser', 'タイプ')) ?> <?php echo $this->BcForm->input('SearchIndex.type', ['type' => 'select', 'options' => $types, 'empty' => __d('baser', '指定なし')]) ?></span>
 	<span><?php echo $this->BcForm->label('SearchIndex.site_id', __d('baser', 'サブサイト')) ?> <?php echo $this->BcForm->input('SearchIndex.site_id', ['type' => 'select', 'options' => $sites]) ?></span>
 	<?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'SearchIndexSiteIdLoader']) ?>
-	<span><?php echo $this->BcForm->label('SearchIndex.folder_id', __d('baser', 'フォルダ')) ?> <?php echo $this->BcForm->input('SearchIndex.folder_id', ['type' => 'select', 'options' => $folders, 'empty' => __d('baser', '指定なし'), 'escape' => false]) ?></span>
+	<span><?php echo $this->BcForm->label('SearchIndex.folder_id', __d('baser', 'フォルダ')) ?> <?php echo $this->BcForm->input('SearchIndex.folder_id', ['type' => 'select', 'options' => $folders, 'empty' => __d('baser', '指定なし')]) ?></span>
 	<span><?php echo $this->BcForm->label('SearchIndex.keyword', __d('baser', 'キーワード')) ?> <?php echo $this->BcForm->input('SearchIndex.keyword', ['type' => 'text', 'size' => '30']) ?></span>
 	<span><?php echo $this->BcForm->label('SearchIndex.status', __d('baser', '公開状態')) ?> 
 		<?php echo $this->BcForm->input('SearchIndex.status', ['type' => 'select', 'options' => $this->BcText->booleanMarkList(), 'empty' => __d('baser', '指定なし')]) ?></span>　
