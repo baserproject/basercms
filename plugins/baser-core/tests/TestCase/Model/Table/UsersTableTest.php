@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\UsersTable;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Validation\Validator;
 
 /**
  * BaserCore\Model\Table\UsersTable Test Case
@@ -78,10 +79,21 @@ class UsersTableTest extends BcTestCase
      */
     public function testBeforeMarshal() {
         $user = $this->Users->newEntity([
-            'password' => '',
             'password_1' => 'testtest'
         ]);
         $this->assertNotEmpty($user->password);
+    }
+
+    /**
+     * Test testAfterMarshal
+     */
+    public function testAfterMarshal() {
+        $user = $this->Users->newEntity([
+            'password' => '',
+            'password_1' => ''
+        ]);
+        $this->assertEquals($user->getError('password_1'), [0 => '']);
+        $this->assertEquals($user->getError('password_2'), [0 => '']);
     }
 
     /**
@@ -91,7 +103,12 @@ class UsersTableTest extends BcTestCase
      */
     public function testValidationDefault()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $validator = $this->Users->validationDefault(new Validator());
+        $fields = [];
+        foreach($validator->getIterator() as $key => $value) {
+            $fields[] = $key;
+        }
+        $this->assertEquals(['id', 'name', 'real_name_1', 'real_name_2', 'nickname', 'user_groups', 'email', 'password'], $fields);
     }
 
     /**
