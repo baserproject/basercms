@@ -9,7 +9,7 @@
     </a>
 </p>
 
-ucmitz は、baserCMSをCakePHP4化するためのプロジェクトの開発コードです。
+ucmitz 🐮🐮🐮 は、baserCMSをCakePHP4化するためのプロジェクトの開発コードです。
 BaserApp を親パッケージとして、BaserCore、BcAdminThirdは、子パッケージとしてモノレポで管理します。
 - [BaserApp ソースコード / baserproject/basercms:dev-5-cake3](https://github.com/baserproject/ucmitz/tree/dev)
 baserCMSのアプリケーションフレームを提供
