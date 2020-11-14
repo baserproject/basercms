@@ -117,7 +117,13 @@ class UserGroupsController extends BcAdminAppController
     {
         $userGroup = $this->UserGroups->newEmptyEntity();
         if ($this->request->is('post')) {
-            $userGroup = $this->UserGroups->patchEntity($userGroup, $this->request->getData());
+            $data = $this->request->getData();
+            if (empty($data['auth_prefix'])) {
+                $data['auth_prefix'] = 'Admin';
+            } else {
+                $data['auth_prefix'] = implode(',', $data['auth_prefix']);
+            }
+            $userGroup = $this->UserGroups->patchEntity($userGroup, $data);
             if ($this->UserGroups->save($userGroup)) {
                 $this->BcMessage->setSuccess(__d('baser', '新規ユーザーグループ「{0}」を追加しました。', $userGroup->name));
                 return $this->redirect(['action' => 'index']);
@@ -160,7 +166,15 @@ class UserGroupsController extends BcAdminAppController
             'contain' => ['Users'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $userGroup = $this->UserGroups->patchEntity($userGroup, $this->request->getData());
+
+            $data = $this->request->getData();
+            if (empty($data['auth_prefix'])) {
+                $data['auth_prefix'] = 'Admin';
+            } else {
+                $data['auth_prefix'] = implode(',', $data['auth_prefix']);
+            }
+            $userGroup = $this->UserGroups->patchEntity($userGroup, $data);
+
             if ($this->UserGroups->save($userGroup)) {
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name));
                 return $this->redirect(['action' => 'index']);

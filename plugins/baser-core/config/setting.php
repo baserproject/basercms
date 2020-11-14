@@ -138,7 +138,9 @@ return [
      */
     'BcPrefixAuth' => [
         // 管理画面
-	    'Admin' => [
+        'Admin' => [
+            // 認証設定名
+            'name' => __d('baser', '管理システム'),
             // 認証タイプ
             'type' => 'Form',
             // URLにおけるエイリアス
@@ -157,6 +159,6 @@ return [
             'userModel' => 'Users',
             // セッションキー
             'sessionKey' => 'AuthAdmin',
-	    ]
+        ]
     ]
 ];

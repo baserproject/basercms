@@ -76,18 +76,29 @@ class UserGroupsTable extends Table
 
         $validator
             ->scalar('name')
-            ->maxLength('name', 50)
-            ->allowEmptyString('name');
+            ->maxLength('name', 50, 'ユーザーグループ名は50文字以内で入力してください。')
+            ->notEmptyString('name', 'ユーザーグループ名を入力してください。')
+            ->add('name', [
+                'name_halfText' => [
+                    'rule' => 'halfText',
+                    'provider' => 'bc',
+                    'message' => 'ユーザーグループ名は半角のみで入力してください。'
+                ],
+                'name_unique'  => [
+                    'rule' => 'validateUnique',
+                    'provider' => 'table',
+                    'message' => '既に登録のあるユーザーグループ名です。'
+                ]
+            ]);
 
         $validator
             ->scalar('title')
-            ->maxLength('title', 50)
-            ->allowEmptyString('title');
+            ->maxLength('title', 50, '表示名は50文字以内で入力してください。')
+            ->notEmptyString('title', '表示名を入力してください。');
 
         $validator
             ->scalar('auth_prefix')
-            ->maxLength('auth_prefix', 20)
-            ->allowEmptyString('auth_prefix');
+            ->notEmptyString('auth_prefix', '認証プレフィックスを選択してください。');
 
         $validator
             ->boolean('use_admin_globalmenu')
