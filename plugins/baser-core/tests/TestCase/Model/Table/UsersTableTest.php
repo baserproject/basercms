@@ -12,12 +12,12 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\UsersTable;
-use Cake\TestSuite\TestCase;
+use BaserCore\TestSuite\BcTestCase;
 
 /**
  * BaserCore\Model\Table\UsersTable Test Case
  */
-class UsersTableTest extends TestCase
+class UsersTableTest extends BcTestCase
 {
 
     /**
@@ -74,6 +74,17 @@ class UsersTableTest extends TestCase
     }
 
     /**
+     * Test testBeforeMarshal
+     */
+    public function testBeforeMarshal() {
+        $user = $this->Users->newEntity([
+            'password' => '',
+            'password_1' => 'testtest'
+        ]);
+        $this->assertNotEmpty($user->password);
+    }
+
+    /**
      * Test validationDefault method
      *
      * @return void
@@ -92,4 +103,5 @@ class UsersTableTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
 }

@@ -10,6 +10,8 @@
  */
 
 namespace BaserCore\TestSuite;
+use App\Application;
+use BaserCore\Plugin;
 use Cake\Http\ServerRequest;
 use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
@@ -19,9 +21,27 @@ use Cake\TestSuite\TestCase;
  * @package BaserCore\TestSuite
  */
 class BcTestCase extends TestCase {
+
+    /**
+     * Set Up
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $plugin = new Plugin();
+        $plugin->bootstrap(new Application(''));
+    }
+
+    /**
+     * Request を取得する
+     *
+     * @param string $url
+     * @return ServerRequest
+     */
     public function getRequest($url = '/') {
         $request = new ServerRequest(['url' => $url]);
         Router::setRequest($request);
         return $request;
     }
+
 }
