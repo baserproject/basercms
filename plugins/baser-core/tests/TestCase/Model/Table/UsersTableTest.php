@@ -34,11 +34,12 @@ class UsersTableTest extends BcTestCase
      * @var array
      */
     protected $fixtures = [
-        'plugin.BaserCore.Users'
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
     ];
 
     /**
-     * setUp method
+     * Set Up
      *
      * @return void
      */
@@ -50,7 +51,7 @@ class UsersTableTest extends BcTestCase
     }
 
     /**
-     * tearDown method
+     * Tear Down
      *
      * @return void
      */
@@ -61,7 +62,7 @@ class UsersTableTest extends BcTestCase
     }
 
     /**
-     * Test initialize method
+     * Test initialize
      *
      * @return void
      */
@@ -75,9 +76,10 @@ class UsersTableTest extends BcTestCase
     }
 
     /**
-     * Test testBeforeMarshal
+     * Test beforeMarshal
      */
-    public function testBeforeMarshal() {
+    public function testBeforeMarshal()
+    {
         $user = $this->Users->newEntity([
             'password_1' => 'testtest'
         ]);
@@ -85,19 +87,19 @@ class UsersTableTest extends BcTestCase
     }
 
     /**
-     * Test testAfterMarshal
+     * Test afterMarshal
      */
-    public function testAfterMarshal() {
+    public function testAfterMarshal()
+    {
         $user = $this->Users->newEntity([
-            'password' => '',
-            'password_1' => ''
+            'password' => ''
         ]);
         $this->assertEquals($user->getError('password_1'), [0 => '']);
         $this->assertEquals($user->getError('password_2'), [0 => '']);
     }
 
     /**
-     * Test validationDefault method
+     * Test validationDefault
      *
      * @return void
      */
@@ -112,13 +114,26 @@ class UsersTableTest extends BcTestCase
     }
 
     /**
-     * Test buildRules method
+     * Test validationNew
      *
      * @return void
      */
-    public function testBuildRules()
+    public function testValidationNew()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $user = $this->Users->newEntity([
+            'password' => '',
+            'password_1' => '',
+            'password_2' => ''
+        ], ['validate' => 'new']);
+        $this->assertEquals($user->getError('password')['_empty'], __d('baser', 'パスワードを入力してください。'));
+    }
+
+    /**
+     * Test getNew
+     */
+    public function testGetNew()
+    {
+        $this->assertEquals(1, $this->Users->getNew()->user_groups[0]->id);
     }
 
 }
