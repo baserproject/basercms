@@ -11,6 +11,7 @@
 
 use BaserCore\Model\Entity\UserGroup;
 use BaserCore\View\AppView;
+use Cake\Core\Configure;
 
 /**
  * UserGroups Form
@@ -20,15 +21,13 @@ use BaserCore\View\AppView;
 
 $this->BcBaser->js('admin/user_groups/form', false);
 $authPrefixes = [];
-// TODO
-// foreach (Configure::read('BcAuthPrefix') as $key => $authPrefix) {
-// 	$authPrefixes[$key] = $authPrefix['name'];
-// }
+foreach (Configure::read('BcPrefixAuth') as $key => $authPrefix) {
+	$authPrefixes[$key] = $authPrefix['name'];
+}
 ?>
 
 
 <script type="text/javascript">
-/*
 $(window).load(function() {
 <?php if ($userGroup->name == 'admins'): ?>
 	$("#UserGroupAuthPrefixAdmin").prop('disabled', true);
@@ -37,7 +36,6 @@ $(window).load(function() {
 		$("#UserGroupAuthPrefixAdmin").removeAttr('disabled');
 	});
 });
-*/
 </script>
 
 
@@ -97,7 +95,7 @@ $(window).load(function() {
             <tr>
                 <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('auth_prefix', __d('baser', '認証プレフィックス設定')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
                 <td class="col-input bca-form-table__input">
-                    <?php echo $this->BcAdminForm->control('auth_prefix', ['type' => 'select', 'multiple' => 'checkbox', 'options' => $authPrefixes, 'value' => explode(',', $userGroup->auth_prefix)]) ?>
+                    <?php echo $this->BcAdminForm->control('auth_prefix', ['type' => 'multiCheckbox', 'options' => $authPrefixes, 'value' => explode(',', $userGroup->auth_prefix)]) ?>
                     <i class="bca-icon--question-circle btn help bca-help"></i>
                     <?php echo $this->BcAdminForm->error('auth_prefix') ?>
                     <div id="helptextAuthPrefix" class="helptext">

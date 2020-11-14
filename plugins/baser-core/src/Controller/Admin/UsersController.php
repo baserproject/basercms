@@ -55,8 +55,8 @@ class UsersController extends BcAdminAppController
     {
         // TODO 取り急ぎ動作させるためのコード
         // >>>
-		$this->siteConfigs['admin_list_num'] = 20;
-		// $this->request = $this->request->withParam('pass', ['num' => 20]);
+		$this->siteConfigs['admin_list_num'] = 30;
+		// $this->request = $this->request->withParam('pass', ['num' => 30]);
 		// <<<
     }
 
@@ -81,11 +81,13 @@ class UsersController extends BcAdminAppController
 	 */
     public function index(): void
     {
-        $this->setViewConditions('', ['default' => ['named' => ['num' => $this->siteConfigs['admin_list_num']]]]);
-        $query = $this->Users->find()
-            ->order(['Users.id'])
-            ->limit($this->request->getParam('pass')['num'])
-            ->contain('UserGroups');
+        $this->setViewConditions('User', ['default' => ['query' => ['num' => $this->siteConfigs['admin_list_num']]]]);
+        $this->paginate = [
+            'order' => ['Users.id'],
+            'limit' => $this->request->getQuery('num'),
+            'contain' => ['UserGroups']
+        ];
+        $query = $this->Users->find('all', $this->paginate);
         $query = $this->Users->createWhere($query, $this->request);
         $this->set([
             'users' => $this->paginate($query)
@@ -168,8 +170,8 @@ class UsersController extends BcAdminAppController
     {
         $user = $this->Users->newEmptyEntity();
         if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            $user->password = $this->request->getData('password_1');
+            $this->request = $this->request->withData('password', $this->request->getData('password_1'));
+            $user = $this->Users->patchEntity($user, $this->request->getData(), ['validate' => 'new']);
             if ($this->Users->save($user)) {
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を追加しました。', $user->name));
                 return $this->redirect(['action' => 'edit', $user->id]);
@@ -249,11 +251,6 @@ class UsersController extends BcAdminAppController
             // }
 
             $user = $this->Users->patchEntity($user, $this->request->getData());
-
-            // パスワードがない場合は更新しない
-            if ($this->request->getData('password_1') || $this->request->getData('password_2')) {
-                $user->password = $this->request->getData('password_1');
-            }
 
             // 権限確認
             if (!$updatable) {

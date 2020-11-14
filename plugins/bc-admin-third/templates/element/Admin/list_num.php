@@ -15,3 +15,33 @@ use BaserCore\View\AppView;
  * list num
  * @var AppView $this
  */
+$currentNum = '';
+if (empty($nums)) {
+	$nums = ['10', '30', '50', '100'];
+}
+if (!is_array($nums)) {
+	$nums = [$nums];
+}
+if (!empty($this->request->getQuery('num'))) {
+	$currentNum = $this->request->getQuery('num');
+}
+$links = [];
+foreach ($nums as $num) {
+	if ($currentNum != $num) {
+		$links[] = '<span>' . $this->BcBaser->getLink($num, ['?' => array_merge($this->request->getQuery(), ['num' => $num, 'page' => null])]) . '</span>';
+	} else {
+		$links[] = '<span class="current">' . $num . '</span>';
+	}
+}
+if ($links) {
+	$link = implode('｜', $links);
+}
+?>
+
+
+<?php if ($link): ?>
+	<dl class="list-num bca-list-num">
+		<dt class="bca-list-num__title"><?php echo __d('baser', '表示件数')?></dt>
+        <dd class="bca-list-num__data"><?php echo $link ?></dd>
+	</dl>
+<?php endif ?>
