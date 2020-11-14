@@ -33,7 +33,8 @@ class BcAuthHelper extends Helper {
      * 現在認証プレフィックスを取得する
      * @return string currentPrefix
      */
-    public function getCurrentPrefix () {
+    public function getCurrentPrefix(): string
+    {
         $currentPrefix = '';
         $request = $this->_View->getRequest();
         if (!empty($request)) {
@@ -50,7 +51,8 @@ class BcAuthHelper extends Helper {
      * 現在の認証プレフィックスの設定を取得
      * @return array 認証プレフィックス設定
      */
-    public function getCurrentPrefixSetting() {
+    public function getCurrentPrefixSetting(): array
+    {
         return Configure::read('BcPrefixAuth.' . $this->getCurrentPrefix());
     }
 
@@ -58,7 +60,8 @@ class BcAuthHelper extends Helper {
      * 現在の認証プレフィックスのログインURLを取得
      * @return string
      */
-    public function getCurrentLoginUrl() {
+    public function getCurrentLoginUrl(): strings
+    {
         return $this->getCurrentPrefixSetting()['loginAction'];
     }
 
@@ -66,7 +69,8 @@ class BcAuthHelper extends Helper {
      * 現在のユーザーに許可された認証プレフィックスを取得する
      * @return array
      */
-    public function getCurrentUserPrefixSettings() {
+    public function getCurrentUserPrefixSettings(): array
+    {
         // TODO: 現在のログインユーザーのセッションキーを取得
         // $sessionKey = BcUtil::getLoginUserSessionKey();
         // >>>
@@ -87,7 +91,8 @@ class BcAuthHelper extends Helper {
      * 現在のユーザーが管理画面の利用が許可されているかどうか
      * @return bool
      */
-    public function isCurrentUserAdminAvailable() {
+    public function isCurrentUserAdminAvailable(): bool
+    {
         return in_array('admin', $this->getCurrentUserPrefixSettings());
     }
 
@@ -96,7 +101,8 @@ class BcAuthHelper extends Helper {
      * TODO: 未実装
      * @return string
      */
-    public function getCurrentLoginAction() {
+    public function getCurrentLoginAction(): string
+    {
 //        $currentAuthPrefixSetting = $this->BcAuth->getCurrentPrefixSetting();
 //        if ($this->isCurrentUserAdminAvailable()) {
 //            $logoutAction = Configure::read('BcAuthPrefix.admin.logoutAction');
@@ -111,7 +117,8 @@ class BcAuthHelper extends Helper {
      * 認証名を取得する
      * フロントの場合はサイト名
      */
-    public function getCurrentName() {
+    public function getCurrentName()
+    {
         $currentPrefixSetting = $this->getCurrentPrefixSetting();
         if (!empty($currentPrefixSetting['name']) && $this->getCurrentPrefix() !== 'front') {
             $name = $currentPrefixSetting['name'];
@@ -135,7 +142,8 @@ class BcAuthHelper extends Helper {
      * 現在のログアウトURL
      * @return mixed
      */
-    public function getCurrentLogoutUrl() {
+    public function getCurrentLogoutUrl()
+    {
         return $this->getCurrentPrefixSetting()['logoutAction'];
     }
 
@@ -143,7 +151,8 @@ class BcAuthHelper extends Helper {
      * 現在のログイン後のリダイレクトURL
      * @return mixed
      */
-    public function getCurrentLoginRedirectUrl() {
+    public function getCurrentLoginRedirectUrl()
+    {
         return $this->getCurrentPrefixSetting()['loginRedirect'];
     }
 
@@ -151,8 +160,29 @@ class BcAuthHelper extends Helper {
      * 現在のログインユーザー
      * @return Entity
      */
-    public function getCurrentLoginUser() {
+    public function getCurrentLoginUser()
+    {
         return BcUtil::loginUser();
+    }
+
+    /**
+     * 特権ユーザログイン状態判別
+     *
+     * @return boolean
+     */
+    public function isSuperUser(): bool
+    {
+        return BcUtil::isSuperUser();
+    }
+
+    /**
+     * 代理ログイン状態判別
+     *
+     * @return boolean
+     */
+    public function isAgentUser(): bool
+    {
+        return BcUtil::isAgentUser();
     }
 
 }

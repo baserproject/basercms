@@ -12,12 +12,15 @@
 namespace BaserCore\Controller\Admin;
 
 use Authentication\Controller\Component\AuthenticationComponent;
+use BaserCore\Utility\BcUtil;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\UsersTable;
 use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\EventInterface;
+use Cake\Routing\Router;
 use Cake\Http\Response;
+use Cake\Http\Exception\ForbiddenException;
 
 /**
  * Class UsersController
@@ -108,11 +111,18 @@ class UsersController extends BcAdminAppController
      */
     public function login()
     {
+        var_dump($this->Authentication->getLoginRedirect());
+        exit;
         $this->set('title', '管理システムログイン');
         $result = $this->Authentication->getResult();
         if ($result->isValid()) {
             $target = $this->Authentication->getLoginRedirect() ?? Configure::read('BcPrefixAuth.Admin.loginRedirect');
             $user = $result->getData();
+
+            // グループ情報等データセットを付与
+            $user = $this->Users->getLoginData($user->id);
+            $this->Authentication->setIdentity($user);
+
             $this->BcMessage->setInfo(__d('baser', 'ようこそ、' . $user->name . 'さん。'));
             $this->redirect($target);
             return;
@@ -131,6 +141,8 @@ class UsersController extends BcAdminAppController
      */
     public function logout()
     {
+        $session = Router::getRequest()->getSession();
+        $session->delete('AuthAgent');
         $this->Authentication->logout();
         $this->redirect(['action' => 'login']);
     }
@@ -320,5 +332,62 @@ class UsersController extends BcAdminAppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * 代理ログイン
+     *
+     * 別のユーザにログインできる
+     *
+     * @param string|null $id User id.
+     * @return Response Redirects
+     * @throws RecordNotFoundException When record not found.
+     */
+    public function login_agent($id)
+    {
+        $session = Router::getRequest()->getSession();
+        $user = BcUtil::loginUser();
+
+        // 特権確認
+        if (BcUtil::isSuperUser() === false) {
+            throw new ForbiddenException();
+        }
+
+        // 既に代理ログイン済み
+        if (BcUtil::isAgentUser()) {
+            $this->BcMessage->setError(__d('baser', '既に代理ログイン中のため失敗しました。'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        // 対象ユーザデータ取得
+        $agentUser = $this->Users->getLoginData($id);
+        $this->Authentication->setIdentity($agentUser);
+        $session->write('AuthAgent.User', $user);
+        $session->write('AuthAgent.referer', $this->referer());
+
+        $target = $this->Authentication->getLoginRedirect() ?? Configure::read('BcPrefixAuth.Admin.loginRedirect');
+        $this->redirect($target);
+        return;
+    }
+
+    /**
+     * 代理ログイン解除
+     *
+     * @return Response
+     */
+    public function back_agent()
+    {
+        $session = Router::getRequest()->getSession();
+        $user = $session->read('AuthAgent.User');
+        if (empty($user)) {
+            $this->BcMessage->setError(__d('baser', '対象データが見つかりません。'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $this->Authentication->setIdentity($user);
+        $target = $session->read('AuthAgent.referer') ?? Configure::read('BcPrefixAuth.Admin.loginRedirect');
+
+        $session->delete('AuthAgent');
+        $this->redirect($target);
     }
 }

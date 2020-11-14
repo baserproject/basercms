@@ -14,11 +14,13 @@ namespace BaserCore\Controller\Admin;
  * Class UtilitiesController
  * @package BaserCore\Controller\Admin
  */
-class UtilitiesController extends BcAdminAppController {
+class UtilitiesController extends BcAdminAppController
+{
     /**
      * サーバーキャッシュを削除する
      */
-    public function clear_cache() {
+    public function clear_cache()
+    {
         // TODO 未実装
         $this->BcMessage->setError("おっと、まだ処理は実装されていませんよ！！！ \n\n/tmp/cache/ 内を削除するだけなので簡単です＾＾");
         $this->redirect($this->referer());
@@ -31,7 +33,8 @@ class UtilitiesController extends BcAdminAppController {
      * @param mixed $open 1 Or ''
      * @return void
      */
-	public function ajax_save_search_box($key, $open = '') {
+    public function ajax_save_search_box($key, $open = '')
+    {
 	    $this->autoRender = false;
 		$this->request->getSession()->write('BcApp.adminSearchOpened.' . $key, $open);
 		echo true;
