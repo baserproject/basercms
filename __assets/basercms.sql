@@ -272,6 +272,26 @@ ALTER TABLE `users_user_groups`
 --
 ALTER TABLE `user_groups`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+
+DROP TABLE IF EXISTS `password_requests`;
+CREATE TABLE `password_requests` (
+  `id` int(8) NOT NULL,
+  `user_id` int(8) DEFAULT NULL,
+  `request_key` varchar(255) DEFAULT NULL,
+  `used` int(2) DEFAULT 0,
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `password_requests`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `password_requests`
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
