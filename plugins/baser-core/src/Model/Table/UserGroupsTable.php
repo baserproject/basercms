@@ -39,6 +39,7 @@ use Cake\Validation\Validator;
  */
 class UserGroupsTable extends Table
 {
+
     /**
      * Initialize method
      *
@@ -114,4 +115,5 @@ class UserGroupsTable extends Table
 
         return $validator;
     }
+
 }

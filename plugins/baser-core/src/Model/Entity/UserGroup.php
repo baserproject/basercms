@@ -31,6 +31,7 @@ use Cake\ORM\Entity;
  */
 class UserGroup extends Entity
 {
+
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -51,4 +52,5 @@ class UserGroup extends Entity
         'created' => true,
         'users' => true,
     ];
+
 }

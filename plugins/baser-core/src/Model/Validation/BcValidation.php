@@ -104,18 +104,11 @@ class BcValidation extends Validation {
  * @param array $check 確認する値を含む配列。先頭の要素のみチェックされる
  * @return boolean
  */
-    public static function halfText($check)
+    public static function halfText($value)
     {
-
-        if (is_array($check)) {
-            // TODO: 引数が配列になることがあるかどうか不明
-            $value = $check[key($check)];
-        } else {
-            $value = $check;
-        }
         $len = strlen($value);
-        $mblen = mb_strlen($value, 'UTF-8');
-        if ($len != $mblen) {
+        $mbLen = mb_strlen($value, 'UTF-8');
+        if ($len != $mbLen) {
             return false;
         }
         return true;

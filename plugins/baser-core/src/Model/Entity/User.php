@@ -23,26 +23,12 @@ use Cake\ORM\Entity as EntityAlias;
  * @property string $real_name_1
  * @property string $real_name_2
  * @property string $email
- * @property int $user_group_id
  * @property string $nickname
  * @property TimeAlias $created
  * @property TimeAlias $modified
  */
 class User extends EntityAlias
 {
-
-    /**
-     * 初期化
-     *
-     * @param array $config
-     * @return void
-     */
-    public function initialize(array $config)
-    {
-        $this->hasMany('UserGroup', [
-            'className' => 'UserGroup'
-        ]);
-    }
 
     /**
      * Accessible
