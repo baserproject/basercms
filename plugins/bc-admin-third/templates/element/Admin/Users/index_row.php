@@ -22,6 +22,7 @@ use BaserCore\View\AppView;
 <tr>
     <td class="bca-table-listup__tbody-td"><?php echo $user->id ?></td>
     <td class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($user->name, ['action' => 'edit', $user->id], ['escape' => true]) ?></td>
+    <td class="bca-table-listup__tbody-td"><?php echo h($user->email) ?></td>
     <td class="bca-table-listup__tbody-td"><?php echo h($user->nickname) ?></td>
     <td class="bca-table-listup__tbody-td">
         <?php if (!empty($user->user_groups)): ?>
