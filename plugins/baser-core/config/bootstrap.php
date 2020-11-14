@@ -20,4 +20,7 @@ Configure::load('BaserCore.setting', 'baser');
 // DebugKit が重すぎるので削除
 Plugin::getCollection()->remove('DebugKit');
 
+/**
+ * デフォルトバリデーションプロバイダー
+ */
 Validator::addDefaultProvider('bc', 'BaserCore\Model\Validation\BcValidation');

@@ -73,11 +73,18 @@ class UsersTable extends Table
             ->scalar('name')
             ->maxLength('name', 255, __d('baser', 'アカウント名は255文字以内で入力してください。'))
             ->notEmptyString('name', __d('baser', 'アカウント名を入力してください。'))
-            ->add('name', 'duplicate', [
-                'rule' => 'duplicate',
-                'message' => __d('baser', '既に登録のあるアカウント名です。'),
-                'provider' => 'bc'
-            ]);
+            ->add('name', [
+                'nameUnique' => [
+                    'rule' => 'validateUnique',
+                    'provider' => 'table',
+                    'message' => __d('baser', '既に登録のあるアカウント名です。'),
+            ]])
+            ->add('name', [
+                'nameAlphaNumericPlus' => [
+                    'rule' => ['alphaNumericPlus'],
+                    'provider' => 'bc',
+                    'message' => __d('baser', 'アカウント名は半角英数字とハイフン、アンダースコアのみで入力してください。'),
+            ]]);
         $validator
             ->scalar('password')
             ->maxLength('password', 255)
