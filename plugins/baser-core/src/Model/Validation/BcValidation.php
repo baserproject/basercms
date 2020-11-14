@@ -27,7 +27,7 @@ class BcValidation extends Validation {
      * @param array $options 他に許容する文字列
      * @return boolean
      */
-	public function alphaNumericPlus($value, $context = []) {
+	public static function alphaNumericPlus($value, $context = []) {
 		if (!$value) {
 			return true;
 		}
@@ -46,6 +46,35 @@ class BcValidation extends Validation {
 		} else {
 			return false;
 		}
+	}
+
+    /**
+     * ２つのフィールド値を確認する
+     *
+     * @param	array	$check 対象となる値
+     * @param	mixed	$fields フィールド名
+     * @return	boolean
+     */
+	public static function confirm($value, $fields, $context) {
+		$value1 = $value2 = '';
+		if (is_array($fields) && count($fields) > 1) {
+			if (isset($context['data'][$fields[0]]) &&
+				isset($context['data'][$fields[1]])) {
+				$value1 = $context['data'][$fields[0]];
+				$value2 = $context['data'][$fields[1]];
+			}
+		} elseif ($fields) {
+			if (isset($value) && isset($context['data'][$fields])) {
+				$value1 = $value;
+				$value2 = $context['data'][$fields];
+			}
+		} else {
+			return false;
+		}
+		if ($value1 != $value2) {
+			return false;
+		}
+		return true;
 	}
 
 }

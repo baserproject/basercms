@@ -11,8 +11,10 @@
 
 namespace BaserCore\Model\Table;
 
+use ArrayObject;
 use BaserCore\Model\Entity\User;
 use Cake\Datasource\EntityInterface;
+use Cake\Event\Event;
 use Cake\ORM\Association\BelongsTo;
 use Cake\ORM\Behavior\TimestampBehavior;
 use Cake\ORM\Query;
@@ -59,6 +61,19 @@ class UsersTable extends Table
     }
 
     /**
+     * Before Marshal
+     *
+     * @param Event $event
+     * @param ArrayObject $data
+     * @param ArrayObject $options
+     */
+    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options) {
+        if (!empty($data['password_1']) || !empty($data['password_2'])) {
+            $data['password'] = $data['password_1'];
+        }
+    }
+
+    /**
      * Validation Default
      *
      * @param Validator $validator
@@ -77,32 +92,44 @@ class UsersTable extends Table
                 'nameUnique' => [
                     'rule' => 'validateUnique',
                     'provider' => 'table',
-                    'message' => __d('baser', '既に登録のあるアカウント名です。'),
+                    'message' => __d('baser', '既に登録のあるアカウント名です。')
             ]])
             ->add('name', [
                 'nameAlphaNumericPlus' => [
                     'rule' => ['alphaNumericPlus'],
                     'provider' => 'bc',
-                    'message' => __d('baser', 'アカウント名は半角英数字とハイフン、アンダースコアのみで入力してください。'),
+                    'message' => __d('baser', 'アカウント名は半角英数字とハイフン、アンダースコアのみで入力してください。')
             ]]);
         $validator
-            ->scalar('password')
-            ->maxLength('password', 255)
-            ->notEmptyString('password');
-        $validator
             ->scalar('real_name_1')
-            ->maxLength('real_name_1', 50)
-            ->notEmptyString('real_name_1');
+            ->maxLength('real_name_1', 50, __d('baser', '名前[姓]は50文字以内で入力してください。'))
+            ->notEmptyString('real_name_1', __d('baser', '名前[姓]を入力してください。'));
         $validator
             ->scalar('real_name_2')
-            ->maxLength('real_name_2', 50)
+            ->maxLength('real_name_2', 50, __d('baser', '名前[名]は50文字以内で入力してください。'))
             ->allowEmptyString('real_name_2');
+        $validator
+            ->scalar('password')
+            ->minLength('password', 6, __d('baser', 'パスワードは6文字以上で入力してください。'))
+            ->maxLength('password', 255, __d('baser', 'パスワードは255文字以内で入力してください。'))
+            ->add('password', [
+                'passwordAlphaNumericPlus' => [
+                    'rule' => ['alphaNumericPlus', ' \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*'],
+                    'provider' => 'bc',
+                    'message' => __d('baser', 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。')
+            ]])
+            ->add('password', [
+                'passwordConfirm' => [
+                    'rule' => ['confirm', ['password_1', 'password_2']],
+                    'provider' => 'bc',
+                    'message' => __d('baser', __d('baser', 'パスワードが同じものではありません。'))
+            ]]);
         $validator
             ->email('email')
             ->notEmptyString('email');
         $validator
             ->scalar('nickname')
-            ->maxLength('nickname', 255)
+            ->maxLength('nickname', 255, __d('baser', 'ニックネームは255文字以内で入力してください。'))
             ->allowEmptyString('nickname');
         return $validator;
     }
