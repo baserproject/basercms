@@ -78,9 +78,11 @@ class UserGroupsController extends BcAdminAppController
      */
     public function index()
     {
-        $this->setViewConditions('UserGroup', ['default' => ['query' => ['num' => $this->siteConfigs['admin_list_num']]]]);
+        $this->setViewConditions('UserGroup', ['default' => ['query' => [
+            'num' => $this->siteConfigs['admin_list_num'],
+            'UserGroups.id' => 'ASC',
+        ]]]);
         $this->paginate = [
-            'order' => ['UserGroups.id'],
             'limit' => $this->request->getQuery('num'),
         ];
         $query = $this->UserGroups->find('all', $this->paginate);

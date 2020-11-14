@@ -81,9 +81,11 @@ class UsersController extends BcAdminAppController
 	 */
     public function index(): void
     {
-        $this->setViewConditions('User', ['default' => ['query' => ['num' => $this->siteConfigs['admin_list_num']]]]);
+        $this->setViewConditions('User', ['default' => ['query' => [
+            'num' => $this->siteConfigs['admin_list_num'],
+            'Users.id' => 'ASC',
+        ]]]);
         $this->paginate = [
-            'order' => ['Users.id'],
             'limit' => $this->request->getQuery('num'),
             'contain' => ['UserGroups']
         ];
@@ -113,8 +115,6 @@ class UsersController extends BcAdminAppController
      */
     public function login()
     {
-        var_dump($this->Authentication->getLoginRedirect());
-        exit;
         $this->set('title', '管理システムログイン');
         $result = $this->Authentication->getResult();
         if ($result->isValid()) {
