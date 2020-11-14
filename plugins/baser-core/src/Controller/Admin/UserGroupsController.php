@@ -51,8 +51,8 @@ class UserGroupsController extends BcAdminAppController
     {
         // TODO 取り急ぎ動作させるためのコード
         // >>>
-        $this->siteConfigs['admin_list_num'] = 20;
-        // $this->request = $this->request->withParam('pass', ['num' => 20]);
+        $this->siteConfigs['admin_list_num'] = 30;
+        // $this->request = $this->request->withParam('pass', ['num' => 30]);
         // <<<
 
     }
