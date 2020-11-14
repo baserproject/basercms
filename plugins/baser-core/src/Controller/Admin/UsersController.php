@@ -238,11 +238,6 @@ class UsersController extends BcAdminAppController
 
             $user = $this->Users->patchEntity($user, $this->request->getData());
 
-            // パスワードがない場合は更新しない
-            if ($this->request->getData('password_1') || $this->request->getData('password_2')) {
-                $user->password = $this->request->getData('password_1');
-            }
-
             // 権限確認
             if (!$updatable) {
                 $this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));

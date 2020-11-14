@@ -109,6 +109,23 @@ class UsersTable extends Table
             ->maxLength('real_name_2', 50, __d('baser', '名前[名]は50文字以内で入力してください。'))
             ->allowEmptyString('real_name_2');
         $validator
+            ->scalar('nickname')
+            ->maxLength('nickname', 255, __d('baser', 'ニックネームは255文字以内で入力してください。'))
+            ->allowEmptyString('nickname');
+        $validator
+            ->add('user_groups', [
+                'userGroupsNotEmptyMultiple' => [
+                    'rule' => 'notEmptyMultiple',
+                    'provider' => 'bc',
+                    'message' => __d('baser', 'グループを選択してください。')
+                ]
+            ]);
+        $validator
+            ->scalar('email')
+            ->email('email', true, __d('baser', 'Eメールの形式が不正です。'))
+            ->maxLength('email', 255, __d('baser', 'Eメールは255文字以内で入力してください。'))
+            ->notEmptyString('email', __d('baser', 'Eメールを入力してください。'));
+        $validator
             ->scalar('password')
             ->minLength('password', 6, __d('baser', 'パスワードは6文字以上で入力してください。'))
             ->maxLength('password', 255, __d('baser', 'パスワードは255文字以内で入力してください。'))
@@ -124,13 +141,7 @@ class UsersTable extends Table
                     'provider' => 'bc',
                     'message' => __d('baser', __d('baser', 'パスワードが同じものではありません。'))
             ]]);
-        $validator
-            ->email('email')
-            ->notEmptyString('email');
-        $validator
-            ->scalar('nickname')
-            ->maxLength('nickname', 255, __d('baser', 'ニックネームは255文字以内で入力してください。'))
-            ->allowEmptyString('nickname');
+
         return $validator;
     }
 

@@ -77,4 +77,25 @@ class BcValidation extends Validation {
 		return true;
 	}
 
+    /**
+     * HABTM 用マルチチェックボックスの未選択チェック
+     * @param mixed $value
+     * @param array $context
+     * @return bool
+     */
+    public static function notEmptyMultiple($value, $context) {
+        if(isset($value['_ids'])) {
+            $value = $value['_ids'];
+        }
+        if(!is_array($value)) {
+            return false;
+        }
+        foreach($value as $v) {
+            if($v) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
