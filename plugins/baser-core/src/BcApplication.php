@@ -124,33 +124,38 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
      */
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
     {
-        $prefix = $request->getParam('prefix');
-        $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
         $service = new AuthenticationService();
-        $service->setConfig([
-            'unauthenticatedRedirect' => $authSetting['loginAction'],
-            'queryParam' => 'redirect',
-        ]);
+        $prefix = $request->getParam('prefix');
 
-        $fields = [
-            'username' => $authSetting['username'],
-            'password' => $authSetting['password']
-        ];
+        if($prefix) {
+            $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
+            $service->setConfig([
+                'unauthenticatedRedirect' => $authSetting['loginAction'],
+                'queryParam' => 'redirect',
+            ]);
 
-        $service->loadAuthenticator('Authentication.Session', [
-            'sessionKey' => $authSetting['sessionKey'],
-        ]);
-        $service->loadAuthenticator('Authentication.' . $authSetting['type'], [
-            'fields' => $fields,
-            'loginUrl' => $authSetting['loginAction'],
-        ]);
-        $service->loadIdentifier('Authentication.Password', [
-            'fields' => $fields,
-            'resolver' => [
-                'className' => 'Authentication.Orm',
-                'userModel' => $authSetting['userModel']
-            ],
-        ]);
+            $fields = [
+                'username' => $authSetting['username'],
+                'password' => $authSetting['password']
+            ];
+
+            $service->loadAuthenticator('Authentication.Session', [
+                'sessionKey' => $authSetting['sessionKey'],
+            ]);
+            $service->loadAuthenticator('Authentication.' . $authSetting['type'], [
+                'fields' => $fields,
+                'loginUrl' => $authSetting['loginAction'],
+            ]);
+            $service->loadIdentifier('Authentication.Password', [
+                'fields' => $fields,
+                'resolver' => [
+                    'className' => 'Authentication.Orm',
+                    'userModel' => $authSetting['userModel']
+                ],
+            ]);
+        } else {
+            $service->loadAuthenticator('Authentication.Form');
+        }
 
         return $service;
     }
