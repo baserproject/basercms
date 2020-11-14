@@ -211,7 +211,7 @@ class UsersTable extends Table
 		if (isset($controlSources[$field])) {
 			return $controlSources[$field];
 		} else {
-			return [];
+			return null;
 		}
 	}
 
