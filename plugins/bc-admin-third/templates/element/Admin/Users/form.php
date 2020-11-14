@@ -116,8 +116,8 @@ $this->BcBaser->js('admin/users/edit', false);
                 <?php if ($this->request->getParam('action') == 'edit'): ?><small>[<?php echo __d('baser', 'パスワードは変更する場合のみ入力してください') ?>]</small><br /><?php endif ?>
                 <!-- ↓↓↓自動入力を防止する為のダミーフィールド↓↓↓ -->
                 <input type="password" name="dummy-pass" style="top:-100px;left:-100px;position:fixed;">
-                <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => 20, 'maxlength' => 255]) ?>
-                <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255]) ?>
+                <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'error' => false]) ?>
+                <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'error' => false]) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
                 <?php echo $this->BcAdminForm->error('password') ?>
                 <div id="helptextPassword" class="helptext">

@@ -156,8 +156,8 @@ class UsersController extends BcAdminAppController
     {
         $user = $this->Users->newEmptyEntity();
         if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            $user->password = $this->request->getData('password_1');
+            $this->request = $this->request->withData('password', $this->request->getData('password_1'));
+            $user = $this->Users->patchEntity($user, $this->request->getData(), ['validate' => 'new']);
             if ($this->Users->save($user)) {
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を追加しました。', $user->name));
                 return $this->redirect(['action' => 'edit', $user->id]);

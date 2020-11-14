@@ -17,6 +17,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\ORM\Association\BelongsTo;
 use Cake\ORM\Behavior\TimestampBehavior;
+use Cake\ORM\Entity;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -67,10 +68,27 @@ class UsersTable extends Table
      * @param ArrayObject $data
      * @param ArrayObject $options
      */
-    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options) {
+    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
+    {
         if (!empty($data['password_1']) || !empty($data['password_2'])) {
             $data['password'] = $data['password_1'];
         }
+    }
+
+    /**
+     * After Marshal
+     *
+     * @param Event $event
+     * @param User $user
+     * @param ArrayObject $data
+     * @param ArrayObject $options
+     */
+    public function afterMarshal(Event $event, User $user, ArrayObject $data, ArrayObject $options)
+    {
+		if ($user->getError('password')) {
+		    $user->setError('password_1', '');
+		    $user->setError('password_2', '');
+		}
     }
 
     /**
@@ -146,6 +164,18 @@ class UsersTable extends Table
     }
 
     /**
+     * Validation New
+     * @param Validator $validator
+     * @return Validator
+     */
+    public function validationNew(Validator $validator): Validator
+    {
+        $this->validationDefault($validator)
+            ->notEmptyString('password', __d('baser', 'パスワードを入力してください。'));
+        return $validator;
+    }
+
+    /**
      * Build Rules
      *
      * @param RulesChecker $rules
@@ -188,6 +218,12 @@ class UsersTable extends Table
 		}
 	}
 
+    /**
+     * Where 条件を作成する
+     * @param $query
+     * @param $request
+     * @return Query
+     */
 	public function createWhere($query, $request): Query
     {
         $get = $request->getQuery();
