@@ -98,4 +98,27 @@ class BcValidation extends Validation {
         return false;
     }
 
+/**
+ * 半角チェック
+ *
+ * @param array $check 確認する値を含む配列。先頭の要素のみチェックされる
+ * @return boolean
+ */
+    public static function halfText($check)
+    {
+
+        if (is_array($check)) {
+            // TODO: 引数が配列になることがあるかどうか不明
+            $value = $check[key($check)];
+        } else {
+            $value = $check;
+        }
+        $len = strlen($value);
+        $mblen = mb_strlen($value, 'UTF-8');
+        if ($len != $mblen) {
+            return false;
+        }
+        return true;
+    }
+
 }

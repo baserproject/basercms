@@ -37,6 +37,7 @@ class BcAdminFormHelper extends BcFormHelper
             $options = array_replace_recursive([
                 'label' => false,
                 'legend' => false,
+                'error' => false,
                 'templateVars' => ['tag' => 'span', 'groupTag' => 'span']
             ], $options);
             $class = 'bca-hidden__input';
