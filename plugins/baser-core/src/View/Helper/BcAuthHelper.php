@@ -60,7 +60,7 @@ class BcAuthHelper extends Helper {
      * 現在の認証プレフィックスのログインURLを取得
      * @return string
      */
-    public function getCurrentLoginUrl(): strings
+    public function getCurrentLoginUrl(): string
     {
         return $this->getCurrentPrefixSetting()['loginAction'];
     }
