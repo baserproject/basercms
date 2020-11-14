@@ -238,4 +238,17 @@ class UsersTable extends Table
         return $query;
     }
 
+    /**
+     * ログイン時のユーザデータを取得する
+     *
+     * @param [type] $id
+     * @return User
+     */
+    public function getLoginData($id): User
+    {
+        return $this->get($id, [
+            'contain' => ['UserGroups'],
+        ]);
+    }
+
 }

@@ -30,6 +30,20 @@ use Cake\ORM\Entity as EntityAlias;
  */
 class User extends EntityAlias
 {
+
+    /**
+     * 初期化
+     *
+     * @param array $config
+     * @return void
+     */
+    public function initialize(array $config)
+    {
+        $this->hasMany('UserGroup', [
+            'className' => 'UserGroup'
+        ]);
+    }
+
     /**
      * Accessible
      *
@@ -63,6 +77,6 @@ class User extends EntityAlias
         } else {
             return false;
         }
-	}
+    }
 
 }

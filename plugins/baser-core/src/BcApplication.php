@@ -132,6 +132,7 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
             $service->setConfig([
                 'unauthenticatedRedirect' => $authSetting['loginAction'],
                 'queryParam' => 'redirect',
+                'contain' => 'UserGroups',
             ]);
 
             $fields = [
@@ -152,6 +153,7 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
                     'className' => 'Authentication.Orm',
                     'userModel' => $authSetting['userModel']
                 ],
+                'contain' => 'UserGroups',
             ]);
         } else {
             $service->loadAuthenticator('Authentication.Form');

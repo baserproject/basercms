@@ -24,12 +24,12 @@ $authName = $this->BcAuth->getCurrentName();
 $logoLinkSettings = [
     'install' => [
         'text' => __d('baser', 'インストールマニュアル'),
-        'link' => 'https://basercms.net/manuals/introductions/4.html',
+        'link' => Configure::read('BcApp.installManual'),
         'options' => ['target' => '_blank', 'class' => 'bca-toolbar__logo-link']
     ],
     'update' => [
         'text' => __d('baser', 'アップデートマニュアル'),
-        'link' => 'https://basercms.net/manuals/introductions/8.html',
+        'link' => Configure::read('BcApp.updateManual'),
         'options' => ['target' => '_blank', 'class' => 'bca-toolbar__logo-link']
     ],
     'normal' => [
@@ -110,6 +110,7 @@ if($loginUser) {
 
 <div id="ToolBar" class="bca-toolbar">
     <div id="ToolbarInner" class="clearfix bca-toolbar__body">
+
         <div class="bca-toolbar__logo">
             <?php $this->BcBaser->link(
                 $logo . '<span class="bca-toolbar__logo-text">' . $logoLinkSettings[$logoLinkKey]['text'] . '</span>',
@@ -117,50 +118,57 @@ if($loginUser) {
                 $logoLinkSettings[$logoLinkKey]['options']
             ) ?>
         </div>
+
         <div id="ToolMenu" class="bca-toolbar__tools">
-<?php if ($this->BcBaser->existsEditLink() && !isset($this->request->getQuery['preview'])): ?>
-            <div class="bca-toolbar__tools-button bca-toolbar__tools-button-edit">
-                <?php $this->BcBaser->editLink() ?>
-            </div>
-<?php endif ?>
-<?php if ($this->BcBaser->existsPublishLink()): ?>
-            <div class="bca-toolbar__tools-button bca-toolbar__tools-button-publish">
-                <?php $this->BcBaser->publishLink() ?>
-            </div>
-<?php endif ?>
-<?php if ($modeLabelKey): ?>
-            <div class="bca-toolbar__tools-mode">
-                <span id="DebugMode" class="bca-debug-mode" title="<?php echo $modeLabelSettings[$modeLabelKey]['description'] ?>">
-                    <?php echo $modeLabelSettings[$modeLabelKey]['title'] ?>
-                </span>
-            </div>
-<?php endif ?>
+            <?php if ($this->BcBaser->existsEditLink() && !isset($this->request->getQuery['preview'])): ?>
+                <div class="bca-toolbar__tools-button bca-toolbar__tools-button-edit">
+                    <?php $this->BcBaser->editLink() ?>
+                </div>
+            <?php endif ?>
+            <?php if ($this->BcBaser->existsPublishLink()): ?>
+                <div class="bca-toolbar__tools-button bca-toolbar__tools-button-publish">
+                    <?php $this->BcBaser->publishLink() ?>
+                </div>
+            <?php endif ?>
+            <?php if ($modeLabelKey): ?>
+                <div class="bca-toolbar__tools-mode">
+                    <span id="DebugMode" class="bca-debug-mode" title="<?php echo h($modeLabelSettings[$modeLabelKey]['description']) ?>">
+                        <?php echo h($modeLabelSettings[$modeLabelKey]['title']) ?>
+                    </span>
+                </div>
+            <?php endif ?>
         </div>
+
         <div id="UserMenu" class="bca-toolbar__users">
             <ul class="clearfix">
                 <li>
-<?php if ($this->BcAuth->isAdminLogin()): ?>
-                    <?php $this->BcBaser->link(h($this->BcBaser->getUserName($loginUser)) . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title', 'escapeTitle' => false]) ?>
-                    <ul>
-    <?php if ($session->check('AuthAgent')): ?>
-                        <li><?php $this->BcBaser->link(__d('baser', '元のユーザーに戻る'), ['admin' => false, 'controller' => 'users', 'action' => 'back_agent']) ?></li>
-    <?php endif ?>
-    <?php if ($isCurrentUserAdminAvailable || !$isFront): ?>
-                        <li><?php $this->BcBaser->link(__d('baser', 'アカウント設定'), $accountEditUrl) ?></li>
-    <?php endif ?>
-                        <li><?php $this->BcBaser->link(__d('baser', 'ログアウト'), $this->BcAuth->getCurrentLogoutUrl()) ?></li>
-                    </ul>
-<?php elseif ($this->name !== 'Installations' && !$isLoginUrl && !Configure::read('BcRequest.isUpdater')): ?>
-                    <?php $this->BcBaser->link(__d('baser', 'ログインしていません ') . $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title', 'escapeTitle' => false]) ?>
-                    <ul>
-                        <li><?php $this->BcBaser->link(__d('baser', 'ログイン'), $loginUrl) ?></li>
-                    </ul>
-<?php endif ?>
+                    <?php if ($this->BcAuth->isAdminLogin()): ?>
+                        <?php $this->BcBaser->link(h($this->BcBaser->getUserName($loginUser)) . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title', 'escapeTitle' => false]) ?>
+                        <ul>
+                            <?php if ($this->BcAuth->isAgentUser()): ?>
+                                <li><?php $this->BcBaser->link(__d('baser', '元のユーザーに戻る'), ['admin' => false, 'controller' => 'users', 'action' => 'back_agent']) ?></li>
+                            <?php endif ?>
+
+                            <?php if ($isCurrentUserAdminAvailable || !$isFront): ?>
+                                <li><?php $this->BcBaser->link(__d('baser', 'アカウント設定'), $accountEditUrl) ?></li>
+                            <?php endif ?>
+
+                            <li><?php $this->BcBaser->link(__d('baser', 'ログアウト'), $this->BcAuth->getCurrentLogoutUrl()) ?></li>
+                        </ul>
+
+                    <?php elseif ($this->name !== 'Installations' && !$isLoginUrl && !Configure::read('BcRequest.isUpdater')): ?>
+                        <?php $this->BcBaser->link(__d('baser', 'ログインしていません ') . $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title', 'escapeTitle' => false]) ?>
+                        <ul>
+                            <li><?php $this->BcBaser->link(__d('baser', 'ログイン'), $loginUrl) ?></li>
+                        </ul>
+                    <?php endif ?>
                 </li>
-<?php if ($this->BcAuth->isAdminLogin() && $isCurrentUserAdminAvailable): ?>
-                <li><?php $this->BcBaser->link(__d('baser', 'キャッシュクリア'), ['admin' => true, 'controller' => 'Utilities', 'action' => 'clear_cache'], ['confirm' => __d('baser', 'キャッシュクリアします。いいですか？')]) ?></li>
-<?php endif ?>
+
+                <?php if ($this->BcAuth->isAdminLogin() && $isCurrentUserAdminAvailable): ?>
+                    <li><?php $this->BcBaser->link(__d('baser', 'キャッシュクリア'), ['admin' => true, 'controller' => 'Utilities', 'action' => 'clear_cache'], ['confirm' => __d('baser', 'キャッシュクリアします。いいですか？')]) ?></li>
+                <?php endif ?>
             </ul>
         </div>
+
     </div>
 </div>
