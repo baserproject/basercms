@@ -17,6 +17,8 @@ use Cake\Validation\Validator;
 
 /**
  * BaserCore\Model\Table\UsersTable Test Case
+ *
+ * @property UsersTable $Users
  */
 class UsersTableTest extends BcTestCase
 {
@@ -35,6 +37,7 @@ class UsersTableTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.Users',
+        'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
     ];
 
@@ -134,6 +137,43 @@ class UsersTableTest extends BcTestCase
     public function testGetNew()
     {
         $this->assertEquals(1, $this->Users->getNew()->user_groups[0]->id);
+    }
+
+    /**
+     * Test getControlSource
+     */
+    public function testGetControlSource() {
+        $list = $this->Users->getControlSource('user_group_id')->toList();
+        $this->assertEquals('システム管理', $list[0]);
+    }
+
+    /**
+     * Test createWhere
+     *
+     * @dataProvider createWhereDataProvider
+     */
+    public function testCreateWhere($userGroupId, $expected)
+    {
+        $request = $this->getRequest('/?user_group_id=' . $userGroupId);
+        $query = $this->Users->createWhere($this->Users->find(), $request);
+        $this->assertEquals($expected, $query->count());
+    }
+
+    public function createWhereDataProvider()
+    {
+        return [
+            [1, 1],
+            [2, 0]
+        ];
+    }
+
+    /**
+     * Test getLoginFormatData
+     */
+    public function testGetLoginFormatData()
+    {
+        $user = $this->Users->getLoginFormatData(1)->toArray();
+        $this->assertEquals(1, $user['user_groups'][0]['id']);
     }
 
 }

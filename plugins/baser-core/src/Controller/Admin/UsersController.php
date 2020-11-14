@@ -122,7 +122,7 @@ class UsersController extends BcAdminAppController
             $user = $result->getData();
 
             // グループ情報等データセットを付与
-            $user = $this->Users->getLoginData($user->id);
+            $user = $this->Users->getLoginFormatData($user->id);
             $this->Authentication->setIdentity($user);
 
             $this->BcMessage->setInfo(__d('baser', 'ようこそ、' . $user->name . 'さん。'));
@@ -357,7 +357,7 @@ class UsersController extends BcAdminAppController
         }
 
         // 対象ユーザデータ取得
-        $agentUser = $this->Users->getLoginData($id);
+        $agentUser = $this->Users->getLoginFormatData($id);
         $this->Authentication->setIdentity($agentUser);
         $session->write('AuthAgent.User', $user);
         $session->write('AuthAgent.referer', $this->referer());

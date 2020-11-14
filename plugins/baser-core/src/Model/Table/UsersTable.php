@@ -197,9 +197,9 @@ class UsersTable extends Table
      *
      * @param string $field フィールド名
      * @param array $options オプション
-     * @return array コントロールソース
+     * @return Query コントロールソース
      */
-	public function getControlSource($field, $options) {
+	public function getControlSource($field, $options = []) {
 		switch ($field) {
 			case 'user_group_id':
 				$controlSources['user_group_id'] = $this->UserGroups->find('list', [
@@ -238,7 +238,7 @@ class UsersTable extends Table
      * @param [type] $id
      * @return User
      */
-    public function getLoginData($id): User
+    public function getLoginFormatData($id): User
     {
         return $this->get($id, [
             'contain' => ['UserGroups'],
