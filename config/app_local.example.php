@@ -89,4 +89,16 @@ return [
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
         ],
     ],
+
+    /**
+     * セッション
+     */
+    'Session' => [
+        'defaults' => 'php',
+        /**
+         * セッションの有効期限（分）
+         * デフォルト：2日間
+         */
+        'timeout' => 60 * 24 * 2
+    ],
 ];
