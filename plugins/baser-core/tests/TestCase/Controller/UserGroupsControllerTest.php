@@ -72,7 +72,7 @@ class UserGroupsControllerTest extends TestCase
      */
     public function testIndex_pagination()
     {
-        $this->get('/baser/admin/user_groups/?page=2');
+        $this->get('/baser/admin/user_groups/?num=1&page=21');
         $this->assertResponseOk();
     }
 
