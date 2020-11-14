@@ -54,7 +54,7 @@ CakePHPのプラグインとしての開発を前提とし、plugins 配下内�
 ### リクエストの取得
 ```php
 $this->getRequest();    // Controller / View
-Router::getRquest();    // Other
+Router::getRequest();    // Other
 ```
 　
 
