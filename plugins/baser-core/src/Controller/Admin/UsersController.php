@@ -83,7 +83,8 @@ class UsersController extends BcAdminAppController
     {
         $this->setViewConditions('User', ['default' => ['query' => [
             'num' => $this->siteConfigs['admin_list_num'],
-            'Users.id' => 'ASC',
+            'sort' => 'id',
+            'direction' => 'asc',
         ]]]);
         $this->paginate = [
             'limit' => $this->request->getQuery('num'),
