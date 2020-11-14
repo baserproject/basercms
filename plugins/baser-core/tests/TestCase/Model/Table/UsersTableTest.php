@@ -12,12 +12,15 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\UsersTable;
-use Cake\TestSuite\TestCase;
+use BaserCore\TestSuite\BcTestCase;
+use Cake\Validation\Validator;
 
 /**
  * BaserCore\Model\Table\UsersTable Test Case
+ *
+ * @property UsersTable $Users
  */
-class UsersTableTest extends TestCase
+class UsersTableTest extends BcTestCase
 {
 
     /**
@@ -33,11 +36,13 @@ class UsersTableTest extends TestCase
      * @var array
      */
     protected $fixtures = [
-        'plugin.BaserCore.Users'
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.UserGroups',
     ];
 
     /**
-     * setUp method
+     * Set Up
      *
      * @return void
      */
@@ -49,7 +54,7 @@ class UsersTableTest extends TestCase
     }
 
     /**
-     * tearDown method
+     * Tear Down
      *
      * @return void
      */
@@ -60,7 +65,7 @@ class UsersTableTest extends TestCase
     }
 
     /**
-     * Test initialize method
+     * Test initialize
      *
      * @return void
      */
@@ -74,22 +79,101 @@ class UsersTableTest extends TestCase
     }
 
     /**
-     * Test validationDefault method
+     * Test beforeMarshal
+     */
+    public function testBeforeMarshal()
+    {
+        $user = $this->Users->newEntity([
+            'password_1' => 'testtest'
+        ]);
+        $this->assertNotEmpty($user->password);
+    }
+
+    /**
+     * Test afterMarshal
+     */
+    public function testAfterMarshal()
+    {
+        $user = $this->Users->newEntity([
+            'password' => ''
+        ]);
+        $this->assertEquals($user->getError('password_1'), [0 => '']);
+        $this->assertEquals($user->getError('password_2'), [0 => '']);
+    }
+
+    /**
+     * Test validationDefault
      *
      * @return void
      */
     public function testValidationDefault()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $validator = $this->Users->validationDefault(new Validator());
+        $fields = [];
+        foreach($validator->getIterator() as $key => $value) {
+            $fields[] = $key;
+        }
+        $this->assertEquals(['id', 'name', 'real_name_1', 'real_name_2', 'nickname', 'user_groups', 'email', 'password'], $fields);
     }
 
     /**
-     * Test buildRules method
+     * Test validationNew
      *
      * @return void
      */
-    public function testBuildRules()
+    public function testValidationNew()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $user = $this->Users->newEntity([
+            'password' => '',
+            'password_1' => '',
+            'password_2' => ''
+        ], ['validate' => 'new']);
+        $this->assertEquals($user->getError('password')['_empty'], __d('baser', 'パスワードを入力してください。'));
     }
+
+    /**
+     * Test getNew
+     */
+    public function testGetNew()
+    {
+        $this->assertEquals(1, $this->Users->getNew()->user_groups[0]->id);
+    }
+
+    /**
+     * Test getControlSource
+     */
+    public function testGetControlSource() {
+        $list = $this->Users->getControlSource('user_group_id')->toList();
+        $this->assertEquals('システム管理', $list[0]);
+    }
+
+    /**
+     * Test createWhere
+     *
+     * @dataProvider createWhereDataProvider
+     */
+    public function testCreateWhere($userGroupId, $expected)
+    {
+        $request = $this->getRequest('/?user_group_id=' . $userGroupId);
+        $query = $this->Users->createWhere($this->Users->find(), $request);
+        $this->assertEquals($expected, $query->count());
+    }
+
+    public function createWhereDataProvider()
+    {
+        return [
+            [1, 1],
+            [2, 0]
+        ];
+    }
+
+    /**
+     * Test getLoginFormatData
+     */
+    public function testGetLoginFormatData()
+    {
+        $user = $this->Users->getLoginFormatData(1)->toArray();
+        $this->assertEquals(1, $user['user_groups'][0]['id']);
+    }
+
 }

@@ -4,12 +4,12 @@
     <a href="LICENSE" target="_blank">
         <img alt="Software License" src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square">
     </a>
-    <a href="https://travis-ci.org/baserproject/basercms" target="_blank">
+    <a href="https://travis-ci.org/baserproject/ucmitz" target="_blank">
         <img alt="Build Status" src="https://travis-ci.org/baserproject/ucmitz.svg?branch=dev">
     </a>
 </p>
 
-ucmitz は、baserCMSをCakePHP4化するためのプロジェクトの開発コードです。
+ucmitz 🐮🐮🐮 は、baserCMSをCakePHP4化するためのプロジェクトの開発コードです。
 BaserApp を親パッケージとして、BaserCore、BcAdminThirdは、子パッケージとしてモノレポで管理します。
 - [BaserApp ソースコード / baserproject/basercms:dev-5-cake3](https://github.com/baserproject/ucmitz/tree/dev)
 baserCMSのアプリケーションフレームを提供

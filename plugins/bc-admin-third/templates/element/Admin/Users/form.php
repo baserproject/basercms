@@ -52,7 +52,7 @@ $this->BcBaser->js('admin/users/edit', false);
         <tr>
             <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('name', __d('baser', 'アカウント名')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
             <td class="col-input bca-form-table__input">
-                <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 20, 'maxlength' => 255, 'autofocus' => true, 'error' => false]) ?>
+                <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 20, 'maxlength' => 255, 'autofocus' => true]) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
                 <?php echo $this->BcAdminForm->error('name') ?>
                 <div id="helptextName" class="helptext"><?php echo __d('baser', '半角英数字とハイフン、アンダースコアのみで入力してください。') ?></div>
@@ -61,8 +61,8 @@ $this->BcBaser->js('admin/users/edit', false);
         <tr>
             <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('real_name_1', __d('baser', '名前')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
             <td class="col-input bca-form-table__input">
-                <small>[<?php echo __d('baser', '姓') ?>]</small> <?php echo $this->BcAdminForm->control('real_name_1', ['type' => 'text', 'size' => 12, 'maxlength' => 255, 'error' => false]) ?>
-                <small>[<?php echo __d('baser', '名') ?>]</small> <?php echo $this->BcAdminForm->control('real_name_2', ['type' => 'text', 'size' => 12, 'maxlength' => 255, 'error' => false]) ?>
+                <small>[<?php echo __d('baser', '姓') ?>]</small> <?php echo $this->BcAdminForm->control('real_name_1', ['type' => 'text', 'size' => 12, 'maxlength' => 255]) ?>
+                <small>[<?php echo __d('baser', '名') ?>]</small> <?php echo $this->BcAdminForm->control('real_name_2', ['type' => 'text', 'size' => 12, 'maxlength' => 255]) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
                 <?php echo $this->BcAdminForm->error('real_name_1', __d('baser', '姓を入力してください')) ?>
                 <?php echo $this->BcAdminForm->error('real_name_2', __d('baser', '名を入力してください')) ?>
@@ -96,7 +96,7 @@ $this->BcBaser->js('admin/users/edit', false);
             <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('email', __d('baser', 'Eメール')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
             <td class="col-input bca-form-table__input">
                 <input type="text" name="dummy-email" style="top:-100px;left:-100px;position:fixed;">
-                <?php echo $this->BcAdminForm->control('email', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'error' => false]) ?>
+                <?php echo $this->BcAdminForm->control('email', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
                 <?php echo $this->BcAdminForm->error('email') ?>
                 <div id="helptextEmail" class="helptext">
@@ -116,8 +116,8 @@ $this->BcBaser->js('admin/users/edit', false);
                 <?php if ($this->request->getParam('action') == 'edit'): ?><small>[<?php echo __d('baser', 'パスワードは変更する場合のみ入力してください') ?>]</small><br /><?php endif ?>
                 <!-- ↓↓↓自動入力を防止する為のダミーフィールド↓↓↓ -->
                 <input type="password" name="dummy-pass" style="top:-100px;left:-100px;position:fixed;">
-                <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'error' => false]) ?>
-                <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'error' => false]) ?>
+                <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => 20, 'maxlength' => 255]) ?>
+                <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255]) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
                 <?php echo $this->BcAdminForm->error('password') ?>
                 <div id="helptextPassword" class="helptext">

@@ -142,7 +142,13 @@ class UsersTable extends Table
             ->scalar('email')
             ->email('email', true, __d('baser', 'Eメールの形式が不正です。'))
             ->maxLength('email', 255, __d('baser', 'Eメールは255文字以内で入力してください。'))
-            ->notEmptyString('email', __d('baser', 'Eメールを入力してください。'));
+            ->notEmptyString('email', __d('baser', 'Eメールを入力してください。'))
+            ->add('email', [
+                'nameUnique' => [
+                    'rule' => 'validateUnique',
+                    'provider' => 'table',
+                    'message' => __d('baser', '既に登録のあるEメールです。')
+            ]]);
         $validator
             ->scalar('password')
             ->minLength('password', 6, __d('baser', 'パスワードは6文字以上で入力してください。'))
@@ -176,18 +182,6 @@ class UsersTable extends Table
     }
 
     /**
-     * Build Rules
-     *
-     * @param RulesChecker $rules
-     * @return RulesChecker
-     */
-    public function buildRules(RulesChecker $rules): RulesChecker
-    {
-        $rules->add($rules->isUnique(['email']));
-        return $rules;
-    }
-
-    /**
      * 初期化されたエンティティを取得する
      */
     public function getNew()
@@ -203,9 +197,9 @@ class UsersTable extends Table
      *
      * @param string $field フィールド名
      * @param array $options オプション
-     * @return array コントロールソース
+     * @return Query コントロールソース
      */
-	public function getControlSource($field, $options) {
+	public function getControlSource($field, $options = []) {
 		switch ($field) {
 			case 'user_group_id':
 				$controlSources['user_group_id'] = $this->UserGroups->find('list', [
@@ -217,7 +211,7 @@ class UsersTable extends Table
 		if (isset($controlSources[$field])) {
 			return $controlSources[$field];
 		} else {
-			return [];
+			return null;
 		}
 	}
 
@@ -244,7 +238,7 @@ class UsersTable extends Table
      * @param [type] $id
      * @return User
      */
-    public function getLoginData($id): User
+    public function getLoginFormatData($id): User
     {
         return $this->get($id, [
             'contain' => ['UserGroups'],
