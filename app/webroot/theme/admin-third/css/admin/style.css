@@ -9152,6 +9152,15 @@ table.cake-sql-log tr td {
 .ui-datepicker {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2) !important; }
 
+.ui-datepicker-today .ui-state-default {
+  border: none !important;
+  background: #ddd !important; }
+
+.ui-datepicker .ui-state-active {
+  border: none !important;
+  background: #9ccc65 !important;
+  color: #fff !important; }
+
 .ui-dialog th {
   padding: 1.4em 2em 1em 0 !important; }
 
