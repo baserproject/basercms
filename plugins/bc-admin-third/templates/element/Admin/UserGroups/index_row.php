@@ -37,7 +37,14 @@ use BaserCore\View\AppView;
             <?php $this->BcBaser->link('', ['controller' => 'permissions', 'action' => 'index', $userGroup->id], ['title' => __d('baser', '制限'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'permission', 'data-bca-btn-size' => 'lg']) ?>
         <?php endif ?>
         <?php $this->BcBaser->link('', ['action' => 'edit', $userGroup->id], ['title' => __d('baser', '編集'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
-        <?php //$this->BcBaser->link('', ['action' => 'ajax_copy', $userGroup->id], ['title' => __d('baser', 'コピー'), 'class' => 'btn-copy bca-btn-icon', 'data-bca-btn-type' => 'copy', 'data-bca-btn-size' => 'lg']) ?>
+        <?php echo $this->BcForm->postLink(
+            '',
+            ['action' => 'copy', $userGroup->id],
+            ['title' => __d('baser', 'コピー'),
+            'class' => 'btn-copy bca-btn-icon',
+            'data-bca-btn-type' => 'copy',
+            'data-bca-btn-size' => 'lg']
+        ) ?>
         <?php if ($userGroup->name != 'admins'): ?>
             <?= $this->BcForm->postLink(
                 '',
