@@ -215,7 +215,7 @@ class UserGroupsController extends BcAdminAppController
      * @param string|null $id User Group id.
      * @return Response|null|void Redirects to index.
      * @throws RecordNotFoundException When record not found.
-     * @throws CopyUserGroupsFailedException When copy failed.
+     * @throws CopyFailedException When copy failed.
      */
     public function copy($id = null)
     {

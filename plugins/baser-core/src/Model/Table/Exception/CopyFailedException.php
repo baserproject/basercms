@@ -13,11 +13,11 @@ namespace BaserCore\Model\Table\Exception;
 use Cake\Core\Exception\Exception;
 
 /**
- * Class CopyUserGroupsException
+ * Class CopyFailedException
  * @package BaserCore\Model\Table\Execption
  * @property array $errors
  */
-class CopyUserGroupsFailedException extends Exception
+class CopyFailedException extends Exception
 {
     /**
      * validation errors

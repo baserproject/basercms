@@ -16,7 +16,7 @@ use Cake\ORM\Behavior\TimestampBehavior as TimestampBehaviorAlias;
 use Cake\Datasource\{EntityInterface, ResultSetInterface as ResultSetInterfaceAlias};
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use BaserCore\Model\Table\Exception\CopyUserGroupsFailedException;
+use BaserCore\Model\Table\Exception\CopyFailedException;
 
 /**
  * Class UserGroupsTable
@@ -124,7 +124,7 @@ class UserGroupsTable extends Table
      * @param array $data DBに挿入するデータ
      * @param bool $recursive 関連したPermissionもcopyするかしないか
      * @return mixed UserGroups Or false
-     * @throws CopyUserGroupsFailedException When copy failed.
+     * @throws CopyFailedException When copy failed.
      */
     public function copy($id = null, $data = [], $recursive = true) {
         if ($id && is_numeric($id)) {
@@ -144,7 +144,7 @@ class UserGroupsTable extends Table
         $entity = $this->newEntity($data);
         $errors = $entity->getErrors();
         if ($errors) {
-            $exception = new CopyUserGroupsFailedException(__d('baser', '処理に失敗しました。'));
+            $exception = new CopyFailedException(__d('baser', '処理に失敗しました。'));
             $exception->setErrors($errors);
             throw $exception;
         }
