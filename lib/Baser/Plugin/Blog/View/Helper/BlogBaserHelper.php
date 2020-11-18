@@ -12,12 +12,12 @@
 
 /**
  * BlogBaserヘルパー
- * 
+ *
  * BcBaserHelper より透過的に呼び出される
- * 
+ *
  * 《利用例》
  * $this->BcBaser->blogPosts('news')
- * 
+ *
  * BcBaserHeleper へのインターフェイスを提供する役割だけとし、
  * 実装をできるだけこのクラスで持たないようにし、BlogHelper 等で実装する
  *
@@ -34,22 +34,22 @@ class BlogBaserHelper extends AppHelper {
 
 /**
  * ブログ記事一覧出力
- * 
+ *
  * ページ編集画面等で利用する事ができる。
  * ビュー: lib/Baser/Plugin/Blog/View/blog/{コンテンツテンプレート名}/posts.php
- * 
+ *
  * 《利用例》
  * $this->BcBaser->blogPosts('news', 3)
- * 
+ *
  * 複数のコンテンツを指定する場合：配列にて複数のコンテンツ名を指定
  *									コンテンツテンプレート名は配列の先頭を利用する
  * $this->BcBaser->blogPosts(array('news', 'work'), 3)
- * 
+ *
  * 全てのコンテンツを指定する場合：nullを指定
  *									contentsTemplateオプションにて
  *									コンテンツテンプレート名を指定する（必須）
  * $this->BcBaser->blogPosts(null, 3, array('contentsTemplate' => 'news'))
- * 
+ *
  * @param string | array $contentsName 管理システムで指定したコンテンツ名（初期値 : null）２階層目以降はURLで指定
  * @param int $num 記事件数（初期値 : 5）
  * @param array $options オプション（初期値 : array()）
@@ -80,7 +80,7 @@ class BlogBaserHelper extends AppHelper {
 
 /**
  * ブログ記事を取得する
- * 
+ *
  * @param array $contentsName
  * @param int $num
  * @param array $options
@@ -102,7 +102,7 @@ class BlogBaserHelper extends AppHelper {
 
 /**
  * タグ別記事一覧ページ判定
- * 
+ *
  * @return boolean 現在のページがタグ別記事一覧ページであれば true を返す
  */
 	public function isBlogTag() {
@@ -111,7 +111,7 @@ class BlogBaserHelper extends AppHelper {
 
 /**
  * 日別記事一覧ページ判定
- * 
+ *
  * @return boolean 現在のページが日別記事一覧ページであれば true を返す
  */
 	public function isBlogDate() {
@@ -120,7 +120,7 @@ class BlogBaserHelper extends AppHelper {
 
 /**
  * 月別記事一覧ページ判定
- * 
+ *
  * @return boolean 現在のページが月別記事一覧ページであれば true を返す
  */
 	public function isBlogMonth() {
@@ -129,7 +129,7 @@ class BlogBaserHelper extends AppHelper {
 
 /**
  * 年別記事一覧ページ判定
- * 
+ *
  * @return boolean 現在のページが年別記事一覧ページであれば true を返す
  */
 	public function isBlogYear() {
@@ -138,7 +138,7 @@ class BlogBaserHelper extends AppHelper {
 
 /**
  * 個別ページ判定
- * 
+ *
  * @return boolean 現在のページが個別ページであれば true を返す
  */
 	public function isBlogSingle() {
@@ -147,7 +147,7 @@ class BlogBaserHelper extends AppHelper {
 
 /**
  * インデックスページ判定
- * 
+ *
  * @return boolean 現在のページがインデックスページであれば true を返す
  */
 	public function isBlogHome() {
@@ -179,7 +179,7 @@ class BlogBaserHelper extends AppHelper {
 
 /**
  * ブログカテゴリを取得する
- * 
+ *
  * @param array $options
  * @return mixed
  */
@@ -189,7 +189,7 @@ class BlogBaserHelper extends AppHelper {
 
 /**
  * 子カテゴリを持っているかどうか
- * 
+ *
  * @param int $id
  * @return mixed
  */
@@ -214,7 +214,7 @@ class BlogBaserHelper extends AppHelper {
 
 /**
  * ブログタグリストを出力する
- * 
+ *
  * @param mixed $name
  * @param array $options
  * 	オプションは、BlogBaserHelper::getBlogTagList() と同じ
@@ -235,5 +235,15 @@ class BlogBaserHelper extends AppHelper {
 	public function getBlogContentsUrl($blogContentId, $base = true) {
 		return $this->Blog->getContentsUrl($blogContentId, $base);
 	}
-	
+
+/**
+ * 記事件数を取得する
+ * 一覧でのみ利用可能
+ *
+ * @return false|mixed
+ */
+	public function getBlogPostCount() {
+		return $this->Blog->getPostCount();
+	}
+
 }

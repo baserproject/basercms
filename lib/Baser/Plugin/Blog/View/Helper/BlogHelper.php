@@ -1856,4 +1856,18 @@ class BlogHelper extends AppHelper {
 		return ClassRegistry::init('Blog.BlogCategory')->getByName($blogContentId, $categoryName, $options);
 	}
 
+/**
+ * 記事件数を取得する
+ * 一覧でのみ利用可能
+ *
+ * @return false|mixed
+ */
+	public function getPostCount() {
+		$params = $this->_View->Paginator->params('BlogPost');
+		if(isset($params['count'])) {
+			return $params['count'];
+		}
+		return false;
+	}
+
 }

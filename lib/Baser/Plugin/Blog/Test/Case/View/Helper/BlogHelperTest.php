@@ -1044,4 +1044,20 @@ class BlogHelperTest extends BaserTestCase {
 		];
 	}
 
+	/**
+	 * 記事件数を取得する
+	 */
+	public function testGetPostCount() {
+		$this->View->loadHelper('Paginator');
+		$this->View->Paginator->request = $this->_getRequest('/news/');
+		$this->View->Paginator->request->params = [
+			'paging' => [
+				'BlogPost' => [
+					'count' => 10
+				]
+			]
+		];
+		$this->assertEquals(10, $this->Blog->getPostCount());
+	}
+
 }
