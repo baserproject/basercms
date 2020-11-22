@@ -105,13 +105,16 @@ class FavoritesController extends AppController {
 	public function admin_ajax_delete() {
 		if (!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
-			exit;
+			exit();
 		}
 
 		$name = $this->Favorite->field('name', ['Favorite.id' => $this->request->data['Favorite']['id']]);
 		if ($this->Favorite->delete($this->request->data['Favorite']['id'])) {
 			$this->Favorite->saveDbLog(sprintf(__d('baser', 'よく使う項目: %s を削除しました。'), $name));
+			exit(true);
 		}
+
+		$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		exit();
 	}
 
