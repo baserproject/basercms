@@ -1060,11 +1060,11 @@ class BcUploadBehavior extends ModelBehavior {
  * @param Model $Model
  */
 	public function deleteExistingFiles(Model $Model) {
-		$dataTmp = $Model->data[$Model->alias];
+		$dataTmp = $Model->data;
 		$uploadFields = array_keys($this->settings[$Model->alias]['fields']);
 		$targetFields = [];
 		foreach($uploadFields as $field) {
-			if(!empty($dataTmp[$field]['tmp_name'])) {
+			if(!empty($dataTmp[$Model->alias][$field]['tmp_name'])) {
 				$targetFields[] = $field;
 			}
 		}
