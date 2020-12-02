@@ -21,7 +21,7 @@ $this->Mail->token();
 <script type="text/javascript">
 $(function(){
 	$(".form-submit").click(function(){
-		var mode = $(this).attr('id').replace('BtnMessage', '');
+		let mode = $(this).attr('id').replace('BtnMessage', '');
 		$("#MailMessageMode").val(mode);
 		$(this).prop('disabled',true);//ボタンを無効化する
 		$(this).closest('form').submit();//フォームを送信する
