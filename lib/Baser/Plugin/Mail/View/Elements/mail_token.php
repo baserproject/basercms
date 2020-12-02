@@ -13,11 +13,11 @@
 
 
 <script type="text/javascript">
-$(document).ready(function(){
+$(function(){
 	$('input[type="submit"]').prop('disabled', true);
 });
 <?php if($this->request->is('ajax')): ?>
-$(document).ready(function(){
+$(function(){
 <?php else: ?>
 $(window).on('load', function() {
 <?php endif ?>
