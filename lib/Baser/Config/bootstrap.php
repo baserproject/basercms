@@ -109,19 +109,23 @@ Configure::write('BcRequest.isInstalled', BC_INSTALLED); // UnitTest用
  */
 $assetRegex = '/^' . preg_quote(BC_BASE_URL, '/') . '.*?(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
 $assetRegexTheme = '/^' . preg_quote(BC_BASE_URL, '/') . 'theme\/[^\/]+?\/(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
+// テーマ編集は除外
+$nonAssets = '/^' . preg_quote(BC_BASE_URL . Configure::read('Routing.prefixes.0') . '/theme_files/edit/', '/') . '.*?(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
 $uri = @$_SERVER['REQUEST_URI'];
-if (preg_match($assetRegex, $uri) || preg_match($assetRegexTheme, $uri)) {
-	Configure::write('BcRequest.asset', true);
-	App::uses('ClassRegistry', 'Utility');
-	$plugins = getEnablePlugins();
-	foreach ($plugins as $plugin) {
-		// プラグインのパスを取得するため２回ロード
-		CakePlugin::load($plugin['Plugin']['name']);
-		CakePlugin::load($plugin['Plugin']['name'], [
-			'bootstrap' => file_exists(CakePlugin::path($plugin['Plugin']['name']) . 'Config' . DS . 'bootstrap.php')
-		]);
+if (preg_match($nonAssets, $uri) === 0) {
+	if (preg_match($assetRegex, $uri) || preg_match($assetRegexTheme, $uri)) {
+		Configure::write('BcRequest.asset', true);
+		App::uses('ClassRegistry', 'Utility');
+		$plugins = getEnablePlugins();
+		foreach ($plugins as $plugin) {
+			// プラグインのパスを取得するため２回ロード
+			CakePlugin::load($plugin['Plugin']['name']);
+			CakePlugin::load($plugin['Plugin']['name'], [
+				'bootstrap' => file_exists(CakePlugin::path($plugin['Plugin']['name']) . 'Config' . DS . 'bootstrap.php')
+			]);
+		}
+		return;
 	}
-	return;
 }
 
 /**
