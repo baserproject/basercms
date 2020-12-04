@@ -496,19 +496,19 @@ class InstallationsController extends AppController {
 		if (!$installationData) {
 			$installationData = $this->Session->read('Installation');
 		}
-
-		$data = [];
-		$data['datasource'] = $installationData['dbType'];
-		$data['host'] = $installationData['dbHost'];
-		$data['port'] = $installationData['dbPort'];
-		$data['login'] = $installationData['dbUsername'];
-		$data['password'] = $installationData['dbPassword'];
-		$data['prefix'] = $installationData['dbPrefix'];
-		$data['database'] = $this->BcManager->getRealDbName($data['datasource'], $installationData['dbName']);
-		$data['schema'] = $installationData['dbSchema'];
-		$data['encoding'] = $installationData['dbEncoding'];
-		$data['dataPattern'] = $installationData['dbDataPattern'];
-		$data['persistent'] = false;
+		$data = [
+			'datasource' => $installationData['dbType'],
+			'host' => $installationData['dbHost'],
+			'port' => $installationData['dbPort'],
+			'login' => $installationData['dbUsername'],
+			'password' => $installationData['dbPassword'],
+			'prefix' => $installationData['dbPrefix'],
+			'database' => $this->BcManager->getRealDbName($installationData['dbType'], $installationData['dbName']),
+			'schema' => $installationData['dbSchema'],
+			'encoding' => $installationData['dbEncoding'],
+			'dataPattern' => $installationData['dbDataPattern'],
+			'persistent' => false,
+		];
 		return $data;
 	}
 
