@@ -152,15 +152,16 @@ class BlogPostsController extends BlogAppController {
 				$named
 			);
 		}
-		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->request->data);
-		if (strpos($this->passedArgs['sort'], '.') === false) {
+		if (!empty($this->passedArgs['sort']) && strpos($this->passedArgs['sort'], '.') === false) {
 			$order = 'BlogPost.' . $this->passedArgs['sort'];
-		}
-		if ($order && $this->passedArgs['direction']) {
-			$order .= ' ' . $this->passedArgs['direction'];
+			if(!empty($this->passedArgs['direction'])) {
+				$order .= ' ' . $this->passedArgs['direction'];
+			}
+		} else {
+			$order = '';
 		}
 		$options = [
-			'conditions' => $conditions,
+			'conditions' => $this->_createAdminIndexConditions($blogContentId, $this->request->data),
 			'joins' => $joins,
 			'order' => $order,
 			'limit' => $this->passedArgs['num'],
