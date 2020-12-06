@@ -146,7 +146,12 @@ class BlogPostsController extends BlogAppController {
 					'conditions' => ['BlogTag.id = BlogPostsBlogTag.blog_tag_id', 'BlogTag.id' => $this->request->data['BlogPost']['blog_tag_id']]
 			]];
 		}
-
+		if($named = Hash::get($this->request->params, 'named')) {
+			$this->request->data['BlogPost'] = Hash::merge(
+				$this->request->data['BlogPost'],
+				$named
+			);
+		}
 		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->request->data);
 		if (strpos($this->passedArgs['sort'], '.') === false) {
 			$order = 'BlogPost.' . $this->passedArgs['sort'];
