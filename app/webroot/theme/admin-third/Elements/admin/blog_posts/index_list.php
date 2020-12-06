@@ -96,7 +96,6 @@ $this->BcListTable->setColumnNumber(9);
 		<?php if ($blogContent['BlogContent']['comment_use']): ?>
 			<th class="bca-table-listup__thead-th"><?php echo __d('baser', 'コメント') ?></th>
 		<?php endif ?>
-		</th>
 		<th class="bca-table-listup__thead-th"><?php // 作成者 ?>
 			<?php echo $this->Paginator->sort(
 				'user_id',
