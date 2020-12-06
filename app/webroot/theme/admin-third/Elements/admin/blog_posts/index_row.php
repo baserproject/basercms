@@ -40,8 +40,20 @@
 	<?php if ($data['BlogContent']['tag_use'] ): ?>
 	<td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--tag"><?php // タグ ?>
 		<?php if (!empty($data['BlogTag'])): ?>
-		<?php $tags = Hash::extract($data['BlogTag'], '{n}.name') ?>
-		<span class="tag"><?php echo implode('</span><span class="tag">', h($tags)) ?></span>
+			<style>span.tag:after {content:'' !important;margin-right:5px;} span.tag a{padding:3px 8px;color:#fff;background-color:#6fa83d;border-radius:50vh;}</style>
+			<?php
+			foreach ($data['BlogTag'] as $tag) {
+				echo sprintf(
+					'<span class="tag"><a
+						href="/%s/blog/blog_posts/index/%s/blog_tag_id:%s"
+					>%s</a></span>',
+					BcUtil::getAdminPrefix(),
+					$data['BlogContent']['id'],
+					$tag['id'],
+					h($tag['name']),
+				);
+			}
+			?>
 		<?php endif ?>
 	</td>
 	<?php endif ?>
