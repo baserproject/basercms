@@ -129,6 +129,12 @@ class BlogPostsController extends BlogAppController {
 			]
 		);
 
+		if($named = Hash::get($this->request->params, 'named')) {
+			$this->request->data['BlogPost'] = Hash::merge(
+				$this->request->data['BlogPost'],
+				$named
+			);
+		}
 		$joins = [];
 		if (!empty($this->request->data['BlogPost']['blog_tag_id'])) {
 			$db = ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
@@ -145,12 +151,6 @@ class BlogPostsController extends BlogAppController {
 					'type' => 'inner',
 					'conditions' => ['BlogTag.id = BlogPostsBlogTag.blog_tag_id', 'BlogTag.id' => $this->request->data['BlogPost']['blog_tag_id']]
 			]];
-		}
-		if($named = Hash::get($this->request->params, 'named')) {
-			$this->request->data['BlogPost'] = Hash::merge(
-				$this->request->data['BlogPost'],
-				$named
-			);
 		}
 		if (!empty($this->passedArgs['sort']) && strpos($this->passedArgs['sort'], '.') === false) {
 			$order = 'BlogPost.' . $this->passedArgs['sort'];
