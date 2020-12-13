@@ -14,9 +14,9 @@
  * 呼出箇所：全てのページ
  */
 
-.bs-header-nav,
+.bs-header__nav,
 .bs-footer{
-	background-color:MAIN;
+	background-color:MAIN!important;
 }
 .bs-pagination a,
 .bs-top-post-to-list a,
