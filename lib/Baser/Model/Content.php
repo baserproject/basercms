@@ -1541,6 +1541,9 @@ class Content extends AppModel {
 		}
 		// 親変更後のオフセットを取得
 		$offset = $targetSort - $currentSort;
+		if($currentParentId == $targetParentId && $targetId && $offset > 0) {
+			$offset--;
+		}
 		// オフセットを元に移動
 		return $this->moveOffset($currentId, $offset);
 	}
