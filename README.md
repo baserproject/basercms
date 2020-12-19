@@ -12,7 +12,7 @@
     </a>
 </p>
 
-Based Website Development Project  
+Based Website Development Project
 Copyright (c) baserCMS Users Community
 
 Documentation
@@ -43,6 +43,7 @@ Contributing
 -------------
 
 - See [CONTRIBUTING.md](.github/CONTRIBUTING.md)
+- See [Next baserCMS（ucmitz）](https://github.com/baserproject/ucmitz)
 
 License
 -------
