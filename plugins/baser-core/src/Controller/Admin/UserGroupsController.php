@@ -206,4 +206,39 @@ class UserGroupsController extends BcAdminAppController
         }
         return $this->redirect(['action' => 'index']);
     }
+
+    /**
+     * ユーザーグループコピー
+     *
+     * ユーザーグループをコピーする
+     *
+     * @param string|null $id User Group id.
+     * @return Response|null|void Redirects to index.
+     * @throws RecordNotFoundException When record not found.
+     * @throws CopyFailedException When copy failed.
+     */
+    public function copy($id = null)
+    {
+        $this->request->allowMethod(['post']);
+        if (!$id || !is_numeric($id)) {
+            $this->BcMessage->setError(__d('baser', '無効な処理です。'));
+            return $this->redirect(['action' => 'index']);
+        }
+        $userGroup = $this->UserGroups->get($id);
+        try {
+            if ($this->UserGroups->copy($id)) {
+                $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」をコピーしました。', $userGroup->name));
+            } else {
+                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            }
+        } catch (\Exception $e) {
+            $message = [$e->getMessage()];
+            $errors = $e->getErrors();
+            if (!empty($errors)) {
+                foreach ($errors as $error) $message[] = __d('baser', current($error));
+            }
+            $this->BcMessage->setError(implode("\n", $message), false);
+        }
+        return $this->redirect(['action' => 'index']);
+    }
 }

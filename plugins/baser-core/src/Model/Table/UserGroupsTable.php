@@ -16,6 +16,7 @@ use Cake\ORM\Behavior\TimestampBehavior as TimestampBehaviorAlias;
 use Cake\Datasource\{EntityInterface, ResultSetInterface as ResultSetInterfaceAlias};
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use BaserCore\Model\Table\Exception\CopyFailedException;
 
 /**
  * Class UserGroupsTable
@@ -116,4 +117,48 @@ class UserGroupsTable extends Table
         return $validator;
     }
 
+    /**
+     * ユーザーグループデータをコピーする
+     *
+     * @param int $id ユーザーグループID
+     * @param array $data DBに挿入するデータ
+     * @param bool $recursive 関連したPermissionもcopyするかしないか
+     * @return mixed UserGroups Or false
+     * @throws CopyFailedException When copy failed.
+     */
+    public function copy($id = null, $data = [], $recursive = true) {
+        if ($id && is_numeric($id)) {
+            $data = $this->get($id)->toArray();
+        } else {
+            if (!empty($data['id'])) {
+                $id = $data['id'];
+            }
+        }
+        $data['name'] .= '_copy';
+        $data['title'] .= '_copy';
+
+        unset($data['id']);
+        unset($data['created']);
+        unset($data['modified']);
+
+        $entity = $this->newEntity($data);
+        $errors = $entity->getErrors();
+        if ($errors) {
+            $exception = new CopyFailedException(__d('baser', '処理に失敗しました。'));
+            $exception->setErrors($errors);
+            throw $exception;
+        }
+
+        $result = $this->save($entity);
+        if ($result) {
+            // TODO: Permissionのコピー
+            return $result;
+        } else {
+            if (!isset($errors['name'])) {
+                return $this->copy(null, $data, $recursive);
+            } else {
+                return false;
+            }
+        }
+    }
 }

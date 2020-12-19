@@ -29,6 +29,15 @@ class UserGroupsTableTest extends BcTestCase {
     public $UserGroups;
 
     /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BaserCore.UserGroups',
+    ];
+
+    /**
      * Set Up
      *
      * @return void
@@ -76,6 +85,19 @@ class UserGroupsTableTest extends BcTestCase {
             $fields[] = $key;
         }
         $this->assertEquals(['id', 'name', 'title', 'auth_prefix', 'use_admin_globalmenu', 'default_favorites', 'use_move_contents'], $fields);
+    }
+
+    /**
+     * Test copy
+     *
+     * @return void
+     */
+    public function testCopy()
+    {
+        $this->UserGroups->copy(1);
+        $originalUserGroup = $this->UserGroups->get(1);
+        $query = $this->UserGroups->find()->where(['name' => $originalUserGroup->name.'_copy']);
+        $this->assertEquals(1, $query->count());
     }
 
 }

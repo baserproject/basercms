@@ -105,4 +105,19 @@ class UserGroupsControllerTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
+    /**
+     * Test copy method
+     *
+     * @return void
+     */
+    public function testCopy()
+    {
+        $this->post('/baser/admin/user_groups/copy/1');
+        $this->assertResponseSuccess();
+        $userGroups = $this->getTableLocator()->get('UserGroups');
+        $originalUserGroup = $userGroups->get(1);
+        $query = $userGroups->find()->where(['name' => $originalUserGroup->name.'_copy']);
+        $this->assertEquals(1, $query->count());
+    }
 }
