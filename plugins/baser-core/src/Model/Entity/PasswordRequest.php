@@ -29,11 +29,7 @@ class PasswordRequest extends Entity
 {
 
     /**
-     * Fields that can be mass assigned using newEntity() or patchEntity().
-     *
-     * Note that when '*' is set to true, this allows all unspecified fields to
-     * be mass assigned. For security purposes, it is advised to set '*' to false
-     * (or remove it), and explicitly make individual fields accessible as needed.
+     * accessible
      *
      * @var array
      */
@@ -47,11 +43,20 @@ class PasswordRequest extends Entity
         'created' => true,
     ];
 
+    /**
+     * Set Request Key
+     */
     public function setRequestKey()
     {
         $this->request_key = $this->makeRequestKey();
     }
 
+    /**
+     * Make Request Key
+     *
+     * @param int $length
+     * @return false|string
+     */
     private function makeRequestKey($length = 48)
     {
         return substr(base_convert(hash('sha256', uniqid()), 16, 36), 0, $length);
