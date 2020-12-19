@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Utility;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
 
 class BcUtilTest extends BcTestCase
 {
@@ -44,6 +45,24 @@ class BcUtilTest extends BcTestCase
     public function testIsInstallMode ()
     {
         $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test getVersion
+     */
+    public function testGetVersion ()
+    {
+        // BaserCore
+        $file = new \Cake\Filesystem\File(BASER . DS . 'VERSION.txt');
+        $expected = preg_replace('/(.+?)\n/', "$1", $file->read());
+        $result = BcUtil::getVersion();
+        $this->assertEquals($expected, $result);
+
+        // プラグイン
+        $file = new \Cake\Filesystem\File(\Cake\Core\Plugin::path('bc-admin-third') . DS . 'VERSION.txt');
+        $expected = preg_replace('/(.+?)\n/', "$1", $file->read());
+        $result = BcUtil::getVersion('BcAdminThird');
+        $this->assertEquals($expected, $result);
     }
 
 }

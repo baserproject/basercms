@@ -24,3 +24,8 @@ Plugin::getCollection()->remove('DebugKit');
  * デフォルトバリデーションプロバイダー
  */
 Validator::addDefaultProvider('bc', 'BaserCore\Model\Validation\BcValidation');
+
+/**
+ * パス定義
+ */
+require __DIR__ . DS . 'paths.php';

@@ -65,3 +65,5 @@ nbproject/*
 /Vagrantfile
 
 node_modules
+# etc
+LOCAL_TODO.md

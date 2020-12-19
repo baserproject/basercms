@@ -11,9 +11,14 @@
 
 return [
     'BcApp' => [
-        // 特権管理者グループID
+        /**
+         * 特権管理者グループID
+         */
         'adminGroup' => ['admins'],
-
+        /**
+         * コアプラグイン
+         */
+        'corePlugins' => ['BcBlog', 'BcMail'],
         /**
          * システムナビ
          *
