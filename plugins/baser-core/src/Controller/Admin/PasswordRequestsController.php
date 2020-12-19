@@ -57,10 +57,9 @@ class PasswordRequestsController extends BcAdminAppController
 	 */
     public function entry(): void
     {
-        $title = __d('baser', 'パスワードのリセット');
         $passwordRequest = $this->PasswordRequests->newEmptyEntity();
         $this->set('passwordRequest', $passwordRequest);
-        $this->set('title', $title);
+        $this->setTitle(__d('baser', 'パスワードのリセット'));
 
         if ($this->request->is(['patch', 'post', 'put']) === false) {
             return;
@@ -105,7 +104,6 @@ class PasswordRequestsController extends BcAdminAppController
         $title = __d('baser', 'パスワードのリセット');
         $this->set('title', $title);
         $this->set('user', $this->Users->newEmptyEntity($this->request->getData()));
-
         $passwordRequest = $this->PasswordRequests->getEnableRequestData($key);
 
         if (empty($passwordRequest)) {

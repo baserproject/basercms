@@ -19,3 +19,6 @@ indent_size = 2
 
 [*.twig]
 insert_final_newline = false
+
+[*.{md,markdown}]
+trim_trailing_whitespace = false

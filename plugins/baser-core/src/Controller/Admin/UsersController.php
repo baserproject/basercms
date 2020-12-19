@@ -116,7 +116,7 @@ class UsersController extends BcAdminAppController
      */
     public function login()
     {
-        $this->set('title', '管理システムログイン');
+        $this->setTitle(__d('baser', '管理システムログイン'));
         $result = $this->Authentication->getResult();
         if ($result->isValid()) {
             $target = $this->Authentication->getLoginRedirect() ?? Configure::read('BcPrefixAuth.Admin.loginRedirect');
@@ -188,10 +188,9 @@ class UsersController extends BcAdminAppController
         $selfUpdate = false;
         $editable = true;
         $deletable = false;
-        $title = __d('baser', '新規ユーザー登録');
-        // TODO: help
-        // $this->help = 'users_form';
-        $this->set(compact('user', 'userGroups', 'editable', 'selfUpdate', 'deletable', 'title'));
+        $this->setTitle(__d('baser', '新規ユーザー登録'));
+        $this->setHelp('users_form');
+        $this->set(compact('user', 'userGroups', 'editable', 'selfUpdate', 'deletable'));
     }
 
     /**
@@ -292,10 +291,9 @@ class UsersController extends BcAdminAppController
         //     $deletable = false;
         // }
 
-        $title = __d('baser', 'ユーザー情報編集');
-        // TODO: help
-        // $this->help = 'users_form';
-        $this->set(compact('user', 'userGroups', 'editable', 'selfUpdate', 'deletable', 'title'));
+        $this->setTitle(__d('baser', 'ユーザー情報編集'));
+        $this->setHelp('users_form');
+        $this->set(compact('user', 'userGroups', 'editable', 'selfUpdate', 'deletable'));
     }
 
     /**

@@ -9,20 +9,10 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Controller\Admin;
-
 /**
- * Class DashboardController
- * @package BaserCore\Controller\Admin
+ * [ADMIN] ユーザーグループ編集　ヘルプ
  */
-class DashboardController extends BcAdminAppController {
+?>
 
-    /**
-     * ダッシュボード
-     */
-    public function index() {
-        // TODO 未実装
-        $this->setTitle( __d('baser', 'ダッシュボード'));
-    }
 
-}
+<p><?php echo __d('baser', 'ログインするユーザーのグループを登録します。コンテンツへの権限内容がわかりやすい名称で登録します。')?></p>
