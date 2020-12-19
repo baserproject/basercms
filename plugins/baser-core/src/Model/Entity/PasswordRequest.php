@@ -47,12 +47,12 @@ class PasswordRequest extends Entity
         'created' => true,
     ];
 
-    public function setRequestKey()
+    public function setRequestKey(): void
     {
         $this->request_key = $this->makeRequestKey();
     }
 
-    private function makeRequestKey($length = 48)
+    private function makeRequestKey($length = 48): string
     {
         return substr(base_convert(hash('sha256', uniqid()), 16, 36), 0, $length);
     }

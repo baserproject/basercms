@@ -17,11 +17,17 @@ use BaserCore\View\AppView;
 ?>
 
 <div class="section">
-	<p><?php echo __d('baser', 'パスワードを忘れた方は、登録されているメールアドレスを送信してください。<br />新しいパスワードをメールでお知らせします。')?></p>
+	<p><?php echo __d('baser', '新しいパスワードを入力してください。')?></p>
 
-	<?= $this->BcAdminForm->create($passwordRequest, ['novalidate' => true]) ?>
+	<?= $this->BcAdminForm->create($user, ['novalidate' => true]) ?>
 	<div class="submit">
-        <?php echo $this->BcAdminForm->control('email', ['type' => 'text', 'size' => '50', 'maxlength' => 255, 'placeholder' => 'yourname@example.com']) ?>
+        <p>
+            <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => '50', 'maxlength' => 255, 'placeholder' => 'パスワード']) ?>
+            <?php echo $this->BcAdminForm->error('password') ?>
+        </p>
+        <p>
+            <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => '50', 'maxlength' => 255, 'placeholder' => '再入力']) ?>
+        </p>
 
         <?= $this->BcAdminForm->button(
                 __d('baser', '保存'),

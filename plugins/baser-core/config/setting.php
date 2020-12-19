@@ -14,6 +14,9 @@ return [
         // 特権管理者グループID
         'adminGroup' => ['admins'],
 
+        // パスワード再発行URLの有効時間(min) デフォルト24時間
+        'passwordRequestAllowTime' => 1440,
+
         /**
          * システムナビ
          *

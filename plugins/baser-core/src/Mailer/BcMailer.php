@@ -9,13 +9,10 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-use BaserCore\View\AppView;
+namespace BaserCore\Mailer;
+use Cake\Mailer\Mailer;
 
-/**
- * @var AppView $this
- */
-?>
+class BcMailer extends Mailer
+{
 
-<div class="section">
-	<p><?php echo __d('baser', 'ページの有効期限が切れているか、もしくは誤ったURLにアクセスしています。')?></p>
-</div>
+}
