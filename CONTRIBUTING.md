@@ -1,15 +1,17 @@
 # 開発への貢献方法
 
-baserCMS５の開発コードは、`ucmitz` です。開発については、`ucmitz` レポジトリの `dev` ブランチを利用します。
+baserCMS５の開発コードネームは、`ucmitz` です。開発については、`ucmitz` レポジトリの `dev` ブランチを利用します。
 
 　
 
-## 開発方針の確認
+## 開発方針とロードマップの確認
 
-開発にたずさわる前に [開発方針](https://docs.google.com/document/d/1QAmScc65CwMyn8QuwWKE9q_8HnSKcW9oefI9RrHoUYY/edit) を必ず確認します。
+開発にたずさわる前に 開発方針とロードマップを必ず確認します。
+
+- [開発方針](https://docs.google.com/document/d/1QAmScc65CwMyn8QuwWKE9q_8HnSKcW9oefI9RrHoUYY/edit)
+- [ロードマップ](https://docs.google.com/spreadsheets/d/1TZ71-O_9KiQM9xAB_a_jnSFVrH2dsyKowMLkyGLcI9g/edit#gid=2131306554)
 
 　
-
 ## 開発環境の準備
 
 1. BaserApp をクローンし、ブランチを切り替えます。
@@ -27,8 +29,13 @@ baserCMS５の開発コードは、`ucmitz` です。開発については、`uc
 9. admin@example.com / password でログインします。
 
 　
+## パッケージ構成の確認
 
+- [BaserApp](https://github.com/baserproject/ucmitz) ：Gitでクローンした本体。親パッケージとしてbaserCMSのアプリケーションフレームを提供
+- [BaserCore](https://github.com/baserproject/ucmitz/tree/dev/plugins/baser-core) ：baserCMSの本体、子パッケージとして主にURLに紐づくルーティングと、ビジネスロジックを提供　`/plugins/baser-core`
+- [BcAdminThird](https://github.com/baserproject/ucmitz/tree/dev/plugins/bc-admin-third) ：子パッケージとして、baserCMSの画面表示をテーマとして提供　`/plugins/bc-admin-third`
 
+　
 ## 開発の手順
 
 ### 1. 実装する機能、または課題を選択する
