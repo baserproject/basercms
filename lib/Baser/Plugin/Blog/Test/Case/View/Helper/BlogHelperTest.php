@@ -1060,4 +1060,11 @@ class BlogHelperTest extends BaserTestCase {
 		$this->assertEquals(10, $this->Blog->getPostCount());
 	}
 
+	/**
+	 * 現在のブログタグアーカイブのブログタグ情報を取得する
+	 */
+	public function testGetCurrentArchiveBlogTag() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
