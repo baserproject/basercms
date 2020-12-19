@@ -21,7 +21,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :"forwarded_port", guest: 443, host: 443
   config.vm.network :"forwarded_port", guest: 1080, host: 1080
   config.vm.network :"forwarded_port", guest: 8080, host: 8080
-  config.vm.network :"forwarded_port", guest: 10080, host: 10080
+  config.vm.network :"forwarded_port", guest: 3306, host: 3306
 
   # スマートフォン等の実機で確認する場合は、上記をコメントアウトして、下記の設定をコメントを外すことで同一ネットワーク上から確認できます
   #config.vm.network :public_network, ip: SERVER_IP_ADDRESS, bridge: "en0: Wi-Fi (AirPort)"
