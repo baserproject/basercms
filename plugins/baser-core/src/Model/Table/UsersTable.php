@@ -86,8 +86,6 @@ class UsersTable extends Table
     public function afterMarshal(Event $event, User $user, ArrayObject $data, ArrayObject $options)
     {
 		if ($user->getError('password')) {
-		    $user->setError('password_1', '');
-		    $user->setError('password_2', '');
 		}
     }
 
@@ -178,6 +176,28 @@ class UsersTable extends Table
     {
         $this->validationDefault($validator)
             ->notEmptyString('password', __d('baser', 'パスワードを入力してください。'));
+        return $validator;
+    }
+
+    public function validationPasswordUpdate(Validator $validator): Validator
+    {
+        $validator
+            ->scalar('password')
+            ->minLength('password', 6, __d('baser', 'パスワードは6文字以上で入力してください。'))
+            ->maxLength('password', 255, __d('baser', 'パスワードは255文字以内で入力してください。'))
+            ->add('password', [
+                'passwordAlphaNumericPlus' => [
+                    'rule' => ['alphaNumericPlus', ' \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*'],
+                    'provider' => 'bc',
+                    'message' => __d('baser', 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。')
+            ]])
+            ->add('password', [
+                'passwordConfirm' => [
+                    'rule' => ['confirm', ['password_1', 'password_2']],
+                    'provider' => 'bc',
+                    'message' => __d('baser', __d('baser', 'パスワードが同じものではありません。'))
+        ]]);
+
         return $validator;
     }
 

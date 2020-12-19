@@ -13,6 +13,7 @@ namespace BaserCore\Model\Table;
 
 use ArrayObject;
 use DateTime;
+use BaserCore\Model\Entity\PasswordRequest;
 use BaserCore\Model\Entity\User;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
@@ -22,6 +23,7 @@ use Cake\ORM\Entity;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 
 /**
@@ -69,33 +71,6 @@ class PasswordRequestsTable extends Table
     }
 
     /**
-     * Validation New
-     * @param Validator $validator
-     * @return Validator
-     */
-    public function validationChange(Validator $validator): Validator
-    {
-        $validator
-            ->scalar('password')
-            ->minLength('password', 6, __d('baser', 'パスワードは6文字以上で入力してください。'))
-            ->maxLength('password', 255, __d('baser', 'パスワードは255文字以内で入力してください。'))
-            ->add('password', [
-                'passwordAlphaNumericPlus' => [
-                    'rule' => ['alphaNumericPlus', ' \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*'],
-                    'provider' => 'bc',
-                    'message' => __d('baser', 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。')
-            ]])
-            ->add('password', [
-                'passwordConfirm' => [
-                    'rule' => ['confirm', ['password_1', 'password_2']],
-                    'provider' => 'bc',
-                    'message' => __d('baser', __d('baser', 'パスワードが同じものではありません。'))
-        ]]);
-
-        return $validator;
-    }
-
-    /**
      * 有効なパスワード変更情報を取得する
      *
      * @param [type] $requestKey
@@ -110,6 +85,37 @@ class PasswordRequestsTable extends Table
                 'PasswordRequests.used' => 0,
             ])
             ->first();
+    }
+
+    /**
+     * パスワードを変更する
+     *
+     * @param PasswordRequest $passwordRequest
+     * @param string $password
+     * @return void
+     */
+    public function updatePassword(PasswordRequest $passwordRequest, string $password)
+    {
+
+        $passwordRequest = $this->find('all')
+            ->where([
+                'id' => $passwordRequest->id,
+                'used' => 0,
+            ])
+            ->first();
+
+        if ($passwordRequest === null) {
+            return false;
+        }
+        $passwordRequest->used = 1;
+        $this->save($passwordRequest);
+
+        $users = TableRegistry::get('BaserCore.Users');
+        $user = $users->find('all')
+            ->where(['Users.id' => $passwordRequest->user_id])
+            ->first();
+        $user->password = $password;
+        return $users->save($user);
     }
 
 

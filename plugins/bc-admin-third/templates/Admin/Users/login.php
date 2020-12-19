@@ -52,7 +52,7 @@ use BaserCore\View\AppView;
                 ]); ?>
             </div>
             <div class="bca-login-forgot-pass">
-                <?php $this->BcBaser->link(__d('baser', 'パスワードを忘れた場合はこちら'), ['action' => 'reset_password', $this->request->getParam('prefix') => true]) ?>
+                <?php $this->BcBaser->link(__d('baser', 'パスワードを忘れた場合はこちら'), ['controller' => 'password_requests', 'action' => 'entry', $this->request->getParam('prefix') => true]) ?>
             </div>
         </div>
 		<?= $this->BcAdminForm->end() ?>

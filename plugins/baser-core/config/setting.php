@@ -20,6 +20,10 @@ return [
          */
         'corePlugins' => ['BcBlog', 'BcMail'],
         /**
+         * パスワード再発行URLの有効時間(min) デフォルト24時間
+         */
+        'passwordRequestAllowTime' => 1440,
+        /**
          * システムナビ
          *
          * 初期状態で表示するメニューは、`Contents` キー配下に定義し、「設定」内に格納する場合は、`Systems` キー配下に定義する

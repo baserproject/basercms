@@ -13,8 +13,7 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Utility\BcUtil;
 use BaserCore\Controller\Component\BcMessageComponent;
-use BaserCore\Model\Table\PasswordRequestsTable;
-use BaserCore\Model\Table\UsersTable;
+use BaserCore\Mailer\PasswordRequestMailer;
 use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\EventInterface;
@@ -24,7 +23,6 @@ use Cake\Http\Response;
 /**
  * Class UsersController
  * @package BaserCore\Controller\Admin
- * @property UsersTable $Users
  * @property AuthenticationComponent $Authentication
  * @property BcMessageComponent $BcMessage
  */
@@ -40,8 +38,8 @@ class PasswordRequestsController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadModel('Users');
-        $this->Authentication->allowUnauthenticated(['entry', 'apply']);
+        $this->loadModel('BaserCore.Users');
+        $this->Authentication->allowUnauthenticated(['entry', 'apply', 'done']);
     }
 
 
@@ -63,7 +61,7 @@ class PasswordRequestsController extends BcAdminAppController
         $this->set('passwordRequest', $passwordRequest);
         $this->setTitle(__d('baser', 'パスワードのリセット'));
 
-        if ($this->request->is('post') === false) {
+        if ($this->request->is(['patch', 'post', 'put']) === false) {
             return;
         }
 
@@ -82,8 +80,8 @@ class PasswordRequestsController extends BcAdminAppController
             $passwordRequest->used = 0;
             $passwordRequest->setRequestKey();
 
-            // TODO メール送信
             $this->PasswordRequests->save($passwordRequest);
+            (new PasswordRequestMailer())->deliver($user, $passwordRequest);
         }
 
         $this->BcMessage->setSuccess(__d('baser', 'パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。'));
@@ -97,29 +95,65 @@ class PasswordRequestsController extends BcAdminAppController
      *	- User.password_2
      *  - submit
 	 *
+     * - viewVars
+     *  - title
+     *  - user
 	 */
     public function apply($key): void
     {
-        $this->setTitle(__d('baser', 'パスワードのリセット'));
-        // $passwordRequest = $this->PasswordRequests->newEmptyEntity();
-
-
+        $title = __d('baser', 'パスワードのリセット');
+        $this->set('title', $title);
+        $this->set('user', $this->Users->newEmptyEntity($this->request->getData()));
         $passwordRequest = $this->PasswordRequests->getEnableRequestData($key);
+
         if (empty($passwordRequest)) {
+            $this->response->withStatus(404);
             $this->render('expired');
             return;
         }
 
-        var_dump($passwordRequest);
-        exit;
+        if ($this->request->is(['patch', 'post', 'put']) === false) {
+            return;
+        }
 
-        // TODO ユーザパスワード更新処理
-        // TODO 変更申請使用済み更新処理
+        // ユーザパスワード更新処理
+        // $conn = ConnectionManager::get('default');
 
-        // TODO エラー制御
+        $user = $this->Users->find('all')
+            ->where(['Users.id' => $passwordRequest->user_id])
+            ->first();
+        $this->request = $this->request->withData('password', $this->request->getData('password_1'));
 
-        $this->set('passwordRequest', $passwordRequest);
+        $user = $this->Users->patchEntity(
+            $user,
+            $this->request->getData(),
+            ['validate' => 'passwordUpdate']
+        );
 
+        if ($user->hasErrors()) {
+            $this->set('user', $user);
+            return;
+        }
+
+        if ($this->PasswordRequests->updatePassword($passwordRequest, $this->request->getData('password_1')) === false) {
+            $this->render('expired');
+            return;
+        }
+        $this->redirect(['action' => 'done']);
+    }
+
+    /**
+     * パスワード変更完了
+     *
+     * - viewVars
+     *  - title
+     *
+     * @return void
+     */
+    public function done()
+    {
+        $title = __d('baser', 'パスワードのリセット');
+        $this->set('title', $title);
     }
 
 }
