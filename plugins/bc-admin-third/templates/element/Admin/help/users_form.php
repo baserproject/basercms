@@ -9,20 +9,13 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Controller\Admin;
-
 /**
- * Class DashboardController
- * @package BaserCore\Controller\Admin
+ * [ADMIN] ユーザー編集　ヘルプ
  */
-class DashboardController extends BcAdminAppController {
+?>
 
-    /**
-     * ダッシュボード
-     */
-    public function index() {
-        // TODO 未実装
-        $this->setTitle( __d('baser', 'ダッシュボード'));
-    }
 
-}
+<ul>
+	<li><?php echo __d('baser', 'ログイン用のユーザーアカウントを登録する事ができます。')?></li>
+	<?php if ($this->request->getParam('action') == 'edit'): ?><li><?php echo __d('baser', 'パスワード欄は変更する場合のみ入力します。')?></li><?php endif ?>
+</ul>

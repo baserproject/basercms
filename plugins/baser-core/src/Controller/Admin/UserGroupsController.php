@@ -92,9 +92,8 @@ class UserGroupsController extends BcAdminAppController
             '_serialize' => ['userGroups']
         ]);
 
-        // TODO: help
-        // $this->help = 'user_groups_index';
-        $this->set('title', __d('baser', 'ユーザーグループ一覧'));
+        $this->setHelp('user_groups_index');
+        $this->setTitle(__d('baser', 'ユーザーグループ一覧'));
     }
 
     /**
@@ -129,10 +128,9 @@ class UserGroupsController extends BcAdminAppController
             $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
         }
 
-        $title = __d('baser', '新規ユーザーグループ登録');
-        // TODO: help
-        // $this->help = 'user_groups_form';
-        $this->set(compact('userGroup', 'title'));
+        $this->setTitle(__d('baser', '新規ユーザーグループ登録'));
+        $this->setHelp('user_groups_form');
+        $this->set(compact('userGroup'));
     }
 
     /**
@@ -180,10 +178,9 @@ class UserGroupsController extends BcAdminAppController
             $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
         }
 
-        $title = __d('baser', 'ユーザーグループ編集');
-        // TODO: help
-        // $this->help = 'user_groups_form';
-        $this->set(compact('userGroup', 'title'));
+        $this->setTitle(__d('baser', 'ユーザーグループ編集'));
+        $this->setHelp('user_groups_form');
+        $this->set(compact('userGroup'));
     }
 
     /**
