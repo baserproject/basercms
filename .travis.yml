@@ -18,6 +18,7 @@ before_script:
   - pear config-set preferred_state snapshot && yes "" | pecl install mcrypt ;
   - |
     bash -c "
+    mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root
     mysql -u root -e \"CREATE DATABASE basercms CHARACTER SET utf8;\";
     mysql -u root -e \"CREATE DATABASE test_basercms CHARACTER SET utf8;\";
     mysql -u root -e \"SET GLOBAL time_zone = 'Asia/Tokyo'\";
