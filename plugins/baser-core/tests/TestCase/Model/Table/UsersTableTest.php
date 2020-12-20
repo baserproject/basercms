@@ -83,9 +83,10 @@ class UsersTableTest extends BcTestCase
      */
     public function testBeforeMarshal()
     {
-        $user = $this->Users->newEntity([
-            'password_1' => 'testtest'
-        ]);
+        $user = $this->Users->newEntity(
+            ['password_1' => 'testtest'],
+            ['validate' => false]
+        );
         $this->assertNotEmpty($user->password);
     }
 
