@@ -23,17 +23,17 @@ class BcValidation extends Validation {
      *
      * ハイフンアンダースコアを許容
      *
-     * @param array $check チェック対象文字列
-     * @param array $options 他に許容する文字列
+     * @param string $value チェック対象文字列
+     * @param array $context 他に許容する文字列
      * @return boolean
      */
-	public static function alphaNumericPlus($value, $context = []) {
+	public static function alphaNumericPlus($value, $context = null) {
 		if (!$value) {
 			return true;
 		}
-		if($context) {
+		if ($context) {
             if (is_array($context)) {
-                if(array_key_exists('data', $context)) {
+                if (array_key_exists('data', $context)) {
                     $context = [];
                 }
             } else {
@@ -51,8 +51,9 @@ class BcValidation extends Validation {
     /**
      * ２つのフィールド値を確認する
      *
-     * @param	array	$check 対象となる値
+     * @param	string	$value 対象となる値
      * @param	mixed	$fields フィールド名
+     * @param	array	$context
      * @return	boolean
      */
 	public static function confirm($value, $fields, $context) {
@@ -62,11 +63,18 @@ class BcValidation extends Validation {
 				isset($context['data'][$fields[1]])) {
 				$value1 = $context['data'][$fields[0]];
 				$value2 = $context['data'][$fields[1]];
+			} else {
+				return false;
 			}
 		} elseif ($fields) {
+			if (is_array($fields)) {
+				$fields = $fields[0];
+			}
 			if (isset($value) && isset($context['data'][$fields])) {
 				$value1 = $value;
 				$value2 = $context['data'][$fields];
+			} else {
+				return false;
 			}
 		} else {
 			return false;
@@ -84,26 +92,26 @@ class BcValidation extends Validation {
      * @return bool
      */
     public static function notEmptyMultiple($value, $context) {
-        if(isset($value['_ids'])) {
+        if (isset($value['_ids'])) {
             $value = $value['_ids'];
         }
-        if(!is_array($value)) {
+        if (!is_array($value)) {
             return false;
         }
-        foreach($value as $v) {
-            if($v) {
+        foreach ($value as $v) {
+            if ($v) {
                 return true;
             }
         }
         return false;
     }
 
-/**
- * 半角チェック
- *
- * @param array $check 確認する値を含む配列。先頭の要素のみチェックされる
- * @return boolean
- */
+    /**
+     * 半角チェック
+     *
+     * @param string $value 確認する値を含む配列
+     * @return boolean
+     */
     public static function halfText($value)
     {
         $len = strlen($value);
