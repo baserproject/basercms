@@ -83,9 +83,10 @@ class UsersTableTest extends BcTestCase
      */
     public function testBeforeMarshal()
     {
-        $user = $this->Users->newEntity([
-            'password_1' => 'testtest'
-        ]);
+        $user = $this->Users->newEntity(
+            ['password_1' => 'testtest'],
+            ['validate' => false]
+        );
         $this->assertNotEmpty($user->password);
     }
 
@@ -97,8 +98,8 @@ class UsersTableTest extends BcTestCase
         $user = $this->Users->newEntity([
             'password' => ''
         ]);
-        $this->assertEquals($user->getError('password_1'), [0 => '']);
-        $this->assertEquals($user->getError('password_2'), [0 => '']);
+        $this->assertEquals($user->getError('password_1'), []);
+        $this->assertEquals($user->getError('password_2'), []);
     }
 
     /**
