@@ -13,84 +13,126 @@
 /**
  * Baserディレクトリ名
  */
-define('BASER', Cake\Core\Plugin::path('BaserCore'));
+if(!defined('BASER')) {
+    define('BASER', Cake\Core\Plugin::path('BaserCore'));
+}
 /**
  * Baserコントローラーパス
  */
-define('BASER_CONTROLLERS', BASER . 'Controller' . DS);
+if(!defined('BASER_CONTROLLERS')) {
+    define('BASER_CONTROLLERS', BASER . 'Controller' . DS);
+}
 /**
  * Baserモデルパス
  */
-define('BASER_MODELS', BASER . 'Model' . DS);
+if(!defined('BASER_MODELS')) {
+    define('BASER_MODELS', BASER . 'Model' . DS);
+}
 /**
  * Baserビューパス
  */
-define('BASER_VIEWS', BASER . 'View' . DS);
+if(!defined('BASER_VIEWS')) {
+    define('BASER_VIEWS', BASER . 'View' . DS);
+}
 /**
  * BaserVendorsパス
  */
-define('BASER_VENDORS', BASER . 'Vendor' . DS);
+if(!defined('BASER_VENDORS')) {
+    define('BASER_VENDORS', BASER . 'Vendor' . DS);
+}
 /**
  * Baserコンポーネント
  */
-define('BASER_COMPONENTS', BASER_CONTROLLERS . 'Component' . DS);
+
+if(!defined('BASER_COMPONENTS')) {
+    define('BASER_COMPONENTS', BASER_CONTROLLERS . 'Component' . DS);
+}
 /**
  * Baserヘルパー
  */
-define('BASER_HELPERS', BASER_VIEWS . 'Helper' . DS);
+if(!defined('BASER_HELPERS')) {
+    define('BASER_HELPERS', BASER_VIEWS . 'Helper' . DS);
+}
 /**
  * Baserビヘイビア
  */
-define('BASER_BEHAVIORS', BASER_MODELS . 'Behavior' . DS);
+if(!defined('BASER_BEHAVIORS')) {
+    define('BASER_BEHAVIORS', BASER_MODELS . 'Behavior' . DS);
+}
 /**
  * Baserデータソース
  */
-define('BASER_DATASOURCE', BASER_MODELS . 'Datasource' . DS);
+if(!defined('BASER_DATASOURCE')) {
+    define('BASER_DATASOURCE', BASER_MODELS . 'Datasource' . DS);
+}
 /**
  * Baserデータベース
  */
-define('BASER_DATABASE', BASER_DATASOURCE . 'Database' . DS);
+if(!defined('BASER_DATABASE')) {
+    define('BASER_DATABASE', BASER_DATASOURCE . 'Database' . DS);
+}
 /**
  * Baserプラグイン
  */
-define('BASER_PLUGINS', BASER . 'Plugin' . DS);
+if(!defined('BASER_PLUGINS')) {
+    define('BASER_PLUGINS', BASER . 'Plugin' . DS);
+}
 /**
  * Baserコンフィグ
  */
-define('BASER_CONFIGS', BASER . 'Config' . DS);
+if(!defined('BASER_CONFIGS')) {
+    define('BASER_CONFIGS', BASER . 'Config' . DS);
+}
 /**
  * BaserLocale
  */
-define('BASER_LOCALES', BASER . 'Locale' . DS);
+if(!defined('BASER_LOCALES')) {
+    define('BASER_LOCALES', BASER . 'Locale' . DS);
+}
 /**
  * BaserEvent
  */
-define('BASER_EVENTS', BASER . 'Event' . DS);
+if(!defined('BASER_EVENTS')) {
+    define('BASER_EVENTS', BASER . 'Event' . DS);
+}
 /**
  * Baser Libs
  */
-define('BASER_LIBS', BASER . 'Lib' . DS);
+if(!defined('BASER_LIBS')) {
+    define('BASER_LIBS', BASER . 'Lib' . DS);
+}
 /**
  * Baser TestSuite
  */
-define('BASER_TEST_SUITE', BASER_LIBS . 'TestSuite' . DS);
+if(!defined('BASER_TEST_SUITE')) {
+    define('BASER_TEST_SUITE', BASER_LIBS . 'TestSuite' . DS);
+}
 /**
  * Baser TestCase
  */
-define('BASER_TEST_CASES', BASER . 'Test' . DS . 'Case');
+if(!defined('BASER_TEST_CASES')) {
+    define('BASER_TEST_CASES', BASER . 'Test' . DS . 'Case');
+}
 /**
  * Baser Console
  */
-define('BASER_CONSOLES', BASER . 'Console' . DS);
+if(!defined('BASER_CONSOLES')) {
+    define('BASER_CONSOLES', BASER . 'Console' . DS);
+}
 /**
  * Baser webroot
  */
-define('BASER_WEBROOT', BASER . 'webroot' . DS);
+if(!defined('BASER_WEBROOT')) {
+    define('BASER_WEBROOT', BASER . 'webroot' . DS);
+}
 /**
  * Baserテーマ
  */
-if (is_dir(WWW_ROOT . 'theme')) {
-	define('BASER_THEMES', WWW_ROOT . 'theme' . DS);
-} elseif (is_dir(ROOT . DS . 'theme')) {
-	define('BASER_THEMES', ROOT . DS . 'theme' . DS);
+if(!defined('BASER_THEMES')) {
+    if (is_dir(WWW_ROOT . 'theme')) {
+        define('BASER_THEMES', WWW_ROOT . 'theme' . DS);
+    } elseif (is_dir(ROOT . DS . 'theme')) {
+        define('BASER_THEMES', ROOT . DS . 'theme' . DS);
+    }
 }
+

@@ -44,12 +44,4 @@ class BcTestCase extends TestCase {
         return $request;
     }
 
-    /**
-     * Setup Before Class
-     */
-    public static function setupBeforeClass():void
-    {
-        include \Cake\Core\Plugin::path('baser-core') . DS . 'config' . DS . 'paths.php';
-    }
-
 }
