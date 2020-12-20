@@ -98,8 +98,8 @@ class UsersTableTest extends BcTestCase
         $user = $this->Users->newEntity([
             'password' => ''
         ]);
-        $this->assertEquals($user->getError('password_1'), [0 => '']);
-        $this->assertEquals($user->getError('password_2'), [0 => '']);
+        $this->assertEquals($user->getError('password_1'), []);
+        $this->assertEquals($user->getError('password_2'), []);
     }
 
     /**
