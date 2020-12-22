@@ -1063,7 +1063,7 @@ class BlogHelperTest extends BaserTestCase {
 	/**
 	 * 現在のブログタグアーカイブのブログタグ情報を取得する
 	 */
-	public function testGetCurrentArchiveBlogTag() {
+	public function testGetCurrentBlogTag() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 

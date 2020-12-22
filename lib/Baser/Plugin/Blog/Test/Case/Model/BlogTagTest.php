@@ -120,7 +120,7 @@ class BlogTagTest extends BaserTestCase {
 /**
  * 指定した名称のブログタグ情報を取得する
  */
-	public function testGetBlogTag($blogTagName) {
+	public function testFindByName($blogTagName) {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 

@@ -1875,13 +1875,13 @@ class BlogHelper extends AppHelper {
  *
  * @return array
  */
-	public function getCurrentArchiveBlogTag() {
+	public function getCurrentBlogTag() {
 		$blogTag = [];
 		if ($this->isTag()) {
 			$pass = $this->request->params['pass'];
 			$tag = isset($pass[1]) ? $pass[1] : '';
 			$BlogTagModel = ClassRegistry::init('Blog.BlogTag');
-			$blogTag = $BlogTagModel->getBlogTag(urldecode($tag));
+			$blogTag = $BlogTagModel->findByName(urldecode($tag));
 		}
 		return $blogTag;
 	}

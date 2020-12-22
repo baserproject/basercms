@@ -187,13 +187,12 @@ class BlogTag extends BlogAppModel {
  * @param string $blogTagName
  * @return array
  */
-	public function getBlogTag($blogTagName) {
-		$data = $this->find('first', [
+	public function findByName($blogTagName) {
+		return $this->find('first', [
 			'conditions' => ['BlogTag.name' => $blogTagName],
 			'recursive' => -1,
 			'callbacks' => false,
 		]);
-		return $data;
 	}
 
 }
