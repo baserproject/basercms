@@ -1879,9 +1879,9 @@ class BlogHelper extends AppHelper {
 		$blogTag = [];
 		if ($this->isTag()) {
 			$pass = $this->request->params['pass'];
-			$tag = isset($pass[1]) ? $pass[1] : '';
+			$name = isset($pass[1]) ? $pass[1] : '';
 			$BlogTagModel = ClassRegistry::init('Blog.BlogTag');
-			$blogTag = $BlogTagModel->findByName(urldecode($tag));
+			$blogTag = $BlogTagModel->getByName(urldecode($name));
 		}
 		return $blogTag;
 	}

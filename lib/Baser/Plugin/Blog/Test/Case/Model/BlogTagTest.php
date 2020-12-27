@@ -28,6 +28,7 @@ class BlogTagTest extends BaserTestCase {
 		'plugin.blog.Model/BlogTag/SiteBlogTagFindCustomPrams',
 		'baser.Default.BlogCategory',
 		'baser.Default.BlogComment',
+		'baser.Default.BlogTag',
 		'baser.Default.User',
 	];
 
@@ -119,9 +120,21 @@ class BlogTagTest extends BaserTestCase {
 
 /**
  * 指定した名称のブログタグ情報を取得する
+ * @dataProvider getByNameDataProvider
+ * @param string $name
+ * @param bool $expects
  */
-	public function testFindByName($blogTagName) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetByName($name, $expects) {
+		$result = $this->BlogTag->getByName($name);
+		$this->assertEquals($expects, (bool) $result);
+	}
+
+	public function getByNameDataProvider() {
+		return [
+			['新製品', true],
+			['hoge', false],
+			['%90V%90%BB%95i', false], // 文字列 新製品 をURLエンコード化
+		];
 	}
 
 }

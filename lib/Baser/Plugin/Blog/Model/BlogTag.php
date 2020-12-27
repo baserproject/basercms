@@ -184,12 +184,12 @@ class BlogTag extends BlogAppModel {
 /**
  * 指定した名称のブログタグ情報を取得する
  *
- * @param string $blogTagName
+ * @param string $name
  * @return array
  */
-	public function findByName($blogTagName) {
+	public function getByName($name) {
 		return $this->find('first', [
-			'conditions' => ['BlogTag.name' => $blogTagName],
+			'conditions' => ['BlogTag.name' => $name],
 			'recursive' => -1,
 			'callbacks' => false,
 		]);
