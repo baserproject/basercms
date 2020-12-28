@@ -23,8 +23,16 @@ if (empty($mailFields)) {
 	return;
 }
 
-$tpl_row = '<tr id="{%row_id%}"{%display%}><th class="col-head" width="150">{%title%}<span class="{%required_class%}">{%required_word%}</span></th><td class="col-input">{%form%}</td></tr>';
-$tpl_form = '<span id="{%id%}">{%description%}{%before-attach%}{%form%}{%after-attach%}{%attention%}{%error%}{%lastErrors%}</span>';
+$template = [
+	'row' => '<tr id="{%row_id%}"{%display%}><th class="col-head" width="150">{%title%}<span class="{%required_class%}">{%required_word%}</span></th><td class="col-input">{%form%}</td></tr>',
+	'form' => [
+		'wrap'          => '<span id="{%id%}">{%description%}{%before-attach%}{%form%}{%after-attach%}{%attention%}{%error%}{%lastErrors%}</span>',
+		'desc'          => '<span class="mail-description">{%description%}</span>',
+		'before_attach' => '<span class="mail-before-attachment">{%before_attachment%}</span>',
+		'after_attach'  => '<span class="mail-after-attachment">{%after_attachment%}</span>',
+		'attention'     => '<span class="mail-attention">{%attention%}</span>'
+	]
+];
 
 $group_field = null;
 $iteration = 0;
@@ -34,6 +42,7 @@ if (!isset($blockEnd)) {
 
 $title = null;
 $form = [];
+$rows = [];
 foreach ($mailFields as $key => $record) {
 
 	$iteration++;
@@ -52,15 +61,12 @@ foreach ($mailFields as $key => $record) {
 	/* 項目名 */
 	if ($group_field != $field['group_field'] || (!$group_field && !$field['group_field'])) {
 		$title = $this->mail->formatText(
-			$tpl_row,
+			Hash::get($template, 'row'),
 			[
 				'row_id'  => 'RowMessage' . Inflector::camelize($field['field_name']),
 				'display' => $field['type'] === 'hidden' ? ' style="display:none"' : '',
 				'title'   =>$this->Mailform->label(
-					sprintf(
-						'MailMessage.%s',
-						$field['field_name']
-					),
+					sprintf('MailMessage.%s', $field['field_name']),
 					$field['head']
 				),
 				'required_class' => $field['not_empty'] ? 'required' : 'normal',
@@ -102,19 +108,19 @@ foreach ($mailFields as $key => $record) {
 	$hasDescription = (!$freezed && $field['description']);
 	$hasAttachment = (!$freezed || $this->Mailform->value('MailMessage.' . $field['field_name']) !== '');
 	$form[] = $this->Mail->formatText(
-		$tpl_form,
+		Hash::get($template, 'form.wrap'),
 		[
 			'id'            => 'FieldMessage' . Inflector::camelize($field['field_name']),
-			'description'   => $hasDescription ? sprintf('<span class="mail-description">%s</span>', $field['description']) : '',
-			'before-attach' => $hasAttachment  ? sprintf('<span class="mail-before-attachment">%s</span>', $field['before_attachment']) : '',
+			'description'   => $hasDescription ? $this->Mail->formatText(Hash::get($template, 'form.desc'), $field) : '',
+			'before-attach' => $hasAttachment  ? $this->Mail->formatText(Hash::get($template, 'form.before_attach'), $field) : '',
 			'form' => $this->Mailform->control(
 				($freezed && $field['no_send']) ? 'hidden' : $field['type'],
 				'MailMessage.' . $field['field_name'],
 				$this->Mailfield->getOptions($record),
 				$this->Mailfield->getAttributes($record)
 			),
-			'after-attach'=>$hasAttachment ? sprintf('<span class="mail-after-attachment">%s</span>', $field['after_attachment']) : '',
-			'attention'  => !$freezed ? sprintf('<span class="mail-attention">%s</span>', $field['attention']) : '',
+			'after-attach'=>$hasAttachment ? $this->Mail->formatText(Hash::get($template, 'form.after_attach'), $field) : '',
+			'attention'  => !$freezed ? $this->Mailform->error(Hash::get($template, 'form.attention'), $field) : '',
 			'error'      => !$isGroupValidComplate ? $this->Mailform->error('MailMessage.' . $field['field_name']) : '',
 			'lastErrors' => implode("\n", $errors)
 
@@ -122,9 +128,11 @@ foreach ($mailFields as $key => $record) {
 	);
 
 	if ($this->Mailform->isGroupLastField($mailFields, $field) || empty($field['group_field'])) {
-		echo $this->Mail->formatText($title,['form'=>implode("\n", $form)]);
+		$rows[] = $this->Mail->formatText($title,['form'=>implode("\n", $form)]);
 		$title = null;
 		$form = [];
 	}
 	$group_field = $field['group_field'];
 }
+
+echo implode("\n", $rows);
