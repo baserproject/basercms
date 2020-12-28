@@ -22,6 +22,10 @@
 if (empty($mailFields)) {
 	return;
 }
+
+$tpl_row = '<tr id="{%row_id%}"{%display%}><th class="col-head" width="150">{%title%}<span class="{%required_class%}">{%required_word%}</span></th><td class="col-input">{%form%}</td></tr>';
+$tpl_form = '<span id="{%id%}">{%description%}{%before-attach%}{%form%}{%after-attach%}{%attention%}{%error%}{%lastErrors%}</span>';
+
 $group_field = null;
 $iteration = 0;
 if (!isset($blockEnd)) {
@@ -48,7 +52,7 @@ foreach ($mailFields as $key => $record) {
 	/* 項目名 */
 	if ($group_field != $field['group_field'] || (!$group_field && !$field['group_field'])) {
 		$title = $this->mail->formatText(
-			'<tr id="{%row_id%}"{%display%}><th class="col-head" width="150">{%title%}<span class="{%required_class%}">{%required_word%}</span></th><td class="col-input">{%form%}</td></tr>',
+			$tpl_row,
 			[
 				'row_id'  => 'RowMessage' . Inflector::camelize($field['field_name']),
 				'display' => $field['type'] === 'hidden' ? ' style="display:none"' : '',
@@ -72,6 +76,7 @@ foreach ($mailFields as $key => $record) {
 	// 本来であれば、not_display_confirm 等のオプションを別途準備し、そちらを利用するべきだが、
 	// 後方互換のため残す
 	// =========================================================================================================
+	$isGroupValidComplate = in_array('VALID_GROUP_COMPLATE', explode(',', $field['valid_ex']));
 	$errors = [];
 	if ($this->Mailform->isGroupLastField($mailFields, $field)) {
 		if ($isGroupValidComplate) {
@@ -96,12 +101,11 @@ foreach ($mailFields as $key => $record) {
 	}
 	$hasDescription = (!$freezed && $field['description']);
 	$hasAttachment = (!$freezed || $this->Mailform->value('MailMessage.' . $field['field_name']) !== '');
-	$isGroupValidComplate = in_array('VALID_GROUP_COMPLATE', explode(',', $field['valid_ex']));
 	$form[] = $this->Mail->formatText(
-		'<span id="{%id%}">{%description%}{%before-attach%}{%form%}{%after-attach%}{%attention%}{%error%}{%lastErrors%}</span>',
+		$tpl_form,
 		[
-			'id'=>'FieldMessage' . Inflector::camelize($field['field_name']),
-			'description' => $hasDescription ? sprintf('<span class="mail-description">%s</span>', $field['description']) : '',
+			'id'            => 'FieldMessage' . Inflector::camelize($field['field_name']),
+			'description'   => $hasDescription ? sprintf('<span class="mail-description">%s</span>', $field['description']) : '',
 			'before-attach' => $hasAttachment  ? sprintf('<span class="mail-before-attachment">%s</span>', $field['before_attachment']) : '',
 			'form' => $this->Mailform->control(
 				($freezed && $field['no_send']) ? 'hidden' : $field['type'],
@@ -110,8 +114,8 @@ foreach ($mailFields as $key => $record) {
 				$this->Mailfield->getAttributes($record)
 			),
 			'after-attach'=>$hasAttachment ? sprintf('<span class="mail-after-attachment">%s</span>', $field['after_attachment']) : '',
-			'attention'=>!$freezed ? sprintf('<span class="mail-attention">%s</span>', $field['attention']) : '',
-			'error'=>!$isGroupValidComplate ? $this->Mailform->error('MailMessage.' . $field['field_name']) : '',
+			'attention'  => !$freezed ? sprintf('<span class="mail-attention">%s</span>', $field['attention']) : '',
+			'error'      => !$isGroupValidComplate ? $this->Mailform->error('MailMessage.' . $field['field_name']) : '',
 			'lastErrors' => implode("\n", $errors)
 
 		]
