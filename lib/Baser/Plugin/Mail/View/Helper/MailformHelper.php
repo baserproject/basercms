@@ -24,7 +24,7 @@ class MailformHelper extends BcFreezeHelper {
 
 /**
  * ヘルパー
- * 
+ *
  * @var array
  */
 	public $helpers = ['Html', 'BcTime', 'BcText', 'Js', 'BcUpload', 'BcCkeditor', 'BcBaser', 'BcContents', 'BcArray'];
@@ -73,7 +73,7 @@ class MailformHelper extends BcFreezeHelper {
 				// フィールド自身が送信されないため、validatePost に引っかかってしまう
 				// hiddenタグを強制的に出すため、falseを明示的に指定
 				$attributes['hiddenField'] = false;
-				$out = $this->hidden($fieldName, array(['value' => '']));
+				$out = $this->hidden($fieldName, ['value' => '']);
 				$out .= $this->radio($fieldName, $options, $attributes);
 				break;
 
@@ -83,8 +83,8 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['maxlength']);
 				unset($attributes['separator']);
 				if (isset($attributes['empty'])) {
-					if (strtolower($attributes['empty']) == 'false' || 
-						strtolower($attributes['empty']) == 'null') {
+					if (strtolower($attributes['empty']) === 'false' ||
+						strtolower($attributes['empty']) === 'null') {
 						$showEmpty = false;
 					} else {
 						$showEmpty = $attributes['empty'];
@@ -174,7 +174,7 @@ class MailformHelper extends BcFreezeHelper {
 				$out .= $this->file($fieldName, $attributes);
 
 				break;
-			
+
 			case 'date_time_calender':
 				unset($attributes['size']);
 				unset($attributes['rows']);
@@ -190,11 +190,11 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['empty']);
 				$attributes['monthNames'] = false;
 				$attributes['separator'] = '&nbsp;';
-				if (isset($attributes['minYear']) && $attributes['minYear'] == 'today') {
-					$attributes['minYear'] = intval(date('Y'));
+				if (isset($attributes['minYear']) && $attributes['minYear'] === 'today') {
+					$attributes['minYear'] = (int)date('Y');
 				}
-				if (isset($attributes['maxYear']) && $attributes['maxYear'] == 'today') {
-					$attributes['maxYear'] = intval(date('Y'));
+				if (isset($attributes['maxYear']) && $attributes['maxYear'] === 'today') {
+					$attributes['maxYear'] = (int)date('Y');
 				}
 				$out = $this->dateTime($fieldName, 'WMD', null, $attributes);
 				break;
@@ -255,7 +255,7 @@ class MailformHelper extends BcFreezeHelper {
 
 /**
  * 認証キャプチャを表示する
- * 
+ *
  * @param array $options オプション（初期値 : []）
  * 	- `separate` : 画像と入力欄の区切り（初期値：''）
  * 	- `class` : CSSクラス名（初期値：auth-captcha-image）
