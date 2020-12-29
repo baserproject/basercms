@@ -146,7 +146,7 @@ class MailContent extends MailAppModel {
 /**
  * SSL用のURLが設定されているかチェックする
  *
- * @param string $check チェック対象文字列
+ * @param array $check チェック対象文字列
  * @return boolean
  */
 	public function checkSslUrl($check) {
@@ -160,7 +160,7 @@ class MailContent extends MailAppModel {
 /**
  * 英数チェック
  *
- * @param string $check チェック対象文字列
+ * @param array $check チェック対象文字列
  * @return boolean
  */
 	public function alphaNumeric($check) {
