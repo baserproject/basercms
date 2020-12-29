@@ -27,7 +27,8 @@ $mailContents = $MailContent->find('all', [
 		$MailContent->Content->getConditionAllowPublish()
 	],
 	'recursive' => 0,
-	'order' => $MailContent->id
+	'order' => $MailContent->id,
+	'cache' => false,
 ]);
 foreach ($mailContents as $mailContent) {
 	$mail = $mailContent['MailContent'];
@@ -40,7 +41,7 @@ foreach ($mailContents as $mailContent) {
 		'menus' => [
 			'MailMessages' . $mail['id'] => ['title' => '受信メール', 'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_messages', 'action' => 'index', $mail['id']]],
 			'MailFields' . $mail['id'] => [
-				'title' => 'フィールド', 
+				'title' => 'フィールド',
 				'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mail['id']],
 				'currentRegex' => '/\/mail\/mail_fields\/[^\/]+?\/' . $mail['id'] . '($|\/)/s'
 			],
@@ -99,12 +100,12 @@ $config['BcContents']['items']['Mail'] = [
 				'action'	=> 'ajax_copy'
 			]
 		]
-	]	
+	]
 ];
 
 /**
  * ショートコード
  */
 $config['BcShortCode']['Mail'] = [
-	'Mail.getForm'	
+	'Mail.getForm'
 ];
