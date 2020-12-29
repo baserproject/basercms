@@ -70,28 +70,6 @@ foreach ($records as $key => $record) {
 	$field = $record['MailField'];
 	$next_key = $key + 1;
 
-	/* 項目名 */
-	if ($group_field != $field['group_field'] || (!$group_field && !$field['group_field'])) {
-		$row = $this->mail->formatText(
-			Hash::get($template, 'row'),
-			[
-				'row_id'  => $this->Mail->formatText(
-					Hash::get($template, 'row_id'),
-					['camelize(field_name)'=>Inflector::camelize($field['field_name'])]
-				),
-				'display' => $field['type'] === 'hidden' ? ' style="display:none"' : '',
-				'label'   =>$this->Mailform->label(
-					sprintf('MailMessage.%s', $field['field_name']),
-					$field['head']
-				),
-				'mark'    => Hash::get(
-					$template,
-					$field['not_empty'] ? 'mark.required' : 'mark.optional'
-				)
-			]
-		);
-	}
-
 	// =========================================================================================================
 	// 2018/02/06 ryuring
 	// no_send オプションは、確認画面に表示しないようにするために利用されている可能性が高い
@@ -100,6 +78,23 @@ foreach ($records as $key => $record) {
 	// 後方互換のため残す
 	// =========================================================================================================
 	$isGroupValidComplate = in_array('VALID_GROUP_COMPLATE', explode(',', $field['valid_ex']));
+	$tmp = [];
+	if(!$this->get('freezed') && $field['description']) {
+		$tmp['description'] = $this->Mail->formatText(
+			Hash::get($template, 'input.description'), $field
+		);
+	}
+	if(!$this->get('freezed') || $this->Mailform->value('MailMessage.' . $field['field_name']) !== '') {
+		$tmp['before'] = $this->Mail->formatText(
+			Hash::get($template, 'input.before'), ['before'=>$field['before_attachment']]
+		);
+		$tmp['after']  = $this->Mail->formatText(
+			Hash::get($template, 'input.after'), ['after'=>$field['after_attachment']]
+		);
+	}
+	if (!$isGroupValidComplate) {
+		$tmp['error'] = $this->Mailform->error('MailMessage.' . $field['field_name']);
+	}
 	$errors = [];
 	if ($this->Mailform->isGroupLastField($this->get('mailFields'), $field)) {
 		if ($isGroupValidComplate) {
@@ -121,23 +116,6 @@ foreach ($records as $key => $record) {
 			'MailMessage.' . $field['group_valid'] . '_not_complate',
 			__('入力データが不完全です。')
 		);
-	}
-	$tmp = [];
-	if(!$this->get('freezed') && $field['description']) {
-		$tmp['description'] = $this->Mail->formatText(
-			Hash::get($template, 'input.description'), $field
-		);
-	}
-	if(!$this->get('freezed') || $this->Mailform->value('MailMessage.' . $field['field_name']) !== '') {
-		$tmp['before'] = $this->Mail->formatText(
-			Hash::get($template, 'input.before'), ['before'=>$field['before_attachment']]
-		);
-		$tmp['after']  = $this->Mail->formatText(
-			Hash::get($template, 'input.after'), ['after'=>$field['after_attachment']]
-		);
-	}
-	if (!$isGroupValidComplate) {
-		$tmp['error'] = $this->Mailform->error('MailMessage.' . $field['field_name']);
 	}
 	$input[] = $this->Mail->formatText(
 		Hash::get($template, 'input.wrap'),
@@ -161,6 +139,28 @@ foreach ($records as $key => $record) {
 
 		]
 	);
+
+	/* 項目名 */
+	if ($group_field != $field['group_field'] || (!$group_field && !$field['group_field'])) {
+		$row = $this->mail->formatText(
+			Hash::get($template, 'row'),
+			[
+				'row_id'  => $this->Mail->formatText(
+					Hash::get($template, 'row_id'),
+					['camelize(field_name)'=>Inflector::camelize($field['field_name'])]
+				),
+				'display' => $field['type'] === 'hidden' ? ' style="display:none"' : '',
+				'label'   =>$this->Mailform->label(
+					sprintf('MailMessage.%s', $field['field_name']),
+					$field['head']
+				),
+				'mark'    => Hash::get(
+					$template,
+					$field['not_empty'] ? 'mark.required' : 'mark.optional'
+				)
+			]
+		);
+	}
 
 	if ($this->Mailform->isGroupLastField($this->get('mailFields'), $field) || empty($field['group_field'])) {
 		$rows[] = $this->Mail->formatText($row,['input'=>implode("\n", $input)]);
