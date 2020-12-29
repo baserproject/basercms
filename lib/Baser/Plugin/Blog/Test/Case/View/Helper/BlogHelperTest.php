@@ -1060,4 +1060,85 @@ class BlogHelperTest extends BaserTestCase {
 		$this->assertEquals(10, $this->Blog->getPostCount());
 	}
 
+	/**
+	 * ブログのアーカイブタイプを取得する
+	 * @dataProvider getBlogArchiveTypeDataProvider
+	 */
+	public function testGetBlogArchiveType($url, $type, $expects) {
+		$this->Blog->request = $this->_getRequest($url);
+		$this->View->set('blogArchiveType', $type);
+		$result = $this->Blog->getBlogArchiveType();
+		$this->assertEquals($type, $result);
+
+		$isArchive = false;
+		if ($expects) {
+			$isArchive = true;
+		}
+		$this->assertEquals($expects, $isArchive);
+	}
+
+	public function getBlogArchiveTypeDataProvider() {
+		return [
+			['/news/archives/category/release', 'category', true],
+			['/news/archives/tag/新製品', 'tag', true],
+			['/news/archives/archives/date/2016', 'yearly', true],
+			['/news/archives/archives/date/2016/02', 'monthly', true],
+			['/news/archives/archives/date/2016/02/10', 'daily', true],
+			['/news/archives/hoge', 'hoge', false], // 存在しないアーカイブの場合
+			['/news/', '', false],
+		];
+	}
+
+	/**
+	 * タグ別記事一覧ページ判定
+	 * @dataProvider isTagDataProvider
+	 */
+	public function testIsTag($type, $expects) {
+		$this->View->set('blogArchiveType', $type);
+		$result = $this->Blog->isTag();
+		$this->assertEquals($expects, $result);
+	}
+
+	public function isTagDataProvider() {
+		return [
+			['category', false],
+			['tag', true],
+			['yearly', false],
+			['monthly', false],
+			['daily', false],
+			['hoge', false], // 存在しないアーカイブの場合
+			['', false], // アーカイブ指定がない場合
+		];
+	}
+
+	/**
+	 * 現在のブログタグアーカイブのブログタグ情報を取得する
+	 * @dataProvider getCurrentBlogTagDataProvider
+	 */
+	public function testGetCurrentBlogTag($url, $type, $isTag, $expects) {
+		$this->Blog->request = $this->_getRequest($url);
+		$this->View->set('blogArchiveType', $type);
+
+		$result = $this->Blog->isTag();
+		$this->assertEquals($isTag, $result);
+
+		$result = $this->Blog->getCurrentBlogTag();
+		$this->assertEquals($expects, $result);
+	}
+
+	public function getCurrentBlogTagDataProvider() {
+		return [
+			['/news/archives/tag/新製品', 'tag', true, [
+				'BlogTag' => [
+					'name' => '新製品',
+					'id' => '1',
+					'created' => '2015-08-10 18:57:47',
+					'modified' => null,
+				],
+			]],
+			['/news/archives/tag/test1', 'tag', true, []],
+			['/news/archives/category/test2', 'category', false, []],
+		];
+	}
+
 }

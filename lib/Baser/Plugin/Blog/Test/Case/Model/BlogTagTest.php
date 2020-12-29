@@ -14,7 +14,7 @@ App::uses('BlogTag', 'Blog.Model');
 
 /**
  * Class BlogTagTest
- * 
+ *
  * @property BlogTag $BlogTag
  */
 class BlogTagTest extends BaserTestCase {
@@ -83,7 +83,7 @@ class BlogTagTest extends BaserTestCase {
 
 /**
  * ブログタグリスト取得
- * 
+ *
  * @param string $type
  * @param mixed $expected
  * @param array $options
@@ -102,7 +102,7 @@ class BlogTagTest extends BaserTestCase {
 		}
 		$this->assertEquals($expected, $result);
 	}
-	
+
 	public function findCustomParamsDataProvider() {
 		return [
 			['count', 5, []],
@@ -115,5 +115,26 @@ class BlogTagTest extends BaserTestCase {
 			['id', [5, 4, 3, 2, 1], ['sort' => 'id', 'direction' => 'DESC']],	// 並び替え指定
 		];
 	}
-	
+
+/**
+ * 指定した名称のブログタグ情報を取得する
+ * @dataProvider getByNameDataProvider
+ * @param string $name
+ * @param bool $expects
+ */
+	public function testGetByName($name, $expects) {
+		$result = $this->BlogTag->getByName($name);
+		$this->assertEquals($expects, (bool) $result);
+	}
+
+	public function getByNameDataProvider() {
+		return [
+			['タグ１', true],
+			['タグ２', true],
+			['新製品', false],
+			['%90V%90%BB%95i', false], // 文字列 新製品 をURLエンコード化
+			['hoge', false],
+		];
+	}
+
 }
