@@ -26,19 +26,19 @@ if (empty($mailFields)) {
 $template = [
 	'row'    => [
 		'<tr id="{%row_id%}"{%display%}>',
-		'<th class="col-head" width="150">{%title%}</th>',
-		'<td class="col-input">{%form%}</td>',
+		'<th class="col-head" width="150">{%label%}</th>',
+		'<td class="col-input">{%input%}</td>',
 		'</tr>'
 	],
 	'row_id' => 'RowMessage{%camelize(field_name)%}',
-	'title'  => '{%title%}<span class="{%required_class%}">{%required_word%}</span>',
-	'form' => [
+	'label'  => '{%label%}<span class="{%required_class%}">{%required_word%}</span>',
+	'input' => [
 		'wrap'        => [
-			'<span id="{%row_id%}">',
-			'{%description%}{%before%}{%form%}{%after%}{%attention%}{%error%}{%group-error%}',
+			'<span id="{%field_id%}">',
+			'{%description%}{%before%}{%input%}{%after%}{%attention%}{%error%}{%group-error%}',
 			'</span>'
 		],
-		'row_id'      => 'FieldMessage{%camelize(field_name)%}',
+		'field_id'      => 'FieldMessage{%camelize(field_name)%}',
 		'description' => '<span class="mail-description">{%description%}</span>',
 		'before'      => '<span class="mail-before-attachment">{%before%}</span>',
 		'after'       => '<span class="mail-after-attachment">{%after%}</span>',
@@ -53,7 +53,7 @@ if (!isset($blockEnd)) {
 }
 
 $row  = null;
-$form = [];
+$input = [];
 $rows = [];
 foreach ($mailFields as $key => $record) {
 
@@ -77,10 +77,10 @@ foreach ($mailFields as $key => $record) {
 			[
 				'row_id'  => 'RowMessage' . Inflector::camelize($field['field_name']),
 				'display' => $field['type'] === 'hidden' ? ' style="display:none"' : '',
-				'title'   => $this->mail->formatText(
-					Hash::get($template, 'title'),
+				'label'   => $this->mail->formatText(
+					Hash::get($template, 'label'),
 					[
-						'title'   =>$this->Mailform->label(
+						'label'   =>$this->Mailform->label(
 							sprintf('MailMessage.%s', $field['field_name']),
 							$field['head']
 						),
@@ -125,37 +125,37 @@ foreach ($mailFields as $key => $record) {
 	$tmp = [];
 	if(!$freezed && $field['description']) {
 		$tmp['description'] = $this->Mail->formatText(
-			Hash::get($template, 'form.description'), $field
+			Hash::get($template, 'input.description'), $field
 		);
 	}
 	if(!$freezed || $this->Mailform->value('MailMessage.' . $field['field_name']) !== '') {
 		$tmp['before'] = $this->Mail->formatText(
-			Hash::get($template, 'form.before'), ['before'=>$field['before_attachment']]
+			Hash::get($template, 'input.before'), ['before'=>$field['before_attachment']]
 		);
 		$tmp['after']  = $this->Mail->formatText(
-			Hash::get($template, 'form.after'), ['after'=>$field['after_attachment']]
+			Hash::get($template, 'input.after'), ['after'=>$field['after_attachment']]
 		);
 	}
 	if (!$isGroupValidComplate) {
 		$tmp['error'] = $this->Mailform->error('MailMessage.' . $field['field_name']);
 	}
-	$form[] = $this->Mail->formatText(
-		Hash::get($template, 'form.wrap'),
+	$input[] = $this->Mail->formatText(
+		Hash::get($template, 'input.wrap'),
 		[
-			'row_id'      => $this->Mail->formatText(
-				Hash::get($template, 'form.row_id'),
+			'field_id'      => $this->Mail->formatText(
+				Hash::get($template, 'input.field_id'),
 				['camelize(field_name)'=>Inflector::camelize($field['field_name'])]
 			),
 			'description' => Hash::get($tmp, 'description', ''),
 			'before'      => Hash::get($tmp, 'before', ''),
-			'form' => $this->Mailform->control(
+			'input' => $this->Mailform->control(
 				($freezed && $field['no_send']) ? 'hidden' : $field['type'],
 				'MailMessage.' . $field['field_name'],
 				$this->Mailfield->getOptions($record),
 				$this->Mailfield->getAttributes($record)
 			),
 			'after'       => Hash::get($tmp, 'after', ''),
-			'attention'   => !$freezed ? $this->Mailform->error(Hash::get($template, 'form.attention'), $field) : '',
+			'attention'   => !$freezed ? $this->Mailform->error(Hash::get($template, 'input.attention'), $field) : '',
 			'error'       => Hash::get($tmp, 'error', ''),
 			'group-error' => implode("\n", $errors)
 
@@ -163,9 +163,9 @@ foreach ($mailFields as $key => $record) {
 	);
 
 	if ($this->Mailform->isGroupLastField($mailFields, $field) || empty($field['group_field'])) {
-		$rows[] = $this->Mail->formatText($row,['form'=>implode("\n", $form)]);
+		$rows[] = $this->Mail->formatText($row,['input'=>implode("\n", $input)]);
 		$row = false;
-		$form = [];
+		$input = [];
 	}
 	$group_field = $field['group_field'];
 }
