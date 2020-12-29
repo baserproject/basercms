@@ -14,12 +14,12 @@
  * メールフォーム入力欄
  * 呼出箇所：メールフォーム入力ページ、メールフォーム入力内容確認ページ
  *
- * @var int $blockStart 表示するフィールドの開始NO
- * @var int $blockEnd 表示するフィールドの終了NO
- * @var bool $freezed 確認画面かどうか
+ * @var int  $this->get('blockStart') 表示するフィールドの開始NO
+ * @var int  $this->get('blockEnd') 表示するフィールドの終了NO
+ * @var bool $this->get('freezed') 確認画面かどうか
  */
 
-if (empty($mailFields)) {
+if (!$this->get('mailFields')) {
 	return;
 }
 
@@ -48,15 +48,12 @@ $template = [
 
 $group_field = null;
 $iteration = 0;
-if (!isset($blockEnd)) {
-	$blockEnd = 0;
-}
 
 $row  = null;
 $input = [];
 $rows = [];
-foreach ($mailFields as $key => $record) {
-
+$records = $this->get('mailFields');
+foreach ($records as $key => $record) {
 	$iteration++;
 	if (!$record['MailField']['use_field']) {
 		continue;
@@ -64,7 +61,7 @@ foreach ($mailFields as $key => $record) {
 	if (!$blockStart || $iteration < $blockStart) {
 		continue;
 	}
-	if ($blockEnd && $iteration > $blockEnd) {
+	if ($this->get('blockEnd') && $iteration > $this->get('blockEnd')) {
 		continue;
 	}
 	$field = $record['MailField'];
@@ -101,10 +98,10 @@ foreach ($mailFields as $key => $record) {
 	// =========================================================================================================
 	$isGroupValidComplate = in_array('VALID_GROUP_COMPLATE', explode(',', $field['valid_ex']));
 	$errors = [];
-	if ($this->Mailform->isGroupLastField($mailFields, $field)) {
+	if ($this->Mailform->isGroupLastField($this->get('mailFields'), $field)) {
 		if ($isGroupValidComplate) {
 			$groupValidErrors = $this->Mailform->getGroupValidErrors(
-				$mailFields,
+				$this->get('mailFields'),
 				$field['group_valid']
 			);
 			if ($groupValidErrors) {
@@ -123,12 +120,12 @@ foreach ($mailFields as $key => $record) {
 		);
 	}
 	$tmp = [];
-	if(!$freezed && $field['description']) {
+	if(!$this->get('freezed') && $field['description']) {
 		$tmp['description'] = $this->Mail->formatText(
 			Hash::get($template, 'input.description'), $field
 		);
 	}
-	if(!$freezed || $this->Mailform->value('MailMessage.' . $field['field_name']) !== '') {
+	if(!$this->get('freezed') || $this->Mailform->value('MailMessage.' . $field['field_name']) !== '') {
 		$tmp['before'] = $this->Mail->formatText(
 			Hash::get($template, 'input.before'), ['before'=>$field['before_attachment']]
 		);
@@ -149,20 +146,20 @@ foreach ($mailFields as $key => $record) {
 			'description' => Hash::get($tmp, 'description', ''),
 			'before'      => Hash::get($tmp, 'before', ''),
 			'input' => $this->Mailform->control(
-				($freezed && $field['no_send']) ? 'hidden' : $field['type'],
+				($this->get('freezed') && $field['no_send']) ? 'hidden' : $field['type'],
 				'MailMessage.' . $field['field_name'],
 				$this->Mailfield->getOptions($record),
 				$this->Mailfield->getAttributes($record)
 			),
 			'after'       => Hash::get($tmp, 'after', ''),
-			'attention'   => !$freezed ? $this->Mailform->error(Hash::get($template, 'input.attention'), $field) : '',
+			'attention'   => !$this->get('freezed') ? $this->Mailform->error(Hash::get($template, 'input.attention'), $field) : '',
 			'error'       => Hash::get($tmp, 'error', ''),
 			'group-error' => implode("\n", $errors)
 
 		]
 	);
 
-	if ($this->Mailform->isGroupLastField($mailFields, $field) || empty($field['group_field'])) {
+	if ($this->Mailform->isGroupLastField($this->get('mailFields'), $field) || empty($field['group_field'])) {
 		$rows[] = $this->Mail->formatText($row,['input'=>implode("\n", $input)]);
 		$row = false;
 		$input = [];
