@@ -86,9 +86,19 @@ class MaildataHelper extends BcTextHelper {
 				$aryFile = explode('/', $value);
 				$file = $aryFile[count($aryFile) - 1];
 				$ext = decodeContent(null, $file);
-				$link = array_merge(array('admin' => true, 'controller' => 'mail_messages', 'action' => 'attachment', $mailContent['MailContent']['id']), $aryFile);
+				$link = array_merge(
+					array(
+						'admin' => true,
+						'controller' => 'mail_messages',
+						'action' => 'attachment',
+						$mailContent['MailContent']['id']
+					),
+					$aryFile
+				);
 				if (in_array($ext, array('gif', 'jpg', 'png'))) {
-					return $this->BcBaser->getLink($this->BcBaser->getImg($link, array('width' => 400)), $link, array('target' => '_blank'));
+					return $this->BcBaser->getLink(
+						$this->BcBaser->getImg($link, array('width' => 400)), $link, array('target' => '_blank')
+					);
 				}
 
 				return $this->BcBaser->getLink($file, $link);

@@ -288,7 +288,10 @@ class MailformHelper extends BcFreezeHelper {
 	public function getGroupValidErrors($mailFields, $groupValid, $options = [], $distinct = true) {
 		$errors = [];
 		foreach ($mailFields as $mailField) {
-			if ($mailField['MailField']['group_valid'] !== $groupValid || !in_array('VALID_GROUP_COMPLATE', explode(',', $mailField['MailField']['valid_ex']))) {
+			if ($mailField['MailField']['group_valid'] !== $groupValid) {
+				continue;
+			}
+			if (!in_array('VALID_GROUP_COMPLATE', explode(',', $mailField['MailField']['valid_ex']))) {
 				continue;
 			}
 			if(!empty($this->validationErrors['MailMessage'][$mailField['MailField']['field_name']])) {

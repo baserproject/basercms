@@ -72,7 +72,15 @@ class MailMessagesController extends MailAppController {
 		$this->MailMessage->setup($this->mailContent['MailContent']['id']);
 		$mailContentId = $this->params['pass'][0];
 		$this->request->params['Content'] = $this->BcContents->getContent($mailContentId)['Content'];
-		$this->crumbs[] = array('name' => sprintf(__d('baser', '%s 管理'), $this->request->params['Content']['title']), 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0]));
+		$this->crumbs[] = array(
+			'name' => sprintf(
+				__d('baser', '%s 管理'),
+				$this->request->params['Content']['title']
+			),
+			'url' => array(
+				'plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0]
+			)
+		);
 	}
 
 /**
@@ -109,7 +117,10 @@ class MailMessagesController extends MailAppController {
 			return;
 		}
 
-		$this->pageTitle = sprintf(__d('baser', '%s｜受信メール一覧'), $this->request->params['Content']['title']);
+		$this->pageTitle = sprintf(
+			__d('baser', '%s｜受信メール一覧'),
+			$this->request->params['Content']['title']
+		);
 		$this->help = 'mail_messages_index';
 	}
 
@@ -131,9 +142,19 @@ class MailMessagesController extends MailAppController {
 		));
 		$mailFields = $this->MailMessage->mailFields;
 
-		$this->crumbs[] = array('name' => __d('baser', '受信メール一覧'), 'url' => array('controller' => 'mail_messages', 'action' => 'index', $this->params['pass'][0]));
+		$this->crumbs[] = array(
+			'name' => __d('baser', '受信メール一覧'),
+			'url'  => array(
+				'controller' => 'mail_messages',
+				'action' => 'index',
+				$this->params['pass'][0]
+			)
+		);
 		$this->set(compact('message', 'mailFields'));
-		$this->pageTitle = sprintf(__d('baser', '%s｜受信メール詳細'), $this->request->params['Content']['title']);
+		$this->pageTitle = sprintf(
+			__d('baser', '%s｜受信メール詳細'),
+			$this->request->params['Content']['title']
+		);
 	}
 
 /**
@@ -141,7 +162,7 @@ class MailMessagesController extends MailAppController {
  *
  * @param int $mailContentId
  * @param int $messageId
- * @return void
+ * @return bool
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -164,11 +185,11 @@ class MailMessagesController extends MailAppController {
 		if (!$messageId) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
-		if ($this->_del($messageId)) {
-			exit(true);
-		} else {
-			exit();
+		if (!$this->_del($messageId)) {
+			exit;
 		}
+
+		exit(true);
 	}
 
 /**
@@ -176,16 +197,16 @@ class MailMessagesController extends MailAppController {
  *
  * @param int $mailContentId
  * @param int $messageId
- * @return void
+ * @return bool
  */
 	protected function _del($id = null) {
-		if ($this->MailMessage->delete($id)) {
-			$message = sprintf(__d('baser', '受信データ NO「%s」 を削除しました。'), $id);
-			$this->MailMessage->saveDbLog($message);
-			return true;
-		} else {
+		if (!$this->MailMessage->delete($id)) {
 			return false;
 		}
+
+		$message = sprintf(__d('baser', '受信データ NO「%s」 を削除しました。'), $id);
+		$this->MailMessage->saveDbLog($message);
+		return true;
 	}
 
 /**
@@ -201,10 +222,18 @@ class MailMessagesController extends MailAppController {
 			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->notFound();
 		}
-		if ($this->MailMessage->delete($messageId)) {
-			$this->BcMessage->setSuccess(sprintf(__d('baser', '%s への受信データ NO「%s」 を削除しました。'), $this->mailContent['Content']['title'], $messageId));
+		if (!$this->MailMessage->delete($messageId)) {
+			$this->BcMessage->setError(
+				__d('baser', 'データベース処理中にエラーが発生しました。')
+			);
 		} else {
-			$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+			$this->BcMessage->setSuccess(
+				sprintf(
+					__d('baser', '%s への受信データ NO「%s」 を削除しました。'),
+					$this->mailContent['Content']['title'],
+					$messageId
+				)
+			);
 		}
 		$this->redirect(array('action' => 'index', $mailContentId));
 	}
@@ -220,14 +249,14 @@ class MailMessagesController extends MailAppController {
 		$filePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . $file;
 		$ext = decodeContent(null, $file);
 		$mineType = 'application/octet-stream';
-		if ($ext != 'gif' && $ext != 'jpg' && $ext != 'png') {
+		if ($ext !== 'gif' && $ext !== 'jpg' && $ext !== 'png') {
 			Header("Content-disposition: attachment; filename=" . $file);
 		} else {
 			$mineType = 'image/' . $ext;
 		}
-		Header("Content-type: " . $mineType . "; name=" . $file);
+		Header(sprintf('Content-type: %s; name=%s', $mineType, $file));
 		echo file_get_contents($filePath);
 		exit();
 	}
-	
+
 }

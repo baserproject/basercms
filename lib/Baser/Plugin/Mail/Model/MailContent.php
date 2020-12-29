@@ -56,50 +56,105 @@ class MailContent extends MailAppModel {
 		parent::__construct($id, $table, $ds);
 		$this->validate = [
 			'id' => [
-				['rule' => 'numeric', 'on' => 'update', 'message' => __d('baser', 'IDに不正な値が利用されています。')]],
+				[
+					'rule' => 'numeric',
+					'on' => 'update',
+					'message' => __d('baser', 'IDに不正な値が利用されています。')
+				]
+			],
 			'sender_name' => [
-				['rule' => ['notBlank'], 'message' => __d('baser', '送信先名を入力してください。')],
-				['rule' => ['maxLength', 255], 'message' => __d('baser', '送信先名は255文字以内で入力してください。')]],
+				[
+					'rule' => ['notBlank'],
+					'message' => __d('baser', '送信先名を入力してください。')
+				],
+				[
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', '送信先名は255文字以内で入力してください。')
+				]
+			],
 			'subject_user' => [
-				['rule' => ['notBlank'], 'message' => __d('baser', '自動返信メール件名[ユーザー宛]を入力してください。')],
-				['rule' => ['maxLength', 255], 'message' => __d('baser', '自動返信メール件名[ユーザー宛]は255文字以内で入力してください。')]],
+				[
+					'rule' => ['notBlank'],
+					'message' => __d('baser', '自動返信メール件名[ユーザー宛]を入力してください。')
+				],
+				[
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', '自動返信メール件名[ユーザー宛]は255文字以内で入力してください。')
+				]
+			],
 			'subject_admin' => [
-				['rule' => ['notBlank'], 'message' => __d('baser', '自動送信メール件名[管理者宛]を入力してください。')],
-				['rule' => ['maxLength', 255], 'message' => __d('baser', '自動返信メール件名[管理者宛]は255文字以内で入力してください。')]],
+				[
+					'rule' => ['notBlank'],
+					'message' => __d('baser', '自動送信メール件名[管理者宛]を入力してください。')
+				],
+				[
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', '自動返信メール件名[管理者宛]は255文字以内で入力してください。')
+				]
+			],
 			'form_template' => [
-				['rule' => ['halfText'], 'message' => __d('baser', 'メールフォームテンプレート名は半角のみで入力してください。'), 'allowEmpty' => false],
-				['rule' => ['maxLength', 20], 'message' => __d('baser', 'フォームテンプレート名は20文字以内で入力してください。')]],
+				[
+					'rule' => ['halfText'],
+					'message' => __d('baser', 'メールフォームテンプレート名は半角のみで入力してください。'),
+					'allowEmpty' => false
+				],
+				[
+					'rule' => ['maxLength', 20],
+					'message' => __d('baser', 'フォームテンプレート名は20文字以内で入力してください。')
+				]
+			],
 			'mail_template' => [
-				['rule' => ['halfText'], 'message' => __d('baser', '送信メールテンプレートは半角のみで入力してください。'), 'allowEmpty' => false],
-				['rule' => ['maxLength', 20], 'message' => __d('baser', 'メールテンプレート名は20文字以内で入力してください。')]	],
+				[
+					'rule' => ['halfText'],
+					'message' => __d('baser', '送信メールテンプレートは半角のみで入力してください。'),
+					'allowEmpty' => false
+				],
+				[
+					'rule' => ['maxLength', 20],
+					'message' => __d('baser', 'メールテンプレート名は20文字以内で入力してください。')
+				]
+			],
 			'redirect_url' => [
-				['rule' => ['maxLength', 255], 'message' => __d('baser', 'リダイレクトURLは255文字以内で入力してください。')]],
+				[
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', 'リダイレクトURLは255文字以内で入力してください。')
+				]
+			],
 			'sender_1' => [
-				['rule' => ['emails'], 'allowEmpty' => true, 'message' => __d('baser', '送信先メールアドレスの形式が不正です。')]],
+				[
+					'rule' => ['emails'],
+					'allowEmpty' => true,
+					'message' => __d('baser', '送信先メールアドレスの形式が不正です。')
+				]
+			],
 			'sender_2' => [
-				['rule' => ['emails'], 'allowEmpty' => true, 'message' => __d('baser', '送信先メールアドレスの形式が不正です。')]],
+				[
+					'rule' => ['emails'],
+					'allowEmpty' => true,
+					'message' => __d('baser', '送信先メールアドレスの形式が不正です。')
+				]
+			],
 			'ssl_on' => [
-				['rule' => 'checkSslUrl', "message" => __d('baser', 'SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。')]]
+				[
+					'rule' => 'checkSslUrl',
+					"message" => __d('baser', 'SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。')
+				]
+			]
 		];
 	}
 
 /**
  * SSL用のURLが設定されているかチェックする
- * 
+ *
  * @param string $check チェック対象文字列
  * @return boolean
  */
 	public function checkSslUrl($check) {
-		if ($check[key($check)]) {
-			$sslUrl = Configure::read('BcEnv.sslUrl');
-			if (empty($sslUrl)) {
-				return false;
-			} else {
-				return true;
-			}
-		} else {
-			return true;
+		if ($check[key($check)] && empty(Configure::read('BcEnv.sslUrl'))) {
+			return false;
 		}
+
+		return true;
 	}
 
 /**
@@ -109,36 +164,38 @@ class MailContent extends MailAppModel {
  * @return boolean
  */
 	public function alphaNumeric($check) {
-		if (preg_match("/^[a-z0-9]+$/", $check[key($check)])) {
-			return true;
-		} else {
+		if (!preg_match("/^[a-z0-9]+$/", $check[key($check)])) {
 			return false;
 		}
+		return true;
 	}
 
 /**
  * フォームの初期値を取得する
  *
- * @return string
+ * @return array
  */
 	public function getDefaultValue() {
-		$data['MailContent']['sender_name'] = __d('baser', '送信先名を入力してください');
-		$data['MailContent']['subject_user'] = __d('baser', 'お問い合わせ頂きありがとうございます');
-		$data['MailContent']['subject_admin'] = __d('baser', 'お問い合わせを頂きました');
-		$data['MailContent']['layout_template'] = 'default';
-		$data['MailContent']['form_template'] = 'default';
-		$data['MailContent']['mail_template'] = 'mail_default';
-		$data['MailContent']['use_description'] = true;
-		$data['MailContent']['auth_captcha'] = false;
-		$data['MailContent']['ssl_on'] = false;
-		$data['MailContent']['save_info'] = true;
-		return $data;
+		return [
+			'MailContent' => [
+				'sender_name'     => __d('baser', '送信先名を入力してください'),
+				'subject_user'    => __d('baser', 'お問い合わせ頂きありがとうございます'),
+				'subject_admin'   => __d('baser', 'お問い合わせを頂きました'),
+				'layout_template' => 'default',
+				'form_template'   => 'default',
+				'mail_template'   => 'mail_default',
+				'use_description' => true,
+				'auth_captcha'    => false,
+				'ssl_on'          => false,
+				'save_info'       => true
+			]
+		];
 	}
 
 /**
  * afterSave
  *
- * @return boolean
+ * @return void
  */
 	public function afterSave($created, $options = array()) {
 		// 検索用テーブルへの登録・削除
@@ -171,18 +228,21 @@ class MailContent extends MailAppModel {
 		}
 		$mailContent = $data['MailContent'];
 		$content = $data['Content'];
-		return ['SearchIndex' => [
-			'type' => __d('baser', 'メール'),
-			'model_id' => (!empty($mailContent['id'])) ? $mailContent['id'] : $this->id,
-			'content_id' => $content['id'],
-			'site_id' => $content['site_id'],
-			'title' => $content['title'],
-			'detail' => $mailContent['description'],
-			'url' => $content['url'],
-			'status' => $content['status'],
-			'publish_begin' => $content['publish_begin'],
-			'publish_end' => $content['publish_end']
-		]];
+		return [
+			'SearchIndex' =>
+				[
+					'type'        => __d('baser', 'メール'),
+					'model_id'    => (!empty($mailContent['id'])) ? $mailContent['id'] : $this->id,
+					'content_id'  => $content['id'],
+					'site_id'     => $content['site_id'],
+					'title'       => $content['title'],
+					'detail'      => $mailContent['description'],
+					'url'         => $content['url'],
+					'status'      => $content['status'],
+					'publish_begin' => $content['publish_begin'],
+					'publish_end' => $content['publish_end']
+				]
+		];
 	}
 
 /**
@@ -232,7 +292,14 @@ class MailContent extends MailAppModel {
 		if ($result = $this->save($data)) {
 			$result['MailContent']['id'] = $this->id;
 			$data = $result;
-			$mailFields = $this->MailField->find('all', array('conditions' => array('MailField.mail_content_id' => $id), 'order' => 'MailField.sort', 'recursive' => -1));
+			$mailFields = $this->MailField->find(
+				'all',
+				array(
+					'conditions' => array('MailField.mail_content_id' => $id),
+					'order' => 'MailField.sort',
+					'recursive' => -1
+				)
+			);
 			foreach ($mailFields as $mailField) {
 				$mailField['MailField']['mail_content_id'] = $result['MailContent']['id'];
 				$this->MailField->copy(null, $mailField, array('sortUpdateOff' => true));
@@ -275,12 +342,12 @@ class MailContent extends MailAppModel {
  * @return	bool
  */
 	public function isAccepting($publishBegin, $publishEnd) {
-		if ($publishBegin && $publishBegin != '0000-00-00 00:00:00') {
+		if ($publishBegin && $publishBegin !== '0000-00-00 00:00:00') {
 			if ($publishBegin > date('Y-m-d H:i:s')) {
 				return false;
 			}
 		}
-		if ($publishEnd && $publishEnd != '0000-00-00 00:00:00') {
+		if ($publishEnd && $publishEnd !== '0000-00-00 00:00:00') {
 			if ($publishEnd < date('Y-m-d H:i:s')) {
 				return false;
 			}
@@ -323,5 +390,4 @@ class MailContent extends MailAppModel {
 		}
 		return $this->find($type, $query);
 	}
-	
 }
