@@ -24,10 +24,21 @@ if (empty($mailFields)) {
 }
 
 $template = [
-	'row' => '<tr id="{%row_id%}"{%display%}><th class="col-head" width="150">{%title%}</th><td class="col-input">{%form%}</td></tr>',
-	'title' => '{%title%}<span class="{%required_class%}">{%required_word%}</span>',
+	'row'    => [
+		'<tr id="{%row_id%}"{%display%}>',
+		'<th class="col-head" width="150">{%title%}</th>',
+		'<td class="col-input">{%form%}</td>',
+		'</tr>'
+	],
+	'row_id' => 'RowMessage{%camelize(field_name)%}',
+	'title'  => '{%title%}<span class="{%required_class%}">{%required_word%}</span>',
 	'form' => [
-		'wrap'        => '<span id="{%row_id%}">{%description%}{%before%}{%form%}{%after%}{%attention%}{%error%}{%group-error%}</span>',
+		'wrap'        => [
+			'<span id="{%row_id%}">',
+			'{%description%}{%before%}{%form%}{%after%}{%attention%}{%error%}{%group-error%}',
+			'</span>'
+		],
+		'row_id'      => 'FieldMessage{%camelize(field_name)%}',
 		'description' => '<span class="mail-description">{%description%}</span>',
 		'before'      => '<span class="mail-before-attachment">{%before%}</span>',
 		'after'       => '<span class="mail-after-attachment">{%after%}</span>',
@@ -125,10 +136,16 @@ foreach ($mailFields as $key => $record) {
 			Hash::get($template, 'form.after'), ['after'=>$field['after_attachment']]
 		);
 	}
+	if (!$isGroupValidComplate) {
+		$tmp['error'] = $this->Mailform->error('MailMessage.' . $field['field_name']);
+	}
 	$form[] = $this->Mail->formatText(
 		Hash::get($template, 'form.wrap'),
 		[
-			'row_id'      => 'FieldMessage' . Inflector::camelize($field['field_name']),
+			'row_id'      => $this->Mail->formatText(
+				Hash::get($template, 'form.row_id'),
+				['camelize(field_name)'=>Inflector::camelize($field['field_name'])]
+			),
 			'description' => Hash::get($tmp, 'description', ''),
 			'before'      => Hash::get($tmp, 'before', ''),
 			'form' => $this->Mailform->control(
@@ -139,7 +156,7 @@ foreach ($mailFields as $key => $record) {
 			),
 			'after'       => Hash::get($tmp, 'after', ''),
 			'attention'   => !$freezed ? $this->Mailform->error(Hash::get($template, 'form.attention'), $field) : '',
-			'error'       => !$isGroupValidComplate ? $this->Mailform->error('MailMessage.' . $field['field_name']) : '',
+			'error'       => Hash::get($tmp, 'error', ''),
 			'group-error' => implode("\n", $errors)
 
 		]

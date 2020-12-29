@@ -258,6 +258,9 @@ class MailHelper extends AppHelper {
 	 * @return string
 	 */
 	public function formatText($text, $values=[], $left='{%', $right='%}') {
+		if(is_array($text)) {
+			$text = implode("\n", $text);
+		}
 		foreach ($values as $k=>$v) {
 			$text = str_replace($left.$k.$right, $v, $text);
 		}
