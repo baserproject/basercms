@@ -27,11 +27,11 @@ $template = [
 	'row' => '<tr id="{%row_id%}"{%display%}><th class="col-head" width="150">{%title%}</th><td class="col-input">{%form%}</td></tr>',
 	'title' => '{%title%}<span class="{%required_class%}">{%required_word%}</span>',
 	'form' => [
-		'wrap'          => '<span id="{%row_id%}">{%description%}{%before%}{%form%}{%after%}{%attention%}{%error%}{%group-error%}</span>',
-		'description'   => '<span class="mail-description">{%description%}</span>',
-		'before' => '<span class="mail-before-attachment">{%before%}</span>',
-		'after'  => '<span class="mail-after-attachment">{%after%}</span>',
-		'attention'     => '<span class="mail-attention">{%attention%}</span>'
+		'wrap'        => '<span id="{%row_id%}">{%description%}{%before%}{%form%}{%after%}{%attention%}{%error%}{%group-error%}</span>',
+		'description' => '<span class="mail-description">{%description%}</span>',
+		'before'      => '<span class="mail-before-attachment">{%before%}</span>',
+		'after'       => '<span class="mail-after-attachment">{%after%}</span>',
+		'attention'   => '<span class="mail-attention">{%attention%}</span>'
 	]
 ];
 
