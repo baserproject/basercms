@@ -635,7 +635,7 @@ class MailController extends MailAppController {
 					[
 						'fromName' => $mailContent['sender_name'],
 						// カンマ区切りで複数設定されていた場合先頭のアドレスをreplayToに利用
-						'replyTo' => strpos($userMail, ',') === false ? $userMail : current(explode(',', $userMail)),
+						'replyTo' => strpos($userMail, ',') === false ? $userMail : strstr($userMail,',',true),
 						'from' => $fromAdmin,
 						'template' => 'Mail.' . $mailContent['mail_template'],
 						'bcc' => $mailContent['sender_2'],
