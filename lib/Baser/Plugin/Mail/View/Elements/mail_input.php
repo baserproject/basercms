@@ -26,19 +26,22 @@ if (!$this->get('mailFields')) {
 $template = [
 	'row'    => [
 		'<tr id="{%row_id%}"{%display%}>',
-		'<th class="col-head" width="150">{%label%}</th>',
+		'<th class="col-head" width="150">{%label%}{%mark%}</th>',
 		'<td class="col-input">{%input%}</td>',
 		'</tr>'
 	],
 	'row_id' => 'RowMessage{%camelize(field_name)%}',
-	'label'  => '{%label%}<span class="{%required_class%}">{%required_word%}</span>',
+	'mark'   => [
+		'required' => sprintf('<span class="required">%s</span>', __('必須')),
+		'optional' => sprintf('<span class="normal">%s</span>', __('任意'))
+	],
 	'input' => [
 		'wrap'        => [
 			'<span id="{%field_id%}">',
 			'{%description%}{%before%}{%input%}{%after%}{%attention%}{%error%}{%group-error%}',
 			'</span>'
 		],
-		'field_id'      => 'FieldMessage{%camelize(field_name)%}',
+		'field_id'    => 'FieldMessage{%camelize(field_name)%}',
 		'description' => '<span class="mail-description">{%description%}</span>',
 		'before'      => '<span class="mail-before-attachment">{%before%}</span>',
 		'after'       => '<span class="mail-after-attachment">{%after%}</span>',
@@ -72,18 +75,18 @@ foreach ($records as $key => $record) {
 		$row = $this->mail->formatText(
 			Hash::get($template, 'row'),
 			[
-				'row_id'  => 'RowMessage' . Inflector::camelize($field['field_name']),
+				'row_id'  => $this->Mail->formatText(
+					Hash::get($template, 'row_id'),
+					['camelize(field_name)'=>Inflector::camelize($field['field_name'])]
+				),
 				'display' => $field['type'] === 'hidden' ? ' style="display:none"' : '',
-				'label'   => $this->mail->formatText(
-					Hash::get($template, 'label'),
-					[
-						'label'   =>$this->Mailform->label(
-							sprintf('MailMessage.%s', $field['field_name']),
-							$field['head']
-						),
-						'required_class' => $field['not_empty'] ? 'required' : 'normal',
-						'required_word'  => $field['not_empty'] ? __('必須') : __('任意')
-					]
+				'label'   =>$this->Mailform->label(
+					sprintf('MailMessage.%s', $field['field_name']),
+					$field['head']
+				),
+				'mark'    => Hash::get(
+					$template,
+					$field['not_empty'] ? 'mark.required' : 'mark.optional'
 				)
 			]
 		);
