@@ -24,12 +24,13 @@ if (empty($mailFields)) {
 }
 
 $template = [
-	'row' => '<tr id="{%row_id%}"{%display%}><th class="col-head" width="150">{%title%}<span class="{%required_class%}">{%required_word%}</span></th><td class="col-input">{%form%}</td></tr>',
+	'row' => '<tr id="{%row_id%}"{%display%}><th class="col-head" width="150">{%title%}</th><td class="col-input">{%form%}</td></tr>',
+	'title' => '{%title%}<span class="{%required_class%}">{%required_word%}</span>',
 	'form' => [
-		'wrap'          => '<span id="{%id%}">{%description%}{%before-attach%}{%form%}{%after-attach%}{%attention%}{%error%}{%lastErrors%}</span>',
-		'desc'          => '<span class="mail-description">{%description%}</span>',
-		'before_attach' => '<span class="mail-before-attachment">{%before_attachment%}</span>',
-		'after_attach'  => '<span class="mail-after-attachment">{%after_attachment%}</span>',
+		'wrap'          => '<span id="{%row_id%}">{%description%}{%before%}{%form%}{%after%}{%attention%}{%error%}{%group-error%}</span>',
+		'description'   => '<span class="mail-description">{%description%}</span>',
+		'before' => '<span class="mail-before-attachment">{%before%}</span>',
+		'after'  => '<span class="mail-after-attachment">{%after%}</span>',
 		'attention'     => '<span class="mail-attention">{%attention%}</span>'
 	]
 ];
@@ -40,7 +41,7 @@ if (!isset($blockEnd)) {
 	$blockEnd = 0;
 }
 
-$title = null;
+$row  = null;
 $form = [];
 $rows = [];
 foreach ($mailFields as $key => $record) {
@@ -60,17 +61,22 @@ foreach ($mailFields as $key => $record) {
 
 	/* 項目名 */
 	if ($group_field != $field['group_field'] || (!$group_field && !$field['group_field'])) {
-		$title = $this->mail->formatText(
+		$row = $this->mail->formatText(
 			Hash::get($template, 'row'),
 			[
 				'row_id'  => 'RowMessage' . Inflector::camelize($field['field_name']),
 				'display' => $field['type'] === 'hidden' ? ' style="display:none"' : '',
-				'title'   =>$this->Mailform->label(
-					sprintf('MailMessage.%s', $field['field_name']),
-					$field['head']
-				),
-				'required_class' => $field['not_empty'] ? 'required' : 'normal',
-				'required_word'  => $field['not_empty'] ? __('必須') : __('任意')
+				'title'   => $this->mail->formatText(
+					Hash::get($template, 'title'),
+					[
+						'title'   =>$this->Mailform->label(
+							sprintf('MailMessage.%s', $field['field_name']),
+							$field['head']
+						),
+						'required_class' => $field['not_empty'] ? 'required' : 'normal',
+						'required_word'  => $field['not_empty'] ? __('必須') : __('任意')
+					]
+				)
 			]
 		);
 	}
@@ -105,31 +111,43 @@ foreach ($mailFields as $key => $record) {
 			__('入力データが不完全です。')
 		);
 	}
-	$hasDescription = (!$freezed && $field['description']);
-	$hasAttachment = (!$freezed || $this->Mailform->value('MailMessage.' . $field['field_name']) !== '');
+	$tmp = [];
+	if(!$freezed && $field['description']) {
+		$tmp['description'] = $this->Mail->formatText(
+			Hash::get($template, 'form.description'), $field
+		);
+	}
+	if(!$freezed || $this->Mailform->value('MailMessage.' . $field['field_name']) !== '') {
+		$tmp['before'] = $this->Mail->formatText(
+			Hash::get($template, 'form.before'), ['before'=>$field['before_attachment']]
+		);
+		$tmp['after']  = $this->Mail->formatText(
+			Hash::get($template, 'form.after'), ['after'=>$field['after_attachment']]
+		);
+	}
 	$form[] = $this->Mail->formatText(
 		Hash::get($template, 'form.wrap'),
 		[
-			'id'            => 'FieldMessage' . Inflector::camelize($field['field_name']),
-			'description'   => $hasDescription ? $this->Mail->formatText(Hash::get($template, 'form.desc'), $field) : '',
-			'before-attach' => $hasAttachment  ? $this->Mail->formatText(Hash::get($template, 'form.before_attach'), $field) : '',
+			'row_id'      => 'FieldMessage' . Inflector::camelize($field['field_name']),
+			'description' => Hash::get($tmp, 'description', ''),
+			'before'      => Hash::get($tmp, 'before', ''),
 			'form' => $this->Mailform->control(
 				($freezed && $field['no_send']) ? 'hidden' : $field['type'],
 				'MailMessage.' . $field['field_name'],
 				$this->Mailfield->getOptions($record),
 				$this->Mailfield->getAttributes($record)
 			),
-			'after-attach'=>$hasAttachment ? $this->Mail->formatText(Hash::get($template, 'form.after_attach'), $field) : '',
-			'attention'  => !$freezed ? $this->Mailform->error(Hash::get($template, 'form.attention'), $field) : '',
-			'error'      => !$isGroupValidComplate ? $this->Mailform->error('MailMessage.' . $field['field_name']) : '',
-			'lastErrors' => implode("\n", $errors)
+			'after'       => Hash::get($tmp, 'after', ''),
+			'attention'   => !$freezed ? $this->Mailform->error(Hash::get($template, 'form.attention'), $field) : '',
+			'error'       => !$isGroupValidComplate ? $this->Mailform->error('MailMessage.' . $field['field_name']) : '',
+			'group-error' => implode("\n", $errors)
 
 		]
 	);
 
 	if ($this->Mailform->isGroupLastField($mailFields, $field) || empty($field['group_field'])) {
-		$rows[] = $this->Mail->formatText($title,['form'=>implode("\n", $form)]);
-		$title = null;
+		$rows[] = $this->Mail->formatText($row,['form'=>implode("\n", $form)]);
+		$row = false;
 		$form = [];
 	}
 	$group_field = $field['group_field'];
