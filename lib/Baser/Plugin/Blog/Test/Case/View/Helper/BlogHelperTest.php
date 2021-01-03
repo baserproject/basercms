@@ -747,13 +747,14 @@ class BlogHelperTest extends BaserTestCase {
 		$this->expectOutputRegex($expected);
 		$this->Blog->tagList($name, $options);
 	}
+	
 
 	public function tagListDataProvider() {
 		return [
 			['/(?=\/tag\/タグ１).*?(?!.*\/tag\/タグ２).*?(?!.*\/tag\/タグ３)/s', 'blog1'],
 			['/(?=\/tag\/タグ１).*?(?=\/tag\/タグ２).*?(?=\/tag\/タグ３)/s', '/s/blog3/'],
 			['/(?=\/tags\/タグ１).*?(?=\/tags\/タグ２).*?(?=\/tags\/タグ３).*?(?=\/tags\/タグ４).*?(?=\/tags\/タグ５)/s', null],
-			['/(?=\/tag\/タグ１).*?\(4\)/s', 'blog1', ['postCount' => true]],
+			['/(?=\/tag\/タグ１).*?\(2\)/s', 'blog1', ['postCount' => true]],
 		];
 	}
 
