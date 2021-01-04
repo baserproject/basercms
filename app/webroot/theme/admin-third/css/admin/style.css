@@ -7310,7 +7310,8 @@ body {
     padding-bottom: 9px;
     margin-bottom: 8px;
     line-height: 1.5;
-    border-bottom: 1px solid #eeeeea; }
+    border-bottom: 1px solid #eeeeea;
+    word-break: break-word; }
     .bca-update-log__list-item .date {
       font-size: 80%; }
 
