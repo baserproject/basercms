@@ -317,6 +317,7 @@ class BlogHelper extends AppHelper {
  *	「≫ 続きを読む」という文字列がリンクとして表示される。（初期値 : false）
  * また、文字列を指定するとその文字列がリンクとなる
  * @param mixed $cut 文字をカットするかどうかを真偽値で指定。カットする場合、文字数を数値で入力（初期値 : false）
+ * @param mixed $lastText 本文後に文字列を挿入するかを真偽値で指定。挿入する場合、テキストを入力（初期値 : false）
  * @return void
  */
 	public function postContent($post, $moreText = true, $moreLink = false, $cut = false, $lastText = false) {
