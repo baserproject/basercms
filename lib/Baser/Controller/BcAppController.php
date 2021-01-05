@@ -188,12 +188,13 @@ class BcAppController extends Controller {
 		}
 
 		// 言語設定
+		Configure::write('Config.language', BcLang::parseLang(@$_SERVER['HTTP_ACCEPT_LANGUAGE']));
 		$currentSite = BcSite::findCurrent();
-		$lang = Configure::read('BcLang.' . $currentSite->lang);
-		if(Configure::read('BcApp.systemMessageLangFromSiteSetting') && isset($lang['langs'][0])) {
-			Configure::write('Config.language', $lang['langs'][0]);
-		} else {
-			Configure::write('Config.language', BcLang::parseLang(@$_SERVER['HTTP_ACCEPT_LANGUAGE']));
+		if ($currentSite) {
+			$lang = Configure::read('BcLang.' . $currentSite->lang);
+			if (Configure::read('BcApp.systemMessageLangFromSiteSetting') && isset($lang['langs'][0])) {
+				Configure::write('Config.language', $lang['langs'][0]);
+			}
 		}
 
 		// コンソールベースのインストールの際のページテンプレート生成において、

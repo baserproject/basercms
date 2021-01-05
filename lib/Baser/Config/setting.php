@@ -203,7 +203,7 @@ $config['BcApp'] = [
 		// アップデートマニュアル
 		'updateManual' => 'http://wiki.basercms.net/%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%A2%E3%83%83%E3%83%97%E3%82%AC%E3%82%A4%E3%83%89'
 	],
-	// システムメッセージの言語につてサイト設定を利用する
+	// システムメッセージの言語についてサイト設定を利用する
 	// 	- false：ブラウザ
 	// 	- true：サイト設定
 	'systemMessageLangFromSiteSetting' => false
