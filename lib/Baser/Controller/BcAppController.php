@@ -189,7 +189,9 @@ class BcAppController extends Controller {
 
 		// 言語設定
 		$currentSite = BcSite::findCurrent();
-		$lang = Configure::read('BcLang.' . $currentSite->lang);
+		if($currentSite) {
+			$lang = Configure::read('BcLang.' . $currentSite->lang);
+		}
 		if(Configure::read('BcApp.systemMessageLangFromSiteSetting') && isset($lang['langs'][0])) {
 			Configure::write('Config.language', $lang['langs'][0]);
 		} else {
