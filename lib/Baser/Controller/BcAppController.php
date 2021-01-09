@@ -285,8 +285,13 @@ class BcAppController extends Controller {
 				$siteUrl = Configure::read('BcEnv.siteUrl');
 			}
 			if($siteUrl && siteUrl() != $siteUrl) {
-				$webrootReg = '/^' . preg_quote($this->request->webroot, '/') . '/';
-				$this->redirect($siteUrl . preg_replace($webrootReg, '', Router::reverse($this->request, false)));
+				$this->redirect(
+					$siteUrl . preg_replace(
+						'/^' . preg_quote($this->request->webroot, '/') . '/',
+						'',
+						Router::reverse($this->request, false)
+					)
+				);
 			}
 		}
 
@@ -341,10 +346,11 @@ class BcAppController extends Controller {
 		// 環境によって？キーにamp;が付加されてしまうため
 		if (isset($this->request->query) && is_array($this->request->query)) {
 			foreach ($this->request->query as $key => $val) {
-				if (strpos($key, 'amp;') === 0) {
-					$this->request->query[substr($key, 4)] = $val;
-					unset($this->request->query[$key]);
+				if (strpos($key, 'amp;') !== 0) {
+					continue;
 				}
+				$this->request->query[substr($key, 4)] = $val;
+				unset($this->request->query[$key]);
 			}
 		}
 
@@ -388,11 +394,12 @@ class BcAppController extends Controller {
 					break;
 				}
 				if ($this->request->params['action'] !== 'back_agent') {
-					if ($key == $currentAuthPrefix) {
-						$authConfig = $authPrefixSetting;
-						$authConfig['auth_prefix'] = $key;
-						break;
+					if ($key != $currentAuthPrefix) {
+						continue;
 					}
+					$authConfig = $authPrefixSetting;
+					$authConfig['auth_prefix'] = $key;
+					break;
 				}
 			}
 			if ($authConfig) {
@@ -423,7 +430,15 @@ class BcAppController extends Controller {
 					];
 					if (isset($User->belongsTo['UserGroup'])) {
 						$UserGroup = ClassRegistry::init('UserGroup');
-						$userGroups = $UserGroup->find('all', ['conditions' => ['UserGroup.auth_prefix LIKE' => '%' . $authConfig['auth_prefix'] . '%'], 'recursive' => -1]);
+						$userGroups = $UserGroup->find(
+							'all',
+							[
+								'conditions' => [
+									'UserGroup.auth_prefix LIKE' => '%' . $authConfig['auth_prefix'] . '%'
+								],
+								'recursive' => -1
+							]
+						);
 						$userGroupIds = Hash::extract($userGroups, '{n}.UserGroup.id');
 						$conditions[$userModel . '.user_group_id'] = $userGroupIds;
 					}
@@ -436,7 +451,7 @@ class BcAppController extends Controller {
 			}
 		}
 
-		if ($this->request->is('ajax') || isset($this->BcAuth) && $this->BcAuth->user()) {
+		if ($this->request->is('ajax') || (isset($this->BcAuth) && $this->BcAuth->user())) {
 			// キャッシュ対策
 			$this->response->header([
 				'Cache-Control' => 'no-cache, must-revalidate, post-check=0, pre-check=0',
@@ -682,9 +697,15 @@ class BcAppController extends Controller {
 
 			if ($inenc != $outenc) {
 				// 半角カナは一旦全角に変換する
-				$value = mb_convert_kana($value, 'KV', $inenc);
-				$value = mb_convert_encoding($value, $outenc, $inenc);
-				$data[$key] = $value;
+				$data[$key] = mb_convert_encoding(
+					mb_convert_kana(
+						$value,
+						'KV',
+						$inenc
+					),
+					$outenc,
+					$inenc
+				);
 			}
 		}
 
@@ -915,9 +936,10 @@ class BcAppController extends Controller {
 				$body = mb_convert_kana($body, 'KV', 'UTF-8');
 			} elseif (isset($body['message']) && is_array($body['message'])) {
 				foreach ($body['message'] as $key => $val) {
-					if (is_string($val)) {
-						$body['message'][$key] = mb_convert_kana($val, 'KV', 'UTF-8');
+					if (!is_string($val)) {
+						continue;
 					}
+					$body['message'][$key] = mb_convert_kana($val, 'KV', 'UTF-8');
 				}
 			}
 		}
@@ -1169,13 +1191,23 @@ class BcAppController extends Controller {
 
 		foreach ($filterModels as $model) {
 			if (isset($this->request->data[$model])) {
-				$this->Session->write("Baser.viewConditions.{$contentsName}.filter.{$model}", $this->request->data[$model]);
+				$this->Session->write(
+					sprintf(
+						'Baser.viewConditions.%s.filter.%s',
+						$contentsName,
+						$model
+					),
+					$this->request->data[$model]
+				);
 			}
 		}
 
 		if (!empty($this->request->params['named'])) {
 			if($this->Session->check("Baser.viewConditions.{$contentsName}.named")) {
-				$named = array_merge($this->Session->read("Baser.viewConditions.{$contentsName}.named"), $this->request->params['named']);
+				$named = array_merge($this->Session->read(
+					sprintf('Baser.viewConditions.%s.named', $contentsName)),
+					$this->request->params['named']
+				);
 			} else {
 				$named = $this->request->params['named'];
 			}
@@ -1267,14 +1299,15 @@ class BcAppController extends Controller {
 		$_options = array('type' => 'string', 'conditionType' => 'or');
 		$options = am($_options, $options);
 		$conditions = [];
-		extract($options);
 
-		if ($type === 'string' && !is_array($value)) {
+		if ($options['type'] === 'string' && !is_array($options['value'])) {
 			$values = explode(',', str_replace('\'', '', $values));
 		}
 		if (!empty($values) && is_array($values)) {
 			foreach ($values as $value) {
-				$conditions[$conditionType][] = [$fieldName . ' LIKE' => "%'" . $value . "'%"];
+				$conditions[$options['conditionType']][] = [
+					sprintf('%s LIKE', $fieldName) => "%'" . $value . "'%"
+				];
 			}
 		}
 		return $conditions;
@@ -1285,7 +1318,7 @@ class BcAppController extends Controller {
  *
  * @param string $fieldName フィールド名
  * @param mixed $value 値
- * @return array
+ * @return array|false
  */
 	protected function convertBetweenCondition($fieldName, $value) {
 		if (strpos($value, '-') === false) {
@@ -1309,14 +1342,13 @@ class BcAppController extends Controller {
  * @return string パスワード
  */
 	protected function generatePassword($len = 8) {
-		srand((double)microtime() * 1000000);
-		$seed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-		$password = "";
-		while ($len--) {
-			$pos = rand(0, 61);
-			$password .= $seed[$pos];
-		}
-		return $password;
+		return substr(
+			str_shuffle(
+				'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+			),
+			0,
+			$len
+		);
 	}
 
 /**
@@ -1631,7 +1663,7 @@ class BcAppController extends Controller {
  * - トークンが送信されていない場合 not found
  */
 	protected function _checkSubmitToken() {
-		if(strtoupper($_SERVER['REQUEST_METHOD']) === 'GET' || empty($_POST['_Token']['key']) && empty($_POST['data']['_Token']['key'])) {
+		if(strtoupper(env('REQUEST_METHOD')) === 'GET' || (!$this->request->data('_Token.key') && !$this->request->data('_Token.key'))) {
 			throw new NotFoundException();
 		}
 	}
