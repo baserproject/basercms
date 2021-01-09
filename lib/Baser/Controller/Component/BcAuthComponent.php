@@ -23,7 +23,7 @@ class BcAuthComponent extends AuthComponent {
 
 /**
  * 個体識別ID
- * @var string 
+ * @var string
  * CUSTOMIZE ADD 2011/09/25 ryuring
  */
 	public $serial = '';
@@ -44,9 +44,17 @@ class BcAuthComponent extends AuthComponent {
 		// >>>
 		if (!empty($this->fields['serial']) && !$user) {
 			$serial = $this->getSerial();
-			$Model = $model = $this->getModel();
+			$Model = $this->getModel();
 			if ($serial) {
-				$user = $Model->find('first', ['conditions' => [$Model->alias . '.' . $this->fields['serial'] => $serial], 'recursive' => -1]);
+				$user = $Model->find(
+					'first',
+					[
+						'conditions' => [
+							sprintf('%s.%s', $Model->alias, $this->fields['serial']) => $serial
+						],
+						'recursive' => -1
+					]
+				);
 			}
 		}
 		// <<<
@@ -77,11 +85,11 @@ class BcAuthComponent extends AuthComponent {
 
 /**
  * 個体識別IDを保存する
- * 
- * @return boolean 
+ *
+ * @return boolean
  */
 	public function saveSerial() {
-		$user = $this->user();
+		$user = self::user();
 		if (!empty($this->fields['serial']) && $user) {
 			$serial = $this->getSerial();
 			$Model = $model = $this->getModel();
@@ -95,11 +103,11 @@ class BcAuthComponent extends AuthComponent {
 
 /**
  * 個体識別IDを削除する
- * 
+ *
  * @return boolean
  */
 	public function deleteSerial() {
-		$user = $this->user();
+		$user = self::user();
 		if (!empty($this->fields['serial']) && $user) {
 			$Model = $model = $this->getModel();
 			$user[$this->userModel][$this->fields['serial']] = '';
@@ -110,15 +118,19 @@ class BcAuthComponent extends AuthComponent {
 
 /**
  * 個体識別IDを取得
- * 
+ *
  * @return string
  */
 	public function getSerial() {
 		if (!empty($_SERVER['HTTP_X_DCMGUID'])) {
 			return $_SERVER['HTTP_X_DCMGUID'];
-		} elseif (!empty($_SERVER['HTTP_X_UP_SUBNO'])) {
+		}
+
+		if (!empty($_SERVER['HTTP_X_UP_SUBNO'])) {
 			return $_SERVER['HTTP_X_UP_SUBNO'];
-		} elseif (!empty($_SERVER['HTTP_X_JPHONE_UID'])) {
+		}
+
+		if (!empty($_SERVER['HTTP_X_JPHONE_UID'])) {
 			return $_SERVER['HTTP_X_JPHONE_UID'];
 		}
 		return '';
@@ -126,7 +138,7 @@ class BcAuthComponent extends AuthComponent {
 
 /**
  * セッションキーをセットする
- * 
+ *
  * @param string $sessionKey
  */
 	public function setSessionKey($sessionKey) {
@@ -135,22 +147,19 @@ class BcAuthComponent extends AuthComponent {
 
 /**
  * 再ログインを実行する
- * 
+ *
  * return boolean
  */
 	public function relogin () {
-		
+
 		$UserModel = ClassRegistry::init($this->authenticate['Form']['userModel']);
-		$user = $this->user();
+		$user = self::user();
 		$Db = $UserModel->getDataSource();
 		$Db->flushMethodCache();
 		$UserModel->schema(true);
 		$user = $UserModel->find('first', ['conditions' => ['User.id' => $user['id']], 'recursive' => -1]);
 		$this->authenticate['Form']['passwordHasher'] = 'BcNo';
 		$this->request->data['User'] = $user['User'];
-		$result = $this->login();
-		return $result;
-	
+		return $this->login();
 	}
-	
 }
