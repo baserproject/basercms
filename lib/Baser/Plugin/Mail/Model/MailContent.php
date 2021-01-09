@@ -150,7 +150,7 @@ class MailContent extends MailAppModel {
  * @return boolean
  */
 	public function checkSslUrl($check) {
-		if ($check[key($check)] && empty(Configure::read('BcEnv.sslUrl'))) {
+		if ($check[key($check)] && !Configure::read('BcEnv.sslUrl')) {
 			return false;
 		}
 
