@@ -180,4 +180,19 @@ class BlogTag extends BlogAppModel {
 		$ajaxAddUrl = preg_replace('|^/index.php|', '', Router::url(['plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'ajax_add', $blogContentId]));
 		return $Permission->check($ajaxAddUrl, $userGroupId);
 	}
+
+/**
+ * 指定した名称のブログタグ情報を取得する
+ *
+ * @param string $name
+ * @return array
+ */
+	public function getByName($name) {
+		return $this->find('first', [
+			'conditions' => ['BlogTag.name' => $name],
+			'recursive' => -1,
+			'callbacks' => false,
+		]);
+	}
+
 }
