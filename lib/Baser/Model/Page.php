@@ -270,7 +270,7 @@ class Page extends AppModel {
 	public function createAllPageTemplate() {
 		set_time_limit(0);
 		if (function_exists('ini_set')) {
-			ini_set('memory_limit ', '-1');
+			ini_set('memory_limit', '-1');
 		}
 		$pages = $this->find('all', ['conditions' => ['Content.deleted' => false], 'recursive' => 0]);
 		$result = true;
@@ -291,7 +291,7 @@ class Page extends AppModel {
 	public function createPageTemplate($data) {
 		set_time_limit(0);
 		if (function_exists('ini_set')) {
-			ini_set('memory_limit ', '-1');
+			ini_set('memory_limit', '-1');
 		}
 		if (!isset($data['Page']) || !isset($data['Content'])) {
 			return false;
