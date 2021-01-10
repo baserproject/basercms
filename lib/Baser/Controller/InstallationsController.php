@@ -494,7 +494,22 @@ class InstallationsController extends AppController {
  */
 	protected function _readDbSetting($installationData = []) {
 		if (!$installationData) {
-			$installationData = $this->Session->read('Installation');
+			if($this->Session->check('Installation')) {
+				$installationData = $this->Session->read('Installation');
+			} else {
+				$installationData = [
+					'dbType' => '',
+					'dbHost' => '',
+					'dbPort' => '',
+					'dbUsername' => '',
+					'dbPassword' => '',
+					'dbPrefix' => '',
+					'dbName' => '',
+					'dbSchema' => '',
+					'dbEncoding' => '',
+					'dbDataPattern' => ''
+				];
+			}
 		}
 		$data = [
 			'datasource' => $installationData['dbType'],
