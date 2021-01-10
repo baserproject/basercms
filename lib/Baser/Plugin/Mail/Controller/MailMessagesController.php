@@ -66,6 +66,10 @@ class MailMessagesController extends MailAppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
+		$content = $this->BcContents->getContent($this->request->params['pass'][0]);
+		if(!$content) {
+			$this->notFound();
+		}
 		$this->mailContent = $this->MailContent->read(null, $this->params['pass'][0]);
 		App::uses('MailMessage', 'Mail.Model');
 		$this->MailMessage = new MailMessage();
