@@ -129,45 +129,56 @@ class UsersController extends AppController {
 			$this->notFound();
 		}
 
-		if ($this->request->data) {
+		if ($this->request->is('post')) {
 			$this->BcAuth->login();
-			$user = $this->BcAuth->user();
-			$userModel = $this->BcAuth->authenticate['Form']['userModel'];
-			if ($user && $this->isAuthorized($user)) {
-				if (!empty($this->request->data[$userModel]['saved'])) {
-					if (!$this->request->is('mobile')) {
-						$this->setAuthCookie($this->request->data);
-					} else {
-						$this->BcAuth->saveSerial();
-					}
-					unset($this->request->data[$userModel]['save']);
-				} else {
-					$this->Cookie->destroy();
-				}
-				App::uses('BcBaserHelper', 'View/Helper');
-				$BcBaser = new BcBaserHelper(new View());
-				$this->BcMessage->setInfo(sprintf(__d('baser', 'ようこそ、%s さん。'), $BcBaser->getUserName($user)));
-				$this->redirect($this->BcAuth->redirectUrl());
-			} else {
-				$this->BcMessage->setError(__d('baser', 'アカウント名、パスワードが間違っています。'));
-			}
-		} else {
-			$user = $this->BcAuth->user();
-			if ($user && $this->isAuthorized($user)) {
-				$this->redirect($this->BcAuth->redirectUrl());
-			}
 		}
+		$user = $this->BcAuth->user();
 
-		$pageTitle = __d('baser', 'ログイン');
-		$prefixAuth = Configure::read('BcAuthPrefix.' . $this->request->params['prefix']);
-		if ($prefixAuth && isset($prefixAuth['loginTitle'])) {
-			$pageTitle = $prefixAuth['loginTitle'];
+		if ($this->request->is('post')) {
+			if($this->_user_match($user)) {
+				return;
+			}
+			$this->BcMessage->setError(__d('baser', 'アカウント名、パスワードが間違っています。'));
+		} else {
+			if ($user && $this->isAuthorized($user)) {
+				$this->redirect($this->BcAuth->redirectUrl());
+				return;
+			}
 		}
 
 		/* 表示設定 */
-		$this->crumbs = [];
+		$this->crumbs          = [];
 		$this->subMenuElements = '';
-		$this->pageTitle = $pageTitle;
+		$prefixAuth = Configure::read('BcAuthPrefix.' . $this->request->prefix);
+		if (Hash::get($prefixAuth, 'loginTitle')) {
+			$this->pageTitle = $prefixAuth['loginTitle'];
+		} else {
+			$this->pageTitle = __d('baser', 'ログイン');
+		}
+	}
+
+	private function _user_match($user) {
+		if (!$user || !$this->isAuthorized($user)) {
+			return false;
+		}
+		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
+		if ($this->request->data($userModel . '.saved')) {
+			if ($this->request->is('mobile')) {
+				$this->BcAuth->saveSerial();
+			} else {
+				$this->setAuthCookie($this->request->data);
+			}
+			unset($this->request->data[$userModel]['save']);
+		} else {
+			$this->Cookie->destroy();
+		}
+		App::uses('BcBaserHelper', 'View/Helper');
+		$BcBaser = new BcBaserHelper(new View());
+		$this->BcMessage->setInfo(
+			sprintf(__d('baser', 'ようこそ、%s さん。'), $BcBaser->getUserName($user))
+		);
+		$this->redirect($this->BcAuth->redirectUrl());
+		return true;
 	}
 
 	/**
@@ -182,10 +193,15 @@ class UsersController extends AppController {
 			$this->Session->write('AuthAgent', $user);
 		}
 
-		$result = $this->User->find('first', ['conditions' => ['User.id' => $id], 'recursive' => 0]);
+		$result = $this->User->find(
+			'first',
+			[
+				'conditions' => ['User.id' => $id],
+				'recursive' => 0
+			]
+		);
 		$user = $result['User'];
-		unset($user['password']);
-		unset($result['User']);
+		unset($user['password'], $result['User']);
 		$user = array_merge($user, $result);
 		Configure::write('debug', 0);
 		if ($user) {
@@ -237,12 +253,17 @@ class UsersController extends AppController {
 		$cookie = [];
 		foreach($data[$userModel] as $key => $val) {
 			// savedは除外
-			if ($key !== "saved") {
+			if ($key !== 'saved') {
 				$cookie[$key] = $val;
 			}
 		}
 		$this->Cookie->httpOnly = true;
-		$this->Cookie->write(Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)), $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
+		$this->Cookie->write(
+			Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)),
+			$cookie,
+			true,
+			'+2 weeks'
+		);	// 3つめの'true'で暗号化
 	}
 
 /**
@@ -252,7 +273,9 @@ class UsersController extends AppController {
  */
 	public function admin_logout() {
 		$logoutRedirect = $this->BcAuth->logout();
-		$this->Cookie->delete(Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)));
+		$this->Cookie->delete(
+			Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey))
+		);
 		$this->BcMessage->setInfo(__d('baser', 'ログアウトしました'));
 		$this->redirect($logoutRedirect);
 	}
@@ -344,11 +367,19 @@ class UsersController extends AppController {
 			if ($this->User->save()) {
 
 				$this->request->data['User']['id'] = $this->User->id;
-				$this->getEventManager()->dispatch(new CakeEvent('Controller.Users.afterAdd', $this, [
-					'user' => $this->request->data
-				]));
+				$this->getEventManager()->dispatch(
+					new CakeEvent(
+						'Controller.Users.afterAdd',
+						$this,
+						[
+							'user' => $this->request->data
+						]
+					)
+				);
 
-				$this->BcMessage->setSuccess('ユーザー「' . $this->request->data['User']['name'] . '」を追加しました。');
+				$this->BcMessage->setSuccess(
+					sprintf('ユーザー「%s」を追加しました。', $this->request->data['User']['name'])
+				);
 				$this->redirect(['action' => 'edit', $this->User->getInsertID()]);
 			} else {
 				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
@@ -416,7 +447,7 @@ class UsersController extends AppController {
 			if (!$updatable) {
 				$this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));
 
-			// 自身のアカウントは変更出来ないようにチェック
+			// 自身のアカウントは変更できないようにチェック
 			} elseif ($selfUpdate && $user['user_group_id'] != $this->request->data['User']['user_group_id']) {
 				$this->BcMessage->setError(__d('baser', '自分のアカウントのグループは変更できません。'));
 			} else {
@@ -592,7 +623,7 @@ class UsersController extends AppController {
 		$result = $this->sendMail(
 			$email,
 			__d('baser', 'パスワードを変更しました'),
-			['email' => $email, 'password' => $password],
+			['email'    => $email, 'password' => $password],
 			['template' => 'reset_password']
 		);
 		if (!$result) {
@@ -606,5 +637,4 @@ class UsersController extends AppController {
 		$this->BcMessage->setSuccess($email . ' 宛に新しいパスワードを送信しました。');
 		$this->request->data = [];
 	}
-
 }
