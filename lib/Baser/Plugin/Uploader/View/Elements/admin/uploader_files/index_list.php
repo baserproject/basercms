@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Uploader.View
  * @since			baserCMS v 3.0.10
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 // IE文字化け対策
 header('Content-type: text/html; charset=utf-8');
@@ -49,7 +49,7 @@ $this->BcBaser->js([
 
 
 <div class="file-list-body clearfix corner5">
-		
+
 <table class="list-table">
 
 <thead>

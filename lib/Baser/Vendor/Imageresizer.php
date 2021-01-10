@@ -4,7 +4,7 @@
  *
  * @filesource
  * @copyright		Copyright (c) 2007, Catchup
- * @link				http://basercms.net
+ * @link				https://basercms.net
  * @license			MIT License
  */
 class Imageresizer {

@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -19,7 +19,7 @@ class SiteConfig extends AppModel {
 
 /**
  * ビヘイビア
- * 
+ *
  * @var array
  */
 	public $actsAs = ['BcCache'];
@@ -51,7 +51,7 @@ class SiteConfig extends AppModel {
 				'rule' => ['notBlank'], 'message' => __d('baser', 'メインサイト表示名を入力してください。'), 'required' => false]
 		];
 	}
-	
+
 /**
  * テーマの一覧を取得する
  *
@@ -74,7 +74,7 @@ class SiteConfig extends AppModel {
 
 /**
  * コントロールソースを取得する
- * 
+ *
  * @param string $field
  * @return mixed array | false
  */
@@ -103,7 +103,7 @@ class SiteConfig extends AppModel {
 
 /**
  * コンテンツ一覧を表示してから、コンテンツの並び順が変更されていないかどうか
- * 
+ *
  * @param $listDisplayed
  * @return bool
  */
@@ -137,7 +137,7 @@ class SiteConfig extends AppModel {
 	}
 
 /**
- * コンテンツ並び替え順変更時間をリセットする 
+ * コンテンツ並び替え順変更時間をリセットする
  */
 	public function resetContentsSortLastModified() {
 		$siteConfigs['contents_sort_last_modified'] = '';
@@ -146,7 +146,7 @@ class SiteConfig extends AppModel {
 
 /**
  * 指定したフィールドの値がDBのデータと比較して変更状態か確認
- * 
+ *
  * @param string $field フィールド名
  * @param string $value 値
  * @return bool

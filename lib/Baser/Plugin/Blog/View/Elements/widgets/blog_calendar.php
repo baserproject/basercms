@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -118,7 +118,7 @@ $entryDates = $data['entryDates'];
 	print "</td></tr>";
 
 	print '
-<tr> 
+<tr>
 <th class="sunday">' . __('日') . '</th>
 <th>' . __('月') . '</th>
 <th>' . __('火') . '</th>

@@ -1,68 +1,72 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('HttpSocket', 'Core.Network/Http');
 
 /**
+ * Class SearchIndicesController
+ *
  * 検索インデックスコントローラー
  *
- * @package	Baser.Controller
+ * @package Baser.Controller
  * @property Content $Content
  * @property Site $Site
  * @property SearchIndex $SearchIndex
  */
-class SearchIndicesController extends AppController {
+class SearchIndicesController extends AppController
+{
 
-/**
- * クラス名
- *
- * @var array
- */
+	/**
+	 * クラス名
+	 *
+	 * @var array
+	 */
 	public $name = 'SearchIndices';
 
-/**
- * モデル
- *
- * @var array
- */
+	/**
+	 * モデル
+	 *
+	 * @var array
+	 */
 	public $uses = ['SearchIndex', 'Page', 'Site', 'Content'];
 
-/**
- * コンポーネント
- *
- * @var array
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
-/**
- * ヘルパー
- *
- * @var array
- */
+	/**
+	 * ヘルパー
+	 *
+	 * @var array
+	 */
 	public $helpers = ['BcText', 'BcForm', 'BcSearchIndex'];
 
-/**
- * サブメニュー
- *
- * @var array
- */
+	/**
+	 * サブメニュー
+	 *
+	 * @var array
+	 */
 	public $subMenuElements = ['site_configs', 'search_indices'];
 
-/**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
+	/**
+	 * beforeFilter
+	 *
+	 * @return void
+	 */
+	public function beforeFilter()
+	{
 		parent::beforeFilter();
 
 		// 認証設定
@@ -75,7 +79,7 @@ class SearchIndicesController extends AppController {
 			];
 		}
 
-		if(BcUtil::isAdminSystem()) {
+		if (BcUtil::isAdminSystem()) {
 			return;
 		}
 
@@ -99,12 +103,13 @@ class SearchIndicesController extends AppController {
 
 	}
 
-/**
- * コンテンツ検索
- *
- * @return void
- */
-	public function search() {
+	/**
+	 * コンテンツ検索
+	 *
+	 * @return void
+	 */
+	public function search()
+	{
 		$datas = [];
 		$query = [];
 
@@ -112,7 +117,7 @@ class SearchIndicesController extends AppController {
 		$this->setViewConditions('SearchIndex', ['default' => $default, 'type' => 'get']);
 
 		if (!empty($this->request->data['SearchIndex'])) {
-			foreach ($this->request->data['SearchIndex'] as $key => $value) {
+			foreach($this->request->data['SearchIndex'] as $key => $value) {
 				$this->request->data['SearchIndex'][$key] = h($value);
 			}
 		}
@@ -131,20 +136,22 @@ class SearchIndicesController extends AppController {
 		$this->pageTitle = __d('baser', '検索結果一覧');
 	}
 
-/**
- * [SMARTPHONE] コンテンツ検索
- */
-	public function smartphone_search() {
+	/**
+	 * [SMARTPHONE] コンテンツ検索
+	 */
+	public function smartphone_search()
+	{
 		$this->setAction('search');
 	}
 
-/**
- * 検索キーワードを分解し配列に変換する
- *
- * @param string $query
- * @return array
- */
-	protected function _parseQuery($query) {
+	/**
+	 * 検索キーワードを分解し配列に変換する
+	 *
+	 * @param string $query
+	 * @return array
+	 */
+	protected function _parseQuery($query)
+	{
 		$query = str_replace('　', ' ', $query);
 		if (strpos($query, ' ') !== false) {
 			$query = explode(' ', $query);
@@ -154,14 +161,15 @@ class SearchIndicesController extends AppController {
 		return h($query);
 	}
 
-/**
- * 検索条件を生成する
- *
- * @param	array	$data
- * @return	array	$conditions
- * @access	protected
- */
-	protected function _createSearchConditions($data) {
+	/**
+	 * 検索条件を生成する
+	 *
+	 * @param array $data
+	 * @return    array    $conditions
+	 * @access    protected
+	 */
+	protected function _createSearchConditions($data)
+	{
 		$conditions = $this->SearchIndex->getConditionAllowPublish();
 		$query = '';
 		if (!empty($data['SearchIndex']['q'])) {
@@ -186,7 +194,7 @@ class SearchIndicesController extends AppController {
 		}
 		if ($query) {
 			$query = $this->_parseQuery($query);
-			foreach ($query as $key => $value) {
+			foreach($query as $key => $value) {
 				$conditions['and'][$key]['or'][] = ['SearchIndex.title LIKE' => "%{$value}%"];
 				$conditions['and'][$key]['or'][] = ['SearchIndex.detail LIKE' => "%{$value}%"];
 			}
@@ -195,12 +203,13 @@ class SearchIndicesController extends AppController {
 		return $conditions;
 	}
 
-/**
- * [ADMIN] 検索インデックス
- *
- * @return void
- */
-	public function admin_index() {
+	/**
+	 * [ADMIN] 検索インデックス
+	 *
+	 * @return void
+	 */
+	public function admin_index()
+	{
 		$this->pageTitle = __d('baser', '検索インデックス一覧');
 
 		/* 画面情報設定 */
@@ -223,24 +232,24 @@ class SearchIndicesController extends AppController {
 			return;
 		}
 
-		$this->set('folders', $this->Content->getContentFolderList((int) $this->request->data['SearchIndex']['site_id'], ['conditions' => ['Content.site_root' => false]]));
+		$this->set('folders', $this->Content->getContentFolderList((int)$this->request->data['SearchIndex']['site_id'], ['conditions' => ['Content.site_root' => false]]));
 		$this->set('sites', $this->Site->getSiteList());
 		$this->search = 'search_indices_index';
 		$this->help = 'search_indices_index';
 	}
 
-/**
- * [ADMIN] 検索インデックス登録
- *
- * TODO 2013/8/8 ryuring
- * この機能は、URLより、baserCMSで管理されたコンテンツのタイトルとコンテンツ本体を取得し、検索インデックスに登録する為の機能だったが、
- * CakePHP２より、Viewの扱いが変更となった（ClassRegistryで管理されなくなった）為、requestAction 時のタイトルを取得できなくなった。
- * よって機能自体を一旦廃止する事とする。
- * 実装の際は、自動取得ではなく、手動で、タイトルとコンテンツ本体等を取得する仕様に変更する。
- *
- * @return	void
- * @access 	public
- */
+	/**
+	 * [ADMIN] 検索インデックス登録
+	 *
+	 * TODO 2013/8/8 ryuring
+	 * この機能は、URLより、baserCMSで管理されたコンテンツのタイトルとコンテンツ本体を取得し、検索インデックスに登録する為の機能だったが、
+	 * CakePHP２より、Viewの扱いが変更となった（ClassRegistryで管理されなくなった）為、requestAction 時のタイトルを取得できなくなった。
+	 * よって機能自体を一旦廃止する事とする。
+	 * 実装の際は、自動取得ではなく、手動で、タイトルとコンテンツ本体等を取得する仕様に変更する。
+	 *
+	 * @return    void
+	 * @access    public
+	 */
 //	public function admin_add() {
 //		$this->pageTitle = '検索インデックス登録';
 //
@@ -314,14 +323,15 @@ class SearchIndicesController extends AppController {
 //		$this->help = 'search_indices_add';
 //	}
 
-/**
- * [ADMIN] 検索インデックス削除　(ajax)
- *
- * @param	int		$id
- * @return	void
- * @access 	public
- */
-	public function admin_ajax_delete($id = null) {
+	/**
+	 * [ADMIN] 検索インデックス削除　(ajax)
+	 *
+	 * @param int $id
+	 * @return    void
+	 * @access    public
+	 */
+	public function admin_ajax_delete($id = null)
+	{
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -343,11 +353,12 @@ class SearchIndicesController extends AppController {
 	 * @return bool
 	 * @access    public
 	 */
-	protected function _batch_del($ids) {
+	protected function _batch_del($ids)
+	{
 		if (!$ids) {
 			return true;
 		}
-		foreach ($ids as $id) {
+		foreach($ids as $id) {
 			/* 削除処理 */
 			if ($this->SearchIndex->delete($id)) {
 				$message = sprintf(__d('baser', '検索インデックスより NO.%s を削除しました。'), $id);
@@ -363,7 +374,8 @@ class SearchIndicesController extends AppController {
 	 * @return void
 	 * @throws Exception
 	 */
-	public function admin_ajax_change_priority() {
+	public function admin_ajax_change_priority()
+	{
 		if ($this->request->data) {
 			$this->SearchIndex->set($this->request->data);
 			if ($this->SearchIndex->save()) {
@@ -380,7 +392,8 @@ class SearchIndicesController extends AppController {
 	 * @return array
 	 * @access    protected
 	 */
-	protected function _createAdminIndexConditions($data) {
+	protected function _createAdminIndexConditions($data)
+	{
 		if (empty($data['SearchIndex'])) {
 			return [];
 		}
@@ -388,19 +401,19 @@ class SearchIndicesController extends AppController {
 		$conditions = [];
 
 		$type = $status = $keyword = $folderId = $siteId = null;
-		if(isset($data['SearchIndex']['type'])) {
+		if (isset($data['SearchIndex']['type'])) {
 			$type = $data['SearchIndex']['type'];
 		}
-		if(isset($data['SearchIndex']['status'])) {
+		if (isset($data['SearchIndex']['status'])) {
 			$status = $data['SearchIndex']['status'];
 		}
-		if(isset($data['SearchIndex']['keyword'])) {
+		if (isset($data['SearchIndex']['keyword'])) {
 			$keyword = $data['SearchIndex']['keyword'];
 		}
-		if(isset($data['SearchIndex']['folder_id'])) {
+		if (isset($data['SearchIndex']['folder_id'])) {
 			$folderId = $data['SearchIndex']['folder_id'];
 		}
-		if(isset($data['SearchIndex']['site_id'])) {
+		if (isset($data['SearchIndex']['site_id'])) {
 			$siteId = $data['SearchIndex']['site_id'];
 		}
 
@@ -415,18 +428,18 @@ class SearchIndicesController extends AppController {
 		if (empty($data['SearchIndex']['priority'])) {
 			unset($data['SearchIndex']['priority']);
 		}
-		foreach ($data['SearchIndex'] as $key => $value) {
+		foreach($data['SearchIndex'] as $key => $value) {
 			if (preg_match('/priority_[0-9]+$/', $key)) {
 				unset($data['SearchIndex'][$key]);
 			}
 		}
-		if(isset($data['SearchIndex']['priority'])) {
+		if (isset($data['SearchIndex']['priority'])) {
 			$conditions['SearchIndex.priority'] = $data['SearchIndex']['priority'];
 		}
 		if ($type) {
 			$conditions['SearchIndex.type'] = $type;
 		}
-		if($siteId) {
+		if ($siteId) {
 			$conditions['SearchIndex.site_id'] = $siteId;
 		} else {
 			$conditions['SearchIndex.site_id'] = 0;
@@ -449,12 +462,13 @@ class SearchIndicesController extends AppController {
 		return $conditions;
 	}
 
-/**
- * 検索インデックスを再構築する
- */
-	public function admin_reconstruct() {
+	/**
+	 * 検索インデックスを再構築する
+	 */
+	public function admin_reconstruct()
+	{
 		set_time_limit(0);
-		if($this->SearchIndex->reconstruct()) {
+		if ($this->SearchIndex->reconstruct()) {
 			$this->BcMessage->setSuccess('検索インデックスの再構築に成功しました。');
 		} else {
 			$this->BcMessage->setError('検索インデックスの再構築に失敗しました。');

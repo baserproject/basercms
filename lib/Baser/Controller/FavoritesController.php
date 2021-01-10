@@ -1,51 +1,56 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
+ * Class FavoritesController
+ *
  * よく使う項目　コントローラー
  *
  * @package Baser.Controller
  * @property Favorite $Favorite
  */
-class FavoritesController extends AppController {
+class FavoritesController extends AppController
+{
 
-/**
- * クラス名
- *
- * @var string
- */
+	/**
+	 * クラス名
+	 *
+	 * @var string
+	 */
 	public $name = 'Favorites';
 
-/**
- * コンポーネント
- *
- * @var array
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
-/**
- * beforeFilter
- */
-	public function beforeFilter() {
+	/**
+	 * beforeFilter
+	 */
+	public function beforeFilter()
+	{
 		parent::beforeFilter();
 		$this->Favorite->setSession($this->Session);
 	}
 
-/**
- * [ADMIN] よく使う項目を追加する（AJAX）
- *
- * @return void
- */
-	public function admin_ajax_add() {
+	/**
+	 * [ADMIN] よく使う項目を追加する（AJAX）
+	 *
+	 * @return void
+	 */
+	public function admin_ajax_add()
+	{
 		$this->autoRender = false;
 		if (!$this->request->data) {
 			return;
@@ -70,13 +75,14 @@ class FavoritesController extends AppController {
 		$this->render('ajax_form');
 	}
 
-/**
- * [ADMIN] よく使う項目編集
- *
- * @param int $id
- * @return void
- */
-	public function admin_ajax_edit($id) {
+	/**
+	 * [ADMIN] よく使う項目編集
+	 *
+	 * @param int $id
+	 * @return void
+	 */
+	public function admin_ajax_edit($id)
+	{
 		$this->autoRender = false;
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -97,12 +103,13 @@ class FavoritesController extends AppController {
 		$this->render('ajax_form');
 	}
 
-/**
- * [ADMIN] 削除
- *
- * @param int $id
- */
-	public function admin_ajax_delete() {
+	/**
+	 * [ADMIN] 削除
+	 *
+	 * @param int $id
+	 */
+	public function admin_ajax_delete()
+	{
 		if (!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 			exit();
@@ -123,7 +130,8 @@ class FavoritesController extends AppController {
 	 *
 	 * @return void
 	 */
-	public function admin_update_sort() {
+	public function admin_update_sort()
+	{
 		$user = $this->BcAuth->user();
 		if ($this->request->data) {
 			if ($this->Favorite->changeSort($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'], ['Favorite.user_id' => $user['id']])) {

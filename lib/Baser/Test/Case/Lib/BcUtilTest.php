@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Lib
  * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('BcUtil', 'Lib');
 App::uses('BcAuthComponent', 'Controller/Component');
@@ -15,7 +15,7 @@ App::uses('BcAuthComponent', 'Controller/Component');
 
 /**
  * BcUtilクラスのテスト
- * 
+ *
  * @package Baser.Test.Case.Lib
  * @property BcUtil $BcUtil
  */
@@ -51,7 +51,7 @@ class BcUtilTest extends BaserTestCase {
 
 /**
  * 管理システムかチェック
- * 
+ *
  * @param string $url 対象URL
  * @param bool $expect 期待値
  * @dataProvider isAdminSystemDataProvider
@@ -80,7 +80,7 @@ class BcUtilTest extends BaserTestCase {
 
 /**
  * 管理ユーザーかチェック
- * 
+ *
  * @param string $userGroupId ユーザーグループ名
  * @param bool $expect 期待値
  * @dataProvider isAdminUserDataProvider
@@ -157,7 +157,7 @@ class BcUtilTest extends BaserTestCase {
 		// セッションキーを未設定の場合
 		$result = BcUtil::getLoginUserSessionKey();
 		$this->assertEquals('User', $result, 'セッションキーを取得を正しく取得できません');
-		
+
 		// セッションキーを設定した場合
 		BcAuthComponent::$sessionKey = 'Auth.Hoge';
 		$result = BcUtil::getLoginUserSessionKey();
@@ -204,7 +204,7 @@ class BcUtilTest extends BaserTestCase {
 		$Folder->delete($path);
 		$this->assertEquals([], BcUtil::getCurrentThemesPlugins(), '現在適用しているテーマ梱包プラグインのリストを正しく取得できません。');
 	}
-	
+
 /**
  * スキーマ情報のパスを取得する
  */
@@ -217,12 +217,12 @@ class BcUtilTest extends BaserTestCase {
 		$result = BcUtil::getSchemaPath('Blog');
 		$this->assertEquals(BASER_PLUGINS . 'Blog/Config/Schema', $result, 'プラグインのスキーマ情報のパスを正しく取得できません');
 	}
-	
+
 /**
  * 初期データのパスを取得する
- * 
+ *
  * 初期データのフォルダは アンダースコア区切り推奨
- * 
+ *
  * @param string $plugin プラグイン名
  * @param string $theme テーマ名
  * @param string $pattern 初期データの類型
@@ -234,7 +234,7 @@ class BcUtilTest extends BaserTestCase {
 		$isset_plt = isset($plugin) && isset($theme);
 		$isset_plptt = isset($plugin) && isset($pattern) && isset($theme);
 		$Folder = new Folder();
-		
+
 		// 初期データ用のダミーディレクトリを作成
 		if ($isset_ptt) {
 			$Folder->create(BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern);
@@ -368,7 +368,7 @@ class BcUtilTest extends BaserTestCase {
 
 
 /**
- * 現在のドメインを取得する 
+ * 現在のドメインを取得する
  */
 	public function testGetCurrentDomain() {
 		$this->assertEmpty(BcUtil::getCurrentDomain(), '$_SERVER[HTTP_HOST] の値が間違っています。');
@@ -378,7 +378,7 @@ class BcUtilTest extends BaserTestCase {
 
 /**
  * サブドメインを取得する
- * 
+ *
  * @param string $host
  * @param string $currentHost
  * @param string $expects
@@ -387,13 +387,13 @@ class BcUtilTest extends BaserTestCase {
 	public function testGetSubDomain($host, $currentHost, $expects, $message) {
 		Configure::write('BcEnv.mainDomain', 'localhost');
 		if($currentHost) {
-			Configure::write('BcEnv.host', $currentHost);	
+			Configure::write('BcEnv.host', $currentHost);
 		} else {
 			Configure::write('BcEnv.host', '');
 		}
 		$this->assertEquals($expects, BcUtil::getSubDomain($host), $message);
 	}
-	
+
 	public function getSubDomainDataProvider() {
 		return [
 			['', '', '', '現在のサブドメイン名が不正です。'],
@@ -404,5 +404,5 @@ class BcUtilTest extends BaserTestCase {
 			['localhost', '', '', '引数を指定してサブドメイン名が取得できません。'],
 		];
 	}
-	
+
 }

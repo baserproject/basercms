@@ -1,15 +1,15 @@
 <?php
 /**
  * Simplezip
- * 
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ *
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Vendor
  * @since			baserCMS v 3.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -18,7 +18,7 @@
  * CAUTION 現在、Macで圧縮したZipファイルに対応していない
  */
 class Simplezip {
-	
+
 /**
  * 圧縮データ
  *
@@ -26,7 +26,7 @@ class Simplezip {
  * @access	public
  */
 	var $compressedData = array();
-	
+
 /**
  * Central Directory
  *
@@ -34,7 +34,7 @@ class Simplezip {
  * @access	public
  */
 	var $centralDirectory = array();
-	
+
 /**
  * End Of Central Directory Record
  *
@@ -42,7 +42,7 @@ class Simplezip {
  * @access	public
  */
 	var $endOfCentralDirectory = "\x50\x4b\x05\x06\x00\x00\x00\x00";
-	
+
 /**
  * オフセット
  *
@@ -50,15 +50,15 @@ class Simplezip {
  * @access	public
  */
 	var $oldOffset = 0;
-	
+
 /**
  * エントリ（解凍用）
- * 
+ *
  * @var		array
  * @access	public
  */
 	var $entries = array();
-	
+
 /**
  * Get Hexd Time
  *
@@ -80,7 +80,7 @@ class Simplezip {
 		eval('$mtime = "'.$mtime.'";');
 		return $mtime;
 	}
-	
+
 /**
  * フォルダを追加する
  *
@@ -106,7 +106,7 @@ class Simplezip {
 		closedir($handle);
 
 	}
-	
+
 /**
  * 圧縮対象データを追加
  *
@@ -167,7 +167,7 @@ class Simplezip {
 		$this -> centralDirectory[] = $addCentralRecord;
 
 	}
-	
+
 /**
  * Adds "file" to archive
  *
@@ -190,10 +190,10 @@ class Simplezip {
         return (($timearray['year'] - 1980) << 25) | ($timearray['mon'] << 21) | ($timearray['mday'] << 16) |
                 ($timearray['hours'] << 11) | ($timearray['minutes'] << 5) | ($timearray['seconds'] >> 1);
     } // end of the 'unix2DosTime()' method
-	
+
 /**
  * addFile2
- * 
+ *
  * @param mixed $data
  * @param string $name
  * @param int $time
@@ -268,7 +268,7 @@ class Simplezip {
         // save to central directory
         $this -> centralDirectory[] = $cdrec;
     } // end of the 'addFile()' method
-	
+
 /**
  * 圧縮されたデータを取得する
  *
@@ -289,7 +289,7 @@ class Simplezip {
 				pack("V", strlen($controlDirectory)).
 				pack("V", strlen($data))."\x00\x00";
 	}
-	
+
 /**
  * 圧縮ファイルをダウンロードする
  *
@@ -326,7 +326,7 @@ class Simplezip {
 		echo $zippedData;
 
 	}
-	
+
 /**
  * 解凍したファイルを出力する
  *
@@ -355,7 +355,7 @@ class Simplezip {
 		}
 		return $result;
 	}
-	
+
 /**
  * ZIPファイルを読み込む
  *
@@ -484,7 +484,7 @@ class Simplezip {
 		}
 
 		return $this->entries;
-		
+
 	}
 
 }

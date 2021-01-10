@@ -1,20 +1,20 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model
  * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('BcApp', 'Model');
 App::uses('Content', 'Model');
 
 /**
  * BcAppTest class
- * 
+ *
  * @package Baser.Test.Case.Model
  * @property BcAppModel $BcApp
  * @property Page $Page
@@ -197,14 +197,14 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * 子カテゴリのIDリストを取得する
- * 
+ *
  * @dataProvider getChildIdsListDataProvider
  */
 	public function testGetChildIdsList($id, $expects) {
 		$result = $this->Content->getChildIdsList($id);
 		$this->assertEquals($expects, array_values($result));
 	}
-	
+
 	public function getChildIdsListDataProvider() {
 		return [
 			[1, [2, 9, 17, 19, 3, 10, 11, 12, 13, 14, 18, 20, 4, 5, 6, 7, 8, 15, 16]],	// PC
@@ -433,7 +433,7 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * テーブルの存在チェックを行う
- * 
+ *
  * @param string $tableName
  * @param boolean $expect
  * @dataProvider tableExistsDataProvider
@@ -457,7 +457,7 @@ class BcAppTest extends BaserTestCase {
  * 英数チェック
  *
  * @param string $check チェック対象文字列
- * @param boolean $expect 
+ * @param boolean $expect
  * @dataProvider alphaNumericDataProvider
  */
 	public function testAlphaNumeric($check, $expect) {
@@ -527,7 +527,7 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * ファイルサイズチェック
- * 
+ *
  * @param string $fileName チェック対象ファイル名
  * @param string $fileSize チェック対象ファイルサイズ
  * @param boolean $expect
@@ -546,7 +546,7 @@ class BcAppTest extends BaserTestCase {
 		CakeLog::disable('stderr');
 		$result = $this->BcApp->fileCheck($check, $size);
 		CakeLog::enable('stderr');
-		$this->assertEquals($expect, $result);		
+		$this->assertEquals($expect, $result);
 	}
 
 	public function fileCheckDataProvider() {
@@ -562,7 +562,7 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * ファイルの拡張子チェック
- * 
+ *
  * @param string $fileName チェック対象ファイル名
  * @param string $fileType チェック対象ファイルタイプ
  * @param boolean $expect
@@ -577,7 +577,7 @@ class BcAppTest extends BaserTestCase {
 		$ext = "jpg,png";
 
 		$result = $this->BcApp->fileExt($check, $ext);
-		$this->assertEquals($expect, $result);		
+		$this->assertEquals($expect, $result);
 	}
 
 	public function fileExtDataProvider() {
@@ -591,7 +591,7 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * 半角チェック
- * 
+ *
  * @param array $check
  * @param boolean $expect
  * @dataProvider halfTextDataProvider
@@ -683,7 +683,7 @@ class BcAppTest extends BaserTestCase {
 /**
  * リストチェック
  * 対象となる値がリストに含まれる場合はエラー
- * 
+ *
  * @param string $check 対象となる値
  * @param array $list リスト
  * @param boolean $expect
@@ -722,7 +722,7 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * ２つのフィールド値を確認する
- * 
+ *
  * @param mixed $check 対象となる値
  * @param	mixed	$fields フィールド名
  * @param	mixed	$data 値データ
@@ -780,7 +780,7 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * 複数のEメールチェック（カンマ区切り）
- * 
+ *
  * @param array $check 複数のメールアドレス
  * @param boolean $expect
  * @dataProvider emailsDataProvider
@@ -866,14 +866,14 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * 日付の正当性チェック
- * 
+ *
  * @param array $check 確認する値
  * @param boolean $expect
  * @dataProvider checkDateDataProvider
  */
 	public function testCheckDate($check, $expect) {
 		$result = $this->BcApp->checkDate($check);
-		$this->assertEquals($expect, $result);	
+		$this->assertEquals($expect, $result);
 	}
 
 	public function checkDateDataProvider() {
@@ -896,7 +896,7 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * ファイルが送信されたかチェックするバリデーション
- * 
+ *
  * @param array $check ファイルのデータ
  * @param boolean $expect　
  * @dataProvider notFileEmptyDataProvider
@@ -998,5 +998,5 @@ class BcAppTest extends BaserTestCase {
 		$this->assertEquals($result[1]['or']['1']['BcApp.publish_end'], null);
 		$this->assertEquals($result[1]['or']['2']['BcApp.publish_end'], '0000-00-00 00:00:00');
 	}
-	
+
 }

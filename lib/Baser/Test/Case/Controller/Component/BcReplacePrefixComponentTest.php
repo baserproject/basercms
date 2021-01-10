@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Controller.Component
  * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('BcReplacePrefixComponent', 'Controller/Component');
 App::uses('Controller', 'Controller');
@@ -90,7 +90,7 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
 	public function testAllow() {
 		$this->BcReplacePrefix->allowedPureActions = ['a' => 'hoge1', 'b' => 'hoge2'];
 		$this->BcReplacePrefix->allow(['a' => 'hoge3', 'c' => 'hoge4']);
-		
+
 		$result = $this->BcReplacePrefix->allowedPureActions;
 		$expected = ['a' => 'hoge3', 'b' => 'hoge2', 'c' => 'hoge4'];
 		$this->assertEquals($expected, $result, 'プレフィックスの置き換えを許可するアクションを設定が正しくありません');
@@ -98,7 +98,7 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
 
 /**
  * startup
- * 
+ *
  * @param string $pre actionのprefix
  * @param string $action action名
  * @param string $methods $Controller->methods の値
@@ -107,12 +107,12 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
  * @dataProvider startupDataProvider
  */
 	public function testStartup($pre, $action, $methods, $view, $expected) {
-		
+
 		Configure::write('BcAuthPrefix', array_merge(Configure::read('BcAuthPrefix'), [
 			'pre' => ['alias' => 'pre'],
 			'front' => []
 		]));
-		
+
 		// 初期化
 		$this->Controller->params['prefix'] = $pre;
 		$this->Controller->action = $action;

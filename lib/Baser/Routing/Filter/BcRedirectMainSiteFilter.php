@@ -1,21 +1,21 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Routing.Filter
  * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
  * BcRedirectMainSiteFilter class
- * 
+ *
  * サブサイトにコンテンツが存在しない場合、同階層のメインサイトのコンテンツを確認し、
  * 存在していれば、メインサイトへリダイレクトをする。
- * 
+ *
  * （例）
  * /s/service → /service
  *
@@ -24,15 +24,15 @@
 class BcRedirectMainSiteFilter extends DispatcherFilter {
 
 /**
- * priority 
- * 
+ * priority
+ *
  * URLの存在確認が完了しているタイミングを前提としている為、
  * Dispacher::parseParams() より後に実行される必要がある
- * 
+ *
  * @var int
  */
 	public $priority = 10;
-	
+
 /**
  * beforeDispatch Event
  *
@@ -76,7 +76,7 @@ class BcRedirectMainSiteFilter extends DispatcherFilter {
 
 /**
  * コントローラーが存在するか確認
- * 
+ *
  * @param $request
  * @return bool
  */

@@ -1,25 +1,25 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model
  * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('EditorTemplate', 'Model');
 
 /**
  * EditorTemplateTest class
- * 
+ *
  * class NonAssosiationEditorTemplate extends EditorTemplate {
  *  public $name = 'EditorTemplate';
  *  public $belongsTo = [];
  *  public $hasMany = [];
  * }
- * 
+ *
  * @package Baser.Test.Case.Model
  */
 class EditorTemplateTest extends BaserTestCase {

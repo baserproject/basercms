@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -51,9 +51,9 @@ class BlogCommentsController extends BlogAppController {
 			$this->Security->enabled = true;
 			$this->Security->requireAuth('add');
 		}
-		
+
 		$crumbs = [];
-		
+
 		if (!empty($this->params['pass'][1])) {
 			$dbDatas = $this->BlogPost->find('first', ['conditions' => ['BlogPost.id' => $this->params['pass'][1]]]);
 			if (!$dbDatas) {
@@ -64,19 +64,19 @@ class BlogCommentsController extends BlogAppController {
 			if (BcUtil::isAdminSystem()) {
 				$crumbs[] = ['name' => sprintf(__d('baser', '%s 設定'), $this->request->params['Content']['title']), 'url' => ['controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']]];
 				$crumbs[] = ['name' => $this->blogPost['BlogPost']['name'], 'url' => ['controller' => 'blog_posts', 'action' => 'edit', $this->blogContent['BlogContent']['id'], $this->blogPost['BlogPost']['id']]];
-			}	
+			}
 		} elseif (!empty($this->params['pass'][0])) {
 			if(!in_array($this->request->action, ['captcha', 'smartphone_captcha', 'get_token'])) {
 				$dbDatas = $this->BlogPost->BlogContent->find('first', ['conditions' => ['BlogContent.id' => $this->params['pass'][0]]]);
 				$this->blogContent = ['BlogContent' => $dbDatas['BlogContent']];
 				if (BcUtil::isAdminSystem()) {
 					$crumbs[] = ['name' => sprintf(__d('baser', '%s 設定'), $this->request->params['Content']['title']), 'url' => ['controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']]];
-				}	
+				}
 			}
 		}
 
 		$this->crumbs = array_merge($this->crumbs, $crumbs);
-		
+
 	}
 
 /**
@@ -191,7 +191,7 @@ class BlogCommentsController extends BlogAppController {
 
 /**
  * [ADMIN] 無効状態にする（AJAX）
- * 
+ *
  * @param string $blogContentId
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
@@ -213,7 +213,7 @@ class BlogCommentsController extends BlogAppController {
 
 /**
  * [ADMIN] 有効状態にする（AJAX）
- * 
+ *
  * @param string $blogContentId
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
@@ -235,10 +235,10 @@ class BlogCommentsController extends BlogAppController {
 
 /**
  * 一括公開
- * 
+ *
  * @param array $ids
  * @return boolean
- * @access protected 
+ * @access protected
  */
 	protected function _batch_publish($ids) {
 		if ($ids) {
@@ -252,10 +252,10 @@ class BlogCommentsController extends BlogAppController {
 
 /**
  * 一括非公開
- * 
+ *
  * @param array $ids
  * @return boolean
- * @access protected 
+ * @access protected
  */
 	protected function _batch_unpublish($ids) {
 		if ($ids) {
@@ -269,10 +269,10 @@ class BlogCommentsController extends BlogAppController {
 
 /**
  * ステータスを変更する
- * 
+ *
  * @param int $id
  * @param boolean $status
- * @return boolean 
+ * @return boolean
  */
 	protected function _changeStatus($id, $status) {
 		$statusTexts = [0 => __d('baser', '非公開状態'), 1 => __d('baser', '公開状態')];
@@ -296,7 +296,7 @@ class BlogCommentsController extends BlogAppController {
 
 /**
  * [AJAX] ブログコメントを登録する
- * 
+ *
  * @param string $blogContentId
  * @param string $blogPostId
  * @return boolean
@@ -338,7 +338,7 @@ class BlogCommentsController extends BlogAppController {
 
 /**
  * [AJAX] ブログコメントを登録する
- * 
+ *
  * @param string $blogContentId
  * @param string $blogPostId
  * @return boolean
@@ -349,7 +349,7 @@ class BlogCommentsController extends BlogAppController {
 
 /**
  * 認証用のキャプチャ画像を表示する
- * 
+ *
  * @return void
  */
 	public function captcha($token = null) {
@@ -359,7 +359,7 @@ class BlogCommentsController extends BlogAppController {
 
 /**
  * [SMARTPHONE] 認証用のキャプチャ画像を表示する
- * 
+ *
  * @return void
  */
 	public function smartphone_captcha($token = null) {

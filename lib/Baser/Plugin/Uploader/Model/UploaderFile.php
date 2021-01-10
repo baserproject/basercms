@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Uploader.Model
  * @since			baserCMS v 3.0.10
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -86,7 +86,7 @@ class UploaderFile extends AppModel {
 		$UploaderConfig = ClassRegistry::init('Uploader.UploaderConfig');
 		$uploaderConfigs = $UploaderConfig->findExpanded();
 		$imagecopy = array();
-		
+
 		foreach($sizes as $size) {
 			if(!isset($uploaderConfigs[$size.'_width']) || !isset($uploaderConfigs[$size.'_height'])) {
 				continue;
@@ -98,7 +98,7 @@ class UploaderFile extends AppModel {
 				$imagecopy[$size]['thumb'] = $uploaderConfigs[$size.'_thumb'];
 			}
 		}
-		
+
 		$settings = $this->actsAs['BcUpload'];
 		$settings['fields']['name']['imagecopy'] = $imagecopy;
 		$this->Behaviors->attach('BcUpload', $settings);
@@ -117,13 +117,13 @@ class UploaderFile extends AppModel {
  */
 	public function beforeSave($options = array()) {
 		parent::beforeSave($options);
-		
+
 		if(!empty($this->data['UploaderFile']['id'])) {
-			
+
 			$savePath = WWW_ROOT . 'files' . DS . $this->actsAs['BcUpload']['saveDir'] . DS;
 			$sizes = array('large', 'midium', 'small', 'mobile_large', 'mobile_small');
 			$pathinfo = pathinfo($this->data['UploaderFile']['name']);
-			
+
 			if(!empty($this->data['UploaderFile']['publish_begin']) || !empty($this->data['UploaderFile']['publish_end'])) {
 				if(file_exists($savePath . $this->data['UploaderFile']['name'])) {
 					rename($savePath . $this->data['UploaderFile']['name'], $savePath . 'limited' . DS . $this->data['UploaderFile']['name']);
@@ -133,7 +133,7 @@ class UploaderFile extends AppModel {
 					if(file_exists($savePath . $file)) {
 						rename($savePath . $file, $savePath . 'limited' . DS . $file);
 					}
-				}	
+				}
 			} else {
 				if(file_exists($savePath . 'limited' . DS . $this->data['UploaderFile']['name'])) {
 					rename($savePath . 'limited' . DS . $this->data['UploaderFile']['name'], $savePath . $this->data['UploaderFile']['name']);
@@ -143,10 +143,10 @@ class UploaderFile extends AppModel {
 					if(file_exists($savePath . 'limited' . DS . $file)) {
 						rename($savePath . 'limited' . DS . $file, $savePath . $file);
 					}
-				}	
+				}
 			}
 		}
-		
+
 		return true;
 	}
 
@@ -157,7 +157,7 @@ class UploaderFile extends AppModel {
  * @return	bool
  */
 	public function fileExists($fileName, $limited = false) {
-		
+
 		if($limited) {
 			$savePath = WWW_ROOT . 'files' . DS . $this->actsAs['BcUpload']['saveDir'] . DS . 'limited' . DS . $fileName;
 		} else {
@@ -169,7 +169,7 @@ class UploaderFile extends AppModel {
 
 /**
  * 複数のファイルの存在チェックを行う
- * 
+ *
  * @param	string	$fileName
  * @return	array
  */
@@ -234,6 +234,6 @@ class UploaderFile extends AppModel {
 		}
 		return parent::beforeDelete($cascade);
 	}
-	
+
 }
 

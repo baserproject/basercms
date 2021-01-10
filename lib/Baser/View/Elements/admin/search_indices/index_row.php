@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -27,7 +27,7 @@ $priorities = ['0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.4', '
 	<td class="row-tools" style="width:22%">
 		<?php if ($this->BcBaser->isAdminUser()): ?>
 			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['SearchIndex']['id'], ['type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['SearchIndex']['id']]) ?>
-		<?php endif ?>		
+		<?php endif ?>
 		<?php
 		echo $this->BcForm->input('SearchIndex.priority' . '_' . $data['SearchIndex']['id'], [
 			'type' => 'select',

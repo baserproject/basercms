@@ -1,25 +1,25 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model
  * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('Permission', 'Model');
 
 /**
  * PermissionTest class
- * 
+ *
  * class NonAssosiationPermission extends Permission {
  *  public $name = 'Permission';
  *  public $belongsTo = array();
  *  public $hasMany = array();
  * }
- * 
+ *
  * @property Permission $Permission
  */
 class PermissionTest extends BaserTestCase {
@@ -202,7 +202,7 @@ class PermissionTest extends BaserTestCase {
 
 /**
  * beforeSave
- * 
+ *
  * @param array $url saveするurl
  * @param array $expectedUrl 期待するurl
  * @param string $message テストが失敗した時に表示されるメッセージ
@@ -234,7 +234,7 @@ class PermissionTest extends BaserTestCase {
 
 /**
  * 権限チェックを行う
- * 
+ *
  * @param array $url
  * @param string $userGroupId
  * @param array $expected 期待値
@@ -260,7 +260,7 @@ class PermissionTest extends BaserTestCase {
 
 /**
  * アクセス制限データをコピーする
- * 
+ *
  * @param int $id
  * @param array $data
  * @param array $expected 期待値

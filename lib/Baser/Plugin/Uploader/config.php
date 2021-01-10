@@ -1,19 +1,19 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Uploader
  * @since			baserCMS v 3.0.10
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 $title = __d('baser', 'アップローダー');
 $description = __d('baser', 'Webページやブログ記事で、画像等のファイルを貼り付ける事ができます。');
 $author = 'baserCMS Users Community';
-$url = 'http://basercms.net';
+$url = 'https://basercms.net';
 $adminLink = array('admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_files', 'action' => 'index');
 if(!is_writable(WWW_ROOT.'files')){
 	$viewFilesPath = str_replace(ROOT,'',WWW_ROOT).'files';

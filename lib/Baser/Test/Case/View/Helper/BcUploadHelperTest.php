@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.View.Helper
  * @since			baserCMS v 3.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BcUploadHelper', 'View/Helper');
@@ -19,10 +19,10 @@ App::uses('BcUploadHelper', 'View/Helper');
  * @property  BcUploadHelper $BcUpload
  */
 class BcUploadHelperTest extends BaserTestCase {
-	
+
 /**
  * Fixtures
- * @var array 
+ * @var array
  */
 	public $fixtures = [
 		'baser.Default.Content',
@@ -88,7 +88,7 @@ class BcUploadHelperTest extends BaserTestCase {
  * アップロードした画像のタグを出力する
  */
 	public function testUploadImage() {
-		
+
 		// オプションなし
 		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg');
 		$this->assertRegExp('/^<a href=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?><\/a>/', $result);

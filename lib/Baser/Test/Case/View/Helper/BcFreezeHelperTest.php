@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.View.Helper
  * @since			baserCMS v 3.0.6
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BcFreezeHelper', 'View/Helper');
@@ -47,10 +47,10 @@ class BcFreezeHelperTest extends BaserTestCase {
 		unset($this->BcFreeze);
 		parent::tearDown();
 	}
-	
+
 /**
  * テキストボックスを表示する
- * 
+ *
  * @param boolean $freezed フォームを凍結させる
  * @param string $fieldName フィールド文字列
  * @param array $attributes html属性
@@ -84,7 +84,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 
 /**
  * select プルダウンメニューを表示
- * 
+ *
  * @param boolean $freezed フォームを凍結させる
  * @param	string $fieldName フィールド文字列
  * @param	array $options コントロールソース
@@ -119,7 +119,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 
 /**
  * 日付タグを表示
- * 
+ *
  * @param boolean $freezed フォームを凍結させる
  * @param	string $fieldName フィールド文字列
  * @param	string $dateFormat 日付フォーマット
@@ -129,7 +129,7 @@ class BcFreezeHelperTest extends BaserTestCase {
  * @dataProvider dateTimeDataProvider
  */
 	public function testDateTime($freezed, $fieldName, $dateFormat, $timeFormat, $attributes, $expected) {
-		
+
 		// 凍結させる
 		if($freezed) {
 			$this->BcFreeze->freeze();
@@ -195,7 +195,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 
 /**
  * チェックボックスを表示する
- * 
+ *
  * @param boolean $freezed フォームを凍結させる
  * @param string $fieldName フィールド文字列
  * @param title $title タイトル
@@ -225,7 +225,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 
 /**
  * テキストエリアを表示する
- * 
+ *
  * @param boolean $freezed フォームを凍結させる
  * @param string フィールド文字列
  * @param array html属性
@@ -257,7 +257,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 
 /**
  * ラジオボタンを表示する
- * 
+ *
  * @param boolean $freezed フォームを凍結させる
  * @param string $fieldName フィールド文字列
  * @param array $options コントロールソース
@@ -288,10 +288,10 @@ class BcFreezeHelperTest extends BaserTestCase {
 
 /**
  * ファイルタグを出力
- * 
+ *
  * MEMO : 3番目のテストは、以下のエラーに対応できなかったためスキップしています。
  * BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。
- * 
+ *
  * @param boolean $freezed フォームを凍結させる
  * @param string $fieldName
  * @param array $options
@@ -309,11 +309,11 @@ class BcFreezeHelperTest extends BaserTestCase {
 			$result = $this->EditorTemplate->BcFreeze->file($fieldName, $options);
 			$this->assertRegExp('/' . $expected . '/s', $result);
 
-		
+
 		} else {
 			$result = $this->BcFreeze->file($fieldName, $options);
 			$this->assertRegExp('/' . $expected . '/s', $result);
-		
+
 		}
 
 	}
@@ -329,7 +329,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 /**
  * ファイルコントロール（画像）を表示する
  * TODO 確認画面には未チェック
- * 
+ *
  * @param boolean $freezed フォームを凍結させる
  * @param string $name $this->request->data[$model][$field]['name']に格納する値
  * @param string $exist フィールド文字列 $this->request->data[$model][$field . '_exists'] に格納する値
@@ -344,7 +344,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 		list($model, $field) = explode('.', $fieldName);
 		$this->BcFreeze->request->data[$model][$field]['name'] = $name;
 		$this->BcFreeze->request->data[$model][$field . '_exists'] = $exist;
-		
+
 		// 凍結させる
 		if($freezed) {
 			$this->BcFreeze->freeze();
@@ -372,7 +372,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 /**
  * JsonList
  * TODO 確認画面用の実装は全くしてない
- * 
+ *
  * @param boolean $freezed フォームを凍結させる
  * @param array $data 凍結させたjsonのデータ
  * @param string $fieldName フィールド文字列
@@ -415,7 +415,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 /**
  * カレンダーコントロール付きのテキストフィールド
  * jquery-ui-1.7.2 必須
- * 
+ *
  * @param boolean $freezed フォームを凍結させる
  * @param string $date 凍結させた日時
  * @param string $fieldName フィールド文字列

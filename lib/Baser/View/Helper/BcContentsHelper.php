@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -28,12 +28,12 @@ class BcContentsHelper extends AppHelper {
 
 /**
  * Content Model
- * 
+ *
  * @var Content
  */
 	protected $_Content = null;
 	protected $_Permission = null;
-	
+
 /**
  * Constructor.
  *
@@ -50,30 +50,30 @@ class BcContentsHelper extends AppHelper {
 	}
 
 /**
- * セットアップ 
+ * セットアップ
  */
 	public function setup() {
 		$settings = $this->_View->get('contentsSettings');
-                
+
 		if(!$settings) {
 			return;
 		}
-		
+
 		$existsTitles = $this->_getExistsTitles();
 		$user = BcUtil::loginUser('admin');
-		
+
 		foreach($settings as $type => $setting) {
 
 			// title
 			if (empty($setting['title'])) {
 				$setting['title'] = $type;
 			}
-			
+
 			// omitViewAction
 			if(empty($setting['omitViewAction'])) {
 				$setting['omitViewAction'] = false;
 			}
-			
+
 			// exists
 			if (empty($setting['multiple'])) {
 				$setting['multiple'] = false;
@@ -89,7 +89,7 @@ class BcContentsHelper extends AppHelper {
 			// icon
 			if (!empty($setting['icon'])) {
 				if(preg_match('/\.(png|jpg|gif)$/', $setting['icon'])) {
-					$setting['url']['icon'] = $this->_getIconUrl($setting['plugin'], $setting['type'], $setting['icon']);	
+					$setting['url']['icon'] = $this->_getIconUrl($setting['plugin'], $setting['type'], $setting['icon']);
 				}
 			} else {
 				// 後方互換のため判定を入れる（v4.2.0）
@@ -99,7 +99,7 @@ class BcContentsHelper extends AppHelper {
 					$setting['url']['icon'] = $this->_getIconUrl($setting['plugin'], $setting['type'], null);
 				}
 			}
-			
+
 			// routes
 			foreach (['manage', 'add', 'edit', 'delete', 'copy', 'dblclick'] as $method) {
 				if (empty($setting['routes'][$method]) && !in_array($method, ['copy', 'manage', 'dblclick'])) {
@@ -116,7 +116,7 @@ class BcContentsHelper extends AppHelper {
 		}
 		$this->settings = $settings;
 	}
-	
+
 /**
  * アクションが利用可能かどうか確認する
  *
@@ -214,7 +214,7 @@ class BcContentsHelper extends AppHelper {
  * データが公開状態にあるか確認する
  *
  * @param array $data コンテンツデータ
- * @param bool $self コンテンツ自身の公開状態かどうか 
+ * @param bool $self コンテンツ自身の公開状態かどうか
  * @return mixed
  */
 	public function isAllowPublish($data, $self = false) {
@@ -280,7 +280,7 @@ class BcContentsHelper extends AppHelper {
 
 /**
  * コンテンツリストをツリー構造で取得する
- * 
+ *
  * @param int $id カテゴリID
  * @param int $level 関連データの階層
  * @param array $options
@@ -313,8 +313,8 @@ class BcContentsHelper extends AppHelper {
 		}
 		// CAUTION CakePHP2系では、fields を指定すると正常なデータが取得できない
 		return $this->_Content->find('threaded', [
-			'order' => $options['order'], 
-			'conditions' => $conditions, 
+			'order' => $options['order'],
+			'conditions' => $conditions,
 			'recursive' => 0,
 			'cache' => false
 		]);
@@ -326,7 +326,7 @@ class BcContentsHelper extends AppHelper {
  * - 引数なしで現在のコンテンツの親情報を取得
  * - $id を指定して取得する事ができる
  * - $direct を false に設定する事で、最上位までの親情報を取得
- * 
+ *
  * @param bool $direct 直接の親かどうか
  * @return mixed false|array
  */
@@ -367,7 +367,7 @@ class BcContentsHelper extends AppHelper {
 
 /**
  * サイト連携データかどうか確認する
- * 
+ *
  * @param array $data コンテンツデータ
  * @return bool
  */
@@ -382,7 +382,7 @@ class BcContentsHelper extends AppHelper {
 
 /**
  * 関連サイトのコンテンツを取得
- * 
+ *
  * @param int $id コンテンツID
  * @return array | false
  */
@@ -400,15 +400,15 @@ class BcContentsHelper extends AppHelper {
 					$id = $content['id'];
 				}
 			} else {
-				return false;	
-			}	
+				return false;
+			}
 		}
 		return $this->_Content->getRelatedSiteContents($id, $options);
 	}
 
 /**
  * 関連サイトのリンク情報を取得する
- * 
+ *
  * @param int $id
  * @return array
  */
@@ -427,12 +427,12 @@ class BcContentsHelper extends AppHelper {
 				];
 			}
 		}
-		return $urls;		
+		return $urls;
 	}
 
 /**
  * フォルダリストを取得する
- * 
+ *
  * @param int $siteId
  * @param array $options
  * @return array|bool
@@ -440,22 +440,22 @@ class BcContentsHelper extends AppHelper {
 	public function getContentFolderList($siteId = null, $options = []) {
 		return $this->_Content->getContentFolderList($siteId, $options);
 	}
-	
+
 /**
  * サイトIDからサイトルートとなるコンテンツを取得する
- * 
+ *
  * @param int $siteId
  * @return array
- */	
+ */
 	public function getSiteRoot($siteId) {
 		return $this->_Content->getSiteRoot($siteId);
 	}
 /**
  * サイトIDからサイトルートとなるコンテンツIDを取得する
- * 
+ *
  * @param int $siteId
  * @return string|bool
- */		
+ */
 	public function getSiteRootId($siteId) {
 		$content = $this->getSiteRoot($siteId);
 		if($content) {
@@ -515,7 +515,7 @@ class BcContentsHelper extends AppHelper {
  * @param string $contentType コンテンツタイプ
  * ('Page','MailContent','BlogContent','ContentFolder')
  * @param string $field 取得したい値
- *  'name','url','title'など　初期値：Null 
+ *  'name','url','title'など　初期値：Null
  *  省略した場合配列を取得
  * @return array|string|bool
  */
@@ -531,7 +531,7 @@ class BcContentsHelper extends AppHelper {
  * @param string $contentType コンテンツタイプ
  * ('Page','MailContent','BlogContent','ContentFolder')
  * @param string $field 取得したい値
- *  'name','url','title'など　初期値：Null 
+ *  'name','url','title'など　初期値：Null
  *  省略した場合配列を取得
  * @return array|string|bool
  */
@@ -623,7 +623,7 @@ class BcContentsHelper extends AppHelper {
 		}
 		return $folderLinkedUrl;
 	}
-	
+
 /**
  * フォルダかどうか確認する
  * @return bool

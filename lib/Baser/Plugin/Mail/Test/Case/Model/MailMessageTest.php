@@ -1,20 +1,20 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Mail.Test.Case.Model
  * @since			baserCMS v 3.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('MailMessage', 'Mail.Model');
 
 /**
  * Class MailMessageTest
- * 
+ *
  * @property MailMessage $MailMessage
  */
 class MailMessageTest extends BaserTestCase {
@@ -38,12 +38,12 @@ class MailMessageTest extends BaserTestCase {
 		unset($this->MailMessage);
 		parent::tearDown();
 	}
-	
+
 /**
  * モデルのセットアップを行う
- * 
+ *
  * MailMessageモデルは利用前にこのメソッドを呼び出しておく必要あり
- * 
+ *
  * @param type $mailContentId
  * @return boolean
  */
@@ -122,7 +122,7 @@ class MailMessageTest extends BaserTestCase {
 				'tel_1' => '000', 'tel_2' => '0000', 'tel_3' => '0000',
 				'category' => 1, 'message' => array('year' => 9999, 'month' => 99, 'day' => 99),
 				'name_1' => 'baser', 'name_2' => 'cms',
-				'root' => '検索エンジン', 
+				'root' => '検索エンジン',
 			),
 			array(), 'バリデーションチェックが正しく行われていません'),
 			// 異常系
@@ -423,7 +423,7 @@ class MailMessageTest extends BaserTestCase {
 
 		$this->MailMessage->createTable($id);
 		$this->MailMessage->construction($id);
-		
+
 		// フィールド追加
 		$this->MailMessage->addMessageField($id, $fieldName);
 		$sql = $command . " $fullTable $fieldName";
@@ -447,7 +447,7 @@ class MailMessageTest extends BaserTestCase {
  * メッセージ保存用テーブルのフィールドを最適化する
  * 初回の場合、id/created/modifiedを追加する
  * 2回目以降の場合は、最後のカラムに追加する
- * 
+ *
  * @param array $dbConfig
  * @param int $mailContentId
  * @return boolean
@@ -476,7 +476,7 @@ class MailMessageTest extends BaserTestCase {
 		// 一回目
 		$this->MailMessage->construction($id);
 		$this->assertTrue($this->MailMessage->tableExists($fullTable), 'メッセージテーブルを正しく作成できません');
-		
+
 		$expectColumns = array('id', 'modified', 'created');
 		$sql = $command . " $fullTable";
 		$resultColumns = array();
@@ -508,7 +508,7 @@ class MailMessageTest extends BaserTestCase {
 
 /**
  * 受信メッセージの内容を表示状態に変換する
- * 
+ *
  * @param int $id
  * @param array $messages
  * @return array
@@ -563,14 +563,14 @@ class MailMessageTest extends BaserTestCase {
 				)
 			)
 		);
-		
+
 		$result = $this->MailMessage->convertMessageToCsv(1, $messages);
 		$this->assertEquals($expected, $result, '受信メッセージの内容を表示状態に正しく変換できません');
 	}
 
 /**
  * メール受信テーブルを全て再構築
- * 
+ *
  * @return boolean
  */
 	public function testReconstructionAll() {
@@ -581,10 +581,10 @@ class MailMessageTest extends BaserTestCase {
 		$this->assertTrue($this->MailMessage->tableExists($fullTable));
 	}
 
-	
+
 /**
  * find
- * 
+ *
  * @param String $type
  * @param mixed $query
  * @return Array

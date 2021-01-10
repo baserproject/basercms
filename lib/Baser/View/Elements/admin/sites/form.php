@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -119,7 +119,7 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 				<div class="helptext"><?php echo __d('baser', 'サブサイトに言語属性を持たせ、サイトアクセス時、ブラウザの言語設定を判定し適切なサイトを表示する機能を利用します。')?></div>
 			<?php else: ?>
 				<?php echo $this->BcForm->input('Site.lang', ['type' => 'hidden']) ?>
-			<?php endif ?>				
+			<?php endif ?>
 			<div id="SectionAccessType" style="display:none">
 				<small><?php echo __d('baser', '[アクセス設定]')?></small>
 				<br>

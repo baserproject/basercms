@@ -1,18 +1,18 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Mail.View
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
  * [ADMIN] メールコンテンツ フォーム
- * 
+ *
  * @var BcAppView $this
  */
 $this->BcBaser->i18nScript([
@@ -104,7 +104,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 			</td>
 		</tr>
 		<?php echo $this->BcForm->dispatchAfterForm() ?>
-	</table>	
+	</table>
 </div>
 
 <h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption"><?php echo __d('baser', 'オプション')?></a></h2>
@@ -115,16 +115,16 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 			<td class="col-input">
 				&nbsp;&nbsp;
 				<?php echo $this->BcForm->input('MailContent.publish_begin', [
-				        'type' => 'dateTimePicker', 
-                        'size' => 12, 
+				        'type' => 'dateTimePicker',
+                        'size' => 12,
                         'maxlength' => 10,
 						'dateLabel' => ['text' => '開始日付'],
 						'timeLabel' => ['text' => '開始時間']
                 ]) ?>
 				&nbsp;〜&nbsp;
 				<?php echo $this->BcForm->input('MailContent.publish_end', [
-				        'type' => 'dateTimePicker', 
-                        'size' => 12, 
+				        'type' => 'dateTimePicker',
+                        'size' => 12,
                         'maxlength' => 10,
 						'dateLabel' => ['text' => '終了日付'],
 						'timeLabel' => ['text' => '終了時間']

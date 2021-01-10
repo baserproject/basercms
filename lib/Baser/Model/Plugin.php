@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -19,7 +19,7 @@ class Plugin extends AppModel {
 
 /**
  * ビヘイビア
- * 
+ *
  * @var array
  */
 	public $actsAs = ['BcCache'];
@@ -42,7 +42,7 @@ class Plugin extends AppModel {
 				['rule' => ['maxLength', 50], 'message' => __d('baser', 'プラグインタイトルは50文字以内とします。')]]
 		];
 	}
-	
+
 /**
  * データベースを初期化する
  * 既存のテーブルは上書きしない
@@ -77,7 +77,7 @@ class Plugin extends AppModel {
 
 /**
  * データベースをプラグインインストール前の状態に戻す
- * 
+ *
  * @param string $plugin プラグイン名
  * @return bool
  */
@@ -168,7 +168,7 @@ class Plugin extends AppModel {
 
 /**
  * データベースの構造を変更する
- * 
+ *
  * @param string $plugin プラグイン名
  * @param string $dbConfigName データベース設定名
  * @param string $filterTable テーブル指定
@@ -426,7 +426,7 @@ class Plugin extends AppModel {
 		}
 
 		$adminLinkUrl = Router::url($pluginInfo['Plugin']['admin_link']);
-		if (isset($pluginInfo['Plugin']['admin_link']['action']) && 
+		if (isset($pluginInfo['Plugin']['admin_link']['action']) &&
 			$pluginInfo['Plugin']['admin_link']['action'] == 'index') {
 			$adminLinkUrl .= '/';
 		}

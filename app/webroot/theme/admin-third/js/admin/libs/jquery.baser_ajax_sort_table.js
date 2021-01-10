@@ -1,12 +1,12 @@
 
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -38,16 +38,16 @@
 
 		},
 		initList: function() {
-			
+
 			var config = $.baserAjaxSortTable.config;
-			
+
 			// イベント削除
 			$(config.handle).unbind();
 			// 初期化されてない場合にメソッドを実行すると処理が止まってしまう為 try を利用
 			try {
 				$(config.listTable).sortable("destroy");
 			} catch(e) {}
-			
+
 			// イベント登録
 			var sortableOptions = {
 				scroll: true,
@@ -70,17 +70,17 @@
 			$(config.handle).click(function(e){
 				e.stopPropagation();
 			});
-			
+
 		}
-		
+
 	};
 /**
 * 並び替え開始時イベント
 */
 	function sortStartHandler(event, ui) {
-		
+
 		var config = $.baserAjaxSortTable.config;
-		
+
 		ui.item.css('border','1px solid #CCC');
 		$(config.placeHolder).css('height',ui.item.height());
 		for(var i = 0; i < ui.item.find('td').length; i++){
@@ -88,28 +88,28 @@
 		}
 		$(config.placeHolder + " td").css('background-color', '#ffffff');
 		$(config.placeHolder + " td").css('border', 'none');
-		
+
 	}
 /**
  * 並び替え終了時イベント
  */
 	function sortStopHander(event, ui) {
-		
+
 		ui.item.css('border','none');
-		
+
 	}
 /**
  * 並び順を更新時イベント
  */
 	function sortUpdateHandler(event, ui){
-		
+
 		var config = $.baserAjaxSortTable.config;
 		var target = ui.item;
 		var targetNum = $(config.listTable + " " + config.items).index(target)+1;
 		var sourceNum = target.attr('id').replace('Row','');
 		var offset = targetNum - sourceNum;
 		var sortTable = $(config.listTable);
-	
+
 		var form = $('<form/>').hide();
 		var sortId = $('<input/>').attr('type', 'hidden').attr('name', 'data[Sort][id]').val(target.find('.id').val());
 		var sortOffset = $('<input/>').attr('type', 'hidden').attr('name', 'data[Sort][offset]').val(offset);
@@ -162,7 +162,7 @@
 				}
 			});
 		}, {hideLoader: false});
-		
+
 	}
-	
+
 })(jQuery);

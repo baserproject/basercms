@@ -1,32 +1,34 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Lib.TestSuite.Reporter
- * @since			baserCMS v 3.0.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Lib.TestSuite.Reporter
+ * @since           baserCMS v 3.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('CakeTextReporter', 'TestSuite/Reporter');
 
 /**
- * CakeTextReporter contains reporting features used for plain text based output
+ * Class BaserTextReporter
  *
- * @package       Baser.Lib.TestSuite.Reporter
+ * @package Baser.Lib.TestSuite.Reporter
  */
-class BaserTextReporter extends CakeTextReporter {
+class BaserTextReporter extends CakeTextReporter
+{
 
-/**
- * Generate a test case list in plain text.
- * Creates as series of url's for tests that can be run.
- * One case per line.
- *
- * @return void
- */
-	public function testCaseList() {
+	/**
+	 * Generate a test case list in plain text.
+	 * Creates as series of url's for tests that can be run.
+	 * One case per line.
+	 *
+	 * @return void
+	 */
+	public function testCaseList()
+	{
 		// CUSTOMIZE MODIFY 2014/07/02 ryuring
 		// >>>
 		//$testCases = parent::testCaseList();
@@ -46,7 +48,7 @@ class BaserTextReporter extends CakeTextReporter {
 			$buffer = "Baser Test Cases:\n";
 			$urlExtra = '&baser=true';
 		} elseif ($app) {
-		// <<<
+			// <<<
 			$buffer = "App Test Cases:\n";
 		} elseif ($plugin) {
 			$buffer = Inflector::humanize($plugin) . " Test Cases:\n";
@@ -57,7 +59,7 @@ class BaserTextReporter extends CakeTextReporter {
 			echo $buffer;
 		}
 
-		foreach ($testCases as $testCase) {
+		foreach($testCases as $testCase) {
 			$buffer .= $_SERVER['SERVER_NAME'] . $this->baseUrl() . "?case=" . $testCase . "&output=text\n";
 		}
 

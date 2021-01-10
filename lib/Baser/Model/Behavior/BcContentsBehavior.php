@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model.Behavior
  * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -158,7 +158,7 @@ class BcContentsBehavior extends ModelBehavior {
 
 /**
  * 公開されたコンテンツを取得する
- * 
+ *
  * @param Model $model
  * @param string $type
  * @param array $query
@@ -176,5 +176,5 @@ class BcContentsBehavior extends ModelBehavior {
 		}
 		return $model->find($type, $query);
 	}
-	
+
 }

@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Feed
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -16,7 +16,7 @@
 ?>
 
 
-<p><?php echo __d('baser', 'フィード設定の基本項目を入力します。<br />フィードごとにデザインを変更する場合には、画面下の「オプション」をクリックしてテンプレート名を変更します。<br /><small>※ テンプレート名を変更した場合は、新しい名称のテンプレートを作成しアップロードする必要があります。</small><br /><a href="http://basercms.net/manuals/designers/7.html" target="_blank" class="outside-link">フィード読み込み部分のテンプレートを変更する</a>')?></p>
+<p><?php echo __d('baser', 'フィード設定の基本項目を入力します。<br />フィードごとにデザインを変更する場合には、画面下の「オプション」をクリックしてテンプレート名を変更します。<br /><small>※ テンプレート名を変更した場合は、新しい名称のテンプレートを作成しアップロードする必要があります。</small><br /><a href="https://basercms.net/manuals/designers/7.html" target="_blank" class="outside-link">フィード読み込み部分のテンプレートを変更する</a>')?></p>
 <ul>
 	<li><?php echo __d('baser', '一つの設定につき、フィードは複数登録する事ができます。複数登録した場合は、複数のフィードを合わせた上で日付順に並び替えられます。')?></li>
 	<li><?php echo __d('baser', 'フィードを追加するには、画面下の「フィード一覧」の「新規追加」ボタンをクリックします。')?></li>

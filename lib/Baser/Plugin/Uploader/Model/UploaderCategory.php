@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Uploader.Model
  * @since			baserCMS v 3.0.10
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -39,7 +39,7 @@ class UploaderCategory extends AppModel {
 		);
 /**
  * コピーする
- * 
+ *
  * @param int $id
  * @param array $data
  * @return mixed page Or false
@@ -62,11 +62,11 @@ class UploaderCategory extends AppModel {
 
 		$data['UploaderCategory']['name'] .= '_copy';
 		$data['UploaderCategory']['id'] = $this->getMax('id', array('UploaderCategory.id' => $data['UploaderCategory']['id'])) + 1;
-		
+
 		unset($data['UploaderCategory']['id']);
 		unset($data['UploaderCategory']['created']);
 		unset($data['UploaderCategory']['modified']);
-		
+
 		$this->create($data);
 		$result = $this->save();
 		if($result) {
@@ -89,7 +89,7 @@ class UploaderCategory extends AppModel {
 				return false;
 			}
 		}
-		
+
 	}
 
 }

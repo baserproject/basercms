@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Mail.Test.Case.Model
  * @since			baserCMS v 3.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('MailField', 'Mail.Model');
@@ -70,7 +70,7 @@ class MailFieldTest extends BaserTestCase {
 				'type' => '',
 			)
 		));
-	
+
 		$this->assertFalse($this->MailField->validates());
 
 		$expected = array(
@@ -129,7 +129,7 @@ class MailFieldTest extends BaserTestCase {
 			)
 		));
 		$this->assertFalse($this->MailField->validates());
-		
+
 		$expected = array(
 			'field_name' => array('フィールド名は半角英数字のみで入力してください。'),
 		);
@@ -144,7 +144,7 @@ class MailFieldTest extends BaserTestCase {
 			)
 		));
 		$this->assertFalse($this->MailField->validates());
-		
+
 		$expected = array(
 			'field_name' => array('入力されたフィールド名は既に登録されています。'),
 		);
@@ -201,7 +201,7 @@ class MailFieldTest extends BaserTestCase {
 			} else {
 				$this->assertEquals(1, $result['MailField']['sort'], 'sortを正しく設定できません');
 			}
-		
+
 		} else {
 			$this->assertEquals('hogeName_copy', $result['MailField']['name'], '$dataからコピーができません');
 			if (!$sortUpdateOff) {
@@ -244,7 +244,7 @@ class MailFieldTest extends BaserTestCase {
 	public function testAfterSave() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
-	
+
 /**
  * testFormatSource
  * @dataProvider formatSourceDataProvider

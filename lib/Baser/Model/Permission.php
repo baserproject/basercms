@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -19,7 +19,7 @@ class Permission extends AppModel {
 
 /**
  * ビヘイビア
- * 
+ *
  * @var array
  */
 	public $actsAs = ['BcCache'];
@@ -35,7 +35,7 @@ class Permission extends AppModel {
  * permissionsTmp
  * ログインしているユーザーの拒否URLリスト
  * キャッシュ用
- * 
+ *
  * @var mixed
  */
 	public $permissionsTmp = -1;
@@ -142,7 +142,7 @@ class Permission extends AppModel {
 /**
  * beforeSave
  * urlの先頭に / を付けて絶対パスにする
- * 
+ *
  * @param array $options
  * @return boolean
  */
@@ -163,7 +163,7 @@ class Permission extends AppModel {
 
 /**
  * 権限チェックを行う
- * 
+ *
  * @param array $url
  * @param string $userGroupId
  * @return boolean
@@ -172,7 +172,7 @@ class Permission extends AppModel {
 		if($userGroupId == Configure::read('BcApp.adminGroupId')) {
 			return true;
 		}
-		
+
 		$this->setCheck($userGroupId);
 		$permissions = $this->permissionsTmp;
 
@@ -225,7 +225,7 @@ class Permission extends AppModel {
 
 /**
  * アクセス制限データをコピーする
- * 
+ *
  * @param int $id
  * @param array $data
  * @return mixed UserGroup Or false
@@ -262,7 +262,7 @@ class Permission extends AppModel {
 
 /**
  * 権限チェックの準備をする
- * 
+ *
  * @param $userGroupId
  */
 	public function setCheck($userGroupId) {
@@ -284,7 +284,7 @@ class Permission extends AppModel {
 
 /**
  * 権限チェック対象を追加する
- * 
+ *
  * @param string $url
  * @param bool $auth
  */

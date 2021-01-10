@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.View.Helper
  * @since			baserCMS v 3.0.6
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BcAppView', 'View');
@@ -26,7 +26,7 @@ class Contact extends CakeTestModel {
  * @var bool
  */
 	public $useTable = false;
-	
+
 /**
  * ビヘイビア
  *
@@ -61,7 +61,7 @@ class BcFormHelperTest extends BaserTestCase {
 
 /**
  * Fixtures
- * @var array 
+ * @var array
  */
 	public $fixtures = [
 		'baser.Default.Page',
@@ -73,7 +73,7 @@ class BcFormHelperTest extends BaserTestCase {
 		'baser.Default.UserGroup',
 		'baser.Default.Favorite'
 	];
-	
+
 /**
  * setUp method
  *
@@ -174,7 +174,7 @@ class BcFormHelperTest extends BaserTestCase {
 /**
  * create
  * フック用にラッピング
- * 
+ *
  * @param array $model
  * @param array $options
  * @return string
@@ -274,7 +274,7 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 /**
- * ラベルを取得する 
+ * ラベルを取得する
  */
 	public function testLabel() {
 		$expected = 'class="bca-label"';
@@ -303,11 +303,11 @@ class BcFormHelperTest extends BaserTestCase {
 			['test', [], '<textarea name="data\[test\]".*load.*CKEDITOR', 'CKEditorを出力できません'],
 			['test', ['editorLanguage' => 'en'], '"language":"en"', 'オプションを設定できません'],
 		];
-	}	
+	}
 
 /**
  * エディタを表示する
- * 
+ *
  * @param string $fieldName
  * @param array $options
  * @param string $expected 期待値
@@ -502,7 +502,7 @@ class BcFormHelperTest extends BaserTestCase {
 
 /**
  * 日付カレンダーと時間フィールド
- * 
+ *
  * @param string $fieldName
  * @param array $attributes
  * @param string $expected 期待値
@@ -527,7 +527,7 @@ class BcFormHelperTest extends BaserTestCase {
 
 /**
  * 文字列保存用複数選択コントロール
- * 
+ *
  * @param string $fieldName
  * @param array $options
  * @param mixed $selected
@@ -588,7 +588,7 @@ class BcFormHelperTest extends BaserTestCase {
 
 /**
  * フォームの最後のフィールドの後に発動する前提としてイベントを発動する
- * 
+ *
  * @param string $type フォームのタイプ タイプごとにイベントの登録ができる
  * @return string 行データ
  * @dataProvider dispatchAfterFormDataProvider
@@ -616,7 +616,7 @@ class BcFormHelperTest extends BaserTestCase {
 /**
  * Creates a set of radio widgets. Will create a legend and fieldset
  * by default. Use $options to control this
- * 
+ *
  * @param string $fieldName Name of a field, like this "Modelname.fieldname"
  * @param array $options Radio button options array.
  * @param array $attributes Array of HTML attributes, and special attributes above.
@@ -626,7 +626,7 @@ class BcFormHelperTest extends BaserTestCase {
  */
 	public function testRadio($fieldName, $options, $attributes, $expected, $message) {
 		$result = $this->BcForm->radio($fieldName, $options, $attributes);
-		$this->assertRegExp('/' . $expected . '/s', $result, $message);	
+		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
 	public function radioDataProvider() {
@@ -644,7 +644,7 @@ class BcFormHelperTest extends BaserTestCase {
  * testFormCreateWithSecurity method
  *
  * Test BcForm->create() with security key.
- * 
+ *
  * @return void
  */
 	public function testCreateWithSecurity() {
@@ -713,7 +713,7 @@ class BcFormHelperTest extends BaserTestCase {
 			'/span',
 			['input' => ['type' => 'hidden', 'name' => 'data[Contact][eye_catch_]', 'value' => 'template1.jpg', 'id' => 'ContactEyeCatch']],
 			['br' => true],
-			['figure' => []],	
+			['figure' => []],
 			['a' => ['href' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'rel' => 'colorbox', 'title' => '']],
 			['img' => ['src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '']],
 			'/a',

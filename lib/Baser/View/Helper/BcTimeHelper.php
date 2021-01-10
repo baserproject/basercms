@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('TimeHelper', 'View/Helper');
@@ -27,7 +27,7 @@ class BcTimeHelper extends TimeHelper {
  * @var array
  */
 	public $nengos = ["m" => "明治", "t" => "大正", "s" => "昭和", "h" => "平成", "r" => "令和"];
-	
+
 /**
  * 日本語曜日リスト
  *
@@ -85,7 +85,7 @@ class BcTimeHelper extends TimeHelper {
 /**
  * 西暦を和暦の年に変換する
  * 西暦をまたがる場合があるので配列で返す
- * 
+ *
  * @param int $year
  * @return array
  */
@@ -116,7 +116,7 @@ class BcTimeHelper extends TimeHelper {
 /**
  * 和暦の年を西暦に変換する
  * 和暦のフォーマット例：s-48
- * 
+ *
  * @param string $year
  * @return int
  */
@@ -282,12 +282,12 @@ class BcTimeHelper extends TimeHelper {
 		}
 		return false;
 	}
-	
+
 /**
  * 日本の曜日名を1文字 + $suffixの形式で取得する
  * - 引数により、指定しない場合は本日の曜日
  * - 文字列で、strtotime関数で解析可能な場合は解析された日付の曜日
- * 
+ *
  * @param string $dataStr (null|string) 日付文字列 "+1 day" / "YYYY/MM/DD"など
  * @param type $suffix 接尾語(曜日 など)
  * @return string 曜日 | 空白
@@ -297,21 +297,21 @@ class BcTimeHelper extends TimeHelper {
 		if ($dateStr === null) {
 			return $this->jpWeekList[date('w')] . $suffix;
 		}
-		
+
 		// 日付として解析出来る場合
 		if (strtotime($dateStr)) {
 			return $this->jpWeekList[date('w', strtotime($dateStr))] . $suffix;
 		}
-		
+
 		// 解析できなかった場合
 		return '';
 	}
-	
+
 /**
  * 曜日情報を出力する
  * - 曜日情報が正しく取得できない場合は接尾辞も表示しない
  * - ex) <?php $this->BcTime->jpWeek($post['posts_date'], '曜日'); ?>
- * 
+ *
  * @param string $dateStr getJpWeek参照
  * @param string $suffix getJpWeek参照
  */

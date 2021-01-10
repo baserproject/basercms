@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -193,16 +193,16 @@ if($this->BcContents->isEditable()) {
 					&nbsp;&nbsp;&nbsp;&nbsp;<small>[<?php echo __d('baser', '公開期間')?>]</small>&nbsp;
 					<?php if(!$disableEdit): ?>
                         <?php echo $this->BcForm->input('Content.self_publish_begin', [
-                                'type' => 'dateTimePicker', 
-                                'size' => 12, 
+                                'type' => 'dateTimePicker',
+                                'size' => 12,
                                 'maxlength' => 10,
 								'dateLabel' => ['text' => '開始日付'],
 								'timeLabel' => ['text' => '開始時間']
                         ]) ?>
 						&nbsp;〜&nbsp;
 						<?php echo $this->BcForm->input('Content.self_publish_end', [
-						        'type' => 'dateTimePicker', 
-                                'size' => 12, 
+						        'type' => 'dateTimePicker',
+                                'size' => 12,
                                 'maxlength' => 10,
 								'dateLabel' => ['text' => '終了日付'],
 								'timeLabel' => ['text' => '終了時間']
@@ -221,7 +221,7 @@ if($this->BcContents->isEditable()) {
 					<?php if((bool) $this->BcForm->value('Content.status') != (bool) $this->BcForm->value('Content.self_status')): ?>
 						<p class="parents-disable">※ <?php echo __d('baser', '親フォルダの設定を継承し非公開状態となっています')?></p>
 					<?php endif ?>
-					<?php if(($this->BcForm->value('Content.publish_begin') != $this->BcForm->value('Content.self_publish_begin')) || 
+					<?php if(($this->BcForm->value('Content.publish_begin') != $this->BcForm->value('Content.self_publish_begin')) ||
 							($this->BcForm->value('Content.publish_end') != $this->BcForm->value('Content.self_publish_end'))): ?>
 						<p>※ <?php echo __d('baser', '親フォルダの設定を継承し公開期間が設定されている状態となっています')?><br>
 							（<?php echo $this->BcTime->format('Y/m/d H:i', $this->BcForm->value('Content.publish_begin')) ?> 〜

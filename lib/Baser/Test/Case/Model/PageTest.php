@@ -1,19 +1,19 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model
  * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('Page', 'Model');
 
 /**
  * PageTest class
- * 
+ *
  * @package Baser.Test.Case.Model
  * @property Page $Page
  */
@@ -41,7 +41,7 @@ class PageTest extends BaserTestCase {
 
 /**
  * Page
- * 
+ *
  * @var Page
  */
 	public $Page = null;
@@ -106,7 +106,7 @@ class PageTest extends BaserTestCase {
 			['<img onMouseOver="">', false],
 			['<a href="javascript:alert(\'test\')">', false],
 			['<a href=\'javascript:alert("test")\'>', false],
-			['<a href="http://basercms.net">baserCMS<\/a>', true]
+			['<a href="https://basercms.net">baserCMS<\/a>', true]
 		];
 	}
 
@@ -153,7 +153,7 @@ class PageTest extends BaserTestCase {
 
 /**
  * ページテンプレートファイルが開けるかチェックする
- * 
+ *
  * @param array $name ページ名
  * @param array $parentId 親コンテンツID
  * @param array $expected 期待値
@@ -187,7 +187,7 @@ class PageTest extends BaserTestCase {
 
 /**
  * afterSave
- * 
+ *
  * @param boolean $created
  * @param array $options
  * @return boolean
@@ -199,7 +199,7 @@ class PageTest extends BaserTestCase {
 
 /**
  * 関連ページに反映する
- * 
+ *
  * @param string $type
  * @param array $data
  * @return boolean
@@ -227,7 +227,7 @@ class PageTest extends BaserTestCase {
  */
 	public function testCreateSearchIndex($id, $name, $categoryId, $title, $url, $description, $publish_begin, $publish_end, $status, $message = null) {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		
+
 		$data = [
 			'Page' => [
 				'id' => $id,
@@ -281,7 +281,7 @@ class PageTest extends BaserTestCase {
 			]
 		);
 		$path = APP . 'View' . DS . 'Pages' . $page['Content']['url'] . '.php';
-		$File = new File($path);  
+		$File = new File($path);
 		$content = $File->read();
 
 		// 削除実行
@@ -330,7 +330,7 @@ class PageTest extends BaserTestCase {
 
 /**
  * ページテンプレートを生成する
- * 
+ *
  * @param array $name ページ名
  * @param array $categoryId ページカテゴリーID
  * @param array $expected 期待値
@@ -356,7 +356,7 @@ class PageTest extends BaserTestCase {
 
 		// trueなら生成されている
 		$result = file_exists($path);
-		
+
 		// 生成されているファイル削除
 		@unlink($path);
 
@@ -380,7 +380,7 @@ class PageTest extends BaserTestCase {
 
 /**
  * ページファイルを削除する
- * 
+ *
  * @param array $name ページ名
  * @param array $categoryId ページカテゴリーID
  * @param array $expected 期待値
@@ -416,8 +416,8 @@ class PageTest extends BaserTestCase {
 
 			// trueなら削除済み
 			$result = !file_exists($path);
-			
-			// 削除したファイルを再生成	
+
+			// 削除したファイルを再生成
 			$File->write($tmp_content);
 
 		} else {
@@ -426,7 +426,7 @@ class PageTest extends BaserTestCase {
 		}
 
 		$File->close();
-		
+
 		$this->assertEquals($expected, $result, $message);
 	}
 
@@ -440,7 +440,7 @@ class PageTest extends BaserTestCase {
 
 /**
  * 本文にbaserが管理するタグを追加する
- * 
+ *
  * @param string $id ID
  * @param string $contents 本文
  * @param string $title タイトル
@@ -465,9 +465,9 @@ class PageTest extends BaserTestCase {
 
 /**
  * コントロールソースを取得する
- * 
+ *
  * MEMO: $optionのテストについては、UserTest でテスト済み
- * 
+ *
  * @param string $field フィールド名
  * @param array $options
  * @param array $expected 期待値
@@ -499,7 +499,7 @@ class PageTest extends BaserTestCase {
 
 /**
  * 固定ページとして管理されているURLかチェックする
- * 
+ *
  * @param string $url URL
  * @param bool $expects true Or false
  * @return void
@@ -539,7 +539,7 @@ class PageTest extends BaserTestCase {
 			]
 		);
 		$path = APP . 'View' . DS . 'Pages' . $Page['Content']['url'] . '.php';
-		$File = new File($path);  
+		$File = new File($path);
 		$Content = $File->read();
 
 		// 削除実行
@@ -563,7 +563,7 @@ class PageTest extends BaserTestCase {
 
 /**
  * ページデータをコピーする
- * 
+ *
  * @param int $id ページID
  * @param int $newParentId 新しい親コンテンツID
  * @param string $newTitle 新しいタイトル
@@ -573,7 +573,7 @@ class PageTest extends BaserTestCase {
  * @dataProvider copyDataProvider
  */
 	public function testCopy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId, $message = null) {
-		$this->_loginAdmin();		
+		$this->_loginAdmin();
 		$result = $this->Page->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
 
 		// コピーしたファイル存在チェック
@@ -661,7 +661,7 @@ class PageTest extends BaserTestCase {
 
 /**
  * URLからページを取得する
- * 
+ *
  * @param string $url
  * @param string $publish
  * @param bool $expected
@@ -672,7 +672,7 @@ class PageTest extends BaserTestCase {
 		$result = (bool) $this->Page->findByUrl($url, $publish);
 		$this->assertEquals($expected, $result);
 	}
-	
+
 	public function findByUrlDataProvider() {
 		return [
 			['/about', true, true],
@@ -702,5 +702,5 @@ class PageTest extends BaserTestCase {
 			[4, false],
 		];
 	}
-	
+
 }

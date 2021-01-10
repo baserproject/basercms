@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -86,7 +86,7 @@ class BlogContentsController extends BlogAppController {
 		}
 		return false;
 	}
-	
+
 /**
  * [ADMIN] ブログコンテンツ追加
  *
@@ -174,7 +174,7 @@ class BlogContentsController extends BlogAppController {
 
 /**
  * レイアウト編集画面にリダイレクトする
- * 
+ *
  * @param string $template
  * @return void
  */
@@ -201,7 +201,7 @@ class BlogContentsController extends BlogAppController {
 
 /**
  * ブログテンプレート編集画面にリダイレクトする
- * 
+ *
  * @param string $template
  * @return void
  */
@@ -227,7 +227,7 @@ class BlogContentsController extends BlogAppController {
 			$this->redirect(['action' => 'index']);
 		}
 	}
-	
+
 /**
  * 削除
  *
@@ -244,7 +244,7 @@ class BlogContentsController extends BlogAppController {
 		}
 		return false;
 	}
-	
+
 /**
  * コピー
  *
@@ -266,5 +266,5 @@ class BlogContentsController extends BlogAppController {
 		}
 		return false;
 	}
-	
+
 }

@@ -1,19 +1,19 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model
  * @since			baserCMS v 4.1.6
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('SearchIndex', 'Model');
 
 /**
  * ThemeFileTest class
- * 
+ *
  * @package Baser.Test.Case.Model
  * @property SearchIndex $SearchIndex
  */
@@ -57,7 +57,7 @@ class SearchIndexTest extends BaserTestCase {
 		Configure::write('BcAuthPrefix.admin.previewRedirect', '');
 		$_SERVER['REQUEST_URI'] = '/';
 		$this->_loginAdmin();
-		
+
 		// ===========================================
 		// 全ページ再構築
 		// ===========================================
@@ -65,7 +65,7 @@ class SearchIndexTest extends BaserTestCase {
 		$this->SearchIndex->reconstruct();
 		$result = $this->SearchIndex->find('count');
 		$this->assertEquals(15, $result);
-		
+
 		// ===========================================
 		// 指定ディレクトリ配下再構築
 		// ===========================================
@@ -103,7 +103,7 @@ class SearchIndexTest extends BaserTestCase {
 		$searchIndex = $searchIndexModel->find('first', ['conditions' => ['id' => 8]]);
 		$this->assertTrue($searchIndex['SearchIndex']['status']);
 	}
-	
+
 /**
  * 公開状態を取得する
  *

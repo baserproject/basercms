@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('Xml', 'Utility');
@@ -188,7 +188,7 @@ class BlogPostsController extends BlogAppController {
 
 /**
  * 一覧の表示用データをセットする
- * 
+ *
  * @return void
  */
 	protected function _setAdminIndexViewData() {
@@ -494,7 +494,7 @@ class BlogPostsController extends BlogAppController {
 
 /**
  * 一括削除
- * 
+ *
  * @param array $ids
  * @return boolean
  */
@@ -509,9 +509,9 @@ class BlogPostsController extends BlogAppController {
 
 /**
  * データを削除する
- * 
+ *
  * @param int $id
- * @return boolean 
+ * @return boolean
  */
 	protected function _del($id) {
 		// メッセージ用にデータを取得
@@ -656,7 +656,7 @@ class BlogPostsController extends BlogAppController {
 
 /**
  * [ADMIN] 無効状態にする（AJAX）
- * 
+ *
  * @param string $blogContentId
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
@@ -678,7 +678,7 @@ class BlogPostsController extends BlogAppController {
 
 /**
  * [ADMIN] 有効状態にする（AJAX）
- * 
+ *
  * @param string $blogContentId
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
@@ -700,10 +700,10 @@ class BlogPostsController extends BlogAppController {
 
 /**
  * 一括公開
- * 
+ *
  * @param array $ids
  * @return boolean
- * @access protected 
+ * @access protected
  */
 	protected function _batch_publish($ids) {
 		if ($ids) {
@@ -717,10 +717,10 @@ class BlogPostsController extends BlogAppController {
 
 /**
  * 一括非公開
- * 
+ *
  * @param array $ids
  * @return boolean
- * @access protected 
+ * @access protected
  */
 	protected function _batch_unpublish($ids) {
 		if ($ids) {
@@ -734,10 +734,10 @@ class BlogPostsController extends BlogAppController {
 
 /**
  * ステータスを変更する
- * 
+ *
  * @param int $id
  * @param boolean $status
- * @return boolean 
+ * @return boolean
  */
 	protected function _changeStatus($id, $status) {
 		$statusTexts = [0 => __d('baser', '非公開状態'), 1 => __d('baser', '公開状態')];
@@ -759,8 +759,8 @@ class BlogPostsController extends BlogAppController {
 
 /**
  * [ADMIN] コピー
- * 
- * @param int $id 
+ *
+ * @param int $id
  * @return void
  */
 	public function admin_ajax_copy($blogContentId, $id = null) {

@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model
  * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('Favorite', 'Model');
 App::uses('SessionComponent', 'Controller/Component');
@@ -16,13 +16,13 @@ App::uses('CookieComponent', 'Controller/Component');
 
 /**
  * FavoriteTest class
- * 
+ *
  * class NonAssosiationFavorite extends Favorite {
  *  public $name = 'Favorite';
  *  public $belongsTo = array();
  *  public $hasMany = array();
  * }
- * 
+ *
  * @package Baser.Test.Case.Model
  */
 class FavoriteTest extends BaserTestCase {
@@ -49,7 +49,7 @@ class FavoriteTest extends BaserTestCase {
 
 /**
  * 偽装ログイン処理
- * 
+ *
  * @param $id ユーザーIDとユーザーグループID
  * - 1 システム管理者
  * - 2 サイト運営

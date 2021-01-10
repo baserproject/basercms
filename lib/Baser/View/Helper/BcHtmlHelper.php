@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('HtmlHelper', 'View/Helper');
@@ -18,7 +18,7 @@ App::uses('HtmlHelper', 'View/Helper');
  * @package Baser.View.Helper
  */
 class BcHtmlHelper extends HtmlHelper {
-	
+
 // CUSTOMIZE ADD 2014/07/03 ryuring
 // >>>
 /**
@@ -27,7 +27,7 @@ class BcHtmlHelper extends HtmlHelper {
  * @var array
  */
 	public $helpers = ['Js'];
-	
+
 /**
  * タグにラッピングされていないパンくずデータを取得する
  * @return array
@@ -47,7 +47,7 @@ class BcHtmlHelper extends HtmlHelper {
  */
 	public function setScript($variable, $value, $options = []) {
 		$options = array_merge([
-			'inline' => false, 
+			'inline' => false,
 			'declaration' => true,
 			'escape' => true
 		], $options);
@@ -74,7 +74,7 @@ class BcHtmlHelper extends HtmlHelper {
 	public function declarationI18n() {
 		return $this->setScript('bcI18n', [], ['inline' => true]);
 	}
-	
+
 /**
  * JavaScript に、翻訳データを引き渡す
  * `bcI18n.キー名` で参照可能
@@ -87,7 +87,7 @@ class BcHtmlHelper extends HtmlHelper {
  */
 	public function i18nScript($data, $options = []) {
 		$options = array_merge([
-			'inline' => false, 
+			'inline' => false,
 			'declaration' => false,
 			'escape' => true
 		], $options);

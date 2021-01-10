@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.Model
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BlogAppModel', 'Blog.Model');
@@ -38,11 +38,11 @@ class BlogPost extends BlogAppModel {
 
 /**
  * ファインダーメソッド
- * 
+ *
  * @var array
  */
 	public $findMethods = ['customParams' =>  true];
-	
+
 /**
  * ビヘイビア
  *
@@ -97,7 +97,7 @@ class BlogPost extends BlogAppModel {
 
 /**
  * HABTM
- * 
+ *
  * @var array
  */
 	public $hasAndBelongsToMany = [
@@ -210,13 +210,13 @@ class BlogPost extends BlogAppModel {
 			'viewCount' => false,
 			'type' => 'month' // month Or year
 			], $options);
-		
+
 		$conditions = [];
 		if($blogContentId) {
-			$conditions = ['BlogPost.blog_content_id' => $blogContentId];	
+			$conditions = ['BlogPost.blog_content_id' => $blogContentId];
 		}
 		$conditions = array_merge($conditions, $this->getConditionAllowPublish());
-		
+
 		if ($options['category']) {
 			$recursive = 1;
 			$this->unbindModel([
@@ -293,7 +293,7 @@ class BlogPost extends BlogAppModel {
 
 /**
  * カレンダー用に指定した月で記事の投稿がある日付のリストを取得する
- * 
+ *
  * @param int $blogContentId ブログコンテンツID
  * @param int $year 年
  * @param int $month 月
@@ -315,10 +315,10 @@ class BlogPost extends BlogAppModel {
 
 /**
  * 投稿者の一覧を取得する
- * 
+ *
  * @param int $blogContentId ブログコンテンツID
  * @param array $options オプション
- * @return array 
+ * @return array
  */
 	public function getAuthors($blogContentId, $options) {
 		$options = array_merge([
@@ -367,7 +367,7 @@ class BlogPost extends BlogAppModel {
 /**
  * 年月を指定した検索条件を生成
  * データベースごとに構文が違う
- * 
+ *
  * @param int $blogContentId
  * @param int $year
  * @param int $month
@@ -432,14 +432,14 @@ class BlogPost extends BlogAppModel {
 			'blogCategoryId' => '',
 			'empty' => ''
 		], $options);
-		
+
 		$blogContentId = $options['blogContentId'];
 		$empty = $options['empty'];
 		unset($options['blogCategoryId']);
 		unset($options['blogContentId']);
 		unset($options['empty']);
 		unset($options['userGroupId']);
-		
+
 		switch ($field) {
 			case 'blog_category_id':
 				$catOption = ['blogContentId' => $blogContentId];
@@ -551,7 +551,7 @@ class BlogPost extends BlogAppModel {
 		if(!$content) {
 			return false;
 		}
-		
+
 		$status = $data['status'];
 		$publishBegin = $data['publish_begin'];
 		$publishEnd = $data['publish_end'];
@@ -559,7 +559,7 @@ class BlogPost extends BlogAppModel {
 		if(!$content['Content']['status']) {
 			$status = false;
 		}
-		
+
 		if($publishBegin) {
 			if((!empty($content['Content']['publish_begin']) && $content['Content']['publish_begin'] > $publishBegin)) {
 				// コンテンツの公開開始の方が遅い場合
@@ -588,7 +588,7 @@ class BlogPost extends BlogAppModel {
 				$publishEnd = $content['Content']['publish_end'];
 			}
 		}
-		
+
 		return ['SearchIndex' => [
 			'type' => __d('baser', 'ブログ'),
 			'model_id' => $this->id,
@@ -602,7 +602,7 @@ class BlogPost extends BlogAppModel {
 			'publish_begin' => $publishBegin,
 			'publish_end' => $publishEnd
 		]];
-		
+
 	}
 
 /**
@@ -616,7 +616,7 @@ class BlogPost extends BlogAppModel {
 
 /**
  * コピーする
- * 
+ *
  * @param int $id
  * @param array $data
  * @return mixed page Or false
@@ -780,7 +780,7 @@ class BlogPost extends BlogAppModel {
 /**
  * カスタムパラメーター検索
  * ※ カスタムファインダーメソッド
- * 
+ *
  * @param string $state
  * @param array $query
  * @param array $results
@@ -792,7 +792,7 @@ class BlogPost extends BlogAppModel {
 			$assocContent = false;
 			$query = array_merge([
 				'conditions' => [],		// 検索条件のベース
-				'listCount' => null, 	// 件数（非推奨） 
+				'listCount' => null, 	// 件数（非推奨）
 				'num' => null,			// 件数
 				'limit' => null,		// 件数
 				'direction' => 'DESC',	// 並び方向
@@ -838,11 +838,11 @@ class BlogPost extends BlogAppModel {
 					}
 				}
 			}
-			
+
 			if(is_null($query['conditions'])) {
 				$conditions = [];
 			} else {
-				$conditions = $query['conditions'];	
+				$conditions = $query['conditions'];
 			}
 
 			// ブログコンテンツID
@@ -911,14 +911,14 @@ class BlogPost extends BlogAppModel {
 				$query['cache'] = false;
 			}
 			$query['conditions'] = $conditions;
-			
+
 			unset($query['contentId'], $query['category'], $query['tag'], $query['keyword'],
-				$query['year'], $query['month'], $query['day'], $query['author'], $query['id'], 
-				$query['preview'], $query['sort'], $query['direction'], $query['num'], 
+				$query['year'], $query['month'], $query['day'], $query['author'], $query['id'],
+				$query['preview'], $query['sort'], $query['direction'], $query['num'],
 				$query['force'],$query['no'], $query['siteId'], $query['contentUrl']);
 
 			$this->reduceAssociations($expects, false);
-			
+
 			$this->BlogContent->unbindModel([
 				'hasMany' => ['BlogPost', 'BlogCategory']
 			]);
@@ -930,12 +930,12 @@ class BlogPost extends BlogAppModel {
 			]);
 			return $query;
 		}
-		return $results;	
+		return $results;
 	}
 
 /**
  * カテゴリ条件を生成する
- * 
+ *
  * @param array $conditions
  * @param string $category
  * @param int $contentId
@@ -977,7 +977,7 @@ class BlogPost extends BlogAppModel {
 
 /**
  * タグ条件を生成する
- * 
+ *
  * @param array $conditions
  * @param mixed $tag タグ（配列可）
  * @return array
@@ -1003,10 +1003,10 @@ class BlogPost extends BlogAppModel {
 
 /**
  * キーワード条件を生成する
- * 
+ *
  * @param array $conditions
  * @param string $keyword
- * @return array 
+ * @return array
  */
 	public function createKeywordCondition($conditions, $keyword) {
 		$keyword = str_replace('　', ' ', $keyword);
@@ -1026,7 +1026,7 @@ class BlogPost extends BlogAppModel {
 
 /**
  * 年月日条件を生成する
- * 
+ *
  * @param array $conditions
  * @param int $year
  * @param int $month
@@ -1057,7 +1057,7 @@ class BlogPost extends BlogAppModel {
 
 /**
  * 作成者の条件を作成する
- * 
+ *
  * @param array $conditions
  * @param string $author
  * @return array
@@ -1070,7 +1070,7 @@ class BlogPost extends BlogAppModel {
 
 /**
  * 並び替え設定を生成する
- * 
+ *
  * @param string $sort
  * @param string $direction
  * @return string

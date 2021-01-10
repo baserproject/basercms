@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.Model
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BlogAppModel', 'Blog.Model');
@@ -84,11 +84,11 @@ class BlogContent extends BlogAppModel {
 				['rule' => ['checkEyeCatchSize'], 'message' => __d('baser', 'アイキャッチ画像のサイズが不正です。')]]
 		];
 	}
-	
+
 /**
  * アイキャッチ画像サイズバリデーション
- * 
- * @return boolean 
+ *
+ * @return boolean
  */
 	public function checkEyeCatchSize() {
 		$data = $this->constructEyeCatchSize($this->data);
@@ -129,7 +129,7 @@ class BlogContent extends BlogAppModel {
 				$ContentModel = ClassRegistry::init('Content');
 				$controlSources['id'] = $ContentModel->find('list', [
 					'fields' => [
-						'entity_id', 
+						'entity_id',
 						'title',
 					],
 					'conditions' => [
@@ -293,7 +293,7 @@ class BlogContent extends BlogAppModel {
 		$this->getDataSource()->rollback();
 		return false;
 	}
-	
+
 /**
  * フォームの初期値を取得する
  *
@@ -321,9 +321,9 @@ class BlogContent extends BlogAppModel {
 
 /**
  * アイキャッチサイズフィールドの値をDB用に変換する
- * 
+ *
  * @param array $data
- * @return array 
+ * @return array
  */
 	public function deconstructEyeCatchSize($data) {
 		$data['BlogContent']['eye_catch_size'] = BcUtil::serialize([
@@ -342,9 +342,9 @@ class BlogContent extends BlogAppModel {
 
 /**
  * アイキャッチサイズフィールドの値をフォーム用に変換する
- * 
+ *
  * @param array $data
- * @return array 
+ * @return array
  */
 	public function constructEyeCatchSize($data) {
 		$eyeCatchSize = BcUtil::unserialize($data['BlogContent']['eye_catch_size']);

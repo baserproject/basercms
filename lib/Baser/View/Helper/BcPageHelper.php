@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('Helper', 'View');
@@ -24,7 +24,7 @@ class BcPageHelper extends Helper {
 
 /**
  * ページモデル
- * 
+ *
  * @var Page
  */
 	public $Page = null;
@@ -37,7 +37,7 @@ class BcPageHelper extends Helper {
 
 /**
  * ヘルパー
- * 
+ *
  * @var array
  */
 	public $helpers = ['BcBaser', 'BcContents'];
@@ -59,7 +59,7 @@ class BcPageHelper extends Helper {
 
 /**
  * ページ機能用URLを取得する
- * 
+ *
  * @param array $page 固定ページデータ
  * @return string URL
  */
@@ -76,7 +76,7 @@ class BcPageHelper extends Helper {
 /**
  * ページリストを取得する
  * 戻り値は、固定ページ、または、コンテンツフォルダが対象
- * 
+ *
  * @param int $pageCategoryId カテゴリID
  * @param int $recursive 関連データの階層
  * @return array
@@ -134,7 +134,7 @@ class BcPageHelper extends Helper {
 			'overCategory'	=> false,
 			'escape'		=> true
 		], $options);
-		
+
 		$arrow = $options['arrow'];
 		$overCategory = $options['overCategory'];
 		unset($options['arrow']);
@@ -257,7 +257,7 @@ class BcPageHelper extends Helper {
 
 /**
  * 固定ページのコンテンツを出力する
- * 
+ *
  * @return void
  */
 	public function content() {

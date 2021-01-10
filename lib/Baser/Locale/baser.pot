@@ -3287,7 +3287,7 @@ msgid "コメントが投稿された場合、コメント承認機能を利用�
 msgstr ""
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_contents_form.php:15
-msgid "ブログコンテンツの基本設定を登録•編集します。<br />各項目のヘルプメッセージを確認し登録を完了させてください。<br />ブログごとにデザインを変更する事もできます。その場合、画面下の「オプション」をクリックし、テンプレート名を変更します。<br /><small>※ テンプレート名を変更した場合は、新しい名称のテンプレートを作成しアップロードする必要があります。</small><br /><a href=\"http://basercms.net/manuals/designers/5.html\" target=\"_blank\">≫ ブログのテンプレートを変更する</a>"
+msgid "ブログコンテンツの基本設定を登録•編集します。<br />各項目のヘルプメッセージを確認し登録を完了させてください。<br />ブログごとにデザインを変更する事もできます。その場合、画面下の「オプション」をクリックし、テンプレート名を変更します。<br /><small>※ テンプレート名を変更した場合は、新しい名称のテンプレートを作成しアップロードする必要があります。</small><br /><a href=\"https://basercms.net/manuals/designers/5.html\" target=\"_blank\">≫ ブログのテンプレートを変更する</a>"
 msgstr ""
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_contents_index.php:19
@@ -3737,7 +3737,7 @@ msgid "データが見つかりませんでした。「追加する」ボタン�
 msgstr ""
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_configs_form.php:19
-msgid "フィード設定の基本項目を入力します。<br />フィードごとにデザインを変更する場合には、画面下の「オプション」をクリックしてテンプレート名を変更します。<br /><small>※ テンプレート名を変更した場合は、新しい名称のテンプレートを作成しアップロードする必要があります。</small><br /><a href=\"http://basercms.net/manuals/designers/7.html\" target=\"_blank\" class=\"outside-link\">フィード読み込み部分のテンプレートを変更する</a>"
+msgid "フィード設定の基本項目を入力します。<br />フィードごとにデザインを変更する場合には、画面下の「オプション」をクリックしてテンプレート名を変更します。<br /><small>※ テンプレート名を変更した場合は、新しい名称のテンプレートを作成しアップロードする必要があります。</small><br /><a href=\"https://basercms.net/manuals/designers/7.html\" target=\"_blank\" class=\"outside-link\">フィード読み込み部分のテンプレートを変更する</a>"
 msgstr ""
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_configs_form.php:21
@@ -4276,7 +4276,7 @@ msgid "メールフォームプラグイン共通の基本設定が行えます�
 msgstr ""
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_contents_form.php:19
-msgid "メールフォームコンテンツの基本設定を登録します。<br />メールフォームごとにデザインを変更する事もできます。その場合、画面下の「オプション」をクリックし、テンプレート名を変更します。<br /><small>※ テンプレート名を変更した場合は、新しい名称のテンプレートを作成しアップロードする必要があります。</small><br /><a class=\"outside-link\" href=\"http://basercms.net/manuals/designers/6.html\" target=\"_blank\">メールフォームのテンプレートを変更する"
+msgid "メールフォームコンテンツの基本設定を登録します。<br />メールフォームごとにデザインを変更する事もできます。その場合、画面下の「オプション」をクリックし、テンプレート名を変更します。<br /><small>※ テンプレート名を変更した場合は、新しい名称のテンプレートを作成しアップロードする必要があります。</small><br /><a class=\"outside-link\" href=\"https://basercms.net/manuals/designers/6.html\" target=\"_blank\">メールフォームのテンプレートを変更する"
 msgstr ""
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_contents_index.php:20
@@ -5705,7 +5705,7 @@ msgid "一覧左上の「並び替え」をクリックすると、各データ�
 msgstr ""
 
 #: View/Elements/admin/helps/pages_index.php:26
-msgid "オーサリングツールでの制作に慣れている方向けに、ファイルをアップロードしてデータベースに一括で読み込む機能を備えています。<br />ページを読み込むには、特定のフォルダにページテンプレートをアップロードして、サブメニューの「ページテンプレート読込」を実行します。<br /><a href=\"http://basercms.net/manuals/etc/5.html\" class=\"outside-link\" target=\"_blank\">ページテンプレートの読込について</a>"
+msgid "オーサリングツールでの制作に慣れている方向けに、ファイルをアップロードしてデータベースに一括で読み込む機能を備えています。<br />ページを読み込むには、特定のフォルダにページテンプレートをアップロードして、サブメニューの「ページテンプレート読込」を実行します。<br /><a href=\"https://basercms.net/manuals/etc/5.html\" class=\"outside-link\" target=\"_blank\">ページテンプレートの読込について</a>"
 msgstr ""
 
 #: View/Elements/admin/helps/pages_index.php:29
@@ -8652,7 +8652,7 @@ msgid "リリースノートのアップデート時の注意事項は読まれ�
 msgstr ""
 
 #: View/Updaters/admin/update.php:98
-msgid "リリースバージョンによっては、追加作業が必要となる場合があるので注意が必要です。<br />公式サイトの <a href=\"http://basercms.net/news/archives/category/release\" target=\"_blank\" class=\"outside-link\">リリースノート</a> を必ず確認してください。"
+msgid "リリースバージョンによっては、追加作業が必要となる場合があるので注意が必要です。<br />公式サイトの <a href=\"https://basercms.net/news/archives/category/release\" target=\"_blank\" class=\"outside-link\">リリースノート</a> を必ず確認してください。"
 msgstr ""
 
 #: View/Updaters/admin/update.php:105

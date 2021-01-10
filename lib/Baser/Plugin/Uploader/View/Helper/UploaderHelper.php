@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Uploader.Helper
  * @since			baserCMS v 3.0.10
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -18,21 +18,21 @@
 class UploaderHelper extends AppHelper {
 /**
  * アップロードファイルの保存URL
- * 
+ *
  * @var		string
  * @access	public
  */
 	public $savedUrl = '';
 /**
  * アップロードファイルの保存パス
- * 
+ *
  * @var		string
  * @access	public
  */
 	public $savePath = '';
 /**
  * ヘルパー
- * 
+ *
  * @var		array
  * @access	public
  */
@@ -73,7 +73,7 @@ class UploaderHelper extends AppHelper {
 		if(in_array(strtolower($ext), array('gif','jpg','png'))) {
 			if (isset($options['size'])) {
 				$resizeName = $pathInfo['filename'] . '__' . $options['size'] . '.' . $ext;
-				
+
 				if(!empty($uploaderFile['publish_begin']) || !empty($uploaderFile['publish_end'])) {
 					$savePath = $this->savePath . 'limited' . DS . $resizeName;
 				} else {
@@ -89,7 +89,7 @@ class UploaderHelper extends AppHelper {
 			$imgUrl = 'Uploader.icon_upload_file.png';
 			return $this->Html->image($imgUrl, $options);
 		}
-		
+
 	}
 
 /**
@@ -108,7 +108,7 @@ class UploaderHelper extends AppHelper {
 		}
 
 	}
-	
+
 /**
  * ダウンロードリンクを表示
  *
@@ -124,15 +124,15 @@ class UploaderHelper extends AppHelper {
 		// HtmlヘルパではスマートURLオフの場合に正常なURLが取得できないので、直接記述
 		return '<a href="'.$fileUrl.'" target="_blank">'.$linkText.'</a>';
 	}
-	
+
 /**
  * ファイルの公開制限期間が設定されているか判定する
- * 
+ *
  * @param array $data
  * @return boolean
  */
 	public function isLimitSetting($data) {
-		
+
 		if(!empty($data['UploaderFile'])) {
 			$data = $data['UploaderFile'];
 		}
@@ -141,12 +141,12 @@ class UploaderHelper extends AppHelper {
 		} else {
 			return false;
 		}
-		
+
 	}
-	
+
 /**
  * ファイルの公開状態を取得する
- * 
+ *
  * @param array $data
  * @return boolean
  */
@@ -155,7 +155,7 @@ class UploaderHelper extends AppHelper {
 			$data = $data['UploaderFile'];
 		}
 		$isPublish = true;
-		
+
 		if ($data['publish_begin'] == '0000-00-00 00:00:00') {
 			$data['publish_begin'] = null;
 		}
@@ -167,8 +167,8 @@ class UploaderHelper extends AppHelper {
 			($data['publish_end'] && $data['publish_end'] <= date('Y-m-d H:i:s'))) {
 			$isPublish = false;
 		}
-		
+
 		return $isPublish;
 	}
-	
+
 }

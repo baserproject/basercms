@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 ?>
 
@@ -36,5 +36,5 @@
 		$this->BcBaser->link(__d('baser', '削除'), ['action' => 'del'], ['class' => 'btn-gray button submit-token'], __d('baser', '最近の動きのログを削除します。いいですか？'))
 		?>
 	</div>
-	<?php endif ?>	
+	<?php endif ?>
 <?php endif ?>

@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -157,16 +157,16 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
 				<?php echo $this->BcForm->error('BlogPost.status') ?>
                 &nbsp;&nbsp;&nbsp;&nbsp;<small>[公開期間]</small>&nbsp;
 				<?php echo $this->BcForm->input('BlogPost.publish_begin', [
-				        'type' => 'dateTimePicker', 
-                        'size' => 12, 
+				        'type' => 'dateTimePicker',
+                        'size' => 12,
                         'maxlength' => 10,
 						'dateLabel' => ['text' => '開始日付'],
 						'timeLabel' => ['text' => '開始時間']
                 ]) ?>
 				&nbsp;〜&nbsp;
 				<?php echo $this->BcForm->input('BlogPost.publish_end', [
-				        'type' => 'dateTimePicker', 
-                        'size' => 12, 
+				        'type' => 'dateTimePicker',
+                        'size' => 12,
                         'maxlength' => 10,
 						'dateLabel' => ['text' => '終了日付'],
 						'timeLabel' => ['text' => '終了時間']

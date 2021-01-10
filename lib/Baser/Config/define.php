@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
  * @package			Baser.Config
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -29,15 +29,15 @@ $fileName = str_replace('/', DS, $_SERVER['SCRIPT_FILENAME']);
  */
 // 通常パターン
 if (@is_dir(dirname(dirname(dirname($fileName))) . DS . 'lib' . DS . 'Cake')) {
-    define('ROOT', dirname(dirname(dirname($fileName))));
+	define('ROOT', dirname(dirname(dirname($fileName))));
 
 // app内にcakeを配置 パターン
 /*}elseif(is_dir(dirname(dirname($fileName)).DS.'cake')){
-    define('ROOT', dirname(dirname($fileName)));*/
+	define('ROOT', dirname(dirname($fileName)));*/
 
 // WEBROOT配置パターン
 } elseif (is_dir(dirname($fileName) . DS . 'lib' . DS . 'Cake')) {
-    define('ROOT', dirname($fileName));
+	define('ROOT', dirname($fileName));
 }
 
 /**

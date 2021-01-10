@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.Model
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BlogAppModel', 'Blog.Model');
@@ -29,14 +29,14 @@ class BlogCategory extends BlogAppModel {
 
 /**
  * バリデーション設定
- * 
+ *
  * @var array
  */
 	public $validationParams = [];
 
 /**
  * actsAs
- * 
+ *
  * @var array
  */
 	public $actsAs = ['Tree', 'BcCache'];
@@ -142,7 +142,7 @@ class BlogCategory extends BlogAppModel {
 /**
  * 同じニックネームのカテゴリがないかチェックする
  * 同じブログコンテンツが条件
- * 
+ *
  * @param array $check
  * @return boolean
  */
@@ -162,7 +162,7 @@ class BlogCategory extends BlogAppModel {
 
 /**
  * 関連する記事データをカテゴリ無所属に変更し保存する
- * 
+ *
  * @param boolean $cascade
  * @return boolean
  */
@@ -233,7 +233,7 @@ class BlogCategory extends BlogAppModel {
 
 /**
  * カテゴリリストを取得する（再帰処理）
- * 
+ *
  * @param int $blogContentId
  * @param int $parentId
  * @param int $viewCount
@@ -257,7 +257,7 @@ class BlogCategory extends BlogAppModel {
 		}
 		// 親を指定する場合
 		if($parentId !== false) {
-			$conditions['BlogCategory.parent_id'] = $parentId;	
+			$conditions['BlogCategory.parent_id'] = $parentId;
 		}
 		if(!empty($options['id'])) {
 			$conditions['BlogCategory.id'] = $options['id'];
@@ -336,12 +336,12 @@ class BlogCategory extends BlogAppModel {
 		}
 		return $datas;
 	}
-	
+
 /**
  * アクセス制限としてカテゴリの新規追加ができるか確認する
- * 
+ *
  * Ajaxを利用する箇所にて BcBaserHelper::link() が利用できない場合に利用
- * 
+ *
  * @param int $userGroupId ユーザーグループID
  * @param int $blogContentId ブログコンテンツID
  */
@@ -357,17 +357,17 @@ class BlogCategory extends BlogAppModel {
 
 /**
  * 子カテゴリを持っているかどうか
- * 
+ *
  * @param int $id
  * @return bool
  */
 	public function hasChild($id) {
 		return (bool) $this->childCount($id);
 	}
-	
+
 /**
  * カテゴリ名よりカテゴリを取得
- * 
+ *
  * @param int $blogContentId
  * @param string $name
  * @param array $options
@@ -384,5 +384,5 @@ class BlogCategory extends BlogAppModel {
 		$this->unbindModel(['hasMany' => ['BlogPost']]);
 		return $this->find('first', $options);
 	}
-	
+
 }

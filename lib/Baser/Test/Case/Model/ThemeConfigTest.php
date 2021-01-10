@@ -1,25 +1,25 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model
  * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('ThemeConfig', 'Model');
 
 /**
  * ThemeConfigTest class
- * 
+ *
  * class NonAssosiationThemeConfig extends ThemeConfig {
  *  public $name = 'ThemeConfig';
  *  public $belongsTo = array();
  *  public $hasMany = array();
  * }
- * 
+ *
  * @package Baser.Test.Case.Model
  */
 class ThemeConfigTest extends BaserTestCase {
@@ -41,9 +41,9 @@ class ThemeConfigTest extends BaserTestCase {
 
 /**
  * 画像を保存する
- * 
+ *
  * MEMO : move_uploaded_file()が成功しないため、スキップ
- * 
+ *
  * @param array $data
  */
 	public function testSaveImage() {
@@ -73,14 +73,14 @@ class ThemeConfigTest extends BaserTestCase {
 
 /**
  * 画像を削除する
- * 
+ *
  * @param array $data
  * @param array $expected true 画像が存在する / false 画像が存在しない(削除されている)
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider deleteImageDataProvider
  */
 	public function testDeleteImage($data, $expected, $message = null) {
-		
+
 		// ダミーの画像を作成
 		$sourcePath = WWW_ROOT . 'theme' . DS . 'nada-icons' . DS . 'img' . DS . 'logo.png';
 		$dummyPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo.png';
@@ -88,7 +88,7 @@ class ThemeConfigTest extends BaserTestCase {
 
 		$data = ['ThemeConfig' => $data];
 		$this->ThemeConfig->deleteImage($data);
-		
+
 		// 画像の有無
 		if ($expected) {
 			$this->assertFileExists($dummyPath, $message);
@@ -111,7 +111,7 @@ class ThemeConfigTest extends BaserTestCase {
 
 /**
  * テーマカラー設定を保存する
- * 
+ *
  * @param array $data 設定するテーマカラーのデータ
  * @param array $expected 期待値
  * @param string $message テストが失敗した時に表示されるメッセージ
@@ -136,7 +136,7 @@ class ThemeConfigTest extends BaserTestCase {
 
 		// 元のファイルを再生成
 		$FileOriginal->write($configOriginal);
-		$FileOriginal->close();    
+		$FileOriginal->close();
 
 		// 生成したconfig.cssをの内容を取得
 		$setting = $File->read();

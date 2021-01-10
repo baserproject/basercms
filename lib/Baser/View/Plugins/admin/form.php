@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -40,7 +40,7 @@ $(function(){
 
 <?php if ($installMessage): ?>
 <div id="UpdateMessage"><?php echo $installMessage ?></div>
-<?php endif ?> 
+<?php endif ?>
 
 <?php if ($isInstallable): ?>
 	<?php echo $this->BcForm->create('Plugin', ['url' => [$this->request->data['Plugin']['name']]]) ?>
@@ -64,13 +64,13 @@ $(function(){
 		<?php echo $this->BcForm->error('Plugin.name') ?>
 		<?php echo $this->BcForm->error('Plugin.title') ?>
 	</div>
-		
+
 
 	<div class="submit">
 	<?php if ($dbInited): ?>
 			<?php echo $this->BcForm->submit(__d('baser', 'プラグインのデータを初期化する'), ['div' => false, 'class' => 'button', 'id' => 'BtnReset']) ?>
 			<?php echo $this->BcForm->submit(__d('baser', '有効化'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
-	<?php else: ?> 
+	<?php else: ?>
 			<?php echo $this->BcForm->submit(__d('baser', 'インストール'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 	<?php endif; ?>
 	</div>

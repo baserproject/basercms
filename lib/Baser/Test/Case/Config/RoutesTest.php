@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Config
  * @since			baserCMS v 3.0.9
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('Router', 'Routing');
@@ -36,7 +36,7 @@ class RoutesTest extends BaserTestCase {
 
 /**
  * __construct
- * 
+ *
  * @param string $name
  * @param array $data
  * @param string $dataName
@@ -47,7 +47,7 @@ class RoutesTest extends BaserTestCase {
 		// そちらのフィクスチャを読み込ませないようにアンセット
 		unset($this->fixtures[array_search('baser.Default.Page', $this->fixtures)]);
 	}
-	
+
 /**
  * Set up
  *
@@ -245,5 +245,5 @@ class RoutesTest extends BaserTestCase {
 			['/s/service', ['s', 'service']]
 		];
 	}
-	
+
 }

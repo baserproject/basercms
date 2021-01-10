@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -49,14 +49,14 @@ class BcAppView extends View {
 
 /**
  * ページタイトル
- * 
+ *
  * @var string
  */
 	public $pageTitle = null;
 
 /**
  * エレメントキャッシュ
- * 
+ *
  * @var string
  */
 	public $elementCache = '_cake_element_';
@@ -187,7 +187,7 @@ class BcAppView extends View {
 
 		// CUSTOMIZE ADD 2012/04/11 ryuring
 		// プレフィックスが設定されている場合は、プレフィックスを除外する
-		// >>>		
+		// >>>
 		$prefix = '';
 		if (!empty($this->request->params['prefix'])) {
 			$prefix = $this->request->params['prefix'];
@@ -340,7 +340,7 @@ class BcAppView extends View {
 			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
 		// <<<
-		
+
 		list($plugin, $name) = $this->pluginSplit($name);
 
 		// CUSTOMIZE ADD 2013/08/26 ryuring
@@ -354,7 +354,7 @@ class BcAppView extends View {
 				// Elements ではなく、コントローラー内のテンプレートを参照する場合の処理
 				// BlogBaserHelper::blogPosts() で、ブログコントローラー内のテンプレートを参照している為（posts等）
 				// TODO テンプレートの場所を Elements 内に移動するべき
-				$name = '..' . DS . $matches[1] . DS . $this->subDir . DS . $matches[2]; 
+				$name = '..' . DS . $matches[1] . DS . $this->subDir . DS . $matches[2];
 			} else {
 				$name = $this->subDir . DS . $name;
 			}
@@ -364,7 +364,7 @@ class BcAppView extends View {
 
 		$paths = $this->_paths($plugin);
 		$exts = $this->_getExtensions();
-		
+
 		// CUSTOMIZE MODIFY 2014/02/24 ryuring
 		// サブフォルダ内にテンプレートが存在しない場合上位階層のテンプレートも検索する仕様に変更
 		// >>>
@@ -386,7 +386,7 @@ class BcAppView extends View {
 			}
 		}
 		// <<<
-		
+
 		return false;
 	}
 
@@ -478,7 +478,7 @@ class BcAppView extends View {
 
 /**
  * イベントを発火
- * 
+ *
  * @param string $name
  * @param array $params
  * @return mixed
@@ -500,7 +500,7 @@ class BcAppView extends View {
 		App::uses('BcEventDispatcher', 'Event');
 		return BcEventDispatcher::dispatch($name, $this, $params, $options);
 	}
-	
+
 /**
  * Sandbox method to evaluate a template / view script in.
  *
@@ -531,5 +531,5 @@ class BcAppView extends View {
 		// <<<
 		return parent::_evaluate($viewFile, $dataForView);
 	}
-	
+
 }

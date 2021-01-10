@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -2569,7 +2569,7 @@ END_FLASH;
 /**
  * URLのパラメータ情報を返す
  * 主なreturnデータは
- * http://basercms.net/news/index/example/test?name=value の場合
+ * https://basercms.net/news/index/example/test?name=value の場合
  * 'plugin' => blog (利用しているプラグイン)
  * 'pass' => [0] => 'example'
  *           [1] => 'test'

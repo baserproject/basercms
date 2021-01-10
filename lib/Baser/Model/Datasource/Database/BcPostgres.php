@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model.Datasource.Database
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('Postgres', 'Model/Datasource/Database');
@@ -171,7 +171,7 @@ class BcPostgres extends Postgres {
 		// >>>
 		unset($fields['sequence']);
 		// <<<
-		
+
 		if (isset($model->sequence)) {
 			$this->_sequenceMap[$table][$model->primaryKey] = $model->sequence;
 		}
@@ -270,7 +270,7 @@ class BcPostgres extends Postgres {
 /**
  * DboPostgresのdescribeメソッドを呼び出さずにキャッシュを読み込む為に利用
  * Datasource::describe と同じ（一部ハック）
- * 
+ *
  * @param Model|string $model
  * @return array Array of Metadata for the $model
  */
@@ -303,7 +303,7 @@ class BcPostgres extends Postgres {
 		}
 		return null;
 	}
-	
+
 /**
  * シーケンスを更新する
  */

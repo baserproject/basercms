@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -75,7 +75,7 @@ class Content extends AppModel {
  * @var bool
  */
 	public $updatingSystemData = true;
-	
+
 /**
  * 保存前の親ID
  *
@@ -84,7 +84,7 @@ class Content extends AppModel {
  * @var null
  */
 	public $beforeSaveParentId = null;
-	
+
 /**
  * 削除時の削除対象レコード
  *
@@ -92,7 +92,7 @@ class Content extends AppModel {
  * @var []
  */
 	private $__deleteTarget;
-	
+
 /**
  * Implemented Events
  *
@@ -339,7 +339,7 @@ class Content extends AppModel {
 		}
 		return parent::beforeSave($options);
 	}
-	
+
 /**
  * After Save
  *
@@ -511,12 +511,12 @@ class Content extends AppModel {
 		if(!empty($data['Content']['alias_id']) || !isset($data['Content']['site_id'])) {
 			return true;
 		}
-		
+
 		$isContentFolder = false;
 		if(!empty($data['Content']['type']) && $data['Content']['type'] == 'ContentFolder') {
 			$isContentFolder = true;
 		}
-		
+
 		// メインサイトか確認し、メインサイトでない場合は終了
 		if(!$this->Site->isMain($data['Content']['site_id'])) {
 			return true;
@@ -667,7 +667,7 @@ class Content extends AppModel {
 		$this->create($content);
 		return $this->save(null, $validate);
 	}
-	
+
 /**
  * コンテンツデータよりURLを生成する
  *
@@ -731,7 +731,7 @@ class Content extends AppModel {
 		}
 		return $url;
 	}
-	
+
 /**
  * システムデータを更新する
  *
@@ -1298,7 +1298,7 @@ class Content extends AppModel {
 		if (isset($data['Content'])) {
 			$data = $data['Content'];
 		}
-		
+
 		$fields = [
 			'status' => 'status',
 			'publish_begin' => 'publish_begin',
@@ -1309,7 +1309,7 @@ class Content extends AppModel {
 				$fields[$key] = 'self_' . $field;
 			}
 		}
-		
+
 		$allowPublish = (int) $data[$fields['status']];
 
 		// 期限を設定している場合に条件に該当しない場合は強制的に非公開とする
@@ -1386,7 +1386,7 @@ class Content extends AppModel {
 		}
 		return true;
 	}
-	
+
 /**
  * 移動元のコンテンツと移動先のディレクトリから移動が可能かチェックする
  *
@@ -1406,14 +1406,14 @@ class Content extends AppModel {
 			'conditions' => ['id' => $targetParentId],
 			'recursive' => -1
 		]);
-		
+
 		// 指定コンテンツが存在しない
 		if (!$currentContent || !$parentCuntent) {
 			return false;
 		}
-		
+
 		$parentId[] = $parentCuntent['Content']['id'];
-		
+
 		// 関連コンテンツで移動先と同じ階層のフォルダを確認
 		$childrenSite = $this->Site->children($currentContent['Content']['site_id'], [
 			'conditions' => ['relate_main_site' => true]
@@ -1429,7 +1429,7 @@ class Content extends AppModel {
 				}
 			}
 		}
-		
+
 		// 移動先に同一コンテンツが存在するか確認
 		$movedContent = $this->find('first', [
 			'conditions' => [
@@ -1610,7 +1610,7 @@ class Content extends AppModel {
 		$this->id = $idTmp;
 		return $result;
 	}
-	
+
 /**
  * オフセットを元にコンテンツを移動する
  *
@@ -1930,5 +1930,5 @@ class Content extends AppModel {
 		}
 		return $content;
 	}
-	
+
 }

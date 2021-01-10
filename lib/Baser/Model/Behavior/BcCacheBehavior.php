@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model.Behavior
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -19,9 +19,9 @@ class BcCacheBehavior extends ModelBehavior {
 
 /**
  * setup
- * 
+ *
  * @param Model $model
- * @param array $config 
+ * @param array $config
  * @return void
  */
 	public function setup(Model $model, $config = array()) {
@@ -36,8 +36,8 @@ class BcCacheBehavior extends ModelBehavior {
 
 /**
  * キャッシュフォルダーを生成する
- * 
- * @param Model $model 
+ *
+ * @param Model $model
  */
 	public function createCacheFolder(Model $model) {
 		if (!defined('CACHE_DATA_PATH')) {
@@ -52,7 +52,7 @@ class BcCacheBehavior extends ModelBehavior {
 
 /**
  * キャッシュ処理
- * 
+ *
  * @param Model $model
  * @param int $expire
  * @param string $method
@@ -105,8 +105,8 @@ class BcCacheBehavior extends ModelBehavior {
 
 /**
  * データキャッシュのパスを指定する
- * 
- * @param string $dir 
+ *
+ * @param string $dir
  */
 	public function changeCachePath($table) {
 		if (!defined('CACHE_DATA_PATH')) {
@@ -119,7 +119,7 @@ class BcCacheBehavior extends ModelBehavior {
 
 /**
  * キャッシュを削除する
- * 
+ *
  * @param Model $model
  * @return void
  */
@@ -135,9 +135,9 @@ class BcCacheBehavior extends ModelBehavior {
 
 /**
  * afterSave
- * 
+ *
  * @param Model $model
- * @param boolean $created 
+ * @param boolean $created
  * @return void
  */
 	public function afterSave(Model $model, $created, $options = array()) {
@@ -146,8 +146,8 @@ class BcCacheBehavior extends ModelBehavior {
 
 /**
  * afterDelete
- * 
- * @param Model $model 
+ *
+ * @param Model $model
  * @return void
  */
 	public function afterDelete(Model $model) {
@@ -156,7 +156,7 @@ class BcCacheBehavior extends ModelBehavior {
 
 /**
  * 関連モデルを含めてキャッシュを削除する
- * 
+ *
  * @param Model $model
  * @return void
  * @todo 現在、3階層まで再帰対応。CakePHPのrecursiveの仕組み合わせたい

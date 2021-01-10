@@ -1,48 +1,53 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller.Component
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Controller.Component
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('Component', 'Controller');
 
 /**
+ * Class BcAuthConfigureComponent
+ *
  * 認証設定コンポーネント
  *
  * @package Baser.Controller.Component
  */
-class BcAuthConfigureComponent extends Component {
+class BcAuthConfigureComponent extends Component
+{
 
-/**
- * コントローラー
- * 
- * @var Controller
- */
+	/**
+	 * コントローラー
+	 *
+	 * @var Controller
+	 */
 	public $_Controller = null;
 
-/**
- * initialize
- *
- * @param object $Controller
- * @return void
- */
-	public function initialize(Controller $Controller) {
+	/**
+	 * initialize
+	 *
+	 * @param object $Controller
+	 * @return void
+	 */
+	public function initialize(Controller $Controller)
+	{
 		$this->_Controller = $Controller;
 	}
 
-/**
- * 認証設定
- *
- * @param string $config
- * @return boolean
- */
-	public function setting($config) {
+	/**
+	 * 認証設定
+	 *
+	 * @param string $config
+	 * @return boolean
+	 */
+	public function setting($config)
+	{
 		if (empty($this->_Controller->BcAuth) || !$config) {
 			return false;
 		}
@@ -56,17 +61,17 @@ class BcAuthConfigureComponent extends Component {
 		}
 
 		$config = array_merge([
-			'loginRedirect'		=> '/' . $requestedPrefix,
-			'logoutRedirect'	=> '',
-			'username'			=> 'name',
-			'password'			=> 'password',
-			'serial'			=> '',
-			'loginAction'		=> '',
-			'userModel'			=> 'User',
-			'auth_prefix'		=> '',
-			'userScope'			=> '',
-			'sessionKey'		=> Configure::read('BcAuthPrefix.admin.sessionKey')
-			], $config);
+			'loginRedirect' => '/' . $requestedPrefix,
+			'logoutRedirect' => '',
+			'username' => 'name',
+			'password' => 'password',
+			'serial' => '',
+			'loginAction' => '',
+			'userModel' => 'User',
+			'auth_prefix' => '',
+			'userScope' => '',
+			'sessionKey' => Configure::read('BcAuthPrefix.admin.sessionKey')
+		], $config);
 		if (empty($config['type'])) {
 			$config['type'] = 'Form';
 		}
@@ -104,7 +109,7 @@ class BcAuthConfigureComponent extends Component {
 		// 無限リダイレクトが発生してしまう為。
 		// =====================================================================
 		$BcAuth->unauthorizedRedirect = $BcAuth->loginAction;
-		
+
 		// フォームの認証設定
 		$BcAuth->authenticate = [
 			$config['type'] => [
@@ -146,14 +151,14 @@ class BcAuthConfigureComponent extends Component {
 
 		// ログイン後にリダイレクトするURL
 		$BcAuth->loginRedirect = $config['loginRedirect'];
-		
+
 		if (!$BcAuth->user()) {
 
 			// クッキーがある場合にはクッキーで認証
 			if (!empty($Controller->Cookie) && $Controller->request->is('requestview') !== false) {
 				$cookieKey = Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey));
 				$cookie = $Controller->Cookie->read($cookieKey);
-				
+
 				// ===================================================================================
 				// 2014/06/19 ryuring
 				// PHPの仕様として、ある条件にてクッキーを削除した際、クッキーの値に deleted が設定されてしまうので、
@@ -163,16 +168,16 @@ class BcAuthConfigureComponent extends Component {
 				// 上記参考情報には、「クライアントPCの時刻を1年以上昔に設定」とあるが、そうしない場合も再現できた
 				// その原因までは追っていない
 				// ===================================================================================
-				if (!empty($cookie) && $cookie != 'deleted') {					
-					if(is_array($cookie)) {
+				if (!empty($cookie) && $cookie != 'deleted') {
+					if (is_array($cookie)) {
 						list($plugin, $userModel) = pluginSplit($config['userModel']);
-						if(!empty($Controller->request->data[$userModel])) {
+						if (!empty($Controller->request->data[$userModel])) {
 							$requestData = $Controller->request->data[$userModel];
 						}
 						$Controller->request->data[$userModel] = $cookie;
 						$loginResult = $BcAuth->login();
 						unset($Controller->request->data[$userModel]);
-						if(!empty($requestData)) {
+						if (!empty($requestData)) {
 							$Controller->request->data[$userModel] = $requestData;
 						}
 						if ($loginResult) {

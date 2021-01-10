@@ -1,12 +1,12 @@
 
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @since			baserCMS v 2.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -38,13 +38,13 @@
 	 * 初期化処理
 	 */
 		init: function(config){
-			
+
 			if(config) {
 				$.extend($.baserAjaxDataList.config, config);
 			}
-			
+
 			config = $.baserAjaxDataList.config;
-			
+
 			$(config.searchBox + " form").submit(function(){
 				$.baserAjaxDataList.search();
 				return false;
@@ -69,11 +69,11 @@
 	 * リストの初期化処理
 	 */
 		initList: function() {
-			
+
 			var config = $.baserAjaxDataList.config;
-			
+
 			var linkAjaxes = [];
-			
+
 			if(config.pagination) {
 				linkAjaxes.push(config.pagination + " a");
 			}
@@ -84,7 +84,7 @@
 				linkAjaxes.push(config.listNum + " a");
 			}
 			linkAjaxes = linkAjaxes.join(',');
-			
+
 			// イベントを削除
 			$(linkAjaxes).unbind();
 			$(config.dataList + " tbody td").unbind();
@@ -100,7 +100,7 @@
 				$.baserAjaxDataList.load($(this).attr('href'));
 				return false;
 			});
-	
+
 			$(config.dataList + " tbody td").hover(function(){
 				$(this).parent().addClass('hoverrow');
 			},function(){
@@ -109,13 +109,13 @@
 
 			// 行IDを初期化
 			$.baserAjaxDataList.initRowId();
-			
+
 			$.each(config.methods, function(){
 
 				if(this.button == null) {
 					return true;
 				}
-				
+
 				var methodsResult = this.result;
 				var methodsCofirm = this.confirm;
 				var methodsComplete = this.complete;
@@ -131,7 +131,7 @@
 					if(methodsCofirm && !confirm(methodsCofirm)) {
 						return false;
 					}
-					
+
 					var config = $.baserAjaxDataList.config;
 					var row = $("#"+$(this).parent().parent().attr('id'));
 					var form = $(this).parent().find('form');
@@ -197,20 +197,20 @@
 					}, {useUpdate: false, hideLoader: false});
 
 					return false;
-					
+
 				});
-				
+
 			});
-			
+
 			// TODO イベント化すべき
 			if($.baserAjaxBatch) {
 				$.baserAjaxBatch.initList();
 			}
-			
+
 			if($.baserAjaxSortTable) {
 				$.baserAjaxSortTable.initList();
 			}
-			
+
 		},
 	/**
 	 * 一覧を読み込む
@@ -304,7 +304,7 @@
 				$(this).attr('id', config.rowIdPrefix + i);
 			});
 		}
-		
+
 	}
-	
+
 })(jQuery);

@@ -1,18 +1,18 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model.Behavior
  * @since			baserCMS v 3.0.6
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
  * BcSearchIndexManagerBehavioreTest class
- * 
+ *
  * @package Baser.Test.Case.Model
  */
 class BcSearchIndexManagerBehaviorTest extends BaserTestCase {
@@ -46,7 +46,7 @@ class BcSearchIndexManagerBehaviorTest extends BaserTestCase {
  * @return boolean
  */
 	public function testSaveSearchIndex() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。'); 
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**

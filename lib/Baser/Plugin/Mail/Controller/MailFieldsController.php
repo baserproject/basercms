@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Mail.Controller
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -135,7 +135,7 @@ class MailFieldsController extends MailAppController {
 
 /**
  * 一覧の表示用データをセットする
- * 
+ *
  * @return void
  */
 	protected function _setAdminIndexViewData() {
@@ -194,7 +194,7 @@ class MailFieldsController extends MailAppController {
 				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
-		
+
 		$this->subMenuElements = array('mail_fields');
 		$this->pageTitle = sprintf(__d('baser', '%s｜新規メールフィールド登録'), $this->request->params['Content']['title']);
 		$this->help = 'mail_fields_form';
@@ -317,7 +317,7 @@ class MailFieldsController extends MailAppController {
 
 /**
  * 一括削除
- * 
+ *
  * @param array $ids
  * @return boolean
  */
@@ -376,7 +376,7 @@ class MailFieldsController extends MailAppController {
 
 /**
  * メッセージCSVファイルをダウンロードする
- * 
+ *
  * @param int $mailContentId
  * @return void
  */
@@ -434,7 +434,7 @@ class MailFieldsController extends MailAppController {
 
 /**
  * [ADMIN] 無効状態にする（AJAX）
- * 
+ *
  * @param string $blogContentId
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
@@ -455,7 +455,7 @@ class MailFieldsController extends MailAppController {
 
 /**
  * [ADMIN] 有効状態にする（AJAX）
- * 
+ *
  * @param string $blogContentId
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
@@ -476,10 +476,10 @@ class MailFieldsController extends MailAppController {
 
 /**
  * 一括公開
- * 
+ *
  * @param array $ids
  * @return boolean
- * @access protected 
+ * @access protected
  */
 	protected function _batch_publish($ids) {
 		if ($ids) {
@@ -492,10 +492,10 @@ class MailFieldsController extends MailAppController {
 
 /**
  * 一括非公開
- * 
+ *
  * @param array $ids
  * @return boolean
- * @access protected 
+ * @access protected
  */
 	protected function _batch_unpublish($ids) {
 		if ($ids) {
@@ -508,10 +508,10 @@ class MailFieldsController extends MailAppController {
 
 /**
  * ステータスを変更する
- * 
+ *
  * @param int $id
  * @param boolean $status
- * @return boolean 
+ * @return boolean
  */
 	protected function _changeStatus($id, $status) {
 		$statusTexts = array(0 => __d('baser', '無効'), 1 => __d('baser', '有効'));

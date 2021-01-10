@@ -1,18 +1,18 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
  * [ADMIN] ツールバー
- * 
+ *
  * @var BcAppView $this
  */
 // JSの出力について、ツールバーはフロントエンドでも利用するため、inlineに出力する
@@ -46,7 +46,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 					<li><?php $this->BcBaser->link(__d('baser', 'インストールマニュアル'), Configure::read('BcApp.outerLinks.installManual'), ['target' => '_blank', 'class' => 'tool-menu']) ?></li>
 				<?php elseif (Configure::read('BcRequest.isUpdater')): ?>
 					<li><?php $this->BcBaser->link(__d('baser', 'アップデートマニュアル'), Configure::read('BcApp.outerLinks.updateManual'), ['target' => '_blank', 'class' => 'tool-menu']) ?></li>
-				<?php elseif (!empty($this->request->params['admin']) || ('/' . $this->request->url) == $loginUrl): ?>	
+				<?php elseif (!empty($this->request->params['admin']) || ('/' . $this->request->url) == $loginUrl): ?>
 					<li><?php $this->BcBaser->link($this->BcBaser->siteConfig['formal_name'], '/', ['escape' => true]) ?></li>
 				<?php else: ?>
 					<?php if (in_array('admin', $currentUserAuthPrefixes)): ?>
@@ -103,12 +103,12 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 					<li>
 						<?php $this->BcBaser->link(__d('baser', 'システムナビ') . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title']) ?>
 						<div id="SystemMenu"><div>
-								<?php 
+								<?php
 								$adminSitemap = Configure::read('BcApp.adminNavi');
 								$isAdminGlobalmenuUsed = $this->BcAdmin->isAdminGlobalmenuUsed();
 								?>
 								<?php foreach ($adminSitemap as $key => $package): ?>
-									<?php 
+									<?php
 									if(!$isAdminGlobalmenuUsed && $key == 'core') {
 										continue;
 									}

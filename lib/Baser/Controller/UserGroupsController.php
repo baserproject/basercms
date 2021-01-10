@@ -1,64 +1,69 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
+
 /**
+ * Class UserGroupsController
+ *
  * ユーザーグループコントローラー
  *
  * @package Baser.Controller
- * @property \UserGroup $UserGroup
+ * @property UserGroup $UserGroup
  */
-class UserGroupsController extends AppController {
+class UserGroupsController extends AppController
+{
 
-/**
- * クラス名
- *
- * @var string
- */
+	/**
+	 * クラス名
+	 *
+	 * @var string
+	 */
 	public $name = 'UserGroups';
 
-/**
- * モデル
- *
- * @var array
- */
+	/**
+	 * モデル
+	 *
+	 * @var array
+	 */
 	public $uses = ['UserGroup'];
 
-/**
- * コンポーネント
- *
- * @var array
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
-/**
- * ヘルパ
- *
- * @var array
- */
+	/**
+	 * ヘルパ
+	 *
+	 * @var array
+	 */
 	public $helpers = ['BcTime', 'BcForm'];
 
-/**
- * サブメニューエレメント
- *
- * @var array
- */
+	/**
+	 * サブメニューエレメント
+	 *
+	 * @var array
+	 */
 	public $subMenuElements = ['site_configs', 'users'];
 
-/**
- * UserGroupsController constructor.
- *
- * @param \CakeRequest $request
- * @param \CakeRequest $response
- */
-	public function __construct($request = null, $response = null) {
+	/**
+	 * UserGroupsController constructor.
+	 *
+	 * @param \CakeRequest $request
+	 * @param \CakeRequest $response
+	 */
+	public function __construct($request = null, $response = null)
+	{
 		parent::__construct($request, $response);
 		$this->crumbs = [
 			['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
@@ -66,18 +71,19 @@ class UserGroupsController extends AppController {
 		];
 	}
 
- /**
- * beforeFilter
- * @return void
- */
-	public function beforeFilter() {
+	/**
+	 * beforeFilter
+	 * @return void
+	 */
+	public function beforeFilter()
+	{
 		parent::beforeFilter();
 		if ($this->request->params['prefix'] === 'admin') {
 			$this->set('usePermission', $this->UserGroup->checkOtherAdmins());
 		}
 
 		$authPrefixes = [];
-		foreach (Configure::read('BcAuthPrefix') as $key => $authPrefix) {
+		foreach(Configure::read('BcAuthPrefix') as $key => $authPrefix) {
 			$authPrefixes[$key] = $authPrefix['name'];
 		}
 		if (count($authPrefixes) <= 1) {
@@ -85,12 +91,13 @@ class UserGroupsController extends AppController {
 		}
 	}
 
-/**
- * ユーザーグループの一覧を表示する
- *
- * @return void
- */
-	public function admin_index() {
+	/**
+	 * ユーザーグループの一覧を表示する
+	 *
+	 * @return void
+	 */
+	public function admin_index()
+	{
 		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
 		$this->setViewConditions('UserGroup', ['default' => $default]);
 		$this->paginate = [
@@ -103,12 +110,13 @@ class UserGroupsController extends AppController {
 		$this->help = 'user_groups_index';
 	}
 
-/**
- * [ADMIN] 登録処理
- *
- * @return void
- */
-	public function admin_add() {
+	/**
+	 * [ADMIN] 登録処理
+	 *
+	 * @return void
+	 */
+	public function admin_add()
+	{
 		/* 表示設定 */
 		$this->pageTitle = __d('baser', '新規ユーザーグループ登録');
 		$this->help = 'user_groups_form';
@@ -140,13 +148,14 @@ class UserGroupsController extends AppController {
 		$this->render('form');
 	}
 
-/**
- * [ADMIN] 編集処理
- *
- * @param int ID
- * @return void
- */
-	public function admin_edit($id) {
+	/**
+	 * [ADMIN] 編集処理
+	 *
+	 * @param int ID
+	 * @return void
+	 */
+	public function admin_edit($id)
+	{
 		/* 除外処理 */
 		if (!$id) {
 			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
@@ -180,13 +189,14 @@ class UserGroupsController extends AppController {
 		$this->redirect(['action' => 'index', $id]);
 	}
 
-/**
- * [ADMIN] 削除処理 (ajax)
- *
- * @param int ID
- * @return void
- */
-	public function admin_ajax_delete($id = null) {
+	/**
+	 * [ADMIN] 削除処理 (ajax)
+	 *
+	 * @param int ID
+	 * @return void
+	 */
+	public function admin_ajax_delete($id = null)
+	{
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
@@ -206,13 +216,14 @@ class UserGroupsController extends AppController {
 		exit(true);
 	}
 
-/**
- * [ADMIN] 削除処理
- *
- * @param int ID
- * @return void
- */
-	public function admin_delete($id = null) {
+	/**
+	 * [ADMIN] 削除処理
+	 *
+	 * @param int ID
+	 * @return void
+	 */
+	public function admin_delete($id = null)
+	{
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
@@ -233,13 +244,14 @@ class UserGroupsController extends AppController {
 		$this->redirect(['action' => 'index']);
 	}
 
-/**
- * [ADMIN] データコピー（AJAX）
- *
- * @param int $id
- * @return void
- */
-	public function admin_ajax_copy($id) {
+	/**
+	 * [ADMIN] データコピー（AJAX）
+	 *
+	 * @param int $id
+	 * @return void
+	 */
+	public function admin_ajax_copy($id)
+	{
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -261,12 +273,13 @@ class UserGroupsController extends AppController {
 	 * @return void
 	 * @throws Exception
 	 */
-	public function admin_set_default_favorites($id) {
+	public function admin_set_default_favorites($id)
+	{
 		if (!$this->request->is(['post', 'put'])) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		$defaultFavorites = null;
-		if($this->request->data) {
+		if ($this->request->data) {
 			$defaultFavorites = BcUtil::serialize($this->request->data);
 		}
 		$this->UserGroup->id = $id;

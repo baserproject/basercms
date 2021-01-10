@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Mail.Config
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -40,7 +40,7 @@ foreach ($mailContents as $mailContent) {
 		'menus' => [
 			'MailMessages' . $mail['id'] => ['title' => '受信メール', 'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_messages', 'action' => 'index', $mail['id']]],
 			'MailFields' . $mail['id'] => [
-				'title' => 'フィールド', 
+				'title' => 'フィールド',
 				'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mail['id']],
 				'currentRegex' => '/\/mail\/mail_fields\/[^\/]+?\/' . $mail['id'] . '($|\/)/s'
 			],
@@ -99,12 +99,12 @@ $config['BcContents']['items']['Mail'] = [
 				'action'	=> 'ajax_copy'
 			]
 		]
-	]	
+	]
 ];
 
 /**
  * ショートコード
  */
 $config['BcShortCode']['Mail'] = [
-	'Mail.getForm'	
+	'Mail.getForm'
 ];

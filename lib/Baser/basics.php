@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('EmailComponent', 'Controller/Component');
@@ -24,12 +24,12 @@ App::uses('CakeText', 'Utility');
 
 /**
  * WebサイトのベースとなるURLを取得する
- * 
+ *
  * コントローラーが初期化される前など {$this->base} が利用できない場合に利用する
  * / | /index.php/ | /subdir/ | /subdir/index.php/
- * 
+ *
  * ※ プログラムフォルダ内の画像やCSSの読み込み時もbootstrap.php で呼び出されるのでサーバーキャッシュは利用しない
- * 
+ *
  * @return string ベースURL
  */
 function baseUrl() {
@@ -63,7 +63,7 @@ function baseUrl() {
 		$baseUrl = '/';
 	}
 	return $baseUrl;
-	
+
 }
 
 /**
@@ -118,7 +118,7 @@ function revision($version) {
  * 1.5.9 => 1005009
  * ※ ２つ目以降のバージョン番号は999までとする
  * β版の場合はfalseを返す
- * 
+ *
  * @param mixed $version Or false
  */
 function verpoint($version) {
@@ -205,12 +205,12 @@ function decodeContent($content, $fileName = null) {
 
 /**
  * 環境変数よりURLパラメータを取得する
- * 
+ *
  * ＊ プレフィックスは除外する
  * ＊ GETパラメーターは除外する
- * 
+ *
  * 《注意》
- * bootstrap 実行後でのみ利用可 
+ * bootstrap 実行後でのみ利用可
  */
 function getUrlParamFromEnv() {
 	$url = getUrlFromEnv();
@@ -223,11 +223,11 @@ function getUrlParamFromEnv() {
 
 /**
  * 環境変数よりURLを取得する
- * 
+ *
  * スマートURLオフ＆bootstrapのタイミングでは、$_GET['url']が取得できてない為、それをカバーする為に利用する
  * ＊ 先頭のスラッシュは除外する
  * ＊ baseUrlは除外する
- *  
+ *
  */
 function getUrlFromEnv() {
 
@@ -400,9 +400,9 @@ function isInstalled() {
 
 /**
  * DBセッティングが存在するかチェックする
- * 
+ *
  * @param string $name
- * @return mixed DatabaseConfig Or false 
+ * @return mixed DatabaseConfig Or false
  */
 function getDbConfig($name = 'default') {
 	if (file_exists(APP . 'Config' . DS . 'database.php')) {
@@ -532,7 +532,7 @@ function fullUrl($url) {
  * @return	string
  */
 function topLevelUrl($lastSlash = true) {
-	
+
 	if (isConsole() && !Configure::check('BcEnv.host')) {
 		return Configure::read('App.fullBaseUrl');
 	}
@@ -593,7 +593,7 @@ function amr($a, $b) {
 /**
  * URLにセッションIDを付加する
  * 既に付加されている場合は重複しない
- * 
+ *
  * @param mixed $url
  * @return mixed
  */
@@ -653,10 +653,10 @@ function addSessionId($url, $force = false) {
 
 /**
  * 利用可能なプラグインのリストを取得する
- * 
+ *
  * ClassRegistry::removeObject('Plugin'); で一旦 Plugin オブジェクトを削除
  * エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
- * 
+ *
  * @return array
  */
 function getEnablePlugins() {
@@ -702,7 +702,7 @@ function getEnablePlugins() {
 		}
 	}
 	return $enablePlugins;
-	
+
 }
 
 /**
@@ -728,7 +728,7 @@ function loadSiteConfig($force = false) {
 
 /**
  * バージョンを取得する
- * 
+ *
  * @return string Or false
  */
 function getVersion($plugin = '') {
@@ -763,7 +763,7 @@ function getVersion($plugin = '') {
 }
 
 /**
- * アップデートのURLを記載したメールを送信する 
+ * アップデートのURLを記載したメールを送信する
  */
 function sendUpdateMail() {
 
@@ -803,9 +803,9 @@ function sendUpdateMail() {
 
 /**
  * 展開出力
- * 
+ *
  * デバッグレベルが 0 の時でも強制的に出力する
- * 
+ *
  * @param mixed $var
  * @return void
  */
@@ -825,9 +825,9 @@ function p($var) {
 
 /**
  * データベースのドライバー名を取得する
- * 
+ *
  * @param string $dbConfigKeyName
- * @return string 
+ * @return string
  */
 function getDbDriver($dbConfigKeyName = 'default') {
 
@@ -837,7 +837,7 @@ function getDbDriver($dbConfigKeyName = 'default') {
 
 /**
  * コンソールから実行されているかチェックする
- * 
+ *
  * @return bool
  */
 function isConsole() {
@@ -874,7 +874,7 @@ function aa() {
 
 /**
  * 日本語ファイル名対応版basename
- * 
+ *
  * @param string $str
  * @param string $suffix
  * @return type
@@ -891,7 +891,7 @@ function mb_basename($str, $suffix=null){
 
 /**
  * プラグインを読み込む
- * 
+ *
  * @param string $plugin
  * @return bool
  */
@@ -947,7 +947,7 @@ function loadPlugin($plugin, $priority) {
 
 /**
  * 後方互換の為の非推奨メッセージを生成する
- * 
+ *
  * @param string $target 非推奨の対象
  * @param string $since 非推奨となったバージョン
  * @param string $remove 削除予定のバージョン
@@ -972,13 +972,13 @@ function deprecatedMessage($target, $since, $remove = null, $note = null) {
 
 /**
  * パーセントエンコーディングされないURLセーフなbase64エンコード
- * 
- * base64エンコード時でに出てくる記号 +(プラス) , /(スラッシュ) , =(イコール) 
+ *
+ * base64エンコード時でに出てくる記号 +(プラス) , /(スラッシュ) , =(イコール)
  * このbase64エンコードした値をさらにURLのパラメータで使うためにURLエンコードすると
  * パーセントエンコーディングされてしまいます。
  * その為、このメソッドではパーセントエンコーディングされないURLセーフな
  * base64エンコードを行います。
- * 
+ *
  * @param string $val 対象文字列
  * @return string
  */
@@ -986,10 +986,10 @@ function base64UrlsafeEncode($val) {
 	$val = base64_encode($val);
 	return str_replace(array('+', '/', '='), array('_', '-', '.'), $val);
 }
- 
+
 /**
  * パーセントエンコーディングされないURLセーフなbase64デコード
- * 
+ *
  * @param string $val 対象文字列
  * @return string
  */

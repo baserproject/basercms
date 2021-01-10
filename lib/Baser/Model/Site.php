@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -60,10 +60,10 @@ class Site extends AppModel {
 				['rule' => ['maxLength', 255], 'message' => __d('baser', 'サブサイトタイトルは255文字以内で入力してください。')]]
 		];
 	}
-	
+
 /**
  * エイリアスのスラッシュをチェックする
- * 
+ *
  * - 連続してスラッシュは入力できない
  * - 先頭と末尾にスラッシュは入力できない
  * @param $check
@@ -79,7 +79,7 @@ class Site extends AppModel {
 
 /**
  * 公開されている全てのサイトを取得する
- * 
+ *
  * @return array
  */
 	public function getPublishedAll() {
@@ -93,7 +93,7 @@ class Site extends AppModel {
 		}
 		return $sites;
 	}
-	
+
 /**
  * サイトリストを取得
  *
@@ -114,16 +114,16 @@ class Site extends AppModel {
 		if ($event !== false) {
 			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
-		
+
 		$conditions = ['Site.status' => true];
 		if(!is_null($mainSiteId)) {
 			$conditions['Site.main_site_id'] = $mainSiteId;
 		}
-		
+
 		$rootMain = [];
 		$excludeKey = false;
 		$includeKey = true;
-		
+
 		if(isset($options['excludeIds'])) {
 			if(!is_array($options['excludeIds'])) {
 				$options['excludeIds'] = [$options['excludeIds']];
@@ -133,7 +133,7 @@ class Site extends AppModel {
 				unset($options['excludeIds'][$excludeKey]);
 			}
 			if($options['excludeIds']) {
-				$conditions[]['NOT']['Site.id'] = $options['excludeIds'];	
+				$conditions[]['NOT']['Site.id'] = $options['excludeIds'];
 			}
 		}
 
@@ -149,23 +149,23 @@ class Site extends AppModel {
 				$conditions[]['Site.id'] = $options['includeIds'];
 			}
 		}
-		
+
 		if($includeKey !== false && $excludeKey === false && is_null($mainSiteId)) {
 			$rootMainTmp = $this->getRootMain();
 			$rootMain = [$rootMainTmp['Site']['id'] => $rootMainTmp['Site']['display_name']];
 		}
 		return $rootMain + $this->find('list', ['fields' => ['id', 'display_name'], 'conditions' => $conditions]);
     }
-	
+
 /**
  * メインサイトのデータを取得する
- * 
+ *
  * @param mixed $options 取得するフィールド
  * @return array
  */
 	public function getRootMain($options = []) {
 		$options += [
-			'fields' => []	
+			'fields' => []
 		];
 		// =============================================================
 		// テストの際、Fixture のロード前に、設定 BcSite を、DBから読む為、
@@ -345,14 +345,14 @@ class Site extends AppModel {
 			'Content.site_id' => $this->id,
 			'Content.site_root' => true
 		]);
-	
+
 		$children = $Content->children($id, false);
 		foreach($children as $child) {
 			$child['Content']['site_id'] = 0;
 			// バリデートすると name が変換されてしまう
 			$Content->save($child, false);
 		}
-	
+
 		$children = $Content->children($id, true);
 		foreach($children as $child) {
 			$Content->softDeleteFromTree($child['Content']['id']);
@@ -408,7 +408,7 @@ class Site extends AppModel {
 
 /**
  * URLよりサイトを取得する
- * 
+ *
  * @param string $url
  * @return array|bool|null
  */
@@ -434,7 +434,7 @@ class Site extends AppModel {
 
 /**
  * メインサイトを取得する
- * 
+ *
  * @param int $id
  * @return array|null
  */
@@ -452,7 +452,7 @@ class Site extends AppModel {
 
 /**
  * After Find
- * 
+ *
  * @param mixed $results
  * @param bool $primary
  * @return mixed
@@ -461,7 +461,7 @@ class Site extends AppModel {
 		$results = parent::afterFind($results, $primary = false);
 		$this->dataIter($results, function(&$entity, &$model) {
 			if(isset($entity['Site']['alias']) && $entity['Site']['alias'] === '' && !empty($entity['Site']['name'])) {
-				$entity['Site']['alias'] = $entity['Site']['name'];	
+				$entity['Site']['alias'] = $entity['Site']['name'];
 			}
 		});
 		return $results;
@@ -495,7 +495,7 @@ class Site extends AppModel {
 
 /**
  * 選択可能が言語の一覧を取得する
- * 
+ *
  * @param int $mainSiteId メインサイトID
  * @param int $currentSiteId 現在のサイトID
  * @return array
@@ -521,7 +521,7 @@ class Site extends AppModel {
 
 /**
  * デバイス設定をリセットする
- * 
+ *
  * @return bool
  */
 	public function resetDevice() {
@@ -540,7 +540,7 @@ class Site extends AppModel {
 				if(!$this->save()) {
 					$result = false;
 				}
-			}	
+			}
 		}
 		if(!$result) {
 			$this->getDataSource()->rollback();
@@ -552,7 +552,7 @@ class Site extends AppModel {
 
 /**
  * 言語設定をリセットする
- * 
+ *
  * @return bool
  */
 	public function resetLang() {
@@ -582,7 +582,7 @@ class Site extends AppModel {
 
 /**
  * Before Save
- * 
+ *
  * @param array $options
  * @return bool
  */
@@ -595,5 +595,5 @@ class Site extends AppModel {
 		}
 		return true;
 	}
-	
+
 }

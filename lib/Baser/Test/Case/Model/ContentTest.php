@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model
  * @since			baserCMS v 4.0.1
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('Content', 'Model');
@@ -439,7 +439,7 @@ class ContentTest extends BaserTestCase {
 
 /**
  * testGetUrl の base テスト
- * 
+ *
  * @param $url
  * @param $base
  * @param $expects
@@ -453,7 +453,7 @@ class ContentTest extends BaserTestCase {
 		$result = $this->Content->getUrl($url, false, false, $useBase);
 		$this->assertEquals($result, $expects);
 	}
-	
+
 	public function getUrlBaseDataProvider() {
 		return [
 			['/news/archives/1', '', true, '/news/archives/1'],
@@ -544,7 +544,7 @@ class ContentTest extends BaserTestCase {
 			[true, '', date('Y-m-d H:i:s', strtotime("+1 hour")), true],
 		];
 	}
-	
+
 /**
  * 移動元のコンテンツと移動先のディレクトリから移動が可能かチェックする
  * @throws Exception
@@ -554,7 +554,7 @@ class ContentTest extends BaserTestCase {
 		$this->loadFixtures('ContentIsMovable');
 		if(!$siteRelated) {
 			$site = $this->Content->Site->find('first', [
-				'conditions' => ['id' => 2], 
+				'conditions' => ['id' => 2],
 				'recursive' => -1
 			]);
 			$site['Site']['relate_main_site'] = false;
@@ -562,7 +562,7 @@ class ContentTest extends BaserTestCase {
 		}
 		$this->assertEquals($expects, $this->Content->isMovable($currentId, $parentId));
 	}
-	
+
 	public function isMovableDataProvider() {
 		return [
 			[false, 2, 3, false],	// ファイルを移動、同じファイル名が存在
@@ -675,7 +675,7 @@ class ContentTest extends BaserTestCase {
 			$ago =  strtotime('-5 min', strtotime($data['Content']['publish_end'])) - time();
 			$this->assertGreaterThan($result, $later);
 			$this->assertLessThan($result, $ago);
-			
+
 		// viewDuration が publish_end より早い場合
 		} elseif ($cacheTime == 'twoHourlater') {
 			Configure::write('BcCache.viewDuration', '+1 hour');
@@ -698,8 +698,8 @@ class ContentTest extends BaserTestCase {
 			[['Content' => ['status' => true, 'publish_end' => date('Y-m-d H:i:s', strtotime('+2 hour'))]], 'twoHourlater'],
 		];
 	}
-	
-	
+
+
 
 /**
  * 全てのURLをデータの状況に合わせ更新する
@@ -727,7 +727,7 @@ class ContentTest extends BaserTestCase {
  *
  * TODO sameUrl / useSubDomain のテストが書けていない
  * Siteのデータを用意する必要がある
- * 
+ *
  * @param string $url
  * @param string $publish
  * @param bool $extend

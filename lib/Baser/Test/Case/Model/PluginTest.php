@@ -1,25 +1,25 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model
  * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('Plugin', 'Model');
 
 /**
  * PluginTest class
- * 
+ *
  * class NonAssosiationPlugin extends Plugin {
  *  public $name = 'Plugin';
  *  public $belongsTo = array();
  *  public $hasMany = array();
  * }
- * 
+ *
  * @package Baser.Test.Case.Model
  */
 class PluginTest extends BaserTestCase {
@@ -121,7 +121,7 @@ class PluginTest extends BaserTestCase {
 
 /**
  * データベースをプラグインインストール前の状態に戻す
- * 
+ *
  * @param string $plugin プラグイン名
  * @return bool
  */
@@ -131,7 +131,7 @@ class PluginTest extends BaserTestCase {
 
 /**
  * データベースの構造を変更する
- * 
+ *
  * @param string $plugin プラグイン名
  * @param string $dbConfigName データベース設定名
  * @param string $filterTable テーブル指定
@@ -233,13 +233,13 @@ class PluginTest extends BaserTestCase {
  */
 	public function testAddFavoriteAdminLink($pluginName, $userId, $expected, $message = null) {
 		$user = ['id' => $userId ];
-		
+
 		$this->Plugin->addFavoriteAdminLink($pluginName, $user);
 
 		if(!isset($this->Plugin->Favorite)) {
 			return;
 		}
-		
+
 		// 追加したお気に入りを取得
 		$this->Plugin->Favorite->cacheQueries = false;
 		$lastId = $this->Plugin->Favorite->getLastInsertID();

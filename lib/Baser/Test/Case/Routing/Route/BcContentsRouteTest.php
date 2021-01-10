@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Routing.Route
  * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BcContentsRoute', 'Routing/Route');
@@ -71,7 +71,7 @@ class BcContentsRouteTest extends BaserTestCase {
 
 /**
  * リバースルーティング
- * 
+ *
  * @param string $current 現在のURL
  * @param string $params URLパラメーター
  * @param string $expects 期待するURL

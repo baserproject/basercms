@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.View.Helper
  * @since			baserCMS v 3.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BcAppView', 'View');
@@ -26,10 +26,10 @@ App::uses('BcContentsHelper', 'View/Helper');
  * @property BcContentsHelper $BcContents
  */
 class BcPageHelperTest extends BaserTestCase {
-	
+
 /**
  * Fixtures
- * @var array 
+ * @var array
  */
 	public $fixtures = [
 		'baser.View.Helper.BcPageHelper.PageBcPageHelper',
@@ -46,13 +46,13 @@ class BcPageHelperTest extends BaserTestCase {
 
 /**
  * View
- * 
+ *
  * @var View
  */
 	protected $_View;
 /**
  * __construct
- * 
+ *
  * @param string $name
  * @param array $data
  * @param string $dataName
@@ -90,7 +90,7 @@ class BcPageHelperTest extends BaserTestCase {
 
 /**
  * テスト用に固定ページのデータを取得する
- * 
+ *
  * @return array 固定ページのデータ
  */
 	public function getPageData($conditions = [], $fields = []) {
@@ -109,7 +109,7 @@ class BcPageHelperTest extends BaserTestCase {
 
 /**
  * ページ機能用URLを取得する
- * 
+ *
  * @param array $pageId 固定ページID
  * @param array $expected 期待値
  * @param string $message テストが失敗した時に表示されるメッセージ
@@ -138,7 +138,7 @@ class BcPageHelperTest extends BaserTestCase {
 
 /**
  * 公開状態を取得する
- * 
+ *
  * @param boolean $status 公開状態
  * @param mixed $begin 公開開始日時
  * @param mixed $end 公開終了日時
@@ -178,7 +178,7 @@ class BcPageHelperTest extends BaserTestCase {
  *	- `arrow` : 表示文字列（初期値 : ' ≫'）
  *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
  * @param string $expected
- * 
+ *
  * @dataProvider getNextLinkDataProvider
  */
 	public function testGetNextLink($url, $title, $options, $expected) {
@@ -214,9 +214,9 @@ class BcPageHelperTest extends BaserTestCase {
  *	- `arrow` : 表示文字列（初期値 : ' ≫'）
  *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
  * @param string $expected
- * 
+ *
  * @dataProvider getPrevLinkDataProvider
- */	
+ */
 	public function testGetPrevLink($url, $title, $options, $expected) {
 		$this->BcPage->request = $this->_getRequest($url);
 		$result = $this->BcPage->getPrevLink($title, $options);
@@ -244,7 +244,7 @@ class BcPageHelperTest extends BaserTestCase {
 
 /**
  * 固定ページのコンテンツを出力する
- * 
+ *
  * @param string $expected 期待値
  * @param string $message テスト失敗時、表示するメッセージ
  * @dataProvider contentDataProvider
@@ -278,7 +278,7 @@ class BcPageHelperTest extends BaserTestCase {
 
 /**
  * ページリストを取得する
- * 
+ *
  * @dataProvider getPageListDataProvider
  */
 	public function testGetPageList($id, $expects) {
@@ -286,7 +286,7 @@ class BcPageHelperTest extends BaserTestCase {
 		$result = Hash::extract($result, '{n}.Content.type');
 		$this->assertEquals($expects, $result);
 	}
-	
+
 	public function getPageListDataProvider() {
 		return [
 			[1, ['Page', 'Page', 'Page', 'Page', 'ContentFolder']],	// トップフォルダ

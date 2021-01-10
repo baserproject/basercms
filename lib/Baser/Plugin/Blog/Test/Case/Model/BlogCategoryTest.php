@@ -1,20 +1,20 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.Test.Case.Model
  * @since			baserCMS v 3.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BlogCategory', 'Blog.Model');
 
 /**
  * Class BlogCategoryTest
- * 
+ *
  * @property BlogCategory $BlogCategory
  */
 
@@ -140,7 +140,7 @@ class BlogCategoryTest extends BaserTestCase {
 
 /**
  * コントロールソースを取得する
- * 
+ *
  * @param string $field フィールド名
  * @param array $option オプション
  * @param array $expected 期待値
@@ -240,7 +240,7 @@ class BlogCategoryTest extends BaserTestCase {
 		$result = $this->BlogCategory->getCategoryList(1, ['type' => 'year', 'limit' => 1, 'viewCount' => true]);
 		$this->assertEquals($result['2015'][0]['BlogCategory']['count'], 1, $message);
 	}
-	
+
 /**
  * アクセス制限としてカテゴリの新規追加ができるか確認する
  */
@@ -256,7 +256,7 @@ class BlogCategoryTest extends BaserTestCase {
 		$this->assertFalse($this->BlogCategory->hasChild(2));
 		$this->assertTrue($this->BlogCategory->hasChild(1));
 	}
-	
+
 /**
  * カテゴリ名よりカテゴリを取得する
  * @dataProvider getByNameDataProvider
@@ -268,7 +268,7 @@ class BlogCategoryTest extends BaserTestCase {
 		$result = $this->BlogCategory->getByName($blogCategoryId, $name);
 		$this->assertEquals($expects, (bool) $result);
 	}
-	
+
 	public function getByNameDataProvider() {
 		return [
 			[1, 'child', true],
@@ -276,5 +276,5 @@ class BlogCategoryTest extends BaserTestCase {
 			[2, 'child', false]
 		];
 	}
-	
+
 }

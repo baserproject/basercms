@@ -2,14 +2,14 @@
 /**
  * test for BlogHelper
  *
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link      http://basercms.net baserCMS Project
+ * @link      https://basercms.net baserCMS Project
  * @package     Baser.Test.Case.View.Helper
  * @since        baserCMS v 3.0.6
- * @license     http://basercms.net/license/index.html
+ * @license     https://basercms.net/license/index.html
  */
 
 App::uses('BcBaserHelper', 'View/Helper');
@@ -29,11 +29,11 @@ class BlogBaserHelperTest extends BaserTestCase {
 
 /**
  * Fixtures
- * @var array 
+ * @var array
  */
 	public $fixtures = [
 		'plugin.blog.View/Helper/BlogBaserHelper/ContentMultiBlog',	// テスト内で読み込む
-		'baser.Default.Content', 
+		'baser.Default.Content',
 		'baser.Default.Site',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
@@ -45,7 +45,7 @@ class BlogBaserHelperTest extends BaserTestCase {
 		'plugin.blog.Model/BlogPost/BlogCategoryModel',
 		'plugin.blog.View/Helper/BlogBaserHelper/BlogPostBlogBaserHelper',
 	];
-	
+
 /**
  * setUp
  *
@@ -94,7 +94,7 @@ class BlogBaserHelperTest extends BaserTestCase {
 
 /**
  * ブログのカテゴリ取得
- * 
+ *
  * BlogHelper::getCategories() のラッピングの為、呼び出せるかどうかだけテストし、
  * 詳細なテストは、BlogHelper::getCategories() に委ねる
  */

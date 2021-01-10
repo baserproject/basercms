@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Mail.View
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -15,7 +15,7 @@
  */
 ?>
 
-                                           <?php echo $other['date'] ?> 
+                                           <?php echo $other['date'] ?>
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 　　　　　　　　◆◇　<?php echo __d('baser', 'お問い合わせを受け付けました')?>　◇◆
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -33,8 +33,8 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
 <?php echo $this->element('../Emails/text/mail_data') ?>
 
- 
- 
+
+
 ────────────────────────────────────
 
 <?php if ($other['mode'] === 'user'): ?>
@@ -45,7 +45,7 @@
 　<?php echo __d('baser', 'なお、このメールは自動転送システムです。')?>　
 　<?php echo __d('baser', '受け付けた旨のメールもユーザーへ送られています。')?>　
 <?php endif; ?>
- 
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 　<?php echo $mailConfig['site_name']; ?>　

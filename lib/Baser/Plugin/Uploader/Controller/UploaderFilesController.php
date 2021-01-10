@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Uploader.Controller
  * @since			baserCMS v 3.0.10
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -81,7 +81,7 @@ class UploaderFilesController extends AppController {
 	}
 
 /**
- * プラグインの環境をチェックする 
+ * プラグインの環境をチェックする
  */
 	protected function _checkEnv() {
 		$savePath = WWW_ROOT . 'files' . DS . $this->UploaderFile->actsAs['BcUpload']['saveDir'] . DS;
@@ -100,7 +100,7 @@ class UploaderFilesController extends AppController {
 			}
 		}
 	}
-	
+
 /**
  * [ADMIN] ファイル一覧
  *
@@ -118,7 +118,7 @@ class UploaderFilesController extends AppController {
 		$this->setViewConditions('UploadFile', array('default' => $default));
 		$this->set('uploaderConfigs', $this->UploaderConfig->findExpanded());
 		$this->set('installMessage', $this->checkInstall());
-		
+
 		if($this->RequestHandler->isAjax()) {
 			$settings = $this->UploaderFile->Behaviors->BcUpload->settings;
 			$this->set('listId', $id);
@@ -180,7 +180,7 @@ class UploaderFilesController extends AppController {
 	public function admin_ajax_list($id='') {
 
 		Configure::write('debug',0);
-		
+
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('UploadFile', array('default' => $default, 'type' => 'get'));
 
@@ -191,7 +191,7 @@ class UploaderFilesController extends AppController {
 		if(!empty($this->request->data['Filter']['name'])) {
 			$this->request->data['Filter']['name'] = urldecode($this->request->data['Filter']['name']);
 		}
-			
+
 		// =====================================================================
 		// setViewConditions で type を get に指定した場合、
 		// 自動的に $this->passedArgs['num'] 設定されないので明示的に取得
@@ -220,16 +220,16 @@ class UploaderFilesController extends AppController {
 				'order'=>'created DESC',
 				'limit'=>$num
 		);
-		
+
 		$dbDatas = $this->paginate('UploaderFile');
-		
+
 		foreach($dbDatas as $key => $dbData) {
 			$limited = (!empty($dbData['UploaderFile']['publish_begin']) || !empty($dbData['UploaderFile']['publish_end']));
 			$files = $this->UploaderFile->filesExists($dbData['UploaderFile']['name'], $limited);
 			$dbData = Set::merge($dbData,array('UploaderFile'=>$files));
 			$dbDatas[$key] = $dbData;
 		}
-		
+
 		$this->set('installMessage', $this->checkInstall());
 		$uploaderConfig = $this->UploaderConfig->findExpanded();
 		$this->set('listId', $id);
@@ -240,16 +240,16 @@ class UploaderFilesController extends AppController {
 			$layoutType = 'table';
 		}
 		$this->set('layoutType', $uploaderConfig['layout_type']);
-		
+
 	}
 /**
  * 一覧の検索条件を生成する
- * 
+ *
  * @param array $data
- * @return array 
+ * @return array
  */
 	protected function _createAdminIndexConditions($data) {
-		
+
 		$conditions = array();
 		if(!empty($data['uploader_category_id'])) {
 			$conditions = array('UploaderFile.uploader_category_id' => $data['uploader_category_id']);
@@ -275,9 +275,9 @@ class UploaderFilesController extends AppController {
 			$conditions['and']['or'][] = array('UploaderFile.name LIKE' => '%' . $data['name'] . '%');
 			$conditions['and']['or'][] = array('UploaderFile.alt LIKE' => '%' . $data['name'] . '%');
 		}
-		
+
 		return $conditions;
-		
+
 	}
 /**
  * [ADMIN] Ajaxファイルアップロード
@@ -300,7 +300,7 @@ class UploaderFilesController extends AppController {
 			}
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
-		
+
 		// 2014.08.10 yuse fixed 4777 php.iniに定義されたサイズチェックエラーの場合はエラー(UPLOAD_ERR_INI_SIZE)
 		if($this->request->data['UploaderFile']['file']['error'] == 1){
 			echo null;
@@ -319,7 +319,7 @@ class UploaderFilesController extends AppController {
 		if($this->UploaderFile->save()) {
 			echo true;
 		}
-		
+
 		exit();
 
 	}
@@ -332,7 +332,7 @@ class UploaderFilesController extends AppController {
  * @access	public
  */
 	public function admin_ajax_image($name, $size='small') {
-		
+
 		$file = $this->UploaderFile->findByName(urldecode($name));
 		$this->set('file', $file);
 		$this->set('size', $size);
@@ -353,7 +353,7 @@ class UploaderFilesController extends AppController {
 		$files = $this->UploaderFile->filesExists($name);
 		$this->set('result',$files);
 		$this->render('json_result');
-		
+
 	}
 /**
  * [ADMIN] 編集処理
@@ -367,7 +367,7 @@ class UploaderFilesController extends AppController {
 		} elseif(!$this->request->is('ajax') && !$id) {
 			$this->notFound();
 		}
-		
+
 		$user = $this->BcAuth->user();
 		$uploaderConfig = $this->UploaderConfig->findExpanded();
 		if($uploaderConfig['use_permission']) {
@@ -375,7 +375,7 @@ class UploaderFilesController extends AppController {
 				$this->notFound();
 			}
 		}
-		
+
 		if(!$this->request->data) {
 			$this->request->data = $this->UploaderFile->read(null, $id);
 		} else {
@@ -394,7 +394,7 @@ class UploaderFilesController extends AppController {
 				} else {
 					$this->BcMessage->setInfo(__d('baser', '保存中にエラーが発生しました。'));
 				}
-			}	
+			}
 		}
 
 		$this->render('../Elements/admin/uploader_files/form');
@@ -442,22 +442,22 @@ class UploaderFilesController extends AppController {
 	}
 /**
  * 検索ボックスを取得する
- * 
+ *
  * @param string $listid
  */
 	public function admin_ajax_get_search_box($listId = "") {
-		
+
 		$this->set('listId', $listId);
 		$this->render('../Elements/admin/searches/uploader_files_index');
 
 	}
-	
+
 /**
  * 公開期間のチェックを行う
- * 
+ *
  */
 	public function view_limited_file($filename) {
-		
+
 		$display = false;
 		if(!empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			$display = true;
@@ -476,7 +476,7 @@ class UploaderFilesController extends AppController {
 				$display = true;
 			}
 		}
-		
+
 		if($display) {
 			$info = pathinfo($filename);
 			$ext = $info['extension'];
@@ -523,8 +523,8 @@ class UploaderFilesController extends AppController {
 		} else {
 			$this->notFound();
 		}
-		
+
 	}
-	
+
 }
 

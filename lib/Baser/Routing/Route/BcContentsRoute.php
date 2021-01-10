@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Routing.Filter
  * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('CakeRoute', 'Routing/Route');
@@ -40,7 +40,7 @@ class BcContentsRoute extends CakeRoute {
 		if(!$request) {
 			return false;
 		}
-		
+
 		//管理システムにログインしているかつプレビューの場合は公開状態のステータスは無視する
 		$publish = true;
 		if((!empty($request->query['preview']) || !empty($request->query['force'])) && BcUtil::loginUser()) {
@@ -51,7 +51,7 @@ class BcContentsRoute extends CakeRoute {
 				 Configure::write('BcEnv.host', '');
 			}
 		}
-		
+
 		$sameUrl = false;
 		$site = BcSite::findCurrentSub(true);
 		if($site) {
@@ -103,7 +103,7 @@ class BcContentsRoute extends CakeRoute {
 				exit();
 			}
 		}
-		
+
 		if($content['Content']['alias_id'] && !$Content->isPublishById($content['Content']['alias_id'])) {
 			return false;
 		}
@@ -196,12 +196,12 @@ class BcContentsRoute extends CakeRoute {
  * @return mixed either false or a string URL.
  */
 	public function match($url) {
-		
+
 		// フロント以外のURLの場合にマッチしない
 		if(!empty($url['admin'])) {
 			return false;
 		}
-		
+
 		// プラグイン確定
 		if(empty($url['plugin'])) {
 			$plugin = 'Core';
@@ -297,7 +297,7 @@ class BcContentsRoute extends CakeRoute {
 						$param = 1;
 					}
 					if(!is_array($param)) {
-						$named[] = $key . ':' . $param;	
+						$named[] = $key . ':' . $param;
 					}
 				} else {
 					$pass[] = $param;

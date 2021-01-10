@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Mail.Controller
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('MailAppController', 'Mail.Controller');
@@ -127,7 +127,7 @@ class MailController extends MailAppController {
 		$this->dbDatas['mailContent'] = $this->MailMessage->mailContent;
 		$this->dbDatas['mailFields'] = $this->MailMessage->mailFields;
 		$this->dbDatas['mailConfig'] = $this->MailConfig->find();
-		
+
 		// ページタイトルをセット
 		$this->pageTitle = $this->request->params['Content']['title'];
 
@@ -175,7 +175,7 @@ class MailController extends MailAppController {
 		if ($this->dbDatas['mailContent']['MailContent']['widget_area']) {
 			$this->set('widgetArea', $this->dbDatas['mailContent']['MailContent']['widget_area']);
 		}
-		
+
 		// キャッシュ対策
 		if (!isConsole() && empty($this->request->params['requested'])) {
 			header("Cache-Control: no-cache, no-store, must-revalidate");
@@ -203,7 +203,7 @@ class MailController extends MailAppController {
 			$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
 			$this->request->params['Content']['eyecatch'] = $this->request->data['Content']['eyecatch'];
 		}
-		
+
 		$this->Session->write('Mail.valid', true);
 
 		// 初期値を取得
@@ -243,7 +243,7 @@ class MailController extends MailAppController {
 				$this->BcMessage->setError(__('ファイルのアップロードサイズが上限を超えています。'));
 			}
 		}
-		
+
 		if (!$this->MailContent->isAccepting($this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
 			$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
 			return;
@@ -258,7 +258,7 @@ class MailController extends MailAppController {
 		} else {
 			// 入力データを整形し、モデルに引き渡す
 			$this->request->data = $this->MailMessage->create($this->MailMessage->autoConvert($this->request->data));
-			
+
 			// fileタイプへの送信データ検証
 			if (!$this->_checkDirectoryRraversal()) {
 				$this->redirect($this->request->params['Content']['url'] . '/index');
@@ -326,12 +326,12 @@ class MailController extends MailAppController {
 					unset($this->request->data['MailMessage']['auth_captcha']);
 				}
 			}
-			
+
 			// fileタイプへの送信データ検証
 			if (!$this->_checkDirectoryRraversal()) {
 				$this->redirect($this->request->params['Content']['url'] . '/index');
 			}
-			
+
 			$this->MailMessage->create($this->request->data);
 
 			// データの入力チェックを行う
@@ -486,7 +486,7 @@ class MailController extends MailAppController {
 
 /**
  * メール送信する
- * 
+ *
  * @return void
  */
 	protected function _sendEmail($options) {
@@ -616,21 +616,21 @@ class MailController extends MailAppController {
 
 		return true;
 	}
-	
+
 /**
  * ファイルフィールドのデータがアップロードされたファイルパスであることを検証する
- * 
+ *
  * @return boolean
  */
 	private function _checkDirectoryRraversal() {
-		if (!isset($this->dbDatas['mailFields']) 
+		if (!isset($this->dbDatas['mailFields'])
 			|| !is_array($this->dbDatas['mailFields'])
 			|| empty($this->MailMessage->Behaviors->BcUpload->settings['MailMessage'])) {
 			return false;
 		}
-		
+
 		$settings = $this->MailMessage->Behaviors->BcUpload->settings['MailMessage'];
-		
+
 		foreach($this->dbDatas['mailFields'] as $mailField) {
 			if ($mailField['MailField']['type'] == 'file' &&
 				!empty($this->request->data['MailMessage'][$mailField['MailField']['field_name']]['tmp_name'])) {
@@ -644,7 +644,7 @@ class MailController extends MailAppController {
 
 /**
  * 認証用のキャプチャ画像を表示する
- * 
+ *
  * @return void
  */
 	public function captcha($token = null) {

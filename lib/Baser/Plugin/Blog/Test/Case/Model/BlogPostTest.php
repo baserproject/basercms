@@ -1,20 +1,20 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.Test.Case.Model
  * @since			baserCMS v 3.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BlogPost', 'Blog.Model');
 
 /**
  * Class BlogPostTest
- * 
+ *
  * @property BlogPost $BlogPost
  */
 class BlogPostTest extends BaserTestCase {
@@ -232,7 +232,7 @@ public function testGetDefaultValue() {
 			[1, [], [['year' => '2016', 'month' => '02'], ['year' => '2015', 'month' => '01']]],
 			[2, [], [['year' => '2016', 'month' => '02']]],
 			[1, ['category' => true], [
-				['year' => '2016', 'month' => '02', 'BlogCategory' => ['id' => null, 'name' => null, 'title' => null]], 
+				['year' => '2016', 'month' => '02', 'BlogCategory' => ['id' => null, 'name' => null, 'title' => null]],
 				['year' => '2016', 'month' => '02', 'BlogCategory' => ['id' => '2', 'name' => 'child', 'title' => '子カテゴリ']],
 				['year' => '2015', 'month' => '01', 'BlogCategory' => ['id' => '2', 'name' => 'child', 'title' => '子カテゴリ']],
 				['year' => '2015', 'month' => '01', 'BlogCategory' => ['id' => '1', 'name' => 'release', 'title' => 'プレスリリース']],
@@ -246,7 +246,7 @@ public function testGetDefaultValue() {
 
 /**
  * カレンダー用に指定した月で記事の投稿がある日付のリストを取得する
- * 
+ *
  * @param int $blogContentId ブログコンテンツID
  * @param int $year 年
  * @param int $month 月
@@ -280,7 +280,7 @@ public function testGetDefaultValue() {
 		$result = $this->BlogPost->getAuthors(1, []);
 		$this->assertEquals($result[0]['User']['name'], 'basertest', $message);
 		$this->assertEquals($result[1]['User']['name'], 'basertest2', $message);
-		
+
 		$result = $this->BlogPost->getAuthors(2, []);
 		$this->assertEquals($result[0]['User']['name'], 'basertest', $message);
 
@@ -357,7 +357,7 @@ public function testGetDefaultValue() {
  */
 	public function testGetPublishes() {
 		$message = '正しく公開状態の記事を取得できません';
-		
+
 		$result = count($this->BlogPost->getPublishes([]));
 		$this->assertEquals($result, 6, $message);
 
@@ -388,7 +388,7 @@ public function testGetDefaultValue() {
 		]];
 
 		$SearchIndex = ClassRegistry::init('SearchIndex');
-		
+
 		// 登録
 		$data['BlogPost']['exclude_search'] = false;
 		$this->BlogPost->create($data);
@@ -398,7 +398,7 @@ public function testGetDefaultValue() {
 			'conditions' => ['SearchIndex.title' => 'test-name'],
 		]);
 		$this->assertEquals($result, 1, '検索用テーブルへ登録できません');
-		
+
 		// 削除
 		$data['BlogPost']['exclude_search'] = true;
 		$this->BlogPost->create($data);
@@ -446,7 +446,7 @@ public function testGetDefaultValue() {
 		$result = $this->BlogPost->createSearchIndex($data);
 		$this->assertEquals($expected, $result, 'ブログ記事用の検索用データを正しく生成できません');
 	}
-	
+
 	/**
 	 * 検索用データ生成、ステータス設定
 	 * @dataProvider createSearchIndexStatusDataProvider
@@ -478,7 +478,7 @@ public function testGetDefaultValue() {
 			[false, false, false],
 		];
 	}
-	
+
 	/**
 	 * 検索用データ生成、公開期間設定
 	 * @dataProvider createSearchIndexPublishDataProvider
@@ -519,7 +519,7 @@ public function testGetDefaultValue() {
 			[['begin' => '', 'end' => '2020-8-30'], ['begin' => '2020-09-01', 'end' => ''], ['begin' => '2020-09-01', 'end' => '2020-09-01']],	// 記事の終了日がコンテンツの開始日より早い
 		];
 	}
-	
+
 
 /**
  * beforeDelete
@@ -537,7 +537,7 @@ public function testGetDefaultValue() {
 
 /**
  * コピーする
- * 
+ *
  * @param int $id
  * @param array $data
  */
@@ -559,7 +559,7 @@ public function testGetDefaultValue() {
 
 /**
  * カスタムファインダー　customParams
- * 
+ *
  * @param array $options
  * @param mixed $expected
  * @dataProvider findCustomParamsDataProvider
@@ -568,7 +568,7 @@ public function testGetDefaultValue() {
 		set_error_handler(function($no, $str, $file, $line, $context) {});
 		$result = $this->BlogPost->find('customParams', $options);
 		if($type == 'count') {
-			$this->assertEquals($expected, count($result));	
+			$this->assertEquals($expected, count($result));
 		} elseif($type == 'name') {
 			$this->assertEquals($expected, $result[0]['BlogPost']['name']);
 		} elseif($type == 'id') {
@@ -576,7 +576,7 @@ public function testGetDefaultValue() {
 			$this->assertEquals($expected, $id);
 		}
 	}
-	
+
 	public function findCustomParamsDataProvider() {
 		return [
 			['count', [], 6],											// 公開状態全件取得

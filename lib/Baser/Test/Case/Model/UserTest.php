@@ -1,25 +1,25 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model
  * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('User', 'Model');
 
 /**
  * UserTest class
- * 
+ *
  * class NonAssosiationUser extends User {
  *	public $name = 'User';
  *	public $belongsTo = [];
  *	public $hasMany = [];
  * }
- * 
+ *
  * @package Baser.Test.Case.Model
  */
 class UserTest extends BaserTestCase {
@@ -233,7 +233,7 @@ class UserTest extends BaserTestCase {
 /**
  * ユーザーリストを取得する
  * 条件を指定する場合は引数を指定する
- * 
+ *
  * @param array $conditions 取得条件
  * @param array $expected 期待値
  * @param string $message テストが失敗した時に表示されるメッセージ
@@ -283,7 +283,7 @@ class UserTest extends BaserTestCase {
 
 /**
  * beforeSave
- * 
+ *
  * @param type $options
  * @return boolean
  */
@@ -293,8 +293,8 @@ class UserTest extends BaserTestCase {
 
 /**
  * afterSave
- * 
- * @param boolean $created 
+ *
+ * @param boolean $created
  */
 	public function testAfterSave() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -302,7 +302,7 @@ class UserTest extends BaserTestCase {
 
 /**
  * よく使う項目の初期データをユーザーに適用する
- * 
+ *
  * @param type $userId ユーザーID
  * @param type $userGroupId ユーザーグループID
  * @param array $expected 期待値

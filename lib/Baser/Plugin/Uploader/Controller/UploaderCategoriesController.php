@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Uploader.Controller
  * @since			baserCMS v 3.0.10
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -84,7 +84,7 @@ class UploaderCategoriesController extends AppController {
 		}
 		$this->pageTitle = __d('baser', 'カテゴリ新規登録');
 		$this->render('form');
-		
+
 	}
 /**
  * 編集
@@ -117,7 +117,7 @@ class UploaderCategoriesController extends AppController {
 
 		$this->pageTitle = __d('baser', 'カテゴリ編集');
 		$this->render('form');
-		
+
 	}
 /**
  * 削除
@@ -143,7 +143,7 @@ class UploaderCategoriesController extends AppController {
 		}
 
 		$this->redirect('index');
-		
+
 	}
 /**
  * [ADMIN] 削除処理　(ajax)
@@ -166,29 +166,29 @@ class UploaderCategoriesController extends AppController {
 		} else {
 			exit();
 		}
-		
+
 	}
 /**
  * 一括削除
- * 
+ *
  * @param array $ids
  * @return boolean
  */
 	public function _batch_del($ids) {
-		
+
 		if($ids) {
 			foreach($ids as $id) {
 				$this->_del($id);
 			}
 		}
 		return true;
-		
+
 	}
 /**
  * データを削除する
- * 
+ *
  * @param int $id
- * @return boolean 
+ * @return boolean
  */
 	public function _del($id = null) {
 		// メッセージ用にデータを取得
@@ -201,11 +201,11 @@ class UploaderCategoriesController extends AppController {
 			return false;
 		}
 	}
-	
+
 /**
  * [ADMIN] コピー
- * 
- * @param int $id 
+ *
+ * @param int $id
  * @return void
  */
 	public function admin_ajax_copy($id = null) {
@@ -218,7 +218,7 @@ class UploaderCategoriesController extends AppController {
 		} else {
 			$this->ajaxError(500, $this->UploaderCategory->validationErrors);
 		}
-		
+
 	}
 
 }

@@ -1,26 +1,26 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model
  * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('UserGroup', 'Model');
 App::uses('Permission', 'Model');
 
 /**
  * UserGroupTest class
- * 
+ *
  * class NonAssosiationUserGroup extends UserGroup {
  *  public $name = 'UserGroup';
  *  public $belongsTo = [];
  *  public $hasMany = [];
  * }
- * 
+ *
  * @package Baser.Test.Case.Model
  * @property UserGroup $UserGroup
  */
@@ -135,9 +135,9 @@ class UserGroupTest extends BaserTestCase {
 			]
 		);
 		$result = $data[0]['User']['user_group_id'];
-		
+
 		$this->assertEquals(1, $result, '削除したユーザーグループに属するユーザーを、管理者グループに変更できません');
-	} 
+	}
 
 /**
  * 管理者グループ以外のグループが存在するかチェックする
@@ -170,7 +170,7 @@ class UserGroupTest extends BaserTestCase {
 
 /**
  * ユーザーグループデータをコピーする
- * 
+ *
  * @param int $id ユーザーグループID
  * @param array $data DBに挿入するデータ
  * @param boolean $recursive Permissionもcopyをするかしないか
@@ -204,7 +204,7 @@ class UserGroupTest extends BaserTestCase {
 				]
 			);
 		};
-		
+
 		$this->assertEquals($expected, $result);
 	}
 
@@ -249,7 +249,7 @@ class UserGroupTest extends BaserTestCase {
 
 /**
  * グローバルメニューを利用可否確認
- * 
+ *
  * @param string $id
  * @param array $expected 期待値
  * @param string $message テストが失敗した時に表示されるメッセージ

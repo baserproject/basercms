@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model
  * @since			baserCMS v 4.0.9
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('ContentFolder', 'Model');
@@ -40,7 +40,7 @@ class ContentFolderTest extends BaserTestCase {
 		'plugin.feed.Default/FeedConfig',
 		'baser.Default.FeedDetail',
 	];
-	
+
 /**
  * set up
  *
@@ -138,7 +138,7 @@ class ContentFolderTest extends BaserTestCase {
 		Configure::write('BcAuthPrefix.admin.previewRedirect', '');
 		$_SERVER['REQUEST_URI'] = '/';
 		$this->_loginAdmin();
-		
+
 		$pageModel = ClassRegistry::init('Page');
 		// ディレクトリを追加
 		$contentFolder = $this->ContentFolder->save(['Content' => [
@@ -158,7 +158,7 @@ class ContentFolderTest extends BaserTestCase {
 		// ページを公開
 		$page['Content']['self_status'] = true;
 		$pageModel->save($page);
-		
+
 		// ディレクトリを非公開
 		$contentFolder['Content']['self_status'] = false;
 		$this->ContentFolder->save($contentFolder, ['reconstructSearchIndices' => true]);

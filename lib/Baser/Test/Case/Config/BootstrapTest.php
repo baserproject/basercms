@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Config
  * @since			baserCMS v 3.0.9
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 
@@ -28,7 +28,7 @@ class BootstrapTest extends BaserTestCase {
 
 /**
  * __construct
- * 
+ *
  * @param string $name
  * @param array $data
  * @param string $dataName
@@ -36,7 +36,7 @@ class BootstrapTest extends BaserTestCase {
 	public function __construct($name = null, $data = [], $dataName = '') {
 		parent::__construct($name, $data, $dataName);
 	}
-	
+
 /**
  * Set up
  *

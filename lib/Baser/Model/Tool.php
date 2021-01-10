@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('CakeSchema', 'Model');
@@ -28,7 +28,7 @@ class Tool extends AppModel {
 
 /**
  * テーブル
- * 
+ *
  * @var string
  */
 	public $useTable = false;
@@ -52,7 +52,7 @@ class Tool extends AppModel {
 
 /**
  * データソースを指定してモデルリストを取得する
- * 
+ *
  * @param string $configKeyName データソース名
  * @return array
  */
@@ -79,7 +79,7 @@ class Tool extends AppModel {
 
 /**
  * スキーマを書き出す
- * 
+ *
  * @param array $data
  * @param string $path スキーマファイルの生成場所
  * @return boolean
@@ -109,9 +109,9 @@ class Tool extends AppModel {
 
 /**
  * スキーマファイルを読み込む
- * 
+ *
  * @param array $data
- * @param string $tmpPath 
+ * @param string $tmpPath
  * @return boolean
  */
 	public function loadSchemaFile($data, $tmpPath) {

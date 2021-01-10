@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -20,7 +20,7 @@ class UserGroup extends AppModel {
 
 /**
  * ビヘイビア
- * 
+ *
  * @var array
  */
 	public $actsAs = ['BcCache'];
@@ -71,10 +71,10 @@ class UserGroup extends AppModel {
 				['rule' => ['notBlank'], 'message' => __d('baser', '認証プレフィックスを入力してください。')]]
 		];
 	}
-	
+
 /**
  * 関連するユーザーを管理者グループに変更し保存する
- * 
+ *
  * @param boolean $cascade
  * @return boolean
  */
@@ -131,7 +131,7 @@ class UserGroup extends AppModel {
 
 /**
  * ユーザーグループデータをコピーする
- * 
+ *
  * @param int $id ユーザーグループID
  * @param array $data DBに挿入するデータ
  * @param boolean $recursive 関連したPermissionもcopyをするかしないか
@@ -181,12 +181,12 @@ class UserGroup extends AppModel {
 
 /**
  * グローバルメニューを利用可否確認
- * 
+ *
  * @param string $id ユーザーグループID
  * @return boolean
  */
 	public function isAdminGlobalmenuUsed($id) {
 		return $this->field('use_admin_globalmenu', ['UserGroup.id' => $id]);
 	}
-	
+
 }

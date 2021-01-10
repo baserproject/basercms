@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -21,7 +21,7 @@ class BlogAppController extends AppController {
 
 /**
  * コメントを管理者メールへメール送信する
- * 
+ *
  * @param int $postId
  * @param array $data
  * @return boolean
@@ -46,10 +46,10 @@ class BlogAppController extends AppController {
 
 /**
  * コメント投稿者にアラートメールを送信する
- * 
+ *
  * @param int $postId
  * @param array $data
- * @return boolean 
+ * @return boolean
  */
 	protected function _sendCommentContributor($postId, $data) {
 		if (!$postId || !$data || empty($this->siteConfigs['email'])) {

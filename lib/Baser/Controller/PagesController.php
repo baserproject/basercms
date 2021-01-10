@@ -1,16 +1,18 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
+ * Class PagesController
+ *
  * 固定ページコントローラー
  *
  * @package Baser.Controller
@@ -18,49 +20,51 @@
  * @property Content $Content
  * @property BcContentsComponent $BcContents
  */
-class PagesController extends AppController {
+class PagesController extends AppController
+{
 
-/**
- * コントローラー名
- *
- * @var string
- */
+	/**
+	 * コントローラー名
+	 *
+	 * @var string
+	 */
 	public $name = 'Pages';
 
-/**
- * ヘルパー
- *
- * @var array
- */
+	/**
+	 * ヘルパー
+	 *
+	 * @var array
+	 */
 	public $helpers = [
 		'Html', 'Session', 'BcGooglemaps',
 		'BcXml', 'BcText',
 		'BcFreeze', 'BcPage'
 	];
 
-/**
- * コンポーネント
- *
- * @var array
- * @deprecated useViewCache 5.0.0 since 4.0.0
- * 	CakePHP3では、ビューキャッシュは廃止となるため、別の方法に移行する
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 * @deprecated useViewCache 5.0.0 since 4.0.0
+	 *    CakePHP3では、ビューキャッシュは廃止となるため、別の方法に移行する
+	 */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['useForm' => true, 'useViewCache' => true]];
 
-/**
- * モデル
- *
- * @var array
- * @access	public
- */
+	/**
+	 * モデル
+	 *
+	 * @var array
+	 * @access    public
+	 */
 	public $uses = ['Page', 'Content'];
 
-/**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
+	/**
+	 * beforeFilter
+	 *
+	 * @return void
+	 */
+	public function beforeFilter()
+	{
 		parent::beforeFilter();
 
 		// 認証設定
@@ -72,14 +76,15 @@ class PagesController extends AppController {
 		$this->helpers[] = $this->siteConfigs['editor'];
 	}
 
-/**
- * 固定ページ情報登録
- *
- * @return mixed json|false
- */
-	public function admin_ajax_add() {
+	/**
+	 * 固定ページ情報登録
+	 *
+	 * @return mixed json|false
+	 */
+	public function admin_ajax_add()
+	{
 		$this->autoRender = false;
-		if(!$this->request->data) {
+		if (!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
@@ -88,7 +93,7 @@ class PagesController extends AppController {
 			'data' => $this->request->data
 		]);
 		if ($event !== false) {
-			$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+			$this->request->data = $event->result === true? $event->data['data'] : $event->result;
 		}
 
 		$data = $this->Page->save($this->request->data);
@@ -114,13 +119,14 @@ class PagesController extends AppController {
 		return json_encode($data['Content']);
 	}
 
-/**
- * [ADMIN] 固定ページ情報編集
- *
- * @param int $id (page_id)
- * @return void
- */
-	public function admin_edit($id) {
+	/**
+	 * [ADMIN] 固定ページ情報編集
+	 *
+	 * @param int $id (page_id)
+	 * @return void
+	 */
+	public function admin_edit($id)
+	{
 		if (!$id && empty($this->request->data)) {
 			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
@@ -141,7 +147,7 @@ class PagesController extends AppController {
 				'data' => $this->request->data
 			]);
 			if ($event !== false) {
-				$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+				$this->request->data = $event->result === true? $event->data['data'] : $event->result;
 			}
 
 			$this->Page->set($this->request->data);
@@ -172,7 +178,7 @@ class PagesController extends AppController {
 		} else {
 			$this->Page->recursive = 2;
 			$this->request->data = $this->Page->read(null, $id);
-			if(!$this->request->data) {
+			if (!$this->request->data) {
 				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
@@ -190,8 +196,8 @@ class PagesController extends AppController {
 			App::uses('CKEditorStyleParser', 'Vendor');
 			$CKEditorStyleParser = new CKEditorStyleParser();
 			$editorOptions = array_merge($editorOptions, [
-				'editorStylesSet'	=> 'default',
-				'editorStyles' 		=> [
+				'editorStylesSet' => 'default',
+				'editorStyles' => [
 					'default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles'])
 				]
 			]);
@@ -199,7 +205,7 @@ class PagesController extends AppController {
 		// ページテンプレートリスト
 		$theme = [$this->siteConfigs['theme']];
 		$site = BcSite::findById($this->request->data['Content']['site_id']);
-		if(!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
+		if (!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
 			$theme[] = $site->theme;
 		}
 		$pageTemplateList = $this->Page->getPageTemplateList($this->request->data['Content']['id'], $theme);
@@ -210,29 +216,31 @@ class PagesController extends AppController {
 		$this->render('form');
 	}
 
-/**
- * 削除
- *
- * Controller::requestAction() で呼び出される
- *
- * @return bool
- */
-	public function admin_delete() {
-		if(empty($this->request->data['entityId'])) {
+	/**
+	 * 削除
+	 *
+	 * Controller::requestAction() で呼び出される
+	 *
+	 * @return bool
+	 */
+	public function admin_delete()
+	{
+		if (empty($this->request->data['entityId'])) {
 			return false;
 		}
-		if($this->Page->delete($this->request->data['entityId'])) {
+		if ($this->Page->delete($this->request->data['entityId'])) {
 			return true;
 		}
 		return false;
 	}
 
-/**
- * [ADMIN] 固定ページファイルを登録する
- *
- * @return void
- */
-	public function admin_entry_page_files() {
+	/**
+	 * [ADMIN] 固定ページファイルを登録する
+	 *
+	 * @return void
+	 */
+	public function admin_entry_page_files()
+	{
 		$this->_checkSubmitToken();
 		$pagesPath = APP . 'View' . DS . 'Pages';
 		$result = $this->Page->entryPageFiles($pagesPath);
@@ -243,12 +251,13 @@ class PagesController extends AppController {
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
 
-/**
- * [ADMIN] 固定ページファイルを登録する
- *
- * @return void
- */
-	public function admin_write_page_files() {
+	/**
+	 * [ADMIN] 固定ページファイルを登録する
+	 *
+	 * @return void
+	 */
+	public function admin_write_page_files()
+	{
 		$this->_checkSubmitToken();
 		if ($this->Page->createAllPageTemplate()) {
 			$this->BcMessage->setInfo(__d('baser', '固定ページテンプレートの書き出しに成功しました。'));
@@ -259,29 +268,30 @@ class PagesController extends AppController {
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
 
-/**
- * ビューを表示する
- *
- * @return void
- * @throws ForbiddenException When a directory traversal attempt.
- * @throws NotFoundException When the view file could not be found
- *   or MissingViewException in debug mode.
- */
-	public function display() {
+	/**
+	 * ビューを表示する
+	 *
+	 * @return void
+	 * @throws ForbiddenException When a directory traversal attempt.
+	 * @throws NotFoundException When the view file could not be found
+	 *   or MissingViewException in debug mode.
+	 */
+	public function display()
+	{
 		// CUSTOMIZE DELETE 2016/10/05 ryuring
 		$path = func_get_args();
 
 		// CUSTOMIZE ADD 2014/07/02 ryuring
 		// >>>
-		if($this->request->params['Content']['alias_id']) {
+		if ($this->request->params['Content']['alias_id']) {
 			$urlTmp = $this->Content->field('url', ['Content.id' => $this->request->params['Content']['alias_id']]);
 		} else {
 			$urlTmp = $this->request->params['Content']['url'];
 		}
 
-		if($this->request->params['Site']['alias']) {
+		if ($this->request->params['Site']['alias']) {
 			$site = BcSite::findByUrl($urlTmp);
-			if($site && ($site->alias == $this->request->params['Site']['alias'])) {
+			if ($site && ($site->alias == $this->request->params['Site']['alias'])) {
 				$urlTmp = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/' . $this->request->params['Site']['name'] . '/', $urlTmp);
 			}
 		}
@@ -316,31 +326,31 @@ class PagesController extends AppController {
 		// >>>
 
 		$previewCreated = false;
-		if($this->request->data) {
+		if ($this->request->data) {
 			// POSTパラメータのコードに含まれるscriptタグをそのままHTMLに出力するとブラウザによりXSSと判定される
 			// 一度データをセッションに退避する
-			if($this->BcContents->preview === 'default') {
+			if ($this->BcContents->preview === 'default') {
 				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->data['Content']['entity_id'];
 				$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
-				$this->Session->write($sessionKey,  $this->request->data);
+				$this->Session->write($sessionKey, $this->request->data);
 				$query = [];
-				if($this->request->query) {
+				if ($this->request->query) {
 					foreach($this->request->query as $key => $value) {
 						$query[] = $key . '=' . $value;
 					}
 				}
 				$redirectUrl = '/';
-				if($this->request->url) {
+				if ($this->request->url) {
 					$redirectUrl .= $this->request->url;
 				}
-				if($query) {
+				if ($query) {
 					$redirectUrl .= '?' . implode('&', $query);
 				}
 				$this->redirect($redirectUrl);
 				return;
 			}
 
-			if($this->BcContents->preview === 'draft') {
+			if ($this->BcContents->preview === 'draft') {
 				$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
 				$this->request->params['Content']['eyecatch'] = $this->request->data['Content']['eyecatch'];
 
@@ -352,12 +362,12 @@ class PagesController extends AppController {
 		} else {
 
 			// プレビューアクセス
-			if($this->BcContents->preview === 'default') {
+			if ($this->BcContents->preview === 'default') {
 				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->params['Content']['entity_id'];
 				$previewData = $this->Session->read($sessionKey);
 				$this->request->params['Content']['eyecatch'] = $previewData['Content']['eyecatch'];
 
-				if(!is_null($previewData)) {
+				if (!is_null($previewData)) {
 					$this->Session->delete($sessionKey);
 					$uuid = $this->_createPreviewTemplate($previewData);
 					$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
@@ -366,7 +376,7 @@ class PagesController extends AppController {
 			}
 
 			// 草稿アクセス
-			if($this->BcContents->preview === 'draft') {
+			if ($this->BcContents->preview === 'draft') {
 				$data = $this->Page->find('first', ['conditions' => ['Page.id' => $this->request->params['Content']['entity_id']]]);
 				$uuid = $this->_createPreviewTemplate($data, true);
 				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
@@ -391,7 +401,7 @@ class PagesController extends AppController {
 			//$this->render(implode('/', $path));
 			// ---
 			$this->render('templates/' . $template);
-			if($previewCreated) {
+			if ($previewCreated) {
 				@unlink(TMP . 'pages_preview_' . $uuid . $this->ext);
 			}
 			// <<<
@@ -413,10 +423,11 @@ class PagesController extends AppController {
 	 * @param bool $isDraft
 	 * @return string uuid
 	 */
-	protected function _createPreviewTemplate($data, $isDraft = false) {
-		if(!$isDraft) {
+	protected function _createPreviewTemplate($data, $isDraft = false)
+	{
+		if (!$isDraft) {
 			// postで送信される前提
-			if(!empty($data['Page']['contents_tmp'])) {
+			if (!empty($data['Page']['contents_tmp'])) {
 				$contents = $data['Page']['contents_tmp'];
 			} else {
 				$contents = $data['Page']['contents'];
@@ -442,14 +453,15 @@ class PagesController extends AppController {
 		return $uuid;
 	}
 
-/**
- * コピー
- *
- * @return bool
- */
-	public function admin_ajax_copy() {
+	/**
+	 * コピー
+	 *
+	 * @return bool
+	 */
+	public function admin_ajax_copy()
+	{
 		$this->autoRender = false;
-		if(!$this->request->data) {
+		if (!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		$user = $this->BcAuth->user();
@@ -470,12 +482,13 @@ class PagesController extends AppController {
 		return json_encode($data['Content']);
 	}
 
-/**
- * 一覧の表示用データをセットする
- *
- * @return void
- */
-	protected function _setAdminIndexViewData() {
+	/**
+	 * 一覧の表示用データをセットする
+	 *
+	 * @return void
+	 */
+	protected function _setAdminIndexViewData()
+	{
 		$user = $this->BcAuth->user();
 		$allowOwners = [];
 		if (!empty($user)) {

@@ -1,19 +1,19 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Configure
  * @since			baserCMS v 3.0.7
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('BcThemeConfigReader', 'Configure');
 
 /**
  * BcThemeConfigReader Test
- * 
+ *
  * @package Baser.Test.Case.Network
  */
 class BcThemeConfigReaderTest extends BaserTestCase {
@@ -59,7 +59,7 @@ class BcThemeConfigReaderTest extends BaserTestCase {
 \$title = 'タイトル';
 \$description = 'シングルクォーテーションを含む説明\'';
 \$author = '制作者';
-\$url = 'http://basercms.net';
+\$url = 'https://basercms.net';
 
 EOF;
 
@@ -70,7 +70,7 @@ EOF;
 				'title' => 'タイトル',
 				'description' => "シングルクォーテーションを含む説明'",
 				'author' => '制作者',
-				'url' => 'http://basercms.net'
+				'url' => 'https://basercms.net'
 			],
 			$contents
 		];

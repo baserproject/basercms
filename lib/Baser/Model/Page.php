@@ -1,18 +1,18 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
  * ページモデル
- * 
+ *
  * @package Baser.Model
  * @property Content $Content
  * @method array|false saveSearchIndex($data)
@@ -29,7 +29,7 @@ class Page extends AppModel {
 
 /**
  * 更新前のページファイルのパス
- * 
+ *
  * @var string
  */
 	public $oldPath = '';
@@ -38,7 +38,7 @@ class Page extends AppModel {
  * ファイル保存可否
  * true の場合、ページデータ保存の際、ページテンプレートファイルにも内容を保存する
  * テンプレート読み込み時などはfalseにして保存しないようにする
- * 
+ *
  * @var boolean
  */
 	public $fileSave = true;
@@ -53,7 +53,7 @@ class Page extends AppModel {
 /**
  * 公開WebページURLリスト
  * キャッシュ用
- * 
+ *
  * @var mixed
  */
 	protected $_publishes = -1;
@@ -61,7 +61,7 @@ class Page extends AppModel {
 /**
  * WebページURLリスト
  * キャッシュ用
- * 
+ *
  * @var mixed
  */
 	protected $_pages = -1;
@@ -74,7 +74,7 @@ class Page extends AppModel {
  * @var int
  */
 	private $__pageInsertID = null;
-	
+
 /**
  * Page constructor.
  *
@@ -123,7 +123,7 @@ class Page extends AppModel {
 		} else {
 			$this->oldPath = '';
 		}
-		
+
 		// 新しいページファイルのパスが開けるかチェックする
 		$result = true;
 		if(!empty($this->data['Content'])) {
@@ -148,7 +148,7 @@ class Page extends AppModel {
 
 /**
  * ページテンプレートファイルが開けるかチェックする
- * 
+ *
  * @param	array	$data	ページデータ
  * @return	boolean
  */
@@ -167,15 +167,15 @@ class Page extends AppModel {
 
 /**
  * afterSave
- * 
+ *
  * @param boolean $created
  * @param array $options
  * @return void
  */
 	public function afterSave($created, $options = []) {
-		
+
 		parent::afterSave($created, $options);
-		
+
 		if (empty($data['Page']['id'])) {
 			$data = $this->read(null, $this->id);
 		} else {
@@ -194,7 +194,7 @@ class Page extends AppModel {
 				$this->deleteSearchIndex($data['Page']['id']);
 			}
 		}
-		
+
 	}
 
 /**
@@ -219,14 +219,14 @@ class Page extends AppModel {
 		if (!$content['title']) {
 			$content['title'] = Inflector::camelize($content['name']);
 		}
-		
+
 		// $this->idに値が入ってない場合もあるので
 		if (!empty($page['id'])) {
 			$modelId = $page['id'];
 		} else {
 			$modelId = $this->id;
 		}
-		
+
 		$host = '';
 		$url = $content['url'];
 		$site = BcSite::findById($content['site_id']);
@@ -264,7 +264,7 @@ class Page extends AppModel {
 
 /**
  * DBデータを元にページテンプレートを全て生成する
- * 
+ *
  * @return boolean
  */
 	public function createAllPageTemplate() {
@@ -284,7 +284,7 @@ class Page extends AppModel {
 
 /**
  * ページテンプレートを生成する
- * 
+ *
  * @param array $data ページデータ
  * @return boolean
  */
@@ -328,19 +328,19 @@ class Page extends AppModel {
 
 /**
  * ページファイルのパスを取得する
- * 
+ *
  * @param array $data
  * @return string
  */
 	public function getPageFilePath($data) {
-		
+
 		$path = APP . 'View' . DS . 'Pages' . DS;
-		
+
 		if (!is_dir($path)) {
 			mkdir($path);
 			chmod($path, 0777);
 		}
-		
+
 		$url = $this->Content->createUrl($data['Content']['parent_id'], 'Core', 'ContentFolder');
 		if(!$url) {
 			return false;
@@ -366,7 +366,7 @@ class Page extends AppModel {
 
 /**
  * ページファイルを削除する
- * 
+ *
  * @param array $data 削除対象となるレコードデータ
  * @return boolean
  */
@@ -380,7 +380,7 @@ class Page extends AppModel {
 
 /**
  * 本文にbaserが管理するタグを追加する
- * 
+ *
  * @param string $id ID
  * @param string $contents 本文
  * @param string $title タイトル
@@ -478,15 +478,15 @@ class Page extends AppModel {
 				$siteId = 0;
 			}
 		}
-		
+
 		if($urlAry[0]) {
-			$url = '/' . implode('/', $urlAry) . '/';	
+			$url = '/' . implode('/', $urlAry) . '/';
 		} else {
 			$url = '/';
 		}
-		
+
 		$contentId = '';
-		
+
 		if ($folderName != 'Pages') {
 			// カテゴリ名の取得
 			// 標準では設定されてないので、利用する場合は、あらかじめ bootstrap 等で宣言しておく
@@ -652,10 +652,10 @@ class Page extends AppModel {
 
 /**
  * 固定ページとして管理されているURLかチェックする
- * 
+ *
  * $this->_pages をキャッシュとして利用する
  * URL に、拡張子 .html がついている場合も存在するとみなす
- * 
+ *
  * @param string $url URL
  * @return boolean
  */
@@ -721,7 +721,7 @@ class Page extends AppModel {
  *
  * 固定ページテンプレートの生成処理を実行する必要がある為、
  * Content::copy() は利用しない
- * 
+ *
  * @param int $id ページID
  * @param int $newParentId 新しい親コンテンツID
  * @param string $newTitle 新しいタイトル
@@ -790,7 +790,7 @@ class Page extends AppModel {
 		$this->getDataSource()->rollback();
 		return false;
 	}
-	
+
 /**
  * PHP構文チェック
  *
@@ -869,7 +869,7 @@ class Page extends AppModel {
 
 /**
  * URLより固定ページデータを探す
- * 
+ *
  * @param string $url
  * @param bool $publish
  * @return array|bool
@@ -888,8 +888,8 @@ class Page extends AppModel {
 			$conditions = array_merge($conditions, $this->Content->getConditionAllowPublish());
 		}
 		$record = $this->find('first', [
-			'conditions' => $conditions, 
-			'order' => 'Content.url DESC', 
+			'conditions' => $conditions,
+			'order' => 'Content.url DESC',
 			'cache' => false,
 			'joins' => [[
 				'type' => 'LEFT',
@@ -934,5 +934,5 @@ class Page extends AppModel {
 		}
 		return $path . $url;
 	}
-	
+
 }

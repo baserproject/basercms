@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('HtmlHelper', 'View/Helper');
@@ -344,7 +344,7 @@ class BcFormHelper extends FormHelper {
 					$options['label'] = ['class' => $labelClass];
 				}
 			}
-			
+
 		}
 		if(!$type) {
 			unset($options['class']);
@@ -378,7 +378,7 @@ class BcFormHelper extends FormHelper {
 		} else {
 			$radioOptions = [];
 		}
-		
+
 		// CUSTOMIZE MODIFY 2014/10/27 ryuring
 		// >>>
 		//$label = $this->_getLabel($fieldName, $options);
@@ -487,7 +487,7 @@ DOC_END;
 		return $output;
 		// <<<
 	}
-	
+
 /**
  * Creates a checkbox input widget.
  * MODIFIED 2008/10/24 egashira
@@ -720,7 +720,7 @@ DOC_END;
 		// <<<
 
 	}
-	
+
 /**
  * Returns a set of SELECT elements for a full datetime setup: day, month and year, and then time.
  *
@@ -1483,7 +1483,7 @@ DOC_END;
 			$label = $attributes['label'];
 			unset($attributes['label']);
 		}
-		
+
 		$separator = null;
 		if (isset($attributes['separator'])) {
 			$separator = $attributes['separator'];
@@ -1523,7 +1523,7 @@ DOC_END;
 			unset($attributes['div']);
 		}
 		unset($label['label']);
-		
+
 		$this->_domIdSuffixes = array();
 		foreach ($options as $optValue => $optTitle) {
 			$optionsHere = array('value' => $optValue, 'disabled' => false);
@@ -1941,7 +1941,7 @@ DOC_END;
 
 		$this->Html->script('admin/vendors/jquery.timepicker', ['inline' => false]);
 		$this->Html->css('admin/jquery.timepicker', 'stylesheet', ['inline' => false]);
-		
+
 		$options = array_merge([
 			'div' => ['tag' => 'span'],
 			'dateInput' => [],
@@ -1951,7 +1951,7 @@ DOC_END;
 			'timeDiv' => ['tag' => 'span'],
 			'timeLabel' => ['text' => '時間']
 		], $options);
-		
+
 		$dateOptions = array_merge($options, [
 			'type' => 'datepicker',
 			'div' => $options['dateDiv'],
@@ -1964,22 +1964,22 @@ DOC_END;
 			'div' => $options['timeDiv'],
 			'label' => $options['timeLabel'],
 			'autocomplete' => 'off',
-			'size' => 8, 
-			'maxlength' => 8, 
+			'size' => 8,
+			'maxlength' => 8,
 			'escape' => true
 		], $options['timeInput']);
-		
+
 		unset($options['dateDiv'], $options['dateLabel'], $options['timeDiv'], $options['timeLabel'], $options['dateInput'], $options['timeInput']);
 		unset($dateOptions['dateDiv'], $dateOptions['dateLabel'], $dateOptions['timeDiv'], $dateOptions['timeLabel'], $dateOptions['dateInput'], $dateOptions['timeInput']);
 		unset($timeOptions['dateDiv'], $timeOptions['dateLabel'], $timeOptions['timeDiv'], $timeOptions['timeLabel'], $timeOptions['dateInput'], $timeOptions['timeInput']);
-		
+
 		if (!isset($options['value'])) {
 			$value = $this->value($fieldName);
 		} else {
 			$value = $options['value'];
 			unset($options['value']);
 		}
-		
+
 		if ($value && $value != '0000-00-00 00:00:00') {
 			list($dateValue, $timeValue) = explode(' ', $value);
 			$dateOptions['value'] = $dateValue;
@@ -2003,7 +2003,7 @@ DOC_END;
 			$timeLabelOptions = $timeOptions;
 			unset($timeOptions['type'], $timeOptions['label']);
 		}
-		
+
 		$dateTag = $this->datepicker($fieldName . '_date', $dateOptions);
 		if($dateLabelOptions['label']) {
 			$dateTag = $this->_getLabel($fieldName, $dateLabelOptions) . $dateTag;
@@ -2052,7 +2052,7 @@ $(function(){
 </script>
 DOC_END;
 		$this->_View->append('script', $_script);
-		
+
 		return $dateTag . $timeTag . $hiddenTag;
 
 	}
@@ -2192,7 +2192,7 @@ DOC_END;
 		unset($options['delCheck'], $options['force'], $options['width'], $options['height']);
 		unset($options['deleteSpan'], $options['deleteCheckbox'], $options['deleteLabel']);
 		unset($options['figure'], $options['img'], $options['figcaption'], $options['div']);
-		
+
 		$fileLinkTag = $this->BcUpload->fileLink($fieldName, $linkOptions);
 		$fileTag = parent::file($fieldName, $options);
 

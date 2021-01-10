@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Mail.Test.Case.Controller
  * @since			baserCMS v 3.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('MailAppController', 'Mail.Controller');
@@ -42,7 +42,7 @@ class MailConfigsControllerTest extends BaserTestCase {
 
 	/**
 	 * [ADMIN] メールフォーム設定
-	 * 
+	 *
 	 * @param array $data requestのdata
 	 * @dataProvider admin_formDataProvider
 	 */
@@ -52,7 +52,7 @@ class MailConfigsControllerTest extends BaserTestCase {
 		session_id('baser');
 		$this->Case->testAction("admin/mail/mail_configs/form", array(
 				'method' => 'post', 'data' => $data));
-		
+
 		if (!empty($data)) {
 			$flash = CakeSession::read('Message.flash');
 			$this->assertEquals($flash['message'], 'メールフォーム設定を保存しました。');

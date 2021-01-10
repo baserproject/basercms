@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model
  * @since			baserCMS v 4.0.2
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('Site', 'Model');
 
@@ -21,7 +21,7 @@ class SiteTest extends BaserTestCase {
 
 /**
  * Fixtures
- * 
+ *
  * @var array
  */
 	public $fixtures = [
@@ -33,7 +33,7 @@ class SiteTest extends BaserTestCase {
 	];
 
 /**
- * Set Up 
+ * Set Up
  */
 	public function setUp() {
 		parent::setUp();

@@ -25,7 +25,7 @@ class BlogCommentFixture extends BaserTestFixture {
 			'status' => 1,
 			'name' => 'baserCMS',
 			'email' => '',
-			'url' => 'http://basercms.net',
+			'url' => 'https://basercms.net',
 			'message' => 'ホームページの開設おめでとうございます。（ダミー）',
 			'created' => '2015-08-10 18:57:47',
 			'modified' => NULL,

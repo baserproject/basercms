@@ -10,7 +10,7 @@ class PageBcPageHelperFixture extends BaserTestFixture {
  * @var string
  */
 	public $name = 'Page';
-	
+
 /**
  * Records
  *
@@ -282,7 +282,7 @@ WEBシステム開発事業（ダミー）</td></tr>
 <p>
 	&nbsp;</p>
 <p>
-	まずは、<a href="http://basercms.net/files/extra/nada-works-png.zip">nada-works-png.zip</a> をダウンロードして解凍します。</p>
+	まずは、<a href="https://basercms.net/files/extra/nada-works-png.zip">nada-works-png.zip</a> をダウンロードして解凍します。</p>
 <p>
 	&nbsp;</p>
 <p>

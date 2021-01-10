@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -26,7 +26,7 @@ class ThemeFolder extends AppModel {
 
 /**
  * use table
- * 
+ *
  * @var boolean
  */
 	public $useTable = false;
@@ -47,10 +47,10 @@ class ThemeFolder extends AppModel {
 				['rule' => ['duplicateThemeFolder'], 'on' => 'create', 'message' => __d('baser', '入力されたテーマフォルダ名は、同一階層に既に存在します。')]]
 		];
 	}
-	
+
 /**
  * フォルダの重複チェック
- * 
+ *
  * @param array $check
  * @return boolean
  */

@@ -1,19 +1,19 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Lib
  * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('BcAgent', 'Lib');
 
 /**
  * BcAgentクラスのテスト
- * 
+ *
  * @package Baser.Test.Case.Lib
  */
 class BcAgentTest extends BaserTestCase {
@@ -179,5 +179,5 @@ public function testGetDetectorRegex() {
 			[false, 'DoCoMo']
 		];
 	}
-	
+
 }

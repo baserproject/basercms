@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Uploader.View
  * @since			baserCMS v 3.0.10
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 if(!isset($uploaderCategories)) {
 	$uploaderCategories = $this->BcForm->getControlSource("UploaderFile.uploader_category_id");
@@ -30,7 +30,7 @@ $(function(){
 	var imgUrl = $.baseUrl + '/' + $("#AdminPrefix").html() + '/uploader/uploader_files/ajax_image/'+name+'/midium';
 	$.get(imgUrl,function(res){
 		$("#UploaderFileImage").html(res);
-	});	
+	});
 });
 </script>
 
@@ -82,16 +82,16 @@ $(function(){
 		<th class="col-head"><?php echo $this->BcForm->label('UploaderFile.publish_begin_date', __d('baser', '公開期間')) ?></th>
 		<td class="col-input">
 			<?php echo $this->BcForm->input('UploaderFile.publish_begin', [
-			        'type' => 'dateTimePicker', 
-                    'size' => 12, 
+			        'type' => 'dateTimePicker',
+                    'size' => 12,
                     'maxlength' => 10,
 					'dateLabel' => ['text' => '開始日付'],
 					'timeLabel' => ['text' => '開始時間']
             ]) ?>
 			&nbsp;〜&nbsp;
 			<?php echo $this->BcForm->input('UploaderFile.publish_end', [
-			        'type' => 'dateTimePicker', 
-                    'size' => 12, 
+			        'type' => 'dateTimePicker',
+                    'size' => 12,
                     'maxlength' => 10,
 					'dateLabel' => ['text' => '終了日付'],
 					'timeLabel' => ['text' => '終了時間']

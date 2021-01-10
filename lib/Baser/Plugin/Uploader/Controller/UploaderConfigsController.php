@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Uploader.Controller
  * @since			baserCMS v 3.0.10
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -51,7 +51,7 @@ class UploaderConfigsController extends AppController {
  * @access	public
  */
 	public function admin_index() {
-		
+
 		$this->pageTitle = __d('baser', 'アップローダープラグイン設定');
 		if(!$this->request->data) {
 			$this->request->data['UploaderConfig'] = $this->UploaderConfig->findExpanded();
@@ -65,7 +65,7 @@ class UploaderConfigsController extends AppController {
 				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
-		
+
 	}
 
 }

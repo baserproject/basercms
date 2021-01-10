@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Mail.Model
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('MailAppModel', 'Mail.Model');
@@ -38,11 +38,11 @@ class MailMessage extends MailAppModel {
 
 /**
  * メールコンテンツ情報
- * 
+ *
  * @var array
  */
 	public $mailContent = array();
-	
+
 /**
  * ビヘイビア
  *
@@ -53,12 +53,12 @@ class MailMessage extends MailAppModel {
 			'subdirDateFormat' => 'Y/m/'
 		)
 	);
-	
+
 /**
  * モデルのセットアップを行う
- * 
+ *
  * MailMessageモデルは利用前にこのメソッドを呼び出しておく必要あり
- * 
+ *
  * @param int $mailContentId
  * @return boolean
  */
@@ -77,7 +77,7 @@ class MailMessage extends MailAppModel {
 			return false;
 		}
 		$this->mailContent = ['MailContent' => $mailContent['MailContent']];
-		
+
 		$this->mailFields = $MailContent->MailField->find('all', [
 			'conditions' => ['MailField.mail_content_id' => $mailContentId, 'MailField.use_field' => true],
 			'recursive' => -1,
@@ -87,18 +87,18 @@ class MailMessage extends MailAppModel {
 		// アップロード設定
 		$this->setupUpload($mailContentId);
 		return true;
-		
+
 	}
 
 /**
  * テーブル名を設定する
- * 
+ *
  * @param $mailContentId
  */
 	public function setUseTable($mailContentId) {
 		$this->table = $this->useTable = $this->createTableName($mailContentId);
 	}
-	
+
 /**
  * アップロード設定を行う
  */
@@ -120,9 +120,9 @@ class MailMessage extends MailAppModel {
 			$settings['saveDir'] = "mail" . DS . "limited" . DS . $name . DS . "messages";
 		}
 		$this->Behaviors->load('BcUpload', $settings);
-		
+
 	}
-	
+
 /**
  * beforeSave
  *
@@ -258,7 +258,7 @@ class MailMessage extends MailAppModel {
 			}
 		}
 	}
-	
+
 /**
  * 拡張バリデートチェック
  *
@@ -679,14 +679,14 @@ class MailMessage extends MailAppModel {
 
 /**
  * フルテーブル名を生成する
- * 
+ *
  * @param $mailContentId
  * @return string
  */
 	public function createFullTableName($mailContentId) {
 		return $this->tablePrefix . $this->createTableName($mailContentId);
 	}
-	
+
 /**
  * メッセージテーブルを作成する
  *
@@ -776,7 +776,7 @@ class MailMessage extends MailAppModel {
  * メッセージ保存用テーブルのフィールドを最適化する
  * 初回の場合、id/created/modifiedを追加する
  * 2回目以降の場合は、最後のカラムに追加する
- * 
+ *
  * @param array $dbConfig
  * @param int $mailContentId
  * @return boolean
@@ -808,7 +808,7 @@ class MailMessage extends MailAppModel {
 
 /**
  * 受信メッセージの内容を表示状態に変換する
- * 
+ *
  * @param int $id
  * @param array $messages
  * @return array
@@ -847,10 +847,10 @@ class MailMessage extends MailAppModel {
 
 		return $messages;
 	}
-	
+
 /**
  * メール受信テーブルを全て再構築
- * 
+ *
  * @return boolean
  */
 	public function reconstructionAll() {
@@ -873,10 +873,10 @@ class MailMessage extends MailAppModel {
 
 	}
 
-	
+
 /**
  * find
- * 
+ *
  * @param String $type
  * @param mixed $query
  * @return Array

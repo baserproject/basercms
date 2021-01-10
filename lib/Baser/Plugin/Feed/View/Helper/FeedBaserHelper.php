@@ -1,20 +1,20 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Feed.View.Helper
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
  * フィードBaserヘルパー
- * 
+ *
  * BcBaserHelper より透過的に呼び出される
- * 
+ *
  * 《利用例》
  * $this->BcBaser->feed(1)
  *
@@ -25,9 +25,9 @@ class FeedBaserHelper extends AppHelper {
 
 /**
  * フィード出力
- * 
+ *
  * @param int $id フィードID
- * @param mixid $mobile	
+ * @param mixid $mobile
  *	- '' : 現在のリクエストについて自動取得
  *	- true : モバイル用
  *	- false : PC用

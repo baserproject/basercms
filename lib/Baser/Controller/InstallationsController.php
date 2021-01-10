@@ -1,85 +1,89 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
+ * Class InstallationsController
+ *
  * インストーラーコントローラー
  *
  * @package Baser.Controller
  * @property BcManagerComponent $BcManager
  */
-class InstallationsController extends AppController {
+class InstallationsController extends AppController
+{
 
-/**
- * クラス名
- *
- * @var string
- * @access	public
- */
+	/**
+	 * クラス名
+	 *
+	 * @var string
+	 * @access    public
+	 */
 	public $name = 'Installations';
 
-/**
- * コンポーネント
- *
- * @var array
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 */
 	public $components = ['Session', 'BcEmail', 'BcManager'];
 
-/**
- * レイアウトパス
- *
- * @var string
- * @access	public
- */
+	/**
+	 * レイアウトパス
+	 *
+	 * @var string
+	 * @access    public
+	 */
 	public $layoutPath = 'admin';
 
-/**
- * サブフォルダ
- *
- * @var string
- * @access	public
- */
+	/**
+	 * サブフォルダ
+	 *
+	 * @var string
+	 * @access    public
+	 */
 	public $subDir = 'admin';
 
-/**
- * ヘルパー
- *
- * @var array
- * @access	public
- */
+	/**
+	 * ヘルパー
+	 *
+	 * @var array
+	 * @access    public
+	 */
 	public $helpers = ['BcHtml', 'BcForm', 'Js', 'BcTime'];
 
-/**
- * モデル
- *
- * @var array
- * @access	public
- */
+	/**
+	 * モデル
+	 *
+	 * @var array
+	 * @access    public
+	 */
 	public $uses = null;
 
-/**
- * テーマ
- *
- * @var string
- */
+	/**
+	 * テーマ
+	 *
+	 * @var string
+	 */
 	public $theme = 'Baseradmin';
 
 	public $isInstalled = false;
 
-/**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
+	/**
+	 * beforeFilter
+	 *
+	 * @return void
+	 */
+	public function beforeFilter()
+	{
 		parent::beforeFilter();
 		set_time_limit(300);
 		/* インストール状態判別 */
@@ -95,7 +99,7 @@ class InstallationsController extends AppController {
 			$installed = 'yet';
 		}
 
-		switch ($this->request->action) {
+		switch($this->request->action) {
 			case 'alert':
 				break;
 			case 'reset':
@@ -128,22 +132,24 @@ class InstallationsController extends AppController {
 		$this->Security->validatePost = false;
 	}
 
-/**
- * Step 1: ウェルカムページ
- *
- * @return void
- */
-	public function index() {
+	/**
+	 * Step 1: ウェルカムページ
+	 *
+	 * @return void
+	 */
+	public function index()
+	{
 		$this->pageTitle = __d('baser', 'baserCMSのインストール');
 		clearAllCache();
 	}
 
-/**
- * Step 2: 必須条件チェック
- *
- * @return void
- */
-	public function step2() {
+	/**
+	 * Step 2: 必須条件チェック
+	 *
+	 * @return void
+	 */
+	public function step2()
+	{
 		if ($this->request->data && $this->request->data['clicked'] === 'next') {
 			$this->redirect('step3');
 			return;
@@ -162,12 +168,13 @@ class InstallationsController extends AppController {
 		$this->pageTitle = __d('baser', 'baserCMSのインストール｜ステップ２');
 	}
 
-/**
- * Step 3: データベースの接続設定
- *
- * @return void
- */
-	public function step3() {
+	/**
+	 * Step 3: データベースの接続設定
+	 *
+	 * @return void
+	 */
+	public function step3()
+	{
 		$dbsource = $this->_getDbSource();
 
 		if (!$this->request->data) {
@@ -207,7 +214,7 @@ class InstallationsController extends AppController {
 			try {
 				$this->_deleteAllTables();
 				$result = $this->_constructionDb($dbDataPattern, Configure::read('BcApp.defaultAdminTheme'));
-			} catch(Exception $e) {
+			} catch (Exception $e) {
 				$errorMessage .= "\n" . $e->getMessage();
 			}
 			if ($result) {
@@ -224,12 +231,13 @@ class InstallationsController extends AppController {
 		$this->set('dbsource', $dbsource);
 	}
 
-/**
- * Step 4: データベース生成／管理者ユーザー作成
- *
- * @return void
- */
-	public function step4() {
+	/**
+	 * Step 4: データベース生成／管理者ユーザー作成
+	 *
+	 * @return void
+	 */
+	public function step4()
+	{
 		if (!$this->request->data) {
 			$this->request->data = $this->_getDefaultValuesStep4();
 			$this->pageTitle = __d('baser', 'baserCMSのインストール｜ステップ４');
@@ -277,8 +285,8 @@ class InstallationsController extends AppController {
 			}
 
 			$User = ClassRegistry::init('User', 'Model');
-			if ( !empty($User->validationErrors) ) {
-			$errMsg = implode("\n", Hash::extract($User->validationErrors, '{s}.{n}'));
+			if (!empty($User->validationErrors)) {
+				$errMsg = implode("\n", Hash::extract($User->validationErrors, '{s}.{n}'));
 			}
 			$this->BcMessage->setError(__d('baser', '管理ユーザーを作成できませんでした。'));
 			$this->BcMessage->setError($errMsg);
@@ -286,29 +294,31 @@ class InstallationsController extends AppController {
 		$this->pageTitle = __d('baser', 'baserCMSのインストール｜ステップ４');
 	}
 
-/**
- * インストール完了メールを送信する
- *
- * @param	string	$email
- * @param	string	$name
- * @param	string	$password
- * @return void
- */
-	protected function _sendCompleteMail($email, $name, $password) {
+	/**
+	 * インストール完了メールを送信する
+	 *
+	 * @param string $email
+	 * @param string $name
+	 * @param string $password
+	 * @return void
+	 */
+	protected function _sendCompleteMail($email, $name, $password)
+	{
 		if (DS !== '\\') {
 			$body = ['name' => $name, 'password' => $password, 'siteUrl' => siteUrl()];
 			$this->sendMail($email, __d('baser', 'baserCMSインストール完了'), $body, ['template' => 'installed', 'from' => $email]);
 		}
 	}
 
-/**
- * Step 5: 設定ファイルの生成
- * データベース設定ファイル[database.php]
- * インストールファイル[install.php]
- *
- * @return void
- */
-	public function step5() {
+	/**
+	 * Step 5: 設定ファイルの生成
+	 * データベース設定ファイル[database.php]
+	 * インストールファイル[install.php]
+	 *
+	 * @return void
+	 */
+	public function step5()
+	{
 		$this->pageTitle = __d('baser', 'baserCMSのインストール完了！');
 		Cache::config('default', ['engine' => 'File']);
 
@@ -347,7 +357,7 @@ class InstallationsController extends AppController {
 
 			App::build(['Plugin' => array_merge([BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Plugin' . DS], App::path('Plugin'))]);
 			$themesPlugins = BcUtil::getCurrentThemesPlugins();
-			if($themesPlugins) {
+			if ($themesPlugins) {
 				foreach($themesPlugins as $plugin) {
 					$this->BcManager->installPlugin($plugin);
 					CakePlugin::load($plugin);
@@ -357,7 +367,7 @@ class InstallationsController extends AppController {
 			}
 
 			$Db = ConnectionManager::getDataSource('default');
-			if($Db->config['datasource'] === 'Database/BcPostgres') {
+			if ($Db->config['datasource'] === 'Database/BcPostgres') {
 				$Db->updateSequence();
 			}
 
@@ -392,13 +402,14 @@ class InstallationsController extends AppController {
 		$this->Session->delete('InstallLastStep');
 	}
 
-/**
- * 管理画面にログインする
- *
- * @return void
- * @access	protected
- */
-	protected function _login() {
+	/**
+	 * 管理画面にログインする
+	 *
+	 * @return void
+	 * @access    protected
+	 */
+	protected function _login()
+	{
 		$extra = [];
 		// ログインするとセッションが初期化されてしまうので一旦取得しておく
 		$installationSetting = Cache::read('Installation', 'default');
@@ -410,13 +421,14 @@ class InstallationsController extends AppController {
 		$this->Session->write('Installation', $installationSetting);
 	}
 
-/**
- * データベースを構築する
- *
- * @param string $dbDataPattern データパターン
- * @return boolean
- */
-	protected function _constructionDb($dbDataPattern = null, $adminTheme = '') {
+	/**
+	 * データベースを構築する
+	 *
+	 * @param string $dbDataPattern データパターン
+	 * @return boolean
+	 */
+	protected function _constructionDb($dbDataPattern = null, $adminTheme = '')
+	{
 		$dbConfig = $this->_readDbSetting();
 		if (!$this->BcManager->constructionDb($dbConfig, $dbDataPattern, $adminTheme)) {
 			return false;
@@ -424,13 +436,14 @@ class InstallationsController extends AppController {
 		return true;
 	}
 
-/**
- * ステップ３用のフォーム初期値を取得する
- *
- * @return array
- * @access	protected
- */
-	protected function _getDefaultValuesStep3() {
+	/**
+	 * ステップ３用のフォーム初期値を取得する
+	 *
+	 * @return array
+	 * @access    protected
+	 */
+	protected function _getDefaultValuesStep3()
+	{
 		$defaultTheme = Configure::read('BcApp.defaultTheme');
 		$data = [];
 		if (!$this->Session->read('Installation.dbType')) {
@@ -459,13 +472,14 @@ class InstallationsController extends AppController {
 		return $data;
 	}
 
-/**
- * ステップ４用のフォーム初期値を取得する
- *
- * @return array
- * @access	protected
- */
-	protected function _getDefaultValuesStep4() {
+	/**
+	 * ステップ４用のフォーム初期値を取得する
+	 *
+	 * @return array
+	 * @access    protected
+	 */
+	protected function _getDefaultValuesStep4()
+	{
 		$data = [];
 		if ($this->Session->read('Installation.admin_username')) {
 			$data['Installation']['admin_username'] = $this->Session->read('Installation.admin_username');
@@ -486,15 +500,16 @@ class InstallationsController extends AppController {
 		return $data;
 	}
 
-/**
- * DB設定をセッションから取得
- *
- * @return array
- * @access	protected
- */
-	protected function _readDbSetting($installationData = []) {
+	/**
+	 * DB設定をセッションから取得
+	 *
+	 * @return array
+	 * @access    protected
+	 */
+	protected function _readDbSetting($installationData = [])
+	{
 		if (!$installationData) {
-			if($this->Session->check('Installation')) {
+			if ($this->Session->check('Installation')) {
 				$installationData = $this->Session->read('Installation');
 			} else {
 				$installationData = [
@@ -527,14 +542,15 @@ class InstallationsController extends AppController {
 		return $data;
 	}
 
-/**
- * DB設定をセッションに保存
- *
- * @param array $data
- * @return void
- * @access	protected
- */
-	protected function _writeDbSettingToSession($data) {
+	/**
+	 * DB設定をセッションに保存
+	 *
+	 * @param array $data
+	 * @return void
+	 * @access    protected
+	 */
+	protected function _writeDbSettingToSession($data)
+	{
 		/* dbEncoding */
 		$data['dbEncoding'] = 'utf8';
 
@@ -560,13 +576,14 @@ class InstallationsController extends AppController {
 		$this->Session->write('Installation.dbDataPattern', $data['dbDataPattern']);
 	}
 
-/**
- * データベース接続テスト
- *
- * @param array $config
- * @return boolean
- */
-	protected function _testConnectDb($config) {
+	/**
+	 * データベース接続テスト
+	 *
+	 * @param array $config
+	 * @return boolean
+	 */
+	protected function _testConnectDb($config)
+	{
 		/* データベース接続確認 */
 		try {
 			$this->BcManager->checkDbConnection($config);
@@ -600,7 +617,7 @@ class InstallationsController extends AppController {
 		}
 
 		//version check
-		switch (get_class($db)) {
+		switch(get_class($db)) {
 			case 'BcMysql' :
 				$result = $db->query("SELECT version() as version");
 				if (version_compare($result[0][0]['version'], Configure::read('BcRequire.MySQLVersion')) == -1) {
@@ -634,7 +651,7 @@ class InstallationsController extends AppController {
 		// データベースのテーブルをチェック
 		$tableNames = $db->listSources();
 		$prefix = Hash::get($config, 'prefix');
-		$duplicateTableNames = array_filter($tableNames, function ($tableName) use ($prefix) {
+		$duplicateTableNames = array_filter($tableNames, function($tableName) use ($prefix) {
 			return strpos($tableName, $prefix) === 0;
 		});
 
@@ -649,13 +666,14 @@ class InstallationsController extends AppController {
 		return true;
 	}
 
-/**
- * 利用可能なデータソースを取得する
- *
- * @return array
- * @access	protected
- */
-	protected function _getDbSource() {
+	/**
+	 * 利用可能なデータソースを取得する
+	 *
+	 * @return array
+	 * @access    protected
+	 */
+	protected function _getDbSource()
+	{
 		/* DBソース取得 */
 		$dbsource = [];
 		$folder = new Folder();
@@ -676,7 +694,7 @@ class InstallationsController extends AppController {
 			$dbFolderPath = APP . 'db' . DS . 'sqlite';
 			if (is_writable(dirname($dbFolderPath)) && $folder->create($dbFolderPath, 0777)) {
 				$info = SQLite3::version();
-				if(version_compare($info['versionString'], Configure::read('BcRequire.winSQLiteVersion'), '>')) {
+				if (version_compare($info['versionString'], Configure::read('BcRequire.winSQLiteVersion'), '>')) {
 					$dbsource['sqlite'] = 'SQLite';
 				}
 			}
@@ -691,30 +709,32 @@ class InstallationsController extends AppController {
 		return $dbsource;
 	}
 
-/**
- * インストール不能警告メッセージを表示
- *
- * @return void
- */
-	public function alert() {
+	/**
+	 * インストール不能警告メッセージを表示
+	 *
+	 * @return void
+	 */
+	public function alert()
+	{
 		$this->pageTitle = __d('baser', 'baserCMSのインストールを開始できません');
 	}
 
-/**
- * baserCMSを初期化する
- * debug フラグが -1 の場合のみ実行可能
- *
- * @return	void
- * @access	public
- */
-	public function reset() {
+	/**
+	 * baserCMSを初期化する
+	 * debug フラグが -1 の場合のみ実行可能
+	 *
+	 * @return    void
+	 * @access    public
+	 */
+	public function reset()
+	{
 		$this->pageTitle = __d('baser', 'baserCMSの初期化');
 		$this->layoutPath = 'admin';
 		$this->layout = 'default';
 		$this->subDir = 'admin';
 
 		if (empty($this->request->data['Installation']['reset'])) {
-			$this->set('complete', !BC_INSTALLED ? true : false);
+			$this->set('complete', !BC_INSTALLED? true : false);
 			return;
 		}
 
@@ -736,13 +756,14 @@ class InstallationsController extends AppController {
 		$this->redirect('reset');
 	}
 
-/**
- * 全てのテーブルを削除する
- *
- * @return void
- * @access public
- */
-	public function _deleteAllTables() {
+	/**
+	 * 全てのテーブルを削除する
+	 *
+	 * @return void
+	 * @access public
+	 */
+	public function _deleteAllTables()
+	{
 		$dbConfig = $this->_readDbSetting();
 		if (!$dbConfig) {
 			$dbConfig = getDbConfig();

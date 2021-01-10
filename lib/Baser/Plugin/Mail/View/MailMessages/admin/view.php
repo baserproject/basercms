@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Mail.View
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -41,14 +41,14 @@
 			if (!$field['no_send']) {
 				if($field['type'] == 'file') {
 					echo $this->Maildata->control(
-						$mailField['MailField']['type'], 
-						$message['MailMessage'][$mailField['MailField']['field_name']], 
+						$mailField['MailField']['type'],
+						$message['MailMessage'][$mailField['MailField']['field_name']],
 						$this->Mailfield->getOptions($mailField['MailField'])
 					);
 				} else {
 					echo nl2br($this->BcText->autoLink($this->Maildata->control(
-						$mailField['MailField']['type'], 
-						$message['MailMessage'][$mailField['MailField']['field_name']], 
+						$mailField['MailField']['type'],
+						$message['MailMessage'][$mailField['MailField']['field_name']],
 						$this->Mailfield->getOptions($mailField['MailField'])
 					)));
 				}

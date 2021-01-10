@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -95,7 +95,7 @@ $this->BcBaser->js('admin/updaters/update', false);
 		</div>
 		<div class="section">
 			<h2><?php echo __d('baser', 'リリースノートのアップデート時の注意事項は読まれましたか？')?></h2>
-			<p><?php echo __d('baser', 'リリースバージョンによっては、追加作業が必要となる場合があるので注意が必要です。<br />公式サイトの <a href="http://basercms.net/news/archives/category/release" target="_blank" class="outside-link">リリースノート</a> を必ず確認してください。')?></p>
+			<p><?php echo __d('baser', 'リリースバージョンによっては、追加作業が必要となる場合があるので注意が必要です。<br />公式サイトの <a href="https://basercms.net/news/archives/category/release" target="_blank" class="outside-link">リリースノート</a> を必ず確認してください。')?></p>
 		</div>
 	</div>
 <?php endif ?>
@@ -113,7 +113,7 @@ $this->BcBaser->js('admin/updaters/update', false);
 	<?php else: ?>
 		<p>
 			<?php if (!$plugin): ?>
-			<p><?php echo sprintf(__d('baser', 'baserCMSコアのアップデートがうまくいかない場合は、%sにご相談されるか、前のバージョンの baserCMS に戻す事をおすすめします。'), $this->BcBaser->getLink('baserCMSの制作・開発パートナー', 'http://basercms.net/partners/', ['target' => '_blank']))?></p>
+			<p><?php echo sprintf(__d('baser', 'baserCMSコアのアップデートがうまくいかない場合は、%sにご相談されるか、前のバージョンの baserCMS に戻す事をおすすめします。'), $this->BcBaser->getLink('baserCMSの制作・開発パートナー', 'https://basercms.net/partners/', ['target' => '_blank']))?></p>
 			<?php if (!$requireUpdate): ?>
 				<?php $this->BcBaser->link('≫ 管理画面に移動する', '/' . BcUtil::getAdminPrefix()) ?>
 			<?php endif ?>

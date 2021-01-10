@@ -1,25 +1,25 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model
  * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('Tool', 'Model');
 
 /**
  * ToolTest class
- * 
+ *
  * class NonAssosiationTool extends Tool {
  *  public $name = 'Tool';
  *  public $belongsTo = [];
  *  public $hasMany = [];
  * }
- * 
+ *
  * @package Baser.Test.Case.Model
  * @property Tool $Tool
  */
@@ -39,7 +39,7 @@ class ToolTest extends BaserTestCase {
 
 /**
  * コントロールソース取得
- * 
+ *
  * @param string $field
  * @param array $expected 期待値
  * @param string $message テストが失敗した時に表示されるメッセージ
@@ -59,7 +59,7 @@ class ToolTest extends BaserTestCase {
 
 /**
  * データソースを指定してモデルリストを取得する
- * 
+ *
  * @param string $configKeyName
  * @param array $expected 期待値
  * @param string $message テストが失敗した時に表示されるメッセージ
@@ -79,7 +79,7 @@ class ToolTest extends BaserTestCase {
 
 /**
  * スキーマを書き出す
- * 
+ *
  * @param array $data
  * @param string $path スキーマファイルの生成場所
  * @param array $expected 期待値
@@ -107,7 +107,7 @@ class ToolTest extends BaserTestCase {
 
 /**
  * スキーマファイルを読み込む
- * 
+ *
  * @param array $data
  * @param string $tmpPath
  * @return boolean

@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -19,7 +19,7 @@ $this->BcBaser->i18nScript([
 	'alertMessage2' => __d('baser', '削除に失敗しました。'),
 	'confirmMessage1' => __d('baser', "このデータを本当に削除してもよろしいですか？\n※ 削除したデータは元に戻すことができません。"),
 	'confirmMessage2' => __d('baser', '<p><strong>初期データを読み込みます。よろしいですか？</strong></p><br><p>※ 初期データを読み込むと現在登録されている記事データや設定は全て上書きされますのでご注意ください。<br>※ 管理ログは読み込まれず、ユーザー情報はログインしているユーザーのみに初期化されます。</p>'),
-	'confirmTitle1' => __d('baser', '初期データ読込')   
+	'confirmTitle1' => __d('baser', '初期データ読込')
 ], ['escape' => false]);
 $this->BcBaser->js([
 	'admin/libs/jquery.baser_ajax_data_list',

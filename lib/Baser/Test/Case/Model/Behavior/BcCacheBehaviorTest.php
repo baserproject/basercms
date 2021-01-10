@@ -1,18 +1,18 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model.Behavior
  * @since			baserCMS v 3.0.6
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
  * BcCacheBehaviorTest class
- * 
+ *
  * @package Baser.Test.Case.Model
  */
 class BcCacheBehaviorTest extends BaserTestCase {
@@ -125,14 +125,14 @@ class BcCacheBehaviorTest extends BaserTestCase {
 	public function testCreateCacheFolder() {
 		$this->Page->createCacheFolder();
 		$path = CACHE_DATA_PATH . $this->Page->tablePrefix . $this->Page->table;
-		
+
 		// フォルダが生成されているかチェック
 		$this->assertFileExists($path);
 	}
 
 /**
  * キャッシュ処理
- * 
+ *
  * @param Model $model
  * @param int $expire
  * @param string $method
@@ -145,8 +145,8 @@ class BcCacheBehaviorTest extends BaserTestCase {
 
 /**
  * データキャッシュのパスを指定する
- * 
- * @param string $dir 
+ *
+ * @param string $dir
  */
 	public function testChangeCachePath() {
 		$table = 'hoge';
@@ -164,7 +164,7 @@ class BcCacheBehaviorTest extends BaserTestCase {
 
 /**
  * キャッシュを削除する
- * 
+ *
  * @param Model $model
  * @return void
  */
@@ -175,7 +175,7 @@ class BcCacheBehaviorTest extends BaserTestCase {
 		touch($path . DS . 'hoge');
 
 		$this->Page->delCache();
-				
+
 		// キャッシュフォルダが空かチェック
 		$result = $this->isEmptyDir($path);
 		$this->assertTrue($result);
@@ -197,7 +197,7 @@ class BcCacheBehaviorTest extends BaserTestCase {
 
 /**
  * 関連モデルを含めてキャッシュを削除する
- * 
+ *
  * BcCacheBehaviorのBeforeSave, afterDeleteのテストも兼ねます
  */
 	public function testDelAssockCache() {

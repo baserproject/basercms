@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -23,7 +23,7 @@ class ContentLink extends AppModel {
  * @var array
  */
 	public $actsAs = ['BcContents'];
-	
+
 /**
  * ContentLink constructor.
  *
@@ -38,5 +38,5 @@ class ContentLink extends AppModel {
 				['rule' => ['notBlank'], 'message' => __d('baser', 'リンク先URLを入力してください。')]]
 		];
 	}
-	
+
 }

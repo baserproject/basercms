@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BcFormHelper', 'View/Helper');
@@ -15,21 +15,21 @@ App::uses('BcUploadHelper', 'View/Helper');
 
 /**
  * Class BcFreezeHelper
- * 
+ *
  * @package Baser.View.Helper
  */
 class BcFreezeHelper extends BcFormHelper {
 
 /**
  * 凍結状態
- * 
+ *
  * @var boolean
  */
 	public $freezed = false;
 
 /**
  * フォームを凍結させる
- * 
+ *
  * @return void
  */
 	public function freeze() {
@@ -38,7 +38,7 @@ class BcFreezeHelper extends BcFormHelper {
 
 /**
  * テキストボックスを表示する
- * 
+ *
  * @param string $fieldName フィールド文字列
  * @param array $attributes html属性
  * - 凍結時に、$attributes["value"]が指定されている場合、その値がvalueになる。
@@ -68,11 +68,11 @@ class BcFreezeHelper extends BcFormHelper {
 
 /**
  * select プルダウンメニューを表示
- * 
+ *
  * @param	string $fieldName フィールド文字列
  * @param	array $options コントロールソース
  * @param	array $attributes html属性
- * - $attributes['cols']が指定されている場合、値の文字の横幅を指定できる 
+ * - $attributes['cols']が指定されている場合、値の文字の横幅を指定できる
  * @param	array	空データの表示有無
  * @return	string $showEmpty htmlタグ
  * @access	public
@@ -99,7 +99,7 @@ class BcFreezeHelper extends BcFormHelper {
 
 /**
  * 日付タグを表示
- * 
+ *
  * @param	string $fieldName フィールド文字列
  * @param	string $dateFormat 日付フォーマット
  * @param	string $timeFormat 時間フォーマット
@@ -111,7 +111,7 @@ class BcFreezeHelper extends BcFormHelper {
 	public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $attributes = []) {
 
 		if ($this->freezed) {
-			
+
 			$year = $month = $day = $hour = $min = $meridian = $showEmpty = $selected = null;
 			if(isset($attributes['selected'])) {
 				$selected = $attributes['selected'];
@@ -119,7 +119,7 @@ class BcFreezeHelper extends BcFormHelper {
 			if(isset($attributes['empty'])) {
 				$showEmpty = $attributes['empty'];
 			}
-			
+
 			if (empty($selected)) {
 				$selected = $this->value($fieldName);
 			}
@@ -292,7 +292,7 @@ class BcFreezeHelper extends BcFormHelper {
 
 /**
  * チェックボックスを表示する
- * 
+ *
  * @param string $fieldName フィールド文字列
  * @param array $attributes html属性
  * @return string htmlタグ
@@ -313,7 +313,7 @@ class BcFreezeHelper extends BcFormHelper {
 
 /**
  * テキストエリアを表示する
- * 
+ *
  * @param string フィールド文字列
  * @param array html属性
  * @return string htmlタグ
@@ -340,7 +340,7 @@ class BcFreezeHelper extends BcFormHelper {
 
 /**
  * ラジオボタンを表示する
- * 
+ *
  * @param string $fieldName フィールド文字列
  * @param array $options コントロールソース
  * @param array $attributes html属性
@@ -357,7 +357,7 @@ class BcFreezeHelper extends BcFormHelper {
 
 /**
  * ファイルタグを出力
- * 
+ *
  * @param string $fieldName
  * @param array $options
  * @return string
@@ -387,7 +387,7 @@ class BcFreezeHelper extends BcFormHelper {
 /**
  * ファイルコントロール（画像）を表示する
  * TODO 確認画面には未チェック
- * 
+ *
  * @param string $fieldName フィールド文字列
  * @param	array $attributes html属性
  * @param array $imageAttributes 画像属性
@@ -401,7 +401,7 @@ class BcFreezeHelper extends BcFormHelper {
 
 		$output = "";
 		$imageAttributes = array_merge(['ext' => 'jpg', 'alt' => '', 'dir' => '', 'id' => ''], $imageAttributes);
-		
+
 		if (!empty($imageAttributes['subdir'])) {
 			$imageAttributes['subdir'] .= DS;
 		}
@@ -442,7 +442,7 @@ class BcFreezeHelper extends BcFormHelper {
 
 /**
  * TELボックスを表示する
- * 
+ *
  * @param string $fieldName フィールド文字列
  * @param array $attributes html属性
  * @return	string	htmlタグ
@@ -471,7 +471,7 @@ class BcFreezeHelper extends BcFormHelper {
 
 /**
  * パスワードボックスを表示する
- * 
+ *
  * @param string $fieldName フィールド文字列
  * @param array $attributes html属性
  * - 凍結時に、valueはマスクして表示する。
@@ -502,7 +502,7 @@ class BcFreezeHelper extends BcFormHelper {
 /**
  * JsonList
  * TODO 確認画面用の実装は全くしてない
- * 
+ *
  * @param string $fieldName フィールド文字列
  * @param array $attributes html属性
  * @return string	htmlタグ
@@ -529,7 +529,7 @@ class BcFreezeHelper extends BcFormHelper {
 /**
  * カレンダーコントロール付きのテキストフィールド
  * jquery-ui-1.7.2 必須
- * 
+ *
  * @param string $fieldName フィールド文字列
  * @param array $attributes HTML属性
  * @return string html

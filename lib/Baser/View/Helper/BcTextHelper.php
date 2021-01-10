@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('TextHelper', 'View/Helper');
@@ -38,7 +38,7 @@ class BcTextHelper extends TextHelper {
  * boolean型を ○ または ― マークで出力
  *
  * @param boolean $value
- * @return string ○ または ― 
+ * @return string ○ または ―
  */
 	public function booleanMark($value) {
 		if ($value) {
@@ -83,7 +83,7 @@ class BcTextHelper extends TextHelper {
  */
 	public function booleanDoList($doText = null) {
 		return [
-			0 => sprintf(__d('baser', '%s しない'), $doText), 
+			0 => sprintf(__d('baser', '%s しない'), $doText),
 			1 => sprintf(__d('baser', '%s する'), $doText)
 		];
 	}
@@ -128,7 +128,7 @@ class BcTextHelper extends TextHelper {
 
 /**
  * 性別を出力
- * 
+ *
  * @param array $value
  * @return string
  */
@@ -314,7 +314,7 @@ class BcTextHelper extends TextHelper {
 
 /**
  * 配列とキーを指定して値を取得する
- * 
+ *
  * @param int $key 配列のキー
  * @param array $array 配列
  * @param mixed type $noValue 値がない場合に返す値

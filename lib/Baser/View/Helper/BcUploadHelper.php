@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BcAppHelper', 'View/Helper');
@@ -22,11 +22,11 @@ class BcUploadHelper extends BcAppHelper {
 
 /**
  * ヘルパ
- * 
+ *
  * @var array
  */
 	public $helpers = ['Html', 'BcForm'];
-	
+
 /**
  * ファイルへのリンクを取得する
  *
@@ -128,10 +128,10 @@ class BcUploadHelper extends BcAppHelper {
 				}
 				if ($uploadSettings['type'] == 'image' || in_array($ext, $Model->Behaviors->BcUpload->imgExts)) {
 					$imgOptions = array_merge([
-						'imgsize' => $options['imgsize'], 
-						'rel' => $options['rel'], 
-						'title' => $options['title'], 
-						'link' => $options['link'], 
+						'imgsize' => $options['imgsize'],
+						'rel' => $options['rel'],
+						'title' => $options['title'],
+						'link' => $options['link'],
 						'force' => $options['force'],
 						'width' => $options['width'], // 横幅
 						'height' => $options['height'] // 高さ
@@ -200,7 +200,7 @@ class BcUploadHelper extends BcAppHelper {
 
 		$this->setEntity($fieldName);
 		$field = $this->field();
-		
+
 		try{
 			$settings = $this->getBcUploadSetting();
 		} catch (BcException $e){
@@ -220,7 +220,7 @@ class BcUploadHelper extends BcAppHelper {
 		}
 
 		$this->setBcUploadSetting($settings);
-		
+
 		$imgOptions = [
 			'alt' => $options['alt'],
 			'width' => $options['width'],
@@ -228,7 +228,7 @@ class BcUploadHelper extends BcAppHelper {
 			'class' => $options['class']
 		];
 		if(empty($imgOptions['class'])) {
-			unset($imgOptions['class']);	
+			unset($imgOptions['class']);
 		}
 		if ($imgOptions['width'] === '') {
 			unset($imgOptions['width']);
@@ -329,14 +329,14 @@ class BcUploadHelper extends BcAppHelper {
 					if (isset($copySetting['prefix'])) {
 						$imgPrefix = $copySetting['prefix'];
 					}
-					
+
 					$pathinfo = pathinfo($fileName);
 					$ext = $pathinfo['extension'];
 					$basename = basename($fileName, '.' . $ext);
 
 					$subdir = str_replace($basename . '.' . $ext, '', $fileName);
 					$file = str_replace('/', DS, $subdir) . $imgPrefix . $basename . $imgSuffix . '.' . $ext;
-					
+
 					$fileExists = false;
 					if(file_exists($saveDir . $file)) {
 						$fileExists = true;
@@ -344,7 +344,7 @@ class BcUploadHelper extends BcAppHelper {
 						$fileExists = true;
 						$fileUrl = $fileUrlInTheme;
 					}
-					
+
 					if ($fileExists || $options['force']) {
 						if ($check && !$mostSizeExists) {
 							$mostSizeUrl = $fileUrl . $subdir . $imgPrefix . $basename . $imgSuffix . '.' . $ext . '?' . rand();
@@ -380,7 +380,7 @@ class BcUploadHelper extends BcAppHelper {
 		unset($options['force']);
 		unset($options['output']);
 		unset($options['class']);
-		
+
 		switch($output){
 			case 'url' :
 				$out = $mostSizeUrl;
@@ -425,7 +425,7 @@ class BcUploadHelper extends BcAppHelper {
 		}
 		$siteConfig = Configure::read('BcSite');
 		if(!$isTheme || empty($siteConfig['theme'])) {
-			return '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';	
+			return '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 		} else {
 			$siteConfig = Configure::read('BcSite');
 			return '/theme/' . $siteConfig['theme'] . '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
@@ -447,7 +447,7 @@ class BcUploadHelper extends BcAppHelper {
 		$Model = $this->getUploadModel();
 		$Model->Behaviors->BcUpload->settings[$Model->name] = $settings;
 	}
-	
+
 	protected function getUploadModel() {
 		$modelName = $this->model();
 		$Model = ClassRegistry::init($modelName);
@@ -456,5 +456,5 @@ class BcUploadHelper extends BcAppHelper {
 		}
 		return $Model;
 	}
-	
+
 }

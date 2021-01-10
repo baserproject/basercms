@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -16,17 +16,17 @@
  * @package Baser.View.Helper
  */
 class BcSmartphoneHelper extends Helper {
-	
+
 /**
  * ヘルパ
- * 
+ *
  * @var array
  */
 	public $helpers = ['BcHtml'];
 
 /**
  * After Render
- * 
+ *
  * @param string $viewFile
  */
 	public function afterRender($viewFile) {
@@ -49,7 +49,7 @@ class BcSmartphoneHelper extends Helper {
 					'inline' => false
 				]
 			)
-		);	
+		);
 	}
 
 	/**
@@ -97,10 +97,10 @@ class BcSmartphoneHelper extends Helper {
 /**
  * リンクからモバイル用のプレフィックスを除外する
  * preg_replace_callback のコールバック関数
- * 
+ *
  * @param array $matches
  * @return string
- * @access protected 
+ * @access protected
  */
 	protected function _removePrefix($matches) {
 		$etc = $matches[1];
@@ -116,9 +116,9 @@ class BcSmartphoneHelper extends Helper {
 /**
  * リンクにモバイル用のプレフィックスを追加する
  * preg_replace_callback のコールバック関数
- * 
+ *
  * @param array $matches
- * @return string 
+ * @return string
  */
 	protected function _addPrefix($matches) {
 		$currentAlias = $this->request->params['Site']['alias'];

@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model.Datasource.Database
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('DboSource', 'Model/Datasource');
@@ -211,12 +211,12 @@ class BcSqlite extends Sqlite {
 		if(($column == 'boolean' && ($data === "'0'" || $data === "'1'"))) {
 			return $data;
 		}
-		
+
 		$parent = parent::value($data, $column, $safe);
 		if ($parent != null) {
 			return $parent;
 		}
-	
+
 
 		if ($data === null) {
 			return 'NULL';
@@ -280,7 +280,7 @@ class BcSqlite extends Sqlite {
  * Begin a transaction
  * TODO データベースがロックされてしまい正常に処理が実行されないのでとりあえず未実装とする
  * ロックに関する原因については未解析
- * 
+ *
  * @param string $model
  * @return boolean True on success, false on fail
  * (i.e. if the database/model does not support transactions).
@@ -300,7 +300,7 @@ class BcSqlite extends Sqlite {
  * Commit a transaction
  * TODO データベースがロックされてしまい正常に処理が実行されないのでとりあえず未実装とする
  * ロックに関する原因については未解析
- * 
+ *
  * @param unknown_type $model
  * @return boolean True on success, false on fail
  * (i.e. if the database/model does not support transactions,
@@ -319,7 +319,7 @@ class BcSqlite extends Sqlite {
  * Rollback a transaction
  * TODO データベースがロックされてしまい正常に処理が実行されないのでとりあえず未実装とする
  * ロックに関する原因については未解析
- * 
+ *
  * @param unknown_type $model
  * @return boolean True on success, false on fail
  * (i.e. if the database/model does not support transactions,
@@ -800,7 +800,7 @@ class BcSqlite extends Sqlite {
 /**
  * Generate index alteration statements for a table.
  * TODO 未サポート
- * 
+ *
  * @param string $table Table to alter indexes for
  * @param array $new Indexes to add and drop
  * @return array Index alteration statements
@@ -881,7 +881,7 @@ class BcSqlite extends Sqlite {
 
 /**
  * カラムを変更する
- * 
+ *
  * @param	array	$options [ table / new / old ]
  * @return boolean
  */
@@ -954,7 +954,7 @@ class BcSqlite extends Sqlite {
 
 /**
  * カラムを削除する
- * 
+ *
  * @param	array	$options [ table / field / prefix ]
  * @return boolean
  */
@@ -1094,7 +1094,7 @@ class BcSqlite extends Sqlite {
  * Returns a Model description (metadata) or null if none found.
  * DboSQlite3のdescribeメソッドを呼び出さずにキャッシュを読み込む為に利用
  * Datasource::describe と同じ
- * 
+ *
  * @param Model $model
  * @return mixed
  */
@@ -1114,5 +1114,5 @@ class BcSqlite extends Sqlite {
 		}
 		return null;
 	}
-	
+
 }

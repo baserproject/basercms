@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -19,14 +19,14 @@ class User extends AppModel {
 
 /**
  * ビヘイビア
- * 
+ *
  * @var array
  */
 	public $actsAs = ['BcCache'];
 
 /**
  * belongsTo
- * 
+ *
  * @var array
  */
 	public $belongsTo = [
@@ -37,7 +37,7 @@ class User extends AppModel {
 
 /**
  * hasMany
- * 
+ *
  * @var array
  */
 	public $hasMany = ['Favorite' => [
@@ -82,7 +82,7 @@ class User extends AppModel {
 				'rule' => ['notBlank'], 'message' => __d('baser', 'グループを選択してください。')]
 		];
 	}
-	
+
 /**
  * validates
  *
@@ -121,7 +121,7 @@ class User extends AppModel {
 /**
  * ユーザーリストを取得する
  * 条件を指定する場合は引数を指定する
- * 
+ *
  * @param array $conditions 取得条件
  * @return array
  */
@@ -173,7 +173,7 @@ class User extends AppModel {
 
 /**
  * beforeSave
- * 
+ *
  * @param type $options
  * @return boolean
  */
@@ -187,8 +187,8 @@ class User extends AppModel {
 
 /**
  * afterSave
- * 
- * @param boolean $created 
+ *
+ * @param boolean $created
  */
 	public function afterSave($created, $options = []) {
 		parent::afterSave($created);
@@ -199,7 +199,7 @@ class User extends AppModel {
 
 /**
  * よく使う項目の初期データをユーザーに適用する
- * 
+ *
  * @param type $userId ユーザーID
  * @param type $userGroupId ユーザーグループID
  */
@@ -228,7 +228,7 @@ class User extends AppModel {
 
 /**
  * ユーザーに関連するよく使う項目を削除する
- * 
+ *
  * @param int $userId ユーザーID
  * @return boolean
  */

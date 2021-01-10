@@ -246,7 +246,7 @@ class CakeEventManager {
 			if ($result === false) {
 				$event->stopPropagation();
 			}
-			
+
 			// CUSTOMIZE ADD 2013/09/23 ryuring
 			// ObjectCollection を継承しているイベントの場合、
 			// 複数のオブジェクトに対するイベントの結果が配列で返ってくるが、
@@ -265,7 +265,7 @@ class CakeEventManager {
 				}
 			}
 			// <<<
-			
+
 			if ($result !== null) {
 				$event->result = $result;
 			}

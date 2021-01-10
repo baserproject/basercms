@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Feed.Controller
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -240,7 +240,7 @@ class FeedDetailsController extends FeedAppController {
 
 /**
  * 一括削除
- * 
+ *
  * @param array $ids
  * @return boolean
  */
@@ -255,9 +255,9 @@ class FeedDetailsController extends FeedAppController {
 
 /**
  * データを削除する
- * 
+ *
  * @param int $id
- * @return boolean 
+ * @return boolean
  */
 	protected function _del($id) {
 		$data = $this->FeedDetail->read(null, $id);

@@ -1,14 +1,14 @@
 <?php
 
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.View.Helper
  * @since			baserCMS v 3.0.6
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('BcAppView', 'View');
 App::uses('BcContentsHelper', 'View/Helper');
@@ -23,7 +23,7 @@ class BcContentsHelperTest extends BaserTestCase {
 
 /**
  * Fixtures
- * @var array 
+ * @var array
  */
 	public $fixtures = [
 		'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
@@ -38,7 +38,7 @@ class BcContentsHelperTest extends BaserTestCase {
 
 /**
  * View
- * 
+ *
  * @var View
  */
 	protected $_View;
@@ -68,11 +68,11 @@ class BcContentsHelperTest extends BaserTestCase {
 
 /**
  * ページリストを取得する
- * 
+ *
  * @param int $pageCategoryId カテゴリID
- * @param int $level 関連データの階層	
+ * @param int $level 関連データの階層
  * @param int $expectedCount 期待値
- * @param string $expectedTitle  
+ * @param string $expectedTitle
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider getPageListDataProvider
  */
@@ -226,12 +226,12 @@ class BcContentsHelperTest extends BaserTestCase {
  * 現在のURLを元に指定したサブサイトのURLを取得する
  * getCurrentRelatedSiteUrl
  * フロントエンド専用メソッド
- * @param string $siteName 
+ * @param string $siteName
  * @param mixed|string $expect 期待値
  * @dataProvider getCurrentRelatedSiteUrlDataProvider
  */
 	public function testGetCurrentRelatedSiteUrl($siteName, $expect) {
-		$this->BcContents->request = $this->_getRequest('/');  
+		$this->BcContents->request = $this->_getRequest('/');
 		$_SERVER['HTTP_USER_AGENT'] = 'iPhone';
 		$result = $this->BcContents->getCurrentRelatedSiteUrl($siteName);
 		$this->assertEquals($expect, $result);
@@ -264,7 +264,7 @@ class BcContentsHelperTest extends BaserTestCase {
 		if(!empty($result[1]['Content']['id'])) {
 			$result = $result[1]['Content']['id'];
 		}
-		$this->assertEquals($expect, $result);                       
+		$this->assertEquals($expect, $result);
 	}
 	public function getRelatedSiteContentsDataProvider() {
 		return [
@@ -295,8 +295,8 @@ class BcContentsHelperTest extends BaserTestCase {
 		$this->BcContents->request = $this->_getRequest('/');
 		$_SERVER['HTTP_USER_AGENT'] = 'iPhone';
 		$result = $this->BcContents->getRelatedSiteLinks($id, $options);
-		$this->assertEquals($expect, $result);      
-	}	
+		$this->assertEquals($expect, $result);
+	}
 	public function getRelatedSiteLinksDataProvider() {
 		return [
 			// IDが空 オプションも空
@@ -312,7 +312,7 @@ class BcContentsHelperTest extends BaserTestCase {
 			[1, ['excludeIds' => [0]], [['prefix' => 'mobile','name' => 'ケータイ', 'url'=>'/m/'],['prefix' => 'smartphone','name' => 'スマートフォン', 'url'=>'/s/']]],
 			[99, [], []],
 		];
-	}	
+	}
 
 /**
  * コンテンツ設定を Json 形式で取得する
@@ -329,7 +329,7 @@ class BcContentsHelperTest extends BaserTestCase {
 		$View->loadHelpers();
 		$View->BcContents->setup();
 		$result = $View->BcContents->getJsonSettings();
-		// JSON形式が正しいかどうか		
+		// JSON形式が正しいかどうか
 		$this->assertTrue(is_string($result) && is_array(json_decode($result, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false);
 	}
 /**
@@ -350,7 +350,7 @@ class BcContentsHelperTest extends BaserTestCase {
 		// 　getJsonSettingsで取得した値がsettingsの値と等しいかどうか
 		$result = json_decode($View->BcContents->getJsonSettings(),true);
 		$result = $result[$no]['title'];
-		$this->assertEquals($expect, $result);      
+		$this->assertEquals($expect, $result);
 	}
 	public function getJsonSettingsDataProvider() {
 		return [
@@ -407,7 +407,7 @@ class BcContentsHelperTest extends BaserTestCase {
 			[[1,21,24], '/service/sub_service/sub_service_1', false] // パス URLで解決
 		];
 	}
-	
+
 /**
  * フォルダリストを取得する
  *
@@ -427,16 +427,16 @@ class BcContentsHelperTest extends BaserTestCase {
 /**
  * サイトIDからコンテンツIDを取得する
  * getSiteRootId
- * 
+ *
  * @param int $siteId
  * @param string|bool $expect 期待値
  * @dataProvider getSiteRootIdDataProvider
- */	
+ */
 	public function testGetSiteRootId($siteId, $expect) {
 		$result = $this->BcContents->getSiteRootId($siteId);
-		$this->assertEquals($expect, $result);                       
+		$this->assertEquals($expect, $result);
 	}
-	
+
 	public function getSiteRootIdDataProvider() {
 		return [
 			// 存在するサイトID（0~2）を指定した場合
@@ -451,21 +451,21 @@ class BcContentsHelperTest extends BaserTestCase {
 /**
  * エンティティIDからコンテンツの情報を取得
  * getContentByEntityId
- * 
+ *
  * @param string $contentType コンテンツタイプ
  * ('Page','MailContent','BlogContent','ContentFolder')
  * @param int $id エンティティID
  * @param string $field 取得したい値
- *  'name','url','title'など　初期値：Null 
+ *  'name','url','title'など　初期値：Null
  *  省略した場合配列を取得
  * @param string|bool $expect 期待値
  * @dataProvider getContentByEntityIdDataProvider
- */	
+ */
 	public function testgetContentByEntityId($expect, $id, $contentType, $field) {
 		$result = $this->BcContents->getContentByEntityId($id, $contentType, $field);
-		$this->assertEquals($expect, $result);                       
+		$this->assertEquals($expect, $result);
 	}
-	
+
 	public function getContentByEntityIdDataProvider() {
 		return [
 			// 存在するID（0~2）を指定した場合
@@ -485,21 +485,21 @@ class BcContentsHelperTest extends BaserTestCase {
 /**
  * urlからコンテンツの情報を取得
  * getContentByUrl
- * 
+ *
  * @param string $contentType コンテンツタイプ
  * ('Page','MailContent','BlogContent','ContentFolder')
  * @param string $url
  * @param string $field 取得したい値
- *  'name','url','title'など　初期値：Null 
+ *  'name','url','title'など　初期値：Null
  *  省略した場合配列を取得
  * @param string|bool $expect 期待値
  * @dataProvider getContentByUrlDataProvider
- */	
+ */
 	public function testgetContentByUrl($expect, $url, $contentType, $field) {
 		$result = $this->BcContents->getContentByUrl($url, $contentType, $field);
-		$this->assertEquals($expect, $result);                       
+		$this->assertEquals($expect, $result);
 	}
-	
+
 	public function getContentByUrlDataProvider() {
 		return [
 			// 存在するURL（0~2）を指定した場合
@@ -543,7 +543,7 @@ class BcContentsHelperTest extends BaserTestCase {
 	public function test_getIconUrl(){
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
-	
+
 /**
  * 現在のページがコンテンツフォルダかどうか確認する
  * @param $url
@@ -554,7 +554,7 @@ class BcContentsHelperTest extends BaserTestCase {
 		$this->BcContents->request = $this->_getRequest($url);
 		$this->assertEquals($expects, $this->BcContents->isFolder());
 	}
-	
+
 	public function isFolderDataProvider() {
 		return [
 			['/', false],	// index あり
@@ -566,7 +566,7 @@ class BcContentsHelperTest extends BaserTestCase {
 			['/service/hoge', false]	// 存在しない
 		];
 	}
-	
+
 /**
  * 対象コンテンツが属するフォルダまでのフルパスを取得する
  * フォルダ名称部分にはフォルダ編集画面へのリンクを付与する
@@ -576,12 +576,12 @@ class BcContentsHelperTest extends BaserTestCase {
  */
 	public function testGetFolderLinkedUrl($url, $expected) {
 		$content = ClassRegistry::init('Content')->find('first', [
-			'conditions' => ['url' => $url], 
+			'conditions' => ['url' => $url],
 			'recursive' => 0
 		]);
 		$this->assertEquals($expected, $this->BcContents->getFolderLinkedUrl($content));
 	}
-	
+
 	public function getFolderLinkedUrlDataProvider()
 	{
 		return [
@@ -591,5 +591,5 @@ class BcContentsHelperTest extends BaserTestCase {
 			['/s/service/index', 'http://localhost/<a href="/admin/content_folders/edit/3">s</a>/<a href="/admin/content_folders/edit/6">service</a>/'],
 		];
 	}
-	
+
 }

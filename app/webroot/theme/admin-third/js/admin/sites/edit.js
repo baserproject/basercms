@@ -1,11 +1,11 @@
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -40,7 +40,7 @@ $(function(){
 	$("#SiteMainSiteId").change(loadDeviceAndLang);
 	$("#SiteDevice, #SiteLang").change(loadOptions);
 	$('input[name="data[Site][same_main_url]"]').click(loadOptions);
-	
+
 	loadDeviceAndLang();
 
 /**
@@ -64,9 +64,9 @@ $(function(){
 			loadOptions();
 		}, {type: 'GET', loaderType: 'after', loaderSelector: '#SiteMainSiteId'});
 	}
-	
+
 /**
- * デバイスと言語のオプションの表示設定 
+ * デバイスと言語のオプションの表示設定
  */
 	function loadOptions() {
 		var autoRedirect = $("#SiteAutoRedirect");
@@ -96,5 +96,5 @@ $(function(){
 			}
 		}
 	}
-	
+
 });

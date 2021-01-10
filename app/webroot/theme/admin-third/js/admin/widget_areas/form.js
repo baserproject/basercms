@@ -1,11 +1,11 @@
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 
@@ -117,7 +117,7 @@ $(function() {
 			return false;
 		});
 	}
-	
+
 /**
  * ウィジェットごとにid/nameをリネームする
  */
@@ -141,7 +141,7 @@ $(function() {
 			}
 		});
 	}
-	
+
 /**
  * ウィジェットイベントを登録
  */
@@ -174,7 +174,7 @@ $(function() {
 		});
 
 	}
-	
+
 /**
  * ウィジェットを削除
  */
@@ -187,7 +187,7 @@ $(function() {
 				data: {
 					_Token:{
 						key: $.bcToken.key
-					}	
+					}
 				},
 				dataType: 'text',
 				beforeSend: function() {
@@ -216,7 +216,7 @@ $(function() {
 			});
 		}, {loaderType: "target", loaderSelector: "#WidgetAreaUpdateSortLoader", hideLoader: false});
 	}
-	
+
 /**
  * 並び順を更新する
  */
@@ -256,7 +256,7 @@ $(function() {
 		}, {loaderType: "target", loaderSelector: "#WidgetAreaUpdateSortLoader", hideLoader: false});
 
 	}
-	
+
 /**
  * タイトルを更新する
  */
@@ -292,7 +292,7 @@ $(function() {
 			});
 		}, {loaderType: "target", loaderSelector: "#WidgetAreaUpdateTitleLoader", hideLoader: false});
 	}
-	
+
 /**
  * ウィジェットを更新する
  */

@@ -1,28 +1,32 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Lib.TestSuite
- * @since			baserCMS v 3.0.6
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Lib.TestSuite
+ * @since           baserCMS v 3.0.6
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('BaserTestFixture', 'TestSuite/Fixture');
 
 /**
+ * Class BaserTestCase
+ *
  * Baser Test Case
  *
- * @package			Baser.Lib.TestSuite
+ * @package Baser.Lib.TestSuite
  */
-class BaserTestCase extends CakeTestCase {
+class BaserTestCase extends CakeTestCase
+{
 
-/**
- * {@inheritDoc}
- */
-	public function __construct($name = null, array $data = [], $dataName = '') {
+	/**
+	 * {@inheritDoc}
+	 */
+	public function __construct($name = null, array $data = [], $dataName = '')
+	{
 		parent::__construct($name, $data, $dataName);
 		// ブラウザと、コンソールでCakeRequestの内容が違うので一旦トップページとして初期化する
 		Configure::write('debug', 1);
@@ -36,18 +40,19 @@ class BaserTestCase extends CakeTestCase {
 		ClassRegistry::flush();
 	}
 
-/**
- * 指定されたURLに対応しRouterパース済のCakeRequestのインスタンスを返す
- *
- * @param string $url URL
- * @return CakeRequest
- */
-	protected function _getRequest($url) {
+	/**
+	 * 指定されたURLに対応しRouterパース済のCakeRequestのインスタンスを返す
+	 *
+	 * @param string $url URL
+	 * @return CakeRequest
+	 */
+	protected function _getRequest($url)
+	{
 		Router::$initialized = false;
 		Router::reload();
 		BcSite::flash();
 		$request = new CakeRequest($url);
-		
+
 		// コンソールからのテストの場合、requestのパラメーターが想定外のものとなってしまうので調整
 		if (isConsole()) {
 			$baseUrl = Configure::read('App.baseUrl');
@@ -76,12 +81,13 @@ class BaserTestCase extends CakeTestCase {
 		return $request;
 	}
 
-/**
- * 管理画面にログインする
- * 
- * @param string $group
- */
-	protected function _loginAdmin($id = 1) {
+	/**
+	 * 管理画面にログインする
+	 *
+	 * @param string $group
+	 */
+	protected function _loginAdmin($id = 1)
+	{
 		$key = Configure::read('BcAuthPrefix.admin.sessionKey');
 		$User = ClassRegistry::init('User', 'Model');
 		$user = $User->find('first', ['conditions' => ['User.id' => $id]]);
@@ -89,49 +95,55 @@ class BaserTestCase extends CakeTestCase {
 		$_SESSION['Auth'][$key] = $user['User'];
 	}
 
-/**
- * イベントを設定する
- * 
- * @param $events
- */
-	public function attachEvent($events) {
+	/**
+	 * イベントを設定する
+	 *
+	 * @param $events
+	 */
+	public function attachEvent($events)
+	{
 		$EventManager = CakeEventManager::instance();
 		$event = new BcEventListenerMock($events);
 		$EventManager->attach($event);
 		return $event;
 	}
 
-/**
- * イベントをリセットする 
- */
-	public function resetEvent() {
+	/**
+	 * イベントをリセットする
+	 */
+	public function resetEvent()
+	{
 		$EventManager = CakeEventManager::instance();
 		$reflectionClass = new ReflectionClass(get_class($EventManager));
 		$property = $reflectionClass->getProperty('_listeners');
 		$property->setAccessible(true);
 		$property->setValue($EventManager, []);
 	}
-	
+
 }
 
 /**
  * Class BcEventListenerMock
  */
-class BcEventListenerMock extends CakeObject implements CakeEventListener {
+class BcEventListenerMock extends CakeObject implements CakeEventListener
+{
 	public $events = [];
+
 	/**
 	 * BcEventListenerMock constructor.
 	 * @param $events
 	 */
-	public function __construct($events) {
+	public function __construct($events)
+	{
 		$this->events = $events;
 	}
 
 	/**
 	 * @return array
 	 */
-	public function implementedEvents() {
+	public function implementedEvents()
+	{
 		return $this->events;
 	}
-	
+
 }

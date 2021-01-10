@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.View
  * @since			baserCMS v 4.0.5
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -24,15 +24,15 @@ if(!isset($postCount)) {
 ?>
 
 
-<?php if(!empty($tags)): ?> 
+<?php if(!empty($tags)): ?>
 <ul class="bc-blog-tags">
-	<?php foreach($tags as $tag): ?> 
+	<?php foreach($tags as $tag): ?>
 	<li>
 		<?php $this->Blog->tagLink($blogContentId, $tag) ?>
 		<?php if($postCount): ?>
 			(<?php echo $tag['BlogTag']['post_count'] ?>)
 		<?php endif ?>
 	</li>
-	<?php endforeach ?> 
+	<?php endforeach ?>
 </ul>
 <?php endif ?>

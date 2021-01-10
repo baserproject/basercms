@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BlogAppController', 'Blog.Controller');
@@ -261,7 +261,7 @@ class BlogController extends BlogAppController {
 		}
 
 		$crumbs[] = ['name' => $this->request->params['Content']['title'], 'url' => $this->request->params['Content']['url']];
-		
+
 		switch ($type) {
 
 			/* カテゴリ一覧 */
@@ -388,7 +388,7 @@ class BlogController extends BlogAppController {
 							}
 						}
 					}
-					
+
 				} else {
 					if (empty($pass[0])) {
 						$this->notFound();
@@ -400,7 +400,7 @@ class BlogController extends BlogAppController {
 					} else {
 						$this->notFound();
 					}
-					
+
 					// 一覧系のページの場合、時限公開の記事が存在し、キャッシュがあると反映できないが、
 					// 詳細ページの場合は、記事の終了期間の段階でキャッシュが切れる前提となる為、キャッシュを利用する
 					// プレビューでは利用しない事。
@@ -411,7 +411,7 @@ class BlogController extends BlogAppController {
 					}
 
 				}
-				
+
 				if (BcUtil::loginUser('admin')) {
 					$this->set('editLink', ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $post['BlogPost']['blog_content_id'], $post['BlogPost']['id']]);
 				}
@@ -574,10 +574,10 @@ class BlogController extends BlogAppController {
 
 /**
  * 投稿者一覧ウィジェット用のデータを取得する
- * 
+ *
  * @param int $blogContentId
  * @param boolean $limit
- * @param int $viewCount 
+ * @param int $viewCount
  */
 	public function get_authors($blogContentId, $viewCount = false) {
 		$data = [];

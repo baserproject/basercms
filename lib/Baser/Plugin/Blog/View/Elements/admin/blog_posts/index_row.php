@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -21,7 +21,7 @@
 	<td class="row-tools">
 		<?php if ($this->BcBaser->isAdminUser()): ?>
 			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['BlogPost']['id'], ['type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['BlogPost']['id']]) ?>
-		<?php endif ?>		
+		<?php endif ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_unpublish.png', ['alt' => __d('baser', '非公開'), 'class' => 'btn']), ['action' => 'ajax_unpublish', $data['BlogContent']['id'], $data['BlogPost']['id']], ['title' => __d('baser', '非公開'), 'class' => 'btn-unpublish']) ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_publish.png', ['alt' => __d('baser', '公開'), 'class' => 'btn']), ['action' => 'ajax_publish', $data['BlogContent']['id'], $data['BlogPost']['id']], ['title' => __d('baser', '公開'), 'class' => 'btn-publish']) ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', ['alt' => __d('baser', '確認'), 'class' => 'btn']), $this->BcBaser->getContentsUrl($this->request->params['Content']['url'] . 'archives/' . $data['BlogPost']['no'], true, $this->request->params['Site']['use_subdomain']), ['title' => __d('baser', '確認'), 'target' => '_blank']) ?>
@@ -47,7 +47,7 @@
 		<?php echo h($this->BcBaser->getUserName($data['User'])) ?><br>
         <?php echo $this->BcText->booleanMark($data['BlogPost']['status']); ?>
 	</td>
-	
+
 	<?php if ($data['BlogContent']['comment_use']): ?>
     <td>
         <?php $comment = count($data['BlogComment']) ?>

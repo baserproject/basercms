@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Uploader.Event
  * @since			baserCMS v 3.0.10
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -17,10 +17,10 @@
  * @property \BcHtmlHelper $BcHtml
  */
 class UploaderViewEventListener extends BcViewEventListener {
-	
+
 	public $events = array('afterLayout',
 			'Pages.beforeRender');
-	
+
 /**
  * afterLayout
  *
@@ -32,20 +32,20 @@ class UploaderViewEventListener extends BcViewEventListener {
 		$event->subject()->BcBaser;
 	}
 	public function afterLayout(CakeEvent $event) {
-		
+
 		$View = $event->subject();
 		if(!BcUtil::isAdminSystem() || $View->name == 'CakeError') {
 			return;
 		}
 
 		$this->BcHtml = $View->BcHtml;
-		
+
 		if(isset($View->BcCkeditor)) {
 
 			if(preg_match_all("/(editor_[a-z0-9_]*?)\s*?=\s*?CKEDITOR\.replace/s", $View->output, $matches)) {
 
 				/* ckeditor_uploader.js を読み込む */
-				
+
 				$jscode = $this->BcHtml->scriptBlock("var baseUrl ='" . $View->request->base . "/';");
 				$jscode .= $this->BcHtml->scriptBlock("var adminPrefix ='" . Configure::read('Routing.prefixes.0') . "';");
 				$jscode .= $this->BcHtml->i18nScript([
@@ -98,7 +98,7 @@ class UploaderViewEventListener extends BcViewEventListener {
 			}
 
 		}
-		
+
 		if (!empty($View->request->params['prefix']) && $View->request->params['prefix'] == 'mobile') {
 
 			/* モバイル画像に差し替える */
@@ -110,7 +110,7 @@ class UploaderViewEventListener extends BcViewEventListener {
 		}
 
 	}
-	
+
 /**
  * CKEditorのアップローダーを組み込む為のJavascriptを返す
  *
@@ -123,7 +123,7 @@ class UploaderViewEventListener extends BcViewEventListener {
  * @access	private
  */
 	function __getCkeditorUploaderScript($id) {
-		
+
 		$css = $this->BcHtml->url('/uploader/css/ckeditor/contents.css');
 		return <<< DOC_END
 			$(window).load(function(){
@@ -139,7 +139,7 @@ class UploaderViewEventListener extends BcViewEventListener {
 DOC_END;
 
 	}
-	
+
 /**
  * 画像タグをモバイル用に置き換える
  *
@@ -170,7 +170,7 @@ DOC_END;
 		$matches[3] = preg_replace('/width="[^"]+?"/', '', $matches[3]);
 		$matches[3] = preg_replace('/height="[^"]+?"/', '', $matches[3]);
 		$matches[3] = preg_replace('/style="[^"]+?"/', '', $matches[3]);
-		
+
 		if(file_exists($path)) {
 			return '<img'.$matches[1].'src="'.$this->BcHtml->webroot($_url).'"'.$matches[3].'/>';
 		}else {
@@ -178,7 +178,7 @@ DOC_END;
 		}
 
 	}
-	
+
 /**
  * アンカータグのリンク先が画像のものをモバイル用に置き換える
  *
@@ -210,5 +210,5 @@ DOC_END;
 		}
 
 	}
-	
+
 }

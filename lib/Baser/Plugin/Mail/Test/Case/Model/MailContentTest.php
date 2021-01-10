@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Mail.Test.Case.Model
  * @since			baserCMS v 3.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('MailContent', 'Mail.Model');
@@ -54,7 +54,7 @@ class MailContentTest extends BaserTestCase {
 				'layout_template' => '01234567890123456789',
 				'form_template' => '01234567890123456789',
 				'mail_template' => '01234567890123456789',
-				'redirect_url' => 'http://basercms.net/',
+				'redirect_url' => 'https://basercms.net/',
 				'sender_1' => 'test1@example.co.jp',
 				'sender_2' => 'test2@example.co.jp',
 				'ssl_on' => ''

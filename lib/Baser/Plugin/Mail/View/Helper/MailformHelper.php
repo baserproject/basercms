@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Mail.View.Helper
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BcHtmlHelper', 'View/Helper');
@@ -24,7 +24,7 @@ class MailformHelper extends BcFreezeHelper {
 
 /**
  * ヘルパー
- * 
+ *
  * @var array
  */
 	public $helpers = ['Html', 'BcTime', 'BcText', 'Js', 'BcUpload', 'BcCkeditor', 'BcBaser', 'BcContents', 'BcArray'];
@@ -83,7 +83,7 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['maxlength']);
 				unset($attributes['separator']);
 				if (isset($attributes['empty'])) {
-					if (strtolower($attributes['empty']) == 'false' || 
+					if (strtolower($attributes['empty']) == 'false' ||
 						strtolower($attributes['empty']) == 'null') {
 						$showEmpty = false;
 					} else {
@@ -174,7 +174,7 @@ class MailformHelper extends BcFreezeHelper {
 				$out .= $this->file($fieldName, $attributes);
 
 				break;
-			
+
 			case 'date_time_calender':
 				unset($attributes['size']);
 				unset($attributes['rows']);
@@ -255,7 +255,7 @@ class MailformHelper extends BcFreezeHelper {
 
 /**
  * 認証キャプチャを表示する
- * 
+ *
  * @param array $options オプション（初期値 : []）
  * 	- `separate` : 画像と入力欄の区切り（初期値：''）
  * 	- `class` : CSSクラス名（初期値：auth-captcha-image）

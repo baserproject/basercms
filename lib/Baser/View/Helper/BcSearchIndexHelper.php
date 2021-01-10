@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.View.Helper
  * @since			baserCMS v 4.4.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -17,12 +17,12 @@ class BcSearchIndexHelper extends AppHelper {
 
 /**
  * 公開状態確認
- * 
+ *
  * @param array $data
  * @return bool
  */
 	public function allowPublish($data) {
 		return ClassRegistry::init('SearchIndex')->allowPublish($data);
 	}
-	
+
 }

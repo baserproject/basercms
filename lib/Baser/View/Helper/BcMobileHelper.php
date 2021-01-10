@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -53,7 +53,7 @@ class BcMobileHelper extends Helper {
 			)
 		);
 	}
-	
+
 /**
  * afterLayout
  *
@@ -99,7 +99,7 @@ class BcMobileHelper extends Helper {
 
 /**
  * コンテンツタイプを出力
- * 
+ *
  * @return void
  * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
  */
@@ -113,7 +113,7 @@ class BcMobileHelper extends Helper {
 /**
  * リンクからモバイル用のプレフィックスを除外する
  * preg_replace_callback のコールバック関数
- * 
+ *
  * @param array $matches
  * @return string
  * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
@@ -129,9 +129,9 @@ class BcMobileHelper extends Helper {
 /**
  * リンクにモバイル用のプレフィックスを追加する
  * preg_replace_callback のコールバック関数
- * 
+ *
  * @param array $matches
- * @return string 
+ * @return string
  * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
  */
 	protected function _addMobilePrefix($matches) {

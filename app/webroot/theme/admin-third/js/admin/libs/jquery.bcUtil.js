@@ -1,17 +1,17 @@
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 (function($){
 	$.bcUtil = {
 	/**
-	 * hideMessage() を無効にする 
+	 * hideMessage() を無効にする
 	 */
 		disabledHideMessage: false,
 
@@ -48,7 +48,7 @@
 		},
 	/**
 	 * アラートメッセージを表示
-	 * 
+	 *
 	 * @param message
 	 */
 		showAlertMessage: function(message) {
@@ -59,10 +59,10 @@
 				.html(message);
 			$("#BcMessageBox").fadeIn(500);
 		},
-		
+
 	/**
 	 * ノーティスメッセージを表示
-	 * 
+	 *
 	 * @param message
 	 */
 		showNoticeMessage: function(message) {
@@ -115,7 +115,7 @@
 		},
 
 	/**
-	 * ローダーを隠す 
+	 * ローダーを隠す
 	 */
 		hideLoader: function(type, selector, key) {
 			if(type == undefined || (type != 'none' && selector == undefined)) {
@@ -138,9 +138,9 @@
 					break;
 			}
 		},
-		
+
 	/**
-	 * Ajax 
+	 * Ajax
 	 */
 		ajax: function(url, success, config) {
 			if(!config) {
@@ -170,7 +170,7 @@
 				},
 				complete:function(){
 					if(hideLoader) {
-						$.bcUtil.hideLoader(loaderType, loaderSelector, loaderKey);	
+						$.bcUtil.hideLoader(loaderType, loaderSelector, loaderKey);
 					}
 				},
 				error:function(XMLHttpRequest, textStatus, errorThrown){
@@ -179,11 +179,11 @@
 				success: success
 			};
 			if(config) {
-				$.extend(ajaxConfig, config);	
+				$.extend(ajaxConfig, config);
 			}
 			return $.ajax(ajaxConfig);
 		},
-		
+
 	/**
 	 * Ajax のエラーメッセージを表示
 	 *

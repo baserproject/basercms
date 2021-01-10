@@ -1,16 +1,18 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
+ * Class PluginsController
+ *
  * Plugin 拡張クラス
  * プラグインのコントローラーより継承して利用する
  *
@@ -19,47 +21,49 @@
  * @property BcManagerComponent $BcManager
  * @property BcAuthComponent $BcAuth
  */
-class PluginsController extends AppController {
+class PluginsController extends AppController
+{
 
-/**
- * クラス名
- *
- * @var string
- */
+	/**
+	 * クラス名
+	 *
+	 * @var string
+	 */
 	public $name = 'Plugins';
 
-/**
- * モデル
- *
- * @var array
- */
+	/**
+	 * モデル
+	 *
+	 * @var array
+	 */
 	public $uses = ['Plugin'];
 
-/**
- * コンポーネント
- *
- * @var array
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
-/**
- * ヘルパ
- *
- * @var array
- */
+	/**
+	 * ヘルパ
+	 *
+	 * @var array
+	 */
 	public $helpers = ['BcTime', 'BcForm'];
 
-/**
- * サブメニューエレメント
- *
- * @var array
- */
+	/**
+	 * サブメニューエレメント
+	 *
+	 * @var array
+	 */
 	public $subMenuElements = [];
 
-/**
- * Before Filter
- */
-	public function beforeFilter() {
+	/**
+	 * Before Filter
+	 */
+	public function beforeFilter()
+	{
 		parent::beforeFilter();
 		$this->crumbs = [
 			[
@@ -73,12 +77,13 @@ class PluginsController extends AppController {
 		];
 	}
 
-/**
- * プラグインをアップロードしてインストールする
- *
- * @return void
- */
-	public function admin_add() {
+	/**
+	 * プラグインをアップロードしてインストールする
+	 *
+	 * @return void
+	 */
+	public function admin_add()
+	{
 		$this->pageTitle = __d('baser', 'プラグインアップロード');
 		$this->subMenuElements = ['plugins'];
 
@@ -130,12 +135,13 @@ class PluginsController extends AppController {
 		$this->redirect(['action' => 'index']);
 	}
 
-/**
- * プラグインの一覧を表示する
- *
- * @return void
- */
-	public function admin_index() {
+	/**
+	 * プラグインの一覧を表示する
+	 *
+	 * @return void
+	 */
+	public function admin_index()
+	{
 		$this->Plugin->cacheQueries = false;
 		$datas = $this->Plugin->find('all', ['order' => 'Plugin.priority']);
 		if (!$datas) {
@@ -145,10 +151,10 @@ class PluginsController extends AppController {
 		// プラグインフォルダーのチェックを行う。
 		$pluginInfos = [];
 		$paths = App::path('Plugin');
-		foreach ($paths as $path) {
+		foreach($paths as $path) {
 			$Folder = new Folder($path);
 			$files = $Folder->read(true, true, true);
-			foreach ($files[0] as $file) {
+			foreach($files[0] as $file) {
 				$pluginInfos[basename($file)] = $this->Plugin->getPluginInfo($datas, $file);
 			}
 		}
@@ -157,7 +163,7 @@ class PluginsController extends AppController {
 		$pluginInfos = array_reverse($pluginInfos); // Hash::sortの為、逆順に変更
 
 		$availables = $unavailables = [];
-		foreach ($pluginInfos as $pluginInfo) {
+		foreach($pluginInfos as $pluginInfo) {
 			if (isset($pluginInfo['Plugin']['priority'])) {
 				$availables[] = $pluginInfo;
 			} else {
@@ -188,12 +194,13 @@ class PluginsController extends AppController {
 		$this->help = 'plugins_index';
 	}
 
-/**
- * baserマーケットのプラグインデータを取得する
- *
- * @return void
- */
-	public function admin_ajax_get_market_plugins() {
+	/**
+	 * baserマーケットのプラグインデータを取得する
+	 *
+	 * @return void
+	 */
+	public function admin_ajax_get_market_plugins()
+	{
 		$cachePath = 'views' . DS . 'baser_market_plugins.rss';
 		if (Configure::read('debug') > 0) {
 			clearCache('baser_market_plugins', 'views', '.rss');
@@ -222,12 +229,13 @@ class PluginsController extends AppController {
 		$this->set('baserPlugins', $baserPlugins);
 	}
 
-/**
- * 並び替えを更新する [AJAX]
- *
- * @return bool
- */
-	public function admin_ajax_update_sort() {
+	/**
+	 * 並び替えを更新する [AJAX]
+	 *
+	 * @return bool
+	 */
+	public function admin_ajax_update_sort()
+	{
 		$this->autoRender = false;
 		if (!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -244,13 +252,15 @@ class PluginsController extends AppController {
 		Configure::write('debug', 0);
 		return true;
 	}
-/**
- * [ADMIN] ファイル削除
- *
- * @param string $pluginName プラグイン名
- * @return void
- */
-	public function admin_ajax_delete_file($pluginName) {
+
+	/**
+	 * [ADMIN] ファイル削除
+	 *
+	 * @param string $pluginName プラグイン名
+	 * @return void
+	 */
+	public function admin_ajax_delete_file($pluginName)
+	{
 		$this->_checkSubmitToken();
 		if (!$pluginName) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -262,15 +272,16 @@ class PluginsController extends AppController {
 		exit(true);
 	}
 
-/**
- * プラグインファイルを削除する
- *
- * @param string $pluginName プラグイン名
- * @return void
- */
-	private function __deletePluginFile($pluginName) {
+	/**
+	 * プラグインファイルを削除する
+	 *
+	 * @param string $pluginName プラグイン名
+	 * @return void
+	 */
+	private function __deletePluginFile($pluginName)
+	{
 		$paths = App::path('Plugin');
-		foreach ($paths as $path) {
+		foreach($paths as $path) {
 			$pluginPath = $path . $pluginName;
 			if (is_dir($pluginPath)) {
 				break;
@@ -287,7 +298,7 @@ class PluginsController extends AppController {
 		$folder = new Folder($path);
 		$files = $folder->read(true, true);
 		if (is_array($files[1])) {
-			foreach ($files[1] as $file) {
+			foreach($files[1] as $file) {
 				if (preg_match('/\.php$/', $file)) {
 					$from = $path . DS . $file;
 					$to = $tmpPath . 'drop_' . $file;
@@ -307,13 +318,14 @@ class PluginsController extends AppController {
 		$folder->delete($tmpPath);
 	}
 
-/**
- * [ADMIN] 登録処理
- *
- * @param string $name プラグイン名
- * @return void
- */
-	public function admin_install($name) {
+	/**
+	 * [ADMIN] 登録処理
+	 *
+	 * @param string $name プラグイン名
+	 * @return void
+	 */
+	public function admin_install($name)
+	{
 		$name = urldecode($name);
 		$dbInited = false;
 		$installMessage = '';
@@ -322,7 +334,7 @@ class PluginsController extends AppController {
 			if ($this->canInstall($name)) {
 				$isInstallable = true;
 			}
-		} catch (BcException $e){
+		} catch (BcException $e) {
 			$isInstallable = false;
 			$installMessage = $e->getMessage();
 		}
@@ -330,7 +342,7 @@ class PluginsController extends AppController {
 		if ($isInstallable) {
 			if (!$this->request->data) {
 				$paths = App::path('Plugin');
-				foreach ($paths as $path) {
+				foreach($paths as $path) {
 					$path .= $name . DS . 'config.php';
 					if (file_exists($path)) {
 						include $path;
@@ -350,7 +362,7 @@ class PluginsController extends AppController {
 
 				$this->request->data = ['Plugin' => [
 					'name' => $name,
-					'title'	=> $title,
+					'title' => $title,
 					'status' => true,
 					'version' => $version,
 					'permission' => 1
@@ -385,13 +397,14 @@ class PluginsController extends AppController {
 		$this->render('form');
 	}
 
-/**
- * プラグインがインストール可能か判定する
- *
- * @param string $pluginName プラグイン名
- * @return boolean
- */
-	private function canInstall($pluginName) {
+	/**
+	 * プラグインがインストール可能か判定する
+	 *
+	 * @param string $pluginName プラグイン名
+	 * @return boolean
+	 */
+	private function canInstall($pluginName)
+	{
 		$installedPlugin = $this->Plugin->find('first', [
 			'conditions' => [
 				'name' => $pluginName,
@@ -405,7 +418,7 @@ class PluginsController extends AppController {
 
 		$paths = App::path('Plugin');
 		$existsPluginFolder = false;
-		foreach ($paths as $path) {
+		foreach($paths as $path) {
 			if (!is_dir($path . $pluginName)) {
 				continue;
 			}
@@ -430,13 +443,14 @@ class PluginsController extends AppController {
 		return true;
 	}
 
-/**
- * アクセス制限設定を追加する
- *
- * @param array $data リクエストデータ
- * @return void
- */
-	public function _addPermission($data) {
+	/**
+	 * アクセス制限設定を追加する
+	 *
+	 * @param array $data リクエストデータ
+	 * @return void
+	 */
+	public function _addPermission($data)
+	{
 		if (ClassRegistry::isKeySet('Permission')) {
 			$Permission = ClassRegistry::getObject('Permission');
 		} else {
@@ -448,7 +462,7 @@ class PluginsController extends AppController {
 			return;
 		}
 
-		foreach ($userGroups as $userGroup) {
+		foreach($userGroups as $userGroup) {
 			//$permissionAuthPrefix = $Permission->UserGroup->getAuthPrefix($userGroup['UserGroup']['id']);
 			// TODO 現在 admin 固定、今後、mypage 等にも対応する
 			$permissionAuthPrefix = 'admin';
@@ -460,7 +474,7 @@ class PluginsController extends AppController {
 					'recursive' => -1
 				]
 			);
-			switch ($data['Plugin']['permission']) {
+			switch($data['Plugin']['permission']) {
 				case 1:
 					if (!$permission) {
 						$Permission->create([
@@ -484,12 +498,13 @@ class PluginsController extends AppController {
 		}
 	}
 
-/**
- * データベースをリセットする
- *
- * @return void
- */
-	public function admin_reset_db() {
+	/**
+	 * データベースをリセットする
+	 *
+	 * @return void
+	 */
+	public function admin_reset_db()
+	{
 		if (!$this->request->data) {
 			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			return;
@@ -512,13 +527,14 @@ class PluginsController extends AppController {
 		$this->redirect(['action' => 'install', $data['Plugin']['name']]);
 	}
 
-/**
- * [ADMIN] 削除処理　(ajax)
- *
- * @param string $name プラグイン名
- * @return void
- */
-	public function admin_ajax_delete($name = null) {
+	/**
+	 * [ADMIN] 削除処理　(ajax)
+	 *
+	 * @param string $name プラグイン名
+	 * @return void
+	 */
+	public function admin_ajax_delete($name = null)
+	{
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$name) {
@@ -534,17 +550,18 @@ class PluginsController extends AppController {
 		exit();
 	}
 
-/**
- * 一括無効
- *
- * @param array $ids プラグインIDの配列
- * @return bool
- */
-	protected function _batch_del($ids) {
+	/**
+	 * 一括無効
+	 *
+	 * @param array $ids プラグインIDの配列
+	 * @return bool
+	 */
+	protected function _batch_del($ids)
+	{
 		if (!$ids) {
 			return true;
 		}
-		foreach ($ids as $id) {
+		foreach($ids as $id) {
 			$data = $this->Plugin->read(null, $id);
 			if ($this->BcManager->uninstallPlugin($data['Plugin']['name'])) {
 				$this->Plugin->saveDbLog(

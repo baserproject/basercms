@@ -1,26 +1,26 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model
  * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('ThemeFile', 'Model');
 App::uses('File', 'Utility');
 
 /**
  * ThemeFileTest class
- * 
+ *
  * class NonAssosiationThemeFile extends ThemeFile {
  *  public $name = 'ThemeFile';
  *  public $belongsTo = array();
  *  public $hasMany = array();
  * }
- * 
+ *
  * @package Baser.Test.Case.Model
  */
 class ThemeFileTest extends BaserTestCase {

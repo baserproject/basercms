@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Mail.Model
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -20,7 +20,7 @@ class MailField extends MailAppModel {
 
 /**
  * ビヘイビア
- * 
+ *
  * @var array
  */
 	public $actsAs = array('BcCache');
@@ -72,7 +72,7 @@ class MailField extends MailAppModel {
 				['rule' => ['maxLength', 255], 'message' => __d('baser', 'グループ入力チェックは255文字以内で入力してください。')]]
 		];
 	}
-	
+
 /**
  * コントロールソースを取得する
  *
@@ -157,7 +157,7 @@ class MailField extends MailAppModel {
 
 /**
  * 選択リストの入力チェック
- * 
+ *
  * @param type $check
  */
 	public function sourceMailField($check) {
@@ -247,7 +247,7 @@ class MailField extends MailAppModel {
 			return false;
 		}
 	}
-	
+
 /**
  * 選択リストのソースを整形する
  * 空白と \r を除外し、改行で結合する
@@ -266,7 +266,7 @@ class MailField extends MailAppModel {
 	}
 
 /**
- * After Delete 
+ * After Delete
  */
 	public function afterDelete() {
 		parent::afterDelete();
@@ -277,7 +277,7 @@ class MailField extends MailAppModel {
 
 /**
  * After Save
- * 
+ *
  * @param bool $created
  * @param array $options
  */

@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model.Behavior
  * @since			baserCMS v 3.0.6
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -195,11 +195,11 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @dataProvider saveFilesCanSaveDataProvider
  */
 	public function testSaveFilesCanSave($tmpId, $message) {
-		
+
 		// TODO 2020/07/08 ryuring PHP7.4 で、gd が標準インストールされないため、テストがエラーとなるためスキップ
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		return;
-		
+
 		$this->initTestSaveFiles();
 
 		// tmpIdを設定
@@ -307,7 +307,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		// TODO 2020/07/08 ryuring PHP7.4 で、gd が標準インストールされないため、テストがエラーとなるためスキップ
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		return;
-		
+
 		$this->initTestSaveFiles(1, array('name' => 'copy.gif', 'type' => 'image'));
 
 		// パス情報
@@ -354,7 +354,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		// TODO 2020/07/08 ryuring PHP7.4 で、gd が標準インストールされないため、テストがエラーとなるためスキップ
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		return;
-		
+
 		$this->initTestSaveFiles();
 
 		// パス情報
@@ -392,7 +392,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @return void
  */
 	public function testMoveFileSessionToTmp() {
-		
+
 		$tmpId = 1;
 		$fieldName = 'fieldName';
 		$tmp_name  = 'basercms_tmp';
@@ -415,7 +415,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 			'namefield' => $namefield,
 		);
 		$this->BcUploadBehavior->tmpId = $tmpId;
-		
+
 		$this->EditorTemplate->data['EditorTemplate'][$fieldName] = array(
 			'name' => $basename,
 			'tmp_name' => $tmpPath,
@@ -446,7 +446,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 		// 判定
 		$this->assertFileExists($targetPath, 'セッションに保存されたファイルデータをファイルとして保存できません');
-		
+
 		$result = $this->EditorTemplate->data['EditorTemplate'][$fieldName];
 		$expected = array(
 			'error' => 0,
@@ -565,7 +565,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		// TODO 2020/07/08 ryuring PHP7.4 で、gd が標準インストールされないため、テストがエラーとなるためスキップ
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		return;
-		
+
 		$imgPath = ROOT . '/lib/Baser/webroot/img/';
 		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
 		$fileName = 'baser.power';
@@ -578,7 +578,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 			'width' => 100,
 			'height' => 100,
 		);
-		
+
 		$this->EditorTemplate->data = array(
 			'EditorTemplate' => array(
 				'image' => array(
@@ -623,7 +623,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		// TODO 2020/07/08 ryuring PHP7.4 で、gd が標準インストールされないため、テストがエラーとなるためスキップ
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		return;
-		
+
 		$imgPath = ROOT . '/lib/Baser/webroot/img/';
 		$source = $imgPath . 'baser.power.gif';
 		$distination = $imgPath . 'baser.power_copy.gif';
@@ -633,19 +633,19 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 		// コピー実行
 		$this->BcUploadBehavior->resizeImage($source, $distination, $width, $height, $thumb);
-		
+
 		if (!$width && !$height) {
 			$this->assertFileExists($distination, $message);
-		
+
 		} else {
 			$result = $this->BcUploadBehavior->getImageSize($distination);
 			$this->assertEquals($expected, $result, $message);
-		
+
 		}
-		
+
 		// コピーした画像を削除
 		@unlink($distination);
-		
+
 	}
 
 	public function resizeImageDataProvider() {
@@ -710,11 +710,11 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @dataProvider delFileDataProvider
  */
 	public function testDelFile($prefix, $suffix, $imagecopy, $message) {
-	
+
 		// TODO 2020/07/08 ryuring PHP7.4 で、gd が標準インストールされないため、テストがエラーとなるためスキップ
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		return;
-		
+
 		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
 		$tmpPath = TMP;
 		$fileName = 'dummy';
@@ -798,7 +798,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 		// ダミーファイルの生成
 		touch($oldPath);
-		
+
 		if ($imagecopy) {
 			foreach ($imagecopy as $copysetting) {
 				$oldCopynames = $this->EditorTemplate->getFileName($copysetting, $oldName);
@@ -887,7 +887,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 		// テスト実行
 		$result = $this->EditorTemplate->getFieldBasename($setting, 'ext');
-		
+
 
 		if (!$issetSubdirDataFormat) {
 			$this->assertEquals($expected, $result, $message);

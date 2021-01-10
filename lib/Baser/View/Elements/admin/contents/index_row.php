@@ -2,14 +2,14 @@
 /**
  * [ADMIN] メールフィールド 一覧　行
  *
- * baserCMS :  Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
  * @copyright		Copyright 2008 - 2015, baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.4', '0.5' => '0.5',
 	'0.6' => '0.6', '0.7' => '0.7', '0.8' => '0.8', '0.9' => '0.9', '1.0' => '1.0');
@@ -25,7 +25,7 @@ $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.
 	<td class="row-tools" style="width:22%">
 		<?php if ($this->BcBaser->isAdminUser()): ?>
 			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['Content']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Content']['id'])) ?>
-		<?php endif ?>		
+		<?php endif ?>
 		<?php
 		echo $this->BcForm->input('Content.priority' . '_' . $data['Content']['id'], array(
 			'type' => 'select',

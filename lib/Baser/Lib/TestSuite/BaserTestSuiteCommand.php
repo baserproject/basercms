@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Lib.TestSuite
- * @since			baserCMS v 3.0.6
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Lib.TestSuite
+ * @since           baserCMS v 3.0.6
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('CakeTestSuiteCommand', 'TestSuite');
@@ -15,19 +15,21 @@ App::uses('BaserTestLoader', 'TestSuite');
 App::uses('BaserTestCase', 'TestSuite');
 
 /**
- * Class to customize loading of test suites from CLI
+ * Class BaserTestSuiteCommand
  *
- * @package       Baser.Lib.TestSuite
+ * @package Baser.Lib.TestSuite
  */
-class BaserTestSuiteCommand extends CakeTestSuiteCommand {
+class BaserTestSuiteCommand extends CakeTestSuiteCommand
+{
 
-/**
- * Handles output flag used to change printing on webrunner.
- *
- * @param string $reporter
- * @return void
- */
-	public function handleReporter($reporter) {
+	/**
+	 * Handles output flag used to change printing on webrunner.
+	 *
+	 * @param string $reporter
+	 * @return void
+	 */
+	public function handleReporter($reporter)
+	{
 		$object = null;
 
 		$reporter = ucwords($reporter);

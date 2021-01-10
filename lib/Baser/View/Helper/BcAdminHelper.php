@@ -1,13 +1,12 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View.Helper
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -31,7 +30,7 @@ class BcAdminHelper extends AppHelper {
 
 /**
  * 管理システムグローバルメニューの利用可否確認
- * 
+ *
  * @return boolean
  */
 	public function isAdminGlobalmenuUsed() {
@@ -51,8 +50,8 @@ class BcAdminHelper extends AppHelper {
 
 /**
  * ログインユーザーがシステム管理者かチェックする
- * 
- * @return boolean 
+ *
+ * @return boolean
  */
 	public function isSystemAdmin() {
 		$user = $this->_View->getVar('user');

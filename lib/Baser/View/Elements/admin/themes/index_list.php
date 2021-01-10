@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -73,7 +73,7 @@ $(function(){
 		<?php endforeach; ?>
 	<?php else: ?>
 		<?php if(strtotime('2014-03-31 17:00:00') >= time()): ?>
-		<li class="no-data"><?php echo __d('baser', '変更できるテーマがありません。')?><br /><a href="http://basercms.net/themes/index" target="_blank"><?php echo __d('baser', 'baserCMSの公式サイト</a>では無償のテーマが公開されています。')?></li>
+		<li class="no-data"><?php echo __d('baser', '変更できるテーマがありません。')?><br /><a href="https://basercms.net/themes/index" target="_blank"><?php echo __d('baser', 'baserCMSの公式サイト</a>では無償のテーマが公開されています。')?></li>
 		<?php else: ?>
 		<li class="no-data"><?php echo __d('baser', '変更できるテーマがありません。')?><br /><a href="https://market.basercms.net/" target="_blank"><?php echo __d('baser', 'baserマーケット</a>でテーマをダウンロードしましょう。')?></li>
 		<?php endif ?>

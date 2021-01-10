@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.View.Helper
  * @since			baserCMS v 3.0.6
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BcAppView', 'View');
@@ -132,7 +132,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		// カテゴリがない場合
 		$this->BcBaser->setTitle('会社案内');
 		$this->assertEquals("会社案内{$topTitle}", $this->BcBaser->getTitle());
-		
+
 		// カテゴリがある場合
 		$this->BcBaser->request = $this->_getRequest('/service/service2');
 		$this->BcBaser->_View->set('crumbs', [
@@ -170,7 +170,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->setPageEditLink(1);
 		$this->assertEquals(['admin' => true, 'controller' => 'pages', 'action' => 'edit', '0' => '1'], $this->_View->viewVars['editLink']);
 	}
-	
+
 /**
  * meta タグのキーワードを設定する
  *
@@ -732,7 +732,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testScripts() {
 		$themeConfigTag = '<link rel="stylesheet" type="text/css" href="/files/theme_configs/config.css" />';
-		
+
 		// CSS
 		$expected = "\n" . '<meta name="generator" content="basercms"/><link rel="stylesheet" type="text/css" href="/css/admin/layout.css"/>';
 		$this->BcBaser->css('admin/layout', ['inline' => false]);
@@ -742,9 +742,9 @@ class BcBaserHelperTest extends BaserTestCase {
 		$result = str_replace($themeConfigTag, '', $result);
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('css', '');
-		
+
 		Configure::write('BcApp.outputMetaGenerator', false);
-		
+
 		// Javascript
 		$expected = '<script type="text/javascript" src="/js/admin/startup.js"></script>';
 		$this->BcBaser->js('admin/startup', false);
@@ -754,7 +754,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$result = str_replace($themeConfigTag, '', $result);
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('script', '');
-		
+
 		// meta
 		$expected = '<meta name="description" content="説明文"/>';
 		App::uses('BcHtmlHelper', 'View/Helper');
@@ -766,7 +766,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$result = str_replace($themeConfigTag, '', $result);
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('meta', '');
-		
+
 		// ツールバー
 		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/toolbar.css"/>';
 		$this->BcBaser->set('user', ['User']);
@@ -1525,7 +1525,7 @@ class BcBaserHelperTest extends BaserTestCase {
 			[false, '/blog/blog/index'],
 		];
 	}
-	
+
 
 /**
  * 現在のページの純粋なURLを取得する
@@ -1727,7 +1727,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @dataProvider includeCoreDataProvider
  */
 	public function testIncludeCore($selectPlugin, $name, $data, $options, $expected, $message = null) {
-		
+
 		// テスト用プラグインフォルダ作成
 		if ($selectPlugin) {
 			$path1 = ROOT . '/lib/Baser/Plugin/Test/';
@@ -2061,11 +2061,11 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testGetSiteUrl() {
 
-		Configure::write('BcEnv.siteUrl', 'http://basercms.net/');
+		Configure::write('BcEnv.siteUrl', 'https://basercms.net/');
 		Configure::write('BcEnv.sslUrl', 'https://basercms.net/');
 
 		// http
-		$this->assertEquals('http://basercms.net/', $this->BcBaser->getSiteUrl());
+		$this->assertEquals('https://basercms.net/', $this->BcBaser->getSiteUrl());
 		//https
 		$this->assertEquals('https://basercms.net/', $this->BcBaser->getSiteUrl(true));
 	}

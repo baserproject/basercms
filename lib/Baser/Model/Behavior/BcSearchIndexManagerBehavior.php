@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model.Behavior
  * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -19,16 +19,16 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
 
 /**
  * SearchIndex Model
- * 
+ *
  * @var SearchIndex
  */
 	public $SearchIndex = null;
 
 /**
  * 検索インデクスデータを登録する
- * 
+ *
  * 検索インデクスデータを次のように作成して引き渡す
- * 
+ *
  * ['SearchIndex' => [
  * 		'type' => 'コンテンツのタイプ',
  * 		'model_id' => 'モデルでのID',
@@ -98,7 +98,7 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
 
 /**
  * コンテンツデータを削除する
- * 
+ *
  * @param Model $model
  * @param string $id
  */

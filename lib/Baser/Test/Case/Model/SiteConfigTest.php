@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Model
  * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('SiteConfig', 'Model');
 
@@ -15,13 +15,13 @@ App::uses('SiteConfig', 'Model');
  * SiteConfigTest class
  *
  * @property SiteConfig $SiteConfig
- * 
+ *
  * class NonAssosiationSiteConfig extends SiteConfig {
  *  public $name = 'SiteConfig';
  *  public $belongsTo = [];
  *  public $hasMany = [];
  * }
- * 
+ *
  * @package Baser.Test.Case.Model
  */
 class SiteConfigTest extends BaserTestCase {
@@ -123,7 +123,7 @@ class SiteConfigTest extends BaserTestCase {
 
 /**
  * コントロールソースを取得する
- * 
+ *
  * @param string $field フィールド名
  * @param array $expected 期待値
  * @param string $message テストが失敗した時に表示されるメッセージ
@@ -176,7 +176,7 @@ class SiteConfigTest extends BaserTestCase {
 
 /**
  * testIsChanged
- * 
+ *
  * @param string $field フィールド名
  * @param string $value 値
  * @param bool $expected 期待値
@@ -186,7 +186,7 @@ class SiteConfigTest extends BaserTestCase {
 		$result = $this->SiteConfig->isChange($field, $value);
 		$this->assertEquals($expected, $result);
 	}
-	
+
 	public function isChangeDataProvider() {
 		return [
 			['use_site_device_setting', "1", false],

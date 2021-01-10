@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -47,7 +47,7 @@ $(document).ready( function() {
 		} else if (this.id == 'checkdb'){
 			$("#buttonclicked").val('checkdb');
 		}
-		
+
 		if (this.id != 'btnback' &&
 			$('#InstallationDbType').val() != 'csv' &&
 			$('#InstallationDbType').val() != 'sqlite') {
@@ -75,9 +75,9 @@ $(document).ready( function() {
 			} else if ($("#InstallationDbPort").val() == "") {
 				alert(bcI18n.message8);
 				return false;
-			}			
+			}
 		}
-		
+
 		$('#dbsettings').submit();
 
 	});
@@ -126,7 +126,7 @@ $(document).ready( function() {
 			$('#dbUser').hide(500);
 			$('#dbInfo').hide(500);
 			$('#checkdb').hide();
-			
+
 			$('#btnnext').removeAttr("disabled");
 			$('#btnnext').show();
 			dbName = 'baser';
@@ -161,7 +161,7 @@ $(document).ready( function() {
 		if(!$('#InstallationDbPrefix').val()){
 			$('#InstallationDbPrefix').val(prefix);
 		}
-		
+
 	}
 </script>
 

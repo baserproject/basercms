@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.Model
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BlogAppModel', 'Blog.Model');
@@ -28,7 +28,7 @@ class BlogTag extends BlogAppModel {
 
 /**
  * ビヘイビア
- * 
+ *
  * @var array
  */
 	public $actsAs = ['BcCache'];
@@ -51,7 +51,7 @@ class BlogTag extends BlogAppModel {
 			'finderQuery' => '',
 			'deleteQuery' => ''
 	]];
-	
+
 /**
  * ファインダーメソッド
  *
@@ -74,11 +74,11 @@ class BlogTag extends BlogAppModel {
 				'duplicate' => ['rule' => ['duplicate', 'name'], 'message' => __d('baser', '既に登録のあるタグです。')]]
 		];
 	}
-	
+
 /**
  * カスタムパラメーター検索
  * ※ カスタムファインダーメソッド
- * 
+ *
  * @param string $state
  * @param array $query
  * @param array $results
@@ -165,9 +165,9 @@ class BlogTag extends BlogAppModel {
 
 /**
  * アクセス制限としてブログタグの新規追加ができるか確認する
- * 
+ *
  * Ajaxを利用する箇所にて BcBaserHelper::link() が利用できない場合に利用
- * 
+ *
  * @param int $userGroupId ユーザーグループID
  * @param int $blogContentId ブログコンテンツID
  */

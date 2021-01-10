@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('CacheHelper', 'View/Helper');
@@ -39,7 +39,7 @@ class BcCacheHelper extends CacheHelper {
 		} else {
 			$cacheTime = strtotime($timestamp, $now);
 		}
-		
+
 		// CUSTOMIZE 2014/08/11 ryuring
 		// $this->request->here で、URLを取得する際、URL末尾の 「index」の有無に関わらず
 		// 同一ファイルを参照すべきだが、別々のURLを出力してしまう為、
@@ -49,7 +49,7 @@ class BcCacheHelper extends CacheHelper {
 		// ---
 		$path = $this->request->normalizedHere();
 		// <<<
-		
+
 		if ($path === '/') {
 			$path = 'home';
 		}

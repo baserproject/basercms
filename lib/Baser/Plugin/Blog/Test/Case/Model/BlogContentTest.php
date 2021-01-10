@@ -1,20 +1,20 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Blog.Test.Case.Model
  * @since			baserCMS v 3.0.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('BlogContent', 'Blog.Model');
 
 /**
  * Class BlogContentTest
- * 
+ *
  * @property BlogContent $BlogContent
  */
 class BlogContentTest extends BaserTestCase {
@@ -105,7 +105,7 @@ class BlogContentTest extends BaserTestCase {
 
 		$this->assertArrayHasKey('list_count', $this->BlogContent->validationErrors);
 		$this->assertEquals('一覧表示件数は半角で入力してください。', current($this->BlogContent->validationErrors['list_count']));
-		
+
 		// eye_catch_sizeチェック
 		$this->BlogContent->create([
 			'BlogContent' => [
@@ -211,15 +211,15 @@ class BlogContentTest extends BaserTestCase {
 /**
  * afterSave
  *
- * @param mixed $id 
- * @param int $exclude_search 
+ * @param mixed $id
+ * @param int $exclude_search
  * @dataProvider afterSaveDataProvider
  */
 	public function testAfterSave($id, $exclude_search) {
 		$this->_loginAdmin();
 		$this->BlogContent->create([
 			'BlogContent' => [
-				'id' => $id,	
+				'id' => $id,
 				'description' => 'test-description',
 			],
 			'Content' => [
@@ -243,7 +243,7 @@ class BlogContentTest extends BaserTestCase {
 			]);
 			$this->assertEquals($result, 1, '検索用テーブルへ登録できません');
 			unset($BlogContent);
-		
+
 		} else {
 			$SearchIndex = ClassRegistry::init('SearchIndex');
 			$result = $SearchIndex->find('count', [

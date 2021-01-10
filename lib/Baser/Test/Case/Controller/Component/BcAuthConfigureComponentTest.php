@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Test.Case.Controller.Component
  * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 App::uses('BcAuthConfigureComponent', 'Controller/Component');
 App::uses('Controller', 'Controller');
@@ -35,35 +35,35 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 	];
 
 	public $components = ['BcAuthConfigure'];
-	
+
 	public function setUp() {
 		parent::setUp();
-		
+
 		// コンポーネントと偽のコントローラをセットアップする
 		$request = new CakeRequest();
 		$response = $this->getMock('CakeResponse');
 		$this->Controller = new BcAuthConfigureTestController($request, $response);
-		
+
 		$collection = new ComponentCollection();
 		$collection->init($this->Controller);
-		
+
 		$this->BcAuthConfigure = new BcAuthConfigureComponent($collection);
 		$this->BcAuthConfigure->request = $request;
 		$this->BcAuthConfigure->response = $response;
 
 		$this->Controller->Components->init($this->Controller);
-		
+
 		Router::reload();
 		Router::connect('/:controller/:action/*');
 
 	}
-	
+
 	public function tearDown() {
 		session_unset();
 		parent::tearDown();
 		unset($this->Controller);
 		unset($this->BcAuthConfigure);
-	
+
 	}
 
 /**
@@ -82,7 +82,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 		$this->Controller->BcAuthConfigure->initialize($this->Controller);
 		$result = $this->Controller->BcAuthConfigure->setting([1]);
 		$this->assertTrue($result, '初期化がされている場合にfalseが返ってきます');
-	
+
 	}
 
 /**
@@ -178,7 +178,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
  * @dataProvider settingCheckLoginModeDataProvider
  */
 	public function testSettingCheckLogin($password) {
-		
+
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		// 初期化
@@ -203,7 +203,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 		if ($password == 'basercms') {
 			$this->assertContains('basertest', $user, 'ログインでの認証が正しく行えません');
 			$this->assertEquals([1], $data, 'ログインでの認証が正しく行えません');
-		
+
 		} else {
 			$this->assertNull($user, 'ログインでの認証が正しく行えません');
 			$this->assertNull($data, 'ログインでの認証が正しく行えません');
@@ -226,7 +226,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
  * @dataProvider settingCheckDebugModeDataProvider
  */
 	public function testSettingCheckDebugMode($mode) {
-		
+
 		// 初期化
 		$this->Controller->Session->write('Message.auth', 'Message');
 		$this->Controller->methods = ['method1','method2'];
@@ -251,7 +251,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 				'message' => null,
 				'allowedActions' => ['method1','method2'],
 			];
-		
+
 		} else {
 			$expected = [
 				'message' => 'Message',
@@ -260,7 +260,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 		}
 
 		$this->assertEquals($expected, $result, 'インストールモードの場合のみに無条件に認証なしになりません');
-	
+
 	}
 
 	public function settingCheckDebugModeDataProvider() {

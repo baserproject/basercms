@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('Imageresizer', 'Vendor');
@@ -21,7 +21,7 @@ class ThemeConfig extends AppModel {
 
 /**
  * ビヘイビア
- * 
+ *
  * @var array
  */
 	public $actsAs = ['BcCache'];
@@ -47,7 +47,7 @@ class ThemeConfig extends AppModel {
 
 /**
  * 画像を保存する
- * 
+ *
  * @param array $data
  * @return array
  */
@@ -82,7 +82,7 @@ class ThemeConfig extends AppModel {
 
 /**
  * 画像を削除する
- * 
+ *
  * @param array $data
  */
 	public function deleteImage($data) {
@@ -104,12 +104,12 @@ class ThemeConfig extends AppModel {
 
 /**
  * テーマカラー設定を保存する
- * 
+ *
  * @param array $data
  * @return boolean
  */
 	public function updateColorConfig($data) {
-		
+
 		$configPath = getViewPath() . 'css' . DS . 'config.css';
 		if (!file_exists($configPath)) {
 			return false;
@@ -138,7 +138,7 @@ class ThemeConfig extends AppModel {
 			unlink($configPath);
 		}
 		return true;
-		
+
 	}
 
 }

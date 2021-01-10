@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Feed.Model
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::import('Vendor', 'Feed.SimplePie_Autoloader', true, array(), 'simplepie' . DS . 'autoloader.php');
@@ -19,22 +19,22 @@ App::uses('FeedAppModel', 'Feed.Model');
  * @package Feed.Model
  */
 class Feed extends FeedAppModel {
-	
+
 /**
  * useDbConfig
- * 
+ *
  * @var string
  */
 	public $useDbConfig = false;
-	
+
 /**
  * キャッシュフォルダー
- * 
+ *
  * @var string
  * @access	public
  */
 	public $cacheFolder = 'views';
-	
+
 /**
  * フィードを取得する
  *
@@ -45,7 +45,7 @@ class Feed extends FeedAppModel {
  * @return array RSSデータ
  */
 	public function getFeed($url, $limit = 10, $cacheExpires = null, $category = null) {
-		
+
 		// simplepie でフィードを取得する
 		$datas = $this->_getFeed($url, $cacheExpires);
 
@@ -57,7 +57,7 @@ class Feed extends FeedAppModel {
 		}
 
 		return $datas;
-		
+
 	}
 
 /**
@@ -68,7 +68,7 @@ class Feed extends FeedAppModel {
  * @return array $items
  */
 	public function _filteringCategory($items, $filterCategory = null) {
-		
+
 		if (!$items || !$filterCategory) {
 			return $items;
 		}
@@ -116,7 +116,7 @@ class Feed extends FeedAppModel {
  * @return array RSSデータ
  */
 	protected function _getFeed($url, $cacheExpires = null) {
-		
+
 		if (!$url) {
 			return false;
 		}
@@ -163,7 +163,7 @@ class Feed extends FeedAppModel {
 			return BcUtil::unserialize($rssData);
 		}
 	}
-	
+
 /**
  * SimplePieで取得したデータを表示用に整形する
  * 2009/09/09	ryuring
@@ -220,7 +220,7 @@ class Feed extends FeedAppModel {
 		}
 		return $feed;
 	}
-	
+
 /**
  * Creates a unique cache file path by combining all parameters given to a unique MD5 hash
  *
@@ -271,7 +271,7 @@ class Feed extends FeedAppModel {
 
 /**
  * ブログ記事のアイキャッチ画像のURLを取得する
- * 
+ *
  * @param Object $data
  * @return array
  */

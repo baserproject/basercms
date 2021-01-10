@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 /**
@@ -26,7 +26,7 @@ class BcCkeditorHelper extends AppHelper {
 /**
  * スクリプト
  * 既にjavascriptが読み込まれている場合はfalse
- * 
+ *
  * @var boolean
  */
 	protected $_script = false;
@@ -41,9 +41,9 @@ class BcCkeditorHelper extends AppHelper {
 
 /**
  * スタイル初期化判定
- * 
+ *
  * @var boolean
- * @access protected 
+ * @access protected
  */
 	protected $_initedStyles = false;
 
@@ -199,7 +199,7 @@ class BcCkeditorHelper extends AppHelper {
 			'editorToolbar' => [], // ツールバータイプ
 			'editorWidth' => '600px', // エディタサイズ
 			'editorHeight' => '300px', // エディタ高さ
-			'editorCollapser' => false, // 
+			'editorCollapser' => false, //
 			'editorBaseFloatZIndex' => 900, //
 			'editorStylesSet' => 'basercms', // スタイルセット
 			'editorUseDraft' => false, // 草稿利用
@@ -344,7 +344,7 @@ class BcCkeditorHelper extends AppHelper {
 		if ($theme) {
 			$sitePrefix = '';
 			if(!empty($this->request->data['Site']['name'])) {
-				$sitePrefix = $this->request->data['Site']['name'];	
+				$sitePrefix = $this->request->data['Site']['name'];
 			}
 			if ($sitePrefix) {
 				array_unshift($themeEditorCsses, [
@@ -397,7 +397,7 @@ class BcCkeditorHelper extends AppHelper {
     		$("#DraftMode{$fieldCamelize}").val('publish');
     	} else if(ev.data.name === 'changeDraft' || ev.data.name === 'copyDraft') {
     		$("#DraftMode{$fieldCamelize}").val('draft');
-    	}	
+    	}
     });
 EOL;
 			$jscode .= " });";
@@ -405,7 +405,7 @@ EOL;
 
 		$jscode .= "editor_{$field}.on('instanceReady', function(event) {";
 		$jscode .= "if(editor_{$field}.getCommand('maximize').uiItems.length > 0) {";
-		
+
 		// ツールバーの表示を切り替え
 		$jscode .= <<< EOL
 editor_{$field}.getCommand('maximize').on( 'state' , function( e )

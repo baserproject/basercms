@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
+ * @link			https://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @license			https://basercms.net/license/index.html
  */
 
 App::uses('Helper', 'View');
@@ -53,7 +53,7 @@ class BcAppHelper extends Helper {
 			return $file;
 		}
 		// <<<
-		
+
 		$asset = explode('?', $file);
 		$asset[1] = isset($asset[1]) ? '?' . $asset[1] : null;
 
@@ -128,7 +128,7 @@ class BcAppHelper extends Helper {
 						$webPath = "{$this->request->webroot}theme/" . $theme . $asset[0];
 					}
 				} else {
-					
+
 					// フロントのWebページを表示する際に、管理システム用のアセットファイルを参照する為のURLを生成する
 					if (property_exists($this->_View, 'adminTheme') && $this->_View->adminTheme) {
 						if (file_exists($themePath = Configure::read('App.www_root') . 'theme' . DS . $this->_View->adminTheme . DS . $file)) {
@@ -240,5 +240,5 @@ class BcAppHelper extends Helper {
 		// 半角スペースは除去した場合レイアウトが崩れる可能性がある為除去しない
 		$this->_View->output = preg_replace("/\n[\t]+?([^\t])/", "\n$1", $this->_View->output);
 	}
-	
+
 }
