@@ -90,7 +90,7 @@ class UsersController extends AppController {
 			/* 認証設定 */
 			// parent::beforeFilterの前に記述する必要あり
 			$this->BcAuth->allow(
-				'admin_login', 'admin_logout', 'admin_login_exec', 'admin_reset_password'
+				'admin_login', 'admin_logout', 'admin_login_exec', 'admin_reset_password', 'admin_send_activate_url'
 			);
 			if(isset($this->UserGroup)) {
 				$this->set('usePermission', $this->UserGroup->checkOtherAdmins());
@@ -99,7 +99,7 @@ class UsersController extends AppController {
 
 		parent::beforeFilter();
 
-		$this->BcReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password');
+		$this->BcReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password', 'send_activate_url');
 	}
 
 /**
@@ -585,13 +585,72 @@ class UsersController extends AppController {
 			$this->redirect(['controller' => 'dashboard', 'action' => 'index']);
 		}
 
-		$this->pageTitle = __d('baser', 'パスワードのリセット');
+		$this->pageTitle = __d('baser', 'パスワード再発行');
 		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 		if(strpos($userModel, '.') !== false) {
 			list(, $userModel) = explode('.', $userModel);
 		}
-		if (!$this->request->data) {
+		$activate_key = $this->request->query('key');
+		if (!$activate_key) {
+			$this->BcMessage->setError('無効なリセットURLです。');
+			$this->render('send_activate_url');
 			return;
+		}
+		$user = $this->{$userModel}->find(
+			'first', [
+				'conditions' => [$userModel.'.activate_key' => $activate_key]
+			]
+		);
+		if (!$user) {
+			$this->BcMessage->setError('無効なリセットURLです。');
+			$this->render('send_activate_url');
+			return;
+		}
+		if(strtotime(Hash::get($user, $userModel.'.activate_expire',0)) < env('REQUEST_TIME')) {
+			$this->BcMessage->setError('有効期限切れのリセットURLです。');
+			$this->render('send_activate_url');
+			return;
+		}
+		$new_password = $this->generatePassword();
+		$user[$userModel]['password'] = $new_password;
+		$user[$userModel]['activate_key'] = null;
+		$user[$userModel]['activate_expire'] = null;
+		$this->{$userModel}->set($user);
+		if (!$this->{$userModel}->save(null, ['validate' => false])) {
+			$this->BcMessage->setError('新しいパスワードをデータベースに保存できませんでした。');
+			$this->render('send_activate_url');
+			return;
+		}
+		$this->set('new_password', $new_password);
+		$this->BcAuth->login($user[$userModel]);
+		$this->_set_auth($this->BcAuth->user());
+	}
+	/**
+	 * パスワードリセットのためアクティベーション処理を行なう
+	 * アクティベーション画面のURLを指定したメールアドレス宛に送信する
+	 *
+	 * @return void
+	 */
+	public function admin_send_activate_url() {
+		if (empty($this->params['prefix']) && !Configure::read('BcAuthPrefix.front')) {
+			$this->notFound();
+		}
+		if($this->BcAuth->user()) {
+			$this->redirect(['controller' => 'dashboard', 'action' => 'index']);
+		}
+		$this->pageTitle = __d('baser', 'パスワードのリセット');
+
+		if (!$this->request->is('post')) {
+			return;
+		}
+		if ($this->request->data('User.email')) {
+			$this->render('sent_activate_url');
+			return;
+		}
+
+		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
+		if(strpos($userModel, '.') !== false) {
+			list(, $userModel) = explode('.', $userModel);
 		}
 
 		$email = $this->request->data($userModel . '.email') ?: '';
@@ -600,41 +659,65 @@ class UsersController extends AppController {
 			$this->BcMessage->setError('メールアドレスを入力してください。');
 			return;
 		}
-		$user = $this->{$userModel}->findByEmail($email);
-		if ($user) {
-			$email = $user[$userModel]['email'];
-		}
-		if (!$user || !$email) {
+		$find = $this->{$userModel}->find(
+			'all',
+			[
+				'conditions' => [
+					'email' => $email
+				]
+			]
+		);
+		if (!$find) {
 			$this->BcMessage->setError('送信されたメールアドレスは登録されていません。');
 			return;
 		}
-		$password = $this->generatePassword();
-		$user[$userModel]['password'] = $password;
-		$this->{$userModel}->set($user);
-
-		$dataSource = $this->{$userModel}->getDataSource();
-		$dataSource->begin();
-
-		if (!$this->{$userModel}->save(null, ['validate' => false])) {
-			$dataSource->roolback();
-			$this->BcMessage->setError('新しいパスワードをデータベースに保存できませんでした。');
+		$users = Hash::combine(
+			Hash::remove($find, '{n}.User.password'),
+			'{n}.User.id',
+			'{n}.User'
+		);
+		$data = [];
+		$activate_expire = date('Y-m-d H:i:s', strtotime('+1 hours'));
+		foreach ($users as $user_id=>$user) {
+			$activate_key = $this->easyHash(mt_rand().print_r($user, true)); // 一意性を確保
+			$data[] = [
+				'id'              => $user_id,
+				'activate_key'    => $activate_key,
+				'activate_expire' => $activate_expire
+			];
+			$users[$user_id]['activate_key'] = $activate_key;
+		}
+		$result = $this->{$userModel}->saveAll($data);
+		if (!$result) {
+			$this->BcMessage->setError('アクティベートメールを送信できませんでした。');
 			return;
 		}
 		$result = $this->sendMail(
 			$email,
-			__d('baser', 'パスワードを変更しました'),
-			['email'    => $email, 'password' => $password],
-			['template' => 'reset_password']
+			__d('baser', 'パスワード変更リクエストを受け付けました'),
+			[
+				'action_url' => Router::url(
+					[
+						'prefix'     => $this->params['prefix'],
+						'controller' => 'users',
+						'action'     => 'reset_password'
+					]
+					, true
+				),
+				'expire' => $activate_expire,
+				'email'  => $email,
+				'users'  => 1<count($users) ? $users : array_pop($users)
+			],
+			['template' => 1<count($users) ? 'send_activate_urls' : 'send_activate_url']
 		);
 		if (!$result) {
-			$dataSource->roolback();
 			$this->BcMessage->setError('メール送信時にエラーが発生しました。');
 			return;
 		}
 
-		$dataSource->commit();
-
-		$this->BcMessage->setSuccess($email . ' 宛に新しいパスワードを送信しました。');
+		$this->BcMessage->setSuccess(
+			$email . ' 宛てにパスワード再発行手順を送信しました。'
+		);
 		$this->request->data = [];
 	}
 }
