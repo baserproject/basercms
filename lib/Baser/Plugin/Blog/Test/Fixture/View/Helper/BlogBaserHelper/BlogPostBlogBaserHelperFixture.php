@@ -58,7 +58,7 @@ class BlogPostBlogBaserHelperFixture extends BaserTestFixture {
     [
       'id' => '3',
       'blog_content_id' => '1',
-      'no' => '1',
+      'no' => '3',
       'name' => 'name3',
       'content' => 'content3',
       'blog_category_id' => '3',

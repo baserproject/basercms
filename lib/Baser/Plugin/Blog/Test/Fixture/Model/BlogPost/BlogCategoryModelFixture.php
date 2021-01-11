@@ -48,7 +48,7 @@ class BlogCategoryModelFixture extends BaserTestFixture {
 		[
 			'id' => '3',
 			'blog_content_id' => '1',
-			'no' => '2',
+			'no' => '3',
 			'name' => 'child-no-parent',
 			'title' => '親子関係なしカテゴリ',
 			'status' => '1',
