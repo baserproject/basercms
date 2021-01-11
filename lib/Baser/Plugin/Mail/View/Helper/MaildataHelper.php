@@ -48,16 +48,6 @@ class MaildataHelper extends BcTextHelper {
  */
 	public function toDisplayString($type, $value) {
 		switch ($type) {
-			case 'text':
-			case 'tel':
-			case 'textarea':
-			case 'email':
-			case 'hidden':
-			case 'check':
-			case 'radio':
-			case 'select':
-				return $value;
-
 			case 'pref':
 				$prefs = $this->prefList();
 				$options = array();

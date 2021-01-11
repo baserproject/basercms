@@ -170,11 +170,11 @@ class MailHelper extends AppHelper {
  * @return boolean 設定されている場合 true を返す
  */
 	public function descriptionExists() {
-		if (!empty($this->mailContent['description'])) {
-			return true;
-		} else {
+		if (empty($this->mailContent['description'])) {
 			return false;
 		}
+
+		return true;
 	}
 
 /**
