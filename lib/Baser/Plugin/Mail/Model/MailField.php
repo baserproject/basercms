@@ -20,7 +20,7 @@ class MailField extends MailAppModel {
 
 /**
  * ビヘイビア
- * 
+ *
  * @var array
  */
 	public $actsAs = array('BcCache');
@@ -36,43 +36,118 @@ class MailField extends MailAppModel {
 		parent::__construct($id, $table, $ds);
 		$this->validate = [
 			'id' => [
-				['rule' => 'numeric', 'on' => 'update', 'message' => __d('baser', 'IDに不正な値が利用されています。')]],
+				[
+					'rule' => 'numeric',
+					'on' => 'update',
+					'message' => __d('baser', 'IDに不正な値が利用されています。')
+				]
+			],
 			'name' => [
-				['rule' => ['notBlank'], 'message' => __d('baser', '項目名を入力してください。')],
-				['rule' => ['maxLength', 255], 'message' => __d('baser', '項目名は255文字以内で入力してください。')]],
+				[
+					'rule' => ['notBlank'],
+					'message' => __d('baser', '項目名を入力してください。')
+				],
+				[
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', '項目名は255文字以内で入力してください。')
+				]
+			],
 			'field_name' => [
-				['rule' => ['halfTextMailField'], 'message' => __d('baser', 'フィールド名は半角英数字のみで入力してください。'), 'allowEmpty' => false],
-				['rule' => 'duplicateMailField', 'message' => __d('baser', '入力されたフィールド名は既に登録されています。')],
-				['rule' => ['maxLength', 255], 'message' => __d('baser', 'フィールド名は255文字以内で入力してください。')]],
+				[
+					'rule' => ['halfTextMailField'],
+					'message' => __d('baser', 'フィールド名は半角英数字のみで入力してください。'),
+					'allowEmpty' => false
+				],
+				[
+					'rule' => 'duplicateMailField',
+					'message' => __d('baser', '入力されたフィールド名は既に登録されています。')
+				],
+				[
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', 'フィールド名は255文字以内で入力してください。')
+				]
+			],
 			'type' => [
-				['rule' => ['notBlank'], 'message' => __d('baser', 'タイプを入力してください。')]],
+				[
+					'rule' => ['notBlank'],
+					'message' => __d('baser', 'タイプを入力してください。')
+				]
+			],
 			'head' => [
-				['rule' => ['maxLength', 255], 'message' => __d('baser', '項目見出しは255文字以内で入力してください。')]],
+				[
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', '項目見出しは255文字以内で入力してください。')
+				]
+			],
 			'attention' => [
-				['rule' => ['maxLength', 255], 'message' => __d('baser', '注意書きは255文字以内で入力してください。')]],
+				[
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', '注意書きは255文字以内で入力してください。')
+				]
+			],
 			'before_attachment' => [
-				['rule' => ['maxLength', 255], 'message' => __d('baser', '前見出しは255文字以内で入力してください。')]],
+				[
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', '前見出しは255文字以内で入力してください。')
+				]
+			],
 			'after_attachment' => [
-				['rule' => ['maxLength', 255], 'message' => __d('baser', '後見出しは255文字以内で入力してください。')]],
+				[
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', '後見出しは255文字以内で入力してください。')
+				]
+			],
 			'source' => [
-				['rule' => ['sourceMailField'], 'message' => __d('baser', '選択リストを入力してください。')]],
+				[
+					'rule' => ['sourceMailField'],
+					'message' => __d('baser', '選択リストを入力してください。')
+				]
+			],
 			'options' => [
-				['rule' => ['maxLength', 255], 'message' => __d('baser', 'オプションは255文字以内で入力してください。')]],
+				[
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', 'オプションは255文字以内で入力してください。')
+				]
+			],
 			'class' => [
-				['rule' => ['maxLength', 255], 'message' => __d('baser', 'クラス名は255文字以内で入力してください。')]],
+				[
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', 'クラス名は255文字以内で入力してください。')
+				]
+			],
 			'separator' => [
-				['rule' => ['maxLength', 20], 'message' => __d('baser', '区切り文字は20文字以内で入力してください。')]],
+				[
+					'rule' => ['maxLength', 20],
+					'message' => __d('baser', '区切り文字は20文字以内で入力してください。')
+				]
+			],
 			'default_value' => [
-				['rule' => ['maxLength', 255], 'message' => __d('baser', '初期値は255文字以内で入力してください。')]],
+				[
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', '初期値は255文字以内で入力してください。')
+				]
+			],
 			'description' => [
-				['rule' => ['maxLength', 255], 'message' => __d('baser', '説明文は255文字以内で入力してください。')]],
+				[
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', '説明文は255文字以内で入力してください。')
+				]
+			],
 			'group_field' => [
-				['rule' => ['maxLength', 255], 'message' => __d('baser', 'グループフィールドは255文字以内で入力してください。')]],
+				[
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', 'グループフィールドは255文字以内で入力してください。')
+				]
+			],
 			'group_valid' => [
-				['rule' => ['maxLength', 255], 'message' => __d('baser', 'グループ入力チェックは255文字以内で入力してください。')]]
+				[
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', 'グループ入力チェックは255文字以内で入力してください。')
+				]
+			]
 		];
 	}
-	
+
 /**
  * コントロールソースを取得する
  *
@@ -185,14 +260,25 @@ class MailField extends MailAppModel {
  * @return mixed UserGroup Or false
  */
 	public function copy($id, $data = array(), $options = array()) {
-		$options = array_merge(array(
-			'sortUpdateOff' => false,
-			), $options);
+		$options = array_merge(
+			array(
+				'sortUpdateOff' => false,
+			),
+			$options
+		);
 
 		extract($options);
 
 		if ($id) {
-			$data = $this->find('first', array('conditions' => array('MailField.id' => $id), 'recursive' => -1));
+			$data = $this->find(
+				'first',
+				[
+					'conditions' => [
+						'MailField.id' => $id
+					],
+					'recursive' => -1
+				]
+			);
 		}
 		$oldData = $data;
 
@@ -216,7 +302,12 @@ class MailField extends MailAppModel {
 			}
 		}
 
-		$data['MailField']['no'] = $this->getMax('no', array('MailField.mail_content_id' => $data['MailField']['mail_content_id'])) + 1;
+		$data['MailField']['no'] = $this->getMax(
+				'no',
+				array(
+					'MailField.mail_content_id' => $data['MailField']['mail_content_id']
+				)
+			) + 1;
 		if (!$sortUpdateOff) {
 			$data['MailField']['sort'] = $this->getMax('sort') + 1;
 		}
@@ -247,7 +338,7 @@ class MailField extends MailAppModel {
 			return false;
 		}
 	}
-	
+
 /**
  * 選択リストのソースを整形する
  * 空白と \r を除外し、改行で結合する
@@ -266,7 +357,7 @@ class MailField extends MailAppModel {
 	}
 
 /**
- * After Delete 
+ * After Delete
  */
 	public function afterDelete() {
 		parent::afterDelete();
@@ -277,7 +368,7 @@ class MailField extends MailAppModel {
 
 /**
  * After Save
- * 
+ *
  * @param bool $created
  * @param array $options
  */
