@@ -643,10 +643,6 @@ class UsersController extends AppController {
 		if (!$this->request->is('post')) {
 			return;
 		}
-		if ($this->request->data('User.email')) {
-			$this->render('sent_activate_url');
-			return;
-		}
 
 		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 		if(strpos($userModel, '.') !== false) {
@@ -718,6 +714,6 @@ class UsersController extends AppController {
 		$this->BcMessage->setSuccess(
 			$email . ' 宛てにパスワード再発行手順を送信しました。'
 		);
-		$this->request->data = [];
+		$this->render('sent_activate_url');
 	}
 }
