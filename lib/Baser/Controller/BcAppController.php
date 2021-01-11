@@ -1352,6 +1352,33 @@ class BcAppController extends Controller {
 	}
 
 /**
+ * 入力された文字列をハッシュ文字列に変換する
+ * md5()の結果を36進数化
+ * base_convert()一発で変換できないため桁ごとに変換
+ *
+ * @param string $seed 変換元の文字列
+ * @return string ハッシュ化された文字列
+ */
+	protected function easyHash($seed) {
+		$md5 = str_split(md5($seed));
+		$int = 0;
+		foreach ($md5 as $char) {
+			$int = bcadd(
+				bcmul($int, 16)
+				, base_convert($char, 16, 10)
+			);
+		}
+		$hash = '';
+		while (0 < $int) {
+			$r = (int) bcmod($int, 36);
+			$hash = base_convert($r, 10, 36) . $hash;
+			$int = bcdiv($int, 36, 0);
+		}
+		return $hash;
+	}
+
+
+/**
  * 認証完了後処理
  *
  * @param array $user 認証されたユーザー情報
