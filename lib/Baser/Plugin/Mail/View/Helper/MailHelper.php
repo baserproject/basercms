@@ -252,5 +252,18 @@ class MailHelper extends AppHelper {
 			$this->_View->BcForm->request->params['_Token']['unlockedFields'] = $this->_View->get('unlockedFields');
 		}
 	}
-
+	/**
+	 * 簡易テンプレート
+	 *
+	 * @return string
+	 */
+	public function formatText($text, $values=[], $left='{%', $right='%}') {
+		if(is_array($text)) {
+			$text = implode("\n", $text);
+		}
+		foreach ($values as $k=>$v) {
+			$text = str_replace($left.$k.$right, $v, $text);
+		}
+		return $text;
+	}
 }
