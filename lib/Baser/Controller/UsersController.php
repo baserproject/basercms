@@ -688,45 +688,24 @@ class UsersController extends AppController {
 			$this->BcMessage->setError('アクティベートメールを送信できませんでした。');
 			return;
 		}
-		if (1 < count($users)) {
-			$result = $this->sendMail(
-				$email,
-				__d('baser', 'パスワード変更リクエストを受け付けました'),
-				[
-					'action_url' => Router::url(
-						[
-							'prefix' => $this->params['prefix'],
-							'controller' => 'users',
-							'action' => 'reset_password'
-						]
-						, true
-					),
-					'expire' => $activate_expire,
-					'email' => $email,
-					'users' => $users
-				],
-				['template' => 'send_activate_urls']
-			);
-		} else {
-			$result = $this->sendMail(
-				$email,
-				__d('baser', 'パスワード変更リクエストを受け付けました'),
-				[
-					'action_url' => Router::url(
-						[
-							'prefix' => $this->params['prefix'],
-							'controller' => 'users',
-							'action' => 'reset_password'
-						]
-						, true
-					),
-					'expire' => $activate_expire,
-					'email' => $email,
-					'users' => array_pop($users)
-				],
-				['template' => 'send_activate_url']
-			);
-		}
+		$result = $this->sendMail(
+			$email,
+			__d('baser', 'パスワード変更リクエストを受け付けました'),
+			[
+				'action_url' => Router::url(
+					[
+						'prefix'     => $this->params['prefix'],
+						'controller' => 'users',
+						'action'     => 'reset_password'
+					]
+					, true
+				),
+				'expire' => $activate_expire,
+				'email'  => $email,
+				'users'  => 1<count($users) ? $users : array_pop($users)
+			],
+			['template' => 1<count($users) ? 'send_activate_urls' : 'send_activate_url']
+		);
 		if (!$result) {
 			$this->BcMessage->setError('メール送信時にエラーが発生しました。');
 			return;
