@@ -166,7 +166,7 @@ class MailMessagesController extends MailAppController {
  *
  * @param int $mailContentId
  * @param int $messageId
- * @return void
+ * @return bool
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -201,7 +201,7 @@ class MailMessagesController extends MailAppController {
  *
  * @param int $mailContentId
  * @param int $messageId
- * @return void
+ * @return bool
  */
 	protected function _del($id = null) {
 		if ($this->MailMessage->delete($id)) {

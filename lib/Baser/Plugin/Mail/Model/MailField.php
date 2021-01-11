@@ -232,8 +232,8 @@ class MailField extends MailAppModel {
 
 /**
  * 選択リストの入力チェック
- * 
- * @param type $check
+ *
+ * @param integer $check
  */
 	public function sourceMailField($check) {
 		switch ($this->data['MailField']['type']) {

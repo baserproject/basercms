@@ -517,8 +517,8 @@ class MailController extends MailAppController {
 
 /**
  * メール送信する
- * 
- * @return void
+ *
+ * @return false|void
  */
 	protected function _sendEmail($options) {
 		$options = array_merge(

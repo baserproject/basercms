@@ -379,7 +379,7 @@ class MailFieldsController extends MailAppController {
 /**
  * フォームの初期値を取得する
  *
- * @return string
+ * @return array
  */
 	protected function _getDefaultValue() {
 		$data['MailField']['type'] = 'text';
@@ -443,7 +443,7 @@ class MailFieldsController extends MailAppController {
  * 並び替えを更新する [AJAX]
  *
  * @param int $mailContentId
- * @return boolean
+ * @return bool|void
  * @access	public
  */
 	public function admin_ajax_update_sort($mailContentId) {
@@ -467,8 +467,8 @@ class MailFieldsController extends MailAppController {
 /**
  * 管理画面ページ一覧の検索条件を取得する
  *
- * @param array $mailContentId
- * @return string
+ * @param integer $mailContentId
+ * @return array
  */
 	protected function _createAdminIndexConditions($mailContentId) {
 		$conditions = array('MailField.mail_content_id' => $mailContentId);

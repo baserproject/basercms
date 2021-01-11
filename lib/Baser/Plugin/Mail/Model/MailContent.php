@@ -145,8 +145,8 @@ class MailContent extends MailAppModel {
 
 /**
  * SSL用のURLが設定されているかチェックする
- * 
- * @param string $check チェック対象文字列
+ *
+ * @param array $check チェック対象文字列
  * @return boolean
  */
 	public function checkSslUrl($check) {
@@ -165,7 +165,7 @@ class MailContent extends MailAppModel {
 /**
  * 英数チェック
  *
- * @param string $check チェック対象文字列
+ * @param array $check チェック対象文字列
  * @return boolean
  */
 	public function alphaNumeric($check) {
@@ -179,7 +179,7 @@ class MailContent extends MailAppModel {
 /**
  * フォームの初期値を取得する
  *
- * @return string
+ * @return array
  */
 	public function getDefaultValue() {
 		return [
@@ -201,7 +201,7 @@ class MailContent extends MailAppModel {
 /**
  * afterSave
  *
- * @return boolean
+ * @return void
  */
 	public function afterSave($created, $options = array()) {
 		// 検索用テーブルへの登録・削除

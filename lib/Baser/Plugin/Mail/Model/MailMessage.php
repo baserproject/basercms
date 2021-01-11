@@ -736,7 +736,7 @@ class MailMessage extends MailAppModel {
  *
  * @param string $contentName
  * @param string $field
- * @return array
+ * @return array|bool
  */
 	public function addMessageField($mailContentId, $field) {
 		$table = $this->createTableName($mailContentId);
@@ -750,7 +750,7 @@ class MailMessage extends MailAppModel {
  *
  * @param string $contentName
  * @param string $field
- * @return array
+ * @return array|bool
  */
 	public function delMessageField($mailContentId, $field) {
 		$table = $this->createTableName($mailContentId);
@@ -764,7 +764,7 @@ class MailMessage extends MailAppModel {
  * @param string $fieldName
  * @param string $oldFieldName
  * @param string $newfieldName
- * @return array
+ * @return array|bool
  */
 	public function renameMessageField($mailContentId, $oldFieldName, $newfieldName) {
 		$table = $this->createTableName($mailContentId);
