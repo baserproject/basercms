@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -36,15 +36,15 @@ $entryDates = $data['entryDates'];
 		<h2><?php echo $name ?></h2>
 	<?php endif ?>
 	<?php
-//本日の日付を取得する
+	//本日の日付を取得する
 	$time = time();
 
-//各日付をセットする
+	//各日付をセットする
 	$year = date("Y", $time);
 	$month = date("n", $time);
 	$day = date("j", $time);
 
-//GETにきた年月をチェックする
+	//GETにきた年月をチェックする
 	if (isset($this->params['pass']['0']) && $this->params['pass']['0'] == 'date') {
 		$year2 = h(@$this->params['pass']['1']);
 		$month2 = h(@$this->params['pass']['2']);
@@ -55,7 +55,7 @@ $entryDates = $data['entryDates'];
 		$day2 = '';
 	}
 
-//先月、来月をクリックした場合の処理
+	//先月、来月をクリックした場合の処理
 	if ($year2 != "" || $month2 != "" || $day2 != "") {
 		if ($year2 != "") {
 			$year = $year2;
@@ -76,17 +76,17 @@ $entryDates = $data['entryDates'];
 		$day = date("j", $time);
 	}
 
-//今月の日付の数
+	//今月の日付の数
 	$num = date("t", $time);
 
-//曜日を取得するために時間をセット
+	//曜日を取得するために時間をセット
 	$today = mktime(0, 0, 0, $month, $day, $year);
 
-//曜日の配列
+	//曜日の配列
 	$date = [__('日'), __('月'), __('火'), __('水'), __('木'), __('金'), __('土')];
 
-//カレンダーを表示する
-//先月の場合
+	//カレンダーを表示する
+	//先月の場合
 	if ($month == 1) {
 		$year3 = $year - 1;
 		$month3 = 12;
@@ -95,7 +95,7 @@ $entryDates = $data['entryDates'];
 		$month3 = $month - 1;
 	}
 
-//来月の場合
+	//来月の場合
 	if ($month == 12) {
 		$year4 = $year + 1;
 		$month4 = 1;
@@ -104,7 +104,7 @@ $entryDates = $data['entryDates'];
 		$month4 = $month + 1;
 	}
 
-//カレンダーを表示するHTML
+	//カレンダーを表示するHTML
 	print '<table class="blog-calendar"><tr><td colspan=7>';
 	print "<center>";
 	if ($data['prev']) {
@@ -129,8 +129,8 @@ $entryDates = $data['entryDates'];
 </tr>
 ';
 
-//カレンダーの日付を作る
-	for ($i = 1; $i <= $num; $i++) {
+	//カレンダーの日付を作る
+	for($i = 1; $i <= $num; $i++) {
 
 		//本日の曜日を取得する
 		$print_today = mktime(0, 0, 0, $month, $i, $year);
@@ -141,7 +141,7 @@ $entryDates = $data['entryDates'];
 		if ($i == 1) {
 			//一日目の曜日を提示するまでを繰り返し
 			print "<tr>";
-			for ($j = 1; $j <= $w; $j++) {
+			for($j = 1; $j <= $w; $j++) {
 				print "<td>&nbsp;</td>";
 			}
 
@@ -150,7 +150,7 @@ $entryDates = $data['entryDates'];
 			if ($w == 6) {
 				print "</tr>";
 			}
-		//一日目以降の場合
+			//一日目以降の場合
 		} else {
 			if ($w == 0) {
 				print "<tr>";
@@ -164,19 +164,20 @@ $entryDates = $data['entryDates'];
 	}
 	print "</table>";
 
-/**
- * 特定の日付の場合の処理
- */
-	function check($i, $w, $year, $month, $day, $entryDates, $BcBaser, $blogContent) {
+	/**
+	 * 特定の日付の場合の処理
+	 */
+	function check($i, $w, $year, $month, $day, $entryDates, $BcBaser, $blogContent)
+	{
 		if (in_array(date('Y-m-d', strtotime($year . '-' . $month . '-' . $i)), $entryDates)) {
 			if (date('Y-m-d') == date('Y-m-d', strtotime($year . '-' . $month . '-' . $i))) {
-				$change = '<td class="today">' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent['BlogContent']['id']) . 'archives/date/' . $year . '/' .  $month . '/' . $i, null, false) . '</td>';
+				$change = '<td class="today">' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent['BlogContent']['id']) . 'archives/date/' . $year . '/' . $month . '/' . $i, null, false) . '</td>';
 			} elseif ($w == 0) {
-				$change = '<td class="sunday">' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent['BlogContent']['id']) . 'archives/date/' . $year . '/' .  $month . '/' . $i, null, false) . '</td>';
+				$change = '<td class="sunday">' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent['BlogContent']['id']) . 'archives/date/' . $year . '/' . $month . '/' . $i, null, false) . '</td>';
 			} elseif ($w == 6) {
-				$change = '<td class="saturday">' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent['BlogContent']['id']) . 'archives/date/' . $year . '/' .  $month . '/' . $i, null, false) . '</td>';
+				$change = '<td class="saturday">' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent['BlogContent']['id']) . 'archives/date/' . $year . '/' . $month . '/' . $i, null, false) . '</td>';
 			} else {
-				$change = '<td>' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent['BlogContent']['id']) . 'archives/date/' . $year . '/' .  $month . '/' . $i, null, false) . '</td>';
+				$change = '<td>' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent['BlogContent']['id']) . 'archives/date/' . $year . '/' . $month . '/' . $i, null, false) . '</td>';
 			}
 		} else {
 			if (date('Y-m-d') == date('Y-m-d', strtotime($year . '-' . $month . '-' . $i))) {

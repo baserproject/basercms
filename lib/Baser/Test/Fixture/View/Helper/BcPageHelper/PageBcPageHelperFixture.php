@@ -1,21 +1,23 @@
 <?php
+
 /**
  * PageBcPageHelperFixture
  */
-class PageBcPageHelperFixture extends BaserTestFixture {
+class PageBcPageHelperFixture extends BaserTestFixture
+{
 
-/**
- * Name of the object
- *
- * @var string
- */
+	/**
+	 * Name of the object
+	 *
+	 * @var string
+	 */
 	public $name = 'Page';
 
-/**
- * Records
- *
- * @var array
- */
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => 1,

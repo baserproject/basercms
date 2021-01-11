@@ -3,18 +3,18 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Mail.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Mail.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
  * [PUBLISH] メールフォーム
  */
-$this->BcBaser->css('admin/jquery-ui/ui.all', array('inline' => true));
-$this->BcBaser->js(array('admin/vendors/jquery-ui-1.11.4.min', 'admin/vendors/i18n/ui.datepicker-ja'), false);
+$this->BcBaser->css('admin/jquery-ui/ui.all', ['inline' => true]);
+$this->BcBaser->js(['admin/vendors/jquery-ui-1.11.4.min', 'admin/vendors/i18n/ui.datepicker-ja'], false);
 ?>
 
 

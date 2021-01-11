@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -22,7 +22,9 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 
 <?php if ($this->action == 'admin_edit'): ?>
 	<div class="em-box align-left">
-		<p><strong><?php echo sprintf(__d('baser', 'このカテゴリのURL：%s'), $this->BcBaser->getLink($fullUrl, $fullUrl, ['target' => '_blank']))?></strong></p>
+		<p>
+			<strong><?php echo sprintf(__d('baser', 'このカテゴリのURL：%s'), $this->BcBaser->getLink($fullUrl, $fullUrl, ['target' => '_blank'])) ?></strong>
+		</p>
 	</div>
 <?php endif ?>
 
@@ -30,7 +32,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if ($this->action == 'admin_add'): ?>
 	<?php echo $this->BcForm->create('BlogCategory', ['url' => ['controller' => 'blog_categories', 'action' => 'add', $blogContent['BlogContent']['id']]]) ?>
-	<?php elseif ($this->action == 'admin_edit'): ?>
+<?php elseif ($this->action == 'admin_edit'): ?>
 	<?php echo $this->BcForm->create('BlogCategory', ['url' => ['controller' => 'blog_categories', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id'), 'id' => false]]) ?>
 <?php endif; ?>
 
@@ -51,21 +53,23 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 			</tr>
 		<?php endif; ?>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.name', __d('baser', 'カテゴリ名')) ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.name', __d('baser', 'カテゴリ名')) ?>
+				&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('BlogCategory.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
 				<?php echo $this->BcHtml->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<?php echo $this->BcForm->error('BlogCategory.name') ?>
 				<div id="helptextName" class="helptext">
 					<ul>
-						<li><?php echo __d('baser', 'URLに利用されます')?></li>
-						<li><?php echo __d('baser', '半角（半角英数字、ハイフン、アンダーバー）のみで入力してください')?></li>
+						<li><?php echo __d('baser', 'URLに利用されます') ?></li>
+						<li><?php echo __d('baser', '半角（半角英数字、ハイフン、アンダーバー）のみで入力してください') ?></li>
 					</ul>
 				</div>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.title', __d('baser', 'カテゴリタイトル')) ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.title', __d('baser', 'カテゴリタイトル')) ?>
+				&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('BlogCategory.title', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
 				<?php echo $this->BcForm->error('BlogCategory.title') ?>
@@ -81,7 +85,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 						'options' => $parents,
 						'escape' => true])
 					?>
-			<?php echo $this->BcForm->error('BlogCategory.parent_id') ?>
+					<?php echo $this->BcForm->error('BlogCategory.parent_id') ?>
 				</td>
 			</tr>
 		<?php else: ?>
@@ -106,7 +110,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 					<?php endif ?>
 					<div id="helptextOwnerId" class="helptext">
 						<ul>
-							<li><?php echo __d('baser', '管理グループを指定した場合、このカテゴリに属した記事は、管理グループのユーザーしか編集する事ができなくなります。')?></li>
+							<li><?php echo __d('baser', '管理グループを指定した場合、このカテゴリに属した記事は、管理グループのユーザーしか編集する事ができなくなります。') ?></li>
 						</ul>
 					</div>
 				</td>

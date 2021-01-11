@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View.Helper
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View.Helper
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('BcAppHelper', 'View/Helper');
@@ -20,5 +20,6 @@ App::uses('BcAppHelper', 'View/Helper');
  *
  * @package       app.View.Helper
  */
-class AppHelper extends BcAppHelper {
+class AppHelper extends BcAppHelper
+{
 }

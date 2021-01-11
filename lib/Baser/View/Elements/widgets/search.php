@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -21,7 +21,7 @@ if (Configure::read('BcRequest.isMaintenance')) {
 	return;
 }
 $siteId = 0;
-if(!empty($this->request->params['Site']['id'])) {
+if (!empty($this->request->params['Site']['id'])) {
 	$siteId = $this->request->params['Site']['id'];
 }
 if (!empty($this->passedArgs['num'])) {

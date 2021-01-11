@@ -3,49 +3,53 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.Model
- * @since			baserCMS v 4.0.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Model
+ * @since           baserCMS v 4.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
+ * Class SearchIndex
+ *
  * 検索インデックスモデル
  *
  * @package Baser.Model
  */
-class SearchIndex extends AppModel {
+class SearchIndex extends AppModel
+{
 
-/**
- * クラス名
- *
- * @var string
- */
+	/**
+	 * クラス名
+	 *
+	 * @var string
+	 */
 	public $name = 'SearchIndex';
 
-/**
- * ビヘイビア
- *
- * @var array
- */
+	/**
+	 * ビヘイビア
+	 *
+	 * @var array
+	 */
 	public $actsAs = ['BcCache'];
 
-/**
- * 検索インデックス再構築
- *
- * @param int $parentContentId 親となるコンテンツID
- * @return bool
- */
-	public function reconstruct($parentContentId = null) {
+	/**
+	 * 検索インデックス再構築
+	 *
+	 * @param int $parentContentId 親となるコンテンツID
+	 * @return bool
+	 */
+	public function reconstruct($parentContentId = null)
+	{
 		/* @var Content $contentModel */
 		$contentModel = ClassRegistry::init('Content');
 		$conditions = [
 			'OR' => [
 				['Site.status' => null],
 				['Site.status' => true]
-		]];
-		if($parentContentId) {
+			]];
+		if ($parentContentId) {
 			$parentContent = $contentModel->find('first', [
 				'fields' => ['lft', 'rght'],
 				'conditions' => ['id' => $parentContentId],
@@ -65,20 +69,20 @@ class SearchIndex extends AppModel {
 		$db = $this->getDataSource();
 		$this->begin();
 
-		if(!$parentContentId) {
+		if (!$parentContentId) {
 			$db->truncate('search_indices');
 		}
 
 		$result = true;
-		if($contents) {
+		if ($contents) {
 			foreach($contents as $content) {
-				if(isset($models[$content['Content']['type']])) {
+				if (isset($models[$content['Content']['type']])) {
 					$modelClass = $models[$content['Content']['type']];
 				} else {
-					if(ClassRegistry::isKeySet($content['Content']['type'])) {
+					if (ClassRegistry::isKeySet($content['Content']['type'])) {
 						$models[$content['Content']['type']] = $modelClass = ClassRegistry::getObject($content['Content']['type']);
 					} else {
-						if($content['Content']['plugin'] == 'Core') {
+						if ($content['Content']['plugin'] == 'Core') {
 							$modelName = $content['Content']['type'];
 						} else {
 							$modelName = $content['Content']['plugin'] . '.' . $content['Content']['type'];
@@ -87,12 +91,12 @@ class SearchIndex extends AppModel {
 					}
 				}
 				$entity = $modelClass->find('first', ['conditions' => [$modelClass->name . '.id' => $content['Content']['entity_id']], 'recursive' => 0]);
-				if(!$modelClass->save($entity, false)) {
+				if (!$modelClass->save($entity, false)) {
 					$result = false;
 				}
 			}
 		}
-		if($result) {
+		if ($result) {
 			$this->commit();
 		} else {
 			$this->roleback();
@@ -100,13 +104,14 @@ class SearchIndex extends AppModel {
 		return $result;
 	}
 
-/**
- * 公開状態確認
- *
- * @param array $data
- * @return bool
- */
-	public function allowPublish($data) {
+	/**
+	 * 公開状態確認
+	 *
+	 * @param array $data
+	 * @return bool
+	 */
+	public function allowPublish($data)
+	{
 		if (isset($data['SearchIndex'])) {
 			$data = $data['SearchIndex'];
 		}

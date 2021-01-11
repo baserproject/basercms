@@ -3,22 +3,23 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Controller.Component
- * @since			baserCMS v 3.0.0-beta
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.Controller.Component
+ * @since           baserCMS v 3.0.0-beta
+ * @license         https://basercms.net/license/index.html
  */
+
 App::uses('BcCaptchaComponent', 'Controller/Component');
 App::uses('Controller', 'Controller');
-
 
 /**
  * 偽コントローラ
  *
- * @package       Cake.Test.Case.Controller.Component
+ * @package Baser.Test.Case.Controller.Component
  */
-class BcCaptchaTestController extends Controller {
+class BcCaptchaTestController extends Controller
+{
 
 	public $components = ['BcCaptcha', 'Session'];
 
@@ -27,7 +28,8 @@ class BcCaptchaTestController extends Controller {
 /**
  * BcCaptchaComponentのテスト
  */
-class BcCaptchaComponentTest extends BaserTestCase {
+class BcCaptchaComponentTest extends BaserTestCase
+{
 
 	public $fixtures = [
 		'baser.Default.BlogCategory',
@@ -47,7 +49,8 @@ class BcCaptchaComponentTest extends BaserTestCase {
 
 	public $components = ['BcCaptcha'];
 
-	public function setUp() {
+	public function setUp()
+	{
 		parent::setUp();
 
 		// コンポーネントと偽のテストコントローラをセットアップする
@@ -67,26 +70,29 @@ class BcCaptchaComponentTest extends BaserTestCase {
 		Router::connect('/:controller/:action/*');
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		session_unset();
 		parent::tearDown();
 		unset($this->Controller);
 		unset($this->BcCaptcha);
 	}
 
-/**
- * キャプチャ画象を表示する
- *
- * @return void
- */
-	public function testRender() {
+	/**
+	 * キャプチャ画象を表示する
+	 *
+	 * @return void
+	 */
+	public function testRender()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * 認証を行う
- */
-	public function testCheck() {
+	/**
+	 * 認証を行う
+	 */
+	public function testCheck()
+	{
 
 		// 初期化
 		$this->BcCaptcha->startup($this->Controller);
@@ -103,10 +109,11 @@ class BcCaptchaComponentTest extends BaserTestCase {
 
 	}
 
-/**
- * kcaptchaで定義されたアルファベットを $convert に定義された任意の文字列に変換する
- */
-	public function testConvert() {
+	/**
+	 * kcaptchaで定義されたアルファベットを $convert に定義された任意の文字列に変換する
+	 */
+	public function testConvert()
+	{
 
 		// 正常系
 		$this->BcCaptcha->alphabet = 'wonderful';
@@ -124,13 +131,14 @@ class BcCaptchaComponentTest extends BaserTestCase {
 
 	}
 
-/**
- * 文字列を１文字づつ分割して配列にする
- */
-	public function testStrSplit() {
+	/**
+	 * 文字列を１文字づつ分割して配列にする
+	 */
+	public function testStrSplit()
+	{
 
 		$result = $this->BcCaptcha->strSplit('aiueo');
-		$expected = ['a','i','u','e','o'];
+		$expected = ['a', 'i', 'u', 'e', 'o'];
 		$this->assertEquals($expected, $result, '文字列を１文字づつ分割して配列にする処理が正しくありません');
 
 	}

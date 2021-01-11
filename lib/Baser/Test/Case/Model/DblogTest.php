@@ -3,16 +3,16 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Model
- * @since			baserCMS v 3.0.0-beta
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.Model
+ * @since           baserCMS v 3.0.0-beta
+ * @license         https://basercms.net/license/index.html
  */
 App::uses('Dblog', 'Model');
 
 /**
- * DblogTest class
+ * Class DblogTest
  *
  * class NonAssosiationDblog extends Dblog {
  *  public $name = 'Dblog';
@@ -22,26 +22,30 @@ App::uses('Dblog', 'Model');
  *
  * @package Baser.Test.Case.Model
  */
-class DblogTest extends BaserTestCase {
+class DblogTest extends BaserTestCase
+{
 
 	public $fixtures = [
 		'baser.Default.Dblog',
 	];
 
-	public function setUp() {
+	public function setUp()
+	{
 		parent::setUp();
 		$this->Dblog = ClassRegistry::init('Dblog');
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		unset($this->Dblog);
 		parent::tearDown();
 	}
 
 	/**
- * validate
- */
-	public function test空白チェック() {
+	 * validate
+	 */
+	public function test空白チェック()
+	{
 		$this->Dblog->create([
 			'Dblog' => [
 				'name' => '',

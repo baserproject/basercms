@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 2.0.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 2.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -46,7 +46,8 @@ $this->BcBaser->js('admin/users/login', false);
 			<?php echo $this->BcForm->submit(__d('baser', 'ログイン'), ['div' => false, 'class' => 'btn-red button', 'id' => 'BtnLogin', 'tabindex' => 4]) ?>
 		</div>
 		<div class="clear login-etc">
-			<?php echo $this->BcForm->input($userModel . '.saved', ['type' => 'checkbox', 'label' => __d('baser', 'ログイン状態を保存する'), 'tabindex' => 3]) ?>　
+			<?php echo $this->BcForm->input($userModel . '.saved', ['type' => 'checkbox', 'label' => __d('baser', 'ログイン状態を保存する'), 'tabindex' => 3]) ?>
+			　
 			<?php if ($currentPrefix == 'front'): ?>
 				<?php $this->BcBaser->link(__d('baser', 'パスワードを忘れた場合はこちら'), ['action' => 'reset_password'], ['rel' => 'popup']) ?>
 			<?php else: ?>

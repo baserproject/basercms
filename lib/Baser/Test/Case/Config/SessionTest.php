@@ -3,67 +3,70 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Config
- * @since			baserCMS v 3.0.9
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.Config
+ * @since           baserCMS v 3.0.9
+ * @license         https://basercms.net/license/index.html
  */
-
 
 App::uses('Datasource/CakeSession', 'Model');
 
 /**
- * Test class for session.php
+ * Class SessionTest
  *
  * @package Baser.Test.Case.Config
- *
  */
-class SessionTest extends BaserTestCase {
+class SessionTest extends BaserTestCase
+{
 
-/**
- * __construct
- *
- * @param string $name
- * @param array $data
- * @param string $dataName
- */
-	public function __construct($name = null, $data = [], $dataName = '') {
+	/**
+	 * __construct
+	 *
+	 * @param string $name
+	 * @param array $data
+	 * @param string $dataName
+	 */
+	public function __construct($name = null, $data = [], $dataName = '')
+	{
 		parent::__construct($name, $data, $dataName);
 	}
 
-/**
- * Set up
- *
- * @return void
- */
-	public function setUp() {
+	/**
+	 * Set up
+	 *
+	 * @return void
+	 */
+	public function setUp()
+	{
 		parent::setUp();
 	}
 
-/**
- * Tear down
- *
- * @return void
- */
-	public function tearDown() {
+	/**
+	 * Tear down
+	 *
+	 * @return void
+	 */
+	public function tearDown()
+	{
 		parent::tearDown();
 	}
 
-/**
- * モバイルagentによるSession設定テスト
- * モバイルのUSER_AGENTの場合のみcookieの利用をoff/use_trans_sidを1としURLにSESSION_IDを付帯する
- *
- * @param int $expects 予測値
- * @param string $agent USER_AGENT
- * @return void
- *
- * @dataProvider sessionConfigureMobileDataProvider
- * @todo PHP 7.1 よりセッションの仕様が変わり、破棄したセッションを session_id() で再開できなくなった
- * session_start() を行う場合、コンソール出力が事前に発生する為、エラーとなってしまう。
- * テスト方法の検討が必要
- */
-	public function testSessionConfigureMobile($expects, $agent) {
+	/**
+	 * モバイルagentによるSession設定テスト
+	 * モバイルのUSER_AGENTの場合のみcookieの利用をoff/use_trans_sidを1としURLにSESSION_IDを付帯する
+	 *
+	 * @param int $expects 予測値
+	 * @param string $agent USER_AGENT
+	 * @return void
+	 *
+	 * @dataProvider sessionConfigureMobileDataProvider
+	 * @todo PHP 7.1 よりセッションの仕様が変わり、破棄したセッションを session_id() で再開できなくなった
+	 * session_start() を行う場合、コンソール出力が事前に発生する為、エラーとなってしまう。
+	 * テスト方法の検討が必要
+	 */
+	public function testSessionConfigureMobile($expects, $agent)
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		CakeSession::destroy();
 
@@ -77,12 +80,14 @@ class SessionTest extends BaserTestCase {
 
 		$this->assertEquals($expects, [intval(ini_get('session.use_cookies')), intval(ini_get('session.use_trans_sid'))]);
 	}
-/**
- * Session設定用データプロバイダ
- *
- * @return array
- */
-	public function sessionConfigureMobileDataProvider(){
+
+	/**
+	 * Session設定用データプロバイダ
+	 *
+	 * @return array
+	 */
+	public function sessionConfigureMobileDataProvider()
+	{
 		return [
 			/* iPhone / iOS6 */
 			[[1, 1], 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A403 Safari/8536.25'],
@@ -109,20 +114,21 @@ class SessionTest extends BaserTestCase {
 	}
 
 
-/**
- * HTTPSによるSession設定テスト
- *
- * @param int $expects 予測値
- * @param string $siteUrl BcEnv.siteUrlの値
- * @param string $sslUrl BcEnv.sslUrlの値
- * @return void
- *
- * @dataProvider sessionConfigureUrlDataProvider
- * @todo PHP 7.1 よりセッションの仕様が変わり、破棄したセッションを session_id() で再開できなくなった
- * session_start() を行う場合、コンソール出力が事前に発生する為、エラーとなってしまう。
- * テスト方法の検討が必要
- */
-	public function testSessionConfigureUrl($expects, $siteUrl, $sslUrl) {
+	/**
+	 * HTTPSによるSession設定テスト
+	 *
+	 * @param int $expects 予測値
+	 * @param string $siteUrl BcEnv.siteUrlの値
+	 * @param string $sslUrl BcEnv.sslUrlの値
+	 * @return void
+	 *
+	 * @dataProvider sessionConfigureUrlDataProvider
+	 * @todo PHP 7.1 よりセッションの仕様が変わり、破棄したセッションを session_id() で再開できなくなった
+	 * session_start() を行う場合、コンソール出力が事前に発生する為、エラーとなってしまう。
+	 * テスト方法の検討が必要
+	 */
+	public function testSessionConfigureUrl($expects, $siteUrl, $sslUrl)
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		CakeSession::destroy();
 		ini_set('session.cookie_secure', 0);
@@ -135,12 +141,13 @@ class SessionTest extends BaserTestCase {
 		$this->assertEquals($expects, intval(ini_get('session.cookie_secure')));
 	}
 
-/**
- * Session設定用データプロバイダ
- *
- * @return array
- */
-	public function sessionConfigureUrlDataProvider() {
+	/**
+	 * Session設定用データプロバイダ
+	 *
+	 * @return array
+	 */
+	public function sessionConfigureUrlDataProvider()
+	{
 		return [
 			[0, 'https://basercms.net/', ''],
 			[0, 'https://basercms.net/', 'https://basercms.net/'],

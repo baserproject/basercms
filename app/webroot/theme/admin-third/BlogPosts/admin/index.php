@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package            Blog.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -28,14 +28,17 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 
 
 <script type="text/javascript">
-$(document).ready(function(){
-	$.baserAjaxDataList.init();
-	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
-});
+	$(document).ready(function () {
+		$.baserAjaxDataList.init();
+		$.baserAjaxBatch.init({url: $("#AjaxBatchUrl").html()});
+	});
 </script>
 
 
-<div id="AjaxBatchUrl" hidden><?php $this->BcBaser->url(['controller' => 'blog_posts', 'action' => 'ajax_batch']) ?></div>
+<div id="AjaxBatchUrl"
+	 hidden><?php $this->BcBaser->url(['controller' => 'blog_posts', 'action' => 'ajax_batch']) ?></div>
 <div id="AlertMessage" class="message" hidden></div>
-<div id="MessageBox" hidden><div id="flashMessage" class="notice-message"></div></div>
+<div id="MessageBox" hidden>
+	<div id="flashMessage" class="notice-message"></div>
+</div>
 <div id="DataList" class="bca-data-list"><?php $this->BcBaser->element('blog_posts/index_list') ?></div>

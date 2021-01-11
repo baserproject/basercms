@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Feed.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Feed.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -30,6 +30,6 @@
 	<td><?php $this->BcBaser->link($data['FeedConfig']['name'], ['action' => 'edit', $data['FeedConfig']['id']], ['escape' => true]) ?></td>
 	<td><?php echo $data['FeedConfig']['display_number'] ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
-	<td><?php echo $this->BcTime->format('Y-m-d', $data['FeedConfig']['created']); ?><br />
+	<td><?php echo $this->BcTime->format('Y-m-d', $data['FeedConfig']['created']); ?><br/>
 		<?php echo $this->BcTime->format('Y-m-d', $data['FeedConfig']['modified']); ?></td>
 </tr>

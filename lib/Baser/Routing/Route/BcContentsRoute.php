@@ -3,79 +3,81 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.Routing.Filter
- * @since			baserCMS v 4.0.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Routing.Filter
+ * @since           baserCMS v 4.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('CakeRoute', 'Routing/Route');
 App::uses('BcSite', 'Lib');
 
 /**
- * BcContentsRoute
+ * Class BcContentsRoute
  *
  * @package Baser.Routing.Route
  */
-class BcContentsRoute extends CakeRoute {
+class BcContentsRoute extends CakeRoute
+{
 
-/**
- * Parses a string URL into an array. If a plugin key is found, it will be copied to the
- * controller parameter
- *
- * @param string $url The URL to parse
- * @return mixed false on failure, or an array of request parameters
- */
-	public function parse($url) {
-		if(is_array($url)) {
+	/**
+	 * Parses a string URL into an array. If a plugin key is found, it will be copied to the
+	 * controller parameter
+	 *
+	 * @param string $url The URL to parse
+	 * @return mixed false on failure, or an array of request parameters
+	 */
+	public function parse($url)
+	{
+		if (is_array($url)) {
 			return false;
 		}
 
-		if(BcUtil::isAdminSystem($url)) {
+		if (BcUtil::isAdminSystem($url)) {
 			return false;
 		}
 
 		$request = Router::getRequest(true);
-		if(!$request) {
+		if (!$request) {
 			return false;
 		}
 
 		//管理システムにログインしているかつプレビューの場合は公開状態のステータスは無視する
 		$publish = true;
-		if((!empty($request->query['preview']) || !empty($request->query['force'])) && BcUtil::loginUser()) {
+		if ((!empty($request->query['preview']) || !empty($request->query['force'])) && BcUtil::loginUser()) {
 			$publish = false;
-			if(!empty($request->query['host'])) {
+			if (!empty($request->query['host'])) {
 				Configure::write('BcEnv.host', $request->query['host']);
 			} else {
-				 Configure::write('BcEnv.host', '');
+				Configure::write('BcEnv.host', '');
 			}
 		}
 
 		$sameUrl = false;
 		$site = BcSite::findCurrentSub(true);
-		if($site) {
+		if ($site) {
 			// 同一URL対応
 			$sameUrl = true;
 			$checkUrl = $site->makeUrl($request);
 			@header('Vary: User-Agent');
 		} else {
 			$site = BcSite::findCurrent(true);
-			if(!is_null($site->name)) {
-				if($site->useSubDomain) {
+			if (!is_null($site->name)) {
+				if ($site->useSubDomain) {
 					$checkUrl = '/' . $site->alias . (($url)? $url : '/');
 				} else {
 					$checkUrl = (($url)? $url : '/');
 				}
 			} else {
-				if(!empty($request->query['force']) && BcUtil::isAdminUser()) {
+				if (!empty($request->query['force']) && BcUtil::isAdminUser()) {
 					// =================================================================================================
 					// 2016/11/10 ryuring
 					// 別ドメインの際に、固定ページのプレビューで、正しくサイト情報を取得できない。
 					// そのため、文字列でリクエストアクションを送信し、URLでホストを判定する。
 					// =================================================================================================
 					$tmpSite = BcSite::findByUrl($url);
-					if(!is_null($tmpSite)) {
+					if (!is_null($tmpSite)) {
 						$site = $tmpSite;
 					}
 				}
@@ -85,7 +87,7 @@ class BcContentsRoute extends CakeRoute {
 
 		$Content = ClassRegistry::init('Content');
 		$content = $Content->findByUrl($checkUrl, $publish, false, $sameUrl, $site->useSubDomain);
-		if(!$content) {
+		if (!$content) {
 			$content = $Content->findByUrl($checkUrl, $publish, true, $sameUrl, $site->useSubDomain);
 		}
 
@@ -97,37 +99,38 @@ class BcContentsRoute extends CakeRoute {
 		$redirect = Configure::read('BcAuthPrefix.admin.previewRedirect');
 		if ($redirect) {
 			// データが存在してもプレビューで管理システムにログインしていない場合はログイン画面に遷移
-			if((!empty($request->query['preview']) || !empty($request->query['force'])) && !BcUtil::loginUser()) {
+			if ((!empty($request->query['preview']) || !empty($request->query['force'])) && !BcUtil::loginUser()) {
 				$_SESSION['Auth']['redirect'] = $_SERVER['REQUEST_URI'];
 				header('Location: ' . topLevelUrl(false) . baseUrl() . Configure::read('BcAuthPrefix.admin.alias') . '/users/login');
 				exit();
 			}
 		}
 
-		if($content['Content']['alias_id'] && !$Content->isPublishById($content['Content']['alias_id'])) {
+		if ($content['Content']['alias_id'] && !$Content->isPublishById($content['Content']['alias_id'])) {
 			return false;
 		}
 		$request->params['Content'] = isset($content['Content'])? $content['Content'] : null;
 		$request->params['Site'] = $content['Site'];
 		$url = $site->getPureUrl($url);
 		$params = $this->getParams($url, $content['Content']['url'], $content['Content']['plugin'], $content['Content']['type'], $content['Content']['entity_id'], $site->alias);
-		if($params) {
+		if ($params) {
 			return $params;
 		}
 		return false;
 	}
 
-/**
- * コンテンツに関連するパラメーター情報を取得する
- *
- * @param $requestUrl
- * @param $entryUrl
- * @param $plugin
- * @param $type
- * @param $entityId
- * @return mixed false|array
- */
-	public function getParams($requestUrl, $entryUrl, $plugin, $type, $entityId, $alias) {
+	/**
+	 * コンテンツに関連するパラメーター情報を取得する
+	 *
+	 * @param $requestUrl
+	 * @param $entryUrl
+	 * @param $plugin
+	 * @param $type
+	 * @param $entityId
+	 * @return mixed false|array
+	 */
+	public function getParams($requestUrl, $entryUrl, $plugin, $type, $entityId, $alias)
+	{
 		$viewParams = Configure::read('BcContents.items.' . $plugin . '.' . $type . '.routes.view');
 		if (!$viewParams) {
 			$viewParams = Configure::read('BcContents.items.Core.Default.routes.view');
@@ -142,13 +145,13 @@ class BcContentsRoute extends CakeRoute {
 			$action = $viewParams['action'];
 			// 別ドメインの場合は１階層目を除外
 			$pureEntryUrl = $entryUrl;
-			if($alias) {
+			if ($alias) {
 				$pureEntryUrl = preg_replace('/^\/' . preg_quote($alias, '/') . '\//', '/', $pureEntryUrl);
 			}
-			if($type == 'Page' || $type == 'ContentLink') {
+			if ($type == 'Page' || $type == 'ContentLink') {
 				$url = preg_replace('/^\//', '', $entryUrl);
 				$pass = explode('/', $url);
-			} elseif($requestUrl != $pureEntryUrl) {
+			} elseif ($requestUrl != $pureEntryUrl) {
 				// コントローラーとなり得る部分までの文字列を除外してアクションを取得
 				$url = preg_replace('/^' . preg_quote($pureEntryUrl, '/') . '/', '', $requestUrl);
 				$url = preg_replace('/^\//', '', $url);
@@ -157,9 +160,9 @@ class BcContentsRoute extends CakeRoute {
 				// アクション部分を除外
 				array_shift($urlAry);
 				// パラメーターを取得（pass / named）
-				if($urlAry) {
+				if ($urlAry) {
 					foreach($urlAry as $param) {
-						if(strpos($param, ':') !== false) {
+						if (strpos($param, ':') !== false) {
 							list($key, $value) = explode(':', $param);
 							$named[$key] = $value;
 						} else {
@@ -168,13 +171,13 @@ class BcContentsRoute extends CakeRoute {
 					}
 				}
 			}
-			if($plugin == 'Core') {
+			if ($plugin == 'Core') {
 				$plugin = '';
 			}
 			$controllerClass = Inflector::camelize($viewParams['controller']) . 'Controller';
 			App::uses($controllerClass, ($plugin)? $plugin . '.Controller' : 'Controller');
 			$methods = get_class_methods($controllerClass);
-			if(!in_array($action, $methods)) {
+			if (!in_array($action, $methods)) {
 				return false;
 			}
 			$params = [
@@ -189,28 +192,29 @@ class BcContentsRoute extends CakeRoute {
 		return $params;
 	}
 
-/**
- * Reverse route
- *
- * @param array $url Array of parameters to convert to a string.
- * @return mixed either false or a string URL.
- */
-	public function match($url) {
+	/**
+	 * Reverse route
+	 *
+	 * @param array $url Array of parameters to convert to a string.
+	 * @return mixed either false or a string URL.
+	 */
+	public function match($url)
+	{
 
 		// フロント以外のURLの場合にマッチしない
-		if(!empty($url['admin'])) {
+		if (!empty($url['admin'])) {
 			return false;
 		}
 
 		// プラグイン確定
-		if(empty($url['plugin'])) {
+		if (empty($url['plugin'])) {
 			$plugin = 'Core';
 		} else {
 			$plugin = Inflector::camelize($url['plugin']);
 		}
 
 		// アクション確定
-		if(!empty($url['action'])) {
+		if (!empty($url['action'])) {
 			$action = $url['action'];
 		} else {
 			$action = 'index';
@@ -224,34 +228,34 @@ class BcContentsRoute extends CakeRoute {
 
 		// コンテンツタイプ確定、できなければスルー
 		$type = $this->_getContentTypeByParams($url);
-		if($type) {
+		if ($type) {
 			unset($params['action']);
 		} else {
 			$type = $this->_getContentTypeByParams($url, false);
 		}
-		if(!$type) {
+		if (!$type) {
 			return false;
 		}
 
 		// エンティティID確定
 		$entityId = $contentId = null;
-		if(isset($url['entityId'])) {
+		if (isset($url['entityId'])) {
 			$entityId = $url['entityId'];
 		} else {
 			$request = Router::getRequest(true);
-			if(!empty($request->params['entityId'])) {
+			if (!empty($request->params['entityId'])) {
 				$entityId = $request->params['entityId'];
 			}
-			if(!empty($request->params['Content']['alias_id'])) {
+			if (!empty($request->params['Content']['alias_id'])) {
 				$contentId = $request->params['Content']['id'];
 			}
 		}
 
 		// コンテンツ確定、できなければスルー
-		if($type == 'Page') {
+		if ($type == 'Page') {
 			$pass = [];
 			foreach($params as $key => $param) {
-				if(!is_string($key)) {
+				if (!is_string($key)) {
 					$pass[] = $param;
 					unset($params[$key]);
 				}
@@ -259,7 +263,7 @@ class BcContentsRoute extends CakeRoute {
 			$strUrl = '/' . implode('/', $pass);
 		} else {
 			$Content = ClassRegistry::init('Content');
-			if($contentId) {
+			if ($contentId) {
 				$conditions = ['Content.id' => $contentId];
 			} else {
 				$conditions = [
@@ -271,32 +275,32 @@ class BcContentsRoute extends CakeRoute {
 			$strUrl = $Content->field('url', $conditions);
 		}
 
-		if(!$strUrl) {
+		if (!$strUrl) {
 			return false;
 		}
 
 		// URL生成
 		$site = BcSite::findByUrl($strUrl);
-		if($site && $site->useSubDomain) {
+		if ($site && $site->useSubDomain) {
 			$strUrl = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/', $strUrl);
 		}
 		$pass = [];
 		$named = [];
 		$setting = Configure::read('BcContents.items.' . $plugin . '.' . $type);
-		if(!$params) {
-			if(empty($setting['omitViewAction']) && $setting['routes']['view']['action'] != $action) {
+		if (!$params) {
+			if (empty($setting['omitViewAction']) && $setting['routes']['view']['action'] != $action) {
 				$strUrl .= '/' . $action;
 			}
 		} else {
-			if(empty($setting['omitViewAction'])) {
+			if (empty($setting['omitViewAction'])) {
 				$strUrl .= '/' . $action;
 			}
 			foreach($params as $key => $param) {
-				if(!is_numeric($key)) {
-					if($key == 'page' && !$param) {
+				if (!is_numeric($key)) {
+					if ($key == 'page' && !$param) {
 						$param = 1;
 					}
-					if(!is_array($param)) {
+					if (!is_array($param)) {
 						$named[] = $key . ':' . $param;
 					}
 				} else {
@@ -304,43 +308,44 @@ class BcContentsRoute extends CakeRoute {
 				}
 			}
 		}
-		if($pass) {
+		if ($pass) {
 			$strUrl .= '/' . implode('/', $pass);
 		}
-		if($named) {
+		if ($named) {
 			$strUrl .= '/' . implode('/', $named);
 		}
 		return $strUrl;
 	}
 
-/**
- * パラメーターよりコンテンツタイプを取得する
- *
- * @param array $params パラメーター
- * @param bool $useAction アクションを判定に入れるかどうか
- * @return bool|string
- */
-	protected function _getContentTypeByParams($params, $useAction = true) {
-		if(empty($params['plugin'])) {
+	/**
+	 * パラメーターよりコンテンツタイプを取得する
+	 *
+	 * @param array $params パラメーター
+	 * @param bool $useAction アクションを判定に入れるかどうか
+	 * @return bool|string
+	 */
+	protected function _getContentTypeByParams($params, $useAction = true)
+	{
+		if (empty($params['plugin'])) {
 			$plugin = 'Core';
 		} else {
 			$plugin = Inflector::camelize($params['plugin']);
 		}
 		$settings = Configure::read('BcContents.items.' . $plugin);
-		if(!$settings) {
+		if (!$settings) {
 			return false;
 		}
 		foreach($settings as $key => $setting) {
-			if(empty($setting['routes']['view'])) {
+			if (empty($setting['routes']['view'])) {
 				continue;
 			}
 			$viewParams = $setting['routes']['view'];
-			if($useAction) {
-				if($params['controller'] == $viewParams['controller'] && $params['action'] == $viewParams['action']) {
+			if ($useAction) {
+				if ($params['controller'] == $viewParams['controller'] && $params['action'] == $viewParams['action']) {
 					return $key;
 				}
 			} else {
-				if($params['controller'] == $viewParams['controller']) {
+				if ($params['controller'] == $viewParams['controller']) {
 					return $key;
 				}
 			}

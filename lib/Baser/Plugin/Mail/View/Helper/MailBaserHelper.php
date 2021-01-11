@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Mail.View.Helper
- * @since			baserCMS v 4.0.5
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Mail.View.Helper
+ * @since           baserCMS v 4.0.5
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -18,14 +18,16 @@
  * @package Mail.View.Helper
  * @property CakeRequest $request
  */
-class MailBaserHelper extends AppHelper {
+class MailBaserHelper extends AppHelper
+{
 
-/**
- * 現在のページがメールプラグインかどうかを判定する
- *
- * @return bool
- */
-	public function isMail() {
+	/**
+	 * 現在のページがメールプラグインかどうかを判定する
+	 *
+	 * @return bool
+	 */
+	public function isMail()
+	{
 		return (!empty($this->request->params['Content']['plugin']) && $this->request->params['Content']['plugin'] == 'Mail');
 	}
 

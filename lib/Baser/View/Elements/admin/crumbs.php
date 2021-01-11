@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 2.0.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 2.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -18,7 +18,7 @@ if ($this->viewPath != 'dashboard') {
 }
 $crumbs = $this->BcBaser->getCrumbs();
 if (!empty($crumbs)) {
-	foreach ($crumbs as $key => $crumb) {
+	foreach($crumbs as $key => $crumb) {
 		if ($this->BcArray->last($crumbs, $key + 1)) {
 			if ($crumbs[$key + 1]['name'] == $crumb['name']) {
 				continue;
@@ -44,4 +44,4 @@ if (!empty($crumbs)) {
 	<?php else: ?>
 		&nbsp;
 	<?php endif ?>
-<!-- / #Crumb  --></div>
+	<!-- / #Crumb  --></div>

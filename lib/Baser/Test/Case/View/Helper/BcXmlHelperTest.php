@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.Test.Case.View.Helper
- * @since			baserCMS v 3.0.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.View.Helper
+ * @since           baserCMS v 3.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('View', 'View');
@@ -19,35 +19,39 @@ App::uses('BcXmlHelper', 'View/Helper');
  * @package Baser.Test.Case.View.Helper
  * @property BcTextHelper $Helper
  */
-class BcXmlHelperTest extends BaserTestCase {
+class BcXmlHelperTest extends BaserTestCase
+{
 
-/**
- * Fixtures
- * @var array
- */
+	/**
+	 * Fixtures
+	 * @var array
+	 */
 	public $fixtures = [];
 
-	public function setUp() {
+	public function setUp()
+	{
 		parent::setUp();
 		$View = new View();
 		$this->BcXml = new BcXmlHelper($View);
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		unset($this->BcXml);
 		parent::tearDown();
 	}
 
-/**
- * XML宣言を生成
- * IE6以外の場合のみ生成する
- *
- * @param array $attrib
- * @param string $agent ユーザーエージェント
- * @param string $expected 期待値
- * @dataProvider headerDataProvider
- */
-	public function testHeader($attrib, $agent, $expected) {
+	/**
+	 * XML宣言を生成
+	 * IE6以外の場合のみ生成する
+	 *
+	 * @param array $attrib
+	 * @param string $agent ユーザーエージェント
+	 * @param string $expected 期待値
+	 * @dataProvider headerDataProvider
+	 */
+	public function testHeader($attrib, $agent, $expected)
+	{
 
 		$_SERVER['HTTP_USER_AGENT'] = $agent;
 
@@ -55,7 +59,8 @@ class BcXmlHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 	}
 
-	public function headerDataProvider() {
+	public function headerDataProvider()
+	{
 		return [
 			[
 				['test' => 'testValue'],

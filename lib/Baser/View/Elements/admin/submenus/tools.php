@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 4.0.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 4.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -17,7 +17,7 @@
 
 
 <tr>
-	<th><?php echo __d('baser', 'ユーティリティメニュー')?></th>
+	<th><?php echo __d('baser', 'ユーティリティメニュー') ?></th>
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link(__d('baser', 'ユーティリティトップ'), ['controller' => 'tools', 'action' => 'index', 'plugin' => null]) ?></li>

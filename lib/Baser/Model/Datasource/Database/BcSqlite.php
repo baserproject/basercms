@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.Model.Datasource.Database
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Model.Datasource.Database
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('DboSource', 'Model/Datasource');
@@ -15,53 +15,56 @@ App::uses('Sqlite', 'Model/Datasource/Database');
 App::uses('CakeSchema', 'Model');
 
 /**
+ * Class BcSqlite
+ *
  * SQLite DBO拡張
  *
  * @TODO 2014/07/04 ryuring
- * 		CakePHPの標準のものを移植しようとしたが全く使い物にならなかったので、
- * 		一旦、スルーして現行のものをそのまま利用する事にした。
- * 		listSourcesの取得で何故かエラーとなっていた。
+ *        CakePHPの標準のものを移植しようとしたが全く使い物にならなかったので、
+ *        一旦、スルーして現行のものをそのまま利用する事にした。
+ *        listSourcesの取得で何故かエラーとなっていた。
  * @package Baser.Model.Datasource.Database
  */
-class BcSqlite extends Sqlite {
+class BcSqlite extends Sqlite
+{
 
-/**
- * Enter description here...
- *
- * @var string
- */
+	/**
+	 * Enter description here...
+	 *
+	 * @var string
+	 */
 	public $description = "SQLite3 DBO Driver";
 
-/**
- * Enter description here...
- *
- * @var string
- */
+	/**
+	 * Enter description here...
+	 *
+	 * @var string
+	 */
 	public $startQuote = '"';
 
-/**
- * Enter description here...
- *
- * @var string
- */
+	/**
+	 * Enter description here...
+	 *
+	 * @var string
+	 */
 	public $endQuote = '"';
 
-/**
- * Base configuration settings for SQLite3 driver
- *
- * @var array
- */
+	/**
+	 * Base configuration settings for SQLite3 driver
+	 *
+	 * @var array
+	 */
 	protected $_baseConfig = [
 		'persistent' => false,
 		'database' => null,
 		'connect' => 'sqlite' //sqlite3 in pdo_sqlite is sqlite. sqlite2 is sqlite2
 	];
 
-/**
- * SQLite3 column definition
- *
- * @var array
- */
+	/**
+	 * SQLite3 column definition
+	 *
+	 * @var array
+	 */
 	public $columns = [
 		'primary_key' => ['name' => 'integer primary key autoincrement'],
 		'string' => ['name' => 'varchar', 'limit' => '255'],
@@ -84,13 +87,14 @@ class BcSqlite extends Sqlite {
 
 	public $row_count = null;
 
-/**
- * Connects to the database using config['database'] as a filename.
- *
- * @param array $config Configuration array for connecting
- * @return mixed
- */
-	public function connect() {
+	/**
+	 * Connects to the database using config['database'] as a filename.
+	 *
+	 * @param array $config Configuration array for connecting
+	 * @return mixed
+	 */
+	public function connect()
+	{
 		//echo "runs connect\n";
 		$this->last_error = null;
 		$config = $this->config;
@@ -106,12 +110,13 @@ class BcSqlite extends Sqlite {
 		return $this->connected;
 	}
 
-/**
- * Disconnects from database.
- *
- * @return boolean True if the database could be disconnected, else false
- */
-	public function disconnect() {
+	/**
+	 * Disconnects from database.
+	 *
+	 * @return boolean True if the database could be disconnected, else false
+	 */
+	public function disconnect()
+	{
 		//echo "runs disconnect\n";
 		//@sqlite3_close($this->_connection);
 		$this->_connection = null;
@@ -119,17 +124,18 @@ class BcSqlite extends Sqlite {
 		return $this->connected;
 	}
 
-/**
- * Executes given SQL statement.
- *
- * @param string $sql SQL statement
- * @return resource Result resource identifier
- */
-	protected function _execute($sql, $params = [], $prepareOptions = []) {
+	/**
+	 * Executes given SQL statement.
+	 *
+	 * @param string $sql SQL statement
+	 * @return resource Result resource identifier
+	 */
+	protected function _execute($sql, $params = [], $prepareOptions = [])
+	{
 		//echo "runs execute\n";
 		//return sqlite3_query($this->_connection, $sql);
 
-		for ($i = 0; $i < 2; $i++) {
+		for($i = 0; $i < 2; $i++) {
 			try {
 				$this->last_error = null;
 				$this->pdo_statement = $this->_connection->query($sql);
@@ -149,12 +155,13 @@ class BcSqlite extends Sqlite {
 		return false;
 	}
 
-/**
- * Returns an array of tables in the database. If there are no tables, an error is raised and the application exits.
- *
- * @return array Array of tablenames in the database
- */
-	public function listSources($data = null) {
+	/**
+	 * Returns an array of tables in the database. If there are no tables, an error is raised and the application exits.
+	 *
+	 * @return array Array of tablenames in the database
+	 */
+	public function listSources($data = null)
+	{
 		//echo "runs listSources\n";
 		$db = $this->config['database'];
 		$this->config['database'] = basename($this->config['database']);
@@ -178,7 +185,7 @@ class BcSqlite extends Sqlite {
 			return [];
 		} else {
 			$tables = [];
-			foreach ($result as $table) {
+			foreach($result as $table) {
 				$tables[] = $table[0]['name'];
 			}
 			parent::listSources($tables);
@@ -190,15 +197,16 @@ class BcSqlite extends Sqlite {
 		return [];
 	}
 
-/**
- * Returns a quoted and escaped string of $data for use in an SQL statement.
- *
- * @param string $data String to be prepared for use in an SQL statement
- * @param string $column
- * @param int $safe
- * @return string Quoted and escaped
- */
-	public function value($data, $column = null, $safe = false) {
+	/**
+	 * Returns a quoted and escaped string of $data for use in an SQL statement.
+	 *
+	 * @param string $data String to be prepared for use in an SQL statement
+	 * @param string $column
+	 * @param int $safe
+	 * @return string Quoted and escaped
+	 */
+	public function value($data, $column = null, $safe = false)
+	{
 
 		// ================================================================
 		// MEMO 2016/08/07 ryuring
@@ -208,7 +216,7 @@ class BcSqlite extends Sqlite {
 		// フィールドのデータに初期値を設定しない事が一番望ましいが設定されている場合に
 		// バグとなるので念の為対応しておく
 		// ================================================================
-		if(($column == 'boolean' && ($data === "'0'" || $data === "'1'"))) {
+		if (($column == 'boolean' && ($data === "'0'" || $data === "'1'"))) {
 			return $data;
 		}
 
@@ -222,7 +230,7 @@ class BcSqlite extends Sqlite {
 			return 'NULL';
 		}
 
-		switch ($column) {
+		switch($column) {
 			case 'boolean':
 				if ($data === '') {
 					return 0;
@@ -253,18 +261,19 @@ class BcSqlite extends Sqlite {
 		return "'" . $data . "'";
 	}
 
-/**
- * Generates and executes an SQL UPDATE statement for given model, fields, and values.
- *
- * @param Model $model
- * @param array $fields
- * @param array $values
- * @param mixed $conditions
- * @return array
- */
-	public function update(Model $model, $fields = null, $values = null, $conditions = null) {
+	/**
+	 * Generates and executes an SQL UPDATE statement for given model, fields, and values.
+	 *
+	 * @param Model $model
+	 * @param array $fields
+	 * @param array $values
+	 * @param mixed $conditions
+	 * @return array
+	 */
+	public function update(Model $model, $fields = null, $values = null, $conditions = null)
+	{
 		if (empty($values) && !empty($fields)) {
-			foreach ($fields as $field => $value) {
+			foreach($fields as $field => $value) {
 				if (strpos($field, $model->alias . '.') !== false) {
 					unset($fields[$field]);
 					$field = str_replace($model->alias . '.', "", $field);
@@ -276,16 +285,17 @@ class BcSqlite extends Sqlite {
 		return parent::update($model, $fields, $values, $conditions);
 	}
 
-/**
- * Begin a transaction
- * TODO データベースがロックされてしまい正常に処理が実行されないのでとりあえず未実装とする
- * ロックに関する原因については未解析
- *
- * @param string $model
- * @return boolean True on success, false on fail
- * (i.e. if the database/model does not support transactions).
- */
-	public function begin() {
+	/**
+	 * Begin a transaction
+	 * TODO データベースがロックされてしまい正常に処理が実行されないのでとりあえず未実装とする
+	 * ロックに関する原因については未解析
+	 *
+	 * @param string $model
+	 * @return boolean True on success, false on fail
+	 * (i.e. if the database/model does not support transactions).
+	 */
+	public function begin()
+	{
 		return null;
 		/* if (parent::begin($model)) {
 		  if ($this->_connection->beginTransaction()) {
@@ -296,17 +306,18 @@ class BcSqlite extends Sqlite {
 		  return false; */
 	}
 
-/**
- * Commit a transaction
- * TODO データベースがロックされてしまい正常に処理が実行されないのでとりあえず未実装とする
- * ロックに関する原因については未解析
- *
- * @param unknown_type $model
- * @return boolean True on success, false on fail
- * (i.e. if the database/model does not support transactions,
- * or a transaction has not started).
- */
-	public function commit() {
+	/**
+	 * Commit a transaction
+	 * TODO データベースがロックされてしまい正常に処理が実行されないのでとりあえず未実装とする
+	 * ロックに関する原因については未解析
+	 *
+	 * @param unknown_type $model
+	 * @return boolean True on success, false on fail
+	 * (i.e. if the database/model does not support transactions,
+	 * or a transaction has not started).
+	 */
+	public function commit()
+	{
 		return null;
 		/* if (parent::commit($model)) {
 		  $this->_transactionStarted = false;
@@ -315,17 +326,18 @@ class BcSqlite extends Sqlite {
 		  return false; */
 	}
 
-/**
- * Rollback a transaction
- * TODO データベースがロックされてしまい正常に処理が実行されないのでとりあえず未実装とする
- * ロックに関する原因については未解析
- *
- * @param unknown_type $model
- * @return boolean True on success, false on fail
- * (i.e. if the database/model does not support transactions,
- * or a transaction has not started).
- */
-	public function rollback() {
+	/**
+	 * Rollback a transaction
+	 * TODO データベースがロックされてしまい正常に処理が実行されないのでとりあえず未実装とする
+	 * ロックに関する原因については未解析
+	 *
+	 * @param unknown_type $model
+	 * @return boolean True on success, false on fail
+	 * (i.e. if the database/model does not support transactions,
+	 * or a transaction has not started).
+	 */
+	public function rollback()
+	{
 		return null;
 		/* if (parent::rollback($model)) {
 		  return $this->_connection->rollBack();
@@ -333,34 +345,37 @@ class BcSqlite extends Sqlite {
 		  return false; */
 	}
 
-/**
- * Returns a formatted error message from previous database operation.
- *
- * @return string Error message
- */
-	public function lastError(PDOStatement $query = null) {
+	/**
+	 * Returns a formatted error message from previous database operation.
+	 *
+	 * @return string Error message
+	 */
+	public function lastError(PDOStatement $query = null)
+	{
 		return $this->last_error;
 	}
 
-/**
- * Returns number of affected rows in previous database operation. If no previous operation exists, this returns false.
- *
- * @return integer Number of affected rows
- */
-	public function lastAffected($source = null) {
+	/**
+	 * Returns number of affected rows in previous database operation. If no previous operation exists, this returns false.
+	 *
+	 * @return integer Number of affected rows
+	 */
+	public function lastAffected($source = null)
+	{
 		if ($this->_result) {
 			return $this->pdo_statement->rowCount();
 		}
 		return false;
 	}
 
-/**
- * Returns number of rows in previous resultset. If no previous resultset exists,
- * this returns false.
- *
- * @return integer Number of rows in resultset
- */
-	public function lastNumRows($source = null) {
+	/**
+	 * Returns number of rows in previous resultset. If no previous resultset exists,
+	 * this returns false.
+	 *
+	 * @return integer Number of rows in resultset
+	 */
+	public function lastNumRows($source = null)
+	{
 		if ($this->pdo_statement) {
 			// pdo_statement->rowCount() doesn't work for this case
 			return $this->row_count;
@@ -368,23 +383,25 @@ class BcSqlite extends Sqlite {
 		return false;
 	}
 
-/**
- * Returns the ID generated from the previous INSERT operation.
- *
- * @return int
- */
-	public function lastInsertId($source = null) {
+	/**
+	 * Returns the ID generated from the previous INSERT operation.
+	 *
+	 * @return int
+	 */
+	public function lastInsertId($source = null)
+	{
 		//return sqlite3_last_insert_rowid($this->_connection);
 		return $this->_connection->lastInsertId($source);
 	}
 
-/**
- * Converts database-layer column types to basic types
- *
- * @param string $real Real database-layer column type (i.e. "varchar(255)")
- * @return string Abstract column type (i.e. "string")
- */
-	public function column($real) {
+	/**
+	 * Converts database-layer column types to basic types
+	 *
+	 * @param string $real Real database-layer column type (i.e. "varchar(255)")
+	 * @return string Abstract column type (i.e. "string")
+	 */
+	public function column($real)
+	{
 		if (is_array($real)) {
 			$col = $real['name'];
 			if (isset($real['limit'])) {
@@ -418,7 +435,8 @@ class BcSqlite extends Sqlite {
 	 * @param mixed $results The results to modify.
 	 * @return void
 	 */
-	public function resultSet($results) {
+	public function resultSet($results)
+	{
 		$this->results = $results;
 		$this->map = [];
 		$numFields = $results->columnCount();
@@ -431,7 +449,7 @@ class BcSqlite extends Sqlite {
 		$selects = [];
 		if (stripos($querystring, 'SELECT') === 0 && stripos($querystring, 'FROM') > 0) {
 			$selectpart = substr($querystring, 7);
-			foreach (CakeText::tokenize($selectpart, ',', '(', ')') as $part) {
+			foreach(CakeText::tokenize($selectpart, ',', '(', ')') as $part) {
 				$fromPos = stripos($part, ' FROM ');
 				if ($fromPos !== false) {
 					$selects[] = trim(substr($part, 0, $fromPos));
@@ -457,7 +475,7 @@ class BcSqlite extends Sqlite {
 			if (strpos($columnName, '.')) {
 				list($table) = explode('.', $columnName);
 				$table = preg_replace('/^DISTINCT\s+/', '', $table);
-				if(empty($columnMeta[$table])) {
+				if (empty($columnMeta[$table])) {
 					$pdo_statement = $this->_connection->query('PRAGMA table_info(' . $this->config['prefix'] . Inflector::tableize($table) . ')');
 					$fields = $pdo_statement->fetchAll(PDO::FETCH_ASSOC);
 					foreach($fields as $field) {
@@ -467,7 +485,7 @@ class BcSqlite extends Sqlite {
 			}
 		}
 
-		while ($j < $numFields) {
+		while($j < $numFields) {
 			if (!isset($selects[$j])) {
 				$j++;
 				continue;
@@ -494,10 +512,10 @@ class BcSqlite extends Sqlite {
 				// CUSTOMIZE ADD 2017/02/21 ryuring
 				// 型情報が取得できない問題を改善
 				// >>>
-				if(!$metaType) {
+				if (!$metaType) {
 					if (strpos($columnName, '.')) {
 						list($table, $column) = explode('.', $columnName);
-						if(!empty($columnMeta[$table][$column]['type'])) {
+						if (!empty($columnMeta[$table][$column]['type'])) {
 							$metaType = $columnMeta[$table][$column]['type'];
 						}
 					}
@@ -517,12 +535,13 @@ class BcSqlite extends Sqlite {
 		}
 	}
 
-/**
- * Fetches the next row from the current result set
- *
- * @return unknown
- */
-	public function fetchResult() {
+	/**
+	 * Fetches the next row from the current result set
+	 *
+	 * @return unknown
+	 */
+	public function fetchResult()
+	{
 		//if ($row = sqlite3_fetch_array($this->results, SQLITE3_ASSOC)) {
 		if (count($this->rows)) {
 			$row = array_shift($this->rows);
@@ -531,7 +550,7 @@ class BcSqlite extends Sqlite {
 			$resultRow = [];
 			$i = 0;
 
-			foreach ($row as $index => $field) {
+			foreach($row as $index => $field) {
 				//pr($index);
 				if (isset($this->map[$index]) && $this->map[$index] != "") {
 					//echo "asdf: ".$this->map[$index];
@@ -562,14 +581,15 @@ class BcSqlite extends Sqlite {
 		}
 	}
 
-/**
- * Returns a limit statement in the correct format for the particular database.
- *
- * @param integer $limit Limit of results returned
- * @param integer $offset Offset from which to start results
- * @return string SQL limit/offset statement
- */
-	public function limit($limit, $offset = null) {
+	/**
+	 * Returns a limit statement in the correct format for the particular database.
+	 *
+	 * @param integer $limit Limit of results returned
+	 * @param integer $offset Offset from which to start results
+	 * @return string SQL limit/offset statement
+	 */
+	public function limit($limit, $offset = null)
+	{
 		if ($limit) {
 			$rt = '';
 			if (!strpos(strtolower($limit), 'limit') || strpos(strtolower($limit), 'limit') === 0) {
@@ -584,14 +604,15 @@ class BcSqlite extends Sqlite {
 		return null;
 	}
 
-/**
- * Generate a database-native column schema string
- *
- * @param array $column An array structured like the following: array('name'=>'value', 'type'=>'value'[, options]),
- * where options can be 'default', 'length', or 'key'.
- * @return string
- */
-	public function buildColumn($column) {
+	/**
+	 * Generate a database-native column schema string
+	 *
+	 * @param array $column An array structured like the following: array('name'=>'value', 'type'=>'value'[, options]),
+	 * where options can be 'default', 'length', or 'key'.
+	 * @return string
+	 */
+	public function buildColumn($column)
+	{
 		$name = $type = null;
 		$column = array_merge(['null' => true], $column);
 		extract($column);
@@ -639,17 +660,18 @@ class BcSqlite extends Sqlite {
 		return $out;
 	}
 
-/**
- * Removes redundant primary key indexes, as they are handled in the column def of the key.
- *
- * @param array $indexes
- * @param string $table
- * @return string
- */
-	public function buildIndex($indexes, $table = null) {
+	/**
+	 * Removes redundant primary key indexes, as they are handled in the column def of the key.
+	 *
+	 * @param array $indexes
+	 * @param string $table
+	 * @return string
+	 */
+	public function buildIndex($indexes, $table = null)
+	{
 		$join = [];
 
-		foreach ($indexes as $name => $value) {
+		foreach($indexes as $name => $value) {
 			if ($name == 'PRIMARY') {
 				continue;
 			} else {
@@ -669,19 +691,20 @@ class BcSqlite extends Sqlite {
 		return $join;
 	}
 
-/**
- * Overrides DboSource::renderStatement to handle schema generation with SQLite3-style indexes
- *
- * @param string $type
- * @param array $data
- * @return string
- */
-	public function renderStatement($type, $data) {
-		switch (strtolower($type)) {
+	/**
+	 * Overrides DboSource::renderStatement to handle schema generation with SQLite3-style indexes
+	 *
+	 * @param string $type
+	 * @param array $data
+	 * @return string
+	 */
+	public function renderStatement($type, $data)
+	{
+		switch(strtolower($type)) {
 			case 'schema':
 				extract($data);
 
-				foreach (['columns', 'indexes'] as $var) {
+				foreach(['columns', 'indexes'] as $var) {
 					if (is_array(${$var})) {
 						${$var} = "\t" . join(",\n\t", array_filter(${$var}));
 					}
@@ -695,50 +718,52 @@ class BcSqlite extends Sqlite {
 		}
 	}
 
-/**
- * PDO deals in objects, not resources, so overload accordingly.
- */
-	public function hasResult() {
+	/**
+	 * PDO deals in objects, not resources, so overload accordingly.
+	 */
+	public function hasResult()
+	{
 		return is_object($this->_result);
 	}
 
-/**
- * Generate a MySQL Alter Table syntax for the given Schema comparison
- *
- * @param array $compare Result of a CakeSchema::compare()
- * @return array Array of alter statements to make.
- */
-	public function alterSchema($compare, $table = null) {
+	/**
+	 * Generate a MySQL Alter Table syntax for the given Schema comparison
+	 *
+	 * @param array $compare Result of a CakeSchema::compare()
+	 * @return array Array of alter statements to make.
+	 */
+	public function alterSchema($compare, $table = null)
+	{
 		if (!is_array($compare)) {
 			return false;
 		}
 		$out = '';
 		$colList = [];
-		foreach ($compare as $curTable => $types) {
+		foreach($compare as $curTable => $types) {
 			$indexes = [];
 			if (!$table || $table == $curTable) {
 				$out .= 'ALTER TABLE ' . $this->fullTableName($curTable) . " \n";
-				foreach ($types as $type => $column) {
+				foreach($types as $type => $column) {
 					if (isset($column['indexes'])) {
 						$indexes[$type] = $column['indexes'];
 						unset($column['indexes']);
 					}
-					switch ($type) {
+					switch($type) {
 						case 'add':
-							foreach ($column as $field => $col) {
+							foreach($column as $field => $col) {
 								$col['name'] = $field;
 								$alter = 'ADD ' . $this->buildColumn($col);
 								$colList[] = $alter;
 							}
 							break;
 						case 'drop':
-							foreach ($column as $field => $col) {
+							foreach($column as $field => $col) {
 								$col['name'] = $field;
 								$colList[] = 'DROP ' . $this->name($field);
 							}
 							break;
 						case 'change':
-							foreach ($column as $field => $col) {
+							foreach($column as $field => $col) {
 								if (!isset($col['name'])) {
 									$col['name'] = $field;
 								}
@@ -754,31 +779,32 @@ class BcSqlite extends Sqlite {
 		return $out;
 	}
 
-/**
- * Overrides DboSource::index to handle SQLite indexe introspection
- * Returns an array of the indexes in given table name.
- *
- * @param string $model Name of model to inspect
- * @return array Fields in table. Keys are column and unique
- */
-	public function index($model) {
+	/**
+	 * Overrides DboSource::index to handle SQLite indexe introspection
+	 * Returns an array of the indexes in given table name.
+	 *
+	 * @param string $model Name of model to inspect
+	 * @return array Fields in table. Keys are column and unique
+	 */
+	public function index($model)
+	{
 		$index = [];
 		$table = $this->fullTableName($model, false, false);
 		if ($table) {
 
 			$tableInfo = $this->query('PRAGMA table_info(' . $table . ')');
 			$primary = [];
-			foreach ($tableInfo as $info) {
+			foreach($tableInfo as $info) {
 				if (!empty($info[0]['pk'])) {
 					$primary = ['PRIMARY' => ['unique' => true, 'column' => $info[0]['name']]];
 				}
 			}
 
 			$indexes = $this->query('PRAGMA index_list(' . $table . ')');
-			foreach ($indexes as $i => $info) {
+			foreach($indexes as $i => $info) {
 				$key = array_pop($info);
 				$keyInfo = $this->query('PRAGMA index_info("' . $key['name'] . '")');
-				foreach ($keyInfo as $keyCol) {
+				foreach($keyInfo as $keyCol) {
 					if (!isset($index[$key['name']])) {
 						$col = [];
 						$index[$key['name']]['column'] = $keyCol[0]['name'];
@@ -797,25 +823,27 @@ class BcSqlite extends Sqlite {
 		return $index;
 	}
 
-/**
- * Generate index alteration statements for a table.
- * TODO 未サポート
- *
- * @param string $table Table to alter indexes for
- * @param array $new Indexes to add and drop
- * @return array Index alteration statements
- */
-	protected function _alterIndexes($table, $indexes) {
+	/**
+	 * Generate index alteration statements for a table.
+	 * TODO 未サポート
+	 *
+	 * @param string $table Table to alter indexes for
+	 * @param array $new Indexes to add and drop
+	 * @return array Index alteration statements
+	 */
+	protected function _alterIndexes($table, $indexes)
+	{
 		return [];
 	}
 
-/**
- * テーブル構造を変更する
- *
- * @param array $options [ new / old ]
- * @return boolean
- */
-	public function alterTable($options) {
+	/**
+	 * テーブル構造を変更する
+	 *
+	 * @param array $options [ new / old ]
+	 * @return boolean
+	 */
+	public function alterTable($options)
+	{
 		extract($options);
 
 		if (!isset($old) || !isset($new)) {
@@ -831,16 +859,16 @@ class BcSqlite extends Sqlite {
 		}
 
 		$result = true;
-		foreach ($compare as $table => $types) {
+		foreach($compare as $table => $types) {
 			if (!$types) {
 				return false;
 			}
-			foreach ($types as $type => $fields) {
+			foreach($types as $type => $fields) {
 				if (!$fields) {
 					continue;
 				}
-				foreach ($fields as $fieldName => $column) {
-					switch ($type) {
+				foreach($fields as $fieldName => $column) {
+					switch($type) {
 						case 'add':
 							if (!$this->addColumn(['field' => $fieldName, 'table' => $table, 'column' => $column])) {
 								$reuslt = false;
@@ -868,24 +896,26 @@ class BcSqlite extends Sqlite {
 		return $result;
 	}
 
-/**
- * テーブル名のリネームステートメントを生成
- *
- * @param string $sourceName
- * @param string $targetName
- * @return string
- */
-	public function buildRenameTable($sourceName, $targetName) {
+	/**
+	 * テーブル名のリネームステートメントを生成
+	 *
+	 * @param string $sourceName
+	 * @param string $targetName
+	 * @return string
+	 */
+	public function buildRenameTable($sourceName, $targetName)
+	{
 		return "ALTER TABLE " . $sourceName . " RENAME TO " . $targetName;
 	}
 
-/**
- * カラムを変更する
- *
- * @param	array	$options [ table / new / old ]
- * @return boolean
- */
-	public function renameColumn($options) {
+	/**
+	 * カラムを変更する
+	 *
+	 * @param array $options [ table / new / old ]
+	 * @return boolean
+	 */
+	public function renameColumn($options)
+	{
 		extract($options);
 
 		if (!isset($table) || !isset($new) || !isset($old)) {
@@ -900,12 +930,12 @@ class BcSqlite extends Sqlite {
 		$Schema = ClassRegistry::init('CakeSchema');
 		$Schema->connection = $this->configKeyName;
 		$schema = $Schema->read(['models' => [$model]]);
-		if(!empty($schema['tables'][$_table])) {
+		if (!empty($schema['tables'][$_table])) {
 			$schema = $schema['tables'][$_table];
 		} else {
 			$schema = $schema['tables']['missing'][$_table];
 		}
-		if(!$schema) {
+		if (!$schema) {
 			return false;
 		}
 
@@ -919,7 +949,7 @@ class BcSqlite extends Sqlite {
 
 		// スキーマのキーを変更（並び順を変えないように）
 		$newSchema = [];
-		foreach ($schema as $key => $field) {
+		foreach($schema as $key => $field) {
 			if ($key == $old) {
 				$key = $new;
 			}
@@ -952,13 +982,14 @@ class BcSqlite extends Sqlite {
 		return true;
 	}
 
-/**
- * カラムを削除する
- *
- * @param	array	$options [ table / field / prefix ]
- * @return boolean
- */
-	public function dropColumn($options) {
+	/**
+	 * カラムを削除する
+	 *
+	 * @param array $options [ table / field / prefix ]
+	 * @return boolean
+	 */
+	public function dropColumn($options)
+	{
 		extract($options);
 
 		if (!isset($table) || !isset($field)) {
@@ -1011,26 +1042,28 @@ class BcSqlite extends Sqlite {
 		return true;
 	}
 
-/**
- * テーブルからテーブルへデータを移動する
- * @param string	$sourceTableName
- * @param string	$targetTableName
- * @param array	$schema
- * @return booelan
- */
-	protected function _moveData($sourceTableName, $targetTableName, $schema) {
+	/**
+	 * テーブルからテーブルへデータを移動する
+	 * @param string $sourceTableName
+	 * @param string $targetTableName
+	 * @param array $schema
+	 * @return booelan
+	 */
+	protected function _moveData($sourceTableName, $targetTableName, $schema)
+	{
 		$sql = 'INSERT INTO ' . $targetTableName . ' SELECT ' . $this->_convertCsvFieldsFromSchema($schema) . ' FROM ' . $sourceTableName;
 		return $this->execute($sql);
 	}
 
-/**
- * スキーマ情報よりCSV形式のフィールドリストを取得する
- * @param array $schema
- * @return string
- */
-	protected function _convertCsvFieldsFromSchema($schema) {
+	/**
+	 * スキーマ情報よりCSV形式のフィールドリストを取得する
+	 * @param array $schema
+	 * @return string
+	 */
+	protected function _convertCsvFieldsFromSchema($schema)
+	{
 		$fields = '';
-		foreach ($schema as $key => $field) {
+		foreach($schema as $key => $field) {
 			if ($key != 'tableParameters') {
 				$fields .= '"' . $key . '",';
 			}
@@ -1038,13 +1071,14 @@ class BcSqlite extends Sqlite {
 		return substr($fields, 0, strlen($fields) - 1);
 	}
 
-/**
- * Returns an array of the fields in given table name.
- *
- * @param string $tableName Name of database table to inspect
- * @return array Fields in table. Keys are name and type
- */
-	public function describe($model) {
+	/**
+	 * Returns an array of the fields in given table name.
+	 *
+	 * @param string $tableName Name of database table to inspect
+	 * @return array Fields in table. Keys are name and type
+	 */
+	public function describe($model)
+	{
 		$cache = $this->__describe($model);
 		if ($cache != null) {
 			return $cache;
@@ -1052,13 +1086,13 @@ class BcSqlite extends Sqlite {
 		$fields = [];
 		$result = $this->fetchAll('PRAGMA table_info(' . $model->tablePrefix . $model->table . ')');
 
-		foreach ($result as $column) {
+		foreach($result as $column) {
 			$fields[$column[0]['name']] = [
 				'type' => $this->column($column[0]['type']),
 				'null' => !$column[0]['notnull'],
 				'default' => $column[0]['dflt_value'],
 				// sqlite_sequence テーブルの場合、typeがないのでエラーとなるので調整
-				'length' => ($column[0]['type']) ? $this->length($column[0]['type']) : ''
+				'length' => ($column[0]['type'])? $this->length($column[0]['type']) : ''
 			];
 			if (in_array($fields[$column[0]['name']]['type'], ['timestamp', 'datetime']) && strtoupper($fields[$column[0]['name']]['default']) === 'CURRENT_TIMESTAMP') {
 				$fields[$column[0]['name']]['default'] = null;
@@ -1090,15 +1124,16 @@ class BcSqlite extends Sqlite {
 		return $fields;
 	}
 
-/**
- * Returns a Model description (metadata) or null if none found.
- * DboSQlite3のdescribeメソッドを呼び出さずにキャッシュを読み込む為に利用
- * Datasource::describe と同じ
- *
- * @param Model $model
- * @return mixed
- */
-	private function __describe($model) {
+	/**
+	 * Returns a Model description (metadata) or null if none found.
+	 * DboSQlite3のdescribeメソッドを呼び出さずにキャッシュを読み込む為に利用
+	 * Datasource::describe と同じ
+	 *
+	 * @param Model $model
+	 * @return mixed
+	 */
+	private function __describe($model)
+	{
 		if ($this->cacheSources === false) {
 			return null;
 		}

@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -25,7 +25,7 @@ if (!isset($modulus)) {
 ?>
 
 
-<?php if ((int) $this->Paginator->counter(['format' => '%pages%']) > 1): ?>
+<?php if ((int)$this->Paginator->counter(['format' => '%pages%']) > 1): ?>
 	<div class="pagination">
 		<?php echo $this->Paginator->prev(__d('baser', '< 前へ'), ['class' => 'prev'], null, ['class' => 'disabled']) ?>
 		<?php echo $this->Html->tag('span', $this->Paginator->numbers(['separator' => '', 'class' => 'number', 'modulus' => $modulus], ['class' => 'page-numbers'])) ?>

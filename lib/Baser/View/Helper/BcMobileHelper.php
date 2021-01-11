@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View.Helper
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View.Helper
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -16,25 +16,27 @@
  * @package Baser.View.Helper
  * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
  */
-class BcMobileHelper extends Helper {
+class BcMobileHelper extends Helper
+{
 
-/**
- * ヘルパ
- *
- * @var array
- */
+	/**
+	 * ヘルパ
+	 *
+	 * @var array
+	 */
 	public $helpers = ['BcHtml'];
 
-/**
- * After Render
- *
- * @param string $viewFile
- * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
- */
-	public function afterRender($viewFile) {
+	/**
+	 * After Render
+	 *
+	 * @param string $viewFile
+	 * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
+	 */
+	public function afterRender($viewFile)
+	{
 		parent::afterRender($viewFile);
 		$site = BcSite::findCurrent();
-		if($site->device != 'mobile' || $site->sameMainUrl) {
+		if ($site->device != 'mobile' || $site->sameMainUrl) {
 			return;
 		}
 		// 別URLの場合、canonicalを出力
@@ -54,13 +56,14 @@ class BcMobileHelper extends Helper {
 		);
 	}
 
-/**
- * afterLayout
- *
- * @return void
- * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
- */
-	public function afterLayout($layoutFile) {
+	/**
+	 * afterLayout
+	 *
+	 * @return void
+	 * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
+	 */
+	public function afterLayout($layoutFile)
+	{
 
 		/* 出力データをSJISに変換 */
 		$View = $this->_View;
@@ -97,28 +100,30 @@ class BcMobileHelper extends Helper {
 		}
 	}
 
-/**
- * コンテンツタイプを出力
- *
- * @return void
- * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
- */
-	public function header() {
+	/**
+	 * コンテンツタイプを出力
+	 *
+	 * @return void
+	 * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
+	 */
+	public function header()
+	{
 		if ($this->request->params['Site']['device'] == 'mobile') {
 			$this->_View->response->charset('Shift-JIS');
 			header("Content-type: application/xhtml+xml");
 		}
 	}
 
-/**
- * リンクからモバイル用のプレフィックスを除外する
- * preg_replace_callback のコールバック関数
- *
- * @param array $matches
- * @return string
- * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
- */
-	protected function _removeMobilePrefix($matches) {
+	/**
+	 * リンクからモバイル用のプレフィックスを除外する
+	 * preg_replace_callback のコールバック関数
+	 *
+	 * @param array $matches
+	 * @return string
+	 * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
+	 */
+	protected function _removeMobilePrefix($matches)
+	{
 		if (strpos($matches[1], 'mobile=off') === false) {
 			return 'href="' . BC_BASE_URL . $matches[2] . '"';
 		} else {
@@ -126,15 +131,16 @@ class BcMobileHelper extends Helper {
 		}
 	}
 
-/**
- * リンクにモバイル用のプレフィックスを追加する
- * preg_replace_callback のコールバック関数
- *
- * @param array $matches
- * @return string
- * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
- */
-	protected function _addMobilePrefix($matches) {
+	/**
+	 * リンクにモバイル用のプレフィックスを追加する
+	 * preg_replace_callback のコールバック関数
+	 *
+	 * @param array $matches
+	 * @return string
+	 * @deprecated  5.0.0 since 4.3.3 ガラケーは非対応とする
+	 */
+	protected function _addMobilePrefix($matches)
+	{
 		$currentAlias = $this->request->params['Site']['alias'];
 		$url = $matches[1];
 		if (strpos($url, 'mobile=off') === false) {

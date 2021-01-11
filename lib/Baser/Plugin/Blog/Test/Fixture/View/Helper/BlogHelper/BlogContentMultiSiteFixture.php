@@ -1,21 +1,23 @@
 <?php
+
 /**
  * BlogContentMultiSiteFixture Fixture
  */
-class BlogContentMultiSiteFixture extends CakeTestFixture {
+class BlogContentMultiSiteFixture extends CakeTestFixture
+{
 
-/**
- * Import
- *
- * @var array
- */
+	/**
+	 * Import
+	 *
+	 * @var array
+	 */
 	public $import = ['model' => 'Blog.BlogContent'];
 
-/**
- * Records
- *
- * @var array
- */
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '1',

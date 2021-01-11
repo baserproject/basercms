@@ -1,21 +1,23 @@
 <?php
+
 /**
  * SiteConfigBcBaserHelperFixture
  */
-class SiteConfigBcBaserHelperFixture extends BaserTestFixture {
+class SiteConfigBcBaserHelperFixture extends BaserTestFixture
+{
 
-/**
- * Name of the object
- *
- * @var string
- */
+	/**
+	 * Name of the object
+	 *
+	 * @var string
+	 */
 	public $name = 'SiteConfig';
 
-/**
- * Records
- *
- * @var array
- */
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '1',

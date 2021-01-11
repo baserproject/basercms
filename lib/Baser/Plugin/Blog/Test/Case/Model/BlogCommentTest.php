@@ -3,16 +3,17 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Blog.Test.Case.Model
- * @since			baserCMS v 3.0.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.Test.Case.Model
+ * @since           baserCMS v 3.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('BlogComment', 'Blog.Model');
 
-class BlogCommentTest extends BaserTestCase {
+class BlogCommentTest extends BaserTestCase
+{
 
 	public $fixtures = [
 		'baser.Default.BlogComment',
@@ -20,20 +21,23 @@ class BlogCommentTest extends BaserTestCase {
 		'baser.Default.Site',
 	];
 
-	public function setUp() {
+	public function setUp()
+	{
 		$this->BlogComment = ClassRegistry::init('Blog.BlogComment');
 		parent::setUp();
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		unset($this->BlogComment);
 		parent::tearDown();
 	}
 
-/*
- * validate
- */
-	public function test空チェック() {
+	/*
+	 * validate
+	 */
+	public function test空チェック()
+	{
 		$this->BlogComment->create([
 			'BlogComment' => [
 				'name' => '',
@@ -50,7 +54,8 @@ class BlogCommentTest extends BaserTestCase {
 		$this->assertEquals('コメントを入力してください。', current($this->BlogComment->validationErrors['message']));
 	}
 
-	public function test桁数チェック異常系() {
+	public function test桁数チェック異常系()
+	{
 		$this->BlogComment->create([
 			'BlogComment' => [
 				'name' => '123456789012345678901234567890123456789012345678901',
@@ -71,7 +76,8 @@ class BlogCommentTest extends BaserTestCase {
 		$this->assertEquals('URLは255文字以内で入力してください。', current($this->BlogComment->validationErrors['url']));
 	}
 
-	public function test桁数チェック正常系() {
+	public function test桁数チェック正常系()
+	{
 		$this->BlogComment->create([
 			'BlogComment' => [
 				'name' => '12345678901234567890123456789012345678901234567890',
@@ -82,7 +88,8 @@ class BlogCommentTest extends BaserTestCase {
 		$this->assertTrue($this->BlogComment->validates());
 	}
 
-	public function testその他異常系() {
+	public function testその他異常系()
+	{
 		// 形式チェック
 		$this->BlogComment->create([
 			'BlogComment' => [
@@ -100,17 +107,19 @@ class BlogCommentTest extends BaserTestCase {
 		$this->assertEquals('URLの形式が不正です。', current($this->BlogComment->validationErrors['url']));
 	}
 
-/**
- * 初期値を取得する
- */
-	public function testGetDefaultValue() {
+	/**
+	 * 初期値を取得する
+	 */
+	public function testGetDefaultValue()
+	{
 		$this->assertEquals($this->BlogComment->getDefaultValue()['BlogComment']['name'], 'NO NAME');
 	}
 
-/**
- * コメントを追加する
- */
-	public function testAdd() {
+	/**
+	 * コメントを追加する
+	 */
+	public function testAdd()
+	{
 		$data = ['BlogComment' => [
 			'name' => 'test_name<',
 			'email' => '-@example.com',

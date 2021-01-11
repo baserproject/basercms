@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Blog.Test.Case.Model
- * @since			baserCMS v 3.0.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.Test.Case.Model
+ * @since           baserCMS v 3.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('BlogTag', 'Blog.Model');
@@ -17,7 +17,8 @@ App::uses('BlogTag', 'Blog.Model');
  *
  * @property BlogTag $BlogTag
  */
-class BlogTagTest extends BaserTestCase {
+class BlogTagTest extends BaserTestCase
+{
 
 	public $fixtures = [
 		'plugin.blog.Model/BlogTag/BlogPostBlogTagFindCustomPrams',
@@ -31,20 +32,23 @@ class BlogTagTest extends BaserTestCase {
 		'baser.Default.User',
 	];
 
-	public function setUp() {
+	public function setUp()
+	{
 		$this->BlogTag = ClassRegistry::init('Blog.BlogTag');
 		parent::setUp();
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		unset($this->BlogTag);
 		parent::tearDown();
 	}
 
-/*
- * validate
- */
-	public function test空チェック() {
+	/*
+	 * validate
+	 */
+	public function test空チェック()
+	{
 
 		$this->BlogTag->create([
 			'BlogTag' => [
@@ -58,7 +62,8 @@ class BlogTagTest extends BaserTestCase {
 		$this->assertEquals('ブログタグを入力してください。', current($this->BlogTag->validationErrors['name']));
 	}
 
-	public function test重複チェック() {
+	public function test重複チェック()
+	{
 		$this->BlogTag->create([
 			'BlogTag' => [
 				'name' => 'タグ１'
@@ -71,7 +76,8 @@ class BlogTagTest extends BaserTestCase {
 		$this->assertEquals('既に登録のあるタグです。', current($this->BlogTag->validationErrors['name']));
 	}
 
-	public function test正常チェック() {
+	public function test正常チェック()
+	{
 		$this->BlogTag->create([
 			'BlogTag' => [
 				'name' => 'test'
@@ -81,53 +87,57 @@ class BlogTagTest extends BaserTestCase {
 		$this->assertTrue($this->BlogTag->validates());
 	}
 
-/**
- * ブログタグリスト取得
- *
- * @param string $type
- * @param mixed $expected
- * @param array $options
- * @dataProvider findCustomParamsDataProvider
- */
-	public function testFindCustomParams($type, $expected, $options = []) {
+	/**
+	 * ブログタグリスト取得
+	 *
+	 * @param string $type
+	 * @param mixed $expected
+	 * @param array $options
+	 * @dataProvider findCustomParamsDataProvider
+	 */
+	public function testFindCustomParams($type, $expected, $options = [])
+	{
 		$result = $this->BlogTag->find('customParams', $options);
-		if($type == 'count') {
-			if($result) {
+		if ($type == 'count') {
+			if ($result) {
 				$result = count($result);
 			}
-		} elseif($type == 'id') {
-			if($result) {
+		} elseif ($type == 'id') {
+			if ($result) {
 				$result = Hash::extract($result, '{n}.BlogTag.id');
 			}
 		}
 		$this->assertEquals($expected, $result);
 	}
 
-	public function findCustomParamsDataProvider() {
+	public function findCustomParamsDataProvider()
+	{
 		return [
 			['count', 5, []],
-			['count', 2, ['siteId' => 0]],										// サイト指定
-			['count', 3, ['siteId' => [0, 2]]],									// サイト指定（復数）
-			['count', 2, ['contentId' => 2]],									// ブログコンテンツID指定
-			['count', 3, ['contentId' => [2, 3]]],								// ブログコンテンツID指定（復数）
-			['count', 2, ['contentUrl' => ['/blog1/', '/blog2/']]],				// コンテンツURL指定
+			['count', 2, ['siteId' => 0]],                                        // サイト指定
+			['count', 3, ['siteId' => [0, 2]]],                                    // サイト指定（復数）
+			['count', 2, ['contentId' => 2]],                                    // ブログコンテンツID指定
+			['count', 3, ['contentId' => [2, 3]]],                                // ブログコンテンツID指定（復数）
+			['count', 2, ['contentUrl' => ['/blog1/', '/blog2/']]],                // コンテンツURL指定
 			['count', 3, ['contentUrl' => ['/blog1/', '/blog2/', '/s/blog3/']]],// コンテンツURL指定（復数）
-			['id', [5, 4, 3, 2, 1], ['sort' => 'id', 'direction' => 'DESC']],	// 並び替え指定
+			['id', [5, 4, 3, 2, 1], ['sort' => 'id', 'direction' => 'DESC']],    // 並び替え指定
 		];
 	}
 
-/**
- * 指定した名称のブログタグ情報を取得する
- * @dataProvider getByNameDataProvider
- * @param string $name
- * @param bool $expects
- */
-	public function testGetByName($name, $expects) {
+	/**
+	 * 指定した名称のブログタグ情報を取得する
+	 * @dataProvider getByNameDataProvider
+	 * @param string $name
+	 * @param bool $expects
+	 */
+	public function testGetByName($name, $expects)
+	{
 		$result = $this->BlogTag->getByName($name);
-		$this->assertEquals($expects, (bool) $result);
+		$this->assertEquals($expects, (bool)$result);
 	}
 
-	public function getByNameDataProvider() {
+	public function getByNameDataProvider()
+	{
 		return [
 			['タグ１', true],
 			['タグ２', true],

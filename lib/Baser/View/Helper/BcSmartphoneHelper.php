@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View.Helper
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View.Helper
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -15,24 +15,26 @@
  *
  * @package Baser.View.Helper
  */
-class BcSmartphoneHelper extends Helper {
+class BcSmartphoneHelper extends Helper
+{
 
-/**
- * ヘルパ
- *
- * @var array
- */
+	/**
+	 * ヘルパ
+	 *
+	 * @var array
+	 */
 	public $helpers = ['BcHtml'];
 
-/**
- * After Render
- *
- * @param string $viewFile
- */
-	public function afterRender($viewFile) {
+	/**
+	 * After Render
+	 *
+	 * @param string $viewFile
+	 */
+	public function afterRender($viewFile)
+	{
 		parent::afterRender($viewFile);
 		$site = BcSite::findCurrent();
-		if($site->device != 'smartphone' || $site->sameMainUrl) {
+		if ($site->device != 'smartphone' || $site->sameMainUrl) {
 			return;
 		}
 		// 別URLの場合、canonicalを出力
@@ -53,11 +55,12 @@ class BcSmartphoneHelper extends Helper {
 	}
 
 	/**
- * afterLayout
- *
- * @return void
- */
-	public function afterLayout($layoutFile) {
+	 * afterLayout
+	 *
+	 * @return void
+	 */
+	public function afterLayout($layoutFile)
+	{
 
 		if (isset($this->request->params['ext']) && $this->request->params['ext'] == 'rss') {
 			$rss = true;
@@ -66,7 +69,7 @@ class BcSmartphoneHelper extends Helper {
 		}
 		$site = BcSite::findCurrent();
 		if (!$rss && $site->device == 'smartphone' && $this->_View->layoutPath != 'Emails' . DS . 'text') {
-			if(empty($this->request->params['Site'])) {
+			if (empty($this->request->params['Site'])) {
 				return;
 			}
 			// 内部リンクの自動変換
@@ -78,7 +81,7 @@ class BcSmartphoneHelper extends Helper {
 					preg_quote(BC_BASE_URL, '/'),
 					preg_quote(preg_replace('/\/$/', '', $siteUrl) . BC_BASE_URL, '/'),
 				];
-				if($sslUrl) {
+				if ($sslUrl) {
 					$regBaseUrls[] = preg_quote(preg_replace('/\/$/', '', $sslUrl) . BC_BASE_URL, '/');
 				}
 				$regBaseUrl = implode('|', $regBaseUrls);
@@ -94,15 +97,16 @@ class BcSmartphoneHelper extends Helper {
 		}
 	}
 
-/**
- * リンクからモバイル用のプレフィックスを除外する
- * preg_replace_callback のコールバック関数
- *
- * @param array $matches
- * @return string
- * @access protected
- */
-	protected function _removePrefix($matches) {
+	/**
+	 * リンクからモバイル用のプレフィックスを除外する
+	 * preg_replace_callback のコールバック関数
+	 *
+	 * @param array $matches
+	 * @return string
+	 * @access protected
+	 */
+	protected function _removePrefix($matches)
+	{
 		$etc = $matches[1];
 		$baseUrl = $matches[3];
 		if (strpos($matches[2], 'smartphone=off') !== false) {
@@ -113,14 +117,15 @@ class BcSmartphoneHelper extends Helper {
 		return '<a' . $etc . 'href="' . $baseUrl . $url . '"';
 	}
 
-/**
- * リンクにモバイル用のプレフィックスを追加する
- * preg_replace_callback のコールバック関数
- *
- * @param array $matches
- * @return string
- */
-	protected function _addPrefix($matches) {
+	/**
+	 * リンクにモバイル用のプレフィックスを追加する
+	 * preg_replace_callback のコールバック関数
+	 *
+	 * @param array $matches
+	 * @return string
+	 */
+	protected function _addPrefix($matches)
+	{
 		$currentAlias = $this->request->params['Site']['alias'];
 		$baseUrl = $matches[2];
 		$etc = $matches[1];
@@ -131,7 +136,7 @@ class BcSmartphoneHelper extends Helper {
 			// 指定した絶対URLを記載しているリンクは変換しない
 			$excludeList = Configure::read('BcApp.excludeAbsoluteUrlAddPrefix');
 			if ($excludeList) {
-				foreach ($excludeList as $exclude) {
+				foreach($excludeList as $exclude) {
 					if (strpos($baseUrl, $exclude) !== false) {
 						return '<a' . $etc . 'href="' . $baseUrl . $url . '"';
 					}
@@ -140,7 +145,7 @@ class BcSmartphoneHelper extends Helper {
 			// 指定したディレクトリURLを記載しているリンクは変換しない
 			$excludeList = Configure::read('BcApp.excludeListAddPrefix');
 			if ($excludeList) {
-				foreach ($excludeList as $exclude) {
+				foreach($excludeList as $exclude) {
 					if (strpos($url, $exclude) !== false) {
 						return '<a' . $etc . 'href="' . $baseUrl . $url . '"';
 					}

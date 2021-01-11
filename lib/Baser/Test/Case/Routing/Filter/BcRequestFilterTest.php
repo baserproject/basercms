@@ -3,26 +3,27 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Routing.Filter
- * @since			baserCMS v 3.0.0-beta
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.Routing.Filter
+ * @since           baserCMS v 3.0.0-beta
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('BcRequestFilter', 'Routing/Filter');
 
 /**
- * BcRequestFilterTest class
+ * Class BcRequestFilterTest
  *
  * @package Baser.Test.Case.Routing.Filter
  */
-class BcRequestFilterTest extends BaserTestCase {
+class BcRequestFilterTest extends BaserTestCase
+{
 
-/**
- * フィクスチャ
- * @var array
- */
+	/**
+	 * フィクスチャ
+	 * @var array
+	 */
 	public $fixtures = [
 		'baser.Default.Page',
 		'baser.Default.Content',
@@ -31,62 +32,68 @@ class BcRequestFilterTest extends BaserTestCase {
 		'baser.Default.User',
 	];
 
-/**
- * BcRequestFilter
- * @var BcRequestFilter
- */
+	/**
+	 * BcRequestFilter
+	 * @var BcRequestFilter
+	 */
 	public $requestFilter;
 
-/**
- * set up
- *
- * @return void
- */
-	public function setUp() {
+	/**
+	 * set up
+	 *
+	 * @return void
+	 */
+	public function setUp()
+	{
 		parent::setUp();
 		$this->requestFilter = new BcRequestFilter();
 	}
 
-/**
- * beforeDispatch Event
- */
-	public function testBeforeDispatch() {
+	/**
+	 * beforeDispatch Event
+	 */
+	public function testBeforeDispatch()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * リクエスト検出器の設定を取得
- */
-	public function testGetDetectorConfigs() {
+	/**
+	 * リクエスト検出器の設定を取得
+	 */
+	public function testGetDetectorConfigs()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * リクエスト検出器を追加する
- */
-	public function testAddDetectors() {
+	/**
+	 * リクエスト検出器を追加する
+	 */
+	public function testAddDetectors()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * 管理画面のURLかどうかを判定
- *
- * @param bool $expect 期待値
- * @param string $url URL文字列
- * @return void
- * @dataProvider isAdminDataProvider
- */
-	public function testIsAdmin($expect, $url) {
+	/**
+	 * 管理画面のURLかどうかを判定
+	 *
+	 * @param bool $expect 期待値
+	 * @param string $url URL文字列
+	 * @return void
+	 * @dataProvider isAdminDataProvider
+	 */
+	public function testIsAdmin($expect, $url)
+	{
 		$request = new CakeRequest($url);
 		$this->assertEquals($expect, $this->requestFilter->isAdmin($request));
 	}
 
-/**
- * isAdmin用データプロバイダ
- *
- * @return array
- */
-	public function isAdminDataProvider() {
+	/**
+	 * isAdmin用データプロバイダ
+	 *
+	 * @return array
+	 */
+	public function isAdminDataProvider()
+	{
 		return [
 			[true, '/admin'],
 			[true, '/admin/'],
@@ -98,25 +105,27 @@ class BcRequestFilterTest extends BaserTestCase {
 		];
 	}
 
-/**
- * アセットのURLかどうかを判定
- *
- * @param bool $expect 期待値
- * @param string $url URL文字列
- * @return void
- * @dataProvider isAssetDataProvider
- */
-	public function testIsAsset($expect, $url) {
+	/**
+	 * アセットのURLかどうかを判定
+	 *
+	 * @param bool $expect 期待値
+	 * @param string $url URL文字列
+	 * @return void
+	 * @dataProvider isAssetDataProvider
+	 */
+	public function testIsAsset($expect, $url)
+	{
 		$request = new CakeRequest($url);
 		$this->assertEquals($expect, $this->requestFilter->isAsset($request));
 	}
 
-/**
- * isAsset用データプロバイダ
- *
- * @return array
- */
-	public function isAssetDataProvider() {
+	/**
+	 * isAsset用データプロバイダ
+	 *
+	 * @return array
+	 */
+	public function isAssetDataProvider()
+	{
 		return [
 			[false, '/'],
 			[false, '/about'],
@@ -135,26 +144,28 @@ class BcRequestFilterTest extends BaserTestCase {
 		];
 	}
 
-/**
- * インストール用のURLかどうかを判定
- *
- * @param bool $expect 期待値
- * @param string $url URL文字列
- * @return void
- * @dataProvider isInstallDataProvider
- */
-	public function testIsInstall($expect, $url) {
+	/**
+	 * インストール用のURLかどうかを判定
+	 *
+	 * @param bool $expect 期待値
+	 * @param string $url URL文字列
+	 * @return void
+	 * @dataProvider isInstallDataProvider
+	 */
+	public function testIsInstall($expect, $url)
+	{
 		Configure::write('BcRequest.isInstalled', false);
 		$request = $this->_getRequest($url);
 		$this->assertEquals($expect, $this->requestFilter->isInstall($request));
 	}
 
-/**
- * isInstall用データプロバイダ
- *
- * @return array
- */
-	public function isInstallDataProvider() {
+	/**
+	 * isInstall用データプロバイダ
+	 *
+	 * @return array
+	 */
+	public function isInstallDataProvider()
+	{
 		return [
 			[true, '/install'],
 			[true, '/install/'],
@@ -165,25 +176,27 @@ class BcRequestFilterTest extends BaserTestCase {
 		];
 	}
 
-/**
- * メンテナンス用のURLかどうかを判定
- *
- * @param bool $expect 期待値
- * @param string $url URL文字列
- * @return void
- * @dataProvider isMaintenanceDataProvider
- */
-	public function testIsMaintenance($expect, $url) {
+	/**
+	 * メンテナンス用のURLかどうかを判定
+	 *
+	 * @param bool $expect 期待値
+	 * @param string $url URL文字列
+	 * @return void
+	 * @dataProvider isMaintenanceDataProvider
+	 */
+	public function testIsMaintenance($expect, $url)
+	{
 		$request = new CakeRequest($url);
 		$this->assertEquals($expect, $this->requestFilter->isMaintenance($request));
 	}
 
-/**
- * isMaintenance用データプロバイダ
- *
- * @return array
- */
-	public function isMaintenanceDataProvider() {
+	/**
+	 * isMaintenance用データプロバイダ
+	 *
+	 * @return array
+	 */
+	public function isMaintenanceDataProvider()
+	{
 		return [
 			[true, '/maintenance'],
 			[true, '/maintenance/'],
@@ -194,25 +207,27 @@ class BcRequestFilterTest extends BaserTestCase {
 		];
 	}
 
-/**
- * アップデート用のURLかどうかを判定
- *
- * @param bool $expect 期待値
- * @param string $url URL文字列
- * @return void
- * @dataProvider isUpdateDataProvider
- */
-	public function testIsUpdate($expect, $url) {
+	/**
+	 * アップデート用のURLかどうかを判定
+	 *
+	 * @param bool $expect 期待値
+	 * @param string $url URL文字列
+	 * @return void
+	 * @dataProvider isUpdateDataProvider
+	 */
+	public function testIsUpdate($expect, $url)
+	{
 		$request = new CakeRequest($url);
 		$this->assertEquals($expect, $this->requestFilter->isUpdate($request));
 	}
 
-/**
- * isUpdate用データプロバイダ
- *
- * @return array
- */
-	public function isUpdateDataProvider() {
+	/**
+	 * isUpdate用データプロバイダ
+	 *
+	 * @return array
+	 */
+	public function isUpdateDataProvider()
+	{
 		$slug = Configure::read('BcApp.updateKey');
 		return [
 			[true, "/{$slug}"],
@@ -224,26 +239,28 @@ class BcRequestFilterTest extends BaserTestCase {
 		];
 	}
 
-/**
- * 固定ページ表示用のURLかどうかを判定
- * [注]ルーターによるURLパース後のみ
- *
- * @param bool $expect 期待値
- * @param string $url URL文字列
- * @return void
- * @dataProvider isPageDataProvider
- */
-	public function testIsPage($expect, $url) {
+	/**
+	 * 固定ページ表示用のURLかどうかを判定
+	 * [注]ルーターによるURLパース後のみ
+	 *
+	 * @param bool $expect 期待値
+	 * @param string $url URL文字列
+	 * @return void
+	 * @dataProvider isPageDataProvider
+	 */
+	public function testIsPage($expect, $url)
+	{
 		$request = $this->_getRequest($url);
 		$this->assertEquals($expect, $this->requestFilter->isPage($request));
 	}
 
-/**
- * isPage用データプロバイダ
- *
- * @return array
- */
-	public function isPageDataProvider() {
+	/**
+	 * isPage用データプロバイダ
+	 *
+	 * @return array
+	 */
+	public function isPageDataProvider()
+	{
 		return [
 			[false, '/admin/'],
 			[false, '/news/index'],
@@ -254,10 +271,11 @@ class BcRequestFilterTest extends BaserTestCase {
 		];
 	}
 
-/**
- * baserCMSの基本処理を必要とするかどうか
- */
-	public function testIsRequestView() {
+	/**
+	 * baserCMSの基本処理を必要とするかどうか
+	 */
+	public function testIsRequestView()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 

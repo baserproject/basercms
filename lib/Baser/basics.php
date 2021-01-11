@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('EmailComponent', 'Controller/Component');
@@ -19,7 +19,7 @@ App::uses('CakeText', 'Utility');
  *
  * baser/config/bootstrapより呼び出される
  *
- * @package			Baser
+ * @package         Baser
  */
 
 /**
@@ -32,7 +32,8 @@ App::uses('CakeText', 'Utility');
  *
  * @return string ベースURL
  */
-function baseUrl() {
+function baseUrl()
+{
 
 	$baseUrl = Configure::read('App.baseUrl');
 	if ($baseUrl) {
@@ -41,10 +42,10 @@ function baseUrl() {
 		}
 	} else {
 		$script = $_SERVER['SCRIPT_FILENAME'];
-		if(isConsole()) {
+		if (isConsole()) {
 			$script = str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
 		}
-		$script = str_replace(array('\\', '/'), DS, $script);
+		$script = str_replace(['\\', '/'], DS, $script);
 		$docroot = docRoot();
 		$script = str_replace($docroot, '', $script);
 		if (BC_DEPLOY_PATTERN == 1) {
@@ -74,13 +75,14 @@ function baseUrl() {
  *
  * @return string   ドキュメントルートの絶対パス
  */
-function docRoot() {
+function docRoot()
+{
 
 	if (empty($_SERVER['SCRIPT_NAME'])) {
 		return '';
 	}
 
-	if(isConsole()) {
+	if (isConsole()) {
 		$script = $_SERVER['SCRIPT_NAME'];
 		return str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
 	}
@@ -96,7 +98,7 @@ function docRoot() {
 	// WINDOWS環境の場合、SCRIPT_NAMEのDIRECTORY_SEPARATORがスラッシュの場合があるので
 	// スラッシュに一旦置換してスラッシュベースで解析
 	$docRoot = str_replace('\\', '/', $_SERVER['SCRIPT_FILENAME']);
-	foreach ($path as $value) {
+	foreach($path as $value) {
 		$reg = "/\/" . $value . "$/";
 		$docRoot = preg_replace($reg, '', $docRoot);
 	}
@@ -108,7 +110,8 @@ function docRoot() {
  * @param string    baserCMS形式のバージョン表記　（例）baserCMS 1.5.3.1600 beta
  * @return string   リビジョン番号
  */
-function revision($version) {
+function revision($version)
+{
 	return preg_replace("/baserCMS [0-9]+?\.[0-9]+?\.[0-9]+?\.([0-9]*)[\sa-z]*/is", "$1", $version);
 }
 
@@ -121,7 +124,8 @@ function revision($version) {
  *
  * @param mixed $version Or false
  */
-function verpoint($version) {
+function verpoint($version)
+{
 	$version = str_replace('baserCMS ', '', $version);
 	if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)([\sa-z\-]+|\.[0-9]+|)([\sa-z\-]+|\.[0-9]+|)/is", $version, $maches)) {
 		if (isset($maches[4]) && preg_match('/^\.[0-9]+$/', $maches[4])) {
@@ -142,13 +146,14 @@ function verpoint($version) {
 
 /**
  * 拡張子を取得する
- * @param	string	mimeタイプ
- * @return	string	拡張子
- * @access	public
+ * @param string    mimeタイプ
+ * @return    string    拡張子
+ * @access    public
  */
-function decodeContent($content, $fileName = null) {
+function decodeContent($content, $fileName = null)
+{
 
-	$contentsMaping = array(
+	$contentsMaping = [
 		"image/gif" => "gif",
 		"image/jpeg" => "jpg",
 		"image/pjpeg" => "jpg",
@@ -187,7 +192,7 @@ function decodeContent($content, $fileName = null) {
 		"video/x-msvideo" => "avi",
 		"video/x-ms-asf" => "asf",
 		"video/x-ms-wmv" => "wmv"
-	);
+	];
 
 	if (isset($contentsMaping[$content])) {
 		return $contentsMaping[$content];
@@ -212,9 +217,10 @@ function decodeContent($content, $fileName = null) {
  * 《注意》
  * bootstrap 実行後でのみ利用可
  */
-function getUrlParamFromEnv() {
+function getUrlParamFromEnv()
+{
 	$url = getUrlFromEnv();
-	$url = preg_replace('/^\//', '',  $url);
+	$url = preg_replace('/^\//', '', $url);
 	if (strpos($url, '?') !== false) {
 		list($url) = explode('?', $url);
 	}
@@ -229,7 +235,8 @@ function getUrlParamFromEnv() {
  * ＊ baseUrlは除外する
  *
  */
-function getUrlFromEnv() {
+function getUrlFromEnv()
+{
 
 	if (!empty($_GET['url'])) {
 		return preg_replace('/^\//', '', $_GET['url']);
@@ -277,7 +284,8 @@ function getUrlFromEnv() {
  * @param CakeRequest $Request
  * @return type
  */
-function getPureUrl($Request) {
+function getPureUrl($Request)
+{
 	if (!$Request) {
 		$Request = new CakeRequest();
 	}
@@ -297,16 +305,17 @@ function getPureUrl($Request) {
  * 全て削除する場合、標準の関数clearCacheだとemptyファイルまで削除されてしまい、
  * 開発時に不便なのでFolderクラスで削除
  *
- * @param	$url
- * @return	void
- * @access	public
+ * @param    $url
+ * @return    void
+ * @access    public
  */
-function clearViewCache($url = null, $ext = '.php') {
+function clearViewCache($url = null, $ext = '.php')
+{
 
 	$url = preg_replace('/^\/mobile\//is', '/m/', $url);
 	if ($url == '/' || $url == '/index' || $url == '/index.html' || $url == '/m/' || $url == '/m/index' || $url == '/m/index.html') {
-		$homes = array('index', 'index_html');
-		foreach ($homes as $home) {
+		$homes = ['index', 'index_html'];
+		foreach($homes as $home) {
 			if (preg_match('/^\/m/is', $url)) {
 				if ($home) {
 					$home = 'm_' . $home;
@@ -322,7 +331,7 @@ function clearViewCache($url = null, $ext = '.php') {
 			}
 			$baseUrl = baseUrl();
 			if ($baseUrl) {
-				$baseUrl = str_replace(array('/', '.'), '_', $baseUrl);
+				$baseUrl = str_replace(['/', '.'], '_', $baseUrl);
 				$baseUrl = preg_replace('/^_/', '', $baseUrl);
 				$baseUrl = preg_replace('/_$/', '', $baseUrl);
 				if ($home) {
@@ -346,7 +355,7 @@ function clearViewCache($url = null, $ext = '.php') {
 	} else {
 		$folder = new Folder(CACHE . 'views' . DS);
 		$files = $folder->read(true, true);
-		foreach ($files[1] as $file) {
+		foreach($files[1] as $file) {
 			if ($file != 'empty') {
 				@unlink(CACHE . 'views' . DS . $file);
 			}
@@ -357,17 +366,18 @@ function clearViewCache($url = null, $ext = '.php') {
 /**
  * データキャッシュを削除する
  */
-function clearDataCache() {
+function clearDataCache()
+{
 
 	App::import('Core', 'Folder');
 	$folder = new Folder(CACHE . 'datas' . DS);
 
 	$files = $folder->read(true, true, true);
-	foreach ($files[1] as $file) {
+	foreach($files[1] as $file) {
 		@unlink($file);
 	}
 	$Folder = new Folder();
-	foreach ($files[0] as $folder) {
+	foreach($files[0] as $folder) {
 		$Folder->delete($folder);
 	}
 }
@@ -375,7 +385,8 @@ function clearDataCache() {
 /**
  * キャッシュファイルを全て削除する
  */
-function clearAllCache() {
+function clearAllCache()
+{
 
 	Cache::clear(false, '_cake_core_');
 	Cache::clear(false, '_cake_model_');
@@ -388,9 +399,10 @@ function clearAllCache() {
 
 /**
  * baserCMSのインストールが完了しているかチェックする
- * @return	boolean
+ * @return    boolean
  */
-function isInstalled() {
+function isInstalled()
+{
 
 	if (getDbConfig() && file_exists(APP . 'Config' . DS . 'install.php')) {
 		return true;
@@ -404,7 +416,8 @@ function isInstalled() {
  * @param string $name
  * @return mixed DatabaseConfig Or false
  */
-function getDbConfig($name = 'default') {
+function getDbConfig($name = 'default')
+{
 	if (file_exists(APP . 'Config' . DS . 'database.php')) {
 		require_once APP . 'Config' . DS . 'database.php';
 		$dbConfig = new DATABASE_CONFIG();
@@ -419,7 +432,8 @@ function getDbConfig($name = 'default') {
  * 必要な一時フォルダが存在するかチェックし、
  * なければ生成する
  */
-function checkTmpFolders() {
+function checkTmpFolders()
+{
 
 	if (!is_writable(TMP)) {
 		return;
@@ -441,16 +455,17 @@ function checkTmpFolders() {
 /**
  * フォルダの中をフォルダを残して空にする(ファイルのみを削除する)
  *
- * @param	string	$path
- * @return	boolean
+ * @param string $path
+ * @return    boolean
  */
-function emptyFolder($path) {
+function emptyFolder($path)
+{
 
 	$result = true;
 	$Folder = new Folder($path);
 	$files = $Folder->read(true, true, true);
 	if (is_array($files[1])) {
-		foreach ($files[1] as $file) {
+		foreach($files[1] as $file) {
 			if ($file != 'empty') {
 				if (!@unlink($file)) {
 					$result = false;
@@ -459,7 +474,7 @@ function emptyFolder($path) {
 		}
 	}
 	if (is_array($files[0])) {
-		foreach ($files[0] as $file) {
+		foreach($files[0] as $file) {
 			if (!emptyFolder($file)) {
 				$result = false;
 			}
@@ -473,7 +488,8 @@ function emptyFolder($path) {
  *
  * @return string
  */
-function getViewPath() {
+function getViewPath()
+{
 	$siteConfig = Configure::read('BcSite');
 	$theme = $siteConfig['theme'];
 	if ($theme) {
@@ -486,19 +502,20 @@ function getViewPath() {
 /**
  * ファイルポインタから行を取得し、CSVフィールドを処理する
  *
- * @param	stream	handle
- * @param	int		length
- * @param	string	delimiter
- * @param 	string	enclosure
- * @return	mixed	ファイルの終端に達した場合を含み、エラー時にFALSEを返します。
+ * @param stream    handle
+ * @param int        length
+ * @param string    delimiter
+ * @param string    enclosure
+ * @return    mixed    ファイルの終端に達した場合を含み、エラー時にFALSEを返します。
  */
-function fgetcsvReg(&$handle, $length = null, $d = ',', $e = '"') {
+function fgetcsvReg(&$handle, $length = null, $d = ',', $e = '"')
+{
 	$d = preg_quote($d);
 	$e = preg_quote($e);
 	$_line = "";
 	$eof = false;
-	while (($eof != true) and (!feof($handle))) {
-		$_line .= (empty($length) ? fgets($handle) : fgets($handle, $length));
+	while(($eof != true) and (!feof($handle))) {
+		$_line .= (empty($length)? fgets($handle) : fgets($handle, $length));
 		$itemcnt = preg_match_all('/' . $e . '/', $_line, $dummy);
 		if ($itemcnt % 2 == 0)
 			$eof = true;
@@ -507,20 +524,21 @@ function fgetcsvReg(&$handle, $length = null, $d = ',', $e = '"') {
 	$_csv_pattern = '/(' . $e . '[^' . $e . ']*(?:' . $e . $e . '[^' . $e . ']*)*' . $e . '|[^' . $d . ']*)' . $d . '/';
 	preg_match_all($_csv_pattern, $_csv_line, $_csv_matches);
 	$_csv_data = $_csv_matches[1];
-	for ($_csv_i = 0; $_csv_i < count($_csv_data); $_csv_i++) {
+	for($_csv_i = 0; $_csv_i < count($_csv_data); $_csv_i++) {
 		$_csv_data[$_csv_i] = preg_replace('/^' . $e . '(.*)' . $e . '$/s', '$1', $_csv_data[$_csv_i]);
 		$_csv_data[$_csv_i] = str_replace($e . $e, $e, $_csv_data[$_csv_i]);
 	}
-	return empty($_line) ? false : $_csv_data;
+	return empty($_line)? false : $_csv_data;
 }
 
 /**
  * httpからのフルURLを取得する
  *
- * @param	mixed	$url
- * @return	string
+ * @param mixed $url
+ * @return    string
  */
-function fullUrl($url) {
+function fullUrl($url)
+{
 	$url = Router::url($url);
 	return topLevelUrl(false) . $url;
 }
@@ -528,10 +546,11 @@ function fullUrl($url) {
 /**
  * サイトのトップレベルのURLを取得する
  *
- * @param	boolean	$lastSlash
- * @return	string
+ * @param boolean $lastSlash
+ * @return    string
  */
-function topLevelUrl($lastSlash = true) {
+function topLevelUrl($lastSlash = true)
+{
 
 	if (isConsole() && !Configure::check('BcEnv.host')) {
 		return Configure::read('App.fullBaseUrl');
@@ -554,12 +573,13 @@ function topLevelUrl($lastSlash = true) {
  *
  * index.phpは含まない
  *
- * @return	string
+ * @return    string
  */
-function siteUrl() {
+function siteUrl()
+{
 	$baseUrl = preg_replace('/' . preg_quote(basename($_SERVER['SCRIPT_FILENAME']), '/') . '\/$/', '', baseUrl());
 	$topLevelUrl = topLevelUrl(false);
-	if($topLevelUrl) {
+	if ($topLevelUrl) {
 		return $topLevelUrl . $baseUrl;
 	} else {
 		return '';
@@ -569,13 +589,14 @@ function siteUrl() {
 /**
  * 配列を再帰的に上書きする
  * 二つまで
- * @param	array	$a
- * @param	array	$b
- * @return	array
+ * @param array $a
+ * @param array $b
+ * @return    array
  */
-function amr($a, $b) {
+function amr($a, $b)
+{
 
-	foreach ($b as $k => $v) {
+	foreach($b as $k => $v) {
 		if (is_array($v)) {
 			if (isset($a[$k])) {
 				$a[$k] = amr($a[$k], $v);
@@ -583,7 +604,7 @@ function amr($a, $b) {
 			}
 		}
 		if (!is_array($a)) {
-			$a = array($a);
+			$a = [$a];
 		}
 		$a[$k] = $v;
 	}
@@ -597,17 +618,18 @@ function amr($a, $b) {
  * @param mixed $url
  * @return mixed
  */
-function addSessionId($url, $force = false) {
-	if(BcUtil::isAdminSystem()) {
+function addSessionId($url, $force = false)
+{
+	if (BcUtil::isAdminSystem()) {
 		return $url;
 	}
 	$sessionId = session_id();
-	if(!$sessionId) {
+	if (!$sessionId) {
 		return $url;
 	}
 
 	$site = null;
-	if(!Configure::read('BcRequest.isUpdater')) {
+	if (!Configure::read('BcRequest.isUpdater')) {
 		$site = BcSite::findCurrent();
 	}
 	// use_trans_sid が有効になっている場合、２重で付加されてしまう
@@ -616,12 +638,12 @@ function addSessionId($url, $force = false) {
 			$url["?"][session_name()] = $sessionId;
 		} else {
 			if (strpos($url, '?') !== false) {
-				$args = array();
+				$args = [];
 				$_url = explode('?', $url);
 				if (!empty($_url[1])) {
 					if (strpos($_url[1], '&') !== false) {
 						$aryUrl = explode('&', $_url[1]);
-						foreach ($aryUrl as $pass) {
+						foreach($aryUrl as $pass) {
 							if (strpos($pass, '=') !== false) {
 								list($key, $value) = explode('=', $pass);
 								$args[$key] = $value;
@@ -636,7 +658,7 @@ function addSessionId($url, $force = false) {
 				}
 				$args[session_name()] = $sessionId;
 				$pass = '';
-				foreach ($args as $key => $value) {
+				foreach($args as $key => $value) {
 					if ($pass) {
 						$pass .= '&';
 					}
@@ -659,9 +681,10 @@ function addSessionId($url, $force = false) {
  *
  * @return array
  */
-function getEnablePlugins() {
+function getEnablePlugins()
+{
 
-	$enablePlugins = array();
+	$enablePlugins = [];
 	if (!Configure::read('Cache.disable') && Configure::read('debug') == 0) {
 		$enablePlugins = Cache::read('enable_plugins', '_cake_env_');
 	}
@@ -670,12 +693,12 @@ function getEnablePlugins() {
 		try {
 			$Plugin = ClassRegistry::init('Plugin');   // ConnectionManager の前に呼出さないとエラーとなる
 		} catch (Exception $ex) {
-			return array();
+			return [];
 		}
 		$db = ConnectionManager::getDataSource('default');
 		$sources = $db->listSources();
 		$pluginTable = $db->config['prefix'] . 'plugins';
-		$enablePlugins = array();
+		$enablePlugins = [];
 		if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
 			$enablePlugins = $Plugin->find('all', ['conditions' => ['Plugin.status' => true], 'order' => 'Plugin.priority']);
 			ClassRegistry::removeObject('Plugin');
@@ -691,7 +714,7 @@ function getEnablePlugins() {
 							$pluginExists = true;
 						}
 					}
-					if(!$pluginExists) {
+					if (!$pluginExists) {
 						unset($enablePlugins[$key]);
 					}
 				}
@@ -708,11 +731,12 @@ function getEnablePlugins() {
 /**
  * サイト基本設定をConfigureへ読み込む
  *
- * @var bool $force 強制的に読み込み直す
  * @return bool
+ * @var bool $force 強制的に読み込み直す
  */
-function loadSiteConfig($force = false) {
-	if(Configure::read('BcSite') && !$force) {
+function loadSiteConfig($force = false)
+{
+	if (Configure::read('BcSite') && !$force) {
 		return true;
 	}
 	// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
@@ -731,7 +755,8 @@ function loadSiteConfig($force = false) {
  *
  * @return string Or false
  */
-function getVersion($plugin = '') {
+function getVersion($plugin = '')
+{
 
 	$corePlugins = Configure::read('BcApp.corePlugins');
 	if (!$plugin || in_array($plugin, $corePlugins)) {
@@ -740,13 +765,13 @@ function getVersion($plugin = '') {
 		$paths = App::path('Plugin');
 		$exists = false;
 		foreach($paths as $path) {
-			$path .=  $plugin . DS . 'VERSION.txt';
+			$path .= $plugin . DS . 'VERSION.txt';
 			if (file_exists($path)) {
 				$exists = true;
 				break;
 			}
 		}
-		if(!$exists) {
+		if (!$exists) {
 			return false;
 		}
 	}
@@ -765,12 +790,13 @@ function getVersion($plugin = '') {
 /**
  * アップデートのURLを記載したメールを送信する
  */
-function sendUpdateMail() {
+function sendUpdateMail()
+{
 
 	$bcSite = Configure::read('BcSite');
 	$bcSite['update_id'] = CakeText::uuid();
 	$SiteConfig = ClassRegistry::init('SiteConfig');
-	$SiteConfig->saveKeyValue(array('SiteConfig' => $bcSite));
+	$SiteConfig->saveKeyValue(['SiteConfig' => $bcSite]);
 	ClassRegistry::removeObject('SiteConfig');
 
 	$BcEmail = new BcEmailComponent();
@@ -784,18 +810,18 @@ function sendUpdateMail() {
 	$BcEmail->lineLength = 105;
 	if (!empty($bcSite['smtp_host'])) {
 		$BcEmail->delivery = 'smtp';
-		$BcEmail->smtpOptions = array('host' => $bcSite['smtp_host'],
+		$BcEmail->smtpOptions = ['host' => $bcSite['smtp_host'],
 			'port' => 25,
 			'timeout' => 30,
-			'username' => ($bcSite['smtp_user']) ? $bcSite['smtp_user'] : null,
-			'password' => ($bcSite['smtp_password']) ? $bcSite['smtp_password'] : null);
+			'username' => ($bcSite['smtp_user'])? $bcSite['smtp_user'] : null,
+			'password' => ($bcSite['smtp_password'])? $bcSite['smtp_password'] : null];
 	} else {
 		$BcEmail->delivery = "mail";
 	}
 	$BcEmail->to = $bcSite['email'];
 	$BcEmail->subject = __d('baser', 'baserCMSアップデート');
 	$BcEmail->from = $bcSite['name'] . ' <' . $bcSite['email'] . '>';
-	$message = array();
+	$message = [];
 	$message[] = __d('baser', '下記のURLよりbaserCMSのアップデートを完了してください。');
 	$message[] = topLevelUrl(false) . baseUrl() . 'updaters/index/' . $bcSite['update_id'];
 	$BcEmail->send($message);
@@ -809,7 +835,8 @@ function sendUpdateMail() {
  * @param mixed $var
  * @return void
  */
-function p($var) {
+function p($var)
+{
 	$debug = Configure::read('debug');
 	if ($debug < 1) {
 		Configure::write('debug', 1);
@@ -829,7 +856,8 @@ function p($var) {
  * @param string $dbConfigKeyName
  * @return string
  */
-function getDbDriver($dbConfigKeyName = 'default') {
+function getDbDriver($dbConfigKeyName = 'default')
+{
 
 	$db = ConnectionManager::getDataSource($dbConfigKeyName);
 	return $db->config['datasource'];
@@ -840,7 +868,8 @@ function getDbDriver($dbConfigKeyName = 'default') {
  *
  * @return bool
  */
-function isConsole() {
+function isConsole()
+{
 	return defined('CAKEPHP_SHELL') && CAKEPHP_SHELL;
 }
 
@@ -858,10 +887,11 @@ function isConsole() {
  * @return array Associative array
  * @link http://book.cakephp.org/view/695/aa
  */
-function aa() {
+function aa()
+{
 	$args = func_get_args();
 	$argc = count($args);
-	for ($i = 0; $i < $argc; $i++) {
+	for($i = 0; $i < $argc; $i++) {
 		if ($i + 1 < $argc) {
 			$a[$args[$i]] = $args[$i + 1];
 		} else {
@@ -879,14 +909,15 @@ function aa() {
  * @param string $suffix
  * @return type
  */
-function mb_basename($str, $suffix=null){
-  $tmp = preg_split('/[\/\\\\]/', $str);
-  $res = end($tmp);
-  if(strlen($suffix)){
-    $suffix = preg_quote($suffix);
-    $res = preg_replace("/({$suffix})$/u", "", $res);
-  }
-  return $res;
+function mb_basename($str, $suffix = null)
+{
+	$tmp = preg_split('/[\/\\\\]/', $str);
+	$res = end($tmp);
+	if (strlen($suffix)) {
+		$suffix = preg_quote($suffix);
+		$res = preg_replace("/({$suffix})$/u", "", $res);
+	}
+	return $res;
 }
 
 /**
@@ -895,8 +926,9 @@ function mb_basename($str, $suffix=null){
  * @param string $plugin
  * @return bool
  */
-function loadPlugin($plugin, $priority) {
-	if(CakePlugin::loaded($plugin)) {
+function loadPlugin($plugin, $priority)
+{
+	if (CakePlugin::loaded($plugin)) {
 		return true;
 	}
 	try {
@@ -905,21 +937,22 @@ function loadPlugin($plugin, $priority) {
 		return false;
 	}
 	$pluginPath = CakePlugin::path($plugin);
-	$config = array(
+	$config = [
 		'bootstrap' => file_exists($pluginPath . 'Config' . DS . 'bootstrap.php'),
 		'routes' => file_exists($pluginPath . 'Config' . DS . 'routes.php')
-	);
+	];
 	CakePlugin::load($plugin, $config);
 	if (file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
 		// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
 		// ※ プラグインの setting.php で、DBへの接続処理が書かれている可能性がある為
 		try {
 			Configure::load($plugin . '.setting');
-		} catch (Exception $ex) {}
+		} catch (Exception $ex) {
+		}
 	}
 	// プラグインイベント登録
-	$eventTargets = array('Controller', 'Model', 'View', 'Helper');
-	foreach ($eventTargets as $eventTarget) {
+	$eventTargets = ['Controller', 'Model', 'View', 'Helper'];
+	foreach($eventTargets as $eventTarget) {
 		$eventClass = $plugin . $eventTarget . 'EventListener';
 		if (file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
 			App::uses($eventClass, $plugin . '.Event');
@@ -929,14 +962,14 @@ function loadPlugin($plugin, $priority) {
 
 			foreach($EventClass->events as $key => $options) {
 				// プラグイン側で priority の設定がされてない場合に設定
-				if(is_array($options)) {
-					if(empty($options['priority'])) {
+				if (is_array($options)) {
+					if (empty($options['priority'])) {
 						$options['priority'] = $priority;
 						$EventClass->events[$key] = $options;
 					}
 				} else {
 					unset($EventClass->events[$key]);
-					$EventClass->events[$options] = array('priority' => $priority);
+					$EventClass->events[$options] = ['priority' => $priority];
 				}
 			}
 			$CakeEvent->attach($EventClass, null);
@@ -954,16 +987,17 @@ function loadPlugin($plugin, $priority) {
  * @param string $note その他特記事項
  * @return string 非推奨メッセージ
  */
-function deprecatedMessage($target, $since, $remove = null, $note = null) {
+function deprecatedMessage($target, $since, $remove = null, $note = null)
+{
 
-	if(Configure::read('debug') == 0) {
+	if (Configure::read('debug') == 0) {
 		return;
 	}
 	$message = sprintf(__d('baser', '%s は、バージョン %s より非推奨となりました。'), $target, $since);
-	if($remove) {
+	if ($remove) {
 		$message .= sprintf(__d('baser', 'バージョン %s で削除される予定です。'), $remove);
 	}
-	if($note) {
+	if ($note) {
 		$message .= $note;
 	}
 	return $message;
@@ -982,9 +1016,10 @@ function deprecatedMessage($target, $since, $remove = null, $note = null) {
  * @param string $val 対象文字列
  * @return string
  */
-function base64UrlsafeEncode($val) {
+function base64UrlsafeEncode($val)
+{
 	$val = base64_encode($val);
-	return str_replace(array('+', '/', '='), array('_', '-', '.'), $val);
+	return str_replace(['+', '/', '='], ['_', '-', '.'], $val);
 }
 
 /**
@@ -993,8 +1028,9 @@ function base64UrlsafeEncode($val) {
  * @param string $val 対象文字列
  * @return string
  */
-function base64UrlsafeDecode($val) {
-	$val = str_replace(array('_','-', '.'), array('+', '/', '='), $val);
+function base64UrlsafeDecode($val)
+{
+	$val = str_replace(['_', '-', '.'], ['+', '/', '='], $val);
 	return base64_decode($val);
 }
 
@@ -1003,7 +1039,8 @@ function base64UrlsafeDecode($val) {
  *
  * @return bool
  */
-function isWindows() {
+function isWindows()
+{
 	return DIRECTORY_SEPARATOR == '\\';
 }
 
@@ -1015,17 +1052,18 @@ function isWindows() {
  * @param $sec
  * @return bool
  */
-function checktime($hour, $min, $sec = null) {
-	$hour = (int) $hour;
+function checktime($hour, $min, $sec = null)
+{
+	$hour = (int)$hour;
 	if ($hour < 0 || $hour > 23) {
 		return false;
 	}
-	$min = (int) $min;
+	$min = (int)$min;
 	if ($min < 0 || $min > 59) {
 		return false;
 	}
-	if($sec) {
-		$sec = (int) $sec;
+	if ($sec) {
+		$sec = (int)$sec;
 		if ($sec < 0 || $sec > 59) {
 			return false;
 		}
@@ -1038,9 +1076,10 @@ function checktime($hour, $min, $sec = null) {
  *
  * @return array
  */
-function getTableList() {
+function getTableList()
+{
 	$list = Cache::read('table_list', '_cake_core_');
-	if($list !== false) {
+	if ($list !== false) {
 		return $list;
 	}
 	$prefix = ConnectionManager::getDataSource('default')->config['prefix'];
@@ -1048,10 +1087,10 @@ function getTableList() {
 	$Folder = new Folder(BASER_CONFIGS . 'Schema');
 	$files = $Folder->read(true, true);
 	$list = [];
-	if($files[1]) {
+	if ($files[1]) {
 		foreach($tables as $key => $table) {
 			foreach($files[1] as $file) {
-				if($table == $prefix . basename($file, '.php')) {
+				if ($table == $prefix . basename($file, '.php')) {
 					$list['core'][] = $table;
 					unset($tables[$key]);
 				}
@@ -1065,7 +1104,7 @@ function getTableList() {
 		$themePath = BASER_THEMES . Configure::read('BcSite.theme') . DS;
 		if (is_dir($themePath . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema')) {
 			$path = $themePath . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema';
-		}elseif (is_dir(APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema')) {
+		} elseif (is_dir(APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema')) {
 			$path = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema';
 		} elseif (is_dir(BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema')) {
 			$path = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema';
@@ -1078,12 +1117,12 @@ function getTableList() {
 	}
 	foreach($tables as $table) {
 		foreach($pluginFiles as $file) {
-			if($prefix . basename($file, '.php') == 'mail_message') {
+			if ($prefix . basename($file, '.php') == 'mail_message') {
 				$test = '';
 			}
 			$file = $prefix . basename($file, '.php');
 			$singularize = Inflector::singularize($file);
-			if(preg_match('/^(' . preg_quote($file, '/') . '|' . preg_quote($singularize, '/') . ')/', $table)) {
+			if (preg_match('/^(' . preg_quote($file, '/') . '|' . preg_quote($singularize, '/') . ')/', $table)) {
 				$list['plugin'][] = $table;
 				unset($tables[$key]);
 			}
@@ -1101,7 +1140,8 @@ function getTableList() {
  * @return mixed
  * @throws Exception
  */
-function retry($times, callable $callback, $interval = 0) {
+function retry($times, callable $callback, $interval = 0)
+{
 
 	if ($times <= 0) {
 		throw new \InvalidArgumentException(__d('baser', 'リトライ回数は正の整数値で指定してください。'));
@@ -1109,7 +1149,7 @@ function retry($times, callable $callback, $interval = 0) {
 
 	$times--;
 
-	while (true) {
+	while(true) {
 		try {
 			return $callback();
 		} catch (\Exception $e) {

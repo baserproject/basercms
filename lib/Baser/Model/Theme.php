@@ -3,44 +3,48 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.Model
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Model
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('BcThemeConfigReader', 'Configure');
 
 /**
+ * Class Theme
+ *
  * テーマモデル
  *
  * @package Baser.Model
  */
-class Theme extends AppModel {
+class Theme extends AppModel
+{
 
-/**
- * クラス名
- *
- * @var string
- */
+	/**
+	 * クラス名
+	 *
+	 * @var string
+	 */
 	public $name = 'Theme';
 
-/**
- * テーブル
- *
- * @var string
- */
+	/**
+	 * テーブル
+	 *
+	 * @var string
+	 */
 	public $useTable = false;
 
-/**
- * Theme constructor.
- *
- * @param bool $id
- * @param null $table
- * @param null $ds
- */
-	public function __construct($id = false, $table = null, $ds = null) {
+	/**
+	 * Theme constructor.
+	 *
+	 * @param bool $id
+	 * @param null $table
+	 * @param null $ds
+	 */
+	public function __construct($id = false, $table = null, $ds = null)
+	{
 		parent::__construct($id, $table, $ds);
 		$this->validate = [
 			'name' => [
@@ -53,13 +57,14 @@ class Theme extends AppModel {
 		];
 	}
 
-/**
- * テーマ名の重複チェック
- *
- * @param string $check チェックするテーマ名
- * @return bool
- */
-	public function themeDuplicate($check) {
+	/**
+	 * テーマ名の重複チェック
+	 *
+	 * @param string $check チェックするテーマ名
+	 * @return bool
+	 */
+	public function themeDuplicate($check)
+	{
 		$value = $check[key($check)];
 		if (!$value) {
 			return true;
@@ -74,24 +79,25 @@ class Theme extends AppModel {
 		}
 	}
 
-/**
- * 保存
- *
- * @param array $data 保存するデータの配列
- * @param bool|array $validate 真偽値または配列
- *   真偽値の場合はバリデーションするかを示す
- *   配列の場合は下記のキーを含むことが可能:
- *
- *   - validate: trueまたはfalseに設定してバリデーションを有効化・無効化する
- *   - fieldList: 保存を許すフィールドの配列
- *   - callbacks: falseに設定するとコールバックを無効にする. 'before' または 'after'
- *      に設定するとそれぞれのコールバックだけが有効になる
- *   - `counterCache`: Boolean to control updating of counter caches (if any)
- *
- * @param array $fieldList 保存を許すフィールドの配列
- * @return bool
- */
-	public function save($data = null, $validate = true, $fieldList = []) {
+	/**
+	 * 保存
+	 *
+	 * @param array $data 保存するデータの配列
+	 * @param bool|array $validate 真偽値または配列
+	 *   真偽値の場合はバリデーションするかを示す
+	 *   配列の場合は下記のキーを含むことが可能:
+	 *
+	 *   - validate: trueまたはfalseに設定してバリデーションを有効化・無効化する
+	 *   - fieldList: 保存を許すフィールドの配列
+	 *   - callbacks: falseに設定するとコールバックを無効にする. 'before' または 'after'
+	 *      に設定するとそれぞれのコールバックだけが有効になる
+	 *   - `counterCache`: Boolean to control updating of counter caches (if any)
+	 *
+	 * @param array $fieldList 保存を許すフィールドの配列
+	 * @return bool
+	 */
+	public function save($data = null, $validate = true, $fieldList = [])
+	{
 		if (!$data) {
 			$data = $this->data;
 		} else {

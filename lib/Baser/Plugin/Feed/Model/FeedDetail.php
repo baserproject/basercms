@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Feed.Model
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Feed.Model
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('FeedAppModel', 'Feed.Model');
@@ -17,41 +17,43 @@ App::uses('FeedAppModel', 'Feed.Model');
  *
  * @package Feed.Model
  */
-class FeedDetail extends FeedAppModel {
+class FeedDetail extends FeedAppModel
+{
 
-/**
- * クラス名
- *
- * @var string
- */
+	/**
+	 * クラス名
+	 *
+	 * @var string
+	 */
 	public $name = 'FeedDetail';
 
-/**
- * ビヘイビア
- *
- * @var array
- */
-	public $actsAs = array('BcCache');
+	/**
+	 * ビヘイビア
+	 *
+	 * @var array
+	 */
+	public $actsAs = ['BcCache'];
 
-/**
- * belongsTo
- *
- * @var array
- */
-	public $belongsTo = array('FeedConfig' => array('className' => 'Feed.FeedConfig',
-			'conditions' => '',
-			'order' => '',
-			'foreignKey' => 'feed_config_id'
-	));
+	/**
+	 * belongsTo
+	 *
+	 * @var array
+	 */
+	public $belongsTo = ['FeedConfig' => ['className' => 'Feed.FeedConfig',
+		'conditions' => '',
+		'order' => '',
+		'foreignKey' => 'feed_config_id'
+	]];
 
-/**
- * FeedDetail constructor.
- *
- * @param bool $id
- * @param null $table
- * @param null $ds
- */
-	public function __construct($id = false, $table = null, $ds = null) {
+	/**
+	 * FeedDetail constructor.
+	 *
+	 * @param bool $id
+	 * @param null $table
+	 * @param null $ds
+	 */
+	public function __construct($id = false, $table = null, $ds = null)
+	{
 		parent::__construct($id, $table, $ds);
 		$this->validate = [
 			'name' => [
@@ -65,30 +67,32 @@ class FeedDetail extends FeedAppModel {
 		];
 	}
 
-/**
- * コントロールソースを取得する
- *
- * @param string $field フィールド名
- * @return array コントロールソース
- * @access	public
- */
-	public function getControlSource($field = null) {
-		$controlSources['cache_time'] = array('+1 minute' => __d('baser', '1分'),
+	/**
+	 * コントロールソースを取得する
+	 *
+	 * @param string $field フィールド名
+	 * @return array コントロールソース
+	 * @access    public
+	 */
+	public function getControlSource($field = null)
+	{
+		$controlSources['cache_time'] = ['+1 minute' => __d('baser', '1分'),
 			'+30 minutes' => __d('baser', '30分'),
 			'+1 hour' => __d('baser', '1時間'),
 			'+6 hours' => __d('baser', '6時間'),
-			'+24 hours' => __d('baser', '1日'));
+			'+24 hours' => __d('baser', '1日')];
 		return $controlSources[$field];
 	}
 
-/**
- * 初期値を取得する
- *
- * @param string $feedDetailId
- * @retun array $data
- */
-	public function getDefaultValue($feedConfigId) {
-		$feedConfig = $this->FeedConfig->find('first', array('conditions' => array('FeedConfig.id' => $feedConfigId)));
+	/**
+	 * 初期値を取得する
+	 *
+	 * @param string $feedDetailId
+	 * @retun array $data
+	 */
+	public function getDefaultValue($feedConfigId)
+	{
+		$feedConfig = $this->FeedConfig->find('first', ['conditions' => ['FeedConfig.id' => $feedConfigId]]);
 		$data[$this->name]['feed_config_id'] = $feedConfigId;
 		$data[$this->name]['name'] = $feedConfig['FeedConfig']['name'];
 		$data[$this->name]['cache_time'] = '+30 minutes';

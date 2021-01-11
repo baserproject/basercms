@@ -3,16 +3,16 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Model
- * @since			baserCMS v 3.0.0-beta
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.Model
+ * @since           baserCMS v 3.0.0-beta
+ * @license         https://basercms.net/license/index.html
  */
 App::uses('EditorTemplate', 'Model');
 
 /**
- * EditorTemplateTest class
+ * Class EditorTemplateTest
  *
  * class NonAssosiationEditorTemplate extends EditorTemplate {
  *  public $name = 'EditorTemplate';
@@ -22,26 +22,30 @@ App::uses('EditorTemplate', 'Model');
  *
  * @package Baser.Test.Case.Model
  */
-class EditorTemplateTest extends BaserTestCase {
+class EditorTemplateTest extends BaserTestCase
+{
 
 	public $fixtures = [
 		'baser.Default.EditorTemplate',
 	];
 
-	public function setUp() {
+	public function setUp()
+	{
 		parent::setUp();
 		$this->EditorTemplate = ClassRegistry::init('EditorTemplate');
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		unset($this->EditorTemplate);
 		parent::tearDown();
 	}
 
-/**
- * validate
- */
-	public function test必須チェック() {
+	/**
+	 * validate
+	 */
+	public function test必須チェック()
+	{
 		$this->EditorTemplate->create([
 			'EditorTemplate' => [
 				'name' => '',

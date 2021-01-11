@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -39,12 +39,12 @@ if (isset($user['user_group_id'])) {
 			<?php echo $data['BlogCategory']['name'] ?>
 		<?php endif ?>
 		<?php if ($this->BcBaser->siteConfig['category_permission']): ?>
-			<br />
+			<br/>
 			<?php echo $this->BcText->arrayValue($data['BlogCategory']['owner_id'], $owners) ?>
 		<?php endif ?>
 	</td>
 	<td><?php echo html_entity_decode(h($data['BlogCategory']['title'])) ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
-	<td><?php echo $this->BcTime->format('Y-m-d', $data['BlogCategory']['created']); ?><br />
+	<td><?php echo $this->BcTime->format('Y-m-d', $data['BlogCategory']['created']); ?><br/>
 		<?php echo $this->BcTime->format('Y-m-d', $data['BlogCategory']['modified']); ?></td>
 </tr>

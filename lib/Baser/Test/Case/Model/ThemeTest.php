@@ -3,16 +3,16 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Model
- * @since			baserCMS v 3.0.0-beta
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.Model
+ * @since           baserCMS v 3.0.0-beta
+ * @license         https://basercms.net/license/index.html
  */
 App::uses('Theme', 'Model');
 
 /**
- * ThemeTest class
+ * Class ThemeTest
  *
  * class NonAssosiationTheme extends Theme {
  *  public $name = 'Theme';
@@ -22,26 +22,30 @@ App::uses('Theme', 'Model');
  *
  * @package Baser.Test.Case.Model
  */
-class ThemeTest extends BaserTestCase {
+class ThemeTest extends BaserTestCase
+{
 
 	public $fixtures = [
 		'baser.Default.ThemeConfig',
 	];
 
-	public function setUp() {
+	public function setUp()
+	{
 		parent::setUp();
 		$this->Theme = ClassRegistry::init('Theme');
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		unset($this->Theme);
 		parent::tearDown();
 	}
 
-/**
- * validate
- */
-	public function test必須チェック() {
+	/**
+	 * validate
+	 */
+	public function test必須チェック()
+	{
 		$this->Theme->create([
 			'Theme' => [
 				'name' => '',
@@ -52,7 +56,8 @@ class ThemeTest extends BaserTestCase {
 		$this->assertEquals('テーマ名を入力してください。', current($this->Theme->validationErrors['name']));
 	}
 
-	public function test半角英数チェック正常系() {
+	public function test半角英数チェック正常系()
+	{
 		$this->Theme->create([
 			'Theme' => [
 				'name' => '123abc',
@@ -63,7 +68,8 @@ class ThemeTest extends BaserTestCase {
 		$this->assertTrue($this->Theme->validates());
 	}
 
-	public function test半角英数チェック異常系() {
+	public function test半角英数チェック異常系()
+	{
 		$this->Theme->create([
 			'Theme' => [
 				'name' => '１２３ａｂｃ',
@@ -78,7 +84,8 @@ class ThemeTest extends BaserTestCase {
 		$this->assertEquals('URLは半角英数字のみで入力してください。', current($this->Theme->validationErrors['url']));
 	}
 
-	public function testURLチェック異常系() {
+	public function testURLチェック異常系()
+	{
 		$this->Theme->create([
 			'Theme' => [
 				'url' => 'hoge',
@@ -90,9 +97,10 @@ class ThemeTest extends BaserTestCase {
 		$this->assertEquals('URLの形式が間違っています。', current($this->Theme->validationErrors['url']));
 	}
 
-	public function test重複チェック異常系() {
+	public function test重複チェック異常系()
+	{
 		$this->Theme->create([
-		'Theme' => [
+			'Theme' => [
 				'name' => 'nada-icons',
 				'old_name' => 'hoge',
 			]
@@ -102,15 +110,16 @@ class ThemeTest extends BaserTestCase {
 		$this->assertEquals('既に存在するテーマ名です。', current($this->Theme->validationErrors['name']));
 	}
 
-/**
- * 保存
- */
-	public function testSaveOnRename() {
+	/**
+	 * 保存
+	 */
+	public function testSaveOnRename()
+	{
 		$path = WWW_ROOT . 'theme' . DS;
 		$data = ['Theme' => [
 			'old_name' => 'nada-icons',
 			'name' => 'new-nada-icons',
-			]
+		]
 		];
 		$this->Theme->save($data);
 		$this->assertFileExists($path . 'new-nada-icons', 'ファイル名を変更できません');
@@ -118,17 +127,19 @@ class ThemeTest extends BaserTestCase {
 		$Folder->move(['to' => $path . 'nada-icons']);
 	}
 
-/**
- * テーマ名の重複チェック
- */
-	public function testThemeDuplicate() {
+	/**
+	 * テーマ名の重複チェック
+	 */
+	public function testThemeDuplicate()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * 保存
- */
-	public function testSave() {
+	/**
+	 * 保存
+	 */
+	public function testSave()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 

@@ -3,22 +3,23 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Model
- * @since			baserCMS v 4.0.9
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.Model
+ * @since           baserCMS v 4.0.9
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('ContentFolder', 'Model');
 
 /**
- * ContentFolderTest class
+ * Class ContentFolderTest
  *
  * @package Baser.Test.Case.Model
  * @property ContentFolder $ContentFolder
  */
-class ContentFolderTest extends BaserTestCase {
+class ContentFolderTest extends BaserTestCase
+{
 
 	public $fixtures = [
 		'baser.Default.Content',
@@ -41,100 +42,113 @@ class ContentFolderTest extends BaserTestCase {
 		'baser.Default.FeedDetail',
 	];
 
-/**
- * set up
- *
- * @return void
- */
-	public function setUp() {
+	/**
+	 * set up
+	 *
+	 * @return void
+	 */
+	public function setUp()
+	{
 		parent::setUp();
 		$this->ContentFolder = ClassRegistry::init('ContentFolder');
 	}
 
-/**
- * tearDown
- *
- * @return void
- */
-	public function tearDown() {
+	/**
+	 * tearDown
+	 *
+	 * @return void
+	 */
+	public function tearDown()
+	{
 		unset($this->ContentFolder);
 		parent::tearDown();
 	}
 
-/**
- * Implemented Events
- */
-	public function testImplementedEvents() {
+	/**
+	 * Implemented Events
+	 */
+	public function testImplementedEvents()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * Before Move
- */
-	public function testBeforeMove() {
+	/**
+	 * Before Move
+	 */
+	public function testBeforeMove()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * After Move
- */
-	public function testAfterMove() {
+	/**
+	 * After Move
+	 */
+	public function testAfterMove()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * Before Save
- */
-	public function testBeforeSave() {
+	/**
+	 * Before Save
+	 */
+	public function testBeforeSave()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * After Save
- */
-	public function testAfterSave() {
+	/**
+	 * After Save
+	 */
+	public function testAfterSave()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * 保存前のURLをセットする
- */
-	public function testSetBeforeUrl() {
+	/**
+	 * 保存前のURLをセットする
+	 */
+	public function testSetBeforeUrl()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * 固定ページテンプレートを移動する
- */
-	public function testMovePageTemplates() {
+	/**
+	 * 固定ページテンプレートを移動する
+	 */
+	public function testMovePageTemplates()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * サイトルートフォルダを保存
- */
-	public function testSaveSiteRoot() {
+	/**
+	 * サイトルートフォルダを保存
+	 */
+	public function testSaveSiteRoot()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * フォルダのテンプレートリストを取得する
- */
-	public function testGetFolderTemplateList() {
+	/**
+	 * フォルダのテンプレートリストを取得する
+	 */
+	public function testGetFolderTemplateList()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * 親のテンプレートを取得する
- */
-	public function testGetParentTemplate() {
+	/**
+	 * 親のテンプレートを取得する
+	 */
+	public function testGetParentTemplate()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	/**
 	 * 検索インデックスを再構築する
 	 */
-	public function testReconstructSearchIndices() {
+	public function testReconstructSearchIndices()
+	{
 		Configure::write('BcAuthPrefix.admin.previewRedirect', '');
 		$_SERVER['REQUEST_URI'] = '/';
 		$this->_loginAdmin();

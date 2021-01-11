@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -49,18 +49,18 @@ if (!$data['BlogComment']['status']) {
 		<?php if (!empty($data['BlogComment']['email'])): ?>
 			<?php $this->BcBaser->link($data['BlogComment']['email'], 'mailto:' . $data['BlogComment']['email'], ['escape' => true]) ?>
 		<?php endif; ?>
-		<br />
+		<br/>
 		<?php echo $this->BcText->autoLinkUrls($data['BlogComment']['url']) ?>
 	</td>
 	<td>
 		<strong>
 			<?php $this->BcBaser->link($data['BlogPost']['name'], ['controller' => 'blog_posts', 'action' => 'edit', $blogContent['BlogContent']['id'], $data['BlogPost']['id']]) ?>
-		</strong><br />
+		</strong><br/>
 		<?php echo nl2br($this->BcText->autoLinkUrls($data['BlogComment']['message'])) ?>
 	</td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td style="white-space: nowrap">
-		<?php echo $this->BcTime->format('Y-m-d', $data['BlogComment']['created']); ?><br />
+		<?php echo $this->BcTime->format('Y-m-d', $data['BlogComment']['created']); ?><br/>
 		<?php echo $this->BcTime->format('Y-m-d', $data['BlogComment']['modified']); ?>
 	</td>
 </tr>

@@ -3,28 +3,29 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Mail.Test.Fixture.Model.MailMessage
- * @since			baserCMS v 3.0.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Mail.Test.Fixture.Model.MailMessage
+ * @since           baserCMS v 3.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
-class MailContentMailMessageFixture extends BaserTestFixture {
-/**
- * Name of the object
- *
- * @var string
- */
-  public $name = 'MailContent';
+class MailContentMailMessageFixture extends BaserTestFixture
+{
+	/**
+	 * Name of the object
+	 *
+	 * @var string
+	 */
+	public $name = 'MailContent';
 
-/**
- * Records
- *
- * @var array
- */
-	public $records = array(
-		array(
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
+	public $records = [
+		[
 			'id' => '1',
 			'description' => '<p><span style="color:#C30">*</span> 印の項目は必須となりますので、必ず入力してください。</p>',
 			'sender_1' => '',
@@ -42,8 +43,8 @@ class MailContentMailMessageFixture extends BaserTestFixture {
 			'publish_end' => null,
 			'created' => '2015-01-27 12:56:53',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '99',
 			'description' => '<p><span style="color:#C30">*</span> 印の項目は必須となりますので、必ず入力してください。</p>',
 			'sender_1' => '',
@@ -61,7 +62,7 @@ class MailContentMailMessageFixture extends BaserTestFixture {
 			'publish_end' => null,
 			'created' => '2015-01-27 12:56:53',
 			'modified' => null
-		),
-	);
+		],
+	];
 
 }

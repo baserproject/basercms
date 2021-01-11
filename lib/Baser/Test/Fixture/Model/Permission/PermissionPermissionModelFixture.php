@@ -1,19 +1,21 @@
 <?php
+
 /**
  * PermissionFixture
  */
-class PermissionPermissionModelFixture extends BaserTestFixture {
-/**
- * Name of the object
- *
- * @var string
- */
+class PermissionPermissionModelFixture extends BaserTestFixture
+{
+	/**
+	 * Name of the object
+	 *
+	 * @var string
+	 */
 	public $name = 'Permission';
-/**
- * Records
- *
- * @var array
- */
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '1',

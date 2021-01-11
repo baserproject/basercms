@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -35,7 +35,7 @@ $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/author/';
 	<?php endif ?>
 	<?php if ($authors): ?>
 		<ul>
-			<?php foreach ($authors as $author): ?>
+			<?php foreach($authors as $author): ?>
 				<?php
 				if ('/' . $this->request->url == $baseCurrentUrl . $author['User']['name']) {
 					$class = ' class="current"';

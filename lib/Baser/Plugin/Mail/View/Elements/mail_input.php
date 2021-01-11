@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Mail.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Mail.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -26,7 +26,7 @@ if (!isset($blockEnd)) {
 
 if (!empty($mailFields)) {
 
-	foreach ($mailFields as $key => $record) {
+	foreach($mailFields as $key => $record) {
 
 		$field = $record['MailField'];
 		$iteration++;
@@ -81,12 +81,12 @@ if (!empty($mailFields)) {
 
 			/* 説明欄 */
 			$isGroupValidComplate = in_array('VALID_GROUP_COMPLATE', explode(',', $field['valid_ex']));
-			if(!$isGroupValidComplate) {
+			if (!$isGroupValidComplate) {
 				echo $this->Mailform->error("MailMessage." . $field['field_name']);
 			}
 			$isRequiredToClose = true;
 			if ($this->Mailform->isGroupLastField($mailFields, $field)) {
-				if($isGroupValidComplate) {
+				if ($isGroupValidComplate) {
 					$groupValidErrors = $this->Mailform->getGroupValidErrors($mailFields, $field['group_valid']);
 					if ($groupValidErrors) {
 						foreach($groupValidErrors as $groupValidError) {
@@ -96,11 +96,11 @@ if (!empty($mailFields)) {
 				}
 				echo $this->Mailform->error("MailMessage." . $field['group_valid'] . "_not_same", __("入力データが一致していません。"));
 				echo $this->Mailform->error("MailMessage." . $field['group_valid'] . "_not_complate", __("入力データが不完全です。"));
-			} elseif(!empty($field['group_field'])) {
+			} elseif (!empty($field['group_field'])) {
 				$isRequiredToClose = false;
 			}
 			echo '</span>';
-			if($isRequiredToClose) {
+			if ($isRequiredToClose) {
 				echo "</td>\n    </tr>\n";
 			}
 			$group_field = $field['group_field'];

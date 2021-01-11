@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -28,6 +28,6 @@
 	<td><?php echo $data['BlogTag']['id'] ?></td>
 	<td><?php $this->BcBaser->link(h($data['BlogTag']['name']), ['action' => 'edit', $data['BlogTag']['id']]) ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
-	<td><?php echo $this->BcTime->format('Y-m-d', $data['BlogTag']['created']); ?><br />
+	<td><?php echo $this->BcTime->format('Y-m-d', $data['BlogTag']['created']); ?><br/>
 		<?php echo $this->BcTime->format('Y-m-d', $data['BlogTag']['modified']); ?></td>
 </tr>

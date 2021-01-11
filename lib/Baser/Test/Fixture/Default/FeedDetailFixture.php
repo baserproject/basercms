@@ -1,13 +1,15 @@
 <?php
+
 /**
  * FeedDetailFixture
  */
-class FeedDetailFixture extends BaserTestFixture {
-/**
- * Records
- *
- * @var array
- */
+class FeedDetailFixture extends BaserTestFixture
+{
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '1',

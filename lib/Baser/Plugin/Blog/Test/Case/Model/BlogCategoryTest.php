@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Blog.Test.Case.Model
- * @since			baserCMS v 3.0.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.Test.Case.Model
+ * @since           baserCMS v 3.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('BlogCategory', 'Blog.Model');
@@ -17,8 +17,8 @@ App::uses('BlogCategory', 'Blog.Model');
  *
  * @property BlogCategory $BlogCategory
  */
-
-class BlogCategoryTest extends BaserTestCase {
+class BlogCategoryTest extends BaserTestCase
+{
 
 	public $fixtures = [
 		'baser.Default.SearchIndex',
@@ -36,20 +36,23 @@ class BlogCategoryTest extends BaserTestCase {
 		'plugin.blog.Model/BlogPost/BlogCategoryModel',
 	];
 
-	public function setUp() {
+	public function setUp()
+	{
 		$this->BlogCategory = ClassRegistry::init('Blog.BlogCategory');
 		parent::setUp();
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		unset($this->BlogCategory);
 		parent::tearDown();
 	}
 
-/*
- * validate
- */
-	public function test必須チェック() {
+	/*
+	 * validate
+	 */
+	public function test必須チェック()
+	{
 		// blog_content_idを設定
 		$this->BlogCategory->validationParams = [
 			'blogContentId' => 1
@@ -70,7 +73,8 @@ class BlogCategoryTest extends BaserTestCase {
 		$this->assertEquals('カテゴリタイトルを入力してください。', current($this->BlogCategory->validationErrors['title']));
 	}
 
-	public function test桁数チェック異常系() {
+	public function test桁数チェック異常系()
+	{
 		// blog_content_idを設定
 		$this->BlogCategory->validationParams = [
 			'blogContentId' => 1
@@ -91,7 +95,8 @@ class BlogCategoryTest extends BaserTestCase {
 		$this->assertEquals('カテゴリタイトルは255文字以内で入力してください。', current($this->BlogCategory->validationErrors['title']));
 	}
 
-	public function test桁数チェック正常系() {
+	public function test桁数チェック正常系()
+	{
 		// blog_content_idを設定
 		$this->BlogCategory->validationParams = [
 			'blogContentId' => 1
@@ -107,7 +112,8 @@ class BlogCategoryTest extends BaserTestCase {
 		$this->assertTrue($this->BlogCategory->validates());
 	}
 
-	public function testその他異常系() {
+	public function testその他異常系()
+	{
 		// blog_content_idを設定
 		$this->BlogCategory->validationParams = [
 			'blogContentId' => 1
@@ -138,20 +144,22 @@ class BlogCategoryTest extends BaserTestCase {
 		$this->assertEquals('入力されたカテゴリ名は既に登録されています。', current($this->BlogCategory->validationErrors['name']));
 	}
 
-/**
- * コントロールソースを取得する
- *
- * @param string $field フィールド名
- * @param array $option オプション
- * @param array $expected 期待値
- * @dataProvider getControlSourceDataProvider
- */
-	public function testGetControlSource($field, $options, $expected) {
+	/**
+	 * コントロールソースを取得する
+	 *
+	 * @param string $field フィールド名
+	 * @param array $option オプション
+	 * @param array $expected 期待値
+	 * @dataProvider getControlSourceDataProvider
+	 */
+	public function testGetControlSource($field, $options, $expected)
+	{
 		$result = $this->BlogCategory->getControlSource($field, $options);
 		$this->assertEquals($expected, $result, 'コントロールソースを正しく取得できません');
 	}
 
-	public function getControlSourceDataProvider() {
+	public function getControlSourceDataProvider()
+	{
 		return [
 			['parent_id', ['blogContentId' => 1], [
 				1 => 'プレスリリース',
@@ -170,20 +178,22 @@ class BlogCategoryTest extends BaserTestCase {
 		];
 	}
 
-/**
- * 同じニックネームのカテゴリがないかチェックする
- * 同じブログコンテンツが条件
- *
- * @dataProvider duplicateBlogCategoryDataProvider
- */
-	public function testDuplicateBlogCategory($check, $expected) {
+	/**
+	 * 同じニックネームのカテゴリがないかチェックする
+	 * 同じブログコンテンツが条件
+	 *
+	 * @dataProvider duplicateBlogCategoryDataProvider
+	 */
+	public function testDuplicateBlogCategory($check, $expected)
+	{
 		$this->BlogCategory->validationParams['blogContentId'] = 1;
 		$result = $this->BlogCategory->duplicateBlogCategory($check);
 		$this->assertEquals($result, $expected);
 	}
 
-	public function duplicateBlogCategoryDataProvider() {
-		return[
+	public function duplicateBlogCategoryDataProvider()
+	{
+		return [
 			[['id' => 0], true],
 			[['id' => 1], false],
 			[['name' => 'release'], false],
@@ -193,10 +203,11 @@ class BlogCategoryTest extends BaserTestCase {
 		];
 	}
 
-/**
- * 関連する記事データをカテゴリ無所属に変更し保存する
- */
-	public function testBeforeDelete() {
+	/**
+	 * 関連する記事データをカテゴリ無所属に変更し保存する
+	 */
+	public function testBeforeDelete()
+	{
 		$this->BlogCategory->data = ['BlogCategory' => [
 			'id' => '1'
 		]];
@@ -204,15 +215,16 @@ class BlogCategoryTest extends BaserTestCase {
 
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
 		$result = $BlogPost->find('first', [
-        'conditions' => ['blog_category_id' => 1]
-    ]);
-    $this->assertEmpty($result);
+			'conditions' => ['blog_category_id' => 1]
+		]);
+		$this->assertEmpty($result);
 	}
 
-/**
- * カテゴリリストを取得する
- */
-	public function testGetCategoryList() {
+	/**
+	 * カテゴリリストを取得する
+	 */
+	public function testGetCategoryList()
+	{
 		$message = '正しくカテゴリリストを取得できません';
 		// 正常
 		$result = $this->BlogCategory->getCategoryList(1, []);
@@ -241,35 +253,39 @@ class BlogCategoryTest extends BaserTestCase {
 		$this->assertEquals($result['2015'][0]['BlogCategory']['count'], 1, $message);
 	}
 
-/**
- * アクセス制限としてカテゴリの新規追加ができるか確認する
- */
-	public function testHasNewCategoryAddablePermission() {
+	/**
+	 * アクセス制限としてカテゴリの新規追加ができるか確認する
+	 */
+	public function testHasNewCategoryAddablePermission()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 //		$result = $this->BlogCategory->hasNewCategoryAddablePermission(2, 99);
 	}
 
-/**
- * 子カテゴリを持っているかどうか
- */
-	public function testHasChild() {
+	/**
+	 * 子カテゴリを持っているかどうか
+	 */
+	public function testHasChild()
+	{
 		$this->assertFalse($this->BlogCategory->hasChild(2));
 		$this->assertTrue($this->BlogCategory->hasChild(1));
 	}
 
-/**
- * カテゴリ名よりカテゴリを取得する
- * @dataProvider getByNameDataProvider
- * @param int $blogCategoryId
- * @param string $name
- * @param bool $expects
- */
-	public function testGetByName($blogCategoryId, $name, $expects) {
+	/**
+	 * カテゴリ名よりカテゴリを取得する
+	 * @dataProvider getByNameDataProvider
+	 * @param int $blogCategoryId
+	 * @param string $name
+	 * @param bool $expects
+	 */
+	public function testGetByName($blogCategoryId, $name, $expects)
+	{
 		$result = $this->BlogCategory->getByName($blogCategoryId, $name);
-		$this->assertEquals($expects, (bool) $result);
+		$this->assertEquals($expects, (bool)$result);
 	}
 
-	public function getByNameDataProvider() {
+	public function getByNameDataProvider()
+	{
 		return [
 			[1, 'child', true],
 			[1, 'hoge', false],

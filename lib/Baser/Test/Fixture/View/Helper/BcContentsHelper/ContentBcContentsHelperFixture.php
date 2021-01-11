@@ -1,21 +1,23 @@
 <?php
+
 /**
  * ContentBcContentsHelperFixture
  */
-class ContentBcContentsHelperFixture extends BaserTestFixture {
-	
-/**
- * Name of the object
- *
- * @var string
- */
+class ContentBcContentsHelperFixture extends BaserTestFixture
+{
+
+	/**
+	 * Name of the object
+	 *
+	 * @var string
+	 */
 	public $name = 'Content';
 
-/**
- * Records
- *
- * @var array
- */
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '1',

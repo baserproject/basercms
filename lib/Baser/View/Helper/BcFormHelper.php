@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View.Helper
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View.Helper
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('HtmlHelper', 'View/Helper');
@@ -22,12 +22,13 @@ App::uses('BcUploadHelper', 'View/Helper');
  *
  * @package Baser.View.Helper
  */
-class BcFormHelper extends FormHelper {
-/**
- * Other helpers used by FormHelper
- *
- * @var array
- */
+class BcFormHelper extends FormHelper
+{
+	/**
+	 * Other helpers used by FormHelper
+	 *
+	 * @var array
+	 */
 	// CUSTOMIZE MODIFY 2014/07/02 ryuring
 	// >>>
 	//public $helpers = array('Html');
@@ -37,48 +38,49 @@ class BcFormHelper extends FormHelper {
 
 // CUSTOMIZE ADD 2014/07/02 ryuring
 // >>>
-/**
- * sizeCounter用の関数読み込み可否
- *
- * @var boolean
- */
+	/**
+	 * sizeCounter用の関数読み込み可否
+	 *
+	 * @var boolean
+	 */
 	public $sizeCounterFunctionLoaded = false;
 
-/**
- * フォームID
- *
- * @var string
- */
+	/**
+	 * フォームID
+	 *
+	 * @var string
+	 */
 	private $__id = null;
 // <<<
 
-/**
- * Returns an HTML FORM element.
- *
- * ### Options:
- *
- * - `type` Form method defaults to POST
- * - `action`  The controller action the form submits to, (optional). Deprecated since 2.8, use `url`.
- * - `url`  The URL the form submits to. Can be a string or a URL array. If you use 'url'
- *    you should leave 'action' undefined.
- * - `default`  Allows for the creation of AJAX forms. Set this to false to prevent the default event handler.
- *   Will create an onsubmit attribute if it doesn't not exist. If it does, default action suppression
- *   will be appended.
- * - `onsubmit` Used in conjunction with 'default' to create AJAX forms.
- * - `inputDefaults` set the default $options for FormHelper::input(). Any options that would
- *   be set when using FormHelper::input() can be set here. Options set with `inputDefaults`
- *   can be overridden when calling input()
- * - `encoding` Set the accept-charset encoding for the form. Defaults to `Configure::read('App.encoding')`
- *
- * @param mixed|null $model The model name for which the form is being defined. Should
- *   include the plugin name for plugin models. e.g. `ContactManager.Contact`.
- *   If an array is passed and $options argument is empty, the array will be used as options.
- *   If `false` no model is used.
- * @param array $options An array of html attributes and options.
- * @return string A formatted opening FORM tag.
- * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-create
- */
-	public function create($model = null, $options = array()) {
+	/**
+	 * Returns an HTML FORM element.
+	 *
+	 * ### Options:
+	 *
+	 * - `type` Form method defaults to POST
+	 * - `action`  The controller action the form submits to, (optional). Deprecated since 2.8, use `url`.
+	 * - `url`  The URL the form submits to. Can be a string or a URL array. If you use 'url'
+	 *    you should leave 'action' undefined.
+	 * - `default`  Allows for the creation of AJAX forms. Set this to false to prevent the default event handler.
+	 *   Will create an onsubmit attribute if it doesn't not exist. If it does, default action suppression
+	 *   will be appended.
+	 * - `onsubmit` Used in conjunction with 'default' to create AJAX forms.
+	 * - `inputDefaults` set the default $options for FormHelper::input(). Any options that would
+	 *   be set when using FormHelper::input() can be set here. Options set with `inputDefaults`
+	 *   can be overridden when calling input()
+	 * - `encoding` Set the accept-charset encoding for the form. Defaults to `Configure::read('App.encoding')`
+	 *
+	 * @param mixed|null $model The model name for which the form is being defined. Should
+	 *   include the plugin name for plugin models. e.g. `ContactManager.Contact`.
+	 *   If an array is passed and $options argument is empty, the array will be used as options.
+	 *   If `false` no model is used.
+	 * @param array $options An array of html attributes and options.
+	 * @return string A formatted opening FORM tag.
+	 * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-create
+	 */
+	public function create($model = null, $options = [])
+	{
 
 		// CUSTOMIZE ADD 2014/07/03 ryuring
 		// ブラウザの妥当性のチェックを除外する
@@ -95,7 +97,7 @@ class BcFormHelper extends FormHelper {
 			'options' => $options
 		], ['class' => 'Form', 'plugin' => '']);
 		if ($event !== false) {
-			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+			$options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
 		}
 		// <<<
 
@@ -109,7 +111,7 @@ class BcFormHelper extends FormHelper {
 			'out' => $out
 		], ['class' => 'Form', 'plugin' => '']);
 		if ($event !== false) {
-			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+			$out = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
 		}
 
 		return $out;
@@ -117,32 +119,33 @@ class BcFormHelper extends FormHelper {
 
 	}
 
-/**
- * Closes an HTML form, cleans up values set by FormHelper::create(), and writes hidden
- * input fields where appropriate.
- *
- * If $options is set a form submit button will be created. Options can be either a string or an array.
- *
- * ```
- * array usage:
- *
- * array('label' => 'save'); value="save"
- * array('label' => 'save', 'name' => 'Whatever'); value="save" name="Whatever"
- * array('name' => 'Whatever'); value="Submit" name="Whatever"
- * array('label' => 'save', 'name' => 'Whatever', 'div' => 'good') <div class="good"> value="save" name="Whatever"
- * array('label' => 'save', 'name' => 'Whatever', 'div' => array('class' => 'good')); <div class="good"> value="save" name="Whatever"
- * ```
- *
- * If $secureAttributes is set, these html attributes will be merged into the hidden input tags generated for the
- * Security Component. This is especially useful to set HTML5 attributes like 'form'
- *
- * @param string|array $options as a string will use $options as the value of button,
- * @param array $secureAttributes will be passed as html attributes into the hidden input elements generated for the
- *   Security Component.
- * @return string a closing FORM tag optional submit button.
- * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#closing-the-form
- */
-	public function end($options = null, $secureAttributes = array()) {
+	/**
+	 * Closes an HTML form, cleans up values set by FormHelper::create(), and writes hidden
+	 * input fields where appropriate.
+	 *
+	 * If $options is set a form submit button will be created. Options can be either a string or an array.
+	 *
+	 * ```
+	 * array usage:
+	 *
+	 * array('label' => 'save'); value="save"
+	 * array('label' => 'save', 'name' => 'Whatever'); value="save" name="Whatever"
+	 * array('name' => 'Whatever'); value="Submit" name="Whatever"
+	 * array('label' => 'save', 'name' => 'Whatever', 'div' => 'good') <div class="good"> value="save" name="Whatever"
+	 * array('label' => 'save', 'name' => 'Whatever', 'div' => array('class' => 'good')); <div class="good"> value="save" name="Whatever"
+	 * ```
+	 *
+	 * If $secureAttributes is set, these html attributes will be merged into the hidden input tags generated for the
+	 * Security Component. This is especially useful to set HTML5 attributes like 'form'
+	 *
+	 * @param string|array $options as a string will use $options as the value of button,
+	 * @param array $secureAttributes will be passed as html attributes into the hidden input elements generated for the
+	 *   Security Component.
+	 * @return string a closing FORM tag optional submit button.
+	 * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#closing-the-form
+	 */
+	public function end($options = null, $secureAttributes = [])
+	{
 
 		// CUSTOMIZE ADD 2014/07/03 ryuring
 		// >>>
@@ -155,7 +158,7 @@ class BcFormHelper extends FormHelper {
 			'options' => $options
 		], ['class' => 'Form', 'plugin' => '']);
 		if ($event !== false) {
-			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+			$options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
 		}
 		// <<<
 
@@ -169,47 +172,48 @@ class BcFormHelper extends FormHelper {
 			'out' => $out
 		], ['class' => 'Form', 'plugin' => '']);
 		if ($event !== false) {
-			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+			$out = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
 		}
 
 		return $out;
 		// <<<
 	}
 
-/**
- * Generates a form input element complete with label and wrapper div
- *
- * ### Options
- *
- * See each field type method for more information. Any options that are part of
- * $attributes or $options for the different **type** methods can be included in `$options` for input().i
- * Additionally, any unknown keys that are not in the list below, or part of the selected type's options
- * will be treated as a regular html attribute for the generated input.
- *
- * - `type` - Force the type of widget you want. e.g. `type => 'select'`
- * - `label` - Either a string label, or an array of options for the label. See FormHelper::label().
- * - `div` - Either `false` to disable the div, or an array of options for the div.
- *	See HtmlHelper::div() for more options.
- * - `options` - For widgets that take options e.g. radio, select.
- * - `error` - Control the error message that is produced. Set to `false` to disable any kind of error reporting (field
- *    error and error messages).
- * - `errorMessage` - Boolean to control rendering error messages (field error will still occur).
- * - `empty` - String or boolean to enable empty select box options.
- * - `before` - Content to place before the label + input.
- * - `after` - Content to place after the label + input.
- * - `between` - Content to place between the label + input.
- * - `format` - Format template for element order. Any element that is not in the array, will not be in the output.
- *	- Default input format order: array('before', 'label', 'between', 'input', 'after', 'error')
- *	- Default checkbox format order: array('before', 'input', 'between', 'label', 'after', 'error')
- *	- Hidden input will not be formatted
- *	- Radio buttons cannot have the order of input and label elements controlled with these settings.
- *
- * @param string $fieldName This should be "Modelname.fieldname"
- * @param array $options Each type of input takes different options.
- * @return string Completed form widget.
- * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#creating-form-elements
- */
-	public function input($fieldName, $options = array()) {
+	/**
+	 * Generates a form input element complete with label and wrapper div
+	 *
+	 * ### Options
+	 *
+	 * See each field type method for more information. Any options that are part of
+	 * $attributes or $options for the different **type** methods can be included in `$options` for input().i
+	 * Additionally, any unknown keys that are not in the list below, or part of the selected type's options
+	 * will be treated as a regular html attribute for the generated input.
+	 *
+	 * - `type` - Force the type of widget you want. e.g. `type => 'select'`
+	 * - `label` - Either a string label, or an array of options for the label. See FormHelper::label().
+	 * - `div` - Either `false` to disable the div, or an array of options for the div.
+	 *    See HtmlHelper::div() for more options.
+	 * - `options` - For widgets that take options e.g. radio, select.
+	 * - `error` - Control the error message that is produced. Set to `false` to disable any kind of error reporting (field
+	 *    error and error messages).
+	 * - `errorMessage` - Boolean to control rendering error messages (field error will still occur).
+	 * - `empty` - String or boolean to enable empty select box options.
+	 * - `before` - Content to place before the label + input.
+	 * - `after` - Content to place after the label + input.
+	 * - `between` - Content to place between the label + input.
+	 * - `format` - Format template for element order. Any element that is not in the array, will not be in the output.
+	 *    - Default input format order: array('before', 'label', 'between', 'input', 'after', 'error')
+	 *    - Default checkbox format order: array('before', 'input', 'between', 'label', 'after', 'error')
+	 *    - Hidden input will not be formatted
+	 *    - Radio buttons cannot have the order of input and label elements controlled with these settings.
+	 *
+	 * @param string $fieldName This should be "Modelname.fieldname"
+	 * @param array $options Each type of input takes different options.
+	 * @return string Completed form widget.
+	 * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#creating-form-elements
+	 */
+	public function input($fieldName, $options = [])
+	{
 
 		// CUSTOMIZE ADD 2014/07/03 ryuring
 		// >>>
@@ -221,8 +225,8 @@ class BcFormHelper extends FormHelper {
 			'options' => $options
 		], ['class' => 'Form', 'plugin' => '']);
 		if ($event !== false) {
-			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
-			if(!$options) {
+			$options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
+			if (!$options) {
 				$options = [];
 			}
 		}
@@ -239,7 +243,7 @@ class BcFormHelper extends FormHelper {
 		$class = 'bca-hidden__input';
 		$divClass = 'bca-hidden';
 		$labelClass = $childDivClass = $label = '';
-		switch ($type) {
+		switch($type) {
 			default :
 				if (!isset($options['label'])) {
 					$options['label'] = false;
@@ -301,7 +305,7 @@ class BcFormHelper extends FormHelper {
 				$labelClass = 'bca-checkbox__label';
 				break;
 			case 'select':
-				if(!empty($options['multiple']) && $options['multiple'] === 'checkbox') {
+				if (!empty($options['multiple']) && $options['multiple'] === 'checkbox') {
 					$options['label'] = true;
 					$class = 'bca-checkbox__input';
 					$divClass = 'bca-checkbox-group';
@@ -337,8 +341,8 @@ class BcFormHelper extends FormHelper {
 			$options['class'] = $class;
 		}
 		if (!isset($options['label']['class'])) {
-			if(!empty($options['label'])) {
-				if($options['label'] !== true) {
+			if (!empty($options['label'])) {
+				if ($options['label'] !== true) {
 					$options['label'] = ['text' => $options['label'], 'class' => $labelClass];
 				} else {
 					$options['label'] = ['class' => $labelClass];
@@ -346,7 +350,7 @@ class BcFormHelper extends FormHelper {
 			}
 
 		}
-		if(!$type) {
+		if (!$type) {
 			unset($options['class']);
 		}
 		// <<<
@@ -362,11 +366,11 @@ class BcFormHelper extends FormHelper {
 		// ---
 		if ($childDivClass && $options['div'] !== false) {
 			$options['div']['class'] = $childDivClass;
-		} elseif($options['div'] !== false) {
+		} elseif ($options['div'] !== false) {
 			unset($options['div']);
 		}
 		$counter = false;
-		if(isset($options['counter'])) {
+		if (isset($options['counter'])) {
 			$counter = true;
 			unset($options['counter']);
 		}
@@ -413,7 +417,7 @@ class BcFormHelper extends FormHelper {
 		}
 
 		$type = $options['type'];
-		$out = array('before' => $options['before'], 'label' => $label, 'between' => $options['between'], 'after' => $options['after']);
+		$out = ['before' => $options['before'], 'label' => $label, 'between' => $options['between'], 'after' => $options['after']];
 		$format = $this->_getFormat($options);
 
 		unset($options['type'], $options['before'], $options['between'], $options['after'], $options['format']);
@@ -436,7 +440,7 @@ class BcFormHelper extends FormHelper {
 		$out['input'] = $this->_getInput(compact('type', 'fieldName', 'options', 'radioOptions', 'selected', 'dateFormat', 'timeFormat'));
 
 		$output = '';
-		foreach ($format as $element) {
+		foreach($format as $element) {
 			$output .= $out[$element];
 		}
 
@@ -481,35 +485,36 @@ DOC_END;
 		], ['class' => 'Form', 'plugin' => '']);
 
 		if ($event !== false) {
-			$output = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+			$output = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
 		}
 
 		return $output;
 		// <<<
 	}
 
-/**
- * Creates a checkbox input widget.
- * MODIFIED 2008/10/24 egashira
- *          hiddenタグを出力しないオプションを追加
- *
- * ### Options:
- *
- * - `value` - the value of the checkbox
- * - `checked` - boolean indicate that this checkbox is checked.
- * - `hiddenField` - boolean to indicate if you want the results of checkbox() to include
- *    a hidden input with a value of ''.
- * - `disabled` - create a disabled input.
- * - `default` - Set the default value for the checkbox. This allows you to start checkboxes
- *    as checked, without having to check the POST data. A matching POST data value, will overwrite
- *    the default value.
- *
- * @param string $fieldName Name of a field, like this "Modelname.fieldname"
- * @param array $options Array of HTML attributes.
- * @return string An HTML text input element.
- * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
- */
-	public function checkbox($fieldName, $options = array()) {
+	/**
+	 * Creates a checkbox input widget.
+	 * MODIFIED 2008/10/24 egashira
+	 *          hiddenタグを出力しないオプションを追加
+	 *
+	 * ### Options:
+	 *
+	 * - `value` - the value of the checkbox
+	 * - `checked` - boolean indicate that this checkbox is checked.
+	 * - `hiddenField` - boolean to indicate if you want the results of checkbox() to include
+	 *    a hidden input with a value of ''.
+	 * - `disabled` - create a disabled input.
+	 * - `default` - Set the default value for the checkbox. This allows you to start checkboxes
+	 *    as checked, without having to check the POST data. A matching POST data value, will overwrite
+	 *    the default value.
+	 *
+	 * @param string $fieldName Name of a field, like this "Modelname.fieldname"
+	 * @param array $options Array of HTML attributes.
+	 * @return string An HTML text input element.
+	 * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
+	 */
+	public function checkbox($fieldName, $options = [])
+	{
 
 		// CUSTOMIZE ADD 2011/05/07 ryuring
 		// >>> hiddenをデフォルトオプションに追加
@@ -518,8 +523,8 @@ DOC_END;
 		], $options);
 		$hidden = $options['hidden'];
 		$labelOptions = [];
-		if(!empty($options['label']) ) {
-			if(is_array($options['label'])) {
+		if (!empty($options['label'])) {
+			if (is_array($options['label'])) {
 				$label = $options['label']['text'];
 				unset($options['label']['text']);
 				$labelOptions = $options['label'];
@@ -530,14 +535,14 @@ DOC_END;
 		unset($options['label'], $options['hidden']);
 		// <<<
 
-		$valueOptions = array();
+		$valueOptions = [];
 		if (isset($options['default'])) {
 			$valueOptions['default'] = $options['default'];
 			unset($options['default']);
 		}
 
-		$options += array('value' => 1, 'required' => false);
-		$options = $this->_initInputField($fieldName, $options) + array('hiddenField' => true);
+		$options += ['value' => 1, 'required' => false];
+		$options = $this->_initInputField($fieldName, $options) + ['hiddenField' => true];
 		$value = current($this->value($valueOptions));
 		$output = '';
 
@@ -553,14 +558,14 @@ DOC_END;
 		//if ($options['hiddenField']) {
 		// ---
 		if ($hidden !== false && $options['hiddenField'] !== false) {
-		// <<<
-			$hiddenOptions = array(
+			// <<<
+			$hiddenOptions = [
 				'id' => $options['id'] . '_',
 				'name' => $options['name'],
-				'value' => ($options['hiddenField'] !== true ? $options['hiddenField'] : '0'),
-				'form' => isset($options['form']) ? $options['form'] : null,
+				'value' => ($options['hiddenField'] !== true? $options['hiddenField'] : '0'),
+				'form' => isset($options['form'])? $options['form'] : null,
 				'secure' => false,
-			);
+			];
 			if (isset($options['disabled']) && $options['disabled']) {
 				$hiddenOptions['disabled'] = 'disabled';
 			}
@@ -585,15 +590,16 @@ DOC_END;
 		// <<<
 	}
 
-/**
- * Creates a hidden input field.
- *
- * @param string $fieldName Name of a field, in the form of "Modelname.fieldname"
- * @param array $options Array of HTML attributes.
- * @return string A generated hidden input
- * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::hidden
- */
-	public function hidden($fieldName, $options = array()) {
+	/**
+	 * Creates a hidden input field.
+	 *
+	 * @param string $fieldName Name of a field, in the form of "Modelname.fieldname"
+	 * @param array $options Array of HTML attributes.
+	 * @return string A generated hidden input
+	 * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::hidden
+	 */
+	public function hidden($fieldName, $options = [])
+	{
 		$options += ['required' => false, 'secure' => true];
 
 		$secure = $options['secure'];
@@ -616,7 +622,7 @@ DOC_END;
 		// <<<
 
 		$options = $this->_initInputField($fieldName, array_merge(
-			$options, array('secure' => static::SECURE_SKIP)
+			$options, ['secure' => static::SECURE_SKIP]
 		));
 
 		if ($secure === true) {
@@ -651,7 +657,7 @@ DOC_END;
 		// ---
 		if ($multiple && is_array($value)) {
 			$out = [];
-			foreach ($value as $_value) {
+			foreach($value as $_value) {
 				$options['value'] = $_value;
 				$out[] = $this->Html->useTag('hiddenmultiple', $options['name'], array_diff_key($options, ['name' => '']));
 			}
@@ -662,92 +668,94 @@ DOC_END;
 		// <<<
 	}
 
-/**
- * Creates a submit button element. This method will generate `<input />` elements that
- * can be used to submit, and reset forms by using $options. image submits can be created by supplying an
- * image path for $caption.
- *
- * ### Options
- *
- * - `div` - Include a wrapping div?  Defaults to true. Accepts sub options similar to
- *   FormHelper::input().
- * - `before` - Content to include before the input.
- * - `after` - Content to include after the input.
- * - `type` - Set to 'reset' for reset inputs. Defaults to 'submit'
- * - `confirm` - JavaScript confirmation message.
- * - Other attributes will be assigned to the input element.
- *
- * ### Options
- *
- * - `div` - Include a wrapping div?  Defaults to true. Accepts sub options similar to
- *   FormHelper::input().
- * - Other attributes will be assigned to the input element.
- *
- * @param string $caption The label appearing on the button OR if string contains :// or the
- *  extension .jpg, .jpe, .jpeg, .gif, .png use an image if the extension
- *  exists, AND the first character is /, image is relative to webroot,
- *  OR if the first character is not /, image is relative to webroot/img.
- * @param array $options Array of options. See above.
- * @return string A HTML submit button
- * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::submit
- */
-	public function submit($caption = null, $options = array()) {
+	/**
+	 * Creates a submit button element. This method will generate `<input />` elements that
+	 * can be used to submit, and reset forms by using $options. image submits can be created by supplying an
+	 * image path for $caption.
+	 *
+	 * ### Options
+	 *
+	 * - `div` - Include a wrapping div?  Defaults to true. Accepts sub options similar to
+	 *   FormHelper::input().
+	 * - `before` - Content to include before the input.
+	 * - `after` - Content to include after the input.
+	 * - `type` - Set to 'reset' for reset inputs. Defaults to 'submit'
+	 * - `confirm` - JavaScript confirmation message.
+	 * - Other attributes will be assigned to the input element.
+	 *
+	 * ### Options
+	 *
+	 * - `div` - Include a wrapping div?  Defaults to true. Accepts sub options similar to
+	 *   FormHelper::input().
+	 * - Other attributes will be assigned to the input element.
+	 *
+	 * @param string $caption The label appearing on the button OR if string contains :// or the
+	 *  extension .jpg, .jpe, .jpeg, .gif, .png use an image if the extension
+	 *  exists, AND the first character is /, image is relative to webroot,
+	 *  OR if the first character is not /, image is relative to webroot/img.
+	 * @param array $options Array of options. See above.
+	 * @return string A HTML submit button
+	 * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::submit
+	 */
+	public function submit($caption = null, $options = [])
+	{
 
 		// CUSTOMIZE ADD 2016/06/08 ryuring
 		// >>>
 		/*** beforeInput ***/
 		$event = $this->dispatchEvent('beforeSubmit', [
-			'id'      => $this->__id,
+			'id' => $this->__id,
 			'caption' => $caption,
 			'options' => $options
 		], ['class' => 'Form', 'plugin' => '']);
 		if ($event !== false) {
-			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+			$options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
 		}
 
 		$output = parent::submit($caption, $options);
 
 		/*** afterInput ***/
 		$event = $this->dispatchEvent('afterSubmit', [
-			'id'      => $this->__id,
+			'id' => $this->__id,
 			'caption' => $caption,
 			'out' => $output
 		], ['class' => 'Form', 'plugin' => '']);
 		if ($event !== false) {
-			$output = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+			$output = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
 		}
 		return $output;
 		// <<<
 
 	}
 
-/**
- * Returns a set of SELECT elements for a full datetime setup: day, month and year, and then time.
- *
- * ### Attributes:
- *
- * - `monthNames` If false, 2 digit numbers will be used instead of text.
- *   If an array, the given array will be used.
- * - `minYear` The lowest year to use in the year select
- * - `maxYear` The maximum year to use in the year select
- * - `interval` The interval for the minutes select. Defaults to 1
- * - `separator` The contents of the string between select elements. Defaults to '-'
- * - `empty` - If true, the empty select option is shown. If a string,
- *   that string is displayed as the empty element.
- * - `round` - Set to `up` or `down` if you want to force rounding in either direction. Defaults to null.
- * - `value` | `default` The default value to be used by the input. A value in `$this->data`
- *   matching the field name will override this value. If no default is provided `time()` will be used.
- *
- * @param string $fieldName Prefix name for the SELECT element
- * @param string $dateFormat DMY, MDY, YMD, or null to not generate date inputs.
- * - W が入力された場合、和暦のselectと年月日の接尾辞が付与される
- * @param string $timeFormat 12, 24, or null to not generate time inputs.
- * @param array $attributes Array of Attributes
- * @return string Generated set of select boxes for the date and time formats chosen.
- * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::dateTime
- */
-	public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $attributes = array()) {
-		$attributes += array('empty' => true, 'value' => null);
+	/**
+	 * Returns a set of SELECT elements for a full datetime setup: day, month and year, and then time.
+	 *
+	 * ### Attributes:
+	 *
+	 * - `monthNames` If false, 2 digit numbers will be used instead of text.
+	 *   If an array, the given array will be used.
+	 * - `minYear` The lowest year to use in the year select
+	 * - `maxYear` The maximum year to use in the year select
+	 * - `interval` The interval for the minutes select. Defaults to 1
+	 * - `separator` The contents of the string between select elements. Defaults to '-'
+	 * - `empty` - If true, the empty select option is shown. If a string,
+	 *   that string is displayed as the empty element.
+	 * - `round` - Set to `up` or `down` if you want to force rounding in either direction. Defaults to null.
+	 * - `value` | `default` The default value to be used by the input. A value in `$this->data`
+	 *   matching the field name will override this value. If no default is provided `time()` will be used.
+	 *
+	 * @param string $fieldName Prefix name for the SELECT element
+	 * @param string $dateFormat DMY, MDY, YMD, or null to not generate date inputs.
+	 * - W が入力された場合、和暦のselectと年月日の接尾辞が付与される
+	 * @param string $timeFormat 12, 24, or null to not generate time inputs.
+	 * @param array $attributes Array of Attributes
+	 * @return string Generated set of select boxes for the date and time formats chosen.
+	 * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::dateTime
+	 */
+	public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $attributes = [])
+	{
+		$attributes += ['empty' => true, 'value' => null];
 		$year = $month = $day = $hour = $min = $meridian = null;
 
 		if (empty($attributes['value'])) {
@@ -802,7 +810,7 @@ DOC_END;
 				$current->setTime($hour, $min);
 			}
 			$changeValue = $min * (1 / $interval);
-			switch ($round) {
+			switch($round) {
 				case 'up':
 					$changeValue = ceil($changeValue);
 					break;
@@ -813,54 +821,54 @@ DOC_END;
 					$changeValue = round($changeValue);
 			}
 			$change = ($changeValue * $interval) - $min;
-			$current->modify($change > 0 ? "+$change minutes" : "$change minutes");
-			$format = ($timeFormat == 12) ? 'Y m d h i a' : 'Y m d H i a';
+			$current->modify($change > 0? "+$change minutes" : "$change minutes");
+			$format = ($timeFormat == 12)? 'Y m d h i a' : 'Y m d H i a';
 			$newTime = explode(' ', $current->format($format));
 			list($year, $month, $day, $hour, $min, $meridian) = $newTime;
 		}
 
-		$keys = array('Day', 'Month', 'Year', 'Hour', 'Minute', 'Meridian');
+		$keys = ['Day', 'Month', 'Year', 'Hour', 'Minute', 'Meridian'];
 		$attrs = array_fill_keys($keys, $attributes);
 
 		$hasId = isset($attributes['id']);
 		if ($hasId && is_array($attributes['id'])) {
 			// check for missing ones and build selectAttr for each element
-			$attributes['id'] += array(
+			$attributes['id'] += [
 				'month' => '',
 				'year' => '',
 				'day' => '',
 				'hour' => '',
 				'minute' => '',
 				'meridian' => ''
-			);
-			foreach ($keys as $key) {
+			];
+			foreach($keys as $key) {
 				$attrs[$key]['id'] = $attributes['id'][strtolower($key)];
 			}
 		}
 		if ($hasId && is_string($attributes['id'])) {
 			// build out an array version
-			foreach ($keys as $key) {
+			foreach($keys as $key) {
 				$attrs[$key]['id'] = $attributes['id'] . $key;
 			}
 		}
 
 		if (is_array($attributes['empty'])) {
-			$attributes['empty'] += array(
+			$attributes['empty'] += [
 				'month' => true,
 				'year' => true,
 				'day' => true,
 				'hour' => true,
 				'minute' => true,
 				'meridian' => true
-			);
-			foreach ($keys as $key) {
+			];
+			foreach($keys as $key) {
 				$attrs[$key]['empty'] = $attributes['empty'][strtolower($key)];
 			}
 		}
 
-		$selects = array();
-		foreach (preg_split('//', $dateFormat, -1, PREG_SPLIT_NO_EMPTY) as $char) {
-			switch ($char) {
+		$selects = [];
+		foreach(preg_split('//', $dateFormat, -1, PREG_SPLIT_NO_EMPTY) as $char) {
+			switch($char) {
 				// >>> CUSTOMIZE ADD 2011/01/11 ryuring	和暦対応
 				case 'W':
 					$selects[] = $this->wyear($fieldName, $minYear, $maxYear, $year, $attributes, $attributes['empty']) . "年";
@@ -874,7 +882,7 @@ DOC_END;
 						$fieldName, $minYear, $maxYear, $attrs['Year']
 					); */
 					// ---
-					$suffix = (preg_match('/^W/', $dateFormat)) ? '年' : '';
+					$suffix = (preg_match('/^W/', $dateFormat))? '年' : '';
 					$selects[] = $this->year(
 							$fieldName, $minYear, $maxYear, $attrs['Year']
 						) . $suffix;
@@ -888,7 +896,7 @@ DOC_END;
 					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 					/* $selects[] = $this->month($fieldName, $attrs['Month']); */
 					// ---
-					$suffix = (preg_match('/^W/', $dateFormat)) ? '月' : '';
+					$suffix = (preg_match('/^W/', $dateFormat))? '月' : '';
 					$selects[] = $this->month($fieldName, $attrs['Month']) . $suffix;
 					// <<<
 
@@ -899,7 +907,7 @@ DOC_END;
 					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 					/* $selects[] = $this->day($fieldName, $attrs['Day']); */
 					// ---
-					$suffix = (preg_match('/^W/', $dateFormat)) ? '日' : '';
+					$suffix = (preg_match('/^W/', $dateFormat))? '日' : '';
 					$selects[] = $this->day($fieldName, $attrs['Day']) . $suffix;
 					// <<<
 
@@ -909,90 +917,91 @@ DOC_END;
 		$opt = implode($separator, $selects);
 
 		$attrs['Minute']['interval'] = $interval;
-		switch ($timeFormat) {
+		switch($timeFormat) {
 			case '24':
 				$attrs['Hour']['value'] = $hour;
 				$attrs['Minute']['value'] = $min;
 				$opt .= $this->hour($fieldName, true, $attrs['Hour']) . ':' .
-				$this->minute($fieldName, $attrs['Minute']);
+					$this->minute($fieldName, $attrs['Minute']);
 				break;
 			case '12':
 				$attrs['Hour']['value'] = $hour;
 				$attrs['Minute']['value'] = $min;
 				$attrs['Meridian']['value'] = $meridian;
 				$opt .= $this->hour($fieldName, false, $attrs['Hour']) . ':' .
-				$this->minute($fieldName, $attrs['Minute']) . ' ' .
-				$this->meridian($fieldName, $attrs['Meridian']);
+					$this->minute($fieldName, $attrs['Minute']) . ' ' .
+					$this->meridian($fieldName, $attrs['Meridian']);
 				break;
 		}
 		return $opt;
 	}
 
-/**
- * Returns a formatted SELECT element.
- *
- * ### Attributes:
- *
- * - `showParents` - If included in the array and set to true, an additional option element
- *   will be added for the parent of each option group. You can set an option with the same name
- *   and it's key will be used for the value of the option.
- * - `multiple` - show a multiple select box. If set to 'checkbox' multiple checkboxes will be
- *   created instead.
- * - `empty` - If true, the empty select option is shown. If a string,
- *   that string is displayed as the empty element.
- * - `escape` - If true contents of options will be HTML entity encoded. Defaults to true.
- * - `value` The selected value of the input.
- * - `class` - When using multiple = checkbox the class name to apply to the divs. Defaults to 'checkbox'.
- * - `disabled` - Control the disabled attribute. When creating a select box, set to true to disable the
- *   select box. When creating checkboxes, `true` will disable all checkboxes. You can also set disabled
- *   to a list of values you want to disable when creating checkboxes.
- *
- * ### Using options
- *
- * A simple array will create normal options:
- *
- * ```
- * $options = array(1 => 'one', 2 => 'two);
- * $this->Form->select('Model.field', $options));
- * ```
- *
- * While a nested options array will create optgroups with options inside them.
- * ```
- * $options = array(
- *  1 => 'bill',
- *  'fred' => array(
- *     2 => 'fred',
- *     3 => 'fred jr.'
- *  )
- * );
- * $this->Form->select('Model.field', $options);
- * ```
- *
- * In the above `2 => 'fred'` will not generate an option element. You should enable the `showParents`
- * attribute to show the fred option.
- *
- * If you have multiple options that need to have the same value attribute, you can
- * use an array of arrays to express this:
- *
- * ```
- * $options = array(
- *  array('name' => 'United states', 'value' => 'USA'),
- *  array('name' => 'USA', 'value' => 'USA'),
- * );
- * ```
- *
- * @param string $fieldName Name attribute of the SELECT
- * @param array $options Array of the OPTION elements (as 'value'=>'Text' pairs) to be used in the
- *	SELECT element
- * @param array $attributes The HTML attributes of the select element.
- * @return string Formatted SELECT element
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
- */
-	public function select($fieldName, $options = array(), $attributes = array()) {
-		$select = array();
+	/**
+	 * Returns a formatted SELECT element.
+	 *
+	 * ### Attributes:
+	 *
+	 * - `showParents` - If included in the array and set to true, an additional option element
+	 *   will be added for the parent of each option group. You can set an option with the same name
+	 *   and it's key will be used for the value of the option.
+	 * - `multiple` - show a multiple select box. If set to 'checkbox' multiple checkboxes will be
+	 *   created instead.
+	 * - `empty` - If true, the empty select option is shown. If a string,
+	 *   that string is displayed as the empty element.
+	 * - `escape` - If true contents of options will be HTML entity encoded. Defaults to true.
+	 * - `value` The selected value of the input.
+	 * - `class` - When using multiple = checkbox the class name to apply to the divs. Defaults to 'checkbox'.
+	 * - `disabled` - Control the disabled attribute. When creating a select box, set to true to disable the
+	 *   select box. When creating checkboxes, `true` will disable all checkboxes. You can also set disabled
+	 *   to a list of values you want to disable when creating checkboxes.
+	 *
+	 * ### Using options
+	 *
+	 * A simple array will create normal options:
+	 *
+	 * ```
+	 * $options = array(1 => 'one', 2 => 'two);
+	 * $this->Form->select('Model.field', $options));
+	 * ```
+	 *
+	 * While a nested options array will create optgroups with options inside them.
+	 * ```
+	 * $options = array(
+	 *  1 => 'bill',
+	 *  'fred' => array(
+	 *     2 => 'fred',
+	 *     3 => 'fred jr.'
+	 *  )
+	 * );
+	 * $this->Form->select('Model.field', $options);
+	 * ```
+	 *
+	 * In the above `2 => 'fred'` will not generate an option element. You should enable the `showParents`
+	 * attribute to show the fred option.
+	 *
+	 * If you have multiple options that need to have the same value attribute, you can
+	 * use an array of arrays to express this:
+	 *
+	 * ```
+	 * $options = array(
+	 *  array('name' => 'United states', 'value' => 'USA'),
+	 *  array('name' => 'USA', 'value' => 'USA'),
+	 * );
+	 * ```
+	 *
+	 * @param string $fieldName Name attribute of the SELECT
+	 * @param array $options Array of the OPTION elements (as 'value'=>'Text' pairs) to be used in the
+	 *    SELECT element
+	 * @param array $attributes The HTML attributes of the select element.
+	 * @return string Formatted SELECT element
+	 * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
+	 */
+	public function select($fieldName, $options = [], $attributes = [])
+	{
+		$select = [];
 		$style = null;
 		$tag = null;
-		$attributes += array(
+		$attributes += [
 			'class' => null,
 			'escape' => true,
 			'secure' => true,
@@ -1008,12 +1017,12 @@ DOC_END;
 			'div' => true,
 			'label' => false
 			// <<<
-		);
+		];
 
 		// CUSTOMIZE ADD 2016/01/28 ryuring
 		// checkboxのdivを外せるオプションを追加
 		// >>>
-		if($attributes['div'] === 'false' || $attributes['div'] === '0') {
+		if ($attributes['div'] === 'false' || $attributes['div'] === '0') {
 			$attributes['div'] = false;
 		}
 		$div = $this->_extractOption('div', $attributes);
@@ -1029,31 +1038,31 @@ DOC_END;
 		$id = $this->_extractOption('id', $attributes);
 
 		$attributes = $this->_initInputField($fieldName, array_merge(
-			(array)$attributes, array('secure' => static::SECURE_SKIP)
+			(array)$attributes, ['secure' => static::SECURE_SKIP]
 		));
 
 		if (is_string($options) && isset($this->_options[$options])) {
 			$options = $this->_generateOptions($options);
 		} elseif (!is_array($options)) {
-			$options = array();
+			$options = [];
 		}
 		if (isset($attributes['type'])) {
 			unset($attributes['type']);
 		}
 
 		if (!empty($attributes['multiple'])) {
-			$style = ($attributes['multiple'] === 'checkbox') ? 'checkbox' : null;
-			$template = ($style) ? 'checkboxmultiplestart' : 'selectmultiplestart';
+			$style = ($attributes['multiple'] === 'checkbox')? 'checkbox' : null;
+			$template = ($style)? 'checkboxmultiplestart' : 'selectmultiplestart';
 			$tag = $template;
 			if ($hiddenField) {
-				$hiddenAttributes = array(
+				$hiddenAttributes = [
 					'value' => '',
-					'id' => $attributes['id'] . ($style ? '' : '_'),
+					'id' => $attributes['id'] . ($style? '' : '_'),
 					'secure' => false,
-					'form' => isset($attributes['form']) ? $attributes['form'] : null,
+					'form' => isset($attributes['form'])? $attributes['form'] : null,
 					'name' => $attributes['name'],
 					'disabled' => $attributes['disabled'] === true || $attributes['disabled'] === 'disabled'
-				);
+				];
 				$select[] = $this->hidden(null, $hiddenAttributes);
 			}
 		} else {
@@ -1074,7 +1083,7 @@ DOC_END;
 			) {
 				$this->_secure(true, $this->_secureFieldName($attributes));
 			}
-			$filter = array('name' => null, 'value' => null);
+			$filter = ['name' => null, 'value' => null];
 			if (is_array($attributes['disabled'])) {
 				$filter['disabled'] = null;
 			}
@@ -1083,13 +1092,13 @@ DOC_END;
 		$emptyMulti = (
 			$showEmpty !== null && $showEmpty !== false && !(
 				empty($showEmpty) && (isset($attributes) &&
-				array_key_exists('multiple', $attributes))
+					array_key_exists('multiple', $attributes))
 			)
 		);
 
 		if ($emptyMulti) {
-			$showEmpty = ($showEmpty === true) ? '' : $showEmpty;
-			$options = array('' => $showEmpty) + $options;
+			$showEmpty = ($showEmpty === true)? '' : $showEmpty;
+			$options = ['' => $showEmpty] + $options;
 		}
 
 		if (!$id) {
@@ -1098,9 +1107,9 @@ DOC_END;
 
 		$select = array_merge($select, $this->_selectOptions(
 			array_reverse($options, true),
-			array(),
+			[],
 			$showParents,
-			array(
+			[
 				'escape' => $escapeOptions,
 				'style' => $style,
 				'name' => $attributes['name'],
@@ -1116,27 +1125,28 @@ DOC_END;
 				'div' => $div,
 				'label' => $attributes['label']
 				// <<<
-			)
+			]
 		));
 
-		$template = ($style === 'checkbox') ? 'checkboxmultipleend' : 'selectend';
+		$template = ($style === 'checkbox')? 'checkboxmultipleend' : 'selectend';
 		$select[] = $this->Html->useTag($template);
 		return implode("\n", $select);
 	}
 
-/**
- * Returns an array of formatted OPTION/OPTGROUP elements
- *
- * @param array $elements Elements to format.
- * @param array $parents Parents for OPTGROUP.
- * @param bool $showParents Whether to show parents.
- * @param array $attributes HTML attributes.
- * @return array
- */
-	protected function _selectOptions($elements = array(), $parents = array(), $showParents = null, $attributes = array()) {
-		$select = array();
+	/**
+	 * Returns an array of formatted OPTION/OPTGROUP elements
+	 *
+	 * @param array $elements Elements to format.
+	 * @param array $parents Parents for OPTGROUP.
+	 * @param bool $showParents Whether to show parents.
+	 * @param array $attributes HTML attributes.
+	 * @return array
+	 */
+	protected function _selectOptions($elements = [], $parents = [], $showParents = null, $attributes = [])
+	{
+		$select = [];
 		$attributes = array_merge(
-			array('escape' => true, 'style' => null, 'value' => null, 'class' => null),
+			['escape' => true, 'style' => null, 'value' => null, 'class' => null],
 			$attributes
 		);
 		$selectedIsEmpty = ($attributes['value'] === '' || $attributes['value'] === null);
@@ -1147,9 +1157,9 @@ DOC_END;
 			$attributes['value'] = 0;
 		}
 
-		$this->_domIdSuffixes = array();
-		foreach ($elements as $name => $title) {
-			$htmlOptions = array();
+		$this->_domIdSuffixes = [];
+		foreach($elements as $name => $title) {
+			$htmlOptions = [];
 			if (is_array($title) && (!isset($title['name']) || !isset($title['value']))) {
 				if (!empty($name)) {
 					if ($attributes['style'] === 'checkbox') {
@@ -1164,7 +1174,7 @@ DOC_END;
 				));
 
 				if (!empty($name)) {
-					$name = $attributes['escape'] ? h($name) : $name;
+					$name = $attributes['escape']? h($name) : $name;
 					if ($attributes['style'] === 'checkbox') {
 						$select[] = $this->Html->useTag('fieldsetstart', $name);
 					} else {
@@ -1192,7 +1202,7 @@ DOC_END;
 				}
 
 				if ($showParents || (!in_array($title, $parents))) {
-					$title = ($attributes['escape']) ? h($title) : $title;
+					$title = ($attributes['escape'])? h($title) : $title;
 
 					$hasDisabled = !empty($attributes['disabled']);
 					if ($hasDisabled) {
@@ -1208,7 +1218,7 @@ DOC_END;
 						$htmlOptions['disabled'] = 'disabled';
 					}
 					if ($hasDisabled && !$disabledIsArray && $attributes['style'] === 'checkbox') {
-						$htmlOptions['disabled'] = $attributes['disabled'] === true ? 'disabled' : $attributes['disabled'];
+						$htmlOptions['disabled'] = $attributes['disabled'] === true? 'disabled' : $attributes['disabled'];
 					}
 
 					if ($attributes['style'] === 'checkbox') {
@@ -1216,7 +1226,7 @@ DOC_END;
 
 						$tagName = $attributes['id'] . $this->domIdSuffix($name);
 						$htmlOptions['id'] = $tagName;
-						$label = array('for' => $tagName);
+						$label = ['for' => $tagName];
 
 						if (isset($htmlOptions['checked']) && $htmlOptions['checked'] === true) {
 							$label['class'] = 'selected';
@@ -1246,12 +1256,12 @@ DOC_END;
 						// $item = $this->Html->useTag('checkboxmultiple', $name, $htmlOptions);
 						// $select[] = $this->Html->div($attributes['class'], $item . $label);
 						// ---
-						if(!empty($attributes['class'])) {
+						if (!empty($attributes['class'])) {
 							$htmlOptions['class'] = $attributes['class'];
 						}
-						if(!empty($attributes['label']) && is_array($attributes['label'])) {
-							if(!empty($attributes['label']['class'])) {
-								if(!empty($label['class']) && $label['class'] === 'selected') {
+						if (!empty($attributes['label']) && is_array($attributes['label'])) {
+							if (!empty($attributes['label']['class'])) {
+								if (!empty($label['class']) && $label['class'] === 'selected') {
 									$label['class'] .= ' ' . $attributes['label']['class'];
 								} else {
 									$label['class'] = $attributes['label']['class'];
@@ -1261,12 +1271,12 @@ DOC_END;
 						}
 						$item = $this->Html->useTag('checkboxmultiple', $name, $htmlOptions) . $this->label(null, $title, $label);
 						if (isset($attributes['div'])) {
-							if($attributes['div'] === false) {
+							if ($attributes['div'] === false) {
 								$select[] = $item;
-							} elseif(is_array($attributes['div'])) {
+							} elseif (is_array($attributes['div'])) {
 								$divOptions = $attributes['div'];
 								$tag = 'div';
-								if(!empty($divOptions['tag'])) {
+								if (!empty($divOptions['tag'])) {
 									$tag = $divOptions['tag'];
 								}
 								unset($divOptions['tag'], $divOptions['errorClass']);
@@ -1292,20 +1302,21 @@ DOC_END;
 		return array_reverse($select, true);
 	}
 
-/**
- * Generates option lists for common <select /> menus
- *
- * @param string $name List type name.
- * @param array $options Options list.
- * @return array
- */
-	protected function _generateOptions($name, $options = array()) {
+	/**
+	 * Generates option lists for common <select /> menus
+	 *
+	 * @param string $name List type name.
+	 * @param array $options Options list.
+	 * @return array
+	 */
+	protected function _generateOptions($name, $options = [])
+	{
 		if (!empty($this->options[$name])) {
 			return $this->options[$name];
 		}
-		$data = array();
+		$data = [];
 
-		switch ($name) {
+		switch($name) {
 			case 'minute':
 				if (isset($options['interval'])) {
 					$interval = $options['interval'];
@@ -1313,26 +1324,26 @@ DOC_END;
 					$interval = 1;
 				}
 				$i = 0;
-				while ($i < 60) {
+				while($i < 60) {
 					$data[sprintf('%02d', $i)] = sprintf('%02d', $i);
 					$i += $interval;
 				}
 				break;
 			case 'hour':
-				for ($i = 1; $i <= 12; $i++) {
+				for($i = 1; $i <= 12; $i++) {
 					$data[sprintf('%02d', $i)] = $i;
 				}
 				break;
 			case 'hour24':
-				for ($i = 0; $i <= 23; $i++) {
+				for($i = 0; $i <= 23; $i++) {
 					$data[sprintf('%02d', $i)] = $i;
 				}
 				break;
 			case 'meridian':
-				$data = array('am' => 'am', 'pm' => 'pm');
+				$data = ['am' => 'am', 'pm' => 'pm'];
 				break;
 			case 'day':
-				for ($i = 1; $i <= 31; $i++) {
+				for($i = 1; $i <= 31; $i++) {
 					$data[sprintf('%02d', $i)] = $i;
 				}
 				break;
@@ -1353,7 +1364,7 @@ DOC_END;
 				} elseif (is_array($options['monthNames'])) {
 					$data = $options['monthNames'];
 				} else {
-					for ($m = 1; $m <= 12; $m++) {
+					for($m = 1; $m <= 12; $m++) {
 						$data[sprintf("%02s", $m)] = strftime("%m", mktime(1, 1, 1, $m, 1, 1999));
 					}
 				}
@@ -1361,11 +1372,11 @@ DOC_END;
 			case 'year':
 				$current = (int)date('Y');
 
-				$min = !isset($options['min']) ? $current - 20 : (int)$options['min'];
-				$max = !isset($options['max']) ? $current + 20 : (int)$options['max'];
+				$min = !isset($options['min'])? $current - 20 : (int)$options['min'];
+				$max = !isset($options['max'])? $current + 20 : (int)$options['max'];
 
 				if ($min > $max) {
-					list($min, $max) = array($max, $min);
+					list($min, $max) = [$max, $min];
 				}
 				if (!empty($options['value']) &&
 					(int)$options['value'] < $min &&
@@ -1376,7 +1387,7 @@ DOC_END;
 					$max = (int)$options['value'];
 				}
 
-				for ($i = $min; $i <= $max; $i++) {
+				for($i = $min; $i <= $max; $i++) {
 					$data[$i] = $i;
 				}
 				if ($options['order'] !== 'asc') {
@@ -1401,10 +1412,10 @@ DOC_END;
 				if ($min > $max) {
 					list($min, $max) = [$max, $min];
 				}
-				for ($i = $min; $i <= $max; $i++) {
+				for($i = $min; $i <= $max; $i++) {
 					$wyears = $this->BcTime->convertToWarekiYear($i);
 					if ($wyears) {
-						foreach ($wyears as $value) {
+						foreach($wyears as $value) {
 							list($w, $year) = explode('-', $value);
 							$data[$value] = $this->BcTime->nengo($w) . ' ' . $year;
 						}
@@ -1418,49 +1429,50 @@ DOC_END;
 		return $this->_options[$name];
 	}
 
-/**
- * Creates a set of radio widgets. Will create a legend and fieldset
- * by default. Use $options to control this
- *
- * You can also customize each radio input element using an array of arrays:
- *
- * ```
- * $options = array(
- *  array('name' => 'United states', 'value' => 'US', 'title' => 'My title'),
- *  array('name' => 'Germany', 'value' => 'DE', 'class' => 'de-de', 'title' => 'Another title'),
- * );
- * ```
- *
- * ### Attributes:
- *
- * - `separator` - define the string in between the radio buttons
- * - `between` - the string between legend and input set or array of strings to insert
- *    strings between each input block
- * - `legend` - control whether or not the widget set has a fieldset & legend
- * - `fieldset` - sets the class of the fieldset. Fieldset is only generated if legend attribute is provided
- * - `value` - indicate a value that is should be checked
- * - `label` - boolean to indicate whether or not labels for widgets show be displayed
- * - `hiddenField` - boolean to indicate if you want the results of radio() to include
- *    a hidden input with a value of ''. This is useful for creating radio sets that non-continuous
- * - `disabled` - Set to `true` or `disabled` to disable all the radio buttons.
- * - `empty` - Set to `true` to create an input with the value '' as the first option. When `true`
- *   the radio label will be 'empty'. Set this option to a string to control the label value.
- *
- * @param string $fieldName Name of a field, like this "Modelname.fieldname"
- * @param array $options Radio button options array.
- * @param array $attributes Array of HTML attributes, and special attributes above.
- * @return string Completed radio widget set.
- * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
- */
-	public function radio($fieldName, $options = array(), $attributes = array()) {
+	/**
+	 * Creates a set of radio widgets. Will create a legend and fieldset
+	 * by default. Use $options to control this
+	 *
+	 * You can also customize each radio input element using an array of arrays:
+	 *
+	 * ```
+	 * $options = array(
+	 *  array('name' => 'United states', 'value' => 'US', 'title' => 'My title'),
+	 *  array('name' => 'Germany', 'value' => 'DE', 'class' => 'de-de', 'title' => 'Another title'),
+	 * );
+	 * ```
+	 *
+	 * ### Attributes:
+	 *
+	 * - `separator` - define the string in between the radio buttons
+	 * - `between` - the string between legend and input set or array of strings to insert
+	 *    strings between each input block
+	 * - `legend` - control whether or not the widget set has a fieldset & legend
+	 * - `fieldset` - sets the class of the fieldset. Fieldset is only generated if legend attribute is provided
+	 * - `value` - indicate a value that is should be checked
+	 * - `label` - boolean to indicate whether or not labels for widgets show be displayed
+	 * - `hiddenField` - boolean to indicate if you want the results of radio() to include
+	 *    a hidden input with a value of ''. This is useful for creating radio sets that non-continuous
+	 * - `disabled` - Set to `true` or `disabled` to disable all the radio buttons.
+	 * - `empty` - Set to `true` to create an input with the value '' as the first option. When `true`
+	 *   the radio label will be 'empty'. Set this option to a string to control the label value.
+	 *
+	 * @param string $fieldName Name of a field, like this "Modelname.fieldname"
+	 * @param array $options Radio button options array.
+	 * @param array $attributes Array of HTML attributes, and special attributes above.
+	 * @return string Completed radio widget set.
+	 * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
+	 */
+	public function radio($fieldName, $options = [], $attributes = [])
+	{
 		$attributes['options'] = $options;
 		$attributes = $this->_initInputField($fieldName, $attributes);
 		unset($attributes['options']);
 
 		$showEmpty = $this->_extractOption('empty', $attributes);
 		if ($showEmpty) {
-			$showEmpty = ($showEmpty === true) ? __d('cake', 'empty') : $showEmpty;
-			$options = array('' => $showEmpty) + $options;
+			$showEmpty = ($showEmpty === true)? __d('cake', 'empty') : $showEmpty;
+			$options = ['' => $showEmpty] + $options;
 		}
 		unset($attributes['empty']);
 
@@ -1474,7 +1486,7 @@ DOC_END;
 
 		$fieldsetAttrs = '';
 		if (isset($attributes['fieldset'])) {
-			$fieldsetAttrs = array('class' => $attributes['fieldset']);
+			$fieldsetAttrs = ['class' => $attributes['fieldset']];
 			unset($attributes['fieldset']);
 		}
 
@@ -1503,30 +1515,30 @@ DOC_END;
 			$value = $this->value($fieldName);
 		}
 
-		$disabled = array();
+		$disabled = [];
 		if (isset($attributes['disabled'])) {
 			$disabled = $attributes['disabled'];
 		}
 
-		$out = array();
+		$out = [];
 
-		$hiddenField = isset($attributes['hiddenField']) ? $attributes['hiddenField'] : true;
+		$hiddenField = isset($attributes['hiddenField'])? $attributes['hiddenField'] : true;
 		unset($attributes['hiddenField']);
 
 		if (isset($value) && is_bool($value)) {
-			$value = $value ? 1 : 0;
+			$value = $value? 1 : 0;
 		}
 
 		$div = null;
-		if(!empty($attributes['div'])) {
+		if (!empty($attributes['div'])) {
 			$div = $attributes['div'];
 			unset($attributes['div']);
 		}
 		unset($label['label']);
 
-		$this->_domIdSuffixes = array();
-		foreach ($options as $optValue => $optTitle) {
-			$optionsHere = array('value' => $optValue, 'disabled' => false);
+		$this->_domIdSuffixes = [];
+		foreach($options as $optValue => $optTitle) {
+			$optionsHere = ['value' => $optValue, 'disabled' => false];
 			if (is_array($optTitle)) {
 				if (isset($optTitle['value'])) {
 					$optionsHere['value'] = $optTitle['value'];
@@ -1547,8 +1559,8 @@ DOC_END;
 			$tagName = $attributes['id'] . $this->domIdSuffix($optValue);
 
 			if ($label) {
-				$labelOpts = is_array($label) ? $label : array();
-				$labelOpts += array('for' => $tagName);
+				$labelOpts = is_array($label)? $label : [];
+				$labelOpts += ['for' => $tagName];
 				$optTitle = $this->label($tagName, $optTitle, $labelOpts);
 			}
 
@@ -1565,16 +1577,16 @@ DOC_END;
 			);*/
 			// ---
 			$radio = $this->Html->useTag('radio', $attributes['name'], $tagName,
-				array_diff_key($allOptions, array('name' => null, 'type' => null, 'id' => null)),
+				array_diff_key($allOptions, ['name' => null, 'type' => null, 'id' => null]),
 				$optTitle
 			);
 			if (isset($div)) {
-				if($div === false) {
+				if ($div === false) {
 					$out[] = $radio;
-				} elseif(is_array($div)) {
+				} elseif (is_array($div)) {
 					$divOptions = $div;
 					$tag = 'div';
-					if(!empty($divOptions['tag'])) {
+					if (!empty($divOptions['tag'])) {
 						$tag = $divOptions['tag'];
 					}
 					unset($divOptions['tag'], $divOptions['errorClass']);
@@ -1591,12 +1603,12 @@ DOC_END;
 
 		if ($hiddenField) {
 			if (!isset($value) || $value === '') {
-				$hidden = $this->hidden($fieldName, array(
-					'form' => isset($attributes['form']) ? $attributes['form'] : null,
+				$hidden = $this->hidden($fieldName, [
+					'form' => isset($attributes['form'])? $attributes['form'] : null,
 					'id' => $attributes['id'] . '_',
-					'value' => $hiddenField === true ? '' : $hiddenField,
+					'value' => $hiddenField === true? '' : $hiddenField,
 					'name' => $attributes['name']
-				));
+				]);
 			}
 		}
 		$out = $hidden . implode($separator, $out);
@@ -1613,27 +1625,29 @@ DOC_END;
 	}
 
 // CUSTOMIZE ADD 2014/07/02 ryuring
-/**
- * フォームのIDを取得する
- * BcForm::create より呼出される事が前提
- *
- * @param string $model
- * @param array $options
- * @return string
- */
-	protected function _getId($model = null, $options = []) {
+
+	/**
+	 * フォームのIDを取得する
+	 * BcForm::create より呼出される事が前提
+	 *
+	 * @param string $model
+	 * @param array $options
+	 * @return string
+	 */
+	protected function _getId($model = null, $options = [])
+	{
 
 		if (!isset($options['id'])) {
-            if (empty($model) && $model !== false && !empty($this->request->params['models'])) {
-                $model = key($this->request->params['models']);
-            } elseif (empty($model) && empty($this->request->params['models'])) {
-                $model = false;
-            }
+			if (empty($model) && $model !== false && !empty($this->request->params['models'])) {
+				$model = key($this->request->params['models']);
+			} elseif (empty($model) && empty($this->request->params['models'])) {
+				$model = false;
+			}
 			if ($model !== false) {
-                list(, $model) = pluginSplit($model, true);
+				list(, $model) = pluginSplit($model, true);
 				$this->setEntity($model, true);
 			}
-			$domId = isset($options['url']['action']) ? $options['url']['action'] : $this->request->params['action'];
+			$domId = isset($options['url']['action'])? $options['url']['action'] : $this->request->params['action'];
 			$id = $this->domId($domId . 'Form');
 		} else {
 			$id = $options['id'];
@@ -1642,52 +1656,55 @@ DOC_END;
 		return $id;
 	}
 
-/**
- * フォームのIDを取得する
- *
- * BcFormHelper::create() の後に呼び出される事を前提とする
- *
- * @return string フォームID
- */
-	public function getId() {
+	/**
+	 * フォームのIDを取得する
+	 *
+	 * BcFormHelper::create() の後に呼び出される事を前提とする
+	 *
+	 * @return string フォームID
+	 */
+	public function getId()
+	{
 		return $this->__id;
 	}
 
-/**
- * CKEditorを出力する
- *
- * @param	string	$fieldName
- * @param	array	$options
- * @param	array	$editorOptions
- * @param	array	$styles
- * @return	string
- * @access	public
- */
-	public function ckeditor($fieldName, $options = []) {
+	/**
+	 * CKEditorを出力する
+	 *
+	 * @param string $fieldName
+	 * @param array $options
+	 * @param array $editorOptions
+	 * @param array $styles
+	 * @return    string
+	 * @access    public
+	 */
+	public function ckeditor($fieldName, $options = [])
+	{
 
 		$options = array_merge(['type' => 'textarea'], $options);
 		return $this->BcCkeditor->editor($fieldName, $options);
 	}
 
-/**
- * エディタを表示する
- *
- * @param string $fieldName
- * @param array $options
- * @return string
- */
-	public function editor($fieldName, $options = []) {
+	/**
+	 * エディタを表示する
+	 *
+	 * @param string $fieldName
+	 * @param array $options
+	 * @return string
+	 */
+	public function editor($fieldName, $options = [])
+	{
 
 		$options = array_merge([
 			'editor' => 'BcCkeditor',
 			'style' => 'width:99%;height:540px'
-			], $options);
+		], $options);
 		list($plugin, $editor) = pluginSplit($options['editor']);
 		if (!empty($this->_View->{$editor})) {
 			return $this->_View->{$editor}->editor($fieldName, $options);
 		} elseif ($editor == 'none') {
 			$_options = [];
-			foreach ($options as $key => $value) {
+			foreach($options as $key => $value) {
 				if (!preg_match('/^editor/', $key)) {
 					$_options[$key] = $value;
 				}
@@ -1698,19 +1715,20 @@ DOC_END;
 		}
 	}
 
-/**
- * 都道府県用のSELECTタグを表示する
- *
- * @param string $fieldName Name attribute of the SELECT
- * @param mixed $selected Selected option
- * @param array $attributes Array of HTML options for the opening SELECT element
- * @param array $convertKey true value = "value" / false value = "key"
- * @return string 都道府県用のSELECTタグ
- */
-	public function prefTag($fieldName, $selected = null, $attributes = array(), $convertKey = false) {
+	/**
+	 * 都道府県用のSELECTタグを表示する
+	 *
+	 * @param string $fieldName Name attribute of the SELECT
+	 * @param mixed $selected Selected option
+	 * @param array $attributes Array of HTML options for the opening SELECT element
+	 * @param array $convertKey true value = "value" / false value = "key"
+	 * @return string 都道府県用のSELECTタグ
+	 */
+	public function prefTag($fieldName, $selected = null, $attributes = [], $convertKey = false)
+	{
 		$prefs = $this->BcText->prefList();
 		if ($convertKey) {
-			$options = array();
+			$options = [];
 			foreach($prefs as $key => $value) {
 				if ($key) {
 					$options[$value] = $value;
@@ -1726,18 +1744,19 @@ DOC_END;
 		return $this->select($fieldName, $options, $attributes);
 	}
 
-/**
- * 和暦年
- *
- * @param string $fieldName Prefix name for the SELECT element
- * @param integer $minYear First year in sequence
- * @param integer $maxYear Last year in sequence
- * @param string $selected Option which is selected.
- * @param array $attributes Attribute array for the select elements.
- * @param boolean $showEmpty Show/hide the empty select option
- * @return string
- */
-	public function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = [], $showEmpty = true) {
+	/**
+	 * 和暦年
+	 *
+	 * @param string $fieldName Prefix name for the SELECT element
+	 * @param integer $minYear First year in sequence
+	 * @param integer $maxYear Last year in sequence
+	 * @param string $selected Option which is selected.
+	 * @param array $attributes Attribute array for the select elements.
+	 * @param boolean $showEmpty Show/hide the empty select option
+	 * @return string
+	 */
+	public function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = [], $showEmpty = true)
+	{
 
 		if ((empty($selected) || $selected === true) && $value = $this->value($fieldName)) {
 			if (is_array($value)) {
@@ -1782,21 +1801,22 @@ DOC_END;
 		$yearOptions = ['min' => $minYear, 'max' => $maxYear];
 		$attributes = array_merge($attributes, [
 			'value' => $selected,
-			'empty'=> $showEmpty
+			'empty' => $showEmpty
 		]);
 		return $this->hidden($fieldName . ".wareki", ['value' => true]) .
 			$this->select($fieldName . ".year", $this->_generateOptions('wyear', $yearOptions), $attributes);
 	}
 
-/**
- * コントロールソースを取得する
- * Model側でメソッドを用意しておく必要がある
- *
- * @param string $field フィールド名
- * @param array $options
- * @return array コントロールソース
- */
-	public function getControlSource($field, $options = []) {
+	/**
+	 * コントロールソースを取得する
+	 * Model側でメソッドを用意しておく必要がある
+	 *
+	 * @param string $field フィールド名
+	 * @param array $options
+	 * @return array コントロールソース
+	 */
+	public function getControlSource($field, $options = [])
+	{
 
 		$count = preg_match_all('/\./is', $field, $matches);
 		if ($count == 1) {
@@ -1820,19 +1840,20 @@ DOC_END;
 		}
 	}
 
-/**
- * モデルよりリストを生成する
- *
- * @param string $modelName
- * @param mixed $conditions
- * @param mixed $fields
- * @param mixed $order
- * @return mixed リストまたは、false
- */
-	public function generateList($modelName, $conditions = [], $fields = [], $order = []) {
+	/**
+	 * モデルよりリストを生成する
+	 *
+	 * @param string $modelName
+	 * @param mixed $conditions
+	 * @param mixed $fields
+	 * @param mixed $order
+	 * @return mixed リストまたは、false
+	 */
+	public function generateList($modelName, $conditions = [], $fields = [], $order = [])
+	{
 
 		$model = ClassRegistry::init($modelName);
-		if(!$model) {
+		if (!$model) {
 			return 'aaa';
 		}
 		if ($fields) {
@@ -1850,14 +1871,15 @@ DOC_END;
 		}
 	}
 
-/**
- * JsonList
- *
- * @param string $field フィールド文字列
- * @param string $attributes
- * @return array 属性
- */
-	public function jsonList($field, $attributes) {
+	/**
+	 * JsonList
+	 *
+	 * @param string $field フィールド文字列
+	 * @param string $attributes
+	 * @return array 属性
+	 */
+	public function jsonList($field, $attributes)
+	{
 
 		am(["imgSrc" => "", "ajaxAddAction" => "", "ajaxDelAction" => ""], $attributes);
 		// JsonDb用Hiddenタグ
@@ -1883,15 +1905,16 @@ DOC_END;
 		return $out;
 	}
 
-/**
- * カレンダーコントロール付きのテキストフィールド
- * jquery-ui-1.7.2 必須
- *
- * @param string フィールド文字列
- * @param array HTML属性
- * @return string html
- */
-	public function datepicker($fieldName, $attributes = []) {
+	/**
+	 * カレンダーコントロール付きのテキストフィールド
+	 * jquery-ui-1.7.2 必須
+	 *
+	 * @param string フィールド文字列
+	 * @param array HTML属性
+	 * @return string html
+	 */
+	public function datepicker($fieldName, $attributes = [])
+	{
 		if (!isset($attributes['autocomplete'])) {
 			$attributes['autocomplete'] = 'off';
 		}
@@ -1930,14 +1953,15 @@ DOC_END;
 		return $out;
 	}
 
-/**
- * 日付カレンダーと時間フィールド
- *
- * @param string $fieldName
- * @param array $options
- * @return string
- */
-	public function dateTimePicker($fieldName, $options = []) {
+	/**
+	 * 日付カレンダーと時間フィールド
+	 *
+	 * @param string $fieldName
+	 * @param array $options
+	 * @return string
+	 */
+	public function dateTimePicker($fieldName, $options = [])
+	{
 
 		$this->Html->script('admin/vendors/jquery.timepicker', ['inline' => false]);
 		$this->Html->css('admin/jquery.timepicker', 'stylesheet', ['inline' => false]);
@@ -1987,42 +2011,42 @@ DOC_END;
 		}
 
 		$dateDivOptions = $timeDivOptions = $dateLabelOptions = $timeLabelOptions = null;
-		if(!empty($dateOptions['div'])) {
+		if (!empty($dateOptions['div'])) {
 			$dateDivOptions = $dateOptions['div'];
 			unset($dateOptions['div']);
 		}
-		if(!empty($timeOptions['div'])) {
+		if (!empty($timeOptions['div'])) {
 			$timeDivOptions = $timeOptions['div'];
 			unset($timeOptions['div']);
 		}
-		if(!empty($dateOptions['label'])) {
+		if (!empty($dateOptions['label'])) {
 			$dateLabelOptions = $dateOptions;
 			unset($dateOptions['type'], $dateOptions['label']);
 		}
-		if(!empty($timeOptions['label'])) {
+		if (!empty($timeOptions['label'])) {
 			$timeLabelOptions = $timeOptions;
 			unset($timeOptions['type'], $timeOptions['label']);
 		}
 
 		$dateTag = $this->datepicker($fieldName . '_date', $dateOptions);
-		if($dateLabelOptions['label']) {
+		if ($dateLabelOptions['label']) {
 			$dateTag = $this->_getLabel($fieldName, $dateLabelOptions) . $dateTag;
 		}
-		if($dateDivOptions) {
+		if ($dateDivOptions) {
 			$tag = 'div';
-			if(!empty($dateDivOptions['tag'])) {
+			if (!empty($dateDivOptions['tag'])) {
 				$tag = $dateDivOptions['tag'];
 				unset($dateDivOptions['tag']);
 			}
 			$dateTag = $this->Html->tag($tag, $dateTag, $dateDivOptions);
 		}
 		$timeTag = $this->text($fieldName . '_time', $timeOptions);
-		if($timeLabelOptions['label']) {
+		if ($timeLabelOptions['label']) {
 			$timeTag = $this->_getLabel($fieldName, $timeLabelOptions) . $timeTag;
 		}
-		if($timeDivOptions) {
+		if ($timeDivOptions) {
 			$tag = 'div';
-			if(!empty($timeDivOptions['tag'])) {
+			if (!empty($timeDivOptions['tag'])) {
 				$tag = $timeDivOptions['tag'];
 				unset($timeDivOptions['tag']);
 			}
@@ -2057,17 +2081,18 @@ DOC_END;
 
 	}
 
-/**
- * 文字列保存用複数選択コントロール
- *
- * @param string $fieldName id,nameなどの名前
- * @param array $options optionタグの値
- * @param mixed $selected selectedを付与する要素
- * @param array $attributes htmlの属性
- * @param mixed $showEmpty 空要素の表示/非表示、初期値
- * @return string
- */
-	public function selectText($fieldName, $options = [], $selected = null, $attributes = [], $showEmpty = '') {
+	/**
+	 * 文字列保存用複数選択コントロール
+	 *
+	 * @param string $fieldName id,nameなどの名前
+	 * @param array $options optionタグの値
+	 * @param mixed $selected selectedを付与する要素
+	 * @param array $attributes htmlの属性
+	 * @param mixed $showEmpty 空要素の表示/非表示、初期値
+	 * @return string
+	 */
+	public function selectText($fieldName, $options = [], $selected = null, $attributes = [], $showEmpty = '')
+	{
 
 		$_attributes = ['separator' => '<br />', 'quotes' => true];
 		$attributes = Hash::merge($_attributes, $attributes);
@@ -2111,25 +2136,26 @@ DOC_END;
 		return $out;
 	}
 
-/**
- * ファイルインプットボックス出力
- *
- * 画像の場合は画像タグ、その他の場合はファイルへのリンク
- * そして削除用のチェックボックスを表示する
- *
- * 《オプション》
- * imgsize	画像のサイズを指定する
- * rel		A タグの rel 属性を指定
- * title	A タグの title 属性を指定
- * link		大きいサイズへの画像へのリンク有無
- * delCheck	削除用チェックボックスの利用可否
- * force	ファイルの存在有無に関わらず強制的に画像タグを表示するかどうか
- *
- * @param string $fieldName
- * @param array $options
- * @return string
- */
-	public function file($fieldName, $options = []) {
+	/**
+	 * ファイルインプットボックス出力
+	 *
+	 * 画像の場合は画像タグ、その他の場合はファイルへのリンク
+	 * そして削除用のチェックボックスを表示する
+	 *
+	 * 《オプション》
+	 * imgsize    画像のサイズを指定する
+	 * rel        A タグの rel 属性を指定
+	 * title    A タグの title 属性を指定
+	 * link        大きいサイズへの画像へのリンク有無
+	 * delCheck    削除用チェックボックスの利用可否
+	 * force    ファイルの存在有無に関わらず強制的に画像タグを表示するかどうか
+	 *
+	 * @param string $fieldName
+	 * @param array $options
+	 * @return string
+	 */
+	public function file($fieldName, $options = [])
+	{
 		$options = $this->_initInputField($fieldName, $options);
 		$entity = $this->entity();
 		$modelName = $this->model();
@@ -2173,19 +2199,19 @@ DOC_END;
 		];
 
 		$deleteSpanOptions = $deleteCheckboxOptions = $deleteLabelOptions = [];
-		if(!empty($options['deleteSpan'])) {
+		if (!empty($options['deleteSpan'])) {
 			$deleteSpanOptions = $options['deleteSpan'];
 		}
-		if(!empty($options['deleteCheckbox'])) {
+		if (!empty($options['deleteCheckbox'])) {
 			$deleteCheckboxOptions = $options['deleteCheckbox'];
 		}
-		if(!empty($options['deleteLabel'])) {
+		if (!empty($options['deleteLabel'])) {
 			$deleteLabelOptions = $options['deleteLabel'];
 		}
-		if(!empty($options['div'])) {
+		if (!empty($options['div'])) {
 			$divOptions = $options['div'];
 		}
-		if(empty($options['class'])) {
+		if (empty($options['class'])) {
 			unset($options['class']);
 		}
 		unset($options['imgsize'], $options['rel'], $options['title'], $options['link']);
@@ -2211,7 +2237,7 @@ DOC_END;
 		$fileValue = $this->value($fieldName);
 
 		$hiddenTag = '';
-		if($fileLinkTag) {
+		if ($fileLinkTag) {
 			if (is_array($fileValue) && empty($fileValue['tmp_name']) && $hiddenValue) {
 				$hiddenTag = $this->hidden($fieldName . '_', ['value' => $hiddenValue]);
 			} else {
@@ -2236,7 +2262,7 @@ DOC_END;
 				if (!empty($divOptions['tag'])) {
 					$tag = $divOptions['tag'];
 				}
-				if(!empty($divOptions['class'])) {
+				if (!empty($divOptions['class'])) {
 					$divOptions['class'] .= ' upload-file';
 				} else {
 					$divOptions['class'] = 'upload-file';
@@ -2251,43 +2277,44 @@ DOC_END;
 		}
 	}
 
-/**
- * フォームの最後のフィールドの後に発動する前提としてイベントを発動する
- *
- * ### 発動側
- * フォームの</table>の直前に記述して利用する
- *
- * ### コールバック処理
- * プラグインのコールバック処理で CakeEvent::data['fields'] に
- * 配列で行データを追加する事でフォームの最後に行を追加する事ができる。
- *
- * ### イベント名
- * コントローラー名.Form.afterForm Or コントローラー名.Form.afterOptionForm
- *
- * ### 行データのキー（配列）
- * - title：見出欄
- * - input：入力欄
- *
- * ### 行データの追加例
- * $View = $event->subject();	// $event は、CakeEvent
- * $input = $View->BcForm->input('Page.add_field', array('type' => 'input'));
- * $event->data['fields'][] = array(
- *		'title'	=> '追加フィールド',
- *		'input'	=> $input
- * );
- *
- * @param string $type フォームのタイプ タイプごとにイベントの登録ができる
- * @return string 行データ
- */
-	public function dispatchAfterForm($type = '') {
-		if($type) {
+	/**
+	 * フォームの最後のフィールドの後に発動する前提としてイベントを発動する
+	 *
+	 * ### 発動側
+	 * フォームの</table>の直前に記述して利用する
+	 *
+	 * ### コールバック処理
+	 * プラグインのコールバック処理で CakeEvent::data['fields'] に
+	 * 配列で行データを追加する事でフォームの最後に行を追加する事ができる。
+	 *
+	 * ### イベント名
+	 * コントローラー名.Form.afterForm Or コントローラー名.Form.afterOptionForm
+	 *
+	 * ### 行データのキー（配列）
+	 * - title：見出欄
+	 * - input：入力欄
+	 *
+	 * ### 行データの追加例
+	 * $View = $event->subject();    // $event は、CakeEvent
+	 * $input = $View->BcForm->input('Page.add_field', array('type' => 'input'));
+	 * $event->data['fields'][] = array(
+	 *        'title'    => '追加フィールド',
+	 *        'input'    => $input
+	 * );
+	 *
+	 * @param string $type フォームのタイプ タイプごとにイベントの登録ができる
+	 * @return string 行データ
+	 */
+	public function dispatchAfterForm($type = '')
+	{
+		if ($type) {
 			$type = Inflector::camelize($type);
 		}
 
 		$event = $this->dispatchEvent('after' . $type . 'Form', ['fields' => [], 'id' => $this->__id], ['class' => 'Form', 'plugin' => '']);
 		$out = '';
 		if ($event !== false) {
-			if(!empty($event->data['fields'])) {
+			if (!empty($event->data['fields'])) {
 				foreach($event->data['fields'] as $field) {
 					$out .= "<tr>";
 					$out .= "<th class=\"col-head bca-form-table__label\">" . $field['title'] . "</th>\n";

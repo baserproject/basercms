@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Blog.Controller
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -22,56 +22,59 @@
  * @property BcContentsComponent $BcContents
  * @property Content $Content
  */
-class BlogContentsController extends BlogAppController {
+class BlogContentsController extends BlogAppController
+{
 
-/**
- * モデル
- *
- * @var
- */
+	/**
+	 * モデル
+	 *
+	 * @var
+	 */
 	public $uses = ['Blog.BlogContent', 'SiteConfig', 'Blog.BlogCategory'];
 
-/**
- * ヘルパー
- *
- * @var array
- */
+	/**
+	 * ヘルパー
+	 *
+	 * @var array
+	 */
 	public $helpers = ['BcHtml', 'BcTime', 'BcForm', 'Blog.Blog'];
 
-/**
- * コンポーネント
- *
- * @var array
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents' => ['useForm' => true]];
 
-/**
- * サブメニューエレメント
- *
- * @var array
- */
+	/**
+	 * サブメニューエレメント
+	 *
+	 * @var array
+	 */
 	public $subMenuElements = [];
 
-/**
- * before_filter
- *
- * @return void
- */
-	public function beforeFilter() {
+	/**
+	 * before_filter
+	 *
+	 * @return void
+	 */
+	public function beforeFilter()
+	{
 		parent::beforeFilter();
 		if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
 			$this->subMenuElements = ['blog_common'];
 		}
 	}
 
-/**
- * ブログ登録
- *
- * @return mixed json|false
- */
-	public function admin_ajax_add() {
+	/**
+	 * ブログ登録
+	 *
+	 * @return mixed json|false
+	 */
+	public function admin_ajax_add()
+	{
 		$this->autoRender = false;
-		if(!$this->request->data) {
+		if (!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		$this->request->data['BlogContent'] = $this->BlogContent->getDefaultValue()['BlogContent'];
@@ -87,12 +90,13 @@ class BlogContentsController extends BlogAppController {
 		return false;
 	}
 
-/**
- * [ADMIN] ブログコンテンツ追加
- *
- * @return void
- */
-	public function admin_add() {
+	/**
+	 * [ADMIN] ブログコンテンツ追加
+	 *
+	 * @return void
+	 */
+	public function admin_add()
+	{
 		$this->pageTitle = __d('baser', '新規ブログ登録');
 
 		if (!$this->request->data) {
@@ -120,13 +124,14 @@ class BlogContentsController extends BlogAppController {
 		$this->render('form');
 	}
 
-/**
- * [ADMIN] 編集処理
- *
- * @param int $id
- * @return void
- */
-	public function admin_edit($id) {
+	/**
+	 * [ADMIN] 編集処理
+	 *
+	 * @param int $id
+	 * @return void
+	 */
+	public function admin_edit($id)
+	{
 		if (!$id && empty($this->request->data)) {
 			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
@@ -154,13 +159,13 @@ class BlogContentsController extends BlogAppController {
 			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->request->data);
 		} else {
 			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->BlogContent->read(null, $id));
-			if(!$this->request->data) {
+			if (!$this->request->data) {
 				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
 		}
 		$site = BcSite::findById($this->request->data['Content']['site_id']);
-		if(!empty($this->request->data['Content']['status'])) {
+		if (!empty($this->request->data['Content']['status'])) {
 			$this->set('publishLink', $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain));
 		}
 		$this->request->params['Content'] = $this->BcContents->getContent($id)['Content'];
@@ -172,19 +177,20 @@ class BlogContentsController extends BlogAppController {
 		$this->render('form');
 	}
 
-/**
- * レイアウト編集画面にリダイレクトする
- *
- * @param string $template
- * @return void
- */
-	protected function redirectEditLayout($template) {
+	/**
+	 * レイアウト編集画面にリダイレクトする
+	 *
+	 * @param string $template
+	 * @return void
+	 */
+	protected function redirectEditLayout($template)
+	{
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . 'Layouts' . DS . $template . $this->ext;
 		$sorces = [BASER_PLUGINS . 'blog' . DS . 'View' . DS . 'Layouts' . DS . $template . $this->ext,
 			BASER_VIEWS . 'Layouts' . DS . $template . $this->ext];
 		if ($this->siteConfigs['theme']) {
 			if (!file_exists($target)) {
-				foreach ($sorces as $source) {
+				foreach($sorces as $source) {
 					if (file_exists($source)) {
 						copy($source, $target);
 						chmod($target, 0666);
@@ -199,19 +205,20 @@ class BlogContentsController extends BlogAppController {
 		}
 	}
 
-/**
- * ブログテンプレート編集画面にリダイレクトする
- *
- * @param string $template
- * @return void
- */
-	protected function redirectEditBlog($template) {
+	/**
+	 * ブログテンプレート編集画面にリダイレクトする
+	 *
+	 * @param string $template
+	 * @return void
+	 */
+	protected function redirectEditBlog($template)
+	{
 		$path = 'Blog' . DS . $template;
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $path;
 		$sources = [BASER_PLUGINS . 'Blog' . DS . 'View' . DS . $path];
 		if ($this->siteConfigs['theme']) {
 			if (!file_exists($target . DS . 'index' . $this->ext)) {
-				foreach ($sources as $source) {
+				foreach($sources as $source) {
 					if (is_dir($source)) {
 						$folder = new Folder();
 						$folder->create(dirname($target), 0777);
@@ -228,31 +235,33 @@ class BlogContentsController extends BlogAppController {
 		}
 	}
 
-/**
- * 削除
- *
- * Controller::requestAction() で呼び出される
- *
- * @return bool
- */
-	public function admin_delete() {
-		if(empty($this->request->data['entityId'])) {
+	/**
+	 * 削除
+	 *
+	 * Controller::requestAction() で呼び出される
+	 *
+	 * @return bool
+	 */
+	public function admin_delete()
+	{
+		if (empty($this->request->data['entityId'])) {
 			return false;
 		}
-		if($this->BlogContent->delete($this->request->data['entityId'])) {
+		if ($this->BlogContent->delete($this->request->data['entityId'])) {
 			return true;
 		}
 		return false;
 	}
 
-/**
- * コピー
- *
- * @return bool
- */
-	public function admin_ajax_copy() {
+	/**
+	 * コピー
+	 *
+	 * @return bool
+	 */
+	public function admin_ajax_copy()
+	{
 		$this->autoRender = false;
-		if(!$this->request->data) {
+		if (!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		$user = $this->BcAuth->user();

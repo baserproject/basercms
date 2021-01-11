@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -28,7 +28,7 @@ $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->ge
 
 	<!-- post title -->
 	<h2 class="contents-head">
-		<?php $this->BcBaser->contentsTitle() ?><br />
+		<?php $this->BcBaser->contentsTitle() ?><br/>
 		<small><?php $this->Blog->postDate($post) ?></small>
 	</h2>
 

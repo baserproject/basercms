@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Blog.Controller
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -20,35 +20,37 @@
  * @property BcContentsComponent $BcContents
  * @property BlogTag $BlogTag
  */
-class BlogTagsController extends BlogAppController {
+class BlogTagsController extends BlogAppController
+{
 
-/**
- * クラス名
- *
- * @var array
- */
+	/**
+	 * クラス名
+	 *
+	 * @var array
+	 */
 	public $name = 'BlogTags';
 
-/**
- * モデル
- *
- * @var array
- */
+	/**
+	 * モデル
+	 *
+	 * @var array
+	 */
 	public $uses = ['Blog.BlogCategory', 'Blog.BlogTag'];
 
-/**
- * コンポーネント
- *
- * @var array
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents'];
 
-/**
- * [ADMIN] タグ一覧
- *
- * @return void
- */
-	public function admin_index() {
+	/**
+	 * [ADMIN] タグ一覧
+	 *
+	 * @return void
+	 */
+	public function admin_index()
+	{
 		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num'], 'sort' => 'id', 'direction' => 'asc']];
 		$this->setViewConditions('BlogTag', ['default' => $default]);
 
@@ -62,12 +64,13 @@ class BlogTagsController extends BlogAppController {
 		$this->pageTitle = __d('baser', 'タグ一覧');
 	}
 
-/**
- * [ADMIN] タグ登録
- *
- * @return void
- */
-	public function admin_add() {
+	/**
+	 * [ADMIN] タグ登録
+	 *
+	 * @return void
+	 */
+	public function admin_add()
+	{
 		if (!empty($this->request->data)) {
 			$this->BlogTag->create($this->request->data);
 			if ($this->BlogTag->save()) {
@@ -81,13 +84,14 @@ class BlogTagsController extends BlogAppController {
 		$this->render('form');
 	}
 
-/**
- * [ADMIN] タグ編集
- *
- * @param int $id タグID
- * @return void
- */
-	public function admin_edit($id) {
+	/**
+	 * [ADMIN] タグ編集
+	 *
+	 * @param int $id タグID
+	 * @return void
+	 */
+	public function admin_edit($id)
+	{
 		if (!$id) {
 			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->redirect(['action' => 'index']);
@@ -107,13 +111,14 @@ class BlogTagsController extends BlogAppController {
 		$this->render('form');
 	}
 
-/**
- * [ADMIN] 削除処理
- *
- * @param int $id
- * @return void
- */
-	public function admin_delete($id = null) {
+	/**
+	 * [ADMIN] 削除処理
+	 *
+	 * @param int $id
+	 * @return void
+	 */
+	public function admin_delete($id = null)
+	{
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
@@ -131,13 +136,14 @@ class BlogTagsController extends BlogAppController {
 		$this->redirect(['action' => 'index']);
 	}
 
-/**
- * [ADMIN] 削除処理　(ajax)
- *
- * @param int $id
- * @return void
- */
-	public function admin_ajax_delete($id = null) {
+	/**
+	 * [ADMIN] 削除処理　(ajax)
+	 *
+	 * @param int $id
+	 * @return void
+	 */
+	public function admin_ajax_delete($id = null)
+	{
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -152,15 +158,16 @@ class BlogTagsController extends BlogAppController {
 		exit();
 	}
 
-/**
- * [ADMIN] 一括削除
- *
- * @param int $id
- * @return void
- */
-	protected function _batch_del($ids) {
+	/**
+	 * [ADMIN] 一括削除
+	 *
+	 * @param int $id
+	 * @return void
+	 */
+	protected function _batch_del($ids)
+	{
 		if ($ids) {
-			foreach ($ids as $id) {
+			foreach($ids as $id) {
 				$data = $this->BlogTag->read(null, $id);
 				if ($this->BlogTag->delete($id)) {
 					$message = sprintf(__d('baser', 'タグ「%s」を削除しました。'), $this->BlogTag->data['BlogTag']['name']);
@@ -171,12 +178,13 @@ class BlogTagsController extends BlogAppController {
 		return true;
 	}
 
-/**
- * [ADMIN] AJAXタグ登録
- *
- * @return void
- */
-	public function admin_ajax_add() {
+	/**
+	 * [ADMIN] AJAXタグ登録
+	 *
+	 * @return void
+	 */
+	public function admin_ajax_add()
+	{
 		if (!empty($this->request->data)) {
 			$this->BlogTag->create($this->request->data);
 			if ($data = $this->BlogTag->save()) {

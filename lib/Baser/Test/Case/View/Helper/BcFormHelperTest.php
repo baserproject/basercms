@@ -3,35 +3,36 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.Test.Case.View.Helper
- * @since			baserCMS v 3.0.6
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.View.Helper
+ * @since           baserCMS v 3.0.6
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('BcAppView', 'View');
 App::uses('BcFormHelper', 'View/Helper');
 
 /**
- * Contact class
+ * Class Contact
  *
- * @package		Baser.Test.Case.View.Helper
+ * @package        Baser.Test.Case.View.Helper
  */
-class Contact extends CakeTestModel {
+class Contact extends CakeTestModel
+{
 
-/**
- * useTable property
- *
- * @var bool
- */
+	/**
+	 * useTable property
+	 *
+	 * @var bool
+	 */
 	public $useTable = false;
 
-/**
- * ビヘイビア
- *
- * @var array
- */
+	/**
+	 * ビヘイビア
+	 *
+	 * @var array
+	 */
 	public $actsAs = [
 		'BcSearchIndexManager',
 		'BcCache',
@@ -49,7 +50,7 @@ class Contact extends CakeTestModel {
 }
 
 /**
- * FormHelperTest class
+ * Class FormHelperTest
  *
  * @package Baser.Test.Case.View.Helper
  * @property BcFormHelper $BcForm
@@ -57,12 +58,13 @@ class Contact extends CakeTestModel {
  * @property BcUploadHelper $BcUpload
  * @property View $_View
  */
-class BcFormHelperTest extends BaserTestCase {
+class BcFormHelperTest extends BaserTestCase
+{
 
-/**
- * Fixtures
- * @var array
- */
+	/**
+	 * Fixtures
+	 * @var array
+	 */
 	public $fixtures = [
 		'baser.Default.Page',
 		'baser.Default.Plugin',
@@ -74,12 +76,13 @@ class BcFormHelperTest extends BaserTestCase {
 		'baser.Default.Favorite'
 	];
 
-/**
- * setUp method
- *
- * @return void
- */
-	public function setUp() {
+	/**
+	 * setUp method
+	 *
+	 * @return void
+	 */
+	public function setUp()
+	{
 		parent::setUp();
 		Configure::write('Config.language', 'jp');
 		Configure::write('App.base', '');
@@ -90,34 +93,37 @@ class BcFormHelperTest extends BaserTestCase {
 		$this->BcTime = new BcTimeHelper($this->_View);
 	}
 
-/**
- * tearDown method
- *
- * @return void
- */
-	public function tearDown() {
+	/**
+	 * tearDown method
+	 *
+	 * @return void
+	 */
+	public function tearDown()
+	{
 		parent::tearDown();
 		unset($this->BcForm);
 		unset($this->BcTime);
 	}
 
-/**
- * Returns a set of SELECT elements for a full datetime setup: day, month and year, and then time.
- *
- * @param string $fieldName Prefix name for the SELECT element
- * @param string $dateFormat DMY, MDY, YMD, or null to not generate date inputs.
- * @param string $timeFormat 12, 24, or null to not generate time inputs.
- * @param array $attributes Array of Attributes
- * @param string $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider dateTimeDataProvider
- */
-	public function testDateTime($fieldName, $dateFormat, $timeFormat, $attributes, $expected, $message) {
+	/**
+	 * Returns a set of SELECT elements for a full datetime setup: day, month and year, and then time.
+	 *
+	 * @param string $fieldName Prefix name for the SELECT element
+	 * @param string $dateFormat DMY, MDY, YMD, or null to not generate date inputs.
+	 * @param string $timeFormat 12, 24, or null to not generate time inputs.
+	 * @param array $attributes Array of Attributes
+	 * @param string $expected 期待値
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider dateTimeDataProvider
+	 */
+	public function testDateTime($fieldName, $dateFormat, $timeFormat, $attributes, $expected, $message)
+	{
 		$result = $this->BcForm->dateTime($fieldName, $dateFormat, $timeFormat, $attributes);
 		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-	public function dateTimeDataProvider() {
+	public function dateTimeDataProvider()
+	{
 		return [
 			['test', 'W', '12', ['maxYear' => 2010], 'id="testWareki".*<option value="h-22">平成 22', 'datetime()を出力できません'],
 			['test', 'WY', '12', [], '年.*年', '年の接尾辞を出力できません'],
@@ -126,107 +132,115 @@ class BcFormHelperTest extends BaserTestCase {
 		];
 	}
 
-/**
- * Creates a checkbox input widget.
- *
- * @param string $fieldName Name of a field, like this "Modelname.fieldname"
- * @param array $options Array of HTML attributes.
- * @param string $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider checkboxDataProvider
- */
-	public function testCheckbox($fieldName, $options, $expected, $message) {
+	/**
+	 * Creates a checkbox input widget.
+	 *
+	 * @param string $fieldName Name of a field, like this "Modelname.fieldname"
+	 * @param array $options Array of HTML attributes.
+	 * @param string $expected 期待値
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider checkboxDataProvider
+	 */
+	public function testCheckbox($fieldName, $options, $expected, $message)
+	{
 		$result = $this->BcForm->checkbox($fieldName, $options);
 		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-	public function checkboxDataProvider() {
+	public function checkboxDataProvider()
+	{
 		return [
 			['test', [], '<input type="checkbox" name="data\[test\]" value="1" id="test"', 'checkbox()を出力できません'],
 			['test', ['label' => 'testLabel'], '<input type="checkbox".*label for="test">testLabel', '属性を付与できません'],
 		];
 	}
 
-/**
- * Creates a hidden input field.
- *
- * @param string $fieldName Name of a field, in the form of "Modelname.fieldname"
- * @param array $options Array of HTML attributes.
- * @param string $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider hiddenDataProvider
- */
-	public function testHidden($fieldName, $options, $expected, $message) {
+	/**
+	 * Creates a hidden input field.
+	 *
+	 * @param string $fieldName Name of a field, in the form of "Modelname.fieldname"
+	 * @param array $options Array of HTML attributes.
+	 * @param string $expected 期待値
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider hiddenDataProvider
+	 */
+	public function testHidden($fieldName, $options, $expected, $message)
+	{
 		$result = $this->BcForm->hidden($fieldName, $options);
 		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-	public function hiddenDataProvider() {
+	public function hiddenDataProvider()
+	{
 		return [
 			['test', [], '<input type="hidden" name="data\[test\]" id="test"', 'hidden()を出力できません'],
 			['test', ['class' => 'bcclass'], 'class="bcclass"', '属性を付与できません'],
 			['test', ['multiple' => 'checkbox'], 'name="data\[test\]"\/>$', 'セキュリティコンポーネントに対応していません'],
-			['test', ['multiple' => 'checkbox', 'value' => ['value1','value2']], 'name="data\[test\]\[\]".* value="value1".*value="value2"', '値を複数追加できません'],
+			['test', ['multiple' => 'checkbox', 'value' => ['value1', 'value2']], 'name="data\[test\]\[\]".* value="value1".*value="value2"', '値を複数追加できません'],
 		];
 	}
 
 
-/**
- * create
- * フック用にラッピング
- *
- * @param array $model
- * @param array $options
- * @return string
- */
-	public function testCreate() {
+	/**
+	 * create
+	 * フック用にラッピング
+	 *
+	 * @param array $model
+	 * @param array $options
+	 * @return string
+	 */
+	public function testCreate()
+	{
 		$result = $this->BcForm->create();
-		$this->assertRegExp('/<form action="\/contacts\/add" novalidate="novalidate" id="addForm" method="post" accept-charset="utf-8"><div style="display:none;">.*/',$result);
+		$this->assertRegExp('/<form action="\/contacts\/add" novalidate="novalidate" id="addForm" method="post" accept-charset="utf-8"><div style="display:none;">.*/', $result);
 	}
 
 
-/**
- * end
- * フック用にラッピング
- *
- * @param	array	$options
- * @return	string
- * @access	public
- * @dataProvider endProvider
- */
-	public function testEnd($array1, $array2, $expected) {
+	/**
+	 * end
+	 * フック用にラッピング
+	 *
+	 * @param array $options
+	 * @return    string
+	 * @access    public
+	 * @dataProvider endProvider
+	 */
+	public function testEnd($array1, $array2, $expected)
+	{
 		$result = $this->BcForm->end($array1, $array2);
-		$this->assertEquals($expected,$result);
+		$this->assertEquals($expected, $result);
 	}
 
-	public function endProvider() {
+	public function endProvider()
+	{
 		return [
 			[null, null, '</form>'],
-			[[1,2], null, '<div class="submit"><input 1="1" 2="2" type="submit" value="Submit"/></div></form>'],
-			[null, [1,2], '</form>'],
-			[[1,2], [1,2], '<div class="submit"><input 1="1" 2="2" type="submit" value="Submit"/></div></form>']
+			[[1, 2], null, '<div class="submit"><input 1="1" 2="2" type="submit" value="Submit"/></div></form>'],
+			[null, [1, 2], '</form>'],
+			[[1, 2], [1, 2], '<div class="submit"><input 1="1" 2="2" type="submit" value="Submit"/></div></form>']
 		];
 	}
 
 
-/**
- * Generates a form input element complete with label and wrapper div
- *
- * @param string $fieldName This should be "Modelname.fieldname"
- * @param array $options Each type of input takes different options.
- * @return string Completed form widget
- * @dataProvider inputDataProvider
- *
- * maxlength値がsqliteでは8、その他は11と返り値が異なるため、4,5番目のテストでは.*を使用
- */
+	/**
+	 * Generates a form input element complete with label and wrapper div
+	 *
+	 * @param string $fieldName This should be "Modelname.fieldname"
+	 * @param array $options Each type of input takes different options.
+	 * @return string Completed form widget
+	 * @dataProvider inputDataProvider
+	 *
+	 * maxlength値がsqliteでは8、その他は11と返り値が異なるため、4,5番目のテストでは.*を使用
+	 */
 
-	public function testInput($optionsField, $optionsData, $fieldName, $options, $expected) {
-		$this->attachEvent(['Helper.Form.beforeInput' => ['callable' => function(CakeEvent $event) use ( $optionsField, $optionsData) {
-			if(!empty($optionsField)) {
+	public function testInput($optionsField, $optionsData, $fieldName, $options, $expected)
+	{
+		$this->attachEvent(['Helper.Form.beforeInput' => ['callable' => function(CakeEvent $event) use ($optionsField, $optionsData) {
+			if (!empty($optionsField)) {
 				$event->data['options'][$optionsField] = $optionsData;
 			}
 		}]]);
-		if(@$options['type'] === 'file') {
+		if (@$options['type'] === 'file') {
 			$this->BcForm->BcUpload->request->data = [
 				'Contact' => [
 					'id' => '1',
@@ -240,7 +254,8 @@ class BcFormHelperTest extends BaserTestCase {
 		$this->resetEvent();
 	}
 
-	public function inputDataProvider() {
+	public function inputDataProvider()
+	{
 		$beginYear = date('Y') - 20;
 		$endYear = date('Y') + 20;
 		return [
@@ -273,53 +288,58 @@ class BcFormHelperTest extends BaserTestCase {
 		];
 	}
 
-/**
- * ラベルを取得する
- */
-	public function testLabel() {
+	/**
+	 * ラベルを取得する
+	 */
+	public function testLabel()
+	{
 		$expected = 'class="bca-label"';
 		$result = $this->BcForm->label('User.id', 'id', ['class' => 'bca-label']);
 		$this->assertRegExp('/' . $expected . '/s', $result, 'ラベルに正しいクラスが付与できません');
 	}
 
-/**
- * CKEditorを出力する
- *
- * @param	string	$fieldName
- * @param	array	$options
- * @param	array	$editorOptions
- * @param	array	$styles
- * @param string $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider ckeditorDataProvider
- */
-	public function testCkeditor($fieldName, $options, $expected, $message) {
+	/**
+	 * CKEditorを出力する
+	 *
+	 * @param string $fieldName
+	 * @param array $options
+	 * @param array $editorOptions
+	 * @param array $styles
+	 * @param string $expected 期待値
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider ckeditorDataProvider
+	 */
+	public function testCkeditor($fieldName, $options, $expected, $message)
+	{
 		$result = $this->BcForm->ckeditor($fieldName, $options);
 		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-	public function ckeditorDataProvider() {
+	public function ckeditorDataProvider()
+	{
 		return [
 			['test', [], '<textarea name="data\[test\]".*load.*CKEDITOR', 'CKEditorを出力できません'],
 			['test', ['editorLanguage' => 'en'], '"language":"en"', 'オプションを設定できません'],
 		];
 	}
 
-/**
- * エディタを表示する
- *
- * @param string $fieldName
- * @param array $options
- * @param string $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider editorDataProvider
- */
-	public function testEditor($fieldName, $options, $expected, $message) {
+	/**
+	 * エディタを表示する
+	 *
+	 * @param string $fieldName
+	 * @param array $options
+	 * @param string $expected 期待値
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider editorDataProvider
+	 */
+	public function testEditor($fieldName, $options, $expected, $message)
+	{
 		$result = $this->BcForm->editor($fieldName, $options);
 		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-	public function editorDataProvider() {
+	public function editorDataProvider()
+	{
 		return [
 			['test', [], '<textarea name="data\[test\]".*load.*CKEDITOR', 'CKEditorを出力できません'],
 			['test', ['editorLanguage' => 'en'], '"language":"en"', 'オプションを設定できません'],
@@ -327,22 +347,24 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 
-/**
- * 都道府県用のSELECTタグを表示する
- *
- * @param string $fieldName Name attribute of the SELECT
- * @param mixed $selected Selected option
- * @param array $attributes Array of HTML options for the opening SELECT element
- * @param string $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider prefTagDataProvider
- */
-	public function testPrefTag($fieldName, $selected, $attributes, $expected, $message) {
+	/**
+	 * 都道府県用のSELECTタグを表示する
+	 *
+	 * @param string $fieldName Name attribute of the SELECT
+	 * @param mixed $selected Selected option
+	 * @param array $attributes Array of HTML options for the opening SELECT element
+	 * @param string $expected 期待値
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider prefTagDataProvider
+	 */
+	public function testPrefTag($fieldName, $selected, $attributes, $expected, $message)
+	{
 		$result = $this->BcForm->prefTag($fieldName, $selected, $attributes);
 		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-	public function prefTagDataProvider() {
+	public function prefTagDataProvider()
+	{
 		return [
 			['test', null, [], '<select name="data\[test\]" id="test">.<option value="">都道府県.*<option value="1">北海道.*<option value="47">沖縄県', 'prefTag()を出力できません'],
 			['test', '40', [], '<option value="40" selected="selected">', '要素を選択状態にできません'],
@@ -351,26 +373,27 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 
-
-/**
- * 和暦年
- *
- * @param string $fieldName Prefix name for the SELECT element
- * @param integer $minYear First year in sequence
- * @param integer $maxYear Last year in sequence
- * @param string $selected Option which is selected.
- * @param array $attributes Attribute array for the select elements.
- * @param boolean $showEmpty Show/hide the empty select option
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @param string $expected 期待値
- * @dataProvider wyearDataProvider
- */
-	public function testWyear($fieldName, $minYear, $maxYear, $selected, $attributes, $showEmpty, $expected, $message) {
+	/**
+	 * 和暦年
+	 *
+	 * @param string $fieldName Prefix name for the SELECT element
+	 * @param integer $minYear First year in sequence
+	 * @param integer $maxYear Last year in sequence
+	 * @param string $selected Option which is selected.
+	 * @param array $attributes Attribute array for the select elements.
+	 * @param boolean $showEmpty Show/hide the empty select option
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @param string $expected 期待値
+	 * @dataProvider wyearDataProvider
+	 */
+	public function testWyear($fieldName, $minYear, $maxYear, $selected, $attributes, $showEmpty, $expected, $message)
+	{
 		$result = $this->BcForm->wyear($fieldName, $minYear, $maxYear, $selected, $attributes, $showEmpty);
 		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-	public function wyearDataProvider() {
+	public function wyearDataProvider()
+	{
 		return [
 			['test', null, null, null, [], true, '<input type="hidden" name="data\[test\]\[wareki\].*<option value="h-', 'wyear()がされません	'],
 			['test', 2010, null, null, [], true, '<option value="h-22">平成 22<\/option>.<\/select>$', '最小の年を指定できません'],
@@ -383,12 +406,13 @@ class BcFormHelperTest extends BaserTestCase {
 		];
 	}
 
-/**
- * 和暦年
- *
- * wyear()の今年を選択状態にするテスト
- */
-	public function testWyearNow() {
+	/**
+	 * 和暦年
+	 *
+	 * wyear()の今年を選択状態にするテスト
+	 */
+	public function testWyearNow()
+	{
 		// 現在の和暦
 		$wareki = $this->BcTime->convertToWareki(date('Y-m-d'));
 		$w = $this->BcTime->wareki($wareki);
@@ -399,62 +423,67 @@ class BcFormHelperTest extends BaserTestCase {
 		$this->assertRegExp('/' . $now . '" selected/s', $result, '今年を選択状態にできません');
 	}
 
-/**
- * コントロールソースを取得する
- * Model側でメソッドを用意しておく必要がある
- *
- * @param string $field フィールド名
- * @param array $options
- * @return array コントロールソース
- * @dataProvider getControlSourceProvider
- */
-	public function testGetControlSource($field, $expected) {
+	/**
+	 * コントロールソースを取得する
+	 * Model側でメソッドを用意しておく必要がある
+	 *
+	 * @param string $field フィールド名
+	 * @param array $options
+	 * @return array コントロールソース
+	 * @dataProvider getControlSourceProvider
+	 */
+	public function testGetControlSource($field, $expected)
+	{
 		$result = $this->BcForm->getControlSource($field);
 		$this->assertEquals($expected, $result);
 	}
 
-	public function getControlSourceProvider() {
+	public function getControlSourceProvider()
+	{
 		return [
 			['hoge', []],
 			['', []]
 		];
 	}
 
-/**
- * モデルよりリストを生成する
- *
- * @param string $modelName
- * @param mixed $conditions
- * @param mixed $fields
- * @param mixed $order
- * @return mixed リストまたは、false
- * @dataProvider generateListProvider
-*/
-	public function testGenerateList($modelName, $conditions, $fields, $expected) {
+	/**
+	 * モデルよりリストを生成する
+	 *
+	 * @param string $modelName
+	 * @param mixed $conditions
+	 * @param mixed $fields
+	 * @param mixed $order
+	 * @return mixed リストまたは、false
+	 * @dataProvider generateListProvider
+	 */
+	public function testGenerateList($modelName, $conditions, $fields, $expected)
+	{
 		$result = $this->BcForm->generateList($modelName, $conditions, $fields);
 		$this->assertEquals($result, $expected);
 	}
 
-	public function generateListProvider() {
+	public function generateListProvider()
+	{
 		return [
 			['hoge', '', '', ''],
-			['User', '', ['id','name'], [1 => 'basertest', 2 => 'basertest2']],
-			['User', '', ['name','id'], ['basertest' => 1, 'basertest2' => 2]],
-			['User', true, ['name','id'], ['basertest' => 1, 'basertest2' => 2]],
-			['User', false, ['name','id'], null]
+			['User', '', ['id', 'name'], [1 => 'basertest', 2 => 'basertest2']],
+			['User', '', ['name', 'id'], ['basertest' => 1, 'basertest2' => 2]],
+			['User', true, ['name', 'id'], ['basertest' => 1, 'basertest2' => 2]],
+			['User', false, ['name', 'id'], null]
 		];
 	}
 
 
-/**
- * JsonList
- *
- * @param string $field フィールド文字列
- * @param string $attributes
- * @param string $expected 期待値
- * @dataProvider jsonListDataProvider
- */
-	public function testJsonList($field, $attributes, $expected, $message) {
+	/**
+	 * JsonList
+	 *
+	 * @param string $field フィールド文字列
+	 * @param string $attributes
+	 * @param string $expected 期待値
+	 * @dataProvider jsonListDataProvider
+	 */
+	public function testJsonList($field, $attributes, $expected, $message)
+	{
 
 		$attributes_default = [
 			'imgSrc' => null,
@@ -468,7 +497,8 @@ class BcFormHelperTest extends BaserTestCase {
 		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-	public function jsonListDataProvider() {
+	public function jsonListDataProvider()
+	{
 		return [
 			['test', [], 'id="JsonTestDb".*jQuery\(function\(\)', 'jsonList()を出力できません'],
 			['test', ['imgSrc' => 'test'], '"deleteButtonSrc":"test"', 'imgSrc属性を付与できません'],
@@ -477,22 +507,24 @@ class BcFormHelperTest extends BaserTestCase {
 		];
 	}
 
-/**
- * カレンダーコントロール付きのテキストフィールド
- * jquery-ui-1.7.2 必須
- *
- * @param string フィールド文字列
- * @param array HTML属性
- * @param string $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider datepickerDataProvider
- */
-	public function testDatepicker($fieldName, $attributes, $expected, $message) {
+	/**
+	 * カレンダーコントロール付きのテキストフィールド
+	 * jquery-ui-1.7.2 必須
+	 *
+	 * @param string フィールド文字列
+	 * @param array HTML属性
+	 * @param string $expected 期待値
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider datepickerDataProvider
+	 */
+	public function testDatepicker($fieldName, $attributes, $expected, $message)
+	{
 		$result = $this->BcForm->datepicker($fieldName, $attributes);
 		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-	public function datepickerDataProvider() {
+	public function datepickerDataProvider()
+	{
 		return [
 			['baser', [], 'type="text".*id="baser".*("#baser")', 'datepicker()が出力できません'],
 			['baser', ['test1' => 'testValue1'], 'test1="testValue1"', '要素に属性を付与できません'],
@@ -500,21 +532,23 @@ class BcFormHelperTest extends BaserTestCase {
 		];
 	}
 
-/**
- * 日付カレンダーと時間フィールド
- *
- * @param string $fieldName
- * @param array $attributes
- * @param string $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider dateTimePickerDataProvider
- */
-	public function testDateTimePicker($fieldName, $attributes, $expected, $message) {
+	/**
+	 * 日付カレンダーと時間フィールド
+	 *
+	 * @param string $fieldName
+	 * @param array $attributes
+	 * @param string $expected 期待値
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider dateTimePickerDataProvider
+	 */
+	public function testDateTimePicker($fieldName, $attributes, $expected, $message)
+	{
 		$result = $this->BcForm->dateTimePicker($fieldName, $attributes);
 		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-	public function dateTimePickerDataProvider() {
+	public function dateTimePickerDataProvider()
+	{
 		return [
 			['baser', [], '<span><label for="baser_date">日付.+?<input .+?<span><label for="baser_time">時間.+?<input .+?<input type="hidden".+?', 'dateTimePicker()が出力されません'],
 			['baser', ['value' => '2010-4-1 11:22:33'], 'value="2010\/4\/1".*value="11:22:33".*value="2010-4-1 11:22:33"', '時間指定が正しく出力できません'],
@@ -525,52 +559,56 @@ class BcFormHelperTest extends BaserTestCase {
 		];
 	}
 
-/**
- * 文字列保存用複数選択コントロール
- *
- * @param string $fieldName
- * @param array $options
- * @param mixed $selected
- * @param array $attributes
- * @param mixed $showEmpty
- * @param string $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider selectTextDataProvider
- */
-	public function testSelectText($fieldName, $options, $selected, $attributes, $showEmpty, $expected, $message) {
+	/**
+	 * 文字列保存用複数選択コントロール
+	 *
+	 * @param string $fieldName
+	 * @param array $options
+	 * @param mixed $selected
+	 * @param array $attributes
+	 * @param mixed $showEmpty
+	 * @param string $expected 期待値
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider selectTextDataProvider
+	 */
+	public function testSelectText($fieldName, $options, $selected, $attributes, $showEmpty, $expected, $message)
+	{
 		$result = $this->BcForm->selectText($fieldName, $options, $selected, $attributes, $showEmpty);
 		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-	public function selectTextDataProvider() {
+	public function selectTextDataProvider()
+	{
 		return [
 			['baser', [], null, [], '', '<div id="baser_"><input type="hidden" name="data\[baser_\]" value="" id="baser_"', 'selectText()を出力できません'],
 			['baser', ['BaserCMS1'], null, [], '', 'id="Baser0".*<label for="Baser0">BaserCMS1', 'optionを出力できません'],
 			['baser', ['BaserCMS1', 'BaserCMS2'], null, [], '', '<label for="Baser0">.*BaserCMS1.*<label for="Baser1">.*BaserCMS2', 'optionを複数出力できません'],
 			['baser', ['BaserCMS1', 'BaserCMS2'], '1', [], '', 'checked="checked".*for="Baser1" class="selected">BaserCMS2', 'checkboxを選択状態にできません'],
-			['baser', ['BaserCMS1'], '1', ['class'=>'bcclass'], '', 'div class="bcclass"', '要素に属性を付与できません'],
-			['baser', ['BaserCMS1'], '1', ['multiple'=>'select'], '', '<select', 'selectを出力できません'],
+			['baser', ['BaserCMS1'], '1', ['class' => 'bcclass'], '', 'div class="bcclass"', '要素に属性を付与できません'],
+			['baser', ['BaserCMS1'], '1', ['multiple' => 'select'], '', '<select', 'selectを出力できません'],
 			['baser', ['BaserCMS1'], '1', [], true, 'value="".*>&nbsp;<label for="Baser">', '空要素を出力できません'],
 			['baser', ['BaserCMS1'], '1', [], '選択してください', 'value="" id="Baser".+?&nbsp;<.*選択してください', '空要素のテキストを指定できません'],
 			['baser', ['BaserCMS1'], '1', [], ['未選択' => '選択してください'], ' value="未選択" id="Baser未選択".+?&nbsp;<.+選択してください', '空要素のテキストと値を指定できません'],
 		];
 	}
 
-/**
- * ファイルインプットボックス出力
- *
- * @param string $fieldName
- * @param array $options
- * @param string $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider fileDataProvider
- */
-	public function testFile($fieldName, $options, $expected, $message = null) {
+	/**
+	 * ファイルインプットボックス出力
+	 *
+	 * @param string $fieldName
+	 * @param array $options
+	 * @param string $expected 期待値
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider fileDataProvider
+	 */
+	public function testFile($fieldName, $options, $expected, $message = null)
+	{
 		$result = $this->BcForm->file($fieldName, $options);
 		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-	public function fileDataProvider() {
+	public function fileDataProvider()
+	{
 		return [
 			['hoge', [], '<input type="file" name="data\[hoge\]" id="hoge"', 'ファイルインプットボックス出力できません'],
 			['hoge', ['imgsize' => '50'], 'imgsize="50"', 'ファイルインプットボックス出力できません'],
@@ -586,16 +624,16 @@ class BcFormHelperTest extends BaserTestCase {
 		];
 	}
 
-/**
- * フォームの最後のフィールドの後に発動する前提としてイベントを発動する
- *
- * @param string $type フォームのタイプ タイプごとにイベントの登録ができる
- * @return string 行データ
- * @dataProvider dispatchAfterFormDataProvider
- */
+	/**
+	 * フォームの最後のフィールドの後に発動する前提としてイベントを発動する
+	 *
+	 * @param string $type フォームのタイプ タイプごとにイベントの登録ができる
+	 * @return string 行データ
+	 * @dataProvider dispatchAfterFormDataProvider
+	 */
 	public function testDispatchAfterForm($type, $fields, $res, $expected)
 	{
-		$event = $this->attachEvent(['Helper.Form.after' .  $type . 'Form' => ['callable' => function (CakeEvent $event) use ($fields, $res) {
+		$event = $this->attachEvent(['Helper.Form.after' . $type . 'Form' => ['callable' => function(CakeEvent $event) use ($fields, $res) {
 			$event->data['fields'] = $fields;
 			return $res;
 		}]]);
@@ -604,7 +642,8 @@ class BcFormHelperTest extends BaserTestCase {
 		$this->resetEvent();
 	}
 
-	public function dispatchAfterFormDataProvider() {
+	public function dispatchAfterFormDataProvider()
+	{
 		return [
 			['Hoge', [['title' => '1', 'input' => '2']], true, '<tr><th class="col-head bca-form-table__label">1<\/th>\n<td class="col-input bca-form-table__input">2<\/td>\n<\/tr>'],
 			['Hoge', [['title' => '1', 'input' => '2']], false, '<tr><th class="col-head bca-form-table__label">1<\/th>\n<td class="col-input bca-form-table__input">2<\/td>\n<\/tr>'],
@@ -613,41 +652,44 @@ class BcFormHelperTest extends BaserTestCase {
 		];
 	}
 
-/**
- * Creates a set of radio widgets. Will create a legend and fieldset
- * by default. Use $options to control this
- *
- * @param string $fieldName Name of a field, like this "Modelname.fieldname"
- * @param array $options Radio button options array.
- * @param array $attributes Array of HTML attributes, and special attributes above.
- * @param string $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider radioDataProvider
- */
-	public function testRadio($fieldName, $options, $attributes, $expected, $message) {
+	/**
+	 * Creates a set of radio widgets. Will create a legend and fieldset
+	 * by default. Use $options to control this
+	 *
+	 * @param string $fieldName Name of a field, like this "Modelname.fieldname"
+	 * @param array $options Radio button options array.
+	 * @param array $attributes Array of HTML attributes, and special attributes above.
+	 * @param string $expected 期待値
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider radioDataProvider
+	 */
+	public function testRadio($fieldName, $options, $attributes, $expected, $message)
+	{
 		$result = $this->BcForm->radio($fieldName, $options, $attributes);
 		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-	public function radioDataProvider() {
+	public function radioDataProvider()
+	{
 		return [
 			['baser', [], [], '<input type="hidden" name="data\[baser\]" id="baser_" value=""', 'radio()を出力できません'],
 			['baser', ['BaserCMS1'], [], 'id="baser0" value="0" \/><label for="baser0">BaserCMS1<', 'optionを出力できません'],
 			['baser', ['BaserCMS1', 'BaserCMS2'], [], '<legend>Baser.*value="0".*BaserCMS1.*value="1".*BaserCMS2', 'optionを複数出力できません'],
 			['baser', ['BaserCMS1', 'BaserCMS2'], ['between' => 'test'], '<\/legend>test', ' legend と最初の要素の間に挿入されるコンテンツを出力できません'],
 			['baser', ['BaserCMS1', 'BaserCMS2'], ['between' => ['test1', 'test2']], 'BaserCMS1<\/label>test1.*BaserCMS2<\/label>test2', '要素の後に挿入されるコンテンツを出力できません'],
-			['baser', ['BaserCMS1'], ['label' => ['class'=>'bcclass']], 'class="bcclass"', 'labelに属性を付与できません'],
+			['baser', ['BaserCMS1'], ['label' => ['class' => 'bcclass']], 'class="bcclass"', 'labelに属性を付与できません'],
 		];
 	}
 
-/**
- * testFormCreateWithSecurity method
- *
- * Test BcForm->create() with security key.
- *
- * @return void
- */
-	public function testCreateWithSecurity() {
+	/**
+	 * testFormCreateWithSecurity method
+	 *
+	 * Test BcForm->create() with security key.
+	 *
+	 * @return void
+	 */
+	public function testCreateWithSecurity()
+	{
 		$this->BcForm->request['_Token'] = ['key' => 'testKey'];
 		$encoding = strtolower(Configure::read('App.encoding'));
 		$result = $this->BcForm->create('Contact', ['url' => '/contacts/add']);
@@ -666,12 +708,13 @@ class BcFormHelperTest extends BaserTestCase {
 		$this->assertTags($result, $expected);
 	}
 
-/**
- * testFileUploadField method
- *
- * @return void
- */
-	public function testFileUploadField() {
+	/**
+	 * testFileUploadField method
+	 *
+	 * @return void
+	 */
+	public function testFileUploadField()
+	{
 		$fieldName = 'Contact.upload';
 		$this->BcForm->setEntity($fieldName);
 		// 通常
@@ -682,14 +725,15 @@ class BcFormHelperTest extends BaserTestCase {
 		$this->assertTags($result, $expected);
 	}
 
-/**
- * ファイルアップロードフィールドのテスト
- *
- * データと画像が既に存在する場合について
- *
- * @return void
- */
-	public function testFileUploadFieldWithImageFile() {
+	/**
+	 * ファイルアップロードフィールドのテスト
+	 *
+	 * データと画像が既に存在する場合について
+	 *
+	 * @return void
+	 */
+	public function testFileUploadFieldWithImageFile()
+	{
 		$fieldName = 'Contact.eye_catch';
 		$this->BcForm->setEntity($fieldName);
 		$this->BcForm->BcUpload->request->data = [
@@ -727,12 +771,13 @@ class BcFormHelperTest extends BaserTestCase {
 		$this->assertTags($result, $expected);
 	}
 
-/**
- * ファイルアップロードフィールドのテスト（hasMany対応）
- *
- * @return void
- */
-	public function testFileUploadFieldHasManyField() {
+	/**
+	 * ファイルアップロードフィールドのテスト（hasMany対応）
+	 *
+	 * @return void
+	 */
+	public function testFileUploadFieldHasManyField()
+	{
 		$fieldName = 'Contact.0.upload';
 		$this->BcForm->setEntity($fieldName);
 
@@ -745,14 +790,15 @@ class BcFormHelperTest extends BaserTestCase {
 		$this->assertTags($result, $expected);
 	}
 
-/**
- * ファイルアップロードフィールドのテスト（hasMany対応）
- *
- * データと画像が既に存在する場合について
- *
- * @return void
- */
-	public function testFileUploadFieldHasManyFieldWithImageFile() {
+	/**
+	 * ファイルアップロードフィールドのテスト（hasMany対応）
+	 *
+	 * データと画像が既に存在する場合について
+	 *
+	 * @return void
+	 */
+	public function testFileUploadFieldHasManyFieldWithImageFile()
+	{
 		$fieldName = 'Contact.0.eye_catch';
 		$this->BcForm->setEntity($fieldName);
 		$this->BcForm->BcUpload->request->data = [
@@ -793,17 +839,19 @@ class BcFormHelperTest extends BaserTestCase {
 		$this->assertTags($result, $expected);
 	}
 
-/**
- * フォームのIDを取得する
- *
- * @dataProvider getIdDataProvider
- */
-	public function testGetId($Model, $expected) {
+	/**
+	 * フォームのIDを取得する
+	 *
+	 * @dataProvider getIdDataProvider
+	 */
+	public function testGetId($Model, $expected)
+	{
 		$this->BcForm->create($Model);
 		$this->assertEquals($expected, $this->BcForm->getId());
 	}
 
-	public function getIdDataProvider() {
+	public function getIdDataProvider()
+	{
 		return [
 			['', 'addForm'],
 			['hogehoge', 'hogehogeAddForm'],

@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Feed.Controller
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Feed.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -15,55 +15,58 @@
  *
  * @package Feed.Controller
  */
-class FeedController extends FeedAppController {
+class FeedController extends FeedAppController
+{
 
-/**
- * クラス名
- *
- * @var string
- */
+	/**
+	 * クラス名
+	 *
+	 * @var string
+	 */
 	public $name = 'Feed';
 
-/**
- * コンポーネント
- * @var array
- */
-	public $components = array('RequestHandler', 'Cookie', 'BcAuth', 'BcAuthConfigure');
+	/**
+	 * コンポーネント
+	 * @var array
+	 */
+	public $components = ['RequestHandler', 'Cookie', 'BcAuth', 'BcAuthConfigure'];
 
-/**
- * モデル
- *
- * @var array
- */
-	public $uses = array("Feed.FeedConfig", "Feed.FeedDetail", "Feed.Feed");
+	/**
+	 * モデル
+	 *
+	 * @var array
+	 */
+	public $uses = ["Feed.FeedConfig", "Feed.FeedDetail", "Feed.Feed"];
 
-/**
- * ヘルパー
- *
- * @var array
- */
-	public $helpers = array('BcText', 'Feed.Feed', 'BcArray');
+	/**
+	 * ヘルパー
+	 *
+	 * @var array
+	 */
+	public $helpers = ['BcText', 'Feed.Feed', 'BcArray'];
 
-/**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
+	/**
+	 * beforeFilter
+	 *
+	 * @return void
+	 */
+	public function beforeFilter()
+	{
 		/* 認証設定 */
 		$this->BcAuth->allow('index', 'mobile_index', 'smartphone_index', 'ajax', 'smartphone_ajax');
 		parent::beforeFilter();
 	}
 
-/**
- * [PUBLIC] フィードを一覧表示する
- *
- * @param int $id
- * @return void
- */
-	public function index($id = null) {
+	/**
+	 * [PUBLIC] フィードを一覧表示する
+	 *
+	 * @param int $id
+	 * @return void
+	 */
+	public function index($id = null)
+	{
 
-		$this->navis = array();
+		$this->navis = [];
 
 		// IDの指定がなかった場合はエラーとする
 		if (!$id) {
@@ -73,7 +76,7 @@ class FeedController extends FeedAppController {
 
 		// feed設定データ取得
 		$feedConfig = $this->FeedConfig->read(null, $id);
-		$feedDetails = $this->FeedDetail->find('all', array('conditions' => array("FeedDetail.feed_config_id" => $id)));
+		$feedDetails = $this->FeedDetail->find('all', ['conditions' => ["FeedDetail.feed_config_id" => $id]]);
 
 		// データが取得できなかった場合はエラーとする
 		if (!$feedConfig || !$feedDetails) {
@@ -82,7 +85,7 @@ class FeedController extends FeedAppController {
 		}
 		$cachetime = 0;
 		$itemExists = false;
-		foreach ($feedDetails as $feedDetail) {
+		foreach($feedDetails as $feedDetail) {
 
 			// フィードを取得する
 			if (strpos($feedDetail['FeedDetail']['category_filter'], '|') !== false) {
@@ -125,10 +128,10 @@ class FeedController extends FeedAppController {
 		// フィードタイトルをtitle_noとしてインデックス番号に変換する
 		if ($feedConfig['FeedConfig']['feed_title_index']) {
 			$titleIndex = explode("|", $feedConfig['FeedConfig']['feed_title_index']);
-			foreach ($feeds as $key => $feed) {
-				foreach ($titleIndex as $key2 => $title) {
+			foreach($feeds as $key => $feed) {
+				foreach($titleIndex as $key2 => $title) {
 					if ($title == $feed['Channel']['title']['value']) {
-						foreach ($feed['Items'] as $key3 => $item) {
+						foreach($feed['Items'] as $key3 => $item) {
 							$feeds[$key]['Items'][$key3]['feed_title_no']['value'] = $key2 + 1;
 							$feeds[$key]['Items'][$key3]['feed_title']['value'] = $title;
 						}
@@ -138,8 +141,8 @@ class FeedController extends FeedAppController {
 		}
 
 		// アイテムをマージ
-		$items = array();
-		foreach ($feeds as $feed) {
+		$items = [];
+		foreach($feeds as $feed) {
 			if (!empty($feed['Items'])) {
 				$items = array_merge($items, $feed['Items']);
 			}
@@ -148,8 +151,8 @@ class FeedController extends FeedAppController {
 		// カテゴリをcategory_noとしてインデックス番号に変換する
 		if ($feedConfig['FeedConfig']['category_index']) {
 			$categoryIndex = explode("|", $feedConfig['FeedConfig']['category_index']);
-			foreach ($items as $key => $item) {
-				foreach ($categoryIndex as $key2 => $category) {
+			foreach($items as $key => $item) {
+				foreach($categoryIndex as $key2 => $category) {
 					if ($category == $item['category']['value']) {
 						$items[$key]['category_no']['value'] = $key2 + 1;
 					}
@@ -157,14 +160,14 @@ class FeedController extends FeedAppController {
 			}
 		}
 		// 日付を秒数に変換
-		foreach ($items as $key => $item) {
+		foreach($items as $key => $item) {
 			if (!empty($item['pubDate']['value'])) {
 				$items[$key]['timestamp'] = strtotime($item['pubDate']['value']);
 			}
 		}
 
 		// 日付で並び替え
-		usort($items, array($this, "_sortDescByTimestamp"));
+		usort($items, [$this, "_sortDescByTimestamp"]);
 
 		// 件数で絞り込み
 		$items = array_slice($items, 0, $feedConfig['FeedConfig']['display_number']);
@@ -180,7 +183,7 @@ class FeedController extends FeedAppController {
 			unset($this->request->query['_']);
 		}
 
-		if(!empty($this->request->query['admin_theme']) && $this->adminTheme) {
+		if (!empty($this->request->query['admin_theme']) && $this->adminTheme) {
 			$this->theme = $this->adminTheme;
 		}
 
@@ -189,27 +192,29 @@ class FeedController extends FeedAppController {
 		$this->render($feedConfig['FeedConfig']['template']);
 	}
 
-/**
- * [SMARTPHONE] フィードを一覧表示する
- *
- * @param int $id
- * @return void
- */
-	public function smartphone_index($id) {
+	/**
+	 * [SMARTPHONE] フィードを一覧表示する
+	 *
+	 * @param int $id
+	 * @return void
+	 */
+	public function smartphone_index($id)
+	{
 		$this->setAction('index', $id);
 	}
 
-/**
- * [PUBLIC] フィードをAJAXで読み込む為のJavascriptを生成する
- *
- * @param int $id
- * @return void
- */
-	public function ajax($id) {
+	/**
+	 * [PUBLIC] フィードをAJAXで読み込む為のJavascriptを生成する
+	 *
+	 * @param int $id
+	 * @return void
+	 */
+	public function ajax($id)
+	{
 		if (strpos($id, '.js') !== false) {
 			$id = str_replace('.js', '', $id);
 		}
-		if(!empty($this->request->query['admin_theme'])) {
+		if (!empty($this->request->query['admin_theme'])) {
 			$this->theme = '';
 		}
 		$this->cacheAction = Configure::read('BcCache.duration');
@@ -219,42 +224,45 @@ class FeedController extends FeedAppController {
 		$this->render('ajax');
 	}
 
-/**
- * [PUBLIC] フィードをAJAXで読み込む為のJavascriptを生成する
- *
- * @param int $id
- * @return void
- */
-	public function smartphone_ajax($id) {
+	/**
+	 * [PUBLIC] フィードをAJAXで読み込む為のJavascriptを生成する
+	 *
+	 * @param int $id
+	 * @return void
+	 */
+	public function smartphone_ajax($id)
+	{
 		$this->setAction('ajax', $id);
 	}
 
-/**
- * タイムスタンプを元に降順に並び替える
- *
- * @param array $a
- * @param array $b
- * @return array
- */
-	protected function _sortDescByTimestamp($a, $b) {
+	/**
+	 * タイムスタンプを元に降順に並び替える
+	 *
+	 * @param array $a
+	 * @param array $b
+	 * @return array
+	 */
+	protected function _sortDescByTimestamp($a, $b)
+	{
 		if ($a['timestamp'] == $b['timestamp']) {
 			return 0;
 		}
-		return ($a['timestamp'] > $b['timestamp']) ? -1 : 1;
+		return ($a['timestamp'] > $b['timestamp'])? -1 : 1;
 	}
 
-/**
- * バブルソート
- *
- * @param array $val = ソートする配列
- * @param string $flag = ソート対象の配列要素
- * @param string $order = ソートの昇順・降順 デフォルトは昇順
- * @return array 並び替え後の配列
- */
-	protected function _bsort(&$val, $flag = "", $order = "ASC") {
+	/**
+	 * バブルソート
+	 *
+	 * @param array $val = ソートする配列
+	 * @param string $flag = ソート対象の配列要素
+	 * @param string $order = ソートの昇順・降順 デフォルトは昇順
+	 * @return array 並び替え後の配列
+	 */
+	protected function _bsort(&$val, $flag = "", $order = "ASC")
+	{
 		$count = count($val);
-		for ($i = 0; $i < $count - 1; $i++) {
-			for ($j = $count - 1; $j > $i; $j--) {
+		for($i = 0; $i < $count - 1; $i++) {
+			for($j = $count - 1; $j > $i; $j--) {
 				if ($flag) {
 					if ($order == "DESC") {
 						if ($val[$j]["" . $flag . ""] > $val[$j - 1]["" . $flag . ""]) {

@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View.Helper
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View.Helper
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -15,52 +15,53 @@
  *
  * @package Baser.View.Helper
  */
-class BcCkeditorHelper extends AppHelper {
+class BcCkeditorHelper extends AppHelper
+{
 
-/**
- * ヘルパー
- * @var array
- */
+	/**
+	 * ヘルパー
+	 * @var array
+	 */
 	public $helpers = ['BcHtml', 'BcForm', 'JqueryEngine'];
 
-/**
- * スクリプト
- * 既にjavascriptが読み込まれている場合はfalse
- *
- * @var boolean
- */
+	/**
+	 * スクリプト
+	 * 既にjavascriptが読み込まれている場合はfalse
+	 *
+	 * @var boolean
+	 */
 	protected $_script = false;
 
-/**
- * 初期化状態
- * 複数のCKEditorを設置する場合、一つ目を設置した時点で true となる
- *
- * @var boolean
- */
+	/**
+	 * 初期化状態
+	 * 複数のCKEditorを設置する場合、一つ目を設置した時点で true となる
+	 *
+	 * @var boolean
+	 */
 	public $inited = false;
 
-/**
- * スタイル初期化判定
- *
- * @var boolean
- * @access protected
- */
+	/**
+	 * スタイル初期化判定
+	 *
+	 * @var boolean
+	 * @access protected
+	 */
 	protected $_initedStyles = false;
 
-/**
- * 初期設定スタイル
- * StyleSet 名 basercms
- * 翻訳がある為、コンストラクタで初期化
- *
- * @var array
- */
+	/**
+	 * 初期設定スタイル
+	 * StyleSet 名 basercms
+	 * 翻訳がある為、コンストラクタで初期化
+	 *
+	 * @var array
+	 */
 	public $style = [];
 
-/**
- * ツールバー
- *
- * @var array
- */
+	/**
+	 * ツールバー
+	 *
+	 * @var array
+	 */
 	public $toolbars = [
 		'simple' => [
 			['Bold', 'Underline', '-',
@@ -79,12 +80,13 @@ class BcCkeditorHelper extends AppHelper {
 		]
 	];
 
-/**
- * BcCkeditorHelper constructor.
- * @param View $View
- * @param array $settings
- */
-	public function __construct(View $View, $settings = []){
+	/**
+	 * BcCkeditorHelper constructor.
+	 * @param View $View
+	 * @param array $settings
+	 */
+	public function __construct(View $View, $settings = [])
+	{
 		parent::__construct($View, $settings);
 		$this->style = [
 			['name' => __d('baser', '青見出し') . '(h3)',
@@ -117,80 +119,81 @@ class BcCkeditorHelper extends AppHelper {
 	}
 
 	/**
- * CKEditor のスクリプトを構築する
- * 【ボタン一覧】
- * Source			- ソース
- * Save				- 保存
- * NewPage			- 新しいページ
- * Preview			- プレビュー
- * Templates		- テンプレート
- * Cut				- 切り取り
- * Copy				- コピー
- * Paste			- 貼り付け
- * PasteText		- プレーンテキスト貼り付け
- * PasteFromWord	- ワードから貼り付け
- * Print			- 印刷
- * SpellChecker		- スペルチェック
- * Scayt			- スペルチェック設定
- * Undo				- 元に戻す
- * Redo				- やり直し
- * Find				- 検索
- * Replace			- 置き換え
- * SelectAll		- すべて選択
- * RemoveFormat		- フォーマット削除
- * Form				- フォーム
- * Checkbox			- チェックボックス
- * Radio			- ラジオボタン
- * TextField		- 1行テキスト
- * Textarea			- テキストエリア
- * Select			- 選択フィールド
- * Button			- ボタン
- * ImageButton		- 画像ボタン
- * HiddenField		- 不可視フィールド
- * Bold				- 太字
- * Italic			- 斜体
- * Underline		- 下線
- * Strike			- 打ち消し線
- * Subscript		- 添え字
- * Superscript		- 上付き文字
- * NumberedList		- 段落番号
- * BulletedList		- 箇条書き
- * Outdent			- インデント解除
- * Indent			- インデント
- * Blockquote		- ブロック引用
- * JustifyLeft		- 左揃え
- * JustifyCenter	- 中央揃え
- * JustifyRight		- 右揃え
- * JustifyBlock		- 両端揃え
- * Link				- リンク挿入／編集
- * Unlink			- リンク解除
- * Anchor			- アンカー挿入／編集
- * Image			- イメージ
- * Flash			- FLASH
- * Table			- テーブル
- * HorizontalRule	- 横罫線
- * Smiley			- 絵文字
- * SpecialChar		- 特殊文字
- * PageBreak		- 改ページ挿入
- * Styles			- スタイル
- * Format			- フォーマット
- * Font				- フォント
- * FontSize			- フォントサイズ
- * TextColor		- テキスト色
- * BGColor			- 背景色
- * Maximize			- 最大化
- * ShowBlocks		- ブロック表示
- * About			- CKEditorバージョン情報
- * Publish			- 本稿に切り替え
- * Draft			- 草稿に切り替え
- * CopyPublish		- 本稿を草稿にコピー
- * CopyDraft		- 草稿を本稿にコピー
- *
- * @param string $fieldName
- * @param array $options
- * @return string
- */
-	function _build($fieldName, $options = []) {
+	 * CKEditor のスクリプトを構築する
+	 * 【ボタン一覧】
+	 * Source            - ソース
+	 * Save                - 保存
+	 * NewPage            - 新しいページ
+	 * Preview            - プレビュー
+	 * Templates        - テンプレート
+	 * Cut                - 切り取り
+	 * Copy                - コピー
+	 * Paste            - 貼り付け
+	 * PasteText        - プレーンテキスト貼り付け
+	 * PasteFromWord    - ワードから貼り付け
+	 * Print            - 印刷
+	 * SpellChecker        - スペルチェック
+	 * Scayt            - スペルチェック設定
+	 * Undo                - 元に戻す
+	 * Redo                - やり直し
+	 * Find                - 検索
+	 * Replace            - 置き換え
+	 * SelectAll        - すべて選択
+	 * RemoveFormat        - フォーマット削除
+	 * Form                - フォーム
+	 * Checkbox            - チェックボックス
+	 * Radio            - ラジオボタン
+	 * TextField        - 1行テキスト
+	 * Textarea            - テキストエリア
+	 * Select            - 選択フィールド
+	 * Button            - ボタン
+	 * ImageButton        - 画像ボタン
+	 * HiddenField        - 不可視フィールド
+	 * Bold                - 太字
+	 * Italic            - 斜体
+	 * Underline        - 下線
+	 * Strike            - 打ち消し線
+	 * Subscript        - 添え字
+	 * Superscript        - 上付き文字
+	 * NumberedList        - 段落番号
+	 * BulletedList        - 箇条書き
+	 * Outdent            - インデント解除
+	 * Indent            - インデント
+	 * Blockquote        - ブロック引用
+	 * JustifyLeft        - 左揃え
+	 * JustifyCenter    - 中央揃え
+	 * JustifyRight        - 右揃え
+	 * JustifyBlock        - 両端揃え
+	 * Link                - リンク挿入／編集
+	 * Unlink            - リンク解除
+	 * Anchor            - アンカー挿入／編集
+	 * Image            - イメージ
+	 * Flash            - FLASH
+	 * Table            - テーブル
+	 * HorizontalRule    - 横罫線
+	 * Smiley            - 絵文字
+	 * SpecialChar        - 特殊文字
+	 * PageBreak        - 改ページ挿入
+	 * Styles            - スタイル
+	 * Format            - フォーマット
+	 * Font                - フォント
+	 * FontSize            - フォントサイズ
+	 * TextColor        - テキスト色
+	 * BGColor            - 背景色
+	 * Maximize            - 最大化
+	 * ShowBlocks        - ブロック表示
+	 * About            - CKEditorバージョン情報
+	 * Publish            - 本稿に切り替え
+	 * Draft            - 草稿に切り替え
+	 * CopyPublish        - 本稿を草稿にコピー
+	 * CopyDraft        - 草稿を本稿にコピー
+	 *
+	 * @param string $fieldName
+	 * @param array $options
+	 * @return string
+	 */
+	function _build($fieldName, $options = [])
+	{
 
 		$options = array_merge([
 			'editorLanguage' => 'ja', // 言語
@@ -212,13 +215,13 @@ class BcCkeditorHelper extends AppHelper {
 			'editorUseTemplates' => true, // テンプレート利用
 			'editorEnterBr' => false, // エンター時に改行を入れる
 			'editorStyles' => []  // スタイル
-			], $options);
+		], $options);
 
 		extract($options);
 		if (empty($editorToolbar)) {
 			$options['editorToolbar'] = $this->toolbars[$editorToolType];
 			if ($editorUseTemplates) {
-				switch ($editorToolType) {
+				switch($editorToolType) {
 					case 'simple':
 						$options['editorToolbar'][0][] = 'Templates';
 						break;
@@ -253,7 +256,7 @@ class BcCkeditorHelper extends AppHelper {
 			unset($options['editorToolType']);
 
 		$_options = [];
-		foreach ($options as $key => $option) {
+		foreach($options as $key => $option) {
 			$key = preg_replace('/^editor/', '', $key);
 			$key = Inflector::variable($key);
 			$_options[$key] = $option;
@@ -301,7 +304,7 @@ class BcCkeditorHelper extends AppHelper {
 			$jscode .= '';
 		}
 		if (!$this->_initedStyles && $editorStyles) {
-			foreach ($editorStyles as $key => $style) {
+			foreach($editorStyles as $key => $style) {
 				$jscode .= "CKEDITOR.addStylesSet('" . $key . "'," . $this->JqueryEngine->object($style) . ");";
 			}
 			$this->_initedStyles = true;
@@ -343,7 +346,7 @@ class BcCkeditorHelper extends AppHelper {
 
 		if ($theme) {
 			$sitePrefix = '';
-			if(!empty($this->request->data['Site']['name'])) {
+			if (!empty($this->request->data['Site']['name'])) {
 				$sitePrefix = $this->request->data['Site']['name'];
 			}
 			if ($sitePrefix) {
@@ -356,7 +359,7 @@ class BcCkeditorHelper extends AppHelper {
 
 		$this->theme = $theme;
 
-		foreach ($themeEditorCsses as $themeEditorCss) {
+		foreach($themeEditorCsses as $themeEditorCss) {
 			if (file_exists($themeEditorCss['path'])) {
 				$jscode .= "CKEDITOR.config.contentsCss = ['" . $themeEditorCss['url'] . "'];";
 				break;
@@ -425,14 +428,15 @@ EOL;
 		return $this->BcHtml->scriptBlock($jscode) . '<input type="hidden" id="DraftMode' . $fieldCamelize . '" value="' . $draftMode . '">';
 	}
 
-/**
- * CKEditorのテキストエリアを出力する
- *
- * @param string $fieldName エディタのid, nameなどの名前を指定
- * @param array $options
- * @return string
- */
-	public function editor($fieldName, $options = []) {
+	/**
+	 * CKEditorのテキストエリアを出力する
+	 *
+	 * @param string $fieldName エディタのid, nameなどの名前を指定
+	 * @param array $options
+	 * @return string
+	 */
+	public function editor($fieldName, $options = [])
+	{
 
 		if (!empty($options['editorUseDraft']) && !empty($options['editorDraftField']) && strpos($fieldName, '.')) {
 			list($model) = explode('.', $fieldName);
@@ -444,7 +448,7 @@ EOL;
 		}
 		$options['type'] = 'textarea';
 		$_options = [];
-		foreach ($options as $key => $option) {
+		foreach($options as $key => $option) {
 			if (!preg_match('/^editor/', $key)) {
 				$_options[$key] = $option;
 			}

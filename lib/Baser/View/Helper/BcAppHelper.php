@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View.Helper
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View.Helper
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('Helper', 'View');
@@ -15,17 +15,19 @@ App::uses('Helper', 'View');
 /**
  * Helper 拡張クラス
  *
- * @package			Baser.View.Helper
+ * @package         Baser.View.Helper
  */
-class BcAppHelper extends Helper {
+class BcAppHelper extends Helper
+{
 
-/**
- * Constructor.
- *
- * @return	void
- * @access	public
- */
-	public function __construct(View $View, $settings = []) {
+	/**
+	 * Constructor.
+	 *
+	 * @return    void
+	 * @access    public
+	 */
+	public function __construct(View $View, $settings = [])
+	{
 
 		parent::__construct($View, $settings);
 
@@ -36,26 +38,27 @@ class BcAppHelper extends Helper {
 		}
 	}
 
-/**
- * Checks if a file exists when theme is used, if no file is found default location is returned
- *
- * PENDING Core Hack
- *
- * @param  string  $file
- * @return string  $webPath web path to file.
- */
-	public function webroot($file) {
+	/**
+	 * Checks if a file exists when theme is used, if no file is found default location is returned
+	 *
+	 * PENDING Core Hack
+	 *
+	 * @param string $file
+	 * @return string  $webPath web path to file.
+	 */
+	public function webroot($file)
+	{
 
 		// CUSTOMIZE ADD 2015/02/15 ryuring
 		// >>>
 		// フルパスの場合はそのまま返す
-		if(preg_match('/^(http|https):\/\//', $file)) {
+		if (preg_match('/^(http|https):\/\//', $file)) {
 			return $file;
 		}
 		// <<<
 
 		$asset = explode('?', $file);
-		$asset[1] = isset($asset[1]) ? '?' . $asset[1] : null;
+		$asset[1] = isset($asset[1])? '?' . $asset[1] : null;
 
 		// CUSTOMIZE MODIFY 2009/10/6 ryuring
 		// Rewriteモジュールが利用できない場合、$this->Html->css / $javascript->link では、
@@ -107,7 +110,7 @@ class BcAppHelper extends Helper {
 				// >>>
 				//$webPath = "{$this->request->webroot}theme/" . $theme . $asset[0];
 				// ---
-				if(!preg_match('/^files\//', $file)) {
+				if (!preg_match('/^files\//', $file)) {
 					$webPath = "{$this->request->webroot}theme/" . $theme . $asset[0];
 				}
 				// <<<
@@ -159,23 +162,24 @@ class BcAppHelper extends Helper {
 		return $webPath . $asset[1];
 	}
 
-/**
- * Finds URL for specified action.
- *
- * Returns an URL pointing to a combination of controller and action. Param
- * $url can be:
- * 	+ Empty - the method will find adress to actuall controller/action.
- * 	+ '/' - the method will find base URL of application.
- * 	+ A combination of controller/action - the method will find url for it.
- *
- * @param  mixed  $url    Cake-relative URL, like "/products/edit/92" or "/presidents/elect/4"
- *                        or an array specifying any of the following: 'controller', 'action',
- *                        and/or 'plugin', in addition to named arguments (keyed array elements),
- *                        and standard URL arguments (indexed array elements)
- * @param boolean $full   If true, the full base URL will be prepended to the result
- * @return string  Full translated URL with base path.
- */
-	public function url($url = null, $full = false, $sessionId = true) {
+	/**
+	 * Finds URL for specified action.
+	 *
+	 * Returns an URL pointing to a combination of controller and action. Param
+	 * $url can be:
+	 *    + Empty - the method will find adress to actuall controller/action.
+	 *    + '/' - the method will find base URL of application.
+	 *    + A combination of controller/action - the method will find url for it.
+	 *
+	 * @param mixed $url Cake-relative URL, like "/products/edit/92" or "/presidents/elect/4"
+	 *                        or an array specifying any of the following: 'controller', 'action',
+	 *                        and/or 'plugin', in addition to named arguments (keyed array elements),
+	 *                        and standard URL arguments (indexed array elements)
+	 * @param boolean $full If true, the full base URL will be prepended to the result
+	 * @return string  Full translated URL with base path.
+	 */
+	public function url($url = null, $full = false, $sessionId = true)
+	{
 		if ($sessionId) {
 			$url = addSessionId($url);
 		}
@@ -201,39 +205,41 @@ class BcAppHelper extends Helper {
 			$url = parent::url($url, $full);
 			$params = explode('?', $url);
 			$url = preg_replace('/\/index$/', '/', $params[0]);
-			if(!empty($params[1])) {
+			if (!empty($params[1])) {
 				$url .= '?' . $params[1];
 			}
 			return $url;
 		}
 	}
 
-/**
- * イベントを発火
- *
- * @param string $name
- * @param array $params
- * @return mixed
- */
-	public function dispatchEvent($name, $params = [], $options = []) {
+	/**
+	 * イベントを発火
+	 *
+	 * @param string $name
+	 * @param array $params
+	 * @return mixed
+	 */
+	public function dispatchEvent($name, $params = [], $options = [])
+	{
 
 		$options = array_merge([
 			'modParams' => 0,
 			'plugin' => $this->plugin,
 			'layer' => 'Helper',
 			'class' => str_replace('Helper', '', get_class($this))
-			], $options);
+		], $options);
 
 		App::uses('BcEventDispatcher', 'Event');
 		return BcEventDispatcher::dispatch($name, $this->_View, $params, $options);
 	}
 
-/**
- * afterLayout
- *
- * @param type $layoutFile
- */
-	public function afterLayout($layoutFile) {
+	/**
+	 * afterLayout
+	 *
+	 * @param type $layoutFile
+	 */
+	public function afterLayout($layoutFile)
+	{
 		parent::afterLayout($layoutFile);
 		// 出力時にインデント用のタブを除去
 		// インデントの調整がちゃんとできてないので取り急ぎ除去するようにした

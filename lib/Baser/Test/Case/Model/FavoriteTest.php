@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Model
- * @since			baserCMS v 3.0.0-beta
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.Model
+ * @since           baserCMS v 3.0.0-beta
+ * @license         https://basercms.net/license/index.html
  */
 App::uses('Favorite', 'Model');
 App::uses('SessionComponent', 'Controller/Component');
@@ -15,7 +15,7 @@ App::uses('ComponentCollection', 'Controller/Component');
 App::uses('CookieComponent', 'Controller/Component');
 
 /**
- * FavoriteTest class
+ * Class FavoriteTest
  *
  * class NonAssosiationFavorite extends Favorite {
  *  public $name = 'Favorite';
@@ -25,7 +25,8 @@ App::uses('CookieComponent', 'Controller/Component');
  *
  * @package Baser.Test.Case.Model
  */
-class FavoriteTest extends BaserTestCase {
+class FavoriteTest extends BaserTestCase
+{
 
 	public $fixtures = [
 		'baser.Default.User',
@@ -34,37 +35,41 @@ class FavoriteTest extends BaserTestCase {
 		'baser.Default.Permission',
 	];
 
-	public $components = ["Auth","Cookie","Session"];
+	public $components = ["Auth", "Cookie", "Session"];
 
-	public function setUp() {
+	public function setUp()
+	{
 		parent::setUp();
 		$this->Favorite = ClassRegistry::init('Favorite');
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		session_unset();
 		unset($this->Favorite);
 		parent::tearDown();
 	}
 
-/**
- * 偽装ログイン処理
- *
- * @param $id ユーザーIDとユーザーグループID
- * - 1 システム管理者
- * - 2 サイト運営
- */
-	public function login($id) {
+	/**
+	 * 偽装ログイン処理
+	 *
+	 * @param $id ユーザーIDとユーザーグループID
+	 * - 1 システム管理者
+	 * - 2 サイト運営
+	 */
+	public function login($id)
+	{
 		$this->Favorite->setSession(new SessionComponent(new ComponentCollection()));
 		$prefix = BcUtil::authSessionKey('admin');
 		$this->Favorite->_Session->write('Auth.' . $prefix . '.id', $id);
 		$this->Favorite->_Session->write('Auth.' . $prefix . '.user_group_id', $id);
 	}
 
-/**
- * validate
- */
-	public function test権限チェック異常系() {
+	/**
+	 * validate
+	 */
+	public function test権限チェック異常系()
+	{
 		$this->Favorite->create([
 			'Favorite' => [
 				'url' => '/admin/hoge',
@@ -78,7 +83,8 @@ class FavoriteTest extends BaserTestCase {
 		$this->assertEquals('このURLの登録は許可されていません。', current($this->Favorite->validationErrors['url']));
 	}
 
-	public function test権限チェックシステム管理者正常系() {
+	public function test権限チェックシステム管理者正常系()
+	{
 		$this->Favorite->create([
 			'Favorite' => [
 				'url' => '/admin/hoge',
@@ -90,7 +96,8 @@ class FavoriteTest extends BaserTestCase {
 		$this->assertTrue($this->Favorite->validates());
 	}
 
-	public function test権限チェックサイト運営者正常系() {
+	public function test権限チェックサイト運営者正常系()
+	{
 		$this->Favorite->create([
 			'Favorite' => [
 				'url' => '/hoge',
@@ -102,17 +109,19 @@ class FavoriteTest extends BaserTestCase {
 		$this->assertTrue($this->Favorite->validates());
 	}
 
-/**
- * セッションをセットする
- */
-	public function testSetSession() {
+	/**
+	 * セッションをセットする
+	 */
+	public function testSetSession()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * アクセス権があるかチェックする
- */
-	public function testIsPermitted() {
+	/**
+	 * アクセス権があるかチェックする
+	 */
+	public function testIsPermitted()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 

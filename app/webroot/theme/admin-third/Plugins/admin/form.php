@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -23,24 +23,24 @@ $this->BcBaser->i18nScript([
 
 <?php echo $this->BcForm->input('ResetDbUrl', ['type' => 'hidden', 'value' => $this->BcBaser->getUrl(['action' => 'reset_db'])]) ?>
 <script>
-$(function(){
-	$("#BtnReset").click(function(){
-        if(confirm(bcI18n.message1)) {
-            $("#PluginAdminInstallForm").attr('action', $("#ResetDbUrl").val());
-            $.bcUtil.showLoader();
-        } else {
-            return false;
-        }
+	$(function () {
+		$("#BtnReset").click(function () {
+			if (confirm(bcI18n.message1)) {
+				$("#PluginAdminInstallForm").attr('action', $("#ResetDbUrl").val());
+				$.bcUtil.showLoader();
+			} else {
+				return false;
+			}
+		});
+		$("#BtnSave").click(function () {
+			$.bcUtil.showLoader();
+		});
 	});
-	$("#BtnSave").click(function(){
-		$.bcUtil.showLoader();
-	});
-});
 </script>
 
 <?php if ($installMessage): ?>
-<div id="UpdateMessage"><?php echo $installMessage ?></div>
-<?php endif ?> 
+	<div id="UpdateMessage"><?php echo $installMessage ?></div>
+<?php endif ?>
 
 <?php echo $this->BcForm->create('Plugin', ['url' => [$this->request->data['Plugin']['name']]]) ?>
 <?php echo $this->BcForm->input('Plugin.name', ['type' => 'hidden']) ?>
@@ -63,15 +63,15 @@ $(function(){
 	<?php echo $this->BcForm->error('Plugin.name') ?>
 	<?php echo $this->BcForm->error('Plugin.title') ?>
 </div>
-	
+
 
 <div class="submit">
-<?php if ($dbInited): ?>
+	<?php if ($dbInited): ?>
 		<?php echo $this->BcForm->submit(__d('baser', 'プラグインのデータを初期化する'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnReset']) ?>
 		<?php echo $this->BcForm->submit(__d('baser', '有効化'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave']) ?>
-<?php else: ?> 
+	<?php else: ?>
 		<?php echo $this->BcForm->submit(__d('baser', 'インストール'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave']) ?>
-<?php endif; ?>
+	<?php endif; ?>
 </div>
 
 <?php echo $this->BcForm->end() ?>

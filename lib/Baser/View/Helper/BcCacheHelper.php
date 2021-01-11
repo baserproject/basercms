@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View.Helper
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View.Helper
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('CacheHelper', 'View/Helper');
@@ -20,18 +20,20 @@ App::uses('CacheHelper', 'View/Helper');
  *
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/cache.html
  */
-class BcCacheHelper extends CacheHelper {
+class BcCacheHelper extends CacheHelper
+{
 
-/**
- * Write a cached version of the file
- *
- * @param string $content view content to write to a cache file.
- * @param string $timestamp Duration to set for cache file.
- * @param bool $useCallbacks Whether to include statements in cached file which
- *   run callbacks.
- * @return bool success of caching view.
- */
-	protected function _writeFile($content, $timestamp, $useCallbacks = false) {
+	/**
+	 * Write a cached version of the file
+	 *
+	 * @param string $content view content to write to a cache file.
+	 * @param string $timestamp Duration to set for cache file.
+	 * @param bool $useCallbacks Whether to include statements in cached file which
+	 *   run callbacks.
+	 * @return bool success of caching view.
+	 */
+	protected function _writeFile($content, $timestamp, $useCallbacks = false)
+	{
 		$now = time();
 
 		if (is_numeric($timestamp)) {

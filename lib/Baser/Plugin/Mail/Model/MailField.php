@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Mail.Model
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Mail.Model
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -16,23 +16,25 @@
  * @package Mail.Model
  *
  */
-class MailField extends MailAppModel {
+class MailField extends MailAppModel
+{
 
-/**
- * ビヘイビア
- *
- * @var array
- */
-	public $actsAs = array('BcCache');
+	/**
+	 * ビヘイビア
+	 *
+	 * @var array
+	 */
+	public $actsAs = ['BcCache'];
 
-/**
- * MailField constructor.
- *
- * @param bool $id
- * @param null $table
- * @param null $ds
- */
-	public function __construct($id = false, $table = null, $ds = null) {
+	/**
+	 * MailField constructor.
+	 *
+	 * @param bool $id
+	 * @param null $table
+	 * @param null $ds
+	 */
+	public function __construct($id = false, $table = null, $ds = null)
+	{
 		parent::__construct($id, $table, $ds);
 		$this->validate = [
 			'id' => [
@@ -73,45 +75,46 @@ class MailField extends MailAppModel {
 		];
 	}
 
-/**
- * コントロールソースを取得する
- *
- * @param string $field
- * @return array source
- */
-	public function getControlSource($field = null) {
+	/**
+	 * コントロールソースを取得する
+	 *
+	 * @param string $field
+	 * @return array source
+	 */
+	public function getControlSource($field = null)
+	{
 		$source['type'] = [
-			'text'				=> __d('baser', 'テキスト'),
-			'textarea'			=> __d('baser', 'テキストエリア'),
-			'radio'				=> __d('baser', 'ラジオボタン'),
-			'select'			=> __d('baser', 'セレクトボックス'),
-			'email'				=> __d('baser', 'Eメール'),
-			'multi_check'		=> __d('baser', 'マルチチェックボックス'),
-			'file'				=> __d('baser', 'ファイル'),
-			'autozip'			=> __d('baser', '自動補完郵便番号'),
-			'pref'				=> __d('baser', '都道府県リスト'),
-			'date_time_wareki'	=> __d('baser', '和暦日付'),
-			'date_time_calender'=> __d('baser', 'カレンダー'),
-			'tel'				=> __d('baser', '電話番号'),
-			'password'			=> __d('baser', 'パスワード'),
-			'hidden'			=> __d('baser', '隠しフィールド')
+			'text' => __d('baser', 'テキスト'),
+			'textarea' => __d('baser', 'テキストエリア'),
+			'radio' => __d('baser', 'ラジオボタン'),
+			'select' => __d('baser', 'セレクトボックス'),
+			'email' => __d('baser', 'Eメール'),
+			'multi_check' => __d('baser', 'マルチチェックボックス'),
+			'file' => __d('baser', 'ファイル'),
+			'autozip' => __d('baser', '自動補完郵便番号'),
+			'pref' => __d('baser', '都道府県リスト'),
+			'date_time_wareki' => __d('baser', '和暦日付'),
+			'date_time_calender' => __d('baser', 'カレンダー'),
+			'tel' => __d('baser', '電話番号'),
+			'password' => __d('baser', 'パスワード'),
+			'hidden' => __d('baser', '隠しフィールド')
 		];
 		$source['valid'] = [
-			'VALID_NOT_EMPTY'	=> __d('baser', '入力必須'),
-			'VALID_EMAIL'		=> __d('baser', 'Eメールチェック（入力必須）'),
-			'/^(|[0-9]+)$/'		=> __d('baser', '数値チェック'),
-			'/^([0-9]+)$/'		=> __d('baser', '数値チェック（入力必須）')
+			'VALID_NOT_EMPTY' => __d('baser', '入力必須'),
+			'VALID_EMAIL' => __d('baser', 'Eメールチェック（入力必須）'),
+			'/^(|[0-9]+)$/' => __d('baser', '数値チェック'),
+			'/^([0-9]+)$/' => __d('baser', '数値チェック（入力必須）')
 		];
 		$source['valid_ex'] = [
-			'VALID_EMAIL_CONFIRM'	=> __d('baser', 'Eメール比較チェック'),
-			'VALID_GROUP_COMPLATE'	=> __d('baser', 'グループチェック'),
-			'VALID_NOT_UNCHECKED'	=> __d('baser', 'チェックボックス未入力チェック'),
-			'VALID_DATETIME'		=> __d('baser', '日付チェック'),
-			'VALID_MAX_FILE_SIZE'	=> __d('baser', 'ファイルアップロードサイズ制限'),
-			'VALID_FILE_EXT'		=> __d('baser', 'ファイル拡張子チェック'),
-			'VALID_ZENKAKU_KATAKANA' 		=> __d('baser', '全角カタカナチェック'),
-			'VALID_ZENKAKU_HIRAGANA' 		=> __d('baser', '全角ひらがなチェック'),
-			'VALID_REGEX' 			=> __d('baser', '正規表現チェック'),
+			'VALID_EMAIL_CONFIRM' => __d('baser', 'Eメール比較チェック'),
+			'VALID_GROUP_COMPLATE' => __d('baser', 'グループチェック'),
+			'VALID_NOT_UNCHECKED' => __d('baser', 'チェックボックス未入力チェック'),
+			'VALID_DATETIME' => __d('baser', '日付チェック'),
+			'VALID_MAX_FILE_SIZE' => __d('baser', 'ファイルアップロードサイズ制限'),
+			'VALID_FILE_EXT' => __d('baser', 'ファイル拡張子チェック'),
+			'VALID_ZENKAKU_KATAKANA' => __d('baser', '全角カタカナチェック'),
+			'VALID_ZENKAKU_HIRAGANA' => __d('baser', '全角ひらがなチェック'),
+			'VALID_REGEX' => __d('baser', '正規表現チェック'),
 		];
 		$source['auto_convert'] = ['CONVERT_HANKAKU' => __d('baser', '半角変換')];
 		if ($field) {
@@ -121,20 +124,21 @@ class MailField extends MailAppModel {
 		}
 	}
 
-/**
- * 同じ名称のフィールド名がないかチェックする
- * 同じメールコンテンツが条件
- *
- * @param array $check
- * @return boolean
- */
-	public function duplicateMailField($check) {
-		$conditions = array('MailField.' . key($check) => $check[key($check)],
-			'MailField.mail_content_id' => $this->data['MailField']['mail_content_id']);
+	/**
+	 * 同じ名称のフィールド名がないかチェックする
+	 * 同じメールコンテンツが条件
+	 *
+	 * @param array $check
+	 * @return boolean
+	 */
+	public function duplicateMailField($check)
+	{
+		$conditions = ['MailField.' . key($check) => $check[key($check)],
+			'MailField.mail_content_id' => $this->data['MailField']['mail_content_id']];
 		if ($this->exists()) {
-			$conditions['NOT'] = array('MailField.id' => $this->id);
+			$conditions['NOT'] = ['MailField.id' => $this->id];
 		}
-		$ret = $this->find('first', array('conditions' => $conditions));
+		$ret = $this->find('first', ['conditions' => $conditions]);
 		if ($ret) {
 			return false;
 		} else {
@@ -142,30 +146,32 @@ class MailField extends MailAppModel {
 		}
 	}
 
-/**
- * メールフィールドの値として正しい文字列か検証する
- * 半角英数-_
- *
- * @param array $check
- * @return boolean
- */
-	public function halfTextMailField($check) {
+	/**
+	 * メールフィールドの値として正しい文字列か検証する
+	 * 半角英数-_
+	 *
+	 * @param array $check
+	 * @return boolean
+	 */
+	public function halfTextMailField($check)
+	{
 		$subject = $check[key($check)];
 		$pattern = "/^[a-zA-Z0-9-_]*$/";
 		return !!(preg_match($pattern, $subject) === 1);
 	}
 
-/**
- * 選択リストの入力チェック
- *
- * @param type $check
- */
-	public function sourceMailField($check) {
-		switch ($this->data['MailField']['type']) {
-			case 'radio':		// ラジオボタン
-			case 'select':		// セレクトボックス
-			case 'multi_check':	// マルチチェックボックス
-			case 'autozip':		// 自動保管郵便番号
+	/**
+	 * 選択リストの入力チェック
+	 *
+	 * @param type $check
+	 */
+	public function sourceMailField($check)
+	{
+		switch($this->data['MailField']['type']) {
+			case 'radio':        // ラジオボタン
+			case 'select':        // セレクトボックス
+			case 'multi_check':    // マルチチェックボックス
+			case 'autozip':        // 自動保管郵便番号
 				// 選択リストのチェックを行う
 				$result = (!empty($check[key($check)]));
 				break;
@@ -177,28 +183,29 @@ class MailField extends MailAppModel {
 		return $result;
 	}
 
-/**
- * フィールドデータをコピーする
- *
- * @param int $id
- * @param array $data
- * @return mixed UserGroup Or false
- */
-	public function copy($id, $data = array(), $options = array()) {
-		$options = array_merge(array(
+	/**
+	 * フィールドデータをコピーする
+	 *
+	 * @param int $id
+	 * @param array $data
+	 * @return mixed UserGroup Or false
+	 */
+	public function copy($id, $data = [], $options = [])
+	{
+		$options = array_merge([
 			'sortUpdateOff' => false,
-			), $options);
+		], $options);
 
 		extract($options);
 
 		if ($id) {
-			$data = $this->find('first', array('conditions' => array('MailField.id' => $id), 'recursive' => -1));
+			$data = $this->find('first', ['conditions' => ['MailField.id' => $id], 'recursive' => -1]);
 		}
 		$oldData = $data;
 
-		if ($this->find('count', array('conditions' => array('MailField.mail_content_id' => $data['MailField']['mail_content_id'], 'MailField.field_name' => $data['MailField']['field_name'])))) {
+		if ($this->find('count', ['conditions' => ['MailField.mail_content_id' => $data['MailField']['mail_content_id'], 'MailField.field_name' => $data['MailField']['field_name']]])) {
 			$data['MailField']['name'] .= '_copy';
-			if(strlen($data['MailField']['name']) >= 64) {
+			if (strlen($data['MailField']['name']) >= 64) {
 				return false;
 			}
 			$data['MailField']['field_name'] .= '_copy';
@@ -212,11 +219,11 @@ class MailField extends MailAppModel {
 				'id' => $id,
 			]);
 			if ($event !== false) {
-				$data = $event->result === true ? $event->data['data'] : $event->result;
+				$data = $event->result === true? $event->data['data'] : $event->result;
 			}
 		}
 
-		$data['MailField']['no'] = $this->getMax('no', array('MailField.mail_content_id' => $data['MailField']['mail_content_id'])) + 1;
+		$data['MailField']['no'] = $this->getMax('no', ['MailField.mail_content_id' => $data['MailField']['mail_content_id']]) + 1;
 		if (!$sortUpdateOff) {
 			$data['MailField']['sort'] = $this->getMax('sort') + 1;
 		}
@@ -248,40 +255,43 @@ class MailField extends MailAppModel {
 		}
 	}
 
-/**
- * 選択リストのソースを整形する
- * 空白と \r を除外し、改行で結合する
- * | の対応は後方互換として残しておく
- * @param string $source 選択リストソース
- * @return string 整形後選択リストソース
- */
-	public function formatSource($source) {
+	/**
+	 * 選択リストのソースを整形する
+	 * 空白と \r を除外し、改行で結合する
+	 * | の対応は後方互換として残しておく
+	 * @param string $source 選択リストソース
+	 * @return string 整形後選択リストソース
+	 */
+	public function formatSource($source)
+	{
 		$source = str_replace('|', "\n", $source);
 		$values = explode("\n", $source);
 		$sourceList = [];
-		foreach ($values as $value) {
+		foreach($values as $value) {
 			$sourceList[] = preg_replace("/(^\s+|\r|\n\s+$)/u", '', $value);
 		}
 		return implode("\n", $sourceList);
 	}
 
-/**
- * After Delete
- */
-	public function afterDelete() {
+	/**
+	 * After Delete
+	 */
+	public function afterDelete()
+	{
 		parent::afterDelete();
 		// フロントエンドでは、MailContentのキャッシュを利用する為削除しておく
 		$MailContent = ClassRegistry::init('Mail.MailContent');
 		$MailContent->delCache();
 	}
 
-/**
- * After Save
- *
- * @param bool $created
- * @param array $options
- */
-	public function afterSave($created, $options = array()) {
+	/**
+	 * After Save
+	 *
+	 * @param bool $created
+	 * @param array $options
+	 */
+	public function afterSave($created, $options = [])
+	{
 		parent::afterSave($created, $options);
 		// フロントエンドでは、MailContentのキャッシュを利用する為削除しておく
 		$MailContent = ClassRegistry::init('Mail.MailContent');

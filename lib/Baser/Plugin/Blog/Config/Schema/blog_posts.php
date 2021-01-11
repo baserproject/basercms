@@ -2,7 +2,8 @@
 
 /* BlogPosts schema generated on: 2011-08-20 02:08:54 : 1313774094 */
 
-class BlogPostsSchema extends CakeSchema {
+class BlogPostsSchema extends CakeSchema
+{
 
 	public $name = 'BlogPosts';
 
@@ -10,19 +11,20 @@ class BlogPostsSchema extends CakeSchema {
 
 	public $connection = 'default';
 
-	public function before($event = []) {
+	public function before($event = [])
+	{
 		return true;
 	}
 
 	public function after($event = [])
 	{
 		$db = ConnectionManager::getDataSource($this->connection);
-		if( get_class($db) !== 'BcMysql'){
-			return true ;
+		if (get_class($db) !== 'BcMysql') {
+			return true;
 		}
 
 		if (isset($event['create'])) {
-			switch ($event['create']) {
+			switch($event['create']) {
 				case 'blogposts':
 					$tableName = $db->config['prefix'] . 'blog_posts';
 					$db->query("ALTER TABLE {$tableName} CHANGE content content LONGTEXT");

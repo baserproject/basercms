@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 4.0.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 4.0.0
+ * @license         https://basercms.net/license/index.html
  */
 ?>
 
@@ -20,7 +20,8 @@
 	<tr>
 		<th><?php echo __d('baser', 'リンク先URL') ?></th>
 		<td>
-			<?php echo $this->BcForm->input('ContentLink.url', ['type' => 'text', 'size' => 60, 'placeholder' => 'http://']) ?><br>
+			<?php echo $this->BcForm->input('ContentLink.url', ['type' => 'text', 'size' => 60, 'placeholder' => 'http://']) ?>
+			<br>
 			<?php echo $this->BcForm->error('ContentLink.url') ?>
 		</td>
 	</tr>

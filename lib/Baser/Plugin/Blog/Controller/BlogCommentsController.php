@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Blog.Controller
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -19,28 +19,30 @@
  * @property BcAuthConfigureComponent $BcAuthConfigure
  * @property BcContentsComponent $BcContents
  */
-class BlogCommentsController extends BlogAppController {
+class BlogCommentsController extends BlogAppController
+{
 
-/**
- * モデル
- *
- * @var array
- */
+	/**
+	 * モデル
+	 *
+	 * @var array
+	 */
 	public $uses = ['Blog.BlogCategory', 'Blog.BlogComment', 'Blog.BlogPost'];
 
-/**
- * コンポーネント
- *
- * @var array
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler', 'BcEmail', 'Security', 'BcCaptcha', 'BcContents' => ['type' => 'Blog.BlogContent']];
 
-/**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
+	/**
+	 * beforeFilter
+	 *
+	 * @return void
+	 */
+	public function beforeFilter()
+	{
 		parent::beforeFilter();
 
 		$this->BcAuth->allow('add', 'captcha', 'smartphone_add', 'smartphone_captcha', 'get_token');
@@ -66,7 +68,7 @@ class BlogCommentsController extends BlogAppController {
 				$crumbs[] = ['name' => $this->blogPost['BlogPost']['name'], 'url' => ['controller' => 'blog_posts', 'action' => 'edit', $this->blogContent['BlogContent']['id'], $this->blogPost['BlogPost']['id']]];
 			}
 		} elseif (!empty($this->params['pass'][0])) {
-			if(!in_array($this->request->action, ['captcha', 'smartphone_captcha', 'get_token'])) {
+			if (!in_array($this->request->action, ['captcha', 'smartphone_captcha', 'get_token'])) {
 				$dbDatas = $this->BlogPost->BlogContent->find('first', ['conditions' => ['BlogContent.id' => $this->params['pass'][0]]]);
 				$this->blogContent = ['BlogContent' => $dbDatas['BlogContent']];
 				if (BcUtil::isAdminSystem()) {
@@ -79,24 +81,26 @@ class BlogCommentsController extends BlogAppController {
 
 	}
 
-/**
- * beforeRender
- *
- * @return void
- */
-	public function beforeRender() {
+	/**
+	 * beforeRender
+	 *
+	 * @return void
+	 */
+	public function beforeRender()
+	{
 		parent::beforeRender();
 		if (!empty($this->blogContent)) {
 			$this->set('blogContent', $this->blogContent);
 		}
 	}
 
-/**
- * [ADMIN] ブログを一覧表示する
- *
- * @return void
- */
-	public function admin_index($blogContentId, $blogPostId = null) {
+	/**
+	 * [ADMIN] ブログを一覧表示する
+	 *
+	 * @return void
+	 */
+	public function admin_index($blogContentId, $blogPostId = null)
+	{
 		if (!$blogContentId || empty($this->blogContent['BlogContent'])) {
 			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->redirect('/admin');
@@ -127,32 +131,34 @@ class BlogCommentsController extends BlogAppController {
 		$this->help = 'blog_comments_index';
 	}
 
-/**
- * [ADMIN] 一括削除
- *
- * @param int $blogContentId
- * @param int $blogPostId
- * @param int $id
- * @return void
- */
-	protected function _batch_del($ids) {
+	/**
+	 * [ADMIN] 一括削除
+	 *
+	 * @param int $blogContentId
+	 * @param int $blogPostId
+	 * @param int $id
+	 * @return void
+	 */
+	protected function _batch_del($ids)
+	{
 		if ($ids) {
-			foreach ($ids as $id) {
+			foreach($ids as $id) {
 				$this->_del($id);
 			}
 		}
 		return true;
 	}
 
-/**
- * [ADMIN] 削除処理　(ajax)
- *
- * @param int $blogContentId
- * @param int $blogPostId
- * @param int $id
- * @return void
- */
-	public function admin_ajax_delete($blogContentId, $blogPostId, $id = null) {
+	/**
+	 * [ADMIN] 削除処理　(ajax)
+	 *
+	 * @param int $blogContentId
+	 * @param int $blogPostId
+	 * @param int $id
+	 * @return void
+	 */
+	public function admin_ajax_delete($blogContentId, $blogPostId, $id = null)
+	{
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
@@ -166,15 +172,16 @@ class BlogCommentsController extends BlogAppController {
 		}
 	}
 
-/**
- * 削除処理
- *
- * @param int $blogContentId
- * @param int $blogPostId
- * @param int $id
- * @return void
- */
-	protected function _del($id = null) {
+	/**
+	 * 削除処理
+	 *
+	 * @param int $blogContentId
+	 * @param int $blogPostId
+	 * @param int $id
+	 * @return void
+	 */
+	protected function _del($id = null)
+	{
 		/* 削除処理 */
 		if ($this->BlogComment->delete($id)) {
 			if (isset($this->blogPost['BlogPost']['name'])) {
@@ -189,15 +196,16 @@ class BlogCommentsController extends BlogAppController {
 		}
 	}
 
-/**
- * [ADMIN] 無効状態にする（AJAX）
- *
- * @param string $blogContentId
- * @param string $blogPostId beforeFilterで利用
- * @param string $blogCommentId
- * @return void
- */
-	public function admin_ajax_unpublish($blogContentId, $blogPostId, $id) {
+	/**
+	 * [ADMIN] 無効状態にする（AJAX）
+	 *
+	 * @param string $blogContentId
+	 * @param string $blogPostId beforeFilterで利用
+	 * @param string $blogCommentId
+	 * @return void
+	 */
+	public function admin_ajax_unpublish($blogContentId, $blogPostId, $id)
+	{
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -211,15 +219,16 @@ class BlogCommentsController extends BlogAppController {
 		exit();
 	}
 
-/**
- * [ADMIN] 有効状態にする（AJAX）
- *
- * @param string $blogContentId
- * @param string $blogPostId beforeFilterで利用
- * @param string $blogCommentId
- * @return void
- */
-	public function admin_ajax_publish($blogContentId, $blogPostId, $id) {
+	/**
+	 * [ADMIN] 有効状態にする（AJAX）
+	 *
+	 * @param string $blogContentId
+	 * @param string $blogPostId beforeFilterで利用
+	 * @param string $blogCommentId
+	 * @return void
+	 */
+	public function admin_ajax_publish($blogContentId, $blogPostId, $id)
+	{
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -233,16 +242,17 @@ class BlogCommentsController extends BlogAppController {
 		exit();
 	}
 
-/**
- * 一括公開
- *
- * @param array $ids
- * @return boolean
- * @access protected
- */
-	protected function _batch_publish($ids) {
+	/**
+	 * 一括公開
+	 *
+	 * @param array $ids
+	 * @return boolean
+	 * @access protected
+	 */
+	protected function _batch_publish($ids)
+	{
 		if ($ids) {
-			foreach ($ids as $id) {
+			foreach($ids as $id) {
 				$this->_changeStatus($id, true);
 			}
 		}
@@ -250,16 +260,17 @@ class BlogCommentsController extends BlogAppController {
 		return true;
 	}
 
-/**
- * 一括非公開
- *
- * @param array $ids
- * @return boolean
- * @access protected
- */
-	protected function _batch_unpublish($ids) {
+	/**
+	 * 一括非公開
+	 *
+	 * @param array $ids
+	 * @return boolean
+	 * @access protected
+	 */
+	protected function _batch_unpublish($ids)
+	{
 		if ($ids) {
-			foreach ($ids as $id) {
+			foreach($ids as $id) {
 				$this->_changeStatus($id, false);
 			}
 		}
@@ -267,14 +278,15 @@ class BlogCommentsController extends BlogAppController {
 		return true;
 	}
 
-/**
- * ステータスを変更する
- *
- * @param int $id
- * @param boolean $status
- * @return boolean
- */
-	protected function _changeStatus($id, $status) {
+	/**
+	 * ステータスを変更する
+	 *
+	 * @param int $id
+	 * @param boolean $status
+	 * @return boolean
+	 */
+	protected function _changeStatus($id, $status)
+	{
 		$statusTexts = [0 => __d('baser', '非公開状態'), 1 => __d('baser', '公開状態')];
 		$data = $this->BlogComment->find('first', ['conditions' => ['BlogComment.id' => $id], 'recursive' => -1]);
 		$data['BlogComment']['status'] = $status;
@@ -294,14 +306,15 @@ class BlogCommentsController extends BlogAppController {
 		}
 	}
 
-/**
- * [AJAX] ブログコメントを登録する
- *
- * @param string $blogContentId
- * @param string $blogPostId
- * @return boolean
- */
-	public function add($blogContentId, $blogPostId) {
+	/**
+	 * [AJAX] ブログコメントを登録する
+	 *
+	 * @param string $blogContentId
+	 * @param string $blogPostId
+	 * @return boolean
+	 */
+	public function add($blogContentId, $blogPostId)
+	{
 		Configure::write('debug', 0);
 
 		if (!$this->request->data || !$blogContentId || !$blogPostId || empty($this->blogContent) || !$this->blogContent['BlogContent']['comment_use']) {
@@ -336,41 +349,45 @@ class BlogCommentsController extends BlogAppController {
 		}
 	}
 
-/**
- * [AJAX] ブログコメントを登録する
- *
- * @param string $blogContentId
- * @param string $blogPostId
- * @return boolean
- */
-	public function smartphone_add($blogContentId, $blogPostId) {
+	/**
+	 * [AJAX] ブログコメントを登録する
+	 *
+	 * @param string $blogContentId
+	 * @param string $blogPostId
+	 * @return boolean
+	 */
+	public function smartphone_add($blogContentId, $blogPostId)
+	{
 		$this->setAction('add', $blogContentId, $blogPostId);
 	}
 
-/**
- * 認証用のキャプチャ画像を表示する
- *
- * @return void
- */
-	public function captcha($token = null) {
+	/**
+	 * 認証用のキャプチャ画像を表示する
+	 *
+	 * @return void
+	 */
+	public function captcha($token = null)
+	{
 		$this->BcCaptcha->render($token);
 		exit();
 	}
 
-/**
- * [SMARTPHONE] 認証用のキャプチャ画像を表示する
- *
- * @return void
- */
-	public function smartphone_captcha($token = null) {
+	/**
+	 * [SMARTPHONE] 認証用のキャプチャ画像を表示する
+	 *
+	 * @return void
+	 */
+	public function smartphone_captcha($token = null)
+	{
 		$this->BcCaptcha->render($token);
 		exit();
 	}
 
-/**
- * コメント送信用にAjax経由でトークンを取得するアクション
- */
-	public function get_token() {
+	/**
+	 * コメント送信用にAjax経由でトークンを取得するアクション
+	 */
+	public function get_token()
+	{
 		$this->_checkReferer();
 		$this->autoRender = false;
 		return $this->getToken();
