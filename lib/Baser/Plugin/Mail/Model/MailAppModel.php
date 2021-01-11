@@ -51,15 +51,14 @@ class MailAppModel extends AppModel {
 			E_USER_DEPRECATED
 		);
 		foreach ($datas as $key => $data) {
-			if (!is_array($data)) {
-				$data = str_replace("<br />", "", $data);
-				$data = str_replace("<br>", "", $data);
-				$data = str_replace('&lt;', '<', $data);
-				$data = str_replace('&gt;', '>', $data);
-				$data = str_replace('&amp;', '&', $data);
-				$data = str_replace('&quot;', '"', $data);
-				$datas[$key] = $data;
+			if (is_array($data)) {
+				continue;
 			}
+			$datas[$key] = str_replace(
+				array('<br />', '<br>', '&lt;', '&gt;', '&amp;', '&quot;'),
+				array('', '', '<', '>', '&', '"'),
+				$data
+			);
 		}
 		return $datas;
 	}

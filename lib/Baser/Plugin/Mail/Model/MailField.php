@@ -189,11 +189,11 @@ class MailField extends MailAppModel {
 			'VALID_REGEX' 			=> __d('baser', '正規表現チェック'),
 		];
 		$source['auto_convert'] = ['CONVERT_HANKAKU' => __d('baser', '半角変換')];
-		if ($field) {
-			return $source[$field];
-		} else {
+		if (!$field) {
 			return $source;
 		}
+
+		return $source[$field];
 	}
 
 /**
@@ -212,9 +212,9 @@ class MailField extends MailAppModel {
 		$ret = $this->find('first', array('conditions' => $conditions));
 		if ($ret) {
 			return false;
-		} else {
-			return true;
 		}
+
+		return true;
 	}
 
 /**
@@ -242,14 +242,10 @@ class MailField extends MailAppModel {
 			case 'multi_check':	// マルチチェックボックス
 			case 'autozip':		// 自動保管郵便番号
 				// 選択リストのチェックを行う
-				$result = (!empty($check[key($check)]));
-				break;
-			default:
-				// 選択リストが不要のタイプの時はチェックしない
-				$result = true;
-				break;
+				return (!empty($check[key($check)]));
 		}
-		return $result;
+		// 選択リストが不要のタイプの時はチェックしない
+		return true;
 	}
 
 /**
@@ -319,24 +315,24 @@ class MailField extends MailAppModel {
 
 		$this->create($data);
 		$result = $this->save();
-		if ($result) {
-			$result['MailField']['id'] = $this->getInsertID();
-			$data = $result;
-
-			// EVENT MailField.afterCopy
-			if (!$sortUpdateOff) {
-				$event = $this->dispatchEvent('afterCopy', [
-					'id' => $data['MailField']['id'],
-					'data' => $data,
-					'oldId' => $id,
-					'oldData' => $oldData,
-				]);
-			}
-
-			return $result;
-		} else {
+		if (!$result) {
 			return false;
 		}
+
+		$result['MailField']['id'] = $this->getInsertID();
+		$data = $result;
+
+		// EVENT MailField.afterCopy
+		if (!$sortUpdateOff) {
+			$event = $this->dispatchEvent('afterCopy', [
+				'id' => $data['MailField']['id'],
+				'data' => $data,
+				'oldId' => $id,
+				'oldData' => $oldData,
+			]);
+		}
+
+		return $result;
 	}
 
 /**

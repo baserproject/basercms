@@ -269,44 +269,56 @@ class MailMessage extends MailAppModel {
 		$dists = array();
 
 		// 対象フィールドを取得
-		foreach ($this->mailFields as $mailField) {
-			$mailField = $mailField['MailField'];
-			if (!empty($mailField['use_field'])) {
-				$valids = explode(',', $mailField['valid_ex']);
-				// マルチチェックボックスのチェックなしチェック
-				if (in_array('VALID_NOT_UNCHECKED', $valids)) {
-					if (empty($data['MailMessage'][$mailField['field_name']])) {
-						$this->invalidate($mailField['field_name'], __('必須項目です。'));
+		foreach ($this->mailFields as $row) {
+			$mailField = $row['MailField'];
+			if (empty($mailField['use_field'])) {
+				continue;
+			}
+
+			$valids = explode(',', $mailField['valid_ex']);
+			$field_name = $mailField['field_name'];
+			// マルチチェックボックスのチェックなしチェック
+			if (in_array('VALID_NOT_UNCHECKED', $valids)) {
+				if (empty($data['MailMessage'][$field_name])) {
+					$this->invalidate($field_name, __('必須項目です。'));
+				}
+				$dists[$field_name][] = @$data['MailMessage'][$field_name];
+				// datetimeの空チェック
+				continue;
+			}
+
+			if (in_array('VALID_DATETIME', $valids)) {
+				if (is_array($data['MailMessage'][$field_name])) {
+					if (empty($data['MailMessage'][$field_name]['year']) ||
+						empty($data['MailMessage'][$field_name]['month']) ||
+						empty($data['MailMessage'][$field_name]['day'])) {
+						$this->invalidate($field_name, __('日付の形式が無効です。'));
 					}
-					$dists[$mailField['field_name']][] = @$data['MailMessage'][$mailField['field_name']];
-					// datetimeの空チェック
-				} elseif (in_array('VALID_DATETIME', $valids)) {
-					if (is_array($data['MailMessage'][$mailField['field_name']])) {
-						if (empty($data['MailMessage'][$mailField['field_name']]['year']) ||
-							empty($data['MailMessage'][$mailField['field_name']]['month']) ||
-							empty($data['MailMessage'][$mailField['field_name']]['day'])) {
-							$this->invalidate($mailField['field_name'], __('日付の形式が無効です。'));
-						}
+				}
+				if (is_string($data['MailMessage'][$field_name])) {
+					// カレンダー入力利用時は yyyy/mm/dd で入ってくる
+					// yyyy/mm/dd 以外の文字列入力も可能であり、そうした際は日付データとして 1970-01-01 となるため認めない
+					$inputValue = date('Y-m-d', strtotime($data['MailMessage'][$field_name]));
+					if ($inputValue === '1970-01-01') {
+						$this->invalidate($field_name, __('日付の形式が無効です。'));
 					}
-					if (is_string($data['MailMessage'][$mailField['field_name']])) {
-						// カレンダー入力利用時は yyyy/mm/dd で入ってくる
-						// yyyy/mm/dd 以外の文字列入力も可能であり、そうした際は日付データとして 1970-01-01 となるため認めない
-						$inputValue = date('Y-m-d', strtotime($data['MailMessage'][$mailField['field_name']]));
-						if ($inputValue === '1970-01-01') {
-							$this->invalidate($mailField['field_name'], __('日付の形式が無効です。'));
-						}
-						if (!$this->checkDate(array($mailField['field_name'] => $inputValue))) {
-							$this->invalidate($mailField['field_name'], __('日付の形式が無効です。'));
-						}
+					if (!$this->checkDate(array($field_name => $inputValue))) {
+						$this->invalidate($field_name, __('日付の形式が無効です。'));
 					}
-				} elseif (in_array('VALID_ZENKAKU_KATAKANA', $valids)) {
-					if(!preg_match('/^(|[ァ-ヾ 　]+)$/u', $data['MailMessage'][$mailField['field_name']])) {
-						$this->invalidate($mailField['field_name'], __('全て全角カタカナで入力してください。'));
-					}
-				} elseif (in_array('VALID_ZENKAKU_HIRAGANA', $valids)) {
-					if (!preg_match('/^([　 \t\r\n]|[ぁ-ん]|[ー])+$/u', $data['MailMessage'][$mailField['field_name']])) {
-						$this->invalidate($mailField['field_name'], __('全て全角ひらがなで入力してください。'));
-					}
+				}
+				continue;
+			}
+
+			if (in_array('VALID_ZENKAKU_KATAKANA', $valids)) {
+				if (!preg_match('/^(|[ァ-ヾ 　]+)$/u', $data['MailMessage'][$field_name])) {
+					$this->invalidate($field_name, __('全て全角カタカナで入力してください。'));
+				}
+				continue;
+			}
+
+			if (in_array('VALID_ZENKAKU_HIRAGANA', $valids)) {
+				if (!preg_match('/^([　 \t\r\n]|[ぁ-ん]|[ー])+$/u', $data['MailMessage'][$field_name])) {
+					$this->invalidate($field_name, __('全て全角ひらがなで入力してください。'));
 				}
 			}
 		}
@@ -373,9 +385,9 @@ class MailMessage extends MailAppModel {
 			$count = count($dist);
 			if ($i > 0 && $i < $count) {
  				$this->invalidate($key . '_not_complate', __('入力データが不完全です。'));
- 				for ($j = 0; $j < $count; $j++) {
- 					$this->invalidate($dist[$j]['name']);
- 				}
+				foreach ($dist as $jValue) {
+					$this->invalidate($jValue['name']);
+				}
 			}
 		}
 	}
@@ -670,11 +682,11 @@ class MailMessage extends MailAppModel {
  */
 	public function createTableName($mailContentId) {
 		$mailContentId = (int) $mailContentId;
-		if(is_int($mailContentId)) {
-			return 'mail_message_' . $mailContentId;
-		} else {
+		if(!is_int($mailContentId)) {
 			throw new BcException(__d('baser', 'createTableNameの引数$mailContentIdはint型しか受けつけていません。'));
 		}
+
+		return 'mail_message_' . $mailContentId;
 	}
 
 /**
@@ -741,8 +753,7 @@ class MailMessage extends MailAppModel {
 	public function addMessageField($mailContentId, $field) {
 		$table = $this->createTableName($mailContentId);
 		$options = array('field' => $field, 'column' => array('type' => 'text'), 'table' => $table);
-		$ret = parent::addField($options);
-		return $ret;
+		return parent::addField($options);
 	}
 
 /**
@@ -754,8 +765,7 @@ class MailMessage extends MailAppModel {
  */
 	public function delMessageField($mailContentId, $field) {
 		$table = $this->createTableName($mailContentId);
-		$ret = parent::delField(array('field' => $field, 'table' => $table));
-		return $ret;
+		return parent::delField(array('field' => $field, 'table' => $table));
 	}
 
 /**
@@ -768,8 +778,7 @@ class MailMessage extends MailAppModel {
  */
 	public function renameMessageField($mailContentId, $oldFieldName, $newfieldName) {
 		$table = $this->createTableName($mailContentId);
-		$ret = parent::renameField(array('old' => $oldFieldName, 'new' => $newfieldName, 'table' => $table));
-		return $ret;
+		return parent::renameField(array('old' => $oldFieldName, 'new' => $newfieldName, 'table' => $table));
 	}
 
 /**

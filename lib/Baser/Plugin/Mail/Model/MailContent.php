@@ -150,16 +150,11 @@ class MailContent extends MailAppModel {
  * @return boolean
  */
 	public function checkSslUrl($check) {
-		if ($check[key($check)]) {
-			$sslUrl = Configure::read('BcEnv.sslUrl');
-			if (empty($sslUrl)) {
-				return false;
-			} else {
-				return true;
-			}
-		} else {
-			return true;
+		if ($check[key($check)] && !Configure::read('BcEnv.sslUrl')) {
+			return false;
 		}
+
+		return true;
 	}
 
 /**
@@ -169,11 +164,10 @@ class MailContent extends MailAppModel {
  * @return boolean
  */
 	public function alphaNumeric($check) {
-		if (preg_match("/^[a-z0-9]+$/", $check[key($check)])) {
-			return true;
-		} else {
+		if (!preg_match("/^[a-z0-9]+$/", $check[key($check)])) {
 			return false;
 		}
+		return true;
 	}
 
 /**
