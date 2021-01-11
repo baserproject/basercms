@@ -161,9 +161,9 @@ $(function(){
 				</div>
 				<div class="bca-login-forgot-pass">
 					<?php if ($currentPrefix == 'front'): ?>
-						<?php $this->BcBaser->link(__d('baser', 'パスワードを忘れた場合はこちら'), ['action' => 'reset_password']) ?>
+						<?php $this->BcBaser->link(__d('baser', 'パスワードを忘れた場合はこちら'), ['action' => 'send_activate_url']) ?>
 					<?php else: ?>
-						<?php $this->BcBaser->link(__d('baser', 'パスワードを忘れた場合はこちら'), ['action' => 'reset_password', $this->request->params['prefix'] => true]) ?>
+						<?php $this->BcBaser->link(__d('baser', 'パスワードを忘れた場合はこちら'), ['action' => 'send_activate_url', $this->request->params['prefix'] => true]) ?>
 					<?php endif ?>
 				</div>
 			</div>

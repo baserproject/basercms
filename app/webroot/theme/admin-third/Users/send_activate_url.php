@@ -6,17 +6,11 @@
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			https://basercms.net baserCMS Project
  * @package			Baser.View
- * @since			baserCMS v 0.1.0
+ * @since			baserCMS v 3.0.7
  * @license			https://basercms.net/license/index.html
  */
 
 /**
- * [ADMIN] パスワード再生成画面
+ * [ADMIN] アクティベート要求画面
  */
-?>
-<h3><?= __d('baser', '新しいパスワードを生成しました。') ?></h3>
-<div class="section">
-	<p>
-		新しいパスワード : <?= $this->get('new_password') ?>
-	</p>
-</div>
+include BASER_VIEWS . 'Users' . DS . 'admin' . DS . 'send_activate_url.php';
