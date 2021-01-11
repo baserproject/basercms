@@ -1690,7 +1690,7 @@ class BcAppController extends Controller {
  * - トークンが送信されていない場合 not found
  */
 	protected function _checkSubmitToken() {
-		if(strtoupper(env('REQUEST_METHOD')) === 'GET' || (!$this->request->data('_Token.key') && !$this->request->data('_Token.key'))) {
+		if(strtoupper($_SERVER['REQUEST_METHOD']) === 'GET' || empty($_POST['_Token']['key']) && empty($_POST['data']['_Token']['key'])) {
 			throw new NotFoundException();
 		}
 	}

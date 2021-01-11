@@ -135,7 +135,8 @@ class UsersController extends AppController {
 		$user = $this->BcAuth->user();
 
 		if ($this->request->is('post')) {
-			if($this->_user_match($user)) {
+			if($this->_set_auth($user)) {
+				$this->redirect($this->BcAuth->redirectUrl());
 				return;
 			}
 			$this->BcMessage->setError(__d('baser', 'アカウント名、パスワードが間違っています。'));
@@ -157,7 +158,7 @@ class UsersController extends AppController {
 		}
 	}
 
-	private function _user_match($user) {
+	private function _set_auth($user) {
 		if (!$user || !$this->isAuthorized($user)) {
 			return false;
 		}
@@ -177,7 +178,6 @@ class UsersController extends AppController {
 		$this->BcMessage->setInfo(
 			sprintf(__d('baser', 'ようこそ、%s さん。'), $BcBaser->getUserName($user))
 		);
-		$this->redirect($this->BcAuth->redirectUrl());
 		return true;
 	}
 

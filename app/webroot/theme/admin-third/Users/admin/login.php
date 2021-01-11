@@ -152,12 +152,12 @@ $(function(){
 			</div>
 			<div class="clear login-etc bca-login-form-ctrl">
 				<div class="bca-login-form-checker">
-					<?php echo $this->BcForm->input($userModel . '.saved', [
-              			'type' => 'checkbox',
-              			'label' => __d('baser', 'ログイン状態を保存する'),
+				<?php echo $this->BcForm->input($userModel . '.saved', [
+						'type' => 'checkbox',
+						'label' => __d('baser', 'ログイン状態を保存する'),
 						'class' => 'bca-checkbox__input bca-login-form-checkbox ',
-              			'tabindex' => 3
-            		]); ?>
+						'tabindex' => 3
+					]); ?>
 				</div>
 				<div class="bca-login-forgot-pass">
 					<?php if ($currentPrefix == 'front'): ?>
