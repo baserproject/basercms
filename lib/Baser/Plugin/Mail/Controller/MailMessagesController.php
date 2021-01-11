@@ -189,11 +189,11 @@ class MailMessagesController extends MailAppController {
 		if (!$messageId) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
-		if ($this->_del($messageId)) {
-			exit(true);
-		} else {
-			exit();
+		if (!$this->_del($messageId)) {
+			exit;
 		}
+
+		exit(true);
 	}
 
 /**
@@ -204,13 +204,13 @@ class MailMessagesController extends MailAppController {
  * @return bool
  */
 	protected function _del($id = null) {
-		if ($this->MailMessage->delete($id)) {
-			$message = sprintf(__d('baser', '受信データ NO「%s」 を削除しました。'), $id);
-			$this->MailMessage->saveDbLog($message);
-			return true;
-		} else {
+		if (!$this->MailMessage->delete($id)) {
 			return false;
 		}
+
+		$message = sprintf(__d('baser', '受信データ NO「%s」 を削除しました。'), $id);
+		$this->MailMessage->saveDbLog($message);
+		return true;
 	}
 
 /**
@@ -226,10 +226,18 @@ class MailMessagesController extends MailAppController {
 			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->notFound();
 		}
-		if ($this->MailMessage->delete($messageId)) {
-			$this->BcMessage->setSuccess(sprintf(__d('baser', '%s への受信データ NO「%s」 を削除しました。'), $this->mailContent['Content']['title'], $messageId));
+		if (!$this->MailMessage->delete($messageId)) {
+			$this->BcMessage->setError(
+				__d('baser', 'データベース処理中にエラーが発生しました。')
+			);
 		} else {
-			$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+			$this->BcMessage->setSuccess(
+				sprintf(
+					__d('baser', '%s への受信データ NO「%s」 を削除しました。'),
+					$this->mailContent['Content']['title'],
+					$messageId
+				)
+			);
 		}
 		$this->redirect(array('action' => 'index', $mailContentId));
 	}

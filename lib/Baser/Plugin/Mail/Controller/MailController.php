@@ -133,7 +133,7 @@ class MailController extends MailAppController {
 
 		if (empty($this->contentId)) {
 			// 配列のインデックスが無いためエラーとなるため修正
-			$this->contentId = isset($this->request->params['entityId']) ? $this->request->params['entityId'] : null;
+			$this->contentId = Hash::get($this->request->params, 'entityId');
 		}
 
 		$this->subMenuElements = ['default'];
@@ -149,7 +149,7 @@ class MailController extends MailAppController {
 			$disabledFields = ['MailMessage.mode'];
 			// type="file" を除外
 			foreach($this->MailMessage->mailFields as $field) {
-				if (isset($field['MailField']['type']) && $field['MailField']['type'] == 'file') {
+				if (Hash::get($field, 'MailField.type') === 'file') {
 					$disabledFields[] = $field['MailField']['field_name'];
 				}
 			}
@@ -265,8 +265,11 @@ class MailController extends MailAppController {
 			}
 
 			// 画像認証を行う
-			if ($this->request->params['Site']['name'] != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']) {
-				$captchaResult = $this->BcCaptcha->check(@$this->request->data['MailMessage']['auth_captcha'], @$this->request->data['MailMessage']['captcha_id']);
+			if ($this->request->params['Site']['name'] !== 'mobile' && Hash::get($this->dbDatas, 'mailContent.MailContent.auth_captcha')) {
+				$captchaResult = $this->BcCaptcha->check(
+					Hash::get($this->request->data, 'MailMessage.auth_captcha'),
+					Hash::get($this->request->data, 'MailMessage.captcha_id')
+				);
 				if (!$captchaResult) {
 					$this->MailMessage->invalidate('auth_captcha');
 				}
@@ -302,7 +305,7 @@ class MailController extends MailAppController {
 			);
 		}
 		$this->set('mailContent', $this->dbDatas['mailContent']);
-		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'confirm');
+		$this->render(Hash::get($this->dbDatas, 'mailContent.MailContent.form_template') . '/confirm');
 	}
 
 /**
@@ -312,7 +315,11 @@ class MailController extends MailAppController {
  * @return void
  */
 	public function submit($id = null) {
-		if (!$this->MailContent->isAccepting($this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
+		$isAccepting = $this->MailContent->isAccepting(
+			$this->dbDatas['mailContent']['MailContent']['publish_begin'],
+			$this->dbDatas['mailContent']['MailContent']['publish_end']
+		);
+		if (!$isAccepting) {
 			$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
 			return;
 		}
@@ -323,17 +330,24 @@ class MailController extends MailAppController {
 
 		if (!$this->request->data) {
 			$this->redirect($this->request->params['Content']['url'] . '/index');
-		} elseif (isset($this->request->data['MailMessage']['mode']) && $this->request->data['MailMessage']['mode'] == 'Back') {
+			return;
+		}
+
+		if (Hash::get($this->request->data, 'MailMessage.mode') === 'Back') {
 			$this->_back($id);
 		} else {
 			// 画像認証を行う
-			if ($this->request->params['Site']['name'] != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']) {
-				$captchaResult = $this->BcCaptcha->check($this->request->data['MailMessage']['auth_captcha'], @$this->request->data['MailMessage']['captcha_id']);
+			$auth_captcha = Hash::get($this->dbDatas, 'mailContent.MailContent.auth_captcha');
+			if ($this->request->params['Site']['name'] !== 'mobile' && $auth_captcha) {
+				$captchaResult = $this->BcCaptcha->check(
+					$this->request->data['MailMessage']['auth_captcha'],
+					@$this->request->data['MailMessage']['captcha_id']
+				);
 				if (!$captchaResult) {
 					$this->redirect($this->request->params['Content']['url'] . '/index');
-				} else {
-					unset($this->request->data['MailMessage']['auth_captcha']);
+					return;
 				}
+				unset($this->request->data['MailMessage']['auth_captcha']);
 			}
 
 			// fileタイプへの送信データ検証
@@ -360,8 +374,11 @@ class MailController extends MailAppController {
 					$sendEmailPasswords = [];
 					foreach ($this->dbDatas['mailFields'] as $key => $field) {
 						if ($field['MailField']['type'] === 'password') {
-							$maskedPassword = preg_replace('/./', '*', $this->request->data['MailMessage'][$field['MailField']['field_name']]);
-							$sendEmailPasswords[$field['MailField']['field_name']] = $maskedPassword;
+							$sendEmailPasswords[$field['MailField']['field_name']] = preg_replace(
+								'/./',
+								'*',
+								$this->request->data['MailMessage'][$field['MailField']['field_name']]
+							);
 						}
 					}
 
@@ -387,16 +404,18 @@ class MailController extends MailAppController {
 						if (!$this->dbDatas['mailContent']['MailContent']['save_info']) {
 							$fileRecords = [];
 							foreach($this->dbDatas['mailFields'] as $key => $field) {
-								if($field['MailField']['type'] === 'file') {
-									// 削除フラグをセット
-									$fileRecords['MailMessage'] = [
-										$field['MailField']['field_name'] => $this->request->data['MailMessage'][$field['MailField']['field_name']],
-										$field['MailField']['field_name'] . '_delete' => true,
-									];
-									// BcUploadBehavior::deleteFiles() はデータベースのデータを削除する前提となっているため、
-									// Model->data['MailMessage']['field_name'] に、配列ではなく、文字列がセットされている状態を想定しているので状態を模倣する
-									$this->MailMessage->data['MailMessage'][$field['MailField']['field_name']] = $this->request->data['MailMessage'][$field['MailField']['field_name']];
+								if($field['MailField']['type'] !== 'file') {
+									continue;
 								}
+								// 削除フラグをセット
+								$field_name = $field['MailField']['field_name'];
+								$fileRecords['MailMessage'] = [
+									$field_name => $this->request->data['MailMessage'][$field_name],
+									$field_name . '_delete' => true,
+								];
+								// BcUploadBehavior::deleteFiles() はデータベースのデータを削除する前提となっているため、
+								// Model->data['MailMessage']['field_name'] に、配列ではなく、文字列がセットされている状態を想定しているので状態を模倣する
+								$this->MailMessage->data['MailMessage'][$field_name] = $this->request->data['MailMessage'][$field_name];
 							}
 							$this->MailMessage->deleteFiles($fileRecords);
 						}
@@ -461,7 +480,11 @@ class MailController extends MailAppController {
  * @return void
  */
 	public function thanks() {
-		if (!$this->MailContent->isAccepting($this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
+		$isAccepting = $this->MailContent->isAccepting(
+			$this->dbDatas['mailContent']['MailContent']['publish_begin'],
+			$this->dbDatas['mailContent']['MailContent']['publish_end']
+		);
+		if (!$isAccepting) {
 			$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
 			return;
 		}
@@ -603,26 +626,26 @@ class MailController extends MailAppController {
 
 		// 管理者に送信
 		if (!empty($adminMail)) {
-			// カンマ区切りで複数設定されていた場合先頭のアドレスをreplayToに利用
-			$userReply = $userMail;
-			if (strpos($userReply, ',') !== false) {
-				list($userReply) = explode(',', $userReply);
-			}
 			$data['other']['mode'] = 'admin';
-			$toAdminOptions = array_merge(
-				[
-					'fromName' => $mailContent['sender_name'],
-					'replyTo' => $userReply,
-					'from' => $fromAdmin,
-					'template' => 'Mail.' . $mailContent['mail_template'],
-					'bcc' => $mailContent['sender_2'],
-					'agentTemplate' => false,
-					'attachments' => $attachments,
-					// 'additionalParameters' => '-f ' . $fromAdmin,
-				],
-				$options['toAdmin']
+			$sendResult = $this->sendMail(
+				$adminMail,
+				$mailContent['subject_admin'],
+				$data,
+				array_merge(
+					[
+						'fromName' => $mailContent['sender_name'],
+						// カンマ区切りで複数設定されていた場合先頭のアドレスをreplayToに利用
+						'replyTo' => strpos($userMail, ',') === false ? $userMail : strstr($userMail,',',true),
+						'from' => $fromAdmin,
+						'template' => 'Mail.' . $mailContent['mail_template'],
+						'bcc' => $mailContent['sender_2'],
+						'agentTemplate' => false,
+						'attachments' => $attachments,
+						// 'additionalParameters' => '-f ' . $fromAdmin,
+					],
+					$options['toAdmin']
+				)
 			);
-			$sendResult = $this->sendMail($adminMail, $mailContent['subject_admin'], $data, $toAdminOptions);
 			if (!$sendResult) {
 				return false;
 			}
@@ -631,23 +654,23 @@ class MailController extends MailAppController {
 		// ユーザーに送信
 		if (!empty($userMail)) {
 			$site = BcSite::findCurrent();
-			$agentTemplate = false;
-			if($site && $site->device) {
-				$agentTemplate = true;
-			}
 			$data['other']['mode'] = 'user';
-			$toUserOptions = array_merge(
-				[
-					'fromName' => $mailContent['sender_name'],
-					'from' => $fromAdmin,
-					'template' => 'Mail.' . $mailContent['mail_template'],
-					'replyTo' => $fromAdmin,
-					'agentTemplate' => $agentTemplate,
-					// 'additionalParameters' => '-f ' . $fromAdmin,
-				],
-				$options['toUser']
+			$sendResult = $this->sendMail(
+				$userMail,
+				$mailContent['subject_user'],
+				$data,
+				array_merge(
+					[
+						'fromName' => $mailContent['sender_name'],
+						'from' => $fromAdmin,
+						'template' => 'Mail.' . $mailContent['mail_template'],
+						'replyTo' => $fromAdmin,
+						'agentTemplate' => ($site && $site->device) ? true : false,
+						// 'additionalParameters' => '-f ' . $fromAdmin,
+					],
+					$options['toUser']
+				)
 			);
-			$sendResult = $this->sendMail($userMail, $mailContent['subject_user'], $data, $toUserOptions);
 			if (!$sendResult) {
 				return false;
 			}
@@ -667,15 +690,20 @@ class MailController extends MailAppController {
 			|| empty($this->MailMessage->Behaviors->BcUpload->settings['MailMessage'])) {
 			return false;
 		}
-		
-		$settings = $this->MailMessage->Behaviors->BcUpload->settings['MailMessage'];
-		
+
 		foreach($this->dbDatas['mailFields'] as $mailField) {
-			if ($mailField['MailField']['type'] == 'file' &&
-				!empty($this->request->data['MailMessage'][$mailField['MailField']['field_name']]['tmp_name'])) {
-				if (!is_uploaded_file($this->request->data['MailMessage'][$mailField['MailField']['field_name']]['tmp_name'])) {
-					return false;
-				}
+			if ($mailField['MailField']['type'] !== 'file') {
+				continue;
+			}
+			$tmp_name = Hash::get(
+				$this->request->data,
+				sprintf(
+					'MailMessage.%s.tmp_name',
+					Hash::get($mailField, 'MailField.field_name')
+				)
+			);
+			if ($tmp_name && !is_uploaded_file($tmp_name )) {
+				return false;
 			}
 		}
 		return true;
