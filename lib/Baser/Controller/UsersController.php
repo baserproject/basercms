@@ -227,7 +227,7 @@ class UsersController extends AppController {
 			$authPrefix = $authPrefix[0];
 		} else {
 			$this->BcMessage->setError(__d('baser', '不正な操作です。'));
-			if (!empty($this->request->param('prefix'))) {
+			if ($this->request->param('prefix')) {
 				$authPrefix = $this->request->param('prefix');
 			} else {
 				$authPrefix = 'front';
@@ -578,7 +578,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_reset_password() {
-		if (empty($this->request->param('prefix')) && !Configure::read('BcAuthPrefix.front')) {
+		if (!$this->request->param('prefix') && !Configure::read('BcAuthPrefix.front')) {
 			$this->notFound();
 		}
 		if($this->BcAuth->user()) {
@@ -632,7 +632,7 @@ class UsersController extends AppController {
 	 * @return void
 	 */
 	public function admin_send_activate_url() {
-		if (empty($this->request->param('prefix')) && !Configure::read('BcAuthPrefix.front')) {
+		if (!$this->request->param('prefix') && !Configure::read('BcAuthPrefix.front')) {
 			$this->notFound();
 		}
 		if($this->BcAuth->user()) {
