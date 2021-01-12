@@ -213,7 +213,7 @@ class MailContentsController extends MailAppController {
 			}
 		}
 
-		$this->request->params['Content'] = $this->BcContents->getContent($id)['Content'];
+		$this->request->param('Content', $this->BcContents->getContent($id)['Content']);
 		if($this->request->data['Content']['status']) {
 			$site = BcSite::findById($this->request->data['Content']['site_id']);
 			$this->set(

@@ -65,11 +65,11 @@ class MailFieldsController extends MailAppController {
 		parent::beforeFilter();
 		$this->_checkEnv();
 		$this->MailContent->recursive = -1;
-		$mailContentId = $this->params['pass'][0];
+		$mailContentId = $this->request->param('pass.0');
 		$this->mailContent = $this->MailContent->read(null, $mailContentId);
-		$this->request->params['Content'] = $this->BcContents->getContent($mailContentId)['Content'];
+		$this->request->param('Content', $this->BcContents->getContent($mailContentId)['Content']);
 		$this->crumbs[] = array(
-			'name' => sprintf('%s 設定', $this->request->params['Content']['title']),
+			'name' => sprintf('%s 設定', $this->request->param('Content.title')),
 			'url' => array(
 				'plugin' => 'mail',
 				'controller' => 'mail_fields',
@@ -77,10 +77,10 @@ class MailFieldsController extends MailAppController {
 				$mailContentId
 			)
 		);
-		if($this->request->params['Content']['status']) {
-			$site = BcSite::findById($this->request->params['Content']['site_id']);
+		if($this->request->param('Content.status')) {
+			$site = BcSite::findById($this->request->param('Content.site_id'));
 			$this->set('publishLink', $this->Content->getUrl(
-				$this->request->params['Content']['url'], true, $site->useSubDomain)
+				$this->request->param('Content.url'), true, $site->useSubDomain)
 			);
 		}
 	}
@@ -150,7 +150,7 @@ class MailFieldsController extends MailAppController {
 		$this->subMenuElements = array('mail_fields');
 		$this->pageTitle = sprintf(
 			__d('baser', '%s｜メールフィールド一覧'),
-			$this->request->params['Content']['title']
+			$this->request->param('Content.title')
 		);
 		$this->help = 'mail_fields_index';
 	}
@@ -236,7 +236,7 @@ class MailFieldsController extends MailAppController {
 
 		$this->subMenuElements = array('mail_fields');
 		$this->pageTitle = sprintf(
-			__d('baser', '%s｜新規メールフィールド登録'), $this->request->params['Content']['title']
+			__d('baser', '%s｜新規メールフィールド登録'), $this->request->param('Content.title')
 		);
 		$this->help = 'mail_fields_form';
 		$this->render('form');
@@ -301,7 +301,7 @@ class MailFieldsController extends MailAppController {
 		/* 表示設定 */
 		$this->subMenuElements = array('mail_fields');
 		$this->pageTitle = sprintf(
-			__d('baser', '%s｜メールフィールド編集'), $this->request->params['Content']['title']
+			__d('baser', '%s｜メールフィールド編集'), $this->request->param('Content.title')
 		);
 		$this->help = 'mail_fields_form';
 		$this->render('form');
@@ -479,7 +479,7 @@ class MailFieldsController extends MailAppController {
 		);
 		$this->set('encoding', $this->request->query['encoding']);
 		$this->set('messages', $messages);
-		$this->set('contentName', $this->request->params['Content']['name']);
+		$this->set('contentName', $this->request->param('Content.name'));
 	}
 
 /**

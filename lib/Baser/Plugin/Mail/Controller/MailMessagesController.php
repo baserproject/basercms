@@ -66,23 +66,27 @@ class MailMessagesController extends MailAppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$content = $this->BcContents->getContent($this->request->params['pass'][0]);
+		$content = $this->BcContents->getContent($this->request->param('pass.0'));
 		if(!$content) {
 			$this->notFound();
 		}
-		$this->mailContent = $this->MailContent->read(null, $this->params['pass'][0]);
+		$this->mailContent = $this->MailContent->read(null, $this->request->param('pass.0'));
 		App::uses('MailMessage', 'Mail.Model');
 		$this->MailMessage = new MailMessage();
 		$this->MailMessage->setup($this->mailContent['MailContent']['id']);
-		$mailContentId = $this->params['pass'][0];
-		$this->request->params['Content'] = $this->BcContents->getContent($mailContentId)['Content'];
+		$mailContentId = $this->request->param('pass.0');
+		$content = $this->BcContents->getContent($mailContentId);
+		$this->request->param('Content', $content['Content']);
 		$this->crumbs[] = array(
 			'name' => sprintf(
 				__d('baser', '%s 管理'),
-				$this->request->params['Content']['title']
+				$this->request->param('Content.title')
 			),
 			'url' => array(
-				'plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0]
+				'plugin' => 'mail',
+				'controller' => 'mail_fields',
+				'action' => 'index',
+				$this->request->param('pass.0')
 			)
 		);
 	}
@@ -123,7 +127,7 @@ class MailMessagesController extends MailAppController {
 
 		$this->pageTitle = sprintf(
 			__d('baser', '%s｜受信メール一覧'),
-			$this->request->params['Content']['title']
+			$this->request->param('Content.title')
 		);
 		$this->help = 'mail_messages_index';
 	}
@@ -157,7 +161,7 @@ class MailMessagesController extends MailAppController {
 		$this->set(compact('message', 'mailFields'));
 		$this->pageTitle = sprintf(
 			__d('baser', '%s｜受信メール詳細'),
-			$this->request->params['Content']['title']
+			$this->request->param('Content.title')
 		);
 	}
 
