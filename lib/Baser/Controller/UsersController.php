@@ -227,8 +227,8 @@ class UsersController extends AppController {
 			$authPrefix = $authPrefix[0];
 		} else {
 			$this->BcMessage->setError(__d('baser', '不正な操作です。'));
-			if (!empty($this->request->params['prefix'])) {
-				$authPrefix = $this->request->params['prefix'];
+			if (!empty($this->request->param('prefix'))) {
+				$authPrefix = $this->request->param('prefix');
 			} else {
 				$authPrefix = 'front';
 			}
@@ -578,7 +578,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_reset_password() {
-		if (empty($this->params['prefix']) && !Configure::read('BcAuthPrefix.front')) {
+		if (empty($this->request->param('prefix')) && !Configure::read('BcAuthPrefix.front')) {
 			$this->notFound();
 		}
 		if($this->BcAuth->user()) {
@@ -632,7 +632,7 @@ class UsersController extends AppController {
 	 * @return void
 	 */
 	public function admin_send_activate_url() {
-		if (empty($this->params['prefix']) && !Configure::read('BcAuthPrefix.front')) {
+		if (empty($this->request->param('prefix')) && !Configure::read('BcAuthPrefix.front')) {
 			$this->notFound();
 		}
 		if($this->BcAuth->user()) {
@@ -694,7 +694,7 @@ class UsersController extends AppController {
 			[
 				'action_url' => Router::url(
 					[
-						'prefix'     => $this->params['prefix'],
+						'prefix'     => $this->request->param('prefix'),
 						'controller' => 'users',
 						'action'     => 'reset_password'
 					]
