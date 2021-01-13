@@ -62,7 +62,8 @@ $this->BcListTable->setColumnNumber(5);
 			<?php endforeach; ?>
 		<?php else: ?>
 			<tr>
-				<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p>
+				<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p
+						class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p>
 				</td>
 			</tr>
 		<?php endif; ?>

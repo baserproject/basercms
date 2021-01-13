@@ -1,21 +1,23 @@
 <?php
+
 /**
  * WidgetAreaFixture
  */
-class WidgetAreaFixture extends BaserTestFixture {
+class WidgetAreaFixture extends BaserTestFixture
+{
 
-/**
- * Name of the object
- *
- * @var string
- */
+	/**
+	 * Name of the object
+	 *
+	 * @var string
+	 */
 	public $name = 'WidgetArea';
-	
-/**
- * Records
- *
- * @var array
- */
+
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '1',

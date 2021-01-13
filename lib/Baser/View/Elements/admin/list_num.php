@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 2.0.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 2.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -24,7 +24,7 @@ if (!empty($this->passedArgs['num'])) {
 	$currentNum = $this->passedArgs['num'];
 }
 $links = [];
-foreach ($nums as $num) {
+foreach($nums as $num) {
 	if ($currentNum != $num) {
 		$links[] = '<span>' . $this->BcBaser->getLink($num, am($this->passedArgs, ['num' => $num, 'page' => null])) . '</span>';
 	} else {
@@ -39,7 +39,7 @@ if ($links) {
 
 <?php if ($link): ?>
 	<div class="list-num">
-		<strong><?php echo __d('baser', '表示件数')?></strong><p><?php echo $link ?></p>
+		<strong><?php echo __d('baser', '表示件数') ?></strong>
+		<p><?php echo $link ?></p>
 	</div>
 <?php endif ?>
-	

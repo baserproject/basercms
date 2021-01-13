@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Feed.Controller
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Feed.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -18,62 +18,65 @@
  * @property FeedConfig $FeedConfig
  * @property FeedDetail $FeedDetail
  */
-class FeedDetailsController extends FeedAppController {
+class FeedDetailsController extends FeedAppController
+{
 
-/**
- * クラス名
- *
- * @var string
- */
+	/**
+	 * クラス名
+	 *
+	 * @var string
+	 */
 	public $name = 'FeedDetails';
 
-/**
- * モデル
- *
- * @var array
- */
+	/**
+	 * モデル
+	 *
+	 * @var array
+	 */
 	public $uses = ['Feed.FeedDetail', 'Feed.FeedConfig', 'Feed.Feed'];
 
-/**
- * ヘルパー
- *
- * @var array
- */
+	/**
+	 * ヘルパー
+	 *
+	 * @var array
+	 */
 	public $helpers = ['BcForm'];
 
-/**
- * コンポーネント
- *
- * @var array
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
-/**
- * FeedDetailsController constructor.
- *
- * @param \CakeRequest $request
- * @param \CakeRequest $response
- */
-	public function __construct($request = null, $response = null) {
+	/**
+	 * FeedDetailsController constructor.
+	 *
+	 * @param \CakeRequest $request
+	 * @param \CakeRequest $response
+	 */
+	public function __construct($request = null, $response = null)
+	{
 		parent::__construct($request, $response);
 		$this->crumbs = [
 			['name' => __d('baser', 'フィード管理'), 'url' => ['controller' => 'feed_configs', 'action' => 'index']]
 		];
 	}
 
-/**
- * サブメニューエレメント
- *
- * @var array
- */
+	/**
+	 * サブメニューエレメント
+	 *
+	 * @var array
+	 */
 	public $subMenuElements = [];
 
-/**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
+	/**
+	 * beforeFilter
+	 *
+	 * @return void
+	 */
+	public function beforeFilter()
+	{
 		parent::beforeFilter();
 
 		$feedConfig = $this->FeedConfig->read(null, $this->params['pass'][0]);
@@ -85,13 +88,14 @@ class FeedDetailsController extends FeedAppController {
 		}
 	}
 
-/**
- * [ADMIN] 登録
- *
- * @param int feed_config_id
- * @return void
- */
-	public function admin_add($feedConfigId) {
+	/**
+	 * [ADMIN] 登録
+	 *
+	 * @param int feed_config_id
+	 * @return void
+	 */
+	public function admin_add($feedConfigId)
+	{
 		/* 除外処理 */
 		if (!$feedConfigId) {
 			$this->BcMessage->setError(__d('baser', '無効なIDです'));
@@ -126,15 +130,16 @@ class FeedDetailsController extends FeedAppController {
 		$this->render('form');
 	}
 
-/**
- * [ADMIN] 編集
- *
- * @param int $feedConfigId
- * @param int $id
- * @return	void
- * @access	public
- */
-	public function admin_edit($feedConfigId, $id) {
+	/**
+	 * [ADMIN] 編集
+	 *
+	 * @param int $feedConfigId
+	 * @param int $id
+	 * @return    void
+	 * @access    public
+	 */
+	public function admin_edit($feedConfigId, $id)
+	{
 		if (!$id && empty($this->request->data)) {
 			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(['controller' => 'feed_configs', 'action' => 'index']);
@@ -168,15 +173,16 @@ class FeedDetailsController extends FeedAppController {
 		$this->render('form');
 	}
 
-/**
- * フィードのキャッシュを削除する
- *
- * @param string $feedConfigId
- * @param string $url
- * @return	void
- * @access	protected
- */
-	protected function _clearViewCatch($feedConfigId, $url) {
+	/**
+	 * フィードのキャッシュを削除する
+	 *
+	 * @param string $feedConfigId
+	 * @param string $url
+	 * @return    void
+	 * @access    protected
+	 */
+	protected function _clearViewCatch($feedConfigId, $url)
+	{
 		clearViewCache('/feed/index/' . $feedConfigId);
 		clearViewCache('/feed/ajax/' . $feedConfigId);
 		clearViewCache('/feed/cachetime/' . $feedConfigId);
@@ -190,15 +196,16 @@ class FeedDetailsController extends FeedAppController {
 		}
 	}
 
-/**
- * [ADMIN] 削除　(ajax)
- *
- * @param int $feedConfigId
- * @param	int $id
- * @return void
- * @access	public
- */
-	public function admin_ajax_delete($feedConfigId, $id = null) {
+	/**
+	 * [ADMIN] 削除　(ajax)
+	 *
+	 * @param int $feedConfigId
+	 * @param int $id
+	 * @return void
+	 * @access    public
+	 */
+	public function admin_ajax_delete($feedConfigId, $id = null)
+	{
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __('無効な処理です。'));
@@ -209,20 +216,21 @@ class FeedDetailsController extends FeedAppController {
 		exit();
 	}
 
-/**
- * [ADMIN] 削除
- *
- * @param int $feedConfigId
- * @param	int $id
- * @return void
- * @access	public
- */
-	public function admin_delete($feedConfigId, $id = null) {
+	/**
+	 * [ADMIN] 削除
+	 *
+	 * @param int $feedConfigId
+	 * @param int $id
+	 * @return void
+	 * @access    public
+	 */
+	public function admin_delete($feedConfigId, $id = null)
+	{
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
-			$this->redirect(array('controller' => 'feed_configs', 'action' => 'index'));
+			$this->redirect(['controller' => 'feed_configs', 'action' => 'index']);
 		}
 
 		// メッセージ用にデータを取得
@@ -235,31 +243,33 @@ class FeedDetailsController extends FeedAppController {
 			$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 		}
 
-		$this->redirect(array('controller' => 'feed_configs', 'action' => 'edit', $feedConfigId, $id, '#' => 'headFeedDetail'));
+		$this->redirect(['controller' => 'feed_configs', 'action' => 'edit', $feedConfigId, $id, '#' => 'headFeedDetail']);
 	}
 
-/**
- * 一括削除
- * 
- * @param array $ids
- * @return boolean
- */
-	protected function _batch_del($ids) {
+	/**
+	 * 一括削除
+	 *
+	 * @param array $ids
+	 * @return boolean
+	 */
+	protected function _batch_del($ids)
+	{
 		if ($ids) {
-			foreach ($ids as $id) {
+			foreach($ids as $id) {
 				$this->_del($id);
 			}
 		}
 		return true;
 	}
 
-/**
- * データを削除する
- * 
- * @param int $id
- * @return boolean 
- */
-	protected function _del($id) {
+	/**
+	 * データを削除する
+	 *
+	 * @param int $id
+	 * @return boolean
+	 */
+	protected function _del($id)
+	{
 		$data = $this->FeedDetail->read(null, $id);
 		if ($this->FeedDetail->delete($id)) {
 			$this->FeedDetail->saveDbLog(sprintf(__d('baser', 'フィード「%s」を削除しました。'), $data['FeedDetail']['name']));

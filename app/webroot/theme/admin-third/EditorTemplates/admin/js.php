@@ -5,20 +5,20 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 ?>
 
 
 CKEDITOR.addTemplates('default',{
-	imagesPath:CKEDITOR.getUrl('<?php echo $this->BcBaser->webroot('/files/editor/') ?>'),
-	templates:[
+imagesPath:CKEDITOR.getUrl('<?php echo $this->BcBaser->webroot('/files/editor/') ?>'),
+templates:[
 <?php if ($templates): ?>
-	<?php foreach ($templates as $key => $template): ?>
+	<?php foreach($templates as $key => $template): ?>
 		{
 		title:'<?php echo $template['EditorTemplate']['name'] ?>',
 		<?php if (file_exists(WWW_ROOT . 'files' . DS . 'editor' . DS . $template['EditorTemplate']['image'])): ?>
@@ -29,5 +29,5 @@ CKEDITOR.addTemplates('default',{
 		}<?php if (!$this->BcArray->last($templates, $key)): ?>, <?php endif ?>
 	<?php endforeach ?>
 <?php endif ?>
-	]
+]
 });

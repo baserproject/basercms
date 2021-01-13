@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -21,7 +21,9 @@
 
 <table cellpadding="0" cellspacing="0" class="form-table">
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $this->BcForm->label('Tool.schema_type', __d('baser', 'スキーマタイプ')) ?></th>
+		<th class="col-head"><span
+				class="required">*</span>&nbsp;<?php echo $this->BcForm->label('Tool.schema_type', __d('baser', 'スキーマタイプ')) ?>
+		</th>
 		<td class="col-input">
 			<?php echo $this->BcForm->input('Tool.schema_type', [
 				'type' => 'radio',
@@ -32,7 +34,9 @@
 		</td>
 	</tr>
 	<tr>
-		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $this->BcForm->label('Tool.schema_file', __d('baser', 'スキーマファイル')) ?></th>
+		<th class="col-head"><span
+				class="required">*</span>&nbsp;<?php echo $this->BcForm->label('Tool.schema_file', __d('baser', 'スキーマファイル')) ?>
+		</th>
 		<td class="col-input">
 			<?php echo $this->BcForm->input('Tool.schema_file', ['type' => 'file']) ?>
 			<?php echo $this->BcForm->error('Tool.schema_file') ?>
@@ -40,6 +44,7 @@
 	</tr>
 </table>
 
-<div class="submit"><?php echo $this->BcForm->submit(__d('baser', '読み込み'), ['div' => false, 'class' => 'btn-red button']) ?></div>
+<div
+	class="submit"><?php echo $this->BcForm->submit(__d('baser', '読み込み'), ['div' => false, 'class' => 'btn-red button']) ?></div>
 
 <?php echo $this->BcForm->end(); ?>

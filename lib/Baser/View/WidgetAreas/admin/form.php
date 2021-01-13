@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -26,7 +26,7 @@ $this->BcBaser->i18nScript([
 ]);
 $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormScript',
 	'data-delWidgetUrl' => $this->BcBaser->getUrl(['controller' => 'widget_areas', 'action' => 'del_widget', $this->BcForm->value('WidgetArea.id')]),
-	'data-currentAction' =>$this->request->action
+	'data-currentAction' => $this->request->action
 ]);
 ?>
 
@@ -41,7 +41,8 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 
 <?php echo $this->BcForm->label('WidgetArea.name', __d('baser', 'ウィジェットエリア名')) ?>&nbsp;
 <?php echo $this->BcForm->input('WidgetArea.name', ['type' => 'text', 'size' => 40, 'autofocus' => true]) ?>&nbsp;
-<span class="submit"><?php echo $this->BcForm->end(['label' => __d('baser', 'エリア名を保存する'), 'div' => false, 'class' => 'button btn-red', 'id' => 'WidgetAreaUpdateTitleSubmit']) ?></span>
+<span
+	class="submit"><?php echo $this->BcForm->end(['label' => __d('baser', 'エリア名を保存する'), 'div' => false, 'class' => 'button btn-red', 'id' => 'WidgetAreaUpdateTitleSubmit']) ?></span>
 <?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'WidgetAreaUpdateTitleLoader']) ?>
 <?php echo $this->BcForm->error('WidgetArea.name') ?>
 
@@ -51,22 +52,22 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 	<?php echo $this->BcForm->input('WidgetArea.sorted_ids', ['type' => 'hidden']) ?>
 	<?php echo $this->BcForm->end() ?>
 
-	<div id="WidgetSetting" class="clearfix" >
+	<div id="WidgetSetting" class="clearfix">
 
 		<!-- 利用できるウィジェット -->
 		<div id="SourceOuter">
 			<div id="Source">
 
-				<h2><?php echo __d('baser', '利用できるウィジェット')?></h2>
-				<?php foreach ($widgetInfos as $widgetInfo) : ?>
+				<h2><?php echo __d('baser', '利用できるウィジェット') ?></h2>
+				<?php foreach($widgetInfos as $widgetInfo) : ?>
 					<h3><?php echo h($widgetInfo['title']) ?></h3>
 					<?php
 					$widgets = [];
-					foreach ($widgetInfo['paths'] as $path) {
+					foreach($widgetInfo['paths'] as $path) {
 						$Folder = new Folder($path);
 						$files = $Folder->read(true, true, true);
 						$widgets = [];
-						foreach ($files[1] as $file) {
+						foreach($files[1] as $file) {
 							$widget = ['name' => '', 'title' => '', 'description' => '', 'setting' => ''];
 							ob_start();
 							$key = 'Widget';
@@ -83,19 +84,21 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 						}
 					}
 					?>
-					<?php foreach ($widgets as $widget): ?>
+					<?php foreach($widgets as $widget): ?>
 
-						<div class="ui-widget-content draggable widget" id="Widget<?php echo Inflector::camelize($widget['name']) ?>">
+						<div class="ui-widget-content draggable widget"
+							 id="Widget<?php echo Inflector::camelize($widget['name']) ?>">
 							<div class="head"><?php echo h($widget['title']) ?></div>
 						</div>
 
 						<div class="description"><?php echo h($widget['description']) ?></div>
 
-						<div class="ui-widget-content sortable widget template <?php echo h($widget['name']) ?>" id="<?php echo Inflector::camelize($widget['name']) ?>">
+						<div class="ui-widget-content sortable widget template <?php echo h($widget['name']) ?>"
+							 id="<?php echo Inflector::camelize($widget['name']) ?>">
 							<div class="clearfix">
 								<div class="widget-name display-none"><?php echo h($widget['name']) ?></div>
-								<div class="del"><?php echo __d('baser', '削除')?></div>
-								<div class="action"><?php echo __d('baser', '設定')?></div>
+								<div class="del"><?php echo __d('baser', '削除') ?></div>
+								<div class="action"><?php echo __d('baser', '設定') ?></div>
 								<div class="head"><?php echo $widget['title'] ?></div>
 							</div>
 							<div class="content" style="text-align:right">
@@ -107,8 +110,9 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 								<?php echo $this->BcForm->input('Widget.plugin', ['type' => 'hidden', 'value' => $widgetInfo['plugin']]) ?>
 								<?php echo $this->BcForm->input('Widget.sort', ['type' => 'hidden']) ?>
 								<?php echo $this->BcForm->label('Widget.name', __d('baser', 'タイトル')) ?>&nbsp;
-								<?php echo $this->BcForm->input('Widget.name', ['type' => 'text', 'class' => 'name']) ?><br />
-								<?php echo $widget['setting'] ?><br />
+								<?php echo $this->BcForm->input('Widget.name', ['type' => 'text', 'class' => 'name']) ?>
+								<br/>
+								<?php echo $widget['setting'] ?><br/>
 								<?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader', 'class' => 'loader']) ?>
 								<?php echo $this->BcForm->input('Widget.use_title', ['type' => 'checkbox', 'label' => __d('baser', 'タイトルを表示'), 'class' => 'use_title', 'checked' => 'checked']) ?>
 								<?php echo $this->BcForm->input('Widget.status', ['type' => 'checkbox', 'label' => __d('baser', '利用する'), 'class' => 'status']) ?>
@@ -124,25 +128,27 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 		<div id="TargetOuter">
 			<div id="Target">
 
-				<h2><?php echo __d('baser', '利用中のウィジェット')?> <?php $this->BcBaser->img('admin/ajax-loader-s.gif', [
+				<h2><?php echo __d('baser', '利用中のウィジェット') ?><?php $this->BcBaser->img('admin/ajax-loader-s.gif', [
 						'style' => 'vertical-align:middle;display:none',
 						'id' => 'WidgetAreaUpdateSortLoader',
 						'class' => 'loader']); ?></h2>
 
 				<?php if ($this->BcForm->value('WidgetArea.widgets')): ?>
-					<?php foreach ($this->BcForm->value('WidgetArea.widgets') as $widget): ?>
+					<?php foreach($this->BcForm->value('WidgetArea.widgets') as $widget): ?>
 
 						<?php $key = key($widget) ?>
 						<?php $enabled = '' ?>
 						<?php if ($widget[$key]['status']): ?>
-				<?php $enabled = ' enabled' ?>
-			<?php endif ?>
+							<?php $enabled = ' enabled' ?>
+						<?php endif ?>
 
-						<div class="ui-widget-content sortable widget setting <?php echo h($widget[$key]['element']) ?><?php echo $enabled ?>" id="Setting<?php echo $widget[$key]['id'] ?>">
+						<div
+							class="ui-widget-content sortable widget setting <?php echo h($widget[$key]['element']) ?><?php echo $enabled ?>"
+							id="Setting<?php echo $widget[$key]['id'] ?>">
 							<div class="clearfix">
 								<div class="widget-name display-none"><?php echo h($widget[$key]['element']) ?></div>
-								<div class="del"><?php echo __d('baser', '削除')?></div>
-								<div class="action"><?php echo __d('baser', '設定')?></div>
+								<div class="del"><?php echo __d('baser', '削除') ?></div>
+								<div class="action"><?php echo __d('baser', '設定') ?></div>
 								<div class="head"><?php echo h($widget[$key]['name']) ?></div>
 							</div>
 							<div class="content" style="text-align:right">
@@ -154,16 +160,18 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 								<?php echo $this->BcForm->input($key . '.plugin', ['type' => 'hidden']) ?>
 								<?php echo $this->BcForm->input($key . '.sort', ['type' => 'hidden']) ?>
 								<?php echo $this->BcForm->label($key . 'name', __d('baser', 'タイトル')) ?>&nbsp;
-								<?php echo $this->BcForm->input($key . '.name', ['type' => 'text', 'class' => 'name']) ?><br />
-								<?php $this->BcBaser->element('widgets/' . $widget[$key]['element'], ['key' => $key, 'plugin' => $widget[$key]['plugin'], 'mode' => 'edit'], ['plugin' => $widget[$key]['plugin']]) ?><br />
+								<?php echo $this->BcForm->input($key . '.name', ['type' => 'text', 'class' => 'name']) ?>
+								<br/>
+								<?php $this->BcBaser->element('widgets/' . $widget[$key]['element'], ['key' => $key, 'plugin' => $widget[$key]['plugin'], 'mode' => 'edit'], ['plugin' => $widget[$key]['plugin']]) ?>
+								<br/>
 								<?php $this->BcBaser->img('admin/ajax-loader-s.gif', ['style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader' . $widget[$key]['id'], 'class' => 'loader']) ?>
 								<?php echo $this->BcForm->input($key . '.use_title', ['type' => 'checkbox', 'label' => __d('baser', 'タイトルを表示'), 'class' => 'use_title']) ?>
 								<?php echo $this->BcForm->input($key . '.status', ['type' => 'checkbox', 'label' => __d('baser', '利用する'), 'class' => 'status']) ?>
 								<?php echo $this->BcForm->end(['label' => __d('baser', '保存'), 'div' => false, 'id' => 'WidgetUpdateWidgetSubmit' . $widget[$key]['id'], 'class' => 'button']) ?>
 							</div>
 						</div>
-		<?php endforeach; ?>
-	<?php endif; ?>
+					<?php endforeach; ?>
+				<?php endif; ?>
 			</div>
 		</div>
 	</div>

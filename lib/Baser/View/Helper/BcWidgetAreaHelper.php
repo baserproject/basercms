@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View.Helper
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View.Helper
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -16,23 +16,25 @@
  * @package Baser.View.Helper
  * @property BcAppView $_View
  */
-class BcWidgetAreaHelper extends AppHelper {
+class BcWidgetAreaHelper extends AppHelper
+{
 
-/**
- * ウィジェットエリアを表示する
- *
- * @param int $no ウィジェットエリアNO
- * @param array $options オプション
- *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
- *  ※ その他のパラメータについては、View::element() を参照
- */
-	public function show ($no, $options = []) {
+	/**
+	 * ウィジェットエリアを表示する
+	 *
+	 * @param int $no ウィジェットエリアNO
+	 * @param array $options オプション
+	 *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
+	 *  ※ その他のパラメータについては、View::element() を参照
+	 */
+	public function show($no, $options = [])
+	{
 
 		$options = array_merge([
 			'subDir' => true,
-			'cache' => (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) ? '+1 month' : false
+			'cache' => (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]))? '+1 month' : false
 		], $options);
-		if($options['cache'] === false) {
+		if ($options['cache'] === false) {
 			unset($options['cache']);
 		}
 		$WidgetArea = ClassRegistry::init('WidgetArea');
@@ -50,7 +52,7 @@ class BcWidgetAreaHelper extends AppHelper {
 		$widgets = BcUtil::unserialize($widgetArea['WidgetArea']['widgets']);
 		usort($widgets, ['BcWidgetAreaHelper', '_widgetSort']);
 
-		foreach ($widgets as $key => $widget) {
+		foreach($widgets as $key => $widget) {
 			$key = key($widget);
 			if ($widget[$key]['status']) {
 				$params = [];
@@ -68,15 +70,16 @@ class BcWidgetAreaHelper extends AppHelper {
 
 	}
 
-/**
- * ウィジェットの並べ替えを行う
- * usortのコールバックメソッド
- *
- * @param array $a
- * @param array $b
- * @return int
- */
-	protected function _widgetSort($a, $b) {
+	/**
+	 * ウィジェットの並べ替えを行う
+	 * usortのコールバックメソッド
+	 *
+	 * @param array $a
+	 * @param array $b
+	 * @return int
+	 */
+	protected function _widgetSort($a, $b)
+	{
 		$aKey = key($a);
 		$bKey = key($b);
 		if ($a[$aKey]['sort'] == $b[$bKey]['sort']) {

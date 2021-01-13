@@ -1,16 +1,18 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
+ * Class SiteConfigsController
+ *
  * サイト設定コントローラー
  *
  * @package Baser.Controller
@@ -19,56 +21,59 @@
  * @property Site $Site
  * @property CakeRequest $request
  */
-class SiteConfigsController extends AppController {
+class SiteConfigsController extends AppController
+{
 
-/**
- * クラス名
- *
- * @var string
- */
+	/**
+	 * クラス名
+	 *
+	 * @var string
+	 */
 	public $name = 'SiteConfigs';
 
-/**
- * モデル
- *
- * @var array
- */
+	/**
+	 * モデル
+	 *
+	 * @var array
+	 */
 	public $uses = ['SiteConfig', 'Page', 'Site'];
 
-/**
- * コンポーネント
- *
- * @var array
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager'];
 
-/**
- * サブメニューエレメント
- *
- * @var array
- */
+	/**
+	 * サブメニューエレメント
+	 *
+	 * @var array
+	 */
 	public $subMenuElements = [];
 
-/**
- * ヘルパー
- * @var array
- */
+	/**
+	 * ヘルパー
+	 * @var array
+	 */
 	public $helpers = ['BcForm', 'BcPage'];
 
-/**
- * beforeFilter
- */
-	public function beforeFilter() {
+	/**
+	 * beforeFilter
+	 */
+	public function beforeFilter()
+	{
 		// @deprecated 5.0.0 since 4.0.0 ajax_get_token は、BcFormController に移行した為、次のバージョンで削除
 		$this->BcAuth->allow('admin_ajax_credit', 'jquery_base_url', 'ajax_get_token');
 		parent::beforeFilter();
 		$this->crumbs = [['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']]];
 	}
 
-/**
- * [ADMIN] サイト基本設定
- */
-	public function admin_form() {
+	/**
+	 * [ADMIN] サイト基本設定
+	 */
+	public function admin_form()
+	{
 		$writableInstall = is_writable(APP . 'Config' . DS . 'install.php');
 
 		if (empty($this->request->data)) {
@@ -85,7 +90,7 @@ class SiteConfigsController extends AppController {
 				if (isset($this->request->data['SiteConfig']['mode'])) {
 					$mode = $this->request->data['SiteConfig']['mode'];
 				}
-				if($mode > 0) {
+				if ($mode > 0) {
 					clearAllCache();
 				} else {
 					clearViewCache();
@@ -104,13 +109,13 @@ class SiteConfigsController extends AppController {
 				}
 
 				$adminSsl = @$this->request->data['SiteConfig']['admin_ssl'];
-				if($this->request->data['SiteConfig']['use_site_device_setting'] === "0" && $this->SiteConfig->isChange('use_site_device_setting', "0")) {
+				if ($this->request->data['SiteConfig']['use_site_device_setting'] === "0" && $this->SiteConfig->isChange('use_site_device_setting', "0")) {
 					$this->Site->resetDevice();
 				}
-				if($this->request->data['SiteConfig']['use_site_lang_setting'] === "0" && $this->SiteConfig->isChange('use_site_lang_setting', "0")) {
+				if ($this->request->data['SiteConfig']['use_site_lang_setting'] === "0" && $this->SiteConfig->isChange('use_site_lang_setting', "0")) {
 					$this->Site->resetLang();
 				}
-				if(Configure::read('BcSite.admin_theme') !== $this->request->data['SiteConfig']['admin_theme']) {
+				if (Configure::read('BcSite.admin_theme') !== $this->request->data['SiteConfig']['admin_theme']) {
 					Configure::write('BcSite.admin_theme', $this->request->data['SiteConfig']['admin_theme']);
 					$this->BcManager->deleteAdminAssets();
 					$this->BcManager->deployAdminAssets();
@@ -128,7 +133,7 @@ class SiteConfigsController extends AppController {
 
 					$ContentFolder = ClassRegistry::init('ContentFolder');
 					$ContentFolder->saveSiteRoot(0, [
-						'title'		=> $this->request->data['SiteConfig']['name']
+						'title' => $this->request->data['SiteConfig']['name']
 					]);
 
 					$this->BcMessage->setInfo(__d('baser', 'システム設定を保存しました。'));
@@ -138,7 +143,7 @@ class SiteConfigsController extends AppController {
 						$this->BcManager->setInstallSetting('debug', $mode);
 						$this->BcManager->setInstallSetting('BcEnv.siteUrl', "'" . $siteUrl . "'");
 						$this->BcManager->setInstallSetting('BcEnv.sslUrl', "'" . $sslUrl . "'");
-						$this->BcManager->setInstallSetting('BcApp.adminSsl', ($adminSsl) ? 'true' : 'false');
+						$this->BcManager->setInstallSetting('BcApp.adminSsl', ($adminSsl)? 'true' : 'false');
 					}
 
 					// キャッシュをクリア
@@ -193,20 +198,22 @@ class SiteConfigsController extends AppController {
 		$this->help = 'site_configs_form';
 	}
 
-/**
- * キャッシュファイルを全て削除する
- */
-	public function admin_del_cache() {
+	/**
+	 * キャッシュファイルを全て削除する
+	 */
+	public function admin_del_cache()
+	{
 		$this->_checkReferer();
 		clearAllCache();
 		$this->BcMessage->setInfo(__d('baser', 'サーバーキャッシュを削除しました。'));
 		$this->redirect($this->referer());
 	}
 
-/**
- * [ADMIN] PHPINFOを表示する
- */
-	public function admin_info() {
+	/**
+	 * [ADMIN] PHPINFOを表示する
+	 */
+	public function admin_info()
+	{
 
 		$this->pageTitle = __d('baser', '環境情報');
 		$datasources = ['csv' => 'CSV', 'sqlite' => 'SQLite', 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL'];
@@ -224,17 +231,19 @@ class SiteConfigsController extends AppController {
 
 	}
 
-/**
- * [ADMIN] PHP INFO
- */
-	public function admin_phpinfo() {
+	/**
+	 * [ADMIN] PHP INFO
+	 */
+	public function admin_phpinfo()
+	{
 		$this->layout = 'empty';
 	}
 
-/**
- * サイト基本設定データを取得する
- */
-	protected function _getSiteConfigData() {
+	/**
+	 * サイト基本設定データを取得する
+	 */
+	protected function _getSiteConfigData()
+	{
 		$data['SiteConfig'] = $this->siteConfigs;
 		$data['SiteConfig']['mode'] = Configure::read('debug');
 		$data['SiteConfig']['site_url'] = Configure::read('BcEnv.siteUrl');
@@ -246,16 +255,17 @@ class SiteConfigsController extends AppController {
 		return $data;
 	}
 
-/**
- * メールの送信テストを実行する
- */
-	public function admin_check_sendmail () {
+	/**
+	 * メールの送信テストを実行する
+	 */
+	public function admin_check_sendmail()
+	{
 
-		if(empty( $this->request->data['SiteConfig'])) {
+		if (empty($this->request->data['SiteConfig'])) {
 			$this->ajaxError(500, __d('baser', 'データが送信できませんでした。'));
 		}
 		$this->siteConfigs = $this->request->data['SiteConfig'];
-		if(!$this->sendMail(
+		if (!$this->sendMail(
 			$this->siteConfigs['email'], __d('baser', 'メール送信テスト'),
 			sprintf('%s からのメール送信テストです。', $this->siteConfigs['formal_name']) . "\n" . Configure::read('BcEnv.siteUrl')
 		)) {
@@ -266,10 +276,11 @@ class SiteConfigsController extends AppController {
 		exit();
 	}
 
-/**
- * クレジット表示用データをレンダリング
- */
-	public function admin_ajax_credit() {
+	/**
+	 * クレジット表示用データをレンダリング
+	 */
+	public function admin_ajax_credit()
+	{
 
 		$this->layout = 'ajax';
 		Configure::write('debug', 0);
@@ -279,13 +290,14 @@ class SiteConfigsController extends AppController {
 			$specialThanks = Cache::read('special_thanks', '_cake_env_');
 		}
 
-		if($specialThanks) {
+		if ($specialThanks) {
 			$json = json_decode($specialThanks);
 		} else {
 			try {
 				$json = file_get_contents(Configure::read('BcApp.specialThanks'), true);
-			} catch (Exception $ex) {}
-			if($json) {
+			} catch (Exception $ex) {
+			}
+			if ($json) {
 				if (!Configure::read('Cache.disable')) {
 					Cache::write('special_thanks', $json, '_cake_env_');
 				}
@@ -303,24 +315,26 @@ class SiteConfigsController extends AppController {
 
 	}
 
-/**
- * admin用Token取得アクション
- *
- * @return string
- * @deprecated 5.0.0 since 4.0.0 ajax_get_token は、BcFormController に移行した為、次のバージョンで削除
- */
-	public function admin_ajax_get_token() {
+	/**
+	 * admin用Token取得アクション
+	 *
+	 * @return string
+	 * @deprecated 5.0.0 since 4.0.0 ajax_get_token は、BcFormController に移行した為、次のバージョンで削除
+	 */
+	public function admin_ajax_get_token()
+	{
 		$this->autoRender = false;
 		return $this->getToken();
 	}
 
-/**
- * セキュリティトークンを取得する
- *
- * @return mixed
- * @deprecated 5.0.0 since 4.0.0 ajax_get_token は、BcFormController に移行した為、次のバージョンで削除
- */
-	public function ajax_get_token() {
+	/**
+	 * セキュリティトークンを取得する
+	 *
+	 * @return mixed
+	 * @deprecated 5.0.0 since 4.0.0 ajax_get_token は、BcFormController に移行した為、次のバージョンで削除
+	 */
+	public function ajax_get_token()
+	{
 		return $this->setAction(('admin_ajax_get_token'));
 	}
 

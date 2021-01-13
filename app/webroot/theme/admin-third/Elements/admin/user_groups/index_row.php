@@ -21,13 +21,15 @@
 	<td class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['UserGroup']['name'], ['action' => 'edit', $data['UserGroup']['id']], ['escape' => true]) ?>
 		<?php if (!empty($data['User'])): ?><br>
 			<?php foreach($data['User'] as $user): ?>
-				<span class="tag"><?php $this->BcBaser->link($this->BcBaser->getUserName($user), ['controller' => 'users', 'action' => 'edit', $user['id']], ['escape' => true]) ?></span>
+				<span
+					class="tag"><?php $this->BcBaser->link($this->BcBaser->getUserName($user), ['controller' => 'users', 'action' => 'edit', $user['id']], ['escape' => true]) ?></span>
 			<?php endforeach ?>
 		<?php endif ?>
 	</td>
 	<td class="bca-table-listup__tbody-td"><?php echo h($data['UserGroup']['title']) ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
-	<td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format('Y-m-d', $data['UserGroup']['created']) ?><br/>
+	<td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format('Y-m-d', $data['UserGroup']['created']) ?>
+		<br/>
 		<?php echo $this->BcTime->format('Y-m-d', $data['UserGroup']['modified']) ?></td>
 	<td class="bca-table-listup__tbody-td">
 		<?php if ($data['UserGroup']['name'] != 'admins'): ?>

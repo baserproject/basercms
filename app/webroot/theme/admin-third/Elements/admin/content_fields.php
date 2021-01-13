@@ -16,10 +16,10 @@
  * @var BcAppView $this
  * @var array $parentContents
  * @var bool $related 親サイトに連携する設定で、エイリアス、もしくはフォルダであるかどうか
- * 										上記に一致する場合、URLに関わるコンテンツ名は編集できない
+ *                                        上記に一致する場合、URLに関わるコンテンツ名は編集できない
  * @var bool $disableEditContent コンテンツ編集不可かどうか
  */
-if($this->request->data['Site']['use_subdomain']) {
+if ($this->request->data['Site']['use_subdomain']) {
 	$targetSite = BcSite::findByUrl($this->request->data['Content']['url']);
 	$previewUrl = $this->BcBaser->getUrl($targetSite->getPureUrl($this->request->data['Content']['url']) . '?host=' . $targetSite->host);
 } else {
@@ -33,41 +33,41 @@ $this->BcBaser->js('admin/contents/edit', false, ['id' => 'AdminContentsEditScri
 	'data-settings' => $this->BcContents->getJsonSettings()
 ]);
 $this->BcBaser->i18nScript([
-    'contentsEditConfirmMessage1' => __d('baser', 'コンテンツをゴミ箱に移動してもよろしいですか？'),
-    'contentsEditConfirmMessage2' => __d('baser', "エイリアスを削除してもよろしいですか？\nエイリアスはゴミ箱に入らず完全に削除されます。"),
-    'contentsEditConfirmMessage3' => __d('baser', 'このコンテンツを元に %s にエイリアスを作成します。よろしいですか？'),
+	'contentsEditConfirmMessage1' => __d('baser', 'コンテンツをゴミ箱に移動してもよろしいですか？'),
+	'contentsEditConfirmMessage2' => __d('baser', "エイリアスを削除してもよろしいですか？\nエイリアスはゴミ箱に入らず完全に削除されます。"),
+	'contentsEditConfirmMessage3' => __d('baser', 'このコンテンツを元に %s にエイリアスを作成します。よろしいですか？'),
 	'contentsEditConfirmMessage4' => __d('baser', 'このコンテンツを元に %s にコピーを作成します。よろしいですか？'),
-    'contentsEditInfoMessage1' => __d('baser', 'エイリアスを作成しました。作成先の編集画面に移動しますのでしばらくお待ち下さい。'),
-    'contentsEditInfoMessage2' => __d('baser', 'コピーを作成しました。作成先の編集画面に移動しますのでしばらくお待ち下さい。'),
-    'contentsEditAlertMessage1' => __d('baser', 'エイリアスの作成に失敗しました。'),
-    'contentsEditAlertMessage2' => __d('baser', '指定したサイトの同じ階層上にフォルダではない同名のコンテンツが存在します。エイリアスの作成を実行する前に、指定したサイト上の同名コンテンツを確認し名称を変更してください。'),
+	'contentsEditInfoMessage1' => __d('baser', 'エイリアスを作成しました。作成先の編集画面に移動しますのでしばらくお待ち下さい。'),
+	'contentsEditInfoMessage2' => __d('baser', 'コピーを作成しました。作成先の編集画面に移動しますのでしばらくお待ち下さい。'),
+	'contentsEditAlertMessage1' => __d('baser', 'エイリアスの作成に失敗しました。'),
+	'contentsEditAlertMessage2' => __d('baser', '指定したサイトの同じ階層上にフォルダではない同名のコンテンツが存在します。エイリアスの作成を実行する前に、指定したサイト上の同名コンテンツを確認し名称を変更してください。'),
 	'contentsEditAlertMessage3' => __d('baser', '指定したサイトの同じ階層上にフォルダではない同名のコンテンツが存在します。コピーの作成を実行する前に、指定したサイト上の同名コンテンツを確認し名称を変更してください。'),
-    'contentsEditAlertmessage4' => __d('baser', 'コピーの作成に失敗しました。')
+	'contentsEditAlertmessage4' => __d('baser', 'コピーの作成に失敗しました。')
 ]);
 $isOmitViewAction = $this->BcContents->settings[$this->request->data['Content']['type']]['omitViewAction'];
 
 // サブドメイン
-if($this->request->data['Site']['use_subdomain']) {
+if ($this->request->data['Site']['use_subdomain']) {
 	$contentsName = '';
-	if(!$this->request->data['Content']['site_root']) {
+	if (!$this->request->data['Content']['site_root']) {
 		$contentsName = $this->BcForm->value('Content.name');
-		if(!$isOmitViewAction && $this->request->data['Content']['url'] !== '/') {
+		if (!$isOmitViewAction && $this->request->data['Content']['url'] !== '/') {
 			$contentsName .= '/';
 		}
 	}
 } else {
-	if($this->request->data['Site']['same_main_url'] && $this->request->data['Content']['site_root']) {
+	if ($this->request->data['Site']['same_main_url'] && $this->request->data['Content']['site_root']) {
 		$contentsName = '';
 	} else {
 		$contentsName = $this->BcForm->value('Content.name');
 	}
-	if(!$isOmitViewAction && $this->request->data['Content']['url'] !== '/' && $contentsName) {
+	if (!$isOmitViewAction && $this->request->data['Content']['url'] !== '/' && $contentsName) {
 		$contentsName .= '/';
 	}
 }
 $linkedFullUrl = $this->BcContents->getCurrentFolderLinkedUrl() . $contentsName;
 $disableEdit = false;
-if($this->BcContents->isEditable()) {
+if ($this->BcContents->isEditable()) {
 	$disableEdit = true;
 }
 ?>
@@ -90,7 +90,8 @@ if($this->BcContents->isEditable()) {
 <div class="bca-section bca-section__post-top">
   <span class="bca-post__url">
 	  <a href="<?php echo h($fullUrl) ?>" class="bca-text-url" target="_blank" data-toggle="tooltip"
-		 data-placement="top" title="<?php echo __d('baser', '公開URLを開きます') ?>"><i class="bca-icon--globe"></i><?php echo urldecode($fullUrl) ?></a>
+		 data-placement="top" title="<?php echo __d('baser', '公開URLを開きます') ?>"><i
+			  class="bca-icon--globe"></i><?php echo urldecode($fullUrl) ?></a>
 	  <?php echo $this->BcForm->button('', [
 		  'id' => 'BtnCopyUrl',
 		  'class' => 'bca-btn',
@@ -105,7 +106,8 @@ if($this->BcContents->isEditable()) {
 	<table class="form-table bca-form-table" data-bca-table-type="type2">
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Content.name', 'URL') ?>
-				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
+				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+			</th>
 			<td class="col-input bca-form-table__input">
 				<?php if (!$this->request->data['Content']['site_root']): ?>
 					<?php echo $this->BcForm->input('Content.parent_id', ['type' => 'select', 'options' => $parentContents, 'escape' => true]) ?>
@@ -115,8 +117,8 @@ if($this->BcContents->isEditable()) {
 					<?php if (!$isOmitViewAction && $this->request->data['Content']['url'] !== '/'): ?>/<?php endif ?>　
 				<?php else: ?>
 					<?php if (!$this->request->data['Content']['site_root']): ?>
-					<?php // サイトルートの場合はコンテンツ名を表示しない ?>
-					<?php echo h($contentsName) ?>
+						<?php // サイトルートの場合はコンテンツ名を表示しない ?>
+						<?php echo h($contentsName) ?>
 					<?php endif ?>
 					<?php echo $this->BcForm->hidden('Content.name') ?>
 				<?php endif ?>
@@ -144,7 +146,8 @@ if($this->BcContents->isEditable()) {
 		</tr>
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Content.self_status', __d('baser', '公開状態')) ?>
-				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
+				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+			</th>
 			<td class="col-input bca-form-table__input">
 				<?php if (!$disableEdit): ?>
 					<?php echo $this->BcForm->input('Content.self_status', ['type' => 'radio', 'options' => $this->BcText->booleanDoList('公開')]) ?>

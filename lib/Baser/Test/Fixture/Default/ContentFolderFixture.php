@@ -1,14 +1,16 @@
 <?php
+
 /**
  * ContentFolder Fixture
  */
-class ContentFolderFixture extends CakeTestFixture {
+class ContentFolderFixture extends CakeTestFixture
+{
 
-/**
- * Fields
- *
- * @var array
- */
+	/**
+	 * Fields
+	 *
+	 * @var array
+	 */
 	public $fields = [
 		'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'unsigned' => false, 'key' => 'primary'],
 		'folder_template' => ['type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'],
@@ -21,11 +23,11 @@ class ContentFolderFixture extends CakeTestFixture {
 		'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB']
 	];
 
-/**
- * Records
- *
- * @var array
- */
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '1',

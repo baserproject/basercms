@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View.Helper
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View.Helper
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('BcFormHelper', 'View/Helper');
@@ -15,38 +15,41 @@ App::uses('BcUploadHelper', 'View/Helper');
 
 /**
  * Class BcFreezeHelper
- * 
+ *
  * @package Baser.View.Helper
  */
-class BcFreezeHelper extends BcFormHelper {
+class BcFreezeHelper extends BcFormHelper
+{
 
-/**
- * 凍結状態
- * 
- * @var boolean
- */
+	/**
+	 * 凍結状態
+	 *
+	 * @var boolean
+	 */
 	public $freezed = false;
 
-/**
- * フォームを凍結させる
- * 
- * @return void
- */
-	public function freeze() {
+	/**
+	 * フォームを凍結させる
+	 *
+	 * @return void
+	 */
+	public function freeze()
+	{
 		$this->freezed = true;
 	}
 
-/**
- * テキストボックスを表示する
- * 
- * @param string $fieldName フィールド文字列
- * @param array $attributes html属性
- * - 凍結時に、$attributes["value"]が指定されている場合、その値がvalueになる。
- * 　指定されてない場合、$this->request->data[$model][$field]がvalueになる。
- * @return	string	htmlタグ
- * @access	public
- */
-	public function text($fieldName, $attributes = []) {
+	/**
+	 * テキストボックスを表示する
+	 *
+	 * @param string $fieldName フィールド文字列
+	 * @param array $attributes html属性
+	 * - 凍結時に、$attributes["value"]が指定されている場合、その値がvalueになる。
+	 * 　指定されてない場合、$this->request->data[$model][$field]がvalueになる。
+	 * @return    string    htmlタグ
+	 * @access    public
+	 */
+	public function text($fieldName, $attributes = [])
+	{
 
 		if ($this->freezed) {
 			list($model, $field) = explode('.', $fieldName);
@@ -66,18 +69,19 @@ class BcFreezeHelper extends BcFormHelper {
 		}
 	}
 
-/**
- * select プルダウンメニューを表示
- * 
- * @param	string $fieldName フィールド文字列
- * @param	array $options コントロールソース
- * @param	array $attributes html属性
- * - $attributes['cols']が指定されている場合、値の文字の横幅を指定できる 
- * @param	array	空データの表示有無
- * @return	string $showEmpty htmlタグ
- * @access	public
- */
-	public function select($fieldName, $options = [], $attributes = []) {
+	/**
+	 * select プルダウンメニューを表示
+	 *
+	 * @param string $fieldName フィールド文字列
+	 * @param array $options コントロールソース
+	 * @param array $attributes html属性
+	 * - $attributes['cols']が指定されている場合、値の文字の横幅を指定できる
+	 * @param array    空データの表示有無
+	 * @return    string $showEmpty htmlタグ
+	 * @access    public
+	 */
+	public function select($fieldName, $options = [], $attributes = [])
+	{
 
 		if ($this->freezed) {
 			return $this->freezeControll($fieldName, $options, $attributes);
@@ -86,7 +90,7 @@ class BcFreezeHelper extends BcFormHelper {
 			// 指定した文字数より足りない文字数分スペースを埋める処理としている為、
 			// 等幅フォントを設定しないとちゃんとした横幅にはならない
 			if (!empty($attributes['cols'])) {
-				foreach ($options as $key => $option) {
+				foreach($options as $key => $option) {
 					if ($attributes['cols'] > mb_strlen($option)) {
 						$pad = str_repeat('　', $attributes['cols'] - mb_strlen($option));
 						$options[$key] = $option . $pad;
@@ -97,29 +101,30 @@ class BcFreezeHelper extends BcFormHelper {
 		}
 	}
 
-/**
- * 日付タグを表示
- * 
- * @param	string $fieldName フィールド文字列
- * @param	string $dateFormat 日付フォーマット
- * @param	string $timeFormat 時間フォーマット
- * @param	array	$attributes html属性
- * - 凍結時、$attributes['selected']に要素を格納することで日付を選択する
- * (例) $attributes['selected'] = array('selected' => array('year' => '2010', 'month' => '4', 'day' => '1'))
- * @return string htmlタグ
- */
-	public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $attributes = []) {
+	/**
+	 * 日付タグを表示
+	 *
+	 * @param string $fieldName フィールド文字列
+	 * @param string $dateFormat 日付フォーマット
+	 * @param string $timeFormat 時間フォーマット
+	 * @param array $attributes html属性
+	 * - 凍結時、$attributes['selected']に要素を格納することで日付を選択する
+	 * (例) $attributes['selected'] = array('selected' => array('year' => '2010', 'month' => '4', 'day' => '1'))
+	 * @return string htmlタグ
+	 */
+	public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $attributes = [])
+	{
 
 		if ($this->freezed) {
-			
+
 			$year = $month = $day = $hour = $min = $meridian = $showEmpty = $selected = null;
-			if(isset($attributes['selected'])) {
+			if (isset($attributes['selected'])) {
 				$selected = $attributes['selected'];
 			}
-			if(isset($attributes['empty'])) {
+			if (isset($attributes['empty'])) {
 				$showEmpty = $attributes['empty'];
 			}
-			
+
 			if (empty($selected)) {
 				$selected = $this->value($fieldName);
 			}
@@ -172,21 +177,21 @@ class BcFreezeHelper extends BcFormHelper {
 			$defaults = [
 				'minYear' => null, 'maxYear' => null, 'separator' => '&nbsp;'
 			];
-			$attributes = array_merge($defaults, (array) $attributes);
+			$attributes = array_merge($defaults, (array)$attributes);
 			$minYear = $attributes['minYear'];
 			$maxYear = $attributes['maxYear'];
 			$separator = $attributes['separator'];
 			if (isset($attributes['id'])) {
 				if (is_string($attributes['id'])) {
 					// build out an array version
-					foreach ($elements as $element) {
+					foreach($elements as $element) {
 						$selectAttrName = 'select' . $element . 'Attr';
 						${$selectAttrName} = $attributes;
 						${$selectAttrName}['id'] = $attributes['id'] . $element;
 					}
 				} elseif (is_array($attributes['id'])) {
 					// check for missing ones and build selectAttr for each element
-					foreach ($elements as $element) {
+					foreach($elements as $element) {
 						$selectAttrName = 'select' . $element . 'Attr';
 						${$selectAttrName} = $attributes;
 						${$selectAttrName}['id'] = $attributes['id'][strtolower($element)];
@@ -194,7 +199,7 @@ class BcFreezeHelper extends BcFormHelper {
 				}
 			} else {
 				// build the selectAttrName with empty id's to pass
-				foreach ($elements as $element) {
+				foreach($elements as $element) {
 					$selectAttrName = 'select' . $element . 'Attr';
 					${$selectAttrName} = $attributes;
 				}
@@ -213,7 +218,7 @@ class BcFreezeHelper extends BcFormHelper {
 			$selectDayAttr['value'] = $day;
 			$selects[] = $this->freezeControll($fieldName . ".month", [], $selectMonthAttr) . "月";
 			$selects[] = $this->freezeControll($fieldName . ".day", [], $selectDayAttr) . "日";
-			if($timeFormat) {
+			if ($timeFormat) {
 				$selects[] = $this->freezeControll($fieldName . ".hour", [], ['value' => $hour]) . "時";
 				$selects[] = $this->freezeControll($fieldName . ".min", [], ['value' => $min]) . "分";
 			}
@@ -224,18 +229,19 @@ class BcFreezeHelper extends BcFormHelper {
 		}
 	}
 
-/**
- * 和暦年
- *
- * @param string $fieldName Prefix name for the SELECT element
- * @param integer $minYear First year in sequence
- * @param integer $maxYear Last year in sequence
- * @param string $selected Option which is selected.
- * @param array $attributes Attribute array for the select elements.
- * @param boolean $showEmpty Show/hide the empty select option
- * @return string
- */
-	public function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = [], $showEmpty = true) {
+	/**
+	 * 和暦年
+	 *
+	 * @param string $fieldName Prefix name for the SELECT element
+	 * @param integer $minYear First year in sequence
+	 * @param integer $maxYear Last year in sequence
+	 * @param string $selected Option which is selected.
+	 * @param array $attributes Attribute array for the select elements.
+	 * @param boolean $showEmpty Show/hide the empty select option
+	 * @return string
+	 */
+	public function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = [], $showEmpty = true)
+	{
 
 		if ($this->freezed) {
 			if ((empty($selected) || $selected === true) && $value = $this->value($fieldName)) {
@@ -290,14 +296,15 @@ class BcFreezeHelper extends BcFormHelper {
 		}
 	}
 
-/**
- * チェックボックスを表示する
- * 
- * @param string $fieldName フィールド文字列
- * @param array $attributes html属性
- * @return string htmlタグ
- */
-	public function checkbox($fieldName, $attributes = []) {
+	/**
+	 * チェックボックスを表示する
+	 *
+	 * @param string $fieldName フィールド文字列
+	 * @param array $attributes html属性
+	 * @return string htmlタグ
+	 */
+	public function checkbox($fieldName, $attributes = [])
+	{
 
 		if ($this->freezed) {
 			$label = '';
@@ -311,14 +318,15 @@ class BcFreezeHelper extends BcFormHelper {
 		}
 	}
 
-/**
- * テキストエリアを表示する
- * 
- * @param string フィールド文字列
- * @param array html属性
- * @return string htmlタグ
- */
-	public function textarea($fieldName, $attributes = []) {
+	/**
+	 * テキストエリアを表示する
+	 *
+	 * @param string フィールド文字列
+	 * @param array html属性
+	 * @return string htmlタグ
+	 */
+	public function textarea($fieldName, $attributes = [])
+	{
 
 		if ($this->freezed) {
 			list($model, $field) = explode('.', $fieldName);
@@ -338,15 +346,16 @@ class BcFreezeHelper extends BcFormHelper {
 		}
 	}
 
-/**
- * ラジオボタンを表示する
- * 
- * @param string $fieldName フィールド文字列
- * @param array $options コントロールソース
- * @param array $attributes html属性
- * @return string htmlタグ
- */
-	public function radio($fieldName, $options = [], $attributes = []) {
+	/**
+	 * ラジオボタンを表示する
+	 *
+	 * @param string $fieldName フィールド文字列
+	 * @param array $options コントロールソース
+	 * @param array $attributes html属性
+	 * @return string htmlタグ
+	 */
+	public function radio($fieldName, $options = [], $attributes = [])
+	{
 
 		if ($this->freezed) {
 			return $this->freezeControll($fieldName, $options, $attributes);
@@ -355,14 +364,15 @@ class BcFreezeHelper extends BcFormHelper {
 		}
 	}
 
-/**
- * ファイルタグを出力
- * 
- * @param string $fieldName
- * @param array $options
- * @return string
- */
-	public function file($fieldName, $options = []) {
+	/**
+	 * ファイルタグを出力
+	 *
+	 * @param string $fieldName
+	 * @param array $options
+	 * @return string
+	 */
+	public function file($fieldName, $options = [])
+	{
 
 		if ($this->freezed) {
 			$value = $this->value($fieldName);
@@ -384,16 +394,17 @@ class BcFreezeHelper extends BcFormHelper {
 		}
 	}
 
-/**
- * ファイルコントロール（画像）を表示する
- * TODO 確認画面には未チェック
- * 
- * @param string $fieldName フィールド文字列
- * @param	array $attributes html属性
- * @param array $imageAttributes 画像属性
- * @return string htmlタグ
- */
-	public function image($fieldName, $attributes = [], $imageAttributes = []) {
+	/**
+	 * ファイルコントロール（画像）を表示する
+	 * TODO 確認画面には未チェック
+	 *
+	 * @param string $fieldName フィールド文字列
+	 * @param array $attributes html属性
+	 * @param array $imageAttributes 画像属性
+	 * @return string htmlタグ
+	 */
+	public function image($fieldName, $attributes = [], $imageAttributes = [])
+	{
 
 		if (!$attributes) {
 			$attributes = [];
@@ -401,7 +412,7 @@ class BcFreezeHelper extends BcFormHelper {
 
 		$output = "";
 		$imageAttributes = array_merge(['ext' => 'jpg', 'alt' => '', 'dir' => '', 'id' => ''], $imageAttributes);
-		
+
 		if (!empty($imageAttributes['subdir'])) {
 			$imageAttributes['subdir'] .= DS;
 		}
@@ -440,15 +451,16 @@ class BcFreezeHelper extends BcFormHelper {
 		}
 	}
 
-/**
- * TELボックスを表示する
- * 
- * @param string $fieldName フィールド文字列
- * @param array $attributes html属性
- * @return	string	htmlタグ
- * @access	public
- */
-	public function tel($fieldName, $attributes = []) {
+	/**
+	 * TELボックスを表示する
+	 *
+	 * @param string $fieldName フィールド文字列
+	 * @param array $attributes html属性
+	 * @return    string    htmlタグ
+	 * @access    public
+	 */
+	public function tel($fieldName, $attributes = [])
+	{
 
 		if ($this->freezed) {
 			list($model, $field) = explode('.', $fieldName);
@@ -469,16 +481,17 @@ class BcFreezeHelper extends BcFormHelper {
 		}
 	}
 
-/**
- * パスワードボックスを表示する
- * 
- * @param string $fieldName フィールド文字列
- * @param array $attributes html属性
- * - 凍結時に、valueはマスクして表示する。
- * @return	string	htmlタグ
- * @access	public
- */
-	public function password($fieldName, $attributes = []) {
+	/**
+	 * パスワードボックスを表示する
+	 *
+	 * @param string $fieldName フィールド文字列
+	 * @param array $attributes html属性
+	 * - 凍結時に、valueはマスクして表示する。
+	 * @return    string    htmlタグ
+	 * @access    public
+	 */
+	public function password($fieldName, $attributes = [])
+	{
 
 		if ($this->freezed) {
 			list($model, $field) = explode('.', $fieldName);
@@ -499,25 +512,26 @@ class BcFreezeHelper extends BcFormHelper {
 		}
 	}
 
-/**
- * JsonList
- * TODO 確認画面用の実装は全くしてない
- * 
- * @param string $fieldName フィールド文字列
- * @param array $attributes html属性
- * @return string	htmlタグ
- */
-	public function jsonList($fieldName, $attributes) {
+	/**
+	 * JsonList
+	 * TODO 確認画面用の実装は全くしてない
+	 *
+	 * @param string $fieldName フィールド文字列
+	 * @param array $attributes html属性
+	 * @return string    htmlタグ
+	 */
+	public function jsonList($fieldName, $attributes)
+	{
 
 		if ($this->freezed) {
 
 			$out = '';
 			if (!empty($this->request->data[$fieldName])) {
 				$out = '<div id="JsonTagView"><ul class="freezed">';
-				foreach ($this->request->data[$fieldName] as $tag) {
-					$out.='<li>' . $tag['name'] . '</li>';
+				foreach($this->request->data[$fieldName] as $tag) {
+					$out .= '<li>' . $tag['name'] . '</li>';
 				}
-				$out.='</ul></div>';
+				$out .= '</ul></div>';
 			}
 
 			return $out;
@@ -526,15 +540,16 @@ class BcFreezeHelper extends BcFormHelper {
 		}
 	}
 
-/**
- * カレンダーコントロール付きのテキストフィールド
- * jquery-ui-1.7.2 必須
- * 
- * @param string $fieldName フィールド文字列
- * @param array $attributes HTML属性
- * @return string html
- */
-	public function datepicker($fieldName, $attributes = []) {
+	/**
+	 * カレンダーコントロール付きのテキストフィールド
+	 * jquery-ui-1.7.2 必須
+	 *
+	 * @param string $fieldName フィールド文字列
+	 * @param array $attributes HTML属性
+	 * @return string html
+	 */
+	public function datepicker($fieldName, $attributes = [])
+	{
 
 		if ($this->freezed) {
 			list($model, $field) = explode('.', $fieldName);
@@ -554,14 +569,15 @@ class BcFreezeHelper extends BcFormHelper {
 		}
 	}
 
-/**
- * 凍結時用のコントロールを取得する
- * @param	string $fieldName フィールド文字列
- * @param	array	$options コントロールソース
- * @param	array	$attributes html属性
- * @return string htmlタグ
- */
-	public function freezeControll($fieldName, $options, $attributes = []) {
+	/**
+	 * 凍結時用のコントロールを取得する
+	 * @param string $fieldName フィールド文字列
+	 * @param array $options コントロールソース
+	 * @param array $attributes html属性
+	 * @return string htmlタグ
+	 */
+	public function freezeControll($fieldName, $options, $attributes = [])
+	{
 
 		$attributes = array_merge(['class' => ''], $attributes);
 		unset($attributes["separator"]);
@@ -593,7 +609,7 @@ class BcFreezeHelper extends BcFormHelper {
 			// HABTAM
 			if (!empty($attributes["multiple"]) && $attributes["multiple"] !== 'checkbox') {
 				$_value = "";
-				foreach ($value as $data) {
+				foreach($value as $data) {
 					if (isset($data['id']) && isset($options[$data['id']])) {
 						$_value .= sprintf($this->Html->_tags['li'], null, $options[$data['id']]);
 					}
@@ -606,7 +622,7 @@ class BcFreezeHelper extends BcFormHelper {
 			} elseif (!empty($attributes["multiple"]) && $attributes["multiple"] === 'checkbox') {
 
 				$_value = "";
-				foreach ($value as $key => $data) {
+				foreach($value as $key => $data) {
 					if (isset($options[$data])) {
 						$_value .= sprintf($this->Html->_tags['li'], null, $options[$data]);
 					}

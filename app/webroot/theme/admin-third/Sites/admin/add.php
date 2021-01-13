@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 4.0.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 4.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -32,10 +32,10 @@ $this->BcBaser->js('admin/sites/edit', false);
 
 <div class="submit bca-actions">
 	<?php echo $this->BcForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn',
-    'data-bca-btn-type' => 'save',
-    'data-bca-btn-size' => 'lg',
-    'data-bca-btn-width' => 'lg',
-  ]) ?>
+		'data-bca-btn-type' => 'save',
+		'data-bca-btn-size' => 'lg',
+		'data-bca-btn-width' => 'lg',
+	]) ?>
 </div>
 <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), ['plugin' => '', 'admin' => true, 'controller' => 'sites', 'action' => 'index'], ['class' => 'button bca-btn', 'data-bca-btn-type' => 'back-to-list']) ?>
 

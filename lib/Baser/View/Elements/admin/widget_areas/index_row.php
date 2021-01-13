@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -27,6 +27,6 @@
 	<td><?php echo $data['WidgetArea']['id']; ?></td>
 	<td><?php $this->BcBaser->link($data['WidgetArea']['name'], ['action' => 'edit', $data['WidgetArea']['id']], ['escape' => true]); ?></td>
 	<td><?php echo $data['WidgetArea']['count']; ?></td>
-	<td><?php echo $this->BcTime->format('Y-m-d', $data['WidgetArea']['created']); ?><br />
+	<td><?php echo $this->BcTime->format('Y-m-d', $data['WidgetArea']['created']); ?><br/>
 		<?php echo $this->BcTime->format('Y-m-d', $data['WidgetArea']['modified']); ?></td>
 </tr>

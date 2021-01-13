@@ -28,15 +28,15 @@
 		<div id="Copyright">
 			<address>Copyright &copy; <a href="http://komomo.biz/" target="_blank">小桃</a><a href="http://clipdesign.jp/" target="_blank">クリップ</a> Allrights Reserved.</address>
 			<p id="PowerdBy" class="ta-center">
-				<a href="http://basercms.net/" target="_blank"><?php $this->BcBaser->img('baser.power.gif', array('alt' => 'baserCMS : Based Website Development Project')); ?></a>
-				&nbsp; 
+				<a href="https://basercms.net/" target="_blank"><?php $this->BcBaser->img('baser.power.gif', array('alt' => 'baserCMS : Based Website Development Project')); ?></a>
+				&nbsp;
 				<a href="http://cakephp.org/" target="_blank"><?php $this->BcBaser->img('cake.power.gif', array('alt' => 'CakePHP(tm) : Rapid Development Framework')); ?></a>
-				&nbsp; 
+				&nbsp;
 				<a href="http://clipdesign.jp/" target="_blank"><?php $this->BcBaser->img('footer/clip.gif', array('alt' => 'clipdesign')); ?></a>
-				&nbsp; 
-				<a href="http://komomo.biz/" target="_blank"><?php $this->BcBaser->img('footer/komomo.gif', array('alt' => '小桃デザイン')); ?></a>&nbsp; 
+				&nbsp;
+				<a href="http://komomo.biz/" target="_blank"><?php $this->BcBaser->img('footer/komomo.gif', array('alt' => '小桃デザイン')); ?></a>&nbsp;
 			</p>
 		</div>
-		
+
 	</div>
 </footer>

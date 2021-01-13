@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -19,5 +19,5 @@ echo $this->BcForm->hidden($key . '.cache', ['value' => true]);
 ?>
 
 
-<br />
-<small><?php echo __d('baser', 'タイトルを表示する場合、カテゴリ名を表示します。')?></small>
+<br/>
+<small><?php echo __d('baser', 'タイトルを表示する場合、カテゴリ名を表示します。') ?></small>

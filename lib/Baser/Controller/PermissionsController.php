@@ -1,63 +1,67 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
+ * Class PermissionsController
+ *
  * アクセス制限設定コントローラー
  *
  * @package Baser.Controller
  */
-class PermissionsController extends AppController {
+class PermissionsController extends AppController
+{
 
-/**
- * クラス名
- *
- * @var string
- */
+	/**
+	 * クラス名
+	 *
+	 * @var string
+	 */
 	public $name = 'Permissions';
 
-/**
- * モデル
- *
- * @var array
- */
+	/**
+	 * モデル
+	 *
+	 * @var array
+	 */
 	public $uses = ['Permission'];
 
-/**
- * コンポーネント
- *
- * @var array
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
-/**
- * ヘルパ
- *
- * @var array
- */
+	/**
+	 * ヘルパ
+	 *
+	 * @var array
+	 */
 	public $helpers = ['BcTime', 'BcFreeze'];
 
-/**
- * サブメニューエレメント
- *
- * @var array
- */
+	/**
+	 * サブメニューエレメント
+	 *
+	 * @var array
+	 */
 	public $subMenuElements = ['site_configs', 'users', 'permissions'];
 
-/**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
+	/**
+	 * beforeFilter
+	 *
+	 * @return void
+	 */
+	public function beforeFilter()
+	{
 		parent::beforeFilter();
 		$this->crumbs = [
 			['name' => __d('baser', 'ユーザー管理'), 'url' => ['controller' => 'users', 'action' => 'index']],
@@ -66,17 +70,18 @@ class PermissionsController extends AppController {
 		if ($this->request->params['prefix'] === 'admin') {
 			$this->set('usePermission', true);
 		}
-		if(!$this->request->is('ajax')) {
+		if (!$this->request->is('ajax')) {
 			$this->crumbs[] = ['name' => __d('baser', 'アクセス制限設定管理'), 'url' => ['controller' => 'permissions', 'action' => 'index', $this->request->params['pass'][0]]];
 		}
 	}
 
-/**
- * アクセス制限設定の一覧を表示する
- *
- * @return void
- */
-	public function admin_index($userGroupId = null) {
+	/**
+	 * アクセス制限設定の一覧を表示する
+	 *
+	 * @return void
+	 */
+	public function admin_index($userGroupId = null)
+	{
 		/* セッション処理 */
 		if (!$userGroupId) {
 			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
@@ -88,7 +93,7 @@ class PermissionsController extends AppController {
 		$conditions = $this->_createAdminIndexConditions($userGroupId);
 		$datas = $this->Permission->find('all', ['conditions' => $conditions, 'order' => 'Permission.sort']);
 		if ($datas) {
-			foreach ($datas as $key => $data) {
+			foreach($datas as $key => $data) {
 				$datas[$key]['Permission']['url'] = preg_replace('/^\/admin\//', '/' . Configure::read('Routing.prefixes.0') . '/', $data['Permission']['url']);
 			}
 		}
@@ -106,21 +111,23 @@ class PermissionsController extends AppController {
 		$this->help = 'permissions_index';
 	}
 
-/**
- * 一覧の表示用データをセットする
- *
- * @return void
- */
-	protected function _setAdminIndexViewData() {
+	/**
+	 * 一覧の表示用データをセットする
+	 *
+	 * @return void
+	 */
+	protected function _setAdminIndexViewData()
+	{
 		$this->set('sortmode', $this->passedArgs['sortmode']);
 	}
 
-/**
- * [ADMIN] 登録処理
- *
- * @return void
- */
-	public function admin_add($userGroupId) {
+	/**
+	 * [ADMIN] 登録処理
+	 *
+	 * @return void
+	 */
+	public function admin_add($userGroupId)
+	{
 		$userGroup = $this->Permission->UserGroup->find('first', ['conditions' => ['UserGroup.id' => $userGroupId],
 			'fields' => ['id', 'title'],
 			'order' => 'UserGroup.id ASC', 'recursive' => -1]);
@@ -161,12 +168,13 @@ class PermissionsController extends AppController {
 		$this->render('form');
 	}
 
-/**
- * [ADMIN] 登録処理
- *
- * @return void
- */
-	public function admin_ajax_add() {
+	/**
+	 * [ADMIN] 登録処理
+	 *
+	 * @return void
+	 */
+	public function admin_ajax_add()
+	{
 		if (!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 			exit;
@@ -192,13 +200,14 @@ class PermissionsController extends AppController {
 		exit();
 	}
 
-/**
- * [ADMIN] 編集処理
- *
- * @param int $id
- * @return void
- */
-	public function admin_edit($userGroupId, $id) {
+	/**
+	 * [ADMIN] 編集処理
+	 *
+	 * @param int $id
+	 * @return void
+	 */
+	public function admin_edit($userGroupId, $id)
+	{
 		/* 除外処理 */
 		if (!$userGroupId || !$id) {
 			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
@@ -242,9 +251,10 @@ class PermissionsController extends AppController {
 	 * @param $ids
 	 * @return boolean
 	 */
-	protected function _batch_del($ids) {
+	protected function _batch_del($ids)
+	{
 		if ($ids) {
-			foreach ($ids as $id) {
+			foreach($ids as $id) {
 				// メッセージ用にデータを取得
 				$post = $this->Permission->read(null, $id);
 				/* 削除処理 */
@@ -256,13 +266,14 @@ class PermissionsController extends AppController {
 		return true;
 	}
 
-/**
- * [ADMIN] 削除処理　(ajax)
- *
- * @param int $id
- * @return void
- */
-	public function admin_ajax_delete($id = null) {
+	/**
+	 * [ADMIN] 削除処理　(ajax)
+	 *
+	 * @param int $id
+	 * @return void
+	 */
+	public function admin_ajax_delete($id = null)
+	{
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
@@ -280,13 +291,14 @@ class PermissionsController extends AppController {
 		exit();
 	}
 
-/**
- * [ADMIN] 削除処理
- *
- * @param int $id
- * @return void
- */
-	public function admin_delete($userGroupId, $id = null) {
+	/**
+	 * [ADMIN] 削除処理
+	 *
+	 * @param int $id
+	 * @return void
+	 */
+	public function admin_delete($userGroupId, $id = null)
+	{
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
@@ -318,7 +330,8 @@ class PermissionsController extends AppController {
 	 * @param $userGroupId
 	 * @return void
 	 */
-	public function admin_ajax_update_sort($userGroupId) {
+	public function admin_ajax_update_sort($userGroupId)
+	{
 		if (!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 			exit;
@@ -338,7 +351,8 @@ class PermissionsController extends AppController {
 	 * @param $userGroupId
 	 * @return array
 	 */
-	protected function _createAdminIndexConditions($userGroupId) {
+	protected function _createAdminIndexConditions($userGroupId)
+	{
 		/* 条件を生成 */
 		$conditions = [];
 		if ($userGroupId) {
@@ -348,13 +362,14 @@ class PermissionsController extends AppController {
 		return $conditions;
 	}
 
-/**
- * [ADMIN] データコピー（AJAX）
- *
- * @param int $id
- * @return void
- */
-	public function admin_ajax_copy($userGroupId, $id) {
+	/**
+	 * [ADMIN] データコピー（AJAX）
+	 *
+	 * @param int $id
+	 * @return void
+	 */
+	public function admin_ajax_copy($userGroupId, $id)
+	{
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -381,7 +396,8 @@ class PermissionsController extends AppController {
 	 * @param $id
 	 * @return void
 	 */
-	public function admin_ajax_unpublish($id) {
+	public function admin_ajax_unpublish($id)
+	{
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -399,7 +415,8 @@ class PermissionsController extends AppController {
 	 * @param $id
 	 * @return void
 	 */
-	public function admin_ajax_publish($id) {
+	public function admin_ajax_publish($id)
+	{
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -412,44 +429,47 @@ class PermissionsController extends AppController {
 		exit(true);
 	}
 
-/**
- * 一括公開
- *
- * @param array $ids
- * @return boolean
- */
-	protected function _batch_publish($ids) {
+	/**
+	 * 一括公開
+	 *
+	 * @param array $ids
+	 * @return boolean
+	 */
+	protected function _batch_publish($ids)
+	{
 		if ($ids) {
-			foreach ($ids as $id) {
+			foreach($ids as $id) {
 				$this->_changeStatus($id, true);
 			}
 		}
 		return true;
 	}
 
-/**
- * 一括非公開
- *
- * @param array $ids
- * @return boolean
- */
-	protected function _batch_unpublish($ids) {
+	/**
+	 * 一括非公開
+	 *
+	 * @param array $ids
+	 * @return boolean
+	 */
+	protected function _batch_unpublish($ids)
+	{
 		if ($ids) {
-			foreach ($ids as $id) {
+			foreach($ids as $id) {
 				$this->_changeStatus($id, false);
 			}
 		}
 		return true;
 	}
 
-/**
- * ステータスを変更する
- *
- * @param int $id
- * @param boolean $status
- * @return boolean
- */
-	protected function _changeStatus($id, $status) {
+	/**
+	 * ステータスを変更する
+	 *
+	 * @param int $id
+	 * @param boolean $status
+	 * @return boolean
+	 */
+	protected function _changeStatus($id, $status)
+	{
 		$statusTexts = [0 => __d('baser', '無効'), 1 => __d('baser', '有効')];
 		$data = $this->Permission->find('first', ['conditions' => ['Permission.id' => $id], 'recursive' => -1]);
 		$data['Permission']['status'] = $status;

@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Console.Command
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Console.Command
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('TestShell', 'Console/Command');
@@ -16,25 +16,26 @@ App::uses('BaserTestSuiteCommand', 'TestSuite');
 App::uses('BaserTestLoader', 'TestSuite');
 
 /**
- * Provides a CakePHP wrapper around PHPUnit.
- * Adds in CakePHP's fixtures and gives access to plugin, app and core test cases
+ * Class BaserTestShell
  *
- * @package       Baser.Console.Command
+ * @package Baser.Console.Command
  */
-class BaserTestShell extends TestShell {
+class BaserTestShell extends TestShell
+{
 
-/**
- * Initialization method installs PHPUnit and loads all plugins
- *
- * @return void
- * @throws Exception
- */
-	public function initialize() {
+	/**
+	 * Initialization method installs PHPUnit and loads all plugins
+	 *
+	 * @return void
+	 * @throws Exception
+	 */
+	public function initialize()
+	{
 		// CUSTOMIZE ADD 2016/08/28 ryuring
 		// >>>
 		$currentTheme = Configure::read('BcSite.theme');
 		$testTheme = Configure::read('BcApp.testTheme');
-		if($currentTheme != $testTheme) {
+		if ($currentTheme != $testTheme) {
 			trigger_error(sprintf(__d('baser', 'CLIでのユニットテストは、%s テーマを利用する前提となっています。再インストール後にユニットテストを実行してください。'), $testTheme), E_USER_ERROR);
 			exit();
 		}
@@ -46,12 +47,13 @@ class BaserTestShell extends TestShell {
 		}
 	}
 
-/**
- * Parse the CLI options into an array CakeTestDispatcher can use.
- *
- * @return array Array of params for CakeTestDispatcher
- */
-	protected function _parseArgs() {
+	/**
+	 * Parse the CLI options into an array CakeTestDispatcher can use.
+	 *
+	 * @return array Array of params for CakeTestDispatcher
+	 */
+	protected function _parseArgs()
+	{
 		if (empty($this->args)) {
 			return;
 		}
@@ -86,14 +88,15 @@ class BaserTestShell extends TestShell {
 		return $params;
 	}
 
-/**
- * Runs the test case from $runnerArgs
- *
- * @param array $runnerArgs list of arguments as obtained from _parseArgs()
- * @param array $options list of options as constructed by _runnerOptions()
- * @return void
- */
-	protected function _run($runnerArgs, $options = []) {
+	/**
+	 * Runs the test case from $runnerArgs
+	 *
+	 * @param array $runnerArgs list of arguments as obtained from _parseArgs()
+	 * @param array $options list of options as constructed by _runnerOptions()
+	 * @return void
+	 */
+	protected function _run($runnerArgs, $options = [])
+	{
 		restore_error_handler();
 		restore_error_handler();
 
@@ -101,12 +104,13 @@ class BaserTestShell extends TestShell {
 		$testCli->run($options);
 	}
 
-/**
- * Shows a list of available test cases and gives the option to run one of them
- *
- * @return void
- */
-	public function available() {
+	/**
+	 * Shows a list of available test cases and gives the option to run one of them
+	 *
+	 * @return void
+	 */
+	public function available()
+	{
 		$params = $this->_parseArgs();
 		$testCases = BaserTestLoader::generateTestList($params);
 		$baser = $params['baser'];
@@ -134,14 +138,14 @@ class BaserTestShell extends TestShell {
 		$this->out($title);
 		$i = 1;
 		$cases = [];
-		foreach ($testCases as $testCaseFile => $testCase) {
+		foreach($testCases as $testCaseFile => $testCase) {
 			$case = str_replace('Test.php', '', $testCase);
 			$this->out("[$i] $case");
 			$cases[$i] = $case;
 			$i++;
 		}
 
-		while ($choice = $this->in(__d('baser', '何のテストケースを実行したいですか？'), null, 'q')) {
+		while($choice = $this->in(__d('baser', '何のテストケースを実行したいですか？'), null, 'q')) {
 			if (is_numeric($choice) && isset($cases[$choice])) {
 				$this->args[0] = $category;
 				$this->args[1] = $cases[$choice];
@@ -162,16 +166,17 @@ class BaserTestShell extends TestShell {
 		}
 	}
 
-/**
- * Find the test case for the passed file. The file could itself be a test.
- *
- * @param string $file
- * @param string $category 
- * @param boolean $throwOnMissingFile 
- * @return array(type, case)
- * @throws Exception
- */
-	protected function _mapFileToCase($file, $category, $throwOnMissingFile = true) {
+	/**
+	 * Find the test case for the passed file. The file could itself be a test.
+	 *
+	 * @param string $file
+	 * @param string $category
+	 * @param boolean $throwOnMissingFile
+	 * @return array(type, case)
+	 * @throws Exception
+	 */
+	protected function _mapFileToCase($file, $category, $throwOnMissingFile = true)
+	{
 		if (!$category || (substr($file, -4) !== '.php')) {
 			return false;
 		}
@@ -219,7 +224,7 @@ class BaserTestShell extends TestShell {
 			}
 
 			return $testCase;
-		// CUSTOMIZE ADD
+			// CUSTOMIZE ADD
 		} elseif ($category === 'baser') {
 			$testCase = str_replace(DS, '/', $file);
 			$testCase = preg_replace('@.*lib/Baser/@', '', $file);
@@ -229,7 +234,7 @@ class BaserTestShell extends TestShell {
 				throw new Exception(__d('cake_dev', 'Test case %s not found', $testFile));
 			}
 			return $testCase;
-		// <<<
+			// <<<
 		}
 
 
@@ -253,13 +258,14 @@ class BaserTestShell extends TestShell {
 		return $testCase;
 	}
 
-/**
- * For the given file, what category of test is it? returns app, core or the name of the plugin
- *
- * @param string $file
- * @return string
- */
-	protected function _mapFileToCategory($file) {
+	/**
+	 * For the given file, what category of test is it? returns app, core or the name of the plugin
+	 *
+	 * @param string $file
+	 * @return string
+	 */
+	protected function _mapFileToCategory($file)
+	{
 		$_file = realpath($file);
 		if ($_file) {
 			$file = $_file;
@@ -276,12 +282,13 @@ class BaserTestShell extends TestShell {
 		return 'app';
 	}
 
-/**
- * Main entry point to this shell
- *
- * @return void
- */
-	public function main() {
+	/**
+	 * Main entry point to this shell
+	 *
+	 * @return void
+	 */
+	public function main()
+	{
 
 		// CUSTOMIZE MODIFY 2016/08/06 ryuring
 		// >>>
@@ -289,7 +296,7 @@ class BaserTestShell extends TestShell {
 		// ---
 		$this->out(__d('baser', 'baserCMS テストシェル'));
 		// <<<
-		
+
 		$this->hr();
 		$args = $this->_parseArgs();
 
@@ -300,25 +307,26 @@ class BaserTestShell extends TestShell {
 		$this->_run($args, $this->_runnerOptions());
 	}
 
-/**
- * Displays a header for the shell
- *
- * @return void
- */
-	protected function _welcome() {
+	/**
+	 * Displays a header for the shell
+	 *
+	 * @return void
+	 */
+	protected function _welcome()
+	{
 		$this->out();
-		
+
 		// CUSTOMIZE MODIFY 2016/08/06 ryuring
 		// >>>
 		//$this->out(__d('cake_console', '<info>Welcome to CakePHP %s Console</info>', 'v' . Configure::version()));
 		// ---
 		$this->out(__d('baser', '<info>baserCMS %s コンソールへようこそ</info>', 'v' . getVersion()));
 		// <<<
-		
+
 		$this->hr();
 		$this->out(__d('cake_console', 'App : %s', APP_DIR));
 		$this->out(__d('cake_console', 'Path: %s', APP));
 		$this->hr();
 	}
-	
+
 }

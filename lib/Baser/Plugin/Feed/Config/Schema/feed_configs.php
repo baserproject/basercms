@@ -2,7 +2,8 @@
 
 /* FeedConfigs schema generated on: 2010-11-04 18:11:12 : 1288863012 */
 
-class FeedConfigsSchema extends CakeSchema {
+class FeedConfigsSchema extends CakeSchema
+{
 
 	public $name = 'FeedConfigs';
 
@@ -10,24 +11,26 @@ class FeedConfigsSchema extends CakeSchema {
 
 	public $connection = 'default';
 
-	public function before($event = array()) {
+	public function before($event = [])
+	{
 		return true;
 	}
 
-	public function after($event = array()) {
+	public function after($event = [])
+	{
 	}
 
-	public $feed_configs = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'),
-		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
-		'feed_title_index' => array('type' => 'string', 'null' => true, 'default' => null),
-		'category_index' => array('type' => 'string', 'null' => true, 'default' => null),
-		'template' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
-		'display_number' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 3),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci')
-	);
+	public $feed_configs = [
+		'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'],
+		'name' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 50],
+		'feed_title_index' => ['type' => 'string', 'null' => true, 'default' => null],
+		'category_index' => ['type' => 'string', 'null' => true, 'default' => null],
+		'template' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 50],
+		'display_number' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 3],
+		'created' => ['type' => 'datetime', 'null' => true, 'default' => null],
+		'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
+		'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
+		'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci']
+	];
 
 }

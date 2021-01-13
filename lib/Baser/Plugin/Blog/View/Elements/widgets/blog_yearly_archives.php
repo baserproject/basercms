@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -35,7 +35,7 @@ if ($limit) {
 if ($view_count) {
 	$actionUrl .= '/1';
 } else {
-	$actionUrl .= '/0';	
+	$actionUrl .= '/0';
 }
 
 $data = $this->requestAction($actionUrl, ['entityId' => $id]);
@@ -51,7 +51,7 @@ $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/';
 	<?php endif ?>
 	<?php if (!empty($postedDates)): ?>
 		<ul>
-			<?php foreach ($postedDates as $postedDate): ?>
+			<?php foreach($postedDates as $postedDate): ?>
 				<?php if (isset($this->params['named']['year']) && $this->params['named']['year'] == $postedDate['year']): ?>
 					<?php $class = ' class="selected"' ?>
 				<?php elseif ($this->request->url == $baseCurrentUrl . $postedDate['year']): ?>

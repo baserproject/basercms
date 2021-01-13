@@ -1,53 +1,56 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Model
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Model
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
+ * Class Permission
  * パーミッションモデル
  *
  * @package Baser.Model
  */
-class Permission extends AppModel {
+class Permission extends AppModel
+{
 
-/**
- * ビヘイビア
- * 
- * @var array
- */
+	/**
+	 * ビヘイビア
+	 *
+	 * @var array
+	 */
 	public $actsAs = ['BcCache'];
 
-/**
- * belongsTo
- * @var array
- */
-	public $belongsTo = ['UserGroup' => [ 'className' => 'UserGroup',
-			'foreignKey' => 'user_group_id']];
+	/**
+	 * belongsTo
+	 * @var array
+	 */
+	public $belongsTo = ['UserGroup' => ['className' => 'UserGroup',
+		'foreignKey' => 'user_group_id']];
 
-/**
- * permissionsTmp
- * ログインしているユーザーの拒否URLリスト
- * キャッシュ用
- * 
- * @var mixed
- */
+	/**
+	 * permissionsTmp
+	 * ログインしているユーザーの拒否URLリスト
+	 * キャッシュ用
+	 *
+	 * @var mixed
+	 */
 	public $permissionsTmp = -1;
 
-/**
- * Permission constructor.
- *
- * @param bool $id
- * @param null $table
- * @param null $ds
- */
-	public function __construct($id = false, $table = null, $ds = null) {
+	/**
+	 * Permission constructor.
+	 *
+	 * @param bool $id
+	 * @param null $table
+	 * @param null $ds
+	 */
+	public function __construct($id = false, $table = null, $ds = null)
+	{
 		parent::__construct($id, $table, $ds);
 		$this->validate = [
 			'name' => [
@@ -62,13 +65,14 @@ class Permission extends AppModel {
 		];
 	}
 
-/**
- * 権限の必要なURLかチェックする
- *
- * @param array $check チェックするURL
- * @return boolean True if the operation should continue, false if it should abort
- */
-	public function checkUrl($check) {
+	/**
+	 * 権限の必要なURLかチェックする
+	 *
+	 * @param array $check チェックするURL
+	 * @return boolean True if the operation should continue, false if it should abort
+	 */
+	public function checkUrl($check)
+	{
 		if (!$check[key($check)]) {
 			return true;
 		}
@@ -95,13 +99,14 @@ class Permission extends AppModel {
 		return true;
 	}
 
-/**
- * 認証プレフィックスを取得する
- *
- * @param int $id PermissionのID
- * @return string
- */
-	public function getAuthPrefix($id) {
+	/**
+	 * 認証プレフィックスを取得する
+	 *
+	 * @param int $id PermissionのID
+	 * @return string
+	 */
+	public function getAuthPrefix($id)
+	{
 		$data = $this->find('first', [
 			'conditions' => ['Permission.id' => $id],
 			'recursive' => 1
@@ -113,23 +118,25 @@ class Permission extends AppModel {
 		}
 	}
 
-/**
- * 初期値を取得する
- * @return array
- */
-	public function getDefaultValue() {
+	/**
+	 * 初期値を取得する
+	 * @return array
+	 */
+	public function getDefaultValue()
+	{
 		$data['Permission']['auth'] = 0;
 		$data['Permission']['status'] = 1;
 		return $data;
 	}
 
-/**
- * コントロールソースを取得する
- *
- * @param string フィールド名
- * @return array コントロールソース
- */
-	public function getControlSource($field = null) {
+	/**
+	 * コントロールソースを取得する
+	 *
+	 * @param string フィールド名
+	 * @return array コントロールソース
+	 */
+	public function getControlSource($field = null)
+	{
 		$controlSources['user_group_id'] = $this->UserGroup->find('list', ['conditions' => ['UserGroup.id <>' => Configure::read('BcApp.adminGroupId')]]);
 		$controlSources['auth'] = ['0' => __d('baser', '不可'), '1' => __d('baser', '可')];
 		if (isset($controlSources[$field])) {
@@ -139,14 +146,15 @@ class Permission extends AppModel {
 		}
 	}
 
-/**
- * beforeSave
- * urlの先頭に / を付けて絶対パスにする
- * 
- * @param array $options
- * @return boolean
- */
-	public function beforeSave($options = []) {
+	/**
+	 * beforeSave
+	 * urlの先頭に / を付けて絶対パスにする
+	 *
+	 * @param array $options
+	 * @return boolean
+	 */
+	public function beforeSave($options = [])
+	{
 		if (isset($this->data['Permission'])) {
 			$data = $this->data['Permission'];
 		} else {
@@ -161,18 +169,19 @@ class Permission extends AppModel {
 		return true;
 	}
 
-/**
- * 権限チェックを行う
- * 
- * @param array $url
- * @param string $userGroupId
- * @return boolean
- */
-	public function check($url, $userGroupId) {
-		if($userGroupId == Configure::read('BcApp.adminGroupId')) {
+	/**
+	 * 権限チェックを行う
+	 *
+	 * @param array $url
+	 * @param string $userGroupId
+	 * @return boolean
+	 */
+	public function check($url, $userGroupId)
+	{
+		if ($userGroupId == Configure::read('BcApp.adminGroupId')) {
 			return true;
 		}
-		
+
 		$this->setCheck($userGroupId);
 		$permissions = $this->permissionsTmp;
 
@@ -196,14 +205,14 @@ class Permission extends AppModel {
 			$allows[] = '/^admin\/users\/edit\/' . $_SESSION['Auth'][$sessionKey]['id'] . '$/';
 		}
 
-		foreach ($allows as $allow) {
+		foreach($allows as $allow) {
 			if (preg_match($allow, $url)) {
 				return true;
 			}
 		}
 
 		$ret = true;
-		foreach ($permissions as $permission) {
+		foreach($permissions as $permission) {
 			if (!$permission['Permission']['status']) {
 				continue;
 			}
@@ -220,17 +229,18 @@ class Permission extends AppModel {
 				$ret = $permission['Permission']['auth'];
 			}
 		}
-		return (boolean) $ret;
+		return (boolean)$ret;
 	}
 
-/**
- * アクセス制限データをコピーする
- * 
- * @param int $id
- * @param array $data
- * @return mixed UserGroup Or false
- */
-	public function copy($id, $data = []) {
+	/**
+	 * アクセス制限データをコピーする
+	 *
+	 * @param int $id
+	 * @param array $data
+	 * @return mixed UserGroup Or false
+	 */
+	public function copy($id, $data = [])
+	{
 		if ($id) {
 			$data = $this->find('first', ['conditions' => ['Permission.id' => $id], 'recursive' => -1]);
 		}
@@ -260,12 +270,13 @@ class Permission extends AppModel {
 		}
 	}
 
-/**
- * 権限チェックの準備をする
- * 
- * @param $userGroupId
- */
-	public function setCheck($userGroupId) {
+	/**
+	 * 権限チェックの準備をする
+	 *
+	 * @param $userGroupId
+	 */
+	public function setCheck($userGroupId)
+	{
 		if ($this->permissionsTmp === -1) {
 			$conditions = ['Permission.user_group_id' => $userGroupId];
 			$permissions = $this->find('all', [
@@ -282,13 +293,14 @@ class Permission extends AppModel {
 		}
 	}
 
-/**
- * 権限チェック対象を追加する
- * 
- * @param string $url
- * @param bool $auth
- */
-	public function addCheck($url, $auth) {
+	/**
+	 * 権限チェック対象を追加する
+	 *
+	 * @param string $url
+	 * @param bool $auth
+	 */
+	public function addCheck($url, $auth)
+	{
 		$this->setCheck(BcUtil::loginUser('admin')['user_group_id']);
 		$this->permissionsTmp[] = [
 			'Permission' => [

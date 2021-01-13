@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Blog.Controller
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('Xml', 'Utility');
@@ -21,62 +21,64 @@ App::uses('Xml', 'Utility');
  * @property BlogContent $BlogContent
  * @property BcContentsComponent $BcContents
  */
-class BlogPostsController extends BlogAppController {
+class BlogPostsController extends BlogAppController
+{
 
-/**
- * クラス名
- *
- * @var string
- */
+	/**
+	 * クラス名
+	 *
+	 * @var string
+	 */
 	public $name = 'BlogPosts';
 
-/**
- * モデル
- *
- * @var array
- */
+	/**
+	 * モデル
+	 *
+	 * @var array
+	 */
 	public $uses = ['Blog.BlogPost', 'Blog.BlogCategory', 'Blog.BlogContent'];
 
-/**
- * ヘルパー
- *
- * @var array
- */
+	/**
+	 * ヘルパー
+	 *
+	 * @var array
+	 */
 	public $helpers = ['Blog.Blog'];
 
-/**
- * コンポーネント
- *
- * @var array
- * @deprecated useViewCache 5.0.0 since 4.0.0
- * 	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 * @deprecated useViewCache 5.0.0 since 4.0.0
+	 *    CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
+	 */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['type' => 'Blog.BlogContent']];
 
-/**
- * サブメニューエレメント
- *
- * @var array
- */
+	/**
+	 * サブメニューエレメント
+	 *
+	 * @var array
+	 */
 	public $subMenuElements = [];
 
-/**
- * ブログコンテンツデータ
- *
- * @var array
- */
+	/**
+	 * ブログコンテンツデータ
+	 *
+	 * @var array
+	 */
 	public $blogContent;
 
-/**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
+	/**
+	 * beforeFilter
+	 *
+	 * @return void
+	 */
+	public function beforeFilter()
+	{
 		parent::beforeFilter();
 		if (isset($this->request->params['pass'][0])) {
 			$content = $this->BcContents->getContent($this->request->params['pass'][0]);
-			if(!$content) {
+			if (!$content) {
 				$this->notFound();
 			}
 			$this->request->params['Content'] = $content['Content'];
@@ -94,23 +96,25 @@ class BlogPostsController extends BlogAppController {
 		}
 	}
 
-/**
- * beforeRender
- *
- * @return void
- */
-	public function beforeRender() {
+	/**
+	 * beforeRender
+	 *
+	 * @return void
+	 */
+	public function beforeRender()
+	{
 		parent::beforeRender();
 		$this->set('blogContent', $this->blogContent);
 	}
 
-/**
- * [ADMIN] 一覧表示
- *
- * @param int $blogContentId
- * @return void
- */
-	public function admin_index($blogContentId) {
+	/**
+	 * [ADMIN] 一覧表示
+	 *
+	 * @param int $blogContentId
+	 * @return void
+	 */
+	public function admin_index($blogContentId)
+	{
 		if (!$blogContentId || !$this->blogContent) {
 			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->redirect(['plugin' => '', 'controller' => 'contents', 'action' => 'index']);
@@ -138,7 +142,7 @@ class BlogPostsController extends BlogAppController {
 					'alias' => 'BlogTag',
 					'type' => 'inner',
 					'conditions' => ['BlogTag.id = BlogPostsBlogTag.blog_tag_id', 'BlogTag.id' => $this->request->data['BlogPost']['blog_tag_id']]
-			]];
+				]];
 		}
 
 		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->request->data);
@@ -161,7 +165,7 @@ class BlogPostsController extends BlogAppController {
 			'options' => $options
 		]);
 		if ($event !== false) {
-			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+			$options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
 		}
 
 		$this->BlogPost->BlogContent->unbindModel(['hasMany' => ['BlogPost', 'BlogCategory']]);
@@ -186,12 +190,13 @@ class BlogPostsController extends BlogAppController {
 		$this->help = 'blog_posts_index';
 	}
 
-/**
- * 一覧の表示用データをセットする
- * 
- * @return void
- */
-	protected function _setAdminIndexViewData() {
+	/**
+	 * 一覧の表示用データをセットする
+	 *
+	 * @return void
+	 */
+	protected function _setAdminIndexViewData()
+	{
 		$user = $this->BcAuth->user();
 		$allowOwners = [];
 		if (!empty($user)) {
@@ -201,14 +206,15 @@ class BlogPostsController extends BlogAppController {
 		$this->set('users', $this->BlogPost->User->getUserList());
 	}
 
-/**
- * ページ一覧用の検索条件を生成する
- *
- * @param int $blogContentId
- * @param array $data
- * @return array $conditions
- */
-	protected function _createAdminIndexConditions($blogContentId, $data) {
+	/**
+	 * ページ一覧用の検索条件を生成する
+	 *
+	 * @param int $blogContentId
+	 * @param array $data
+	 * @return array $conditions
+	 */
+	protected function _createAdminIndexConditions($blogContentId, $data)
+	{
 		unset($data['ListTool']);
 		$name = $blogCategoryId = '';
 		if (isset($data['BlogPost']['name'])) {
@@ -249,7 +255,7 @@ class BlogPostsController extends BlogAppController {
 			$blogCategoryIds = [$blogCategoryId];
 			$children = $this->BlogCategory->children($blogCategoryId);
 			if ($children) {
-				foreach ($children as $child) {
+				foreach($children as $child) {
 					$blogCategoryIds[] = $child['BlogCategory']['id'];
 				}
 			}
@@ -258,10 +264,10 @@ class BlogPostsController extends BlogAppController {
 			unset($data['BlogPost']['blog_category_id']);
 		}
 
-		if(isset($data['BlogPost']['status'])) {
+		if (isset($data['BlogPost']['status'])) {
 			$conditions['BlogPost.status'] = $data['BlogPost']['status'];
 		}
-		if(isset($data['BlogPost']['user_id'])) {
+		if (isset($data['BlogPost']['user_id'])) {
 			$conditions['BlogPost.user_id'] = $data['BlogPost']['user_id'];
 		}
 
@@ -272,13 +278,14 @@ class BlogPostsController extends BlogAppController {
 		return $conditions;
 	}
 
-/**
- * [ADMIN] 登録処理
- *
- * @param int $blogContentId
- * @return void
- */
-	public function admin_add($blogContentId) {
+	/**
+	 * [ADMIN] 登録処理
+	 *
+	 * @param int $blogContentId
+	 * @return void
+	 */
+	public function admin_add($blogContentId)
+	{
 		if (!$blogContentId || !$this->blogContent) {
 			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->redirect(['controller' => 'blog_contents', 'action' => 'index']);
@@ -294,7 +301,7 @@ class BlogPostsController extends BlogAppController {
 			$this->request->data['BlogPost']['no'] = $this->BlogPost->getMax('no', ['BlogPost.blog_content_id' => $blogContentId]) + 1;
 			$this->request->data['BlogPost']['posts_date'] = str_replace('/', '-', $this->request->data['BlogPost']['posts_date']);
 
-			if(!BcUtil::isAdminUser()) {
+			if (!BcUtil::isAdminUser()) {
 				$user = $this->BcAuth->user();
 				$this->request->data['BlogPost']['user_id'] = $user['id'];
 			}
@@ -304,7 +311,7 @@ class BlogPostsController extends BlogAppController {
 				'data' => $this->request->data
 			]);
 			if ($event !== false) {
-				$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+				$this->request->data = $event->result === true? $event->data['data'] : $event->result;
 			}
 
 			// データを保存
@@ -363,14 +370,15 @@ class BlogPostsController extends BlogAppController {
 		$this->render('form');
 	}
 
-/**
- * [ADMIN] 編集処理
- *
- * @param int $blogContentId
- * @param int $id
- * @return void
- */
-	public function admin_edit($blogContentId, $id) {
+	/**
+	 * [ADMIN] 編集処理
+	 *
+	 * @param int $blogContentId
+	 * @param int $id
+	 * @return void
+	 */
+	public function admin_edit($blogContentId, $id)
+	{
 		if (!$blogContentId || !$id) {
 			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 			$this->redirect(['plugin' => 'blog', 'admin' => true, 'controller' => 'blog_posts', 'action' => 'index', $blogContentId]);
@@ -398,7 +406,7 @@ class BlogPostsController extends BlogAppController {
 				'data' => $this->request->data
 			]);
 			if ($event !== false) {
-				$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+				$this->request->data = $event->result === true? $event->data['data'] : $event->result;
 			}
 
 			// データを保存
@@ -416,13 +424,13 @@ class BlogPostsController extends BlogAppController {
 				$this->BcMessage->setError(__d('baser', 'エラーが発生しました。内容を確認してください。'));
 			}
 		} else {
-			$this->request->data = $this->BlogPost->find('first', array(
-				'conditions' => array(
+			$this->request->data = $this->BlogPost->find('first', [
+				'conditions' => [
 					'BlogPost.id' => $id,
 					'BlogPost.blog_content_id' => $blogContentId
-				)
-			));
-			if(!$this->request->data) {
+				]
+			]);
+			if (!$this->request->data) {
 				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
 				$this->redirect(['plugin' => 'blog', 'admin' => true, 'controller' => 'blog_posts', 'action' => 'index', $blogContentId]);
 			}
@@ -470,14 +478,15 @@ class BlogPostsController extends BlogAppController {
 		$this->render('form');
 	}
 
-/**
- * [ADMIN] 削除処理　(ajax)
- *
- * @param int $blogContentId
- * @param int $id
- * @return void
- */
-	public function admin_ajax_delete($blogContentId, $id = null) {
+	/**
+	 * [ADMIN] 削除処理　(ajax)
+	 *
+	 * @param int $blogContentId
+	 * @param int $id
+	 * @return void
+	 */
+	public function admin_ajax_delete($blogContentId, $id = null)
+	{
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -492,28 +501,30 @@ class BlogPostsController extends BlogAppController {
 		exit();
 	}
 
-/**
- * 一括削除
- * 
- * @param array $ids
- * @return boolean
- */
-	protected function _batch_del($ids) {
+	/**
+	 * 一括削除
+	 *
+	 * @param array $ids
+	 * @return boolean
+	 */
+	protected function _batch_del($ids)
+	{
 		if ($ids) {
-			foreach ($ids as $id) {
+			foreach($ids as $id) {
 				$this->_del($id);
 			}
 		}
 		return true;
 	}
 
-/**
- * データを削除する
- * 
- * @param int $id
- * @return boolean 
- */
-	protected function _del($id) {
+	/**
+	 * データを削除する
+	 *
+	 * @param int $id
+	 * @return boolean
+	 */
+	protected function _del($id)
+	{
 		// メッセージ用にデータを取得
 		$post = $this->BlogPost->read(null, $id);
 
@@ -526,14 +537,15 @@ class BlogPostsController extends BlogAppController {
 		}
 	}
 
-/**
- * [ADMIN] 削除処理
- *
- * @param int $blogContentId
- * @param int $id
- * @return void
- */
-	public function admin_delete($blogContentId, $id = null) {
+	/**
+	 * [ADMIN] 削除処理
+	 *
+	 * @param int $blogContentId
+	 * @param int $id
+	 * @return void
+	 */
+	public function admin_delete($blogContentId, $id = null)
+	{
 		$this->_checkSubmitToken();
 		if (!$blogContentId || !$id) {
 			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
@@ -554,13 +566,13 @@ class BlogPostsController extends BlogAppController {
 		$this->redirect(['action' => 'index', $blogContentId]);
 	}
 
-/**
- * 外部データインポート
- * WordPressのみ対応（2.2.3のみ検証済）
- *
- * @return void
- * @todo 未実装
- */
+	/**
+	 * 外部データインポート
+	 * WordPressのみ対応（2.2.3のみ検証済）
+	 *
+	 * @return void
+	 * @todo 未実装
+	 */
 //	public function admin_import() {
 //		// 入力チェック
 //		$check = true;
@@ -654,15 +666,16 @@ class BlogPostsController extends BlogAppController {
 //		$this->redirect(array('controller' => 'blog_configs', 'action' => 'form'));
 //	}
 
-/**
- * [ADMIN] 無効状態にする（AJAX）
- * 
- * @param string $blogContentId
- * @param string $blogPostId beforeFilterで利用
- * @param string $blogCommentId
- * @return void
- */
-	public function admin_ajax_unpublish($blogContentId, $id) {
+	/**
+	 * [ADMIN] 無効状態にする（AJAX）
+	 *
+	 * @param string $blogContentId
+	 * @param string $blogPostId beforeFilterで利用
+	 * @param string $blogCommentId
+	 * @return void
+	 */
+	public function admin_ajax_unpublish($blogContentId, $id)
+	{
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -676,15 +689,16 @@ class BlogPostsController extends BlogAppController {
 		exit();
 	}
 
-/**
- * [ADMIN] 有効状態にする（AJAX）
- * 
- * @param string $blogContentId
- * @param string $blogPostId beforeFilterで利用
- * @param string $blogCommentId
- * @return void
- */
-	public function admin_ajax_publish($blogContentId, $id) {
+	/**
+	 * [ADMIN] 有効状態にする（AJAX）
+	 *
+	 * @param string $blogContentId
+	 * @param string $blogPostId beforeFilterで利用
+	 * @param string $blogCommentId
+	 * @return void
+	 */
+	public function admin_ajax_publish($blogContentId, $id)
+	{
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -698,16 +712,17 @@ class BlogPostsController extends BlogAppController {
 		exit();
 	}
 
-/**
- * 一括公開
- * 
- * @param array $ids
- * @return boolean
- * @access protected 
- */
-	protected function _batch_publish($ids) {
+	/**
+	 * 一括公開
+	 *
+	 * @param array $ids
+	 * @return boolean
+	 * @access protected
+	 */
+	protected function _batch_publish($ids)
+	{
 		if ($ids) {
-			foreach ($ids as $id) {
+			foreach($ids as $id) {
 				$this->_changeStatus($id, true);
 			}
 		}
@@ -715,16 +730,17 @@ class BlogPostsController extends BlogAppController {
 		return true;
 	}
 
-/**
- * 一括非公開
- * 
- * @param array $ids
- * @return boolean
- * @access protected 
- */
-	protected function _batch_unpublish($ids) {
+	/**
+	 * 一括非公開
+	 *
+	 * @param array $ids
+	 * @return boolean
+	 * @access protected
+	 */
+	protected function _batch_unpublish($ids)
+	{
 		if ($ids) {
-			foreach ($ids as $id) {
+			foreach($ids as $id) {
 				$this->_changeStatus($id, false);
 			}
 		}
@@ -732,14 +748,15 @@ class BlogPostsController extends BlogAppController {
 		return true;
 	}
 
-/**
- * ステータスを変更する
- * 
- * @param int $id
- * @param boolean $status
- * @return boolean 
- */
-	protected function _changeStatus($id, $status) {
+	/**
+	 * ステータスを変更する
+	 *
+	 * @param int $id
+	 * @param boolean $status
+	 * @return boolean
+	 */
+	protected function _changeStatus($id, $status)
+	{
 		$statusTexts = [0 => __d('baser', '非公開状態'), 1 => __d('baser', '公開状態')];
 		$data = $this->BlogPost->find('first', ['conditions' => ['BlogPost.id' => $id], 'recursive' => -1]);
 		$data['BlogPost']['status'] = $status;
@@ -757,13 +774,14 @@ class BlogPostsController extends BlogAppController {
 		}
 	}
 
-/**
- * [ADMIN] コピー
- * 
- * @param int $id 
- * @return void
- */
-	public function admin_ajax_copy($blogContentId, $id = null) {
+	/**
+	 * [ADMIN] コピー
+	 *
+	 * @param int $id
+	 * @return void
+	 */
+	public function admin_ajax_copy($blogContentId, $id = null)
+	{
 		$this->_checkSubmitToken();
 		$result = $this->BlogPost->copy($id);
 		if ($result) {

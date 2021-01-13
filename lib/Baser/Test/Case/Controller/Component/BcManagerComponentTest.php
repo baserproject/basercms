@@ -1,37 +1,41 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Controller.Component
- * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.Controller.Component
+ * @since           baserCMS v 3.0.0-beta
+ * @license         https://basercms.net/license/index.html
  */
+
 App::uses('BcManagerComponent', 'Controller/Component');
 App::uses('Controller', 'Controller');
 
-
 /**
- * 偽コントローラ
+ * Class BcManagerTestController
  *
- * @package       Cake.Test.Case.Controller.Component
+ * @package Baser.Test.Case.Controller.Component
  * @property BcManagerComponent $BcManager
  */
-class BcManagerTestController extends Controller {
+class BcManagerTestController extends Controller
+{
 
-	public $components = array('BcManager');
+	public $components = ['BcManager'];
 
 }
 
 /**
- * BcManagerComponentのテスト
+ * Class BcManagerComponentTest
+ *
+ * @package Baser.Test.Case.Controller.Component
  * @property BcManagerComponent $BcManager
  */
-class BcManagerComponentTest extends BaserTestCase {
+class BcManagerComponentTest extends BaserTestCase
+{
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.BlogCategory',
 		'baser.Default.BlogContent',
 		'baser.Default.BlogComment',
@@ -46,11 +50,12 @@ class BcManagerComponentTest extends BaserTestCase {
 		'baser.Default.Plugin',
 		'baser.Default.User',
 		'baser.Default.Site',
-	);
+	];
 
-	public $components = array('BcManager');
+	public $components = ['BcManager'];
 
-	public function setUp() {
+	public function setUp()
+	{
 		parent::setUp();
 
 		// コンポーネントと偽のテストコントローラをセットアップする
@@ -70,101 +75,113 @@ class BcManagerComponentTest extends BaserTestCase {
 		Router::connect('/:controller/:action/*');
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		parent::tearDown();
 		unset($this->Controller);
 		unset($this->BcManager);
 	}
 
-	public function test_getDataSource() {
+	public function test_getDataSource()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-	public function test_updateContents() {
+	public function test_updateContents()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-	public function test_updatePluginStatus() {
+	public function test_updatePluginStatus()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * baserCMSのインストール
- * 
- * @param type $dbConfig
- * @param type $adminUser
- * @param type $adminPassword
- * @param type $adminEmail
- * @return boolean 
- */
-	public function testInstall() {
+	/**
+	 * baserCMSのインストール
+	 *
+	 * @param type $dbConfig
+	 * @param type $adminUser
+	 * @param type $adminPassword
+	 * @param type $adminEmail
+	 * @return boolean
+	 */
+	public function testInstall()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * データベースに接続する
- */
-	public function testConnectDb() {
+	/**
+	 * データベースに接続する
+	 */
+	public function testConnectDb()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * datasource名を取得
- *
- * @param string $datasource datasource名
- * @param string $expected 期待値
- * @dataProvider getDatasourceNameDataProvider
- */
-	public function testGetDatasourceName($datasource, $expected) {
+	/**
+	 * datasource名を取得
+	 *
+	 * @param string $datasource datasource名
+	 * @param string $expected 期待値
+	 * @dataProvider getDatasourceNameDataProvider
+	 */
+	public function testGetDatasourceName($datasource, $expected)
+	{
 		$result = $this->BcManager->getDatasourceName($datasource);
 		$this->assertEquals($expected, $result, 'datasource名を正しく取得できません');
 	}
 
-	public function getDatasourceNameDataProvider() {
-		return array(
-			array('postgres', 'Database/BcPostgres'),
-			array('mysql', 'Database/BcMysql'),
-			array('sqlite', 'Database/BcSqlite'),
-			array('csv', 'Database/BcCsv'),
-		);
+	public function getDatasourceNameDataProvider()
+	{
+		return [
+			['postgres', 'Database/BcPostgres'],
+			['mysql', 'Database/BcMysql'],
+			['sqlite', 'Database/BcSqlite'],
+			['csv', 'Database/BcCsv'],
+		];
 	}
 
-/**
- * 実際の設定用のDB名を取得する
- *
- * @param string $type
- * @param string $name
- * @dataProvider getRealDbNameDataProvider
- */
-	public function testGetRealDbName($type, $name, $expected) {
+	/**
+	 * 実際の設定用のDB名を取得する
+	 *
+	 * @param string $type
+	 * @param string $name
+	 * @dataProvider getRealDbNameDataProvider
+	 */
+	public function testGetRealDbName($type, $name, $expected)
+	{
 		$result = $this->BcManager->getRealDbName($type, $name);
 		$this->assertEquals($expected, $result, '実際の設定用のDB名を正しく取得できません');
 	}
 
-	public function getRealDbNameDataProvider() {
-		return array(
-			array('type', 'name', 'name'),
-			array('sqlite', 'name', APP . 'db' . DS . 'sqlite' . DS . 'name' . '.db'),
-			array('csv', 'name', APP . 'db' . DS . 'csv' . DS . 'name'),
-			array('sqlite', '/name', '/name'),
-		);
+	public function getRealDbNameDataProvider()
+	{
+		return [
+			['type', 'name', 'name'],
+			['sqlite', 'name', APP . 'db' . DS . 'sqlite' . DS . 'name' . '.db'],
+			['csv', 'name', APP . 'db' . DS . 'csv' . DS . 'name'],
+			['sqlite', '/name', '/name'],
+		];
 	}
 
-/**
- * テーマ用のページファイルを生成する
- *
- * @access	protected
- */
-	public function testCreatePageTemplates() {
+	/**
+	 * テーマ用のページファイルを生成する
+	 *
+	 * @access    protected
+	 */
+	public function testCreatePageTemplates()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * データベースのデータに初期更新を行う
- */
-	public function testExecuteDefaultUpdates() {
+	/**
+	 * データベースのデータに初期更新を行う
+	 */
+	public function testExecuteDefaultUpdates()
+	{
 
-		$dbConfig =  array(
+		$dbConfig = [
 			'datasource' => 'Database/BcMysql',
 			'persistent' => false,
 			'host' => 'localhost',
@@ -175,7 +192,7 @@ class BcManagerComponentTest extends BaserTestCase {
 			'schema' => '',
 			'prefix' => 'mysite_',
 			'encoding' => 'utf8',
-		);
+		];
 
 		// プラグイン有効化チェック用準備(ダミーのプラグインディレクトリを作成)
 		$testPluginPath = BASER_PLUGINS . 'Test' . DS;
@@ -185,7 +202,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		$File = new File($testPluginConfigPath, true);
 		$File->write('<?php $title = "テスト";');
 
-		Configure::write('BcApp.corePlugins', array('Blog', 'Feed', 'Mail', 'Test'));
+		Configure::write('BcApp.corePlugins', ['Blog', 'Feed', 'Mail', 'Test']);
 
 
 		// 初期更新を実行
@@ -197,37 +214,38 @@ class BcManagerComponentTest extends BaserTestCase {
 		// =====================
 		$File->delete();
 		$Folder->delete($testPluginPath);
-		
+
 		$this->Plugin = ClassRegistry::init('Plugin');
-		$plugin = $this->Plugin->find('first', array(
-				'conditions' => array('id' => 4),
-				'fields' => array('title','status'),
-			)
+		$plugin = $this->Plugin->find('first', [
+				'conditions' => ['id' => 4],
+				'fields' => ['title', 'status'],
+			]
 		);
-		$expected = array(
-			'Plugin' => array(
+		$expected = [
+			'Plugin' => [
 				'title' => 'テスト',
 				'status' => 1,
-			)
-		);
+			]
+		];
 		$this->Plugin->delete(4);
 		unset($this->Plugin);
 		$this->assertEquals($expected, $plugin, 'プラグインのステータスを正しく更新できません');
 		$this->assertTrue($result, 'データベースのデータに初期更新に失敗しました');
 	}
 
-/**
- * サイト基本設定に管理用メールアドレスを登録する
- */
-	public function testSetAdminEmail() {
+	/**
+	 * サイト基本設定に管理用メールアドレスを登録する
+	 */
+	public function testSetAdminEmail()
+	{
 
 		$this->BcManager->setAdminEmail('hoge');
 
 		$this->SiteConfig = ClassRegistry::init('SiteConfig');
-		$result = $this->SiteConfig->find('first', array(
-				'conditions' => array('name' => 'email'),
-				'fields' => array('value'),
-			)
+		$result = $this->SiteConfig->find('first', [
+				'conditions' => ['name' => 'email'],
+				'fields' => ['value'],
+			]
 		);
 
 		$this->assertEquals('hoge', $result['SiteConfig']['value'], 'サイト基本設定に管理用メールアドレスを登録できません');
@@ -235,20 +253,21 @@ class BcManagerComponentTest extends BaserTestCase {
 
 	}
 
-/**
- * 初期ユーザーを登録する
- * 
- * @param array $user
- * @return boolean 
- */
-	public function testAddDefaultUser() {
-		$user = array(
+	/**
+	 * 初期ユーザーを登録する
+	 *
+	 * @param array $user
+	 * @return boolean
+	 */
+	public function testAddDefaultUser()
+	{
+		$user = [
 			'name' => 'hoge',
 			'email' => 'test@co.jp',
 			'user_group_id' => 1,
 			'password_1' => 'testtest',
 			'password_2' => 'testtest'
-		);
+		];
 		$result = $this->BcManager->addDefaultUser($user, 'hogehoge');
 
 		$this->User = ClassRegistry::init('User');
@@ -260,24 +279,25 @@ class BcManagerComponentTest extends BaserTestCase {
 
 	}
 
-/**
- * データベース設定ファイル[database.php]を保存する
- *
- * @param	array	$options
- * @return boolean
- */
-	public function testCreateDatabaseConfig() {
+	/**
+	 * データベース設定ファイル[database.php]を保存する
+	 *
+	 * @param array $options
+	 * @return boolean
+	 */
+	public function testCreateDatabaseConfig()
+	{
 
 		// database.phpをバックアップ
 		$configPath = APP . 'Config' . DS;
 		$copy = copy($configPath . 'database.php', $configPath . 'database.php.copy');
 
 		if ($copy) {
-			$options = array(
-				'datasource'	=> 'mysql',
-				'host'			=> 'hoge',
-				'port'			=> '0000',
-			);
+			$options = [
+				'datasource' => 'mysql',
+				'host' => 'hoge',
+				'port' => '0000',
+			];
 			$this->BcManager->createDatabaseConfig($options);
 
 			$File = new File($configPath . 'database.php');
@@ -296,19 +316,20 @@ class BcManagerComponentTest extends BaserTestCase {
 
 	}
 
-/**
- * インストール設定ファイルを生成する
- */
-	public function testCreateInstallFile() {
-		
+	/**
+	 * インストール設定ファイルを生成する
+	 */
+	public function testCreateInstallFile()
+	{
+
 		// install.phpをバックアップ
 		$configPath = APP . 'Config' . DS;
 		$copy = copy($configPath . 'install.php', $configPath . 'install.php.copy');
 
 		if ($copy) {
-			
+
 			$this->BcManager->createInstallFile('hogeSalt', 'hogeSeed', 'hogeUrl');
-					
+
 			$File = new File($configPath . 'install.php');
 			$result = $File->read();
 
@@ -326,10 +347,11 @@ class BcManagerComponentTest extends BaserTestCase {
 
 	}
 
-/**
- * セキュリティ用のキーを生成する
- */
-	public function testSetSecuritySalt() {
+	/**
+	 * セキュリティ用のキーを生成する
+	 */
+	public function testSetSecuritySalt()
+	{
 
 		$result = $this->BcManager->setSecuritySalt();
 		$length = strlen($result);
@@ -341,10 +363,11 @@ class BcManagerComponentTest extends BaserTestCase {
 
 	}
 
-/**
- * セキュリティ用の数字キーを生成する
- */
-	public function testSetSecurityCipherSeed() {
+	/**
+	 * セキュリティ用の数字キーを生成する
+	 */
+	public function testSetSecurityCipherSeed()
+	{
 
 		$result = $this->BcManager->setSecurityCipherSeed();
 		$length = strlen($result);
@@ -356,32 +379,36 @@ class BcManagerComponentTest extends BaserTestCase {
 
 	}
 
-/**
- * データベースを構築する
- * 
- * @param array $dbConfig
- * @param string $dbDataPattern
- * @return boolean
- */
-	public function testConstructionDb() {
+	/**
+	 * データベースを構築する
+	 *
+	 * @param array $dbConfig
+	 * @param string $dbDataPattern
+	 * @return boolean
+	 */
+	public function testConstructionDb()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
 
-/**
- * メール受信テーブルの再構築
- * 
- * @return boolean
- */
-	public function testReconstructionMessage() {
+	/**
+	 * メール受信テーブルの再構築
+	 *
+	 * @return boolean
+	 */
+	public function testReconstructionMessage()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		
+
 	}
-/**
- * 全ての初期データセットのリストを取得する
- */
-	public function testGetAllDefaultDataPatterns() {
-		
+
+	/**
+	 * 全ての初期データセットのリストを取得する
+	 */
+	public function testGetAllDefaultDataPatterns()
+	{
+
 		$result = $this->BcManager->getAllDefaultDataPatterns();
 		$expecteds = [
 			'core.default' => 'コア ( default )',
@@ -394,15 +421,16 @@ class BcManagerComponentTest extends BaserTestCase {
 
 	}
 
-/**
- * 初期データのセットを取得する
- * 
- * @param string $theme
- * @param array $options
- * @return array 
- */
-	public function testGetDefaultDataPatterns() {
-		
+	/**
+	 * 初期データのセットを取得する
+	 *
+	 * @param string $theme
+	 * @param array $options
+	 * @return array
+	 */
+	public function testGetDefaultDataPatterns()
+	{
+
 		$options = ['useTitle' => false];
 		$result = $this->BcManager->getDefaultDataPatterns('core', $options);
 		$expected = [
@@ -412,95 +440,103 @@ class BcManagerComponentTest extends BaserTestCase {
 
 	}
 
-/**
- * 初期データを読み込む
- * 
- * @param string $dbConfigKeyName
- * @param array $dbConfig
- * @param string $pattern
- * @param string $theme
- * @param string $plugin
- * @return boolean 
- */
-	public function testLoadDefaultDataPattern() {
+	/**
+	 * 初期データを読み込む
+	 *
+	 * @param string $dbConfigKeyName
+	 * @param array $dbConfig
+	 * @param string $pattern
+	 * @param string $theme
+	 * @param string $plugin
+	 * @return boolean
+	 */
+	public function testLoadDefaultDataPattern()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
 
 
-	public function testInitPlugin() {
+	public function testInitPlugin()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
-/**
- * システムデータを初期化する
- * 
- * @param string $dbConfigKeyName
- * @param array $dbConfig 
- */
-	public function testInitSystemData() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
-	}
-
-/**
- * テーブルを構築する
- *
- * @param string	$path
- * @param string	$dbConfigKeyName
- * @param string	$dbConfig
- * @param string	$dbDataPattern
- * @return boolean
- */
-	public function testConstructionTable() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-
-	}
-
-/**
- * 全てのテーブルを削除する
- * 
- * @param array $dbConfig 
- * @return boolean
- */
-	public function testDeleteAllTables($dbConfig = null) {
+	/**
+	 * システムデータを初期化する
+	 *
+	 * @param string $dbConfigKeyName
+	 * @param array $dbConfig
+	 */
+	public function testInitSystemData()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
 
-/**
- * プラグインも含めて全てのテーブルをリセットする
- * 
- * プラグインは有効となっているもののみ
- * 現在のテーマでないテーマの梱包プラグインを検出できない為
- * 
- * @param array $dbConfig 
- * @return boolean
- */
-	public function testResetAllTables($dbConfig = null, $excludes = []) {
+	/**
+	 * テーブルを構築する
+	 *
+	 * @param string $path
+	 * @param string $dbConfigKeyName
+	 * @param string $dbConfig
+	 * @param string $dbDataPattern
+	 * @return boolean
+	 */
+	public function testConstructionTable()
+	{
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+
+	}
+
+	/**
+	 * 全てのテーブルを削除する
+	 *
+	 * @param array $dbConfig
+	 * @return boolean
+	 */
+	public function testDeleteAllTables($dbConfig = null)
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
 
-/**
- * テーブルをリセットする
- * 
- * @param type $dbConfigKeyName
- * @param type $dbConfig
- * @return boolean 
- */
-	public function testResetTables() {
-	
+	/**
+	 * プラグインも含めて全てのテーブルをリセットする
+	 *
+	 * プラグインは有効となっているもののみ
+	 * 現在のテーマでないテーマの梱包プラグインを検出できない為
+	 *
+	 * @param array $dbConfig
+	 * @return boolean
+	 */
+	public function testResetAllTables($dbConfig = null, $excludes = [])
+	{
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+	}
+
+	/**
+	 * テーブルをリセットする
+	 *
+	 * @param type $dbConfigKeyName
+	 * @param type $dbConfig
+	 * @return boolean
+	 */
+	public function testResetTables()
+	{
+
 		$result = $this->BcManager->resetTables('test');
 		$this->assertTrue($result, 'テーブルをリセットできません');
-		
+
 		$this->User = ClassRegistry::init('User');
 		$User = $this->User->find('all', [
 				'recursive' => -1,
 			]
 		);
 		$this->assertEmpty($User, 'テーブルをリセットできません');
-		
+
 		$this->FeedDetail = ClassRegistry::init('FeedDetail');
 		$FeedDetail = $this->FeedDetail->find('all', [
 				'recursive' => -1,
@@ -510,21 +546,23 @@ class BcManagerComponentTest extends BaserTestCase {
 
 	}
 
-/**
- * テーブルを削除する
- */
-	public function testDeleteTables() {
+	/**
+	 * テーブルを削除する
+	 */
+	public function testDeleteTables()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
 
-/**
- * テーマを配置する
- *
- * @param string $theme テーマ名
- * @dataProvider deployThemeDataProvider
- */
-	public function testDeployTheme($theme) {
+	/**
+	 * テーマを配置する
+	 *
+	 * @param string $theme テーマ名
+	 * @dataProvider deployThemeDataProvider
+	 */
+	public function testDeployTheme($theme)
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		// nada-icons テーマフォルダを削除
@@ -536,16 +574,17 @@ class BcManagerComponentTest extends BaserTestCase {
 
 		if ($theme != 'bccolumn') {
 			$this->assertFileExists($targetPath, 'テーマを配置できません');
-		
+
 		} else {
 			$this->assertFileNotExists($targetPath, '指定したテーマのみを配置することができません');
 			$this->BcManager->deployTheme();
-		
+
 		}
 
 	}
 
-	public function deployThemeDataProvider() {
+	public function deployThemeDataProvider()
+	{
 		return [
 			[null],
 			['nada-icons'],
@@ -553,53 +592,56 @@ class BcManagerComponentTest extends BaserTestCase {
 		];
 	}
 
-/**
- * エディタテンプレート用のアイコン画像をデプロイ
- * 
- * @return boolean
- */
-	public function testDeployEditorTemplateImage() {
+	/**
+	 * エディタテンプレート用のアイコン画像をデプロイ
+	 *
+	 * @return boolean
+	 */
+	public function testDeployEditorTemplateImage()
+	{
 
 		// editor フォルダを削除
 		$Folder = new Folder();
-		$targetPath =  WWW_ROOT . 'files' . DS . 'editor' . DS;
+		$targetPath = WWW_ROOT . 'files' . DS . 'editor' . DS;
 		$Folder->delete($targetPath);
-		
+
 		$this->BcManager->deployEditorTemplateImage();
 
 		$this->assertFileExists($targetPath, 'エディタテンプレート用のアイコン画像をデプロイできません');
 
 	}
 
-/**
- * アップロード用初期フォルダを作成する
- */
-	public function testCreateDefaultFiles() {
+	/**
+	 * アップロード用初期フォルダを作成する
+	 */
+	public function testCreateDefaultFiles()
+	{
 
 		// 各フォルダを削除
 		$Folder = new Folder();
 		$path = WWW_ROOT . 'files' . DS;
 		$dirs = ['blog', 'editor', 'theme_configs'];
 
-		foreach ($dirs as $dir) {
+		foreach($dirs as $dir) {
 			$Folder->delete($path . $dir);
 		}
 
 		$this->BcManager->createDefaultFiles();
 
-		foreach ($dirs as $dir) {
+		foreach($dirs as $dir) {
 			$this->assertFileExists($path . $dir, 'アップロード用初期フォルダを正しく作成できません');
 		}
 
 	}
 
-/**
- * 設定ファイルをリセットする
- * 
- * @return boolean 
- */
-	public function testResetSetting() {
-		
+	/**
+	 * 設定ファイルをリセットする
+	 *
+	 * @return boolean
+	 */
+	public function testResetSetting()
+	{
+
 		// database.phpとinstall.phpをバックアップ
 		$configPath = APP . 'Config' . DS;
 		$copy1 = copy($configPath . 'database.php', $configPath . 'database.php.copy');
@@ -618,38 +660,40 @@ class BcManagerComponentTest extends BaserTestCase {
 
 		} else {
 			$this->markTestIncomplete('database.phpとinstall.phpのバックアップに失敗したため、このテストをスキップします。');
-		
+
 		}
-	
+
 	}
 
-/**
- * files フォルダを初期化する
- * 
- * @return boolean
- */
-	public function testResetFiles() {
-		
+	/**
+	 * files フォルダを初期化する
+	 *
+	 * @return boolean
+	 */
+	public function testResetFiles()
+	{
+
 		$this->BcManager->resetFiles();
 
 		$path = WWW_ROOT . 'files' . DS;
 		$dirs = ['blog', 'editor', 'theme_configs'];
-		foreach ($dirs as $dir) {
+		foreach($dirs as $dir) {
 			$this->assertFileNotExists($path . $dir, 'files フォルダを初期化できません');
 		}
 
 		// 削除されたフォルダを復元
 		$this->BcManager->createDefaultFiles();
-	
+
 	}
-	
-/**
- * 管理画面用のアセットフォルダ（img / js / css）を初期化する
- * 
- * @return boolean
- */
-	public function testResetAdminAssets() {
-		
+
+	/**
+	 * 管理画面用のアセットフォルダ（img / js / css）を初期化する
+	 *
+	 * @return boolean
+	 */
+	public function testResetAdminAssets()
+	{
+
 		// 初期化
 		$this->BcManager->resetAdminAssets();
 
@@ -658,49 +702,54 @@ class BcManagerComponentTest extends BaserTestCase {
 			WWW_ROOT . 'css' . DS . 'admin',
 			WWW_ROOT . 'js' . DS . 'admin'
 		];
-		foreach ($paths as $path) {
+		foreach($paths as $path) {
 			$this->assertFileNotExists($path, '管理画面用のアセットフォルダを初期化できません');
 		}
 
 		// 復元
 		$this->BcManager->deployAdminAssets();
-	
+
 	}
-	
-/**
- * baserCMSをリセットする
- * 
- * @param array $dbConfig 
- */
-	public function testReset() {
+
+	/**
+	 * baserCMSをリセットする
+	 *
+	 * @param array $dbConfig
+	 */
+	public function testReset()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
 
-	public function testResetPage() {
+	public function testResetPage()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
 
-	public function testResetThema() {
+	public function testResetThema()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
 
-	public function testEmptyFolder() {
+	public function testEmptyFolder()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
 
-/**
- * インストール設定を書き換える
- *
- * @param	string	$key
- * @param	string	$value
- * @return	boolean
- * @access	public
- */
-	public function testSetInstallSetting() {
+	/**
+	 * インストール設定を書き換える
+	 *
+	 * @param string $key
+	 * @param string $value
+	 * @return    boolean
+	 * @access    public
+	 */
+	public function testSetInstallSetting()
+	{
 
 		// install.phpをバックアップ
 		$configPath = APP . 'Config' . DS;
@@ -727,27 +776,29 @@ class BcManagerComponentTest extends BaserTestCase {
 
 	}
 
-/**
- * 環境チェック
- * 
- * @return array 
- */
-	public function testCheckEnv() {
+	/**
+	 * 環境チェック
+	 *
+	 * @return array
+	 */
+	public function testCheckEnv()
+	{
 		$result = $this->BcManager->checkEnv();
 		$this->assertNotEmpty($result, '環境情報を取得できません');
 	}
 
-/**
- * DB接続チェック
- * 
- * @param	string	$datasource 'MySQL' or 'Postgres' or 'SQLite' or 'CSV'
- * @param	string	$database データベース名 SQLiteの場合はファイルパス CSVの場合はディレクトリへのパス
- * @param	string	$host テキストDB or localhostの場合は不要
- * @param	string	$port 接続ポート テキストDBの場合は不要
- * @param	string	$login 接続ユーザ名 テキストDBの場合は不要
- * @param	string	$password 接続パスワード テキストDBの場合は不要
- */
-	public function testCheckDbConnection() {
+	/**
+	 * DB接続チェック
+	 *
+	 * @param string $datasource 'MySQL' or 'Postgres' or 'SQLite' or 'CSV'
+	 * @param string $database データベース名 SQLiteの場合はファイルパス CSVの場合はディレクトリへのパス
+	 * @param string $host テキストDB or localhostの場合は不要
+	 * @param string $port 接続ポート テキストDBの場合は不要
+	 * @param string $login 接続ユーザ名 テキストDBの場合は不要
+	 * @param string $password 接続パスワード テキストDBの場合は不要
+	 */
+	public function testCheckDbConnection()
+	{
 
 		// 使用しているDBのデータを取得し設定
 		$dbData = ConnectionManager::getDataSource('default');
@@ -762,7 +813,7 @@ class BcManagerComponentTest extends BaserTestCase {
 
 
 		$datasource = $dbData->config['datasource'];
-		switch ($datasource) {
+		switch($datasource) {
 			case 'Database/BcPostgres' :
 				$datasource = 'postgres';
 				break;
@@ -784,17 +835,18 @@ class BcManagerComponentTest extends BaserTestCase {
 
 	}
 
-/**
- * DB接続チェック
- * checkDbConnection()の Exception 例外のテスト
- * 
- * PHPUnitのバージョンによって、Exceptionは派生クラスではないとエラーが出るのでスキップ
- * 
- * expectedException Exception
- * expectedExceptionMessage ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite|CSV)
- */
+	/**
+	 * DB接続チェック
+	 * checkDbConnection()の Exception 例外のテスト
+	 *
+	 * PHPUnitのバージョンによって、Exceptionは派生クラスではないとエラーが出るのでスキップ
+	 *
+	 * expectedException Exception
+	 * expectedExceptionMessage ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite|CSV)
+	 */
 
-	public function testCheckDbConnectionException() {
+	public function testCheckDbConnectionException()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		// でたらめな入力
@@ -810,14 +862,15 @@ class BcManagerComponentTest extends BaserTestCase {
 
 	}
 
-/**
- * DB接続チェック
- * checkDbConnection()の PDOException 例外のテスト
- * 
- * @expectedException PDOException
- * @expectedExceptionMessage SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
- */
-	public function testCheckDbConnectionPDOException() {
+	/**
+	 * DB接続チェック
+	 * checkDbConnection()の PDOException 例外のテスト
+	 *
+	 * @expectedException PDOException
+	 * @expectedExceptionMessage SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+	 */
+	public function testCheckDbConnectionPDOException()
+	{
 
 		// でたらめな入力
 		$config = [
@@ -831,7 +884,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		// まともな datasource
 		$dbData = ConnectionManager::getDataSource('default');
 		$datasource = $dbData->config['datasource'];
-		switch ($datasource) {
+		switch($datasource) {
 			case 'Database/BcPostgres' :
 				$datasource = 'postgres';
 				$this->markTestIncomplete('postgresは、このテストの対象外です');
@@ -848,17 +901,18 @@ class BcManagerComponentTest extends BaserTestCase {
 		$this->BcManager->checkDbConnection($config);
 
 	}
-	
-/**
- * テーマに管理システム用アセットを配置する
- */
-	public function testDeployAdminAssets() {
+
+	/**
+	 * テーマに管理システム用アセットを配置する
+	 */
+	public function testDeployAdminAssets()
+	{
 		// 初期化
 		$this->BcManager->resetAdminAssets();
 		// 配置
 		$this->BcManager->deployAdminAssets();
-		
-		if(is_dir(BASER_THEMES . Configure::read('BcSite.admin_theme'))) {
+
+		if (is_dir(BASER_THEMES . Configure::read('BcSite.admin_theme'))) {
 			$assetRoot = BASER_THEMES . Configure::read('BcSite.admin_theme') . DS;
 		} else {
 			$assetRoot = WWW_ROOT;
@@ -868,21 +922,22 @@ class BcManagerComponentTest extends BaserTestCase {
 			$assetRoot . 'css' . DS . 'admin',
 			$assetRoot . 'js' . DS . 'admin'
 		];
-		foreach ($paths as $path) {
+		foreach($paths as $path) {
 			$this->assertFileExists($path, '管理画面用のアセットフォルダを配置きません');
 		}
 	}
-	
-/**
- * プラグインをインストール/アンインストールする
- * 
- * @param string $name
- */
-	public function testInstallAndUninstallPlugin() {
-		
+
+	/**
+	 * プラグインをインストール/アンインストールする
+	 *
+	 * @param string $name
+	 */
+	public function testInstallAndUninstallPlugin()
+	{
+
 		mkdir(BASER_PLUGINS . 'Test');
 
-		// -- インストール -- 	
+		// -- インストール --
 		$result = $this->BcManager->installPlugin('Test');
 		rmdir(BASER_PLUGINS . 'Test');
 
@@ -897,7 +952,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		);
 		$this->assertEquals('Test', $data['Plugin']['name'], 'プラグインをインストールできません');
 
-		// -- アンインストール -- 	
+		// -- アンインストール --
 		$result = $this->BcManager->uninstallPlugin('Test');
 		$this->assertTrue($result, 'プラグインをアンインストールできません');
 
@@ -909,14 +964,16 @@ class BcManagerComponentTest extends BaserTestCase {
 
 		unset($this->Plugin);
 	}
-/**
- * プラグインをインストールする
- * 設定ファイルなどを読み込む場合
- * 
- * @param string $name
- */
-	public function testInstallPluginInclude() {
-		
+
+	/**
+	 * プラグインをインストールする
+	 * 設定ファイルなどを読み込む場合
+	 *
+	 * @param string $name
+	 */
+	public function testInstallPluginInclude()
+	{
+
 		$pluginPath = BASER_PLUGINS . 'Test';
 		mkdir($pluginPath);
 
@@ -948,13 +1005,14 @@ class BcManagerComponentTest extends BaserTestCase {
 		rmdir($pluginPath);
 
 		$this->assertTrue($result, 'config.phpを読み込めません');
-	
+
 	}
 
-/**
- * テーマに梱包されているプラグインをインストールする
- */
-	public function testInstallThemesPlugins() {
+	/**
+	 * テーマに梱包されているプラグインをインストールする
+	 */
+	public function testInstallThemesPlugins()
+	{
 		$theme = Configure::read('BcSite.theme');
 		$Folder = new Folder();
 		$path = BASER_THEMES . $theme . DS . 'Plugin';
@@ -968,11 +1026,13 @@ class BcManagerComponentTest extends BaserTestCase {
 		$this->assertTrue($result, 'デフォルトテーマのプラグインのインストールに失敗しました。');
 	}
 
-	public function testStartup() {
+	public function testStartup()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-	public function testUninstallPlugin() {
+	public function testUninstallPlugin()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 

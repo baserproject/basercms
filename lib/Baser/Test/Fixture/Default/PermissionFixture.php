@@ -1,14 +1,16 @@
 <?php
+
 /**
  * PermissionFixture
  */
-class PermissionFixture extends BaserTestFixture {
+class PermissionFixture extends BaserTestFixture
+{
 
-/**
- * Records
- *
- * @var array
- */
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '1',

@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 2.0.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 2.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -20,7 +20,7 @@ if (!empty($user)) {
 		<div id="SubMenu" class="bca-submenu">
 			<table class="sub-menu bca-table-submenu">
 				<?php
-				foreach ($subMenuElements as $subMenuElement) {
+				foreach($subMenuElements as $subMenuElement) {
 					$plugin = '';
 					if (strpos($subMenuElement, '.') !== false) {
 						list($plugin, $subMenuElement) = explode('.', $subMenuElement);

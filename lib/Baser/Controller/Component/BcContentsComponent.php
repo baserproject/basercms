@@ -1,97 +1,99 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller.Component
- * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Controller.Component
+ * @since           baserCMS v 4.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
- * baserCMS Contents Component
+ * Class BcContentsComponent
  *
  * 階層コンテンツと連携したフォーム画面を作成する為のコンポーネント
  *
  * 《役割》
  * - コンテンツ一覧へのパンくずを自動追加
  * - フロントエンドでコンテンツデータを設定
- * 		Controller / View にて、$this->request->params['Content'] で参照できる
+ *        Controller / View にて、$this->request->params['Content'] で参照できる
  * - コンテンツ保存フォームを自動表示
  * - コンテンツ保存フォームのデータソースを設定
  * - コンテンツ保存フォームの初期値を設定
  *
  * @package Baser.Controller.Component
  */
-class BcContentsComponent extends Component {
+class BcContentsComponent extends Component
+{
 
-/**
- * Content 保存フォームをコントローラーで利用するかどうか
- * settings で指定する
- *
- * @var bool
- */
- 	public $useForm = false;
+	/**
+	 * Content 保存フォームをコントローラーで利用するかどうか
+	 * settings で指定する
+	 *
+	 * @var bool
+	 */
+	public $useForm = false;
 
-/**
- * ビューキャッシュを利用するかどうか
- * 
- * @var bool
- * @deprecated 5.0.0 since 4.0.0
- * 	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
- */
+	/**
+	 * ビューキャッシュを利用するかどうか
+	 *
+	 * @var bool
+	 * @deprecated 5.0.0 since 4.0.0
+	 *    CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
+	 */
 	public $useViewCache = false;
 
-/**
- * コンテンツ編集用のアクション名
- * 判定に利用
- * settings で指定する
- *
- * @var string
- */
+	/**
+	 * コンテンツ編集用のアクション名
+	 * 判定に利用
+	 * settings で指定する
+	 *
+	 * @var string
+	 */
 	public $editAction = 'admin_edit';
 
-/**
- * コンテンツタイプ
- * settings で指定する
- *
- * @var string
- */
+	/**
+	 * コンテンツタイプ
+	 * settings で指定する
+	 *
+	 * @var string
+	 */
 	public $type = null;
 
-/**
- * コントローラー
- *
- * @var Controller
- */
+	/**
+	 * コントローラー
+	 *
+	 * @var Controller
+	 */
 	protected $_Controller = null;
 
-/**
- * プレビューモード
- *
- * @var string default Or alias
- */
+	/**
+	 * プレビューモード
+	 *
+	 * @var string default Or alias
+	 */
 	public $preview = null;
 
-/**
- * Initialize
- *
- * @param Controller $controller Controller with components to initialize
- * @return void
- */
-	public function initialize(Controller $controller) {
+	/**
+	 * Initialize
+	 *
+	 * @param Controller $controller Controller with components to initialize
+	 * @return void
+	 */
+	public function initialize(Controller $controller)
+	{
 		$this->_Controller = $controller;
 		$controller->uses[] = 'Content';
-		if(!$this->type) {
-			if($controller->plugin) {
+		if (!$this->type) {
+			if ($controller->plugin) {
 				$this->type = $controller->plugin . '.' . $controller->modelClass;
 			} else {
 				$this->type = $controller->modelClass;
 			}
 		}
-		if(!BcUtil::isAdminSystem()) {
+		if (!BcUtil::isAdminSystem()) {
 			// フロントエンド設定
 			$this->setupFront();
 		} else {
@@ -100,14 +102,15 @@ class BcContentsComponent extends Component {
 		}
 	}
 
-/**
- * 管理システム設定 
- */
-	public function setupAdmin() {
+	/**
+	 * 管理システム設定
+	 */
+	public function setupAdmin()
+	{
 		$items = Configure::read('BcContents.items');
 		$createdSettings = [];
 		foreach($items as $name => $settings) {
-			foreach ($settings as $type => $setting) {
+			foreach($settings as $type => $setting) {
 				$setting['plugin'] = $name;
 				$setting['type'] = $type;
 				$createdSettings[$type] = $setting;
@@ -116,26 +119,27 @@ class BcContentsComponent extends Component {
 		$this->settings['items'] = $createdSettings;
 	}
 
-/**
- * フロントエンドのセットアップ 
- */
-	public function setupFront() {
+	/**
+	 * フロントエンドのセットアップ
+	 */
+	public function setupFront()
+	{
 		$controller = $this->_Controller;
 		// プレビュー時のデータセット
-		if(!empty($controller->request->query['preview'])) {
+		if (!empty($controller->request->query['preview'])) {
 			$this->preview = $this->_Controller->request->query['preview'];
-			if(!empty($controller->request->data['Content'])) {
+			if (!empty($controller->request->data['Content'])) {
 				$controller->request->params['Content'] = $controller->request->data['Content'];
 				$controller->Security->validatePost = false;
 				$controller->Security->csrfCheck = false;
 			}
 		}
-		
+
 		// 表示設定
-		if(!empty($controller->request->params['Content'])) {
+		if (!empty($controller->request->params['Content'])) {
 			// レイアウトテンプレート設定
 			$controller->layout = $controller->request->params['Content']['layout_template'];
-			if(!$controller->layout) {
+			if (!$controller->layout) {
 				$controller->layout = $this->getParentLayoutTemplate($controller->request->params['Content']['id']);
 			}
 			// パンくず
@@ -145,16 +149,17 @@ class BcContentsComponent extends Component {
 			// タイトル
 			$controller->pageTitle = $controller->request->params['Content']['title'];
 		}
-		
+
 	}
 
-/**
- * パンくず用のデータを取得する
- *
- * @param $id
- * @return array
- */
-	public function getCrumbs($id) {
+	/**
+	 * パンくず用のデータを取得する
+	 *
+	 * @param $id
+	 * @return array
+	 */
+	public function getCrumbs($id)
+	{
 		// ===========================================================================================
 		// 2016/09/22 ryuring
 		// PHP 7.0.8 環境にて、コンテンツ一覧追加時、検索インデックス作成の為、BcContentsComponent が
@@ -163,13 +168,13 @@ class BcContentsComponent extends Component {
 		// CakePHPも、PHP自体のエラーも発生せず、ただ止まる。PHP7のバグ？PHP側のメモリーを256Mにしても変わらず。
 		// ===========================================================================================
 		$contents = $this->_Controller->Content->Behaviors->Tree->getPath($this->_Controller->Content, $id, [], -1);
-		unset($contents[count($contents) -1]);
+		unset($contents[count($contents) - 1]);
 		$crumbs = [];
 		foreach($contents as $content) {
-			if(!$content['Content']['site_root']) {
+			if (!$content['Content']['site_root']) {
 				$crumb = [
-					'name'	=> $content['Content']['title'],
-					'url'	=> $content['Content']['url']
+					'name' => $content['Content']['title'],
+					'url' => $content['Content']['url']
 				];
 				$crumbs[] = $crumb;
 			}
@@ -177,32 +182,34 @@ class BcContentsComponent extends Component {
 		return $crumbs;
 	}
 
-/**
- * Content データを取得する
- *
- * @param int $entityId
- * @return array
- */
-	public function getContent($entityId = null) {
+	/**
+	 * Content データを取得する
+	 *
+	 * @param int $entityId
+	 * @return array
+	 */
+	public function getContent($entityId = null)
+	{
 		return $this->_Controller->Content->findByType($this->type, $entityId);
 	}
-	
-/**
- * Before render
- *
- * @param Controller $controller
- * @return void
- */
-	public function beforeRender(Controller $controller) {
+
+	/**
+	 * Before render
+	 *
+	 * @param Controller $controller
+	 * @return void
+	 */
+	public function beforeRender(Controller $controller)
+	{
 		parent::beforeRender($controller);
-		if(BcUtil::isAdminSystem()) {
+		if (BcUtil::isAdminSystem()) {
 			$controller->set('contentsSettings', $this->settings['items']);
 			// パンくずをセット
 			array_unshift($controller->crumbs, ['name' => __d('baser', 'コンテンツ一覧'), 'url' => ['plugin' => null, 'controller' => 'contents', 'action' => 'index']]);
-			if($controller->subMenuElements && !in_array('contents', $controller->subMenuElements)) {
+			if ($controller->subMenuElements && !in_array('contents', $controller->subMenuElements)) {
 				array_unshift($controller->subMenuElements, 'contents');
 			} else {
-				$controller->subMenuElements =  ['contents'];	
+				$controller->subMenuElements = ['contents'];
 			}
 			if ($this->useForm && in_array($controller->request->action, [$this->editAction, 'admin_edit_alias']) && !empty($controller->request->data['Content'])) {
 				// フォームをセット
@@ -216,7 +223,7 @@ class BcContentsComponent extends Component {
 			}
 		} else {
 			// ビューキャッシュ設定
-			if(empty($controller->request->query['preview'])) {
+			if (empty($controller->request->query['preview'])) {
 				// @deprecated 5.0.0 since 4.0.0
 				//	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
 				if ($this->useViewCache && !BcUtil::loginUser('admin') && !isConsole() && !empty($controller->request->params['Content'])) {
@@ -228,39 +235,40 @@ class BcContentsComponent extends Component {
 
 	}
 
-/**
- * コンテンツ保存フォームを設定する
- *
- * @param Controller $controller
- * @return void
- */
-public function settingForm(Controller $controller, $currentSiteId, $currentContentId = null) {
+	/**
+	 * コンテンツ保存フォームを設定する
+	 *
+	 * @param Controller $controller
+	 * @return void
+	 */
+	public function settingForm(Controller $controller, $currentSiteId, $currentContentId = null)
+	{
 
 		// コントロールソースを設定
 		$options = [];
-		if($controller->name == 'ContentFolders') {
+		if ($controller->name == 'ContentFolders') {
 			$options['excludeId'] = $currentContentId;
 		}
 		$data = $controller->request->data;
-		
+
 		$theme = $this->_Controller->siteConfigs['theme'];
 		$site = BcSite::findById($data['Content']['site_id']);
-		if($site->theme) {
-			$theme = $site->theme;	
+		if ($site->theme) {
+			$theme = $site->theme;
 		}
 		$templates = array_merge(
 			BcUtil::getTemplateList('Layouts', '', $theme),
 			BcUtil::getTemplateList('Layouts', $this->_Controller->plugin, $theme)
 		);
-		if($data['Content']['id'] != 1) {
+		if ($data['Content']['id'] != 1) {
 			$parentTemplate = $this->getParentLayoutTemplate($data['Content']['id']);
-			if(in_array($parentTemplate, $templates)) {
+			if (in_array($parentTemplate, $templates)) {
 				unset($templates[$parentTemplate]);
 			}
 			array_unshift($templates, ['' => __d('baser', '親フォルダの設定に従う') . '（' . $parentTemplate . '）']);
 		}
 		$data['Content']['name'] = urldecode($data['Content']['name']);
-		if(Configure::read('BcApp.autoUpdateContentCreatedDate')) {
+		if (Configure::read('BcApp.autoUpdateContentCreatedDate')) {
 			$data['Content']['modified_date'] = date('Y-m-d H:i:s');
 		}
 		$controller->set('layoutTemplates', $templates);
@@ -268,7 +276,7 @@ public function settingForm(Controller $controller, $currentSiteId, $currentCont
 		$controller->set('authors', $controller->User->getUserList());
 		$Site = ClassRegistry::init('Site');
 		$site = $controller->Content->find('first', ['conditions' => ['Content.id' => $data['Content']['id']]]);
-    	if(!is_null($site['Site']['main_site_id'])){
+		if (!is_null($site['Site']['main_site_id'])) {
 			$mainSiteId = $site['Site']['main_site_id'];
 		} else {
 			$mainSiteId = 0;
@@ -280,33 +288,34 @@ public function settingForm(Controller $controller, $currentSiteId, $currentCont
 		$controller->set('mainSiteId', $mainSiteId);
 		$controller->set('relatedContents', $Site->getRelatedContents($data['Content']['id']));
 		$related = false;
-		if(($data['Site']['relate_main_site'] && $data['Content']['main_site_content_id'] && $data['Content']['alias_id']) ||
+		if (($data['Site']['relate_main_site'] && $data['Content']['main_site_content_id'] && $data['Content']['alias_id']) ||
 			$data['Site']['relate_main_site'] && $data['Content']['main_site_content_id'] && $data['Content']['type'] == 'ContentFolder') {
 			$related = true;
 		}
 		$disableEditContent = false;
 		$controller->request->data = $data;
-		if(!BcUtil::isAdminUser() || ($controller->request->data['Site']['relate_main_site'] && $controller->request->data['Content']['main_site_content_id'] &&
+		if (!BcUtil::isAdminUser() || ($controller->request->data['Site']['relate_main_site'] && $controller->request->data['Content']['main_site_content_id'] &&
 				($controller->request->data['Content']['alias_id'] || $controller->request->data['Content']['type'] == 'ContentFolder'))) {
 			$disableEditContent = true;
 		}
 		$currentSiteId = $siteId = $controller->request->data['Site']['id'];
-		if(is_null($currentSiteId)) {
+		if (is_null($currentSiteId)) {
 			$currentSiteId = 0;
 		}
-		$controller->set('currentSiteId', $currentSiteId);	
+		$controller->set('currentSiteId', $currentSiteId);
 		$controller->set('disableEditContent', $disableEditContent);
-		$controller->set('related', $related);	
+		$controller->set('related', $related);
 	}
 
-/**
- * レイアウトテンプレートを取得する
- *
- * @param $id
- * @return string $parentTemplate|false
- */
-	public function getParentLayoutTemplate($id) {
-		if(!$id) {
+	/**
+	 * レイアウトテンプレートを取得する
+	 *
+	 * @param $id
+	 * @return string $parentTemplate|false
+	 */
+	public function getParentLayoutTemplate($id)
+	{
+		if (!$id) {
 			return false;
 		}
 		// ===========================================================================================
@@ -319,24 +328,25 @@ public function settingForm(Controller $controller, $currentSiteId, $currentCont
 		$contents = $this->_Controller->Content->Behaviors->Tree->getPath($this->_Controller->Content, $id);
 		$contents = array_reverse($contents);
 		unset($contents[0]);
-		if(!$contents) {
+		if (!$contents) {
 			return false;
 		}
 		$parentTemplates = Hash::extract($contents, '{n}.Content.layout_template');
 		foreach($parentTemplates as $parentTemplate) {
-			if($parentTemplate) {
+			if ($parentTemplate) {
 				break;
 			}
 		}
 		return $parentTemplate;
 	}
 
-/**
- * 登録されているタイプの一覧を取得する
- * 
- * @return array
- */
-	public function getTypes() {
+	/**
+	 * 登録されているタイプの一覧を取得する
+	 *
+	 * @return array
+	 */
+	public function getTypes()
+	{
 		$types = [];
 		foreach($this->settings['items'] as $key => $value) {
 			$types[$key] = $value['title'];

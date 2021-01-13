@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Console.Command
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Console.Command
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('AppShell', 'Console/Command');
@@ -15,18 +15,20 @@ App::uses('BcManagerComponent', 'Controller/Component');
 
 /**
  * インストール用シェルスクリプト
- * 
+ *
  * @package Baser.Console.Command
  * @property BcManagerComponent $BcManager
  */
-class BcManagerShell extends AppShell {
+class BcManagerShell extends AppShell
+{
 
-/**
- * get the option parser
- *
- * @return void
- */
-	public function getOptionParser() {
+	/**
+	 * get the option parser
+	 *
+	 * @return void
+	 */
+	public function getOptionParser()
+	{
 		$parser = parent::getOptionParser();
 		$parser->addOption('host', [
 			'help' => __d('baser', 'ホスト名'),
@@ -57,20 +59,22 @@ class BcManagerShell extends AppShell {
 		return $parser;
 	}
 
-/**
- * startup 
- */
-	public function startup() {
+	/**
+	 * startup
+	 */
+	public function startup()
+	{
 		parent::startup();
 		$this->BcManager = new BcManagerComponent(new ComponentCollection());
 	}
 
-/**
- * インストール 
- * 
- * cake bc_manager install "サイト名" "データベースの種類" "管理者アカウント名" "管理者パスワード" "管理者Eメール" -host "DBホスト名" -database "DB名" -login "DBユーザー名" -password "DBパスワード" -prefix "DBプレフィックス" -port "DBポート" -baseurl "RewriteBaseに設定するURL"
- */
-	public function install() {
+	/**
+	 * インストール
+	 *
+	 * cake bc_manager install "サイト名" "データベースの種類" "管理者アカウント名" "管理者パスワード" "管理者Eメール" -host "DBホスト名" -database "DB名" -login "DBユーザー名" -password "DBパスワード" -prefix "DBプレフィックス" -port "DBポート" -baseurl "RewriteBaseに設定するURL"
+	 */
+	public function install()
+	{
 		if (BC_INSTALLED) {
 			$this->err(__d('baser', '既にインストール済です。 cake bc_manager reset を実行してください。'));
 			return;
@@ -91,12 +95,13 @@ class BcManagerShell extends AppShell {
 		$this->out(__d('baser', 'baserCMSのインストールが完了しました。'));
 	}
 
-/**
- * reset 
- * 
- * cake bc_manager reset
- */
-	public function reset() {
+	/**
+	 * reset
+	 *
+	 * cake bc_manager reset
+	 */
+	public function reset()
+	{
 		if (Configure::read('debug') != -1) {
 			$this->err(__d('baser', 'baserCMSの初期化を行うには、debug を -1 に設定する必要があります。'));
 			return false;
@@ -107,12 +112,13 @@ class BcManagerShell extends AppShell {
 		$this->out(__d('baser', 'baserCMSのリセットが完了しました。'));
 	}
 
-/**
- * 再インストール
- * 
- * コマンドはインストールと同じ
- */
-	public function reinstall() {
+	/**
+	 * 再インストール
+	 *
+	 * コマンドはインストールと同じ
+	 */
+	public function reinstall()
+	{
 		if (Configure::read('debug') != -1) {
 			$this->err(__d('baser', 'baserCMSの初期化を行うには、debug を -1 に設定する必要があります。'));
 			return false;
@@ -130,36 +136,37 @@ class BcManagerShell extends AppShell {
 		}
 	}
 
-/**
- * 環境チェック
- * 
- * cake bc_manager checkenv
- */
-	public function checkenv() {
+	/**
+	 * 環境チェック
+	 *
+	 * cake bc_manager checkenv
+	 */
+	public function checkenv()
+	{
 		$checkResult = $this->BcManager->checkEnv();
 		$this->out(__d('baser', '基本必須条件'));
 		$this->hr();
-		$this->out('* PHP mbstring (' . $checkResult['encoding'] . ')：' . (($checkResult['encodingOk']) ? 'OK' : 'NG'));
+		$this->out('* PHP mbstring (' . $checkResult['encoding'] . ')：' . (($checkResult['encodingOk'])? 'OK' : 'NG'));
 		if (!$checkResult['encodingOk']) {
 			$this->out('　' . __d('baser', 'mbstring.internal_encoding を UTF-8 に設定してください。'));
 		}
-		$this->out('* PHP Version (' . $checkResult['phpVersion'] . ')：' . (($checkResult['phpVersionOk']) ? 'OK' : 'NG'));
+		$this->out('* PHP Version (' . $checkResult['phpVersion'] . ')：' . (($checkResult['phpVersionOk'])? 'OK' : 'NG'));
 		if (!$checkResult['phpVersionOk']) {
 			$this->out('　' . __d('baser', '古いバージョンのPHPです。動作保証はありません。'));
 		}
-		$this->out('* PHP Memory Limit (' . $checkResult['phpMemory'] . 'MB)：' . (($checkResult['phpMemoryOk']) ? 'OK' : 'NG'));
+		$this->out('* PHP Memory Limit (' . $checkResult['phpMemory'] . 'MB)：' . (($checkResult['phpMemoryOk'])? 'OK' : 'NG'));
 		if (!$checkResult['phpMemoryOk']) {
 			$this->out('　' . sprintf(__d('baser', 'memoty_limit の設定値を %s MB 以上に変更してください。'), Configure::read('BcRequire.phpMemory')));
 		}
-		$this->out('* Writable /app/Config/ (' . (($checkResult['configDirWritable']) ? 'True' : 'False') . ')：' . (($checkResult['configDirWritable']) ? 'OK' : 'NG'));
+		$this->out('* Writable /app/Config/ (' . (($checkResult['configDirWritable'])? 'True' : 'False') . ')：' . (($checkResult['configDirWritable'])? 'OK' : 'NG'));
 		if (!$checkResult['configDirWritable']) {
 			$this->out('　' . __d('baser', '/app/Config/ に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。'));
 		}
-		$this->out('* Writable /app/webroot/theme/ (' . (($checkResult['themeDirWritable']) ? 'True' : 'False') . ')：' . (($checkResult['themeDirWritable']) ? 'OK' : 'NG'));
+		$this->out('* Writable /app/webroot/theme/ (' . (($checkResult['themeDirWritable'])? 'True' : 'False') . ')：' . (($checkResult['themeDirWritable'])? 'OK' : 'NG'));
 		if (!$checkResult['themeDirWritable']) {
 			$this->out('　' . __d('baser', '/app/webroot/theme/ に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。'));
 		}
-		$this->out('* PHP GD (' . (($checkResult['phpGd']) ? 'True' : 'False') . ')');
+		$this->out('* PHP GD (' . (($checkResult['phpGd'])? 'True' : 'False') . ')');
 		if (!$checkResult['phpGd']) {
 			$this->out('　' . __d('baser', 'PHP の GD は、必須モジュールです。GDが利用可能な状態にしてください。'));
 		}
@@ -168,19 +175,19 @@ class BcManagerShell extends AppShell {
 		$this->out(__d('baser', 'オプション'));
 		$this->hr();
 
-		$this->out('* PHP Safe Mode (' . (!($checkResult['safeModeOff']) ? 'On' : 'Off') . ')');
+		$this->out('* PHP Safe Mode (' . (!($checkResult['safeModeOff'])? 'On' : 'Off') . ')');
 		if (!$checkResult['safeModeOff']) {
 			$this->out('　' . __d('baser', 'Safe Mode が On の場合、動作保証はありません。'));
 		}
-		$this->out('* PHP GD (' . (($checkResult['phpGd']) ? 'True' : 'False') . ')');
+		$this->out('* PHP GD (' . (($checkResult['phpGd'])? 'True' : 'False') . ')');
 		if (!$checkResult['phpGd']) {
 			$this->out('　' . __d('baser', 'PHP の GD は、推奨モジュールです。インストールされていない場合、画像処理ができません。'));
 		}
-		$this->out('* PHP PDO (' . (($checkResult['phpPdo']) ? 'True' : 'False') . ')');
+		$this->out('* PHP PDO (' . (($checkResult['phpPdo'])? 'True' : 'False') . ')');
 		if (!$checkResult['phpPdo']) {
 			$this->out('　' . __d('baser', 'PHP の PDO は推奨モジュールです。インストールされていない場合、SQLite は利用できません。'));
 		}
-		$this->out('* Writable /app/db/ (' . (($checkResult['dbDirWritable']) ? 'True' : 'False') . ')');
+		$this->out('* Writable /app/db/ (' . (($checkResult['dbDirWritable'])? 'True' : 'False') . ')');
 		if (!$checkResult['dbDirWritable']) {
 			$this->out('　' . __d('baser', '/app/db/ に書き込み権限を与える事ができませんでした。'));
 			$this->out('　' . __d('baser', 'SQLite や CSV など、ファイルベースのデータベースを利用するには、'));
@@ -200,10 +207,11 @@ class BcManagerShell extends AppShell {
 		$this->hr();
 	}
 
-/**
- * インストール 
- */
-	protected function _install() {
+	/**
+	 * インストール
+	 */
+	protected function _install()
+	{
 		if (count($this->args) < 2) {
 			$this->err(__d('baser', '引数を見なおしてください。'));
 			return false;
@@ -241,22 +249,23 @@ class BcManagerShell extends AppShell {
 		return $this->BcManager->install($siteUrl, $dbConfig, $adminUser, $baseUrl, $dataPattern);
 	}
 
-/**
- * パラメーターからDBの設定を取得する
- * @return mixed Array Or false
- */
-	protected function _getDbParams() {
+	/**
+	 * パラメーターからDBの設定を取得する
+	 * @return mixed Array Or false
+	 */
+	protected function _getDbParams()
+	{
 		$dbConfig = [
-			'datasource'	=> '',
-			'host'			=> '',
-			'database'		=> '',
-			'login'			=> '',
-			'password'		=> '',
-			'prefix'		=> '',
-			'port'			=> '',
-			'persistent'	=> false,
-			'schema'		=> '',
-			'encoding'		=> 'utf8'
+			'datasource' => '',
+			'host' => '',
+			'database' => '',
+			'login' => '',
+			'password' => '',
+			'prefix' => '',
+			'port' => '',
+			'persistent' => false,
+			'schema' => '',
+			'encoding' => 'utf8'
 		];
 
 		if (!empty($this->args[1])) {
@@ -320,10 +329,11 @@ class BcManagerShell extends AppShell {
 		return $dbConfig;
 	}
 
-/**
- * reset 
- */
-	protected function _reset() {
+	/**
+	 * reset
+	 */
+	protected function _reset()
+	{
 		$dbConfig = getDbConfig();
 		return $this->BcManager->reset($dbConfig);
 	}

@@ -1,65 +1,69 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
+ * Class UpdatersController
+ *
  * アップデーターコントローラー
  *
  * baserCMSのコアや、プラグインのアップデートを行います
  *
- * @package	Baser.Controller
+ * @package    Baser.Controller
  */
-class UpdatersController extends AppController {
+class UpdatersController extends AppController
+{
 
-/**
- * クラス名
- *
- * @var string
- */
+	/**
+	 * クラス名
+	 *
+	 * @var string
+	 */
 	public $name = 'Updaters';
 
-/**
- * アップデートメッセージ
- *
- * @var array
- */
+	/**
+	 * アップデートメッセージ
+	 *
+	 * @var array
+	 */
 	protected $_updateMessage = [];
 
-/**
- * コンポーネント
- *
- * @var array
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager'];
 
-/**
- * ヘルパー
- *
- * @var array
- */
+	/**
+	 * ヘルパー
+	 *
+	 * @var array
+	 */
 	public $helpers = ['BcForm'];
 
-/**
- * モデル
- *
- * @var array
- */
+	/**
+	 * モデル
+	 *
+	 * @var array
+	 */
 	public $uses = ['Favorite'];
 
-/**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
+	/**
+	 * beforeFilter
+	 *
+	 * @return void
+	 */
+	public function beforeFilter()
+	{
 		$this->Updater = ClassRegistry::init('Updater');
 		$this->Plugin = ClassRegistry::init('Plugin');
 		$this->SiteConfig = ClassRegistry::init('SiteConfig');
@@ -75,17 +79,19 @@ class UpdatersController extends AppController {
 		$this->subDir = 'admin';
 	}
 
-	public function beforeRender() {
+	public function beforeRender()
+	{
 		parent::beforeRender();
 		$this->set('favoriteBoxOpened', false);
 	}
 
-/**
- * コアのアップデート実行
- *
- * @return void
- */
-	public function index() {
+	/**
+	 * コアのアップデート実行
+	 *
+	 * @return void
+	 */
+	public function index()
+	{
 		$aryUrl = explode('/', $this->request->url);
 		if (empty($aryUrl[0])) {
 			$this->notFound();
@@ -104,7 +110,7 @@ class UpdatersController extends AppController {
 
 		$scriptNum = 0;
 		$scriptMessages = [];
-		foreach ($targets as $target) {
+		foreach($targets as $target) {
 			$scriptNum += count($this->_getUpdaters($target));
 			$scriptMessages += $this->_getScriptMessages($target);
 		}
@@ -123,7 +129,7 @@ class UpdatersController extends AppController {
 			// プラグインを一旦無効化
 			$plugins = $this->Plugin->find('all', ['fields' => ['Plugin.id'], 'conditions' => ['Plugin.status' => true]]);
 			$enabledPluginIds = [];
-			foreach ($plugins as $plugin) {
+			foreach($plugins as $plugin) {
 				$enabledPluginIds[] = $plugin['Plugin']['id'];
 				$plugin['Plugin']['status'] = false;
 				$this->Plugin->set($plugin);
@@ -131,14 +137,14 @@ class UpdatersController extends AppController {
 			}
 
 			$this->setUpdateLog(__d('baser', 'アップデート処理を開始します。'));
-			foreach ($targets as $target) {
+			foreach($targets as $target) {
 				if (!$this->_update($target)) {
 					$this->setUpdateLog(__d('baser', 'アップデート処理が途中で失敗しました。'));
 				}
 			}
 
 			// プラグインを有効化
-			foreach ($enabledPluginIds as $pluginId) {
+			foreach($enabledPluginIds as $pluginId) {
 				$plugin = [];
 				$plugin['Plugin']['id'] = $pluginId;
 				$plugin['Plugin']['status'] = true;
@@ -178,12 +184,13 @@ class UpdatersController extends AppController {
 		$this->render('update');
 	}
 
-/**
- * [ADMIN] アップデートスクリプトを実行する
- *
- * @return void
- */
-	public function admin_exec_script() {
+	/**
+	 * [ADMIN] アップデートスクリプトを実行する
+	 *
+	 * @return void
+	 */
+	public function admin_exec_script()
+	{
 		if ($this->request->data) {
 			$this->setUpdateLog(__d('baser', 'アップデートスクリプトの実行します。'));
 			if ($this->_execScript($this->request->data['Updater']['plugin'], $this->request->data['Updater']['version'])) {
@@ -211,13 +218,14 @@ class UpdatersController extends AppController {
 		$this->set('log', $updateLog);
 	}
 
-/**
- * プラグインのアップデート実行
- *
- * @param string $name
- * @return void
- */
-	public function admin_plugin($name) {
+	/**
+	 * プラグインのアップデート実行
+	 *
+	 * @param string $name
+	 * @return void
+	 */
+	public function admin_plugin($name)
+	{
 		if (!$name) {
 			$this->notFound();
 		}
@@ -272,7 +280,8 @@ class UpdatersController extends AppController {
 	 * @param string $plugin
 	 * @return array $updates
 	 */
-	protected function _getUpdaters($plugin = '') {
+	protected function _getUpdaters($plugin = '')
+	{
 
 		$targetVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getBaserVersion($plugin)));
 		$sourceVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getSiteVersion($plugin)));
@@ -295,7 +304,7 @@ class UpdatersController extends AppController {
 				}
 				$path = null;
 			}
-			if(!$path) {
+			if (!$path) {
 				return [];
 			}
 		}
@@ -305,12 +314,12 @@ class UpdatersController extends AppController {
 		$updaters = [];
 		$updateVerPoints = [];
 		if (!empty($files[0])) {
-			foreach ($files[0] as $folder) {
+			foreach($files[0] as $folder) {
 				$updateVersion = $folder;
 				$updateVerPoints[$updateVersion] = verpoint($updateVersion);
 			}
 			asort($updateVerPoints);
-			foreach ($updateVerPoints as $key => $updateVerPoint) {
+			foreach($updateVerPoints as $key => $updateVerPoint) {
 				if (($updateVerPoint > $sourceVerPoint && $updateVerPoint <= $targetVerPoint) || $key === 'test') {
 					if (file_exists($path . DS . $key . DS . 'updater.php')) {
 						$updaters[$key] = $updateVerPoint;
@@ -327,7 +336,8 @@ class UpdatersController extends AppController {
 	 * @param string $plugin
 	 * @return array $updates
 	 */
-	protected function _getScriptMessages($plugin = '') {
+	protected function _getScriptMessages($plugin = '')
+	{
 		$targetVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getBaserVersion($plugin)));
 		$sourceVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getSiteVersion($plugin)));
 
@@ -349,7 +359,7 @@ class UpdatersController extends AppController {
 				}
 				$path = null;
 			}
-			if(!$path) {
+			if (!$path) {
 				return [];
 			}
 		}
@@ -359,17 +369,17 @@ class UpdatersController extends AppController {
 		$messages = [];
 		$updateVerPoints = [];
 		if (!empty($files[0])) {
-			foreach ($files[0] as $folder) {
+			foreach($files[0] as $folder) {
 				$updateVersion = $folder;
 				$updateVerPoints[$updateVersion] = verpoint($updateVersion);
 			}
 			asort($updateVerPoints);
-			foreach ($updateVerPoints as $key => $updateVerPoint) {
+			foreach($updateVerPoints as $key => $updateVerPoint) {
 				$updateMessage = '';
 				if (($updateVerPoint > $sourceVerPoint && $updateVerPoint <= $targetVerPoint) || $key === 'test') {
 					if (file_exists($path . DS . $key . DS . 'config.php')) {
 						include $path . DS . $key . DS . 'config.php';
-						if($updateMessage) {
+						if ($updateMessage) {
 							$messages[$key] = $updateMessage;
 						}
 					}
@@ -379,13 +389,14 @@ class UpdatersController extends AppController {
 		return $messages;
 	}
 
-/**
- * アップデートフォルダのパスを取得する
- *
- * @param string $plugin
- * @return mixed $path or false
- */
-	protected function _getUpdateFolder($plugin = '') {
+	/**
+	 * アップデートフォルダのパスを取得する
+	 *
+	 * @param string $plugin
+	 * @return mixed $path or false
+	 */
+	protected function _getUpdateFolder($plugin = '')
+	{
 		if (!$plugin) {
 			return BASER_CONFIGS . 'update' . DS;
 		}
@@ -393,7 +404,7 @@ class UpdatersController extends AppController {
 		$paths = App::path('Plugin');
 		foreach($paths as $path) {
 			$path .= $plugin . DS . 'Config' . DS . 'update' . DS;
-			if(is_dir($path)) {
+			if (is_dir($path)) {
 				return $path;
 			}
 		}
@@ -410,7 +421,8 @@ class UpdatersController extends AppController {
 	 * @param string $plugin
 	 * @return boolean
 	 */
-	protected function _update($plugin = '') {
+	protected function _update($plugin = '')
+	{
 		$targetVersion = $this->getBaserVersion($plugin);
 		$sourceVersion = $this->getSiteVersion($plugin);
 		$path = $this->_getUpdateFolder($plugin);
@@ -426,7 +438,7 @@ class UpdatersController extends AppController {
 
 		if ($updaters) {
 			asort($updaters);
-			foreach ($updaters as $version => $updateVerPoint) {
+			foreach($updaters as $version => $updateVerPoint) {
 				$this->setUpdateLog('アップデートプログラム ' . $version . ' を実行します。');
 				$this->_execScript($plugin, $version);
 			}
@@ -471,7 +483,8 @@ class UpdatersController extends AppController {
 	 * @param string $__version
 	 * @return bool
 	 */
-	public function _execScript($__plugin, $__version) {
+	public function _execScript($__plugin, $__version)
+	{
 		ClassRegistry::flush();
 		BcSite::flash();
 		$__path = $this->_getUpdateFolder($__plugin) . $__version . DS . 'updater.php';
@@ -496,7 +509,8 @@ class UpdatersController extends AppController {
 	 * @param string $message
 	 * @return void
 	 */
-	public function setUpdateLog($message) {
+	public function setUpdateLog($message)
+	{
 		$this->_updateMessage[] = $message;
 	}
 
@@ -512,7 +526,8 @@ class UpdatersController extends AppController {
 	 * @return boolean
 	 * @access    public
 	 */
-	public function loadSchema($version, $plugin = '', $filterTable = '', $filterType = '') {
+	public function loadSchema($version, $plugin = '', $filterTable = '', $filterType = '')
+	{
 		$path = $this->_getUpdatePath($version, $plugin);
 		if (!$path) {
 			return false;
@@ -523,41 +538,43 @@ class UpdatersController extends AppController {
 		return $result;
 	}
 
-/**
- * CSVファイルで作成されたデータをインポートする
- *
- * @param string $version アップデート対象のバージョン番号を指定します。（例）'4.0.0'
- * @param string $plugin プラグイン内のCSVを読み込むにはプラグイン名を指定します。（例）'Mail'
- * @param string $filterTable 指定したテーブルのみCSVファイルを読み込む場合は、プレフィックス部分を除外したテーブル名を指定します。（例）'permissions'
- *		指定しない場合は全てのテーブルが対象になります。
- * @return boolean
- */
-	public function loadCsv($version, $plugin = '', $filterTable = '') {
+	/**
+	 * CSVファイルで作成されたデータをインポートする
+	 *
+	 * @param string $version アップデート対象のバージョン番号を指定します。（例）'4.0.0'
+	 * @param string $plugin プラグイン内のCSVを読み込むにはプラグイン名を指定します。（例）'Mail'
+	 * @param string $filterTable 指定したテーブルのみCSVファイルを読み込む場合は、プレフィックス部分を除外したテーブル名を指定します。（例）'permissions'
+	 *        指定しない場合は全てのテーブルが対象になります。
+	 * @return boolean
+	 */
+	public function loadCsv($version, $plugin = '', $filterTable = '')
+	{
 		$path = $this->_getUpdatePath($version, $plugin);
 		if (!$path) {
 			return false;
 		}
 		return $this->Updater->loadCsv(
-			$plugin ? 'plugin' : 'baser',
+			$plugin? 'plugin' : 'baser',
 			$path,
 			['filterTable' => $filterTable]
 		);
 	}
 
-/**
- * アップデートスクリプトのパスを取得する
- *
- * @param string $version
- * @param string $plugin
- * @return string $path or ''
- */
-	protected function _getUpdatePath($version, $plugin = '') {
+	/**
+	 * アップデートスクリプトのパスを取得する
+	 *
+	 * @param string $version
+	 * @param string $plugin
+	 * @return string $path or ''
+	 */
+	protected function _getUpdatePath($version, $plugin = '')
+	{
 
 		if ($plugin) {
 			$paths = App::path('Plugin');
 			foreach($paths as $path) {
 				$path .= $plugin . DS . 'Config' . DS . 'update' . DS . $version;
-				if(is_dir($path)) {
+				if (is_dir($path)) {
 					return $path;
 				}
 			}
@@ -573,14 +590,15 @@ class UpdatersController extends AppController {
 
 	}
 
-/**
- * アップデートメッセージを保存する
- *
- * @return void
- */
-	protected function _writeUpdateLog() {
+	/**
+	 * アップデートメッセージを保存する
+	 *
+	 * @return void
+	 */
+	protected function _writeUpdateLog()
+	{
 		if ($this->_updateMessage) {
-			foreach ($this->_updateMessage as $message) {
+			foreach($this->_updateMessage as $message) {
 				$this->log(strip_tags($message), 'update');
 			}
 		}

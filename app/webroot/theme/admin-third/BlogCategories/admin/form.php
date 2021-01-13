@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package            Blog.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -18,28 +18,30 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 ?>
 
 <?php if ($this->action == 'admin_edit'): ?>
-  <div class="bca-section bca-section__post-top">
+	<div class="bca-section bca-section__post-top">
 	<span class="bca-post__no">
 		<?php echo $this->BcForm->label('BlogCategory.no', 'No') ?> : <strong><?php echo $this->BcForm->value('BlogCategory.no') ?></strong>
 		<?php echo $this->BcForm->input('BlogCategory.no', ['type' => 'hidden']) ?>
 	</span>
-	<span class="bca-post__url">
-	  <a href="<?php echo $this->BcBaser->getUri($fullUrl) ?>" class="bca-text-url" target="_blank" data-toggle="tooltip" data-placement="top" title="公開URLを開きます"><i class="bca-icon--globe"></i><?php echo $this->BcBaser->getUri($fullUrl) ?></a>
+		<span class="bca-post__url">
+	  <a href="<?php echo $this->BcBaser->getUri($fullUrl) ?>" class="bca-text-url" target="_blank"
+		 data-toggle="tooltip" data-placement="top" title="公開URLを開きます"><i
+			  class="bca-icon--globe"></i><?php echo $this->BcBaser->getUri($fullUrl) ?></a>
 	  <?php echo $this->BcForm->button('', [
-		'id' => 'BtnCopyUrl',
-		'class' => 'bca-btn',
-		'type' => 'button',
-		'data-bca-btn-type' => 'textcopy',
-		'data-bca-btn-category' => 'text',
-		'data-bca-btn-size' => 'sm'
+		  'id' => 'BtnCopyUrl',
+		  'class' => 'bca-btn',
+		  'type' => 'button',
+		  'data-bca-btn-type' => 'textcopy',
+		  'data-bca-btn-category' => 'text',
+		  'data-bca-btn-size' => 'sm'
 	  ]) ?>
-  </div>
+	</div>
 <?php endif; ?>
 
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if ($this->action == 'admin_add'): ?>
 	<?php echo $this->BcForm->create('BlogCategory', ['url' => ['controller' => 'blog_categories', 'action' => 'add', $blogContent['BlogContent']['id']]]) ?>
-	<?php elseif ($this->action == 'admin_edit'): ?>
+<?php elseif ($this->action == 'admin_edit'): ?>
 	<?php echo $this->BcForm->create('BlogCategory', ['url' => ['controller' => 'blog_categories', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id'), 'id' => false]]) ?>
 <?php endif; ?>
 
@@ -51,7 +53,9 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table bca-form-table">
 		<tr>
-			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogCategory.name', __d('baser', 'カテゴリ名')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
+			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogCategory.name', __d('baser', 'カテゴリ名')) ?>
+				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+			</th>
 			<td class="col-input bca-form-table__input">
 				<?php echo $this->BcForm->input('BlogCategory.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
@@ -65,7 +69,9 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogCategory.title', __d('baser', 'カテゴリタイトル')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
+			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogCategory.title', __d('baser', 'カテゴリタイトル')) ?>
+				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+			</th>
 			<td class="col-input bca-form-table__input">
 				<?php echo $this->BcForm->input('BlogCategory.title', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
 				<?php echo $this->BcForm->error('BlogCategory.title') ?>
@@ -81,7 +87,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 						'options' => $parents,
 						'escape' => true])
 					?>
-			<?php echo $this->BcForm->error('BlogCategory.parent_id') ?>
+					<?php echo $this->BcForm->error('BlogCategory.parent_id') ?>
 				</td>
 			</tr>
 		<?php else: ?>
@@ -122,9 +128,9 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 <div class="submit bca-actions">
 	<div class="bca-actions__main">
 		<?php echo $this->BcForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn bca-actions__item',
-      'data-bca-btn-type' => 'save',
-      'data-bca-btn-size' => 'lg',
-      'data-bca-btn-width' => 'lg',]) ?>
+			'data-bca-btn-type' => 'save',
+			'data-bca-btn-size' => 'lg',
+			'data-bca-btn-width' => 'lg',]) ?>
 	</div>
 	<?php if ($this->action == 'admin_edit'): ?>
 		<div class="bca-actions__sub">

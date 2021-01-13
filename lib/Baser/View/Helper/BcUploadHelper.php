@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View.Helper
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View.Helper
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('BcAppHelper', 'View/Helper');
@@ -18,23 +18,25 @@ App::uses('BcAppHelper', 'View/Helper');
  * @package Baser.View.Helper
  * @property HtmlHelper $Html
  */
-class BcUploadHelper extends BcAppHelper {
+class BcUploadHelper extends BcAppHelper
+{
 
-/**
- * ヘルパ
- * 
- * @var array
- */
+	/**
+	 * ヘルパ
+	 *
+	 * @var array
+	 */
 	public $helpers = ['Html', 'BcForm'];
-	
-/**
- * ファイルへのリンクを取得する
- *
- * @param string $fieldName
- * @param array $options
- * @return string
- */
-	public function fileLink($fieldName, $options = []) {
+
+	/**
+	 * ファイルへのリンクを取得する
+	 *
+	 * @param string $fieldName
+	 * @param array $options
+	 * @return string
+	 */
+	public function fileLink($fieldName, $options = [])
+	{
 		$options = array_merge([
 			'imgsize' => 'medium', // 画像サイズ
 			'rel' => '', // rel属性
@@ -46,9 +48,9 @@ class BcUploadHelper extends BcAppHelper {
 			'figure' => null,
 			'img' => ['class' => ''],
 			'figcaption' => null
-			], $options);
+		], $options);
 
-		if(strpos($fieldName, '.') === false) {
+		if (strpos($fieldName, '.') === false) {
 			throw new BcException(__d('baser', 'BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドットで区切って指定する必要があります。'));
 		}
 		$this->setEntity($fieldName);
@@ -57,10 +59,10 @@ class BcUploadHelper extends BcAppHelper {
 		$tmp = false;
 		$Model = ClassRegistry::init($this->model());
 
-		try{
+		try {
 			$settings = $this->getBcUploadSetting();
-		} catch (BcException $e){
-			throw $e ;
+		} catch (BcException $e) {
+			throw $e;
 		}
 
 		// EVENT BcUpload.beforeFileLInk
@@ -71,7 +73,7 @@ class BcUploadHelper extends BcAppHelper {
 			'options' => $options
 		], ['class' => 'BcUpload', 'plugin' => '']);
 		if ($event !== false) {
-			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+			$options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
 			$settings = $event->data['settings'];
 		}
 
@@ -115,23 +117,23 @@ class BcUploadHelper extends BcAppHelper {
 				$uploadSettings = $settings['fields'][$field];
 				$ext = decodeContent('', $value);
 				$figureOptions = $figcaptionOptions = [];
-				if(!empty($options['figcaption'])) {
+				if (!empty($options['figcaption'])) {
 					$figcaptionOptions = $options['figcaption'];
 				}
-				if(!empty($options['figure'])) {
+				if (!empty($options['figure'])) {
 					$figureOptions = $options['figure'];
 				}
-				if(!empty($figcaptionOptions['class'])) {
+				if (!empty($figcaptionOptions['class'])) {
 					$figcaptionOptions['class'] .= ' file-name';
 				} else {
 					$figcaptionOptions['class'] = 'file-name';
 				}
 				if ($uploadSettings['type'] == 'image' || in_array($ext, $Model->Behaviors->BcUpload->imgExts)) {
 					$imgOptions = array_merge([
-						'imgsize' => $options['imgsize'], 
-						'rel' => $options['rel'], 
-						'title' => $options['title'], 
-						'link' => $options['link'], 
+						'imgsize' => $options['imgsize'],
+						'rel' => $options['rel'],
+						'title' => $options['title'],
+						'link' => $options['link'],
 						'force' => $options['force'],
 						'width' => $options['width'], // 横幅
 						'height' => $options['height'] // 高さ
@@ -143,7 +145,7 @@ class BcUploadHelper extends BcAppHelper {
 				} else {
 					$filePath = $basePath . $value;
 					$linkOptions = ['target' => '_blank'];
-					if(is_array($options['link'])) {
+					if (is_array($options['link'])) {
 						$linkOptions = array_merge($linkOptions, $options['link']);
 					}
 					$out = $this->Html->tag('figure', $this->Html->link(__d('baser', 'ダウンロード') . ' ≫', $filePath, $linkOptions) . '<br>' . $this->Html->tag('figcaption', mb_basename($value), $figcaptionOptions), $figureOptions);
@@ -162,25 +164,26 @@ class BcUploadHelper extends BcAppHelper {
 			'out' => $out
 		], ['class' => 'BcUpload', 'plugin' => '']);
 		if ($event !== false) {
-			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+			$out = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
 		}
 
 		return $out;
 	}
 
-/**
- * アップロードした画像のタグをリンク付きで出力する
- * Uploadビヘイビアの設定による
- * 上から順に大きい画像を並べている事が前提で
- * 指定したサイズ内で最大の画像を出力
- * リンク先は存在する最大の画像へのリンクとなる
- *
- * @param string $fieldName
- * @param string $fileName
- * @param array $options
- * @return string
- */
-	public function uploadImage($fieldName, $fileName, $options = []) {
+	/**
+	 * アップロードした画像のタグをリンク付きで出力する
+	 * Uploadビヘイビアの設定による
+	 * 上から順に大きい画像を並べている事が前提で
+	 * 指定したサイズ内で最大の画像を出力
+	 * リンク先は存在する最大の画像へのリンクとなる
+	 *
+	 * @param string $fieldName
+	 * @param string $fileName
+	 * @param array $options
+	 * @return string
+	 */
+	public function uploadImage($fieldName, $fileName, $options = [])
+	{
 		$options = array_merge([
 			'imgsize' => 'medium', // 画像サイズ
 			'escape' => false, // エスケープ
@@ -200,11 +203,11 @@ class BcUploadHelper extends BcAppHelper {
 
 		$this->setEntity($fieldName);
 		$field = $this->field();
-		
-		try{
+
+		try {
 			$settings = $this->getBcUploadSetting();
-		} catch (BcException $e){
-			throw $e ;
+		} catch (BcException $e) {
+			throw $e;
 		}
 
 		// EVENT BcUpload.beforeUploadImage
@@ -215,20 +218,20 @@ class BcUploadHelper extends BcAppHelper {
 			'options' => $options
 		], ['class' => 'BcUpload', 'plugin' => '']);
 		if ($event !== false) {
-			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+			$options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
 			$settings = $event->data['settings'];
 		}
 
 		$this->setBcUploadSetting($settings);
-		
+
 		$imgOptions = [
 			'alt' => $options['alt'],
 			'width' => $options['width'],
 			'height' => $options['height'],
 			'class' => $options['class']
 		];
-		if(empty($imgOptions['class'])) {
-			unset($imgOptions['class']);	
+		if (empty($imgOptions['class'])) {
+			unset($imgOptions['class']);
 		}
 		if ($imgOptions['width'] === '') {
 			unset($imgOptions['width']);
@@ -240,10 +243,10 @@ class BcUploadHelper extends BcAppHelper {
 			'rel' => 'colorbox',
 			'escape' => $options['escape']
 		];
-		if(!empty($options['link']) && is_array($options['link'])) {
+		if (!empty($options['link']) && is_array($options['link'])) {
 			$linkOptions = array_merge($linkOptions, $options['link']);
 		}
-		if(empty($linkOptions['class'])) {
+		if (empty($linkOptions['class'])) {
 			unset($linkOptions['class']);
 		}
 		if (is_array($fileName)) {
@@ -282,7 +285,7 @@ class BcUploadHelper extends BcAppHelper {
 			$copySettings = "";
 		}
 
-		if(!$options['imgsize']) {
+		if (!$options['imgsize']) {
 			$options['imgsize'] = 'default';
 		}
 		if ($options['tmp']) {
@@ -304,7 +307,7 @@ class BcUploadHelper extends BcAppHelper {
 
 			if ($copySettings && ($options['imgsize'] != 'default')) {
 
-				foreach ($copySettings as $key => $copySetting) {
+				foreach($copySettings as $key => $copySetting) {
 
 					if ($key == $options['imgsize']) {
 						$check = true;
@@ -329,22 +332,22 @@ class BcUploadHelper extends BcAppHelper {
 					if (isset($copySetting['prefix'])) {
 						$imgPrefix = $copySetting['prefix'];
 					}
-					
+
 					$pathinfo = pathinfo($fileName);
 					$ext = $pathinfo['extension'];
 					$basename = basename($fileName, '.' . $ext);
 
 					$subdir = str_replace($basename . '.' . $ext, '', $fileName);
 					$file = str_replace('/', DS, $subdir) . $imgPrefix . $basename . $imgSuffix . '.' . $ext;
-					
+
 					$fileExists = false;
-					if(file_exists($saveDir . $file)) {
+					if (file_exists($saveDir . $file)) {
 						$fileExists = true;
-					} elseif(file_exists($saveDirInTheme . $file)) {
+					} elseif (file_exists($saveDirInTheme . $file)) {
 						$fileExists = true;
 						$fileUrl = $fileUrlInTheme;
 					}
-					
+
 					if ($fileExists || $options['force']) {
 						if ($check && !$mostSizeExists) {
 							$mostSizeUrl = $fileUrl . $subdir . $imgPrefix . $basename . $imgSuffix . '.' . $ext . '?' . rand();
@@ -380,8 +383,8 @@ class BcUploadHelper extends BcAppHelper {
 		unset($options['force']);
 		unset($options['output']);
 		unset($options['class']);
-		
-		switch($output){
+
+		switch($output) {
 			case 'url' :
 				$out = $mostSizeUrl;
 				break;
@@ -403,52 +406,56 @@ class BcUploadHelper extends BcAppHelper {
 			'out' => $out
 		], ['class' => 'BcUpload', 'plugin' => '']);
 		if ($event !== false) {
-			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+			$out = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
 		}
 		return $out;
 	}
 
-/**
- * アップロード先のベースパスを取得
- *
- * @param string $fieldName 格納されているDBのフィールド名、ex) BlogPost.eye_catch
- * @param bool $isTheme テーマ内の初期データのパスとするかどうか
- * @return string パス
- */
-	public function getBasePath($settings = null, $isTheme = false) {
-		if(!$settings){
-			try{
+	/**
+	 * アップロード先のベースパスを取得
+	 *
+	 * @param string $fieldName 格納されているDBのフィールド名、ex) BlogPost.eye_catch
+	 * @param bool $isTheme テーマ内の初期データのパスとするかどうか
+	 * @return string パス
+	 */
+	public function getBasePath($settings = null, $isTheme = false)
+	{
+		if (!$settings) {
+			try {
 				$settings = $this->getBcUploadSetting();
-			} catch (BcException $e){
-				throw $e ;
+			} catch (BcException $e) {
+				throw $e;
 			}
 		}
 		$siteConfig = Configure::read('BcSite');
-		if(!$isTheme || empty($siteConfig['theme'])) {
-			return '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';	
+		if (!$isTheme || empty($siteConfig['theme'])) {
+			return '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 		} else {
 			$siteConfig = Configure::read('BcSite');
 			return '/theme/' . $siteConfig['theme'] . '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 		}
 	}
 
-/**
- * アップロードの設定を取得する
- *
- * @param string $modelName
- * @return array
- */
-	protected function getBcUploadSetting(){
+	/**
+	 * アップロードの設定を取得する
+	 *
+	 * @param string $modelName
+	 * @return array
+	 */
+	protected function getBcUploadSetting()
+	{
 		$Model = $this->getUploadModel();
 		return $Model->Behaviors->BcUpload->settings[$Model->name];
 	}
 
-	protected function setBcUploadSetting($settings){
+	protected function setBcUploadSetting($settings)
+	{
 		$Model = $this->getUploadModel();
 		$Model->Behaviors->BcUpload->settings[$Model->name] = $settings;
 	}
-	
-	protected function getUploadModel() {
+
+	protected function getUploadModel()
+	{
 		$modelName = $this->model();
 		$Model = ClassRegistry::init($modelName);
 		if (empty($Model->Behaviors->BcUpload)) {
@@ -456,5 +463,5 @@ class BcUploadHelper extends BcAppHelper {
 		}
 		return $Model;
 	}
-	
+
 }

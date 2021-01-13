@@ -1,21 +1,23 @@
 <?php
+
 /**
  * PageFixture
  */
-class PagePageModelFixture extends BaserTestFixture {
+class PagePageModelFixture extends BaserTestFixture
+{
 
-/**
- * Name of the object
- *
- * @var string
- */
+	/**
+	 * Name of the object
+	 *
+	 * @var string
+	 */
 	public $name = 'Page';
-	
-/**
- * Records
- *
- * @var array
- */
+
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => 1,
@@ -282,7 +284,7 @@ WEBシステム開発事業（ダミー）</td></tr>
 <p>
 	&nbsp;</p>
 <p>
-	まずは、<a href="http://basercms.net/files/extra/nada-works-png.zip">nada-works-png.zip</a> をダウンロードして解凍します。</p>
+	まずは、<a href="https://basercms.net/files/extra/nada-works-png.zip">nada-works-png.zip</a> をダウンロードして解凍します。</p>
 <p>
 	&nbsp;</p>
 <p>

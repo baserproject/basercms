@@ -1,50 +1,57 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('Imageresizer', 'Vendor');
 
 /**
+ * Class UploadsController
+ *
  * アップロードコントローラー
+ *
  * @package Baser.Controller
  */
-class UploadsController extends AppController {
+class UploadsController extends AppController
+{
 
-/**
- * クラス名
- *
- * @var string
- */
+	/**
+	 * クラス名
+	 *
+	 * @var string
+	 */
 	public $name = 'Uploads';
 
-/**
- * モデル
- * @var array
- */
+	/**
+	 * モデル
+	 * @var array
+	 */
 	public $uses = [];
 
-/**
- * セッションに保存した一時ファイルを出力する
- * @param string $name
- * @return void
- */
-	public function tmp() {
+	/**
+	 * セッションに保存した一時ファイルを出力する
+	 * @param string $name
+	 * @return void
+	 */
+	public function tmp()
+	{
 		$this->output(func_get_args(), func_num_args());
 	}
 
-	public function smartphone_tmp(){
+	public function smartphone_tmp()
+	{
 		$this->output(func_get_args(), func_num_args());
 	}
 
-	protected function output($args, $funcNum) {
+	protected function output($args, $funcNum)
+	{
 		$size = '';
 		if ($funcNum > 1) {
 			$size = $args[0];

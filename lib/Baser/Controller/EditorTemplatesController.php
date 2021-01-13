@@ -1,51 +1,55 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
+ * Class EditorTemplatesController
+ *
  * エディタテンプレートコントローラー
  *
  * エディタテンプレートの管理を行う
  *
  * @package Baser.Controller
  */
-class EditorTemplatesController extends AppController {
+class EditorTemplatesController extends AppController
+{
 
-/**
- * コントローラー名
- *
- * @var string
- */
+	/**
+	 * コントローラー名
+	 *
+	 * @var string
+	 */
 	public $name = 'EditorTemplates';
 
-/**
- * サブメニュー
- *
- * @var array
- */
+	/**
+	 * サブメニュー
+	 *
+	 * @var array
+	 */
 	public $subMenuElements = ['site_configs', 'editor_templates'];
 
-/**
- * コンポーネント
- *
- * @var array
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
-/**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
+	/**
+	 * beforeFilter
+	 *
+	 * @return void
+	 */
+	public function beforeFilter()
+	{
 		parent::beforeFilter();
 		$this->crumbs = [
 			['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
@@ -56,19 +60,21 @@ class EditorTemplatesController extends AppController {
 		}
 	}
 
-/**
- * [ADMIN] 一覧
- */
-	public function admin_index() {
+	/**
+	 * [ADMIN] 一覧
+	 */
+	public function admin_index()
+	{
 		$this->pageTitle = __d('baser', 'エディタテンプレート一覧');
 		$this->help = 'editor_templates_index';
 		$this->set('datas', $this->EditorTemplate->find('all'));
 	}
 
-/**
- * [ADMIN] 新規登録
- */
-	public function admin_add() {
+	/**
+	 * [ADMIN] 新規登録
+	 */
+	public function admin_add()
+	{
 		$this->pageTitle = __d('baser', 'エディタテンプレート新規登録');
 		$this->help = 'editor_templates_form';
 
@@ -104,12 +110,13 @@ class EditorTemplatesController extends AppController {
 //		$this->render('form');
 	}
 
-/**
- * [ADMIN] 編集
- *
- * @param int $id
- */
-	public function admin_edit($id) {
+	/**
+	 * [ADMIN] 編集
+	 *
+	 * @param int $id
+	 */
+	public function admin_edit($id)
+	{
 		$this->pageTitle = __d('baser', 'エディタテンプレート編集');
 		$this->help = 'editor_templates_form';
 
@@ -131,7 +138,7 @@ class EditorTemplatesController extends AppController {
 			return;
 		}
 
-	// EVENT EditorTemplates.afterEdit
+		// EVENT EditorTemplates.afterEdit
 		$this->dispatchEvent('afterEdit', [
 			'data' => $result
 		]);
@@ -140,12 +147,13 @@ class EditorTemplatesController extends AppController {
 //		$this->render('form');
 	}
 
-/**
- * [ADMIN] 削除
- *
- * @param int $id
- */
-	public function admin_delete($id) {
+	/**
+	 * [ADMIN] 削除
+	 *
+	 * @param int $id
+	 */
+	public function admin_delete($id)
+	{
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
@@ -160,11 +168,12 @@ class EditorTemplatesController extends AppController {
 		$this->redirect(['action' => 'index']);
 	}
 
-/**
- * [ADMIN AJAX] 削除
- * @param int $id
- */
-	public function admin_ajax_delete($id) {
+	/**
+	 * [ADMIN AJAX] 削除
+	 * @param int $id
+	 */
+	public function admin_ajax_delete($id)
+	{
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
@@ -177,10 +186,11 @@ class EditorTemplatesController extends AppController {
 		exit();
 	}
 
-/**
- * [ADMIN] CKEditor用テンプレート用のjavascriptを出力する
- */
-	public function admin_js() {
+	/**
+	 * [ADMIN] CKEditor用テンプレート用のjavascriptを出力する
+	 */
+	public function admin_js()
+	{
 		header('Content-Type: text/javascript; name="editor_templates.js"');
 		$this->layout = 'empty';
 		$this->set('templates', $this->EditorTemplate->find('all'));

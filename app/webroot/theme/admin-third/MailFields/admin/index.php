@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Mail.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package            Mail.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -28,17 +28,21 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 
 
 <script type="text/javascript">
-$(function(){
-	$.baserAjaxDataList.config.methods.copy.result = null;
-	$.baserAjaxDataList.init();
-	$.baserAjaxSortTable.init({ url: $("#AjaxSorttableUrl").html()});
-	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
-});
+	$(function () {
+		$.baserAjaxDataList.config.methods.copy.result = null;
+		$.baserAjaxDataList.init();
+		$.baserAjaxSortTable.init({url: $("#AjaxSorttableUrl").html()});
+		$.baserAjaxBatch.init({url: $("#AjaxBatchUrl").html()});
+	});
 </script>
 
-<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(['controller' => 'mail_fields', 'action' => 'ajax_batch', $mailContent['MailContent']['id']]) ?></div>
-<div id="AjaxSorttableUrl" style="display:none"><?php $this->BcBaser->url(['controller' => 'mail_fields', 'action' => 'ajax_update_sort', $mailContent['MailContent']['id']]) ?></div>
+<div id="AjaxBatchUrl"
+	 style="display:none"><?php $this->BcBaser->url(['controller' => 'mail_fields', 'action' => 'ajax_batch', $mailContent['MailContent']['id']]) ?></div>
+<div id="AjaxSorttableUrl"
+	 style="display:none"><?php $this->BcBaser->url(['controller' => 'mail_fields', 'action' => 'ajax_update_sort', $mailContent['MailContent']['id']]) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
-<div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
+<div id="MessageBox" style="display:none">
+	<div id="flashMessage" class="notice-message"></div>
+</div>
 
 <div id="DataList" class="bca-data-list"><?php $this->BcBaser->element('mail_fields/index_list') ?></div>

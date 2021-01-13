@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Config
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Config
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -144,21 +144,21 @@ $config['BcApp'] = [
 	],
 	// @deprecated 5.0.0 since 4.2.0 BcApp.adminNavigation の形式に変更
 	'adminNavi' => ['core' => [
-			'name' => 'baserCMSコア',
-			'contents' => [
-				['name' => __d('baser', 'コンテンツ管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'index']],
-				['name' => __d('baser', 'ウィジェット管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index']],
-				['name' => __d('baser', 'テーマ管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'index']],
-				['name' => __d('baser', 'プラグイン管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'plugins', 'action' => 'index']],
-				['name' => __d('baser', 'システム設定'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'form']],
-				['name' => __d('baser', 'ユーザー管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'index']],
-				['name' => __d('baser', 'ユーザーグループ管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index']],
-				['name' => __d('baser', '検索インデックス管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'index']],
-				['name' => __d('baser', 'エディタテンプレート管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index']],
-				['name' => __d('baser', 'サブサイト管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'sites', 'action' => 'index']],
-				['name' => __d('baser', 'ユーティリティ'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'index']],
-				['name' => __d('baser', 'サーバーキャッシュ削除'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'del_cache'], 'options' => ['confirm' => __d('baser', 'サーバーキャッシュを削除します。いいですか？')]]
-	]]],
+		'name' => 'baserCMSコア',
+		'contents' => [
+			['name' => __d('baser', 'コンテンツ管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'index']],
+			['name' => __d('baser', 'ウィジェット管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index']],
+			['name' => __d('baser', 'テーマ管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'index']],
+			['name' => __d('baser', 'プラグイン管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'plugins', 'action' => 'index']],
+			['name' => __d('baser', 'システム設定'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'form']],
+			['name' => __d('baser', 'ユーザー管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'index']],
+			['name' => __d('baser', 'ユーザーグループ管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index']],
+			['name' => __d('baser', '検索インデックス管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'index']],
+			['name' => __d('baser', 'エディタテンプレート管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index']],
+			['name' => __d('baser', 'サブサイト管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'sites', 'action' => 'index']],
+			['name' => __d('baser', 'ユーティリティ'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'index']],
+			['name' => __d('baser', 'サーバーキャッシュ削除'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'del_cache'], 'options' => ['confirm' => __d('baser', 'サーバーキャッシュを削除します。いいですか？')]]
+		]]],
 	// コアプラグイン
 	'corePlugins' => ['Blog', 'Feed', 'Mail', 'Uploader'],
 	// アップデートキー
@@ -180,7 +180,7 @@ $config['BcApp'] = [
 	'allowedThemeEdit' => false,
 	'marketThemeRss' => 'https://market.basercms.net/themes.rss',
 	'marketPluginRss' => 'https://market.basercms.net/plugins.rss',
-	'specialThanks'	=> 'https://basercms.net/special_thanks/special_thanks/ajax_users',
+	'specialThanks' => 'https://basercms.net/special_thanks/special_thanks/ajax_users',
 	// 管理システムのデフォルトテーマ
 	'defaultAdminTheme' => 'admin-third',
 	// コンテンツの作成日を自動で更新する
@@ -212,18 +212,18 @@ $config['BcApp'] = [
 /**
  * システム要件
  */
-$config['BcRequire'] = array(
+$config['BcRequire'] = [
 	'phpVersion' => "5.4.0",
 	'phpMemory' => "128",
 	'MySQLVersion' => "5.0.0",
 	'winSQLiteVersion' => "3.7.16",
 	'PostgreSQLVersion' => "8.4.0"
-);
+];
 
 /**
  * 環境設定
  */
-$config['BcEnv'] = array(
+$config['BcEnv'] = [
 	// テストDBプレフィックス
 	'testDbPrefix' => 'test_',
 	// WebサイトURL（インストーラーで install.php 自動設定される、システム設定で変更可）
@@ -234,19 +234,19 @@ $config['BcEnv'] = array(
 	'mainDomain' => '',
 	// 現在のリクエストのホスト
 	'host' => @$_SERVER['HTTP_HOST']
-);
+];
 
 /**
  * 文字コード設定
  */
-$config['BcEncode'] = array(
+$config['BcEncode'] = [
 	// 文字コードの検出順
 	'detectOrder' => 'ASCII,JIS,UTF-8,SJIS-win,EUC-JP',
-	'mail' => array(
+	'mail' => [
 		'UTF-8' => 'UTF-8',
 		'ISO-2022-JP' => 'ISO-2022-JP'
-	)
-);
+	]
+];
 
 /**
  * 認証プレフィックス設定
@@ -254,9 +254,9 @@ $config['BcEncode'] = array(
  */
 $prefixes = Configure::read('Routing.prefixes');
 $adminPrefix = $prefixes[0];
-$config['BcAuthPrefix'] = array(
+$config['BcAuthPrefix'] = [
 	// 管理画面
-	'admin' => array(
+	'admin' => [
 		// 認証タイプ
 		'type' => 'Form',
 		// 認証設定名
@@ -270,7 +270,7 @@ $config['BcAuthPrefix'] = array(
 		// ログインページURL
 		'loginAction' => '/' . $adminPrefix . '/users/login',
 		// ログアウトページURL
-		'logoutAction'=> '/' . $adminPrefix . '/users/logout',
+		'logoutAction' => '/' . $adminPrefix . '/users/logout',
 		// ツールバー利用
 		'toolbar' => true,
 		// モデル
@@ -283,47 +283,47 @@ $config['BcAuthPrefix'] = array(
 		// @see /lib/Baser/Routing/Route/BcContentsRoute.php
 		'previewRedirect' => true
 
-	)
+	]
 	// フロント（例）
-/* 'front' => array(
-	  'name'			=> __d('baser', 'フロント'),
-	  'loginRedirect'	=> '/',
-	  'userModel'		=> 'User',
-	  'loginAction'	=> '/users/login',
-	  'logoutAction'=> '/users/logout',
-	  'toolbar'		=> true,
-	  'sessionKey'	=> 'User'
-	), */
+	/* 'front' => array(
+		  'name'			=> __d('baser', 'フロント'),
+		  'loginRedirect'	=> '/',
+		  'userModel'		=> 'User',
+		  'loginAction'	=> '/users/login',
+		  'logoutAction'=> '/users/logout',
+		  'toolbar'		=> true,
+		  'sessionKey'	=> 'User'
+		), */
 	// マイページ（例）
-/* 'mypage' => array(
-	  'name'			=> __d('baser', 'マイページ'),
-	  'alias'			=> 'mypage',
-	  'loginRedirect'	=> '/mypage/members/index',
-	  'loginTitle'	=> __d('baser', 'マイページログイン'),
-	  'userModel'		=> 'Member',
-	  'loginAction'	=> '/mypage/members/login',
-	  'logoutAction'=> '/mypage/members/logout',
-	  'toolbar'		=> false,
-	  'sessionKey'	=> 'User'
-	) */
-);
+	/* 'mypage' => array(
+		  'name'			=> __d('baser', 'マイページ'),
+		  'alias'			=> 'mypage',
+		  'loginRedirect'	=> '/mypage/members/index',
+		  'loginTitle'	=> __d('baser', 'マイページログイン'),
+		  'userModel'		=> 'Member',
+		  'loginAction'	=> '/mypage/members/login',
+		  'logoutAction'=> '/mypage/members/logout',
+		  'toolbar'		=> false,
+		  'sessionKey'	=> 'User'
+		) */
+];
 
 /**
  * Eメール設定
  */
-$config['BcEmail'] = array(
+$config['BcEmail'] = [
 	// 改行コード
 	'lfcode' => "\n"
-);
+];
 
 /**
  * エージェント設定
  */
-$config['BcAgent'] = array(
-	'mobile' => array(
+$config['BcAgent'] = [
+	'mobile' => [
 		'name' => __d('baser', 'ケータイ'),
 		'helper' => 'BcMobile',
-		'agents' => array(
+		'agents' => [
 			'Googlebot-Mobile',
 			'Y!J-SRD',
 			'Y!J-MBS',
@@ -332,29 +332,29 @@ $config['BcAgent'] = array(
 			'Vodafone',
 			'J-PHONE',
 			'UP.Browser'
-		),
+		],
 		'sessionId' => true
-	),
-	'smartphone' => array(
+	],
+	'smartphone' => [
 		'name' => __d('baser', 'スマートフォン'),
 		'helper' => 'BcSmartphone',
-		'agents' => array(
-			'iPhone',			// Apple iPhone
-			'iPod',				// Apple iPod touch
-			'Android',			// 1.5+ Android
-			'dream',			// Pre 1.5 Android
-			'CUPCAKE',			// 1.5+ Android
-			'blackberry9500',	// Storm
-			'blackberry9530',	// Storm
-			'blackberry9520',	// Storm v2
-			'blackberry9550',	// Storm v2
-			'blackberry9800',	// Torch
-			'webOS',			// Palm Pre Experimental
-			'incognito',		// Other iPhone browser
-			'webmate'			// Other iPhone browser
-		)
-	)
-);
+		'agents' => [
+			'iPhone',            // Apple iPhone
+			'iPod',                // Apple iPod touch
+			'Android',            // 1.5+ Android
+			'dream',            // Pre 1.5 Android
+			'CUPCAKE',            // 1.5+ Android
+			'blackberry9500',    // Storm
+			'blackberry9530',    // Storm
+			'blackberry9520',    // Storm v2
+			'blackberry9550',    // Storm v2
+			'blackberry9800',    // Torch
+			'webOS',            // Palm Pre Experimental
+			'incognito',        // Other iPhone browser
+			'webmate'            // Other iPhone browser
+		]
+	]
+];
 
 /**
  * 言語設定
@@ -374,134 +374,134 @@ $config['BcLang'] = [
 $config['BcContents'] = [
 	'items' => [
 		'Core' => [
-			'Default'	=> [
+			'Default' => [
 				'title' => __d('baser', '無所属コンテンツ'),
 				'omitViewAction' => true,
 				'routes' => [
-					'add'	=> [
+					'add' => [
 						'admin' => true,
-						'controller'=> 'contents',
-						'action'	=> 'add'
+						'controller' => 'contents',
+						'action' => 'add'
 					],
-					'edit'	=> [
+					'edit' => [
 						'admin' => true,
-						'controller'=> 'contents',
-						'action'	=> 'edit'
+						'controller' => 'contents',
+						'action' => 'edit'
 					],
 					'delete' => [
 						'admin' => true,
-						'controller'=> 'contents',
-						'action'	=> 'empty'
+						'controller' => 'contents',
+						'action' => 'empty'
 					],
 					'view' => [
-						'controller'=> 'contents',
-						'action'	=> 'view'
+						'controller' => 'contents',
+						'action' => 'view'
 					]
 				],
-				'icon'	=> 'bca-icon--file',
+				'icon' => 'bca-icon--file',
 			],
-			'ContentFolder'	=> [
-				'multiple'	=> true,
-				'preview'	=> true,
+			'ContentFolder' => [
+				'multiple' => true,
+				'preview' => true,
 				'title' => __d('baser', 'フォルダー'),
 				'routes' => [
-					'add'	=> [
+					'add' => [
 						'admin' => true,
-						'controller'=> 'content_folders',
-						'action'	=> 'add'
+						'controller' => 'content_folders',
+						'action' => 'add'
 					],
-					'edit'	=> [
+					'edit' => [
 						'admin' => true,
-						'controller'=> 'content_folders',
-						'action'	=> 'edit'
+						'controller' => 'content_folders',
+						'action' => 'edit'
 					],
 					'delete' => [
 						'admin' => true,
-						'controller'=> 'content_folders',
-						'action'	=> 'delete'
+						'controller' => 'content_folders',
+						'action' => 'delete'
 					],
 					'view' => [
-						'controller'=> 'content_folders',
-						'action'	=> 'view'
+						'controller' => 'content_folders',
+						'action' => 'view'
 					]
 				],
-				'icon'	=> 'bca-icon--folder',
+				'icon' => 'bca-icon--folder',
 			],
-			'ContentAlias'	=> [
+			'ContentAlias' => [
 				'multiple' => true,
 				'title' => __d('baser', 'エイリアス'),
-				'icon'	=> 'bca-icon--alias',
+				'icon' => 'bca-icon--alias',
 				'routes' => [
-					'add'	=> [
+					'add' => [
 						'admin' => true,
-						'controller'=> 'contents',
-						'action'	=> 'add',
+						'controller' => 'contents',
+						'action' => 'add',
 						1
 					],
-					'edit'	=> [
+					'edit' => [
 						'admin' => true,
-						'controller'=> 'contents',
-						'action'	=> 'edit_alias'
+						'controller' => 'contents',
+						'action' => 'edit_alias'
 					]
 				],
 			],
-			'ContentLink'	=> [
+			'ContentLink' => [
 				'multiple' => true,
 				'title' => __d('baser', 'リンク'),
 				'omitViewAction' => true,
 				'routes' => [
-					'add'	=> [
+					'add' => [
 						'admin' => true,
-						'controller'=> 'content_links',
-						'action'	=> 'add'
+						'controller' => 'content_links',
+						'action' => 'add'
 					],
-					'edit'	=> [
+					'edit' => [
 						'admin' => true,
-						'controller'=> 'content_links',
-						'action'	=> 'edit'
+						'controller' => 'content_links',
+						'action' => 'edit'
 					],
 					'delete' => [
 						'admin' => true,
-						'controller'=> 'content_links',
-						'action'	=> 'delete'
+						'controller' => 'content_links',
+						'action' => 'delete'
 					],
 					'view' => [
-						'controller'=> 'content_links',
-						'action'	=> 'view'
+						'controller' => 'content_links',
+						'action' => 'view'
 					]
 				],
-				'icon'	=> 'bca-icon--link',
+				'icon' => 'bca-icon--link',
 			],
-			'Page'	=> [
+			'Page' => [
 				'title' => __d('baser', '固定ページ'),
-				'multiple'	=> true,
-				'preview'	=> true,
-				'icon'	=> 'bca-icon--file',
+				'multiple' => true,
+				'preview' => true,
+				'icon' => 'bca-icon--file',
 				'omitViewAction' => true,
 				'routes' => [
-					'add'	=> [
+					'add' => [
 						'admin' => true,
-						'controller'=> 'pages',
-						'action'	=> 'ajax_add'
+						'controller' => 'pages',
+						'action' => 'ajax_add'
 					],
-					'edit'	=> [
+					'edit' => [
 						'admin' => true,
-						'controller'=> 'pages',
-						'action'	=> 'edit'
+						'controller' => 'pages',
+						'action' => 'edit'
 					],
 					'delete' => [
 						'admin' => true,
-						'controller'=> 'pages',
-						'action'	=> 'delete'
+						'controller' => 'pages',
+						'action' => 'delete'
 					],
 					'view' => [
-						'controller'=> 'pages',
-						'action'	=> 'display'
+						'controller' => 'pages',
+						'action' => 'display'
 					],
-					'copy'	=> [
+					'copy' => [
 						'admin' => true,
-						'controller'=> 'pages',
-						'action'	=> 'ajax_copy'
+						'controller' => 'pages',
+						'action' => 'ajax_copy'
 					]
 				]
 			]

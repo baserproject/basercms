@@ -1,21 +1,23 @@
 <?php
+
 /**
  * BlogPostsBlogTag Fixture
  */
-class BlogPostsBlogTagBlogTagFindCustomPramsFixture extends CakeTestFixture {
+class BlogPostsBlogTagBlogTagFindCustomPramsFixture extends CakeTestFixture
+{
 
-/**
- * Import
- *
- * @var array
- */
+	/**
+	 * Import
+	 *
+	 * @var array
+	 */
 	public $import = ['model' => 'Blog.BlogPostsBlogTag'];
-	
-/**
- * Records
- *
- * @var array
- */
+
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '4',

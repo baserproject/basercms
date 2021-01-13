@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 2.0.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 2.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -27,7 +27,9 @@
 		<dt><h4><?php echo $this->BcForm->label('Permission.name', __d('baser', 'ルール名')) ?></h4></dt>
 		<dd><?php echo $this->BcForm->input('Permission.name', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?></dd>
 		<dt><?php echo $this->BcForm->label('Permission.url', __d('baser', 'URL設定')) ?></dt>
-		<dd><strong id="PermissionAdmin">/<?php echo Configure::read('Routing.prefixes.0') ?>/</strong><?php echo $this->BcForm->input('Permission.url', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?></dd>
+		<dd><strong id="PermissionAdmin">/<?php echo Configure::read('Routing.prefixes.0') ?>
+				/</strong><?php echo $this->BcForm->input('Permission.url', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?>
+		</dd>
 		<dt><?php echo $this->BcForm->label('Permission.auth', __d('baser', 'アクセス')) ?></dt>
 		<dd>
 			<?php
@@ -38,8 +40,8 @@
 				'value' => 0,
 				'separator' => '　'])
 			?>
-	<?php echo $this->BcForm->error('Permission.auth') ?>
+			<?php echo $this->BcForm->error('Permission.auth') ?>
 		</dd>
 	</dl>
-<?php echo $this->BcForm->end() ?>
+	<?php echo $this->BcForm->end() ?>
 </div>

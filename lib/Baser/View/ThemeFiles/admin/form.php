@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -19,17 +19,17 @@ $this->BcBaser->js('admin/themes/form');
 $params = explode('/', $path);
 $parentPrams = explode('/', $path);
 if ($this->request->action !== 'admin_add') {
-	unset($parentPrams[count($parentPrams)-1]);
+	unset($parentPrams[count($parentPrams) - 1]);
 }
 ?>
 
 
 <div class="em-box align-left">
-<?php echo __d('baser', '現在の位置')?>：<?php echo h($currentPath) ?>
+	<?php echo __d('baser', '現在の位置') ?>：<?php echo h($currentPath) ?>
 </div>
 
-<?php if($theme	!= 'core' && !$isWritable): ?>
-<div id="AlertMessage"><?php echo __d('baser', 'ファイルに書き込み権限がないので編集できません。')?></div>
+<?php if ($theme != 'core' && !$isWritable): ?>
+	<div id="AlertMessage"><?php echo __d('baser', 'ファイルに書き込み権限がないので編集できません。') ?></div>
 <?php endif ?>
 
 <?php if ($this->request->action == 'admin_add'): ?>
@@ -46,7 +46,8 @@ if ($this->request->action !== 'admin_add') {
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('ThemeFile.name', __d('baser', 'ファイル名')) ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('ThemeFile.name', __d('baser', 'ファイル名')) ?>&nbsp;<span
+					class="required">*</span></th>
 			<td class="col-input">
 				<?php if ($this->request->action != 'admin_view'): ?>
 					<?php echo $this->BcForm->input('ThemeFile.name', ['type' => 'text', 'size' => 30, 'maxlength' => 255, 'autofocus' => true]) ?>
@@ -57,7 +58,7 @@ if ($this->request->action !== 'admin_add') {
 					<?php echo $this->BcForm->error('ThemeFile.name') ?>
 					<div id="helptextName" class="helptext">
 						<ul>
-							<li><?php echo __d('baser', 'ファイル名は半角で入力してください。')?></li>
+							<li><?php echo __d('baser', 'ファイル名は半角で入力してください。') ?></li>
 						</ul>
 					</div>
 				<?php else: ?>
@@ -99,7 +100,7 @@ if ($this->request->action !== 'admin_add') {
 		<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 	<?php elseif ($this->request->action == 'admin_edit'): ?>
 		<?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], $parentPrams), ['class' => 'btn-gray button']); ?>
-		<?php if($isWritable): ?>
+		<?php if ($isWritable): ?>
 			<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 			<?php $this->BcBaser->link(__d('baser', '削除'), array_merge(['action' => 'del', $theme, $plugin, $type], $params), ['class' => 'submit-token button'], sprintf(__d('baser', '%s を本当に削除してもいいですか？'), basename($path)), false) ?>
 		<?php endif ?>
@@ -113,7 +114,7 @@ if ($this->request->action !== 'admin_add') {
 				<?php $this->BcBaser->link(__d('baser', '現在のテーマにコピー'), array_merge(['action' => 'copy_to_theme', $theme, $plugin, $type], explode('/', $path)), ['class' => 'submit-token btn-red button'], sprintf(__d('baser', "本当に現在のテーマ「 %s 」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。"), Inflector::camelize($siteConfig['theme']))); ?>
 			<?php endif; ?>
 		<?php else: ?>
-            <?php echo __d('baser', '機能制限のセーフモードで動作していますので、現在のテーマへのコピーはできません。')?>
+			<?php echo __d('baser', '機能制限のセーフモードで動作していますので、現在のテーマへのコピーはできません。') ?>
 		<?php endif; ?>
 	<?php endif; ?>
 </div>

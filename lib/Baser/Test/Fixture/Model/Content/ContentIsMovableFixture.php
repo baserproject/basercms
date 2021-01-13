@@ -1,26 +1,28 @@
 <?php
+
 /**
  * ContentFixture
  */
-class ContentIsMovableFixture extends BaserTestFixture {
+class ContentIsMovableFixture extends BaserTestFixture
+{
 
-/**
- * Name of the object
- *
- * @var string
- */
-public $name = 'Content';
-	
-/**
- * Records
- *
- * @var array
- */
+	/**
+	 * Name of the object
+	 *
+	 * @var string
+	 */
+	public $name = 'Content';
+
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '1',
 			'type' => 'ContentFolder',
-			'name' => '',			
+			'name' => '',
 			'title' => 'トップディレクトリ',
 			'entity_id' => '1',
 			'url' => '/',
@@ -29,7 +31,7 @@ public $name = 'Content';
 			'rght' => '2',
 			'level' => 0,
 			'site_id' => '0',
-			'site_root' => 1,			
+			'site_root' => 1,
 			'plugin' => 'Core',
 			'deleted' => 0
 		],
@@ -59,7 +61,7 @@ public $name = 'Content';
 			'parent_id' => 1,
 			'lft' => '4',
 			'rght' => '7',
-			'level' => 0,			
+			'level' => 0,
 			'site_id' => '0',
 			'plugin' => 'Core',
 			'site_root' => 0,
@@ -75,7 +77,7 @@ public $name = 'Content';
 			'parent_id' => 3,
 			'lft' => '5',
 			'rght' => '6',
-			'level' => 1,			
+			'level' => 1,
 			'site_id' => '0',
 			'plugin' => 'Core',
 			'site_root' => 0,
@@ -91,7 +93,7 @@ public $name = 'Content';
 			'parent_id' => 1,
 			'lft' => '8',
 			'rght' => '11',
-			'level' => 0,			
+			'level' => 0,
 			'site_id' => '0',
 			'plugin' => 'Core',
 			'site_root' => 0,
@@ -107,7 +109,7 @@ public $name = 'Content';
 			'parent_id' => 5,
 			'lft' => '9',
 			'rght' => '10',
-			'level' => 1,			
+			'level' => 1,
 			'site_id' => '0',
 			'plugin' => 'Core',
 			'site_root' => 0,
@@ -123,7 +125,7 @@ public $name = 'Content';
 			'parent_id' => 1,
 			'lft' => '12',
 			'rght' => '15',
-			'level' => 0,			
+			'level' => 0,
 			'site_id' => '0',
 			'plugin' => 'Core',
 			'site_root' => 0,

@@ -1,21 +1,23 @@
 <?php
+
 /**
  * Site Fixture
  */
-class SiteBcContentsRouteFixture extends BaserTestFixture {
+class SiteBcContentsRouteFixture extends BaserTestFixture
+{
 
-/**
- * Name of the object
- *
- * @var string
- */
+	/**
+	 * Name of the object
+	 *
+	 * @var string
+	 */
 	public $name = 'Site';
 
-/**
- * Records
- *
- * @var array
- */
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '1',

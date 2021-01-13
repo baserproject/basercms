@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -41,16 +41,16 @@ $adminPrefix = BcUtil::getAdminPrefix();
 <?php echo __d('baser', 'baserCMS を初めてご利用される場合は次のページをご覧ください。')?>　
 
 ■ <?php echo __d('baser', 'baserCMS公式サイト')?>　
-http://basercms.net/
+https://basercms.net/
 
 ■ <?php echo __d('baser', 'baserCMSとは？')?>　
-http://basercms.net/about/index.html
+https://basercms.net/about/index.html
 
 ■ <?php echo __d('baser', '機能一覧')?>　
-http://basercms.net/about/feature.html
+https://basercms.net/about/feature.html
 
 ■ <?php echo __d('baser', 'はじめてガイド')?>　
-http://basercms.net/about/guide.html
+https://basercms.net/about/guide.html
 
 ■ <?php echo __d('baser', 'baserCMS公式ガイド')?>　
 http://wiki.basercms.net/
@@ -65,17 +65,17 @@ https://member.basercms.net/magazine/regist
 <?php echo __d('baser', 'あなたが作った baserCMS の Webサイトを、公式サイトでアピールしませんか？')?>　
 
 ■ <?php echo __d('baser', 'baserCMS導入事例')?>　
-http://basercms.net/works/index
+https://basercms.net/works/index
 
 ■ <?php echo __d('baser', '事例掲載依頼フォーム')?>　
-http://basercms.net/postworks/index
+https://basercms.net/postworks/index
 
 
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 　◆ <?php echo __d('baser', 'ユーザーズコミュニティについて')?>　
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
 ■ <?php echo __d('baser', 'baserCMSユーザー会')?>　
-http://basercms.net/community
+https://basercms.net/community
 <?php echo __d('baser', 'baserCMSコミュニティの紹介ページです。Let\'s Join！')?>　
 
 ■ <?php echo __d('baser', 'baserCMS公式Facebook')?>　

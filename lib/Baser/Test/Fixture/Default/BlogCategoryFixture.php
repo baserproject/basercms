@@ -1,21 +1,23 @@
 <?php
+
 /**
  * BlogCategoryFixture
  */
-class BlogCategoryFixture extends BaserTestFixture {
+class BlogCategoryFixture extends BaserTestFixture
+{
 
-/**
- * Name of the object
- *
- * @var string
- */
+	/**
+	 * Name of the object
+	 *
+	 * @var string
+	 */
 	public $name = 'BlogCategory';
-	
-/**
- * Records
- *
- * @var array
- */
+
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => 1,

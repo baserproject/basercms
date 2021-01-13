@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -28,25 +28,28 @@ $params = explode('/', $path);
 
 
 <script type="text/javascript">
-$(function(){
-	$("#ThemeFileFile").change(function(){
-		$("#Waiting").show();
-		$("#ThemeFileUpload").submit();
+	$(function () {
+		$("#ThemeFileFile").change(function () {
+			$("#Waiting").show();
+			$("#ThemeFileUpload").submit();
+		});
+		$.baserAjaxDataList.init();
+		$.baserAjaxBatch.init({url: $("#AjaxBatchUrl").html()});
 	});
-	$.baserAjaxDataList.init();
-	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
-});
 </script>
 
 
-<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array_merge(['controller' => 'theme_files', 'action' => 'ajax_batch', $theme, $type], $params)) ?></div>
+<div id="AjaxBatchUrl"
+	 style="display:none"><?php $this->BcBaser->url(array_merge(['controller' => 'theme_files', 'action' => 'ajax_batch', $theme, $type], $params)) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
-<div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
+<div id="MessageBox" style="display:none">
+	<div id="flashMessage" class="notice-message"></div>
+</div>
 
 <!-- current -->
-<div class="em-box align-left"><?php echo __d('baser', '現在の位置')?>：<?php echo h($currentPath) ?>
+<div class="em-box align-left"><?php echo __d('baser', '現在の位置') ?>：<?php echo h($currentPath) ?>
 	<?php if (!$writable): ?>
-		　<span style="color:#FF3300">[<?php echo __d('baser', '書込不可')?>]</span>
+		　<span style="color:#FF3300">[<?php echo __d('baser', '書込不可') ?>]</span>
 	<?php endif ?>
 </div>
 

@@ -14,12 +14,12 @@
 <div id="BaseUrl" style="display: none"><?php echo h($this->request->base); ?></div>
 
 <script>
-	authCaptcha = <?php echo $blogContent['BlogContent']['auth_captcha'] ? 'true' : 'false'; ?>;
-	commentApprove = <?php echo $blogContent['BlogContent']['comment_approve'] ? 'true' : 'false'; ?>;
+	authCaptcha = <?php echo $blogContent['BlogContent']['auth_captcha']? 'true' : 'false'; ?>;
+	commentApprove = <?php echo $blogContent['BlogContent']['comment_approve']? 'true' : 'false'; ?>;
 
-	$(function() {
+	$(function () {
 		loadAuthCaptcha();
-		$("#BlogCommentAddButton").click(function() {
+		$("#BlogCommentAddButton").click(function () {
 			sendComment();
 			return false;
 		});

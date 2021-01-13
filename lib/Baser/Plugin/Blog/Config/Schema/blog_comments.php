@@ -2,7 +2,8 @@
 
 /* BlogComments schema generated on: 2010-11-04 18:11:11 : 1288863011 */
 
-class BlogCommentsSchema extends CakeSchema {
+class BlogCommentsSchema extends CakeSchema
+{
 
 	public $name = 'BlogComments';
 
@@ -10,11 +11,13 @@ class BlogCommentsSchema extends CakeSchema {
 
 	public $connection = 'default';
 
-	public function before($event = []) {
+	public function before($event = [])
+	{
 		return true;
 	}
 
-	public function after($event = []) {
+	public function after($event = [])
+	{
 	}
 
 	public $blog_comments = [

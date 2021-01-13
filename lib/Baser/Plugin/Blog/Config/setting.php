@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Blog.Config
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.Config
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -18,7 +18,7 @@ $config['BcApp.adminNavigation'] = [
 		'menus' => [
 			'BlogTags' => ['title' => 'ブログタグ設定', 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'index']],
 		]
-]];
+	]];
 /* @var BlogContent $BlogContent */
 $BlogContent = ClassRegistry::init('Blog.BlogContent');
 $blogContents = $BlogContent->find('all', [
@@ -28,40 +28,40 @@ $blogContents = $BlogContent->find('all', [
 	'recursive' => 0,
 	'order' => $BlogContent->id,
 ]);
-foreach ($blogContents as $blogContent) {
+foreach($blogContents as $blogContent) {
 	$blog = $blogContent['BlogContent'];
 	$content = $blogContent['Content'];
-	$menus = function ($blog) {
+	$menus = function($blog) {
 		$menus = [];
 		$route = [
-				'admin' => true, 'plugin' => 'blog', 'action' => 'index', $blog['id']
+			'admin' => true, 'plugin' => 'blog', 'action' => 'index', $blog['id']
 		];
 		$menus['BlogPosts' . $blog['id']] = [
 			'title' => '記事',
-			'url'   => array_merge($route,['controller'=>'blog_posts']),
+			'url' => array_merge($route, ['controller' => 'blog_posts']),
 			'currentRegex' => '{/blog/blog_posts/[^/]+?/' . $blog['id'] . '($|/)}s'
 		];
 		$menus['BlogCategories' . $blog['id']] = [
 			'title' => 'カテゴリ',
-			'url'   => array_merge($route,['controller'=>'blog_categories']),
+			'url' => array_merge($route, ['controller' => 'blog_categories']),
 			'currentRegex' => '{/blog/blog_categories/[^/]+?/' . $blog['id'] . '($|/)}s'
 		];
 		if ($blog['tag_use']) {
 			$menus['BlogTags' . $blog['id']] = [
 				'title' => 'タグ',
-				'url'   => array_merge($route,['controller'=>'blog_tags']),
+				'url' => array_merge($route, ['controller' => 'blog_tags']),
 				'currentRegex' => '{/blog/blog_tags/[^/]+?/}s'
 			];
 		}
 		if ($blog['comment_use']) {
 			$menus['BlogComments' . $blog['id']] = [
 				'title' => 'コメント',
-				'url'   => array_merge($route,['controller'=>'blog_comments'])
+				'url' => array_merge($route, ['controller' => 'blog_comments'])
 			];
 		}
 		$menus['BlogContentsEdit' . $blog['id']] = [
 			'title' => '設定',
-			'url'   => array_merge($route,['controller'=>'blog_contents', 'action' => 'edit'])
+			'url' => array_merge($route, ['controller' => 'blog_contents', 'action' => 'edit'])
 		];
 		return $menus;
 	};
@@ -77,58 +77,58 @@ foreach ($blogContents as $blogContent) {
 $config['BcApp.adminNavi.blog'] = [
 	'name' => __d('baser', 'ブログプラグイン'),
 	'contents' => [
-		['name' =>  __d('baser', 'タグ一覧'), 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'index']],
-		['name' =>  __d('baser', 'タグ登録'), 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'add']],
+		['name' => __d('baser', 'タグ一覧'), 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'index']],
+		['name' => __d('baser', 'タグ登録'), 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'add']],
 	]
 ];
 
 $config['BcContents']['items']['Blog'] = [
-	'BlogContent'	=> [
+	'BlogContent' => [
 		'title' => __d('baser', 'ブログ'),
-		'multiple'	=> true,
-		'preview'	=> true,
-		'icon'	=> 'bca-icon--blog',
+		'multiple' => true,
+		'preview' => true,
+		'icon' => 'bca-icon--blog',
 		'routes' => [
-			'manage'	=> [
+			'manage' => [
 				'admin' => true,
-				'plugin'	=> 'blog',
-				'controller'=> 'blog_posts',
-				'action'	=> 'index'
+				'plugin' => 'blog',
+				'controller' => 'blog_posts',
+				'action' => 'index'
 			],
-			'add'	=> [
+			'add' => [
 				'admin' => true,
-				'plugin'	=> 'blog',
-				'controller'=> 'blog_contents',
-				'action'	=> 'ajax_add'
+				'plugin' => 'blog',
+				'controller' => 'blog_contents',
+				'action' => 'ajax_add'
 			],
-			'edit'	=> [
+			'edit' => [
 				'admin' => true,
-				'plugin'	=> 'blog',
-				'controller'=> 'blog_contents',
-				'action'	=> 'edit'
+				'plugin' => 'blog',
+				'controller' => 'blog_contents',
+				'action' => 'edit'
 			],
 			'delete' => [
 				'admin' => true,
-				'plugin'	=> 'blog',
-				'controller'=> 'blog_contents',
-				'action'	=> 'delete'
+				'plugin' => 'blog',
+				'controller' => 'blog_contents',
+				'action' => 'delete'
 			],
 			'view' => [
-				'plugin'	=> 'blog',
-				'controller'=> 'blog',
-				'action'	=> 'index'
+				'plugin' => 'blog',
+				'controller' => 'blog',
+				'action' => 'index'
 			],
-			'copy'	=> [
+			'copy' => [
 				'admin' => true,
-				'plugin'	=> 'blog',
-				'controller'=> 'blog_contents',
-				'action'	=> 'ajax_copy'
+				'plugin' => 'blog',
+				'controller' => 'blog_contents',
+				'action' => 'ajax_copy'
 			],
-			'dblclick'	=> [
+			'dblclick' => [
 				'admin' => true,
-				'plugin'	=> 'blog',
-				'controller'=> 'blog_posts',
-				'action'	=> 'index'
+				'plugin' => 'blog',
+				'controller' => 'blog_posts',
+				'action' => 'index'
 			],
 		]
 	]

@@ -1,15 +1,17 @@
 <?php
+
 /**
  * BlogConfigFixture
  *
  */
-class BlogConfigFixture extends BaserTestFixture {
+class BlogConfigFixture extends BaserTestFixture
+{
 
-/**
- * Records
- *
- * @var array
- */
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [];
 
 }

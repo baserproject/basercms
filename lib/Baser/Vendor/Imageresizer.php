@@ -1,29 +1,32 @@
 <?php
+
 /**
  * 画像のリサイズを行う
  *
  * @filesource
- * @copyright		Copyright (c) 2007, Catchup
- * @link				http://basercms.net
- * @license			MIT License
+ * @copyright        Copyright (c) 2007, Catchup
+ * @link                https://basercms.net
+ * @license            MIT License
  */
-class Imageresizer {
-/**
- * 画像をリサイズする
- * @param 	string	ソースファイルのパス
- * @param 	string 	保存先のパス
- * @param 	int 	幅
- * @param 	int		高さ
- * @param 	array	圧縮レベル (JPEG: 100 (0-100), PNG: 6 (0-9))
- * @return 	boolean
- */
-	function resize($imgPath, $savePath = null, $newWidth=null, $newHeight=null, $trimming = false, $quality = []) {
+class Imageresizer
+{
+	/**
+	 * 画像をリサイズする
+	 * @param string    ソースファイルのパス
+	 * @param string    保存先のパス
+	 * @param int    幅
+	 * @param int        高さ
+	 * @param array    圧縮レベル (JPEG: 100 (0-100), PNG: 6 (0-9))
+	 * @return    boolean
+	 */
+	function resize($imgPath, $savePath = null, $newWidth = null, $newHeight = null, $trimming = false, $quality = [])
+	{
 
 		// 画像種類別の圧縮レベルのデフォルト値
 		$quality = $quality + [
-			IMAGETYPE_JPEG => 100,	//  0 - 100
-			IMAGETYPE_PNG => 6,		// 	0 - 9
-		];
+				IMAGETYPE_JPEG => 100,    //  0 - 100
+				IMAGETYPE_PNG => 6,        // 	0 - 9
+			];
 
 		// 元画像のサイズを取得
 		$imginfo = getimagesize($imgPath);
@@ -56,42 +59,42 @@ class Imageresizer {
 				return false;
 		}
 
-		if(!$srcImage) {
+		if (!$srcImage) {
 			return false;
 		}
 
 		// 新しい画像のサイズを取得
-		if(!$newWidth) {
+		if (!$newWidth) {
 
-			if($srcHeight < $newHeight) {
+			if ($srcHeight < $newHeight) {
 				$rate = 1;
-			}else {
+			} else {
 				$rate = $srcHeight / $newHeight;
 			}
 
-		}elseif(!$newHeight) {
+		} elseif (!$newHeight) {
 
-			if($srcWidth < $newWidth) {
+			if ($srcWidth < $newWidth) {
 				$rate = 1;
-			}else {
+			} else {
 				$rate = $srcWidth / $newWidth;
 			}
 
-		}else {
+		} else {
 
 			$w = $srcWidth / $newWidth;
 			$h = $srcHeight / $newHeight;
-			if($w < 1 && $h < 1) {
+			if ($w < 1 && $h < 1) {
 				$rate = 1;
-			}elseif($w > $h) {
+			} elseif ($w > $h) {
 				$rate = $w;
-			}else {
+			} else {
 				$rate = $h;
 			}
 
 		}
 
-		if(!$trimming) {
+		if (!$trimming) {
 			$newWidth = $srcWidth / $rate;
 			$newHeight = $srcHeight / $rate;
 		}
@@ -119,18 +122,18 @@ class Imageresizer {
 		}
 
 		// 画像をコピーし、リサイズする
-		$newImage = $this->_copyAndResize($srcImage,$newImage,$srcWidth,$srcHeight,$newWidth,$newHeight,$trimming);
+		$newImage = $this->_copyAndResize($srcImage, $newImage, $srcWidth, $srcHeight, $newWidth, $newHeight, $trimming);
 		imagedestroy($srcImage);
 
-		if($savePath && file_exists($savePath)) {
+		if ($savePath && file_exists($savePath)) {
 			@unlink($savePath);
 		}
 
 		switch($image_type) {
 			case IMAGETYPE_GIF:
-				if($savePath) {
-					imagegif($newImage,$savePath);
-				}else {
+				if ($savePath) {
+					imagegif($newImage, $savePath);
+				} else {
 					imagegif($newImage);
 				}
 				break;
@@ -140,9 +143,9 @@ class Imageresizer {
 				break;
 
 			case IMAGETYPE_PNG:
-				if($savePath) {
+				if ($savePath) {
 					imagepng($newImage, $savePath, $quality[IMAGETYPE_PNG]);
-				}else {
+				} else {
 					imagepng($newImage);
 				}
 				break;
@@ -153,39 +156,41 @@ class Imageresizer {
 
 		imagedestroy($newImage);
 
-		if($savePath) {
-			chmod($savePath,0666);
+		if ($savePath) {
+			chmod($savePath, 0666);
 		}
 
 		return true;
 
 	}
-/**
- * ファイルをコピーし、リサイズする
- * @param 	Image	ソースイメージオブジェクト
- * @param 	Image 	リサイズイメージ格納用のイメージオブジェクト
- * @param 	int 	元の幅
- * @param 	int		元の高さ
- * @param 	int 	新しい幅
- * @param 	int		新しい高さ
- * @return 	Image	新しいイメージオブジェクト
- */
-	function _copyAndResize($srcImage,$newImage,$srcWidth,$srcHeight,$newWidth,$newHeight,$trimming = false) {
 
-		if($trimming) {
-			if($srcWidth > $srcHeight) {
+	/**
+	 * ファイルをコピーし、リサイズする
+	 * @param Image    ソースイメージオブジェクト
+	 * @param Image    リサイズイメージ格納用のイメージオブジェクト
+	 * @param int    元の幅
+	 * @param int        元の高さ
+	 * @param int    新しい幅
+	 * @param int        新しい高さ
+	 * @return    Image    新しいイメージオブジェクト
+	 */
+	function _copyAndResize($srcImage, $newImage, $srcWidth, $srcHeight, $newWidth, $newHeight, $trimming = false)
+	{
+
+		if ($trimming) {
+			if ($srcWidth > $srcHeight) {
 				$x = ($srcWidth - $srcHeight) / 2;
 				$y = 0;
 				$srcWidth = $srcHeight;
-			}elseif($srcWidth < $srcHeight) {
+			} elseif ($srcWidth < $srcHeight) {
 				$x = 0;
 				$y = ($srcHeight - $srcWidth) / 2;
 				$srcHeight = $srcWidth;
-			}else {
+			} else {
 				$x = 0;
 				$y = 0;
 			}
-		}else {
+		} else {
 			$x = 0;
 			$y = 0;
 		}
@@ -193,13 +198,15 @@ class Imageresizer {
 		return $newImage;
 
 	}
-/**
- * ベース画像を作成する
- * @param 	int 	幅
- * @param 	int		高さ
- * @return 	Image	イメージオブジェクト
- */
-	function _createBaseImange($width, $height) {
+
+	/**
+	 * ベース画像を作成する
+	 * @param int    幅
+	 * @param int        高さ
+	 * @return    Image    イメージオブジェクト
+	 */
+	function _createBaseImange($width, $height)
+	{
 
 		//新しい画像を生成
 		$image = imagecreatetruecolor($width, $height);

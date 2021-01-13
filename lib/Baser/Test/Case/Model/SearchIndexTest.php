@@ -1,23 +1,24 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Model
- * @since			baserCMS v 4.1.6
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.Model
+ * @since           baserCMS v 4.1.6
+ * @license         https://basercms.net/license/index.html
  */
 App::uses('SearchIndex', 'Model');
 
 /**
- * ThemeFileTest class
- * 
+ * Class ThemeFileTest
+ *
  * @package Baser.Test.Case.Model
  * @property SearchIndex $SearchIndex
  */
-class SearchIndexTest extends BaserTestCase {
+class SearchIndexTest extends BaserTestCase
+{
 
 	public $fixtures = [
 		'baser.Default.Content',
@@ -40,24 +41,27 @@ class SearchIndexTest extends BaserTestCase {
 		'baser.Default.FeedDetail',
 	];
 
-	public function setUp() {
+	public function setUp()
+	{
 		parent::setUp();
 		$this->SearchIndex = ClassRegistry::init('SearchIndex');
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		unset($this->SearchIndex);
 		parent::tearDown();
 	}
 
-/**
- * 検索インデックスを再構築する
- */
-	public function testReconstruct() {
+	/**
+	 * 検索インデックスを再構築する
+	 */
+	public function testReconstruct()
+	{
 		Configure::write('BcAuthPrefix.admin.previewRedirect', '');
 		$_SERVER['REQUEST_URI'] = '/';
 		$this->_loginAdmin();
-		
+
 		// ===========================================
 		// 全ページ再構築
 		// ===========================================
@@ -65,7 +69,7 @@ class SearchIndexTest extends BaserTestCase {
 		$this->SearchIndex->reconstruct();
 		$result = $this->SearchIndex->find('count');
 		$this->assertEquals(15, $result);
-		
+
 		// ===========================================
 		// 指定ディレクトリ配下再構築
 		// ===========================================
@@ -103,20 +107,23 @@ class SearchIndexTest extends BaserTestCase {
 		$searchIndex = $searchIndexModel->find('first', ['conditions' => ['id' => 8]]);
 		$this->assertTrue($searchIndex['SearchIndex']['status']);
 	}
-	
-/**
- * 公開状態を取得する
- *
- * @dataProvider allowPublishDataProvider
- */
-	public function testAllowPublish($publish_begin, $publish_end, $status, $expected) {
+
+	/**
+	 * 公開状態を取得する
+	 *
+	 * @dataProvider allowPublishDataProvider
+	 */
+	public function testAllowPublish($publish_begin, $publish_end, $status, $expected)
+	{
 		$data['publish_begin'] = $publish_begin;
 		$data['publish_end'] = $publish_end;
 		$data['status'] = $status;
 		$this->assertEquals($this->SearchIndex->allowPublish($data), $expected);
 	}
-	public function allowPublishDataProvider() {
-		return[
+
+	public function allowPublishDataProvider()
+	{
+		return [
 			['0000-00-00 00:00:00', '0000-00-00 00:00:00', false, false],
 			['0000-00-00 00:00:00', '0000-00-00 00:00:00', true, true],
 			['0000-00-00 00:00:00', date('Y-m-d H:i:s'), true, false],
