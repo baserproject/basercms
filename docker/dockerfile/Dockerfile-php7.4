@@ -1,32 +1,37 @@
 FROM php:7.4.7-apache
 
-RUN echo "deb http://deb.debian.org/debian jessie main" > /etc/apt/sources.list &&\
-    echo "deb http://security.debian.org jessie/updates main" >> /etc/apt/sources.list
+RUN echo "deb http://security.debian.org jessie/updates main" >> /etc/apt/sources.list
 
 # install
 RUN apt-get update \
     && apt-get install -y --allow-downgrades \
-    	zlib1g=1:1.2.8.dfsg-2+deb8u1 \
+    	dialog \
+    	zlib1g=1:1.2.11.dfsg-1 \
+    	zlib1g-dev \
     	libfreetype6-dev \
-			libjpeg62-turbo-dev \
-			libmcrypt-dev \
-			libpng12-0 \
-			openssl libssl1.1 \
-			libxml2=2.9.1+dfsg1-5+deb8u8 \
-			libxml2-dev \
-			zip unzip \
-			libzip-dev \
-			git \
-			vim \
-			libicu-dev \
-			ssmtp \
-			mailutils \
-			guile-2.0-libs \
-			libncurses5 \
-			libreadline5 \
-			ncurses-base=5.9+20140913-1+deb8u3 \
-			libonig-dev \
-    && docker-php-ext-install -j$(nproc) iconv pdo_mysql mbstring xml tokenizer zip intl \
+    	libfreetype6 \
+		libjpeg62-turbo-dev \
+		libmcrypt-dev \
+		libpng16-16 \
+		openssl \
+		libssl1.1 \
+		libxml2=2.9.4+dfsg1-7+deb10u1 \
+		libxml2-dev \
+		zip unzip \
+		libzip-dev \
+		git \
+		vim \
+		libicu-dev \
+		msmtp \
+		msmtp-mta \
+		mailutils \
+		guile-2.0-libs \
+		libncurses5 \
+		libreadline5 \
+#		ncurses-base=5.9+20140913-1+deb8u3 \
+		libonig-dev \
+		libpq-dev \
+    && docker-php-ext-install -j$(nproc) iconv pdo_mysql pdo_pgsql mbstring xml tokenizer zip intl \
     && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
 	&& apt-get clean \
@@ -41,9 +46,9 @@ COPY apache/ssl/ssl-cert-snakeoil.pem /etc/ssl/certs/
 RUN chmod 400 /etc/ssl/private/ssl-cert-snakeoil.key \
 	&& chmod 400 /etc/ssl/certs/ssl-cert-snakeoil.pem
 RUN groupmod -g 1000 www-data && usermod -u 1000 www-data
-    
+
 # php
-RUN echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail.ini \
+RUN echo 'sendmail_path = "/usr/bin/msmtp -t"' > /usr/local/etc/php/conf.d/mail.ini \
 	&& echo "memory_limit = 256M" >> /usr/local/etc/php/php.ini \
 	&& echo "post_max_size = 256M" >> /usr/local/etc/php/php.ini \
 	&& echo "upload_max_filesize = 256M" >> /usr/local/etc/php/php.ini \
@@ -54,11 +59,10 @@ RUN echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail
 	&& echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
 	&& echo "xdebug.remote_host=10.0.2.2" >> /usr/local/etc/php/conf.d/xdebug.ini \
 	&& echo "extension=mcrypt.so" >> /usr/local/etc/php/conf.d/mcrypt.ini
-    
-# ssmtp
-RUN echo "FromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
- 	&& echo "Mailhub=bc-smtp:1025" >> /etc/ssmtp/ssmtp.conf
- 	
+
+# msmtp
+COPY msmtp/msmtprc /etc/msmtprc
+
 # composer
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
