@@ -1,18 +1,20 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('Simplezip', 'Vendor');
 
 /**
+ * Class ToolsController
+ *
  * ツールコントローラー
  *
  * @package Baser.Controller
@@ -20,51 +22,53 @@ App::uses('Simplezip', 'Vendor');
  * @property Page $Page
  * @property BcManagerComponent $BcManager
  */
-class ToolsController extends AppController {
+class ToolsController extends AppController
+{
 
-/**
- * クラス名
- *
- * @var string
- */
+	/**
+	 * クラス名
+	 *
+	 * @var string
+	 */
 	public $name = 'Tools';
 
-/**
- * モデル
- *
- * @var array
- */
+	/**
+	 * モデル
+	 *
+	 * @var array
+	 */
 	public $uses = ['Tool', 'Page'];
 
-/**
- * コンポーネント
- *
- * @var array
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager'];
 
-/**
- * ヘルパ
- *
- * @var array
- */
+	/**
+	 * ヘルパ
+	 *
+	 * @var array
+	 */
 	public $helpers = ['BcForm'];
 
-/**
- * サブメニュー
- *
- * @var array
- * @access public
- */
+	/**
+	 * サブメニュー
+	 *
+	 * @var array
+	 * @access public
+	 */
 	public $subMenuElements = ['site_configs', 'tools'];
 
-/**
- * ToolsController constructor.
- *
- * @param \CakeRequest $request
- * @param \CakeRequest $response
- */
-	public function __construct($request = null, $response = null) {
+	/**
+	 * ToolsController constructor.
+	 *
+	 * @param \CakeRequest $request
+	 * @param \CakeRequest $response
+	 */
+	public function __construct($request = null, $response = null)
+	{
 		parent::__construct($request, $response);
 		$this->crumbs = [
 			['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
@@ -72,22 +76,24 @@ class ToolsController extends AppController {
 		];
 	}
 
-/**
- * ユーティリティ
- */
-	public function admin_index() {
+	/**
+	 * ユーティリティ
+	 */
+	public function admin_index()
+	{
 		$this->pageTitle = __d('baser', 'ユーティリティトップ');
 	}
 
-/**
- * データメンテナンス
- *
- * @param string $mode
- * @return void
- */
-	public function admin_maintenance($mode = '') {
+	/**
+	 * データメンテナンス
+	 *
+	 * @param string $mode
+	 * @return void
+	 */
+	public function admin_maintenance($mode = '')
+	{
 		$this->_checkReferer();
-		switch ($mode) {
+		switch($mode) {
 			case 'backup':
 				set_time_limit(0);
 				$this->_backupDb($this->request->query['backup_encoding']);
@@ -116,7 +122,7 @@ class ToolsController extends AppController {
 					$messages[] = __d('baser', "ページテンプレートの生成に失敗しました。\n表示できないページはページ管理より更新処理を行ってください。");
 				}
 				if ($messages) {
-					if($error) {
+					if ($error) {
 						$this->BcMessage->setError(implode("\n", $messages));
 					} else {
 						$this->BcMessage->setInfo(implode("\n", $messages));
@@ -130,13 +136,14 @@ class ToolsController extends AppController {
 		$this->help = 'tools_maintenance';
 	}
 
-/**
- * バックアップファイルを復元する
- *
- * @param array $data
- * @return boolean
- */
-	protected function _restoreDb($data) {
+	/**
+	 * バックアップファイルを復元する
+	 *
+	 * @param array $data
+	 * @return boolean
+	 */
+	protected function _restoreDb($data)
+	{
 
 		if (empty($data['Tool']['backup']['tmp_name'])) {
 			return false;
@@ -165,7 +172,7 @@ class ToolsController extends AppController {
 		if (!$this->_loadBackup($tmpPath . 'plugin' . DS, $data['Tool']['encoding'])) {
 			$result = false;
 		}
-		if($result) {
+		if ($result) {
 			$db->commit();
 		} else {
 			$db->rollback();
@@ -183,7 +190,8 @@ class ToolsController extends AppController {
 	 * @param $encoding
 	 * @return boolean
 	 */
-	protected function _loadBackup($path, $encoding) {
+	protected function _loadBackup($path, $encoding)
+	{
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
 		if (!is_array($files[1])) {
@@ -193,7 +201,7 @@ class ToolsController extends AppController {
 		$db = ConnectionManager::getDataSource('default');
 		$result = true;
 		/* テーブルを削除する */
-		foreach ($files[1] as $file) {
+		foreach($files[1] as $file) {
 			if (preg_match("/\.php$/", $file)) {
 				try {
 					if (!$db->loadSchema(['type' => 'drop', 'path' => $path, 'file' => $file])) {
@@ -208,7 +216,7 @@ class ToolsController extends AppController {
 		}
 
 		/* テーブルを読み込む */
-		foreach ($files[1] as $file) {
+		foreach($files[1] as $file) {
 			if (preg_match("/\.php$/", $file)) {
 				try {
 					if (!$db->loadSchema(['type' => 'create', 'path' => $path, 'file' => $file])) {
@@ -223,7 +231,7 @@ class ToolsController extends AppController {
 		}
 
 		/* CSVファイルを読み込む */
-		foreach ($files[1] as $file) {
+		foreach($files[1] as $file) {
 			if (preg_match("/\.csv$/", $file)) {
 				try {
 					if (!$db->loadCsv(['path' => $path . $file, 'encoding' => $encoding])) {
@@ -240,12 +248,13 @@ class ToolsController extends AppController {
 		return $result;
 	}
 
-/**
- * バックアップデータを作成する
- *
- * @return void
- */
-	protected function _backupDb($encoding) {
+	/**
+	 * バックアップデータを作成する
+	 *
+	 * @return void
+	 */
+	protected function _backupDb($encoding)
+	{
 		$tmpDir = TMP . 'schemas' . DS;
 		$version = str_replace(' ', '_', $this->getBaserVersion());
 		$this->_resetTmpSchemaFolder();
@@ -254,7 +263,7 @@ class ToolsController extends AppController {
 		$Plugin = ClassRegistry::init('Plugin');
 		$plugins = $Plugin->find('all');
 		if ($plugins) {
-			foreach ($plugins as $plugin) {
+			foreach($plugins as $plugin) {
 				$this->_writeBackup($tmpDir . 'plugin' . DS, $plugin['Plugin']['name'], $encoding);
 			}
 		}
@@ -275,13 +284,14 @@ class ToolsController extends AppController {
 	 * @param $encoding
 	 * @return boolean
 	 */
-	protected function _writeBackup($path, $plugin = '', $encoding) {
+	protected function _writeBackup($path, $plugin = '', $encoding)
+	{
 		$db = ConnectionManager::getDataSource('default');
 		$db->cacheSources = false;
 		$tables = $db->listSources();
 		$tableList = getTableList();
-		foreach ($tables as $table) {
-			if((!$plugin && in_array($table, $tableList['core']) || ($plugin && in_array($table, $tableList['plugin'])))) {
+		foreach($tables as $table) {
+			if ((!$plugin && in_array($table, $tableList['core']) || ($plugin && in_array($table, $tableList['plugin'])))) {
 				$table = str_replace($db->config['prefix'], '', $table);
 				if (!$db->writeSchema(['path' => $path, 'table' => $table, 'plugin' => $plugin])) {
 					return false;
@@ -294,12 +304,13 @@ class ToolsController extends AppController {
 		return true;
 	}
 
-/**
- * モデル名からスキーマファイルを生成する
- *
- * @return void
- */
-	public function admin_write_schema() {
+	/**
+	 * モデル名からスキーマファイルを生成する
+	 *
+	 * @return void
+	 */
+	public function admin_write_schema()
+	{
 		$path = TMP . 'schemas' . DS;
 
 		/* 表示設定 */
@@ -331,12 +342,13 @@ class ToolsController extends AppController {
 		exit();
 	}
 
-/**
- * スキーマファイルを読み込みテーブルを生成する
- *
- * @return void
- */
-	public function admin_load_schema() {
+	/**
+	 * スキーマファイルを読み込みテーブルを生成する
+	 *
+	 * @return void
+	 */
+	public function admin_load_schema()
+	{
 		/* 表示設定 */
 		$this->pageTitle = __d('baser', 'スキーマファイル読込');
 		$this->help = 'tools_load_schema';
@@ -370,28 +382,30 @@ class ToolsController extends AppController {
 		$this->redirect(['action' => 'load_schema']);
 	}
 
-/**
- * スキーマ用の一時フォルダをリセットする
- *
- * @return boolean
- */
-	protected function _resetTmpSchemaFolder() {
+	/**
+	 * スキーマ用の一時フォルダをリセットする
+	 *
+	 * @return boolean
+	 */
+	protected function _resetTmpSchemaFolder()
+	{
 		$path = TMP . 'schemas' . DS;
 		return emptyFolder($path);
 	}
 
-/**
- * ログメンテナンス
- *
- * @param string $mode
- * @return void
- */
-	public function admin_log($mode = '') {
-		$errorLogPath = TMP . 'logs' . DS . 'error.log' ;
-		switch ($mode) {
+	/**
+	 * ログメンテナンス
+	 *
+	 * @param string $mode
+	 * @return void
+	 */
+	public function admin_log($mode = '')
+	{
+		$errorLogPath = TMP . 'logs' . DS . 'error.log';
+		switch($mode) {
 			case 'download':
 				set_time_limit(0);
-				if($this->_downloadErrorLog()) {
+				if ($this->_downloadErrorLog()) {
 					exit();
 				}
 				$this->BcMessage->setInfo('エラーログが存在しません。');
@@ -399,8 +413,8 @@ class ToolsController extends AppController {
 				break;
 			case 'delete':
 				$this->_checkSubmitToken();
-				if( file_exists($errorLogPath) ){
-					if( unlink($errorLogPath) ){
+				if (file_exists($errorLogPath)) {
+					if (unlink($errorLogPath)) {
 						$messages[] = __d('baser', 'エラーログを削除しました。');
 						$error = false;
 					} else {
@@ -420,8 +434,8 @@ class ToolsController extends AppController {
 
 		}
 
-		$fileSize = 0 ;
-		if( file_exists($errorLogPath) ){
+		$fileSize = 0;
+		if (file_exists($errorLogPath)) {
 			$fileSize = filesize($errorLogPath);
 		}
 
@@ -430,16 +444,17 @@ class ToolsController extends AppController {
 		$this->set('fileSize', $fileSize);
 	}
 
-/**
- * ログフォルダを圧縮ダウンロードする
- *
- * @return bool
- */
-	protected function _downloadErrorLog() {
+	/**
+	 * ログフォルダを圧縮ダウンロードする
+	 *
+	 * @return bool
+	 */
+	protected function _downloadErrorLog()
+	{
 		$tmpDir = TMP . 'logs' . DS;
 		$Folder = new Folder($tmpDir);
 		$files = $Folder->read(true, true, false);
-		if(count($files[0]) === 0 && count($files[1]) === 0) {
+		if (count($files[0]) === 0 && count($files[1]) === 0) {
 			return false;
 		}
 		// ZIP圧縮して出力
@@ -450,12 +465,13 @@ class ToolsController extends AppController {
 		return true;
 	}
 
-/**
- * 管理システム用アセットファイルを削除する
- */
-	public function admin_delete_admin_assets() {
+	/**
+	 * 管理システム用アセットファイルを削除する
+	 */
+	public function admin_delete_admin_assets()
+	{
 		$this->_checkReferer();
-		if(!$this->BcManager->deleteAdminAssets()) {
+		if (!$this->BcManager->deleteAdminAssets()) {
 			$this->BcMessage->setError(__d('baser', '管理システム用のアセットファイルの削除に失敗しました。アセットファイルの書込権限を見直してください。'));
 			$this->redirect(['controller' => 'tools', 'action' => 'index']);
 			return;
@@ -465,12 +481,13 @@ class ToolsController extends AppController {
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
 
-/**
- * 管理システム用アセットファイルを再配置する
- */
-	public function admin_deploy_admin_assets() {
+	/**
+	 * 管理システム用アセットファイルを再配置する
+	 */
+	public function admin_deploy_admin_assets()
+	{
 		$this->_checkReferer();
-		if(!$this->BcManager->deployAdminAssets()) {
+		if (!$this->BcManager->deployAdminAssets()) {
 			$this->BcMessage->setError(__d('baser', '管理システム用のアセットファイルの再配置に失敗しました。アセットファイルの書込権限を見直してください。'));
 		} else {
 			$this->BcMessage->setSuccess(__d('baser', '管理システム用のアセットファイルを再配置しました。'));
@@ -478,13 +495,14 @@ class ToolsController extends AppController {
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
 
-/**
- * コンテンツ管理のツリー構造をリセットする
- */
-	public function admin_reset_contents_tree() {
+	/**
+	 * コンテンツ管理のツリー構造をリセットする
+	 */
+	public function admin_reset_contents_tree()
+	{
 		$this->_checkReferer();
 		$Content = ClassRegistry::init('Content');
-		if($Content->resetTree()) {
+		if ($Content->resetTree()) {
 			$this->BcMessage->setSuccess(__d('baser', 'コンテンツのツリー構造をリセットしました。'));
 		} else {
 			$this->BcMessage->setError(__d('baser', 'コンテンツのツリー構造のリセットに失敗しました。'));
@@ -492,17 +510,18 @@ class ToolsController extends AppController {
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
 
-/**
- * コンテンツ管理のツリー構造のチェックを行う
- *
- * 問題がある場合にはログを出力する
- */
-	public function admin_verity_contents_tree() {
+	/**
+	 * コンテンツ管理のツリー構造のチェックを行う
+	 *
+	 * 問題がある場合にはログを出力する
+	 */
+	public function admin_verity_contents_tree()
+	{
 		$this->_checkReferer();
 		$Content = ClassRegistry::init('Content');
 		$Content->Behaviors->unload('SoftDelete');
 		$result = $Content->verify();
-		if($result !== true) {
+		if ($result !== true) {
 			$this->log($result);
 			$this->BcMessage->setError(__d('baser', 'コンテンツのツリー構造に問題があります。ログを確認してください。'));
 		} else {

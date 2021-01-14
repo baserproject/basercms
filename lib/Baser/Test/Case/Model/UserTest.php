@@ -1,28 +1,29 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Model
- * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.Model
+ * @since           baserCMS v 3.0.0-beta
+ * @license         https://basercms.net/license/index.html
  */
 App::uses('User', 'Model');
 
 /**
- * UserTest class
- * 
+ * Class UserTest
+ *
  * class NonAssosiationUser extends User {
- *	public $name = 'User';
- *	public $belongsTo = [];
- *	public $hasMany = [];
+ *    public $name = 'User';
+ *    public $belongsTo = [];
+ *    public $hasMany = [];
  * }
- * 
+ *
  * @package Baser.Test.Case.Model
  */
-class UserTest extends BaserTestCase {
+class UserTest extends BaserTestCase
+{
 
 	public $fixtures = [
 		'baser.Default.User',
@@ -30,20 +31,23 @@ class UserTest extends BaserTestCase {
 		'baser.Default.Favorite',
 	];
 
-	public function setUp() {
+	public function setUp()
+	{
 		parent::setUp();
 		$this->User = ClassRegistry::init('User');
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		unset($this->User);
 		parent::tearDown();
 	}
 
-/**
- * validate
- */
-	public function test必須チェック() {
+	/**
+	 * validate
+	 */
+	public function test必須チェック()
+	{
 		$this->User->create([
 			'User' => [
 				'name' => '',
@@ -65,7 +69,8 @@ class UserTest extends BaserTestCase {
 		$this->assertEquals('グループを選択してください。', current($this->User->validationErrors['user_group_id']));
 	}
 
-	public function test桁数チェック異常系() {
+	public function test桁数チェック異常系()
+	{
 		$this->User->create([
 			'User' => [
 				'name' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
@@ -99,7 +104,8 @@ class UserTest extends BaserTestCase {
 		$this->assertEquals('Eメールは255文字以内で入力してください。', current($this->User->validationErrors['email']));
 	}
 
-	public function test桁数チェック正常系() {
+	public function test桁数チェック正常系()
+	{
 		$this->User->create([
 			'User' => [
 				'name' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
@@ -113,7 +119,8 @@ class UserTest extends BaserTestCase {
 		$this->assertTrue($this->User->validates());
 	}
 
-	public function test半角英数チェック異常系() {
+	public function test半角英数チェック異常系()
+	{
 		$this->User->create([
 			'User' => [
 				'name' => '１２３ａｂｃ',
@@ -129,7 +136,8 @@ class UserTest extends BaserTestCase {
 
 	}
 
-	public function test半角英数チェック正常系() {
+	public function test半角英数チェック正常系()
+	{
 		$this->User->create([
 			'User' => [
 				'name' => '123abc',
@@ -139,7 +147,8 @@ class UserTest extends BaserTestCase {
 		$this->assertTrue($this->User->validates());
 	}
 
-	public function testパスワード記号正常系() {
+	public function testパスワード記号正常系()
+	{
 		$this->User->create([
 			'User' => [
 				'password' => '. _-:/()#,@[]+=&;{}!$*',
@@ -148,7 +157,8 @@ class UserTest extends BaserTestCase {
 		$this->assertTrue($this->User->validates());
 	}
 
-	public function testパスワード記号異常系() {
+	public function testパスワード記号異常系()
+	{
 		$this->User->create([
 			'User' => [
 				'password' => '. _-:/()#,@[]+=&;{}!$*^~"',
@@ -160,7 +170,8 @@ class UserTest extends BaserTestCase {
 		$this->assertEquals('パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。', current($this->User->validationErrors['password']));
 	}
 
-	public function test既存ユーザチェック異常系() {
+	public function test既存ユーザチェック異常系()
+	{
 		$this->User->create([
 			'User' => [
 				'name' => 'basertest',
@@ -173,7 +184,8 @@ class UserTest extends BaserTestCase {
 
 	}
 
-	public function test既存ユーザチェック正常系() {
+	public function test既存ユーザチェック正常系()
+	{
 		$this->User->create([
 			'User' => [
 				'name' => 'hoge',
@@ -182,7 +194,8 @@ class UserTest extends BaserTestCase {
 		$this->assertTrue($this->User->validates());
 	}
 
-	public function testメールアドレス形式チェック異常系() {
+	public function testメールアドレス形式チェック異常系()
+	{
 		$this->User->create([
 			'User' => [
 				'email' => 'abc.co.jp',
@@ -194,7 +207,8 @@ class UserTest extends BaserTestCase {
 		$this->assertEquals('Eメールの形式が不正です。', current($this->User->validationErrors['email']));
 	}
 
-	public function testメールアドレス形式チェック正常系() {
+	public function testメールアドレス形式チェック正常系()
+	{
 		$this->User->create([
 			'User' => [
 				'email' => 'abc@co.jp',
@@ -203,121 +217,132 @@ class UserTest extends BaserTestCase {
 		$this->assertTrue($this->User->validates());
 	}
 
-/**
- * validates
- */
-	public function testValidates() {
+	/**
+	 * validates
+	 */
+	public function testValidates()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * コントロールソースを取得する
- *
- * @param string $field フィールド名
- * @param array $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider getControlSourceDataProvider
- */
-	public function testGetControlSource($field, $expected, $message = null) {
+	/**
+	 * コントロールソースを取得する
+	 *
+	 * @param string $field フィールド名
+	 * @param array $expected 期待値
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider getControlSourceDataProvider
+	 */
+	public function testGetControlSource($field, $expected, $message = null)
+	{
 		$result = $this->User->getControlSource($field);
 		$this->assertEquals($expected, $result, $message);
 	}
 
-  public function getControlSourceDataProvider() {
-    return [
-      ['user_group_id', [1 => 'システム管理', 2 => 'サイト運営'], 'コントロールソースを取得する取得できません'],
-      ['hoge', false, '存在しないフィールド名です'],
-    ];
-  }
+	public function getControlSourceDataProvider()
+	{
+		return [
+			['user_group_id', [1 => 'システム管理', 2 => 'サイト運営'], 'コントロールソースを取得する取得できません'],
+			['hoge', false, '存在しないフィールド名です'],
+		];
+	}
 
-/**
- * ユーザーリストを取得する
- * 条件を指定する場合は引数を指定する
- * 
- * @param array $conditions 取得条件
- * @param array $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider getUserListDataProvider
- */
-	public function testGetUserList($conditions, $expected, $message = null) {
+	/**
+	 * ユーザーリストを取得する
+	 * 条件を指定する場合は引数を指定する
+	 *
+	 * @param array $conditions 取得条件
+	 * @param array $expected 期待値
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider getUserListDataProvider
+	 */
+	public function testGetUserList($conditions, $expected, $message = null)
+	{
 		$result = $this->User->getUserList($conditions);
 		$this->assertEquals($expected, $result, $message);
 	}
 
-  public function getUserListDataProvider() {
-    return [
-      [[], [1 => 'basertest', 2 => 'basertest2'], 'コントロールソースを取得する取得できません'],
-      [['User.id' => 1], [1 => 'basertest'], 'コントロールソースを取得する取得できません'],
-    ];
-  }
+	public function getUserListDataProvider()
+	{
+		return [
+			[[], [1 => 'basertest', 2 => 'basertest2'], 'コントロールソースを取得する取得できません'],
+			[['User.id' => 1], [1 => 'basertest'], 'コントロールソースを取得する取得できません'],
+		];
+	}
 
 
-/**
- * フォームの初期値を設定する
- */
-	public function testGetDefaultValue() {
+	/**
+	 * フォームの初期値を設定する
+	 */
+	public function testGetDefaultValue()
+	{
 		$result = $this->User->getDefaultValue();
 		$expected = ['User' => ['user_group_id' => 1]];
 		$this->assertEquals($expected, $result, 'フォームの初期値が正しくありません');
 	}
 
-/**
- * ユーザーが許可されている認証プレフィックスを取得する
- *
- * @param string $userName ユーザーの名前
- * @param array $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider getAuthPrefixDataProvider
- */
-	public function testGetAuthPrefix($userName, $expected, $message = null) {
+	/**
+	 * ユーザーが許可されている認証プレフィックスを取得する
+	 *
+	 * @param string $userName ユーザーの名前
+	 * @param array $expected 期待値
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider getAuthPrefixDataProvider
+	 */
+	public function testGetAuthPrefix($userName, $expected, $message = null)
+	{
 		$result = $this->User->getAuthPrefix($userName);
 		$this->assertEquals($expected, $result, $message);
 	}
 
-  public function getAuthPrefixDataProvider() {
-    return [
-      ['basertest', 'admin', 'ユーザーの認証プレフィックスを正しく取得できません'],
-      ['basertest2', 'operator', 'ユーザーの認証プレフィックスを正しく取得できません'],
-    ];
-  }
+	public function getAuthPrefixDataProvider()
+	{
+		return [
+			['basertest', 'admin', 'ユーザーの認証プレフィックスを正しく取得できません'],
+			['basertest2', 'operator', 'ユーザーの認証プレフィックスを正しく取得できません'],
+		];
+	}
 
-/**
- * beforeSave
- * 
- * @param type $options
- * @return boolean
- */
-	public function testBeforeSave() {
+	/**
+	 * beforeSave
+	 *
+	 * @param type $options
+	 * @return boolean
+	 */
+	public function testBeforeSave()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * afterSave
- * 
- * @param boolean $created 
- */
-	public function testAfterSave() {
+	/**
+	 * afterSave
+	 *
+	 * @param boolean $created
+	 */
+	public function testAfterSave()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * よく使う項目の初期データをユーザーに適用する
- * 
- * @param type $userId ユーザーID
- * @param type $userGroupId ユーザーグループID
- * @param array $expected 期待値
- * @param array $expectedLastData Favoriteに最後に挿入されたデータ
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider applyDefaultFavoritesDataProvider
- */
-	public function testApplyDefaultFavorites($userId, $userGroupId, $expected, $expectedLastData, $message = null) {
+	/**
+	 * よく使う項目の初期データをユーザーに適用する
+	 *
+	 * @param type $userId ユーザーID
+	 * @param type $userGroupId ユーザーグループID
+	 * @param array $expected 期待値
+	 * @param array $expectedLastData Favoriteに最後に挿入されたデータ
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider applyDefaultFavoritesDataProvider
+	 */
+	public function testApplyDefaultFavorites($userId, $userGroupId, $expected, $expectedLastData, $message = null)
+	{
 		$result = $this->User->applyDefaultFavorites($userId, $userGroupId);
 
 		$LastId = $this->User->Favorite->getLastInsertID();
 		$LastData = $this->User->Favorite->find('all', [
-			'conditions' => ['Favorite.id' => $LastId],
-			'fields' => ['Favorite.name'],
-			'recursive' => 0,
+				'conditions' => ['Favorite.id' => $LastId],
+				'fields' => ['Favorite.name'],
+				'recursive' => 0,
 			]
 		);
 
@@ -325,19 +350,21 @@ class UserTest extends BaserTestCase {
 		$this->assertEquals($expectedLastData, $LastData[0]['Favorite']['name'], $message);
 	}
 
-  public function applyDefaultFavoritesDataProvider() {
-    return [
-      [1, 1, true, 'クレジット', 'よく使う項目の初期データをユーザーに正しく適用できません'],
-      [2, 1, true, 'クレジット', 'よく使う項目の初期データをユーザーに正しく適用できません'],
-      [1, 2, true, 'コメント一覧', 'よく使う項目の初期データをユーザーに正しく適用できません'],
-      [2, 2, true, 'コメント一覧', 'よく使う項目の初期データをユーザーに正しく適用できません'],
-    ];
-  }
+	public function applyDefaultFavoritesDataProvider()
+	{
+		return [
+			[1, 1, true, 'クレジット', 'よく使う項目の初期データをユーザーに正しく適用できません'],
+			[2, 1, true, 'クレジット', 'よく使う項目の初期データをユーザーに正しく適用できません'],
+			[1, 2, true, 'コメント一覧', 'よく使う項目の初期データをユーザーに正しく適用できません'],
+			[2, 2, true, 'コメント一覧', 'よく使う項目の初期データをユーザーに正しく適用できません'],
+		];
+	}
 
-/**
- * ユーザーに関連するよく使う項目を削除する
- */
-	public function testDeleteFavorites() {
+	/**
+	 * ユーザーに関連するよく使う項目を削除する
+	 */
+	public function testDeleteFavorites()
+	{
 		$user = $this->User->find('first', ['conditions' => ['User.id' => 1]]);
 		$this->assertTrue(isset($user['Favorite'][0]['id']), 'ユーザーに関連するよく使う項目の削除対象がありません。');
 		$this->User->deleteFavorites(1);

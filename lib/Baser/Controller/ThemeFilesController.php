@@ -1,75 +1,79 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Controller
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('Imageresizer', 'Vendor');
 
 /**
+ * Class ThemeFilesController
+ *
  * テーマファイルコントローラー
  *
  * @package Baser.Controller
  */
-class ThemeFilesController extends AppController {
+class ThemeFilesController extends AppController
+{
 
-/**
- * クラス名
- * @var string
- */
+	/**
+	 * クラス名
+	 * @var string
+	 */
 	public $name = 'ThemeFiles';
 
-/**
- * モデル
- *
- * @var array
- */
+	/**
+	 * モデル
+	 *
+	 * @var array
+	 */
 	public $uses = ['ThemeFile', 'ThemeFolder'];
 
-/**
- * ヘルパー
- *
- * @var array
- */
+	/**
+	 * ヘルパー
+	 *
+	 * @var array
+	 */
 	public $helpers = ['BcForm', 'BcCkeditor'];
 
-/**
- * テーマファイルタイプ
- *
- * @var array
- * @public protected
- */
+	/**
+	 * テーマファイルタイプ
+	 *
+	 * @var array
+	 * @public protected
+	 */
 	protected $_tempalteTypes = [];
 
-/**
- * コンポーネント
- *
- * @var array
- */
+	/**
+	 * コンポーネント
+	 *
+	 * @var array
+	 */
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
-/**
- * ThemeFilesController constructor.
- *
- * @param CakeRequest $request
- * @param CakeResponse $response
- */
-	public function __construct(CakeRequest $request, CakeResponse $response) {
+	/**
+	 * ThemeFilesController constructor.
+	 *
+	 * @param CakeRequest $request
+	 * @param CakeResponse $response
+	 */
+	public function __construct(CakeRequest $request, CakeResponse $response)
+	{
 		parent::__construct($request, $response);
 		$this->_tempalteTypes = [
-			'Layouts'	=> __d('baser', 'レイアウトテンプレート'),
-			'Elements'	=> __d('baser', 'エレメントテンプレート'),
-			'Emails'	=> __d('baser', 'Eメールテンプレート'),
-			'etc'		=> __d('baser', 'コンテンツテンプレート'),
-			'css'		=> __d('baser', 'スタイルシート'),
-			'js'		=> 'Javascript',
-			'img'		=> __d('baser', 'イメージ')
+			'Layouts' => __d('baser', 'レイアウトテンプレート'),
+			'Elements' => __d('baser', 'エレメントテンプレート'),
+			'Emails' => __d('baser', 'Eメールテンプレート'),
+			'etc' => __d('baser', 'コンテンツテンプレート'),
+			'css' => __d('baser', 'スタイルシート'),
+			'js' => 'Javascript',
+			'img' => __d('baser', 'イメージ')
 		];
 		$this->crumbs = [
 			['name' => __d('baser', 'テーマ管理'), 'url' => ['admin' => true, 'controller' => 'themes', 'action' => 'index']]
@@ -95,11 +99,12 @@ class ThemeFilesController extends AppController {
 	}
 
 	/**
- * テーマファイル一覧
- *
- * @return void
- */
-	public function admin_index() {
+	 * テーマファイル一覧
+	 *
+	 * @return void
+	 */
+	public function admin_index()
+	{
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 
@@ -125,7 +130,7 @@ class ThemeFilesController extends AppController {
 			$themeFiles = [];
 			$folders = [];
 			$excludeList = ['_notes'];
-			foreach ($files[0] as $file) {
+			foreach($files[0] as $file) {
 				if (!in_array($file, $excludeList)) {
 					if ($file === 'admin' && is_link($fullpath . $file)) {
 						continue;
@@ -136,7 +141,7 @@ class ThemeFilesController extends AppController {
 					$folders[] = $folder;
 				}
 			}
-			foreach ($files[1] as $file) {
+			foreach($files[1] as $file) {
 				$themeFile = [];
 				$themeFile['name'] = $file;
 				$themeFile['type'] = $this->_getFileType($file);
@@ -166,7 +171,7 @@ class ThemeFilesController extends AppController {
 					'_notes'
 				];
 			}
-			foreach ($files[0] as $file) {
+			foreach($files[0] as $file) {
 				if (!in_array($file, $excludeFolderList)) {
 					$folder = [];
 					$folder['name'] = $file;
@@ -174,7 +179,7 @@ class ThemeFilesController extends AppController {
 					$folders[] = $folder;
 				}
 			}
-			foreach ($files[1] as $file) {
+			foreach($files[1] as $file) {
 				if (in_array($file, $excludeFileList)) {
 					continue;
 				}
@@ -196,18 +201,19 @@ class ThemeFilesController extends AppController {
 		$this->set('plugin', $plugin);
 		$this->set('type', $type);
 		$this->help = 'theme_files_index';
-		if($this->request->is('ajax')) {
+		if ($this->request->is('ajax')) {
 			$this->render('ajax_index');
 		}
 	}
 
-/**
- * ファイルタイプを取得する
- *
- * @param string $file
- * @return mixed false / type
- */
-	protected function _getFileType($file) {
+	/**
+	 * ファイルタイプを取得する
+	 *
+	 * @param string $file
+	 * @return mixed false / type
+	 */
+	protected function _getFileType($file)
+	{
 		if (preg_match('/^(.+?)(\.ctp|\.php|\.css|\.js)$/is', $file)) {
 			return 'text';
 		}
@@ -219,12 +225,13 @@ class ThemeFilesController extends AppController {
 		return 'file';
 	}
 
-/**
- * テーマファイル作成
- *
- * @return void
- */
-	public function admin_add() {
+	/**
+	 * テーマファイル作成
+	 *
+	 * @return void
+	 */
+	public function admin_add()
+	{
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -284,12 +291,13 @@ class ThemeFilesController extends AppController {
 		$this->render('form');
 	}
 
-/**
- * テーマファイル編集
- *
- * @return void
- */
-	public function admin_edit() {
+	/**
+	 * テーマファイル編集
+	 *
+	 * @return void
+	 */
+	public function admin_edit()
+	{
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -362,12 +370,13 @@ class ThemeFilesController extends AppController {
 		$this->render('form');
 	}
 
-/**
- * ファイルを削除する
- *
- * @return void
- */
-	public function admin_del() {
+	/**
+	 * ファイルを削除する
+	 *
+	 * @return void
+	 */
+	public function admin_del()
+	{
 		$this->_checkSubmitToken();
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
@@ -393,12 +402,13 @@ class ThemeFilesController extends AppController {
 		$this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', dirname($path))));
 	}
 
-/**
- * ファイルを削除する　（ajax）
- *
- * @return void
- */
-	public function admin_ajax_del() {
+	/**
+	 * ファイルを削除する　（ajax）
+	 *
+	 * @return void
+	 */
+	public function admin_ajax_del()
+	{
 		$this->_checkSubmitToken();
 		$args = $this->_parseArgs(func_get_args());
 
@@ -424,7 +434,8 @@ class ThemeFilesController extends AppController {
 	 * @param $args
 	 * @return bool
 	 */
-	protected function _del($args) {
+	protected function _del($args)
+	{
 		extract($args);
 		if (is_dir($fullpath)) {
 			$folder = new Folder();
@@ -448,13 +459,14 @@ class ThemeFilesController extends AppController {
 	 * @param $ids
 	 * @return bool
 	 */
-	protected function _batch_del($ids) {
+	protected function _batch_del($ids)
+	{
 		if (!$ids) {
 			return true;
 		}
 
 		$result = true;
-		foreach ($ids as $id) {
+		foreach($ids as $id) {
 			$args = $this->request->params['pass'];
 			$args[] = $id;
 			$args = $this->_parseArgs($args);
@@ -481,13 +493,14 @@ class ThemeFilesController extends AppController {
 		return true;
 	}
 
-/**
- * テーマファイル表示
- *
- * @return	void
- * @access	public
- */
-	public function admin_view() {
+	/**
+	 * テーマファイル表示
+	 *
+	 * @return    void
+	 * @access    public
+	 */
+	public function admin_view()
+	{
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -517,12 +530,13 @@ class ThemeFilesController extends AppController {
 		$this->render('form');
 	}
 
-/**
- * テーマファイルをコピーする
- *
- * @return void
- */
-	public function admin_ajax_copy() {
+	/**
+	 * テーマファイルをコピーする
+	 *
+	 * @return void
+	 */
+	public function admin_ajax_copy()
+	{
 		$args = $this->_parseArgs(func_get_args());
 
 		if (!$args) {
@@ -537,7 +551,7 @@ class ThemeFilesController extends AppController {
 		$themeFile = [];
 		if (is_dir($fullpath)) {
 			$newPath = preg_replace('/\/$/is', '', $fullpath) . '_copy';
-			while (true) {
+			while(true) {
 				if (!is_dir($newPath)) {
 					break;
 				}
@@ -552,7 +566,7 @@ class ThemeFilesController extends AppController {
 		} else {
 			$pathinfo = pathinfo($fullpath);
 			$newPath = $pathinfo['dirname'] . DS . urldecode(basename($fullpath, '.' . $pathinfo['extension'])) . '_copy';
-			while (true) {
+			while(true) {
 				if (!file_exists($newPath . '.' . $pathinfo['extension'])) {
 					$newPath .= '.' . $pathinfo['extension'];
 					break;
@@ -583,12 +597,13 @@ class ThemeFilesController extends AppController {
 		$this->set('data', $themeFile);
 	}
 
-/**
- * ファイルをアップロードする
- *
- * @return void
- */
-	public function admin_upload() {
+	/**
+	 * ファイルをアップロードする
+	 *
+	 * @return void
+	 */
+	public function admin_upload()
+	{
 		$messages = [];
 		if (!$this->request->data) {
 			if ($this->ThemeFile->isOverPostSize()) {
@@ -615,12 +630,13 @@ class ThemeFilesController extends AppController {
 		$this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', $path)));
 	}
 
-/**
- * フォルダ追加
- *
- * @return void
- */
-	public function admin_add_folder() {
+	/**
+	 * フォルダ追加
+	 *
+	 * @return void
+	 */
+	public function admin_add_folder()
+	{
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -653,12 +669,13 @@ class ThemeFilesController extends AppController {
 		$this->render('form_folder');
 	}
 
-/**
- * フォルダ編集
- *
- * @return void
- */
-	public function admin_edit_folder() {
+	/**
+	 * フォルダ編集
+	 *
+	 * @return void
+	 */
+	public function admin_edit_folder()
+	{
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -704,12 +721,13 @@ class ThemeFilesController extends AppController {
 		$this->render('form_folder');
 	}
 
-/**
- * フォルダ表示
- *
- * @return void
- */
-	public function admin_view_folder() {
+	/**
+	 * フォルダ表示
+	 *
+	 * @return void
+	 */
+	public function admin_view_folder()
+	{
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -735,20 +753,21 @@ class ThemeFilesController extends AppController {
 		$this->render('form_folder');
 	}
 
-/**
- * 引き数を解析する
- *
- * @param array $args
- * @return array
- */
-	protected function _parseArgs($args) {
+	/**
+	 * 引き数を解析する
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	protected function _parseArgs($args)
+	{
 		$data = ['plugin' => '', 'theme' => '', 'type' => '', 'path' => '', 'fullpath' => '', 'assets' => false];
 		$assets = ['css', 'js', 'img'];
 
 		if (!empty($args[1]) && !isset($this->_tempalteTypes[$args[1]])) {
 			$folder = new Folder(BASER_PLUGINS);
 			$files = $folder->read(true, true);
-			foreach ($files[0] as $file) {
+			foreach($files[0] as $file) {
 				if ($args[1] == $file) {
 					$data['plugin'] = $args[1];
 					unset($args[1]);
@@ -819,12 +838,13 @@ class ThemeFilesController extends AppController {
 		return $data;
 	}
 
-/**
- * コアファイルを現在のテーマにコピーする
- *
- * @return void
- */
-	public function admin_copy_to_theme() {
+	/**
+	 * コアファイルを現在のテーマにコピーする
+	 *
+	 * @return void
+	 */
+	public function admin_copy_to_theme()
+	{
 		$this->_checkSubmitToken();
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
@@ -855,12 +875,13 @@ class ThemeFilesController extends AppController {
 		$this->redirect(array_merge(['action' => 'view', $theme, $plugin, $type], explode('/', $path)));
 	}
 
-/**
- * コアファイルのフォルダを現在のテーマにコピーする
- *
- * @return void
- */
-	public function admin_copy_folder_to_theme() {
+	/**
+	 * コアファイルのフォルダを現在のテーマにコピーする
+	 *
+	 * @return void
+	 */
+	public function admin_copy_folder_to_theme()
+	{
 		$this->_checkSubmitToken();
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
@@ -907,14 +928,15 @@ class ThemeFilesController extends AppController {
 		);
 	}
 
-/**
- * 画像を表示する
- * コアの画像等も表示可
- *
- * @param array パス情報
- * @return void
- */
-	public function admin_img() {
+	/**
+	 * 画像を表示する
+	 * コアの画像等も表示可
+	 *
+	 * @param array パス情報
+	 * @return void
+	 */
+	public function admin_img()
+	{
 		$args = $this->_parseArgs(func_get_args());
 		$contents = ['jpg' => 'jpeg', 'gif' => 'gif', 'png' => 'png'];
 		extract($args);
@@ -942,7 +964,8 @@ class ThemeFilesController extends AppController {
 	 *
 	 * @return void
 	 */
-	public function admin_img_thumb() {
+	public function admin_img_thumb()
+	{
 		$args = func_get_args();
 		$width = $args[0];
 		$height = $args[1];

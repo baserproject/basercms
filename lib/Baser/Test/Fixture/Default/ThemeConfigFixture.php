@@ -1,14 +1,16 @@
 <?php
+
 /**
  * ThemeConfigFixture
  */
-class ThemeConfigFixture extends BaserTestFixture {
+class ThemeConfigFixture extends BaserTestFixture
+{
 
-/**
- * Records
- *
- * @var array
- */
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '1',

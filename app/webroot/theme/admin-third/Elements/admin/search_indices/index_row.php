@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -15,7 +15,7 @@
  *
  * @var BcAppView $this
  * @var array $data
- * @var int $count 
+ * @var int $count
  */
 $priorities = [
 	'0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.4', '0.5' => '0.5',
@@ -27,7 +27,7 @@ $priorities = [
 <tr id="Row<?php echo $count + 1 ?>"<?php $this->BcListTable->rowClass($this->BcSearchIndex->allowPublish($data), $data) ?>>
 	<td class="row-tools bca-table-listup__tbody-td">
 		<?php if ($this->BcBaser->isAdminUser()): ?>
-			<?php echo $this->BcForm->input('ListTool.batch_targets.' . $data['SearchIndex']['id'], ['type' => 'checkbox', 'label'=> '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['SearchIndex']['id']]) ?>
+			<?php echo $this->BcForm->input('ListTool.batch_targets.' . $data['SearchIndex']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['SearchIndex']['id']]) ?>
 		<?php endif ?>
 	</td>
 	<td class="bca-table-listup__tbody-td"><?php echo $data['SearchIndex']['id'] ?></td>

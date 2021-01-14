@@ -1,24 +1,25 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Feed.Test.Fixture.Default
- * @since			baserCMS v 3.0.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Feed.Test.Fixture.Default
+ * @since           baserCMS v 3.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
-class FeedConfigFixture extends BaserTestFixture {
+class FeedConfigFixture extends BaserTestFixture
+{
 
-/**
- * Records
- *
- * @var array
- */
-	public $records = array(
-		array(
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
+	public $records = [
+		[
 			'id' => '1',
 			'name' => 'baserCMSニュース',
 			'feed_title_index' => '',
@@ -27,7 +28,7 @@ class FeedConfigFixture extends BaserTestFixture {
 			'display_number' => '3',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => null
-		),
-	);
+		],
+	];
 
 }

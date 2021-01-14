@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Model
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Model
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('Sanitize', 'Utility');
@@ -17,6 +17,8 @@ App::uses('Dblog', 'Model');
 App::uses('AppController', 'Controller');
 
 /**
+ * Class BcAppModel
+ *
  * Model 拡張クラス
  *
  * 既存のCakePHPプロジェクトで、設置済のAppModelと共存できるように、AppModelとは別にした。
@@ -25,43 +27,45 @@ App::uses('AppController', 'Controller');
  * @property Content $Content
  * @property BehaviorCollection $Behaviors
  */
-class BcAppModel extends Model {
+class BcAppModel extends Model
+{
 
-/**
- * DB接続設定名
- *
- * @var string
- */
+	/**
+	 * DB接続設定名
+	 *
+	 * @var string
+	 */
 	public $useDbConfig = 'default';
 
-/**
- * 公開状態のフィールド
- * BcAppModel::getConditionAllowPublish() で利用
- * @var string
- */
+	/**
+	 * 公開状態のフィールド
+	 * BcAppModel::getConditionAllowPublish() で利用
+	 * @var string
+	 */
 	public $publishStatusField = 'status';
-/**
- * 公開開始日のフィールド
- * BcAppModel::getConditionAllowPublish() で利用
- * @var string
- */
+	/**
+	 * 公開開始日のフィールド
+	 * BcAppModel::getConditionAllowPublish() で利用
+	 * @var string
+	 */
 	public $publishBeginField = 'publish_begin';
 
-/**
- * 公開終了日のフィールド
- * BcAppModel::getConditionAllowPublish() で利用
- * @var string
- */
+	/**
+	 * 公開終了日のフィールド
+	 * BcAppModel::getConditionAllowPublish() で利用
+	 * @var string
+	 */
 	public $publishEndField = 'publish_end';
 
-/**
- * コンストラクタ
- *
- * @return	void
- */
-	public function __construct($id = false, $table = null, $ds = null) {
+	/**
+	 * コンストラクタ
+	 *
+	 * @return    void
+	 */
+	public function __construct($id = false, $table = null, $ds = null)
+	{
 		$db = ConnectionManager::getDataSource('default');
-		if(Configure::read('BcRequest.asset')) {
+		if (Configure::read('BcRequest.asset')) {
 			parent::__construct($id, $table, $ds);
 			return;
 		}
@@ -69,7 +73,7 @@ class BcAppModel extends Model {
 		if (isset($db->config['datasource'])) {
 			if ($db->config['datasource'] != '') {
 				// @deprecated 5.0.0 since 4.0.0
-				if($this->useDbConfig == 'plugin') {
+				if ($this->useDbConfig == 'plugin') {
 					$this->useDbConfig = 'default';
 					$this->log(sprintf(__d('baser', 'モデル：%s BcPluginAppModelの 継承は、バージョン 4.0.0 より非推奨となりました。バージョン 5.0.0 で BcPluginAppModel は削除される予定です。プラグインは AppModel を直接継承してください。'), $this->name), LOG_ALERT);
 				}
@@ -88,18 +92,19 @@ class BcAppModel extends Model {
 		}
 	}
 
-/**
- * beforeSave
- *
- * @return	boolean
- */
-	public function beforeSave($options = []) {
+	/**
+	 * beforeSave
+	 *
+	 * @return    boolean
+	 */
+	public function beforeSave($options = [])
+	{
 		$result = parent::beforeSave($options);
 		// 日付フィールドが空の場合、nullを保存する
-		foreach ($this->_schema as $key => $field) {
+		foreach($this->_schema as $key => $field) {
 			if (('date' == $field['type'] ||
-				'datetime' == $field['type'] ||
-				'time' == $field['type']) &&
+					'datetime' == $field['type'] ||
+					'time' == $field['type']) &&
 				isset($this->data[$this->name][$key])) {
 				if ($this->data[$this->name][$key] == '') {
 					$this->data[$this->name][$key] = null;
@@ -109,15 +114,16 @@ class BcAppModel extends Model {
 		return $result;
 	}
 
-/**
- * Saves model data to the database. By default, validation occurs before save.
- *
- * @param	array	$data Data to save.
- * @param	boolean	$validate If set, validation will be done before the save
- * @param	array	$fieldList List of fields to allow to be written
- * @return	mixed	On success Model::$data if its not empty or true, false on failure
- */
-	public function save($data = null, $validate = true, $fieldList = []) {
+	/**
+	 * Saves model data to the database. By default, validation occurs before save.
+	 *
+	 * @param array $data Data to save.
+	 * @param boolean $validate If set, validation will be done before the save
+	 * @param array $fieldList List of fields to allow to be written
+	 * @return    mixed    On success Model::$data if its not empty or true, false on failure
+	 */
+	public function save($data = null, $validate = true, $fieldList = [])
+	{
 		if (!$data) {
 			$data = $this->data;
 		}
@@ -139,18 +145,19 @@ class BcAppModel extends Model {
 		return parent::save($data, $validate, $fieldList);
 	}
 
-/**
- * 配列の文字コードを変換する
- *
- * TODO GLOBAL グローバルな関数として再配置する必要あり
- *
- * @param array $data 変換前のデータ
- * @param string $outenc 変換後の文字コード
- * @param string $inenc 変換元の文字コード
- * @return array 変換後のデータ
- */
-	public function convertEncodingByArray($data, $outenc, $inenc) {
-		foreach ($data as $key => $value) {
+	/**
+	 * 配列の文字コードを変換する
+	 *
+	 * TODO GLOBAL グローバルな関数として再配置する必要あり
+	 *
+	 * @param array $data 変換前のデータ
+	 * @param string $outenc 変換後の文字コード
+	 * @param string $inenc 変換元の文字コード
+	 * @return array 変換後のデータ
+	 */
+	public function convertEncodingByArray($data, $outenc, $inenc)
+	{
+		foreach($data as $key => $value) {
 			if (is_array($value)) {
 				$data[$key] = $this->convertEncodingByArray($value, $outenc, $inenc);
 			} else {
@@ -162,13 +169,14 @@ class BcAppModel extends Model {
 		return $data;
 	}
 
-/**
- * データベースログを記録する
- *
- * @param 	string	$message
- * @return	boolean
- */
-	public function saveDbLog($message) {
+	/**
+	 * データベースログを記録する
+	 *
+	 * @param string $message
+	 * @return    boolean
+	 */
+	public function saveDbLog($message)
+	{
 		// ログを記録する
 		$Dblog = ClassRegistry::init('Dblog');
 		$logdata['Dblog']['name'] = $message;
@@ -176,47 +184,50 @@ class BcAppModel extends Model {
 		return $Dblog->save($logdata);
 	}
 
-/**
- * コントロールソースを取得する
- *
- * 継承先でオーバーライドする事
- *
- * @return 	array
- */
-	public function getControlSource($field) {
+	/**
+	 * コントロールソースを取得する
+	 *
+	 * 継承先でオーバーライドする事
+	 *
+	 * @return    array
+	 */
+	public function getControlSource($field)
+	{
 		return [];
 	}
 
-/**
- * 子カテゴリのIDリストを取得する
- *
- * treeビヘイビア要
- *
- * @param	mixed	$id ページカテゴリーID
- * @return 	array
- */
-	public function getChildIdsList($id) {
+	/**
+	 * 子カテゴリのIDリストを取得する
+	 *
+	 * treeビヘイビア要
+	 *
+	 * @param mixed $id ページカテゴリーID
+	 * @return    array
+	 */
+	public function getChildIdsList($id)
+	{
 		$ids = [];
 		if ($this->childCount($id)) {
 			$children = $this->children($id);
-			foreach ($children as $child) {
+			foreach($children as $child) {
 				$ids[] = (int)$child[$this->name]['id'];
 			}
 		}
 		return $ids;
 	}
 
-/**
- * 機種依存文字の変換処理
- *
- * 内部文字コードがUTF-8である必要がある。
- * 多次元配列には対応していない。
- *
- * @param	string	変換対象文字列
- * @return	string	変換後文字列
- * TODO AppExModeに移行すべきかも
- */
-	public function replaceText($str) {
+	/**
+	 * 機種依存文字の変換処理
+	 *
+	 * 内部文字コードがUTF-8である必要がある。
+	 * 多次元配列には対応していない。
+	 *
+	 * @param string    変換対象文字列
+	 * @return    string    変換後文字列
+	 * TODO AppExModeに移行すべきかも
+	 */
+	public function replaceText($str)
+	{
 		$ret = $str;
 		$arr = [
 			"\xE2\x85\xA0" => "I",
@@ -292,21 +303,22 @@ class BcAppModel extends Model {
 		return str_replace(array_keys($arr), array_values($arr), $str);
 	}
 
-/**
- * データベースを初期化
- *
- * 既に存在するテーブルは上書きしない
- *
- * @param	array	データベース設定名
- * @param	string	プラグイン名
- * @return 	boolean
- */
-	public function initDb($pluginName = '', $options = []) {
+	/**
+	 * データベースを初期化
+	 *
+	 * 既に存在するテーブルは上書きしない
+	 *
+	 * @param array    データベース設定名
+	 * @param string    プラグイン名
+	 * @return    boolean
+	 */
+	public function initDb($pluginName = '', $options = [])
+	{
 		$options = array_merge([
-			'loadCsv'		=> true,
-			'filterTable'	=> '',
-			'filterType'	=> '',
-			'dbDataPattern'	=> ''
+			'loadCsv' => true,
+			'filterTable' => '',
+			'filterType' => '',
+			'dbDataPattern' => ''
 		], $options);
 
 		// 初期データフォルダを走査
@@ -319,20 +331,20 @@ class BcAppModel extends Model {
 			}
 		}
 		$dbDataPattern = null;
-		if(!empty($options['dbDataPattern'])) {
+		if (!empty($options['dbDataPattern'])) {
 			$dbDataPattern = $options['dbDataPattern'];
-		} elseif(!empty($_SESSION['dbDataPattern'])) {
+		} elseif (!empty($_SESSION['dbDataPattern'])) {
 			$dbDataPattern = $_SESSION['dbDataPattern'];
 			unset($_SESSION['dbDataPattern']);
 		}
 		if ($this->loadSchema($this->useDbConfig, $path, $options['filterTable'], $options['filterType'], [], $dropField = false)) {
 			if ($options['loadCsv']) {
 				$theme = $pattern = null;
-				if($dbDataPattern) {
+				if ($dbDataPattern) {
 					list($theme, $pattern) = explode('.', $dbDataPattern);
 				}
 				$path = BcUtil::getDefaultDataPath($pluginName, $theme, $pattern);
-				if($path) {
+				if ($path) {
 					return $this->loadCsv($this->useDbConfig, $path);
 				} else {
 					return true;
@@ -345,16 +357,17 @@ class BcAppModel extends Model {
 		}
 	}
 
-/**
- * スキーマファイルを利用してデータベース構造を変更する
- *
- * @param	array	データベース設定名
- * @param	string	スキーマファイルのパス
- * @param	string	テーブル指定
- * @param	string	更新タイプ指定
- * @return 	boolean
- */
-	public function loadSchema($dbConfigName, $path, $filterTable = '', $filterType = '', $excludePath = [], $dropField = true) {
+	/**
+	 * スキーマファイルを利用してデータベース構造を変更する
+	 *
+	 * @param array    データベース設定名
+	 * @param string    スキーマファイルのパス
+	 * @param string    テーブル指定
+	 * @param string    更新タイプ指定
+	 * @return    boolean
+	 */
+	public function loadSchema($dbConfigName, $path, $filterTable = '', $filterType = '', $excludePath = [], $dropField = true)
+	{
 		// テーブルリストを取得
 		$db = ConnectionManager::getDataSource($dbConfigName);
 		$db->cacheSources = false;
@@ -365,7 +378,7 @@ class BcAppModel extends Model {
 
 		$result = true;
 
-		foreach ($files[1] as $file) {
+		foreach($files[1] as $file) {
 			if (in_array($file, $excludePath)) {
 				continue;
 			}
@@ -415,15 +428,16 @@ class BcAppModel extends Model {
 		return $result;
 	}
 
-/**
- * CSVを読み込む
- *
- * @param	array	データベース設定名
- * @param	string	CSVパス
- * @param	string	テーブル指定
- * @return 	boolean
- */
-	public function loadCsv($dbConfigName, $path, $options = []) {
+	/**
+	 * CSVを読み込む
+	 *
+	 * @param array    データベース設定名
+	 * @param string    CSVパス
+	 * @param string    テーブル指定
+	 * @return    boolean
+	 */
+	public function loadCsv($dbConfigName, $path, $options = [])
+	{
 		$options = array_merge([
 			'filterTable' => ''
 		], $options);
@@ -436,7 +450,7 @@ class BcAppModel extends Model {
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
 		$result = true;
-		foreach ($files[1] as $file) {
+		foreach($files[1] as $file) {
 			if (preg_match('/^(.*?)\.csv$/', $file, $matches)) {
 				$table = $matches[1];
 				if (in_array($prefix . $table, $listSources)) {
@@ -457,58 +471,62 @@ class BcAppModel extends Model {
 		return $result;
 	}
 
-/**
- * 最短の長さチェック
- * - 対象となる値の長さが、指定した最短値より長い場合、trueを返す
- *
- * @param mixed	$check 対象となる値
- * @param int	$min 値の最短値
- * @return boolean
- */
-	public function minLength($check, $min) {
-		$check = (is_array($check)) ? current($check) : $check;
+	/**
+	 * 最短の長さチェック
+	 * - 対象となる値の長さが、指定した最短値より長い場合、trueを返す
+	 *
+	 * @param mixed $check 対象となる値
+	 * @param int $min 値の最短値
+	 * @return boolean
+	 */
+	public function minLength($check, $min)
+	{
+		$check = (is_array($check))? current($check) : $check;
 		$length = mb_strlen($check, Configure::read('App.encoding'));
 		return ($length >= $min);
 	}
 
-/**
- * 最長の長さチェック
- * - 対象となる値の長さが、指定した最長値より短い場合、trueを返す
- *
- * @param mixed	$check 対象となる値
- * @param int	$max 値の最長値
- * @param boolean
- */
-	public function maxLength($check, $max) {
-		$check = (is_array($check)) ? current($check) : $check;
+	/**
+	 * 最長の長さチェック
+	 * - 対象となる値の長さが、指定した最長値より短い場合、trueを返す
+	 *
+	 * @param mixed $check 対象となる値
+	 * @param int $max 値の最長値
+	 * @param boolean
+	 */
+	public function maxLength($check, $max)
+	{
+		$check = (is_array($check))? current($check) : $check;
 		$length = mb_strlen($check, Configure::read('App.encoding'));
 		return ($length <= $max);
 	}
 
-/**
- * 最大のバイト数チェック
- * - 対象となる値のサイズが、指定した最大値より短い場合、true を返す
- *
- * @param mixed $check 対象となる値
- * @param int $max バイト数の最大値
- * @return boolean
- */
-	public function maxByte($check, $max) {
-		$check = (is_array($check)) ? current($check) : $check;
+	/**
+	 * 最大のバイト数チェック
+	 * - 対象となる値のサイズが、指定した最大値より短い場合、true を返す
+	 *
+	 * @param mixed $check 対象となる値
+	 * @param int $max バイト数の最大値
+	 * @return boolean
+	 */
+	public function maxByte($check, $max)
+	{
+		$check = (is_array($check))? current($check) : $check;
 		$byte = strlen($check);
 		return ($byte <= $max);
 	}
 
-/**
- * 最大のバイト数チェック
- * - 対象となる値のサイズが、指定した最大値より短い場合、true を返す
- *
- * @param mixed $check 対象となる値
- * @param int $max バイト数の最大値
- * @return boolean
- */
-	public function checkDateRenge($check, $begin, $end) {
-		if(!empty($this->data[$this->alias][$begin]) &&
+	/**
+	 * 最大のバイト数チェック
+	 * - 対象となる値のサイズが、指定した最大値より短い場合、true を返す
+	 *
+	 * @param mixed $check 対象となる値
+	 * @param int $max バイト数の最大値
+	 * @return boolean
+	 */
+	public function checkDateRenge($check, $begin, $end)
+	{
+		if (!empty($this->data[$this->alias][$begin]) &&
 			!empty($this->data[$this->alias][$end])) {
 			if (strtotime($this->data[$this->alias][$begin]) >=
 				strtotime($this->data[$this->alias][$end])) {
@@ -518,30 +536,32 @@ class BcAppModel extends Model {
 		return true;
 	}
 
-/**
- * 範囲を指定しての長さチェック
- *
- * @param mixed	$check 対象となる値
- * @param int	$min 値の最短値
- * @param int	$max 値の最長値
- * @param boolean
- */
-	public function between($check, $min, $max) {
-		$check = (is_array($check)) ? current($check) : $check;
+	/**
+	 * 範囲を指定しての長さチェック
+	 *
+	 * @param mixed $check 対象となる値
+	 * @param int $min 値の最短値
+	 * @param int $max 値の最長値
+	 * @param boolean
+	 */
+	public function between($check, $min, $max)
+	{
+		$check = (is_array($check))? current($check) : $check;
 		$length = mb_strlen($check, Configure::read('App.encoding'));
 		return ($length >= $min && $length <= $max);
 	}
 
-/**
- * 指定フィールドのMAX値を取得する
- *
- * 現在数値フィールドのみ対応
- *
- * @param string $field
- * @param array $conditions
- * @return int
- */
-	public function getMax($field, $conditions = []) {
+	/**
+	 * 指定フィールドのMAX値を取得する
+	 *
+	 * 現在数値フィールドのみ対応
+	 *
+	 * @param string $field
+	 * @param array $conditions
+	 * @return int
+	 */
+	public function getMax($field, $conditions = [])
+	{
 		if (strpos($field, '.') === false) {
 			$modelName = $this->alias;
 		} else {
@@ -558,7 +578,7 @@ class BcAppModel extends Model {
 			$this->cacheQueries = true;
 			$max = 0;
 			if ($dbDatas) {
-				foreach ($dbDatas as $dbData) {
+				foreach($dbDatas as $dbData) {
 					if ($max < $dbData[$modelName][$field]) {
 						$max = $dbData[$modelName][$field];
 					}
@@ -578,13 +598,14 @@ class BcAppModel extends Model {
 		}
 	}
 
-/**
- * テーブルにフィールドを追加する
- *
- * @param	array	$options [ field / column / table ]
- * @return	boolean
- */
-	public function addField($options) {
+	/**
+	 * テーブルにフィールドを追加する
+	 *
+	 * @param array $options [ field / column / table ]
+	 * @return    boolean
+	 */
+	public function addField($options)
+	{
 		extract($options);
 
 		if (!isset($field) || !isset($column)) {
@@ -605,13 +626,14 @@ class BcAppModel extends Model {
 		return $ret;
 	}
 
-/**
- * フィールド構造を変更する
- *
- * @param	array	$options [ field / column / table ]
- * @return	boolean
- */
-	public function editField($options) {
+	/**
+	 * フィールド構造を変更する
+	 *
+	 * @param array $options [ field / column / table ]
+	 * @return    boolean
+	 */
+	public function editField($options)
+	{
 		extract($options);
 
 		if (!isset($field) || !isset($column)) {
@@ -632,13 +654,14 @@ class BcAppModel extends Model {
 		return $ret;
 	}
 
-/**
- * フィールドを削除する
- *
- * @param	array	$options [ field / table ]
- * @return	boolean
- */
-	public function delField($options) {
+	/**
+	 * フィールドを削除する
+	 *
+	 * @param array $options [ field / table ]
+	 * @return    boolean
+	 */
+	public function delField($options)
+	{
 		extract($options);
 
 		if (!isset($field)) {
@@ -659,14 +682,15 @@ class BcAppModel extends Model {
 		return $ret;
 	}
 
-/**
- * フィールド名を変更する
- *
- * @param array	$options [ new / old / table ]
- * @param array $column
- * @return boolean
- */
-	public function renameField($options) {
+	/**
+	 * フィールド名を変更する
+	 *
+	 * @param array $options [ new / old / table ]
+	 * @param array $column
+	 * @return boolean
+	 */
+	public function renameField($options)
+	{
 		extract($options);
 
 		if (!isset($new) || !isset($old)) {
@@ -687,50 +711,53 @@ class BcAppModel extends Model {
 		return $ret;
 	}
 
-/**
- * テーブルの存在チェックを行う
- * @param string $tableName
- * @return boolean
- */
-	public function tableExists($tableName) {
+	/**
+	 * テーブルの存在チェックを行う
+	 * @param string $tableName
+	 * @return boolean
+	 */
+	public function tableExists($tableName)
+	{
 		$db = ConnectionManager::getDataSource($this->useDbConfig);
 		$db->cacheSources = false;
 		$tables = $db->listSources();
 		return in_array($tableName, $tables);
 	}
 
-/**
- * 英数チェック
- *
- * @param	string	チェック対象文字列
- * @return	boolean
- */
-	public function alphaNumeric($check) {
-		if (!$check[key($check)]) {
-			return true;
- 		}
- 		if (preg_match("/^[a-zA-Z0-9]+$/", $check[key($check)])) {
-			return true;
- 		} else {
-			return false;
- 		}
-	}
-
-/**
- * 英数チェックプラス
- *
- * ハイフンアンダースコアを許容
- *
- * @param array $check チェック対象文字列
- * @param array $options 他に許容する文字列
- * @return boolean
- */
-	public function alphaNumericPlus($check, $options = []) {
+	/**
+	 * 英数チェック
+	 *
+	 * @param string    チェック対象文字列
+	 * @return    boolean
+	 */
+	public function alphaNumeric($check)
+	{
 		if (!$check[key($check)]) {
 			return true;
 		}
-		if($options && !array_key_exists('rule', $options)) {
-			if(!is_array($options)) {
+		if (preg_match("/^[a-zA-Z0-9]+$/", $check[key($check)])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * 英数チェックプラス
+	 *
+	 * ハイフンアンダースコアを許容
+	 *
+	 * @param array $check チェック対象文字列
+	 * @param array $options 他に許容する文字列
+	 * @return boolean
+	 */
+	public function alphaNumericPlus($check, $options = [])
+	{
+		if (!$check[key($check)]) {
+			return true;
+		}
+		if ($options && !array_key_exists('rule', $options)) {
+			if (!is_array($options)) {
 				$options = [$options];
 			}
 			$options = preg_quote(implode('', $options), '/');
@@ -753,7 +780,8 @@ class BcAppModel extends Model {
 	 * @param array $check チェック対象文字列
 	 * @return boolean
 	 */
-	public function bcUtileUrlencodeBlank($check) {
+	public function bcUtileUrlencodeBlank($check)
+	{
 		if (!$check[key($check)]) {
 			return true;
 		}
@@ -765,12 +793,13 @@ class BcAppModel extends Model {
 		}
 	}
 
-/**
- * データの重複チェックを行う
- * @param array $check
- * @return boolean false 重複あり / true 重複なし
- */
-	public function duplicate($check) {
+	/**
+	 * データの重複チェックを行う
+	 * @param array $check
+	 * @return boolean false 重複あり / true 重複なし
+	 */
+	public function duplicate($check)
+	{
 		$conditions = [$this->alias . '.' . key($check) => $check[key($check)]];
 		if ($this->exists()) {
 			$conditions['NOT'] = [$this->alias . '.' . $this->primaryKey => $this->id];
@@ -783,14 +812,15 @@ class BcAppModel extends Model {
 		}
 	}
 
-/**
- * ファイルサイズチェック
- *
- * @param array $check チェック対象データ
- * @param int $size 最大のファイルサイズ
- * @deprecated 5.0.0 since 4.1.0.2 アップロードしたファイルのサイズチェックに加えて、アップロード時のエラーコードをログに取るようにするため
- */
-	public function fileSize($check, $size) {
+	/**
+	 * ファイルサイズチェック
+	 *
+	 * @param array $check チェック対象データ
+	 * @param int $size 最大のファイルサイズ
+	 * @deprecated 5.0.0 since 4.1.0.2 アップロードしたファイルのサイズチェックに加えて、アップロード時のエラーコードをログに取るようにするため
+	 */
+	public function fileSize($check, $size)
+	{
 
 		$this->log(deprecatedMessage(
 			__d('baser', 'メソッド：BcAppModel::fileSize()'), '4.1.0.2', '5.0.0', __d('baser', 'BcAppModel::fileCheck() を利用してください。')
@@ -809,14 +839,15 @@ class BcAppModel extends Model {
 		return true;
 	}
 
-/**
- * ファイルサイズチェック
- *
- * @param array $check チェック対象データ
- * @param int $size 最大のファイルサイズ
- * @link http://php.net/manual/ja/features.file-upload.errors.php
- */
-	public function fileCheck($check, $size) {
+	/**
+	 * ファイルサイズチェック
+	 *
+	 * @param array $check チェック対象データ
+	 * @param int $size 最大のファイルサイズ
+	 * @link http://php.net/manual/ja/features.file-upload.errors.php
+	 */
+	public function fileCheck($check, $size)
+	{
 		// post_max_size オーバーチェック
 		// POSTを前提の検証としているため全ての受信データを検証
 		// データの更新時は必ず$_POSTにデータが入っていることを前提とする
@@ -837,7 +868,7 @@ class BcAppModel extends Model {
 		$fileErrorCode = Hash::get($file, 'error');
 		if ($fileErrorCode) {
 			// ファイルアップロード時のエラーメッセージを取得する
-			switch ($fileErrorCode) {
+			switch($fileErrorCode) {
 				// アップロード成功
 				case 0:
 					// UPLOAD_ERR_OK
@@ -888,20 +919,21 @@ class BcAppModel extends Model {
 		return true;
 	}
 
-/**
- * ファイルの拡張子チェック
- *
- * @param array $check チェック対象データ
- * @param string $ext 許可する拡張子
- */
-	public function fileExt($check, $exts) {
+	/**
+	 * ファイルの拡張子チェック
+	 *
+	 * @param array $check チェック対象データ
+	 * @param string $ext 許可する拡張子
+	 */
+	public function fileExt($check, $exts)
+	{
 		$file = $check[key($check)];
 		if (!empty($file['name'])) {
-			if(!is_array($exts)) {
+			if (!is_array($exts)) {
 				$exts = explode(',', $exts);
 			}
 			$ext = decodeContent($file['type'], $file['name']);
-			if(in_array($ext, $exts)) {
+			if (in_array($ext, $exts)) {
 				return true;
 			} else {
 				return false;
@@ -909,13 +941,15 @@ class BcAppModel extends Model {
 		}
 		return true;
 	}
-/**
- * 半角チェック
- *
- * @param array $check 確認する値を含む配列。先頭の要素のみチェックされる
- * @return boolean
- */
-	public function halfText($check) {
+
+	/**
+	 * 半角チェック
+	 *
+	 * @param array $check 確認する値を含む配列。先頭の要素のみチェックされる
+	 * @return boolean
+	 */
+	public function halfText($check)
+	{
 		$value = $check[key($check)];
 		$len = strlen($value);
 		$mblen = mb_strlen($value, 'UTF-8');
@@ -925,47 +959,51 @@ class BcAppModel extends Model {
 		return true;
 	}
 
-/**
- * 半角英数字+アンダーバー＋ハイフンのチェック
- *
- * @param array $check 確認する値を含む配列。先頭の要素のみチェックされる
- * @return boolean
- */
-	public function alphaNumericDashUnderscore($check) {
+	/**
+	 * 半角英数字+アンダーバー＋ハイフンのチェック
+	 *
+	 * @param array $check 確認する値を含む配列。先頭の要素のみチェックされる
+	 * @return boolean
+	 */
+	public function alphaNumericDashUnderscore($check)
+	{
 		$value = array_values($check);
 		$value = $value[0];
 
 		return preg_match('|^[0-9a-zA-Z_-]*$|', $value);
 	}
 
-/**
- * 一つ位置を上げる
- * @param string	$id
- * @param array		$conditions
- * @return boolean
- */
-	public function sortup($id, $conditions) {
+	/**
+	 * 一つ位置を上げる
+	 * @param string $id
+	 * @param array $conditions
+	 * @return boolean
+	 */
+	public function sortup($id, $conditions)
+	{
 		return $this->changeSort($id, -1, $conditions);
 	}
 
-/**
- * 一つ位置を下げる
- * @param string	$id
- * @param array		$conditions
- * @return boolean
- */
-	public function sortdown($id, $conditions) {
+	/**
+	 * 一つ位置を下げる
+	 * @param string $id
+	 * @param array $conditions
+	 * @return boolean
+	 */
+	public function sortdown($id, $conditions)
+	{
 		return $this->changeSort($id, 1, $conditions);
 	}
 
-/**
- * 並び順を変更する
- * @param string	$id
- * @param int			$offset
- * @param array		$conditions
- * @return boolean
- */
-	public function changeSort($id, $offset, $conditions = []) {
+	/**
+	 * 並び順を変更する
+	 * @param string $id
+	 * @param int $offset
+	 * @param array $conditions
+	 * @return boolean
+	 */
+	public function changeSort($id, $offset, $conditions = [])
+	{
 		if ($conditions) {
 			$_conditions = $conditions;
 		} else {
@@ -979,7 +1017,7 @@ class BcAppModel extends Model {
 			'conditions' => [$this->alias . '.id' => $id],
 			'fields' => [$this->alias . '.id', $this->alias . '.sort']
 		]);
-		if(!$current) {
+		if (!$current) {
 			return false;
 		}
 
@@ -1031,14 +1069,14 @@ class BcAppModel extends Model {
 		]);
 
 		// 全てのデータを更新
-		foreach ($datas as $data) {
+		foreach($datas as $data) {
 			if ($data[$this->alias]['sort'] == $currentSort) {
 				$data[$this->alias]['sort'] = $targetSort;
 			} else {
 				if ($offset > 0) {
-					$data[$this->alias]['sort'] --;
+					$data[$this->alias]['sort']--;
 				} elseif ($offset < 0) {
-					$data[$this->alias]['sort'] ++;
+					$data[$this->alias]['sort']++;
 				}
 			}
 			if (!$this->save($data, false)) {
@@ -1049,43 +1087,46 @@ class BcAppModel extends Model {
 		return true;
 	}
 
-/**
- * Modelキャッシュを削除する
- * @return void
- */
-	public function deleteModelCache() {
+	/**
+	 * Modelキャッシュを削除する
+	 * @return void
+	 */
+	public function deleteModelCache()
+	{
 		$this->_schema = null;
 		$folder = new Folder(CACHE . 'models' . DS);
 		$caches = $folder->read(true, true);
-		foreach ($caches[1] as $cache) {
+		foreach($caches[1] as $cache) {
 			if (basename($cache) != 'empty') {
 				@unlink(CACHE . 'models' . DS . $cache);
 			}
 		}
 	}
 
-/**
- * Key Value 形式のテーブルよりデータを取得して
- * １レコードとしてデータを展開する
- * @return array
- */
-	public function findExpanded() {
+	/**
+	 * Key Value 形式のテーブルよりデータを取得して
+	 * １レコードとしてデータを展開する
+	 * @return array
+	 */
+	public function findExpanded()
+	{
 		$dbDatas = $this->find('all', ['fields' => ['name', 'value']]);
 		$expandedData = [];
 		if ($dbDatas) {
-			foreach ($dbDatas as $dbData) {
+			foreach($dbDatas as $dbData) {
 				$expandedData[$dbData[$this->alias]['name']] = $dbData[$this->alias]['value'];
 			}
 		}
 		return $expandedData;
 	}
 
-/**
- * Key Value 形式のテーブルにデータを保存する
- * @param	array	$data
- * @return	boolean
- */
-	public function saveKeyValue($data) {
+	/**
+	 * Key Value 形式のテーブルにデータを保存する
+	 * @param array $data
+	 * @return    boolean
+	 */
+	public function saveKeyValue($data)
+	{
 		if (isset($data[$this->alias])) {
 			$data = $data[$this->alias];
 		}
@@ -1095,7 +1136,7 @@ class BcAppModel extends Model {
 		}
 
 		$result = true;
-		foreach ($data as $key => $value) {
+		foreach($data as $key => $value) {
 
 			if ($this->find('count', ['conditions' => ['name' => $key]]) > 1) {
 				$this->deleteAll(['name' => $key]);
@@ -1128,26 +1169,28 @@ class BcAppModel extends Model {
 		return $result;
 	}
 
-/**
- * リストチェック
- * 対象となる値がリストに含まれる場合はエラー
- *
- * @param array $check 対象となる値
- * @param array $list リスト
- * @return boolean Succcess
- */
-	public function notInList($check, $list) {
+	/**
+	 * リストチェック
+	 * 対象となる値がリストに含まれる場合はエラー
+	 *
+	 * @param array $check 対象となる値
+	 * @param array $list リスト
+	 * @return boolean Succcess
+	 */
+	public function notInList($check, $list)
+	{
 		return !in_array($check[key($check)], $list);
 	}
 
-/**
- * Deconstructs a complex data type (array or object) into a single field value.
- *
- * @param string $field The name of the field to be deconstructed
- * @param mixed $data An array or object to be deconstructed into a field
- * @return mixed The resulting data that should be assigned to a field
- */
-	public function deconstruct($field, $data) {
+	/**
+	 * Deconstructs a complex data type (array or object) into a single field value.
+	 *
+	 * @param string $field The name of the field to be deconstructed
+	 * @param mixed $data An array or object to be deconstructed into a field
+	 * @return mixed The resulting data that should be assigned to a field
+	 */
+	public function deconstruct($field, $data)
+	{
 		if (!is_array($data)) {
 			return $data;
 		}
@@ -1189,7 +1232,7 @@ class BcAppModel extends Model {
 			$data['hour'] = '00';
 		}
 		if ($type === 'time') {
-			foreach ($timeFields as $key => $val) {
+			foreach($timeFields as $key => $val) {
 				if (!isset($data[$val]) || $data[$val] === '0' || $data[$val] === '00') {
 					$data[$val] = '00';
 				} elseif ($data[$val] !== '') {
@@ -1208,7 +1251,7 @@ class BcAppModel extends Model {
 		// ---
 		if ($type == 'text' || $type == 'string' || $type === 'datetime' || $type === 'timestamp' || $type === 'date') {
 			// <<<
-			foreach ($dateFields as $key => $val) {
+			foreach($dateFields as $key => $val) {
 				if ($val === 'hour' || $val === 'min' || $val === 'sec') {
 					if (!isset($data[$val]) || $data[$val] === '0' || $data[$val] === '00') {
 						$data[$val] = '00';
@@ -1254,7 +1297,7 @@ class BcAppModel extends Model {
 			}
 			// <<<
 
-			foreach (['m', 'd', 'H', 'i', 's'] as $index) {
+			foreach(['m', 'd', 'H', 'i', 's'] as $index) {
 				if (isset($date[$index])) {
 					$date[$index] = sprintf('%02d', $date[$index]);
 				}
@@ -1264,14 +1307,15 @@ class BcAppModel extends Model {
 		return $data;
 	}
 
-/**
- * ２つのフィールド値を確認する
- *
- * @param	array	$check 対象となる値
- * @param	mixed	$fields フィールド名
- * @return	boolean
- */
-	public function confirm($check, $fields) {
+	/**
+	 * ２つのフィールド値を確認する
+	 *
+	 * @param array $check 対象となる値
+	 * @param mixed $fields フィールド名
+	 * @return    boolean
+	 */
+	public function confirm($check, $fields)
+	{
 		$value1 = $value2 = '';
 		if (is_array($fields) && count($fields) > 1) {
 			if (isset($this->data[$this->alias][$fields[0]]) &&
@@ -1294,19 +1338,20 @@ class BcAppModel extends Model {
 		return true;
 	}
 
-/**
- * 指定したモデル以外のアソシエーションを除外する
- *
- * @param array $auguments アソシエーションを除外しないモデル。
- * 　「.（ドット）」で区切る事により、対象モデルにアソシエーションしているモデルがさらに定義しているアソシエーションを対象とする事ができる
- * 　（例）UserGroup.Permission
- * @param boolean $reset バインド時に１回の find でリセットするかどうか
- * @return void
- */
-	public function reduceAssociations($arguments, $reset = true) {
+	/**
+	 * 指定したモデル以外のアソシエーションを除外する
+	 *
+	 * @param array $auguments アソシエーションを除外しないモデル。
+	 * 　「.（ドット）」で区切る事により、対象モデルにアソシエーションしているモデルがさらに定義しているアソシエーションを対象とする事ができる
+	 * 　（例）UserGroup.Permission
+	 * @param boolean $reset バインド時に１回の find でリセットするかどうか
+	 * @return void
+	 */
+	public function reduceAssociations($arguments, $reset = true)
+	{
 		$models = [];
 
-		foreach ($arguments as $index => $argument) {
+		foreach($arguments as $index => $argument) {
 			if (is_array($argument)) {
 				if (count($argument) > 0) {
 					$arguments = am($arguments, $argument);
@@ -1315,7 +1360,7 @@ class BcAppModel extends Model {
 			}
 		}
 
-		foreach ($arguments as $index => $argument) {
+		foreach($arguments as $index => $argument) {
 			if (!is_string($argument)) {
 				unset($arguments[$index]);
 			}
@@ -1324,7 +1369,7 @@ class BcAppModel extends Model {
 		if (count($arguments) == 0) {
 			$models[$this->name] = [];
 		} else {
-			foreach ($arguments as $argument) {
+			foreach($arguments as $argument) {
 				if (strpos($argument, '.') !== false) {
 					$model = substr($argument, 0, strpos($argument, '.'));
 					$child = substr($argument, strpos($argument, '.') + 1);
@@ -1342,11 +1387,11 @@ class BcAppModel extends Model {
 
 		$relationTypes = ['belongsTo', 'hasOne', 'hasMany', 'hasAndBelongsToMany'];
 
-		foreach ($models as $bindingName => $children) {
+		foreach($models as $bindingName => $children) {
 			$model = null;
 
-			foreach ($relationTypes as $relationType) {
-				$currentRelation = (isset($this->$relationType) ? $this->$relationType : null);
+			foreach($relationTypes as $relationType) {
+				$currentRelation = (isset($this->$relationType)? $this->$relationType : null);
 				if (isset($currentRelation) && isset($currentRelation[$bindingName]) &&
 					is_array($currentRelation[$bindingName]) && isset($currentRelation[$bindingName]['className'])) {
 					$model = $currentRelation[$bindingName]['className'];
@@ -1368,7 +1413,7 @@ class BcAppModel extends Model {
 		}
 
 		if (isset($models[$this->name])) {
-			foreach ($models as $model => $children) {
+			foreach($models as $model => $children) {
 				if ($model != $this->name) {
 					$models[$this->name][] = $model;
 				}
@@ -1377,9 +1422,9 @@ class BcAppModel extends Model {
 			$models = array_unique($models[$this->name]);
 			$unbind = [];
 
-			foreach ($relationTypes as $relation) {
+			foreach($relationTypes as $relation) {
 				if (isset($this->$relation)) {
-					foreach ($this->$relation as $bindingName => $bindingData) {
+					foreach($this->$relation as $bindingName => $bindingData) {
 						if (!in_array($bindingName, $models)) {
 							$unbind[$relation][] = $bindingName;
 						}
@@ -1392,13 +1437,14 @@ class BcAppModel extends Model {
 		}
 	}
 
-/**
- * 複数のEメールチェック（カンマ区切り）
- *
- * @param array $check 複数のメールアドレス
- * @return boolean
- */
-	public function emails($check) {
+	/**
+	 * 複数のEメールチェック（カンマ区切り）
+	 *
+	 * @param array $check 複数のメールアドレス
+	 * @return boolean
+	 */
+	public function emails($check)
+	{
 		$emails = [];
 		if (strpos($check[key($check)], ',') !== false) {
 			$emails = explode(',', $check[key($check)]);
@@ -1407,7 +1453,7 @@ class BcAppModel extends Model {
 			$emails = [$check[key($check)]];
 		}
 		$result = true;
-		foreach ($emails as $email) {
+		foreach($emails as $email) {
 			if (!Validation::email($email)) {
 				$result = false;
 			}
@@ -1415,16 +1461,17 @@ class BcAppModel extends Model {
 		return $result;
 	}
 
-/**
- * Deletes multiple model records based on a set of conditions.
- *
- * @param mixed $conditions Conditions to match
- * @param boolean $cascade Set to true to delete records that depend on this record
- * @param boolean $callbacks Run callbacks (not being used)
- * @return boolean True on success, false on failure
- * @link http://book.cakephp.org/view/692/deleteAll
- */
-	public function deleteAll($conditions, $cascade = true, $callbacks = false) {
+	/**
+	 * Deletes multiple model records based on a set of conditions.
+	 *
+	 * @param mixed $conditions Conditions to match
+	 * @param boolean $cascade Set to true to delete records that depend on this record
+	 * @param boolean $callbacks Run callbacks (not being used)
+	 * @return boolean True on success, false on failure
+	 * @link http://book.cakephp.org/view/692/deleteAll
+	 */
+	public function deleteAll($conditions, $cascade = true, $callbacks = false)
+	{
 		$result = parent::deleteAll($conditions, $cascade, $callbacks);
 		if ($result) {
 			if ($this->Behaviors->attached('BcCache') && $this->Behaviors->enabled('BcCache')) {
@@ -1434,16 +1481,17 @@ class BcAppModel extends Model {
 		return $result;
 	}
 
-/**
- * Updates multiple model records based on a set of conditions.
- *
- * @param array $fields Set of fields and values, indexed by fields.
- * 	Fields are treated as SQL snippets, to insert literal values manually escape your data.
- * @param mixed $conditions Conditions to match, true for all records
- * @return boolean True on success, false on failure
- * @link http://book.cakephp.org/view/75/Saving-Your-Data
- */
-	public function updateAll($fields, $conditions = true) {
+	/**
+	 * Updates multiple model records based on a set of conditions.
+	 *
+	 * @param array $fields Set of fields and values, indexed by fields.
+	 *    Fields are treated as SQL snippets, to insert literal values manually escape your data.
+	 * @param mixed $conditions Conditions to match, true for all records
+	 * @return boolean True on success, false on failure
+	 * @link http://book.cakephp.org/view/75/Saving-Your-Data
+	 */
+	public function updateAll($fields, $conditions = true)
+	{
 		$result = parent::updateAll($fields, $conditions);
 		if ($result) {
 			if ($this->Behaviors->attached('BcCache') && $this->Behaviors->enabled('BcCache')) {
@@ -1453,15 +1501,16 @@ class BcAppModel extends Model {
 		return $result;
 	}
 
-/**
- * Used to report user friendly errors.
- * If there is a file app/error.php or app/app_error.php this file will be loaded
- * error.php is the AppError class it should extend ErrorHandler class.
- *
- * @param string $method Method to be called in the error class (AppError or ErrorHandler classes)
- * @param array $messages Message that is to be displayed by the error class
- */
-	public function cakeError($method, $messages = []) {
+	/**
+	 * Used to report user friendly errors.
+	 * If there is a file app/error.php or app/app_error.php this file will be loaded
+	 * error.php is the AppError class it should extend ErrorHandler class.
+	 *
+	 * @param string $method Method to be called in the error class (AppError or ErrorHandler classes)
+	 * @param array $messages Message that is to be displayed by the error class
+	 */
+	public function cakeError($method, $messages = [])
+	{
 		//======================================================================
 		// router.php がロードされる前のタイミング（bootstrap.php）でエラーが発生した場合、
 		// AppControllerなどがロードされていない為、Object::cakeError() を実行する事ができない。
@@ -1474,75 +1523,76 @@ class BcAppModel extends Model {
 		}
 	}
 
-/**
- * Queries the datasource and returns a result set array.
- *
- * Used to perform find operations, where the first argument is type of find operation to perform
- * (all / first / count / neighbors / list / threaded),
- * second parameter options for finding (indexed array, including: 'conditions', 'limit',
- * 'recursive', 'page', 'fields', 'offset', 'order', 'callbacks')
- *
- * Eg:
- * {{{
- * $model->find('all', array(
- *   'conditions' => array('name' => 'Thomas Anderson'),
- *   'fields' => array('name', 'email'),
- *   'order' => 'field3 DESC',
- *   'recursive' => 2,
- *   'group' => 'type',
- *   'callbacks' => false,
- * ));
- * }}}
- *
- * In addition to the standard query keys above, you can provide Datasource, and behavior specific
- * keys. For example, when using a SQL based datasource you can use the joins key to specify additional
- * joins that should be part of the query.
- *
- * {{{
- * $model->find('all', array(
- *   'conditions' => array('name' => 'Thomas Anderson'),
- *   'joins' => array(
- *     array(
- *       'alias' => 'Thought',
- *       'table' => 'thoughts',
- *       'type' => 'LEFT',
- *       'conditions' => '`Thought`.`person_id` = `Person`.`id`'
- *     )
- *   )
- * ));
- * }}}
- *
- * ### Disabling callbacks
- *
- * The `callbacks` key allows you to disable or specify the callbacks that should be run. To
- * disable beforeFind & afterFind callbacks set `'callbacks' => false` in your options. You can
- * also set the callbacks option to 'before' or 'after' to enable only the specified callback.
- *
- * ### Adding new find types
- *
- * Behaviors and find types can also define custom finder keys which are passed into find().
- * See the documentation for custom find types
- * (http://book.cakephp.org/2.0/en/models/retrieving-your-data.html#creating-custom-find-types)
- * for how to implement custom find types.
- *
- * Specifying 'fields' for notation 'list':
- *
- * - If no fields are specified, then 'id' is used for key and 'model->displayField' is used for value.
- * - If a single field is specified, 'id' is used for key and specified field is used for value.
- * - If three fields are specified, they are used (in order) for key, value and group.
- * - Otherwise, first and second fields are used for key and value.
- *
- * Note: find(list) + database views have issues with MySQL 5.0. Try upgrading to MySQL 5.1 if you
- * have issues with database views.
- *
- * Note: find(count) has its own return values.
- *
- * @param string $type Type of find operation (all / first / count / neighbors / list / threaded)
- * @param array $query Option fields (conditions / fields / joins / limit / offset / order / page / group / callbacks)
- * @return array|null Array of records, or Null on failure.
- * @link http://book.cakephp.org/2.0/en/models/retrieving-your-data.html
- */
-	public function find($type = 'first', $query = []) {
+	/**
+	 * Queries the datasource and returns a result set array.
+	 *
+	 * Used to perform find operations, where the first argument is type of find operation to perform
+	 * (all / first / count / neighbors / list / threaded),
+	 * second parameter options for finding (indexed array, including: 'conditions', 'limit',
+	 * 'recursive', 'page', 'fields', 'offset', 'order', 'callbacks')
+	 *
+	 * Eg:
+	 * {{{
+	 * $model->find('all', array(
+	 *   'conditions' => array('name' => 'Thomas Anderson'),
+	 *   'fields' => array('name', 'email'),
+	 *   'order' => 'field3 DESC',
+	 *   'recursive' => 2,
+	 *   'group' => 'type',
+	 *   'callbacks' => false,
+	 * ));
+	 * }}}
+	 *
+	 * In addition to the standard query keys above, you can provide Datasource, and behavior specific
+	 * keys. For example, when using a SQL based datasource you can use the joins key to specify additional
+	 * joins that should be part of the query.
+	 *
+	 * {{{
+	 * $model->find('all', array(
+	 *   'conditions' => array('name' => 'Thomas Anderson'),
+	 *   'joins' => array(
+	 *     array(
+	 *       'alias' => 'Thought',
+	 *       'table' => 'thoughts',
+	 *       'type' => 'LEFT',
+	 *       'conditions' => '`Thought`.`person_id` = `Person`.`id`'
+	 *     )
+	 *   )
+	 * ));
+	 * }}}
+	 *
+	 * ### Disabling callbacks
+	 *
+	 * The `callbacks` key allows you to disable or specify the callbacks that should be run. To
+	 * disable beforeFind & afterFind callbacks set `'callbacks' => false` in your options. You can
+	 * also set the callbacks option to 'before' or 'after' to enable only the specified callback.
+	 *
+	 * ### Adding new find types
+	 *
+	 * Behaviors and find types can also define custom finder keys which are passed into find().
+	 * See the documentation for custom find types
+	 * (http://book.cakephp.org/2.0/en/models/retrieving-your-data.html#creating-custom-find-types)
+	 * for how to implement custom find types.
+	 *
+	 * Specifying 'fields' for notation 'list':
+	 *
+	 * - If no fields are specified, then 'id' is used for key and 'model->displayField' is used for value.
+	 * - If a single field is specified, 'id' is used for key and specified field is used for value.
+	 * - If three fields are specified, they are used (in order) for key, value and group.
+	 * - Otherwise, first and second fields are used for key and value.
+	 *
+	 * Note: find(list) + database views have issues with MySQL 5.0. Try upgrading to MySQL 5.1 if you
+	 * have issues with database views.
+	 *
+	 * Note: find(count) has its own return values.
+	 *
+	 * @param string $type Type of find operation (all / first / count / neighbors / list / threaded)
+	 * @param array $query Option fields (conditions / fields / joins / limit / offset / order / page / group / callbacks)
+	 * @return array|null Array of records, or Null on failure.
+	 * @link http://book.cakephp.org/2.0/en/models/retrieving-your-data.html
+	 */
+	public function find($type = 'first', $query = [])
+	{
 		$this->findQueryType = $type;
 		$this->id = $this->getID();
 
@@ -1597,51 +1647,54 @@ class BcAppModel extends Model {
 		}
 	}
 
-/**
- * イベントを発火
- *
- * @param string $name
- * @param array $params
- * @return mixed
- */
-	public function dispatchEvent($name, $params = [], $options = []) {
+	/**
+	 * イベントを発火
+	 *
+	 * @param string $name
+	 * @param array $params
+	 * @return mixed
+	 */
+	public function dispatchEvent($name, $params = [], $options = [])
+	{
 		$options = array_merge([
 			'modParams' => 0,
 			'plugin' => $this->plugin,
 			'layer' => 'Model',
 			'class' => $this->name
-			], $options);
+		], $options);
 
 		App::uses('BcEventDispatcher', 'Event');
 		return BcEventDispatcher::dispatch($name, $this, $params, $options);
 	}
 
-/**
- * データが公開済みかどうかチェックする
- *
- * @param boolean $status 公開ステータス
- * @param string $publishBegin 公開開始日時
- * @param string $publishEnd 公開終了日時
- * @return bool
- */
-	public function isPublish($status, $publishBegin, $publishEnd) {
+	/**
+	 * データが公開済みかどうかチェックする
+	 *
+	 * @param boolean $status 公開ステータス
+	 * @param string $publishBegin 公開開始日時
+	 * @param string $publishEnd 公開終了日時
+	 * @return bool
+	 */
+	public function isPublish($status, $publishBegin, $publishEnd)
+	{
 		$Content = ClassRegistry::init('Content');
 		return $Content->isPublish($status, $publishBegin, $publishEnd);
 	}
 
-/**
- * 日付の正当性チェック
- *
- * @param array $check 確認する値
- * @return boolean
- */
-	public function checkDate($check) {
+	/**
+	 * 日付の正当性チェック
+	 *
+	 * @param array $check 確認する値
+	 * @return boolean
+	 */
+	public function checkDate($check)
+	{
 		$value = $check[key($check)];
-		if(!$value) {
+		if (!$value) {
 			return true;
 		}
 		$time = '';
-		if(strpos($value, ' ') !== false) {
+		if (strpos($value, ' ') !== false) {
 			list($date, $time) = explode(' ', $value);
 		} else {
 			$date = $value;
@@ -1661,8 +1714,8 @@ class BcAppModel extends Model {
 		if (checkdate($m, $d, $Y) !== true) {
 			return false;
 		}
-		if($time) {
-			if(strpos($value, ':') !== false) {
+		if ($time) {
+			if (strpos($value, ':') !== false) {
 				list($H, $i) = explode(':', $time);
 				if (checktime($H, $i) !== true) {
 					return false;
@@ -1677,14 +1730,15 @@ class BcAppModel extends Model {
 		return true;
 	}
 
-/**
- * ツリーより再帰的に削除する
- *
- * @param int $id
- * @return boolean
- */
-	public function removeFromTreeRecursive($id) {
-		if(!$this->Behaviors->enabled('Tree')) {
+	/**
+	 * ツリーより再帰的に削除する
+	 *
+	 * @param int $id
+	 * @return boolean
+	 */
+	public function removeFromTreeRecursive($id)
+	{
+		if (!$this->Behaviors->enabled('Tree')) {
 			return false;
 		}
 		$children = $this->children($id);
@@ -1694,26 +1748,31 @@ class BcAppModel extends Model {
 		return $this->removeFromTree($id, true);
 	}
 
-/**
- * ファイルが送信されたかチェックするバリデーション
- *
- * @param array $check
- * @return boolean
- */
-	public function notFileEmpty($check) {
+	/**
+	 * ファイルが送信されたかチェックするバリデーション
+	 *
+	 * @param array $check
+	 * @return boolean
+	 */
+	public function notFileEmpty($check)
+	{
 		if (empty($check[key($check)]) || (is_array($check[key($check)]) && $check[key($check)]['size'] === 0)) {
 			return false;
 		}
 		return true;
 	}
-	public function exists($id = null) {
+
+	public function exists($id = null)
+	{
 		if ($this->Behaviors->loaded('SoftDelete')) {
 			return $this->existsAndNotDeleted($id);
 		} else {
 			return parent::exists($id);
 		}
 	}
-	public function delete($id = null, $cascade = true) {
+
+	public function delete($id = null, $cascade = true)
+	{
 		$result = parent::delete($id, $cascade);
 		if ($result === false && $this->Behaviors->enabled('SoftDelete')) {
 			$this->getEventManager()->dispatch(new CakeEvent('Model.afterDelete', $this));
@@ -1722,146 +1781,153 @@ class BcAppModel extends Model {
 		return $result;
 	}
 
-	public function dataIter(&$results, $callback) {
-		if (! $isVector = isset($results[0])) {
+	public function dataIter(&$results, $callback)
+	{
+		if (!$isVector = isset($results[0])) {
 			$results = [$results];
 		}
 		$modeled = array_key_exists($this->alias, $results[0]);
-		foreach ($results as &$value) {
-			if (! $modeled) {
+		foreach($results as &$value) {
+			if (!$modeled) {
 				$value = [$this->alias => $value];
 			}
 			$continue = $callback($value, $this);
-			if (! $modeled) {
+			if (!$modeled) {
 				$value = $value[$this->alias];
 			}
-			if (! is_null($continue) && ! $continue) {
+			if (!is_null($continue) && !$continue) {
 				break;
 			}
 		}
-		if (! $isVector) {
+		if (!$isVector) {
 			$results = $results[0];
 		}
 	}
 
-/**
- * 指定した日付よりも新しい日付かどうかチェックする
- *
- * @param $check
- * @param $target
- * @return bool
- * @unittest yet
- */
-	public function checkDateAfterThan($check, $target) {
-		$check = (is_array($check)) ? current($check) : $check;
-		if($check && !empty($this->data[$this->alias][$target])) {
-			if(strtotime($check) <= strtotime($this->data[$this->alias][$target])) {
+	/**
+	 * 指定した日付よりも新しい日付かどうかチェックする
+	 *
+	 * @param $check
+	 * @param $target
+	 * @return bool
+	 * @unittest yet
+	 */
+	public function checkDateAfterThan($check, $target)
+	{
+		$check = (is_array($check))? current($check) : $check;
+		if ($check && !empty($this->data[$this->alias][$target])) {
+			if (strtotime($check) <= strtotime($this->data[$this->alias][$target])) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-/**
- * コンテンツのURLにマッチする候補を取得する
- *
- * @param $url
- * @return array
- */
-	public function getUrlPattern($url) {
+	/**
+	 * コンテンツのURLにマッチする候補を取得する
+	 *
+	 * @param $url
+	 * @return array
+	 */
+	public function getUrlPattern($url)
+	{
 		$parameter = preg_replace('/^\//', '', $url);
 		$paths = [];
 		$paths[] = '/' . $parameter;
-		if(preg_match('/\/$/', $paths[0])) {
+		if (preg_match('/\/$/', $paths[0])) {
 			$paths[] = $paths[0] . 'index';
-		} elseif(preg_match('/^(.*?\/)index$/', $paths[0], $matches)) {
+		} elseif (preg_match('/^(.*?\/)index$/', $paths[0], $matches)) {
 			$paths[] = $matches[1];
 		} elseif (preg_match('/^(.+?)\.html$/', $paths[0], $matches)) {
 			$paths[] = $matches[1];
-			if(preg_match('/^(.*?\/)index$/', $matches[1], $matches)) {
+			if (preg_match('/^(.*?\/)index$/', $matches[1], $matches)) {
 				$paths[] = $matches[1];
 			}
 		}
 		return $paths;
 	}
 
-/**
- * レコードデータの消毒をおこなう
- * @return array
- * @deprecated 5.0.0 since 4.1.3 htmlspecialchars を利用してください。
- */
-	public function sanitizeRecord($record) {
+	/**
+	 * レコードデータの消毒をおこなう
+	 * @return array
+	 * @deprecated 5.0.0 since 4.1.3 htmlspecialchars を利用してください。
+	 */
+	public function sanitizeRecord($record)
+	{
 		trigger_error(deprecatedMessage('メソッド：BcAppModel::sanitizeRecord()', '4.0.0', '5.0.0', 'htmlspecialchars を利用してください。'), E_USER_DEPRECATED);
-		foreach ($record as $key => $value) {
-				$record[$key] = $this->sanitize($value);
+		foreach($record as $key => $value) {
+			$record[$key] = $this->sanitize($value);
 		}
 		return $record;
 	}
 
-/**
- * 単体データの消毒を行う
- * 配列には対応しない
- * @param $data
- * @return mixed|string
- * @deprecated 5.0.0 since 4.1.3 htmlspecialchars を利用してください。
- */
-	public function sanitize($value) {
+	/**
+	 * 単体データの消毒を行う
+	 * 配列には対応しない
+	 * @param $data
+	 * @return mixed|string
+	 * @deprecated 5.0.0 since 4.1.3 htmlspecialchars を利用してください。
+	 */
+	public function sanitize($value)
+	{
 		trigger_error(deprecatedMessage('メソッド：BcAppModel::sanitizeRecord()', '4.0.0', '5.0.0', 'htmlspecialchars を利用してください。'), E_USER_DEPRECATED);
 		if (!is_array($value)) {
 			// 既に htmlspecialchars を実行済のものについて一旦元の形式に復元した上で再度サイニタイズ処理をかける。
 			$value = str_replace("&lt;!--", "<!--", $value);
 			$value = htmlspecialchars($value);
 			return $value;
-		}else {
+		} else {
 			return $value;
 		}
 	}
 
-/**
- * スクリプトがが埋め込まれているかチェックする
- * - 管理グループの場合は無条件に true を返却
- * - 管理グループ以外の場合に許可されている場合は無条件に true を返却
- * @param array $check
- * @return bool
- */
-	public function containsScript($check) {
+	/**
+	 * スクリプトがが埋め込まれているかチェックする
+	 * - 管理グループの場合は無条件に true を返却
+	 * - 管理グループ以外の場合に許可されている場合は無条件に true を返却
+	 * @param array $check
+	 * @return bool
+	 */
+	public function containsScript($check)
+	{
 		$events = ['onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmouseover', 'onmousemove',
-					'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup', 'onload', 'onunload',
-					'onfocus', 'onblur', 'onsubmit', 'onreset', 'onselect', 'onchange'];
-		if(BcUtil::isAdminUser() || Configure::read('BcApp.allowedPhpOtherThanAdmins')) {
+			'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup', 'onload', 'onunload',
+			'onfocus', 'onblur', 'onsubmit', 'onreset', 'onselect', 'onchange'];
+		if (BcUtil::isAdminUser() || Configure::read('BcApp.allowedPhpOtherThanAdmins')) {
 			return true;
 		}
 		$value = $check[key($check)];
-		if(preg_match('/(<\?=|<\?php|<script)/i', $value)) {
+		if (preg_match('/(<\?=|<\?php|<script)/i', $value)) {
 			return false;
 		}
-		if(preg_match('/<[^>]+?(' . implode('|', $events) . ')=("|\')[^>]*?>/i', $value)) {
+		if (preg_match('/<[^>]+?(' . implode('|', $events) . ')=("|\')[^>]*?>/i', $value)) {
 			return false;
 		}
-		if(preg_match('/href=\s*?("|\')[^"\']*?javascript\s*?:/i', $value)) {
+		if (preg_match('/href=\s*?("|\')[^"\']*?javascript\s*?:/i', $value)) {
 			return false;
 		}
 		return true;
 	}
 
-/**
- * サイズの単位を変換する
- * @param  string $size   変換前のサイズ
- * @param  string $outExt 変換後の単位
- * @param  string $inExt  変換元の単位
- * @return int            変換後のサイズ
- */
-	public function convertSize($size, $outExt = 'B', $inExt = null) {
+	/**
+	 * サイズの単位を変換する
+	 * @param string $size 変換前のサイズ
+	 * @param string $outExt 変換後の単位
+	 * @param string $inExt 変換元の単位
+	 * @return int            変換後のサイズ
+	 */
+	public function convertSize($size, $outExt = 'B', $inExt = null)
+	{
 		preg_match('/\A\d+(\.\d+)?/', $size, $num);
-		$sizeNum = (isset($num[0])) ? $num[0] : 0;
+		$sizeNum = (isset($num[0]))? $num[0] : 0;
 
 		$extArray = ['B', 'K', 'M', 'G', 'T'];
 		$extRegex = implode('|', $extArray);
 		if (empty($inExt)) {
-			$inExt = (preg_match("/($extRegex)B?\z/i", $size, $ext)) ? strtoupper($ext[1]) : 'B';
+			$inExt = (preg_match("/($extRegex)B?\z/i", $size, $ext))? strtoupper($ext[1]) : 'B';
 		}
-		$inExt  = (preg_match("/\A($extRegex)B?\z/i", $inExt,  $ext)) ? strtoupper($ext[1]) : 'B';
-		$outExt = (preg_match("/\A($extRegex)B?\z/i", $outExt, $ext)) ? strtoupper($ext[1]) : 'B';
+		$inExt = (preg_match("/\A($extRegex)B?\z/i", $inExt, $ext))? strtoupper($ext[1]) : 'B';
+		$outExt = (preg_match("/\A($extRegex)B?\z/i", $outExt, $ext))? strtoupper($ext[1]) : 'B';
 
 		$index = array_search($inExt, $extArray) - array_search($outExt, $extArray);
 
@@ -1869,11 +1935,12 @@ class BcAppModel extends Model {
 		return $outSize;
 	}
 
-/**
- * 送信されたPOSTがpost_max_sizeを超えているかチェックする
- * @return boolean
- */
-	public function isOverPostSize() {
+	/**
+	 * 送信されたPOSTがpost_max_sizeを超えているかチェックする
+	 * @return boolean
+	 */
+	public function isOverPostSize()
+	{
 		if (empty($_POST) &&
 			env('REQUEST_METHOD') === 'POST' &&
 			env('CONTENT_LENGTH') > $this->convertSize(ini_get('post_max_size'))) {
@@ -1883,19 +1950,20 @@ class BcAppModel extends Model {
 		}
 	}
 
-/**
- * 公開済データを取得するための conditions を生成取得
- *
- * @return array array
- */
-	public function getConditionAllowPublish() {
+	/**
+	 * 公開済データを取得するための conditions を生成取得
+	 *
+	 * @return array array
+	 */
+	public function getConditionAllowPublish()
+	{
 		$conditions[$this->alias . '.' . $this->publishStatusField] = true;
 		$conditions[] = ['or' => [[$this->alias . '.' . $this->publishBeginField . ' <=' => date('Y-m-d H:i:s')],
-				[$this->alias . '.' . $this->publishBeginField => null],
-				[$this->alias . '.' . $this->publishBeginField => '0000-00-00 00:00:00']]];
+			[$this->alias . '.' . $this->publishBeginField => null],
+			[$this->alias . '.' . $this->publishBeginField => '0000-00-00 00:00:00']]];
 		$conditions[] = ['or' => [[$this->alias . '.' . $this->publishEndField . ' >=' => date('Y-m-d H:i:s')],
-				[$this->alias . '.' . $this->publishEndField  => null],
-				[$this->alias . '.' . $this->publishEndField => '0000-00-00 00:00:00']]];
+			[$this->alias . '.' . $this->publishEndField => null],
+			[$this->alias . '.' . $this->publishEndField => '0000-00-00 00:00:00']]];
 		return $conditions;
 	}
 

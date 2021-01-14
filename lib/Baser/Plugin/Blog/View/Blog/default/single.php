@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -19,28 +19,28 @@ $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->ge
 
 
 <script type="text/javascript">
-$(function(){
-	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox({transition:"fade"});
+	$(function () {
+		if ($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox({transition: "fade"});
 	});
 </script>
 
 <!-- blog title -->
 <h1 class="contents-head">
-<?php echo h($this->Blog->getTitle()) ?>
+	<?php echo h($this->Blog->getTitle()) ?>
 </h1>
 
 <!-- post title -->
 <h2 class="contents-head">
-<?php $this->BcBaser->contentsTitle() ?>
+	<?php $this->BcBaser->contentsTitle() ?>
 </h2>
 
 <div class="eye-catch">
-<?php $this->Blog->eyeCatch($post) ?>
+	<?php $this->Blog->eyeCatch($post) ?>
 </div>
 
 <!-- post detail -->
 <div class="post">
-			<?php $this->Blog->postContent($post) ?>
+	<?php $this->Blog->postContent($post) ?>
 	<div class="meta"><span>
 			<?php $this->Blog->category($post) ?>
 			&nbsp;
@@ -48,14 +48,14 @@ $(function(){
 			&nbsp;
 	<?php $this->Blog->author($post) ?>
 		</span></div>
-<?php $this->BcBaser->element('blog_tag', ['post' => $post]) ?>
+	<?php $this->BcBaser->element('blog_tag', ['post' => $post]) ?>
 </div>
 
 <!-- contents navi -->
 <div class="post-navi">
 	<?php $this->Blog->prevLink($post) ?>
 	&nbsp;｜&nbsp;
-<?php $this->Blog->nextLink($post) ?>
+	<?php $this->Blog->nextLink($post) ?>
 </div>
 
 <!-- comments -->

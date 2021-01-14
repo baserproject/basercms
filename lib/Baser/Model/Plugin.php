@@ -1,37 +1,41 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Model
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Model
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
+ * Class Plugin
+ *
  * プラグインモデル
  *
  * @package Baser.Model
  */
-class Plugin extends AppModel {
+class Plugin extends AppModel
+{
 
-/**
- * ビヘイビア
- * 
- * @var array
- */
+	/**
+	 * ビヘイビア
+	 *
+	 * @var array
+	 */
 	public $actsAs = ['BcCache'];
 
-/**
- * Plugin constructor.
- *
- * @param bool $id
- * @param null $table
- * @param null $ds
- */
-	public function __construct($id = false, $table = null, $ds = null) {
+	/**
+	 * Plugin constructor.
+	 *
+	 * @param bool $id
+	 * @param null $table
+	 * @param null $ds
+	 */
+	public function __construct($id = false, $table = null, $ds = null)
+	{
 		parent::__construct($id, $table, $ds);
 		$this->validate = [
 			'name' => [
@@ -42,46 +46,48 @@ class Plugin extends AppModel {
 				['rule' => ['maxLength', 50], 'message' => __d('baser', 'プラグインタイトルは50文字以内とします。')]]
 		];
 	}
-	
-/**
- * データベースを初期化する
- * 既存のテーブルは上書きしない
- *
- * @param string $dbConfigName データベース設定名
- * @param string $pluginName プラグイン名
- * @param bool $loadCsv CSVファイル読込するかどうか
- * @param string $filterTable テーブル指定
- * @param string $filterType 更新タイプ指定
- * @return bool
- */
-	public function initDb($pluginName = '', $options = []) {
-		if(!is_array($options)) {
+
+	/**
+	 * データベースを初期化する
+	 * 既存のテーブルは上書きしない
+	 *
+	 * @param string $dbConfigName データベース設定名
+	 * @param string $pluginName プラグイン名
+	 * @param bool $loadCsv CSVファイル読込するかどうか
+	 * @param string $filterTable テーブル指定
+	 * @param string $filterType 更新タイプ指定
+	 * @return bool
+	 */
+	public function initDb($pluginName = '', $options = [])
+	{
+		if (!is_array($options)) {
 			// @deprecated 5.0.0 since 4.0.0 baserCMS３まで第二引数がプラグイン名だったが、第一引数にプラグイン名を設定するように変更。元の第一引数は不要
 			$this->log(__d('baser', 'メソッド：Plugin::initDb()は、バージョン 4.0.0 より引数が変更になりました。第一引数にプラグイン名を設定してください。元の第一引数は不要です。'), LOG_ALERT);
 			$pluginName = $options;
 			$options = [];
 		}
 		$options = array_merge([
-			'loadCsv'		=> true,
-			'filterTable'	=> '',
-			'filterType'	=> 'create',
-			'dbDataPattern'	=> ''
+			'loadCsv' => true,
+			'filterTable' => '',
+			'filterType' => 'create',
+			'dbDataPattern' => ''
 		], $options);
 		return parent::initDb($pluginName, [
-			'loadCsv'		=> $options['loadCsv'],
-			'filterTable'	=> $options['filterTable'],
-			'filterType'	=> $options['filterType'],
-			'dbDataPattern'	=> $options['dbDataPattern']
+			'loadCsv' => $options['loadCsv'],
+			'filterTable' => $options['filterTable'],
+			'filterType' => $options['filterType'],
+			'dbDataPattern' => $options['dbDataPattern']
 		]);
 	}
 
-/**
- * データベースをプラグインインストール前の状態に戻す
- * 
- * @param string $plugin プラグイン名
- * @return bool
- */
-	public function resetDb($plugin) {
+	/**
+	 * データベースをプラグインインストール前の状態に戻す
+	 *
+	 * @param string $plugin プラグイン名
+	 * @return bool
+	 */
+	public function resetDb($plugin)
+	{
 		$path = BcUtil::getSchemaPath($plugin);
 
 		if (!$path) {
@@ -103,7 +109,7 @@ class Plugin extends AppModel {
 		$tmpdir = TMP . 'schemas' . DS;
 		$result = true;
 
-		foreach ($files[1] as $file) {
+		foreach($files[1] as $file) {
 
 			$oldSchemaPath = '';
 
@@ -166,34 +172,36 @@ class Plugin extends AppModel {
 		return $result;
 	}
 
-/**
- * データベースの構造を変更する
- * 
- * @param string $plugin プラグイン名
- * @param string $dbConfigName データベース設定名
- * @param string $filterTable テーブル指定
- * @return bool
- * @deprecated 5.0.0 since 4.0.0 Plugin::initDb() に統合
- */
-	public function alterDb($plugin, $options = []) {
+	/**
+	 * データベースの構造を変更する
+	 *
+	 * @param string $plugin プラグイン名
+	 * @param string $dbConfigName データベース設定名
+	 * @param string $filterTable テーブル指定
+	 * @return bool
+	 * @deprecated 5.0.0 since 4.0.0 Plugin::initDb() に統合
+	 */
+	public function alterDb($plugin, $options = [])
+	{
 		$this->log(__d('baser', 'メソッド：Plugin::alterDb()は、バージョン 4.0.0 より非推奨となりました。Plugin::initDb() を利用してください。'), LOG_ALERT);
-		if(!is_array($options)) {
+		if (!is_array($options)) {
 			$pluginName = $options;
 			$options = [];
 		}
 		$options = array_merge([
-			'filterTable'	=> '',
+			'filterTable' => '',
 		], $options);
 		return $this->initDb($plugin, $options);
 	}
 
-/**
- * 指定したフィールドに重複値があるかチェック
- *
- * @param string $fieldName チェックするフィールド名
- * @return bool
- */
-	public function hasDuplicateValue($fieldName) {
+	/**
+	 * 指定したフィールドに重複値があるかチェック
+	 *
+	 * @param string $fieldName チェックするフィールド名
+	 * @return bool
+	 */
+	public function hasDuplicateValue($fieldName)
+	{
 		$this->cacheQueries = false;
 
 		$duplication = $this->find('all', [
@@ -208,19 +216,20 @@ class Plugin extends AppModel {
 		return !empty($duplication);
 	}
 
-/**
- * 優先順位を連番で振り直す
- *
- * @return bool
- */
-	public function rearrangePriorities() {
+	/**
+	 * 優先順位を連番で振り直す
+	 *
+	 * @return bool
+	 */
+	public function rearrangePriorities()
+	{
 		$this->cacheQueries = false;
 		$datas = $this->find('all', [
 			'order' => 'Plugin.priority'
 		]);
 
 		$count = count($datas);
-		for ($i = 0; $i < $count; $i++) {
+		for($i = 0; $i < $count; $i++) {
 			$datas[$i]['Plugin']['priority'] = $i + 1;
 		}
 
@@ -230,15 +239,16 @@ class Plugin extends AppModel {
 		return true;
 	}
 
-/**
- * 優先順位を変更する
- *
- * @param string|int $id 起点となるプラグインのID
- * @param string|int $offset 変更する範囲の相対位置
- * @param array $conditions find条件
- * @return bool
- */
-	public function changePriority($id, $offset, $conditions = []) {
+	/**
+	 * 優先順位を変更する
+	 *
+	 * @param string|int $id 起点となるプラグインのID
+	 * @param string|int $offset 変更する範囲の相対位置
+	 * @param array $conditions find条件
+	 * @return bool
+	 */
+	public function changePriority($id, $offset, $conditions = [])
+	{
 		$offset = intval($offset);
 		if ($offset === 0) {
 			return true;
@@ -276,7 +286,7 @@ class Plugin extends AppModel {
 		//データをローテーション
 		$count = count($datas);
 		$currentNewValue = $datas[$count - 1][$alias][$field];
-		for ($i = $count - 1; $i > 0; $i--) {
+		for($i = $count - 1; $i > 0; $i--) {
 			$datas[$i][$alias][$field] = $datas[$i - 1][$alias][$field];
 		}
 		$datas[0][$alias][$field] = $currentNewValue;
@@ -288,18 +298,19 @@ class Plugin extends AppModel {
 		return true;
 	}
 
-/**
- * プラグインのディレクトリパスを取得
- *
- * @param string $pluginName プラグイン名
- * @return string|null
- */
-	public function getDirectoryPath($pluginName) {
+	/**
+	 * プラグインのディレクトリパスを取得
+	 *
+	 * @param string $pluginName プラグイン名
+	 * @return string|null
+	 */
+	public function getDirectoryPath($pluginName)
+	{
 		$paths = App::path('Plugin');
-		foreach ($paths as $path) {
+		foreach($paths as $path) {
 			$Folder = new Folder($path);
 			$files = $Folder->read(true, true, true);
-			foreach ($files[0] as $dir) {
+			foreach($files[0] as $dir) {
 				if (basename($dir) === $pluginName) {
 					return $dir;
 				}
@@ -308,18 +319,19 @@ class Plugin extends AppModel {
 		return null;
 	}
 
-/**
- * プラグイン情報を取得する
- *
- * @param array $datas プラグインのデータ配列
- * @param string $file プラグインファイルのパス
- * @return array
- */
-	public function getPluginInfo($datas, $file) {
+	/**
+	 * プラグイン情報を取得する
+	 *
+	 * @param array $datas プラグインのデータ配列
+	 * @param string $file プラグインファイルのパス
+	 * @return array
+	 */
+	public function getPluginInfo($datas, $file)
+	{
 		$plugin = basename($file);
 		$pluginData = [];
 		$exists = false;
-		foreach ($datas as $data) {
+		foreach($datas as $data) {
 			if ($plugin == $data['Plugin']['name']) {
 				$pluginData = $data;
 				$exists = true;
@@ -401,13 +413,13 @@ class Plugin extends AppModel {
 		return $pluginData;
 	}
 
-/**
- * プラグイン管理のリンクを指定したユーザーのお気に入りに追加
- *
- * @param string $pluginName プラグイン名
- * @param array $user ユーザーデータの配列
- * @return void
- */
+	/**
+	 * プラグイン管理のリンクを指定したユーザーのお気に入りに追加
+	 *
+	 * @param string $pluginName プラグイン名
+	 * @param array $user ユーザーデータの配列
+	 * @return void
+	 */
 	public function addFavoriteAdminLink($pluginName, $user)
 	{
 		$plugin = $this->findByName($pluginName);
@@ -426,7 +438,7 @@ class Plugin extends AppModel {
 		}
 
 		$adminLinkUrl = Router::url($pluginInfo['Plugin']['admin_link']);
-		if (isset($pluginInfo['Plugin']['admin_link']['action']) && 
+		if (isset($pluginInfo['Plugin']['admin_link']['action']) &&
 			$pluginInfo['Plugin']['admin_link']['action'] == 'index') {
 			$adminLinkUrl .= '/';
 		}

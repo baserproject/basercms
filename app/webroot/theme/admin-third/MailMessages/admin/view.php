@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Mail.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package            Mail.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -17,8 +17,8 @@
 
 
 <!-- view -->
-<table cellpadding="0" cellspacing="0"  class="list-table bca-form-table" id="ListTable">
-	
+<table cellpadding="0" cellspacing="0" class="list-table bca-form-table" id="ListTable">
+
 	<tr>
 		<th class="col-head bca-form-table__label">No</th>
 		<td class="col-input bca-form-table__input"><?php echo $message['MailMessage']['id'] ?></td>
@@ -29,7 +29,7 @@
 	</tr>
 	<?php
 	$groupField = null;
-	foreach ($mailFields as $key => $mailField) {
+	foreach($mailFields as $key => $mailField) {
 		$field = $mailField['MailField'];
 		if ($field['use_field']) {
 			$nextKey = $key + 1;
@@ -43,16 +43,16 @@
 				echo $field['before_attachment'];
 			}
 			if (!$field['no_send']) {
-				if($field['type'] == 'file') {
+				if ($field['type'] == 'file') {
 					echo $this->Maildata->control(
-						$mailField['MailField']['type'], 
-						$message['MailMessage'][$mailField['MailField']['field_name']], 
+						$mailField['MailField']['type'],
+						$message['MailMessage'][$mailField['MailField']['field_name']],
 						$this->Mailfield->getOptions($mailField['MailField'])
 					);
 				} else {
 					echo nl2br($this->BcText->autoLink($this->Maildata->control(
-						$mailField['MailField']['type'], 
-						$message['MailMessage'][$mailField['MailField']['field_name']], 
+						$mailField['MailField']['type'],
+						$message['MailMessage'][$mailField['MailField']['field_name']],
 						$this->Mailfield->getOptions($mailField['MailField'])
 					)));
 				}
@@ -75,21 +75,21 @@
 
 <!-- button -->
 <div class="bca-actions">
-<?php 
-$this->BcBaser->link(__d('baser', '削除'), 
-	[
-		'action' => 'delete', 
-		$mailContent['MailContent']['id'], 
-		$message['MailMessage']['id']], 
-	[
-		'class' => 'submit-token button bca-btn bca-actions__item', 
-		'data-bca-btn-type'=>'delete',
-		'data-bca-btn-size' => 'sm',
-		'data-bca-btn-color' => 'danger',
-		'data-bca-btn-type' => 'delete'
-	], 
-	sprintf(__d('baser', '受信メール No「%s」を削除してもいいですか？'), $message['MailMessage']['id']),
-	false
-); 
-?>
+	<?php
+	$this->BcBaser->link(__d('baser', '削除'),
+		[
+			'action' => 'delete',
+			$mailContent['MailContent']['id'],
+			$message['MailMessage']['id']],
+		[
+			'class' => 'submit-token button bca-btn bca-actions__item',
+			'data-bca-btn-type' => 'delete',
+			'data-bca-btn-size' => 'sm',
+			'data-bca-btn-color' => 'danger',
+			'data-bca-btn-type' => 'delete'
+		],
+		sprintf(__d('baser', '受信メール No「%s」を削除してもいいですか？'), $message['MailMessage']['id']),
+		false
+	);
+	?>
 </div>

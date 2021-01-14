@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -15,21 +15,21 @@
  */
 $this->BcBaser->js('admin/user_groups/form', false);
 $authPrefixes = [];
-foreach (Configure::read('BcAuthPrefix') as $key => $authPrefix) {
+foreach(Configure::read('BcAuthPrefix') as $key => $authPrefix) {
 	$authPrefixes[$key] = $authPrefix['name'];
 }
 ?>
 
 
 <script type="text/javascript">
-$(window).load(function() {
-<?php if ($this->BcForm->value('UserGroup.name') == 'admins'): ?>
-	$("#UserGroupAuthPrefixAdmin").prop('disabled', true);
-<?php endif ?>
-	$("#UserGroupAdminEditForm").submit(function(){
-		$("#UserGroupAuthPrefixAdmin").removeAttr('disabled');
+	$(window).load(function () {
+		<?php if ($this->BcForm->value('UserGroup.name') == 'admins'): ?>
+		$("#UserGroupAuthPrefixAdmin").prop('disabled', true);
+		<?php endif ?>
+		$("#UserGroupAdminEditForm").submit(function () {
+			$("#UserGroupAuthPrefixAdmin").removeAttr('disabled');
+		});
 	});
-});
 </script>
 
 <!-- form -->
@@ -49,7 +49,9 @@ $(window).load(function() {
 			</tr>
 		<?php endif; ?>
 		<tr>
-			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('UserGroup.name', __d('baser', 'ユーザーグループ名')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
+			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('UserGroup.name', __d('baser', 'ユーザーグループ名')) ?>
+				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+			</th>
 			<td class="col-input bca-form-table__input">
 				<?php if ($this->BcForm->value('UserGroup.name') == 'admins' && $this->request->action == 'admin_edit'): ?>
 					<?php echo $this->BcForm->value('UserGroup.name') ?>
@@ -68,7 +70,9 @@ $(window).load(function() {
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('UserGroup.title', __d('baser', '表示名')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
+			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('UserGroup.title', __d('baser', '表示名')) ?>
+				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+			</th>
 			<td class="col-input bca-form-table__input">
 				<?php echo $this->BcForm->input('UserGroup.title', ['type' => 'text', 'size' => 20, 'maxlength' => 255]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
@@ -81,12 +85,13 @@ $(window).load(function() {
 			<td class="col-input bca-form-table__input">
 				<?php if ($this->BcForm->value('UserGroup.name') == 'admins' && $this->request->action == 'admin_edit'): ?>
 					<?php if ($this->BcForm->value('UserGroup.use_admin_globalmenu')): ?>
-                        <?php echo __d('baser', '管理システムのグローバルメニューを利用する')?>
+						<?php echo __d('baser', '管理システムのグローバルメニューを利用する') ?>
 					<?php else: ?>
-                        <?php echo __d('baser', '管理システムのグローバルメニューを利用しない')?>
+						<?php echo __d('baser', '管理システムのグローバルメニューを利用しない') ?>
 					<?php endif ?>
 				<?php else: ?>
-					<span style="white-space: nowrap"><?php echo $this->BcForm->input('UserGroup.use_admin_globalmenu', ['type' => 'checkbox', 'label' => __d('baser', '管理システムのグローバルメニューを利用する')]) ?>　</span>
+					<span
+						style="white-space: nowrap"><?php echo $this->BcForm->input('UserGroup.use_admin_globalmenu', ['type' => 'checkbox', 'label' => __d('baser', '管理システムのグローバルメニューを利用する')]) ?>　</span>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<div id="helptextName" class="helptext">
 						<ul>
@@ -97,7 +102,8 @@ $(window).load(function() {
 					<?php echo $this->BcForm->error('UserGroup.use_admin_globalmenu') ?>
 				<?php endif ?>
 				<br>
-				<span style="white-space: nowrap"><?php echo $this->BcForm->input('UserGroup.use_move_contents', ['type' => 'checkbox', 'label' => __d('baser', 'コンテンツのドラッグ＆ドロップ移動機能を利用する')]) ?></span>
+				<span
+					style="white-space: nowrap"><?php echo $this->BcForm->input('UserGroup.use_move_contents', ['type' => 'checkbox', 'label' => __d('baser', 'コンテンツのドラッグ＆ドロップ移動機能を利用する')]) ?></span>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<div id="helptextName" class="helptext">
 					<span><?php echo __d('baser', 'コンテンツ一覧のツリー構造において、ドラッグ＆ドロップでコンテンツの移動を許可するかどうかを設定します。') ?></span>
@@ -107,13 +113,15 @@ $(window).load(function() {
 		</tr>
 		<?php if (count($authPrefixes) > 1): ?>
 			<tr>
-				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('UserGroup.auth_prefix', __d('baser', '認証プレフィックス設定')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
+				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('UserGroup.auth_prefix', __d('baser', '認証プレフィックス設定')) ?>
+					&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+				</th>
 				<td class="col-input bca-form-table__input">
 					<?php echo $this->BcForm->input('UserGroup.auth_prefix', ['type' => 'select', 'multiple' => 'checkbox', 'options' => $authPrefixes, 'value' => explode(',', $this->BcForm->value('UserGroup.auth_prefix'))]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<?php echo $this->BcForm->error('UserGroup.auth_prefix') ?>
 					<div id="helptextAuthPrefix" class="helptext">
-						<?php echo __d('baser', '認証プレフィックスの設定を指定します。<br />ユーザーグループ名が admins の場合は編集できません。')?>
+						<?php echo __d('baser', '認証プレフィックスの設定を指定します。<br />ユーザーグループ名が admins の場合は編集できません。') ?>
 					</div>
 				</td>
 			</tr>
@@ -126,7 +134,7 @@ $(window).load(function() {
 
 <div class="submit bc-align-center section bca-actions">
 	<div class="bca-actions__main">
-		<?php echo $this->BcForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn bca-actions__item', 'class' => 'bca-btn', 'data-bca-btn-type' => 'save', 'data-bca-btn-size' => 'lg', 'data-bca-btn-width' => 'lg','id' => 'BtnSave']) ?>
+		<?php echo $this->BcForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn bca-actions__item', 'class' => 'bca-btn', 'data-bca-btn-type' => 'save', 'data-bca-btn-size' => 'lg', 'data-bca-btn-width' => 'lg', 'id' => 'BtnSave']) ?>
 	</div>
 	<?php if ($this->request->action == 'admin_edit'): ?>
 		<div class="bca-actions__sub">
@@ -148,11 +156,11 @@ $(window).load(function() {
 			</p>
 			<?php $favorites = BcUtil::unserialize($this->request->data['UserGroup']['default_favorites']) ?>
 			<?php if ($favorites): ?>
-			<ul class="bca-list" data-bca-list-layout="horizon">
-				<?php foreach ($favorites as $favorite): ?>
-					<li class="bca-list__item"><?php $this->BcBaser->link($favorite['name'], $favorite['url']) ?></li>
-				<?php endforeach; ?>
-			</ul>
+				<ul class="bca-list" data-bca-list-layout="horizon">
+					<?php foreach($favorites as $favorite): ?>
+						<li class="bca-list__item"><?php $this->BcBaser->link($favorite['name'], $favorite['url']) ?></li>
+					<?php endforeach; ?>
+				</ul>
 			<?php endif ?>
 		</div>
 	</div>

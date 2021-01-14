@@ -1,27 +1,27 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Config
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Config
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
  * セッション設定
- * 
+ *
  * `/app/Config/setting.php` より先に読み込まれるため
  * `Configure` の値を変更するには、`/app/Config/session.php` で設定する
  */
 
 if (empty($_SESSION)) {
-	
-/**
- * モバイル設定 
- */
+
+	/**
+	 * モバイル設定
+	 */
 	$agentAgents = Configure::read('BcAgent.mobile.agents');
 	$agentAgents = implode('||', $agentAgents);
 	$agentAgents = preg_quote($agentAgents, '/');
@@ -38,18 +38,18 @@ if (empty($_SESSION)) {
 		$useTransSid = 1;
 		ini_set('url_rewriter.tags', '');
 	}
-	
-/**
- * Cookie Secure
- * 
- * 全てHTTPSでサイトが利用されている場合に有効とする
- * URL設定がどちらとも同じドメインでかつ、 HTTPS で設定されている
- * 異なるサブドメインにてcookie共有を許容しているサイトは対象外
- */
- 	$cookieSecure = 0;
+
+	/**
+	 * Cookie Secure
+	 *
+	 * 全てHTTPSでサイトが利用されている場合に有効とする
+	 * URL設定がどちらとも同じドメインでかつ、 HTTPS で設定されている
+	 * 異なるサブドメインにてcookie共有を許容しているサイトは対象外
+	 */
+	$cookieSecure = 0;
 	if (strpos(strtolower(Configure::read('BcEnv.siteUrl')), 'https') === 0) {
 		$siteUrlDomainMatches = null;
-		$sslUrlDomainMatches  = null;
+		$sslUrlDomainMatches = null;
 		preg_match("/^https:\/\/([a-zA-Z0-9\.-]+)(:\d+|)\//", Configure::read('BcEnv.siteUrl'), $siteUrlDomainMatches);
 		preg_match("/^https:\/\/([a-zA-Z0-9\.-]+)(:\d+|)\//", Configure::read('BcEnv.sslUrl'), $sslUrlDomainMatches);
 		if (isset($siteUrlDomainMatches[0]) && isset($sslUrlDomainMatches[0]) &&
@@ -58,8 +58,8 @@ if (empty($_SESSION)) {
 			$cookieSecure = 1;
 		}
 	}
-	
-	
+
+
 	Configure::write('Session', array_merge(Configure::read('Session'), [
 		'defaults' => 'cake',
 		'cookie' => 'BASERCMS',
@@ -74,5 +74,5 @@ if (empty($_SESSION)) {
 			'session.cookie_secure' => $cookieSecure
 		]
 	]));
-	
+
 }

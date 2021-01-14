@@ -1,16 +1,16 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Feed.Model
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Feed.Model
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
-App::import('Vendor', 'Feed.SimplePie_Autoloader', true, array(), 'simplepie' . DS . 'autoloader.php');
+App::import('Vendor', 'Feed.SimplePie_Autoloader', true, [], 'simplepie' . DS . 'autoloader.php');
 App::uses('FeedAppModel', 'Feed.Model');
 
 /**
@@ -18,34 +18,36 @@ App::uses('FeedAppModel', 'Feed.Model');
  *
  * @package Feed.Model
  */
-class Feed extends FeedAppModel {
-	
-/**
- * useDbConfig
- * 
- * @var string
- */
+class Feed extends FeedAppModel
+{
+
+	/**
+	 * useDbConfig
+	 *
+	 * @var string
+	 */
 	public $useDbConfig = false;
-	
-/**
- * キャッシュフォルダー
- * 
- * @var string
- * @access	public
- */
+
+	/**
+	 * キャッシュフォルダー
+	 *
+	 * @var string
+	 * @access    public
+	 */
 	public $cacheFolder = 'views';
-	
-/**
- * フィードを取得する
- *
- * @param string RSSのURL
- * @param int 取得する件数
- * @param string キャッシュ保持期間
- * @param string 抽出するカテゴリ
- * @return array RSSデータ
- */
-	public function getFeed($url, $limit = 10, $cacheExpires = null, $category = null) {
-		
+
+	/**
+	 * フィードを取得する
+	 *
+	 * @param string RSSのURL
+	 * @param int 取得する件数
+	 * @param string キャッシュ保持期間
+	 * @param string 抽出するカテゴリ
+	 * @return array RSSデータ
+	 */
+	public function getFeed($url, $limit = 10, $cacheExpires = null, $category = null)
+	{
+
 		// simplepie でフィードを取得する
 		$datas = $this->_getFeed($url, $cacheExpires);
 
@@ -57,24 +59,25 @@ class Feed extends FeedAppModel {
 		}
 
 		return $datas;
-		
+
 	}
 
-/**
- * カテゴリで抽出する
- *
- * @param array $items
- * @param mixed $filterCategory
- * @return array $items
- */
-	public function _filteringCategory($items, $filterCategory = null) {
-		
+	/**
+	 * カテゴリで抽出する
+	 *
+	 * @param array $items
+	 * @param mixed $filterCategory
+	 * @return array $items
+	 */
+	public function _filteringCategory($items, $filterCategory = null)
+	{
+
 		if (!$items || !$filterCategory) {
 			return $items;
 		}
 
-		$_items = array();
-		foreach ($items as $item) {
+		$_items = [];
+		foreach($items as $item) {
 
 			if (empty($item['category']['value'])) {
 				continue;
@@ -82,7 +85,7 @@ class Feed extends FeedAppModel {
 
 			/* 属しているカテゴリを取得 */
 			$category = '';
-			switch (gettype($item['category']['value'])) {
+			switch(gettype($item['category']['value'])) {
 				case 'object':
 					if (get_class($item['category']['value']) == 'SimplePie_Category') {
 						$category = $item['category']['value']->term;
@@ -108,15 +111,16 @@ class Feed extends FeedAppModel {
 		return $_items;
 	}
 
-/**
- * SimplePieでフィードを取得する
- *
- * @param string RSSのURL
- * @param string キャッシュ保持期間
- * @return array RSSデータ
- */
-	protected function _getFeed($url, $cacheExpires = null) {
-		
+	/**
+	 * SimplePieでフィードを取得する
+	 *
+	 * @param string RSSのURL
+	 * @param string キャッシュ保持期間
+	 * @return array RSSデータ
+	 */
+	protected function _getFeed($url, $cacheExpires = null)
+	{
+
 		if (!$url) {
 			return false;
 		}
@@ -163,18 +167,19 @@ class Feed extends FeedAppModel {
 			return BcUtil::unserialize($rssData);
 		}
 	}
-	
-/**
- * SimplePieで取得したデータを表示用に整形する
- * 2009/09/09	ryuring
- * 				古いバージョンのSimplePieでは、WordPress2.8.4が出力するRSSを解析できない事が判明。
- * 				SimplePie1.2に載せ換えて対応した。
- * TODO			このままでは、itemがない場合、RSS自体の情報が取得できないので修正が必要
- *
- * @param string SimplePieで取得したデータ
- * @return array RSSデータ
- */
-	protected function _convertSimplePie($datas) {
+
+	/**
+	 * SimplePieで取得したデータを表示用に整形する
+	 * 2009/09/09    ryuring
+	 *                古いバージョンのSimplePieでは、WordPress2.8.4が出力するRSSを解析できない事が判明。
+	 *                SimplePie1.2に載せ換えて対応した。
+	 * TODO            このままでは、itemがない場合、RSS自体の情報が取得できないので修正が必要
+	 *
+	 * @param string SimplePieで取得したデータ
+	 * @return array RSSデータ
+	 */
+	protected function _convertSimplePie($datas)
+	{
 		if (!$datas) {
 			return null;
 		}
@@ -186,19 +191,19 @@ class Feed extends FeedAppModel {
 		$feed['Channel']['pubDate']['value'] = '';
 		$feed['Channel']['language']['value'] = $simplePie->get_language();
 		$feed['Channel']['generator']['value'] = 'baserCMS';
-		$feed['Items'] = array();
+		$feed['Items'] = [];
 
-		foreach ($datas as $data) {
+		foreach($datas as $data) {
 
-			$tmp = array();
+			$tmp = [];
 			$tmp['title']['value'] = $data->get_title();
 			$tmp['link']['value'] = $data->get_link();
 			$tmp['pubDate']['value'] = date("r", strtotime($data->get_date('Y-m-d H:i:s')));
 			$tmp['dc:creator']['value'] = $data->get_author();
 			$categories = $data->get_categories();
 			if ($categories) {
-				$categoryArray = array();
-				foreach ($categories as $category) {
+				$categoryArray = [];
+				foreach($categories as $category) {
 					$categoryArray[] = $category->get_term();
 				}
 				$tmp['categories']['value'] = $categoryArray;
@@ -220,46 +225,49 @@ class Feed extends FeedAppModel {
 		}
 		return $feed;
 	}
-	
-/**
- * Creates a unique cache file path by combining all parameters given to a unique MD5 hash
- *
- * @param string $ext The extension for the cache file
- * @return string Returns a unique file path
- */
-	protected function _createCacheHash($ext = '.txt') {
+
+	/**
+	 * Creates a unique cache file path by combining all parameters given to a unique MD5 hash
+	 *
+	 * @param string $ext The extension for the cache file
+	 * @return string Returns a unique file path
+	 */
+	protected function _createCacheHash($ext = '.txt')
+	{
 		$args = func_get_args();
 		array_shift($args);
 
 		$hashSource = null;
 
-		foreach ($args as $arg) {
+		foreach($args as $arg) {
 			$hashSource = $hashSource . serialize($arg);
 		}
 
 		return md5($hashSource) . $ext;
 	}
 
-/**
- * URL文字列に対しキャッシュファイルのハッシュを生成して返す
- *
- * @param string $ext 拡張子
- * @param string $url URL文字列
- * @return string
- */
-	public function createCacheHash($ext = '', $url) {
+	/**
+	 * URL文字列に対しキャッシュファイルのハッシュを生成して返す
+	 *
+	 * @param string $ext 拡張子
+	 * @param string $url URL文字列
+	 * @return string
+	 */
+	public function createCacheHash($ext = '', $url)
+	{
 		return $this->_createCacheHash($ext, $url);
 	}
 
-/**
- * <img>タグとURLを抜き出す
- *
- * @param string $string 文字列
- * @return array img
- */
-	public function extractImg($string) {
+	/**
+	 * <img>タグとURLを抜き出す
+	 *
+	 * @param string $string 文字列
+	 * @return array img
+	 */
+	public function extractImg($string)
+	{
 		$pattern = '/(<img.+?src\s*=\s*[\"|\'](.*?)[\"|\'].*?\/?>)/s';
-		$img = array();
+		$img = [];
 		if (preg_match($pattern, $string, $matches)) {
 			$img['tag'] = $matches[1];
 			$img['url'] = $matches[2];
@@ -269,13 +277,14 @@ class Feed extends FeedAppModel {
 		return $img;
 	}
 
-/**
- * ブログ記事のアイキャッチ画像のURLを取得する
- * 
- * @param Object $data
- * @return array
- */
-	public function getEyeCatchImg($data) {
+	/**
+	 * ブログ記事のアイキャッチ画像のURLを取得する
+	 *
+	 * @param Object $data
+	 * @return array
+	 */
+	public function getEyeCatchImg($data)
+	{
 		$image = $data->get_enclosure();
 
 		$eyeCatchData = [

@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Mail.Config
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Mail.Config
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -29,7 +29,7 @@ $mailContents = $MailContent->find('all', [
 	'recursive' => 0,
 	'order' => $MailContent->id
 ]);
-foreach ($mailContents as $mailContent) {
+foreach($mailContents as $mailContent) {
 	$mail = $mailContent['MailContent'];
 	$content = $mailContent['Content'];
 	$config['BcApp.adminNavigation.Contents.' . 'MailContent' . $mail['id']] = [
@@ -40,7 +40,7 @@ foreach ($mailContents as $mailContent) {
 		'menus' => [
 			'MailMessages' . $mail['id'] => ['title' => '受信メール', 'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_messages', 'action' => 'index', $mail['id']]],
 			'MailFields' . $mail['id'] => [
-				'title' => 'フィールド', 
+				'title' => 'フィールド',
 				'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mail['id']],
 				'currentRegex' => '/\/mail\/mail_fields\/[^\/]+?\/' . $mail['id'] . '($|\/)/s'
 			],
@@ -49,62 +49,62 @@ foreach ($mailContents as $mailContent) {
 	];
 }
 // @deprecated 5.0.0 since 4.2.0 BcApp.adminNavigation の形式に変更
-$config['BcApp.adminNavi.mail'] = array(
+$config['BcApp.adminNavi.mail'] = [
 	'name' => __d('baser', 'メールプラグイン'),
-	'contents' => array(
-		array('name' => __d('baser', '基本設定'), 'url' => array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_configs', 'action' => 'form')),
-	)
-);
+	'contents' => [
+		['name' => __d('baser', '基本設定'), 'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_configs', 'action' => 'form']],
+	]
+];
 
 $config['BcContents']['items']['Mail'] = [
-	'MailContent'	=> [
+	'MailContent' => [
 		'title' => __d('baser', 'メールフォーム'),
-		'multiple'	=> true,
-		'preview'	=> true,
-		'icon'	=> 'bca-icon--mail',
+		'multiple' => true,
+		'preview' => true,
+		'icon' => 'bca-icon--mail',
 		'routes' => [
-			'manage'	=> [
+			'manage' => [
 				'admin' => true,
-				'plugin'	=> 'mail',
-				'controller'=> 'mail_fields',
-				'action'	=> 'index'
+				'plugin' => 'mail',
+				'controller' => 'mail_fields',
+				'action' => 'index'
 			],
-			'add'	=> [
+			'add' => [
 				'admin' => true,
-				'plugin'	=> 'mail',
-				'controller'=> 'mail_contents',
-				'action'	=> 'ajax_add'
+				'plugin' => 'mail',
+				'controller' => 'mail_contents',
+				'action' => 'ajax_add'
 			],
-			'edit'	=> [
+			'edit' => [
 				'admin' => true,
-				'plugin'	=> 'mail',
-				'controller'=> 'mail_contents',
-				'action'	=> 'edit'
+				'plugin' => 'mail',
+				'controller' => 'mail_contents',
+				'action' => 'edit'
 			],
 			'delete' => [
 				'admin' => true,
-				'plugin'	=> 'mail',
-				'controller'=> 'mail_contents',
-				'action'	=> 'delete'
+				'plugin' => 'mail',
+				'controller' => 'mail_contents',
+				'action' => 'delete'
 			],
 			'view' => [
-				'plugin'	=> 'mail',
-				'controller'=> 'mail',
-				'action'	=> 'index'
+				'plugin' => 'mail',
+				'controller' => 'mail',
+				'action' => 'index'
 			],
-			'copy'	=> [
+			'copy' => [
 				'admin' => true,
-				'plugin'	=> 'mail',
-				'controller'=> 'mail_contents',
-				'action'	=> 'ajax_copy'
+				'plugin' => 'mail',
+				'controller' => 'mail_contents',
+				'action' => 'ajax_copy'
 			]
 		]
-	]	
+	]
 ];
 
 /**
  * ショートコード
  */
 $config['BcShortCode']['Mail'] = [
-	'Mail.getForm'	
+	'Mail.getForm'
 ];

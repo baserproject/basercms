@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Lib.TestSuite.templates
- * @since			baserCMS v 3.0.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Lib.TestSuite.templates
+ * @since           baserCMS v 3.0.0
+ * @license         https://basercms.net/license/index.html
  */
 ?>
 <div class="test-menu">
@@ -21,10 +21,10 @@
 		<?php if (!empty($plugins)): ?>
 			<li style="padding-top: 10px">
 				<span style="font-size: 18px">Plugins</span>
-				<?php foreach ($plugins as $plugin): ?>
+				<?php foreach($plugins as $plugin): ?>
 					<ul>
 						<li style="padding-top: 10px">
-							<span  style="font-size: 18px"><?php echo $plugin; ?></span>
+							<span style="font-size: 18px"><?php echo $plugin; ?></span>
 							<ul>
 								<li><?php printf('<a href="%s&amp;plugin=%s">Tests</a>', $cases, $plugin); ?></li>
 							</ul>
@@ -47,4 +47,4 @@
 		</li>
 	</ul>
 </div>
-<div  class="test-results">
+<div class="test-results">

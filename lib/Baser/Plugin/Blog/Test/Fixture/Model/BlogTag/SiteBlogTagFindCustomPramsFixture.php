@@ -1,21 +1,23 @@
 <?php
+
 /**
  * Site Fixture
  */
-class SiteBlogTagFindCustomPramsFixture extends CakeTestFixture {
+class SiteBlogTagFindCustomPramsFixture extends CakeTestFixture
+{
 
-/**
- * Import
- *
- * @var array
- */
+	/**
+	 * Import
+	 *
+	 * @var array
+	 */
 	public $import = ['model' => 'Site'];
 
-/**
- * Records
- *
- * @var array
- */
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '2',

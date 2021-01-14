@@ -1,21 +1,23 @@
 <?php
+
 /**
  * BlogCommentFixture
  */
-class BlogCommentFixture extends BaserTestFixture {
+class BlogCommentFixture extends BaserTestFixture
+{
 
-/**
- * Name of the object
- *
- * @var string
- */
+	/**
+	 * Name of the object
+	 *
+	 * @var string
+	 */
 	public $name = 'BlogComment';
 
-/**
- * Records
- *
- * @var array
- */
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => 1,
@@ -25,7 +27,7 @@ class BlogCommentFixture extends BaserTestFixture {
 			'status' => 1,
 			'name' => 'baserCMS',
 			'email' => '',
-			'url' => 'http://basercms.net',
+			'url' => 'https://basercms.net',
 			'message' => 'ホームページの開設おめでとうございます。（ダミー）',
 			'created' => '2015-08-10 18:57:47',
 			'modified' => NULL,

@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Test.Case.View.Helper
- * @since			baserCMS v 3.0.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.View.Helper
+ * @since           baserCMS v 3.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('BcUploadHelper', 'View/Helper');
@@ -15,15 +15,16 @@ App::uses('BcUploadHelper', 'View/Helper');
 /**
  * test for BcUploadHelper
  *
- * @package			Baser.Test.Case.View.Helper
+ * @package         Baser.Test.Case.View.Helper
  * @property  BcUploadHelper $BcUpload
  */
-class BcUploadHelperTest extends BaserTestCase {
-	
-/**
- * Fixtures
- * @var array 
- */
+class BcUploadHelperTest extends BaserTestCase
+{
+
+	/**
+	 * Fixtures
+	 * @var array
+	 */
 	public $fixtures = [
 		'baser.Default.Content',
 		'baser.Default.Site',
@@ -31,27 +32,30 @@ class BcUploadHelperTest extends BaserTestCase {
 		'baser.Default.SiteConfig',
 	];
 
-/**
- * setUp
- */
-	public function setUp() {
+	/**
+	 * setUp
+	 */
+	public function setUp()
+	{
 		parent::setUp();
 		$this->BcUpload = new BcUploadHelper(new View);
 		$this->BcUpload->request = new CakeRequest('/', false);
 	}
 
-/**
- * tearDown
- */
-	public function tearDown() {
+	/**
+	 * tearDown
+	 */
+	public function tearDown()
+	{
 		unset($this->BcUpload);
 		parent::tearDown();
 	}
 
-/**
- * ファイルへのリンクタグを出力する
- */
-	public function testFileLink() {
+	/**
+	 * ファイルへのリンクタグを出力する
+	 */
+	public function testFileLink()
+	{
 		$this->BcUpload->request->data = [
 			'EditorTemplate' => [
 				'id' => '1',
@@ -65,10 +69,11 @@ class BcUploadHelperTest extends BaserTestCase {
 		$this->assertRegExp('/<a href=\"\/files\/editor\/template1\.jpg/', $result);
 	}
 
-/**
- * ファイルへのリンクタグを出力する(hasMany対応)
- */
-	public function testFileLinkHasManyField() {
+	/**
+	 * ファイルへのリンクタグを出力する(hasMany対応)
+	 */
+	public function testFileLinkHasManyField()
+	{
 		$this->BcUpload->request->data = [
 			'EditorTemplate' => [
 				[
@@ -84,11 +89,12 @@ class BcUploadHelperTest extends BaserTestCase {
 		$this->assertRegExp('/<a href=\"\/files\/editor\/template1\.jpg/', $result);
 	}
 
-/**
- * アップロードした画像のタグを出力する
- */
-	public function testUploadImage() {
-		
+	/**
+	 * アップロードした画像のタグを出力する
+	 */
+	public function testUploadImage()
+	{
+
 		// オプションなし
 		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg');
 		$this->assertRegExp('/^<a href=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?><\/a>/', $result);
@@ -125,7 +131,8 @@ class BcUploadHelperTest extends BaserTestCase {
 		$this->assertRegExp('/^\/files\/editor\/template1\.jpg\?[0-9]+/', $result);
 	}
 
-	public function testGetBasePath() {
+	public function testGetBasePath()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 

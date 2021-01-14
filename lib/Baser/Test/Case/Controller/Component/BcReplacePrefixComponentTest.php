@@ -1,24 +1,25 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Controller.Component
- * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.Controller.Component
+ * @since           baserCMS v 3.0.0-beta
+ * @license         https://basercms.net/license/index.html
  */
+
 App::uses('BcReplacePrefixComponent', 'Controller/Component');
 App::uses('Controller', 'Controller');
 
-
 /**
- * 偽コントローラ
+ * Class BcReplacePrefixTestController
  *
- * @package       Cake.Test.Case.Controller.Component
+ * @package Baser.Test.Case.Controller.Component
  */
-class BcReplacePrefixTestController extends Controller {
+class BcReplacePrefixTestController extends Controller
+{
 
 	public $components = ['BcReplacePrefix'];
 
@@ -27,11 +28,14 @@ class BcReplacePrefixTestController extends Controller {
 }
 
 /**
- * BcReplacePrefixComponentのテスト
+ * BcReplacePrefixComponentTest
+ *
+ * @package Baser.Test.Case.Controller.Component
  * @property BcReplacePrefixTestController $Controller
  * @property BcReplacePrefixComponent $BcReplacePrefix
  */
-class BcReplacePrefixComponentTest extends BaserTestCase {
+class BcReplacePrefixComponentTest extends BaserTestCase
+{
 
 	public $fixtures = [
 		'baser.Default.BlogCategory',
@@ -51,7 +55,8 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
 
 	public $components = ['BcReplacePrefix'];
 
-	public function setUp() {
+	public function setUp()
+	{
 		parent::setUp();
 
 		// コンポーネントと偽のテストコントローラをセットアップする
@@ -71,48 +76,51 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
 		Router::connect('/:controller/:action/*');
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		parent::tearDown();
 		unset($this->Controller);
 		unset($this->BcReplacePrefix);
 	}
 
-/**
- * プレフィックスの置き換えを許可するアクションを設定する
- *
- * $this->Replace->allow('action', 'action',...);
- *
- * @param string $action
- * @param string $action
- * @param string ... etc.
- * @return void
- */
-	public function testAllow() {
+	/**
+	 * プレフィックスの置き換えを許可するアクションを設定する
+	 *
+	 * $this->Replace->allow('action', 'action',...);
+	 *
+	 * @param string $action
+	 * @param string $action
+	 * @param string ... etc.
+	 * @return void
+	 */
+	public function testAllow()
+	{
 		$this->BcReplacePrefix->allowedPureActions = ['a' => 'hoge1', 'b' => 'hoge2'];
 		$this->BcReplacePrefix->allow(['a' => 'hoge3', 'c' => 'hoge4']);
-		
+
 		$result = $this->BcReplacePrefix->allowedPureActions;
 		$expected = ['a' => 'hoge3', 'b' => 'hoge2', 'c' => 'hoge4'];
 		$this->assertEquals($expected, $result, 'プレフィックスの置き換えを許可するアクションを設定が正しくありません');
 	}
 
-/**
- * startup
- * 
- * @param string $pre actionのprefix
- * @param string $action action名
- * @param string $methods $Controller->methods の値
- * @param boolean $view viewファイルの作成を行うか
- * @param array $expected 期待値
- * @dataProvider startupDataProvider
- */
-	public function testStartup($pre, $action, $methods, $view, $expected) {
-		
+	/**
+	 * startup
+	 *
+	 * @param string $pre actionのprefix
+	 * @param string $action action名
+	 * @param string $methods $Controller->methods の値
+	 * @param boolean $view viewファイルの作成を行うか
+	 * @param array $expected 期待値
+	 * @dataProvider startupDataProvider
+	 */
+	public function testStartup($pre, $action, $methods, $view, $expected)
+	{
+
 		Configure::write('BcAuthPrefix', array_merge(Configure::read('BcAuthPrefix'), [
 			'pre' => ['alias' => 'pre'],
 			'front' => []
 		]));
-		
+
 		// 初期化
 		$this->Controller->params['prefix'] = $pre;
 		$this->Controller->action = $action;
@@ -144,7 +152,8 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
 		$this->assertEquals($expected[2], $this->Controller->subDir, 'startupが正しく動作していません');
 	}
 
-	public function startupDataProvider() {
+	public function startupDataProvider()
+	{
 		return [
 			['pre', 'pre_action', 'admin_action', false, ['admin_action', 'admin', 'admin']],
 			[null, 'pre_action', 'admin_action', false, ['pre_action', null, null]],
@@ -156,20 +165,22 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
 		];
 	}
 
-/**
- * beforeRender
- */
-	public function testBeforeRender() {
+	/**
+	 * beforeRender
+	 */
+	public function testBeforeRender()
+	{
 		$this->Controller->request->params['prefix'] = 'front';
 		$this->BcReplacePrefix->beforeRender($this->Controller);
 		$result = $this->Controller->request->params['prefix'];
 		$this->assertEmpty($result, 'beforeRenderが正しく動作していません');
 	}
 
-/**
- * Return all possible paths to find view files in order
- */
-	public function testGetViewPaths() {
+	/**
+	 * Return all possible paths to find view files in order
+	 */
+	public function testGetViewPaths()
+	{
 
 		$this->Controller->theme = 'hoge-theme';
 		$this->Controller->plugin = 'Mail';
@@ -181,12 +192,13 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
 			ROOT . '/app/webroot/',
 			ROOT . '/app/View/',
 			ROOT . '/lib/Baser/View/',
-  	];
-  	$this->assertEquals($expected, $result, 'Viewのパスを正しく取得できません');
+		];
+		$this->assertEquals($expected, $result, 'Viewのパスを正しく取得できません');
 
 	}
 
-	public function testInitialize() {
+	public function testInitialize()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 

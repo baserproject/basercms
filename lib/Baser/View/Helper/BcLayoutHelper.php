@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View.Helper
- * @since			baserCMS v 4.0.5
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View.Helper
+ * @since           baserCMS v 4.0.5
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -15,14 +15,16 @@
  *
  * @package Baser.View.Helper
  */
-class BcLayoutHelper extends AppHelper {
+class BcLayoutHelper extends AppHelper
+{
 
 	/**
 	 * コンテンツヘッダー発火
 	 *
 	 * @return string
 	 */
-	public function dispatchContentsHeader() {
+	public function dispatchContentsHeader()
+	{
 		$request = $this->_View->request;
 		$id = Inflector::camelize($request->params['controller']) . '.' . Inflector::camelize($request->params['action']);
 		$event = $this->dispatchEvent('contentsHeader', [
@@ -31,7 +33,7 @@ class BcLayoutHelper extends AppHelper {
 		], ['class' => 'BcLayout', 'plugin' => '']);
 		$output = '';
 		if ($event !== false) {
-			$output = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+			$output = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
 		}
 		return $output;
 	}
@@ -41,7 +43,8 @@ class BcLayoutHelper extends AppHelper {
 	 *
 	 * @return string
 	 */
-	public function dispatchContentsFooter() {
+	public function dispatchContentsFooter()
+	{
 		$request = $this->_View->request;
 		$id = Inflector::camelize($request->params['controller']) . '.' . Inflector::camelize($request->params['action']);
 		$event = $this->dispatchEvent('contentsFooter', [
@@ -50,7 +53,7 @@ class BcLayoutHelper extends AppHelper {
 		], ['class' => 'BcLayout', 'plugin' => '']);
 		$output = '';
 		if ($event !== false) {
-			$output = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+			$output = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
 		}
 		return $output;
 	}

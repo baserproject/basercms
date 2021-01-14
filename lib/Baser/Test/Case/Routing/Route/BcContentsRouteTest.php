@@ -1,30 +1,31 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Routing.Route
- * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.Routing.Route
+ * @since           baserCMS v 4.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('BcContentsRoute', 'Routing/Route');
 
 /**
- * BcRequestFilterTest class
+ * Class BcRequestFilterTest
  *
  * @package Baser.Test.Case.Routing.Route
  * @property BcContentsRoute $BcContentsRoute
  */
-class BcContentsRouteTest extends BaserTestCase {
+class BcContentsRouteTest extends BaserTestCase
+{
 
 
-/**
- * フィクスチャ
- * @var array
- */
+	/**
+	 * フィクスチャ
+	 * @var array
+	 */
 	public $fixtures = [
 		'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',
 		'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',
@@ -32,12 +33,13 @@ class BcContentsRouteTest extends BaserTestCase {
 		'baser.Default.User',
 	];
 
-/**
- * set up
- *
- * @return void
- */
-	public function setUp() {
+	/**
+	 * set up
+	 *
+	 * @return void
+	 */
+	public function setUp()
+	{
 		parent::setUp();
 		$this->BcContentsRoute = new BcContentsRoute(
 			'/',
@@ -47,42 +49,47 @@ class BcContentsRouteTest extends BaserTestCase {
 		BcSite::flash();
 	}
 
-/**
- * Parses a string URL into an array. If a plugin key is found, it will be copied to the
- * controller parameter
- */
-	public function testParse() {
+	/**
+	 * Parses a string URL into an array. If a plugin key is found, it will be copied to the
+	 * controller parameter
+	 */
+	public function testParse()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * コンテンツに関連するパラメーター情報を取得する
- */
-	public function testGetParams() {
+	/**
+	 * コンテンツに関連するパラメーター情報を取得する
+	 */
+	public function testGetParams()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * Reverse route
- */
-	public function testMatch() {
+	/**
+	 * Reverse route
+	 */
+	public function testMatch()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * リバースルーティング
- * 
- * @param string $current 現在のURL
- * @param string $params URLパラメーター
- * @param string $expects 期待するURL
- * @dataProvider reverseRoutingDataProvider
- */
-	public function testReverseRouting($current, $params, $expects) {
+	/**
+	 * リバースルーティング
+	 *
+	 * @param string $current 現在のURL
+	 * @param string $params URLパラメーター
+	 * @param string $expects 期待するURL
+	 * @dataProvider reverseRoutingDataProvider
+	 */
+	public function testReverseRouting($current, $params, $expects)
+	{
 		Router::setRequestInfo($this->_getRequest($current));
 		$this->assertEquals($expects, Router::url($params));
 	}
 
-	public function reverseRoutingDataProvider() {
+	public function reverseRoutingDataProvider()
+	{
 		return [
 			// ContentFolder
 			['/', ['plugin' => null, 'controller' => 'content_folders', 'action' => 'view', 'entityId' => 1], '/'],
@@ -99,22 +106,23 @@ class BcContentsRouteTest extends BaserTestCase {
 		];
 	}
 
-/**
- * Router::parse
- *
- * @param string $url URL文字列
- * @param string $expect 期待値
- * @return void
- * @dataProvider routerParseDataProvider
- */
-	public function testRouterParse($useSiteDeviceSetting, $host, $ua, $url, $expects) {
+	/**
+	 * Router::parse
+	 *
+	 * @param string $url URL文字列
+	 * @param string $expect 期待値
+	 * @return void
+	 * @dataProvider routerParseDataProvider
+	 */
+	public function testRouterParse($useSiteDeviceSetting, $host, $ua, $url, $expects)
+	{
 		$siteUrl = Configure::read('BcEnv.siteUrl');
 		Configure::write('BcSite.use_site_device_setting', $useSiteDeviceSetting);
 		Configure::write('BcEnv.siteUrl', 'http://main.com');
-		if($ua) {
+		if ($ua) {
 			$_SERVER['HTTP_USER_AGENT'] = $ua;
 		}
-		if($host) {
+		if ($host) {
 			Configure::write('BcEnv.host', $host);
 		}
 		Router::setRequestInfo($this->_getRequest($url));
@@ -122,7 +130,8 @@ class BcContentsRouteTest extends BaserTestCase {
 		Configure::write('BcEnv.siteUrl', $siteUrl);
 	}
 
-	public function routerParseDataProvider() {
+	public function routerParseDataProvider()
+	{
 		return [
 			// PC（ノーマル : デバイス設定無）
 			[0, '', '', '/', ['plugin' => '', 'controller' => 'pages', 'action' => 'display', 'entityId' => '1', 'pass' => ['index'], 'named' => []]],

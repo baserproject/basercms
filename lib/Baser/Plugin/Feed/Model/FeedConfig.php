@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Feed.Model
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Feed.Model
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('FeedAppModel', 'Feed.Model');
@@ -17,37 +17,39 @@ App::uses('FeedAppModel', 'Feed.Model');
  *
  * @package Feed.Model
  */
-class FeedConfig extends FeedAppModel {
+class FeedConfig extends FeedAppModel
+{
 
-/**
- * ビヘイビア
- * 
- * @var array
- */
-	public $actsAs = array('BcCache');
+	/**
+	 * ビヘイビア
+	 *
+	 * @var array
+	 */
+	public $actsAs = ['BcCache'];
 
-/**
- * hasMany
- *
- * @var array
- */
-	public $hasMany = array("FeedDetail" =>
-		array("className" => "Feed.FeedDetail",
+	/**
+	 * hasMany
+	 *
+	 * @var array
+	 */
+	public $hasMany = ["FeedDetail" =>
+		["className" => "Feed.FeedDetail",
 			"conditions" => "",
 			"order" => "FeedDetail.id ASC",
 			"foreignKey" => "feed_config_id",
 			"dependent" => true,
 			"exclusive" => false,
-			"finderQuery" => ""));
+			"finderQuery" => ""]];
 
-/**
- * FeedConfig constructor.
- *
- * @param bool $id
- * @param null $table
- * @param null $ds
- */
-	public function __construct($id = false, $table = null, $ds = null) {
+	/**
+	 * FeedConfig constructor.
+	 *
+	 * @param bool $id
+	 * @param null $table
+	 * @param null $ds
+	 */
+	public function __construct($id = false, $table = null, $ds = null)
+	{
 		parent::__construct($id, $table, $ds);
 		$this->validate = [
 			'name' => [
@@ -65,13 +67,14 @@ class FeedConfig extends FeedAppModel {
 				['rule' => ['maxLength', 50], 'message' => __d('baser', 'テンプレート名は50文字以内で入力してください。')]]
 		];
 	}
-	
-/**
- * 初期値を取得
- * 
- * @return array
- */
-	public function getDefaultValue() {
+
+	/**
+	 * 初期値を取得
+	 *
+	 * @return array
+	 */
+	public function getDefaultValue()
+	{
 		$data['FeedConfig']['display_number'] = '5';
 		$data['FeedConfig']['template'] = 'default';
 		return $data;

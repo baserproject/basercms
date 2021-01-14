@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Test.Case.View.Helper
- * @since			baserCMS v 3.0.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.View.Helper
+ * @since           baserCMS v 3.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('BcAppView', 'View');
@@ -19,7 +19,8 @@ App::uses('BcSmartphoneHelper', 'View/Helper');
  *
  * @property BcSmartphoneHelper $BcSmartphone
  */
-class BcSmartphoneHelperTest extends BaserTestCase {
+class BcSmartphoneHelperTest extends BaserTestCase
+{
 
 	public $fixtures = [
 		'baser.Default.Content',
@@ -29,34 +30,37 @@ class BcSmartphoneHelperTest extends BaserTestCase {
 	];
 
 
-/**
- * setUp method
- *
- * @return void
- */
-	public function setUp() {
+	/**
+	 * setUp method
+	 *
+	 * @return void
+	 */
+	public function setUp()
+	{
 		parent::setUp();
 		$this->View = new BcAppView();
 		$this->BcSmartphone = new BcSmartphoneHelper($this->View);
 	}
 
-/**
- * tearDown method
- *
- * @return void
- */
-	public function tearDown() {
+	/**
+	 * tearDown method
+	 *
+	 * @return void
+	 */
+	public function tearDown()
+	{
 		unset($this->BcSmartphone);
 
 		parent::tearDown();
 	}
 
-/**
- * afterLayout
- *
- * @return void
- */
-	public function testAfterLayout() {
+	/**
+	 * afterLayout
+	 *
+	 * @return void
+	 */
+	public function testAfterLayout()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		//afterLayoutの条件分岐、$this->request->params['Site']をempty以外にしたい
@@ -67,7 +71,8 @@ class BcSmartphoneHelperTest extends BaserTestCase {
 
 	}
 
-	public function testAfterRender() {
+	public function testAfterRender()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 

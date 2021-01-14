@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -24,7 +24,8 @@
 <tr<?php echo $class; ?>>
 	<td style="width:15%" class="row-tools">
 		<?php if ($sortmode): ?>
-			<span class="sort-handle"><?php $this->BcBaser->img('admin/sort.png', ['alt' => __d('baser', '並び替え')]) ?></span>
+			<span
+				class="sort-handle"><?php $this->BcBaser->img('admin/sort.png', ['alt' => __d('baser', '並び替え')]) ?></span>
 			<?php echo $this->BcForm->input('Sort.id' . $data['Permission']['id'], ['type' => 'hidden', 'class' => 'id', 'value' => $data['Permission']['id']]) ?>
 		<?php endif ?>
 		<?php if ($this->BcBaser->isAdminUser()): ?>
@@ -40,13 +41,15 @@
 	</td>
 	<td style="width:10%"><?php echo $data['Permission']['no']; ?></td>
 	<td style="width:55%">
-		<?php $this->BcBaser->link($data['Permission']['name'], ['action' => 'edit', $this->request->params['pass'][0], $data['Permission']['id']]); ?><br />
+		<?php $this->BcBaser->link($data['Permission']['name'], ['action' => 'edit', $this->request->params['pass'][0], $data['Permission']['id']]); ?>
+		<br/>
 		<?php echo $data['Permission']['url']; ?>
 	</td>
-	<td style="width:10%" class="align-center"><?php echo $this->BcText->arrayValue($data['Permission']['auth'], [0 => '×', 1 => '○']) ?></td>
+	<td style="width:10%"
+		class="align-center"><?php echo $this->BcText->arrayValue($data['Permission']['auth'], [0 => '×', 1 => '○']) ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td style="width:10%">
-		<?php echo $this->BcTime->format('Y-m-d', $data['Permission']['created']); ?><br />
+		<?php echo $this->BcTime->format('Y-m-d', $data['Permission']['created']); ?><br/>
 		<?php echo $this->BcTime->format('Y-m-d', $data['Permission']['modified']); ?>
 	</td>
 </tr>

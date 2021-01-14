@@ -1,52 +1,56 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Model
- * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.Model
+ * @since           baserCMS v 3.0.0-beta
+ * @license         https://basercms.net/license/index.html
  */
 App::uses('ThemeConfig', 'Model');
 
 /**
- * ThemeConfigTest class
- * 
+ * Class ThemeConfigTest
+ *
  * class NonAssosiationThemeConfig extends ThemeConfig {
  *  public $name = 'ThemeConfig';
  *  public $belongsTo = array();
  *  public $hasMany = array();
  * }
- * 
+ *
  * @package Baser.Test.Case.Model
  */
-class ThemeConfigTest extends BaserTestCase {
+class ThemeConfigTest extends BaserTestCase
+{
 
 	public $fixtures = [
 		'baser.Default.Page',
 		'baser.Default.ThemeConfig',
 	];
 
-	public function setUp() {
+	public function setUp()
+	{
 		parent::setUp();
 		$this->ThemeConfig = ClassRegistry::init('ThemeConfig');
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		unset($this->ThemeConfig);
 		parent::tearDown();
 	}
 
-/**
- * 画像を保存する
- * 
- * MEMO : move_uploaded_file()が成功しないため、スキップ
- * 
- * @param array $data
- */
-	public function testSaveImage() {
+	/**
+	 * 画像を保存する
+	 *
+	 * MEMO : move_uploaded_file()が成功しないため、スキップ
+	 *
+	 * @param array $data
+	 */
+	public function testSaveImage()
+	{
 
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
@@ -60,9 +64,9 @@ class ThemeConfigTest extends BaserTestCase {
 		$data = ['ThemeConfig' => [
 			'logo' => [
 				'name' => 'logo.png',
-				'tmp_name' => WWW_ROOT . 'files' . DS . 'theme_configs' . DS .'logo_tmp.png',
-				]
+				'tmp_name' => WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo_tmp.png',
 			]
+		]
 		];
 		$this->ThemeConfig->saveImage($data);
 
@@ -71,16 +75,17 @@ class ThemeConfigTest extends BaserTestCase {
 		@unlink($dummyTmpPath);
 	}
 
-/**
- * 画像を削除する
- * 
- * @param array $data
- * @param array $expected true 画像が存在する / false 画像が存在しない(削除されている)
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider deleteImageDataProvider
- */
-	public function testDeleteImage($data, $expected, $message = null) {
-		
+	/**
+	 * 画像を削除する
+	 *
+	 * @param array $data
+	 * @param array $expected true 画像が存在する / false 画像が存在しない(削除されている)
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider deleteImageDataProvider
+	 */
+	public function testDeleteImage($data, $expected, $message = null)
+	{
+
 		// ダミーの画像を作成
 		$sourcePath = WWW_ROOT . 'theme' . DS . 'nada-icons' . DS . 'img' . DS . 'logo.png';
 		$dummyPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo.png';
@@ -88,7 +93,7 @@ class ThemeConfigTest extends BaserTestCase {
 
 		$data = ['ThemeConfig' => $data];
 		$this->ThemeConfig->deleteImage($data);
-		
+
 		// 画像の有無
 		if ($expected) {
 			$this->assertFileExists($dummyPath, $message);
@@ -101,7 +106,8 @@ class ThemeConfigTest extends BaserTestCase {
 
 	}
 
-	public function deleteImageDataProvider() {
+	public function deleteImageDataProvider()
+	{
 		return [
 			[['logo_delete' => true], false, '画像を削除できません'],
 			[['logo' => true], true, '画像が削除されています'],
@@ -109,15 +115,16 @@ class ThemeConfigTest extends BaserTestCase {
 		];
 	}
 
-/**
- * テーマカラー設定を保存する
- * 
- * @param array $data 設定するテーマカラーのデータ
- * @param array $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider updateColorConfigDataProvider
- */
-	public function testUpdateColorConfig($data, $expected, $message = null) {
+	/**
+	 * テーマカラー設定を保存する
+	 *
+	 * @param array $data 設定するテーマカラーのデータ
+	 * @param array $expected 期待値
+	 * @param string $message テストが失敗した時に表示されるメッセージ
+	 * @dataProvider updateColorConfigDataProvider
+	 */
+	public function testUpdateColorConfig($data, $expected, $message = null)
+	{
 		$theme = Configure::read('BcSite.theme');
 		Configure::write('BcSite.theme', 'nada-icons');
 
@@ -136,7 +143,7 @@ class ThemeConfigTest extends BaserTestCase {
 
 		// 元のファイルを再生成
 		$FileOriginal->write($configOriginal);
-		$FileOriginal->close();    
+		$FileOriginal->close();
 
 		// 生成したconfig.cssをの内容を取得
 		$setting = $File->read();
@@ -147,10 +154,11 @@ class ThemeConfigTest extends BaserTestCase {
 		Configure::write('BcSite.theme', $theme);
 	}
 
-	public function updateColorConfigDataProvider() {
+	public function updateColorConfigDataProvider()
+	{
 		return [
-			[['color_main' => '000000' ], '#000000', 'テーマカラーを設定できません'],
-			[['color_main' => '000000', 'color_link' => '111111' ], '#000000.*#111111', 'テーマカラーを複数設定できません'],
+			[['color_main' => '000000'], '#000000', 'テーマカラーを設定できません'],
+			[['color_main' => '000000', 'color_link' => '111111'], '#000000.*#111111', 'テーマカラーを複数設定できません'],
 			[['hoge' => '000000'], "\{(\n|\r\n)}", '$dataが適切でないのにcssの要素が空ではありません'],
 			[[], "\{(\n|\r\n)\}", '$dataがないのにcssの要素が空ではありません'],
 		];

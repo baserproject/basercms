@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -18,7 +18,7 @@
  */
 ?>
 <div class="bca-data-list__top">
-<!-- 一括処理 -->
+	<!-- 一括処理 -->
 	<?php if ($this->BcBaser->isAdminUser()): ?>
 		<div>
 			<?php echo $this->BcForm->input('ListTool.batch', ['type' => 'select', 'options' => ['del' => __d('baser', '無効')], 'empty' => __d('baser', '一括処理')]) ?>
@@ -30,7 +30,7 @@
 
 
 <table cellpadding="0" cellspacing="0" class="list-table sort-table bca-table-listup" id="ListTable">
-<thead class="bca-table-listup__thead">
+	<thead class="bca-table-listup__thead">
 	<tr class="list-tool">
 		<th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select"><?php // 一括選択 ?>
 			<?php if ($this->BcBaser->isAdminUser()): ?>
@@ -49,10 +49,10 @@
 		<th class="bca-table-listup__thead-th"><?php echo __d('baser', '登録日') ?><br><?php __d('baser', '更新日') ?></th>
 		<th class="bca-table-listup__thead-th"><?php echo __d('baser', 'アクション') ?></th>
 	</tr>
-</thead>
-<tbody>
+	</thead>
+	<tbody>
 	<?php if (!empty($datas)): ?>
-		<?php foreach ($datas as $data): ?>
+		<?php foreach($datas as $data): ?>
 			<?php $this->BcBaser->element('plugins/index_row', ['data' => $data]) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
@@ -60,5 +60,5 @@
 			<td colspan="6"><p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。') ?></p></td>
 		</tr>
 	<?php endif; ?>
-</tbody>
+	</tbody>
 </table>

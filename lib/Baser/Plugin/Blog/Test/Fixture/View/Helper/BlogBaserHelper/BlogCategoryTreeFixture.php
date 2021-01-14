@@ -1,21 +1,23 @@
 <?php
+
 /**
  * BlogCategory Fixture
  */
-class BlogCategoryTreeFixture extends CakeTestFixture {
+class BlogCategoryTreeFixture extends CakeTestFixture
+{
 
-/**
- * Import
- *
- * @var array
- */
+	/**
+	 * Import
+	 *
+	 * @var array
+	 */
 	public $import = ['model' => 'Blog.BlogCategory'];
 
-/**
- * Records
- *
- * @var array
- */
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '1',

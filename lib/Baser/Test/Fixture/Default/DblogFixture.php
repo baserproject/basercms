@@ -1,21 +1,23 @@
 <?php
+
 /**
  * DblogFixture
  */
-class DblogFixture extends BaserTestFixture {
+class DblogFixture extends BaserTestFixture
+{
 
-/**
- * Name of the object
- *
- * @var string
- */
+	/**
+	 * Name of the object
+	 *
+	 * @var string
+	 */
 	public $name = 'Dblog';
-	
-/**
- * Records
- *
- * @var array
- */
+
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [];
 
 }

@@ -1,14 +1,16 @@
 <?php
+
 /**
  * SiteConfigFixture
  */
-class SiteConfigFixture extends BaserTestFixture {
+class SiteConfigFixture extends BaserTestFixture
+{
 
-/**
- * Records
- *
- * @var array
- */
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '1',

@@ -3,7 +3,11 @@
 class BlogPostsSchema extends CakeSchema
 {
 
+	public $name = 'BlogPosts';
+
 	public $file = 'blog_posts.php';
+
+	public $connection = 'default';
 
 	public function before($event = [])
 	{
@@ -12,6 +16,22 @@ class BlogPostsSchema extends CakeSchema
 
 	public function after($event = [])
 	{
+		$db = ConnectionManager::getDataSource($this->connection);
+		if (get_class($db) !== 'BcMysql') {
+			return true;
+		}
+
+		if (isset($event['create'])) {
+			switch($event['create']) {
+				case 'blogposts':
+					$tableName = $db->config['prefix'] . 'blog_posts';
+					$db->query("ALTER TABLE {$tableName} CHANGE content content LONGTEXT");
+					$db->query("ALTER TABLE {$tableName} CHANGE content_draft content_draft LONGTEXT");
+					$db->query("ALTER TABLE {$tableName} CHANGE detail detail LONGTEXT");
+					$db->query("ALTER TABLE {$tableName} CHANGE detail_draft detail_draft LONGTEXT");
+					break;
+			}
+		}
 	}
 
 	public $blog_posts = [

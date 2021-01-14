@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 4.0.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 4.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -44,7 +44,7 @@ $this->BcListTable->setColumnNumber(7);
 		<?php echo $this->BcListTable->dispatchShowHead() ?>
 		<th>
 			<?php echo $this->Paginator->sort('created_date', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . __d('baser', ' 作成日'), 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . __d('baser', ' 作成日')], ['escape' => false, 'class' => 'btn-direction']) ?>
-			<br />
+			<br/>
 			<?php echo $this->Paginator->sort('modified_date', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . __d('baser', ' 更新日'), 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . __d('baser', ' 更新日')], ['escape' => false, 'class' => 'btn-direction']) ?>
 		</th>
 	</tr>
@@ -52,13 +52,14 @@ $this->BcListTable->setColumnNumber(7);
 	<tbody>
 	<?php if (!empty($datas)): ?>
 		<?php $count = 0; ?>
-		<?php foreach ($datas as $data): ?>
+		<?php foreach($datas as $data): ?>
 			<?php $this->BcBaser->element('contents/index_row_table', ['data' => $data, 'count' => $count]) ?>
 			<?php $count++; ?>
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
-			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p></td>
+			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p>
+			</td>
 		</tr>
 	<?php endif; ?>
 	</tbody>

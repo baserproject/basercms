@@ -1,15 +1,17 @@
 <?php
+
 /**
  * BlogPostFixture
  *
  */
-class BlogPostBlogBaserHelperFixture extends BaserTestFixture {
-/**
- * Name of the object
- *
- * @var string
- */
-  public $name = 'BlogPost';
+class BlogPostBlogBaserHelperFixture extends BaserTestFixture
+{
+	/**
+	 * Name of the object
+	 *
+	 * @var string
+	 */
+	public $name = 'BlogPost';
 
 /**
  * Records

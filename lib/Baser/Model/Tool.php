@@ -1,45 +1,49 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Model
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Model
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('CakeSchema', 'Model');
 
 /**
+ * Class Tool
+ *
  * ツールモデル
  *
  * @package Baser.Model
  */
-class Tool extends AppModel {
+class Tool extends AppModel
+{
 
-/**
- * クラス名
- *
- * @var string
- */
+	/**
+	 * クラス名
+	 *
+	 * @var string
+	 */
 	public $name = 'Tool';
 
-/**
- * テーブル
- * 
- * @var string
- */
+	/**
+	 * テーブル
+	 *
+	 * @var string
+	 */
 	public $useTable = false;
 
-/**
- * コントロールソースを取得する
- *
- * @param string フィールド名
- * @return array コントロールソース
- */
-	public function getControlSource($field) {
+	/**
+	 * コントロールソースを取得する
+	 *
+	 * @param string フィールド名
+	 * @return array コントロールソース
+	 */
+	public function getControlSource($field)
+	{
 		// スキーマ用モデルリスト
 		$controlSources['connection'] = ['core' => __d('baser', 'baser（コア）'), 'plugin' => __d('baser', 'plugin（プラグイン）')];
 		$controlSources = $this->getListModels($field);
@@ -50,13 +54,14 @@ class Tool extends AppModel {
 		}
 	}
 
-/**
- * データソースを指定してモデルリストを取得する
- * 
- * @param string $configKeyName データソース名
- * @return array
- */
-	public function getListModels($type = 'core') {
+	/**
+	 * データソースを指定してモデルリストを取得する
+	 *
+	 * @param string $configKeyName データソース名
+	 * @return array
+	 */
+	public function getListModels($type = 'core')
+	{
 		$sources = [];
 		$readedTableList = getTableList();
 		if ($type === 'core') {
@@ -77,14 +82,15 @@ class Tool extends AppModel {
 		return $sources;
 	}
 
-/**
- * スキーマを書き出す
- * 
- * @param array $data
- * @param string $path スキーマファイルの生成場所
- * @return boolean
- */
-	public function writeSchema($data, $path) {
+	/**
+	 * スキーマを書き出す
+	 *
+	 * @param array $data
+	 * @param string $path スキーマファイルの生成場所
+	 * @return boolean
+	 */
+	public function writeSchema($data, $path)
+	{
 		if (isset($data['Tool'])) {
 			$data = $data['Tool'];
 		}
@@ -107,14 +113,15 @@ class Tool extends AppModel {
 		return $result;
 	}
 
-/**
- * スキーマファイルを読み込む
- * 
- * @param array $data
- * @param string $tmpPath 
- * @return boolean
- */
-	public function loadSchemaFile($data, $tmpPath) {
+	/**
+	 * スキーマファイルを読み込む
+	 *
+	 * @param array $data
+	 * @param string $tmpPath
+	 * @return boolean
+	 */
+	public function loadSchemaFile($data, $tmpPath)
+	{
 		$path = $tmpPath . $data['Tool']['schema_file']['name'];
 		if (move_uploaded_file($data['Tool']['schema_file']['tmp_name'], $path)) {
 			include $path;
@@ -131,25 +138,26 @@ class Tool extends AppModel {
 		}
 	}
 
-/**
- * スキーマを書き出す
- *
- * @param string $field
- * @param array $values
- * @param string $path スキーマファイルの生成場所
- * @return boolean
- */
-	protected function _writeSchema($field, $values, $path) {
+	/**
+	 * スキーマを書き出す
+	 *
+	 * @param string $field
+	 * @param array $values
+	 * @param string $path スキーマファイルの生成場所
+	 * @return boolean
+	 */
+	protected function _writeSchema($field, $values, $path)
+	{
 		$db = ConnectionManager::getDataSource('default');
 		$prefix = $db->config['prefix'];
 		$tableList = $this->getControlSource($field);
 		$modelList = [];
-		foreach ($tableList as $key => $table) {
+		foreach($tableList as $key => $table) {
 			$model = Inflector::camelize(Inflector::singularize(str_replace($prefix, '', $table)));
 			$modelList[$key] = $model;
 		}
 		$result = true;
-		foreach ($values as $value) {
+		foreach($values as $value) {
 			if (!$db->writeSchema(['model' => $modelList[$value], 'path' => $path])) {
 				$result = false;
 			} else {

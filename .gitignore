@@ -42,6 +42,7 @@ node_modules/
 /docker-compose.yml
 /Dockerfile
 /docker/phpmyadmin/
+/docker/pgadmin/
 /docker/volumes/
 /docker/docker-compose.yml
 /volumes/*

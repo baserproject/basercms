@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -43,16 +43,19 @@ $this->BcBaser->js('admin/permissions/form', false);
 			</tr>
 		<?php endif; ?>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('Permission.name', __d('baser', 'ルール名')) ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('Permission.name', __d('baser', 'ルール名')) ?>&nbsp;<span
+					class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('Permission.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<?php echo $this->Form->error('Permission.name') ?>
-				<div id="helptextName" class="helptext"> <?php echo __d('baser', 'ルール名には日本語が利用できます。特定しやすいわかりやすい名称を入力してください。')?> </div>
+				<div id="helptextName"
+					 class="helptext"> <?php echo __d('baser', 'ルール名には日本語が利用できます。特定しやすいわかりやすい名称を入力してください。') ?> </div>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('Permission.url', __d('baser', 'URL設定')) ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('Permission.url', __d('baser', 'URL設定')) ?>&nbsp;<span
+					class="required">*</span></th>
 			<td class="col-input">
 				<strong>/<?php echo $permissionAuthPrefix ?>/</strong>
 				<?php echo $this->BcForm->input('Permission.url', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
@@ -60,9 +63,9 @@ $this->BcBaser->js('admin/permissions/form', false);
 				<?php echo $this->Form->error('Permission.url') ?>
 				<div id="helptextUrl" class="helptext">
 					<ul>
-						<li><?php echo __d('baser', 'baserCMSの設置URLを除いたスラッシュから始まるURLを入力してください。<br />（例）/admin/users/index')?></li>
-						<li><?php echo __d('baser', '管理画面など認証がかかっているURLしか登録できません。')?></li>
-						<li><?php echo __d('baser', '特定のフォルダ配下に対しアクセスできないようにする場合などにはワイルドカード（*）を利用します。<br />（例）ユーザー管理内のURL全てアクセスさせない場合： /admin/users* ')?></li>
+						<li><?php echo __d('baser', 'baserCMSの設置URLを除いたスラッシュから始まるURLを入力してください。<br />（例）/admin/users/index') ?></li>
+						<li><?php echo __d('baser', '管理画面など認証がかかっているURLしか登録できません。') ?></li>
+						<li><?php echo __d('baser', '特定のフォルダ配下に対しアクセスできないようにする場合などにはワイルドカード（*）を利用します。<br />（例）ユーザー管理内のURL全てアクセスさせない場合： /admin/users* ') ?></li>
 					</ul>
 				</div>
 			</td>

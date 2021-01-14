@@ -1,40 +1,45 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Controller.Component
- * @since			baserCMS v 3.0.0-beta
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.Controller.Component
+ * @since           baserCMS v 3.0.0-beta
+ * @license         https://basercms.net/license/index.html
  */
+
 App::uses('BcGmapsComponent', 'Controller/Component');
 App::uses('Controller', 'Controller');
 
-
 /**
- * 偽コントローラ
+ * Class BcGmapsTestController
  *
- * @package       Cake.Test.Case.Controller.Component
+ * @package Baser.Test.Case.Controller.Component
  */
-class BcGmapsTestController extends Controller {
+class BcGmapsTestController extends Controller
+{
 
 	public $components = ['BcGmaps'];
 
 }
 
 /**
- * BcGmapsComponentのテスト
+ * Class BcGmapsComponentTest
+ *
+ * @package Baser.Test.Case.Controller.Component
  * @property BcGmapsComponent $BcGmaps
  */
-class BcGmapsComponentTest extends BaserTestCase {
+class BcGmapsComponentTest extends BaserTestCase
+{
 
 	public $fixtures = [];
 
 	public $components = ['BcGmaps'];
 
-	public function setUp() {
+	public function setUp()
+	{
 		parent::setUp();
 
 		// コンポーネントと偽のテストコントローラをセットアップする
@@ -54,20 +59,22 @@ class BcGmapsComponentTest extends BaserTestCase {
 		Router::connect('/:controller/:action/*');
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		parent::tearDown();
 		unset($this->Controller);
 		unset($this->BcGmaps);
 	}
 
-	public function test_connect() {
+	public function test_connect()
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
-/**
- * getInfoLocation
- * 2018/05/15 ryuring TravisCI環境にて、タイミングにより、データを取得できず処理に失敗するので一旦コメントアウト
- * @todo 処理内容を変える等の検討が必要
- */
+	/**
+	 * getInfoLocation
+	 * 2018/05/15 ryuring TravisCI環境にて、タイミングにより、データを取得できず処理に失敗するので一旦コメントアウト
+	 * @todo 処理内容を変える等の検討が必要
+	 */
 //	public function testGetInfoLocation() {
 //		$this->BcGmaps->getInfoLocation('日本');
 //		$lat = round($this->BcGmaps->getLatitude(), 1);

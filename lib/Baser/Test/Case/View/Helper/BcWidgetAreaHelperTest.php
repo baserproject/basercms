@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Test.Case.View.Helper
- * @since			baserCMS v 3.0.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.View.Helper
+ * @since           baserCMS v 3.0.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('View', 'View');
@@ -20,38 +20,42 @@ App::uses('BcWidgetAreaHelper', 'View/Helper');
  * @property BcTextHelper $Helper
  * @property BcWidgetAreaHelper $BcWidgetArea
  */
-class BcWidgetAreaHelperTest extends BaserTestCase {
+class BcWidgetAreaHelperTest extends BaserTestCase
+{
 
-/**
- * Fixtures
- * @var array
- */
+	/**
+	 * Fixtures
+	 * @var array
+	 */
 	public $fixtures = [
 		'baser.Default.WidgetArea',
 	];
 
-	public function setUp() {
+	public function setUp()
+	{
 		parent::setUp();
 		$View = new View();
 		$this->BcWidgetArea = new BcWidgetAreaHelper($View);
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		unset($this->BcWidgetArea);
 		parent::tearDown();
 	}
 
-/**
- * ウィジェットエリアを表示する
- *
- * @param $no ウィジェットエリアNO
- * @param array $options オプション
- * @param string $expected 期待値
- * @dataProvider showDataProvider
- *
- * MEMO: $pathがわからないため保留
- */
-	public function testShow($fileName, $no, $expected) {
+	/**
+	 * ウィジェットエリアを表示する
+	 *
+	 * @param $no ウィジェットエリアNO
+	 * @param array $options オプション
+	 * @param string $expected 期待値
+	 * @dataProvider showDataProvider
+	 *
+	 * MEMO: $pathがわからないため保留
+	 */
+	public function testShow($fileName, $no, $expected)
+	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$path = APP . 'Elements/widgets/' . $fileName . '.ctp';
 		$fh = fopen($path, 'w');
@@ -62,8 +66,8 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
 		//エラーでファイルが残留するため,tryで確実に削除を実行
 		try {
 			$this->BcWidgetArea->show($no);
-		}catch (Exception $e) {
-			echo 'error: ',  $e->getMessage(), "\n";
+		} catch (Exception $e) {
+			echo 'error: ', $e->getMessage(), "\n";
 		}
 		$result = ob_get_clean();
 		unlink($path);
@@ -72,7 +76,8 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 	}
 
-	public function showDataProvider() {
+	public function showDataProvider()
+	{
 		return [
 			['test', 1, ''],
 			['test', 2, '']

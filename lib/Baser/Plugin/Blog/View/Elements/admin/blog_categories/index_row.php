@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -24,7 +24,7 @@ if (isset($user['user_group_id'])) {
 	<td class="row-tools">
 		<?php if ($this->BcBaser->isAdminUser()): ?>
 			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['BlogCategory']['id'], ['type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['BlogCategory']['id']]) ?>
-		<?php endif ?>		
+		<?php endif ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', ['alt' => __d('baser', '確認'), 'class' => 'btn']), $this->Blog->getCategoryUrl($data['BlogCategory']['id']), ['title' => __d('baser', '確認'), 'target' => '_blank']) ?>
 		<?php if (in_array($data['BlogCategory']['owner_id'], $allowOwners) || (isset($user['user_group_id']) && $user['user_group_id'] == Configure::read('BcApp.adminGroupId'))): ?>
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => __d('baser', '編集'), 'class' => 'btn']), ['action' => 'edit', $blogContent['BlogContent']['id'], $data['BlogCategory']['id']], ['title' => __d('baser', '編集')]) ?>
@@ -39,12 +39,12 @@ if (isset($user['user_group_id'])) {
 			<?php echo $data['BlogCategory']['name'] ?>
 		<?php endif ?>
 		<?php if ($this->BcBaser->siteConfig['category_permission']): ?>
-			<br />
+			<br/>
 			<?php echo $this->BcText->arrayValue($data['BlogCategory']['owner_id'], $owners) ?>
 		<?php endif ?>
 	</td>
 	<td><?php echo html_entity_decode(h($data['BlogCategory']['title'])) ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
-	<td><?php echo $this->BcTime->format('Y-m-d', $data['BlogCategory']['created']); ?><br />
+	<td><?php echo $this->BcTime->format('Y-m-d', $data['BlogCategory']['created']); ?><br/>
 		<?php echo $this->BcTime->format('Y-m-d', $data['BlogCategory']['modified']); ?></td>
 </tr>

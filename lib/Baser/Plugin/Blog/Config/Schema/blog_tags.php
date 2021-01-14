@@ -2,7 +2,8 @@
 
 /* BlogTags schema generated on: 2011-04-24 03:04:44 : 1303583084 */
 
-class BlogTagsSchema extends CakeSchema {
+class BlogTagsSchema extends CakeSchema
+{
 
 	public $name = 'BlogTags';
 
@@ -10,11 +11,13 @@ class BlogTagsSchema extends CakeSchema {
 
 	public $connection = 'default';
 
-	public function before($event = []) {
+	public function before($event = [])
+	{
 		return true;
 	}
 
-	public function after($event = []) {
+	public function after($event = [])
+	{
 	}
 
 	public $blog_tags = [

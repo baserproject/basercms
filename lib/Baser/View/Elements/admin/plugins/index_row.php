@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -24,7 +24,8 @@ $class = ' class="' . implode(' ', $classies) . '"';
 <tr<?php echo $class; ?>>
 	<td class="row-tools">
 		<?php if ($sortmode): ?>
-			<span class="sort-handle"><?php $this->BcBaser->img('admin/sort.png', ['alt' => __d('baser', '並び替え'), 'class' => 'sort-handle']) ?></span>
+			<span
+				class="sort-handle"><?php $this->BcBaser->img('admin/sort.png', ['alt' => __d('baser', '並び替え'), 'class' => 'sort-handle']) ?></span>
 			<?php echo $this->BcForm->input('Sort.id' . $data['Plugin']['id'], ['type' => 'hidden', 'class' => 'id', 'value' => $data['Plugin']['id']]) ?>
 		<?php endif ?>
 		<?php if ($this->BcBaser->isAdminUser()): ?>
@@ -49,9 +50,9 @@ $class = ' class="' . implode(' ', $classies) . '"';
 	</td>
 	<td>
 		<?php if ($data['Plugin']['old_version']): ?>
-			<div class="annotation-text"><small><?php echo __d('baser', '新しいバージョンにアップデートしてください')?></small></div>
+			<div class="annotation-text"><small><?php echo __d('baser', '新しいバージョンにアップデートしてください') ?></small></div>
 		<?php elseif ($data['Plugin']['update']): ?>
-			<div class="annotation-text"><small><?php echo __d('baser', 'アップデートを完了させてください')?></small></div>
+			<div class="annotation-text"><small><?php echo __d('baser', 'アップデートを完了させてください') ?></small></div>
 		<?php endif ?>
 		<?php echo $data['Plugin']['name'] ?><?php if ($data['Plugin']['title']): ?>（<?php echo $data['Plugin']['title'] ?>）<?php endif ?>
 	</td>
@@ -59,7 +60,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
 	<td><?php echo $data['Plugin']['description'] ?></td>
 	<td><?php $this->BcBaser->link($data['Plugin']['author'], $data['Plugin']['url'], ['target' => '_blank']) ?></td>
 	<td style="width:10%;white-space: nowrap">
-		<?php echo $this->BcTime->format('Y-m-d', $data['Plugin']['created']) ?><br />
+		<?php echo $this->BcTime->format('Y-m-d', $data['Plugin']['created']) ?><br/>
 		<?php echo $this->BcTime->format('Y-m-d', $data['Plugin']['modified']) ?>
 	</td>
 </tr>

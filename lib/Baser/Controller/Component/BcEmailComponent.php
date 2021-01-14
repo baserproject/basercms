@@ -1,43 +1,47 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Controller.Component
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Controller.Component
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('EmailComponent', 'Controller/Component');
 
 /**
+ * Class BcEmailComponent
+ *
  * Email 拡張モデル
  *
  * @package Baser.Controller.Component
  */
-class BcEmailComponent extends EmailComponent {
+class BcEmailComponent extends EmailComponent
+{
 
-/**
- * プラグイン名
- * CUSTOMIZE ADD 2011/05/07 ryuring
- * プラグインのテンプレートを指定できるようにした
- * 
- * @var string
- */
+	/**
+	 * プラグイン名
+	 * CUSTOMIZE ADD 2011/05/07 ryuring
+	 * プラグインのテンプレートを指定できるようにした
+	 *
+	 * @var string
+	 */
 	public $plugin = null;
 
-/**
- * Send an email using the specified content, template and layout
- *
- * @param	mixed	$content Either an array of text lines, or a string with contents
- * @param	string	$template Template to use when sending email
- * @param	string	$layout Layout to use to enclose email body
- * @return	boolean Success
- * @access	public
- */
-	public function send($content = null, $template = null, $layout = null) {
+	/**
+	 * Send an email using the specified content, template and layout
+	 *
+	 * @param mixed $content Either an array of text lines, or a string with contents
+	 * @param string $template Template to use when sending email
+	 * @param string $layout Layout to use to enclose email body
+	 * @return    boolean Success
+	 * @access    public
+	 */
+	public function send($content = null, $template = null, $layout = null)
+	{
 		$this->__createHeader();
 
 		if ($template) {
@@ -65,7 +69,7 @@ class BcEmailComponent extends EmailComponent {
 
 		$message[] = '';
 
-		foreach ($message as $key => $line) {
+		foreach($message as $key => $line) {
 			// 文字コード変換
 			$enc = mb_detect_encoding($line);
 			// 半角カタカナを全角カタカナに変換
@@ -99,13 +103,14 @@ class BcEmailComponent extends EmailComponent {
 		return $sent;
 	}
 
-/**
- * Wrap the message using EmailComponent::$lineLength
- *
- * @param 	string $message Message to wrap
- * @return 	string Wrapped message
- */
-	private function __wrap($message) {
+	/**
+	 * Wrap the message using EmailComponent::$lineLength
+	 *
+	 * @param string $message Message to wrap
+	 * @return    string Wrapped message
+	 */
+	private function __wrap($message)
+	{
 		$message = $this->__strip($message);
 
 		// MODIFIED 2008/6/22 ryuring
@@ -123,19 +128,20 @@ class BcEmailComponent extends EmailComponent {
 		return $this->___wrap($lines);
 	}
 
-/**
- * テンプレートを整形後に再度ラップする必要があるのでラップ処理の部分だけを分離
- * 
- * @param array $lines
- * @return array
- */
-	private function ___wrap($lines) {
+	/**
+	 * テンプレートを整形後に再度ラップする必要があるのでラップ処理の部分だけを分離
+	 *
+	 * @param array $lines
+	 * @return array
+	 */
+	private function ___wrap($lines)
+	{
 		$formatted = [];
 		if ($this->_lineLength !== null) {
 			trigger_error('_lineLength cannot be accessed please use lineLength', E_USER_WARNING);
 			$this->lineLength = $this->_lineLength;
 		}
-		foreach ($lines as $line) {
+		foreach($lines as $line) {
 			if (substr($line, 0, 1) == '.') {
 				$line = '.' . $line;
 			}
@@ -146,14 +152,15 @@ class BcEmailComponent extends EmailComponent {
 		return $formatted;
 	}
 
-/**
- * Encode the specified string using the current charset
- *
- * @param 	string	$subject String to encode
- * @return 	string	Encoded string
- * @access	private
- */
-	private function __encode($subject) {
+	/**
+	 * Encode the specified string using the current charset
+	 *
+	 * @param string $subject String to encode
+	 * @return    string    Encoded string
+	 * @access    private
+	 */
+	private function __encode($subject)
+	{
 		$subject = $this->__strip($subject);
 
 		if (strtolower($this->charset) !== 'iso-8859-15') {
@@ -184,36 +191,37 @@ class BcEmailComponent extends EmailComponent {
 		return $subject;
 	}
 
-/**
- * マルチバイト文字を考慮したfolding(折り畳み)処理
- *
- * @param mixed $str foldingを行う文字列or文字列の配列
- *                   文字列に改行が含まれている場合は改行位置でも分割される
- * @param integer $width 一行の幅(バイト数)。4以上でなければならない
- * @param string $encoding $strの文字エンコーディング
- *                         省略した場合は内部文字エンコーディングを使用する
- * @return array 一行ずつに分けた文字列の配列
- *
- * NOTE: いわゆる半角/全角といった見た目ではなく、
- *       バイト数によって処理が行われるので、文字エンコーディングによって
- *       結果が変わる可能性がある。
- *
- *       例えば半角カナはShift-JISでは1バイトだが、EUC-JPでは2バイトなので、
- *       $width=10の場合Shift-JISなら10文字だが、EUC-JPでは5文字になる。
- *
- *       全角/半角といった見た目で処理をするにはmb_strwidth()を利用した
- *       実装が必要となる。
- *
- * TODO: 日本語禁則処理(Japanese Hyphenation)
- *       行頭禁則文字は濁点/半濁点の応用でいけるので
- *       行末禁則文字の処理を加えれば対応できそう
- *
- *       ……と思ったけど、禁則文字が$widthを超える分だけ並んでたら
- *       どうすればいいんだろう
- *       禁則処理をした結果、桁あふれを起こす場合は禁則処理を無視して
- *       強制的に$widthで改行する、とか？
- */
-	public function mbFold($str, $width, $encoding = null) {
+	/**
+	 * マルチバイト文字を考慮したfolding(折り畳み)処理
+	 *
+	 * @param mixed $str foldingを行う文字列or文字列の配列
+	 *                   文字列に改行が含まれている場合は改行位置でも分割される
+	 * @param integer $width 一行の幅(バイト数)。4以上でなければならない
+	 * @param string $encoding $strの文字エンコーディング
+	 *                         省略した場合は内部文字エンコーディングを使用する
+	 * @return array 一行ずつに分けた文字列の配列
+	 *
+	 * NOTE: いわゆる半角/全角といった見た目ではなく、
+	 *       バイト数によって処理が行われるので、文字エンコーディングによって
+	 *       結果が変わる可能性がある。
+	 *
+	 *       例えば半角カナはShift-JISでは1バイトだが、EUC-JPでは2バイトなので、
+	 *       $width=10の場合Shift-JISなら10文字だが、EUC-JPでは5文字になる。
+	 *
+	 *       全角/半角といった見た目で処理をするにはmb_strwidth()を利用した
+	 *       実装が必要となる。
+	 *
+	 * TODO: 日本語禁則処理(Japanese Hyphenation)
+	 *       行頭禁則文字は濁点/半濁点の応用でいけるので
+	 *       行末禁則文字の処理を加えれば対応できそう
+	 *
+	 *       ……と思ったけど、禁則文字が$widthを超える分だけ並んでたら
+	 *       どうすればいいんだろう
+	 *       禁則処理をした結果、桁あふれを起こす場合は禁則処理を無視して
+	 *       強制的に$widthで改行する、とか？
+	 */
+	public function mbFold($str, $width, $encoding = null)
+	{
 		assert('$width >= 4');
 
 		if (!isset($str)) {
@@ -226,7 +234,7 @@ class BcEmailComponent extends EmailComponent {
 
 		// 元々の配列も文字列中の改行もとにかく展開してひとつの配列にする
 		$strings = [];
-		foreach ((array)$str as $s) {
+		foreach((array)$str as $s) {
 			// NOTE: 何故かmb_split()だと改行でうまく分割できない
 			//       どうせメジャーなエンコーディングなら制御コードは
 			//       leading byteにもtrailing byteにもかぶらないので
@@ -238,11 +246,11 @@ class BcEmailComponent extends EmailComponent {
 		}
 
 		$lines = [];
-		foreach ($strings as $string) {
+		foreach($strings as $string) {
 			// 1文字ずつに分解して足していって、
 			// バイト数が$widthを超えたら次の行に回す
 			$len = mb_strlen($string, $encoding);
-			for ($i = 0, $line = ''; $i < $len; $i++) {
+			for($i = 0, $line = ''; $i < $len; $i++) {
 				$char = mb_substr($string, $i, 1, $encoding);
 
 				// 濁点や半濁点が続いていた場合のいい加減な禁則処理
@@ -252,7 +260,7 @@ class BcEmailComponent extends EmailComponent {
 					$next = mb_substr($string, $i + 1, 1, $encoding);
 					$uc = mb_convert_encoding($next, 'UCS-2', $encoding);
 					if (in_array($uc, ["\x30\x99", "\x30\x9B", "\x30\x9C",
-							"\xFF\x9E", "\xFF\x9F"])) {
+						"\xFF\x9E", "\xFF\x9F"])) {
 						$char .= $next;
 						$i++;
 					}
@@ -265,19 +273,20 @@ class BcEmailComponent extends EmailComponent {
 					$line .= $char;
 				}
 			}
-			$lines[] = $line;	// 端数or空行
+			$lines[] = $line;    // 端数or空行
 		}
 
 		return $lines;
 	}
 
-/**
- * Format a string as an email address
- *
- * @param string $string String representing an email address
- * @return string Email address suitable for email headers or smtp pipe
- */
-	private function __formatAddress($string, $smtp = false) {
+	/**
+	 * Format a string as an email address
+	 *
+	 * @param string $string String representing an email address
+	 * @return string Email address suitable for email headers or smtp pipe
+	 */
+	private function __formatAddress($string, $smtp = false)
+	{
 		$hasAlias = preg_match('/((.*)\s)?<(.+)>/', $string, $matches);
 		if ($smtp && $hasAlias) {
 			return $this->__strip('<' . $matches[3] . '>');
@@ -295,13 +304,14 @@ class BcEmailComponent extends EmailComponent {
 		return $this->__strip($string);
 	}
 
-/**
- * Render the contents using the current layout and template.
- *
- * @param string $content Content to render
- * @return array Email ready to be sent
- */
-	private function __renderTemplate($content) {
+	/**
+	 * Render the contents using the current layout and template.
+	 *
+	 * @param string $content Content to render
+	 * @return array Email ready to be sent
+	 */
+	private function __renderTemplate($content)
+	{
 		$viewClass = $this->Controller->viewClass;
 
 		if ($viewClass != 'View') {

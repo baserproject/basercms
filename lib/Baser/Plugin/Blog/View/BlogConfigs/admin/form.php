@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -21,8 +21,8 @@
 <!-- title -->
 <h2><?php $this->BcBaser->contentsTitle() ?></h2>
 
-<h3><?php echo __d('baser', 'WordPressデータの取り込み')?></h3>
-<p><?php echo __d('baser', 'WordPressから出力したXMLデータを取込みます。（<a href="http://ja.wordpress.org/" target="_blank">WordPress</a> 2.8.4 のみ動作確認済）')?></p>
+<h3><?php echo __d('baser', 'WordPressデータの取り込み') ?></h3>
+<p><?php echo __d('baser', 'WordPressから出力したXMLデータを取込みます。（<a href="http://ja.wordpress.org/" target="_blank">WordPress</a> 2.8.4 のみ動作確認済）') ?></p>
 
 <div class="align-center">
 	<?php echo $this->BcForm->create('BlogPost', ['url' => ['action' => 'import'], 'enctype' => 'multipart/form-data']) ?>

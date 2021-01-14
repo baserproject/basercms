@@ -1,31 +1,35 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Model.Datasource.Database
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Model.Datasource.Database
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('Postgres', 'Model/Datasource/Database');
 
 /**
+ * Class BcPostgres
+ *
  * PostgreSQL DBO拡張
  *
  * @package Baser.Model.Datasource.Database
  */
-class BcPostgres extends Postgres {
+class BcPostgres extends Postgres
+{
 
-/**
- * Returns an array of the fields in given table name.
- *
- * @param Model|string $model Name of database table to inspect
- * @return array Fields in table. Keys are name and type
- */
-	public function describe($model) {
+	/**
+	 * Returns an array of the fields in given table name.
+	 *
+	 * @param Model|string $model Name of database table to inspect
+	 * @return array Fields in table. Keys are name and type
+	 */
+	public function describe($model)
+	{
 		$table = $this->fullTableName($model, false, false);
 		// CUSTOMIZE MODIFY 2014/03/28 ryuring
 		// 関連シーケンスを正常に取得できない仕様対策
@@ -63,8 +67,8 @@ class BcPostgres extends Postgres {
 			// ---
 			$cols = $this->_execute(
 				"SELECT DISTINCT table_schema AS schema, column_name AS name, data_type AS type, udt_name AS udt, is_nullable AS null," .
-					"column_default AS default, ordinal_position AS position, character_maximum_length AS char_length," .
-					"character_octet_length AS oct_length FROM information_schema.columns " .
+				"column_default AS default, ordinal_position AS position, character_maximum_length AS char_length," .
+				"character_octet_length AS oct_length FROM information_schema.columns " .
 				"WHERE table_name = ? AND table_schema = ?  ORDER BY position",
 				[$table, $this->config['schema']]
 			);
@@ -72,17 +76,17 @@ class BcPostgres extends Postgres {
 
 			// @codingStandardsIgnoreStart
 			// Postgres columns don't match the coding standards.
-			foreach ($cols as $c) {
+			foreach($cols as $c) {
 				$type = $c->type;
 				if (!empty($c->oct_length) && $c->char_length === null) {
 					if ($c->type === 'character varying') {
 						$length = null;
 						$type = 'text';
-					// CUSTOMIZE ADD 2013/08/16 ryuring
-					// >>>
+						// CUSTOMIZE ADD 2013/08/16 ryuring
+						// >>>
 					} elseif ($c->type == 'text') {
 						$length = null;
-					// <<<
+						// <<<
 					} elseif ($c->type === 'uuid') {
 						$type = 'uuid';
 						$length = 36;
@@ -102,16 +106,16 @@ class BcPostgres extends Postgres {
 				if (empty($length)) {
 					$length = null;
 				}
-				$fields[$c->name] = array(
+				$fields[$c->name] = [
 					'type' => $this->column($type),
-					'null' => ($c->null === 'NO' ? false : true),
+					'null' => ($c->null === 'NO'? false : true),
 					'default' => preg_replace(
 						"/^'(.*)'$/",
 						"$1",
 						preg_replace('/::[\w\s]+/', '', $c->default)
 					),
 					'length' => $length,
-				);
+				];
 				// CUSTOMIZE ADD 2013/08/16 ryuring
 				// >>>
 				if (!$fields[$c->name]['length'] && $fields[$c->name]['type'] == 'integer') {
@@ -171,7 +175,7 @@ class BcPostgres extends Postgres {
 		// >>>
 		unset($fields['sequence']);
 		// <<<
-		
+
 		if (isset($model->sequence)) {
 			$this->_sequenceMap[$table][$model->primaryKey] = $model->sequence;
 		}
@@ -182,13 +186,14 @@ class BcPostgres extends Postgres {
 		return $fields;
 	}
 
-/**
- * Gets the length of a database-native column description, or null if no length
- *
- * @param string $real Real database-layer column type (i.e. "varchar(255)")
- * @return integer An integer representing the length of the column
- */
-	public function length($real) {
+	/**
+	 * Gets the length of a database-native column description, or null if no length
+	 *
+	 * @param string $real Real database-layer column type (i.e. "varchar(255)")
+	 * @return integer An integer representing the length of the column
+	 */
+	public function length($real)
+	{
 		// >>> CUSTOMIZE ADD 2012/04/23 ryuring
 		if (preg_match('/^int([0-9]+)$/', $real, $maches)) {
 			return intval($maches[1]);
@@ -204,17 +209,18 @@ class BcPostgres extends Postgres {
 		return parent::length($real);
 	}
 
-/**
- * {@inheritDoc}
- */
-	public function value($data, $column = null, $null = true) {
+	/**
+	 * {@inheritDoc}
+	 */
+	public function value($data, $column = null, $null = true)
+	{
 		$value = parent::value($data, $column, $null);
 		if ($column === 'uuid' && is_scalar($data) && $data === '') {
 			return 'NULL';
 		}
 		// CUSTOMIZE ADD 2014/07/02 ryuring
 		// >>>
-		switch ($column) {
+		switch($column) {
 			case 'date':
 			case 'datetime':
 			case 'timestamp':
@@ -243,7 +249,8 @@ class BcPostgres extends Postgres {
 	 * @param string $targetName
 	 * @return string
 	 */
-	public function buildRenameTable($sourceName, $targetName) {
+	public function buildRenameTable($sourceName, $targetName)
+	{
 		return "ALTER TABLE " . $sourceName . " RENAME TO " . $targetName;
 	}
 
@@ -253,7 +260,8 @@ class BcPostgres extends Postgres {
 	 * @param array $options [ table / new / old  ]
 	 * @return boolean
 	 */
-	public function renameColumn($options) {
+	public function renameColumn($options)
+	{
 		extract($options);
 
 		if (!isset($table) || !isset($new) || !isset($old)) {
@@ -267,14 +275,15 @@ class BcPostgres extends Postgres {
 // <<<
 // CUSTOMIZE ADD 2014/07/02 ryuring
 // >>>
-/**
- * DboPostgresのdescribeメソッドを呼び出さずにキャッシュを読み込む為に利用
- * Datasource::describe と同じ（一部ハック）
- * 
- * @param Model|string $model
- * @return array Array of Metadata for the $model
- */
-	private function __describe($model) {
+	/**
+	 * DboPostgresのdescribeメソッドを呼び出さずにキャッシュを読み込む為に利用
+	 * Datasource::describe と同じ（一部ハック）
+	 *
+	 * @param Model|string $model
+	 * @return array Array of Metadata for the $model
+	 */
+	private function __describe($model)
+	{
 		if ($this->cacheSources === false) {
 			return null;
 		}
@@ -293,7 +302,7 @@ class BcPostgres extends Postgres {
 			// CUSTOMIZE ADD 2014/03/28 ryuring
 			// 関連シーケンスを正常に取得できない仕様対策
 			// >>>
-			if(!empty($cache['sequence'][$table])) {
+			if (!empty($cache['sequence'][$table])) {
 				$this->_sequenceMap[$table] = $cache['sequence'][$table];
 			}
 			unset($cache['sequence']);
@@ -303,16 +312,17 @@ class BcPostgres extends Postgres {
 		}
 		return null;
 	}
-	
-/**
- * シーケンスを更新する
- */
-	public function updateSequence() {
+
+	/**
+	 * シーケンスを更新する
+	 */
+	public function updateSequence()
+	{
 		$tables = $this->listSources();
 		$result = true;
 		foreach($tables as $table) {
 			$sql = 'select setval(\'' . $this->getSequence($table) . '\', (select max(id) from ' . $table . '));';
-			if(!$this->execute($sql)) {
+			if (!$this->execute($sql)) {
 				$result = false;
 			}
 		}

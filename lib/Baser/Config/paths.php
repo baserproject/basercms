@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Config
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Config
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -87,7 +87,7 @@ define('BASER_CONSOLES', BASER . 'Console' . DS);
  */
 define('BASER_WEBROOT', BASER . 'webroot' . DS);
 /**
- * Baserテーマ 
+ * Baserテーマ
  */
 if (is_dir(WWW_ROOT . 'theme')) {
 	define('BASER_THEMES', WWW_ROOT . 'theme' . DS);

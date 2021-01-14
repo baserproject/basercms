@@ -3,11 +3,11 @@
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			https://basercms.net baserCMS Project
- * @package			Baser.View
- * @since			baserCMS v 0.1.0
- * @license			https://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -43,16 +43,21 @@ $this->BcBaser->js('admin/permissions/form', false);
 			</tr>
 		<?php endif; ?>
 		<tr>
-			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Permission.name', __d('baser', 'ルール名')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
+			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Permission.name', __d('baser', 'ルール名')) ?>
+				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+			</th>
 			<td class="col-input bca-form-table__input">
 				<?php echo $this->BcForm->input('Permission.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<?php echo $this->Form->error('Permission.name') ?>
-				<div id="helptextName" class="helptext"><?php echo __d('baser', 'ルール名には日本語が利用できます。特定しやすいわかりやすい名称を入力してください。') ?></div>
+				<div id="helptextName"
+					 class="helptext"><?php echo __d('baser', 'ルール名には日本語が利用できます。特定しやすいわかりやすい名称を入力してください。') ?></div>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Permission.url', __d('baser', 'URL設定')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
+			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Permission.url', __d('baser', 'URL設定')) ?>
+				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+			</th>
 			<td class="col-input bca-form-table__input">
 				<strong>/<?php echo $permissionAuthPrefix ?>/</strong>
 				<?php echo $this->BcForm->input('Permission.url', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
@@ -90,10 +95,10 @@ $this->BcBaser->js('admin/permissions/form', false);
 <div class="submit bca-actions">
 	<div class="bca-actions__main">
 		<?php echo $this->BcForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn bca-actions__item', 'id' => 'BtnSave',
-      'data-bca-btn-type' => 'save',
-      'data-bca-btn-size' => 'lg',
-      'data-bca-btn-width' => 'lg',
-      ]) ?>
+			'data-bca-btn-type' => 'save',
+			'data-bca-btn-size' => 'lg',
+			'data-bca-btn-width' => 'lg',
+		]) ?>
 	</div>
 	<?php if ($this->request->action == 'admin_edit'): ?>
 		<div class="bca-actions__sub">

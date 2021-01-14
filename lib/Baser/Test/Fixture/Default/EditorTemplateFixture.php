@@ -1,21 +1,23 @@
 <?php
+
 /**
  * EditorTemplateFixture
  */
-class EditorTemplateFixture extends BaserTestFixture {
+class EditorTemplateFixture extends BaserTestFixture
+{
 
-/**
- * Name of the object
- *
- * @var string
- */
+	/**
+	 * Name of the object
+	 *
+	 * @var string
+	 */
 	public $name = 'EditorTemplate';
-	
-/**
- * Records
- *
- * @var array
- */
+
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '1',

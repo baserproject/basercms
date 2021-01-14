@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Test.Case.View.Helper
- * @since			baserCMS v 3.0.6
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Baser.Test.Case.View.Helper
+ * @since           baserCMS v 3.0.6
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('View', 'View');
@@ -47,16 +47,16 @@ class BcGooglemapsHelperTest extends BaserTestCase
 	}
 
 
-/**
- * Google マップ を読み込む
- *
- * @param string $address
- * @param int $width
- * @param int $height
- * @param string $expected 期待値
- * 2018/07/19 ryuring GoogleMapsAPIがAPIキー必須となった為コメントアウト
- * @todo 処理内容を変える等の検討が必要
- */
+	/**
+	 * Google マップ を読み込む
+	 *
+	 * @param string $address
+	 * @param int $width
+	 * @param int $height
+	 * @param string $expected 期待値
+	 * 2018/07/19 ryuring GoogleMapsAPIがAPIキー必須となった為コメントアウト
+	 * @todo 処理内容を変える等の検討が必要
+	 */
 	public function testLoad()
 //	public function testLoad($address, $width, $height, $expected)
 	{

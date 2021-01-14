@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Mail.View.Helper
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Mail.View.Helper
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 App::uses('BcHtmlHelper', 'View/Helper');
@@ -20,25 +20,27 @@ App::uses('BcFreezeHelper', 'View/Helper');
  * @property BcBaserHelper $BcBaser
  * @property BcContentsHelper $BcContents
  */
-class MailformHelper extends BcFreezeHelper {
+class MailformHelper extends BcFreezeHelper
+{
 
-/**
- * ヘルパー
- * 
- * @var array
- */
+	/**
+	 * ヘルパー
+	 *
+	 * @var array
+	 */
 	public $helpers = ['Html', 'BcTime', 'BcText', 'Js', 'BcUpload', 'BcCkeditor', 'BcBaser', 'BcContents', 'BcArray'];
 
-/**
- * メールフィールドのデータよりコントロールを生成する
- *
- * @param string $type コントロールタイプ
- * @param string $fieldName フィールド文字列
- * @param array $options コントロールソース
- * @param array $attributes HTML属性
- * @return string フォームコントロールのHTMLタグ
- */
-	public function control($type, $fieldName, $options, $attributes = array()) {
+	/**
+	 * メールフィールドのデータよりコントロールを生成する
+	 *
+	 * @param string $type コントロールタイプ
+	 * @param string $fieldName フィールド文字列
+	 * @param array $options コントロールソース
+	 * @param array $attributes HTML属性
+	 * @return string フォームコントロールのHTMLタグ
+	 */
+	public function control($type, $fieldName, $options, $attributes = [])
+	{
 		$attributes['escape'] = true;
 		$out = '';
 		if ($this->freezed) {
@@ -47,7 +49,7 @@ class MailformHelper extends BcFreezeHelper {
 
 		unset($attributes['regex']);
 
-		switch ($type) {
+		switch($type) {
 
 			case 'text':
 			case 'email':
@@ -73,7 +75,7 @@ class MailformHelper extends BcFreezeHelper {
 				// フィールド自身が送信されないため、validatePost に引っかかってしまう
 				// hiddenタグを強制的に出すため、falseを明示的に指定
 				$attributes['hiddenField'] = false;
-				$out = $this->hidden($fieldName, array(['value' => '']));
+				$out = $this->hidden($fieldName, [['value' => '']]);
 				$out .= $this->radio($fieldName, $options, $attributes);
 				break;
 
@@ -83,7 +85,7 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['maxlength']);
 				unset($attributes['separator']);
 				if (isset($attributes['empty'])) {
-					if (strtolower($attributes['empty']) == 'false' || 
+					if (strtolower($attributes['empty']) == 'false' ||
 						strtolower($attributes['empty']) == 'null') {
 						$showEmpty = false;
 					} else {
@@ -112,12 +114,12 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['empty']);
 				$count = 0;
 				foreach($options as $option) {
-					switch ($count) {
+					switch($count) {
 						case 0:
-							$address1 = $this->_name(array(), $option);
+							$address1 = $this->_name([], $option);
 							break;
 						case 1:
-							$address2 = $this->_name(array(), $option);
+							$address2 = $this->_name([], $option);
 							break;
 						default:
 							break;
@@ -162,11 +164,11 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['maxlength']);
 				unset($attributes['separator']);
 				unset($attributes['escape']);
-				if(empty($attributes['width'])) {
+				if (empty($attributes['width'])) {
 					$attributes['width'] = 400;
 				}
 				$attributes['delCheck'] = false;
-				if(!empty($attributes['maxFileSize'])) {
+				if (!empty($attributes['maxFileSize'])) {
 					$out = '<input type="hidden" name="MAX_FILE_SIZE" value="' . $attributes['maxFileSize'] * 1024 * 1024 . '" />';
 				}
 				unset($attributes['maxFileSize']);
@@ -174,7 +176,7 @@ class MailformHelper extends BcFreezeHelper {
 				$out .= $this->file($fieldName, $attributes);
 
 				break;
-			
+
 			case 'date_time_calender':
 				unset($attributes['size']);
 				unset($attributes['rows']);
@@ -235,65 +237,68 @@ class MailformHelper extends BcFreezeHelper {
 	}
 
 
-/**
- * create
- * ファイル添付の対応のためにデフォルト値を変更
- *
- * @param array $model
- * @param array $options
- * @return string
- */
-	public function create($model = null, $options = array()) {
+	/**
+	 * create
+	 * ファイル添付の対応のためにデフォルト値を変更
+	 *
+	 * @param array $model
+	 * @param array $options
+	 * @return string
+	 */
+	public function create($model = null, $options = [])
+	{
 		if (!isset($options['type'])) {
 			$options['type'] = 'file';
 		}
-		if(!empty($options['url']) && !empty($this->request->params['Site']['same_main_url'])) {
+		if (!empty($options['url']) && !empty($this->request->params['Site']['same_main_url'])) {
 			$options['url'] = $this->BcContents->getPureUrl($options['url'], $this->request->params['Site']['id']);
 		}
 		return parent::create($model, $options);
 	}
 
-/**
- * 認証キャプチャを表示する
- * 
- * @param array $options オプション（初期値 : []）
- * 	- `separate` : 画像と入力欄の区切り（初期値：''）
- * 	- `class` : CSSクラス名（初期値：auth-captcha-image）
- */
-	public function authCaptcha($fieldName, $options = []) {
+	/**
+	 * 認証キャプチャを表示する
+	 *
+	 * @param array $options オプション（初期値 : []）
+	 *    - `separate` : 画像と入力欄の区切り（初期値：''）
+	 *    - `class` : CSSクラス名（初期値：auth-captcha-image）
+	 */
+	public function authCaptcha($fieldName, $options = [])
+	{
 		$options = array_merge([
 			'separate' => '',
 			'class' => 'auth-captcha-image'
 		], $options);
 		$captchaId = mt_rand(0, 99999999);
 		$url = $this->request->params['Content']['url'];
-		if(!empty($this->request->params['Site']['same_main_url'])) {
+		if (!empty($this->request->params['Site']['same_main_url'])) {
 			$url = $this->BcContents->getPureUrl($url, $this->request->params['Site']['id']);
 		}
-		$output = $this->BcBaser->getImg($url . '/captcha/' . $captchaId, array('alt' => __('認証画像'), 'class' => $options['class']));
+		$output = $this->BcBaser->getImg($url . '/captcha/' . $captchaId, ['alt' => __('認証画像'), 'class' => $options['class']]);
 		$output .= $options['separate'] . $this->text($fieldName);
 		$output .= $this->input('MailMessage.captcha_id', ['type' => 'hidden', 'value' => $captchaId]);
 		echo $output;
 	}
 
-/**
- * 指定したgroup_validをもつフィールドのエラーを取得する
- *
- * @param array $mailFields
- * @param string $groupValid
- * @param array $options
- * @param bool $distinct 同じエラーメッセージをまとめる
- * @return array
- */
-	public function getGroupValidErrors($mailFields, $groupValid, $options = [], $distinct = true) {
+	/**
+	 * 指定したgroup_validをもつフィールドのエラーを取得する
+	 *
+	 * @param array $mailFields
+	 * @param string $groupValid
+	 * @param array $options
+	 * @param bool $distinct 同じエラーメッセージをまとめる
+	 * @return array
+	 */
+	public function getGroupValidErrors($mailFields, $groupValid, $options = [], $distinct = true)
+	{
 		$errors = [];
-		foreach ($mailFields as $mailField) {
+		foreach($mailFields as $mailField) {
 			if ($mailField['MailField']['group_valid'] !== $groupValid || !in_array('VALID_GROUP_COMPLATE', explode(',', $mailField['MailField']['valid_ex']))) {
 				continue;
 			}
-			if(!empty($this->validationErrors['MailMessage'][$mailField['MailField']['field_name']])) {
+			if (!empty($this->validationErrors['MailMessage'][$mailField['MailField']['field_name']])) {
 				foreach($this->validationErrors['MailMessage'][$mailField['MailField']['field_name']] as $key => $error) {
-					if($error === true) {
+					if ($error === true) {
 						unset($this->validationErrors['MailMessage'][$mailField['MailField']['field_name']][$key]);
 					}
 				}
@@ -306,13 +311,14 @@ class MailformHelper extends BcFreezeHelper {
 		return $errors;
 	}
 
-/**
- * メールフィールドのグループの最後か判定する
- * @param array $mailFields
- * @param array $currentMailField
- * @return bool
- */
-	public function isGroupLastField($mailFields, $currentMailField) {
+	/**
+	 * メールフィールドのグループの最後か判定する
+	 * @param array $mailFields
+	 * @param array $currentMailField
+	 * @return bool
+	 */
+	public function isGroupLastField($mailFields, $currentMailField)
+	{
 		if (empty($currentMailField['group_field'])) {
 			return false;
 		}
@@ -324,7 +330,7 @@ class MailformHelper extends BcFreezeHelper {
 				break;
 			}
 		}
-		if(empty($mailFields[$key + 1]['MailField']['group_field']) ||
+		if (empty($mailFields[$key + 1]['MailField']['group_field']) ||
 			$currentMailField['group_field'] !== $mailFields[$key + 1]['MailField']['group_field']) {
 			return true;
 		}

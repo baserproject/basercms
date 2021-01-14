@@ -1,13 +1,13 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
  *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Blog.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link            https://basercms.net baserCMS Project
+ * @package         Blog.View
+ * @since           baserCMS v 0.1.0
+ * @license         https://basercms.net/license/index.html
  */
 
 /**
@@ -49,9 +49,10 @@ $this->Blog = new BlogHelper($this);
 	<?php endif ?>
 	<?php if ($by_year): ?>
 		<ul>
-			<?php foreach ($categories as $key => $category): ?>
-				<li class="category-year"><span><?php $this->BcBaser->link(sprintf(__('%s年'), $key), $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $key) ?></span>
-						<?php echo $this->Blog->getCategoryList($category, $depth, $view_count, ['named' => ['year' => $key]]) ?>
+			<?php foreach($categories as $key => $category): ?>
+				<li class="category-year">
+					<span><?php $this->BcBaser->link(sprintf(__('%s年'), $key), $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $key) ?></span>
+					<?php echo $this->Blog->getCategoryList($category, $depth, $view_count, ['named' => ['year' => $key]]) ?>
 				</li>
 			<?php endforeach ?>
 		</ul>

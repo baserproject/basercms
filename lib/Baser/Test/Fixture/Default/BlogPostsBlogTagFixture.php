@@ -1,21 +1,23 @@
 <?php
+
 /**
  * BlogContentFixture
  */
-class BlogPostsBlogTagFixture extends BaserTestFixture {
+class BlogPostsBlogTagFixture extends BaserTestFixture
+{
 
-/**
- * Name of the object
- *
- * @var string
- */
+	/**
+	 * Name of the object
+	 *
+	 * @var string
+	 */
 	public $name = 'BlogPostsBlogTag';
-	
-/**
- * Records
- *
- * @var array
- */
+
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '1',

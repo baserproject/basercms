@@ -1,14 +1,16 @@
 <?php
+
 /**
  * UserGroupFixture
  */
-class UserGroupFixture extends BaserTestFixture {
+class UserGroupFixture extends BaserTestFixture
+{
 
-/**
- * Records
- *
- * @var array
- */
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
 	public $records = [
 		[
 			'id' => '1',

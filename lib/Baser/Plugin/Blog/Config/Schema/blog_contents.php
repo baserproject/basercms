@@ -2,7 +2,8 @@
 
 /* BlogContents schema generated on: 2013-03-22 21:03:08 : 1363957088 */
 
-class BlogContentsSchema extends CakeSchema {
+class BlogContentsSchema extends CakeSchema
+{
 
 	public $name = 'BlogContents';
 
@@ -10,11 +11,13 @@ class BlogContentsSchema extends CakeSchema {
 
 	public $connection = 'default';
 
-	public function before($event = []) {
+	public function before($event = [])
+	{
 		return true;
 	}
 
-	public function after($event = []) {
+	public function after($event = [])
+	{
 	}
 
 	public $blog_contents = [
