@@ -13,69 +13,84 @@ class BlogPostBlogBaserHelperFixture extends BaserTestFixture
 	 */
 	public $name = 'BlogPost';
 
-/**
- * Records
- *
- * @var array
- */
-  public $records = [
-    [
-      'id' => '1',
-      'blog_content_id' => '1',
-      'no' => '1',
-      'name' => 'name1',
-      'content' => 'content1',
-      'blog_category_id' => '1',
-      'user_id' => '1',
-      'status' => '1',
-      'posts_date' => '2017-02-01 12:57:59',
-      'content_draft' => '',
-      'detail_draft' => '',
-      'publish_begin' => null,
-      'publish_end' => null,
-      'exclude_search' => 0,
-      'eye_catch' => '',
-      'created' => '2017-02-01 12:57:59',
-      'modified' => '2016-01-02 12:57:59'
-    ],
-    [
-      'id' => '2',
-      'blog_content_id' => '1',
-      'no' => '2',
-      'name' => 'name2',
-      'content' => 'content2',
-      'blog_category_id' => '2',
-      'user_id' => '1',
-      'status' => '1',
-      'posts_date' => '2016-02-02 12:57:59',
-      'content_draft' => '',
-      'detail_draft' => '',
-      'publish_begin' => null,
-      'publish_end' => null,
-      'exclude_search' => 0,
-      'eye_catch' => '',
-      'created' => '2016-02-02 12:57:59',
-      'modified' => '2016-02-02 12:57:59'
-    ],
-    [
-      'id' => '3',
-      'blog_content_id' => '1',
-      'no' => '3',
-      'name' => 'name3',
-      'content' => 'content3',
-      'blog_category_id' => '3',
-      'user_id' => '1',
-      'status' => '1',
-      'posts_date' => '2016-01-02 12:57:59',
-      'content_draft' => '',
-      'detail_draft' => '',
-      'publish_begin' => null,
-      'publish_end' => null,
-      'exclude_search' => 0,
-      'eye_catch' => '',
-      'created' => '2016-01-02 12:57:59',
-      'modified' => '2016-01-02 12:57:59'
-    ]
-  ];
+	/**
+	 * BlogPostFixture constructor.
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+		// PostgreSQLの場合、プライマリーキー以外のインデックスが設定されている場合
+		// テスト用のテーブルを作成する際に本体用のインデックスとの重複エラーとなってしまうため
+		// 別名のインデックス名として作成しなおす
+		$schema = new BlogPostsSchema();
+		$schema->tables['blog_posts']['indexes']['test_no'] = $schema->tables['blog_posts']['indexes']['no'];
+		unset($schema->tables['blog_posts']['indexes']['no']);
+		$this->fields = $schema->tables['blog_posts'];
+	}
+
+	/**
+	 * Records
+	 *
+	 * @var array
+	 */
+	public $records = [
+		[
+			'id' => '1',
+			'blog_content_id' => '1',
+			'no' => '1',
+			'name' => 'name1',
+			'content' => 'content1',
+			'blog_category_id' => '1',
+			'user_id' => '1',
+			'status' => '1',
+			'posts_date' => '2017-02-01 12:57:59',
+			'content_draft' => '',
+			'detail_draft' => '',
+			'publish_begin' => null,
+			'publish_end' => null,
+			'exclude_search' => 0,
+			'eye_catch' => '',
+			'created' => '2017-02-01 12:57:59',
+			'modified' => '2016-01-02 12:57:59'
+		],
+		[
+			'id' => '2',
+			'blog_content_id' => '1',
+			'no' => '2',
+			'name' => 'name2',
+			'content' => 'content2',
+			'blog_category_id' => '2',
+			'user_id' => '1',
+			'status' => '1',
+			'posts_date' => '2016-02-02 12:57:59',
+			'content_draft' => '',
+			'detail_draft' => '',
+			'publish_begin' => null,
+			'publish_end' => null,
+			'exclude_search' => 0,
+			'eye_catch' => '',
+			'created' => '2016-02-02 12:57:59',
+			'modified' => '2016-02-02 12:57:59'
+		],
+		[
+			'id' => '3',
+			'blog_content_id' => '1',
+			'no' => '3',
+			'name' => 'name3',
+			'content' => 'content3',
+			'blog_category_id' => '3',
+			'user_id' => '1',
+			'status' => '1',
+			'posts_date' => '2016-01-02 12:57:59',
+			'content_draft' => '',
+			'detail_draft' => '',
+			'publish_begin' => null,
+			'publish_end' => null,
+			'exclude_search' => 0,
+			'eye_catch' => '',
+			'created' => '2016-01-02 12:57:59',
+			'modified' => '2016-01-02 12:57:59'
+		]
+	];
 
 }
