@@ -19,6 +19,7 @@
 <script type="text/javascript">
 	$(function () {
 		$("#btnnext,#btncheckagain").click(function () {
+			$.bcUtil.showLoader();
 			switch (this.id) {
 				case 'btnnext':
 					$("#clicked").val('next');

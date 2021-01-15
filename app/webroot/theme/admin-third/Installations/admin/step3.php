@@ -36,7 +36,7 @@ $this->BcBaser->i18nScript([
 
 		/* イベント登録 */
 		$('#checkdb,#btnnext,#btnback').click(function array() {
-
+			$.bcUtil.showLoader();
 			if (this.id == 'btnnext') {
 				$("#buttonclicked").val('createdb');
 			} else if (this.id == 'btnback') {
@@ -45,37 +45,45 @@ $this->BcBaser->i18nScript([
 				$("#buttonclicked").val('checkdb');
 			}
 
+			var result = true;
 			if (this.id != 'btnback' &&
-				$('#InstallationDbType').val() != 'csv' &&
-				$('#InstallationDbType').val() != 'sqlite') {
+					$('#InstallationDbType').val() != 'csv' &&
+					$('#InstallationDbType').val() != 'sqlite') {
+
 				if ($("#InstallationDbHost").val() == "") {
 					alert(bcI18n.message1);
-					return false;
+					result = false;
 				} else if ($("#InstallationDbUsername").val() == "") {
 					alert(bcI18n.message2);
-					return false;
+					result = false;
 				} else if ($("#InstallationDbName").val() == "") {
 					alert(bcI18n.message3);
-					return false;
+					result = false;
 				} else if ($("#InstallationDbPrefix").val() == "") {
 					alert(bcI18n.message4);
-					return false;
+					result = false;
 				} else if (!$("#InstallationDbPrefix").val().match(/[_]$/)) {
 					alert(bcI18n.message5);
-					return false;
+					result = false;
 				} else if (!$("#InstallationDbPrefix").val().match(/^[a-zA-z0-9_]+_$/)) {
 					alert(bcI18n.message6);
-					return false;
+					result = false;
 				} else if ($("#InstallationDbName").val().match(/^.*\..*$/)) {
 					alert(bcI18n.message7);
-					return false;
+					result = false;
 				} else if ($("#InstallationDbPort").val() == "") {
 					alert(bcI18n.message8);
-					return false;
+					result = false;
 				}
+
 			}
 
-			$('#dbsettings').submit();
+			if (result) {
+				$('#dbsettings').submit();
+			} else {
+				$.bcUtil.hideLoader();
+				return false;
+			}
 
 		});
 
