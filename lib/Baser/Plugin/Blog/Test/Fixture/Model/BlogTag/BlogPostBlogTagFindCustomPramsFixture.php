@@ -22,6 +22,7 @@ class BlogPostBlogTagFindCustomPramsFixture extends CakeTestFixture
 		// PostgreSQLの場合、プライマリーキー以外のインデックスが設定されている場合
 		// テスト用のテーブルを作成する際に本体用のインデックスとの重複エラーとなってしまうため
 		// 別名のインデックス名として作成しなおす
+		include_once BASER_PLUGINS . 'Blog' . DS . 'Config' . DS . 'Schema' . DS . 'blog_posts.php';
 		$schema = new BlogPostsSchema();
 		$schema->tables['blog_posts']['indexes']['test_no'] = $schema->tables['blog_posts']['indexes']['no'];
 		unset($schema->tables['blog_posts']['indexes']['no']);

@@ -139,11 +139,17 @@ class BlogHelperTest extends BaserTestCase
 					'name' => 'test',
 				]
 			]];
+			$View->request = $this->_getRequest('/');
+			$View->request->params['Content']['type'] = 'BlogContent';
 			$this->Blog = new BlogHelper($View);
 		}
 		$this->Blog->blogContent = null;
 		$this->Blog->setContent($blogContentId);
-		$this->assertEquals($this->Blog->blogContent['id'], $expected, 'ブログコンテンツデータを正しくセットできません');
+		$result = null;
+		if(!empty($this->Blog->blogContent['id'])) {
+			$result = $this->Blog->blogContent['id'];
+		}
+		$this->assertEquals($result, $expected, 'ブログコンテンツデータを正しくセットできません');
 	}
 
 	public function setContentDataProvider()
@@ -831,7 +837,7 @@ class BlogHelperTest extends BaserTestCase
 			['/', 1, 'タグ１', '', false, '/news/archives/tag/タグ１'],
 			['/', 1, 'タグ１', '/sub', false, '/news/archives/tag/タグ１'],
 			['/', 1, 'タグ１', '/sub', true, '/sub/news/archives/tag/タグ１'],
-			['/s/', 3, 'タグ２', '', false, 'http://main.com/en/news/archives/tag/タグ２'],
+			['/en/', 3, 'タグ２', '', false, '/en/news/archives/tag/タグ２'],
 			['/', 4, 'タグ２', '', false, 'http://sub.main.com/news/archives/tag/タグ２'],
 			['/', null, 'タグ１', '', false, '/tags/タグ１'],
 			['/s/', null, 'タグ２', '', false, '/s/tags/タグ２']

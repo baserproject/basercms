@@ -31,6 +31,8 @@ class BlogContentTest extends BaserTestCase
 		'baser.Default.Content',
 		'baser.Default.Site',
 		'baser.Default.User',
+		'baser.Default.UserGroup',
+		'baser.Default.Favorite'
 	];
 
 	public function setUp()
