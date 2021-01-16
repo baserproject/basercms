@@ -1557,10 +1557,7 @@ class BcBaserHelper extends AppHelper
 					$crumb = '<span itemprop="name">' . $crumb[0] . '</span>';
 				}
 				$out[] = <<< EOD
-<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-	{$crumb}
-	<meta itemprop="position" content="{$counter}" />
-</li>
+<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">{$crumb}<meta itemprop="position" content="{$counter}" /></li>
 EOD;
 				$counter++;
 			}
