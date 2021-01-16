@@ -28,7 +28,7 @@ composeer install
 
 ### クラスの継承
 
-`Cake\TestSuite\TestCase` クラスを継承します。
+`BaserCore\TestSuite\BcTestCase` クラスを継承します。
 
 ### メソッド名
 
@@ -38,7 +38,7 @@ composeer install
 // （例）BcTestHelper の hoge メソッド
 // /plugins/baser-core/tests/TestCase/View/Helper/BcTestHelperTest.php
 
-class BcTestHelperTest extends Cake\TestSuite\TestCase {
+class BcTestHelperTest extends BaserCore\TestSuite\BcTestCase {
     public function testHoge() {
 
     }
