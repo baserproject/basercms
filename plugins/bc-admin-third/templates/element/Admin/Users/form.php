@@ -28,7 +28,6 @@ $this->BcBaser->i18nScript([
 	'confirmMessage2' => __d('baser', '登録されている「よく使う項目」を、このユーザーが所属するユーザーグループの初期設定として登録します。よろしいですか？'),
 	'infoMessage1' => __d('baser', '登録されている「よく使う項目」を所属するユーザーグループの初期値として設定しました。'),
 ]);
-$this->BcBaser->js('admin/users/edit', false);
 ?>
 
 <div id="SelfUpdate" style="display: none"><?php echo $selfUpdate ?></div>
@@ -115,9 +114,9 @@ $this->BcBaser->js('admin/users/edit', false);
             <td class="col-input bca-form-table__input">
                 <?php if ($this->request->getParam('action') == 'edit'): ?><small>[<?php echo __d('baser', 'パスワードは変更する場合のみ入力してください') ?>]</small><br /><?php endif ?>
                 <!-- ↓↓↓自動入力を防止する為のダミーフィールド↓↓↓ -->
-                <input type="password" name="dummy-pass" style="top:-100px;left:-100px;position:fixed;">
-                <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => 20, 'maxlength' => 255]) ?>
-                <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255]) ?>
+                <input type="password" name="dummy-pass" autocomplete="off" style="top:-100px;left:-100px;position:fixed;">
+                <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
+                <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
                 <?php echo $this->BcAdminForm->error('password') ?>
                 <div id="helptextPassword" class="helptext">

@@ -23,7 +23,7 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 $this->BcAdmin->setTitle(__d('baser', 'ユーザー一覧'));
 $this->BcAdmin->setSearch('users_index');
 $this->BcAdmin->setHelp('users_index');
-$this->BcBaser->js('admin/users/index.bundle');
+$this->BcBaser->js('admin/users/index.bundle', false);
 ?>
 
 

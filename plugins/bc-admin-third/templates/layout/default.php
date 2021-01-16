@@ -28,13 +28,14 @@ $base = $attributes['base'];
     <meta name="robots" content="noindex,nofollow"/>
     <title><?= h($this->fetch('title')) ?></title>
     <? echo $this->fetch('meta') ?>
-    <? echo $this->fetch('css') ?>
-    <? echo $this->fetch('script') ?>
     <? echo $this->BcBaser->js([
         'admin/vendor.bundle',
         'vendor/vue.min',
         'vendor/jquery-3.5.1.min',
         'vendor/jquery.bt.min',
+        'vendor/jquery-ui-1.11.4.min.js',
+        'vendor/i18n/ui.datepicker-ja',
+        'vendor/jquery.timepicker',
     ]) ?>
     <? echo $this->BcBaser->js('admin/common.bundle', true, [
         'id' => 'AdminScript',
@@ -43,12 +44,14 @@ $base = $attributes['base'];
     <? echo $this->BcBaser->js([
         'admin/startup.bundle'
     ]) ?>
+    <? echo $this->fetch('script') ?>
     <? echo $this->Html->css([
         'vendor/bootstrap-4.1.3/bootstrap',
+        'vendor/jquery-ui/jquery-ui.min',
+        'vendor/jquery.timepicker',
         'admin/style',
-        'admin/jquery-ui/jquery-ui.min'
     ]) ?>
-    <? //echo $this->Html->script(['https://unpkg.com/vue', 'https://unpkg.com/axios/dist/axios.min.js', 'admin/app']) ?>
+    <? echo $this->fetch('css') ?>
 </head>
 
 <body id="<? $this->BcBaser->contentsName(true) ?>" class="normal">
