@@ -51,10 +51,7 @@ if (!empty($crumbs)) {
 <?php else: ?>
 	<ul itemscope itemtype="http://schema.org/BreadcrumbList">
 		<?php if ($this->BcBaser->isHome()): ?>
-			<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-				<span itemprop="name"><?php echo $home ?></span>
-				<meta itemprop="position" content="1"/>
-			</li>
+			<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><span itemprop="name"><?php echo $home ?></span><meta itemprop="position" content="1"/></li>
 		<?php else: ?>
 			<?php $this->BcBaser->crumbs($separator, $home, true) ?>
 		<?php endif ?>
