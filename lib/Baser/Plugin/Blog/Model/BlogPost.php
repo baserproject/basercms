@@ -529,6 +529,17 @@ class BlogPost extends BlogAppModel
 	}
 
 	/**
+	 * After Validate
+	 */
+	public function afterValidate()
+	{
+		parent::afterValidate();
+		if (empty($this->data['BlogPost']['id'])) {
+			$this->data['BlogPost']['no'] = $this->getMax('no', ['BlogPost.blog_content_id' => $this->data['BlogPost']['blog_content_id']]) + 1;
+		}
+	}
+
+	/**
 	 * afterSave
 	 *
 	 * @param boolean $created
@@ -536,10 +547,6 @@ class BlogPost extends BlogAppModel
 	 */
 	public function afterSave($created, $options = [])
 	{
-		if ($created) {
-			$this->data['BlogPost']['no'] = $this->getMax('no', ['BlogPost.blog_content_id' => $this->data['BlogPost']['blog_content_id']]) + 1;
-			$this->data = $this->save(null, ['validate' => false, 'callbacks' => false]);
-		}
 		// 検索用テーブルへの登録・削除
 		if ($this->searchIndexSaving && empty($this->data['BlogPost']['exclude_search'])) {
 			$this->saveSearchIndex($this->createSearchIndex($this->data));
