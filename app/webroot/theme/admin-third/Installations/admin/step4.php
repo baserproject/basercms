@@ -29,31 +29,40 @@ $this->BcBaser->i18nScript([
 <script type="text/javascript">
 	$(document).ready(function () {
 		$('#btnfinish,#btnback').click(function () {
+			$.bcUtil.showLoader();
+			var result = true;
 			if (this.id == 'btnfinish') {
 				$("#InstallationClicked").val('finish');
 				if ($("#InstallationAdminEmail").val() == "") {
 					alert(bcI18n.message1);
-					return false;
+					result = false;
 				} else if ($("#InstallationAdminUsername").val() == "") {
 					alert(bcI18n.message2);
-					return false;
+					result = false;
 				} else if (!$("#InstallationAdminUsername").val().match(/^[a-zA-Z0-9\-_]+$/)) {
 					alert(bcI18n.message3);
-					return false;
+					result = false;
 				} else if ($("#InstallationAdminPassword").val().length < 6) {
 					alert(bcI18n.message4);
-					return false;
+					result = false;
 				} else if ($("#InstallationAdminPassword").val() != $("#InstallationAdminConfirmpassword").val()) {
 					alert(bcI18n.message5);
-					return false;
+					result = false;
 				} else if (!$("#InstallationAdminPassword").val().match(/^[a-zA-Z0-9\-_ \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*]+$/)) {
 					alert(bcI18n.message6);
-					return false;
+					result = false;
 				}
 			} else if (this.id == 'btnback') {
 				$("#InstallationClicked").val('back');
 			}
-			$('#adminSettings').submit();
+
+			if(result) {
+				$('#adminSettings').submit();
+			} else {
+				$.bcUtil.hideLoader();
+				return false;
+			}
+
 		});
 	});
 </script>
