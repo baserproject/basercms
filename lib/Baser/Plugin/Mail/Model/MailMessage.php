@@ -209,10 +209,16 @@ class MailMessage extends MailAppModel {
 					$this->validate[$mailField['field_name']] = $mailField['valid'];
 				}
 				if (!empty($this->data['MailMessage'][$mailField['field_name']]) && $mailField['valid'] == 'VALID_EMAIL') {
-					$this->validate[$mailField['field_name']] = array('email' => array(
-						'rule' => array('email'),
-						'message' => __('形式が無効です。')
-					));
+					$this->validate[$mailField['field_name']] = array(
+						'email' => array(
+							'rule' => array('email'),
+							'message' => __('形式が無効です。')
+						),
+						'english' => array(
+							'rule' => '/^[a-zA-Z0-9-_@.*+]*$/',
+							'message' => __('半角で入力してください。')
+						)
+					);
 				}
 			}
 			// ### 拡張バリデーション
