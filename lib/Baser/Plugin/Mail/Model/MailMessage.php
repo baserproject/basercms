@@ -223,7 +223,7 @@ class MailMessage extends MailAppModel
 							'message' => __('形式が無効です。')
 						], 
 						'english' => [
-							'rule' => '/^[a-zA-Z0-9-_@.*+]*$/',
+							'rule' => '/^[a-zA-Z0-9!#$%&\’*+-\/=?^_`{|}~@.]*$/',
 							'message' => __('半角で入力してください。')
 						]
 					];
