@@ -24,8 +24,8 @@ class BlogPostFixture extends BaserTestFixture
 		// 別名のインデックス名として作成しなおす
 		include_once BASER_PLUGINS . 'Blog' . DS . 'Config' . DS . 'Schema' . DS . 'blog_posts.php';
 		$schema = new BlogPostsSchema();
-		$schema->tables['blog_posts']['indexes']['test_no'] = $schema->tables['blog_posts']['indexes']['no'];
-		unset($schema->tables['blog_posts']['indexes']['no']);
+		$schema->tables['blog_posts']['indexes']['test_blog_content_id_no_index'] = $schema->tables['blog_posts']['indexes']['blog_content_id_no_index'];
+		unset($schema->tables['blog_posts']['indexes']['blog_content_id_no_index']);
 		$this->fields = $schema->tables['blog_posts'];
 	}
 

@@ -314,24 +314,32 @@ class BlogPostsController extends BlogAppController
 			}
 
 			// データを保存
-			if ($this->BlogPost->saveAll($this->request->data)) {
-				clearViewCache();
-				$id = $this->BlogPost->getLastInsertId();
-				$this->BcMessage->setSuccess(sprintf(__d('baser', '記事「%s」を追加しました。'), $this->request->data['BlogPost']['name']));
+			try {
+				if ($this->BlogPost->saveAll($this->request->data)) {
+					clearViewCache();
+					$id = $this->BlogPost->getLastInsertId();
+					$this->BcMessage->setSuccess(sprintf(__d('baser', '記事「%s」を追加しました。'), $this->request->data['BlogPost']['name']));
 
-				// 下のBlogPost::read()で、BlogTagデータ無しのキャッシュを作ってしまわないように
-				// recursiveを設定
-				$this->BlogPost->recursive = 1;
+					// 下のBlogPost::read()で、BlogTagデータ無しのキャッシュを作ってしまわないように
+					// recursiveを設定
+					$this->BlogPost->recursive = 1;
 
-				// EVENT BlogPosts.afterAdd
-				$this->dispatchEvent('afterAdd', [
-					'data' => $this->BlogPost->read(null, $id)
-				]);
+					// EVENT BlogPosts.afterAdd
+					$this->dispatchEvent('afterAdd', [
+						'data' => $this->BlogPost->read(null, $id)
+					]);
 
-				// 編集画面にリダイレクト
-				$this->redirect(['action' => 'edit', $blogContentId, $id]);
-			} else {
-				$this->BcMessage->setError(__d('baser', 'エラーが発生しました。内容を確認してください。'));
+					// 編集画面にリダイレクト
+					$this->redirect(['action' => 'edit', $blogContentId, $id]);
+				} else {
+					$this->BcMessage->setError(__d('baser', 'エラーが発生しました。内容を確認してください。'));
+				}
+			} catch (Exception $e) {
+				if($e->getCode() === "23000") {
+					$this->BcMessage->setError(__d('baser', '同時更新エラーです。しばらく経ってから保存してください。'));
+				} else {
+					$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+				}
 			}
 		} else {
 			$this->request->data = $this->BlogPost->getDefaultValue($this->BcAuth->user());

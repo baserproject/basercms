@@ -57,7 +57,7 @@ class BlogPostTest extends BaserTestCase
 	{
 
 		$this->BlogPost->create([
-			'BlogPost' => []
+			'BlogPost' => ['blog_content_id' => 1]
 		]);
 
 		$this->assertFalse($this->BlogPost->validates());
@@ -73,7 +73,8 @@ class BlogPostTest extends BaserTestCase
 	{
 		$this->BlogPost->create([
 			'BlogPost' => [
-				'user_id' => ''
+				'user_id' => '',
+				'blog_content_id' => 1
 			]
 		]);
 
@@ -88,6 +89,7 @@ class BlogPostTest extends BaserTestCase
 		$this->BlogPost->create([
 			'BlogPost' => [
 				'name' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
+				'blog_content_id' => 1
 			]
 		]);
 
@@ -102,7 +104,8 @@ class BlogPostTest extends BaserTestCase
 		$this->BlogPost->create([
 			'BlogPost' => [
 				'name' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
-				'posts_date' => '2020-01-27 12:57:59'
+				'posts_date' => '2020-01-27 12:57:59',
+				'blog_content_id' => 1
 			]
 		]);
 		$this->assertTrue($this->BlogPost->validates());
@@ -116,6 +119,7 @@ class BlogPostTest extends BaserTestCase
 				'publish_begin' => 'test',
 				'publish_end' => 'test',
 				'posts_date' => 'test',
+				'blog_content_id' => 1
 			]
 		]);
 
@@ -162,6 +166,7 @@ class BlogPostTest extends BaserTestCase
 				'publish_begin' => '2020-01-27 12:57:59',
 				'publish_end' => '2020-01-29 12:57:59',
 				'posts_date' => '2020-01-27 12:57:59',
+				'blog_content_id' => 1
 			]
 		]);
 
@@ -397,6 +402,7 @@ class BlogPostTest extends BaserTestCase
 	{
 		$data = ['BlogPost' => [
 			'id' => 99,
+			'no' => 99,
 			'exclude_search' => 0,
 			'name' => 'test-name',
 			'blog_content_id' => 1,

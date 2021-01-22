@@ -534,7 +534,10 @@ class BlogPost extends BlogAppModel
 	public function afterValidate()
 	{
 		parent::afterValidate();
-		if (empty($this->data['BlogPost']['id'])) {
+		if(empty($this->data['BlogPost']['blog_content_id'])) {
+			throw new BcException('blog_content_id が指定されていません。');
+		}
+		if (empty($this->validationErrors) && empty($this->data['BlogPost']['id'])) {
 			$this->data['BlogPost']['no'] = $this->getMax('no', ['BlogPost.blog_content_id' => $this->data['BlogPost']['blog_content_id']]) + 1;
 		}
 	}
