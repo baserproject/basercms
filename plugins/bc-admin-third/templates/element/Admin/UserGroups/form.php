@@ -62,13 +62,13 @@ $(window).load(function() {
                     <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 20, 'maxlength' => 255, 'autofocus' => true]) ?>
                 <?php endif ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
-                <?php echo $this->BcAdminForm->error('name') ?>
                 <div id="helptextName" class="helptext">
                     <ul>
                         <li><?php echo __d('baser', '重複しない識別名称を半角のみで入力してください。') ?></li>
                         <li><?php echo __d('baser', 'admins の場合は変更できません。') ?></li>
                     </ul>
                 </div>
+                <?php echo $this->BcAdminForm->error('name') ?>
             </td>
         </tr>
         <tr>
