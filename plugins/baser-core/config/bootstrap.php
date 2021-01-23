@@ -9,21 +9,23 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
-use Cake\Core\Plugin;
 use Cake\Validation\Validator;
 
 Configure::config('baser', new PhpConfig());
 Configure::load('BaserCore.setting', 'baser');
 
-// DebugKit が重すぎるので削除
-Plugin::getCollection()->remove('DebugKit');
-
 /**
  * デフォルトバリデーションプロバイダー
  */
 Validator::addDefaultProvider('bc', 'BaserCore\Model\Validation\BcValidation');
+
+/**
+ * キャッシュ
+ */
+Cache::setConfig(Configure::consume('Cache'));
 
 /**
  * パス定義

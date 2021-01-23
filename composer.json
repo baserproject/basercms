@@ -24,14 +24,12 @@
         "psr-4": {
             "App\\": "src/",
             "BaserCore\\": "plugins/baser-core/src",
-            "BcBlog\\": "plugins/bc-blog/src/",
             "BcAdminThird\\": "plugins/bc-admin-third/src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "BaserCore\\Test\\": "plugins/baser-core/tests/",
-            "BcBlog\\Test\\": "plugins/bc-blog/tests/",
             "Cake\\Test\\": [
                 "plugins/baser-core/vendor/cakephp/cakephp/tests/"
             ]

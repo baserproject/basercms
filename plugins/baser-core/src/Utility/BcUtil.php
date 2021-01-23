@@ -11,10 +11,14 @@
 
 namespace BaserCore\Utility;
 
+use Cake\Cache\Cache;
 use Cake\Core\App;
 use Cake\Core\Configure;
+use Cake\Database\Exception;
+use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\File;
 use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 
@@ -161,6 +165,49 @@ class BcUtil
     public static function getAdminPrefix()
     {
         return Configure::read('BcPrefixAuth.Admin.alias');
+    }
+
+    /**
+     * 利用可能なプラグインのリストを取得する
+     *
+     * ClassRegistry::removeObject('Plugin'); で一旦 Plugin オブジェクトを削除
+     * エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
+     *
+     * @return array
+     */
+    public static function getEnablePlugins()
+    {
+        $enablePlugins = [];
+        if (!Configure::read('debug')) {
+            $enablePlugins = Cache::read('enable_plugins', '_cake_env_');
+        }
+        if (!$enablePlugins) {
+            // DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+            try {
+                $pluginsTable = TableRegistry::getTableLocator()->get('Plugins');;   // ConnectionManager の前に呼出さないとエラーとなる
+            } catch (Exception $ex) {
+                return [];
+            }
+            $sources = ConnectionManager::get('default')->getSchemaCollection()->listTables();
+            if (!is_array($sources) || in_array(strtolower('plugins'), array_map('strtolower', $sources))) {
+                $plugins = $pluginsTable->find('all', ['conditions' => ['status' => true], 'order' => 'priority']);
+                TableRegistry::getTableLocator()->remove('Plugin');
+                if ($plugins) {
+                    foreach($plugins as $key => $plugin) {
+                        foreach(App::path('plugins') as $path) {
+                            if (is_dir($path . $plugin->name) || is_dir($path . Inflector::dasherize($plugin->name))) {
+                                $enablePlugins[] = $plugin->name;
+                                break;
+                            }
+                        }
+                    }
+                    if (!Configure::read('debug')) {
+                        Cache::write('enable_plugins', $enablePlugins, '_cake_env_');
+                    }
+                }
+            }
+        }
+        return $enablePlugins;
     }
 
 }

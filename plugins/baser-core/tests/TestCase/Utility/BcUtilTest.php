@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Test\TestCase\Utility;
+
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\App;
@@ -19,10 +20,20 @@ use Cake\Filesystem\Folder;
 
 class BcUtilTest extends BcTestCase
 {
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BaserCore.Plugins',
+    ];
+
     /**
      * Test loginUser
      */
-    public function testLoginUser ()
+    public function testLoginUser()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
@@ -30,7 +41,7 @@ class BcUtilTest extends BcTestCase
     /**
      * Test isSuperUser
      */
-    public function testIsSuperUser ()
+    public function testIsSuperUser()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
@@ -38,7 +49,7 @@ class BcUtilTest extends BcTestCase
     /**
      * Test isAgentUser
      */
-    public function testIsAgentUser ()
+    public function testIsAgentUser()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
@@ -46,7 +57,7 @@ class BcUtilTest extends BcTestCase
     /**
      * Test isInstallMode
      */
-    public function testIsInstallMode ()
+    public function testIsInstallMode()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
@@ -54,7 +65,7 @@ class BcUtilTest extends BcTestCase
     /**
      * Test getVersion
      */
-    public function testGetVersion ()
+    public function testGetVersion()
     {
         // BaserCore
         $file = new File(BASER . DS . 'VERSION.txt');
@@ -68,30 +79,40 @@ class BcUtilTest extends BcTestCase
         $result = BcUtil::getVersion('BcAdminThird');
         $this->assertEquals($expected, $result);
 
-		// ダミーのプラグインを作成
-		$path = App::path('plugins')[0] . 'hoge' . DS;
-		$Folder = new Folder($path, true);
-		$File = new File($path . 'VERSION.txt', true);
-		$File->write('1.2.3');
-		$result = BcUtil::getVersion('Hoge');
+        // ダミーのプラグインを作成
+        $path = App::path('plugins')[0] . 'hoge' . DS;
+        $Folder = new Folder($path, true);
+        $File = new File($path . 'VERSION.txt', true);
+        $File->write('1.2.3');
+        $result = BcUtil::getVersion('Hoge');
 
-		$File->close();
-		$Folder->delete();
-		$this->assertEquals('1.2.3', $result, 'プラグインのバージョンを取得できません');
+        $File->close();
+        $Folder->delete();
+        $this->assertEquals('1.2.3', $result, 'プラグインのバージョンを取得できません');
     }
 
-	/**
-	 * バージョンを特定する一意の数値を取得する
-	 */
-	public function testVerpoint()
-	{
-		$version = 'baserCMS 3.0.6.1';
-		$result = BcUtil::verpoint($version);
-		$this->assertEquals(3000006001, $result, '正しくバージョンを特定する一意の数値を取得できません');
+    /**
+     * バージョンを特定する一意の数値を取得する
+     */
+    public function testVerpoint()
+    {
+        $version = 'baserCMS 3.0.6.1';
+        $result = BcUtil::verpoint($version);
+        $this->assertEquals(3000006001, $result, '正しくバージョンを特定する一意の数値を取得できません');
 
-		$version = 'baserCMS 3.0.6.1 beta';
-		$result = BcUtil::verpoint($version);
-		$this->assertEquals(false, $result, '正しくバージョンを特定する一意の数値を取得できません');
-	}
+        $version = 'baserCMS 3.0.6.1 beta';
+        $result = BcUtil::verpoint($version);
+        $this->assertEquals(false, $result, '正しくバージョンを特定する一意の数値を取得できません');
+    }
+
+    /**
+     * 有効なプラグインの一覧を取得する
+     */
+    public function testGetEnablePlugins()
+    {
+        $expects = ['BcBlog'];
+        $result = BcUtil::getEnablePlugins();
+        $this->assertEquals($expects, $result, 'プラグインの一覧が取得できません。');
+    }
 
 }

@@ -15,6 +15,7 @@ use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\App;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\Utility\Hash;
 use Cake\Utility\Xml;
