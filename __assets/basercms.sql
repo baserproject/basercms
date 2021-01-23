@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: bc5-db
--- 生成日時: 2020 年 4 月 22 日 10:29
+-- 生成日時: 2021 年 1 月 23 日 07:51
 -- サーバのバージョン： 5.7.29
 -- PHP のバージョン: 7.4.4
 
@@ -122,6 +122,48 @@ INSERT INTO `pages` (`id`, `contents`, `draft`, `page_template`, `code`, `modifi
 -- --------------------------------------------------------
 
 --
+-- テーブルの構造 `password_requests`
+--
+
+DROP TABLE IF EXISTS `password_requests`;
+CREATE TABLE `password_requests` (
+  `id` int(8) NOT NULL,
+  `user_id` int(8) DEFAULT NULL,
+  `request_key` varchar(255) DEFAULT NULL,
+  `used` int(2) DEFAULT '0',
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `plugins`
+--
+
+DROP TABLE IF EXISTS `plugins`;
+CREATE TABLE `plugins` (
+  `id` int(8) NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `title` varchar(50) DEFAULT NULL,
+  `version` varchar(100) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT NULL,
+  `db_init` tinyint(1) DEFAULT NULL,
+  `priority` int(8) DEFAULT '0',
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `plugins`
+--
+
+INSERT INTO `plugins` (`id`, `name`, `title`, `version`, `status`, `db_init`, `priority`, `created`, `modified`) VALUES
+(1, 'BcBlog', 'ブログ', '1.0.0', 1, 0, 1, '2020-12-19 18:53:39', '2020-12-19 18:53:44');
+
+-- --------------------------------------------------------
+
+--
 -- テーブルの構造 `users`
 --
 
@@ -216,6 +258,12 @@ ALTER TABLE `pages`
   ADD PRIMARY KEY (`id`);
 
 --
+-- テーブルのインデックス `password_requests`
+--
+ALTER TABLE `password_requests`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- テーブルのインデックス `users`
 --
 ALTER TABLE `users`
@@ -256,6 +304,12 @@ ALTER TABLE `pages`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- テーブルのAUTO_INCREMENT `password_requests`
+--
+ALTER TABLE `password_requests`
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
+
+--
 -- テーブルのAUTO_INCREMENT `users`
 --
 ALTER TABLE `users`
@@ -272,26 +326,6 @@ ALTER TABLE `users_user_groups`
 --
 ALTER TABLE `user_groups`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
-
-DROP TABLE IF EXISTS `password_requests`;
-CREATE TABLE `password_requests` (
-  `id` int(8) NOT NULL,
-  `user_id` int(8) DEFAULT NULL,
-  `request_key` varchar(255) DEFAULT NULL,
-  `used` int(2) DEFAULT 0,
-  `created` datetime DEFAULT NULL,
-  `modified` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-ALTER TABLE `password_requests`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `password_requests`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
-
-
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
