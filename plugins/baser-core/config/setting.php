@@ -9,6 +9,8 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use Cake\Cache\Engine\FileEngine;
+
 return [
     'BcApp' => [
         /**
@@ -51,21 +53,21 @@ return [
                     'type' => 'dashboard',
                     'url' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX', '/admin'),
                 ],
-    //			'Contents' => [
-    //				'title' => __d('baser', 'コンテンツ管理'),
-    //				'type' => 'contents',
-    //				'menus' => [
-    //					'Contents' => ['title' => __d('baser', 'コンテンツ'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'contents', 'action' => 'index']],
-    //					'ContentsTrash' => ['title' => __d('baser', 'ゴミ箱'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'contents', 'action' => 'trash_index']],
-    //				]
-    //			],
+                //			'Contents' => [
+                //				'title' => __d('baser', 'コンテンツ管理'),
+                //				'type' => 'contents',
+                //				'menus' => [
+                //					'Contents' => ['title' => __d('baser', 'コンテンツ'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'contents', 'action' => 'index']],
+                //					'ContentsTrash' => ['title' => __d('baser', 'ゴミ箱'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'contents', 'action' => 'trash_index']],
+                //				]
+                //			],
             ],
             'Systems' => [
-    //			'SiteConfigs' => [
-    //				'title' => __d('baser', 'サイト基本設定'),
-    //				'type' => 'system',
-    //				'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'site_configs', 'action' => 'form'],
-    //			],
+                //			'SiteConfigs' => [
+                //				'title' => __d('baser', 'サイト基本設定'),
+                //				'type' => 'system',
+                //				'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'site_configs', 'action' => 'form'],
+                //			],
                 'Users' => [
                     'title' => __d('baser', 'ユーザー管理'),
                     'type' => 'system',
@@ -82,32 +84,32 @@ return [
                         ],
                     ]
                 ],
-    //			'Sites' => [
-    //				'title' => __d('baser', 'サブサイト管理'),
-    //				'type' => 'system',
-    //				'menus' => [
-    //					'Sites' => [
-    //						'title' => __d('baser', 'サブサイト'),
-    //						'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'sites', 'action' => 'index'],
-    //						'currentRegex' => '/\/sites\/.+?/s'
-    //					],
-    //				]
-    //			],
-    //			'Theme' => [
-    //				'title' => __d('baser', 'テーマ管理'),
-    //				'type' => 'system',
-    //				'menus' => [
-    //					'Themes' => [
-    //						'title' => __d('baser', 'テーマ'),
-    //						'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'index'],
-    //						'currentRegex' => '/\/themes\/[^\/]+?/s'
-    //					],
-    //					'ThemeConfigs' => ['title' => __d('baser', '設定'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'theme_configs', 'action' => 'form']],
-    //					'ThemeAdd' => ['title' => __d('baser', '新規追加'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'add']],
-    //					'ThemesDownload' => ['title' => __d('baser', '利用中テーマダウンロード'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'download']],
-    //					'ThemesDownloadDefaultDataPattern' => ['title' => __d('baser', 'テーマ用初期データダウンロード'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'download_default_data_pattern']],
-    //				]
-    //			],
+                //			'Sites' => [
+                //				'title' => __d('baser', 'サブサイト管理'),
+                //				'type' => 'system',
+                //				'menus' => [
+                //					'Sites' => [
+                //						'title' => __d('baser', 'サブサイト'),
+                //						'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'sites', 'action' => 'index'],
+                //						'currentRegex' => '/\/sites\/.+?/s'
+                //					],
+                //				]
+                //			],
+                //			'Theme' => [
+                //				'title' => __d('baser', 'テーマ管理'),
+                //				'type' => 'system',
+                //				'menus' => [
+                //					'Themes' => [
+                //						'title' => __d('baser', 'テーマ'),
+                //						'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'index'],
+                //						'currentRegex' => '/\/themes\/[^\/]+?/s'
+                //					],
+                //					'ThemeConfigs' => ['title' => __d('baser', '設定'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'theme_configs', 'action' => 'form']],
+                //					'ThemeAdd' => ['title' => __d('baser', '新規追加'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'add']],
+                //					'ThemesDownload' => ['title' => __d('baser', '利用中テーマダウンロード'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'download']],
+                //					'ThemesDownloadDefaultDataPattern' => ['title' => __d('baser', 'テーマ用初期データダウンロード'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'themes', 'action' => 'download_default_data_pattern']],
+                //				]
+                //			],
                 'Plugin' => [
                     'title' => __d('baser', 'プラグイン管理'),
                     'type' => 'system',
@@ -119,74 +121,88 @@ return [
                         ],
                     ]
                 ],
-    //			'Tools' => [
-    //				'title' => __d('baser', 'ユーティリティ'),
-    //				'type' => 'system',
-    //				'menus' => [
-    //					'Tools' => ['title' => __d('baser', 'ユーティリティトップ'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'index']],
-    //					'EditorTemplates' => [
-    //						'title' => __d('baser', 'エディタテンプレート'),
-    //						'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'editor_templates', 'action' => 'index'],
-    //						'currentRegex' => '/\/editor_templates\/[^\/]+?/s'
-    //					],
-    //					'WidgetAreas' => [
-    //						'title' => __d('baser', 'ウィジェットエリア'),
-    //						'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'widget_areas', 'action' => 'index'],
-    //						'currentRegex' => '/\/widget_areas\/[^\/]+?\/[0-9]+/s'
-    //					],
-    //					'SearchIndices' => ['title' => __d('baser', '検索インデックス'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'search_indices', 'action' => 'index']],
-    //					'SiteConfigsInfo' => ['title' => __d('baser', '環境情報'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'site_configs', 'action' => 'info']],
-    //					'ThemeFiles' => [
-    //						'title' => __d('baser', 'コアテンプレート確認'),
-    //						'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'theme_files', 'action' => 'index', 'core'],
-    //						'currentRegex' => '/\/theme_files\/[^\/]+?/s'
-    //					],
-    //					'ToolsMaintenance' => ['title' => __d('baser', 'データメンテナンス'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'maintenance']],
-    //					'ToolsLog' => ['title' => __d('baser', 'ログメンテナンス'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'log']],
-    //					'ToolsWriteSchema' => ['title' => __d('baser', 'スキーマファイル生成'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'write_schema']],
-    //					'ToolsLoadSchema' => ['title' => __d('baser', 'スキーマファイル読込'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'load_schema']],
-    //				]
-    //			]
+                //			'Tools' => [
+                //				'title' => __d('baser', 'ユーティリティ'),
+                //				'type' => 'system',
+                //				'menus' => [
+                //					'Tools' => ['title' => __d('baser', 'ユーティリティトップ'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'index']],
+                //					'EditorTemplates' => [
+                //						'title' => __d('baser', 'エディタテンプレート'),
+                //						'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'editor_templates', 'action' => 'index'],
+                //						'currentRegex' => '/\/editor_templates\/[^\/]+?/s'
+                //					],
+                //					'WidgetAreas' => [
+                //						'title' => __d('baser', 'ウィジェットエリア'),
+                //						'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'widget_areas', 'action' => 'index'],
+                //						'currentRegex' => '/\/widget_areas\/[^\/]+?\/[0-9]+/s'
+                //					],
+                //					'SearchIndices' => ['title' => __d('baser', '検索インデックス'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'search_indices', 'action' => 'index']],
+                //					'SiteConfigsInfo' => ['title' => __d('baser', '環境情報'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'site_configs', 'action' => 'info']],
+                //					'ThemeFiles' => [
+                //						'title' => __d('baser', 'コアテンプレート確認'),
+                //						'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'theme_files', 'action' => 'index', 'core'],
+                //						'currentRegex' => '/\/theme_files\/[^\/]+?/s'
+                //					],
+                //					'ToolsMaintenance' => ['title' => __d('baser', 'データメンテナンス'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'maintenance']],
+                //					'ToolsLog' => ['title' => __d('baser', 'ログメンテナンス'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'log']],
+                //					'ToolsWriteSchema' => ['title' => __d('baser', 'スキーマファイル生成'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'write_schema']],
+                //					'ToolsLoadSchema' => ['title' => __d('baser', 'スキーマファイル読込'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'tools', 'action' => 'load_schema']],
+                //				]
+                //			]
             ]
         ]],
 
-        /**
-         * プレフィックス認証
-         */
-        'BcPrefixAuth' => [
-            // 管理画面
-            'Admin' => [
-                // 認証設定名
-                'name' => __d('baser', '管理システム'),
-                // 認証タイプ
-                'type' => 'Form',
-                // URLにおけるエイリアス
-                'alias' => env('BC_ADMIN_PREFIX'),
-                // 認証後リダイレクト先
-                'loginRedirect' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX', '/admin'),
-                // ログインページURL
-                'loginAction' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX', '/admin') . '/users/login',
-                // ログアウトページURL
-                'logoutAction'=> env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX') . '/users/logout',
-                // ユーザー名フィールド
-                'username' => 'email',
-                // パスワードフィールド
-                'password' => 'password',
-                // モデル
-                'userModel' => 'Users',
-                // セッションキー
-                'sessionKey' => 'AuthAdmin',
-            ]
-        ],
+    /**
+     * プレフィックス認証
+     */
+    'BcPrefixAuth' => [
+        // 管理画面
+        'Admin' => [
+            // 認証設定名
+            'name' => __d('baser', '管理システム'),
+            // 認証タイプ
+            'type' => 'Form',
+            // URLにおけるエイリアス
+            'alias' => env('BC_ADMIN_PREFIX'),
+            // 認証後リダイレクト先
+            'loginRedirect' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX', '/admin'),
+            // ログインページURL
+            'loginAction' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX', '/admin') . '/users/login',
+            // ログアウトページURL
+            'logoutAction' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX') . '/users/logout',
+            // ユーザー名フィールド
+            'username' => 'email',
+            // パスワードフィールド
+            'password' => 'password',
+            // モデル
+            'userModel' => 'Users',
+            // セッションキー
+            'sessionKey' => 'AuthAdmin',
+        ]
+    ],
 
-        'links' => [
-            'marketThemeRss' => 'https://market.basercms.net/themes.rss',
-            'marketPluginRss' => 'https://market.basercms.net/plugins.rss',
-            'specialThanks'	=> 'https://basercms.net/special_thanks/special_thanks/ajax_users',
-            // インストールマニュアル
-            'installManual' => 'https://basercms.net/manuals/introductions/4.html',
-            // アップデートマニュアル
-            'updateManual' => 'https://basercms.net/manuals/introductions/8.html'
+    'links' => [
+        'marketThemeRss' => 'https://market.basercms.net/themes.rss',
+        'marketPluginRss' => 'https://market.basercms.net/plugins.rss',
+        'specialThanks' => 'https://basercms.net/special_thanks/special_thanks/ajax_users',
+        // インストールマニュアル
+        'installManual' => 'https://basercms.net/manuals/introductions/4.html',
+        // アップデートマニュアル
+        'updateManual' => 'https://basercms.net/manuals/introductions/8.html'
+    ],
+
+    /**
+     * キャッシュ
+     */
+    'Cache' => [
+        '_cake_env_' => [
+            'className' => FileEngine::class,
+            'prefix' => 'myapp_cake_env_',
+            'path' => CACHE . 'environment' . DS,
+            'serialize' => true,
+            'duration' => '+999 days',
+            'url' => env('CACHE_CAKEENV_URL', null),
         ],
+    ]
 
 ];

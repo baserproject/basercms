@@ -98,6 +98,9 @@ ClassRegistry::init('User');
 TableRegistry::getTableLocator()->get('Users');
 ```
 
+### テーブルプレフィックス
+
+CakePHP3系よりテーブルプレフィックスはなくなっています。ない前提での移行が必要です。
 　
 
 ## baserCMS関連

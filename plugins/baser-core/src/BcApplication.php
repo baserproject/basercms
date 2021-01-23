@@ -12,12 +12,14 @@ declare(strict_types=1);
  */
 namespace BaserCore;
 
+use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\MiddlewareQueue;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 
@@ -46,15 +48,19 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
             $this->bootstrapCli();
         }
 
-        if (Configure::read('debug')) {
+        if(Configure::read('debug') && env('USE_DEBUG_KIT', false)) {
+            // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
             $this->addPlugin('DebugKit');
         }
 
-        // Load more plugins here
         $this->addPlugin('BaserCore');
-        $this->addPlugin('BcBlog');
         $this->addPlugin('Authentication');
         $this->addPlugin('BcAdminThird');
+
+        $plugins = BcUtil::getEnablePlugins();
+        foreach($plugins as $plugin) {
+            $this->addPlugin($plugin->name);
+        }
 
     }
 

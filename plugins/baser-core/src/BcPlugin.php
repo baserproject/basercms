@@ -28,16 +28,17 @@ class BcPlugin extends BasePlugin
     public function routes($routes): void
     {
         $path = '/baser';
-        if($this->name !== 'BaserCore') {
-            $path .= '/' . Inflector::dasherize($this->name);
-        }
         Router::plugin(
             $this->name,
             ['path' =>  $path],
             function (RouteBuilder $routes) {
+                $path = env('BC_ADMIN_PREFIX', '/admin');
+                if($this->name !== 'BaserCore') {
+                    $path .= '/' . Inflector::dasherize($this->name);
+                }
                 $routes->prefix(
                     'Admin',
-                    ['path' => env('BC_ADMIN_PREFIX', '/admin')],
+                    ['path' => $path],
                     function (RouteBuilder $routes) {
                         $routes->connect('', ['controller' => 'Dashboard', 'action' => 'index']);
                         // CakePHPのデフォルトで /index が省略する仕様のため、URLを生成する際は、強制的に /index を付ける仕様に変更
