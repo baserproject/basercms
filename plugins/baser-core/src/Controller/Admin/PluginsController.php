@@ -41,7 +41,9 @@ class PluginsController extends BcAdminAppController
             $Folder = new Folder($path);
             $files = $Folder->read(true, true, true);
             foreach($files[0] as $file) {
-                $pluginConfigs[basename($file)] = $this->Plugins->getPluginConfig($file);
+                if(!in_array(basename($file), Configure::read('BcApp.core'))) {
+                    $pluginConfigs[basename($file)] = $this->Plugins->getPluginConfig($file);
+                }
             }
         }
 

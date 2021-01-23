@@ -151,7 +151,11 @@ $this->BcAdmin->setTitle($title);
 $this->BcTime->format($format, $date);
 ↓
 $this->BcTime->format($date, $format);
+
 ```
+また、フォーマットの形式が変更となった。`YYYY-MM-dd`  
+https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax
+
 
 ### ビュー おいてモデルの配列をエンティティに置換する正規表現例
 

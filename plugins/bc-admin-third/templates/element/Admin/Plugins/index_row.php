@@ -49,7 +49,15 @@ $class = ' class="' . implode(' ', $classies) . '"';
     </td>
     <td class="bca-table-listup__tbody-td"><?php echo $plugin->version ?></td>
     <td class="bca-table-listup__tbody-td"><?php echo h($plugin->description) ?></td>
-    <td class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($plugin->author, $plugin->url, ['target' => '_blank']) ?></td>
+    <td class="bca-table-listup__tbody-td">
+        <?php if($plugin->author): ?>
+            <?php if($plugin->url): ?>
+                <?php echo h($plugin->author) ?>
+            <?php else: ?>
+                 <?php $this->BcBaser->link($plugin->author, $plugin->url, ['target' => '_blank']) ?>
+            <?php endif ?>
+        <?php endif ?>
+    </td>
     <td class="bca-table-listup__tbody-td" style="width:10%;white-space: nowrap">
         <?php echo $this->BcTime->format($plugin->created, 'YYYY-MM-dd') ?><br/>
         <?php echo $this->BcTime->format($plugin->modified, 'YYYY-MM-dd') ?>
