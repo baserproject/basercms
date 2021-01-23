@@ -332,6 +332,7 @@ class PermissionsController extends AppController
 	 */
 	public function admin_ajax_update_sort($userGroupId)
 	{
+		$this->autoRender = false;
 		if (!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 			exit;
