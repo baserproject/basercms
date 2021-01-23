@@ -146,6 +146,7 @@ class BlogPostTest extends BaserTestCase
 			'BlogPost' => [
 				'detail' => $bigData,
 				'detail_draft' => $bigData,
+				'blog_content_id' => 1
 			]
 		]);
 
@@ -180,6 +181,7 @@ class BlogPostTest extends BaserTestCase
 			'BlogPost' => [
 				'detail' => 'test',
 				'detail_draft' => 'test',
+				'blog_content_id' => 1
 			]
 		]);
 
