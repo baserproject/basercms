@@ -113,6 +113,7 @@ class UserGroupsControllerTest extends TestCase
      */
     public function testCopy()
     {
+        $this->enableSecurityToken();
         $this->post('/baser/admin/user_groups/copy/1');
         $this->assertResponseSuccess();
         $userGroups = $this->getTableLocator()->get('UserGroups');

@@ -83,6 +83,7 @@ class UsersControllerTest extends TestCase
      */
     public function testAdd()
     {
+        $this->enableSecurityToken();
         $data = [
             'name' => 'Lorem ipsum dolor sit amet',
             'password_1' => 'Lorem ipsum dolor sit amet',
