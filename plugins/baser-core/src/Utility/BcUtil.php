@@ -11,7 +11,9 @@
 
 namespace BaserCore\Utility;
 
+use Cake\Core\App;
 use Cake\Core\Configure;
+use Cake\Filesystem\File;
 use Cake\ORM\Entity;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
@@ -98,7 +100,7 @@ class BcUtil {
         if (!$plugin || in_array($plugin, $corePlugins)) {
             $path = BASER . 'VERSION.txt';
         } else {
-            $paths = \Cake\Core\App::path('plugins');
+            $paths = App::path('plugins');
             $exists = false;
             foreach($paths as $path) {
                 $path .=  $plugin . DS . 'VERSION.txt';
@@ -111,7 +113,7 @@ class BcUtil {
                 return false;
             }
         }
-        $versionFile = new \Cake\Filesystem\File($path);
+        $versionFile = new File($path);
         $versionData = $versionFile->read();
         $aryVersionData = explode("\n", $versionData);
         if (!empty($aryVersionData[0])) {

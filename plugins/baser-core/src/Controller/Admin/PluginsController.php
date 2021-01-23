@@ -66,6 +66,9 @@ class PluginsController extends BcAdminAppController {
 			'numeric'), $unavailables);
 //		}
 
+        foreach($pluginConfigs as $plugin) {
+            var_dump($plugin->toArray());
+            }
 		// 表示設定
 		$this->set('datas', $pluginConfigs);
 		$this->set('corePlugins', Configure::read('BcApp.corePlugins'));
