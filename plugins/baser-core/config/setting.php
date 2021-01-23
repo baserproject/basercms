@@ -16,6 +16,10 @@ return [
          */
         'adminGroup' => ['admins'],
         /**
+         * コアパッケージ名
+         */
+        'core' => ['baser-core', 'bc-admin-third'],
+        /**
          * コアプラグイン
          */
         'corePlugins' => ['BcBlog', 'BcMail'],

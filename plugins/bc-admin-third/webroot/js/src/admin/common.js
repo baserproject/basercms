@@ -11,4 +11,5 @@
 
 import "bootstrap";
 import "./_lib/jquery.baseUrl.js";
+import "./_lib/jquery.bcUtil.js";
 import "./_module/sidebar.js";

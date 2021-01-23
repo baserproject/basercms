@@ -9,6 +9,7 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\Utility\BcUtil;
 use BaserCore\View\AppView;
 
 /**
@@ -39,7 +40,8 @@ $base = $attributes['base'];
     ]) ?>
     <? echo $this->BcBaser->js('admin/common.bundle', true, [
         'id' => 'AdminScript',
-        'data-baseUrl' => h($base)
+        'data-baseUrl' => h($base),
+        'data-adminPrefix' => BcUtil::getAdminPrefix()
     ]) ?>
     <? echo $this->BcBaser->js([
         'admin/startup.bundle'

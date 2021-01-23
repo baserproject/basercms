@@ -12,4 +12,6 @@
 
 CakePHP4 から、File、Folder クラスは非推奨となり、SplFileInfo、SplFileObject の利用が推奨されているが、baserCMSでは利用箇所が多いため、一旦、そのまま利用する。
 
+## HTML
 
+- table タグの `cellpadding="0" cellspacing="0"` は除外する。

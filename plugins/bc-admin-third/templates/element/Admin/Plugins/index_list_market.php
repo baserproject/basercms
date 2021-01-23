@@ -30,7 +30,7 @@
 	<tbody>
 	<?php if (!empty($baserPlugins)): ?>
 		<?php foreach($baserPlugins as $data): ?>
-			<?php $this->BcBaser->element('plugins/index_row_market', ['data' => $data]) ?>
+			<?php $this->BcBaser->element('BaserCore.Admin/Plugins/index_row_market', ['data' => $data]) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
