@@ -474,7 +474,6 @@ class BlogController extends BlogAppController
 			'num' => null,
 			'contentId' => $contentId,
 			'page' => 1,
-			'cache' => false,
 		], $options);
 
 		$named = [];

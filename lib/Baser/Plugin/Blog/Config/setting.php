@@ -27,7 +27,6 @@ $blogContents = $BlogContent->find('all', [
 	],
 	'recursive' => 0,
 	'order' => $BlogContent->id,
-	'cache' => false,
 ]);
 foreach($blogContents as $blogContent) {
 	$blog = $blogContent['BlogContent'];
