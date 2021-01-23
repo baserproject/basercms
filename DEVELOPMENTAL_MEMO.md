@@ -140,6 +140,10 @@ $this->setTitle($title);    // 新
 $this->BcAdmin->setTitle($title);
 ```
 
+## basics.php 関数について
+
+`BcUtil` に静的メソッドとして統合。  
+`getVersion()` → `BcUtil::getVersion()`
 　
 
 ## ユニットテストについて

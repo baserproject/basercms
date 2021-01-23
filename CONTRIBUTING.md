@@ -94,6 +94,7 @@ Issue番号にもとづいた名称でブランチを作成し切り替えます
 
 ## その他の開発に必要なドキュメント
 - [システム要件](https://github.com/baserproject/ucmitz/blob/dev/docs/system.md)
+- [コーディング方針](https://github.com/baserproject/ucmitz/blob/dev/docs/coding-policy.md)
 - [データベースの定義](https://github.com/baserproject/ucmitz/blob/dev/docs/database.md)
 - [プラグインの呼び出し](https://github.com/baserproject/ucmitz/blob/dev/docs/call-plugin.md)
 - [BcAdminThirdの開発](https://github.com/baserproject/ucmitz/blob/dev/plugins/bc-admin-third/README.md)
