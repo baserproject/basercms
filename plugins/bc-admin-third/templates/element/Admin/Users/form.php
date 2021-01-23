@@ -53,8 +53,8 @@ $this->BcBaser->i18nScript([
             <td class="col-input bca-form-table__input">
                 <?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 20, 'maxlength' => 255, 'autofocus' => true]) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
-                <?php echo $this->BcAdminForm->error('name') ?>
                 <div id="helptextName" class="helptext"><?php echo __d('baser', '半角英数字とハイフン、アンダースコアのみで入力してください。') ?></div>
+                <?php echo $this->BcAdminForm->error('name') ?>
             </td>
         </tr>
         <tr>
@@ -63,9 +63,9 @@ $this->BcBaser->i18nScript([
                 <small>[<?php echo __d('baser', '姓') ?>]</small> <?php echo $this->BcAdminForm->control('real_name_1', ['type' => 'text', 'size' => 12, 'maxlength' => 255]) ?>
                 <small>[<?php echo __d('baser', '名') ?>]</small> <?php echo $this->BcAdminForm->control('real_name_2', ['type' => 'text', 'size' => 12, 'maxlength' => 255]) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
+                <div id="helptextRealName1" class="helptext"><?php echo __d('baser', '「名」は省略する事ができます。') ?></div>
                 <?php echo $this->BcAdminForm->error('real_name_1', __d('baser', '姓を入力してください')) ?>
                 <?php echo $this->BcAdminForm->error('real_name_2', __d('baser', '名を入力してください')) ?>
-                <div id="helptextRealName1" class="helptext"><?php echo __d('baser', '「名」は省略する事ができます。') ?></div>
             </td>
         </tr>
         <tr>
@@ -73,8 +73,8 @@ $this->BcBaser->i18nScript([
             <td class="col-input bca-form-table__input">
                 <?php echo $this->BcAdminForm->control('nickname', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
-                <?php echo $this->BcAdminForm->error('nickname') ?>
                 <div id="helptextNickname" class="helptext"><?php echo __d('baser', 'ニックネームを設定している場合は全ての表示にニックネームが利用されます。') ?></div>
+                <?php echo $this->BcAdminForm->error('nickname') ?>
             </td>
         </tr>
         <tr>
@@ -97,11 +97,11 @@ $this->BcBaser->i18nScript([
                 <input type="text" name="dummy-email" style="top:-100px;left:-100px;position:fixed;">
                 <?php echo $this->BcAdminForm->control('email', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
-                <?php echo $this->BcAdminForm->error('email') ?>
                 <div id="helptextEmail" class="helptext">
                     <?php echo __d('baser', '連絡用メールアドレスを入力します。') ?>
                     <br><small>※ <?php echo __d('baser', 'パスワードを忘れた場合の新パスワードの通知先等') ?></small>
                 </div>
+                <?php echo $this->BcAdminForm->error('email') ?>
             </td>
         </tr>
         <tr>
@@ -118,7 +118,6 @@ $this->BcBaser->i18nScript([
                 <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
                 <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
-                <?php echo $this->BcAdminForm->error('password') ?>
                 <div id="helptextPassword" class="helptext">
                     <ul>
                         <li>
@@ -130,6 +129,7 @@ $this->BcBaser->i18nScript([
                         <li><?php echo __d('baser', '最低６文字以上で入力してください') ?></li>
                     </ul>
                 </div>
+                <?php echo $this->BcAdminForm->error('password') ?>
             </td>
         </tr>
         <?php echo $this->BcAdminForm->dispatchAfterForm() ?>
