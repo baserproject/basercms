@@ -197,7 +197,7 @@ class PermissionsController extends AppController
 				__d('baser', '新規アクセス制限設定「%s」を追加しました。'), $this->request->data['Permission']['name']
 			)
 		);
-		exit();
+		exit(true);
 	}
 
 	/**
