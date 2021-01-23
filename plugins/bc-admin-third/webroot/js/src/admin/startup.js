@@ -61,7 +61,7 @@ $(function() {
      * ヘルプ
      */
 	$('#BtnMenuHelp').click(function(){
-		if($('#Help').css('display')=='none'){
+		if($('#Help').css('display')==='none'){
 			$('#Help').fadeIn(300);
 		} else {
 			$('#Help').fadeOut(300);
@@ -70,6 +70,11 @@ $(function() {
 	$('#CloseHelp').click(function(){
 		$('#Help').fadeOut(300);
 	});
+
+    /**
+     * BcUtil 初期化
+     */
+     $.bcUtil.init([]);
 
 });
 

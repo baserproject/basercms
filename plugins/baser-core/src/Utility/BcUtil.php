@@ -23,24 +23,25 @@ use Cake\Utility\Inflector;
  *
  * @package Baser.Lib
  */
-class BcUtil {
+class BcUtil
+{
 
-/**
- * ログインユーザーのデータを取得する
- *
- * @return Entity
- */
+    /**
+     * ログインユーザーのデータを取得する
+     *
+     * @return Entity
+     */
     public static function loginUser($prefix = 'Admin')
     {
-	    $session = Router::getRequest()->getSession();
-	    $sessionKey = Configure::read('BcPrefixAuth.' . $prefix . '.sessionKey');
-		$user = $session->read($sessionKey);
-		if (!$user) {
-			if (!empty($_SESSION[$sessionKey])) {
-				$user = $_SESSION[$sessionKey];
-			}
-		}
-		return $user;
+        $session = Router::getRequest()->getSession();
+        $sessionKey = Configure::read('BcPrefixAuth.' . $prefix . '.sessionKey');
+        $user = $session->read($sessionKey);
+        if (!$user) {
+            if (!empty($_SESSION[$sessionKey])) {
+                $user = $_SESSION[$sessionKey];
+            }
+        }
+        return $user;
     }
 
     /**
@@ -86,7 +87,7 @@ class BcUtil {
     public static function isInstallMode()
     {
         return env('INSTALL_MODE');
-	}
+    }
 
     /**
      * バージョンを取得する
@@ -103,13 +104,13 @@ class BcUtil {
             $paths = App::path('plugins');
             $exists = false;
             foreach($paths as $path) {
-                $path .=  $plugin . DS . 'VERSION.txt';
+                $path .= $plugin . DS . 'VERSION.txt';
                 if (file_exists($path)) {
                     $exists = true;
                     break;
                 }
             }
-            if(!$exists) {
+            if (!$exists) {
                 return false;
             }
         }
@@ -132,7 +133,8 @@ class BcUtil {
      *
      * @param mixed $version Or false
      */
-    public static function verpoint($version) {
+    public static function verpoint($version)
+    {
         $version = str_replace('baserCMS ', '', $version);
         if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)([\sa-z\-]+|\.[0-9]+|)([\sa-z\-]+|\.[0-9]+|)/is", $version, $maches)) {
             if (isset($maches[4]) && preg_match('/^\.[0-9]+$/', $maches[4])) {
@@ -149,6 +151,16 @@ class BcUtil {
         } else {
             return 0;
         }
+    }
+
+    /**
+     * 管理画面用のプレフィックスを取得する
+     *
+     * @return string
+     */
+    public static function getAdminPrefix()
+    {
+        return Configure::read('BcPrefixAuth.Admin.alias');
     }
 
 }
