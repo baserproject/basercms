@@ -47,6 +47,10 @@ class BcBaserHelper extends Helper
 		return $this->_View->element($name, $data, $options);
 	}
 
+	public function img($path, $options = []) {
+		echo $this->Html->image($path, $options);
+	}
+
 	public function getImg($path, $options = []) {
 		return $this->Html->image($path, $options);
 	}

@@ -140,11 +140,26 @@ $this->setTitle($title);    // 新
 $this->BcAdmin->setTitle($title);
 ```
 
-## basics.php 関数について
+### basics.php 関数について
 
 `BcUtil` に静的メソッドとして統合。  
 `getVersion()` → `BcUtil::getVersion()`
 　
+### BcTime::format() の引数の順番変更
+
+```php
+$this->BcTime->format($format, $date);
+↓
+$this->BcTime->format($date, $format);
+```
+
+### ビュー おいてモデルの配列をエンティティに置換する正規表現例
+
+```
+\$plugin\['Plugin'\]\['(.+?)'\]
+↓
+\$plugin->$1
+```
 
 ## ユニットテストについて
 ユニットテストの作成と実行については [ユニットテスト](https://github.com/baserproject/ucmitz/blob/dev/docs/unittest.md) を参考にします。
