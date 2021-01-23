@@ -529,6 +529,20 @@ class BlogPost extends BlogAppModel
 	}
 
 	/**
+	 * After Validate
+	 */
+	public function afterValidate()
+	{
+		parent::afterValidate();
+		if(empty($this->data['BlogPost']['blog_content_id'])) {
+			throw new BcException('blog_content_id が指定されていません。');
+		}
+		if (empty($this->validationErrors) && empty($this->data['BlogPost']['id'])) {
+			$this->data['BlogPost']['no'] = $this->getMax('no', ['BlogPost.blog_content_id' => $this->data['BlogPost']['blog_content_id']]) + 1;
+		}
+	}
+
+	/**
 	 * afterSave
 	 *
 	 * @param boolean $created
@@ -537,7 +551,7 @@ class BlogPost extends BlogAppModel
 	public function afterSave($created, $options = [])
 	{
 		// 検索用テーブルへの登録・削除
-		if ($this->searchIndexSaving && !$this->data['BlogPost']['exclude_search']) {
+		if ($this->searchIndexSaving && empty($this->data['BlogPost']['exclude_search'])) {
 			$this->saveSearchIndex($this->createSearchIndex($this->data));
 		} else {
 			if (!empty($this->data['BlogPost']['id'])) {

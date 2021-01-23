@@ -14,6 +14,22 @@ class BlogPostBlogBaserHelperFixture extends BaserTestFixture
 	public $name = 'BlogPost';
 
 	/**
+	 * BlogPostFixture constructor.
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+		// PostgreSQLの場合、プライマリーキー以外のインデックスが設定されている場合
+		// テスト用のテーブルを作成する際に本体用のインデックスとの重複エラーとなってしまうため
+		// 別名のインデックス名として作成しなおす
+		include_once BASER_PLUGINS . 'Blog' . DS . 'Config' . DS . 'Schema' . DS . 'blog_posts.php';
+		$schema = new BlogPostsSchema();
+		$schema->tables['blog_posts']['indexes']['test_blog_content_id_no_index'] = $schema->tables['blog_posts']['indexes']['blog_content_id_no_index'];
+		unset($schema->tables['blog_posts']['indexes']['blog_content_id_no_index']);
+		$this->fields = $schema->tables['blog_posts'];
+	}
+
+	/**
 	 * Records
 	 *
 	 * @var array
@@ -60,7 +76,7 @@ class BlogPostBlogBaserHelperFixture extends BaserTestFixture
 		[
 			'id' => '3',
 			'blog_content_id' => '1',
-			'no' => '1',
+			'no' => '3',
 			'name' => 'name3',
 			'content' => 'content3',
 			'blog_category_id' => '3',
