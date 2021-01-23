@@ -1389,7 +1389,7 @@ class BlogHelper extends AppHelper
 		$tags = $BlogTag->find('customParams', $options);
 		// 公開記事数のカウントを追加
 		if ($options['postCount']) {
-			$tags = $this->_mergePostCountToTagsData($tags);
+			$tags = $this->_mergePostCountToTagsData($tags, $options);
 		}
 		return $tags;
 	}
@@ -1496,7 +1496,7 @@ class BlogHelper extends AppHelper
 	 * @param array $tags BlogTagの基本情報の配列
 	 * @return array
 	 */
-	private function _mergePostCountToTagsData(array $tags)
+	private function _mergePostCountToTagsData(array $tags, $options)
 	{
 
 		/** @var BlogPost $BlogPost */
@@ -1506,6 +1506,26 @@ class BlogHelper extends AppHelper
 			['BlogTag.id' => $blogTagIds],
 			$BlogPost->getConditionAllowPublish()
 		);
+		if (!empty($options['contentId'])) {
+			$blogContentIds = $options['contentId'];
+		}
+		if (!empty($options['contentUrl'])) {
+			/** @var BlogContent $BlogContent */
+			$BlogContent = ClassRegistry::init('Blog.BlogContent');
+			$blogContent = $BlogContent->find('all', [
+				'fields' => ['BlogContent.id'],
+				'conditions' => array_merge(
+					$BlogContent->Content->getConditionAllowPublish(),
+					['Content.url' => $options['contentUrl']]
+				),
+				'recursive' => 0,
+				'cache' => false
+			]);
+			$blogContentIds = Hash::extract($blogContent, "{n}.BlogContent.id");
+		}
+		if (!empty($blogContentIds)) {
+			$conditions[] = ['BlogPost.blog_content_id' => $blogContentIds];
+		}
 
 		$postCountsData = $BlogPost->find('all', [
 			'fields' => [
