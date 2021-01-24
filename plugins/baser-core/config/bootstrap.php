@@ -25,6 +25,9 @@ Validator::addDefaultProvider('bc', 'BaserCore\Model\Validation\BcValidation');
 /**
  * キャッシュ
  */
+if (Cache::getConfig('_cake_env_')) {
+    Cache::drop('_cake_env_');
+}
 Cache::setConfig(Configure::consume('Cache'));
 
 /**
