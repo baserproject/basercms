@@ -1,6 +1,6 @@
 # ユニットテスト
 
-baserCMSでは、[CakePHPのテストの仕組み](https://book.cakephp.org/4/ja/development/testing.html) をしてユニットテストを作成します。
+baserCMSでは、[CakePHPのテストの仕組み](https://book.cakephp.org/4/ja/development/testing.html) を使用してユニットテストを作成します。
 
 ## テストの準備
 
@@ -44,6 +44,10 @@ class BcTestHelperTest extends BaserCore\TestSuite\BcTestCase {
     }
 }
 ```
+
+### プライベートメソッドに対するテスト
+
+プライベートメソッドに対するテストはパブリックメソッド経由で行うものとします。
 
 ## テストの実行
 
