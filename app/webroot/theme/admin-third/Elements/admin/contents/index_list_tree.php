@@ -81,12 +81,13 @@ if (!$PermissionModel->check('/' . Configure::read('Routing.prefixes.0') . '/con
 	"editDisabled":"<?php echo $editDisabled ?>",
 	"manageDisabled":"<?php echo $manageDisabled ?>",
 	"deleteDisabled":"<?php echo $deleteDisabled ?>"
-}'<?php if ($open): ?> class="jstree-open"<?php endif ?>>
-			<?php echo h($data['Content']['title']) ?>
-			<?php if (!empty($data['children'])): ?>
-				<?php $this->BcBaser->element('admin/contents/index_list_tree', ['datas' => $data['children']]) ?>
-			<?php endif ?>
-		</li>
+}'<?php if ($open): ?> class="jstree-open"<?php endif ?>
+		><?php
+		echo h($data['Content']['title']);
+		if (!empty($data['children'])) {
+			$this->BcBaser->element('admin/contents/index_list_tree', ['datas' => $data['children']]);
+		}
+		?></li>
 	<?php endforeach ?>
 </ul>
 
