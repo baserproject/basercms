@@ -21,9 +21,7 @@ if ($feedAdminTheme) {
 }
 $requestUrl = Router::url($requestUrl);
 ?>
-document.write('
-<div
-	id="feeds<?php echo $id; ?>"><?php echo $this->html->image('admin/ajax-loader.gif', ['alt' => 'loading now...', 'style' => 'display:block;margin:auto']) ?></div>');
+document.write('<div id="feeds<?php echo $id; ?>"><?php echo $this->html->image('admin/ajax-loader.gif', ['alt' => 'loading now...', 'style' => 'display:block;margin:auto']) ?></div>');
 
 // 読込み成功時の処理
 var successCallback = function (response)
