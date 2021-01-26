@@ -78,7 +78,15 @@ class MailMessagesController extends MailAppController
 		$this->MailMessage->setup($this->mailContent['MailContent']['id']);
 		$mailContentId = $this->params['pass'][0];
 		$this->request->params['Content'] = $this->BcContents->getContent($mailContentId)['Content'];
-		$this->crumbs[] = ['name' => sprintf(__d('baser', '%s 管理'), $this->request->params['Content']['title']), 'url' => ['plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0]]];
+		$this->crumbs[] = [
+			'name' => sprintf(
+				__d('baser', '%s 管理'),
+				$this->request->params['Content']['title']
+			),
+			'url' => [
+				'plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0]
+			]
+		];
 	}
 
 	/**
@@ -117,7 +125,10 @@ class MailMessagesController extends MailAppController
 			return;
 		}
 
-		$this->pageTitle = sprintf(__d('baser', '%s｜受信メール一覧'), $this->request->params['Content']['title']);
+		$this->pageTitle = sprintf(
+			__d('baser', '%s｜受信メール一覧'),
+			$this->request->params['Content']['title']
+		);
 		$this->help = 'mail_messages_index';
 	}
 
@@ -140,9 +151,19 @@ class MailMessagesController extends MailAppController
 		]);
 		$mailFields = $this->MailMessage->mailFields;
 
-		$this->crumbs[] = ['name' => __d('baser', '受信メール一覧'), 'url' => ['controller' => 'mail_messages', 'action' => 'index', $this->params['pass'][0]]];
+		$this->crumbs[] = [
+			'name' => __d('baser', '受信メール一覧'),
+			'url' => [
+				'controller' => 'mail_messages',
+				'action' => 'index',
+				$this->params['pass'][0]
+			]
+		];
 		$this->set(compact('message', 'mailFields'));
-		$this->pageTitle = sprintf(__d('baser', '%s｜受信メール詳細'), $this->request->params['Content']['title']);
+		$this->pageTitle = sprintf(
+			__d('baser', '%s｜受信メール詳細'),
+			$this->request->params['Content']['title']
+		);
 	}
 
 	/**
@@ -234,12 +255,12 @@ class MailMessagesController extends MailAppController
 		$filePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . $file;
 		$ext = decodeContent(null, $file);
 		$mineType = 'application/octet-stream';
-		if ($ext != 'gif' && $ext != 'jpg' && $ext != 'png') {
+		if ($ext !== 'gif' && $ext !== 'jpg' && $ext !== 'png') {
 			Header("Content-disposition: attachment; filename=" . $file);
 		} else {
 			$mineType = 'image/' . $ext;
 		}
-		Header("Content-type: " . $mineType . "; name=" . $file);
+		Header(sprintf('Content-type: %s; name=%s', $mineType, $file));
 		echo file_get_contents($filePath);
 		exit();
 	}

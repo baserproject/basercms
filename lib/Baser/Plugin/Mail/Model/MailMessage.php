@@ -112,7 +112,7 @@ class MailMessage extends MailAppModel
 		$settings['fields'] = [];
 		foreach($this->mailFields as $mailField) {
 			$mailField = $mailField['MailField'];
-			if ($mailField['type'] == 'file') {
+			if ($mailField['type'] === 'file') {
 				$settings['fields'][$mailField['field_name']] = [
 					'type' => 'all',
 					'namefield' => 'id',
@@ -185,8 +185,8 @@ class MailMessage extends MailAppModel
 			$mailField = $mailField['MailField'];
 			if ($mailField['valid'] && !empty($mailField['use_field'])) {
 				// 必須項目
-				if ($mailField['valid'] == 'VALID_NOT_EMPTY' || $mailField['valid'] == 'VALID_EMAIL') {
-					if ($mailField['type'] == 'file') {
+				if ($mailField['valid'] === 'VALID_NOT_EMPTY' || $mailField['valid'] === 'VALID_EMAIL') {
+					if ($mailField['type'] === 'file') {
 						if (!isset($this->data['MailMessage'][$mailField['field_name'] . '_tmp'])) {
 							$this->validate[$mailField['field_name']] = ['notBlank' => [
 								'rule' => ['notFileEmpty'],
@@ -202,13 +202,13 @@ class MailMessage extends MailAppModel
 						]];
 					}
 					// 半角数字
-				} elseif ($mailField['valid'] == '/^(|[0-9]+)$/') {
+				} elseif ($mailField['valid'] === '/^(|[0-9]+)$/') {
 					$this->validate[$mailField['field_name']] = [
 						'rule' => '/^(|[0-9]+)$/',
 						'message' => '半角数字で入力してください。'
 					];
 					// 半角数字（入力必須）
-				} elseif ($mailField['valid'] == '/^([0-9]+)$/') {
+				} elseif ($mailField['valid'] === '/^([0-9]+)$/') {
 					$this->validate[$mailField['field_name']] = [
 						'rule' => '/^([0-9]+)$/',
 						'message' => __('半角数字で入力してください。')
@@ -221,7 +221,7 @@ class MailMessage extends MailAppModel
 						'email' => [
 							'rule' => ['email'],
 							'message' => __('形式が無効です。')
-						], 
+						],
 						'english' => [
 							'rule' => '/^[a-zA-Z0-9!#$%&\’*+-\/=?^_`{|}~@.]*$/',
 							'message' => __('半角で入力してください。')
@@ -468,11 +468,11 @@ class MailMessage extends MailAppModel
 			if ($value !== null) {
 
 				// 半角処理
-				if ($mailField['auto_convert'] == 'CONVERT_HANKAKU') {
+				if ($mailField['auto_convert'] === 'CONVERT_HANKAKU') {
 					$value = mb_convert_kana($value, 'a');
 				}
 				// 全角処理
-				if ($mailField['auto_convert'] == 'CONVERT_ZENKAKU') {
+				if ($mailField['auto_convert'] === 'CONVERT_ZENKAKU') {
 					$value = mb_convert_kana($value, 'AK');
 				}
 				// サニタイズ
@@ -507,7 +507,7 @@ class MailMessage extends MailAppModel
 				// 対象フィールドがあれば、バリデートグループごとに配列に格納する
 				if (!is_null($mailField['default_value']) && $mailField['default_value'] !== "") {
 
-					if ($mailField['type'] == 'multi_check') {
+					if ($mailField['type'] === 'multi_check') {
 						$_data['MailMessage'][$mailField['field_name']][0] = $mailField['default_value'];
 					} else {
 						$_data['MailMessage'][$mailField['field_name']] = $mailField['default_value'];
@@ -540,7 +540,7 @@ class MailMessage extends MailAppModel
 		foreach($this->mailFields as $mailField) {
 			$mailField = $mailField['MailField'];
 			// マルチチェックのデータを｜区切りに変換
-			if ($mailField['type'] == 'multi_check' && $mailField['use_field']) {
+			if ($mailField['type'] === 'multi_check' && $mailField['use_field']) {
 				if (!empty($dbData['MailMessage'][$mailField['field_name']])) {
 					if (is_array($dbData['MailMessage'][$mailField['field_name']])) {
 						$dbData['MailMessage'][$mailField['field_name']] = implode("|", $dbData['MailMessage'][$mailField['field_name']]);
@@ -550,7 +550,7 @@ class MailMessage extends MailAppModel
 				}
 			}
 			// パスワードのデータをハッシュ化
-			if ($mailField['type'] == 'password') {
+			if ($mailField['type'] === 'password') {
 				if (!empty($dbData['MailMessage'][$mailField['field_name']])) {
 					App::uses('AuthComponent', 'Controller/Component');
 					$dbData['MailMessage'][$mailField['field_name']] = AuthComponent::password($dbData['MailMessage'][$mailField['field_name']]);
@@ -671,12 +671,12 @@ class MailMessage extends MailAppModel
 			if ($mailField['no_send']) {
 				unset($dbData['message'][$mailField['field_name']]);
 			}
-			if ($mailField['type'] == 'multi_check') {
+			if ($mailField['type'] === 'multi_check') {
 				if (!empty($dbData['message'][$mailField['field_name']]) && !is_array($dbData['message'][$mailField['field_name']])) {
 					$dbData['message'][$mailField['field_name']] = explode("|", $dbData['message'][$mailField['field_name']]);
 				}
 			}
-			if ($mailField['type'] == 'file' && isset($dbData['message'][$mailField['field_name'] . '_tmp'])) {
+			if ($mailField['type'] === 'file' && isset($dbData['message'][$mailField['field_name'] . '_tmp'])) {
 				$dbData['message'][$mailField['field_name']] = $dbData['message'][$mailField['field_name'] . '_tmp'];
 				unset($dbData['message'][$mailField['field_name'] . '_tmp']);
 			}
@@ -862,7 +862,7 @@ class MailMessage extends MailAppModel
 			$inData = [];
 			$inData['NO'] = $message[$this->alias]['id'];
 			foreach($mailFields as $mailField) {
-				if ($mailField['MailField']['type'] == 'file') {
+				if ($mailField['MailField']['type'] === 'file') {
 					$inData[$mailField['MailField']['field_name'] . ' (' . $mailField['MailField']['name'] . ')'] = $message[$this->alias][$mailField['MailField']['field_name']];
 				} else {
 					$inData[$mailField['MailField']['field_name'] . ' (' . $mailField['MailField']['name'] . ')'] = $Maildata->toDisplayString(
@@ -905,7 +905,6 @@ class MailMessage extends MailAppModel
 		return $result;
 
 	}
-
 
 	/**
 	 * find

@@ -203,7 +203,7 @@ class MailController extends MailAppController
 			return;
 		}
 
-		if ($this->BcContents->preview == 'default' && $this->request->data && empty($this->request->params['requested'])) {
+		if ($this->BcContents->preview === 'default' && $this->request->data && empty($this->request->params['requested'])) {
 			$this->dbDatas['mailContent']['MailContent'] = $this->request->data['MailContent'];
 			$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
 			$this->request->params['Content']['eyecatch'] = $this->request->data['Content']['eyecatch'];
@@ -296,7 +296,16 @@ class MailController extends MailAppController
 		}
 		$user = BcUtil::loginUser('admin');
 		if (!empty($user)) {
-			$this->set('editLink', ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']]);
+			$this->set(
+				'editLink',
+				[
+					'admin' => true,
+					'plugin' => 'mail',
+					'controller' => 'mail_contents',
+					'action' => 'edit',
+					$this->dbDatas['mailContent']['MailContent']['id']
+				]
+			);
 		}
 		$this->set('mailContent', $this->dbDatas['mailContent']);
 		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'confirm');
@@ -406,11 +415,15 @@ class MailController extends MailAppController
 							'data' => $this->request->data
 						]);
 					} else {
-						$this->BcMessage->setError(__('エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。'));
+						$this->BcMessage->setError(
+							__('エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。')
+						);
 						$this->redirect($this->request->params['Content']['url']);
 					}
 				} else {
-					$this->BcMessage->setError(__('エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。'));
+					$this->BcMessage->setError(
+						__('エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。')
+					);
 					$this->redirect($this->request->params['Content']['url']);
 				}
 
@@ -436,7 +449,16 @@ class MailController extends MailAppController
 		}
 		$user = BcUtil::loginUser('admin');
 		if (!empty($user)) {
-			$this->set('editLink', ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']]);
+			$this->set(
+				'editLink',
+				[
+					'admin' => true,
+					'plugin' => 'mail',
+					'controller' => 'mail_contents',
+					'action' => 'edit',
+					$this->dbDatas['mailContent']['MailContent']['id']
+				]
+			);
 		}
 	}
 
@@ -487,7 +509,16 @@ class MailController extends MailAppController
 		// <<<
 		$user = BcUtil::loginUser('admin');
 		if (!empty($user)) {
-			$this->set('editLink', ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']]);
+			$this->set(
+				'editLink',
+				[
+					'admin' => true,
+					'plugin' => 'mail',
+					'controller' => 'mail_contents',
+					'action' => 'edit',
+					$this->dbDatas['mailContent']['MailContent']['id']
+				]
+			);
 		}
 		$this->set('mailContent', $this->dbDatas['mailContent']);
 		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'index');
@@ -545,20 +576,28 @@ class MailController extends MailAppController
 			}
 			$value = $data['message'][$field];
 			// ユーザーメールを取得
-			if ($mailField['MailField']['type'] == 'email' && $value) {
+			if ($mailField['MailField']['type'] === 'email' && $value) {
 				$userMail = $value;
 			}
 			// 件名にフィールドの値を埋め込む
 			// 和暦など配列の場合は無視
 			if (!is_array($value)) {
-				$mailContent['subject_user'] = str_replace('{$' . $field . '}', $value, $mailContent['subject_user']);
-				$mailContent['subject_admin'] = str_replace('{$' . $field . '}', $value, $mailContent['subject_admin']);
+				$mailContent['subject_user'] = str_replace(
+					'{$' . $field . '}',
+					$value,
+					$mailContent['subject_user']
+				);
+				$mailContent['subject_admin'] = str_replace(
+					'{$' . $field . '}',
+					$value,
+					$mailContent['subject_admin']
+				);
 			}
-			if ($mailField['MailField']['type'] == 'file' && $value) {
+			if ($mailField['MailField']['type'] === 'file' && $value) {
 				$attachments[] = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . $value;
 			}
 			// パスワードは入力値をマスクした値を表示
-			if ($mailField['MailField']['type'] == 'password' && $value && !empty($options['maskedPasswords'][$field])) {
+			if ($mailField['MailField']['type'] === 'password' && $value && !empty($options['maskedPasswords'][$field])) {
 				$data['message'][$field] = $options['maskedPasswords'][$field];
 			}
 		}

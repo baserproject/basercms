@@ -70,10 +70,20 @@ class MailFieldsController extends MailAppController
 		$mailContentId = $this->params['pass'][0];
 		$this->mailContent = $this->MailContent->read(null, $mailContentId);
 		$this->request->params['Content'] = $this->BcContents->getContent($mailContentId)['Content'];
-		$this->crumbs[] = ['name' => sprintf('%s 設定', $this->request->params['Content']['title']), 'url' => ['plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId]];
+		$this->crumbs[] = [
+			'name' => sprintf('%s 設定', $this->request->params['Content']['title']),
+			'url' => [
+				'plugin' => 'mail',
+				'controller' => 'mail_fields',
+				'action' => 'index',
+				$mailContentId
+			]
+		];
 		if ($this->request->params['Content']['status']) {
 			$site = BcSite::findById($this->request->params['Content']['site_id']);
-			$this->set('publishLink', $this->Content->getUrl($this->request->params['Content']['url'], true, $site->useSubDomain));
+			$this->set('publishLink', $this->Content->getUrl(
+				$this->request->params['Content']['url'], true, $site->useSubDomain)
+			);
 		}
 	}
 
@@ -87,14 +97,18 @@ class MailFieldsController extends MailAppController
 			$Folder = new Folder();
 			$Folder->create($savePath, 0777);
 			if (!is_dir($savePath)) {
-				$this->BcMessage->setError('ファイルフィールドを利用している場合、現在、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにする為には、' . WWW_ROOT . 'files/mail/ に書き込み権限を与えてください。');
+				$this->BcMessage->setError(
+					'ファイルフィールドを利用している場合、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにするためには、' . WWW_ROOT . 'files/mail/ に書き込み権限を与えてください。'
+				);
 			}
 			$File = new File($savePath . DS . '.htaccess');
 			$htaccess = "Order allow,deny\nDeny from all";
 			$File->write($htaccess);
 			$File->close();
 			if (!file_exists($savePath . DS . '.htaccess')) {
-				$this->BcMessage->setError('ファイルフィールドを利用している場合、現在、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにする為には、' . WWW_ROOT . 'files/mail/limited/ に書き込み権限を与えてください。');
+				$this->BcMessage->setError(
+					'ファイルフィールドを利用している場合、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにするためには、' . WWW_ROOT . 'files/mail/limited/ に書き込み権限を与えてください。'
+				);
 			}
 		}
 	}
@@ -124,8 +138,13 @@ class MailFieldsController extends MailAppController
 		}
 
 		$conditions = $this->_createAdminIndexConditions($mailContentId);
-		$datas = $this->MailField->find('all', ['conditions' => $conditions, 'order' => 'MailField.sort']);
-		$this->set('datas', $datas);
+		$this->set(
+			'datas',
+			$this->MailField->find(
+				'all',
+				['conditions' => $conditions, 'order' => 'MailField.sort']
+			)
+		);
 
 		$this->_setAdminIndexViewData();
 
@@ -134,7 +153,10 @@ class MailFieldsController extends MailAppController
 			return;
 		}
 		$this->subMenuElements = ['mail_fields'];
-		$this->pageTitle = sprintf(__d('baser', '%s｜メールフィールド一覧'), $this->request->params['Content']['title']);
+		$this->pageTitle = sprintf(
+			__d('baser', '%s｜メールフィールド一覧'),
+			$this->request->params['Content']['title']
+		);
 		$this->help = 'mail_fields_index';
 	}
 
@@ -147,7 +169,10 @@ class MailFieldsController extends MailAppController
 	{
 		/* セッション処理 */
 		if (isset($this->params['named']['sortmode'])) {
-			$this->Session->write('SortMode.MailField', $this->params['named']['sortmode']);
+			$this->Session->write(
+				'SortMode.MailField',
+				$this->params['named']['sortmode']
+			);
 		}
 
 		/* 並び替えモード */
@@ -181,7 +206,9 @@ class MailFieldsController extends MailAppController
 				$data['MailField']['valid_ex'] = implode(',', $data['MailField']['valid_ex']);
 			}
 			$data['MailField']['mail_content_id'] = $mailContentId;
-			$data['MailField']['no'] = $this->MailField->getMax('no', ['MailField.mail_content_id' => $mailContentId]) + 1;
+			$data['MailField']['no'] = $this->MailField->getMax(
+					'no', ['MailField.mail_content_id' => $mailContentId]
+				) + 1;
 			$data['MailField']['sort'] = $this->MailField->getMax('sort') + 1;
 			$data['MailField']['source'] = $this->MailField->formatSource($data['MailField']['source']);
 			$this->MailField->create($data);
@@ -203,7 +230,9 @@ class MailFieldsController extends MailAppController
 		}
 
 		$this->subMenuElements = ['mail_fields'];
-		$this->pageTitle = sprintf(__d('baser', '%s｜新規メールフィールド登録'), $this->request->params['Content']['title']);
+		$this->pageTitle = sprintf(
+			__d('baser', '%s｜新規メールフィールド登録'), $this->request->params['Content']['title']
+		);
 		$this->help = 'mail_fields_form';
 		$this->render('form');
 	}
@@ -258,7 +287,9 @@ class MailFieldsController extends MailAppController
 
 		/* 表示設定 */
 		$this->subMenuElements = ['mail_fields'];
-		$this->pageTitle = sprintf(__d('baser', '%s｜メールフィールド編集'), $this->request->params['Content']['title']);
+		$this->pageTitle = sprintf(
+			__d('baser', '%s｜メールフィールド編集'), $this->request->params['Content']['title']
+		);
 		$this->help = 'mail_fields_form';
 		$this->render('form');
 	}
@@ -314,12 +345,19 @@ class MailFieldsController extends MailAppController
 		/* 削除処理 */
 		if ($this->MailMessage->delMessageField($mailContentId, $mailField['MailField']['field_name'])) {
 			if ($this->MailField->delete($id)) {
-				$this->BcMessage->setSuccess(sprintf(__d('baser', 'メールフィールド「%s」を削除しました。'), $mailField['MailField']['name']));
+				$this->BcMessage->setSuccess(
+					sprintf(
+						__d('baser', 'メールフィールド「%s」を削除しました。'),
+						$mailField['MailField']['name']
+					)
+				);
 			} else {
 				$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 			}
 		} else {
-			$this->BcMessage->setError(__d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。'));
+			$this->BcMessage->setError(
+				__d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。')
+			);
 		}
 
 		$this->redirect(['action' => 'index', $mailContentId]);
@@ -335,7 +373,6 @@ class MailFieldsController extends MailAppController
 	{
 		if ($ids) {
 			foreach($ids as $id) {
-
 				// メッセージ用にデータを取得
 				$mailField = $this->MailField->read(null, $id);
 				/* 削除処理 */
@@ -404,7 +441,13 @@ class MailFieldsController extends MailAppController
 		$this->MailMessage->schema(true);
 		$this->MailMessage->cacheSources = false;
 		$this->MailMessage->setUseTable($mailContentId);
-		$messages = $this->MailMessage->convertMessageToCsv($mailContentId, $this->MailMessage->find('all', ['order' => $this->MailMessage->alias . '.created DESC',]));
+		$messages = $this->MailMessage->convertMessageToCsv(
+			$mailContentId,
+			$this->MailMessage->find(
+				'all',
+				['order' => $this->MailMessage->alias . '.created DESC']
+			)
+		);
 		$this->set('encoding', $this->request->query['encoding']);
 		$this->set('messages', $messages);
 		$this->set('contentName', $this->request->params['Content']['name']);
@@ -536,7 +579,10 @@ class MailFieldsController extends MailAppController
 	protected function _changeStatus($id, $status)
 	{
 		$statusTexts = [0 => __d('baser', '無効'), 1 => __d('baser', '有効')];
-		$data = $this->MailField->find('first', ['conditions' => ['MailField.id' => $id], 'recursive' => -1]);
+		$data = $this->MailField->find(
+			'first',
+			['conditions' => ['MailField.id' => $id], 'recursive' => -1]
+		);
 		$data['MailField']['use_field'] = $status;
 		$this->MailField->set($data);
 

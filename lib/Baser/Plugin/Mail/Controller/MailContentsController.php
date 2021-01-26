@@ -186,7 +186,14 @@ class MailContentsController extends MailAppController
 		$this->request->params['Content'] = $this->BcContents->getContent($id)['Content'];
 		if ($this->request->data['Content']['status']) {
 			$site = BcSite::findById($this->request->data['Content']['site_id']);
-			$this->set('publishLink', $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain));
+			$this->set(
+				'publishLink',
+				$this->Content->getUrl(
+					$this->request->data['Content']['url'],
+					true,
+					$site->useSubDomain
+				)
+			);
 		}
 		$this->set('mailContent', $this->request->data);
 		$this->subMenuElements = ['mail_fields'];
@@ -239,9 +246,24 @@ class MailContentsController extends MailAppController
 				}
 			}
 			$path = str_replace(DS, '/', $path);
-			$this->redirect(array_merge(['plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], $type], explode('/', $path)));
+			$this->redirect(
+				array_merge(
+					[
+						'plugin' => null,
+						'mail' => false,
+						'prefix' => false,
+						'controller' => 'theme_files',
+						'action' => 'edit',
+						$this->siteConfigs['theme'],
+						$type
+					],
+					explode('/', $path)
+				)
+			);
 		} else {
-			$this->BcMessage->setError(__d('baser', '現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。'));
+			$this->BcMessage->setError(
+				__d('baser', '現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。')
+			);
 			$this->redirect(['action' => 'index']);
 		}
 	}
@@ -269,9 +291,24 @@ class MailContentsController extends MailAppController
 				}
 			}
 			$path = str_replace(DS, '/', $path);
-			$this->redirect(array_merge(['plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc'], explode('/', $path . '/index' . $this->ext)));
+			$this->redirect(
+				array_merge(
+					[
+						'plugin' => null,
+						'mail' => false,
+						'prefix' => false,
+						'controller' => 'theme_files',
+						'action' => 'edit',
+						$this->siteConfigs['theme'],
+						'etc'
+					],
+					explode('/', $path . '/index' . $this->ext)
+				)
+			);
 		} else {
-			$this->BcMessage->setError(__d('baser', '現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。'));
+			$this->BcMessage->setError(
+				__d('baser', '現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。')
+			);
 			$this->redirect(['action' => 'index']);
 		}
 	}
