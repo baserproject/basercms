@@ -39,7 +39,7 @@ umount: /mnt: not mounted
 
 ### 解決法
 
-これらはvbguestプラグインが正常に動いていないことが原因のようです。
+これらはOSのカーネルが古いことと、vbguestプラグインが正常に動いていないことが原因のようです。
 
 以下のコマンドを仮想マシン内で順番に実行して、正常な状態に戻すことで動くようになります。
 まず、ホストOSからvbguestの状態を確認します。
@@ -56,6 +56,8 @@ umount: /mnt: not mounted
 ```
 (vagrant up && vagrant ssh を行って仮想マシンにssh接続している状態)
 
+$ sudo yum -y update kernel
+$ sudo yum -y install kernel-devel kernel-headers dkms gcc gcc-c++
 $ cd /tmp
 $ wget http://download.virtualbox.org/virtualbox/6.1.16/VBoxGuestAdditions_6.1.16.iso
 $ sudo mount -t iso9660 /tmp/VBoxGuestAdditions_6.1.16.iso /mnt
@@ -67,6 +69,6 @@ $ sudo reboot
 ここまで実行したらssh接続を閉じます。
 その後、ホストOSから
 ```
-vagrant reload default
+% vagrant reload default
 ```
 を実行することで正常に起動するようになります。
