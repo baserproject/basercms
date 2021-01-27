@@ -22,7 +22,7 @@ cp vagrant/Vagrantfile Vagrantfile
 
 ## docker-compose をコピーする
 ```shell script
-cp docker/docker-compose.default.yml docker-compose.yml
+cp docker/docker-compose.yml.default docker/docker-compose.yml
 ```
 ※ このファイルは自由に編集可能です。
 
@@ -73,3 +73,6 @@ baserCMSが送信したメールは、MailCatcher で確認する事ができま
 ## SSL通信でサイトを確認する
 自己証明書によってSSL通信で確認する事ができます。
 [https://localhost/](https://localhost/)
+
+## 環境構築においてのトラブルシューティング
+[トラブルシューティング](https://github.com/baserproject/ucmitz/blob/dev/docs/troubleshooting.md)を参照してください。
