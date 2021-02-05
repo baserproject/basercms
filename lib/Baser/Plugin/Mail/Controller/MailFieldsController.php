@@ -67,13 +67,23 @@ class MailFieldsController extends MailAppController
 		parent::beforeFilter();
 		$this->_checkEnv();
 		$this->MailContent->recursive = -1;
-		$mailContentId = $this->params['pass'][0];
+		$mailContentId = $this->request->param('pass.0');
 		$this->mailContent = $this->MailContent->read(null, $mailContentId);
-		$this->request->params['Content'] = $this->BcContents->getContent($mailContentId)['Content'];
-		$this->crumbs[] = ['name' => sprintf('%s 設定', $this->request->params['Content']['title']), 'url' => ['plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId]];
-		if ($this->request->params['Content']['status']) {
-			$site = BcSite::findById($this->request->params['Content']['site_id']);
-			$this->set('publishLink', $this->Content->getUrl($this->request->params['Content']['url'], true, $site->useSubDomain));
+		$this->request->param('Content', $this->BcContents->getContent($mailContentId)['Content']);
+		$this->crumbs[] = [
+			'name' => sprintf('%s 設定', $this->request->param('Content.title')),
+			'url' => [
+				'plugin' => 'mail',
+				'controller' => 'mail_fields',
+				'action' => 'index',
+				$mailContentId
+			]
+		];
+		if ($this->request->param('Content.status')) {
+			$site = BcSite::findById($this->request->param('Content.site_id'));
+			$this->set('publishLink', $this->Content->getUrl(
+				$this->request->param('Content.url'), true, $site->useSubDomain)
+			);
 		}
 	}
 
@@ -87,14 +97,18 @@ class MailFieldsController extends MailAppController
 			$Folder = new Folder();
 			$Folder->create($savePath, 0777);
 			if (!is_dir($savePath)) {
-				$this->BcMessage->setError('ファイルフィールドを利用している場合、現在、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにする為には、' . WWW_ROOT . 'files/mail/ に書き込み権限を与えてください。');
+				$this->BcMessage->setError(
+					'ファイルフィールドを利用している場合、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにするためには、' . WWW_ROOT . 'files/mail/ に書き込み権限を与えてください。'
+				);
 			}
 			$File = new File($savePath . DS . '.htaccess');
 			$htaccess = "Order allow,deny\nDeny from all";
 			$File->write($htaccess);
 			$File->close();
 			if (!file_exists($savePath . DS . '.htaccess')) {
-				$this->BcMessage->setError('ファイルフィールドを利用している場合、現在、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにする為には、' . WWW_ROOT . 'files/mail/limited/ に書き込み権限を与えてください。');
+				$this->BcMessage->setError(
+					'ファイルフィールドを利用している場合、フォームより送信したファイルフィールドのデータは公開された状態となっています。URLを直接閲覧すると参照できてしまいます。参照されないようにするためには、' . WWW_ROOT . 'files/mail/limited/ に書き込み権限を与えてください。'
+				);
 			}
 		}
 	}
@@ -124,8 +138,13 @@ class MailFieldsController extends MailAppController
 		}
 
 		$conditions = $this->_createAdminIndexConditions($mailContentId);
-		$datas = $this->MailField->find('all', ['conditions' => $conditions, 'order' => 'MailField.sort']);
-		$this->set('datas', $datas);
+		$this->set(
+			'datas',
+			$this->MailField->find(
+				'all',
+				['conditions' => $conditions, 'order' => 'MailField.sort']
+			)
+		);
 
 		$this->_setAdminIndexViewData();
 
@@ -134,7 +153,10 @@ class MailFieldsController extends MailAppController
 			return;
 		}
 		$this->subMenuElements = ['mail_fields'];
-		$this->pageTitle = sprintf(__d('baser', '%s｜メールフィールド一覧'), $this->request->params['Content']['title']);
+		$this->pageTitle = sprintf(
+			__d('baser', '%s｜メールフィールド一覧'),
+			$this->request->param('Content.title')
+		);
 		$this->help = 'mail_fields_index';
 	}
 
@@ -147,7 +169,10 @@ class MailFieldsController extends MailAppController
 	{
 		/* セッション処理 */
 		if (isset($this->params['named']['sortmode'])) {
-			$this->Session->write('SortMode.MailField', $this->params['named']['sortmode']);
+			$this->Session->write(
+				'SortMode.MailField',
+				$this->params['named']['sortmode']
+			);
 		}
 
 		/* 並び替えモード */
@@ -181,21 +206,35 @@ class MailFieldsController extends MailAppController
 				$data['MailField']['valid_ex'] = implode(',', $data['MailField']['valid_ex']);
 			}
 			$data['MailField']['mail_content_id'] = $mailContentId;
-			$data['MailField']['no'] = $this->MailField->getMax('no', ['MailField.mail_content_id' => $mailContentId]) + 1;
+			$data['MailField']['no'] = $this->MailField->getMax(
+					'no', ['MailField.mail_content_id' => $mailContentId]
+				) + 1;
 			$data['MailField']['sort'] = $this->MailField->getMax('sort') + 1;
 			$data['MailField']['source'] = $this->MailField->formatSource($data['MailField']['source']);
 			$this->MailField->create($data);
 			if ($this->MailField->validates()) {
-				if ($this->MailMessage->addMessageField($this->mailContent['MailContent']['id'], $data['MailField']['field_name'])) {
+				$ret = $this->MailMessage->addMessageField(
+					$this->mailContent['MailContent']['id'],
+					$data['MailField']['field_name']
+				);
+				if ($ret) {
 					// データを保存
 					if ($this->MailField->save(null, false)) {
-						$this->BcMessage->setSuccess(sprintf(__d('baser', '新規メールフィールド「%s」を追加しました。'), $data['MailField']['name']));
-						$this->redirect(['controller' => 'mail_fields', 'action' => 'index', $mailContentId]);
-					} else {
-						$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+						$this->BcMessage->setSuccess(
+							sprintf(
+								__d('baser', '新規メールフィールド「%s」を追加しました。'), $data['MailField']['name']
+							)
+						);
+						$this->redirect(
+							['controller' => 'mail_fields', 'action' => 'index', $mailContentId]
+						);
+						return;
 					}
+					$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 				} else {
-					$this->BcMessage->setError(__d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。'));
+					$this->BcMessage->setError(
+						__d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。')
+					);
 				}
 			} else {
 				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
@@ -203,7 +242,9 @@ class MailFieldsController extends MailAppController
 		}
 
 		$this->subMenuElements = ['mail_fields'];
-		$this->pageTitle = sprintf(__d('baser', '%s｜新規メールフィールド登録'), $this->request->params['Content']['title']);
+		$this->pageTitle = sprintf(
+			__d('baser', '%s｜新規メールフィールド登録'), $this->request->param('Content.title')
+		);
 		$this->help = 'mail_fields_form';
 		$this->render('form');
 	}
@@ -236,20 +277,29 @@ class MailFieldsController extends MailAppController
 
 			$this->MailField->set($data);
 			if ($this->MailField->validates()) {
-				$ret = true;
 				if ($old['MailField']['field_name'] != $data['MailField']['field_name']) {
-					$ret = $this->MailMessage->renameMessageField($mailContentId, $old['MailField']['field_name'], $data['MailField']['field_name']);
+					$ret = $this->MailMessage->renameMessageField(
+						$mailContentId,
+						$old['MailField']['field_name'],
+						$data['MailField']['field_name']
+					);
+				} else {
+					$ret = true;
 				}
 				if ($ret) {
 					/* 更新処理 */
 					if ($this->MailField->save(null, false)) {
-						$this->BcMessage->setSuccess(sprintf(__d('baser', 'メールフィールド「%s」を更新しました。'), $data['MailField']['name']));
+						$this->BcMessage->setSuccess(
+							sprintf(__d('baser', 'メールフィールド「%s」を更新しました。'), $data['MailField']['name'])
+						);
 						$this->redirect(['action' => 'index', $mailContentId]);
-					} else {
-						$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+						return;
 					}
+					$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 				} else {
-					$this->BcMessage->setError(__d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。'));
+					$this->BcMessage->setError(
+						__d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。')
+					);
 				}
 			} else {
 				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
@@ -258,7 +308,9 @@ class MailFieldsController extends MailAppController
 
 		/* 表示設定 */
 		$this->subMenuElements = ['mail_fields'];
-		$this->pageTitle = sprintf(__d('baser', '%s｜メールフィールド編集'), $this->request->params['Content']['title']);
+		$this->pageTitle = sprintf(
+			__d('baser', '%s｜メールフィールド編集'), $this->request->param('Content.title')
+		);
 		$this->help = 'mail_fields_form';
 		$this->render('form');
 	}
@@ -278,18 +330,29 @@ class MailFieldsController extends MailAppController
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		// メッセージ用にデータを取得
-		$mailField = $this->MailField->read(null, $id);
+		$data = $this->MailField->read(null, $id);
+		$field = Hash::get($data, 'MailField');
 
 		/* 削除処理 */
-		if ($mailField && $this->MailMessage->delMessageField($mailContentId, $mailField['MailField']['field_name'])) {
-			if ($this->MailField->delete($id)) {
-				$this->MailField->saveDbLog(sprintf(__d('baser', 'メールフィールド「%s」 を削除しました。'), $mailField['MailField']['name']));
-				exit(true);
-			}
-		} else {
-			$this->ajaxError(500, __d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。'));
+		if (!$field || !$this->MailMessage->delMessageField($mailContentId, $field['field_name'])) {
+			$this->ajaxError(
+				500,
+				__d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。')
+			);
+			exit;
 		}
-		exit();
+
+		if (!$this->MailField->delete($id)) {
+			exit;
+		}
+
+		$this->MailField->saveDbLog(
+			sprintf(
+				__d('baser', 'メールフィールド「%s」 を削除しました。'),
+				$field['name']
+			)
+		);
+		exit(true);
 	}
 
 	/**
@@ -314,12 +377,19 @@ class MailFieldsController extends MailAppController
 		/* 削除処理 */
 		if ($this->MailMessage->delMessageField($mailContentId, $mailField['MailField']['field_name'])) {
 			if ($this->MailField->delete($id)) {
-				$this->BcMessage->setSuccess(sprintf(__d('baser', 'メールフィールド「%s」を削除しました。'), $mailField['MailField']['name']));
+				$this->BcMessage->setSuccess(
+					sprintf(
+						__d('baser', 'メールフィールド「%s」を削除しました。'),
+						$mailField['MailField']['name']
+					)
+				);
 			} else {
 				$this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
 			}
 		} else {
-			$this->BcMessage->setError(__d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。'));
+			$this->BcMessage->setError(
+				__d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。')
+			);
 		}
 
 		$this->redirect(['action' => 'index', $mailContentId]);
@@ -335,15 +405,22 @@ class MailFieldsController extends MailAppController
 	{
 		if ($ids) {
 			foreach($ids as $id) {
-
 				// メッセージ用にデータを取得
-				$mailField = $this->MailField->read(null, $id);
+				$data = $this->MailField->read(null, $id);
+				$field = $data['MailField'];
 				/* 削除処理 */
-				if ($this->MailMessage->delMessageField($mailField['MailField']['mail_content_id'], $mailField['MailField']['field_name'])) {
-					if ($this->MailField->delete($id)) {
-						$this->MailField->saveDbLog(sprintf(__d('baser', 'メールフィールド「%s」 を削除しました。'), $mailField['MailField']['name']));
-					}
+				if (!$this->MailMessage->delMessageField($field['mail_content_id'], $field['field_name'])) {
+					continue;
 				}
+				if (!$this->MailField->delete($id)) {
+					continue;
+				}
+				$this->MailField->saveDbLog(
+					sprintf(
+						__d('baser', 'メールフィールド「%s」 を削除しました。'),
+						$field['name']
+					)
+				);
 			}
 		}
 
@@ -353,7 +430,7 @@ class MailFieldsController extends MailAppController
 	/**
 	 * フォームの初期値を取得する
 	 *
-	 * @return string
+	 * @return array
 	 */
 	protected function _getDefaultValue()
 	{
@@ -379,12 +456,15 @@ class MailFieldsController extends MailAppController
 		}
 
 		$result = $this->MailField->copy($id);
-		if ($result) {
-			$this->MailMessage->construction($mailContentId);
-			$this->set('data', $result);
-		} else {
-			$this->ajaxError(500, __d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。'));
+		if (!$result) {
+			$this->ajaxError(
+				500,
+				__d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。')
+			);
+			return;
 		}
+		$this->MailMessage->construction($mailContentId);
+		$this->set('data', $result);
 	}
 
 	/**
@@ -404,48 +484,58 @@ class MailFieldsController extends MailAppController
 		$this->MailMessage->schema(true);
 		$this->MailMessage->cacheSources = false;
 		$this->MailMessage->setUseTable($mailContentId);
-		$messages = $this->MailMessage->convertMessageToCsv($mailContentId, $this->MailMessage->find('all', ['order' => $this->MailMessage->alias . '.created DESC',]));
+		$messages = $this->MailMessage->convertMessageToCsv(
+			$mailContentId,
+			$this->MailMessage->find(
+				'all',
+				['order' => $this->MailMessage->alias . '.created DESC']
+			)
+		);
 		$this->set('encoding', $this->request->query['encoding']);
 		$this->set('messages', $messages);
-		$this->set('contentName', $this->request->params['Content']['name']);
+		$this->set('contentName', $this->request->param('Content.name'));
 	}
 
 	/**
 	 * 並び替えを更新する [AJAX]
 	 *
 	 * @param int $mailContentId
-	 * @return boolean
+	 * @return bool|void
 	 * @access    public
 	 */
 	public function admin_ajax_update_sort($mailContentId)
 	{
 		if (!$mailContentId) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
+			return;
 		}
 
-		if ($this->request->data) {
-			$conditions = $this->_createAdminIndexConditions($mailContentId);
-			if ($this->MailField->changeSort($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'], $conditions)) {
-				exit(true);
-			} else {
-				$this->ajaxError(500, $this->MailField->validationErrors);
-			}
-		} else {
+		if (!$this->request->data) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
+			return;
 		}
-		exit();
+
+		$sorted = $this->MailField->changeSort(
+			$this->request->data['Sort']['id'],
+			$this->request->data['Sort']['offset'],
+			$this->_createAdminIndexConditions($mailContentId)
+		);
+		if (!$sorted) {
+			$this->ajaxError(500, $this->MailField->validationErrors);
+			return;
+		}
+		exit(true);
 	}
 
 	/**
 	 * 管理画面ページ一覧の検索条件を取得する
 	 *
-	 * @param array $mailContentId
-	 * @return string
+	 * @param integer $mailContentId
+	 * @return array
 	 */
 	protected function _createAdminIndexConditions($mailContentId)
 	{
-		$conditions = ['MailField.mail_content_id' => $mailContentId];
-		return $conditions;
+		return ['MailField.mail_content_id' => $mailContentId];
 	}
 
 	/**
@@ -461,13 +551,13 @@ class MailFieldsController extends MailAppController
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
+			return;
 		}
-		if ($this->_changeStatus($id, false)) {
-			exit(true);
-		} else {
+		if (!$this->_changeStatus($id, false)) {
 			$this->ajaxError(500, $this->MailField->validationErrors);
+			return;
 		}
-		exit();
+		exit(true);
 	}
 
 	/**
@@ -483,13 +573,13 @@ class MailFieldsController extends MailAppController
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
+			return;
 		}
-		if ($this->_changeStatus($id, true)) {
-			exit(true);
-		} else {
+		if (!$this->_changeStatus($id, true)) {
 			$this->ajaxError(500, $this->MailField->validationErrors);
+			return;
 		}
-		exit();
+		exit(true);
 	}
 
 	/**
@@ -501,10 +591,11 @@ class MailFieldsController extends MailAppController
 	 */
 	protected function _batch_publish($ids)
 	{
-		if ($ids) {
-			foreach($ids as $id) {
-				$this->_changeStatus($id, true);
-			}
+		if (!$ids) {
+			return true;
+		}
+		foreach($ids as $id) {
+			$this->_changeStatus($id, true);
 		}
 		return true;
 	}
@@ -518,10 +609,12 @@ class MailFieldsController extends MailAppController
 	 */
 	protected function _batch_unpublish($ids)
 	{
-		if ($ids) {
-			foreach($ids as $id) {
-				$this->_changeStatus($id, false);
-			}
+		if (!$ids) {
+			return true;
+		}
+
+		foreach($ids as $id) {
+			$this->_changeStatus($id, false);
 		}
 		return true;
 	}
@@ -536,17 +629,25 @@ class MailFieldsController extends MailAppController
 	protected function _changeStatus($id, $status)
 	{
 		$statusTexts = [0 => __d('baser', '無効'), 1 => __d('baser', '有効')];
-		$data = $this->MailField->find('first', ['conditions' => ['MailField.id' => $id], 'recursive' => -1]);
+		$data = $this->MailField->find(
+			'first',
+			['conditions' => ['MailField.id' => $id], 'recursive' => -1]
+		);
 		$data['MailField']['use_field'] = $status;
 		$this->MailField->set($data);
 
-		if ($this->MailField->save()) {
-			$statusText = $statusTexts[$status];
-			$this->MailField->saveDbLog(sprintf(__d('baser', 'メールフィールド「%s」 の設定を %s に変更しました。'), $data['MailField']['name'], $statusText));
-			return true;
-		} else {
+		if (!$this->MailField->save()) {
 			return false;
 		}
+
+		$statusText = $statusTexts[$status];
+		$this->MailField->saveDbLog(
+			sprintf(
+				__d('baser', 'メールフィールド「%s」 の設定を %s に変更しました。'),
+				$data['MailField']['name'], $statusText
+			)
+		);
+		return true;
 	}
 
 }
