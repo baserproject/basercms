@@ -59,7 +59,7 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
 
         $plugins = BcUtil::getEnablePlugins();
         foreach($plugins as $plugin) {
-            $this->addPlugin($plugin->name);
+            $this->addPlugin($plugin);
         }
 
     }
