@@ -44,7 +44,7 @@ use BaserCore\View\AppView;
         </div>
         <div class="clear login-etc bca-login-form-ctrl">
             <div class="bca-login-form-checker">
-                <?php echo $this->BcForm->control('saved', [
+                <?php echo $this->BcAdminForm->control('saved', [
                     'type' => 'checkbox',
                     'label' => __d('baser', 'ログイン状態を保存する'),
                     'class' => 'bca-checkbox__input bca-login-form-checkbox ',

@@ -28,6 +28,7 @@ class BcAdminAppController extends AppController
     {
         parent::initialize();
         $this->loadComponent('BaserCore.BcMessage');
+        $this->loadComponent('Security');
         $this->loadComponent('Authentication.Authentication');
         $this->loadComponent('Paginator');
     }

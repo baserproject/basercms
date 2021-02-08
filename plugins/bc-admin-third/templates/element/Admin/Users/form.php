@@ -95,6 +95,7 @@ $this->BcBaser->i18nScript([
             <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('email', __d('baser', 'Eメール')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
             <td class="col-input bca-form-table__input">
                 <input type="text" name="dummy-email" style="top:-100px;left:-100px;position:fixed;">
+                <?php $this->BcAdminForm->unlockFields('dummy-email') ?>
                 <?php echo $this->BcAdminForm->control('email', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
                 <div id="helptextEmail" class="helptext">
@@ -115,6 +116,7 @@ $this->BcBaser->i18nScript([
                 <?php if ($this->request->getParam('action') == 'edit'): ?><small>[<?php echo __d('baser', 'パスワードは変更する場合のみ入力してください') ?>]</small><br /><?php endif ?>
                 <!-- ↓↓↓自動入力を防止する為のダミーフィールド↓↓↓ -->
                 <input type="password" name="dummy-pass" autocomplete="off" style="top:-100px;left:-100px;position:fixed;">
+                <?php $this->BcAdminForm->unlockFields('dummy-pass') ?>
                 <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
                 <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
                 <i class="bca-icon--question-circle btn help bca-help"></i>
