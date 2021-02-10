@@ -623,10 +623,10 @@ class BcContentsHelperTest extends BaserTestCase
 	public function getFolderLinkedUrlDataProvider()
 	{
 		return [
-			['/', 'http://localhost/'],
-			['/about', 'http://localhost/'],
-			['/service/index', 'http://localhost/<a href="/admin/content_folders/edit/4">service</a>/'],
-			['/s/service/index', 'http://localhost/<a href="/admin/content_folders/edit/3">s</a>/<a href="/admin/content_folders/edit/6">service</a>/'],
+			['/', 'https://localhost/'],
+			['/about', 'https://localhost/'],
+			['/service/index', 'https://localhost/<a href="/admin/content_folders/edit/4">service</a>/'],
+			['/s/service/index', 'https://localhost/<a href="/admin/content_folders/edit/3">s</a>/<a href="/admin/content_folders/edit/6">service</a>/'],
 		];
 	}
 

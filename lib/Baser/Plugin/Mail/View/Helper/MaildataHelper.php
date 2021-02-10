@@ -51,16 +51,6 @@ class MaildataHelper extends BcTextHelper
 	public function toDisplayString($type, $value)
 	{
 		switch($type) {
-			case 'text':
-			case 'tel':
-			case 'textarea':
-			case 'email':
-			case 'hidden':
-			case 'check':
-			case 'radio':
-			case 'select':
-				return $value;
-
 			case 'pref':
 				$prefs = $this->prefList();
 				$options = [];
@@ -99,9 +89,19 @@ class MaildataHelper extends BcTextHelper
 				$aryFile = explode('/', $value);
 				$file = $aryFile[count($aryFile) - 1];
 				$ext = decodeContent(null, $file);
-				$link = array_merge(['admin' => true, 'controller' => 'mail_messages', 'action' => 'attachment', $mailContent['MailContent']['id']], $aryFile);
+				$link = array_merge(
+					[
+						'admin' => true,
+						'controller' => 'mail_messages',
+						'action' => 'attachment',
+						$mailContent['MailContent']['id']
+					],
+					$aryFile
+				);
 				if (in_array($ext, ['gif', 'jpg', 'png'])) {
-					return $this->BcBaser->getLink($this->BcBaser->getImg($link, ['width' => 400]), $link, ['target' => '_blank']);
+					return $this->BcBaser->getLink(
+						$this->BcBaser->getImg($link, ['width' => 400]), $link, ['target' => '_blank']
+					);
 				}
 
 				return $this->BcBaser->getLink($file, $link);
