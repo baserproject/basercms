@@ -31,9 +31,10 @@ class BcUtil
 {
 
     /**
-     * ログインユーザーのデータを取得する
+     * 認証領域を指定してログインユーザーのデータを取得する
+     * セッションクラスが設定されていない場合にはスーパーグローバル変数を利用する
      *
-     * @return Entity
+     * @return mixed Entity|null
      */
     public static function loginUser($prefix = 'Admin')
     {

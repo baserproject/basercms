@@ -12,7 +12,9 @@
 namespace BaserCore\TestSuite;
 use App\Application;
 use BaserCore\Plugin;
+use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
 
@@ -43,5 +45,20 @@ class BcTestCase extends TestCase {
         Router::setRequest($request);
         return $request;
     }
+
+	/**
+	 * 管理画面にログインする
+	 *
+	 * @param string $group
+	 */
+	protected function loginAdmin($id = 1)
+	{
+	    $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
+	    $userTable = TableRegistry::getTableLocator()->get('Users');
+	    $session = Router::getRequest()->getSession();
+	    $session->write($sessionKey, $userTable->find()
+		    ->where(['Users.id' => $id])
+		);
+	}
 
 }

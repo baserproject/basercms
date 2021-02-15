@@ -27,15 +27,34 @@ class BcUtilTest extends BcTestCase
      * @var array
      */
     protected $fixtures = [
+        'plugin.BaserCore.Users',
         'plugin.BaserCore.Plugins',
     ];
 
     /**
      * Test loginUser
+     * @dataProvider loginUserDataProvider
      */
-    public function testLoginUser()
+    public function testLoginUser($isLogin, $expects)
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->getRequest();
+        if($isLogin) {
+            $this->loginAdmin();
+        }
+        $result = BcUtil::loginUser();
+        if($result) {
+            $result = $result->toArray()[0]->id;
+        }
+        $this->assertEquals($expects, $result);
+    }
+
+    public function loginUserDataProvider() {
+        return [
+            // ログインしている状況
+            [true, 1],
+            // ログインしていない状況
+            [false, null]
+        ];
     }
 
     /**
