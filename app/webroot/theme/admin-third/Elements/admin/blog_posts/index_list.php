@@ -110,7 +110,6 @@ $this->BcListTable->setColumnNumber(9);
 			) ?>
 		</th>
 		<th class="bca-table-listup__thead-th"><?php // 投稿日 ?>
-			<?php echo $this->BcListTable->dispatchShowHead() ?>
 			<?php echo $this->Paginator->sort(
 				'posts_date',
 				[
@@ -123,6 +122,7 @@ $this->BcListTable->setColumnNumber(9);
 				]
 			) ?>
 		</th>
+		<?php echo $this->BcListTable->dispatchShowHead() ?>
 		<th class="bca-table-listup__thead-th"><?php // アクション ?>
 			<?php echo __d('baser', 'アクション') ?>
 		</th>
