@@ -36,9 +36,9 @@ class MailfieldHelper extends AppHelper
 		$attributes['maxlength'] = $data['maxlength'];
 		$attributes['separator'] = $data['separator'];
 		$attributes['class'] = $data['class'];
-		if ($data['type'] == 'multi_check') {
+		if ($data['type'] === 'multi_check') {
 			$attributes['multiple'] = true;
-		} elseif ($data['type'] == 'tel') {
+		} elseif ($data['type'] === 'tel') {
 			$attributes['type'] = 'tel';
 		}
 		if (!empty($data['options'])) {
@@ -61,7 +61,7 @@ class MailfieldHelper extends AppHelper
 			$data = $data['MailField'];
 		}
 		if (!empty($data['source'])) {
-			if ($data['type'] != "check") {
+			if ($data['type'] !== "check") {
 				$values = explode("\n", str_replace('|', "\n", $data['source']));
 				$source = [];
 				foreach($values as $value) {

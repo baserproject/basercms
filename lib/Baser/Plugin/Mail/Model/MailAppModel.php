@@ -25,7 +25,15 @@ class MailAppModel extends AppModel
 	 */
 	public function sanitizeData($datas)
 	{
-		trigger_error(deprecatedMessage('メソッド：BcAppModel::sanitizeData()', '4.0.0', '5.0.0', 'htmlspecialchars を利用してください。'), E_USER_DEPRECATED);
+		trigger_error(
+			deprecatedMessage(
+				'メソッド：BcAppModel::sanitizeData()',
+				'4.0.0',
+				'5.0.0',
+				'htmlspecialchars を利用してください。'
+			),
+			E_USER_DEPRECATED
+		);
 		return $this->sanitizeRecord($datas);
 	}
 
@@ -36,17 +44,24 @@ class MailAppModel extends AppModel
 	 */
 	public function restoreData($datas)
 	{
-		trigger_error(deprecatedMessage('メソッド：MailAppModel::restoreData()', '4.1.3', '5.0.0', 'htmlspecialchars_decode を利用してください。'), E_USER_DEPRECATED);
+		trigger_error(
+			deprecatedMessage(
+				'メソッド：MailAppModel::restoreData()',
+				'4.1.3',
+				'5.0.0',
+				'htmlspecialchars_decode を利用してください。'
+			),
+			E_USER_DEPRECATED
+		);
 		foreach($datas as $key => $data) {
-			if (!is_array($data)) {
-				$data = str_replace("<br />", "", $data);
-				$data = str_replace("<br>", "", $data);
-				$data = str_replace('&lt;', '<', $data);
-				$data = str_replace('&gt;', '>', $data);
-				$data = str_replace('&amp;', '&', $data);
-				$data = str_replace('&quot;', '"', $data);
-				$datas[$key] = $data;
+			if (is_array($data)) {
+				continue;
 			}
+			$datas[$key] = str_replace(
+				['<br />', '<br>', '&lt;', '&gt;', '&amp;', '&quot;'],
+				['', '', '<', '>', '&', '"'],
+				$data
+			);
 		}
 		return $datas;
 	}

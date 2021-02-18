@@ -28,7 +28,13 @@ class MailBaserHelper extends AppHelper
 	 */
 	public function isMail()
 	{
-		return (!empty($this->request->params['Content']['plugin']) && $this->request->params['Content']['plugin'] == 'Mail');
+		if (!Hash::get($this->request->params, 'Content.plugin')) {
+			return false;
+		}
+		if (Hash::get($this->request->params, 'Content.plugin') !== 'Mail') {
+			return false;
+		}
+		return true;
 	}
 
 }

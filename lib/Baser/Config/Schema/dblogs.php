@@ -19,7 +19,7 @@ class DblogsSchema extends CakeSchema {
 
 	public $dblogs = [
 		'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'],
-		'name' => ['type' => 'string', 'null' => true, 'default' => null],
+		'name' => ['type' => 'text', 'null' => true, 'default' => null],
 		'user_id' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8],
 		'created' => ['type' => 'datetime', 'null' => true, 'default' => null],
 		'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
