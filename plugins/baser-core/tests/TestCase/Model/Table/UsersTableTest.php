@@ -164,7 +164,7 @@ class UsersTableTest extends BcTestCase
     {
         return [
             [1, 1],
-            [2, 0]
+            [2, 1]
         ];
     }
 
