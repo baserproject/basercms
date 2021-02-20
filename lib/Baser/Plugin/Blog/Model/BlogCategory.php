@@ -254,7 +254,7 @@ class BlogCategory extends BlogAppModel
 		$options = array_merge([
 			'id' => null,
 			'siteId' => null,
-			'order' => 'BlogCategory.id',
+			'order' => 'BlogCategory.lft asc',
 			'conditions' => [],
 			'threaded' => false
 		], $options);
