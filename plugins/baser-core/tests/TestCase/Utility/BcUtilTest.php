@@ -116,7 +116,9 @@ class BcUtilTest extends BcTestCase
      */
     public function testIsInstallMode()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $expects = getenv('INSTALL_MODE');
+        $result = BcUtil::isInstallMode();
+        $this->assertEquals($expects,$result);
     }
 
     /**
