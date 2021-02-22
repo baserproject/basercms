@@ -17,10 +17,10 @@ use Cake\Core\App;
 use Cake\Core\Plugin;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
+use Cake\Routing\Router;
 
 class BcUtilTest extends BcTestCase
 {
-
     /**
      * Fixtures
      *
@@ -86,10 +86,29 @@ class BcUtilTest extends BcTestCase
 
     /**
      * Test isAgentUser
+     * @dataProvider isAgentUserDataProvider
      */
-    public function testIsAgentUser()
+    public function testIsAgentUser($id,$expects)
     {
-        $this->markTestIncomplete('Not implemented yet.');
+
+        $this->getRequest();
+        if($id) {
+            $user = $this->loginAdmin($id);
+            $session = Router::getRequest()->getSession();
+            $session->write('AuthAgent.User',$user);
+        }
+        $result = BcUtil::isAgentUser();
+
+        $this->assertEquals($expects,$result);
+    }
+
+    public function isAgentUserDataProvider() {
+        return [
+            // ログインしてない場合
+            [null,false],
+            // システム管理者などAuthAgentが与えられた場合
+            [1,true],
+        ];
     }
 
     /**
