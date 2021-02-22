@@ -85,12 +85,12 @@ class UsersControllerTest extends TestCase
     {
         $this->enableSecurityToken();
         $data = [
-            'name' => 'Lorem ipsum dolor sit amet',
+            'name' => 'Test_test_Man',
             'password_1' => 'Lorem ipsum dolor sit amet',
             'password_2' => 'Lorem ipsum dolor sit amet',
             'real_name_1' => 'Lorem ipsum dolor sit amet',
             'real_name_2' => 'Lorem ipsum dolor sit amet',
-            'email' => 'Lorem ipsum dolor sit amet',
+            'email' => 'test@catchup.co.jp',
             'nickname' => 'Lorem ipsum dolor sit amet',
         ];
         $this->post('/baser/admin/users/add', $data);
