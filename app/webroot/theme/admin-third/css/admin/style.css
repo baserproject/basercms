@@ -7655,7 +7655,8 @@ body {
 #MessageBox .notice-message,
 #BcMessageBox .notice-message,
 #UpdateMessage {
-  color: #0087bc; }
+  color: #0087bc;
+  word-break: break-word; }
   #MessageBox .message::before,
   #MessageBox .notice-message::before,
   #BcMessageBox .notice-message::before,
