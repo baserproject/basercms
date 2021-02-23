@@ -18,6 +18,7 @@ use BaserCore\BcApplication;
 use Cake\Validation\Validator;
 use Cake\Core\Configure;
 use Cake\Http\ServerRequestFactory;
+use Cake\TestSuite\IntegrationTestTrait;
 
 /**
  * BaserCore\Model\Table\PasswordRequestsTable Test Case
@@ -26,6 +27,7 @@ use Cake\Http\ServerRequestFactory;
  */
 class PasswordRequestsTableTest extends BcTestCase
 {
+    use IntegrationTestTrait;
 
     /**
      * @var PasswordRequestsTable
@@ -44,6 +46,9 @@ class PasswordRequestsTableTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.PasswordRequests',
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.UserGroups',
     ];
 
     /**
@@ -151,44 +156,12 @@ class PasswordRequestsTableTest extends BcTestCase
         $this->assertNotEquals($beforePassword, $afterPassword);
 
         // 変更後のパスワードでログイン
-        $user = $this->login(['email' => 'Lorem ipsum dolor sit amet', 'password' => 'test']);
-        $this->assertEquals(1, $user->id);
-    }
-
-    /**
-     * ログイン
-     */
-    private function login($requestData) {
-        $authSetting = Configure::read('BcPrefixAuth.Admin');
-        $request = ServerRequestFactory::fromGlobals(
-            ['REQUEST_URI' => $authSetting['loginAction']],
-            [],
-            $requestData
-        );
-        $fields = [
-            'username' => $authSetting['username'],
-            'password' => $authSetting['password']
-        ];
-
-        $service = new AuthenticationService([
-            'identifiers' => [
-                'Authentication.Password' => [
-                    'fields' => $fields,
-                ],
-            ],
-            'authenticators' => [
-                'Authentication.Form' => [
-                    'fields' => $fields,
-                    'loginUrl' => $authSetting['loginAction'],
-                ],
-            ],
+        $this->enableSecurityToken();
+        $this->post(Configure::read('BcPrefixAuth.Admin.loginAction'), [
+            'email' => 'Lorem ipsum dolor sit amet',
+            'password' => 'test'
         ]);
-
-        $result = $service->authenticate($request);
-        if (!$result->isValid()) {
-            return false;
-        }
-        return $result->getData();
+        $this->assertSession(1, 'AuthAdmin.id');
     }
 
 }
