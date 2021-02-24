@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: bc5-db
--- 生成日時: 2021 年 1 月 23 日 07:51
+-- 生成日時: 2021 年 2 月 24 日 10:43
 -- サーバのバージョン： 5.7.29
 -- PHP のバージョン: 7.4.4
 
@@ -154,13 +154,6 @@ CREATE TABLE `plugins` (
   `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- テーブルのデータのダンプ `plugins`
---
-
-INSERT INTO `plugins` (`id`, `name`, `title`, `version`, `status`, `db_init`, `priority`, `created`, `modified`) VALUES
-(1, 'BcBlog', 'ブログ', '1.0.0', 1, 0, 1, '2020-12-19 18:53:39', '2020-12-19 18:53:44');
-
 -- --------------------------------------------------------
 
 --
@@ -262,6 +255,12 @@ ALTER TABLE `pages`
 --
 ALTER TABLE `password_requests`
   ADD PRIMARY KEY (`id`);
+
+--
+-- テーブルのインデックス `plugins`
+--
+ALTER TABLE `plugins`
+  ADD UNIQUE KEY `id` (`id`);
 
 --
 -- テーブルのインデックス `users`
