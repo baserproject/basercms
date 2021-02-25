@@ -15,7 +15,6 @@
     "require-dev": {
         "cakephp/bake": "^2.0.3",
         "cakephp/debug_kit": "^4.1",
-        "josegonzalez/dotenv": "^3.2",
         "phpunit/phpunit": "~8.5.0",
         "psy/psysh": "@stable",
         "symplify/monorepo-builder": "^6.1"
@@ -48,7 +47,7 @@
         "cs-check": "phpcs --colors -p  src/ tests/",
         "cs-fix": "phpcbf --colors -p src/ tests/",
         "stan": "phpstan analyse src/",
-        "test": "phpunit --colors=always"
+        "test": "vendor/bin/phpunit --colors=always"
     },
     "suggest": {
         "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
