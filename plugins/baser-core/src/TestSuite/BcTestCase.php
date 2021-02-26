@@ -46,18 +46,20 @@ class BcTestCase extends TestCase {
         return $request;
     }
 
-	/**
+    /**
 	 * 管理画面にログインする
 	 *
 	 * @param string $group
 	 */
 	protected function loginAdmin($id = 1)
 	{
-	    $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
-	    $userTable = TableRegistry::getTableLocator()->get('Users');
-	    $session = Router::getRequest()->getSession();
-	    $session->write($sessionKey, $userTable->find()
-		    ->where(['Users.id' => $id])
+        $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
+        $userTable = TableRegistry::getTableLocator()->get('BaserCore.Users');
+        $session = Router::getRequest()->getSession();
+        $session->write($sessionKey, $userTable->find()
+            ->where(['Users.id' => $id])
+            ->contain(['UserGroups'])
+            ->first()
 		);
 	}
 

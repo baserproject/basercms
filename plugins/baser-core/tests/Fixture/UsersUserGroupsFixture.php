@@ -34,5 +34,12 @@ class UsersUserGroupsFixture extends TestFixture
             'created' => '2017-05-03 10:57:07',
             'modified' => '2017-05-03 10:57:07'
         ],
+        [
+            'id' => 2,
+            'user_id' => 2,
+            'user_group_id' => 2,
+            'created' => '2017-05-03 10:57:07',
+            'modified' => '2017-05-03 10:57:07'
+        ],
     ];
 }
