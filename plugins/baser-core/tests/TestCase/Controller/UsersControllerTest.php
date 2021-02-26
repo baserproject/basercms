@@ -90,7 +90,7 @@ class UsersControllerTest extends TestCase
             'password_2' => 'Lorem ipsum dolor sit amet',
             'real_name_1' => 'Lorem ipsum dolor sit amet',
             'real_name_2' => 'Lorem ipsum dolor sit amet',
-            'email' => 'test@catchup.co.jp',
+            'email' => 'test@example.com',
             'nickname' => 'Lorem ipsum dolor sit amet',
         ];
         $this->post('/baser/admin/users/add', $data);

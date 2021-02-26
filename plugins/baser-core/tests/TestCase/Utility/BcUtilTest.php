@@ -91,10 +91,10 @@ class BcUtilTest extends BcTestCase
     public function testIsAgentUser($id,$expects)
     {
 
-        $this->getRequest();
+        $request = $this->getRequest();
         if($id) {
             $user = $this->loginAdmin($id);
-            $session = Router::getRequest()->getSession();
+            $session = $request->getSession();
             $session->write('AuthAgent.User',$user);
         }
         $result = BcUtil::isAgentUser();
@@ -113,12 +113,22 @@ class BcUtilTest extends BcTestCase
 
     /**
      * Test isInstallMode
+     * @dataProvider isInstallModeDataProvider
      */
-    public function testIsInstallMode()
+    public function testIsInstallMode($mode,$expects)
     {
-        $expects = getenv('INSTALL_MODE');
+        $_SERVER["INSTALL_MODE"] = $mode;
         $result = BcUtil::isInstallMode();
         $this->assertEquals($expects,$result);
+    }
+
+    public function isInstallModeDataProvider() {
+        return [
+            // インストールモード On
+            ['true','true'],
+            // インストールモード Off
+            ['false','false'],
+        ];
     }
 
     /**
