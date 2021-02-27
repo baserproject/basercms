@@ -19,7 +19,7 @@ services:
     command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci --innodb-use-native-aio=0
   bc5-php:
     container_name: bc5-php
-    image: baserproject/basercms:5-php7.3
+    image: baserproject/basercms:5-php7.4
     volumes:
       - ../:/var/www/html:cached
     environment:
@@ -50,3 +50,29 @@ services:
      - 8080:80
     volumes:
        - ./phpmyadmin/sessions:/sessions
+  bc5-pg:
+    image: postgres:10.5
+    container_name: bc5-pg
+    ports:
+      - 5432:5432
+    volumes:
+      - ./volumes/postgres:/var/lib/postgres
+      - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    restart: always
+    user: root
+
+  bc5-pga:
+    image: dpage/pgadmin4:3.3
+    container_name: bc5-pga
+    ports:
+      - 10080:80
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin/storage
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root
+      PGADMIN_DEFAULT_PASSWORD: root
+    restart: always

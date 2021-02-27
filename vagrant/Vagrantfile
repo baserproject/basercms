@@ -19,8 +19,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #config.vm.network "private_network", ip: SERVER_IP_ADDRESS
   config.vm.network :"forwarded_port", guest: 80, host: 80
   config.vm.network :"forwarded_port", guest: 443, host: 443
-  config.vm.network :"forwarded_port", guest: 1080, host: 1080
-  config.vm.network :"forwarded_port", guest: 8080, host: 8080
+  config.vm.network :"forwarded_port", guest: 1080, host: 1080 # MailCatcher
+  config.vm.network :"forwarded_port", guest: 8080, host: 8080 # phpMyAdmin
+  config.vm.network :"forwarded_port", guest: 10080, host: 10080 # pgAdmin
   config.vm.network :"forwarded_port", guest: 3306, host: 3306
 
   # スマートフォン等の実機で確認する場合は、上記をコメントアウトして、下記の設定をコメントを外すことで同一ネットワーク上から確認できます
@@ -33,6 +34,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "2048"
   end
+
+  # 初期設定
+  config.vm.provision "shell", path: 'vagrant/provision/provision.sh'
 
   # Docker
   config.vm.provision :docker, run: "always"
