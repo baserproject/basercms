@@ -67,7 +67,7 @@ class BcFormHelperTest extends BcTestCase
 		return [
 			['hoge', []],
 			['', []],
-			['BaserCore.Users.user_group_id', [1 => 'システム管理']]
+			['BaserCore.Users.user_group_id', [1 => 'システム管理',2 => 'サイト運営者']]
 		];
 	}
 

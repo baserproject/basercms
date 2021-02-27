@@ -29,10 +29,21 @@ class UsersFixture extends TestFixture
     public $records = [
         [
             'id' => 1,
-            'name' => 'Lorem ipsum dolor sit amet',
+            'name' => 'baser admin',
             'password' => 'Lorem ipsum dolor sit amet',
-            'real_name_1' => 'Lorem ipsum dolor sit amet',
-            'real_name_2' => 'Lorem ipsum dolor sit amet',
+            'real_name_1' => 'baser',
+            'real_name_2' => 'admin',
+            'email' => 'Lorem ipsum dolor sit amet',
+            'nickname' => 'Lorem ipsum dolor sit amet',
+            'created' => '2017-05-03 10:57:07',
+            'modified' => '2017-05-03 10:57:07'
+        ],
+        [
+            'id' => 2,
+            'name' => 'baser operator',
+            'password' => 'Lorem ipsum dolor sit amet',
+            'real_name_1' => 'baser',
+            'real_name_2' => 'operator',
             'email' => 'Lorem ipsum dolor sit amet',
             'nickname' => 'Lorem ipsum dolor sit amet',
             'created' => '2017-05-03 10:57:07',

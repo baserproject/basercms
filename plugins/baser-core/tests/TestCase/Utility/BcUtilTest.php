@@ -17,10 +17,10 @@ use Cake\Core\App;
 use Cake\Core\Plugin;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
+use Cake\Routing\Router;
 
 class BcUtilTest extends BcTestCase
 {
-
     /**
      * Fixtures
      *
@@ -28,6 +28,8 @@ class BcUtilTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Plugins',
     ];
 
@@ -43,7 +45,7 @@ class BcUtilTest extends BcTestCase
         }
         $result = BcUtil::loginUser();
         if($result) {
-            $result = $result->toArray()[0]->id;
+            $result = $result->id;
         }
         $this->assertEquals($expects, $result);
     }
@@ -59,26 +61,74 @@ class BcUtilTest extends BcTestCase
 
     /**
      * Test isSuperUser
+     * @dataProvider isSuperUserDataProvider
      */
-    public function testIsSuperUser()
+    public function testIsSuperUser($id,$expects)
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->getRequest();
+        if($id) {
+            $this->loginAdmin($id);
+        }
+        $result = BcUtil::isSuperUser();
+        $this->assertEquals($expects,$result);
+    }
+
+    public function isSuperUserDataProvider() {
+        return [
+            // ログインしてない場合
+            [null,false],
+            // システム管理者の場合
+            [1,true],
+             // サイト運営者などそれ以外の場合
+            [2,false]
+        ];
     }
 
     /**
      * Test isAgentUser
+     * @dataProvider isAgentUserDataProvider
      */
-    public function testIsAgentUser()
+    public function testIsAgentUser($id,$expects)
     {
-        $this->markTestIncomplete('Not implemented yet.');
+
+        $request = $this->getRequest();
+        if($id) {
+            $user = $this->loginAdmin($id);
+            $session = $request->getSession();
+            $session->write('AuthAgent.User',$user);
+        }
+        $result = BcUtil::isAgentUser();
+
+        $this->assertEquals($expects,$result);
+    }
+
+    public function isAgentUserDataProvider() {
+        return [
+            // ログインしてない場合
+            [null,false],
+            // システム管理者などAuthAgentが与えられた場合
+            [1,true],
+        ];
     }
 
     /**
      * Test isInstallMode
+     * @dataProvider isInstallModeDataProvider
      */
-    public function testIsInstallMode()
+    public function testIsInstallMode($mode,$expects)
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $_SERVER["INSTALL_MODE"] = $mode;
+        $result = BcUtil::isInstallMode();
+        $this->assertEquals($expects,$result);
+    }
+
+    public function isInstallModeDataProvider() {
+        return [
+            // インストールモード On
+            ['true','true'],
+            // インストールモード Off
+            ['false','false'],
+        ];
     }
 
     /**
