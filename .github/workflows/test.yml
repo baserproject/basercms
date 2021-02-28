@@ -1,6 +1,6 @@
 name: Test
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   test:
@@ -8,35 +8,40 @@ jobs:
 
     runs-on: ubuntu-20.04
 
+    strategy:
+      matrix:
+        php-version: ['7.3', '7.4']
+
     steps:
 
-    - name: Setup PHP 7.4
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: 7.4
+      - name: Setup PHP 7.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
 
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate
+      - name: Validate composer.json and composer.lock
+        run: composer validate
 
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress --no-suggest
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
 
-    - name: Install baserCMS
-      run: |
-        cp config/app_local.example.php config/app_local.php
-        cp config/.env.example config/.env
+      - name: Install baserCMS
+        run: |
+          cp config/app_local.example.php config/app_local.php
+          cp config/.env.example config/.env
 
-    - name: Run compose
-      run: |
-        cd docker
-        cp docker-compose.yml.default docker-compose.yml
-        docker-compose up -d
+      - name: Run compose
+        run: |
+          cd docker
+          cp docker-compose.yml.default docker-compose.yml
+          sed -i -e "s/basercms:5-php7.4/basercms:5-php${{ matrix.php-version }}/g" docker-compose.yml;
+          docker-compose up -d
 
-    - name: Sleep for 10 seconds
-      run: sleep 10
+      - name: Sleep for 10 seconds
+        run: sleep 10
 
-    - name: Run test suite
-      run: docker exec bc5-php composer run-script test
+      - name: Run test suite
+        run: docker exec bc5-php composer run-script test
