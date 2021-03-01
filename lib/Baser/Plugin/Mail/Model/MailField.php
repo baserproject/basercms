@@ -119,8 +119,8 @@ class MailField extends MailAppModel
 			],
 			'separator' => [
 				[
-					'rule' => ['maxLength', 20],
-					'message' => __d('baser', '区切り文字は20文字以内で入力してください。')
+					'rule' => ['maxLength', 255],
+					'message' => __d('baser', '区切り文字は255文字以内で入力してください。')
 				]
 			],
 			'default_value' => [
