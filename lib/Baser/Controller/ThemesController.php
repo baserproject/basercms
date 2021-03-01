@@ -573,6 +573,9 @@ class ThemesController extends AppController
 	 */
 	public function admin_download_default_data_pattern()
 	{
+		set_time_limit(0);
+		ini_set('memory_limit', -1);
+
 		/* コアのCSVを生成 */
 		$tmpDir = TMP . 'csv' . DS;
 		$Folder = new Folder();
