@@ -37,7 +37,7 @@ class MailFieldsSchema extends CakeSchema
 		'maxlength' => ['type' => 'integer', 'null' => true, 'default' => null],
 		'options' => ['type' => 'string', 'null' => true, 'default' => null],
 		'class' => ['type' => 'string', 'null' => true, 'default' => null],
-		'separator' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 20],
+		'separator' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 255],
 		'default_value' => ['type' => 'string', 'null' => true, 'default' => null],
 		'description' => ['type' => 'string', 'null' => true, 'default' => null],
 		'group_field' => ['type' => 'string', 'null' => true, 'default' => null],
