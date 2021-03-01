@@ -1900,10 +1900,10 @@ class BcAppModel extends Model
 		if (preg_match('/(<\?=|<\?php|<script)/i', $value)) {
 			return false;
 		}
-		if (preg_match('/<[^>]+?(' . implode('|', $events) . ')=("|\')[^>]*?>/i', $value)) {
+		if (preg_match('/<[^>]+?(' . implode('|', $events) . ')\s*=[^<>]*?>/i', $value)) {
 			return false;
 		}
-		if (preg_match('/href=\s*?("|\')[^"\']*?javascript\s*?:/i', $value)) {
+		if (preg_match('/href\s*=\s*[^>]*?javascript\s*?:/i', $value)) {
 			return false;
 		}
 		return true;
