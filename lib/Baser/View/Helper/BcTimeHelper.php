@@ -162,7 +162,11 @@ class BcTimeHelper extends TimeHelper
 			if (empty($date['year']) || empty($date['month']) || empty($date['day'])) {
 				return '';
 			}
-			$date = $this->convertToSeirekiYear($date['year']) . '-' . $date['month'] . '-' . $date['day'];
+			if (strpos($date['year'], '-') === false) {
+				$date = $date['year'] . '-' . $date['month'] . '-' . $date['day'];
+			} else {
+				$date = $this->convertToSeirekiYear($date['year']) . '-' . $date['month'] . '-' . $date['day'];
+			}
 		}
 
 		$time = strtotime($date);
