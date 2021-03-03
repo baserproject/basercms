@@ -170,6 +170,8 @@ class MailMessage extends MailAppModel
 		$this->_validExtends($data);
 		// バリデートグループエラーチェック
 		$this->_validGroupErrorCheck();
+		// 和暦不完全データチェック
+		$this->_validWarekiComplate($data);
 	}
 
 	/**
@@ -456,6 +458,43 @@ class MailMessage extends MailAppModel
 	}
 
 	/**
+	 * 和暦不完全データチェック
+	 *
+	 * @param array $data
+	 * @return void
+	 */
+	protected function _validWarekiComplate($data)
+	{
+		$dists = [];
+
+
+		// 対象フィールドを取得
+		foreach ($this->mailFields as $mailField) {
+			$mailField = $mailField['MailField'];
+			if ($mailField['type'] !== 'date_time_wareki') {
+				continue;
+			}
+			$dists[] = [
+				'name' => $mailField['field_name'],
+				'value' => $data['MailMessage'][$mailField['field_name']]
+			];
+		}
+
+		foreach ($dists as $dist) {
+			$timeNames = ['year', 'month', 'day'];
+			$inputCount = 0;
+			foreach ($timeNames as $timeName) {
+				if (!empty($data['MailMessage'][$dist['name']][$timeName])) {
+					$inputCount++;
+				}
+			}
+			if ($inputCount !== 0 && $inputCount !== count($timeNames)) {
+				$this->invalidate($dist['name'] . '', __('入力データが不完全です。'));
+			}
+		}
+	}
+
+	/**
 	 * 自動変換
 	 * 確認画面で利用される事も踏まえてバリデートを通す為の
 	 * 可能な変換処理を行う。
@@ -567,6 +606,12 @@ class MailMessage extends MailAppModel
 					App::uses('AuthComponent', 'Controller/Component');
 					$dbData['MailMessage'][$mailField['field_name']] = AuthComponent::password($dbData['MailMessage'][$mailField['field_name']]);
 				}
+			}
+			// 和暦未入力時に配列をnullに変換
+			// - 和暦完全入力時は、lib/Baser/Model/BcAppModel->deconstruct にて日時に変換される
+			// - 一部のフィールドしか入力されていない場合は $this->_validWarekiComplate にてエラーになる
+			if ($mailField['type'] === 'date_time_wareki' && is_array($dbData['MailMessage'][$mailField['field_name']])) {
+				$dbData['MailMessage'][$mailField['field_name']] = null;
 			}
 		}
 
