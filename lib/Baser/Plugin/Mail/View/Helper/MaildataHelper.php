@@ -37,7 +37,7 @@ class MaildataHelper extends BcTextHelper
 	public function control($type, $value, $escape = true)
 	{
 		$toDisplayString = $this->toDisplayString($type, $value);
-		return $escape? ' ' . h($toDisplayString) : ' ' . $toDisplayString;
+		return $escape? h($toDisplayString) : $toDisplayString;
 	}
 
 	/**
@@ -51,6 +51,14 @@ class MaildataHelper extends BcTextHelper
 	public function toDisplayString($type, $value)
 	{
 		switch($type) {
+			case 'text':
+			case 'radio':
+			case 'select':
+			case 'email':
+			case 'tel':
+			case 'password':
+				return ' ' . $value;
+
 			case 'pref':
 				$prefs = $this->prefList();
 				$options = [];
@@ -58,7 +66,7 @@ class MaildataHelper extends BcTextHelper
 					$options[$pref] = $pref;
 				}
 				if (isset($options[$value])) {
-					return $options[$value];
+					return ' ' . $options[$value];
 				}
 				return '';
 
@@ -73,10 +81,7 @@ class MaildataHelper extends BcTextHelper
 
 				$out = '';
 				foreach($value as $key => $data) {
-					if ($key != 0) {
-						$out .= " ";
-					}
-					$out .= "・" . $data . PHP_EOL;
+					$out .= " ・" . $data . PHP_EOL;
 				}
 				return $out;
 
@@ -111,7 +116,7 @@ class MaildataHelper extends BcTextHelper
 					$value = $this->dateTime($value);
 				}
 				if ($value) {
-					return date(__d('baser', 'Y年 m月 d日'), strtotime($value));
+					return ' ' . date(__d('baser', 'Y年 m月 d日'), strtotime($value));
 				}
 				return '';
 
@@ -119,13 +124,13 @@ class MaildataHelper extends BcTextHelper
 				if (!is_array($value)) {
 					$value = $this->BcTime->convertToWarekiArray($value);
 				}
-				return $this->dateTimeWareki($value);
+				return ' ' . $this->dateTimeWareki($value);
 
 			case 'autozip':
 				if (strlen($value) == 7) {
 					return substr($value, 0, 3) . '-' . substr($value, 3, 7);
 				}
-				return $value;
+				return ' ' . $value;
 
 			default:
 				return $value;
