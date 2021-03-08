@@ -4,9 +4,7 @@
     <a href="LICENSE" target="_blank">
         <img alt="Software License" src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square">
     </a>
-    <a href="https://travis-ci.org/baserproject/ucmitz" target="_blank">
-        <img alt="Build Status" src="https://travis-ci.org/baserproject/ucmitz.svg?branch=dev">
-    </a>
+    [![Test](https://github.com/baserproject/ucmitz/actions/workflows/test.yml/badge.svg)](https://github.com/baserproject/ucmitz/actions/workflows/test.yml)
 </p>
 
 ucmitz 🐮🐮🐮 は、baserCMSをCakePHP4化するためのプロジェクトの開発コードネームです。
