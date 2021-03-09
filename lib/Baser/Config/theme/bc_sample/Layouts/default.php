@@ -55,7 +55,7 @@
 		<?php $this->BcBaser->mainImage(['all' => true, 'num' => 5, 'width' => '100%', 'class' => 'bs-main-image']) ?>
 	<?php else: ?>
 		<!-- /Elements/crumbs.php -->
-		<?php $this->BcBaser->crumbsList(); ?>
+		<?php $this->BcBaser->crumbsList(['onSchema' => true]); ?>
 	<?php endif ?>
 
 	<div class="bs-wrap clearfix">

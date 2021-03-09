@@ -902,7 +902,8 @@ body {
   padding: 15px 20px;
   font-size: 12px;
   color: #CCC;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  line-height: 2em; }
   @media screen and (max-width: 768px) {
     .bs-crumbs {
       box-sizing: border-box;
@@ -917,6 +918,12 @@ body {
       color: #000; }
     .bs-crumbs a:hover {
       color: #555; }
+  .bs-crumbs ul {
+    display: flex;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+    flex-wrap: wrap; }
 
 /* Contents Navigation
 ----------------------------------------------- */

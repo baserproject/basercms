@@ -39,7 +39,7 @@ if (!empty($crumbs)) {
 }
 ?>
 
-
+<div class="bs-crumbs">
 <?php if (empty($onSchema)): ?>
 	<?php
 	if ($this->BcBaser->isHome()) {
@@ -57,4 +57,4 @@ if (!empty($crumbs)) {
 		<?php endif ?>
 	</ul>
 <?php endif ?>
-
+</div>
