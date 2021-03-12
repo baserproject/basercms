@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: bc5-db
--- 生成日時: 2021 年 2 月 24 日 10:43
--- サーバのバージョン： 5.7.29
--- PHP のバージョン: 7.4.4
+-- 生成日時: 2021 年 3 月 12 日 08:58
+-- サーバのバージョン： 5.7.33
+-- PHP のバージョン: 7.4.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -154,6 +154,13 @@ CREATE TABLE `plugins` (
   `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- テーブルのデータのダンプ `plugins`
+--
+
+INSERT INTO `plugins` (`id`, `name`, `title`, `version`, `status`, `db_init`, `priority`, `created`, `modified`) VALUES
+(1, 'BcBlog', 'ブログ', '1.0.0', 1, 1, 1, '2021-03-12 06:43:31', '2021-03-12 06:43:31');
+
 -- --------------------------------------------------------
 
 --
@@ -281,47 +288,47 @@ ALTER TABLE `user_groups`
   ADD PRIMARY KEY (`id`);
 
 --
--- ダンプしたテーブルのAUTO_INCREMENT
+-- ダンプしたテーブルの AUTO_INCREMENT
 --
 
 --
--- テーブルのAUTO_INCREMENT `contents`
+-- テーブルの AUTO_INCREMENT `contents`
 --
 ALTER TABLE `contents`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- テーブルのAUTO_INCREMENT `content_folders`
+-- テーブルの AUTO_INCREMENT `content_folders`
 --
 ALTER TABLE `content_folders`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- テーブルのAUTO_INCREMENT `pages`
+-- テーブルの AUTO_INCREMENT `pages`
 --
 ALTER TABLE `pages`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- テーブルのAUTO_INCREMENT `password_requests`
+-- テーブルの AUTO_INCREMENT `password_requests`
 --
 ALTER TABLE `password_requests`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
 
 --
--- テーブルのAUTO_INCREMENT `users`
+-- テーブルの AUTO_INCREMENT `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- テーブルのAUTO_INCREMENT `users_user_groups`
+-- テーブルの AUTO_INCREMENT `users_user_groups`
 --
 ALTER TABLE `users_user_groups`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT COMMENT 'ID', AUTO_INCREMENT=2;
 
 --
--- テーブルのAUTO_INCREMENT `user_groups`
+-- テーブルの AUTO_INCREMENT `user_groups`
 --
 ALTER TABLE `user_groups`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;

@@ -13,47 +13,49 @@ namespace BaserCore\Model\Table;
 
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
+use Cake\ORM\Table;
 use Cake\Utility\Inflector;
 
-class PluginsTable extends \Cake\ORM\Table
+class PluginsTable extends Table
 {
-/**
- * プラグイン情報を取得する
- *
- * @param array $datas プラグインのデータ配列
- * @param string $file プラグインファイルのパス
- * @return array
- */
-	public function getPluginConfig($file) {
+    /**
+     * プラグイン情報を取得する
+     *
+     * @param array $datas プラグインのデータ配列
+     * @param string $file プラグインファイルのパス
+     * @return array
+     */
+    public function getPluginConfig($file)
+    {
 
-		$pluginName = Inflector::camelize(basename($file), '-');
+        $pluginName = Inflector::camelize(basename($file), '-');
 
-		// プラグインのバージョンを取得
-		$corePlugins = Configure::read('BcApp.corePlugins');
-		if (in_array($pluginName, $corePlugins)) {
-			$core = true;
-			$version = BcUtil::getVersion();
-		} else {
-		    $core = false;
-			$version = BcUtil::getVersion($pluginName);
-		}
+        // プラグインのバージョンを取得
+        $corePlugins = Configure::read('BcApp.corePlugins');
+        if (in_array($pluginName, $corePlugins)) {
+            $core = true;
+            $version = BcUtil::getVersion();
+        } else {
+            $core = false;
+            $version = BcUtil::getVersion($pluginName);
+        }
 
-		$result = $this->find()
-		    ->order(['priority'])
-		    ->where(['name' => $pluginName])
-		    ->first();
+        $result = $this->find()
+            ->order(['priority'])
+            ->where(['name' => $pluginName])
+            ->first();
 
-		if($result) {
-		    $pluginRecord = $result;
-		    $this->patchEntity($pluginRecord, [
-		        'update' => false,
-		        'core' => $core,
-		        'registered' => true
+        if ($result) {
+            $pluginRecord = $result;
+            $this->patchEntity($pluginRecord, [
+                'update' => false,
+                'core' => $core,
+                'registered' => true
             ]);
-			if (BcUtil::verpoint($pluginRecord->version) < BcUtil::verpoint($version) && !in_array($pluginRecord->name, Configure::read('BcApp.corePlugins'))) {
-				$pluginRecord->update = true;
-			}
-		} else {
+            if (BcUtil::verpoint($pluginRecord->version) < BcUtil::verpoint($version) && !in_array($pluginRecord->name, Configure::read('BcApp.corePlugins'))) {
+                $pluginRecord->update = true;
+            }
+        } else {
             $pluginRecord = $this->newEntity([
                 'id' => '',
                 'name' => $pluginName,
@@ -64,13 +66,13 @@ class PluginsTable extends \Cake\ORM\Table
                 'core' => $core,
                 'registered' => false,
             ]);
-		}
+        }
 
-		// 設定ファイル読み込み
-		$appConfigPath = $file . DS . 'config.php';
-		if (file_exists($appConfigPath)) {
-		    $this->patchEntity($pluginRecord, include $appConfigPath);
-		}
-		return $pluginRecord;
-	}
+        // 設定ファイル読み込み
+        $appConfigPath = $file . DS . 'config.php';
+        if (file_exists($appConfigPath)) {
+            $this->patchEntity($pluginRecord, include $appConfigPath);
+        }
+        return $pluginRecord;
+    }
 }

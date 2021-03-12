@@ -13,13 +13,13 @@ declare(strict_types=1);
 namespace BaserCore;
 
 use BaserCore\Utility\BcUtil;
+use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\MiddlewareQueue;
-use Cake\ORM\TableRegistry;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 
@@ -27,6 +27,7 @@ use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Middleware\AuthenticationMiddleware;
+use Cake\Utility\Inflector;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -59,9 +60,35 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
 
         $plugins = BcUtil::getEnablePlugins();
         foreach($plugins as $plugin) {
-            $this->addPlugin($plugin);
+            if($this->includePluginClass($plugin)) {
+                $this->addPlugin($plugin);
+            }
         }
 
+    }
+
+    /**
+     * プラグイン配下の Plugin クラスを読み込む
+     *
+     * Plugin クラスが読み込めていないとプラグイン自体を読み込めないため
+     * プラグインのフォルダ名は camelize と dasherize に対応
+     * 例）BcBlog / bc-blog
+     *
+     * @param string $pluginName
+     * @return bool
+     */
+    protected function includePluginClass($pluginName) {
+        $pluginNames = [$pluginName, Inflector::dasherize($pluginName)];
+        foreach(App::path('plugins') as $path) {
+            foreach($pluginNames as $name) {
+                $pluginClassPath = $path . $name . DS . 'src' . DS . 'Plugin.php';
+                if(file_exists($pluginClassPath)) {
+                    include $pluginClassPath;
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

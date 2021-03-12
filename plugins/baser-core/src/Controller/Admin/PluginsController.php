@@ -11,11 +11,10 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Model\Table\PluginsTable;
 use BaserCore\Utility\BcUtil;
-use Cake\Cache\Cache;
 use Cake\Core\App;
 use Cake\Core\Configure;
-use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\Utility\Hash;
 use Cake\Utility\Xml;
@@ -23,6 +22,7 @@ use Cake\Utility\Xml;
 /**
  * Class PluginsController
  * @package BaserCore\Controller\Admin
+ * @property PluginsTable $Plugins
  */
 class PluginsController extends BcAdminAppController
 {
@@ -42,7 +42,7 @@ class PluginsController extends BcAdminAppController
             $Folder = new Folder($path);
             $files = $Folder->read(true, true, true);
             foreach($files[0] as $file) {
-                if(!in_array(basename($file), Configure::read('BcApp.core'))) {
+                if (!in_array(basename($file), Configure::read('BcApp.core'))) {
                     $pluginConfigs[basename($file)] = $this->Plugins->getPluginConfig($file);
                 }
             }
@@ -67,6 +67,7 @@ class PluginsController extends BcAdminAppController
 //			$pluginConfigs = Hash::sort($availables, '{n}.Plugin.priority', 'asc', 'numeric');
 //		} else {
         $sortmode = false;
+
         $pluginConfigs = array_merge(Hash::sort(
             $availables,
             '{n}.Plugin.priority',
