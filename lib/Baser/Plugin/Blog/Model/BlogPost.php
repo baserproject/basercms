@@ -51,7 +51,6 @@ class BlogPost extends BlogAppModel
 	 */
 	public $actsAs = [
 		'BcSearchIndexManager',
-		'BcCache',
 		'BcUpload' => [
 			'subdirDateFormat' => 'Y/m/',
 			'fields' => [
@@ -237,7 +236,6 @@ class BlogPost extends BlogAppModel
 			'conditions' => $conditions,
 			'order' => 'BlogPost.posts_date DESC',
 			'recursive' => $recursive,
-			'cache' => false
 		]);
 
 		$dates = [];
@@ -310,7 +308,6 @@ class BlogPost extends BlogAppModel
 			'fields' => ['BlogPost.posts_date'],
 			'conditions' => $this->_getEntryDatesConditions($blogContentId, $year, $month),
 			'recursive' => -1,
-			'cache' => false
 		]);
 		$entryDates = Hash::extract($entryDates, '{n}.BlogPost.posts_date');
 		foreach($entryDates as $key => $entryDate) {
@@ -364,7 +361,6 @@ class BlogPost extends BlogAppModel
 			'fields' => ['BlogPost.id'],
 			'conditions' => $this->_getEntryDatesConditions($blogContentId, $year, $month),
 			'recursive' => -1,
-			'cache' => false
 		])) {
 			return true;
 		} else {
@@ -523,7 +519,6 @@ class BlogPost extends BlogAppModel
 			$options['conditions'] = $this->getConditionAllowPublish();
 		}
 		// 毎秒抽出条件が違うのでキャッシュしない
-		$options['cache'] = false;
 		$datas = $this->find('all', $options);
 		return $datas;
 	}

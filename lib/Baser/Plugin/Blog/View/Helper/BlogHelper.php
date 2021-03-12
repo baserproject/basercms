@@ -984,13 +984,11 @@ class BlogHelper extends AppHelper
 		];
 		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
 
-		// 毎秒抽出条件が違うのでキャッシュしない
 		$relatedPosts = $BlogPost->find('all', [
 			'conditions' => $conditions,
 			'recursive' => $options['recursive'],
 			'order' => $options['order'],
 			'limit' => $options['limit'],
-			'cache' => false
 		]);
 
 		return $relatedPosts;
@@ -1210,12 +1208,10 @@ class BlogHelper extends AppHelper
 		$conditions['BlogPost.blog_content_id'] = $post['BlogPost']['blog_content_id'];
 		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
 		$order = 'BlogPost.posts_date, BlogPost.id';
-		// 毎秒抽出条件が違うのでキャッシュしない
 		$nextPost = $BlogPost->find('first', [
 			'conditions' => $conditions,
 			'order' => $order,
 			'recursive' => 0,
-			'cache' => false
 		]);
 
 		if (empty($nextPost)) {
@@ -1224,12 +1220,10 @@ class BlogHelper extends AppHelper
 			$conditions['BlogPost.posts_date >'] = $post['BlogPost']['posts_date'];
 			$conditions['BlogPost.blog_content_id'] = $post['BlogPost']['blog_content_id'];
 			$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
-			// 毎秒抽出条件が違うのでキャッシュしない
 			$nextPost = $BlogPost->find('first', [
 				'conditions' => $conditions,
 				'order' => $order,
 				'recursive' => 0,
-				'cache' => false
 			]);
 		}
 		return $nextPost;
@@ -1251,12 +1245,10 @@ class BlogHelper extends AppHelper
 		$conditions['BlogPost.blog_content_id'] = $post['BlogPost']['blog_content_id'];
 		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
 		$order = 'BlogPost.posts_date DESC, BlogPost.id DESC';
-		// 毎秒抽出条件が違うのでキャッシュしない
 		$prevPost = $BlogPost->find('first', [
 			'conditions' => $conditions,
 			'order' => $order,
 			'recursive' => 0,
-			'cache' => false
 		]);
 		if (empty($prevPost)) {
 			// 投稿日が古いデータを取得
@@ -1264,12 +1256,10 @@ class BlogHelper extends AppHelper
 			$conditions['BlogPost.posts_date <'] = $post['BlogPost']['posts_date'];
 			$conditions['BlogPost.blog_content_id'] = $post['BlogPost']['blog_content_id'];
 			$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
-			// 毎秒抽出条件が違うのでキャッシュしない
 			$prevPost = $BlogPost->find('first', [
 				'conditions' => $conditions,
 				'order' => $order,
 				'recursive' => 0,
-				'cache' => false
 			]);
 		}
 		return $prevPost;
@@ -1519,7 +1509,6 @@ class BlogHelper extends AppHelper
 					['Content.url' => $options['contentUrl']]
 				),
 				'recursive' => 0,
-				'cache' => false
 			]);
 			$blogContentIds = Hash::extract($blogContent, "{n}.BlogContent.id");
 		}
@@ -1661,7 +1650,6 @@ class BlogHelper extends AppHelper
 				'fields' => ['BlogContent.template'],
 				'conditions' => $conditions,
 				'recursive' => 0,
-				'cache' => false
 			]);
 			if ($blogContent) {
 				$contentsTemplate = $blogContent['BlogContent']['template'];
@@ -1791,7 +1779,6 @@ class BlogHelper extends AppHelper
 		$datas = $BlogContent->find('all', [
 				'conditions' => $conditions,
 				'order' => $options['sort'],
-				'cache' => false,
 				'recursive' => 0
 			]
 		);

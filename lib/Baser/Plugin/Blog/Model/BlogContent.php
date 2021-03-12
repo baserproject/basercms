@@ -33,7 +33,10 @@ class BlogContent extends BlogAppModel
 	 *
 	 * @var array
 	 */
-	public $actsAs = ['BcSearchIndexManager', 'BcCache', 'BcContents'];
+	public $actsAs = [
+		'BcSearchIndexManager',
+		'BcContents'
+	];
 
 	/**
 	 * hasMany
