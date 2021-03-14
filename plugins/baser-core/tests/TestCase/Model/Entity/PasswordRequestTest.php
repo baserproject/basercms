@@ -51,7 +51,8 @@ class PasswordRequestTest extends BcTestCase
     /**
      * Test setRequestKey
      */
-    public function testRequestKey() {
+    public function testRequestKey()
+    {
         $this->PasswordRequest->setRequestKey();
         $requestKey1 = $this->PasswordRequest->request_key;
         $this->PasswordRequest->setRequestKey();

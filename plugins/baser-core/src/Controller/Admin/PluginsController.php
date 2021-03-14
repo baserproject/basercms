@@ -11,13 +11,14 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Error\BcException;
 use BaserCore\Model\Table\PluginsTable;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\App;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\Utility\Hash;
-use Cake\Utility\Xml;
 
 /**
  * Class PluginsController
@@ -35,28 +36,13 @@ class PluginsController extends BcAdminAppController
     public function index()
     {
 
-        // プラグインフォルダーのチェックを行う
-        $pluginConfigs = [];
-        $paths = App::path('plugins');
-        foreach($paths as $path) {
-            $Folder = new Folder($path);
-            $files = $Folder->read(true, true, true);
-            foreach($files[0] as $file) {
-                if (!in_array(basename($file), Configure::read('BcApp.core'))) {
-                    $pluginConfigs[basename($file)] = $this->Plugins->getPluginConfig($file);
-                }
-            }
-        }
-
-        $pluginConfigs = array_values($pluginConfigs); // Hash::sortの為、一旦キーを初期化
-        $pluginConfigs = array_reverse($pluginConfigs); // Hash::sortの為、逆順に変更
-
-        $availables = $unavailables = [];
-        foreach($pluginConfigs as $pluginInfo) {
+        $plugins = $this->Plugins->getAvailable();
+        $available = $unavailable = [];
+        foreach($plugins as $pluginInfo) {
             if (isset($pluginInfo['Plugin']['priority'])) {
-                $availables[] = $pluginInfo;
+                $available[] = $pluginInfo;
             } else {
-                $unavailables[] = $pluginInfo;
+                $unavailable[] = $pluginInfo;
             }
         }
 
@@ -68,58 +54,65 @@ class PluginsController extends BcAdminAppController
 //		} else {
         $sortmode = false;
 
-        $pluginConfigs = array_merge(Hash::sort(
-            $availables,
+        $plugins = array_merge(Hash::sort(
+            $available,
             '{n}.Plugin.priority',
             'asc',
-            'numeric'), $unavailables);
+            'numeric'), $unavailable);
 //		}
 
-        // 表示設定
-        $this->set('plugins', $pluginConfigs);
+        $this->set('plugins', $plugins);
         $this->set('corePlugins', Configure::read('BcApp.corePlugins'));
         $this->set('sortmode', $sortmode);
-
         $this->setTitle(__d('baser', 'プラグイン一覧'));
         $this->setHelp('plugins_index');
     }
 
-
     /**
-     * baserマーケットのプラグインデータを取得する
+     * インストール
      *
+     * @param string $name プラグイン名
      * @return void
      */
-    public function admin_ajax_get_market_plugins()
+    public function install($name)
     {
-        return false;
-        // TODO 実装要
-        $cachePath = 'views' . DS . 'baser_market_plugins.rss';
-        if (Configure::read('debug') > 0) {
-            clearCache('baser_market_plugins', 'views', '.rss');
-        }
-        $baserPlugins = cache($cachePath);
-        if ($baserPlugins) {
-            $baserPlugins = BcUtil::unserialize($baserPlugins);
-            $this->set('baserPlugins', $baserPlugins);
-            return;
-        }
+        $name = urldecode($name);
+        $installMessage = '';
 
-        $Xml = new Xml();
         try {
-            $baserPlugins = $Xml->build(Configure::read('BcApp.marketPluginRss'));
-        } catch (BcException $ex) {
+            if ($this->Plugins->isInstallable($name)) {
+                $isInstallable = true;
+            }
+        } catch (BcException $e) {
+            $isInstallable = false;
+            $installMessage = $e->getMessage();
+        }
 
+        $plugin = $this->Plugins->getPluginConfig($name);
+        if ($isInstallable && $this->request->is('post')) {
+            // プラグインをインストール
+            BcUtil::includePluginClass($name);
+            $plugins = Plugin::getCollection();
+            $plugin = $plugins->create($name);
+            $plugin->install();
+            if ($plugin->install()) {
+                $this->BcMessage->setSuccess(sprintf(__d('baser', '新規プラグイン「%s」を baserCMS に登録しました。'), $name));
+                // TODO: アクセス権限を追加する
+                // $this->_addPermission($this->request->data);
+                $this->redirect(['action' => 'index']);
+            } else {
+                $this->BcMessage->setError(__d('baser', 'プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。'));
+            }
         }
-        if ($baserPlugins) {
-            $baserPlugins = $Xml->toArray($baserPlugins->channel);
-            $baserPlugins = $baserPlugins['channel']['item'];
-            cache($cachePath, BcUtil::serialize($baserPlugins));
-            chmod(CACHE . $cachePath, 0666);
-        } else {
-            $baserPlugins = [];
-        }
-        $this->set('baserPlugins', $baserPlugins);
+
+        $this->set('installMessage', $installMessage);
+        $this->set('isInstallable', $isInstallable);
+        $this->set('dbInited', $plugin->dbInited);
+        $this->set('plugin', $plugin);
+        $this->subMenuElements = ['plugins'];
+        $this->pageTitle = __d('baser', '新規プラグイン登録');
+        $this->help = 'plugins_form';
+        $this->render('form');
     }
 
 }

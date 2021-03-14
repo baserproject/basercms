@@ -43,33 +43,33 @@ class BcFormHelperTest extends BcTestCase
         $this->BcForm = new BcFormHelper(new BcAdminAppView($this->getRequest('/contacts/add')));
     }
 
-	/**
-	 * コントロールソースを取得する
-	 * Model側でメソッドを用意しておく必要がある
-	 *
-	 * @param string $field フィールド名
-	 * @param array $options
-	 * @dataProvider getControlSourceProvider
-	 */
-	public function testGetControlSource($field, $expected)
-	{
-		$result = $this->BcForm->getControlSource($field);
-		if($result) {
-		    $result = $result->toArray();
-		} else {
-		    $result = [];
-		}
-		$this->assertEquals($expected, $result);
-	}
+    /**
+     * コントロールソースを取得する
+     * Model側でメソッドを用意しておく必要がある
+     *
+     * @param string $field フィールド名
+     * @param array $options
+     * @dataProvider getControlSourceProvider
+     */
+    public function testGetControlSource($field, $expected)
+    {
+        $result = $this->BcForm->getControlSource($field);
+        if ($result) {
+            $result = $result->toArray();
+        } else {
+            $result = [];
+        }
+        $this->assertEquals($expected, $result);
+    }
 
-	public function getControlSourceProvider()
-	{
-		return [
-			['hoge', []],
-			['', []],
-			['BaserCore.Users.user_group_id', [1 => 'システム管理',2 => 'サイト運営者']]
-		];
-	}
+    public function getControlSourceProvider()
+    {
+        return [
+            ['hoge', []],
+            ['', []],
+            ['BaserCore.Users.user_group_id', [1 => 'システム管理', 2 => 'サイト運営者']]
+        ];
+    }
 
     /**
      * testDatePicker

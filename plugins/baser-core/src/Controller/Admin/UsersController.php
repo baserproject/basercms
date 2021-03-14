@@ -29,10 +29,9 @@ use Cake\Http\Exception\ForbiddenException;
  * @property AuthenticationComponent $Authentication
  * @property BcMessageComponent $BcMessage
  */
-
 class UsersController extends BcAdminAppController
 {
-	public $siteConfigs = [];
+    public $siteConfigs = [];
 
     /**
      * initialize
@@ -51,34 +50,34 @@ class UsersController extends BcAdminAppController
      * @param EventInterface $event
      * @return Response|void|null
      */
-	public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event)
     {
         // TODO 取り急ぎ動作させるためのコード
         // >>>
-		$this->siteConfigs['admin_list_num'] = 30;
-		// $this->request = $this->request->withParam('pass', ['num' => 30]);
-		// <<<
+        $this->siteConfigs['admin_list_num'] = 30;
+        // $this->request = $this->request->withParam('pass', ['num' => 30]);
+        // <<<
     }
 
-	/**
-	 * ログインユーザーリスト
-	 *
-	 * 管理画面にログインすることができるユーザーの一覧を表示する
-	 *
-	 * - list view
+    /**
+     * ログインユーザーリスト
+     *
+     * 管理画面にログインすることができるユーザーの一覧を表示する
+     *
+     * - list view
      *  - User.id
-	 *	- User.name
+     *    - User.name
      *  - User.nickname
      *  - UserGroup.title
      *  - User.real_name_1 && User.real_name_2
      *  - User.created && User.modified
-	 *
-	 * - search input
-	 *	- User.user_group_id
-	 *
-	 * - pagination
-	 * - view num
-	 */
+     *
+     * - search input
+     *    - User.user_group_id
+     *
+     * - pagination
+     * - view num
+     */
     public function index(): void
     {
         $this->setViewConditions('User', ['default' => ['query' => [
@@ -100,15 +99,15 @@ class UsersController extends BcAdminAppController
 
     /**
      * 管理画面へログインする
-	 * - link
-     *	- パスワード再発行
+     * - link
+     *    - パスワード再発行
      *
      * - viewVars
      *  - title
-	 *
-	 * - input
-	 *	- User.name or User.email
-     *	- User.password
+     *
+     * - input
+     *    - User.name or User.email
+     *    - User.password
      *  - remember login
      *  - submit
      *
@@ -255,8 +254,8 @@ class UsersController extends BcAdminAppController
             // 権限確認
             if (!$updatable) {
                 $this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));
-            // TODO: 自身のアカウントは変更出来ないようにチェック
-            // } elseif ($selfUpdate && $user['user_group_id'] != $this->request->getData('user_group_id')) {
+                // TODO: 自身のアカウントは変更出来ないようにチェック
+                // } elseif ($selfUpdate && $user['user_group_id'] != $this->request->getData('user_group_id')) {
                 // $this->BcMessage->setError(__d('baser', '自分のアカウントのグループは変更できません。'));
             } else {
                 if ($this->Users->save($user)) {
@@ -276,7 +275,7 @@ class UsersController extends BcAdminAppController
         } else {
             // ログイン中のユーザーが自分の場合の処理
             if ($user->id == $this->request->getData('id')) {
-                 $selfUpdate = true;
+                $selfUpdate = true;
             }
         }
 

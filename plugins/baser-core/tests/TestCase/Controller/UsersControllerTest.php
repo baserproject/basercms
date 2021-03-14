@@ -49,7 +49,7 @@ class UsersControllerTest extends TestCase
             $this->loadFixtures('Users');
         }
 
-        $config = $this->getTableLocator()->exists('Users') ? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
+        $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
         $Users = $this->getTableLocator()->get('Users', $config);
         $this->session(['AuthAdmin' => $Users->get(1)]);
     }

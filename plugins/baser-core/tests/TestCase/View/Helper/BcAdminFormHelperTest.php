@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Test\TestCase\View\Helper;
+
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcAdminFormHelper;
@@ -21,7 +22,8 @@ use BaserCore\View\Helper\BcFormHelper;
  * @property BcAdminFormHelper $BcAdminForm
  * @property BcFormHelper $BcForm
  */
-class BcAdminFormHelperTest extends BcTestCase {
+class BcAdminFormHelperTest extends BcTestCase
+{
 
     /**
      * setUp method
@@ -58,11 +60,11 @@ class BcAdminFormHelperTest extends BcTestCase {
         $this->assertEquals($this->BcForm->control($name), $this->BcAdminForm->control($name));
 
         $options = [
-            'label'  => false,
+            'label' => false,
             'legend' => false,
-            'error'  => false,
+            'error' => false,
             'templateVars' => [
-                'tag'      => 'span',
+                'tag' => 'span',
                 'groupTag' => 'span'
             ]
         ];
@@ -99,7 +101,7 @@ class BcAdminFormHelperTest extends BcTestCase {
         $this->assertEquals($controlFile, $this->BcAdminForm->control($name, ['type' => 'file']));
 
         $optionsDateTimePicker = array_replace_recursive($options, [
-            'type'  => 'dateTimePicker',
+            'type' => 'dateTimePicker',
             'templateVars' => [
                 'class' => 'bca-datetimepicker'
             ],
@@ -107,22 +109,22 @@ class BcAdminFormHelperTest extends BcTestCase {
                 'class' => 'bca-datetimepicker__date-input'
             ],
             'dateDiv' => [
-                'tag'   => 'span',
+                'tag' => 'span',
                 'class' => 'bca-datetimepicker__date'
             ],
             'dateLabel' => [
-                'text'  => '日付',
+                'text' => '日付',
                 'class' => 'bca-datetimepicker__date-label'
             ],
             'timeInput' => [
                 'class' => 'bca-datetimepicker__time-input'
             ],
             'timeDiv' => [
-                'tag'   => 'span',
+                'tag' => 'span',
                 'class' => 'bca-datetimepicker__time'
             ],
             'timeLabel' => [
-                'text'  => '時間',
+                'text' => '時間',
                 'class' => 'bca-datetimepicker__time-label'
             ],
             'class' => 'bca-hidden__input'
@@ -131,7 +133,7 @@ class BcAdminFormHelperTest extends BcTestCase {
         $this->assertEquals($controlDateTimePicker, $this->BcAdminForm->control($name, ['type' => 'dateTimePicker']));
 
         $optionsText = array_replace_recursive($options, [
-            'type'  => 'text',
+            'type' => 'text',
             'class' => 'bca-textbox__input',
             'templateVars' => [
                 'class' => 'bca-textbox'
@@ -144,7 +146,7 @@ class BcAdminFormHelperTest extends BcTestCase {
         $this->assertEquals($controlText, $this->BcAdminForm->control($name, ['type' => 'text']));
 
         $optionsPassword = array_replace_recursive($options, [
-            'type'  => 'password',
+            'type' => 'password',
             'class' => 'bca-textbox__input',
             'templateVars' => [
                 'class' => 'bca-textbox'
@@ -157,7 +159,7 @@ class BcAdminFormHelperTest extends BcTestCase {
         $this->assertEquals($controlPassword, $this->BcAdminForm->control($name, ['type' => 'password']));
 
         $optionsDatePicker = array_replace_recursive($options, [
-            'type'  => 'datePicker',
+            'type' => 'datePicker',
             'class' => 'bca-textbox__input',
             'templateVars' => [
                 'class' => 'bca-textbox'
@@ -170,7 +172,7 @@ class BcAdminFormHelperTest extends BcTestCase {
         $this->assertEquals($controlDatePicker, $this->BcAdminForm->control($name, ['type' => 'datePicker']));
 
         $optionsTextarea = array_replace_recursive($options, [
-            'type'  => 'textarea',
+            'type' => 'textarea',
             'class' => 'bca-textarea__textarea',
             'templateVars' => [
                 'class' => 'bca-textarea'
@@ -180,10 +182,10 @@ class BcAdminFormHelperTest extends BcTestCase {
         $this->assertEquals($controlTextarea, $this->BcAdminForm->control($name, ['type' => 'textarea']));
 
         $optionsCheckbox = array_replace_recursive($options, [
-            'type'  => 'checkbox',
+            'type' => 'checkbox',
             'class' => 'bca-checkbox__textarea',
             'templateVars' => [
-                'class'      => 'bca-checkbox',
+                'class' => 'bca-checkbox',
                 'labelClass' => 'bca-checkbox__label'
             ],
             'labelOptions' => [
@@ -193,10 +195,10 @@ class BcAdminFormHelperTest extends BcTestCase {
         $controlCheckbox = $this->BcForm->control($name, $optionsCheckbox);
 
         $optionsMultiCheckbox = array_replace_recursive($options, [
-            'type'  => 'multiCheckbox',
+            'type' => 'multiCheckbox',
             'class' => 'bca-checkbox__textarea',
             'templateVars' => [
-                'class'      => 'bca-checkbox',
+                'class' => 'bca-checkbox',
                 'groupClass' => 'bca-checkbox-group'
             ],
             'labelOptions' => [
@@ -207,7 +209,7 @@ class BcAdminFormHelperTest extends BcTestCase {
         $this->assertEquals($controlMultiCheckbox, $this->BcAdminForm->control($name, ['type' => 'multiCheckbox']));
 
         $optionsSelect = array_replace_recursive($options, [
-            'type'  => 'select',
+            'type' => 'select',
             'class' => 'bca-select__select',
             'templateVars' => [
                 'class' => 'bca-select'
@@ -217,10 +219,10 @@ class BcAdminFormHelperTest extends BcTestCase {
         $this->assertEquals($controlSelect, $this->BcAdminForm->control($name, ['type' => 'select']));
 
         $optionsRadio = array_replace_recursive($options, [
-            'type'  => 'radio',
+            'type' => 'radio',
             'class' => 'bca-radio__input',
             'templateVars' => [
-                'class'      => 'bca-radio',
+                'class' => 'bca-radio',
                 'groupClass' => 'bca-radio-group'
             ],
             'labelOptions' => [

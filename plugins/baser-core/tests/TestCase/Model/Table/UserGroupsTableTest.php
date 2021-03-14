@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Test\TestCase\Model\Table;
+
 use BaserCore\Model\Table\UserGroupsTable;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Validation\Validator;
@@ -19,7 +20,8 @@ use Cake\Validation\Validator;
  * @package BaserCore\Test\TestCase\Model\Table
  * @property UserGroupsTable $UserGroups
  */
-class UserGroupsTableTest extends BcTestCase {
+class UserGroupsTableTest extends BcTestCase
+{
 
     /**
      * Test subject
@@ -45,7 +47,7 @@ class UserGroupsTableTest extends BcTestCase {
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('UserGroups') ? [] : ['className' => 'BaserCore\Model\Table\UserGroupsTable'];
+        $config = $this->getTableLocator()->exists('UserGroups')? [] : ['className' => 'BaserCore\Model\Table\UserGroupsTable'];
         $this->UserGroups = $this->getTableLocator()->get('UserGroups', $config);
     }
 
@@ -96,7 +98,7 @@ class UserGroupsTableTest extends BcTestCase {
     {
         $this->UserGroups->copy(1);
         $originalUserGroup = $this->UserGroups->get(1);
-        $query = $this->UserGroups->find()->where(['name' => $originalUserGroup->name.'_copy']);
+        $query = $this->UserGroups->find()->where(['name' => $originalUserGroup->name . '_copy']);
         $this->assertEquals(1, $query->count());
     }
 

@@ -18,7 +18,8 @@ use BaserCore\TestSuite\BcTestCase;
  * Class CopyFailedExceptionTest
  * @package BaserCore\Test\TestCase\Model\Table\Exception
  */
-class CopyFailedExceptionTest extends BcTestCase {
+class CopyFailedExceptionTest extends BcTestCase
+{
 
     /**
      * Test subject

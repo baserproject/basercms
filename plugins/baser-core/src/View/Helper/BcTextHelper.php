@@ -17,11 +17,13 @@ use Cake\View\Helper;
  * Class BcTextHelper
  * @package BaserCore\View\Helper
  */
-class BcTextHelper extends Helper {
-	public  function listValue ()
-	{
-	}
-	public function arrayValue ($key, $array, $noValue = '')
+class BcTextHelper extends Helper
+{
+    public function listValue()
+    {
+    }
+
+    public function arrayValue($key, $array, $noValue = '')
     {
     }
 }

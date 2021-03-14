@@ -39,7 +39,7 @@ class PasswordRequestsFixture extends TestFixture
                 'used' => 1,
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => '2021-02-20 12:54:00'
-            // 無効: 期限切れ
+                // 無効: 期限切れ
             ], [
                 'id' => 2,
                 'user_id' => 1,
@@ -47,7 +47,7 @@ class PasswordRequestsFixture extends TestFixture
                 'used' => 0,
                 'created' => date('Y-m-d H:i:s', strtotime('-2 days')),
                 'modified' => '2021-02-20 12:54:00'
-            // 有効
+                // 有効
             ], [
                 'id' => 3,
                 'user_id' => 1,
@@ -55,7 +55,7 @@ class PasswordRequestsFixture extends TestFixture
                 'used' => 0,
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => '2021-02-20 12:54:00'
-            // 有効
+                // 有効
             ], [
                 'id' => 4,
                 'user_id' => 2,

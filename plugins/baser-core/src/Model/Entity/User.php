@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Model\Entity;
+
 use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\I18n\Time as TimeAlias;
 use Cake\ORM\Entity as EntityAlias;
@@ -49,13 +50,13 @@ class User extends EntityAlias
         'password'
     ];
 
-	/**
-	 * Set Password
-	 *
-	 * @param $value
-	 * @return bool|string
-	 */
-	protected function _setPassword($value)
+    /**
+     * Set Password
+     *
+     * @param $value
+     * @return bool|string
+     */
+    protected function _setPassword($value)
     {
         if ($value) {
             $hasher = new DefaultPasswordHasher();

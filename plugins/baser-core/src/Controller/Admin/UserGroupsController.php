@@ -64,12 +64,12 @@ class UserGroupsController extends BcAdminAppController
      *
      * - list view
      *  - UserGroup.id
-     *	- UserGroup.name
+     *    - UserGroup.name
      *  - UserGroup.title
      *  - UserGroup.created && UserGroup.modified
      *
      * - search input
-     *	- UserGroup.name
+     *    - UserGroup.name
      *
      * - pagination
      * - view num
@@ -232,7 +232,7 @@ class UserGroupsController extends BcAdminAppController
             $message = [$e->getMessage()];
             $errors = $e->getErrors();
             if (!empty($errors)) {
-                foreach ($errors as $error) $message[] = __d('baser', current($error));
+                foreach($errors as $error) $message[] = __d('baser', current($error));
             }
             $this->BcMessage->setError(implode("\n", $message), false);
         }

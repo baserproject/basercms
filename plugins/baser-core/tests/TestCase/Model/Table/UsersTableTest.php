@@ -49,7 +49,7 @@ class UsersTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('Users') ? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
+        $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
         $this->Users = $this->getTableLocator()->get('Users', $config);
     }
 
@@ -143,7 +143,8 @@ class UsersTableTest extends BcTestCase
     /**
      * Test getControlSource
      */
-    public function testGetControlSource() {
+    public function testGetControlSource()
+    {
         $list = $this->Users->getControlSource('user_group_id')->toList();
         $this->assertEquals('システム管理', $list[0]);
     }

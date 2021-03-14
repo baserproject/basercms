@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Controller\Admin;
+
 use Cake\Event\EventInterface;
 use BaserCore\Controller\AppController;
 use Cake\Utility\Inflector;
@@ -33,51 +34,51 @@ class BcAdminAppController extends AppController
         $this->loadComponent('Paginator');
     }
 
-	/**
-	 * 画面の情報をセットする
-	 *
-	 * @param array $targetModel ターゲットとなるモデル
-	 * @param array $options オプション
-	 */
-	protected function setViewConditions($targetModel = [], $options = []): void
-	{
-		$this->saveViewConditions($targetModel, $options);
-		$this->loadViewConditions($targetModel, $options);
-	}
+    /**
+     * 画面の情報をセットする
+     *
+     * @param array $targetModel ターゲットとなるモデル
+     * @param array $options オプション
+     */
+    protected function setViewConditions($targetModel = [], $options = []): void
+    {
+        $this->saveViewConditions($targetModel, $options);
+        $this->loadViewConditions($targetModel, $options);
+    }
 
-	/**
-	 * 画面の情報をセッションに保存する
-	 *
-	 * @param array $filterModels
-	 * @param array $options オプション
-	 * @return    void
-	 * @access    protected
-	 */
-	protected function saveViewConditions($targetModel = [], $options = []): void
-	{
-		$options = array_merge([
-		    'action' => '',
-		    'group' => '',
-		    'post' => true,
-		    'get' => true,
-		    'named' => true
-		], $options);
+    /**
+     * 画面の情報をセッションに保存する
+     *
+     * @param array $filterModels
+     * @param array $options オプション
+     * @return    void
+     * @access    protected
+     */
+    protected function saveViewConditions($targetModel = [], $options = []): void
+    {
+        $options = array_merge([
+            'action' => '',
+            'group' => '',
+            'post' => true,
+            'get' => true,
+            'named' => true
+        ], $options);
 
-		if (!$options['action']) {
-			$options['action'] = $this->request->getParam('action');
-		}
-		$contentsName = $this->name . Inflector::classify($options['action']);
-		if ($options['group']) {
-			$contentsName .= "." . $options['group'];
-		}
+        if (!$options['action']) {
+            $options['action'] = $this->request->getParam('action');
+        }
+        $contentsName = $this->name . Inflector::classify($options['action']);
+        if ($options['group']) {
+            $contentsName .= "." . $options['group'];
+        }
 
-		if (!is_array($targetModel)) {
-			$targetModel = [$targetModel];
-		}
+        if (!is_array($targetModel)) {
+            $targetModel = [$targetModel];
+        }
 
         $session = $this->request->getSession();
 
-        if($options['post']) {
+        if ($options['post']) {
             if ($targetModel) {
                 foreach($targetModel as $model) {
                     if ($this->request->getData($model)) {
@@ -91,52 +92,52 @@ class BcAdminAppController extends AppController
             }
         }
 
-        if($options['get'] && $this->request->getQuery()) {
+        if ($options['get'] && $this->request->getQuery()) {
             $session->write("BcApp.viewConditions.{$contentsName}.query", $this->request->getQuery());
         }
 
-		if ($options['named'] && $this->request->getParam('named')) {
-			if ($session->check("BcApp.viewConditions.{$contentsName}.named")) {
-				$named = array_merge($session->read("BcApp.viewConditions.{$contentsName}.named"), $this->request->getParam('named'));
-			} else {
-				$named = $this->request->getParam('named');
-			}
-			$session->write("BcApp.viewConditions.{$contentsName}.named", $named);
-		}
-	}
+        if ($options['named'] && $this->request->getParam('named')) {
+            if ($session->check("BcApp.viewConditions.{$contentsName}.named")) {
+                $named = array_merge($session->read("BcApp.viewConditions.{$contentsName}.named"), $this->request->getParam('named'));
+            } else {
+                $named = $this->request->getParam('named');
+            }
+            $session->write("BcApp.viewConditions.{$contentsName}.named", $named);
+        }
+    }
 
-	/**
-	 * 画面の情報をセッションから読み込む
-	 *
-	 * @param array $targetModel
-	 * @param array|string $options オプション
-	 */
-	protected function loadViewConditions($targetModel = [], $options = []): void
-	{
-		$options = array_merge([
-		    'default' => [],
-		    'action' => '',
-		    'group' => '',
-		    'post' => true,
-		    'get' => true,
-		    'named' => true
-		], $options);
+    /**
+     * 画面の情報をセッションから読み込む
+     *
+     * @param array $targetModel
+     * @param array|string $options オプション
+     */
+    protected function loadViewConditions($targetModel = [], $options = []): void
+    {
+        $options = array_merge([
+            'default' => [],
+            'action' => '',
+            'group' => '',
+            'post' => true,
+            'get' => true,
+            'named' => true
+        ], $options);
 
-		if (!$options['action']) {
-			$options['action'] = $this->request->getParam('action');
-		}
-		$contentsName = $this->name . Inflector::classify($options['action']);
-		if ($options['group']) {
-			$contentsName .= "." . $options['group'];
-		}
+        if (!$options['action']) {
+            $options['action'] = $this->request->getParam('action');
+        }
+        $contentsName = $this->name . Inflector::classify($options['action']);
+        if ($options['group']) {
+            $contentsName .= "." . $options['group'];
+        }
 
-		if (!is_array($targetModel)) {
-			$targetModel = [$targetModel];
-		}
+        if (!is_array($targetModel)) {
+            $targetModel = [$targetModel];
+        }
 
         $session = $this->request->getSession();
 
-		if ($targetModel) {
+        if ($targetModel) {
             foreach($targetModel as $model) {
                 if ($session->check("BcApp.viewConditions.{$contentsName}.data.{$model}")) {
                     $data = $session->read("BcApp.viewConditions.{$contentsName}.data.{$model}");
@@ -145,7 +146,7 @@ class BcAdminAppController extends AppController
                 } else {
                     $data = [];
                 }
-                if($data) {
+                if ($data) {
                     $this->request = $this->request->withData($model, $data);
                 }
             }
@@ -162,7 +163,7 @@ class BcAdminAppController extends AppController
         if (empty($query) && !empty($options['default']['query'])) {
             $query = $options['default']['query'];
         }
-        if($query) {
+        if ($query) {
             $this->request = $this->request->withQueryParams($query);
         }
 
@@ -176,18 +177,18 @@ class BcAdminAppController extends AppController
 
         $named['?'] = $query;
         $this->request = $this->request->withParam('pass', $named);
-	}
+    }
 
     /**
      * Before Render
      * @param EventInterface $event
      * @return \Cake\Http\Response|void|null
      */
-	public function beforeRender(EventInterface $event): void
-	{
-	    $this->viewBuilder()->setClassName('BaserCore.BcAdminApp');
-		$this->viewBuilder()->setTheme('BcAdminThird');
-	}
+    public function beforeRender(EventInterface $event): void
+    {
+        $this->viewBuilder()->setClassName('BaserCore.BcAdminApp');
+        $this->viewBuilder()->setTheme('BcAdminThird');
+    }
 
     /**
      * Set Title
@@ -202,16 +203,16 @@ class BcAdminAppController extends AppController
      * Set Search
      * @param string $template
      */
-	protected function setSearch($template): void
-	{
+    protected function setSearch($template): void
+    {
         $this->set('search', $template);
-	}
+    }
 
     /**
      * Set Help
      * @param string $template
      */
-	protected function setHelp($template): void
+    protected function setHelp($template): void
     {
         $this->set('help', $template);
     }

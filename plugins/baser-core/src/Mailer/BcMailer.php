@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Mailer;
+
 use Cake\Mailer\Mailer;
 
 class BcMailer extends Mailer

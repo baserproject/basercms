@@ -10,4 +10,10 @@ use BaserCore\BcPlugin;
  */
 class Plugin extends BcPlugin
 {
+
+    public function install()
+    {
+
+        parent::install();
+    }
 }

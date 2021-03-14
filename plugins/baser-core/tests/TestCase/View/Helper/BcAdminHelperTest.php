@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Test\TestCase\View\Helper;
+
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcAdminHelper;
@@ -19,7 +20,8 @@ use BaserCore\View\Helper\BcAdminHelper;
  * @package BaserCore\Test\TestCase\View\Helper
  * @property BcAdminHelper $BcAdmin
  */
-class BcAdminHelperTest extends BcTestCase {
+class BcAdminHelperTest extends BcTestCase
+{
 
     /**
      * setUp method
@@ -34,7 +36,8 @@ class BcAdminHelperTest extends BcTestCase {
         $this->BcAdmin = new BcAdminHelper($BcAdminAppView);
     }
 
-    public function testIsAvailableSideBar() {
+    public function testIsAvailableSideBar()
+    {
         // 未ログイン
         $results = $this->BcAdmin->isAvailableSideBar();
         $this->assertEquals(false, $results);
@@ -56,7 +59,8 @@ class BcAdminHelperTest extends BcTestCase {
      *
      * @return void
      */
-    public function testSetTitle() {
+    public function testSetTitle()
+    {
         $title = 'test';
         $this->BcAdmin->setTitle($title);
         $this->assertEquals($title, $this->BcAdmin->getView()->get('title'));
@@ -67,7 +71,8 @@ class BcAdminHelperTest extends BcTestCase {
      *
      * @return void
      */
-    public function testSetHelp() {
+    public function testSetHelp()
+    {
         $help = 'test';
         $this->BcAdmin->setHelp($help);
         $this->assertEquals($help, $this->BcAdmin->getView()->get('help'));
@@ -78,7 +83,8 @@ class BcAdminHelperTest extends BcTestCase {
      *
      * @return void
      */
-    public function testSetSearch() {
+    public function testSetSearch()
+    {
         $search = 'test';
         $this->BcAdmin->setSearch($search);
         $this->assertEquals($search, $this->BcAdmin->getView()->get('search'));
@@ -89,7 +95,8 @@ class BcAdminHelperTest extends BcTestCase {
      *
      * @return void
      */
-    public function testTitle() {
+    public function testTitle()
+    {
         ob_start();
         $this->BcAdmin->title();
         $actualEmpty = ob_get_clean();
@@ -108,7 +115,8 @@ class BcAdminHelperTest extends BcTestCase {
      *
      * @return void
      */
-    public function testHelp() {
+    public function testHelp()
+    {
         ob_start();
         $this->BcAdmin->help();
         $actualEmpty = ob_get_clean();
@@ -129,7 +137,8 @@ class BcAdminHelperTest extends BcTestCase {
      *
      * @return void
      */
-    public function testSearch() {
+    public function testSearch()
+    {
         $this->markTestIncomplete('Not implemented yet.');
     }
 
@@ -138,7 +147,8 @@ class BcAdminHelperTest extends BcTestCase {
      *
      * @return void
      */
-    public function testContentsMenu() {
+    public function testContentsMenu()
+    {
         // ヘルプなし 未ログイン
         $expected = $this->BcAdmin->getView()->element('Admin/contents_menu', [
             'isHelp' => false,

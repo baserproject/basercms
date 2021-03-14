@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\View\Helper;
+
 use Cake\ORM\Entity;
 use \Cake\View\Helper;
 use Cake\View\Helper\FlashHelper;
@@ -25,61 +26,74 @@ use Cake\View\Helper\UrlHelper;
  */
 class BcBaserHelper extends Helper
 {
-	public $helpers = ['Html', 'Url', 'Flash'];
-	// TODO 取り急ぎ
-	public $siteConfig = [
-		'formal_name' => 'baserCMS',
-		'admin_side_banner' => true
-	];
-	public function js($url, $inline = true, $options = []) {
-		$options = array_merge(['block' => !$inline], $options);
-		$result = $this->Html->script($url, $options);
-		if ($inline) {
-			echo $result;
-		}
-	}
+    public $helpers = ['Html', 'Url', 'Flash'];
+    // TODO 取り急ぎ
+    public $siteConfig = [
+        'formal_name' => 'baserCMS',
+        'admin_side_banner' => true
+    ];
 
-	public function element($name, $data = [], $options = []) {
-		echo $this->getElement($name, $data, $options);
-	}
+    public function js($url, $inline = true, $options = [])
+    {
+        $options = array_merge(['block' => !$inline], $options);
+        $result = $this->Html->script($url, $options);
+        if ($inline) {
+            echo $result;
+        }
+    }
 
-	public function getElement($name, $data = [], $options = []) {
-		return $this->_View->element($name, $data, $options);
-	}
+    public function element($name, $data = [], $options = [])
+    {
+        echo $this->getElement($name, $data, $options);
+    }
 
-	public function img($path, $options = []) {
-		echo $this->Html->image($path, $options);
-	}
+    public function getElement($name, $data = [], $options = [])
+    {
+        return $this->_View->element($name, $data, $options);
+    }
 
-	public function getImg($path, $options = []) {
-		return $this->Html->image($path, $options);
-	}
+    public function img($path, $options = [])
+    {
+        echo $this->Html->image($path, $options);
+    }
 
-	public function link($title, $url = null, $htmlAttributes = [], $confirmMessage = false) {
-		echo $this->getLink($title, $url, $htmlAttributes, $confirmMessage);
-	}
+    public function getImg($path, $options = [])
+    {
+        return $this->Html->image($path, $options);
+    }
 
-	public function getLink($title, $url = null, $options = [], $confirmMessage = false) {
-	    if($confirmMessage) {
-	        $options['confirm'] = $confirmMessage;
-	    }
-		return $this->Html->link($title, $url, $options);
-	}
+    public function link($title, $url = null, $htmlAttributes = [], $confirmMessage = false)
+    {
+        echo $this->getLink($title, $url, $htmlAttributes, $confirmMessage);
+    }
 
-	public function isAdminUser ($userGroupId = null) {
+    public function getLink($title, $url = null, $options = [], $confirmMessage = false)
+    {
+        if ($confirmMessage) {
+            $options['confirm'] = $confirmMessage;
+        }
+        return $this->Html->link($title, $url, $options);
+    }
 
-	}
-	public function existsEditLink() {
+    public function isAdminUser($userGroupId = null)
+    {
 
-	}
+    }
 
-	public function existsPublishLink() {
+    public function existsEditLink()
+    {
 
-	}
+    }
 
-	public function url($url = null, $full = false, $sessionId = true) {
+    public function existsPublishLink()
+    {
 
-	}
+    }
+
+    public function url($url = null, $full = false, $sessionId = true)
+    {
+
+    }
 
     /**
      * ユーザー名を整形して取得する
@@ -90,23 +104,24 @@ class BcBaserHelper extends Helper
      * @param Entity $user ユーザーデータ
      * @return string $userName ユーザー名
      */
-	public function getUserName($user)
-	{
-		if (!empty($user->nickname)) {
-			return $user->nickname;
-		}
-		$userName = [];
-		if (!empty($user->real_name_1)) {
-			$userName[] = $user->real_name_1;
-		}
-		if (!empty($user->real_name_2)) {
-			$userName[] = $user->real_name_2;
-		}
-		$userName = implode(' ', $userName);
-		return $userName;
-	}
+    public function getUserName($user)
+    {
+        if (!empty($user->nickname)) {
+            return $user->nickname;
+        }
+        $userName = [];
+        if (!empty($user->real_name_1)) {
+            $userName[] = $user->real_name_1;
+        }
+        if (!empty($user->real_name_2)) {
+            $userName[] = $user->real_name_2;
+        }
+        $userName = implode(' ', $userName);
+        return $userName;
+    }
 
-    public function i18nScript($data, $options = []) {
+    public function i18nScript($data, $options = [])
+    {
 
     }
 
@@ -120,19 +135,20 @@ class BcBaserHelper extends Helper
     public function flash($key = 'flash'): void
     {
         $session = $this->_View->getRequest()->getSession();
-		$sessionMessageList = $session->read('Flash');
-		if ($sessionMessageList) {
-		    echo '<div id="MessageBox" class="message-box">';
-			foreach ($sessionMessageList as $messageKey => $sessionMessage) {
-				if ($key === $messageKey && $session->check('Flash.' . $messageKey)) {
-					echo $this->Flash->render($messageKey, ['escape' => false]);
-				}
-			}
-			echo '</div>';
-		}
+        $sessionMessageList = $session->read('Flash');
+        if ($sessionMessageList) {
+            echo '<div id="MessageBox" class="message-box">';
+            foreach($sessionMessageList as $messageKey => $sessionMessage) {
+                if ($key === $messageKey && $session->check('Flash.' . $messageKey)) {
+                    echo $this->Flash->render($messageKey, ['escape' => false]);
+                }
+            }
+            echo '</div>';
+        }
     }
 
-    public function getContentsTitle() {
+    public function getContentsTitle()
+    {
 
     }
 
@@ -144,12 +160,13 @@ class BcBaserHelper extends Helper
      *
      * @param bool $detail 詳細モード true にした場合は、ページごとに一意となる文字列をキャメルケースで出力する（初期値 : false）
      * @param array $options オプション（初期値 : array()）
-     *	※ オプションの詳細については、BcBaserHelper::getContentsName() を参照
+     *    ※ オプションの詳細については、BcBaserHelper::getContentsName() を参照
      * @return void
      */
-	public function contentsName($detail = false, $options = []) {
-		echo $this->getContentsName($detail, $options);
-	}
+    public function contentsName($detail = false, $options = [])
+    {
+        echo $this->getContentsName($detail, $options);
+    }
 
 
     /**
@@ -166,30 +183,32 @@ class BcBaserHelper extends Helper
      *
      * @param bool $detail 詳細モード true にした場合は、ページごとに一意となる文字列をキャメルケースで取得する（初期値 : false）
      * @param array $options オプション（初期値 : array()）
-     *	- `home` : トップページの場合に出力する文字列（初期値 : Home）
-     *	- `default` : ルート直下の下層ページの場合に出力する文字列（初期値 : Default）
-     *	- `error` : エラーページの場合に出力する文字列（初期値 : Error）
+     *    - `home` : トップページの場合に出力する文字列（初期値 : Home）
+     *    - `default` : ルート直下の下層ページの場合に出力する文字列（初期値 : Default）
+     *    - `error` : エラーページの場合に出力する文字列（初期値 : Error）
      *  - `underscore` : キャメルケースではなく、アンダースコア区切りで出力する（初期値 : false）
      * @return string
      */
-	public function getContentsName($detail = false, $options = []) {
-	    // TODO : 一時対応。実装要
-	    $request = $this->_View->getRequest();
-	    if($request->getParam('action') === 'login') {
+    public function getContentsName($detail = false, $options = [])
+    {
+        // TODO : 一時対応。実装要
+        $request = $this->_View->getRequest();
+        if ($request->getParam('action') === 'login') {
             return 'AdminUsersLogin';
         } else {
             return 'Admin';
         }
-	}
+    }
 
     /**
      * 編集画面へのリンクを出力する
      *
      * @return void
      */
-	public function editLink() {
+    public function editLink()
+    {
         // TODO: 未実装
-	}
+    }
 
     /**
      * 公開ページへのリンクを出力する
@@ -198,9 +217,10 @@ class BcBaserHelper extends Helper
      *
      * @return void
      */
-	public function publishLink() {
-		// TODO: 未実装
-	}
+    public function publishLink()
+    {
+        // TODO: 未実装
+    }
 
     /**
      * baserCMSの設置フォルダを考慮したURLを取得する
@@ -209,14 +229,15 @@ class BcBaserHelper extends Helper
      * <a href="<?php echo $this->BcBaser->getUrl('/about') ?>">会社概要</a>
      *
      * @param mixed $url baserCMS設置フォルダからの絶対URL、もしくは配列形式のURL情報
-     *		省略した場合には、PC用のトップページのURLを取得する
+     *        省略した場合には、PC用のトップページのURLを取得する
      * @param bool $full httpから始まるURLを取得するかどうか
      * @param bool $sessionId セションIDを付加するかどうか
      * @return string URL
      */
-	public function getUrl($url = null, $full = false, $sessionId = true) {
-	    // TODO $sessionId について実装要
-	    return $this->Url->build($url, ['fullBase' => $full]);
-	}
+    public function getUrl($url = null, $full = false, $sessionId = true)
+    {
+        // TODO $sessionId について実装要
+        return $this->Url->build($url, ['fullBase' => $full]);
+    }
 
 }

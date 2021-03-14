@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Test\TestCase\Model\Entity;
+
 use BaserCore\Model\Entity\User;
 use BaserCore\TestSuite\BcTestCase;
 
@@ -50,7 +51,8 @@ class UserTest extends BcTestCase
     /**
      * Test _setPassword
      */
-    public function testSetPassword() {
+    public function testSetPassword()
+    {
         $this->User->set('password', 'testtest');
         $this->assertNotEquals('testtest', $this->User->password);
     }

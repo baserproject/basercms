@@ -11,19 +11,46 @@
 
 namespace BaserCore\Model\Table;
 
+use BaserCore\Error\BcException;
 use BaserCore\Utility\BcUtil;
+use Cake\Core\App;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
+use Cake\Filesystem\Folder;
 use Cake\ORM\Table;
 use Cake\Utility\Inflector;
 
 class PluginsTable extends Table
 {
+
+    /**
+     * 利用可能なプラグインの一覧を取得
+     *
+     * @return array
+     */
+    public function getAvailable()
+    {
+        // プラグインフォルダーのチェックを行う
+        $pluginConfigs = [];
+        $paths = App::path('plugins');
+        foreach($paths as $path) {
+            $Folder = new Folder($path);
+            $files = $Folder->read(true, true, true);
+            foreach($files[0] as $file) {
+                if (!in_array(basename($file), Configure::read('BcApp.core'))) {
+                    $pluginConfigs[basename($file)] = $this->getPluginConfig($file);
+                }
+            }
+        }
+        return array_reverse(array_values($pluginConfigs));
+    }
+
     /**
      * プラグイン情報を取得する
      *
      * @param array $datas プラグインのデータ配列
      * @param string $file プラグインファイルのパス
-     * @return array
+     * @return \BaserCore\Model\Entity\Plugin|\Cake\Datasource\EntityInterface
      */
     public function getPluginConfig($file)
     {
@@ -52,7 +79,9 @@ class PluginsTable extends Table
                 'core' => $core,
                 'registered' => true
             ]);
-            if (BcUtil::verpoint($pluginRecord->version) < BcUtil::verpoint($version) && !in_array($pluginRecord->name, Configure::read('BcApp.corePlugins'))) {
+            if (BcUtil::verpoint($pluginRecord->version) < BcUtil::verpoint($version) &&
+                !in_array($pluginRecord->name, Configure::read('BcApp.corePlugins'))
+            ) {
                 $pluginRecord->update = true;
             }
         } else {
@@ -75,4 +104,72 @@ class PluginsTable extends Table
         }
         return $pluginRecord;
     }
+
+    /**
+     * インストール可能かチェックする
+     *
+     * @param $pluginName
+     * @return bool
+     */
+    public function isInstallable($pluginName)
+    {
+        $installedPlugin = $this->find()->where([
+            'name' => $pluginName,
+            'status' => true,
+        ])->first();
+
+        // 既にプラグインがインストール済み
+        if ($installedPlugin) {
+            throw new BcException('既にインストール済のプラグインです。');
+        }
+
+        $paths = App::path('plugins');
+        $existsPluginFolder = false;
+        foreach($paths as $path) {
+            if (!is_dir($path . $pluginName)) {
+                continue;
+            }
+            $existsPluginFolder = true;
+            $configPath = $path . $pluginName . DS . 'config.php';
+            if (file_exists($configPath)) {
+                include $configPath;
+            }
+            break;
+        }
+
+        // プラグインのフォルダが存在しない
+        if (!$existsPluginFolder) {
+            throw new BcException('インストールしようとしているプラグインのフォルダが存在しません。');
+        }
+
+        // インストールしようとしているプラグイン名と、設定ファイル内のプラグイン名が違う
+        if (!empty($name) && $pluginName !== $name) {
+            throw new BcException('このプラグイン名のフォルダ名を' . $name . 'にしてください。');
+        }
+
+        return true;
+    }
+
+    /**
+     * プラグインをインストールする
+     *
+     * @param $name
+     * @return bool
+     */
+    public function install($name)
+    {
+        $recordExists = $this->find()->where(['name' => $name])->count();
+        $plugin = $this->getPluginConfig($name);
+        if (!$recordExists) {
+            $query = $this->find();
+            $priority = $query->select(['max' => $query->func()->max('priority')])->first();
+            $plugin->priority = $priority->max + 1;
+        }
+        if ($this->save($plugin)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

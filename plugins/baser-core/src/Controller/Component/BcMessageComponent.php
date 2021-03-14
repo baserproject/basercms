@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Controller\Component;
+
 use Cake\Controller\Component;
 use Cake\Controller\Component\FlashComponent;
 
@@ -19,7 +20,8 @@ use Cake\Controller\Component\FlashComponent;
  * @package BaserCore\Controller\Component
  * @property FlashComponent $Flash
  */
-class BcMessageComponent extends Component {
+class BcMessageComponent extends Component
+{
 
     /**
      * @var array
@@ -66,11 +68,11 @@ class BcMessageComponent extends Component {
             ]);
         }
 
-         if ($saveDblog) {
+        if ($saveDblog) {
             // TODO: DbLogの仕組み
             // $AppModel = ClassRegistry::init('AppModel');
             // $AppModel->saveDblog($message);
-         }
+        }
     }
 
     /**

@@ -85,8 +85,8 @@ class UsersTable extends Table
      */
     public function afterMarshal(Event $event, User $user, ArrayObject $data, ArrayObject $options)
     {
-		if ($user->getError('password')) {
-		}
+        if ($user->getError('password')) {
+        }
     }
 
     /**
@@ -109,13 +109,13 @@ class UsersTable extends Table
                     'rule' => 'validateUnique',
                     'provider' => 'table',
                     'message' => __d('baser', '既に登録のあるアカウント名です。')
-            ]])
+                ]])
             ->add('name', [
                 'nameAlphaNumericPlus' => [
                     'rule' => ['alphaNumericPlus'],
                     'provider' => 'bc',
                     'message' => __d('baser', 'アカウント名は半角英数字とハイフン、アンダースコアのみで入力してください。')
-            ]]);
+                ]]);
         $validator
             ->scalar('real_name_1')
             ->maxLength('real_name_1', 50, __d('baser', '名前[姓]は50文字以内で入力してください。'))
@@ -146,7 +146,7 @@ class UsersTable extends Table
                     'rule' => 'validateUnique',
                     'provider' => 'table',
                     'message' => __d('baser', '既に登録のあるEメールです。')
-            ]]);
+                ]]);
         $validator
             ->scalar('password')
             ->minLength('password', 6, __d('baser', 'パスワードは6文字以上で入力してください。'))
@@ -156,13 +156,13 @@ class UsersTable extends Table
                     'rule' => ['alphaNumericPlus', ' \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*'],
                     'provider' => 'bc',
                     'message' => __d('baser', 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。')
-            ]])
+                ]])
             ->add('password', [
                 'passwordConfirm' => [
                     'rule' => ['confirm', ['password_1', 'password_2']],
                     'provider' => 'bc',
                     'message' => __d('baser', __d('baser', 'パスワードが同じものではありません。'))
-            ]]);
+                ]]);
 
         return $validator;
     }
@@ -190,13 +190,13 @@ class UsersTable extends Table
                     'rule' => ['alphaNumericPlus', ' \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*'],
                     'provider' => 'bc',
                     'message' => __d('baser', 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。')
-            ]])
+                ]])
             ->add('password', [
                 'passwordConfirm' => [
                     'rule' => ['confirm', ['password_1', 'password_2']],
                     'provider' => 'bc',
                     'message' => __d('baser', __d('baser', 'パスワードが同じものではありません。'))
-        ]]);
+                ]]);
 
         return $validator;
     }
@@ -207,9 +207,9 @@ class UsersTable extends Table
     public function getNew()
     {
         return $this->newEntity([
-                'user_groups' => [
-                    '_ids' => [1]
-        ]]);
+            'user_groups' => [
+                '_ids' => [1]
+            ]]);
     }
 
     /**
@@ -219,21 +219,22 @@ class UsersTable extends Table
      * @param array $options オプション
      * @return Query コントロールソース
      */
-	public function getControlSource($field, $options = []) {
-		switch ($field) {
-			case 'user_group_id':
-				$controlSources['user_group_id'] = $this->UserGroups->find('list', [
+    public function getControlSource($field, $options = [])
+    {
+        switch($field) {
+            case 'user_group_id':
+                $controlSources['user_group_id'] = $this->UserGroups->find('list', [
                     'keyField' => 'id',
                     'valueField' => 'title'
                 ]);
-				break;
-		}
-		if (isset($controlSources[$field])) {
-			return $controlSources[$field];
-		} else {
-			return null;
-		}
-	}
+                break;
+        }
+        if (isset($controlSources[$field])) {
+            return $controlSources[$field];
+        } else {
+            return null;
+        }
+    }
 
     /**
      * Where 条件を作成する
@@ -241,11 +242,11 @@ class UsersTable extends Table
      * @param $request
      * @return Query
      */
-	public function createWhere($query, $request): Query
+    public function createWhere($query, $request): Query
     {
         $get = $request->getQuery();
-        if(!empty($get['user_group_id'])) {
-            $query->matching('UserGroups', function($q) use($get) {
+        if (!empty($get['user_group_id'])) {
+            $query->matching('UserGroups', function($q) use ($get) {
                 return $q->where(['UserGroups.id' => $get['user_group_id']]);
             });
         }

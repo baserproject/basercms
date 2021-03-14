@@ -9,30 +9,17 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\View\Helper;
+namespace BaserCore\Error;
 
-use \Cake\View\Helper;
+use Cake\Core\Exception\CakeException;
 
 /**
- * Class BcFormTableHelper
- * @package BaserCore\View\Helper
- * @uses BcFormTableHelper
+ * Class BcException
+ *
+ * CakeException 拡張クラス
+ *
+ * @package BaserCore.Error
  */
-class BcFormTableHelper extends Helper
+class BcException extends CakeException
 {
-
-    /**
-     * テーブル前発火
-     */
-    public function dispatchBefore()
-    {
-    }
-
-    /**
-     * テーブル後発火
-     */
-    public function dispatchAfter()
-    {
-    }
-
 }

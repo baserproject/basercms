@@ -49,7 +49,7 @@ class UserGroupsControllerTest extends TestCase
             $this->loadFixtures('UserGroups');
         }
 
-        $config = $this->getTableLocator()->exists('UserGroups') ? [] : ['className' => 'BaserCore\Model\Table\UserGroupsTable'];
+        $config = $this->getTableLocator()->exists('UserGroups')? [] : ['className' => 'BaserCore\Model\Table\UserGroupsTable'];
         $UserGroups = $this->getTableLocator()->get('UserGroups', $config);
         $this->session(['AuthAdmin' => $UserGroups->get(1)]);
     }
@@ -118,7 +118,7 @@ class UserGroupsControllerTest extends TestCase
         $this->assertResponseSuccess();
         $userGroups = $this->getTableLocator()->get('UserGroups');
         $originalUserGroup = $userGroups->get(1);
-        $query = $userGroups->find()->where(['name' => $originalUserGroup->name.'_copy']);
+        $query = $userGroups->find()->where(['name' => $originalUserGroup->name . '_copy']);
         $this->assertEquals(1, $query->count());
     }
 }

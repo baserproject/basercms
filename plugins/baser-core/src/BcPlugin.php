@@ -10,7 +10,9 @@
  */
 
 namespace BaserCore;
+
 use Cake\Core\BasePlugin;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Route\InflectedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
@@ -29,17 +31,17 @@ class BcPlugin extends BasePlugin
     {
         $path = '/baser';
         Router::plugin(
-            $this->name,
-            ['path' =>  $path],
-            function (RouteBuilder $routes) {
+            $this->getName(),
+            ['path' => $path],
+            function(RouteBuilder $routes) {
                 $path = env('BC_ADMIN_PREFIX', '/admin');
-                if($this->name !== 'BaserCore') {
-                    $path .= '/' . Inflector::dasherize($this->name);
+                if ($this->getName() !== 'BaserCore') {
+                    $path .= '/' . Inflector::dasherize($this->getName());
                 }
                 $routes->prefix(
                     'Admin',
                     ['path' => $path],
-                    function (RouteBuilder $routes) {
+                    function(RouteBuilder $routes) {
                         $routes->connect('', ['controller' => 'Dashboard', 'action' => 'index']);
                         // CakePHPのデフォルトで /index が省略する仕様のため、URLを生成する際は、強制的に /index を付ける仕様に変更
                         $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
@@ -50,4 +52,24 @@ class BcPlugin extends BasePlugin
         );
         parent::routes($routes);
     }
+
+    /**
+     * インストール
+     */
+    public function install()
+    {
+        // TODO clearAllCache 未実装
+        // clearAllCache();
+        $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+        return $plugins->install($this->getName());
+    }
+
+    /**
+     * アンインストール
+     */
+    public function uninstall()
+    {
+
+    }
+
 }

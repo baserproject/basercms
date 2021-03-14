@@ -76,36 +76,36 @@ class BcFormHelper extends FormHelper
         }
     }
 
-	/**
-	 * カレンダーピッカー
+    /**
+     * カレンダーピッカー
      *
-	 * jquery-ui-1系 必須
-	 *
-	 * @param string フィールド文字列
-	 * @param array オプション
-	 * @return string html
-	 */
-	public function datePicker($fieldName, $options = [])
-	{
-	    $options = array_merge([
+     * jquery-ui-1系 必須
+     *
+     * @param string フィールド文字列
+     * @param array オプション
+     * @return string html
+     */
+    public function datePicker($fieldName, $options = [])
+    {
+        $options = array_merge([
             'autocomplete' => 'off',
             'id' => $this->_domId($fieldName),
             'value' => $this->context()->val($fieldName)
         ], $options);
-		if ($options['value']) {
-			[$options['value'],] = explode(" ", str_replace('-', '/', $options['value']));
-		}
-		unset($options['type']);
-		$input = $this->text($fieldName, $options);
-		$script = <<< SCRIPT_END
+        if ($options['value']) {
+            [$options['value'],] = explode(" ", str_replace('-', '/', $options['value']));
+        }
+        unset($options['type']);
+        $input = $this->text($fieldName, $options);
+        $script = <<< SCRIPT_END
 <script>
 jQuery(function($){
 	$("#{$options['id']}").datepicker();
 });
 </script>
 SCRIPT_END;
-		return $input . "\n" . $script;
-	}
+        return $input . "\n" . $script;
+    }
 
     /**
      * カレンダピッカーとタイムピッカー

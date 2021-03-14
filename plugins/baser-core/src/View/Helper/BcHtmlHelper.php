@@ -10,12 +10,14 @@
  */
 
 namespace BaserCore\View\Helper;
+
 use Cake\View\Helper\HtmlHelper;
 
 /**
  * Class BcHtmlHelper
  * @package BaserCore\View\Helper
  */
-class BcHtmlHelper extends HtmlHelper {
+class BcHtmlHelper extends HtmlHelper
+{
 
 }

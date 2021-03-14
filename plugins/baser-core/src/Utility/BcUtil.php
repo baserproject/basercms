@@ -17,7 +17,6 @@ use Cake\Core\Configure;
 use Cake\Database\Exception;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\File;
-use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
@@ -209,6 +208,31 @@ class BcUtil
             }
         }
         return $enablePlugins;
+    }
+
+    /**
+     * プラグイン配下の Plugin クラスを読み込む
+     *
+     * Plugin クラスが読み込めていないとプラグイン自体を読み込めないため
+     * プラグインのフォルダ名は camelize と dasherize に対応
+     * 例）BcBlog / bc-blog
+     *
+     * @param string $pluginName
+     * @return bool
+     */
+    static public function includePluginClass($pluginName)
+    {
+        $pluginNames = [$pluginName, Inflector::dasherize($pluginName)];
+        foreach(App::path('plugins') as $path) {
+            foreach($pluginNames as $name) {
+                $pluginClassPath = $path . $name . DS . 'src' . DS . 'Plugin.php';
+                if (file_exists($pluginClassPath)) {
+                    require_once $pluginClassPath;
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

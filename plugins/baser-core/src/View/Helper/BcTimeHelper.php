@@ -10,13 +10,15 @@
  */
 
 namespace BaserCore\View\Helper;
+
 use Cake\View\Helper\TimeHelper;
 
 /**
  * Class BcTimeHelper
  * @package BaserCore\View\Helper
  */
-class BcTimeHelper extends TimeHelper {
+class BcTimeHelper extends TimeHelper
+{
     // public  function format () {
     // }
 }

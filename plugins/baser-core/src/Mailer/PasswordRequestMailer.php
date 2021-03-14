@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Mailer;
+
 use BaserCore\Mailer\BcMailer;
 use BaserCore\Model\Entity\PasswordRequest;
 use Cake\ORM\Entity;
@@ -37,12 +38,12 @@ class PasswordRequestMailer
         $agoInStr = '+' . Configure::read('BcApp.passwordRequestAllowTime') . ' min';
         $timelimit = date('Y/m/d H:i', strtotime($agoInStr, $createtime));
         $url = Router::url([
-                'plugin' => 'BaserCore',
-                'prefix' => 'Admin',
-                'controller' => 'password_requests',
-                'action' => 'apply',
-                $passwordRequestData['request_key'],
-            ],
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'password_requests',
+            'action' => 'apply',
+            $passwordRequestData['request_key'],
+        ],
             true
         );
 
@@ -55,10 +56,10 @@ class PasswordRequestMailer
             ->setTheme($this->theme)
             ->setTemplate('password_request')
             ->setVars([
-                'limit' => $timelimit,
-                'url' => $url,
-            ]
-        );
+                    'limit' => $timelimit,
+                    'url' => $url,
+                ]
+            );
         return $mailer->deliver();
     }
 }

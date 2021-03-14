@@ -18,17 +18,21 @@ use Cake\View\Helper;
  * @package BaserCore\View\Helper
  * @uses BcListTableHelper
  */
-class BcListTableHelper extends Helper {
-	public function setColumnNumber ($number)
-	{
-	}
-	public function dispatchShowHead ()
-	{
-	}
-	public function dispatchShowRow ($data)
-	{
-	}
-	public function getColumnNumber()
-	{
-	}
+class BcListTableHelper extends Helper
+{
+    public function setColumnNumber($number)
+    {
+    }
+
+    public function dispatchShowHead()
+    {
+    }
+
+    public function dispatchShowRow($data)
+    {
+    }
+
+    public function getColumnNumber()
+    {
+    }
 }

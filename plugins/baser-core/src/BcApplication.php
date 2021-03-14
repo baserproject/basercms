@@ -10,10 +10,10 @@ declare(strict_types=1);
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
+
 namespace BaserCore;
 
 use BaserCore\Utility\BcUtil;
-use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
@@ -22,12 +22,10 @@ use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
-
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Middleware\AuthenticationMiddleware;
-use Cake\Utility\Inflector;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -49,46 +47,22 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
             $this->bootstrapCli();
         }
 
-        if(Configure::read('debug') && env('USE_DEBUG_KIT', false)) {
+        if (Configure::read('debug') && env('USE_DEBUG_KIT', false)) {
             // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
             $this->addPlugin('DebugKit');
         }
 
         $this->addPlugin('BaserCore');
         $this->addPlugin('Authentication');
+        $this->addPlugin('Migrations');
         $this->addPlugin('BcAdminThird');
 
         $plugins = BcUtil::getEnablePlugins();
         foreach($plugins as $plugin) {
-            if($this->includePluginClass($plugin)) {
+            if (BcUtil::includePluginClass($plugin)) {
                 $this->addPlugin($plugin);
             }
         }
-
-    }
-
-    /**
-     * プラグイン配下の Plugin クラスを読み込む
-     *
-     * Plugin クラスが読み込めていないとプラグイン自体を読み込めないため
-     * プラグインのフォルダ名は camelize と dasherize に対応
-     * 例）BcBlog / bc-blog
-     *
-     * @param string $pluginName
-     * @return bool
-     */
-    protected function includePluginClass($pluginName) {
-        $pluginNames = [$pluginName, Inflector::dasherize($pluginName)];
-        foreach(App::path('plugins') as $path) {
-            foreach($pluginNames as $name) {
-                $pluginClassPath = $path . $name . DS . 'src' . DS . 'Plugin.php';
-                if(file_exists($pluginClassPath)) {
-                    require $pluginClassPath;
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     /**
@@ -123,8 +97,7 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
             ->add(new BodyParserMiddleware())
 
             // Authorization (AuthComponent to Authorization)
-            ->add(new AuthenticationMiddleware($this))
-            ;
+            ->add(new AuthenticationMiddleware($this));
 
         return $middlewareQueue;
     }
@@ -160,7 +133,7 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
         $service = new AuthenticationService();
         $prefix = $request->getParam('prefix');
 
-        if($prefix) {
+        if ($prefix) {
             $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
             $service->setConfig([
                 'unauthenticatedRedirect' => $authSetting['loginAction'],

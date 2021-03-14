@@ -40,7 +40,7 @@ class BcAdminFormHelper extends BcFormHelper
     public function control(string $name, array $options = []): string
     {
 
-        if(!empty($options['type'])) {
+        if (!empty($options['type'])) {
             $options = array_replace_recursive([
                 'label' => false,
                 'legend' => false,
@@ -119,7 +119,7 @@ class BcAdminFormHelper extends BcFormHelper
                 $options['class'] = $class;
             }
             if (!isset($options['labelOptions'])) {
-                if(!empty($options['label']) && $options['label'] !== true) {
+                if (!empty($options['label']) && $options['label'] !== true) {
                     $options['labelOptions'] = ['text' => $options['label'], 'class' => $labelClass];
                 } else {
                     $options['labelOptions'] = ['class' => $labelClass];

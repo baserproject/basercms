@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Model\Table\Exception;
+
 use Cake\Core\Exception\Exception;
 
 /**

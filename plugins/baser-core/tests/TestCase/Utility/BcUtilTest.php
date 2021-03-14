@@ -40,17 +40,18 @@ class BcUtilTest extends BcTestCase
     public function testLoginUser($isLogin, $expects)
     {
         $this->getRequest();
-        if($isLogin) {
+        if ($isLogin) {
             $this->loginAdmin();
         }
         $result = BcUtil::loginUser();
-        if($result) {
+        if ($result) {
             $result = $result->id;
         }
         $this->assertEquals($expects, $result);
     }
 
-    public function loginUserDataProvider() {
+    public function loginUserDataProvider()
+    {
         return [
             // ログインしている状況
             [true, 1],
@@ -63,24 +64,25 @@ class BcUtilTest extends BcTestCase
      * Test isSuperUser
      * @dataProvider isSuperUserDataProvider
      */
-    public function testIsSuperUser($id,$expects)
+    public function testIsSuperUser($id, $expects)
     {
         $this->getRequest();
-        if($id) {
+        if ($id) {
             $this->loginAdmin($id);
         }
         $result = BcUtil::isSuperUser();
-        $this->assertEquals($expects,$result);
+        $this->assertEquals($expects, $result);
     }
 
-    public function isSuperUserDataProvider() {
+    public function isSuperUserDataProvider()
+    {
         return [
             // ログインしてない場合
-            [null,false],
+            [null, false],
             // システム管理者の場合
-            [1,true],
-             // サイト運営者などそれ以外の場合
-            [2,false]
+            [1, true],
+            // サイト運営者などそれ以外の場合
+            [2, false]
         ];
     }
 
@@ -88,26 +90,27 @@ class BcUtilTest extends BcTestCase
      * Test isAgentUser
      * @dataProvider isAgentUserDataProvider
      */
-    public function testIsAgentUser($id,$expects)
+    public function testIsAgentUser($id, $expects)
     {
 
         $request = $this->getRequest();
-        if($id) {
+        if ($id) {
             $user = $this->loginAdmin($id);
             $session = $request->getSession();
-            $session->write('AuthAgent.User',$user);
+            $session->write('AuthAgent.User', $user);
         }
         $result = BcUtil::isAgentUser();
 
-        $this->assertEquals($expects,$result);
+        $this->assertEquals($expects, $result);
     }
 
-    public function isAgentUserDataProvider() {
+    public function isAgentUserDataProvider()
+    {
         return [
             // ログインしてない場合
-            [null,false],
+            [null, false],
             // システム管理者などAuthAgentが与えられた場合
-            [1,true],
+            [1, true],
         ];
     }
 
@@ -115,19 +118,20 @@ class BcUtilTest extends BcTestCase
      * Test isInstallMode
      * @dataProvider isInstallModeDataProvider
      */
-    public function testIsInstallMode($mode,$expects)
+    public function testIsInstallMode($mode, $expects)
     {
         $_SERVER["INSTALL_MODE"] = $mode;
         $result = BcUtil::isInstallMode();
-        $this->assertEquals($expects,$result);
+        $this->assertEquals($expects, $result);
     }
 
-    public function isInstallModeDataProvider() {
+    public function isInstallModeDataProvider()
+    {
         return [
             // インストールモード On
-            ['true','true'],
+            ['true', 'true'],
             // インストールモード Off
-            ['false','false'],
+            ['false', 'false'],
         ];
     }
 
@@ -182,6 +186,15 @@ class BcUtilTest extends BcTestCase
         $expects = ['BcBlog'];
         $result = BcUtil::getEnablePlugins();
         $this->assertEquals($expects, $result, 'プラグインの一覧が取得できません。');
+    }
+
+    /**
+     * testIncludePluginClass
+     */
+    public function testIncludePluginClass()
+    {
+        $this->assertEquals(true, BcUtil::includePluginClass('BcBlog'));
+        $this->assertEquals(false, BcUtil::includePluginClass('BcTest'));
     }
 
 }
