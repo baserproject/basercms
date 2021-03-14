@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: bc5-db
--- 生成日時: 2021 年 3 月 12 日 08:58
+-- 生成日時: 2021 年 3 月 14 日 09:56
 -- サーバのバージョン： 5.7.33
 -- PHP のバージョン: 7.4.15
 
@@ -138,6 +138,28 @@ CREATE TABLE `password_requests` (
 -- --------------------------------------------------------
 
 --
+-- テーブルの構造 `phinxlog`
+--
+
+DROP TABLE IF EXISTS `phinxlog`;
+CREATE TABLE `phinxlog` (
+  `version` bigint(20) NOT NULL,
+  `migration_name` varchar(100) DEFAULT NULL,
+  `start_time` timestamp NULL DEFAULT NULL,
+  `end_time` timestamp NULL DEFAULT NULL,
+  `breakpoint` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `phinxlog`
+--
+
+INSERT INTO `phinxlog` (`version`, `migration_name`, `start_time`, `end_time`, `breakpoint`) VALUES
+(20210314094339, 'Initial', '2021-03-14 18:43:40', '2021-03-14 18:43:40', 0);
+
+-- --------------------------------------------------------
+
+--
 -- テーブルの構造 `plugins`
 --
 
@@ -153,13 +175,6 @@ CREATE TABLE `plugins` (
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- テーブルのデータのダンプ `plugins`
---
-
-INSERT INTO `plugins` (`id`, `name`, `title`, `version`, `status`, `db_init`, `priority`, `created`, `modified`) VALUES
-(1, 'BcBlog', 'ブログ', '1.0.0', 1, 1, 1, '2021-03-12 06:43:31', '2021-03-12 06:43:31');
 
 -- --------------------------------------------------------
 
@@ -264,10 +279,16 @@ ALTER TABLE `password_requests`
   ADD PRIMARY KEY (`id`);
 
 --
+-- テーブルのインデックス `phinxlog`
+--
+ALTER TABLE `phinxlog`
+  ADD PRIMARY KEY (`version`);
+
+--
 -- テーブルのインデックス `plugins`
 --
 ALTER TABLE `plugins`
-  ADD UNIQUE KEY `id` (`id`);
+  ADD PRIMARY KEY (`id`) USING BTREE;
 
 --
 -- テーブルのインデックス `users`
@@ -313,6 +334,12 @@ ALTER TABLE `pages`
 -- テーブルの AUTO_INCREMENT `password_requests`
 --
 ALTER TABLE `password_requests`
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
+
+--
+-- テーブルの AUTO_INCREMENT `plugins`
+--
+ALTER TABLE `plugins`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
 
 --
