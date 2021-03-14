@@ -83,7 +83,7 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
             foreach($pluginNames as $name) {
                 $pluginClassPath = $path . $name . DS . 'src' . DS . 'Plugin.php';
                 if(file_exists($pluginClassPath)) {
-                    include $pluginClassPath;
+                    require $pluginClassPath;
                     return true;
                 }
             }
