@@ -120,7 +120,17 @@ class PluginsController extends AppController
 		$plugin = explode(DS, $plugin);
 		$plugin = $plugin[0];
 		$srcPluginPath = APP . 'Plugin' . DS . $plugin;
-		$Folder = new Folder();
+		$Folder = new Folder($srcPluginPath);
+		// .htacessファイルが含まれる場合はアップロード不可
+		$htaccessFiles = $Folder->findRecursive('.*\.htaccess');
+		if ($htaccessFiles) {
+			$msg = __d('baser', '.htaccessファイルが含まれるプラグインはアップロードできません。');
+			$Folder->delete();
+			$this->BcMessage->setError($msg);
+			$this->redirect(['action' => 'add']);
+			return;
+		}
+
 		$Folder->chmod($srcPluginPath, 0777);
 		$tgtPluginPath = APP . 'Plugin' . DS . Inflector::camelize($plugin);
 		if ($srcPluginPath != $tgtPluginPath) {
