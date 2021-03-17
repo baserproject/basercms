@@ -17,8 +17,11 @@ use Cake\Core\App;
 use Cake\Core\Plugin;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
-use Cake\Routing\Router;
 
+/**
+ * Class BcUtilTest
+ * @package BaserCore\Test\TestCase\Utility
+ */
 class BcUtilTest extends BcTestCase
 {
     /**

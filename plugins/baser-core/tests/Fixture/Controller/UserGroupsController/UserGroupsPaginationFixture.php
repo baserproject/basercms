@@ -12,7 +12,6 @@
 namespace BaserCore\Test\Fixture\Controller\UserGroupsController;
 
 use Cake\TestSuite\Fixture\TestFixture;
-use Cake\ORM\TableRegistry;
 
 /**
  * Class UserGroupsPaginationFixture

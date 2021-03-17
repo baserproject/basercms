@@ -11,17 +11,34 @@
 
 namespace BaserCore\Mailer;
 
-use BaserCore\Mailer\BcMailer;
 use BaserCore\Model\Entity\PasswordRequest;
 use Cake\ORM\Entity;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 
+/**
+ * Class PasswordRequestMailer
+ * @package BaserCore\Mailer
+ */
 class PasswordRequestMailer
 {
+    /**
+     * Mailer Config
+     *
+     * @var string
+     */
     private $mailerConfig = 'default';
+
+    /**
+     * Theme
+     *
+     * @var string
+     */
     private $theme = 'BcAdminThird';
 
+    /**
+     * PasswordRequestMailer constructor.
+     */
     public function __construct()
     {
 

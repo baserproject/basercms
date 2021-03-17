@@ -14,10 +14,8 @@ namespace BaserCore\Controller\Admin;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Table\PluginsTable;
 use BaserCore\Utility\BcUtil;
-use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Filesystem\Folder;
 use Cake\Utility\Hash;
 
 /**
@@ -88,13 +86,11 @@ class PluginsController extends BcAdminAppController
             $installMessage = $e->getMessage();
         }
 
-        $plugin = $this->Plugins->getPluginConfig($name);
         if ($isInstallable && $this->request->is('post')) {
             // プラグインをインストール
             BcUtil::includePluginClass($name);
             $plugins = Plugin::getCollection();
             $plugin = $plugins->create($name);
-            $plugin->install();
             if ($plugin->install()) {
                 $this->BcMessage->setSuccess(sprintf(__d('baser', '新規プラグイン「%s」を baserCMS に登録しました。'), $name));
                 // TODO: アクセス権限を追加する
@@ -105,14 +101,13 @@ class PluginsController extends BcAdminAppController
             }
         }
 
+        $pluginEntity = $this->Plugins->getPluginConfig($name);
         $this->set('installMessage', $installMessage);
         $this->set('isInstallable', $isInstallable);
-        $this->set('dbInited', $plugin->dbInited);
-        $this->set('plugin', $plugin);
-        $this->subMenuElements = ['plugins'];
-        $this->pageTitle = __d('baser', '新規プラグイン登録');
-        $this->help = 'plugins_form';
-        $this->render('form');
+        $this->set('dbInited', $pluginEntity->db_inited);
+        $this->set('plugin', $pluginEntity);
+        $this->setTitle(__d('baser', '新規プラグイン登録'));
+        $this->setHelp('plugins_install');
     }
 
 }

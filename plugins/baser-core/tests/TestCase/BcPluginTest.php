@@ -9,13 +9,10 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Test\TestCase\Model\Table;
+namespace BaserCore\Test\TestCase;
 
 use BaserCore\BcPlugin;
-use BaserCore\Model\Table\PluginsTable;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Core\App;
-use Cake\Filesystem\Folder;
 
 /**
  * Class BcPluginTest
@@ -61,18 +58,27 @@ class BcPluginTest extends BcTestCase
         parent::tearDown();
     }
 
+    /**
+     * testRoutes
+     */
     public function testRoutes()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
 
+    /**
+     * testInstall
+     */
     public function testInstall()
     {
-        $this->BcPlugin->install();
-        $plugin = $this->getTableLocator()->get('Plugins')->find()->where(['name' => 'BcBlog'])->first();
-        $this->assertEquals(1, $plugin->priority);
+        $this->BcPlugin->install(['connection' => 'test']);
+        $plugins = $this->getTableLocator()->get('Plugins')->find()->where(['name' => 'BcBlog'])->first();
+        $this->assertEquals(1, $plugins->priority);
     }
 
+    /**
+     * testUninstall
+     */
     public function testUninstall()
     {
         $this->markTestIncomplete('Not implemented yet.');

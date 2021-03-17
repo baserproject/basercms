@@ -11,13 +11,9 @@
 
 namespace BaserCore\Test\TestCase\Model\Table;
 
-use Authentication\AuthenticationService;
 use BaserCore\Model\Table\PasswordRequestsTable;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\BcApplication;
-use Cake\Validation\Validator;
 use Cake\Core\Configure;
-use Cake\Http\ServerRequestFactory;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**

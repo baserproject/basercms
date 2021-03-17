@@ -15,11 +15,14 @@ use BaserCore\Error\BcException;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\App;
 use Cake\Core\Configure;
-use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\ORM\Table;
 use Cake\Utility\Inflector;
 
+/**
+ * Class PluginsTable
+ * @package BaserCore\Model\Table
+ */
 class PluginsTable extends Table
 {
 
@@ -93,6 +96,7 @@ class PluginsTable extends Table
                 'status' => false,
                 'update' => false,
                 'core' => $core,
+                'permission' => 1,
                 'registered' => false,
             ]);
         }
@@ -125,14 +129,19 @@ class PluginsTable extends Table
 
         $paths = App::path('plugins');
         $existsPluginFolder = false;
+        $folder = $pluginName;
         foreach($paths as $path) {
-            if (!is_dir($path . $pluginName)) {
-                continue;
+            if (!is_dir($path . $folder)) {
+                $dasherize = Inflector::dasherize($folder);
+                if(!is_dir($path . $dasherize)) {
+                    continue;
+                }
+                $folder = $dasherize;
             }
             $existsPluginFolder = true;
-            $configPath = $path . $pluginName . DS . 'config.php';
+            $configPath = $path . $folder . DS . 'config.php';
             if (file_exists($configPath)) {
-                include $configPath;
+                $config = include $configPath;
             }
             break;
         }
@@ -143,8 +152,8 @@ class PluginsTable extends Table
         }
 
         // インストールしようとしているプラグイン名と、設定ファイル内のプラグイン名が違う
-        if (!empty($name) && $pluginName !== $name) {
-            throw new BcException('このプラグイン名のフォルダ名を' . $name . 'にしてください。');
+        if (!empty($config['name']) && $pluginName !== $config['name']) {
+            throw new BcException('このプラグイン名のフォルダ名を' . $config['name'] . 'にしてください。');
         }
 
         return true;
@@ -164,6 +173,7 @@ class PluginsTable extends Table
             $query = $this->find();
             $priority = $query->select(['max' => $query->func()->max('priority')])->first();
             $plugin->priority = $priority->max + 1;
+            $plugin->status = true;
         }
         if ($this->save($plugin)) {
             return true;

@@ -11,12 +11,14 @@
 
 namespace BaserCore;
 
+use BaserCore\Error\BcException;
 use Cake\Core\BasePlugin;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Route\InflectedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
+use Migrations\Migrations;
 
 /**
  * Class plugin
@@ -24,6 +26,21 @@ use Cake\Utility\Inflector;
  */
 class BcPlugin extends BasePlugin
 {
+
+    /**
+     * @var Migrations
+     */
+    public $migrations;
+
+    /**
+     * Initialize
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->migrations = new Migrations();
+    }
+
     /**
      * @param \Cake\Routing\RouteBuilder $routes
      */
@@ -54,22 +71,42 @@ class BcPlugin extends BasePlugin
     }
 
     /**
-     * インストール
+     * プラグインをインストールする
+     *
+     * マイグレーションファイルを読み込み、 plugins テーブルに登録する
+     * @param array $options
+     *  - `plugin` : プラグイン名
+     *  - `connection` : コネクション名
      */
-    public function install()
+    public function install($options = []) : bool
     {
+        $options = array_merge([
+            'plugin' => $this->getName(),
+            'connection' => 'default'
+        ], $options);
+
         // TODO clearAllCache 未実装
         // clearAllCache();
-        $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
-        return $plugins->install($this->getName());
+
+        try {
+            $this->migrations->migrate($options);
+            $this->migrations->seed($options);
+            $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+            return $plugins->install($this->getName());
+        } catch (BcException $e) {
+            $this->migrations->rollback($options);
+            return false;
+        }
+
     }
 
     /**
-     * アンインストール
+     * プラグインをアンインストールする
      */
-    public function uninstall()
+    public function uninstall() : bool
     {
-
+        // TODO 未実装
+        return true;
     }
 
 }

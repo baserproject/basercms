@@ -13,8 +13,8 @@ namespace BcBlog\Test\TestCase;
 
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
-use BcBlog\Plugin as BlogPlugin;
 use Cake\Core\Plugin;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * Class BcPluginTest
@@ -61,11 +61,31 @@ class BcPluginTest extends BcTestCase
         parent::tearDown();
     }
 
+    /**
+     * testInstall
+     */
     public function testInstall()
     {
-        $this->Plugin->install();
+        $expected = ['blog_posts'];
+        $this->Plugin->install(['connection' => 'test']);
+        // インストールされたテーブルをチェック
+        $connection = ConnectionManager::get('test');
+        $tables = $connection->getSchemaCollection()->listTables();
+        foreach($expected as $value) {
+            $this->assertContains($value, $tables);
+        }
+        // インストーラーで追加したテーブルを削除
+        $connection = ConnectionManager::get('test');
+        $this->Plugin->migrations->rollback(['plugin' => 'BcBlog', 'connection' => 'test']);
+        // bc_blog_phinxlog 削除
+        $schema = $connection->getDriver()->newTableSchema('bc_blog_phinxlog');
+        $sql = $schema->dropSql($connection);
+        $connection->execute($sql[0])->closeCursor();
     }
 
+    /**
+     * testUninstall
+     */
     public function testUninstall()
     {
         $this->markTestIncomplete('Not implemented yet.');

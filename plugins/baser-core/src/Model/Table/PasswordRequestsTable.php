@@ -11,17 +11,13 @@
 
 namespace BaserCore\Model\Table;
 
-use ArrayObject;
+use Cake\ORM\Query;
 use DateTime;
 use BaserCore\Model\Entity\PasswordRequest;
 use BaserCore\Model\Entity\User;
 use Cake\Datasource\EntityInterface;
-use Cake\Event\Event;
 use Cake\ORM\Association\BelongsTo;
 use Cake\ORM\Behavior\TimestampBehavior;
-use Cake\ORM\Entity;
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
@@ -74,7 +70,7 @@ class PasswordRequestsTable extends Table
      * 有効なパスワード変更情報を取得する
      *
      * @param [type] $requestKey
-     * @return void
+     * @return EntityInterface
      */
     public function getEnableRequestData($requestKey)
     {
@@ -92,7 +88,7 @@ class PasswordRequestsTable extends Table
      *
      * @param PasswordRequest $passwordRequest
      * @param string $password
-     * @return void
+     * @return \Cake\Datasource\EntityInterface|false
      */
     public function updatePassword(PasswordRequest $passwordRequest, string $password)
     {

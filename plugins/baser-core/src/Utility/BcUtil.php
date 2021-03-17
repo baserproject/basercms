@@ -192,7 +192,7 @@ class BcUtil
             if (!is_array($sources) || in_array(strtolower('plugins'), array_map('strtolower', $sources))) {
                 $plugins = $pluginsTable->find('all', ['conditions' => ['status' => true], 'order' => 'priority']);
                 TableRegistry::getTableLocator()->remove('Plugin');
-                if ($plugins) {
+                if ($plugins->count()) {
                     foreach($plugins as $key => $plugin) {
                         foreach(App::path('plugins') as $path) {
                             if (is_dir($path . $plugin->name) || is_dir($path . Inflector::dasherize($plugin->name))) {

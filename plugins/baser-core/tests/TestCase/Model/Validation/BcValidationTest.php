@@ -13,7 +13,6 @@ namespace BaserCore\Test\TestCase\Model\Validation;
 
 use BaserCore\Model\Validation\BcValidation;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Validation\Validator;
 
 /**
  * Class BcValidationTest

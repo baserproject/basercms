@@ -57,7 +57,7 @@ use BaserCore\Model\Entity\UserGroup;
 
 <?= $this->fetch('postLink') ?>
 
-<?php /* ?>
+<?php /* TODO ?>
 <?php if ($this->request->getParam('action') == 'edit'): ?>
 	<div class="section">
 		<div class="panel-box bca-panel-box corner10">

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: bc5-db
--- 生成日時: 2021 年 3 月 14 日 09:56
+-- 生成日時: 2021 年 3 月 16 日 06:56
 -- サーバのバージョン： 5.7.33
 -- PHP のバージョン: 7.4.15
 
@@ -24,13 +24,116 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- テーブルの構造 `baser_core_phinxlog`
+--
+
+DROP TABLE IF EXISTS `baser_core_phinxlog`;
+CREATE TABLE `baser_core_phinxlog` (
+  `version` bigint(20) NOT NULL,
+  `migration_name` varchar(100) DEFAULT NULL,
+  `start_time` timestamp NULL DEFAULT NULL,
+  `end_time` timestamp NULL DEFAULT NULL,
+  `breakpoint` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- テーブルのデータのダンプ `baser_core_phinxlog`
+--
+
+INSERT INTO `baser_core_phinxlog` (`version`, `migration_name`, `start_time`, `end_time`, `breakpoint`) VALUES
+(20210316065511, 'Initial', '2021-03-16 15:55:11', '2021-03-16 15:55:11', 0);
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `bc_blog_phinxlog`
+--
+
+DROP TABLE IF EXISTS `bc_blog_phinxlog`;
+CREATE TABLE `bc_blog_phinxlog` (
+  `version` bigint(20) NOT NULL,
+  `migration_name` varchar(100) DEFAULT NULL,
+  `start_time` timestamp NULL DEFAULT NULL,
+  `end_time` timestamp NULL DEFAULT NULL,
+  `breakpoint` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- テーブルのデータのダンプ `bc_blog_phinxlog`
+--
+
+INSERT INTO `bc_blog_phinxlog` (`version`, `migration_name`, `start_time`, `end_time`, `breakpoint`) VALUES
+(20210316064713, 'Initial', '2021-03-16 15:47:13', '2021-03-16 15:47:13', 0);
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `bc_sample_phinxlog`
+--
+
+DROP TABLE IF EXISTS `bc_sample_phinxlog`;
+CREATE TABLE `bc_sample_phinxlog` (
+  `version` bigint(20) NOT NULL,
+  `migration_name` varchar(100) DEFAULT NULL,
+  `start_time` timestamp NULL DEFAULT NULL,
+  `end_time` timestamp NULL DEFAULT NULL,
+  `breakpoint` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `bc_sample_phinxlog`
+--
+
+INSERT INTO `bc_sample_phinxlog` (`version`, `migration_name`, `start_time`, `end_time`, `breakpoint`) VALUES
+(20210316065250, 'Initial', '2021-03-16 15:52:50', '2021-03-16 15:52:50', 0);
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `blog_posts`
+--
+
+DROP TABLE IF EXISTS `blog_posts`;
+CREATE TABLE `blog_posts` (
+  `id` int(11) NOT NULL,
+  `blog_content_id` int(8) DEFAULT NULL,
+  `no` int(11) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `content` longtext,
+  `detail` longtext,
+  `blog_category_id` int(8) DEFAULT NULL,
+  `user_id` int(8) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT NULL,
+  `posted` datetime DEFAULT NULL,
+  `content_draft` longtext,
+  `detail_draft` longtext,
+  `publish_begin` datetime DEFAULT NULL,
+  `publish_end` datetime DEFAULT NULL,
+  `exclude_search` tinyint(1) DEFAULT NULL,
+  `eye_catch` mediumtext,
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- テーブルのデータのダンプ `blog_posts`
+--
+
+INSERT INTO `blog_posts` (`id`, `blog_content_id`, `no`, `name`, `title`, `content`, `detail`, `blog_category_id`, `user_id`, `status`, `posted`, `content_draft`, `detail_draft`, `publish_begin`, `publish_end`, `exclude_search`, `eye_catch`, `created`, `modified`) VALUES
+(1, 1, 1, NULL, 'メールフォーム機能について説明します', '', '<p>baserCMSのメールフォームでは、管理画面上にて入力項目を自由に変更することができ、受信したメールを管理画面で閲覧することができます。</p>\n\n<h3>入力項目の変更</h3>\n\n<p>メールフォームの各入力項目をフィールドと呼びます。フィールドを削除したり新しく追加するには、まず、管理画面より、[お問い合わせ] &rarr; [フィールド] と移動し、登録されているフィールドを確認しましょう。その画面よりフィールドの新規登録や変更、削除が行えます。</p>\n\n<h3>受信メールの確認</h3>\n\n<p>管理画面より、[お問い合わせ] &rarr; [受信メール] と移動すると、受信したメールを一覧で確認できます。データベースに受信したメールを保存しない場合は、[お問い合わせ] &rarr; [設定] &rarr; [詳細設定] より、[送信情報をデータベースに保存しない] にチェックを入れて保存します。</p>', 1, 1, 1, '2021-03-08 11:36:50', '', '', NULL, NULL, 0, '2016/08/00000001_eye_catch.jpg', '2016-08-12 00:48:33', '2021-03-09 19:52:42'),
+(2, 1, 2, NULL, 'ブログ機能について説明します', '<p>この文章はブログ記事の [概要] 欄に入力されています。ブログ記事の一覧にて概要だけを表示する場合に利用しますが、テーマの構成上で利用しない場合は、各ブログの [設定] より、 [概要] 欄を利用しないようにする事もできます。ちなみにこのサンプルテーマではブログ記事一覧において概要を利用していません。</p>', '<p>ここからは、ブログ記事の [本文] 欄に入力されている文章となります。</p>\n\n<h3>カテゴリ・タグ機能</h3>\n\n<p>baserCMSでのカテゴリとタグは少し仕様が違います。一つの記事は複数のタグを付けることができますが、複数のカテゴリに属すことはできません。また、タグは全ブログ共通ですが、カテゴリは各ブログごとに分けて作ることができます。</p>\n\n<p>なお、タグやカテゴリを利用するにはテーマ側が対応している必要があります。このサンプルテーマでは、タグの利用を想定していません。</p>\n\n<h3>ブログコメント機能</h3>\n\n<p>ブログの各記事には一般ユーザーがコメントを付ける機能がありますが、利用しない場合は、各ブログの [設定] 画面より簡単に非表示にすることができます。</p>', 1, 1, 1, '2021-03-08 11:36:50', '', '', NULL, NULL, 0, '2016/08/00000002_eye_catch.jpg', '2016-08-12 00:48:33', '2021-03-09 19:52:44');
+
+-- --------------------------------------------------------
+
+--
 -- テーブルの構造 `contents`
 --
 
 DROP TABLE IF EXISTS `contents`;
 CREATE TABLE `contents` (
   `id` int(8) NOT NULL,
-  `name` text,
+  `name` mediumtext,
   `plugin` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
   `entity_id` int(8) DEFAULT NULL,
@@ -43,7 +146,7 @@ CREATE TABLE `contents` (
   `rght` int(8) DEFAULT NULL,
   `level` int(8) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
-  `description` text,
+  `description` mediumtext,
   `eyecatch` varchar(255) DEFAULT NULL,
   `author_id` int(8) DEFAULT NULL,
   `layout_template` varchar(50) DEFAULT NULL,
@@ -63,7 +166,7 @@ CREATE TABLE `contents` (
   `blank_link` tinyint(1) DEFAULT '0',
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- テーブルのデータのダンプ `contents`
@@ -86,7 +189,7 @@ CREATE TABLE `content_folders` (
   `page_template` varchar(255) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- テーブルのデータのダンプ `content_folders`
@@ -104,13 +207,13 @@ INSERT INTO `content_folders` (`id`, `folder_template`, `page_template`, `create
 DROP TABLE IF EXISTS `pages`;
 CREATE TABLE `pages` (
   `id` int(8) NOT NULL,
-  `contents` mediumtext,
-  `draft` text,
+  `contents` longtext,
+  `draft` mediumtext,
   `page_template` varchar(255) DEFAULT NULL,
-  `code` text,
+  `code` mediumtext,
   `modified` datetime DEFAULT NULL,
   `created` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- テーブルのデータのダンプ `pages`
@@ -133,29 +236,7 @@ CREATE TABLE `password_requests` (
   `used` int(2) DEFAULT '0',
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- テーブルの構造 `phinxlog`
---
-
-DROP TABLE IF EXISTS `phinxlog`;
-CREATE TABLE `phinxlog` (
-  `version` bigint(20) NOT NULL,
-  `migration_name` varchar(100) DEFAULT NULL,
-  `start_time` timestamp NULL DEFAULT NULL,
-  `end_time` timestamp NULL DEFAULT NULL,
-  `breakpoint` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- テーブルのデータのダンプ `phinxlog`
---
-
-INSERT INTO `phinxlog` (`version`, `migration_name`, `start_time`, `end_time`, `breakpoint`) VALUES
-(20210314094339, 'Initial', '2021-03-14 18:43:40', '2021-03-14 18:43:40', 0);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -174,7 +255,29 @@ CREATE TABLE `plugins` (
   `priority` int(8) DEFAULT '0',
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- テーブルのデータのダンプ `plugins`
+--
+
+INSERT INTO `plugins` (`id`, `name`, `title`, `version`, `status`, `db_init`, `priority`, `created`, `modified`) VALUES
+(1, 'BcBlog', 'ブログ', '5.0.0', 1, 1, 1, '2021-03-16 06:36:24', '2021-03-16 06:36:24'),
+(2, 'BcSample', 'サンプル', '1.0.0', 1, 1, 2, '2021-03-16 06:46:11', '2021-03-16 06:46:11');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `samples`
+--
+
+DROP TABLE IF EXISTS `samples`;
+CREATE TABLE `samples` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -193,7 +296,7 @@ CREATE TABLE `users` (
   `nickname` varchar(255) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- テーブルのデータのダンプ `users`
@@ -215,7 +318,7 @@ CREATE TABLE `users_user_groups` (
   `user_group_id` int(8) DEFAULT NULL COMMENT 'ユーザーグループID',
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- テーブルのデータのダンプ `users_user_groups`
@@ -236,11 +339,11 @@ CREATE TABLE `user_groups` (
   `name` varchar(50) DEFAULT NULL,
   `title` varchar(50) DEFAULT NULL,
   `auth_prefix` varchar(20) DEFAULT NULL,
-  `default_favorites` text,
+  `default_favorites` mediumtext,
   `use_move_contents` tinyint(1) DEFAULT '0',
   `modified` datetime DEFAULT NULL,
   `created` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- テーブルのデータのダンプ `user_groups`
@@ -253,6 +356,31 @@ INSERT INTO `user_groups` (`id`, `name`, `title`, `auth_prefix`, `default_favori
 --
 -- ダンプしたテーブルのインデックス
 --
+
+--
+-- テーブルのインデックス `baser_core_phinxlog`
+--
+ALTER TABLE `baser_core_phinxlog`
+  ADD PRIMARY KEY (`version`);
+
+--
+-- テーブルのインデックス `bc_blog_phinxlog`
+--
+ALTER TABLE `bc_blog_phinxlog`
+  ADD PRIMARY KEY (`version`);
+
+--
+-- テーブルのインデックス `bc_sample_phinxlog`
+--
+ALTER TABLE `bc_sample_phinxlog`
+  ADD PRIMARY KEY (`version`);
+
+--
+-- テーブルのインデックス `blog_posts`
+--
+ALTER TABLE `blog_posts`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `blog_content_id_no_index` (`blog_content_id`,`no`);
 
 --
 -- テーブルのインデックス `contents`
@@ -279,16 +407,16 @@ ALTER TABLE `password_requests`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `phinxlog`
---
-ALTER TABLE `phinxlog`
-  ADD PRIMARY KEY (`version`);
-
---
 -- テーブルのインデックス `plugins`
 --
 ALTER TABLE `plugins`
   ADD PRIMARY KEY (`id`) USING BTREE;
+
+--
+-- テーブルのインデックス `samples`
+--
+ALTER TABLE `samples`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- テーブルのインデックス `users`
@@ -311,6 +439,12 @@ ALTER TABLE `user_groups`
 --
 -- ダンプしたテーブルの AUTO_INCREMENT
 --
+
+--
+-- テーブルの AUTO_INCREMENT `blog_posts`
+--
+ALTER TABLE `blog_posts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- テーブルの AUTO_INCREMENT `contents`
@@ -340,7 +474,13 @@ ALTER TABLE `password_requests`
 -- テーブルの AUTO_INCREMENT `plugins`
 --
 ALTER TABLE `plugins`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- テーブルの AUTO_INCREMENT `samples`
+--
+ALTER TABLE `samples`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- テーブルの AUTO_INCREMENT `users`

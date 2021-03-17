@@ -17,9 +17,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\ORM\Association\BelongsTo;
 use Cake\ORM\Behavior\TimestampBehavior;
-use Cake\ORM\Entity;
 use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
