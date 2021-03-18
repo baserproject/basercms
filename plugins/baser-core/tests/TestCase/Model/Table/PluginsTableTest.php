@@ -67,14 +67,14 @@ class PluginsTableTest extends BcTestCase
     public function testGetAvailable()
     {
         $plugins = $this->Plugins->getAvailable();
-        $this->assertEquals(1, count($plugins));
+        $this->assertEquals(2, count($plugins));
 
         $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
         $folder = new Folder($pluginPath);
         $folder->create($pluginPath, 0777);
 
         $plugins = $this->Plugins->getAvailable();
-        $this->assertEquals(2, count($plugins));
+        $this->assertEquals(3, count($plugins));
 
         $folder->delete($pluginPath);
     }

@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase;
 
 use BaserCore\BcPlugin;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * Class BcPluginTest
@@ -74,6 +75,13 @@ class BcPluginTest extends BcTestCase
         $this->BcPlugin->install(['connection' => 'test']);
         $plugins = $this->getTableLocator()->get('Plugins')->find()->where(['name' => 'BcBlog'])->first();
         $this->assertEquals(1, $plugins->priority);
+        // インストーラーで追加したテーブルを削除
+        $connection = ConnectionManager::get('test');
+        $this->BcPlugin->migrations->rollback(['plugin' => 'BcBlog', 'connection' => 'test']);
+        // bc_blog_phinxlog 削除
+        $schema = $connection->getDriver()->newTableSchema('bc_blog_phinxlog');
+        $sql = $schema->dropSql($connection);
+        $connection->execute($sql[0])->closeCursor();
     }
 
     /**
