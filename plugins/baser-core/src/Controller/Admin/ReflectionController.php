@@ -11,7 +11,7 @@ class ReflectionController extends BcAdminAppController {
         $basePath = ROOT . DS . 'plugins' . DS;
         $methods = $this->reflection($basePath);
         foreach($methods as $method) {
-            echo $method . "<br>";
+            echo $method . "\n";
         }
         exit();
     }
@@ -49,14 +49,24 @@ class ReflectionController extends BcAdminAppController {
             }
             try {
                 $class = new ReflectionClass($className);
+                $traits = $class->getTraits();
+                $traitMethodsArray = [];
+                if($traits) {
+                    $trait = new ReflectionClass($traits[key($traits)]->name);
+                    $traitMethods = $trait->getMethods();
+                    foreach($traitMethods as $traitMethod) {
+                        $traitMethodsArray[] = $traitMethod->name;
+                    }
+                }
+
             } catch(Exception $e) {
                 $classMethods[] = $className;;
                 continue;
             }
             $methods = $class->getMethods();
             foreach($methods as $method) {
-                if('\\' . $method->class === $className) {
-                    $classMethods[] = $className . "," . $method->name;
+                if('\\' . $method->class === $className && !in_array($method->name, $traitMethodsArray)) {
+                    $classMethods[] = $className . "\t" . $method->name;
                 }
             }
         }
