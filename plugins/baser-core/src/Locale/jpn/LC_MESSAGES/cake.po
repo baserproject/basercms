@@ -1,0 +1,379 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: baserCMS\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2019-08-09 17:58+0900\n"
+"Last-Translator: \n"
+"Language-Team: baserCMS Users Community <info@basercms.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.10\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: ja\n"
+
+#: View/Helper/BcFormHelper.php:308 View/Helper/FormHelper.php:2952
+msgid "January"
+msgstr "1月"
+
+#: View/Helper/BcFormHelper.php:309 View/Helper/FormHelper.php:2953
+msgid "February"
+msgstr "2月"
+
+#: View/Helper/BcFormHelper.php:310 View/Helper/FormHelper.php:2954
+msgid "March"
+msgstr "3月"
+
+#: View/Helper/BcFormHelper.php:311 View/Helper/FormHelper.php:2955
+msgid "April"
+msgstr "4月"
+
+#: View/Helper/BcFormHelper.php:312 View/Helper/FormHelper.php:2956
+msgid "May"
+msgstr "5月"
+
+#: View/Helper/BcFormHelper.php:313 View/Helper/FormHelper.php:2957
+msgid "June"
+msgstr "6月"
+
+#: View/Helper/BcFormHelper.php:314 View/Helper/FormHelper.php:2958
+msgid "July"
+msgstr "7月"
+
+#: View/Helper/BcFormHelper.php:315 View/Helper/FormHelper.php:2959
+msgid "August"
+msgstr "8月"
+
+#: View/Helper/BcFormHelper.php:316 View/Helper/FormHelper.php:2960
+msgid "September"
+msgstr "9月"
+
+#: View/Helper/BcFormHelper.php:317 View/Helper/FormHelper.php:2961
+msgid "October"
+msgstr "10月"
+
+#: View/Helper/BcFormHelper.php:318 View/Helper/FormHelper.php:2962
+msgid "November"
+msgstr "11月"
+
+#: View/Helper/BcFormHelper.php:319 View/Helper/FormHelper.php:2963
+msgid "December"
+msgstr "12月"
+
+#: Controller/Scaffold.php:127
+msgid "Scaffold :: "
+msgstr ""
+
+#: Controller/Scaffold.php:168;235;304
+msgid "Invalid %s"
+msgstr ""
+
+#: Controller/Scaffold.php:223
+msgid "updated"
+msgstr ""
+
+#: Controller/Scaffold.php:226
+msgid "saved"
+msgstr ""
+
+#: Controller/Scaffold.php:246
+msgid "The %1$s has been %2$s"
+msgstr ""
+
+#: Controller/Scaffold.php:256
+msgid "Please correct errors below."
+msgstr ""
+
+#: Controller/Scaffold.php:307
+msgid "The %1$s with id: %2$s has been deleted."
+msgstr ""
+
+#: Controller/Scaffold.php:310
+msgid "There was an error deleting the %1$s with id: %2$s"
+msgstr ""
+
+#: Controller/Component/AuthComponent.php:434
+msgid "You are not authorized to access that location."
+msgstr ""
+
+#: Error/ExceptionRenderer.php:222
+msgid "Not Found"
+msgstr "見つかりませんでした。"
+
+#: Error/ExceptionRenderer.php:245
+msgid "An Internal Error Has Occurred."
+msgstr ""
+
+#: Model/Validator/CakeValidationSet.php:286
+msgid "This field cannot be left blank"
+msgstr ""
+
+#: Network/CakeResponse.php:1355
+msgid "The requested file was not found"
+msgstr ""
+
+#: Utility/CakeNumber.php:119
+msgid "%s KB"
+msgstr ""
+
+#: Utility/CakeNumber.php:121
+msgid "%s MB"
+msgstr ""
+
+#: Utility/CakeNumber.php:123
+msgid "%s GB"
+msgstr ""
+
+#: Utility/CakeNumber.php:125
+msgid "%s TB"
+msgstr ""
+
+#: Utility/CakeNumber.php:117
+msgid "%d Byte"
+msgid_plural "%d Bytes"
+msgstr[0] ""
+
+#: Utility/CakeText.php:702
+msgid "and"
+msgstr ""
+
+#: Utility/CakeTime.php:397
+msgid "Today, %s"
+msgstr ""
+
+#: Utility/CakeTime.php:400
+msgid "Yesterday, %s"
+msgstr ""
+
+#: Utility/CakeTime.php:403
+msgid "Tomorrow, %s"
+msgstr ""
+
+#: Utility/CakeTime.php:408
+msgid "Sunday"
+msgstr ""
+
+#: Utility/CakeTime.php:409
+msgid "Monday"
+msgstr ""
+
+#: Utility/CakeTime.php:410
+msgid "Tuesday"
+msgstr ""
+
+#: Utility/CakeTime.php:411
+msgid "Wednesday"
+msgstr ""
+
+#: Utility/CakeTime.php:412
+msgid "Thursday"
+msgstr ""
+
+#: Utility/CakeTime.php:413
+msgid "Friday"
+msgstr ""
+
+#: Utility/CakeTime.php:414
+msgid "Saturday"
+msgstr ""
+
+#: Utility/CakeTime.php:420
+msgid "On %s %s"
+msgstr ""
+
+#: Utility/CakeTime.php:743
+msgid "%s ago"
+msgstr ""
+
+#: Utility/CakeTime.php:744
+msgid "in %s"
+msgstr ""
+
+#: Utility/CakeTime.php:745
+msgid "on %s"
+msgstr ""
+
+#: Utility/CakeTime.php:801
+msgid "just now"
+msgstr ""
+
+#: Utility/CakeTime.php:924
+msgid "in about a second"
+msgstr ""
+
+#: Utility/CakeTime.php:925
+msgid "in about a minute"
+msgstr ""
+
+#: Utility/CakeTime.php:926
+msgid "in about an hour"
+msgstr ""
+
+#: Utility/CakeTime.php:927
+msgid "in about a day"
+msgstr ""
+
+#: Utility/CakeTime.php:928
+msgid "in about a week"
+msgstr ""
+
+#: Utility/CakeTime.php:929
+msgid "in about a year"
+msgstr ""
+
+#: Utility/CakeTime.php:933
+msgid "about a second ago"
+msgstr ""
+
+#: Utility/CakeTime.php:934
+msgid "about a minute ago"
+msgstr ""
+
+#: Utility/CakeTime.php:935
+msgid "about an hour ago"
+msgstr ""
+
+#: Utility/CakeTime.php:936
+msgid "about a day ago"
+msgstr ""
+
+#: Utility/CakeTime.php:937
+msgid "about a week ago"
+msgstr ""
+
+#: Utility/CakeTime.php:938
+msgid "about a year ago"
+msgstr ""
+
+#: Utility/CakeTime.php:958;980
+msgid "days"
+msgstr ""
+
+#: Utility/CakeTime.php:895
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] ""
+
+#: Utility/CakeTime.php:898
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] ""
+
+#: Utility/CakeTime.php:901
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] ""
+
+#: Utility/CakeTime.php:904
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] ""
+
+#: Utility/CakeTime.php:907
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] ""
+
+#: Utility/CakeTime.php:910
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] ""
+
+#: Utility/CakeTime.php:913
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] ""
+
+#: View/ViewBlock.php:78
+msgid "A view block with the name '%s' is already/still open."
+msgstr ""
+
+#: View/Helper/FormHelper.php:753
+msgid "Error in field %s"
+msgstr ""
+
+#: View/Helper/FormHelper.php:949 View/Scaffolds/form.ctp:46
+#: View/Scaffolds/index.ctp:77;92 View/Scaffolds/view.ctp:63;78;188
+msgid "New %s"
+msgstr ""
+
+#: View/Helper/FormHelper.php:955 View/Scaffolds/view.ctp:51;109
+msgid "Edit %s"
+msgstr ""
+
+#: View/Helper/FormHelper.php:1539
+msgid "empty"
+msgstr ""
+
+#: View/Helper/FormHelper.php:1958 View/Scaffolds/form.ctp:21
+msgid "Submit"
+msgstr ""
+
+#: View/Helper/HtmlHelper.php:783
+msgid "Home"
+msgstr ""
+
+#: View/Helper/PaginatorHelper.php:644
+msgid " of "
+msgstr ""
+
+#: View/Scaffolds/form.ctp:25 View/Scaffolds/index.ctp:24;75
+#: View/Scaffolds/view.ctp:47
+msgid "Actions"
+msgstr ""
+
+#: View/Scaffolds/form.ctp:29 View/Scaffolds/index.ctp:49
+#: View/Scaffolds/view.ctp:173
+msgid "Delete"
+msgstr ""
+
+#: View/Scaffolds/form.ctp:32 View/Scaffolds/index.ctp:52
+#: View/Scaffolds/view.ctp:55;176
+msgid "Are you sure you want to delete # %s?"
+msgstr ""
+
+#: View/Scaffolds/form.ctp:35
+msgid "List"
+msgstr ""
+
+#: View/Scaffolds/form.ctp:42 View/Scaffolds/index.ctp:85
+#: View/Scaffolds/view.ctp:59;72
+msgid "List %s"
+msgstr ""
+
+#: View/Scaffolds/index.ctp:46 View/Scaffolds/view.ctp:161
+msgid "View"
+msgstr ""
+
+#: View/Scaffolds/index.ctp:47 View/Scaffolds/view.ctp:167
+msgid "Edit"
+msgstr ""
+
+#: View/Scaffolds/index.ctp:63
+msgid ""
+"Page {:page} of {:pages}, showing {:current} records out of {:count} total, "
+"starting on record {:start}, ending on {:end}"
+msgstr ""
+
+#: View/Scaffolds/index.ctp:68
+msgid "previous"
+msgstr ""
+
+#: View/Scaffolds/index.ctp:70
+msgid "next"
+msgstr ""
+
+#: View/Scaffolds/view.ctp:18
+msgid "View %s"
+msgstr ""
+
+#: View/Scaffolds/view.ctp:55
+msgid "Delete %s"
+msgstr ""
+
+#: View/Scaffolds/view.ctp:93;133
+msgid "Related %s"
+msgstr ""

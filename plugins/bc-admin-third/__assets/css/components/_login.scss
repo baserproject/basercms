@@ -1,0 +1,105 @@
+/* ==================================================================== */
+/*    Login
+/* ==================================================================== */
+
+.bca-login {
+  &,
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  position: relative;
+  z-index: 100;
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 40px 25px 25px;
+  border-radius: 5px;
+  background: $color_lightest;
+  font-size: 1.4rem;
+  @include mq(sp) {
+  	max-width: none!important;
+  }
+  &__title {
+    margin-top: 0;
+    margin-bottom: 40px;
+    text-align: center;
+    color: $color_primary;
+    font-weight: bold;
+    font-size:4rem;
+  }
+  &__logo {
+    width: 230px;
+  }
+
+  &-form-item {
+    position: relative;
+    display: block;
+    label {
+      color: $color_text_secondary;
+      font-size: 1.2rem;
+      display: block;
+      position: absolute;
+      top: 50%;
+      right: 1.2em;
+      transform: translate(0, -50%);
+      pointer-events: none;
+    }
+    .bca-textbox {
+      display: block;
+      .bca-textbox__input {
+        display: block;
+        width: 100%;
+        height: 52px;
+        border: 1px solid $color_control_border_color;
+        border-radius: 3px;
+        margin: 0 0 20px;
+        padding: 0.69em 1em;
+
+        color: $color_text_primary;
+        font-size: 1.6rem;
+        font-weight: bold;
+        line-height: 1;
+        appearance: none;
+        &:focus {
+          border-color: $color_primary;
+          border-width: 1px;
+          outline: none;
+        }
+      }
+    }
+  }
+  button.bca-btn--login {
+    font-size: 1.6rem;
+    line-height: 1;
+    display: block;
+    width: 100%;
+    height: 52px;
+  }
+  .bca-login-form-ctrl {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+
+    margin-top: 20px;
+    overflow: hidden;
+  }
+  .bca-login-form-checker {
+  }
+  .bca-login-forgot-pass {
+  }
+  .bca-login-form-checkbox {
+    //display: inline-block;
+    //vertical-align: middle;
+    //line-height: 1;
+  }
+}
+#AdminUsersLogin {
+  .bca-main {
+    &__contents {
+      border:none;
+      background: none;
+    }
+  }
+}

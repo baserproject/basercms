@@ -1,0 +1,38 @@
+.bca-textarea {
+  display: inline;
+  //width: calc(100% - 120px);
+  width: 100%;
+  &__textarea {
+    display: inline-block;
+    outline: none;
+    padding: $button_padding_top 0.5em $button_padding_bottom 0.5em;
+    border-radius: 3px;
+    box-sizing: border-box;
+    border: 1px solid $color_control_border_color;
+    line-height: 1.6;
+    font-size: $input_text_font_size;
+    color: $color_text_secondary;
+    margin:4px;
+    width: calc(100% - 80px);
+    &[data-input-text-size=lg] {
+      font-size: $button_font_size_large;
+    }
+    &[data-input-text-size=sm] {
+      font-size: $button_font_size_small;
+    }
+    &[data-input-text-size=full-counter] {
+      width: calc(100% - 120px);
+    }
+    &[data-width=full] {
+      width: calc(100% - 80px);
+    }
+    &:focus {
+      box-shadow: $focus_shadow;
+      border-color: $color_primary;
+      border-width: 1px;
+	}
+	&::placeholder {
+		color: $color_text_placeholder;
+	}
+  }
+}

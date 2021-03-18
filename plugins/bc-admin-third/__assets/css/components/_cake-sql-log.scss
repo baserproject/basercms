@@ -1,0 +1,54 @@
+table.cake-sql-log {
+  width: 90%;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-bottom: 1px solid #666;
+  border-right: 1px solid #666;
+  color: #333;
+  background-color: #fff;
+  clear: both;
+  padding: 0;
+  margin: 0 0 1em 0;
+  white-space: normal;
+  border-collapse: separate;
+  margin: 20px auto;
+}
+
+table.cake-sql-log caption {
+  font-weight: bold;
+  text-align: center;
+}
+
+table.cake-sql-log th {
+  background-color: #e2e2e2;
+  padding: 4px 8px;
+  font-weight: bold;
+  text-align: center;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: #FFFFFF;
+  border-right-color: #666;
+  border-bottom-color: #666;
+  border-left-color: #FFFFFF;
+  font-size: 0.8em;
+}
+
+table.cake-sql-log tr td {
+  background-color: #F7F7F7;
+  padding: 6px 8px;
+  vertical-align: top;
+  text-align: left;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-right-color: #ccc;
+  border-bottom-color: #ccc;
+  font-size: 0.8em;
+}

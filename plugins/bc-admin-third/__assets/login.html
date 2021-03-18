@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex,nofollow" />
+<title>管理システムログイン｜baserCMS inc.</title>
+
+<link rel="stylesheet" type="text/css" href="/theme/admin-third/css/admin/style.css"/>
+<link rel="stylesheet" type="text/css" href="/theme/admin-third/css/admin/jquery-ui/jquery-ui.min.css"/>
+<link rel="stylesheet" type="text/css" href="/theme/admin-third/css/../js/admin/vendors/jquery.jstree-3.3.1/themes/proton/style.min.css"/>
+<link rel="stylesheet" type="text/css" href="/theme/admin-third/css/../js/admin/vendors/jquery-contextMenu-2.2.0/jquery.contextMenu.min.css"/>
+<link rel="stylesheet" type="text/css" href="/theme/admin-third/css/admin/colorbox/colorbox-1.6.1.css"/>
+
+
+<!--[if IE]>
+<script type="text/javascript" src="/theme/admin-third/js/admin/vendors/excanvas.js"></script>
+<![endif]-->
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.3/vue.min.js"></script>
+<script type="text/javascript" src="/theme/admin-third/js/admin/vendors/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="/theme/admin-third/js/admin/vendors/jquery-ui-1.11.4.min.js"></script>
+<style type="text/css">
+#CreditScroller,#CreditScroller a{
+color:#333!important;
+}
+#Credit {
+text-align: right;
+}
+#CreditScrollerInner {
+margin-right:0;
+}
+html {
+margin-top:0;
+}
+#ToolBar {
+position:relative;
+}
+.bca-container {
+height: auto !important;
+background: #F4F5F1;
+}
+.bca-crumb,
+.bca-main-body-header {
+display: none;
+}
+</style>	</head>
+
+<body id="AdminUsers" class="normal">
+<div id="Page">
+<div id="BaseUrl" style="display: none"></div>
+<div id="SaveFavoriteBoxUrl" style="display:none">/admin/dashboard/ajax_save_favorite_box</div>
+<div id="SaveSearchBoxUrl" style="display:none">/admin/dashboard/ajax_save_search_box/AdminUsersLogin</div>
+<div id="SearchBoxOpened" style="display:none"></div>
+<div id="CurrentPageName" style="display: none">管理システムログイン</div>
+<div id="CurrentPageUrl" style="display: none">/admin/users/login</div>
+
+<!-- Waiting -->
+<div id="Waiting" class="waiting-box" style="display:none">
+<div class="corner10">
+<img src="/theme/admin-third/img/admin/ajax-loader.gif" alt=""/><br />
+W A I T
+</div>
+</div>
+
+
+<header id="Header" class="bca-header">
+
+<div id="ToolBar">
+<div id="ToolbarInner" class="clearfix">
+<div id="ToolMenu">
+<ul>
+<li><a href="/" class="bca-toolbar-logo"><img src="/theme/admin-third/img/admin/logo_icon.svg" alt="" width="24" height="21" class="bca-toolbar-logo-image"/><span class="bca-toolbar-logo-text">baserCMS inc.</span></a></li>
+</ul>
+</div>
+<div id="UserMenu">
+<ul class="clearfix">
+<li>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="HeaderInner" hidden>
+
+
+<div id="Logo" hidden>
+<img src="/theme/admin-third/img/admin/logo_header.png" width="153" height="30" alt="baserCMS"/>							</div>
+
+</div>
+</header>
+<div id="Wrap" class="bca-container">
+
+
+
+<main id="Contents" class="bca-main">
+
+<article id="ContentsBody" class="contents-body bca-main__body">
+
+<div class="bca-main__header">
+<h1 class="bca-main__header-title">管理システムログイン</h1>
+<div class="bca-main__header-actions">
+
+</div>
+<div class="bca-main__header-menu">
+
+
+</div>
+</div>
+
+
+
+<div id="BcMessageBox"><div id="BcSystemMessage" class="notice-message">&nbsp;</div></div>
+
+
+  <div id="UserModel" style="display:none">User</div>
+<div id="LoginCredit" style="display:none">1</div>
+<div id="Login" class="bca-login">
+
+<div id="LoginInner">
+<h1>管理システムログイン</h1>
+<div id="AlertMessage" class="message" style="display:none"></div>
+<form action="/admin/users/login" novalidate="novalidate" id="UserLoginForm" method="post" accept-charset="utf-8"><div style="display:none;"><input type="hidden" name="_method" value="POST"/><input type="hidden" name="data[_Token][key]" value="bf19bb93d742cd5613cfed34b99b16f71bb09e6a43155ed7c5169718a232b62b7aeec3efabffb205deb283b15799815057c2c1a63a3932d87cdcc178655d8fe3" id="Token389679185" autocomplete="off"/></div>			<div class="login-input bca-login-form-item">
+<label for="UserName">アカウント名</label>				<input name="data[User][name]" tabindex="1" autofocus="autofocus" maxlength="255" type="text" id="UserName" required="required"/>			</div>
+<div class="login-input bca-login-form-item">
+<label for="UserPassword">パスワード</label>				<input name="data[User][password]" tabindex="2" type="password" id="UserPassword" required="required"/>			</div>
+<div class="submit bca-login-form-btn-group">
+<button type="submit" class="bca-btn--login bca-btn" data-bca-btn-type="login" id="BtnLogin" tabindex="4">ログイン</button>			</div>
+<div class="clear login-etc bca-login-form-ctrl">
+<div class="bca-login-form-checker">
+<input type="hidden" name="data[User][saved]" id="UserSaved_" value="0"/><input type="checkbox" name="data[User][saved]" class="bca-login-form-checkbox" tabindex="3" value="1" id="UserSaved"/>					<label for="UserSaved">ログイン状態を保存する</label>				</div>
+<div class="bca-login-forgot-pass">
+<a href="/admin/users/reset_password">パスワードを忘れた場合はこちら</a>									</div>
+</div>
+<div style="display:none;"><input type="hidden" name="data[_Token][fields]" value="0da17c88b6f707074ed197f41fb489709a37a948%3A" id="TokenFields1405736785" autocomplete="off"/><input type="hidden" name="data[_Token][unlocked]" value="" id="TokenUnlocked1507615907" autocomplete="off"/></div></form>	</div>
+
+</div>
+
+<!-- / bca-main__body --></article>
+
+
+<!-- / .bca-main --></main>
+
+<!-- / #Wrap --></div>
+
+<div id="Footer" class="bca-footer" data-loggedin="false">
+  <div class="bca-footer__inner">
+    <div class="bca-footer__header">
+      <a href="/admin"><img src="/theme/admin-third/img/admin/logo_icon.svg" alt="" class="bca-footer__logo"/></a>
+      <div class="bca-footer__baser-version">baserCMS 4.1.0-dev</div>
+
+      <ul class="bca-footer__banner">
+        <li class="bca-footer__banner__item"><a href="https://basercms.net/" target="_blank" title="baserCMS Power"><img src="/theme/admin-third/img/baser.power.gif" alt="baserCMS Power"/></a></li>
+        <li class="bca-footer__banner__item"><a href="http://cakephp.jp/" target="_blank" title="CakePHP Power"><img src="/theme/admin-third/img/cake.power.gif" alt="CakePHP Power"/></a></li>
+      </ul>
+    </div>
+
+    <ul class="bca-footer__sns">
+      <li class="bca-footer__sns__item"><a href="http://www.facebook.com/basercms" target="_blank" class="bca-footer__sns__link bca-footer__sns__link--facebook">Facebook</a></li>
+      <li class="bca-footer__sns__item"><a href="http://twitter.com/basercms" target="_blank" class="bca-footer__sns__link bca-footer__sns__link--twitter">Twitter</a></li>
+    </ul>
+
+    <ul class="bca-footer__links">
+      <li class="bca-footer__links__item"><a href="https://basercms.net/" target="_blank">baserCMS 公式サイト</a></li>
+      <li class="bca-footer__links__item"><a href="http://sites.google.com/site/baserusers/" target="_blank">baserCMS ユーザー会</a></li>
+      <li class="bca-footer__links__item"><a href="http://forum.basercms.net/" target="_blank">baserCMS ユーザーズフォーラム</a></li>
+      <li class="bca-footer__links__item"><a href="http://project.e-catchup.jp/projects/basercms" target="_blank">baserCMS コア開発プロジェクト</a></li>
+    </ul>
+
+    <div class="bca-footer__copyright">Copyright (C) baserCMS Users Community 2009 - 2018 All rights reserved.</div>
+  </div>
+<!-- / #Footer --></div>
+<!-- / #Page --></div>
+
+</body>
+
+</html>

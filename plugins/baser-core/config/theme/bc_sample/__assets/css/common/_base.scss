@@ -1,0 +1,50 @@
+/**
+ * Base
+ */
+
+html {
+  @include bs-mq() {
+    position: relative;
+    width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+body {
+  text-align: center;
+  font-family: Arial, Verdana, "游ゴシック", YuGothic, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+  color: #000;
+  background-color: #fff;
+  -webkit-font-smoothing: antialiased;
+
+  @include bs-mq() {
+    position: relative;
+    width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+.bs-container {
+  text-align: left;
+  margin: 0 auto;
+  min-width: 1300px;
+
+  @include bs-mq() {
+    min-width: 100%;
+  }
+}
+
+.bs-wrap {
+  width: 1300px;
+  margin: 0 auto;
+  padding: 0 40px;
+  box-sizing: border-box;
+
+  @include bs-mq() {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 20px;
+  }
+}

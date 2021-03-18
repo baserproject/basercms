@@ -1,0 +1,64 @@
+"﻿"id"","name","value","created","modified"
+"1","name","サンプル","",""
+"2","keyword","","",""
+"3","description","","",""
+"4","address","","",""
+"5","theme","bc_sample","",""
+"6","email","","",""
+"7","widget_area","1","",""
+"8","maintenance","0","",""
+"9","mail_encode","UTF-8","",""
+"10","smtp_host","","",""
+"11","smtp_user","","",""
+"12","smtp_password","","",""
+"13","smtp_port","","",""
+"14","formal_name","サンプル","",""
+"15","admin_list_num","10","",""
+"16","google_analytics_id","","",""
+"17","content_types","YToxOntzOjk6IuODmuODvOOCuCI7czo5OiLjg5rjg7zjgrgiO30=","",""
+"18","category_permission","","",""
+"19","admin_theme","admin-third","",""
+"20","login_credit","1","",""
+"21","first_access","","",""
+"22","editor","BcCkeditor","",""
+"23","editor_styles","#青見出し
+h3 {
+color:Blue;
+}
+#赤見出し
+h3 {
+color:Red;
+}
+#黄マーカー
+span {
+background-color:Yellow;
+}
+#緑マーカー
+span {
+background-color:Lime;
+}
+#大文字
+big {}
+#小文字
+small {}
+#コード
+code {}
+#削除文
+del {}
+#挿入文
+ins {}
+#引用
+cite {}
+#インライン
+q {}","",""
+"24","editor_enter_br","0","",""
+"25","admin_side_banner","1","",""
+"26","smtp_tls","0","",""
+"27","main_site_display_name","メインサイト","",""
+"28","use_site_device_setting","0","",""
+"29","use_site_lang_setting","0","",""
+"31","google_maps_api_key","","",""
+"32","use_universal_analytics","","",""
+"33","version","","",""
+"34","contents_sort_last_modified","","",""
+"35","mail_additional_parameters","","",""

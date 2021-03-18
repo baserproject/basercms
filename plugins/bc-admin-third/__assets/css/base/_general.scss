@@ -1,0 +1,38 @@
+// old
+a {
+  color: $color_text_link;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+//
+// 要素の基本設定
+//
+//
+:root {
+  font-size: $general_root_font_size;
+  font-family: Arial, Geneva, sans-serif, "メイリオ", Verdana, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "ＭＳ Ｐゴシック";
+  color: $color_text_primary; // old
+  background: #FFF; // old
+}
+
+body {
+  min-width: 960px; // old
+  height: 100%; // old
+  line-height: 1.15; // normalize.css for bootstrap4の上書き防止
+  background-color: $color_footer;
+  @include mq(sp) {
+  	min-width: auto;
+  }
+}
+
+body * {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none;
+}

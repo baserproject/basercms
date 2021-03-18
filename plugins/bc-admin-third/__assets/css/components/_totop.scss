@@ -1,0 +1,42 @@
+/* bca-totop
+----------------------------------------------- */
+
+/* ToTop
+----------------------------------------------- */
+
+//#ToTop {
+//	text-align: right;
+//	padding-right:20px;
+//	padding-bottom:15px;
+//}
+//#ToTop a {
+//	border: 1px solid #9C0;
+//	padding: 4px 10px;
+//	text-decoration: none;
+//	font-size: 10px;
+//	color:#9C0;
+//}
+//#ToTop a:hover {
+//	background-color: #8DC71C;
+//	color: #FFF;
+//}
+
+.bca-totop {
+  display: block;
+  clear: both;
+  text-align: right;
+  margin-top: 30px;
+  padding-bottom: 15px;
+
+  a {
+    border: 1px solid $color_secondary;
+    padding: 4px 10px;
+    text-decoration: none;
+    font-size: 10px;
+    color: $color_secondary;
+    &:hover {
+      background-color: $color_secondary;
+      color: $color_lightest;
+    }
+  }
+}

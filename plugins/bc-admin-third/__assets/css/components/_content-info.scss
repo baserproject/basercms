@@ -1,0 +1,16 @@
+.bca-content-info {
+  &__title {
+    margin: 0 0 10px;
+    font-size: 1.4rem;
+  }
+  &__list {
+    margin: 0 0 30px;
+    padding: 0;
+    list-style: none;
+    //font-size: 1.6rem;
+    &-item {
+      font-size: 1.4rem;
+      line-height: 1.5;
+    }
+  }
+}

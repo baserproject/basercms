@@ -11,7 +11,6 @@
 
 namespace BaserCore\Model\Table;
 
-use Cake\ORM\Query;
 use DateTime;
 use BaserCore\Model\Entity\PasswordRequest;
 use BaserCore\Model\Entity\User;

@@ -1,0 +1,232 @@
+/* ==================================================================== */
+/*    Footer
+/* ==================================================================== */
+//
+// TODO: idにスタイルを指定しない
+//
+///* Footer
+//----------------------------------------------- */
+//#Footer{
+//}
+//#FooterInner{
+//	background-image: url(../../img/admin/bg_footer.png);
+//	background-repeat: repeat-x;
+//	background-color: #333;
+//	color: #EEE;
+//	padding: 40px 30px 60px;
+//	margin: 0;
+//	min-width:960px;
+//}
+//#FooterInner a{
+//	color: #BBB;
+//	text-decoration: none;
+//}
+//#FooterInner a:hover{
+//	color: #EEE;
+//}
+//
+///* FooterLogo
+//----------------------------------------------- */
+//
+//#FooterLogo{
+//	width: 190px;
+//	float: left;
+//	padding: 65px 0;
+//}
+//
+///* FooterLink
+//----------------------------------------------- */
+//
+//#FooterLink h2{
+//	margin-bottom:15px;
+//}
+//
+//#FooterLink li{
+///*	padding-right:30px;*/
+//	margin:5px 0;
+//	background: url(../../img/admin/blt_list_2.png) no-repeat left center;
+//	padding-left:15px;
+//	line-height:18px;
+//}
+//#FooterLink{
+//	float: left;
+//	background-image: url(../../img/admin/bg_border_2.png);
+//	background-repeat: repeat-y;
+//	padding-left:15px;
+//}
+//
+///* FooterBanner
+//----------------------------------------------- */
+//
+//#FooterBanner {
+//	padding-top:5px;
+//	margin-bottom:15px;
+//}
+//#FooterBanner li {
+//	text-align:right;
+//	padding:0px 20px;
+//}
+//#FooterBanner li img{
+//	vertical-align:bottom;
+//}
+//#FooterBanner li.lastChild{
+//   margin-top:7px;
+//}
+//
+///* BaserVersion
+//----------------------------------------------- */
+//
+//#BaserVersion {
+//	padding-right:20px;
+//	text-align:right;
+//	font-size:12px;
+//	font-family:Tahoma, Geneva, sans-serif;
+//	margin-bottom:15px;
+//}
+//
+///* Copyright
+//----------------------------------------------- */
+//
+//#Copyright {
+//	text-align:right;
+//	font-size:10px;
+//	padding-right:20px;
+//}
+.bca-footer {
+  width: 100%;
+  color: #ccc;
+  background-color: $color_footer;
+  &__inner {
+    min-width: 960px;
+    padding-top: 37px;
+    padding-bottom: 15px;
+    @include mq(sp) {
+    	min-width: auto;
+    }
+  }
+
+  // ログイン前
+  &__header {
+    text-align: center;
+  }
+  &__logo {
+    width: 82px;
+    margin-bottom: 10px;
+  }
+  &__banner {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    &__item {
+      margin: 0;
+      padding: 0;
+    }
+  }
+  &__baser-version {
+    margin-bottom: 10px;
+  }
+
+  &__banner {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 20px;
+    padding: 0;
+    list-style: none;
+    &__item {
+      margin: 0;
+      padding: 0 5px;
+    }
+  }
+
+  &__sns {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 20px;
+    padding: 0;
+    list-style: none;
+    &__item {
+      margin: 0;
+      padding: 0 5px;
+    }
+    &__link {
+      position: relative;
+      display: inline-block;
+      width: 30px;
+      height: 0px;
+      padding-top: 30px;
+      overflow: hidden;
+      font-size: 2.2rem;
+      background-color: $color_primary;
+      &:before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #fff;
+      }
+      &--facebook {
+        @include bca-icon(facebook);
+        background-color: #3F5D93;
+      }
+      &--twitter {
+        @include bca-icon(twitter);
+        background-color: #54ABED;
+      }
+    }
+  }
+
+  &__links {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 38px;
+    padding: 0;
+    list-style: none;
+    font-size: 1.2rem;
+    &__item {
+      padding: 0 1em;
+      a {
+        &:link,
+        &:visited,
+        &:active {
+          color: #ccc;
+        }
+        &:hover {
+          color: $color_primary;
+        }
+      }
+    }
+  }
+  &__copyright {
+    margin: 0;
+    text-align: center;
+  }
+
+  // ログイン後
+  &__inner--full {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    align-items: center;
+    padding: 7px 20px 7px 12px;
+    .bca-footer__main {
+      display: flex;
+      align-items: center;
+      .bca-footer__baser-version {
+        padding-right: 10px;
+        margin: 0;
+      }
+      .bca-footer__banner {
+        margin: 0;
+      }
+    }
+    .bca-footer__sub {
+    }
+  }
+}
+
+
+
+
+
+
+

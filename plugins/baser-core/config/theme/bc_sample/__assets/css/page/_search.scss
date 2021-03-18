@@ -1,0 +1,58 @@
+/**
+ * Search
+ */
+
+/* search result
+----------------------------------------------- */
+.bs-search-header {
+  font-size: 12px;
+  font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+
+  &__result-text {
+    background: #efefef;
+    padding: 10px 20px;
+    text-align: right;
+    margin-bottom: 20px;
+    border-radius: 10px;
+
+    strong {
+      font-weight: bold;
+    }
+  }
+}
+
+.bs-search-result {
+  &__item {
+    margin-bottom: 20px;
+
+    &-head {
+      background: none !important;
+      padding: 0 !important;
+      margin-bottom: 0 !important;
+
+      a:link,
+      a:visited {
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline !important;
+      }
+    }
+
+    &-body {
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+
+      strong {
+        font-weight: bold !important;
+      }
+    }
+
+    &-link {
+      margin: 0 !important;
+      text-align: right;
+      line-height: 1 !important;
+    }
+  }
+}

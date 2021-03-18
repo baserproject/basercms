@@ -11,14 +11,9 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Utility\BcUtil;
+use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Mailer\PasswordRequestMailer;
-use Cake\Core\Configure;
-use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\Event\EventInterface;
-use Cake\Routing\Router;
-use Cake\Http\Response;
 
 /**
  * Class UsersController

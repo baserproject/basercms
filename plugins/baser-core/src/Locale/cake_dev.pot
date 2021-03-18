@@ -1,0 +1,133 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: Configure/BcThemeConfigReader.php:70
+msgid "テーマの設定ファイルが存在しません : %s"
+msgstr ""
+
+#: Console/Command/BaserTestShell.php:45
+msgid "Please install PHPUnit framework <info>(http://www.phpunit.de)</info>"
+msgstr ""
+
+#: Console/Command/BaserTestShell.php:205
+msgid "Test case %s cannot be run via this shell"
+msgstr ""
+
+#: Console/Command/BaserTestShell.php:218;230;245
+msgid "Test case %s not found"
+msgstr ""
+
+#: Event/CakeEventManager.php:102
+msgid "The eventKey variable is required"
+msgstr ""
+
+#: Lib/TestSuite/Fixture/CakeFixtureManager.php:188
+msgid "Referenced fixture class %s (%s) not found"
+msgstr ""
+
+#: Lib/TestSuite/Fixture/CakeFixtureManager.php:296
+msgid "Referenced fixture class %s not found"
+msgstr ""
+
+#: Model/CakeSchema.php:634
+msgid "Schema generation error: invalid column type %s for %s.%s does not exist in DBO"
+msgstr ""
+
+#: Model/Datasource/DboSource.php:279
+msgid "Selected driver is not enabled"
+msgstr ""
+
+#: Model/Datasource/DboSource.php:1356
+msgid "Error in Model %s"
+msgstr ""
+
+#: Model/Datasource/DboSource.php:3361
+msgid "Invalid schema object"
+msgstr ""
+
+#: Model/Datasource/DboSource.php:3471
+msgid "Column name or type not defined in schema"
+msgstr ""
+
+#: Model/Datasource/DboSource.php:3476
+msgid "Column type %s does not exist"
+msgstr ""
+
+#: Network/CakeRequest.php:492
+msgid "Method %s does not exist"
+msgstr ""
+
+#: Routing/Router.php:233
+msgid "Route class not found, or route class is not a subclass of CakeRoute"
+msgstr ""
+
+#: View/Errors/fatal_error.php:19
+msgid "Fatal Error"
+msgstr ""
+
+#: View/Errors/fatal_error.php:21
+#: View/Errors/missing_action.php:19;23
+#: View/Errors/missing_connection.php:21;32
+msgid "Error"
+msgstr ""
+
+#: View/Errors/fatal_error.php:25
+msgid "File"
+msgstr ""
+
+#: View/Errors/fatal_error.php:29
+msgid "Line"
+msgstr ""
+
+#: View/Errors/fatal_error.php:33
+#: View/Errors/missing_action.php:38
+#: View/Errors/missing_connection.php:37
+msgid "Notice"
+msgstr ""
+
+#: View/Errors/fatal_error.php:34
+#: View/Errors/missing_action.php:39
+#: View/Errors/missing_connection.php:38
+msgid "If you want to customize this error message, create %s"
+msgstr ""
+
+#: View/Errors/missing_action.php:18
+msgid "Missing Method in %s"
+msgstr ""
+
+#: View/Errors/missing_action.php:20
+msgid "The action %1$s is not defined in controller %2$s"
+msgstr ""
+
+#: View/Errors/missing_action.php:24
+msgid "Create %1$s%2$s in file: %3$s."
+msgstr ""
+
+#: View/Errors/missing_connection.php:19
+msgid "Missing Database Connection"
+msgstr ""
+
+#: View/Errors/missing_connection.php:22
+msgid "A Database connection using \"%s\" was missing or unable to connect."
+msgstr ""
+
+#: View/Errors/missing_connection.php:26
+msgid "The database server returned this error: %s"
+msgstr ""
+
+#: View/Errors/missing_connection.php:33
+msgid "%s driver is NOT enabled"
+msgstr ""
+

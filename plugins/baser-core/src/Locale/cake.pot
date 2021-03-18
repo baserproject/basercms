@@ -1,0 +1,63 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: View/Helper/BcFormHelper.php:1181
+msgid "January"
+msgstr ""
+
+#: View/Helper/BcFormHelper.php:1182
+msgid "February"
+msgstr ""
+
+#: View/Helper/BcFormHelper.php:1183
+msgid "March"
+msgstr ""
+
+#: View/Helper/BcFormHelper.php:1184
+msgid "April"
+msgstr ""
+
+#: View/Helper/BcFormHelper.php:1185
+msgid "May"
+msgstr ""
+
+#: View/Helper/BcFormHelper.php:1186
+msgid "June"
+msgstr ""
+
+#: View/Helper/BcFormHelper.php:1187
+msgid "July"
+msgstr ""
+
+#: View/Helper/BcFormHelper.php:1188
+msgid "August"
+msgstr ""
+
+#: View/Helper/BcFormHelper.php:1189
+msgid "September"
+msgstr ""
+
+#: View/Helper/BcFormHelper.php:1190
+msgid "October"
+msgstr ""
+
+#: View/Helper/BcFormHelper.php:1191
+msgid "November"
+msgstr ""
+
+#: View/Helper/BcFormHelper.php:1192
+msgid "December"
+msgstr ""
+

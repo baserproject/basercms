@@ -1,0 +1,138 @@
+/* display
+----------------------------------------------- */
+
+/*.display-none {
+	display:none;
+}*/
+
+/* text
+----------------------------------------------- */
+/*
+.weight-normal {
+	font-weight: normal!important;
+}
+.weight-bold {
+	font-weight:bold!important;
+}
+.size-small {
+	font-size:small!important;
+}
+.size-smaller {
+	font-size: x-small!important;
+}
+.size-medium {
+	font-size:medium!important;
+}
+.size-large {
+	font-size:large!important;
+}
+.size-larger {
+	font-size: x-large!important;
+}*/
+.align-left {
+  text-align: left !important;
+}
+
+.align-right {
+  text-align: right !important;
+}
+
+.align-center {
+  text-align: center !important;
+}
+
+.bc-align-left {
+  text-align: left !important;
+}
+
+.bc-align-right {
+  text-align: right !important;
+}
+
+.bc-align-center {
+  text-align: center !important;
+}
+
+/* float
+----------------------------------------------- */
+
+/*.float-left {
+	float:left;
+}
+.float-right {
+	float:right;
+}
+.img-right {
+	float:right;
+	margin-left:10px;
+	margin-bottom:10px;
+}
+.img-left {
+	float:left;
+	margin-right:10px;
+	margin-bottom:10px;
+}*/
+
+/* clear
+----------------------------------------------- */
+
+/*.clear {
+	clear:both;
+}
+.clearfix:after {
+	content: " ";
+	display: block;
+	clear: both;
+	height: 0;
+}
+.clearfix {
+	display: inline-block;
+}
+.clearfix {
+	display: block;
+}*/
+
+/* 縦方向中央揃え
+----------------------------------------------- */
+
+/*.vertical-middle{
+		position: relative!important;
+}
+.vertical-middle .inner{
+		position: absolute!important;
+		top: 50%!important;
+		margin-top: -1em!important;
+}*/
+
+/*
+.required {
+	color:#C30;
+	font-size:16px;
+}
+*/
+
+// サムネイル画像用の枠
+//
+.photo {
+  padding: 5px;
+  background-color: #FFF;
+  border: 1px solid #DDD;
+}
+
+// 外部リンク用アイコン付きテキストリンク
+.outside-link {
+  background: url(../../img/admin/blt_outside_link.png) no-repeat left -1px;
+  padding-left: 18px;
+}
+
+// たぶん不必要
+/*.full-width {
+	width:100%;
+}*/
+
+#vakata-dnd {
+	background-color:#fff;
+	div {
+		padding-right:14px!important;
+	}
+}

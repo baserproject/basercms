@@ -1,0 +1,11 @@
+.bca-icon--mail::before {
+    content: "\f0e0";
+    font-weight: 400;
+    font-family: 'Font Awesome 5 Free';
+}
+.jstree-proton .bca-icon--mail {
+    color:#7faa00;
+}
+.jstree-proton-contextmenu .bca-icon--mail {
+    color:#7faa00;
+}

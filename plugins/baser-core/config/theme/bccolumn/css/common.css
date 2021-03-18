@@ -1,0 +1,242 @@
+@charset "utf-8";
+/* reset
+-------------------- */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-style: normal;
+  font-weight: normal;
+  vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+
+/*input, textarea {*/
+  /*margin: 0;*/
+  /*padding: 0;*/
+/*}*/
+
+input[type=text], textarea, select, input[type=password] {
+	margin:3px 2px;
+	padding: 3px 1px;
+	border:1px solid #ccc;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	background-color:#fff;
+}
+input[type=checkbox] {
+	vertical-align: middle;
+}
+input[type=radio],
+input[type=checkbox] {
+	margin-left:5px;
+	margin-right:5px;
+}
+input[type=text], textarea, input[type=password] {
+	font-size: 1.3em;
+	padding: 3px 3px;
+}
+textarea {
+	width:95%;
+}
+input[type=text], input[type=password] {
+	line-height: 1.3em;
+}
+select {
+	font-size: 1.2em;
+}
+select {
+	padding: 1px;
+}
+optgroup option{
+	padding-left:20px;
+}
+
+a:focus {
+  outline: none;
+}
+
+/* clearfix
+-------------------- */
+.clearfix:after {
+  content: ".";
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+
+.clearfix {
+  min-height: 1px;
+}
+
+* html .clearfix {
+  height: 1px;
+  /*¥*/
+  /*/
+  height: auto;
+  overflow: hidden;
+  /**/
+}
+
+.both {
+  clear: both;
+}
+
+.inline-block {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+
+/* universal
+-------------------- */
+html {
+  width: 100%;
+  color: #000;
+  font-size: 62.5%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+body {
+  width: 100%;
+  font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", Verdana, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+body > div#Wrapper {
+  font-size: 14px;
+  color: #333;
+}
+
+/* hypertext
+-------------------- */
+a {
+  color: #0099CC;
+  text-decoration: underline;
+}
+a:visited {
+}
+a:hover {
+  color: #82D0EC;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+}
+a:active {
+  color: #0099CC;
+}
+
+/* text
+-------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+}
+
+p {
+  line-height: 1.8;
+}
+p b {
+  font-family: "ヒラギノ角ゴ Pro W6", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", Verdana, Arial, sans-serif;
+  font-weight: bold;
+}
+strong {
+  font-family: "ヒラギノ角ゴ Pro W6", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", Verdana, Arial, sans-serif;
+  font-weight: bold;
+}
+
+/* list tag
+-------------------- */
+ul, ol, dt, dd {
+  list-style: none;
+}
+
+/* table tag
+-------------------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  box-sizing: border-box;
+}
+table tr th {
+  text-align: left;
+}
+
+/* image
+-------------------- */
+img {
+  max-width: 100%;
+  height:auto;
+  border: 0;
+  vertical-align: bottom;
+}
+
+#Contents a:hover img:not([class="Over"]) {
+  filter: alpha(opacity=70);
+  opacity: 0.7;
+}
+@media screen and (max-width: 640px){
+    
+    #Contents a:hover img:not([class="Over"]) {
+      filter: alpha(opacity=100);
+      opacity: 1;
+    }
+    
+}
+
+/* layout
+-------------------- */
+.forPC {
+  display: block;
+}
+
+.forSP {
+  display: none;
+}
+
+@media screen and (max-width: 640px){
+
+	.forPC {
+	  display: none;
+	}
+	
+	.forSP {
+	  display: block;
+	}
+	
+}

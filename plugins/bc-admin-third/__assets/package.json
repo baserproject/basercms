@@ -1,0 +1,33 @@
+{
+  "name": "basercms4-theme",
+  "version": "1.0.0",
+  "private": true,
+  "description": "baserCMS4 Theme",
+  "author": "baserCMS Users Community",
+  "license": "MIT",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "scripts": {
+    "build": "gulp",
+    "dev": "gulp watch",
+    "guide": "gulp guide",
+    "capt": "node ./script/scraper/traversal"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.2.5",
+    "browser-sync": "2.23.5",
+    "gulp": "^3.9.1",
+    "gulp-plumber": "^1.2.0",
+    "gulp-postcss": "^7.0.1",
+    "gulp-sass": "^3.1.0",
+    "gulp-sceg": "^0.6.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "puppeteer": "^1.0.0",
+    "run-sequence": "^2.2.1",
+    "stylelint": "^8.4.0"
+  },
+  "dependencies": {
+    "normalize.css": "^7.0.0"
+  }
+}

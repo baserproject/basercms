@@ -1,0 +1,493 @@
+//
+// # アイコン
+//
+@import '../../vender/Font-Awesome/fontawesome';
+@import '../../vender/Font-Awesome/solid';
+@import '../../vender/Font-Awesome/brands';
+@import '../../vender/Font-Awesome/regular';
+
+
+/**
+ *
+ * 左ナビ
+ *
+ */
+
+// ダッシュボード
+$bca-icon--dashboard: $fa-var-home;
+// コンテンツ管理
+$bca-icon--contents: $fa-var-sitemap;
+// 設定
+$bca-icon--system: $fa-var-cog;
+
+
+
+/**
+ *
+ * 左ナビ（設定）
+ *
+ */
+
+// サイト基本設定
+$bca-icon--siteconfigs: $fa-var-bars;
+// ユーザー管理
+$bca-icon--users: $fa-var-user;
+// サブサイト管理
+$bca-icon--sites: $fa-var-id-card;
+// テーマ管理
+$bca-icon--theme: $fa-var-paint-brush;
+// プラグイン管理
+$bca-icon--plugin: $fa-var-plug;
+// ユーティリティ
+$bca-icon--tools: $fa-var-wrench;
+
+
+/**
+ *
+ * ボタンアイコン
+ *
+ */
+
+// 公開
+$bca-icon--publish: $fa-var-play-circle;
+// 非公開
+$bca-icon--unpublish: $fa-var-pause-circle;
+// 確認
+$bca-icon--preview: $fa-var-eye;
+// 編集
+$bca-icon--edit: $fa-var-pencil-alt;
+// 複製
+$bca-icon--copy: $fa-var-copy;
+// 削除
+$bca-icon--delete: $fa-var-trash-alt;
+// 一覧
+$bca-icon--th-list: $fa-var-th-list;
+// 一覧に戻る
+$bca-icon--back-to-list: $fa-var-chevron-left;
+// お気に入り
+$bca-icon--favorite: $fa-var-heart;
+// メニューアイテム
+$bca-icon--menuitem: $fa-var-angle-right;
+// 追加
+$bca-icon--add: $fa-var-plus-circle;
+// ヘルプ
+$bca-icon--help: $fa-var-question-circle;
+// // ヘルプ（浮き輪）
+// 'rescue: $fa-var-life-ring;
+// 制限（鍵)
+$bca-icon--permission: $fa-var-lock;
+// 適用
+$bca-icon--apply: $fa-var-check-square;
+// HOME
+$bca-icon--home: $fa-var-home;
+// ログイン（切り替え）
+$bca-icon--switch: $fa-var-sign-in-alt;
+// 開く
+$bca-icon--open: $fa-var-folder-open;
+// テキストコピー
+$bca-icon--textcopy: $fa-var-paste;
+// ダウンロード
+$bca-icon--download: $fa-var-download;
+// ドラッグ可能
+$bca-icon--draggable: $fa-var-arrows-alt-v;
+// フォルダ
+$bca-icon--folder: $fa-var-folder;
+// フォルダ（オープン）
+$bca-icon--folder-open: $fa-var-folder-open;
+// ファイル
+$bca-icon--file: $fa-var-file;
+// 1階層上に戻る
+$bca-icon--up-directory: $fa-var-arrow-up;
+// 矢印　右
+$bca-icon--arrow-right: $fa-var-arrow-right;
+// 矢印　左
+$bca-icon--arrow-left: $fa-var-arrow-left;
+// 矢印　上
+$bca-icon--arrow-up: $fa-var-arrow-up;
+// 矢印　下
+$bca-icon--arrow-down: $fa-var-arrow-down;
+// ファイルリスト
+$bca-icon--file-list: $fa-var-file-alt;
+// アップデート
+$bca-icon--update: $fa-var-sync;
+// 設定
+$bca-icon--setting: $fa-var-cog;
+// 検索
+$bca-icon--search: $fa-var-search;
+// クリア
+$bca-icon--clear: $fa-var-sync;
+// 名称変更
+$bca-icon--rename: $fa-var-i-cursor;
+// もとに戻す
+$bca-icon--undo: $fa-var-undo;
+// もとに戻す
+$bca-icon--ban: $fa-var-ban;
+// リンク
+$bca-icon--link: $fa-var-link;
+// エイリアス
+$bca-icon--alias: $fa-var-external-link-square-alt;
+// 機能ボタン
+$bca-icon--ellipsis-h: $fa-var-ellipsis-h;
+
+/**
+ *
+ * フォーム関連
+ *
+ */
+
+// datetimepicker（日付）
+$bca-icon--datetimepicker-date: $fa-var-calendar;
+// datetimepicker（時刻）
+$bca-icon--datetimepicker-time: $fa-var-clock;
+
+
+
+/**
+ *
+ * リスト関連
+ *
+ */
+
+// デフォルト
+$bca-icon--list-default: $fa-var-angle-right;
+// 丸
+$bca-icon--list-circle: $fa-var-circle;
+
+
+
+/**
+ *
+ * エラー / アラート表示
+ *
+ */
+
+// エラー
+$bca-icon--error: $fa-var-exclamation-triangle;
+// アラート
+$bca-icon--alert: $fa-var-exclamation-triangle;
+// 注意
+$bca-icon--notification: $fa-var-info-circle;
+
+
+
+/**
+ *
+ * SNS
+ *
+ */
+
+// Facebook
+$bca-icon--facebook: $fa-var-facebook-f;
+// Twitter
+$bca-icon--twitter: $fa-var-twitter;
+
+
+
+// 次
+$bca-icon--next: $fa-var-angle-right;
+// 前
+$bca-icon--back: $fa-var-angle-left;
+// 矢印　三角上
+$bca-icon--asc: $fa-var-caret-up;
+// 矢印　三角下
+$bca-icon--desc: $fa-var-caret-down;
+
+
+// 下矢印
+$bca-icon--chevron-down: $fa-var-chevron-down;
+
+
+// 一覧
+$bca-icon--list: $fa-var-list-ul;
+// プラス
+$bca-icon--plus-square: $fa-var-plus-square;
+//
+$bca-icon--question-circle: $fa-var-question-circle;
+// マイナス
+$bca-icon--minus-square: $fa-var-minus-square;
+// ブックマーク
+$bca-icon--bookmark: $fa-var-bookmark;
+// 地球
+$bca-icon--globe: $fa-var-globe-americas;
+// ファイル
+$bca-icon--file: $fa-var-file;
+
+$bca-icon--mail: $fa-var-envelope;
+
+
+// -------------------------------------------------
+
+@mixin bca-icon-base($icon) {
+  &::before {
+    @extend .#{$fa-css-prefix};
+    content: fa-content($icon);
+    @content;
+  }
+}
+@mixin bca-icon($id) {
+  @extend %bca-icon--#{$id};
+  &::before {
+    font-size: 95%;
+    font-stretch: normal;
+    margin: 0 .3em 0 0;
+    @content;
+  }
+}
+%bca-icon {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Font Awesome 5 Free';
+  font-size: 95%;
+  font-style: normal;
+  font-stretch: normal;
+
+  &--dashboard {
+    @include bca-icon-base($bca-icon--dashboard);
+  }
+  &--contents {
+    @include bca-icon-base($bca-icon--contents);
+  }
+  &--system {
+    @include bca-icon-base($bca-icon--system);
+  }
+  &--siteconfigs {
+    @include bca-icon-base($bca-icon--siteconfigs);
+  }
+  &--users {
+    @include bca-icon-base($bca-icon--users) {
+      @extend %far;
+    }
+  }
+  &--sites {
+    @include bca-icon-base($bca-icon--sites) {
+      @extend %far;
+    }
+  }
+  &--theme {
+    @include bca-icon-base($bca-icon--theme);
+  }
+  &--plugin {
+    @include bca-icon-base($bca-icon--plugin);
+  }
+  &--tools {
+    @include bca-icon-base($bca-icon--tools);
+  }
+  &--publish {
+    @include bca-icon-base($bca-icon--publish) {
+      @extend %far;
+    }
+  }
+  &--unpublish {
+    @include bca-icon-base($bca-icon--unpublish) {
+      @extend %far;
+    }
+  }
+  &--preview {
+    @include bca-icon-base($bca-icon--preview) {
+      @extend %far;
+    }
+  }
+  &--edit {
+    @include bca-icon-base($bca-icon--edit);
+  }
+  &--copy {
+    @include bca-icon-base($bca-icon--copy) {
+      @extend %far;
+    }
+  }
+  &--delete {
+    @include bca-icon-base($bca-icon--delete) {
+      @extend %far;
+    }
+  }
+  &--ban {
+    @include bca-icon-base($bca-icon--ban) {
+      @extend %far;
+    }
+  }
+  &--undo {
+    @include bca-icon-base($bca-icon--undo) {
+      @extend %far;
+    }
+  }
+  &--rename {
+    @include bca-icon-base($bca-icon--rename);
+  }
+  &--link {
+    @include bca-icon-base($bca-icon--link);
+  }
+  &--alias {
+    @include bca-icon-base($bca-icon--alias);
+  }
+  &--th-list {
+    @include bca-icon-base($bca-icon--th-list);
+  }
+  &--back-to-list {
+    @include bca-icon-base($bca-icon--back-to-list);
+  }
+  &--favorite {
+    @include bca-icon-base($bca-icon--favorite);
+  }
+  &--menuitem {
+    @include bca-icon-base($bca-icon--menuitem);
+  }
+  &--add {
+    @include bca-icon-base($bca-icon--add);
+  }
+  &--help {
+    @include bca-icon-base($bca-icon--help);
+  }
+  &--permission {
+    @include bca-icon-base($bca-icon--permission);
+  }
+  &--apply {
+    @include bca-icon-base($bca-icon--apply) {
+      @extend %far;
+    }
+  }
+  &--home {
+    @include bca-icon-base($bca-icon--home);
+  }
+  &--switch {
+    @include bca-icon-base($bca-icon--switch);
+  }
+  &--open {
+    @include bca-icon-base($bca-icon--open);
+  }
+  &--textcopy {
+    @include bca-icon-base($bca-icon--textcopy);
+  }
+  &--download {
+    @include bca-icon-base($bca-icon--download);
+  }
+  &--draggable {
+    @include bca-icon-base($bca-icon--draggable);
+  }
+  &--folder {
+    @include bca-icon-base($bca-icon--folder);
+  }
+  &--folder-open {
+    @include bca-icon-base($bca-icon--folder-open);
+  }
+  &--file {
+    @include bca-icon-base($bca-icon--file) {
+      @extend %far;
+    }
+  }
+  &--up-directory {
+    @include bca-icon-base($bca-icon--up-directory);
+  }
+  &--arrow-right {
+    @include bca-icon-base($bca-icon--arrow-right);
+  }
+  &--arrow-left {
+    @include bca-icon-base($bca-icon--arrow-left);
+  }
+  &--arrow-up {
+    @include bca-icon-base($bca-icon--arrow-up);
+  }
+  &--arrow-down {
+    @include bca-icon-base($bca-icon--arrow-down);
+  }
+  &--file-list {
+    @include bca-icon-base($bca-icon--file-list);
+  }
+  &--file {
+    @include bca-icon-base($bca-icon--file);
+  }
+  &--update {
+    @include bca-icon-base($bca-icon--update);
+  }
+  &--setting {
+    @include bca-icon-base($bca-icon--setting);
+  }
+  &--search {
+    @include bca-icon-base($bca-icon--search);
+  }
+  &--clear {
+    @include bca-icon-base($bca-icon--clear);
+  }
+  &--datetimepicker-date {
+    @include bca-icon-base($bca-icon--datetimepicker-date) {
+      @extend %far;
+    }
+  }
+  &--datetimepicker-time {
+    @include bca-icon-base($bca-icon--datetimepicker-time) {
+      @extend %far;
+    }
+  }
+  &--list-default {
+    @include bca-icon-base($bca-icon--list-default);
+  }
+  &--list-circle {
+    @include bca-icon-base($bca-icon--list-circle);
+  }
+  &--error {
+    @include bca-icon-base($bca-icon--error);
+  }
+  &--alert {
+    @include bca-icon-base($bca-icon--alert);
+  }
+  &--notification {
+    @include bca-icon-base($bca-icon--notification);
+  }
+  &--facebook {
+    @include bca-icon-base($bca-icon--facebook) {
+      @extend %fab;
+    }
+  }
+  &--twitter {
+    @include bca-icon-base($bca-icon--twitter) {
+      @extend %fab;
+    }
+  }
+  &--next {
+    @include bca-icon-base($bca-icon--next);
+  }
+  &--back {
+    @include bca-icon-base($bca-icon--back);
+  }
+  &--asc {
+    @include bca-icon-base($bca-icon--asc);
+  }
+  &--desc {
+    @include bca-icon-base($bca-icon--desc);
+  }
+  &--chevron-down {
+    @include bca-icon-base($bca-icon--chevron-down);
+  }
+  &--list {
+    @include bca-icon-base($bca-icon--list);
+  }
+  &--plus-square {
+    @include bca-icon-base($bca-icon--plus-square);
+  }
+  &--question-circle {
+    @include bca-icon-base($bca-icon--question-circle);
+  }
+  &--minus-square {
+    @include bca-icon-base($bca-icon--minus-square);
+  }
+  &--bookmark {
+    @include bca-icon-base($bca-icon--bookmark);
+  }
+  &--globe {
+    @include bca-icon-base($bca-icon--globe);
+  }
+  &--ellipsis-h {
+    @include bca-icon-base($bca-icon--ellipsis-h);
+  }
+  &--mail {
+    @include bca-icon-base($bca-icon--mail);
+  }
+}
+%far {
+  font-weight: 400;
+}
+%fas {
+  font-weight: 900;
+}
+%fab {
+  font-family: 'Font Awesome 5 Brands';
+}

@@ -1,0 +1,255 @@
+/**
+ * Sub
+ */
+
+/* Sub Contents
+----------------------------------------------- */
+
+.bs-sub-contents {
+  float: right;
+  width: 240px;
+  padding: 49px 60px 100px 60px;
+
+  h2 {
+    font-weight: bold;
+  }
+
+  @include bs-mq() {
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px 0 0 0;
+    border-top: 1px solid #ddd;
+  }
+}
+
+#Home .bs-sub-contents {
+  padding: 100px 60px !important;
+  @include bs-mq() {
+    float: none;
+    padding: 40px 0 0 0 !important;
+    border-top: 1px solid #ddd;
+  }
+}
+
+/* Widget Area
+----------------------------------------------- */
+
+.bs-widget-area {
+  font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+
+  .bs-widget {
+    margin-bottom: 60px;
+  }
+
+  h2 {
+    &:nth-of-type(1) {
+      padding-top: 0;
+    }
+
+    font-weight: bold;
+    font-size: 20px;
+    padding: 10px 0 10px 0;
+    margin: 0;
+  }
+
+  ul {
+    padding: 0;
+    margin: 0 0 36px 0;
+    line-height: 1.6;
+    letter-spacing: .05rem;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    li {
+      font-size: 14px;
+      list-style-position: inside;
+      position: relative;
+      padding: 0 0 0 25px;
+      margin: 0.5em 0 0.5em 0;
+      list-style-type: none;
+      overflow: hidden;
+
+      a {
+        zoom: 1;
+        color: #000;
+
+        &:hover {
+          text-decoration: none;
+          color: #555 !important;
+        }
+      }
+
+      &:before {
+        display: block;
+        content: '';
+        position: absolute;
+        top: 9px;
+        left: 1px;
+        width: 6px;
+        height: 6px;
+        background: #181818;
+        border-radius: 50%;
+      }
+    }
+
+    ul {
+      margin: 0 0 0 1.8em;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+/* Widget Text
+----------------------------------------------- */
+
+.bs-widget-text {
+  ul {
+    margin: 0;
+    border-top: 1px solid #ddd;
+    padding-left: 0;
+
+    li {
+      font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+      font-size: 14px;
+      padding: 0;
+      border-bottom: 1px solid #ddd;
+      line-height: 25px;
+      list-style: none;
+
+      a {
+        padding: 10px 22px;
+        transition: all 300ms;
+        display: block;
+        color: #000;
+        text-decoration: none;
+        @include bs-mq() {
+          text-align: center;
+        }
+
+        &:hover {
+          color: #555;
+        }
+      }
+    }
+  }
+}
+
+/* Widget Local Navigation
+----------------------------------------------- */
+
+.bs-widget-local-navi {
+  h2 {
+    font-size: 14px;
+    background-color: #001800;
+    color: #fff;
+    padding: 22px 22px !important;
+    margin: 0;
+  }
+
+  ul {
+    border-top: 1px solid #ddd;
+    margin: 0;
+    padding: 0;
+
+    li {
+      font-size: 14px;
+      padding: 0;
+      border-bottom: 1px solid #ddd;
+      line-height: 25px;
+      list-style: none;
+
+      a {
+        padding: 10px 22px;
+        transition: all 300ms;
+        display: block;
+        color: #000;
+        text-decoration: none;
+
+        &:hover {
+          color: #555;
+        }
+      }
+
+      &:before {
+        content: none;
+      }
+    }
+  }
+}
+
+/* Widget Blog Calendar
+----------------------------------------------- */
+
+.bs-widget-blog-calendar {
+  table {
+    width: 100%;
+
+    center {
+      font-weight: bold;
+      font-size: 14px;
+      a {
+        display: inline-block!important;
+      }
+    }
+
+    th {
+      border-bottom: 1px solid #e2e2e2;
+    }
+
+    th,
+    td {
+      padding: 2px 5px;
+      font-size: 12px;
+      text-align: center;
+
+      a {
+        transition: all 300ms;
+        display: block;
+        color: #000;
+
+        &:hover {
+          text-decoration: none;
+          color: #555;
+        }
+      }
+    }
+
+    .sunday {
+      color: #ab350e;
+    }
+
+    .saturday {
+      color: #4a61a9;
+    }
+
+    .today {
+      background-color: #e2e2e2;
+    }
+  }
+}
+
+/* Widget Site Search
+----------------------------------------------- */
+.bs-widget-search-box {
+  label {
+    font-size: 12px;
+  }
+
+  input,
+  select {
+    font-size: 14px;
+  }
+
+  select {
+    width: 100%;
+  }
+
+  input[name=q] {
+    width: 142px;
+  }
+}

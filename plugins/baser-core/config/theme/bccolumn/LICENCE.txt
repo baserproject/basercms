@@ -1,0 +1,6 @@
+小桃クリップ : baserCMS Theme
+Copyright 2015, bc themes. <https://komomo.biz/>
+
+About License
+Licensed under the baserマーケット標準販売ライセンス
+https://market.basercms.net/files/baser_market_license.pdf

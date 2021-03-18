@@ -1,0 +1,81 @@
+<!--
+	# フォーム系 datepicker
+	@parts
+	フォーム系 datepicker
+-->
+
+<span class="bca-datetimepicker">
+  <span class="bca-datetimepicker__date">
+    <label for="DateSample1" class="bca-datetimepicker__date-label">日付</label>
+    <input name="" size="12" maxlength="10" class="bca-datetimepicker__date-input hasDatepicker" type="text" id="DateSample1">
+    <script type="text/javascript">
+    <!--
+    jQuery(function($){
+      $("#DateSample1").datepicker();
+    });
+    //-->
+    </script>
+  </span>
+  <span class="bca-datetimepicker__time">
+    <label for="DateSample2" class="bca-datetimepicker__time-label">時間</label>
+    <input name="" size="8" maxlength="8" class="bca-datetimepicker__time-input ui-timepicker-input" type="text" id="DateSample2" autocomplete="off">
+  </span>
+</span>
+
+<h3>▼開始〜終了</h3>
+<span class="bca-datetimepicker__group">
+  <span class="bca-datetimepicker__start">
+    <span class="bca-datetimepicker">
+      <span class="bca-datetimepicker__date">
+        <label for="BlogPostPublishBeginDate" class="bca-datetimepicker__date-label">開始日付</label>
+        <input name="data[BlogPost][publish_begin_date]" size="12" maxlength="10" class="bca-datetimepicker__date-input hasDatepicker" type="text" id="BlogPostPublishBeginDate">
+        <script type="text/javascript">
+        <!--
+        jQuery(function($){
+          $("#BlogPostPublishBeginDate").datepicker();
+        });
+        //-->
+        </script>
+      </span>
+      <span class="bca-datetimepicker__time">
+        <label for="BlogPostPublishBeginTime" class="bca-datetimepicker__time-label">開始時間</label>
+        <input name="data[BlogPost][publish_begin_time]" size="8" maxlength="8" class="bca-datetimepicker__time-input ui-timepicker-input" type="text" id="BlogPostPublishBeginTime" autocomplete="off">
+      </span>
+      <input type="hidden" name="data[BlogPost][publish_begin]" id="BlogPostPublishBegin">
+    </span>
+  </span>
+
+  <span class="bca-datetimepicker__delimiter">〜</span>
+
+  <span class="bca-datetimepicker__end">
+    <span class="bca-datetimepicker">
+      <span class="bca-datetimepicker__date">
+        <label for="BlogPostPublishEndDate" class="bca-datetimepicker__date-label">終了日付</label>
+        <input name="data[BlogPost][publish_end_date]" size="12" maxlength="10" class="bca-datetimepicker__date-input hasDatepicker" type="text" id="BlogPostPublishEndDate">
+        <script type="text/javascript">
+        <!--
+        jQuery(function($){
+          $("#BlogPostPublishEndDate").datepicker();
+        });
+        //-->
+        </script>
+      </span>
+      <span class="bca-datetimepicker__time">
+        <label for="BlogPostPublishEndTime" class="bca-datetimepicker__time-label">終了時間</label>
+        <input name="data[BlogPost][publish_end_time]" size="8" maxlength="8" class="bca-datetimepicker__time-input ui-timepicker-input" type="text" id="BlogPostPublishEndTime" autocomplete="off">
+      </span>
+      <input type="hidden" name="data[BlogPost][publish_end]" id="BlogPostPublishEnd">
+    </span>
+  </span>
+</span>
+
+
+<span class="bca-datepicker__begin">
+  <input name="data[BlogPost][publish_begin_date]" class="bca-datepicker__begin__date hasDatepicker" …>
+  <input name="data[BlogPost][publish_begin_time]" class="bca-datepicker__begin__date__time ui-timepicker-input" …>
+</span>
+<span class="bca-datepicker__delimiter">〜</span>
+<span class="bca-datepicker__end">
+  <input name="data[BlogPost][publish_end_date]" class="bca-datepicker__end__date hasDatepicker">
+  <input name="data[BlogPost][publish_end_time]" class="bca-datepicker__end__date__time ui-timepicker-input">
+</span>

@@ -1,0 +1,341 @@
+/**
+ * BurgerEditor StyleSheet Style
+ */
+
+.bgt-box__caption {
+  text-align: left;
+  font-weight: normal;
+  padding: 3px;
+  background: none;
+  font-size: 0.8em;
+}
+
+.bgt-btn {
+  appearance: none;
+  display: inline-block;
+  vertical-align: middle;
+  padding: 12px 10px;
+  border-width: 1px;
+  border-style: solid;
+  background: #fff;
+  text-decoration: none;
+  min-width: 280px;
+  border-radius: 2px;
+
+  &:active,
+  &:focus {
+    box-shadow: 0 0 10px 0 $btnGlowColor, 0 0 10px 0 #fff;
+  }
+}
+
+.bgt-btn--link /* 旧セレクタ */
+,
+[data-bgt-button-kind='link'] .bgt-btn /* 新セレクタ */
+{
+  $color: #333;
+  $bColor: #ccc;
+  $bgColor: #fff;
+  $bgColorHover: #e9e9e9;
+  color: $color;
+  border-color: $bColor;
+  background: $bgColor;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: $bgColorHover;
+  }
+}
+
+.bgt-btn--em /* 旧セレクタ */
+,
+[data-bgt-button-kind='em'] .bgt-btn /* 新セレクタ */
+{
+  $color: #fff;
+  $bColor: #333;
+  $bgColor: #333;
+  $bgColorHover: #555;
+  font-weight: bold;
+  color: $color;
+  border-color: $bColor;
+  background: $bgColor;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: $bgColorHover;
+  }
+}
+
+.bgt-btn--external /* 旧セレクタ */
+,
+[data-bgt-button-kind='external'] .bgt-btn /* 新セレクタ */
+{
+  $color: #333;
+  $bColor: #ccc;
+  $bgColor: #fff;
+  $bgColorHover: #e9e9e9;
+  color: $color;
+  border-color: $bColor;
+  background: $bgColor;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: $bgColorHover;
+  }
+
+  &::after {
+    @include bge-icon;
+    content: '\f08e';
+    font-size: 1em;
+    color: #999;
+    vertical-align: middle;
+  }
+}
+
+.bgt-btn--back /* 旧セレクタ */
+,
+[data-bgt-button-kind='back'] .bgt-btn /* 新セレクタ */
+{
+  $color: #333;
+  $bColor: #ddd;
+  $bgColor: #ddd;
+  $bgColorHover: #e9e9e9;
+  color: $color;
+  border-color: $bColor;
+  background: $bgColor;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: $bgColorHover;
+  }
+
+  span {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  &::before {
+    @include bge-icon;
+    content: '\f053';
+    font-size: 1em;
+    margin-top: -2px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+.bgt-hr {
+  margin: 0 auto;
+}
+
+[data-bgt-hr-kind='dashed'] .bgt-hr {
+  height: 0;
+  border: none;
+  background: none;
+  border-bottom: 2px dashed currentColor;
+}
+
+.bgt-hr--bold /* 旧セレクタ */
+,
+[data-bgt-hr-kind='bold'] .bgt-hr /* 新セレクタ */
+{
+  height: 5px;
+}
+
+.bgt-hr--narrow /* 旧セレクタ */
+,
+[data-bgt-hr-kind='narrow'] .bgt-hr /* 新セレクタ */
+{
+  height: 1px;
+}
+
+.bgt-hr--short /* 旧セレクタ */
+,
+[data-bgt-hr-kind='short'] .bgt-hr /* 新セレクタ */
+{
+  width: 60%;
+  height: 1px;
+}
+
+.bgt-download-file__link {
+  color: #333;
+  text-align: left;
+  font-size: 1.08em;
+  font-weight: bold;
+  display: inline-block;
+  padding: 0.7em 1em;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: #fff;
+  line-height: 1;
+  text-decoration: none;
+
+  &:hover {
+    background-color: #eee;
+  }
+
+  &:active,
+  &:focus {
+    box-shadow: 0 0 5px 1px $btnGlowColor;
+    outline: none;
+  }
+}
+
+.bgt-link__size {
+  color: #808080;
+  font-size: 0.8em;
+  font-weight: normal;
+}
+
+.bgt-google-maps-link {
+  @media screen and (max-width: $breakPoint) {
+    margin-top: 10px;
+    padding: 1em;
+    text-decoration: none;
+    color: #333;
+    border: solid 1px #999;
+    border-radius: 3px;
+    text-align: center;
+
+    span {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    &::after {
+      @include bge-icon;
+      content: '\f08e';
+      font-size: 1em;
+      vertical-align: middle;
+    }
+  }
+}
+
+[data-bgt='gallery'] {
+  $thumb-size: 60px;
+
+  .bgt-gallery {
+    padding-top: 54%;
+
+    &:hover &-ctrl {
+      opacity: 1;
+    }
+
+    &__img {
+      img {
+        object-fit: cover;
+      }
+    }
+
+    &__caption {
+      color: #fff;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 0.7em 1em;
+      text-align: center;
+    }
+
+    &-ctrl {
+      top: 50%;
+      opacity: 0;
+      transition: opacity 200ms ease-in;
+
+      &__prev,
+      &__next {
+        display: block;
+        appearance: none;
+        margin: -20px 0 0;
+        padding: 0;
+        background: none;
+        border: none;
+        transform-origin: center center;
+
+        &:hover {
+          opacity: 0.5;
+        }
+
+        &:focus {
+          outline: none;
+        }
+
+        span {
+          display: block;
+          overflow: hidden;
+          width: 0;
+          height: 0;
+        }
+
+        &::after {
+          content: '';
+          display: block;
+          width: 40px;
+          height: 40px;
+          border: solid #fff;
+          border-width: 5px 5px 0 0;
+        }
+      }
+
+      &__prev {
+        left: 20px;
+        transform: rotate(-135deg);
+      }
+
+      &__next {
+        right: 20px;
+        transform: rotate(45deg);
+      }
+    }
+  }
+
+  [data-gallery-marker='thumbs'] {
+    + .bgt-gallery-marker {
+      margin-top: 10px;
+
+      li {
+        margin: 0 5px;
+        width: $thumb-size;
+        height: $thumb-size;
+      }
+    }
+  }
+
+  [data-gallery-marker='dot'] {
+    + .bgt-gallery-marker {
+      margin-top: 10px;
+
+      li {
+        margin: 0 2px;
+        width: 10px;
+        height: 10px;
+        background-color: #999;
+        border-radius: 100%;
+
+        &.current {
+          background-color: #000;
+        }
+
+      }
+    }
+  }
+}
+
+/* デバイス依存汎用クラス */
+.pc-only {
+  display: block;
+
+  @media screen and (max-width: $breakPoint) {
+    display: none;
+  }
+}
+
+.sp-only {
+  display: none;
+
+  @media screen and (max-width: $breakPoint) {
+    display: block;
+  }
+}
+

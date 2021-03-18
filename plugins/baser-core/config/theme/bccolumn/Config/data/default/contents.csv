@@ -1,0 +1,15 @@
+﻿id,name,plugin,type,entity_id,url,site_id,alias_id,main_site_content_id,parent_id,lft,rght,level,title,description,eyecatch,author_id,layout_template,status,publish_begin,publish_end,self_status,self_publish_begin,self_publish_end,exclude_search,created_date,modified_date,site_root,deleted_date,deleted,exclude_menu,blank_link,created,modified
+1,,Core,ContentFolder,1,/,0,,,,1,28,0,baserCMS inc.,,,1,default,1,,,1,,,,,,1,,,,,2016-11-26 16:31:56,
+2,m,Core,ContentFolder,2,/m/,1,,,1,2,3,1,baserCMS inc.｜ケータイ,,,1,default,,,,,,,,,,1,,,,,2016-11-26 16:31:56,
+3,s,Core,ContentFolder,3,/s/,2,,,1,4,5,1,baserCMS inc.｜スマホ,,,1,default,,,,,,,,,,1,,,,,2016-11-26 16:31:56,
+4,index,Core,Page,1,/index,0,,,1,6,7,1,トップページ,,,1,,1,,,1,,,,2016-07-29 17:26:25,2016-11-26 18:47:08,,,,,,2016-11-26 16:31:56,2016-11-26 18:47:31
+5,concept,Core,ContentFolder,4,/concept/,0,,,1,10,19,1,このテーマについて,,,1,,1,,,1,,,,2016-07-29 17:27:39,,,,,,,2016-11-26 16:31:56,
+6,index,Core,Page,2,/concept/index,0,,,5,11,12,2,このテーマについて,,,1,,1,,,1,,,,2016-07-29 17:28:32,,,,,,,2016-11-26 16:31:56,
+7,left,Core,Page,3,/concept/left,0,,,5,13,14,2,左サイド2カラム,,,1,left_column,1,,,1,,,,2016-07-29 17:28:54,,,,,,,2016-11-26 16:31:56,
+8,right,Core,Page,4,/concept/right,0,,,5,15,16,2,右サイド2カラム,,,1,right_column,1,,,1,,,,2016-07-29 17:29:14,2016-09-21 18:48:00,,,,,,2016-11-26 16:31:56,
+9,parts,Core,Page,5,/concept/parts,0,,,5,17,18,2,1カラム(パーツ一覧),,,1,,1,,,1,,,,2016-07-29 17:29:39,,,,,,,2016-11-26 16:31:56,
+10,about,Core,Page,6,/about,0,,,1,24,25,1,会社案内,,,1,,1,,,1,,,,2016-07-29 17:30:00,,,,,,,2016-11-26 16:31:56,
+11,contact,Mail,MailContent,1,/contact/,0,,,1,26,27,1,お問い合わせ,,,1,right_column,1,,,1,,,,2016-07-30 22:20:32,2016-09-21 18:49:12,,,,,,2016-11-26 16:31:56,
+12,news,Blog,BlogContent,1,/news/,0,,,1,8,9,1,新着情報,,,1,right_column,1,,,1,,,,2016-07-31 14:56:45,2016-09-21 18:43:54,,,,1,,2016-11-26 16:31:56,2016-11-26 18:48:09
+13,works,Blog,BlogContent,2,/works/,0,,,1,20,21,1,実績,,,1,right_column,1,,,1,,,,2016-07-31 14:56:54,2016-09-21 18:44:50,,,,,,2016-11-26 16:31:56,
+14,topics,Blog,BlogContent,3,/topics/,0,,,1,22,23,1,BLOG,,,1,right_column,1,,,1,,,,2016-07-31 14:57:02,2016-09-21 18:43:18,,,,1,,2016-11-26 16:31:56,2016-11-26 18:48:45

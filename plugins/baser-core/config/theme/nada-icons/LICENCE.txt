@@ -1,0 +1,6 @@
+nada icons : baserCMS Theme
+Copyright 2014, nada designs. <https://twitter.com/fukuoka_yocco>
+
+About License
+Licensed under the baserマーケット標準販売ライセンス
+https://market.basercms.net/files/baser_market_license.pdf

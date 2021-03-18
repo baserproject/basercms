@@ -1,0 +1,220 @@
+.bca-icon {
+  &--dashboard {
+    @include bca-icon(dashboard);
+  }
+  &--contents {
+    @include bca-icon(contents);
+  }
+  &--system {
+    @include bca-icon(system);
+  }
+  &--siteconfigs {
+    @include bca-icon(siteconfigs);
+  }
+  &--users {
+    @include bca-icon(users);
+  }
+  &--sites {
+    @include bca-icon(sites);
+  }
+  &--theme {
+    @include bca-icon(theme);
+  }
+  &--plugin {
+    @include bca-icon(plugin);
+  }
+  &--tools {
+    @include bca-icon(tools);
+  }
+  &--publish {
+    @include bca-icon(publish);
+  }
+  &--unpublish {
+    @include bca-icon(unpublish);
+  }
+  &--preview {
+    @include bca-icon(preview);
+  }
+  &--edit {
+    @include bca-icon(edit);
+  }
+  &--copy {
+    @include bca-icon(copy);
+  }
+  &--delete {
+    @include bca-icon(delete);
+  }
+  &--th-list {
+    @include bca-icon(th-list);
+  }
+  &--back-to-list {
+    @include bca-icon(back-to-list);
+  }
+  &--favorite {
+    @include bca-icon(favorite);
+  }
+  &--menuitem {
+    @include bca-icon(menuitem);
+  }
+  &--add {
+    @include bca-icon(add);
+  }
+  &--help {
+    @include bca-icon(help);
+  }
+  &--permission {
+    @include bca-icon(permission);
+  }
+  &--apply {
+    @include bca-icon(apply);
+  }
+  &--home {
+    @include bca-icon(home);
+  }
+  &--switch {
+    @include bca-icon(switch);
+  }
+  &--open {
+    @include bca-icon(open);
+  }
+  &--textcopy {
+    @include bca-icon(textcopy);
+  }
+  &--download {
+    @include bca-icon(download);
+  }
+  &--draggable {
+    @include bca-icon(draggable);
+  }
+  &--folder {
+    @include bca-icon(folder);
+  }
+  &--file {
+    @include bca-icon(file);
+  }
+  &--up-directory {
+    @include bca-icon(up-directory);
+  }
+  &--arrow-right {
+    @include bca-icon(arrow-right);
+  }
+  &--arrow-left {
+    @include bca-icon(arrow-left);
+  }
+  &--arrow-up {
+    @include bca-icon(arrow-up);
+  }
+  &--arrow-down {
+    @include bca-icon(arrow-down);
+  }
+  &--file-list {
+    @include bca-icon(file-list);
+  }
+  &--update {
+    @include bca-icon(update);
+  }
+  &--setting {
+    @include bca-icon(setting);
+  }
+  &--search {
+    @include bca-icon(search);
+  }
+  &--clear {
+    @include bca-icon(clear);
+  }
+  &--datetimepicker-date {
+    @include bca-icon(datetimepicker-date);
+  }
+  &--datetimepicker-time {
+    @include bca-icon(datetimepicker-time);
+  }
+  &--list-default {
+    @include bca-icon(list-default);
+  }
+  &--list-circle {
+    @include bca-icon(list-circle);
+  }
+  &--error {
+    @include bca-icon(error);
+  }
+  &--alert {
+    @include bca-icon(alert);
+  }
+  &--notification {
+    @include bca-icon(notification);
+  }
+  &--facebook {
+    @include bca-icon(facebook);
+  }
+  &--twitter {
+    @include bca-icon(twitter);
+  }
+  &--next {
+    @include bca-icon(next);
+  }
+  &--back {
+    @include bca-icon(back);
+  }
+  &--asc {
+    @include bca-icon(asc);
+  }
+  &--desc {
+    @include bca-icon(desc);
+  }
+  &--chevron-down {
+    @include bca-icon(chevron-down);
+  }
+  &--list {
+    @include bca-icon(list);
+  }
+  &--plus-square {
+    @include bca-icon(plus-square);
+  }
+  &--question-circle {
+    @include bca-icon(question-circle);
+  }
+  &--minus-square {
+    @include bca-icon(minus-square);
+  }
+  &--bookmark {
+    @include bca-icon(bookmark);
+  }
+  &--alias {
+    @include bca-icon(alias);
+  }
+  &--rename {
+    @include bca-icon(rename);
+  }
+  &--link {
+    @include bca-icon(link);
+  }
+  &--globe {
+    @include bca-icon(globe);
+  }
+  &--mail {
+    @include bca-icon(mail);
+  }
+}
+// ラベルテキスト：デフォルトは非表示
+[class*="bca-icon"] .bca-icon-label {
+  display: none;
+}
+
+// サイズ
+// ===========================
+[class^="bca-icon"] {
+  // large
+  &[data-bca-icon-size=lg] {
+    font-size: 2.4rem;
+  }
+
+  // small
+  &[data-bca-icon-size=sm] {
+    font-size: 1.4rem;
+  }
+
+  // xsmall
+  &[data-bca-icon-size=xs] {
+    font-size: 1.2rem;
+  }
+}

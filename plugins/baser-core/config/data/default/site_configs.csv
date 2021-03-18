@@ -1,0 +1,73 @@
+﻿"id","name","value","created","modified"
+"","name","baserCMS inc.","",""
+"","keyword","","",""
+"","description","","",""
+"","address","","",""
+"","theme","","",""
+"","email","","",""
+"","widget_area","1","",""
+"","maintenance","0","",""
+"","mail_encode","UTF-8","",""
+"","smtp_host","","",""
+"","smtp_user","","",""
+"","smtp_password","","",""
+"","smtp_port","","",""
+"","smtp_tls","0","",""
+"","formal_name","baserCMS inc.","",""
+"","mobile","1","",""
+"","admin_list_num","10","",""
+"","google_analytics_id","","",""
+"","content_types","","",""
+"","category_permission","","",""
+"","admin_theme","","",""
+"","login_credit","1","",""
+"","first_access","1","",""
+"","editor","BcCkeditor","",""
+"","editor_styles","#青見出し(h3)
+h3 {
+	color:Blue;
+}
+
+#赤見出し(h3)
+h3 {
+	color:Red;
+}
+
+#黄マーカー(span)
+span {
+	background-color:Yellow;
+}
+
+#緑マーカー(span)
+span {
+	background-color:Lime;
+}
+
+#大文字(big)
+big {}
+
+#小文字(small)
+small {}
+
+#コード(code)
+code {}
+
+#削除文(del)
+del {}
+
+#挿入文(ins)
+ins {}
+
+#引用(cite)
+cite {}
+
+#インライン(q)
+q {}","",""
+"","editor_enter_br","0","",""
+"","admin_side_banner","1","",""
+"","smtp_tls","0","",""
+"","use_universal_analytics","1","",""
+"","google_maps_api_key","","",""
+"","main_site_display_name","パソコン","",""
+"","use_site_device_setting","1","",""
+"","use_site_lang_setting","0","",""

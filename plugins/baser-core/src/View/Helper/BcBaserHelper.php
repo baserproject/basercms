@@ -27,11 +27,13 @@ use Cake\View\Helper\UrlHelper;
 class BcBaserHelper extends Helper
 {
     public $helpers = ['Html', 'Url', 'Flash'];
-    // TODO 取り急ぎ
+    // TODO 取り急ぎ動作させるために追加
+    // >>>
     public $siteConfig = [
         'formal_name' => 'baserCMS',
         'admin_side_banner' => true
     ];
+    // <<<
 
     public function js($url, $inline = true, $options = [])
     {

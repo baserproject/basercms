@@ -1,0 +1,231 @@
+// .contents-body .form-table{
+// 	border: 1px solid #DDD;
+// 	border-collapse: collapse;
+// 	margin-bottom:30px;
+// 	width:100%;
+// }
+// .contents-body .form-table th{
+// 	vertical-align:middle;
+// 	text-align: left;
+// 	background-repeat: repeat-x;
+// 	background-color: #EFEFEF;
+// 	padding:5px 10px;
+// 	white-space: nowrap;
+// 	width:20%;
+// 	border: 1px solid #DDD;
+// }
+// .contents-body .form-table th a{
+// 	text-decoration:none;
+// 	white-space: nowrap;
+// }
+// .contents-body .form-table th a:hover{
+// 	color:#9C0;
+// }
+// .contents-body .form-table th img {
+// 	vertical-align:middle;
+// }
+// .contents-body .form-table th a {
+// 	line-height: 20px;
+// }
+// .contents-body .form-table td{
+// 	padding: 5px 10px;
+// 	border-left: 1px solid #DDD;
+// 	border-right: 1px solid #DDD;
+// 	border-top: 1px dotted #DDD;
+// 	border-bottom: 1px dotted #DDD;
+// 	vertical-align: middle;
+// 	background-color:#FFF;
+// }
+// .contents-body .form-table td textarea {
+// 	width: 86%;
+// }
+// .contents-body .form-table input.full-width {
+// 	width:86%;
+// }
+// .contents-body .form-table td img {
+// 	vertical-align: baseline;
+// 	max-width: 100%;
+// }
+// .contents-body .form-table .checkbox {
+// 	float:left;
+// }
+// .contents-body .form-table .error-message{
+// 	-webkit-border-radius: 10px;
+// 	-moz-border-radius: 10px;
+// 	border-radius: 10px;
+// }
+// .contents-body .form-table input.active,
+// .contents-body .form-table textarea.active,
+// .contents-body .form-table select.active {
+// 	background-color:#ffffde;
+// }
+// .contents-body .form-table button {
+// 	padding:0px 7px;
+// 	cursor: pointer;
+// }
+
+// .contents-body .form-table th {
+//     font-size: 12px;
+// }
+
+.bca-form-table {
+  font-size: $label_font_size_small;
+  width: 100%;
+  table-layout: auto;
+  font-weight: normal;
+  // border-bottom: 1px solid $border-color;
+
+  &__label {
+    vertical-align: top;
+    width: 250px;
+    padding: 1.4em 2em 1em 0;
+    font-weight: normal;
+    border-bottom:1px solid $color_table_border_color;
+    text-align: left;
+    &.-label {
+      display: block;
+      border: none;
+    }
+    label {
+      padding: 0.2em 0 0;
+      margin-bottom: 0;
+    }
+    .bca-label {
+      position: relative;
+      top: -0.15em;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+  &__input {
+    padding: 1em 0 1em;
+    vertical-align: top;
+    border-bottom:1px solid $color_table_border_color;
+    font-weight: normal;
+    //white-space: nowrap;
+  }
+  &__input-wrap {
+    display: block;
+    padding: 0;
+  }
+  tr:last-child th,
+  tr:last-child td{
+    border-bottom: none!important;
+  }
+  &__group {
+    & + & {
+      // margin-top: 1em;
+    }
+    &-state {
+      display: flex;
+      flex-wrap: wrap;
+      //align-items: center;
+      .bca-radio-group {
+        margin-right: 1em;
+        //padding: 10px 0 15px;
+      }
+    }
+  }
+
+  &__inner-table {
+    &-label {
+      padding: 0.5em 1em 0.5em 0;
+      font-weight: normal;
+      text-align: left;
+      vertical-align: middle;
+    }
+    &-input {
+      padding: 0.5em 0;
+      vertical-align: top;
+      vertical-align: middle;
+    }
+  }
+  &__inner-submit {
+    margin: 1em 0 0;
+  }
+
+  .bca-post__url {
+    display: block;
+    margin-top: 0.5em;
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+
+  .bca-mailContentSender1 {
+    margin-top: 1em;
+    margin-left: 2em;
+  }
+
+  // 設定画面系：ボーダーなし
+  &[data-bca-table-type=type2] {
+
+    $color_table_border_color: #ccc;
+    font-size: 1.4rem;
+    width: 100%;
+    table-layout: auto;
+    border-bottom: none;
+    .bca-form-table {
+
+      &__label {
+        vertical-align: top;
+        width: 250px;
+        padding-left: 0.2em;
+        text-align: left;
+        white-space: nowrap;
+        &.-label {
+          display: block;
+          border: none;
+        }
+        label {
+          display: inline-block;
+          padding: 0.2em 0 0;
+          margin-bottom: 0;
+        }
+
+        .bca-label {
+          position: relative;
+          top: -0.15em;
+          margin-top: 0;
+          margin-bottom: 0;
+        }
+      }
+
+      &__input {
+        vertical-align: top;
+        font-weight: normal;
+        .bca-select,
+        .bca-textbox,
+        .bca-textarea {
+          position: relative;
+          margin-top: -0.5em;
+          margin-left: -4px;
+        }
+      }
+
+      &__explanation {
+        display: inline-block;
+        margin-left: 1em;
+        font-size: 1.2rem;
+        color: #666;
+      }
+    }
+    .bca-textbox {
+      //margin-bottom: 8px;
+    }
+
+    .btn.help {
+      position: relative;
+      margin-bottom: -3px;
+      margin-left: 3px;
+    }
+  }
+  .bca-help {
+    font-size:20px;
+  }
+
+}
+
+#BasicSetting table {
+  border-bottom:1px solid $color_border;
+  margin-bottom:20px;
+}

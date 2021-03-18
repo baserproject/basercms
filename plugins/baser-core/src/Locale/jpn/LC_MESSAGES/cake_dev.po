@@ -1,0 +1,1024 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: baserCMS\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2017-05-14 22:10+0900\n"
+"Last-Translator: \n"
+"Language-Team: baserCMS Users Community <info@basercms.net>\n"
+"Language: ja_JP\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-Basepath: ../../..\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: Console/Command/BaserTestShell.php:45
+msgid "Please install PHPUnit framework <info>(http://www.phpunit.de)</info>"
+msgstr ""
+"PHPUnit framework をインストールしてください。 <info>(http://www.phpunit.de)"
+"</info>"
+
+#: Console/Command/BaserTestShell.php:205 Console/Command/TestShell.php:372
+msgid "Test case %s cannot be run via this shell"
+msgstr "このシェルでテストケース %s を実行することはできません"
+
+#: Console/Command/BaserTestShell.php:218;230;245
+#: Console/Command/TestShell.php:385;402
+msgid "Test case %s not found"
+msgstr "テストケース %s が見つかりません"
+
+#: Event/CakeEventManager.php:104 Event/CakeEventManager.php:102
+msgid "The eventKey variable is required"
+msgstr "このイベントキー変数は必要です。"
+
+#: Lib/TestSuite/Fixture/CakeFixtureManager.php:188
+msgid "Referenced fixture class %s (%s) not found"
+msgstr "参照しているフィクスチャクラス %s (%s) が見つかりません。"
+
+#: Lib/TestSuite/Fixture/CakeFixtureManager.php:296
+msgid "Referenced fixture class %s not found"
+msgstr "参照しているフィクスチャクラス %s が見つかりません。"
+
+#: Model/CakeSchema.php:619 Model/CakeSchema.php:613
+msgid ""
+"Schema generation error: invalid column type %s for %s.%s does not exist in "
+"DBO"
+msgstr ""
+
+#: Model/Datasource/DboSource.php:268 Model/Datasource/DboSource.php:255
+msgid "Selected driver is not enabled"
+msgstr "選択しているでドライバーは有効ではありません。"
+
+#: Model/Datasource/DboSource.php:1257 Model/Datasource/DboSource.php:1270
+msgid "Error in Model %s"
+msgstr "モデル %s でエラーです"
+
+#: Model/Datasource/DboSource.php:3207 Model/Datasource/DboSource.php:3236
+msgid "Invalid schema object"
+msgstr "無効なスキーマオブジェクト"
+
+#: Model/Datasource/DboSource.php:3317 Model/Datasource/DboSource.php:3346
+#: Model/Datasource/Database/Sqlite.php:410
+msgid "Column name or type not defined in schema"
+msgstr "カラム名、もしくは、型がスキーマに宣言されていません。"
+
+#: Model/Datasource/DboSource.php:3322 Model/Datasource/DboSource.php:3351
+#: Model/Datasource/Database/Sqlite.php:415
+msgid "Column type %s does not exist"
+msgstr "カラム型 %s が存在しません"
+
+#: Network/CakeRequest.php:492 Network/CakeRequest.php:469
+msgid "Method %s does not exist"
+msgstr "メソッド %s が存在しません"
+
+#: Routing/Router.php:233
+msgid "Route class not found, or route class is not a subclass of CakeRoute"
+msgstr ""
+
+#: Cache/Cache.php:173
+msgid "Cache engine %s is not available."
+msgstr "キャッシュエンジン %s が利用できません。"
+
+#: Cache/Cache.php:177
+msgid "Cache engines must use %s as a base class."
+msgstr ""
+
+#: Cache/Cache.php:181
+msgid ""
+"Cache engine \"%s\" is not properly configured. Ensure required extensions "
+"are installed, and credentials/permissions are correct"
+msgstr ""
+
+#: Cache/Cache.php:321
+msgid "%s cache was unable to write '%s' to %s cache"
+msgstr ""
+
+#: Cache/Cache.php:543
+msgid "Invalid cache group %s"
+msgstr "無効なキャッシュグループ %s"
+
+#: Cache/Engine/FileEngine.php:313
+msgid "Files cannot be atomically decremented."
+msgstr ""
+
+#: Cache/Engine/FileEngine.php:325
+msgid "Files cannot be atomically incremented."
+msgstr ""
+
+#: Cache/Engine/FileEngine.php:362
+msgid "Could not apply permission mask \"%s\" on cache file \"%s\""
+msgstr ""
+
+#: Cache/Engine/FileEngine.php:385
+msgid "%s is not writable"
+msgstr "%s は書き込み可能ではありません"
+
+#: Cache/Engine/MemcacheEngine.php:166;183
+msgid "Method %s not implemented for compressed cache in %s"
+msgstr ""
+
+#: Cache/Engine/MemcachedEngine.php:133
+msgid "Memcached extension is not build with SASL support"
+msgstr ""
+
+#: Cache/Engine/MemcachedEngine.php:160
+msgid "%s is not a valid serializer engine for Memcached"
+msgstr ""
+
+#: Cache/Engine/MemcachedEngine.php:166
+msgid "Memcached extension is not compiled with %s support"
+msgstr ""
+
+#: Configure/IniReader.php:101 Configure/PhpReader.php:64
+msgid "Cannot load configuration files with ../ in them."
+msgstr ""
+
+#: Configure/IniReader.php:106 Configure/PhpReader.php:69
+msgid "Could not load configuration file: %s"
+msgstr "設定ファイルが読み込めません。 : %s"
+
+#: Configure/PhpReader.php:74
+msgid "No variable %s found in %s"
+msgstr ""
+
+#: Console/Command/TestShell.php:175
+msgid ""
+"Please install PHPUnit framework v3.7 <info>(http://www.phpunit.de)</info>"
+msgstr ""
+
+#: Console/Command/Task/PluginTask.php:185
+msgid "%s modified"
+msgstr ""
+
+#: Console/Command/Task/TestTask.php:322
+msgid "Invalid object type."
+msgstr "無効なオブジェクト型"
+
+#: Console/Command/Task/TestTask.php:341
+msgid "Invalid type name"
+msgstr "無効な型名"
+
+#: Controller/Component/AclComponent.php:67
+msgid "Could not find %s."
+msgstr "%s が見つかりません。"
+
+#: Controller/Component/AclComponent.php:91
+msgid "AclComponent adapters must implement AclInterface"
+msgstr ""
+
+#: Controller/Component/AclComponent.php:162;176
+msgid "%s is deprecated, use %s instead"
+msgstr "%s は非推奨となりました。変わりに %s を利用してください。"
+
+#: Controller/Component/AuthComponent.php:498
+msgid "Authorization adapter \"%s\" was not found."
+msgstr ""
+
+#: Controller/Component/AuthComponent.php:501
+msgid "Authorization objects must implement an %s method."
+msgstr ""
+
+#: Controller/Component/AuthComponent.php:800
+msgid "Authentication adapter \"%s\" was not found."
+msgstr ""
+
+#: Controller/Component/AuthComponent.php:803
+msgid "Authentication objects must implement an %s method."
+msgstr ""
+
+#: Controller/Component/CookieComponent.php:386
+msgid "You must use cipher, rijndael or aes for cookie encryption type"
+msgstr ""
+
+#: Controller/Component/RequestHandlerComponent.php:761
+msgid "You must give a handler callback."
+msgstr "コールバック処理を設定してください。"
+
+#: Controller/Component/SecurityComponent.php:336;622
+msgid "The request has been black-holed"
+msgstr "システムエラーです。"
+
+#: Controller/Component/Acl/PhpAcl.php:104
+msgid "\"roles\" section not found in configuration."
+msgstr ""
+
+#: Controller/Component/Acl/PhpAcl.php:108
+msgid "Neither \"allow\" nor \"deny\" rules were provided in configuration."
+msgstr ""
+
+#: Controller/Component/Acl/PhpAcl.php:526
+msgid "cycle detected when inheriting %s from %s. Path: %s"
+msgstr ""
+
+#: Controller/Component/Auth/BaseAuthenticate.php:172
+msgid "Password hasher class \"%s\" was not found."
+msgstr "パスワードハッシャ―クラス \"%s\" が見つかりませんでした。"
+
+#: Controller/Component/Auth/BaseAuthenticate.php:175
+msgid "Password hasher must extend AbstractPasswordHasher class."
+msgstr ""
+"パスワードハッシャ―は、 AbstractPasswordHasher クラスを継承する必要がありま"
+"す。"
+
+#: Controller/Component/Auth/BaseAuthorize.php:95
+msgid "$controller needs to be an instance of Controller"
+msgstr ""
+
+#: Controller/Component/Auth/ControllerAuthorize.php:49
+msgid "$controller does not implement an %s method."
+msgstr ""
+
+#: Controller/Component/Auth/CrudAuthorize.php:83
+msgid ""
+"CrudAuthorize::authorize() - Attempted access of un-mapped action \"%1$s\" "
+"in controller \"%2$s\""
+msgstr ""
+
+#: Core/Configure.php:73
+msgid ""
+"Can't find application core file. Please create %s, and make sure it is "
+"readable by PHP."
+msgstr ""
+"アプリケーションのコアファイルが見つかりません。%s を作成し、それがPHPで読み"
+"込める必要があります。"
+
+#: Core/Configure.php:99
+msgid ""
+"Can't find application bootstrap file. Please create %s, and make sure it is "
+"readable by PHP."
+msgstr ""
+"アプリケーションのブートストラップファイルが見つかりません。%s を作成し、それ"
+"がPHPで読み込める必要があります。"
+
+#: Core/Configure.php:371
+msgid "There is no \"%s\" adapter."
+msgstr ""
+
+#: Core/Configure.php:374
+msgid "The \"%s\" adapter, does not have a %s method."
+msgstr ""
+
+#: I18n/I18n.php:229
+msgid "You cannot use \"\" as a domain."
+msgstr ""
+
+#: I18n/I18n.php:268
+msgid ""
+"Missing plural form translation for \"%s\" in \"%s\" domain, \"%s\" locale.  "
+"Check your po file for correct plurals and valid Plural-Forms header."
+msgstr ""
+
+#: Log/CakeLog.php:194
+msgid "Invalid key name"
+msgstr ""
+
+#: Log/CakeLog.php:197
+msgid "Missing logger class name"
+msgstr "ロガークラス名がありません"
+
+#: Log/CakeLog.php:318;336;355
+msgid "Stream %s not found"
+msgstr "ストリーム %s が見つかりません"
+
+#: Log/LogEngineCollection.php:44
+msgid "logger class %s does not implement a %s method."
+msgstr ""
+
+#: Log/LogEngineCollection.php:69
+msgid "Could not load class %s"
+msgstr "クラス %s が見つかりません。"
+
+#: Log/Engine/FileLog.php:150
+msgid "Could not apply permission mask \"%s\" on log file \"%s\""
+msgstr ""
+
+#: Model/AclNode.php:177
+msgid "AclNode::node() - Couldn't find %s node identified by \"%s\""
+msgstr ""
+
+#: Model/BehaviorCollection.php:226
+msgid "%s - Method %s not found in any attached behavior"
+msgstr ""
+
+#: Model/Model.php:1413
+msgid ""
+"(Model::getColumnTypes) Unable to build model field data. If you are using a "
+"model without a database table, try implementing schema()"
+msgstr ""
+"(Model::getColumnTypes) モデルのフィールドデータを作成できません。もしデータ"
+"ベーステーブル無しのモデルを使用している場合、schema() を実行してみてくださ"
+"い。"
+
+#: Model/Model.php:3738
+msgid ""
+"Invalid join model settings in %s. The association parameter has the wrong "
+"type, expecting a string or array, but was passed type: %s"
+msgstr ""
+
+#: Model/Permission.php:84
+msgid ""
+"%s - Failed ARO node lookup in permissions check. Node references:\n"
+"Aro: %s\n"
+"Aco: %s"
+msgstr ""
+
+#: Model/Permission.php:95
+msgid ""
+"%s - Failed ACO node lookup in permissions check. Node references:\n"
+"Aro: %s\n"
+"Aco: %s"
+msgstr ""
+
+#: Model/Permission.php:106
+msgid "ACO permissions key %s does not exist in %s"
+msgstr "ACO のパーミッションキー %s が、 %s に存在しません"
+
+#: Model/Permission.php:179
+msgid "%s - Invalid node"
+msgstr "%s - 無効なノード"
+
+#: Model/Permission.php:197
+msgid "Invalid permission key \"%s\""
+msgstr ""
+
+#: Model/Behavior/AclBehavior.php:66
+msgid "Callback %s not defined in %s"
+msgstr ""
+
+#: Model/Behavior/AclBehavior.php:83
+msgid ""
+"AclBehavior is setup with more then one type, please specify type parameter "
+"for node()"
+msgstr ""
+
+#: Model/Behavior/ContainableBehavior.php:342
+msgid "Model \"%s\" is not associated with model \"%s\""
+msgstr "モデル \"%s\" はモデル \"%s\" とアソシエーションできません"
+
+#: Model/Behavior/TranslateBehavior.php:71
+msgid "Datasource %s for TranslateBehavior of model %s is not connected"
+msgstr ""
+
+#: Model/Behavior/TranslateBehavior.php:606
+msgid "You cannot bind a translation named \"name\"."
+msgstr ""
+
+#: Model/Behavior/TranslateBehavior.php:628
+msgid "Association %s is already bound to model %s"
+msgstr ""
+
+#: Model/Datasource/CakeSession.php:554
+msgid "Unable to configure the session, setting %s failed."
+msgstr ""
+
+#: Model/Datasource/CakeSession.php:613
+msgid "Could not load %s to handle the session."
+msgstr ""
+
+#: Model/Datasource/CakeSession.php:619
+msgid ""
+"Chosen SessionHandler does not implement CakeSessionHandlerInterface it "
+"cannot be used with an engine key."
+msgstr ""
+
+#: Model/Datasource/Database/Mysql.php:342
+#: Model/Datasource/Database/Sqlserver.php:227
+msgid "Could not describe table for %s"
+msgstr ""
+
+#: Model/Validator/CakeValidationRule.php:281
+msgid "Could not find validation handler %s for %s"
+msgstr ""
+
+#: Network/CakeResponse.php:633
+msgid "Unknown status code"
+msgstr "不明なステータスコードです。"
+
+#: Network/CakeResponse.php:677
+msgid "Invalid status code"
+msgstr "無効なステータスコードです。"
+
+#: Network/CakeResponse.php:1340
+msgid "The requested file contains `..` and will not be read."
+msgstr ""
+
+#: Network/CakeResponse.php:1353
+msgid "The requested file %s was not found or not readable"
+msgstr ""
+"リクエストされたファイル %s は見つかりませんでした。もしくは読み込めません。"
+
+#: Network/CakeSocket.php:379
+msgid "Connection timed out"
+msgstr ""
+
+#: Network/CakeSocket.php:446
+msgid "Invalid encryption scheme chosen"
+msgstr ""
+
+#: Network/CakeSocket.php:460
+msgid "Unable to perform enableCrypto operation on CakeSocket"
+msgstr ""
+
+#: Network/Email/CakeEmail.php:387
+msgid "From requires only 1 email address."
+msgstr ""
+
+#: Network/Email/CakeEmail.php:403
+msgid "Sender requires only 1 email address."
+msgstr ""
+
+#: Network/Email/CakeEmail.php:419
+msgid "Reply-To requires only 1 email address."
+msgstr ""
+
+#: Network/Email/CakeEmail.php:435
+msgid "Disposition-Notification-To requires only 1 email address."
+msgstr ""
+
+#: Network/Email/CakeEmail.php:451
+msgid "Return-Path requires only 1 email address."
+msgstr ""
+
+#: Network/Email/CakeEmail.php:626
+msgid "Invalid email: \"%s\""
+msgstr "無効なEメール: \"%s\""
+
+#: Network/Email/CakeEmail.php:704;719
+msgid "$headers should be an array."
+msgstr ""
+
+#: Network/Email/CakeEmail.php:931
+msgid "Format not available."
+msgstr ""
+
+#: Network/Email/CakeEmail.php:966
+msgid "Class \"%s\" not found."
+msgstr "クラス \"%s\" が見つかりません"
+
+#: Network/Email/CakeEmail.php:968
+msgid "The \"%s\" does not have a %s method."
+msgstr ""
+
+#: Network/Email/CakeEmail.php:989
+msgid ""
+"Invalid format for Message-ID. The text should be something like "
+"\"<uuid@server.com>\""
+msgstr ""
+
+#: Network/Email/CakeEmail.php:1068
+msgid "No file or data specified."
+msgstr ""
+
+#: Network/Email/CakeEmail.php:1071
+msgid "No filename specified."
+msgstr ""
+
+#: Network/Email/CakeEmail.php:1078
+msgid "File not found: \"%s\""
+msgstr "ファイルが見つかりません。: \"%s\""
+
+#: Network/Email/CakeEmail.php:1161
+msgid "From is not specified."
+msgstr ""
+
+#: Network/Email/CakeEmail.php:1164
+msgid "You need to specify at least one destination for to, cc or bcc."
+msgstr ""
+
+#: Network/Email/CakeEmail.php:1241
+msgid "%s not found."
+msgstr "%s が見つかりません。"
+
+#: Network/Email/CakeEmail.php:1246
+msgid "Unknown email configuration \"%s\"."
+msgstr "不明なEメール設定です \"%s\"。 "
+
+#: Network/Email/SmtpTransport.php:156
+msgid "Unable to connect to SMTP server."
+msgstr "SMTPサーバに接続できません。"
+
+#: Network/Email/SmtpTransport.php:177
+msgid ""
+"SMTP server did not accept the connection or trying to connect to non TLS "
+"SMTP server using TLS."
+msgstr ""
+
+#: Network/Email/SmtpTransport.php:182
+msgid "SMTP server did not accept the connection."
+msgstr ""
+
+#: Network/Email/SmtpTransport.php:200
+msgid "SMTP server did not accept the username."
+msgstr ""
+
+#: Network/Email/SmtpTransport.php:205
+msgid "SMTP server did not accept the password."
+msgstr ""
+
+#: Network/Email/SmtpTransport.php:208
+msgid ""
+"SMTP authentication method not allowed, check if SMTP server requires TLS."
+msgstr ""
+
+#: Network/Email/SmtpTransport.php:210
+msgid ""
+"AUTH command not recognized or not implemented, SMTP server may not require "
+"authentication."
+msgstr ""
+
+#: Network/Email/SmtpTransport.php:361
+msgid "SMTP timeout."
+msgstr ""
+
+#: Network/Email/SmtpTransport.php:374
+msgid "SMTP Error: %s"
+msgstr "SMTPエラー: %s"
+
+#: Network/Http/HttpResponse.php:21
+msgid ""
+"HttpResponse is deprecated due to naming conflicts. Use HttpSocketResponse "
+"instead."
+msgstr ""
+
+#: Network/Http/HttpSocket.php:244
+msgid "Invalid resource."
+msgstr ""
+
+#: Network/Http/HttpSocket.php:410
+msgid "Class %s not found."
+msgstr "クラス %s が見つかりません"
+
+#: Network/Http/HttpSocket.php:635
+msgid "Unknown authentication method."
+msgstr ""
+
+#: Network/Http/HttpSocket.php:638
+msgid "The %s does not support authentication."
+msgstr ""
+
+#: Network/Http/HttpSocket.php:665
+msgid "Unknown authentication method for proxy."
+msgstr ""
+
+#: Network/Http/HttpSocket.php:668
+msgid "The %s does not support proxy authentication."
+msgstr ""
+
+#: Network/Http/HttpSocket.php:899
+msgid ""
+"HttpSocket::_buildRequestLine - Passed an invalid request line string. "
+"Activate quirks mode to do this."
+msgstr ""
+
+#: Network/Http/HttpSocket.php:917
+msgid ""
+"HttpSocket::_buildRequestLine - The \"*\" asterisk character is only allowed "
+"for the following methods: %s. Activate quirks mode to work outside of "
+"HTTP/1.1 specs."
+msgstr ""
+
+#: Network/Http/HttpSocketResponse.php:151
+msgid "Invalid response."
+msgstr "無効なレスポンスです。"
+
+#: Network/Http/HttpSocketResponse.php:155
+msgid "Invalid HTTP response."
+msgstr "無効な HTTPレスポンスです。"
+
+#: Utility/CakeNumber.php:163
+msgid "No unit type."
+msgstr ""
+
+#: Utility/ClassRegistry.php:117
+msgid ""
+"(ClassRegistry::init() Attempted to create instance of a class with a "
+"numeric name"
+msgstr "数字の名前でクラスのインスタンスを作成することを試みます"
+
+#: Utility/ClassRegistry.php:149
+msgid "Cannot create instance of %s, as it is abstract or is an interface"
+msgstr ""
+
+#: Utility/Debugger.php:623
+msgid "Invalid Debugger output format."
+msgstr ""
+
+#: Utility/Debugger.php:839
+msgid ""
+"Please change the value of %s in %s to a salt value specific to your "
+"application."
+msgstr ""
+
+#: Utility/Debugger.php:843
+msgid ""
+"Please change the value of %s in %s to a numeric (digits only) seed value "
+"specific to your application."
+msgstr ""
+
+#: Utility/Folder.php:440;463
+msgid "%s changed to %s"
+msgstr "%s は %s に変更されました"
+
+#: Utility/Folder.php:444;465
+msgid "%s NOT changed to %s"
+msgstr "%s は %s に変更されませんでした"
+
+#: Utility/Folder.php:568
+msgid "%s is a file"
+msgstr "%s はファイルです"
+
+#: Utility/Folder.php:579;763
+msgid "%s created"
+msgstr "%s が作成されました"
+
+#: Utility/Folder.php:583
+msgid "%s NOT created"
+msgstr "%s が作成されませんでした"
+
+#: Utility/Folder.php:655;663;675
+msgid "%s removed"
+msgstr "%s は削除されました"
+
+#: Utility/Folder.php:657;665;677
+msgid "%s NOT removed"
+msgstr "%s は削除されませんでした"
+
+#: Utility/Folder.php:721
+msgid "%s not found"
+msgstr "%s が見つかりません"
+
+#: Utility/Folder.php:730
+msgid "%s not writable"
+msgstr "%s は書き込み可能ではありません"
+
+#: Utility/Folder.php:746
+msgid "%s copied to %s"
+msgstr "%s は %s にコピーされました"
+
+#: Utility/Folder.php:748
+msgid "%s NOT copied to %s"
+msgstr "%s は %s にコピーされませんでした"
+
+#: Utility/Folder.php:767
+msgid "%s not created"
+msgstr "%s は作成されませんでした"
+
+#: Utility/Hash.php:53
+msgid "Invalid Parameter %s, should be dot separated path or array."
+msgstr ""
+
+#: Utility/Hash.php:414
+msgid "Hash::combine() needs an equal number of keys + values."
+msgstr ""
+
+#: Utility/Hash.php:1106
+msgid "Invalid data array to nest."
+msgstr ""
+
+#: Utility/ObjectCollection.php:124
+msgid "Cannot use modParams with indexes that do not exist."
+msgstr ""
+
+#: Utility/Security.php:161
+msgid "Invalid value, cost must be between %s and %s"
+msgstr ""
+
+#: Utility/Security.php:219;252
+msgid "You cannot use an empty key for %s"
+msgstr "%s に空のキーを使用することはできません"
+
+#: Utility/Security.php:256
+msgid ""
+"You must specify the operation for Security::rijndael(), either encrypt or "
+"decrypt"
+msgstr ""
+
+#: Utility/Security.php:260
+msgid "You must use a key larger than 32 bytes for Security::rijndael()"
+msgstr ""
+
+#: Utility/Security.php:319
+msgid ""
+"Invalid salt: %s for %s Please visit http://www.php.net/crypt and read the "
+"appropriate section for building %s salts."
+msgstr ""
+
+#: Utility/Security.php:372
+msgid "Invalid key for %s, key must be at least 256 bits (32 bytes) long."
+msgstr ""
+
+#: Utility/Security.php:388
+msgid "The data to decrypt cannot be empty."
+msgstr ""
+
+#: Utility/Validation.php:277
+msgid "You must define the $operator parameter for %s"
+msgstr ""
+
+#: Utility/Validation.php:295
+msgid "You must define a regular expression for %s"
+msgstr "%s の正規表現を定義してください"
+
+#: Utility/Validation.php:861
+msgid "Could not find %s class, unable to complete validation."
+msgstr ""
+
+#: Utility/Validation.php:865
+msgid "Method %s does not exist on %s unable to complete validation."
+msgstr ""
+
+#: Utility/Validation.php:936
+msgid "Can not determine the mimetype."
+msgstr ""
+
+#: Utility/Xml.php:112;116;121
+msgid "XML cannot be read."
+msgstr ""
+
+#: Utility/Xml.php:119;198
+msgid "Invalid input."
+msgstr ""
+
+#: Utility/Xml.php:153
+msgid "Xml cannot be read."
+msgstr ""
+
+#: Utility/Xml.php:202
+msgid "The key of input must be alphanumeric"
+msgstr ""
+
+#: Utility/Xml.php:279;292
+msgid "Invalid array"
+msgstr ""
+
+#: Utility/Xml.php:343
+msgid "The input is not instance of SimpleXMLElement, DOMDocument or DOMNode."
+msgstr ""
+
+#: View/Helper.php:231
+msgid "Method %1$s::%2$s does not exist"
+msgstr "メソッド %1$s::%2$s が存在しません"
+
+#: View/View.php:425
+msgid "Element Not Found: %s"
+msgstr "エレメントが見つかりませんでした。 : %s"
+
+#: View/View.php:741
+msgid "You cannot extend an element which does not exist (%s)."
+msgstr ""
+
+#: View/View.php:757
+msgid "You cannot have views extend themselves."
+msgstr ""
+
+#: View/View.php:760
+msgid "You cannot have views extend in a loop."
+msgstr ""
+
+#: View/View.php:952
+msgid "The \"%s\" block was left open. Blocks are not allowed to cross files."
+msgstr ""
+
+#: View/Elements/sql_dump.ctp:81
+msgid "Encountered unexpected %s. Cannot generate SQL log."
+msgstr ""
+
+#: View/Errors/fatal_error.ctp:18
+msgid "Fatal Error"
+msgstr "致命的なエラー"
+
+#: View/Errors/fatal_error.ctp:20 View/Errors/missing_action.ctp:19;23
+#: View/Errors/missing_behavior.ctp:21;25
+#: View/Errors/missing_component.ctp:21;25
+#: View/Errors/missing_connection.ctp:19;30
+#: View/Errors/missing_controller.ctp:21;25
+#: View/Errors/missing_database.ctp:19;23
+#: View/Errors/missing_datasource.ctp:21
+#: View/Errors/missing_datasource_config.ctp:19
+#: View/Errors/missing_helper.ctp:21;25 View/Errors/missing_layout.ctp:19
+#: View/Errors/missing_plugin.ctp:19;23 View/Errors/missing_table.ctp:19
+#: View/Errors/missing_view.ctp:19 View/Errors/pdo_error.ctp:19
+#: View/Errors/private_action.ctp:19 View/Errors/scaffold_error.ctp:19
+msgid "Error"
+msgstr "エラー"
+
+#: View/Errors/fatal_error.ctp:24
+msgid "File"
+msgstr "ファイル"
+
+#: View/Errors/fatal_error.ctp:28
+msgid "Line"
+msgstr "行"
+
+#: View/Errors/fatal_error.ctp:32 View/Errors/missing_action.ctp:38
+#: View/Errors/missing_behavior.ctp:35 View/Errors/missing_component.ctp:35
+#: View/Errors/missing_connection.ctp:35 View/Errors/missing_controller.ctp:35
+#: View/Errors/missing_database.ctp:27 View/Errors/missing_datasource.ctp:28
+#: View/Errors/missing_datasource_config.ctp:23
+#: View/Errors/missing_helper.ctp:35 View/Errors/missing_layout.ctp:40
+#: View/Errors/missing_plugin.ctp:39 View/Errors/missing_table.ctp:23
+#: View/Errors/missing_view.ctp:40 View/Errors/pdo_error.ctp:33
+#: View/Errors/private_action.ctp:23 View/Errors/scaffold_error.ctp:23
+msgid "Notice"
+msgstr "注意"
+
+#: View/Errors/fatal_error.ctp:33 View/Errors/missing_action.ctp:39
+#: View/Errors/missing_behavior.ctp:36 View/Errors/missing_component.ctp:36
+#: View/Errors/missing_connection.ctp:36 View/Errors/missing_controller.ctp:36
+#: View/Errors/missing_database.ctp:28 View/Errors/missing_datasource.ctp:29
+#: View/Errors/missing_datasource_config.ctp:24
+#: View/Errors/missing_helper.ctp:36 View/Errors/missing_layout.ctp:41
+#: View/Errors/missing_plugin.ctp:40 View/Errors/missing_table.ctp:24
+#: View/Errors/missing_view.ctp:41 View/Errors/pdo_error.ctp:34
+#: View/Errors/private_action.ctp:24 View/Errors/scaffold_error.ctp:24
+msgid "If you want to customize this error message, create %s"
+msgstr "このエラーメッセージをカスタマイズしたい場合は、 %s を作成してください"
+
+#: View/Errors/missing_action.ctp:18
+msgid "Missing Method in %s"
+msgstr "%s にメソッドがありません"
+
+#: View/Errors/missing_action.ctp:20
+msgid "The action %1$s is not defined in controller %2$s"
+msgstr "アクション %1$s が、コントローラ %2$s に定義されていません"
+
+#: View/Errors/missing_action.ctp:24
+msgid "Create %1$s%2$s in file: %3$s."
+msgstr "%1$s%2$s を %3$s に作成してください。"
+
+#: View/Errors/missing_behavior.ctp:19
+msgid "Missing Behavior"
+msgstr "ビヘイビアがありません"
+
+#: View/Errors/missing_behavior.ctp:22 View/Errors/missing_component.ctp:22
+#: View/Errors/missing_controller.ctp:22 View/Errors/missing_helper.ctp:22
+msgid "%s could not be found."
+msgstr "%s が見つかりません。"
+
+#: View/Errors/missing_behavior.ctp:26 View/Errors/missing_component.ctp:26
+#: View/Errors/missing_controller.ctp:26 View/Errors/missing_helper.ctp:26
+msgid "Create the class %s below in file: %s"
+msgstr "クラス %s を %s ファイル内に作成してください。"
+
+#: View/Errors/missing_component.ctp:19
+msgid "Missing Component"
+msgstr "コンポーネントがありません"
+
+#: View/Errors/missing_connection.ctp:17 View/Errors/missing_database.ctp:17
+msgid "Missing Database Connection"
+msgstr "データベースへの接続がありません"
+
+#: View/Errors/missing_connection.ctp:20
+msgid "A Database connection using \"%s\" was missing or unable to connect."
+msgstr ""
+
+#: View/Errors/missing_connection.ctp:24
+msgid "The database server returned this error: %s"
+msgstr ""
+
+#: View/Errors/missing_connection.ctp:31
+msgid "%s driver is NOT enabled"
+msgstr "%s ドライバーは利用できません。"
+
+#: View/Errors/missing_controller.ctp:19
+msgid "Missing Controller"
+msgstr "コントローラがありません"
+
+#: View/Errors/missing_database.ctp:20
+msgid "Scaffold requires a database connection"
+msgstr "Scaffold にはデータベース接続が必要です"
+
+#: View/Errors/missing_database.ctp:24 View/Errors/missing_layout.ctp:24
+#: View/Errors/missing_view.ctp:24
+msgid "Confirm you have created the file: %s"
+msgstr "ファイル %s を作成したことを確認してください"
+
+#: View/Errors/missing_datasource.ctp:19
+msgid "Missing Datasource"
+msgstr "データソースがありません"
+
+#: View/Errors/missing_datasource.ctp:22
+msgid "Datasource class %s could not be found."
+msgstr "データソースクラス %s が見つかりません。"
+
+#: View/Errors/missing_datasource_config.ctp:17
+msgid "Missing Datasource Configuration"
+msgstr "データベース設定が見つかりません。"
+
+#: View/Errors/missing_datasource_config.ctp:20
+msgid "The datasource configuration %1$s was not found in database.php."
+msgstr ""
+
+#: View/Errors/missing_helper.ctp:19
+msgid "Missing Helper"
+msgstr "ヘルパーファイルがありません"
+
+#: View/Errors/missing_layout.ctp:17
+msgid "Missing Layout"
+msgstr "レイアウトがありません"
+
+#: View/Errors/missing_layout.ctp:20
+msgid "The layout file %s can not be found or does not exist."
+msgstr "レイアウトファイル %s が見つからないか、存在しません。"
+
+#: View/Errors/missing_plugin.ctp:17
+msgid "Missing Plugin"
+msgstr "プラグインが見つかりません。"
+
+#: View/Errors/missing_plugin.ctp:20
+msgid "The application is trying to load a file from the %s plugin"
+msgstr ""
+
+#: View/Errors/missing_plugin.ctp:24
+msgid "Make sure your plugin %s is in the %s directory and was loaded"
+msgstr ""
+
+#: View/Errors/missing_plugin.ctp:32
+msgid "Loading all plugins"
+msgstr ""
+
+#: View/Errors/missing_plugin.ctp:33
+msgid ""
+"If you wish to load all plugins at once, use the following line in your %s "
+"file"
+msgstr ""
+
+#: View/Errors/missing_table.ctp:17
+msgid "Missing Database Table"
+msgstr "データベーステーブルがありません"
+
+#: View/Errors/missing_table.ctp:20
+msgid "Table %1$s for model %2$s was not found in datasource %3$s."
+msgstr ""
+"モデル %2$s のテーブル %1$s は、データソース %3$s に見つかりませんでした。"
+
+#: View/Errors/missing_view.ctp:17
+msgid "Missing View"
+msgstr "ビューがありません"
+
+#: View/Errors/missing_view.ctp:20
+msgid "The view for %1$s%2$s was not found."
+msgstr "ビュー %1$s%2$s が見つかりません。"
+
+#: View/Errors/pdo_error.ctp:17
+msgid "Database Error"
+msgstr "データベースエラー"
+
+#: View/Errors/pdo_error.ctp:24
+msgid "SQL Query"
+msgstr ""
+
+#: View/Errors/pdo_error.ctp:29
+msgid "SQL Query Params"
+msgstr ""
+
+#: View/Errors/private_action.ctp:17
+msgid "Private Method in %s"
+msgstr "%s のプライベートメソッド"
+
+#: View/Errors/private_action.ctp:20
+msgid "%s%s cannot be accessed directly."
+msgstr "%s%s には直接アクセスできません。"
+
+#: View/Errors/scaffold_error.ctp:17
+msgid "Scaffold Error"
+msgstr "Scaffold エラー"
+
+#: View/Errors/scaffold_error.ctp:20
+msgid "Method _scaffoldError in was not found in the controller"
+msgstr "メソッド _scaffoldError がコントローラに見つかりません。"
+
+#: View/Helper/CacheHelper.php:161
+msgid "Unable to write view cache file: \"%s\" for \"%s\""
+msgstr ""
+
+#: View/Helper/FormHelper.php:1683
+msgid "Missing field name for FormHelper::%s"
+msgstr ""
+
+#: View/Helper/HtmlHelper.php:1243
+msgid "Cannot load the configuration file. Wrong \"configFile\" configuration."
+msgstr ""
+
+#: View/Helper/HtmlHelper.php:1249
+msgid "Cannot load the configuration file. Unknown reader."
+msgstr "設定ファイルを読み込めません。不明なリーダーです。"
+
+#: View/Helper/JsHelper.php:152
+msgid "JsHelper:: Missing Method %s is undefined"
+msgstr ""
+
+#: View/Helper/MootoolsEngineHelper.php:311
+msgid "%s requires a \"drag\" option to properly function"
+msgstr "%s には「ドラッグ」オプションが必要です。"
+
+#: View/Helper/NumberHelper.php:63 View/Helper/TextHelper.php:78
+#: View/Helper/TimeHelper.php:61
+msgid "%s could not be found"
+msgstr "%s が見つかりません"
+
+#: View/Helper/PaginatorHelper.php:99
+msgid "%s does not implement a %s method, it is incompatible with %s"
+msgstr "%s は %s メソッドを実装していないので %s と互換性がありません。"

@@ -1,0 +1,355 @@
+@charset "utf-8";
+/* @group .Clearfix
+-------------------------------- */
+.clearfix:after {
+  content: "";
+  clear: both;
+  display: block;
+  height: 0;
+}
+
+.clear {
+  clear: both;
+}
+
+/* @end */
+/* @display
+-------------------------------- */
+.displayNone {
+  display: none;
+}
+
+.display-none {
+  display: none;
+}
+
+/* @end */
+/* @font-family
+-------------------------------- */
+.mincho {
+  font-family: "ヒラギノ明朝 Pro W3","Hiragino Mincho Pro","HGS明朝E","ＭＳ Ｐ明朝",serif;
+}
+
+@font-face {
+  font-family: "oswald";
+  src: url('font/Oswald/Oswald-Regular.ttf') format('truetype');
+}
+.oswald {
+    font-family: 'Oswald', sans-serif;
+}
+.century {
+    font-family: 'Century Gothic', CenturyGothic, AppleGothic, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+
+
+/* @end */
+/* @group float
+-------------------------------- */
+.right {
+  float: right;
+}
+
+.left {
+  float: left;
+}
+
+img.right {
+  margin: 0 0 10px 20px;
+}
+
+img.left {
+  margin: 0 20px 10px 0;
+}
+
+.img-left {
+  float: left;
+  margin: 0 20px 10px 0;
+}
+
+.img-right {
+  float: right;
+  margin: 0 0 10px 20px;
+}
+
+/* @end */
+/* @text-align
+-------------------------------- */
+.ta-right {
+  text-align: right !important;
+}
+
+.ta-center {
+  text-align: center !important;
+}
+
+.ta-left {
+  text-align: left !important;
+}
+
+/* @end */
+/* @vertical-align
+-------------------------------- */
+.va-top {
+  vertical-align: top !important;
+}
+
+.va-bottom {
+  vertical-align: bottom !important;
+}
+
+.va-middle {
+  vertical-align: middle !important;
+}
+
+/* @end */
+/* @group color
+-------------------------------- */
+.red {
+  color: #c00 !important;
+}
+
+.gray {
+  color: #666 !important;
+}
+
+.pink {
+  color: #C60070 !important;
+}
+
+.peach {
+  color: #F86363 !important;
+}
+
+.green {
+  color: #89B929 !important;
+}
+
+/* @end */
+/* @group margin
+-------------------------------- */
+.m0 {
+  margin: 0 !important;
+}
+
+.mb10 {
+  margin-bottom: 10px !important;
+}
+
+.mb20 {
+  margin-bottom: 20px !important;
+}
+
+.mb30 {
+  margin-bottom: 30px !important;
+}
+
+.mb40 {
+  margin-bottom: 40px !important;
+}
+
+.mb50 {
+  margin-bottom: 50px !important;
+}
+
+.mb60 {
+  margin-bottom: 60px !important;
+}
+
+.mb70 {
+  margin-bottom: 70px !important;
+}
+
+.mb80 {
+  margin-bottom: 80px !important;
+}
+
+.mb90 {
+  margin-bottom: 90px !important;
+}
+
+.mb100 {
+  margin-bottom: 100px !important;
+}
+
+.mt10 {
+  margin-top: 10px !important;
+}
+
+.mt20 {
+  margin-top: 20px !important;
+}
+
+.mr10 {
+  margin-right: 10px !important;
+}
+
+.mr20 {
+  margin-right: 20px !important;
+}
+
+.mr30 {
+  margin-right: 30px !important;
+}
+
+.mr40 {
+  margin-right: 40px !important;
+}
+
+/* @end */
+/* @font size
+-------------------------------- */
+.fs10 {
+  font-size: 10px;
+  font-size: 1.0rem !important;
+}
+
+.fs11 {
+  font-size: 11px;
+  font-size: 1.1rem !important;
+}
+
+.fs12 {
+  font-size: 12px;
+  font-size: 1.2rem !important;
+}
+
+.fs13 {
+  font-size: 13px;
+  font-size: 1.3rem !important;
+}
+
+.fs14 {
+  font-size: 14px;
+  font-size: 1.4rem !important;
+}
+
+.fs15 {
+  font-size: 15px;
+  font-size: 1.5rem !important;
+}
+
+.fs16 {
+  font-size: 16px;
+  font-size: 1.6rem !important;
+}
+
+.fs17 {
+  font-size: 17px;
+  font-size: 1.7rem !important;
+}
+
+.fs18 {
+  font-size: 18px;
+  font-size: 1.8rem !important;
+}
+
+.fs19 {
+  font-size: 19px;
+  font-size: 1.9rem !important;
+}
+
+.fs20 {
+  font-size: 20px;
+  font-size: 2.0rem !important;
+}
+
+.fs21 {
+  font-size: 21px;
+  font-size: 2.1rem !important;
+}
+
+.fs22 {
+  font-size: 22px;
+  font-size: 2.2rem !important;
+}
+
+.fs23 {
+  font-size: 23px;
+  font-size: 2.3rem !important;
+}
+
+.fs24 {
+  font-size: 24px;
+  font-size: 2.4rem !important;
+}
+
+.fs25 {
+  font-size: 25px;
+  font-size: 2.5rem !important;
+}
+
+.fs26 {
+  font-size: 26px;
+  font-size: 2.6rem !important;
+}
+
+.fs27 {
+  font-size: 27px;
+  font-size: 2.7rem !important;
+}
+
+/* @end */
+/* @font-weight
+-------------------------------- */
+.fw-bold {
+  font-weight: bold !important;
+}
+
+/* @border
+-------------------------------- */
+.bb-none {
+  border-bottom: 0 !important;
+}
+
+.bl-none {
+  border-left: 0 !important;
+}
+
+.br-none {
+  border-right: 0 !important;
+}
+
+.bt-none {
+  border-top: 0 !important;
+}
+
+/* @status font color
+-------------------------------- */
+#MailMessageIndexForm .required{
+    color:#FFF;
+    font-size:10px;
+    background-color: #C30;
+    padding:4px 5px;
+    font-weight: normal;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    white-space: nowrap;
+    margin-left:5px;
+    margin-right:5px;
+    vertical-align: middle;
+}
+#MailMessageIndexForm .normal{
+    color:#FFF;
+    font-size:10px;
+    background-color: #CCC;
+    padding:4px 5px;
+    font-weight: normal;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    white-space: nowrap;
+    margin-left:5px;
+    margin-right:5px;
+    vertical-align: middle;
+}
+
+.error-message {
+  color: #c00;
+}
+
+.message {
+  color: #c00;
+}
+
+/* @end */
+
+

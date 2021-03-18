@@ -1,0 +1,7 @@
+table#TableBlogPosts span.tag {
+	border:1px solid #e2e2e2;
+	background-color: #efefef;
+	font-size: 10px;
+	padding:1px 2px;
+	margin-left:5px;
+}

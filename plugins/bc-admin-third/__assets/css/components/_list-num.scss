@@ -1,0 +1,16 @@
+.bca-list-num {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+  font-size: $label_font_size_small;
+  line-height: 1;
+  &__title {
+    font-weight: bold;
+    padding-right: 0.5rem;
+  }
+  &__data {
+    margin: 0;
+    padding: 0;
+    font-size: $label_font_size_small;
+  }
+}

@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BcBlog\Controller;
+namespace BcSample\Controller;
 
 use App\Controller\AppController as BaseController;
 

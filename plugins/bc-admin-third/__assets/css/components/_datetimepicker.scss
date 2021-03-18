@@ -1,0 +1,127 @@
+/*
+ datepicker
+  span			bca-datepicker
+  span(date)			bca-datepicker__date
+  text(date)			bca-datepicker__date-input
+  label(date)			bca-datepicker__date-label
+  span(time)			bca-datepicker__time
+  text(time)			bca-datepicker__time-input
+  label(time)			bca-datepicker__time-label
+
+<span class="bca-datetimepicker required">
+  <span class="bca-datetimepicker__date">
+    <label for="BlogPostPostsDateDate" class="bca-datetimepicker__date-label">日付</label>
+    <input name="data[BlogPost][posts_date_date]" size="12" maxlength="10"
+      class="bca-datetimepicker__date-input hasDatepicker" value="2018/10/15" type="text" id="BlogPostPostsDateDate">
+    <script></script>
+  </span>
+  <span class="bca-datetimepicker__time">
+    <label for="BlogPostPostsDateTime" class="bca-datetimepicker__time-label">時間</label>
+    <input name="data[BlogPost][posts_date_time]" size="8" maxlength="8" class="bca-datetimepicker__time-input ui-timepicker-input" value="19:14:12" type="text" id="BlogPostPostsDateTime" autocomplete="off">
+  </span>
+  <input type="hidden" name="data[BlogPost][posts_date]" value="2018-10-15 19:14:12" id="BlogPostPostsDate">
+</span>
+
+ */
+.bca-datetimepicker {
+
+  display: inline-block;
+  white-space: nowrap;
+
+  &__date,
+  &__time {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    &-label {
+      margin-right: 0.3em;
+      cursor: pointer;
+      &::before {
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-50%);
+        font-size: 1.8rem;
+        color: #666;
+        //color: $color_primary;
+        //cursor: pointer;
+        transition: 0.2;
+      }
+    }
+
+    &:hover {
+      .bca-datetimepicker {
+        &__date,
+        &__time {
+          &-label {
+            &:before {
+              color: $color_secondary;
+            }
+          }
+        }
+      }
+    }
+
+    &-input {
+      display: inline-block;
+      outline: none;
+      padding: $button_padding_top calc(0.5em + 16px) $button_padding_bottom 0.5em;
+      margin:4px;
+      border-radius: 3px;
+      box-sizing: border-box;
+      border: 1px solid $color_control_border_color;
+      line-height: 1.2;
+      font-size: $button_font_size_medium;
+      color: $color_text_secondary;
+      &[data-input-text-size=lg] {
+        font-size: $button_font_size_large;
+      }
+      &[data-input-text-size=sm] {
+        font-size: $button_font_size_small;
+      }
+      &[data-input-text-size=full-counter] {
+        width: calc(100% - 80px);
+      }
+      &:focus {
+        box-shadow: $focus_shadow;
+        border-color: $color_primary;
+        border-width: 1px;
+      }
+    }
+  }
+
+  &__date {
+    &-label {
+      @include bca-icon(datetimepicker-date);
+    }
+  }
+  &__time {
+    margin-left: 1em;
+    &-label {
+      @include bca-icon(datetimepicker-time);
+    }
+    &-input {
+      width: 6em;
+    }
+  }
+
+  &__delimiter {
+    display: inline-block;
+    padding: 0 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  &__group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: -0.5em;
+  }
+  &__start,
+  &__end {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: start;
+    margin-bottom: 0.5em;
+  }
+}
