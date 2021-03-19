@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS User Community <https://basercms.net/community/>
@@ -10,17 +9,23 @@ declare(strict_types=1);
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BcSample\Controller;
-
-use App\Controller\AppController as BaseController;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
+namespace BaserCore\Annotation;
 
 /**
- * Class AppController
- * @package BcBlog\Controller
+ * @Annotation
  */
-class AppController extends BaseController
+
+/**
+ * Class Checked
+ * @package BaserCore\Annotation
+ * @Annotation
+ */
+final class Checked
 {
+    /**
+     * Name
+     * @var string
+     */
+    public $name = 'checked';
+
 }

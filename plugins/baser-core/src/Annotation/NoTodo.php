@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS User Community <https://basercms.net/community/>
@@ -10,17 +9,19 @@ declare(strict_types=1);
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BcSample\Controller;
-
-use App\Controller\AppController as BaseController;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
+namespace BaserCore\Annotation;
 
 /**
- * Class AppController
- * @package BcBlog\Controller
+ * Class NoTodo
+ * @package BaserCore\Annotation
+ * @Annotation
  */
-class AppController extends BaseController
+final class NoTodo
 {
+    /**
+     * Name
+     * @var string
+     */
+    public $name = 'noTodo';
+
 }

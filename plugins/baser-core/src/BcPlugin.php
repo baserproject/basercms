@@ -19,6 +19,9 @@ use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use Migrations\Migrations;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class plugin
@@ -43,6 +46,7 @@ class BcPlugin extends BasePlugin
 
     /**
      * @param \Cake\Routing\RouteBuilder $routes
+     * @checked
      */
     public function routes($routes): void
     {
@@ -55,6 +59,13 @@ class BcPlugin extends BasePlugin
                 if ($this->getName() !== 'BaserCore') {
                     $path .= '/' . Inflector::dasherize($this->getName());
                 }
+
+                /**
+                 * AnalyseController で利用
+                 */
+                $routes->setExtensions(['json']);
+                $routes->fallbacks(InflectedRoute::class);
+
                 $routes->prefix(
                     'Admin',
                     ['path' => $path],
