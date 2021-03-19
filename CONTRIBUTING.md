@@ -76,7 +76,7 @@ Issue番号にもとづいた名称でブランチを作成し切り替えます
 
 ## 全体の構成や baserCMS４からの変更点について
 
-[開発メモ](https://github.com/baserproject/ucmitz/blob/dev/DEVELOPMENTAL_MEMO.md) を参考にします。
+[baserCMS4 から ucmitz への移行](https://github.com/baserproject/ucmitz/blob/dev/migration-docs/README.md) を参考にします。
 
 　
 
@@ -88,7 +88,7 @@ Issue番号にもとづいた名称でブランチを作成し切り替えます
 
 ## 開発中に発生した開発に必要なドキュメントの追加について
 
-`/docs/` に、マークダウン形式でファイルを作成します。
+`/docs/` または、 `/migration-docs/` に、マークダウン形式でファイルを作成します。
 
 　
 
@@ -103,5 +103,4 @@ Issue番号にもとづいた名称でブランチを作成し切り替えます
 - [ユニットテスト](https://github.com/baserproject/ucmitz/blob/dev/docs/unittest.md)
 - [モノレポによるパッケージ管理](https://github.com/baserproject/ucmitz/blob/dev/docs/monorepo.md)
 - [Cloud9 上で Docker を動作させる](https://github.com/baserproject/ucmitz/blob/dev/docs/cloud9.md)
-- [開発メモ](https://github.com/baserproject/ucmitz/blob/dev/DEVELOPMENTAL_MEMO.md)
 - [将来的に追加したい機能](https://docs.google.com/document/d/1AwJQ0h0xQ5utFB1tVzLh1b1UhZp-lxQbM2fDjxtDc9I/edit#)
