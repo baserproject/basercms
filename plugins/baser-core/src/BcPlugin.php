@@ -95,6 +95,7 @@ class BcPlugin extends BasePlugin
             'plugin' => $this->getName(),
             'connection' => 'default'
         ], $options);
+        $pluginName = $options['plugin'];
 
         // TODO clearAllCache 未実装
         // clearAllCache();
@@ -103,7 +104,7 @@ class BcPlugin extends BasePlugin
             $this->migrations->migrate($options);
             $this->migrations->seed($options);
             $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
-            return $plugins->install($this->getName());
+            return $plugins->install($pluginName);
         } catch (BcException $e) {
             $this->migrations->rollback($options);
             return false;
@@ -113,11 +114,22 @@ class BcPlugin extends BasePlugin
 
     /**
      * プラグインをアンインストールする
+     *  - `plugin` : プラグイン名
+     *  - `connection` : コネクション名
+     *  - `target` : ロールバック対象バージョン
      */
-    public function uninstall() : bool
+    public function uninstall($options = []) : bool
     {
-        // TODO 未実装
-        return true;
+        $options = array_merge([
+            'plugin' => $this->getName(),
+            'connection' => 'default',
+            'target' => 0,
+        ], $options);
+        $pluginName = $options['plugin'];
+
+        $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+        $this->migrations->rollback($options);
+        return $plugins->uninstall($pluginName);
     }
 
 }
