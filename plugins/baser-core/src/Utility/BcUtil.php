@@ -227,6 +227,8 @@ class BcUtil
             foreach($pluginNames as $name) {
                 $pluginClassPath = $path . $name . DS . 'src' . DS . 'Plugin.php';
                 if (file_exists($pluginClassPath)) {
+                    $loader = require ROOT . DS . 'vendor/autoload.php';
+                    $loader->addPsr4($name . '\\', $path . $name . DS . 'src');
                     require_once $pluginClassPath;
                     return true;
                 }
