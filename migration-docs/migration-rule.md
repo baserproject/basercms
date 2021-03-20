@@ -100,9 +100,19 @@ $options = array_merge([    // ※ 本来であればここからスタートだ
 
 これにより進捗管理表に自動反映し、進捗状況をわかるようにする。
 
+なお、クラスの冒頭にアノテーションのインポートが必要なので
+
+```php
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+```
 
 ```php
 // 例）
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
     /**
      * コンテンツを特定する文字列を出力する
