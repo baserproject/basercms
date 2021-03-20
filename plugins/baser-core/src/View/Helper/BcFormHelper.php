@@ -14,6 +14,9 @@ namespace BaserCore\View\Helper;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use \Cake\View\Helper\FormHelper;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * FormHelper 拡張クラス
@@ -83,7 +86,7 @@ class BcFormHelper extends FormHelper
 	 *
 	 * @param string $type フォームのタイプ タイプごとにイベントの登録ができる
 	 * @return string 行データ
-     * @check
+     * @checked
 	 */
 	public function dispatchAfterForm($type = '') : string
 	{
@@ -331,7 +334,7 @@ SCRIPT_END;
      * @param array $options An array of html attributes and options.
      * @return string An formatted opening FORM tag.
      * @link https://book.cakephp.org/4/en/views/helpers/form.html#Cake\View\Helper\FormHelper::
-     * @check
+     * @checked
      */
 	public function create($context = null, $options = []) : string
 	{
@@ -389,7 +392,7 @@ SCRIPT_END;
      *   into the hidden input elements generated for the Security Component.
      * @return string A closing FORM tag.
      * @link https://book.cakephp.org/4/en/views/helpers/form.html#closing-the-form
-     * @check
+     * @checked
      */
 	public function end(array $secureAttributes = []) : string
 	{
@@ -765,7 +768,7 @@ DOC_END;
 	 * @param array $options Array of HTML attributes.
 	 * @return string An HTML text input element.
 	 * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
-     * @check
+     * @checked
 	 */
 	public function checkbox($fieldName, $options = [])
 	{
@@ -856,7 +859,7 @@ DOC_END;
 	 * @param array $options Array of HTML attributes.
 	 * @return string A generated hidden input
 	 * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::hidden
-     * @check
+     * @checked
 	 */
 	public function hidden($fieldName, $options = []) : string
 	{
@@ -1261,7 +1264,7 @@ DOC_END;
 	 * @param array $attributes The HTML attributes of the select element.
 	 * @return string Formatted SELECT element
 	 * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
-     * @check
+     * @checked
 	 */
 	public function select($fieldName, $options = [], $attributes = []) : string
 	{
@@ -2216,7 +2219,7 @@ DOC_END;
 	 * @param string $fieldName
 	 * @param array $options
 	 * @return string
-     * @check
+     * @checked
 	 */
 	public function file($fieldName, $options = []) : string
 	{

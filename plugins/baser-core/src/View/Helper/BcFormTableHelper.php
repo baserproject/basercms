@@ -12,6 +12,9 @@
 namespace BaserCore\View\Helper;
 
 use \Cake\View\Helper;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcFormTableHelper
@@ -25,7 +28,7 @@ class BcFormTableHelper extends Helper
 	 * テーブル前発火
 	 *
 	 * @return string
-     * @check
+     * @checked
 	 */
 	public function dispatchBefore()
 	{
@@ -50,7 +53,7 @@ class BcFormTableHelper extends Helper
 	 * テーブル後発火
 	 *
 	 * @return string
-     * @check
+     * @checked
 	 */
 	public function dispatchAfter()
 	{

@@ -18,6 +18,9 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
 use Cake\Utility\Hash;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class PluginsController
