@@ -30,22 +30,6 @@ class BcMessageComponent extends Component
     public $components = ['Flash'];
 
     /**
-     * Initialize
-     *
-     * @param array $config
-     * @return void
-     * @checked
-     * @noTodo
-     */
-    public function initialize(array $config): void
-    {
-        parent::initialize($config);
-		if (!isset($controller->Flash)) {
-			throw new BcException(__d('baser', 'BcMessageComponent を利用するには、コントローラーで FlashComponent の利用設定が必要です。'));
-		}
-    }
-
-    /**
      * メッセージをセットする
      *
      * @param string $message メッセージ
