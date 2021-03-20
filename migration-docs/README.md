@@ -6,6 +6,7 @@
 - [コントローラーにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/migration-docs/about-controller.md)
 - [モデルにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/migration-docs/about-model.md)
 - [ビューにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/migration-docs/about-view.md)
+- [ヘルパーにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/migration-docs/about-helper.md)
 - [リクエスト関連における注意点](https://github.com/baserproject/ucmitz/blob/dev/migration-docs/about-request.md)
 - [セッション関連における注意点](https://github.com/baserproject/ucmitz/blob/dev/migration-docs/about-request.md)
 - [全体的な変更点](https://github.com/baserproject/ucmitz/blob/dev/migration-docs/change.md)
