@@ -21,18 +21,54 @@ use \Cake\View\Helper;
 class BcFormTableHelper extends Helper
 {
 
-    /**
-     * テーブル前発火
-     */
-    public function dispatchBefore()
-    {
-    }
+	/**
+	 * テーブル前発火
+	 *
+	 * @return string
+     * @check
+	 */
+	public function dispatchBefore()
+	{
 
-    /**
-     * テーブル後発火
-     */
-    public function dispatchAfter()
-    {
-    }
+	    // TODO 未実装のため代替措置
+	    // >>>
+	    return '';
+	    // <<<
+
+		$event = $this->dispatchEvent('before', [
+			'id' => $this->_View->BcForm->getId(),
+			'out' => ''
+		], ['class' => 'BcFormTable', 'plugin' => '']);
+		$output = '';
+		if ($event !== false) {
+			$output = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+		}
+		return $output;
+	}
+
+	/**
+	 * テーブル後発火
+	 *
+	 * @return string
+     * @check
+	 */
+	public function dispatchAfter()
+	{
+
+	    // TODO 未実装のため代替措置
+	    // >>>
+	    return '';
+	    // <<<
+
+		$event = $this->dispatchEvent('after', [
+			'id' => $this->_View->BcForm->getId(),
+			'out' => ''
+		], ['class' => 'BcFormTable', 'plugin' => '']);
+		$output = '';
+		if ($event !== false) {
+			$output = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+		}
+		return $output;
+	}
 
 }
