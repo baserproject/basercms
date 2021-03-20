@@ -55,12 +55,66 @@ return;
 チェック時、参照しているクラスメソッドが未実装である場合など、完全な動作確認ができない場合がある。その際は、TODOコメントを必ず記載する。
 コメントについては他の人が見てもわかるようにする。
 
-なお、既存のコードをコメントアウトする場合は、範囲を指定するよう
+なお、既存のコードをコメントアウトする場合は、範囲を指定する
 
 ```php
+部分的に動作しないのでコメントアウトしたい場合
+
 // TODO 未実装のためコメントアウト
 /* >>>
 $hoge = 1;
 $hoge = 2;
 <<< */
+```
+
+```php
+メソッドの冒頭部で代替措置を記述する場合
+
+// TODO 未実装のため代替措置
+// >>>
+$request = $this->_View->getRequest();
+if ($request->getParam('action') === 'login') {
+    return 'AdminUsersLogin';
+} else {
+    return 'Admin';
+}
+// <<<
+
+$options = array_merge([    // ※ 本来であればここからスタートだが代替措置で return されているため実行されない
+    'home' => 'Home',
+    'default' => 'Default',
+    'error' => 'Error',
+    'underscore' => false
+], $options);
+```
+
+## コード移行時のマーキング
+
+クラスメソッドやビューファイルの移行実装時には、ヘッダーコメントにアノテーションでマーキングをする
+
+```
+@checked : コードの精査が完了している
+@noTodo : Todo が発生しない
+@unitTest : unitTest が実装済である
+```
+
+これにより進捗管理表に自動反映し、進捗状況をわかるようにする。
+
+
+```php
+// 例）
+
+    /**
+     * コンテンツを特定する文字列を出力する
+     *
+     * URL を元に、第一階層までの文字列をキャメルケースで取得する
+     * ※ 利用例、出力例については BcBaserHelper::getContentsName() を参照
+     *
+     * @param bool $detail 詳細モード true にした場合は、ページごとに一意となる文字列をキャメルケースで出力する（初期値 : false）
+     * @param array $options オプション（初期値 : array()）
+     *    ※ オプションの詳細については、BcBaserHelper::getContentsName() を参照
+     * @return void
+     * @checked
+     * @noTodo
+     */
 ```
