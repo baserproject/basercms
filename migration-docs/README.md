@@ -1,7 +1,7 @@
 # baserCMS4 から ucmitz への移行
 
 - [プログラムの構成](https://github.com/baserproject/ucmitz/blob/dev/migration-docs/constitution.md)
-- [コーディングの基本](https://github.com/baserproject/ucmitz/blob/dev/migration-docs/coding-basics.md)
+- [移行上のルールと注意点](https://github.com/baserproject/ucmitz/blob/dev/migration-docs/migration-rule.md)
 - [ルーティングにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/migration-docs/about-routing.md)
 - [コントローラーにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/migration-docs/about-controller.md)
 - [モデルにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/migration-docs/about-model.md)
