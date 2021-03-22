@@ -165,7 +165,7 @@ class PluginsTable extends Table
      * @param $name
      * @return bool
      */
-    public function install($name)
+    public function install($name): bool
     {
         $recordExists = $this->find()->where(['name' => $name])->count();
         $plugin = $this->getPluginConfig($name);
@@ -181,5 +181,37 @@ class PluginsTable extends Table
             return false;
         }
     }
+
+    /**
+     * プラグインをアンインストールする
+     *
+     * @param $name
+     * @return bool
+     */
+    public function uninstall($name): bool
+    {
+        $targetPlugin = $this->find()->where(['name' => $name])->first();
+        return $this->delete($targetPlugin);
+    }
+
+
+    /**
+     * プラグインを無効化する
+     *
+     * @param $name
+     * @return bool
+     */
+    public function detouch($name): bool
+    {
+        $targetPlugin = $this->find()->where(['name' => $name])->first();
+        if ($targetPlugin === null) {
+            return false;
+        }
+        $targetPlugin->status = 0;
+        $result = $this->save($targetPlugin);
+        return $result !== false;
+    }
+
+
 
 }

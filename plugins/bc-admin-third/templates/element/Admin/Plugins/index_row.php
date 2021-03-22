@@ -82,13 +82,16 @@ $class = ' class="' . implode(' ', $classies) . '"';
             ]); ?>
         <?php endif; ?>
         <?php if ($plugin->status): ?>
-            <?php $this->BcBaser->link('', ['action' => 'ajax_delete', $plugin->name], [
-                'aria-label' => __d('baser', 'このプラグインを無効にする'),
+            <?= $this->BcForm->postLink(
+                '',
+                ['action' => 'detouch', $plugin->name],
+                ['block' => true,
+                'confirm' => __d('baser', "本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。"),
                 'title' => __d('baser', '無効'),
                 'class' => 'btn-delete bca-btn-icon',
                 'data-bca-btn-type' => 'unpublish',
-                'data-bca-btn-size' => 'lg'
-            ]); ?>
+                'data-bca-btn-size' => 'lg']
+            ) ?>
         <?php elseif (!$plugin->status && !$plugin->update && !$plugin->old_version): ?>
             <?php $this->BcBaser->link('',
                 ['action' => 'install', $plugin->name], [
@@ -100,16 +103,16 @@ $class = ' class="' . implode(' ', $classies) . '"';
                 ]); ?>
         <?php endif ?>
         <?php if (!$plugin->status): ?>
-            <?php if (!in_array($plugin->name, $corePlugins)): ?>
-                <?php $this->BcBaser->link('',
-                    ['action' => 'ajax_delete_file', $plugin->name], [
-                        'aria-label' => __d('baser', 'このプラグインを削除する'),
-                        'title' => __d('baser', '削除'),
-                        'class' => 'btn-delete bca-btn-icon',
-                        'data-bca-btn-type' => 'delete',
-                        'data-bca-btn-size' => 'lg'
-                    ]); ?>
-            <?php endif ?>
+            <?= $this->BcForm->postLink(
+                '',
+                ['action' => 'uninstall', $plugin->name],
+                ['block' => true,
+                'confirm' => __d('baser', "本当に削除してもいいですか？\nプラグインフォルダ内のファイル、データベースのデータも全て削除されます。"),
+                'title' => __d('baser', '削除'),
+                'class' => 'btn-delete bca-btn-icon',
+                'data-bca-btn-type' => 'delete',
+                'data-bca-btn-size' => 'lg']
+            ) ?>
         <?php endif; ?>
     </td>
 </tr>

@@ -12,7 +12,7 @@
 $this->BcBaser->i18nScript([
     'message1' => __d('baser', "このデータを本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。"),
     'message2' => __d('baser', "本当に削除してもいいですか？\nプラグインフォルダ内のファイル、データベースのデータも全て削除されます。"),
-    'message3' => __d('baser', "本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。")
+    // 'message3' => __d('baser', "本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。")
 ]);
 $this->BcBaser->js('admin/plugins/index.bundle', false);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
@@ -42,3 +42,4 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
         </div>
     </div>
 </div>
+<?= $this->fetch('postLink') ?>

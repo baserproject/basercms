@@ -141,6 +141,54 @@ class PluginsController extends BcAdminAppController
         $this->setHelp('plugins_install');
     }
 
+
+    /**
+     * アンインストール
+     *
+     * @param string $name プラグイン名
+     * @return void
+     */
+    public function uninstall($name)
+    {
+        $name = urldecode($name);
+        if (!$this->request->is('post')) {
+            $this->notfound();
+        }
+
+        $plugins = Plugin::getCollection();
+        $plugin = $plugins->get($name);
+        $plugin->uninstall();
+
+        if ($plugin->uninstall()) {
+            $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を削除しました。'), $name));
+        } else {
+            $this->BcMessage->setError(__d('baser', 'プラグインの削除に失敗しました。'));
+        }
+    }
+
+    /**
+     * 無効化
+     *
+     * @param string $name プラグイン名
+     * @return void
+     */
+    public function detouch($name) {
+        $name = urldecode($name);
+        if (!$this->request->is('post')) {
+            $this->notfound();
+        }
+
+        if ($this->Plugins->detouch($name)) {
+            $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を無効にしました。'), $name));
+        } else {
+            $this->BcMessage->setError(__d('baser', 'プラグインの無効化に失敗しました。'));
+        }
+        $this->redirect(['action' => 'index']);
+    }
+
+
+
+
 	/**
 	 * プラグインをアップロードしてインストールする
 	 *
@@ -323,51 +371,6 @@ class PluginsController extends BcAdminAppController
 		$folder->delete($tmpPath);
 	}
 
-	/**
-	 * プラグインがインストール可能か判定する
-	 *
-	 * @param string $pluginName プラグイン名
-	 * @return boolean
-	 */
-	private function canInstall($pluginName)
-	{
-		$installedPlugin = $this->Plugin->find('first', [
-			'conditions' => [
-				'name' => $pluginName,
-				'status' => 1,
-			],
-		]);
-		// 既にプラグインがインストール済み
-		if ($installedPlugin) {
-			throw new BcException('既にインストール済のプラグインです。');
-		}
-
-		$paths = App::path('Plugin');
-		$existsPluginFolder = false;
-		foreach($paths as $path) {
-			if (!is_dir($path . $pluginName)) {
-				continue;
-			}
-			$existsPluginFolder = true;
-			$configPath = $path . $pluginName . DS . 'config.php';
-			if (file_exists($configPath)) {
-				include $configPath;
-			}
-			break;
-		}
-
-		// プラグインのフォルダが存在しない
-		if (!$existsPluginFolder) {
-			throw new BcException('インストールしようとしているプラグインのフォルダが存在しません。');
-		}
-
-		// インストールしようとしているプラグイン名と、設定ファイル内のプラグイン名が違う
-		if (!empty($name) && $pluginName !== $name) {
-			throw new BcException('このプラグイン名のフォルダ名を' . $name . 'にしてください。');
-		}
-
-		return true;
-	}
 
 	/**
 	 * アクセス制限設定を追加する
