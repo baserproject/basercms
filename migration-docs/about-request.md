@@ -19,3 +19,23 @@ $request->getPath();
 ```php
 $request->getRequestTarget();
 ```
+
+## リクエストデータ
+```php
+// baserCMS4
+$request->data[];
+```
+```php
+// ucmitz
+$request->getData();
+```
+
+## パラメーター
+```php
+// baserCMS4
+$request->params[];
+```
+```php
+// ucmitz
+$request->getParam();
+```
