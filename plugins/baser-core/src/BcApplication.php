@@ -10,6 +10,7 @@ declare(strict_types=1);
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
+
 namespace BaserCore;
 
 use BaserCore\Utility\BcUtil;
@@ -19,10 +20,8 @@ use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\MiddlewareQueue;
-use Cake\ORM\TableRegistry;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
-
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
@@ -48,20 +47,22 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
             $this->bootstrapCli();
         }
 
-        if(Configure::read('debug') && env('USE_DEBUG_KIT', false)) {
+        if (Configure::read('debug') && env('USE_DEBUG_KIT', false)) {
             // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
             $this->addPlugin('DebugKit');
         }
 
         $this->addPlugin('BaserCore');
         $this->addPlugin('Authentication');
+        $this->addPlugin('Migrations');
         $this->addPlugin('BcAdminThird');
 
         $plugins = BcUtil::getEnablePlugins();
         foreach($plugins as $plugin) {
-            $this->addPlugin($plugin);
+            if (BcUtil::includePluginClass($plugin)) {
+                $this->addPlugin($plugin);
+            }
         }
-
     }
 
     /**
@@ -96,8 +97,7 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
             ->add(new BodyParserMiddleware())
 
             // Authorization (AuthComponent to Authorization)
-            ->add(new AuthenticationMiddleware($this))
-            ;
+            ->add(new AuthenticationMiddleware($this));
 
         return $middlewareQueue;
     }
@@ -133,7 +133,7 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
         $service = new AuthenticationService();
         $prefix = $request->getParam('prefix');
 
-        if($prefix) {
+        if ($prefix) {
             $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
             $service->setConfig([
                 'unauthenticatedRedirect' => $authSetting['loginAction'],

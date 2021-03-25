@@ -8,6 +8,7 @@
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
+
 namespace BaserCore\Controller\Admin;
 
 /**
@@ -35,9 +36,9 @@ class UtilitiesController extends BcAdminAppController
      */
     public function ajax_save_search_box($key, $open = '')
     {
-	    $this->autoRender = false;
-		$this->request->getSession()->write('BcApp.adminSearchOpened.' . $key, $open);
-		echo true;
-	}
+        $this->autoRender = false;
+        $this->request->getSession()->write('BcApp.adminSearchOpened.' . $key, $open);
+        echo true;
+    }
 
 }

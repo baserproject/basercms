@@ -1,0 +1,76 @@
+.bca-radio {
+  display: inline-block;
+  min-height: 1.5em;
+  margin: 0.2em 1em 0 0;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size: $label_font_size_medium;
+  &[data-bca-radio-size=lg] { //大きいサイズ
+    font-size: $label_font_size_large;
+  }
+  &[data-bca-radio-size=sm] { //小さいサイズ
+    font-size: $label_font_size_small;
+  }
+
+  &-group {
+    margin-bottom: -0.5em;
+    .bca-radio {
+      //margin-bottom: 0.5em;
+    }
+    br + .bca-radio {
+      margin-top: .5em;
+    }
+  }
+
+  &__input {
+    opacity: 0;
+    width: 0px;
+    height: 0px;
+    margin: 0px;
+    & + label {
+      display: inline-block;
+      position: relative;
+      cursor: pointer;
+      //margin-right: 15px;
+      padding-left: 2em;
+      font-size: $label_font_size_small;
+    }
+    &[data-bca-radio-size=lg] { //大きいサイズ
+      + label {
+        font-size: $label_font_size_large;
+      }
+    }
+    &[data-bca-radio-size=sm] { //小さいサイズ
+      + label {
+        font-size: $label_font_size_small;
+      }
+    }
+    & + label:before {
+      content: "";
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 1.5em;
+      height: 1.5em;
+      box-sizing: border-box;
+      margin: auto;
+      border: 1px solid $color_control_border_color;
+      border-radius: 50%;
+      //background: #EEEEEE;
+    }
+    &:checked + label:before {
+      background: $color_primary;
+      box-shadow: 0 0 0px 4px #fff inset;
+    }
+    &:focus + label:before {
+      box-shadow: 0 0 0px 4px #fff inset, $focus_shadow;
+      border-color: $color_primary;
+      border-width: 1px;
+    }
+  }
+  &__label {
+    margin-bottom: 0;
+  }
+}

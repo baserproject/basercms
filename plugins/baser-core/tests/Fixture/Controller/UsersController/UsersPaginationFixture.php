@@ -12,7 +12,6 @@
 namespace BaserCore\Test\Fixture\Controller\UsersController;
 
 use Cake\TestSuite\Fixture\TestFixture;
-use Cake\ORM\TableRegistry;
 
 /**
  * Class UsersPaginationFixture
@@ -31,9 +30,9 @@ class UsersPaginationFixture extends TestFixture
     {
         $this->records = [];
 
-        for ($i = 1; $i <= 21; $i++) {
+        for($i = 1; $i <= 21; $i++) {
             $this->records[] = [
-                'name' => 'Lorem ipsum dolor sit amet Pagination'.$i,
+                'name' => 'Lorem ipsum dolor sit amet Pagination' . $i,
                 'password' => 'Lorem ipsum dolor sit amet',
                 'real_name_1' => 'Lorem ipsum dolor sit amet',
                 'real_name_2' => 'Lorem ipsum dolor sit amet',

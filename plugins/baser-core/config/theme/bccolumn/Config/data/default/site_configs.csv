@@ -1,0 +1,60 @@
+﻿"id","name","value","created","modified"
+"","name","baser company","",""
+"","keyword","baser,CMS,コンテンツマネジメントシステム,開発支援","",""
+"","description","baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。WEBサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。","",""
+"","address","福岡県","",""
+"","theme","bccolumn","",""
+"","email","","",""
+"","widget_area","1","",""
+"","maintenance","0","",""
+"","mail_encode","UTF-8","",""
+"","smtp_host","","",""
+"","smtp_user","","",""
+"","smtp_password","","",""
+"","smtp_port","","",""
+"","formal_name","baser company","",""
+"","admin_list_num","10","",""
+"","google_analytics_id","","",""
+"","content_types","YTozOntzOjk6IuODluODreOCsCI7czo5OiLjg5bjg63jgrAiO3M6OToi44Oa44O844K4IjtzOjk6IuODmuODvOOCuCI7czo5OiLjg6Hjg7zjg6siO3M6OToi44Oh44O844OrIjt9","",""
+"","category_permission","","",""
+"","admin_theme","","",""
+"","login_credit","1","",""
+"","first_access","","",""
+"","editor","BcCkeditor","",""
+"","editor_styles","#青見出し
+h3 {
+color:Blue;
+}
+#赤見出し
+h3 {
+color:Red;
+}
+#黄マーカー
+span {
+background-color:Yellow;
+}
+#緑マーカー
+span {
+background-color:Lime;
+}
+#大文字
+big {}
+#小文字
+small {}
+#コード
+code {}
+#削除文
+del {}
+#挿入文
+ins {}
+#引用
+cite {}
+#インライン
+q {}","",""
+"","editor_enter_br","0","",""
+"","admin_side_banner","1","",""
+"","smtp_tls","0","",""
+"","use_universal_analytics","1","",""
+"","version","","",""
+"","google_maps_api_key","","",""
+"","main_site_display_name","パソコン","",""

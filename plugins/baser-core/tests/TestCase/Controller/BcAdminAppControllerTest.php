@@ -20,7 +20,7 @@ use BaserCore\Controller\Admin\BcAdminAppController;
  */
 class BcAdminAppControllerTest extends TestCase
 {
-    use IntegrationTestTrait;
+//    use IntegrationTestTrait;
 
     /**
      * set up

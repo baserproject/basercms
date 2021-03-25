@@ -1,0 +1,3 @@
+﻿id,main_site_id,name,display_name,title,alias,theme,status,use_subdomain,relate_main_site,device,lang,same_main_url,auto_redirect,auto_link,created,modified
+1,0,mobile,ケータイ,baserCMS inc.｜ケータイ,m,,0,,,mobile,,,1,,,
+2,0,smartphone,スマートフォン,baserCMS inc.｜スマホ,s,,0,,,smartphone,,,1,,,

@@ -1,0 +1,61 @@
+.bca-search {
+  font-size: $label_font_size_medium;
+  border-bottom: 1px solid $color_main_contents_border_color;
+  margin-bottom: 20px;
+  align-self: auto;
+  background-color: #fff;
+  &__head {
+    margin: 0;
+    padding: 10px;
+    border: none;
+    font-size: 1em;
+    font-weight: normal;
+    a {
+      display: block;
+      padding: 10px;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  &__body {
+    margin: 0;
+    padding: 0 1em 2em;
+    display: none;
+  }
+
+  &__input-list {
+    margin-top: 0;
+    /*display: flex;
+    justify-content: space-between;
+    align-items: flex-start;*/
+  }
+
+  &__input-item {
+    font-size: .875em;
+    /*flex: 0 1 0;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    display: block;*/
+    display: inline-block;
+    margin-right: 0.2vw;
+    &-label {
+      display: block;
+      margin: 0 0 8px 4px;
+    }
+  }
+
+  &__btns {
+    /*display: flex;
+    justify-content: center;
+    align-items: center;*/
+    margin: 1em 0 0 4px;
+
+    &-item {
+      margin: 0 1em 0 0;
+      display: inline-block;
+    }
+  }
+}

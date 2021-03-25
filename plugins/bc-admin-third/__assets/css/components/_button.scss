@@ -1,0 +1,370 @@
+%btn-common {
+  display: inline-block;
+  border-radius: 3px;
+  padding: $button_padding_top 1em $button_padding_bottom;
+  line-height: 1.2;
+  border: 1px solid $color_control_border_color;
+  cursor: pointer;
+  font-size: $button_font_size_medium;
+  box-sizing: border-box;
+  outline: none;
+  color: $color_text_primary;
+  text-decoration: none;
+  background-image: linear-gradient(rgb(255, 255, 255) 10%, rgb(244, 245, 241) 100%);
+  transition: all .3s ease-out 0s;
+  white-space: nowrap;
+  &::before {
+    margin-right: 4px;
+    color: $color_text_primary;
+  }
+  &:hover {
+    text-decoration: none;
+    color: $color_text_primary;
+    background-color: $color_background_menu;
+    background-image: linear-gradient(rgb(255, 255, 255) 100%, rgb(255, 255, 255) 100%);
+  }
+  &:focus {
+    box-shadow: $focus_shadow;
+  }
+}
+.bca-btn {
+  @extend %btn-common;
+
+  @mixin btn-primary {
+    color: #fff;
+    border: none;
+    background: $color_primary;
+    &::before {
+      //font-size: 16px !important;
+      color: #fff;
+    }
+    &:hover {
+      color: #fff;
+      background: $color_secondary;
+    }
+  }
+  // 公開
+  &[data-bca-btn-type=publish] {
+    @include bca-icon(publish);
+  }
+  // 非公開
+  &[data-bca-btn-type=unpublish] {
+    @include bca-icon(unpublish);
+  }
+  // 確認(プレビュー）
+  &[data-bca-btn-type=preview] {
+    // @include bca-icon(preview);
+  }
+  // 編集
+  &[data-bca-btn-type=edit] {
+    @include bca-icon(edit);
+  }
+  // 複製
+  &[data-bca-btn-type=copy] {
+    @include bca-icon(copy);
+  }
+  // 保存
+  &[data-bca-btn-type=save] {
+    @include btn-primary;
+  }
+  // 削除
+  &[data-bca-btn-type=delete] {
+    @include bca-icon(delete);
+  }
+  // 一覧に戻る
+  &[data-bca-btn-type=back-to-list] {
+    @include bca-icon(back-to-list);
+  }
+  // お気に入り
+  &[data-bca-btn-type=favorite] {
+    @include bca-icon(favorite);
+  }
+  // メニューアイテム
+  &[data-bca-btn-type=menuitem] {
+    @include bca-icon(menuitem);
+  }
+  // 追加
+  &[data-bca-btn-type=add] {
+    @include bca-icon(add);
+    @include btn-primary;
+  }
+  // ヘルプ
+  &[data-bca-btn-type=help] {
+    @include bca-icon(help);
+  }
+  // 制限（鍵)
+  &[data-bca-btn-type=permission] {
+    @include bca-icon(permission);
+  }
+  // HOME
+  &[data-bca-btn-type=home] {
+    @include bca-icon(home);
+  }
+  // Login
+  &[data-bca-btn-type=login] {
+    color: $color_lightest;
+    $color_darken: darken($color_primary, 5%);
+    border: 1px solid $color_darken;
+    background-image: linear-gradient($color_primary 10%, $color_darken 100%);
+    &:hover,
+    &:focus {
+      color: $color_lightest;
+      background-image: linear-gradient($color_darken 10%, $color_darken 100%);
+    }
+  }
+  // 検索
+  &[data-bca-btn-type=search] {
+    @include bca-icon(search);
+  }
+
+  // クリア
+  &[data-bca-btn-type=clear] {
+    @include bca-icon(clear);
+  }
+  // テキストコピー
+  &[data-bca-btn-type=textcopy] {
+    @include bca-icon(textcopy);
+  }
+  // ダウンロード
+  &[data-bca-btn-type=download] {
+    @include bca-icon(download);
+  }
+  // ドラック可能
+  &[data-bca-btn-type=draggable] {
+    @include bca-icon(draggable);
+  }
+
+  // サイズ
+  // ===========================
+  // xlarge
+  &[data-bca-btn-size=xl] {
+    font-size: $button_font_size_x_large; // 16px *
+  }
+  // large
+  &[data-bca-btn-size=lg] {
+    font-size: $button_font_size_large; // 16px *
+    //padding: .5em .8em .4em;
+  }
+  // small
+  &[data-bca-btn-size=sm] {
+    font-size: $button_font_size_small;
+    //font-size: 0.91rem;
+    //padding: .4em .8em .5em;
+  }
+  // xsmall
+  &[data-bca-btn-size=xs] {
+    font-size: $button_font_size_x_small;
+    font-size: 0.78rem;
+    padding: .6em .8em .4em;
+  }
+
+  // 横幅
+  // ===========================
+  // xlarge
+  &[data-bca-btn-width=xl] {
+    padding-right: 5em;
+    padding-left: 5em;
+  }
+  // large
+  &[data-bca-btn-width=lg] {
+    padding-right: 3em;
+    padding-left: 3em;
+  }
+
+  // category
+  // ===========================
+
+  // text
+  &[data-bca-btn-category=text] {
+    font-size: 1.4rem;
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+    color: $color_text_link;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // 色
+  // ===========================
+  &[data-bca-btn-color=danger] {
+    transition: none;
+    &:hover {
+      color: #fff;
+      background: $color_danger;
+      border-color: $color_danger;
+      &::before {
+        color: #fff;
+      }
+    }
+  }
+
+  // ステータス
+  // ===========================
+
+  // プライマリー
+  &[data-bca-btn-status=primary] {
+    color: #fff;
+    background: $color_primary;
+    &::before {
+      color: #fff;
+    }
+    &:hover {
+      color: #fff;
+      background: $color_secondary;
+    }
+  }
+
+  // disabled
+  &[disabled] {
+    color: #aaa;
+    border-color: #ddd;
+    //background: #eee;
+  }
+}
+// ポップアップダイアログ
+.ui-dialog-buttonset {
+  button {
+    @extend %btn-common;
+  }
+}
+.button-small {
+  @extend %btn-common;
+}
+
+
+// .submit {
+// 	position:relative;
+// 	text-align:center;
+// }
+// .submit .button,
+// .ui-widget-content .button{
+// 	color:#535A62;
+// 	border:1px solid #CCC;
+// 	cursor:pointer;
+// 	text-shadow:rgba(255,255,255,0.4) 1px 1px 0;
+// 	-webkit-border-radius:2px;
+// 	-moz-border-radius:2px;
+// 	-o-border-radius:2px;
+// 	border-radius:2px;
+// 	-webkit-box-shadow:inset 0 0 0 1px rgba(255,255,255,0.4);
+// 	-moz-box-shadow:inset 0 0 0 1px rgba(255,255,255,0.4);
+// 	-o-box-shadow:inset 0 0 0 1px rgba(255,255,255,0.4);
+// 	box-shadow:inset 0 0 0 1px rgba(255,255,255,0.4);
+// 	background:#F3F3F3;
+// 	background:-moz-linear-gradient(top,#FFF,#F3F3F3);
+// 	background:-webkit-gradient(linear,left top,left bottom,from(#FFF),color-stop(100%,#F3F3F3));
+// 	background:-o-linear-gradient(top,#FFF,#F3F3F3);
+// 	margin:10px;
+// 	padding:3px 40px;
+// 	font-weight: bold;
+// 	font-size: 1.2em;
+// 	white-space: nowrap;
+// 	line-height: 24px;
+// }
+// .submit .button:hover,
+// .ui-widget-content .button:hover{
+// 	border:1px solid #CCC;
+// 	text-decoration:none;
+// 	background:#f4f4f4;
+// 	background:-moz-linear-gradient(top,#f4f4f4,#dfdfdf 100%);
+// 	background:-webkit-gradient(linear,left top,left bottom,from(#f4f4f4),color-stop(100%,#dfdfdf));
+// 	background:-o-linear-gradient(top,#f4f4f4,#dfdfdf 100%);
+// }
+// .submit .button:active,
+// .ui-widget-content .button:active{
+// 	border:1px solid #CCC;text-decoration:none;
+// 	background:#cdcdcd;
+// 	background:-moz-linear-gradient(top,#cdcdcd,#eee 100%);
+// 	background:-webkit-gradient(linear,left top,left bottom,from(#cdcdcd),color-stop(100%,#eee));
+// 	background:-o-linear-gradient(top,#cdcdcd,#eee 100%);
+// }
+// .submit .button[disabled],
+// .ui-widget-content .button[disabled]{
+// 	opacity:.5
+// }
+// .submit a.button,
+// .ui-widget-content a.button{
+// 	padding-top:5px;
+// 	padding-bottom:5.5px;
+// }
+// *:first-child+html .submit a.button,
+// .ui-widget-content a.button{
+// 	position:absolute;
+// 	top:1px;
+// 	padding-top:3px;
+// 	padding-bottom:3px;
+// }
+
+// #Help .button, #Limit .button{
+// 	text-align: center;
+// }
+
+// /* button
+// ----------------------------------------------- */
+
+// .button-small{
+// 	text-decoration: none!important;
+// 	display:inline-block;
+// 	padding:4px 10px 4px;
+// 	margin-bottom:0;
+// 	font-size:13px;
+// 	line-height:18px;
+// 	color:#333!important;
+// 	text-align:center;
+// 	text-shadow:0 1px 1px rgba(255, 255, 255, 0.75);
+// 	vertical-align:middle;
+// 	cursor:pointer;
+// 	background-color:#f5f5f5;
+// 	background-image:-ms-linear-gradient(top, #fff, #e6e6e6);
+// 	background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#e6e6e6));
+// 	background-image:-webkit-linear-gradient(top, #fff, #e6e6e6);
+// 	background-image:-o-linear-gradient(top, #fff, #e6e6e6);
+// 	background-image:linear-gradient(top, #fff, #e6e6e6);
+// 	background-image:-moz-linear-gradient(top, #fff, #e6e6e6);
+// 	background-repeat:repeat-x;
+// 	border:1px solid #ccc;
+// 	border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+// 	border-color:#e6e6e6 #e6e6e6 #bfbfbf;
+// 	border-bottom-color:#b3b3b3;
+// 	-webkit-border-radius:4px;
+// 	-moz-border-radius:4px;
+// 	border-radius:4px;
+// 	filter:progid:dximagetransform.microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
+// 	filter:progid:dximagetransform.microsoft.gradient(enabled=false);
+// 	-webkit-box-shadow:inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+// 	-moz-box-shadow:inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+// 	box-shadow:inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+// 	border-color:#ccc;
+// 	border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+// }
+// .button-small:hover{
+// 	background-color:#e6e6e6;
+// 	color:#333;
+// 	text-decoration:none;
+// 	background-color:#e6e6e6;
+// 	background-position:0 -15px;
+// 	-webkit-transition:background-position .1s linear;
+// 	-moz-transition:background-position .1s linear;
+// 	-ms-transition:background-position .1s linear;
+// 	-o-transition:background-position .1s linear;
+// 	transition:background-position .1s linear;
+// }
+
+// // .btnとセットで使われる
+// .help{
+// 	cursor: pointer;
+// 	vertical-align:middle;
+// }
+
+// // HTML上存在するが、スタイルはない
+// .btn {
+
+// }
+
+
+
+
+

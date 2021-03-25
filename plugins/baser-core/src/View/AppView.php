@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\View;
+
 use BaserCore\View\Helper\BcAdminFormHelper;
 use BaserCore\View\Helper\BcAdminHelper;
 use BaserCore\View\Helper\BcAuthHelper;
@@ -36,8 +37,9 @@ use Cake\View\View;
  * @property BcListTableHelper $BcListTable
  * @property BcAuthHelper $BcAuth
  */
-class AppView extends View {
-    public function initialize():void
+class AppView extends View
+{
+    public function initialize(): void
     {
         parent::initialize();
         $this->loadHelper('BaserCore.BcAdminForm', ['templates' => 'BaserCore.bc_form']);

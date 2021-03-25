@@ -1,0 +1,18 @@
+.bca-file-list {
+  display: flex;
+  flex-wrap: wrap;
+  background: #eeeeee;
+  padding: 10px;
+  &__item {
+    box-sizing: content-box;
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  &__no-data {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+  }
+}

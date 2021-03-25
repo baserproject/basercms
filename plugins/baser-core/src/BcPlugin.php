@@ -10,11 +10,18 @@
  */
 
 namespace BaserCore;
+
+use BaserCore\Error\BcException;
 use Cake\Core\BasePlugin;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Route\InflectedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Cake\Utility\Inflector;
+use Migrations\Migrations;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class plugin
@@ -22,24 +29,47 @@ use Cake\Utility\Inflector;
  */
 class BcPlugin extends BasePlugin
 {
+
+    /**
+     * @var Migrations
+     */
+    public $migrations;
+
+    /**
+     * Initialize
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->migrations = new Migrations();
+    }
+
     /**
      * @param \Cake\Routing\RouteBuilder $routes
+     * @checked
      */
     public function routes($routes): void
     {
         $path = '/baser';
         Router::plugin(
-            $this->name,
-            ['path' =>  $path],
-            function (RouteBuilder $routes) {
+            $this->getName(),
+            ['path' => $path],
+            function(RouteBuilder $routes) {
                 $path = env('BC_ADMIN_PREFIX', '/admin');
-                if($this->name !== 'BaserCore') {
-                    $path .= '/' . Inflector::dasherize($this->name);
+                if ($this->getName() !== 'BaserCore') {
+                    $path .= '/' . Inflector::dasherize($this->getName());
                 }
+
+                /**
+                 * AnalyseController で利用
+                 */
+                $routes->setExtensions(['json']);
+                $routes->fallbacks(InflectedRoute::class);
+
                 $routes->prefix(
                     'Admin',
                     ['path' => $path],
-                    function (RouteBuilder $routes) {
+                    function(RouteBuilder $routes) {
                         $routes->connect('', ['controller' => 'Dashboard', 'action' => 'index']);
                         // CakePHPのデフォルトで /index が省略する仕様のため、URLを生成する際は、強制的に /index を付ける仕様に変更
                         $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
@@ -50,4 +80,56 @@ class BcPlugin extends BasePlugin
         );
         parent::routes($routes);
     }
+
+    /**
+     * プラグインをインストールする
+     *
+     * マイグレーションファイルを読み込み、 plugins テーブルに登録する
+     * @param array $options
+     *  - `plugin` : プラグイン名
+     *  - `connection` : コネクション名
+     */
+    public function install($options = []) : bool
+    {
+        $options = array_merge([
+            'plugin' => $this->getName(),
+            'connection' => 'default'
+        ], $options);
+        $pluginName = $options['plugin'];
+
+        // TODO clearAllCache 未実装
+        // clearAllCache();
+
+        try {
+            $this->migrations->migrate($options);
+            $this->migrations->seed($options);
+            $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+            return $plugins->install($pluginName);
+        } catch (BcException $e) {
+            $this->migrations->rollback($options);
+            return false;
+        }
+
+    }
+
+    /**
+     * プラグインをアンインストールする
+     *  - `plugin` : プラグイン名
+     *  - `connection` : コネクション名
+     *  - `target` : ロールバック対象バージョン
+     */
+    public function uninstall($options = []) : bool
+    {
+        $options = array_merge([
+            'plugin' => $this->getName(),
+            'connection' => 'default',
+            'target' => 0,
+        ], $options);
+        $pluginName = $options['plugin'];
+
+        $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+        $this->migrations->rollback($options);
+        return $plugins->uninstall($pluginName);
+    }
+
 }

@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Model\Table;
+
 use BaserCore\Model\Entity\UserGroup;
 use Cake\ORM\Association\BelongsToMany;
 use Cake\ORM\Behavior\TimestampBehavior as TimestampBehaviorAlias;
@@ -86,7 +87,7 @@ class UserGroupsTable extends Table
                     'provider' => 'bc',
                     'message' => 'ユーザーグループ名は半角のみで入力してください。'
                 ],
-                'name_unique'  => [
+                'name_unique' => [
                     'rule' => 'validateUnique',
                     'provider' => 'table',
                     'message' => '既に登録のあるユーザーグループ名です。'
@@ -126,7 +127,8 @@ class UserGroupsTable extends Table
      * @return mixed UserGroups Or false
      * @throws CopyFailedException When copy failed.
      */
-    public function copy($id = null, $data = [], $recursive = true) {
+    public function copy($id = null, $data = [], $recursive = true)
+    {
         if ($id && is_numeric($id)) {
             $data = $this->get($id)->toArray();
         } else {

@@ -1,4 +1,4 @@
-# BcPlugin plugin for baserCMS
+# BcBlog plugin for baserCMS
 
 ## Installation
 

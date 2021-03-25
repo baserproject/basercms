@@ -49,7 +49,7 @@ class UserGroupsControllerTest extends TestCase
             $this->loadFixtures('UserGroups');
         }
 
-        $config = $this->getTableLocator()->exists('UserGroups') ? [] : ['className' => 'BaserCore\Model\Table\UserGroupsTable'];
+        $config = $this->getTableLocator()->exists('UserGroups')? [] : ['className' => 'BaserCore\Model\Table\UserGroupsTable'];
         $UserGroups = $this->getTableLocator()->get('UserGroups', $config);
         $this->session(['AuthAdmin' => $UserGroups->get(1)]);
     }
@@ -118,7 +118,39 @@ class UserGroupsControllerTest extends TestCase
         $this->assertResponseSuccess();
         $userGroups = $this->getTableLocator()->get('UserGroups');
         $originalUserGroup = $userGroups->get(1);
-        $query = $userGroups->find()->where(['name' => $originalUserGroup->name.'_copy']);
+        $query = $userGroups->find()->where(['name' => $originalUserGroup->name . '_copy']);
         $this->assertEquals(1, $query->count());
     }
+
+	/**
+	 * beforeFilter
+	 */
+	public function testBeforeFilter()
+	{
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	/**
+	 * [ADMIN] 削除処理 (ajax)
+	 */
+	public function testAjax_delete()
+	{
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	/**
+	 * [ADMIN] データコピー（AJAX）
+	 */
+	public function testAjax_copy()
+	{
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	/**
+	 * ユーザーグループのよく使う項目の初期値を登録する
+	 */
+	public function testSet_default_favorites()
+	{
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 }

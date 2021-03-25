@@ -1,0 +1,50 @@
+.message {
+  color: $color_notification;
+  font-weight: normal;
+  margin: 20px;
+  line-height: 1.6;
+}
+
+#MessageBox .message,
+#MessageBox .notice-message,
+#BcMessageBox .notice-message,
+#UpdateMessage {
+  color: $color_notification;
+  word-break: break-word;
+  @include bca-icon(notification) {
+    margin: 0 .3em 0 0;
+  }
+  //background: #EBF5E1 url(../../img/admin/icn_info.png) no-repeat 10px 13px;
+}
+
+// jQuery.bcUtil.js で使用
+#MessageBox .alert-message,
+#authMessage,
+#AlertMessage,
+#BcMessageBox .alert-message{
+  color: $color_danger!important;
+  @include bca-icon(alert) {
+    margin: 0 .3em 0 0;
+  }
+  //background: #F7E9EC url(../../img/admin/warning.png) no-repeat 10px 13px;
+}
+
+/* flashMessage
+----------------------------------------------- */
+#authMessage,
+#flashMessage,
+#AlertMessage,
+#BcSystemMessage,
+#UpdateMessage {
+  padding: 10px 10px 10px 25px;
+  margin: 20px 0;
+  font-size: 16px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  font-weight: normal;
+}
+
+#BcMessageBox {
+  display: none;
+}

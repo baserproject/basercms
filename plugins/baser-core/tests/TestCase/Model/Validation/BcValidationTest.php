@@ -10,16 +10,17 @@
  */
 
 namespace BaserCore\Test\TestCase\Model\Validation;
+
 use BaserCore\Model\Validation\BcValidation;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Validation\Validator;
 
 /**
  * Class BcValidationTest
  * @package BaserCore\Test\TestCase\Model\Validation
  * @property BcValidation $BcValidation
  */
-class BcValidationTest extends BcTestCase {
+class BcValidationTest extends BcTestCase
+{
 
     /**
      * Test subject
@@ -57,16 +58,16 @@ class BcValidationTest extends BcTestCase {
      */
     public function testAlphaNumericPlus()
     {
-        $alpha   = implode('', array_merge(range('a', 'z'), range('A', 'Z')));
+        $alpha = implode('', array_merge(range('a', 'z'), range('A', 'Z')));
         $numeric = implode('', range(0, 9));
-        $mark    = '-_';
-        $allowedChars = $alpha.$numeric.$mark;
+        $mark = '-_';
+        $allowedChars = $alpha . $numeric . $mark;
 
         $this->assertEquals(true, $this->BcValidation->alphaNumericPlus(null));
         $this->assertEquals(true, $this->BcValidation->alphaNumericPlus($allowedChars));
-        $this->assertEquals(false, $this->BcValidation->alphaNumericPlus($allowedChars.'!'));
-        $this->assertEquals(true, $this->BcValidation->alphaNumericPlus($allowedChars.'!', '!'));
-        $this->assertEquals(true, $this->BcValidation->alphaNumericPlus($allowedChars.'!', ['!']));
+        $this->assertEquals(false, $this->BcValidation->alphaNumericPlus($allowedChars . '!'));
+        $this->assertEquals(true, $this->BcValidation->alphaNumericPlus($allowedChars . '!', '!'));
+        $this->assertEquals(true, $this->BcValidation->alphaNumericPlus($allowedChars . '!', ['!']));
     }
 
     /**

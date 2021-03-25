@@ -1,0 +1,50 @@
+@charset "UTF-8";
+/**
+ * CKEditor
+ *
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ *
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link			https://basercms.net baserCMS Project
+ * @since           baserCMS v 2.0.0
+ * @license         https://basercms.net/license/index.html
+ */
+
+.cke_button__draft .cke_button_label,
+.cke_button__publish .cke_button_label,
+.cke_button__copydraft .cke_button_label,
+.cke_button__copypublish .cke_button_label{
+	display: inline!important;
+}
+.cke_button__draft .cke_button_icon,
+.cke_button__publish .cke_button_icon,
+.cke_button__copydraft .cke_button_icon,
+.cke_button__copypublish .cke_button_icon{
+	display: none!important;
+}
+input.cke_dialog_ui_input_text, .cke_skin_kama input.cke_dialog_ui_input_password {
+	height:auto!important;
+	width:100%!important;
+	padding:3px 5px!important;
+}
+.cke_dialog_ui_input_select {
+	padding: 3px 1px!important;
+	font-size:14px!important;
+}
+div.cke_dialog_ui_input_text, .cke_skin_kama div.cke_dialog_ui_input_password {
+	background:none!important;
+	border:none!important;
+}
+.cke_browser_webkit a.cke_dialog_ui_button span.cke_dialog_ui_button {
+	line-height:18px;
+}
+.cke_dialog_ui_labeled_label {
+	line-height: 16px;
+}
+.cke_dialog_ui_vbox_child {
+	padding:2px;
+}
+.cke_button_disabled .cke_button_label {
+	opacity: 0.3;
+}

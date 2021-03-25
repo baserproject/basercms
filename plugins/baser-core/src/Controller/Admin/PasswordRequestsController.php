@@ -11,14 +11,9 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Utility\BcUtil;
+use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Mailer\PasswordRequestMailer;
-use Cake\Core\Configure;
-use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\Event\EventInterface;
-use Cake\Routing\Router;
-use Cake\Http\Response;
 
 /**
  * Class UsersController
@@ -26,7 +21,6 @@ use Cake\Http\Response;
  * @property AuthenticationComponent $Authentication
  * @property BcMessageComponent $BcMessage
  */
-
 class PasswordRequestsController extends BcAdminAppController
 {
     /**
@@ -43,18 +37,18 @@ class PasswordRequestsController extends BcAdminAppController
     }
 
 
-	/**
-	 * パスワード変更申請
-	 *
-	 * - input
-     *	- PasswordRequest.email
+    /**
+     * パスワード変更申請
+     *
+     * - input
+     *    - PasswordRequest.email
      *  - submit
      *
      * - viewVars
      *  - title
      *  - PasswordRequest.[]
-	 *
-	 */
+     *
+     */
     public function entry(): void
     {
         $passwordRequest = $this->PasswordRequests->newEmptyEntity();
@@ -87,18 +81,18 @@ class PasswordRequestsController extends BcAdminAppController
         $this->BcMessage->setSuccess(__d('baser', 'パスワードのリセットを受付ました。該当メールアドレスが存在した場合、変更URLを送信いたしました。'));
     }
 
-	/**
-	 * パスワード変更
-	 *
-	 * - input
-     *	- User.password_1
-     *	- User.password_2
+    /**
+     * パスワード変更
+     *
+     * - input
+     *    - User.password_1
+     *    - User.password_2
      *  - submit
-	 *
+     *
      * - viewVars
      *  - title
      *  - user
-	 */
+     */
     public function apply($key): void
     {
         $title = __d('baser', 'パスワードのリセット');

@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\TestSuite;
+
 use App\Application;
 use BaserCore\Plugin;
 use Cake\Core\Configure;
@@ -22,7 +23,8 @@ use Cake\TestSuite\TestCase;
  * Class BcTestCase
  * @package BaserCore\TestSuite
  */
-class BcTestCase extends TestCase {
+class BcTestCase extends TestCase
+{
 
     /**
      * Set Up
@@ -40,19 +42,20 @@ class BcTestCase extends TestCase {
      * @param string $url
      * @return ServerRequest
      */
-    public function getRequest($url = '/') {
+    public function getRequest($url = '/')
+    {
         $request = new ServerRequest(['url' => $url]);
         Router::setRequest($request);
         return $request;
     }
 
     /**
-	 * 管理画面にログインする
-	 *
-	 * @param string $group
-	 */
-	protected function loginAdmin($id = 1)
-	{
+     * 管理画面にログインする
+     *
+     * @param string $group
+     */
+    protected function loginAdmin($id = 1)
+    {
         $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
         $userTable = TableRegistry::getTableLocator()->get('BaserCore.Users');
         $session = Router::getRequest()->getSession();
@@ -60,7 +63,7 @@ class BcTestCase extends TestCase {
             ->where(['Users.id' => $id])
             ->contain(['UserGroups'])
             ->first()
-		);
-	}
+        );
+    }
 
 }

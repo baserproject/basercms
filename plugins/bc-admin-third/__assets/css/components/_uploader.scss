@@ -1,0 +1,13 @@
+.ui-dialog .uploader-file-image .url {
+  border: none !important;
+  width:auto !important;
+  padding:0 !important;
+  max-width: 400px !important;
+  margin-left:20px;
+}
+.ui-dialog .uploader-file-image .url a{
+  color:$color_text_link !important;
+}
+.ui-dialog #UploaderFileImage {
+  width:500px;
+}

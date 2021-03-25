@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\View\Helper;
+
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\ORM\Entity;
@@ -21,7 +22,8 @@ use Cake\View\Helper;
  * @property BcBaserHelper $BcBaser
  * @uses BcAuthHelper
  */
-class BcAuthHelper extends Helper {
+class BcAuthHelper extends Helper
+{
 
     /**
      * Helper
@@ -44,7 +46,7 @@ class BcAuthHelper extends Helper {
                 $currentPrefix = 'front';
             }
         }
-		return $currentPrefix;
+        return $currentPrefix;
     }
 
     /**
@@ -77,8 +79,8 @@ class BcAuthHelper extends Helper {
 //        $sessionKey = 'admin';
         // <<<
 //		$currentUserPrefixes = [];
-		// TODO 取り急ぎ
-		// >>>
+        // TODO 取り急ぎ
+        // >>>
 //		if ($this->Session->check('Auth.' . $sessionKey . '.UserGroup.auth_prefix')) {
 //			$currentUserAuthPrefixes = explode(',', $this->Session->read('Auth.' . $sessionKey . '.UserGroup.auth_prefix'));
 //		}
@@ -134,8 +136,9 @@ class BcAuthHelper extends Helper {
      * 管理画面にログインしているかどうか
      * @return bool
      */
-    public function isAdminLogin() {
-        return (bool) BcUtil::loginUser();
+    public function isAdminLogin()
+    {
+        return (bool)BcUtil::loginUser();
     }
 
     /**

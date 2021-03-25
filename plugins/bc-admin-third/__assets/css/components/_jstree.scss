@@ -1,0 +1,171 @@
+.jstree-proton {
+  border: 1px solid #DDD;
+
+  .jstree-container-ul {
+    .jstree-node {
+      margin: 0;
+      padding: 0;
+
+
+      .jstree-children {
+        margin-left: 26px;
+      }
+
+      .content-name {
+        position: relative;
+      }
+      .jstree-anchor {
+        margin: 0 !important;
+      }
+
+      // アクション
+      .function {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        //background: url("../../img/admin/icon_function.png");
+        position: absolute;
+        cursor: pointer;
+        font-size:18px;
+        text-align: right;
+        @include bca-icon(ellipsis-h);
+      }
+      // ホバー時
+      .jstree-wholerow-hovered {
+        background: $color_background_menu_dark !important;
+      }
+      .jstree-hovered {
+        color: $color_darkest!important;
+      }
+
+      // クリック時
+      .jstree-wholerow-clicked {
+        background: $color_primary !important;
+      }
+      .jstree-clicked {
+        & + .content-name {
+          color: $color_lightest!important;
+        }
+        .jstree-icon {
+          color: $color_lightest !important;
+        }
+      }
+
+      // クリックレコードのホバー時
+      .jstree-hovered.jstree-clicked {
+        color: $color_lightest!important;
+      }
+
+      // エイリアスレコード
+      .alias {
+        display: block;
+        width: 32px;
+        height: 32px;
+        background: url("../../img/admin/icon_alias_layerd.png");
+        position: absolute;
+        top: 0;
+      }
+      // 非公開レコード
+      .jstree-unpublish-odd,
+      .jstree-unpublish-even {
+        background-color: $color_disabled;
+      }
+    }
+
+
+    // アイコン
+    .jstree-icon {
+      font-size: 1.6rem !important;
+      &:before {
+        @extend %bca-icon;
+        margin: 0;
+      }
+
+      &.bca-icon--folder {
+        color: #edc528;
+      }
+    }
+    .jstree-open {
+      & > .jstree-anchor {
+        .bca-icon--folder {
+          @include bca-icon(folder-open);
+        }
+      }
+    }
+  }
+
+  // アクションウィンドウ
+  &-contextmenu {
+    background-color: $color_lightest !important;
+    font-size: 14px;
+
+    li {
+      & > a {
+        color: $color_text_primary !important;
+        &:hover {
+          background-color:$color_background_menu_dark!important;
+          box-shadow:none!important;
+        }
+
+        // アイコン
+        i {
+          vertical-align: middle !important;
+          font-weight: 900;
+
+          &:before {
+            @extend %bca-icon;
+            font-size: 15px !important;
+            margin: 0 !important;
+          }
+          &.bca-icon--folder {
+            color: #edc528;
+          }
+          &.bca-icon--alias {
+            color: #6fa83d;
+          }
+          &.bca-icon--link {
+            color: #6fa83d;
+          }
+        }
+
+        .vakata-contextmenu-sep {
+          border-left: none !important;
+          background: none !important;
+        }
+      }
+
+      &.vakata-context-separator {
+        border-top: 1px solid $color_control_border_color !important;
+        border-radius: 0 !important;
+
+        a {
+          margin: 0;
+          &:hover {
+            margin: 0;
+          }
+        }
+      }
+    }
+
+
+
+    // アクション > エイリアスメニュー
+    .icon-alias-layerd {
+      display: block;
+      width: 32px;
+      height: 32px;
+      background: url("../../img/admin/icon_alias_layerd.png");
+      position: absolute;
+      margin-top: -36px;
+    }
+    // アクション . プラグイン追加
+    .icon-add-layerd {
+      display: block;
+      width: 32px;
+      height: 32px;
+      background: url("../../img/admin/icon_add_layerd.png");
+      position: absolute;
+      margin-top: -36px;
+    }
+  }
+}

@@ -12,6 +12,7 @@
 declare(strict_types=1);
 
 namespace BaserCore\Model\Entity;
+
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
 

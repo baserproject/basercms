@@ -1,0 +1,10 @@
+// tbox系
+
+.bca-box {
+  display: block;
+  padding: 1em;
+  background-color: $color_background_primary;
+
+  &[data-bca-box-type=type1] {
+  }
+}

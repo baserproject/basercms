@@ -1,0 +1,16 @@
+.bca-current-box {
+  // border:5px solid #DDD;
+  padding: 1px 0;
+  // background: #FFFFFF;
+  // color: #535A62;
+  font-size: $label_font_size_medium;
+  margin: 20px auto 20px;
+  line-height: 1.6;
+  a {
+    color: $color_danger;
+    &:hover {
+      color: $color_text_link;
+      text-decoration: none;
+    }
+  }
+}

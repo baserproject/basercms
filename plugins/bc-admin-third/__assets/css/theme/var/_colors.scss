@@ -1,0 +1,71 @@
+//
+// # カラー
+//
+// グラデーションで明暗を使う場合は、
+// SASSの関数で明度を変更することを推奨する。
+//
+
+// base
+$color_primary: #6fa83d;
+//$color_primary: #FF6F61;
+$color_secondary: #424f44;
+// $color_light_primary: #ff000;
+$color_lightest: #fff;
+$color_dim: #c9c8c8;
+$color_darkest: $color_secondary;
+$color_notification: #0087bc;
+$color_danger: #f20014;
+$color_warning: #ffd24d;
+$color_warning_low: #fff6af;
+$color_disabled: #ccc;
+
+// text
+$color_text_primary: $color_darkest;
+$color_text_secondary: $color_darkest;
+
+// placeholder
+$color_text_placeholder: $color_dim;
+
+// link
+$color_text_link: $color_primary;
+$color_text_hover: $color_primary;
+
+// background
+$color_background_primary: #f8f8f8;
+$color_background_secondary: #fff;
+
+// border
+$color_border: #eeeeea;
+$color_table_border_color: $color_border;
+$color_control_border_color: #ccc;
+$color_menu_border: #fff;
+$color_background_secondary_border: $color_border;
+$color_main_contents_border_color:$color_border;
+
+// menu
+$color_background_menu_dark: #ddd;
+$color_background_menu: $color_border;
+$color_background_menu_current: $color_darkest;
+$color_background_menu_current_parent: $color_background_menu_dark;
+$color_background_menu_current_submenu: $color_background_primary;
+$color_background_menu_hover: $color_background_menu_dark;
+$color_menu_link: $color_darkest;
+$color_menu_current: $color_lightest;
+$color_menu_hover: $color_darkest;
+
+// table
+$color_background_table_listup: $color_background_menu;
+$color_text_link_table_listup: $color_darkest;
+$color_table_listup_hover: $color_background_primary;
+
+// toolbar
+$color_toolbar: #2a332c;
+$color_toolbar_text: $color_lightest;
+$color_toolbar_text_hover: #ccc;
+$color_footer: $color_toolbar;
+
+// parts
+$color_main_title: $color_darkest;
+$color_pagination_link: $color_darkest;
+$color_pagination_hover: $color_darkest;
+$color_background_menu_current_primary: $color_primary;

@@ -1,0 +1,52 @@
+.bca-list {
+  padding: 0;
+  list-style: none;
+  &[data-bca-list-layout=horizon] {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &__item {
+    position: relative;
+    padding: 0 0 0 1em;
+    margin-bottom: 8px;
+    margin-right: 30px;
+    line-height: 1.4;
+    @include bca-icon(list-default) {
+      position: absolute;
+      top: 0;
+      left: 0;
+      line-height: 1.2;
+      color: $color_text_primary;
+      // margin-right: 0.4em;
+    }
+  }
+
+  &[data-bca-list-type=circle] {
+    margin: 0;
+    .bca-list__item {
+      @include bca-icon(list-circle);
+      padding: 0;
+      margin-right: 1.5em;
+      white-space: nowrap;
+      &::before {
+        position: relative;
+        top: -2px;
+        color: #aaa;
+        font-size: 1rem;
+        padding-right: 0.4em;
+      }
+    }
+  }
+
+  &[data-bca-list-delimiter=comma] {
+    .bca-list__item {
+      &::after {
+        content: ",";
+        display: inline-block;
+      }
+      &:last-child:after {
+        content: none;
+      }
+    }
+  }
+}

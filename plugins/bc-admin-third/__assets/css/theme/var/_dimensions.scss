@@ -1,0 +1,32 @@
+//
+// # 寸法
+//
+//
+
+// フォントサイズ
+$general_root_font_size: 10px;
+
+// ナビゲーション
+$nav_base_padding: 12px;
+$nav_item_padding: 4px;
+
+// チェックボックス、ラジオボックスのフォントサイズ
+$label_font_size_small: 1.4rem;
+$label_font_size_medium: 1.6rem;
+$label_font_size_large: 2rem;
+
+$input_text_font_size: 1.6rem;
+
+$button_font_size_x_small: 1.1rem;
+$button_font_size_small: 1.2rem;
+$button_font_size_medium: 1.4rem;
+$button_font_size_large: 1.6rem;
+$button_font_size_x_large: 2rem;
+
+// セレクトボックスとボタンの高さ
+$button_padding_top: 0.7em;
+$button_padding_bottom: 0.6em;
+
+// focus時のシャドウ
+$focus_shadow: 0 0 4px 0px $color_primary;
+

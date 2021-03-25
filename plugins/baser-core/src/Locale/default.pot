@@ -1,0 +1,635 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: Config/theme/bc_sample/Blog/default/archives.php:6
+#: Config/theme/bc_sample/Blog/smartphone/default/archives.php:6
+#: Config/theme/bccolumn/Blog/default/archives.php:5
+#: Config/theme/bccolumn/Blog/topics/archives.php:5
+#: Config/theme/bccolumn/Blog/works/archives.php:5
+#: Config/theme/nada-icons/Blog/tags.php:19
+#: Config/theme/nada-icons/Blog/default/archives.php:7
+msgid "のアーカイブ一覧です。"
+msgstr ""
+
+#: Config/theme/bc_sample/Blog/default/archives.php:31
+#: Config/theme/bc_sample/Blog/default/index.php:33
+#: Config/theme/bc_sample/Blog/default/posts.php:31
+#: Config/theme/bc_sample/Blog/smartphone/default/archives.php:31
+#: Config/theme/bc_sample/Blog/smartphone/default/index.php:33
+#: Config/theme/bc_sample/Blog/smartphone/default/posts.php:31
+#: Config/theme/bccolumn/Blog/default/archives.php:39
+#: Config/theme/bccolumn/Blog/default/index.php:35
+#: Config/theme/bccolumn/Blog/default/posts.php:23
+#: Config/theme/bccolumn/Blog/topics/archives.php:46
+#: Config/theme/bccolumn/Blog/topics/index.php:43
+#: Config/theme/bccolumn/Blog/topics/posts.php:31
+#: Config/theme/bccolumn/Blog/works/archives.php:37
+#: Config/theme/bccolumn/Blog/works/index.php:35
+#: Config/theme/bccolumn/Blog/works/posts.php:31
+#: Config/theme/nada-icons/Blog/tags.php:51
+#: Config/theme/nada-icons/Blog/default/archives.php:44
+#: Config/theme/nada-icons/Blog/default/index.php:46
+msgid "記事がありません。"
+msgstr ""
+
+#: Config/theme/bc_sample/Contents/search.php:13
+#: Config/theme/bc_sample/Contents/smartphone/search.php:14
+msgid "で検索した結果"
+msgstr ""
+
+#: Config/theme/bc_sample/Contents/search.php:13
+#: Config/theme/bc_sample/Contents/smartphone/search.php:14
+msgid "件目"
+msgstr ""
+
+#: Config/theme/bc_sample/Contents/search.php:13
+#: Config/theme/bc_sample/Contents/smartphone/search.php:14
+msgid "件"
+msgstr ""
+
+#: Config/theme/bc_sample/Contents/search.php:30
+#: Config/theme/bc_sample/Contents/smartphone/search.php:31
+msgid "該当する結果が存在しませんでした。"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:17
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:17
+#: Plugin/Blog/View/Elements/blog_comments.php:27
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:23
+msgid "この記事へのコメント"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:28
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:28
+#: Plugin/Blog/View/Elements/blog_comments.php:37
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:38
+msgid "コメントを送る"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:35
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:35
+#: Config/theme/bccolumn/Elements/blog_comments.php:32
+#: Plugin/Blog/View/Elements/blog_comments.php:44
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:41
+msgid "お名前"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:35
+#: Config/theme/bccolumn/Elements/blog_comments.php:32
+#: Plugin/Blog/View/Elements/blog_comments.php:44
+msgid "ニックネーム"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:39
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:39
+#: Config/theme/bccolumn/Elements/blog_comments.php:36
+#: Plugin/Blog/View/Elements/blog_comments.php:48
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:44
+msgid "Eメール"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:42
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:42
+#: Config/theme/bccolumn/Elements/blog_comments.php:39
+#: Plugin/Blog/View/Elements/blog_comments.php:51
+msgid "Eメールは公開されません"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:50
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:50
+#: Config/theme/bccolumn/Elements/blog_comments.php:47
+#: Plugin/Blog/View/Elements/blog_comments.php:59
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:50
+msgid "コメント"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:57
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:57
+#: Config/theme/bccolumn/Elements/blog_comments.php:55
+msgid "認証画象"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:60
+#: Config/theme/bc_sample/Elements/mail_form.php:41
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:60
+#: Config/theme/bc_sample/Elements/smartphone/mail_form.php:37
+#: Config/theme/bccolumn/Elements/blog_comments.php:58
+#: Plugin/Blog/View/Elements/blog_comments.php:69
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:9
+#: Plugin/Mail/View/Elements/mail_form.php:54
+msgid "画像の文字を入力してください"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:64
+#: Config/theme/bc_sample/Elements/mail_form.php:54
+#: Config/theme/bc_sample/Elements/smartphone/mail_form.php:52
+#: Config/theme/bccolumn/Elements/blog_comments.php:62
+#: Plugin/Blog/View/Elements/blog_comments.php:73
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:53
+#: Plugin/Mail/View/Elements/mail_form.php:67
+#: Plugin/Mail/View/Elements/mobile/mail_form.php:37
+msgid "送信する"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_tag.php:11
+#: Config/theme/bc_sample/Elements/smartphone/blog_tag.php:11
+#: Plugin/Blog/View/Elements/blog_tag.php:21
+msgid "タグ"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/crumbs.php:14;38
+#: Config/theme/bccolumn/Elements/crumbs.php:6;22
+#: Config/theme/nada-icons/Elements/crumbs.php:6;22
+msgid "ホーム"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/google_maps.php:42
+#: Config/theme/bc_sample/Elements/smartphone/google_maps.php:45
+msgid "Google Maps を読み込めません。管理画面で正しい住所が設定されているか確認してください。"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/list_num.php:33
+#: Config/theme/bc_sample/Elements/smartphone/list_num.php:34
+msgid "表示件数"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/mail_form.php:42
+#: Config/theme/bc_sample/Elements/smartphone/mail_form.php:38
+#: Plugin/Mail/View/Elements/mail_form.php:55
+msgid "入力された文字が間違っています。入力をやり直してください。"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/mail_form.php:53
+#: Config/theme/bc_sample/Elements/smartphone/mail_form.php:51
+#: Plugin/Mail/View/Elements/mail_form.php:66
+msgid "書き直す"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/mail_form.php:57
+#: Config/theme/bc_sample/Elements/smartphone/mail_form.php:54
+#: Plugin/Mail/View/Elements/mail_form.php:70
+#: Plugin/Mail/View/Elements/mobile/mail_form.php:42
+#: Plugin/Mail/View/Mail/default/confirm.php:28
+#: Plugin/Mail/View/Mail/mobile/default/confirm.php:30
+#: Plugin/Mail/View/Mail/smartphone/default/confirm.php:29
+msgid "入力内容を確認する"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/mail_input.php:35
+#: Plugin/Mail/View/Elements/mail_input.php:46
+msgid "必須"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/mail_input.php:37
+#: Plugin/Mail/View/Elements/mail_input.php:48
+msgid "任意"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/mail_input.php:86
+#: Config/theme/bc_sample/Elements/smartphone/mail_input.php:86
+#: Plugin/Mail/Model/MailMessage.php:394
+#: Plugin/Mail/Test/Case/Model/MailMessageTest.php:141
+#: Plugin/Mail/View/Elements/mail_input.php:97
+#: Plugin/Mail/View/Elements/mobile/mail_input.php:89
+msgid "入力データが一致していません。"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/mail_input.php:87
+#: Config/theme/bc_sample/Elements/smartphone/mail_input.php:87
+#: Plugin/Mail/Model/MailMessage.php:353
+#: Plugin/Mail/Test/Case/Model/MailMessageTest.php:142
+#: Plugin/Mail/View/Elements/mail_input.php:98
+#: Plugin/Mail/View/Elements/mobile/mail_input.php:90
+msgid "入力データが不完全です。"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/paginations/simple.php:20
+#: Config/theme/bc_sample/Elements/smartphone/paginations/simple.php:21
+msgid "前へ"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/paginations/simple.php:22
+#: Config/theme/bc_sample/Elements/smartphone/paginations/simple.php:23
+msgid "次へ"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;114
+#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;114
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;116
+msgid "日"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;115
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_monthly_archives.php:51;53
+#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;115
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;117
+msgid "月"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;116
+#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;116
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;118
+msgid "火"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;117
+#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;117
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;119
+msgid "水"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;118
+#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;118
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;120
+msgid "木"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;119
+#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;119
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;121
+msgid "金"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:79;120
+#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;120
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;122
+msgid "土"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_monthly_archives.php:51;53
+msgid "年"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/smartphone/widgets/search.php:22
+#: Config/theme/bc_sample/Elements/widgets/search.php:45
+msgid "検索"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/widgets/search.php:37
+msgid "サイト内検索"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/widgets/search.php:40
+msgid "カテゴリ"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/widgets/search.php:41
+msgid "指定しない"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/widgets/search.php:43
+msgid "キーワード"
+msgstr ""
+
+#: Config/theme/bc_sample/Emails/text/mail_default.php:10
+#: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:10
+msgid "お問合せを受付けました"
+msgstr ""
+
+#: Config/theme/bc_sample/Emails/text/mail_default.php:14
+#: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:14
+msgid "この度は、お問い合わせいただきありがとうございます。"
+msgstr ""
+
+#: Config/theme/bc_sample/Emails/text/mail_default.php:15
+#: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:15
+msgid "送信内容は下記のようになっております。"
+msgstr ""
+
+#: Config/theme/bc_sample/Emails/text/mail_default.php:17
+#: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:17
+msgid "へのお問い合わせを受け付けました。"
+msgstr ""
+
+#: Config/theme/bc_sample/Emails/text/mail_default.php:18
+#: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:18
+msgid "受信内容は下記のとおりです。"
+msgstr ""
+
+#: Config/theme/bc_sample/Emails/text/mail_default.php:22
+#: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:22
+msgid "お問い合わせ内容"
+msgstr ""
+
+#: Config/theme/bc_sample/Emails/text/mail_default.php:31
+#: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:31
+msgid "なお、このメールは自動返信メールとなっております。"
+msgstr ""
+
+#: Config/theme/bc_sample/Emails/text/mail_default.php:32
+#: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:32
+msgid "メールを確認させて頂き次第、早急にご連絡させていただきます。"
+msgstr ""
+
+#: Config/theme/bc_sample/Emails/text/mail_default.php:33
+#: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:33
+msgid "恐れ入りますがしばらくお待ちください。"
+msgstr ""
+
+#: Config/theme/bc_sample/Emails/text/mail_default.php:35
+#: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:35
+msgid "なお、このメールは自動転送システムです。"
+msgstr ""
+
+#: Config/theme/bc_sample/Emails/text/mail_default.php:36
+#: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:36
+msgid "受け付けた旨のメールもユーザーへ送られています。"
+msgstr ""
+
+#: Config/theme/bc_sample/Errors/error400.php:11
+msgid "エラー"
+msgstr ""
+
+#: Config/theme/bc_sample/Errors/error400.php:13
+msgid "アドレス %s に送信されたリクエストは無効です。"
+msgstr ""
+
+#: Config/theme/bc_sample/Mail/default/confirm.php:15
+#: Config/theme/bc_sample/Mail/smartphone/default/confirm.php:15
+#: Config/theme/bccolumn/Mail/default/confirm.php:18
+#: Config/theme/nada-icons/Mail/default/confirm.php:16
+msgid "入力内容の確認"
+msgstr ""
+
+#: Config/theme/bc_sample/Mail/default/confirm.php:16
+#: Config/theme/bc_sample/Mail/smartphone/default/confirm.php:16
+#: Config/theme/bccolumn/Mail/default/confirm.php:19
+#: Config/theme/nada-icons/Mail/default/confirm.php:17
+#: Plugin/Mail/View/Mail/default/confirm.php:29
+#: Plugin/Mail/View/Mail/mobile/default/confirm.php:32
+#: Plugin/Mail/View/Mail/smartphone/default/confirm.php:30
+msgid "入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。"
+msgstr ""
+
+#: Config/theme/bc_sample/Mail/default/confirm.php:18
+#: Config/theme/bc_sample/Mail/default/index.php:11
+#: Config/theme/bc_sample/Mail/smartphone/default/confirm.php:18
+#: Config/theme/bc_sample/Mail/smartphone/default/index.php:11
+#: Config/theme/bccolumn/Mail/default/confirm.php:21
+#: Config/theme/bccolumn/Mail/default/index.php:14
+#: Config/theme/nada-icons/Mail/default/confirm.php:19
+#: Config/theme/nada-icons/Mail/default/index.php:13
+#: Plugin/Mail/View/Mail/default/confirm.php:31
+#: Plugin/Mail/View/Mail/default/index.php:24
+#: Plugin/Mail/View/Mail/mobile/default/confirm.php:34
+#: Plugin/Mail/View/Mail/mobile/default/index.php:25
+#: Plugin/Mail/View/Mail/smartphone/default/confirm.php:32
+#: Plugin/Mail/View/Mail/smartphone/default/index.php:25
+msgid "入力フォーム"
+msgstr ""
+
+#: Config/theme/bc_sample/Mail/default/submit.php:14
+#: Config/theme/bc_sample/Mail/smartphone/default/submit.php:14
+#: Config/theme/bccolumn/Mail/default/submit.php:14
+#: Config/theme/nada-icons/Mail/default/submit.php:13
+#: Plugin/Mail/View/Mail/default/submit.php:26
+#: Plugin/Mail/View/Mail/mobile/default/submit.php:28
+#: Plugin/Mail/View/Mail/smartphone/default/submit.php:26
+msgid "メール送信完了"
+msgstr ""
+
+#: Config/theme/bc_sample/Mail/default/submit.php:17
+#: Config/theme/bc_sample/Mail/smartphone/default/submit.php:17
+#: Config/theme/bccolumn/Mail/default/submit.php:16
+#: Config/theme/nada-icons/Mail/default/submit.php:15
+msgid "お問い合わせ頂きありがとうございました。"
+msgstr ""
+
+#: Config/theme/bc_sample/Mail/default/submit.php:18
+#: Config/theme/bc_sample/Mail/smartphone/default/submit.php:18
+#: Config/theme/bccolumn/Mail/default/submit.php:17
+#: Config/theme/nada-icons/Mail/default/submit.php:16
+msgid "確認次第、ご連絡させて頂きます。"
+msgstr ""
+
+#: Config/theme/bc_sample/Mail/default/submit.php:20
+#: Config/theme/bc_sample/Mail/smartphone/default/submit.php:20
+#: Config/theme/bccolumn/Mail/default/submit.php:19
+#: Config/theme/nada-icons/Mail/default/submit.php:18
+#: Plugin/Mail/View/Mail/default/submit.php:31
+#: Plugin/Mail/View/Mail/smartphone/default/submit.php:31
+msgid "%s 秒後にトップページへ自動的に移動します。"
+msgstr ""
+
+#: Config/theme/bc_sample/Mail/default/submit.php:21
+#: Config/theme/bc_sample/Mail/smartphone/default/submit.php:21
+#: Config/theme/bccolumn/Mail/default/submit.php:20
+#: Config/theme/nada-icons/Mail/default/submit.php:19
+msgid "移動しない場合はコチラをクリックしてください。"
+msgstr ""
+
+#: Config/theme/bc_sample/Mail/default/unpublish.php:11
+msgid "受付中止"
+msgstr ""
+
+#: Config/theme/bc_sample/Mail/default/unpublish.php:13
+msgid "現在、受付を中止しています。"
+msgstr ""
+
+#: Config/theme/bc_sample/Maintenance/index.php:9
+#: Config/theme/bc_sample/Maintenance/smartphone/index.php:9
+msgid "メンテナンス中"
+msgstr ""
+
+#: Config/theme/bc_sample/Maintenance/index.php:12
+#: Config/theme/bc_sample/Maintenance/smartphone/index.php:12
+msgid "ご迷惑をおかけしております。"
+msgstr ""
+
+#: Config/theme/bc_sample/Maintenance/index.php:13
+#: Config/theme/bc_sample/Maintenance/smartphone/index.php:13
+msgid "現在メンテナンス中です。"
+msgstr ""
+
+#: Config/theme/bc_sample/Maintenance/index.php:14
+#: Config/theme/bc_sample/Maintenance/smartphone/index.php:14
+msgid "もうしばらくお待ちください。"
+msgstr ""
+
+#: Config/theme/bccolumn/Blog/default/index.php:20
+#: Config/theme/bccolumn/Blog/topics/archives.php:29
+#: Config/theme/bccolumn/Blog/topics/index.php:27
+#: Config/theme/bccolumn/Blog/works/archives.php:33
+#: Config/theme/bccolumn/Blog/works/index.php:31
+msgid "詳細ページへ"
+msgstr ""
+
+#: Config/theme/bccolumn/Blog/default/single.php:39
+#: Config/theme/bccolumn/Blog/topics/single.php:39
+#: Config/theme/bccolumn/Blog/works/single.php:31
+msgid "前の記事"
+msgstr ""
+
+#: Config/theme/bccolumn/Blog/default/single.php:41
+#: Config/theme/bccolumn/Blog/topics/single.php:41
+#: Config/theme/bccolumn/Blog/works/single.php:33
+msgid "一覧へ"
+msgstr ""
+
+#: Config/theme/bccolumn/Blog/default/single.php:42
+#: Config/theme/bccolumn/Blog/topics/single.php:42
+#: Config/theme/bccolumn/Blog/works/single.php:35
+msgid "後の記事"
+msgstr ""
+
+#: Config/theme/bccolumn/Elements/toppage.php:12
+msgid "実績"
+msgstr ""
+
+#: Config/theme/nada-icons/Layouts/default.php:64
+msgid "ページトップへ戻る"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogAppController.php:76
+msgid "【%s】コメントが投稿されました"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogController.php:336
+msgid "%s年%s月%s日"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogController.php:338
+msgid "%s年%s月"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogController.php:340
+#: Plugin/Blog/View/Elements/widgets/blog_category_archives.php:53
+msgid "%s年"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogController.php:472
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:10
+msgid "送信が完了しました。送信された内容は確認後公開させて頂きます。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogController.php:474
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:11
+msgid "コメントの送信が完了しました。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogController.php:479
+msgid "コメントの送信に失敗しました。"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:7
+msgid "お名前を入力してください"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:8
+msgid "コメントを入力してください"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:12
+msgid "コメントの送信に失敗しました。入力内容を見なおしてください。"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/blog_related_posts.php:22
+msgid "関連記事"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:44
+msgid "非公開"
+msgstr ""
+
+#: Plugin/Feed/Controller/FeedConfigsController.php:241
+#: Plugin/Feed/Controller/FeedDetailsController.php:204
+msgid "無効な処理です。"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailController.php:106
+msgid "お問い合わせ"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailController.php:240
+msgid "ファイルのアップロードサイズが上限を超えています。"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailController.php:280
+msgid "エラー : 入力内容を確認して再度送信してください。"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailController.php:371
+msgid "エラー : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailMessage.php:188;195;274
+#: Plugin/Mail/Test/Case/Model/MailMessageTest.php:136;137;140;146
+msgid "必須項目です。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailMessage.php:209
+msgid "半角数字で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailMessage.php:217
+#: Plugin/Mail/Test/Case/Model/MailMessageTest.php:138;139
+msgid "形式が無効です。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailMessage.php:231
+msgid "ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailMessage.php:233
+msgid "何らかの原因でファイルをアップロードできませんでした。Webサイトの管理者に連絡してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailMessage.php:247
+msgid "ファイル形式が無効です。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailMessage.php:282
+msgid "日付の形式が無効です。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailMessage.php:286
+msgid "全て全角カタカナで入力してください。"
+msgstr ""
+
+#: Plugin/Mail/View/Elements/mail_form.php:69
+msgid "クリア"
+msgstr ""
+
+#: Plugin/Mail/View/Helper/MailformHelper.php:245
+msgid "認証画像"
+msgstr ""
+
+#: Plugin/Mail/View/Mail/default/submit.php:29
+#: Plugin/Mail/View/Mail/mobile/default/submit.php:30
+#: Plugin/Mail/View/Mail/smartphone/default/submit.php:29
+msgid "お問い合わせ頂きありがとうございました。<br>確認次第、ご連絡させて頂きます。"
+msgstr ""
+
+#: Plugin/Mail/View/Mail/default/submit.php:32
+#: Plugin/Mail/View/Mail/smartphone/default/submit.php:32
+msgid "移動しない場合はこちらをクリックしてください。"
+msgstr ""
+
+#: Plugin/Mail/View/Mail/default/unpublish.php:22
+msgid "受付停止中"
+msgstr ""
+
+#: Plugin/Mail/View/Mail/default/unpublish.php:25
+msgid "現在、受付を停止しています。"
+msgstr ""
+
+#: Plugin/Uploader/Event/UploaderViewEventListener.php:70
+msgid "baser"
+msgstr ""
+
+#: View/Elements/paginations/ordered_list.php:26
+msgid "ページ送り"
+msgstr ""
+

@@ -1,0 +1,38 @@
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ *
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link			https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 4.4.0
+ * @license         https://basercms.net/license/index.html
+ */
+
+/**
+ * テーマ設定用CSS
+ * 呼出箇所：全てのページ
+ */
+
+.bs-header__nav,
+.bs-footer{
+	background-color:MAIN!important;
+}
+.bs-pagination a,
+.bs-top-post-to-list a,
+.bs-widget-local-navi h2{
+	background-color:SUB;
+}
+.bs-main-contents a:link,
+.bs-main-contents a:visited,
+.bge-contents a:link,
+.bge-contents a:visited,
+.cke_editable a:link,
+.cke_editable a:visited {
+	color:LINK;
+}
+.bs-main-contents a:hover,
+.bge-contents a:hover,
+.cke_editable a:hover {
+	color:HOVER;
+}

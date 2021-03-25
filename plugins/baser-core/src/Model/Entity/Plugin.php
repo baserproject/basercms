@@ -12,6 +12,7 @@
 declare(strict_types=1);
 
 namespace BaserCore\Model\Entity;
+
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
 
@@ -24,6 +25,7 @@ use Cake\ORM\Entity;
  * @property string|null $version
  * @property bool $status
  * @property bool $db_init
+ * @property int $priority
  * @property FrozenTime|null $modified
  * @property FrozenTime|null $created
  */
@@ -50,6 +52,7 @@ class Plugin extends Entity
         'description' => true,
         'author' => true,
         'url' => true,
+        'permission' => true,
         'installMessage' => true,
         'adminLink' => true
     ];

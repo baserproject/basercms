@@ -1,0 +1,172 @@
+.bca-current-theme {
+  position: relative;
+  border: 3px solid $color_primary;
+  padding: 20px;
+  margin-bottom: 20px;
+
+  &__name {
+    margin-top: 0;
+    margin-bottom: 0.2em;
+  }
+
+  &__inner {
+    display: flex;
+  }
+  &__main {
+    margin-right: 20px;
+    width: 300px;
+  }
+  &__sub {
+    flex: 1;
+  }
+
+  &__screenshot {
+    padding: 0;
+    border: 1px solid #ccc;
+    img {
+      display: block;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  .theme {
+    &-info {
+
+    }
+    &-name {
+      margin-top: 0;
+    }
+
+    &-screenshot {
+      // border: 1px solid #e2e2e2;
+      // margin-bottom: 10px;
+      // img {
+      // 	width: 298px;
+      // }
+    }
+
+    &-description {
+      line-height: 1.6em;
+      clear: right;
+    }
+
+    &-popup-contents {
+      padding: 20px 20px 30px 20px;
+      .theme-screenshot {
+        border: 1px solid #e2e2e2;
+        float: left;
+        margin-right: 20px;
+        img {
+          width: 298px;
+        }
+        .theme-description {
+          padding-top: 10px;
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+
+  .row-tools {
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: 3px solid #ccc;
+    padding: 3px;
+  }
+
+  .error-message {
+    margin: 0;
+    white-space: normal;
+    display: block;
+    line-height: 16px;
+    top: 56px;
+    position: absolute;
+    padding: 7px;
+    width: 286px;
+  }
+
+}
+
+#CurrentTheme {
+  h2 {
+    font-weight: normal;
+    font-size: $label_font_size_large;
+    margin-bottom:20px;
+  }
+  .theme-description {
+    font-size: $label_font_size_small;
+  }
+  #ThemeLoadDefaultDataPatternForm {
+    margin-bottom:20px;
+  }
+}
+
+/*
+#CurrentTheme {
+	border:5px solid #e2e2e2;
+	padding:20px;
+	margin-bottom: 20px;
+}
+#CurrentTheme .theme-screenshot {
+	border:1px solid #e2e2e2;
+	margin-bottom: 10px;
+}
+#CurrentTheme .theme-screenshot img {
+	width:298px;
+}
+#CurrentTheme .row-tools {
+	text-align: center;
+	margin-top:5px;
+	margin-bottom: 5px;
+	border:3px solid #ccc;
+	padding:3px;
+}
+#CurrentTheme .theme-info {
+	float:left;
+	width:240px;
+	background-color:#efefef;
+	padding:20px;
+	margin-right:50px;
+	height:90px;
+}
+
+#CurrentTheme .current-theme-left {
+	width:300px;
+	margin-right:20px;
+	float:left;
+}
+#CurrentTheme .theme-description {
+	line-height: 1.6em;
+	clear:right;
+}
+.theme-popup-contents {
+	padding:20px 20px 30px 20px;
+}
+.theme-popup-contents .theme-screenshot {
+	border:1px solid #e2e2e2;
+	float:left;
+	margin-right:20px;
+}
+.theme-popup-contents .theme-screenshot img {
+	width:298px;
+}
+.theme-popup-contents .theme-description {
+	padding-top:10px;
+	margin-top:10px;
+}
+#CurrentTheme {
+	position: relative;
+}
+.current-theme-left .error-message {
+	margin:0;
+	white-space:normal;
+	display: block;
+	line-height: 16px;
+	top:56px;
+	position: absolute;
+	padding:7px;
+	width:286px;
+}
+*/

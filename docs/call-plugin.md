@@ -36,3 +36,4 @@ return [
 $this->addPlugin('BaserCore');
 $this->addPlugin('BcAdminThird');
 ```
+※ 現在は、管理画面よりプラグインをインストールすることで呼び出しが可能となる。

@@ -1,0 +1,462 @@
+﻿"id","contents","draft","page_template","code","modified","created"
+"1","<h2><span class=""main-title1"">ABOUT</span><br />
+<span class=""sub-title"">弊社の特徴</span></h2>
+
+<ul class=""clearfix"">
+	<li>
+	<div class=""thumbnail""><?php $this->BcBaser->img('top/img_about01.png', array('alt' => '')) ?></div>
+
+	<h3 class=""main-color"">ハイクオリティを提供</h3>
+
+	<p>詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。</p>
+	</li>
+	<li>
+	<div class=""thumbnail""><?php $this->BcBaser->img('top/img_about02.png', array('alt' => '')) ?></div>
+
+	<h3 class=""main-color"">お客様の要望を叶える</h3>
+
+	<p>詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。</p>
+	</li>
+	<li>
+	<div class=""thumbnail""><?php $this->BcBaser->img('top/img_about03.png', array('alt' => '')) ?></div>
+
+	<h3 class=""main-color"">業界NO.1の実績</h3>
+
+	<p>詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。詳細が入ります。</p>
+	</li>
+</ul>","","","","2016-07-29 17:26:35","2016-07-29 17:26:25"
+"2","<div id=""Recipe"">
+<h2>BCCOLUMNレイアウト変更方法</h2>
+
+<p>baserCMSテーマBCCOLUMNは、レイアウトファイルを選択することで、１カラム・２カラム左サイド・２カラム右サイドを簡単に切り替えることが可能です。</p>
+
+<h3>ブログのレイアウト変更方法</h3>
+
+<p>ブログの設定画面　＞　オプションを開く　＞　レイアウトテンプレート名を選択</p>
+
+<p><img alt="""" src=""http://bccolumn.komomo.biz/theme/bccolumn/img/page/img_layout01.png"" /></p>
+
+<ul class=""list-square"">
+	<li>1カラム：「default」</li>
+	<li>2カラム右サイドバー：「right_column」</li>
+	<li>2カラム左サイドバー：「left_column」</li>
+</ul>
+
+<h3>固定ページカテゴリのレイアウト変更方法</h3>
+
+<p>固定ページ管理　＞　カテゴリー情報編集　＞　オプションを開く　＞　レイアウトテンプレートを選択</p>
+
+<p><img alt="""" src=""http://bccolumn.komomo.biz/theme/bccolumn/img/page/img_layout02.png"" /></p>
+
+<ul class=""list-square"">
+	<li>1カラム：「default」</li>
+	<li>2カラム右サイドバー：「right_column」</li>
+	<li>2カラム左サイドバー：「left_column」</li>
+</ul>
+
+<h3>固定ページ１ページだけのレイアウト変更方法</h3>
+
+<p>固定ページ情報編集　＞　オプションを開く　＞　コードエリアにスクリプトを記述</p>
+
+<p><img alt="""" src=""http://bccolumn.komomo.biz/theme/bccolumn/img/page/img_layout03.png"" /></p>
+
+<ul class=""list-square"">
+	<li>1カラム：記述無し</li>
+	<li>2カラム右サイドバー：「&lt;?php $this-&gt;layout = &#39;right_column&#39; ?&gt;」</li>
+	<li>2カラム左サイドバー：「&lt;?php $this-&gt;layout = &#39;left_column&#39; ?&gt;」</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<h2>BCCOLUMNテーマカスタマイズ方法</h2>
+
+<p>また、管理画面から簡単にロゴやテーマカラー、メイン画像を変更することも可能です。</p>
+
+<p>テーマ管理　＞　テーマ設定</p>
+
+<h3>テーマカラーの変更方法</h3>
+
+<p>カラーピッカーでお好みの色を選択してください</p>
+
+<p><img alt="""" src=""http://bccolumn.komomo.biz/theme/bccolumn/img/page/img_theme01.png"" /></p>
+
+<ul class=""list-square"">
+	<li>メイン：フッター部分コンタクト背景・ボタンの色</li>
+	<li>サブ：サイドナビタイトル背景</li>
+	<li>テキストリンク：リンクカラー」</li>
+	<li>テキストホバー：マウスオーバー時リンクカラー」</li>
+</ul>
+
+<h3>ロゴの変更方法</h3>
+
+<p>制作するサイトのロゴをアップしてください</p>
+
+<p><img alt="""" src=""http://bccolumn.komomo.biz/theme/bccolumn/img/page/img_theme02.png"" /></p>
+
+<h3>メイン画像の変更方法</h3>
+
+<p>メイン画像は大きめがおすすめです</p>
+
+<p><img alt="""" src=""http://bccolumn.komomo.biz/theme/bccolumn/img/page/img_theme03.png"" /></p>
+
+<p>&nbsp;</p>
+
+<p>そして、基本的なパーツレイアウトが揃っているので、簡単にブログや固定ページを追加することができます。<br />
+パーツデザインのページをご参考ください。</p>
+</div>","","","","2016-07-29 17:43:45","2016-07-29 17:28:32"
+"3","<h2>見出し２</h2>
+
+<p>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
+
+<table>
+	<tbody>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+	</tbody>
+</table>
+
+<table class=""table-style"">
+	<tbody>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。 　 <a href=""#"">&gt; テキストリンク</a></td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+	</tbody>
+</table>
+
+<table class=""horizon"">
+	<thead>
+		<tr>
+			<th>項目</th>
+			<th>項目</th>
+			<th>項目</th>
+			<th>項目</th>
+			<th>項目</th>
+			<th>項目</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>テキストが入ります。<a href=""#"">&gt; テキストリンク</a></td>
+			<td>テキストが入ります。</td>
+			<td>テキストが入ります。</td>
+			<td>テキストが入ります。</td>
+			<td>テキストが入ります。</td>
+			<td>テキストが入ります。</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>見出し3</h3>
+
+<h4>◆リスト</h4>
+
+<ul class=""list-square"">
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+</ul>
+
+<h4>●リスト</h4>
+
+<ul class=""list-circle"">
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+</ul>
+
+<h4>ボタン小中大</h4>
+
+<p><a class=""btn btn-small"" href=""#"">ボタン１</a><br />
+<a class=""btn btn-midium"" href=""#"">ボタン２</a><br />
+<a class=""btn btn-big"" href=""#"">ボタン３</a></p>
+
+<h4>見出し4</h4>
+
+<p>テキストが入ります。テキストが入ります。テキストが入ります。</p>","","","","2016-07-29 17:31:36","2016-07-29 17:28:54"
+"4","<h2>見出し２</h2>
+
+<p>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
+
+<table>
+	<tbody>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+	</tbody>
+</table>
+
+<table class=""table-style"">
+	<tbody>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。 　 <a href=""#"">&gt; テキストリンク</a></td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+	</tbody>
+</table>
+
+<table class=""horizon"">
+	<thead>
+		<tr>
+			<th>項目</th>
+			<th>項目</th>
+			<th>項目</th>
+			<th>項目</th>
+			<th>項目</th>
+			<th>項目</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>テキストが入ります。<a href=""#"">&gt; テキストリンク</a></td>
+			<td>テキストが入ります。</td>
+			<td>テキストが入ります。</td>
+			<td>テキストが入ります。</td>
+			<td>テキストが入ります。</td>
+			<td>テキストが入ります。</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>見出し3</h3>
+
+<h4>◆リスト</h4>
+
+<ul class=""list-square"">
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+</ul>
+
+<h4>●リスト</h4>
+
+<ul class=""list-circle"">
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+</ul>
+
+<h4>ボタン小中大</h4>
+
+<p><a class=""btn btn-small"" href=""#"">ボタン１</a><br />
+<a class=""btn btn-midium"" href=""#"">ボタン２</a><br />
+<a class=""btn btn-big"" href=""#"">ボタン３</a></p>
+
+<h4>見出し4</h4>
+
+<p>テキストが入ります。テキストが入ります。テキストが入ります。</p>","","","","2016-07-29 17:32:20","2016-07-29 17:29:14"
+"5","<h2>見出し２</h2>
+
+<p>テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。テキストが入ります。</p>
+
+<h3>テーブル</h3>
+
+<table>
+	<tbody>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+	</tbody>
+</table>
+
+<h4>class=&quot;table-style&quot;</h4>
+
+<table class=""table-style"">
+	<tbody>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。 　 <a href=""#"">&gt; テキストリンク</a></td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+		<tr>
+			<th>項目</th>
+			<td>テキストが入ります。テキストが入ります。テキストが入ります。</td>
+		</tr>
+	</tbody>
+</table>
+
+<h4>class=&quot;horizon&quot;</h4>
+
+<table class=""horizon"">
+	<thead>
+		<tr>
+			<th>項目</th>
+			<th>項目</th>
+			<th>項目</th>
+			<th>項目</th>
+			<th>項目</th>
+			<th>項目</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>テキストが入ります。<a href=""#"">&gt; テキストリンク</a></td>
+			<td>テキストが入ります。</td>
+			<td>テキストが入ります。</td>
+			<td>テキストが入ります。</td>
+			<td>テキストが入ります。</td>
+			<td>テキストが入ります。</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>見出し3</h3>
+
+<h4>◆リスト class=&quot;list-square&quot;</h4>
+
+<ul class=""list-square"">
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+</ul>
+
+<h4>●リスト class=&quot;list-circle&quot;</h4>
+
+<ul class=""list-circle"">
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+	<li>テキストが入ります。テキストが入ります。テキストが入ります。</li>
+</ul>
+
+<h4>ボタン小 class=&quot;btn btn-small&quot;</h4>
+
+<p><a class=""btn btn-small"" href=""#"">ボタン１</a></p>
+
+<p>&nbsp;</p>
+
+<h4>ボタン中 class=&quot;btn btn-midium&quot;</h4>
+
+<p><a class=""btn btn-midium"" href=""#"">ボタン２</a></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<h4>ボタン大 class=&quot;btn btn-big&quot;</h4>
+
+<p><a class=""btn btn-big"" href=""#"">ボタン３</a></p>
+
+<p>&nbsp;</p>
+
+<h4>見出し4</h4>
+
+<p>テキストが入ります。テキストが入ります。テキストが入ります。</p>","","","","2016-07-29 17:32:52","2016-07-29 17:29:39"
+"6","<h2>会社案内</h2>
+
+<h3>ご挨拶</h3>
+
+<p>サイトによっては、左サイドバーが良かったり右サイドバーが良かったり、またはサイドバーがなくてもよかったりすることがあります。<br />
+このテーマには左右サイドの2カラムと1カラムの3つのレイアウトを選択できるようになっているのでbaserCMSのレイアウト選択機能で、簡単に切り替えることが可能です。<br />
+<br />
+ブログ毎、カテゴリー毎、個別に設定する方法をテーマの中に説明したページを作成しましたのでご参考ください。<br />
+<a href=""http://bccolumn.komomo.biz/concept/index"" target=""_blank"">http://bccolumn.komomo.biz/concept/index</a><br />
+<br />
+デザインは、どんなサイトにも使っていただけるよう、シンプルでカッコいいを目指しています。<br />
+白黒ベースが基本ですが、ポイントカラーを管理画面のテーマ設定から変更できるようにしています。<br />
+<br />
+また、固定ページの追加や、ブログ記事を書くときに使える、classを追加すると表示できるパーツデザインをご用意いたしました。<br />
+<a href=""http://bccolumn.komomo.biz/concept/parts"" target=""_blank"">http://bccolumn.komomo.biz/concept/parts</a><br />
+<br />
+トップページの実績・NEWS・BLOGの3カ所は、baserCMSのブログ機能を活かして、最新記事を取得するように設計しています。</p>
+
+<h3>会社概要</h3>
+
+<table>
+	<tbody>
+		<tr>
+			<th width=""150"">会社名</th>
+			<td>baserCMS inc. [デモ]</td>
+		</tr>
+		<tr>
+			<th>設立</th>
+			<td>2009年11月</td>
+		</tr>
+		<tr>
+			<th>所在地</th>
+			<td>福岡県福岡市博多区博多駅前（ダミー）</td>
+		</tr>
+		<tr>
+			<th>事業内容</th>
+			<td>インターネットサービス業（ダミー）<br />
+			WEBサイト制作事業（ダミー）<br />
+			WEBシステム開発事業（ダミー）</td>
+		</tr>
+	</tbody>
+</table>","","","","2016-07-29 17:33:56","2016-07-29 17:30:00"

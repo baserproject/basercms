@@ -1,0 +1,330 @@
+﻿"id","contents","draft","code","page_template","modified","created"
+"1","<div class=""clearfix"" id=""news"">
+<div class=""news"" style=""margin-right:28px;"">
+<h2 id=""newsHead01"">NEWS RELEASE</h2>
+
+<div class=""body""><?php $this->BcBaser->blogPosts('news', 5) ?></div>
+</div>
+
+<div class=""news"">
+<h2 id=""newsHead02"">baserCMS NEWS</h2>
+
+<div class=""body""><?php $this->BcBaser->js('/feed/ajax/1') ?></div>
+</div>
+</div>","","","","2016-07-29 18:13:18","2016-07-29 18:13:03"
+"2","<h2 class=""contents-head"">会社案内</h2>
+
+<h3 class=""contents-head"">会社データ</h3>
+
+<div class=""section"">
+<table cellpadding=""0"" cellspacing=""0"" class=""row-table-01"">
+	<tbody>
+		<tr>
+			<th width=""150"">会社名</th>
+			<td>baserCMS inc. [デモ]</td>
+		</tr>
+		<tr>
+			<th>設立</th>
+			<td>2009年11月</td>
+		</tr>
+		<tr>
+			<th>所在地</th>
+			<td>福岡県福岡市博多区博多駅前（ダミー）</td>
+		</tr>
+		<tr>
+			<th>事業内容</th>
+			<td>インターネットサービス業（ダミー）<br />
+			WEBサイト制作事業（ダミー）<br />
+			WEBシステム開発事業（ダミー）</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+
+<h3 class=""contents-head"">アクセスマップ</h3>
+
+<div class=""section""><?php $this->BcBaser->googleMaps(array(""width"" => 585)) ?></div>","","","","2016-07-29 18:14:13","2016-07-29 18:13:55"
+"3","<h2 class=""contents-head"">サービス</h2>
+
+<div class=""section"">
+<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>
+</div>
+
+<div class=""section"">
+<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>
+</div>
+
+<div class=""section"">
+<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>
+</div>","","","","2016-07-29 18:14:54","2016-07-29 18:14:33"
+"4","<h2>アイコンの使い方</h2>
+
+<h3>50種類のアイコンを自由にカスタマイズしよう。</h3>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>まずは、<a href=""https://basercms.net/files/extra/nada-works-png.zip"">nada-works-png.zip</a> をダウンロードして解凍します。</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>icons_ico_.pngをFireworksで開くと下記の50種類のアイコンがレイヤー分けされています。</p>
+
+<p>&nbsp;</p>
+
+<p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_001.png', array('style' => 'width: 656px; height: 250px;')) ?></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>カスタマイズ1：ベースの形を変える。</p>
+
+<p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_002.png', array('style' => 'width: 656px; height: 93px;')) ?></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>カスタマイズ2：色を変える。</p>
+
+<p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_003.png', array('style' => 'width: 656px; height: 93px;')) ?></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>カスタマイズ3：パスを使って変形させる。（上級者向け）<br />
+パスで作成しています。自由に変形させることが可能です。</p>
+
+<p>&nbsp;</p>
+
+<p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_004.png', array('style' => 'width: 193px; height: 186px;')) ?></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>パターン例：各コンテンツで色を変える。同じアイコンを使用する、など</p>
+
+<p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_005.png', array('style' => 'width: 656px; height: 215px;')) ?></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<h3>文字と写真を変えるだけで完成！かんたんバナーを作ろう。</h3>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>icons_banner_00.png、icons_banner_l_00.pngをFireworksで開くと各要素をレイヤー分けされています。<br />
+言葉、フォント、色、画像を変更してオリジナルのバナーを作成することができます。<br />
+画像は「シンボル」にて配置しています。差し替えたい画像をシンボル化し、「シンボルを入れ替え」にて差し替えてご使用ください。</p>
+
+<p>&nbsp;</p>
+
+<p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_006.png', array('style' => 'width: 656px; height: 302px;')) ?></p>
+
+<p>&nbsp;</p>
+
+<p>例：言葉、フォントの変更、画像差し替え</p>
+
+<p>&nbsp;</p>
+
+<p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_007.png', array('style' => 'width: 656px; height: 278px;')) ?></p>","","","","2016-07-29 18:15:29","2016-07-29 18:15:14"
+"5","<h2 class=""contents-head"">サイトマップ</h2>
+<div class=""section sitemap"">
+<?php $this->BcBaser->sitemap() ?>
+</div>","","","","2016-07-29 18:16:20","2016-07-29 18:15:50"
+"6","<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
+<div style=""text-align:center;background-color:#8ABE08;""><span style=""color:white;"">メインメニュー</span></div>
+
+<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
+<p><span style=""color:#8ABE08"">■</span> <?php $this->BcBaser->link(""ニュースリリース"",array(""controller""=>""news"",""action""=>""index"")) ?><br />
+<span style=""color:#8ABE08"">■</span> <?php $this->BcBaser->link(""お問い合わせ"",array(""controller""=>""contact"",""action""=>""index"")) ?></p>
+
+<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
+<div style=""text-align:center;background-color:#8ABE08;""><span style=""color:white;"">NEWS RELEASE</span></div>
+
+<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" /><?php $this->BcBaser->blogPosts('news', 5) ?>
+<div>&nbsp;</div>
+
+<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
+<div style=""text-align:center;background-color:#8ABE08;""><span style=""color:white;"">baserCMS NEWS</span></div>
+
+<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" /><?php $this->BcBaser->feed(1) ?>","","","","2016-07-29 18:19:04","2016-07-29 18:18:05"
+"7","<div class=""clearfix"" id=""news"">
+<div class=""news"" style=""margin-right:28px;"">
+<h2 id=""newsHead01"">NEWS RELEASE</h2>
+
+<div class=""body""><?php $this->BcBaser->blogPosts('news', 5) ?></div>
+</div>
+
+<div class=""news"">
+<h2 id=""newsHead02"">baserCMS NEWS</h2>
+
+<div class=""body""><?php $this->BcBaser->js('/s/feed/ajax/1') ?></div>
+</div>
+</div>","","","","2016-07-29 18:22:39","2016-07-29 18:19:54"
+"8","<h2 class=""contents-head"">会社案内</h2>
+
+<h3 class=""contents-head"">会社データ</h3>
+
+<div class=""section"">
+<table cellpadding=""0"" cellspacing=""0"" class=""row-table-01"">
+	<tbody>
+		<tr>
+			<th width=""150"">会社名</th>
+			<td>baserCMS inc. [デモ]</td>
+		</tr>
+		<tr>
+			<th>設立</th>
+			<td>2009年11月</td>
+		</tr>
+		<tr>
+			<th>所在地</th>
+			<td>福岡県福岡市博多区博多駅前（ダミー）</td>
+		</tr>
+		<tr>
+			<th>事業内容</th>
+			<td>インターネットサービス業（ダミー）<br />
+			WEBサイト制作事業（ダミー）<br />
+			WEBシステム開発事業（ダミー）</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+
+<h3 class=""contents-head"">アクセスマップ</h3>
+
+<div class=""section""><?php $this->BcBaser->googleMaps(array(""width"" => 585)) ?></div>","","","","2016-07-29 18:22:21","2016-07-29 18:20:18"
+"9","<h2 class=""contents-head"">サービス</h2>
+
+<div class=""section"">
+<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>
+</div>
+
+<div class=""section"">
+<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>
+</div>
+
+<div class=""section"">
+<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>
+</div>","","","","2016-07-29 18:22:05","2016-07-29 18:20:35"
+"10","<h2>アイコンの使い方</h2>
+
+<h3>50種類のアイコンを自由にカスタマイズしよう。</h3>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>まずは、<a href=""https://basercms.net/files/extra/nada-works-png.zip"">nada-works-png.zip</a> をダウンロードして解凍します。</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>icons_ico_.pngをFireworksで開くと下記の50種類のアイコンがレイヤー分けされています。</p>
+
+<p>&nbsp;</p>
+
+<p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_001.png', array('style' => 'width: 656px; height: 250px;')) ?></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>カスタマイズ1：ベースの形を変える。</p>
+
+<p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_002.png', array('style' => 'width: 656px; height: 93px;')) ?></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>カスタマイズ2：色を変える。</p>
+
+<p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_003.png', array('style' => 'width: 656px; height: 93px;')) ?></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>カスタマイズ3：パスを使って変形させる。（上級者向け）<br />
+パスで作成しています。自由に変形させることが可能です。</p>
+
+<p>&nbsp;</p>
+
+<p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_004.png', array('style' => 'width: 193px; height: 186px;')) ?></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>パターン例：各コンテンツで色を変える。同じアイコンを使用する、など</p>
+
+<p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_005.png', array('style' => 'width: 656px; height: 215px;')) ?></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<h3>文字と写真を変えるだけで完成！かんたんバナーを作ろう。</h3>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>icons_banner_00.png、icons_banner_l_00.pngをFireworksで開くと各要素をレイヤー分けされています。<br />
+言葉、フォント、色、画像を変更してオリジナルのバナーを作成することができます。<br />
+画像は「シンボル」にて配置しています。差し替えたい画像をシンボル化し、「シンボルを入れ替え」にて差し替えてご使用ください。</p>
+
+<p>&nbsp;</p>
+
+<p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_006.png', array('style' => 'width: 656px; height: 302px;')) ?></p>
+
+<p>&nbsp;</p>
+
+<p>例：言葉、フォントの変更、画像差し替え</p>
+
+<p>&nbsp;</p>
+
+<p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_007.png', array('style' => 'width: 656px; height: 278px;')) ?></p>","","","","2016-07-29 18:21:48","2016-07-29 18:20:50"
+"11","<h2 class=""contents-head"">サイトマップ</h2>
+<div class=""section sitemap"">
+<?php $this->BcBaser->sitemap(2) ?>
+</div>","","","","2016-07-29 18:21:31","2016-07-29 18:21:04"

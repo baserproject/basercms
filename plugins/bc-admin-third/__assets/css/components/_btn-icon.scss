@@ -1,0 +1,223 @@
+//
+// # ボタンアイコン（アイコンのみ/テキストなし)
+//
+.bca-btn-icon {
+
+  // デフォルトボタン
+  display: inline-block;
+  width: 1em;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  color: $color_primary;
+  transition: all 0.2s;
+  &:hover {
+    text-decoration: none;
+    color: $color_secondary;
+  }
+
+  @mixin bca-btn-icon-common {
+
+  }
+
+  // 公開
+  &[data-bca-btn-type=publish] {
+    @include bca-icon(publish);
+  }
+  // 非公開
+  &[data-bca-btn-type=unpublish] {
+    @include bca-icon(unpublish);
+  }
+  // 確認
+  &[data-bca-btn-type=preview] {
+    @include bca-icon(preview);
+  }
+  // 編集
+  &[data-bca-btn-type=edit] {
+    @include bca-icon(edit);
+  }
+  // 複製
+  &[data-bca-btn-type=copy] {
+    @include bca-icon(copy);
+  }
+  // 削除
+  &[data-bca-btn-type=delete] {
+    @include bca-icon(delete);
+  }
+  // 一覧
+  &[data-bca-btn-type=th-list] {
+    @include bca-icon(th-list);
+  }
+  // 一覧に戻る
+  &[data-bca-btn-type=back-to-list] {
+    @include bca-icon(back-to-list);
+  }
+  // お気に入り
+  &[data-bca-btn-type=favorite] {
+    @include bca-icon(favorite);
+  }
+  // メニューアイテム
+  &[data-bca-btn-type=menuitem] {
+    @include bca-icon(menuitem);
+  }
+  // 追加
+  &[data-bca-btn-type=add] {
+    @include bca-icon(add);
+  }
+  // ヘルプ
+  &[data-bca-btn-type=help] {
+    @include bca-icon(help);
+  }
+  // 制限（鍵)
+  &[data-bca-btn-type=permission] {
+    @include bca-icon(permission);
+  }
+  // 適用
+  &[data-bca-btn-type=apply] {
+    @include bca-icon(apply);
+  }
+  // HOME
+  &[data-bca-btn-type=home] {
+    @include bca-icon(home);
+  }
+  // ログイン
+  &[data-bca-btn-type=login] {
+    color: $color_lightest;
+    $color_darken: darken($color_primary, 5%);
+    border: 1px solid $color_darken;
+    background-image: linear-gradient($color_primary 10%, $color_darken 100%);
+    &:hover,
+    &:focus {
+      color: $color_lightest;
+      background-image: linear-gradient($color_darken 10%, $color_darken 100%);
+    }
+  }
+  // Login
+  &[data-bca-btn-type=switch] {
+    @include bca-icon(switch);
+  }
+  // 開く
+  &[data-bca-btn-type=open] {
+    @include bca-icon(open);
+  }
+  // テキストコピー
+  &[data-bca-btn-type=textcopy] {
+    @include bca-icon(textcopy);
+  }
+  // ダウンロード
+  &[data-bca-btn-type=download] {
+    @include bca-icon(download);
+  }
+  // ドラック可能
+  &[data-bca-btn-type=draggable] {
+    @include bca-icon(draggable);
+  }
+  // フォルダ
+  &[data-bca-btn-type=folder] {
+    @include bca-icon(folder);
+  }
+  // ファイル
+  &[data-bca-btn-type=file] {
+    @include bca-icon(file);
+  }
+  // 1階層上に戻る
+  &[data-bca-btn-type=up-directory] {
+    @include bca-icon(up-directory);
+  }
+  // 矢印　右
+  &[data-bca-btn-type=arrow-right] {
+    @include bca-icon(arrow-right);
+  }
+  // 矢印　左
+  &[data-bca-btn-type=arrow-left] {
+    @include bca-icon(arrow-left);
+  }
+  // 矢印　上
+  &[data-bca-btn-type=arrow-up] {
+    @include bca-icon(arrow-up);
+  }
+  // 矢印　下
+  &[data-bca-btn-type=arrow-down] {
+    @include bca-icon(arrow-down);
+  }
+  // ファイルリスト
+  &[data-bca-btn-type=file-list] {
+    @include bca-icon(file-list);
+  }
+  // アップデート
+  &[data-bca-btn-type=update] {
+    @include bca-icon(update);
+  }
+  // 設定
+  &[data-bca-btn-type=setting] {
+    @include bca-icon(setting);
+  }
+
+  // サイズ
+  // ===========================
+
+  // large
+  &[data-bca-btn-size=lg] {
+    font-size: 2.4rem;
+  }
+
+  // small
+  &[data-bca-btn-size=sm] {
+    font-size: 1.4rem;
+  }
+
+  // xsmall
+  &[data-bca-btn-size=xs] {
+    font-size: 1.2rem;
+  }
+
+  // ステータス
+  // ===========================
+
+  // プライマリー
+  &[data-bca-btn-status=primary] {
+    color: #fff;
+    background: $color_primary;
+    &::before {
+      color: #fff;
+    }
+    &:hover {
+      background: $color_secondary;
+    }
+  }
+  // 白
+  &[data-bca-btn-status=white] {
+    color: #fff;
+    &::before {
+      color: #fff;
+    }
+    &:hover {
+      color: #fff;
+      &::before {
+        color: #fff;
+      }
+    }
+  }
+  // グレー
+  &[data-bca-btn-status=gray] {
+    color: $color_secondary;
+    &::before {
+      color: $color_background_secondary_border;
+    }
+    &:hover {
+      color: $color_background_secondary_border;
+      &::before {
+        color: $color_background_secondary_border;
+      }
+    }
+  }
+
+  // disabled
+  &[disabled] {
+    color: #aaa;
+    border-color: #ddd;
+    //background: #eee;
+  }
+}
