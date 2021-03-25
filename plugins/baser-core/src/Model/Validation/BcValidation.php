@@ -28,6 +28,9 @@ class BcValidation extends Validation
      * @param string $value チェック対象文字列
      * @param array $context 他に許容する文字列
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function alphaNumericPlus($value, $context = null)
     {
@@ -58,6 +61,9 @@ class BcValidation extends Validation
      * @param mixed $fields フィールド名
      * @param array $context
      * @return    boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function confirm($value, $fields, $context)
     {
@@ -94,6 +100,9 @@ class BcValidation extends Validation
      * @param mixed $value
      * @param array $context
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function notEmptyMultiple($value, $context)
     {
@@ -116,6 +125,9 @@ class BcValidation extends Validation
      *
      * @param string $value 確認する値を含む配列
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function halfText($value)
     {

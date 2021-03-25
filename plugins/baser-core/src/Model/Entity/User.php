@@ -55,6 +55,9 @@ class User extends EntityAlias
      *
      * @param $value
      * @return bool|string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function _setPassword($value)
     {

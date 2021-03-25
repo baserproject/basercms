@@ -34,6 +34,9 @@ class BcUtil
      * セッションクラスが設定されていない場合にはスーパーグローバル変数を利用する
      *
      * @return mixed Entity|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function loginUser($prefix = 'Admin')
     {
@@ -52,6 +55,9 @@ class BcUtil
      * 特権ユーザでのログイン状態か判別する
      *
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function isSuperUser(): bool
     {
@@ -77,6 +83,9 @@ class BcUtil
      * 代理ログイン状態か判別する
      *
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function isAgentUser(): bool
     {
@@ -87,6 +96,9 @@ class BcUtil
     /**
      * インストールモードか判定する
      * @return bool|string|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function isInstallMode()
     {
@@ -97,6 +109,9 @@ class BcUtil
      * バージョンを取得する
      *
      * @return bool|string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function getVersion($plugin = '')
     {
@@ -136,6 +151,9 @@ class BcUtil
      * β版の場合はfalseを返す
      *
      * @param mixed $version Or false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function verpoint($version)
     {
@@ -161,6 +179,9 @@ class BcUtil
      * 管理画面用のプレフィックスを取得する
      *
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function getAdminPrefix()
     {
@@ -174,6 +195,9 @@ class BcUtil
      * エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
      *
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function getEnablePlugins()
     {
@@ -219,6 +243,9 @@ class BcUtil
      *
      * @param string $pluginName
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     static public function includePluginClass($pluginName)
     {

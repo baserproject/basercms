@@ -42,6 +42,9 @@ class UsersTable extends Table
      *
      * @param array $config テーブル設定
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {
@@ -65,6 +68,9 @@ class UsersTable extends Table
      * @param Event $event
      * @param ArrayObject $data
      * @param ArrayObject $options
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
     {
@@ -80,6 +86,9 @@ class UsersTable extends Table
      * @param User $user
      * @param ArrayObject $data
      * @param ArrayObject $options
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function afterMarshal(Event $event, User $user, ArrayObject $data, ArrayObject $options)
     {
@@ -92,6 +101,9 @@ class UsersTable extends Table
      *
      * @param Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -169,6 +181,9 @@ class UsersTable extends Table
      * Validation New
      * @param Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function validationNew(Validator $validator): Validator
     {
@@ -201,6 +216,9 @@ class UsersTable extends Table
 
     /**
      * 初期化されたエンティティを取得する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNew()
     {
@@ -216,6 +234,9 @@ class UsersTable extends Table
      * @param string $field フィールド名
      * @param array $options オプション
      * @return Query コントロールソース
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getControlSource($field, $options = [])
     {
@@ -239,6 +260,9 @@ class UsersTable extends Table
      * @param $query
      * @param $request
      * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function createWhere($query, $request): Query
     {
@@ -256,6 +280,9 @@ class UsersTable extends Table
      *
      * @param [type] $id
      * @return User
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getLoginFormatData($id): User
     {

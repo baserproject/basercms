@@ -36,6 +36,9 @@ class BcAdminFormHelper extends BcFormHelper
      * @param string $name
      * @param array $options
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function control(string $name, array $options = []): string
     {

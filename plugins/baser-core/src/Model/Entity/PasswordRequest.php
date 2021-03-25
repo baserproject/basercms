@@ -46,6 +46,9 @@ class PasswordRequest extends Entity
 
     /**
      * Set Request Key
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function setRequestKey(): void
     {

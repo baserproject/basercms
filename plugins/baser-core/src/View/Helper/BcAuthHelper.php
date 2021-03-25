@@ -34,6 +34,9 @@ class BcAuthHelper extends Helper
     /**
      * 現在認証プレフィックスを取得する
      * @return string currentPrefix
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCurrentPrefix(): string
     {
@@ -52,6 +55,9 @@ class BcAuthHelper extends Helper
     /**
      * 現在の認証プレフィックスの設定を取得
      * @return array 認証プレフィックス設定
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCurrentPrefixSetting(): array
     {
@@ -61,6 +67,9 @@ class BcAuthHelper extends Helper
     /**
      * 現在の認証プレフィックスのログインURLを取得
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCurrentLoginUrl(): string
     {
@@ -92,6 +101,8 @@ class BcAuthHelper extends Helper
     /**
      * 現在のユーザーが管理画面の利用が許可されているかどうか
      * @return bool
+     * @checked
+     * @unitTest
      */
     public function isCurrentUserAdminAvailable(): bool
     {
@@ -118,6 +129,9 @@ class BcAuthHelper extends Helper
     /**
      * 認証名を取得する
      * フロントの場合はサイト名
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCurrentName()
     {
@@ -135,6 +149,9 @@ class BcAuthHelper extends Helper
     /**
      * 管理画面にログインしているかどうか
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isAdminLogin()
     {
@@ -144,6 +161,9 @@ class BcAuthHelper extends Helper
     /**
      * 現在のログアウトURL
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCurrentLogoutUrl()
     {
@@ -153,6 +173,9 @@ class BcAuthHelper extends Helper
     /**
      * 現在のログイン後のリダイレクトURL
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCurrentLoginRedirectUrl()
     {
@@ -162,6 +185,9 @@ class BcAuthHelper extends Helper
     /**
      * 現在のログインユーザー
      * @return Entity
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCurrentLoginUser()
     {
@@ -172,6 +198,9 @@ class BcAuthHelper extends Helper
      * 特権ユーザログイン状態判別
      *
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isSuperUser(): bool
     {
@@ -182,6 +211,9 @@ class BcAuthHelper extends Helper
      * 代理ログイン状態判別
      *
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isAgentUser(): bool
     {

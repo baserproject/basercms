@@ -57,7 +57,11 @@ class BcAdminHelperTest extends BcTestCase
 		unset($this->BcAdmin);
 		parent::tearDown();
 	}
-
+    /**
+     * Test isAvailableSideBar
+     *
+     * @return void
+     */
     public function testIsAvailableSideBar()
     {
         // 未ログイン

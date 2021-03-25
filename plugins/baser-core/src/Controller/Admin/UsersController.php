@@ -351,6 +351,7 @@ class UsersController extends BcAdminAppController
      * - pagination
      * - view num
      * @checked
+     * @unitTest
      */
     public function index(): void
     {
@@ -405,6 +406,7 @@ class UsersController extends BcAdminAppController
      *
      * @return Response|null|void Redirects on successful add, renders view otherwise.
      * @checked
+     * @unitTest
      */
     public function add()
     {

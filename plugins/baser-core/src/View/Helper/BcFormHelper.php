@@ -123,6 +123,7 @@ class BcFormHelper extends FormHelper
      * @return Query|false コントロールソース
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getControlSource($field, $options = [])
     {
@@ -158,6 +159,7 @@ class BcFormHelper extends FormHelper
      * @return string html
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function datePicker($fieldName, $options = [])
     {
@@ -191,6 +193,7 @@ SCRIPT_END;
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function dateTimePicker($fieldName, $options = [])
     {

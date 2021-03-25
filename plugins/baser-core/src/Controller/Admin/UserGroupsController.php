@@ -120,6 +120,7 @@ class UserGroupsController extends BcAdminAppController
      * @return Response|null|void Renders view
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function index()
     {
@@ -156,6 +157,7 @@ class UserGroupsController extends BcAdminAppController
      * @return Response|null|void Redirects on successful add, renders view otherwise.
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function add()
     {
@@ -284,6 +286,9 @@ class UserGroupsController extends BcAdminAppController
      * @return Response|null|void Redirects to index.
      * @throws RecordNotFoundException When record not found.
      * @throws CopyFailedException When copy failed.
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function copy($id = null)
     {

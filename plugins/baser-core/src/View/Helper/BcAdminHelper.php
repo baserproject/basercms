@@ -239,6 +239,9 @@ class BcAdminHelper extends Helper
     /**
      * サイドバーが利用可能か確認する
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isAvailableSideBar()
     {
@@ -256,6 +259,9 @@ class BcAdminHelper extends Helper
     /**
      * Set Title
      * @param string $title
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function setTitle($title): void
     {
@@ -265,6 +271,9 @@ class BcAdminHelper extends Helper
     /**
      * Set Help
      * @param string $template
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function setHelp($template): void
     {
@@ -274,6 +283,9 @@ class BcAdminHelper extends Helper
     /**
      * Set Search
      * @param string $template
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function setSearch($template): void
     {
@@ -282,6 +294,9 @@ class BcAdminHelper extends Helper
 
     /**
      * Title
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function title(): void
     {
@@ -290,6 +305,9 @@ class BcAdminHelper extends Helper
 
     /**
      * Help
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function help(): void
     {
@@ -301,6 +319,8 @@ class BcAdminHelper extends Helper
 
     /**
      * Search
+     * @checked
+     * @noTodo
      */
     public function search(): void
     {
@@ -323,6 +343,9 @@ class BcAdminHelper extends Helper
 
     /**
      * Contents Menu
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function contentsMenu(): void
     {
