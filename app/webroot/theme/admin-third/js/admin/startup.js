@@ -72,7 +72,7 @@ $(function () {
                     opacity: 0
                 }, 100, callback);
             },
-            contentSelector: "$(this).next('.helptext').html()"
+            contentSelector: "$(this).nextAll('.helptext').html()"
         });
     }
 
