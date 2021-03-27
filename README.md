@@ -10,4 +10,4 @@
 
 ucmitz 🐮🐮🐮 は、baserCMSをCakePHP4化するためのプロジェクトの開発コードネームです。
 
-- [開発への貢献方法](https://github.com/baserproject/ucmitz/blob/dev/CONTRIBUTING.md)
+- [開発への貢献方法](https://github.com/baserproject/ucmitz/blob/dev/.github/CONTRIBUTING.md)
