@@ -26,7 +26,7 @@ Issueの内容に従って機能を実装します。
 　
 ## 5. マーキングを行う
 
-[コード移行時のマーキング](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration-rule.md#コード移行時のマーキング) を参考に、マーキングを行います。
+[コード移行時のマーキング](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_rule.md#コード移行時のマーキング) を参考に、マーキングを行います。
 
 　 
 ## 6. プルリクエストを作成する

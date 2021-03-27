@@ -11,6 +11,8 @@
         }
     },
 ```
+
+　
 ## dump-autoload の実行
 dump-autoload を実行することで、 `/vendor/cakephp-plugins.php` に、CakePHP プラグインとしての定義が書き込まれる。
 ```
@@ -30,6 +32,8 @@ return [
     ]
 ];
 ```
+
+　
 ## BcApplication に呼び出し定義
 `plugins/baser-core/src/BcApplication.php` の `bootstrap` メソッドに呼び出すプラグインを定義することで呼び出しが可能になる。
 ```php

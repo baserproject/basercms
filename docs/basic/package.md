@@ -59,9 +59,9 @@ CakePHPのプラグインとしての開発を前提とし、`/plugins/` 配下�
 複数のパッケージを統合的に管理するためにPHP用のモノレポ 「monorepo-builder」 を利用しています。
 リリース時に次のレポジトリに分割してコミットされます。
 
-- [BaserApp ソースコード / baserproject/basercms:dev-5-cake3](https://github.com/baserproject/ucmitz/tree/dev)
-- [BaserCore ソースコード / baserproject/baser-core:dev-5-cake3](https://github.com/baserproject/baser-core/tree/dev-5-cake3)
-- [BcAdminThird ソースコード / baserproject/bc-admin-third:dev-5-cake3](https://github.com/baserproject/bc-admin-third/tree/dev-5-cake3)
+- [ucmitz ソースコード / baserproject/ucmitz](https://github.com/baserproject/ucmitz/tree/master)
+- [BaserCore ソースコード / baserproject/baser-core](https://github.com/baserproject/baser-core/tree/master)
+- [BcAdminThird ソースコード / baserproject/bc-admin-third](https://github.com/baserproject/bc-admin-third/tree/master)
 
 　
 

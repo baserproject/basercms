@@ -4,7 +4,7 @@
 
 実際の開発については、開発の手順に従って開発します。
 
-- [開発の手順](https://github.com/baserproject/ucmitz/blob/dev/docs/development/procedure-development) 
+- [開発の手順](https://github.com/baserproject/ucmitz/blob/dev/docs/development/procedure.md) 
 
 　
 ## 移行上のルール
@@ -18,20 +18,20 @@ baserCMS4のコードを移行していることが ucmitzの開発になるの�
 
 baserCMS4で利用しているCakePHP2系からCakePHP4系に移行するにあたり、様々な変更点や注意点があります。開発上の注意点を参考にします。
 
-- [ルーティングにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/development/migration_point/about-routing.md)
-- [コントローラーにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/development/migration_point/about-controller.md)
-- [モデルにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/development/migration_point/about-model.md)
-- [ビューにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/development/migration_point/about-view.md)
-- [ヘルパーにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/development/migration_point/about-helper.md)
-- [リクエスト関連における注意点](https://github.com/baserproject/ucmitz/blob/dev/development/migration_point/about-request.md)
-- [セッション関連における注意点](https://github.com/baserproject/ucmitz/blob/dev/development/migration_point/about-request.md)
+- [ルーティングにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/routing.md)
+- [コントローラーにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/controller.md)
+- [モデルにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/model.md)
+- [ビューにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/view.md)
+- [ヘルパーにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/helper.md)
+- [リクエスト関連における注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/request.md)
+- [セッション関連における注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/session.md)
 
 　
 ## 全体的な変更点
 
 開発における全体的な変更点については次を確認してください。
 
-- [全体的な変更点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/change.md)
+- [全体的な変更点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/changed.md)
 
 　
 ## 既知の問題点

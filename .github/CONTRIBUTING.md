@@ -18,7 +18,7 @@
 
 ucmitz は、PHP7.2以降でのみ動作します。詳細についてはシステム要件を確認します。
 
-- [システム要件](https://github.com/baserproject/ucmitz/blob/dev/docs/preparation/basic/system.md)
+- [システム要件](https://github.com/baserproject/ucmitz/blob/dev/docs/basic/system.md)
 
 　
 
