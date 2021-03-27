@@ -6,7 +6,7 @@ $this->getRequest();    // Controller / View
 Router::getRequest();    // Other
 ```
 
-
+　
 ## URL関連
 
 ### 現在のURLを取得する
@@ -20,22 +20,22 @@ $request->getPath();
 $request->getRequestTarget();
 ```
 
+　
 ## リクエストデータ
 ```php
 // baserCMS4
 $request->data[];
-```
-```php
 // ucmitz
 $request->getData();
 ```
 
+　
 ## パラメーター
 ```php
 // baserCMS4
 $request->params[];
-```
-```php
 // ucmitz
 $request->getParam();
 ```
+
+　

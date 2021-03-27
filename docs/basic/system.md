@@ -7,5 +7,5 @@
 - 必須Apacheモジュール：Rewrite
 - 必須PHPモジュール：GD2、libxml、cURL、mbstring、PDO
 - 管理システム対応ブラウザ：Chrome・Firefox・Safari・Edge
-- メール送信環境（sendmail or 外部SMTPサーバ）
-- Postfix、qmailなどのsendmail互換MTAでも可能
+- メール送信環境：sendmail or 外部SMTPサーバ 
+    - Postfix、qmailなどのsendmail互換MTAでも可能

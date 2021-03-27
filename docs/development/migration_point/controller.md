@@ -1,14 +1,15 @@
 # コントローラーにおける注意点
 
-### サブメニューの設定
+## サブメニューの設定
 
-廃止。コントローラーの下記のようなコードは削除する。
+廃止となりました。コントローラーの下記のようなコードは削除します。
 
 ```php
 $this->subMenuElements = ['plugins'];
 ```
 
-### 検索フォームの設定
+　
+## 検索フォームの設定
 ```php
 // baserCMS4
 $this->search = $templateName;
@@ -16,7 +17,8 @@ $this->search = $templateName;
 $this->setSearch($templateName);
 ```
 
-### ヘルプの設定
+　
+## ヘルプの設定
 ```php
 // baserCMS4
 $this->help = $templateName;
@@ -24,7 +26,8 @@ $this->help = $templateName;
 $this->setHelp($templateName);
 ```
 
-### タイトルの設定
+　
+## タイトルの設定
 ```php
 // baserCMS4
 $this->pageTitle = $title;

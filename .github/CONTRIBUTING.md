@@ -1,62 +1,86 @@
 # 開発への貢献方法
 
-baserCMS５の開発コードネームは、`ucmitz` です。開発については、`ucmitz` レポジトリの `dev` ブランチを利用します。
+「ucmitz」は、baserCMSをCakePHP4に対応するプロジェクトの開発コードネームです。コアデベロッパーの gondoh が命名しました。  
+
+開発に貢献頂ける場合は、`dev` ブランチを利用してください。
 
 　
 
 ## 開発方針とロードマップの確認
 
-開発にたずさわる前に 開発方針とロードマップを必ず確認します。
+開発に貢献する前に、開発方針とロードマップを必ず確認しましょう。ucmitz は、メジャーバージョンを３回刻んだ後、baserCMS５としてリリースされます。
 
 - [開発方針](https://docs.google.com/document/d/1QAmScc65CwMyn8QuwWKE9q_8HnSKcW9oefI9RrHoUYY/edit)
 - [ロードマップ](https://docs.google.com/spreadsheets/d/1TZ71-O_9KiQM9xAB_a_jnSFVrH2dsyKowMLkyGLcI9g/edit#gid=2131306554)
 
 　
-## 開発環境の準備
+## システム要件の確認
 
-[開発環境の準備](https://github.com/baserproject/ucmitz/blob/dev/docs/pre-development.md) を参考に、ucmitz がローカル環境で動作するように準備します。
+ucmitz は、PHP7.2以降でのみ動作します。詳細についてはシステム要件を確認します。
 
+- [システム要件](https://github.com/baserproject/ucmitz/blob/dev/docs/preparation/basic/system.md)
+
+　
+
+## 開発の準備
+
+次のドキュメントを参考に、ucmitz がローカル環境で動作するように準備します。Docker on Vagrant の環境を提供しています。
+
+- [開発の準備](https://github.com/baserproject/ucmitz/blob/dev/docs/preparation/pre-development.md) 
+
+　
 　
 ## パッケージ構成の確認
 
-- [BaserApp](https://github.com/baserproject/ucmitz) ：Gitでクローンした本体。親パッケージとしてbaserCMSのアプリケーションフレームを提供
-- [BaserCore](https://github.com/baserproject/ucmitz/tree/dev/plugins/baser-core) ：baserCMSの本体、子パッケージとして主にURLに紐づくルーティングと、ビジネスロジックを提供　`/plugins/baser-core`
-- [BcAdminThird](https://github.com/baserproject/ucmitz/tree/dev/plugins/bc-admin-third) ：子パッケージとして、baserCMSの画面表示をテーマとして提供　`/plugins/bc-admin-third`
+ucmitz は、主に `BaserApp`、`BaserCore`、`BcAdminThird` の３つコアパッケージを中心に、ブログやメールフォームなどコアプラグインで構成されます。
+詳細については、パッケージ構成を参照してください。
+
+- [パッケージ構成](https://github.com/baserproject/ucmitz/blob/dev/docs/basic/package.md)
 
 　
-## 開発の手順
-
-[開発の手順](https://github.com/baserproject/ucmitz/blob/dev/docs/procedure-development) に従って開発します。
-
 　
- 
-## 全体の構成や baserCMS４からの変更点について
+## 開発にとりかかる
 
-[baserCMS4 から ucmitz への移行](https://github.com/baserproject/ucmitz/blob/dev/migration-docs/README.md) を参考にします。
+実際の開発については、ucmitz開発ガイドを参考にします。
 
-　
+- [ucmitz 開発ガイド](https://github.com/baserproject/ucmitz/blob/dev/docs/development/index.md) 
 
-## 新しい仕様の定義について
-
-仕様の定義者は、新しく仕様を定義する場合、 [機能要件一覧](https://docs.google.com/spreadsheets/d/1YT5PuZQdDNU0wrZdqYbh74KuLSw1SIt4_EKwPWOfDKA/edit#gid=0) に存在するか確認し、なければ追加します。
 
 　
 
-## 開発中に発生した開発に必要なドキュメントの追加について
+## 新しい機能の定義
 
-`/docs/` または、 `/migration-docs/` に、マークダウン形式でファイルを作成します。
+新しく機能を定義したい場合、 機能要件一覧に存在するか確認し、なければ Issue を作成して話し合い、承認されれば機能要件一覧に追加します。
+
+- [機能要件一覧](https://docs.google.com/spreadsheets/d/1YT5PuZQdDNU0wrZdqYbh74KuLSw1SIt4_EKwPWOfDKA/edit#gid=0) 
 
 　
 
-## その他の開発に必要なドキュメント
-- [システム要件](https://github.com/baserproject/ucmitz/blob/dev/docs/system.md)
-- [コーディング方針](https://github.com/baserproject/ucmitz/blob/dev/docs/coding-policy.md)
-- [データベースの定義](https://github.com/baserproject/ucmitz/blob/dev/docs/database.md)
-- [プラグインの呼び出し](https://github.com/baserproject/ucmitz/blob/dev/docs/call-plugin.md)
-- [BcAdminThirdの開発](https://github.com/baserproject/ucmitz/blob/dev/plugins/bc-admin-third/README.md)
-- [外部のCakePHPアプリケーションで baserCMSを利用する](https://github.com/baserproject/ucmitz/blob/dev/docs/application.md)
-- [baserCMSのプラグイン開発](https://github.com/baserproject/ucmitz/blob/dev/docs/plugin.md)
-- [ユニットテスト](https://github.com/baserproject/ucmitz/blob/dev/docs/unittest.md)
-- [モノレポによるパッケージ管理](https://github.com/baserproject/ucmitz/blob/dev/docs/monorepo.md)
-- [Cloud9 上で Docker を動作させる](https://github.com/baserproject/ucmitz/blob/dev/docs/cloud9.md)
-- [将来的に追加したい機能](https://docs.google.com/document/d/1AwJQ0h0xQ5utFB1tVzLh1b1UhZp-lxQbM2fDjxtDc9I/edit#)
+## ドキュメントの追加
+
+開発中に発生した開発に必要なドキュメントを追加する場合は、`/docs/` ディレクトリに、マークダウン形式でファイルを作成します。
+
+　
+
+## プロジェクトで ucmitz を利用する
+
+人柱となり自身のプロジェクトで ucmitz を利用したい場合は、composer でインストールできます。
+詳細については次のドキュメントを参照してください。
+
+- [外部のCakePHPアプリケーションで ucmitz を利用する](https://github.com/baserproject/ucmitz/blob/dev/docs/etc/use_my_project.md)
+
+　
+　
+## 新しいプラグインを開発する
+
+ucmitz の新しいプラグインを開発するには次のドキュメントが参考になります。
+
+- [ucmitzのプラグインの開発](https://github.com/baserproject/ucmitz/blob/dev/docs/plugin/plugin-development.md)
+
+　
+　
+## その他のドキュメント
+
+- [Cloud9 上で ucmitz を動作させる](https://github.com/baserproject/ucmitz/blob/dev/docs/etc/cloud9.md)
+
+　
