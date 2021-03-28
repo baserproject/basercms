@@ -7,7 +7,7 @@ GitHub の [Issue](https://github.com/baserproject/ucmitz/issues) より対応�
 機能要件一覧より選択する場合、次の項目を更新します。
 
 - 担当者名：自身の名前を記入します
-- Issue：「●」を記載し、Issueへのリンクを貼ります（Issueが存在しなければ作成します）
+- Issue：「●」を記載し、Issueへのリンクを貼ります（Issueが存在しなければ、マイルストンを設定の上作成します）
 - 状況：着手中に切り替えます。
 
 　
