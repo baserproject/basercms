@@ -25,8 +25,8 @@
 - [開発環境の構築](https://github.com/baserproject/ucmitz/blob/dev/docs/preparation/environment.md)
 - [ucmitz をセットアップする](https://github.com/baserproject/ucmitz/blob/dev/docs/preparation/setup.md) 
 - [パッケージ構成](https://github.com/baserproject/ucmitz/blob/dev/docs/basic/package.md)
+
 　
-　　
 ## 開発にとりかかる
 
 ### 開発の手順と移行上のルール

@@ -62,6 +62,16 @@ class PluginsTableTest extends BcTestCase
     }
 
     /**
+     * Test initialize
+     *
+     * @return void
+     */
+    public function testInitialize()
+    {
+        $this->assertIsBool($this->Plugins->hasBehavior('Timestamp'));
+    }
+
+    /**
      * testGetAvailable
      */
     public function testGetAvailable()
