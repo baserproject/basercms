@@ -1,6 +1,6 @@
 # パッケージ構成
 
-BaserApp を親パッケージとして、BaserCore、BcAdminThird など必要とするパッケージを CakePHP のプラグインとして開発し、子パッケージとして管理しています。  
+ucmitz を親パッケージとして、BaserCore、BcAdminThird など必要とするパッケージを CakePHP のプラグインとして開発し、子パッケージとして管理しています。  
 
 　
 ## コアの構成

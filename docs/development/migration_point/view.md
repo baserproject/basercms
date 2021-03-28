@@ -1,5 +1,7 @@
 # ビューにおける注意点
 
+ビューのテンプレートは、BcAdminThirdプラグインとして、`/plugins/bc-admin-third/templates/` 内に配置します。
+
 ## フォーム関連
 
 ### フォームコントロールのテンプレート
@@ -60,3 +62,10 @@ https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-form
 ## HTML
 
 - table タグの `cellpadding="0" cellspacing="0"` は除外します。
+
+　
+## テーマの定義について
+現在、テーマの定義は、次のメソッドにてハードコーディングで行っています。
+```php
+BaserCore\Controller\Admin\BcAdminAppController::beforeRender()
+```

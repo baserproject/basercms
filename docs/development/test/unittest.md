@@ -4,7 +4,7 @@ ucmitz では、[CakePHPのテストの仕組み](https://book.cakephp.org/4/ja/
 
 ## テストの準備
 
-事前に Composer で、PHPUnit などをインストールしておく必要があります。
+事前にコンテナにログインし Composer で、PHPUnit などをインストールしておく必要があります。
 
 ```shell
 composeer install
@@ -58,7 +58,7 @@ class BcTestHelperTest extends BaserCore\TestSuite\BcTestCase {
 　
 ## テストの実行
 
-テストを実行するには次のコマンドを実行します。
+テストを実行するには、事前にコンテナにログインし次のコマンドを実行します。
 
 ```shell
 vendor/bin/phpunit

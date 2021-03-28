@@ -55,14 +55,6 @@ Cloud9 の メニューの `Preview` より、`Preview Running Application` を�
 Cloud9 内にブラウザが立ち上がるので、URLの入力欄にカーソルを当てるとURLを確認できる。
 
 　
-
-## phpMyAdmin で、SQLを流し込む
-
-`https://ベースURL:8081/` にアクセスする。
-データベース `basercms` を選択し、SQLより、`/__asset/basercms.sql` を実行する。
-
-　
-
 ## 開発中のURLにアクセスする
 
 ```
