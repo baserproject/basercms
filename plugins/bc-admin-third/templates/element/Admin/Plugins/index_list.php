@@ -23,8 +23,8 @@ use BaserCore\View\AppView;
 <div class="bca-data-list__top">
     <?php if ($this->BcBaser->isAdminUser()): ?>
         <div>
-            <?php echo $this->BcForm->control('ListTool.batch', ['type' => 'select', 'options' => ['del' => __d('baser', '無効')], 'empty' => __d('baser', '一括処理')]) ?>
-            <?php echo $this->BcForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
+            <?php echo $this->BcAdminForm->control('ListTool.batch', ['type' => 'select', 'options' => ['del' => __d('baser', '無効')], 'empty' => __d('baser', '一括処理')]) ?>
+            <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
         </div>
     <?php endif ?>
 </div>
@@ -35,7 +35,7 @@ use BaserCore\View\AppView;
     <tr class="list-tool">
         <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select">
             <?php if ($this->BcBaser->isAdminUser()): ?>
-                <?php echo $this->BcForm->control('ListTool.checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
+                <?php echo $this->BcAdminForm->control('ListTool.checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
             <?php endif ?>
             <?php if (!$sortmode): ?>
                 <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', '並び替え'), ['sortmode' => 1], ['escape' => false]) ?>

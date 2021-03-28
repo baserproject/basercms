@@ -90,6 +90,11 @@ class UsersTable extends Table
      */
     public function beforeSave($options = [])
     {
+        // TODO 暫定措置
+        // >>>
+        return true;
+        // <<<
+
         if (isset($this->data[$this->alias]['password'])) {
             App::uses('AuthComponent', 'Controller/Component');
             $this->data[$this->alias]['password'] = AuthComponent::password($this->data[$this->alias]['password']);
@@ -121,6 +126,11 @@ class UsersTable extends Table
      */
     public function afterSave($created, $options = [])
     {
+        // TODO 暫定措置
+        // >>>
+        return;
+        // <<<
+
         parent::afterSave($created);
         if ($created && !empty($this->UserGroup)) {
             $this->applyDefaultFavorites($this->getLastInsertID(), $this->data[$this->alias]['user_group_id']);

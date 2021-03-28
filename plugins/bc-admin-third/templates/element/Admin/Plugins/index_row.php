@@ -31,12 +31,16 @@ $class = ' class="' . implode(' ', $classies) . '"';
 <tr<?php echo $class; ?>>
     <td class="row-tools bca-table-listup__tbody-td">
         <?php if ($this->BcBaser->isAdminUser()): ?>
-            <?php echo $this->BcForm->control('ListTool.batch_targets.' . $plugin->id, ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $plugin->id]) ?>
+            <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $plugin->id, [
+                'type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
+                'class' => 'batch-targets bca-checkbox__input',
+                'value' => $plugin->id,
+                'escape' => false
+            ]) ?>
         <?php endif ?>
         <?php if ($sortmode): ?>
-            <span class="sort-handle"><i class="bca-btn-icon-text"
-                                         data-bca-btn-type="draggable"></i><?php echo __d('baser', 'ドラッグ可能') ?></span>
-            <?php echo $this->BcForm->control('Sort.id' . $plugin->id, ['type' => 'hidden', 'class' => 'id', 'value' => $plugin->id]) ?>
+            <span class="sort-handle"><i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i><?php echo __d('baser', 'ドラッグ可能') ?></span>
+            <?php echo $this->BcAdminForm->control('Sort.id' . $plugin->id, ['type' => 'hidden', 'class' => 'id', 'value' => $plugin->id]) ?>
         <?php endif ?>
     </td>
     <td class="bca-table-listup__tbody-td">
@@ -84,7 +88,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
         <?php if ($plugin->status): ?>
             <?= $this->BcForm->postLink(
                 '',
-                ['action' => 'detouch', $plugin->name],
+                ['action' => 'detach', $plugin->name],
                 ['block' => true,
                 'confirm' => __d('baser', "本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。"),
                 'title' => __d('baser', '無効'),

@@ -237,12 +237,12 @@ class PluginsTable extends Table
         return $this->delete($targetPlugin);
     }
 
-
     /**
      * プラグインを無効化する
      *
      * @param $name
      * @return bool
+     * @checked
      */
     public function detach($name): bool
     {
@@ -250,8 +250,12 @@ class PluginsTable extends Table
         if ($targetPlugin === null) {
             return false;
         }
-        $targetPlugin->status = 0;
+        $targetPlugin->status = false;
         $result = $this->save($targetPlugin);
+        // TODO 未実装
+        /* >>>
+        clearAllCache();
+        <<< */
         return $result !== false;
     }
 

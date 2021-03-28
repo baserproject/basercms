@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Table\PluginsTable;
 use BaserCore\Utility\BcUtil;
@@ -26,34 +27,26 @@ use BaserCore\Annotation\Checked;
  * Class PluginsController
  * @package BaserCore\Controller\Admin
  * @property PluginsTable $Plugins
+ * @property BcMessageComponent $BcMessage
  */
 class PluginsController extends BcAdminAppController
 {
 
-	/**
-	 * モデル
-	 *
-	 * @var array
-	 */
-	public $uses = ['BaserCore.Plugin'];
+    /**
+     * モデル
+     *
+     * @var array
+     */
+    public $uses = ['BaserCore.Plugin'];
 
-	/**
-	 * Before Filter
-	 */
-	public function beforeFilter(EventInterface $event)
-	{
-		parent::beforeFilter($event);
-		$this->crumbs = [
-			[
-				'name' => __d('baser', 'プラグイン管理'),
-				'url' => [
-					'plugin' => '',
-					'controller' => 'plugins',
-					'action' => 'index'
-				]
-			]
-		];
-	}
+    /**
+     * Before Filter
+     * @param \Cake\Event\EventInterface $event An Event instance
+     */
+    public function beforeFilter(EventInterface $event): void
+    {
+        parent::beforeFilter($event);
+    }
 
     /**
      * プラグインの一覧を表示する
@@ -117,7 +110,7 @@ class PluginsController extends BcAdminAppController
             $installMessage = $e->getMessage();
         }
 
-        if ($isInstallable && $this->request->is('post')) {
+        if ($isInstallable && $this->request->is('put')) {
             // プラグインをインストール
             BcUtil::includePluginClass($name);
             $plugins = Plugin::getCollection();
@@ -170,332 +163,310 @@ class PluginsController extends BcAdminAppController
      * 無効化
      *
      * @param string $name プラグイン名
-     * @return void
      */
-    public function detach($name) {
+    public function detach($name)
+    {
         $name = urldecode($name);
         if (!$this->request->is('post')) {
-            $this->notfound();
+            $this->BcMessage->setError(__d('baser', '無効な処理です。'));
+            return $this->redirect(['action' => 'index']);
         }
-
-        if ($this->Plugins->detouch($name)) {
+        if ($this->Plugins->detach($name)) {
             $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を無効にしました。'), $name));
         } else {
             $this->BcMessage->setError(__d('baser', 'プラグインの無効化に失敗しました。'));
         }
+        return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * プラグインをアップロードしてインストールする
+     *
+     * @return void
+     */
+    public function add()
+    {
+        $this->pageTitle = __d('baser', 'プラグインアップロード');
+        $this->subMenuElements = ['plugins'];
+
+        //データなし
+        if (empty($this->request->getData())) {
+            if ($this->Plugin->isOverPostSize()) {
+                $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+            }
+            return;
+        }
+
+        //アップロード失敗
+        if (empty($this->request->getData('Plugin.file.tmp_name'))) {
+            $this->BcMessage->setError(__d('baser', 'ファイルのアップロードに失敗しました。'));
+            return;
+        }
+
+        $zippedName = $this->request->getData('Plugin.file.name');
+        move_uploaded_file($this->request->getData('Plugin.file.tmp_name'), TMP . $zippedName);
+        App::uses('BcZip', 'Lib');
+        $BcZip = new BcZip();
+        if (!$BcZip->extract(TMP . $zippedName, APP . 'Plugin' . DS)) {
+            $msg = __d('baser', 'アップロードしたZIPファイルの展開に失敗しました。');
+            $msg .= "\n" . $BcZip->error;
+            $this->BcMessage->setError($msg);
+            $this->redirect(['action' => 'add']);
+            return;
+        }
+
+        $plugin = $BcZip->topArchiveName;
+
+        // 解凍したプラグインフォルダがキャメルケースでない場合にキャメルケースに変換
+        $plugin = preg_replace('/^\s*?(creating|inflating):\s*' . preg_quote(APP . 'Plugin' . DS, '/') . '/', '', $plugin);
+        $plugin = explode(DS, $plugin);
+        $plugin = $plugin[0];
+        $srcPluginPath = APP . 'Plugin' . DS . $plugin;
+        $Folder = new Folder();
+        $Folder->chmod($srcPluginPath, 0777);
+        $tgtPluginPath = APP . 'Plugin' . DS . Inflector::camelize($plugin);
+        if ($srcPluginPath != $tgtPluginPath) {
+            $Folder->move([
+                'to' => $tgtPluginPath,
+                'from' => $srcPluginPath,
+                'mode' => 0777
+            ]);
+        }
+        unlink(TMP . $zippedName);
+        $this->BcMessage->setSuccess(sprintf(__d('baser', '新規プラグイン「%s」を追加しました。'), $plugin));
         $this->redirect(['action' => 'index']);
     }
 
-	/**
-	 * [ADMIN] 削除処理　(ajax)
-	 *
-	 * @param string $name プラグイン名
-	 * @return void
-	 */
-	public function ajax_delete($name = null)
-	{
-		$this->_checkSubmitToken();
-		/* 除外処理 */
-		if (!$name) {
-			$this->ajaxError(500, __d('baser', '無効な処理です。'));
-		}
+    /**
+     * baserマーケットのプラグインデータを取得する
+     *
+     * @return void
+     */
+    public function ajax_get_market_plugins()
+    {
+        $cachePath = 'views' . DS . 'baser_market_plugins.rss';
+        if (Configure::read('debug') > 0) {
+            clearCache('baser_market_plugins', 'views', '.rss');
+        }
+        $baserPlugins = cache($cachePath);
+        if ($baserPlugins) {
+            $baserPlugins = BcUtil::unserialize($baserPlugins);
+            $this->set('baserPlugins', $baserPlugins);
+            return;
+        }
 
-		if ($this->BcManager->uninstallPlugin($name)) {
-			clearAllCache();
-			$this->Plugin->saveDbLog(sprintf(__d('baser', 'プラグイン「%s」 を 無効化しました。'), $name));
-			exit(true);
-		}
+        $Xml = new Xml();
+        try {
+            $baserPlugins = $Xml->build(Configure::read('BcApp.marketPluginRss'));
+        } catch (Exception $ex) {
 
-		exit();
-	}
+        }
+        if ($baserPlugins) {
+            $baserPlugins = $Xml->toArray($baserPlugins->channel);
+            $baserPlugins = $baserPlugins['channel']['item'];
+            cache($cachePath, BcUtil::serialize($baserPlugins));
+            chmod(CACHE . $cachePath, 0666);
+        } else {
+            $baserPlugins = [];
+        }
+        $this->set('baserPlugins', $baserPlugins);
+    }
 
-	/**
-	 * プラグインをアップロードしてインストールする
-	 *
-	 * @return void
-	 */
-	public function add()
-	{
-		$this->pageTitle = __d('baser', 'プラグインアップロード');
-		$this->subMenuElements = ['plugins'];
+    /**
+     * 並び替えを更新する [AJAX]
+     *
+     * @return bool
+     */
+    public function ajax_update_sort()
+    {
+        $this->autoRender = false;
+        if (!$this->request->getData()) {
+            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+            return false;
+        }
 
-		//データなし
-		if (empty($this->request->getData())) {
-			if ($this->Plugin->isOverPostSize()) {
-				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
-			}
-			return;
-		}
+        if (!$this->Plugin->changePriority($this->request->getData('Sort.id'), $this->request->getData('Sort.offset'))) {
+            $this->ajaxError(500, __d('baser', '一度リロードしてから再実行してみてください。'));
+            return false;
+        }
 
-		//アップロード失敗
-		if (empty($this->request->getData('Plugin.file.tmp_name'))) {
-			$this->BcMessage->setError(__d('baser', 'ファイルのアップロードに失敗しました。'));
-			return;
-		}
+        clearViewCache();
+        clearDataCache();
+        Configure::write('debug', 0);
+        return true;
+    }
 
-		$zippedName = $this->request->getData('Plugin.file.name');
-		move_uploaded_file($this->request->getData('Plugin.file.tmp_name'), TMP . $zippedName);
-		App::uses('BcZip', 'Lib');
-		$BcZip = new BcZip();
-		if (!$BcZip->extract(TMP . $zippedName, APP . 'Plugin' . DS)) {
-			$msg = __d('baser', 'アップロードしたZIPファイルの展開に失敗しました。');
-			$msg .= "\n" . $BcZip->error;
-			$this->BcMessage->setError($msg);
-			$this->redirect(['action' => 'add']);
-			return;
-		}
+    /**
+     * [ADMIN] ファイル削除
+     *
+     * @param string $pluginName プラグイン名
+     * @return void
+     */
+    public function ajax_delete_file($pluginName)
+    {
+        $this->_checkSubmitToken();
+        if (!$pluginName) {
+            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+        }
 
-		$plugin = $BcZip->topArchiveName;
+        $pluginName = urldecode($pluginName);
+        $this->__deletePluginFile($pluginName);
+        $this->Plugin->saveDbLog(sprintf(__d('baser', 'プラグイン「%s」 を完全に削除しました。'), $pluginName));
+        exit(true);
+    }
 
-		// 解凍したプラグインフォルダがキャメルケースでない場合にキャメルケースに変換
-		$plugin = preg_replace('/^\s*?(creating|inflating):\s*' . preg_quote(APP . 'Plugin' . DS, '/') . '/', '', $plugin);
-		$plugin = explode(DS, $plugin);
-		$plugin = $plugin[0];
-		$srcPluginPath = APP . 'Plugin' . DS . $plugin;
-		$Folder = new Folder();
-		$Folder->chmod($srcPluginPath, 0777);
-		$tgtPluginPath = APP . 'Plugin' . DS . Inflector::camelize($plugin);
-		if ($srcPluginPath != $tgtPluginPath) {
-			$Folder->move([
-				'to' => $tgtPluginPath,
-				'from' => $srcPluginPath,
-				'mode' => 0777
-			]);
-		}
-		unlink(TMP . $zippedName);
-		$this->BcMessage->setSuccess(sprintf(__d('baser', '新規プラグイン「%s」を追加しました。'), $plugin));
-		$this->redirect(['action' => 'index']);
-	}
+    /**
+     * プラグインファイルを削除する
+     *
+     * @param string $pluginName プラグイン名
+     * @return void
+     */
+    private function __deletePluginFile($pluginName)
+    {
+        $paths = App::path('Plugin');
+        foreach($paths as $path) {
+            $pluginPath = $path . $pluginName;
+            if (is_dir($pluginPath)) {
+                break;
+            }
+        }
 
-	/**
-	 * baserマーケットのプラグインデータを取得する
-	 *
-	 * @return void
-	 */
-	public function ajax_get_market_plugins()
-	{
-		$cachePath = 'views' . DS . 'baser_market_plugins.rss';
-		if (Configure::read('debug') > 0) {
-			clearCache('baser_market_plugins', 'views', '.rss');
-		}
-		$baserPlugins = cache($cachePath);
-		if ($baserPlugins) {
-			$baserPlugins = BcUtil::unserialize($baserPlugins);
-			$this->set('baserPlugins', $baserPlugins);
-			return;
-		}
+        $tmpPath = TMP . 'schemas' . DS . 'uninstall' . DS;
+        $folder = new Folder();
+        $folder->delete($tmpPath);
+        $folder->create($tmpPath);
 
-		$Xml = new Xml();
-		try {
-			$baserPlugins = $Xml->build(Configure::read('BcApp.marketPluginRss'));
-		} catch (Exception $ex) {
+        // インストール用スキーマをdropスキーマとして一時フォルダに移動
+        $path = BcUtil::getSchemaPath($pluginName);
+        $folder = new Folder($path);
+        $files = $folder->read(true, true);
+        if (is_array($files[1])) {
+            foreach($files[1] as $file) {
+                if (preg_match('/\.php$/', $file)) {
+                    $from = $path . DS . $file;
+                    $to = $tmpPath . 'drop_' . $file;
+                    copy($from, $to);
+                    chmod($to, 0666);
+                }
+            }
+        }
 
-		}
-		if ($baserPlugins) {
-			$baserPlugins = $Xml->toArray($baserPlugins->channel);
-			$baserPlugins = $baserPlugins['channel']['item'];
-			cache($cachePath, BcUtil::serialize($baserPlugins));
-			chmod(CACHE . $cachePath, 0666);
-		} else {
-			$baserPlugins = [];
-		}
-		$this->set('baserPlugins', $baserPlugins);
-	}
+        // テーブルを削除
+        $this->Plugin->loadSchema('default', $tmpPath);
 
-	/**
-	 * 並び替えを更新する [AJAX]
-	 *
-	 * @return bool
-	 */
-	public function ajax_update_sort()
-	{
-		$this->autoRender = false;
-		if (!$this->request->getData()) {
-			$this->ajaxError(500, __d('baser', '無効な処理です。'));
-			return false;
-		}
+        // プラグインフォルダを削除
+        $folder->delete($pluginPath);
 
-		if (!$this->Plugin->changePriority($this->request->getData('Sort.id'), $this->request->getData('Sort.offset'))) {
-			$this->ajaxError(500, __d('baser', '一度リロードしてから再実行してみてください。'));
-			return false;
-		}
+        // 一時フォルダを削除
+        $folder->delete($tmpPath);
+    }
 
-		clearViewCache();
-		clearDataCache();
-		Configure::write('debug', 0);
-		return true;
-	}
+    /**
+     * アクセス制限設定を追加する
+     *
+     * @param array $data リクエストデータ
+     * @return void
+     */
+    public function _addPermission($data)
+    {
+        if (ClassRegistry::isKeySet('Permission')) {
+            $Permission = ClassRegistry::getObject('Permission');
+        } else {
+            $Permission = ClassRegistry::init('Permission');
+        }
 
-	/**
-	 * [ADMIN] ファイル削除
-	 *
-	 * @param string $pluginName プラグイン名
-	 * @return void
-	 */
-	public function ajax_delete_file($pluginName)
-	{
-		$this->_checkSubmitToken();
-		if (!$pluginName) {
-			$this->ajaxError(500, __d('baser', '無効な処理です。'));
-		}
+        $userGroups = $Permission->UserGroup->find('all', ['conditions' => ['UserGroup.id <>' => Configure::read('BcApp.adminGroupId')], 'recursive' => -1]);
+        if (!$userGroups) {
+            return;
+        }
 
-		$pluginName = urldecode($pluginName);
-		$this->__deletePluginFile($pluginName);
-		$this->Plugin->saveDbLog(sprintf(__d('baser', 'プラグイン「%s」 を完全に削除しました。'), $pluginName));
-		exit(true);
-	}
+        foreach($userGroups as $userGroup) {
+            //$permissionAuthPrefix = $Permission->UserGroup->getAuthPrefix($userGroup['UserGroup']['id']);
+            // TODO 現在 admin 固定、今後、mypage 等にも対応する
+            $permissionAuthPrefix = 'admin';
+            $url = '/' . $permissionAuthPrefix . '/' . Inflector::underscore($data['Plugin']['name']) . '/*';
+            $permission = $Permission->find(
+                'first',
+                [
+                    'conditions' => ['Permission.url' => $url],
+                    'recursive' => -1
+                ]
+            );
+            switch($data['Plugin']['permission']) {
+                case 1:
+                    if (!$permission) {
+                        $Permission->create([
+                            'name' => $data['Plugin']['title'] . ' ' . __d('baser', '管理'),
+                            'user_group_id' => $userGroup['UserGroup']['id'],
+                            'auth' => true,
+                            'status' => true,
+                            'url' => $url,
+                            'no' => $Permission->getMax('no', ['user_group_id' => $userGroup['UserGroup']['id']]) + 1,
+                            'sort' => $Permission->getMax('sort', ['user_group_id' => $userGroup['UserGroup']['id']]) + 1
+                        ]);
+                        $Permission->save();
+                    }
+                    break;
+                case 2:
+                    if ($permission) {
+                        $Permission->delete($permission['Permission']['id']);
+                    }
+                    break;
+            }
+        }
+    }
 
-	/**
-	 * プラグインファイルを削除する
-	 *
-	 * @param string $pluginName プラグイン名
-	 * @return void
-	 */
-	private function __deletePluginFile($pluginName)
-	{
-		$paths = App::path('Plugin');
-		foreach($paths as $path) {
-			$pluginPath = $path . $pluginName;
-			if (is_dir($pluginPath)) {
-				break;
-			}
-		}
+    /**
+     * データベースをリセットする
+     *
+     * @return void
+     */
+    public function reset_db()
+    {
+        if (!$this->request->getData()) {
+            $this->BcMessage->setError(__d('baser', '無効な処理です。'));
+            return;
+        }
+        $data = $this->Plugin->find('first', ['conditions' => ['name' => $this->request->getData('Plugin.name')]]);
+        $this->Plugin->resetDb($this->request->getData('Plugin.name'));
+        $data['Plugin']['db_inited'] = false;
+        $this->Plugin->set($data);
 
-		$tmpPath = TMP . 'schemas' . DS . 'uninstall' . DS;
-		$folder = new Folder();
-		$folder->delete($tmpPath);
-		$folder->create($tmpPath);
+        // データを保存
+        if (!$this->Plugin->save()) {
+            $this->BcMessage->setError(__d('baser', '処理中にエラーが発生しました。プラグインの開発者に確認してください。'));
+            return;
+        }
+        clearAllCache();
+        $this->BcAuth->relogin();
+        $this->BcMessage->setSuccess(
+            sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $data['Plugin']['title'])
+        );
+        $this->redirect(['action' => 'install', $data['Plugin']['name']]);
+    }
 
-		// インストール用スキーマをdropスキーマとして一時フォルダに移動
-		$path = BcUtil::getSchemaPath($pluginName);
-		$folder = new Folder($path);
-		$files = $folder->read(true, true);
-		if (is_array($files[1])) {
-			foreach($files[1] as $file) {
-				if (preg_match('/\.php$/', $file)) {
-					$from = $path . DS . $file;
-					$to = $tmpPath . 'drop_' . $file;
-					copy($from, $to);
-					chmod($to, 0666);
-				}
-			}
-		}
-
-		// テーブルを削除
-		$this->Plugin->loadSchema('default', $tmpPath);
-
-		// プラグインフォルダを削除
-		$folder->delete($pluginPath);
-
-		// 一時フォルダを削除
-		$folder->delete($tmpPath);
-	}
-
-	/**
-	 * アクセス制限設定を追加する
-	 *
-	 * @param array $data リクエストデータ
-	 * @return void
-	 */
-	public function _addPermission($data)
-	{
-		if (ClassRegistry::isKeySet('Permission')) {
-			$Permission = ClassRegistry::getObject('Permission');
-		} else {
-			$Permission = ClassRegistry::init('Permission');
-		}
-
-		$userGroups = $Permission->UserGroup->find('all', ['conditions' => ['UserGroup.id <>' => Configure::read('BcApp.adminGroupId')], 'recursive' => -1]);
-		if (!$userGroups) {
-			return;
-		}
-
-		foreach($userGroups as $userGroup) {
-			//$permissionAuthPrefix = $Permission->UserGroup->getAuthPrefix($userGroup['UserGroup']['id']);
-			// TODO 現在 admin 固定、今後、mypage 等にも対応する
-			$permissionAuthPrefix = 'admin';
-			$url = '/' . $permissionAuthPrefix . '/' . Inflector::underscore($data['Plugin']['name']) . '/*';
-			$permission = $Permission->find(
-				'first',
-				[
-					'conditions' => ['Permission.url' => $url],
-					'recursive' => -1
-				]
-			);
-			switch($data['Plugin']['permission']) {
-				case 1:
-					if (!$permission) {
-						$Permission->create([
-							'name' => $data['Plugin']['title'] . ' ' . __d('baser', '管理'),
-							'user_group_id' => $userGroup['UserGroup']['id'],
-							'auth' => true,
-							'status' => true,
-							'url' => $url,
-							'no' => $Permission->getMax('no', ['user_group_id' => $userGroup['UserGroup']['id']]) + 1,
-							'sort' => $Permission->getMax('sort', ['user_group_id' => $userGroup['UserGroup']['id']]) + 1
-						]);
-						$Permission->save();
-					}
-					break;
-				case 2:
-					if ($permission) {
-						$Permission->delete($permission['Permission']['id']);
-					}
-					break;
-			}
-		}
-	}
-
-	/**
-	 * データベースをリセットする
-	 *
-	 * @return void
-	 */
-	public function reset_db()
-	{
-		if (!$this->request->getData()) {
-			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
-			return;
-		}
-		$data = $this->Plugin->find('first', ['conditions' => ['name' => $this->request->getData('Plugin.name')]]);
-		$this->Plugin->resetDb($this->request->getData('Plugin.name'));
-		$data['Plugin']['db_inited'] = false;
-		$this->Plugin->set($data);
-
-		// データを保存
-		if (!$this->Plugin->save()) {
-			$this->BcMessage->setError(__d('baser', '処理中にエラーが発生しました。プラグインの開発者に確認してください。'));
-			return;
-		}
-		clearAllCache();
-		$this->BcAuth->relogin();
-		$this->BcMessage->setSuccess(
-			sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $data['Plugin']['title'])
-		);
-		$this->redirect(['action' => 'install', $data['Plugin']['name']]);
-	}
-
-	/**
-	 * 一括無効
-	 *
-	 * @param array $ids プラグインIDの配列
-	 * @return bool
-	 */
-	protected function _batch_del($ids)
-	{
-		if (!$ids) {
-			return true;
-		}
-		foreach($ids as $id) {
-			$data = $this->Plugin->read(null, $id);
-			if ($this->BcManager->uninstallPlugin($data['Plugin']['name'])) {
-				$this->Plugin->saveDbLog(
-					sprintf(__d('baser', 'プラグイン「%s」 を 無効化しました。'), $data['Plugin']['title'])
-				);
-			}
-		}
-		clearAllCache();
-		return true;
-	}
+    /**
+     * 一括無効
+     *
+     * @param array $ids プラグインIDの配列
+     * @return bool
+     */
+    protected function _batch_del($ids)
+    {
+        if (!$ids) {
+            return true;
+        }
+        foreach($ids as $id) {
+            $data = $this->Plugin->read(null, $id);
+            // TODO PluginsTable::detach() に移行
+            if ($this->BcManager->uninstallPlugin($data['Plugin']['name'])) {
+                $this->Plugin->saveDbLog(
+                    sprintf(__d('baser', 'プラグイン「%s」 を 無効化しました。'), $data['Plugin']['title'])
+                );
+            }
+        }
+        clearAllCache();
+        return true;
+    }
 
 }

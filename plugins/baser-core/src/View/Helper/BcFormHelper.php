@@ -972,6 +972,11 @@ DOC_END;
 	public function submit($caption = null, $options = []) : string
 	{
 
+	    // TODO 暫定措置
+	    // >>>
+	    return parent::submit($caption, $options);
+	    // <<<
+
 		// CUSTOMIZE ADD 2016/06/08 ryuring
 		// >>>
 		/*** beforeInput ***/
@@ -1743,6 +1748,11 @@ DOC_END;
 	 */
 	public function radio($fieldName, $options = [], $attributes = []) : string
 	{
+	    // TODO 暫定措置
+	    // >>>
+	    return parent::radio($fieldName, $options, $attributes);
+	    // <<<
+
 		$attributes['options'] = $options;
 		$attributes = $this->_initInputField($fieldName, $attributes);
 		unset($attributes['options']);

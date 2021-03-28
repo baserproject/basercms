@@ -507,6 +507,7 @@ class ThemesController extends AppController
 		$plugins = BcUtil::getCurrentThemesPlugins();
 		// テーマ梱包のプラグインをアンインストール
 		foreach($plugins as $plugin) {
+		    // TODO PluginsTable::detach() に移行する
 			$this->BcManager->uninstallPlugin($plugin);
 		}
 
