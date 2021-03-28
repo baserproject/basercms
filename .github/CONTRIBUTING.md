@@ -22,7 +22,7 @@
 なお、ucmitz は、主に `BaserApp`、`BaserCore`、`BcAdminThird` の３つコアパッケージを中心に、ブログやメールフォームなどコアプラグインで構成されます。
 詳細については、パッケージ構成を参照してください。
 
-- [開発環境の構築](https://github.com/baserproject/ucmitz/blob/dev/docs/preparation/evvironment.md)
+- [開発環境の構築](https://github.com/baserproject/ucmitz/blob/dev/docs/preparation/environment.md)
 - [ucmitz をセットアップする](https://github.com/baserproject/ucmitz/blob/dev/docs/preparation/setup.md) 
 - [パッケージ構成](https://github.com/baserproject/ucmitz/blob/dev/docs/basic/package.md)
 　
@@ -72,18 +72,21 @@ ucmitz の開発では、ユニットテストのカバレッジ100%を目指し
 - [既知の問題点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/problem.md)
 
 　
-## 新しい機能の定義
+## 開発の進捗管理と新しい機能の定義
 
-新しく機能を定義したい場合、 機能要件一覧に存在するか確認し、なければ Issue を作成して話し合い、承認されれば機能要件一覧に追加します。
+開発の進捗管理については、機能要件一覧と、Issue、そして、各ファイルや各メソッドのコメントにおけるアノテーションによって管理しています。[コード移行時のマーキング]() を参考に必ずマーキングをお願いします。また、
+新しく機能を定義したい場合は、機能要件一覧に存在するか確認し、なければ Issue を作成して話し合い、承認されれば機能要件一覧に追加します。
 
 - [機能要件一覧](https://docs.google.com/spreadsheets/d/1YT5PuZQdDNU0wrZdqYbh74KuLSw1SIt4_EKwPWOfDKA/edit#gid=0) 
+- [Issue](https://github.com/baserproject/ucmitz/issues)
+- [ucmitz進行管理](https://docs.google.com/spreadsheets/d/1EGxMk-dy8WIg2NmgOKsS_fBXqDB6oJky9M0mB7TADEk/edit#gid=938641024)
 
 　
 ## ドキュメントの追加
 
 開発中に発生した開発に必要なドキュメントを追加する場合は、`/docs/` ディレクトリに、マークダウン形式でファイルを作成します。
 できるだけ情報を拡充させて開発を楽にしてきましょう。
-　
+
 　
 ## プロジェクトで ucmitz を利用する
 
