@@ -4,7 +4,11 @@
 
 GitHub の [Issue](https://github.com/baserproject/ucmitz/issues) より対応する Issue を選択します。
 もしくは、[機能要件一覧](https://docs.google.com/spreadsheets/d/1YT5PuZQdDNU0wrZdqYbh74KuLSw1SIt4_EKwPWOfDKA/edit#gid=0) にて各機能の仕様を確認し、取りかかれそうな機能な選択します。  
-機能要件一覧より対応する場合、GitHubの Issueに存在するか確認し、存在しなければ作成し、機能要件一覧にリンクを記載します。
+機能要件一覧より選択する場合、次の項目を更新します。
+
+- 担当者名：自身の名前を記入します
+- Issue：「●」を記載し、Issueへのリンクを貼ります（Issueが存在しなければ作成します）
+- 状況：着手中に切り替えます。
 
 　
 ## 2. ブランチを切る
@@ -31,9 +35,13 @@ Issueの内容に従って機能を実装します。
 　 
 ## 6. プルリクエストを作成する
 
-実装とテストが完了したら、自身のレポジトリにプッシュしプルリクエストを作成します。
+実装とテストが完了したら、自身のレポジトリにプッシュしプルリクエストを作成します。  
+また、[機能要件一覧](https://docs.google.com/spreadsheets/d/1YT5PuZQdDNU0wrZdqYbh74KuLSw1SIt4_EKwPWOfDKA/edit#gid=0) の状況を「レビュー待ち」に切り替えます。
 
 　
+## 7. レビューとマージ
 
+マージ担当者はコードをレビューし問題なければマージします。  
+また、実装担当者は、コードがマージされたら、[機能要件一覧](https://docs.google.com/spreadsheets/d/1YT5PuZQdDNU0wrZdqYbh74KuLSw1SIt4_EKwPWOfDKA/edit#gid=0) の状況を「完了」に切り替えます。
 
 　
