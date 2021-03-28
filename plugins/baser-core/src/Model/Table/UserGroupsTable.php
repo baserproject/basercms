@@ -45,6 +45,31 @@ use BaserCore\Annotation\Checked;
 class UserGroupsTable extends Table
 {
 
+
+	/**
+	 * hasMany
+	 *
+	 * @var array
+	 */
+	public $hasMany = [
+		'Permission' => [
+			'className' => 'Permission',
+			'order' => 'id',
+			'foreignKey' => 'user_group_id',
+			'dependent' => true,
+			'exclusive' => false,
+			'finderQuery' => ''
+		],
+		'User' => [
+			'className' => 'User',
+			'order' => 'id',
+			'foreignKey' => 'user_group_id',
+			'dependent' => false,
+			'exclusive' => false,
+			'finderQuery' => ''
+		]
+	];
+
     /**
      * Initialize method
      *
@@ -70,6 +95,32 @@ class UserGroupsTable extends Table
             'joinTable' => 'users_user_groups',
         ]);
     }
+
+
+
+	/**
+	 * UserGroup constructor.
+	 *
+	 * @param bool $id
+	 * @param null $table
+	 * @param null $ds
+	 */
+	public function __construct($id = false, $table = null, $ds = null)
+	{
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'ユーザーグループ名を入力してください。')],
+				['rule' => ['halfText'], 'message' => __d('baser', 'ユーザーグループ名は半角のみで入力してください。')],
+				['rule' => ['duplicate', 'name'], 'message' => __d('baser', '既に登録のあるユーザーグループ名です。')],
+				['rule' => ['maxLength', 50], 'message' => __d('baser', 'ユーザーグループ名は50文字以内で入力してください。')]],
+			'title' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', '表示名を入力してください。')],
+				['rule' => ['maxLength', 50], 'message' => __d('baser', '表示名は50文字以内で入力してください。')]],
+			'auth_prefix' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', '認証プレフィックスを入力してください。')]]
+		];
+	}
 
     /**
      * Default validation rules.
@@ -165,6 +216,20 @@ class UserGroupsTable extends Table
         $result = $this->save($entity);
         if ($result) {
             // TODO: Permissionのコピー
+//			$result['UserGroup']['id'] = $this->getInsertID();
+//			if ($recursive) {
+//				$permissions = $this->Permission->find('all', [
+//					'conditions' => ['Permission.user_group_id' => $id],
+//					'order' => ['Permission.sort'],
+//					'recursive' => -1
+//				]);
+//				if ($permissions) {
+//					foreach($permissions as $permission) {
+//						$permission['Permission']['user_group_id'] = $result['UserGroup']['id'];
+//						$this->Permission->copy(null, $permission);
+//					}
+//				}
+//			}
             return $result;
         } else {
             if (!isset($errors['name'])) {
@@ -174,4 +239,83 @@ class UserGroupsTable extends Table
             }
         }
     }
+
+	/**
+	 * ビヘイビア
+	 *
+	 * @var array
+	 */
+	public $actsAs = ['BcCache'];
+
+	/**
+	 * 関連するユーザーを管理者グループに変更し保存する
+	 *
+	 * @param boolean $cascade
+	 * @return boolean
+	 */
+	public function beforeDelete($cascade = true)
+	{
+		parent::beforeDelete($cascade);
+		$ret = true;
+		if (!empty($this->data['UserGroup']['id'])) {
+			$id = $this->data['UserGroup']['id'];
+			$this->User->unBindModel(['belongsTo' => ['UserGroup']]);
+			$datas = $this->User->find('all', ['conditions' => ['User.user_group_id' => $id]]);
+			if ($datas) {
+				foreach($datas as $data) {
+					$data['User']['user_group_id'] = Configure::read('BcApp.adminGroupId');
+					$this->User->set($data);
+					if (!$this->User->save()) {
+						$ret = false;
+					}
+				}
+			}
+		}
+		return $ret;
+	}
+
+	/**
+	 * 管理者グループ以外のグループが存在するかチェックする
+	 * @return    boolean
+	 */
+	public function checkOtherAdmins()
+	{
+		if ($this->find('first', ['conditions' => ['UserGroup.id <>' => 1]])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * 認証プレフィックスを取得する
+	 *
+	 * @param int $id ユーザーグループID
+	 * @return    string
+	 */
+	public function getAuthPrefix($id)
+	{
+		$data = $this->find('first', [
+			'conditions' => ['UserGroup.id' => $id],
+			'fields' => ['UserGroup.auth_prefix'],
+			'recursive' => -1
+		]);
+		if (isset($data['UserGroup']['auth_prefix'])) {
+			return $data['UserGroup']['auth_prefix'];
+		} else {
+			return '';
+		}
+	}
+
+	/**
+	 * グローバルメニューを利用可否確認
+	 *
+	 * @param string $id ユーザーグループID
+	 * @return boolean
+	 */
+	public function isAdminGlobalmenuUsed($id)
+	{
+		return $this->field('use_admin_globalmenu', ['UserGroup.id' => $id]);
+	}
+
 }

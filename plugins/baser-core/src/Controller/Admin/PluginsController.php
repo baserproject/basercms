@@ -172,7 +172,7 @@ class PluginsController extends BcAdminAppController
      * @param string $name プラグイン名
      * @return void
      */
-    public function detouch($name) {
+    public function detach($name) {
         $name = urldecode($name);
         if (!$this->request->is('post')) {
             $this->notfound();
@@ -186,8 +186,28 @@ class PluginsController extends BcAdminAppController
         $this->redirect(['action' => 'index']);
     }
 
+	/**
+	 * [ADMIN] 削除処理　(ajax)
+	 *
+	 * @param string $name プラグイン名
+	 * @return void
+	 */
+	public function ajax_delete($name = null)
+	{
+		$this->_checkSubmitToken();
+		/* 除外処理 */
+		if (!$name) {
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
+		}
 
+		if ($this->BcManager->uninstallPlugin($name)) {
+			clearAllCache();
+			$this->Plugin->saveDbLog(sprintf(__d('baser', 'プラグイン「%s」 を 無効化しました。'), $name));
+			exit(true);
+		}
 
+		exit();
+	}
 
 	/**
 	 * プラグインをアップロードしてインストールする
@@ -371,7 +391,6 @@ class PluginsController extends BcAdminAppController
 		$folder->delete($tmpPath);
 	}
 
-
 	/**
 	 * アクセス制限設定を追加する
 	 *
@@ -454,29 +473,6 @@ class PluginsController extends BcAdminAppController
 			sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $data['Plugin']['title'])
 		);
 		$this->redirect(['action' => 'install', $data['Plugin']['name']]);
-	}
-
-	/**
-	 * [ADMIN] 削除処理　(ajax)
-	 *
-	 * @param string $name プラグイン名
-	 * @return void
-	 */
-	public function ajax_delete($name = null)
-	{
-		$this->_checkSubmitToken();
-		/* 除外処理 */
-		if (!$name) {
-			$this->ajaxError(500, __d('baser', '無効な処理です。'));
-		}
-
-		if ($this->BcManager->uninstallPlugin($name)) {
-			clearAllCache();
-			$this->Plugin->saveDbLog(sprintf(__d('baser', 'プラグイン「%s」 を 無効化しました。'), $name));
-			exit(true);
-		}
-
-		exit();
 	}
 
 	/**
