@@ -50,6 +50,21 @@ class BcTestCase extends TestCase
     }
 
     /**
+     * サンプル用のユーザーを取得する
+     *
+     * @param string $group
+     */
+    protected function getUser($id = 1)
+    {
+        $userTable = TableRegistry::getTableLocator()->get('BaserCore.Users');
+        $user = $userTable->find()
+                    ->where(['Users.id' => $id])
+                    ->contain(['UserGroups'])
+                    ->first();
+        return $user;
+    }
+
+    /**
      * 管理画面にログインする
      *
      * @param string $group
@@ -57,13 +72,9 @@ class BcTestCase extends TestCase
     protected function loginAdmin($id = 1)
     {
         $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
-        $userTable = TableRegistry::getTableLocator()->get('BaserCore.Users');
+        $user = $this->getUser($id);
         $session = Router::getRequest()->getSession();
-        $session->write($sessionKey, $userTable->find()
-            ->where(['Users.id' => $id])
-            ->contain(['UserGroups'])
-            ->first()
-        );
+        $session->write($sessionKey, $user);
     }
 
 }

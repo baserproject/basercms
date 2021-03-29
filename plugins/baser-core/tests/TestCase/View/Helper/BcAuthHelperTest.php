@@ -201,11 +201,8 @@ class BcAuthHelperTest extends BcTestCase {
     {
         $ids = [1, 2];
         foreach ($ids as $id) {
-            $this->Users = $this->getTableLocator()->get('BaserCore.Users');
-            $expected = $this->Users->find()
-                        ->where(['Users.id' => $id])
-                        ->contain(['UserGroups'])
-                        ->first();
+            $expected = $this->getUser($id);
+
             $this->loginAdmin($id);
             $result = $this->BcAuth->getCurrentLoginUser();
             $this->assertEquals($result, $expected);
