@@ -165,11 +165,11 @@ return [
             // URLにおけるエイリアス
             'alias' => env('BC_ADMIN_PREFIX'),
             // 認証後リダイレクト先
-            'loginRedirect' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX', '/admin'),
+            'loginRedirect' => ['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
             // ログインページURL
-            'loginAction' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX', '/admin') . '/users/login',
+            'loginAction' => ['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Users', 'action' => 'login'],
             // ログアウトページURL
-            'logoutAction' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX') . '/users/logout',
+            'logoutAction' => ['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Users', 'action' => 'logout'],
             // ユーザー名フィールド
             'username' => 'email',
             // パスワードフィールド

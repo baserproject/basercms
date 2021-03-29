@@ -26,6 +26,7 @@ use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Middleware\AuthenticationMiddleware;
+use Cake\Routing\Router;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -136,7 +137,7 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
         if ($prefix) {
             $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
             $service->setConfig([
-                'unauthenticatedRedirect' => $authSetting['loginAction'],
+                'unauthenticatedRedirect' => Router::url($authSetting['loginAction'], true),
                 'queryParam' => 'redirect',
                 'contain' => 'UserGroups',
             ]);
@@ -151,7 +152,7 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
             ]);
             $service->loadAuthenticator('Authentication.' . $authSetting['type'], [
                 'fields' => $fields,
-                'loginUrl' => $authSetting['loginAction'],
+                'loginUrl' => Router::url($authSetting['loginAction']),
             ]);
             $service->loadIdentifier('Authentication.Password', [
                 'fields' => $fields,

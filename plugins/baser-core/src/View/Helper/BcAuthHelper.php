@@ -14,6 +14,7 @@ namespace BaserCore\View\Helper;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\ORM\Entity;
+use Cake\Routing\Router;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -76,7 +77,7 @@ class BcAuthHelper extends Helper
      */
     public function getCurrentLoginUrl(): string
     {
-        return $this->getCurrentPrefixSetting()['loginAction'];
+        return Router::url($this->getCurrentPrefixSetting()['loginAction']);
     }
 
     /**
@@ -170,7 +171,7 @@ class BcAuthHelper extends Helper
      */
     public function getCurrentLogoutUrl()
     {
-        return $this->getCurrentPrefixSetting()['logoutAction'];
+        return Router::url($this->getCurrentPrefixSetting()['logoutAction']);
     }
 
     /**
@@ -182,7 +183,7 @@ class BcAuthHelper extends Helper
      */
     public function getCurrentLoginRedirectUrl()
     {
-        return $this->getCurrentPrefixSetting()['loginRedirect'];
+        return Router::url($this->getCurrentPrefixSetting()['loginRedirect']);
     }
 
     /**

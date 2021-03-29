@@ -176,7 +176,7 @@ class UsersController extends BcAdminAppController
         $result = $this->Authentication->getResult();
         if($this->request->is('post')) {
             if ($result->isValid()) {
-                $target = $this->Authentication->getLoginRedirect() ?? Configure::read('BcPrefixAuth.Admin.loginRedirect');
+                $target = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
                 $user = $result->getData();
 
                 // グループ情報等データセットを付与
@@ -239,7 +239,7 @@ class UsersController extends BcAdminAppController
         $session->write('AuthAgent.User', $user);
         $session->write('AuthAgent.referer', $this->referer());
 
-        $target = $this->Authentication->getLoginRedirect() ?? Configure::read('BcPrefixAuth.Admin.loginRedirect');
+        $target = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
         $this->redirect($target);
         return;
     }
@@ -267,7 +267,7 @@ class UsersController extends BcAdminAppController
                 $authPrefix = 'front';
             }
             if (!empty($configs[$authPrefix])) {
-                $redirect = $configs[$authPrefix]['loginRedirect'];
+                $redirect = Router::url($configs[$authPrefix]['loginRedirect']);
             } else {
                 $redirect = '/';
             }
@@ -284,12 +284,12 @@ class UsersController extends BcAdminAppController
         $authPrefix = explode(',', $user['UserGroup']['auth_prefix']);
         $authPrefix = $authPrefix[0];
         if (!empty($configs[$authPrefix])) {
-            $redirect = $configs[$authPrefix]['loginRedirect'];
+            $redirect = Router::url($configs[$authPrefix]['loginRedirect']);
         } else {
             $redirect = '/';
         }
         <<< */
-        $target = $session->read('AuthAgent.referer') ?? Configure::read('BcPrefixAuth.Admin.loginRedirect');
+        $target = $session->read('AuthAgent.referer') ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
 
         $session->delete('AuthAgent');
         return $this->redirect($target);

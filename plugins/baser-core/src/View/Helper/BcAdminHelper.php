@@ -13,6 +13,7 @@ namespace BaserCore\View\Helper;
 
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -249,7 +250,7 @@ class BcAdminHelper extends Helper
     public function isAvailableSideBar()
     {
         $prefix = $this->_View->getRequest()->getParam('prefix');
-        $loginAction = Configure::read('BcPrefixAuth.' . $prefix . '.loginAction');
+        $loginAction = Router::url(Configure::read('BcPrefixAuth.' . $prefix . '.loginAction'));
         $name = $this->_View->getName();
         $url = $this->_View->getRequest()->getPath();
         if (!in_array($name, ['Installations', 'Updaters']) && ($loginAction !== $url && !empty(BcUtil::loginUser()))) {
@@ -331,7 +332,7 @@ class BcAdminHelper extends Helper
         $contentsName = $this->BcBaser->getContentsName(true);
         $adminSearchOpened = $this->_View->getRequest()->getSession()->read('BcApp.adminSearchOpened.' . $contentsName);
         $adminSearchOpenedSaveUrl = $this->BcBaser->getUrl([
-            'controller' => 'utilities',
+            'controller' => 'Utilities',
             'action' => 'ajax_save_search_box',
             $contentsName
         ]);
