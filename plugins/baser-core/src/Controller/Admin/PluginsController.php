@@ -18,6 +18,7 @@ use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
+use Cake\Http\Response;
 use Cake\Utility\Hash;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -53,6 +54,7 @@ class PluginsController extends BcAdminAppController
      *
      * @return void
      * @checked
+     * @unitTest
      */
     public function index()
     {
@@ -93,10 +95,10 @@ class PluginsController extends BcAdminAppController
      * インストール
      *
      * @param string $name プラグイン名
-     * @return void
      * @checked
+     * @unitTest
      */
-    public function install($name)
+    public function install($name): ?Response
     {
         $name = urldecode($name);
         $installMessage = '';
@@ -115,11 +117,13 @@ class PluginsController extends BcAdminAppController
             BcUtil::includePluginClass($name);
             $plugins = Plugin::getCollection();
             $plugin = $plugins->create($name);
-            if ($plugin->install()) {
+
+            // install に $this->request->getData() を引数とするのはユニットテストで connection を test として設定するため
+            if ($plugin->install($this->request->getData())) {
                 $this->BcMessage->setSuccess(sprintf(__d('baser', '新規プラグイン「%s」を baserCMS に登録しました。'), $name));
                 // TODO: アクセス権限を追加する
                 // $this->_addPermission($this->request->data);
-                $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'index']);
             } else {
                 $this->BcMessage->setError(__d('baser', 'プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。'));
             }
@@ -134,6 +138,28 @@ class PluginsController extends BcAdminAppController
         $this->setHelp('plugins_install');
     }
 
+    /**
+     * 無効化
+     *
+     * @param string $name プラグイン名
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function detach($name)
+    {
+        $name = urldecode($name);
+        if (!$this->request->is('post')) {
+            $this->BcMessage->setError(__d('baser', '無効な処理です。'));
+            return $this->redirect(['action' => 'index']);
+        }
+        if ($this->Plugins->detach($name)) {
+            $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を無効にしました。'), $name));
+        } else {
+            $this->BcMessage->setError(__d('baser', 'プラグインの無効化に失敗しました。'));
+        }
+        return $this->redirect(['action' => 'index']);
+    }
 
     /**
      * アンインストール
@@ -157,26 +183,6 @@ class PluginsController extends BcAdminAppController
         } else {
             $this->BcMessage->setError(__d('baser', 'プラグインの削除に失敗しました。'));
         }
-    }
-
-    /**
-     * 無効化
-     *
-     * @param string $name プラグイン名
-     */
-    public function detach($name)
-    {
-        $name = urldecode($name);
-        if (!$this->request->is('post')) {
-            $this->BcMessage->setError(__d('baser', '無効な処理です。'));
-            return $this->redirect(['action' => 'index']);
-        }
-        if ($this->Plugins->detach($name)) {
-            $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を無効にしました。'), $name));
-        } else {
-            $this->BcMessage->setError(__d('baser', 'プラグインの無効化に失敗しました。'));
-        }
-        return $this->redirect(['action' => 'index']);
     }
 
     /**

@@ -47,7 +47,7 @@ class PluginsTableTest extends BcTestCase
     {
         parent::setUp();
         $config = $this->getTableLocator()->exists('Plugins')? [] : ['className' => 'BaserCore\Model\Table\PluginsTable'];
-        $this->Plugins = $this->getTableLocator()->get('Plugins', $config);
+        $this->Plugins = $this->getTableLocator()->get('BaserCore.Plugins', $config);
     }
 
     /**

@@ -66,10 +66,10 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 
     <div class="bca-actions">
         <?php if ($dbInited): ?>
-            <?php echo $this->BcForm->submit(__d('baser', 'プラグインのデータを初期化する'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnReset']) ?>
-            <?php echo $this->BcForm->submit(__d('baser', '有効化'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave']) ?>
+            <?php echo $this->BcAdminForm->submit(__d('baser', 'プラグインのデータを初期化する'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnReset']) ?>
+            <?php echo $this->BcAdminForm->submit(__d('baser', '有効化'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave']) ?>
         <?php else: ?>
-            <?php echo $this->BcForm->submit(__d('baser', 'インストール'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave']) ?>
+            <?php echo $this->BcAdminForm->submit(__d('baser', 'インストール'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave']) ?>
         <?php endif; ?>
     </div>
 

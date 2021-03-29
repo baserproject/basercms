@@ -1,118 +1,157 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Controller
- * @since           baserCMS v 4.0.9
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('PluginsController', 'Controller');
+namespace BaserCore\Test\TestCase\Controller;
+
+use BaserCore\TestSuite\BcTestCase;
+use Cake\Datasource\ConnectionManager;
+use Cake\TestSuite\IntegrationTestTrait;
 
 /**
  * Class PluginsControllerTest
- *
- * @package Baser.Test.Case.Controller
- * @property  PluginsController $PluginsController
+ * @package BaserCore\Test\TestCase\Controller
  */
-class PluginsControllerTest extends BaserTestCase
+class PluginsControllerTest extends BcTestCase
 {
+    /**
+     * IntegrationTestTrait
+     */
+    use IntegrationTestTrait;
 
-	/**
-	 * set up
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.Plugins'
+    ];
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * Set up
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->loginAdmin();
+    }
 
-	/**
-	 * プラグインをアップロードしてインストールする
-	 */
-	public function testAdmin_add()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * Tear down
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
 
-	/**
-	 * プラグインの一覧を表示する
-	 */
-	public function testAdmin_index()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * プラグインをアップロードしてインストールする
+     */
+    public function testAdd()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * baserマーケットのプラグインデータを取得する
-	 */
-	public function testAdmin_ajax_get_market_plugins()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * プラグインの一覧を表示する
+     */
+    public function testIndex()
+    {
+        $this->get('/baser/admin/plugins/index');
+        $this->assertResponseOk();
+    }
 
-	/**
-	 * 並び替えを更新する [AJAX]
-	 */
-	public function testAdmin_ajax_update_sort()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * baserマーケットのプラグインデータを取得する
+     */
+    public function testAjax_get_market_plugins()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * [ADMIN] ファイル削除
-	 */
-	public function testAdmin_ajax_delete_file()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * 並び替えを更新する
+     */
+    public function testAjax_update_sort()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * [ADMIN] 登録処理
-	 */
-	public function testAdmin_install()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * ファイル削除
+     */
+    public function testAjax_delete_file()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * アクセス制限設定を追加する
-	 */
-	public function test_addPermission()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * プラグインを無効にして有効にする
+     *
+     * 複数のプラグインのインストールを行うと
+     * Migration ファイルの Initial クラスの重複読み込みエラーとなるので
+     * 一つのプラグインで行わなければならない
+     */
+    public function testDetachAndInstall(): void
+    {
+        $this->enableSecurityToken();
+        $this->post('/baser/admin/plugins/detach/BcSample');
+        $this->assertFlashMessage('プラグインの無効化に失敗しました。');
+        $this->post('/baser/admin/plugins/detach/BcBlog');
+        $this->assertFlashMessage('プラグイン「BcBlog」を無効にしました。');
 
-	/**
-	 * データベースをリセットする
-	 */
-	public function testAdmin_reset_db()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+        $this->enableSecurityToken();
+        $this->put('/baser/admin/plugins/install/BcBlog', ['connection' => 'test']);
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'plugins',
+            'action' => 'index'
+        ]);
 
-	/**
-	 * [ADMIN] 削除処理　(ajax)
-	 */
-	public function testAdmin_ajax_delete()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+        // できたテーブルを削除
+        $connection = ConnectionManager::get('test');
+        $schema = $connection->getDriver()->newTableSchema('bc_blog_phinxlog');
+        $sql = $schema->dropSql($connection);
+        $connection->execute($sql[0])->closeCursor();
+        $schema = $connection->getDriver()->newTableSchema('blog_posts');
+        $sql = $schema->dropSql($connection);
+        $connection->execute($sql[0])->closeCursor();
+    }
+
+    /**
+     * アクセス制限設定を追加する
+     */
+    public function test_addPermission()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * データベースをリセットする
+     */
+    public function testReset_db()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * 削除処理
+     */
+    public function testDelete()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
 }

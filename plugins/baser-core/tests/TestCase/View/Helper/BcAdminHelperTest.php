@@ -68,6 +68,7 @@ class BcAdminHelperTest extends BcTestCase
         $results = $this->BcAdmin->isAvailableSideBar();
         $this->assertEquals(false, $results);
         // ログイン済
+        $this->BcAdmin->getView()->setRequest($this->getRequest('/baser/admin'));
         $session = $this->BcAdmin->getView()->getRequest()->getSession();
         $session->write('AuthAdmin', true);
         $results = $this->BcAdmin->isAvailableSideBar();
