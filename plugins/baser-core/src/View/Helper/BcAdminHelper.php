@@ -331,7 +331,7 @@ class BcAdminHelper extends Helper
         $contentsName = $this->BcBaser->getContentsName(true);
         $adminSearchOpened = $this->_View->getRequest()->getSession()->read('BcApp.adminSearchOpened.' . $contentsName);
         $adminSearchOpenedSaveUrl = $this->BcBaser->getUrl([
-            'controller' => 'Utilities',
+            'controller' => 'utilities',
             'action' => 'ajax_save_search_box',
             $contentsName
         ]);
