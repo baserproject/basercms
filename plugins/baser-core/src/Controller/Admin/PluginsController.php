@@ -95,6 +95,7 @@ class PluginsController extends BcAdminAppController
      * インストール
      *
      * @param string $name プラグイン名
+     * @return Response|void
      * @checked
      * @unitTest
      */
@@ -112,23 +113,6 @@ class PluginsController extends BcAdminAppController
             $installMessage = $e->getMessage();
         }
 
-        if ($isInstallable && $this->request->is('post')) {
-            // プラグインをインストール
-            BcUtil::includePluginClass($name);
-            $plugins = Plugin::getCollection();
-            $plugin = $plugins->create($name);
-
-            // install に $this->request->getData() を引数とするのはユニットテストで connection を test として設定するため
-            if ($plugin->install($this->request->getData())) {
-                $this->BcMessage->setSuccess(sprintf(__d('baser', '新規プラグイン「%s」を baserCMS に登録しました。'), $name));
-                // TODO: アクセス権限を追加する
-                // $this->_addPermission($this->request->data);
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->BcMessage->setError(__d('baser', 'プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。'));
-            }
-        }
-
         $pluginEntity = $this->Plugins->getPluginConfig($name);
         $this->set('installMessage', $installMessage);
         $this->set('isInstallable', $isInstallable);
@@ -136,6 +120,30 @@ class PluginsController extends BcAdminAppController
         $this->set('plugin', $pluginEntity);
         $this->setTitle(__d('baser', '新規プラグイン登録'));
         $this->setHelp('plugins_install');
+
+        if (!$isInstallable || !$this->request->is('post')) {
+            return;
+        }
+
+        // プラグインをインストール
+        BcUtil::includePluginClass($name);
+        $plugins = Plugin::getCollection();
+        $plugin = $plugins->create($name);
+        if(!method_exists($plugin, 'install')) {
+            $this->BcMessage->setError(__d('baser', 'プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。'));
+            return;
+        }
+
+        // install に $this->request->getData() を引数とするのはユニットテストで connection を test として設定するため
+        if ($plugin->install($this->request->getData())) {
+            $this->BcMessage->setSuccess(sprintf(__d('baser', '新規プラグイン「%s」を baserCMS に登録しました。'), $name));
+            // TODO: アクセス権限を追加する
+            // $this->_addPermission($this->request->data);
+            return $this->redirect(['action' => 'index']);
+        } else {
+            $this->BcMessage->setError(__d('baser', 'プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。'));
+        }
+
     }
 
     /**
@@ -168,6 +176,7 @@ class PluginsController extends BcAdminAppController
      * - プラグインのディレクトリを削除
      *
      * @param string $name プラグイン名
+     * @return Response|void
      * @checked
      * @noTodo
      * @unitTest
@@ -180,8 +189,13 @@ class PluginsController extends BcAdminAppController
             return $this->redirect(['action' => 'index']);
         }
 
+        BcUtil::includePluginClass($name);
         $plugins = Plugin::getCollection();
-        $plugin = $plugins->get($name);
+        $plugin = $plugins->create($name);
+        if(!method_exists($plugin, 'uninstall')) {
+            $this->BcMessage->setError(__d('baser', 'プラグインに Plugin クラスが存在しません。手動で削除してください。'));
+            return;
+        }
 
         if ($plugin->uninstall($this->request->getData())) {
             $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を削除しました。'), $name));
