@@ -34,7 +34,6 @@ $class = ' class="' . implode(' ', $classies) . '"';
             <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $plugin->id, [
                 'type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',
                 'class' => 'batch-targets bca-checkbox__input',
-                'value' => $plugin->id,
                 'escape' => false
             ]) ?>
         <?php endif ?>
