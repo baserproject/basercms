@@ -114,7 +114,7 @@ class PluginsControllerTest extends BcTestCase
         $this->assertFlashMessage('プラグイン「BcBlog」を無効にしました。');
 
         $this->enableSecurityToken();
-        $this->post('/baser/admin/plugins/install/BcBlog', ['connection' => 'test']);
+        $this->put('/baser/admin/plugins/install/BcBlog', ['connection' => 'test']);
         $this->assertRedirect([
             'plugin' => 'BaserCore',
             'prefix' => 'Admin',

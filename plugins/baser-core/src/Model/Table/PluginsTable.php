@@ -221,7 +221,7 @@ class PluginsTable extends Table
 			if (in_array($name, $corePlugins)) {
 				$version = BcUtil::getVersion();
 			} else {
-				$version = getVersion($name);
+				$version = BcUtil::getVersion($name);
 			}
             $query = $this->find();
             $priority = $query->select(['max' => $query->func()->max('priority')])->first();
