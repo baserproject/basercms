@@ -67,7 +67,8 @@ return [
     // Radio input element,
     'radio' => '<input type="radio" name="{{name}}" value="{{value}}"{{attrs}}>',
     // Wrapping container for radio input/label,
-    'radioWrapper' => '{{label}}',
+    'radioWrapper' => '<span class="{{class}}">{{label}}</span>',
+    'radioFormGroup' => '<span class="{{groupClass}}">{{input}}</span>',
     // Textarea input element,
     'textarea' => '<textarea name="{{name}}"{{attrs}}>{{value}}</textarea>',
     // Container for submit buttons.

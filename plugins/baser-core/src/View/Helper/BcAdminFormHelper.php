@@ -111,9 +111,6 @@ class BcAdminFormHelper extends BcFormHelper
                     $containerClass = 'bca-select';
                     break;
                 case 'radio':
-                    if (!isset($options['separator'])) {
-                        $options['separator'] = '　';
-                    }
                     $class = 'bca-radio__input';
                     $containerClass = 'bca-radio';
                     $labelClass = 'bca-radio__label';
