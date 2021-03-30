@@ -12,7 +12,9 @@
 namespace BaserCore\Test\TestCase\Controller;
 
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
 use Cake\Datasource\ConnectionManager;
+use Cake\Filesystem\Folder;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**
@@ -112,13 +114,23 @@ class PluginsControllerTest extends BcTestCase
         $this->assertFlashMessage('プラグイン「BcBlog」を無効にしました。');
 
         $this->enableSecurityToken();
-        $this->put('/baser/admin/plugins/install/BcBlog', ['connection' => 'test']);
+        $this->post('/baser/admin/plugins/install/BcBlog', ['connection' => 'test']);
         $this->assertRedirect([
             'plugin' => 'BaserCore',
             'prefix' => 'Admin',
             'controller' => 'plugins',
             'action' => 'index'
         ]);
+
+        $from = BcUtil::getPluginPath('BcBlog');
+        $pluginDir = dirname($from);
+        $folder = new Folder();
+        $to = $pluginDir . DS . 'BcBlogBak';
+        $folder->copy($to, [
+            'from' => $from,
+            'mode' => 0777
+        ]);
+        $folder->create($from, 0777);
         $this->post('/baser/admin/plugins/uninstall/BcBlog', ['connection' => 'test']);
         $this->assertRedirect([
             'plugin' => 'BaserCore',
@@ -127,6 +139,12 @@ class PluginsControllerTest extends BcTestCase
             'action' => 'index'
         ]);
         $this->assertFlashMessage('プラグイン「BcBlog」を削除しました。');
+        $folder->move($from, [
+            'from' => $to,
+            'mode' => 0777,
+            'schema' => Folder::OVERWRITE
+        ]);
+
     }
 
     /**

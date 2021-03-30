@@ -98,7 +98,7 @@ class PluginsController extends BcAdminAppController
      * @checked
      * @unitTest
      */
-    public function install($name): ?Response
+    public function install($name)
     {
         $name = urldecode($name);
         $installMessage = '';
@@ -112,7 +112,7 @@ class PluginsController extends BcAdminAppController
             $installMessage = $e->getMessage();
         }
 
-        if ($isInstallable && $this->request->is('put')) {
+        if ($isInstallable && $this->request->is('post')) {
             // プラグインをインストール
             BcUtil::includePluginClass($name);
             $plugins = Plugin::getCollection();
