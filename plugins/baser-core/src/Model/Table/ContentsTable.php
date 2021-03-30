@@ -100,7 +100,7 @@ class ContentsTable extends Table
 	 *
 	 * @return array
 	 */
-	public function implementedEvents()
+	public function implementedEvents(): array
 	{
 		return [
 			'Model.beforeFind' => ['callable' => 'beforeFind', 'passParams' => true],

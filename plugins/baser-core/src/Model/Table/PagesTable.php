@@ -710,7 +710,7 @@ class PagesTable extends Table
 	{
 	    // TODO 暫定措置
 	    // >>>
-	    return;
+	    return true;
 	    // <<<
 
 		// メッセージ用にデータを取得

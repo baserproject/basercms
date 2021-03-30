@@ -52,7 +52,7 @@ class ContentFoldersTable extends Table
 	 *
 	 * @return array
 	 */
-	public function implementedEvents()
+	public function implementedEvents(): array
 	{
 		return array_merge(parent::implementedEvents(), [
 			'Controller.Contents.beforeMove' => ['callable' => 'beforeMove'],
