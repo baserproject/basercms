@@ -164,25 +164,77 @@ class PluginsController extends BcAdminAppController
     /**
      * アンインストール
      *
+     * - プラグインのテーブルを削除
+     * - プラグインのディレクトリを削除
+     *
      * @param string $name プラグイン名
-     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function uninstall($name)
     {
         $name = urldecode($name);
         if (!$this->request->is('post')) {
-            $this->notfound();
+            $this->BcMessage->setError(__d('baser', '無効な処理です。'));
+            return $this->redirect(['action' => 'index']);
         }
 
         $plugins = Plugin::getCollection();
         $plugin = $plugins->get($name);
-        $plugin->uninstall();
 
-        if ($plugin->uninstall()) {
+        if ($plugin->uninstall($this->request->getData())) {
             $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を削除しました。'), $name));
         } else {
             $this->BcMessage->setError(__d('baser', 'プラグインの削除に失敗しました。'));
         }
+        return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * プラグインファイルを削除する
+     *
+     * @param string $pluginName プラグイン名
+     * @return void
+     */
+    private function __deletePluginFile($pluginName)
+    {
+        $paths = App::path('Plugin');
+        foreach($paths as $path) {
+            $pluginPath = $path . $pluginName;
+            if (is_dir($pluginPath)) {
+                break;
+            }
+        }
+
+        $tmpPath = TMP . 'schemas' . DS . 'uninstall' . DS;
+        $folder = new Folder();
+        $folder->delete($tmpPath);
+        $folder->create($tmpPath);
+
+        // インストール用スキーマをdropスキーマとして一時フォルダに移動
+        $path = BcUtil::getSchemaPath($pluginName);
+        $folder = new Folder($path);
+        $files = $folder->read(true, true);
+        if (is_array($files[1])) {
+            foreach($files[1] as $file) {
+                if (preg_match('/\.php$/', $file)) {
+                    $from = $path . DS . $file;
+                    $to = $tmpPath . 'drop_' . $file;
+                    copy($from, $to);
+                    chmod($to, 0666);
+                }
+            }
+        }
+
+        // テーブルを削除
+        $this->Plugin->loadSchema('default', $tmpPath);
+
+        // プラグインフォルダを削除
+        $folder->delete($pluginPath);
+
+        // 一時フォルダを削除
+        $folder->delete($tmpPath);
     }
 
     /**
@@ -300,71 +352,6 @@ class PluginsController extends BcAdminAppController
         clearDataCache();
         Configure::write('debug', 0);
         return true;
-    }
-
-    /**
-     * [ADMIN] ファイル削除
-     *
-     * @param string $pluginName プラグイン名
-     * @return void
-     */
-    public function ajax_delete_file($pluginName)
-    {
-        $this->_checkSubmitToken();
-        if (!$pluginName) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-
-        $pluginName = urldecode($pluginName);
-        $this->__deletePluginFile($pluginName);
-        $this->Plugin->saveDbLog(sprintf(__d('baser', 'プラグイン「%s」 を完全に削除しました。'), $pluginName));
-        exit(true);
-    }
-
-    /**
-     * プラグインファイルを削除する
-     *
-     * @param string $pluginName プラグイン名
-     * @return void
-     */
-    private function __deletePluginFile($pluginName)
-    {
-        $paths = App::path('Plugin');
-        foreach($paths as $path) {
-            $pluginPath = $path . $pluginName;
-            if (is_dir($pluginPath)) {
-                break;
-            }
-        }
-
-        $tmpPath = TMP . 'schemas' . DS . 'uninstall' . DS;
-        $folder = new Folder();
-        $folder->delete($tmpPath);
-        $folder->create($tmpPath);
-
-        // インストール用スキーマをdropスキーマとして一時フォルダに移動
-        $path = BcUtil::getSchemaPath($pluginName);
-        $folder = new Folder($path);
-        $files = $folder->read(true, true);
-        if (is_array($files[1])) {
-            foreach($files[1] as $file) {
-                if (preg_match('/\.php$/', $file)) {
-                    $from = $path . DS . $file;
-                    $to = $tmpPath . 'drop_' . $file;
-                    copy($from, $to);
-                    chmod($to, 0666);
-                }
-            }
-        }
-
-        // テーブルを削除
-        $this->Plugin->loadSchema('default', $tmpPath);
-
-        // プラグインフォルダを削除
-        $folder->delete($pluginPath);
-
-        // 一時フォルダを削除
-        $folder->delete($tmpPath);
     }
 
     /**

@@ -12,7 +12,12 @@
 namespace BaserCore;
 
 use BaserCore\Error\BcException;
+use BaserCore\Utility\BcUtil;
+use Cake\Core\App;
 use Cake\Core\BasePlugin;
+use Cake\Core\Configure;
+use Cake\Datasource\ConnectionManager;
+use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Route\InflectedRoute;
 use Cake\Routing\RouteBuilder;
@@ -117,6 +122,9 @@ class BcPlugin extends BasePlugin
      *  - `plugin` : プラグイン名
      *  - `connection` : コネクション名
      *  - `target` : ロールバック対象バージョン
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function uninstall($options = []) : bool
     {
@@ -127,8 +135,21 @@ class BcPlugin extends BasePlugin
         ], $options);
         $pluginName = $options['plugin'];
 
-        $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
         $this->migrations->rollback($options);
+
+        $phinxTableName = Inflector::underscore($pluginName) . '_phinxlog';
+        $connection = ConnectionManager::get($options['connection']);
+        $schema = $connection->getDriver()->newTableSchema($phinxTableName);
+        $sql = $schema->dropSql($connection);
+        $connection->execute($sql[0])->closeCursor();
+
+        $pluginPath = BcUtil::getPluginPath($pluginName);
+        if($pluginPath) {
+            $Folder = new Folder();
+            $Folder->delete($pluginPath);
+        }
+
+        $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
         return $plugins->uninstall($pluginName);
     }
 

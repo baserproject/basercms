@@ -97,13 +97,13 @@ class PluginsControllerTest extends BcTestCase
     }
 
     /**
-     * プラグインを無効にして有効にする
+     * プラグインを無効にして有効にして削除する
      *
      * 複数のプラグインのインストールを行うと
      * Migration ファイルの Initial クラスの重複読み込みエラーとなるので
      * 一つのプラグインで行わなければならない
      */
-    public function testDetachAndInstall(): void
+    public function testDetachAndInstallAndUninstall(): void
     {
         $this->enableSecurityToken();
         $this->post('/baser/admin/plugins/detach/BcSample');
@@ -119,15 +119,14 @@ class PluginsControllerTest extends BcTestCase
             'controller' => 'plugins',
             'action' => 'index'
         ]);
-
-        // できたテーブルを削除
-        $connection = ConnectionManager::get('test');
-        $schema = $connection->getDriver()->newTableSchema('bc_blog_phinxlog');
-        $sql = $schema->dropSql($connection);
-        $connection->execute($sql[0])->closeCursor();
-        $schema = $connection->getDriver()->newTableSchema('blog_posts');
-        $sql = $schema->dropSql($connection);
-        $connection->execute($sql[0])->closeCursor();
+        $this->post('/baser/admin/plugins/uninstall/BcBlog', ['connection' => 'test']);
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'plugins',
+            'action' => 'index'
+        ]);
+        $this->assertFlashMessage('プラグイン「BcBlog」を削除しました。');
     }
 
     /**
@@ -142,14 +141,6 @@ class PluginsControllerTest extends BcTestCase
      * データベースをリセットする
      */
     public function testReset_db()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * 削除処理
-     */
-    public function testDelete()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }

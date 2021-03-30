@@ -13,7 +13,9 @@ namespace BaserCore\Test\TestCase;
 
 use BaserCore\BcPlugin;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
 use Cake\Datasource\ConnectionManager;
+use Cake\Filesystem\Folder;
 
 /**
  * Class BcPluginTest
@@ -70,25 +72,32 @@ class BcPluginTest extends BcTestCase
     /**
      * testInstall
      */
-    public function testInstall()
+    public function testInstallAndUninstall()
     {
+        // インストール
         $this->BcPlugin->install(['connection' => 'test']);
         $plugins = $this->getTableLocator()->get('Plugins')->find()->where(['name' => 'BcBlog'])->first();
         $this->assertEquals(1, $plugins->priority);
-        // インストーラーで追加したテーブルを削除
-        $connection = ConnectionManager::get('test');
-        $this->BcPlugin->migrations->rollback(['plugin' => 'BcBlog', 'connection' => 'test']);
-        // bc_blog_phinxlog 削除
-        $schema = $connection->getDriver()->newTableSchema('bc_blog_phinxlog');
-        $sql = $schema->dropSql($connection);
-        $connection->execute($sql[0])->closeCursor();
+
+        // アンインストール
+        $from = BcUtil::getPluginPath('BcBlog');
+        $pluginDir = dirname($from);
+        $folder = new Folder();
+        $to = $pluginDir . DS . 'BcBlogBak';
+        $folder->copy($to, [
+            'from' => $from,
+            'mode' => 0777
+        ]);
+        $folder->create($from, 0777);
+        $this->BcPlugin->uninstall(['connection' => 'test']);
+        $plugins = $this->getTableLocator()->get('Plugins')->find()->where(['name' => 'BcBlog'])->first();
+        $this->assertNull($plugins);
+        $folder->move($from, [
+            'from' => $to,
+            'mode' => 0777,
+            'schema' => Folder::OVERWRITE
+        ]);
+
     }
 
-    /**
-     * testUninstall
-     */
-    public function testUninstall()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
 }

@@ -653,4 +653,12 @@ class BcUtilTest extends BcTestCase
 		];
 	}
 
+    /**
+     * testGetPluginPath
+     */
+    public function testGetPluginPath()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
 }
