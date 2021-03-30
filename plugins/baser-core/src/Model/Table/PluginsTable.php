@@ -84,7 +84,7 @@ class PluginsTable extends Table
             $files = $Folder->read(true, true, true);
             foreach($files[0] as $file) {
                 if (!in_array(basename($file), Configure::read('BcApp.core'))) {
-                    $pluginConfigs[basename($file)] = $this->getPluginConfig($file);
+                    $pluginConfigs[basename($file)] = $this->getPluginConfig(basename($file));
                 }
             }
         }
@@ -94,14 +94,13 @@ class PluginsTable extends Table
     /**
      * プラグイン情報を取得する
      *
-     * @param array $datas プラグインのデータ配列
-     * @param string $file プラグインファイルのパス
+     * @param string $name プラグイン名
      * @return \BaserCore\Model\Entity\Plugin|\Cake\Datasource\EntityInterface
      */
-    public function getPluginConfig($file)
+    public function getPluginConfig($name)
     {
 
-        $pluginName = Inflector::camelize(basename($file), '-');
+        $pluginName = Inflector::camelize($name, '-');
 
         // プラグインのバージョンを取得
         $corePlugins = Configure::read('BcApp.corePlugins');
@@ -123,6 +122,7 @@ class PluginsTable extends Table
             $this->patchEntity($pluginRecord, [
                 'update' => false,
                 'core' => $core,
+                'permission' => 1,
                 'registered' => true
             ]);
             if (BcUtil::verpoint($pluginRecord->version) < BcUtil::verpoint($version) &&
@@ -145,7 +145,7 @@ class PluginsTable extends Table
         }
 
         // 設定ファイル読み込み
-        $appConfigPath = $file . DS . 'config.php';
+        $appConfigPath = BcUtil::getPluginPath($name) . 'config.php';
         if (file_exists($appConfigPath)) {
             $this->patchEntity($pluginRecord, include $appConfigPath);
         }
@@ -202,6 +202,10 @@ class PluginsTable extends Table
         return true;
     }
 
+    public function isDbInit($name) {
+
+    }
+
     /**
      * プラグインをインストールする
      *
@@ -213,9 +217,20 @@ class PluginsTable extends Table
         $recordExists = $this->find()->where(['name' => $name])->count();
         $plugin = $this->getPluginConfig($name);
         if (!$recordExists) {
+			$corePlugins = Configure::read('BcApp.corePlugins');
+			if (in_array($name, $corePlugins)) {
+				$version = BcUtil::getVersion();
+			} else {
+				$version = getVersion($name);
+			}
             $query = $this->find();
             $priority = $query->select(['max' => $query->func()->max('priority')])->first();
+			$plugin->version = ($version)? $version : null;
             $plugin->priority = $priority->max + 1;
+            $plugin->db_init = true;
+            $plugin->status = true;
+        } else {
+            $plugin->db_init = true;
             $plugin->status = true;
         }
         if ($this->save($plugin)) {

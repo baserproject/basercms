@@ -730,7 +730,7 @@ class BcUtil
         foreach($paths as $path) {
             foreach([$pluginName, Inflector::dasherize($pluginName)] as $name) {
                 if(is_dir($path . $name)) {
-                    return $path . $name;
+                    return $path . $name . DS;
                 }
             }
         }

@@ -106,13 +106,16 @@ class BcPlugin extends BasePlugin
         // clearAllCache();
         $pluginPath = BcUtil::getPluginPath($options['plugin']);
         try {
-            if(is_dir($pluginPath . 'config' . DS . 'Migrations')) {
-                $this->migrations->migrate($options);
-            }
-            if(is_dir($pluginPath . 'config' . DS . 'Seeds')) {
-                $this->migrations->seed($options);
-            }
             $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+            $plugin = $plugins->findByName($pluginName)->first();
+            if(!$plugin || !$plugin->db_init) {
+                if (is_dir($pluginPath . 'config' . DS . 'Migrations')) {
+                    $this->migrations->migrate($options);
+                }
+                if (is_dir($pluginPath . 'config' . DS . 'Seeds')) {
+                    $this->migrations->seed($options);
+                }
+            }
             return $plugins->install($pluginName);
         } catch (BcException $e) {
             $this->migrations->rollback($options);

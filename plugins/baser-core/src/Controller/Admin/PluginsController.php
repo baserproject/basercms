@@ -116,12 +116,12 @@ class PluginsController extends BcAdminAppController
         $pluginEntity = $this->Plugins->getPluginConfig($name);
         $this->set('installMessage', $installMessage);
         $this->set('isInstallable', $isInstallable);
-        $this->set('dbInited', $pluginEntity->db_inited);
+        $this->set('dbInit', $pluginEntity->db_init);
         $this->set('plugin', $pluginEntity);
         $this->setTitle(__d('baser', '新規プラグイン登録'));
         $this->setHelp('plugins_install');
 
-        if (!$isInstallable || !$this->request->is('post')) {
+        if (!$isInstallable || !$this->request->is('put')) {
             return;
         }
 

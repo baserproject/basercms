@@ -18,7 +18,7 @@ use BaserCore\View\AppView;
  * @var string $installMessage インストールメッセージ
  * @var bool $isInstallable インストール可能かどうか
  * @var \BaserCore\Model\Entity\Plugin $plugin
- * @var bool $dbInited
+ * @var bool $dbInit
  */
 $this->BcBaser->i18nScript([
     'message1' => __d('baser', 'プラグインのデータを初期化します。よろしいですか？'),
@@ -65,9 +65,9 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 
 
     <div class="bca-actions">
-        <?php if ($dbInited): ?>
+        <?php if ($dbInit): ?>
+            <?php echo $this->BcAdminForm->submit(__d('baser', '有効化'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave']) ?>&nbsp;&nbsp;
             <?php echo $this->BcAdminForm->submit(__d('baser', 'プラグインのデータを初期化する'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnReset']) ?>
-            <?php echo $this->BcAdminForm->submit(__d('baser', '有効化'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave']) ?>
         <?php else: ?>
             <?php echo $this->BcAdminForm->submit(__d('baser', 'インストール'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave']) ?>
         <?php endif; ?>
