@@ -1,50 +1,96 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.View.Helper
- * @since           baserCMS v 3.0.6
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('BcAppView', 'View');
-App::uses('BcHtmlHelper', 'View/Helper');
+namespace BaserCore\Test\TestCase\View\Helper;
+
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\BcAdminAppView;
+use BaserCore\View\Helper\BcHtmlHelper;
 
 /**
  * Class BcHtmlHelperTest
  *
  * @property BcHtmlHelper $BcHtml
  */
-class BcHtmlHelperTest extends CakeTestCase
+class BcHtmlHelperTest extends BcTestCase
 {
 
-	public function setUp()
-	{
-		parent::setUp();
-		$View = new View();
-		$this->BcHtml = new BcHtmlHelper($View);
-	}
+    /**
+     * setUp
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->BcHtml = new BcHtmlHelper(new BcAdminAppView($this->getRequest('/')));
+    }
 
-	public function tearDown()
-	{
-		unset($this->BcHtml);
-		parent::tearDown();
-	}
+    /**
+     * tearDown
+     */
+    public function tearDown(): void
+    {
+        unset($this->BcHtml);
+        parent::tearDown();
+    }
 
-	/**
-	 * タグにラッピングされていないパンくずデータを取得する
-	 */
-	public function testGetStripCrumbs()
-	{
-		$expected = 'abc';
-		$this->BcHtml->_crumbs = [$expected];
-		$crumbs = $this->BcHtml->getCrumbs();
-		$this->assertEquals('<a href="/b" c>a</a>', $crumbs);
-		$this->assertEquals([$expected], $this->BcHtml->getStripCrumbs());
-	}
+    /**
+     * タグにラッピングされていないパンくずデータを取得する
+     */
+    public function testGetStripCrumbs()
+    {
+        // TODO 暫定措置
+        // >>>
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // <<<
+
+        $expected = 'abc';
+        $this->BcHtml->_crumbs = [$expected];
+        $crumbs = $this->BcHtml->getCrumbs();
+        $this->assertEquals('<a href="/b" c>a</a>', $crumbs);
+        $this->assertEquals([$expected], $this->BcHtml->getStripCrumbs());
+    }
+
+    /**
+     * testSetScript
+     * @param string $variable 変数名（グローバル変数）
+     * @param string $value 値
+     * @param array $options
+     *  - `inline` : インラインに出力するかどうか。（初期値 : false）
+     *  - `declaration` : var 宣言を行うかどうか（初期値 : true）
+     * @dataProvider setScriptDataProvider
+     */
+    public function testSetScript($value, $inline, $declaration, $expected)
+    {
+        $result = $this->BcHtml->setScript('test', $value, [
+            'inline' => $inline,
+            'declaration' => $declaration
+        ]);
+        $this->assertEquals($expected, $result);
+    }
+
+    public function setScriptDataProvider()
+    {
+        return [
+            ['</script>', true, true, '<script>var test = "<\/script>";</script>'],
+            ['abc', false, true, ''],
+            ['abc', true, false, '<script>test = "abc";</script>'],
+        ];
+    }
+
+    /**
+     * testDeclarationI18n
+     */
+    public function testDeclarationI18n()
+    {
+        $result = $this->BcHtml->declarationI18n();
+        $this->assertEquals('<script>var bcI18n = [];</script>', $result);
+    }
 }
