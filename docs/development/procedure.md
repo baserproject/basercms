@@ -11,7 +11,8 @@
 　
 ### GitHubのIssue より選択する
 GitHub の [Issue](https://github.com/baserproject/ucmitz/issues) 現在対象となっているマイルストーンの Issue より、対応する Issue を選択します。  
-選択したら、Issue の Assignees に自分を設定します。
+担当することをコメントしておくと他の人作業がかぶりません。  
+（コラボレータは、Issue で担当するコメントを見つけたらその人を Assignees に設定してください）
 
 　
 ### 機能要件一覧より選択する
@@ -19,9 +20,10 @@ GitHub の [Issue](https://github.com/baserproject/ucmitz/issues) 現在対象�
 機能要件一覧より選択する場合、次の項目を更新します。
 
 - 担当者名：自身の名前を記入します
-- Issue：「●」を記載し、Issueへのリンクを貼ります（Issueが存在しなければ、マイルストンと Assignees を設定の上作成します）
+- Issue：「●」を記載し、Issueへのリンクを貼ります（Issueが存在しなければ新しく作成します）
 - 状況：着手中に切り替えます。
 
+（コラボレーターは、新しい Issueを見つけたら、適切なマイルストンを設定してください）
 　
 ### ucmitz 進行管理の未対応分より選択する 
 [ucmitz 進行管理](https://docs.google.com/spreadsheets/d/1EGxMk-dy8WIg2NmgOKsS_fBXqDB6oJky9M0mB7TADEk/edit#gid=938641024) にて作業状況の進捗を確認できますが、その中より未対応のものを対応していいきます。
