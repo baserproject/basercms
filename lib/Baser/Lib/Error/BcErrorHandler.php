@@ -10,12 +10,11 @@ class BcErrorHandler extends ErrorHandler
 	 */
 	public static function handleException($exception)
 	{
-		$config = Configure::read('Exception');
 		if ($exception->getCode() == 404) {
 			CakeLog::write('error404', self::error404msg() . "\n");
 		}
 
-		$renderer = isset($config['renderer']) ? $config['renderer'] : 'ExceptionRenderer';
+		$renderer = Configure::read('Exception.renderer')?: 'ExceptionRenderer';
 		if ($renderer !== 'ExceptionRenderer') {
 			list($plugin, $renderer) = pluginSplit($renderer, true);
 			App::uses($renderer, $plugin . 'Error');
@@ -24,6 +23,7 @@ class BcErrorHandler extends ErrorHandler
 			$error = new $renderer($exception);
 			$error->render();
 		} catch (Exception $e) {
+
 			set_error_handler(Configure::read('Error.handler'));
 			Configure::write('Error.trace', false);
 			$message = sprintf(
@@ -135,14 +135,14 @@ class BcErrorHandler extends ErrorHandler
 	private static function makeMessage($error, $error_code, $description, $file_path, $line)
 	{
 		$rs = [];
-		$rs[] = sprintf('Error Type: %s[%s]', $error, $error_code);
+		$rs[] = 'Description: ' . (self::hasStackTrace($description) ? self::description($description) : $description);
+		$rs[] = 'Source: ' . self::getErrorSource($file_path, $line);
+		$rs[] = self::hasStackTrace($description) ? self::errorType($description) : sprintf('Error Type: %s[%s]', $error, $error_code);
 		if (env('REQUEST_URI')) {
 			$rs[] = 'Uri: ' . env('REQUEST_URI');
 		}
 		$rs[] = 'File: ' . self::trimPath($file_path);
 		$rs[] = 'Line: ' . $line;
-		$rs[] = 'Source: ' . self::getErrorSource($file_path, $line);
-		$rs[] = 'Description: ' . $description;
 		if (env('REMOTE_ADDR')) {
 			$hostname = gethostbyaddr(env('REMOTE_ADDR'));
 			$rs[] = 'IP: ' . env('REMOTE_ADDR') . (preg_match('@[a-z]+@', $hostname) ? ' by ' . $hostname : '');
@@ -174,8 +174,45 @@ class BcErrorHandler extends ErrorHandler
 		return sprintf(
 			"%s\nStack Trace:\n%s\n",
 			implode("\n", $rs),
-			self::readableTrace()
+			!self::hasStackTrace($description) ? self::readableTrace() : self::stackTraceFromString($description)
 		);
+	}
+
+	private static function hasStackTrace($description) {
+		if (strpos($description, 'Error:')===false) {
+			return false;
+		}
+		if (strpos($description, 'Stack trace:')===false) {
+			return false;
+		}
+		if (strpos($description, '#0')===false) {
+			return false;
+		}
+		return true;
+	}
+
+	private static function description($description) {
+		$_ = explode('Stack trace:', $description);
+		$_ = explode('Error:', str_replace([ROOT, '\\'], ['', '/'], trim($_[0])));
+		return trim($_[1]);
+	}
+
+	private static function errorType($description) {
+		$_ = explode('Error:', $description);
+		return 'Error Type: ' . rtrim($_[0],':');
+	}
+
+	private static function stackTraceFromString($description) {
+		$_ = explode('Stack trace:', $description);
+		$stackTrace = explode("\n", $_[1]);
+		$rs = [];
+		foreach($stackTrace as $k=>$v) {
+			if(substr($v,0,1)!=='#') {
+				continue;
+			}
+			$rs[] = self::trimPath(preg_replace('@^#[0-9]+ @', '', $v));
+		}
+		return implode("\n", $rs);
 	}
 
 	private static function trimPath($path) {
