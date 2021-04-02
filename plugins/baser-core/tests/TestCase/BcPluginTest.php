@@ -90,6 +90,7 @@ class BcPluginTest extends BcTestCase
         ]);
         $folder->create($from, 0777);
         $this->BcPlugin->uninstall(['connection' => 'test']);
+        $this->assertFalse(is_dir($from));
         $plugins = $this->getTableLocator()->get('Plugins')->find()->where(['name' => 'BcBlog'])->first();
         $this->assertNull($plugins);
         $folder->move($from, [
@@ -98,6 +99,17 @@ class BcPluginTest extends BcTestCase
             'schema' => Folder::OVERWRITE
         ]);
 
+    }
+
+    /**
+     * testRollback
+     */
+    public function testRollback() {
+        $this->BcPlugin->install(['connection' => 'test']);
+        $this->BcPlugin->rollbackDb(['connection' => 'test']);
+        $collection = ConnectionManager::get('default')->getSchemaCollection();
+        $tables = $collection->listTables();
+        $this->assertNotContains('blog_posts', $tables);
     }
 
 }

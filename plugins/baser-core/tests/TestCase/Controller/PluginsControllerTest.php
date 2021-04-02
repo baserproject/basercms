@@ -160,7 +160,16 @@ class PluginsControllerTest extends BcTestCase
      */
     public function testReset_db()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->put('/baser/admin/plugins/reset_db/BcBlog', ['connection' => 'test', 'name' => 'BcBlog']);
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'plugins',
+            'action' => 'install',
+            'BcBlog'
+        ]);
+        $this->assertFlashMessage('ブログ プラグインのデータを初期化しました。');
     }
 
 }

@@ -48,32 +48,29 @@ class BcHtmlHelper extends HtmlHelper
      * @param string $variable 変数名（グローバル変数）
      * @param mixed $value 値
      * @param array $options
-     *  - `inline` : インラインに出力するかどうか。（初期値 : false）
+     *  - `block` : ビューブロックを指定（初期値 : false）
      *  - `declaration` : var 宣言を行うかどうか（初期値 : true）
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function setScript($variable, $value, $options = [])
+    public function setScript($variable, $value, $options = []): string
     {
+        if(isset($options['inline'])) {
+            trigger_error('オプション inline は利用できなくなりました。 block を利用してください。', E_USER_WARNING);
+        }
         $options = array_merge([
-            'inline' => false,
-            'declaration' => true
+            'declaration' => true,
+            'block' => true
         ], $options);
         $code = '';
         if ($options['declaration']) {
             $code = 'var ';
         }
-        $code .= h($variable) . ' = ' . json_encode($value) . ';';
-        if (!$options['inline']) {
-            $options['block'] = 'script';
-            $isInline = false;
-        } else {
-            $isInline = true;
-        }
-        unset($options['declaration'], $options['escape'], $options['inline']);
+        $code .= h($variable) . ' = ' . json_encode($value) . ";";
+        unset($options['declaration'], $options['escape']);
         $result = $this->scriptBlock($code, $options);
-        if ($isInline) {
+        if (!$options['block']) {
             return $result;
         }
         return '';
@@ -88,7 +85,7 @@ class BcHtmlHelper extends HtmlHelper
      */
     public function declarationI18n()
     {
-        return $this->setScript('bcI18n', [], ['inline' => true]);
+        return $this->setScript('bcI18n', [], ['block' => false]);
     }
 
     /**
@@ -98,22 +95,19 @@ class BcHtmlHelper extends HtmlHelper
      *
      * @param array $value 値（連想配列）
      *  - `inline` : インラインに出力するかどうか。（初期値 : false）
-     *  - `declaration` : var 宣言を行うかどうか（初期値 : false）
-     *  - `escape` : 値のエスケープを行うかどうか（初期値 : true）
      */
     public function i18nScript($data, $options = [])
     {
         $options = array_merge([
-            'inline' => false,
-            'declaration' => false,
-            'escape' => true
+            'block' => true
         ], $options);
+        $result = '';
         if (is_array($data)) {
-            $result = '';
+            $options['declaration'] = false;
             foreach($data as $key => $value) {
                 $result .= $this->setScript('bcI18n.' . $key, $value, $options) . "\n";
             }
-            if ($options['inline']) {
+            if (!$options['block']) {
                 return $result;
             }
         }

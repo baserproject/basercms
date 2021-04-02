@@ -63,14 +63,14 @@ class BcHtmlHelperTest extends BcTestCase
      * @param string $variable 変数名（グローバル変数）
      * @param string $value 値
      * @param array $options
-     *  - `inline` : インラインに出力するかどうか。（初期値 : false）
+     *  - `block` : ビューブロックに出力するかどうか。（初期値 : false）
      *  - `declaration` : var 宣言を行うかどうか（初期値 : true）
      * @dataProvider setScriptDataProvider
      */
-    public function testSetScript($value, $inline, $declaration, $expected)
+    public function testSetScript($value, $block, $declaration, $expected)
     {
         $result = $this->BcHtml->setScript('test', $value, [
-            'inline' => $inline,
+            'block' => $block,
             'declaration' => $declaration
         ]);
         $this->assertEquals($expected, $result);
@@ -79,9 +79,9 @@ class BcHtmlHelperTest extends BcTestCase
     public function setScriptDataProvider()
     {
         return [
-            ['</script>', true, true, '<script>var test = "<\/script>";</script>'],
-            ['abc', false, true, ''],
-            ['abc', true, false, '<script>test = "abc";</script>'],
+            ['</script>', false, true, '<script>var test = "<\/script>";</script>'],
+            ['abc', true, true, ''],
+            ['abc', false, false, '<script>test = "abc";</script>'],
         ];
     }
 
@@ -93,4 +93,10 @@ class BcHtmlHelperTest extends BcTestCase
         $result = $this->BcHtml->declarationI18n();
         $this->assertEquals('<script>var bcI18n = [];</script>', $result);
     }
+
+    public function testI18nScript() {
+        $result = $this->BcHtml->i18nScript(['a' => 'b', 'c' => 'd'], ['block' => false]);
+        $this->assertEquals("<script>bcI18n.a = \"b\";</script>\n<script>bcI18n.c = \"d\";</script>\n", $result);
+    }
+
 }

@@ -8,5 +8,5 @@
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
-$((function(){$("#BtnReset").click((function(){if(!confirm(bcI18n.message1))return!1;$("#PluginAdminInstallForm").attr("action",$("#ResetDbUrl").val()),$.bcUtil.showLoader()})),$("#BtnSave").click((function(){$.bcUtil.showLoader()}))}))}});
+$((function(){var e=$("#AdminPluginInstallScript").attr("data-resetDbUrl");$("#BtnReset").click((function(){if(!confirm(bcI18n.message1))return!1;$("#AdminPluginInstallForm").attr("action",e),$.bcUtil.showLoader()})),$("#BtnSave").click((function(){$.bcUtil.showLoader()}))}))}});
 //# sourceMappingURL=install.bundle.js.map

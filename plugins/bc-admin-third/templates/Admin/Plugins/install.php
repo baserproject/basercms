@@ -23,7 +23,10 @@ use BaserCore\View\AppView;
 $this->BcBaser->i18nScript([
     'message1' => __d('baser', 'プラグインのデータを初期化します。よろしいですか？'),
 ]);
-$this->BcBaser->js('admin/plugins/install.bundle', false);
+$this->BcBaser->js('admin/plugins/install.bundle', false, [
+	'id' => 'AdminPluginInstallScript',
+	'data-resetDbUrl' => $this->BcBaser->getUrl(['action' => 'reset_db'])
+]);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
     'url' => ['action' => 'add'],
     'title' => __d('baser', '新規追加'),
@@ -31,14 +34,12 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 ?>
 
 
-<?php echo $this->BcAdminForm->control('ResetDbUrl', ['type' => 'hidden', 'value' => $this->BcBaser->getUrl(['action' => 'reset_db'])]) ?>
-
 <?php if ($installMessage): ?>
     <div id="UpdateMessage"><?php echo $installMessage ?></div>
 <?php endif ?>
 
 <?php if ($isInstallable): ?>
-    <?php echo $this->BcAdminForm->create($plugin, ['url' => [$plugin->name]]) ?>
+    <?php echo $this->BcAdminForm->create($plugin, ['url' => [$plugin->name], 'id' => 'AdminPluginInstallForm']) ?>
     <?php echo $this->BcAdminForm->control('name', ['type' => 'hidden']) ?>
     <?php echo $this->BcAdminForm->control('title', ['type' => 'hidden']) ?>
     <?php echo $this->BcAdminForm->control('status', ['type' => 'hidden']) ?>

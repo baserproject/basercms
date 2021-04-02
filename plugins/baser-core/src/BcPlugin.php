@@ -142,13 +142,7 @@ class BcPlugin extends BasePlugin
         ], $options);
         $pluginName = $options['plugin'];
 
-        $this->migrations->rollback($options);
-
-        $phinxTableName = Inflector::underscore($pluginName) . '_phinxlog';
-        $connection = ConnectionManager::get($options['connection']);
-        $schema = $connection->getDriver()->newTableSchema($phinxTableName);
-        $sql = $schema->dropSql($connection);
-        $connection->execute($sql[0])->closeCursor();
+        $this->rollbackDb($options);
 
         $pluginPath = BcUtil::getPluginPath($pluginName);
         if($pluginPath) {
@@ -158,6 +152,40 @@ class BcPlugin extends BasePlugin
 
         $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
         return $plugins->uninstall($pluginName);
+    }
+
+    /**
+     * プラグインのテーブルをリセットする
+     *
+     * @param array $options
+     *  - `plugin` : プラグイン名
+     *  - `connection` : コネクション名
+     *  - `target` : ロールバック対象バージョン
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function rollbackDb($options = []) : bool
+    {
+        $options = array_merge([
+            'plugin' => $this->getName(),
+            'connection' => 'default',
+            'target' => 0,
+        ], $options);
+        $pluginName = $options['plugin'];
+        try {
+            $this->migrations->rollback($options);
+
+            $phinxTableName = Inflector::underscore($pluginName) . '_phinxlog';
+            $connection = ConnectionManager::get($options['connection']);
+            $schema = $connection->getDriver()->newTableSchema($phinxTableName);
+            $sql = $schema->dropSql($connection);
+            $connection->execute($sql[0])->closeCursor();
+        } catch (BcException $e) {
+            return false;
+        }
+        return true;
     }
 
 }

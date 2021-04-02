@@ -47,6 +47,9 @@ class PluginsController extends BcAdminAppController
     public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
+        if ($this->request->getParam('action') === 'reset_db') {
+            $this->Security->setConfig('validatePost', false);
+        }
     }
 
     /**
@@ -134,8 +137,10 @@ class PluginsController extends BcAdminAppController
             return;
         }
 
+        $data = $this->request->getData();
+        unset($data['name'], $data['title'], $data['status'], $data['version'], $data['permission']);
         // install に $this->request->getData() を引数とするのはユニットテストで connection を test として設定するため
-        if ($plugin->install($this->request->getData())) {
+        if ($plugin->install($data)) {
             $this->BcMessage->setSuccess(sprintf(__d('baser', '新規プラグイン「%s」を baserCMS に登録しました。'), $name));
             // TODO: アクセス権限を追加する
             // $this->_addPermission($this->request->data);
@@ -427,29 +432,45 @@ class PluginsController extends BcAdminAppController
      * データベースをリセットする
      *
      * @return void
+     * @checked
+     * @unitTest
      */
     public function reset_db()
     {
-        if (!$this->request->getData()) {
+        if (!$this->request->is('put')) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
             return;
         }
-        $data = $this->Plugin->find('first', ['conditions' => ['name' => $this->request->getData('Plugin.name')]]);
-        $this->Plugin->resetDb($this->request->getData('Plugin.name'));
-        $data['Plugin']['db_inited'] = false;
-        $this->Plugin->set($data);
+        $plugin = $this->Plugins->find()
+            ->where(['name' => $this->request->getData('name')])
+            ->first();
 
-        // データを保存
-        if (!$this->Plugin->save()) {
+        BcUtil::includePluginClass($plugin->name);
+        $plugins = Plugin::getCollection();
+        $pluginClass = $plugins->create($plugin->name);
+        if(!method_exists($pluginClass, 'rollbackDb')) {
+            $this->BcMessage->setError(__d('baser', 'プラグインに Plugin クラスが存在しません。手動で削除してください。'));
+            return;
+        }
+
+        $plugin->db_init = false;
+        $data = $this->request->getData();
+        unset($data['name'], $data['title'], $data['status'], $data['version'], $data['permission']);
+        if (!$pluginClass->rollbackDb($data) || !$this->Plugins->save($plugin)) {
             $this->BcMessage->setError(__d('baser', '処理中にエラーが発生しました。プラグインの開発者に確認してください。'));
             return;
         }
+
+        // TODO
+        /*
         clearAllCache();
         $this->BcAuth->relogin();
+        */
+
         $this->BcMessage->setSuccess(
-            sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $data['Plugin']['title'])
+            sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $plugin->title)
         );
-        $this->redirect(['action' => 'install', $data['Plugin']['name']]);
+        $this->redirect(['action' => 'install', $plugin->name]);
     }
 
     /**
