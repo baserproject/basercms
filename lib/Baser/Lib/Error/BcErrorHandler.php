@@ -260,8 +260,10 @@ class BcErrorHandler extends ErrorHandler
 		return $path;
 	}
 
-	private static function readableTrace($trace=null) {
-		$backtrace = $trace ?: debug_backtrace();
+	private static function readableTrace($backtrace=null) {
+		if(!$backtrace) {
+			$backtrace = debug_backtrace();
+		}
 		$default = array(
 			'line' => '??',
 			'file' => '[internal]',
