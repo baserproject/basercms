@@ -12,6 +12,8 @@ class BcErrorHandler extends ErrorHandler
 	{
 		if ($exception->getCode() == 404) {
 			CakeLog::write('error404', self::error404msg() . "\n");
+		} else {
+			CakeLog::write(LOG_ERR, static::exceptionToMessage($exception)."\n");
 		}
 
 		$renderer = Configure::read('Exception.renderer')?: 'ExceptionRenderer';
@@ -35,6 +37,28 @@ class BcErrorHandler extends ErrorHandler
 			static::$_bailExceptionRendering = 1;
 			trigger_error($message, E_USER_ERROR);
 		}
+	}
+
+	private static function exceptionToMessage($exception) {
+		$rs = [];
+		$rs[] = sprintf('Description: %s - %s', get_class($exception), $exception->getMessage());
+		if (env('REQUEST_URI')) {
+			$rs[] = 'Uri: ' . env('REQUEST_URI');
+		}
+		if (env('REMOTE_ADDR')) {
+			$hostname = gethostbyaddr(env('REMOTE_ADDR'));
+			$rs[] = 'IP: ' . env('REMOTE_ADDR') . (preg_match('@[a-z]+@', $hostname) ? ' by ' . $hostname : '');
+		}
+		if (env('HTTP_USER_AGENT')) {
+			$rs[] = 'ua: ' . env('HTTP_USER_AGENT');
+		}
+		if (!empty($_POST)) {
+			$rs[] = 'method: POST';
+		}
+		if (env('HTTP_REFERER')) {
+			$rs[] = 'Referer: ' . env('HTTP_REFERER');
+		}
+		return implode("\n", $rs);
 	}
 
 	public static function handleError($code, $description, $file_path = null, $line = null, $context = null)
@@ -132,12 +156,12 @@ class BcErrorHandler extends ErrorHandler
 		return trim($source[$line - 1]);
 	}
 
-	private static function makeMessage($error, $error_code, $description, $file_path, $line)
+	private static function makeMessage($errorType, $errorCode, $description, $file_path, $line)
 	{
 		$rs = [];
 		$rs[] = 'Description: ' . (self::hasStackTrace($description) ? self::description($description) : $description);
 		$rs[] = 'Source: ' . self::getErrorSource($file_path, $line);
-		$rs[] = self::hasStackTrace($description) ? self::errorType($description) : sprintf('Error Type: %s[%s]', $error, $error_code);
+		$rs[] = self::hasStackTrace($description) ? self::errorType($description) : sprintf('Error Type: %s[%s]', $errorType, $errorCode);
 		if (env('REQUEST_URI')) {
 			$rs[] = 'Uri: ' . env('REQUEST_URI');
 		}
@@ -236,8 +260,8 @@ class BcErrorHandler extends ErrorHandler
 		return $path;
 	}
 
-	private static function readableTrace() {
-		$backtrace = debug_backtrace();
+	private static function readableTrace($trace=null) {
+		$backtrace = $trace ?: debug_backtrace();
 		$default = array(
 			'line' => '??',
 			'file' => '[internal]',
