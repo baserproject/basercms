@@ -49,9 +49,9 @@ $this->BcBaser->js('admin/users/login', false);
 			<?php echo $this->BcForm->input($userModel . '.saved', ['type' => 'checkbox', 'label' => __d('baser', 'ログイン状態を保存する'), 'tabindex' => 3]) ?>
 			　
 			<?php if ($currentPrefix == 'front'): ?>
-				<?php $this->BcBaser->link(__d('baser', 'パスワードを忘れた場合はこちら'), ['action' => 'reset_password'], ['rel' => 'popup']) ?>
+				<?php $this->BcBaser->link(__d('baser', 'パスワードを忘れた場合はこちら'), ['action' => 'send_activate_url'], ['rel' => 'popup']) ?>
 			<?php else: ?>
-				<?php $this->BcBaser->link(__d('baser', 'パスワードを忘れた場合はこちら'), ['action' => 'reset_password', $this->request->params['prefix'] => true], ['rel' => 'popup']) ?>
+				<?php $this->BcBaser->link(__d('baser', 'パスワードを忘れた場合はこちら'), ['action' => 'send_activate_url', $this->request->params['prefix'] => true], ['rel' => 'popup']) ?>
 			<?php endif ?>
 		</div>
 		<?php echo $this->BcForm->end() ?>

@@ -1163,3 +1163,21 @@ function retry($times, callable $callback, $interval = 0)
 		}
 	}
 }
+
+/**
+ * URlセーフな短いハッシュ文字列を作る
+ * @param string $string 文字列
+ * @return string
+ */
+function easyHash($string) {
+	return strtr(
+		rtrim(
+			base64_encode(
+				pack('H*', hash('CRC32', $string))
+			),
+			'='
+		),
+		'+/',
+		'-_'
+	);
+}

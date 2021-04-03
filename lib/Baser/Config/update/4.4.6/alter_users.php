@@ -1,6 +1,6 @@
 <?php
 
-/* Users schema generated on: 2013-03-23 00:03:52 : 1363966852 */
+/* Users schema generated on: 2021-04-02 21:00:00 : 1617364800 */
 
 class UsersSchema extends CakeSchema {
 
@@ -33,5 +33,4 @@ class UsersSchema extends CakeSchema {
 		'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
 		'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci']
 	];
-
 }
