@@ -124,7 +124,6 @@ if (preg_match($nonAssets, $uri) === 0) {
 				'bootstrap' => file_exists(CakePlugin::path($plugin['Plugin']['name']) . 'Config' . DS . 'bootstrap.php')
 			]);
 		}
-		return;
 	}
 }
 
@@ -304,6 +303,23 @@ if (BC_INSTALLED) {
 	}
 	Configure::write('BcRequest.isUpdater', $isUpdater);
 }
+
+/**
+ * テーマヘルパーのパスを追加する
+ */
+if (BC_INSTALLED || isConsole()) {
+	App::build([
+		'View/Helper' => [BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Helper' . DS]
+	], App::PREPEND);
+}
+
+/**
+ * アセットの場合負荷を軽減するため以降の処理を終了
+ */
+if(Configure::write('BcRequest.asset', true)) {
+	return;
+}
+
 /**
  * プラグインをCake側で有効化
  *
@@ -408,15 +424,6 @@ if (Configure::read('Cache.check')) {
 	if ($site->useSubDomain) {
 		Configure::write('Cache.viewPrefix', $site->alias);
 	}
-}
-
-/**
- * テーマヘルパーのパスを追加する
- */
-if (BC_INSTALLED || isConsole()) {
-	App::build([
-		'View/Helper' => [BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Helper' . DS]
-	], App::PREPEND);
 }
 
 /**
