@@ -316,7 +316,7 @@ if (BC_INSTALLED || isConsole()) {
 /**
  * アセットの場合負荷を軽減するため以降の処理を終了
  */
-if(Configure::write('BcRequest.asset', true)) {
+if(Configure::read('BcRequest.asset')) {
 	return;
 }
 
