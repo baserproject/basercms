@@ -22,7 +22,7 @@
 		<?php $this->BcBaser->title() ?>
 		<?php
 		$this->BcBaser->css([
-			'admin/jquery-ui/ui.all',
+			'admin/jquery-ui/jquery-ui.min',
 			'admin/import',
 			'../js/admin/jquery.contextMenu-1.0/jquery.contextMenu',
 			'admin/colorbox/colorbox-1.6.1'])
