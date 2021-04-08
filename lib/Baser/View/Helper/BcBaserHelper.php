@@ -2814,16 +2814,19 @@ END_FLASH;
 			return;
 		}
 		// 別URLの場合、alternateを出力（スマートフォンのみ対応）
-		$pureUrl = $this->BcContents->getPureUrl($this->request->url, $this->request->params['Site']['id']);
-		$agent = BcAgent::find('smartphone');
-		$subSite = BcSite::findCurrentSub(false, $agent);
+		$subSite = BcSite::findCurrentSub(false, BcAgent::find('smartphone'));
 		if (!$subSite) {
 			return;
 		}
-		$url = $subSite->makeUrl(new CakeRequest($pureUrl));
 		$this->_View->set('meta',
 			$this->BcHtml->meta('canonical',
-				$this->BcHtml->url($url, true),
+				$this->BcHtml->url(
+					$this->getContentsUrl(
+						Hash::get($this->request->params, 'Content.url', '/'),
+						$subSite
+					),
+					true
+				),
 				[
 					'rel' => 'canonical',
 					'media' => 'only screen and (max-width: 640px)',
