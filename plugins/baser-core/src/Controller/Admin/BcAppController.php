@@ -1679,22 +1679,4 @@ class BcAppController extends Controller
 			throw new NotFoundException();
 		}
 	}
-
-	/**
-	 * リファラチェックを行う
-	 *
-	 * @return bool
-	 */
-	protected function _checkReferer()
-	{
-		$siteDomain = BcUtil::getCurrentDomain();
-		if (empty($_SERVER['HTTP_REFERER'])) {
-			return false;
-		}
-		$refererDomain = BcUtil::getDomain($_SERVER['HTTP_REFERER']);
-		if (!preg_match('/^' . preg_quote($siteDomain, '/') . '/', $refererDomain)) {
-			throw new NotFoundException();
-		}
-		return true;
-	}
 }

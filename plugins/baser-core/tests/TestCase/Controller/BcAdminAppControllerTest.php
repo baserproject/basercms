@@ -12,15 +12,18 @@
 namespace BaserCore\Test\TestCase\Controller;
 
 use Cake\TestSuite\IntegrationTestTrait;
-use Cake\TestSuite\TestCase;
+use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Controller\Admin\BcAdminAppController;
+use Cake\Core\Configure;
+use ReflectionClass;
+use \Cake\Http\Exception\NotFoundException;
 
 /**
  * BaserCore\Controller\BcAdminAppController Test Case
  */
-class BcAdminAppControllerTest extends TestCase
+class BcAdminAppControllerTest extends BcTestCase
 {
-//    use IntegrationTestTrait;
+   use IntegrationTestTrait;
 
     /**
      * set up
@@ -28,8 +31,7 @@ class BcAdminAppControllerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        $this->BcAdminApp = new BcAdminAppController();
+        $this->BcAdminApp = new BcAdminAppController($this->getRequest());
     }
 
     /**
@@ -102,14 +104,14 @@ class BcAdminAppControllerTest extends TestCase
      */
     public function testSetTitle()
     {
-        $ref = new \ReflectionClass($this->BcAdminApp);
+        $ref = new ReflectionClass($this->BcAdminApp);
         $method = $ref->getMethod('setTitle');
         $method->setAccessible(true);
 
         $template = 'test';
         $method->invokeArgs($this->BcAdminApp, [$template]);
 
-        $viewBuilder = new \ReflectionClass($this->BcAdminApp->viewBuilder());
+        $viewBuilder = new ReflectionClass($this->BcAdminApp->viewBuilder());
         $vars = $viewBuilder->getProperty('_vars');
         $vars->setAccessible(true);
         $actual = $vars->getValue($this->BcAdminApp->viewBuilder())['title'];
@@ -123,14 +125,14 @@ class BcAdminAppControllerTest extends TestCase
      */
     public function testSetSearch()
     {
-        $ref = new \ReflectionClass($this->BcAdminApp);
+        $ref = new ReflectionClass($this->BcAdminApp);
         $method = $ref->getMethod('setSearch');
         $method->setAccessible(true);
 
         $template = 'test';
         $method->invokeArgs($this->BcAdminApp, [$template]);
 
-        $viewBuilder = new \ReflectionClass($this->BcAdminApp->viewBuilder());
+        $viewBuilder = new ReflectionClass($this->BcAdminApp->viewBuilder());
         $vars = $viewBuilder->getProperty('_vars');
         $vars->setAccessible(true);
         $actual = $vars->getValue($this->BcAdminApp->viewBuilder())['search'];
@@ -144,17 +146,55 @@ class BcAdminAppControllerTest extends TestCase
      */
     public function testSetHelp()
     {
-        $ref = new \ReflectionClass($this->BcAdminApp);
+        $ref = new ReflectionClass($this->BcAdminApp);
         $method = $ref->getMethod('setHelp');
         $method->setAccessible(true);
 
         $template = 'test';
         $method->invokeArgs($this->BcAdminApp, [$template]);
 
-        $viewBuilder = new \ReflectionClass($this->BcAdminApp->viewBuilder());
+        $viewBuilder = new ReflectionClass($this->BcAdminApp->viewBuilder());
         $vars = $viewBuilder->getProperty('_vars');
         $vars->setAccessible(true);
         $actual = $vars->getValue($this->BcAdminApp->viewBuilder())['help'];
         $this->assertEquals($template, $actual);
+    }
+
+    /**
+     * Test _checkReferer method
+     * @dataProvider testCheckRefererDataProvider
+     * @return void
+     */
+    public function testCheckReferer($referer, $expected)
+    {
+        Configure::write('BcEnv.host', $referer ? parse_url($referer)['host'] : null);
+        $_SERVER['HTTP_REFERER'] = $referer;
+        $ref = new ReflectionClass($this->BcAdminApp);
+        $method = $ref->getMethod('_checkReferer');
+        $method->setAccessible(true);
+
+        if ($expected === 'error') {
+            Configure::write('BcEnv.host', parse_url('http://www.example2.com/')['host']);
+            try {
+                $method->invokeArgs($this->BcAdminApp, []);
+            } catch (NotFoundException $e) {
+                $this->assertStringContainsString("Not Found", $e->getMessage());
+            }
+        } else {
+            $result = $method->invokeArgs($this->BcAdminApp, []);
+            $this->assertEquals($result, $expected);
+        }
+    }
+
+    public function testCheckRefererDataProvider()
+    {
+        return [
+            // refererがnullの場合　
+            [null, false],
+            // refererがある場合
+            ["http://www.example.com/", true],
+            // refererが同サイトドメインでない場合
+            ["http://www.example.com/", 'error'],
+        ];
     }
 }

@@ -9,10 +9,15 @@
  * @since           baserCMS v 0.1.0
  * @license         https://basercms.net/license/index.html
  */
-
-App::uses('EmailComponent', 'Controller/Component');
-App::uses('BcEmailComponent', 'Controller/Component');
-App::uses('CakeText', 'Utility');
+// TODO: 一部の関数使うため一時的にコメントアウト
+// App::uses('EmailComponent', 'Controller/Component');
+// App::uses('BcEmailComponent', 'Controller/Component');
+// App::uses('CakeText', 'Utility');
+use Cake\Utility\Inflector;
+use Cake\Utility\Text;
+use Cake\Cache\Cache;
+use Cake\Filesystem\Folder;
+use Cake\Filesystem\File;
 
 /**
  * baserCMS共通関数
@@ -35,35 +40,35 @@ App::uses('CakeText', 'Utility');
 function baseUrl()
 {
 
-	$baseUrl = Configure::read('App.baseUrl');
-	if ($baseUrl) {
-		if (!preg_match('/\/$/', $baseUrl)) {
-			$baseUrl .= '/';
-		}
-	} else {
-		$script = $_SERVER['SCRIPT_FILENAME'];
-		if (isConsole()) {
-			$script = str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
-		}
-		$script = str_replace(['\\', '/'], DS, $script);
-		$docroot = docRoot();
-		$script = str_replace($docroot, '', $script);
-		if (BC_DEPLOY_PATTERN == 1) {
-			$baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'index.php', '/') . '/', '', $script);
-			$baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'test.php', '/') . '/', '', $baseUrl);
-			// ↓ Windows Azure 対策 SCRIPT_FILENAMEに期待した値が入ってこない為
-			$baseUrl = preg_replace('/index\.php/', '', $baseUrl);
-		} elseif (BC_DEPLOY_PATTERN == 2) {
-			$baseUrl = preg_replace('/' . preg_quote(basename($_SERVER['SCRIPT_FILENAME']), '/') . '/', '', $script);
-		}
-		$baseUrl = preg_replace("/index$/", '', $baseUrl);
-	}
+    $baseUrl = Configure::read('App.baseUrl');
+    if ($baseUrl) {
+        if (!preg_match('/\/$/', $baseUrl)) {
+            $baseUrl .= '/';
+        }
+    } else {
+        $script = $_SERVER['SCRIPT_FILENAME'];
+        if (isConsole()) {
+            $script = str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
+        }
+        $script = str_replace(['\\', '/'], DS, $script);
+        $docroot = docRoot();
+        $script = str_replace($docroot, '', $script);
+        if (BC_DEPLOY_PATTERN == 1) {
+            $baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'index.php', '/') . '/', '', $script);
+            $baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'test.php', '/') . '/', '', $baseUrl);
+            // ↓ Windows Azure 対策 SCRIPT_FILENAMEに期待した値が入ってこない為
+            $baseUrl = preg_replace('/index\.php/', '', $baseUrl);
+        } elseif (BC_DEPLOY_PATTERN == 2) {
+            $baseUrl = preg_replace('/' . preg_quote(basename($_SERVER['SCRIPT_FILENAME']), '/') . '/', '', $script);
+        }
+        $baseUrl = preg_replace("/index$/", '', $baseUrl);
+    }
 
-	$baseUrl = str_replace(DS, '/', $baseUrl);
-	if (!$baseUrl) {
-		$baseUrl = '/';
-	}
-	return $baseUrl;
+    $baseUrl = str_replace(DS, '/', $baseUrl);
+    if (!$baseUrl) {
+        $baseUrl = '/';
+    }
+    return $baseUrl;
 
 }
 
@@ -78,31 +83,31 @@ function baseUrl()
 function docRoot()
 {
 
-	if (empty($_SERVER['SCRIPT_NAME'])) {
-		return '';
-	}
+    if (empty($_SERVER['SCRIPT_NAME'])) {
+        return '';
+    }
 
-	if (isConsole()) {
-		$script = $_SERVER['SCRIPT_NAME'];
-		return str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
-	}
+    if (isConsole()) {
+        $script = $_SERVER['SCRIPT_NAME'];
+        return str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
+    }
 
-	if (strpos($_SERVER['SCRIPT_NAME'], '.php') === false) {
-		// さくらの場合、/index を呼びだすと、拡張子が付加されない
-		$scriptName = $_SERVER['SCRIPT_NAME'] . '.php';
-	} else {
-		$scriptName = $_SERVER['SCRIPT_NAME'];
-	}
-	$path = explode('/', $scriptName);
-	krsort($path);
-	// WINDOWS環境の場合、SCRIPT_NAMEのDIRECTORY_SEPARATORがスラッシュの場合があるので
-	// スラッシュに一旦置換してスラッシュベースで解析
-	$docRoot = str_replace('\\', '/', $_SERVER['SCRIPT_FILENAME']);
-	foreach($path as $value) {
-		$reg = "/\/" . $value . "$/";
-		$docRoot = preg_replace($reg, '', $docRoot);
-	}
-	return str_replace('/', DS, $docRoot);
+    if (strpos($_SERVER['SCRIPT_NAME'], '.php') === false) {
+        // さくらの場合、/index を呼びだすと、拡張子が付加されない
+        $scriptName = $_SERVER['SCRIPT_NAME'] . '.php';
+    } else {
+        $scriptName = $_SERVER['SCRIPT_NAME'];
+    }
+    $path = explode('/', $scriptName);
+    krsort($path);
+    // WINDOWS環境の場合、SCRIPT_NAMEのDIRECTORY_SEPARATORがスラッシュの場合があるので
+    // スラッシュに一旦置換してスラッシュベースで解析
+    $docRoot = str_replace('\\', '/', $_SERVER['SCRIPT_FILENAME']);
+    foreach($path as $value) {
+        $reg = "/\/" . $value . "$/";
+        $docRoot = preg_replace($reg, '', $docRoot);
+    }
+    return str_replace('/', DS, $docRoot);
 }
 
 /**
@@ -112,7 +117,7 @@ function docRoot()
  */
 function revision($version)
 {
-	return preg_replace("/baserCMS [0-9]+?\.[0-9]+?\.[0-9]+?\.([0-9]*)[\sa-z]*/is", "$1", $version);
+    return preg_replace("/baserCMS [0-9]+?\.[0-9]+?\.[0-9]+?\.([0-9]*)[\sa-z]*/is", "$1", $version);
 }
 
 /**
@@ -126,22 +131,22 @@ function revision($version)
  */
 function verpoint($version)
 {
-	$version = str_replace('baserCMS ', '', $version);
-	if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)([\sa-z\-]+|\.[0-9]+|)([\sa-z\-]+|\.[0-9]+|)/is", $version, $maches)) {
-		if (isset($maches[4]) && preg_match('/^\.[0-9]+$/', $maches[4])) {
-			if (isset($maches[5]) && preg_match('/^[\sa-z\-]+$/', $maches[5])) {
-				return false;
-			}
-			$maches[4] = str_replace('.', '', $maches[4]);
-		} elseif (isset($maches[4]) && preg_match('/^[\sa-z\-]+$/', $maches[4])) {
-			return false;
-		} else {
-			$maches[4] = 0;
-		}
-		return $maches[1] * 1000000000 + $maches[2] * 1000000 + $maches[3] * 1000 + $maches[4];
-	} else {
-		return 0;
-	}
+    $version = str_replace('baserCMS ', '', $version);
+    if (preg_match("/([0-9]+)\.([0-9]+)\.([0-9]+)([\sa-z\-]+|\.[0-9]+|)([\sa-z\-]+|\.[0-9]+|)/is", $version, $maches)) {
+        if (isset($maches[4]) && preg_match('/^\.[0-9]+$/', $maches[4])) {
+            if (isset($maches[5]) && preg_match('/^[\sa-z\-]+$/', $maches[5])) {
+                return false;
+            }
+            $maches[4] = str_replace('.', '', $maches[4]);
+        } elseif (isset($maches[4]) && preg_match('/^[\sa-z\-]+$/', $maches[4])) {
+            return false;
+        } else {
+            $maches[4] = 0;
+        }
+        return $maches[1] * 1000000000 + $maches[2] * 1000000 + $maches[3] * 1000 + $maches[4];
+    } else {
+        return 0;
+    }
 }
 
 /**
@@ -153,59 +158,59 @@ function verpoint($version)
 function decodeContent($content, $fileName = null)
 {
 
-	$contentsMaping = [
-		"image/gif" => "gif",
-		"image/jpeg" => "jpg",
-		"image/pjpeg" => "jpg",
-		"image/x-png" => "png",
-		"image/jpg" => "jpg",
-		"image/png" => "png",
-		"application/x-shockwave-flash" => "swf",
-		/* "application/pdf" => "pdf", */ // TODO windows で ai ファイルをアップロードをした場合、headerがpdfとして出力されるのでコメントアウト
-		"application/pgp-signature" => "sig",
-		"application/futuresplash" => "spl",
-		"application/msword" => "doc",
-		"application/postscript" => "ai",
-		"application/x-bittorrent" => "torrent",
-		"application/x-dvi" => "dvi",
-		"application/x-gzip" => "gz",
-		"application/x-ns-proxy-autoconfig" => "pac",
-		"application/x-shockwave-flash" => "swf",
-		"application/x-tgz" => "tar.gz",
-		"application/x-tar" => "tar",
-		"application/zip" => "zip",
-		"audio/mpeg" => "mp3",
-		"audio/x-mpegurl" => "m3u",
-		"audio/x-ms-wma" => "wma",
-		"audio/x-ms-wax" => "wax",
-		"audio/x-wav" => "wav",
-		"image/x-xbitmap" => "xbm",
-		"image/x-xpixmap" => "xpm",
-		"image/x-xwindowdump" => "xwd",
-		"text/css" => "css",
-		"text/html" => "html",
-		"text/javascript" => "js",
-		"text/plain" => "txt",
-		"text/xml" => "xml",
-		"video/mpeg" => "mpeg",
-		"video/quicktime" => "mov",
-		"video/x-msvideo" => "avi",
-		"video/x-ms-asf" => "asf",
-		"video/x-ms-wmv" => "wmv"
-	];
+    $contentsMaping = [
+        "image/gif" => "gif",
+        "image/jpeg" => "jpg",
+        "image/pjpeg" => "jpg",
+        "image/x-png" => "png",
+        "image/jpg" => "jpg",
+        "image/png" => "png",
+        "application/x-shockwave-flash" => "swf",
+        /* "application/pdf" => "pdf", */ // TODO windows で ai ファイルをアップロードをした場合、headerがpdfとして出力されるのでコメントアウト
+        "application/pgp-signature" => "sig",
+        "application/futuresplash" => "spl",
+        "application/msword" => "doc",
+        "application/postscript" => "ai",
+        "application/x-bittorrent" => "torrent",
+        "application/x-dvi" => "dvi",
+        "application/x-gzip" => "gz",
+        "application/x-ns-proxy-autoconfig" => "pac",
+        "application/x-shockwave-flash" => "swf",
+        "application/x-tgz" => "tar.gz",
+        "application/x-tar" => "tar",
+        "application/zip" => "zip",
+        "audio/mpeg" => "mp3",
+        "audio/x-mpegurl" => "m3u",
+        "audio/x-ms-wma" => "wma",
+        "audio/x-ms-wax" => "wax",
+        "audio/x-wav" => "wav",
+        "image/x-xbitmap" => "xbm",
+        "image/x-xpixmap" => "xpm",
+        "image/x-xwindowdump" => "xwd",
+        "text/css" => "css",
+        "text/html" => "html",
+        "text/javascript" => "js",
+        "text/plain" => "txt",
+        "text/xml" => "xml",
+        "video/mpeg" => "mpeg",
+        "video/quicktime" => "mov",
+        "video/x-msvideo" => "avi",
+        "video/x-ms-asf" => "asf",
+        "video/x-ms-wmv" => "wmv"
+    ];
 
-	if (isset($contentsMaping[$content])) {
-		return $contentsMaping[$content];
-	} elseif ($fileName) {
-		$info = pathinfo($fileName);
-		if (!empty($info['extension'])) {
-			return $info['extension'];
-		} else {
-			return false;
-		}
-	} else {
-		return false;
-	}
+    if (isset($contentsMaping[$content])) {
+        return $contentsMaping[$content];
+    } elseif ($fileName) {
+        $info = pathinfo($fileName);
+        if (!empty($info['extension'])) {
+            return $info['extension'];
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -219,12 +224,12 @@ function decodeContent($content, $fileName = null)
  */
 function getUrlParamFromEnv()
 {
-	$url = getUrlFromEnv();
-	$url = preg_replace('/^\//', '', $url);
-	if (strpos($url, '?') !== false) {
-		list($url) = explode('?', $url);
-	}
-	return $url;
+    $url = getUrlFromEnv();
+    $url = preg_replace('/^\//', '', $url);
+    if (strpos($url, '?') !== false) {
+        list($url) = explode('?', $url);
+    }
+    return $url;
 }
 
 /**
@@ -238,42 +243,42 @@ function getUrlParamFromEnv()
 function getUrlFromEnv()
 {
 
-	if (!empty($_GET['url'])) {
-		return preg_replace('/^\//', '', $_GET['url']);
-	}
+    if (!empty($_GET['url'])) {
+        return preg_replace('/^\//', '', $_GET['url']);
+    }
 
-	if (!isset($_SERVER['REQUEST_URI'])) {
-		return;
-	} else {
-		$requestUri = $_SERVER['REQUEST_URI'];
-	}
+    if (!isset($_SERVER['REQUEST_URI'])) {
+        return;
+    } else {
+        $requestUri = $_SERVER['REQUEST_URI'];
+    }
 
-	$appBaseUrl = Configure::read('App.baseUrl');
-	$parameter = '';
+    $appBaseUrl = Configure::read('App.baseUrl');
+    $parameter = '';
 
-	if ($appBaseUrl) {
+    if ($appBaseUrl) {
 
-		$base = dirname($appBaseUrl);
-		if (strpos($requestUri, $appBaseUrl) !== false) {
-			$parameter = str_replace($appBaseUrl, '', $requestUri);
-		} else {
-			// トップページ
-			$parameter = str_replace($base . '/', '', $requestUri);
-		}
-	} else {
+        $base = dirname($appBaseUrl);
+        if (strpos($requestUri, $appBaseUrl) !== false) {
+            $parameter = str_replace($appBaseUrl, '', $requestUri);
+        } else {
+            // トップページ
+            $parameter = str_replace($base . '/', '', $requestUri);
+        }
+    } else {
 
-		if (strpos($requestUri, '?')) {
-			$aryRequestUri = explode('?', $requestUri);
-			$requestUri = $aryRequestUri[0];
-		}
-		if (preg_match('/^' . str_replace('/', '\/', baseUrl()) . '/is', $requestUri)) {
-			$parameter = preg_replace('/^' . str_replace('/', '\/', baseUrl()) . '/is', '', $requestUri);
-		} else {
-			$parameter = $requestUri;
-		}
-	}
+        if (strpos($requestUri, '?')) {
+            $aryRequestUri = explode('?', $requestUri);
+            $requestUri = $aryRequestUri[0];
+        }
+        if (preg_match('/^' . str_replace('/', '\/', baseUrl()) . '/is', $requestUri)) {
+            $parameter = preg_replace('/^' . str_replace('/', '\/', baseUrl()) . '/is', '', $requestUri);
+        } else {
+            $parameter = $requestUri;
+        }
+    }
 
-	return preg_replace('/^\//', '', $parameter);
+    return preg_replace('/^\//', '', $parameter);
 }
 
 /**
@@ -286,17 +291,17 @@ function getUrlFromEnv()
  */
 function getPureUrl($Request)
 {
-	if (!$Request) {
-		$Request = new CakeRequest();
-	}
-	$url = $Request->url;
-	if ($url === false) {
-		$url = '';
-	}
-	if (strpos($url, '?') !== false) {
-		list($url) = explode('?', $url);
-	}
-	return $url;
+    if (!$Request) {
+        $Request = new CakeRequest();
+    }
+    $url = $Request->url;
+    if ($url === false) {
+        $url = '';
+    }
+    if (strpos($url, '?') !== false) {
+        list($url) = explode('?', $url);
+    }
+    return $url;
 }
 
 /**
@@ -312,55 +317,55 @@ function getPureUrl($Request)
 function clearViewCache($url = null, $ext = '.php')
 {
 
-	$url = preg_replace('/^\/mobile\//is', '/m/', $url);
-	if ($url == '/' || $url == '/index' || $url == '/index.html' || $url == '/m/' || $url == '/m/index' || $url == '/m/index.html') {
-		$homes = ['index', 'index_html'];
-		foreach($homes as $home) {
-			if (preg_match('/^\/m/is', $url)) {
-				if ($home) {
-					$home = 'm_' . $home;
-				} else {
-					$home = 'm';
-				}
-			} elseif (preg_match('/^\/s/is', $url)) {
-				if ($home) {
-					$home = 's_' . $home;
-				} else {
-					$home = 's';
-				}
-			}
-			$baseUrl = baseUrl();
-			if ($baseUrl) {
-				$baseUrl = str_replace(['/', '.'], '_', $baseUrl);
-				$baseUrl = preg_replace('/^_/', '', $baseUrl);
-				$baseUrl = preg_replace('/_$/', '', $baseUrl);
-				if ($home) {
-					$home = $baseUrl . $home;
-				} else {
-					$home = $baseUrl;
-				}
-			} elseif (!$home) {
-				$home = 'home';
-			}
-			clearCache($home);
-		}
-	} elseif ($url) {
-		if (preg_match('/\/index$/', $url)) {
-			clearCache(strtolower(Inflector::slug($url)), 'views', $ext);
-			$url = preg_replace('/\/index$/', '', $url);
-			clearCache(strtolower(Inflector::slug($url)), 'views', $ext);
-		} else {
-			clearCache(strtolower(Inflector::slug($url)), 'views', $ext);
-		}
-	} else {
-		$folder = new Folder(CACHE . 'views' . DS);
-		$files = $folder->read(true, true);
-		foreach($files[1] as $file) {
-			if ($file != 'empty') {
-				@unlink(CACHE . 'views' . DS . $file);
-			}
-		}
-	}
+    $url = preg_replace('/^\/mobile\//is', '/m/', $url);
+    if ($url == '/' || $url == '/index' || $url == '/index.html' || $url == '/m/' || $url == '/m/index' || $url == '/m/index.html') {
+        $homes = ['index', 'index_html'];
+        foreach($homes as $home) {
+            if (preg_match('/^\/m/is', $url)) {
+                if ($home) {
+                    $home = 'm_' . $home;
+                } else {
+                    $home = 'm';
+                }
+            } elseif (preg_match('/^\/s/is', $url)) {
+                if ($home) {
+                    $home = 's_' . $home;
+                } else {
+                    $home = 's';
+                }
+            }
+            $baseUrl = baseUrl();
+            if ($baseUrl) {
+                $baseUrl = str_replace(['/', '.'], '_', $baseUrl);
+                $baseUrl = preg_replace('/^_/', '', $baseUrl);
+                $baseUrl = preg_replace('/_$/', '', $baseUrl);
+                if ($home) {
+                    $home = $baseUrl . $home;
+                } else {
+                    $home = $baseUrl;
+                }
+            } elseif (!$home) {
+                $home = 'home';
+            }
+            clearCache($home);
+        }
+    } elseif ($url) {
+        if (preg_match('/\/index$/', $url)) {
+            clearCache(strtolower(Text::slug($url)), 'views', $ext);
+            $url = preg_replace('/\/index$/', '', $url);
+            clearCache(strtolower(Text::slug($url)), 'views', $ext);
+        } else {
+            clearCache(strtolower(Text::slug($url)), 'views', $ext);
+        }
+    } else {
+        $folder = new Folder(CACHE . 'views' . DS);
+        $files = $folder->read(true, true);
+        foreach($files[1] as $file) {
+            if ($file != 'empty') {
+                @unlink(CACHE . 'views' . DS . $file);
+            }
+        }
+    }
 }
 
 /**
@@ -369,17 +374,17 @@ function clearViewCache($url = null, $ext = '.php')
 function clearDataCache()
 {
 
-	App::import('Core', 'Folder');
-	$folder = new Folder(CACHE . 'datas' . DS);
+    App::import('Core', 'Folder');
+    $folder = new Folder(CACHE . 'datas' . DS);
 
-	$files = $folder->read(true, true, true);
-	foreach($files[1] as $file) {
-		@unlink($file);
-	}
-	$Folder = new Folder();
-	foreach($files[0] as $folder) {
-		$Folder->delete($folder);
-	}
+    $files = $folder->read(true, true, true);
+    foreach($files[1] as $file) {
+        @unlink($file);
+    }
+    $Folder = new Folder();
+    foreach($files[0] as $folder) {
+        $Folder->delete($folder);
+    }
 }
 
 /**
@@ -388,13 +393,13 @@ function clearDataCache()
 function clearAllCache()
 {
 
-	Cache::clear(false, '_cake_core_');
-	Cache::clear(false, '_cake_model_');
-	Cache::clear(false, '_cake_env_');
-	// viewキャッシュ削除
-	clearCache();
-	// dataキャッシュ削除
-	clearDataCache();
+    Cache::clear(false, '_cake_core_');
+    Cache::clear(false, '_cake_model_');
+    Cache::clear(false, '_cake_env_');
+    // viewキャッシュ削除
+    clearCache();
+    // dataキャッシュ削除
+    clearDataCache();
 }
 
 /**
@@ -404,10 +409,10 @@ function clearAllCache()
 function isInstalled()
 {
 
-	if (getDbConfig() && file_exists(APP . 'Config' . DS . 'install.php')) {
-		return true;
-	}
-	return false;
+    if (getDbConfig() && file_exists(APP . 'Config' . DS . 'install.php')) {
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -418,14 +423,14 @@ function isInstalled()
  */
 function getDbConfig($name = 'default')
 {
-	if (file_exists(APP . 'Config' . DS . 'database.php')) {
-		require_once APP . 'Config' . DS . 'database.php';
-		$dbConfig = new DATABASE_CONFIG();
-		if (!empty($dbConfig->{$name}['datasource'])) {
-			return $dbConfig->{$name};
-		}
-	}
-	return false;
+    if (file_exists(APP . 'Config' . DS . 'database.php')) {
+        require_once APP . 'Config' . DS . 'database.php';
+        $dbConfig = new DATABASE_CONFIG();
+        if (!empty($dbConfig->{$name}['datasource'])) {
+            return $dbConfig->{$name};
+        }
+    }
+    return false;
 }
 
 /**
@@ -435,21 +440,21 @@ function getDbConfig($name = 'default')
 function checkTmpFolders()
 {
 
-	if (!is_writable(TMP)) {
-		return;
-	}
-	$folder = new Folder();
-	$folder->create(TMP . 'logs', 0777);
-	$folder->create(TMP . 'sessions', 0777);
-	$folder->create(TMP . 'schemas', 0777);
-	$folder->create(TMP . 'schemas' . DS . 'core', 0777);
-	$folder->create(TMP . 'schemas' . DS . 'plugin', 0777);
-	$folder->create(CACHE, 0777);
-	$folder->create(CACHE . 'models', 0777);
-	$folder->create(CACHE . 'persistent', 0777);
-	$folder->create(CACHE . 'views', 0777);
-	$folder->create(CACHE . 'datas', 0777);
-	$folder->create(CACHE . 'environment', 0777);
+    if (!is_writable(TMP)) {
+        return;
+    }
+    $folder = new Folder();
+    $folder->create(TMP . 'logs', 0777);
+    $folder->create(TMP . 'sessions', 0777);
+    $folder->create(TMP . 'schemas', 0777);
+    $folder->create(TMP . 'schemas' . DS . 'core', 0777);
+    $folder->create(TMP . 'schemas' . DS . 'plugin', 0777);
+    $folder->create(CACHE, 0777);
+    $folder->create(CACHE . 'models', 0777);
+    $folder->create(CACHE . 'persistent', 0777);
+    $folder->create(CACHE . 'views', 0777);
+    $folder->create(CACHE . 'datas', 0777);
+    $folder->create(CACHE . 'environment', 0777);
 }
 
 /**
@@ -461,26 +466,26 @@ function checkTmpFolders()
 function emptyFolder($path)
 {
 
-	$result = true;
-	$Folder = new Folder($path);
-	$files = $Folder->read(true, true, true);
-	if (is_array($files[1])) {
-		foreach($files[1] as $file) {
-			if ($file != 'empty') {
-				if (!@unlink($file)) {
-					$result = false;
-				}
-			}
-		}
-	}
-	if (is_array($files[0])) {
-		foreach($files[0] as $file) {
-			if (!emptyFolder($file)) {
-				$result = false;
-			}
-		}
-	}
-	return $result;
+    $result = true;
+    $Folder = new Folder($path);
+    $files = $Folder->read(true, true, true);
+    if (is_array($files[1])) {
+        foreach($files[1] as $file) {
+            if ($file != 'empty') {
+                if (!@unlink($file)) {
+                    $result = false;
+                }
+            }
+        }
+    }
+    if (is_array($files[0])) {
+        foreach($files[0] as $file) {
+            if (!emptyFolder($file)) {
+                $result = false;
+            }
+        }
+    }
+    return $result;
 }
 
 /**
@@ -490,13 +495,13 @@ function emptyFolder($path)
  */
 function getViewPath()
 {
-	$siteConfig = Configure::read('BcSite');
-	$theme = $siteConfig['theme'];
-	if ($theme) {
-		return WWW_ROOT . 'theme' . DS . $theme . DS;
-	} else {
-		return APP . 'View' . DS;
-	}
+    $siteConfig = Configure::read('BcSite');
+    $theme = $siteConfig['theme'];
+    if ($theme) {
+        return WWW_ROOT . 'theme' . DS . $theme . DS;
+    } else {
+        return APP . 'View' . DS;
+    }
 }
 
 /**
@@ -510,25 +515,25 @@ function getViewPath()
  */
 function fgetcsvReg(&$handle, $length = null, $d = ',', $e = '"')
 {
-	$d = preg_quote($d);
-	$e = preg_quote($e);
-	$_line = "";
-	$eof = false;
-	while(($eof != true) and (!feof($handle))) {
-		$_line .= (empty($length)? fgets($handle) : fgets($handle, $length));
-		$itemcnt = preg_match_all('/' . $e . '/', $_line, $dummy);
-		if ($itemcnt % 2 == 0)
-			$eof = true;
-	}
-	$_csv_line = preg_replace('/(?:\r\n|[\r\n])?$/', $d, trim($_line));
-	$_csv_pattern = '/(' . $e . '[^' . $e . ']*(?:' . $e . $e . '[^' . $e . ']*)*' . $e . '|[^' . $d . ']*)' . $d . '/';
-	preg_match_all($_csv_pattern, $_csv_line, $_csv_matches);
-	$_csv_data = $_csv_matches[1];
-	for($_csv_i = 0; $_csv_i < count($_csv_data); $_csv_i++) {
-		$_csv_data[$_csv_i] = preg_replace('/^' . $e . '(.*)' . $e . '$/s', '$1', $_csv_data[$_csv_i]);
-		$_csv_data[$_csv_i] = str_replace($e . $e, $e, $_csv_data[$_csv_i]);
-	}
-	return empty($_line)? false : $_csv_data;
+    $d = preg_quote($d);
+    $e = preg_quote($e);
+    $_line = "";
+    $eof = false;
+    while(($eof != true) and (!feof($handle))) {
+        $_line .= (empty($length)? fgets($handle) : fgets($handle, $length));
+        $itemcnt = preg_match_all('/' . $e . '/', $_line, $dummy);
+        if ($itemcnt % 2 == 0)
+            $eof = true;
+    }
+    $_csv_line = preg_replace('/(?:\r\n|[\r\n])?$/', $d, trim($_line));
+    $_csv_pattern = '/(' . $e . '[^' . $e . ']*(?:' . $e . $e . '[^' . $e . ']*)*' . $e . '|[^' . $d . ']*)' . $d . '/';
+    preg_match_all($_csv_pattern, $_csv_line, $_csv_matches);
+    $_csv_data = $_csv_matches[1];
+    for($_csv_i = 0; $_csv_i < count($_csv_data); $_csv_i++) {
+        $_csv_data[$_csv_i] = preg_replace('/^' . $e . '(.*)' . $e . '$/s', '$1', $_csv_data[$_csv_i]);
+        $_csv_data[$_csv_i] = str_replace($e . $e, $e, $_csv_data[$_csv_i]);
+    }
+    return empty($_line)? false : $_csv_data;
 }
 
 /**
@@ -539,8 +544,8 @@ function fgetcsvReg(&$handle, $length = null, $d = ',', $e = '"')
  */
 function fullUrl($url)
 {
-	$url = Router::url($url);
-	return topLevelUrl(false) . $url;
+    $url = Router::url($url);
+    return topLevelUrl(false) . $url;
 }
 
 /**
@@ -552,20 +557,20 @@ function fullUrl($url)
 function topLevelUrl($lastSlash = true)
 {
 
-	if (isConsole() && !Configure::check('BcEnv.host')) {
-		return Configure::read('App.fullBaseUrl');
-	}
-	$request = Router::getRequest();
-	$protocol = 'http://';
-	if (!empty($request) && $request->is('ssl')) {
-		$protocol = 'https://';
-	}
-	$host = Configure::read('BcEnv.host');
-	$url = $protocol . $host;
-	if ($lastSlash) {
-		$url .= '/';
-	}
-	return $url;
+    if (isConsole() && !Configure::check('BcEnv.host')) {
+        return Configure::read('App.fullBaseUrl');
+    }
+    $request = Router::getRequest();
+    $protocol = 'http://';
+    if (!empty($request) && $request->is('ssl')) {
+        $protocol = 'https://';
+    }
+    $host = Configure::read('BcEnv.host');
+    $url = $protocol . $host;
+    if ($lastSlash) {
+        $url .= '/';
+    }
+    return $url;
 }
 
 /**
@@ -577,13 +582,13 @@ function topLevelUrl($lastSlash = true)
  */
 function siteUrl()
 {
-	$baseUrl = preg_replace('/' . preg_quote(basename($_SERVER['SCRIPT_FILENAME']), '/') . '\/$/', '', baseUrl());
-	$topLevelUrl = topLevelUrl(false);
-	if ($topLevelUrl) {
-		return $topLevelUrl . $baseUrl;
-	} else {
-		return '';
-	}
+    $baseUrl = preg_replace('/' . preg_quote(basename($_SERVER['SCRIPT_FILENAME']), '/') . '\/$/', '', baseUrl());
+    $topLevelUrl = topLevelUrl(false);
+    if ($topLevelUrl) {
+        return $topLevelUrl . $baseUrl;
+    } else {
+        return '';
+    }
 }
 
 /**
@@ -596,19 +601,19 @@ function siteUrl()
 function amr($a, $b)
 {
 
-	foreach($b as $k => $v) {
-		if (is_array($v)) {
-			if (isset($a[$k])) {
-				$a[$k] = amr($a[$k], $v);
-				continue;
-			}
-		}
-		if (!is_array($a)) {
-			$a = [$a];
-		}
-		$a[$k] = $v;
-	}
-	return $a;
+    foreach($b as $k => $v) {
+        if (is_array($v)) {
+            if (isset($a[$k])) {
+                $a[$k] = amr($a[$k], $v);
+                continue;
+            }
+        }
+        if (!is_array($a)) {
+            $a = [$a];
+        }
+        $a[$k] = $v;
+    }
+    return $a;
 }
 
 /**
@@ -620,57 +625,57 @@ function amr($a, $b)
  */
 function addSessionId($url, $force = false)
 {
-	if (BcUtil::isAdminSystem()) {
-		return $url;
-	}
-	$sessionId = session_id();
-	if (!$sessionId) {
-		return $url;
-	}
+    if (BcUtil::isAdminSystem()) {
+        return $url;
+    }
+    $sessionId = session_id();
+    if (!$sessionId) {
+        return $url;
+    }
 
-	$site = null;
-	if (!Configure::read('BcRequest.isUpdater')) {
-		$site = BcSite::findCurrent();
-	}
-	// use_trans_sid が有効になっている場合、２重で付加されてしまう
-	if ($site && $site->device == 'mobile' && Configure::read('BcAgent.mobile.sessionId') && (!ini_get('session.use_trans_sid') || $force)) {
-		if (is_array($url)) {
-			$url["?"][session_name()] = $sessionId;
-		} else {
-			if (strpos($url, '?') !== false) {
-				$args = [];
-				$_url = explode('?', $url);
-				if (!empty($_url[1])) {
-					if (strpos($_url[1], '&') !== false) {
-						$aryUrl = explode('&', $_url[1]);
-						foreach($aryUrl as $pass) {
-							if (strpos($pass, '=') !== false) {
-								list($key, $value) = explode('=', $pass);
-								$args[$key] = $value;
-							}
-						}
-					} else {
-						if (strpos($_url[1], '=') !== false) {
-							list($key, $value) = explode('=', $_url[1]);
-							$args[$key] = $value;
-						}
-					}
-				}
-				$args[session_name()] = $sessionId;
-				$pass = '';
-				foreach($args as $key => $value) {
-					if ($pass) {
-						$pass .= '&';
-					}
-					$pass .= $key . '=' . $value;
-				}
-				$url = $_url[0] . '?' . $pass;
-			} else {
-				$url .= '?' . session_name() . '=' . $sessionId;
-			}
-		}
-	}
-	return $url;
+    $site = null;
+    if (!Configure::read('BcRequest.isUpdater')) {
+        $site = BcSite::findCurrent();
+    }
+    // use_trans_sid が有効になっている場合、２重で付加されてしまう
+    if ($site && $site->device == 'mobile' && Configure::read('BcAgent.mobile.sessionId') && (!ini_get('session.use_trans_sid') || $force)) {
+        if (is_array($url)) {
+            $url["?"][session_name()] = $sessionId;
+        } else {
+            if (strpos($url, '?') !== false) {
+                $args = [];
+                $_url = explode('?', $url);
+                if (!empty($_url[1])) {
+                    if (strpos($_url[1], '&') !== false) {
+                        $aryUrl = explode('&', $_url[1]);
+                        foreach($aryUrl as $pass) {
+                            if (strpos($pass, '=') !== false) {
+                                list($key, $value) = explode('=', $pass);
+                                $args[$key] = $value;
+                            }
+                        }
+                    } else {
+                        if (strpos($_url[1], '=') !== false) {
+                            list($key, $value) = explode('=', $_url[1]);
+                            $args[$key] = $value;
+                        }
+                    }
+                }
+                $args[session_name()] = $sessionId;
+                $pass = '';
+                foreach($args as $key => $value) {
+                    if ($pass) {
+                        $pass .= '&';
+                    }
+                    $pass .= $key . '=' . $value;
+                }
+                $url = $_url[0] . '?' . $pass;
+            } else {
+                $url .= '?' . session_name() . '=' . $sessionId;
+            }
+        }
+    }
+    return $url;
 }
 
 /**
@@ -684,47 +689,47 @@ function addSessionId($url, $force = false)
 function getEnablePlugins()
 {
 
-	$enablePlugins = [];
-	if (!Configure::read('Cache.disable') && Configure::read('debug') == 0) {
-		$enablePlugins = Cache::read('enable_plugins', '_cake_env_');
-	}
-	if (!$enablePlugins) {
-		// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
-		try {
-			$Plugin = ClassRegistry::init('Plugin');   // ConnectionManager の前に呼出さないとエラーとなる
-		} catch (Exception $ex) {
-			return [];
-		}
-		$db = ConnectionManager::getDataSource('default');
-		$sources = $db->listSources();
-		$pluginTable = $db->config['prefix'] . 'plugins';
-		$enablePlugins = [];
-		if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
-			$enablePlugins = $Plugin->find('all', ['conditions' => ['Plugin.status' => true], 'order' => 'Plugin.priority']);
-			ClassRegistry::removeObject('Plugin');
-			if ($enablePlugins) {
-				foreach($enablePlugins as $key => $enablePlugin) {
-					$pluginExists = false;
-					foreach(App::path('plugins') as $path) {
-						if (is_dir($path . $enablePlugin['Plugin']['name'])) {
-							$pluginExists = true;
-						}
-						$underscored = Inflector::underscore($enablePlugin['Plugin']['name']);
-						if (is_dir($path . $underscored)) {
-							$pluginExists = true;
-						}
-					}
-					if (!$pluginExists) {
-						unset($enablePlugins[$key]);
-					}
-				}
-				if (!Configure::read('Cache.disable')) {
-					Cache::write('enable_plugins', $enablePlugins, '_cake_env_');
-				}
-			}
-		}
-	}
-	return $enablePlugins;
+    $enablePlugins = [];
+    if (!Configure::read('Cache.disable') && Configure::read('debug') == 0) {
+        $enablePlugins = Cache::read('enable_plugins', '_cake_env_');
+    }
+    if (!$enablePlugins) {
+        // DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+        try {
+            $Plugin = ClassRegistry::init('Plugin');   // ConnectionManager の前に呼出さないとエラーとなる
+        } catch (Exception $ex) {
+            return [];
+        }
+        $db = ConnectionManager::getDataSource('default');
+        $sources = $db->listSources();
+        $pluginTable = $db->config['prefix'] . 'plugins';
+        $enablePlugins = [];
+        if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
+            $enablePlugins = $Plugin->find('all', ['conditions' => ['Plugin.status' => true], 'order' => 'Plugin.priority']);
+            ClassRegistry::removeObject('Plugin');
+            if ($enablePlugins) {
+                foreach($enablePlugins as $key => $enablePlugin) {
+                    $pluginExists = false;
+                    foreach(App::path('plugins') as $path) {
+                        if (is_dir($path . $enablePlugin['Plugin']['name'])) {
+                            $pluginExists = true;
+                        }
+                        $underscored = Inflector::underscore($enablePlugin['Plugin']['name']);
+                        if (is_dir($path . $underscored)) {
+                            $pluginExists = true;
+                        }
+                    }
+                    if (!$pluginExists) {
+                        unset($enablePlugins[$key]);
+                    }
+                }
+                if (!Configure::read('Cache.disable')) {
+                    Cache::write('enable_plugins', $enablePlugins, '_cake_env_');
+                }
+            }
+        }
+    }
+    return $enablePlugins;
 
 }
 
@@ -736,18 +741,18 @@ function getEnablePlugins()
  */
 function loadSiteConfig($force = false)
 {
-	if (Configure::read('BcSite') && !$force) {
-		return true;
-	}
-	// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
-	try {
-		$SiteConfig = ClassRegistry::init('SiteConfig');
-	} catch (Exception $ex) {
-		return false;
-	}
-	Configure::write('BcSite', $SiteConfig->findExpanded());
-	ClassRegistry::removeObject('SiteConfig');
-	return true;
+    if (Configure::read('BcSite') && !$force) {
+        return true;
+    }
+    // DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+    try {
+        $SiteConfig = ClassRegistry::init('SiteConfig');
+    } catch (Exception $ex) {
+        return false;
+    }
+    Configure::write('BcSite', $SiteConfig->findExpanded());
+    ClassRegistry::removeObject('SiteConfig');
+    return true;
 }
 
 /**
@@ -758,33 +763,33 @@ function loadSiteConfig($force = false)
 function getVersion($plugin = '')
 {
 
-	$corePlugins = Configure::read('BcApp.corePlugins');
-	if (!$plugin || in_array($plugin, $corePlugins)) {
-		$path = BASER . 'VERSION.txt';
-	} else {
-		$paths = App::path('Plugin');
-		$exists = false;
-		foreach($paths as $path) {
-			$path .= $plugin . DS . 'VERSION.txt';
-			if (file_exists($path)) {
-				$exists = true;
-				break;
-			}
-		}
-		if (!$exists) {
-			return false;
-		}
-	}
+    $corePlugins = Configure::read('BcApp.corePlugins');
+    if (!$plugin || in_array($plugin, $corePlugins)) {
+        $path = BASER . 'VERSION.txt';
+    } else {
+        $paths = App::path('Plugin');
+        $exists = false;
+        foreach($paths as $path) {
+            $path .= $plugin . DS . 'VERSION.txt';
+            if (file_exists($path)) {
+                $exists = true;
+                break;
+            }
+        }
+        if (!$exists) {
+            return false;
+        }
+    }
 
-	App::uses('File', 'Utility');
-	$versionFile = new File($path);
-	$versionData = $versionFile->read();
-	$aryVersionData = explode("\n", $versionData);
-	if (!empty($aryVersionData[0])) {
-		return trim($aryVersionData[0]);
-	} else {
-		return false;
-	}
+    App::uses('File', 'Utility');
+    $versionFile = new File($path);
+    $versionData = $versionFile->read();
+    $aryVersionData = explode("\n", $versionData);
+    if (!empty($aryVersionData[0])) {
+        return trim($aryVersionData[0]);
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -793,38 +798,38 @@ function getVersion($plugin = '')
 function sendUpdateMail()
 {
 
-	$bcSite = Configure::read('BcSite');
-	$bcSite['update_id'] = CakeText::uuid();
-	$SiteConfig = ClassRegistry::init('SiteConfig');
-	$SiteConfig->saveKeyValue(['SiteConfig' => $bcSite]);
-	ClassRegistry::removeObject('SiteConfig');
+    $bcSite = Configure::read('BcSite');
+    $bcSite['update_id'] = CakeText::uuid();
+    $SiteConfig = ClassRegistry::init('SiteConfig');
+    $SiteConfig->saveKeyValue(['SiteConfig' => $bcSite]);
+    ClassRegistry::removeObject('SiteConfig');
 
-	$BcEmail = new BcEmailComponent();
-	if (!empty($bcSite['mail_encode'])) {
-		$encode = $bcSite['mail_encode'];
-	} else {
-		$encode = 'ISO-2022-JP';
-	}
-	$BcEmail->charset = $encode;
-	$BcEmail->sendAs = 'text';
-	$BcEmail->lineLength = 105;
-	if (!empty($bcSite['smtp_host'])) {
-		$BcEmail->delivery = 'smtp';
-		$BcEmail->smtpOptions = ['host' => $bcSite['smtp_host'],
-			'port' => 25,
-			'timeout' => 30,
-			'username' => ($bcSite['smtp_user'])? $bcSite['smtp_user'] : null,
-			'password' => ($bcSite['smtp_password'])? $bcSite['smtp_password'] : null];
-	} else {
-		$BcEmail->delivery = "mail";
-	}
-	$BcEmail->to = $bcSite['email'];
-	$BcEmail->subject = __d('baser', 'baserCMSアップデート');
-	$BcEmail->from = $bcSite['name'] . ' <' . $bcSite['email'] . '>';
-	$message = [];
-	$message[] = __d('baser', '下記のURLよりbaserCMSのアップデートを完了してください。');
-	$message[] = topLevelUrl(false) . baseUrl() . 'updaters/index/' . $bcSite['update_id'];
-	$BcEmail->send($message);
+    $BcEmail = new BcEmailComponent();
+    if (!empty($bcSite['mail_encode'])) {
+        $encode = $bcSite['mail_encode'];
+    } else {
+        $encode = 'ISO-2022-JP';
+    }
+    $BcEmail->charset = $encode;
+    $BcEmail->sendAs = 'text';
+    $BcEmail->lineLength = 105;
+    if (!empty($bcSite['smtp_host'])) {
+        $BcEmail->delivery = 'smtp';
+        $BcEmail->smtpOptions = ['host' => $bcSite['smtp_host'],
+            'port' => 25,
+            'timeout' => 30,
+            'username' => ($bcSite['smtp_user'])? $bcSite['smtp_user'] : null,
+            'password' => ($bcSite['smtp_password'])? $bcSite['smtp_password'] : null];
+    } else {
+        $BcEmail->delivery = "mail";
+    }
+    $BcEmail->to = $bcSite['email'];
+    $BcEmail->subject = __d('baser', 'baserCMSアップデート');
+    $BcEmail->from = $bcSite['name'] . ' <' . $bcSite['email'] . '>';
+    $message = [];
+    $message[] = __d('baser', '下記のURLよりbaserCMSのアップデートを完了してください。');
+    $message[] = topLevelUrl(false) . baseUrl() . 'updaters/index/' . $bcSite['update_id'];
+    $BcEmail->send($message);
 }
 
 /**
@@ -837,17 +842,17 @@ function sendUpdateMail()
  */
 function p($var)
 {
-	$debug = Configure::read('debug');
-	if ($debug < 1) {
-		Configure::write('debug', 1);
-	}
-	$calledFrom = debug_backtrace();
-	echo '<strong style="font-size:10px">' . substr(str_replace(ROOT, '', $calledFrom[0]['file']), 1) . '</strong>';
-	echo '<span style="font-size:10px"> (line <strong>' . $calledFrom[0]['line'] . '</strong>)</span>';
-	debug($var, true, false);
-	if ($debug < 1) {
-		Configure::write('debug', $debug);
-	}
+    $debug = Configure::read('debug');
+    if ($debug < 1) {
+        Configure::write('debug', 1);
+    }
+    $calledFrom = debug_backtrace();
+    echo '<strong style="font-size:10px">' . substr(str_replace(ROOT, '', $calledFrom[0]['file']), 1) . '</strong>';
+    echo '<span style="font-size:10px"> (line <strong>' . $calledFrom[0]['line'] . '</strong>)</span>';
+    debug($var, true, false);
+    if ($debug < 1) {
+        Configure::write('debug', $debug);
+    }
 }
 
 /**
@@ -859,8 +864,8 @@ function p($var)
 function getDbDriver($dbConfigKeyName = 'default')
 {
 
-	$db = ConnectionManager::getDataSource($dbConfigKeyName);
-	return $db->config['datasource'];
+    $db = ConnectionManager::getDataSource($dbConfigKeyName);
+    return $db->config['datasource'];
 }
 
 /**
@@ -870,7 +875,7 @@ function getDbDriver($dbConfigKeyName = 'default')
  */
 function isConsole()
 {
-	return defined('CAKEPHP_SHELL') && CAKEPHP_SHELL;
+    return defined('CAKEPHP_SHELL') && CAKEPHP_SHELL;
 }
 
 /**
@@ -889,17 +894,17 @@ function isConsole()
  */
 function aa()
 {
-	$args = func_get_args();
-	$argc = count($args);
-	for($i = 0; $i < $argc; $i++) {
-		if ($i + 1 < $argc) {
-			$a[$args[$i]] = $args[$i + 1];
-		} else {
-			$a[$args[$i]] = null;
-		}
-		$i++;
-	}
-	return $a;
+    $args = func_get_args();
+    $argc = count($args);
+    for($i = 0; $i < $argc; $i++) {
+        if ($i + 1 < $argc) {
+            $a[$args[$i]] = $args[$i + 1];
+        } else {
+            $a[$args[$i]] = null;
+        }
+        $i++;
+    }
+    return $a;
 }
 
 /**
@@ -911,13 +916,13 @@ function aa()
  */
 function mb_basename($str, $suffix = null)
 {
-	$tmp = preg_split('/[\/\\\\]/', $str);
-	$res = end($tmp);
-	if (strlen($suffix)) {
-		$suffix = preg_quote($suffix);
-		$res = preg_replace("/({$suffix})$/u", "", $res);
-	}
-	return $res;
+    $tmp = preg_split('/[\/\\\\]/', $str);
+    $res = end($tmp);
+    if (strlen($suffix)) {
+        $suffix = preg_quote($suffix);
+        $res = preg_replace("/({$suffix})$/u", "", $res);
+    }
+    return $res;
 }
 
 /**
@@ -928,54 +933,54 @@ function mb_basename($str, $suffix = null)
  */
 function loadPlugin($plugin, $priority)
 {
-	if (CakePlugin::loaded($plugin)) {
-		return true;
-	}
-	try {
-		CakePlugin::load($plugin);
-	} catch (Exception $e) {
-		return false;
-	}
-	$pluginPath = CakePlugin::path($plugin);
-	$config = [
-		'bootstrap' => file_exists($pluginPath . 'Config' . DS . 'bootstrap.php'),
-		'routes' => file_exists($pluginPath . 'Config' . DS . 'routes.php')
-	];
-	CakePlugin::load($plugin, $config);
-	if (file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
-		// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
-		// ※ プラグインの setting.php で、DBへの接続処理が書かれている可能性がある為
-		try {
-			Configure::load($plugin . '.setting');
-		} catch (Exception $ex) {
-		}
-	}
-	// プラグインイベント登録
-	$eventTargets = ['Controller', 'Model', 'View', 'Helper'];
-	foreach($eventTargets as $eventTarget) {
-		$eventClass = $plugin . $eventTarget . 'EventListener';
-		if (file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
-			App::uses($eventClass, $plugin . '.Event');
-			App::uses('CakeEventManager', 'Event');
-			$CakeEvent = CakeEventManager::instance();
-			$EventClass = new $eventClass();
+    if (CakePlugin::loaded($plugin)) {
+        return true;
+    }
+    try {
+        CakePlugin::load($plugin);
+    } catch (Exception $e) {
+        return false;
+    }
+    $pluginPath = CakePlugin::path($plugin);
+    $config = [
+        'bootstrap' => file_exists($pluginPath . 'Config' . DS . 'bootstrap.php'),
+        'routes' => file_exists($pluginPath . 'Config' . DS . 'routes.php')
+    ];
+    CakePlugin::load($plugin, $config);
+    if (file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
+        // DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+        // ※ プラグインの setting.php で、DBへの接続処理が書かれている可能性がある為
+        try {
+            Configure::load($plugin . '.setting');
+        } catch (Exception $ex) {
+        }
+    }
+    // プラグインイベント登録
+    $eventTargets = ['Controller', 'Model', 'View', 'Helper'];
+    foreach($eventTargets as $eventTarget) {
+        $eventClass = $plugin . $eventTarget . 'EventListener';
+        if (file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
+            App::uses($eventClass, $plugin . '.Event');
+            App::uses('CakeEventManager', 'Event');
+            $CakeEvent = CakeEventManager::instance();
+            $EventClass = new $eventClass();
 
-			foreach($EventClass->events as $key => $options) {
-				// プラグイン側で priority の設定がされてない場合に設定
-				if (is_array($options)) {
-					if (empty($options['priority'])) {
-						$options['priority'] = $priority;
-						$EventClass->events[$key] = $options;
-					}
-				} else {
-					unset($EventClass->events[$key]);
-					$EventClass->events[$options] = ['priority' => $priority];
-				}
-			}
-			$CakeEvent->attach($EventClass, null);
-		}
-	}
-	return true;
+            foreach($EventClass->events as $key => $options) {
+                // プラグイン側で priority の設定がされてない場合に設定
+                if (is_array($options)) {
+                    if (empty($options['priority'])) {
+                        $options['priority'] = $priority;
+                        $EventClass->events[$key] = $options;
+                    }
+                } else {
+                    unset($EventClass->events[$key]);
+                    $EventClass->events[$options] = ['priority' => $priority];
+                }
+            }
+            $CakeEvent->attach($EventClass, null);
+        }
+    }
+    return true;
 }
 
 /**
@@ -990,17 +995,17 @@ function loadPlugin($plugin, $priority)
 function deprecatedMessage($target, $since, $remove = null, $note = null)
 {
 
-	if (Configure::read('debug') == 0) {
-		return;
-	}
-	$message = sprintf(__d('baser', '%s は、バージョン %s より非推奨となりました。'), $target, $since);
-	if ($remove) {
-		$message .= sprintf(__d('baser', 'バージョン %s で削除される予定です。'), $remove);
-	}
-	if ($note) {
-		$message .= $note;
-	}
-	return $message;
+    if (Configure::read('debug') == 0) {
+        return;
+    }
+    $message = sprintf(__d('baser', '%s は、バージョン %s より非推奨となりました。'), $target, $since);
+    if ($remove) {
+        $message .= sprintf(__d('baser', 'バージョン %s で削除される予定です。'), $remove);
+    }
+    if ($note) {
+        $message .= $note;
+    }
+    return $message;
 
 }
 
@@ -1018,8 +1023,8 @@ function deprecatedMessage($target, $since, $remove = null, $note = null)
  */
 function base64UrlsafeEncode($val)
 {
-	$val = base64_encode($val);
-	return str_replace(['+', '/', '='], ['_', '-', '.'], $val);
+    $val = base64_encode($val);
+    return str_replace(['+', '/', '='], ['_', '-', '.'], $val);
 }
 
 /**
@@ -1030,8 +1035,8 @@ function base64UrlsafeEncode($val)
  */
 function base64UrlsafeDecode($val)
 {
-	$val = str_replace(['_', '-', '.'], ['+', '/', '='], $val);
-	return base64_decode($val);
+    $val = str_replace(['_', '-', '.'], ['+', '/', '='], $val);
+    return base64_decode($val);
 }
 
 /**
@@ -1041,7 +1046,7 @@ function base64UrlsafeDecode($val)
  */
 function isWindows()
 {
-	return DIRECTORY_SEPARATOR == '\\';
+    return DIRECTORY_SEPARATOR == '\\';
 }
 
 /**
@@ -1054,21 +1059,21 @@ function isWindows()
  */
 function checktime($hour, $min, $sec = null)
 {
-	$hour = (int)$hour;
-	if ($hour < 0 || $hour > 23) {
-		return false;
-	}
-	$min = (int)$min;
-	if ($min < 0 || $min > 59) {
-		return false;
-	}
-	if ($sec) {
-		$sec = (int)$sec;
-		if ($sec < 0 || $sec > 59) {
-			return false;
-		}
-	}
-	return true;
+    $hour = (int)$hour;
+    if ($hour < 0 || $hour > 23) {
+        return false;
+    }
+    $min = (int)$min;
+    if ($min < 0 || $min > 59) {
+        return false;
+    }
+    if ($sec) {
+        $sec = (int)$sec;
+        if ($sec < 0 || $sec > 59) {
+            return false;
+        }
+    }
+    return true;
 }
 
 /**
@@ -1078,58 +1083,58 @@ function checktime($hour, $min, $sec = null)
  */
 function getTableList()
 {
-	$list = Cache::read('table_list', '_cake_core_');
-	if ($list !== false) {
-		return $list;
-	}
-	$prefix = ConnectionManager::getDataSource('default')->config['prefix'];
-	$tables = ConnectionManager::getDataSource('default')->listSources();
-	$Folder = new Folder(BASER_CONFIGS . 'Schema');
-	$files = $Folder->read(true, true);
-	$list = [];
-	if ($files[1]) {
-		foreach($tables as $key => $table) {
-			foreach($files[1] as $file) {
-				if ($table == $prefix . basename($file, '.php')) {
-					$list['core'][] = $table;
-					unset($tables[$key]);
-				}
-			}
-		}
-	}
-	$plugins = CakePlugin::loaded();
-	$pluginFiles = [];
-	foreach($plugins as $plugin) {
-		$path = null;
-		$themePath = BASER_THEMES . Configure::read('BcSite.theme') . DS;
-		if (is_dir($themePath . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema')) {
-			$path = $themePath . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema';
-		} elseif (is_dir(APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema')) {
-			$path = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema';
-		} elseif (is_dir(BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema')) {
-			$path = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema';
-		}
-		$Folder = new Folder($path);
-		$files = $Folder->read(true, true);
-		if ($files[1]) {
-			$pluginFiles = array_merge($pluginFiles, $files[1]);
-		}
-	}
-	foreach($tables as $table) {
-		foreach($pluginFiles as $file) {
-			if ($prefix . basename($file, '.php') == 'mail_message') {
-				$test = '';
-			}
-			$file = $prefix . basename($file, '.php');
-			$singularize = Inflector::singularize($file);
-			if (preg_match('/^(' . preg_quote($file, '/') . '|' . preg_quote($singularize, '/') . ')/', $table)) {
-				$list['plugin'][] = $table;
-				unset($tables[$key]);
-			}
-		}
-	}
-	Cache::write('table_list', $list, '_cake_core_');
-	return $list;
+    $list = Cache::read('table_list', '_cake_core_');
+    if ($list !== false) {
+        return $list;
+    }
+    $prefix = ConnectionManager::getDataSource('default')->config['prefix'];
+    $tables = ConnectionManager::getDataSource('default')->listSources();
+    $Folder = new Folder(BASER_CONFIGS . 'Schema');
+    $files = $Folder->read(true, true);
+    $list = [];
+    if ($files[1]) {
+        foreach($tables as $key => $table) {
+            foreach($files[1] as $file) {
+                if ($table == $prefix . basename($file, '.php')) {
+                    $list['core'][] = $table;
+                    unset($tables[$key]);
+                }
+            }
+        }
+    }
+    $plugins = CakePlugin::loaded();
+    $pluginFiles = [];
+    foreach($plugins as $plugin) {
+        $path = null;
+        $themePath = BASER_THEMES . Configure::read('BcSite.theme') . DS;
+        if (is_dir($themePath . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema')) {
+            $path = $themePath . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema';
+        } elseif (is_dir(APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema')) {
+            $path = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema';
+        } elseif (is_dir(BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema')) {
+            $path = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema';
+        }
+        $Folder = new Folder($path);
+        $files = $Folder->read(true, true);
+        if ($files[1]) {
+            $pluginFiles = array_merge($pluginFiles, $files[1]);
+        }
+    }
+    foreach($tables as $table) {
+        foreach($pluginFiles as $file) {
+            if ($prefix . basename($file, '.php') == 'mail_message') {
+                $test = '';
+            }
+            $file = $prefix . basename($file, '.php');
+            $singularize = Inflector::singularize($file);
+            if (preg_match('/^(' . preg_quote($file, '/') . '|' . preg_quote($singularize, '/') . ')/', $table)) {
+                $list['plugin'][] = $table;
+                unset($tables[$key]);
+            }
+        }
+    }
+    Cache::write('table_list', $list, '_cake_core_');
+    return $list;
 }
 
 /**
@@ -1143,23 +1148,23 @@ function getTableList()
 function retry($times, callable $callback, $interval = 0)
 {
 
-	if ($times <= 0) {
-		throw new \InvalidArgumentException(__d('baser', 'リトライ回数は正の整数値で指定してください。'));
-	}
+    if ($times <= 0) {
+        throw new \InvalidArgumentException(__d('baser', 'リトライ回数は正の整数値で指定してください。'));
+    }
 
-	$times--;
+    $times--;
 
-	while(true) {
-		try {
-			return $callback();
-		} catch (\Exception $e) {
-			if ($times <= 0) {
-				throw $e;
-			}
-			$times--;
-			if ($interval > 0) {
-				usleep($interval * 1000);
-			}
-		}
-	}
+    while(true) {
+        try {
+            return $callback();
+        } catch (\Exception $e) {
+            if ($times <= 0) {
+                throw $e;
+            }
+            $times--;
+            if ($interval > 0) {
+                usleep($interval * 1000);
+            }
+        }
+    }
 }
