@@ -59,6 +59,20 @@ https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-form
 ```
 
 　
+## リンク作成関連
+
+### 名前付きパラメータ
+
+名前付きパラメータは仕様から削除されています。クエリーストリングに変換します。
+
+```php
+// 名前付きパラメーター
+$this->BcBaser->link('hoge', ['controller' => 'Users', 'action' => 'index', 'name1' => 1, 'named2' => 2]);
+// クエリーストリング
+$this->BcBaser->link('hoge', ['controller' => 'Users', 'action' => 'index', '?' => ['name1' => 1, 'named2' => 2]]);
+```
+
+　
 ## HTML
 
 - table タグの `cellpadding="0" cellspacing="0"` は除外します。
