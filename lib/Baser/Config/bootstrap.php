@@ -44,6 +44,8 @@ App::build([
 
 //新規登録
 App::build([
+	'Error' => [BASER_LIBS . DS . 'Error' . DS],
+	'Log/Engine' => [BASER_LIBS . DS . 'Log' . DS . 'Engine' . DS],
 	'Event' => [APP . 'Event', BASER_EVENTS],
 	'Routing' => [BASER . 'Routing' . DS],
 	'Routing/Filter' => [BASER . 'Routing' . DS . 'Filter' . DS],
@@ -153,6 +155,8 @@ App::uses('CakeRequest', 'Network');
 App::uses('BcSite', 'Lib');
 App::uses('BcAgent', 'Lib');
 App::uses('BcLang', 'Lib');
+App::uses('BcFileLog', 'Log/Engine');
+App::uses('BcErrorHandler', 'Error');
 
 // @deprecated
 // >>>
@@ -206,14 +210,24 @@ if (BC_INSTALLED) {
 	 */
 	App::uses('CakeLog', 'Log');
 	CakeLog::config('debug', [
-		'engine' => 'FileLog',
+		'engine' => 'BcFile',
 		'types' => ['notice', 'info', 'debug'],
 		'file' => 'debug',
 	]);
+	CakeLog::config('warning', [
+		'engine' => 'BcFile',
+		'types' => ['warning'],
+		'file' => 'warning',
+	]);
 	CakeLog::config('error', [
-		'engine' => 'FileLog',
-		'types' => ['warning', 'error', 'critical', 'alert', 'emergency'],
+		'engine' => 'BcFile',
+		'types' => ['error', 'critical', 'alert', 'emergency'],
 		'file' => 'error',
+	]);
+	CakeLog::config('error404', [
+		'engine' => 'BcFile',
+		'types' => ['error404'],
+		'file' => 'error404',
 	]);
 	CakeLog::config('update', [
 		'engine' => 'FileLog',
