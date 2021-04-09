@@ -58,34 +58,37 @@ class PluginsController extends BcAdminAppController
      * @return void
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function index()
     {
-
-        $plugins = $this->Plugins->getAvailable();
-        $available = $unavailable = [];
-        foreach($plugins as $pluginInfo) {
-            if (isset($pluginInfo['Plugin']['priority'])) {
-                $available[] = $pluginInfo;
+        $available = $this->Plugins->getAvailable();
+        $registered = $unregistered = [];
+        foreach($available as $pluginInfo) {
+            if (isset($pluginInfo->priority)) {
+                $registered[] = $pluginInfo;
             } else {
-                $unavailable[] = $pluginInfo;
+                $unregistered[] = $pluginInfo;
             }
         }
 
-        //並び替えモードの場合はDBにデータが登録されていないプラグインを表示しない
-        // TODO 未実装
-//		if (!empty($this->passedArgs['sortmode'])) {
-//			$sortmode = true;
-//			$pluginConfigs = Hash::sort($availables, '{n}.Plugin.priority', 'asc', 'numeric');
-//		} else {
-        $sortmode = false;
-
-        $plugins = array_merge(Hash::sort(
-            $available,
-            '{n}.Plugin.priority',
-            'asc',
-            'numeric'), $unavailable);
-//		}
+		if (!empty($this->request->getQuery('sortmode'))) {
+		    //並び替えモードの場合はDBにデータが登録されていないプラグインを表示しない
+			$sortmode = true;
+			$plugins = Hash::sort(
+			    $registered,
+			    '{n}.Plugin.priority',
+			    'asc', 'numeric'
+			);
+		} else {
+            $sortmode = false;
+            $plugins = array_merge(Hash::sort(
+                $registered,
+                '{n}.Plugin.priority',
+                'asc',
+                'numeric'
+            ), $unregistered);
+		}
 
         $this->set('plugins', $plugins);
         $this->set('corePlugins', Configure::read('BcApp.corePlugins'));
