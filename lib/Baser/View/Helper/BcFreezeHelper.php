@@ -425,7 +425,7 @@ class BcFreezeHelper extends BcFormHelper
 
 			// 確認画面
 			if (!empty($this->request->data[$model][$field]['name'])) {
-				$path = "tmp" . DS . Inflector::underscore($model) . DS . "img" . DS . $field . $imageAttributes['ext'] . "?" . rand();
+				$path = "tmp" . DS . Inflector::underscore($model) . DS . "img" . DS . $field . $imageAttributes['ext'] . "?" . mt_rand();
 				unset($imageAttributes['ext']);
 				$output = parent::text($fieldName . "_exists", $attributes);
 				$output .= sprintf($this->Html->_tags['image'], $path, $this->Html->_parseAttributes($imageAttributes));
@@ -433,7 +433,7 @@ class BcFreezeHelper extends BcFormHelper
 				// 通常表示
 			} else {
 				if (!empty($this->request->data[$model][$field . '_exists'])) {
-					$path = DS . $imageAttributes['dir'] . DS . Inflector::tableize($model) . DS . $imageAttributes['id'] . DS . $field . "." . $imageAttributes['ext'] . "?" . rand();
+					$path = DS . $imageAttributes['dir'] . DS . Inflector::tableize($model) . DS . $imageAttributes['id'] . DS . $field . "." . $imageAttributes['ext'] . "?" . mt_rand();
 					unset($imageAttributes['ext']);
 					return sprintf($this->Html->_tags['image'], $path, $this->Html->_parseAttributes($imageAttributes));
 				} else {
@@ -442,7 +442,7 @@ class BcFreezeHelper extends BcFormHelper
 			}
 		} else {
 			if (!empty($this->request->data[$model][$field . '_exists'])) {
-				$path = DS . $imageAttributes['dir'] . DS . Inflector::tableize($model) . DS . $imageAttributes['id'] . DS . $field . "." . $imageAttributes['ext'] . "?" . rand();
+				$path = DS . $imageAttributes['dir'] . DS . Inflector::tableize($model) . DS . $imageAttributes['id'] . DS . $field . "." . $imageAttributes['ext'] . "?" . mt_rand();
 				unset($imageAttributes['ext']);
 				$output = sprintf($this->Html->_tags['image'], $path, $this->Html->_parseAttributes($imageAttributes));
 				$output .= "<br />" . $this->checkbox($fieldName . "_delete", ['label' => __d('baser', '削除する')]);

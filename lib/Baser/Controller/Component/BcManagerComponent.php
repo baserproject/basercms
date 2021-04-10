@@ -537,7 +537,7 @@ class BcManagerComponent extends Component
 		$keyset = "abcdefghijklmABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		$randkey = "";
 		for($i = 0; $i < $length; $i++) {
-			$randkey .= substr($keyset, rand(0, strlen($keyset) - 1), 1);
+			$randkey .= $keyset[mt_rand(0, strlen($keyset) - 1)];
 		}
 		Configure::write('Security.salt', $randkey);
 		return $randkey;
@@ -555,7 +555,7 @@ class BcManagerComponent extends Component
 		$keyset = "0123456789";
 		$randkey = "";
 		for($i = 0; $i < $length; $i++) {
-			$randkey .= substr($keyset, rand(0, strlen($keyset) - 1), 1);
+			$randkey .= $keyset[mt_rand(0, strlen($keyset) - 1)];
 		}
 		Configure::write('Security.cipherSeed', $randkey);
 		return $randkey;

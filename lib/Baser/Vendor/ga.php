@@ -67,7 +67,7 @@
 
   // Get a random number string.
   function getRandomNumber() {
-    return rand(0, 0x7fffffff);
+    return mt_rand(0, 0x7fffffff);
   }
 
   // Writes the bytes of a 1x1 transparent gif into the response.
