@@ -11,10 +11,10 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Controller\BcAppController;
 use Cake\Event\EventInterface;
 use BaserCore\Controller\AppController;
 use Cake\Utility\Inflector;
-use Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -24,7 +24,7 @@ use Cake\Http\Exception\NotFoundException;
  * Class BcAdminAppController
  * @package BaserCore\Controller\Admin
  */
-class BcAdminAppController extends AppController
+class BcAdminAppController extends BcAppController
 {
     /**
      * Initialize
