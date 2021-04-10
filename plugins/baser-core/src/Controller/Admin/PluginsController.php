@@ -320,7 +320,7 @@ class PluginsController extends BcAdminAppController
         if (Configure::read('debug') > 0) {
             Cache::delete('baserMarketPlugins');
         }
-        if (!($baserPlugins = Cache::read('baserMarketPlugins'))) {
+        if (!($baserPlugins = Cache::read('baserMarketPlugins', '_cake_env_'))) {
             $Xml = new Xml();
             try {
 				$client = new Client([
@@ -336,7 +336,7 @@ class PluginsController extends BcAdminAppController
             } catch (Exception $e) {
 
             }
-            Cache::write('baserMarketPlugins', $baserPlugins);
+            Cache::write('baserMarketPlugins', $baserPlugins, '_cake_env_');
         }
         if ($baserPlugins) {
             $this->set('baserPlugins', $baserPlugins);

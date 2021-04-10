@@ -23,14 +23,6 @@ Configure::load('BaserCore.setting', 'baser');
 Validator::addDefaultProvider('bc', 'BaserCore\Model\Validation\BcValidation');
 
 /**
- * キャッシュ
- */
-if (Cache::getConfig('_cake_env_')) {
-    Cache::drop('_cake_env_');
-}
-Cache::setConfig(Configure::consume('Cache'));
-
-/**
  * パス定義
  */
 require __DIR__ . DS . 'paths.php';
