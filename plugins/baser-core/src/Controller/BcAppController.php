@@ -314,7 +314,7 @@ class BcAppController extends Controller
 				$siteUrl = Configure::read('BcEnv.siteUrl');
 			}
 			if ($siteUrl && siteUrl() != $siteUrl) {
-				$webrootReg = '/^' . preg_quote($this->request->webroot, '/') . '/';
+				$webrootReg = '/^' . preg_quote($this->request->getAttributes()['webroot'], '/') . '/';
 				$this->redirect($siteUrl . preg_replace($webrootReg, '', Router::reverse($this->request, false)));
 			}
 		}
@@ -368,14 +368,16 @@ class BcAppController extends Controller
 
 		// $this->request->query['url'] の調整
 		// 環境によって？キーにamp;が付加されてしまうため
-		if (isset($this->request->query) && is_array($this->request->query)) {
-			foreach($this->request->query as $key => $val) {
+		$query = $this->request->getQuery();
+		if (is_array($query)) {
+			foreach($query as $key => $val) {
 				if (strpos($key, 'amp;') === 0) {
-					$this->request->query[substr($key, 4)] = $val;
-					unset($this->request->query[$key]);
+					$query[substr($key, 4)] = $val;
+					unset($query[$key]);
 				}
 			}
 		}
+		$this->request = $this->request->withQueryParams($query);
 
 		// コンソールから利用される場合、$isInstall だけでは判定できないので、BC_INSTALLED も判定に入れる
 		if ((!BC_INSTALLED || $isInstall || $isUpdate) && $this->name !== 'CakeError') {
@@ -902,7 +904,7 @@ class BcAppController extends Controller
 			'options' => $options
 		]);
 		if ($event !== false) {
-			$this->request->data = $event->result === true? $event->data['data'] : $event->result;
+			$this->request = $this->request->withParsedBody($event->getResult() === true? $event->getData('data') : $event->getResult());
 			if (!empty($event->data['options'])) {
 				$options = $event->data['options'];
 			}
@@ -1177,10 +1179,9 @@ class BcAppController extends Controller
 	{
 		$_options = ['type' => 'post', 'session' => true];
 		$options = am($_options, $options);
-		extract($options);
-		if ($type === 'post' && $session == true) {
+		if ($options['type'] === 'post' && $options['session'] == true) {
 			$this->_saveViewConditions($filterModels, $options);
-		} elseif ($type === 'get') {
+		} elseif ($options['type'] === 'get') {
 			$options['session'] = false;
 		}
 		$this->_loadViewConditions($filterModels, $options);
@@ -1198,24 +1199,23 @@ class BcAppController extends Controller
 	{
 		$_options = ['action' => '', 'group' => ''];
 		$options = am($_options, $options);
-		extract($options);
 
 		if (!is_array($filterModels)) {
 			$filterModels = [$filterModels];
 		}
 
-		if (!$action) {
+		if (!$options['action']) {
 			$action = $this->request->action;
 		}
 
 		$contentsName = $this->name . Inflector::classify($action);
-		if ($group) {
-			$contentsName .= "." . $group;
+		if ($options['group']) {
+			$contentsName .= "." . $options['group'];
 		}
 
 		foreach($filterModels as $model) {
-			if (isset($this->request->data[$model])) {
-				$this->Session->write("Baser.viewConditions.{$contentsName}.filter.{$model}", $this->request->data[$model]);
+			if (isset($this->request->getData[$model])) {
+				$this->Session->write("Baser.viewConditions.{$contentsName}.filter.{$model}", $this->request->getData($model));
 			}
 		}
 
@@ -1243,7 +1243,6 @@ class BcAppController extends Controller
 		$options = am($_options, $options);
 		$named = [];
 		$filter = [];
-		extract($options);
 
 		if (!is_array($filterModels)) {
 			$model = (string)$filterModels;
@@ -1252,16 +1251,16 @@ class BcAppController extends Controller
 			$model = (string)$filterModels[0];
 		}
 
-		if (!$action) {
+		if (!$options['action']) {
 			$action = $this->request->action;
 		}
 
 		$contentsName = $this->name . Inflector::classify($action);
-		if ($group) {
-			$contentsName .= "." . $group;
+		if ($options['group']) {
+			$contentsName .= "." . $options['group'];
 		}
 
-		if ($type === 'post' && $session) {
+		if ($options['type'] === 'post' && $options['session']) {
 			foreach($filterModels as $model) {
 				if ($this->Session->check("Baser.viewConditions.{$contentsName}.filter.{$model}")) {
 					$filter = $this->Session->read("Baser.viewConditions.{$contentsName}.filter.{$model}");
@@ -1270,7 +1269,7 @@ class BcAppController extends Controller
 				} else {
 					$filter = [];
 				}
-				$this->request->data[$model] = $filter;
+				$this->request->withData($model, $filter);
 			}
 			$named = [];
 			if (!empty($default['named'])) {
@@ -1279,9 +1278,9 @@ class BcAppController extends Controller
 			if ($this->Session->check("Baser.viewConditions.{$contentsName}.named")) {
 				$named = array_merge($named, $this->Session->read("Baser.viewConditions.{$contentsName}.named"));
 			}
-		} elseif ($type === 'get') {
-			if (!empty($this->request->query)) {
-				$url = $this->request->query;
+		} elseif ($options['type'] === 'get') {
+			if (!empty($this->request->getQuery())) {
+				$url = $this->request->getQuery();
 				unset($url['url']);
 				unset($url['ext']);
 				unset($url['x']);
@@ -1292,7 +1291,7 @@ class BcAppController extends Controller
 			} elseif (!empty($default[$model])) {
 				$filter = $default[$model];
 			}
-			$this->request->data[$model] = $filter;
+			$this->request->withData($model, $filter);
 			if (!empty($default['named'])) {
 				$named = $default['named'];
 			}
@@ -1315,14 +1314,13 @@ class BcAppController extends Controller
 		$_options = ['type' => 'string', 'conditionType' => 'or'];
 		$options = am($_options, $options);
 		$conditions = [];
-		extract($options);
 
-		if ($type === 'string' && !is_array($value)) {
+		if ($options['type'] === 'string' && !is_array($values)) {
 			$values = explode(',', str_replace('\'', '', $values));
 		}
 		if (!empty($values) && is_array($values)) {
 			foreach($values as $value) {
-				$conditions[$conditionType][] = [$fieldName . ' LIKE' => "%'" . $value . "'%"];
+				$conditions[$options['conditionType']][] = [$fieldName . ' LIKE' => "%'" . $value . "'%"];
 			}
 		}
 		return $conditions;
@@ -1407,7 +1405,7 @@ class BcAppController extends Controller
 			// スマートURLオフの際、$this->request->webrootがうまく動作しないので調整
 			//$base = FULL_BASE_URL . $this->request->webroot;
 			// ---
-			$base = FULL_BASE_URL . $this->request->base;
+			$base = FULL_BASE_URL . $this->request->getAttributes()['base'];
 			// <<<
 			if (strpos($ref, $base) === 0) {
 				$return = substr($ref, strlen($base));
