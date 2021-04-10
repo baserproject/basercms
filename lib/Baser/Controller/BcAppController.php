@@ -1336,11 +1336,11 @@ class BcAppController extends Controller
 	 */
 	protected function generatePassword($len = 8)
 	{
-		srand((double)microtime() * 1000000);
+		mt_srand((double)microtime() * 1000000);
 		$seed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 		$password = "";
 		while($len--) {
-			$pos = rand(0, 61);
+			$pos = mt_rand(0, 61);
 			$password .= $seed[$pos];
 		}
 		return $password;

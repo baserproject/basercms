@@ -636,7 +636,7 @@ class InstallationsController extends AppController
 		}
 
 		/* 一時的にテーブルを作成できるかテスト */
-		$randomtablename = 'deleteme' . rand(100, 100000);
+		$randomtablename = 'deleteme' . mt_rand(100, 100000);
 		$result = $db->execute("CREATE TABLE $randomtablename (a varchar(10))");
 
 
