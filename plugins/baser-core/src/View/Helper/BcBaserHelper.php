@@ -156,7 +156,7 @@ class BcBaserHelper extends Helper
      * @param bool $inline コンテンツ内に Javascript を出力するかどうか（初期値 : true）
      * @return void
      * @checked
-     * @noTodo
+     * @unitTest
      */
     public function js($url, $inline = true, $options = [])
     {
@@ -176,6 +176,9 @@ class BcBaserHelper extends Helper
      *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
      * ※ その他のパラメータについては、View::element() を参照
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function element($name, $data = [], $options = [])
     {
@@ -194,6 +197,8 @@ class BcBaserHelper extends Helper
      *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
      * ※ その他のパラメータについては、View::element() を参照
      * @return string エレメントのレンダリング結果
+     * @checked
+     * @unitTest
      */
     public function getElement($name, $data = [], $options = [])
     {
@@ -282,7 +287,7 @@ class BcBaserHelper extends Helper
      *    ※ パラメータについては、HtmlHelper::image() を参照。
      * @return void
      * @checked
-     * @noTodo
+     * @unitTest
      */
     public function img($path, $options = [])
     {
@@ -297,7 +302,7 @@ class BcBaserHelper extends Helper
      * ※ パラメータについては、HtmlHelper::image() を参照。
      * @return string 画像タグ
      * @checked
-     * @noTodo
+     * @unitTest
      */
     public function getImg($path, $options = [])
     {
@@ -319,7 +324,7 @@ class BcBaserHelper extends Helper
      *    リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
      * @return void
      * @checked
-     * @noTodo
+     * @unitTest
      */
     public function link($title, $url = null, $htmlAttributes = [], $confirmMessage = false)
     {
@@ -340,6 +345,8 @@ class BcBaserHelper extends Helper
      * @param bool $confirmMessage 確認メッセージ（初期値 : false）
      *    リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
      * @return string
+     * @checked
+     * @unitTest
      */
     public function getLink($title, $url = null, $options = [], $confirmMessage = false)
     {
@@ -563,6 +570,7 @@ class BcBaserHelper extends Helper
      * @return string $userName ユーザー名
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getUserName($user)
     {
@@ -602,6 +610,7 @@ class BcBaserHelper extends Helper
      * @param string $key 出力するメッセージのキー（初期状態では省略可）
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function flash($key = 'flash'): void
     {
@@ -643,6 +652,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function contentsName($detail = false, $options = [])
     {
@@ -668,6 +678,8 @@ class BcBaserHelper extends Helper
      *    - `error` : エラーページの場合に出力する文字列（初期値 : Error）
      *  - `underscore` : キャメルケースではなく、アンダースコア区切りで出力する（初期値 : false）
      * @return string
+     * @checked
+     * @unitTest
      */
     public function getContentsName($detail = false, $options = [])
     {
@@ -850,6 +862,8 @@ class BcBaserHelper extends Helper
      * @param bool $full httpから始まるURLを取得するかどうか
      * @param bool $sessionId セションIDを付加するかどうか
      * @return string URL
+     * @checked
+     * @unitTest
      */
     public function getUrl($url = null, $full = false, $sessionId = true)
     {
@@ -2095,7 +2109,7 @@ EOD;
         $out = <<< END_FLASH
 <div id="{$id}">{$noflash}</div>
 <script type="text/javascript">
-	swfobject.embedSWF("{$path}", "{$id}", "{$width}", "{$height}", "{$version}");
+    swfobject.embedSWF("{$path}", "{$id}", "{$width}", "{$height}", "{$version}");
 </script>
 END_FLASH;
 
