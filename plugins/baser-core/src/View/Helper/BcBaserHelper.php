@@ -1524,6 +1524,8 @@ class BcBaserHelper extends Helper
      *  ※ その他のパラメータについては、HtmlHelper::css() を参照。
      *    ※ false を指定した場合、inline が false となる。
      * @return string|void
+     * @checked
+     * @noTodo
      */
     public function css($path, $options = [])
     {
@@ -1534,9 +1536,7 @@ class BcBaserHelper extends Helper
             'rel' => 'stylesheet',
             'inline' => true
         ], $options);
-        $rel = $options['rel'];
-        unset($options['rel']);
-        $result = $this->BcHtml->css($path, $rel, $options);
+        $result = $this->BcHtml->css($path, $options);
         if ($options['inline']) {
             echo $result;
         }
