@@ -127,6 +127,19 @@ class BlogPostsController extends BlogAppController
 		]];
 		$this->setViewConditions('BlogPost', ['group' => $blogContentId, 'default' => $default]);
 
+		if($named = Hash::get($this->request->params, 'named')) {
+			$this->request->data['BlogPost'] = Hash::merge(
+				$this->request->data['BlogPost'],
+				$named
+			);
+		}
+		if($this->request->query) {
+			$this->request->data['BlogPost'] = Hash::merge(
+				$this->request->data['BlogPost'],
+				$this->request->query
+			);
+		}
+
 		$joins = [];
 		if (!empty($this->request->data['BlogPost']['blog_tag_id'])) {
 			$db = ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
