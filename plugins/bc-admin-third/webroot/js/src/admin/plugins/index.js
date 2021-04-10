@@ -13,21 +13,29 @@ $(function () {
     /**
      * マーケットのデータを取得
      */
-    // TODO 実装要
-    // $.ajax({
-    //     url: $.baseUrl + '/baser/' + $.bcUtil.adminPrefix + '/plugins/ajax_get_market_plugins',
-    //     type: "GET",
-    //     success: function (result) {
-    //         $("#BaserMarket").html(result);
-    //     }
-    // });
+    $.ajax({
+        url: $.baseUrl() + '/baser' + $.bcUtil.adminPrefix + '/plugins/get_market_plugins',
+        type: "GET",
+        success: function (result) {
+            $("#BaserMarket").html(result);
+        }
+    });
 
+    /**
+     * タブ設定
+     */
     $("#tabs").tabs();
 
+    /**
+     * 並び替え機能実装
+     */
     $.bcSortable.init({
         updateSortUrl:$("#AdminPluginsIndexScript").attr('data-updateSortUrl')
     });
 
+    /**
+     * 一括処理実装
+     */
     $.bcBatch.init({
         batchUrl: $("#AdminPluginsIndexScript").attr('data-batchUrl')
     });

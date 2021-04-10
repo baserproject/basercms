@@ -15,14 +15,17 @@ use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Table\PluginsTable;
 use BaserCore\Utility\BcUtil;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
+use Cake\Core\Exception\Exception;
 use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
+use Cake\Http\Client;
 use Cake\Http\Response;
-use Cake\Utility\Hash;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Utility\Xml;
 
 /**
  * Class PluginsController
@@ -311,34 +314,33 @@ class PluginsController extends BcAdminAppController
      *
      * @return void
      */
-    public function ajax_get_market_plugins()
+    public function get_market_plugins()
     {
-        $cachePath = 'views' . DS . 'baser_market_plugins.rss';
+        $this->viewBuilder()->disableAutoLayout();
         if (Configure::read('debug') > 0) {
-            clearCache('baser_market_plugins', 'views', '.rss');
+            Cache::delete('baserMarketPlugins');
         }
-        $baserPlugins = cache($cachePath);
+        if (!($baserPlugins = Cache::read('baserMarketPlugins'))) {
+            $Xml = new Xml();
+            try {
+				$client = new Client([
+				    'host' => ''
+                ]);
+				$response = $client->get(Configure::read('BcApp.marketPluginRss'));
+				if ($response->getStatusCode() !== 200) {
+                    return;
+				}
+                $baserPlugins = $Xml->build($response->getBody()->getContents());
+                $baserPlugins = $Xml->toArray($baserPlugins->channel);
+                $baserPlugins = $baserPlugins['channel']['item'];
+            } catch (Exception $e) {
+
+            }
+            Cache::write('baserMarketPlugins', $baserPlugins);
+        }
         if ($baserPlugins) {
-            $baserPlugins = BcUtil::unserialize($baserPlugins);
             $this->set('baserPlugins', $baserPlugins);
-            return;
         }
-
-        $Xml = new Xml();
-        try {
-            $baserPlugins = $Xml->build(Configure::read('BcApp.marketPluginRss'));
-        } catch (Exception $ex) {
-
-        }
-        if ($baserPlugins) {
-            $baserPlugins = $Xml->toArray($baserPlugins->channel);
-            $baserPlugins = $baserPlugins['channel']['item'];
-            cache($cachePath, BcUtil::serialize($baserPlugins));
-            chmod(CACHE . $cachePath, 0666);
-        } else {
-            $baserPlugins = [];
-        }
-        $this->set('baserPlugins', $baserPlugins);
     }
 
     /**
@@ -347,7 +349,7 @@ class PluginsController extends BcAdminAppController
      */
     public function update_sort()
     {
-        $this->autoRender = false;
+        $this->disableAutoRender();
         if (!$this->request->getData()) {
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
             return;

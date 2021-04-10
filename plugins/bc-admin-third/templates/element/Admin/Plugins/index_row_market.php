@@ -9,8 +9,11 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\View\AppView;
+
 /**
- * [ADMIN] プラグイン一覧　行
+ * プラグイン一覧　行
+ * @var AppView $this
  */
 ?>
 
@@ -35,7 +38,7 @@
 	<td class="bca-table-listup__tbody-td"><?php echo h($data['description']) ?></td>
 	<td class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['author'], $data['authorLink'], ['target' => '_blank', 'escape' => true]) ?></td>
 	<td class="bca-table-listup__tbody-td" style="width:10%;white-space: nowrap">
-		<?php echo $this->BcTime->format('Y-m-d', $data['created']) ?><br/>
-		<?php echo $this->BcTime->format('Y-m-d', $data['modified']) ?>
+		<?php echo $this->BcTime->format($data['created'], 'YYYY-MM-dd') ?><br/>
+		<?php echo $this->BcTime->format($data['modified'], 'YYYY-MM-dd') ?>
 	</td>
 </tr>

@@ -13,4 +13,4 @@
 /**
  * [ADMIN] baserマーケットテーマ一覧
  */
-$this->BcBaser->element('plugins/index_list_market');
+$this->BcBaser->element('Admin/plugins/index_list_market');
