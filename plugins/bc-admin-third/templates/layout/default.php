@@ -56,6 +56,7 @@ $base = $attributes['base'];
         'commonUnpublishFailedMessage' => __d('baser', '非公開処理に失敗しました。'),
         'commonCopyFailedMessage' => __d('baser', 'コピーに失敗しました。'),
         'commonDeleteFailedMessage' => __d('baser', '削除に失敗しました。'),
+        'batchConfirmMessage' => __d('baser', '選択したデータの一括処理を行います。よろしいですか？'),
         'batchListConfirmDeleteMessage' => __d('baser', "選択したデータを全て削除します。よろしいですか？\n※ 削除したデータは元に戻すことができません。"),
         'batchListConfirmPublishMessage' => __d('baser', '選択したデータを全て公開状態に変更します。よろしいですか？'),
         'batchListConfirmUnpublishMessage' => __d('baser', '選択したデータを全て非公開状態に変更します。よろしいですか？'),

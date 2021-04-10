@@ -13,4 +13,6 @@ import "bootstrap";
 import "./_lib/jquery.baseUrl.js";
 import "./_lib/jquery.bcUtil.js";
 import "./_lib/jquery.bcToken.js";
+import "./_lib/jquery.bcSortable.js";
+import "./_lib/jquery.bcBatch.js";
 import "./_module/sidebar.js";

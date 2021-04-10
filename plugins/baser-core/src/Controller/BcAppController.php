@@ -1513,41 +1513,6 @@ class BcAppController extends Controller
 	}
 
 	/**
-	 * 一括処理
-	 *
-	 * 一括処理としてコントローラーの次のメソッドを呼び出す
-	 * バッチ処理名は、バッチ処理指定用のコンボボックスで定義する
-	 *
-	 * _batch{バッチ処理名}
-	 *
-	 * 処理結果として成功の場合は、バッチ処理名を出力する
-	 *
-	 * @return void
-	 */
-	public function admin_ajax_batch()
-	{
-		$this->_checkSubmitToken();
-		$method = $this->request->data['ListTool']['batch'];
-
-		if ($this->request->data['ListTool']['batch_targets']) {
-			foreach($this->request->data['ListTool']['batch_targets'] as $key => $batchTarget) {
-				if (!$batchTarget) {
-					unset($this->request->data['ListTool']['batch_targets'][$key]);
-				}
-			}
-		}
-
-		$action = '_batch_' . $method;
-
-		if (method_exists($this, $action)) {
-			if ($this->{$action}($this->request->data['ListTool']['batch_targets'])) {
-				echo $method;
-			}
-		}
-		exit();
-	}
-
-	/**
 	 * 検索ボックスの表示状態を保存する
 	 *
 	 * @param string $key キー

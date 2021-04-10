@@ -14,7 +14,8 @@ $this->BcBaser->i18nScript([
 ]);
 $this->BcBaser->js('admin/plugins/index.bundle', false, [
     'id' => 'AdminPluginsIndexScript',
-    'data-updateSortUrl' => $this->BcBaser->getUrl(['controller' => 'plugins', 'action' => 'update_sort'])
+    'data-updateSortUrl' => $this->BcBaser->getUrl(['controller' => 'plugins', 'action' => 'update_sort']),
+    'data-batchUrl' => $this->BcBaser->getUrl(['controller' => 'plugins', 'action' => 'batch'])
 ]);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
     'url' => ['action' => 'add'],
@@ -23,7 +24,6 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 ?>
 
 
-<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(['controller' => 'plugins', 'action' => 'ajax_batch']) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="MessageBox" style="display:none">
     <div id="flashMessage" class="notice-message"></div>

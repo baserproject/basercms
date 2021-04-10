@@ -47,7 +47,7 @@ class PluginsController extends BcAdminAppController
     public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
-        $this->Security->setConfig('unlockedActions', ['reset_db', 'update_sort']);
+        $this->Security->setConfig('unlockedActions', ['reset_db', 'update_sort', 'batch']);
     }
 
     /**
@@ -463,27 +463,28 @@ class PluginsController extends BcAdminAppController
     }
 
     /**
-     * 一括無効
+     * 一括処理
      *
      * @param array $ids プラグインIDの配列
-     * @return bool
+     * @return void|Response
      */
-    protected function _batch_del($ids)
+    public function batch()
     {
-        if (!$ids) {
-            return true;
+        $this->autoRender = false;
+        if($this->request->getData('ListTool.batch') !== 'detach') {
+            return;
         }
-        foreach($ids as $id) {
-            $data = $this->Plugin->read(null, $id);
-            // TODO PluginsTable::detach() に移行
-            if ($this->BcManager->uninstallPlugin($data['Plugin']['name'])) {
-                $this->Plugin->saveDbLog(
-                    sprintf(__d('baser', 'プラグイン「%s」 を 無効化しました。'), $data['Plugin']['title'])
+        foreach($this->request->getData('ListTool.batch_targets') as $id) {
+            $plugin = $this->Plugins->get($id);
+            if ($this->Plugins->detach($plugin->name)) {
+                $this->BcMessage->setSuccess(
+                    sprintf(__d('baser', 'プラグイン「%s」 を 無効化しました。'), $plugin->title),
+                    true,
+                    false
                 );
             }
         }
-        clearAllCache();
-        return true;
+        return $this->response->withStringBody(true);
     }
 
 }

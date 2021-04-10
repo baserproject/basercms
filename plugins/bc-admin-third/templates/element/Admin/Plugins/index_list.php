@@ -23,7 +23,10 @@ use BaserCore\View\AppView;
 <div class="bca-data-list__top">
     <?php if ($this->BcBaser->isAdminUser()): ?>
         <div>
-            <?php echo $this->BcAdminForm->control('ListTool.batch', ['type' => 'select', 'options' => ['del' => __d('baser', '無効')], 'empty' => __d('baser', '一括処理')]) ?>
+            <?php echo $this->BcAdminForm->control('ListTool.batch', [
+                'type' => 'select',
+                'options' => ['detach' => __d('baser', '無効')], 'empty' => __d('baser', '一括処理')
+            ]) ?>
             <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
         </div>
     <?php endif ?>

@@ -268,6 +268,7 @@ class PluginsTable extends Table
      * @param $name
      * @return bool
      * @checked
+     * @noTodo
      */
     public function detach($name): bool
     {
@@ -277,10 +278,7 @@ class PluginsTable extends Table
         }
         $targetPlugin->status = false;
         $result = $this->save($targetPlugin);
-        // TODO 未実装
-        /* >>>
-        clearAllCache();
-        <<< */
+        BcUtil::clearAllCache();
         return $result !== false;
     }
 
