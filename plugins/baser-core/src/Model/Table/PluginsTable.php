@@ -76,19 +76,29 @@ class PluginsTable extends Table
      */
     public function getAvailable()
     {
-        // プラグインフォルダーのチェックを行う
+
+        $result = $this->find()
+            ->order(['priority'])
+            ->all();
         $pluginConfigs = [];
+        foreach($result as $plugin) {
+            $pluginConfigs[$plugin->name] = $this->getPluginConfig($plugin->name);
+        }
+        $registered = array_keys($pluginConfigs);
+
+        // プラグインフォルダーのチェックを行う
         $paths = App::path('plugins');
         foreach($paths as $path) {
             $Folder = new Folder($path);
             $files = $Folder->read(true, true, true);
             foreach($files[0] as $file) {
-                if (!in_array(basename($file), Configure::read('BcApp.core'))) {
-                    $pluginConfigs[basename($file)] = $this->getPluginConfig(basename($file));
+                $name = Inflector::camelize(Inflector::underscore(basename($file)));
+                if (!in_array(basename($file), Configure::read('BcApp.core')) && !in_array($name, $registered)) {
+                    $pluginConfigs[$name] = $this->getPluginConfig($name);
                 }
             }
         }
-        return array_reverse(array_values($pluginConfigs));
+        return array_values($pluginConfigs);
     }
 
     /**
@@ -381,54 +391,50 @@ class PluginsTable extends Table
      * @param string|int $offset 変更する範囲の相対位置
      * @param array $conditions find条件
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function changePriority($id, $offset, $conditions = [])
+    public function changePriority($id, $offset, $conditions = []): bool
     {
         $offset = intval($offset);
         if ($offset === 0) {
             return true;
         }
 
-        $field = 'priority';
-        $alias = $this->alias;
-
-        // 一時的にキャッシュをOFFする
-        $this->cacheQueries = false;
-
-        $current = $this->findById($id, ["{$alias}.id", "{$alias}.{$field}"]);
+        $current = $this->get($id);
 
         // currentを含め変更するデータを取得
         if ($offset > 0) { // DOWN
-            $order = ["{$alias}.{$field}"];
-            $conditions["{$alias}.{$field} >="] = $current[$alias][$field];
+            $order = ["priority"];
+            $conditions["priority >="] = $current->priority;
         } else { // UP
-            $order = ["{$alias}.{$field} DESC"];
-            $conditions["{$alias}.{$field} <="] = $current[$alias][$field];
+            $order = ["priority DESC"];
+            $conditions["priority <="] = $current->priority;
         }
 
-        $datas = $this->find('all', [
-            'conditions' => $conditions,
-            'fields' => ["{$alias}.id", "{$alias}.{$field}", "{$alias}.name"],
-            'order' => $order,
-            'limit' => abs($offset) + 1,
-            'recursive' => -1
-        ]);
+        $result = $this->find()
+            ->where($conditions)
+            ->select(["id", "priority", "name"])
+            ->order($order)
+            ->limit(abs($offset) + 1)
+            ->all();
 
-        if (empty($datas)) {
+        $count = $result->count();
+        if (!$count) {
             return false;
         }
-
+        $plugins = $result->toList();
         //データをローテーション
-        $count = count($datas);
-        $currentNewValue = $datas[$count - 1][$alias][$field];
+        $currentNewValue = $plugins[$count - 1]->priority;
         for($i = $count - 1; $i > 0; $i--) {
-            $datas[$i][$alias][$field] = $datas[$i - 1][$alias][$field];
+            $plugins[$i]->priority = $plugins[$i - 1]->priority;
         }
-        $datas[0][$alias][$field] = $currentNewValue;
+        $plugins[0]->priority = $currentNewValue;
 
-        if (!$this->saveMany($datas)) {
+        if (!$this->saveMany($plugins)) {
             return false;
-        };
+        }
 
         return true;
     }

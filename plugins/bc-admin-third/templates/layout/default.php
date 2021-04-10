@@ -28,46 +28,46 @@ $base = $attributes['base'];
     <meta charset="UTF-8">
     <meta name="robots" content="noindex,nofollow"/>
     <title><?= h($this->fetch('title')) ?></title>
-    <? echo $this->fetch('meta') ?>
-    <? echo $this->Html->css([
+    <?= $this->fetch('meta') ?>
+    <?php $this->BcBaser->css([
         'vendor/bootstrap-4.1.3/bootstrap',
         'vendor/jquery-ui/jquery-ui.min',
         'vendor/jquery.timepicker',
         'admin/style',
     ]) ?>
-    <? echo $this->fetch('css') ?>
-    <? echo $this->BcBaser->declarationI18n() ?>
-    <? echo $this->BcBaser->i18nScript([
-        'commonCancel'                  => __d('baser', 'キャンセル'),
-        'commonSave'                    => __d('baser', '保存'),
-        'commonExecCompletedMessage'    => __d('baser', '処理が完了しました。'),
-        'commonSaveFailedMessage'       => __d('baser', '保存に失敗しました。'),
-        'commonExecFailedMessage'       => __d('baser', '処理に失敗しました。'),
-        'commonBatchExecFailedMessage'  => __d('baser', '一括処理に失敗しました。'),
-        'commonGetDataFailedMessage'    => __d('baser', 'データ取得に失敗しました。'),
-        'commonSortSaveFailedMessage'   => __d('baser', '並び替えの保存に失敗しました。'),
-        'commonSortSaveConfirmMessage'	=> __d('baser', 'コンテンツを移動します。よろしいですか？'),
-        'commonNotFoundProgramMessage'  => __d('baser', '送信先のプログラムが見つかりません。'),
+    <?= $this->fetch('css') ?>
+    <?= $this->BcBaser->declarationI18n() ?>
+    <?= $this->BcBaser->i18nScript([
+        'commonCancel' => __d('baser', 'キャンセル'),
+        'commonSave' => __d('baser', '保存'),
+        'commonExecCompletedMessage' => __d('baser', '処理が完了しました。'),
+        'commonSaveFailedMessage' => __d('baser', '保存に失敗しました。'),
+        'commonExecFailedMessage' => __d('baser', '処理に失敗しました。'),
+        'commonBatchExecFailedMessage' => __d('baser', '一括処理に失敗しました。'),
+        'commonGetDataFailedMessage' => __d('baser', 'データ取得に失敗しました。'),
+        'commonSortSaveFailedMessage' => __d('baser', '並び替えの保存に失敗しました。'),
+        'commonSortSaveConfirmMessage' => __d('baser', 'コンテンツを移動します。よろしいですか？'),
+        'commonNotFoundProgramMessage' => __d('baser', '送信先のプログラムが見つかりません。'),
         'commonSelectDataFailedMessage' => __d('baser', 'データが選択されていません。'),
-        'commonConfirmDeleteMessage'    => __d('baser', '本当に削除してもよろしいですか？'),
-        'commonConfirmHardDeleteMessage'=> __d('baser', "このデータを本当に削除してもよろしいですか？\n※ 削除したデータは元に戻すことができません。"),
-        'commonPublishFailedMessage'    => __d('baser', '公開処理に失敗しました。'),
-        'commonChangePublishFailedMessage'=> __d('baser', '公開状態の変更に失敗しました。'),
-        'commonUnpublishFailedMessage'  => __d('baser', '非公開処理に失敗しました。'),
-        'commonCopyFailedMessage'       => __d('baser', 'コピーに失敗しました。'),
-        'commonDeleteFailedMessage'     => __d('baser', '削除に失敗しました。'),
+        'commonConfirmDeleteMessage' => __d('baser', '本当に削除してもよろしいですか？'),
+        'commonConfirmHardDeleteMessage' => __d('baser', "このデータを本当に削除してもよろしいですか？\n※ 削除したデータは元に戻すことができません。"),
+        'commonPublishFailedMessage' => __d('baser', '公開処理に失敗しました。'),
+        'commonChangePublishFailedMessage' => __d('baser', '公開状態の変更に失敗しました。'),
+        'commonUnpublishFailedMessage' => __d('baser', '非公開処理に失敗しました。'),
+        'commonCopyFailedMessage' => __d('baser', 'コピーに失敗しました。'),
+        'commonDeleteFailedMessage' => __d('baser', '削除に失敗しました。'),
         'batchListConfirmDeleteMessage' => __d('baser', "選択したデータを全て削除します。よろしいですか？\n※ 削除したデータは元に戻すことができません。"),
-        'batchListConfirmPublishMessage'=> __d('baser', '選択したデータを全て公開状態に変更します。よろしいですか？'),
-        'batchListConfirmUnpublishMessage'=> __d('baser', '選択したデータを全て非公開状態に変更します。よろしいですか？'),
-        'bcConfirmTitle1'               => __d('baser', 'ダイアログ'),
-        'bcConfirmAlertMessage1'        => __d('baser', 'メッセージを指定してください。'),
-        'bcConfirmAlertMessage2'        => __d('baser', 'コールバック処理が登録されていません。'),
-        'favoriteTitle1'                => __d('baser', 'よく使う項目登録'),
-        'favoriteTitle2'                => __d('baser', 'よく使う項目編集'),
-        'favoriteAlertMessage1'         => __d('baser', '並び替えの保存に失敗しました。'),
-        'favoriteAlertMessage2'         => __d('baser', 'よく使う項目の追加に失敗しました。'),
+        'batchListConfirmPublishMessage' => __d('baser', '選択したデータを全て公開状態に変更します。よろしいですか？'),
+        'batchListConfirmUnpublishMessage' => __d('baser', '選択したデータを全て非公開状態に変更します。よろしいですか？'),
+        'bcConfirmTitle1' => __d('baser', 'ダイアログ'),
+        'bcConfirmAlertMessage1' => __d('baser', 'メッセージを指定してください。'),
+        'bcConfirmAlertMessage2' => __d('baser', 'コールバック処理が登録されていません。'),
+        'favoriteTitle1' => __d('baser', 'よく使う項目登録'),
+        'favoriteTitle2' => __d('baser', 'よく使う項目編集'),
+        'favoriteAlertMessage1' => __d('baser', '並び替えの保存に失敗しました。'),
+        'favoriteAlertMessage2' => __d('baser', 'よく使う項目の追加に失敗しました。'),
     ], ['block' => false]) ?>
-    <? $this->BcBaser->js([
+    <?php $this->BcBaser->js([
         'admin/vendor.bundle',
         'vendor/vue.min',
         'vendor/jquery-3.5.1.min',
@@ -76,29 +76,37 @@ $base = $attributes['base'];
         'vendor/i18n/ui.datepicker-ja',
         'vendor/jquery.timepicker',
     ]) ?>
-    <? $this->BcBaser->js('admin/common.bundle', true, [
+    <?php $this->BcBaser->js('admin/common.bundle', true, [
         'id' => 'AdminScript',
         'data-baseUrl' => h($base),
         'data-adminPrefix' => BcUtil::getAdminPrefix()
     ]) ?>
-    <? $this->BcBaser->js([
+    <?php $this->BcBaser->js([
         'admin/startup.bundle'
     ]) ?>
-    <? echo $this->fetch('script') ?>
+    <?= $this->fetch('script') ?>
 
 </head>
 
-<body id="<? $this->BcBaser->contentsName(true) ?>" class="normal">
+<body id="<?php $this->BcBaser->contentsName(true) ?>" class="normal">
+
+<div class="bca-data">
+    <div id="Waiting" class="waiting-box bca-waiting-box" hidden>
+        <div class="corner10">
+            <?php echo $this->Html->image('admin/ajax-loader.gif') ?>
+        </div>
+    </div>
+</div>
 
 <div id="Page" class="bca-app">
 
-    <? echo $this->element('Admin/header') ?>
+    <?php $this->BcBaser->element('Admin/header') ?>
 
     <div id="Wrap" class="bca-container">
 
-        <? if ($this->BcAdmin->isAvailableSideBar()): ?>
-            <? $this->BcBaser->element('Admin/sidebar') ?>
-        <? endif ?>
+        <?php if ($this->BcAdmin->isAvailableSideBar()): ?>
+            <?php $this->BcBaser->element('Admin/sidebar') ?>
+        <?php endif ?>
 
         <main id="Contents" class="bca-main">
 
@@ -109,20 +117,20 @@ $base = $attributes['base'];
                     <h1 class="bca-main__header-title"><? $this->BcAdmin->title() ?></h1>
 
                     <div class="bca-main__header-actions">
-                        <? $this->BcBaser->element('Admin/main_body_header_links'); ?>
+                        <?php $this->BcBaser->element('Admin/main_body_header_links'); ?>
                     </div>
 
                     <div class="bca-main__header-menu">
-                        <? $this->BcAdmin->contentsMenu() ?>
+                        <?php $this->BcAdmin->contentsMenu() ?>
                     </div>
 
                 </div>
 
-                <? $this->BcAdmin->help() ?>
+                <?php $this->BcAdmin->help() ?>
 
-                <? $this->BcAdmin->search() ?>
+                <?php $this->BcAdmin->search() ?>
 
-                <? $this->BcBaser->flash() ?>
+                <?php $this->BcBaser->flash() ?>
 
                 <div id="BcMessageBox">
                     <div id="BcSystemMessage" class="notice-message"></div>
@@ -138,7 +146,7 @@ $base = $attributes['base'];
 
         <!-- / #Wrap --></div>
 
-        <? echo $this->element('Admin/footer') ?>
+    <?php $this->BcBaser->element('Admin/footer') ?>
 
     <!-- / #Page --></div>
 

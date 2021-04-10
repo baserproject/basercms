@@ -1456,7 +1456,11 @@ class BcAppController extends Controller
 	 */
 	public function redirect($url, int $status = 302): ?Response
 	{
+	    // TODO 未確認のため代替措置
+	    /* >>>
 		$url = addSessionId($url, true);
+		<<< */
+
 		// 管理システムでのURLの生成が CakePHP の標準仕様と違っていたので調整
 		// ※ Routing.admin を変更した場合
 		if (is_array($url)) {
@@ -1466,7 +1470,7 @@ class BcAppController extends Controller
 				unset($url['admin']);
 			}
 		}
-		parent::redirect($url, $status);
+		return parent::redirect($url, $status);
 	}
 
 	/**

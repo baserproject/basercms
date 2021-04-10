@@ -162,7 +162,7 @@ class BcAdminAppControllerTest extends BcTestCase
 
     /**
      * Test _checkReferer method
-     * @dataProvider testCheckRefererDataProvider
+     * @dataProvider checkRefererDataProvider
      * @return void
      */
     public function testCheckReferer($referer, $expected)
@@ -186,7 +186,7 @@ class BcAdminAppControllerTest extends BcTestCase
         }
     }
 
-    public function testCheckRefererDataProvider()
+    public function checkRefererDataProvider()
     {
         return [
             // refererがnullの場合　

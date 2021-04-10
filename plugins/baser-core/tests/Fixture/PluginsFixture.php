@@ -38,5 +38,27 @@ class PluginsFixture extends TestFixture
             'created' => '2021-05-03 10:57:07',
             'modified' => '2021-05-03 10:57:07'
         ],
+        [
+            'id' => 2,
+            'name' => 'BcMail',
+            'title' => 'メール',
+            'version' => '1.0.0',
+            'status' => '1',
+            'db_init' => '1',
+            'priority' => '2',
+            'created' => '2021-05-03 10:57:07',
+            'modified' => '2021-05-03 10:57:07'
+        ],
+        [
+            'id' => 3,
+            'name' => 'BcUploader',
+            'title' => 'アップローダー',
+            'version' => '1.0.0',
+            'status' => '1',
+            'db_init' => '1',
+            'priority' => '3',
+            'created' => '2021-05-03 10:57:07',
+            'modified' => '2021-05-03 10:57:07'
+        ],
     ];
 }

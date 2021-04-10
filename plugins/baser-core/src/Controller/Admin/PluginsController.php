@@ -47,9 +47,7 @@ class PluginsController extends BcAdminAppController
     public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
-        if ($this->request->getParam('action') === 'reset_db') {
-            $this->Security->setConfig('validatePost', false);
-        }
+        $this->Security->setConfig('unlockedActions', ['reset_db', 'update_sort']);
     }
 
     /**
@@ -75,19 +73,10 @@ class PluginsController extends BcAdminAppController
 		if (!empty($this->request->getQuery('sortmode'))) {
 		    //並び替えモードの場合はDBにデータが登録されていないプラグインを表示しない
 			$sortmode = true;
-			$plugins = Hash::sort(
-			    $registered,
-			    '{n}.Plugin.priority',
-			    'asc', 'numeric'
-			);
+			$plugins = $registered;
 		} else {
             $sortmode = false;
-            $plugins = array_merge(Hash::sort(
-                $registered,
-                '{n}.Plugin.priority',
-                'asc',
-                'numeric'
-            ), $unregistered);
+            $plugins = array_merge($registered, $unregistered);
 		}
 
         $this->set('plugins', $plugins);
@@ -353,27 +342,24 @@ class PluginsController extends BcAdminAppController
     }
 
     /**
-     * 並び替えを更新する [AJAX]
-     *
-     * @return bool
+     * 並び替えを更新する
+     * @return void|Response
      */
-    public function ajax_update_sort()
+    public function update_sort()
     {
         $this->autoRender = false;
         if (!$this->request->getData()) {
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
-            return false;
+            return;
         }
 
-        if (!$this->Plugin->changePriority($this->request->getData('Sort.id'), $this->request->getData('Sort.offset'))) {
+        if (!$this->Plugins->changePriority($this->request->getData('Sort.id'), $this->request->getData('Sort.offset'))) {
             $this->ajaxError(500, __d('baser', '一度リロードしてから再実行してみてください。'));
-            return false;
+            return;
         }
 
-        clearViewCache();
-        clearDataCache();
-        Configure::write('debug', 0);
-        return true;
+        BcUtil::clearAllCache();
+        return $this->response->withStringBody(true);
     }
 
     /**

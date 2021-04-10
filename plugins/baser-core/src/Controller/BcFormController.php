@@ -1,3 +1,4 @@
+<?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS User Community <https://basercms.net/community/>
@@ -8,9 +9,24 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+namespace BaserCore\Controller;
 
-import "bootstrap";
-import "./_lib/jquery.baseUrl.js";
-import "./_lib/jquery.bcUtil.js";
-import "./_lib/jquery.bcToken.js";
-import "./_module/sidebar.js";
+/**
+ * Class BcFormController
+ * @package BaserCore\Controller
+ */
+class BcFormController extends AppController
+{
+
+	/**
+	 * セキュリティトークンを取得する
+	 *
+	 * @return mixed
+	 */
+	public function get_token()
+	{
+		$this->autoRender = false;
+		return $this->request->getParam('_Token.key');
+	}
+
+}

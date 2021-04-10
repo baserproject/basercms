@@ -151,11 +151,14 @@
     // 選択
     &--select {
       padding: 10px;
+
       input {
         margin: 0;
       }
+
       a {
         color: $color_text_link;
+
         .bca-btn-icon-text[data-bca-btn-type=draggable]::before {
           color: $color_text_link;
         }
@@ -167,6 +170,7 @@
     display: inline-block;
     line-height: 1;
     color: $color_text_link_table_listup;
+
     .bca-icon--asc,
     .bca-icon--desc {
       position: relative;
@@ -182,6 +186,7 @@
         font-size: 1.5em;
       }
     }
+
     &:hover,
     &.asc,
     &.desc {
@@ -191,9 +196,11 @@
       }
     }
   }
+
   &__img {
     vertical-align: middle;
   }
+
   &__tbody-th,
   &__tbody-td {
     border: none;
@@ -208,50 +215,76 @@
   &__tbody-th {
     white-space: nowrap;
   }
+
   &__tbody-td {
     line-height: 1.6;
     // 選択
     &--select {
       padding: 10px;
       width: 12.5px;
+
       input {
         margin: 0;
       }
     }
+
     // タイトル
     &--title {
       min-width: 200px;
       max-width: 500px;
       font-size: 1.3rem;
     }
+
     // カテゴリ
     &--category {
       min-width: 100px;
     }
+
     // タグ
     &--tag {
       min-width: 100px;
+
       .tag {
         &:after {
           content: ', ';
         }
+
         &:last-child:after {
           content: none;
         }
       }
     }
+
     // 日付
     &--date {
       white-space: nowrap;
     }
+
     // アクション
     &--actions {
       padding-left: 1rem;
       padding-right: 1rem;
       white-space: nowrap;
+
       .bca-btn-icon {
         margin-right: 0.2em;
       }
+    }
+  }
+
+  tr.ui-sortable-helper {
+    display:flex;
+    justify-content:center;
+    border: 3px solid $color_table_border_color!important;
+    width:auto !important;
+    td {
+      border: none!important;
+    }
+  }
+
+  tr.ui-sortable-placeholder {
+    td {
+      background-color: rgba(253, 245, 203, 0.84) !important;
     }
   }
 
@@ -265,9 +298,11 @@
     display: flex;
     flex-wrap: nowrap;
   }
+
   .eye_catch {
     margin-right: 10px;
     width: 50px;
+
     img {
       width: 100%;
     }
@@ -276,10 +311,11 @@
   [data-bca-text-size=lg] {
     font-size: 1.6rem;
   }
+
   .bca-currentrow {
     th, td {
       background: $color_background_menu_current_primary;
-      color:#FFF;
+      color: #FFF;
     }
   }
 }

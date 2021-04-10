@@ -10,11 +10,12 @@
  */
 
 $this->BcBaser->i18nScript([
-    'message1' => __d('baser', "このデータを本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。"),
-    'message2' => __d('baser', "本当に削除してもいいですか？\nプラグインフォルダ内のファイル、データベースのデータも全て削除されます。"),
-    // 'message3' => __d('baser', "本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。")
+    'message1' => __d('baser', "このデータを本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。")
 ]);
-$this->BcBaser->js('admin/plugins/index.bundle', false);
+$this->BcBaser->js('admin/plugins/index.bundle', false, [
+    'id' => 'AdminPluginsIndexScript',
+    'data-updateSortUrl' => $this->BcBaser->getUrl(['controller' => 'plugins', 'action' => 'update_sort'])
+]);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
     'url' => ['action' => 'add'],
     'title' => __d('baser', '新規追加'),
@@ -23,7 +24,6 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 
 
 <div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(['controller' => 'plugins', 'action' => 'ajax_batch']) ?></div>
-<div id="AjaxSorttableUrl" style="display:none"><?php $this->BcBaser->url(['controller' => 'plugins', 'action' => 'ajax_update_sort']) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="MessageBox" style="display:none">
     <div id="flashMessage" class="notice-message"></div>

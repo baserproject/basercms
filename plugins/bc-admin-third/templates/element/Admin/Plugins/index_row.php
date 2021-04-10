@@ -18,6 +18,10 @@
  * @var \BaserCore\Model\Entity\Plugin $plugin
  */
 
+/**
+ * @var AppView $this
+ * @var int $count
+ */
 use BaserCore\View\AppView;
 
 $classies = ['sortable'];
@@ -28,8 +32,8 @@ $class = ' class="' . implode(' ', $classies) . '"';
 ?>
 
 
-<tr<?php echo $class; ?>>
-    <td class="row-tools bca-table-listup__tbody-td">
+<tr id="Row<?php echo $count ?>" <?php echo $class; ?>>
+    <td class="row-tools bca-table-listup__tbody-td" nowrap>
         <?php if ($this->BcBaser->isAdminUser()): ?>
             <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $plugin->id, [
                 'type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>',

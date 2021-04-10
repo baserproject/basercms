@@ -129,7 +129,18 @@ class PluginsTableTest extends BcTestCase
     {
         $this->Plugins->install('BcTest');
         $plugin = $this->Plugins->find()->where(['name' => 'BcTest'])->first();
-        $this->assertEquals(2, $plugin->priority);
+        $this->assertEquals(4, $plugin->priority);
+    }
+
+    /**
+     * testChangePriority
+     */
+    public function testChangePriority()
+    {
+        $this->Plugins->changePriority(1, 1);
+        $this->assertEquals(2, $this->Plugins->get(1)->priority);
+        $this->Plugins->changePriority(3, -1);
+        $this->assertEquals(2, $this->Plugins->get(3)->priority);
     }
 
 }
