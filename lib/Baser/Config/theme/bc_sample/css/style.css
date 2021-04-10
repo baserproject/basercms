@@ -323,7 +323,7 @@ template {
 /**
  * Base
  */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1340px) {
   html {
     position: relative;
     width: 100%;
@@ -337,7 +337,7 @@ body {
   color: #000;
   background-color: #fff;
   -webkit-font-smoothing: antialiased; }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1340px) {
     body {
       position: relative;
       width: 100%;
@@ -347,7 +347,7 @@ body {
   text-align: left;
   margin: 0 auto;
   min-width: 1300px; }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1340px) {
     .bs-container {
       min-width: 100%; } }
 
@@ -356,7 +356,7 @@ body {
   margin: 0 auto;
   padding: 0 40px;
   box-sizing: border-box; }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1340px) {
     .bs-wrap {
       box-sizing: border-box;
       width: 100%;
@@ -370,13 +370,13 @@ body {
   width: 860px;
   margin: 49px 0 160px;
   padding: 0; }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1340px) {
     .bs-main-contents {
       width: 100%; } }
 
 #Home .bs-main-contents {
   margin: 100px 0; }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1340px) {
     #Home .bs-main-contents {
       float: none;
       padding: 0;
@@ -394,7 +394,7 @@ body {
     margin: 0 auto;
     padding: 0 40px;
     box-sizing: border-box; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-header__inner {
         width: 100%;
         padding: 0 20px; } }
@@ -407,7 +407,7 @@ body {
     .bs-header__logo:hover {
       opacity: 0.7;
       transition: all 300ms 0s ease; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-header__logo {
         margin-top: 20px;
         margin-bottom: 20px; } }
@@ -439,13 +439,13 @@ body {
     .bs-header__menu-button.bs-open span:nth-child(3) {
       transform-origin: left;
       transform: rotate(-45deg); }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-header__menu-button {
         display: block; } }
   .bs-header__nav {
     font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
     background-color: #001800; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-header__nav {
         position: absolute;
         transform: translateX(100%);
@@ -465,7 +465,7 @@ body {
   margin: 0 auto;
   padding: 0 40px;
   z-index: 15; }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1340px) {
     .bs-global-menu {
       width: 100%;
       padding: 0; } }
@@ -492,7 +492,7 @@ body {
   display: inline-block;
   padding: 0;
   margin: 0; }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1340px) {
     .bs-global-menu-item {
       display: block; } }
   .bs-global-menu-item a {
@@ -501,7 +501,7 @@ body {
     padding: 25px 10px;
     text-decoration: none;
     font-weight: bold; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-global-menu-item a {
         width: 100%;
         padding: 25px 0;
@@ -509,7 +509,7 @@ body {
   .bs-global-menu-item a:link,
   .bs-global-menu-item a:visited {
     color: #fff; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-global-menu-item a:link,
       .bs-global-menu-item a:visited {
         color: #fff; } }
@@ -519,7 +519,7 @@ body {
     padding: 25px 15px;
     margin: 0 0 -1px 0;
     border: 1px solid transparent; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-global-menu-item > a {
         display: block;
         width: 100%;
@@ -530,7 +530,7 @@ body {
   .bs-global-menu-item > a:focus,
   .bs-global-menu-item > a.open {
     border: 1px solid #dedede; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-global-menu-item > a:focus,
       .bs-global-menu-item > a.open {
         border: 1px solid transparent; } }
@@ -539,7 +539,7 @@ body {
     border-bottom: none;
     z-index: 2;
     color: #000; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-global-menu-item > a.open {
         background-color: transparent;
         border: 1px solid transparent;
@@ -567,7 +567,7 @@ body {
     padding: 0; }
   .bs-global-menu-sub.open {
     display: block; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-global-menu-sub.open {
         display: none; } }
 
@@ -579,7 +579,7 @@ body {
 .bs-footer {
   background-color: #001800;
   padding: 80px 0; }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1340px) {
     .bs-footer {
       padding: 80px 20px; } }
   .bs-footer__copyright {
@@ -587,13 +587,13 @@ body {
     color: #999;
     width: 1260px;
     margin: 0 auto; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-footer__copyright {
         width: 100%;
         text-align: center;
         font-size: 12px;
         line-height: 1.8; } }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1340px) {
     .bs-footer__banner {
       display: block; } }
   .bs-footer__banner-link img {
@@ -611,7 +611,7 @@ body {
   padding: 49px 60px 100px 60px; }
   .bs-sub-contents h2 {
     font-weight: bold; }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1340px) {
     .bs-sub-contents {
       width: 100%;
       margin: 0 auto;
@@ -620,7 +620,7 @@ body {
 
 #Home .bs-sub-contents {
   padding: 100px 60px !important; }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1340px) {
     #Home .bs-sub-contents {
       float: none;
       padding: 40px 0 0 0 !important;
@@ -694,7 +694,7 @@ body {
       display: block;
       color: #000;
       text-decoration: none; }
-      @media screen and (max-width: 768px) {
+      @media screen and (max-width: 1340px) {
         .bs-widget-text ul li a {
           text-align: center; } }
       .bs-widget-text ul li a:hover {
@@ -869,12 +869,12 @@ body {
     border-radius: 5px 0 0 5px; }
   .bs-pagination__next a, .bs-pagination__next.disabled {
     border-radius: 0 5px 5px 0; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-pagination__next a, .bs-pagination__next.disabled {
         border-left: none; } }
   .bs-pagination__number {
     display: inline-block; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-pagination__number {
         display: none; } }
     .bs-pagination__number:not(:last-child) {
@@ -883,7 +883,7 @@ body {
     .bs-pagination__number a {
       display: inline-block;
       padding: 4px 11px; }
-      @media screen and (max-width: 768px) {
+      @media screen and (max-width: 1340px) {
         .bs-pagination__number.current,
         .bs-pagination__number a {
           display: none; } }
@@ -904,7 +904,7 @@ body {
   color: #CCC;
   box-sizing: border-box;
   line-height: 2em; }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1340px) {
     .bs-crumbs {
       box-sizing: border-box;
       width: 100%;
@@ -938,7 +938,7 @@ body {
     width: 47%;
     display: block;
     text-decoration: none; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-contents-navi a {
         font-size: 12px; } }
     .bs-contents-navi a:link, .bs-contents-navi a:visited {
@@ -1086,7 +1086,7 @@ table.cake-sql-log {
   margin-bottom: 100px; }
   .bs-info h2 {
     font-weight: bold !important; }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1340px) {
     .bs-info {
       margin-bottom: 100px; } }
 
@@ -1125,7 +1125,7 @@ table.cake-sql-log {
       color: #a0a2a8;
       font-style: italic;
       font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif; }
-      @media screen and (max-width: 768px) {
+      @media screen and (max-width: 1340px) {
         .bs-top-post__item-date {
           margin-bottom: 6px !important; } }
     .bs-top-post__item-category {
@@ -1149,7 +1149,7 @@ table.cake-sql-log {
 ----------------------------------------------- */
 .bs-top-post-to-list {
   text-align: right; }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1340px) {
     .bs-top-post-to-list {
       text-align: center; } }
   .bs-top-post-to-list a {
@@ -1161,7 +1161,7 @@ table.cake-sql-log {
     background-color: #001800;
     color: #fff !important;
     text-decoration: none; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-top-post-to-list a {
         font-size: 12px;
         padding: 12px 60px; } }
@@ -1246,7 +1246,7 @@ table.cake-sql-log {
       color: #a0a2a8;
       font-style: italic;
       font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif; }
-      @media screen and (max-width: 768px) {
+      @media screen and (max-width: 1340px) {
         .bs-blog-post__item-date {
           margin-bottom: 6px !important; } }
 
@@ -1257,7 +1257,7 @@ table.cake-sql-log {
   .bs-single-post__meta {
     text-align: right;
     margin-bottom: 30px; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-single-post__meta {
         margin-bottom: 40px;
         padding-right: 10px; } }
@@ -1283,7 +1283,7 @@ table.cake-sql-log {
       color: #a0a2a8;
       font-style: italic;
       font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif; }
-      @media screen and (max-width: 768px) {
+      @media screen and (max-width: 1340px) {
         .bs-single-post__meta-date {
           padding-left: 10px; } }
   .bs-single-post__eye-catch img {
@@ -1307,7 +1307,7 @@ table.cake-sql-log {
     width: 47%;
     display: block;
     text-decoration: none; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-blog-contents-navi a {
         font-size: 12px; } }
     .bs-blog-contents-navi a:link, .bs-blog-contents-navi a:visited {
@@ -1530,7 +1530,7 @@ table.cake-sql-log {
       background: -moz-linear-gradient(top, #cdcdcd, #eee 100%);
       background: -webkit-gradient(linear, left top, left bottom, from(#cdcdcd), color-stop(100%, #eee));
       background: -o-linear-gradient(top, #cdcdcd, #eee 100%); }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1340px) {
       .bs-mail-form-submit input[type=submit],
       .bs-mail-form-submit input[type=reset] {
         width: 100%;
