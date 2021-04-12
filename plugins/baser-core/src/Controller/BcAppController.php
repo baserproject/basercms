@@ -1390,43 +1390,6 @@ class BcAppController extends Controller
 	}
 
 	/**
-	 * Returns the referring URL for this request.
-	 *
-	 * @param string $default Default URL to use if HTTP_REFERER cannot be read from headers
-	 * @param bool $local If true, restrict referring URLs to local server
-	 * @return string Referring URL
-	 * @link http://book.cakephp.org/view/430/referer
-	 */
-	public function referer($default = '/', bool $local = true): string
-	{
-		$ref = env('HTTP_REFERER');
-		if (!empty($ref) && defined('FULL_BASE_URL')) {
-			// >>> CUSTOMIZE MODIFY 2011/01/18 ryuring
-			// スマートURLオフの際、$this->request->webrootがうまく動作しないので調整
-			//$base = FULL_BASE_URL . $this->request->webroot;
-			// ---
-			$base = FULL_BASE_URL . $this->request->getAttributes()['base'];
-			// <<<
-			if (strpos($ref, $base) === 0) {
-				$return = substr($ref, strlen($base));
-				if ($return[0] !== '/') {
-					$return = '/' . $return;
-				}
-				return $return;
-			}
-
-			if (!$local) {
-				return $ref;
-			}
-		}
-
-		if ($default != null) {
-			return $default;
-		}
-		return '/';
-	}
-
-	/**
 	 * リクエストされた画面に対しての認証用ユーザーモデルを取得する
 	 *
 	 * @return mixed string Or false

@@ -366,25 +366,26 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * 現在のログインユーザーが管理者グループかどうかチェックする
-     * @since basercms4
-     * @param int $userGroupId ユーザーグループID
+     * @param int|null $id ユーザーグループID
      * @param boolean $expected 期待値
      * @dataProvider isAdminUserDataProvider
      */
-    public function testIsAdminUser($userGroupId, $expected)
+    public function testIsAdminUser($id, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->_login();
-        $result = $this->BcBaser->isAdminUser($userGroupId);
+        $this->loginAdmin();
+        $user = $id ? $this->getuser($id) : null;
+        $result = $this->BcBaser->isAdminUser($user);
         $this->assertEquals($expected, $result);
-        $this->_logout();
     }
 
     public function isAdminUserDataProvider()
     {
         return [
+            // 管理者グループ
             [1, true],
+            // 運営者グループ
             [2, false],
+            // 引数を持たない場合
             [null, true]
         ];
     }

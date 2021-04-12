@@ -50,7 +50,7 @@ use BaserCore\View\AppView;
                 'data-bca-btn-type' => 'delete',
                 'data-bca-btn-size' => 'lg']
             ) ?>
-        <?php if (!$this->BcBaser->isAdminUser($user->user_group_id)): ?>
+        <?php if (!$this->BcBaser->isAdminUser($user)): ?>
             <?php $this->BcBaser->link('', ['action' => 'login_agent', $user->id], ['title' => __d('baser', 'ログイン'), 'class' => 'btn-login bca-btn-icon', 'data-bca-btn-type' => 'switch', 'data-bca-btn-size' => 'lg']) ?>
         <?php endif ?>
     </td>

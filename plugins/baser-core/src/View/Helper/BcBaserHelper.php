@@ -490,23 +490,15 @@ class BcBaserHelper extends Helper
     /**
      * 管理者グループかどうかチェックする
      *
-     * @param int $userGroupId ユーザーグループID（初期値 : null）※ 指定しない場合は、現在のログインユーザーについてチェックする
+     * @param array| BaserCore\Model\Entity\User $user ユーザー（初期値 : null）※ 指定しない場合は、現在のログインユーザーについてチェックする
      * @return bool 管理者グループの場合は true を返す
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function isAdminUser($userGroupId = null)
+    public function isAdminUser($user = null): bool
     {
-        // TODO 未実装
-        // >>>
-        return true;
-        // <<<
-        if (!$userGroupId) {
-            return BcUtil::isAdminUser();
-        }
-        if ($userGroupId == Configure::read('BcApp.adminGroupId')) {
-            return true;
-        } else {
-            return false;
-        }
+        return BcUtil::isAdminUser($user);
     }
 
     /**

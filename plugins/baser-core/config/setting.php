@@ -17,6 +17,8 @@ return [
          * 特権管理者グループID
          */
         'adminGroup' => ['admins'],
+        // 管理者グループID
+        'adminGroupId' => 1,
         /**
          * コアパッケージ名
          */
@@ -193,6 +195,19 @@ return [
         'installManual' => 'https://basercms.net/manuals/introductions/4.html',
         // アップデートマニュアル
         'updateManual' => 'https://basercms.net/manuals/introductions/8.html'
-    ]
+    ],
 
+    /**
+     * キャッシュ
+     */
+    'Cache' => [
+        '_cake_env_' => [
+            'className' => FileEngine::class,
+            'prefix' => 'myapp_cake_env_',
+            'path' => CACHE . 'environment' . DS,
+            'serialize' => true,
+            'duration' => '+999 days',
+            'url' => env('CACHE_CAKEENV_URL', null),
+        ],
+    ],
 ];
