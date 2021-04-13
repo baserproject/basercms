@@ -2813,6 +2813,15 @@ END_FLASH;
 		if (isset($this->request->params['Site']['device']) && $this->request->params['Site']['device'] != '') {
 			return;
 		}
+		$this->setCanonicalUrl(Hash::get($this->request->params, 'Content.url', '/'));
+	}
+
+	/**
+	 * 必要に応じてcanonical・alternateを出し分ける
+	 *
+	 * @param $title
+	 */
+	private function setCanonicalUrl($contentUrl) {
 		// 別URLの場合、alternateを出力（スマートフォンのみ対応）
 		$subSite = BcSite::findCurrentSub(false, BcAgent::find('smartphone'));
 		if ($subSite) {
@@ -2820,7 +2829,7 @@ END_FLASH;
 				'meta',
 				$this->BcHtml->meta(
 					'alternate',
-					$subSite->makeUrl(new CakeRequest(Hash::get($this->request->params, 'Content.url', '/'))),
+					$subSite->makeUrl(new CakeRequest($contentUrl)),
 					[
 						'rel' => 'alternate',
 						'media' => 'only screen and (max-width: 640px)',
@@ -2832,12 +2841,12 @@ END_FLASH;
 			);
 			return;
 		}
-		if ($this->request->here !== Hash::get($this->request->params, 'Content.url', '/')) {
+		if ($this->request->here !== $contentUrl) {
 			$this->_View->set(
 				'meta',
 				$this->BcHtml->meta(
 					'canonical',
-					Hash::get($this->request->params, 'Content.url', '/'),
+					$contentUrl,
 					[
 						'rel' => 'canonical',
 						'type' => null,
@@ -2847,7 +2856,7 @@ END_FLASH;
 				)
 			);
 		}
-}
+	}
 
 	/**
 	 * トップページのタイトルをセットする
