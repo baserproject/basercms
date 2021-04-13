@@ -2815,28 +2815,39 @@ END_FLASH;
 		}
 		// 別URLの場合、alternateを出力（スマートフォンのみ対応）
 		$subSite = BcSite::findCurrentSub(false, BcAgent::find('smartphone'));
-		if (!$subSite) {
+		if ($subSite) {
+			$this->_View->set(
+				'meta',
+				$this->BcHtml->meta(
+					'alternate',
+					$subSite->makeUrl(new CakeRequest(Hash::get($this->request->params, 'Content.url', '/'))),
+					[
+						'rel' => 'alternate',
+						'media' => 'only screen and (max-width: 640px)',
+						'type' => null,
+						'title' => null,
+						'inline' => false
+					]
+				)
+			);
 			return;
 		}
-		$this->_View->set('meta',
-			$this->BcHtml->meta('canonical',
-				$this->BcHtml->url(
-					$this->getContentsUrl(
-						Hash::get($this->request->params, 'Content.url', '/'),
-						$subSite
-					),
-					true
-				),
-				[
-					'rel' => 'canonical',
-					'media' => 'only screen and (max-width: 640px)',
-					'type' => null,
-					'title' => null,
-					'inline' => false
-				]
-			)
-		);
-	}
+		if ($this->request->here !== Hash::get($this->request->params, 'Content.url', '/')) {
+			$this->_View->set(
+				'meta',
+				$this->BcHtml->meta(
+					'canonical',
+					Hash::get($this->request->params, 'Content.url', '/'),
+					[
+						'rel' => 'canonical',
+						'type' => null,
+						'title' => null,
+						'inline' => false
+					]
+				)
+			);
+		}
+}
 
 	/**
 	 * トップページのタイトルをセットする

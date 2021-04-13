@@ -428,12 +428,14 @@ class BcSite
 	public function makeUrl(CakeRequest $request)
 	{
 		$here = $request->here(false);
-		if ($this->alias) {
-			return h("/{$this->alias}{$here}");
-		} else {
+		if (!$this->alias) {
 			return h($here);
 		}
-	}
+		if ($here === '/index') {
+			return h("/{$this->alias}/");
+		}
+		return h("/{$this->alias}{$here}");
+}
 
 	/**
 	 * メインサイトを取得
@@ -461,7 +463,7 @@ class BcSite
 	 */
 	public function getPureUrl($url)
 	{
-		$url = preg_replace('/^\//', '', $url);
+		$url = preg_replace('{^/}', '', $url);
 		if ($this->alias) {
 			return '/' . preg_replace('/^' . preg_quote($this->alias, '/') . '\//', '', $url);
 		}
