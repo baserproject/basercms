@@ -35,18 +35,23 @@ if (empty($dblogs)) {
 		<?php foreach($dblogs as $record): ?>
 			<li class="bca-update-log__list-item">
 				<span class="date">
-					<?php echo $this->BcTime->format('Y.m.d', $record['Dblog']['created']) ?>
+					<?php echo $this->BcTime->format(
+						'Y.m.d',
+						Hash::get($record, 'Dblog.created')
+					) ?>
 				</span>
 				<small>
-					<?php echo $this->BcTime->format('H:i:s', $record['Dblog']['created']) ?>&nbsp;
+					<?php echo $this->BcTime->format(
+						'H:i:s',
+						Hash::get($record, 'Dblog.created')
+					) ?>&nbsp;
 					<?php
-					$userName = $this->BcBaser->getUserName($record['User']);
-					if ($userName) {
-						echo '[' . h($userName) . ']';
+					if (Hash::get($record, 'User.name')) {
+						echo sprintf('[%s]', h(Hash::get($record, 'User.name')));
 					}
 					?>
 				</small><br/>
-				<?php echo nl2br(h($record['Dblog']['name'])) ?></li>
+				<?php echo nl2br(h(Hash::get($record, 'Dblog.name'))) ?></li>
 		<?php endforeach; ?>
 	</ul>
 	<?php $this->BcBaser->element('list_num') ?>
