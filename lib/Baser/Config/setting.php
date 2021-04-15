@@ -213,6 +213,16 @@ $config['BcApp'] = [
 						],
 						'currentRegex' => '/\/editor_templates\/[^\/]+?/s'
 					],
+					'DbLogs' => [
+						'title' => __d('baser', '最近の動き'),
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'dblogs',
+							'action' => 'index'
+						],
+						'currentRegex' => '{/dblogs/[^/]+?}s'
+					],
 					'WidgetAreas' => [
 						'title' => __d('baser', 'ウィジェットエリア'),
 						'url' => [

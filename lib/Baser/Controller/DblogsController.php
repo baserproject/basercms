@@ -28,6 +28,31 @@ class DblogsController extends AppController
 	/**
 	 * 一覧を取得
 	 */
+	public function admin_index()
+	{
+		$this->setViewConditions(
+			'Dblog',
+			[
+				'default' => [
+					'named' => [
+						'num' => $this->siteConfigs['admin_list_num']
+					]
+				],
+				'action' => 'admin_index'
+			]
+		);
+		$this->paginate = [
+			'order' => ['Dblog.created ' => 'DESC', 'Dblog.id' => 'DESC'],
+			'limit' => $this->passedArgs['num']
+		];
+		$this->set('logs', $this->paginate('Dblog'));
+		$this->pageTitle = __d('baser', '最近の動き一覧');
+		$this->help = 'dblogs_index';
+	}
+
+	/**
+	 * 一覧を取得
+	 */
 	public function admin_ajax_index()
 	{
 		$this->autoLayout = false;
@@ -35,7 +60,7 @@ class DblogsController extends AppController
 		$this->setViewConditions('Dblog', ['default' => $default, 'action' => 'admin_index']);
 		$this->paginate = [
 			'order' => ['Dblog.created ' => 'DESC', 'Dblog.id' => 'DESC'],
-			'limit' => $this->passedArgs['num']
+			'limit' => 5
 		];
 		$this->set('dblogs', $this->paginate('Dblog'));
 	}
