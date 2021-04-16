@@ -14,6 +14,7 @@
  * @var array $dblogs
  * @var BcAppView $this
  */
+exit('sdfsdfsdf');
 if (empty($dblogs)) {
 	return;
 }

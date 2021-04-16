@@ -41,13 +41,29 @@ class DblogsController extends AppController
 				'action' => 'admin_index'
 			]
 		);
+		$conditions = [];
+		if ($this->request->data('Dblogs.name')) {
+			$conditions[] = ['Dblog.name like' => '%' . $this->request->data('Dblogs.name') . '%'];
+		}
+		if ($this->request->data('Dblogs.user_id')) {
+			$conditions[] = ['Dblog.user_id' => $this->request->data('Dblogs.user_id')];
+		}
 		$this->paginate = [
 			'order' => ['Dblog.created ' => 'DESC', 'Dblog.id' => 'DESC'],
-			'limit' => $this->passedArgs['num']
+			'limit' => $this->passedArgs['num'],
+			'conditions' => $conditions
 		];
 		$this->set('logs', $this->paginate('Dblog'));
+
+		if ($this->request->is('ajax') || !empty($this->request->query['ajax'])) {
+			Configure::write('debug', 0);
+			$this->render('ajax_index_list');
+			return;
+		}
+
 		$this->pageTitle = __d('baser', '最近の動き一覧');
 		$this->help = 'dblogs_index';
+		$this->search = 'dblogs_index';
 	}
 
 	/**
@@ -56,8 +72,18 @@ class DblogsController extends AppController
 	public function admin_ajax_index()
 	{
 		$this->autoLayout = false;
-		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
-		$this->setViewConditions('Dblog', ['default' => $default, 'action' => 'admin_index']);
+		$default = [
+			'named' => [
+				'num' => $this->siteConfigs['admin_list_num']
+			]
+		];
+		$this->setViewConditions(
+			'Dblog',
+			[
+				'default' => $default,
+				'action' => 'admin_index'
+			]
+		);
 		$this->paginate = [
 			'order' => ['Dblog.created ' => 'DESC', 'Dblog.id' => 'DESC'],
 			'limit' => 5
