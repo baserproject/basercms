@@ -154,6 +154,13 @@
   }
 }
 
+@media screen and (max-width: 1260px) {
+  .bs-global-menu {
+      width: auto;
+      padding-right: 0;
+  }
+}
+
 /* Global Menu Item
 ----------------------------------------------- */
 
