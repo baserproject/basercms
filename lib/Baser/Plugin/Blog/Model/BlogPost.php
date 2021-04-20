@@ -1021,7 +1021,8 @@ class BlogPost extends BlogAppModel
 		}
 		$tags = $this->BlogTag->find('all', [
 			'conditions' => ['BlogTag.name' => $tag],
-			'recursive' => 1
+			'recursive' => 1,
+			'cache' => false,
 		]);
 		if (isset($tags[0]['BlogPost'][0]['id'])) {
 			$conditions['BlogPost.id'] = Hash::extract($tags, '{n}.BlogPost.{n}.id');
