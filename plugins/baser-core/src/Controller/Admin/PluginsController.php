@@ -44,6 +44,16 @@ class PluginsController extends BcAdminAppController
     public $uses = ['BaserCore.Plugin'];
 
     /**
+     * initialize
+     * @throws \Exception
+     */
+    public function initialize():void
+    {
+        parent::initialize();
+        $this->loadComponent('RequestHandler');
+    }
+
+    /**
      * Before Filter
      * @param \Cake\Event\EventInterface $event An Event instance
      */
@@ -83,6 +93,12 @@ class PluginsController extends BcAdminAppController
 		}
 
         $this->set('plugins', $plugins);
+
+        if($this->RequestHandler->prefers('json')) {
+            $this->viewBuilder()->setOption('serialize', ['plugins']);
+            return;
+        }
+
         $this->set('corePlugins', Configure::read('BcApp.corePlugins'));
         $this->set('sortmode', $sortmode);
         $this->setTitle(__d('baser', 'プラグイン一覧'));

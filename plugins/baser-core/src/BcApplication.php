@@ -142,23 +142,24 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
                 'contain' => 'UserGroups',
             ]);
 
-            $fields = [
-                'username' => $authSetting['username'],
-                'password' => $authSetting['password']
-            ];
-
             $service->loadAuthenticator('Authentication.Session', [
                 'sessionKey' => $authSetting['sessionKey'],
             ]);
             $service->loadAuthenticator('Authentication.' . $authSetting['type'], [
-                'fields' => $fields,
+                'fields' => [
+                    'username' => is_array($authSetting['username']) ? $authSetting['username'][0] : $authSetting['username'],
+                    'password' => $authSetting['password']
+                 ],
                 'loginUrl' => Router::url($authSetting['loginAction']),
             ]);
             $service->loadIdentifier('Authentication.Password', [
-                'fields' => $fields,
+                'fields' => [
+                    'username' => $authSetting['username'],
+                    'password' => $authSetting['password']
+                 ],
                 'resolver' => [
                     'className' => 'Authentication.Orm',
-                    'userModel' => $authSetting['userModel']
+                    'userModel' => $authSetting['userModel'],
                 ],
                 'contain' => 'UserGroups',
             ]);
