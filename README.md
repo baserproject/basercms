@@ -7,8 +7,8 @@
     <a href="LICENSE" target="_blank">
         <img alt="Software License" src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square">
     </a>
-    <a href="https://travis-ci.org/baserproject/basercms" target="_blank">
-        <img alt="Build Status" src="https://travis-ci.org/baserproject/basercms.svg?branch=dev-4">
+    <a href="https://www.travis-ci.com/baserproject/basercms" target="_blank">
+        <img alt="Build Status" src="https://www.travis-ci.com/baserproject/basercms.svg?branch=dev-4">
     </a>
 </p>
 
@@ -33,7 +33,7 @@ Some Handy Links
 - See [CakePHP - the rapid development PHP framework](https://cakephp.org)
 
 Get Support!
--------------
+-------------MaildataHelperTest
 
 - See [baserCMS Users Forum](https://forum.basercms.net/)
 - See [baserCMS Issues](https://github.com/baserproject/basercms/issues)
