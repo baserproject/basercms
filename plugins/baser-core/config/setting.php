@@ -175,11 +175,11 @@ return [
             // ログアウトページURL
             'logoutAction' => ['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Users', 'action' => 'logout'],
             // ユーザー名フィールド
-            'username' => 'email',
+            'username' => ['email', 'name'],
             // パスワードフィールド
             'password' => 'password',
             // モデル
-            'userModel' => 'Users',
+            'userModel' => 'BaserCore.Users',
             // セッションキー
             'sessionKey' => 'AuthAdmin',
         ]
