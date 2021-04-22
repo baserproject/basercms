@@ -589,24 +589,27 @@ class UsersController extends BcAdminAppController
         }
 
         $this->request->allowMethod(['post', 'delete']);
-
-        // TODO： 最後のユーザーの場合は削除はできない
-        // if ($this->User->field('user_group_id', ['User.id' => $id]) == Configure::read('BcApp.adminGroupId') &&
-        //     $this->User->find('count', ['conditions' => ['User.user_group_id' => Configure::read('BcApp.adminGroupId')]]) == 1) {
-        //     $this->BcMessage->setError(__d('baser', '最後の管理者ユーザーは削除する事はできません。'));
-        //     $this->redirect(['action' => 'index']);
-        // }
-
         // メッセージ用にデータを取得
-        $user = $this->Users->get($id);
 
-        /* 削除処理 */
-        if ($this->Users->delete($user)) {
-            $this->BcMessage->setSuccess(__d('baser', 'ユーザー: {0} を削除しました。', $user->name));
+        $user = $this->Users->get($id, ['contain' => ['UserGroups']]);
+        // TODO: UsersTableにUsersUserGroupsアソシエーションを追加後メソッドとして作成する必要あり↓↓↓$group_count
+        $groupCount = $this->Users
+            ->find('all', ['conditions' => ['UsersUserGroups.user_group_id' => Configure::read('BcApp.adminGroupId')]])
+            ->join(['table' => 'users_user_groups',
+                    'alias' => 'UsersUserGroups',
+                    'type' => 'inner',
+                    'conditions' => 'UsersUserGroups.user_id = Users.id'])
+            ->count();
+         /* 最後のシステム管理者でなければ、削除処理 */
+        if (BcUtil::isAdminUser($user) && $groupCount === 1) {
+            $this->BcMessage->setError(__d('baser', '最後のシステム管理者は削除できません'));
         } else {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            if ($this->Users->delete($user)) {
+                $this->BcMessage->setSuccess(__d('baser', 'ユーザー: {0} を削除しました。', $user->name));
+            } else {
+                $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
+            }
         }
-
         return $this->redirect(['action' => 'index']);
     }
 
