@@ -232,9 +232,9 @@ class UserGroupsController extends BcAdminAppController
             $data['auth_prefix'] = implode(',', $data['auth_prefix']);
         }
         $userGroup = $this->UserGroups->patchEntity($userGroup, $data);
-
         if (!$this->UserGroups->save($userGroup)) {
             $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+            return;
         }
 
         $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name));
