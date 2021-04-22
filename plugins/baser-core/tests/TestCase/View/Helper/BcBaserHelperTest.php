@@ -769,7 +769,7 @@ class BcBaserHelperTest extends BcTestCase {
 
         // セッションIDを付加する場合
         // TODO セッションIDを付加する場合、session.use_trans_sid の値が0である必要が
-        // があるが、上記の値はセッションがスタートした後では書込不可の為見送り
+        // があるが、上記の値はセッションがスタートした後では書込不可のため見送り
         /*Configure::write('BcRequest.agent', 'mobile');
         Configure::write('BcAgent.mobile.sessionId', true);
         ini_set('session.use_trans_sid', 0);*/

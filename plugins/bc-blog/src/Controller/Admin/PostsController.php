@@ -23,7 +23,7 @@ class PostsController extends BcAdminAppController
     /**
      * 記事一覧
      */
-    public function index() : void
+    public function index(): void
     {
         $this->setTitle('ブログサンプル');
     }

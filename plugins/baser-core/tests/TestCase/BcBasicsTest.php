@@ -808,7 +808,7 @@ class BlogControllerEventListener extends BcControllerEventListener {
 	}
 
 	/**
-	 * 後方互換の為の非推奨メッセージを生成する
+	 * 後方互換のための非推奨メッセージを生成する
 	 */
 	public function testDeprecatedMessage()
 	{

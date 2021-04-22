@@ -27,7 +27,7 @@ $this->BcBaser->i18nScript([
 ?>
 
 <script type="text/javascript">
-	$(document).ready(function () {
+	$(function () {
 		$('#btnfinish,#btnback').click(function () {
 			$.bcUtil.showLoader();
 			var result = true;
@@ -95,7 +95,7 @@ $this->BcBaser->i18nScript([
 					<div class="float-left">
 						<?php echo $this->BcForm->input('Installation.admin_confirmpassword', ['type' => 'password']); ?>
 						<br>
-						<small><?php echo __d('baser', '確認の為もう一度入力してください') ?></small>
+						<small><?php echo __d('baser', '確認のためもう一度入力してください') ?></small>
 					</div>
 				</li>
 			</ul>

@@ -8,11 +8,10 @@ return;
 class BlogConfigFixture extends BaserTestFixture
 {
 
-	/**
-	 * Records
-	 *
-	 * @var array
-	 */
-	public $records = [];
-
+    /**
+     * Records
+     *
+     * @var array
+     */
+    public $records = [];
 }

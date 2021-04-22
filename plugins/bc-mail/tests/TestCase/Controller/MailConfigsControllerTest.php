@@ -1,4 +1,5 @@
 <?php
+
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -17,64 +18,65 @@ App::uses('SessionComponent', 'Controller/Component');
 class MailConfigsControllerTest extends BaserTestCase
 {
 
-	public $fixtures = [
-		// 'baser.Default.SiteConfig',
-		'baser.Default.User',
-		'baser.Default.UserGroup',
-		'baser.Default.Plugin',
-		'baser.Default.Permission',
-		'baser.Default.Favorite',
-		'plugin.mail.Default/MailConfig',
-	];
+    public $fixtures = [
+        // 'baser.Default.SiteConfig',
+        'baser.Default.User',
+        'baser.Default.UserGroup',
+        'baser.Default.Plugin',
+        'baser.Default.Permission',
+        'baser.Default.Favorite',
+        'plugin.mail.Default/MailConfig',
+    ];
 
-	public function setUp()
-	{
-		$this->MailConfigs = new MailConfigsController(new CakeRequest(null, false), new CakeResponse());
+    public function setUp()
+    {
+        $this->MailConfigs = new MailConfigsController(new CakeRequest(null, false), new CakeResponse());
 
-		$this->Case = $this->getMockForAbstractClass('ControllerTestCase');
+        $this->Case = $this->getMockForAbstractClass('ControllerTestCase');
 
-		parent::setUp();
-	}
+        parent::setUp();
+    }
 
-	public function tearDown()
-	{
-		unset($this->MailConfigs);
-		unset($this->Case);
-		parent::tearDown();
-	}
+    public function tearDown()
+    {
+        unset($this->MailConfigs);
+        unset($this->Case);
+        parent::tearDown();
+    }
 
-	/**
-	 * [ADMIN] メールフォーム設定
-	 *
-	 * @param array $data requestのdata
-	 * @dataProvider admin_formDataProvider
-	 */
-	public function testAdmin_form($data, $expected)
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+    /**
+     * [ADMIN] メールフォーム設定
+     *
+     * @param array $data requestのdata
+     * @dataProvider admin_formDataProvider
+     */
+    public function testAdmin_form($data, $expected)
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
 
-		session_id('baser');
-		$this->Case->testAction("admin/mail/mail_configs/form", [
-			'method' => 'post', 'data' => $data]);
+        session_id('baser');
+        $this->Case->testAction("admin/mail/mail_configs/form", [
+            'method' => 'post', 'data' => $data
+        ]);
 
-		if (!empty($data)) {
-			$flash = CakeSession::read('Message.flash');
-			$this->assertEquals($flash['message'], 'メールフォーム設定を保存しました。');
-		}
+        if (!empty($data)) {
+            $flash = CakeSession::read('Message.flash');
+            $this->assertEquals($flash['message'], 'メールフォーム設定を保存しました。');
+        }
 
-		$url = $this->Case->headers['Location'];
-		$this->assertRegExp('/' . $expected . '/', $url);
+        $url = $this->Case->headers['Location'];
+        $this->assertRegExp('/' . $expected . '/', $url);
+    }
 
-	}
-
-	public function admin_formDataProvider()
-	{
-		return [
-			[[], '\/admin\/users\/login'],
-			[["MailConfig" => [
-				"site_name" => "test"]
-			], '\/admin\/mail\/mail_configs\/form']
-		];
-	}
-
+    public function admin_formDataProvider()
+    {
+        return [
+            [[], '\/admin\/users\/login'],
+            [[
+                "MailConfig" => [
+                    "site_name" => "test"
+                ]
+            ], '\/admin\/mail\/mail_configs\/form']
+        ];
+    }
 }

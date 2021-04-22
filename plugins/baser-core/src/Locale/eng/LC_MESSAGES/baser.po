@@ -4130,7 +4130,7 @@ msgstr "You can register other site’s Feed."
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_details_form.php:23
 msgid ""
-"他サイトのフィードを読み込む場合は、他サイトのサーバー負荷軽減の為、画面下の"
+"他サイトのフィードを読み込む場合は、他サイトのサーバー負荷軽減のため、画面下の"
 "「オプション」をクリックし、キャッシュ時間を多めに設定しておきましょう。（自"
 "サイトの場合でも負荷軽減を行う為には同様です）<br /><small>※ キャッシュとは、"
 "取得したデータを保持し、指定した時間の間、フィードのリクエストを抑制する仕組"
@@ -5120,7 +5120,7 @@ msgstr ""
 msgid ""
 "Eメールを選択すると、メールフォーム送信の際、入力されたEメール宛に自動返信"
 "メールを送信します。<br />\n"
-"\t\t\t\t\t\t\t<small>※ 前バージョンとの互換性の為、フィールド名を「email_1」"
+"\t\t\t\t\t\t\t<small>※ 前バージョンとの互換性のため、フィールド名を「email_1」"
 "とした場合、Eメールを選択しなくても自動返信メールを送信します。</small>"
 msgstr ""
 "It will send auto-reply mail to entered e-mail when sending Mail Form if you "
@@ -8952,7 +8952,7 @@ msgstr ""
 "large), spaces, symbols(._-:/()#,@[]+=&amp;;{}!$*)"
 
 #: View/Installations/admin/step4.php:93
-msgid "確認の為もう一度入力してください"
+msgid "確認のためもう一度入力してください"
 msgstr "Please re-enter to confirm"
 
 #: View/Installations/admin/step4.php:105
@@ -9849,7 +9849,7 @@ msgstr "Owned Theme"
 
 #: View/Tools/admin/index.php:17
 msgid ""
-"baserCMSは、表示速度向上の為、サーバーサイドのキャッシュ機構利用しています。"
+"baserCMSは、表示速度向上のため、サーバーサイドのキャッシュ機構利用しています。"
 "<br>これによりテンプレートを直接編集した際など、変更内容が反映されない場合が"
 "ありますので、その際には、サーバーサイドのキャッシュを削除します。"
 msgstr ""
@@ -10332,7 +10332,7 @@ msgid "パスワードの変更をする場合は、"
 msgstr "If you change password,"
 
 #: View/Users/admin/form.php:128
-msgid "確認の為２回入力してください。"
+msgid "確認のため２回入力してください。"
 msgstr "Please enter twice for confirmation."
 
 #: View/Users/admin/form.php:129

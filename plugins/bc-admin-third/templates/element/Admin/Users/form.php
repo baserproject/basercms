@@ -126,7 +126,7 @@ $this->BcBaser->i18nScript([
                             <?php if ($this->request->getParam('action') == 'edit'): ?>
                                 <?php echo __d('baser', 'パスワードの変更をする場合は、') ?>
                             <?php endif; ?>
-                            <?php echo __d('baser', '確認の為２回入力してください。') ?></li>
+                            <?php echo __d('baser', '確認のため２回入力してください。') ?></li>
                         <li><?php echo __d('baser', '半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください') ?></li>
                         <li><?php echo __d('baser', '最低６文字以上で入力してください') ?></li>
                     </ul>

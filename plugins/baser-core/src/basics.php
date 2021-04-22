@@ -984,7 +984,7 @@ function loadPlugin($plugin, $priority)
 }
 
 /**
- * 後方互換の為の非推奨メッセージを生成する
+ * 後方互換のための非推奨メッセージを生成する
  *
  * @param string $target 非推奨の対象
  * @param string $since 非推奨となったバージョン
@@ -1015,7 +1015,7 @@ function deprecatedMessage($target, $since, $remove = null, $note = null)
  * base64エンコード時でに出てくる記号 +(プラス) , /(スラッシュ) , =(イコール)
  * このbase64エンコードした値をさらにURLのパラメータで使うためにURLエンコードすると
  * パーセントエンコーディングされてしまいます。
- * その為、このメソッドではパーセントエンコーディングされないURLセーフな
+ * そのため、このメソッドではパーセントエンコーディングされないURLセーフな
  * base64エンコードを行います。
  *
  * @param string $val 対象文字列

@@ -740,7 +740,7 @@ class ContentsController extends AppController
 		);
 
 		if ($data['currentParentId'] == $data['targetParentId']) {
-			// 親が違う場合は、Contentモデルで更新してくれるが同じ場合更新しない仕様の為ここで更新する
+			// 親が違う場合は、Contentモデルで更新してくれるが同じ場合更新しない仕様のためここで更新する
 			$this->SiteConfig->updateContentsSortLastModified();
 		}
 

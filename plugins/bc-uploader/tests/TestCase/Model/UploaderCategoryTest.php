@@ -20,33 +20,31 @@ App::uses('UploaderCategory', 'Uploader.Model');
  */
 class UploaderCategoryTest extends BaserTestCase
 {
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	/**
-	 * set up
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
-
-	/**
-	 * コピーする
-	 */
-	public function testCopy()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
+    /**
+     * コピーする
+     */
+    public function testCopy()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }

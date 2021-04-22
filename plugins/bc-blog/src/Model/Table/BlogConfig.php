@@ -22,18 +22,17 @@ App::uses('BlogAppModel', 'Blog.Model');
 class BlogConfig extends BlogAppModel
 {
 
-	/**
-	 * クラス名
-	 *
-	 * @var string
-	 */
-	public $name = 'BlogConfig';
+    /**
+     * クラス名
+     *
+     * @var string
+     */
+    public $name = 'BlogConfig';
 
-	/**
-	 * ビヘイビア
-	 *
-	 * @var array
-	 */
-	public $actsAs = ['BcCache'];
-
+    /**
+     * ビヘイビア
+     *
+     * @var array
+     */
+    public $actsAs = ['BcCache'];
 }

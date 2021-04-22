@@ -1,4 +1,5 @@
 <?php
+
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -19,18 +20,17 @@
 class MailConfig extends MailAppModel
 {
 
-	/**
-	 * クラス名
-	 *
-	 * @var string
-	 */
-	public $name = 'MailConfig';
+    /**
+     * クラス名
+     *
+     * @var string
+     */
+    public $name = 'MailConfig';
 
-	/**
-	 * ビヘイビア
-	 *
-	 * @var array
-	 */
-	public $actsAs = ['BcCache'];
-
+    /**
+     * ビヘイビア
+     *
+     * @var array
+     */
+    public $actsAs = ['BcCache'];
 }

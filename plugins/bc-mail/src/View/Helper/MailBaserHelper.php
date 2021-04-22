@@ -1,4 +1,5 @@
 <?php
+
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -21,20 +22,19 @@
 class MailBaserHelper extends AppHelper
 {
 
-	/**
-	 * 現在のページがメールプラグインかどうかを判定する
-	 *
-	 * @return bool
-	 */
-	public function isMail()
-	{
-		if (!Hash::get($this->request->params, 'Content.plugin')) {
-			return false;
-		}
-		if (Hash::get($this->request->params, 'Content.plugin') !== 'Mail') {
-			return false;
-		}
-		return true;
-	}
-
+    /**
+     * 現在のページがメールプラグインかどうかを判定する
+     *
+     * @return bool
+     */
+    public function isMail()
+    {
+        if (!Hash::get($this->request->params, 'Content.plugin')) {
+            return false;
+        }
+        if (Hash::get($this->request->params, 'Content.plugin') !== 'Mail') {
+            return false;
+        }
+        return true;
+    }
 }

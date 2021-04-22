@@ -819,7 +819,7 @@ DOC_END;
 
 		// CUSTOMIZE MODIFY 2011/05/07 ryuring
 		// >>> hiddenオプションがある場合のみ、hiddenタグを出力
-		// 2014/03/23 ryuring CakePHP側が実装していたが互換性の為に残す
+		// 2014/03/23 ryuring CakePHP側が実装していたが互換性のために残す
 		//if ($options['hiddenField']) {
 		// ---
 		if ($hidden !== false && $options['hiddenField'] !== false) {
@@ -2194,7 +2194,7 @@ DOC_END;
 		$out = '<div id="' . $_id . '">' . $this->select($fieldName . '_', $options, $attributes) . '</div>';
 		$out .= $this->hidden($fieldName);
 		$script = <<< DOC_END
-$(document).ready(function() {
+$(function() {
     aryValue = $("#{$id}").val().replace(/\'/g,"").split(",");
     for(key in aryValue){
         var value = aryValue[key];

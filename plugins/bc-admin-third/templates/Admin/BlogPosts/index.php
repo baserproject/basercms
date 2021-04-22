@@ -28,15 +28,14 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 
 
 <script type="text/javascript">
-	$(document).ready(function () {
+	$(function () {
 		$.baserAjaxDataList.init();
 		$.baserAjaxBatch.init({url: $("#AjaxBatchUrl").html()});
 	});
 </script>
 
 
-<div id="AjaxBatchUrl"
-	 hidden><?php $this->BcBaser->url(['controller' => 'blog_posts', 'action' => 'ajax_batch']) ?></div>
+<div　id="AjaxBatchUrl" hidden><?php $this->BcBaser->url(['controller' => 'blog_posts', 'action' => 'ajax_batch']) ?></div>
 <div id="AlertMessage" class="message" hidden></div>
 <div id="MessageBox" hidden>
 	<div id="flashMessage" class="notice-message"></div>

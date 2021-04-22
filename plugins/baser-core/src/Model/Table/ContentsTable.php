@@ -219,7 +219,7 @@ class ContentsTable extends Table
 			$this->data['Content']['title'] = mb_substr($this->data['Content']['title'], 0, 254, 'UTF-8');
 		}
 		if ($create) {
-			// IEのURL制限が2083文字の為、全て全角文字を想定し231文字でカット
+			// IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
 			if (!isset($this->data['Content']['name'])) {
 				$this->data['Content']['name'] = BcUtil::urlencode(mb_substr($this->data['Content']['title'], 0, 230, 'UTF-8'));
 			}
@@ -546,7 +546,7 @@ class ContentsTable extends Table
 			$data = ['Content' => array_merge($_data['Content'], $data['Content'])];
 		}
 
-		// URLが空の場合はゴミ箱へ移動する処理の為、連携更新を行わない
+		// URLが空の場合はゴミ箱へ移動する処理のため、連携更新を行わない
 		if (!$data['Content']['url']) {
 			return true;
 		}

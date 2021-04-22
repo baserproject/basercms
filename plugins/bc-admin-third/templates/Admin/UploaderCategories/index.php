@@ -21,14 +21,18 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 ]);
 ?>
 
-<script type="text/javascript">
-	$(document).ready(function () {
+<script>
+	$(function () {
 		$.baserAjaxDataList.init();
 		$.baserAjaxBatch.init({url: $("#AjaxBatchUrl").html()});
 	});
 </script>
 
-<div id="AjaxBatchUrl"
-	 style="display:none"><?php $this->BcBaser->url(['controller' => 'uploader_categories', 'action' => 'ajax_batch']) ?></div>
-<div id="AlertMessage" class="message" style="display:none"></div>
-<div id="DataList" class="bca-data-list"><?php $this->BcBaser->element('uploader_categories/index_list') ?></div>
+<div id="AjaxBatchUrl" style="display:none">
+    <?php $this->BcBaser->url(['controller' => 'uploader_categories', 'action' => 'ajax_batch']) ?>
+</div>
+<div id="AlertMessage" class="message" style="display:none">
+</div>
+<div id="DataList" class="bca-data-list">
+    <?php $this->BcBaser->element('uploader_categories/index_list') ?>
+</div>

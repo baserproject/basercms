@@ -27,7 +27,7 @@ $this->BcBaser->i18nScript([
 
 
 <script type="text/javascript">
-	$(document).ready(function () {
+	$(function () {
 		if ($('#btnnext').prop('disabled')) {
 			$('#btnnext').hide();
 		}

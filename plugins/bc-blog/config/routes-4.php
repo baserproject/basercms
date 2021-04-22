@@ -16,5 +16,5 @@ Router::connect('/tags/*', ['plugin' => 'blog', 'controller' => 'blog', 'action'
 $request = new CakeRequest();
 $site = BcSite::findByUrl($request->url);
 if ($site) {
-	Router::connect("/{$site->alias}/tags/*", ['prefix' => $site->name, 'plugin' => 'blog', 'controller' => 'blog', 'action' => 'tags'], 'Blog');
+    Router::connect("/{$site->alias}/tags/*", ['prefix' => $site->name, 'plugin' => 'blog', 'controller' => 'blog', 'action' => 'tags'], 'Blog');
 }

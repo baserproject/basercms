@@ -1,4 +1,5 @@
 <?php
+
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -18,49 +19,48 @@
 class MailConfigsController extends MailAppController
 {
 
-	/**
-	 * クラス名
-	 *
-	 * @var string
-	 */
-	public $name = 'MailConfigs';
+    /**
+     * クラス名
+     *
+     * @var string
+     */
+    public $name = 'MailConfigs';
 
-	/**
-	 * モデル
-	 *
-	 * @var array
-	 */
-	public $uses = ['Mail.MailConfig'];
+    /**
+     * モデル
+     *
+     * @var array
+     */
+    public $uses = ['Mail.MailConfig'];
 
-	/**
-	 * コンポーネント
-	 *
-	 * @var array
-	 */
-	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents'];
+    /**
+     * コンポーネント
+     *
+     * @var array
+     */
+    public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents'];
 
-	/**
-	 * [ADMIN] メールフォーム設定
-	 *
-	 * @return void
-	 */
-	public function admin_form()
-	{
-		if (empty($this->request->data)) {
-			$this->request->data = $this->MailConfig->read(null, 1);
-		} else {
+    /**
+     * [ADMIN] メールフォーム設定
+     *
+     * @return void
+     */
+    public function admin_form()
+    {
+        if (empty($this->request->data)) {
+            $this->request->data = $this->MailConfig->read(null, 1);
+        } else {
 
-			/* 更新処理 */
-			if ($this->MailConfig->save($this->request->data)) {
-				$this->BcMessage->setInfo(__d('baser', 'メールフォーム設定を保存しました。'));
-				$this->redirect(['action' => 'form']);
-			} else {
-				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
-			}
-		}
+            /* 更新処理 */
+            if ($this->MailConfig->save($this->request->data)) {
+                $this->BcMessage->setInfo(__d('baser', 'メールフォーム設定を保存しました。'));
+                $this->redirect(['action' => 'form']);
+            } else {
+                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+            }
+        }
 
-		$this->pageTitle = __d('baser', 'メールプラグイン基本設定');
-		$this->help = 'mail_configs_form';
-	}
-
+        $this->pageTitle = __d('baser', 'メールプラグイン基本設定');
+        $this->help = 'mail_configs_form';
+    }
 }

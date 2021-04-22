@@ -4373,7 +4373,7 @@ class DboSource extends DataSource {
 				'plugin' => null
 			], $options);
 		} else {
-			// 後方互換の為
+			// 後方互換のため
 			$options['cache'] = $options;
 			$plugin = null;
 		}
