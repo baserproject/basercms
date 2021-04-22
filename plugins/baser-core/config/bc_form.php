@@ -23,7 +23,7 @@ return [
     // Container for error items.
     'errorList' => '<ul>{{content}}</ul>',
     // Error item wrapper.
-    'errorItem' => '<li>{{text}}</li>',
+    'errorItem' => '<li class="error-message">{{text}}</li>',
     // File input used by file().
     'file' => '<input type="file" name="{{name}}"{{attrs}}>',
     // Fieldset element used by allControls().

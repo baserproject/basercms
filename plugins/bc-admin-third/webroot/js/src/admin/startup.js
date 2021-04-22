@@ -80,6 +80,11 @@ $(function () {
      * bcToken 初期化
      */
     $.bcToken.init();
-
+    /**
+     * Cake\View\Helper\FormHelper
+     * @method error()
+     * `error`, `errorList` and `errorItem` templatesのclassをjsで変更する
+     */
+    $(".error-message:has(ul)").removeClass("error-message").addClass("error-wrap");
 });
 

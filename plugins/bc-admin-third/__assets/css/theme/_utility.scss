@@ -136,3 +136,12 @@
 		padding-right:14px!important;
 	}
 }
+/**
+ * Cake\View\Helper\FormHelper
+ * @method error()用
+ * `error`, `errorList` and `errorItem` templatesにjsでstyleを追加する用
+ */
+.error-wrap ul{
+	padding:0;
+	margin:0;
+}
