@@ -12,7 +12,12 @@
 namespace BaserCore;
 
 use BaserCore\Error\BcException;
+use BaserCore\Utility\BcUtil;
+use Cake\Core\App;
 use Cake\Core\BasePlugin;
+use Cake\Core\Configure;
+use Cake\Datasource\ConnectionManager;
+use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Route\InflectedRoute;
 use Cake\Routing\RouteBuilder;
@@ -99,11 +104,18 @@ class BcPlugin extends BasePlugin
 
         // TODO clearAllCache 未実装
         // clearAllCache();
-
+        $pluginPath = BcUtil::getPluginPath($options['plugin']);
         try {
-            $this->migrations->migrate($options);
-            $this->migrations->seed($options);
             $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
+            $plugin = $plugins->findByName($pluginName)->first();
+            if(!$plugin || !$plugin->db_init) {
+                if (is_dir($pluginPath . 'config' . DS . 'Migrations')) {
+                    $this->migrations->migrate($options);
+                }
+                if (is_dir($pluginPath . 'config' . DS . 'Seeds')) {
+                    $this->migrations->seed($options);
+                }
+            }
             return $plugins->install($pluginName);
         } catch (BcException $e) {
             $this->migrations->rollback($options);
@@ -117,6 +129,9 @@ class BcPlugin extends BasePlugin
      *  - `plugin` : プラグイン名
      *  - `connection` : コネクション名
      *  - `target` : ロールバック対象バージョン
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function uninstall($options = []) : bool
     {
@@ -127,9 +142,50 @@ class BcPlugin extends BasePlugin
         ], $options);
         $pluginName = $options['plugin'];
 
+        $this->rollbackDb($options);
+
+        $pluginPath = BcUtil::getPluginPath($pluginName);
+        if($pluginPath) {
+            $Folder = new Folder();
+            $Folder->delete($pluginPath);
+        }
+
         $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
-        $this->migrations->rollback($options);
         return $plugins->uninstall($pluginName);
+    }
+
+    /**
+     * プラグインのテーブルをリセットする
+     *
+     * @param array $options
+     *  - `plugin` : プラグイン名
+     *  - `connection` : コネクション名
+     *  - `target` : ロールバック対象バージョン
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function rollbackDb($options = []) : bool
+    {
+        $options = array_merge([
+            'plugin' => $this->getName(),
+            'connection' => 'default',
+            'target' => 0,
+        ], $options);
+        $pluginName = $options['plugin'];
+        try {
+            $this->migrations->rollback($options);
+
+            $phinxTableName = Inflector::underscore($pluginName) . '_phinxlog';
+            $connection = ConnectionManager::get($options['connection']);
+            $schema = $connection->getDriver()->newTableSchema($phinxTableName);
+            $sql = $schema->dropSql($connection);
+            $connection->execute($sql[0])->closeCursor();
+        } catch (BcException $e) {
+            return false;
+        }
+        return true;
     }
 
 }

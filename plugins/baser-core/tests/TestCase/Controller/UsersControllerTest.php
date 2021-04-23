@@ -121,22 +121,78 @@ class UsersControllerTest extends TestCase
     }
 
     /**
-     * Test delete login
-     *
-     * @return void
+     * beforeFilter
      */
-    public function testLogin()
+    public function testBeforeFilter()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
-     * Test delete logout
-     *
-     * @return void
+     * ログイン処理を行う
+     * ・リダイレクトは行わない
+     * ・requestActionから呼び出す
+     */
+    public function testLogin_exec()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * [ADMIN] 管理者ログイン画面
+     */
+    public function testLogin()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * [ADMIN] 代理ログイン
+     */
+    public function testLogin_agent()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * 代理ログインをしている場合、元のユーザーに戻る
+     */
+    public function testBack_agent()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * 認証クッキーをセットする
+     */
+    public function testSetAuthCookie()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * [ADMIN] 管理者ログアウト
      */
     public function testLogout()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
+
+    /**
+     * [ADMIN] ユーザー情報削除　(ajax)
+     */
+    public function testAjax_delete()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * ログインパスワードをリセットする
+     * 新しいパスワードを生成し、指定したメールアドレス宛に送信する
+     */
+    public function testReset_password()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
 }

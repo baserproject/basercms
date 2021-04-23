@@ -1,4 +1,5 @@
 <?php
+
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -19,58 +20,57 @@
 class MailfieldHelper extends AppHelper
 {
 
-	/**
-	 * htmlの属性を取得する
-	 *
-	 * @param array $data メールフィールドデータ
-	 * @return array HTML属性
-	 */
-	public function getAttributes($data)
-	{
-		if (isset($data['MailField'])) {
-			$data = $data['MailField'];
-		}
+    /**
+     * htmlの属性を取得する
+     *
+     * @param array $data メールフィールドデータ
+     * @return array HTML属性
+     */
+    public function getAttributes($data)
+    {
+        if (isset($data['MailField'])) {
+            $data = $data['MailField'];
+        }
 
-		$attributes['size'] = $data['size'];
-		$attributes['rows'] = $data['rows'];
-		$attributes['maxlength'] = $data['maxlength'];
-		$attributes['separator'] = $data['separator'];
-		$attributes['class'] = $data['class'];
-		if ($data['type'] === 'multi_check') {
-			$attributes['multiple'] = true;
-		} elseif ($data['type'] === 'tel') {
-			$attributes['type'] = 'tel';
-		}
-		if (!empty($data['options'])) {
-			$options = preg_split('/(?<!\\\)\|/', $data['options']);
-			$options = call_user_func_array('aa', $options);
-			$attributes = am($attributes, $options);
-		}
-		return $attributes;
-	}
+        $attributes['size'] = $data['size'];
+        $attributes['rows'] = $data['rows'];
+        $attributes['maxlength'] = $data['maxlength'];
+        $attributes['separator'] = $data['separator'];
+        $attributes['class'] = $data['class'];
+        if ($data['type'] === 'multi_check') {
+            $attributes['multiple'] = true;
+        } elseif ($data['type'] === 'tel') {
+            $attributes['type'] = 'tel';
+        }
+        if (!empty($data['options'])) {
+            $options = preg_split('/(?<!\\\)\|/', $data['options']);
+            $options = call_user_func_array('aa', $options);
+            $attributes = am($attributes, $options);
+        }
+        return $attributes;
+    }
 
-	/**
-	 * コントロールのソースを取得する
-	 *
-	 * @param array $data メールフィールドデータ
-	 * @return array コントロールソース
-	 */
-	public function getOptions($data)
-	{
-		if (isset($data['MailField'])) {
-			$data = $data['MailField'];
-		}
-		if (!empty($data['source'])) {
-			if ($data['type'] !== "check") {
-				$values = explode("\n", str_replace('|', "\n", $data['source']));
-				$source = [];
-				foreach($values as $value) {
-					$source[$value] = $value;
-				}
-				return $source;
-			}
-		}
-		return [];
-	}
-
+    /**
+     * コントロールのソースを取得する
+     *
+     * @param array $data メールフィールドデータ
+     * @return array コントロールソース
+     */
+    public function getOptions($data)
+    {
+        if (isset($data['MailField'])) {
+            $data = $data['MailField'];
+        }
+        if (!empty($data['source'])) {
+            if ($data['type'] !== "check") {
+                $values = explode("\n", str_replace('|', "\n", $data['source']));
+                $source = [];
+                foreach ($values as $value) {
+                    $source[$value] = $value;
+                }
+                return $source;
+            }
+        }
+        return [];
+    }
 }

@@ -47,7 +47,7 @@ class PluginsTableTest extends BcTestCase
     {
         parent::setUp();
         $config = $this->getTableLocator()->exists('Plugins')? [] : ['className' => 'BaserCore\Model\Table\PluginsTable'];
-        $this->Plugins = $this->getTableLocator()->get('Plugins', $config);
+        $this->Plugins = $this->getTableLocator()->get('BaserCore.Plugins', $config);
     }
 
     /**
@@ -62,19 +62,37 @@ class PluginsTableTest extends BcTestCase
     }
 
     /**
+     * Test initialize
+     *
+     * @return void
+     */
+    public function testInitialize()
+    {
+        $this->assertIsBool($this->Plugins->hasBehavior('Timestamp'));
+    }
+
+    /**
      * testGetAvailable
      */
     public function testGetAvailable()
     {
         $plugins = $this->Plugins->getAvailable();
-        $this->assertEquals(4, count($plugins));
+        $pluginNames = [];
+        foreach($plugins as $plugin) {
+            $pluginNames[] = $plugin->name;
+        }
+        $this->assertContains('BcBlog', $pluginNames);
 
         $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
         $folder = new Folder($pluginPath);
         $folder->create($pluginPath, 0777);
 
         $plugins = $this->Plugins->getAvailable();
-        $this->assertEquals(5, count($plugins));
+        $pluginNames = [];
+        foreach($plugins as $plugin) {
+            $pluginNames[] = $plugin->name;
+        }
+        $this->assertContains('BcTest', $pluginNames);
 
         $folder->delete($pluginPath);
     }
@@ -111,7 +129,18 @@ class PluginsTableTest extends BcTestCase
     {
         $this->Plugins->install('BcTest');
         $plugin = $this->Plugins->find()->where(['name' => 'BcTest'])->first();
-        $this->assertEquals(2, $plugin->priority);
+        $this->assertEquals(4, $plugin->priority);
+    }
+
+    /**
+     * testChangePriority
+     */
+    public function testChangePriority()
+    {
+        $this->Plugins->changePriority(1, 1);
+        $this->assertEquals(2, $this->Plugins->get(1)->priority);
+        $this->Plugins->changePriority(3, -1);
+        $this->assertEquals(2, $this->Plugins->get(3)->priority);
     }
 
 }

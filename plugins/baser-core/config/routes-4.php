@@ -17,7 +17,7 @@ $isUpdater = Configure::read('BcRequest.isUpdater');
 $isInstalled = Configure::read('BcRequest.isInstalled');
 
 // ==================================================================
-// Object::cakeError() の為、router.php が読み込まれた事をマークしておく
+// Object::cakeError() のため、router.php が読み込まれた事をマークしておく
 // BaserAppModel::cakeError で利用
 // ==================================================================
 Configure::write('BcRequest.routerLoaded', true);

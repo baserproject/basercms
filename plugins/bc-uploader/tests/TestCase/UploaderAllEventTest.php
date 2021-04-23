@@ -13,16 +13,15 @@
 class UploaderAllEventTest extends CakeTestSuite
 {
 
-	/**
-	 * Suite define the tests for this suite
-	 *
-	 * @return CakeTestSuite
-	 */
-	public static function suite()
-	{
-		$suite = new CakeTestSuite('All Uploader Event tests');
-		$suite->addTestDirectory(dirname(__FILE__) . DS . 'Event' . DS);
-		return $suite;
-	}
-
+    /**
+     * Suite define the tests for this suite
+     *
+     * @return CakeTestSuite
+     */
+    public static function suite()
+    {
+        $suite = new CakeTestSuite('All Uploader Event tests');
+        $suite->addTestDirectory(__DIR__ . DS . 'Event' . DS);
+        return $suite;
+    }
 }

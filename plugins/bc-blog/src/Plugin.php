@@ -34,6 +34,8 @@ class Plugin extends BcPlugin
 
     /**
      * プラグインをアンインストールする
+     *
+     * @param array $options
      *  - `plugin` : プラグイン名
      *  - `connection` : コネクション名
      *  - `target` : ロールバック対象バージョン
@@ -41,7 +43,7 @@ class Plugin extends BcPlugin
     public function uninstall($options = []): bool
     {
         // ここに必要なアンインストール処理を記述
-        return parent::uninstall();
+        return parent::uninstall($options);
     }
 
 }

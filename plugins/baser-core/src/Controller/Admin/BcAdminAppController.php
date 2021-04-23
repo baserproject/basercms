@@ -11,19 +11,26 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Controller\BcAppController;
 use Cake\Event\EventInterface;
 use BaserCore\Controller\AppController;
 use Cake\Utility\Inflector;
-use Exception;
-
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Utility\BcUtil;
+use Cake\Http\Exception\NotFoundException;
 /**
  * Class BcAdminAppController
  * @package BaserCore\Controller\Admin
  */
-class BcAdminAppController extends AppController
+class BcAdminAppController extends BcAppController
 {
     /**
      * Initialize
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {
@@ -39,6 +46,7 @@ class BcAdminAppController extends AppController
      *
      * @param array $targetModel ターゲットとなるモデル
      * @param array $options オプション
+     *
      */
     protected function setViewConditions($targetModel = [], $options = []): void
     {
@@ -186,13 +194,18 @@ class BcAdminAppController extends AppController
      */
     public function beforeRender(EventInterface $event): void
     {
-        $this->viewBuilder()->setClassName('BaserCore.BcAdminApp');
+        if(!isset($this->RequestHandler) || !$this->RequestHandler->prefers('json')) {
+            $this->viewBuilder()->setClassName('BaserCore.BcAdminApp');
+        }
         $this->viewBuilder()->setTheme('BcAdminThird');
     }
 
     /**
      * Set Title
      * @param string $title
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function setTitle($title): void
     {
@@ -202,6 +215,9 @@ class BcAdminAppController extends AppController
     /**
      * Set Search
      * @param string $template
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function setSearch($template): void
     {
@@ -211,10 +227,33 @@ class BcAdminAppController extends AppController
     /**
      * Set Help
      * @param string $template
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function setHelp($template): void
     {
         $this->set('help', $template);
+    }
+
+    /**
+     * リファラチェックを行う
+     * @checked
+     * @noTodo
+     * @unitTest
+     * @return bool
+     */
+    protected function _checkReferer(): bool
+    {
+        $siteDomain = BcUtil::getCurrentDomain();
+        if (empty($_SERVER['HTTP_REFERER'])) {
+            return false;
+        }
+        $refererDomain = BcUtil::getDomain($_SERVER['HTTP_REFERER']);
+        if (!preg_match('/^' . preg_quote($siteDomain, '/') . '/', $refererDomain)) {
+            throw new NotFoundException();
+        }
+        return true;
     }
 
 }

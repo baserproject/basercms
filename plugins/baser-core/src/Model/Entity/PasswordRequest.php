@@ -16,6 +16,9 @@ namespace BaserCore\Model\Entity;
 use Cake\Utility\Security;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class PasswordRequest
@@ -47,6 +50,9 @@ class PasswordRequest extends Entity
 
     /**
      * Set Request Key
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function setRequestKey(): void
     {

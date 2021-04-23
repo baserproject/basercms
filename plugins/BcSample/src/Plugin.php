@@ -28,7 +28,7 @@ class Plugin extends BcPlugin
      */
     public function install($options = []) : bool
     {
-        return parent::install();
+        return parent::install($options);
     }
 
 }

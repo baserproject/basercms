@@ -18,12 +18,15 @@ use BaserCore\View\AppView;
  * @var string $installMessage インストールメッセージ
  * @var bool $isInstallable インストール可能かどうか
  * @var \BaserCore\Model\Entity\Plugin $plugin
- * @var bool $dbInited
+ * @var bool $dbInit
  */
 $this->BcBaser->i18nScript([
     'message1' => __d('baser', 'プラグインのデータを初期化します。よろしいですか？'),
 ]);
-$this->BcBaser->js('admin/plugins/install.bundle', false);
+$this->BcBaser->js('admin/plugins/install.bundle', false, [
+	'id' => 'AdminPluginInstallScript',
+	'data-resetDbUrl' => $this->BcBaser->getUrl(['action' => 'reset_db'])
+]);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
     'url' => ['action' => 'add'],
     'title' => __d('baser', '新規追加'),
@@ -31,14 +34,12 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 ?>
 
 
-<?php echo $this->BcAdminForm->control('ResetDbUrl', ['type' => 'hidden', 'value' => $this->BcBaser->getUrl(['action' => 'reset_db'])]) ?>
-
 <?php if ($installMessage): ?>
     <div id="UpdateMessage"><?php echo $installMessage ?></div>
 <?php endif ?>
 
 <?php if ($isInstallable): ?>
-    <?php echo $this->BcAdminForm->create($plugin, ['url' => [$plugin->name]]) ?>
+    <?php echo $this->BcAdminForm->create($plugin, ['url' => [$plugin->name], 'id' => 'AdminPluginInstallForm']) ?>
     <?php echo $this->BcAdminForm->control('name', ['type' => 'hidden']) ?>
     <?php echo $this->BcAdminForm->control('title', ['type' => 'hidden']) ?>
     <?php echo $this->BcAdminForm->control('status', ['type' => 'hidden']) ?>
@@ -65,11 +66,11 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 
 
     <div class="bca-actions">
-        <?php if ($dbInited): ?>
-            <?php echo $this->BcForm->submit(__d('baser', 'プラグインのデータを初期化する'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnReset']) ?>
-            <?php echo $this->BcForm->submit(__d('baser', '有効化'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave']) ?>
+        <?php if ($dbInit): ?>
+            <?php echo $this->BcAdminForm->submit(__d('baser', '有効化'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave']) ?>&nbsp;&nbsp;
+            <?php echo $this->BcAdminForm->submit(__d('baser', 'プラグインのデータを初期化する'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnReset']) ?>
         <?php else: ?>
-            <?php echo $this->BcForm->submit(__d('baser', 'インストール'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave']) ?>
+            <?php echo $this->BcAdminForm->submit(__d('baser', 'インストール'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave']) ?>
         <?php endif; ?>
     </div>
 

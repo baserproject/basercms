@@ -123,6 +123,7 @@ class BcFormHelper extends FormHelper
      * @return Query|false コントロールソース
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getControlSource($field, $options = [])
     {
@@ -158,6 +159,7 @@ class BcFormHelper extends FormHelper
      * @return string html
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function datePicker($fieldName, $options = [])
     {
@@ -191,6 +193,7 @@ SCRIPT_END;
      * @return string
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function dateTimePicker($fieldName, $options = [])
     {
@@ -816,7 +819,7 @@ DOC_END;
 
 		// CUSTOMIZE MODIFY 2011/05/07 ryuring
 		// >>> hiddenオプションがある場合のみ、hiddenタグを出力
-		// 2014/03/23 ryuring CakePHP側が実装していたが互換性の為に残す
+		// 2014/03/23 ryuring CakePHP側が実装していたが互換性のために残す
 		//if ($options['hiddenField']) {
 		// ---
 		if ($hidden !== false && $options['hiddenField'] !== false) {
@@ -968,6 +971,11 @@ DOC_END;
 	 */
 	public function submit($caption = null, $options = []) : string
 	{
+
+	    // TODO 暫定措置
+	    // >>>
+	    return parent::submit($caption, $options);
+	    // <<<
 
 		// CUSTOMIZE ADD 2016/06/08 ryuring
 		// >>>
@@ -1740,6 +1748,11 @@ DOC_END;
 	 */
 	public function radio($fieldName, $options = [], $attributes = []) : string
 	{
+	    // TODO 暫定措置
+	    // >>>
+	    return parent::radio($fieldName, $options, $attributes);
+	    // <<<
+
 		$attributes['options'] = $options;
 		$attributes = $this->_initInputField($fieldName, $attributes);
 		unset($attributes['options']);
@@ -2181,7 +2194,7 @@ DOC_END;
 		$out = '<div id="' . $_id . '">' . $this->select($fieldName . '_', $options, $attributes) . '</div>';
 		$out .= $this->hidden($fieldName);
 		$script = <<< DOC_END
-$(document).ready(function() {
+$(function() {
     aryValue = $("#{$id}").val().replace(/\'/g,"").split(",");
     for(key in aryValue){
         var value = aryValue[key];

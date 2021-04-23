@@ -9,9 +9,10 @@
  */
 
 $(function () {
+    var resetDbUrl = $("#AdminPluginInstallScript").attr('data-resetDbUrl');
     $("#BtnReset").click(function () {
         if (confirm(bcI18n.message1)) {
-            $("#PluginAdminInstallForm").attr('action', $("#ResetDbUrl").val());
+            $("#AdminPluginInstallForm").attr('action', resetDbUrl);
             $.bcUtil.showLoader();
         } else {
             return false;

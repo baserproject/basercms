@@ -955,6 +955,7 @@ class BcManagerComponentTest extends BaserTestCase
 		$this->assertEquals('Test', $data['Plugin']['name'], 'プラグインをインストールできません');
 
 		// -- アンインストール --
+		// TODO PluginsTable::detach() に移行した
 		$result = $this->BcManager->uninstallPlugin('Test');
 		$this->assertTrue($result, 'プラグインをアンインストールできません');
 

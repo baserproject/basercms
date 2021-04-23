@@ -18,7 +18,7 @@ $users = $this->BcForm->getControlSource("UploaderFile.user_id");
 $uploaderCategories = $this->BcForm->getControlSource("UploaderFile.uploader_category_id");
 $this->passedArgs['action'] = 'ajax_list';
 //==============================================================================
-// Ajaxで呼び出される事が前提の為インラインで呼びだし
+// Ajaxで呼び出される事が前提のためインラインで呼び出し
 //==============================================================================
 $this->BcBaser->js([
 	'admin/vendors/jquery.upload-1.0.0.min',

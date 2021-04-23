@@ -210,7 +210,7 @@ class BcContentsHelperTest extends BaserTestCase
 	 * getUrlById
 	 *
 	 * public function testGetUrlById() {
-	 * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
+	 * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドのためスキップします。');
 	 * }
 	 */
 
@@ -219,7 +219,7 @@ class BcContentsHelperTest extends BaserTestCase
 	 * getUrl
 	 *
 	 * public function testGetUrl() {
-	 * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
+	 * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドのためスキップします。');
 	 * }
 	 */
 
@@ -228,7 +228,7 @@ class BcContentsHelperTest extends BaserTestCase
 	 * getPureUrl
 	 *
 	 * public function testGetPureUrl() {
-	 * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
+	 * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドのためスキップします。');
 	 * }
 	 */
 
@@ -387,7 +387,7 @@ class BcContentsHelperTest extends BaserTestCase
 	 * データが公開状態にあるか確認する
 	 *
 	 * public function testIsAllowPublish() {
-	 * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
+	 * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドのためスキップします。');
 	 * }
 	 */
 
@@ -437,7 +437,7 @@ class BcContentsHelperTest extends BaserTestCase
 	 * フォルダリストを取得する
 	 *
 	 * public function testGetContentFolderList() {
-	 * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
+	 * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドのためスキップします。');
 	 * }
 	 */
 
@@ -445,7 +445,7 @@ class BcContentsHelperTest extends BaserTestCase
 	 * サイトIDからサイトルートとなるコンテンツを取得する
 	 *
 	 * public function testGetSiteRoot() {
-	 * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
+	 * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドのためスキップします。');
 	 * }
 	 */
 

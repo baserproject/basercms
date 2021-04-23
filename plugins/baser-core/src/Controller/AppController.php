@@ -30,23 +30,48 @@ class AppController extends BaseController
     {
         parent::initialize();
 
+        var_dump("aaa");
+        exit;
+
+        // ログイン状態の保存確認
+        $this->checkAutoLogin();
+    }
+
+    /**
+     * ログイン状態の保存確認
+     *
+     * @return void
+     */
+    private function checkAutoLogin(): void
+    {
         // ログイン状態の保存確認
         $this->loadComponent('Authentication.Authentication');
         $user = $this->Authentication->getIdentity();
-        $autoLoginKey = $this->request->getCookie(LoginStoresTable::KEY_NAME);
-        if ($user === null && $autoLoginKey !== null) {
-            $this->loadModel('BaserCore.LoginStores');
-            $loginStore = $this->LoginStores->getEnableLoginStore($autoLoginKey);
-            if ($loginStore !== null) {
-                $this->loadModel('BaserCore.Users');
-                $user = $this->Users->getLoginFormatData($loginStore->user_id);
-                $this->Authentication->setIdentity($user);
-
-                // キーのリフレッシュ
-                $loginStore = $this->LoginStores->refresh('Admin', $loginStore->user_id);
-                $this->setCookieAutoLoginKey($loginStore->store_key);
-            }
+        if ($user !== null) {
+            return;
         }
+
+        $autoLoginKey = $this->request->getCookie(LoginStoresTable::KEY_NAME);
+        if ($autoLoginKey === null) {
+            return;
+        }
+
+        $this->loadModel('BaserCore.LoginStores');
+        $loginStore = $this->LoginStores->getEnableLoginStore($autoLoginKey);
+        if ($loginStore === null) {
+            return;
+        }
+
+        $this->loadModel('BaserCore.Users');
+        $user = $this->Users->getLoginFormatData($loginStore->user_id);
+        if ($user === null) {
+            return;
+        }
+
+        $this->Authentication->setIdentity($user);
+        // キーのリフレッシュ
+        $loginStore = $this->LoginStores->refresh('Admin', $loginStore->user_id);
+        $this->setCookieAutoLoginKey($loginStore->store_key);
     }
 
     /**

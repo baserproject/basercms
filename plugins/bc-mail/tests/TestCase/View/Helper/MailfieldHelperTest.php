@@ -1,4 +1,5 @@
 <?php
+
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -15,36 +16,35 @@ App::uses('MailfieldHelper', 'Mail.View/Helper');
 class MailfieldHelperTest extends BaserTestCase
 {
 
-	/**
-	 * set up
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * set up
+     */
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	/**
-	 * tear down
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * tear down
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	/**
-	 * htmlの属性を取得する
-	 */
-	public function testGetAttributes()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * htmlの属性を取得する
+     */
+    public function testGetAttributes()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * コントロールのソースを取得する
-	 */
-	public function testGetOptions()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
+    /**
+     * コントロールのソースを取得する
+     */
+    public function testGetOptions()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }

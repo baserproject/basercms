@@ -17,6 +17,8 @@ return [
          * 特権管理者グループID
          */
         'adminGroup' => ['admins'],
+        // 管理者グループID
+        'adminGroupId' => 1,
         /**
          * コアパッケージ名
          */
@@ -29,6 +31,10 @@ return [
          * パスワード再発行URLの有効時間(min) デフォルト24時間
          */
         'passwordRequestAllowTime' => 1440,
+        /**
+         * baserマーケットRSS
+         */
+        'marketPluginRss' => 'https://market.basercms.net/plugins.php',
         /**
          * システムナビ
          *
@@ -165,17 +171,17 @@ return [
             // URLにおけるエイリアス
             'alias' => env('BC_ADMIN_PREFIX'),
             // 認証後リダイレクト先
-            'loginRedirect' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX', '/admin'),
+            'loginRedirect' => ['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
             // ログインページURL
-            'loginAction' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX', '/admin') . '/users/login',
+            'loginAction' => ['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Users', 'action' => 'login'],
             // ログアウトページURL
-            'logoutAction' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX') . '/users/logout',
+            'logoutAction' => ['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Users', 'action' => 'logout'],
             // ユーザー名フィールド
-            'username' => 'email',
+            'username' => ['email', 'name'],
             // パスワードフィールド
             'password' => 'password',
             // モデル
-            'userModel' => 'Users',
+            'userModel' => 'BaserCore.Users',
             // セッションキー
             'sessionKey' => 'AuthAdmin',
         ]
@@ -203,6 +209,5 @@ return [
             'duration' => '+999 days',
             'url' => env('CACHE_CAKEENV_URL', null),
         ],
-    ]
-
+    ],
 ];

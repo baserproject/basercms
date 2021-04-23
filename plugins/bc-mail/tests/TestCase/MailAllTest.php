@@ -1,4 +1,5 @@
 <?php
+
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -16,21 +17,20 @@
 class MailAllTest extends CakeTestSuite
 {
 
-	/**
-	 * Suite define the tests for this suite
-	 *
-	 * @return CakeTestSuite
-	 */
-	public static function suite()
-	{
-		$suite = new CakeTestSuite('Baser Mail All Tests');
+    /**
+     * Suite define the tests for this suite
+     *
+     * @return CakeTestSuite
+     */
+    public static function suite()
+    {
+        $suite = new CakeTestSuite('Baser Mail All Tests');
 
-		$path = dirname(__FILE__) . DS;
+        $path = __DIR__ . DS;
 
-		$suite->addTestFile($path . 'MailAllControllerTest.php');
-		$suite->addTestFile($path . 'MailAllModelTest.php');
-		$suite->addTestFile($path . 'MailAllHelpersTest.php');
-		return $suite;
-	}
-
+        $suite->addTestFile($path . 'MailAllControllerTest.php');
+        $suite->addTestFile($path . 'MailAllModelTest.php');
+        $suite->addTestFile($path . 'MailAllHelpersTest.php');
+        return $suite;
+    }
 }

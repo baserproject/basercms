@@ -8,7 +8,7 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-$(function() {
+$(function () {
 
     /**
      * ヘルプ用バルーンチップ設定
@@ -60,21 +60,31 @@ $(function() {
     /**
      * ヘルプ
      */
-	$('#BtnMenuHelp').click(function(){
-		if($('#Help').css('display')==='none'){
-			$('#Help').fadeIn(300);
-		} else {
-			$('#Help').fadeOut(300);
-		}
-	});
-	$('#CloseHelp').click(function(){
-		$('#Help').fadeOut(300);
-	});
+    $('#BtnMenuHelp').click(function () {
+        if ($('#Help').css('display') === 'none') {
+            $('#Help').fadeIn(300);
+        } else {
+            $('#Help').fadeOut(300);
+        }
+    });
+    $('#CloseHelp').click(function () {
+        $('#Help').fadeOut(300);
+    });
 
     /**
-     * BcUtil 初期化
+     * bcUtil 初期化
      */
-     $.bcUtil.init([]);
+    $.bcUtil.init({});
 
+    /**
+     * bcToken 初期化
+     */
+    $.bcToken.init();
+    /**
+     * Cake\View\Helper\FormHelper
+     * @method error()
+     * `error`, `errorList` and `errorItem` templatesのclassをjsで変更する
+     */
+    $(".error-message:has(ul)").removeClass("error-message").addClass("error-wrap");
 });
 

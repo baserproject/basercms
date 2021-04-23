@@ -5,6 +5,9 @@
  * Note: It is not recommended to commit files with credentials such as app_local.php
  * into source code version control.
  */
+
+use Cake\Cache\Engine\FileEngine;
+
 return [
     /*
      * Debug Level:
@@ -101,4 +104,19 @@ return [
          */
         'timeout' => 60 * 24 * 2
     ],
+
+    /**
+     * キャッシュ
+     */
+    'Cache' => [
+        '_cake_env_' => [
+            'className' => FileEngine::class,
+            'prefix' => 'myapp_cake_env_',
+            'path' => CACHE . 'environment' . DS,
+            'serialize' => true,
+            'duration' => '+999 days',
+            'url' => env('CACHE_CAKEENV_URL', null),
+        ],
+    ]
+
 ];

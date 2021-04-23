@@ -233,7 +233,7 @@ class BcPostgres extends Postgres
 				}
 			case 'integer':
 				// TreeBehavior::getPath() にて、引数 $id に、null、または、空文字を指定した場合に、
-				// Model::id の初期値 false に上書きされてしまう仕様の為、SQLエラーが発生してしまう。
+				// Model::id の初期値 false に上書きされてしまう仕様のため、SQLエラーが発生してしまう。
 				if ($data === false) {
 					return 'NULL';
 				}

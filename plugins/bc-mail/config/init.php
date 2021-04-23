@@ -1,4 +1,5 @@
 <?php
+
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -30,20 +31,20 @@ $savePath = $filesPath . DS . 'mail';
 $limitedPath = $savePath . DS . 'limited';
 
 if (is_writable($filesPath) && !is_dir($savePath)) {
-	mkdir($savePath);
+    mkdir($savePath);
 }
 if (!is_writable($savePath)) {
-	chmod($savePath, 0777);
+    chmod($savePath, 0777);
 }
 if (is_writable($savePath) && !is_dir($limitedPath)) {
-	mkdir($limitedPath);
+    mkdir($limitedPath);
 }
 if (!is_writable($limitedPath)) {
-	chmod($limitedPath, 0777);
+    chmod($limitedPath, 0777);
 }
 if (is_writable($limitedPath)) {
-	$File = new File($limitedPath . DS . '.htaccess');
-	$htaccess = "Order allow,deny\nDeny from all";
-	$File->write($htaccess);
-	$File->close();
+    $File = new File($limitedPath . DS . '.htaccess');
+    $htaccess = "Order allow,deny\nDeny from all";
+    $File->write($htaccess);
+    $File->close();
 }

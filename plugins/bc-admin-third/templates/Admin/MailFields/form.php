@@ -74,7 +74,7 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 				<div id="helptextType" class="helptext">
 					<ul>
 						<li><?php echo __d('baser', 'Eメールを選択すると、メールフォーム送信の際、入力されたEメール宛に自動返信メールを送信します。') ?><br/>
-							<small>※ 前バージョンとの互換性の為、フィールド名を「email_1」とした場合、Eメールを選択しなくても自動返信メールを送信します。</small></li>
+							<small>※ 前バージョンとの互換性のため、フィールド名を「email_1」とした場合、Eメールを選択しなくても自動返信メールを送信します。</small></li>
 						<li><?php echo __d('baser', '自動補完郵便番号の場合は、選択リストに都道府県のフィールドと住所のフィールドのリストを指定します。') ?></li>
 					</ul>
 				</div>

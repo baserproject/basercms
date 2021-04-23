@@ -42,7 +42,7 @@ class BcAdminHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $BcAdminAppView = new BcAdminAppView($this->getRequest());
+        $BcAdminAppView = new BcAdminAppView($this->getRequest()->withParam('controller', 'users'));
         $BcAdminAppView->setTheme('BcAdminThird');
         $this->BcAdmin = new BcAdminHelper($BcAdminAppView);
     }
@@ -57,13 +57,18 @@ class BcAdminHelperTest extends BcTestCase
 		unset($this->BcAdmin);
 		parent::tearDown();
 	}
-
+    /**
+     * Test isAvailableSideBar
+     *
+     * @return void
+     */
     public function testIsAvailableSideBar()
     {
         // 未ログイン
         $results = $this->BcAdmin->isAvailableSideBar();
         $this->assertEquals(false, $results);
         // ログイン済
+        $this->BcAdmin->getView()->setRequest($this->getRequest('/baser/admin'));
         $session = $this->BcAdmin->getView()->getRequest()->getSession();
         $session->write('AuthAdmin', true);
         $results = $this->BcAdmin->isAvailableSideBar();
@@ -157,12 +162,21 @@ class BcAdminHelperTest extends BcTestCase
 
     /**
      * Test search
-     *
      * @return void
      */
-    public function testSearch()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
+    public function testSearch() {
+
+        $this->loadRoutes();
+        ob_start();
+        $this->BcAdmin->search();
+        $actual = ob_get_clean();
+        $this->assertEmpty($actual);
+
+        $this->BcAdmin->getView()->set('search', 'users_index');
+        ob_start();
+        $this->BcAdmin->search();
+        $actual = ob_get_clean();
+        $this->assertRegExp('/class="bca-search">(.*)<form/s', $actual);
     }
 
     /**

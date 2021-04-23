@@ -26,6 +26,7 @@ use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Middleware\AuthenticationMiddleware;
+use Cake\Routing\Router;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -136,28 +137,29 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
         if ($prefix) {
             $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
             $service->setConfig([
-                'unauthenticatedRedirect' => $authSetting['loginAction'],
+                'unauthenticatedRedirect' => Router::url($authSetting['loginAction'], true),
                 'queryParam' => 'redirect',
                 'contain' => 'UserGroups',
             ]);
-
-            $fields = [
-                'username' => $authSetting['username'],
-                'password' => $authSetting['password']
-            ];
 
             $service->loadAuthenticator('Authentication.Session', [
                 'sessionKey' => $authSetting['sessionKey'],
             ]);
             $service->loadAuthenticator('Authentication.' . $authSetting['type'], [
-                'fields' => $fields,
-                'loginUrl' => $authSetting['loginAction'],
+                'fields' => [
+                    'username' => is_array($authSetting['username']) ? $authSetting['username'][0] : $authSetting['username'],
+                    'password' => $authSetting['password']
+                 ],
+                'loginUrl' => Router::url($authSetting['loginAction']),
             ]);
             $service->loadIdentifier('Authentication.Password', [
-                'fields' => $fields,
+                'fields' => [
+                    'username' => $authSetting['username'],
+                    'password' => $authSetting['password']
+                 ],
                 'resolver' => [
                     'className' => 'Authentication.Orm',
-                    'userModel' => $authSetting['userModel']
+                    'userModel' => $authSetting['userModel'],
                 ],
                 'contain' => 'UserGroups',
             ]);

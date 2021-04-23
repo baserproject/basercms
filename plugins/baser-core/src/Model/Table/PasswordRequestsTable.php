@@ -20,6 +20,9 @@ use Cake\ORM\Behavior\TimestampBehavior;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class UsersTable
@@ -42,6 +45,9 @@ class PasswordRequestsTable extends Table
      *
      * @param array $config テーブル設定
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {
@@ -54,6 +60,9 @@ class PasswordRequestsTable extends Table
      *
      * @param Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -70,6 +79,9 @@ class PasswordRequestsTable extends Table
      *
      * @param [type] $requestKey
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getEnableRequestData($requestKey)
     {
@@ -88,6 +100,9 @@ class PasswordRequestsTable extends Table
      * @param PasswordRequest $passwordRequest
      * @param string $password
      * @return \Cake\Datasource\EntityInterface|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function updatePassword(PasswordRequest $passwordRequest, string $password)
     {

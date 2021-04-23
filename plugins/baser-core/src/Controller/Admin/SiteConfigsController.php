@@ -317,27 +317,4 @@ class SiteConfigsController extends AppController
 
 	}
 
-	/**
-	 * admin用Token取得アクション
-	 *
-	 * @return string
-	 * @deprecated 5.0.0 since 4.0.0 ajax_get_token は、BcFormController に移行した為、次のバージョンで削除
-	 */
-	public function admin_ajax_get_token()
-	{
-		$this->autoRender = false;
-		return $this->getToken();
-	}
-
-	/**
-	 * セキュリティトークンを取得する
-	 *
-	 * @return mixed
-	 * @deprecated 5.0.0 since 4.0.0 ajax_get_token は、BcFormController に移行した為、次のバージョンで削除
-	 */
-	public function ajax_get_token()
-	{
-		return $this->setAction(('admin_ajax_get_token'));
-	}
-
 }

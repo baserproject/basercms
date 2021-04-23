@@ -1,4 +1,5 @@
 <?php
+
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -28,13 +29,13 @@ $BlogPost = ClassRegistry::init('Blog.BlogPost');
 $BlogPost->contentSaving = false;
 $datas = $BlogPost->find('all', ['recursive' => -1]);
 if ($datas) {
-	$ret = true;
-	foreach($datas as $data) {
-		$data['BlogPost']['posts_date'] = date('Y-m-d H:i:s');
-		unset($data['BlogPost']['eye_catch']);
-		$BlogPost->set($data);
-		if (!$BlogPost->save($data)) {
-			$ret = false;
-		}
-	}
+    $ret = true;
+    foreach ($datas as $data) {
+        $data['BlogPost']['posts_date'] = date('Y-m-d H:i:s');
+        unset($data['BlogPost']['eye_catch']);
+        $BlogPost->set($data);
+        if (!$BlogPost->save($data)) {
+            $ret = false;
+        }
+    }
 }

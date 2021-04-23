@@ -13,8 +13,10 @@ trim_trailing_whitespace = true
 [*.bat]
 end_of_line = crlf
 
+[*.scss]
+indent_size = 2
+
 [*.yml]
-indent_style = space
 indent_size = 2
 
 [*.twig]

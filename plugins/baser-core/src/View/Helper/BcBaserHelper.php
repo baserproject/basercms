@@ -156,7 +156,7 @@ class BcBaserHelper extends Helper
      * @param bool $inline コンテンツ内に Javascript を出力するかどうか（初期値 : true）
      * @return void
      * @checked
-     * @noTodo
+     * @unitTest
      */
     public function js($url, $inline = true, $options = [])
     {
@@ -176,6 +176,9 @@ class BcBaserHelper extends Helper
      *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
      * ※ その他のパラメータについては、View::element() を参照
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function element($name, $data = [], $options = [])
     {
@@ -194,6 +197,8 @@ class BcBaserHelper extends Helper
      *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
      * ※ その他のパラメータについては、View::element() を参照
      * @return string エレメントのレンダリング結果
+     * @checked
+     * @unitTest
      */
     public function getElement($name, $data = [], $options = [])
     {
@@ -282,7 +287,7 @@ class BcBaserHelper extends Helper
      *    ※ パラメータについては、HtmlHelper::image() を参照。
      * @return void
      * @checked
-     * @noTodo
+     * @unitTest
      */
     public function img($path, $options = [])
     {
@@ -297,7 +302,7 @@ class BcBaserHelper extends Helper
      * ※ パラメータについては、HtmlHelper::image() を参照。
      * @return string 画像タグ
      * @checked
-     * @noTodo
+     * @unitTest
      */
     public function getImg($path, $options = [])
     {
@@ -319,7 +324,7 @@ class BcBaserHelper extends Helper
      *    リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
      * @return void
      * @checked
-     * @noTodo
+     * @unitTest
      */
     public function link($title, $url = null, $htmlAttributes = [], $confirmMessage = false)
     {
@@ -340,6 +345,8 @@ class BcBaserHelper extends Helper
      * @param bool $confirmMessage 確認メッセージ（初期値 : false）
      *    リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
      * @return string
+     * @checked
+     * @unitTest
      */
     public function getLink($title, $url = null, $options = [], $confirmMessage = false)
     {
@@ -483,23 +490,15 @@ class BcBaserHelper extends Helper
     /**
      * 管理者グループかどうかチェックする
      *
-     * @param int $userGroupId ユーザーグループID（初期値 : null）※ 指定しない場合は、現在のログインユーザーについてチェックする
+     * @param array| BaserCore\Model\Entity\User $user ユーザー（初期値 : null）※ 指定しない場合は、現在のログインユーザーについてチェックする
      * @return bool 管理者グループの場合は true を返す
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function isAdminUser($userGroupId = null)
+    public function isAdminUser($user = null): bool
     {
-        // TODO 未実装
-        // >>>
-        return true;
-        // <<<
-        if (!$userGroupId) {
-            return BcUtil::isAdminUser();
-        }
-        if ($userGroupId == Configure::read('BcApp.adminGroupId')) {
-            return true;
-        } else {
-            return false;
-        }
+        return BcUtil::isAdminUser($user);
     }
 
     /**
@@ -563,6 +562,7 @@ class BcBaserHelper extends Helper
      * @return string $userName ユーザー名
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function getUserName($user)
     {
@@ -602,6 +602,7 @@ class BcBaserHelper extends Helper
      * @param string $key 出力するメッセージのキー（初期状態では省略可）
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function flash($key = 'flash'): void
     {
@@ -643,6 +644,7 @@ class BcBaserHelper extends Helper
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function contentsName($detail = false, $options = [])
     {
@@ -668,6 +670,8 @@ class BcBaserHelper extends Helper
      *    - `error` : エラーページの場合に出力する文字列（初期値 : Error）
      *  - `underscore` : キャメルケースではなく、アンダースコア区切りで出力する（初期値 : false）
      * @return string
+     * @checked
+     * @unitTest
      */
     public function getContentsName($detail = false, $options = [])
     {
@@ -850,6 +854,8 @@ class BcBaserHelper extends Helper
      * @param bool $full httpから始まるURLを取得するかどうか
      * @param bool $sessionId セションIDを付加するかどうか
      * @return string URL
+     * @checked
+     * @unitTest
      */
     public function getUrl($url = null, $full = false, $sessionId = true)
     {
@@ -1524,6 +1530,8 @@ class BcBaserHelper extends Helper
      *  ※ その他のパラメータについては、HtmlHelper::css() を参照。
      *    ※ false を指定した場合、inline が false となる。
      * @return string|void
+     * @checked
+     * @noTodo
      */
     public function css($path, $options = [])
     {
@@ -1534,9 +1542,7 @@ class BcBaserHelper extends Helper
             'rel' => 'stylesheet',
             'inline' => true
         ], $options);
-        $rel = $options['rel'];
-        unset($options['rel']);
-        $result = $this->BcHtml->css($path, $rel, $options);
+        $result = $this->BcHtml->css($path, $options);
         if ($options['inline']) {
             echo $result;
         }
@@ -2095,7 +2101,7 @@ EOD;
         $out = <<< END_FLASH
 <div id="{$id}">{$noflash}</div>
 <script type="text/javascript">
-	swfobject.embedSWF("{$path}", "{$id}", "{$width}", "{$height}", "{$version}");
+    swfobject.embedSWF("{$path}", "{$id}", "{$width}", "{$height}", "{$version}");
 </script>
 END_FLASH;
 

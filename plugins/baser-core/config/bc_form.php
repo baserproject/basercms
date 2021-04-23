@@ -23,7 +23,7 @@ return [
     // Container for error items.
     'errorList' => '<ul>{{content}}</ul>',
     // Error item wrapper.
-    'errorItem' => '<li>{{text}}</li>',
+    'errorItem' => '<li class="error-message">{{text}}</li>',
     // File input used by file().
     'file' => '<input type="file" name="{{name}}"{{attrs}}>',
     // Fieldset element used by allControls().
@@ -67,7 +67,8 @@ return [
     // Radio input element,
     'radio' => '<input type="radio" name="{{name}}" value="{{value}}"{{attrs}}>',
     // Wrapping container for radio input/label,
-    'radioWrapper' => '{{label}}',
+    'radioWrapper' => '<span class="{{class}}">{{label}}</span>',
+    'radioFormGroup' => '<span class="{{groupClass}}">{{input}}</span>',
     // Textarea input element,
     'textarea' => '<textarea name="{{name}}"{{attrs}}>{{value}}</textarea>',
     // Container for submit buttons.

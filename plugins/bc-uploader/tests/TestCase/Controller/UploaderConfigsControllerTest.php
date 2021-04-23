@@ -21,32 +21,31 @@ App::uses('UploaderConfigsController', 'Uploader.Controller');
 class UploaderConfigsControllerTest extends BaserTestCase
 {
 
-	/**
-	 * set up
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	/**
-	 * [ADMIN] アップローダー設定
-	 */
-	public function testAdmin_index()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
+    /**
+     * [ADMIN] アップローダー設定
+     */
+    public function testAdmin_index()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }

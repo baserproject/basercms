@@ -263,12 +263,15 @@ class BcTimeHelper extends TimeHelper
 	 * @param int $userOffset User's offset from GMT (in hours)
 	 * @return string Formatted date string
 	 */
-	public function format($format = 'Y-m-d', $date = null, $invalid = false, $userOffset = null)
+	public function format($date = null, $format = 'YYYY-MM-dd', $invalid = false, $userOffset = null)
 	{
+	    if($format === 'Y-m-d') {
+	        $format = 'YYYY-MM-dd';
+	    }
 		if ($date !== "00:00:00" && (!$date || $date == '0000-00-00 00:00:00')) {
 			return "";
 		}
-		return parent::format($format, $date, $invalid, $userOffset);
+		return parent::format($date, $format, $invalid, $userOffset);
 	}
 
 	/**

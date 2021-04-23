@@ -23,32 +23,31 @@ App::uses('BlogConfigsController', 'Blog.Controller');
 class BlogConfigsControllerTest extends BaserTestCase
 {
 
-	/**
-	 * set up
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	/**
-	 * before_filter
-	 */
-	public function testBeforeFilter()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
+    /**
+     * before_filter
+     */
+    public function testBeforeFilter()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }

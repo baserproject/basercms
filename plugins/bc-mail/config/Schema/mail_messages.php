@@ -5,27 +5,26 @@
 class MailMessagesSchema extends CakeSchema
 {
 
-	public $name = 'MailMessages';
+    public $name = 'MailMessages';
 
-	public $file = 'mail_messages.php';
+    public $file = 'mail_messages.php';
 
-	public $connection = 'default';
+    public $connection = 'default';
 
-	public function before($event = [])
-	{
-		return true;
-	}
+    public function before($event = [])
+    {
+        return true;
+    }
 
-	public function after($event = [])
-	{
-	}
+    public function after($event = [])
+    {
+    }
 
-	public $mail_messages = [
-		'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'],
-		'created' => ['type' => 'datetime', 'null' => true, 'default' => null],
-		'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
-		'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
-		'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci']
-	];
-
+    public $mail_messages = [
+        'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'],
+        'created' => ['type' => 'datetime', 'null' => true, 'default' => null],
+        'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
+        'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
+        'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci']
+    ];
 }

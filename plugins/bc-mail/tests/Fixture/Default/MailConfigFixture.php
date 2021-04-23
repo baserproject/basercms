@@ -1,4 +1,5 @@
 <?php
+
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -13,22 +14,21 @@
 class MailConfigFixture extends BaserTestFixture
 {
 
-	/**
-	 * Records
-	 *
-	 * @var array
-	 */
-	public $records = [
-		[
-			'id' => '1',
-			'site_name' => 'baserCMS - Based Website Development Project -',
-			'site_url' => 'https://basercms.net/',
-			'site_email' => 'info@basercms.net',
-			'site_tel' => '',
-			'site_fax' => '',
-			'created' => '2015-01-27 12:56:53',
-			'modified' => null
-		],
-	];
-
+    /**
+     * Records
+     *
+     * @var array
+     */
+    public $records = [
+        [
+            'id' => '1',
+            'site_name' => 'baserCMS - Based Website Development Project -',
+            'site_url' => 'https://basercms.net/',
+            'site_email' => 'info@basercms.net',
+            'site_tel' => '',
+            'site_fax' => '',
+            'created' => '2015-01-27 12:56:53',
+            'modified' => null
+        ],
+    ];
 }

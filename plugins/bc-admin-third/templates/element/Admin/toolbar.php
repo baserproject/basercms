@@ -65,20 +65,14 @@ $currentPrefix = $this->BcAuth->getCurrentPrefix();
 $loginUser = $this->BcAuth->getCurrentLoginUser();
 $session = $this->getRequest()->getSession();
 $currentUrl = $this->request->getPath();
-$isLoginUrl = false;
-if($currentUrl === $loginUrl) {
-    $isLoginUrl = true;
-}
-$isFront = false;
-if($currentPrefix === 'front') {
-    $isFront = true;
-}
+$isLoginUrl = ($currentUrl === $loginUrl) ? true : false;
+$isFront = ($currentPrefix === 'front') ? true : false;
 $logo = $this->BcBaser->getImg('admin/logo_icon.svg', ['alt' => '', 'width' => '24', 'height' => '21', 'class' => 'bca-toolbar__logo-symbol']);
 if ($this->name === 'Installations') {
     $logoLinkKey = 'install';
 } elseif (Configure::read('BcRequest.isUpdater')) {
     $logoLinkKey = 'update';
-} elseif (!empty($this->request->getParam('admin')) || $isLoginUrl) {
+} elseif ($this->request->getParam('prefix') === "Admin" || $isLoginUrl) {
     $logoLinkKey = 'normal';
 } else {
     if ($isCurrentUserAdminAvailable) {
@@ -88,7 +82,7 @@ if ($this->name === 'Installations') {
     }
 }
 $modeLabelKey = '';
-if (!$loginUrl || $isLoginUrl) {
+if (!$loginUrl || !$isLoginUrl) {
     if (Configure::read('debug')) {
         $modeLabelKey = 'debug';
     } elseif (BcUtil::isInstallMode()) {

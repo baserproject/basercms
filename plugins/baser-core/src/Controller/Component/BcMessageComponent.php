@@ -41,6 +41,7 @@ class BcMessageComponent extends Component
      * @param bool $setFlash flash message に保存するか
      * @param null|string $class 付与するクラス名
      * @checked
+     * @unitTest
      */
     public function set($message, $alert = false, $saveDblog = false, $setFlash = true, $class = null)
     {
@@ -72,6 +73,7 @@ class BcMessageComponent extends Component
      * @param bool $setFlash
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setSuccess($message, $log = true, $setFlash = true)
     {
@@ -86,6 +88,7 @@ class BcMessageComponent extends Component
      * @param bool $setFlash フラッシュメッセージにセットするかどうか
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setError($message, $log = false, $setFlash = true)
     {
@@ -100,6 +103,7 @@ class BcMessageComponent extends Component
      * @param bool $setFlash フラッシュメッセージにセットするかどうか
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setWarning($message, $log = false, $setFlash = true)
     {
@@ -114,6 +118,7 @@ class BcMessageComponent extends Component
      * @param bool $setFlash フラッシュメッセージにセットするかどうか
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function setInfo($message, $log = false, $setFlash = true)
     {

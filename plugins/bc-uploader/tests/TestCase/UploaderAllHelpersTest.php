@@ -13,16 +13,15 @@
 class UploaderAllHelpersTest extends CakeTestSuite
 {
 
-	/**
-	 * Suite define the tests for this suite
-	 *
-	 * @return CakeTestSuite
-	 */
-	public static function suite()
-	{
-		$suite = new CakeTestSuite('All Uploader Helper tests');
-		$suite->addTestDirectory(dirname(__FILE__) . DS . 'View' . DS . 'Helper' . DS);
-		return $suite;
-	}
-
+    /**
+     * Suite define the tests for this suite
+     *
+     * @return CakeTestSuite
+     */
+    public static function suite()
+    {
+        $suite = new CakeTestSuite('All Uploader Helper tests');
+        $suite->addTestDirectory(__DIR__ . DS . 'View' . DS . 'Helper' . DS);
+        return $suite;
+    }
 }

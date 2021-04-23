@@ -949,7 +949,7 @@ class BcManagerComponent extends Component
 	 * @return boolean
 	 * TODO 処理を DboSource に移動する
 	 * TODO コアのテーブルを削除する際、プレフィックスだけでは、プラグインを識別できないので、プラグインのテーブルも削除されてしまう。
-	 *        その為、プラグインのテーブルを削除しようとすると存在しない為、Excerptionが発生してしまい。処理が停止してしまうので、
+	 *        そのため、プラグインのテーブルを削除しようとすると存在しない為、Excerptionが発生してしまい。処理が停止してしまうので、
 	 *        try で実行し、catch はスルーしている。
 	 */
 	public function deleteTables($dbConfigKeyName = 'default', $dbConfig = null)
@@ -1717,27 +1717,6 @@ class BcManagerComponent extends Component
 				$this->log($e->getMessage());
 			}
 		}
-	}
-
-	/**
-	 * プラグインをアンインストールする
-	 *
-	 * @param string $name
-	 * @return boolean
-	 */
-	public function uninstallPlugin($name)
-	{
-
-		$Plugin = ClassRegistry::init('Plugin');
-		$data = $Plugin->find('first', ['conditions' => ['Plugin.name' => $name], 'recursive' => -1]);
-		$data['Plugin']['status'] = false;
-		if ($Plugin->save($data)) {
-			clearAllCache();
-			return true;
-		} else {
-			return false;
-		}
-
 	}
 
 	/**

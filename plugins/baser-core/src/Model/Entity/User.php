@@ -14,6 +14,9 @@ namespace BaserCore\Model\Entity;
 use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\I18n\Time as TimeAlias;
 use Cake\ORM\Entity as EntityAlias;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class User
@@ -55,6 +58,9 @@ class User extends EntityAlias
      *
      * @param $value
      * @return bool|string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function _setPassword($value)
     {

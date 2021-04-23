@@ -20,6 +20,9 @@ use Cake\ORM\Behavior\TimestampBehavior;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class UsersTable
@@ -42,6 +45,9 @@ class UsersTable extends Table
      *
      * @param array $config テーブル設定
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {
@@ -65,6 +71,9 @@ class UsersTable extends Table
      * @param Event $event
      * @param ArrayObject $data
      * @param ArrayObject $options
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
     {
@@ -74,12 +83,35 @@ class UsersTable extends Table
     }
 
     /**
+     * beforeSave
+     *
+     * @param type $options
+     * @return boolean
+     */
+    public function beforeSave($options = [])
+    {
+        // TODO 暫定措置
+        // >>>
+        return true;
+        // <<<
+
+        if (isset($this->data[$this->alias]['password'])) {
+            App::uses('AuthComponent', 'Controller/Component');
+            $this->data[$this->alias]['password'] = AuthComponent::password($this->data[$this->alias]['password']);
+        }
+        return true;
+    }
+
+    /**
      * After Marshal
      *
      * @param Event $event
      * @param User $user
      * @param ArrayObject $data
      * @param ArrayObject $options
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function afterMarshal(Event $event, User $user, ArrayObject $data, ArrayObject $options)
     {
@@ -88,10 +120,36 @@ class UsersTable extends Table
     }
 
     /**
+     * afterSave
+     *
+     * @param boolean $created
+     */
+    public function afterSave($created, $options = [])
+    {
+        var_dump("aa");
+
+        exit;
+
+
+        // TODO 暫定措置
+        // >>>
+        return;
+        // <<<
+
+        parent::afterSave($created);
+        if ($created && !empty($this->UserGroup)) {
+            $this->applyDefaultFavorites($this->getLastInsertID(), $this->data[$this->alias]['user_group_id']);
+        }
+    }
+
+    /**
      * Validation Default
      *
      * @param Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -169,6 +227,9 @@ class UsersTable extends Table
      * Validation New
      * @param Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function validationNew(Validator $validator): Validator
     {
@@ -201,6 +262,9 @@ class UsersTable extends Table
 
     /**
      * 初期化されたエンティティを取得する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNew()
     {
@@ -216,6 +280,9 @@ class UsersTable extends Table
      * @param string $field フィールド名
      * @param array $options オプション
      * @return Query コントロールソース
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getControlSource($field, $options = [])
     {
@@ -239,6 +306,9 @@ class UsersTable extends Table
      * @param $query
      * @param $request
      * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function createWhere($query, $request): Query
     {
@@ -256,12 +326,112 @@ class UsersTable extends Table
      *
      * @param [type] $id
      * @return User
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getLoginFormatData($id): User
     {
         return $this->get($id, [
             'contain' => ['UserGroups'],
         ]);
+    }
+
+    /**
+     * ユーザーリストを取得する
+     * 条件を指定する場合は引数を指定する
+     *
+     * @param array $conditions 取得条件
+     * @return array
+     */
+    public function getUserList($conditions = [])
+    {
+        $users = $this->find("all", [
+            'fields' => ['id', 'real_name_1', 'real_name_2', 'nickname'],
+            'conditions' => $conditions,
+            'recursive' => -1
+        ]);
+        $list = [];
+        if ($users) {
+            App::uses('BcBaserHelper', 'View/Helper');
+            $BcBaser = new BcBaserHelper(new View());
+            foreach($users as $key => $user) {
+                $list[$user[$this->alias]['id']] = $BcBaser->getUserName($user);
+            }
+        }
+        return $list;
+    }
+
+    /**
+     * フォームの初期値を設定する
+     *
+     * @return array 初期値データ
+     */
+    public function getDefaultValue()
+    {
+        $data[$this->alias]['user_group_id'] = Configure::read('BcApp.adminGroupId');
+        return $data;
+    }
+
+    /**
+     * ユーザーが許可されている認証プレフィックスを取得する
+     *
+     * @param string $userName ユーザーの名前
+     * @return string
+     */
+    public function getAuthPrefix($userName)
+    {
+        $user = $this->find('first', [
+            'conditions' => ["{$this->alias}.name" => $userName],
+            'recursive' => 1
+        ]);
+
+        if (isset($user['UserGroup']['auth_prefix'])) {
+            return $user['UserGroup']['auth_prefix'];
+        } else {
+            return '';
+        }
+    }
+
+    /**
+     * よく使う項目の初期データをユーザーに適用する
+     *
+     * @param type $userId ユーザーID
+     * @param type $userGroupId ユーザーグループID
+     */
+    public function applyDefaultFavorites($userId, $userGroupId)
+    {
+        $result = true;
+        $defaultFavorites = $this->UserGroup->field('default_favorites', [
+            'UserGroup.id' => $userGroupId
+        ]);
+        if ($defaultFavorites) {
+            $defaultFavorites = BcUtil::unserialize($defaultFavorites);
+            if ($defaultFavorites) {
+                $this->deleteFavorites($userId);
+                $this->Favorite->Behaviors->detach('BcCache');
+                foreach($defaultFavorites as $favorites) {
+                    $favorites['user_id'] = $userId;
+                    $favorites['sort'] = $this->Favorite->getMax('sort', ['Favorite.user_id' => $userId]) + 1;
+                    $this->Favorite->create($favorites);
+                    if (!$this->Favorite->save()) {
+                        $result = false;
+                    }
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * ユーザーに関連するよく使う項目を削除する
+     *
+     * @param int $userId ユーザーID
+     * @return boolean
+     */
+    public function deleteFavorites($userId)
+    {
+        return $this->Favorite->deleteAll(['Favorite.user_id' => $userId], false);
     }
 
 }

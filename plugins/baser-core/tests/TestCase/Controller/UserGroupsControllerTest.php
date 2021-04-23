@@ -121,4 +121,36 @@ class UserGroupsControllerTest extends TestCase
         $query = $userGroups->find()->where(['name' => $originalUserGroup->name . '_copy']);
         $this->assertEquals(1, $query->count());
     }
+
+	/**
+	 * beforeFilter
+	 */
+	public function testBeforeFilter()
+	{
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	/**
+	 * [ADMIN] 削除処理 (ajax)
+	 */
+	public function testAjax_delete()
+	{
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	/**
+	 * [ADMIN] データコピー（AJAX）
+	 */
+	public function testAjax_copy()
+	{
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	/**
+	 * ユーザーグループのよく使う項目の初期値を登録する
+	 */
+	public function testSet_default_favorites()
+	{
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 }

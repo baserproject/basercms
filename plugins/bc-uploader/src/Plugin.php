@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BcBlog;
+namespace BcUploader;
 
 use BaserCore\BcPlugin;
 
@@ -35,10 +35,10 @@ class Plugin extends BcPlugin
     /**
      * プラグインをアンインストールする
      */
-    public function uninstall(): bool
+    public function uninstall($options = []): bool
     {
         // ここに必要なアンインストール処理を記述
-        return parent::uninstall();
+        return parent::uninstall($options);
     }
 
 }
