@@ -43,6 +43,7 @@ use BaserCore\View\AppView;
             ]); ?>
         </div>
         <div class="clear login-etc bca-login-form-ctrl">
+            <?php if ($savedEnable): ?>
             <div class="bca-login-form-checker">
                 <?php echo $this->BcAdminForm->control('saved', [
                     'type' => 'checkbox',
@@ -51,6 +52,7 @@ use BaserCore\View\AppView;
                     'tabindex' => 3
                 ]); ?>
             </div>
+            <?php endif; ?>
             <div class="bca-login-forgot-pass">
                 <?php $this->BcBaser->link(__d('baser', 'パスワードを忘れた場合はこちら'), ['controller' => 'password_requests', 'action' => 'entry', $this->request->getParam('prefix') => true]) ?>
             </div>

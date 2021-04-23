@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace BaserCore\Model\Entity;
 
+use Cake\Utility\Security;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
 
@@ -60,7 +61,7 @@ class PasswordRequest extends Entity
      */
     private function makeRequestKey($length = 48): string
     {
-        return substr(base_convert(hash('sha256', uniqid()), 16, 36), 0, $length);
+        return Security::randomString($length);
     }
 
 }

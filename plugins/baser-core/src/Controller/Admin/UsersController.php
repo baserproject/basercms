@@ -21,6 +21,8 @@ use Cake\Event\EventInterface;
 use Cake\Routing\Router;
 use Cake\Http\Response;
 use Cake\Http\Exception\ForbiddenException;
+use Cake\Http\Cookie\Cookie;
+use DateTime;
 
 /**
  * Class UsersController
@@ -43,6 +45,7 @@ class UsersController extends BcAdminAppController
     {
         parent::initialize();
         $this->Authentication->allowUnauthenticated(['login']);
+        $this->loadModel('BaserCore.LoginStores');
     }
 
     /**
@@ -104,10 +107,12 @@ class UsersController extends BcAdminAppController
      *
      * - viewVars
      *  - title
+     *  - savedEnable
      *
      * - input
      *    - User.name or User.email
      *    - User.password
+     *    - User.saved
      *  - remember login
      *  - submit
      *
@@ -116,6 +121,7 @@ class UsersController extends BcAdminAppController
     public function login()
     {
         $this->setTitle(__d('baser', '管理システムログイン'));
+        $this->set('savedEnable', $this->request->is('ssl'));
         $result = $this->Authentication->getResult();
         if ($result->isValid()) {
             $target = $this->Authentication->getLoginRedirect() ?? Configure::read('BcPrefixAuth.Admin.loginRedirect');
@@ -124,6 +130,14 @@ class UsersController extends BcAdminAppController
             // グループ情報等データセットを付与
             $user = $this->Users->getLoginFormatData($user->id);
             $this->Authentication->setIdentity($user);
+
+            $this->LoginStores->removeKey('Admin', $user->id);
+            // 自動ログイン保存
+            if ($this->request->is('ssl') && $this->request->getData('saved') == '1') {
+                $loginStore = $this->LoginStores->addKey('Admin', $user->id);
+                // クッキーを追加
+                $this->setCookieAutoLoginKey($loginStore->store_key);
+            }
 
             $this->BcMessage->setInfo(__d('baser', 'ようこそ、' . $user->name . 'さん。'));
             $this->redirect($target);
@@ -143,6 +157,11 @@ class UsersController extends BcAdminAppController
      */
     public function logout()
     {
+        // ログイン状態保存のデータ削除
+        $user = $this->Authentication->getIdentity();
+        $this->LoginStores->removeKey('Admin', $user->id);
+        $this->response = $this->response->withExpiredCookie(new Cookie($this->LoginStores::KEY_NAME));
+
         $session = Router::getRequest()->getSession();
         $session->delete('AuthAgent');
         $this->Authentication->logout();

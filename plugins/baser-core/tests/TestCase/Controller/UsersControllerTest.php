@@ -119,4 +119,24 @@ class UsersControllerTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
+    /**
+     * Test delete login
+     *
+     * @return void
+     */
+    public function testLogin()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test delete logout
+     *
+     * @return void
+     */
+    public function testLogout()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
 }

@@ -16,7 +16,7 @@ use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Mailer\PasswordRequestMailer;
 
 /**
- * Class UsersController
+ * Class PasswordRequestsController
  * @package BaserCore\Controller\Admin
  * @property AuthenticationComponent $Authentication
  * @property BcMessageComponent $BcMessage
