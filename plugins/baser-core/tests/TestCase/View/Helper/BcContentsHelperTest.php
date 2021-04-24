@@ -20,7 +20,7 @@ App::uses('BcContentsHelper', 'View/Helper');
  * @package Baser.Test.Case
  * @property BcContentsHelper $BcContents
  */
-class BcContentsHelperTest extends BaserTestCase
+class BcContentsHelperTest extends BcTestCase
 {
 
 	/**

@@ -20,7 +20,7 @@ App::uses('ThemeFilesController', 'Controller');
  * @package Baser.Test.Case.Controller
  * @property  ThemeFilesController $ThemeFilesController
  */
-class ThemeFilesControllerTest extends BaserTestCase
+class ThemeFilesControllerTest extends BcTestCase
 {
 
 	/**

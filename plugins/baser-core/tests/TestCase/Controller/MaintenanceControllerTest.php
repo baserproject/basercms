@@ -20,7 +20,7 @@ App::uses('MaintenanceController', 'Controller');
  * @package Baser.Test.Case.Controller
  * @property  MaintenanceController $MaintenanceController
  */
-class MaintenanceControllerTest extends BaserTestCase
+class MaintenanceControllerTest extends BcTestCase
 {
 
 	/**

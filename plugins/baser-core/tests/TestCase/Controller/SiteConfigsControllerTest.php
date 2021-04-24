@@ -20,7 +20,7 @@ App::uses('SiteConfigsController', 'Controller');
  * @package Baser.Test.Case.Controller
  * @property  SiteConfigsController $SiteConfigsController
  */
-class SiteConfigsControllerTest extends BaserTestCase
+class SiteConfigsControllerTest extends BcTestCase
 {
 
 	/**

@@ -18,7 +18,7 @@ App::uses('BcAgent', 'Lib');
  *
  * @package Baser.Test.Case.Lib
  */
-class BcAgentTest extends BaserTestCase
+class BcAgentTest extends BcTestCase
 {
 	/**
 	 * Fixtures

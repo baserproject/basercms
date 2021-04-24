@@ -20,7 +20,7 @@ App::uses('MembersController', 'Controller');
  * @package Baser.Test.Case.Controller
  * @property  MembersController $MembersController
  */
-class MembersControllerTest extends BaserTestCase
+class MembersControllerTest extends BcTestCase
 {
 
 	/**

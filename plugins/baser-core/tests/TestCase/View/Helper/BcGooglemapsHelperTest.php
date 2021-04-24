@@ -23,7 +23,7 @@ App::uses('Component', 'Controller');
  * @property BcTextHelper $Helper
  * @property BcGooglemapsHelper $BcGooglemaps
  */
-class BcGooglemapsHelperTest extends BaserTestCase
+class BcGooglemapsHelperTest extends BcTestCase
 {
 
 	/**

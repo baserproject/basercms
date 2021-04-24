@@ -20,7 +20,7 @@ App::uses('ContentFoldersController', 'Controller');
  * @package Baser.Test.Case.Controller
  * @property ContentFoldersController $ContentFoldersController
  */
-class ContentFoldersControllerTest extends BaserTestCase
+class ContentFoldersControllerTest extends BcTestCase
 {
 
 	/**

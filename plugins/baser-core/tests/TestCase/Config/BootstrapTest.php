@@ -17,7 +17,7 @@ return;
  *
  * @package Baser.Test.Case.Config
  */
-class BootstrapTest extends BaserTestCase
+class BootstrapTest extends BcTestCase
 {
 
 	/**

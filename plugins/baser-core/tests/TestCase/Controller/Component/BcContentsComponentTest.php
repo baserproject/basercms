@@ -19,7 +19,7 @@ App::uses('Controller', 'Controller');
  *
  * @package Baser.Test.Case.Controller.Component
  */
-class BcContentsComponentTest extends BaserTestCase
+class BcContentsComponentTest extends BcTestCase
 {
 	public function setUp()
 	{

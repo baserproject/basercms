@@ -1,18 +1,17 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Event
- * @since           baserCMS v 4.0.9
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('BcControllerEventDispatcher', 'Event');
+namespace BaserCore\Test\TestCase\Event;
+use BaserCore\TestSuite\BcTestCase;
+use Cake\Event\EventManager;
 
 /**
  * Class BcControllerEventDispatcherTest
@@ -20,7 +19,7 @@ App::uses('BcControllerEventDispatcher', 'Event');
  * @package Baser.Test.Case.Event
  * @property  BcControllerEventDispatcher $BcControllerEventDispatcher
  */
-class BcControllerEventDispatcherTest extends BaserTestCase
+class BcControllerEventDispatcherTest extends BcTestCase
 {
 
 	/**
@@ -28,7 +27,7 @@ class BcControllerEventDispatcherTest extends BaserTestCase
 	 *
 	 * @return void
 	 */
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 	}
@@ -38,7 +37,7 @@ class BcControllerEventDispatcherTest extends BaserTestCase
 	 *
 	 * @return void
 	 */
-	public function tearDown()
+	public function tearDown(): void
 	{
 		parent::tearDown();
 	}

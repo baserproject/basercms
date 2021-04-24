@@ -21,7 +21,7 @@ App::uses('BcSmartphoneHelper', 'View/Helper');
  *
  * @property BcSmartphoneHelper $BcSmartphone
  */
-class BcSmartphoneHelperTest extends BaserTestCase
+class BcSmartphoneHelperTest extends BcTestCase
 {
 
 	public $fixtures = [

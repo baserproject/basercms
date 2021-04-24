@@ -19,7 +19,7 @@ App::uses('CakeRequest', 'Network');
  *
  * @package Baser.Test.Case.Network
  */
-class CakeRequestTest extends BaserTestCase
+class CakeRequestTest extends BcTestCase
 {
 
 	public $fixtures = [

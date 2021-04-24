@@ -15,7 +15,7 @@ return;
 App::uses('BcAppView', 'View');
 App::uses('BcFormTableHelper', 'View/Helper');
 
-class BcFormTableHelperTest extends BaserTestCase
+class BcFormTableHelperTest extends BcTestCase
 {
 	public function setUp()
 	{

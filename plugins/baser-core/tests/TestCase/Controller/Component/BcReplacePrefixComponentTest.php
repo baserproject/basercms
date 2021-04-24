@@ -36,7 +36,7 @@ class BcReplacePrefixTestController extends Controller
  * @property BcReplacePrefixTestController $Controller
  * @property BcReplacePrefixComponent $BcReplacePrefix
  */
-class BcReplacePrefixComponentTest extends BaserTestCase
+class BcReplacePrefixComponentTest extends BcTestCase
 {
 
 	public $fixtures = [

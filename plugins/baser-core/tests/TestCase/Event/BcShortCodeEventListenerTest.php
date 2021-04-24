@@ -20,7 +20,7 @@ App::uses('BcShortCodeEventListener', 'Event');
  * @package Baser.Test.Case.Event
  * @property  BcShortCodeEventListener $BcShortCodeEventListener
  */
-class BcShortCodeEventListenerTest extends BaserTestCase
+class BcShortCodeEventListenerTest extends BcTestCase
 {
 
 	/**

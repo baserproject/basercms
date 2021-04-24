@@ -20,7 +20,7 @@ App::uses('BcViewEventDispatcher', 'Event');
  * @package Baser.Test.Case.Event
  * @property  BcViewEventDispatcher $BcViewEventDispatcher
  */
-class BcViewEventDispatcherTest extends BaserTestCase
+class BcViewEventDispatcherTest extends BcTestCase
 {
 
 	/**

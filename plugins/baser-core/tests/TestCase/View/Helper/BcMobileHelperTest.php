@@ -22,7 +22,7 @@ App::uses('BcMobileHelper', 'View/Helper');
  * @property BcMobileHelper $BcMobile
  * @property BcAppView $View
  */
-class BcMobileHelperTest extends BaserTestCase
+class BcMobileHelperTest extends BcTestCase
 {
 
 	/**

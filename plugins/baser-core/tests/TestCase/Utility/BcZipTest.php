@@ -18,7 +18,7 @@ App::uses('BcZip', 'Lib');
  *
  * @package Baser.Test.Case.Lib
  */
-class BcZipTest extends BaserTestCase
+class BcZipTest extends BcTestCase
 {
 
 	/**

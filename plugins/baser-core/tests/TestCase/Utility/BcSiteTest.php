@@ -18,7 +18,7 @@ App::uses('BcSite', 'Lib');
  *
  * @package Baser.Test.Case.Lib
  */
-class BcSiteTest extends BaserTestCase
+class BcSiteTest extends BcTestCase
 {
 
 	/**

@@ -17,7 +17,7 @@ return;
  *
  * @package Baser.Test.Case
  */
-class BcBasicsTest extends BaserTestCase
+class BcBasicsTest extends BcTestCase
 {
 
 	/**

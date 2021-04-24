@@ -20,7 +20,7 @@ App::uses('PermissionsController', 'Controller');
  * @package Baser.Test.Case.Controller
  * @property  PermissionsController $PermissionsController
  */
-class PermissionsControllerTest extends BaserTestCase
+class PermissionsControllerTest extends BcTestCase
 {
 
 	/**

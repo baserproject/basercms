@@ -19,7 +19,7 @@ App::uses('BcSearchIndexHelper', 'View/Helper');
  * Class BcSearchIndexHelperTest
  * @property BcSearchIndexHelper $BcSearchIndex
  */
-class BcSearchIndexHelperTest extends BaserTestCase
+class BcSearchIndexHelperTest extends BcTestCase
 {
 
 	/**

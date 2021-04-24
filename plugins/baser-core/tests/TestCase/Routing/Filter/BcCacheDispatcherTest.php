@@ -20,7 +20,7 @@ App::uses('BcCacheDispatcher', 'Routing/Filter');
  * @package Baser.Test.Case.Routing.Filter
  * @property  BcCacheDispatcher $BcCacheDispatcher
  */
-class BcCacheDispatcherTest extends BaserTestCase
+class BcCacheDispatcherTest extends BcTestCase
 {
 
 	/**

@@ -19,7 +19,7 @@ App::uses('BcGmaps', 'Lib');
  * @package Baser.Test.Case.Lib
  * @property BcGmaps $BcGmaps
  */
-class BcGmapsTest extends BaserTestCase
+class BcGmapsTest extends BcTestCase
 {
 
 	/**

@@ -22,7 +22,7 @@ App::uses('BcWidgetAreaHelper', 'View/Helper');
  * @property BcTextHelper $Helper
  * @property BcWidgetAreaHelper $BcWidgetArea
  */
-class BcWidgetAreaHelperTest extends BaserTestCase
+class BcWidgetAreaHelperTest extends BcTestCase
 {
 
 	/**

@@ -20,7 +20,7 @@ App::uses('InstallationsController', 'Controller');
  * @package Baser.Test.Case.Controller
  * @property  InstallationsController $InstallationsController
  */
-class InstallationsControllerTest extends BaserTestCase
+class InstallationsControllerTest extends BcTestCase
 {
 
 	/**

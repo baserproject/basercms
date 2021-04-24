@@ -27,7 +27,7 @@ App::uses('BcContentsHelper', 'View/Helper');
  * @property BcBaserHelper $BcBaser
  * @property BcContentsHelper $BcContents
  */
-class BcPageHelperTest extends BaserTestCase
+class BcPageHelperTest extends BcTestCase
 {
 
 	/**

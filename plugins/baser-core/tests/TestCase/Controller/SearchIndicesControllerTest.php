@@ -20,7 +20,7 @@ App::uses('SearchIndicesController', 'Controller');
  * @package Baser.Test.Case.Controller
  * @property  SearchIndicesController $SearchIndicesController
  */
-class SearchIndicesControllerTest extends BaserTestCase
+class SearchIndicesControllerTest extends BcTestCase
 {
 
 	/**

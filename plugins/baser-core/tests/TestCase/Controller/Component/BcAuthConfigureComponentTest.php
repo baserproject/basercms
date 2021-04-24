@@ -34,7 +34,7 @@ class BcAuthConfigureTestController extends Controller
  *
  * @package Baser.Test.Case.Controller.Component
  */
-class BcAuthConfigureComponentTest extends BaserTestCase
+class BcAuthConfigureComponentTest extends BcTestCase
 {
 	public $fixtures = [
 		'baser.Default.User',

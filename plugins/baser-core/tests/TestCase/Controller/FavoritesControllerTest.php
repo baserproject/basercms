@@ -20,7 +20,7 @@ App::uses('FavoritesController', 'Controller');
  * @package Baser.Test.Case.Controller
  * @property  FavoritesController $FavoritesController
  */
-class FavoritesControllerTest extends BaserTestCase
+class FavoritesControllerTest extends BcTestCase
 {
 
 	/**

@@ -20,7 +20,7 @@ App::uses('Controller', 'Controller');
  *
  * @package Baser.Test.Case.Controller.Component
  */
-class BcAuthComponentTest extends BaserTestCase
+class BcAuthComponentTest extends BcTestCase
 {
 
 	public function setUp()

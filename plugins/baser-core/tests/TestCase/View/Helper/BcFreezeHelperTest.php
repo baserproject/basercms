@@ -20,7 +20,7 @@ App::uses('BcFreezeHelper', 'View/Helper');
  * @property BcFormHelper $Form
  * @property BcFreezeHelper $BcFreeze
  */
-class BcFreezeHelperTest extends BaserTestCase
+class BcFreezeHelperTest extends BcTestCase
 {
 
 	/**

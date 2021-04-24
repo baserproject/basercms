@@ -20,7 +20,7 @@ App::uses('BcControllerEventListener', 'Event');
  * @package Baser.Test.Case.Event
  * @property  BcControllerEventListener $BcControllerEventListener
  */
-class BcControllerEventListenerTest extends BaserTestCase
+class BcControllerEventListenerTest extends BcTestCase
 {
 
 	/**

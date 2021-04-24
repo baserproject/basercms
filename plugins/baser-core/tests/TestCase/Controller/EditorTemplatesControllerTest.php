@@ -20,7 +20,7 @@ App::uses('EditorTemplatesController', 'Controller');
  * @package Baser.Test.Case.Controller
  * @property  EditorTemplatesController $EditorTemplatesController
  */
-class EditorTemplatesControllerTest extends BaserTestCase
+class EditorTemplatesControllerTest extends BcTestCase
 {
 
 	/**
