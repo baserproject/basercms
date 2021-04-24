@@ -18,6 +18,12 @@ docker exec -it bc5-php /bin/bash
 composer install
 ```
 
+## migration の実行
+DBの更新があった場合コンテナにログインし、migrationの実行を行う必要があります。
+```
+bin/cake migrations migrate --plugin baser-core
+```
+
 　
 ## ブラウザで表示を確認
 ブラウザで、次のURLにアクセスして表示を確認します。
