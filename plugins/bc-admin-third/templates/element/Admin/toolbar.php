@@ -67,13 +67,12 @@ $session = $this->getRequest()->getSession();
 $currentUrl = $this->request->getPath();
 $isLoginUrl = ($currentUrl === $loginUrl) ? true : false;
 $isFront = ($currentPrefix === 'front') ? true : false;
-
 $logo = $this->BcBaser->getImg('admin/logo_icon.svg', ['alt' => '', 'width' => '24', 'height' => '21', 'class' => 'bca-toolbar__logo-symbol']);
 if ($this->name === 'Installations') {
     $logoLinkKey = 'install';
 } elseif (Configure::read('BcRequest.isUpdater')) {
     $logoLinkKey = 'update';
-} elseif (!empty($this->request->getParam('admin')) || $isLoginUrl) {
+} elseif ($this->request->getParam('prefix') === "Admin" || $isLoginUrl) {
     $logoLinkKey = 'normal';
 } else {
     if ($isCurrentUserAdminAvailable) {

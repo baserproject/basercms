@@ -653,7 +653,7 @@ class BcAppController extends Controller
 	private function __updateFirstAccess()
 	{
 		// 初回アクセスメッセージ表示設定
-		if (!empty($this->request->getParam('admin')) && !empty($this->siteConfigs['first_access'])) {
+		if ($this->request->getParam('prefix') === "Admin" && !empty($this->siteConfigs['first_access'])) {
 			$data = ['SiteConfig' => ['first_access' => false]];
 			$SiteConfig = ClassRegistry::init('SiteConfig', 'Model');
 			$SiteConfig->saveKeyValue($data);
@@ -766,7 +766,7 @@ class BcAppController extends Controller
 		/* ログインユーザー */
 		if (BC_INSTALLED && $user && $this->name !== 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name !== 'CakeError') {
 			$this->set('user', $user);
-			if (!empty($this->request->getParam('admin'))) {
+			if ($this->request->getParam('prefix') === "Admin") {
 				$this->set('favorites', $this->Favorite->find('all', ['conditions' => ['Favorite.user_id' => $user['id']], 'order' => 'Favorite.sort', 'recursive' => -1]));
 			}
 		}
@@ -1425,7 +1425,7 @@ class BcAppController extends Controller
 		// 管理システムでのURLの生成が CakePHP の標準仕様と違っていたので調整
 		// ※ Routing.admin を変更した場合
 		if (is_array($url)) {
-			if (!isset($url['admin']) && !empty($this->request->getParam('admin'))) {
+			if (!isset($url['admin']) && $this->request->getParam('prefix') === "Admin") {
 				$url['admin'] = true;
 			} elseif (isset($url['admin']) && !$url['admin']) {
 				unset($url['admin']);
@@ -1449,7 +1449,7 @@ class BcAppController extends Controller
 		// >>> CUSTOMIZE MODIFY 2012/1/28 ryuring
 		// 配列でないURLの場合に、間違った値に書きなおされていたので配列チェックを追加
 		if (is_array($url)) {
-			if ((!isset($url['admin']) && !empty($this->request->getParam('admin'))) || !empty($url['admin'])) {
+			if ((!isset($url['admin']) && $this->request->getParam('prefix') === "Admin") || !empty($url['admin'])) {
 				$url['prefix'] = 'admin';
 			}
 			if (!isset($url['plugin']) && !empty($this->request->getParam('plugin'))) {
@@ -1525,7 +1525,7 @@ class BcAppController extends Controller
 	 */
 	protected function setThemeHelpers()
 	{
-		if (!empty($this->request->getParam('admin'))) {
+		if ($this->request->getParam('prefix') === "Admin") {
 			return;
 		}
 
