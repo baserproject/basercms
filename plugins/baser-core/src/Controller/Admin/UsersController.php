@@ -24,6 +24,8 @@ use Cake\Http\ServerRequest;
 use Cake\Routing\Router;
 use Cake\Http\Response;
 use Cake\Http\Exception\ForbiddenException;
+use Cake\Http\Cookie\Cookie;
+use DateTime;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -88,6 +90,7 @@ class UsersController extends BcAdminAppController
     {
         parent::initialize();
         $this->Authentication->allowUnauthenticated(['login']);
+        $this->loadModel('BaserCore.LoginStores');
     }
 
     /**
@@ -145,10 +148,12 @@ class UsersController extends BcAdminAppController
      *
      * - viewVars
      *  - title
+     *  - savedEnable
      *
      * - input
      *    - User.name or User.email
      *    - User.password
+     *    - User.saved
      *  - remember login
      *  - submit
      *
@@ -173,6 +178,8 @@ class UsersController extends BcAdminAppController
         }
         <<< */
         $this->setTitle($pageTitle);
+        $this->set('savedEnable', $this->request->is('ssl'));
+
         $result = $this->Authentication->getResult();
         if($this->request->is('post')) {
             if ($result->isValid()) {
@@ -188,6 +195,15 @@ class UsersController extends BcAdminAppController
                 $BcBaser = new BcBaserHelper(new View());
                 $this->BcMessage->setInfo(sprintf(__d('baser', 'ようこそ、%s さん。'), $BcBaser->getUserName($user)));
                 <<< */
+
+                $this->LoginStores->removeKey('Admin', $user->id);
+                // 自動ログイン保存
+                if ($this->request->is('ssl') && $this->request->getData('saved') == '1') {
+                    $loginStore = $this->LoginStores->addKey('Admin', $user->id);
+                    // クッキーを追加
+                    $this->setCookieAutoLoginKey($loginStore->store_key);
+                }
+
                 $this->BcMessage->setInfo(__d('baser', 'ようこそ、' . $user->name . 'さん。'));
                 $this->redirect($target);
                 return;
@@ -326,6 +342,11 @@ class UsersController extends BcAdminAppController
      */
     public function logout()
     {
+        // ログイン状態保存のデータ削除
+        $user = $this->Authentication->getIdentity();
+        $this->LoginStores->removeKey('Admin', $user->id);
+        $this->response = $this->response->withExpiredCookie(new Cookie($this->LoginStores::KEY_NAME));
+
         $session = Router::getRequest()->getSession();
         $session->delete('AuthAgent');
         $this->BcMessage->setInfo(__d('baser', 'ログアウトしました'));
