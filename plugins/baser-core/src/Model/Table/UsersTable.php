@@ -19,6 +19,7 @@ use Cake\ORM\Association\BelongsTo;
 use Cake\ORM\Behavior\TimestampBehavior;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -124,11 +125,15 @@ class UsersTable extends Table
      *
      * @param boolean $created
      */
-    public function afterSave($created, $options = [])
+    public function afterSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
-        var_dump("aa");
+        // ユーザデータが変更された場合は自動ログインのデータを削除する
+        $loginStores = TableRegistry::get('BaserCore.LoginStores');
+        $loginStores->deleteAll([
+            'user_id' => $entity->id
+        ]);
 
-        exit;
+
 
 
         // TODO 暫定措置

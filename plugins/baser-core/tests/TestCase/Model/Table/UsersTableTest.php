@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\UsersTable;
+use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Validation\Validator;
 
@@ -39,6 +40,7 @@ class UsersTableTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.LoginStores',
     ];
 
     /**
@@ -51,6 +53,10 @@ class UsersTableTest extends BcTestCase
         parent::setUp();
         $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
         $this->Users = $this->getTableLocator()->get('Users', $config);
+
+        $config = $this->getTableLocator()->exists('LoginStores') ?
+            [] : ['className' => 'BaserCore\Model\Table\LoginStoresTable'];
+        $this->LoginStores = $this->getTableLocator()->get('LoginStores', $config);
     }
 
     /**
@@ -100,6 +106,28 @@ class UsersTableTest extends BcTestCase
         ]);
         $this->assertEquals($user->getError('password_1'), []);
         $this->assertEquals($user->getError('password_2'), []);
+    }
+
+    /**
+     * Test afterSave
+     */
+    public function testAfterSave()
+    {
+        // ユーザ更新時、自動ログインのデータを削除する
+        $user = $this->Users->find('all')->first();
+        $this->LoginStores->addKey('Admin', $user->id);
+        $dataCount = $this->LoginStores->find('all')
+            ->where(['user_id' => $user->id])
+            ->count();
+        $this->assertNotSame($dataCount, 0);
+
+        $user->real_name_1 = $user->real_name_1 . 'modify';
+        $this->Users->save($user);
+
+        $dataCount = $this->LoginStores->find('all')
+            ->where(['user_id' => $user->id])
+            ->count();
+        $this->assertSame($dataCount, 0);
     }
 
     /**
