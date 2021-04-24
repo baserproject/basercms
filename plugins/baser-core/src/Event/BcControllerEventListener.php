@@ -1,18 +1,18 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Event
- * @since           baserCMS v 3.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('BcEventListener', 'Event');
+namespace BaserCore\Event;
+
+use BaserCore\Utility\BcUtil;
+use Cake\Controller\Controller;
 
 /**
  * Class BcControllerEventListener
@@ -35,44 +35,45 @@ App::uses('BcEventListener', 'Event');
 class BcControllerEventListener extends BcEventListener
 {
 
-	/**
-	 * レイヤー名
-	 *
-	 * @var string
-	 */
-	public $layer = 'Controller';
+    /**
+     * レイヤー名
+     *
+     * @var string
+     */
+    public $layer = 'Controller';
 
-	/**
-	 * 管理システムの現在のサイトをセットする
-	 *
-	 * @param \Controller $controller
-	 * @param $siteId
-	 */
-	public function setAdminCurrentSite(Controller $controller, $siteId)
-	{
-		if (!BcUtil::isAdminSystem()) {
-			return false;
-		}
-		$controller->passedArgs['site_id'] = $siteId;
-		return true;
-	}
+    /**
+     * 管理システムの現在のサイトをセットする
+     *
+     * @param Controller $controller
+     * @param $siteId
+     * @return bool
+     */
+    public function setAdminCurrentSite(Controller $controller, $siteId)
+    {
+        if (!BcUtil::isAdminSystem()) {
+            return false;
+        }
+        $controller->passedArgs['site_id'] = $siteId;
+        return true;
+    }
 
-	/**
-	 * コントローラーにヘルパーを追加する
-	 *
-	 * @param Controller $controller
-	 * @param string $helper
-	 */
-	public function addHelper(Controller $controller, $helper)
-	{
-		if (!is_array($helper)) {
-			$helper = [$helper];
-		}
-		foreach($helper as $value) {
-			if (!in_array($value, $controller->helpers)) {
-				$controller->helpers[] = $value;
-			}
-		}
-	}
+    /**
+     * コントローラーにヘルパーを追加する
+     *
+     * @param Controller $controller
+     * @param string $helper
+     */
+    public function addHelper(Controller $controller, $helper)
+    {
+        if (!is_array($helper)) {
+            $helper = [$helper];
+        }
+        foreach($helper as $value) {
+            if (!in_array($value, $controller->helpers)) {
+                $controller->helpers[] = $value;
+            }
+        }
+    }
 
 }

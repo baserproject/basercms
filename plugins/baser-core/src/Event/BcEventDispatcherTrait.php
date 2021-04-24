@@ -11,7 +11,12 @@
 
 namespace BaserCore\Event;
 
-trait BcEventDispatcherTrait {
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+
+trait BcEventDispatcherTrait
+{
 
     /**
      * View
@@ -20,38 +25,42 @@ trait BcEventDispatcherTrait {
      */
     protected $_View;
 
-	/**
-	 * イベントを発火
-	 *
-	 * @param string $name
-	 * @param array $data
-	 * @return bool|\Cake\Event\Event
+    /**
+     * イベントを発火
+     *
+     * @param string $name
+     * @param array $data
+     * @return bool|\Cake\Event\Event
+     * @checked
+     * @unitTest
      */
-	public function dispatchLayerEvent($name, $data = [], $options = [])
-	{
-	    $plugin = method_exists($this, 'getPlugin') ? $this->getPlugin() : '';
-	    $class = method_exists($this, 'getName') ? $this->getName() : get_class($this);
-	    $subject = $this;
-	    $layer = '';
-	    if(is_a($this, 'Cake\Controller\Controller')) {
-	        $layer = 'Controller';
-	    } elseif(is_a($this, 'Cake\ORM\Table')) {
-	        $layer = 'Model';
-	    } elseif(is_a($this, 'Cake\View\View')) {
-	        $layer = 'View';
-        }elseif(is_a($this, 'Cake\View\Helper')) {
-	        $layer = 'Helper';
-	        $class = str_replace('Helper', '', $class);
-	        $subject = $this->_View;
+    public function dispatchLayerEvent($name, $data = [], $options = [])
+    {
+        $plugin = method_exists($this, 'getPlugin')? $this->getPlugin() : '';
+        $class = method_exists($this, 'getName')? $this->getName() : get_class($this);
+        $subject = $this;
+        $layer = '';
+        if (is_a($this, 'Cake\Controller\Controller')) {
+            $layer = 'Controller';
+        } elseif (is_a($this, 'Cake\ORM\Table')) {
+            $classArray = explode('\\', $class);
+            $class = str_replace('Table', '', $classArray[count($classArray) - 1]);
+            $layer = 'Model';
+        } elseif (is_a($this, 'Cake\View\View')) {
+            $layer = 'View';
+        } elseif (is_a($this, 'Cake\View\Helper')) {
+            $layer = 'Helper';
+            $class = str_replace('Helper', '', $class);
+            $subject = $this->_View;
         }
         // TODO Tableクラスはプラグイン名を持たないため、自動でプラグイン名を取得することができない
         // 一旦空文字列とする
-		$options = array_merge([
-			'modParams' => 0,
-			'plugin' => $plugin,
-			'layer' => $layer,
-			'class' => $class
-		], $options);
-		return BcEventDispatcher::dispatch($name, $subject, $data, $options);
-	}
+        $options = array_merge([
+            'modParams' => 0,
+            'plugin' => $plugin,
+            'layer' => $layer,
+            'class' => $class
+        ], $options);
+        return BcEventDispatcher::dispatch($name, $subject, $data, $options);
+    }
 }

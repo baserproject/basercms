@@ -17,6 +17,7 @@ use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
+use Cake\Event\EventManager;
 use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\MiddlewareQueue;
@@ -27,6 +28,7 @@ use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Routing\Router;
+use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -60,10 +62,57 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
 
         $plugins = BcUtil::getEnablePlugins();
         foreach($plugins as $plugin) {
-            if (BcUtil::includePluginClass($plugin)) {
-                $this->addPlugin($plugin);
+            if (BcUtil::includePluginClass($plugin->name)) {
+                $this->loadPlugin($plugin->name, $plugin->priority);
             }
         }
+    }
+
+    /**
+     * プラグインを読み込む
+     *
+     * @param string $plugin
+     * @return bool
+     */
+    function loadPlugin($plugin, $priority)
+    {
+        $this->addPlugin($plugin);
+        $pluginPath = BcUtil::getPluginPath($plugin);
+        if (file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
+            // DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+            // ※ プラグインの setting.php で、DBへの接続処理が書かれている可能性がある為
+            try {
+                // TODO 未確認
+                /* >>>
+                Configure::load($plugin . '.setting');
+                <<< */
+            } catch (Exception $ex) {
+            }
+        }
+        // プラグインイベント登録
+        $eventTargets = ['Controller', 'Model', 'View', 'Helper'];
+        foreach($eventTargets as $eventTarget) {
+            $eventClassName = $plugin . $eventTarget . 'EventListener';
+            if (file_exists($pluginPath . 'src' . DS . 'Event' . DS . $eventClassName . '.php')) {
+                $event = EventManager::instance();
+                $class = '\\' . $plugin . '\\Event\\' . $eventClassName;
+                $pluginEvent = new $class();
+                foreach($pluginEvent->events as $key => $options) {
+                    // プラグイン側で priority の設定がされてない場合に設定
+                    if (is_array($options)) {
+                        if (empty($options['priority'])) {
+                            $options['priority'] = $priority;
+                            $pluginEvent->events[$key] = $options;
+                        }
+                    } else {
+                        unset($pluginEvent->events[$key]);
+                        $pluginEvent->events[$options] = ['priority' => $priority];
+                    }
+                }
+                $event->on($pluginEvent, null);
+            }
+        }
+        return true;
     }
 
     /**
@@ -147,16 +196,16 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
             ]);
             $service->loadAuthenticator('Authentication.' . $authSetting['type'], [
                 'fields' => [
-                    'username' => is_array($authSetting['username']) ? $authSetting['username'][0] : $authSetting['username'],
+                    'username' => is_array($authSetting['username'])? $authSetting['username'][0] : $authSetting['username'],
                     'password' => $authSetting['password']
-                 ],
+                ],
                 'loginUrl' => Router::url($authSetting['loginAction']),
             ]);
             $service->loadIdentifier('Authentication.Password', [
                 'fields' => [
                     'username' => $authSetting['username'],
                     'password' => $authSetting['password']
-                 ],
+                ],
                 'resolver' => [
                     'className' => 'Authentication.Orm',
                     'userModel' => $authSetting['userModel'],

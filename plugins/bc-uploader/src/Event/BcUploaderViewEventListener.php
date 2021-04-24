@@ -1,44 +1,39 @@
 <?php
-
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Uploader.Event
- * @since           baserCMS v 3.0.10
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+
+namespace BcUploader\Event;
+
+use BaserCore\Event\BcViewEventListener;
+use BaserCore\View\Helper\BcHtmlHelper;
+use Cake\Event\Event;
 
 /**
  * UploaderViewEventListener
  *
  * @package Uploader.Event
- * @property \BcHtmlHelper $BcHtml
+ * @property BcHtmlHelper $BcHtml
  */
-class UploaderViewEventListener extends BcViewEventListener
+class BcUploaderViewEventListener extends BcViewEventListener
 {
 
     public $events = [
-        'afterLayout',
-        'Pages.beforeRender'
+        'afterLayout'
     ];
 
-    /**
-     * afterLayout
-     *
-     * @return    void
-     * @access    pubic
-     */
-    public function pagesBeforeRender(CakeEvent $event)
+    public function afterLayout(Event $event)
     {
-        $event->data;
-        $event->subject()->BcBaser;
-    }
-
-    public function afterLayout(CakeEvent $event)
-    {
+        // TODO 未確認のため代替処理
+        // >>>
+        return ;
+        // <<<
 
         $View = $event->subject();
         if (!BcUtil::isAdminSystem() || $View->name == 'CakeError') {
@@ -89,7 +84,7 @@ class UploaderViewEventListener extends BcViewEventListener
                 $View->output = str_replace('</body>', $css . '</body>', $View->output);
 
                 /* VIEWのCKEDITOR読込部分のコードを書き換える */
-                foreach ($matches[1] as $match) {
+                foreach($matches[1] as $match) {
                     $jscode = $this->__getCkeditorUploaderScript($match);
                     $pattern = "/<script type=\"text\/javascript\">[\s\n]*?\/\/<\!\[CDATA\[[\s\n]*?([\$]\(window\)\.load.+?" . $match . "\s=\sCKEDITOR\.replace.*?)\/\/\]\]>\n*?<\/script>/s";
                     $output = preg_replace($pattern, $this->BcHtml->scriptBlock("$1" . $jscode), $View->output);

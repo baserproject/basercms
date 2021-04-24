@@ -27,7 +27,7 @@ use Cake\Http\ServerRequest;
  * @package Baser.Controller
  * @property BcMessageComponent $BcMessage
  */
-class BcAppController extends Controller
+class BcAppController extends AppController
 {
 
 	/**

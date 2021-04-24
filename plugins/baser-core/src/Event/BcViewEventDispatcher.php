@@ -10,8 +10,12 @@
  */
 
 namespace BaserCore\Event;
+
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcViewEventDispatcher
@@ -28,116 +32,142 @@ use Cake\Event\EventListenerInterface;
 class BcViewEventDispatcher implements EventListenerInterface
 {
 
-	public function implementedEvents(): array
-	{
-		return [
-			'View.beforeRenderFile' => 'beforeRenderFile',
-			'View.afterRenderFile' => 'afterRenderFile',
-			'View.beforeRender' => 'beforeRender',
-			'View.afterRender' => 'afterRender',
-			'View.beforeLayout' => 'beforeLayout',
-			'View.afterLayout' => 'afterLayout'
-		];
-	}
+    /**
+     * implementedEvents
+     *
+     * @return string[]
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function implementedEvents(): array
+    {
+        return [
+            'View.beforeRenderFile' => 'beforeRenderFile',
+            'View.afterRenderFile' => 'afterRenderFile',
+            'View.beforeRender' => 'beforeRender',
+            'View.afterRender' => 'afterRender',
+            'View.beforeLayout' => 'beforeLayout',
+            'View.afterLayout' => 'afterLayout'
+        ];
+    }
 
-	/**
-	 * beforeRenderFile
-	 *
-	 * @param Event $event
-	 * @return void
-	 */
-	public function beforeRenderFile(Event $event)
-	{
-		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
-			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
-				return;
-			}
-			$event->getSubject()->dispatchLayerEvent('beforeRenderFile', $event->getData());
-		}
-	}
+    /**
+     * beforeRenderFile
+     *
+     * @param Event $event
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function beforeRenderFile(Event $event)
+    {
+        if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+            if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
+                return;
+            }
+            $event->getSubject()->dispatchLayerEvent('beforeRenderFile', $event->getData());
+        }
+    }
 
-	/**
-	 * afterRenderFile
-	 *
-	 * @param Event $event
-	 * @return string
-	 */
-	public function afterRenderFile(Event $event): string
-	{
-		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
-			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
-				return $event->getData(1);
-			}
-			$currentEvent = $event->getSubject()->dispatchLayerEvent('afterRenderFile', $event->getData(), ['modParams' => 1]);
-			if ($currentEvent) {
-				return $currentEvent->getData(1);
-			}
-		}
-		return $event->getData(1);
-	}
+    /**
+     * afterRenderFile
+     *
+     * @param Event $event
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function afterRenderFile(Event $event): string
+    {
+        if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+            if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
+                return $event->getData(1);
+            }
+            $currentEvent = $event->getSubject()->dispatchLayerEvent('afterRenderFile', $event->getData(), ['modParams' => 1]);
+            if ($currentEvent) {
+                return $currentEvent->getData(1);
+            }
+        }
+        return $event->getData(1);
+    }
 
-	/**
-	 * beforeRender
-	 *
-	 * @param Event $event
-	 * @return void
-	 */
-	public function beforeRender(Event $event)
-	{
-		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
-			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
-				return;
-			}
-			$event->getSubject()->dispatchLayerEvent('beforeRender', $event->getData());
-		}
-	}
+    /**
+     * beforeRender
+     *
+     * @param Event $event
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function beforeRender(Event $event)
+    {
+        if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+            if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
+                return;
+            }
+            $event->getSubject()->dispatchLayerEvent('beforeRender', $event->getData());
+        }
+    }
 
-	/**
-	 * afterRender
-	 *
-	 * @param Event $event
-	 * @return void
-	 */
-	public function afterRender(Event $event)
-	{
-		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
-			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
-				return;
-			}
-			$event->getSubject()->dispatchLayerEvent('afterRender', $event->getData());
-		}
-	}
+    /**
+     * afterRender
+     *
+     * @param Event $event
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function afterRender(Event $event)
+    {
+        if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+            if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
+                return;
+            }
+            $event->getSubject()->dispatchLayerEvent('afterRender', $event->getData());
+        }
+    }
 
-	/**
-	 * beforeLayout
-	 *
-	 * @param Event $event
-	 * @return void
-	 */
-	public function beforeLayout(Event $event)
-	{
-		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
-			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
-				return;
-			}
-			$event->getSubject()->dispatchLayerEvent('beforeLayout', $event->getData());
-		}
-	}
+    /**
+     * beforeLayout
+     *
+     * @param Event $event
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function beforeLayout(Event $event)
+    {
+        if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+            if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
+                return;
+            }
+            $event->getSubject()->dispatchLayerEvent('beforeLayout', $event->getData());
+        }
+    }
 
-	/**
-	 * afterLayout
-	 *
-	 * @param Event $event
-	 * @return void
-	 */
-	public function afterLayout(Event $event)
-	{
-		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
-			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
-				return;
-			}
-			$event->getSubject()->dispatchLayerEvent('afterLayout', $event->getData());
-		}
-	}
+    /**
+     * afterLayout
+     *
+     * @param Event $event
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function afterLayout(Event $event)
+    {
+        if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+            if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
+                return;
+            }
+            $event->getSubject()->dispatchLayerEvent('afterLayout', $event->getData());
+        }
+    }
 
 }

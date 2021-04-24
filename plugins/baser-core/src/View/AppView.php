@@ -11,7 +11,6 @@
 
 namespace BaserCore\View;
 
-use BaserCore\Event\BcEventDispatcher;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\View\Helper\BcAdminFormHelper;
 use BaserCore\View\Helper\BcAdminHelper;

@@ -218,6 +218,9 @@ class BcUtilTest extends BcTestCase
     {
         $expects = ['BcBlog', 'BcMail', 'BcUploader'];
         $result = BcUtil::getEnablePlugins();
+        foreach($result as $key => $value) {
+            $result[$key] = $value->name;
+        }
         $this->assertEquals($expects, $result, 'プラグインの一覧が取得できません。');
     }
 
@@ -237,7 +240,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testClearAllCache(): void
     {
-         // cacheファイルのバックアップ作成
+        // cacheファイルのバックアップ作成
         $folder = new Folder();
         $origin = CACHE;
         $backup = str_replace('cache', 'cache_backup', CACHE);
@@ -250,11 +253,11 @@ class BcUtilTest extends BcTestCase
         // cache環境準備
         $cacheList = ['environment' => '_cake_env_', 'persistent' => '_cake_core_', 'models' => '_cake_model_'];
 
-        foreach ($cacheList as $path => $cacheName) {
+        foreach($cacheList as $path => $cacheName) {
             Cache::drop($cacheName);
             Cache::setConfig($cacheName, [
                 'className' => "File",
-                'prefix' => 'myapp'. $cacheName,
+                'prefix' => 'myapp' . $cacheName,
                 'path' => CACHE . $path . DS,
                 'serialize' => true,
                 'duration' => '+999 days',
@@ -276,6 +279,7 @@ class BcUtilTest extends BcTestCase
         ]);
         $folder->chmod($origin, 0777);
     }
+
     /**
      * 管理システムかチェック
      *
@@ -310,6 +314,7 @@ class BcUtilTest extends BcTestCase
             ['hoge/', false],
         ];
     }
+
     /**
      * 管理ユーザーかチェック
      *
@@ -327,6 +332,7 @@ class BcUtilTest extends BcTestCase
         $result = BcUtil::isAdminUser();
         $this->assertEquals($expect, $result);
     }
+
     /**
      * isAdminUser用データプロバイダ
      *
@@ -341,6 +347,7 @@ class BcUtilTest extends BcTestCase
             [2, false],
         ];
     }
+
     /**
      * 現在ログインしているユーザーのユーザーグループ情報を取得する
      */
@@ -724,7 +731,19 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetPluginPath()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertEquals(ROOT . '/plugins/baser-core/', BcUtil::getPluginPath('BaserCore'));
+        $this->assertEquals(ROOT . '/plugins/bc-blog/', BcUtil::getPluginPath('BcBlog'));
+        $this->assertEquals(ROOT . '/plugins/BcSample/', BcUtil::getPluginPath('BcSample'));
+    }
+
+    /**
+     * testGetPluginDir
+     */
+    public function testGetPluginDir()
+    {
+        $this->assertEquals('baser-core', BcUtil::getPluginDir('BaserCore'));
+        $this->assertEquals('bc-blog', BcUtil::getPluginDir('BcBlog'));
+        $this->assertEquals('BcSample', BcUtil::getPluginDir('BcSample'));
     }
 
 }
