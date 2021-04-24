@@ -1,16 +1,17 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Event
- * @since           baserCMS v 3.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+
+namespace BaserCore\Event;
+use Cake\Event\Event;
+use Cake\Event\EventListenerInterface;
 
 /**
  * Class BcModelEventDispatcher
@@ -24,7 +25,7 @@ return;
  * 《イベント名の命名規則》
  * Model.ModelName.eventName
  */
-class BcModelEventDispatcher extends CakeObject implements CakeEventListener
+class BcModelEventDispatcher implements EventListenerInterface
 {
 
 	/**
@@ -32,7 +33,7 @@ class BcModelEventDispatcher extends CakeObject implements CakeEventListener
 	 *
 	 * @return array
 	 */
-	public function implementedEvents()
+	public function implementedEvents(): array
 	{
 		return [
 			'Model.beforeFind' => 'beforeFind',
@@ -50,14 +51,14 @@ class BcModelEventDispatcher extends CakeObject implements CakeEventListener
 	 * beforeFind
 	 *
 	 * @param Event $event
-	 * @return array
+	 * @return array|true
 	 */
 	public function beforeFind(Event $event)
 	{
-		if (!method_exists($event->getSubject()(), 'dispatchEvent')) {
+		if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 			return $event->getData(0);
 		}
-		$currentEvent = $event->getSubject()->dispatchEvent('beforeFind', $event->data);
+		$currentEvent = $event->getSubject()->dispatchLayerEvent('beforeFind', $event->getData());
 		if ($currentEvent) {
 			$event->setData($currentEvent->getData());
 			return true;
@@ -68,15 +69,15 @@ class BcModelEventDispatcher extends CakeObject implements CakeEventListener
 	/**
 	 * afterFind
 	 *
-	 * @param type $event
-	 * @return array
+	 * @param Event $event
+	 * @return array|true
 	 */
 	public function afterFind(Event $event)
 	{
-		if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 			return $event->getData(0);
 		}
-		$currentEvent = $event->getSubject()->dispatchEvent('afterFind', $event->getData());
+		$currentEvent = $event->getSubject()->dispatchLayerEvent('afterFind', $event->getData());
 		if ($currentEvent) {
 			$event->setData($currentEvent->getData());
 			return true;
@@ -92,10 +93,10 @@ class BcModelEventDispatcher extends CakeObject implements CakeEventListener
 	 */
 	public function beforeValidate(Event $event)
 	{
-		if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 			return true;
 		}
-		$currentEvent = $event->getSubject()->dispatchEvent('beforeValidate', $event->getData());
+		$currentEvent = $event->getSubject()->dispatchLayerEvent('beforeValidate', $event->getData());
 		if ($currentEvent) {
 			if ($currentEvent->isStopped()) {
 				return false;
@@ -112,10 +113,10 @@ class BcModelEventDispatcher extends CakeObject implements CakeEventListener
 	 */
 	public function afterValidate(Event $event)
 	{
-		if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 			return;
 		}
-		$event->getSubject()->dispatchEvent('afterValidate', $event->getData());
+		$event->getSubject()->dispatchLayerEvent('afterValidate', $event->getData());
 	}
 
 	/**
@@ -126,10 +127,10 @@ class BcModelEventDispatcher extends CakeObject implements CakeEventListener
 	 */
 	public function beforeSave(Event $event)
 	{
-		if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 			return true;
 		}
-		$currentEvent = $event->getSubject()->dispatchEvent('beforeSave', $event->getData());
+		$currentEvent = $event->getSubject()->dispatchLayerEvent('beforeSave', $event->getData());
 		if ($currentEvent) {
 			if (!$currentEvent->result) {
 				return false;
@@ -146,10 +147,10 @@ class BcModelEventDispatcher extends CakeObject implements CakeEventListener
 	 */
 	public function afterSave(Event $event)
 	{
-		if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 			return;
 		}
-		$event->getSubject()->dispatchEvent('afterSave', $event->getData());
+		$event->getSubject()->dispatchLayerEvent('afterSave', $event->getData());
 	}
 
 	/**
@@ -160,10 +161,10 @@ class BcModelEventDispatcher extends CakeObject implements CakeEventListener
 	 */
 	public function beforeDelete(Event $event)
 	{
-		if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 			return true;
 		}
-		$currentEvent = $event->getSubject()->dispatchEvent('beforeDelete', $event->getData());
+		$currentEvent = $event->getSubject()->dispatchLayerEvent('beforeDelete', $event->getData());
 		if ($currentEvent) {
 			if ($event->isStopped()) {
 				return false;
@@ -179,10 +180,10 @@ class BcModelEventDispatcher extends CakeObject implements CakeEventListener
 	 */
 	public function afterDelete(Event $event)
 	{
-		if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 			return;
 		}
-		$event->getSubject()->dispatchEvent('afterDelete', $event->getData());
+		$event->getSubject()->dispatchLayerEvent('afterDelete', $event->getData());
 	}
 
 }

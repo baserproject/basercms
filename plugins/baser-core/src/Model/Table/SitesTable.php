@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Event\BcEventDispatcherTrait;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -21,6 +23,10 @@ return;
  */
 class Site extends AppModel
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 
 	/**
 	 * ビヘイビア
@@ -117,7 +123,7 @@ class Site extends AppModel
 		], $options);
 
 		// EVENT Site.beforeGetSiteList
-		$event = $this->dispatchEvent('beforeGetSiteList', [
+		$event = $this->dispatchLayerEvent('beforeGetSiteList', [
 			'options' => $options
 		]);
 		if ($event !== false) {

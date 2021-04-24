@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Event\BcEventDispatcherTrait;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -22,6 +24,10 @@ App::uses('BcUploadHelper', 'View/Helper');
  */
 class BcFreezeHelper extends BcFormHelper
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 
 	/**
 	 * 凍結状態
@@ -54,7 +60,7 @@ class BcFreezeHelper extends BcFormHelper
 	{
 
 		if ($this->freezed) {
-			list($model, $field) = explode('.', $fieldName);
+			[$model, $field] = explode('.', $fieldName);
 			if (isset($attributes)) {
 				$attributes = $attributes + ['type' => 'hidden'];
 			} else {
@@ -331,7 +337,7 @@ class BcFreezeHelper extends BcFormHelper
 	{
 
 		if ($this->freezed) {
-			list($model, $field) = explode('.', $fieldName);
+			[$model, $field] = explode('.', $fieldName);
 			$attributes = $attributes + ['type' => 'hidden'];
 			if (isset($attributes["value"])) {
 				$value = $attributes["value"];
@@ -419,7 +425,7 @@ class BcFreezeHelper extends BcFormHelper
 			$imageAttributes['subdir'] .= DS;
 		}
 
-		list($model, $field) = explode('.', $fieldName);
+		[$model, $field] = explode('.', $fieldName);
 
 		if ($this->freezed) {
 
@@ -465,7 +471,7 @@ class BcFreezeHelper extends BcFormHelper
 	{
 
 		if ($this->freezed) {
-			list($model, $field) = explode('.', $fieldName);
+			[$model, $field] = explode('.', $fieldName);
 			if (isset($attributes)) {
 				$attributes = $attributes + ['type' => 'hidden'];
 			} else {
@@ -496,7 +502,7 @@ class BcFreezeHelper extends BcFormHelper
 	{
 
 		if ($this->freezed) {
-			list($model, $field) = explode('.', $fieldName);
+			[$model, $field] = explode('.', $fieldName);
 			if (isset($attributes)) {
 				$attributes = $attributes + ['type' => 'hidden'];
 			} else {
@@ -554,7 +560,7 @@ class BcFreezeHelper extends BcFormHelper
 	{
 
 		if ($this->freezed) {
-			list($model, $field) = explode('.', $fieldName);
+			[$model, $field] = explode('.', $fieldName);
 			if (isset($attributes)) {
 				$attributes = am($attributes, ['type' => 'hidden']);
 			} else {
@@ -584,9 +590,9 @@ class BcFreezeHelper extends BcFormHelper
 		$attributes = array_merge(['class' => ''], $attributes);
 		unset($attributes["separator"]);
 		if (preg_match_all("/\./", $fieldName, $regs) == 2) {
-			list($model, $field, $detail) = explode('.', $fieldName);
+			[$model, $field, $detail] = explode('.', $fieldName);
 		} else {
-			list($model, $field) = explode('.', $fieldName);
+			[$model, $field] = explode('.', $fieldName);
 		}
 
 		// 値を取得

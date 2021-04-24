@@ -52,11 +52,11 @@ class BcControllerEventDispatcher implements EventListenerInterface
 	 */
 	public function initialize(Event $event)
 	{
-		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
-			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 				return;
 			}
-			$event->getSubject()->dispatchEvent('initialize', $event->getData());
+			$event->getSubject()->dispatchLayerEvent('initialize', $event->getData());
 		}
 	}
 
@@ -68,11 +68,11 @@ class BcControllerEventDispatcher implements EventListenerInterface
 	 */
 	public function startup(Event $event)
 	{
-		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
-			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 				return;
 			}
-			$event->getSubject()->dispatchEvent('startup', $event->getData());
+			$event->getSubject()->dispatchLayerEvent('startup', $event->getData());
 		}
 	}
 
@@ -84,11 +84,11 @@ class BcControllerEventDispatcher implements EventListenerInterface
 	 */
 	public function beforeRender(Event $event)
 	{
-		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
-			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 				return;
 			}
-			$event->getSubject()->dispatchEvent('beforeRender', $event->getData());
+			$event->getSubject()->dispatchLayerEvent('beforeRender', $event->getData());
 		}
 	}
 
@@ -100,11 +100,11 @@ class BcControllerEventDispatcher implements EventListenerInterface
 	 */
 	public function beforeRedirect(Event $event)
 	{
-		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
-			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 				return null;
 			}
-			$currentEvent = $event->getSubject()->dispatchEvent('beforeRedirect', $event->getData());
+			$currentEvent = $event->getSubject()->dispatchLayerEvent('beforeRedirect', $event->getData());
 			if ($currentEvent) {
 				$event->setData($currentEvent->getData());
 				return $currentEvent->result;
@@ -121,11 +121,11 @@ class BcControllerEventDispatcher implements EventListenerInterface
 	 */
 	public function shutdown(Event $event)
 	{
-		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
-			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 				return;
 			}
-			$event->getSubject()->dispatchEvent('shutdown', $event->getData());
+			$event->getSubject()->dispatchLayerEvent('shutdown', $event->getData());
 		}
 	}
 

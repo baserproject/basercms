@@ -1650,26 +1650,6 @@ class BcAppModel extends Model
 	}
 
 	/**
-	 * イベントを発火
-	 *
-	 * @param string $name
-	 * @param array $params
-	 * @return mixed
-	 */
-	public function dispatchEvent($name, $params = [], $options = [])
-	{
-		$options = array_merge([
-			'modParams' => 0,
-			'plugin' => $this->plugin,
-			'layer' => 'Model',
-			'class' => $this->name
-		], $options);
-
-		App::uses('BcEventDispatcher', 'Event');
-		return BcEventDispatcher::dispatch($name, $this, $params, $options);
-	}
-
-	/**
 	 * データが公開済みかどうかチェックする
 	 *
 	 * @param boolean $status 公開ステータス

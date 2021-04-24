@@ -13,6 +13,7 @@ namespace BaserCore\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Event\BcEventDispatcherTrait;
 
 /**
  * Class BcAdminFormHelper
@@ -20,6 +21,11 @@ use BaserCore\Annotation\Checked;
  */
 class BcAdminFormHelper extends BcFormHelper
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
+
     /**
      * Other helpers used by FormHelper
      *

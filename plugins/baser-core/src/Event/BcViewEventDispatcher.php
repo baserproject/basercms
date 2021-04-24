@@ -1,16 +1,17 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Event
- * @since           baserCMS v 3.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+
+namespace BaserCore\Event;
+use Cake\Event\Event;
+use Cake\Event\EventListenerInterface;
 
 /**
  * Class BcViewEventDispatcher
@@ -24,10 +25,10 @@ return;
  * 《イベント名の命名規則》
  * View.ControllerName.eventName
  */
-class BcViewEventDispatcher extends CakeObject implements CakeEventListener
+class BcViewEventDispatcher implements EventListenerInterface
 {
 
-	public function implementedEvents()
+	public function implementedEvents(): array
 	{
 		return [
 			'View.beforeRenderFile' => 'beforeRenderFile',
@@ -47,11 +48,11 @@ class BcViewEventDispatcher extends CakeObject implements CakeEventListener
 	 */
 	public function beforeRenderFile(Event $event)
 	{
-		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
-			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 				return;
 			}
-			$event->getSubject()->dispatchEvent('beforeRenderFile', $event->getData());
+			$event->getSubject()->dispatchLayerEvent('beforeRenderFile', $event->getData());
 		}
 	}
 
@@ -59,15 +60,15 @@ class BcViewEventDispatcher extends CakeObject implements CakeEventListener
 	 * afterRenderFile
 	 *
 	 * @param Event $event
-	 * @return array
+	 * @return string
 	 */
-	public function afterRenderFile(Event $event)
+	public function afterRenderFile(Event $event): string
 	{
-		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
-			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 				return $event->getData(1);
 			}
-			$currentEvent = $event->getSubject()->dispatchEvent('afterRenderFile', $event->getData(), ['modParams' => 1]);
+			$currentEvent = $event->getSubject()->dispatchLayerEvent('afterRenderFile', $event->getData(), ['modParams' => 1]);
 			if ($currentEvent) {
 				return $currentEvent->getData(1);
 			}
@@ -83,11 +84,11 @@ class BcViewEventDispatcher extends CakeObject implements CakeEventListener
 	 */
 	public function beforeRender(Event $event)
 	{
-		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
-			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 				return;
 			}
-			$event->getSubject()->dispatchEvent('beforeRender', $event->data);
+			$event->getSubject()->dispatchLayerEvent('beforeRender', $event->getData());
 		}
 	}
 
@@ -99,11 +100,11 @@ class BcViewEventDispatcher extends CakeObject implements CakeEventListener
 	 */
 	public function afterRender(Event $event)
 	{
-		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
-			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 				return;
 			}
-			$event->getSubject()->dispatchEvent('afterRender', $event->getData());
+			$event->getSubject()->dispatchLayerEvent('afterRender', $event->getData());
 		}
 	}
 
@@ -115,11 +116,11 @@ class BcViewEventDispatcher extends CakeObject implements CakeEventListener
 	 */
 	public function beforeLayout(Event $event)
 	{
-		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
-			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 				return;
 			}
-			$event->getSubject()->dispatchEvent('beforeLayout', $event->getData());
+			$event->getSubject()->dispatchLayerEvent('beforeLayout', $event->getData());
 		}
 	}
 
@@ -131,11 +132,11 @@ class BcViewEventDispatcher extends CakeObject implements CakeEventListener
 	 */
 	public function afterLayout(Event $event)
 	{
-		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
-			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+		if ($event->getSubject()->getName() != 'CakeError' && $event->getSubject()->getName() != '') {
+			if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
 				return;
 			}
-			$event->getSubject()->dispatchEvent('afterLayout', $event->getData());
+			$event->getSubject()->dispatchLayerEvent('afterLayout', $event->getData());
 		}
 	}
 

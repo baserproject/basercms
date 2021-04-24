@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Event\BcEventDispatcherTrait;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -19,6 +21,10 @@ return;
  */
 class BcLayoutHelper extends AppHelper
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 
 	/**
 	 * コンテンツヘッダー発火
@@ -28,8 +34,8 @@ class BcLayoutHelper extends AppHelper
 	public function dispatchContentsHeader()
 	{
 		$request = $this->_View->request;
-		$id = Inflector::camelize($request->params['controller']) . '.' . Inflector::camelize($request->params['action']);
-		$event = $this->dispatchEvent('contentsHeader', [
+		$id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
+		$event = $this->dispatchLayerEvent('contentsHeader', [
 			'id' => $id,
 			'out' => ''
 		], ['class' => 'BcLayout', 'plugin' => '']);
@@ -48,8 +54,8 @@ class BcLayoutHelper extends AppHelper
 	public function dispatchContentsFooter()
 	{
 		$request = $this->_View->request;
-		$id = Inflector::camelize($request->params['controller']) . '.' . Inflector::camelize($request->params['action']);
-		$event = $this->dispatchEvent('contentsFooter', [
+		$id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
+		$event = $this->dispatchLayerEvent('contentsFooter', [
 			'id' => $id,
 			'out' => ''
 		], ['class' => 'BcLayout', 'plugin' => '']);

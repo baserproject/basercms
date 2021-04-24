@@ -123,7 +123,7 @@ class ContentsController extends AppController
 							];
 
 							// EVENT Contents.searchIndex
-							$event = $this->dispatchEvent('searchIndex', [
+							$event = $this->dispatchLayerEvent('searchIndex', [
 								'options' => $options
 							]);
 							if ($event !== false) {
@@ -255,14 +255,14 @@ class ContentsController extends AppController
 		$this->autoRender = false;
 
 		// EVENT Contents.beforeTrashReturn
-		$this->dispatchEvent('beforeTrashReturn', [
+		$this->dispatchLayerEvent('beforeTrashReturn', [
 			'data' => $this->request->data['id']
 		]);
 
 		$siteId = $this->Content->trashReturn($this->request->data['id']);
 
 		// EVENT Contents.afterTrashReturn
-		$this->dispatchEvent('afterTrashReturn', [
+		$this->dispatchLayerEvent('afterTrashReturn', [
 			'data' => $this->request->data['id']
 		]);
 
@@ -456,7 +456,7 @@ class ContentsController extends AppController
 		$typeName = Configure::read('BcContents.items.' . $content['plugin'] . '.' . $content['type'] . '.title');
 
 		// EVENT Contents.beforeDelete
-		$this->dispatchEvent('beforeDelete', [
+		$this->dispatchLayerEvent('beforeDelete', [
 			'data' => $id
 		]);
 
@@ -475,7 +475,7 @@ class ContentsController extends AppController
 		}
 
 		// EVENT Contents.afterDelete
-		$this->dispatchEvent('afterDelete', [
+		$this->dispatchLayerEvent('afterDelete', [
 			'data' => $id
 		]);
 
@@ -565,7 +565,7 @@ class ContentsController extends AppController
 	protected function _changeStatus($id, $status)
 	{
 		// EVENT Contents.beforeChangeStatus
-		$this->dispatchEvent('beforeChangeStatus', ['id' => $id, 'status' => $status]);
+		$this->dispatchLayerEvent('beforeChangeStatus', ['id' => $id, 'status' => $status]);
 
 		$content = $this->Content->find('first', ['conditions' => ['Content.id' => $id], 'recursive' => -1]);
 		if (!$content) {
@@ -579,7 +579,7 @@ class ContentsController extends AppController
 		$result = (bool)$this->Content->save($content, false);
 
 		// EVENT Contents.afterChangeStatus
-		$this->dispatchEvent('afterChangeStatus', ['id' => $id, 'result' => $result]);
+		$this->dispatchLayerEvent('afterChangeStatus', ['id' => $id, 'result' => $result]);
 
 		return $result;
 	}
@@ -600,7 +600,7 @@ class ContentsController extends AppController
 		$result = true;
 
 		// EVENT Contents.beforeTrashEmpty
-		$this->dispatchEvent('beforeTrashEmpty', [
+		$this->dispatchLayerEvent('beforeTrashEmpty', [
 			'data' => $contents
 		]);
 
@@ -621,7 +621,7 @@ class ContentsController extends AppController
 		}
 
 		// EVENT Contents.afterTrashEmpty
-		$this->dispatchEvent('afterTrashEmpty', [
+		$this->dispatchLayerEvent('afterTrashEmpty', [
 			'data' => $result
 		]);
 
@@ -720,7 +720,7 @@ class ContentsController extends AppController
 		}
 
 		// EVENT Contents.beforeMove
-		$event = $this->dispatchEvent('beforeMove', [
+		$event = $this->dispatchLayerEvent('beforeMove', [
 			'data' => $this->request->data
 		]);
 		if ($event !== false) {
@@ -750,7 +750,7 @@ class ContentsController extends AppController
 		}
 
 		// EVENT Contents.afterAdd
-		$this->dispatchEvent('afterMove', [
+		$this->dispatchLayerEvent('afterMove', [
 			'data' => $result
 		]);
 		$this->BcMessage->set(

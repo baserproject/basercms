@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Model\Table;
+use BaserCore\Event\BcEventDispatcherTrait;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Table;
 
@@ -18,6 +19,11 @@ use Cake\ORM\Table;
  */
 class PagesTable extends Table
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
+
 	/**
 	 * ビヘイビア
 	 *
@@ -758,7 +764,7 @@ class PagesTable extends Table
 		$oldData = $data;
 
 		// EVENT Page.beforeCopy
-		$event = $this->dispatchEvent('beforeCopy', [
+		$event = $this->dispatchLayerEvent('beforeCopy', [
 			'data' => $data,
 			'id' => $id,
 		]);
@@ -801,7 +807,7 @@ class PagesTable extends Table
 			$data['Page']['id'] = $this->getLastInsertID();
 
 			// EVENT Page.afterCopy
-			$event = $this->dispatchEvent('afterCopy', [
+			$event = $this->dispatchLayerEvent('afterCopy', [
 				'data' => $data,
 				'id' => $data['Page']['id'],
 				'oldId' => $id,

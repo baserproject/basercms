@@ -12,7 +12,6 @@
 namespace BaserCore\Controller;
 
 use BaserCore\Controller\Component\BcMessageComponent;
-use BcEventDispatcher;
 use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
 use Cake\Event\EventInterface;
@@ -900,7 +899,7 @@ class BcAppController extends Controller
 		], $options);
 
 		/*** Controller.beforeSendEmail ***/
-		$event = $this->dispatchEvent('beforeSendMail', [
+		$event = $this->dispatchLayerEvent('beforeSendMail', [
 			'options' => $options
 		]);
 		if ($event !== false) {
@@ -1585,26 +1584,6 @@ class BcAppController extends Controller
 	{
 		$this->BcMessage->set($message, $alert, $saveDblog, $setFlash);
 	}
-
-	/**
-	 * イベントを発火
-	 *
-	 * @param string $name イベント名
-	 * @param array $params パラメータ
-	 * @param array $options オプション
-	 * @return mixed
-	 */
-	// TODO 未確認のためコメントアウト
-//	public function dispatchEvent($name, $params = [], $options = [])
-//	{
-//		$options = array_merge([
-//			'modParams' => 0,
-//			'plugin' => $this->plugin,
-//			'layer' => 'Controller',
-//			'class' => $this->name
-//		], $options);
-//		return BcEventDispatcher::dispatch($name, $this, $params, $options);
-//	}
 
 	/**
 	 * リクエストメソッドとトークンをチェックする

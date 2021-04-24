@@ -12,6 +12,7 @@
 namespace BaserCore\Controller;
 
 use App\Controller\AppController as BaseController;
+use BaserCore\Event\BcEventDispatcherTrait;
 
 /**
  * Class AppController
@@ -19,4 +20,9 @@ use App\Controller\AppController as BaseController;
  */
 class AppController extends BaseController
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
+
 }

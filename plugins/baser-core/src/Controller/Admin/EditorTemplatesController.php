@@ -104,7 +104,7 @@ class EditorTemplatesController extends AppController
 		}
 
 		// EVENT EditorTemplates.afterAdd
-		$this->dispatchEvent('afterAdd', [
+		$this->dispatchLayerEvent('afterAdd', [
 			'data' => $result
 		]);
 		$this->BcMessage->setInfo(__d('baser', '保存完了'));
@@ -141,7 +141,7 @@ class EditorTemplatesController extends AppController
 		}
 
 		// EVENT EditorTemplates.afterEdit
-		$this->dispatchEvent('afterEdit', [
+		$this->dispatchLayerEvent('afterEdit', [
 			'data' => $result
 		]);
 		$this->BcMessage->setInfo(__d('baser', '保存完了'));

@@ -1,16 +1,17 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Event
- * @since           baserCMS v 3.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+
+namespace BaserCore\Event;
+use Cake\Event\Event;
+use Cake\Event\EventManager;
 
 /**
  * Class BcEventDispatcher
@@ -25,7 +26,7 @@ return;
  * 登録されたイベントリスナーが存在しない場合には、falseを を返す。
  * 存在する場合には、生成された Event を返す。
  */
-class BcEventDispatcher extends CakeObject
+class BcEventDispatcher
 {
 
 	/**
@@ -35,20 +36,20 @@ class BcEventDispatcher extends CakeObject
 	 *
 	 * @param string $name
 	 * @param Object $subject
-	 * @param array $params
+	 * @param array $data
 	 * @param array $options
-	 * @return boolean|\Event
+	 * @return boolean|Event
 	 */
-	public static function dispatch($name, $subject, $params = [], $options = [])
+	public static function dispatch($name, $subject, $data = [], $options = [])
 	{
 		$options = array_merge([
 			'modParams' => 0,
 			'layer' => '',
-			'plugin' => $subject->plugin,
-			'class' => $subject->name
+			'plugin' => method_exists($subject, 'getPlugin') ? $subject->getPlugin() : '',
+			'class' => method_exists($subject, 'getName') ? $subject->getName() : ''
 		], $options);
-		extract($options);
 
+        $eventName = '';
 		if ($options['layer'] && !preg_match('/^' . $options['layer'] . './', $name)) {
 			$eventName = $options['layer'];
 			if ($options['plugin']) {
@@ -60,16 +61,14 @@ class BcEventDispatcher extends CakeObject
 			$eventName .= '.' . $name;
 		}
 
-		$EventManager = CakeEventManager::instance();
-		if (!$EventManager->listeners($eventName)) {
+		$eventManager = EventManager::instance();
+		if (!$eventManager->listeners($eventName)) {
 			return false;
 		}
 
-		$event = new Event($eventName, $subject, $params);
+		$event = new Event($eventName, $subject, $data);
 		$event->modParams = $options['modParams'];
-		$EventManager->dispatch($event);
-
-		return $event;
+		return $eventManager->dispatch($event);
 	}
 
 }

@@ -230,11 +230,11 @@ class BcAppView extends View
 		// CUSTOMIZE ADD 2013/08/25 ryuring
 		// イベントを追加
 		// >>>
-		$event = $this->dispatchEvent('beforeGetViewFileName', ['name' => $name], ['class' => '', 'plugin' => '']);
+		$event = $this->dispatchLayerEvent('beforeGetViewFileName', ['name' => $name], ['class' => '', 'plugin' => '']);
 		if ($event !== false) {
 			$name = ($event->result === null || $event->result === true)? $event->data['name'] : $event->result;
 		}
-		$event = $this->dispatchEvent('beforeGetViewFileName', ['name' => $name]);
+		$event = $this->dispatchLayerEvent('beforeGetViewFileName', ['name' => $name]);
 		if ($event !== false) {
 			$name = ($event->result === null || $event->result === true)? $event->data['name'] : $event->result;
 		}
@@ -337,11 +337,11 @@ class BcAppView extends View
 		// CUSTOMIZE ADD 2013/08/27 ryuring
 		// イベントを追加
 		// >>>
-		$event = $this->dispatchEvent('beforeGetElementFileName', ['name' => $name], ['class' => '', 'plugin' => '']);
+		$event = $this->dispatchLayerEvent('beforeGetElementFileName', ['name' => $name], ['class' => '', 'plugin' => '']);
 		if ($event !== false) {
 			$name = ($event->result === null || $event->result === true)? $event->data['name'] : $event->result;
 		}
-		$event = $this->dispatchEvent('beforeGetElementFileName', ['name' => $name]);
+		$event = $this->dispatchLayerEvent('beforeGetElementFileName', ['name' => $name]);
 		if ($event !== false) {
 			$name = ($event->result === null || $event->result === true)? $event->data['name'] : $event->result;
 		}
@@ -413,11 +413,11 @@ class BcAppView extends View
 
 		// CUSTOMIZE ADD 2013/08/25 ryuring
 		// >>>
-		$event = $this->dispatchEvent('beforeGetLayoutFileName', ['name' => $name], ['class' => '', 'plugin' => '']);
+		$event = $this->dispatchLayerEvent('beforeGetLayoutFileName', ['name' => $name], ['class' => '', 'plugin' => '']);
 		if ($event !== false) {
 			$name = ($event->result === null || $event->result === true)? $event->data['name'] : $event->result;
 		}
-		$event = $this->dispatchEvent('beforeGetLayoutFileName', ['name' => $name]);
+		$event = $this->dispatchLayerEvent('beforeGetLayoutFileName', ['name' => $name]);
 		if ($event !== false) {
 			$name = ($event->result === null || $event->result === true)? $event->data['name'] : $event->result;
 		}
@@ -482,32 +482,6 @@ class BcAppView extends View
 			$exts[] = '.ctp';
 		}
 		return $exts;
-	}
-
-	/**
-	 * イベントを発火
-	 *
-	 * @param string $name
-	 * @param array $params
-	 * @return mixed
-	 */
-	public function dispatchEvent($name, $params = [], $options = [])
-	{
-
-		// CakeEmailより呼び出される場合、AppViewを直接呼び出す為、$this->nameに値が入らない。
-		// その際、View.beforeRenderをループで呼び出してしまうので、イベントを実行しない。
-		if (!$this->name) {
-			return false;
-		}
-
-		$options = array_merge([
-			'modParams' => 0,
-			'plugin' => $this->plugin,
-			'layer' => 'View',
-			'class' => $this->name
-		], $options);
-		App::uses('BcEventDispatcher', 'Event');
-		return BcEventDispatcher::dispatch($name, $this, $params, $options);
 	}
 
 	/**

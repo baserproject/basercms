@@ -12,6 +12,7 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
+use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\Entity\User;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
@@ -39,6 +40,11 @@ use BaserCore\Annotation\Checked;
  */
 class UsersTable extends Table
 {
+
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 
     /**
      * Initialize
