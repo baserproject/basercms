@@ -18,7 +18,7 @@ App::uses('BcAbstractDetector', 'Lib');
  *
  * @package Baser.Test.Case.Lib
  */
-class BcAbstractDetectorTest extends BaserTestCase
+class BcAbstractDetectorTest extends BcTestCase
 {
 
 	/**

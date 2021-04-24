@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Event\BcEventDispatcherTrait;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -22,8 +24,12 @@ App::uses('Form', 'View/Helper');
  *
  * @package Baser.View.Helper
  */
-class BcArrayHelper extends AppHelper
+class BcArrayHelper extends Helper
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 
 	/**
 	 * 配列の最初の要素かどうか調べる
@@ -90,7 +96,7 @@ class BcArrayHelper extends AppHelper
 	private function __addText(&$value, $key, $add)
 	{
 		if ($add) {
-			list($prefix, $suffix) = explode(',', $add);
+			[$prefix, $suffix] = explode(',', $add);
 		}
 		$value = $prefix . $value . $suffix;
 	}

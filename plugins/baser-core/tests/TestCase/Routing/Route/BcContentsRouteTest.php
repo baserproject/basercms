@@ -20,7 +20,7 @@ App::uses('BcContentsRoute', 'Routing/Route');
  * @package Baser.Test.Case.Routing.Route
  * @property BcContentsRoute $BcContentsRoute
  */
-class BcContentsRouteTest extends BaserTestCase
+class BcContentsRouteTest extends BcTestCase
 {
 
 

@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Event\BcEventDispatcherTrait;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -23,6 +24,10 @@ use BaserCore\Annotation\Checked;
  */
 class BcListTableHelper extends Helper
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 
 	/**
 	 * カラム数
@@ -70,7 +75,7 @@ class BcListTableHelper extends Helper
 
 		$request = $this->_View->request;
 		$id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
-		$event = $this->dispatchEvent('showHead', ['id' => $id, 'fields' => []], ['class' => 'BcListTable', 'plugin' => '']);
+		$event = $this->dispatchLayerEvent('showHead', ['id' => $id, 'fields' => []], ['class' => 'BcListTable', 'plugin' => '']);
 		$output = '';
 		if ($event !== false) {
 			if (!empty($event->data['fields'])) {
@@ -99,7 +104,7 @@ class BcListTableHelper extends Helper
 
 		$request = $this->_View->request;
 		$id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
-		$event = $this->dispatchEvent('showRow', ['id' => $id, 'data' => $data, 'fields' => []], ['class' => 'BcListTable', 'plugin' => '']);
+		$event = $this->dispatchLayerEvent('showRow', ['id' => $id, 'data' => $data, 'fields' => []], ['class' => 'BcListTable', 'plugin' => '']);
 		$output = '';
 		if ($event !== false) {
 			if (!empty($event->data['fields'])) {
@@ -140,7 +145,7 @@ class BcListTableHelper extends Helper
 		}
 
 		// EVENT BcListTable.rowClass
-		$event = $this->dispatchEvent('rowClass', [
+		$event = $this->dispatchLayerEvent('rowClass', [
 			'classies' => $classies,
 			'record' => $record
 		], ['class' => 'BcListTable', 'plugin' => '']);

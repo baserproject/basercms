@@ -20,7 +20,7 @@ App::uses('CakeEventManager', 'Event');
  * @package Baser.Test.Case.Event
  * @property  CakeEventManager $CakeEventManager
  */
-class CakeEventManagerTest extends BaserTestCase
+class CakeEventManagerTest extends BcTestCase
 {
 
 	/**

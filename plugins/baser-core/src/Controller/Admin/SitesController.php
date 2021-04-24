@@ -81,7 +81,7 @@ class SitesController extends AppController
 			]];
 		} else {
 			/*** Sites.beforeAdd ** */
-			$event = $this->dispatchEvent('beforeAdd', [
+			$event = $this->dispatchLayerEvent('beforeAdd', [
 				'data' => $this->request->data
 			]);
 			if ($event !== false) {
@@ -89,7 +89,7 @@ class SitesController extends AppController
 			}
 			if ($data = $this->Site->save($this->request->data)) {
 				/*** Sites.afterAdd ***/
-				$this->dispatchEvent('afterAdd', [
+				$this->dispatchLayerEvent('afterAdd', [
 					'data' => $data
 				]);
 				if (!empty($data['Site']['theme'])) {
@@ -132,7 +132,7 @@ class SitesController extends AppController
 			}
 		} else {
 			/*** Sites.beforeEdit ** */
-			$event = $this->dispatchEvent('beforeEdit', [
+			$event = $this->dispatchLayerEvent('beforeEdit', [
 				'data' => $this->request->data
 			]);
 			if ($event !== false) {
@@ -141,7 +141,7 @@ class SitesController extends AppController
 			$beforeSite = $this->Site->find('first', ['conditions' => ['Site.id' => $this->request->data['Site']['id']]]);
 			if ($data = $this->Site->save($this->request->data)) {
 				/*** Sites.afterEdit ***/
-				$this->dispatchEvent('afterEdit', [
+				$this->dispatchLayerEvent('afterEdit', [
 					'data' => $data
 				]);
 				if (!empty($data['Site']['theme']) && $beforeSite['Site']['theme'] !== $data['Site']['theme']) {

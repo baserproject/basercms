@@ -1,18 +1,22 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Event
- * @since           baserCMS v 4.0.9
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('BcControllerEventDispatcher', 'Event');
+namespace BaserCore\Test\TestCase\Event;
+
+use BaserCore\Controller\Admin\UsersController;
+use BaserCore\Event\BcControllerEventDispatcher;
+use BaserCore\Event\BcControllerEventListener;
+use BaserCore\TestSuite\BcTestCase;
+use Cake\Event\Event;
+use Cake\Event\EventManager;
 
 /**
  * Class BcControllerEventDispatcherTest
@@ -20,75 +24,162 @@ App::uses('BcControllerEventDispatcher', 'Event');
  * @package Baser.Test.Case.Event
  * @property  BcControllerEventDispatcher $BcControllerEventDispatcher
  */
-class BcControllerEventDispatcherTest extends BaserTestCase
+class BcControllerEventDispatcherTest extends BcTestCase
 {
 
-	/**
-	 * set up
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * @var EventManager|null
+     */
+    public ?EventManager $eventManager;
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * @var BcControllerEventDispatcher|null
+     */
+    public ?BcControllerEventDispatcher $bcControllerEventDispatcher;
 
-	/**
-	 * implementedEvents
-	 */
-	public function testImplementedEvents()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->eventManager = EventManager::instance();
+        $this->bcControllerEventDispatcher = new BcControllerEventDispatcher();
+        foreach($this->bcControllerEventDispatcher->implementedEvents() as $key => $event) {
+            $this->eventManager->off($key);
+        }
+    }
 
-	/**
-	 * initialize
-	 */
-	public function testInitialize()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        $this->eventManager = null;
+        $this->bcControllerEventDispatcher = null;
+        parent::tearDown();
+    }
 
-	/**
-	 * startup
-	 */
-	public function testStartup()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * implementedEvents
+     */
+    public function testImplementedEvents()
+    {
+        $this->assertTrue(is_array($this->bcControllerEventDispatcher->implementedEvents()));
+    }
 
-	/**
-	 * beforeRender
-	 */
-	public function testBeforeRender()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * initialize
+     */
+    public function testInitialize()
+    {
+        $listener = $this->getMockBuilder(BcControllerEventListener::class)
+            ->onlyMethods(['implementedEvents'])
+            ->addMethods(['usersInitialize'])
+            ->getMock();
 
-	/**
-	 * beforeRedirect
-	 */
-	public function testBeforeRedirect()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+        $listener->method('implementedEvents')
+            ->willReturn(['Controller.Users.initialize' => ['callable' => 'usersInitialize']]);
 
-	/**
-	 * shutdown
-	 */
-	public function testShutdown()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+        $listener->expects($this->once())
+            ->method('usersInitialize');
+
+        $this->eventManager
+            ->on($listener)
+            ->on($this->bcControllerEventDispatcher)
+            ->dispatch(new Event('Controller.initialize', new UsersController(), []));
+    }
+
+    /**
+     * startup
+     */
+    public function testStartup()
+    {
+        $listener = $this->getMockBuilder(BcControllerEventListener::class)
+            ->onlyMethods(['implementedEvents'])
+            ->addMethods(['usersStartup'])
+            ->getMock();
+
+        $listener->method('implementedEvents')
+            ->willReturn(['Controller.Users.startup' => ['callable' => 'usersStartup']]);
+
+        $listener->expects($this->once())
+            ->method('usersStartup');
+
+        $this->eventManager
+            ->on($listener)
+            ->on($this->bcControllerEventDispatcher)
+            ->dispatch(new Event('Controller.startup', new UsersController(), []));
+    }
+
+    /**
+     * beforeRender
+     */
+    public function testBeforeRender()
+    {
+        $listener = $this->getMockBuilder(BcControllerEventListener::class)
+            ->onlyMethods(['implementedEvents'])
+            ->addMethods(['usersBeforeRender'])
+            ->getMock();
+
+        $listener->method('implementedEvents')
+            ->willReturn(['Controller.Users.beforeRender' => ['callable' => 'usersBeforeRender']]);
+
+        $listener->expects($this->once())
+            ->method('usersBeforeRender');
+
+        $this->eventManager
+            ->on($listener)
+            ->on($this->bcControllerEventDispatcher)
+            ->dispatch(new Event('Controller.beforeRender', new UsersController(), []));
+    }
+
+    /**
+     * beforeRedirect
+     */
+    public function testBeforeRedirect()
+    {
+        $listener = $this->getMockBuilder(BcControllerEventListener::class)
+            ->onlyMethods(['implementedEvents'])
+            ->addMethods(['usersBeforeRedirect'])
+            ->getMock();
+
+        $listener->method('implementedEvents')
+            ->willReturn(['Controller.Users.beforeRedirect' => ['callable' => 'usersBeforeRedirect']]);
+
+        $listener->expects($this->once())
+            ->method('usersBeforeRedirect');
+
+        $this->eventManager
+            ->on($listener)
+            ->on($this->bcControllerEventDispatcher)
+            ->dispatch(new Event('Controller.beforeRedirect', new UsersController(), []));
+    }
+
+    /**
+     * shutdown
+     */
+    public function testShutdown()
+    {
+        $listener = $this->getMockBuilder(BcControllerEventListener::class)
+            ->onlyMethods(['implementedEvents'])
+            ->addMethods(['usersShutdown'])
+            ->getMock();
+
+        $listener->method('implementedEvents')
+            ->willReturn(['Controller.Users.shutdown' => ['callable' => 'usersShutdown']]);
+
+        $listener->expects($this->once())
+            ->method('usersShutdown');
+
+        $this->eventManager
+            ->on($listener)
+            ->on($this->bcControllerEventDispatcher)
+            ->dispatch(new Event('Controller.shutdown', new UsersController(), []));
+    }
 
 }

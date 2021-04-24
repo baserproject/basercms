@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Event\BcEventDispatcherTrait;
 use Cake\View\Helper\HtmlHelper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -26,6 +27,11 @@ class BcHtmlHelper extends HtmlHelper
 
 // CUSTOMIZE ADD 2014/07/03 ryuring
 // >>>
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
+
     /**
      * Included helpers.
      *

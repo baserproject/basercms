@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\ORM\Entity;
@@ -31,6 +32,10 @@ use BaserCore\Annotation\Checked;
  */
 class BcBaserHelper extends Helper
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 
     /**
      * ヘルパー
@@ -213,7 +218,7 @@ class BcBaserHelper extends Helper
         /*** beforeElement ***/
         // TODO 未実装
         /* >>>
-        $event = $this->dispatchEvent('beforeElement', [
+        $event = $this->dispatchLayerEvent('beforeElement', [
             'name' => $name,
             'data' => $data,
             'options' => $options
@@ -226,7 +231,7 @@ class BcBaserHelper extends Helper
         /*** Controller.beforeElement ***/
         // TODO 未実装
         /* >>>
-        $event = $this->dispatchEvent('beforeElement', [
+        $event = $this->dispatchLayerEvent('beforeElement', [
             'name' => $name,
             'data' => $data,
             'options' => $options
@@ -255,7 +260,7 @@ class BcBaserHelper extends Helper
         /*** afterElement ***/
         // TODO 未実装
         /* >>>
-        $event = $this->dispatchEvent('afterElement', [
+        $event = $this->dispatchLayerEvent('afterElement', [
             'name' => $name,
             'out' => $out
         ], ['layer' => 'View', 'class' => '', 'plugin' => '']);
@@ -267,7 +272,7 @@ class BcBaserHelper extends Helper
         /*** Controller.afterElement ***/
         // TODO 未実装
         /* >>>
-        $event = $this->dispatchEvent('afterElement', [
+        $event = $this->dispatchLayerEvent('afterElement', [
             'name' => $name,
             'out' => $out
         ], ['layer' => 'View', 'class' => $this->_View->getName()]);
@@ -373,7 +378,7 @@ class BcBaserHelper extends Helper
         ], $options);
 
         /*** beforeGetLink ***/
-        $event = $this->dispatchEvent('beforeGetLink', [
+        $event = $this->dispatchLayerEvent('beforeGetLink', [
             'title' => $title,
             'url' => $url,
             'options' => $options,
@@ -476,7 +481,7 @@ class BcBaserHelper extends Helper
         $out = $this->BcHtml->link($title, $url, $options, $confirmMessage);
 
         /*** afterGetLink ***/
-        $event = $this->dispatchEvent('afterGetLink', [
+        $event = $this->dispatchLayerEvent('afterGetLink', [
             'url' => $url,
             'out' => $out
         ], ['class' => 'Html', 'plugin' => '']);
@@ -1255,7 +1260,7 @@ class BcBaserHelper extends Helper
         $out = $this->getElement('header', $data, $options);
 
         /*** header ***/
-        $event = $this->dispatchEvent('header', [
+        $event = $this->dispatchLayerEvent('header', [
             'out' => $out
         ], ['layer' => 'View', 'class' => '', 'plugin' => '']);
         if ($event !== false) {
@@ -1263,7 +1268,7 @@ class BcBaserHelper extends Helper
         }
 
         /*** Controller.header ***/
-        $event = $this->dispatchEvent('header', [
+        $event = $this->dispatchLayerEvent('header', [
             'out' => $out
         ], ['layer' => 'View', 'class' => $this->_View->name]);
         if ($event !== false) {
@@ -1290,7 +1295,7 @@ class BcBaserHelper extends Helper
         $out = $this->getElement('footer', $data, $options);
 
         /*** footer ***/
-        $event = $this->dispatchEvent('footer', [
+        $event = $this->dispatchLayerEvent('footer', [
             'out' => $out
         ], ['layer' => 'View', 'class' => '', 'plugin' => '']);
         if ($event) {
@@ -1298,7 +1303,7 @@ class BcBaserHelper extends Helper
         }
 
         /*** Controller.footer ***/
-        $event = $this->dispatchEvent('footer', [
+        $event = $this->dispatchLayerEvent('footer', [
             'out' => $out
         ], ['layer' => 'View', 'class' => $this->_View->name]);
         if ($event) {
@@ -1342,18 +1347,18 @@ class BcBaserHelper extends Helper
     public function content()
     {
         /*** contentHeader ***/
-        $this->dispatchEvent('contentHeader', null, ['layer' => 'View', 'class' => '', 'plugin' => '']);
+        $this->dispatchLayerEvent('contentHeader', null, ['layer' => 'View', 'class' => '', 'plugin' => '']);
 
         /*** Controller.contentHeader ***/
-        $this->dispatchEvent('contentHeader', null, ['layer' => 'View', 'class' => $this->_View->name]);
+        $this->dispatchLayerEvent('contentHeader', null, ['layer' => 'View', 'class' => $this->_View->name]);
 
         echo $this->_View->fetch('content');
 
         /*** contentFooter ***/
-        $event = $this->dispatchEvent('contentFooter', null, ['layer' => 'View', 'class' => '', 'plugin' => '']);
+        $event = $this->dispatchLayerEvent('contentFooter', null, ['layer' => 'View', 'class' => '', 'plugin' => '']);
 
         /*** Controller.contentFooter ***/
-        $event = $this->dispatchEvent('contentFooter', null, ['layer' => 'View', 'class' => $this->_View->name]);
+        $event = $this->dispatchLayerEvent('contentFooter', null, ['layer' => 'View', 'class' => $this->_View->name]);
     }
 
     /**

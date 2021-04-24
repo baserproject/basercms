@@ -13,7 +13,7 @@ return;
  */
 App::uses('BcAppView', 'View');
 
-class BcAppViewTest extends BaserTestCase
+class BcAppViewTest extends BcTestCase
 {
 
 	public function setUp()

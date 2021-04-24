@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Event\BcEventDispatcherTrait;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use \Cake\View\Helper\FormHelper;
@@ -26,6 +27,11 @@ use BaserCore\Annotation\Checked;
  */
 class BcFormHelper extends FormHelper
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
+
     /**
      * Other helpers used by FormHelper
      *
@@ -99,7 +105,7 @@ class BcFormHelper extends FormHelper
 			$type = Inflector::camelize($type);
 		}
 
-		$event = $this->dispatchEvent('after' . $type . 'Form', ['fields' => [], 'id' => $this->__id], ['class' => 'Form', 'plugin' => '']);
+		$event = $this->dispatchLayerEvent('after' . $type . 'Form', ['fields' => [], 'id' => $this->__id], ['class' => 'Form', 'plugin' => '']);
 		$out = '';
 		if ($event !== false) {
 			if (!empty($event->data['fields'])) {
@@ -358,7 +364,7 @@ SCRIPT_END;
 		$this->__id = $this->_getId($model, $options);
 
 		/*** beforeCreate ***/
-		$event = $this->dispatchEvent('beforeCreate', [
+		$event = $this->dispatchLayerEvent('beforeCreate', [
 			'id' => $this->__id,
 			'options' => $options
 		], ['class' => 'Form', 'plugin' => '']);
@@ -372,7 +378,7 @@ SCRIPT_END;
 		// CUSTOMIZE ADD 2014/07/03 ryuring
 		// >>>
 		/*** afterCreate ***/
-		$event = $this->dispatchEvent('afterCreate', [
+		$event = $this->dispatchLayerEvent('afterCreate', [
 			'id' => $this->__id,
 			'out' => $out
 		], ['class' => 'Form', 'plugin' => '']);
@@ -412,7 +418,7 @@ SCRIPT_END;
 		$this->__id = null;
 
 		/*** beforeEnd ***/
-		$event = $this->dispatchEvent('beforeEnd', [
+		$event = $this->dispatchLayerEvent('beforeEnd', [
 			'id' => $id,
 			'options' => $options
 		], ['class' => 'Form', 'plugin' => '']);
@@ -426,7 +432,7 @@ SCRIPT_END;
 		// CUSTOMIZE ADD 2014/07/03 ryuring
 		// >>>
 		/*** afterEnd ***/
-		$event = $this->dispatchEvent('afterEnd', [
+		$event = $this->dispatchLayerEvent('afterEnd', [
 			'id' => $id,
 			'out' => $out
 		], ['class' => 'Form', 'plugin' => '']);
@@ -477,7 +483,7 @@ SCRIPT_END;
 		// CUSTOMIZE ADD 2014/07/03 ryuring
 		// >>>
 		/*** beforeInput ***/
-		$event = $this->dispatchEvent('beforeInput', [
+		$event = $this->dispatchLayerEvent('beforeInput', [
 			'formId' => $this->__id,
 			'data' => $this->request->data,
 			'fieldName' => $fieldName,
@@ -736,7 +742,7 @@ DOC_END;
 		}
 
 		/*** afterInput ***/
-		$event = $this->dispatchEvent('afterInput', [
+		$event = $this->dispatchLayerEvent('afterInput', [
 			'formId' => $this->__id,
 			'data' => $this->request->data,
 			'fieldName' => $fieldName,
@@ -980,7 +986,7 @@ DOC_END;
 		// CUSTOMIZE ADD 2016/06/08 ryuring
 		// >>>
 		/*** beforeInput ***/
-		$event = $this->dispatchEvent('beforeSubmit', [
+		$event = $this->dispatchLayerEvent('beforeSubmit', [
 			'id' => $this->__id,
 			'caption' => $caption,
 			'options' => $options
@@ -992,7 +998,7 @@ DOC_END;
 		$output = parent::submit($caption, $options);
 
 		/*** afterInput ***/
-		$event = $this->dispatchEvent('afterSubmit', [
+		$event = $this->dispatchLayerEvent('afterSubmit', [
 			'id' => $this->__id,
 			'caption' => $caption,
 			'out' => $output
@@ -1047,7 +1053,7 @@ DOC_END;
 		}
 
 		if (!empty($attributes['value'])) {
-			list($year, $month, $day, $hour, $min, $meridian) = $this->_getDateTimeValue(
+			[$year, $month, $day, $hour, $min, $meridian] = $this->_getDateTimeValue(
 				$attributes['value'],
 				$timeFormat
 			);
@@ -1101,7 +1107,7 @@ DOC_END;
 			$current->modify($change > 0? "+$change minutes" : "$change minutes");
 			$format = ($timeFormat == 12)? 'Y m d h i a' : 'Y m d H i a';
 			$newTime = explode(' ', $current->format($format));
-			list($year, $month, $day, $hour, $min, $meridian) = $newTime;
+			[$year, $month, $day, $hour, $min, $meridian] = $newTime;
 		}
 
 		$keys = ['Day', 'Month', 'Year', 'Hour', 'Minute', 'Meridian'];
@@ -1659,7 +1665,7 @@ DOC_END;
 				$max = !isset($options['max'])? $current + 20 : (int)$options['max'];
 
 				if ($min > $max) {
-					list($min, $max) = [$max, $min];
+					[$min, $max] = [$max, $min];
 				}
 				if (!empty($options['value']) &&
 					(int)$options['value'] < $min &&
@@ -1693,13 +1699,13 @@ DOC_END;
 					$max = $options['max'];
 				}
 				if ($min > $max) {
-					list($min, $max) = [$max, $min];
+					[$min, $max] = [$max, $min];
 				}
 				for($i = $min; $i <= $max; $i++) {
 					$wyears = $this->BcTime->convertToWarekiYear($i);
 					if ($wyears) {
 						foreach($wyears as $value) {
-							list($w, $year) = explode('-', $value);
+							[$w, $year] = explode('-', $value);
 							$data[$value] = $this->BcTime->nengo($w) . ' ' . $year;
 						}
 					}
@@ -1932,7 +1938,7 @@ DOC_END;
 				$model = false;
 			}
 			if ($model !== false) {
-				list(, $model) = pluginSplit($model, true);
+				[, $model] = pluginSplit($model, true);
 				$this->setEntity($model, true);
 			}
 			$domId = isset($options['url']['action'])? $options['url']['action'] : $this->request->params['action'];
@@ -1987,7 +1993,7 @@ DOC_END;
 			'editor' => 'BcCkeditor',
 			'style' => 'width:99%;height:540px'
 		], $options);
-		list($plugin, $editor) = pluginSplit($options['editor']);
+		[$plugin, $editor] = pluginSplit($options['editor']);
 		if (!empty($this->_View->{$editor})) {
 			return $this->_View->{$editor}->editor($fieldName, $options);
 		} elseif ($editor == 'none') {
@@ -2112,7 +2118,7 @@ DOC_END;
 			return 'aaa';
 		}
 		if ($fields) {
-			list($idField, $displayField) = $fields;
+			[$idField, $displayField] = $fields;
 		} else {
 			return false;
 		}

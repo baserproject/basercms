@@ -11,6 +11,7 @@
 
 namespace BaserCore\Model\Table;
 
+use BaserCore\Event\BcEventDispatcherTrait;
 use DateTime;
 use BaserCore\Model\Entity\PasswordRequest;
 use BaserCore\Model\Entity\User;
@@ -39,6 +40,10 @@ use BaserCore\Annotation\Checked;
  */
 class PasswordRequestsTable extends Table
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 
     /**
      * Initialize

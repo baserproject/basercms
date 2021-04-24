@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Event\BcEventDispatcherTrait;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -19,6 +21,10 @@ return;
  */
 class BcSearchBoxHelper extends AppHelper
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 
 	/**
 	 * 検索フィールド発火
@@ -28,8 +34,8 @@ class BcSearchBoxHelper extends AppHelper
 	public function dispatchShowField()
 	{
 		$request = $this->_View->request;
-		$id = Inflector::camelize($request->params['controller']) . '.' . Inflector::camelize($request->params['action']);
-		$event = $this->dispatchEvent('showField', ['id' => $id, 'fields' => []], ['class' => 'BcSearchBox', 'plugin' => '']);
+		$id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
+		$event = $this->dispatchLayerEvent('showField', ['id' => $id, 'fields' => []], ['class' => 'BcSearchBox', 'plugin' => '']);
 		$output = '';
 		if ($event !== false) {
 			if (!empty($event->data['fields'])) {

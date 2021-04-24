@@ -9,9 +9,13 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-use Cake\Cache\Cache;
+use BaserCore\Event\BcControllerEventDispatcher;
+use BaserCore\Event\BcModelEventDispatcher;
+use BaserCore\Event\BcViewEventDispatcher;
+use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
+use Cake\Event\EventManager;
 use Cake\Validation\Validator;
 
 Configure::config('baser', new PhpConfig());
@@ -23,7 +27,24 @@ Configure::load('BaserCore.setting', 'baser');
 Validator::addDefaultProvider('bc', 'BaserCore\Model\Validation\BcValidation');
 
 /**
+ * グローバルイベント登録
+ */
+$event = EventManager::instance();
+$event->on(new BcControllerEventDispatcher());
+$event->on(new BcModelEventDispatcher());
+$event->on(new BcViewEventDispatcher());
+// TODO 未実装
+// >>>
+//$event->on(new PagesControllerEventListener());
+//$event->on(new ContentFoldersControllerEventListener());
+// <<<
+
+/**
  * パス定義
  */
 require __DIR__ . DS . 'paths.php';
+
+// TODO 未確認
+// >>>
 // require BASER . DS . 'src' . DS . 'basics.php';
+// <<<

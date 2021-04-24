@@ -1,16 +1,21 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Event
- * @since           baserCMS v 3.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+
+namespace BaserCore\Event;
+
+use Cake\Event\Event;
+use Cake\Event\EventListenerInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcModelEventDispatcher
@@ -24,165 +29,192 @@ return;
  * 《イベント名の命名規則》
  * Model.ModelName.eventName
  */
-class BcModelEventDispatcher extends CakeObject implements CakeEventListener
+class BcModelEventDispatcher implements EventListenerInterface
 {
 
-	/**
-	 * implementedEvents
-	 *
-	 * @return array
-	 */
-	public function implementedEvents()
-	{
-		return [
-			'Model.beforeFind' => 'beforeFind',
-			'Model.afterFind' => 'afterFind',
-			'Model.beforeValidate' => 'beforeValidate',
-			'Model.afterValidate' => 'afterValidate',
-			'Model.beforeSave' => 'beforeSave',
-			'Model.afterSave' => 'afterSave',
-			'Model.beforeDelete' => 'beforeDelete',
-			'Model.afterDelete' => 'afterDelete'
-		];
-	}
+    /**
+     * implementedEvents
+     *
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function implementedEvents(): array
+    {
+        return [
+            'Model.beforeFind' => 'beforeFind',
+            'Model.afterFind' => 'afterFind',
+            'Model.beforeValidate' => 'beforeValidate',
+            'Model.afterValidate' => 'afterValidate',
+            'Model.beforeSave' => 'beforeSave',
+            'Model.afterSave' => 'afterSave',
+            'Model.beforeDelete' => 'beforeDelete',
+            'Model.afterDelete' => 'afterDelete'
+        ];
+    }
 
-	/**
-	 * beforeFind
-	 *
-	 * @param Event $event
-	 * @return array
-	 */
-	public function beforeFind(Event $event)
-	{
-		if (!method_exists($event->getSubject()(), 'dispatchEvent')) {
-			return $event->getData(0);
-		}
-		$currentEvent = $event->getSubject()->dispatchEvent('beforeFind', $event->data);
-		if ($currentEvent) {
-			$event->setData($currentEvent->getData());
-			return true;
-		}
-		return $event->getData(0);
-	}
+    /**
+     * beforeFind
+     *
+     * @param Event $event
+     * @return array|true
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function beforeFind(Event $event)
+    {
+        if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
+            return $event->getData(0);
+        }
+        $currentEvent = $event->getSubject()->dispatchLayerEvent('beforeFind', $event->getData());
+        if ($currentEvent) {
+            $event->setData($currentEvent->getData());
+            return true;
+        }
+        return $event->getData(0);
+    }
 
-	/**
-	 * afterFind
-	 *
-	 * @param type $event
-	 * @return array
-	 */
-	public function afterFind(Event $event)
-	{
-		if (!method_exists($event->getSubject(), 'dispatchEvent')) {
-			return $event->getData(0);
-		}
-		$currentEvent = $event->getSubject()->dispatchEvent('afterFind', $event->getData());
-		if ($currentEvent) {
-			$event->setData($currentEvent->getData());
-			return true;
-		}
-		return $event->getData(0);
-	}
+    /**
+     * afterFind
+     *
+     * @param Event $event
+     * @return array|true
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function afterFind(Event $event)
+    {
+        if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
+            return $event->getData(0);
+        }
+        $currentEvent = $event->getSubject()->dispatchLayerEvent('afterFind', $event->getData());
+        if ($currentEvent) {
+            $event->setData($currentEvent->getData());
+            return true;
+        }
+        return $event->getData(0);
+    }
 
-	/**
-	 * beforeValidate
-	 *
-	 * @param Event $event
-	 * @return boolean
-	 */
-	public function beforeValidate(Event $event)
-	{
-		if (!method_exists($event->getSubject(), 'dispatchEvent')) {
-			return true;
-		}
-		$currentEvent = $event->getSubject()->dispatchEvent('beforeValidate', $event->getData());
-		if ($currentEvent) {
-			if ($currentEvent->isStopped()) {
-				return false;
-			}
-		}
-		return true;
-	}
+    /**
+     * beforeValidate
+     *
+     * @param Event $event
+     * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function beforeValidate(Event $event): bool
+    {
+        if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
+            return true;
+        }
+        $currentEvent = $event->getSubject()->dispatchLayerEvent('beforeValidate', $event->getData());
+        if ($currentEvent) {
+            if ($currentEvent->isStopped()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	/**
-	 * afterValidate
-	 *
-	 * @param Event $event
-	 * @return void
-	 */
-	public function afterValidate(Event $event)
-	{
-		if (!method_exists($event->getSubject(), 'dispatchEvent')) {
-			return;
-		}
-		$event->getSubject()->dispatchEvent('afterValidate', $event->getData());
-	}
+    /**
+     * afterValidate
+     *
+     * @param Event $event
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function afterValidate(Event $event): void
+    {
+        if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
+            return;
+        }
+        $event->getSubject()->dispatchLayerEvent('afterValidate', $event->getData());
+    }
 
-	/**
-	 * beforeSave
-	 *
-	 * @param Event $event
-	 * @return boolean
-	 */
-	public function beforeSave(Event $event)
-	{
-		if (!method_exists($event->getSubject(), 'dispatchEvent')) {
-			return true;
-		}
-		$currentEvent = $event->getSubject()->dispatchEvent('beforeSave', $event->getData());
-		if ($currentEvent) {
-			if (!$currentEvent->result) {
-				return false;
-			}
-		}
-		return true;
-	}
+    /**
+     * beforeSave
+     *
+     * @param Event $event
+     * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function beforeSave(Event $event): bool
+    {
+        if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
+            return true;
+        }
+        $currentEvent = $event->getSubject()->dispatchLayerEvent('beforeSave', $event->getData());
+        if ($currentEvent) {
+            if (!$currentEvent->getResult()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	/**
-	 * afterSave
-	 *
-	 * @param Event $event
-	 * @return void
-	 */
-	public function afterSave(Event $event)
-	{
-		if (!method_exists($event->getSubject(), 'dispatchEvent')) {
-			return;
-		}
-		$event->getSubject()->dispatchEvent('afterSave', $event->getData());
-	}
+    /**
+     * afterSave
+     *
+     * @param Event $event
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function afterSave(Event $event): void
+    {
+        if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
+            return;
+        }
+        $event->getSubject()->dispatchLayerEvent('afterSave', $event->getData());
+    }
 
-	/**
-	 * beforeDelete
-	 *
-	 * @param Event $event
-	 * @return boolean
-	 */
-	public function beforeDelete(Event $event)
-	{
-		if (!method_exists($event->getSubject(), 'dispatchEvent')) {
-			return true;
-		}
-		$currentEvent = $event->getSubject()->dispatchEvent('beforeDelete', $event->getData());
-		if ($currentEvent) {
-			if ($event->isStopped()) {
-				return false;
-			}
-		}
-		return true;
-	}
+    /**
+     * beforeDelete
+     *
+     * @param Event $event
+     * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function beforeDelete(Event $event): bool
+    {
+        if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
+            return true;
+        }
+        $currentEvent = $event->getSubject()->dispatchLayerEvent('beforeDelete', $event->getData());
+        if ($currentEvent) {
+            if ($event->isStopped()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	/**
-	 * afterDelete
-	 *
-	 * @param Event $event
-	 */
-	public function afterDelete(Event $event)
-	{
-		if (!method_exists($event->getSubject(), 'dispatchEvent')) {
-			return;
-		}
-		$event->getSubject()->dispatchEvent('afterDelete', $event->getData());
-	}
+    /**
+     * afterDelete
+     *
+     * @param Event $event
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function afterDelete(Event $event): void
+    {
+        if (!method_exists($event->getSubject(), 'dispatchLayerEvent')) {
+            return;
+        }
+        $event->getSubject()->dispatchLayerEvent('afterDelete', $event->getData());
+    }
 
 }

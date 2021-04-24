@@ -12,6 +12,7 @@
 namespace BaserCore\Model\Table;
 
 use BaserCore\Error\BcException;
+use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\App;
 use Cake\Core\Configure;
@@ -28,6 +29,11 @@ use BaserCore\Annotation\Checked;
  */
 class PluginsTable extends Table
 {
+
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 
     /**
      * Plugin constructor.

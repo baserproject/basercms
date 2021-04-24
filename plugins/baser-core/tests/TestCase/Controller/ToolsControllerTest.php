@@ -20,7 +20,7 @@ App::uses('ToolsController', 'Controller');
  * @package Baser.Test.Case.Controller
  * @property  ToolsController $ToolsController
  */
-class ToolsControllerTest extends BaserTestCase
+class ToolsControllerTest extends BcTestCase
 {
 
 	/**

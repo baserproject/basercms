@@ -20,7 +20,7 @@ App::uses('UploadsController', 'Controller');
  * @package Baser.Test.Case.Controller
  * @property  UploadsController $UploadsController
  */
-class UploadsControllerTest extends BaserTestCase
+class UploadsControllerTest extends BcTestCase
 {
 
 	/**

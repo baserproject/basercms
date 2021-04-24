@@ -20,7 +20,7 @@ App::uses('BcRedirectMainSiteFilter', 'Routing/Filter');
  * @package Baser.Test.Case.Routing.Filter
  * @property  BcRedirectMainSiteFilter $BcRedirectMainSiteFilter
  */
-class BcRedirectMainSiteFilterTest extends BaserTestCase
+class BcRedirectMainSiteFilterTest extends BcTestCase
 {
 
 	/**

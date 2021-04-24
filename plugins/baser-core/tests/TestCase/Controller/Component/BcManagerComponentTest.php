@@ -34,7 +34,7 @@ class BcManagerTestController extends Controller
  * @package Baser.Test.Case.Controller.Component
  * @property BcManagerComponent $BcManager
  */
-class BcManagerComponentTest extends BaserTestCase
+class BcManagerComponentTest extends BcTestCase
 {
 
 	public $fixtures = [

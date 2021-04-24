@@ -21,7 +21,7 @@ App::uses('BcCkeditorHelper', 'View/Helper');
  * @package Baser.Test.Case.View.Helper
  * @property BcCkeditor $BcCkeditor
  */
-class BcCkeditorHelperTest extends BaserTestCase
+class BcCkeditorHelperTest extends BcTestCase
 {
 
 	/**

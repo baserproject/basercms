@@ -20,7 +20,7 @@ App::uses('Controller', 'Controller');
  *
  * @package Baser.Test.Case.Controller.Component
  */
-class BcNoPasswordHasherTest extends BaserTestCase
+class BcNoPasswordHasherTest extends BcTestCase
 {
 
 	public function setUp()

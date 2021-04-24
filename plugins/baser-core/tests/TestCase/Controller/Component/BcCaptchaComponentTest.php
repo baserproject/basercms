@@ -30,7 +30,7 @@ class BcCaptchaTestController extends Controller
 /**
  * BcCaptchaComponentのテスト
  */
-class BcCaptchaComponentTest extends BaserTestCase
+class BcCaptchaComponentTest extends BcTestCase
 {
 
 	public $fixtures = [

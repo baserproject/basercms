@@ -19,7 +19,7 @@ App::uses('BcRequestFilter', 'Routing/Filter');
  *
  * @package Baser.Test.Case.Routing.Filter
  */
-class BcRequestFilterTest extends BaserTestCase
+class BcRequestFilterTest extends BcTestCase
 {
 
 	/**

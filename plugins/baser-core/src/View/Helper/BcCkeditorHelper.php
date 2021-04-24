@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Event\BcEventDispatcherTrait;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -19,6 +21,10 @@ return;
  */
 class BcCkeditorHelper extends AppHelper
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 
 	/**
 	 * ヘルパー
@@ -267,7 +273,7 @@ class BcCkeditorHelper extends AppHelper
 
 		$jscode = $model = $domId = '';
 		if (strpos($fieldName, '.')) {
-			list($model, $field) = explode('.', $fieldName);
+			[$model, $field] = explode('.', $fieldName);
 		} else {
 			$field = $fieldName;
 		}
@@ -441,7 +447,7 @@ EOL;
 	{
 
 		if (!empty($options['editorUseDraft']) && !empty($options['editorDraftField']) && strpos($fieldName, '.')) {
-			list($model) = explode('.', $fieldName);
+			[$model] = explode('.', $fieldName);
 			$inputFieldName = $fieldName . '_tmp';
 			$hidden = $this->BcForm->hidden($fieldName) . $this->BcForm->hidden($model . '.' . $options['editorDraftField']);
 		} else {

@@ -91,7 +91,7 @@ class PagesController extends AppController
 		}
 
 		// EVENT Pages.beforeAdd
-		$event = $this->dispatchEvent('beforeAdd', [
+		$event = $this->dispatchLayerEvent('beforeAdd', [
 			'data' => $this->request->data
 		]);
 		if ($event !== false) {
@@ -104,7 +104,7 @@ class PagesController extends AppController
 			return false;
 		}
 		// EVENT Pages.afterAdd
-		$this->dispatchEvent('afterAdd', [
+		$this->dispatchLayerEvent('afterAdd', [
 			'data' => $data
 		]);
 		$site = BcSite::findById($data['Content']['site_id']);
@@ -145,7 +145,7 @@ class PagesController extends AppController
 			}
 
 			// EVENT Pages.beforeEdit
-			$event = $this->dispatchEvent('beforeEdit', [
+			$event = $this->dispatchLayerEvent('beforeEdit', [
 				'data' => $this->request->data
 			]);
 			if ($event !== false) {
@@ -167,7 +167,7 @@ class PagesController extends AppController
 				$this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), rawurldecode($data['Content']['name']), urldecode($url)));
 
 				// EVENT Pages.afterEdit
-				$this->dispatchEvent('afterEdit', [
+				$this->dispatchLayerEvent('afterEdit', [
 					'data' => $data
 				]);
 

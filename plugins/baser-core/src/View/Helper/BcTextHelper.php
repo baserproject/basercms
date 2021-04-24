@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Event\BcEventDispatcherTrait;
 use Cake\View\Helper;
 
 /**
@@ -19,7 +20,13 @@ use Cake\View\Helper;
  */
 class BcTextHelper extends Helper
 {
-
+// CUSTOMIZE ADD 2021/04/24 ryuring
+// >>>
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
+// <<<
 	/**
 	 * helpers
 	 *
@@ -251,7 +258,7 @@ class BcTextHelper extends Helper
 		if (!$arrDate['wareki'] || !$arrDate['year'] || !$arrDate['month'] || !$arrDate['day']) {
 			return;
 		}
-		list($w, $year) = explode('-', $arrDate['year']);
+		[$w, $year] = explode('-', $arrDate['year']);
 		$wareki = $this->BcTime->nengo($w);
 		return $wareki . " " . $year . "年 " . $arrDate['month'] . "月 " . $arrDate['day'] . '日';
 	}

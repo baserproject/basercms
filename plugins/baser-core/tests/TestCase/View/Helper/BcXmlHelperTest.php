@@ -21,7 +21,7 @@ App::uses('BcXmlHelper', 'View/Helper');
  * @package Baser.Test.Case.View.Helper
  * @property BcTextHelper $Helper
  */
-class BcXmlHelperTest extends BaserTestCase
+class BcXmlHelperTest extends BcTestCase
 {
 
 	/**

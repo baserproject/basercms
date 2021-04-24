@@ -19,7 +19,7 @@ App::uses('BcThemeConfigReader', 'Configure');
  *
  * @package Baser.Test.Case.Configure
  */
-class BcThemeConfigReaderTest extends BaserTestCase
+class BcThemeConfigReaderTest extends BcTestCase
 {
 
 	/**

@@ -20,7 +20,7 @@ App::uses('Router', 'Routing');
  * @package Baser.Test.Case.Routing
  * @property  Route $Route
  */
-class RouterTest extends BaserTestCase
+class RouterTest extends BcTestCase
 {
 
 	/**

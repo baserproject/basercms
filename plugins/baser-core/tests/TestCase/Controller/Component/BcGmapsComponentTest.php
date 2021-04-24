@@ -33,7 +33,7 @@ class BcGmapsTestController extends Controller
  * @package Baser.Test.Case.Controller.Component
  * @property BcGmapsComponent $BcGmaps
  */
-class BcGmapsComponentTest extends BaserTestCase
+class BcGmapsComponentTest extends BcTestCase
 {
 
 	public $fixtures = [];

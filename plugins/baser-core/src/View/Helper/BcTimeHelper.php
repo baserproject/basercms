@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Event\BcEventDispatcherTrait;
 use Cake\View\Helper\TimeHelper;
 
 /**
@@ -22,6 +23,10 @@ class BcTimeHelper extends TimeHelper
 
 // CUSTOMIZE ADD 2014/07/03 ryuring
 // >>>
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 	/**
 	 * 年号リスト
 	 *
@@ -130,7 +135,7 @@ class BcTimeHelper extends TimeHelper
 		if (strpos($year, '-') === false) {
 			return false;
 		}
-		list($w, $year) = explode('-', $year);
+		[$w, $year] = explode('-', $year);
 		switch($w) {
 			case 'm':
 				return $year + 1867;

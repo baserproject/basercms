@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Event\BcEventDispatcherTrait;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -21,6 +23,10 @@ return;
  */
 class BcContentsHelper extends AppHelper
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 
 	/**
 	 * Helper

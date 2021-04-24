@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Event\BcEventDispatcherTrait;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -22,6 +24,10 @@ App::uses('BcAppHelper', 'View/Helper');
  */
 class BcUploadHelper extends BcAppHelper
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 
 	/**
 	 * ヘルパ
@@ -68,7 +74,7 @@ class BcUploadHelper extends BcAppHelper
 		}
 
 		// EVENT BcUpload.beforeFileLInk
-		$event = $this->dispatchEvent('beforeFileLink', [
+		$event = $this->dispatchLayerEvent('beforeFileLink', [
 			'formId' => $this->__id,
 			'settings' => $settings,
 			'fieldName' => $fieldName,
@@ -160,7 +166,7 @@ class BcUploadHelper extends BcAppHelper
 		}
 
 		// EVENT BcUpload.afterFileLink
-		$event = $this->dispatchEvent('afterFileLink', [
+		$event = $this->dispatchLayerEvent('afterFileLink', [
 			'data' => $this->request->data,
 			'fieldName' => $fieldName,
 			'out' => $out
@@ -213,7 +219,7 @@ class BcUploadHelper extends BcAppHelper
 		}
 
 		// EVENT BcUpload.beforeUploadImage
-		$event = $this->dispatchEvent('beforeUploadImage', [
+		$event = $this->dispatchLayerEvent('beforeUploadImage', [
 			'formId' => $this->__id,
 			'settings' => $settings,
 			'fieldName' => $fieldName,
@@ -402,7 +408,7 @@ class BcUploadHelper extends BcAppHelper
 		}
 
 		// EVENT BcUpload.afterUploadImage
-		$event = $this->dispatchEvent('afterUploadImage', [
+		$event = $this->dispatchLayerEvent('afterUploadImage', [
 			'data' => $this->request->data,
 			'fieldName' => $fieldName,
 			'out' => $out

@@ -20,7 +20,7 @@ App::uses('DblogsController', 'Controller');
  * @package Baser.Test.Case.Controller
  * @property  DblogsController $DblogsController
  */
-class DblogsControllerTest extends BaserTestCase
+class DblogsControllerTest extends BcTestCase
 {
 
 	/**

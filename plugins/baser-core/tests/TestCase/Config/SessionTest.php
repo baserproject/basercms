@@ -19,7 +19,7 @@ App::uses('Datasource/CakeSession', 'Model');
  *
  * @package Baser.Test.Case.Config
  */
-class SessionTest extends BaserTestCase
+class SessionTest extends BcTestCase
 {
 
 	/**

@@ -19,7 +19,7 @@ App::uses('Router', 'Routing');
  *
  * @package Baser.Test.Case.Config
  */
-class RoutesTest extends BaserTestCase
+class RoutesTest extends BcTestCase
 {
 
 	/**

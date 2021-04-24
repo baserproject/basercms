@@ -1,118 +1,284 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Event
- * @since           baserCMS v 4.0.9
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('BcModelEventDispatcher', 'Event');
+namespace BaserCore\Test\TestCase\Event;
+
+use BaserCore\Event\BcModelEventDispatcher;
+use BaserCore\Event\BcModelEventListener;
+use BaserCore\Model\Table\UsersTable;
+use BaserCore\TestSuite\BcTestCase;
+use Cake\Event\Event;
+use Cake\Event\EventManager;
 
 /**
  * Class BcModelEventDispatcherTest
  *
  * @package Baser.Test.Case.Event
- * @property  BcModelEventDispatcher $BcModelEventDispatcher
+ * @property  BcModelEventDispatcher $bcModelEventDispatcher
+ * @property eventManager $eventManager
  */
-class BcModelEventDispatcherTest extends BaserTestCase
+class BcModelEventDispatcherTest extends BcTestCase
 {
 
-	/**
-	 * set up
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * @var EventManager|null
+     */
+    public ?EventManager $eventManager;
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * @var BcModelEventDispatcher|null
+     */
+    public ?BcModelEventDispatcher $bcModelEventDispatcher;
 
-	/**
-	 * implementedEvents
-	 */
-	public function testImplementedEvents()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->eventManager = EventManager::instance();
+        $this->bcModelEventDispatcher = new BcModelEventDispatcher();
+        foreach($this->bcModelEventDispatcher->implementedEvents() as $key => $event) {
+            $this->eventManager->off($key);
+        }
+    }
 
-	/**
-	 * beforeFind
-	 */
-	public function testBeforeFind()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        $this->eventManager = null;
+        $this->bcModelEventDispatcher = null;
+        parent::tearDown();
+    }
 
-	/**
-	 * afterFind
-	 */
-	public function testAfterFind()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * implementedEvents
+     */
+    public function testImplementedEvents()
+    {
+        $this->assertTrue(is_array($this->bcModelEventDispatcher->implementedEvents()));
+    }
 
-	/**
-	 * beforeValidate
-	 */
-	public function testBeforeValidate()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * beforeFind
+     */
+    public function testBeforeFind()
+    {
+        $listener = $this->getMockBuilder(BcModelEventListener::class)
+            ->onlyMethods(['implementedEvents'])
+            ->addMethods(['usersBeforeFind'])
+            ->getMock();
 
-	/**
-	 * afterValidate
-	 */
-	public function testAfterValidate()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+        $listener->method('implementedEvents')
+            ->willReturn(['Model.Users.beforeFind' => ['callable' => 'usersBeforeFind']]);
 
-	/**
-	 * beforeSave
-	 */
-	public function testBeforeSave()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+        $listener->expects($this->once())
+            ->method('usersBeforeFind');
 
-	/**
-	 * afterSave
-	 */
-	public function testAfterSave()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+        $this->eventManager
+            ->on($listener)
+            ->on($this->bcModelEventDispatcher)
+            ->dispatch(new Event(
+                'Model.beforeFind',
+                new UsersTable,
+                []
+            ));
+    }
 
-	/**
-	 * beforeDelete
-	 */
-	public function testBeforeDelete()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * afterFind
+     */
+    public function testAfterFind()
+    {
+        $listener = $this->getMockBuilder(BcModelEventListener::class)
+            ->onlyMethods(['implementedEvents'])
+            ->addMethods(['usersAfterFind'])
+            ->getMock();
 
-	/**
-	 * afterDelete
-	 */
-	public function testAfterDelete()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+        $listener->method('implementedEvents')
+            ->willReturn(['Model.Users.afterFind' => ['callable' => 'usersAfterFind']]);
+
+        $listener->expects($this->once())
+            ->method('usersAfterFind');
+
+        $this->eventManager
+            ->on($listener)
+            ->on($this->bcModelEventDispatcher)
+            ->dispatch(new Event(
+                'Model.afterFind',
+                new UsersTable,
+                []
+            ));
+    }
+
+    /**
+     * beforeValidate
+     */
+    public function testBeforeValidate()
+    {
+        $listener = $this->getMockBuilder(BcModelEventListener::class)
+            ->onlyMethods(['implementedEvents'])
+            ->addMethods(['usersBeforeValidate'])
+            ->getMock();
+
+        $listener->method('implementedEvents')
+            ->willReturn(['Model.Users.beforeValidate' => ['callable' => 'usersBeforeValidate']]);
+
+        $listener->expects($this->once())
+            ->method('usersBeforeValidate');
+
+        $this->eventManager
+            ->on($listener)
+            ->on($this->bcModelEventDispatcher)
+            ->dispatch(new Event(
+                'Model.beforeValidate',
+                new UsersTable,
+                []
+            ));
+    }
+
+    /**
+     * afterValidate
+     */
+    public function testAfterValidate()
+    {
+        $listener = $this->getMockBuilder(BcModelEventListener::class)
+            ->onlyMethods(['implementedEvents'])
+            ->addMethods(['usersAfterValidate'])
+            ->getMock();
+
+        $listener->method('implementedEvents')
+            ->willReturn(['Model.Users.afterValidate' => ['callable' => 'usersAfterValidate']]);
+
+        $listener->expects($this->once())
+            ->method('usersAfterValidate');
+
+        $this->eventManager
+            ->on($listener)
+            ->on($this->bcModelEventDispatcher)
+            ->dispatch(new Event(
+                'Model.afterValidate',
+                new UsersTable,
+                []
+            ));
+    }
+
+    /**
+     * beforeSave
+     */
+    public function testBeforeSave()
+    {
+        $listener = $this->getMockBuilder(BcModelEventListener::class)
+            ->onlyMethods(['implementedEvents'])
+            ->addMethods(['usersBeforeSave'])
+            ->getMock();
+
+        $listener->method('implementedEvents')
+            ->willReturn(['Model.Users.beforeSave' => ['callable' => 'usersBeforeSave']]);
+
+        $listener->expects($this->once())
+            ->method('usersBeforeSave');
+
+        $this->eventManager
+            ->on($listener)
+            ->on($this->bcModelEventDispatcher)
+            ->dispatch(new Event(
+                'Model.beforeSave',
+                new UsersTable,
+                []
+            ));
+    }
+
+    /**
+     * afterSave
+     */
+    public function testAfterSave()
+    {
+        $listener = $this->getMockBuilder(BcModelEventListener::class)
+            ->onlyMethods(['implementedEvents'])
+            ->addMethods(['usersAfterSave'])
+            ->getMock();
+
+        $listener->method('implementedEvents')
+            ->willReturn(['Model.Users.afterSave' => ['callable' => 'usersAfterSave']]);
+
+        $listener->expects($this->once())
+            ->method('usersAfterSave');
+
+        $this->eventManager
+            ->on($listener)
+            ->on($this->bcModelEventDispatcher)
+            ->dispatch(new Event(
+                'Model.afterSave',
+                new UsersTable,
+                []
+            ));
+    }
+
+    /**
+     * beforeDelete
+     */
+    public function testBeforeDelete()
+    {
+        $listener = $this->getMockBuilder(BcModelEventListener::class)
+            ->onlyMethods(['implementedEvents'])
+            ->addMethods(['usersBeforeDelete'])
+            ->getMock();
+
+        $listener->method('implementedEvents')
+            ->willReturn(['Model.Users.beforeDelete' => ['callable' => 'usersBeforeDelete']]);
+
+        $listener->expects($this->once())
+            ->method('usersBeforeDelete');
+
+        $this->eventManager
+            ->on($listener)
+            ->on($this->bcModelEventDispatcher)
+            ->dispatch(new Event(
+                'Model.beforeDelete',
+                new UsersTable,
+                []
+            ));
+    }
+
+    /**
+     * afterDelete
+     */
+    public function testAfterDelete()
+    {
+        $listener = $this->getMockBuilder(BcModelEventListener::class)
+            ->onlyMethods(['implementedEvents'])
+            ->addMethods(['usersAfterDelete'])
+            ->getMock();
+
+        $listener->method('implementedEvents')
+            ->willReturn(['Model.Users.afterDelete' => ['callable' => 'usersAfterDelete']]);
+
+        $listener->expects($this->once())
+            ->method('usersAfterDelete');
+
+        $this->eventManager
+            ->on($listener)
+            ->on($this->bcModelEventDispatcher)
+            ->dispatch(new Event(
+                'Model.afterDelete',
+                new UsersTable,
+                []
+            ));
+    }
 
 }

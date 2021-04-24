@@ -20,7 +20,7 @@ App::uses('BcUploadHelper', 'View/Helper');
  * @package         Baser.Test.Case.View.Helper
  * @property  BcUploadHelper $BcUpload
  */
-class BcUploadHelperTest extends BaserTestCase
+class BcUploadHelperTest extends BcTestCase
 {
 
 	/**

@@ -20,7 +20,7 @@ App::uses('MobileController', 'Controller');
  * @package Baser.Test.Case.Controller
  * @property  MobileController $MobileController
  */
-class MobileControllerTest extends BaserTestCase
+class MobileControllerTest extends BcTestCase
 {
 
 	/**

@@ -20,7 +20,7 @@ App::uses('WidgetAreasController', 'Controller');
  * @package Baser.Test.Case.Controller
  * @property  WidgetAreasController $WidgetAreasController
  */
-class WidgetAreasControllerTest extends BaserTestCase
+class WidgetAreasControllerTest extends BcTestCase
 {
 
 	/**

@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
@@ -27,6 +28,10 @@ use BaserCore\Annotation\Checked;
  */
 class BcAdminHelper extends Helper
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 
     /**
      * Helper

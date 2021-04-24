@@ -46,7 +46,7 @@ class BcUtil
     {
         $session = Router::getRequest()->getSession();
         $sessionKey = Configure::read('BcPrefixAuth.' . $prefix . '.sessionKey');
-        $user = isset($_SESSION[$sessionKey]) ? $session->read($sessionKey) : null;
+        $user = isset($_SESSION[$sessionKey])? $session->read($sessionKey) : null;
         return $user;
     }
 
@@ -219,7 +219,7 @@ class BcUtil
                     foreach($plugins as $key => $plugin) {
                         foreach(App::path('plugins') as $path) {
                             if (is_dir($path . $plugin->name) || is_dir($path . Inflector::dasherize($plugin->name))) {
-                                $enablePlugins[] = $plugin->name;
+                                $enablePlugins[] = $plugin;
                                 break;
                             }
                         }
@@ -248,17 +248,16 @@ class BcUtil
      */
     static public function includePluginClass($pluginName)
     {
-        $pluginNames = [$pluginName, Inflector::dasherize($pluginName)];
-        foreach(App::path('plugins') as $path) {
-            foreach($pluginNames as $name) {
-                $pluginClassPath = $path . $name . DS . 'src' . DS . 'Plugin.php';
-                if (file_exists($pluginClassPath)) {
-                    $loader = require ROOT . DS . 'vendor/autoload.php';
-                    $loader->addPsr4($name . '\\', $path . $name . DS . 'src');
-                    require_once $pluginClassPath;
-                    return true;
-                }
-            }
+        $pluginPath = self::getPluginPath($pluginName);
+        if (!$pluginPath) {
+            return false;
+        }
+        $pluginClassPath = $pluginPath . 'src' . DS . 'Plugin.php';
+        if ($pluginClassPath && file_exists($pluginClassPath)) {
+            $loader = require ROOT . DS . 'vendor/autoload.php';
+            $loader->addPsr4($pluginName . '\\', $pluginPath . 'src');
+            require_once $pluginClassPath;
+            return true;
         }
         return false;
     }
@@ -269,7 +268,7 @@ class BcUtil
      * @checked
      * @unitTest
      */
-    public static function clearAllCache() : void
+    public static function clearAllCache(): void
     {
         Cache::clear('_cake_core_');
         Cache::clear('_cake_model_');
@@ -312,12 +311,12 @@ class BcUtil
      * @notodo
      * @unitTest
      */
-	public static function isAdminUser($user = null): bool
-	{
-        $User = $user ? $user : self::loginUser('Admin');
+    public static function isAdminUser($user = null): bool
+    {
+        $User = $user? $user : self::loginUser('Admin');
         $group_id = array_column($User->user_groups, 'id');
         return in_array(Configure::read('BcApp.adminGroupId'), $group_id);
-	}
+    }
 
     /**
      * 現在ログインしているユーザーのユーザーグループ情報を取得する
@@ -738,14 +737,34 @@ class BcUtil
      */
     public static function getPluginPath($pluginName): string
     {
-        $paths = App::path('plugins');
-        foreach($paths as $path) {
-            foreach([$pluginName, Inflector::dasherize($pluginName)] as $name) {
-                if(is_dir($path . $name)) {
-                    return $path . $name . DS;
+        $pluginDir = self::getPluginDir($pluginName);
+        if ($pluginDir) {
+            $paths = App::path('plugins');
+            foreach($paths as $path) {
+                if (is_dir($path . $pluginDir)) {
+                    return $path . $pluginDir . DS;
                 }
             }
         }
         return false;
     }
+
+    /**
+     * プラグインのディレクトリ名を取得する
+     * @param $pluginName
+     * @return false|mixed
+     */
+    public static function getPluginDir($pluginName)
+    {
+        $pluginNames = [$pluginName, Inflector::dasherize($pluginName)];
+        foreach(App::path('plugins') as $path) {
+            foreach($pluginNames as $name) {
+                if (is_dir($path . $name)) {
+                    return $name;
+                }
+            }
+        }
+        return false;
+    }
+
 }

@@ -20,7 +20,7 @@ App::uses('ContentLinksController', 'Controller');
  * @package Baser.Test.Case.Controller
  * @property  ContentLinksController $ContentLinksController
  */
-class ContentLinksControllerTest extends BaserTestCase
+class ContentLinksControllerTest extends BcTestCase
 {
 
 	/**

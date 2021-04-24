@@ -19,7 +19,7 @@ App::uses('BcLang', 'Lib');
  *
  * @package Baser.Test.Case.Lib
  */
-class BcLangTest extends BaserTestCase
+class BcLangTest extends BcTestCase
 {
 
 	/**

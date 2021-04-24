@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Event\BcEventDispatcherTrait;
 use \Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -23,6 +24,10 @@ use BaserCore\Annotation\Checked;
  */
 class BcFormTableHelper extends Helper
 {
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
 
 	/**
 	 * テーブル前発火
@@ -38,7 +43,7 @@ class BcFormTableHelper extends Helper
 	    return '';
 	    // <<<
 
-		$event = $this->dispatchEvent('before', [
+		$event = $this->dispatchLayerEvent('before', [
 			'id' => $this->_View->BcForm->getId(),
 			'out' => ''
 		], ['class' => 'BcFormTable', 'plugin' => '']);
@@ -63,7 +68,7 @@ class BcFormTableHelper extends Helper
 	    return '';
 	    // <<<
 
-		$event = $this->dispatchEvent('after', [
+		$event = $this->dispatchLayerEvent('after', [
 			'id' => $this->_View->BcForm->getId(),
 			'out' => ''
 		], ['class' => 'BcFormTable', 'plugin' => '']);

@@ -328,22 +328,6 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	Configure::write('BcStatus.enablePlugins', $plugins);
 
 	/**
-	 * イベント登録
-	 */
-	App::uses('CakeEventManager', 'Event');
-	App::uses('BcControllerEventDispatcher', 'Event');
-	App::uses('BcModelEventDispatcher', 'Event');
-	App::uses('BcViewEventDispatcher', 'Event');
-	App::uses('PagesControllerEventListener', 'Event');
-	App::uses('ContentFoldersControllerEventListener', 'Event');
-	$CakeEvent = CakeEventManager::instance();
-	$CakeEvent->attach(new BcControllerEventDispatcher());
-	$CakeEvent->attach(new BcModelEventDispatcher());
-	$CakeEvent->attach(new BcViewEventDispatcher());
-	$CakeEvent->attach(new PagesControllerEventListener());
-	$CakeEvent->attach(new ContentFoldersControllerEventListener());
-
-	/**
 	 * テーマの bootstrap を実行する
 	 */
 	if (!BcUtil::isAdminSystem($parameter)) {

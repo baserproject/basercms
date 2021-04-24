@@ -22,7 +22,7 @@ App::uses('BcCsvHelper', 'View/Helper');
  * @property BcTextHelper $Helper
  * @property BcCsvHelper $BcCsv
  */
-class BcCsvHelperTest extends BaserTestCase
+class BcCsvHelperTest extends BcTestCase
 {
 
 	/**

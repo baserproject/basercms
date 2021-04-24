@@ -11,6 +11,7 @@
 
 namespace BaserCore\View;
 
+use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\View\Helper\BcAdminFormHelper;
 use BaserCore\View\Helper\BcAdminHelper;
 use BaserCore\View\Helper\BcAuthHelper;
@@ -39,9 +40,19 @@ use Cake\View\View;
  */
 class AppView extends View
 {
+
+    /**
+     * Trait
+     */
+    use BcEventDispatcherTrait;
+
+    /**
+     * Initialize
+     */
     public function initialize(): void
     {
         parent::initialize();
         $this->loadHelper('BaserCore.BcAdminForm', ['templates' => 'BaserCore.bc_form']);
     }
+
 }
