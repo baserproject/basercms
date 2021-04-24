@@ -23,7 +23,7 @@ return;
  * Layer.Plugin.Class.eventName
  *
  * 登録されたイベントリスナーが存在しない場合には、falseを を返す。
- * 存在する場合には、生成された CakeEvent を返す。
+ * 存在する場合には、生成された Event を返す。
  */
 class BcEventDispatcher extends CakeObject
 {
@@ -37,7 +37,7 @@ class BcEventDispatcher extends CakeObject
 	 * @param Object $subject
 	 * @param array $params
 	 * @param array $options
-	 * @return boolean|\CakeEvent
+	 * @return boolean|\Event
 	 */
 	public static function dispatch($name, $subject, $params = [], $options = [])
 	{
@@ -65,7 +65,7 @@ class BcEventDispatcher extends CakeObject
 			return false;
 		}
 
-		$event = new CakeEvent($eventName, $subject, $params);
+		$event = new Event($eventName, $subject, $params);
 		$event->modParams = $options['modParams'];
 		$EventManager->dispatch($event);
 

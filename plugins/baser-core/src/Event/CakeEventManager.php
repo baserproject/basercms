@@ -241,7 +241,7 @@ class CakeEventManager {
 				break;
 			}
 			if ($listener['passParams'] === true) {
-				$result = call_user_func_array($listener['callable'], $event->data);
+				$result = call_user_func_array($listener['callable'], $event->getData());
 			} else {
 				$result = call_user_func($listener['callable'], $event);
 			}

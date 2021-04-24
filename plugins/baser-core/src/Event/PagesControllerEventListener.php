@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use Cake\Event\Event;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -69,17 +71,17 @@ class PagesControllerEventListener extends BcControllerEventListener
 	 *
 	 * oldPath を取得する事が目的
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 * @return bool|void
 	 */
-	public function contentsBeforeMove(CakeEvent $event)
+	public function contentsBeforeMove(Event $event)
 	{
-		if ($event->data['data']['currentType'] != 'Page') {
+		if ($event->getData('data.currentType') != 'Page') {
 			return true;
 		}
-		$Controller = $event->subject();
+		$Controller = $event->getSubject();
 		$entityId = $Controller->Content->field('entity_id', [
-			'Content.id' => $event->data['data']['currentId']
+			'Content.id' => $event->getData('data.currentId')
 		]);
 		$this->oldPath = $this->Page->getPageFilePath(
 			$this->Page->find('first', [
@@ -95,20 +97,20 @@ class PagesControllerEventListener extends BcControllerEventListener
 	 *
 	 * テンプレートの移動が目的
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 */
-	public function contentsAfterMove(CakeEvent $event)
+	public function contentsAfterMove(Event $event)
 	{
-		if ($event->data['data']['Content']['type'] != 'Page') {
+		if ($event->getData('data.Content.type') != 'Page') {
 			return;
 		}
-		if (empty($event->data['data']['Content']['entity_id'])) {
-			$Controller = $event->subject();
+		if (empty($event->getData('data.Content.entity_id'))) {
+			$Controller = $event->getSubject();
 			$entityId = $Controller->Content->field('entity_id', [
-				'Content.id' => $event->data['data']['Content']['id']
+				'Content.id' => $event->getData('data.Content.id')
 			]);
 		} else {
-			$entityId = $event->data['data']['Content']['entity_id'];
+			$entityId = $event->getData('data.Content.entity_id');
 		}
 		$data = $this->Page->find('first', [
 			'conditions' => ['Page.id' => $entityId],
@@ -124,11 +126,11 @@ class PagesControllerEventListener extends BcControllerEventListener
 	 *
 	 * ゴミ箱に入れた固定ページのテンプレートの削除が目的
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 */
-	public function contentsBeforeDelete(CakeEvent $event)
+	public function contentsBeforeDelete(Event $event)
 	{
-		$id = $event->data['data'];
+		$id = $event->getData('data');
 		$data = $this->Page->find('first', ['conditions' => ['Content.id' => $id]]);
 		if ($data) {
 			$this->Page->delFile($data);
@@ -141,11 +143,11 @@ class PagesControllerEventListener extends BcControllerEventListener
 	 *
 	 * ゴミ箱から戻した固定ページのテンプレート生成が目的
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 */
-	public function contentsAfterTrashReturn(CakeEvent $event)
+	public function contentsAfterTrashReturn(Event $event)
 	{
-		$id = $event->data;
+		$id = $event->getData();
 		$data = $this->Page->find('first', ['conditions' => ['Content.id' => $id]]);
 		if ($data) {
 			$this->Page->createPageTemplate($data);
@@ -158,14 +160,14 @@ class PagesControllerEventListener extends BcControllerEventListener
 	 *
 	 * 一覧から公開設定を変更した場合に固定ページの検索インデックスを更新する事が目的
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 */
-	public function contentsAfterChangeStatus(CakeEvent $event)
+	public function contentsAfterChangeStatus(Event $event)
 	{
-		if (empty($event->data['result'])) {
+		if (empty($event->getData('result'))) {
 			return;
 		}
-		$id = $event->data['id'];
+		$id = $event->getData('id');
 		$data = $this->Page->find('first', ['conditions' => ['Content.id' => $id]]);
 		$this->Page->saveSearchIndex($this->Page->createSearchIndex($data));
 	}

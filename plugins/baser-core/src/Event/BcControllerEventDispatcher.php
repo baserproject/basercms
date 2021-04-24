@@ -1,16 +1,17 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Event
- * @since           baserCMS v 3.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+
+namespace BaserCore\Event;
+use Cake\Event\Event;
+use Cake\Event\EventListenerInterface;
 
 /**
  * Class BcControllerEventDispatcher
@@ -19,12 +20,12 @@ return;
  *
  * beforeRender 等の、CakePHPのコントローラー向け標準イベントについて、
  * コントローラーごとにイベントをディスパッチする。
- * bootstrap で、attach される。
+ * bootstrap で attach される。
  *
  * 《イベント名の命名規則》
  * Controller.ControllerName.eventName
  */
-class BcControllerEventDispatcher extends CakeObject implements CakeEventListener
+class BcControllerEventDispatcher implements EventListenerInterface
 {
 
 	/**
@@ -32,7 +33,7 @@ class BcControllerEventDispatcher extends CakeObject implements CakeEventListene
 	 *
 	 * @return array
 	 */
-	public function implementedEvents()
+	public function implementedEvents(): array
 	{
 		return [
 			'Controller.initialize' => ['callable' => 'initialize'],
@@ -46,66 +47,66 @@ class BcControllerEventDispatcher extends CakeObject implements CakeEventListene
 	/**
 	 * initialize
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 * @return void
 	 */
-	public function initialize(CakeEvent $event)
+	public function initialize(Event $event)
 	{
-		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
-			if (!method_exists($event->subject(), 'dispatchEvent')) {
+		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
+			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
 				return;
 			}
-			$event->subject->dispatchEvent('initialize', $event->data);
+			$event->getSubject()->dispatchEvent('initialize', $event->getData());
 		}
 	}
 
 	/**
 	 * startup
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 * @return void
 	 */
-	public function startup(CakeEvent $event)
+	public function startup(Event $event)
 	{
-		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
-			if (!method_exists($event->subject(), 'dispatchEvent')) {
+		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
+			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
 				return;
 			}
-			$event->subject->dispatchEvent('startup', $event->data);
+			$event->getSubject()->dispatchEvent('startup', $event->getData());
 		}
 	}
 
 	/**
 	 * beforeRender
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 * @return void
 	 */
-	public function beforeRender(CakeEvent $event)
+	public function beforeRender(Event $event)
 	{
-		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
-			if (!method_exists($event->subject(), 'dispatchEvent')) {
+		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
+			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
 				return;
 			}
-			$event->subject->dispatchEvent('beforeRender', $event->data);
+			$event->getSubject()->dispatchEvent('beforeRender', $event->getData());
 		}
 	}
 
 	/**
 	 * beforeRedirect
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 * @return Responcse
 	 */
-	public function beforeRedirect(CakeEvent $event)
+	public function beforeRedirect(Event $event)
 	{
-		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
-			if (!method_exists($event->subject(), 'dispatchEvent')) {
+		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
+			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
 				return null;
 			}
-			$currentEvent = $event->subject->dispatchEvent('beforeRedirect', $event->data);
+			$currentEvent = $event->getSubject()->dispatchEvent('beforeRedirect', $event->getData());
 			if ($currentEvent) {
-				$event->data = $currentEvent->data;
+				$event->setData($currentEvent->getData());
 				return $currentEvent->result;
 			}
 		}
@@ -115,16 +116,16 @@ class BcControllerEventDispatcher extends CakeObject implements CakeEventListene
 	/**
 	 * shutdown
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 * @return void
 	 */
-	public function shutdown(CakeEvent $event)
+	public function shutdown(Event $event)
 	{
-		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
-			if (!method_exists($event->subject(), 'dispatchEvent')) {
+		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
+			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
 				return;
 			}
-			$event->subject->dispatchEvent('shutdown', $event->data);
+			$event->getSubject()->dispatchEvent('shutdown', $event->getData());
 		}
 	}
 

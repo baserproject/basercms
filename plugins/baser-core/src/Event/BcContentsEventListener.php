@@ -1,5 +1,8 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Utility\BcUtil;
+use Cake\Event\Event;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -42,35 +45,35 @@ class BcContentsEventListener extends CakeObject implements CakeEventListener
 	/**
 	 * Form Before Create
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 */
-	public function formBeforeCreate(CakeEvent $event)
+	public function formBeforeCreate(Event $event)
 	{
 		if (!BcUtil::isAdminSystem()) {
 			return;
 		}
-		$event->data['options']['type'] = 'file';
+		$event->setData('options', ['type' => 'file']);
 	}
 
 	/**
 	 * Form After Create
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 * @return string
 	 */
-	public function formAfterCreate(CakeEvent $event)
+	public function formAfterCreate(Event $event)
 	{
 		if (!BcUtil::isAdminSystem()) {
 			return;
 		}
-		$View = $event->subject();
-		if ($event->data['id'] == 'FavoriteAdminEditForm' || $event->data['id'] == 'PermissionAdminEditForm') {
+		$View = $event->getSubject();
+		if ($event->getData('id') == 'FavoriteAdminEditForm' || $event->getData('id') == 'PermissionAdminEditForm') {
 			return;
 		}
-		if (!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->data['id'])) {
+		if (!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->getData('id'))) {
 			return;
 		}
-		return $event->data['out'] . "\n" . $View->element('admin/content_fields');
+		return $event->getData('out') . "\n" . $View->element('admin/content_fields');
 	}
 
 	/**
@@ -79,19 +82,19 @@ class BcContentsEventListener extends CakeObject implements CakeEventListener
 	 * フォームの保存ボタンの前後に、一覧、プレビュー、削除ボタン、その他のエレメントを配置する
 	 * プレビューを配置する場合は、コンテンツの設定にて、preview を true にする
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 * @return string
 	 */
-	public function formAfterSubmit(CakeEvent $event)
+	public function formAfterSubmit(Event $event)
 	{
 		if (!BcUtil::isAdminSystem()) {
-			return $event->data['out'];
+			return $event->getData('out');
 		}
 		/* @var BcAppView $View */
-		$View = $event->subject();
-		$data = $View->request->data;
-		if (!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->data['id'])) {
-			return $event->data['out'];
+		$View = $event->getSubject();
+		$data = $View->request->getData();
+		if (!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->getData('id'))) {
+			return $event->getData('out');
 		}
 		$setting = Configure::read('BcContents.items.' . $data['Content']['plugin'] . '.' . $data['Content']['type']);
 
@@ -99,18 +102,18 @@ class BcContentsEventListener extends CakeObject implements CakeEventListener
 		$isAvailablePreview = (!empty($setting['preview']) && $data['Content']['type'] != 'ContentFolder');
 		$isAvailableDelete = (empty($data['Content']['site_root']) && $PermissionModel->check('/' . Configure::read('Routing.prefixes.0') . '/contents/delete', $View->viewVars['user']['user_group_id']));
 
-		$event->data['out'] = implode("\n", [
+		$event->setData('out', implode("\n", [
 			$View->element('admin/content_options'),
 			$View->element('admin/content_actions', [
 				'isAvailablePreview' => $isAvailablePreview,
 				'isAvailableDelete' => $isAvailableDelete,
-				'currentAction' => $event->data['out'],
+				'currentAction' => $event->getData('out'),
 				'isAlias' => ($data['Content']['alias_id'])
 			]),
 			$View->element('admin/content_related'),
 			$View->element('admin/content_info')
-		]);
-		return $event->data['out'];
+		]));
+		return $event->getData('out');
 	}
 
 }

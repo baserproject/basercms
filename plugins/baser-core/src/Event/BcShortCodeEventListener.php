@@ -37,14 +37,14 @@ class BcShortCodeEventListener extends CakeObject implements CakeEventListener
 	/**
 	 * After Render
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 */
-	public function afterRender(CakeEvent $event)
+	public function afterRender(Event $event)
 	{
 		if (BcUtil::isAdminSystem()) {
 			return;
 		}
-		$View = $event->subject();
+		$View = $event->getSubject();
 		$this->_execShortCode($View);
 	}
 

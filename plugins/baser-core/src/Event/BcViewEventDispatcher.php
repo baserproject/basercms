@@ -42,100 +42,100 @@ class BcViewEventDispatcher extends CakeObject implements CakeEventListener
 	/**
 	 * beforeRenderFile
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 * @return void
 	 */
-	public function beforeRenderFile(CakeEvent $event)
+	public function beforeRenderFile(Event $event)
 	{
-		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
-			if (!method_exists($event->subject(), 'dispatchEvent')) {
+		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
+			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
 				return;
 			}
-			$event->subject->dispatchEvent('beforeRenderFile', $event->data);
+			$event->getSubject()->dispatchEvent('beforeRenderFile', $event->getData());
 		}
 	}
 
 	/**
 	 * afterRenderFile
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 * @return array
 	 */
-	public function afterRenderFile(CakeEvent $event)
+	public function afterRenderFile(Event $event)
 	{
-		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
-			if (!method_exists($event->subject(), 'dispatchEvent')) {
-				return $event->data[1];
+		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
+			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
+				return $event->getData(1);
 			}
-			$currentEvent = $event->subject->dispatchEvent('afterRenderFile', $event->data, ['modParams' => 1]);
+			$currentEvent = $event->getSubject()->dispatchEvent('afterRenderFile', $event->getData(), ['modParams' => 1]);
 			if ($currentEvent) {
-				return $currentEvent->data[1];
+				return $currentEvent->getData(1);
 			}
 		}
-		return $event->data[1];
+		return $event->getData(1);
 	}
 
 	/**
 	 * beforeRender
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 * @return void
 	 */
-	public function beforeRender(CakeEvent $event)
+	public function beforeRender(Event $event)
 	{
-		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
-			if (!method_exists($event->subject(), 'dispatchEvent')) {
+		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
+			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
 				return;
 			}
-			$event->subject->dispatchEvent('beforeRender', $event->data);
+			$event->getSubject()->dispatchEvent('beforeRender', $event->data);
 		}
 	}
 
 	/**
 	 * afterRender
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 * @return void
 	 */
-	public function afterRender(CakeEvent $event)
+	public function afterRender(Event $event)
 	{
-		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
-			if (!method_exists($event->subject(), 'dispatchEvent')) {
+		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
+			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
 				return;
 			}
-			$event->subject->dispatchEvent('afterRender', $event->data);
+			$event->getSubject()->dispatchEvent('afterRender', $event->getData());
 		}
 	}
 
 	/**
 	 * beforeLayout
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 * @return void
 	 */
-	public function beforeLayout(CakeEvent $event)
+	public function beforeLayout(Event $event)
 	{
-		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
-			if (!method_exists($event->subject(), 'dispatchEvent')) {
+		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
+			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
 				return;
 			}
-			$event->subject->dispatchEvent('beforeLayout', $event->data);
+			$event->getSubject()->dispatchEvent('beforeLayout', $event->getData());
 		}
 	}
 
 	/**
 	 * afterLayout
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 * @return void
 	 */
-	public function afterLayout(CakeEvent $event)
+	public function afterLayout(Event $event)
 	{
-		if ($event->subject->name != 'CakeError' && $event->subject->name != '') {
-			if (!method_exists($event->subject(), 'dispatchEvent')) {
+		if ($event->getSubject()->name != 'CakeError' && $event->getSubject()->name != '') {
+			if (!method_exists($event->getSubject(), 'dispatchEvent')) {
 				return;
 			}
-			$event->subject->dispatchEvent('afterLayout', $event->data);
+			$event->getSubject()->dispatchEvent('afterLayout', $event->getData());
 		}
 	}
 

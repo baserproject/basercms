@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use Cake\Event\Event;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -78,15 +80,15 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener
 	 *
 	 * oldPath を取得する事が目的
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 * @return bool
 	 */
-	public function contentsBeforeMove(CakeEvent $event)
+	public function contentsBeforeMove(Event $event)
 	{
-		if ($event->data['data']['currentType'] != 'ContentFolder') {
+		if ($event->getData('data.currentType') != 'ContentFolder') {
 			return true;
 		}
-		$this->oldPath = $this->Page->getContentFolderPath($event->data['data']['currentId']);
+		$this->oldPath = $this->Page->getContentFolderPath($event->getData('data.currentId'));
 		return true;
 	}
 
@@ -95,16 +97,16 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener
 	 *
 	 * テンプレートの移動が目的
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 */
-	public function contentsAfterMove(CakeEvent $event)
+	public function contentsAfterMove(Event $event)
 	{
-		if ($event->data['data']['Content']['type'] != 'ContentFolder') {
+		if ($event->getData('data.Content.type') != 'ContentFolder') {
 			return;
 		}
-		$Controller = $event->subject();
+		$Controller = $event->getSubject();
 		$this->Page->Behaviors->unload('BcCache');
-		$contents = $Controller->Content->children($event->data['data']['Content']['id'], false, ['type', 'entity_id'], 'Content.lft', null, 1, 1);
+		$contents = $Controller->Content->children($event->getData('data.Content.id'), false, ['type', 'entity_id'], 'Content.lft', null, 1, 1);
 		foreach($contents as $content) {
 			if ($content['Content']['type'] !== 'Page') {
 				continue;
@@ -115,7 +117,7 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener
 		}
 		$this->Page->Behaviors->load('BcCache');
 		// 別の階層に移動の時は元の固定ページファイルを削除（同一階層の移動の時は削除しない）
-		$nowPath = $this->Page->getContentFolderPath($event->data['data']['Content']['id']);
+		$nowPath = $this->Page->getContentFolderPath($event->getData('data.Content.id'));
 		if ($this->oldPath != $nowPath) {
 			$Folder = new Folder($this->oldPath);
 			$Folder->delete();
@@ -127,17 +129,17 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener
 	 *
 	 * ゴミ箱に入れた固定ページのテンプレートの削除が目的
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 */
-	public function contentsBeforeDelete(CakeEvent $event)
+	public function contentsBeforeDelete(Event $event)
 	{
-		$id = $event->data['data'];
+		$id = $event->getData('data');
 		$data = $this->ContentFolder->find('first', ['conditions' => ['Content.id' => $id]]);
 		if ($data) {
 			$path = $this->Page->getContentFolderPath($id);
 			$Folder = new Folder($path);
 			$Folder->delete();
-			$Controller = $event->subject();
+			$Controller = $event->getSubject();
 			$contents = $Controller->Content->children($id, false, ['type', 'entity_id'], 'Content.lft', null, 1, 1);
 			foreach($contents as $content) {
 				if ($content['Content']['type'] !== 'Page') {
@@ -154,14 +156,14 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener
 	 *
 	 * 一覧から公開設定を変更した場合に検索インデックスを更新する事が目的
 	 *
-	 * @param CakeEvent $event
+	 * @param Event $event
 	 */
-	public function contentsAfterChangeStatus(CakeEvent $event)
+	public function contentsAfterChangeStatus(Event $event)
 	{
-		if (empty($event->data['result'])) {
+		if (empty($event->getData('result'))) {
 			return;
 		}
-		$id = $event->data['id'];
+		$id = $event->getData('id');
 		/* @var SearchIndex $searchIndexModel */
 		$searchIndexModel = ClassRegistry::init('SearchIndex');
 		$searchIndexModel->reconstruct($id);
