@@ -36,16 +36,7 @@ $config['BcApp.adminNavigation'] = [
         ],
     ],
 ];
-// @deprecated 5.0.0 since 4.2.0 BcApp.adminNavigation の形式に変更
-$config['BcApp.adminNavi.uploader'] = [
-    'name' => __d('baser', 'アップローダープラグイン'),
-    'contents' => [
-        ['name' => __d('baser', 'アップロードファイル一覧'), 'url' => ['admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_files', 'action' => 'index']],
-        ['name' => __d('baser', 'カテゴリ一覧'), 'url' => ['admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_categories', 'action' => 'index']],
-        ['name' => __d('baser', 'カテゴリ新規登録'), 'url' => ['admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_categories', 'action' => 'add']],
-        ['name' => __d('baser', '基本設定'), 'url' => ['admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_configs', 'action' => 'index']],
-    ]
-];
+
 $config['Uploader'] = [
     // システム管理者によるアップロードでいかなる拡張子も許可する
     'allowedAdmin' => false,

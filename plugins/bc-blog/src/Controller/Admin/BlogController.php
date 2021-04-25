@@ -551,12 +551,9 @@ class BlogController extends BlogAppController
      */
     protected function _getBlogPosts($options = [])
     {
-        $contentId = $listDirection = $listCount = null;
+        $contentId = $listDirection = null;
         if (!empty($this->blogContent['BlogContent']['list_direction'])) {
             $listDirection = $this->blogContent['BlogContent']['list_direction'];
-        }
-        if (!empty($this->blogContent['BlogContent']['list_direction'])) {
-            $listCount = $this->blogContent['BlogContent']['list_count'];
         }
         if ($this->contentId) {
             $contentId = $this->contentId;
@@ -564,7 +561,6 @@ class BlogController extends BlogAppController
         $options = array_merge([
             'findType' => 'customParams',
             'direction' => $listDirection,
-            'listCount' => $listCount,        // @deprecated 5.0.0 since 4.0.0
             'num' => null,
             'contentId' => $contentId,
             'page' => 1,

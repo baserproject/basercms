@@ -1578,21 +1578,6 @@ class BcAppController extends AppController
 	}
 
 	/**
-	 * メッセージをビューにセットする
-	 *
-	 * @param string $message メッセージ
-	 * @param bool $alert 警告かどうか
-	 * @param bool $saveDblog Dblogに保存するか
-	 * @param bool $setFlash flash message に保存するか
-	 * @return void
-	 * @deprecated 5.0.0 since 4.1.5 BcMessage に移行
-	 */
-	protected function setMessage($message, $alert = false, $saveDblog = false, $setFlash = true)
-	{
-		$this->BcMessage->set($message, $alert, $saveDblog, $setFlash);
-	}
-
-	/**
 	 * リクエストメソッドとトークンをチェックする
 	 *
 	 * - GETでのアクセスの場合 not found

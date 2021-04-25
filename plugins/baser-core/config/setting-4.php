@@ -142,23 +142,6 @@ $config['BcApp'] = [
 			]
 		]
 	],
-	// @deprecated 5.0.0 since 4.2.0 BcApp.adminNavigation の形式に変更
-	'adminNavi' => ['core' => [
-		'name' => 'baserCMSコア',
-		'contents' => [
-			['name' => __d('baser', 'コンテンツ管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'index']],
-			['name' => __d('baser', 'ウィジェット管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index']],
-			['name' => __d('baser', 'テーマ管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'index']],
-			['name' => __d('baser', 'プラグイン管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'plugins', 'action' => 'index']],
-			['name' => __d('baser', 'システム設定'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'form']],
-			['name' => __d('baser', 'ユーザー管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'index']],
-			['name' => __d('baser', 'ユーザーグループ管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index']],
-			['name' => __d('baser', '検索インデックス管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'index']],
-			['name' => __d('baser', 'エディタテンプレート管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index']],
-			['name' => __d('baser', 'サブサイト管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'sites', 'action' => 'index']],
-			['name' => __d('baser', 'ユーティリティ'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'index']],
-			['name' => __d('baser', 'サーバーキャッシュ削除'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'del_cache'], 'options' => ['confirm' => __d('baser', 'サーバーキャッシュを削除します。いいですか？')]]
-		]]],
 	// コアプラグイン
 	'corePlugins' => ['Blog', 'Feed', 'Mail', 'Uploader'],
 	// アップデートキー

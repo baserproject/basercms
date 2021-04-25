@@ -23,24 +23,6 @@ class BcAppHelper extends Helper
 {
 
 	/**
-	 * Constructor.
-	 *
-	 * @return    void
-	 * @access    public
-	 */
-	public function __construct(View $View, $settings = [])
-	{
-
-		parent::__construct($View, $settings);
-
-		if (get_class($this) == 'BcHtmlHelper' || get_class($this) == 'HtmlHelper') {
-			// @deprecated 5.0.0 since 4.2.3 &nbsp; は除外、CSSでの設定を推奨
-			$this->_tags['checkboxmultiple'] = '<input type="checkbox" name="%s[]"%s />&nbsp;';
-			$this->_tags['hiddenmultiple'] = '<input type="hidden" name="%s[]" %s />';
-		}
-	}
-
-	/**
 	 * Checks if a file exists when theme is used, if no file is found default location is returned
 	 *
 	 * PENDING Core Hack

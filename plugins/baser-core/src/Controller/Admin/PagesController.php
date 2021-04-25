@@ -47,10 +47,8 @@ class PagesController extends AppController
 	 * コンポーネント
 	 *
 	 * @var array
-	 * @deprecated useViewCache 5.0.0 since 4.0.0
-	 *    CakePHP3では、ビューキャッシュは廃止となるため、別の方法に移行する
 	 */
-	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['useForm' => true, 'useViewCache' => true]];
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['useForm' => true]];
 
 	/**
 	 * モデル

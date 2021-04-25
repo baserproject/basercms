@@ -50,13 +50,6 @@ foreach ($mailContents as $mailContent) {
         ]
     ];
 }
-// @deprecated 5.0.0 since 4.2.0 BcApp.adminNavigation の形式に変更
-$config['BcApp.adminNavi.mail'] = [
-    'name' => __d('baser', 'メールプラグイン'),
-    'contents' => [
-        ['name' => __d('baser', '基本設定'), 'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_configs', 'action' => 'form']],
-    ]
-];
 
 $config['BcContents']['items']['Mail'] = [
     'MailContent' => [

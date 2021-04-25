@@ -74,11 +74,6 @@ class BcAppModel extends Model
 		$request = new CakeRequest();
 		if (isset($db->config['datasource'])) {
 			if ($db->config['datasource'] != '') {
-				// @deprecated 5.0.0 since 4.0.0
-				if ($this->useDbConfig == 'plugin') {
-					$this->useDbConfig = 'default';
-					$this->log(sprintf(__d('baser', 'モデル：%s BcPluginAppModelの 継承は、バージョン 4.0.0 より非推奨となりました。バージョン 5.0.0 で BcPluginAppModel は削除される予定です。プラグインは AppModel を直接継承してください。'), $this->name), LOG_ALERT);
-				}
 				parent::__construct($id, $table, $ds);
 			} elseif ($db->config['login'] == 'dummy' &&
 				$db->config['password'] == 'dummy' &&
@@ -812,33 +807,6 @@ class BcAppModel extends Model
 		} else {
 			return true;
 		}
-	}
-
-	/**
-	 * ファイルサイズチェック
-	 *
-	 * @param array $check チェック対象データ
-	 * @param int $size 最大のファイルサイズ
-	 * @deprecated 5.0.0 since 4.1.0.2 アップロードしたファイルのサイズチェックに加えて、アップロード時のエラーコードをログに取るようにするため
-	 */
-	public function fileSize($check, $size)
-	{
-
-		$this->log(deprecatedMessage(
-			__d('baser', 'メソッド：BcAppModel::fileSize()'), '4.1.0.2', '5.0.0', __d('baser', 'BcAppModel::fileCheck() を利用してください。')
-		), LOG_ALERT);
-		$file = $check[key($check)];
-		if (!empty($file['name'])) {
-			// サイズが空の場合は、HTMLのMAX_FILE_SIZEの制限によりサイズオーバー
-			// だが、post_max_size を超えた場合は、ここまで処理がこない可能性がある
-			if (!$file['size']) {
-				return false;
-			}
-			if ($file['size'] > $size) {
-				return;
-			}
-		}
-		return true;
 	}
 
 	/**
@@ -1827,40 +1795,6 @@ class BcAppModel extends Model
 			}
 		}
 		return $paths;
-	}
-
-	/**
-	 * レコードデータの消毒をおこなう
-	 * @return array
-	 * @deprecated 5.0.0 since 4.1.3 htmlspecialchars を利用してください。
-	 */
-	public function sanitizeRecord($record)
-	{
-		trigger_error(deprecatedMessage('メソッド：BcAppModel::sanitizeRecord()', '4.0.0', '5.0.0', 'htmlspecialchars を利用してください。'), E_USER_DEPRECATED);
-		foreach($record as $key => $value) {
-			$record[$key] = $this->sanitize($value);
-		}
-		return $record;
-	}
-
-	/**
-	 * 単体データの消毒を行う
-	 * 配列には対応しない
-	 * @param $data
-	 * @return mixed|string
-	 * @deprecated 5.0.0 since 4.1.3 htmlspecialchars を利用してください。
-	 */
-	public function sanitize($value)
-	{
-		trigger_error(deprecatedMessage('メソッド：BcAppModel::sanitizeRecord()', '4.0.0', '5.0.0', 'htmlspecialchars を利用してください。'), E_USER_DEPRECATED);
-		if (!is_array($value)) {
-			// 既に htmlspecialchars を実行済のものについて一旦元の形式に復元した上で再度サイニタイズ処理をかける。
-			$value = str_replace("&lt;!--", "<!--", $value);
-			$value = htmlspecialchars($value);
-			return $value;
-		} else {
-			return $value;
-		}
 	}
 
 	/**

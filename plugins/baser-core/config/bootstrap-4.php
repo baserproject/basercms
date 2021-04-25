@@ -155,12 +155,6 @@ App::uses('BcSite', 'Lib');
 App::uses('BcAgent', 'Lib');
 App::uses('BcLang', 'Lib');
 
-// @deprecated
-// >>>
-App::uses('BcPluginAppController', 'Controller');
-App::uses('BcPluginAppModel', 'Model');
-// <<<
-
 /**
  * 設定ファイル読み込み
  * install.php で設定している為、一旦読み込んで再設定
@@ -401,17 +395,4 @@ if (BC_INSTALLED || isConsole()) {
 	App::build([
 		'View/Helper' => [BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Helper' . DS]
 	], App::PREPEND);
-}
-
-/**
- * 後方互換のため過去テーマ用のアイコンを設定
- * @deprecated 5.0.0 since 4.2.0 過去テーマを廃止予定
- */
-if (Configure::read('BcSite.admin_theme') === '') {
-	Configure::write('BcContents.items.Core.ContentFolder.icon', 'admin/icon_folder.png');
-	Configure::write('BcContents.items.Core.ContentAlias.icon', 'admin/icon_alias.png');
-	Configure::write('BcContents.items.Core.ContentLink.icon', 'admin/icon_link.png');
-	Configure::write('BcContents.items.Core.Page.icon', 'admin/icon_page.png');
-	Configure::write('BcContents.items.Blog.BlogContent.icon', 'admin/icon_blog.png');
-	Configure::write('BcContents.items.Mail.MailContent.icon', 'admin/icon_mail.png');
 }

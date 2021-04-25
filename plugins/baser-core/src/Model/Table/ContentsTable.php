@@ -688,14 +688,11 @@ class ContentsTable extends Table
 	 * コンテンツデータよりURLを生成する
 	 *
 	 * @param int $id コンテンツID
-	 * @param string $plugin プラグイン
-	 * @param string $type タイプ
 	 * @return mixed URL | false
 	 */
-	public function createUrl($id, $plugin = null, $type = null)
+	public function createUrl($id)
 	{
 		$id = (int)$id;
-		// @deprecated 5.0.0 since 4.0.2 $plugin / $type の引数は不要
 		if (!$id) {
 			return false;
 		} elseif ($id == 1) {
@@ -1381,21 +1378,6 @@ class ContentsTable extends Table
 			$url .= '/';
 		}
 		return false;
-	}
-
-	/**
-	 * 公開されたURLが存在するか確認する
-	 *
-	 * @param string $url
-	 * @return bool
-	 * @deprecated 5.0.0 since 4.2.2 Content::findByUrl() を利用してください。
-	 */
-	public function existsPublishUrl($url)
-	{
-		trigger_error(deprecatedMessage('メソッド：Content::existsPublishUrl()', '4.2.2', '5.0.0', 'Content::findByUrl() を利用してください。'), E_USER_DEPRECATED);
-		$conditions = $this->getConditionAllowPublish();
-		$conditions['url'] = $url;
-		return (boolean)$this->find('count', ['conditions' => $conditions]);
 	}
 
 	/**

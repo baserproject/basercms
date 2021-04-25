@@ -39,15 +39,6 @@ class BcContentsComponent extends Component
 	public $useForm = false;
 
 	/**
-	 * ビューキャッシュを利用するかどうか
-	 *
-	 * @var bool
-	 * @deprecated 5.0.0 since 4.0.0
-	 *    CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
-	 */
-	public $useViewCache = false;
-
-	/**
 	 * コンテンツ編集用のアクション名
 	 * 判定に利用
 	 * settings で指定する
@@ -222,16 +213,6 @@ class BcContentsComponent extends Component
 				// TODO 改善要
 				App::uses('BcContentsEventListener', 'Event');
 				CakeEventManager::instance()->attach(new BcContentsEventListener());
-			}
-		} else {
-			// ビューキャッシュ設定
-			if (empty($controller->request->query['preview'])) {
-				// @deprecated 5.0.0 since 4.0.0
-				//	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
-				if ($this->useViewCache && !BcUtil::loginUser('admin') && !isConsole() && !empty($controller->request->params['Content'])) {
-					$controller->helpers[] = 'BcCache';
-					$controller->cacheAction = $controller->Content->getCacheTime($controller->request->params['Content']);
-				}
 			}
 		}
 
