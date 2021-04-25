@@ -19,6 +19,9 @@ use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcTestCase
