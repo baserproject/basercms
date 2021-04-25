@@ -43,5 +43,8 @@ jobs:
       - name: Sleep for 10 seconds
         run: sleep 10
 
+      - name: Migration
+        run: bin/cake migrations migrate --plugin baser-core
+
       - name: Run test suite
         run: docker exec bc5-php composer run-script test

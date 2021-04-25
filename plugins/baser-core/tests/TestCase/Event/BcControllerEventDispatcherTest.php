@@ -30,12 +30,12 @@ class BcControllerEventDispatcherTest extends BcTestCase
     /**
      * @var EventManager|null
      */
-    public ?EventManager $eventManager;
+    public $eventManager;
 
     /**
      * @var BcControllerEventDispatcher|null
      */
-    public ?BcControllerEventDispatcher $bcControllerEventDispatcher;
+    public $bcControllerEventDispatcher;
 
     /**
      * set up

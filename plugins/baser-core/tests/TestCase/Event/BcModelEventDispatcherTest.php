@@ -31,12 +31,12 @@ class BcModelEventDispatcherTest extends BcTestCase
     /**
      * @var EventManager|null
      */
-    public ?EventManager $eventManager;
+    public $eventManager;
 
     /**
      * @var BcModelEventDispatcher|null
      */
-    public ?BcModelEventDispatcher $bcModelEventDispatcher;
+    public $bcModelEventDispatcher;
 
     /**
      * set up
