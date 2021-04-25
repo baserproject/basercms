@@ -83,7 +83,28 @@ class UserGroupsControllerTest extends TestCase
      */
     public function testAdd()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->enableSecurityToken();
+
+        $this->get('/baser/admin/user_groups/add');
+        $this->assertResponseOk();
+
+        $this->post('/baser/admin/user_groups/add', [
+            'name' => 'addtestgroup',
+            'title' => 'テストグループ',
+            'use_move_contents' => '1',
+        ]);
+        $this->assertFlashMessage('新規ユーザーグループ「addtestgroup」を追加しました。');
+
+        $userGroups = $this->getTableLocator()->get('UserGroups');
+        $userGroup = $userGroups
+            ->find()
+            ->where([
+                'name' => 'addtestgroup',
+            ])
+            ->first();
+        $this->assertEquals($userGroup['name'], 'addtestgroup');
+        $this->assertEquals($userGroup['title'], 'テストグループ');
+        $this->assertEquals($userGroup['use_move_contents'], 1);
     }
 
     /**
