@@ -30,6 +30,9 @@ use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Routing\Router;
 use Exception;
 use Psr\Http\Message\ServerRequestInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcApplication
@@ -41,6 +44,8 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
      * Load all the application configuration and bootstrap logic.
      *
      * @return void
+     * @checked
+     * @noTodo
      */
     public function bootstrap(): void
     {
@@ -73,6 +78,7 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
      *
      * @param string $plugin
      * @return bool
+     * @checked
      */
     function loadPlugin($plugin, $priority)
     {
@@ -120,6 +126,7 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
      *
      * @param \Cake\Http\MiddlewareQueue $middlewareQueue The middleware queue to setup.
      * @return \Cake\Http\MiddlewareQueue The updated middleware queue.
+     * @checked
      */
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
@@ -158,6 +165,8 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
      * That is when running commands.
      *
      * @return void
+     * @checked
+     * @noTodo
      */
     protected function bootstrapCli(): void
     {
@@ -177,6 +186,8 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request Request
      * @return \Authentication\AuthenticationServiceInterface
+     * @checked
+     * @noTodo
      */
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
     {

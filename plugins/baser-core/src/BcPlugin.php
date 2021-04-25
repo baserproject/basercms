@@ -13,9 +13,7 @@ namespace BaserCore;
 
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcUtil;
-use Cake\Core\App;
 use Cake\Core\BasePlugin;
-use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
@@ -42,6 +40,8 @@ class BcPlugin extends BasePlugin
 
     /**
      * Initialize
+     * @checked
+     * @noTodo
      */
     public function initialize(): void
     {
@@ -52,6 +52,7 @@ class BcPlugin extends BasePlugin
     /**
      * @param \Cake\Routing\RouteBuilder $routes
      * @checked
+     * @noTodo
      */
     public function routes($routes): void
     {
@@ -93,6 +94,7 @@ class BcPlugin extends BasePlugin
      * @param array $options
      *  - `plugin` : プラグイン名
      *  - `connection` : コネクション名
+     * @checked
      */
     public function install($options = []) : bool
     {
