@@ -87,6 +87,7 @@ class BcAdminHelper extends Helper
      * - null：全てのサイトで表示
      * - 数値：対象のサイトのみ表示（javascript で扱いやすいよう文字列に変換）
      * @return string
+     * @checked
      */
     public function getJsonMenu()
     {
@@ -234,6 +235,8 @@ class BcAdminHelper extends Helper
      * 管理画面の画面タイトルの横に配置するボタンをを追加する
      *
      * @param array $links ['url' => string or array, 'confirm' => 'confirm message', 'something attributes' => 'attr value']
+     * @checked
+     * @noTodo
      */
     public function addAdminMainBodyHeaderLinks($links)
     {

@@ -14,7 +14,7 @@ namespace BaserCore\View\Helper;
 use BaserCore\Event\BcEventDispatcherTrait;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
-use \Cake\View\Helper\FormHelper;
+use Cake\View\Helper\FormHelper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
