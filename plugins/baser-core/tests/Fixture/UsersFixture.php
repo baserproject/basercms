@@ -33,7 +33,7 @@ class UsersFixture extends TestFixture
             'password' => 'Lorem ipsum dolor sit amet',
             'real_name_1' => 'baser',
             'real_name_2' => 'admin',
-            'email' => 'Lorem ipsum dolor sit amet',
+            'email' => 'testuser1@example.com',
             'nickname' => 'Lorem ipsum dolor sit amet',
             'created' => '2017-05-03 10:57:07',
             'modified' => '2017-05-03 10:57:07'
@@ -44,7 +44,7 @@ class UsersFixture extends TestFixture
             'password' => 'Lorem ipsum dolor sit amet',
             'real_name_1' => 'baser',
             'real_name_2' => 'operator',
-            'email' => 'Lorem ipsum dolor sit amet',
+            'email' => 'testuser2@example.com',
             'nickname' => 'Lorem ipsum dolor sit amet',
             'created' => '2017-05-03 10:57:07',
             'modified' => '2017-05-03 10:57:07'

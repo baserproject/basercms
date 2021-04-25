@@ -16,6 +16,7 @@ vagrant ssh
 cd /vagrant/docker
 docker exec -it bc5-php /bin/bash
 composer install
+# エラーが出る場合は composer install --no-plugins を実行する
 ```
 
 ## migration の実行

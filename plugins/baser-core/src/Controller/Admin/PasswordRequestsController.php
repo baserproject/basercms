@@ -14,6 +14,9 @@ namespace BaserCore\Controller\Admin;
 use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Mailer\PasswordRequestMailer;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class PasswordRequestsController
@@ -28,6 +31,9 @@ class PasswordRequestsController extends BcAdminAppController
      * ログインページ認証除外
      *
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {
@@ -48,6 +54,9 @@ class PasswordRequestsController extends BcAdminAppController
      *  - title
      *  - PasswordRequest.[]
      *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function entry(): void
     {
@@ -92,6 +101,10 @@ class PasswordRequestsController extends BcAdminAppController
      * - viewVars
      *  - title
      *  - user
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function apply($key): void
     {
@@ -143,6 +156,10 @@ class PasswordRequestsController extends BcAdminAppController
      *  - title
      *
      * @return void
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function done()
     {
