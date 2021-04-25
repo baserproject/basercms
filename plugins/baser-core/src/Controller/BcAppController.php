@@ -13,17 +13,16 @@ namespace BaserCore\Controller;
 
 use BaserCore\Controller\Component\BcMessageComponent;
 use Cake\Controller\ComponentRegistry;
-use Cake\Controller\Controller;
 use Cake\Event\EventInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
-
 use BaserCore\Model\Table\LoginStoresTable;
-use BaserCore\Model\Table\UsersTable;
 use Cake\Http\Cookie\Cookie;
 use DateTime;
-
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcAppController
@@ -184,6 +183,7 @@ class BcAppController extends AppController
      * @param string|null $name
      * @param EventManagerInterface|null $eventManager
      * @param ComponentRegistry|null $components
+     * @checked
      */
 	public function __construct(
         ?ServerRequest $request = null,
@@ -291,7 +291,8 @@ class BcAppController extends AppController
 	/**
 	 * beforeFilter
 	 *
-	 * @return    void
+	 * @return void
+     * @checked
 	 */
 	public function beforeFilter(EventInterface $event)
 	{

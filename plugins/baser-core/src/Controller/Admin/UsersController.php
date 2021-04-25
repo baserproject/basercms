@@ -25,7 +25,6 @@ use Cake\Routing\Router;
 use Cake\Http\Response;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Cookie\Cookie;
-use DateTime;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -85,6 +84,8 @@ class UsersController extends BcAdminAppController
      * ログインページ認証除外
      *
      * @return void
+     * @checked
+     * @noTodo
      */
     public function initialize(): void
     {
@@ -228,12 +229,12 @@ class UsersController extends BcAdminAppController
      * 別のユーザにログインできる
      *
      * @param string|null $id User id.
-     * @return Response Redirects
+     * @return Response|void Redirects
      * @throws RecordNotFoundException When record not found.
      * @checked
      * @noTodo
      */
-    public function login_agent($id)
+    public function login_agent($id): ?Response
     {
         $session = Router::getRequest()->getSession();
         $user = BcUtil::loginUser();
@@ -257,13 +258,13 @@ class UsersController extends BcAdminAppController
 
         $target = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
         $this->redirect($target);
-        return;
     }
 
     /**
      * 代理ログイン解除
      *
      * @return Response
+     * @checked
      */
     public function back_agent()
     {
@@ -491,6 +492,7 @@ class UsersController extends BcAdminAppController
      * @param string|null $id User id.
      * @return Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws RecordNotFoundException When record not found.
+     * @checked
      */
     public function edit($id = null)
     {
@@ -596,6 +598,7 @@ class UsersController extends BcAdminAppController
      * @param string|null $id User id.
      * @return Response|null|void Redirects to index.
      * @throws RecordNotFoundException When record not found.
+     * @checked
      */
     public function delete($id = null)
     {
@@ -639,6 +642,8 @@ class UsersController extends BcAdminAppController
      * 新しいパスワードを生成し、指定したメールアドレス宛に送信する
      *
      * @return void
+     * @checked
+     * @noTodo
      */
     public function reset_password()
     {

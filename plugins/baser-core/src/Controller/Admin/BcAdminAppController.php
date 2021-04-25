@@ -13,7 +13,6 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Controller\BcAppController;
 use Cake\Event\EventInterface;
-use BaserCore\Controller\AppController;
 use Cake\Utility\Inflector;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -46,7 +45,8 @@ class BcAdminAppController extends BcAppController
      *
      * @param array $targetModel ターゲットとなるモデル
      * @param array $options オプション
-     *
+     * @checked
+     * @noTodo
      */
     protected function setViewConditions($targetModel = [], $options = []): void
     {
@@ -57,10 +57,9 @@ class BcAdminAppController extends BcAppController
     /**
      * 画面の情報をセッションに保存する
      *
-     * @param array $filterModels
+     * @param array $targetModel
      * @param array $options オプション
-     * @return    void
-     * @access    protected
+     * @return void
      */
     protected function saveViewConditions($targetModel = [], $options = []): void
     {
@@ -191,6 +190,8 @@ class BcAdminAppController extends BcAppController
      * Before Render
      * @param EventInterface $event
      * @return \Cake\Http\Response|void|null
+     * @checked
+     * @noTodo
      */
     public function beforeRender(EventInterface $event): void
     {
@@ -238,10 +239,10 @@ class BcAdminAppController extends BcAppController
 
     /**
      * リファラチェックを行う
+     * @return bool
      * @checked
      * @noTodo
      * @unitTest
-     * @return bool
      */
     protected function _checkReferer(): bool
     {

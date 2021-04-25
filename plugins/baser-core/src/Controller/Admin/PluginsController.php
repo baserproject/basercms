@@ -22,10 +22,10 @@ use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
 use Cake\Http\Client;
 use Cake\Http\Response;
+use Cake\Utility\Xml;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use Cake\Utility\Xml;
 
 /**
  * Class PluginsController
@@ -46,6 +46,8 @@ class PluginsController extends BcAdminAppController
     /**
      * initialize
      * @throws \Exception
+     * @checked
+     * @noTodo
      */
     public function initialize():void
     {
@@ -56,6 +58,8 @@ class PluginsController extends BcAdminAppController
     /**
      * Before Filter
      * @param \Cake\Event\EventInterface $event An Event instance
+     * @checked
+     * @noTodo
      */
     public function beforeFilter(EventInterface $event): void
     {
@@ -329,6 +333,8 @@ class PluginsController extends BcAdminAppController
      * baserマーケットのプラグインデータを取得する
      *
      * @return void
+     * @checked
+     * @noTodo
      */
     public function get_market_plugins()
     {
@@ -362,6 +368,8 @@ class PluginsController extends BcAdminAppController
     /**
      * 並び替えを更新する
      * @return void|Response
+     * @checked
+     * @noTodo
      */
     public function update_sort()
     {
@@ -485,6 +493,8 @@ class PluginsController extends BcAdminAppController
      *
      * @param array $ids プラグインIDの配列
      * @return void|Response
+     * @checked
+     * @noTodo
      */
     public function batch()
     {

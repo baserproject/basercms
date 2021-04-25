@@ -10,6 +10,9 @@
  */
 
 namespace BaserCore\Controller;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcFormController
@@ -22,6 +25,8 @@ class BcFormController extends AppController
 	 * セキュリティトークンを取得する
 	 *
 	 * @return mixed
+     * @checked
+     * @noTodo
 	 */
 	public function get_token()
 	{

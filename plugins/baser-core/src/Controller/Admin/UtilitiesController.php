@@ -11,6 +11,10 @@
 
 namespace BaserCore\Controller\Admin;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+
 /**
  * Class UtilitiesController
  * @package BaserCore\Controller\Admin
@@ -19,6 +23,8 @@ class UtilitiesController extends BcAdminAppController
 {
     /**
      * サーバーキャッシュを削除する
+     * @checked
+     * @noTodo
      */
     public function clear_cache()
     {

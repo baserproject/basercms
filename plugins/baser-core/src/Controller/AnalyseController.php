@@ -15,6 +15,9 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Exception;
 use ReflectionClass;
 use ReflectionMethod;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class AnalyseController
@@ -40,6 +43,8 @@ class AnalyseController extends AppController
      * API) http://reflection.basercms.net/baser/analyse/index/baser-core.json
      *
      * @param string|null $pluginName
+     * @checked
+     * @noTodo
      */
     public function index($pluginName = null)
     {
@@ -62,6 +67,8 @@ class AnalyseController extends AppController
      *
      * @param string $path
      * @return array
+     * @checked
+     * @noTodo
      */
     private function getList($path)
     {
@@ -126,6 +133,8 @@ class AnalyseController extends AppController
      * @param string $methodName
      * @return array
      * @throws \ReflectionException
+     * @checked
+     * @noTodo
      */
     private function getAnnotations($className, $methodName)
     {
@@ -150,6 +159,8 @@ class AnalyseController extends AppController
      * @param ReflectionClass $reflection
      * @return array
      * @throws \ReflectionException
+     * @checked
+     * @noTodo
      */
     private function getTraitMethod(ReflectionClass $reflection)
     {
@@ -170,6 +181,8 @@ class AnalyseController extends AppController
      *
      * @param string $path
      * @return string|string[]
+     * @checked
+     * @noTodo
      */
     private function pathToClass($path)
     {
