@@ -79,8 +79,8 @@ class BlogCategoriesController extends BlogAppController
             $this->notFound();
         }
 
-        $this->request->params['Content'] = $content['Content'];
-        $this->request->params['Site']    = $content['Site'];
+        $this->request = $this->request->withParam('Content',  $content['Content']);
+        $this->request = $this->request->withParam('Site',  $content['Site']);
 
         $this->blogContent = $this->BlogContent->read(
             null,
@@ -185,11 +185,11 @@ class BlogCategoriesController extends BlogAppController
         } else {
 
             /* 登録処理 */
-            $this->request->data['BlogCategory']['blog_content_id'] = $blogContentId;
-            $this->request->data['BlogCategory']['no'] = $this->BlogCategory->getMax(
+            $this->request = $this->request->withData('BlogCategory.blog_content_id', $blogContentId);
+            $this->request = $this->request->withData('BlogCategory.no', $this->BlogCategory->getMax(
                     'no', [
                     'BlogCategory.blog_content_id' => $blogContentId
-                ]) + 1;
+                ]) + 1);
             $this->BlogCategory->create($this->request->data);
 
             // データを保存
@@ -197,7 +197,7 @@ class BlogCategoriesController extends BlogAppController
                 $this->BcMessage->setSuccess(
                     sprintf(
                         __d('baser', 'カテゴリー「%s」を追加しました。'),
-                        $this->request->data['BlogCategory']['name']
+                        $this->request->getData('BlogCategory.name')
                     )
                 );
                 $this->redirect(['action' => 'index', $blogContentId]);
@@ -251,7 +251,7 @@ class BlogCategoriesController extends BlogAppController
                 $this->BcMessage->setSuccess(
                     sprintf(
                         __d('baser', 'カテゴリー「%s」を更新しました。'),
-                        $this->request->data['BlogCategory']['name']
+                        $this->request->getData('BlogCategory.name')
                     )
                 );
                 $this->redirect(['action' => 'index', $blogContentId]);
@@ -264,7 +264,7 @@ class BlogCategoriesController extends BlogAppController
         $user = $this->BcAuth->user();
         $catOptions = [
             'blogContentId' => $this->blogContent['BlogContent']['id'],
-            'excludeParentId' => $this->request->data['BlogCategory']['id']
+            'excludeParentId' => $this->request->getData('BlogCategory.id')
         ];
         if ($user['user_group_id'] != Configure::read('BcApp.adminGroupId')) {
             $catOptions['ownerId'] = $user['user_group_id'];
@@ -281,7 +281,7 @@ class BlogCategoriesController extends BlogAppController
                 sprintf(
                     "%s/archives/category/%s",
                     rtrim($this->request->params['Content']['url'],'/'),
-                    $this->request->data['BlogCategory']['name']
+                    $this->request->getData('BlogCategory.name')
                 ),
                 true,
                 $this->request->params['Site']['use_subdomain']
@@ -407,21 +407,21 @@ class BlogCategoriesController extends BlogAppController
         }
 
         // カテゴリ名が空の場合タイトルから取る
-        if (empty($this->request->data['BlogCategory']['name'])) {
-            $this->request->data['BlogCategory']['name'] = $this->request->data['BlogCategory']['title'];
+        if (empty($this->request->getData('BlogCategory.name'))) {
+            $this->request = $this->request->withData('BlogCategory.name',  $this->request->getData('BlogCategory.title'));
         }
 
         // マルチバイトを含む場合はエンコードしておく
-        if (strlen($this->request->data['BlogCategory']['name']) !== mb_strlen($this->request->data['BlogCategory']['name'])) {
-            $this->request->data['BlogCategory']['name'] = substr(urlencode($this->request->data['BlogCategory']['name']), 0, 49);
+        if (strlen($this->request->getData('BlogCategory.name')) !== mb_strlen($this->request->getData('BlogCategory.name'))) {
+            $this->request = $this->request->withData('BlogCategory.name',  substr(urlencode($this->request->getData('BlogCategory.name')), 0, 49));
         }
 
-        $this->request->data['BlogCategory']['blog_content_id'] = $blogContentId;
-        $this->request->data['BlogCategory']['no'] = $this->BlogCategory->getMax(
+        $this->request = $this->request->withData('BlogCategory.blog_content_id',  $blogContentId);
+        $this->request = $this->request->withData('BlogCategory.no', $this->BlogCategory->getMax(
             'no',
             ['BlogCategory.blog_content_id' => $blogContentId]
             )
-            + 1;
+            + 1);
 
         $this->BlogCategory->create($this->request->data);
 

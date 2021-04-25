@@ -23,7 +23,7 @@ $(function(){
 
 <div class="post">
 <?php $this->Blog->postContent($post) ?>
-	<div class="meta"> 
+	<div class="meta">
 		<span class="date">
 <?php $this->Blog->postDate($post) ?>
 		</span>
@@ -38,7 +38,7 @@ $(function(){
 <div class="post-navi">
 	<?php $this->Blog->prevLink($post, "＜ ". __('前の記事')) ?>
 	&nbsp;  &nbsp;
-	<?php $this->BcBaser->link(__('一覧へ'), '/'.$this->request->params['Content']['name'].'/index') ?>
+	<?php $this->BcBaser->link(__('一覧へ'), '/'.$this->request->getParam('Content.name').'/index') ?>
 	&nbsp;  &nbsp;	<?php $this->Blog->nextLink($post, __('後の記事'). " ＞") ?>
 </div>
 <?php $this->BcBaser->element('blog_comments') ?>

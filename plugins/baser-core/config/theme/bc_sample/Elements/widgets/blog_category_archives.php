@@ -60,7 +60,7 @@ $this->Blog = new BlogHelper($this);
 					<span>
 						<?php $this->BcBaser->link($key . '年', [
 							'plugin' => null,
-							'controller' => $this->request->params['Content']['url'],
+							'controller' => $this->request->getParam('Content.url'),
 							'action' => 'archives',
 							'date', $key
 						], ['class' => 'bs-widget-list-by-year__item-title']) ?>

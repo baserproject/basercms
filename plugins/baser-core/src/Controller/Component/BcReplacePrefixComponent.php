@@ -109,10 +109,10 @@ class BcReplacePrefixComponent extends Component
 			return;
 		}
 
-		if (!isset($Controller->request->params['prefix'])) {
+		if (!$Controller->request->getParam('prefix')) {
 			$requestedPrefix = '';
 		} else {
-			$requestedPrefix = $Controller->request->params['prefix'];
+			$requestedPrefix = $Controller->request->getParam('prefix');
 		}
 
 		$prefix = [];
@@ -136,9 +136,9 @@ class BcReplacePrefixComponent extends Component
 			return;
 		}
 		if ($requestedPrefix) {
-			$Controller->request->params['prefix'] = $requestedPrefix;
+			$Controller->request = $Controller->request->withParam('prefix',  $requestedPrefix);
 		} else {
-			$Controller->request->params['prefix'] = 'front';
+			$Controller->request = $Controller->request->withParam('prefix',  'front');
 		}
 		$Controller->action = $this->replacedPrefix . '_' . $pureAction;
 		$Controller->layoutPath = $this->replacedPrefix;    // Baserに依存
@@ -176,8 +176,8 @@ class BcReplacePrefixComponent extends Component
 	public function beforeRender(Controller $controller)
 	{
 		parent::beforeRender($controller);
-		if (!empty($controller->request->params['prefix']) && $controller->request->params['prefix'] == 'front') {
-			$controller->request->params['prefix'] = '';
+		if (!empty($controller->request->getParam('prefix')) && $controller->request->getParam('prefix') == 'front') {
+			$controller->request = $this->request->withParam('prefix', '');
 		}
 	}
 

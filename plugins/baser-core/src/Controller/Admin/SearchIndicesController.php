@@ -74,7 +74,7 @@ class SearchIndicesController extends AppController
 		// 認証設定
 		$this->BcAuth->allow('search', 'smartphone_search');
 
-		if (!empty($this->request->params['admin'])) {
+		if ($this->request->getParam('prefix') === 'Admin') {
 			$this->crumbs = [
 				['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
 				['name' => __d('baser', '検索インデックス管理'), 'url' => ['controller' => 'search_indices', 'action' => 'index']]
@@ -88,11 +88,11 @@ class SearchIndicesController extends AppController
 		$Content = ClassRegistry::init('Content');
 		$currentSite = BcSite::findCurrent(true);
 		$url = '/';
-		if ($this->request->params['action'] !== 'search') {
-			$prefix = str_replace('_search', '', $this->request->params['action']);
+		if ($this->request->getParam('action') !== 'search') {
+			$prefix = str_replace('_search', '', $this->request->getParam('action'));
 			if ($prefix == $currentSite->name) {
 				$url = '/' . $currentSite->alias . '/';
-				$this->request->params['action'] = 'search';
+				$this->request = $this->request->withParam('action',  'search');
 				$this->action = 'search';
 			}
 		}
@@ -100,8 +100,8 @@ class SearchIndicesController extends AppController
 		if (is_null($content['Site']['id'])) {
 			$content['Site'] = $this->Site->getRootMain()['Site'];
 		}
-		$this->request->params['Content'] = $content['Content'];
-		$this->request->params['Site'] = $content['Site'];
+		$this->request = $this->request->withParam('Content',  $content['Content']);
+		$this->request = $this->request->withParam('Site',  $content['Site']);
 
 	}
 
@@ -118,9 +118,9 @@ class SearchIndicesController extends AppController
 		$default = ['named' => ['num' => 10]];
 		$this->setViewConditions('SearchIndex', ['default' => $default, 'type' => 'get']);
 
-		if (!empty($this->request->data['SearchIndex'])) {
-			foreach($this->request->data['SearchIndex'] as $key => $value) {
-				$this->request->data['SearchIndex'][$key] = h($value);
+		if (!empty($this->request->getData('SearchIndex'))) {
+			foreach($this->request->getData('SearchIndex') as $key => $value) {
+				$this->request = $this->request->withData('SearchIndex.' . $key, h($value));
 			}
 		}
 		if (isset($this->request->query['q'][0])) {
@@ -234,7 +234,7 @@ class SearchIndicesController extends AppController
 			return;
 		}
 
-		$this->set('folders', $this->Content->getContentFolderList((int)$this->request->data['SearchIndex']['site_id'], ['conditions' => ['Content.site_root' => false]]));
+		$this->set('folders', $this->Content->getContentFolderList((int)$this->request->getData('SearchIndex.site_id'), ['conditions' => ['Content.site_root' => false]]));
 		$this->set('sites', $this->Site->getSiteList());
 		$this->search = 'search_indices_index';
 		$this->help = 'search_indices_index';
@@ -256,7 +256,7 @@ class SearchIndicesController extends AppController
 //		$this->pageTitle = '検索インデックス登録';
 //
 //		if ($this->request->data) {
-//			$url = $this->request->data['SearchIndex']['url'];
+//			$url = $this->request->getData('SearchIndex.url');
 //			$url = str_replace(FULL_BASE_URL . $this->request->base, '', $url);
 //
 //			if (!$this->SearchIndex->find('count', array('conditions' => array('SearchIndex.url' => $url)))) {
@@ -299,7 +299,7 @@ class SearchIndicesController extends AppController
 //					$searchIndex = Sanitize::stripAll($searchIndex);
 //					$searchIndex = strip_tags($searchIndex);
 //					$data = array('SearchIndex' => array(
-//							'title'		=> $this->request->data['SearchIndex']['title'],
+//							'title'		=> $this->request->getData('SearchIndex.title'),
 //							'detail'	=> $searchIndex,
 //							'url'		=> $url,
 //							'type'		=> 'その他',

@@ -152,7 +152,7 @@ class InstallationsController extends AppController
 	 */
 	public function step2()
 	{
-		if ($this->request->data && $this->request->data['clicked'] === 'next') {
+		if ($this->request->data && $this->request->getData('clicked') === 'next') {
 			$this->redirect('step3');
 			return;
 		}
@@ -164,9 +164,18 @@ class InstallationsController extends AppController
 
 		$this->set($checkResult);
 
-		extract($checkResult);
-
-		$this->set('blRequirementsMet', ($phpXml && $phpGd && $tmpDirWritable && $pagesDirWritable && $configDirWritable && $phpVersionOk && $themeDirWritable && $imgDirWritable && $jsDirWritable && $cssDirWritable));
+		$this->set('blRequirementsMet', (
+		    $checkResult['phpXml'] &&
+		    $checkResult['phpGd'] &&
+		    $checkResult['tmpDirWritable'] &&
+		    $checkResult['pagesDirWritable'] &&
+		    $checkResult['configDirWritable'] &&
+		    $checkResult['phpVersionOk'] &&
+		    $checkResult['themeDirWritable'] &&
+		    $checkResult['imgDirWritable'] &&
+		    $checkResult['jsDirWritable'] &&
+		    $checkResult['cssDirWritable']
+		));
 		$this->pageTitle = __d('baser', 'baserCMSのインストール｜ステップ２');
 	}
 
@@ -188,28 +197,28 @@ class InstallationsController extends AppController
 			return;
 		}
 
-		$this->_writeDbSettingToSession($this->request->data['Installation']);
+		$this->_writeDbSettingToSession($this->request->getData('Installation'));
 
 		/* 戻るボタンクリック時 */
-		if ($this->request->data['buttonclicked'] === 'back') {
+		if ($this->request->getData('buttonclicked') === 'back') {
 			$this->redirect('step2');
 			return;
 
 			/* 接続テスト */
 		}
 
-		if ($this->request->data['buttonclicked'] === 'checkdb') {
+		if ($this->request->getData('buttonclicked') === 'checkdb') {
 
 			$this->set('blDBSettingsOK', $this->_testConnectDb($this->_readDbSetting()));
 
 			/* 「次のステップへ」クリック時 */
-		} elseif ($this->request->data['buttonclicked'] === 'createdb') {
+		} elseif ($this->request->getData('buttonclicked') === 'createdb') {
 
 			ini_set("max_execution_time", 180);
 
 			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
-			if (isset($this->request->data['Installation']['dbDataPattern'])) {
-				$dbDataPattern = $this->request->data['Installation']['dbDataPattern'];
+			if ($this->request->getData('Installation.dbDataPattern')) {
+				$dbDataPattern = $this->request->getData('Installation.dbDataPattern');
 			}
 			$result = false;
 			$errorMessage = __d('baser', 'データベースの構築中にエラーが発生しました。');
@@ -247,23 +256,23 @@ class InstallationsController extends AppController
 		}
 
 // ユーザー情報をセッションに保存
-		$this->Session->write('Installation.admin_email', $this->request->data['Installation']['admin_email']);
-		$this->Session->write('Installation.admin_username', $this->request->data['Installation']['admin_username']);
-		$this->Session->write('Installation.admin_password', $this->request->data['Installation']['admin_password']);
+		$this->Session->write('Installation.admin_email', $this->request->getData('Installation.admin_email'));
+		$this->Session->write('Installation.admin_username', $this->request->getData('Installation.admin_username'));
+		$this->Session->write('Installation.admin_password', $this->request->getData('Installation.admin_password'));
 
-		if ($this->request->data['Installation']['clicked'] === 'back') {
+		if ($this->request->getData('Installation.clicked') === 'back') {
 
 			$this->redirect('step3');
 			return;
 		}
 
-		if ($this->request->data['Installation']['clicked'] === 'finish') {
+		if ($this->request->getData('Installation.clicked') === 'finish') {
 
 			// DB接続
 			$db = $this->BcManager->connectDb($this->_readDbSetting());
 
 			// サイト基本設定登録
-			$this->BcManager->setAdminEmail($this->request->data['Installation']['admin_email']);
+			$this->BcManager->setAdminEmail($this->request->getData('Installation.admin_email'));
 
 			// SecuritySalt設定
 			$salt = $this->BcManager->setSecuritySalt();
@@ -274,10 +283,10 @@ class InstallationsController extends AppController
 
 			// 管理ユーザー登録
 			$user = [
-				'name' => $this->request->data['Installation']['admin_username'],
-				'password_1' => $this->request->data['Installation']['admin_password'],
-				'password_2' => $this->request->data['Installation']['admin_confirmpassword'],
-				'email' => $this->request->data['Installation']['admin_email']
+				'name' => $this->request->getData('Installation.admin_username'),
+				'password_1' => $this->request->getData('Installation.admin_password'),
+				'password_2' => $this->request->getData('Installation.admin_confirmpassword'),
+				'email' => $this->request->getData('Installation.admin_email')
 			];
 
 			if ($this->BcManager->addDefaultUser($user)) {
@@ -735,7 +744,7 @@ class InstallationsController extends AppController
 		$this->layout = 'default';
 		$this->subDir = 'admin';
 
-		if (empty($this->request->data['Installation']['reset'])) {
+		if (empty($this->request->getData('Installation.reset'))) {
 			$this->set('complete', !BC_INSTALLED? true : false);
 			return;
 		}

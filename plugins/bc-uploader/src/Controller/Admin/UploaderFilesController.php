@@ -191,12 +191,12 @@ class UploaderFilesController extends AppController
         $default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
         $this->setViewConditions('UploadFile', ['default' => $default, 'type' => 'get']);
 
-        $this->request->data['Filter'] = $this->passedArgs;
-        if (empty($this->request->data['Filter']['uploader_type'])) {
-            $this->request->data['Filter']['uploader_type'] = 'all';
+        $this->request = $this->request->withData('Filter',  $this->passedArgs);
+        if (empty($this->request->getData('Filter.uploader_type'))) {
+            $this->request = $this->request->withData('Filter.uploader_type',  'all');
         }
-        if (!empty($this->request->data['Filter']['name'])) {
-            $this->request->data['Filter']['name'] = urldecode($this->request->data['Filter']['name']);
+        if (!empty($this->request->getData('Filter.name'))) {
+            $this->request = $this->request->withData('Filter.name',  urldecode($this->request->getData('Filter.name')));
         }
 
         // =====================================================================
@@ -213,7 +213,7 @@ class UploaderFilesController extends AppController
             $num = $this->siteConfigs['admin_list_num'];
         }
 
-        $conditions = $this->_createAdminIndexConditions($this->request->data['Filter']);
+        $conditions = $this->_createAdminIndexConditions($this->request->getData('Filter'));
 
         // 管理ユーザ以外が利用時、ユーザ制限がOnになっていれば一覧に表示しない
         $uploaderConfig = $this->UploaderConfig->findExpanded();
@@ -262,7 +262,7 @@ class UploaderFilesController extends AppController
         $conditions = [];
         if (!empty($data['uploader_category_id'])) {
             $conditions = ['UploaderFile.uploader_category_id' => $data['uploader_category_id']];
-            $this->request->data['Filter']['uploader_category_id'] = $data['uploader_category_id'];
+            $this->request = $this->request->withData('Filter.uploader_category_id',  $data['uploader_category_id']);
         }
         if (!empty($data['uploader_type'])) {
             switch ($data['uploader_type']) {
@@ -312,18 +312,18 @@ class UploaderFilesController extends AppController
         }
 
         // 2014.08.10 yuse fixed 4777 php.iniに定義されたサイズチェックエラーの場合はエラー(UPLOAD_ERR_INI_SIZE)
-        if ($this->request->data['UploaderFile']['file']['error'] == 1) {
+        if ($this->request->getData('UploaderFile.file.error') == 1) {
             echo null;
             die;
         }
 
         $user = $this->BcAuth->user();
         if (!empty($user['id'])) {
-            $this->request->data['UploaderFile']['user_id'] = $user['id'];
+            $this->request = $this->request->withData('UploaderFile.user_id',  $user['id']);
         }
-        $this->request->data['UploaderFile']['file']['name'] = str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($this->request->data['UploaderFile']['file']['name']));
-        $this->request->data['UploaderFile']['name'] = $this->request->data['UploaderFile']['file'];
-        $this->request->data['UploaderFile']['alt'] = $this->request->data['UploaderFile']['name']['name'];
+        $this->request = $this->request->withData('UploaderFile.file.name', str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($this->request->getData('UploaderFile.file.name'))));
+        $this->request = $this->request->withData('UploaderFile.name', $this->request->getData('UploaderFile.file'));
+        $this->request = $this->request->withData('UploaderFile.alt', $this->request->getData('UploaderFile.name.name'));
         $this->UploaderFile->create($this->request->data);
 
         if ($this->UploaderFile->save()) {
@@ -384,7 +384,7 @@ class UploaderFilesController extends AppController
         $user = $this->BcAuth->user();
         $uploaderConfig = $this->UploaderConfig->findExpanded();
         if ($uploaderConfig['use_permission']) {
-            if ($user['user_group_id'] != 1 && $this->request->data['UploaderFile']['user_id'] != $user['id']) {
+            if ($user['user_group_id'] != 1 && $this->request->getData('UploaderFile.user_id') != $user['id']) {
                 $this->notFound();
             }
         }

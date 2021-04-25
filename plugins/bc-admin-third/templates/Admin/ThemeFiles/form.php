@@ -67,17 +67,17 @@ if ($this->request->action !== 'admin_add') {
 				<?php endif ?>
 			</td>
 		</tr>
-		<?php if ($this->request->action == 'admin_add' || (($this->request->action == 'admin_edit' || $this->request->action == 'admin_view') && in_array($this->request->data['ThemeFile']['type'], ['text', 'image']))): ?>
+		<?php if ($this->request->action == 'admin_add' || (($this->request->action == 'admin_edit' || $this->request->action == 'admin_view') && in_array($this->request->getData('ThemeFile.type'), ['text', 'image']))): ?>
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('ThemeFile.contents', __d('baser', '内容')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php if (($this->request->action == 'admin_edit' || $this->request->action == 'admin_view') && $this->request->data['ThemeFile']['type'] == 'image'): ?>
+					<?php if (($this->request->action == 'admin_edit' || $this->request->action == 'admin_view') && $this->request->getData('ThemeFile.type') == 'image'): ?>
 						<div style="margin:20px auto">
 							<?php $this->BcBaser->link(
 								$this->BcBaser->getImg(array_merge(['action' => 'img_thumb', 550, 550, $theme, $plugin, $type], explode('/', $path)), ['alt' => basename($path)]), array_merge(['action' => 'img', $theme, $plugin, $type], explode('/', $path)), ['rel' => 'colorbox', 'title' => basename($path)]
 							); ?>
 						</div>
-					<?php elseif ($this->request->action == 'admin_add' || $this->request->data['ThemeFile']['type'] == 'text'): ?>
+					<?php elseif ($this->request->action == 'admin_add' || $this->request->getData('ThemeFile.type') == 'text'): ?>
 						<?php if ($this->request->action != 'admin_view'): ?>
 							<?php echo $this->BcForm->input('ThemeFile.contents', ['type' => 'textarea', 'cols' => 80, 'rows' => 30]) ?>
 							<?php echo $this->BcForm->error('ThemeFile.contents') ?>

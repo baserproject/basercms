@@ -173,7 +173,7 @@ class UsersController extends BcAdminAppController
         $pageTitle = __d('baser', 'ログイン');
         // TODO 未実装
         /* >>>
-        $prefixAuth = Configure::read('BcAuthPrefix.' . $this->request->params['prefix']);
+        $prefixAuth = Configure::read('BcAuthPrefix.' . $this->request->getParam('prefix'));
         if ($prefixAuth && isset($prefixAuth['loginTitle'])) {
             $pageTitle = $prefixAuth['loginTitle'];
         }
@@ -278,8 +278,8 @@ class UsersController extends BcAdminAppController
             $this->BcMessage->setError(__d('baser', '対象データが見つかりません。'));
             // TODO 未実装
             /* >>>
-            if (!empty($this->request->params['prefix'])) {
-                $authPrefix = $this->request->params['prefix'];
+            if (!empty($this->request->getParam('prefix'))) {
+                $authPrefix = $this->request->getParam('prefix');
             } else {
                 $authPrefix = 'front';
             }
@@ -398,7 +398,7 @@ class UsersController extends BcAdminAppController
             'options' => $options
         ]));
         if ($event !== false) {
-            $options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
+            $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
         }
         <<< */
 
@@ -522,8 +522,8 @@ class UsersController extends BcAdminAppController
             // パスワードがない場合は更新しない
             // TODO 未実装
             /* >>>
-            if ($this->request->data['User']['password_1'] || $this->request->data['User']['password_2']) {
-                $this->request->data['User']['password'] = $this->request->data['User']['password_1'];
+            if ($this->request->getData('User.password_1') || $this->request->getData('User.password_2')) {
+                $this->request = $this->request->withData('User.password',  $this->request->getData('User.password_1'));
             }
             <<< */
 

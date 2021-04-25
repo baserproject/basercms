@@ -2596,7 +2596,7 @@ class BcBaserHelperTest extends BcTestCase {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->BcBaser->getCurrentContent();
         $this->assertEquals($this->BcBaser->getContentByEntityId($result['entity_id'], 'Page')['Content'], $result);
-        $this->BcBaser->request->params['Content'] = '';
+        $this->BcBaser->request = $this->BcBaser->request->withParam('Content',  '');
         $this->assertEquals('', $this->BcBaser->getCurrentContent());
     }
 

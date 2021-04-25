@@ -88,36 +88,36 @@ class SiteConfigsController extends AppController
 
 				$mode = 0;
 				$siteUrl = $sslUrl = '';
-				if (isset($this->request->data['SiteConfig']['mode'])) {
-					$mode = $this->request->data['SiteConfig']['mode'];
+				if ($this->request->getData('SiteConfig.mode')) {
+					$mode = $this->request->getData('SiteConfig.mode');
 				}
 				if ($mode > 0) {
 					clearAllCache();
 				} else {
 					clearViewCache();
 				}
-				if (isset($this->request->data['SiteConfig']['ssl_url'])) {
-					$siteUrl = $this->request->data['SiteConfig']['site_url'];
+				if ($this->request->getData('SiteConfig.ssl_url')) {
+					$siteUrl = $this->request->getData('SiteConfig.site_url');
 					if (!preg_match('/\/$/', $siteUrl)) {
 						$siteUrl .= '/';
 					}
 				}
-				if (isset($this->request->data['SiteConfig']['ssl_url'])) {
-					$sslUrl = $this->request->data['SiteConfig']['ssl_url'];
+				if ($this->request->getData('SiteConfig.ssl_url')) {
+					$sslUrl = $this->request->getData('SiteConfig.ssl_url');
 					if ($sslUrl && !preg_match('/\/$/', $sslUrl)) {
 						$sslUrl .= '/';
 					}
 				}
 
-				$adminSsl = @$this->request->data['SiteConfig']['admin_ssl'];
-				if ($this->request->data['SiteConfig']['use_site_device_setting'] === "0" && $this->SiteConfig->isChange('use_site_device_setting', "0")) {
+				$adminSsl = @$this->request->getData('SiteConfig.admin_ssl');
+				if ($this->request->getData('SiteConfig.use_site_device_setting') === "0" && $this->SiteConfig->isChange('use_site_device_setting', "0")) {
 					$this->Site->resetDevice();
 				}
-				if ($this->request->data['SiteConfig']['use_site_lang_setting'] === "0" && $this->SiteConfig->isChange('use_site_lang_setting', "0")) {
+				if ($this->request->getData('SiteConfig.use_site_lang_setting') === "0" && $this->SiteConfig->isChange('use_site_lang_setting', "0")) {
 					$this->Site->resetLang();
 				}
-				if (Configure::read('BcSite.admin_theme') !== $this->request->data['SiteConfig']['admin_theme']) {
-					Configure::write('BcSite.admin_theme', $this->request->data['SiteConfig']['admin_theme']);
+				if (Configure::read('BcSite.admin_theme') !== $this->request->getData('SiteConfig.admin_theme')) {
+					Configure::write('BcSite.admin_theme', $this->request->getData('SiteConfig.admin_theme'));
 					$this->BcManager->deleteAdminAssets();
 					$this->BcManager->deployAdminAssets();
 				}
@@ -134,7 +134,7 @@ class SiteConfigsController extends AppController
 
 					$ContentFolder = ClassRegistry::init('ContentFolder');
 					$ContentFolder->saveSiteRoot(0, [
-						'title' => $this->request->data['SiteConfig']['name']
+						'title' => $this->request->getData('SiteConfig.name')
 					]);
 
 					$this->BcMessage->setInfo(__d('baser', 'システム設定を保存しました。'));
@@ -148,8 +148,8 @@ class SiteConfigsController extends AppController
 					}
 
 					// キャッシュをクリア
-					if ($this->request->data['SiteConfig']['maintenance'] ||
-						($this->siteConfigs['google_analytics_id'] != $this->request->data['SiteConfig']['google_analytics_id'])
+					if ($this->request->getData('SiteConfig.maintenance') ||
+						($this->siteConfigs['google_analytics_id'] != $this->request->getData('SiteConfig.google_analytics_id'))
 					) {
 						clearViewCache();
 					}
@@ -262,10 +262,10 @@ class SiteConfigsController extends AppController
 	public function admin_check_sendmail()
 	{
 
-		if (empty($this->request->data['SiteConfig'])) {
+		if (empty($this->request->getData('SiteConfig'))) {
 			$this->ajaxError(500, __d('baser', 'データが送信できませんでした。'));
 		}
-		$this->siteConfigs = $this->request->data['SiteConfig'];
+		$this->siteConfigs = $this->request->getData('SiteConfig');
 		if (!$this->sendMail(
 			$this->siteConfigs['email'], __d('baser', 'メール送信テスト'),
 			sprintf('%s からのメール送信テストです。', $this->siteConfigs['formal_name']) . "\n" . Configure::read('BcEnv.siteUrl')

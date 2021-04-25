@@ -78,11 +78,11 @@ class BcListTableHelper extends Helper
 		$event = $this->dispatchLayerEvent('showHead', ['id' => $id, 'fields' => []], ['class' => 'BcListTable', 'plugin' => '']);
 		$output = '';
 		if ($event !== false) {
-			if (!empty($event->data['fields'])) {
-				foreach($event->data['fields'] as $field) {
+			if (!empty($event->getData('fields'))) {
+				foreach($event->getData('fields') as $field) {
 					$output .= "<th class=\"bca-table-listup__thead-th\">" . $field . "</th>\n";
 				}
-				$this->_columnNumber += count($event->data['fields']);
+				$this->_columnNumber += count($event->getData('fields'));
 			}
 		}
 		return $output;
@@ -107,8 +107,8 @@ class BcListTableHelper extends Helper
 		$event = $this->dispatchLayerEvent('showRow', ['id' => $id, 'data' => $data, 'fields' => []], ['class' => 'BcListTable', 'plugin' => '']);
 		$output = '';
 		if ($event !== false) {
-			if (!empty($event->data['fields'])) {
-				foreach($event->data['fields'] as $field) {
+			if (!empty($event->getData('fields'))) {
+				foreach($event->getData('fields') as $field) {
 					$output .= "<td class=\"bca-table-listup__tbody-td\">" . $field . "</td>\n";
 				}
 			}
@@ -150,7 +150,7 @@ class BcListTableHelper extends Helper
 			'record' => $record
 		], ['class' => 'BcListTable', 'plugin' => '']);
 		if ($event !== false) {
-			$classies = ($event->result === null || $event->result === true)? $event->data['classies'] : $event->result;
+			$classies = ($event->getResult() === null || $event->getResult() === true)? $event->getData('classies') : $event->getResult();
 		}
 		echo ' class="' . implode(' ', $classies) . '"';
 	}

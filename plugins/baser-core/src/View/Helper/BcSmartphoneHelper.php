@@ -70,21 +70,21 @@ class BcSmartphoneHelper extends Helper
 	public function afterLayout($layoutFile)
 	{
 
-		if (isset($this->request->params['ext']) && $this->request->params['ext'] == 'rss') {
+		if ($this->request->getParam('ext') === 'rss') {
 			$rss = true;
 		} else {
 			$rss = false;
 		}
 		$site = BcSite::findCurrent();
 		if (!$rss && $site->device == 'smartphone' && $this->_View->layoutPath != 'Emails' . DS . 'text') {
-			if (empty($this->request->params['Site'])) {
+			if (empty($this->request->getParam('Site'))) {
 				return;
 			}
 			// 内部リンクの自動変換
 			if ($site->autoLink) {
 				$siteUrl = Configure::read('BcEnv.siteUrl');
 				$sslUrl = Configure::read('BcEnv.sslUrl');
-				$currentAlias = $this->request->params['Site']['alias'];
+				$currentAlias = $this->request->getParam('Site.alias');
 				$regBaseUrls = [
 					preg_quote(BC_BASE_URL, '/'),
 					preg_quote(preg_replace('/\/$/', '', $siteUrl) . BC_BASE_URL, '/'),
@@ -134,7 +134,7 @@ class BcSmartphoneHelper extends Helper
 	 */
 	protected function _addPrefix($matches)
 	{
-		$currentAlias = $this->request->params['Site']['alias'];
+		$currentAlias = $this->request->getParam('Site.alias');
 		$baseUrl = $matches[2];
 		$etc = $matches[1];
 		$url = $matches[3];

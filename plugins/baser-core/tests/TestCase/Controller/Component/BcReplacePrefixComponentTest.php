@@ -172,9 +172,9 @@ class BcReplacePrefixComponentTest extends BcTestCase
 	 */
 	public function testBeforeRender()
 	{
-		$this->Controller->request->params['prefix'] = 'front';
+		$this->Controller->request = $this->Controller->request->withParam('prefix',  'front');
 		$this->BcReplacePrefix->beforeRender($this->Controller);
-		$result = $this->Controller->request->params['prefix'];
+		$result = $this->Controller->request->getParam('prefix');
 		$this->assertEmpty($result, 'beforeRenderが正しく動作していません');
 	}
 

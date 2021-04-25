@@ -93,17 +93,17 @@ class BlogHelperTest extends BaserTestCase
     {
         parent::setUp();
         $this->View = new BcAppView();
-        $this->View->request->params['Site'] = [
+        $this->View->request = $this->View->request->withParam('Site', [
             'id' => null,
             'use_subdomain' => null,
             'name' => null,
             'alias' => null,
-        ];
-        $this->View->request->params['Content'] = [
+        ]);
+        $this->View->request = $this->View->request->withParam('Content', [
             'url' => '/news/',
             'name' => 'news',
             'title' => '新着情報'
-        ];
+        ]);
         $this->Blog = new BlogHelper($this->View);
 
         $this->BlogContent = ClassRegistry::init('Blog.BlogContent');

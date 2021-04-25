@@ -286,9 +286,11 @@ class BcFormHelperTest extends BcTestCase
 	    $this->markTestIncomplete('このテストは、まだ実装されていません。');
 	    // <<<
 
-		$this->attachEvent(['Helper.Form.beforeInput' => ['callable' => function(CakeEvent $event) use ($optionsField, $optionsData) {
+		$this->attachEvent(['Helper.Form.beforeInput' => ['callable' => function(\Cake\Event\Event $event) use ($optionsField, $optionsData) {
 			if (!empty($optionsField)) {
-				$event->data['options'][$optionsField] = $optionsData;
+				$event->setData('options', [
+				    $optionsField => $optionsData
+                ]);
 			}
 		}]]);
 		if (@$options['type'] === 'file') {
@@ -668,8 +670,8 @@ class BcFormHelperTest extends BcTestCase
 	    $this->markTestIncomplete('このテストは、まだ実装されていません。');
 	    // <<<
 
-		$event = $this->attachEvent(['Helper.Form.after' . $type . 'Form' => ['callable' => function(CakeEvent $event) use ($fields, $res) {
-			$event->data['fields'] = $fields;
+		$event = $this->attachEvent(['Helper.Form.after' . $type . 'Form' => ['callable' => function(\Cake\Event\Event $event) use ($fields, $res) {
+			$event->setData('fields',  $fields);
 			return $res;
 		}]]);
 		$result = $this->BcForm->dispatchAfterForm($type);

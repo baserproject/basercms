@@ -25,7 +25,7 @@ if (!$userModel) {
 	<?php if ($currentPrefix == 'front'): ?>
 		<?php echo $this->BcForm->create($userModel, ['url' => ['action' => 'reset_password']]) ?>
 	<?php else: ?>
-		<?php echo $this->BcForm->create($userModel, ['url' => ['action' => 'reset_password', $this->request->params['prefix'] => true]]) ?>
+		<?php echo $this->BcForm->create($userModel, ['url' => ['action' => 'reset_password', $this->request->getParam('prefix') => true]]) ?>
 	<?php endif ?>
 	<div class="submit">
 		<?php echo $this->BcForm->input($userModel . '.email', ['type' => 'text', 'size' => 34]) ?>

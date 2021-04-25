@@ -38,10 +38,10 @@ class BcCacheDispatcher extends DispatcherFilter
 	/**
 	 * Checks whether the response was cached and set the body accordingly.
 	 *
-	 * @param CakeEvent $event containing the request and response object
+	 * @param \Cake\Event\Event $event containing the request and response object
 	 * @return CakeResponse with cached content if found, null otherwise
 	 */
-	public function beforeDispatch(CakeEvent $event)
+	public function beforeDispatch(Cake\Event\Event $event)
 	{
 		if (Configure::read('Cache.check') !== true) {
 			return null;
@@ -52,9 +52,9 @@ class BcCacheDispatcher extends DispatcherFilter
 		// 同一ファイルを参照すべきだが、別々のURLを出力してしまう為、
 		// 正規化された URLを取得するメソッドに変更
 		// >>>
-		//$path = $event->data['request']->here();
+		//$path = $event->getData('request')->here();
 		// ---
-		$path = $event->data['request']->normalizedHere();
+		$path = $event->getData('request')->normalizedHere();
 		// <<<
 
 		if ($path === '/') {
@@ -81,12 +81,12 @@ class BcCacheDispatcher extends DispatcherFilter
 		if (file_exists($filename)) {
 			$controller = null;
 			$view = new View($controller);
-			$view->response = $event->data['response'];
+			$view->response = $event->getData('response');
 			$result = $view->renderCache($filename, microtime(true));
 			if ($result !== false) {
 				$event->stopPropagation();
-				$event->data['response']->body($result);
-				return $event->data['response'];
+				$event->getData('response')->body($result);
+				return $event->getData('response');
 			}
 		}
 	}

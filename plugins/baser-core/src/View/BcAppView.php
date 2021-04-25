@@ -194,8 +194,8 @@ class BcAppView extends View
 		// プレフィックスが設定されている場合は、プレフィックスを除外する
 		// >>>
 		$prefix = '';
-		if (!empty($this->request->params['prefix'])) {
-			$prefix = $this->request->params['prefix'];
+		if (!empty($this->request->getParam('prefix'))) {
+			$prefix = $this->request->getParam('prefix');
 		}
 		if ($prefix && preg_match('/^' . $prefix . '_/', $name)) {
 			$name = str_replace($prefix . '_', '', $name);
@@ -232,11 +232,11 @@ class BcAppView extends View
 		// >>>
 		$event = $this->dispatchLayerEvent('beforeGetViewFileName', ['name' => $name], ['class' => '', 'plugin' => '']);
 		if ($event !== false) {
-			$name = ($event->result === null || $event->result === true)? $event->data['name'] : $event->result;
+			$name = ($event->getResult() === null || $event->getResult() === true)? $event->getData('name') : $event->getResult();
 		}
 		$event = $this->dispatchLayerEvent('beforeGetViewFileName', ['name' => $name]);
 		if ($event !== false) {
-			$name = ($event->result === null || $event->result === true)? $event->data['name'] : $event->result;
+			$name = ($event->getResult() === null || $event->getResult() === true)? $event->getData('name') : $event->getResult();
 		}
 		// <<<
 
@@ -339,11 +339,11 @@ class BcAppView extends View
 		// >>>
 		$event = $this->dispatchLayerEvent('beforeGetElementFileName', ['name' => $name], ['class' => '', 'plugin' => '']);
 		if ($event !== false) {
-			$name = ($event->result === null || $event->result === true)? $event->data['name'] : $event->result;
+			$name = ($event->getResult() === null || $event->getResult() === true)? $event->getData('name') : $event->getResult();
 		}
 		$event = $this->dispatchLayerEvent('beforeGetElementFileName', ['name' => $name]);
 		if ($event !== false) {
-			$name = ($event->result === null || $event->result === true)? $event->data['name'] : $event->result;
+			$name = ($event->getResult() === null || $event->getResult() === true)? $event->getData('name') : $event->getResult();
 		}
 		// <<<
 
@@ -415,11 +415,11 @@ class BcAppView extends View
 		// >>>
 		$event = $this->dispatchLayerEvent('beforeGetLayoutFileName', ['name' => $name], ['class' => '', 'plugin' => '']);
 		if ($event !== false) {
-			$name = ($event->result === null || $event->result === true)? $event->data['name'] : $event->result;
+			$name = ($event->getResult() === null || $event->getResult() === true)? $event->getData('name') : $event->getResult();
 		}
 		$event = $this->dispatchLayerEvent('beforeGetLayoutFileName', ['name' => $name]);
 		if ($event !== false) {
-			$name = ($event->result === null || $event->result === true)? $event->data['name'] : $event->result;
+			$name = ($event->getResult() === null || $event->getResult() === true)? $event->getData('name') : $event->getResult();
 		}
 		// <<<
 

@@ -911,8 +911,8 @@ class BcAppController extends AppController
 		]);
 		if ($event !== false) {
 			$this->request = $this->request->withParsedBody($event->getResult() === true? $event->getData('data') : $event->getResult());
-			if (!empty($event->data['options'])) {
-				$options = $event->data['options'];
+			if (!empty($event->getData('options'))) {
+				$options = $event->getData('options');
 			}
 		}
 

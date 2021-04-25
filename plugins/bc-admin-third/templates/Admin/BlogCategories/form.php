@@ -107,7 +107,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 						<i class="bca-icon--question-circle btn help bca-help"></i>
 						<?php echo $this->BcForm->error('BlogCategory.owner_id') ?>
 					<?php else: ?>
-						<?php echo $this->BcText->arrayValue($this->request->data['BlogCategory']['owner_id'], $owners) ?>
+						<?php echo $this->BcText->arrayValue($this->request->getData('BlogCategory.owner_id'), $owners) ?>
 						<?php echo $this->BcForm->input('BlogCategory.owner_id', ['type' => 'hidden']) ?>
 					<?php endif ?>
 					<div id="helptextOwnerId" class="helptext">

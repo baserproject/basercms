@@ -247,7 +247,7 @@ class BcAdminHelperTest extends BcTestCase
         $this->markTestIncomplete('Not implemented yet.');
         // TODO : 要コード確認
         /* >>>
-		$this->BcAdmin->request->params['admin'] = $admin;
+		$this->BcAdmin->request = $this->BcAdmin->request->withParam('admin',  $admin);
 		$this->BcAdmin->_View->viewVars['user'] = [
 			'user_group_id' => $groupId
 		];
@@ -282,7 +282,7 @@ class BcAdminHelperTest extends BcTestCase
 	    $this->markTestIncomplete('Not implemented yet.');
 	    // TODO : 要コード確認
 	    /* >>>
-		$this->BcAdmin->request->params['admin'] = $admin;
+		$this->BcAdmin->request = $this->BcAdmin->request->withParam('admin',  $admin);
 		$this->BcAdmin->_View->viewVars['user'] = [
 			'user_group_id' => $groupId
 		];

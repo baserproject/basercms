@@ -79,24 +79,24 @@ class ContentFoldersTable extends Table
 	/**
 	 * Before Move
 	 *
-	 * @param \CakeEvent $event
+	 * @param \Cake\Event\Event $event
 	 */
-	public function beforeMove(CakeEvent $event)
+	public function beforeMove(\Cake\Event\Event $event)
 	{
-		if ($event->data['data']['currentType'] == 'ContentFolder') {
-			$this->setBeforeRecord($event->data['data']['entityId']);
+		if ($event->getData('data.currentType') == 'ContentFolder') {
+			$this->setBeforeRecord($event->getData('data.entityId'));
 		}
 	}
 
 	/**
 	 * After Move
 	 *
-	 * @param \CakeEvent $event
+	 * @param \\Cake\Event\Event $event
 	 */
-	public function afterMove(CakeEvent $event)
+	public function afterMove(\Cake\Event\Event $event)
 	{
-		if (!empty($event->data['data']['Content']) && $event->data['data']['Content']['type'] == 'ContentFolder') {
-			$this->movePageTemplates($event->data['data']['Content']['url']);
+		if (!empty($event->getData('data.Content')) && $event->getData('data.Content.type') == 'ContentFolder') {
+			$this->movePageTemplates($event->getData('data.Content.url'));
 		}
 	}
 

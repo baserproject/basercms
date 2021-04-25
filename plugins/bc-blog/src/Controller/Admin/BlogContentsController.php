@@ -79,7 +79,7 @@ class BlogContentsController extends BlogAppController
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
         }
 
-        $this->request->data['BlogContent'] = $this->BlogContent->getDefaultValue()['BlogContent'];
+        $this->request = $this->request->withData('BlogContent',  $this->BlogContent->getDefaultValue()['BlogContent']);
         $this->request->data = $this->BlogContent->deconstructEyeCatchSize(
             $this->request->data
         );
@@ -92,7 +92,7 @@ class BlogContentsController extends BlogAppController
 
         $message = sprintf(
             __d('baser', 'ブログ「%s」を追加しました。'),
-            $this->request->data['Content']['title']
+            $this->request->getData('Content.title')
         );
         $this->BcMessage->setSuccess($message, true, false);
         return json_encode($data['Content']);
@@ -121,7 +121,7 @@ class BlogContentsController extends BlogAppController
                 $this->BcMessage->setSuccess(
                     sprintf(
                         __d('baser', '新規ブログ「%s」を追加しました。'),
-                        $this->request->data['BlogContent']['title']
+                        $this->request->getData('BlogContent.title')
                     )
                 );
                 $this->redirect(
@@ -183,12 +183,12 @@ class BlogContentsController extends BlogAppController
                 $this->BcMessage->setSuccess(
                     sprintf(
                         __d('baser', 'ブログ「%s」を更新しました。'),
-                        $this->request->data['Content']['title']
+                        $this->request->getData('Content.title')
                     )
                 );
-                if ($this->request->data['BlogContent']['edit_blog_template']) {
+                if ($this->request->getData('BlogContent.edit_blog_template')) {
                     $this->redirectEditBlog(
-                        $this->request->data['BlogContent']['template']
+                        $this->request->getData('BlogContent.template')
                     );
                 } else {
                     $this->redirect(['action' => 'edit', $id]);
@@ -215,18 +215,18 @@ class BlogContentsController extends BlogAppController
                 ]);
             }
         }
-        $site = BcSite::findById($this->request->data['Content']['site_id']);
-        if (!empty($this->request->data['Content']['status'])) {
+        $site = BcSite::findById($this->request->getData('Content.site_id'));
+        if (!empty($this->request->getData('Content.status'))) {
             $this->set(
                 'publishLink',
                 $this->Content->getUrl(
-                    $this->request->data['Content']['url'],
+                    $this->request->getData('Content.url'),
                     true,
                     $site->useSubDomain
                 )
             );
         }
-        $this->request->params['Content'] = $this->BcContents->getContent($id)['Content'];
+        $this->request = $this->request->withParam('Content',  $this->BcContents->getContent($id)['Content']);
         $this->set('blogContent', $this->request->data);
         $this->subMenuElements = ['blog_posts'];
         $this->set('themes', $this->SiteConfig->getThemes());
@@ -352,10 +352,10 @@ class BlogContentsController extends BlogAppController
      */
     public function admin_delete()
     {
-        if (empty($this->request->data['entityId'])) {
+        if (empty($this->request->getData('entityId'))) {
             return false;
         }
-        if ($this->BlogContent->delete($this->request->data['entityId'])) {
+        if ($this->BlogContent->delete($this->request->getData('entityId'))) {
             return true;
         }
         return false;
@@ -374,11 +374,11 @@ class BlogContentsController extends BlogAppController
         }
         $user = $this->BcAuth->user();
         $data = $this->BlogContent->copy(
-            $this->request->data['entityId'],
-            $this->request->data['parentId'],
-            $this->request->data['title'],
+            $this->request->getData('entityId'),
+            $this->request->getData('parentId'),
+            $this->request->getData('title'),
             $user['id'],
-            $this->request->data['siteId']
+            $this->request->getData('siteId')
         );
         if (!$data) {
             $this->ajaxError(500, $this->BlogContent->validationErrors);
@@ -387,7 +387,7 @@ class BlogContentsController extends BlogAppController
 
         $message = sprintf(
             __d('baser', 'ブログのコピー「%s」を追加しました。'),
-            $this->request->data['title']
+            $this->request->getData('title')
         );
         $this->BcMessage->setSuccess($message, true, false);
         return json_encode($data['Content']);

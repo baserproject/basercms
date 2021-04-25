@@ -62,8 +62,8 @@ class FavoritesController extends AppController
 		if (!$user) {
 			exit();
 		}
-		$this->request->data['Favorite']['sort'] = $this->Favorite->getMax('sort') + 1;
-		$this->request->data['Favorite']['user_id'] = $user['id'];
+		$this->request = $this->requet->withData('Favorite.sort', $this->Favorite->getMax('sort') + 1);
+		$this->request = $this->request->withData('Favorite.user_id',  $user['id']);
 
 		$this->Favorite->create($this->request->data);
 		$data = $this->Favorite->save();
@@ -117,8 +117,8 @@ class FavoritesController extends AppController
 			exit();
 		}
 
-		$name = $this->Favorite->field('name', ['Favorite.id' => $this->request->data['Favorite']['id']]);
-		if ($this->Favorite->delete($this->request->data['Favorite']['id'])) {
+		$name = $this->Favorite->field('name', ['Favorite.id' => $this->request->getData('Favorite.id')]);
+		if ($this->Favorite->delete($this->request->getData('Favorite.id'))) {
 			$this->Favorite->saveDbLog(sprintf(__d('baser', 'よく使う項目: %s を削除しました。'), $name));
 			exit(true);
 		}
@@ -136,7 +136,7 @@ class FavoritesController extends AppController
 	{
 		$user = $this->BcAuth->user();
 		if ($this->request->data) {
-			if ($this->Favorite->changeSort($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'], ['Favorite.user_id' => $user['id']])) {
+			if ($this->Favorite->changeSort($this->request->getData('Sort.id'), $this->request->getData('Sort.offset'), ['Favorite.user_id' => $user['id']])) {
 				clearDataCache();
 				exit(true);
 			}

@@ -111,8 +111,8 @@ class BcContentsRoute extends CakeRoute
 		if ($content['Content']['alias_id'] && !$Content->isPublishById($content['Content']['alias_id'])) {
 			return false;
 		}
-		$request->params['Content'] = isset($content['Content'])? $content['Content'] : null;
-		$request->params['Site'] = $content['Site'];
+		$request = $request->withParam('Content',  isset($content['Content'])? $content['Content'] : null);
+		$request = $request->withParam('Site',  $content['Site']);
 		$url = $site->getPureUrl($url);
 		$params = $this->getParams($url, $content['Content']['url'], $content['Content']['plugin'], $content['Content']['type'], $content['Content']['entity_id'], $site->alias);
 		if ($params) {
@@ -245,8 +245,8 @@ class BcContentsRoute extends CakeRoute
 			$entityId = $url['entityId'];
 		} else {
 			$request = Router::getRequest(true);
-			if (!empty($request->params['entityId'])) {
-				$entityId = $request->params['entityId'];
+			if (!empty($request->getParam('entityId'))) {
+				$entityId = $request->getParam('entityId');
 			}
 			if (!empty($request->params['Content']['alias_id'])) {
 				$contentId = $request->params['Content']['id'];

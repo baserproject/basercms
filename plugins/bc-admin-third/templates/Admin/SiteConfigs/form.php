@@ -29,7 +29,7 @@ $this->BcBaser->i18nScript([
 ], ['escape' => false]);
 $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsFormScript',
 	'data-safeModeOn' => (string)$safeModeOn,
-	'data-isAdminSsl' => (string)$this->request->data['SiteConfig']['admin_ssl']
+	'data-isAdminSsl' => (string)$this->request->getData('SiteConfig.admin_ssl')
 ]);
 ?>
 

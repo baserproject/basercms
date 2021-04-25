@@ -127,7 +127,7 @@ class Site extends AppModel
 			'options' => $options
 		]);
 		if ($event !== false) {
-			$options = $event->result === true? $event->data['options'] : $event->result;
+			$options = $event->getResult() === true? $event->getData('options') : $event->getResult();
 		}
 
 		$conditions = ['Site.status' => true];

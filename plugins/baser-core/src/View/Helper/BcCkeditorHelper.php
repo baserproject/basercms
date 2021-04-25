@@ -354,8 +354,8 @@ class BcCkeditorHelper extends AppHelper
 
 		if ($theme) {
 			$sitePrefix = '';
-			if (!empty($this->request->data['Site']['name'])) {
-				$sitePrefix = $this->request->data['Site']['name'];
+			if (!empty($this->request->getData('Site.name'))) {
+				$sitePrefix = $this->request->getData('Site.name');
 			}
 			if ($sitePrefix) {
 				array_unshift($themeEditorCsses, [

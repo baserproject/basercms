@@ -526,8 +526,8 @@ class MailFieldsController extends MailAppController
         }
 
         $sorted = $this->MailField->changeSort(
-            $this->request->data['Sort']['id'],
-            $this->request->data['Sort']['offset'],
+            $this->request->getData('Sort.id'),
+            $this->request->getData('Sort.offset'),
             $this->_createAdminIndexConditions($mailContentId)
         );
         if (!$sorted) {

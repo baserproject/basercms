@@ -61,9 +61,9 @@ use BaserCore\Model\Entity\User;
 <?php /* if ($this->request->action == 'admin_edit'): ?>
 	<div class="panel-box bca-panel-box corner10">
 		<h2><?php echo __d('baser', '登録されている「よく使う項目」') ?></h2>
-		<?php if ($this->request->data['Favorite']): ?>
+		<?php if ($this->request->getData('Favorite')): ?>
 			<ul class="bca-list" data-bca-list-layout="horizon" id="DefaultFavorites">
-				<?php foreach ($this->request->data['Favorite'] as $key => $favorite): ?>
+				<?php foreach ($this->request->getData('Favorite') as $key => $favorite): ?>
 					<li class="bca-list__item">
 						<?php $this->BcBaser->link($favorite['name'], $favorite['url']) ?>
 						<?php echo $this->BcAdminForm->control('Favorite.name.' . $key, ['type' => 'hidden', 'value' => $favorite['name'], 'class' => 'favorite-name']) ?>
@@ -73,7 +73,7 @@ use BaserCore\Model\Entity\User;
 			</ul>
 		<?php endif ?>
 		<?php if ($this->Session->check('AuthAgent') || $this->BcBaser->isAdminUser()): ?>
-			<div class="submit"><?php echo $this->BcAdminForm->button($this->request->data['UserGroup']['title'] . 'グループの初期値に設定', ['label' => __d('baser', 'グループ初期データに設定'), 'id' => 'btnSetUserGroupDefault', 'class' => 'button bca-btn']) ?></div>
+			<div class="submit"><?php echo $this->BcAdminForm->button($this->request->getData('UserGroup.title') . 'グループの初期値に設定', ['label' => __d('baser', 'グループ初期データに設定'), 'id' => 'btnSetUserGroupDefault', 'class' => 'button bca-btn']) ?></div>
 		<?php endif ?>
 	</div>
 <?php endif*/ ?>

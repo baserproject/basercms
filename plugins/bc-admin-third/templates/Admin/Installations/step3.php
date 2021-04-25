@@ -231,8 +231,8 @@ $this->BcBaser->i18nScript([
 					<?php echo $this->BcForm->input('Installation.dbDataPattern', ['type' => 'select', 'options' => $dbDataPatterns]) ?>
 					<br>
 					<small>
-						<?php if (isset($dbDataPatterns[$this->request->data['Installation']['dbDataPattern']])): ?>
-						※ <?php echo sprintf(__d('baser', '初めてインストールされる方は、%s を選択してください。'), $dbDataPatterns[$this->request->data['Installation']['dbDataPattern']]) ?></small>
+						<?php if (isset($dbDataPatterns[$this->request->getData('Installation.dbDataPattern')])): ?>
+						※ <?php echo sprintf(__d('baser', '初めてインストールされる方は、%s を選択してください。'), $dbDataPatterns[$this->request->getData('Installation.dbDataPattern')]) ?></small>
 				<?php endif; ?>
 				</li>
 			</ul>

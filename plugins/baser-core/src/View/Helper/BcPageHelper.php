@@ -139,7 +139,7 @@ class BcPageHelper extends Helper
 	public function getNextLink($title = '', $options = [])
 	{
 
-		if (empty($this->request->params['Content']['id']) || empty($this->request->params['Content']['parent_id'])) {
+		if (empty($this->request->getParam('Content.id')) || empty($this->request->params['Content']['parent_id'])) {
 			return false;
 		}
 		$options = array_merge([
@@ -154,7 +154,7 @@ class BcPageHelper extends Helper
 		unset($options['arrow']);
 		unset($options['overCategory']);
 
-		$content = $this->_getPageByNextOrPrev($this->request->params['Content']['lft'], $this->request->params['Content']['parent_id'], 'next', $overCategory);
+		$content = $this->_getPageByNextOrPrev($this->request->getParam('Content.lft'), $this->request->params['Content']['parent_id'], 'next', $overCategory);
 
 		if ($content) {
 			if (!$title) {
@@ -196,7 +196,7 @@ class BcPageHelper extends Helper
 	 */
 	public function getPrevLink($title = '', $options = [])
 	{
-		if (empty($this->request->params['Content']['id']) || empty($this->request->params['Content']['parent_id'])) {
+		if (empty($this->request->getParam('Content.id')) || empty($this->request->params['Content']['parent_id'])) {
 			return false;
 		}
 		$options = array_merge([
@@ -211,7 +211,7 @@ class BcPageHelper extends Helper
 		unset($options['arrow']);
 		unset($options['overCategory']);
 
-		$content = $this->_getPageByNextOrPrev($this->request->params['Content']['lft'], $this->request->params['Content']['parent_id'], 'prev', $overCategory);
+		$content = $this->_getPageByNextOrPrev($this->request->getParam('Content.lft'), $this->request->params['Content']['parent_id'], 'prev', $overCategory);
 
 		if ($content) {
 			if (!$title) {

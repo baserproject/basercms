@@ -49,7 +49,7 @@ class BcFormTableHelper extends Helper
 		], ['class' => 'BcFormTable', 'plugin' => '']);
 		$output = '';
 		if ($event !== false) {
-			$output = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+			$output = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
 		}
 		return $output;
 	}
@@ -74,7 +74,7 @@ class BcFormTableHelper extends Helper
 		], ['class' => 'BcFormTable', 'plugin' => '']);
 		$output = '';
 		if ($event !== false) {
-			$output = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+			$output = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
 		}
 		return $output;
 	}

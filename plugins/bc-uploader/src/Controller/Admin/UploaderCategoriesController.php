@@ -79,7 +79,7 @@ class UploaderCategoriesController extends AppController
         if ($this->request->data) {
             $this->UploaderCategory->set($this->request->data);
             if ($this->UploaderCategory->save()) {
-                $message = sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を追加しました。'), $this->request->data['UploaderCategory']['name']);
+                $message = sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を追加しました。'), $this->request->getData('UploaderCategory.name'));
                 $this->BcMessage->setInfo($message);
                 $this->UploaderCategory->saveDbLog($message);
                 $this->redirect(['action' => 'index']);
@@ -113,7 +113,7 @@ class UploaderCategoriesController extends AppController
 
             $this->UploaderCategory->set($this->request->data);
             if ($this->UploaderCategory->save()) {
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を更新しました。'), $this->request->data['UploaderCategory']['name']));
+                $this->BcMessage->setSuccess(sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を更新しました。'), $this->request->getData('UploaderCategory.name')));
                 $this->redirect(['action' => 'edit', $id]);
             } else {
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));

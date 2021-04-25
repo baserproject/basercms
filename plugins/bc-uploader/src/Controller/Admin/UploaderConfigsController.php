@@ -58,7 +58,7 @@ class UploaderConfigsController extends AppController
 
         $this->pageTitle = __d('baser', 'アップローダープラグイン設定');
         if (!$this->request->data) {
-            $this->request->data['UploaderConfig'] = $this->UploaderConfig->findExpanded();
+            $this->request = $this->request->withData('UploaderConfig',  $this->UploaderConfig->findExpanded());
         } else {
             $this->UploaderConfig->set($this->request->data);
             if ($this->UploaderConfig->validates()) {

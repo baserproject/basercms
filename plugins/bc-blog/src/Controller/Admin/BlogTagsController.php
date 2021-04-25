@@ -87,7 +87,7 @@ class BlogTagsController extends BlogAppController
                 $this->BcMessage->setSuccess(
                     sprintf(
                         __d('baser', 'タグ「%s」を追加しました。'),
-                        $this->request->data['BlogTag']['name']
+                        $this->request->getData('BlogTag.name')
                     )
                 );
                 $this->redirect(['action' => 'index']);
@@ -121,7 +121,7 @@ class BlogTagsController extends BlogAppController
                 $this->BcMessage->setSuccess(
                     sprintf(
                         __d('baser', 'タグ「%s」を更新しました。'),
-                        $this->request->data['BlogTag']['name']
+                        $this->request->getData('BlogTag.name')
                     )
                 );
                 $this->redirect(['action' => 'index']);

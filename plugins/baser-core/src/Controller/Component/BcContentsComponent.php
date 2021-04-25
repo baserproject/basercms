@@ -20,7 +20,7 @@ return;
  * 《役割》
  * - コンテンツ一覧へのパンくずを自動追加
  * - フロントエンドでコンテンツデータを設定
- *        Controller / View にて、$this->request->params['Content'] で参照できる
+ *        Controller / View にて、$this->request->getParam('Content') で参照できる
  * - コンテンツ保存フォームを自動表示
  * - コンテンツ保存フォームのデータソースを設定
  * - コンテンツ保存フォームの初期値を設定
@@ -121,15 +121,15 @@ class BcContentsComponent extends Component
 		// プレビュー時のデータセット
 		if (!empty($controller->request->query['preview'])) {
 			$this->preview = $this->_Controller->request->query['preview'];
-			if (!empty($controller->request->data['Content'])) {
-				$controller->request->params['Content'] = $controller->request->data['Content'];
+			if (!empty($controller->request->getData('Content'))) {
+				$controller->request = $controller->request->withParam('Content', $controller->request->getData('Content'));
 				$controller->Security->validatePost = false;
 				$controller->Security->csrfCheck = false;
 			}
 		}
 
 		// 表示設定
-		if (!empty($controller->request->params['Content'])) {
+		if (!empty($controller->request->getParam('Content'))) {
 			// レイアウトテンプレート設定
 			$controller->layout = $controller->request->params['Content']['layout_template'];
 			if (!$controller->layout) {
@@ -204,9 +204,9 @@ class BcContentsComponent extends Component
 			} else {
 				$controller->subMenuElements = ['contents'];
 			}
-			if ($this->useForm && in_array($controller->request->action, [$this->editAction, 'admin_edit_alias']) && !empty($controller->request->data['Content'])) {
+			if ($this->useForm && in_array($controller->request->action, [$this->editAction, 'admin_edit_alias']) && !empty($controller->request->getData('Content'))) {
 				// フォームをセット
-				$this->settingForm($controller, $controller->request->data['Content']['site_id'], $controller->request->data['Content']['id']);
+				$this->settingForm($controller, $controller->request->getData('Content.site_id'), $controller->request->getData('Content.id'));
 				// フォームを読み込む為のイベントを設定
 				// 内部で useForm を参照できない為、ここに記述。
 				// フォームの設定しかできないイベントになってしまっている。
@@ -277,11 +277,11 @@ class BcContentsComponent extends Component
 		}
 		$disableEditContent = false;
 		$controller->request->data = $data;
-		if (!BcUtil::isAdminUser() || ($controller->request->data['Site']['relate_main_site'] && $controller->request->data['Content']['main_site_content_id'] &&
-				($controller->request->data['Content']['alias_id'] || $controller->request->data['Content']['type'] == 'ContentFolder'))) {
+		if (!BcUtil::isAdminUser() || ($controller->request->getData('Site.relate_main_site') && $controller->request->getData('Content.main_site_content_id') &&
+				($controller->request->getData('Content.alias_id') || $controller->request->getData('Content.type') == 'ContentFolder'))) {
 			$disableEditContent = true;
 		}
-		$currentSiteId = $siteId = $controller->request->data['Site']['id'];
+		$currentSiteId = $siteId = $controller->request->getData('Site.id');
 		if (is_null($currentSiteId)) {
 			$currentSiteId = 0;
 		}

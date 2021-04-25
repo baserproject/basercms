@@ -673,7 +673,7 @@ class BlogPost extends BlogAppModel
             'id' => $id,
         ]);
         if ($event !== false) {
-            $data = $event->result === true ? $event->data['data'] : $event->result;
+            $data = $event->getResult() === true ? $event->getData('data') : $event->getResult();
         }
 
         $sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');

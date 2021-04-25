@@ -99,7 +99,7 @@ class BcUploaderViewEventListener extends BcViewEventListener
             }
         }
 
-        if (!empty($View->request->params['prefix']) && $View->request->params['prefix'] == 'mobile') {
+        if (!empty($View->request->getParam('prefix')) && $View->request->getParam('prefix') == 'mobile') {
 
             /* モバイル画像に差し替える */
             $aMatch = "/<array([^>]*?)href=\"([^>]*?)\"([^>]*?)><img([^>]*?)\/><\/a>/is";

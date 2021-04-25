@@ -222,7 +222,7 @@ class CakeEventManager {
 /**
  * Dispatches a new event to all configured listeners
  *
- * @param string|CakeEvent $event the event key name or instance of CakeEvent
+ * @param string|\Cake\Event\Event $event the event key name or instance of CakeEvent
  * @return CakeEvent
  * @triggers $event
  */
@@ -269,7 +269,7 @@ class CakeEventManager {
 			// <<<
 
 			if ($result !== null) {
-				$event->result = $result;
+				$event->setResult($result);
 			}
 		}
 		return $event;

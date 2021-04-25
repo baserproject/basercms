@@ -210,7 +210,7 @@ class BcAuthConfigureComponentTest extends BcTestCase
 
 		// 結果を取得
 		$user = $this->Controller->Session->read('Auth.User');
-		$data = $this->Controller->request->data['User'];
+		$data = $this->Controller->request->getData('User');
 
 		// 判定
 		if ($password == 'basercms') {

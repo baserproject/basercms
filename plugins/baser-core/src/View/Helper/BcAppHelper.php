@@ -177,7 +177,7 @@ class BcAppHelper extends Helper
 			unset($url['id']);
 		}
 
-		if (is_array($url) && !isset($url['admin']) && !empty($this->request->params['admin'])) {
+		if (is_array($url) && !isset($url['admin']) && $this->request->getParam('prefix') === 'Admin') {
 			$url = array_merge($url, ['admin' => true]);
 		}
 

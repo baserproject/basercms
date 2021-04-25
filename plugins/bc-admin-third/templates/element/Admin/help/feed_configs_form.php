@@ -27,7 +27,7 @@
 		<h3 id="headHowTo"><?php echo __d('baser', 'フィードの読み込み方法') ?></h3>
 		<p><?php echo __d('baser', '以下のjavascriptを読み込みたい場所に貼り付けてください。') ?></p>
 		<textarea cols="100" rows="2" onclick="this.select(0,this.value.length)" readonly="readonly">
-<?php $this->BcBaser->js('/feed/ajax/' . $this->request->data['FeedConfig']['id']) ?>
+<?php $this->BcBaser->js('/feed/ajax/' . $this->request->getData('FeedConfig.id')) ?>
 	</textarea>
 		<br/>
 		<p><?php echo __d('baser', 'また、フィードの読み込みにはjQueryが必要ですので事前に読み込んでおく必要があります。') ?></p>

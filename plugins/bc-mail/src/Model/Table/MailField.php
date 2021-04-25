@@ -304,7 +304,7 @@ class MailField extends MailAppModel
                 'id' => $id,
             ]);
             if ($event !== false) {
-                $data = $event->result === true ? $event->data['data'] : $event->result;
+                $data = $event->getResult() === true ? $event->getData('data') : $event->getResult();
             }
         }
 

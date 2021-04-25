@@ -69,7 +69,7 @@ class PermissionsController extends AppController
 			['name' => __d('baser', 'ユーザー管理'), 'url' => ['controller' => 'users', 'action' => 'index']],
 			['name' => __d('baser', 'ユーザーグループ管理'), 'url' => ['controller' => 'user_groups', 'action' => 'index']]
 		];
-		if ($this->request->params['prefix'] === 'admin') {
+		if ($this->request->getParam('prefix') === 'admin') {
 			$this->set('usePermission', true);
 		}
 		if (!$this->request->is('ajax')) {
@@ -135,27 +135,27 @@ class PermissionsController extends AppController
 			'order' => 'UserGroup.id ASC', 'recursive' => -1]);
 		if (!$this->request->data) {
 			$this->request->data = $this->Permission->getDefaultValue();
-			$this->request->data['Permission']['user_group_id'] = $userGroupId;
+			$this->request = $this->request->withData('Permission.user_group_id',  $userGroupId);
 			// TODO 現在 admin 固定、今後、mypage 等にも対応する
 			$permissionAuthPrefix = 'admin';
 		} else {
 			/* 登録処理 */
-			if (isset($this->request->data['Permission']['user_group_id'])) {
-				$userGroupId = $this->request->data['Permission']['user_group_id'];
+			if ($this->request->getData('Permission.user_group_id')) {
+				$userGroupId = $this->request->getData('Permission.user_group_id');
 			} else {
 				$userGroupId = null;
 			}
 			// TODO 現在 admin 固定、今後、mypage 等にも対応する
 			$permissionAuthPrefix = 'admin';
-			$this->request->data['Permission']['url'] = '/' . $permissionAuthPrefix . '/' . $this->request->data['Permission']['url'];
-			$this->request->data['Permission']['no'] = $this->Permission->getMax('no', ['user_group_id' => $userGroupId]) + 1;
-			$this->request->data['Permission']['sort'] = $this->Permission->getMax('sort', ['user_group_id' => $userGroupId]) + 1;
+			$this->request = $this->reuqest->withData('Permission.url', '/' . $permissionAuthPrefix . '/' . $this->request->getData('Permission.url'));
+			$this->request = $this->request->withData('Permission.no', $this->Permission->getMax('no', ['user_group_id' => $userGroupId]) + 1);
+			$this->request = $this->request->withData('Permission.sort', $this->Permission->getMax('sort', ['user_group_id' => $userGroupId]) + 1);
 			$this->Permission->create($this->request->data);
 			if ($this->Permission->save()) {
-				$this->BcMessage->setSuccess(sprintf(__d('baser', '新規アクセス制限設定「%s」を追加しました。'), $this->request->data['Permission']['name']));
+				$this->BcMessage->setSuccess(sprintf(__d('baser', '新規アクセス制限設定「%s」を追加しました。'), $this->request->getData('Permission.name')));
 				$this->redirect(['action' => 'index', $userGroupId]);
 			} else {
-				$this->request->data['Permission']['url'] = preg_replace('/^(\/' . $permissionAuthPrefix . '\/|\/)/', '', $this->request->data['Permission']['url']);
+				$this->request = $this->request->withData('Permission.url', preg_replace('/^(\/' . $permissionAuthPrefix . '\/|\/)/', '', $this->request->getData('Permission.url')));
 				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
@@ -184,10 +184,10 @@ class PermissionsController extends AppController
 
 // TODO 現在 admin 固定、今後、mypage 等にも対応する
 		$authPrefix = 'admin';
-		$this->request->data['Permission']['url'] = '/' . $authPrefix . '/' . $this->request->data['Permission']['url'];
-		$this->request->data['Permission']['no'] = $this->Permission->getMax('no', ['user_group_id' => $this->request->data['Permission']['user_group_id']]) + 1;
-		$this->request->data['Permission']['sort'] = $this->Permission->getMax('sort', ['user_group_id' => $this->request->data['Permission']['user_group_id']]) + 1;
-		$this->request->data['Permission']['status'] = true;
+		$this->request = $this->request->withData('Permission.url', '/' . $authPrefix . '/' . $this->request->getData('Permission.url'));
+		$this->request = $this->request->withData('Permission.no',  $this->Permission->getMax('no', ['user_group_id' => $this->request->getData('Permission.user_group_id')]) + 1);
+		$this->request = $this->request->withData('Permission.sort',  $this->Permission->getMax('sort', ['user_group_id' => $this->request->getData('Permission.user_group_id')]) + 1);
+		$this->request = $this->request->withData('Permission.status',  true);
 		$this->Permission->create($this->request->data);
 		if (!$this->Permission->save()) {
 			$this->ajaxError(500, $this->Page->validationErrors);
@@ -196,7 +196,7 @@ class PermissionsController extends AppController
 
 		$this->Permission->saveDbLog(
 			sprintf(
-				__d('baser', '新規アクセス制限設定「%s」を追加しました。'), $this->request->data['Permission']['name']
+				__d('baser', '新規アクセス制限設定「%s」を追加しました。'), $this->request->getData('Permission.name')
 			)
 		);
 		exit(true);
@@ -225,17 +225,17 @@ class PermissionsController extends AppController
 		if (empty($this->request->data)) {
 
 			$this->request->data = $this->Permission->read(null, $id);
-			$this->request->data['Permission']['url'] = preg_replace('/^(\/' . $authPrefix . '\/|\/)/', '', $this->request->data['Permission']['url']);
+			$this->request = $this->request->withData('Permission.url',  preg_replace('/^(\/' . $authPrefix . '\/|\/)/', '', $this->request->getData('Permission.url')));
 		} else {
 
 			/* 更新処理 */
-			$this->request->data['Permission']['url'] = '/' . $authPrefix . '/' . $this->request->data['Permission']['url'];
+			$this->request = $this->request->withData('Permission.url',  '/' . $authPrefix . '/' . $this->request->getData('Permission.url'));
 
 			if ($this->Permission->save($this->request->data)) {
-				$this->BcMessage->setSuccess(sprintf(__d('baser', 'アクセス制限設定「%s」を更新しました。'), $this->request->data['Permission']['name']));
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'アクセス制限設定「%s」を更新しました。'), $this->request->getData('Permission.name')));
 				$this->redirect(['action' => 'index', $userGroupId]);
 			} else {
-				$this->request->data['Permission']['url'] = preg_replace('/^(\/' . $authPrefix . '\/|\/)/', '', $this->request->data['Permission']['url']);
+				$this->request = $this->request->withData('Permission.url',  preg_replace('/^(\/' . $authPrefix . '\/|\/)/', '', $this->request->getData('Permission.url')));
 				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
@@ -341,7 +341,7 @@ class PermissionsController extends AppController
 		}
 
 		$conditions = $this->_createAdminIndexConditions($userGroupId);
-		if (!$this->Permission->changeSort($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'], $conditions)) {
+		if (!$this->Permission->changeSort($this->request->getData('Sort.id'), $this->request->getData('Sort.offset'), $conditions)) {
 			$this->ajaxError(500, $this->Permission->validationErrors);
 			exit;
 		}

@@ -29,25 +29,25 @@
 			<div class="bca-box">
 				<ul class="bca-list" data-bca-list-layout="horizon" data-bca-list-type='circle'>
 					<li class="bca-list__item">
-						<span><?php echo __d('baser', 'コンテンツID') ?></span>：<?php echo $this->request->data['Content']['id'] ?>
+						<span><?php echo __d('baser', 'コンテンツID') ?></span>：<?php echo $this->request->getData('Content.id') ?>
 					</li>
 					<li class="bca-list__item">
-						<span><?php echo __d('baser', '実体ID') ?></span>：<?php echo $this->request->data['Content']['entity_id'] ?>
+						<span><?php echo __d('baser', '実体ID') ?></span>：<?php echo $this->request->getData('Content.entity_id') ?>
 					</li>
 					<li class="bca-list__item">
-						<span><?php echo __d('baser', 'プラグイン') ?></span>：<?php echo $this->request->data['Content']['plugin'] ?>
+						<span><?php echo __d('baser', 'プラグイン') ?></span>：<?php echo $this->request->getData('Content.plugin') ?>
 					</li>
 					<li class="bca-list__item">
-						<span><?php echo __d('baser', 'コンテンツタイプ') ?></span>：<?php echo $this->request->data['Content']['type'] ?>
+						<span><?php echo __d('baser', 'コンテンツタイプ') ?></span>：<?php echo $this->request->getData('Content.type') ?>
 					</li>
 					<li class="bca-list__item">
-						<span><?php echo __d('baser', 'データ作成日') ?></span>：<?php echo $this->BcTime->format('Y/m/d H:i:s', $this->request->data['Content']['created']) ?>
+						<span><?php echo __d('baser', 'データ作成日') ?></span>：<?php echo $this->BcTime->format('Y/m/d H:i:s', $this->request->getData('Content.created')) ?>
 					</li>
 					<li class="bca-list__item">
-						<span><?php echo __d('baser', 'データ更新日') ?></span>：<?php echo $this->BcTime->format('Y/m/d H:i:s', $this->request->data['Content']['modified']) ?>
+						<span><?php echo __d('baser', 'データ更新日') ?></span>：<?php echo $this->BcTime->format('Y/m/d H:i:s', $this->request->getData('Content.modified')) ?>
 					</li>
 					<li class="bca-list__item">
-						<span><?php echo __d('baser', 'サイト') ?></span>：<?php echo h($this->BcText->noValue($this->request->data['Site']['display_name'], $mainSiteDisplayName)) ?>
+						<span><?php echo __d('baser', 'サイト') ?></span>：<?php echo h($this->BcText->noValue($this->request->getData('Site.display_name'), $mainSiteDisplayName)) ?>
 					</li>
 					<li class="bca-list__item"><span><?php echo __d('baser', 'タイプ') ?></span>：
 						<?php if (!$this->BcForm->value('Content.alias_id')): ?>

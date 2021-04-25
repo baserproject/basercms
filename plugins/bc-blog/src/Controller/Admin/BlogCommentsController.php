@@ -59,9 +59,9 @@ class BlogCommentsController extends BlogAppController
 
         if (BcUtil::isAdminSystem()) {
             $this->subMenuElements = ['blog_posts'];
-            $this->request->params['Content'] = $this->BcContents->getContent(
+            $this->request = $this->request->withParam('Content', $this->BcContents->getContent(
                 $this->request->params['pass'][0]
-            )['Content'];
+            )['Content']);
             $this->Security->enabled = true;
             $this->Security->requireAuth('add');
         }
@@ -411,8 +411,8 @@ class BlogCommentsController extends BlogAppController
         $captchaResult = true;
         if ($this->blogContent['BlogContent']['auth_captcha']) {
             $captchaResult = $this->BcCaptcha->check(
-                $this->request->data['BlogComment']['auth_captcha'],
-                $this->request->data['BlogComment']['captcha_id']
+                $this->request->getData('BlogComment.auth_captcha'),
+                $this->request->getData('BlogComment.captcha_id')
             );
             if (!$captchaResult) {
                 $this->set('dbData', false);
@@ -436,7 +436,7 @@ class BlogCommentsController extends BlogAppController
             'Blog.BlogContent',
             $this->blogContent['BlogContent']['id']
         );
-        $this->request->data['Content'] = $content['Content'];
+        $this->request = $this->request->withData('Content',  $content['Content']);
         $this->_sendCommentAdmin(
             $blogPostId,
             $this->request->data

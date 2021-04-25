@@ -55,7 +55,7 @@ class ContentLinksController extends AppController
 			exit;
 		}
 
-		$this->BcMessage->setSuccess(sprintf(__d('baser', 'リンク「%s」を追加しました。'), $this->request->data['Content']['title']), true, false);
+		$this->BcMessage->setSuccess(sprintf(__d('baser', 'リンク「%s」を追加しました。'), $this->request->getData('Content.title')), true, false);
 		echo json_encode($data['Content']);
 		exit();
 	}
@@ -75,7 +75,7 @@ class ContentLinksController extends AppController
 			}
 			if ($this->ContentLink->save($this->request->data)) {
 				clearViewCache();
-				$this->BcMessage->setSuccess(sprintf(__d('baser', 'リンク「%s」を更新しました。'), $this->request->data['Content']['title']));
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'リンク「%s」を更新しました。'), $this->request->getData('Content.title')));
 				$this->redirect([
 					'plugin' => '',
 					'controller' => 'content_links',
@@ -92,8 +92,8 @@ class ContentLinksController extends AppController
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
 		}
-		$site = BcSite::findById($this->request->data['Content']['site_id']);
-		$this->set('publishLink', $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain));
+		$site = BcSite::findById($this->request->getData('Content.site_id'));
+		$this->set('publishLink', $this->Content->getUrl($this->request->getData('Content.url'), true, $site->useSubDomain));
 	}
 
 	/**
@@ -103,10 +103,10 @@ class ContentLinksController extends AppController
 	 */
 	public function admin_delete()
 	{
-		if (empty($this->request->data['entityId'])) {
+		if (empty($this->request->getData('entityId'))) {
 			return false;
 		}
-		if ($this->ContentLink->delete($this->request->data['entityId'])) {
+		if ($this->ContentLink->delete($this->request->getData('entityId'))) {
 			return true;
 		}
 		return false;
@@ -119,10 +119,10 @@ class ContentLinksController extends AppController
 	 */
 	public function view()
 	{
-		if (empty($this->request->params['entityId'])) {
+		if (empty($this->request->getParam('entityId'))) {
 			$this->notFound();
 		}
-		$data = $this->ContentLink->find('first', ['conditions' => ['ContentLink.id' => $this->request->params['entityId']]]);
+		$data = $this->ContentLink->find('first', ['conditions' => ['ContentLink.id' => $this->request->getParam('entityId')]]);
 		if ($data) {
 			$this->set(compact('data'));
 		} else {

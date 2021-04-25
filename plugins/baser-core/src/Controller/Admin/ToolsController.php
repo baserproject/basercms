@@ -320,11 +320,11 @@ class ToolsController extends AppController
 		$this->help = 'tools_write_schema';
 
 		if (!$this->request->data) {
-			$this->request->data['Tool']['connection'] = 'core';
+			$this->request = $this->request->withData('Tool.connection',  'core');
 			return;
 		}
 
-		if (empty($this->request->data['Tool'])) {
+		if (empty($this->request->getData('Tool'))) {
 			$this->BcMessage->setError(__d('baser', 'テーブルを選択してください。'));
 			return;
 		}
@@ -355,7 +355,7 @@ class ToolsController extends AppController
 		$this->pageTitle = __d('baser', 'スキーマファイル読込');
 		$this->help = 'tools_load_schema';
 		if (!$this->request->is(['post', 'put'])) {
-			$this->request->data['Tool']['schema_type'] = 'create';
+			$this->request = $this->request->withData('Tool.schema_type',  'create');
 			return;
 		}
 
@@ -365,7 +365,7 @@ class ToolsController extends AppController
 			);
 			$this->redirect(['action' => 'load_schema']);
 		}
-		if (!is_uploaded_file($this->request->data['Tool']['schema_file']['tmp_name'])) {
+		if (!is_uploaded_file($this->request->getData('Tool.schema_file.tmp_name'))) {
 			$this->BcMessage->setError(__d('baser', 'ファイルアップロードに失敗しました。'));
 			return;
 		}

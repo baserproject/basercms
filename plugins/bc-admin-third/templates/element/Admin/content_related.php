@@ -17,7 +17,7 @@
  * @var array $sites サイトリスト
  * @var int $currentSiteId 現在のサイトID
  */
-$pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'], $this->request->data['Site']['id']);
+$pureUrl = $this->BcContents->getPureUrl($this->request->getData('Content.url'), $this->request->getData('Site.id'));
 ?>
 
 
@@ -56,7 +56,7 @@ $pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'],
 					} else {
 						$editUrl = '/' . BcUtil::getAdminPrefix() . '/contents/edit_alias/' . $relatedContent['Content']['id'] . '#RelatedContentsSetting';
 					}
-					if ($this->request->data['Content']['id'] == $relatedContent['Content']['id']) {
+					if ($this->request->getData('Content.id') == $relatedContent['Content']['id']) {
 						$current = true;
 						$class = ' class="bca-currentrow"';
 					}

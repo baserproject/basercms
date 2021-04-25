@@ -769,7 +769,7 @@ class PagesTable extends Table
 			'id' => $id,
 		]);
 		if ($event !== false) {
-			$data = $event->getResult() === true? $event->data['data'] : $event->getResult();
+			$data = $event->getResult() === true? $event->getData('data') : $event->getResult();
 		}
 
 		$url = $data['Content']['url'];

@@ -72,7 +72,7 @@ class BcAdminHelper extends Helper
 	public function isSystemAdmin()
 	{
 		$user = $this->_View->getVar('user');
-		if (empty($this->request->params['admin']) || !$user) {
+		if ($this->request->getParam['prefix'] === 'Admin' || !$user) {
 			return false;
 		}
 		if ($user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {

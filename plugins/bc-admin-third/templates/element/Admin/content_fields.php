@@ -19,13 +19,13 @@
  *                                        上記に一致する場合、URLに関わるコンテンツ名は編集できない
  * @var bool $disableEditContent コンテンツ編集不可かどうか
  */
-if ($this->request->data['Site']['use_subdomain']) {
-	$targetSite = BcSite::findByUrl($this->request->data['Content']['url']);
-	$previewUrl = $this->BcBaser->getUrl($targetSite->getPureUrl($this->request->data['Content']['url']) . '?host=' . $targetSite->host);
+if ($this->request->getData('Site.use_subdomain')) {
+	$targetSite = BcSite::findByUrl($this->request->getData('Content.url'));
+	$previewUrl = $this->BcBaser->getUrl($targetSite->getPureUrl($this->request->getData('Content.url')) . '?host=' . $targetSite->host);
 } else {
-	$previewUrl = $this->BcBaser->getUrl($this->BcContents->getUrl($this->request->data['Content']['url'], false, false, false));
+	$previewUrl = $this->BcBaser->getUrl($this->BcContents->getUrl($this->request->getData('Content.url'), false, false, false));
 }
-$fullUrl = $this->BcContents->getUrl($this->request->data['Content']['url'], true, $this->request->data['Site']['use_subdomain']);
+$fullUrl = $this->BcContents->getUrl($this->request->getData('Content.url'), true, $this->request->getData('Site.use_subdomain'));
 $this->BcBaser->js('admin/contents/edit', false, ['id' => 'AdminContentsEditScript',
 	'data-previewurl' => $previewUrl,
 	'data-fullurl' => $fullUrl,
@@ -44,24 +44,24 @@ $this->BcBaser->i18nScript([
 	'contentsEditAlertMessage3' => __d('baser', '指定したサイトの同じ階層上にフォルダではない同名のコンテンツが存在します。コピーの作成を実行する前に、指定したサイト上の同名コンテンツを確認し名称を変更してください。'),
 	'contentsEditAlertmessage4' => __d('baser', 'コピーの作成に失敗しました。')
 ]);
-$isOmitViewAction = $this->BcContents->settings[$this->request->data['Content']['type']]['omitViewAction'];
+$isOmitViewAction = $this->BcContents->settings[$this->request->getData('Content.type')]['omitViewAction'];
 
 // サブドメイン
-if ($this->request->data['Site']['use_subdomain']) {
+if ($this->request->getData('Site.use_subdomain')) {
 	$contentsName = '';
-	if (!$this->request->data['Content']['site_root']) {
+	if (!$this->request->getData('Content.site_root')) {
 		$contentsName = $this->BcForm->value('Content.name');
-		if (!$isOmitViewAction && $this->request->data['Content']['url'] !== '/') {
+		if (!$isOmitViewAction && $this->request->getData('Content.url') !== '/') {
 			$contentsName .= '/';
 		}
 	}
 } else {
-	if ($this->request->data['Site']['same_main_url'] && $this->request->data['Content']['site_root']) {
+	if ($this->request->getData('Site.same_main_url') && $this->request->getData('Content.site_root')) {
 		$contentsName = '';
 	} else {
 		$contentsName = $this->BcForm->value('Content.name');
 	}
-	if (!$isOmitViewAction && $this->request->data['Content']['url'] !== '/' && $contentsName) {
+	if (!$isOmitViewAction && $this->request->getData('Content.url') !== '/' && $contentsName) {
 		$contentsName .= '/';
 	}
 }
@@ -109,14 +109,14 @@ if ($this->BcContents->isEditable()) {
 				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
 			</th>
 			<td class="col-input bca-form-table__input">
-				<?php if (!$this->request->data['Content']['site_root']): ?>
+				<?php if (!$this->request->getData('Content.site_root')): ?>
 					<?php echo $this->BcForm->input('Content.parent_id', ['type' => 'select', 'options' => $parentContents, 'escape' => true]) ?>
 				<?php endif ?>
-				<?php if (!$this->request->data['Content']['site_root'] && !$related): ?>
+				<?php if (!$this->request->getData('Content.site_root') && !$related): ?>
 					<?php echo $this->BcForm->input('Content.name', ['type' => 'text', 'size' => 20, 'autofocus' => true]) ?>
-					<?php if (!$isOmitViewAction && $this->request->data['Content']['url'] !== '/'): ?>/<?php endif ?>　
+					<?php if (!$isOmitViewAction && $this->request->getData('Content.url') !== '/'): ?>/<?php endif ?>　
 				<?php else: ?>
-					<?php if (!$this->request->data['Content']['site_root']): ?>
+					<?php if (!$this->request->getData('Content.site_root')): ?>
 						<?php // サイトルートの場合はコンテンツ名を表示しない ?>
 						<?php echo h($contentsName) ?>
 					<?php endif ?>

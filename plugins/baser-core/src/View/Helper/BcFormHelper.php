@@ -83,12 +83,14 @@ class BcFormHelper extends FormHelper
 	 * - input：入力欄
 	 *
 	 * ### 行データの追加例
-	 * $View = $event->subject();    // $event は、CakeEvent
-	 * $input = $View->BcForm->input('Page.add_field', array('type' => 'input'));
-	 * $event->data['fields'][] = array(
-	 *        'title'    => '追加フィールド',
-	 *        'input'    => $input
-	 * );
+	 *  $View = $event->subject();    // $event は、CakeEvent
+	 *  $input = $View->BcForm->input('Page.add_field', ['type' => 'input']);
+     *  $event->setData('fields', [
+     *      [
+     *          'title'    => '追加フィールド',
+     *          'input'    => $input
+     *      ]
+     *  ]);
 	 *
 	 * @param string $type フォームのタイプ タイプごとにイベントの登録ができる
 	 * @return string 行データ
@@ -108,8 +110,8 @@ class BcFormHelper extends FormHelper
 		$event = $this->dispatchLayerEvent('after' . $type . 'Form', ['fields' => [], 'id' => $this->__id], ['class' => 'Form', 'plugin' => '']);
 		$out = '';
 		if ($event !== false) {
-			if (!empty($event->data['fields'])) {
-				foreach($event->data['fields'] as $field) {
+			if (!empty($event->getData('fields'))) {
+				foreach($event->getData('fields') as $field) {
 					$out .= "<tr>";
 					$out .= "<th class=\"col-head bca-form-table__label\">" . $field['title'] . "</th>\n";
 					$out .= "<td class=\"col-input bca-form-table__input\">" . $field['input'] . "</td>\n";
@@ -369,7 +371,7 @@ SCRIPT_END;
 			'options' => $options
 		], ['class' => 'Form', 'plugin' => '']);
 		if ($event !== false) {
-			$options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
+			$options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
 		}
 		// <<<
 
@@ -383,7 +385,7 @@ SCRIPT_END;
 			'out' => $out
 		], ['class' => 'Form', 'plugin' => '']);
 		if ($event !== false) {
-			$out = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+			$out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
 		}
 
 		return $out;
@@ -423,7 +425,7 @@ SCRIPT_END;
 			'options' => $options
 		], ['class' => 'Form', 'plugin' => '']);
 		if ($event !== false) {
-			$options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
+			$options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
 		}
 		// <<<
 
@@ -437,7 +439,7 @@ SCRIPT_END;
 			'out' => $out
 		], ['class' => 'Form', 'plugin' => '']);
 		if ($event !== false) {
-			$out = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+			$out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
 		}
 
 		return $out;
@@ -490,7 +492,7 @@ SCRIPT_END;
 			'options' => $options
 		], ['class' => 'Form', 'plugin' => '']);
 		if ($event !== false) {
-			$options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
+			$options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
 			if (!$options) {
 				$options = [];
 			}
@@ -750,7 +752,7 @@ DOC_END;
 		], ['class' => 'Form', 'plugin' => '']);
 
 		if ($event !== false) {
-			$output = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+			$output = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
 		}
 
 		return $output;
@@ -992,7 +994,7 @@ DOC_END;
 			'options' => $options
 		], ['class' => 'Form', 'plugin' => '']);
 		if ($event !== false) {
-			$options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
+			$options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
 		}
 
 		$output = parent::submit($caption, $options);
@@ -1004,7 +1006,7 @@ DOC_END;
 			'out' => $output
 		], ['class' => 'Form', 'plugin' => '']);
 		if ($event !== false) {
-			$output = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+			$output = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
 		}
 		return $output;
 		// <<<
@@ -1932,16 +1934,16 @@ DOC_END;
 	{
 
 		if (!isset($options['id'])) {
-			if (empty($model) && $model !== false && !empty($this->request->params['models'])) {
-				$model = key($this->request->params['models']);
-			} elseif (empty($model) && empty($this->request->params['models'])) {
+			if (empty($model) && $model !== false && !empty($this->request->getParam('models'))) {
+				$model = key($this->request->getParam('models'));
+			} elseif (empty($model) && empty($this->request->getParam('models'))) {
 				$model = false;
 			}
 			if ($model !== false) {
 				[, $model] = pluginSplit($model, true);
 				$this->setEntity($model, true);
 			}
-			$domId = isset($options['url']['action'])? $options['url']['action'] : $this->request->params['action'];
+			$domId = isset($options['url']['action'])? $options['url']['action'] : $this->request->getParam('action');
 			$id = $this->domId($domId . 'Form');
 		} else {
 			$id = $options['id'];
@@ -2054,8 +2056,9 @@ DOC_END;
 
 		if ((empty($selected) || $selected === true) && $value = $this->value($fieldName)) {
 			if (is_array($value)) {
-				extract($value);
-				$selected = $year;
+				if(isset($value['year'])) {
+				    $selected = $value['year'];
+				}
 			} else {
 				if (empty($value)) {
 					if (!$showEmpty && !$maxYear) {

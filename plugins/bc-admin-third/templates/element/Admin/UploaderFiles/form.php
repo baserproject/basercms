@@ -22,7 +22,7 @@ if (empty($popup)) {
 
 
 <?php if (empty($popup)):
-	$url = $this->BcBaser->getUri($this->Uploader->getFileUrl($this->request->data['UploaderFile']['name']));
+	$url = $this->BcBaser->getUri($this->Uploader->getFileUrl($this->request->getData('UploaderFile.name')));
 	?>
 	<div id="AdminPrefix" style="display:none;"><?php echo Configure::read('Routing.prefixes.0'); ?></div>
 	<script type="text/javascript">
@@ -49,7 +49,7 @@ if (empty($popup)) {
 <?php if (!empty($popup)): ?>
 	<?php echo $this->BcForm->create('UploaderFile', ['url' => ['action' => 'edit'], 'id' => 'UploaderFileEditForm' . $listId]) ?>
 <?php else: ?>
-	<?php echo $this->BcForm->create('UploaderFile', ['url' => ['action' => 'edit', $this->request->data['UploaderFile']['id'], $listId], 'id' => 'UploaderFileEditForm' . $listId, 'type' => 'file']) ?>
+	<?php echo $this->BcForm->create('UploaderFile', ['url' => ['action' => 'edit', $this->request->getData('UploaderFile.id'), $listId], 'id' => 'UploaderFileEditForm' . $listId, 'type' => 'file']) ?>
 <?php endif ?>
 
 
@@ -126,7 +126,7 @@ if (empty($popup)) {
 		<td class="col-input bca-form-table__input">
 			<span id="UploaderFileUserName<?php echo $listId ?>">
 			<?php if (empty($popup)): ?>
-				<?php echo $this->BcText->arrayValue($this->request->data['UploaderFile']['user_id'], $users) ?>
+				<?php echo $this->BcText->arrayValue($this->request->getData('UploaderFile.user_id'), $users) ?>
 			<?Php endif ?>
 			</span>
 			<?php echo $this->BcForm->input('UploaderFile.user_id', ['type' => 'hidden', 'id' => 'UploaderFileUserId' . $listId]) ?>

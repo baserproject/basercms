@@ -282,10 +282,10 @@ class BcContentsHelper extends AppHelper
 	 */
 	public function getCurrentRelatedSiteUrl($siteName)
 	{
-		if (empty($this->request->params['Site'])) {
+		if (empty($this->request->getParam('Site'))) {
 			return '';
 		}
-		$url = $this->getPureUrl('/' . $this->request->url, $this->request->params['Site']['id']);
+		$url = $this->getPureUrl('/' . $this->request->url, $this->request->getParam('Site.id'));
 		$Site = ClassRegistry::init('Site');
 		$site = $Site->find('first', ['conditions' => ['Site.name' => $siteName], 'recursive' => -1]);
 		if (!$site) {
@@ -353,8 +353,8 @@ class BcContentsHelper extends AppHelper
 	 */
 	public function getParent($id = null, $direct = true)
 	{
-		if (!$id && !empty($this->request->params['Content']['id'])) {
-			$id = $this->request->params['Content']['id'];
+		if (!$id && !empty($this->request->getParam('Content.id'))) {
+			$id = $this->request->getParam('Content.id');
 		}
 		if (!$id) {
 			return false;
@@ -416,8 +416,8 @@ class BcContentsHelper extends AppHelper
 		], $options);
 		$this->_Content->unbindModel(['belongsTo' => ['User']]);
 		if (!$id) {
-			if (!empty($this->request->params['Content'])) {
-				$content = $this->request->params['Content'];
+			if (!empty($this->request->getParam('Content'))) {
+				$content = $this->request->getParam('Content');
 				if ($content['main_site_content_id']) {
 					$id = $content['main_site_content_id'];
 				} else {
@@ -503,11 +503,11 @@ class BcContentsHelper extends AppHelper
 	public function isEditable($data = null)
 	{
 		if (!$data) {
-			if (!isset($this->request->data['Content']) && !isset($this->request->data['Site'])) {
+			if (!$this->request->getData('Content') && !$this->request->getData('Site')) {
 				return false;
 			}
-			$content = $this->request->data['Content'];
-			$site = $this->request->data['Site'];
+			$content = $this->request->getData('Content');
+			$site = $this->request->getData('Site');
 		} else {
 			if (isset($data['Content'])) {
 				$content = $data['Content'];
@@ -666,10 +666,10 @@ class BcContentsHelper extends AppHelper
 	 */
 	public function isFolder()
 	{
-		if (BcUtil::isAdminSystem() || !isset($this->request->params['Content']['type'])) {
+		if (BcUtil::isAdminSystem() || !$this->request->getParam('Content.type')) {
 			return false;
 		}
-		return ($this->request->params['Content']['type'] === 'ContentFolder');
+		return ($this->request->getParam('Content.type') === 'ContentFolder');
 	}
 
 }

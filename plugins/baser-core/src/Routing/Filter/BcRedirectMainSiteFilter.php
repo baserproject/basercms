@@ -39,14 +39,14 @@ class BcRedirectMainSiteFilter extends DispatcherFilter
 	/**
 	 * beforeDispatch Event
 	 *
-	 * @param CakeEvent $event イベント
+	 * @param \Cake\Event\Event $event イベント
 	 * @return void|CakeResponse
 	 */
-	public function beforeDispatch(CakeEvent $event)
+	public function beforeDispatch(\Cake\Event\Event $event)
 	{
-		$request = $event->data['request'];
-		$response = $event->data['response'];
-		if (!empty($request->params['Content'])) {
+		$request = $event->getData('request');
+		$response = $event->getData('response');
+		if (!empty($request->getParam('Content'))) {
 			return;
 		} else {
 			if ($this->_existController($request)) {
@@ -87,12 +87,12 @@ class BcRedirectMainSiteFilter extends DispatcherFilter
 	protected function _existController($request)
 	{
 		$pluginName = $pluginPath = $controller = null;
-		if (!empty($request->params['plugin'])) {
-			$pluginName = $controller = Inflector::camelize($request->params['plugin']);
+		if (!empty($request->getParam('plugin'))) {
+			$pluginName = $controller = Inflector::camelize($request->getParam('plugin'));
 			$pluginPath = $pluginName . '.';
 		}
-		if (!empty($request->params['controller'])) {
-			$controller = Inflector::camelize($request->params['controller']);
+		if (!empty($request->getParam('controller'))) {
+			$controller = Inflector::camelize($request->getParam('controller'));
 		}
 		if ($pluginPath . $controller) {
 			$class = $controller . 'Controller';

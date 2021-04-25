@@ -86,17 +86,17 @@ class ThemesController extends AppController
 				)
 			);
 		}
-		if (empty($this->request->data['Theme']['file']['tmp_name'])) {
+		if (empty($this->request->getData('Theme.file.tmp_name'))) {
 			$message = __d('baser', 'ファイルのアップロードに失敗しました。');
-			if (!empty($this->request->data['Theme']['file']['error']) && $this->request->data['Theme']['file']['error'] == 1) {
+			if (!empty($this->request->getData('Theme.file.error')) && $this->request->getData('Theme.file.error') == 1) {
 				$message .= __d('baser', 'サーバに設定されているサイズ制限を超えています。');
 			}
 			$this->BcMessage->setError($message);
 			return;
 		}
 
-		$name = $this->request->data['Theme']['file']['name'];
-		move_uploaded_file($this->request->data['Theme']['file']['tmp_name'], TMP . $name);
+		$name = $this->request->getData('Theme.file.name');
+		move_uploaded_file($this->request->getData('Theme.file.tmp_name'), TMP . $name);
 		App::uses('BcZip', 'Lib');
 		$BcZip = new BcZip();
 		if (!$BcZip->extract(TMP . $name, BASER_THEMES)) {
@@ -180,12 +180,12 @@ class ThemesController extends AppController
 	 */
 	public function admin_load_default_data_pattern()
 	{
-		if (empty($this->request->data['Theme']['default_data_pattern'])) {
+		if (empty($this->request->getData('Theme.default_data_pattern'))) {
 			$this->BcMessage->setError(__d('baser', '不正な操作です。'));
 			$this->redirect('index');
 			return;
 		}
-		$result = $this->_load_default_data_pattern($this->request->data['Theme']['default_data_pattern']);
+		$result = $this->_load_default_data_pattern($this->request->getData('Theme.default_data_pattern'));
 		if (!$result) {
 			if (!CakeSession::check('Message.flash.message')) {
 				$this->BcMessage->setError(__d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));

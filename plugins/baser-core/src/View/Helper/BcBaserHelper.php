@@ -224,7 +224,7 @@ class BcBaserHelper extends Helper
             'options' => $options
         ], ['layer' => 'View', 'class' => '', 'plugin' => '']);
         if ($event !== false) {
-            $options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
+            $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
         }
         <<< */
 
@@ -237,7 +237,7 @@ class BcBaserHelper extends Helper
             'options' => $options
         ], ['layer' => 'View', 'class' => $this->_View->getName()]);
         if ($event !== false) {
-            $options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
+            $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
         }
         <<< */
 
@@ -265,7 +265,7 @@ class BcBaserHelper extends Helper
             'out' => $out
         ], ['layer' => 'View', 'class' => '', 'plugin' => '']);
         if ($event !== false) {
-            $out = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+            $out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
         <<< */
 
@@ -277,7 +277,7 @@ class BcBaserHelper extends Helper
             'out' => $out
         ], ['layer' => 'View', 'class' => $this->_View->getName()]);
         if ($event !== false) {
-            $out = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+            $out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
         <<< */
 
@@ -385,12 +385,12 @@ class BcBaserHelper extends Helper
             'confirmMessage' => $confirmMessage
         ], ['class' => 'Html', 'plugin' => '']);
         if ($event !== false) {
-            $options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
+            $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
         }
 
         if ($options['prefix']) {
-            if (!empty($this->request->params['prefix']) && is_array($url)) {
-                $url[$this->request->params['prefix']] = true;
+            if (!empty($this->request->getParam('prefix')) && is_array($url)) {
+                $url[$this->request->getParam('prefix')] = true;
             }
         }
         $forceTitle = $options['forceTitle'];
@@ -426,7 +426,7 @@ class BcBaserHelper extends Helper
 
         // コンテンツ公開チェック
         // TODO 統合コンテンツ管理のチェックに変更する
-//		if (isset($this->_Page) && empty($this->request->params['admin'])) {
+//		if (isset($this->_Page) && $this->request->getParam['prefix'] !== 'Admin') {
 //			$adminPrefix = Configure::read('Routing.prefixes.0');
 //			if (isset($this->_Page) && !preg_match('/^\/' . $adminPrefix . '/', $_url)) {
 //				if ($this->_Page->isPageUrl($_url) && !$this->_Page->checkPublish($_url)) {
@@ -486,7 +486,7 @@ class BcBaserHelper extends Helper
             'out' => $out
         ], ['class' => 'Html', 'plugin' => '']);
         if ($event !== false) {
-            $out = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+            $out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
 
         return $out;
@@ -712,27 +712,27 @@ class BcBaserHelper extends Helper
         $url2 = '';
         $aryUrl = [];
 
-        if (!empty($this->request->params['prefix'])) {
-            $prefix = h($this->request->params['prefix']);
+        if (!empty($this->request->getParam('prefix'))) {
+            $prefix = h($this->request->getParam('prefix'));
         }
-        if (!empty($this->request->params['plugin'])) {
-            $plugin = h($this->request->params['plugin']);
+        if (!empty($this->request->getParam('plugin'))) {
+            $plugin = h($this->request->getParam('plugin'));
         }
-        $controller = h($this->request->params['controller']);
+        $controller = h($this->request->getParam('controller'));
         if ($prefix) {
-            $action = str_replace($prefix . '_', '', h($this->request->params['action']));
+            $action = str_replace($prefix . '_', '', h($this->request->getParam('action')));
         } else {
-            $action = h($this->request->params['action']);
+            $action = h($this->request->getParam('action'));
         }
-        if (!empty($this->request->params['pass'])) {
-            foreach($this->request->params['pass'] as $key => $value) {
+        if (!empty($this->request->getParam('pass'))) {
+            foreach($this->request->getParam('pass') as $key => $value) {
                 $pass[$key] = h($value);
             }
         }
 
         $url = explode('/', h($this->request->url));
 
-        if (!empty($this->request->params['Site']['alias'])) {
+        if (!empty($this->request->getParam('Site.alias'))) {
             array_shift($url);
         }
 
@@ -953,8 +953,8 @@ class BcBaserHelper extends Helper
             return $keywords;
         }
 
-        if (!empty($this->request->params['Site']['keyword'])) {
-            return $this->request->params['Site']['keyword'];
+        if (!empty($this->request->getParam('Site.keyword'))) {
+            return $this->request->getParam('Site.keyword');
         }
 
         if (!empty($this->siteConfig['keyword'])) {
@@ -979,8 +979,8 @@ class BcBaserHelper extends Helper
 
         if ($this->isHome()) {
 
-            if (!empty($this->request->params['Site']['description'])) {
-                return $this->request->params['Site']['description'];
+            if (!empty($this->request->getParam('Site.description'))) {
+                return $this->request->getParam('Site.description');
             }
 
             if (!empty($this->siteConfig['description'])) {
@@ -1052,8 +1052,8 @@ class BcBaserHelper extends Helper
 
         // サイトタイトルを追加
         $siteName = '';
-        if (!empty($this->request->params['Site']['title'])) {
-            $siteName = $this->request->params['Site']['title'];
+        if (!empty($this->request->getParam('Site.title'))) {
+            $siteName = $this->request->getParam('Site.title');
         } elseif (!empty($this->siteConfig['name'])) {
             $siteName = $this->siteConfig['name'];
         }
@@ -1108,9 +1108,9 @@ class BcBaserHelper extends Helper
         $contentsTitle = $this->getContentsTitle();
         $useCurrentTitle = true;
         // インデックスページで親カテゴリとタイトルが被る場合は重複しないようにする
-        if (!empty($this->request->params['Content']) &&
-            $this->request->params['Content']['type'] !== 'ContentFolder' &&
-            $this->request->params['Content']['name'] === 'index' &&
+        if (!empty($this->request->getParam('Content')) &&
+            $this->request->getParam('Content.type') !== 'ContentFolder' &&
+            $this->request->getParam('Content.name') === 'index' &&
             $this->_categoryTitleOn) {
             $parentTitle = '';
             if ($this->_categoryTitle === true && $crumbs) {
@@ -1191,7 +1191,7 @@ class BcBaserHelper extends Helper
      */
     public function isHome()
     {
-        if (empty($this->request->params['Site'])) {
+        if (empty($this->request->getParam('Site'))) {
             return false;
         }
         $site = BcSite::findCurrent(true);
@@ -1264,7 +1264,7 @@ class BcBaserHelper extends Helper
             'out' => $out
         ], ['layer' => 'View', 'class' => '', 'plugin' => '']);
         if ($event !== false) {
-            $out = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+            $out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
 
         /*** Controller.header ***/
@@ -1272,7 +1272,7 @@ class BcBaserHelper extends Helper
             'out' => $out
         ], ['layer' => 'View', 'class' => $this->_View->name]);
         if ($event !== false) {
-            $out = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+            $out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
         echo $out;
     }
@@ -1299,7 +1299,7 @@ class BcBaserHelper extends Helper
             'out' => $out
         ], ['layer' => 'View', 'class' => '', 'plugin' => '']);
         if ($event) {
-            $out = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+            $out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
 
         /*** Controller.footer ***/
@@ -1307,7 +1307,7 @@ class BcBaserHelper extends Helper
             'out' => $out
         ], ['layer' => 'View', 'class' => $this->_View->name]);
         if ($event) {
-            $out = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+            $out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
         echo $out;
     }
@@ -1394,14 +1394,14 @@ class BcBaserHelper extends Helper
         // - ログインしている
         if (empty($this->_View->viewVars['preview']) && $toolbar) {
             if (!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
-                if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
+                if ($this->request->getParam('prefix') !== 'Admin' && !empty($this->_View->viewVars['user'])) {
                     $this->css('admin/toolbar');
                 }
             }
         }
 
         if (empty($this->_View->viewVars['preview']) && Configure::read('BcWidget.editLinkAtFront')) {
-            if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
+            if ($this->request->getParam('prefix') !== 'Admin' && !empty($this->_View->viewVars['user'])) {
                 $this->css('admin/widget_link');
             }
         }
@@ -1462,7 +1462,7 @@ class BcBaserHelper extends Helper
         // - ログインしている
         if (empty($this->_View->viewVars['preview']) && $toolbar) {
             if (!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
-                if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
+                if ($this->request->getParam('prefix') !== 'Admin' && !empty($this->_View->viewVars['user'])) {
                     $this->element('admin/toolbar', [], ['subDir' => false]);
                 }
             }
@@ -1494,7 +1494,7 @@ class BcBaserHelper extends Helper
      */
     public function xmlHeader($attrib = [])
     {
-        if (empty($attrib['encoding']) && !empty($this->request->params['Site']['device']) && $this->request->params['Site']['device'] == 'mobile') {
+        if (empty($attrib['encoding']) && !empty($this->request->getParam('Site.device')) && $this->request->getParam('Site.device') == 'mobile') {
             $attrib['encoding'] = 'Shift-JIS';
         }
         echo $this->BcXml->header($attrib) . "\n";
@@ -1573,7 +1573,7 @@ class BcBaserHelper extends Helper
      */
     public function charset($charset = null)
     {
-        if (!$charset && !empty($this->request->params['Site']['device']) && $this->request->params['Site']['device'] == 'mobile') {
+        if (!$charset && !empty($this->request->getParam('Site.device')) && $this->request->getParam('Site.device') == 'mobile') {
             $charset = 'Shift-JIS';
         }
         echo $this->BcHtml->charset($charset);
@@ -1609,7 +1609,7 @@ class BcBaserHelper extends Helper
      */
     public function setPageEditLink($id)
     {
-        if (empty($this->request->params['admin']) && !empty($this->_View->get('user'))) {
+        if ($this->request->getParam('prefix') !== 'Admin' && !empty($this->_View->get('user'))) {
             $this->_View->set('editLink', ['admin' => true, 'controller' => 'pages', 'action' => 'edit', $id]);
         }
     }
@@ -1647,8 +1647,8 @@ class BcBaserHelper extends Helper
             return '';
         }
         $site = null;
-        if (!empty($this->request->params['Site'])) {
-            $site = $this->request->params['Site'];
+        if (!empty($this->request->getParam('Site'))) {
+            $site = $this->request->getParam('Site');
         }
         $Site = ClassRegistry::init('Site');
         return $Site->getPrefix($site);
@@ -1672,10 +1672,10 @@ class BcBaserHelper extends Helper
         }
         if ($startText) {
             $homeUrl = '/';
-            if (!empty($this->request->params['Site']['alias'])) {
-                $homeUrl = '/' . $this->request->params['Site']['alias'] . '/';
-            } elseif (!empty($this->request->params['Site']['name'])) {
-                $homeUrl = '/' . $this->request->params['Site']['name'] . '/';
+            if (!empty($this->request->getParam('Site.alias'))) {
+                $homeUrl = '/' . $this->request->getParam('Site.alias') . '/';
+            } elseif (!empty($this->request->getParam('Site.name'))) {
+                $homeUrl = '/' . $this->request->getParam('Site.name') . '/';
             }
             array_unshift($crumbs, [
                 0 => $startText,
@@ -2006,8 +2006,8 @@ EOD;
         $siteRoot = $Content->getSiteRoot($siteId);
         $id = $siteRoot['Content']['id'];
         $currentId = null;
-        if (!empty($this->request->params['Content']['id'])) {
-            $currentId = $this->request->params['Content']['id'];
+        if (!empty($this->request->getParam('Content.id'))) {
+            $currentId = $this->request->getParam('Content.id');
         }
         $options = array_merge([
             'tree' => $this->BcContents->getTree($id, $level),
@@ -2120,7 +2120,7 @@ END_FLASH;
      */
     public function isPage()
     {
-        return ($this->request->params['controller'] == 'pages' && $this->request->params['action'] == 'display');
+        return ($this->request->getParam('controller') == 'pages' && $this->request->getParam('action') == 'display');
     }
 
     /**
@@ -2515,9 +2515,9 @@ END_FLASH;
                 $link = $originUrl;
             } elseif ($options['link']) {
                 $link = $options['link'];
-                if (!empty($this->request->params['Site']['alias'])) {
+                if (!empty($this->request->getParam('Site.alias'))) {
                     if (empty($this->request->params['Site']['same_main_url'])) {
-                        $link = '/' . $this->request->params['Site']['alias'] . $link;
+                        $link = '/' . $this->request->getParam('Site.alias') . $link;
                     }
                 }
             }
@@ -2799,8 +2799,8 @@ END_FLASH;
      */
     public function getCurrentContent()
     {
-        if (!empty($this->request->params['Content'])) {
-            return $this->request->params['Content'];
+        if (!empty($this->request->getParam('Content'))) {
+            return $this->request->getParam('Content');
         }
         return null;
     }
@@ -2812,11 +2812,11 @@ END_FLASH;
      */
     public function getCurrentPrefix()
     {
-        if (empty($this->request->params['Site'])) {
+        if (empty($this->request->getParam('Site'))) {
             return '';
         }
         $Site = ClassRegistry::init('Site');
-        return $Site->getPrefix($this->request->params['Site']);
+        return $Site->getPrefix($this->request->getParam('Site'));
     }
 
     /**
@@ -2910,17 +2910,17 @@ END_FLASH;
         if (BcUtil::isAdminSystem()) {
             return;
         }
-        if (empty($this->request->params['Site'])) {
+        if (empty($this->request->getParam('Site'))) {
             return;
         }
-        if (isset($this->request->params['Site']['name']) && is_null($this->request->params['Site']['name'])) {
+        if (is_null($this->request->getParam('Site.name'))) {
             return;
         }
-        if (isset($this->request->params['Site']['device']) && $this->request->params['Site']['device'] != '') {
+        if ($this->request->getParam('Site.device') !== '') {
             return;
         }
         // 別URLの場合、alternateを出力（スマートフォンのみ対応）
-        $pureUrl = $this->BcContents->getPureUrl($this->request->url, $this->request->params['Site']['id']);
+        $pureUrl = $this->BcContents->getPureUrl($this->request->url, $this->request->getParam('Site.id'));
         $agent = BcAgent::find('smartphone');
         $subSite = BcSite::findCurrentSub(false, $agent);
         if (!$subSite) {
@@ -2989,8 +2989,8 @@ END_FLASH;
     public function getContentsUrl($url = null, $full = false, $useSubDomain = null, $base = true)
     {
         if (!$url) {
-            if (!empty($this->request->params['Content']['url'])) {
-                $url = $this->request->params['Content']['url'];
+            if (!empty($this->request->getParam('Content.url'))) {
+                $url = $this->request->getParam('Content.url');
             } else {
                 $url = '/';
             }

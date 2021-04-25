@@ -93,7 +93,7 @@ class PagesController extends AppController
 			'data' => $this->request->data
 		]);
 		if ($event !== false) {
-			$this->request->data = $event->result === true? $event->data['data'] : $event->result;
+			$this->request->data = $event->getResult() === true? $event->getData('data') : $event->getResult();
 		}
 
 		$data = $this->Page->save($this->request->data);
@@ -112,7 +112,7 @@ class PagesController extends AppController
 				'baser',
 				"固定ページ「%s」を追加しました。\n%s"
 			),
-			$this->request->data['Content']['title'],
+			$this->request->getData('Content.title'),
 			urldecode($url)
 		);
 		$this->BcMessage->setSuccess($message, true, false);
@@ -138,8 +138,8 @@ class PagesController extends AppController
 				$this->redirect(['action' => 'edit', $id]);
 			}
 			$isChangedStatus = $this->Content->isChangedStatus($id, $this->request->data);
-			if (empty($this->request->data['Page']['page_type'])) {
-				$this->request->data['Page']['page_type'] = 1;
+			if (empty($this->request->getData('Page.page_type'))) {
+				$this->request = $this->request->withData('Page.page_type',  1);
 			}
 
 			// EVENT Pages.beforeEdit
@@ -147,7 +147,7 @@ class PagesController extends AppController
 				'data' => $this->request->data
 			]);
 			if ($event !== false) {
-				$this->request->data = $event->result === true? $event->data['data'] : $event->result;
+				$this->request->data = $event->getResult() === true? $event->getData('data') : $event->getResult();
 			}
 
 			$this->Page->set($this->request->data);
@@ -156,7 +156,7 @@ class PagesController extends AppController
 				if ($isChangedStatus) {
 					clearViewCache();
 				} else {
-					clearViewCache($this->request->data['Content']['url']);
+					clearViewCache($this->request->getData('Content.url'));
 				}
 
 				// 完了メッセージ
@@ -186,9 +186,9 @@ class PagesController extends AppController
 
 		// 公開リンク
 		$publishLink = '';
-		if ($this->request->data['Content']['status']) {
-			$site = BcSite::findById($this->request->data['Content']['site_id']);
-			$publishLink = $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain);
+		if ($this->request->getData('Content.status')) {
+			$site = BcSite::findById($this->request->getData('Content.site_id'));
+			$publishLink = $this->Content->getUrl($this->request->getData('Content.url'), true, $site->useSubDomain);
 		}
 		// エディタオプション
 		$editorOptions = ['editorDisableDraft' => false];
@@ -204,11 +204,11 @@ class PagesController extends AppController
 		}
 		// ページテンプレートリスト
 		$theme = [$this->siteConfigs['theme']];
-		$site = BcSite::findById($this->request->data['Content']['site_id']);
+		$site = BcSite::findById($this->request->getData('Content.site_id'));
 		if (!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
 			$theme[] = $site->theme;
 		}
-		$pageTemplateList = $this->Page->getPageTemplateList($this->request->data['Content']['id'], $theme);
+		$pageTemplateList = $this->Page->getPageTemplateList($this->request->getData('Content.id'), $theme);
 		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink'));
 
 		$this->pageTitle = __d('baser', '固定ページ情報編集');
@@ -225,10 +225,10 @@ class PagesController extends AppController
 	 */
 	public function admin_delete()
 	{
-		if (empty($this->request->data['entityId'])) {
+		if (empty($this->request->getData('entityId'))) {
 			return false;
 		}
-		if ($this->Page->delete($this->request->data['entityId'])) {
+		if ($this->Page->delete($this->request->getData('entityId'))) {
 			return true;
 		}
 		return false;
@@ -286,13 +286,13 @@ class PagesController extends AppController
 		if ($this->request->params['Content']['alias_id']) {
 			$urlTmp = $this->Content->field('url', ['Content.id' => $this->request->params['Content']['alias_id']]);
 		} else {
-			$urlTmp = $this->request->params['Content']['url'];
+			$urlTmp = $this->request->getParam('Content.url');
 		}
 
-		if ($this->request->params['Site']['alias']) {
+		if ($this->request->getParam('Site.alias')) {
 			$site = BcSite::findByUrl($urlTmp);
-			if ($site && ($site->alias == $this->request->params['Site']['alias'])) {
-				$urlTmp = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/' . $this->request->params['Site']['name'] . '/', $urlTmp);
+			if ($site && ($site->alias == $this->request->getParam('Site.alias'))) {
+				$urlTmp = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/' . $this->request->getParam('Site.name') . '/', $urlTmp);
 			}
 		}
 
@@ -330,7 +330,7 @@ class PagesController extends AppController
 			// POSTパラメータのコードに含まれるscriptタグをそのままHTMLに出力するとブラウザによりXSSと判定される
 			// 一度データをセッションに退避する
 			if ($this->BcContents->preview === 'default') {
-				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->data['Content']['entity_id'];
+				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->getData('Content.entity_id');
 				$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
 				$this->Session->write($sessionKey, $this->request->data);
 				$query = [];
@@ -352,7 +352,7 @@ class PagesController extends AppController
 
 			if ($this->BcContents->preview === 'draft') {
 				$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
-				$this->request->params['Content']['eyecatch'] = $this->request->data['Content']['eyecatch'];
+				$this->request = $this->request->withParam('Content.eyecatch', $this->request->getData('Content.eyecatch'));
 
 				$uuid = $this->_createPreviewTemplate($this->request->data);
 				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
@@ -365,7 +365,7 @@ class PagesController extends AppController
 			if ($this->BcContents->preview === 'default') {
 				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->params['Content']['entity_id'];
 				$previewData = $this->Session->read($sessionKey);
-				$this->request->params['Content']['eyecatch'] = $previewData['Content']['eyecatch'];
+				$this->request = $this->request->withParam('Content.eyecatch', $previewData['Content']['eyecatch']);
 
 				if (!is_null($previewData)) {
 					$this->Session->delete($sessionKey);
@@ -389,7 +389,7 @@ class PagesController extends AppController
 		$pagePath = implode('/', $path);
 		if (!$template) {
 			$ContentFolder = ClassRegistry::init('ContentFolder');
-			$template = $ContentFolder->getParentTemplate($this->request->params['Content']['id'], 'page');
+			$template = $ContentFolder->getParentTemplate($this->request->getParam('Content.id'), 'page');
 		}
 		$this->set('pagePath', $pagePath);
 
@@ -466,18 +466,18 @@ class PagesController extends AppController
 		}
 		$user = $this->BcAuth->user();
 		$data = $this->Page->copy(
-			$this->request->data['entityId'],
-			$this->request->data['parentId'],
-			$this->request->data['title'],
+			$this->request->getData('entityId'),
+			$this->request->getData('parentId'),
+			$this->request->getData('title'),
 			$user['id'],
-			$this->request->data['siteId']
+			$this->request->getData('siteId')
 		);
 		if (!$data) {
 			$this->ajaxError(500, $this->Page->validationErrors);
 			return false;
 		}
 
-		$message = sprintf(__d('baser', '固定ページのコピー「%s」を追加しました。'), $this->request->data['title']);
+		$message = sprintf(__d('baser', '固定ページのコピー「%s」を追加しました。'), $this->request->getData('title'));
 		$this->BcMessage->setSuccess($message, true, false);
 		return json_encode($data['Content']);
 	}

@@ -81,8 +81,8 @@ class BcUploadHelper extends BcAppHelper
 			'options' => $options
 		], ['class' => 'BcUpload', 'plugin' => '']);
 		if ($event !== false) {
-			$options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
-			$settings = $event->data['settings'];
+			$options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
+			$settings = $event->getData('settings');
 		}
 
 		$this->setBcUploadSetting($settings);
@@ -172,7 +172,7 @@ class BcUploadHelper extends BcAppHelper
 			'out' => $out
 		], ['class' => 'BcUpload', 'plugin' => '']);
 		if ($event !== false) {
-			$out = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+			$out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
 		}
 
 		return $out;
@@ -226,8 +226,8 @@ class BcUploadHelper extends BcAppHelper
 			'options' => $options
 		], ['class' => 'BcUpload', 'plugin' => '']);
 		if ($event !== false) {
-			$options = ($event->result === null || $event->result === true)? $event->data['options'] : $event->result;
-			$settings = $event->data['settings'];
+			$options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
+			$settings = $event->getData('settings');
 		}
 
 		$this->setBcUploadSetting($settings);
@@ -414,7 +414,7 @@ class BcUploadHelper extends BcAppHelper
 			'out' => $out
 		], ['class' => 'BcUpload', 'plugin' => '']);
 		if ($event !== false) {
-			$out = ($event->result === null || $event->result === true)? $event->data['out'] : $event->result;
+			$out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
 		}
 		return $out;
 	}

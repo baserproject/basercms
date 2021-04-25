@@ -86,7 +86,7 @@ class MailContentsController extends MailAppController
         if (!$this->request->data) {
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
         }
-        $this->request->data['MailContent'] = $this->MailContent->getDefaultValue()['MailContent'];
+        $this->request = $this->request->withData('MailContent',  $this->MailContent->getDefaultValue()['MailContent']);
         $data = $this->MailContent->save($this->request->data);
         if (!$data) {
             $this->ajaxError(500, $this->MailContent->validationErrors);
@@ -96,7 +96,7 @@ class MailContentsController extends MailAppController
         $this->BcMessage->setSuccess(
             sprintf(
                 __d('baser', 'メールフォーム「%s」を追加しました。'),
-                $this->request->data['Content']['title']
+                $this->request->getData('Content.title')
             ),
             true,
             false
@@ -122,8 +122,8 @@ class MailContentsController extends MailAppController
         }
 
         /* 登録処理 */
-        if (!$this->request->data['MailContent']['sender_1_']) {
-            $this->request->data['MailContent']['sender_1'] = '';
+        if (!$this->request->getData('MailContent.sender_1_')) {
+            $this->request = $this->request->withData('MailContent.sender_1',  '');
         }
         $this->MailContent->create($this->request->data);
         if (!$this->MailContent->validates()) {
@@ -132,7 +132,7 @@ class MailContentsController extends MailAppController
             return;
         }
 
-        if (!$this->MailMessage->createTable($this->request->data['MailContent']['id'])) {
+        if (!$this->MailMessage->createTable($this->request->getData('MailContent.id'))) {
             $this->BcMessage->setError(
                 __d('baser', 'データベースに問題があります。メール受信データ保存用テーブルの作成に失敗しました。')
             );
@@ -150,7 +150,7 @@ class MailContentsController extends MailAppController
         $this->BcMessage->setSuccess(
             sprintf(
                 __d('baser', '新規メールフォーム「%s」を追加しました。'),
-                $this->request->data['MailContent']['title']
+                $this->request->getData('MailContent.title')
             )
         );
         $this->redirect(['action' => 'edit', $this->MailContent->id]);
@@ -174,8 +174,8 @@ class MailContentsController extends MailAppController
         }
 
         if (Hash::get($this->request->data, 'MailContent.id')) {
-            if (!$this->request->data['MailContent']['sender_1_']) {
-                $this->request->data['MailContent']['sender_1'] = '';
+            if (!$this->request->getData('MailContent.sender_1_')) {
+                $this->request = $this->request->withData('MailContent.sender_1',  '');
             }
             $this->MailContent->set($this->request->data);
             if (!$this->MailContent->save()) {
@@ -191,15 +191,15 @@ class MailContentsController extends MailAppController
                             'baser',
                             'メールフォーム「%s」を更新しました。'
                         ),
-                        $this->request->data['Content']['title']
+                        $this->request->getData('Content.title')
                     )
                 );
-                if ($this->request->data['MailContent']['edit_mail_form']) {
-                    $this->redirectEditForm($this->request->data['MailContent']['form_template']);
-                } elseif ($this->request->data['MailContent']['edit_mail']) {
-                    $this->redirectEditMail($this->request->data['MailContent']['mail_template']);
+                if ($this->request->getData('MailContent.edit_mail_form')) {
+                    $this->redirectEditForm($this->request->getData('MailContent.form_template'));
+                } elseif ($this->request->getData('MailContent.edit_mail')) {
+                    $this->redirectEditMail($this->request->getData('MailContent.mail_template'));
                 } else {
-                    $this->redirect(['action' => 'edit', $this->request->data['MailContent']['id']]);
+                    $this->redirect(['action' => 'edit', $this->request->getData('MailContent.id')]);
                 }
             }
         } else {
@@ -222,12 +222,12 @@ class MailContentsController extends MailAppController
         }
 
         $this->request->param('Content', $this->BcContents->getContent($id)['Content']);
-        if ($this->request->data['Content']['status']) {
-            $site = BcSite::findById($this->request->data['Content']['site_id']);
+        if ($this->request->getData('Content.status')) {
+            $site = BcSite::findById($this->request->getData('Content.site_id'));
             $this->set(
                 'publishLink',
                 $this->Content->getUrl(
-                    $this->request->data['Content']['url'],
+                    $this->request->getData('Content.url'),
                     true,
                     $site->useSubDomain
                 )
@@ -249,11 +249,11 @@ class MailContentsController extends MailAppController
      */
     public function admin_delete()
     {
-        if (empty($this->request->data['entityId'])) {
+        if (empty($this->request->getData('entityId'))) {
             return false;
         }
-        if ($this->MailContent->delete($this->request->data['entityId'])) {
-            $this->MailMessage->dropTable($this->request->data['entityId']);
+        if ($this->MailContent->delete($this->request->getData('entityId'))) {
+            $this->MailMessage->dropTable($this->request->getData('entityId'));
             return true;
         }
         return false;
@@ -368,11 +368,11 @@ class MailContentsController extends MailAppController
         }
         $user = $this->BcAuth->user();
         $data = $this->MailContent->copy(
-            $this->request->data['entityId'],
-            $this->request->data['parentId'],
-            $this->request->data['title'],
+            $this->request->getData('entityId'),
+            $this->request->getData('parentId'),
+            $this->request->getData('title'),
             $user['id'],
-            $this->request->data['siteId']
+            $this->request->getData('siteId')
         );
         if (!$data) {
             $this->ajaxError(500, $this->MailContent->validationErrors);
@@ -380,7 +380,7 @@ class MailContentsController extends MailAppController
         }
         $message = sprintf(
             __d('baser', 'メールフォームのコピー「%s」を追加しました。'),
-            $this->request->data['title']
+            $this->request->getData('title')
         );
         $this->BcMessage->setSuccess($message, true, false);
         return json_encode($data['Content']);

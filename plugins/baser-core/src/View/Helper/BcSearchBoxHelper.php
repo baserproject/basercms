@@ -38,8 +38,8 @@ class BcSearchBoxHelper extends AppHelper
 		$event = $this->dispatchLayerEvent('showField', ['id' => $id, 'fields' => []], ['class' => 'BcSearchBox', 'plugin' => '']);
 		$output = '';
 		if ($event !== false) {
-			if (!empty($event->data['fields'])) {
-				foreach($event->data['fields'] as $field) {
+			if (!empty($event->getData('fields'))) {
+				foreach($event->getData('fields') as $field) {
 					$output .= "<span class=\"bca-search__input-item\">";
 					if (!empty($field['title'])) {
 						$output .= $field['title'] . "&nbsp;";

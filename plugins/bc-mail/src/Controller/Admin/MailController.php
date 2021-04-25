@@ -214,17 +214,17 @@ class MailController extends MailAppController
         }
 
         if ($this->BcContents->preview === 'default' && $this->request->data && !$this->request->param('requested')) {
-            $this->dbDatas['mailContent']['MailContent'] = $this->request->data['MailContent'];
+            $this->dbDatas['mailContent']['MailContent'] = $this->request->getData('MailContent');
             $this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
-            $this->request->param('Content.eyecatch', $this->request->data['Content']['eyecatch']);
+            $this->request->param('Content.eyecatch', $this->request->getData('Content.eyecatch'));
         }
 
         $this->Session->write('Mail.valid', true);
 
         // 初期値を取得
-        if (!isset($this->request->data['MailMessage'])) {
+        if (!$this->request->getData('MailMessage')) {
             if ($this->request->param('named')) {
-                foreach ($this->request->params['named'] as $key => $value) {
+                foreach ($this->request->getParam('named') as $key => $value) {
                     $this->request->params['named'][$key] = base64UrlsafeDecode($value);
                 }
             }
@@ -298,8 +298,8 @@ class MailController extends MailAppController
             } else {
                 $this->set('freezed', false);
                 $this->set('error', true);
-                $this->request->data['MailMessage']['auth_captcha'] = null;
-                $this->request->data['MailMessage']['captcha_id'] = null;
+                $this->request = $this->request->withData('MailMessage.auth_captcha',  null);
+                $this->request = $this->request->withData('MailMessage.captcha_id',  null);
                 $this->BcMessage->setError(__('エラー : 入力内容を確認して再度送信してください。'));
             }
         }
@@ -357,8 +357,8 @@ class MailController extends MailAppController
             $auth_captcha = Hash::get($this->dbDatas, 'mailContent.MailContent.auth_captcha');
             if ($this->request->param('Site.name') !== 'mobile' && $auth_captcha) {
                 $captchaResult = $this->BcCaptcha->check(
-                    $this->request->data['MailMessage']['auth_captcha'],
-                    @$this->request->data['MailMessage']['captcha_id']
+                    $this->request->getData('MailMessage.auth_captcha'),
+                    @$this->request->getData('MailMessage.captcha_id')
                 );
                 if (!$captchaResult) {
                     $this->redirect($this->request->param('Content.url') . '/index');
@@ -394,7 +394,7 @@ class MailController extends MailAppController
                             $sendEmailPasswords[$field['MailField']['field_name']] = preg_replace(
                                 '/./',
                                 '*',
-                                $this->request->data['MailMessage'][$field['MailField']['field_name']]
+                                $this->request->getData('MailMessage.' . $field['MailField']['field_name'])
                             );
                         }
                     }
@@ -407,9 +407,9 @@ class MailController extends MailAppController
                     ]);
                     $sendEmailOptions = [];
                     if ($event !== false) {
-                        $this->request->data = $event->result === true ? $event->data['data'] : $event->result;
-                        if (!empty($event->data['sendEmailOptions'])) {
-                            $sendEmailOptions = $event->data['sendEmailOptions'];
+                        $this->request->data = $event->getResult() === true ? $event->getData('data') : $event->getResult();
+                        if (!empty($event->getData('sendEmailOptions'))) {
+                            $sendEmailOptions = $event->getData('sendEmailOptions');
                         }
                     }
                     if (!empty($sendEmailPasswords)) {
@@ -427,12 +427,12 @@ class MailController extends MailAppController
                                 // 削除フラグをセット
                                 $field_name = $field['MailField']['field_name'];
                                 $fileRecords['MailMessage'] = [
-                                    $field_name => $this->request->data['MailMessage'][$field_name],
+                                    $field_name => $this->request->getData('MailMessage.' . $field_name),
                                     $field_name . '_delete' => true,
                                 ];
                                 // BcUploadBehavior::deleteFiles() はデータベースのデータを削除する前提となっているため、
                                 // Model->data['MailMessage']['field_name'] に、配列ではなく、文字列がセットされている状態を想定しているので状態を模倣する
-                                $this->MailMessage->data['MailMessage'][$field_name] = $this->request->data['MailMessage'][$field_name];
+                                $this->MailMessage->data['MailMessage'][$field_name] = $this->request->getData('MailMessage.' . $field_name);
                             }
                             $this->MailMessage->deleteFiles($fileRecords);
                         }
@@ -465,8 +465,8 @@ class MailController extends MailAppController
                 $this->set('error', true);
 
                 $this->BcMessage->setError('Error : Confirm your entries and send again.');
-                $this->request->data['MailMessage']['auth_captcha'] = null;
-                $this->request->data['MailMessage']['captcha_id'] = null;
+                $this->request = $this->request->withData('MailMessage.auth_captcha',  null);
+                $this->request = $this->request->withData('MailMessage.captcha_id',  null);
                 $this->action = 'index'; //viewのボタンの表示の切り替えに必要なため変更
                 if ($this->dbDatas['mailFields']) {
                     $this->set('mailFields', $this->dbDatas['mailFields']);
@@ -526,8 +526,8 @@ class MailController extends MailAppController
     {
         $this->set('freezed', false);
         $this->set('error', false);
-        $this->request->data['MailMessage']['auth_captcha'] = null;
-        $this->request->data['MailMessage']['captcha_id'] = null;
+        $this->request = $this->request->withData('MailMessage.auth_captcha',  null);
+        $this->request = $this->request->withData('MailMessage.captcha_id',  null);
         if ($this->dbDatas['mailFields']) {
             $this->set('mailFields', $this->dbDatas['mailFields']);
         }

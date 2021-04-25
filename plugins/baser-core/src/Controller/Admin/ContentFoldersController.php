@@ -66,7 +66,7 @@ class ContentFoldersController extends AppController
 		$this->BcMessage->setSuccess(
 			sprintf(
 				__d('baser', 'フォルダ「%s」を追加しました。'),
-				$this->request->data['Content']['title']
+				$this->request->getData('Content.title')
 			),
 			true,
 			false
@@ -89,7 +89,7 @@ class ContentFoldersController extends AppController
 			}
 			if ($this->ContentFolder->save($this->request->data, ['reconstructSearchIndices' => true])) {
 				clearViewCache();
-				$this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $this->request->data['Content']['title']));
+				$this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $this->request->getData('Content.title')));
 				$this->redirect([
 					'plugin' => '',
 					'controller' => 'content_folders',
@@ -108,14 +108,14 @@ class ContentFoldersController extends AppController
 		}
 
 		$theme = [$this->siteConfigs['theme']];
-		$site = BcSite::findById($this->request->data['Content']['site_id']);
+		$site = BcSite::findById($this->request->getData('Content.site_id'));
 		if (!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
 			$theme[] = $site->theme;
 		}
-		$site = BcSite::findById($this->request->data['Content']['site_id']);
-		$this->set('folderTemplateList', $this->ContentFolder->getFolderTemplateList($this->request->data['Content']['id'], $theme));
-		$this->set('pageTemplateList', $this->Page->getPageTemplateList($this->request->data['Content']['id'], $theme));
-		$this->set('publishLink', $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain));
+		$site = BcSite::findById($this->request->getData('Content.site_id'));
+		$this->set('folderTemplateList', $this->ContentFolder->getFolderTemplateList($this->request->getData('Content.id'), $theme));
+		$this->set('pageTemplateList', $this->Page->getPageTemplateList($this->request->getData('Content.id'), $theme));
+		$this->set('publishLink', $this->Content->getUrl($this->request->getData('Content.url'), true, $site->useSubDomain));
 	}
 
 	/**
@@ -125,10 +125,10 @@ class ContentFoldersController extends AppController
 	 */
 	public function admin_delete()
 	{
-		if (empty($this->request->data['entityId'])) {
+		if (empty($this->request->getData('entityId'))) {
 			return false;
 		}
-		if ($this->ContentFolder->delete($this->request->data['entityId'])) {
+		if ($this->ContentFolder->delete($this->request->getData('entityId'))) {
 			return true;
 		}
 		return false;
@@ -141,10 +141,10 @@ class ContentFoldersController extends AppController
 	 */
 	public function view()
 	{
-		if (empty($this->request->params['entityId'])) {
+		if (empty($this->request->getParam('entityId'))) {
 			$this->notFound();
 		}
-		$data = $this->ContentFolder->find('first', ['conditions' => ['ContentFolder.id' => $this->request->params['entityId']]]);
+		$data = $this->ContentFolder->find('first', ['conditions' => ['ContentFolder.id' => $this->request->getParam('entityId')]]);
 		if (empty($data)) {
 			$this->notFound();
 		}
@@ -154,8 +154,8 @@ class ContentFoldersController extends AppController
 		$children = $this->ContentFolder->Content->children($data['Content']['id'], true, [], 'lft');
 		$this->ContentFolder->Content->Behaviors->load('BcCache');
 		$this->ContentFolder->Content->Behaviors->Tree->settings['Content']['scope'] = null;
-		if ($this->BcContents->preview && !empty($this->request->data['Content'])) {
-			$data['Content'] = $this->request->data['Content'];
+		if ($this->BcContents->preview && !empty($this->request->getData('Content'))) {
+			$data['Content'] = $this->request->getData('Content');
 		}
 		$this->set(compact('data', 'children'));
 		$folderTemplate = $data['ContentFolder']['folder_template'];

@@ -61,7 +61,7 @@ class UploaderCategory extends AppModel
             'id' => $id,
         ]);
         if ($event !== false) {
-            $data = $event->result === true ? $event->data['data'] : $event->result;
+            $data = $event->getResult() === true ? $event->getData('data') : $event->getResult();
         }
 
         $data['UploaderCategory']['name'] .= '_copy';

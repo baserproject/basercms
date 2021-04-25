@@ -39,13 +39,13 @@ class BcRequestFilter extends DispatcherFilter
 	/**
 	 * beforeDispatch Event
 	 *
-	 * @param CakeEvent $event イベント
+	 * @param \Cake\Event\Event $event イベント
 	 * @return void|CakeResponse
 	 */
-	public function beforeDispatch(CakeEvent $event)
+	public function beforeDispatch(\Cake\Event\Event $event)
 	{
-		$request = $event->data['request'];
-		$response = $event->data['response'];
+		$request = $event->getData('request');
+		$response = $event->getData('response');
 		$this->addDetectors($request);
 
 		// アセットならスキップ
@@ -164,7 +164,7 @@ class BcRequestFilter extends DispatcherFilter
 	 */
 	public function isInstall(CakeRequest $request)
 	{
-		return $request->params['controller'] === 'installations';
+		return $request->getParam('controller') === 'installations';
 	}
 
 	/**
@@ -200,8 +200,8 @@ class BcRequestFilter extends DispatcherFilter
 	 */
 	public function isPage(CakeRequest $request)
 	{
-		return $request->params['controller'] === 'pages'
-			&& $request->params['action'] === 'display';
+		return $request->getParam('controller') === 'pages'
+			&& $request->getParam('action') === 'display';
 	}
 
 	/**

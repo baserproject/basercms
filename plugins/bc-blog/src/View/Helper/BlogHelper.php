@@ -70,8 +70,8 @@ class BlogHelper extends AppHelper
         if (empty($this->blogContent) || ($blogContentId != $this->blogContent['id'])) {
             if ($blogContentId) {
                 if (!empty($this->request->query['preview']) && $this->request->query['preview'] == 'default' && $this->request->data) {
-                    if (!empty($this->request->data['BlogContent'])) {
-                        $this->blogContent = $this->request->data['BlogContent'];
+                    if (!empty($this->request->getData('BlogContent'))) {
+                        $this->blogContent = $this->request->getData('BlogContent');
                         $blogContentUpdated = true;
                     }
                 } else {
@@ -84,7 +84,7 @@ class BlogHelper extends AppHelper
             } elseif (isset($this->_View->viewVars['blogContent']['BlogContent'])) {
                 $this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
                 if ($this->request->params['Content']['type'] === 'BlogContent') {
-                    $this->content = $this->request->params['Content'];
+                    $this->content = $this->request->getParam('Content');
                 } else {
                     $content = $this->BcContents->getContentByEntityId($this->blogContent['id'], 'BlogContent');
                     if (!empty($content['Content'])) {
@@ -275,10 +275,10 @@ class BlogHelper extends AppHelper
             'url' => $url,
         ], ['class' => 'Blog', 'plugin' => 'Blog']);
         if ($event !== false) {
-            $options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
-            $post = $event->data['post'];
-            $title = $event->data['title'];
-            $url = $event->data['url'];
+            $options = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('options') : $event->getResult();
+            $post = $event->getData('post');
+            $title = $event->getData('title');
+            $url = $event->getData('url');
         }
 
         $out = $this->BcBaser->getLink($title, $url, $options);
@@ -291,7 +291,7 @@ class BlogHelper extends AppHelper
             'url' => $url,
         ], ['class' => 'Blog', 'plugin' => 'Blog']);
         if ($event !== false) {
-            $out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+            $out = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('out') : $event->getResult();
         }
         return $out;
     }
@@ -1076,12 +1076,12 @@ class BlogHelper extends AppHelper
      */
     public function isSingle()
     {
-        if (empty($this->request->params['plugin'])) {
+        if (empty($this->request->getParam('plugin'))) {
             return false;
         }
-        return ($this->request->params['plugin'] == 'blog' &&
-            $this->request->params['controller'] == 'blog' &&
-            $this->request->params['action'] == 'archives' &&
+        return ($this->request->getParam('plugin') == 'blog' &&
+            $this->request->getParam('controller') == 'blog' &&
+            $this->request->getParam('action') == 'archives' &&
             !$this->getBlogArchiveType());
     }
 
@@ -1092,10 +1092,10 @@ class BlogHelper extends AppHelper
      */
     public function isHome()
     {
-        if (empty($this->request->params['plugin'])) {
+        if (empty($this->request->getParam('plugin'))) {
             return false;
         }
-        return ($this->request->params['plugin'] == 'blog' && $this->request->params['controller'] == 'blog' && $this->request->params['action'] == 'index');
+        return ($this->request->getParam('plugin') == 'blog' && $this->request->getParam('controller') == 'blog' && $this->request->getParam('action') == 'index');
     }
 
     /**
@@ -1943,7 +1943,7 @@ class BlogHelper extends AppHelper
     public function getCategoryByName($blogContentId, $categoryName = '', $options = [])
     {
         if (!$categoryName && $this->getBlogArchiveType() === 'category') {
-            $pass = $this->request->params['pass'];
+            $pass = $this->request->getParam('pass');
             $categoryName = $pass[count($pass) - 1];
         }
         return ClassRegistry::init('Blog.BlogCategory')->getByName($blogContentId, $categoryName, $options);
@@ -1973,7 +1973,7 @@ class BlogHelper extends AppHelper
     {
         $blogTag = [];
         if ($this->isTag()) {
-            $pass = $this->request->params['pass'];
+            $pass = $this->request->getParam('pass');
             $name = isset($pass[1]) ? $pass[1] : '';
             $BlogTagModel = ClassRegistry::init('Blog.BlogTag');
             $blogTag = $BlogTagModel->getByName(urldecode($name));

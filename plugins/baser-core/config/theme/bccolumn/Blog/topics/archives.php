@@ -19,7 +19,7 @@ $(function(){
 	<?php foreach ($posts as $post): ?>
 		<div class="post">
 			<h3><?php $this->Blog->postTitle($post) ?></h3>
-			<?php $uri = $this->BcBaser->getRoot().$this->request->params['Content']['name'].'/archives/'.$post['BlogPost']['no']; ?>
+			<?php $uri = $this->BcBaser->getRoot().$this->request->getParam('Content.name').'/archives/'.$post['BlogPost']['no']; ?>
 			<div class="eye-catch">
 				<a href="<?php echo $uri ?>">
 					<?php $this->Blog->eyeCatch($post, array('link'=>false, 'width'=>'80px')) ?>
@@ -29,7 +29,7 @@ $(function(){
 			<p class="more"><a href="<?php echo $uri ?>" class="btn btn-more"><?php echo __('詳細ページへ') ?></a></p>
 
 
-				<div class="meta"> 
+				<div class="meta">
 				<span class="date">
 		<?php $this->Blog->postDate($post) ?>
 				</span>

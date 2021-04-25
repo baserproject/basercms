@@ -65,7 +65,7 @@ use BaserCore\Model\Entity\UserGroup;
 			<p>
 				<small><?php echo __d('baser', 'このグループに新しいユーザーを登録した際、次の「よく使う項目」が登録されます。	') ?></small>
 			</p>
-			<?php $favorites = BcUtil::unserialize($this->request->data['UserGroup']['default_favorites']) ?>
+			<?php $favorites = BcUtil::unserialize($this->request->getData('UserGroup.default_favorites')) ?>
 			<?php if ($favorites): ?>
 			<ul class="bca-list" data-bca-list-layout="horizon">
 				<?php foreach ($favorites as $favorite): ?>
