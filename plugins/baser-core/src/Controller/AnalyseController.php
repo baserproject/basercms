@@ -104,14 +104,16 @@ class AnalyseController extends AppController
             }
             $methods = $class->getMethods();
             foreach($methods as $method) {
+                $meta = array_merge($meta, [
+                    'checked' => false,
+                    'unitTest' => false,
+                    'noTodo' => false
+                ]);
                 if ('\\' . $method->class === $className && !in_array($method->name, $traitMethodsArray)) {
                     $meta['method'] = $method->name;
                     $meta = array_merge($meta, $this->getAnnotations($className, $method->name));
                     $metas[] = $meta;
                 }
-                $meta['checked'] = false;
-                $meta['unitTest'] = false;
-                $meta['noTodo'] = false;
             }
         }
         return $metas;
