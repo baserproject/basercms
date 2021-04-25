@@ -34,6 +34,8 @@ class BcTestCase extends TestCase
 
     /**
      * Set Up
+     * @checked
+     * @noTodo
      */
     public function setUp(): void
     {
@@ -52,6 +54,8 @@ class BcTestCase extends TestCase
      *
      * @param string $url
      * @return ServerRequest
+     * @checked
+     * @noTodo
      */
     public function getRequest($url = '/')
     {
@@ -66,6 +70,8 @@ class BcTestCase extends TestCase
      * サンプル用のユーザーを取得する
      *
      * @param string $group
+     * @checked
+     * @noTodo
      */
     protected function getUser($id = 1)
     {
@@ -81,6 +87,8 @@ class BcTestCase extends TestCase
      * 管理画面にログインする
      *
      * @param string $group
+     * @checked
+     * @noTodo
      */
     protected function loginAdmin($id = 1)
     {
