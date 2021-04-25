@@ -10,6 +10,9 @@
  */
 
 namespace BaserCore\View;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcAdminAppView
@@ -19,6 +22,8 @@ class BcAdminAppView extends AppView
 {
     /**
      * initialize
+     * @checked
+     * @noTodo
      */
     public function initialize(): void
     {

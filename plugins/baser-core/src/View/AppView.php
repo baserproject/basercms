@@ -23,6 +23,9 @@ use BaserCore\View\Helper\BcListTableHelper;
 use BaserCore\View\Helper\BcTextHelper;
 use BaserCore\View\Helper\BcTimeHelper;
 use Cake\View\View;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class AppView
@@ -48,6 +51,8 @@ class AppView extends View
 
     /**
      * Initialize
+     * @checked
+     * @noTodo
      */
     public function initialize(): void
     {
