@@ -33,6 +33,7 @@ class PasswordRequestsControllerTest extends BcTestCase
     protected $fixtures = [
         'plugin.BaserCore.PasswordRequests',
         'plugin.BaserCore.Users',
+        'plugin.BaserCore.LoginStores'
     ];
 
     /**

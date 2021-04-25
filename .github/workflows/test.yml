@@ -44,7 +44,7 @@ jobs:
         run: sleep 10
 
       - name: Migration
-        run: bin/cake migrations migrate --plugin baser-core
+        run: docker exec bc5-php composer run-script migration
 
       - name: Run test suite
         run: docker exec bc5-php composer run-script test

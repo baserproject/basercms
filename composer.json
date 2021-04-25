@@ -52,7 +52,8 @@
         "cs-check": "phpcs --colors -p  src/ tests/",
         "cs-fix": "phpcbf --colors -p src/ tests/",
         "stan": "phpstan analyse src/",
-        "test": "vendor/bin/phpunit --colors=always"
+        "test": "vendor/bin/phpunit --colors=always",
+        "migration": "bin/cake migrations migrate --plugin baser-core"
     },
     "suggest": {
         "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
