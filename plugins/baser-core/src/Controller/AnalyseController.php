@@ -36,7 +36,8 @@ class AnalyseController extends AppController
      * 解析したファイル情報一覧
      *
      * .json 付でアクセスすることで JSON を出力
-     * 例）https://localhost/baser/analyse/index/baser-core.json
+     * 例）http://localhost/baser/analyse/index/baser-core.json
+     * API) http://reflection.basercms.net/baser/analyse/index/baser-core.json
      *
      * @param string|null $pluginName
      */
@@ -103,6 +104,11 @@ class AnalyseController extends AppController
             }
             $methods = $class->getMethods();
             foreach($methods as $method) {
+                $meta = array_merge($meta, [
+                    'checked' => false,
+                    'unitTest' => false,
+                    'noTodo' => false
+                ]);
                 if ('\\' . $method->class === $className && !in_array($method->name, $traitMethodsArray)) {
                     $meta['method'] = $method->name;
                     $meta = array_merge($meta, $this->getAnnotations($className, $method->name));
