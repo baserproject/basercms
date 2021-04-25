@@ -9,6 +9,16 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+
+/**
+ * bc_form
+ *
+ * @checked
+ * @noTodo
+ */
 return [
     // Used for button elements in button().
     'button' => '<button{{attrs}}>{{text}}</button>',

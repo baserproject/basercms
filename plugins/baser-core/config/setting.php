@@ -10,7 +10,13 @@
  */
 
 use Cake\Cache\Engine\FileEngine;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
+/**
+ * @checked
+ */
 return [
     'BcApp' => [
         /**

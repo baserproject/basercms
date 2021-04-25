@@ -9,10 +9,19 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+
+/**
+ * bootstrap
+ *
+ * @checked
+ */
+
 use BaserCore\Event\BcControllerEventDispatcher;
 use BaserCore\Event\BcModelEventDispatcher;
 use BaserCore\Event\BcViewEventDispatcher;
-use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Event\EventManager;
