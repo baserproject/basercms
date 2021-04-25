@@ -139,9 +139,6 @@ class UsersTable extends Table
             'user_id' => $entity->id
         ]);
 
-
-
-
         // TODO 暫定措置
         // >>>
         return;
@@ -249,6 +246,13 @@ class UsersTable extends Table
         return $validator;
     }
 
+    /**
+     * validationPasswordUpdate
+     * @param Validator $validator
+     * @return Validator
+     * @checked
+     * @noTodo
+     */
     public function validationPasswordUpdate(Validator $validator): Validator
     {
         $validator

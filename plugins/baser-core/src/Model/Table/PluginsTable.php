@@ -79,6 +79,8 @@ class PluginsTable extends Table
      * 利用可能なプラグインの一覧を取得
      *
      * @return array
+     * @checked
+     * @noTodo
      */
     public function getAvailable()
     {
@@ -112,6 +114,8 @@ class PluginsTable extends Table
      *
      * @param string $name プラグイン名
      * @return \BaserCore\Model\Entity\Plugin|\Cake\Datasource\EntityInterface
+     * @checked
+     * @noTodo
      */
     public function getPluginConfig($name)
     {
@@ -173,6 +177,8 @@ class PluginsTable extends Table
      *
      * @param $pluginName
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function isInstallable($pluginName)
     {
@@ -227,6 +233,8 @@ class PluginsTable extends Table
      *
      * @param $name
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function install($name): bool
     {
@@ -261,6 +269,8 @@ class PluginsTable extends Table
      *
      * @param $name
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function uninstall($name): bool
     {
@@ -319,28 +329,6 @@ class PluginsTable extends Table
             'filterType' => $options['filterType'],
             'dbDataPattern' => $options['dbDataPattern']
         ]);
-    }
-
-    /**
-     * データベースの構造を変更する
-     *
-     * @param string $plugin プラグイン名
-     * @param string $dbConfigName データベース設定名
-     * @param string $filterTable テーブル指定
-     * @return bool
-     * @deprecated 5.0.0 since 4.0.0 Plugin::initDb() に統合
-     */
-    public function alterDb($plugin, $options = [])
-    {
-        $this->log(__d('baser', 'メソッド：Plugin::alterDb()は、バージョン 4.0.0 より非推奨となりました。Plugin::initDb() を利用してください。'), LOG_ALERT);
-        if (!is_array($options)) {
-            $pluginName = $options;
-            $options = [];
-        }
-        $options = array_merge([
-            'filterTable' => '',
-        ], $options);
-        return $this->initDb($plugin, $options);
     }
 
     /**
@@ -448,6 +436,8 @@ class PluginsTable extends Table
      *
      * @param string $pluginName プラグイン名
      * @return string|null
+     * @checked
+     * @noTodo
      */
     public function getDirectoryPath($pluginName)
     {

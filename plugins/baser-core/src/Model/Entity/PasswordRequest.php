@@ -64,6 +64,8 @@ class PasswordRequest extends Entity
      *
      * @param int $length
      * @return false|string
+     * @checked
+     * @noTodo
      */
     private function makeRequestKey($length = 48): string
     {
