@@ -17,7 +17,7 @@
 
 
 <!-- view -->
-<table cellpadding="0" cellspacing="0" class="list-table bca-form-table" id="ListTable">
+<table class="list-table bca-form-table" id="ListTable">
 
 	<tr>
 		<th class="col-head bca-form-table__label">No</th>

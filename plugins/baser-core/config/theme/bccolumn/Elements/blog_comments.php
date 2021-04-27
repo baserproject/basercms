@@ -26,7 +26,7 @@
 			<?php echo $this->BcAdminForm->create('BlogComment', array('url' => '/blog/blog_comments/add/' . $blogContent['BlogContent']['id'] . '/' . $post['BlogPost']['id'], 'id' => 'BlogCommentAddForm')) ?>
 			<?php echo $this->BcAdminForm->control('BlogComment.captcha_id', ['type' => 'hidden', 'value' => $captchaId]) ?>
 
-			<table cellpadding="0" cellspacing="0" class="row-table-01">
+			<table class="row-table-01">
 				<tbody>
 				<tr>
 					<th><?php echo $this->BcForm->label('BlogComment.name', __('お名前') . '・' . __('ニックネーム')) ?><span style="color:red">＊</span></th>

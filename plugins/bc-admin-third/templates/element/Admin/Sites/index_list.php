@@ -38,7 +38,7 @@ foreach($languages as $key => $lang) {
 </div>
 
 <!-- ListTable -->
-<table cellpadding="0" cellspacing="0" class="list-table sort-table bca-table-listup" id="ListTable">
+<table class="list-table sort-table bca-table-listup" id="ListTable">
 	<thead class="bca-table-listup__thead">
 	<tr>
 		<th class="bca-table-listup__thead-th">

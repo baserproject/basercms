@@ -30,7 +30,7 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 <h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser', '基本項目') ?></h2>
 
 <section class="bca-section" data-bca-section-type='form-group'>
-	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table bca-form-table">
+	<table id="FormTable" class="form-table bca-form-table">
 		<?php if ($this->action == 'admin_edit'): ?>
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailField.no', 'No') ?></th>
@@ -182,7 +182,7 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 				class="bca-icon--chevron-down bca-collapse__btn-icon"></i></button>
 	</div>
 	<div class="bca-collapse" id="mailFieldSettingBody" data-bca-state="">
-		<table cellpadding="0" cellspacing="0" class="form-table bca-form-table" id="formOptionBody">
+		<table class="form-table bca-form-table" id="formOptionBody">
 			<tr id="RowValidEx">
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailField.valid_ex', __d('baser', '拡張入力チェック')) ?></th>
 				<td class="col-input bca-form-table__input">

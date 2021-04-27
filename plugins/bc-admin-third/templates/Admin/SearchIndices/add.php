@@ -20,7 +20,7 @@
 
 <!-- form -->
 <div class="section">
-	<table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
+	<table class="list-table" id="ListTable">
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SearchIndex.title', __d('baser', 'タイトル')) ?>
 				&nbsp;<span class="required">*</span></th>

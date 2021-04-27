@@ -43,7 +43,7 @@ if ($this->request->action !== 'admin_add') {
 
 <!-- form -->
 <div class="section">
-	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table bca-form-table">
+	<table id="FormTable" class="form-table bca-form-table">
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('ThemeFile.name', __d('baser', 'ファイル名')) ?>
 				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>

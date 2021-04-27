@@ -18,7 +18,7 @@
 <h2><?php echo __d('baser', '画像サイズ設定') ?></h2>
 
 <div class="section bca-section">
-	<table cellpadding="0" cellspacing="0" class="list-table bca-form-table" id="ListTable">
+	<table class="list-table bca-form-table" id="ListTable">
 		<tr>
 			<th class="bca-form-table__label"><span class="bca-label"
 													data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>&nbsp;
@@ -111,7 +111,7 @@
 
 	<div id="FormOptionBody" class="section">
 		<h3><?php echo __d('baser', '詳細設定') ?></h3>
-		<table cellpadding="0" cellspacing="0" class="form-table bca-form-table">
+		<table class="form-table bca-form-table">
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('UploaderConfig.layout_type', __d('baser', 'レイアウトタイプ')) ?></th>
 				<td class="col-input bca-form-table__input">

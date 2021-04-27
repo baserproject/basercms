@@ -51,7 +51,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 
 <!-- form -->
 <div class="section">
-	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table bca-form-table">
+	<table id="FormTable" class="form-table bca-form-table">
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogCategory.name', __d('baser', 'カテゴリ名')) ?>
 				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>

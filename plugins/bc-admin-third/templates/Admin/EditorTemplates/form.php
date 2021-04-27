@@ -25,7 +25,7 @@ $this->BcBaser->js('admin/editor_templates/form', false);
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
 <div class="section">
-	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table bca-form-table">
+	<table id="FormTable" class="form-table bca-form-table">
 		<?php if ($this->action == 'admin_edit'): ?>
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('EditorTemplate.id', 'No') ?></th>

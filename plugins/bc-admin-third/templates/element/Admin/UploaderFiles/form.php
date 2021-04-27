@@ -53,7 +53,7 @@ if (empty($popup)) {
 <?php endif ?>
 
 
-<table cellpadding="0" cellspacing="0" class="form-table bca-form-table">
+<table class="form-table bca-form-table">
 	<tr>
 		<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('UploaderFile.id', 'No') ?></th>
 		<td class="col-input bca-form-table__input">

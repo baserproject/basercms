@@ -19,7 +19,7 @@
 <!-- form -->
 <?php echo $this->BcAdminForm->create('Tool', ['url' => ['action' => 'load_schema'], 'type' => 'file']) ?>
 
-<table cellpadding="0" cellspacing="0" class="form-table bca-form-table">
+<table class="form-table bca-form-table">
 	<tr>
 		<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Tool.schema_type', __d('baser', 'スキーマタイプ')) ?>
 			&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>

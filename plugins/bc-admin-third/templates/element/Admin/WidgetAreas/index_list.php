@@ -34,7 +34,7 @@ $this->BcListTable->setColumnNumber(6);
 </div>
 
 
-<table cellpadding="0" cellspacing="0" class="list-table bca-table-listup" id="ListTable">
+<table class="list-table bca-table-listup" id="ListTable">
 	<thead class="bca-table-listup__thead">
 	<tr class="">
 		<th class="list-tool bca-table-listup__thead-th  bca-table-listup__thead-th--select">
