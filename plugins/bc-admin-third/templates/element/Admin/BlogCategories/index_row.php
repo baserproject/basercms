@@ -40,9 +40,9 @@ if (isset($user['user_group_id'])) {
 	</td>
 	<td class="bca-table-listup__tbody-td"><?php echo html_entity_decode(h($data['BlogCategory']['title'])) ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
-	<td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format('Y-m-d', $data['BlogCategory']['created']); ?>
+	<td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format($data['BlogCategory']['created'], 'yyyy-MM-dd'); ?>
 		<br/>
-		<?php echo $this->BcTime->format('Y-m-d', $data['BlogCategory']['modified']); ?></td>
+		<?php echo $this->BcTime->format($data['BlogCategory']['modified'], 'yyyy-MM-dd'); ?></td>
 	<td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
 		<?php $this->BcBaser->link('', $this->Blog->getCategoryUrl($data['BlogCategory']['id']), ['title' => __d('baser', '確認'), 'target' => '_blank', 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg']) ?>
 		<?php if (in_array($data['BlogCategory']['owner_id'], $allowOwners) || (isset($user['user_group_id']) && $user['user_group_id'] == Configure::read('BcApp.adminGroupId'))): ?>

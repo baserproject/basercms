@@ -46,8 +46,8 @@ $class = ' class="' . implode(' ', $classies) . '"';
 	<td class="bc-align-center bca-table-listup__tbody-td"><?php echo $this->BcText->booleanMark($statusPublish); ?></td>
 	<td class="user-name bca-table-listup__tbody-td"><?php echo h($this->BcText->arrayValue($file['UploaderFile']['user_id'], $users)) ?></td>
 	<td class="created bca-table-listup__tbody-td">
-		<span class="created"><?php echo $this->BcTime->format('Y.m.d', $file['UploaderFile']['created']) ?></span><br/>
-		<span class="modified"><?php echo $this->BcTime->format('Y.m.d', $file['UploaderFile']['modified']) ?></span>
+		<span class="created"><?php echo $this->BcTime->format($file['UploaderFile']['created'], 'Y.m.d') ?></span><br/>
+		<span class="modified"><?php echo $this->BcTime->format($file['UploaderFile']['modified'], 'Y.m.d') ?></span>
 	</td>
 	<?php if (!$listId): ?>
 		<td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions" style="width:15%">

@@ -36,8 +36,8 @@
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 
 	<td class="bca-table-listup__tbody-td"
-		style="white-space:nowrap"><?php echo $this->BcTime->format('Y-m-d', $data['EditorTemplate']['created']) ?><br>
-		<?php echo $this->BcTime->format('Y-m-d', $data['EditorTemplate']['modified']) ?></td>
+		style="white-space:nowrap"><?php echo $this->BcTime->format($data['EditorTemplate']['created'], 'yyyy-MM-dd') ?><br>
+		<?php echo $this->BcTime->format($data['EditorTemplate']['modified'], 'yyyy-MM-dd') ?></td>
 	<td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
 		<?php $this->BcBaser->link('',
 			['action' => 'edit', $data['EditorTemplate']['id']],

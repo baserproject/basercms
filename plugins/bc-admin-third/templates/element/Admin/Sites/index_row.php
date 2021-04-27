@@ -44,8 +44,8 @@ $url = $this->BcContents->getUrl('/' . $data['Site']['alias'] . '/', true, $data
 	</td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td class="bca-table-listup__tbody-td" style="width:10%;white-space: nowrap">
-		<?php echo $this->BcTime->format('Y-m-d', $data['Site']['created']) ?><br>
-		<?php echo $this->BcTime->format('Y-m-d', $data['Site']['modified']) ?>
+		<?php echo $this->BcTime->format($data['Site']['created'], 'yyyy-MM-dd') ?><br>
+		<?php echo $this->BcTime->format($data['Site']['modified'], 'yyyy-MM-dd') ?>
 	</td>
 	<td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions" style="width:15%">
 		<?php $this->BcBaser->link('', ['action' => 'ajax_unpublish', $data['Site']['id']], ['title' => __d('baser', '非公開'), 'class' => 'btn-unpublish bca-btn-icon', 'data-bca-btn-type' => 'unpublish', 'data-bca-btn-size' => 'lg']) ?>

@@ -63,7 +63,7 @@
 	</td>
 
 	<td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--date"><?php // 投稿日 ?>
-		<?php echo $this->BcTime->format('Y-m-d', $data['BlogPost']['posts_date']); ?>
+		<?php echo $this->BcTime->format($data['BlogPost']['posts_date'], 'yyyy-MM-dd'); ?>
 	</td>
 
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>

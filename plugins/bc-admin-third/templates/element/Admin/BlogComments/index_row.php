@@ -50,8 +50,8 @@ if (!$data['BlogComment']['status']) {
 	</td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td class="bca-table-listup__tbody-td" style="white-space: nowrap">
-		<?php echo $this->BcTime->format('Y-m-d', $data['BlogComment']['created']); ?><br/>
-		<?php echo $this->BcTime->format('Y-m-d', $data['BlogComment']['modified']); ?>
+		<?php echo $this->BcTime->format($data['BlogComment']['created'], 'yyyy-MM-dd'); ?><br/>
+		<?php echo $this->BcTime->format($data['BlogComment']['modified'], 'yyyy-MM-dd'); ?>
 	</td>
 	<td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
 		<?php if (!empty($this->params['pass'][1])): ?>

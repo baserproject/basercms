@@ -92,8 +92,8 @@ if ($data['Content']['self_status']) {
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 
 	<td class="bca-table-listup__tbody-td" style="width:8%;white-space: nowrap">
-		<?php echo $this->BcTime->format('Y-m-d', $data['Content']['created_date']) ?><br/>
-		<?php echo $this->BcTime->format('Y-m-d', $data['Content']['modified_date']) ?>
+		<?php echo $this->BcTime->format($data['Content']['created_date'], 'yyyy-MM-dd') ?><br/>
+		<?php echo $this->BcTime->format($data['Content']['modified_date'], 'yyyy-MM-dd') ?>
 	</td>
 	<td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
 		<?php if ($isPublish): ?>

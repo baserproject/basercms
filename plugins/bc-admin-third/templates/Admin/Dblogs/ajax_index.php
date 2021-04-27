@@ -24,8 +24,8 @@
 		<ul class="clear bca-update-log__list">
 			<?php foreach($dblogs as $record): ?>
 				<li class="bca-update-log__list-item"><span
-						class="date"><?php echo $this->BcTime->format('Y.m.d', $record['Dblog']['created']) ?></span>
-					<small><?php echo $this->BcTime->format('H:i:s', $record['Dblog']['created']) ?>&nbsp;
+						class="date"><?php echo $this->BcTime->format($record['Dblog']['created'], 'Y.m.d') ?></span>
+					<small><?php echo $this->BcTime->format($record['Dblog']['created'], 'H:i:s') ?>&nbsp;
 						<?php
 						$userName = $this->BcBaser->getUserName($record['User']);
 						if ($userName) {

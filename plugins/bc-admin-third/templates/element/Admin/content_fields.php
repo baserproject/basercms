@@ -193,9 +193,9 @@ if ($this->BcContents->isEditable()) {
 				<?php if (($this->BcForm->value('Content.publish_begin') != $this->BcForm->value('Content.self_publish_begin')) ||
 					($this->BcForm->value('Content.publish_end') != $this->BcForm->value('Content.self_publish_end'))): ?>
 					<p>※ <?php echo __d('baser', '親フォルダの設定を継承し公開期間が設定されている状態となっています') ?><br>
-						（<?php echo $this->BcTime->format('Y/m/d H:i', $this->BcForm->value('Content.publish_begin')) ?>
+						（<?php echo $this->BcTime->format($this->BcForm->value('Content.publish_begin', 'Y/m/d H:i')) ?>
 						〜
-						<?php echo $this->BcTime->format('Y/m/d H:i', $this->BcForm->value('Content.publish_end')) ?>）
+						<?php echo $this->BcTime->format($this->BcForm->value('Content.publish_end', 'Y/m/d H:i')) ?>）
 					</p>
 				<?php endif ?>
 			</td>

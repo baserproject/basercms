@@ -40,12 +40,12 @@ $priorities = [
 		<?php echo $this->BcText->booleanMark($data['SearchIndex']['status']); ?><br>
 	</td>
 	<td class="bca-table-listup__tbody-td" nowrap>
-		<?php echo $this->BcTime->format('Y-m-d', $data['SearchIndex']['publish_begin']) ?><br>
-		<?php echo $this->BcTime->format('Y-m-d', $data['SearchIndex']['publish_end']) ?>
+		<?php echo $this->BcTime->format($data['SearchIndex']['publish_begin'], 'yyyy-MM-dd') ?><br>
+		<?php echo $this->BcTime->format($data['SearchIndex']['publish_end'], 'yyyy-MM-dd') ?>
 	</td>
 	<td class="bca-table-listup__tbody-td" style="width:10%;white-space: nowrap">
-		<?php echo $this->BcTime->format('Y-m-d', $data['SearchIndex']['created']) ?><br>
-		<?php echo $this->BcTime->format('Y-m-d', $data['SearchIndex']['modified']) ?>
+		<?php echo $this->BcTime->format($data['SearchIndex']['created'], 'yyyy-MM-dd') ?><br>
+		<?php echo $this->BcTime->format($data['SearchIndex']['modified'], 'yyyy-MM-dd') ?>
 	</td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td class="bca-table-listup__tbody-td">

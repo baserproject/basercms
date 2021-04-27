@@ -44,8 +44,8 @@
 	<td class="bca-table-listup__tbody-td"><?php echo $this->BcText->arrayValue($data['Permission']['auth'], [0 => '×', 1 => '〇']) ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td class="bca-table-listup__tbody-td">
-		<?php echo $this->BcTime->format('Y-m-d', $data['Permission']['created']); ?><br/>
-		<?php echo $this->BcTime->format('Y-m-d', $data['Permission']['modified']); ?>
+		<?php echo $this->BcTime->format($data['Permission']['created'], 'yyyy-MM-dd'); ?><br/>
+		<?php echo $this->BcTime->format($data['Permission']['modified'], 'yyyy-MM-dd'); ?>
 	</td>
 	<td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
 		<?php $this->BcBaser->link('', ['action' => 'ajax_unpublish', $data['Permission']['id']], ['title' => __d('baser', '無効'), 'class' => 'btn-unpublish bca-btn-icon', 'data-bca-btn-type' => 'unpublish', 'data-bca-btn-size' => 'lg']) ?>

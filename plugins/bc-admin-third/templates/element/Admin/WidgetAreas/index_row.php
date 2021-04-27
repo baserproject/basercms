@@ -26,7 +26,7 @@
 	<td class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['WidgetArea']['name'], ['action' => 'edit', $data['WidgetArea']['id']], ['escape' => true]); ?></td>
 	<td class="bca-table-listup__tbody-td"><?php echo $data['WidgetArea']['count']; ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
-	<td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format('Y-m-d', $data['WidgetArea']['created']); ?>
+	<td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format($data['WidgetArea']['created'], 'yyyy-MM-dd'); ?>
 		<br>
 		<?php echo $this->BcTime->format('Y-m-d', $data['WidgetArea']['modified']); ?></td>
 	<td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">

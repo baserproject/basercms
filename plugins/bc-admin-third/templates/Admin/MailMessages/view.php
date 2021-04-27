@@ -25,7 +25,7 @@
 	</tr>
 	<tr>
 		<th class="col-head bca-form-table__label"><?php echo __d('baser', '受信日時') ?></th>
-		<td class="col-input bca-form-table__input"><?php echo $this->BcTime->format('Y/m/d H:i:s', $message['MailMessage']['created']) ?></td>
+		<td class="col-input bca-form-table__input"><?php echo $this->BcTime->format($message['MailMessage']['created'], 'Y/m/d H:i:s') ?></td>
 	</tr>
 	<?php
 	$groupField = null;

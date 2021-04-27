@@ -43,8 +43,8 @@ if (!$data['MailField']['use_field']) {
 	<td class="bca-table-listup__tbody-td"><?php echo $this->BcText->booleanMark($data['MailField']['not_empty']) ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td class="bca-table-listup__tbody-td">
-		<?php echo $this->BcTime->format('Y-m-d', $data['MailField']['created']) ?><br/>
-		<?php echo $this->BcTime->format('Y-m-d', $data['MailField']['modified']) ?>
+		<?php echo $this->BcTime->format($data['MailField']['created'], 'yyyy-MM-dd') ?><br/>
+		<?php echo $this->BcTime->format($data['MailField']['modified'], 'yyyy-MM-dd') ?>
 	</td>
 	<td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
 		<?php $this->BcBaser->link('', ['action' => 'ajax_unpublish', $mailContent['MailContent']['id'], $data['MailField']['id']], ['title' => __d('baser', '非公開'), 'class' => 'btn-unpublish bca-btn-icon', 'data-bca-btn-type' => 'unpublish', 'data-bca-btn-size' => 'lg']) ?>

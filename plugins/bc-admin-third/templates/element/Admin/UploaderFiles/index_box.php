@@ -35,13 +35,13 @@ $class = ' class="' . implode(' ', $classies) . ' bca-file-list__item"';
 	<span class="name"><?php echo $file['UploaderFile']['name'] ?></span>
 	<div style="text-align:right;margin-top:2px">
 		<span class="created" style="white-space: nowrap">
-			[<?php echo __d('baser', '公開状態') ?>：<?php echo $this->BcText->booleanMark($statusPublish); ?>]&nbsp;<?php echo $this->BcTime->format('Y.m.d', $file['UploaderFile']['created']) ?>
+			[<?php echo __d('baser', '公開状態') ?>：<?php echo $this->BcText->booleanMark($statusPublish); ?>]&nbsp;<?php echo $this->BcTime->format($file['UploaderFile']['created'], 'Y.m.d') ?>
 		</span>
 	</div>
 	<div class="user-name"
 		 style="text-align:right"><span><?php echo h($this->BcText->arrayValue($file['UploaderFile']['user_id'], $users)) ?></span></div>
 	<div style="display:none">
-		<span class="modified"><?php echo $this->BcTime->format('Y.m.d', $file['UploaderFile']['modified']) ?></span>
+		<span class="modified"><?php echo $this->BcTime->format($file['UploaderFile']['modified'], 'Y.m.d') ?></span>
 		<span class="small"><?php echo $file['UploaderFile']['small'] ?></span>
 		<span class="midium"><?php echo $file['UploaderFile']['midium'] ?></span>
 		<span class="large"><?php echo $file['UploaderFile']['large'] ?></span>
@@ -49,13 +49,13 @@ $class = ' class="' . implode(' ', $classies) . ' bca-file-list__item"';
 			class="url"><?php echo $this->BcHtml->url($this->Uploader->getFileUrl($file['UploaderFile']['name'])) ?></span>
 		<span class="user-id"><?php echo $file['UploaderFile']['user_id'] ?></span>
 		<span
-			class="publish-begin"><?php echo $this->BcTime->format('Y/m/d', $file['UploaderFile']['publish_begin']) ?></span>
+			class="publish-begin"><?php echo $this->BcTime->format($file['UploaderFile']['publish_begin'], 'yyyy-MM-dd') ?></span>
 		<span
-			class="publish-begin-time"><?php echo $this->BcTime->format('H:i:s', $file['UploaderFile']['publish_begin']) ?></span>
+			class="publish-begin-time"><?php echo $this->BcTime->format($file['UploaderFile']['publish_begin'], 'H:i:s') ?></span>
 		<span
-			class="publish-end"><?php echo $this->BcTime->format('Y/m/d', $file['UploaderFile']['publish_end']) ?></span>
+			class="publish-end"><?php echo $this->BcTime->format($file['UploaderFile']['publish_end'], 'yyyy-MM-dd') ?></span>
 		<span
-			class="publish-end-time"><?php echo $this->BcTime->format('H:i:s', $file['UploaderFile']['publish_end']) ?></span>
+			class="publish-end-time"><?php echo $this->BcTime->format($file['UploaderFile']['publish_end'], 'H:i:s') ?></span>
 		<span class="uploader-category-id"><?php echo $file['UploaderFile']['uploader_category_id'] ?></span>
 		<span class="alt"><?php echo h($file['UploaderFile']['alt']) ?></span>
 	</div>

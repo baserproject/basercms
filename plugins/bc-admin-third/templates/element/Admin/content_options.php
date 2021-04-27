@@ -71,9 +71,9 @@ if ($this->BcContents->isEditable()) {
 						<?php echo h($this->BcText->arrayValue($this->BcForm->value('Content.author_id'), $authors)) ?>　
 
 						<small>[<?php echo __d('baser', '作成日') ?>
-							]</small> <?php echo $this->BcTime->format('Y/m/d H:i', $this->BcForm->value('Content.created_date')) ?>　
+							]</small> <?php echo $this->BcTime->format($this->BcForm->value('Content.created_date', 'Y/m/d H:i')) ?>　
 						<small>[<?php echo __d('baser', '更新日') ?>
-							]</small> <?php echo $this->BcTime->format('Y/m/d H:i', $this->BcForm->value('Content.modified_date')) ?>
+							]</small> <?php echo $this->BcTime->format($this->BcForm->value('Content.modified_date', 'Y/m/d H:i')) ?>
 						<?php echo $this->BcForm->hidden('Content.author_id') ?>
 						<?php echo $this->BcForm->hidden('Content.created_date') ?>
 						<?php echo $this->BcForm->hidden('Content.modified_date') ?>

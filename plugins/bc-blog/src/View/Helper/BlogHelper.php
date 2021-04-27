@@ -618,7 +618,7 @@ class BlogHelper extends AppHelper
         if (!isset($this->BcTime)) {
             $this->BcTime = new BcTimeHelper($this->_View);
         }
-        return $this->BcTime->format($format, $post['BlogPost']['posts_date']);
+        return $this->BcTime->format($post['BlogPost']['posts_date'], $format);
     }
 
     /**
