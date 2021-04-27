@@ -112,7 +112,7 @@ class SitesController extends AppController
 		}
 		$this->set('mainSites', $this->Site->getSiteList());
 		$this->set('themes', array_merge(['' => $defaultThemeName], $themes));
-		$this->help = 'sites_form';
+		$this->setHelp('sites_form');
 	}
 
 	/**
@@ -164,7 +164,7 @@ class SitesController extends AppController
 		}
 		$this->set('mainSites', $this->Site->getSiteList(null, ['excludeIds' => $this->request->getData('Site.id')]));
 		$this->set('themes', array_merge(['' => $defaultThemeName], $themes));
-		$this->help = 'sites_form';
+		$this->setHelp('sites_form');
 	}
 
 	/**

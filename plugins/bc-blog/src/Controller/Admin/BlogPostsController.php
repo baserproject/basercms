@@ -245,7 +245,7 @@ class BlogPostsController extends BlogAppController
             )
         );
         $this->search = 'blog_posts_index';
-        $this->help = 'blog_posts_index';
+        $this->setHelp('blog_posts_index');
     }
 
     /**
@@ -498,7 +498,7 @@ class BlogPostsController extends BlogAppController
             __d('baser', '%s｜新規記事登録'),
             $this->request->params['Content']['title']
         );
-        $this->help = 'blog_posts_form';
+        $this->setHelp('blog_posts_form');
         $this->render('form');
     }
 
@@ -685,7 +685,7 @@ class BlogPostsController extends BlogAppController
             __d('baser', '%s｜記事編集'),
             $this->request->params['Content']['title']
         );
-        $this->help = 'blog_posts_form';
+        $this->setHelp('blog_posts_form');
         $this->render('form');
     }
 

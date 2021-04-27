@@ -134,7 +134,7 @@ class MailMessagesController extends MailAppController
             __d('baser', '%s｜受信メール一覧'),
             $this->request->param('Content.title')
         );
-        $this->help = 'mail_messages_index';
+        $this->setHelp('mail_messages_index');
     }
 
     /**

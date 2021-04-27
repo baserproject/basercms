@@ -231,7 +231,7 @@ class BlogContentsController extends BlogAppController
         $this->subMenuElements = ['blog_posts'];
         $this->set('themes', $this->SiteConfig->getThemes());
         $this->setTitle(__d('baser', 'ブログ設定編集'));
-        $this->help = 'blog_contents_form';
+        $this->setHelp('blog_contents_form');
         $this->render('form');
     }
 

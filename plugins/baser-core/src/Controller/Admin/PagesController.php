@@ -212,7 +212,7 @@ class PagesController extends AppController
 		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink'));
 
 		$this->setTitle(__d('baser', '固定ページ情報編集'));
-		$this->help = 'pages_form';
+		$this->setHelp('pages_form');
 		$this->render('form');
 	}
 

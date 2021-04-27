@@ -163,7 +163,7 @@ class MailFieldsController extends MailAppController
             __d('baser', '%s｜メールフィールド一覧'),
             $this->request->param('Content.title')
         );
-        $this->help = 'mail_fields_index';
+        $this->setHelp('mail_fields_index');
     }
 
     /**
@@ -254,7 +254,7 @@ class MailFieldsController extends MailAppController
             __d('baser', '%s｜新規メールフィールド登録'),
             $this->request->param('Content.title')
         );
-        $this->help = 'mail_fields_form';
+        $this->setHelp('mail_fields_form');
         $this->render('form');
     }
 
@@ -321,7 +321,7 @@ class MailFieldsController extends MailAppController
             __d('baser', '%s｜メールフィールド編集'),
             $this->request->param('Content.title')
         );
-        $this->help = 'mail_fields_form';
+        $this->setHelp('mail_fields_form');
         $this->render('form');
     }
 

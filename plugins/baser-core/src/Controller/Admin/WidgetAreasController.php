@@ -97,7 +97,7 @@ class WidgetAreasController extends AppController
 			}
 		}
 		$this->set('widgetAreas', $widgetAreas);
-		$this->help = 'widget_areas_index';
+		$this->setHelp('widget_areas_index');
 	}
 
 	/**
@@ -118,7 +118,7 @@ class WidgetAreasController extends AppController
 				$this->redirect(['action' => 'edit', $this->WidgetArea->getInsertID()]);
 			}
 		}
-		$this->help = 'widget_areas_form';
+		$this->setHelp('widget_areas_form');
 		$this->render('form');
 	}
 
@@ -176,7 +176,7 @@ class WidgetAreasController extends AppController
 		}
 
 		$this->set('widgetInfos', $widgetInfos);
-		$this->help = 'widget_areas_form';
+		$this->setHelp('widget_areas_form');
 		$this->render('form');
 	}
 

@@ -202,7 +202,7 @@ class ThemeFilesController extends AppController
 		$this->set('theme', $theme);
 		$this->set('plugin', $plugin);
 		$this->set('type', $type);
-		$this->help = 'theme_files_index';
+		$this->setHelp('theme_files_index');
 		if ($this->request->is('ajax')) {
 			$this->render('ajax_index');
 		}
@@ -289,7 +289,7 @@ class ThemeFilesController extends AppController
 		$this->set('plugin', $plugin);
 		$this->set('type', $type);
 		$this->set('path', $path);
-		$this->help = 'theme_files_form';
+		$this->setHelp('theme_files_form');
 		$this->render('form');
 	}
 
@@ -368,7 +368,7 @@ class ThemeFilesController extends AppController
 		$this->set('plugin', $plugin);
 		$this->set('type', $type);
 		$this->set('path', $path);
-		$this->help = 'theme_files_form';
+		$this->setHelp('theme_files_form');
 		$this->render('form');
 	}
 
@@ -667,7 +667,7 @@ class ThemeFilesController extends AppController
 		$this->set('plugin', $plugin);
 		$this->set('type', $type);
 		$this->set('path', $path);
-		$this->help = 'theme_files_form_folder';
+		$this->setHelp('theme_files_form_folder');
 		$this->render('form_folder');
 	}
 
@@ -719,7 +719,7 @@ class ThemeFilesController extends AppController
 		$this->set('plugin', $plugin);
 		$this->set('type', $type);
 		$this->set('path', $path);
-		$this->help = 'theme_files_form_folder';
+		$this->setHelp('theme_files_form_folder');
 		$this->render('form_folder');
 	}
 

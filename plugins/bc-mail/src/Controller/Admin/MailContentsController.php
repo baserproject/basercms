@@ -72,7 +72,7 @@ class MailContentsController extends MailAppController
         $this->set('listDatas', $listDatas);
         $this->subMenuElements = ['mail_common'];
         $this->setTitle(__d('baser', 'メールフォーム一覧'));
-        $this->help = 'mail_contents_index';
+        $this->setHelp('mail_contents_index');
     }
 
     /**
@@ -113,7 +113,7 @@ class MailContentsController extends MailAppController
     {
         $this->setTitle(__d('baser', '新規メールフォーム登録'));
         $this->subMenuElements = ['mail_common'];
-        $this->help = 'mail_contents_form';
+        $this->setHelp('mail_contents_form');
 
         if (!$this->request->data) {
             $this->request->data = $this->MailContent->getDefaultValue();
@@ -236,7 +236,7 @@ class MailContentsController extends MailAppController
         $this->set('mailContent', $this->request->data);
         $this->subMenuElements = ['mail_fields'];
         $this->setTitle(__d('baser', 'メールフォーム設定編集'));
-        $this->help = 'mail_contents_form';
+        $this->setHelp('mail_contents_form');
         $this->render('form');
     }
 

@@ -192,7 +192,7 @@ class BlogCommentsController extends BlogAppController
 
         $dbDatas = $this->paginate('BlogComment');
         $this->set('dbDatas', $dbDatas);
-        $this->help = 'blog_comments_index';
+        $this->setHelp('blog_comments_index');
     }
 
     /**

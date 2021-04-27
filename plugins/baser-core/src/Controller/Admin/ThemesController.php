@@ -135,7 +135,7 @@ class ThemesController extends AppController
 		$this->set('currentTheme', $currentTheme);
 		$this->set('defaultDataPatterns', $this->BcManager->getDefaultDataPatterns($this->siteConfigs['theme'], ['useTitle' => false]));
 		$this->subMenuElements = ['themes'];
-		$this->help = 'themes_index';
+		$this->setHelp('themes_index');
 	}
 
 	/**

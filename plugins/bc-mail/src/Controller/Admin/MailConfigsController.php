@@ -61,6 +61,6 @@ class MailConfigsController extends MailAppController
         }
 
         $this->setTitle(__d('baser', 'メールプラグイン基本設定'));
-        $this->help = 'mail_configs_form';
+        $this->setHelp('mail_configs_form');
     }
 }

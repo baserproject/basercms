@@ -135,7 +135,7 @@ class ToolsController extends AppController
 				break;
 		}
 		$this->setTitle(__d('baser', 'データメンテナンス'));
-		$this->help = 'tools_maintenance';
+		$this->setHelp('tools_maintenance');
 	}
 
 	/**
@@ -317,7 +317,7 @@ class ToolsController extends AppController
 
 		/* 表示設定 */
 		$this->setTitle(__d('baser', 'スキーマファイル生成'));
-		$this->help = 'tools_write_schema';
+		$this->setHelp('tools_write_schema');
 
 		if (!$this->request->data) {
 			$this->request = $this->request->withData('Tool.connection',  'core');
@@ -353,7 +353,7 @@ class ToolsController extends AppController
 	{
 		/* 表示設定 */
 		$this->setTitle(__d('baser', 'スキーマファイル読込'));
-		$this->help = 'tools_load_schema';
+		$this->setHelp('tools_load_schema');
 		if (!$this->request->is(['post', 'put'])) {
 			$this->request = $this->request->withData('Tool.schema_type',  'create');
 			return;
@@ -442,7 +442,7 @@ class ToolsController extends AppController
 		}
 
 		$this->setTitle(__d('baser', 'データメンテナンス'));
-		$this->help = 'tools_log';
+		$this->setHelp('tools_log');
 		$this->set('fileSize', $fileSize);
 	}
 

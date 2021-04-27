@@ -196,7 +196,7 @@ class SiteConfigsController extends AppController
 		));
 		$this->subMenuElements = ['site_configs'];
 		$this->setTitle(__d('baser', 'サイト基本設定'));
-		$this->help = 'site_configs_form';
+		$this->setHelp('site_configs_form');
 	}
 
 	/**

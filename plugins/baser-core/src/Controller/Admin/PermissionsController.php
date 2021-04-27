@@ -110,7 +110,7 @@ class PermissionsController extends AppController
 
 		$userGroupName = $this->Permission->UserGroup->field('title', ['UserGroup.id' => $userGroupId]);
 		$this->setTitle(sprintf(__d('baser', '%s｜アクセス制限設定一覧'), $userGroupName));
-		$this->help = 'permissions_index';
+		$this->setHelp('permissions_index');
 	}
 
 	/**
@@ -166,7 +166,7 @@ class PermissionsController extends AppController
 		}
 		$this->setTitle(sprintf(__d('baser', '%s｜新規アクセス制限設定登録'), $userGroup['UserGroup']['title']));
 		$this->set('permissionAuthPrefix', $permissionAuthPrefix);
-		$this->help = 'permissions_form';
+		$this->setHelp('permissions_form');
 		$this->render('form');
 	}
 
@@ -243,7 +243,7 @@ class PermissionsController extends AppController
 		/* 表示設定 */
 		$this->setTitle(sprintf(__d('baser', '%s｜アクセス制限設定編集'), $userGroup['UserGroup']['title']));
 		$this->set('permissionAuthPrefix', Configure::read('Routing.prefixes.0'));
-		$this->help = 'permissions_form';
+		$this->setHelp('permissions_form');
 		$this->render('form');
 	}
 

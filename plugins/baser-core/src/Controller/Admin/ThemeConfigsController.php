@@ -70,7 +70,7 @@ class ThemeConfigsController extends AppController
 	public function admin_form()
 	{
 		$this->setTitle(__d('baser', 'テーマ設定'));
-		$this->help = 'theme_configs_form';
+		$this->setHelp('theme_configs_form');
 
 		if (!$this->request->is(['post', 'put'])) {
 			$this->request->data = ['ThemeConfig' => $this->ThemeConfig->findExpanded()];
