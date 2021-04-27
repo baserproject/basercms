@@ -83,7 +83,7 @@ class ToolsController extends AppController
 	 */
 	public function admin_index()
 	{
-		$this->pageTitle = __d('baser', 'ユーティリティトップ');
+		$this->setTitle(__d('baser', 'ユーティリティトップ'));
 	}
 
 	/**
@@ -134,7 +134,7 @@ class ToolsController extends AppController
 				$this->redirect(['action' => 'maintenance']);
 				break;
 		}
-		$this->pageTitle = __d('baser', 'データメンテナンス');
+		$this->setTitle(__d('baser', 'データメンテナンス'));
 		$this->help = 'tools_maintenance';
 	}
 
@@ -316,7 +316,7 @@ class ToolsController extends AppController
 		$path = TMP . 'schemas' . DS;
 
 		/* 表示設定 */
-		$this->pageTitle = __d('baser', 'スキーマファイル生成');
+		$this->setTitle(__d('baser', 'スキーマファイル生成'));
 		$this->help = 'tools_write_schema';
 
 		if (!$this->request->data) {
@@ -352,7 +352,7 @@ class ToolsController extends AppController
 	public function admin_load_schema()
 	{
 		/* 表示設定 */
-		$this->pageTitle = __d('baser', 'スキーマファイル読込');
+		$this->setTitle(__d('baser', 'スキーマファイル読込'));
 		$this->help = 'tools_load_schema';
 		if (!$this->request->is(['post', 'put'])) {
 			$this->request = $this->request->withData('Tool.schema_type',  'create');
@@ -441,7 +441,7 @@ class ToolsController extends AppController
 			$fileSize = filesize($errorLogPath);
 		}
 
-		$this->pageTitle = __d('baser', 'データメンテナンス');
+		$this->setTitle(__d('baser', 'データメンテナンス'));
 		$this->help = 'tools_log';
 		$this->set('fileSize', $fileSize);
 	}

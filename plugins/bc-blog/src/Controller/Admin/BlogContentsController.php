@@ -105,7 +105,7 @@ class BlogContentsController extends BlogAppController
      */
     public function admin_add()
     {
-        $this->pageTitle = __d('baser', '新規ブログ登録');
+        $this->setTitle(__d('baser', '新規ブログ登録'));
 
         if (!$this->request->data) {
 
@@ -230,7 +230,7 @@ class BlogContentsController extends BlogAppController
         $this->set('blogContent', $this->request->data);
         $this->subMenuElements = ['blog_posts'];
         $this->set('themes', $this->SiteConfig->getThemes());
-        $this->pageTitle = __d('baser', 'ブログ設定編集');
+        $this->setTitle(__d('baser', 'ブログ設定編集'));
         $this->help = 'blog_contents_form';
         $this->render('form');
     }

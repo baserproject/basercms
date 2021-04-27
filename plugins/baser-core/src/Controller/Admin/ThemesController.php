@@ -71,7 +71,7 @@ class ThemesController extends AppController
 	 */
 	public function admin_add()
 	{
-		$this->pageTitle = __d('baser', 'テーマアップロード');
+		$this->setTitle(__d('baser', 'テーマアップロード'));
 		$this->subMenuElements = ['themes'];
 		if (!$this->request->is(['post', 'put'])) {
 			return;
@@ -117,7 +117,7 @@ class ThemesController extends AppController
 	 */
 	public function admin_index()
 	{
-		$this->pageTitle = __d('baser', 'テーマ一覧');
+		$this->setTitle(__d('baser', 'テーマ一覧'));
 		$themes = BcUtil::getThemeList();
 		$datas = [];
 		$currentTheme = null;

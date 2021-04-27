@@ -57,7 +57,7 @@ class UploaderCategoriesController extends AppController
     public function admin_index()
     {
 
-        $this->pageTitle = __d('baser', 'カテゴリ一覧');
+        $this->setTitle(__d('baser', 'カテゴリ一覧'));
         $default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
         $this->setViewConditions('UploaderCategory', ['default' => $default]);
         $this->paginate = [
@@ -87,7 +87,7 @@ class UploaderCategoriesController extends AppController
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
         }
-        $this->pageTitle = __d('baser', 'カテゴリ新規登録');
+        $this->setTitle(__d('baser', 'カテゴリ新規登録'));
         $this->render('form');
     }
 
@@ -120,7 +120,7 @@ class UploaderCategoriesController extends AppController
             }
         }
 
-        $this->pageTitle = __d('baser', 'カテゴリ編集');
+        $this->setTitle(__d('baser', 'カテゴリ編集'));
         $this->render('form');
     }
 

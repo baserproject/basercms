@@ -56,7 +56,7 @@ class UploaderConfigsController extends AppController
     public function admin_index()
     {
 
-        $this->pageTitle = __d('baser', 'アップローダープラグイン設定');
+        $this->setTitle(__d('baser', 'アップローダープラグイン設定'));
         if (!$this->request->data) {
             $this->request = $this->request->withData('UploaderConfig',  $this->UploaderConfig->findExpanded());
         } else {

@@ -653,7 +653,7 @@ class UsersController extends BcAdminAppController
         if ($this->BcAuth->user()) {
             $this->redirect(['controller' => 'dashboard', 'action' => 'index']);
         }
-        $this->pageTitle = __d('baser', 'パスワードのリセット');
+        $this->setTitle(__d('baser', 'パスワードのリセット'));
         $userModel = $this->BcAuth->authenticate['Form']['userModel'];
         if (strpos($userModel, '.') !== false) {
             [, $userModel] = explode('.', $userModel);

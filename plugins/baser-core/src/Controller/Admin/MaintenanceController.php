@@ -58,7 +58,7 @@ class MaintenanceController extends AppController
 	 */
 	public function index()
 	{
-		$this->pageTitle = __d('baser', 'メンテナンス中');
+		$this->setTitle(__d('baser', 'メンテナンス中'));
 		$this->response->statusCode(503);
 	}
 

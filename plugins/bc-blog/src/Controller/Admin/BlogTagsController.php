@@ -71,7 +71,7 @@ class BlogTagsController extends BlogAppController
         ];
         $this->set('datas', $this->paginate('BlogTag'));
 
-        $this->pageTitle = __d('baser', 'タグ一覧');
+        $this->setTitle(__d('baser', 'タグ一覧'));
     }
 
     /**
@@ -97,7 +97,7 @@ class BlogTagsController extends BlogAppController
                 );
             }
         }
-        $this->pageTitle = __d('baser', '新規タグ登録');
+        $this->setTitle(__d('baser', '新規タグ登録'));
         $this->render('form');
     }
 
@@ -131,7 +131,7 @@ class BlogTagsController extends BlogAppController
                 );
             }
         }
-        $this->pageTitle = __d('baser', 'タグ編集');
+        $this->setTitle(__d('baser', 'タグ編集'));
         $this->render('form');
     }
 

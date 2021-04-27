@@ -288,7 +288,7 @@ class BlogController extends BlogAppController
         }
         $this->set('posts', $datas);
         $this->set('single', false);
-        $this->pageTitle = $this->request->params['Content']['title'];
+        $this->setTitle($this->request->params['Content']['title']);
         $this->render($template);
     }
 
@@ -365,7 +365,7 @@ class BlogController extends BlogAppController
                         }
                     }
                 }
-                $this->pageTitle = $blogCategories[count($blogCategories) - 1]['BlogCategory']['title'];
+                $this->setTitle($blogCategories[count($blogCategories) - 1]['BlogCategory']['title']);
                 $template = $this->blogContent['BlogContent']['template'] . DS . 'archives';
 
                 $this->set('blogArchiveType', $type);
@@ -390,7 +390,7 @@ class BlogController extends BlogAppController
                 );
                 App::uses('BcBaserHelper', 'View/Helper');
                 $BcBaser = new BcBaserHelper(new View());
-                $this->pageTitle = $BcBaser->getUserName($data);
+                $this->setTitle($BcBaser->getUserName($data));
                 $template = $this->blogContent['BlogContent']['template'] . DS . 'archives';
                 $this->set('blogArchiveType', $type);
 
@@ -406,7 +406,7 @@ class BlogController extends BlogAppController
                     $this->notFound();
                 }
                 $posts = $this->_getBlogPosts(['tag' => $tag]);
-                $this->pageTitle = urldecode($tag);
+                $this->setTitle(urldecode($tag));
                 $template = $this->blogContent['BlogContent']['template'] . DS . 'archives';
 
                 $this->set('blogArchiveType', $type);
@@ -429,11 +429,11 @@ class BlogController extends BlogAppController
                 }
                 $posts = $this->_getBlogPosts(['year' => $year, 'month' => $month, 'day' => $day]);
                 if ($day) {
-                    $this->pageTitle = sprintf(__('%s年%s月%s日'), $year, $month, $day);
+                    $this->setTitle(sprintf(__('%s年%s月%s日'), $year, $month, $day));
                 } elseif ($month) {
-                    $this->pageTitle = sprintf(__('%s年%s月'), $year, $month);
+                    $this->setTitle(sprintf(__('%s年%s月'), $year, $month));
                 } else {
-                    $this->pageTitle = sprintf(__('%s年'), $year);
+                    $this->setTitle(sprintf(__('%s年'), $year));
                 }
                 $template = $this->blogContent['BlogContent']['template'] . DS . 'archives';
 
@@ -525,7 +525,7 @@ class BlogController extends BlogAppController
                         }
                     }
                 }
-                $this->pageTitle = $post['BlogPost']['name'];
+                $this->setTitle($post['BlogPost']['name']);
                 $single = true;
                 $template = $this->blogContent['BlogContent']['template'] . DS . 'single';
                 if ($this->BcContents->preview) {
@@ -846,7 +846,7 @@ class BlogController extends BlogAppController
             'tag' => $tag,
             'num' => $num
         ]);
-        $this->pageTitle = urldecode($tag);
+        $this->setTitle(urldecode($tag));
         $this->set('posts', $posts);
     }
 }

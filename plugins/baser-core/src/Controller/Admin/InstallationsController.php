@@ -141,7 +141,7 @@ class InstallationsController extends AppController
 	 */
 	public function index()
 	{
-		$this->pageTitle = __d('baser', 'baserCMSのインストール');
+		$this->setTitle(__d('baser', 'baserCMSのインストール'));
 		clearAllCache();
 	}
 
@@ -176,7 +176,7 @@ class InstallationsController extends AppController
 		    $checkResult['jsDirWritable'] &&
 		    $checkResult['cssDirWritable']
 		));
-		$this->pageTitle = __d('baser', 'baserCMSのインストール｜ステップ２');
+		$this->setTitle(__d('baser', 'baserCMSのインストール｜ステップ２'));
 	}
 
 	/**
@@ -192,7 +192,7 @@ class InstallationsController extends AppController
 			clearAllCache();
 			$this->request->data = $this->_getDefaultValuesStep3();
 			$this->set('dbDataPatterns', $this->BcManager->getAllDefaultDataPatterns());
-			$this->pageTitle = __d('baser', 'baserCMSのインストール｜ステップ３');
+			$this->setTitle(__d('baser', 'baserCMSのインストール｜ステップ３'));
 			$this->set('dbsource', $dbsource);
 			return;
 		}
@@ -238,7 +238,7 @@ class InstallationsController extends AppController
 		}
 
 		$this->set('dbDataPatterns', $this->BcManager->getAllDefaultDataPatterns());
-		$this->pageTitle = __d('baser', 'baserCMSのインストール｜ステップ３');
+		$this->setTitle(__d('baser', 'baserCMSのインストール｜ステップ３'));
 		$this->set('dbsource', $dbsource);
 	}
 
@@ -251,7 +251,7 @@ class InstallationsController extends AppController
 	{
 		if (!$this->request->data) {
 			$this->request->data = $this->_getDefaultValuesStep4();
-			$this->pageTitle = __d('baser', 'baserCMSのインストール｜ステップ４');
+			$this->setTitle(__d('baser', 'baserCMSのインストール｜ステップ４'));
 			return;
 		}
 
@@ -302,7 +302,7 @@ class InstallationsController extends AppController
 			$this->BcMessage->setError(__d('baser', '管理ユーザーを作成できませんでした。'));
 			$this->BcMessage->setError($errMsg);
 		}
-		$this->pageTitle = __d('baser', 'baserCMSのインストール｜ステップ４');
+		$this->setTitle(__d('baser', 'baserCMSのインストール｜ステップ４'));
 	}
 
 	/**
@@ -330,7 +330,7 @@ class InstallationsController extends AppController
 	 */
 	public function step5()
 	{
-		$this->pageTitle = __d('baser', 'baserCMSのインストール完了！');
+		$this->setTitle(__d('baser', 'baserCMSのインストール完了！'));
 		Cache::config('default', ['engine' => 'File']);
 
 		if (!BC_INSTALLED) {
@@ -727,7 +727,7 @@ class InstallationsController extends AppController
 	 */
 	public function alert()
 	{
-		$this->pageTitle = __d('baser', 'baserCMSのインストールを開始できません');
+		$this->setTitle(__d('baser', 'baserCMSのインストールを開始できません'));
 	}
 
 	/**
@@ -739,7 +739,7 @@ class InstallationsController extends AppController
 	 */
 	public function reset()
 	{
-		$this->pageTitle = __d('baser', 'baserCMSの初期化');
+		$this->setTitle(__d('baser', 'baserCMSの初期化'));
 		$this->layoutPath = 'admin';
 		$this->layout = 'default';
 		$this->subDir = 'admin';

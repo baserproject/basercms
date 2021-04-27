@@ -123,7 +123,7 @@ class BlogConfigsController extends BlogAppController
     //		}
     //
     //		/* 表示設定 */
-    //		$this->pageTitle = 'ブログ設定';
+    //		$this->setTitle('ブログ設定');
     //	}
 
 }

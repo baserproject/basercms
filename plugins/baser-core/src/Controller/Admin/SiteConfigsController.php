@@ -195,7 +195,7 @@ class SiteConfigsController extends AppController
 			'writableHtaccess2', 'disableSettingInstallSetting', 'themes'
 		));
 		$this->subMenuElements = ['site_configs'];
-		$this->pageTitle = __d('baser', 'サイト基本設定');
+		$this->setTitle(__d('baser', 'サイト基本設定'));
 		$this->help = 'site_configs_form';
 	}
 
@@ -216,7 +216,7 @@ class SiteConfigsController extends AppController
 	public function admin_info()
 	{
 
-		$this->pageTitle = __d('baser', '環境情報');
+		$this->setTitle(__d('baser', '環境情報'));
 		$datasources = ['csv' => 'CSV', 'sqlite' => 'SQLite', 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL'];
 		$db = ConnectionManager::getDataSource('default');
 		list($type, $name) = explode('/', $db->config['datasource'], 2);

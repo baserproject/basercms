@@ -106,7 +106,7 @@ class MailController extends MailAppController
     public function __construct($request = null, $response = null)
     {
         parent::__construct($request, $response);
-        $this->pageTitle = __('お問い合わせ');
+        $this->setTitle(__('お問い合わせ'));
     }
 
     /**
@@ -143,7 +143,7 @@ class MailController extends MailAppController
         $this->dbDatas['mailConfig'] = $this->MailConfig->find();
 
         // ページタイトルをセット
-        $this->pageTitle = $this->request->param('Content.title');
+        $this->setTitle($this->request->param('Content.title'));
 
         if (empty($this->contentId)) {
             // 配列のインデックスが無いためエラーとなるため修正

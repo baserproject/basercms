@@ -71,7 +71,7 @@ class MailContentsController extends MailAppController
         $listDatas = $this->MailContent->find('all');
         $this->set('listDatas', $listDatas);
         $this->subMenuElements = ['mail_common'];
-        $this->pageTitle = __d('baser', 'メールフォーム一覧');
+        $this->setTitle(__d('baser', 'メールフォーム一覧'));
         $this->help = 'mail_contents_index';
     }
 
@@ -111,7 +111,7 @@ class MailContentsController extends MailAppController
      */
     public function admin_add()
     {
-        $this->pageTitle = __d('baser', '新規メールフォーム登録');
+        $this->setTitle(__d('baser', '新規メールフォーム登録'));
         $this->subMenuElements = ['mail_common'];
         $this->help = 'mail_contents_form';
 
@@ -235,7 +235,7 @@ class MailContentsController extends MailAppController
         }
         $this->set('mailContent', $this->request->data);
         $this->subMenuElements = ['mail_fields'];
-        $this->pageTitle = __d('baser', 'メールフォーム設定編集');
+        $this->setTitle(__d('baser', 'メールフォーム設定編集'));
         $this->help = 'mail_contents_form';
         $this->render('form');
     }

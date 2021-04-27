@@ -67,7 +67,7 @@ class EditorTemplatesController extends AppController
 	 */
 	public function admin_index()
 	{
-		$this->pageTitle = __d('baser', 'エディタテンプレート一覧');
+		$this->setTitle(__d('baser', 'エディタテンプレート一覧'));
 		$this->help = 'editor_templates_index';
 		$this->set('datas', $this->EditorTemplate->find('all'));
 	}
@@ -77,7 +77,7 @@ class EditorTemplatesController extends AppController
 	 */
 	public function admin_add()
 	{
-		$this->pageTitle = __d('baser', 'エディタテンプレート新規登録');
+		$this->setTitle(__d('baser', 'エディタテンプレート新規登録'));
 		$this->help = 'editor_templates_form';
 
 		if (!$this->request->is(['post', 'put'])) {
@@ -119,7 +119,7 @@ class EditorTemplatesController extends AppController
 	 */
 	public function admin_edit($id)
 	{
-		$this->pageTitle = __d('baser', 'エディタテンプレート編集');
+		$this->setTitle(__d('baser', 'エディタテンプレート編集'));
 		$this->help = 'editor_templates_form';
 
 		if (!$this->request->is(['post', 'put'])) {

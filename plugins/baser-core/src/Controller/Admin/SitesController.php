@@ -55,7 +55,7 @@ class SitesController extends AppController
 	 */
 	public function admin_index()
 	{
-		$this->pageTitle = __d('baser', 'サブサイト一覧');
+		$this->setTitle(__d('baser', 'サブサイト一覧'));
 		$this->paginate = ['order' => 'id'];
 		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
 		$this->setViewConditions('Site', ['default' => $default, 'action' => 'admin_index']);
@@ -101,7 +101,7 @@ class SitesController extends AppController
 				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
-		$this->pageTitle = __d('baser', 'サブサイト新規登録');
+		$this->setTitle(__d('baser', 'サブサイト新規登録'));
 		$defaultThemeName = __d('baser', 'サイト基本設定に従う');
 		if (!empty($this->siteConfigs['theme'])) {
 			$defaultThemeName .= '（' . $this->siteConfigs['theme'] . '）';
@@ -153,7 +153,7 @@ class SitesController extends AppController
 				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
-		$this->pageTitle = __d('baser', 'サブサイト編集');
+		$this->setTitle(__d('baser', 'サブサイト編集'));
 		$defaultThemeName = __d('baser', 'サイト基本設定に従う');
 		if (!empty($this->siteConfigs['theme'])) {
 			$defaultThemeName .= '（' . $this->siteConfigs['theme'] . '）';

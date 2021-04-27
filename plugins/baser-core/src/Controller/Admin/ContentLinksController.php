@@ -67,7 +67,7 @@ class ContentLinksController extends AppController
 	 */
 	public function admin_edit($entityId)
 	{
-		$this->pageTitle = __d('baser', 'リンク編集');
+		$this->setTitle(__d('baser', 'リンク編集'));
 		if ($this->request->is(['post', 'put'])) {
 			if ($this->ContentLink->isOverPostSize()) {
 				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));

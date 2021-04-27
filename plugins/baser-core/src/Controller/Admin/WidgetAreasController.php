@@ -84,7 +84,7 @@ class WidgetAreasController extends AppController
 	 */
 	public function admin_index()
 	{
-		$this->pageTitle = __d('baser', 'ウィジェットエリア一覧');
+		$this->setTitle(__d('baser', 'ウィジェットエリア一覧'));
 		$widgetAreas = $this->WidgetArea->find('all');
 		if ($widgetAreas) {
 			foreach($widgetAreas as $key => $widgetArea) {
@@ -107,7 +107,7 @@ class WidgetAreasController extends AppController
 	 */
 	public function admin_add()
 	{
-		$this->pageTitle = __d('baser', '新規ウィジェットエリア登録');
+		$this->setTitle(__d('baser', '新規ウィジェットエリア登録'));
 
 		if ($this->request->data) {
 			$this->WidgetArea->set($this->request->data);
@@ -129,7 +129,7 @@ class WidgetAreasController extends AppController
 	 */
 	public function admin_edit($id)
 	{
-		$this->pageTitle = __d('baser', 'ウィジェットエリア編集');
+		$this->setTitle(__d('baser', 'ウィジェットエリア編集'));
 
 		$widgetArea = $this->WidgetArea->read(null, $id);
 		if ($widgetArea['WidgetArea']['widgets']) {

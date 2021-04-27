@@ -211,7 +211,7 @@ class PagesController extends AppController
 		$pageTemplateList = $this->Page->getPageTemplateList($this->request->getData('Content.id'), $theme);
 		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink'));
 
-		$this->pageTitle = __d('baser', '固定ページ情報編集');
+		$this->setTitle(__d('baser', '固定ページ情報編集'));
 		$this->help = 'pages_form';
 		$this->render('form');
 	}

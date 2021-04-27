@@ -119,7 +119,7 @@ class ThemeFilesController extends AppController
 		if ($plugin) {
 			$pageTitle .= '：' . $plugin;
 		}
-		$this->pageTitle = $pageTitle;
+		$this->setTitle($pageTitle);
 		if (!empty($this->_tempalteTypes[$type])) {
 			$this->pageTitle .= sprintf(__d('baser', '｜%s一覧'), $this->_tempalteTypes[$type]);
 		}
@@ -280,7 +280,7 @@ class ThemeFilesController extends AppController
 			}
 		}
 
-		$this->pageTitle = sprintf(__d('baser', '%s｜%s作成'), Inflector::camelize($theme), $this->_tempalteTypes[$type]);
+		$this->setTitle(sprintf(__d('baser', '%s｜%s作成'), Inflector::camelize($theme), $this->_tempalteTypes[$type]));
 		$this->crumbs[] = ['name' => $this->_tempalteTypes[$type], 'url' => ['controller' => 'theme_files', 'action' => 'index', $theme, $type]];
 		$this->subMenuElements = ['theme_files'];
 		$this->set('isWritable', is_writable($fullpath));
@@ -359,7 +359,7 @@ class ThemeFilesController extends AppController
 			}
 		}
 
-		$this->pageTitle = sprintf(__d('baser', '%s｜%s編集'), Inflector::camelize($theme), $this->_tempalteTypes[$type]);
+		$this->setTitle(sprintf(__d('baser', '%s｜%s編集'), Inflector::camelize($theme), $this->_tempalteTypes[$type]));
 		$this->crumbs[] = ['name' => $this->_tempalteTypes[$type], 'url' => ['controller' => 'theme_files', 'action' => 'index', $theme, $type]];
 		$this->subMenuElements = ['theme_files'];
 		$this->set('currentPath', str_replace(ROOT, '', dirname($fullpath)) . DS);
@@ -520,7 +520,7 @@ class ThemeFilesController extends AppController
 		if ($plugin) {
 			$pageTitle .= '：' . $plugin;
 		}
-		$this->pageTitle = sprintf(__d('baser', '%s｜%s表示'), $pageTitle, $this->_tempalteTypes[$type]);
+		$this->setTitle(sprintf(__d('baser', '%s｜%s表示'), $pageTitle, $this->_tempalteTypes[$type]));
 		$this->crumbs[] = ['name' => $this->_tempalteTypes[$type], 'url' => ['controller' => 'theme_files', 'action' => 'index', $theme, $type]];
 		$this->subMenuElements = ['theme_files'];
 		$this->set('currentPath', str_replace(ROOT, '', dirname($fullpath)) . '/');
@@ -659,7 +659,7 @@ class ThemeFilesController extends AppController
 		}
 
 		$this->crumbs[] = ['name' => $this->_tempalteTypes[$type], 'url' => ['controller' => 'theme_files', 'action' => 'index', $theme, $type]];
-		$this->pageTitle = sprintf(__d('baser', '%s｜フォルダ作成'), $theme);
+		$this->setTitle(sprintf(__d('baser', '%s｜フォルダ作成'), $theme));
 		$this->subMenuElements = ['theme_files'];
 		$this->set('currentPath', str_replace(ROOT, '', $fullpath));
 		$this->set('isWritable', is_writable($fullpath));
@@ -710,7 +710,7 @@ class ThemeFilesController extends AppController
 		}
 
 		$pageTitle = $theme;
-		$this->pageTitle = sprintf(__d('baser', '%s｜フォルダ表示'), $pageTitle);
+		$this->setTitle(sprintf(__d('baser', '%s｜フォルダ表示'), $pageTitle));
 		$this->crumbs[] = ['name' => $this->_tempalteTypes[$type], 'url' => ['controller' => 'theme_files', 'action' => 'index', $theme, $type]];
 		$this->subMenuElements = ['theme_files'];
 		$this->set('currentPath', str_replace(ROOT, '', dirname($fullpath)) . '/');
@@ -744,7 +744,7 @@ class ThemeFilesController extends AppController
 		if ($plugin) {
 			$pageTitle .= '：' . $plugin;
 		}
-		$this->pageTitle = sprintf(__d('baser', '%s｜フォルダ表示'), $pageTitle);
+		$this->setTitle(sprintf(__d('baser', '%s｜フォルダ表示'), $pageTitle));
 		$this->crumbs[] = ['name' => $this->_tempalteTypes[$type], 'url' => ['controller' => 'theme_files', 'action' => 'index', $theme, $type]];
 		$this->subMenuElements = ['theme_files'];
 		$this->set('currentPath', str_replace(ROOT, '', dirname($fullpath)) . '/');

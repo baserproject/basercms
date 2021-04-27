@@ -135,7 +135,7 @@ class SearchIndicesController extends AppController
 		}
 		$this->set('query', $query);
 		$this->set('datas', $datas);
-		$this->pageTitle = __d('baser', '検索結果一覧');
+		$this->setTitle(__d('baser', '検索結果一覧'));
 	}
 
 	/**
@@ -212,7 +212,7 @@ class SearchIndicesController extends AppController
 	 */
 	public function admin_index()
 	{
-		$this->pageTitle = __d('baser', '検索インデックス一覧');
+		$this->setTitle(__d('baser', '検索インデックス一覧'));
 
 		/* 画面情報設定 */
 		$default = [
@@ -253,7 +253,7 @@ class SearchIndicesController extends AppController
 	 * @access    public
 	 */
 //	public function admin_add() {
-//		$this->pageTitle = '検索インデックス登録';
+//		$this->setTitle('検索インデックス登録');
 //
 //		if ($this->request->data) {
 //			$url = $this->request->getData('SearchIndex.url');

@@ -44,7 +44,7 @@ class MembersController extends UsersController
 	 */
 	public function mypage_index()
 	{
-		$this->pageTitle = __d('baser', 'メンバーマイページ');
+		$this->setTitle(__d('baser', 'メンバーマイページ'));
 	}
 
 }

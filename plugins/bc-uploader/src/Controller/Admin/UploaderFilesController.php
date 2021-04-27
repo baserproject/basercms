@@ -131,7 +131,7 @@ class UploaderFilesController extends AppController
             $this->set('imageSettings', $settings['UploaderFile']['fields']['name']['imagecopy']);
         } else {
             $this->search = 'uploader_files_index';
-            $this->pageTitle = __d('baser', 'アップロードファイル一覧');
+            $this->setTitle(__d('baser', 'アップロードファイル一覧'));
         }
     }
 

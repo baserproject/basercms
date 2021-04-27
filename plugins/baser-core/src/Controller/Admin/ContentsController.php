@@ -63,10 +63,10 @@ class ContentsController extends AppController
 
 		switch($this->request->action) {
 			case 'admin_index':
-				$this->pageTitle = __d('baser', 'コンテンツ一覧');
+				$this->setTitle(__d('baser', 'コンテンツ一覧'));
 				break;
 			case 'admin_trash_index':
-				$this->pageTitle = __d('baser', 'ゴミ箱');
+				$this->setTitle(__d('baser', 'ゴミ箱'));
 				break;
 		}
 
@@ -330,7 +330,7 @@ class ContentsController extends AppController
 	 */
 	public function admin_edit()
 	{
-		$this->pageTitle = __d('baser', 'コンテンツ編集');
+		$this->setTitle(__d('baser', 'コンテンツ編集'));
 		if (!$this->request->data) {
 			$this->request->data = $this->Content->find('first', ['conditions' => ['Content.id' => $this->request->params['named']['content_id']]]);
 			if (!$this->request->data) {
@@ -366,7 +366,7 @@ class ContentsController extends AppController
 	public function admin_edit_alias($id)
 	{
 
-		$this->pageTitle = __d('baser', 'エイリアス編集');
+		$this->setTitle(__d('baser', 'エイリアス編集'));
 		if ($this->request->is(['post', 'put'])) {
 			if ($this->Content->isOverPostSize()) {
 				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));

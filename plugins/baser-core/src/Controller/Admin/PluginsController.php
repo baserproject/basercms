@@ -278,7 +278,7 @@ class PluginsController extends BcAdminAppController
      */
     public function add()
     {
-        $this->pageTitle = __d('baser', 'プラグインアップロード');
+        $this->setTitle(__d('baser', 'プラグインアップロード'));
         $this->subMenuElements = ['plugins'];
 
         //データなし

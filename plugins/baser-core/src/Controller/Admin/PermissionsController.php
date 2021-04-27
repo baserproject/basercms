@@ -109,7 +109,7 @@ class PermissionsController extends AppController
 		}
 
 		$userGroupName = $this->Permission->UserGroup->field('title', ['UserGroup.id' => $userGroupId]);
-		$this->pageTitle = sprintf(__d('baser', '%s｜アクセス制限設定一覧'), $userGroupName);
+		$this->setTitle(sprintf(__d('baser', '%s｜アクセス制限設定一覧'), $userGroupName));
 		$this->help = 'permissions_index';
 	}
 
@@ -164,7 +164,7 @@ class PermissionsController extends AppController
 		if ($permissionAuthPrefix === 'admin') {
 			$permissionAuthPrefix = Configure::read('Routing.prefixes.0');
 		}
-		$this->pageTitle = sprintf(__d('baser', '%s｜新規アクセス制限設定登録'), $userGroup['UserGroup']['title']);
+		$this->setTitle(sprintf(__d('baser', '%s｜新規アクセス制限設定登録'), $userGroup['UserGroup']['title']));
 		$this->set('permissionAuthPrefix', $permissionAuthPrefix);
 		$this->help = 'permissions_form';
 		$this->render('form');
@@ -241,7 +241,7 @@ class PermissionsController extends AppController
 		}
 
 		/* 表示設定 */
-		$this->pageTitle = sprintf(__d('baser', '%s｜アクセス制限設定編集'), $userGroup['UserGroup']['title']);
+		$this->setTitle(sprintf(__d('baser', '%s｜アクセス制限設定編集'), $userGroup['UserGroup']['title']));
 		$this->set('permissionAuthPrefix', Configure::read('Routing.prefixes.0'));
 		$this->help = 'permissions_form';
 		$this->render('form');
