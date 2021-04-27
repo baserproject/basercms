@@ -244,7 +244,7 @@ class BlogPostsController extends BlogAppController
                 $this->request->params['Content']['title']
             )
         );
-        $this->search = 'blog_posts_index';
+        $this->setSearch('blog_posts_index');
         $this->setHelp('blog_posts_index');
     }
 

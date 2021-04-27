@@ -236,7 +236,7 @@ class SearchIndicesController extends AppController
 
 		$this->set('folders', $this->Content->getContentFolderList((int)$this->request->getData('SearchIndex.site_id'), ['conditions' => ['Content.site_root' => false]]));
 		$this->set('sites', $this->Site->getSiteList());
-		$this->search = 'search_indices_index';
+		$this->setSearch('search_indices_index');
 		$this->setHelp('search_indices_index');
 	}
 

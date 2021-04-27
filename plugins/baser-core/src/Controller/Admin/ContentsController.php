@@ -157,7 +157,7 @@ class ContentsController extends AppController
 		$this->set('folders', $this->Content->getContentFolderList((int)$currentSiteId, ['conditions' => ['Content.site_root' => false]]));
 		$this->set('listTypes', [1 => __d('baser', 'ツリー形式'), 2 => __d('baser', '表形式')]);
 		$this->set('sites', $sites);
-		$this->search = 'contents_index';
+		$this->setSearch('contents_index');
 		$this->subMenuElements = ['contents'];
 		$this->setHelp('contents_index');
 
