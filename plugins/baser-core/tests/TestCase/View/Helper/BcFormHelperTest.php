@@ -252,7 +252,7 @@ class BcFormHelperTest extends BcTestCase
 	    $this->markTestIncomplete('このテストは、まだ実装されていません。');
 	    // <<<
 
-		$result = $this->BcForm->end($array1, $array2);
+		$result = $this->BcAdminForm->end($array1, $array2);
 		$this->assertEquals($expected, $result);
 	}
 

@@ -339,4 +339,4 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
 	<?php endif ?>
 </section>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcAdminForm->end() ?>

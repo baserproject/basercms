@@ -264,4 +264,4 @@ $this->BcBaser->i18nScript([
 	]) ?>
 </div>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcAdminForm->end() ?>

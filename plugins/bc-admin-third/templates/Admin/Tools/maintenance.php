@@ -34,7 +34,7 @@
 		<?php echo $this->BcForm->error('Tool.backup_encoding') ?>
 	</p>
 	<p class="bca-main__text"><?php echo $this->BcForm->submit(__d('baser', 'ダウンロード'), ['div' => false, 'class' => 'button-small', 'id' => 'BtnDownload']) ?></p>
-	<?php echo $this->BcForm->end() ?>
+	<?php echo $this->BcAdminForm->end() ?>
 </div>
 
 <div class="section bca-main__section">
@@ -47,7 +47,7 @@
 	<p class="bca-main__text"><?php echo $this->BcAdminForm->control('Tool.backup', ['type' => 'file']) ?>
 		<?php echo $this->BcForm->error('Tool.backup') ?></p>
 	<p class="bca-main__text"><?php echo $this->BcForm->submit(__d('baser', 'アップロード'), ['div' => false, 'class' => 'button-small', 'id' => 'BtnUpload']) ?></p>
-	<?php echo $this->BcForm->end() ?>
+	<?php echo $this->BcAdminForm->end() ?>
 </div>
 
 <div class="section bca-main__section">

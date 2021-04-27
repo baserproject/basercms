@@ -52,4 +52,4 @@
 	<div
 		class="bca-search__btns-item"><?php $this->BcBaser->link(__d('baser', 'クリア'), "javascript:void(0)", ['id' => 'BtnSearchClear', 'class' => 'bca-btn', 'data-bca-btn-type' => 'clear']) ?></div>
 </div>
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcAdminForm->end() ?>

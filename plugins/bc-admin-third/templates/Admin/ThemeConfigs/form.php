@@ -139,4 +139,4 @@ $this->BcBaser->js(['admin/vendors/colpick', 'admin/theme_configs/form'], false)
 	<?php echo $this->BcForm->button(__d('baser', '保存'), ['id' => 'BtnSave', 'class' => 'button bca-btn', 'data-bca-btn-type' => 'save', 'data-bca-btn-size' => 'lg', 'data-bca-btn-width' => 'lg',]) ?>
 </div>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcAdminForm->end() ?>

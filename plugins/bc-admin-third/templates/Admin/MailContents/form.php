@@ -277,4 +277,4 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 	</div>
 </div>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcAdminForm->end() ?>

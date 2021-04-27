@@ -34,7 +34,7 @@ $this->BcBaser->js([
 	<?php echo $this->BcAdminForm->control('Function.encoding', ['type' => 'radio', 'options' => ['UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'UTF-8']) ?>
 	&nbsp;&nbsp;
 	<?php echo $this->BcForm->submit(__d('baser', 'CSVダウンロード'), ['div' => false, 'class' => 'button-small']) ?>
-	<?php echo $this->BcForm->end() ?>
+	<?php echo $this->BcAdminForm->end() ?>
 </div>
 
 <div id="AjaxBatchUrl"

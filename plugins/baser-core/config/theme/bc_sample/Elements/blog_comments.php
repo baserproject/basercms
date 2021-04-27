@@ -88,7 +88,7 @@
 	<?php endif ?>
 
 	<div class="bs-blog-comment__submit">
-		<?php echo $this->BcForm->end(['label' => __('送信する'), 'id' => 'BlogCommentAddButton', 'class' => 'button']) ?>
+		<?php echo $this->BcAdminForm->end(['label' => __('送信する'), 'id' => 'BlogCommentAddButton', 'class' => 'button']) ?>
 	</div>
 
 	<div id="ResultMessage" class="message" style="display:none;text-align:center">&nbsp;</div>

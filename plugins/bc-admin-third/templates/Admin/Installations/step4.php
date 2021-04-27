@@ -110,6 +110,6 @@ $this->BcBaser->i18nScript([
 		<?php echo $this->BcForm->button(__d('baser', '完了'), ['type' => 'button', 'class' => 'btn-red button bca-btn bca-actions__item', 'id' => 'btnfinish', 'name' => 'step5', 'data-bca-btn-type' => 'save']) ?>
 	</div>
 
-	<?php echo $this->BcForm->end() ?>
+	<?php echo $this->BcAdminForm->end() ?>
 
 </div>

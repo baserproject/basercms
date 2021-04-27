@@ -308,4 +308,4 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 	<?php endif ?>
 </div>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcAdminForm->end() ?>

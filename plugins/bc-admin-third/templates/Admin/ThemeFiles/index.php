@@ -61,7 +61,7 @@ $params = explode('/', $path);
 		<div class="bca-actions__form">
 			<?php echo $this->BcAdminForm->create('ThemeFile', ['id' => 'ThemeFileUpload', 'url' => array_merge(['action' => 'upload', $theme, $plugin, $type], $params), 'enctype' => 'multipart/form-data']) ?>
 			<?php echo $this->BcAdminForm->control('ThemeFile.file', ['type' => 'file']) ?>
-			<?php echo $this->BcForm->end() ?>
+			<?php echo $this->BcAdminForm->end() ?>
 		</div>
 	<?php endif ?>
 	<div class="bca-actions__adds">

@@ -53,7 +53,7 @@
 		<dt><?php echo $this->BcForm->label('Favorite.url', __d('baser', 'URL')) ?></dt>
 		<dd><?php echo $this->BcAdminForm->control('Favorite.url', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?></dd>
 	</dl>
-	<?php echo $this->BcForm->end() ?>
+	<?php echo $this->BcAdminForm->end() ?>
 </div>
 
 

@@ -89,4 +89,4 @@ $this->BcBaser->js('Mail.admin/mail_configs/form', false);
 	</div>
 </div>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcAdminForm->end() ?>

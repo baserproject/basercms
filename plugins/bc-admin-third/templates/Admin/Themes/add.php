@@ -37,4 +37,4 @@ $this->BcBaser->i18nScript([
 	<?php echo $this->BcForm->submit(__d('baser', '適用'), ['class' => 'button bca-btn', 'div' => false, 'id' => 'BtnSave']) ?>
 </div>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcAdminForm->end() ?>

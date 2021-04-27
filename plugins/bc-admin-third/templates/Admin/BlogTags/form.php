@@ -66,4 +66,4 @@ $this->BcBaser->js('Blog.admin/blog_tags/form', false);
 	<?php endif ?>
 </div>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcAdminForm->end() ?>

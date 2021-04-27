@@ -59,7 +59,7 @@
 				</div>
 			<?php endif ?>
 
-			<?php echo $this->BcForm->end(array('label' => __('送信する'), 'id' => 'BlogCommentAddButton', 'class' => 'button')) ?>
+			<?php echo $this->BcAdminForm->end(array('label' => __('送信する'), 'id' => 'BlogCommentAddButton', 'class' => 'button')) ?>
 			<div id="ResultMessage" class="message" style="display:none;text-align:center">&nbsp;</div>
 		</div>
 	</div>

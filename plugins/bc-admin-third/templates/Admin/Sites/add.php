@@ -39,4 +39,4 @@ $this->BcBaser->js('admin/sites/edit', false);
 </div>
 <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), ['plugin' => '', 'admin' => true, 'controller' => 'sites', 'action' => 'index'], ['class' => 'button bca-btn', 'data-bca-btn-type' => 'back-to-list']) ?>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcAdminForm->end() ?>

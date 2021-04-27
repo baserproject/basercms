@@ -150,4 +150,4 @@ if (empty($popup)) {
 	</div>
 <?php endif; ?>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcAdminForm->end() ?>

@@ -37,4 +37,4 @@ $this->BcBaser->i18nScript([
 	<?php echo $this->BcForm->submit(__d('baser', 'インストール'), ['class' => 'button bca-btn', 'div' => false, 'data-bca-btn-status' => 'primary']) ?>
 </div>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcAdminForm->end() ?>

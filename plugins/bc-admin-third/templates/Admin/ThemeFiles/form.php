@@ -129,4 +129,4 @@ if ($this->request->action !== 'admin_add') {
 <?php endif; ?>
 
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcAdminForm->end() ?>

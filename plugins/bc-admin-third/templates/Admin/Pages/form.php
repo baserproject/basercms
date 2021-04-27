@@ -94,4 +94,4 @@ $this->BcBaser->js('admin/pages/edit', false);
 	'id' => 'BtnSave'
 ]) ?>
 
-<?php echo $this->BcForm->end(); ?>
+<?php echo $this->BcAdminForm->end(); ?>

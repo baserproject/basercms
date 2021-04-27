@@ -18,5 +18,5 @@ if (!empty($this->passedArgs['num'])) {
 	<?php echo $this->BcAdminForm->control('SearchIndex.q', ['escape' => false]) ?>
 	<?php echo $this->BcForm->hidden('SearchIndex.s', ['value' => 0]) ?>
 	<?php echo $this->BcForm->submit('検索', array('div' => false, 'class' => 'submit_button')) ?>
-	<?php echo $this->BcForm->end() ?>
+	<?php echo $this->BcAdminForm->end() ?>
 </div>

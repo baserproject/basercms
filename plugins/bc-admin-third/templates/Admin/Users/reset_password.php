@@ -31,5 +31,5 @@ if (!$userModel) {
 		<?php echo $this->BcAdminForm->control($userModel . '.email', ['type' => 'text', 'size' => 34]) ?>
 		<?php echo $this->BcForm->submit(__d('baser', '送信'), ['div' => false, 'class' => 'btn-red button bca-btn', 'data-bca-btn-status' => 'warning']) ?>
 	</div>
-	<?php echo $this->BcForm->end() ?>
+	<?php echo $this->BcAdminForm->end() ?>
 </div>

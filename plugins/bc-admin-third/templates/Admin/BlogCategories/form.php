@@ -141,4 +141,4 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 	<?php endif ?>
 </div>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcAdminForm->end() ?>

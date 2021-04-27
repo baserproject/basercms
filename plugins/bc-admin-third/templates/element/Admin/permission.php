@@ -43,5 +43,5 @@
 			<?php echo $this->BcForm->error('Permission.auth') ?>
 		</dd>
 	</dl>
-	<?php echo $this->BcForm->end() ?>
+	<?php echo $this->BcAdminForm->end() ?>
 </div>

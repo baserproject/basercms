@@ -50,4 +50,4 @@
 	<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'btnSave', 'data-bca-btn-type' => 'save']) ?>
 </div>
 
-<?php echo $this->BcForm->end() ?>
+<?php echo $this->BcAdminForm->end() ?>

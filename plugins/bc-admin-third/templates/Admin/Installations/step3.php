@@ -250,6 +250,6 @@ $this->BcBaser->i18nScript([
 		<?php endif ?>
 	</div>
 
-	<?php echo $this->BcForm->end() ?>
+	<?php echo $this->BcAdminForm->end() ?>
 
 </div>
