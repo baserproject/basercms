@@ -46,12 +46,12 @@
 
 <div id="FavoriteDialog" title="お気に入り登録" style="display:none">
 	<?php echo $this->BcForm->create('Favorite', ['url' => ['plugin' => null, 'action' => 'ajax']]) ?>
-	<?php echo $this->BcForm->input('Favorite.id', ['type' => 'hidden']) ?>
+	<?php echo $this->BcAdminForm->control('Favorite.id', ['type' => 'hidden']) ?>
 	<dl>
 		<dt><?php echo $this->BcForm->label('Favorite.name', __d('baser', 'タイトル')) ?></dt>
-		<dd><?php echo $this->BcForm->input('Favorite.name', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?></dd>
+		<dd><?php echo $this->BcAdminForm->control('Favorite.name', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?></dd>
 		<dt><?php echo $this->BcForm->label('Favorite.url', __d('baser', 'URL')) ?></dt>
-		<dd><?php echo $this->BcForm->input('Favorite.url', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?></dd>
+		<dd><?php echo $this->BcAdminForm->control('Favorite.url', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?></dd>
 	</dl>
 	<?php echo $this->BcForm->end() ?>
 </div>

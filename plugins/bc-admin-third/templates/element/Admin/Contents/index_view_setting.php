@@ -29,15 +29,15 @@ if ($this->action == 'admin_index') {
 			<?php if (count($sites) >= 2): ?>
 				<div class="bca-panel-box__inline-fields-item">
 					<label class="bca-panel-box__inline-fields-title"><?php echo __d('baser', 'サイト') ?></label>
-					<?php echo $this->BcForm->input('ViewSetting.site_id', ['type' => 'select', 'options' => $sites]) ?>
+					<?php echo $this->BcAdminForm->control('ViewSetting.site_id', ['type' => 'select', 'options' => $sites]) ?>
 				</div>
 				<div class="bca-panel-box__inline-fields-separator"></div>
 			<?php else : ?>
-				<?php echo $this->BcForm->input('ViewSetting.site_id', ['type' => 'hidden', 'options' => $sites]) ?>
+				<?php echo $this->BcAdminForm->control('ViewSetting.site_id', ['type' => 'hidden', 'options' => $sites]) ?>
 			<?php endif ?>
 			<div class="bca-panel-box__inline-fields-item">
 				<label class="bca-panel-box__inline-fields-title"><?php echo __d('baser', '表示') ?></label>
-				<?php echo $this->BcForm->input('ViewSetting.list_type', ['type' => 'radio', 'options' => $listTypes]) ?>
+				<?php echo $this->BcAdminForm->control('ViewSetting.list_type', ['type' => 'radio', 'options' => $listTypes]) ?>
 			</div>
 			<div class="bca-panel-box__inline-fields-separator"></div>
 			<div id="GrpChangeTreeOpenClose">

@@ -15,7 +15,7 @@
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
-<?php echo $this->BcForm->input('UploaderCategory.id', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('UploaderCategory.id', ['type' => 'hidden']) ?>
 
 <table cellpadding="0" cellspacing="0" class="list-table bca-form-table" id="ListTable">
 	<?php if ($this->action == 'admin_edit'): ?>
@@ -23,7 +23,7 @@
 			<th class="bca-form-table__label"><?php echo $this->BcForm->label('UploaderCategory.id', 'No') ?></th>
 			<td class="bca-form-table__input">
 				<?php echo $this->BcForm->value('UploaderCategory.id') ?>
-				<?php echo $this->BcForm->input('UploaderCategory.id', ['type' => 'hidden']) ?>
+				<?php echo $this->BcAdminForm->control('UploaderCategory.id', ['type' => 'hidden']) ?>
 			</td>
 		</tr>
 	<?php endif; ?>
@@ -31,7 +31,7 @@
 		<th class="bca-form-table__label"><?php echo $this->BcForm->label('UploaderCategory.name', __d('baser', 'カテゴリ名')) ?>
 			&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
 		<td class="bca-form-table__input">
-			<?php echo $this->BcForm->input('UploaderCategory.name', ['type' => 'text', 'size' => 40, 'maxlength' => 50, 'autofocus' => true]) ?>
+			<?php echo $this->BcAdminForm->control('UploaderCategory.name', ['type' => 'text', 'size' => 40, 'maxlength' => 50, 'autofocus' => true]) ?>
 			<?php echo $this->BcForm->error('UploaderCategory.name') ?>
 		</td>
 	</tr>

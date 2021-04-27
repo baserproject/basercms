@@ -39,7 +39,7 @@ if ($this->request->action !== 'admin_add') {
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
-<?php echo $this->BcForm->input('ThemeFile.parent', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('ThemeFile.parent', ['type' => 'hidden']) ?>
 
 <!-- form -->
 <div class="section">
@@ -50,10 +50,10 @@ if ($this->request->action !== 'admin_add') {
 			</th>
 			<td class="col-input bca-form-table__input">
 				<?php if ($this->request->action != 'admin_view'): ?>
-					<?php echo $this->BcForm->input('ThemeFile.name', ['type' => 'text', 'size' => 30, 'maxlength' => 255, 'autofocus' => true]) ?>
+					<?php echo $this->BcAdminForm->control('ThemeFile.name', ['type' => 'text', 'size' => 30, 'maxlength' => 255, 'autofocus' => true]) ?>
 					<?php if ($this->BcForm->value('ThemeFile.ext')): ?>.<?php endif ?>
 					<?php echo h($this->BcForm->value('ThemeFile.ext')) ?>
-					<?php echo $this->BcForm->input('ThemeFile.ext', ['type' => 'hidden']) ?>
+					<?php echo $this->BcAdminForm->control('ThemeFile.ext', ['type' => 'hidden']) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<?php echo $this->BcForm->error('ThemeFile.name') ?>
 					<div id="helptextName" class="helptext">
@@ -62,8 +62,8 @@ if ($this->request->action !== 'admin_add') {
 						</ul>
 					</div>
 				<?php else: ?>
-					<?php echo $this->BcForm->input('ThemeFile.name', ['type' => 'text', 'size' => 30, 'readonly' => 'readonly']) ?> .<?php echo $this->BcForm->value('ThemeFile.ext') ?>
-					<?php echo $this->BcForm->input('ThemeFile.ext', ['type' => 'hidden']) ?>
+					<?php echo $this->BcAdminForm->control('ThemeFile.name', ['type' => 'text', 'size' => 30, 'readonly' => 'readonly']) ?> .<?php echo $this->BcForm->value('ThemeFile.ext') ?>
+					<?php echo $this->BcAdminForm->control('ThemeFile.ext', ['type' => 'hidden']) ?>
 				<?php endif ?>
 			</td>
 		</tr>
@@ -79,10 +79,10 @@ if ($this->request->action !== 'admin_add') {
 						</div>
 					<?php elseif ($this->request->action == 'admin_add' || $this->request->getData('ThemeFile.type') == 'text'): ?>
 						<?php if ($this->request->action != 'admin_view'): ?>
-							<?php echo $this->BcForm->input('ThemeFile.contents', ['type' => 'textarea', 'cols' => 80, 'rows' => 30]) ?>
+							<?php echo $this->BcAdminForm->control('ThemeFile.contents', ['type' => 'textarea', 'cols' => 80, 'rows' => 30]) ?>
 							<?php echo $this->BcForm->error('ThemeFile.contents') ?>
 						<?php else: ?>
-							<?php echo $this->BcForm->input('ThemeFile.contents', ['type' => 'textarea', 'cols' => 80, 'rows' => 30, 'readonly' => 'readonly']) ?>
+							<?php echo $this->BcAdminForm->control('ThemeFile.contents', ['type' => 'textarea', 'cols' => 80, 'rows' => 30, 'readonly' => 'readonly']) ?>
 						<?php endif ?>
 					<?php endif ?>
 				</td>

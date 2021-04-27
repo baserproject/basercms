@@ -30,7 +30,7 @@
 	<p class="bca-main__text"><?php echo __d('baser', 'データベースのデータをバックアップファイルとしてPCにダウンロードします。') ?></p>
 	<?php echo $this->BcForm->create('Tool', ['type' => 'get', 'url' => ['action' => 'maintenance', 'backup'], 'target' => '_blank']) ?>
 	<p class="bca-main__text">
-		<?php echo $this->BcForm->input('Tool.backup_encoding', ['type' => 'radio', 'options' => ['UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'UTF-8']) ?>
+		<?php echo $this->BcAdminForm->control('Tool.backup_encoding', ['type' => 'radio', 'options' => ['UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'UTF-8']) ?>
 		<?php echo $this->BcForm->error('Tool.backup_encoding') ?>
 	</p>
 	<p class="bca-main__text"><?php echo $this->BcForm->submit(__d('baser', 'ダウンロード'), ['div' => false, 'class' => 'button-small', 'id' => 'BtnDownload']) ?></p>
@@ -42,9 +42,9 @@
 	<p class="bca-main__text"><?php echo __d('baser', 'バックアップファイルをアップロードし、データベースのデータを復元します。') ?><br/>
 		<small><?php echo __d('baser', 'ダウンロードしたバックアップファイルをZIPファイルのままアップロードします。') ?></small></p>
 	<?php echo $this->BcForm->create('Tool', ['url' => ['action' => 'maintenance', 'restore'], 'type' => 'file']) ?>
-	<p class="bca-main__text"><?php echo $this->BcForm->input('Tool.encoding', ['type' => 'radio', 'options' => ['auto' => __d('baser', '自動判別'), 'UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'auto']) ?>
+	<p class="bca-main__text"><?php echo $this->BcAdminForm->control('Tool.encoding', ['type' => 'radio', 'options' => ['auto' => __d('baser', '自動判別'), 'UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'auto']) ?>
 		<?php echo $this->BcForm->error('Tool.encoding') ?></p>
-	<p class="bca-main__text"><?php echo $this->BcForm->input('Tool.backup', ['type' => 'file']) ?>
+	<p class="bca-main__text"><?php echo $this->BcAdminForm->control('Tool.backup', ['type' => 'file']) ?>
 		<?php echo $this->BcForm->error('Tool.backup') ?></p>
 	<p class="bca-main__text"><?php echo $this->BcForm->submit(__d('baser', 'アップロード'), ['div' => false, 'class' => 'button-small', 'id' => 'BtnUpload']) ?></p>
 	<?php echo $this->BcForm->end() ?>

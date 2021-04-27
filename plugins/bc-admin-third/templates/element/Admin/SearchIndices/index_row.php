@@ -27,7 +27,7 @@ $priorities = [
 <tr id="Row<?php echo $count + 1 ?>"<?php $this->BcListTable->rowClass($this->BcSearchIndex->allowPublish($data), $data) ?>>
 	<td class="row-tools bca-table-listup__tbody-td">
 		<?php if ($this->BcBaser->isAdminUser()): ?>
-			<?php echo $this->BcForm->input('ListTool.batch_targets.' . $data['SearchIndex']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['SearchIndex']['id']]) ?>
+			<?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $data['SearchIndex']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['SearchIndex']['id']]) ?>
 		<?php endif ?>
 	</td>
 	<td class="bca-table-listup__tbody-td"><?php echo $data['SearchIndex']['id'] ?></td>
@@ -50,7 +50,7 @@ $priorities = [
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td class="bca-table-listup__tbody-td">
 		<?php
-		echo $this->BcForm->input('SearchIndex.priority' . '_' . $data['SearchIndex']['id'], [
+		echo $this->BcAdminForm->control('SearchIndex.priority' . '_' . $data['SearchIndex']['id'], [
 			'type' => 'select',
 			'options' => $priorities,
 			'empty' => false,

@@ -20,17 +20,17 @@ if (!isset($listId)) {
 <div class="file-filter submit bca-search__input-list">
 	<span class="bca-search__input-item">
 		<?php echo $this->BcForm->label('BlogPost.blog_tag_id', __d('baser', '名称'), ['class' => 'bca-search__input-item-label']) ?>
-		<?php echo $this->BcForm->input('Filter.name', ['type' => 'text', 'id' => 'FilterName' . $listId, 'style' => 'width:160px']) ?>
+		<?php echo $this->BcAdminForm->control('Filter.name', ['type' => 'text', 'id' => 'FilterName' . $listId, 'style' => 'width:160px']) ?>
 	</span>
 	<?php if (!empty($uploaderCategories)): ?>
 		<span class="bca-search__input-item">
 		<?php echo $this->BcForm->label('BlogPost.blog_tag_id', __d('baser', 'カテゴリ'), ['class' => 'bca-search__input-item-label']) ?>
-		<?php echo $this->BcForm->input('Filter.uploader_category_id', ['type' => 'select', 'options' => $uploaderCategories, 'empty' => __d('baser', '指定なし'), 'id' => 'FilterUploaderCategoryId' . $listId]) ?>
+		<?php echo $this->BcAdminForm->control('Filter.uploader_category_id', ['type' => 'select', 'options' => $uploaderCategories, 'empty' => __d('baser', '指定なし'), 'id' => 'FilterUploaderCategoryId' . $listId]) ?>
 	</span>
 	<?php endif ?>
 	<span class="bca-search__input-item">
 		<?php echo $this->BcForm->label('BlogPost.blog_tag_id', __d('baser', 'タイプ'), ['class' => 'bca-search__input-item-label']) ?>
-		<?php echo $this->BcForm->input('Filter.uploader_type', ['type' => 'radio', 'options' => ['all' => __d('baser', '指定なし'), 'img' => __d('baser', '画像'), 'etc' => __d('baser', '画像以外')], 'id' => 'FilterUploaderType' . $listId]) ?>
+		<?php echo $this->BcAdminForm->control('Filter.uploader_type', ['type' => 'radio', 'options' => ['all' => __d('baser', '指定なし'), 'img' => __d('baser', '画像'), 'etc' => __d('baser', '画像以外')], 'id' => 'FilterUploaderType' . $listId]) ?>
 	</span>
 	<span class="button bca-search__btns">
 		<span

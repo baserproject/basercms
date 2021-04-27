@@ -18,8 +18,8 @@
 
 <?php echo $this->BcForm->create('Content', ['url' => ['content_id' => $this->BcForm->value('Content.id')]]) ?>
 <?php echo $this->BcFormTable->dispatchBefore() ?>
-<?php echo $this->BcForm->input('Content.alias_id', ['type' => 'hidden']) ?>
-<?php echo $this->BcForm->input('Content.site_id', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('Content.alias_id', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('Content.site_id', ['type' => 'hidden']) ?>
 
 <?php $this->BcBaser->element('admin/contents/form_alias') ?>
 

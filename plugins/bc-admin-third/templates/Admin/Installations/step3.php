@@ -184,38 +184,38 @@ $this->BcBaser->i18nScript([
 			<h3 class="bca-panel-box__title"><?php echo __d('baser', '接続情報') ?></h3>
 			<ul>
 				<li id="dbType"> <?php echo $this->BcForm->label('Installation.dbType', __d('baser', 'データベースタイプ')); ?>
-					<?php echo $this->BcForm->input('Installation.dbType', ['type' => 'select', 'options' => $dbsource]) ?>
+					<?php echo $this->BcAdminForm->control('Installation.dbType', ['type' => 'select', 'options' => $dbsource]) ?>
 					<br>
 					<small>※ <?php echo __d('baser', 'MySQL・PostgreSQL・SQLiteの中で、このサーバーで利用できるものが表示されています。') ?></small>
 				</li>
 				<li id="dbHost"> <?php echo $this->BcForm->label('Installation.dbHost', __d('baser', 'データベースホスト名')); ?>
-					<?php echo $this->BcForm->input('Installation.dbHost', ['type' => 'text', 'maxlength' => '300', 'size' => 45]); ?> </li>
+					<?php echo $this->BcAdminForm->control('Installation.dbHost', ['type' => 'text', 'maxlength' => '300', 'size' => 45]); ?> </li>
 				<li id="dbUser" class="clearfix">
 					<label><?php echo __d('baser', 'ログイン情報') ?></label>
 					<div
-						class="float-left"> <?php echo $this->BcForm->input('Installation.dbUsername', ['type' => 'text', 'maxlength' => '100']); ?>
+						class="float-left"> <?php echo $this->BcAdminForm->control('Installation.dbUsername', ['type' => 'text', 'maxlength' => '100']); ?>
 						<br/>
 						<small><?php echo __d('baser', 'ユーザー名') ?></small></div>
 					<div
-						class="float-left"> <?php echo $this->BcForm->input('Installation.dbPassword', ['type' => 'text', 'maxlength' => '100', 'type' => 'password']); ?>
+						class="float-left"> <?php echo $this->BcAdminForm->control('Installation.dbPassword', ['type' => 'text', 'maxlength' => '100', 'type' => 'password']); ?>
 						<br/>
 						<small><?php echo __d('baser', 'パスワード') ?></small></div>
 				</li>
 				<li id="dbInfo" class="clearfix">
 					<label><?php echo __d('baser', 'データベース情報') ?></label>
 					<div
-						class="float-left"> <?php echo $this->BcForm->input('Installation.dbName', ['type' => 'text', 'maxlength' => '100']); ?>
+						class="float-left"> <?php echo $this->BcAdminForm->control('Installation.dbName', ['type' => 'text', 'maxlength' => '100']); ?>
 						<br/>
 						<small><?php echo __d('baser', 'データベース名') ?></small></div>
 					<div
-						class="float-left"> <?php echo $this->BcForm->input('Installation.dbPrefix', ['type' => 'text', 'size' => '10']); ?>
+						class="float-left"> <?php echo $this->BcAdminForm->control('Installation.dbPrefix', ['type' => 'text', 'size' => '10']); ?>
 						<br/>
 						<small><?php echo __d('baser', 'プレフィックス') ?></small></div>
 					<div
-						class="float-left"> <?php echo $this->BcForm->input('Installation.dbPort', ['type' => 'text', 'maxlength' => '5', 'size' => 5]); ?>
+						class="float-left"> <?php echo $this->BcAdminForm->control('Installation.dbPort', ['type' => 'text', 'maxlength' => '5', 'size' => 5]); ?>
 						<br/>
 						<small><?php echo __d('baser', 'ポート') ?></small></div>
-					<?php echo $this->BcForm->input('buttonclicked', ['style' => 'display:none', 'type' => 'hidden']); ?>
+					<?php echo $this->BcAdminForm->control('buttonclicked', ['style' => 'display:none', 'type' => 'hidden']); ?>
 					<br style="clear:both"/><br/>
 					<small>※ <?php echo __d('baser', 'プレフィックスは英数字とアンダースコアの組み合わせとし末尾はアンダースコアにしてください。<br />※ ホスト名、データベース名、ポートは実際の環境に合わせて書き換えてください。') ?></small>
 				</li>
@@ -228,7 +228,7 @@ $this->BcBaser->i18nScript([
 			<ul>
 				<li><label><?php echo __d('baser', 'フロントテーマと初期データ') ?></label>
 					<p class="bca-main__text"><?php echo __d('baser', '利用するフロント側のデザインテーマと、コアパッケージやデザインテーマが保有するデモンストレーション用データを選択します。') ?></p>
-					<?php echo $this->BcForm->input('Installation.dbDataPattern', ['type' => 'select', 'options' => $dbDataPatterns]) ?>
+					<?php echo $this->BcAdminForm->control('Installation.dbDataPattern', ['type' => 'select', 'options' => $dbDataPatterns]) ?>
 					<br>
 					<small>
 						<?php if (isset($dbDataPatterns[$this->request->getData('Installation.dbDataPattern')])): ?>

@@ -47,7 +47,7 @@
 		'url' => '/blog/blog_comments/add/' . $blogContent['BlogContent']['id'] . '/' . $post['BlogPost']['id'],
 		'id' => 'BlogCommentAddForm'
 	]) ?>
-	<?php echo $this->BcForm->input('BlogComment.captcha_id', [
+	<?php echo $this->BcAdminForm->control('BlogComment.captcha_id', [
 		'type' => 'hidden',
 		'value' => $captchaId
 	]) ?>
@@ -55,22 +55,22 @@
 	<table class="bs-blog-comment__form">
 		<tr>
 			<th><?php echo $this->BcForm->label('BlogComment.name', __('お名前') . ' / ' . __('ニックネーム')) ?><span class="required">必須</span></th>
-			<td><?php echo $this->BcForm->input('BlogComment.name', ['type' => 'text', 'required' => false]) ?></td>
+			<td><?php echo $this->BcAdminForm->control('BlogComment.name', ['type' => 'text', 'required' => false]) ?></td>
 		</tr>
 		<tr>
 			<th><?php echo $this->BcForm->label('BlogComment.email', __('メールアドレス')) ?><span class="required">必須</span></th>
 			<td>
-				<?php echo $this->BcForm->input('BlogComment.email', ['type' => 'text', 'size' => 30, 'required' => false]) ?>&nbsp;
+				<?php echo $this->BcAdminForm->control('BlogComment.email', ['type' => 'text', 'size' => 30, 'required' => false]) ?>&nbsp;
 				<br><small>※ <?php echo __('メールアドレスは公開されません') ?></small>
 			</td>
 		</tr>
 		<tr>
 			<th><?php echo $this->BcForm->label('BlogComment.url', 'URL') ?><span class="normal">任意</span></th>
-			<td><?php echo $this->BcForm->input('BlogComment.url', ['type' => 'text', 'size' => 30, 'required' => false]) ?></td>
+			<td><?php echo $this->BcAdminForm->control('BlogComment.url', ['type' => 'text', 'size' => 30, 'required' => false]) ?></td>
 		</tr>
 		<tr>
 			<th><?php echo $this->BcForm->label('BlogComment.message', __('コメント')) ?><span class="required">必須</span></th>
-			<td><?php echo $this->BcForm->input('BlogComment.message', ['type' => 'textarea', 'rows' => 10, 'cols' => 52, 'required' => false]) ?></td>
+			<td><?php echo $this->BcAdminForm->control('BlogComment.message', ['type' => 'textarea', 'rows' => 10, 'cols' => 52, 'required' => false]) ?></td>
 		</tr>
 	</table>
 

@@ -21,7 +21,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 	<div class="bca-section bca-section__post-top">
 	<span class="bca-post__no">
 		<?php echo $this->BcForm->label('BlogCategory.no', 'No') ?> : <strong><?php echo $this->BcForm->value('BlogCategory.no') ?></strong>
-		<?php echo $this->BcForm->input('BlogCategory.no', ['type' => 'hidden']) ?>
+		<?php echo $this->BcAdminForm->control('BlogCategory.no', ['type' => 'hidden']) ?>
 	</span>
 		<span class="bca-post__url">
 	  <a href="<?php echo $this->BcBaser->getUri($fullUrl) ?>" class="bca-text-url" target="_blank"
@@ -47,7 +47,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
-<?php echo $this->BcForm->input('BlogCategory.id', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('BlogCategory.id', ['type' => 'hidden']) ?>
 
 <!-- form -->
 <div class="section">
@@ -57,7 +57,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
 			</th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('BlogCategory.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
+				<?php echo $this->BcAdminForm->control('BlogCategory.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<?php echo $this->BcForm->error('BlogCategory.name') ?>
 				<div id="helptextName" class="helptext">
@@ -73,7 +73,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
 			</th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('BlogCategory.title', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
+				<?php echo $this->BcAdminForm->control('BlogCategory.title', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
 				<?php echo $this->BcForm->error('BlogCategory.title') ?>
 			</td>
 		</tr>
@@ -82,7 +82,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogCategory.parent_id', __d('baser', '親カテゴリ')) ?></th>
 				<td class="col-input bca-form-table__input">
 					<?php
-					echo $this->BcForm->input('BlogCategory.parent_id', [
+					echo $this->BcAdminForm->control('BlogCategory.parent_id', [
 						'type' => 'select',
 						'options' => $parents,
 						'escape' => true])
@@ -91,7 +91,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 				</td>
 			</tr>
 		<?php else: ?>
-			<?php echo $this->BcForm->input('BlogCategory.parent_id', ['type' => 'hidden']) ?>
+			<?php echo $this->BcAdminForm->control('BlogCategory.parent_id', ['type' => 'hidden']) ?>
 		<?php endif ?>
 		<?php if ($this->BcBaser->siteConfig['category_permission']): ?>
 			<tr>
@@ -99,7 +99,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 				<td class="col-input bca-form-table__input">
 					<?php if ($this->BcAdmin->isSystemAdmin()): ?>
 						<?php
-						echo $this->BcForm->input('BlogCategory.owner_id', [
+						echo $this->BcAdminForm->control('BlogCategory.owner_id', [
 							'type' => 'select',
 							'options' => $owners,
 							'empty' => __d('baser', '指定しない')])
@@ -108,7 +108,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 						<?php echo $this->BcForm->error('BlogCategory.owner_id') ?>
 					<?php else: ?>
 						<?php echo $this->BcText->arrayValue($this->request->getData('BlogCategory.owner_id'), $owners) ?>
-						<?php echo $this->BcForm->input('BlogCategory.owner_id', ['type' => 'hidden']) ?>
+						<?php echo $this->BcAdminForm->control('BlogCategory.owner_id', ['type' => 'hidden']) ?>
 					<?php endif ?>
 					<div id="helptextOwnerId" class="helptext">
 						<ul>

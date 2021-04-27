@@ -31,10 +31,10 @@ $this->BcBaser->js('admin/vendors/jquery.upload-1.0.0.min');
 					<?php echo $this->BcForm->label('UploaderFile.uploader_category_id', __d('baser', 'アップロード')) ?>
 					&nbsp;
 					<?php if ($uploaderCategories): ?>
-						<?php echo $this->BcForm->input('UploaderFile.uploader_category_id', ['type' => 'select', 'options' => $uploaderCategories, 'empty' => __d('baser', 'カテゴリ指定なし'), 'id' => 'UploaderFileUploaderCategoryId' . $listId]) ?>&nbsp;
+						<?php echo $this->BcAdminForm->control('UploaderFile.uploader_category_id', ['type' => 'select', 'options' => $uploaderCategories, 'empty' => __d('baser', 'カテゴリ指定なし'), 'id' => 'UploaderFileUploaderCategoryId' . $listId]) ?>&nbsp;
 					<?php endif ?>
 					<span id="SpanUploadFile<?php echo $listId ?>">
-				<?php echo $this->BcForm->input('UploaderFile.file', ['type' => 'file', 'id' => 'UploaderFileFile' . $listId, 'class' => 'uploader-file-file', 'div' => false]) ?>
+				<?php echo $this->BcAdminForm->control('UploaderFile.file', ['type' => 'file', 'id' => 'UploaderFileFile' . $listId, 'class' => 'uploader-file-file', 'div' => false]) ?>
 			</span>
 				</div>
 			</div>

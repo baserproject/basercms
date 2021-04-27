@@ -45,7 +45,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 				&nbsp;<span class="required bca-label"
 							data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('SiteConfig.formal_name', ['type' => 'text', 'size' => 55, 'maxlength' => 255, 'autofocus' => true]) ?>
+				<?php echo $this->BcAdminForm->control('SiteConfig.formal_name', ['type' => 'text', 'size' => 55, 'maxlength' => 255, 'autofocus' => true]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<?php echo $this->BcForm->error('SiteConfig.formal_name') ?>
 				<div id="helptextFormalName" class="helptext">
@@ -61,7 +61,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 				&nbsp;<span class="required bca-label"
 							data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('SiteConfig.name', ['type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true]) ?>
+				<?php echo $this->BcAdminForm->control('SiteConfig.name', ['type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<?php echo $this->BcForm->error('SiteConfig.name') ?>
 				<div id="helptextName" class="helptext">
@@ -74,7 +74,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 		</tr>
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.keyword', __d('baser', 'サイト基本キーワード')) ?></th>
-			<td class="col-input bca-form-table__input"><?php echo $this->BcForm->input('SiteConfig.keyword', ['type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true]) ?>
+			<td class="col-input bca-form-table__input"><?php echo $this->BcAdminForm->control('SiteConfig.keyword', ['type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<?php echo $this->BcForm->error('SiteConfig.keyword') ?>
 				<div id="helptextKeyword"
@@ -83,7 +83,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 		</tr>
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.description', __d('baser', 'サイト基本説明文')) ?></th>
-			<td class="col-input bca-form-table__input"><?php echo $this->BcForm->input('SiteConfig.description', ['type' => 'textarea', 'cols' => 36, 'rows' => 5, 'counter' => true, 'data-input-text-size' => 'full-counter']) ?>
+			<td class="col-input bca-form-table__input"><?php echo $this->BcAdminForm->control('SiteConfig.description', ['type' => 'textarea', 'cols' => 36, 'rows' => 5, 'counter' => true, 'data-input-text-size' => 'full-counter']) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<?php echo $this->BcForm->error('SiteConfig.description') ?>
 				<div id="helptextDescription"
@@ -95,7 +95,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 				&nbsp;<span class="required bca-label"
 							data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('SiteConfig.email', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
+				<?php echo $this->BcAdminForm->control('SiteConfig.email', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
 				<?php echo $this->BcForm->error('SiteConfig.email') ?>
 			</td>
 		</tr>
@@ -106,12 +106,12 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 			<td class="col-input bca-form-table__input">
 				<!-- ↓↓↓自動入力を防止する為のダミーフィールド↓↓↓ -->
 				<input type="password" name="dummypass" style="display: none;">
-				<?php echo $this->BcForm->input('SiteConfig.site_url', array_merge(['type' => 'text', 'size' => 35, 'maxlength' => 255, 'data-margin' => 'bottom'], $disableSettingInstallSetting)) ?>
+				<?php echo $this->BcAdminForm->control('SiteConfig.site_url', array_merge(['type' => 'text', 'size' => 35, 'maxlength' => 255, 'data-margin' => 'bottom'], $disableSettingInstallSetting)) ?>
 				<br/>
-				<?php echo $this->BcForm->input('SiteConfig.ssl_url', array_merge(['type' => 'text', 'size' => 35, 'maxlength' => 255, 'after' => ' <small>[SSL]</small>'], $disableSettingInstallSetting)) ?>
+				<?php echo $this->BcAdminForm->control('SiteConfig.ssl_url', array_merge(['type' => 'text', 'size' => 35, 'maxlength' => 255, 'after' => ' <small>[SSL]</small>'], $disableSettingInstallSetting)) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<?php if ($disableSettingInstallSetting): ?>
-					<?php echo $this->BcForm->input('SiteConfig.site_url', ['type' => 'hidden']) ?>
+					<?php echo $this->BcAdminForm->control('SiteConfig.site_url', ['type' => 'hidden']) ?>
 				<?php endif ?>
 				<?php echo $this->BcForm->error('SiteConfig.site_url') ?>
 				<?php echo $this->BcForm->error('SiteConfig.ssl_url') ?>
@@ -122,7 +122,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.maintenance', __d('baser', '公開状態')) ?></th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('SiteConfig.maintenance', ['type' => 'select', 'options' => [0 => __d('baser', '公開中'), 1 => __d('baser', 'メンテナンス中')]]) ?>
+				<?php echo $this->BcAdminForm->control('SiteConfig.maintenance', ['type' => 'select', 'options' => [0 => __d('baser', '公開中'), 1 => __d('baser', 'メンテナンス中')]]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<div id="helptextMaintenance"
 					 class="helptext"><?php echo __d('baser', '公開状態を指定します。<br>メンテナンス中の場合に、公開ページを確認するには、管理画面にログインする必要があります。<br>ただし、制作・開発モードがデバッグモードに設定されている場合は、メンテナンス中にしていても公開ページが表示されてしまいますので注意が必要です。') ?></div>
@@ -131,7 +131,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.mode', __d('baser', '制作・開発モード')) ?></th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('SiteConfig.mode', array_merge(['type' => 'select', 'options' => $this->BcForm->getControlSource('mode')], $disableSettingInstallSetting)) ?>
+				<?php echo $this->BcAdminForm->control('SiteConfig.mode', array_merge(['type' => 'select', 'options' => $this->BcForm->getControlSource('mode')], $disableSettingInstallSetting)) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<div id="helptextDebug"
 					 class="helptext"><?php echo __d('baser', '制作・開発時のモードを指定します。通常は、ノーマルモードを指定しておきます。<br>※ CakePHPのデバッグモードを指します。<br>※ インストールモードはbaserCMSを初期化する場合にしか利用しませんので普段は利用しないようにしてください。') ?></div>
@@ -140,7 +140,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.widget_area', __d('baser', '標準ウィジェットエリア')) ?></th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('SiteConfig.widget_area', ['type' => 'select', 'options' => $this->BcForm->getControlSource('WidgetArea.id'), 'empty' => __d('baser', 'なし')]) ?>
+				<?php echo $this->BcAdminForm->control('SiteConfig.widget_area', ['type' => 'select', 'options' => $this->BcForm->getControlSource('WidgetArea.id'), 'empty' => __d('baser', 'なし')]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<div id="helptextWidgetArea"
 					 class="helptext"><?php echo sprintf(__d('baser', 'ウィジェットエリアは「%s」より追加できます。'), $this->BcBaser->getLink(__d('baser', 'ウィジェットエリア管理'), ['controller' => 'widget_areas', 'action' => 'index'])) ?></div>
@@ -160,7 +160,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.admin_ssl', __d('baser', '管理画面SSL設定')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('SiteConfig.admin_ssl', array_merge(['type' => 'radio', 'options' => $this->BcText->booleanDoList(__d('baser', 'SSL通信を利用')), 'separator' => '　', 'legend' => false], $disableSettingInstallSetting)) ?>
+					<?php echo $this->BcAdminForm->control('SiteConfig.admin_ssl', array_merge(['type' => 'radio', 'options' => $this->BcText->booleanDoList(__d('baser', 'SSL通信を利用')), 'separator' => '　', 'legend' => false], $disableSettingInstallSetting)) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<?php echo $this->BcForm->error('SiteConfig.admin_ssl') ?>
 					<div id="helptextAdminSslOn"
@@ -170,7 +170,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.admin_list_num', __d('baser', '管理画面テーマ')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('SiteConfig.admin_theme', ['type' => 'select', 'options' => $themes]) ?>
+					<?php echo $this->BcAdminForm->control('SiteConfig.admin_theme', ['type' => 'select', 'options' => $themes]) ?>
 					<?php echo $this->BcForm->error('SiteConfig.admin_theme') ?>
 				</td>
 			</tr>
@@ -178,7 +178,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.admin_list_num', __d('baser', '初期一覧件数')) ?></th>
 				<td class="col-input bca-form-table__input">
 					<?php
-					echo $this->BcForm->input('SiteConfig.admin_list_num', ['type' => 'select', 'options' => [
+					echo $this->BcAdminForm->control('SiteConfig.admin_list_num', ['type' => 'select', 'options' => [
 						10 => __d('baser', '10件'),
 						20 => __d('baser', '20件'),
 						50 => __d('baser', '50件'),
@@ -194,7 +194,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.login_credit', __d('baser', 'ログインページのクレジット表示')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('SiteConfig.login_credit', ['type' => 'radio', 'options' => $this->BcText->booleanDoList(__d('baser', '利用'))]) ?>
+					<?php echo $this->BcAdminForm->control('SiteConfig.login_credit', ['type' => 'radio', 'options' => $this->BcText->booleanDoList(__d('baser', '利用'))]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<div class="helptext"><?php echo __d('baser', 'ログインページに表示されているクレジット表示を利用するかどうか設定します。') ?></div>
 					<?php echo $this->BcForm->error('SiteConfig.login_credit') ?>
@@ -203,7 +203,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.admin_side_banner', __d('baser', 'サイドバーのバナー表示')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('SiteConfig.admin_side_banner', ['type' => 'radio', 'options' => $this->BcText->booleanDoList(__d('baser', '利用'))]) ?>
+					<?php echo $this->BcAdminForm->control('SiteConfig.admin_side_banner', ['type' => 'radio', 'options' => $this->BcText->booleanDoList(__d('baser', '利用'))]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<div class="helptext"><?php echo __d('baser', '管理システムのサイド部分にバナーを表示するかどうか設定します。') ?></div>
 					<?php echo $this->BcForm->error('SiteConfig.admin_side_banner') ?>
@@ -226,12 +226,12 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.address', __d('baser', 'GoogleMaps住所')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('SiteConfig.address', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'placeholder' => __d('baser', '住所'), 'data-margin' => 'bottom']) ?>
+					<?php echo $this->BcAdminForm->control('SiteConfig.address', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'placeholder' => __d('baser', '住所'), 'data-margin' => 'bottom']) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<div id="helptextAddress"
 						 class="helptext"><?php echo __d('baser', 'GoogleMapを利用する場合は地図を表示させたい住所を入力してください。郵便番号からでも大丈夫です。<br><br>入力例1) 福岡市中央区大名2-11-25<br>入力例2) 〒819-0041 福岡県福岡市中央区大名2-11-25<br><br>建物名を含めるとうまく表示されない場合があります。<br>その時は建物名を省略して試してください。<br>APIキーを入力しないと地図が表示されない場合があります。<a href="https://developers.google.com/maps/web/" target="_blank">「ウェブ向け Google Maps API」</a>') ?></div>
 					<br>
-					<?php echo $this->BcForm->input('SiteConfig.google_maps_api_key', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'placeholder' => __d('baser', 'APIキー')]) ?>
+					<?php echo $this->BcAdminForm->control('SiteConfig.google_maps_api_key', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'placeholder' => __d('baser', 'APIキー')]) ?>
 					<?php echo $this->BcForm->error('SiteConfig.address') ?>
 					<?php echo $this->BcForm->error('SiteConfig.google_maps_api_key') ?>
 				</td>
@@ -239,7 +239,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.google_analytics_id', __d('baser', 'Google Analytics<br>トラッキングID')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('SiteConfig.google_analytics_id', ['type' => 'text', 'size' => 35, 'maxlength' => 16, 'data-margin' => 'bottom']) ?>
+					<?php echo $this->BcAdminForm->control('SiteConfig.google_analytics_id', ['type' => 'text', 'size' => 35, 'maxlength' => 16, 'data-margin' => 'bottom']) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<div id="helptextGoogleAnalyticsId" class="helptext">
 						<?php echo __d('baser', 'Googleの無料のアクセス解析サービス <a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> を利用される方は、取得したトラッキングID (UA-000000-01 のような文字列）を入力してください。') ?>
@@ -249,7 +249,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 						<?php echo __d('baser', 'テンプレートで利用する場合は、 <pre>&lt;?php $this->BcBaser->googleAnalytics() ?&gt;</pre> で出力します。') ?>
 					</div>
 					<?php echo $this->BcForm->error('SiteConfig.google_analytics_id') ?><br/>
-					<?php echo sprintf(__d('baser', 'ユニバーサルアナリティクスを%s'), $this->BcForm->input('SiteConfig.use_universal_analytics', ['type' => 'radio', 'options' => ['0' => __d('baser', '利用していない'), '1' => __d('baser', '利用している')]])) ?>
+					<?php echo sprintf(__d('baser', 'ユニバーサルアナリティクスを%s'), $this->BcAdminForm->control('SiteConfig.use_universal_analytics', ['type' => 'radio', 'options' => ['0' => __d('baser', '利用していない'), '1' => __d('baser', '利用している')]])) ?>
 				</td>
 			</tr>
 		</table>
@@ -269,7 +269,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 					&nbsp;<span class="required bca-label"
 								data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('SiteConfig.main_site_display_name', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
+					<?php echo $this->BcAdminForm->control('SiteConfig.main_site_display_name', ['type' => 'text', 'size' => 35, 'maxlength' => 255]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<div class="helptext"><?php echo __d('baser', 'サブサイトを利用する際に、メインサイトを特定する識別名称を設定します。') ?></div>
 					<?php echo $this->BcForm->error('SiteConfig.main_site_display_name') ?>
@@ -278,12 +278,12 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.use_site_device_setting', __d('baser', 'デバイス・言語設定')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('SiteConfig.use_site_device_setting', ['type' => 'checkbox', 'label' => __d('baser', 'サブサイトでデバイス設定を利用する')]) ?>
+					<?php echo $this->BcAdminForm->control('SiteConfig.use_site_device_setting', ['type' => 'checkbox', 'label' => __d('baser', 'サブサイトでデバイス設定を利用する')]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<div
 						class="helptext"><?php echo __d('baser', 'サブサイトにデバイス属性を持たせ、サイトアクセス時、ユーザーエージェントを判定し適切なサイトを表示する機能を利用します。') ?></div>
 					<br>
-					<?php echo $this->BcForm->input('SiteConfig.use_site_lang_setting', ['type' => 'checkbox', 'label' => __d('baser', 'サブサイトで言語設定を利用する')]) ?>
+					<?php echo $this->BcAdminForm->control('SiteConfig.use_site_lang_setting', ['type' => 'checkbox', 'label' => __d('baser', 'サブサイトで言語設定を利用する')]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<div
 						class="helptext"><?php echo __d('baser', 'サブサイトに言語属性を持たせ、サイトアクセス時、ブラウザの言語設定を判定し適切なサイトを表示する機能を利用します。') ?></div>
@@ -306,14 +306,14 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.editor_enter_br', __d('baser', 'エディタタイプ')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('SiteConfig.editor', ['type' => 'radio', 'options' => Configure::read('BcApp.editors')]) ?>
+					<?php echo $this->BcAdminForm->control('SiteConfig.editor', ['type' => 'radio', 'options' => Configure::read('BcApp.editors')]) ?>
 				</td>
 			</tr>
 			<tr class="ckeditor-option">
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.editor_enter_br', __d('baser', '改行モード')) ?></th>
 				<td class="col-input bca-form-table__input">
 					<?php
-					echo $this->BcForm->input('SiteConfig.editor_enter_br', ['type' => 'radio', 'options' => [
+					echo $this->BcAdminForm->control('SiteConfig.editor_enter_br', ['type' => 'radio', 'options' => [
 						'0' => __d('baser', '改行時に段落を挿入する'),
 						'1' => __d('baser', '改行時にBRタグを挿入する')
 					]])
@@ -323,7 +323,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 			<tr class="ckeditor-option">
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.editor_styles', __d('baser', 'エディタスタイルセット')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('SiteConfig.editor_styles', ['type' => 'textarea', 'cols' => 36, 'rows' => 10, 'data-input-text-size' => 'full-counter']) ?>
+					<?php echo $this->BcAdminForm->control('SiteConfig.editor_styles', ['type' => 'textarea', 'cols' => 36, 'rows' => 10, 'data-input-text-size' => 'full-counter']) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<?php echo $this->BcForm->error('SiteConfig.editor_styles') ?>
 					<div id="helptextFormalName" class="helptext">
@@ -362,7 +362,7 @@ h2 {}
 			<tr>
 				<th class="bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.mail_encode', __d('baser', 'メール送信文字コード')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('SiteConfig.mail_encode', ['type' => 'select', 'options' => Configure::read('BcEncode.mail')]) ?>
+					<?php echo $this->BcAdminForm->control('SiteConfig.mail_encode', ['type' => 'select', 'options' => Configure::read('BcEncode.mail')]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<div id="helptextEncode"
 						 class="helptext"><?php echo __d('baser', '送信メールの文字コードを選択します。<br>受信したメールが文字化けする場合に変更します。') ?></div>
@@ -379,7 +379,7 @@ h2 {}
 								<?php echo $this->BcForm->label('SiteConfig.smtp_host', __d('baser', 'ホスト')) ?>
 							</th>
 							<td class="bca-form-table__inner-table-input">
-								<?php echo $this->BcForm->input('SiteConfig.smtp_host', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
+								<?php echo $this->BcAdminForm->control('SiteConfig.smtp_host', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
 								<?php echo $this->BcForm->error('SiteConfig.smtp_host') ?>
 								<i class="bca-icon--question-circle btn help bca-help"></i>
 								<div id="helptextSmtpHost"
@@ -391,7 +391,7 @@ h2 {}
 								<?php echo $this->BcForm->label('SiteConfig.smtp_port', __d('baser', 'ポート')) ?>
 							</th>
 							<td class="bca-form-table__inner-table-input">
-								<?php echo $this->BcForm->input('SiteConfig.smtp_port', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
+								<?php echo $this->BcAdminForm->control('SiteConfig.smtp_port', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
 								<?php echo $this->BcForm->error('SiteConfig.smtp_port') ?>
 								<i class="bca-icon--question-circle btn help bca-help"></i>
 								<div
@@ -403,7 +403,7 @@ h2 {}
 								<?php echo $this->BcForm->label('SiteConfig.smtp_user', __d('baser', 'ユーザー')) ?>
 							</th>
 							<td class="bca-form-table__inner-table-input">
-								<?php echo $this->BcForm->input('SiteConfig.smtp_user', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
+								<?php echo $this->BcAdminForm->control('SiteConfig.smtp_user', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
 								<?php echo $this->BcForm->error('SiteConfig.smtp_user') ?>
 								<i class="bca-icon--question-circle btn help bca-help"></i>
 								<div id="helptextSmtpUsername"
@@ -417,7 +417,7 @@ h2 {}
 								<?php echo $this->BcForm->label('SiteConfig.smtp_password', __d('baser', 'パスワード')) ?>
 							</th>
 							<td class="bca-form-table__inner-table-input">
-								<?php echo $this->BcForm->input('SiteConfig.smtp_password', ['type' => 'password', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
+								<?php echo $this->BcAdminForm->control('SiteConfig.smtp_password', ['type' => 'password', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off']) ?>
 								<?php echo $this->BcForm->error('SiteConfig.smtp_password') ?>
 								<i class="bca-icon--question-circle btn help bca-help"></i>
 								<div id="helptextSmtpPassword"
@@ -429,7 +429,7 @@ h2 {}
 								<?php echo $this->BcForm->label('SiteConfig.smtp_tls', __d('baser', 'TLS暗号化')) ?>
 							</th>
 							<td class="bca-form-table__inner-table-input">
-								<?php echo $this->BcForm->input('SiteConfig.smtp_tls', ['type' => 'radio', 'options' => $this->BcText->booleanDoList(__d('baser', 'TLS暗号化を利用'))]) ?>
+								<?php echo $this->BcAdminForm->control('SiteConfig.smtp_tls', ['type' => 'radio', 'options' => $this->BcText->booleanDoList(__d('baser', 'TLS暗号化を利用'))]) ?>
 								<?php echo $this->BcForm->error('SiteConfig.smtp_tls') ?>
 								<i class="bca-icon--question-circle btn help bca-help"></i>
 								<div id="helptextSmtpTls"
@@ -447,7 +447,7 @@ h2 {}
 			<tr>
 				<th class="bca-form-table__label"><?php echo $this->BcForm->label('SiteConfig.mail_additional_parameters', __d('baser', 'additional_parameters（オプション）')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('SiteConfig.mail_additional_parameters', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'placeholder' => '-f webmaster@mail.example.com']) ?>
+					<?php echo $this->BcAdminForm->control('SiteConfig.mail_additional_parameters', ['type' => 'text', 'size' => 35, 'maxlength' => 255, 'placeholder' => '-f webmaster@mail.example.com']) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<div class="helptext"><?php echo __d('baser', '標準機能によるメール送信時にオプションを追加します。') ?></div>
 					<?php echo $this->BcForm->error('SiteConfig.mail_encode') ?>

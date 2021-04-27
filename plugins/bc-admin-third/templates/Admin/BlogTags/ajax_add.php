@@ -13,7 +13,7 @@
 
 
 <?php if ($result): ?>
-	<?php echo $this->BcForm->input('BlogTag.BlogTag', [
+	<?php echo $this->BcAdminForm->control('BlogTag.BlogTag', [
 		'type' => 'select',
 		'multiple' => 'checkbox',
 		'options' => $result,

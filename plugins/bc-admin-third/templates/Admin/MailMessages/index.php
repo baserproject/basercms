@@ -31,7 +31,7 @@ $this->BcBaser->js([
 
 <div class="panel-box bca-panel-box" id="FunctionBox">
 	<?php echo $this->BcForm->create('Function', ['type' => 'get', 'url' => ['controller' => 'mail_fields', 'action' => 'download_csv', $this->params['pass'][0]]]) ?>
-	<?php echo $this->BcForm->input('Function.encoding', ['type' => 'radio', 'options' => ['UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'UTF-8']) ?>
+	<?php echo $this->BcAdminForm->control('Function.encoding', ['type' => 'radio', 'options' => ['UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'UTF-8']) ?>
 	&nbsp;&nbsp;
 	<?php echo $this->BcForm->submit(__d('baser', 'CSVダウンロード'), ['div' => false, 'class' => 'button-small']) ?>
 	<?php echo $this->BcForm->end() ?>

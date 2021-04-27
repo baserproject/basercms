@@ -21,7 +21,7 @@ $this->BcBaser->js('admin/permissions/form', false);
 
 <?php echo $this->BcForm->create('Permission') ?>
 <?php echo $this->BcFormTable->dispatchBefore() ?>
-<?php echo $this->BcForm->input('Permission.id', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('Permission.id', ['type' => 'hidden']) ?>
 
 <!-- form -->
 <div class="section">
@@ -31,7 +31,7 @@ $this->BcBaser->js('admin/permissions/form', false);
 			<td class="col-input bca-form-table__input">
 				<?php $userGroups = $this->BcForm->getControlSource('user_group_id') ?>
 				<?php echo $userGroups[$this->BcForm->value('Permission.user_group_id')] ?>
-				<?php echo $this->BcForm->input('Permission.user_group_id', ['type' => 'hidden']) ?>
+				<?php echo $this->BcAdminForm->control('Permission.user_group_id', ['type' => 'hidden']) ?>
 			</td>
 		</tr>
 		<?php if ($this->request->action == 'admin_edit'): ?>
@@ -47,7 +47,7 @@ $this->BcBaser->js('admin/permissions/form', false);
 				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
 			</th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('Permission.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
+				<?php echo $this->BcAdminForm->control('Permission.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<?php echo $this->Form->error('Permission.name') ?>
 				<div id="helptextName"
@@ -60,7 +60,7 @@ $this->BcBaser->js('admin/permissions/form', false);
 			</th>
 			<td class="col-input bca-form-table__input">
 				<strong>/<?php echo $permissionAuthPrefix ?>/</strong>
-				<?php echo $this->BcForm->input('Permission.url', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
+				<?php echo $this->BcAdminForm->control('Permission.url', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<?php echo $this->Form->error('Permission.url') ?>
 				<div id="helptextUrl" class="helptext">
@@ -75,14 +75,14 @@ $this->BcBaser->js('admin/permissions/form', false);
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Permission.auth', __d('baser', 'アクセス')) ?></th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('Permission.auth', ['type' => 'radio', 'options' => $this->BcText->booleanAllowList(__d('baser', 'アクセス'))]) ?>
+				<?php echo $this->BcAdminForm->control('Permission.auth', ['type' => 'radio', 'options' => $this->BcText->booleanAllowList(__d('baser', 'アクセス'))]) ?>
 				<?php echo $this->BcForm->error('Permission.auth') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Permission.status', __d('baser', '利用状態')) ?></th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('Permission.status', ['type' => 'checkbox', 'label' => __d('baser', '有効')]) ?>
+				<?php echo $this->BcAdminForm->control('Permission.status', ['type' => 'checkbox', 'label' => __d('baser', '有効')]) ?>
 				<?php echo $this->BcForm->error('Permission.status') ?>
 			</td>
 		</tr>

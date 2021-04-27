@@ -62,7 +62,7 @@ $this->BcBaser->js([
 	'admin/libs/baser_ajax_data_list_config',
 	'admin/libs/baser_ajax_batch_config'
 ]);
-echo $this->BcForm->input('BcManageContent', ['type' => 'hidden', 'value' => $this->BcContents->getJsonSettings()]);
+echo $this->BcAdminForm->control('BcManageContent', ['type' => 'hidden', 'value' => $this->BcContents->getJsonSettings()]);
 ?>
 
 

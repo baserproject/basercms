@@ -28,7 +28,7 @@ if (!$userModel) {
 		<?php echo $this->BcForm->create($userModel, ['url' => ['action' => 'reset_password', $this->request->getParam('prefix') => true]]) ?>
 	<?php endif ?>
 	<div class="submit">
-		<?php echo $this->BcForm->input($userModel . '.email', ['type' => 'text', 'size' => 34]) ?>
+		<?php echo $this->BcAdminForm->control($userModel . '.email', ['type' => 'text', 'size' => 34]) ?>
 		<?php echo $this->BcForm->submit(__d('baser', '送信'), ['div' => false, 'class' => 'btn-red button bca-btn', 'data-bca-btn-status' => 'warning']) ?>
 	</div>
 	<?php echo $this->BcForm->end() ?>

@@ -29,7 +29,7 @@ $this->BcBaser->js('Blog.admin/blog_tags/form', false);
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogTag.id', __d('baser', 'No')) ?></th>
 				<td class="col-input bca-form-table__input">
 					<?php echo $this->BcForm->value('BlogTag.id') ?>
-					<?php echo $this->BcForm->input('BlogTag.id', ['type' => 'hidden']) ?>
+					<?php echo $this->BcAdminForm->control('BlogTag.id', ['type' => 'hidden']) ?>
 				</td>
 			</tr>
 		<?php endif; ?>
@@ -38,7 +38,7 @@ $this->BcBaser->js('Blog.admin/blog_tags/form', false);
 				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
 			</th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('BlogTag.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
+				<?php echo $this->BcAdminForm->control('BlogTag.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
 				<?php echo $this->BcForm->error('BlogTag.name') ?>
 			</td>
 		</tr>

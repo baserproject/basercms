@@ -24,8 +24,8 @@ $this->BcBaser->js('admin/pages/edit', false);
 </div>
 
 <?php echo $this->BcForm->create('Page') ?>
-<?php echo $this->BcForm->input('Page.mode', ['type' => 'hidden']) ?>
-<?php echo $this->BcForm->input('Page.id', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('Page.mode', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('Page.id', ['type' => 'hidden']) ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
@@ -54,7 +54,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 				<tr>
 					<th class="bca-form-table__label"><?php echo $this->BcForm->label('Page.page_template', __d('baser', '固定ページテンプレート')) ?></th>
 					<td class="col-input bca-form-table__input">
-						<?php echo $this->BcForm->input('Page.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
+						<?php echo $this->BcAdminForm->control('Page.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
 						<div
 							class="helptext"><?php echo __d('baser', 'テーマフォルダ内の、Pages/templates テンプレートを配置する事で、ここでテンプレートを選択できます。') ?></div>
 						<?php echo $this->BcForm->error('Page.page_template') ?>
@@ -63,7 +63,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 				<tr>
 					<th class="bca-form-table__label"><?php echo $this->BcForm->label('Page.code', __d('baser', 'コード')) ?></th>
 					<td class="col-input bca-form-table__input">
-						<?php echo $this->BcForm->input('Page.code', [
+						<?php echo $this->BcAdminForm->control('Page.code', [
 							'type' => 'textarea',
 							'cols' => 36,
 							'rows' => 5,
@@ -80,7 +80,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 		</div>
 	</section>
 <?php else: ?>
-	<?php echo $this->BcForm->input('Page.code', ['type' => 'hidden']) ?>
+	<?php echo $this->BcAdminForm->control('Page.code', ['type' => 'hidden']) ?>
 <?php endif ?>
 
 <?php echo $this->BcFormTable->dispatchAfter() ?>

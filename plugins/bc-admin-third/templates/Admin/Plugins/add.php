@@ -33,7 +33,7 @@ $this->BcBaser->i18nScript([
 <?php echo $this->BcForm->create('Plugin', ['type' => 'file']) ?>
 
 <div class="submit">
-	<?php echo $this->BcForm->input('Plugin.file', ['type' => 'file']) ?>
+	<?php echo $this->BcAdminForm->control('Plugin.file', ['type' => 'file']) ?>
 	<?php echo $this->BcForm->submit(__d('baser', 'インストール'), ['class' => 'button bca-btn', 'div' => false, 'data-bca-btn-status' => 'primary']) ?>
 </div>
 

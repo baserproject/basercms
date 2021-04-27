@@ -59,7 +59,7 @@ if (empty($popup)) {
 		<td class="col-input bca-form-table__input">
 			<?php if (empty($popup)): ?>
 				<?php echo $this->BcForm->value('UploaderFile.id') ?>
-				<?php echo $this->BcForm->input('UploaderFile.id', ['type' => 'hidden']) ?>
+				<?php echo $this->BcAdminForm->control('UploaderFile.id', ['type' => 'hidden']) ?>
 			<?php else: ?>
 				<?php echo $this->BcForm->text('UploaderFile.id', ['size' => 30, 'maxlength' => 255, 'readonly' => 'readonly', 'id' => 'UploaderFileId' . $listId, 'class' => 'uploader-file-id']) ?>&nbsp;
 			<?php endif ?>
@@ -72,14 +72,14 @@ if (empty($popup)) {
 	<?php if (empty($popup)): ?>
 		<tr>
 			<th class="bca-form-table__label"><?php echo $this->BcForm->label('UploaderFile.name', __d('baser', 'アップロードファイル')) ?></th>
-			<td class="col-input bca-form-table__input"><?php echo $this->BcForm->input('UploaderFile.name', ['type' => 'file', 'delCheck' => false, 'imgsize' => 'midium', 'force' => 'true']) ?></td>
+			<td class="col-input bca-form-table__input"><?php echo $this->BcAdminForm->control('UploaderFile.name', ['type' => 'file', 'delCheck' => false, 'imgsize' => 'midium', 'force' => 'true']) ?></td>
 		</tr>
 	<?php else: ?>
 		<tr>
 			<th class="col-head bca-form-table__label">
 				<!--<span class="required">*</span>&nbsp;--><?php echo $this->BcForm->label('UploaderFile.name', __d('baser', 'ファイル名')) ?></th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('UploaderFile.name', ['type' => 'text', 'size' => 30, 'maxlength' => 255, 'readonly' => 'readonly', 'id' => 'UploaderFileName' . $listId, 'class' => 'uploader-file-name']) ?>
+				<?php echo $this->BcAdminForm->control('UploaderFile.name', ['type' => 'text', 'size' => 30, 'maxlength' => 255, 'readonly' => 'readonly', 'id' => 'UploaderFileName' . $listId, 'class' => 'uploader-file-name']) ?>
 				<?php echo $this->BcForm->error('UploaderFile.name', __d('baser', 'ファイル名を入力して下さい')) ?>&nbsp;
 			</td>
 		</tr>
@@ -87,14 +87,14 @@ if (empty($popup)) {
 	<tr>
 		<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('UploaderFile.alt', __d('baser', '説明文')) ?></th>
 		<td class="col-input bca-form-table__input">
-			<?php echo $this->BcForm->input('UploaderFile.alt', ['type' => 'text', 'size' => 51, 'maxlength' => 255, 'id' => 'UploaderFileAlt' . $listId, 'class' => 'uploader-file-alt bca-textbox__input']) ?>
+			<?php echo $this->BcAdminForm->control('UploaderFile.alt', ['type' => 'text', 'size' => 51, 'maxlength' => 255, 'id' => 'UploaderFileAlt' . $listId, 'class' => 'uploader-file-alt bca-textbox__input']) ?>
 			&nbsp;
 		</td>
 	</tr>
 	<tr>
 		<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('UploaderFile.publish_begin_date', __d('baser', '公開期間')) ?></th>
 		<td class="col-input bca-form-table__input">
-			<?php echo $this->BcForm->input('UploaderFile.publish_begin', [
+			<?php echo $this->BcAdminForm->control('UploaderFile.publish_begin', [
 				'type' => 'dateTimePicker',
 				'size' => 12,
 				'maxlength' => 10,
@@ -102,7 +102,7 @@ if (empty($popup)) {
 				'timeLabel' => ['text' => __d('baser', '開始時間')]
 			]) ?>
 			&nbsp;〜&nbsp;
-			<?php echo $this->BcForm->input('UploaderFile.publish_end', [
+			<?php echo $this->BcAdminForm->control('UploaderFile.publish_end', [
 				'type' => 'dateTimePicker',
 				'size' => 12,
 				'maxlength' => 10,
@@ -117,7 +117,7 @@ if (empty($popup)) {
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('UploaderFile.uploader_category_id', __d('baser', 'カテゴリ')) ?></th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('UploaderFile.uploader_category_id', ['type' => 'select', 'options' => $uploaderCategories, 'empty' => __d('baser', '指定なし'), 'id' => '_UploaderFileUploaderCategoryId' . $listId]) ?>
+				<?php echo $this->BcAdminForm->control('UploaderFile.uploader_category_id', ['type' => 'select', 'options' => $uploaderCategories, 'empty' => __d('baser', '指定なし'), 'id' => '_UploaderFileUploaderCategoryId' . $listId]) ?>
 			</td>
 		</tr>
 	<?php endif ?>
@@ -129,7 +129,7 @@ if (empty($popup)) {
 				<?php echo $this->BcText->arrayValue($this->request->getData('UploaderFile.user_id'), $users) ?>
 			<?Php endif ?>
 			</span>
-			<?php echo $this->BcForm->input('UploaderFile.user_id', ['type' => 'hidden', 'id' => 'UploaderFileUserId' . $listId]) ?>
+			<?php echo $this->BcAdminForm->control('UploaderFile.user_id', ['type' => 'hidden', 'id' => 'UploaderFileUserId' . $listId]) ?>
 		</td>
 	</tr>
 </table>

@@ -43,7 +43,7 @@ $this->BcBaser->i18nScript([
 	<?php endif ?>
 	<div class="submit bca-actions">
 		<?php echo $this->BcForm->create('Installation', ['url' => ['action' => 'reset']]) ?>
-		<?php echo $this->BcForm->input('Installation.reset', ['type' => 'hidden', 'value' => true]) ?>
+		<?php echo $this->BcAdminForm->control('Installation.reset', ['type' => 'hidden', 'value' => true]) ?>
 		<?php echo $this->BcForm->end(['label' => __d('baser', '初期化する'), 'class' => 'button', 'class' => 'button bca-btn bca-actions__item']) ?>
 	</div>
 <?php else: ?>

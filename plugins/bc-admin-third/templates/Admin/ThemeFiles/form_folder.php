@@ -40,8 +40,8 @@ if ($this->request->action !== 'admin_add_folder') {
 	<div id="AlertMessage">ファイルに書き込み権限がないので編集できません。</div>
 <?php endif ?>
 
-<?php echo $this->BcForm->input('ThemeFolder.parent', ['type' => 'hidden']) ?>
-<?php echo $this->BcForm->input('ThemeFolder.pastname', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('ThemeFolder.parent', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('ThemeFolder.pastname', ['type' => 'hidden']) ?>
 
 <!-- form -->
 <div class="section">
@@ -52,7 +52,7 @@ if ($this->request->action !== 'admin_add_folder') {
 			</th>
 			<td class="col-input bca-form-table__input">
 				<?php if ($this->request->action != 'admin_view_folder'): ?>
-					<?php echo $this->BcForm->input('ThemeFolder.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
+					<?php echo $this->BcAdminForm->control('ThemeFolder.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<div id="helptextName" class="helptext">
 						<ul>
@@ -61,7 +61,7 @@ if ($this->request->action !== 'admin_add_folder') {
 					</div>
 					<?php echo $this->BcForm->error('ThemeFolder.name') ?>
 				<?php else: ?>
-					<?php echo $this->BcForm->input('ThemeFolder.name', ['type' => 'text', 'size' => 40, 'readonly' => 'readonly']) ?>
+					<?php echo $this->BcAdminForm->control('ThemeFolder.name', ['type' => 'text', 'size' => 40, 'readonly' => 'readonly']) ?>
 				<?php endif ?>
 			</td>
 		</tr>

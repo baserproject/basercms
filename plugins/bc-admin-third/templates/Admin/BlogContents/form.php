@@ -23,7 +23,7 @@ $this->BcBaser->i18nScript([
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
-<?php echo $this->BcForm->input('BlogContent.id', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('BlogContent.id', ['type' => 'hidden']) ?>
 
 <section class="bca-section" data-bca-section-type="form-group">
 	<table class="form-table bca-form-table" data-bca-table-type="type2">
@@ -59,7 +59,7 @@ $this->BcBaser->i18nScript([
 					&nbsp;<span class="required bca-label"
 								data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('BlogContent.list_count', ['type' => 'text', 'size' => 20, 'maxlength' => 255]) ?>
+					<?php echo $this->BcAdminForm->control('BlogContent.list_count', ['type' => 'text', 'size' => 20, 'maxlength' => 255]) ?>
 					&nbsp;件&nbsp;
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<?php echo $this->BcForm->error('BlogContent.list_count') ?>
@@ -74,7 +74,7 @@ $this->BcBaser->i18nScript([
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogContent.list_direction', __d('baser', '一覧に表示する順番')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('BlogContent.list_direction', ['type' => 'select', 'options' => ['DESC' => __d('baser', '新しい記事順'), 'ASC' => __d('baser', '古い記事順')]]) ?>
+					<?php echo $this->BcAdminForm->control('BlogContent.list_direction', ['type' => 'select', 'options' => ['DESC' => __d('baser', '新しい記事順'), 'ASC' => __d('baser', '古い記事順')]]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<?php echo $this->BcForm->error('BlogContent.list_direction') ?>
 					<div id="helptextListDirection" class="helptext">
@@ -90,7 +90,7 @@ $this->BcBaser->i18nScript([
 					&nbsp;<span class="required bca-label"
 								data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('BlogContent.feed_count', ['type' => 'text', 'size' => 20, 'maxlength' => 255]) ?>
+					<?php echo $this->BcAdminForm->control('BlogContent.feed_count', ['type' => 'text', 'size' => 20, 'maxlength' => 255]) ?>
 					&nbsp;件&nbsp;
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<?php echo $this->BcForm->error('BlogContent.feed_count') ?>
@@ -110,14 +110,14 @@ $this->BcBaser->i18nScript([
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogContent.comment_use', __d('baser', 'コメント受付機能')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('BlogContent.comment_use', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
+					<?php echo $this->BcAdminForm->control('BlogContent.comment_use', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
 					<?php echo $this->BcForm->error('BlogContent.comment_use') ?>
 				</td>
 			</tr>
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogContent.comment_approve', __d('baser', 'コメント承認機能')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('BlogContent.comment_approve', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
+					<?php echo $this->BcAdminForm->control('BlogContent.comment_approve', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<?php echo $this->BcForm->error('BlogContent.comment_approve') ?>
 					<div id="helptextCommentApprove"
@@ -127,7 +127,7 @@ $this->BcBaser->i18nScript([
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.auth_capthca', __d('baser', 'コメントイメージ認証')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('BlogContent.auth_captcha', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
+					<?php echo $this->BcAdminForm->control('BlogContent.auth_captcha', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<?php echo $this->BcForm->error('BlogContent.auth_captcha') ?>
 					<div id="helptextAuthCaptcha" class="helptext">
@@ -141,7 +141,7 @@ $this->BcBaser->i18nScript([
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogContent.tag_use', __d('baser', 'タグ機能')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('BlogContent.tag_use', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
+					<?php echo $this->BcAdminForm->control('BlogContent.tag_use', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
 					<?php echo $this->BcForm->error('BlogContent.tag_use') ?>
 				</td>
 			</tr>
@@ -151,7 +151,7 @@ $this->BcBaser->i18nScript([
 								data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
 				<td class="col-input bca-form-table__input">
 					<?php
-					echo $this->BcForm->input('BlogContent.widget_area', [
+					echo $this->BcAdminForm->control('BlogContent.widget_area', [
 						'type' => 'select',
 						'options' => $this->BcForm->getControlsource('WidgetArea.id'),
 						'empty' => __d('baser', 'サイト基本設定に従う')])
@@ -173,11 +173,11 @@ $this->BcBaser->i18nScript([
 								data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
 				<td class="col-input bca-form-table__input">
 					<?php
-					echo $this->BcForm->input('BlogContent.template', [
+					echo $this->BcAdminForm->control('BlogContent.template', [
 						'type' => 'select',
 						'options' => $this->Blog->getBlogTemplates($this->BcForm->value('Content.site_id'))])
 					?>
-					<?php echo $this->BcForm->input('BlogContent.edit_blog_template', ['type' => 'hidden']) ?>
+					<?php echo $this->BcAdminForm->control('BlogContent.edit_blog_template', ['type' => 'hidden']) ?>
 					<?php if ($this->action == 'admin_edit'): ?>
 						<?php $this->BcBaser->link('<i class="bca-icon--edit"></i>' . __d('baser', '編集する'), 'javascript:void(0)', ['id' => 'EditBlogTemplate']) ?>
 					<?php endif ?>
@@ -207,19 +207,19 @@ $this->BcBaser->i18nScript([
 						<tbody>
 						<tr>
 							<th><?php echo __d('baser', 'PCサイズ') ?></th>
-							<td><?php echo $this->BcForm->input('BlogContent.eye_catch_size_thumb_width', ['type' => 'text', 'size' => '8']) ?>
+							<td><?php echo $this->BcAdminForm->control('BlogContent.eye_catch_size_thumb_width', ['type' => 'text', 'size' => '8']) ?>
 								&nbsp;px
 							</td>
-							<td><?php echo $this->BcForm->input('BlogContent.eye_catch_size_thumb_height', ['type' => 'text', 'size' => '8']) ?>
+							<td><?php echo $this->BcAdminForm->control('BlogContent.eye_catch_size_thumb_height', ['type' => 'text', 'size' => '8']) ?>
 								px
 							</td>
 						</tr>
 						<tr>
 							<th><?php echo __d('baser', '携帯サイズ') ?></th>
-							<td><?php echo $this->BcForm->input('BlogContent.eye_catch_size_mobile_thumb_width', ['type' => 'text', 'size' => '8']) ?>
+							<td><?php echo $this->BcAdminForm->control('BlogContent.eye_catch_size_mobile_thumb_width', ['type' => 'text', 'size' => '8']) ?>
 								&nbsp;px
 							</td>
-							<td><?php echo $this->BcForm->input('BlogContent.eye_catch_size_mobile_thumb_height', ['type' => 'text', 'size' => '8']) ?>
+							<td><?php echo $this->BcAdminForm->control('BlogContent.eye_catch_size_mobile_thumb_height', ['type' => 'text', 'size' => '8']) ?>
 								px
 							</td>
 						</tr>
@@ -236,7 +236,7 @@ $this->BcBaser->i18nScript([
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogContent.use_content', __d('baser', '記事概要')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('BlogContent.use_content', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
+					<?php echo $this->BcAdminForm->control('BlogContent.use_content', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
 					<?php echo $this->BcForm->error('BlogContent.use_content') ?>
 				</td>
 			</tr>

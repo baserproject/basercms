@@ -33,7 +33,7 @@ $this->BcBaser->i18nScript([
 <?php echo $this->BcForm->create('Theme', ['type' => 'file']) ?>
 
 <div class="submit">
-	<?php echo $this->BcForm->input('Theme.file', ['type' => 'file']) ?>
+	<?php echo $this->BcAdminForm->control('Theme.file', ['type' => 'file']) ?>
 	<?php echo $this->BcForm->submit(__d('baser', '適用'), ['class' => 'button bca-btn', 'div' => false, 'id' => 'BtnSave']) ?>
 </div>
 

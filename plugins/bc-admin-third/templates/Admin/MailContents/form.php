@@ -26,7 +26,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
-<?php echo $this->BcForm->input('MailContent.id', ['type' => 'hidden']) ?>
+<?php echo $this->BcAdminForm->control('MailContent.id', ['type' => 'hidden']) ?>
 
 <section class="bca-section bca-section__mail-description">
 	<label for="MailContentDescriptionTmp"
@@ -52,13 +52,13 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 			</th>
 			<td class="col-input bca-form-table__input">
 				<?php
-				echo $this->BcForm->input('MailContent.sender_1_', [
+				echo $this->BcAdminForm->control('MailContent.sender_1_', [
 					'type' => 'radio',
 					'options' => ['0' => __d('baser', '管理者用メールアドレスに送信する'), '1' => __d('baser', '別のメールアドレスに送信する')],
 					'legend' => false,
 					'separator' => '<br>'])
 				?><br/>
-				<?php echo $this->BcForm->input('MailContent.sender_1', ['type' => 'text', 'size' => 40, 'class' => 'bca-textbox__input bca-mailContentSender1', 'placeholder' => __d('baser', 'メールアドレスを入力してください')]) ?>
+				<?php echo $this->BcAdminForm->control('MailContent.sender_1', ['type' => 'text', 'size' => 40, 'class' => 'bca-textbox__input bca-mailContentSender1', 'placeholder' => __d('baser', 'メールアドレスを入力してください')]) ?>
 				<?php echo $this->BcForm->error('MailContent.sender_1') ?>
 			</td>
 		</tr>
@@ -67,7 +67,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
 			</th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('MailContent.sender_name', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
+				<?php echo $this->BcAdminForm->control('MailContent.sender_name', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<?php echo $this->BcForm->error('MailContent.sender_name') ?>
 				<div id="helptextSenderName" class="helptext"><?php echo __d('baser', '自動返信メールの送信者に表示します。') ?></div>
@@ -78,7 +78,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
 			</th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('MailContent.subject_user', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
+				<?php echo $this->BcAdminForm->control('MailContent.subject_user', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<?php echo $this->BcForm->error('MailContent.subject_user') ?>
 				<div id="helptextSubjectUser"
@@ -90,7 +90,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
 			</th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('MailContent.subject_admin', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
+				<?php echo $this->BcAdminForm->control('MailContent.subject_admin', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<?php echo $this->BcForm->error('MailContent.subject_admin') ?>
 				<div id="helptextSubjectAdmin"
@@ -100,7 +100,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.redirect_url', __d('baser', 'リダイレクトURL')) ?></th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('MailContent.redirect_url', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
+				<?php echo $this->BcAdminForm->control('MailContent.redirect_url', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<?php echo $this->BcForm->error('MailContent.redirect_url') ?>
 				<div id="helptextRedirectUrl" class="helptext">
@@ -128,7 +128,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.publish_begin', __d('baser', 'フォーム受付期間')) ?></th>
 				<td class="col-input bca-form-table__input">
 					&nbsp;&nbsp;
-					<?php echo $this->BcForm->input('MailContent.publish_begin', [
+					<?php echo $this->BcAdminForm->control('MailContent.publish_begin', [
 						'type' => 'dateTimePicker',
 						'size' => 12,
 						'maxlength' => 10,
@@ -136,7 +136,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 						'timeLabel' => ['text' => __d('baser', '開始時間')]
 					]) ?>
 					&nbsp;〜&nbsp;
-					<?php echo $this->BcForm->input('MailContent.publish_end', [
+					<?php echo $this->BcAdminForm->control('MailContent.publish_end', [
 						'type' => 'dateTimePicker',
 						'size' => 12,
 						'maxlength' => 10,
@@ -154,7 +154,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.save_info', __d('baser', 'データベース保存')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('MailContent.save_info', ['type' => 'radio', 'options' => [1 => __d('baser', '送信情報をデータベースに保存する'), 0 => __d('baser', '送信情報をデータベースに保存しない')]]) ?>
+					<?php echo $this->BcAdminForm->control('MailContent.save_info', ['type' => 'radio', 'options' => [1 => __d('baser', '送信情報をデータベースに保存する'), 0 => __d('baser', '送信情報をデータベースに保存しない')]]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<?php echo $this->BcForm->error('MailContent.save_info') ?>
 					<div id="saveInfo" class="helptext">
@@ -168,7 +168,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.auth_capthca', __d('baser', 'イメージ認証')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('MailContent.auth_captcha', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
+					<?php echo $this->BcAdminForm->control('MailContent.auth_captcha', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<?php echo $this->BcForm->error('MailContent.auth_captcha') ?>
 					<div id="helptextAuthCaptcha" class="helptext">
@@ -182,7 +182,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.ssl_on', __d('baser', 'SSL通信')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('MailContent.ssl_on', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
+					<?php echo $this->BcAdminForm->control('MailContent.ssl_on', ['type' => 'checkbox', 'label' => __d('baser', '利用する')]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<div id="helptextSslOn"
 						 class="helptext"><?php echo __d('baser', '管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。また、SSL通信で利用するURLをシステム設定で指定している必要があります。') ?></div>
@@ -192,7 +192,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.sender_2', __d('baser', 'BCC用送信先メールアドレス')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('MailContent.sender_2', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
+					<?php echo $this->BcAdminForm->control('MailContent.sender_2', ['type' => 'text', 'size' => 80, 'maxlength' => 255]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<?php echo $this->BcForm->error('MailContent.sender_2') ?>
 					<div id="helptextSender2" class="helptext">
@@ -208,7 +208,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 					&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
 				</th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('MailContent.widget_area', ['type' => 'select', 'options' => $this->BcForm->getControlsource('WidgetArea.id'), 'empty' => __d('baser', 'サイト基本設定に従う')]) ?>
+					<?php echo $this->BcAdminForm->control('MailContent.widget_area', ['type' => 'select', 'options' => $this->BcForm->getControlsource('WidgetArea.id'), 'empty' => __d('baser', 'サイト基本設定に従う')]) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<?php echo $this->BcForm->error('MailContent.widget_area') ?>
 					<div id="helptextWidgetArea" class="helptext">
@@ -221,8 +221,8 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 					&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
 				</th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('MailContent.form_template', ['type' => 'select', 'options' => $this->Mail->getFormTemplates($this->BcForm->value('Content.site_id'))]) ?>
-					<?php echo $this->BcForm->input('MailContent.edit_mail_form', ['type' => 'hidden']) ?>
+					<?php echo $this->BcAdminForm->control('MailContent.form_template', ['type' => 'select', 'options' => $this->Mail->getFormTemplates($this->BcForm->value('Content.site_id'))]) ?>
+					<?php echo $this->BcAdminForm->control('MailContent.edit_mail_form', ['type' => 'hidden']) ?>
 					<?php if ($this->action == 'admin_edit'): ?>
 						<?php $this->BcBaser->link('<i class="bca-icon--edit"></i>' . __d('baser', '編集する'), 'javascript:void(0)', ['id' => 'EditForm']) ?>
 					<?php endif ?>
@@ -241,8 +241,8 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 					&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
 				</th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('MailContent.mail_template', ['type' => 'select', 'options' => $this->Mail->getMailTemplates($this->BcForm->value('Content.site_id'))]) ?>
-					<?php echo $this->BcForm->input('MailContent.edit_mail', ['type' => 'hidden']) ?>
+					<?php echo $this->BcAdminForm->control('MailContent.mail_template', ['type' => 'select', 'options' => $this->Mail->getMailTemplates($this->BcForm->value('Content.site_id'))]) ?>
+					<?php echo $this->BcAdminForm->control('MailContent.edit_mail', ['type' => 'hidden']) ?>
 					<?php if ($this->action == 'admin_edit'): ?>
 						<?php $this->BcBaser->link('<i class="bca-icon--edit"></i>' . __d('baser', '編集する'), 'javascript:void(0)', ['id' => 'EditMail']) ?>
 					<?php endif ?>

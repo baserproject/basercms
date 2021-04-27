@@ -25,13 +25,13 @@
 	<tr>
 		<th class="bca-form-table__label"><?php echo $this->BcForm->label('ContentFolder.folder_template', __d('baser', 'フォルダーテンプレート')) ?></th>
 		<td class="bca-form-table__input">
-			<?php echo $this->BcForm->input('ContentFolder.folder_template', ['type' => 'select', 'options' => $folderTemplateList]) ?>
+			<?php echo $this->BcAdminForm->control('ContentFolder.folder_template', ['type' => 'select', 'options' => $folderTemplateList]) ?>
 		</td>
 	</tr>
 	<tr>
 		<th class="bca-form-table__label"><?php echo $this->BcForm->label('ContentFolder.page_template', __d('baser', '固定ページテンプレート')) ?></th>
 		<td class="bca-form-table__input">
-			<?php echo $this->BcForm->input('ContentFolder.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
+			<?php echo $this->BcAdminForm->control('ContentFolder.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
 		</td>
 	</tr>
 	<?php echo $this->BcForm->dispatchAfterForm() ?>

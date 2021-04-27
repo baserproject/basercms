@@ -25,7 +25,7 @@
 			<th class="col-head"><?php echo $this->BcForm->label('SearchIndex.title', __d('baser', 'タイトル')) ?>
 				&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('SearchIndex.title', ['type' => 'text', 'size' => 60, 'maxlength' => 255]) ?>
+				<?php echo $this->BcAdminForm->control('SearchIndex.title', ['type' => 'text', 'size' => 60, 'maxlength' => 255]) ?>
 				<?php echo $this->BcForm->error('SearchIndex.title') ?>
 			</td>
 		</tr>
@@ -33,7 +33,7 @@
 			<th class="col-head"><?php echo $this->BcForm->label('SearchIndex.url', 'URL') ?>&nbsp;<span
 					class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('SearchIndex.url', ['type' => 'text', 'size' => 60, 'maxlength' => 255, 'autofocus' => true]) ?>
+				<?php echo $this->BcAdminForm->control('SearchIndex.url', ['type' => 'text', 'size' => 60, 'maxlength' => 255, 'autofocus' => true]) ?>
 				<i class="bca-icon--question-circle btn help bca-help"></i>
 				<?php echo $this->BcForm->error('SearchIndex.url') ?>
 				<div id="helptextUrl" class="helptext">

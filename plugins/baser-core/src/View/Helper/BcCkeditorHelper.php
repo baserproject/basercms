@@ -461,7 +461,7 @@ EOL;
 				$_options[$key] = $option;
 			}
 		}
-		return $this->BcForm->input($inputFieldName, $_options) . $hidden . $this->_build($fieldName, $options);
+		return $this->BcAdminForm->control($inputFieldName, $_options) . $hidden . $this->_build($fieldName, $options);
 	}
 
 }

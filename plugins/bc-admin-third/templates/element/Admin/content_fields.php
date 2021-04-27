@@ -110,10 +110,10 @@ if ($this->BcContents->isEditable()) {
 			</th>
 			<td class="col-input bca-form-table__input">
 				<?php if (!$this->request->getData('Content.site_root')): ?>
-					<?php echo $this->BcForm->input('Content.parent_id', ['type' => 'select', 'options' => $parentContents, 'escape' => true]) ?>
+					<?php echo $this->BcAdminForm->control('Content.parent_id', ['type' => 'select', 'options' => $parentContents, 'escape' => true]) ?>
 				<?php endif ?>
 				<?php if (!$this->request->getData('Content.site_root') && !$related): ?>
-					<?php echo $this->BcForm->input('Content.name', ['type' => 'text', 'size' => 20, 'autofocus' => true]) ?>
+					<?php echo $this->BcAdminForm->control('Content.name', ['type' => 'text', 'size' => 20, 'autofocus' => true]) ?>
 					<?php if (!$isOmitViewAction && $this->request->getData('Content.url') !== '/'): ?>/<?php endif ?>　
 				<?php else: ?>
 					<?php if (!$this->request->getData('Content.site_root')): ?>
@@ -136,7 +136,7 @@ if ($this->BcContents->isEditable()) {
 			</th>
 			<td class="col-input bca-form-table__input">
 				<?php if (!$disableEdit): ?>
-					<?php echo $this->BcForm->input('Content.title', ['type' => 'text', 'size' => 50]) ?>　
+					<?php echo $this->BcAdminForm->control('Content.title', ['type' => 'text', 'size' => 50]) ?>　
 					<?php echo $this->BcForm->error('Content.title') ?>
 				<?php else: ?>
 					<?php echo h($this->BcForm->value('Content.title')) ?>　
@@ -150,7 +150,7 @@ if ($this->BcContents->isEditable()) {
 			</th>
 			<td class="col-input bca-form-table__input">
 				<?php if (!$disableEdit): ?>
-					<?php echo $this->BcForm->input('Content.self_status', ['type' => 'radio', 'options' => $this->BcText->booleanDoList('公開')]) ?>
+					<?php echo $this->BcAdminForm->control('Content.self_status', ['type' => 'radio', 'options' => $this->BcText->booleanDoList('公開')]) ?>
 				<?php else: ?>
 					<?php echo $this->BcText->arrayValue($this->BcForm->value('Content.self_status'), $this->BcText->booleanDoList('公開')) ?>
 					<?php echo $this->BcForm->hidden('Content.self_status') ?>
@@ -166,7 +166,7 @@ if ($this->BcContents->isEditable()) {
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Content.self_status', __d('baser', '公開日時')) ?></th>
 			<td class="col-input bca-form-table__input">
 				<?php if (!$disableEdit): ?>
-					<?php echo $this->BcForm->input('Content.self_publish_begin', [
+					<?php echo $this->BcAdminForm->control('Content.self_publish_begin', [
 						'type' => 'dateTimePicker',
 						'size' => 12,
 						'maxlength' => 10,
@@ -174,7 +174,7 @@ if ($this->BcContents->isEditable()) {
 						'timeLabel' => ['text' => '開始時間']
 					]) ?>
 					&nbsp;〜&nbsp;
-					<?php echo $this->BcForm->input('Content.self_publish_end', [
+					<?php echo $this->BcAdminForm->control('Content.self_publish_end', [
 						'type' => 'dateTimePicker',
 						'size' => 12, 'maxlength' => 10,
 						'dateLabel' => ['text' => '終了日付'],

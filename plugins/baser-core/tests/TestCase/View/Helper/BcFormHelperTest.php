@@ -302,7 +302,7 @@ class BcFormHelperTest extends BcTestCase
 				]
 			];
 		}
-		$result = $this->BcForm->Input($fieldName, $options);
+		$result = $this->BcAdminForm->control($fieldName, $options);
 		$this->assertRegExp('/' . $expected . '/s', $result);
 		$this->resetEvent();
 	}

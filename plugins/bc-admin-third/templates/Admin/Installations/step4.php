@@ -81,26 +81,26 @@ $this->BcBaser->i18nScript([
 		<div class="section">
 			<ul>
 				<li><label><?php echo __d('baser', 'Eメールアドレス') ?></label>
-					<?php echo $this->BcForm->input('Installation.admin_email', ['type' => 'text', 'size' => 44]); ?>
+					<?php echo $this->BcAdminForm->control('Installation.admin_email', ['type' => 'text', 'size' => 44]); ?>
 				</li>
 				<li>
 					<label><?php echo __d('baser', '管理者アカウント名') ?></label>&nbsp;<small><?php echo __d('baser', '半角英数字（ハイフン、アンダースコア含む）') ?></small><br>
-					<?php echo $this->BcForm->input('Installation.admin_username', ['type' => 'text']); ?>
+					<?php echo $this->BcAdminForm->control('Installation.admin_username', ['type' => 'text']); ?>
 				</li>
 				<li class="clearfix">
 					<label><?php echo __d('baser', 'パスワード') ?></label>&nbsp;<small><?php echo __d('baser', '半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&amp;;{}!$*)') ?></small><br>
 					<div class="float-left">
-						<?php echo $this->BcForm->input('Installation.admin_password', ['type' => 'password']); ?>
+						<?php echo $this->BcAdminForm->control('Installation.admin_password', ['type' => 'password']); ?>
 					</div>
 					<div class="float-left">
-						<?php echo $this->BcForm->input('Installation.admin_confirmpassword', ['type' => 'password']); ?>
+						<?php echo $this->BcAdminForm->control('Installation.admin_confirmpassword', ['type' => 'password']); ?>
 						<br>
 						<small><?php echo __d('baser', '確認のためもう一度入力してください') ?></small>
 					</div>
 				</li>
 			</ul>
 		</div>
-		<?php echo $this->BcForm->input('Installation.clicked', ['type' => 'hidden']) ?>
+		<?php echo $this->BcAdminForm->control('Installation.clicked', ['type' => 'hidden']) ?>
 
 
 	</div>

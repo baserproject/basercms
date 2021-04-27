@@ -26,10 +26,10 @@
 			</th>
 			<td class="bca-form-table__input">
 				<small>[<?php echo __d('baser', '幅') ?>
-					]</small>&nbsp;<?php echo $this->BcForm->input('UploaderConfig.large_width', ['type' => 'text', 'size' => 8, 'maxlength' => 8, 'autofocus' => true]) ?>
+					]</small>&nbsp;<?php echo $this->BcAdminForm->control('UploaderConfig.large_width', ['type' => 'text', 'size' => 8, 'maxlength' => 8, 'autofocus' => true]) ?>
 				&nbsp;px　×　
 				<small>[<?php echo __d('baser', '高さ') ?>
-					]</small>&nbsp;<?php echo $this->BcForm->input('UploaderConfig.large_height', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
+					]</small>&nbsp;<?php echo $this->BcAdminForm->control('UploaderConfig.large_height', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
 				&nbsp;px
 				<?php echo $this->BcForm->error('UploaderConfig.large_width') ?>
 				<?php echo $this->BcForm->error('UploaderConfig.large_height') ?>
@@ -42,10 +42,10 @@
 			</th>
 			<td class="bca-form-table__input">
 				<small>[<?php echo __d('baser', '幅') ?>
-					]</small>&nbsp;<?php echo $this->BcForm->input('UploaderConfig.midium_width', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
+					]</small>&nbsp;<?php echo $this->BcAdminForm->control('UploaderConfig.midium_width', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
 				&nbsp;px　×　
 				<small>[<?php echo __d('baser', '高さ') ?>
-					]</small>&nbsp;<?php echo $this->BcForm->input('UploaderConfig.midium_height', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
+					]</small>&nbsp;<?php echo $this->BcAdminForm->control('UploaderConfig.midium_height', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
 				&nbsp;px
 				<?php echo $this->BcForm->error('UploaderConfig.midium_width') ?>
 				<?php echo $this->BcForm->error('UploaderConfig.midium_height') ?>
@@ -58,12 +58,12 @@
 			</th>
 			<td class="bca-form-table__input">
 				<small>[<?php echo __d('baser', '幅') ?>
-					]</small>&nbsp;<?php echo $this->BcForm->input('UploaderConfig.small_width', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
+					]</small>&nbsp;<?php echo $this->BcAdminForm->control('UploaderConfig.small_width', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
 				&nbsp;px　×　
 				<small>[<?php echo __d('baser', '高さ') ?>
-					]</small>&nbsp;<?php echo $this->BcForm->input('UploaderConfig.small_height', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
+					]</small>&nbsp;<?php echo $this->BcAdminForm->control('UploaderConfig.small_height', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
 				&nbsp;px　
-				<?php echo $this->BcForm->input('UploaderConfig.small_thumb', ['type' => 'checkbox', 'label' => __d('baser', '正方形に切り抜く'), 'between' => '&nbsp;']) ?>
+				<?php echo $this->BcAdminForm->control('UploaderConfig.small_thumb', ['type' => 'checkbox', 'label' => __d('baser', '正方形に切り抜く'), 'between' => '&nbsp;']) ?>
 				<?php echo $this->BcForm->error('UploaderConfig.small_width') ?>
 				<?php echo $this->BcForm->error('UploaderConfig.small_height') ?>
 				<?php echo $this->BcForm->error('UploaderConfig.small_thumb') ?>
@@ -76,10 +76,10 @@
 			</th>
 			<td class="bca-form-table__input">
 				<small>[<?php echo __d('baser', '幅') ?>
-					]</small>&nbsp;<?php echo $this->BcForm->input('UploaderConfig.mobile_large_width', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
+					]</small>&nbsp;<?php echo $this->BcAdminForm->control('UploaderConfig.mobile_large_width', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
 				&nbsp;px　×　
 				<small>[<?php echo __d('baser', '高さ') ?>
-					]</small>&nbsp;<?php echo $this->BcForm->input('UploaderConfig.mobile_large_height', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
+					]</small>&nbsp;<?php echo $this->BcAdminForm->control('UploaderConfig.mobile_large_height', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
 				&nbsp;px
 				<?php echo $this->BcForm->error('UploaderConfig.mobile_large_width') ?>
 				<?php echo $this->BcForm->error('UploaderConfig.mobile_large_height') ?>
@@ -92,12 +92,12 @@
 			</th>
 			<td class="bca-form-table__input">
 				<small>[<?php echo __d('baser', '幅') ?>
-					]</small>&nbsp;<?php echo $this->BcForm->input('UploaderConfig.mobile_small_width', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
+					]</small>&nbsp;<?php echo $this->BcAdminForm->control('UploaderConfig.mobile_small_width', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
 				&nbsp;px　×　
 				<small>[<?php echo __d('baser', '高さ') ?>
-					]</small>&nbsp;<?php echo $this->BcForm->input('UploaderConfig.mobile_small_height', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
+					]</small>&nbsp;<?php echo $this->BcAdminForm->control('UploaderConfig.mobile_small_height', ['type' => 'text', 'size' => 8, 'maxlength' => 8]) ?>
 				&nbsp;px　
-				<?php echo $this->BcForm->input('UploaderConfig.mobile_small_thumb', ['type' => 'checkbox', 'label' => __d('baser', '正方形に切り抜く'), 'between' => '&nbsp;']) ?>
+				<?php echo $this->BcAdminForm->control('UploaderConfig.mobile_small_thumb', ['type' => 'checkbox', 'label' => __d('baser', '正方形に切り抜く'), 'between' => '&nbsp;']) ?>
 				<?php echo $this->BcForm->error('UploaderConfig.mobile_small_width') ?>
 				<?php echo $this->BcForm->error('UploaderConfig.mobile_small_height') ?>
 				<?php echo $this->BcForm->error('UploaderConfig.mobile_small_thumb') ?>
@@ -115,14 +115,14 @@
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('UploaderConfig.layout_type', __d('baser', 'レイアウトタイプ')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('UploaderConfig.layout_type', ['type' => 'radio', 'options' => ['panel' => __d('baser', 'パネル'), 'table' => __d('baser', 'テーブル')]]) ?>
+					<?php echo $this->BcAdminForm->control('UploaderConfig.layout_type', ['type' => 'radio', 'options' => ['panel' => __d('baser', 'パネル'), 'table' => __d('baser', 'テーブル')]]) ?>
 					<?php echo $this->BcForm->error('UploaderConfig.layout_type') ?>
 				</td>
 			</tr>
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('UploaderConfig.use_permission', __d('baser', '制限設定')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('UploaderConfig.use_permission', ['type' => 'checkbox', 'label' => __d('baser', '編集/削除を制限する'), 'between' => '&nbsp;']) ?>
+					<?php echo $this->BcAdminForm->control('UploaderConfig.use_permission', ['type' => 'checkbox', 'label' => __d('baser', '編集/削除を制限する'), 'between' => '&nbsp;']) ?>
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<?php echo $this->BcForm->error('UploaderConfig.use_permission') ?>
 					<div id="helptextUsePermission" class="helptext">

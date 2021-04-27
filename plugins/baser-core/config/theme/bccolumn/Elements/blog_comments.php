@@ -24,28 +24,28 @@
 		<div id="CommentForm">
 			<h3>コメント送信フォーム</h3>
 			<?php echo $this->BcForm->create('BlogComment', array('url' => '/blog/blog_comments/add/' . $blogContent['BlogContent']['id'] . '/' . $post['BlogPost']['id'], 'id' => 'BlogCommentAddForm')) ?>
-			<?php echo $this->BcForm->input('BlogComment.captcha_id', ['type' => 'hidden', 'value' => $captchaId]) ?>
+			<?php echo $this->BcAdminForm->control('BlogComment.captcha_id', ['type' => 'hidden', 'value' => $captchaId]) ?>
 
 			<table cellpadding="0" cellspacing="0" class="row-table-01">
 				<tbody>
 				<tr>
 					<th><?php echo $this->BcForm->label('BlogComment.name', __('お名前') . '・' . __('ニックネーム')) ?><span style="color:red">＊</span></th>
-					<td><?php echo $this->BcForm->input('BlogComment.name', array('type' => 'text', 'class' => 'form-m')) ?></td>
+					<td><?php echo $this->BcAdminForm->control('BlogComment.name', array('type' => 'text', 'class' => 'form-m')) ?></td>
 				</tr>
 				<tr>
 					<th><?php echo $this->BcForm->label('BlogComment.email', __('Eメール')) ?><span style="color:red">＊</span></th>
 					<td>
-						<?php echo $this->BcForm->input('BlogComment.email', array('type' => 'text', 'size' => 30, 'class' => 'form-m')) ?><br>
+						<?php echo $this->BcAdminForm->control('BlogComment.email', array('type' => 'text', 'size' => 30, 'class' => 'form-m')) ?><br>
 						<small>※ <?php echo __('Eメールは公開されません') ?></small>
 					</td>
 				</tr>
 				<tr>
 					<th><?php echo $this->BcForm->label('BlogComment.url', 'URL') ?></th>
-					<td><?php echo $this->BcForm->input('BlogComment.url', array('type' => 'text', 'size' => 30, 'class' => 'form-l')) ?></td>
+					<td><?php echo $this->BcAdminForm->control('BlogComment.url', array('type' => 'text', 'size' => 30, 'class' => 'form-l')) ?></td>
 				</tr>
 				<tr>
 					<th><?php echo $this->BcForm->label('BlogComment.message', __('コメント')) ?><span style="color:red">＊</span></th>
-					<td><?php echo $this->BcForm->input('BlogComment.message', array('type' => 'textarea', 'rows' => 10, 'cols' => 52, 'class' => 'form-l')) ?></td>
+					<td><?php echo $this->BcAdminForm->control('BlogComment.message', array('type' => 'textarea', 'rows' => 10, 'cols' => 52, 'class' => 'form-l')) ?></td>
 				</tr>
 				</tbody>
 			</table>

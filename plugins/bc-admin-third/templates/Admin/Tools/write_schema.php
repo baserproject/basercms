@@ -24,7 +24,7 @@
 														 data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>&nbsp;<?php echo $this->BcForm->label('Tool.baser', __d('baser', 'コアテーブル名')) ?>
 		</th>
 		<td class="col-input bca-form-table__input">
-			<?php echo $this->BcForm->input('Tool.core', [
+			<?php echo $this->BcAdminForm->control('Tool.core', [
 				'type' => 'select',
 				'options' => $this->BcForm->getControlSource('Tool.core'),
 				'multiple' => true,
@@ -37,7 +37,7 @@
 														 data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>&nbsp;<?php echo $this->BcForm->label('Tool.plugin', __d('baser', 'プラグインテーブル名')) ?>
 		</th>
 		<td class="col-input bca-form-table__input">
-			<?php echo $this->BcForm->input('Tool.plugin', [
+			<?php echo $this->BcAdminForm->control('Tool.plugin', [
 				'type' => 'select',
 				'options' => $this->BcForm->getControlSource('Tool.plugin'),
 				'multiple' => true,

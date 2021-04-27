@@ -35,7 +35,7 @@ if ($this->BcContents->isEditable()) {
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Content.description', __d('baser', '説明文')) ?></th>
 				<td class="col-input bca-form-table__input">
 					<?php if (!$disableEdit): ?>
-						<?php echo $this->BcForm->input('Content.description', ['type' => 'textarea', 'cols' => 36, 'rows' => 4, 'data-input-text-size' => 'full-counter']) ?>
+						<?php echo $this->BcAdminForm->control('Content.description', ['type' => 'textarea', 'cols' => 36, 'rows' => 4, 'data-input-text-size' => 'full-counter']) ?>
 					<?php else: ?>
 						<?php if ($this->BcForm->value('Content.exclude_search')): ?>
 							<?php echo h($this->BcForm->value('Content.description')) ?>
@@ -51,7 +51,7 @@ if ($this->BcContents->isEditable()) {
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Content.eyecatch', __d('baser', 'アイキャッチ')) ?></th>
 				<td class="col-input bca-form-table__input">
 					<?php if (!$disableEdit): ?>
-						<?php echo $this->BcForm->input('Content.eyecatch', ['type' => 'file', 'imgsize' => 'thumb']) ?>
+						<?php echo $this->BcAdminForm->control('Content.eyecatch', ['type' => 'file', 'imgsize' => 'thumb']) ?>
 					<?php else: ?>
 						<?php echo $this->BcUpload->uploadImage('Content.eyecatch', $this->BcForm->value('Content.eyecatch'), ['imgsize' => 'thumb']) ?>
 					<?php endif ?>
@@ -62,11 +62,11 @@ if ($this->BcContents->isEditable()) {
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Content.author_id', __d('baser', '作成者')) ?></th>
 				<td class="col-input bca-form-table__input">
 					<?php if (!$disableEdit): ?>
-						<?php echo $this->BcForm->input('Content.author_id', ['type' => 'select', 'options' => $authors]) ?>　
+						<?php echo $this->BcAdminForm->control('Content.author_id', ['type' => 'select', 'options' => $authors]) ?>　
 						<small>[<?php echo __d('baser', '作成日') ?>
-							]</small> <?php echo $this->BcForm->input('Content.created_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10]) ?>　
+							]</small> <?php echo $this->BcAdminForm->control('Content.created_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10]) ?>　
 						<small>[<?php echo __d('baser', '更新日') ?>
-							]</small> <?php echo $this->BcForm->input('Content.modified_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10]) ?>
+							]</small> <?php echo $this->BcAdminForm->control('Content.modified_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10]) ?>
 					<?php else: ?>
 						<?php echo h($this->BcText->arrayValue($this->BcForm->value('Content.author_id'), $authors)) ?>　
 
@@ -86,7 +86,7 @@ if ($this->BcContents->isEditable()) {
 			<tr>
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Content.layout_template', __d('baser', 'レイアウトテンプレート')) ?></th>
 				<td class="col-input bca-form-table__input">
-					<?php echo $this->BcForm->input('Content.layout_template', ['type' => 'select', 'options' => $layoutTemplates]) ?>
+					<?php echo $this->BcAdminForm->control('Content.layout_template', ['type' => 'select', 'options' => $layoutTemplates]) ?>
 					　
 					<?php echo $this->BcForm->error('Content.layout_template') ?>　
 				</td>
@@ -96,11 +96,11 @@ if ($this->BcContents->isEditable()) {
 				<td class="col-input bca-form-table__input">
 					<?php if (!$disableEdit): ?>
 						<span
-							style="white-space: nowrap"><?php echo $this->BcForm->input('Content.exclude_search', ['type' => 'checkbox', 'label' => __d('baser', 'サイト内検索の検索結果より除外する')]) ?></span>　
+							style="white-space: nowrap"><?php echo $this->BcAdminForm->control('Content.exclude_search', ['type' => 'checkbox', 'label' => __d('baser', 'サイト内検索の検索結果より除外する')]) ?></span>　
 						<span
-							style="white-space: nowrap"><?php echo $this->BcForm->input('Content.exclude_menu', ['type' => 'checkbox', 'label' => __d('baser', '公開ページのメニューより除外する')]) ?></span>　
+							style="white-space: nowrap"><?php echo $this->BcAdminForm->control('Content.exclude_menu', ['type' => 'checkbox', 'label' => __d('baser', '公開ページのメニューより除外する')]) ?></span>　
 						<span
-							style="white-space: nowrap"><?php echo $this->BcForm->input('Content.blank_link', ['type' => 'checkbox', 'label' => __d('baser', 'メニューのリンクを別ウィンドウ開く')]) ?></span>
+							style="white-space: nowrap"><?php echo $this->BcAdminForm->control('Content.blank_link', ['type' => 'checkbox', 'label' => __d('baser', 'メニューのリンクを別ウィンドウ開く')]) ?></span>
 					<?php else: ?>
 						<?php if ($this->BcForm->value('Content.exclude_search')): ?>
 							<span style="white-space: nowrap"><?php echo __d('baser', 'サイト内検索の検索結果より除外する') ?></span>　

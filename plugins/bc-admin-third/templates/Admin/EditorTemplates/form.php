@@ -31,7 +31,7 @@ $this->BcBaser->js('admin/editor_templates/form', false);
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('EditorTemplate.id', 'No') ?></th>
 				<td class="col-input bca-form-table__input">
 					<?php echo $this->BcForm->value('EditorTemplate.id') ?>
-					<?php echo $this->BcForm->input('EditorTemplate.id', ['type' => 'hidden']) ?>
+					<?php echo $this->BcAdminForm->control('EditorTemplate.id', ['type' => 'hidden']) ?>
 				</td>
 			</tr>
 		<?php endif ?>
@@ -40,21 +40,21 @@ $this->BcBaser->js('admin/editor_templates/form', false);
 				&nbsp;<span class="required bca-label"
 							data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('EditorTemplate.name', ['type' => 'text', 'size' => 20, 'maxlength' => 50]) ?>
+				<?php echo $this->BcAdminForm->control('EditorTemplate.name', ['type' => 'text', 'size' => 20, 'maxlength' => 50]) ?>
 				<?php echo $this->BcForm->error('EditorTemplate.name') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('EditorTemplate.image', __d('baser', 'アイコン画像')) ?></th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('EditorTemplate.image', ['type' => 'file']) ?>
+				<?php echo $this->BcAdminForm->control('EditorTemplate.image', ['type' => 'file']) ?>
 				<?php echo $this->BcForm->error('EditorTemplate.image') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('EditorTemplate.description', __d('baser', '説明文')) ?></th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcForm->input('EditorTemplate.description', ['type' => 'textarea', 'cols' => 60, 'rows' => 2]) ?>
+				<?php echo $this->BcAdminForm->control('EditorTemplate.description', ['type' => 'textarea', 'cols' => 60, 'rows' => 2]) ?>
 				<?php echo $this->BcForm->error('EditorTemplate.description') ?>
 			</td>
 		</tr>
