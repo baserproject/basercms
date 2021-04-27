@@ -22,7 +22,7 @@ $this->BcBaser->js('admin/sites/edit', false);
 ?>
 
 
-<?php echo $this->BcForm->create('Site') ?>
+<?php echo $this->BcAdminForm->create('Site') ?>
 
 <?php $this->BcBaser->element('sites/form') ?>
 

@@ -40,9 +40,9 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if ($this->action == 'admin_add'): ?>
-	<?php echo $this->BcForm->create('BlogCategory', ['url' => ['controller' => 'blog_categories', 'action' => 'add', $blogContent['BlogContent']['id']]]) ?>
+	<?php echo $this->BcAdminForm->create('BlogCategory', ['url' => ['controller' => 'blog_categories', 'action' => 'add', $blogContent['BlogContent']['id']]]) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $this->BcForm->create('BlogCategory', ['url' => ['controller' => 'blog_categories', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id'), 'id' => false]]) ?>
+	<?php echo $this->BcAdminForm->create('BlogCategory', ['url' => ['controller' => 'blog_categories', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id'), 'id' => false]]) ?>
 <?php endif; ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>

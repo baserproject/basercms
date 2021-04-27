@@ -19,7 +19,7 @@ $this->BcBaser->i18nScript([
 ]);
 ?>
 
-<?php echo $this->BcForm->create('BlogContent') ?>
+<?php echo $this->BcAdminForm->create('BlogContent') ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 

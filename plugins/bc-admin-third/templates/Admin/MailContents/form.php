@@ -22,7 +22,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 ?>
 
 
-<?php echo $this->BcForm->create('MailContent', ['novalidate' => true]) ?>
+<?php echo $this->BcAdminForm->create('MailContent', ['novalidate' => true]) ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 

@@ -21,7 +21,7 @@
 ?>
 
 
-<?php echo $this->BcForm->create('Content', ['url' => ['action' => 'index']]) ?>
+<?php echo $this->BcAdminForm->create('Content', ['url' => ['action' => 'index']]) ?>
 <?php echo $this->BcForm->hidden('Content.open', ['value' => true]) ?>
 <p class="bca-search__input-list">
 	<span class="bca-search__input-item">

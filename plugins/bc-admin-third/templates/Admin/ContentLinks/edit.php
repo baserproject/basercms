@@ -12,7 +12,7 @@
 ?>
 
 
-<?php echo $this->BcForm->create() ?>
+<?php echo $this->BcAdminForm->create() ?>
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 <?php echo $this->BcForm->hidden('ContentLink.id') ?>
 

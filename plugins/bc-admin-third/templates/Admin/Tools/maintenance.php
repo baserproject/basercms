@@ -28,7 +28,7 @@
 <div class="section bca-main__section">
 	<h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser', 'データのバックアップ') ?></h2>
 	<p class="bca-main__text"><?php echo __d('baser', 'データベースのデータをバックアップファイルとしてPCにダウンロードします。') ?></p>
-	<?php echo $this->BcForm->create('Tool', ['type' => 'get', 'url' => ['action' => 'maintenance', 'backup'], 'target' => '_blank']) ?>
+	<?php echo $this->BcAdminForm->create('Tool', ['type' => 'get', 'url' => ['action' => 'maintenance', 'backup'], 'target' => '_blank']) ?>
 	<p class="bca-main__text">
 		<?php echo $this->BcAdminForm->control('Tool.backup_encoding', ['type' => 'radio', 'options' => ['UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'UTF-8']) ?>
 		<?php echo $this->BcForm->error('Tool.backup_encoding') ?>
@@ -41,7 +41,7 @@
 	<h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser', 'データの復元') ?></h2>
 	<p class="bca-main__text"><?php echo __d('baser', 'バックアップファイルをアップロードし、データベースのデータを復元します。') ?><br/>
 		<small><?php echo __d('baser', 'ダウンロードしたバックアップファイルをZIPファイルのままアップロードします。') ?></small></p>
-	<?php echo $this->BcForm->create('Tool', ['url' => ['action' => 'maintenance', 'restore'], 'type' => 'file']) ?>
+	<?php echo $this->BcAdminForm->create('Tool', ['url' => ['action' => 'maintenance', 'restore'], 'type' => 'file']) ?>
 	<p class="bca-main__text"><?php echo $this->BcAdminForm->control('Tool.encoding', ['type' => 'radio', 'options' => ['auto' => __d('baser', '自動判別'), 'UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'auto']) ?>
 		<?php echo $this->BcForm->error('Tool.encoding') ?></p>
 	<p class="bca-main__text"><?php echo $this->BcAdminForm->control('Tool.backup', ['type' => 'file']) ?>

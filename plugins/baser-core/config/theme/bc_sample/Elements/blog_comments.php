@@ -43,7 +43,7 @@
 
 	<h4 class="bs-blog-comment__head"><?php echo __('コメントを送る') ?></h4>
 
-	<?php echo $this->BcForm->create('BlogComment', [
+	<?php echo $this->BcAdminForm->create('BlogComment', [
 		'url' => '/blog/blog_comments/add/' . $blogContent['BlogContent']['id'] . '/' . $post['BlogPost']['id'],
 		'id' => 'BlogCommentAddForm'
 	]) ?>

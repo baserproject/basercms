@@ -230,7 +230,7 @@ class BcFormHelperTest extends BcTestCase
 	    $this->markTestIncomplete('このテストは、まだ実装されていません。');
 	    // <<<
 
-		$result = $this->BcForm->create();
+		$result = $this->BcAdminForm->create();
 		$this->assertRegExp('/<form action="\/contacts\/add" novalidate="novalidate" id="addForm" method="post" accept-charset="utf-8"><div style="display:none;">.*/', $result);
 	}
 
@@ -739,7 +739,7 @@ class BcFormHelperTest extends BcTestCase
 
 		$this->BcForm->request['_Token'] = ['key' => 'testKey'];
 		$encoding = strtolower(Configure::read('App.encoding'));
-		$result = $this->BcForm->create('Contact', ['url' => '/contacts/add']);
+		$result = $this->BcAdminForm->create('Contact', ['url' => '/contacts/add']);
 		$expected = [
 			'form' => ['action' => '/contacts/add', 'novalidate' => 'novalidate', 'id' => 'ContactAddForm', 'method' => 'post', 'accept-charset' => $encoding],
 			'div' => ['style' => 'display:none;'],
@@ -750,7 +750,7 @@ class BcFormHelperTest extends BcTestCase
 			'/div'
 		];
 		$this->assertTags($result, $expected);
-		$result = $this->BcForm->create('Contact', ['url' => '/contacts/add', 'id' => 'MyForm']);
+		$result = $this->BcAdminForm->create('Contact', ['url' => '/contacts/add', 'id' => 'MyForm']);
 		$expected['form']['id'] = 'MyForm';
 		$this->assertTags($result, $expected);
 	}
@@ -923,7 +923,7 @@ class BcFormHelperTest extends BcTestCase
 	    $this->markTestIncomplete('このテストは、まだ実装されていません。');
 	    // <<<
 
-		$this->BcForm->create($Model);
+		$this->BcAdminForm->create($Model);
 		$this->assertEquals($expected, $this->BcForm->getId());
 	}
 

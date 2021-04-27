@@ -18,9 +18,9 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 
 
 <?php if ($this->action == 'admin_add'): ?>
-	<?php echo $this->BcForm->create('MailField', ['url' => ['controller' => 'mail_fields', 'action' => 'add', $mailContent['MailContent']['id']]]) ?>
+	<?php echo $this->BcAdminForm->create('MailField', ['url' => ['controller' => 'mail_fields', 'action' => 'add', $mailContent['MailContent']['id']]]) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $this->BcForm->create('MailField', ['url' => ['controller' => 'mail_fields', 'action' => 'edit', $mailContent['MailContent']['id'], $this->BcForm->value('MailField.id'), 'id' => false]]) ?>
+	<?php echo $this->BcAdminForm->create('MailField', ['url' => ['controller' => 'mail_fields', 'action' => 'edit', $mailContent['MailContent']['id'], $this->BcForm->value('MailField.id'), 'id' => false]]) ?>
 <?php endif; ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>

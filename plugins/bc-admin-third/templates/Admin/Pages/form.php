@@ -23,7 +23,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 	<div id="Action"><?php echo $this->request->action ?></div>
 </div>
 
-<?php echo $this->BcForm->create('Page') ?>
+<?php echo $this->BcAdminForm->create('Page') ?>
 <?php echo $this->BcAdminForm->control('Page.mode', ['type' => 'hidden']) ?>
 <?php echo $this->BcAdminForm->control('Page.id', ['type' => 'hidden']) ?>
 

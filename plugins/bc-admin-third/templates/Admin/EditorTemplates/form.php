@@ -20,7 +20,7 @@ $this->BcBaser->js('admin/editor_templates/form', false);
 
 
 <?php $this->BcBaser->css('admin/ckeditor/editor', ['inline' => true]); ?>
-<?php echo $this->BcForm->create('EditorTemplate', ['type' => 'file']) ?>
+<?php echo $this->BcAdminForm->create('EditorTemplate', ['type' => 'file']) ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 

@@ -75,7 +75,7 @@ $this->BcBaser->i18nScript([
 
 	<h2 class="bca-main__heading"><?php echo __d('baser', '管理ユーザー登録') ?></h2>
 
-	<?php echo $this->BcForm->create(null, ['url' => ['controller' => 'installations', 'action' => 'step4'], 'id' => 'adminSettings', 'name' => 'adminSettings']) ?>
+	<?php echo $this->BcAdminForm->create(null, ['url' => ['controller' => 'installations', 'action' => 'step4'], 'id' => 'adminSettings', 'name' => 'adminSettings']) ?>
 
 	<div class="panel-box bca-panel-box corner10">
 		<div class="section">

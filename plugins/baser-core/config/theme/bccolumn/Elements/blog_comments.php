@@ -23,7 +23,7 @@
 
 		<div id="CommentForm">
 			<h3>コメント送信フォーム</h3>
-			<?php echo $this->BcForm->create('BlogComment', array('url' => '/blog/blog_comments/add/' . $blogContent['BlogContent']['id'] . '/' . $post['BlogPost']['id'], 'id' => 'BlogCommentAddForm')) ?>
+			<?php echo $this->BcAdminForm->create('BlogComment', array('url' => '/blog/blog_comments/add/' . $blogContent['BlogContent']['id'] . '/' . $post['BlogPost']['id'], 'id' => 'BlogCommentAddForm')) ?>
 			<?php echo $this->BcAdminForm->control('BlogComment.captcha_id', ['type' => 'hidden', 'value' => $captchaId]) ?>
 
 			<table cellpadding="0" cellspacing="0" class="row-table-01">

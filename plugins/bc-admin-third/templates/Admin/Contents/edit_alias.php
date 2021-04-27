@@ -16,7 +16,7 @@
 ?>
 
 
-<?php echo $this->BcForm->create('Content', ['url' => ['content_id' => $this->BcForm->value('Content.id')]]) ?>
+<?php echo $this->BcAdminForm->create('Content', ['url' => ['content_id' => $this->BcForm->value('Content.id')]]) ?>
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 <?php echo $this->BcAdminForm->control('Content.alias_id', ['type' => 'hidden']) ?>
 <?php echo $this->BcAdminForm->control('Content.site_id', ['type' => 'hidden']) ?>

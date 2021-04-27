@@ -35,7 +35,7 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 
 <section class="bca-section" data-bca-section-type='form-group'>
 	<h2 class="bca-main__heading" data-bca-heading-size="lg"><?php echo __d('baser', '基本項目') ?></h2>
-	<?php echo $this->BcForm->create('SiteConfig', ['url' => ['action' => 'form']]) ?>
+	<?php echo $this->BcAdminForm->create('SiteConfig', ['url' => ['action' => 'form']]) ?>
 	<?php echo $this->BcFormTable->dispatchBefore() ?>
 	<?php echo $this->BcForm->hidden('SiteConfig.id') ?>
 

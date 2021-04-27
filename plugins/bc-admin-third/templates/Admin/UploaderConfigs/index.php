@@ -11,7 +11,7 @@
  */
 ?>
 <!-- form -->
-<?php echo $this->BcForm->create('UploaderConfig', ['url' => ['action' => 'index']]) ?>
+<?php echo $this->BcAdminForm->create('UploaderConfig', ['url' => ['action' => 'index']]) ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 

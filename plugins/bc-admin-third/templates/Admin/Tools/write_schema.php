@@ -16,7 +16,7 @@
 ?>
 
 
-<?php echo $this->BcForm->create('Tool', ['url' => ['action' => 'write_schema']]) ?>
+<?php echo $this->BcAdminForm->create('Tool', ['url' => ['action' => 'write_schema']]) ?>
 
 <table cellpadding="0" cellspacing="0" class="form-table bca-form-table">
 	<tr>

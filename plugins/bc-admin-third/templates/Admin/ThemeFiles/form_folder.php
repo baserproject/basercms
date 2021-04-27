@@ -29,9 +29,9 @@ if ($this->request->action !== 'admin_add_folder') {
 </div>
 
 <?php if ($this->request->action == 'admin_add_folder'): ?>
-	<?php echo $this->BcForm->create('ThemeFolder', ['id' => 'TemplateForm', 'url' => array_merge(['controller' => 'theme_files', 'action' => 'add_folder', $theme, $type], $params)]) ?>
+	<?php echo $this->BcAdminForm->create('ThemeFolder', ['id' => 'TemplateForm', 'url' => array_merge(['controller' => 'theme_files', 'action' => 'add_folder', $theme, $type], $params)]) ?>
 <?php else: ?>
-	<?php echo $this->BcForm->create('ThemeFolder', ['id' => 'TemplateForm', 'url' => array_merge(['controller' => 'theme_files', 'action' => 'edit_folder', $theme, $type], $params)]) ?>
+	<?php echo $this->BcAdminForm->create('ThemeFolder', ['id' => 'TemplateForm', 'url' => array_merge(['controller' => 'theme_files', 'action' => 'edit_folder', $theme, $type], $params)]) ?>
 <?php endif ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>

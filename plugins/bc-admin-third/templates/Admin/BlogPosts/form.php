@@ -60,9 +60,9 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
 
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if ($this->action == 'admin_add'): ?>
-	<?php echo $this->BcForm->create('BlogPost', ['type' => 'file', 'url' => ['controller' => 'blog_posts', 'action' => 'add', $blogContent['BlogContent']['id']], 'id' => 'BlogPostForm']) ?>
+	<?php echo $this->BcAdminForm->create('BlogPost', ['type' => 'file', 'url' => ['controller' => 'blog_posts', 'action' => 'add', $blogContent['BlogContent']['id']], 'id' => 'BlogPostForm']) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $this->BcForm->create('BlogPost', ['type' => 'file', 'url' => ['controller' => 'blog_posts', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogPost.id'), 'id' => false], 'id' => 'BlogPostForm']) ?>
+	<?php echo $this->BcAdminForm->create('BlogPost', ['type' => 'file', 'url' => ['controller' => 'blog_posts', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogPost.id'), 'id' => false], 'id' => 'BlogPostForm']) ?>
 <?php endif; ?>
 <?php echo $this->BcAdminForm->control('BlogPost.id', ['type' => 'hidden']) ?>
 <?php echo $this->BcAdminForm->control('BlogPost.blog_content_id', ['type' => 'hidden', 'value' => $blogContent['BlogContent']['id']]) ?>

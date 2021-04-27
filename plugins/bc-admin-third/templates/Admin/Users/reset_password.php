@@ -23,9 +23,9 @@ if (!$userModel) {
 <div class="section">
 	<p><?php echo __d('baser', 'パスワードを忘れた方は、登録されているメールアドレスを送信してください。<br />新しいパスワードをメールでお知らせします。') ?></p>
 	<?php if ($currentPrefix == 'front'): ?>
-		<?php echo $this->BcForm->create($userModel, ['url' => ['action' => 'reset_password']]) ?>
+		<?php echo $this->BcAdminForm->create($userModel, ['url' => ['action' => 'reset_password']]) ?>
 	<?php else: ?>
-		<?php echo $this->BcForm->create($userModel, ['url' => ['action' => 'reset_password', $this->request->getParam('prefix') => true]]) ?>
+		<?php echo $this->BcAdminForm->create($userModel, ['url' => ['action' => 'reset_password', $this->request->getParam('prefix') => true]]) ?>
 	<?php endif ?>
 	<div class="submit">
 		<?php echo $this->BcAdminForm->control($userModel . '.email', ['type' => 'text', 'size' => 34]) ?>

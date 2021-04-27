@@ -171,7 +171,7 @@ $this->BcBaser->i18nScript([
 	}
 </script>
 
-<?php echo $this->BcForm->create(null, ['url' => ['controller' => 'installations', 'action' => 'step3'], 'id' => 'dbsettings', 'name' => 'dbsettings']) ?>
+<?php echo $this->BcAdminForm->create(null, ['url' => ['controller' => 'installations', 'action' => 'step3'], 'id' => 'dbsettings', 'name' => 'dbsettings']) ?>
 
 <div class="step-3">
 

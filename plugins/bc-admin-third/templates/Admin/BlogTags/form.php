@@ -18,7 +18,7 @@ $this->BcBaser->js('Blog.admin/blog_tags/form', false);
 
 
 <!-- form -->
-<?php echo $this->BcForm->create('BlogTag') ?>
+<?php echo $this->BcAdminForm->create('BlogTag') ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 

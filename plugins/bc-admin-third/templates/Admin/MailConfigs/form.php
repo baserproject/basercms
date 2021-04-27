@@ -16,7 +16,7 @@
 $this->BcBaser->js('Mail.admin/mail_configs/form', false);
 ?>
 <!-- form -->
-<?php echo $this->BcForm->create('MailConfig', ['url' => ['action' => 'form']]) ?>
+<?php echo $this->BcAdminForm->create('MailConfig', ['url' => ['action' => 'form']]) ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 

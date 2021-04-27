@@ -41,7 +41,7 @@ $this->BcBaser->js(['admin/vendors/colpick', 'admin/theme_configs/form'], false)
 </script>
 
 
-<?php echo $this->BcForm->create('ThemeConfig', ['type' => 'file']) ?>
+<?php echo $this->BcAdminForm->create('ThemeConfig', ['type' => 'file']) ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 

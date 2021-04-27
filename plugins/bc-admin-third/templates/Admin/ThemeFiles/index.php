@@ -59,7 +59,7 @@ $params = explode('/', $path);
 <div class="bca-actions" data-bca-type="type2">
 	<?php if ($writable): ?>
 		<div class="bca-actions__form">
-			<?php echo $this->BcForm->create('ThemeFile', ['id' => 'ThemeFileUpload', 'url' => array_merge(['action' => 'upload', $theme, $plugin, $type], $params), 'enctype' => 'multipart/form-data']) ?>
+			<?php echo $this->BcAdminForm->create('ThemeFile', ['id' => 'ThemeFileUpload', 'url' => array_merge(['action' => 'upload', $theme, $plugin, $type], $params), 'enctype' => 'multipart/form-data']) ?>
 			<?php echo $this->BcAdminForm->control('ThemeFile.file', ['type' => 'file']) ?>
 			<?php echo $this->BcForm->end() ?>
 		</div>

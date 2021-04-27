@@ -30,7 +30,7 @@ $this->BcBaser->i18nScript([
 
 
 <p><?php echo __d('baser', 'ZIP 形式のテーマファイルをお持ちの場合、こちらからアップロードして適用できます。') ?></p>
-<?php echo $this->BcForm->create('Theme', ['type' => 'file']) ?>
+<?php echo $this->BcAdminForm->create('Theme', ['type' => 'file']) ?>
 
 <div class="submit">
 	<?php echo $this->BcAdminForm->control('Theme.file', ['type' => 'file']) ?>

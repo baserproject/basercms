@@ -19,7 +19,7 @@ $this->BcBaser->js('admin/permissions/form', false);
 ?>
 
 
-<?php echo $this->BcForm->create('Permission') ?>
+<?php echo $this->BcAdminForm->create('Permission') ?>
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 <?php echo $this->BcAdminForm->control('Permission.id', ['type' => 'hidden']) ?>
 

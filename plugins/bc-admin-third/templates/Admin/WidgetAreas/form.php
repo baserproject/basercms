@@ -31,9 +31,9 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 
 
 <?php if ($this->request->action == 'admin_add'): ?>
-	<?php echo $this->BcForm->create('WidgetArea', ['url' => ['action' => 'add']]) ?>
+	<?php echo $this->BcAdminForm->create('WidgetArea', ['url' => ['action' => 'add']]) ?>
 <?php elseif ($this->request->action == 'admin_edit'): ?>
-	<?php echo $this->BcForm->create('WidgetArea', ['url' => ['action' => 'update_title', 'id' => false]]) ?>
+	<?php echo $this->BcAdminForm->create('WidgetArea', ['url' => ['action' => 'update_title', 'id' => false]]) ?>
 <?php endif ?>
 
 <?php echo $this->BcForm->hidden('WidgetArea.id') ?>
@@ -47,7 +47,7 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 
 <?php if (!empty($widgetInfos)): ?>
 
-	<?php echo $this->BcForm->create('WidgetArea', ['url' => ['action' => 'update_sort', $this->BcForm->value('WidgetArea.id'), 'id' => false]]) ?>
+	<?php echo $this->BcAdminForm->create('WidgetArea', ['url' => ['action' => 'update_sort', $this->BcForm->value('WidgetArea.id'), 'id' => false]]) ?>
 	<?php echo $this->BcAdminForm->control('WidgetArea.sorted_ids', ['type' => 'hidden']) ?>
 	<?php echo $this->BcForm->end() ?>
 
@@ -102,7 +102,7 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 							</div>
 							<div class="content" style="text-align:right">
 								<p class="widget-name"><small><?php echo h($widget['title']) ?></small></p>
-								<?php echo $this->BcForm->create('Widget', ['url' => ['controller' => 'widget_areas', 'action' => 'update_widget', $this->BcForm->value('WidgetArea.id')], 'class' => 'form']) ?>
+								<?php echo $this->BcAdminForm->create('Widget', ['url' => ['controller' => 'widget_areas', 'action' => 'update_widget', $this->BcForm->value('WidgetArea.id')], 'class' => 'form']) ?>
 								<?php echo $this->BcAdminForm->control('Widget.id', ['type' => 'hidden', 'class' => 'id']) ?>
 								<?php echo $this->BcAdminForm->control('Widget.type', ['type' => 'hidden', 'value' => $widget['title']]) ?>
 								<?php echo $this->BcAdminForm->control('Widget.element', ['type' => 'hidden', 'value' => $widget['name']]) ?>
@@ -151,7 +151,7 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 							</div>
 							<div class="content" style="text-align:right">
 								<p><small><?php echo $widget[$key]['type'] ?></small></p>
-								<?php echo $this->BcForm->create('Widget', ['url' => ['controller' => 'widget_areas', 'action' => 'update_widget', $this->BcForm->value('WidgetArea.id'), 'id' => false], 'class' => 'form', 'id' => 'WidgetUpdateWidgetForm' . $widget[$key]['id']]) ?>
+								<?php echo $this->BcAdminForm->create('Widget', ['url' => ['controller' => 'widget_areas', 'action' => 'update_widget', $this->BcForm->value('WidgetArea.id'), 'id' => false], 'class' => 'form', 'id' => 'WidgetUpdateWidgetForm' . $widget[$key]['id']]) ?>
 								<?php echo $this->BcAdminForm->control($key . '.id', ['type' => 'hidden', 'class' => 'id']) ?>
 								<?php echo $this->BcAdminForm->control($key . '.type', ['type' => 'hidden']) ?>
 								<?php echo $this->BcAdminForm->control($key . '.element', ['type' => 'hidden']) ?>

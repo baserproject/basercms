@@ -113,9 +113,9 @@ $this->BcBaser->js('admin/updaters/update', false);
 	<?php if ($requireUpdate): ?>
 		<p><?php echo __d('baser', '「アップデート実行」をクリックしてデータベースのアップデートを完了させてください。') ?></p>
 		<?php if (empty($plugin)): ?>
-			<?php echo $this->BcForm->create('Updater', ['url' => ['action' => $this->request->action]]) ?>
+			<?php echo $this->BcAdminForm->create('Updater', ['url' => ['action' => $this->request->action]]) ?>
 		<?php else: ?>
-			<?php echo $this->BcForm->create('Updater', ['url' => ['action' => $this->request->action, $plugin]]) ?>
+			<?php echo $this->BcAdminForm->create('Updater', ['url' => ['action' => $this->request->action, $plugin]]) ?>
 		<?php endif ?>
 		<?php echo $this->BcAdminForm->control('Installation.update', ['type' => 'hidden', 'value' => true]) ?>
 		<div class="bca-actions">

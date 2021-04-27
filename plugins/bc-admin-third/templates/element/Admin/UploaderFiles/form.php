@@ -47,9 +47,9 @@ if (empty($popup)) {
 
 
 <?php if (!empty($popup)): ?>
-	<?php echo $this->BcForm->create('UploaderFile', ['url' => ['action' => 'edit'], 'id' => 'UploaderFileEditForm' . $listId]) ?>
+	<?php echo $this->BcAdminForm->create('UploaderFile', ['url' => ['action' => 'edit'], 'id' => 'UploaderFileEditForm' . $listId]) ?>
 <?php else: ?>
-	<?php echo $this->BcForm->create('UploaderFile', ['url' => ['action' => 'edit', $this->request->getData('UploaderFile.id'), $listId], 'id' => 'UploaderFileEditForm' . $listId, 'type' => 'file']) ?>
+	<?php echo $this->BcAdminForm->create('UploaderFile', ['url' => ['action' => 'edit', $this->request->getData('UploaderFile.id'), $listId], 'id' => 'UploaderFileEditForm' . $listId, 'type' => 'file']) ?>
 <?php endif ?>
 
 

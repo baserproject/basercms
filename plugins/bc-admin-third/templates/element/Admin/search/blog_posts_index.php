@@ -18,7 +18,7 @@ $this->BlogTags = $this->BcForm->getControlSource('BlogPost.blog_tag_id');
 $users = $this->BcForm->getControlSource("BlogPost.user_id");
 ?>
 
-<?php echo $this->BcForm->create('BlogPost', ['url' => ['action' => 'index', $blogContent['BlogContent']['id']]]) ?>
+<?php echo $this->BcAdminForm->create('BlogPost', ['url' => ['action' => 'index', $blogContent['BlogContent']['id']]]) ?>
 <p class="bca-search__input-list">
 	<span class="bca-search__input-item">
 		<?php echo $this->BcForm->label('BlogPost.name', __d('baser', 'タイトル'), ['class' => 'bca-search__input-item-label']) ?>

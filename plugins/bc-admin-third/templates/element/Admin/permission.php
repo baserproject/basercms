@@ -17,7 +17,7 @@
 
 
 <div id="PermissionDialog" title="アクセス制限登録" style="display:none">
-	<?php echo $this->BcForm->create('Permission', ['url' => ['plugin' => null, 'action' => 'ajax_add']]) ?>
+	<?php echo $this->BcAdminForm->create('Permission', ['url' => ['plugin' => null, 'action' => 'ajax_add']]) ?>
 	<?php echo $this->BcAdminForm->control('Permission.id') ?>
 	<dl>
 		<dt><?php echo $this->BcForm->label('Permission.user_group_id', __d('baser', 'ユーザーグループ')) ?></dt>

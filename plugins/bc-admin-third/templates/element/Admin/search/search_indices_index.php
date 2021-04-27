@@ -26,7 +26,7 @@ $types = BcUtil::unserialize($this->BcBaser->siteConfig['content_types']);
 ?>
 
 
-<?php echo $this->BcForm->create('SearchIndex', ['url' => ['action' => 'index']]) ?>
+<?php echo $this->BcAdminForm->create('SearchIndex', ['url' => ['action' => 'index']]) ?>
 <?php echo $this->BcForm->hidden('SearchIndex.open', ['value' => true]) ?>
 <p class="bca-search__input-list">
 	<span class="bca-search__input-item">

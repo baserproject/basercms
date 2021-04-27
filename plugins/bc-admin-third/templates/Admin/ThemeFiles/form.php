@@ -32,9 +32,9 @@ if ($this->request->action !== 'admin_add') {
 <?php endif ?>
 
 <?php if ($this->request->action == 'admin_add'): ?>
-	<?php echo $this->BcForm->create('ThemeFile', ['id' => 'ThemeFileForm', 'url' => array_merge(['action' => 'add'], [$theme, $plugin, $type], explode('/', $path))]) ?>
+	<?php echo $this->BcAdminForm->create('ThemeFile', ['id' => 'ThemeFileForm', 'url' => array_merge(['action' => 'add'], [$theme, $plugin, $type], explode('/', $path))]) ?>
 <?php elseif ($this->request->action == 'admin_edit'): ?>
-	<?php echo $this->BcForm->create('ThemeFile', ['id' => 'ThemeFileForm', 'url' => array_merge(['action' => 'edit'], [$theme, $plugin, $type], explode('/', $path))]) ?>
+	<?php echo $this->BcAdminForm->create('ThemeFile', ['id' => 'ThemeFileForm', 'url' => array_merge(['action' => 'edit'], [$theme, $plugin, $type], explode('/', $path))]) ?>
 <?php endif ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>

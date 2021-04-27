@@ -11,7 +11,7 @@
  */
 ?>
 <!-- form -->
-<?php echo $this->BcForm->create('UploaderCategory') ?>
+<?php echo $this->BcAdminForm->create('UploaderCategory') ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 

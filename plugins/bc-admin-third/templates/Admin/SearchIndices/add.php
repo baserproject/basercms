@@ -16,7 +16,7 @@
 ?>
 
 
-<?php echo $this->BcForm->create('SearchIndex') ?>
+<?php echo $this->BcAdminForm->create('SearchIndex') ?>
 
 <!-- form -->
 <div class="section">

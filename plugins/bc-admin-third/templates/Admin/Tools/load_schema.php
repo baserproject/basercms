@@ -17,7 +17,7 @@
 
 
 <!-- form -->
-<?php echo $this->BcForm->create('Tool', ['url' => ['action' => 'load_schema'], 'type' => 'file']) ?>
+<?php echo $this->BcAdminForm->create('Tool', ['url' => ['action' => 'load_schema'], 'type' => 'file']) ?>
 
 <table cellpadding="0" cellspacing="0" class="form-table bca-form-table">
 	<tr>
