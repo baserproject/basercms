@@ -52,7 +52,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 					<?php if (in_array('admin', $currentUserAuthPrefixes)): ?>
 						<li><?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_logo.png', ['alt' => __d('baser', 'baserCMS管理システム'), 'class' => 'bc-btn']), ['plugin' => null, 'admin' => true, 'controller' => 'dashboard', 'action' => 'index'], ['title' => __d('baser', 'baserCMS管理システム')]) ?></li>
 					<?php else: ?>
-						<li><?php $this->BcBaser->link($authName, Configure::read('BcAuthPrefix.' . $currentPrefix . '.loginRedirect'), ['title' => $authName, 'escape' => ture]) ?></li>
+						<li><?php $this->BcBaser->link(h($authName), Configure::read('BcAuthPrefix.' . $currentPrefix . '.loginRedirect'), ['title' => h($authName)]) ?></li>
 					<?php endif ?>
 				<?php endif ?>
 				<?php if ($this->BcBaser->existsEditLink() && !isset($this->request->query['preview'])): ?>
