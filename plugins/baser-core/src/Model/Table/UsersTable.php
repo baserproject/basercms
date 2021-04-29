@@ -317,26 +317,6 @@ class UsersTable extends Table
     }
 
     /**
-     * Where 条件を作成する
-     * @param $query
-     * @param $request
-     * @return Query
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function createWhere($query, $request): Query
-    {
-        $get = $request->getQuery();
-        if (!empty($get['user_group_id'])) {
-            $query->matching('UserGroups', function($q) use ($get) {
-                return $q->where(['UserGroups.id' => $get['user_group_id']]);
-            });
-        }
-        return $query;
-    }
-
-    /**
      * ログイン時のユーザデータを取得する
      *
      * @param [type] $id

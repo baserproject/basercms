@@ -61,9 +61,10 @@ class BcPlugin extends BasePlugin
             $this->getName(),
             ['path' => $path],
             function(RouteBuilder $routes) {
-                $path = env('BC_ADMIN_PREFIX', '/admin');
+
+                $pluginPath = '';
                 if ($this->getName() !== 'BaserCore') {
-                    $path .= '/' . Inflector::dasherize($this->getName());
+                    $pluginPath = '/' . Inflector::dasherize($this->getName());
                 }
 
                 /**
@@ -74,7 +75,7 @@ class BcPlugin extends BasePlugin
 
                 $routes->prefix(
                     'Admin',
-                    ['path' => $path],
+                    ['path' => env('BC_ADMIN_PREFIX', '/admin') . $pluginPath],
                     function(RouteBuilder $routes) {
                         $routes->connect('', ['controller' => 'Dashboard', 'action' => 'index']);
                         // CakePHPのデフォルトで /index が省略する仕様のため、URLを生成する際は、強制的に /index を付ける仕様に変更
@@ -82,6 +83,15 @@ class BcPlugin extends BasePlugin
                         $routes->fallbacks(InflectedRoute::class);
                     }
                 );
+
+                $routes->prefix(
+                    'Api',
+                    ['path' => '/api' . $pluginPath],
+                    function(RouteBuilder $routes) {
+                        $routes->fallbacks(InflectedRoute::class);
+                    }
+                );
+
             }
         );
         parent::routes($routes);

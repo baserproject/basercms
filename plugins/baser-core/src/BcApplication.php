@@ -13,8 +13,12 @@ declare(strict_types=1);
 
 namespace BaserCore;
 
+use BaserCore\Service\UserService as UserServiceAlias;
+use BaserCore\Service\UserServiceInterface;
+use BaserCore\ServiceProvider\BcServiceProvider;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
+use Cake\Core\ContainerInterface;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Event\EventManager;
@@ -192,10 +196,8 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
     {
         $service = new AuthenticationService();
-        $prefix = $request->getParam('prefix');
-
-        if ($prefix) {
-            $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
+        $authSetting = Configure::read('BcPrefixAuth.' . $request->getParam('prefix'));
+        if ($authSetting) {
             $service->setConfig([
                 'unauthenticatedRedirect' => Router::url($authSetting['loginAction'], true),
                 'queryParam' => 'redirect',
@@ -229,4 +231,10 @@ class BcApplication extends BaseApplication implements AuthenticationServiceProv
 
         return $service;
     }
+
+    public function services(ContainerInterface $container): void
+    {
+        $container->addServiceProvider(new BcServiceProvider());
+    }
+
 }

@@ -12,6 +12,7 @@
 namespace BaserCore\Controller\Admin;
 
 use Authentication\Controller\Component\AuthenticationComponent;
+use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\UsersTable;
@@ -372,10 +373,11 @@ class UsersController extends BcAdminAppController
      *
      * - pagination
      * - view num
+     * @param UsersServiceInterface $users
      * @checked
      * @unitTest
      */
-    public function index(): void
+    public function index(UsersServiceInterface $users): void
     {
         $this->setTitle(__d('baser', 'ユーザー一覧'));
         $this->setSearch('users_index');
@@ -402,10 +404,8 @@ class UsersController extends BcAdminAppController
         }
         <<< */
 
-        $query = $this->Users->find('all', $this->paginate);
-        $query = $this->Users->createWhere($query, $this->request);
         $this->set([
-            'users' => $this->paginate($query)
+            'users' => $this->paginate($users->adminList($this->request->getQuery(), $this->paginate))
         ]);
         $this->request = $this->request->withParsedBody($this->request->getQuery());
     }
