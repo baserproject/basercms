@@ -10,6 +10,7 @@
  */
 namespace BaserCore\Controller;
 
+use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Exception;
@@ -97,6 +98,17 @@ class AnalyseController extends AppController
                 'noTodo' => false
             ];
             if (preg_match('/^[a-z]/', $fileName) || !preg_match('/\.php$/', $fileName)) {
+                $file = new File($path);
+                $code = $file->read();
+                if(preg_match('/@checked/', $code)) {
+                    $meta['checked'] = true;
+                }
+                if(preg_match('/@noTodo/', $code)) {
+                    $meta['checked'] = true;
+                }
+                if(preg_match('/@noTodo/', $code)) {
+                    $meta['unitTest'] = true;
+                }
                 $metas[] = $meta;
                 continue;
             }
