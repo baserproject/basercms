@@ -1536,16 +1536,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v4.4.20",
+            "version": "v4.4.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "c98349bda966c70d6c08b4cd8658377c94166492"
+                "reference": "1ba4560dbbb9fcf5ae28b61f71f49c678086cf23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/c98349bda966c70d6c08b4cd8658377c94166492",
-                "reference": "c98349bda966c70d6c08b4cd8658377c94166492",
+                "url": "https://api.github.com/repos/symfony/console/zipball/1ba4560dbbb9fcf5ae28b61f71f49c678086cf23",
+                "reference": "1ba4560dbbb9fcf5ae28b61f71f49c678086cf23",
                 "shasum": ""
             },
             "require": {
@@ -1618,20 +1618,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-02-22T18:44:15+00:00"
+            "time": "2021-03-26T09:23:24+00:00"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v5.2.4",
+            "version": "v5.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "710d364200997a5afde34d9fe57bd52f3cc1e108"
+                "reference": "8c86a82f51658188119e62cff0a050a12d09836f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/710d364200997a5afde34d9fe57bd52f3cc1e108",
-                "reference": "710d364200997a5afde34d9fe57bd52f3cc1e108",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/8c86a82f51658188119e62cff0a050a12d09836f",
+                "reference": "8c86a82f51658188119e62cff0a050a12d09836f",
                 "shasum": ""
             },
             "require": {
@@ -1677,7 +1677,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-02-12T10:38:38+00:00"
+            "time": "2021-03-28T14:30:26+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -1990,21 +1990,21 @@
         },
         {
             "name": "symfony/service-contracts",
-            "version": "v2.2.0",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/service-contracts.git",
-                "reference": "d15da7ba4957ffb8f1747218be9e1a121fd298a1"
+                "reference": "f040a30e04b57fbcc9c6cbcf4dbaa96bd318b9bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/d15da7ba4957ffb8f1747218be9e1a121fd298a1",
-                "reference": "d15da7ba4957ffb8f1747218be9e1a121fd298a1",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/f040a30e04b57fbcc9c6cbcf4dbaa96bd318b9bb",
+                "reference": "f040a30e04b57fbcc9c6cbcf4dbaa96bd318b9bb",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.5",
-                "psr/container": "^1.0"
+                "psr/container": "^1.1"
             },
             "suggest": {
                 "symfony/service-implementation": ""
@@ -2012,7 +2012,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-main": "2.4-dev"
                 },
                 "thanks": {
                     "name": "symfony/contracts",
@@ -2062,7 +2062,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-07T11:33:47+00:00"
+            "time": "2021-04-01T10:43:52+00:00"
         }
     ],
     "packages-dev": [
@@ -2234,16 +2234,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "1.10.20",
+            "version": "1.10.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "e55d297525f0ecc805c813a0f63a40114fd670f6"
+                "reference": "28c9dfbe2351635961f670773e8d7b17bc5eda25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/e55d297525f0ecc805c813a0f63a40114fd670f6",
-                "reference": "e55d297525f0ecc805c813a0f63a40114fd670f6",
+                "url": "https://api.github.com/repos/composer/composer/zipball/28c9dfbe2351635961f670773e8d7b17bc5eda25",
+                "reference": "28c9dfbe2351635961f670773e8d7b17bc5eda25",
                 "shasum": ""
             },
             "require": {
@@ -2324,7 +2324,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-27T14:41:06+00:00"
+            "time": "2021-04-27T11:10:45+00:00"
         },
         {
             "name": "composer/semver",
@@ -2477,16 +2477,16 @@
         },
         {
             "name": "composer/xdebug-handler",
-            "version": "1.4.5",
+            "version": "1.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/xdebug-handler.git",
-                "reference": "f28d44c286812c714741478d968104c5e604a1d4"
+                "reference": "f27e06cd9675801df441b3656569b328e04aa37c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/f28d44c286812c714741478d968104c5e604a1d4",
-                "reference": "f28d44c286812c714741478d968104c5e604a1d4",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/f27e06cd9675801df441b3656569b328e04aa37c",
+                "reference": "f27e06cd9675801df441b3656569b328e04aa37c",
                 "shasum": ""
             },
             "require": {
@@ -2494,7 +2494,8 @@
                 "psr/log": "^1.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35 || ^5.7 || 6.5 - 8"
+                "phpstan/phpstan": "^0.12.55",
+                "symfony/phpunit-bridge": "^4.2 || ^5"
             },
             "type": "library",
             "autoload": {
@@ -2531,7 +2532,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-13T08:04:11+00:00"
+            "time": "2021-03-25T17:01:18+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
