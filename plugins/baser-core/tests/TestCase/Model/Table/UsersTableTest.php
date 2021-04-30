@@ -178,26 +178,6 @@ class UsersTableTest extends BcTestCase
     }
 
     /**
-     * Test createWhere
-     *
-     * @dataProvider createWhereDataProvider
-     */
-    public function testCreateWhere($userGroupId, $expected)
-    {
-        $request = $this->getRequest('/?user_group_id=' . $userGroupId);
-        $query = $this->Users->createWhere($this->Users->find(), $request);
-        $this->assertEquals($expected, $query->count());
-    }
-
-    public function createWhereDataProvider()
-    {
-        return [
-            [1, 1],
-            [2, 1]
-        ];
-    }
-
-    /**
      * Test getLoginFormatData
      */
     public function testGetLoginFormatData()
