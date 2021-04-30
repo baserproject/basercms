@@ -19,19 +19,8 @@
  */
 // ブラウザのヒストリーバック（戻るボタン）対応
 $this->Mail->token();
+$this->BcBaser->js('mail/form-submit', true, ['defer'])
 ?>
-
-
-<script type="text/javascript">
-	$(function(){
-		$(".form-submit").click(function(){
-			var mode = $(this).attr('id').replace('BtnMessage', '');
-			$("#MailMessageMode").val(mode);
-			return true;
-		});
-	});
-</script>
-
 
 <?php if (!$freezed): ?>
 	<?php echo $this->Mailform->create('MailMessage', ['url' => $this->BcBaser->getContentsUrl(null, false, null, false) . 'confirm', 'type' => 'file']) ?>

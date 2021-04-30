@@ -17,22 +17,8 @@
  */
 // ブラウザのヒストリーバック（戻るボタン）対応
 $this->Mail->token();
+$this->BcBaser->js('form-submit', true, ['defer']);
 ?>
-
-
-<script type="text/javascript">
-	$(function () {
-		$(".form-submit").click(function () {
-			$("#MailMessageMode").val(
-				$(this).attr('id').replace('BtnMessage', '')
-			);
-			$(this).prop('disabled', true);//ボタンを無効化する
-			$(this).closest('form').submit();//フォームを送信する
-			return true;
-		});
-	});
-</script>
-
 
 <?php /* フォーム開始タグ */ ?>
 <?php if (!$freezed): ?>
