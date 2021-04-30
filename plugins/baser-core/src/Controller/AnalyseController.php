@@ -19,6 +19,7 @@ use ReflectionMethod;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Controller\AppController;
 
 /**
  * Class AnalyseController
@@ -40,11 +41,13 @@ class AnalyseController extends AppController
      * 解析したファイル情報一覧
      *
      * .json 付でアクセスすることで JSON を出力
+     * 例）http://localhost/baser/analyse/index.json
      * 例）http://localhost/baser/analyse/index/baser-core.json
      * API) http://reflection.basercms.net/baser/analyse/index/baser-core.json
      *
      * @param string|null $pluginName
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function index($pluginName = null)
@@ -69,6 +72,7 @@ class AnalyseController extends AppController
      * @param string $path
      * @return array
      * @checked
+     * @unitTest
      * @noTodo
      */
     private function getList($path)
@@ -146,6 +150,7 @@ class AnalyseController extends AppController
      * @return array
      * @throws \ReflectionException
      * @checked
+     * @unitTest
      * @noTodo
      */
     private function getAnnotations($className, $methodName)
@@ -172,6 +177,7 @@ class AnalyseController extends AppController
      * @return array
      * @throws \ReflectionException
      * @checked
+     * @unitTest
      * @noTodo
      */
     private function getTraitMethod(ReflectionClass $reflection)
@@ -194,6 +200,7 @@ class AnalyseController extends AppController
      * @param string $path
      * @return string|string[]
      * @checked
+     * @unitTest
      * @noTodo
      */
     private function pathToClass($path)
