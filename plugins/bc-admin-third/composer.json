@@ -5,20 +5,11 @@
     "type": "cakephp-plugin",
     "license": "MIT",
     "require": {
-        "php": ">=7.2",
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^7.5"
+        "php": ">=7.2"
     },
     "autoload": {
         "psr-4": {
             "BcAdminThird\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "BcAdminThird\\Test\\": "tests/",
-            "Cake\\Test\\": "vendor/cakephp/cakephp/tests/"
         }
     }
 }
