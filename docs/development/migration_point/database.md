@@ -5,5 +5,5 @@
 誰かがテータベース構造を変更した場合は、反映するために、コンテナにログインし、migrationの実行を行う必要があります。
 
 ```
-bin/cake migrations migrate --plugin baser-core
+bin/cake migrations migrate --plugin BaserCore
 ```
