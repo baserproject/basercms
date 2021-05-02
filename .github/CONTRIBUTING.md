@@ -23,7 +23,6 @@
 詳細については、パッケージ構成を参照してください。
 
 - [開発環境の構築](https://github.com/baserproject/ucmitz/blob/dev/docs/preparation/environment.md)
-- [ucmitz をセットアップする](https://github.com/baserproject/ucmitz/blob/dev/docs/preparation/setup.md) 
 - [パッケージ構成](https://github.com/baserproject/ucmitz/blob/dev/docs/basic/package.md)
 
 　
@@ -48,6 +47,7 @@ baserCMS4で利用しているCakePHP2系からCakePHP4系に移行するにあ�
 - [ヘルパーにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/helper.md)
 - [リクエスト関連における注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/request.md)
 - [セッション関連における注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/session.md)
+- [データベースにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/database.md)
 
 　
 ### テーマの開発
