@@ -17,9 +17,6 @@ use Cake\Core\BasePlugin;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
-use Cake\Routing\Route\InflectedRoute;
-use Cake\Routing\RouteBuilder;
-use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use Migrations\Migrations;
 use BaserCore\Annotation\UnitTest;
@@ -47,44 +44,6 @@ class BcPlugin extends BasePlugin
     {
         parent::initialize();
         $this->migrations = new Migrations();
-    }
-
-    /**
-     * @param \Cake\Routing\RouteBuilder $routes
-     * @checked
-     * @noTodo
-     */
-    public function routes($routes): void
-    {
-        $path = '/baser';
-        Router::plugin(
-            $this->getName(),
-            ['path' => $path],
-            function(RouteBuilder $routes) {
-                $path = env('BC_ADMIN_PREFIX', '/admin');
-                if ($this->getName() !== 'BaserCore') {
-                    $path .= '/' . Inflector::dasherize($this->getName());
-                }
-
-                /**
-                 * AnalyseController で利用
-                 */
-                $routes->setExtensions(['json']);
-                $routes->fallbacks(InflectedRoute::class);
-
-                $routes->prefix(
-                    'Admin',
-                    ['path' => $path],
-                    function(RouteBuilder $routes) {
-                        $routes->connect('', ['controller' => 'Dashboard', 'action' => 'index']);
-                        // CakePHPのデフォルトで /index が省略する仕様のため、URLを生成する際は、強制的に /index を付ける仕様に変更
-                        $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
-                        $routes->fallbacks(InflectedRoute::class);
-                    }
-                );
-            }
-        );
-        parent::routes($routes);
     }
 
     /**

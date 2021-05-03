@@ -207,7 +207,7 @@ class BcUtil
         if (!$enablePlugins) {
             // DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
             try {
-                $pluginsTable = TableRegistry::getTableLocator()->get('Plugins');;   // ConnectionManager の前に呼出さないとエラーとなる
+                $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');;   // ConnectionManager の前に呼出さないとエラーとなる
             } catch (Exception $ex) {
                 return [];
             }
