@@ -3,7 +3,7 @@ if [ ! -e '/check' ]; then
     composer install --no-plugins
     cp /var/www/html/config/.env.example /var/www/html/config/.env
     sleep 10
-	bin/cake migrations migrate --plugin baser-core
-	bin/cake migrations seed --plugin baser-core
+	bin/cake migrations migrate --plugin BaserCore
+	bin/cake migrations seed --plugin BaserCore
     echo "container setup is complete"
 fi
