@@ -8,9 +8,6 @@
         "php": ">=7.2",
         "baserproject/baser-core": "0.0.1"
     },
-    "require-dev": {
-        "phpunit/phpunit": "^8.0"
-    },
     "autoload": {
         "psr-4": {
             "BcUploader\\": "src/"

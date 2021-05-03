@@ -1,3 +1,11 @@
+#
+# test.yml
+#
+# コンテナ起動時に、composer install を実行するが、Github Actions では、非同期で処理が走るため
+# composer の処理が完了する前にテストが行われてしまい、テストが失敗する。
+# そのため、composer install を同期処理とするため、ジョブの steps に composer の処理を追加している
+#
+
 name: Test
 
 on: [ push, pull_request ]
@@ -28,11 +36,6 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
-      - name: Install baserCMS
-        run: |
-          cp config/app_local.example.php config/app_local.php
-          cp config/.env.example config/.env
-
       - name: Run compose
         run: |
           cd docker
@@ -43,8 +46,10 @@ jobs:
       - name: Sleep for 10 seconds
         run: sleep 10
 
-      - name: Migration
-        run: docker exec bc5-php composer run-script migration
+      - name: Compose log
+        run:  |
+          cd docker
+          docker-compose logs
 
       - name: Run test suite
         run: docker exec bc5-php composer run-script test
