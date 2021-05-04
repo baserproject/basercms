@@ -46,9 +46,9 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     {
         parent::bootstrap($application);
 
-        if (Configure::read('debug') && env('USE_DEBUG_KIT', false)) {
+        if(!filter_var(env('USE_DEBUG_KIT', true), FILTER_VALIDATE_BOOLEAN)) {
             // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
-            $application->addPlugin('DebugKit');
+            \Cake\Core\Plugin::getCollection()->remove('DebugKit');
         }
 
         $application->addPlugin('Authentication');
@@ -119,12 +119,12 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      */
     public function routes($routes): void
     {
-        $path = '/baser';
+        $path = Configure::read('BcApp.baserCorePrefix');
         Router::plugin(
             $this->getName(),
             ['path' => $path],
             function(RouteBuilder $routes) {
-                $path = env('BC_ADMIN_PREFIX', '/admin');
+                $path = Configure::read('BcApp.adminPrefix');
                 if ($this->getName() !== 'BaserCore') {
                     $path .= '/' . Inflector::dasherize($this->getName());
                 }

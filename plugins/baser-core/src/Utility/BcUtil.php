@@ -101,7 +101,7 @@ class BcUtil
      */
     public static function isInstallMode()
     {
-        return env('INSTALL_MODE');
+        return filter_var(env('INSTALL_MODE', true), FILTER_VALIDATE_BOOLEAN);
     }
 
     /**

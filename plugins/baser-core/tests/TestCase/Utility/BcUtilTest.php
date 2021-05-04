@@ -159,9 +159,9 @@ class BcUtilTest extends BcTestCase
     {
         return [
             // インストールモード On
-            ['true', 'true'],
+            [true, true],
             // インストールモード Off
-            ['false', 'false'],
+            [false, false],
         ];
     }
 

@@ -17,8 +17,20 @@ use BaserCore\Annotation\Checked;
 /**
  * @checked
  */
+$baserCorePrefix = '/baser';
+$adminPrefix = '/admin';
 return [
     'BcApp' => [
+        /**
+         * baserコアのプレフィックス
+         * URLの先頭に付与
+         */
+        'baserCorePrefix' => $baserCorePrefix,
+        /**
+         * 管理システムのプレフィックス
+         * baserコアのプレフィックスの後に付与
+         */
+        'adminPrefix' => $adminPrefix,
         /**
          * 特権管理者グループID
          */
@@ -63,7 +75,7 @@ return [
                 'Dashboard' => [
                     'title' => __d('baser', 'ダッシュボード'),
                     'type' => 'dashboard',
-                    'url' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX', '/admin'),
+                    'url' => $baserCorePrefix . $adminPrefix,
                 ],
                 //			'Contents' => [
                 //				'title' => __d('baser', 'コンテンツ管理'),
@@ -175,7 +187,7 @@ return [
             // 認証タイプ
             'type' => 'Form',
             // URLにおけるエイリアス
-            'alias' => env('BC_ADMIN_PREFIX'),
+            'alias' => $adminPrefix,
             // 認証後リダイレクト先
             'loginRedirect' => ['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
             // ログインページURL
