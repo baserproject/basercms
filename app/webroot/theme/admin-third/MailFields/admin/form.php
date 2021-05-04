@@ -237,6 +237,19 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 					<?php echo $this->BcForm->error('MailField.options') ?>
 				</td>
 			</tr>
+			<tr id="RowType">
+				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailField.type', __d('baser', 'オートコンプリート')) ?></th>
+				<td class="col-input bca-form-table__input">
+					<?php echo $this->BcForm->input('MailField.auto_complete', ['type' => 'select', 'options' => $autoCompleteOptions]) ?>
+					<i class="bca-icon--question-circle btn help bca-help"></i>
+					<div id="helpSeparator" class="helptext">
+						<ul>
+							<li><?php echo __d('baser', 'オートコンプリート属性については<a href="https://developer.mozilla.org/ja/docs/Web/HTML/Attributes/autocomplete" target="_blank">リファレンス</a>を参照してください。') ?></li>
+						</ul>
+					</div>
+					<?php echo $this->BcForm->error('MailField.auto_complete') ?>
+				</td>
+			</tr>
 			<tr id="RowClass">
 				<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailField.class', __d('baser', 'クラス名')) ?></th>
 				<td class="col-input bca-form-table__input">
