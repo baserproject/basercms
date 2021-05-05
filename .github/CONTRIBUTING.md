@@ -96,21 +96,15 @@ ucmitz の開発では、ユニットテストのカバレッジ100%を目指し
 　
 ## プロジェクトで ucmitz を利用する
 
-人柱となり自身のプロジェクトで ucmitz を利用したい場合は、composer でインストールできます。
-詳細については次のドキュメントを参照してください。
+ucmitz は、現在、CMSとしての機能はありませんが、Webアプリケーション開発プラットフォームとして利用できます。
 
-- [外部のCakePHPアプリケーションで ucmitz を利用する](https://github.com/baserproject/ucmitz/blob/dev/docs/etc/use_my_project.md)
+自身のプロジェクトで ucmitz を利用する場合は、composer で簡単にインストールできますので、詳細については次のドキュメントを参照してください。
 
-　
-　
-## 新しいプラグインを開発する
+- [ucmitzをCakePHP4のプロジェクトで利用する](https://github.com/baserproject/ucmitz/wiki/ucmitz%E3%82%92CakePHP4%E3%81%AE%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%A7%E5%88%A9%E7%94%A8%E3%81%99%E3%82%8B)
+- [ucmitzで管理画面を作る](https://github.com/baserproject/ucmitz/wiki/ucmitz%E3%81%A7%E7%AE%A1%E7%90%86%E7%94%BB%E9%9D%A2%E3%82%92%E4%BD%9C%E3%82%8B)
+- [ucmitzのプラグインを開発する](https://github.com/baserproject/ucmitz/wiki/ucmitz%E3%81%AE%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%92%E9%96%8B%E7%99%BA%E3%81%99%E3%82%8B)
 
-ucmitz の新しいプラグインを開発するには次のドキュメントが参考になります。
-
-- [ucmitzのプラグインの開発](https://github.com/baserproject/ucmitz/blob/dev/docs/plugin/plugin-development.md)
-
-　
-　
+　　
 ## その他のドキュメント
 
 - [トラブルシューティング](https://github.com/baserproject/ucmitz/blob/dev/docs/etc/troubleshooting.md)
