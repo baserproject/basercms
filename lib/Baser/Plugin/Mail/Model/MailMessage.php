@@ -219,16 +219,20 @@ class MailMessage extends MailAppModel
 					$this->validate[$mailField['field_name']] = $mailField['valid'];
 				}
 				if (!empty($this->data['MailMessage'][$mailField['field_name']]) && $mailField['valid'] == 'VALID_EMAIL') {
-					$this->validate[$mailField['field_name']] = [
-						'email' => [
-							'rule' => ['email'],
-							'message' => __('形式が無効です。')
-						],
-						'english' => [
-							'rule' => '/^[a-zA-Z0-9!#$%&\’*+-\/=?^_`{|}~@.]*$/',
-							'message' => __('半角で入力してください。')
-						]
-					];
+					if (preg_match('/[^a-zA-Z0-9@\._\+\-]/u', $this->data['MailMessage'][$mailField['field_name']])) {
+						preg_match_all('/[^a-zA-Z0-9@\._\+\-]/u', $this->data['MailMessage'][$mailField['field_name']], $notForEmailArray);
+						$notForEmail = implode('', $notForEmailArray[0]);
+						$this->invalidate($mailField['field_name'], __('次の文字はメールアドレスでは受け付けられません: ' .$notForEmail));
+					}
+					elseif (strpos($this->data['MailMessage'][$mailField['field_name']], '@') === false){
+						$this->invalidate($mailField['field_name'], __('@が必要です。'));
+					}
+					else {
+						$this->validate[$mailField['field_name']] = array('email' => array(
+							'rule' => array('email'),
+							'message' => __('形式が無効です。「XXXXXXXXXX@XXX.XX」で記述してください。')
+						));
+					}
 				}
 			}
 			// ### 拡張バリデーション
