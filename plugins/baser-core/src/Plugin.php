@@ -133,40 +133,44 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      * @checked
      * @noTodo
      */
-    public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
+   public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
     {
         $service = new AuthenticationService();
         $prefix = $request->getParam('prefix');
 
         if ($prefix) {
             $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
-            $service->setConfig([
-                'unauthenticatedRedirect' => Router::url($authSetting['loginAction'], true),
-                'queryParam' => 'redirect',
-                'contain' => 'UserGroups',
-            ]);
+            if($authSetting) {
+                $service->setConfig([
+                    'unauthenticatedRedirect' => Router::url($authSetting['loginAction'], true),
+                    'queryParam' => 'redirect',
+                    'contain' => 'UserGroups',
+                ]);
 
-            $service->loadAuthenticator('Authentication.Session', [
-                'sessionKey' => $authSetting['sessionKey'],
-            ]);
-            $service->loadAuthenticator('Authentication.' . $authSetting['type'], [
-                'fields' => [
-                    'username' => is_array($authSetting['username'])? $authSetting['username'][0] : $authSetting['username'],
-                    'password' => $authSetting['password']
-                ],
-                'loginUrl' => Router::url($authSetting['loginAction']),
-            ]);
-            $service->loadIdentifier('Authentication.Password', [
-                'fields' => [
-                    'username' => $authSetting['username'],
-                    'password' => $authSetting['password']
-                ],
-                'resolver' => [
-                    'className' => 'Authentication.Orm',
-                    'userModel' => $authSetting['userModel'],
-                ],
-                'contain' => 'UserGroups',
-            ]);
+                $service->loadAuthenticator('Authentication.Session', [
+                    'sessionKey' => $authSetting['sessionKey'],
+                ]);
+                $service->loadAuthenticator('Authentication.' . $authSetting['type'], [
+                    'fields' => [
+                        'username' => is_array($authSetting['username'])? $authSetting['username'][0] : $authSetting['username'],
+                        'password' => $authSetting['password']
+                    ],
+                    'loginUrl' => Router::url($authSetting['loginAction']),
+                ]);
+                $service->loadIdentifier('Authentication.Password', [
+                    'fields' => [
+                        'username' => $authSetting['username'],
+                        'password' => $authSetting['password']
+                    ],
+                    'resolver' => [
+                        'className' => 'Authentication.Orm',
+                        'userModel' => $authSetting['userModel'],
+                    ],
+                    'contain' => 'UserGroups',
+                ]);
+            } else {
+                $service->loadAuthenticator('Authentication.Form');
+            }
         } else {
             $service->loadAuthenticator('Authentication.Form');
         }
