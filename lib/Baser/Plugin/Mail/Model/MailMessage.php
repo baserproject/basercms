@@ -325,18 +325,29 @@ class MailMessage extends MailAppModel
 				}
 				continue;
 			}
-
 			if (in_array('VALID_ZENKAKU_KATAKANA', $valids)) {
-				if (!preg_match('/^(|[ァ-ヾ 　]+)$/u', $data['MailMessage'][$field_name])) {
-					$this->invalidate($field_name, __('全て全角カタカナで入力してください。'));
+				if (!preg_match('/^(|[ァ-ヾ 　]+)$/u', $this->data['MailMessage'][$mailField['field_name']])) {
+					preg_match_all('/[^ァ-ヾ 　]/u', $this->data['MailMessage'][$mailField['field_name']], $notKatakanaArray);
+					$notKatakana = implode('', $notKatakanaArray[0]);
+					$this->invalidate($mailField['field_name'], __('次の文字はカタカナではないので受け付けられません: ' . $notKatakana));
 				}
 				continue;
 			}
-
 			if (in_array('VALID_ZENKAKU_HIRAGANA', $valids)) {
-				if (!preg_match('/^([　 \t\r\n]|[ぁ-ん]|[ー])+$/u', $data['MailMessage'][$field_name])) {
-					$this->invalidate($field_name, __('全て全角ひらがなで入力してください。'));
+				if (!preg_match('/^(|[ぁ-ゞ 　]+)$/u', $this->data['MailMessage'][$mailField['field_name']])) {
+					preg_match_all('/[^ぁ-ゞ　]/u', $this->data['MailMessage'][$mailField['field_name']], $notHiraganaArray);
+					$notHiragana = implode('', $notHiraganaArray[0]);
+					$this->invalidate($mailField['field_name'], __('次の文字はひらがなではないので受け付けられません: ' . $notHiragana));
 				}
+				continue;
+			}
+			if (in_array('VALID_NOT_EMOJI', $valids)) {
+				if (preg_match('/[\xF0-\xF7][\x80-\xBF][\x80-\xBF][\x80-\xBF]/', $data['MailMessage'][$mailField['field_name']])) {
+					preg_match_all('/[\xF0-\xF7][\x80-\xBF][\x80-\xBF][\x80-\xBF]/', $data['MailMessage'][$mailField['field_name']], $emojiArray);
+					$emoji = implode('', $emojiArray[0]);
+					$this->invalidate($mailField['field_name'], __('『' . $emoji . '』は『' . $mailField['name'] . '』に利用できません。取り除くか、もしくは文字による代替をしてください。'));
+				}
+				continue;
 			}
 		}
 	}
@@ -533,6 +544,22 @@ class MailMessage extends MailAppModel
 				// TRIM
 				if (!is_array($value)) {
 					$value = trim($value);
+				}
+				// メールアドレスを半角に変換
+				if ($mailField['valid'] == 'VALID_EMAIL') {
+					$value = mb_convert_kana($value, 'a');
+				}
+				// 半角カタカナ・全角カタカナをひらがなに変換・半角スペースを全角スペースに変換
+				if ($mailField['valid_ex'] == 'VALID_ZENKAKU_HIRAGANA') {
+					$value = mb_convert_kana($value, 'H');
+					$value = mb_convert_kana($value, 'c');
+					$value = mb_convert_kana($value, 'S');
+				}
+				// ひらがな・半角カタカナを全角カタカナに変換
+				if ($mailField['valid_ex'] == 'VALID_ZENKAKU_KATAKANA') {
+					$value = mb_convert_kana($value, 'C');
+					$value = mb_convert_kana($value, 'K');
+					$value = mb_convert_kana($value, 'S');
 				}
 			}
 
