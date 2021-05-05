@@ -216,16 +216,28 @@ return [
     ],
 
     /**
+     * セッション
+     */
+    'Session' => [
+        'defaults' => 'php',
+        /**
+         * セッションの有効期限（分）
+         * デフォルト：2日間
+         */
+        'timeout' => 60 * 24 * 2
+    ],
+
+    /**
      * キャッシュ
      */
     'Cache' => [
-        '_cake_env_' => [
+        '_bc_env_' => [
             'className' => FileEngine::class,
-            'prefix' => 'myapp_cake_env_',
+            'prefix' => 'myapp_bc_env_',
             'path' => CACHE . 'environment' . DS,
             'serialize' => true,
-            'duration' => '+999 days',
-            'url' => env('CACHE_CAKEENV_URL', null),
+            'duration' => '+1 years',
+            'url' => env('CACHE_BCENV_URL', null),
         ],
     ],
 ];
