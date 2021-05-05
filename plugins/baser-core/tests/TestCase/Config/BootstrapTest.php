@@ -84,7 +84,7 @@ class BootstrapTest extends BcTestCase
 			['_cake_model_', 'myapp_cake_model_', CACHE . 'models' . DS, strtotime("+999 days") - time()],
 			['_cake_core_', 'myapp_cake_core_', CACHE . 'persistent' . DS, strtotime("+999 days") - time()],
 			['_cake_data_', 'myapp_cake_data_', CACHE . 'datas' . DS, strtotime("+999 days") - time()],
-			['_cake_env_', 'myapp_cake_env_', CACHE . 'environment' . DS, strtotime("+999 days") - time()],
+			['_bc_env_', 'myapp_bc_env_', CACHE . 'environment' . DS, strtotime("+999 days") - time()],
 		];
 	}
 }

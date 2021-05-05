@@ -288,7 +288,7 @@ class SiteConfigsController extends AppController
 
 		$specialThanks = [];
 		if (!Configure::read('Cache.disable') && Configure::read('debug') == 0) {
-			$specialThanks = Cache::read('special_thanks', '_cake_env_');
+			$specialThanks = Cache::read('special_thanks', '_bc_env_');
 		}
 
 		if ($specialThanks) {
@@ -300,7 +300,7 @@ class SiteConfigsController extends AppController
 			}
 			if ($json) {
 				if (!Configure::read('Cache.disable')) {
-					Cache::write('special_thanks', $json, '_cake_env_');
+					Cache::write('special_thanks', $json, '_bc_env_');
 				}
 				$json = json_decode($json);
 			} else {

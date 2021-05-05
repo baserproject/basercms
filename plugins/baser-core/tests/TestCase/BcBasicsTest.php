@@ -300,7 +300,7 @@ class BcBasicsTest extends BcTestCase
 		$coreConf = $coreConf['settings'];
 		$modelConf = Cache::config('_cake_model_');
 		$modelConf = $modelConf['settings'];
-		$envConf = Cache::config('_cake_env_');
+		$envConf = Cache::config('_bc_env_');
 		$envConf = $envConf['settings'];
 
 		$coreCache = new File($coreConf['path'] . $coreConf['prefix'] . 'cache', true);
