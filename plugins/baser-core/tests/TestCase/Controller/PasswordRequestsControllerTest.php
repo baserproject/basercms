@@ -53,9 +53,11 @@ class PasswordRequestsControllerTest extends BcTestCase
         $messages = TestEmailTransport::clearMessages();
 
         $this->enableSecurityToken();
+        $this->enableCsrfToken();
 
         $this->get('/baser/admin/password_requests/entry');
         $this->assertResponseOk();
+
 
         // メールアドレス送信
         $this->post('/baser/admin/password_requests/entry', [

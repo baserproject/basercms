@@ -139,7 +139,7 @@ class PluginsController extends BcAdminAppController
         $this->setTitle(__d('baser', '新規プラグイン登録'));
         $this->setHelp('plugins_install');
 
-        if (!$isInstallable || !$this->request->is('post')) {
+        if (!$isInstallable || !$this->request->is('put')) {
             return;
         }
 

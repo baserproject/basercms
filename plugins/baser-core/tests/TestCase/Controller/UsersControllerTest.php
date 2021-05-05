@@ -84,6 +84,7 @@ class UsersControllerTest extends TestCase
     public function testAdd()
     {
         $this->enableSecurityToken();
+        $this->enableCsrfToken();
         $data = [
             'name' => 'Test_test_Man',
             'password_1' => 'Lorem ipsum dolor sit amet',

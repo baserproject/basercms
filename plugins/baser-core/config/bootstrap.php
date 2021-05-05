@@ -36,11 +36,14 @@ Configure::load('BaserCore.setting', 'baser');
 
 /**
  * キャッシュ設定
+ * ユニットテスト時に重複して設定するとエラーとなるため判定を入れている
  */
-if (Configure::read('debug')) {
-    Configure::write('Cache._bc_env_.duration', '+2 seconds');
+if (!Cache::getConfig('_bc_env_')) {
+    if (Configure::read('debug')) {
+        Configure::write('Cache._bc_env_.duration', '+2 seconds');
+    }
+    Cache::setConfig(Configure::consume('Cache'));
 }
-Cache::setConfig(Configure::consume('Cache'));
 
 /**
  * デフォルトバリデーションプロバイダー

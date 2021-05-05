@@ -108,12 +108,12 @@ class PluginsControllerTest extends BcTestCase
     public function testDetachAndInstallAndUninstall(): void
     {
         $this->enableSecurityToken();
+        $this->enableCsrfToken();
         $this->post('/baser/admin/plugins/detach/BcSample');
         $this->assertFlashMessage('プラグインの無効化に失敗しました。');
         $this->post('/baser/admin/plugins/detach/BcBlog');
         $this->assertFlashMessage('プラグイン「BcBlog」を無効にしました。');
 
-        $this->enableSecurityToken();
         $this->put('/baser/admin/plugins/install/BcBlog', ['connection' => 'test']);
         $this->assertRedirect([
             'plugin' => 'BaserCore',
@@ -161,6 +161,7 @@ class PluginsControllerTest extends BcTestCase
     public function testReset_db()
     {
         $this->enableSecurityToken();
+        $this->enableCsrfToken();
         $this->put('/baser/admin/plugins/reset_db/BcBlog', ['connection' => 'test', 'name' => 'BcBlog']);
         $this->assertRedirect([
             'plugin' => 'BaserCore',
