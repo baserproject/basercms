@@ -160,22 +160,22 @@ class BcPlugin extends BasePlugin
      */
     public function routes($routes): void
     {
-        $path = Configure::read('BcApp.baserCorePrefix');
+        $baserCorePrefix = Configure::read('BcApp.baserCorePrefix');
+        $plugin = $this->getName();
         Router::plugin(
-            $this->getName(),
-            ['path' => $path],
-            function(RouteBuilder $routes) {
-                $path = Configure::read('BcApp.adminPrefix');
-                if ($this->getName() !== 'BaserCore') {
-                    $path .= '/' . Inflector::dasherize($this->getName());
-                }
-
+            $plugin,
+            ['path' => $baserCorePrefix],
+            function(RouteBuilder $routes) use ($plugin) {
                 /**
                  * AnalyseController で利用
                  */
                 $routes->setExtensions(['json']);
                 $routes->fallbacks(InflectedRoute::class);
 
+                $path = Configure::read('BcApp.adminPrefix');
+                if ($plugin !== 'BaserCore') {
+                    $path .= '/' . Inflector::dasherize('/' . $plugin);
+                }
                 $routes->prefix(
                     'Admin',
                     ['path' => $path],
@@ -188,6 +188,16 @@ class BcPlugin extends BasePlugin
                 );
             }
         );
+        if ($this->getName() !== 'BaserCore') {
+            Router::plugin(
+                $plugin,
+                ['path' => $baserCorePrefix . '/' . Inflector::dasherize('/' . $plugin)],
+                function(RouteBuilder $routes) {
+                    $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
+                    $routes->fallbacks(InflectedRoute::class);
+                }
+            );
+        }
         parent::routes($routes);
     }
 
