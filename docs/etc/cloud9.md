@@ -58,7 +58,7 @@ Cloud9 内にブラウザが立ち上がるので、URLの入力欄にカーソ�
 ## 開発中のURLにアクセスする
 
 ```
-https://{ベースURL}/baser/admin/users/index
+https://{ベースURL}/baser/admin/baser-core/users/index
 ```
 
 　

@@ -58,7 +58,7 @@ vagrant up
 ### 管理画面にログインする
 
 ブラウザで、次のURLにアクセスして表示を確認します。
-[https://localhost/baser/admin/users/login](https://localhost/baser/admin/users/login)
+[https://localhost/baser/admin/baser-core/users/login](https://localhost/baser/admin/baser-core/users/login)
    
 メールアドレスとパスワードを入力し管理画面にログインします。
 
