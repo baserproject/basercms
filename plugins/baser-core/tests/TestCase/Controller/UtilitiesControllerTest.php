@@ -50,7 +50,7 @@ class UtilitiesControllerTest extends BcTestCase
     public function testClear_cache(): void
     {
 
-        $this->get('/baser/admin/utilities/clear_cache');
+        $this->get('/baser/admin/baser-core/utilities/clear_cache');
         $this->assertResponseCode(302);
     }
 

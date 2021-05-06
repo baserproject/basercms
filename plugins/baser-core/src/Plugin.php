@@ -20,7 +20,10 @@ use Cake\Core\Configure;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Event\EventManager;
 use Cake\Http\MiddlewareQueue;
+use Cake\Routing\Route\InflectedRoute;
+use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
+use Cake\Utility\Inflector;
 use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 use BaserCore\Annotation\UnitTest;
@@ -177,4 +180,23 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
 
         return $service;
     }
+
+    /**
+     * Routes
+     * App として管理画面を作成するためのルーティングを設定
+     * @param RouteBuilder $routes
+     */
+    public function routes($routes): void
+    {
+        $routes->prefix(
+            'Admin',
+            ['path' => Configure::read('BcApp.baserCorePrefix') . Configure::read('BcApp.adminPrefix')],
+            function(RouteBuilder $routes) {
+                $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
+                $routes->fallbacks(InflectedRoute::class);
+            }
+        );
+        parent::routes($routes);
+    }
+
 }

@@ -41,7 +41,7 @@ class PasswordRequestsControllerTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->get('/baser/admin/password_requests/entry');
+        $this->get('/baser/admin/baser-core/password_requests/entry');
         $this->assertResponseOk();
     }
 
@@ -55,12 +55,12 @@ class PasswordRequestsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
 
-        $this->get('/baser/admin/password_requests/entry');
+        $this->get('/baser/admin/baser-core/password_requests/entry');
         $this->assertResponseOk();
 
 
         // メールアドレス送信
-        $this->post('/baser/admin/password_requests/entry', [
+        $this->post('/baser/admin/baser-core/password_requests/entry', [
             'email' => 'testuser1@example.com',
         ]);
         $this->assertResponseOk();
@@ -82,7 +82,7 @@ class PasswordRequestsControllerTest extends BcTestCase
             'password_1' => 'new-password',
             'password_2' => 'new-password',
         ]);
-        $this->assertRedirect('/baser/admin/password_requests/done');
+        $this->assertRedirect('/baser/admin/baser-core/password_requests/done');
     }
 
     /**
@@ -90,7 +90,7 @@ class PasswordRequestsControllerTest extends BcTestCase
      */
     public function testApply()
     {
-        $this->get('/baser/admin/password_requests/apply');
+        $this->get('/baser/admin/baser-core/password_requests/apply');
         $this->assertResponseFailure();
     }
 
@@ -99,7 +99,7 @@ class PasswordRequestsControllerTest extends BcTestCase
      */
     public function testDone()
     {
-        $this->get('/baser/admin/password_requests/done');
+        $this->get('/baser/admin/baser-core/password_requests/done');
         $this->assertResponseOk();
         $this->assertResponseContains('パスワードを変更しました。');
     }

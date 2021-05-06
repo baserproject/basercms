@@ -162,25 +162,17 @@ class BcPlugin extends BasePlugin
     {
         $baserCorePrefix = Configure::read('BcApp.baserCorePrefix');
         $plugin = $this->getName();
-        Router::plugin(
-            $plugin,
-            ['path' => $baserCorePrefix],
-            function(RouteBuilder $routes) use ($plugin) {
-                /**
-                 * AnalyseController で利用
-                 */
-                $routes->setExtensions(['json']);
-                $routes->fallbacks(InflectedRoute::class);
 
-                $path = Configure::read('BcApp.adminPrefix');
-                if ($plugin !== 'BaserCore') {
-                    $path .= '/' . Inflector::dasherize('/' . $plugin);
-                }
-                $routes->prefix(
-                    'Admin',
-                    ['path' => $path],
-                    function(RouteBuilder $routes) {
-                        $routes->connect('', ['controller' => 'Dashboard', 'action' => 'index']);
+        // プラグインの管理画面用ルーティング
+        $routes->prefix(
+            'Admin',
+            ['path' => $baserCorePrefix . Configure::read('BcApp.adminPrefix')],
+            function(RouteBuilder $routes)  use ($plugin) {
+                $routes->connect('', ['plugin' => 'BaserCore', 'controller' => 'Dashboard', 'action' => 'index']);
+                $routes->plugin(
+                    $plugin,
+                    ['path' => '/' . Inflector::dasherize('/' . $plugin)],
+                    function(RouteBuilder $routes) use ($plugin) {
                         // CakePHPのデフォルトで /index が省略する仕様のため、URLを生成する際は、強制的に /index を付ける仕様に変更
                         $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
                         $routes->fallbacks(InflectedRoute::class);
@@ -188,16 +180,19 @@ class BcPlugin extends BasePlugin
                 );
             }
         );
-        if ($this->getName() !== 'BaserCore') {
-            Router::plugin(
-                $plugin,
-                ['path' => $baserCorePrefix . '/' . Inflector::dasherize('/' . $plugin)],
-                function(RouteBuilder $routes) {
-                    $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
-                    $routes->fallbacks(InflectedRoute::class);
-                }
-            );
-        }
+
+        // プラグインのフロントエンド用ルーティング
+        Router::plugin(
+            $plugin,
+            ['path' => $baserCorePrefix . '/' . Inflector::dasherize('/' . $plugin)],
+            function(RouteBuilder $routes) {
+                // AnalyseController で利用
+                $routes->setExtensions(['json']);
+                $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
+                $routes->fallbacks(InflectedRoute::class);
+            }
+        );
+
         parent::routes($routes);
     }
 

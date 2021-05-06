@@ -99,7 +99,7 @@ class BcAuthHelperTest extends BcTestCase {
     public function testGetCurrentLoginUrl()
     {
         // Adminの場合
-        $expected = "/baser/admin/users/login";
+        $expected = "/baser/admin/baser-core/users/login";
         $result = $this->BcAuth->getCurrentLoginUrl();
         $this->assertEquals($expected, $result);
         // ログインページURLを変更した場合
@@ -168,7 +168,7 @@ class BcAuthHelperTest extends BcTestCase {
     public function testGetCurrentLogoutUrl()
     {
         // Adminの場合
-        $expected = "/baser/admin/users/logout";
+        $expected = "/baser/admin/baser-core/users/logout";
         $result = $this->BcAuth->getCurrentLogoutUrl();
         $this->assertEquals($expected, $result);
         // ログアウトページURLを変更した場合

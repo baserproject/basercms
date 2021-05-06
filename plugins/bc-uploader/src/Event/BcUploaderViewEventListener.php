@@ -1,6 +1,4 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS User Community <https://basercms.net/community/>
@@ -11,11 +9,11 @@ return;
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-//namespace BcUploader\Event;
-//
-//use BaserCore\Event\BcViewEventListener;
-//use BaserCore\View\Helper\BcHtmlHelper;
-//use Cake\Event\Event;
+namespace BcUploader\Event;
+
+use BaserCore\Event\BcViewEventListener;
+use BaserCore\View\Helper\BcHtmlHelper;
+use Cake\Event\Event;
 
 /**
  * UploaderViewEventListener
