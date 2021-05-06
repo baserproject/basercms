@@ -1,5 +1,6 @@
 <?php
-
+// TODO : コード確認要
+return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -57,12 +58,12 @@ class UploaderConfigsController extends AppController
     {
 
         $this->setTitle(__d('baser', 'アップローダープラグイン設定'));
-        if (!$this->request->data) {
+        if (!$this->request->getData()) {
             $this->request = $this->request->withData('UploaderConfig',  $this->UploaderConfig->findExpanded());
         } else {
-            $this->UploaderConfig->set($this->request->data);
+            $this->UploaderConfig->set($this->request->getData());
             if ($this->UploaderConfig->validates()) {
-                $this->UploaderConfig->saveKeyValue($this->request->data);
+                $this->UploaderConfig->saveKeyValue($this->request->getData());
                 $this->BcMessage->setInfo(__d('baser', 'アップローダー設定を保存しました。'));
                 $this->redirect(['action' => 'index']);
             } else {
