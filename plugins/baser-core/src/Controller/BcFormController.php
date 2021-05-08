@@ -31,7 +31,7 @@ class BcFormController extends AppController
 	public function get_token()
 	{
 		$this->autoRender = false;
-		return $this->request->getParam('_Token.key');
+		return $this->response->withStringBody($this->request->getAttribute('csrfToken'));
 	}
 
 }

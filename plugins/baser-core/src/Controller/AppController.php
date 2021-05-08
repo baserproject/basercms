@@ -25,4 +25,18 @@ class AppController extends BaseController
      */
     use BcEventDispatcherTrait;
 
+    /**
+     * Initialize
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->loadComponent('BaserCore.BcMessage');
+        $this->loadComponent('Security');
+        $this->loadComponent('Paginator');
+    }
+
 }

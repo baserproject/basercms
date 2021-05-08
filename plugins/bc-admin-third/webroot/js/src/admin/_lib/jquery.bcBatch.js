@@ -72,7 +72,7 @@
                 });
 
                 $.bcToken.check(function () {
-                    form.append($('<input name="data[_Token][key]" type="hidden">').val($.bcToken.key));
+                    form.append($('<input name="_csrfToken" type="hidden">').val($.bcToken.key));
                     return $.ajax({
                         url: config.batchUrl,
                         type: 'POST',
