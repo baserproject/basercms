@@ -70,7 +70,7 @@ class PluginsControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->get('/baser/admin/plugins/index');
+        $this->get('/baser/admin/baser-core/plugins/index');
         $this->assertResponseOk();
     }
 
@@ -108,13 +108,13 @@ class PluginsControllerTest extends BcTestCase
     public function testDetachAndInstallAndUninstall(): void
     {
         $this->enableSecurityToken();
-        $this->post('/baser/admin/plugins/detach/BcSample');
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/baser-core/plugins/detach/BcSample');
         $this->assertFlashMessage('プラグインの無効化に失敗しました。');
-        $this->post('/baser/admin/plugins/detach/BcBlog');
+        $this->post('/baser/admin/baser-core/plugins/detach/BcBlog');
         $this->assertFlashMessage('プラグイン「BcBlog」を無効にしました。');
 
-        $this->enableSecurityToken();
-        $this->put('/baser/admin/plugins/install/BcBlog', ['connection' => 'test']);
+        $this->put('/baser/admin/baser-core/plugins/install/BcBlog', ['connection' => 'test']);
         $this->assertRedirect([
             'plugin' => 'BaserCore',
             'prefix' => 'Admin',
@@ -131,7 +131,7 @@ class PluginsControllerTest extends BcTestCase
             'mode' => 0777
         ]);
         $folder->create($from, 0777);
-        $this->post('/baser/admin/plugins/uninstall/BcBlog', ['connection' => 'test']);
+        $this->post('/baser/admin/baser-core/plugins/uninstall/BcBlog', ['connection' => 'test']);
         $this->assertRedirect([
             'plugin' => 'BaserCore',
             'prefix' => 'Admin',
@@ -161,7 +161,8 @@ class PluginsControllerTest extends BcTestCase
     public function testReset_db()
     {
         $this->enableSecurityToken();
-        $this->put('/baser/admin/plugins/reset_db/BcBlog', ['connection' => 'test', 'name' => 'BcBlog']);
+        $this->enableCsrfToken();
+        $this->put('/baser/admin/baser-core/plugins/reset_db/BcBlog', ['connection' => 'test', 'name' => 'BcBlog']);
         $this->assertRedirect([
             'plugin' => 'BaserCore',
             'prefix' => 'Admin',

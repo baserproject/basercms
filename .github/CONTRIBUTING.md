@@ -23,7 +23,6 @@
 詳細については、パッケージ構成を参照してください。
 
 - [開発環境の構築](https://github.com/baserproject/ucmitz/blob/dev/docs/preparation/environment.md)
-- [ucmitz をセットアップする](https://github.com/baserproject/ucmitz/blob/dev/docs/preparation/setup.md) 
 - [パッケージ構成](https://github.com/baserproject/ucmitz/blob/dev/docs/basic/package.md)
 
 　
@@ -48,6 +47,7 @@ baserCMS4で利用しているCakePHP2系からCakePHP4系に移行するにあ�
 - [ヘルパーにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/helper.md)
 - [リクエスト関連における注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/request.md)
 - [セッション関連における注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/session.md)
+- [データベースにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/database.md)
 
 　
 ### テーマの開発
@@ -96,21 +96,15 @@ ucmitz の開発では、ユニットテストのカバレッジ100%を目指し
 　
 ## プロジェクトで ucmitz を利用する
 
-人柱となり自身のプロジェクトで ucmitz を利用したい場合は、composer でインストールできます。
-詳細については次のドキュメントを参照してください。
+ucmitz は、現在、CMSとしての機能はありませんが、Webアプリケーション開発プラットフォームとして利用でき、ログイン認証付きのリッチな管理画面を簡単に作成することができます。
 
-- [外部のCakePHPアプリケーションで ucmitz を利用する](https://github.com/baserproject/ucmitz/blob/dev/docs/etc/use_my_project.md)
+自身のプロジェクトで ucmitz を利用する場合は、composer で簡単にインストールできますので、詳細については次のドキュメントを参照してください。
 
-　
-　
-## 新しいプラグインを開発する
+- [ucmitzをCakePHP4のプロジェクトで利用する](https://github.com/baserproject/ucmitz/wiki/ucmitz%E3%82%92CakePHP4%E3%81%AE%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%A7%E5%88%A9%E7%94%A8%E3%81%99%E3%82%8B)
+- [ucmitzを利用して管理画面を作る](https://github.com/baserproject/ucmitz/wiki/ucmitz%E3%82%92%E5%88%A9%E7%94%A8%E3%81%97%E3%81%A6%E7%AE%A1%E7%90%86%E7%94%BB%E9%9D%A2%E3%82%92%E4%BD%9C%E3%82%8B)
+- [ucmitzのプラグインを開発する](https://github.com/baserproject/ucmitz/wiki/ucmitz%E3%81%AE%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%92%E9%96%8B%E7%99%BA%E3%81%99%E3%82%8B)
 
-ucmitz の新しいプラグインを開発するには次のドキュメントが参考になります。
-
-- [ucmitzのプラグインの開発](https://github.com/baserproject/ucmitz/blob/dev/docs/plugin/plugin-development.md)
-
-　
-　
+　　
 ## その他のドキュメント
 
 - [トラブルシューティング](https://github.com/baserproject/ucmitz/blob/dev/docs/etc/troubleshooting.md)

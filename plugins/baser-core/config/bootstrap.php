@@ -22,13 +22,28 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Event\BcControllerEventDispatcher;
 use BaserCore\Event\BcModelEventDispatcher;
 use BaserCore\Event\BcViewEventDispatcher;
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Event\EventManager;
 use Cake\Validation\Validator;
 
+/**
+ * 設定ファイル読み込み
+ */
 Configure::config('baser', new PhpConfig());
 Configure::load('BaserCore.setting', 'baser');
+
+/**
+ * キャッシュ設定
+ * ユニットテスト時に重複して設定するとエラーとなるため判定を入れている
+ */
+if (!Cache::getConfig('_bc_env_')) {
+    if (Configure::read('debug')) {
+        Configure::write('Cache._bc_env_.duration', '+2 seconds');
+    }
+    Cache::setConfig(Configure::consume('Cache'));
+}
 
 /**
  * デフォルトバリデーションプロバイダー

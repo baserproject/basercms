@@ -395,7 +395,7 @@ function clearAllCache()
 
     Cache::clear(false, '_cake_core_');
     Cache::clear(false, '_cake_model_');
-    Cache::clear(false, '_cake_env_');
+    Cache::clear(false, '_bc_env_');
     // viewキャッシュ削除
     clearCache();
     // dataキャッシュ削除
@@ -691,7 +691,7 @@ function getEnablePlugins()
 
     $enablePlugins = [];
     if (!Configure::read('Cache.disable') && Configure::read('debug') == 0) {
-        $enablePlugins = Cache::read('enable_plugins', '_cake_env_');
+        $enablePlugins = Cache::read('enable_plugins', '_bc_env_');
     }
     if (!$enablePlugins) {
         // DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
@@ -724,7 +724,7 @@ function getEnablePlugins()
                     }
                 }
                 if (!Configure::read('Cache.disable')) {
-                    Cache::write('enable_plugins', $enablePlugins, '_cake_env_');
+                    Cache::write('enable_plugins', $enablePlugins, '_bc_env_');
                 }
             }
         }

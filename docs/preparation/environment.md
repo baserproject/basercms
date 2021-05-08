@@ -47,12 +47,23 @@ docker-compose も自動実行しますので、他に何もする必要があ�
 vagrant up
 ```
 ローカルの ucmitz のディレクトリは、/vagrant にマウントされています。  
-マウントが正常にできていない場合は、[トラブルシューティング](https://github.com/baserproject/ucmitz/blob/dev/docs/etc/troubleshooting.md#Vagrantのマウントが正常に行われない) を参照してください。 を参考に解決してください。
+マウントが正常にできていない場合は、[トラブルシューティング](https://github.com/baserproject/ucmitz/blob/dev/docs/etc/troubleshooting.md#Vagrantのマウントが正常に行われない) を参照してください。
 
 - アプリケーション：[https://localhost/](https://localhost/)
 - phpMyAdmin：[http://localhost:8080/](http://localhost:8080/)
 - phpPgAdmin：[http://localhost:10080/](http://localhost:10080/)
 - MailCatcher：[http://localhost:1080/](http://localhost:1080/)
+
+　
+### 管理画面にログインする
+
+ブラウザで、次のURLにアクセスして表示を確認します。
+[https://localhost/baser/admin/baser-core/users/login](https://localhost/baser/admin/baser-core/users/login)
+   
+メールアドレスとパスワードを入力し管理画面にログインします。
+
+- ユーザー名：admin@example.com
+- パスワード：password
 
 　
 ## コンテナへのログイン方法

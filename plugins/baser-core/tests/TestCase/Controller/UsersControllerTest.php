@@ -30,6 +30,7 @@ class UsersControllerTest extends TestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.LoginStores',
         'plugin.BaserCore.Controller/UsersController/UsersPagination',
     ];
 
@@ -46,7 +47,7 @@ class UsersControllerTest extends TestCase
         if ($this->getName() == 'testIndex_pagination') {
             $this->loadFixtures('Controller\UsersController\UsersPagination');
         } else {
-            $this->loadFixtures('Users');
+            $this->loadFixtures('Users', 'LoginStores');
         }
 
         $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
@@ -61,7 +62,7 @@ class UsersControllerTest extends TestCase
      */
     public function testIndex()
     {
-        $this->get('/baser/admin/users/');
+        $this->get('/baser/admin/baser-core/users/');
         $this->assertResponseOk();
     }
 
@@ -72,7 +73,7 @@ class UsersControllerTest extends TestCase
      */
     public function testIndex_pagination()
     {
-        $this->get('/baser/admin/users/?num=1&page=21');
+        $this->get('/baser/admin/baser-core/users/?num=1&page=21');
         $this->assertResponseOk();
     }
 
@@ -84,6 +85,7 @@ class UsersControllerTest extends TestCase
     public function testAdd()
     {
         $this->enableSecurityToken();
+        $this->enableCsrfToken();
         $data = [
             'name' => 'Test_test_Man',
             'password_1' => 'Lorem ipsum dolor sit amet',
@@ -93,7 +95,7 @@ class UsersControllerTest extends TestCase
             'email' => 'test@example.com',
             'nickname' => 'Lorem ipsum dolor sit amet',
         ];
-        $this->post('/baser/admin/users/add', $data);
+        $this->post('/baser/admin/baser-core/users/add', $data);
         $this->assertResponseSuccess();
         $users = $this->getTableLocator()->get('Users');
         $query = $users->find()->where(['name' => $data['name']]);

@@ -5,9 +5,6 @@
  * Note: It is not recommended to commit files with credentials such as app_local.php
  * into source code version control.
  */
-
-use Cake\Cache\Engine\FileEngine;
-
 return [
     /*
      * Debug Level:
@@ -49,14 +46,15 @@ return [
 
             'username' => 'root',
             'password' => 'root',
+
             'database' => 'basercms',
-            /**
+            /*
              * If not using the default 'public' schema with the PostgreSQL driver
              * set it here.
              */
             //'schema' => 'myapp',
 
-            /**
+            /*
              * You can use a DSN string to set the entire configuration
              */
             'url' => env('DATABASE_URL', null),
@@ -72,6 +70,7 @@ return [
             'password' => 'root',
             'database' => 'test_basercms',
             //'schema' => 'myapp',
+            'url' => env('DATABASE_TEST_URL', null),
         ],
     ],
 
@@ -92,31 +91,4 @@ return [
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
         ],
     ],
-
-    /**
-     * セッション
-     */
-    'Session' => [
-        'defaults' => 'php',
-        /**
-         * セッションの有効期限（分）
-         * デフォルト：2日間
-         */
-        'timeout' => 60 * 24 * 2
-    ],
-
-    /**
-     * キャッシュ
-     */
-    'Cache' => [
-        '_cake_env_' => [
-            'className' => FileEngine::class,
-            'prefix' => 'myapp_cake_env_',
-            'path' => CACHE . 'environment' . DS,
-            'serialize' => true,
-            'duration' => '+999 days',
-            'url' => env('CACHE_CAKEENV_URL', null),
-        ],
-    ]
-
 ];

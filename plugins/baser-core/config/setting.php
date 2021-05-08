@@ -17,8 +17,20 @@ use BaserCore\Annotation\Checked;
 /**
  * @checked
  */
+$baserCorePrefix = '/baser';
+$adminPrefix = '/admin';
 return [
     'BcApp' => [
+        /**
+         * baserコアのプレフィックス
+         * URLの先頭に付与
+         */
+        'baserCorePrefix' => $baserCorePrefix,
+        /**
+         * 管理システムのプレフィックス
+         * baserコアのプレフィックスの後に付与
+         */
+        'adminPrefix' => $adminPrefix,
         /**
          * 特権管理者グループID
          */
@@ -63,7 +75,7 @@ return [
                 'Dashboard' => [
                     'title' => __d('baser', 'ダッシュボード'),
                     'type' => 'dashboard',
-                    'url' => env('BC_BASER_CORE_PATH') . env('BC_ADMIN_PREFIX', '/admin'),
+                    'url' => $baserCorePrefix . $adminPrefix,
                 ],
                 //			'Contents' => [
                 //				'title' => __d('baser', 'コンテンツ管理'),
@@ -175,7 +187,7 @@ return [
             // 認証タイプ
             'type' => 'Form',
             // URLにおけるエイリアス
-            'alias' => env('BC_ADMIN_PREFIX'),
+            'alias' => $adminPrefix,
             // 認証後リダイレクト先
             'loginRedirect' => ['plugin' => 'BaserCore', 'prefix' => 'Admin', 'controller' => 'Dashboard', 'action' => 'index'],
             // ログインページURL
@@ -204,16 +216,28 @@ return [
     ],
 
     /**
+     * セッション
+     */
+    'Session' => [
+        'defaults' => 'php',
+        /**
+         * セッションの有効期限（分）
+         * デフォルト：2日間
+         */
+        'timeout' => 60 * 24 * 2
+    ],
+
+    /**
      * キャッシュ
      */
     'Cache' => [
-        '_cake_env_' => [
+        '_bc_env_' => [
             'className' => FileEngine::class,
-            'prefix' => 'myapp_cake_env_',
+            'prefix' => 'myapp_bc_env_',
             'path' => CACHE . 'environment' . DS,
             'serialize' => true,
-            'duration' => '+999 days',
-            'url' => env('CACHE_CAKEENV_URL', null),
+            'duration' => '+1 years',
+            'url' => env('CACHE_BCENV_URL', null),
         ],
     ],
 ];

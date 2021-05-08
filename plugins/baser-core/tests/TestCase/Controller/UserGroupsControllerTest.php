@@ -61,7 +61,7 @@ class UserGroupsControllerTest extends TestCase
      */
     public function testIndex()
     {
-        $this->get('/baser/admin/user_groups/');
+        $this->get('/baser/admin/baser-core/user_groups/');
         $this->assertResponseOk();
     }
 
@@ -72,7 +72,7 @@ class UserGroupsControllerTest extends TestCase
      */
     public function testIndex_pagination()
     {
-        $this->get('/baser/admin/user_groups/?num=1&page=21');
+        $this->get('/baser/admin/baser-core/user_groups/?num=1&page=21');
         $this->assertResponseOk();
     }
 
@@ -84,11 +84,11 @@ class UserGroupsControllerTest extends TestCase
     public function testAdd()
     {
         $this->enableSecurityToken();
-
-        $this->get('/baser/admin/user_groups/add');
+        $this->enableCsrfToken();
+        $this->get('/baser/admin/baser-core/user_groups/add');
         $this->assertResponseOk();
 
-        $this->post('/baser/admin/user_groups/add', [
+        $this->post('/baser/admin/baser-core/user_groups/add', [
             'name' => 'addtestgroup',
             'title' => 'テストグループ',
             'use_move_contents' => '1',
@@ -135,7 +135,8 @@ class UserGroupsControllerTest extends TestCase
     public function testCopy()
     {
         $this->enableSecurityToken();
-        $this->post('/baser/admin/user_groups/copy/1');
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/baser-core/user_groups/copy/1');
         $this->assertResponseSuccess();
         $userGroups = $this->getTableLocator()->get('UserGroups');
         $originalUserGroup = $userGroups->get(1);

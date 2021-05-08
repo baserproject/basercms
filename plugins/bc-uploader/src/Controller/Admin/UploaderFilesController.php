@@ -1,5 +1,6 @@
 <?php
-
+// TODO : コード確認要
+return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -77,11 +78,11 @@ class UploaderFilesController extends AppController
         ];
     }
 
-    public function beforeFilter()
+    public function beforeFilter(EventInterface $event)
     {
         $this->BcAuth->allow('view_limited_file');
         $this->_checkEnv();
-        parent::beforeFilter();
+        parent::beforeFilter($event);
     }
 
     /**
@@ -303,7 +304,7 @@ class UploaderFilesController extends AppController
         $this->layout = 'ajax';
         Configure::write('debug', 0);
 
-        if (!$this->request->data) {
+        if (!$this->request->getData()) {
             if ($this->UploaderFile->isOverPostSize()) {
                 echo null;
                 die;
@@ -324,7 +325,7 @@ class UploaderFilesController extends AppController
         $this->request = $this->request->withData('UploaderFile.file.name', str_replace(['/', '&', '?', '=', '#', ':', '%', '+'], '_', h($this->request->getData('UploaderFile.file.name'))));
         $this->request = $this->request->withData('UploaderFile.name', $this->request->getData('UploaderFile.file'));
         $this->request = $this->request->withData('UploaderFile.alt', $this->request->getData('UploaderFile.name.name'));
-        $this->UploaderFile->create($this->request->data);
+        $this->UploaderFile->create($this->request->getData());
 
         if ($this->UploaderFile->save()) {
             echo true;
@@ -375,7 +376,7 @@ class UploaderFilesController extends AppController
     public function admin_edit($id = null)
     {
         $this->autoRender = false;
-        if (!$this->request->data && $this->request->is('ajax')) {
+        if (!$this->request->getData() && $this->request->is('ajax')) {
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
         } elseif (!$this->request->is('ajax') && !$id) {
             $this->notFound();
@@ -389,10 +390,10 @@ class UploaderFilesController extends AppController
             }
         }
 
-        if (!$this->request->data) {
-            $this->request->data = $this->UploaderFile->read(null, $id);
+        if (!$this->request->getData()) {
+            $this->request = $this->request->withData('UploadFile', $this->UploaderFile->read(null, $id));
         } else {
-            $this->UploaderFile->set($this->request->data);
+            $this->UploaderFile->set($this->request->getData());
             $result = $this->UploaderFile->save();
             if ($this->request->is('ajax')) {
                 if ($result) {

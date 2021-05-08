@@ -1,5 +1,7 @@
 <?php
 declare(strict_types=1);
+// TODO : コード確認要
+return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS User Community <https://basercms.net/community/>
@@ -10,9 +12,9 @@ declare(strict_types=1);
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BcBlog\Controller;
-
-use App\Controller\AppController as BaseController;
+//namespace BcBlog\Controller;
+//
+//use App\Controller\AppController as BaseController;
 
 /**
  * Class AppController

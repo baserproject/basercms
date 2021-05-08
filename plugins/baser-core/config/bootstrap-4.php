@@ -256,7 +256,7 @@ if (BC_INSTALLED) {
 		'duration' => Configure::read('BcCache.viewDuration')
 	]);
 	// 環境情報キャッシュ
-	Cache::config('_cake_env_', [
+	Cache::config('_bc_env_', [
 		'engine' => $cacheEngine,
 		'probability' => 100,
 		'path' => CACHE . 'environment',

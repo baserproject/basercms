@@ -101,7 +101,7 @@ class BcUtil
      */
     public static function isInstallMode()
     {
-        return env('INSTALL_MODE');
+        return filter_var(env('INSTALL_MODE', true), FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -202,12 +202,12 @@ class BcUtil
     {
         $enablePlugins = [];
         if (!Configure::read('debug')) {
-            $enablePlugins = Cache::read('enable_plugins', '_cake_env_');
+            $enablePlugins = Cache::read('enable_plugins', '_bc_env_');
         }
         if (!$enablePlugins) {
             // DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
             try {
-                $pluginsTable = TableRegistry::getTableLocator()->get('Plugins');;   // ConnectionManager の前に呼出さないとエラーとなる
+                $pluginsTable = TableRegistry::getTableLocator()->get('BaserCore.Plugins');;   // ConnectionManager の前に呼出さないとエラーとなる
             } catch (Exception $ex) {
                 return [];
             }
@@ -225,7 +225,7 @@ class BcUtil
                         }
                     }
                     if (!Configure::read('debug')) {
-                        Cache::write('enable_plugins', $enablePlugins, '_cake_env_');
+                        Cache::write('enable_plugins', $enablePlugins, '_bc_env_');
                     }
                 }
             }
@@ -272,7 +272,7 @@ class BcUtil
     {
         Cache::clear('_cake_core_');
         Cache::clear('_cake_model_');
-        Cache::clear('_cake_env_');
+        Cache::clear('_bc_env_');
         //TODO: viewキャッシュ削除
         // clearCache();
         //TODO: dataキャッシュ削除

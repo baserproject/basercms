@@ -9,9 +9,9 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Test\TestCase\Model\Table;
+namespace BaserCore\Test\TestCase\Model;
 
-use BaserCore\Model\Table\AppTable;
+use BaserCore\Model\AppTable;
 use BaserCore\TestSuite\BcTestCase;
 
 /**

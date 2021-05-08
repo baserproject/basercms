@@ -56,7 +56,7 @@ class BcUtilTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        Cache::drop('_cake_env_');
+        Cache::drop('_bc_env_');
         Cache::drop('_cake_core_');
         Cache::drop('_cake_model_');
         parent::tearDown();
@@ -159,9 +159,9 @@ class BcUtilTest extends BcTestCase
     {
         return [
             // インストールモード On
-            ['true', 'true'],
+            [true, true],
             // インストールモード Off
-            ['false', 'false'],
+            [false, false],
         ];
     }
 
@@ -251,7 +251,7 @@ class BcUtilTest extends BcTestCase
         ]);
 
         // cache環境準備
-        $cacheList = ['environment' => '_cake_env_', 'persistent' => '_cake_core_', 'models' => '_cake_model_'];
+        $cacheList = ['environment' => '_bc_env_', 'persistent' => '_cake_core_', 'models' => '_cake_model_'];
 
         foreach($cacheList as $path => $cacheName) {
             Cache::drop($cacheName);

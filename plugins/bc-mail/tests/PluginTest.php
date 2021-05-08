@@ -1,4 +1,6 @@
 <?php
+// TODO : コード確認要
+return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS User Community <https://basercms.net/community/>
@@ -9,12 +11,12 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BcBlog\Test\TestCase;
-
-use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Utility\BcUtil;
-use Cake\Core\Plugin;
-use Cake\Datasource\ConnectionManager;
+//namespace BcBlog\Test\TestCase;
+//
+//use BaserCore\TestSuite\BcTestCase;
+//use BaserCore\Utility\BcUtil;
+//use Cake\Core\Plugin;
+//use Cake\Datasource\ConnectionManager;
 
 /**
  * Class BcPluginTest

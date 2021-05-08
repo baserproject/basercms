@@ -15,9 +15,9 @@ use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Controller\Admin\BcAdminAppController;
 use Cake\Core\Configure;
+use Cake\Event\Event;
 use ReflectionClass;
 use \Cake\Http\Exception\NotFoundException;
-
 /**
  * BaserCore\Controller\BcAdminAppController Test Case
  */
@@ -32,6 +32,7 @@ class BcAdminAppControllerTest extends BcTestCase
     {
         parent::setUp();
         $this->BcAdminApp = new BcAdminAppController($this->getRequest());
+        $this->RequestHandler = $this->BcAdminApp->components()->load('RequestHandler');
     }
 
     /**
@@ -84,7 +85,12 @@ class BcAdminAppControllerTest extends BcTestCase
      */
     public function testSaveViewConditions()
     {
+        // $ref = new ReflectionClass($this->BcAdminApp);
+        // $method = $ref->getMethod('saveViewConditions');
+        // $method->setAccessible(true);
+        // $method->invokeArgs($this->BcAdminApp, ['User',[]]);
         $this->markTestIncomplete('Not implemented yet.');
+
     }
 
     /**
@@ -94,7 +100,18 @@ class BcAdminAppControllerTest extends BcTestCase
      */
     public function testBeforeRender()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $event = new Event('Controller.beforeRender', $this->BcAdminApp);
+        // 拡張子指定なしの場合
+        $this->BcAdminApp->beforeRender($event);
+        $this->assertEquals('BaserCore.BcAdminApp', $this->BcAdminApp->viewBuilder()->getClassName());
+        $this->assertEquals("BcAdminThird", $this->BcAdminApp->viewBuilder()->getTheme());
+        // classNameをリセット
+        $this->BcAdminApp->viewBuilder()->setClassName('');
+        // 拡張子jsonの場合classNameがsetされないか確認
+        $this->BcAdminApp->setRequest($this->BcAdminApp->getRequest()->withParam('_ext', 'json'));
+        $this->RequestHandler->startup($event);
+        $this->BcAdminApp->beforeRender($event);
+        $this->assertEmpty($this->BcAdminApp->viewBuilder()->getClassName());
     }
 
     /**

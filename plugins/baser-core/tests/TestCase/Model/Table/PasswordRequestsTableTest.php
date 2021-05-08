@@ -156,6 +156,7 @@ class PasswordRequestsTableTest extends BcTestCase
 
         // 変更後のパスワードでログイン
         $this->enableSecurityToken();
+        $this->enableCsrfToken();
         $this->post(Configure::read('BcPrefixAuth.Admin.loginAction'), [
             'email' => 'testuser1@example.com',
             'password' => 'test'

@@ -5,7 +5,7 @@ use BaserCore\Service\UsersServiceInterface;
 
 class UsersController extends AppController {
     /**
-     * http://localhost/baser/api/users/index.json で呼び出す
+     * https://localhost/baser/api/baser-core/users/index.json で呼び出す
      * @param UsersServiceInterface $users
      */
     public function index(UsersServiceInterface $users)

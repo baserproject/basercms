@@ -14,6 +14,7 @@ namespace BaserCore;
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\BasePlugin;
+use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
@@ -47,54 +48,6 @@ class BcPlugin extends BasePlugin
     {
         parent::initialize();
         $this->migrations = new Migrations();
-    }
-
-    /**
-     * @param \Cake\Routing\RouteBuilder $routes
-     * @checked
-     * @noTodo
-     */
-    public function routes($routes): void
-    {
-        $path = '/baser';
-        Router::plugin(
-            $this->getName(),
-            ['path' => $path],
-            function(RouteBuilder $routes) {
-
-                $pluginPath = '';
-                if ($this->getName() !== 'BaserCore') {
-                    $pluginPath = '/' . Inflector::dasherize($this->getName());
-                }
-
-                /**
-                 * AnalyseController で利用
-                 */
-                $routes->setExtensions(['json']);
-                $routes->fallbacks(InflectedRoute::class);
-
-                $routes->prefix(
-                    'Admin',
-                    ['path' => env('BC_ADMIN_PREFIX', '/admin') . $pluginPath],
-                    function(RouteBuilder $routes) {
-                        $routes->connect('', ['controller' => 'Dashboard', 'action' => 'index']);
-                        // CakePHPのデフォルトで /index が省略する仕様のため、URLを生成する際は、強制的に /index を付ける仕様に変更
-                        $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
-                        $routes->fallbacks(InflectedRoute::class);
-                    }
-                );
-
-                $routes->prefix(
-                    'Api',
-                    ['path' => '/api' . $pluginPath],
-                    function(RouteBuilder $routes) {
-                        $routes->fallbacks(InflectedRoute::class);
-                    }
-                );
-
-            }
-        );
-        parent::routes($routes);
     }
 
     /**
@@ -198,6 +151,66 @@ class BcPlugin extends BasePlugin
             return false;
         }
         return true;
+    }
+
+    /**
+     * @param \Cake\Routing\RouteBuilder $routes
+     * @checked
+     * @noTodo
+     */
+    public function routes($routes): void
+    {
+        $baserCorePrefix = Configure::read('BcApp.baserCorePrefix');
+        $plugin = $this->getName();
+
+        // プラグインの管理画面用ルーティング
+        $routes->prefix(
+            'Admin',
+            ['path' => $baserCorePrefix . Configure::read('BcApp.adminPrefix')],
+            function(RouteBuilder $routes)  use ($plugin) {
+                $routes->connect('', ['plugin' => 'BaserCore', 'controller' => 'Dashboard', 'action' => 'index']);
+                $routes->plugin(
+                    $plugin,
+                    ['path' => '/' . Inflector::dasherize('/' . $plugin)],
+                    function(RouteBuilder $routes) use ($plugin) {
+                        // CakePHPのデフォルトで /index が省略する仕様のため、URLを生成する際は、強制的に /index を付ける仕様に変更
+                        $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
+                        $routes->fallbacks(InflectedRoute::class);
+                    }
+                );
+            }
+        );
+
+        // プラグインのフロントエンド用ルーティング
+        Router::plugin(
+            $plugin,
+            ['path' => $baserCorePrefix . '/' . Inflector::dasherize('/' . $plugin)],
+            function(RouteBuilder $routes) use ($plugin) {
+                // AnalyseController で利用
+                $routes->setExtensions(['json']);
+                $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
+                $routes->fallbacks(InflectedRoute::class);
+            }
+        );
+
+        // API用ルーティング
+        $routes->prefix(
+            'Api',
+            ['path' => $baserCorePrefix . '/api'],
+            function(RouteBuilder $routes)  use ($plugin) {
+                $routes->plugin(
+                    $plugin,
+                    ['path' => '/' . Inflector::dasherize($plugin)],
+                    function(RouteBuilder $routes) {
+                        $routes->setExtensions(['json']);
+                        $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
+                        $routes->fallbacks(InflectedRoute::class);
+                    }
+                );
+            }
+        );
+
+        parent::routes($routes);
     }
 
 }

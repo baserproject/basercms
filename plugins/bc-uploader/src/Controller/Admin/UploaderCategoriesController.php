@@ -1,5 +1,6 @@
 <?php
-
+// TODO : コード確認要
+return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -76,8 +77,8 @@ class UploaderCategoriesController extends AppController
     public function admin_add()
     {
 
-        if ($this->request->data) {
-            $this->UploaderCategory->set($this->request->data);
+        if ($this->request->getData()) {
+            $this->UploaderCategory->set($this->request->getData());
             if ($this->UploaderCategory->save()) {
                 $message = sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を追加しました。'), $this->request->getData('UploaderCategory.name'));
                 $this->BcMessage->setInfo($message);
@@ -102,16 +103,16 @@ class UploaderCategoriesController extends AppController
 
 
         /* 除外処理 */
-        if (!$id && empty($this->request->data)) {
+        if (!$id && empty($this->request->getData())) {
             $this->BcMessage->setError(__d('baser', '無効なIDです。'));
             $this->redirect(['action' => 'index']);
         }
 
-        if (empty($this->request->data)) {
-            $this->request->data = $this->UploaderCategory->read(null, $id);
+        if (empty($this->request->getData())) {
+            $this->request = $this->request->withData('UploadCategory', $this->UploaderCategory->read(null, $id));
         } else {
 
-            $this->UploaderCategory->set($this->request->data);
+            $this->UploaderCategory->set($this->request->getData());
             if ($this->UploaderCategory->save()) {
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を更新しました。'), $this->request->getData('UploaderCategory.name')));
                 $this->redirect(['action' => 'edit', $id]);

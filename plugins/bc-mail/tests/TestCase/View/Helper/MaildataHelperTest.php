@@ -1,5 +1,6 @@
 <?php
-
+// TODO : コード確認要
+return;
 App::uses('MaildataHelper', 'Mail.View/Helper');
 App::uses('BcAppView', 'View');
 
