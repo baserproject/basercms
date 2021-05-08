@@ -13,6 +13,9 @@ namespace BaserCore\Controller;
 
 use App\Controller\AppController as BaseController;
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class AppController
@@ -29,7 +32,6 @@ class AppController extends BaseController
      * Initialize
      * @checked
      * @noTodo
-     * @unitTest
      */
     public function initialize(): void
     {

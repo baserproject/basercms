@@ -13,7 +13,7 @@ namespace BaserCore\Test\TestCase\Model\Validation;
 
 use BaserCore\Model\Validation\BcValidation;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Model\Table\AppTable;
+use BaserCore\Model\AppTable;
 
 /**
  * Class BcValidationTest

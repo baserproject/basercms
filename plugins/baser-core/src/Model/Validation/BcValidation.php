@@ -16,7 +16,7 @@ use Cake\Core\Configure;
 use Cake\Log\Log;
 use Cake\Utility\Hash;
 use BaserCore\Utility\BcUtil;
-use BaserCore\Model\Table\AppTable;
+use BaserCore\Model\AppTable;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
