@@ -171,8 +171,8 @@ class BcPlugin extends BasePlugin
                 $routes->connect('', ['plugin' => 'BaserCore', 'controller' => 'Dashboard', 'action' => 'index']);
                 $routes->plugin(
                     $plugin,
-                    ['path' => '/' . Inflector::dasherize('/' . $plugin)],
-                    function(RouteBuilder $routes) use ($plugin) {
+                    ['path' => '/' . Inflector::dasherize($plugin)],
+                    function(RouteBuilder $routes) {
                         // CakePHPのデフォルトで /index が省略する仕様のため、URLを生成する際は、強制的に /index を付ける仕様に変更
                         $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
                         $routes->fallbacks(InflectedRoute::class);
@@ -184,7 +184,7 @@ class BcPlugin extends BasePlugin
         // プラグインのフロントエンド用ルーティング
         Router::plugin(
             $plugin,
-            ['path' => $baserCorePrefix . '/' . Inflector::dasherize('/' . $plugin)],
+            ['path' => $baserCorePrefix . '/' . Inflector::dasherize($plugin)],
             function(RouteBuilder $routes) {
                 // AnalyseController で利用
                 $routes->setExtensions(['json']);
