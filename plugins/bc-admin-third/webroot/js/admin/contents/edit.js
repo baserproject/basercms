@@ -52,7 +52,7 @@ $(function () {
         form.attr('target', '_self');
         form.attr('action', action);
         $.get($.baseUrl + '/bc_form/ajax_get_token?requestview=false', function (result) {
-            $('input[name="data[_Token][key]"]').val(result);
+            $('input[name="_csrfToken"]').val(result);
         });
         return false;
     });

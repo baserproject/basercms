@@ -140,7 +140,7 @@
                         if (form.length) {
                             form.append($.bcToken.getHiddenToken());
                             data = form.serialize();
-                            form.find('input[name="data[_Token][key]"]').remove();
+                            form.find('input[name="_csrfToken"]').remove();
                         } else {
                             data = {
                                 data: {

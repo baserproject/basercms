@@ -115,7 +115,7 @@ $(function () {
                     var favoriteId = $("#FavoriteId").val();
                     if ($("#FavoriteAjaxForm").valid()) {
                         $.bcToken.check(function () {
-                            $('#FavoriteAjaxForm input[name="data[_Token][key]"]').val($.bcToken.key);
+                            $('#FavoriteAjaxForm input[name="_csrfToken"]').val($.bcToken.key);
                             return $("#FavoriteAjaxForm").ajaxSubmit({
                                 url: submitUrl,
                                 beforeSend: function () {
@@ -184,7 +184,7 @@ $(function () {
             var data = {
                 'data[Sort][id]': id,
                 'data[Sort][offset]': offset,
-                'data[_Token][key]': $.bcToken.key
+                '_csrfToken': $.bcToken.key
             };
             return $.ajax({
                 url: $("#FavoriteAjaxSorttableUrl").html(),

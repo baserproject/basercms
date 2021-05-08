@@ -46,7 +46,7 @@ $(function () {
         form.attr('target', '_self');
         form.attr('action', action);
         $.get($.baseUrl + '/bc_form/ajax_get_token?requestview=false', function (result) {
-            $('input[name="data[_Token][key]"]').val(result);
+            $('input[name="_csrfToken"]').val(result);
         });
         return false;
     });
@@ -88,7 +88,7 @@ $(function () {
                 url: $("#AddTagUrl").html(),
                 data: {
                     'data[BlogTag][name]': $("#BlogTagName").val(),
-                    'data[_Token][key]': $.bcToken.key
+                    '_csrfToken': $.bcToken.key
                 },
                 dataType: 'html',
                 beforeSend: function () {
@@ -157,7 +157,7 @@ $(function () {
                                 data: {
                                     'data[BlogCategory][name]': name,
                                     'data[BlogCategory][title]': title,
-                                    'data[_Token][key]': $.bcToken.key
+                                    '_csrfToken': $.bcToken.key
                                 },
                                 dataType: 'script',
                                 beforeSend: function () {
