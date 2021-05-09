@@ -38,12 +38,13 @@ class BcSmartphoneHelper extends Helper
 			return;
 		}
 		// 別URLの場合、canonicalを出力
-		$pureUrl = $site->getPureUrl($this->request->url);
-		$mainSite = BcSite::findCurrentMain();
-		$url = $mainSite->makeUrl(new CakeRequest($pureUrl));
-		$this->_View->set('meta',
-			$this->BcHtml->meta('canonical',
-				$this->BcHtml->url($url, true),
+		$obj = ClassRegistry::init('Content');
+		$content = $obj->findById($this->request->param('Content.main_site_content_id'));
+		$this->_View->set(
+			'meta',
+			$this->BcHtml->meta(
+				'canonical',
+				$this->BcHtml->url(Hash::get($content, 'Content.url'), true),
 				[
 					'rel' => 'canonical',
 					'type' => null,

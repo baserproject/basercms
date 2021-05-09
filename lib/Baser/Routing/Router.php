@@ -602,8 +602,8 @@ class Router {
 			$url = '/' . $url;
 		}
 		if (strpos($url, '?') !== false) {
-			list($url, $queryParameters) = explode('?', $url, 2);
-			parse_str($queryParameters, $queryParameters);
+			list($url, $queryString) = explode('?', $url, 2);
+			parse_str($queryString, $queryParameters);
 		}
 
 		extract(static::_parseExtension($url));
@@ -1083,7 +1083,7 @@ class Router {
 			$out = $q;
 			$q = $extra;
 		}
-		$addition = http_build_query($q, null, $join);
+		$addition = http_build_query($q, '', $join);
 
 		if ($out && $addition && substr($out, strlen($join) * -1, strlen($join)) !== $join) {
 			$out .= $join;

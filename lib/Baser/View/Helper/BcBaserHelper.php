@@ -2813,26 +2813,49 @@ END_FLASH;
 		if (isset($this->request->params['Site']['device']) && $this->request->params['Site']['device'] != '') {
 			return;
 		}
+		$this->setCanonicalUrl(Hash::get($this->request->params, 'Content.url', '/'));
+	}
+
+	/**
+	 * 必要に応じてcanonical・alternateを出し分ける
+	 *
+	 * @param $title
+	 */
+	private function setCanonicalUrl($contentUrl) {
 		// 別URLの場合、alternateを出力（スマートフォンのみ対応）
-		$pureUrl = $this->BcContents->getPureUrl($this->request->url, $this->request->params['Site']['id']);
-		$agent = BcAgent::find('smartphone');
-		$subSite = BcSite::findCurrentSub(false, $agent);
-		if (!$subSite) {
+		$subSite = BcSite::findCurrentSub(false, BcAgent::find('smartphone'));
+		if ($subSite) {
+			$this->_View->set(
+				'meta',
+				$this->BcHtml->meta(
+					'alternate',
+					$subSite->makeUrl(new CakeRequest($contentUrl)),
+					[
+						'rel' => 'alternate',
+						'media' => 'only screen and (max-width: 640px)',
+						'type' => null,
+						'title' => null,
+						'inline' => false
+					]
+				)
+			);
 			return;
 		}
-		$url = $subSite->makeUrl(new CakeRequest($pureUrl));
-		$this->_View->set('meta',
-			$this->BcHtml->meta('canonical',
-				$this->BcHtml->url($url, true),
-				[
-					'rel' => 'canonical',
-					'media' => 'only screen and (max-width: 640px)',
-					'type' => null,
-					'title' => null,
-					'inline' => false
-				]
-			)
-		);
+		if ($this->request->here !== $contentUrl) {
+			$this->_View->set(
+				'meta',
+				$this->BcHtml->meta(
+					'canonical',
+					$contentUrl,
+					[
+						'rel' => 'canonical',
+						'type' => null,
+						'title' => null,
+						'inline' => false
+					]
+				)
+			);
+		}
 	}
 
 	/**
