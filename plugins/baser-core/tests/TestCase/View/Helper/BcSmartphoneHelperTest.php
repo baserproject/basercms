@@ -73,9 +73,4 @@ class BcSmartphoneHelperTest extends BcTestCase
 
 	}
 
-	public function testAfterRender()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
 }

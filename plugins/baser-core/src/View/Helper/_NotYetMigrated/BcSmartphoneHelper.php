@@ -34,35 +34,6 @@ class BcSmartphoneHelper extends Helper
 	public $helpers = ['BcHtml'];
 
 	/**
-	 * After Render
-	 *
-	 * @param string $viewFile
-	 */
-	public function afterRender($viewFile)
-	{
-		parent::afterRender($viewFile);
-		$site = BcSite::findCurrent();
-		if ($site->device != 'smartphone' || $site->sameMainUrl) {
-			return;
-		}
-		// 別URLの場合、canonicalを出力
-		$pureUrl = $site->getPureUrl($this->request->url);
-		$mainSite = BcSite::findCurrentMain();
-		$url = $mainSite->makeUrl(new CakeRequest($pureUrl));
-		$this->_View->set('meta',
-			$this->BcHtml->meta('canonical',
-				$this->BcHtml->url($url, true),
-				[
-					'rel' => 'canonical',
-					'type' => null,
-					'title' => null,
-					'inline' => false
-				]
-			)
-		);
-	}
-
-	/**
 	 * afterLayout
 	 *
 	 * @return void
