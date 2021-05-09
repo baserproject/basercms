@@ -2350,4 +2350,46 @@ class BcBaserHelperTest extends BaserTestCase
 		$result = ob_get_clean();
 		$this->assertRegExp('/<link rel="apple-touch-icon/s', $result);
 	}
+
+	/**
+	 * testSetAlternateUrl
+	 * @dataProvider setAlternateUrlDataProvider
+	 */
+	public function testSetAlternateUrl($url, $expected)
+	{
+		Configure::write('BcSite.use_site_device_setting', true);
+		$this->BcBaser->request = $this->_getRequest($url);
+		$this->BcBaser->setAlternateUrl();
+		$this->assertEquals($expected, $this->_View->fetch('meta'));
+	}
+
+	public function setAlternateUrlDataProvider()
+	{
+		return [
+			['/', '<link href="http://localhost/s/" rel="alternate" media="only screen and (max-width: 640px)"/>'],
+			['/s/', '']
+		];
+	}
+
+	/**
+	 * testSetAlternateUrl
+	 * @dataProvider setCanonicalUrlDataProvider
+	 */
+	public function testSetCanonicalUrl($url, $expected)
+	{
+		Configure::write('BcSite.use_site_device_setting', true);
+		$this->BcBaser->request = $this->_getRequest($url);
+		$this->BcBaser->setCanonicalUrl();
+		$this->assertEquals($expected, $this->_View->fetch('meta'));
+	}
+
+	public function setCanonicalUrlDataProvider()
+	{
+		return [
+			['/', '<link href="http://localhost/" rel="canonical"/>'],
+			['/index.html', '<link href="http://localhost/" rel="canonical"/>'],
+			['/about/index.html', '<link href="http://localhost/about/" rel="canonical"/>'],
+			['/s/', '<link href="http://localhost/" rel="canonical"/>'],
+		];
+	}
 }

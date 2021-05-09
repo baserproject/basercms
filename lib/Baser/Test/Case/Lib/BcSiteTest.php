@@ -20,6 +20,18 @@ class BcSiteTest extends BaserTestCase
 {
 
 	/**
+	 * Fixtures
+	 *
+	 * @var array
+	 */
+	public $fixtures = [
+		'baser.Default.Site',
+		'baser.Default.Content',
+		'baser.Default.User',
+		'baser.Default.SiteConfig'
+	];
+
+	/**
 	 * setUp
 	 *
 	 * @return void
@@ -156,10 +168,26 @@ class BcSiteTest extends BaserTestCase
 	/**
 	 * エイリアスを反映したURLを生成
 	 * 同一URL設定のみ利用可
+	 * @dataProvider makeUrlDataProvider
 	 */
-	public function testMakeUrl()
+	public function testMakeUrl($alias, $url, $expected)
 	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$request = $this->_getRequest($url);
+		$site = BcSite::findByAlias($alias);
+		$url = $site->makeUrl($request);
+		$this->assertEquals($expected, $url);
+	}
+
+	public function makeUrlDataProvider()
+	{
+		return [
+			['', '/', '/'],
+			['', '/index', '/'],
+			['', '/about', '/about'],
+			['s', '/', '/s/'],
+			['s', '/index', '/s/'],
+			['s', '/about', '/s/about'],
+		];
 	}
 
 	/**

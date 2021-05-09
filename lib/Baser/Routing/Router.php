@@ -602,8 +602,8 @@ class Router {
 			$url = '/' . $url;
 		}
 		if (strpos($url, '?') !== false) {
-			list($url, $queryString) = explode('?', $url, 2);
-			parse_str($queryString, $queryParameters);
+			list($url, $queryParameters) = explode('?', $url, 2);
+			parse_str($queryParameters, $queryParameters);
 		}
 
 		extract(static::_parseExtension($url));
