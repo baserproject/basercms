@@ -98,7 +98,7 @@ $(function () {
                             "data[UploaderFile][publish_end]": $("#UploaderFilePublishEnd" + listId).val(),
                             "data[UploaderFile][user_id]": $("#UploaderFileUserId" + listId).val(),
                             "data[UploaderFile][uploader_category_id]": $("#_UploaderFileUploaderCategoryId" + listId).val(),
-                            "data[_Token][key]": $.bcToken.key
+                            "_csrfToken": $.bcToken.key
                         };
                         return $.bcUtil.ajax($("#UploaderFileEditForm" + listId).attr('action'), function (res) {
                             if (res) {
@@ -134,7 +134,7 @@ $(function () {
 
         if ($('#UploaderFileFile' + listId).val()) {
             $.bcToken.check(function () {
-                var data = {'data[_Token][key]': $.bcToken.key};
+                var data = {'_csrfToken': $.bcToken.key};
                 if ($("#UploaderFileUploaderCategoryId" + listId).length) {
                     data = $.extend(data, {'data[UploaderFile][uploader_category_id]': $("#UploaderFileUploaderCategoryId" + listId).val()});
                 }

@@ -41,7 +41,7 @@
         /**
          * デフォルトトークンURL
          */
-        defaultUrl: '/baser/bc_form/get_token?requestview=false',
+        defaultUrl: '/baser/baser-core/bc_form/get_token?requestview=false',
 
         /**
          * 初期化
@@ -129,7 +129,7 @@
             return $.bcUtil.ajax($.baseUrl() + this.url, function (result) {
                 $.bcToken.key = result;
                 $.bcToken.requesting = false;
-                $('input[name="data[_Token][key]"]').val($.bcToken.key);
+                $('input[name="_csrfToken"]').val($.bcToken.key);
             }, $.extend(true, {}, config));
         },
 
@@ -155,7 +155,7 @@
          * @returns {*}
          */
         getHiddenToken: function () {
-            return $('<input name="_Token[key]" type="hidden">').val(this.key);
+            return $('<input name="_csrfToken" type="hidden">').val(this.key);
         },
 
         /**

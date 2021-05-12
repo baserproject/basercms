@@ -55,7 +55,7 @@ $(function () {
                     $("#PermissionAjaxAddForm").submit();
                     if ($("#PermissionAjaxAddForm").valid()) {
                         $.bcToken.check(function () {
-                            $('#PermissionAjaxAddForm input[name="data[_Token][key]"]').val($.bcToken.key);
+                            $('#PermissionAjaxAddForm input[name="_csrfToken"]').val($.bcToken.key);
                             $("#PermissionAjaxAddForm").ajaxSubmit({
                                 beforeSend: function () {
                                     $("#Waiting").show();

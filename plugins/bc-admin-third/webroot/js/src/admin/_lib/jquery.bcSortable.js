@@ -72,7 +72,7 @@
             $.bcToken.check(function () {
                 form.append($.bcToken.getHiddenToken());
                 var data = form.serialize();
-                form.find('input[name="_Token[key]"]').remove();
+                form.find('input[name="_csrfToken"]').remove();
                 return $.ajax({
                     url: $.bcSortable.updateSortUrl,
                     type: 'POST',

@@ -232,11 +232,12 @@ class BcSite
 	/**
 	 * 現在のサイトとユーザーエージェントに関連するサブサイトを取得する
 	 *
+	 * @param bool $sameMainUrl
 	 * @param BcAbstractDetector $detector
 	 * @param bool $sameMainUrl
 	 * @return BcSite|null
 	 */
-	public static function findCurrentSub($sameMainUrl = false, BcAgent $agent = null, $lang = null)
+	public static function findCurrentSub($sameMainUrl = false, BcAbstractDetector $agent = null, $lang = null)
 	{
 		$currentSite = self::findCurrent();
 		$sites = self::findAll();
@@ -430,11 +431,16 @@ class BcSite
 	public function makeUrl(CakeRequest $request)
 	{
 		$here = $request->here(false);
-		if ($this->alias) {
-			return h("/{$this->alias}{$here}");
-		} else {
+		if (!$this->alias) {
+			if ($here === '/index') {
+				return "/";
+			}
 			return h($here);
 		}
+		if ($here === '/index') {
+			return h("/{$this->alias}/");
+		}
+		return h("/{$this->alias}{$here}");
 	}
 
 	/**

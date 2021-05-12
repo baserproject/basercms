@@ -13,6 +13,9 @@ namespace BaserCore\Controller;
 
 use App\Controller\AppController as BaseController;
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class AppController
@@ -24,5 +27,18 @@ class AppController extends BaseController
      * Trait
      */
     use BcEventDispatcherTrait;
+
+    /**
+     * Initialize
+     * @checked
+     * @noTodo
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->loadComponent('BaserCore.BcMessage');
+        $this->loadComponent('Security');
+        $this->loadComponent('Paginator');
+    }
 
 }

@@ -180,7 +180,7 @@ $(function () {
      */
     function delWidget(id) {
         $.bcToken.check(function () {
-            $("#WidgetAreaUpdateSortForm input[name='data[_Token][key]']").val($.bcToken.key);
+            $("#WidgetAreaUpdateSortForm input[name='_csrfToken']").val($.bcToken.key);
             return $.ajax({
                 url: delWidgetUrl + '/' + id,
                 type: 'POST',
@@ -228,7 +228,7 @@ $(function () {
         });
         $("#WidgetAreaSortedIds").val(ids.join(','));
         $.bcToken.check(function () {
-            $("#WidgetAreaUpdateSortForm input[name='data[_Token][key]']").val($.bcToken.key);
+            $("#WidgetAreaUpdateSortForm input[name='_csrfToken']").val($.bcToken.key);
             return $.ajax({
                 url: $("#WidgetAreaUpdateSortForm").attr('action'),
                 type: 'POST',
@@ -262,7 +262,7 @@ $(function () {
      */
     function widgetAreaUpdateTitle() {
         $.bcToken.check(function () {
-            $('#WidgetAreaUpdateTitleForm input[name="data[_Token][key]"]').val($.bcToken.key);
+            $('#WidgetAreaUpdateTitleForm input[name="_csrfToken"]').val($.bcToken.key);
             return $.ajax({
                 url: $("#WidgetAreaUpdateTitleForm").attr('action'),
                 type: 'POST',
@@ -299,7 +299,7 @@ $(function () {
     function updateWidget(id) {
 
         $.bcToken.check(function () {
-            $("#WidgetUpdateWidgetForm" + id + ' input[name="data[_Token][key]"]').val($.bcToken.key);
+            $("#WidgetUpdateWidgetForm" + id + ' input[name="_csrfToken"]').val($.bcToken.key);
             return $.ajax({
                 url: $("#WidgetUpdateWidgetForm" + id).attr('action'),
                 type: 'POST',

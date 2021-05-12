@@ -36,7 +36,7 @@ class AppTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('AppTable')? [] : ['className' => 'BaserCore\Model\Table\AppTable'];
+        $config = $this->getTableLocator()->exists('AppTable')? [] : ['className' => 'BaserCore\Model\AppTable'];
         $this->App = $this->getTableLocator()->get('BaserCore.AppTable', $config);
     }
 
