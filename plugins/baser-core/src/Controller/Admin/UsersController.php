@@ -85,6 +85,7 @@ class UsersController extends BcAdminAppController
      *
      * @return void
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function initialize(): void

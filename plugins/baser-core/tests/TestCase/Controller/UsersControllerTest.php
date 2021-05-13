@@ -12,12 +12,13 @@
 namespace BaserCore\Test\TestCase\Controller;
 
 use Cake\TestSuite\IntegrationTestTrait;
-use Cake\TestSuite\TestCase;
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Controller\Admin\UsersController;
 
 /**
  * BaserCore\Controller\UsersController Test Case
  */
-class UsersControllerTest extends TestCase
+class UsersControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
 
@@ -53,6 +54,20 @@ class UsersControllerTest extends TestCase
         $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
         $Users = $this->getTableLocator()->get('Users', $config);
         $this->session(['AuthAdmin' => $Users->get(1)]);
+
+        $this->UsersController = new UsersController($this->getRequest());
+    }
+
+    /**
+     * Test index method
+     *
+     * @return void
+     */
+    public function testInitialize()
+    {
+        $this->assertNotEmpty($this->UsersController->LoginStores);
+        $this->assertEquals($this->UsersController->Authentication->getUnauthenticatedActions(), ['login']);
+
     }
 
     /**
@@ -177,7 +192,10 @@ class UsersControllerTest extends TestCase
      */
     public function testLogout()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $user = $this->getUser();
+        $this->UsersController->Authentication->setIdentity($user);
+        $this->UsersController->LoginStores->addKey('Admin', $user->id);
+        $this->UsersController->logout();
     }
 
     /**
