@@ -276,20 +276,6 @@ class UsersTable extends Table
     }
 
     /**
-     * 初期化されたエンティティを取得する
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getNew()
-    {
-        return $this->newEntity([
-            'user_groups' => [
-                '_ids' => [1]
-            ]]);
-    }
-
-    /**
      * コントロールソースを取得する
      *
      * @param string $field フィールド名
