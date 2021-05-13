@@ -443,7 +443,13 @@ class UsersController extends BcAdminAppController
             $user = $users->getNew();
         }
 
-        $this->set(array_merge($users->getAddDisplayData(), ['user' => $user]));
+        $this->set([
+            'user' => $user,
+            'userGroups' => $this->Users->UserGroups->find('list', ['keyField' => 'id', 'valueField' => 'title']),
+            'selfUpdate' => false,
+            'editable' => true,
+            'deletable' => false
+        ]);
         $this->setTitle(__d('baser', '新規ユーザー登録'));
         $this->setHelp('users_form');
     }

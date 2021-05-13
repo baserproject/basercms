@@ -18,7 +18,7 @@ use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use Cake\Datasource\EntityInterface;
 
-class UsersService implements UsersServiceInterface, MasterManagementServiceInterface
+class UsersService implements UsersServiceInterface
 {
 
     /**
@@ -127,38 +127,6 @@ class UsersService implements UsersServiceInterface, MasterManagementServiceInte
             'user_groups' => [
                 '_ids' => [1]
         ]]);
-    }
-
-    /**
-     * 編集画面用のデータを取得する
-     * @return array
-     */
-    public function getIndexDisplayData(): array
-    {
-        return [];
-    }
-
-    /**
-     * ユーザー登録画面用のデータを取得する
-     * @return array
-     */
-    public function getAddDisplayData(): array
-    {
-        return [
-            'userGroups' => $this->Users->UserGroups->find('list', ['keyField' => 'id', 'valueField' => 'title']),
-            'selfUpdate' => false,
-            'editable' => true,
-            'deletable' => false
-        ];
-    }
-
-    /**
-     * 編集画面用のデータを取得する
-     * @return array
-     */
-    public function getEditDisplayData(): array
-    {
-        return [];
     }
 
 }

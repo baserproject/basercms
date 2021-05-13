@@ -42,4 +42,26 @@ interface UsersServiceInterface
      */
     public function getNew(): EntityInterface;
 
+   /**
+     * 新規登録する
+     * @param ServerRequest $request
+     * @return EntityInterface|false
+     */
+    public function create(ServerRequest $request);
+
+    /**
+     * 編集する
+     * @param EntityInterface $target
+     * @param ServerRequest $request
+     * @return mixed
+     */
+    public function update(EntityInterface $target, ServerRequest $request);
+
+    /**
+     * 削除する
+     * @param int $id
+     * @return mixed
+     */
+    public function delete(int $id);
+
 }
