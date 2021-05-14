@@ -13,7 +13,7 @@
 use BaserCore\View\AppView;
 
 /**
- * プラグインいストール
+ * プラグインインストール
  * @var AppView $this
  * @var string $installMessage インストールメッセージ
  * @var bool $isInstallable インストール可能かどうか

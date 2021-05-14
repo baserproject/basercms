@@ -47,6 +47,7 @@ class PluginsController extends BcAdminAppController
      * initialize
      * @throws \Exception
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function initialize():void
@@ -59,6 +60,7 @@ class PluginsController extends BcAdminAppController
      * Before Filter
      * @param \Cake\Event\EventInterface $event An Event instance
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function beforeFilter(EventInterface $event): void
@@ -139,7 +141,7 @@ class PluginsController extends BcAdminAppController
         $this->setTitle(__d('baser', '新規プラグイン登録'));
         $this->setHelp('plugins_install');
 
-        if (!$isInstallable || !$this->request->is('put')) {
+        if (!$isInstallable || !$this->request->is(['put', 'post'])) {
             return;
         }
 
@@ -335,6 +337,7 @@ class PluginsController extends BcAdminAppController
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get_market_plugins()
     {
@@ -346,7 +349,7 @@ class PluginsController extends BcAdminAppController
             $Xml = new Xml();
             try {
 				$client = new Client([
-				    'host' => ''
+                    'host' => ''
                 ]);
 				$response = $client->get(Configure::read('BcApp.marketPluginRss'));
 				if ($response->getStatusCode() !== 200) {
@@ -370,6 +373,7 @@ class PluginsController extends BcAdminAppController
      * @return void|Response
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function update_sort()
     {
@@ -385,7 +389,7 @@ class PluginsController extends BcAdminAppController
         }
 
         BcUtil::clearAllCache();
-        return $this->response->withStringBody(true);
+        return $this->response->withStringBody('true');
     }
 
     /**
@@ -475,13 +479,9 @@ class PluginsController extends BcAdminAppController
             $this->BcMessage->setError(__d('baser', '処理中にエラーが発生しました。プラグインの開発者に確認してください。'));
             return;
         }
-
+        BcUtil::clearAllCache();
         // TODO
-        /*
-        clearAllCache();
-        $this->BcAuth->relogin();
-        */
-
+        // $this->BcAuth->relogin();
         $this->BcMessage->setSuccess(
             sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $plugin->title)
         );
@@ -495,6 +495,7 @@ class PluginsController extends BcAdminAppController
      * @return void|Response
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function batch()
     {
@@ -512,7 +513,7 @@ class PluginsController extends BcAdminAppController
                 );
             }
         }
-        return $this->response->withStringBody(true);
+        return $this->response->withStringBody('true');
     }
 
 }
