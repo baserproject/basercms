@@ -11,6 +11,8 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Model\Entity\User;
+use BaserCore\Model\Table\UsersTable;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
 use Cake\Http\ServerRequest;
@@ -18,6 +20,11 @@ use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use Cake\Datasource\EntityInterface;
 
+/**
+ * Class UsersService
+ * @package BaserCore\Service
+ * @property UsersTable $Users
+ */
 class UsersService implements UsersServiceInterface
 {
 
@@ -33,6 +40,18 @@ class UsersService implements UsersServiceInterface
     public function __construct()
     {
         $this->Users = TableRegistry::getTableLocator()->get('BaserCore.Users');
+    }
+
+    /**
+     * ユーザーの新規データ用の初期値を含んだエンティティを取得する
+     * @return User
+     */
+    public function getNew(): User
+    {
+        return $this->Users->newEntity([
+            'user_groups' => [
+                '_ids' => [1]
+            ]]);
     }
 
     /**
@@ -105,28 +124,16 @@ class UsersService implements UsersServiceInterface
         $count = $this->Users
             ->find('all', ['conditions' => ['UsersUserGroups.user_group_id' => Configure::read('BcApp.adminGroupId')]])
             ->join(['table' => 'users_user_groups',
-                    'alias' => 'UsersUserGroups',
-                    'type' => 'inner',
-                    'conditions' => 'UsersUserGroups.user_id = Users.id'])
+                'alias' => 'UsersUserGroups',
+                'type' => 'inner',
+                'conditions' => 'UsersUserGroups.user_id = Users.id'])
             ->count();
-         // 最後のシステム管理者でなければ削除
+        // 最後のシステム管理者でなければ削除
         if ($count === 1) {
             throw new Exception(__d('baser', '最後のシステム管理者は削除できません'));
         } else {
             return $this->Users->delete($user);
         }
-    }
-
-    /**
-     * ユーザーの新規データ用の初期値を含んだエンティティを取得する
-     * @return EntityInterface
-     */
-    public function getNew(): EntityInterface
-    {
-        return $this->Users->newEntity([
-            'user_groups' => [
-                '_ids' => [1]
-        ]]);
     }
 
 }

@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Model\Entity\User;
 use Cake\Datasource\EntityInterface;
 use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
@@ -40,7 +41,7 @@ interface UsersServiceInterface
      * 新しいデータの初期値を取得する
      * @return EntityInterface
      */
-    public function getNew(): EntityInterface;
+    public function getNew(): User;
 
    /**
      * 新規登録する

@@ -12,7 +12,6 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\UsersTable;
-use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Validation\Validator;
 
@@ -54,7 +53,7 @@ class UsersTableTest extends BcTestCase
         $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
         $this->Users = $this->getTableLocator()->get('Users', $config);
 
-        $config = $this->getTableLocator()->exists('LoginStores') ?
+        $config = $this->getTableLocator()->exists('LoginStores')?
             [] : ['className' => 'BaserCore\Model\Table\LoginStoresTable'];
         $this->LoginStores = $this->getTableLocator()->get('LoginStores', $config);
     }
