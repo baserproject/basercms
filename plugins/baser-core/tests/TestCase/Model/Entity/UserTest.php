@@ -22,6 +22,15 @@ class UserTest extends BcTestCase
 {
 
     /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BaserCore.Users',
+    ];
+
+    /**
      * @var User
      */
     public $User;
@@ -34,7 +43,8 @@ class UserTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->User = new User();
+        $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
+        $this->User = $this->getTableLocator()->get('Users', $config)->get(1);
     }
 
     /**
@@ -55,6 +65,14 @@ class UserTest extends BcTestCase
     {
         $this->User->set('password', 'testtest');
         $this->assertNotEquals('testtest', $this->User->password);
+    }
+
+    /**
+     * Test isAdmin
+     */
+    public function testIsAdmin()
+    {
+        $this->assertNotEquals(true, $this->User->isAdmin());
     }
 
 }

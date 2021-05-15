@@ -276,20 +276,6 @@ class UsersTable extends Table
     }
 
     /**
-     * 初期化されたエンティティを取得する
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getNew()
-    {
-        return $this->newEntity([
-            'user_groups' => [
-                '_ids' => [1]
-            ]]);
-    }
-
-    /**
      * コントロールソースを取得する
      *
      * @param string $field フィールド名
@@ -314,26 +300,6 @@ class UsersTable extends Table
         } else {
             return null;
         }
-    }
-
-    /**
-     * Where 条件を作成する
-     * @param $query
-     * @param $request
-     * @return Query
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function createWhere($query, $request): Query
-    {
-        $get = $request->getQuery();
-        if (!empty($get['user_group_id'])) {
-            $query->matching('UserGroups', function($q) use ($get) {
-                return $q->where(['UserGroups.id' => $get['user_group_id']]);
-            });
-        }
-        return $query;
     }
 
     /**
