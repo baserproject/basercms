@@ -90,6 +90,7 @@ class BcTestCase extends TestCase
      * 管理画面にログインする
      *
      * @param string $group
+     * @return array $user
      * @checked
      * @noTodo
      */
@@ -102,6 +103,7 @@ class BcTestCase extends TestCase
         // request から取得する session でも書き込むようにした
         $session = $this->getRequest()->getSession();
         $session->write($sessionKey, $user);
+        return $user;
     }
 
 }
