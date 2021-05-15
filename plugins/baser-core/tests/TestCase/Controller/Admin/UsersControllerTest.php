@@ -55,8 +55,7 @@ class UsersControllerTest extends BcTestCase
         $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
         $Users = $this->getTableLocator()->get('Users', $config);
         $this->loginAdmin();
-        $this->request = $this->getRequest();
-        $this->UsersController = new UsersController($this->request);
+        $this->UsersController = new UsersController($this->getRequest());
         $this->UsersController->Users = $Users;
     }
 
@@ -240,7 +239,7 @@ class UsersControllerTest extends BcTestCase
      */
     public function testReset_password()
     {
-        $this->post('/baser/admin/baser-core/users/reset_password', []);
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
 }
