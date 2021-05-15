@@ -11,7 +11,6 @@
 
 namespace BaserCore\Controller\Api;
 
-use BaserCore\Controller\AppController;
 use BaserCore\Service\UsersServiceInterface;
 use Cake\Core\Exception\Exception;
 
@@ -22,8 +21,9 @@ use Cake\Core\Exception\Exception;
  *
  * @package BaserCore\Controller\Api
  */
-class UsersController extends AppController
+class UsersController extends BcApiController
 {
+
     /**
      * ユーザー情報一覧取得
      * @param UsersServiceInterface $users

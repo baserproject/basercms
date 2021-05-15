@@ -54,6 +54,10 @@ return [
          */
         'marketPluginRss' => 'https://market.basercms.net/plugins.php',
         /**
+         * Api トークン（簡易認証用）
+         */
+        'apiToken' => 'Xprg7JjhII1HEtGscjyIhf4Y852gSW4qBbiTXUV69R3//Y5QNfiHNqTo6I8iWhpH',
+        /**
          * システムナビ
          *
          * 初期状態で表示するメニューは、`Contents` キー配下に定義し、「設定」内に格納する場合は、`Systems` キー配下に定義する
