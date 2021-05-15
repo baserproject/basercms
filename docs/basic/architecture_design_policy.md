@@ -2,7 +2,7 @@
 
 ## ビジネスロジックの実装対象
 
-データの取り出し及び、永続化などを含めたビジネスロジックの実装は、テーブルクラスではなく、
+ビジネスロジックの実装は、テーブルクラスではなく、
 サービスクラスに実装し、コントローラーにおいては、テーブルクラスを直接利用することはせず、
 そのサービスクラスを利用します。
 
@@ -29,7 +29,7 @@ interface UserManageServiceInterface
 作成したインターフェイスを実装するようにサービスクラスを定義します。
 ```php
 // baser-core/src/Service/UserManageService.php
-class UsersService implements UserManageServiceInterface
+class UserManageService implements UserManageServiceInterface
 {
     public function get($id)
     {
