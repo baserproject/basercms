@@ -103,22 +103,22 @@ class UsersController extends BcAdminAppController
 // baser-core/src/View/Helper/UserManageHelper.php
 class UserManageHelper extends Helper
 {
-    public $userManage;
+    public $userManageService;
     
     public function initialize(array $config)
     {
         parent::initialize($config);
-        $this->userManage = new UserManageService();
+        $this->userManageService = new UserManageService();
     }
     
     public function get($id)
     {
-        $this->userManage->get($id);
+        $this->userManageService->get($id);
     }
 }
 ```
 
-ラッパーとして実装したメソッドについては、サービスクラス側でテストを書き、ヘルパー側ではテストを書いたものとします。
+ラッパーとして実装したメソッドについては、サービスクラス側でテストを書き、ヘルパー側ではテストを書いたものとし、ヘルパーではテストは書きません。
 
 　
 ## APIの実装
