@@ -28,7 +28,7 @@
 　
 ## 開発にとりかかる
 
-## アーキテクチャー設計方針
+### アーキテクチャー設計方針
 
 まず、全体的な構造における設計方針について確認しておきましょう。
 - [アーキテクチャー設計方針](https://github.com/baserproject/ucmitz/blob/dev/docs/basic/architecture_design_policy.md)
