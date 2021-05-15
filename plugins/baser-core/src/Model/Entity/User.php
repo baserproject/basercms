@@ -12,6 +12,8 @@
 namespace BaserCore\Model\Entity;
 
 use Authentication\PasswordHasher\DefaultPasswordHasher;
+use Cake\Core\Configure;
+use Cake\Datasource\EntityInterface;
 use Cake\I18n\Time as TimeAlias;
 use Cake\ORM\Entity as EntityAlias;
 use BaserCore\Annotation\UnitTest;
@@ -70,6 +72,26 @@ class User extends EntityAlias
         } else {
             return false;
         }
+    }
+
+    /**
+     * 管理ユーザーかどうか判定する
+     * @param EntityInterface|User $user
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isAdmin()
+    {
+        if ($this->user_groups) {
+            foreach($this->user_groups as $group) {
+                if($group->id === Configure::read('BcApp.adminGroupId')) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

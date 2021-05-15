@@ -15,15 +15,16 @@ use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Middleware\AuthenticationMiddleware;
+use BaserCore\ServiceProvider\BcServiceProvider;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
+use Cake\Core\ContainerInterface;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Event\EventManager;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\Route\InflectedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
-use Cake\Utility\Inflector;
 use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 use BaserCore\Annotation\UnitTest;
@@ -46,7 +47,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     {
         parent::bootstrap($application);
 
-        if(!filter_var(env('USE_DEBUG_KIT', true), FILTER_VALIDATE_BOOLEAN)) {
+        if (!filter_var(env('USE_DEBUG_KIT', true), FILTER_VALIDATE_BOOLEAN)) {
             // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
             \Cake\Core\Plugin::getCollection()->remove('DebugKit');
         }
@@ -136,46 +137,64 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      * @checked
      * @noTodo
      */
-   public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
+    public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
     {
         $service = new AuthenticationService();
         $prefix = $request->getParam('prefix');
 
-        if ($prefix) {
-            $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
-            if($authSetting) {
-                $service->setConfig([
-                    'unauthenticatedRedirect' => Router::url($authSetting['loginAction'], true),
-                    'queryParam' => 'redirect',
-                    'contain' => 'UserGroups',
-                ]);
+        switch($prefix) {
 
-                $service->loadAuthenticator('Authentication.Session', [
-                    'sessionKey' => $authSetting['sessionKey'],
+            case 'Api':
+                $service->setConfig([
+                    'unauthenticatedRedirect' => '/'
                 ]);
-                $service->loadAuthenticator('Authentication.' . $authSetting['type'], [
-                    'fields' => [
-                        'username' => is_array($authSetting['username'])? $authSetting['username'][0] : $authSetting['username'],
-                        'password' => $authSetting['password']
-                    ],
-                    'loginUrl' => Router::url($authSetting['loginAction']),
+                $service->loadAuthenticator('Authentication.Token', [
+                    'queryParam' => 'token',
+                    'header' => 'Authorization',
+                    'tokenPrefix' => 'Token',
                 ]);
-                $service->loadIdentifier('Authentication.Password', [
-                    'fields' => [
-                        'username' => $authSetting['username'],
-                        'password' => $authSetting['password']
-                    ],
+                $service->loadIdentifier('Authentication.Token', [
                     'resolver' => [
-                        'className' => 'Authentication.Orm',
-                        'userModel' => $authSetting['userModel'],
-                    ],
-                    'contain' => 'UserGroups',
+                        'className' => 'BaserCore.Config'
+                    ]
                 ]);
-            } else {
-                $service->loadAuthenticator('Authentication.Form');
-            }
-        } else {
-            $service->loadAuthenticator('Authentication.Form');
+                break;
+
+            default:
+                $authSetting = Configure::read('BcPrefixAuth.' . $prefix);
+                if ($authSetting) {
+                    $service->setConfig([
+                        'unauthenticatedRedirect' => Router::url($authSetting['loginAction'], true),
+                        'queryParam' => 'redirect',
+                        'contain' => 'UserGroups',
+                    ]);
+
+                    $service->loadAuthenticator('Authentication.Session', [
+                        'sessionKey' => $authSetting['sessionKey'],
+                    ]);
+                    $service->loadAuthenticator('Authentication.' . $authSetting['type'], [
+                        'fields' => [
+                            'username' => is_array($authSetting['username'])? $authSetting['username'][0] : $authSetting['username'],
+                            'password' => $authSetting['password']
+                        ],
+                        'loginUrl' => Router::url($authSetting['loginAction']),
+                    ]);
+                    $service->loadIdentifier('Authentication.Password', [
+                        'fields' => [
+                            'username' => $authSetting['username'],
+                            'password' => $authSetting['password']
+                        ],
+                        'resolver' => [
+                            'className' => 'Authentication.Orm',
+                            'userModel' => $authSetting['userModel'],
+                        ],
+                        'contain' => 'UserGroups',
+                    ]);
+                } else {
+                    $service->loadAuthenticator('Authentication.Form');
+                }
+                break;
+
         }
 
         return $service;
@@ -197,6 +216,15 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             }
         );
         parent::routes($routes);
+    }
+
+    /**
+     * services
+     * @param ContainerInterface $container
+     */
+    public function services(ContainerInterface $container): void
+    {
+        $container->addServiceProvider(new BcServiceProvider());
     }
 
 }

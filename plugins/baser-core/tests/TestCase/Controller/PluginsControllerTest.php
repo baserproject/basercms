@@ -16,6 +16,8 @@ use BaserCore\Utility\BcUtil;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use Cake\TestSuite\IntegrationTestTrait;
+use BaserCore\Controller\Admin\PluginsController;
+use Cake\Event\Event;
 
 /**
  * Class PluginsControllerTest
@@ -47,6 +49,7 @@ class PluginsControllerTest extends BcTestCase
     {
         parent::setUp();
         $this->loginAdmin();
+        $this->PluginsController = new PluginsController($this->getRequest());
     }
 
     /**
@@ -57,6 +60,22 @@ class PluginsControllerTest extends BcTestCase
         parent::tearDown();
     }
 
+    /**
+     * プラグインの初期化テスト
+     */
+    public function testInitialize()
+    {
+        $this->assertNotEmpty($this->PluginsController->RequestHandler);
+    }
+    /**
+     * beforeFilterテスト
+     */
+    public function testBeforeFilter()
+    {
+        $event = new Event('Controller.beforeFilter', $this->PluginsController);
+        $this->PluginsController->beforeFilter($event);
+        $this->assertEquals($this->PluginsController->Security->getConfig('unlockedActions'), ['reset_db', 'update_sort', 'batch']);
+    }
     /**
      * プラグインをアップロードしてインストールする
      */
@@ -79,7 +98,8 @@ class PluginsControllerTest extends BcTestCase
      */
     public function testAjax_get_market_plugins()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->get('/baser/admin/baser-core/plugins/get_market_plugins');
+        $this->assertResponseOk();
     }
 
     /**
@@ -87,7 +107,11 @@ class PluginsControllerTest extends BcTestCase
      */
     public function testAjax_update_sort()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/baser-core/plugins/update_sort', ['connection' => 'test', 'Sort' => ['id' => 1, 'offset' => 1]]);
+        $this->assertResponseOk();
+        $this->assertSame('true', $this->_getBodyAsString());
     }
 
     /**
@@ -172,5 +196,24 @@ class PluginsControllerTest extends BcTestCase
         ]);
         $this->assertFlashMessage('ブログ プラグインのデータを初期化しました。');
     }
-
+    /**
+     * 一括処理できてるかテスト
+     */
+    public function testAjax_batch()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $batchList = [1, 2];
+        $this->post('/baser/admin/baser-core/plugins/batch', ['connection' => 'test', 'ListTool' => ['batch' => 'detach', 'batch_targets' => $batchList]]);
+        $this->assertResponseOk();
+        $plugins = $this->getTableLocator()->get('Plugins');
+        $query = $plugins->find()->select(['id', 'status']);
+        // 複数detachされてるかテスト
+        foreach($query as $plugin) {
+            if (in_array($plugin->id, $batchList)) {
+                $this->assertFalse($plugin->status);
+            }
+        }
+        $this->assertSame('true', $this->_getBodyAsString());
+    }
 }

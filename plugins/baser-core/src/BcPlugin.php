@@ -193,6 +193,23 @@ class BcPlugin extends BasePlugin
             }
         );
 
+        // API用ルーティング
+        $routes->prefix(
+            'Api',
+            ['path' => $baserCorePrefix . '/api'],
+            function(RouteBuilder $routes)  use ($plugin) {
+                $routes->plugin(
+                    $plugin,
+                    ['path' => '/' . Inflector::dasherize($plugin)],
+                    function(RouteBuilder $routes) {
+                        $routes->setExtensions(['json']);
+                        $routes->connect('/{controller}/index', [], ['routeClass' => InflectedRoute::class]);
+                        $routes->fallbacks(InflectedRoute::class);
+                    }
+                );
+            }
+        );
+
         parent::routes($routes);
     }
 

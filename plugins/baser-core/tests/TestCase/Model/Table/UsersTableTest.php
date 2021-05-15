@@ -12,7 +12,6 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\UsersTable;
-use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Validation\Validator;
 
@@ -54,7 +53,7 @@ class UsersTableTest extends BcTestCase
         $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
         $this->Users = $this->getTableLocator()->get('Users', $config);
 
-        $config = $this->getTableLocator()->exists('LoginStores') ?
+        $config = $this->getTableLocator()->exists('LoginStores')?
             [] : ['className' => 'BaserCore\Model\Table\LoginStoresTable'];
         $this->LoginStores = $this->getTableLocator()->get('LoginStores', $config);
     }
@@ -161,40 +160,12 @@ class UsersTableTest extends BcTestCase
     }
 
     /**
-     * Test getNew
-     */
-    public function testGetNew()
-    {
-        $this->assertEquals(1, $this->Users->getNew()->user_groups[0]->id);
-    }
-
-    /**
      * Test getControlSource
      */
     public function testGetControlSource()
     {
         $list = $this->Users->getControlSource('user_group_id')->toList();
         $this->assertEquals('システム管理', $list[0]);
-    }
-
-    /**
-     * Test createWhere
-     *
-     * @dataProvider createWhereDataProvider
-     */
-    public function testCreateWhere($userGroupId, $expected)
-    {
-        $request = $this->getRequest('/?user_group_id=' . $userGroupId);
-        $query = $this->Users->createWhere($this->Users->find(), $request);
-        $this->assertEquals($expected, $query->count());
-    }
-
-    public function createWhereDataProvider()
-    {
-        return [
-            [1, 1],
-            [2, 1]
-        ];
     }
 
     /**

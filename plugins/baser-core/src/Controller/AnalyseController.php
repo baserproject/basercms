@@ -41,9 +41,9 @@ class AnalyseController extends AppController
      * 解析したファイル情報一覧
      *
      * .json 付でアクセスすることで JSON を出力
-     * 例）http://localhost/baser/analyse/index.json
-     * 例）http://localhost/baser/analyse/index/baser-core.json
-     * API) http://reflection.basercms.net/baser/analyse/index/baser-core.json
+     * 例）http://localhost/baser/baser-core/analyse/index.json
+     * 例）http://localhost/baser/baser-core/analyse/index/baser-core.json
+     * API) http://reflection.basercms.net/baser/baser-core/analyse/index/baser-core.json
      *
      * @param string|null $pluginName
      * @checked
