@@ -160,14 +160,6 @@ class UsersTableTest extends BcTestCase
     }
 
     /**
-     * Test getNew
-     */
-    public function testGetNew()
-    {
-        $this->assertEquals(1, $this->Users->getNew()->user_groups[0]->id);
-    }
-
-    /**
      * Test getControlSource
      */
     public function testGetControlSource()
