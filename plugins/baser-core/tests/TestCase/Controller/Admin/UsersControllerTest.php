@@ -60,6 +60,17 @@ class UsersControllerTest extends BcTestCase
     }
 
     /**
+     * Tear Down
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        unset($this->UsersController);
+        parent::tearDown();
+    }
+
+    /**
      * Test index method
      *
      * @return void
