@@ -11,6 +11,8 @@
 
 namespace BaserCore\ServiceProvider;
 
+use BaserCore\Service\UserManageService;
+use BaserCore\Service\UserManageServiceInterface;
 use BaserCore\Service\UsersService;
 use BaserCore\Service\UsersServiceInterface;
 use Cake\Core\ServiceProvider;
@@ -30,7 +32,8 @@ class BcServiceProvider extends ServiceProvider
      * @var string[]
      */
     protected $provides = [
-        UsersServiceInterface::class
+        UsersServiceInterface::class,
+        UserManageServiceInterface::class
     ];
 
     /**
@@ -43,6 +46,7 @@ class BcServiceProvider extends ServiceProvider
     public function services($container): void
     {
         $container->add(UsersServiceInterface::class, UsersService::class);
+        $container->add(UserManageServiceInterface::class, UserManageService::class);
     }
 
 }

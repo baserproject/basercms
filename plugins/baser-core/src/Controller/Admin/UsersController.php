@@ -12,6 +12,7 @@
 namespace BaserCore\Controller\Admin;
 
 use Authentication\Controller\Component\AuthenticationComponent;
+use BaserCore\Service\UserManageServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Controller\Component\BcMessageComponent;
@@ -374,11 +375,11 @@ class UsersController extends BcAdminAppController
      *
      * - pagination
      * - view num
-     * @param UsersServiceInterface $users
+     * @param UserManageServiceInterface $userManage
      * @checked
      * @unitTest
      */
-    public function index(UsersServiceInterface $users): void
+    public function index(UserManageServiceInterface $userManage): void
     {
         $this->setViewConditions('User', ['default' => ['query' => [
             'num' => $this->siteConfigs['admin_list_num'],
@@ -397,7 +398,7 @@ class UsersController extends BcAdminAppController
         }
         <<< */
 
-        $this->set('users', $this->paginate($users->getIndex($this->request)));
+        $this->set('users', $this->paginate($userManage->getIndex($this->request)));
         $this->request = $this->request->withParsedBody($this->request->getQuery());
         $this->setTitle(__d('baser', 'ユーザー一覧'));
         $this->setSearch('users_index');
@@ -419,15 +420,15 @@ class UsersController extends BcAdminAppController
      *  - User.nickname
      *  - UserGroup
      *  - submit
-     *
+     * @param UserManageServiceInterface $userManage
      * @return Response|null|void Redirects on successful add, renders view otherwise.
      * @checked
      * @unitTest
      */
-    public function add(UsersServiceInterface $users)
+    public function add(UserManageServiceInterface $userManage)
     {
         if ($this->request->is('post')) {
-            if ($user = $users->create($this->request)) {
+            if ($user = $userManage->create($this->request)) {
                 // TODO 未実装
                 /* >>>
                 $this->getEventManager()->dispatch(new CakeEvent('Controller.Users.afterAdd', $this, [
@@ -439,7 +440,7 @@ class UsersController extends BcAdminAppController
             }
             $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
         } else {
-            $user = $users->getNew();
+            $user = $userManage->getNew();
         }
 
         $this->set([
@@ -480,13 +481,14 @@ class UsersController extends BcAdminAppController
      *  - submit
      *  - delete
      *
+     * @param UserManageServiceInterface $userManage
      * @param string|null $id User id.
      * @return Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws RecordNotFoundException When record not found.
      * @checked
      * @unitTest
      */
-    public function edit(UsersServiceInterface $users, $id = null)
+    public function edit(UserManageServiceInterface $userManage, $id = null)
     {
 
         if (!$id && empty($this->request->getData())) {
@@ -494,7 +496,7 @@ class UsersController extends BcAdminAppController
             $this->redirect(['action' => 'index']);
         }
 
-        $user = $users->get($id);
+        $user = $userManage->get($id);
 
         $selfUpdate = false;
         $updatable = true;
@@ -533,7 +535,7 @@ class UsersController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser', '自分のアカウントのグループは変更できません。'));
             <<< */
             } else {
-                if ($users->update($user, $this->request)) {
+                if ($userManage->update($user, $this->request)) {
                     // TODO 未実装
                     /* >>>
                     $this->getEventManager()->dispatch(new CakeEvent('Controller.Users.afterEdit', $this, [
@@ -583,13 +585,14 @@ class UsersController extends BcAdminAppController
      *
      * 管理画面にログインすることができるユーザーを削除する
      *
+     * @param UserManageServiceInterface $userManage
      * @param string|null $id User id.
      * @return Response|null|void Redirects to index.
      * @throws RecordNotFoundException When record not found.
      * @checked
      * @unitTest
      */
-    public function delete(UsersServiceInterface $users, $id = null)
+    public function delete(UserManageServiceInterface $userManage, $id = null)
     {
         // TODO 未実装
         /* >>>
@@ -601,9 +604,9 @@ class UsersController extends BcAdminAppController
             $this->redirect(['action' => 'index']);
         }
         $this->request->allowMethod(['post', 'delete']);
-        $user = $users->get($id);
+        $user = $userManage->get($id);
         try {
-            if ($users->delete($id)) {
+            if ($userManage->delete($id)) {
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザー: {0} を削除しました。', $user->name));
             }
         } catch (Exception $e) {
