@@ -54,7 +54,6 @@ class UsersControllerTest extends BcTestCase
         $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
         $Users = $this->getTableLocator()->get('Users', $config);
         $this->session(['AuthAdmin' => $Users->get(1)]);
-
         $this->UsersController = new UsersController($this->getRequest());
     }
 
@@ -67,6 +66,7 @@ class UsersControllerTest extends BcTestCase
     {
         $this->assertNotEmpty($this->UsersController->LoginStores);
         $this->assertEquals($this->UsersController->Authentication->getUnauthenticatedActions(), ['login']);
+        $this->assertNotEmpty($this->UsersController->Authentication->getConfig('logoutRedirect'));
 
     }
 
@@ -156,11 +156,17 @@ class UsersControllerTest extends BcTestCase
     }
 
     /**
-     * [ADMIN] 管理者ログイン画面
+     * [ADMIN] 管理者ログイン後ログアウト
      */
-    public function testLogin()
+    public function testLoginAndLogout()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/baser-core/users/login');
+        $this->assertRedirect('/baser/admin');
+        $this->post('/baser/admin/baser-core/users/logout');
+        $this->assertRedirect('/baser/admin/baser-core/users/login');
+
     }
 
     /**
@@ -185,17 +191,6 @@ class UsersControllerTest extends BcTestCase
     public function testSetAuthCookie()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * [ADMIN] 管理者ログアウト
-     */
-    public function testLogout()
-    {
-        $user = $this->getUser();
-        $this->UsersController->Authentication->setIdentity($user);
-        $this->UsersController->LoginStores->addKey('Admin', $user->id);
-        $this->UsersController->logout();
     }
 
     /**

@@ -92,6 +92,7 @@ class UsersController extends BcAdminAppController
     {
         parent::initialize();
         $this->Authentication->allowUnauthenticated(['login']);
+        $this->Authentication->setConfig(['logoutRedirect' => Configure::read('BcPrefixAuth.Admin.loginAction')]);
         $this->loadModel('BaserCore.LoginStores');
     }
 
