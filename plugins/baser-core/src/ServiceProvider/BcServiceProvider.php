@@ -21,6 +21,7 @@ use Cake\Core\ServiceProvider;
  */
 class BcServiceProvider extends ServiceProvider
 {
+
     /**
      * Provides
      * @var string[]
@@ -32,9 +33,13 @@ class BcServiceProvider extends ServiceProvider
     /**
      * Services
      * @param \Cake\Core\ContainerInterface $container
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function services($container): void
     {
         $container->add(UsersServiceInterface::class, UsersService::class);
     }
+
 }
