@@ -9,13 +9,13 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Test\TestCase\Controller;
+namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
- * BaserCore\Controller\UsersController Test Case
+ * BaserCore\Controller\Admin\UsersController Test Case
  */
 class UsersControllerTest extends TestCase
 {
@@ -109,7 +109,13 @@ class UsersControllerTest extends TestCase
      */
     public function testEdit()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = [
+            'name' => 'Test_test_Man'
+        ];
+        $this->post('/baser/admin/baser-core/users/edit/1', $data);
+        $this->assertResponseSuccess();
     }
 
     /**
@@ -119,7 +125,16 @@ class UsersControllerTest extends TestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/baser-core/users/delete/1');
+        $this->assertResponseSuccess();
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'users',
+            'action' => 'index'
+        ]);
     }
 
     /**

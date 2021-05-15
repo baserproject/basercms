@@ -56,7 +56,7 @@ return [
         /**
          * Api トークン（簡易認証用）
          */
-        'apiToken' => 'Xprg7JjhII1HEtGscjyIhf4Y852gSW4qBbiTXUV69R3//Y5QNfiHNqTo6I8iWhpH',
+        'apiToken' => 'Xprg7JjhII1HEtGscjyIhf4Y852gSW4qBbiTXUV69R3ewY5QNfiHNqTo6I8iWhpH',
         /**
          * システムナビ
          *

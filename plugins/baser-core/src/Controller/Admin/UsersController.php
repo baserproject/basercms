@@ -12,7 +12,6 @@
 namespace BaserCore\Controller\Admin;
 
 use Authentication\Controller\Component\AuthenticationComponent;
-use BaserCore\Service\Exception\DeleteLastUserException;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Controller\Component\BcMessageComponent;
@@ -485,6 +484,7 @@ class UsersController extends BcAdminAppController
      * @return Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws RecordNotFoundException When record not found.
      * @checked
+     * @unitTest
      */
     public function edit(UsersServiceInterface $users, $id = null)
     {
@@ -587,6 +587,7 @@ class UsersController extends BcAdminAppController
      * @return Response|null|void Redirects to index.
      * @throws RecordNotFoundException When record not found.
      * @checked
+     * @unitTest
      */
     public function delete(UsersServiceInterface $users, $id = null)
     {

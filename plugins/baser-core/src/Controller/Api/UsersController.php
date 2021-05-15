@@ -27,6 +27,9 @@ class UsersController extends BcApiController
     /**
      * ユーザー情報一覧取得
      * @param UsersServiceInterface $users
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function index(UsersServiceInterface $users)
     {
@@ -40,18 +43,24 @@ class UsersController extends BcApiController
      * ユーザー情報取得
      * @param UsersServiceInterface $users
      * @param $id
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function view(UsersServiceInterface $users, $id)
     {
         $this->set([
-            'user' => $users->get($id),
-            '_serialize' => ['user']
+            'user' => $users->get($id)
         ]);
+        $this->viewBuilder()->setOption('serialize', ['user']);
     }
 
     /**
      * ユーザー情報登録
      * @param UsersServiceInterface $users
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(UsersServiceInterface $users)
     {
@@ -62,15 +71,18 @@ class UsersController extends BcApiController
         }
         $this->set([
             'message' => $message,
-            'user' => $user,
-            '_serialize' => ['message', 'user']
+            'user' => $user
         ]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'user']);
     }
 
     /**
      * ユーザー情報編集
      * @param UsersServiceInterface $users
      * @param $id
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function edit(UsersServiceInterface $users, $id)
     {
@@ -84,14 +96,18 @@ class UsersController extends BcApiController
         }
         $this->set([
             'message' => $message,
-            '_serialize' => ['message']
+            'user' => $user
         ]);
+        $this->viewBuilder()->setOption('serialize', ['user', 'message']);
     }
 
     /**
      * ユーザー情報削除
      * @param UsersServiceInterface $users
      * @param $id
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete(UsersServiceInterface $users, $id)
     {
@@ -105,8 +121,9 @@ class UsersController extends BcApiController
         }
         $this->set([
             'message' => $message,
-            '_serialize' => ['message']
+            'user' => $user
         ]);
+        $this->viewBuilder()->setOption('serialize', ['user', 'message']);
     }
 
 }
