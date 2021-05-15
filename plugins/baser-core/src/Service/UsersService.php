@@ -14,6 +14,7 @@ namespace BaserCore\Service;
 use BaserCore\Model\Entity\User;
 use BaserCore\Model\Table\UsersTable;
 use Cake\Core\Configure;
+use Cake\Core\Exception\CakeException;
 use Cake\Core\Exception\Exception;
 use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
@@ -45,6 +46,9 @@ class UsersService implements UsersServiceInterface
     /**
      * ユーザーの新規データ用の初期値を含んだエンティティを取得する
      * @return User
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getNew(): User
     {
@@ -58,6 +62,9 @@ class UsersService implements UsersServiceInterface
      * ユーザーを取得する
      * @param int $id
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function get($id): EntityInterface
     {
@@ -71,6 +78,9 @@ class UsersService implements UsersServiceInterface
      * @param array $queryParams
      * @param array $paginateParams
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getIndex(ServerRequest $request): Query
     {
@@ -85,6 +95,9 @@ class UsersService implements UsersServiceInterface
                 return $q->where(['UserGroups.id' => $queryParams['user_group_id']]);
             });
         }
+        if (!empty($queryParams['name'])) {
+            $query->where(['name LIKE' => '%' . $queryParams['name'] . '%']);
+        }
         return $query;
     }
 
@@ -92,6 +105,9 @@ class UsersService implements UsersServiceInterface
      * ユーザー登録
      * @param ServerRequest $request
      * @return \Cake\Datasource\EntityInterface|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function create(ServerRequest $request)
     {
@@ -106,6 +122,9 @@ class UsersService implements UsersServiceInterface
      * @param EntityInterface $target
      * @param ServerRequest $request
      * @return EntityInterface|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $target, ServerRequest $request)
     {
@@ -115,25 +134,49 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ユーザー情報を削除する
+     * 最後のシステム管理者でなければ削除
      * @param int $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete($id)
     {
         $user = $this->Users->get($id, ['contain' => ['UserGroups']]);
-        $count = $this->Users
-            ->find('all', ['conditions' => ['UsersUserGroups.user_group_id' => Configure::read('BcApp.adminGroupId')]])
-            ->join(['table' => 'users_user_groups',
-                'alias' => 'UsersUserGroups',
-                'type' => 'inner',
-                'conditions' => 'UsersUserGroups.user_id = Users.id'])
-            ->count();
-        // 最後のシステム管理者でなければ削除
-        if ($count === 1) {
-            throw new Exception(__d('baser', '最後のシステム管理者は削除できません'));
-        } else {
-            return $this->Users->delete($user);
+        if($this->isAdmin($user)) {
+            $count = $this->Users
+                ->find('all', ['conditions' => ['UsersUserGroups.user_group_id' => Configure::read('BcApp.adminGroupId')]])
+                ->join(['table' => 'users_user_groups',
+                    'alias' => 'UsersUserGroups',
+                    'type' => 'inner',
+                    'conditions' => 'UsersUserGroups.user_id = Users.id'])
+                ->count();
+            if ($count === 1) {
+                throw new Exception(__d('baser', '最後のシステム管理者は削除できません'));
+            }
         }
+        return $this->Users->delete($user);
+    }
+
+    /**
+     * 管理ユーザーかどうか判定する
+     * @param EntityInterface|User $user
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isAdmin(EntityInterface $user)
+    {
+        if ($user->user_groups) {
+            foreach($user->user_groups as $group) {
+                if($group->id === Configure::read('BcApp.adminGroupId')) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }
