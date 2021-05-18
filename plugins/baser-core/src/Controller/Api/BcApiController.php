@@ -33,6 +33,7 @@ class BcApiController extends AppController
     {
         parent::initialize();
         $this->loadComponent('Authentication.Authentication');
+        $this->Security->setConfig('validatePost', false);
     }
 
 }
