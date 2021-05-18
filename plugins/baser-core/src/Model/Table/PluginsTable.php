@@ -241,15 +241,15 @@ class PluginsTable extends Table
         $recordExists = $this->find()->where(['name' => $name])->count();
         $plugin = $this->getPluginConfig($name);
         if (!$recordExists) {
-			$corePlugins = Configure::read('BcApp.corePlugins');
-			if (in_array($name, $corePlugins)) {
-				$version = BcUtil::getVersion();
-			} else {
-				$version = BcUtil::getVersion($name);
-			}
+            $corePlugins = Configure::read('BcApp.corePlugins');
+            if (in_array($name, $corePlugins)) {
+                $version = BcUtil::getVersion();
+            } else {
+                $version = BcUtil::getVersion($name);
+            }
             $query = $this->find();
             $priority = $query->select(['max' => $query->func()->max('priority')])->first();
-			$plugin->version = ($version)? $version : null;
+            $plugin->version = ($version)? $version : null;
             $plugin->priority = $priority->max + 1;
             $plugin->db_init = true;
             $plugin->status = true;

@@ -36,9 +36,9 @@ class UserGroupsController extends BcAdminAppController
 {
     public $siteConfigs = [];
 
-	/**
-	 * UserGroupsController constructor.
-	 *
+    /**
+     * UserGroupsController constructor.
+     *
      * @param \Cake\Http\ServerRequest|null $request Request object for this controller. Can be null for testing,
      *   but expect that features that use the request parameters will not work.
      * @param \Cake\Http\Response|null $response Response object for this controller.
@@ -46,30 +46,30 @@ class UserGroupsController extends BcAdminAppController
      * @param \Cake\Event\EventManagerInterface|null $eventManager The event manager. Defaults to a new instance.
      * @param \Cake\Controller\ComponentRegistry|null $components The component registry. Defaults to a new instance.
      * @checked
-	 */
-	public function __construct(
+     */
+    public function __construct(
         ?ServerRequest $request = null,
         ?Response $response = null,
         ?string $name = null,
         ?EventManagerInterface $eventManager = null,
         ?ComponentRegistry $components = null
     ) {
-		parent::__construct($request, $response, $name, $eventManager, $components);
-		$this->crumbs = [
-			['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
-			['name' => __d('baser', 'ユーザーグループ管理'), 'url' => ['controller' => 'user_groups', 'action' => 'index']]
-		];
-	}
+        parent::__construct($request, $response, $name, $eventManager, $components);
+        $this->crumbs = [
+            ['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
+            ['name' => __d('baser', 'ユーザーグループ管理'), 'url' => ['controller' => 'user_groups', 'action' => 'index']]
+        ];
+    }
 
-	/**
-	 * beforeFilter
+    /**
+     * beforeFilter
      * @param EventInterface $event
      * @return Response|void|null
      * @checked
-	 */
-	public function beforeFilter(EventInterface $event)
-	{
-		parent::beforeFilter($event);
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
 
         // TODO 取り急ぎ動作させるためのコード
         // >>>
@@ -77,18 +77,18 @@ class UserGroupsController extends BcAdminAppController
         return;
         // <<<
 
-		if ($this->request->getParam('prefix') === 'admin') {
-			$this->set('usePermission', $this->UserGroup->checkOtherAdmins());
-		}
+        if ($this->request->getParam('prefix') === 'admin') {
+            $this->set('usePermission', $this->UserGroup->checkOtherAdmins());
+        }
 
-		$authPrefixes = [];
-		foreach(Configure::read('BcAuthPrefix') as $key => $authPrefix) {
-			$authPrefixes[$key] = $authPrefix['name'];
-		}
-		if (count($authPrefixes) <= 1) {
-			$this->UserGroup->validator()->remove('auth_prefix');
-		}
-	}
+        $authPrefixes = [];
+        foreach(Configure::read('BcAuthPrefix') as $key => $authPrefix) {
+            $authPrefixes[$key] = $authPrefix['name'];
+        }
+        if (count($authPrefixes) <= 1) {
+            $this->UserGroup->validator()->remove('auth_prefix');
+        }
+    }
 
     /**
      * ログインユーザーグループリスト
@@ -199,10 +199,10 @@ class UserGroupsController extends BcAdminAppController
      */
     public function edit($id = null)
     {
-		if (!$id) {
-			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
-			return $this->redirect(['action' => 'index']);
-		}
+        if (!$id) {
+            $this->BcMessage->setError(__d('baser', '無効なIDです。'));
+            return $this->redirect(['action' => 'index']);
+        }
 
         $this->setTitle(__d('baser', 'ユーザーグループ編集'));
         $this->setHelp('user_groups_form');
@@ -252,11 +252,11 @@ class UserGroupsController extends BcAdminAppController
         $this->_checkSubmitToken();
         <<< */
 
-		/* 除外処理 */
-		if (!$id) {
-			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
-			return $this->redirect(['action' => 'index']);
-		}
+        /* 除外処理 */
+        if (!$id) {
+            $this->BcMessage->setError(__d('baser', '無効なIDです。'));
+            return $this->redirect(['action' => 'index']);
+        }
         $this->request->allowMethod(['post', 'delete']);
         $userGroup = $this->UserGroups->get($id);
         if ($this->UserGroups->delete($userGroup)) {
@@ -305,80 +305,80 @@ class UserGroupsController extends BcAdminAppController
         return $this->redirect(['action' => 'index']);
     }
 
-	/**
-	 * [ADMIN] 削除処理 (ajax)
-	 *
-	 * @param int ID
-	 * @return void
-	 */
-	public function ajax_delete($id = null)
-	{
-		$this->_checkSubmitToken();
-		/* 除外処理 */
-		if (!$id) {
-			$this->ajaxError(500, __d('baser', '無効な処理です。'));
-		}
+    /**
+     * [ADMIN] 削除処理 (ajax)
+     *
+     * @param int ID
+     * @return void
+     */
+    public function ajax_delete($id = null)
+    {
+        $this->_checkSubmitToken();
+        /* 除外処理 */
+        if (!$id) {
+            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+        }
 
-		// メッセージ用にデータを取得
-		$post = $this->UserGroup->read(null, $id);
+        // メッセージ用にデータを取得
+        $post = $this->UserGroup->read(null, $id);
 
-		/* 削除処理 */
-		if (!$this->UserGroup->delete($id)) {
-			exit;
-		}
+        /* 削除処理 */
+        if (!$this->UserGroup->delete($id)) {
+            exit;
+        }
 
-		$message = 'ユーザーグループ「' . $post['UserGroup']['title'] . '」 を削除しました。';
-		$this->UserGroup->saveDbLog($message);
-		exit(true);
-	}
+        $message = 'ユーザーグループ「' . $post['UserGroup']['title'] . '」 を削除しました。';
+        $this->UserGroup->saveDbLog($message);
+        exit(true);
+    }
 
-	/**
-	 * [ADMIN] データコピー（AJAX）
-	 *
-	 * @param int $id
-	 * @return void
-	 */
-	public function ajax_copy($id)
-	{
-		$this->_checkSubmitToken();
-		if (!$id) {
-			$this->ajaxError(500, __d('baser', '無効な処理です。'));
-		}
+    /**
+     * [ADMIN] データコピー（AJAX）
+     *
+     * @param int $id
+     * @return void
+     */
+    public function ajax_copy($id)
+    {
+        $this->_checkSubmitToken();
+        if (!$id) {
+            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+        }
 
-		$result = $this->UserGroup->copy($id);
-		if (!$result) {
-			$this->ajaxError(500, $this->UserGroup->validationErrors);
-		} else {
-			$this->set('data', $result);
-		}
-	}
+        $result = $this->UserGroup->copy($id);
+        if (!$result) {
+            $this->ajaxError(500, $this->UserGroup->validationErrors);
+        } else {
+            $this->set('data', $result);
+        }
+    }
 
-	/**
-	 * ユーザーグループのよく使う項目の初期値を登録する
-	 * ユーザー編集画面よりAjaxで呼び出される
-	 *
-	 * @param $id
-	 * @return void
-	 * @throws Exception
-	 */
-	public function set_default_favorites($id)
-	{
-		if (!$this->request->is(['post', 'put'])) {
-			$this->ajaxError(500, __d('baser', '無効な処理です。'));
-		}
-		$defaultFavorites = null;
-		if ($this->request->getData()) {
-			$defaultFavorites = BcUtil::serialize($this->request->getData());
-		}
-		$this->UserGroup->id = $id;
-		$this->UserGroup->recursive = -1;
-		$data = $this->UserGroup->read();
-		$data['UserGroup']['default_favorites'] = $defaultFavorites;
-		$this->UserGroup->set($data);
-		if ($this->UserGroup->save()) {
-			echo true;
-		}
-		exit();
-	}
+    /**
+     * ユーザーグループのよく使う項目の初期値を登録する
+     * ユーザー編集画面よりAjaxで呼び出される
+     *
+     * @param $id
+     * @return void
+     * @throws Exception
+     */
+    public function set_default_favorites($id)
+    {
+        if (!$this->request->is(['post', 'put'])) {
+            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+        }
+        $defaultFavorites = null;
+        if ($this->request->getData()) {
+            $defaultFavorites = BcUtil::serialize($this->request->getData());
+        }
+        $this->UserGroup->id = $id;
+        $this->UserGroup->recursive = -1;
+        $data = $this->UserGroup->read();
+        $data['UserGroup']['default_favorites'] = $defaultFavorites;
+        $this->UserGroup->set($data);
+        if ($this->UserGroup->save()) {
+            echo true;
+        }
+        exit();
+    }
 
 }
