@@ -122,13 +122,28 @@ class PluginsTableTest extends BcTestCase
     }
 
     /**
-     * testInstall
+     * testInstall and testUninstall
      */
-    public function testInstall()
+    public function testInstallAndUninstall()
     {
+        // test Install
         $this->Plugins->install('BcTest');
         $plugin = $this->Plugins->find()->where(['name' => 'BcTest'])->first();
         $this->assertEquals(4, $plugin->priority);
+        // test Uninstall
+        $this->Plugins->uninstall('BcTest');
+        $this->assertEquals(3, $this->Plugins->find()->count());
+    }
+
+    /**
+     * testDetach
+     */
+    public function testDetach()
+    {
+        $plugin = 'BcBlog';
+        $this->assertFalse($this->Plugins->detach(''));
+        $this->Plugins->detach($plugin);
+        $this->assertFalse($this->Plugins->find()->where(['name' => $plugin])->first()->status);
     }
 
     /**

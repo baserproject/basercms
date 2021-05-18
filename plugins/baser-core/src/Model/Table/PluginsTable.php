@@ -80,6 +80,7 @@ class PluginsTable extends Table
      *
      * @return array
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function getAvailable()
@@ -115,6 +116,7 @@ class PluginsTable extends Table
      * @param string $name プラグイン名
      * @return \BaserCore\Model\Entity\Plugin|\Cake\Datasource\EntityInterface
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function getPluginConfig($name)
@@ -178,6 +180,7 @@ class PluginsTable extends Table
      * @param $pluginName
      * @return bool
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function isInstallable($pluginName)
@@ -234,6 +237,7 @@ class PluginsTable extends Table
      * @param $name
      * @return bool
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function install($name): bool
@@ -270,6 +274,7 @@ class PluginsTable extends Table
      * @param $name
      * @return bool
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function uninstall($name): bool
@@ -284,6 +289,7 @@ class PluginsTable extends Table
      * @param $name
      * @return bool
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function detach($name): bool

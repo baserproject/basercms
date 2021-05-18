@@ -12,12 +12,14 @@
 namespace BaserCore\Test\TestCase\Controller;
 
 use Cake\TestSuite\IntegrationTestTrait;
-use Cake\TestSuite\TestCase;
+use BaserCore\TestSuite\BcTestCase;
+use Cake\Event\Event;
+use BaserCore\Controller\Admin\UserGroupsController;
 
 /**
  * BaserCore\Controller\UserGroupsController Test Case
  */
-class UserGroupsControllerTest extends TestCase
+class UserGroupsControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
 
@@ -52,6 +54,7 @@ class UserGroupsControllerTest extends TestCase
         $config = $this->getTableLocator()->exists('UserGroups')? [] : ['className' => 'BaserCore\Model\Table\UserGroupsTable'];
         $UserGroups = $this->getTableLocator()->get('UserGroups', $config);
         $this->session(['AuthAdmin' => $UserGroups->get(1)]);
+        $this->UserGroupsController = new UserGroupsController($this->getRequest());
     }
 
     /**
@@ -114,7 +117,16 @@ class UserGroupsControllerTest extends TestCase
      */
     public function testEdit()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = [
+            'id' => '1',
+            'name' => 'test',
+            'title' => 'test',
+            'use_move_contents' => '1'
+        ];
+        $this->post('/baser/admin/baser-core/user_groups/edit/1', $data);
+        $this->assertRedirect('/baser/admin/baser-core/user_groups/index');
     }
 
     /**
@@ -124,7 +136,12 @@ class UserGroupsControllerTest extends TestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/baser-core/user_groups/delete/1');
+        $userGroups = $this->getTableLocator()->get('UserGroups');
+        $this->assertEquals($userGroups->find()->first()->id, '2');
+        $this->assertRedirect('/baser/admin/baser-core/user_groups/index');
     }
 
     /**
@@ -144,35 +161,21 @@ class UserGroupsControllerTest extends TestCase
         $this->assertEquals(1, $query->count());
     }
 
-	/**
-	 * beforeFilter
-	 */
-	public function testBeforeFilter()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * beforeFilter
+     */
+    public function testBeforeFilter()
+    {
+        $event = new Event('Controller.beforeRender', $this->UserGroupsController);
+        $this->UserGroupsController->beforeFilter($event);
+        $this->assertEquals($this->UserGroupsController->siteConfigs['admin_list_num'], 30);
+    }
 
-	/**
-	 * [ADMIN] 削除処理 (ajax)
-	 */
-	public function testAjax_delete()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	/**
-	 * [ADMIN] データコピー（AJAX）
-	 */
-	public function testAjax_copy()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	/**
-	 * ユーザーグループのよく使う項目の初期値を登録する
-	 */
-	public function testSet_default_favorites()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * ユーザーグループのよく使う項目の初期値を登録する
+     */
+    public function testSet_default_favorites()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }

@@ -11,37 +11,30 @@
 
 namespace BaserCore\Service;
 
-use BaserCore\Model\Entity\User;
+use BaserCore\Model\Entity\UserGroup;
 use Cake\Datasource\EntityInterface;
 use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
 
 /**
- * Interface UsersServiceInterface
+ * Interface UserGroupsServiceInterface
  * @package BaserCore\Service
  */
-interface UsersServiceInterface
+interface UserGroupsServiceInterface
 {
-
     /**
-     * ユーザーを取得する
+     * ユーザーグループを取得する
      * @param int $id
      * @return EntityInterface
      */
     public function get($id): EntityInterface;
 
     /**
-     * ユーザー一覧を取得
-     * @param ServerRequest $request
+     * ユーザーグループ全件取得する
+     * @param array $options
      * @return Query
      */
-    public function getIndex(ServerRequest $request): Query;
-
-    /**
-     * 新しいデータの初期値を取得する
-     * @return EntityInterface
-     */
-    public function getNew(): User;
+    public function getIndex($options = []): Query;
 
     /**
      * 新規登録する
@@ -64,5 +57,4 @@ interface UsersServiceInterface
      * @return mixed
      */
     public function delete(int $id);
-
 }

@@ -13,9 +13,11 @@ namespace BaserCore\Model\Table;
 
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\Entity\UserGroup;
+use Cake\Core\Configure;
 use Cake\ORM\Association\BelongsToMany;
 use Cake\ORM\Behavior\TimestampBehavior as TimestampBehaviorAlias;
 use Cake\Datasource\{EntityInterface, ResultSetInterface as ResultSetInterfaceAlias};
+use BaserCore\Model\AppTable;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use BaserCore\Model\Table\Exception\CopyFailedException;
@@ -43,7 +45,7 @@ use BaserCore\Annotation\Checked;
  * @mixin TimestampBehaviorAlias
  * @uses UserGroupsTable
  */
-class UserGroupsTable extends Table
+class UserGroupsTable extends Table //TODO AppTableに変更必
 {
 
     /**
@@ -81,7 +83,6 @@ class UserGroupsTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function initialize(array $config): void
@@ -92,6 +93,7 @@ class UserGroupsTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
+        // $this->addBehavior('BcCache'); //TODO 未実装
         $this->belongsToMany('Users', [
             'className' => 'BaserCore.Users',
             'foreignKey' => 'user_group_id',
@@ -194,20 +196,20 @@ class UserGroupsTable extends Table
         $result = $this->save($entity);
         if ($result) {
             // TODO: Permissionのコピー
-//			$result['UserGroup']['id'] = $this->getInsertID();
-//			if ($recursive) {
-//				$permissions = $this->Permission->find('all', [
-//					'conditions' => ['Permission.user_group_id' => $id],
-//					'order' => ['Permission.sort'],
-//					'recursive' => -1
-//				]);
-//				if ($permissions) {
-//					foreach($permissions as $permission) {
-//						$permission['Permission']['user_group_id'] = $result['UserGroup']['id'];
-//						$this->Permission->copy(null, $permission);
-//					}
-//				}
-//			}
+            // $result['UserGroup']['id'] = $this->getInsertID();
+            // if ($recursive) {
+            //     $permissions = $this->Permission->find('all', [
+            //         'conditions' => ['Permission.user_group_id' => $id],
+            //         'order' => ['Permission.sort'],
+            //         'recursive' => -1
+            //     ]);
+            //     if ($permissions) {
+            //         foreach($permissions as $permission) {
+            //             $permission['Permission']['user_group_id'] = $result['UserGroup']['id'];
+            //             $this->Permission->copy(null, $permission);
+            //         }
+            //     }
+            // }
             return $result;
         } else {
             if (!isset($errors['name'])) {
@@ -219,13 +221,6 @@ class UserGroupsTable extends Table
     }
 
     /**
-     * ビヘイビア
-     *
-     * @var array
-     */
-    public $actsAs = ['BcCache'];
-
-    /**
      * 関連するユーザーを管理者グループに変更し保存する
      *
      * @param boolean $cascade
@@ -233,8 +228,6 @@ class UserGroupsTable extends Table
      */
     public function beforeDelete($cascade = true)
     {
-        parent::beforeDelete($cascade);
-        $ret = true;
         if (!empty($this->data['UserGroup']['id'])) {
             $id = $this->data['UserGroup']['id'];
             $this->User->unBindModel(['belongsTo' => ['UserGroup']]);
@@ -244,12 +237,12 @@ class UserGroupsTable extends Table
                     $data['User']['user_group_id'] = Configure::read('BcApp.adminGroupId');
                     $this->User->set($data);
                     if (!$this->User->save()) {
-                        $ret = false;
+                        $cascade = false;
                     }
                 }
             }
         }
-        return $ret;
+        return $cascade;
     }
 
     /**
