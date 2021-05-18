@@ -868,15 +868,6 @@ function getDbDriver($dbConfigKeyName = 'default')
     return $db->config['datasource'];
 }
 
-/**
- * コンソールから実行されているかチェックする
- *
- * @return bool
- */
-function isConsole()
-{
-    return defined('CAKEPHP_SHELL') && CAKEPHP_SHELL;
-}
 
 /**
  * Constructs associative array from pairs of arguments.

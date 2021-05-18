@@ -77,7 +77,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * __construct
-     * @since basercms4
      * @param string $name
      * @param array $data
      * @param string $dataName
@@ -147,7 +146,6 @@ class BcBaserHelperTest extends BcTestCase {
 
         /**
      * JSの読み込みタグを出力する
-     * @since basercms4
      * @param string $expected 期待値
      * @param string $url URL
      * @return void
@@ -202,7 +200,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * エレメントテンプレートのレンダリング結果を取得する
-     *　@since basercms4
      * @return void
      */
     public function testGetElement_Version4()
@@ -243,7 +240,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * 画像読み込みタグを出力する
-     * @since basercms4
      * @return void
      */
     public function testImg_Version4()
@@ -269,7 +265,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * 画像タグを取得する
-     * @since basercms4
      * @param string $path 画像のパス
      * @param array $options オプション
      * @param string $expected 結果
@@ -324,7 +319,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * アンカータグを取得する
-     * @since basercms4
      * @param string $title タイトル
      * @param string $url URL
      * @param array $option オプション
@@ -393,7 +387,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * 編集画面へのリンクが存在するかチェックする
-     * @since basercms4
      * @return void
      */
     public function testExistsEditLink()
@@ -412,7 +405,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * 公開ページへのリンクが存在するかチェックする
-     * @since basercms4
      * @return void
      */
     public function testExistsPublishLink()
@@ -457,7 +449,6 @@ class BcBaserHelperTest extends BcTestCase {
     }
     /**
      * ユーザー名を整形して表示する
-     * @since basercms4
      * @param string $nickname
      * @param string $realName1
      * @param string $realName2
@@ -537,7 +528,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * セッションメッセージを出力する
-     * @since basercms4
      * @return void
      */
     public function testFlash_Version4()
@@ -560,7 +550,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * コンテンツタイトルを取得する
-     * @since basercms4
      * @todo メソッド未実装
      * @return void
      */
@@ -610,7 +599,6 @@ class BcBaserHelperTest extends BcTestCase {
      * ・URLのコントローラー名までを取得
      * ・ページの場合は、カテゴリ名（カテゴリがない場合は Default）
      * ・トップページは、Home
-     * @since basercms4
      * @param string $url URL
      * @param string $expects コンテンツ名
      * @return void*
@@ -665,7 +653,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * 編集画面へのリンクを出力する
-     * @since basercms4
      * setPageEditLink のテストも兼ねる
      *
      * @return void
@@ -694,7 +681,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * 公開ページへのリンクを出力する
-     * @since basercms4
      * @return void
      */
     public function testPublishLink()
@@ -736,7 +722,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * Test BcBaser->getUrlが適切なURLを取得してるかテスト
-     * @since basercms4
      * @todo testGetUrlに統合する
      * @return void
      */
@@ -807,7 +792,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * ログイン状態にする
-     * @since basercms4
      * @return void
      */
     protected function _login()
@@ -825,7 +809,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * ログイン状態を解除する
-     * @since basercms4
      * @return void
      */
     protected function _logout()
@@ -836,7 +819,6 @@ class BcBaserHelperTest extends BcTestCase {
     }
         /**
      * タイトルを設定する
-     * @since basercms4
      * @return void
      */
     public function testSetTitle()
@@ -865,7 +847,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * タイトルをセットする
-     * @since basercms4
      */
     public function testSetHomeTitle()
     {
@@ -880,7 +861,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * ページにeditLinkを追加する
-     * @since basercms4
      */
     public function testSetPageEditLink()
     {
@@ -897,7 +877,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * meta タグのキーワードを設定する
-     * @since basercms4
      * @return void
      */
     public function testSetKeywords()
@@ -910,7 +889,6 @@ class BcBaserHelperTest extends BcTestCase {
 
         /**
      * meta タグの説明文を設定する
-     * @since basercms4
      * @return void
      */
     public function testSetDescription()
@@ -923,7 +901,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * レイアウトで利用する為の変数を設定する
-     * @since basercms4
      * @return void
      */
     public function testSet()
@@ -936,7 +913,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * タイトルへのカテゴリタイトルの出力有無を設定する
-     * @since basercms4
      * @return void
      */
     public function testSetCategoryTitle()
@@ -983,7 +959,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * meta タグ用のキーワードを取得する
-     * @since basercms4
      * @param string $expected 期待値
      * @param string|null $keyword 設定されるキーワードの文字列
      * @dataProvider getKeywordsDataProvider
@@ -1009,7 +984,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * meta タグ用のページ説明文を取得する
-     * @since basercms4
      * @param string $expected 期待値
      * @param string|null $description 設定されるキーワードの文字列
      * @return void
@@ -1035,7 +1009,6 @@ class BcBaserHelperTest extends BcTestCase {
 
         /**
      * タイトルタグを取得する
-     * @since basercms4
      * @return void
      */
     public function testGetTitle()
@@ -1084,7 +1057,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * パンくずリストの配列を取得する
-     * @since basercms4
      * @return void
      */
     public function testGetCrumbs()
@@ -1117,7 +1089,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * コンテンツタイトルを出力する
-     * @since basercms4
      * @return void
      */
     public function testContentsTitle()
@@ -1130,7 +1101,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * コンテンツメニューを取得する
-     * @since basercms4
      */
     public function testGetContentsMenu()
     {
@@ -1143,7 +1113,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * タイトルタグを出力する
-     * @since basercms4
      * @return void
      */
     public function testTitle()
@@ -1160,7 +1129,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * キーワード用のメタタグを出力する
-     * @since basercms4
      * @return void
      */
     public function testMetaKeywords()
@@ -1183,7 +1151,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * ページ説明文用のメタタグを出力する
-     * @since basercms4
      * @return void
      */
     public function testMetaDescription()
@@ -1205,7 +1172,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * RSSフィードのリンクタグを出力する
-     * @since basercms4
      * @return void
      */
     public function testRss()
@@ -1228,7 +1194,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * 現在のページがトップページかどうかを判定する
-     * @since basercms4
      * @param bool $expected 期待値
      * @param string $url リクエストURL
      * @return void
@@ -1265,7 +1230,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * baserCMSが設置されているパスを取得する
-     * @since basercms4
      * @param string $expected 期待値
      * @param string $baseUrl App.baseUrl
      * @return void
@@ -1291,7 +1255,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * ヘッダーテンプレートを出力する
-     * @since basercms4
      *
      * @return void
      */
@@ -1305,7 +1268,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * フッターテンプレートを出力する
-     * @since basercms4
      * @return void
      */
     public function testFooter()
@@ -1318,7 +1280,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * ページネーションを出力する
-     * @since basercms4
      * @return void
      */
     public function testPagination()
@@ -1342,7 +1303,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * コンテンツ本体を出力する
-     * @since basercms4
      * @return void
      */
     public function testContent()
@@ -1356,7 +1316,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * コンテンツ内で設定した CSS や javascript をレイアウトテンプレートに出力する
-     * @since basercms4
      * @return void
      */
     public function testScripts()
@@ -1411,7 +1370,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * ツールバーエレメントや CakePHP のデバッグ出力を表示
-     * @since basercms4
      * @return void
      */
     public function testFunc()
@@ -1448,7 +1406,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * サブメニューを設定する
-     * @since basercms4
      * @param array $elements サブメニューエレメント名を配列で指定
      * @param array $expects 期待するサブメニュータイトル
      * @return void
@@ -1481,7 +1438,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * XMLヘッダタグを出力する
-     * @since basercms4
      * @param string $expected 期待値
      * @param string $url URL
      * @return void
@@ -1506,7 +1462,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * アイコン（favicon）タグを出力する
-     * @since basercms4
      * @return void
      */
     public function testIcon()
@@ -1519,7 +1474,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * ドキュメントタイプを指定するタグを出力する
-     * @since basercms4
      * @param string $docType ドキュメントタイプ
      * @param string $expected ドキュメントタイプを指定するタグ
      * @return void
@@ -1543,7 +1497,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * CSSの読み込みタグを出力する
-     * @since basercms4
      * @return void
      */
     public function testCss()
@@ -1577,7 +1530,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * JSの読み込みタグを出力する（インラインオフ）
-     * @since basercms4
      * @return void
      */
     public function testJsNonInline()
@@ -1593,7 +1545,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * SSL通信かどうか判定する
-     * @since basercms4
      * @return void
      */
     public function testIsSSL()
@@ -1607,7 +1558,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * charset メタタグを出力する
-     * @since basercms4
      * @param string $expected 期待値
      * @param string $encoding エンコード
      * @param string $url URL
@@ -1637,7 +1587,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * コピーライト用の年を出力する
-     * @since basercms4
      * @param string $expected 期待値
      * @param mixed $begin 開始年
      * @return void
@@ -1662,7 +1611,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * アップデート処理が必要かチェックする
-     * @since basercms4
      * @param string $baserVersion baserCMSのバージョン
      * @param string $dbVersion データベースのバージョン
      * @param bool $expected 結果
@@ -1689,7 +1637,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      *
-     * @since basercms4
      * @return void
      */
     public function testGetContentCreatedDate()
@@ -1700,7 +1647,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      *
-     * @since basercms4
      * @return void
      */
     public function testGetContentModifiedDate()
@@ -1711,7 +1657,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * パンくずリストのHTMLレンダリング結果を表示する
-     * @since basercms4
      * @return void
      */
     public function testCrumbs()
@@ -1768,7 +1713,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * パンくずリストの要素を追加する
-     * @since basercms4
      * @return void
      */
     public function testAddCrumbs()
@@ -1788,7 +1732,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * ブラウザにキャッシュさせる為のヘッダーを出力する
-     * @since basercms4
      * @param boolean $expected 期待値
      * @dataProvider cacheHeaderDataProvider
      */
@@ -1816,7 +1759,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * httpから始まるURLを取得する
-     * @since basercms4
      * @param mixed $url 文字列のURL、または、配列形式のURL
      * @param bool $sessionId セッションIDを付加するかどうか
      * @param string $host $_SERVER['HTTP_HOST']の要素
@@ -1847,7 +1789,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * 文字列を検索しマークとしてタグをつける
-     * @since basercms4
      * @param string $search 検索文字列
      * @param string $text 検索対象文字列
      * @param string $name マーク用タグ
@@ -1876,7 +1817,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * サイトマップを出力する
-     * @since basercms4
      * TODO : 階層($recursive)を指定した場合のテスト
      * @param mixed $pageCategoryId 固定ページカテゴリID（初期値 : null）
      *    - 0 : 仕様確認要
@@ -1907,7 +1847,6 @@ class BcBaserHelperTest extends BcTestCase {
      * MEMO : サンプルになるかもしれないswfファイルの場所
      *　/lib/Cake/Test/test_app/Plugin/TestPlugin/webroot/flash/plugin_test.swf
      *　/lib/Cake/Test/test_app/View/Themed/TestTheme/webroot/flash/theme_test.swf
-     * @since basercms4
      * @param string $id 任意のID（divにも埋め込まれる）
      * @param int $width 横幅
      * @param int $height 高さ
@@ -1936,7 +1875,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * 現在のページが固定ページかどうかを判定する
-     * @since basercms4
      * @return void
      * @dataProvider getIsPageProvider
      */
@@ -1961,7 +1899,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * 現在のページの純粋なURLを取得する
-     * @since basercms4
      * @param string $url 現在のURL
      * @param string $expected 期待値
      * @return void
@@ -1986,7 +1923,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * 現在のページがページカテゴリのトップかどうかを判定する
-     * @since basercms4
      * @param string $url 現在のURL
      * @param string $expected 期待値
      * @return void
@@ -2012,7 +1948,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * ページをエレメントとして読み込む
-     * @since basercms4
      * @return void
      * @dataProvider PageProvider
      */
@@ -2056,7 +1991,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * ウィジェットエリアを出力する
-     * @since basercms4
      * TODO: $noが指定されてない(null)場合のテストを記述する
      * $noを指定していない場合、ウィジェットが出力されません。
      *
@@ -2084,7 +2018,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * 指定したURLが現在のURLかどうか判定する
-     * @since basercms4
      * @param string $currentUrl 現在のURL
      * @param string $url 引数として与えられるURL
      * @param bool $expects メソッドの返り値
@@ -2127,7 +2060,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * コアテンプレートを読み込む
-     * @since basercms4
      * @param boolean $selectPlugin ダミーのプラグインを作るかどうか
      * @param string $name テンプレート名
      * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
@@ -2172,7 +2104,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * ロゴを出力する
-     * @since basercms4
      * @return void
      */
     public function testLogo()
@@ -2184,7 +2115,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * メインイメージを出力する
-     * @since basercms4
      * @param array $options 指定するオプション
      * @param string $expect
      * @dataProvider mainImageDataProvider
@@ -2229,7 +2159,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * メインイメージの取得でidやclassを指定するオプション
-     * @since basercms4
      * @return void
      */
     public function testMainImageIdClass()
@@ -2269,7 +2198,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * テーマのURLを取得する
-     * @since basercms4
      * @return void
      */
     public function testGetThemeUrl()
@@ -2284,7 +2212,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * ベースとなるURLを取得する
-     * @since basercms4
      * @param string $baseUrl サブディレクトリ配置
      * @param string $url アクセスした時のURL
      * @param string $expects 期待値
@@ -2328,7 +2255,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * サブメニューを取得する
-     * @since basercms4
      * @return void
      */
     public function testGetSubMenu()
@@ -2340,7 +2266,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * コンテンツナビを出力する
-     * @since basercms4
      * @return void
      */
     public function testContentsNavi()
@@ -2353,7 +2278,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * パンくずリストを出力する
-     * @since basercms4
      * @return void
      */
     public function testCrumbsList()
@@ -2365,7 +2289,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * グローバルメニューを取得する
-     * @since basercms4
      * @return void
      */
     public function testGetGlobalMenu()
@@ -2376,7 +2299,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * Google Analytics のトラッキングコードを出力する
-     * @since basercms4
      * @return void
      */
     public function testGoogleAnalytics()
@@ -2387,7 +2309,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * Google Maps を取得する
-     * @since basercms4
      * @return void
      * タイミングによってTravisCI上でテストが失敗するので一時的にコメントアウト
      * GoogleAPI側の問題の可能性あり、テスト内容または、処理内容を見直す必要あり
@@ -2406,7 +2327,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * 表示件数設定機能を出力する
-     * @since basercms4
      * TODO ryuring 現在の資料として、Contents テーブルで管理しているURLの場合、URLが解決できない
      * BcContentsRoute::match() に途中までの処理を記述している
      *
@@ -2422,7 +2342,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * サイト内検索フォームを取得
-     * @since basercms4
      * @return void
      */
     public function testGetSiteSearchForm()
@@ -2433,7 +2352,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * Webサイト名を取得する
-     * @since basercms4
      * @return void
      */
     public function testGetSiteName()
@@ -2444,7 +2362,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * WebサイトURLを取得する
-     * @since basercms4
      * @return void
      */
     public function testGetSiteUrl()
@@ -2461,7 +2378,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * URLのパラメータ情報を返す
-     * @since basercms4
      * @return void
      */
     public function testGetParams()
@@ -2488,7 +2404,6 @@ class BcBaserHelperTest extends BcTestCase {
     }
 
     /**
-     * @since basercms4
      * @return void
      * プラグインの Baser ヘルパを取得する
      */
@@ -2502,7 +2417,6 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * コンテンツ管理用のURLより、正式なURLを取得する
-     * @since basercms4
      * @return void
      */
     public function testGetContentsUrl()
@@ -2532,7 +2446,6 @@ class BcBaserHelperTest extends BcTestCase {
     }
 
     /**
-     * @since basercms4
      * @return void
      */
     public function testGetUpdateInfo()
@@ -2542,7 +2455,6 @@ class BcBaserHelperTest extends BcTestCase {
     }
 
     /**
-     * @since basercms4
      * @return void
      */
     public function testGetRelatedSiteLinks()
@@ -2552,7 +2464,6 @@ class BcBaserHelperTest extends BcTestCase {
     }
 
     /**
-     * @since basercms4
      * @return void
      */
     public function test__call()
@@ -2561,7 +2472,6 @@ class BcBaserHelperTest extends BcTestCase {
     }
 
     /**
-     * @since basercms4
      * @return void
      */
     public function test__construct()
@@ -2570,7 +2480,6 @@ class BcBaserHelperTest extends BcTestCase {
     }
 
     /**
-     * @since basercms4
      * @return void
      */
     public function test_unsetIndexInContentsMenu()
@@ -2579,7 +2488,6 @@ class BcBaserHelperTest extends BcTestCase {
     }
 
     /**
-     * @since basercms4
      * @return void
      */
     public function testAfterRender()
@@ -2588,7 +2496,6 @@ class BcBaserHelperTest extends BcTestCase {
     }
 
     /**
-     * @since basercms4
      * @return void
      */
     public function testGetCurrentContent()
@@ -2601,7 +2508,6 @@ class BcBaserHelperTest extends BcTestCase {
     }
 
     /**
-     * @since basercms4
      * @return void
      */
     public function testCurrentPrefix()
@@ -2610,7 +2516,6 @@ class BcBaserHelperTest extends BcTestCase {
     }
 
     /**
-     * @since basercms4
      * @return void
      */
     public function testGetSitePrefix()
@@ -2619,7 +2524,6 @@ class BcBaserHelperTest extends BcTestCase {
     }
 
     /**
-     * @since basercms4
      * @return void
      */
     public function testWebClipIcon()

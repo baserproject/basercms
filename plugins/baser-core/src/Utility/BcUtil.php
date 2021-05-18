@@ -13,6 +13,7 @@ namespace BaserCore\Utility;
 
 use Cake\Cache\Cache;
 use Cake\Core\App;
+use Cake\Core\Plugin;
 use Cake\Core\Configure;
 use Cake\Database\Exception;
 use Cake\Datasource\ConnectionManager;
@@ -560,24 +561,41 @@ class BcUtil
     }
 
     /**
+     * コンソールから実行されているかチェックする
+     *
+     * @return bool
+     */
+    public static function isConsole()
+    {
+        // TODO isConsoleのCAKEPHP_SHELLが非推奨&&未定義のため代替措置
+        // return defined('CAKEPHP_SHELL') && CAKEPHP_SHELL;
+        return substr(php_sapi_name(), 0, 3) == 'cgi';
+
+    }
+
+    /**
      * レイアウトテンプレートのリストを取得する
      *
      * @param string $path
      * @param string $plugin
      * @param string $theme
      * @return array
+     * @checked
+     * @notodo
+     * @unitTest
      */
     public static function getTemplateList($path, $plugin, $theme)
     {
-
-        if ($plugin) {
-            $templatesPathes = App::path('View', $plugin);
-        } else {
-            $templatesPathes = App::path('View');
-            if ($theme) {
-                array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
-            }
+        if (!$plugin) {
+            return [];
         }
+
+        $templatesPath = self::templatePath($plugin);
+        $templatesPathes = [$templatesPath];
+        if ($theme) {
+            array_push($templatesPathes, $templatesPath . 'theme' . DS . $theme . DS);
+        }
+
         $_templates = [];
         foreach($templatesPathes as $templatesPath) {
             $templatesPath .= $path . DS;
@@ -585,22 +603,30 @@ class BcUtil
             $files = $folder->read(true, true);
             $foler = null;
             if ($files[1]) {
-                if ($_templates) {
-                    $_templates = array_merge($_templates, $files[1]);
-                } else {
-                    $_templates = $files[1];
-                }
+                $_templates = $_templates ? array_merge($_templates, $files[1]) : $files[1];
             }
         }
         $templates = [];
         foreach($_templates as $template) {
-            $ext = Configure::read('BcApp.templateExt');
-            if ($template != 'installations' . $ext) {
-                $template = basename($template, $ext);
+            if ($template != 'installations.php') {
+                $template = basename($template, '.php');
                 $templates[$template] = $template;
             }
         }
         return $templates;
+    }
+    /**
+     * テンプレートのpathを返す
+     *
+     * @param string $plugin
+     * @return string $templatePath
+     * @checked
+     * @notodo
+     * @unitTest
+     */
+    public static function templatePath(string $plugin): string
+    {
+        return Plugin::path($plugin) . 'templates/';
     }
 
     /**
