@@ -58,7 +58,7 @@ use BaserCore\View\AppView;
     <?php if (!empty($plugins)): ?>
         <?php $count = 1 ?>
         <?php foreach($plugins as $plugin): ?>
-            <?php $this->BcBaser->element('BaserCore.Admin/Plugins/index_row', ['plugin' => $plugin, 'count' => $count]) ?>
+            <?php $this->BcBaser->element('Plugins/index_row', ['plugin' => $plugin, 'count' => $count]) ?>
             <?php $count++ ?>
         <?php endforeach; ?>
     <?php else: ?>

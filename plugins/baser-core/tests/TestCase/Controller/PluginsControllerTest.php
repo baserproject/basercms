@@ -13,7 +13,6 @@ namespace BaserCore\Test\TestCase\Controller;
 
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
-use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\Controller\Admin\PluginsController;

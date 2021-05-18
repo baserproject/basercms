@@ -32,6 +32,6 @@ $this->BcBaser->js('admin/search.bundle', true, [
 <div class="bca-search">
 	<h2 class="head bca-search__head"><a href="javascript:void(0)" id="BtnMenuSearch" class="bca-icon--search"><?php echo __d('baser', '絞り込み検索') ?></a></h2>
 	<div id="Search" class="body bca-search__body">
-		<?php $this->BcBaser->element('Admin/search/' . $search) ?>
+		<?php $this->BcBaser->element('search/' . $search) ?>
 	</div>
 <!-- / #Search clearfix --></div>

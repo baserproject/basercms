@@ -24,7 +24,7 @@ use BaserCore\Model\Entity\User;
 
 <?= $this->BcAdminForm->create($user, ['novalidate' => true]) ?>
 
-<? $this->BcBaser->element('Admin/Users/form') ?>
+<? $this->BcBaser->element('Users/form') ?>
 
 <div class="submit section bca-actions">
     <div class="bca-actions__main">

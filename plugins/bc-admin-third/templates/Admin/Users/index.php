@@ -28,5 +28,5 @@ $this->BcBaser->js('admin/users/index.bundle', false);
 
 
 <section id="DataList">
-    <?php $this->BcBaser->element('Admin/Users/index_list') ?>
+    <?php $this->BcBaser->element('Users/index_list') ?>
 </section>

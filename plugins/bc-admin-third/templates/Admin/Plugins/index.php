@@ -35,7 +35,7 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
         <li><a href="#BaserMarket"><?php echo __d('baser', 'baserマーケット') ?></a></li>
     </ul>
     <div id="DataList"
-         class="bca-data-list"><?php $this->BcBaser->element('BaserCore.Admin/Plugins/index_list') ?></div>
+         class="bca-data-list"><?php $this->BcBaser->element('Plugins/index_list') ?></div>
     <div id="BaserMarket">
         <div style="padding:20px;text-align:center;">
             <?php $this->BcBaser->img('admin/ajax-loader.gif', ['alt' => 'Loading...']) ?>

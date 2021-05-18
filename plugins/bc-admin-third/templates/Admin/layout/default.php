@@ -101,12 +101,12 @@ $base = $attributes['base'];
 
 <div id="Page" class="bca-app">
 
-    <?php $this->BcBaser->element('Admin/header') ?>
+    <?php $this->BcBaser->element('header') ?>
 
     <div id="Wrap" class="bca-container">
 
         <?php if ($this->BcAdmin->isAvailableSideBar()): ?>
-            <?php $this->BcBaser->element('Admin/sidebar') ?>
+            <?php $this->BcBaser->element('sidebar') ?>
         <?php endif ?>
 
         <main id="Contents" class="bca-main">
@@ -118,7 +118,7 @@ $base = $attributes['base'];
                     <h1 class="bca-main__header-title"><? $this->BcAdmin->title() ?></h1>
 
                     <div class="bca-main__header-actions">
-                        <?php $this->BcBaser->element('Admin/main_body_header_links'); ?>
+                        <?php $this->BcBaser->element('main_body_header_links'); ?>
                     </div>
 
                     <div class="bca-main__header-menu">
@@ -147,7 +147,7 @@ $base = $attributes['base'];
 
         <!-- / #Wrap --></div>
 
-    <?php $this->BcBaser->element('Admin/footer') ?>
+    <?php $this->BcBaser->element('footer') ?>
 
     <!-- / #Page --></div>
 

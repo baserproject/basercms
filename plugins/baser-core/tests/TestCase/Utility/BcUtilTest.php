@@ -18,7 +18,6 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
-use Cake\Http\Session;
 use Cake\Cache\Cache;
 
 /**
@@ -607,10 +606,11 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetTemplateList()
     {
-        $result = BcUtil::getTemplateList('element/Admin/Dashboard', 'BcAdminThird', 'bc_sample');
+        $result = BcUtil::getTemplateList('Admin/element/Dashboard', 'BaserCore', 'BcAdminThird');
         $expected = ['baser_news' => 'baser_news', "contents_info" => "contents_info", "update_log" => "update_log"];
         $this->assertEquals($expected, $result);
     }
+
     /**
      * templatesのpath取得のテスト
      */

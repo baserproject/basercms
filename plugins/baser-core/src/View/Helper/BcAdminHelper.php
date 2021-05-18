@@ -325,7 +325,7 @@ class BcAdminHelper extends Helper
     {
         $template = $this->_View->get('help');
         if ($template) {
-            echo $this->_View->element('Admin/help', ['help' => $template]);
+            echo $this->_View->element('help', ['help' => $template]);
         }
     }
 
@@ -345,7 +345,7 @@ class BcAdminHelper extends Helper
             $contentsName
         ]);
         if ($template) {
-            echo $this->_View->element('Admin/search', [
+            echo $this->_View->element('search', [
                 'search' => $template,
                 'adminSearchOpened' => $adminSearchOpened,
                 'adminSearchOpenedSaveUrl' => $adminSearchOpenedSaveUrl
@@ -361,7 +361,7 @@ class BcAdminHelper extends Helper
      */
     public function contentsMenu(): void
     {
-        echo $this->_View->element('Admin/contents_menu', [
+        echo $this->_View->element('contents_menu', [
             'isHelp' => (bool)($this->_View->get('help')),
             'isLogin' => (bool)(BcUtil::loginUser())
         ]);

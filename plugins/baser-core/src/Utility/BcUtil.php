@@ -584,24 +584,22 @@ class BcUtil
      * @notodo
      * @unitTest
      */
-    public static function getTemplateList($path, $plugin, $theme)
+    public static function getTemplateList($path, $plugin, $theme = [])
     {
         if (!$plugin) {
             return [];
         }
 
         $templatesPath = self::templatePath($plugin);
-        $templatesPathes = [$templatesPath];
+        $templatesPaths = [$templatesPath];
         if ($theme) {
-            array_push($templatesPathes, $templatesPath . 'theme' . DS . $theme . DS);
+            array_push($templatesPaths, self::templatePath($theme));
         }
 
         $_templates = [];
-        foreach($templatesPathes as $templatesPath) {
-            $templatesPath .= $path . DS;
-            $folder = new Folder($templatesPath);
+        foreach($templatesPaths as $templatesPath) {
+            $folder = new Folder($templatesPath . $path . DS);
             $files = $folder->read(true, true);
-            $foler = null;
             if ($files[1]) {
                 $_templates = $_templates ? array_merge($_templates, $files[1]) : $files[1];
             }

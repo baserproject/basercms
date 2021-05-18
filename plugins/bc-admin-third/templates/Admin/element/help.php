@@ -30,7 +30,7 @@ use BaserCore\View\BcAdminAppView;
 	</h2>
 
 	<div class="body bca-help__body">
-		<?php $this->BcBaser->element('Admin/help/' . $help) ?>
+		<?php $this->BcBaser->element('help/' . $help) ?>
 	</div>
 
 <!-- / #Help --></div>
