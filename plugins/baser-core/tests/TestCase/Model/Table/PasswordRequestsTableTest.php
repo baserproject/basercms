@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\PasswordRequestsTable;
+use BaserCore\Model\Table\UsersTable;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;

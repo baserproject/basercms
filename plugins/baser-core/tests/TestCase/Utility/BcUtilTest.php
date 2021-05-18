@@ -614,11 +614,11 @@ class BcUtilTest extends BcTestCase
     /**
      * templatesのpath取得のテスト
      */
-    public function testTemplatePath()
+    public function testGetTemplatePath()
     {
         $plugin = 'BaserCore';
         $expected = '/var/www/html/plugins/baser-core/templates/';
-        $result = BcUtil::templatePath($plugin);
+        $result = BcUtil::getTemplatePath($plugin);
         $this->assertEquals($expected, $result);
     }
 

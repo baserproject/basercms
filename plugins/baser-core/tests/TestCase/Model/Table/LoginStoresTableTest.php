@@ -13,7 +13,6 @@ namespace BaserCore\Test\TestCase\Model\Table;
 
 use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**

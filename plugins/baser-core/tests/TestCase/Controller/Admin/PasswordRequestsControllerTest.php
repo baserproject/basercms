@@ -9,7 +9,7 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Test\TestCase\Controller;
+namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\EmailTrait;
