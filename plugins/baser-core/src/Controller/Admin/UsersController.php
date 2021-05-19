@@ -13,7 +13,6 @@ namespace BaserCore\Controller\Admin;
 
 use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Service\UserManageServiceInterface;
-use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\UsersTable;
@@ -21,6 +20,7 @@ use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Event\Event;
 use Cake\Event\EventInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Http\ServerRequest;
@@ -93,7 +93,7 @@ class UsersController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Authentication->allowUnauthenticated(['login']);
+        $this->Authentication->allowUnauthenticated(['login', 'login_exec']);
         $this->loadModel('BaserCore.LoginStores');
     }
 
@@ -113,11 +113,6 @@ class UsersController extends BcAdminAppController
         // <<<
 
         if (BC_INSTALLED) {
-            /* 認証設定 */
-            // parent::beforeFilterの前に記述する必要あり
-            $this->BcAuth->allow(
-                'admin_login', 'admin_logout', 'admin_login_exec', 'admin_reset_password'
-            );
             if (isset($this->UserGroup)) {
                 $this->set('usePermission', $this->UserGroup->checkOtherAdmins());
             }
@@ -185,7 +180,7 @@ class UsersController extends BcAdminAppController
         $this->set('savedEnable', $this->request->is('ssl'));
 
         $result = $this->Authentication->getResult();
-        if($this->request->is('post')) {
+        if ($this->request->is('post')) {
             if ($result->isValid()) {
                 $target = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
                 $user = $result->getData();
@@ -388,15 +383,12 @@ class UsersController extends BcAdminAppController
         ]]]);
 
         // EVENT Users.searchIndex
-        // TODO 未実装 $this->paginate を書き換える処理にする
-        /* >>>
-        $event = $this->getEventManager()->dispatch(new CakeEvent('Controller.Users.searchIndex', $this, [
-            'options' => $options
+        $event = $this->getEventManager()->dispatch(new Event('Controller.Users.searchIndex', $this, [
+            'request' => $this->request
         ]));
         if ($event !== false) {
-            $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
+            $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
         }
-        <<< */
 
         $this->set('users', $this->paginate($userManage->getIndex($this->request)));
         $this->request = $this->request->withParsedBody($this->request->getQuery());
@@ -529,11 +521,11 @@ class UsersController extends BcAdminAppController
             // 権限確認
             if (!$updatable) {
                 $this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));
-            // TODO: 未実装 自身のアカウントは変更出来ないようにチェック
-            /* >>>
-            } elseif ($selfUpdate && $user['user_group_id'] != $this->request->getData('user_group_id')) {
-                $this->BcMessage->setError(__d('baser', '自分のアカウントのグループは変更できません。'));
-            <<< */
+                // TODO: 未実装 自身のアカウントは変更出来ないようにチェック
+                /* >>>
+                } elseif ($selfUpdate && $user['user_group_id'] != $this->request->getData('user_group_id')) {
+                    $this->BcMessage->setError(__d('baser', '自分のアカウントのグループは変更できません。'));
+                <<< */
             } else {
                 if ($userManage->update($user, $this->request)) {
                     // TODO 未実装

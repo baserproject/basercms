@@ -12,8 +12,10 @@
 namespace BaserCore\TestSuite;
 
 use App\Application;
+use BaserCore\Event\BcControllerEventListener;
 use BaserCore\Plugin;
 use Cake\Core\Configure;
+use Cake\Event\EventManager;
 use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
@@ -22,6 +24,7 @@ use Cake\TestSuite\TestCase;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Utility\Inflector;
 
 /**
  * Class BcTestCase
@@ -80,9 +83,9 @@ class BcTestCase extends TestCase
     {
         $userTable = TableRegistry::getTableLocator()->get('BaserCore.Users');
         $user = $userTable->find()
-                    ->where(['Users.id' => $id])
-                    ->contain(['UserGroups'])
-                    ->first();
+            ->where(['Users.id' => $id])
+            ->contain(['UserGroups'])
+            ->first();
         return $user;
     }
 
@@ -102,6 +105,31 @@ class BcTestCase extends TestCase
         // request から取得する session でも書き込むようにした
         $session = $this->getRequest()->getSession();
         $session->write($sessionKey, $user);
+    }
+
+    /**
+     * モックにコントローラーのイベントを登録する
+     * @param $eventName
+     * @param $callback
+     * @return BcControllerEventListener|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function entryControllerEventToMock($eventName, $callback)
+    {
+        $aryEventName = explode('.', $eventName);
+        $methodName = Inflector::variable(implode('_', $aryEventName));
+        // モック作成
+        $listener = $this->getMockBuilder(BcControllerEventListener::class)
+            ->onlyMethods(['implementedEvents'])
+            ->addMethods([$methodName])
+            ->getMock();
+        // イベント定義
+        $listener->method('implementedEvents')
+            ->willReturn([$eventName => ['callable' => $methodName]]);
+        // コールバック定義
+        $listener->method($methodName)
+            ->willReturn($this->returnCallback($callback));
+        EventManager::instance()->on($listener);
+        return $listener;
     }
 
 }

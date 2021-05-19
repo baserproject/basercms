@@ -11,13 +11,16 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BaserCore\Controller\Admin\UsersController;
+use BaserCore\Service\UserManageService;
+use BaserCore\TestSuite\BcTestCase;
+use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
-use Cake\TestSuite\TestCase;
 
 /**
  * BaserCore\Controller\Admin\UsersController Test Case
  */
-class UsersControllerTest extends TestCase
+class UsersControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
 
@@ -64,6 +67,17 @@ class UsersControllerTest extends TestCase
     {
         $this->get('/baser/admin/baser-core/users/');
         $this->assertResponseOk();
+
+        // イベントテスト
+        $this->entryControllerEventToMock('Controller.Users.searchIndex', function(Event $event) {
+            $request = $event->getData('request');
+            return $request->withQueryParams(['num' => 1]);
+        });
+        // アクション実行（requestの変化を判定するため $this->get() ではなくクラスを初期化）
+        $controller = new UsersController($this->getRequest('/baser/admin/baser-core/users/'));
+        $controller->beforeFilter(new Event('beforeFilter'));
+        $controller->index(new UserManageService());
+        $this->assertEquals(1, $controller->getRequest()->getQuery('num'));
     }
 
     /**
