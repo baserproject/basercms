@@ -55,7 +55,33 @@ class UsersControllerTest extends BcTestCase
 
         $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
         $Users = $this->getTableLocator()->get('Users', $config);
-        $this->session(['AuthAdmin' => $Users->get(1)]);
+        $this->loginAdmin();
+        $this->UsersController = new UsersController($this->getRequest());
+        $this->UsersController->Users = $Users;
+    }
+
+    /**
+     * Tear Down
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        unset($this->UsersController);
+        parent::tearDown();
+    }
+
+    /**
+     * Test index method
+     *
+     * @return void
+     */
+    public function testInitialize()
+    {
+        $this->assertNotEmpty($this->UsersController->LoginStores);
+        $this->assertEquals($this->UsersController->Authentication->getUnauthenticatedActions(), ['login']);
+        $this->assertNotEmpty($this->UsersController->Authentication->getConfig('logoutRedirect'));
+
     }
 
     /**
@@ -156,7 +182,9 @@ class UsersControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $event = new Event('Controller.beforeRender', $this->UsersController);
+        $this->UsersController->beforeFilter($event);
+        $this->assertEquals($this->UsersController->siteConfigs['admin_list_num'], 30);
     }
 
     /**
@@ -170,11 +198,17 @@ class UsersControllerTest extends BcTestCase
     }
 
     /**
-     * [ADMIN] 管理者ログイン画面
+     * [ADMIN] 管理者ログイン後ログアウト
      */
-    public function testLogin()
+    public function testLoginAndLogout()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/baser-core/users/login');
+        $this->assertRedirect('/baser/admin');
+        $this->post('/baser/admin/baser-core/users/logout');
+        $this->assertRedirect('/baser/admin/baser-core/users/login');
+
     }
 
     /**
@@ -182,7 +216,16 @@ class UsersControllerTest extends BcTestCase
      */
     public function testLogin_agent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        // 代理元 id:1 (admin)
+        $user = $this->loginAdmin();
+        // 一旦ログイン
+        $this->post('/baser/admin/baser-core/users/login');
+        // 代理先 id:2 (operator)
+        $this->get('/baser/admin/baser-core/users/login_agent/2');
+        $this->assertSession($user, 'AuthAgent.User');
+        $this->assertRedirect('/baser/admin');
     }
 
     /**
@@ -190,7 +233,11 @@ class UsersControllerTest extends BcTestCase
      */
     public function testBack_agent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $user = $this->loginAdmin();
+        $this->session(['AuthAgent.User' => $user]);
+        $this->get('/baser/admin/baser-core/users/back_agent');
+        $this->assertSession(null, 'AuthAgent');
+        $this->assertRedirect('/baser/admin');
     }
 
     /**
@@ -202,15 +249,7 @@ class UsersControllerTest extends BcTestCase
     }
 
     /**
-     * [ADMIN] 管理者ログアウト
-     */
-    public function testLogout()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * [ADMIN] ユーザー情報削除　(ajax)
+     * [ADMIN] ユーザー情報削除 (ajax)
      */
     public function testAjax_delete()
     {

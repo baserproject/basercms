@@ -24,6 +24,7 @@ class UtilitiesController extends BcAdminAppController
     /**
      * サーバーキャッシュを削除する
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function clear_cache()

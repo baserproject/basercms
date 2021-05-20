@@ -31,6 +31,7 @@ class AppController extends BaseController
     /**
      * Initialize
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function initialize(): void

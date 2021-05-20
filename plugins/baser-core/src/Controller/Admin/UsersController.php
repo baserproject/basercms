@@ -88,6 +88,7 @@ class UsersController extends BcAdminAppController
      *
      * @return void
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function initialize(): void
@@ -102,6 +103,7 @@ class UsersController extends BcAdminAppController
      * @param EventInterface $event
      * @return Response|void|null
      * @checked
+     * @unitTest
      */
     public function beforeFilter(EventInterface $event)
     {
@@ -158,6 +160,7 @@ class UsersController extends BcAdminAppController
      *
      * @return void
      * @checked
+     * @unitTest
      */
     public function login()
     {
@@ -230,6 +233,7 @@ class UsersController extends BcAdminAppController
      * @return Response|void Redirects
      * @throws RecordNotFoundException When record not found.
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function login_agent($id): ?Response
@@ -253,15 +257,15 @@ class UsersController extends BcAdminAppController
         $this->Authentication->setIdentity($agentUser);
         $session->write('AuthAgent.User', $user);
         $session->write('AuthAgent.referer', $this->referer());
-
         $target = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
-        $this->redirect($target);
+        return $this->redirect($target);
     }
 
     /**
      * 代理ログイン解除
      *
      * @return Response
+     * @unitTest
      * @checked
      */
     public function back_agent()
@@ -337,6 +341,7 @@ class UsersController extends BcAdminAppController
      *   - login
      * @return void
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function logout()
