@@ -55,20 +55,26 @@ class BcValidationTest extends BcTestCase
     /**
      * Test alphaNumericPlus
      *
+     * @param string $value
+     * @param mixed $option
+     * @param boolean $expect
      * @return void
+     * @dataProvider alphaNumericPlusDataProvider
      */
-    public function testAlphaNumericPlus()
+    public function testAlphaNumericPlus($value, $option, $expect)
     {
-        $alpha = implode('', array_merge(range('a', 'z'), range('A', 'Z')));
-        $numeric = implode('', range(0, 9));
-        $mark = '-_';
-        $allowedChars = $alpha . $numeric . $mark;
+        $result = $this->BcValidation->alphaNumericPlus($value, $option);
+        $this->assertEquals($expect, $result);
+    }
 
-        $this->assertEquals(true, $this->BcValidation->alphaNumericPlus(null));
-        $this->assertEquals(true, $this->BcValidation->alphaNumericPlus($allowedChars));
-        $this->assertEquals(false, $this->BcValidation->alphaNumericPlus($allowedChars . '!'));
-        $this->assertEquals(true, $this->BcValidation->alphaNumericPlus($allowedChars . '!', '!'));
-        $this->assertEquals(true, $this->BcValidation->alphaNumericPlus($allowedChars . '!', ['!']));
+    public function alphaNumericPlusDataProvider()
+    {
+        return [
+            ['あいうえお', [], false],
+            ['あいうえお', ['あ'], false],
+            ['あいうえお', ['あいうえお'], true],
+            ['あいうえお_', ['あいうえお'], true],
+        ];
     }
 
     /**
@@ -90,71 +96,121 @@ class BcValidationTest extends BcTestCase
     /**
      * Test bcUtileUrlencodeBlank
      *
-     * @return
+     * @param string $value
+     * @param boolean $expect
+     * @return void
+     * @dataProvider bcUtileUrlencodeBlankDataProvider
      */
-    public function testBcUtileUrlencodeBlank()
+    public function testBcUtileUrlencodeBlank($value, $expect)
     {
-        $disallowedChars = '\\\'|`^"(){}[];/?:@&=+$,%<>#! 　';
+        $result = $this->BcValidation->bcUtileUrlencodeBlank($value);
+        $this->assertEquals($expect, $result);
+    }
 
-        $this->assertEquals(true, $this->BcValidation->bcUtileUrlencodeBlank(null));
-        $this->assertEquals(true, $this->BcValidation->bcUtileUrlencodeBlank($disallowedChars));
-        $this->assertEquals(true, $this->BcValidation->bcUtileUrlencodeBlank($disallowedChars . '_'));
+    public function bcUtileUrlencodeBlankDataProvider()
+    {
+        return [
+            ['あいうえお', true],
+            ['\\', true],
+            ['"', false],
+            ["^'|`^(){}[];/?:@&=+$,%<>#!", false]
+        ];
     }
 
     /**
      * Test minLength
      *
+     * @param mixed $value
+     * @param int $min
+     * @param boolean $expect
      * @return void
+     * @dataProvider minLengthDataProvider
      */
-    public function testMinLength()
+    public function testMinLength($value, $min, $expect)
     {
-        $value = 'テスト';
+        $result = $this->BcValidation->minLength($value, $min);
+        $this->assertEquals($expect, $result);
+    }
 
-        $this->assertEquals(true, $this->BcValidation->minLength($value, 3));
-        $this->assertEquals(true, $this->BcValidation->minLength([$value], 3));
-        $this->assertEquals(false, $this->BcValidation->minLength($value, 4));
-        $this->assertEquals(false, $this->BcValidation->minLength([$value], 4));
+    public function minLengthDataProvider()
+    {
+        return [
+            ['あいう', 4, false],
+            ['あいう', 3, true],
+            [['あいう', 'あいうえお'], 4, false],
+        ];
     }
 
     /**
      * Test maxLength
      *
+     * @param mixed $value
+     * @param int $max
+     * @param boolean $expect
      * @return void
+     * @dataProvider maxLengthDataProvider
      */
-    public function testMaxLength()
+    public function testMaxLength($value, $max, $expect)
     {
-        $value = 'テスト';
+        $result = $this->BcValidation->maxLength($value, $max);
+        $this->assertEquals($expect, $result);
+    }
 
-        $this->assertEquals(true, $this->BcValidation->maxLength($value, 3));
-        $this->assertEquals(true, $this->BcValidation->maxLength([$value], 3));
-        $this->assertEquals(false, $this->BcValidation->maxLength($value, 2));
-        $this->assertEquals(false, $this->BcValidation->maxLength([$value], 2));
+    public function maxLengthDataProvider()
+    {
+        return [
+            ['あいう', 4, true],
+            ['あいう', 3, true],
+            ['あいう', 2, false],
+            [['あいう', 'あいうえお'], 4, true],
+        ];
     }
 
     /**
      * Test maxByte
      *
+     * @param mixed $value
+     * @param int $max
+     * @param boolean $expect
      * @return void
+     * @dataProvider maxByteDataProvider
      */
-    public function testMaxByte()
+    public function testMaxByte($value, $max, $expect)
     {
-        $value = 'テスト';
+        $result = $this->BcValidation->maxByte($value, $max);
+        $this->assertEquals($expect, $result);
+    }
 
-        $this->assertEquals(true, $this->BcValidation->maxByte($value, 9));
-        $this->assertEquals(true, $this->BcValidation->maxByte([$value], 9));
-        $this->assertEquals(false, $this->BcValidation->maxByte($value, 8));
-        $this->assertEquals(false, $this->BcValidation->maxByte([$value], 8));
+    public function maxByteDataProvider()
+    {
+        return [
+            ['あいう', 10, true],
+            ['あいう', 9, true],
+            ['あいう', 8, false]
+        ];
     }
 
     /**
      * Test notInList
      *
+     * @param string $value
+     * @param array $list
+     * @param boolean $expect
      * @return void
+     * @dataProvider notInListDataProvider
      */
-    public function testNotInList()
+    public function testNotInList($value, $list, $expect)
     {
-        $this->assertEquals(true, $this->BcValidation->notInList('test1', ['test2']));
-        $this->assertEquals(false, $this->BcValidation->notInList('test1', ['test1']));
+        $result = $this->BcValidation->notInList($value, $list);
+        $this->assertEquals($expect, $result);
+    }
+
+    public function notInListDataProvider()
+    {
+        return [
+            ['test1', ['test1', 'test2'], false],
+            ['test3', ['test1', 'test2'], true],
+        ];
     }
 
     /**
@@ -164,24 +220,7 @@ class BcValidationTest extends BcTestCase
      */
     public function testFileCheck()
     {
-        $AppTable = new AppTable();
-        $uploadMaxSize = $AppTable->convertSize(ini_get('upload_max_filesize'));
-        $overSize = $uploadMaxSize + 1;
-
-        $this->assertEquals(true, $this->BcValidation->fileCheck(null, 1));
-        $this->assertEquals(true, $this->BcValidation->fileCheck('file', 1));
-        $this->assertEquals(true, $this->BcValidation->fileCheck(['error' => 0], 1));
-        $this->assertEquals(true, $this->BcValidation->fileCheck(['error' => 4], 1));
-        $this->assertEquals(true, $this->BcValidation->fileCheck(['name' => 'file', 'size' => 1], 1));
-        $this->assertIsString($this->BcValidation->fileCheck(['error' => 1], 1));
-        $this->assertIsString($this->BcValidation->fileCheck(['error' => 2], 1));
-        $this->assertIsString($this->BcValidation->fileCheck(['error' => 3], 1));
-        $this->assertIsString($this->BcValidation->fileCheck(['error' => 6], 1));
-        $this->assertIsString($this->BcValidation->fileCheck(['error' => 7], 1));
-        $this->assertIsString($this->BcValidation->fileCheck(['error' => 8], 1));
-        $this->assertIsString($this->BcValidation->fileCheck(['name' => 'file', 'size' => 0], 1));
-        $this->assertIsString($this->BcValidation->fileCheck(['name' => 'file', 'size' => 2], 1));
-        $this->assertIsString($this->BcValidation->fileCheck(['name' => 'file', 'size' => $overSize], $overSize));
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
@@ -197,53 +236,82 @@ class BcValidationTest extends BcTestCase
     /**
      * Test notFileEmpty
      *
+     * @param array $file
+     * @param boolean $expect
      * @return void
+     * @dataProvider notFileEmptyDataProvider
      */
-    public function testNotFileEmpty()
+    public function testNotFileEmpty($file, $expect)
     {
-        $this->assertEquals(true, $this->BcValidation->notFileEmpty(['size' => 1]));
-        $this->assertEquals(true, $this->BcValidation->notFileEmpty('file'));
-        $this->assertEquals(false, $this->BcValidation->notFileEmpty(null));
-        $this->assertEquals(false, $this->BcValidation->notFileEmpty(['size' => 0]));
+        $result = $this->BcValidation->notFileEmpty($file);
+        $this->assertEquals($expect, $result);
+    }
+
+    public function notFileEmptyDataProvider()
+    {
+        return [
+            [['size' => 0], false],
+            [['size' => 100], true],
+            [[], false],
+        ];
     }
 
     /**
      * Test confirm
      *
+     * @param mixed $value
+     * @param mixed $fields
+     * @param array $data
+     * @param boolean $expect
+     * @param string $message
      * @return void
+     * @dataProvider confirmDataProvider
      */
-    public function testConfirm()
+    public function testConfirm($value, $fields, $data, $expect, $message = null)
     {
         $context = [
-            'data' => [
-                'field0' => true,
-                'field1' => true,
-                'field2' => false
-            ]
+            'data' => $data
         ];
 
-        $this->assertEquals(true, $this->BcValidation->confirm(true, ['field0', 'field1'], $context));
-        $this->assertEquals(false, $this->BcValidation->confirm(true, ['field0', 'field2'], $context));
-        $this->assertEquals(false, $this->BcValidation->confirm(true, ['field0', 'nofield'], $context));
-        $this->assertEquals(true, $this->BcValidation->confirm(true, 'field0', $context));
-        $this->assertEquals(true, $this->BcValidation->confirm(true, ['field0'], $context));
-        $this->assertEquals(false, $this->BcValidation->confirm(true, 'field2', $context));
-        $this->assertEquals(false, $this->BcValidation->confirm(true, ['field2'], $context));
-        $this->assertEquals(false, $this->BcValidation->confirm(true, null, $context));
+        $result = $this->BcValidation->confirm($value, $fields, $context);
+        $this->assertEquals($expect, $result, $message);
+    }
+
+    public function confirmDataProvider()
+    {
+        return [
+            ['', ['test1', 'test2'], ['test1' => 'value', 'test2' => 'value'], true, '2つのフィールドが同じ値の場合の判定が正しくありません'],
+            ['', ['test1', 'test2'], ['test1' => 'value', 'test2' => 'other_value'], false, '2つのフィールドが異なる値の場合の判定が正しくありません'],
+            ['value', 'test', ['test' => 'value'], true, 'フィールド名が一つで同じ値の場合の判定が正しくありません'],
+            ['value', 'test', ['test' => 'other_value'], false, 'フィールド名が一つで異なる値の場合の判定が正しくありません'],
+        ];
     }
 
     /**
      * Test emails
      *
+     * @param string $value
+     * @param boolean $expect
      * @return void
+     * @dataProvider emailsDataProvider
      */
-    public function testEmails()
+    public function testEmails($value, $expect)
     {
-        $this->assertEquals(true, $this->BcValidation->emails('test@example.com'));
-        $this->assertEquals(true, $this->BcValidation->emails('test1@example.com,test1@example.com'));
-        $this->assertEquals(false, $this->BcValidation->emails('test@@example.com'));
-        $this->assertEquals(false, $this->BcValidation->emails('test@example.com,test@@example.com'));
+        $message = '複数のEメールのバリデーションチェックができません';
+        $result = $this->BcValidation->emails($value);
+        $this->assertEquals($expect, $result, $message);
     }
+
+    public function emailsDataProvider()
+    {
+        return [
+            ['test1@co.jp', true],
+            ['test1@co.jp,test2@cp.jp', true],
+            ['test1@cojp,test2@cp.jp', false],
+            ['test1@co.jp,test2@cpjp', false],
+        ];
+    }
+
 
     /**
      * Test notEmptyMultiple
@@ -278,31 +346,48 @@ class BcValidationTest extends BcTestCase
     /**
      * Test halfText
      *
+     * @param string $value
+     * @param boolean $expect
      * @return void
+     * @dataProvider halfTextDataProvider
      */
-    public function testHalfText()
+    public function testHalfText($value, $expect)
     {
-        $halfText = 'test';
-        $mbText = mb_convert_kana($halfText, 'A');
+        $result = $this->BcValidation->halfText($value);
+        $this->assertEquals($expect, $result);
+    }
 
-        $this->assertEquals(true, $this->BcValidation->halfText($halfText));
-        $this->assertEquals(false, $this->BcValidation->halfText($mbText));
+    public function halfTextDataProvider()
+    {
+        return [
+            ['test', true],
+            ['テスト', false],
+        ];
     }
 
     /**
      * Test CheckDate
      *
+     * @param string $value
+     * @param boolean $expect
      * @return void
+     * @dataProvider checkDateDataProvider
      */
-    public function testCheckDate()
+    public function testCheckDate($value, $expect)
     {
-        $this->assertEquals(true, $this->BcValidation->checkDate(null));
-        $this->assertEquals(true, $this->BcValidation->checkDate('2021-01-01'));
-        $this->assertEquals(true, $this->BcValidation->checkDate('2021-01-01 00:00:00'));
-        $this->assertEquals(false, $this->BcValidation->checkDate('2021-01-32'));
-        $this->assertEquals(false, $this->BcValidation->checkDate('2021-01-32 00:00:00'));
-        $this->assertEquals(false, $this->BcValidation->checkDate('2021-01-01 00:60:00'));
-        $this->assertEquals(false, $this->BcValidation->checkDate('1970-01-01 09:00:00'));
+        $result = $this->BcValidation->checkDate($value);
+        $this->assertEquals($expect, $result);
+    }
+
+    public function checkDateDataProvider()
+    {
+        return [
+            ['2015-01-01', true],
+            ['201511', false],
+            ['2015-01-01 00:00:00', true],
+            ['2015-0101 00:00:00', false],
+            ['1970-01-01 09:00:00', false],
+        ];
     }
 
     /**
@@ -334,22 +419,32 @@ class BcValidationTest extends BcTestCase
     /**
      * Test checkDateAfterThan
      *
+     * @param string $value
+     * @param string $target
+     * @param boolean $expect
      * @return void
+     * @dataProvider checkDataAfterThanDataProvider
      */
-    public function testCheckDateAfterThan()
+    public function testCheckDateAfterThan($value, $target, $expect)
     {
         $context = [
             'data' => [
-                'target' => '2020-01-01 00:00:00'
+                'target' => $target
             ]
         ];
 
-        $this->assertEquals(true, $this->BcValidation->checkDateAfterThan(null, 'target', $context));
-        $this->assertEquals(true, $this->BcValidation->checkDateAfterThan('2021-01-01 00:00:00', 'test', $context));
-        $this->assertEquals(true, $this->BcValidation->checkDateAfterThan('2021-01-01 00:00:00', 'target', $context));
-        $this->assertEquals(true, $this->BcValidation->checkDateAfterThan(['2021-01-01 00:00:00'], 'target', $context));
-        $this->assertEquals(false, $this->BcValidation->checkDateAfterThan('2020-01-01 00:00:00', 'target', $context));
-        $this->assertEquals(false, $this->BcValidation->checkDateAfterThan('2019-01-01 00:00:00', 'target', $context));
+        $result = $this->BcValidation->checkDateAfterThan($value, 'target', $context);
+        $this->assertEquals($expect, $result);
+    }
+
+    public function checkDataAfterThanDataProvider()
+    {
+        return [
+            ['2015-01-01 00:00:00', '2015-01-01 00:00:00', false],
+            ['2015-01-01 24:00:01', '2015-01-02 00:00:00', true],
+            ['2015-01-01 00:00:00', '2015-01-02 00:00:00', false],
+            ['2015-01-02 00:00:00', '2015-01-01 00:00:00', true],
+        ];
     }
 
     /**

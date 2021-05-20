@@ -72,44 +72,25 @@ class AppTableTest extends BcTestCase
     /**
      * Test getUrlPattern
      *
+     * @param string $url
+     * @param array $expect
      * @return void
+     * @dataProvider getUrlPatternDataProvider
      */
-    public function testGetUrlPattern()
+    public function testGetUrlPattern($url, $expect)
     {
-        $expectedPaths1 = [
-            '/test'
-        ];
-        $this->assertEquals($expectedPaths1, $this->App->getUrlPattern('test'));
-        $this->assertEquals($expectedPaths1, $this->App->getUrlPattern('/test'));
+        $this->assertEquals($expect, $this->App->getUrlPattern($url));
+    }
 
-        $expectedPaths2 = [
-            '/test/',
-            '/test/index'
+    public function getUrlPatternDataProvider()
+    {
+        return [
+            ['/news', ['/news']],
+            ['/news/', ['/news/', '/news/index']],
+            ['/news/index', ['/news/index', '/news/']],
+            ['/news/archives/1', ['/news/archives/1']],
+            ['/news/archives/index', ['/news/archives/index', '/news/archives/']]
         ];
-        $this->assertEquals($expectedPaths2, $this->App->getUrlPattern('test/'));
-        $this->assertEquals($expectedPaths2, $this->App->getUrlPattern('/test/'));
-
-        $expectedPaths3 = [
-            '/test/index',
-            '/test/'
-        ];
-        $this->assertEquals($expectedPaths3, $this->App->getUrlPattern('test/index'));
-        $this->assertEquals($expectedPaths3, $this->App->getUrlPattern('/test/index'));
-
-        $expectedPaths4 = [
-            '/test.html',
-            '/test'
-        ];
-        $this->assertEquals($expectedPaths4, $this->App->getUrlPattern('test.html'));
-        $this->assertEquals($expectedPaths4, $this->App->getUrlPattern('/test.html'));
-
-        $expectedPaths5 = [
-            '/test/index.html',
-            '/test/index',
-            '/test/'
-        ];
-        $this->assertEquals($expectedPaths5, $this->App->getUrlPattern('test/index.html'));
-        $this->assertEquals($expectedPaths5, $this->App->getUrlPattern('/test/index.html'));
     }
 
     /**

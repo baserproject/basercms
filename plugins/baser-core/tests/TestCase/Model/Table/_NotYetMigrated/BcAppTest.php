@@ -293,85 +293,6 @@ class BcAppTest extends BaserTestCase
 	}
 
 	/**
-	 * 最短の長さチェック
-	 *
-	 * @param mixed $check
-	 * @param int $min
-	 * @param boolean $expect
-	 * @dataProvider minLengthDataProvider
-	 */
-	public function testMinLength($check, $min, $expect)
-	{
-		$result = $this->BcApp->minLength($check, $min);
-		$this->assertEquals($expect, $result);
-	}
-
-	public function minLengthDataProvider()
-	{
-		return [
-			["あいう", 4, false],
-			["あいう", 3, true],
-			[["あいう", "あいうえお"], 4, false],
-		];
-	}
-
-	/**
-	 * 最長の長さチェック
-	 *
-	 * @param mixed $check
-	 * @param int $min
-	 * @param boolean $expect
-	 * @dataProvider maxLengthDataProvider
-	 */
-	public function testMaxLength($check, $min, $expect)
-	{
-		$result = $this->BcApp->maxLength($check, $min);
-		$this->assertEquals($expect, $result);
-	}
-
-	public function maxLengthDataProvider()
-	{
-		return [
-			["あいう", 4, true],
-			["あいう", 3, true],
-			["あいう", 2, false],
-			[["あいう", "あいうえお"], 4, true],
-		];
-	}
-
-	/**
-	 * 最大のバイト数チェック
-	 *
-	 * @param mixed $check
-	 * @param int $min
-	 * @param boolean $expect
-	 * @dataProvider maxByteDataProvider
-	 */
-	public function testMaxByte($check, $min, $expect)
-	{
-		$result = $this->BcApp->maxByte($check, $min);
-		$this->assertEquals($expect, $result);
-	}
-
-	public function maxByteDataProvider()
-	{
-		return [
-			["あいう", 10, true],
-			["あいう", 9, true],
-			["あいう", 8, false]
-		];
-	}
-
-	/**
-	 * 最大のバイト数チェック
-	 * - 対象となる値のサイズが、指定した最大値より短い場合、true を返す
-	 */
-	public function testCheckDateRenge()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	/**
 	 * 範囲を指定しての長さチェック
 	 *
 	 * @param mixed $check
@@ -504,49 +425,6 @@ class BcAppTest extends BaserTestCase
 	}
 
 	/**
-	 * 英数チェックプラス
-	 *
-	 * ハイフンアンダースコアを許容
-	 *　@dataProvider alphaNumericPlusDataProvider
-	 */
-	public function testAlphaNumericPlus($check, $option, $expect)
-	{
-		$result = $this->BcApp->alphaNumericPlus($check, $option);
-		$this->assertEquals($expect, $result);
-	}
-
-	public function alphaNumericPlusDataProvider()
-	{
-		return [
-			[["あいうえお"], [], false],
-			[["あいうえお"], ['あ'], false],
-			[["あいうえお"], ['あいうえお'], true],
-			[["あいうえお_"], ['あいうえお'], true],
-		];
-	}
-
-	/**
-	 * 削除文字チェック
-	 *
-	 * @dataProvider bcUtileUrlencodeBlankDataProvider
-	 */
-	public function testBcUtileUrlencodeBlank($check, $expected)
-	{
-		$result = $this->BcApp->bcUtileUrlencodeBlank($check);
-		$this->assertEquals($expected, $result);
-	}
-
-	public function bcUtileUrlencodeBlankDataProvider()
-	{
-		return [
-			[["あいうえお"], true],
-			[["\\"], true],
-			[["\""], false],
-			[["^'|`^(){}[];/?:@&=+$,%<>#!"], false]
-		];
-	}
-
-	/**
 	 * データの重複チェックを行う
 	 */
 	public function testDuplicate()
@@ -629,29 +507,6 @@ class BcAppTest extends BaserTestCase
 	}
 
 	/**
-	 * 半角チェック
-	 *
-	 * @param array $check
-	 * @param boolean $expect
-	 * @dataProvider halfTextDataProvider
-	 */
-	public function testHalfText($check, $expect)
-	{
-		$result = $this->BcApp->halfText($check);
-		$this->assertEquals($expect, $result);
-	}
-
-	public function halfTextDataProvider()
-	{
-		return [
-			[["test"], true],
-			[["テスト"], false],
-			[["test", "テスト"], true],
-			[["テスト", "test"], false],
-		];
-	}
-
-	/**
 	 * 一つ位置を上げる
 	 */
 	public function testSortup()
@@ -673,25 +528,6 @@ class BcAppTest extends BaserTestCase
 	public function testChangeSort()
 	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	/**
-	 * Modelキャッシュを削除する
-	 */
-	public function testDeleteModelCache()
-	{
-		$path = CACHE . 'models' . DS . 'dummy';
-
-		// ダミーファイルをModelキャッシュフォルダに作成
-		if (touch($path)) {
-			$this->BcApp->deleteModelCache();
-			$result = !file_exists($path);
-			$this->assertTrue($result, 'Modelキャッシュを削除できません');
-
-		} else {
-			$this->markTestIncomplete('ダミーのキャッシュファイルの作成に失敗しました。');
-
-		}
 	}
 
 	/**
@@ -728,29 +564,6 @@ class BcAppTest extends BaserTestCase
 	}
 
 	/**
-	 * リストチェック
-	 * 対象となる値がリストに含まれる場合はエラー
-	 *
-	 * @param string $check 対象となる値
-	 * @param array $list リスト
-	 * @param boolean $expect
-	 * @dataProvider notInListDataProvider
-	 */
-	public function testNotInList($check, $list, $expect)
-	{
-		$result = $this->BcApp->notInList($check, $list);
-		$this->assertEquals($expect, $result);
-	}
-
-	public function notInListDataProvider()
-	{
-		return [
-			[["test1"], ["test1", "test2"], false],
-			[["test3"], ["test1", "test2"], true],
-		];
-	}
-
-	/**
 	 * Deconstructs a complex data type (array or object) into a single field value.
 	 */
 	public function testDeconstruct()
@@ -768,34 +581,6 @@ class BcAppTest extends BaserTestCase
 		];
 
 		$this->assertEquals($expected, $result, 'deconstruct が 和暦に対応していません');
-	}
-
-	/**
-	 * ２つのフィールド値を確認する
-	 *
-	 * @param mixed $check 対象となる値
-	 * @param mixed $fields フィールド名
-	 * @param mixed $data 値データ
-	 * @param boolean $expected 期待値
-	 * @param boolean $message テストが失敗した場合に表示されるメッセージ
-	 * @dataProvider confirmDataProvider
-	 */
-	public function testConfirm($check, $fields, $data, $expected, $message = null)
-	{
-		$this->BcApp->data['BcApp'] = $data;
-		$result = $this->BcApp->confirm($check, $fields);
-		$this->assertEquals($expected, $result, $message);
-
-	}
-
-	public function confirmDataProvider()
-	{
-		return [
-			['', ['test1', 'test2'], ['test1' => 'value', 'test2' => 'value'], true, '2つのフィールドが同じ値の場合の判定が正しくありません'],
-			['', ['test1', 'test2'], ['test1' => 'value', 'test2' => 'other_value'], false, '2つのフィールドが異なる値の場合の判定が正しくありません'],
-			[['value' => 'value'], 'test', ['test' => 'value'], true, 'フィールド名が一つで同じ値の場合の判定が正しくありません'],
-			[['value' => 'value'], 'test', ['test' => 'other_value'], false, 'フィールド名が一つで異なる値の場合の判定が正しくありません'],
-		];
 	}
 
 	/**
@@ -829,30 +614,6 @@ class BcAppTest extends BaserTestCase
 			[['UserGroup'], ['User', 'UserGroup'], ['Favorite']],
 			[['UserGroup.Permission'], [], ['Permission']],
 			[['User', 'UserGroup', 'Favorite'], [], ['Permission']],
-		];
-	}
-
-	/**
-	 * 複数のEメールチェック（カンマ区切り）
-	 *
-	 * @param array $check 複数のメールアドレス
-	 * @param boolean $expect
-	 * @dataProvider emailsDataProvider
-	 */
-	public function testEmails($check, $expect)
-	{
-		$message = '複数のEメールのバリデーションチェックができません';
-		$result = $this->BcApp->emails($check);
-		$this->assertEquals($expect, $result, $message);
-	}
-
-	public function emailsDataProvider()
-	{
-		return [
-			[["test1@co.jp"], true],
-			[["test1@co.jp,test2@cp.jp"], true],
-			[["test1@cojp,test2@cp.jp"], false],
-			[["test1@co.jp,test2@cpjp"], false],
 		];
 	}
 
@@ -928,59 +689,11 @@ class BcAppTest extends BaserTestCase
 	}
 
 	/**
-	 * 日付の正当性チェック
-	 *
-	 * @param array $check 確認する値
-	 * @param boolean $expect
-	 * @dataProvider checkDateDataProvider
-	 */
-	public function testCheckDate($check, $expect)
-	{
-		$result = $this->BcApp->checkDate($check);
-		$this->assertEquals($expect, $result);
-	}
-
-	public function checkDateDataProvider()
-	{
-		return [
-			[['2015-01-01'], true],
-			[['201511'], false],
-			[['2015-01-01 00:00:00'], true],
-			[['2015-0101 00:00:00'], false],
-			[['1970-01-01 09:00:00'], false],
-		];
-	}
-
-
-	/**
 	 * ツリーより再帰的に削除する
 	 */
 	public function testRemoveFromTreeRecursive()
 	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	/**
-	 * ファイルが送信されたかチェックするバリデーション
-	 *
-	 * @param array $check ファイルのデータ
-	 * @param boolean $expect　
-	 * @dataProvider notFileEmptyDataProvider
-	 */
-	public function testNotFileEmpty($check, $expect)
-	{
-		$file = [$check];
-		$result = $this->BcApp->notFileEmpty($file);
-		$this->assertEquals($expect, $result);
-	}
-
-	public function notFileEmptyDataProvider()
-	{
-		return [
-			[['size' => 0], false],
-			[['size' => 100], true],
-			[[], false],
-		];
 	}
 
 	public function testExists()
@@ -996,53 +709,6 @@ class BcAppTest extends BaserTestCase
 	public function testDataIter()
 	{
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	/**
-	 * 指定した日付よりも新しい日付かどうかチェックする
-	 *
-	 * @dataProvider checkDataAfterThanDataProvider
-	 */
-	public function testCheckDateAfterThan($check, $target, $expected)
-	{
-		$this->BcApp->data[$this->BcApp->alias]['target'] = $target;
-		$data['check'] = $check;
-		$result = $this->BcApp->checkDateAfterThan($data, 'target');
-		$this->assertEquals($expected, $result);
-	}
-
-	public function checkDataAfterThanDataProvider()
-	{
-		return [
-			['2015-01-01 00:00:00', '2015-01-01 00:00:00', false],
-			['2015-01-01 24:00:01', '2015-01-02 00:00:00', true],
-			['2015-01-01 00:00:00', '2015-01-02 00:00:00', false],
-			['2015-01-02 00:00:00', '2015-01-01 00:00:00', true],
-		];
-	}
-
-	/**
-	 * BcContentsRoute::getUrlPattern
-	 *
-	 * @param string $url URL文字列
-	 * @param string $expect 期待値
-	 * @return void
-	 * @dataProvider getUrlPatternDataProvider
-	 */
-	public function testGetUrlPattern($url, $expects)
-	{
-		$this->assertEquals($expects, $this->BcApp->getUrlPattern($url));
-	}
-
-	public function getUrlPatternDataProvider()
-	{
-		return [
-			['/news', ['/news']],
-			['/news/', ['/news/', '/news/index']],
-			['/news/index', ['/news/index', '/news/']],
-			['/news/archives/1', ['/news/archives/1']],
-			['/news/archives/index', ['/news/archives/index', '/news/archives/']]
-		];
 	}
 
 	/**

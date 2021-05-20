@@ -45,7 +45,7 @@ class BcValidation extends Validation
         if (!$value) {
             return true;
         }
-        if ($context) {
+        if (!is_null($context)) {
             if (is_array($context)) {
                 if (array_key_exists('data', $context)) {
                     $context = [];
