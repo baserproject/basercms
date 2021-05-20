@@ -48,8 +48,24 @@ $config['BcApp'] = [
 				'title' => __d('baser', 'コンテンツ管理'),
 				'type' => 'contents',
 				'menus' => [
-					'Contents' => ['title' => __d('baser', 'コンテンツ'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'index']],
-					'ContentsTrash' => ['title' => __d('baser', 'ゴミ箱'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'trash_index']],
+					'Contents' => [
+						'title' => __d('baser', 'コンテンツ'),
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'contents',
+							'action' => 'index'
+						]
+					],
+					'ContentsTrash' => [
+						'title' => __d('baser', 'ゴミ箱'),
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'contents',
+							'action' => 'trash_index'
+						]
+					],
 				]
 			],
 		],
@@ -57,7 +73,12 @@ $config['BcApp'] = [
 			'SiteConfigs' => [
 				'title' => __d('baser', 'サイト基本設定'),
 				'type' => 'system',
-				'url' => ['admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'form'],
+				'url' => [
+					'admin' => true,
+					'plugin' => null,
+					'controller' => 'site_configs',
+					'action' => 'form'
+				],
 			],
 			'Users' => [
 				'title' => __d('baser', 'ユーザー管理'),
@@ -65,12 +86,22 @@ $config['BcApp'] = [
 				'menus' => [
 					'Users' => [
 						'title' => __d('baser', 'ユーザー'),
-						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'index'],
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'users',
+							'action' => 'index'
+						],
 						'currentRegex' => '/\/users\/[^\/]+?/s'
 					],
 					'UserGroups' => [
 						'title' => __d('baser', 'ユーザーグループ'),
-						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index'],
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'user_groups',
+							'action' => 'index'
+						],
 						'currentRegex' => '/\/user_groups\/[^\/]+?/s'
 					],
 				]
@@ -81,7 +112,12 @@ $config['BcApp'] = [
 				'menus' => [
 					'Sites' => [
 						'title' => __d('baser', 'サブサイト'),
-						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'sites', 'action' => 'index'],
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'sites',
+							'action' => 'index'
+						],
 						'currentRegex' => '/\/sites\/.+?/s'
 					],
 				]
@@ -92,13 +128,50 @@ $config['BcApp'] = [
 				'menus' => [
 					'Themes' => [
 						'title' => __d('baser', 'テーマ'),
-						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'index'],
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'themes',
+							'action' => 'index'
+						],
 						'currentRegex' => '/\/themes\/[^\/]+?/s'
 					],
-					'ThemeConfigs' => ['title' => __d('baser', '設定'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'theme_configs', 'action' => 'form']],
-					'ThemeAdd' => ['title' => __d('baser', '新規追加'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'add']],
-					'ThemesDownload' => ['title' => __d('baser', '利用中テーマダウンロード'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'download']],
-					'ThemesDownloadDefaultDataPattern' => ['title' => __d('baser', 'テーマ用初期データダウンロード'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'download_default_data_pattern']],
+					'ThemeConfigs' => [
+						'title' => __d('baser', '設定'),
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'theme_configs',
+							'action' => 'form'
+						]
+					],
+					'ThemeAdd' => [
+						'title' => __d('baser', '新規追加'),
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'themes',
+							'action' => 'add'
+						]
+					],
+					'ThemesDownload' => [
+						'title' => __d('baser', '利用中テーマダウンロード'),
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'themes',
+							'action' => 'download'
+						]
+					],
+					'ThemesDownloadDefaultDataPattern' => [
+						'title' => __d('baser', 'テーマ用初期データダウンロード'),
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'themes',
+							'action' => 'download_default_data_pattern'
+						]
+					],
 				]
 			],
 			'Plugin' => [
@@ -107,7 +180,12 @@ $config['BcApp'] = [
 				'menus' => [
 					'Plugins' => [
 						'title' => __d('baser', 'プラグイン'),
-						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'plugins', 'action' => 'index'],
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'plugins',
+							'action' => 'index'
+						],
 						'currentRegex' => '/\/plugins\/[^\/]+?/s'
 					],
 				]
@@ -116,49 +194,233 @@ $config['BcApp'] = [
 				'title' => __d('baser', 'ユーティリティ'),
 				'type' => 'system',
 				'menus' => [
-					'Tools' => ['title' => __d('baser', 'ユーティリティトップ'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'index']],
+					'Tools' => [
+						'title' => __d('baser', 'ユーティリティトップ'),
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'tools',
+							'action' => 'index'
+						]
+					],
 					'EditorTemplates' => [
 						'title' => __d('baser', 'エディタテンプレート'),
-						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index'],
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'editor_templates',
+							'action' => 'index'
+						],
 						'currentRegex' => '/\/editor_templates\/[^\/]+?/s'
+					],
+					'DbLogs' => [
+						'title' => __d('baser', '最近の動き'),
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'dblogs',
+							'action' => 'index'
+						],
+						'currentRegex' => '{/dblogs/[^/]+?}s'
 					],
 					'WidgetAreas' => [
 						'title' => __d('baser', 'ウィジェットエリア'),
-						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index'],
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'widget_areas',
+							'action' => 'index'
+						],
 						'currentRegex' => '/\/widget_areas\/[^\/]+?\/[0-9]+/s'
 					],
-					'SearchIndices' => ['title' => __d('baser', '検索インデックス'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'index']],
-					'SiteConfigsInfo' => ['title' => __d('baser', '環境情報'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'info']],
+					'SearchIndices' => [
+						'title' => __d('baser', '検索インデックス'),
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'search_indices',
+							'action' => 'index'
+						]
+					],
+					'SiteConfigsInfo' => [
+						'title' => __d('baser', '環境情報'),
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'site_configs',
+							'action' => 'info'
+						]
+					],
 					'ThemeFiles' => [
 						'title' => __d('baser', 'コアテンプレート確認'),
-						'url' => ['admin' => true, 'plugin' => null, 'controller' => 'theme_files', 'action' => 'index', 'core'],
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'theme_files',
+							'action' => 'index',
+							'core'
+						],
 						'currentRegex' => '/\/theme_files\/[^\/]+?/s'
 					],
-					'ToolsMaintenance' => ['title' => __d('baser', 'データメンテナンス'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'maintenance']],
-					'ToolsLog' => ['title' => __d('baser', 'ログメンテナンス'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'log']],
-					'ToolsWriteSchema' => ['title' => __d('baser', 'スキーマファイル生成'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'write_schema']],
-					'ToolsLoadSchema' => ['title' => __d('baser', 'スキーマファイル読込'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'load_schema']],
+					'ToolsMaintenance' => [
+						'title' => __d('baser', 'データメンテナンス'),
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'tools',
+							'action' => 'maintenance'
+						]
+					],
+					'ToolsLog' => [
+						'title' => __d('baser', 'ログメンテナンス'),
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'tools',
+							'action' => 'log'
+						]
+					],
+					'ToolsWriteSchema' => [
+						'title' => __d('baser', 'スキーマファイル生成'),
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'tools',
+							'action' => 'write_schema'
+						]
+					],
+					'ToolsLoadSchema' => [
+						'title' => __d('baser', 'スキーマファイル読込'),
+						'url' => [
+							'admin' => true,
+							'plugin' => null,
+							'controller' => 'tools',
+							'action' => 'load_schema'
+						]
+					],
 				]
 			]
 		]
 	],
 	// @deprecated 5.0.0 since 4.2.0 BcApp.adminNavigation の形式に変更
-	'adminNavi' => ['core' => [
-		'name' => 'baserCMSコア',
-		'contents' => [
-			['name' => __d('baser', 'コンテンツ管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'index']],
-			['name' => __d('baser', 'ウィジェット管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index']],
-			['name' => __d('baser', 'テーマ管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'index']],
-			['name' => __d('baser', 'プラグイン管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'plugins', 'action' => 'index']],
-			['name' => __d('baser', 'システム設定'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'form']],
-			['name' => __d('baser', 'ユーザー管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'index']],
-			['name' => __d('baser', 'ユーザーグループ管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index']],
-			['name' => __d('baser', '検索インデックス管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'index']],
-			['name' => __d('baser', 'エディタテンプレート管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index']],
-			['name' => __d('baser', 'サブサイト管理'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'sites', 'action' => 'index']],
-			['name' => __d('baser', 'ユーティリティ'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'index']],
-			['name' => __d('baser', 'サーバーキャッシュ削除'), 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'del_cache'], 'options' => ['confirm' => __d('baser', 'サーバーキャッシュを削除します。いいですか？')]]
-		]]],
+	'adminNavi' => [
+		'core' => [
+			'name' => 'baserCMSコア',
+			'contents' => [
+				[
+					'name' => __d('baser', 'コンテンツ管理'),
+					'url' => [
+						'admin' => true,
+						'plugin' => null,
+						'controller' => 'contents',
+						'action' => 'index'
+					]
+				],
+				[
+					'name' => __d('baser', 'ウィジェット管理'),
+					'url' => [
+						'admin' => true,
+						'plugin' => null,
+						'controller' => 'widget_areas',
+						'action' => 'index'
+					]
+				],
+				[
+					'name' => __d('baser', 'テーマ管理'),
+					'url' => [
+						'admin' => true,
+						'plugin' => null,
+						'controller' => 'themes',
+						'action' => 'index'
+					]
+				],
+				[
+					'name' => __d('baser', 'プラグイン管理'),
+					'url' => [
+						'admin' => true,
+						'plugin' => null,
+						'controller' => 'plugins',
+						'action' => 'index'
+					]
+				],
+				[
+					'name' => __d('baser', 'システム設定'),
+					'url' => [
+						'admin' => true,
+						'plugin' => null,
+						'controller' => 'site_configs',
+						'action' => 'form'
+					]
+				],
+				[
+					'name' => __d('baser', 'ユーザー管理'),
+					'url' => [
+						'admin' => true,
+						'plugin' => null,
+						'controller' => 'users',
+						'action' => 'index'
+					]
+				],
+				[
+					'name' => __d('baser', 'ユーザーグループ管理'),
+					'url' => [
+						'admin' => true,
+						'plugin' => null,
+						'controller' => 'user_groups',
+						'action' => 'index'
+					]
+				],
+				[
+					'name' => __d('baser', '検索インデックス管理'),
+					'url' => [
+						'admin' => true,
+						'plugin' => null,
+						'controller' => 'search_indices',
+						'action' => 'index'
+					]
+				],
+				[
+					'name' => __d('baser', 'エディタテンプレート管理'),
+					'url' => [
+						'admin' => true,
+						'plugin' => null,
+						'controller' => 'editor_templates',
+						'action' => 'index'
+					]
+				],
+				[
+					'name' => __d('baser', 'サブサイト管理'),
+					'url' => [
+						'admin' => true,
+						'plugin' => null,
+						'controller' => 'sites',
+						'action' => 'index'
+					]
+				],
+				[
+					'name' => __d('baser', 'ユーティリティ'),
+					'url' => [
+						'admin' => true,
+						'plugin' => null,
+						'controller' => 'tools',
+						'action' => 'index'
+					]
+				],
+				[
+					'name' => __d('baser', 'サーバーキャッシュ削除'),
+					'url' => [
+						'admin' => true,
+						'plugin' => null,
+						'controller' => 'site_configs',
+						'action' => 'del_cache'
+					],
+					'options' => [
+						'confirm' => __d('baser', 'サーバーキャッシュを削除します。いいですか？')
+					]
+				]
+			]
+		]
+	],
 	// コアプラグイン
 	'corePlugins' => ['Blog', 'Feed', 'Mail', 'Uploader'],
 	// アップデートキー
@@ -171,25 +433,32 @@ $config['BcApp'] = [
 		'BcCkeditor' => 'CKEditor'
 	],
 	'testTheme' => 'bc_sample',
+
 	// 固定ページでシンタックスエラーチェックを行うかどうか
 	// お名前ドットコムの場合、CLI版PHPの存在確認の段階で固まってしまう
 	'validSyntaxWithPage' => true,
+
 	// 管理者以外のPHPコードを許可するかどうか
 	'allowedPhpOtherThanAdmins' => true,
+
 	// テーマ編集機能の利用を許可するかどうか
 	'allowedThemeEdit' => false,
 	'marketThemeRss' => 'https://market.basercms.net/themes.rss',
 	'marketPluginRss' => 'https://market.basercms.net/plugins.rss',
 	'specialThanks' => 'https://basercms.net/special_thanks/special_thanks/ajax_users',
+
 	// 管理システムのデフォルトテーマ
 	'defaultAdminTheme' => 'admin-third',
+
 	// コンテンツの作成日を自動で更新する
 	'autoUpdateContentCreatedDate' => true,
+
 	// オートプレフィックス除外設定（絶対URL）
 	// 「すべてのリンクをサブサイト用に変換する」指定時、全てのリンクに対してプレフィックスを備える箇所に除外指定できる
 	// 指定した絶対URLを記載しているリンクは変換しない
 	// 例: 'https://basercms.net/'と記載 → https://basercms.net/s/ は s が付かなくなる
 	'excludeAbsoluteUrlAddPrefix' => [],
+
 	// オートプレフィックス除外設定（ディレクトリ）
 	// 指定したディレクトリURLを記載しているリンクは変換しない
 	// 例: 'test/' と記載 → https://basercms.net/s/test/ は s が付かなくなる
@@ -199,9 +468,9 @@ $config['BcApp'] = [
 	// 外部リンク
 	'outerLinks' => [
 		// インストールマニュアル
-		'installManual' => 'http://wiki.basercms.net/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%82%AC%E3%82%A4%E3%83%89',
+		'installManual' => 'https://wiki.basercms.net/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%82%AC%E3%82%A4%E3%83%89',
 		// アップデートマニュアル
-		'updateManual' => 'http://wiki.basercms.net/%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%A2%E3%83%83%E3%83%97%E3%82%AC%E3%82%A4%E3%83%89'
+		'updateManual' => 'https://wiki.basercms.net/%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%A2%E3%83%83%E3%83%97%E3%82%AC%E3%82%A4%E3%83%89'
 	],
 	// システムメッセージの言語につてサイト設定を利用する
 	// 	- false：ブラウザ

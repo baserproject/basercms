@@ -9,32 +9,38 @@
  * @since           baserCMS v 0.1.0
  * @license         https://basercms.net/license/index.html
  */
+
+/**
+ * @var array $dblogs
+ * @var BcAppView $this
+ */
+if (empty($dblogs)) {
+	return;
+}
 ?>
-
-
-<?php if ($dblogs): ?>
+<div class="bca-update-log">
 	<?php $this->passedArgs['action'] = 'ajax_index' ?>
-	<?php $this->BcBaser->element('pagination', ['modules' => 4, 'options' => ['url' => ['action' => 'ajax_index']]]) ?>
-	<ul class="clear">
+	<ul class="clear bca-update-log__list">
 		<?php foreach($dblogs as $record): ?>
-			<li><span class="date"><?php echo $this->BcTime->format('Y.m.d', $record['Dblog']['created']) ?></span>
-				<small><?php echo $this->BcTime->format('H:i:s', $record['Dblog']['created']) ?>&nbsp;
-					<?php
-					$userName = $this->BcBaser->getUserName($record['User']);
-					if ($userName) {
-						echo '[' . h($userName) . ']';
-					}
-					?>
-				</small><br/>
-				<?php echo nl2br(h($record['Dblog']['name'])) ?></li>
+		<li class="bca-update-log__list-item">
+			<span class="date">
+				<?= $this->BcTime->format('Y.m.d', Hash::get($record, 'Dblog.created')) ?>
+			</span>
+			<small>
+				<?= $this->BcTime->format('H:i:s', Hash::get($record, 'Dblog.created')) ?>&nbsp;
+				<?php
+				if (Hash::get($record, 'User.name')) {
+					echo sprintf('[%s]', h(Hash::get($record, 'User.name')));
+				}
+				?>
+			</small><br/>
+			<?php echo nl2br(h(Hash::get($record, 'Dblog.name'))) ?>
+		</li>
 		<?php endforeach; ?>
 	</ul>
-	<?php $this->BcBaser->element('list_num') ?>
-	<?php if (BcUtil::isAdminUser()): ?>
-		<div class="submit clear">
-			<?php
-			$this->BcBaser->link(__d('baser', '削除'), ['action' => 'del'], ['class' => 'btn-gray button submit-token'], __d('baser', '最近の動きのログを削除します。いいですか？'))
-			?>
-		</div>
-	<?php endif ?>
-<?php endif ?>
+	<div class="align-right">
+		<a
+			href="<?= Router::url(['controller'=>'dblogs','action'=>'/']) ?>/"
+		>&gt; 全てのログを見る</a>
+	</div>
+</div>

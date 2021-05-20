@@ -10,4 +10,4 @@
  * @license         https://basercms.net/license/index.html
  */
 header('Content-type: text/html; charset=utf-8');
-$this->BcBaser->element('contents/index_list_table');
+$this->BcBaser->element('dblogs/index_list');

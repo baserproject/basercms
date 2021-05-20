@@ -18,7 +18,6 @@ if (empty($search)) {
 }
 ?>
 
-
 <div id="Search" class="clearfix">
 
 	<h2 class="head">
