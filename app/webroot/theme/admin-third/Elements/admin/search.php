@@ -17,14 +17,15 @@ if (empty($search)) {
 	return;
 }
 ?>
-
-
-<?php if (!empty($search)): ?>
-	<div class="bca-search">
-		<h2 class="head bca-search__head"><a href="javascript:void(0)" id="BtnMenuSearch"
-											 class="bca-icon--search"><?php echo __d('baser', '絞り込み検索') ?></a></h2>
-		<div id="Search" class="body bca-search__body">
-			<?php $this->BcBaser->element('searches/' . $search) ?>
-		</div>
-		<!-- / #Search clearfix --></div>
-<?php endif ?>
+<div class="bca-search">
+	<h2 class="head bca-search__head">
+		<a
+			href="javascript:void(0)"
+			id="BtnMenuSearch"
+			class="bca-icon--search"
+		><?= __d('baser', '絞り込み検索') ?></a>
+	</h2>
+	<div id="Search" class="body bca-search__body">
+		<?php $this->BcBaser->element('searches/' . $search) ?>
+	</div>
+</div><!-- / #Search clearfix -->
