@@ -40,6 +40,12 @@ class UsersControllerTest extends BcTestCase
     public $autoFixtures = false;
 
     /**
+     * UsersController
+     * @var UsersController
+     */
+    public $UsersController;
+
+    /**
      * set up
      */
     public function setUp(): void
@@ -52,12 +58,9 @@ class UsersControllerTest extends BcTestCase
         } else {
             $this->loadFixtures('Users', 'LoginStores');
         }
-
-        $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
-        $Users = $this->getTableLocator()->get('Users', $config);
         $this->loginAdmin();
         $this->UsersController = new UsersController($this->getRequest());
-        $this->UsersController->Users = $Users;
+        $this->UsersController->loadModel('BaserCore.Users');
     }
 
     /**
@@ -79,9 +82,8 @@ class UsersControllerTest extends BcTestCase
     public function testInitialize()
     {
         $this->assertNotEmpty($this->UsersController->LoginStores);
-        $this->assertEquals($this->UsersController->Authentication->getUnauthenticatedActions(), ['login']);
+        $this->assertEquals($this->UsersController->Authentication->getUnauthenticatedActions(), ['login', 'login_exec']);
         $this->assertNotEmpty($this->UsersController->Authentication->getConfig('logoutRedirect'));
-
     }
 
     /**

@@ -12,6 +12,8 @@
 namespace BaserCore\Controller\Admin;
 
 use Authentication\Controller\Component\AuthenticationComponent;
+use BaserCore\Model\Entity\User;
+use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\Service\UserManageServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Controller\Component\BcMessageComponent;
@@ -38,6 +40,7 @@ use BaserCore\Annotation\Checked;
  * @property UsersTable $Users
  * @property AuthenticationComponent $Authentication
  * @property BcMessageComponent $BcMessage
+ * @property LoginStoresTable $loginStores
  */
 class UsersController extends BcAdminAppController
 {
@@ -348,9 +351,9 @@ class UsersController extends BcAdminAppController
     {
         // ログイン状態保存のデータ削除
         $user = $this->Authentication->getIdentity();
+        /* @var User $user */
         $this->LoginStores->removeKey('Admin', $user->id);
         $this->response = $this->response->withExpiredCookie(new Cookie($this->LoginStores::KEY_NAME));
-
         $session = Router::getRequest()->getSession();
         $session->delete('AuthAgent');
         $this->BcMessage->setInfo(__d('baser', 'ログアウトしました'));

@@ -11,11 +11,11 @@
 
 namespace BaserCore\Model\Table;
 
+use Cake\Datasource\EntityInterface;
 use Cake\Utility\Security;
 use Cake\ORM\Table;
 use Cake\ORM\Entity;
 use Cake\ORM\RulesChecker;
-use Cake\Validation\Validator;
 
 /**
  * Class LoginStoresTable
@@ -23,17 +23,39 @@ use Cake\Validation\Validator;
  */
 class LoginStoresTable extends Table
 {
+    /**
+     * key name
+     * @var string
+     */
     const KEY_NAME = 'LoginStoreKey';
+
+    /**
+     * expire
+     * @var string
+     */
     const EXPIRE = '+1 year';
+
+    /**
+     * key length
+     * @var int
+     */
     private $keyLength = 100;
 
+    /**
+     * initialize
+     * @param array $config
+     */
     public function initialize(array $config): void
     {
         parent::initialize($config);
         $this->addBehavior('Timestamp');
     }
 
-
+    /**
+     * buildRules
+     * @param RulesChecker $rules
+     * @return RulesChecker
+     */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->isUnique(['store_key'], 'キーが重複しています。'));
@@ -45,9 +67,9 @@ class LoginStoresTable extends Table
      *
      * @param string $prefix ログイン対象
      * @param int $user_id ユーザID
-     * @return Entity
+     * @return EntityInterface
      */
-    public function addKey(string $prefix, int $user_id): Entity
+    public function addKey(string $prefix, int $user_id): EntityInterface
     {
         $allready = $this->find('all')
             ->where([
@@ -63,7 +85,7 @@ class LoginStoresTable extends Table
         $loginStore->user_id = $user_id;
         $loginStore->store_key = Security::randomString($this->keyLength);
         $i = 0;
-        while ($this->save($loginStore) === false) {
+        while($this->save($loginStore) === false) {
             $loginStore->store_key = Security::randomString($this->keyLength);
             if ($i++ > 100) {
                 throw new \Exception(__d('baser', '不明なエラー'));
@@ -99,7 +121,7 @@ class LoginStoresTable extends Table
             ->where(['store_key' => $key])
             ->orderAsc('created');
         foreach($loginStoreList as $loginStore) {
-            $expired = strtotime(self::EXPIRE , strtotime($loginStore->created));
+            $expired = strtotime(self::EXPIRE, strtotime($loginStore->created));
             if ($expired < time()) {
                 // 期限切れは削除
                 $this->delete($loginStore);
@@ -115,9 +137,9 @@ class LoginStoresTable extends Table
      *
      * @param string $prefix ログイン対象
      * @param int $user_id ユーザID
-     * @return Entity|null
+     * @return EntityInterface|null
      */
-    public function refresh($prefix, $user_id): Entity
+    public function refresh($prefix, $user_id): EntityInterface
     {
         $loginStore = $this->find('all')
             ->where([

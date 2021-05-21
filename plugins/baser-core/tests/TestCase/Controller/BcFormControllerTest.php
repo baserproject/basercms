@@ -21,6 +21,7 @@ use BaserCore\Controller\BcFormController;
 class BcFormControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
+
     /**
      * set up
      */
@@ -38,6 +39,7 @@ class BcFormControllerTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+        unset($this->BcFormController);
     }
 
     /**
