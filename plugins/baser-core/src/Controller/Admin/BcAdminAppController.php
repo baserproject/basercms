@@ -12,7 +12,9 @@
 namespace BaserCore\Controller\Admin;
 
 use BaserCore\Controller\BcAppController;
+use Cake\Core\Configure;
 use Cake\Event\EventInterface;
+use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -34,10 +36,10 @@ class BcAdminAppController extends BcAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('BaserCore.BcMessage');
-        $this->loadComponent('Security');
-        $this->loadComponent('Authentication.Authentication');
-        $this->loadComponent('Paginator');
+        $this->loadComponent('Authentication.Authentication', [
+            'logoutRedirect' => Router::url(Configure::read('BcPrefixAuth.Admin.loginAction'), true),
+        ]);
+        $this->checkAutoLogin();
     }
 
     /**

@@ -22,7 +22,6 @@ use Cake\Http\Cookie\Cookie;
 use DateTime;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
-use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -1601,9 +1600,6 @@ class BcAppController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-
-        // ログイン状態の保存確認
-        $this->checkAutoLogin();
     }
 
     /**
@@ -1611,10 +1607,9 @@ class BcAppController extends AppController
      *
      * @return void
      */
-    private function checkAutoLogin(): void
+    protected function checkAutoLogin(): void
     {
         // ログイン状態の保存確認
-        $this->loadComponent('Authentication.Authentication');
         $user = $this->Authentication->getIdentity();
         if ($user !== null) {
             return;
