@@ -54,6 +54,7 @@ baserCMS4で利用しているCakePHP2系からCakePHP4系に移行するにあ�
 - [リクエスト関連における注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/request.md)
 - [セッション関連における注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/session.md)
 - [データベースにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/database.md)
+- [プラグインにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/database.md)
 
 　
 ### テーマの開発

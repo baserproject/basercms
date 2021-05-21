@@ -15,6 +15,7 @@ use BaserCore\Error\BcException;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\App;
+use Cake\Core\Plugin;
 use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
 use Cake\ORM\Table;
@@ -429,29 +430,6 @@ class PluginsTable extends Table
     }
 
     /**
-     * プラグインのディレクトリパスを取得
-     *
-     * @param string $pluginName プラグイン名
-     * @return string|null
-     * @checked
-     * @noTodo
-     */
-    public function getDirectoryPath($pluginName)
-    {
-        $paths = App::path('Plugin');
-        foreach($paths as $path) {
-            $Folder = new Folder($path);
-            $files = $Folder->read(true, true, true);
-            foreach($files[0] as $dir) {
-                if (basename($dir) === $pluginName) {
-                    return $dir;
-                }
-            };
-        }
-        return null;
-    }
-
-    /**
      * プラグイン情報を取得する
      *
      * @param array $datas プラグインのデータ配列
@@ -555,7 +533,7 @@ class PluginsTable extends Table
     public function addFavoriteAdminLink($pluginName, $user)
     {
         $plugin = $this->findByName($pluginName);
-        $dirPath = $this->getDirectoryPath($pluginName);
+        $dirPath = Plugin::path($pluginName);
         $pluginInfo = $this->getPluginInfo([$plugin], $dirPath);
 
         //リンクが設定されていない

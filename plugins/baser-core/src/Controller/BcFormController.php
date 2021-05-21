@@ -26,6 +26,7 @@ class BcFormController extends AppController
 	 *
 	 * @return mixed
      * @checked
+	 * @unitTest
      * @noTodo
 	 */
 	public function get_token()

@@ -203,33 +203,6 @@ class PluginTest extends BaserTestCase
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-
-	/**
-	 * プラグインのディレクトリパスを取得
-	 *
-	 * @param string $pluginName プラグイン名
-	 * @param array $expected 期待値
-	 * @param string $message テストが失敗した時に表示されるメッセージ
-	 * @dataProvider getDirectoryPathDataProvider
-	 */
-	public function testGetDirectoryPath($pluginName, $expected, $message = null)
-	{
-		if (!is_null($expected)) {
-			$expected = BASER_PLUGINS . $expected;
-		}
-		$result = $this->Plugin->getDirectoryPath($pluginName);
-		$this->assertEquals($expected, $result, $message);
-	}
-
-	public function getDirectoryPathDataProvider()
-	{
-		return [
-			['Blog', 'Blog', 'プラグインのディレクトリパスを取得できません'],
-			['Feed', 'Feed', 'プラグインのディレクトリパスを取得できません'],
-			['hoge', null, '存在しないプラグインです'],
-		];
-	}
-
 	/**
 	 * プラグイン情報を取得する
 	 *
