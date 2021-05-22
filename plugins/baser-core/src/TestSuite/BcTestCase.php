@@ -63,11 +63,19 @@ class BcTestCase extends TestCase
      * @checked
      * @noTodo
      */
-    public function getRequest($url = '/')
+    public function getRequest($url = '/', $data = [], $method = 'GET')
     {
-        $request = new ServerRequest(['url' => $url]);
+        $config = [
+            'url' => $url,
+            'environment' => [
+                'REQUEST_METHOD' => $method
+        ]];
+        $request = new ServerRequest($config);
         $params = Router::parseRequest($request);
         $request = $request->withAttribute('params', $params);
+        if($data) {
+            $request = $request->withParsedBody($data);
+        }
         Router::setRequest($request);
         return $request;
     }

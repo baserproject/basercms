@@ -380,6 +380,7 @@ class UsersController extends BcAdminAppController
      * - view num
      * @param UserManageServiceInterface $userManage
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function index(UserManageServiceInterface $userManage): void
@@ -400,9 +401,6 @@ class UsersController extends BcAdminAppController
 
         $this->set('users', $this->paginate($userManage->getIndex($this->request)));
         $this->request = $this->request->withParsedBody($this->request->getQuery());
-        $this->setTitle(__d('baser', 'ユーザー一覧'));
-        $this->setSearch('users_index');
-        $this->setHelp('users_index');
     }
 
 
@@ -423,18 +421,17 @@ class UsersController extends BcAdminAppController
      * @param UserManageServiceInterface $userManage
      * @return Response|null|void Redirects on successful add, renders view otherwise.
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function add(UserManageServiceInterface $userManage)
     {
         if ($this->request->is('post')) {
             if ($user = $userManage->create($this->request)) {
-                // TODO 未実装
-                /* >>>
-                $this->getEventManager()->dispatch(new CakeEvent('Controller.Users.afterAdd', $this, [
-                    'user' => $this->request->data
+                // EVENT Users.afterAdd
+                $this->getEventManager()->dispatch(new Event('Controller.Users.afterAdd', $this, [
+                    'user' => $user
                 ]));
-                <<< */
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を追加しました。', $user->name));
                 return $this->redirect(['action' => 'edit', $user->id]);
             }

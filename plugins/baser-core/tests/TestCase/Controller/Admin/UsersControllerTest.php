@@ -13,8 +13,10 @@ namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Controller\Admin\UsersController;
 use BaserCore\Service\UserManageService;
+use BaserCore\Service\UsersService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**
@@ -141,6 +143,28 @@ class UsersControllerTest extends BcTestCase
         $this->assertResponseSuccess();
         $users = $this->getTableLocator()->get('Users');
         $query = $users->find()->where(['name' => $data['name']]);
+        $this->assertEquals(1, $query->count());
+
+        // イベントテスト
+        $this->entryControllerEventToMock('Controller.Users.afterAdd', function(Event $event) {
+            $user = $event->getData('user');
+            $users = TableRegistry::getTableLocator()->get('Users');
+            $user->name = 'etc';
+            $users->save($user);
+        });
+        $data = [
+            'name' => 'Test_test_Man2',
+            'password_1' => 'Lorem ipsum dolor sit amet',
+            'password_2' => 'Lorem ipsum dolor sit amet',
+            'real_name_1' => 'Lorem ipsum dolor sit amet',
+            'real_name_2' => 'Lorem ipsum dolor sit amet',
+            'email' => 'test2@example.com',
+            'nickname' => 'Lorem ipsum dolor sit amet',
+        ];
+        $controller = new UsersController($this->getRequest('/baser/admin/baser-core/users/add', $data, 'POST'));
+        $controller->beforeFilter(new Event('beforeFilter'));
+        $controller->add(new UserManageService());
+        $query = $users->find()->where(['name' => 'etc']);
         $this->assertEquals(1, $query->count());
     }
 
