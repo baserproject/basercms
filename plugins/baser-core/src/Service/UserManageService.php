@@ -13,6 +13,8 @@ namespace BaserCore\Service;
 
 use BaserCore\Model\Entity\User;
 use BaserCore\Model\Table\UsersTable;
+use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
 use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
 use Cake\Datasource\EntityInterface;
@@ -106,6 +108,93 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
     public function delete($id)
     {
         return parent::delete($id);
+    }
+
+    /**
+     * ログインユーザー自身の更新かどうか
+     * @param ServerRequest $request
+     * @return false
+     */
+    public function isSelfUpdate(ServerRequest $request)
+    {
+        switch($request->getParam('action')) {
+            case 'add':
+                return false;
+            case 'edit':
+                $loginUser = BcUtil::loginUser();
+                return ($loginUser->id === $request->getData('id'));
+        }
+        return false;
+    }
+
+    /**
+     * 更新ができるかどうか
+     * @param ServerRequest $request
+     * @return bool
+     */
+    public function isEditable(ServerRequest $request)
+    {
+        switch($request->getParam('action')) {
+            case 'add':
+                return true;
+            case 'edit':
+                $loginUser = BcUtil::loginUser();
+                if(in_array(Configure::read('BcApp.adminGroupId'), $loginUser->user_group_id)) {
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    /**
+     * 削除できるかどうか
+     * 自身が管理グループの場合削除できない
+     * @param ServerRequest $request
+     * @return false
+     */
+    public function isDeletable(ServerRequest $request)
+    {
+        switch($request->getParam('action')) {
+            case 'add':
+                return false;
+            case 'edit':
+                $loginUser = BcUtil::loginUser();
+                if ($this->isSelfUpdate($request) && in_array(Configure::read('BcApp.adminGroupId'), $loginUser->user_group_id)) {
+                    return false;
+                } else {
+                    return true;
+                }
+        }
+        return false;
+    }
+
+    /**
+     * ユーザーグループ選択用のリスト
+     * @return array
+     */
+    public function getUserGroupList()
+    {
+        return $this->Users->UserGroups->find('list', ['keyField' => 'id', 'valueField' => 'title'])->toArray();
+    }
+
+    /**
+     * ログインユーザーが自身の所属するユーザーグループを変更しようとしているかどうか
+     * @param ServerRequest $request
+     * @return bool
+     */
+    public function willChangeSelfGroup(ServerRequest $request)
+    {
+        $loginUser = BcUtil::loginUser();
+        if ($this->isSelfUpdate($request) && $loginUser->user_group_id !== $request->getData('user_group_id')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function reLogin() {
+        // TODO 未実装
     }
 
 }

@@ -439,16 +439,7 @@ class UsersController extends BcAdminAppController
         } else {
             $user = $userManage->getNew();
         }
-
-        $this->set([
-            'user' => $user,
-            'userGroups' => $this->Users->UserGroups->find('list', ['keyField' => 'id', 'valueField' => 'title']),
-            'selfUpdate' => false,
-            'editable' => true,
-            'deletable' => false
-        ]);
-        $this->setTitle(__d('baser', '新規ユーザー登録'));
-        $this->setHelp('users_form');
+        $this->set('user', $user);
     }
 
 
@@ -487,61 +478,28 @@ class UsersController extends BcAdminAppController
      */
     public function edit(UserManageServiceInterface $userManage, $id = null)
     {
-
         if (!$id && empty($this->request->getData())) {
             $this->BcMessage->setError(__d('baser', '無効なIDです。'));
             $this->redirect(['action' => 'index']);
         }
-
         $user = $userManage->get($id);
-
-        $selfUpdate = false;
-        $updatable = true;
-
-        // TODO：ログイン中のユーザーを取得
-        // $user = $this->BcAuth->user();
-
         if ($this->request->is(['patch', 'post', 'put'])) {
-
-            // TODO: 未実装 ログイン中のユーザーが自分の場合の処理
-            // if ($user->id == $this->request->getData('id')) {
-            //     $selfUpdate = true;
-            // }
-
-            // パスワードがない場合は更新しない
-            // TODO 未実装
-            /* >>>
-            if ($this->request->getData('User.password_1') || $this->request->getData('User.password_2')) {
-                $this->request = $this->request->withData('User.password',  $this->request->getData('User.password_1'));
-            }
-            <<< */
-
             // TODO: 未実装 非特権ユーザは該当ユーザの編集権限があるか確認
-            // if ($user['user_group_id'] !== Configure::read('BcApp.adminGroupId')) {
-            //     if (!$this->UserGroup->Permission->check('/admin/users/edit/' . $this->request->getData('id'), $user['user_group_id'])) {
-            //         $updatable = false;
-            //     }
-            // }
-
-            // 権限確認
-            if (!$updatable) {
-                $this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));
-                // TODO: 未実装 自身のアカウントは変更出来ないようにチェック
-                /* >>>
-                } elseif ($selfUpdate && $user['user_group_id'] != $this->request->getData('user_group_id')) {
-                    $this->BcMessage->setError(__d('baser', '自分のアカウントのグループは変更できません。'));
-                <<< */
+//             if ($user['user_group_id'] !== Configure::read('BcApp.adminGroupId')) {
+//                 $loginUser = BcUtil::loginUser();
+//                 if (!$this->UserGroup->Permission->check('/admin/users/edit/' . $this->request->getData('id'), $loginUser['user_group_id'])) {
+//                     $updatable = false;
+//                 }
+//             }
+            if ($userManage->willChangeSelfGroup($this->getRequest())) {
+                $this->BcMessage->setError(__d('baser', '自分のアカウントのグループは変更できません。'));
             } else {
-                if ($userManage->update($user, $this->request)) {
-                    // TODO 未実装
-                    /* >>>
-                    $this->getEventManager()->dispatch(new CakeEvent('Controller.Users.afterEdit', $this, [
-                        'user' => $this->request->data
+                if ($user = $userManage->update($user, $this->request)) {
+                    $this->getEventManager()->dispatch(new Event('Controller.Users.afterEdit', $this, [
+                        'user' => $user
                     ]));
-                    */
-
-                    if ($selfUpdate) {
-                        $this->logout();
+                    if ($userManage->isSelfUpdate($this->getRequest())) {
+                        $userManage->reLogin();
                     }
                     $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を更新しました。', $user->name));
                     return $this->redirect(['action' => 'edit', $user->id]);
@@ -553,27 +511,8 @@ class UsersController extends BcAdminAppController
                     $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
                 }
             }
-        } else {
-            // ログイン中のユーザーが自分の場合の処理
-            if ($user->id == $this->request->getData('id')) {
-                $selfUpdate = true;
-            }
         }
-
-        $userGroups = $this->Users->UserGroups->find('list', ['keyField' => 'id', 'valueField' => 'title']);
-        $editable = true;
-        $deletable = true;
-
-        // TODO
-        // if (@$user['user_group_id'] != Configure::read('BcApp.adminGroupId') && Configure::read('debug') !== -1) {
-        //     $editable = false;
-        // } elseif ($selfUpdate && @$user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
-        //     $deletable = false;
-        // }
-
-        $this->setTitle(__d('baser', 'ユーザー情報編集'));
-        $this->setHelp('users_form');
-        $this->set(compact('user', 'userGroups', 'editable', 'selfUpdate', 'deletable'));
+        $this->set('user', $user);
     }
 
 
@@ -591,11 +530,6 @@ class UsersController extends BcAdminAppController
      */
     public function delete(UserManageServiceInterface $userManage, $id = null)
     {
-        // TODO 未実装
-        /* >>>
-        $this->_checkSubmitToken();
-        <<< */
-
         if (!$id) {
             $this->BcMessage->setError(__d('baser', '無効なIDです。'));
             $this->redirect(['action' => 'index']);

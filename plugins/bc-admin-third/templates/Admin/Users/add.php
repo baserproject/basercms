@@ -17,12 +17,14 @@ use BaserCore\Model\Entity\User;
  * @var AppViewAlias $this
  * @var User $user
  */
+$this->BcAdmin->setTitle(__d('baser', '新規ユーザー登録'));
+$this->BcAdmin->setHelp('users_form');
 ?>
 
 
 <?= $this->BcAdminForm->create($user, ['novalidate' => true]) ?>
 
-<? $this->BcBaser->element('Users/form') ?>
+<?php $this->BcBaser->element('Users/form') ?>
 
 <div class="submit section bca-actions">
     <div class="bca-actions__main">

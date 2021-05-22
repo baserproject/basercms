@@ -24,7 +24,7 @@ use BaserCore\Model\Entity\User;
 
 <?= $this->BcAdminForm->create($user, ['novalidate' => true]) ?>
 
-<? $this->BcBaser->element('Users/form') ?>
+<?php $this->BcBaser->element('Users/form') ?>
 
 <div class="submit section bca-actions">
     <div class="bca-actions__main">
@@ -38,7 +38,7 @@ use BaserCore\Model\Entity\User;
                  'id' => 'BtnSave']
             ) ?>
     </div>
-<? if ($editable && $deletable): ?>
+<?php if ($this->BcUserManage->isDeletable()): ?>
     <div class="bca-actions__sub">
         <?= $this->BcAdminForm->postLink(
                 __d('baser', '削除'),
@@ -50,7 +50,7 @@ use BaserCore\Model\Entity\User;
                 'data-bca-btn-size' => 'sm']
         ) ?>
     </div>
-<? endif ?>
+<?php endif ?>
 </div>
 
 <?= $this->BcAdminForm->end() ?>

@@ -15,11 +15,7 @@ use BaserCore\View\AppView;
 /**
  * Users Form
  * @var AppView $this
- * @var bool $selfUpdate
  * @var User $user
- * @var array $userGroups
- * @var bool $editable
- * @var bool $deletable
  */
 $this->BcBaser->i18nScript([
 	'alertMessage1' => __d('baser', '処理に失敗しました。'),
@@ -28,9 +24,10 @@ $this->BcBaser->i18nScript([
 	'confirmMessage2' => __d('baser', '登録されている「よく使う項目」を、このユーザーが所属するユーザーグループの初期設定として登録します。よろしいですか？'),
 	'infoMessage1' => __d('baser', '登録されている「よく使う項目」を所属するユーザーグループの初期値として設定しました。'),
 ]);
+$userGroups = $this->BcUserManage->getUserGroupList();
 ?>
 
-<div id="SelfUpdate" style="display: none"><?php echo $selfUpdate ?></div>
+<div id="SelfUpdate" style="display: none"><?php echo $this->BcUserManage->isSelfUpdate() ?></div>
 <div id="AlertMessage" style="display: none"></div>
 <div id="UserGroupSetDefaultFavoritesUrl" style="display:none"><?php $this->BcBaser->url(['controller' => 'user_groups', 'action' => 'set_default_favorites', @$this->request->getData('UserGroup.id')]) ?></div>
 
@@ -80,7 +77,7 @@ $this->BcBaser->i18nScript([
         <tr>
             <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('user_group_id', __d('baser', 'グループ')) ?>&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
             <td class="col-input bca-form-table__input">
-                <?php if ($editable): ?>
+                <?php if ($this->BcUserManage->isEditable()): ?>
                     <?php echo $this->BcAdminForm->control('user_groups._ids', ['type' => 'multiCheckbox', 'options' => $userGroups, 'error' => false]); ?>
                     <i class="bca-icon--question-circle btn help bca-help"></i>
                     <div id="helptextUserGroupId" class="helptext"><?php echo sprintf(__d('baser', 'ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには%sより新しいグループを追加しアクセス制限の設定をおこないます。'), $this->BcBaser->getLink(__d('baser', 'ユーザーグループ管理'), ['controller' => 'user_groups', 'action' => 'index']))?></div>
