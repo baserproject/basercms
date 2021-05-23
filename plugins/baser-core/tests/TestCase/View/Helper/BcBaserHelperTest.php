@@ -430,56 +430,6 @@ class BcBaserHelperTest extends BcTestCase {
     }
 
     /**
-     * Test BcBaser->getUserNameで適切な名前が取得できてるかテスト
-     * @todo basercms4系と統合必要
-     * @return void
-     */
-    public function testGetUserName()
-    {
-        $user = $this->getUser(1);
-        // ニックネームの場合
-        $expected = $user->get('nickname');
-        $result = $this->BcBaser->getUserName($user);
-        $this->assertEquals($expected, $result);
-        // ニックネームがない場合
-        $user->unset('nickname');
-        $expected = $user->get('real_name_1') .' ' . $user->get('real_name_2');
-        $result = $this->BcBaser->getUserName($user);
-        $this->assertEquals($expected, $result);
-    }
-    /**
-     * ユーザー名を整形して表示する
-     * @param string $nickname
-     * @param string $realName1
-     * @param string $realName2
-     * @param string $expect
-     * @return void
-     *
-     * @dataProvider getUserNameDataProvider
-     */
-    public function testGetUserName_Version4($nickname, $realName1, $realName2, $expect)
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $user = ['User' => [
-            'nickname' => $nickname,
-            'real_name_1' => $realName1,
-            'real_name_2' => $realName2,
-        ]
-        ];
-        $result = $this->BcBaser->getUserName($user);
-        $this->assertEquals($expect, $result);
-    }
-
-    public function getUserNameDataProvider()
-    {
-        return [
-            ['aiueo', 'yamada', 'tarou', 'aiueo'],
-            ['', 'yamada', 'tarou', 'yamada tarou'],
-            ['', '', '', ''],
-        ];
-    }
-
-    /**
      * Test i18nScript
      *
      * @return void

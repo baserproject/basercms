@@ -11,6 +11,9 @@
 namespace BaserCore\View\Helper;
 use BaserCore\Service\UserManageService;
 use Cake\View\Helper;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcUserManageHelper
@@ -28,6 +31,9 @@ class BcUserManageHelper extends Helper
     /**
      * initialize
      * @param array $config
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {
@@ -37,35 +43,49 @@ class BcUserManageHelper extends Helper
 
     /**
      * ログインユーザー自身の更新かどうか
+     * @param int $id
      * @return false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function isSelfUpdate()
+    public function isSelfUpdate(int $id)
     {
-        return $this->UserManage->isSelfUpdate($this->_View->getRequest());
+        return $this->UserManage->isSelfUpdate($id);
     }
 
     /**
      * 更新ができるかどうか
+     * @param int $id
      * @return false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function isEditable()
+    public function isEditable(int $id)
     {
-        return $this->UserManage->isEditable($this->_View->getRequest());
+        return $this->UserManage->isEditable($id);
     }
 
     /**
      * 削除ができるかどうか
-     * @param $request
+     * @param int $id
      * @return false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function isDeletable()
+    public function isDeletable(int $id)
     {
-        return $this->UserManage->isDeletable($this->_View->getRequest());
+        return $this->UserManage->isDeletable($id);
     }
 
     /**
      * ユーザーグループ選択用のリスト
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getUserGroupList()
     {

@@ -13,7 +13,6 @@ namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Controller\Admin\UsersController;
 use BaserCore\Service\UserManageService;
-use BaserCore\Service\UsersService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
@@ -84,7 +83,7 @@ class UsersControllerTest extends BcTestCase
     public function testInitialize()
     {
         $this->assertNotEmpty($this->UsersController->LoginStores);
-        $this->assertEquals($this->UsersController->Authentication->getUnauthenticatedActions(), ['login', 'login_exec']);
+        $this->assertEquals($this->UsersController->Authentication->getUnauthenticatedActions(), ['login']);
         $this->assertNotEmpty($this->UsersController->Authentication->getConfig('logoutRedirect'));
     }
 

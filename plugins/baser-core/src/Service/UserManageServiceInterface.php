@@ -13,7 +13,6 @@ namespace BaserCore\Service;
 
 use BaserCore\Model\Entity\User;
 use Cake\Datasource\EntityInterface;
-use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
 
 /**
@@ -32,10 +31,10 @@ interface UserManageServiceInterface
 
     /**
      * ユーザー一覧を取得
-     * @param ServerRequest $request
+     * @param array $queryParams
      * @return Query
      */
-    public function getIndex(ServerRequest $request): Query;
+    public function getIndex(array $queryParams): Query;
 
     /**
      * 新しいデータの初期値を取得する
@@ -43,20 +42,20 @@ interface UserManageServiceInterface
      */
     public function getNew(): User;
 
-   /**
+    /**
      * 新規登録する
-     * @param ServerRequest $request
+     * @param array $postData
      * @return EntityInterface|false
      */
-    public function create(ServerRequest $request);
+    public function create(array $postData);
 
     /**
      * 編集する
      * @param EntityInterface $target
-     * @param ServerRequest $request
+     * @param array $postData
      * @return mixed
      */
-    public function update(EntityInterface $target, ServerRequest $request);
+    public function update(EntityInterface $target, array $postData);
 
     /**
      * 削除する
@@ -64,5 +63,48 @@ interface UserManageServiceInterface
      * @return mixed
      */
     public function delete(int $id);
+
+    /**
+     * 整形されたユーザー名を取得する
+     * @param EntityInterface $user
+     * @return string
+     */
+    public function getUserName(EntityInterface $user);
+
+    /**
+     * 管理ユーザーかどうか判定する
+     * @param EntityInterface|User $user
+     * @return bool
+     */
+    public function isAdmin(EntityInterface $user);
+
+    /**
+     * 更新対象データがログインユーザー自身の更新かどうか
+     * @param int $id
+     * @return false
+     */
+    public function isSelfUpdate(int $id);
+
+    /**
+     * 更新ができるかどうか
+     * @param int $id
+     * @return bool
+     */
+    public function isEditable(int $id);
+
+    /**
+     * 削除できるかどうか
+     * ログインユーザーが管理グループの場合、自身は削除できない
+     * @param int $id
+     * @return false
+     */
+    public function isDeletable(int $id);
+
+    /**
+     * ログインユーザーが自身のユーザーグループを変更しようとしているかどうか
+     * @param array $postData
+     * @return bool
+     */
+    public function willChangeSelfGroup(array $postData);
 
 }

@@ -19,6 +19,8 @@ use BaserCore\Model\Entity\User;
  * @var bool $editable
  * @var bool $deletable
  */
+$this->BcAdmin->setTitle(__d('baser', 'ユーザー編集'));
+$this->BcAdmin->setHelp('users_form');
 ?>
 
 
@@ -38,7 +40,7 @@ use BaserCore\Model\Entity\User;
                  'id' => 'BtnSave']
             ) ?>
     </div>
-<?php if ($this->BcUserManage->isDeletable()): ?>
+<?php if ($this->BcUserManage->isDeletable($user->id)): ?>
     <div class="bca-actions__sub">
         <?= $this->BcAdminForm->postLink(
                 __d('baser', '削除'),

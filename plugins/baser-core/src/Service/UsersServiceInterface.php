@@ -13,7 +13,6 @@ namespace BaserCore\Service;
 
 use BaserCore\Model\Entity\User;
 use Cake\Datasource\EntityInterface;
-use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
 
 /**
@@ -32,10 +31,10 @@ interface UsersServiceInterface
 
     /**
      * ユーザー一覧を取得
-     * @param ServerRequest $request
+     * @param array $queryParams
      * @return Query
      */
-    public function getIndex(ServerRequest $request): Query;
+    public function getIndex(Array $queryParams): Query;
 
     /**
      * 新しいデータの初期値を取得する
@@ -45,18 +44,18 @@ interface UsersServiceInterface
 
     /**
      * 新規登録する
-     * @param ServerRequest $request
+     * @param array $postData
      * @return EntityInterface|false
      */
-    public function create(ServerRequest $request);
+    public function create(Array $postData);
 
     /**
      * 編集する
      * @param EntityInterface $target
-     * @param ServerRequest $request
+     * @param array $postData
      * @return mixed
      */
-    public function update(EntityInterface $target, ServerRequest $request);
+    public function update(EntityInterface $target, Array $postData);
 
     /**
      * 削除する
@@ -64,5 +63,12 @@ interface UsersServiceInterface
      * @return mixed
      */
     public function delete(int $id);
+
+    /**
+     * 整形されたユーザー名を取得する
+     * @param EntityInterface $user
+     * @return string
+     */
+    public function getUserName(EntityInterface $user);
 
 }

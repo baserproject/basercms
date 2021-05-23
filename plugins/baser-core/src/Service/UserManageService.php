@@ -15,12 +15,12 @@ use BaserCore\Model\Entity\User;
 use BaserCore\Model\Table\UsersTable;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
-use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Utility\Hash;
 
 /**
  * Class UsersService
@@ -58,42 +58,41 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
     /**
      * ユーザー管理の一覧用のデータを取得
      * @param array $queryParams
-     * @param array $paginateParams
-     * @return array
+     * @return Query
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getIndex(ServerRequest $request): Query
+    public function getIndex(array $queryParams): Query
     {
-        return parent::getIndex($request);
+        return parent::getIndex($queryParams);
     }
 
     /**
      * ユーザー登録
-     * @param ServerRequest $request
+     * @param array $data
      * @return \Cake\Datasource\EntityInterface|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function create(ServerRequest $request)
+    public function create(array $postData)
     {
-        return parent::create($request);
+        return parent::create($postData);
     }
 
     /**
      * ユーザー情報を更新する
      * @param EntityInterface $target
-     * @param ServerRequest $request
+     * @param array $postData
      * @return EntityInterface|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function update(EntityInterface $target, ServerRequest $request)
+    public function update(EntityInterface $target, array $postData)
     {
-        return parent::update($target, $request);
+        return parent::update($target, $postData);
     }
 
     /**
@@ -111,67 +110,90 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
     }
 
     /**
-     * ログインユーザー自身の更新かどうか
-     * @param ServerRequest $request
-     * @return false
+     * 整形されたユーザー名を取得する
+     * @param EntityInterface $user
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function isSelfUpdate(ServerRequest $request)
+    public function getUserName(EntityInterface $user)
     {
-        switch($request->getParam('action')) {
-            case 'add':
-                return false;
-            case 'edit':
-                $loginUser = BcUtil::loginUser();
-                return ($loginUser->id === $request->getData('id'));
+        return parent::getUserName($user);
+    }
+
+    /**
+     * 管理ユーザーかどうか判定する
+     * @param EntityInterface|User|null $user
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isAdmin(?EntityInterface $user)
+    {
+        if (empty($user->user_groups)) {
+            return false;
         }
-        return false;
+        $userGroupId = Hash::extract($user->user_groups, '{n}.id');
+        return in_array(Configure::read('BcApp.adminGroupId'), $userGroupId);
+    }
+
+    /**
+     * 更新対象データがログインユーザー自身の更新かどうか
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isSelfUpdate(int $id)
+    {
+        $loginUser = BcUtil::loginUser();
+        return (!empty($id) && !empty($loginUser->id) && $loginUser->id === $id);
     }
 
     /**
      * 更新ができるかどうか
-     * @param ServerRequest $request
+     * 自身の更新、または、管理者であること
+     * @param int $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function isEditable(ServerRequest $request)
+    public function isEditable($id)
     {
-        switch($request->getParam('action')) {
-            case 'add':
-                return true;
-            case 'edit':
-                $loginUser = BcUtil::loginUser();
-                if(in_array(Configure::read('BcApp.adminGroupId'), $loginUser->user_group_id)) {
-                    return true;
-                }
-                break;
+        if (empty($id)) {
+            return false;
+        } else {
+            return ($this->isSelfUpdate($id) || $this->isAdmin(BcUtil::loginUser()));
         }
-        return false;
     }
 
     /**
      * 削除できるかどうか
-     * 自身が管理グループの場合削除できない
-     * @param ServerRequest $request
+     * 管理者であること、また、自身は削除できない
+     * @param int $id
      * @return false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function isDeletable(ServerRequest $request)
+    public function isDeletable(int $id)
     {
-        switch($request->getParam('action')) {
-            case 'add':
-                return false;
-            case 'edit':
-                $loginUser = BcUtil::loginUser();
-                if ($this->isSelfUpdate($request) && in_array(Configure::read('BcApp.adminGroupId'), $loginUser->user_group_id)) {
-                    return false;
-                } else {
-                    return true;
-                }
+        if (empty($id)) {
+            return false;
         }
-        return false;
+        return ($this->isAdmin(BcUtil::loginUser()) && !$this->isSelfUpdate($id));
     }
 
     /**
      * ユーザーグループ選択用のリスト
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getUserGroupList()
     {
@@ -179,22 +201,22 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
     }
 
     /**
-     * ログインユーザーが自身の所属するユーザーグループを変更しようとしているかどうか
-     * @param ServerRequest $request
+     * ログインユーザーが自身のユーザーグループを変更しようとしているかどうか
+     * @param array $postData
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function willChangeSelfGroup(ServerRequest $request)
+    public function willChangeSelfGroup(array $postData)
     {
         $loginUser = BcUtil::loginUser();
-        if ($this->isSelfUpdate($request) && $loginUser->user_group_id !== $request->getData('user_group_id')) {
-            return true;
-        } else {
+        if (empty($loginUser->user_groups)) {
             return false;
         }
-    }
-
-    public function reLogin() {
-        // TODO 未実装
+        $loginGroupId = Hash::extract($loginUser->user_groups, '{n}.id');
+        $postGroupId = array_map('intval', $postData['user_groups']['_ids']);
+        return ($loginGroupId !== $postGroupId);
     }
 
 }

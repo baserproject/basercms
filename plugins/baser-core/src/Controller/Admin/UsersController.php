@@ -18,14 +18,11 @@ use BaserCore\Service\UserManageServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\UsersTable;
-use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\Event;
 use Cake\Event\EventInterface;
-use Cake\Event\EventManagerInterface;
-use Cake\Http\ServerRequest;
 use Cake\Routing\Router;
 use Cake\Http\Response;
 use Cake\Http\Exception\ForbiddenException;
@@ -55,35 +52,11 @@ class UsersController extends BcAdminAppController
      * コンポーネント
      *
      * @var array
-     * TODO BcReplacePrefix は未精査
      */
-//	public $components = ['BcReplacePrefix', 'BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail'];
-
-    /**
-     * UsersController constructor.
-     *
-     * @param \Cake\Http\ServerRequest|null $request Request object for this controller. Can be null for testing,
-     *   but expect that features that use the request parameters will not work.
-     * @param \Cake\Http\Response|null $response Response object for this controller.
-     * @param string|null $name Override the name useful in testing when using mocks.
-     * @param \Cake\Event\EventManagerInterface|null $eventManager The event manager. Defaults to a new instance.
-     * @param \Cake\Controller\ComponentRegistry|null $components The component registry. Defaults to a new instance.
-     * @checked
-     */
-    public function __construct(
-        ?ServerRequest $request = null,
-        ?Response $response = null,
-        ?string $name = null,
-        ?EventManagerInterface $eventManager = null,
-        ?ComponentRegistry $components = null
-    )
-    {
-        parent::__construct($request, $response, $name, $eventManager, $components);
-        $this->crumbs = [
-            ['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
-            ['name' => __d('baser', 'ユーザー管理'), 'url' => ['controller' => 'users', 'action' => 'index']]
-        ];
-    }
+     // TODO 未実装
+     /* >>>
+	public $components = ['BcReplacePrefix'];
+    <<< */
 
     /**
      * initialize
@@ -97,7 +70,7 @@ class UsersController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Authentication->allowUnauthenticated(['login', 'login_exec']);
+        $this->Authentication->allowUnauthenticated(['login']);
         $this->loadModel('BaserCore.LoginStores');
     }
 
@@ -110,39 +83,20 @@ class UsersController extends BcAdminAppController
      */
     public function beforeFilter(EventInterface $event)
     {
+        parent::beforeFilter($event);
         // TODO 未実装、取り急ぎ動作させるためのコード
         // >>>
         $this->siteConfigs['admin_list_num'] = 30;
-        parent::beforeFilter($event);
-        return;
         // <<<
-
+        // TODO 未実装
+        /* >>>
         if (BC_INSTALLED) {
             if (isset($this->UserGroup)) {
                 $this->set('usePermission', $this->UserGroup->checkOtherAdmins());
             }
         }
-
-        parent::beforeFilter($event);
-        $this->BcReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password');
-    }
-
-    /**
-     * ログイン処理を行う
-     * ・リダイレクトは行わない
-     * ・requestActionから呼び出す
-     *
-     * @return boolean
-     */
-    public function login_exec()
-    {
-        if (!$this->request->getData()) {
-            return false;
-        }
-        if ($this->BcAuth->login()) {
-            return true;
-        }
-        return false;
+        $this->BcReplacePrefix->allow('login', 'logout', 'reset_password');
+        <<< */
     }
 
     /**
@@ -165,7 +119,7 @@ class UsersController extends BcAdminAppController
      * @checked
      * @unitTest
      */
-    public function login()
+    public function login(UserManageServiceInterface $userManage)
     {
         // TODO 未実装
         /* >>>
@@ -173,7 +127,6 @@ class UsersController extends BcAdminAppController
             $this->notFound();
         }
         <<< */
-
         $pageTitle = __d('baser', 'ログイン');
         // TODO 未実装
         /* >>>
@@ -184,23 +137,14 @@ class UsersController extends BcAdminAppController
         <<< */
         $this->setTitle($pageTitle);
         $this->set('savedEnable', $this->request->is('ssl'));
-
         $result = $this->Authentication->getResult();
         if ($this->request->is('post')) {
             if ($result->isValid()) {
                 $target = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
                 $user = $result->getData();
-
                 // グループ情報等データセットを付与
                 $user = $this->Users->getLoginFormatData($user->id);
                 $this->Authentication->setIdentity($user);
-                // TODO 未実装
-                /* >>>
-                App::uses('BcBaserHelper', 'View/Helper');
-                $BcBaser = new BcBaserHelper(new View());
-                $this->BcMessage->setInfo(sprintf(__d('baser', 'ようこそ、%s さん。'), $BcBaser->getUserName($user)));
-                <<< */
-
                 $this->LoginStores->removeKey('Admin', $user->id);
                 // 自動ログイン保存
                 if ($this->request->is('ssl') && $this->request->getData('saved') == '1') {
@@ -208,8 +152,7 @@ class UsersController extends BcAdminAppController
                     // クッキーを追加
                     $this->setCookieAutoLoginKey($loginStore->store_key);
                 }
-
-                $this->BcMessage->setInfo(__d('baser', 'ようこそ、' . $user->name . 'さん。'));
+                $this->BcMessage->setInfo(__d('baser', 'ようこそ、' . $userManage->getUserName($user) . 'さん。'));
                 $this->redirect($target);
                 return;
             }
@@ -217,13 +160,9 @@ class UsersController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser', 'Eメール、または、パスワードが間違っています。'));
             }
         } else {
-            // TODO 未実装
-            /* >>>
-            $user = $this->BcAuth->user();
-            if ($user && $this->isAuthorized($user)) {
-                $this->redirect($this->BcAuth->redirectUrl());
+            if ($this->Authentication->getResult()) {
+                $this->redirect(Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect')));
             }
-            <<< */
         }
     }
 
@@ -318,26 +257,6 @@ class UsersController extends BcAdminAppController
     }
 
     /**
-     * 認証クッキーをセットする
-     *
-     * @param array $data
-     * @return void
-     */
-    public function setAuthCookie($data)
-    {
-        $userModel = $this->BcAuth->authenticate['Form']['userModel'];
-        $cookie = [];
-        foreach($data[$userModel] as $key => $val) {
-            // savedは除外
-            if ($key !== "saved") {
-                $cookie[$key] = $val;
-            }
-        }
-        $this->Cookie->httpOnly = true;
-        $this->Cookie->write(Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)), $cookie, true, '+2 weeks');    // 3つめの'true'で暗号化
-    }
-
-    /**
      * ログイン状態のセッションを破棄する
      *
      * - redirect
@@ -399,10 +318,9 @@ class UsersController extends BcAdminAppController
             $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
         }
 
-        $this->set('users', $this->paginate($userManage->getIndex($this->request)));
+        $this->set('users', $this->paginate($userManage->getIndex($this->request->getQueryParams())));
         $this->request = $this->request->withParsedBody($this->request->getQuery());
     }
-
 
     /**
      * ログインユーザー新規追加
@@ -427,7 +345,7 @@ class UsersController extends BcAdminAppController
     public function add(UserManageServiceInterface $userManage)
     {
         if ($this->request->is('post')) {
-            if ($user = $userManage->create($this->request)) {
+            if ($user = $userManage->create($this->request->getData())) {
                 // EVENT Users.afterAdd
                 $this->getEventManager()->dispatch(new Event('Controller.Users.afterAdd', $this, [
                     'user' => $user
@@ -441,7 +359,6 @@ class UsersController extends BcAdminAppController
         }
         $this->set('user', $user);
     }
-
 
     /**
      * ログインユーザー編集
@@ -485,36 +402,39 @@ class UsersController extends BcAdminAppController
         $user = $userManage->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
             // TODO: 未実装 非特権ユーザは該当ユーザの編集権限があるか確認
-//             if ($user['user_group_id'] !== Configure::read('BcApp.adminGroupId')) {
-//                 $loginUser = BcUtil::loginUser();
-//                 if (!$this->UserGroup->Permission->check('/admin/users/edit/' . $this->request->getData('id'), $loginUser['user_group_id'])) {
-//                     $updatable = false;
-//                 }
-//             }
-            if ($userManage->willChangeSelfGroup($this->getRequest())) {
+            /* >>>
+            if ($user['user_group_id'] !== Configure::read('BcApp.adminGroupId')) {
+                $loginUser = BcUtil::loginUser();
+                if (!$this->UserGroup->Permission->check('/admin/users/edit/' . $this->request->getData('id'), $loginUser['user_group_id'])) {
+                    $updatable = false;
+                }
+            }
+            <<< */
+            if (!$userManage->isAdmin(BcUtil::loginUser()) && $userManage->willChangeSelfGroup($this->getRequest()->getData())) {
                 $this->BcMessage->setError(__d('baser', '自分のアカウントのグループは変更できません。'));
             } else {
-                if ($user = $userManage->update($user, $this->request)) {
+                if ($user = $userManage->update($user, $this->request->getData())) {
                     $this->getEventManager()->dispatch(new Event('Controller.Users.afterEdit', $this, [
                         'user' => $user
                     ]));
-                    if ($userManage->isSelfUpdate($this->getRequest())) {
-                        $userManage->reLogin();
+                    if ($userManage->isSelfUpdate($user->id)) {
+                        $this->Authentication->setIdentity($this->Users->getLoginFormatData($user->id));
                     }
                     $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を更新しました。', $user->name));
                     return $this->redirect(['action' => 'edit', $user->id]);
                 } else {
                     // TODO: よく使う項目のデータを再セット
-                    // $user = $this->User->find('first', ['conditions' => ['User.id' => $id]]);
-                    // unset($user['User']);
-                    // $this->request->data = array_merge($user, $this->request->data);
+                    /* >>>
+                    $user = $this->User->find('first', ['conditions' => ['User.id' => $id]]);
+                    unset($user['User']);
+                    $this->request->data = array_merge($user, $this->request->data);
+                    <<< */
                     $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
                 }
             }
         }
         $this->set('user', $user);
     }
-
 
     /**
      * ログインユーザー削除
@@ -527,6 +447,7 @@ class UsersController extends BcAdminAppController
      * @throws RecordNotFoundException When record not found.
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function delete(UserManageServiceInterface $userManage, $id = null)
     {
@@ -544,71 +465,6 @@ class UsersController extends BcAdminAppController
             $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
         return $this->redirect(['action' => 'index']);
-    }
-
-    /**
-     * ログインパスワードをリセットする
-     * 新しいパスワードを生成し、指定したメールアドレス宛に送信する
-     *
-     * @return void
-     * @checked
-     * @noTodo
-     */
-    public function reset_password()
-    {
-        if ((empty($this->request->getParam('prefix')) && !Configure::read('BcAuthPrefix.front'))) {
-            $this->notFound();
-        }
-        if ($this->BcAuth->user()) {
-            $this->redirect(['controller' => 'dashboard', 'action' => 'index']);
-        }
-        $this->setTitle(__d('baser', 'パスワードのリセット'));
-        $userModel = $this->BcAuth->authenticate['Form']['userModel'];
-        if (strpos($userModel, '.') !== false) {
-            [, $userModel] = explode('.', $userModel);
-        }
-        if (!$this->request->getData()) {
-            return;
-        }
-
-        $email = $this->request->getData("{$userModel}.email")? $this->request->getData("{$userModel}.email") : '';
-
-        if (mb_strlen($email) === 0) {
-            $this->BcMessage->setError('メールアドレスを入力してください。');
-            return;
-        }
-        $user = $this->{$userModel}->findByEmail($email);
-        if ($user) {
-            $email = $user[$userModel]['email'];
-        }
-        if (!$user || mb_strlen($email) === 0) {
-            $this->BcMessage->setError('送信されたメールアドレスは登録されていません。');
-            return;
-        }
-        $password = $this->generatePassword();
-        $user[$userModel]['password'] = $password;
-        $this->{$userModel}->set($user);
-
-        $dataSource = $this->{$userModel}->getDataSource();
-        $dataSource->begin();
-
-        if (!$this->{$userModel}->save(null, ['validate' => false])) {
-            $dataSource->roolback();
-            $this->BcMessage->setError('新しいパスワードをデータベースに保存できませんでした。');
-            return;
-        }
-        $body = ['email' => $email, 'password' => $password];
-        if (!$this->sendMail($email, __d('baser', 'パスワードを変更しました'), $body, ['template' => 'reset_password'])) {
-            $dataSource->roolback();
-            $this->BcMessage->setError('メール送信時にエラーが発生しました。');
-            return;
-        }
-
-        $dataSource->commit();
-
-        $this->BcMessage->setSuccess($email . ' 宛に新しいパスワードを送信しました。');
-        $this->request->withData($userModel, []);
-
     }
 
 }

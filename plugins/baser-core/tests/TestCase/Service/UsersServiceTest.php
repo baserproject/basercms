@@ -85,19 +85,19 @@ class UsersServiceTest extends BcTestCase
     {
         $request = $this->getRequest('/');
 
-        $users = $this->Users->getIndex($request);
+        $users = $this->Users->getIndex($request->getQueryParams());
         $this->assertEquals('baser admin', $users->first()->name);
 
         $request = $this->getRequest('/?user_group_id=2');
-        $users = $this->Users->getIndex($request);
+        $users = $this->Users->getIndex($request->getQueryParams());
         $this->assertEquals('baser operator', $users->first()->name);
 
         $request = $this->getRequest('/?num=1');
-        $users = $this->Users->getIndex($request);
+        $users = $this->Users->getIndex($request->getQueryParams());
         $this->assertEquals(1, $users->all()->count());
 
         $request = $this->getRequest('/?name=baser');
-        $users = $this->Users->getIndex($request);
+        $users = $this->Users->getIndex($request->getQueryParams());
         $this->assertEquals(2, $users->all()->count());
     }
 
@@ -115,9 +115,10 @@ class UsersServiceTest extends BcTestCase
             'password_1' => 'aaaaaaaaaaaaaa',
             'password_2' => 'aaaaaaaaaaaaaa'
         ]);
-        $this->Users->create($request);
+        $request = $request->withData('password', $request->getData('password_1'));
+        $this->Users->create($request->getData());
         $request = $this->getRequest('/?name=ucmitz');
-        $users = $this->Users->getIndex($request);
+        $users = $this->Users->getIndex($request->getQueryParams());
         $this->assertEquals(1, $users->all()->count());
     }
 
@@ -131,9 +132,9 @@ class UsersServiceTest extends BcTestCase
             'name' => 'ucmitz',
         ]);
         $user = $this->Users->get(1);
-        $this->Users->update($user, $request);
+        $this->Users->update($user, $request->getData());
         $request = $this->getRequest('/?name=ucmitz');
-        $users = $this->Users->getIndex($request);
+        $users = $this->Users->getIndex($request->getQueryParams());
         $this->assertEquals(1, $users->all()->count());
     }
 
@@ -144,7 +145,7 @@ class UsersServiceTest extends BcTestCase
     {
         $this->Users->delete(2);
         $request = $this->getRequest('/');
-        $users = $this->Users->getIndex($request);
+        $users = $this->Users->getIndex($request->getQueryParams());
         $this->assertEquals(1, $users->all()->count());
     }
 
@@ -158,13 +159,32 @@ class UsersServiceTest extends BcTestCase
     }
 
     /**
-     * Test isAdmin
+     * ユーザー名を整形して表示する
+     * @param string $nickname
+     * @param string $realName1
+     * @param string $realName2
+     * @param string $expect
+     * @return void
+     * @dataProvider getUserNameDataProvider
      */
-    public function testIsAdmin()
+    public function testGetUserName($nickname, $realName1, $realName2, $expect)
     {
-        $request = $this->getRequest('/?user_group_id=2');
-        $users = $this->Users->getIndex($request);
-        $this->assertFalse($this->Users->isAdmin($users->first()));
+        $userTable = $this->getTableLocator()->get('Users');
+        $user = $userTable->newEntity([
+            'nickname' => $nickname,
+            'real_name_1' => $realName1,
+            'real_name_2' => $realName2,
+        ]);
+        $result = $this->Users->getUserName($user);
+        $this->assertEquals($expect, $result);
+    }
+    public function getUserNameDataProvider()
+    {
+        return [
+            ['aiueo', 'yamada', 'tarou', 'aiueo'],
+            ['', 'yamada', 'tarou', 'yamada tarou'],
+            ['', '', '', ''],
+        ];
     }
 
 }

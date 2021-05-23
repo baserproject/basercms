@@ -15,7 +15,6 @@ use BaserCore\Model\Entity\User;
 use BaserCore\Model\Table\UsersTable;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
-use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use Cake\Datasource\EntityInterface;
@@ -78,15 +77,13 @@ class UsersService implements UsersServiceInterface
     /**
      * ユーザー管理の一覧用のデータを取得
      * @param array $queryParams
-     * @param array $paginateParams
-     * @return array
+     * @return Query
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getIndex(ServerRequest $request): Query
+    public function getIndex(Array $queryParams): Query
     {
-        $queryParams = $request->getQueryParams();
         $options = [];
         if (!empty($queryParams['num'])) {
             $options = ['limit' => $queryParams['num']];
@@ -105,32 +102,31 @@ class UsersService implements UsersServiceInterface
 
     /**
      * ユーザー登録
-     * @param ServerRequest $request
+     * @param array $data
      * @return \Cake\Datasource\EntityInterface|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function create(ServerRequest $request)
+    public function create(Array $postData)
     {
         $user = $this->Users->newEmptyEntity();
-        $request = $request->withData('password', $request->getData('password_1'));
-        $user = $this->Users->patchEntity($user, $request->getData(), ['validate' => 'new']);
+        $user = $this->Users->patchEntity($user, $postData, ['validate' => 'new']);
         return $this->Users->save($user);
     }
 
     /**
      * ユーザー情報を更新する
      * @param EntityInterface $target
-     * @param ServerRequest $request
+     * @param array $postData
      * @return EntityInterface|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function update(EntityInterface $target, ServerRequest $request)
+    public function update(EntityInterface $target, Array $postData)
     {
-        $user = $this->Users->patchEntity($target, $request->getData());
+        $user = $this->Users->patchEntity($target, $postData);
         return $this->Users->save($user);
     }
 
@@ -162,23 +158,27 @@ class UsersService implements UsersServiceInterface
     }
 
     /**
-     * 管理ユーザーかどうか判定する
-     * @param EntityInterface|User $user
-     * @return bool
+     * 整形されたユーザー名を取得する
+     * @param EntityInterface $user
+     * @return string
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function isAdmin(EntityInterface $user)
+    public function getUserName(EntityInterface $user)
     {
-        if ($user->user_groups) {
-            foreach($user->user_groups as $group) {
-                if($group->id === Configure::read('BcApp.adminGroupId')) {
-                    return true;
-                }
-            }
+        if (!empty($user->nickname)) {
+            return $user->nickname;
         }
-        return false;
+        $userName = [];
+        if (!empty($user->real_name_1)) {
+            $userName[] = $user->real_name_1;
+        }
+        if (!empty($user->real_name_2)) {
+            $userName[] = $user->real_name_2;
+        }
+        $userName = implode(' ', $userName);
+        return $userName;
     }
 
 }

@@ -12,6 +12,7 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Service\UsersService;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\ORM\Entity;
@@ -571,18 +572,8 @@ class BcBaserHelper extends Helper
      */
     public function getUserName($user)
     {
-        if (!empty($user->nickname)) {
-            return $user->nickname;
-        }
-        $userName = [];
-        if (!empty($user->real_name_1)) {
-            $userName[] = $user->real_name_1;
-        }
-        if (!empty($user->real_name_2)) {
-            $userName[] = $user->real_name_2;
-        }
-        $userName = implode(' ', $userName);
-        return $userName;
+        $userService = new UsersService();
+        return $userService->getUserName($user);
     }
 
     /**
