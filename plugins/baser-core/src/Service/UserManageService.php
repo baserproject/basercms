@@ -147,7 +147,7 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
      * @noTodo
      * @unitTest
      */
-    public function isSelfUpdate(int $id)
+    public function isSelfUpdate(?int $id)
     {
         $loginUser = BcUtil::loginUser();
         return (!empty($id) && !empty($loginUser->id) && $loginUser->id === $id);
@@ -162,7 +162,7 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
      * @noTodo
      * @unitTest
      */
-    public function isEditable($id)
+    public function isEditable(?int $id)
     {
         if (empty($id)) {
             return false;
@@ -180,7 +180,7 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
      * @noTodo
      * @unitTest
      */
-    public function isDeletable(int $id)
+    public function isDeletable(?int $id)
     {
         if (empty($id)) {
             return false;

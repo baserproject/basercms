@@ -43,9 +43,4 @@ class AppViewTest extends BcTestCase
         parent::tearDown();
     }
 
-
-    public function testInitialize()
-    {
-        $this->assertNotEmpty($this->AppView->BcAdminForm);
-    }
 }

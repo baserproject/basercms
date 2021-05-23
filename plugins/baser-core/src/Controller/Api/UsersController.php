@@ -37,7 +37,7 @@ class UsersController extends BcApiController
     public function index(UsersServiceInterface $users)
     {
         $this->set([
-            'users' => $this->paginate($users->getIndex($this->request))
+            'users' => $this->paginate($users->getIndex($this->request->getQueryParams()))
         ]);
         $this->viewBuilder()->setOption('serialize', ['users']);
     }
@@ -67,7 +67,8 @@ class UsersController extends BcApiController
      */
     public function add(UsersServiceInterface $users)
     {
-        if ($user = $users->create($this->request)) {
+        $this->request->allowMethod(['post', 'delete']);
+        if ($user = $users->create($this->request->getData())) {
             $message = __d('baser', 'ユーザー「{0}」を追加しました。', $user->name);
         } else {
             $message = __d('baser', '入力エラーです。内容を修正してください。');
@@ -89,13 +90,12 @@ class UsersController extends BcApiController
      */
     public function edit(UsersServiceInterface $users, $id)
     {
+        $this->request->allowMethod(['post', 'put']);
         $user = $users->get($id);
-        if ($this->request->is(['post', 'put'])) {
-            if ($user = $users->update($user, $this->request)) {
-                $message = __d('baser', 'ユーザー「{0}」を更新しました。', $user->name);
-            } else {
-                $message = __d('baser', '入力エラーです。内容を修正してください。');
-            }
+        if ($user = $users->update($user, $this->request->getData())) {
+            $message = __d('baser', 'ユーザー「{0}」を更新しました。', $user->name);
+        } else {
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
         }
         $this->set([
             'message' => $message,
@@ -114,6 +114,7 @@ class UsersController extends BcApiController
      */
     public function delete(UsersServiceInterface $users, $id)
     {
+        $this->request->allowMethod(['post', 'delete']);
         $user = $users->get($id);
         try {
             if ($users->delete($id)) {

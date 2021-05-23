@@ -182,8 +182,8 @@ class UserManageServiceTest extends \BaserCore\TestSuite\BcTestCase
     {
         return [
             [null, [0 => 1], false],
-            [1, [0 => 1], true],
-            [null, [0 => 1, 1 => 2], false],
+            [1, [0 => 1], false],
+            [1, [0 => 1, 1 => 2], true],
         ];
     }
 
