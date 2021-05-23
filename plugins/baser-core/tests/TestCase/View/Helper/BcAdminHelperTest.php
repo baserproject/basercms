@@ -232,7 +232,19 @@ class BcAdminHelperTest extends BcTestCase
         $actualIsHelpIsLogin = ob_get_clean();
         $this->assertEquals($expectedIsHelpIsLogin, $actualIsHelpIsLogin);
     }
-
+    
+    /**
+     * Test addAdminMainBodyHeaderLinks
+     *
+     * @return void
+     */
+    public function testAddAdminMainBodyHeaderLinks(): void
+    {
+        $expected = ['url' => 'test', 'confirm' => 'confirm message', 'something attributes' => 'attr value'];
+        $this->BcAdmin->addAdminMainBodyHeaderLinks($expected);
+        $result = $this->BcAdmin->getView()->get('mainBodyHeaderLinks');
+        $this->assertEquals($expected, array_pop($result));
+    }
 	/**
 	 * 管理システムグローバルメニューの利用可否確認
 	 *

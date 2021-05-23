@@ -236,6 +236,7 @@ class BcAdminHelper extends Helper
      *
      * @param array $links ['url' => string or array, 'confirm' => 'confirm message', 'something attributes' => 'attr value']
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function addAdminMainBodyHeaderLinks($links)
@@ -332,6 +333,7 @@ class BcAdminHelper extends Helper
     /**
      * Search
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function search(): void
