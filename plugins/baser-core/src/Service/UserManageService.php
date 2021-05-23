@@ -110,36 +110,6 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
     }
 
     /**
-     * 整形されたユーザー名を取得する
-     * @param EntityInterface $user
-     * @return string
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getUserName(EntityInterface $user)
-    {
-        return parent::getUserName($user);
-    }
-
-    /**
-     * 管理ユーザーかどうか判定する
-     * @param EntityInterface|User|null $user
-     * @return bool
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function isAdmin(?EntityInterface $user)
-    {
-        if (empty($user->user_groups)) {
-            return false;
-        }
-        $userGroupId = Hash::extract($user->user_groups, '{n}.id');
-        return in_array(Configure::read('BcApp.adminGroupId'), $userGroupId);
-    }
-
-    /**
      * 更新対象データがログインユーザー自身の更新かどうか
      * @param int $id
      * @return bool
@@ -164,10 +134,11 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
      */
     public function isEditable(?int $id)
     {
-        if (empty($id)) {
+        $user = BcUtil::loginUser();
+        if (empty($id) || empty($user)) {
             return false;
         } else {
-            return ($this->isSelfUpdate($id) || $this->isAdmin(BcUtil::loginUser()));
+            return ($this->isSelfUpdate($id) || $user->isAdmin());
         }
     }
 
@@ -182,10 +153,11 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
      */
     public function isDeletable(?int $id)
     {
-        if (empty($id)) {
+        $user = BcUtil::loginUser();
+        if (empty($id) || empty($user)) {
             return false;
         }
-        return ($this->isAdmin(BcUtil::loginUser()) && !$this->isSelfUpdate($id));
+        return ($user->isAdmin() && !$this->isSelfUpdate($id));
     }
 
     /**

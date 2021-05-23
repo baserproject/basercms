@@ -13,7 +13,6 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Model\Entity\UserGroup;
 use BaserCore\Service\UserGroupManageServiceInterface;
-use BaserCore\Service\UserGroupsServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\UserGroupsTable;
 use Cake\Controller\ComponentRegistry;
@@ -26,7 +25,6 @@ use Cake\Http\ServerRequest;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use BaserCore\Service\UserGroupManageService;
 
 /**
  * Class UserGroupsController

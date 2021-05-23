@@ -12,7 +12,6 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Service\UsersService;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\ORM\Entity;
@@ -572,8 +571,7 @@ class BcBaserHelper extends Helper
      */
     public function getUserName($user)
     {
-        $userService = new UsersService();
-        return $userService->getUserName($user);
+        return $user->getDisplayName();
     }
 
     /**

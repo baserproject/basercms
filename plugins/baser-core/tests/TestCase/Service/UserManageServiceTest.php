@@ -59,16 +59,6 @@ class UserManageServiceTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
-     * Test isAdmin
-     */
-    public function testIsAdmin()
-    {
-        $request = $this->getRequest('/?user_group_id=2');
-        $users = $this->UserManage->getIndex($request->getQueryParams());
-        $this->assertFalse($this->UserManage->isAdmin($users->first()));
-    }
-
-    /**
      * Test isSelfUpdate
      * @param int $loginId
      * @param int $postId

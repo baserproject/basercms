@@ -158,33 +158,4 @@ class UsersServiceTest extends BcTestCase
         $this->Users->delete(1);
     }
 
-    /**
-     * ユーザー名を整形して表示する
-     * @param string $nickname
-     * @param string $realName1
-     * @param string $realName2
-     * @param string $expect
-     * @return void
-     * @dataProvider getUserNameDataProvider
-     */
-    public function testGetUserName($nickname, $realName1, $realName2, $expect)
-    {
-        $userTable = $this->getTableLocator()->get('Users');
-        $user = $userTable->newEntity([
-            'nickname' => $nickname,
-            'real_name_1' => $realName1,
-            'real_name_2' => $realName2,
-        ]);
-        $result = $this->Users->getUserName($user);
-        $this->assertEquals($expect, $result);
-    }
-    public function getUserNameDataProvider()
-    {
-        return [
-            ['aiueo', 'yamada', 'tarou', 'aiueo'],
-            ['', 'yamada', 'tarou', 'yamada tarou'],
-            ['', '', '', ''],
-        ];
-    }
-
 }

@@ -65,20 +65,6 @@ interface UserManageServiceInterface
     public function delete(int $id);
 
     /**
-     * 整形されたユーザー名を取得する
-     * @param EntityInterface $user
-     * @return string
-     */
-    public function getUserName(EntityInterface $user);
-
-    /**
-     * 管理ユーザーかどうか判定する
-     * @param EntityInterface|User $user
-     * @return bool
-     */
-    public function isAdmin(EntityInterface $user);
-
-    /**
      * 更新対象データがログインユーザー自身の更新かどうか
      * @param int $id
      * @return false

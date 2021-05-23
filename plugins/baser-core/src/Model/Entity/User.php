@@ -19,6 +19,7 @@ use Cake\ORM\Entity as EntityAlias;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Utility\Hash;
 
 /**
  * Class User
@@ -76,7 +77,6 @@ class User extends EntityAlias
 
     /**
      * 管理ユーザーかどうか判定する
-     * @param EntityInterface|User $user
      * @return bool
      * @checked
      * @noTodo
@@ -84,14 +84,34 @@ class User extends EntityAlias
      */
     public function isAdmin()
     {
-        if ($this->user_groups) {
-            foreach($this->user_groups as $group) {
-                if($group->id === Configure::read('BcApp.adminGroupId')) {
-                    return true;
-                }
-            }
+        if (empty($this->user_groups)) {
+            return false;
         }
-        return false;
+        $userGroupId = Hash::extract($this->user_groups, '{n}.id');
+        return in_array(Configure::read('BcApp.adminGroupId'), $userGroupId);
+    }
+
+    /**
+     * 整形されたユーザー名を取得する
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getDisplayName()
+    {
+        if (!empty($this->nickname)) {
+            return $this->nickname;
+        }
+        $userName = [];
+        if (!empty($this->real_name_1)) {
+            $userName[] = $this->real_name_1;
+        }
+        if (!empty($this->real_name_2)) {
+            $userName[] = $this->real_name_2;
+        }
+        $userName = implode(' ', $userName);
+        return $userName;
     }
 
 }

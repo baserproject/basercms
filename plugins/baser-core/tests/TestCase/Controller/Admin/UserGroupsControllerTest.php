@@ -43,17 +43,13 @@ class UserGroupsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-
         $this->loadFixtures('UsersUserGroups', 'Users');
         if ($this->getName() == 'testIndex_pagination') {
             $this->loadFixtures('Controller\UserGroupsController\UserGroupsPagination');
         } else {
             $this->loadFixtures('UserGroups');
         }
-
-        $config = $this->getTableLocator()->exists('UserGroups')? [] : ['className' => 'BaserCore\Model\Table\UserGroupsTable'];
-        $UserGroups = $this->getTableLocator()->get('UserGroups', $config);
-        $this->session(['AuthAdmin' => $UserGroups->get(1)]);
+        $this->loginAdmin();
         $this->UserGroupsController = new UserGroupsController($this->getRequest());
     }
 

@@ -157,28 +157,4 @@ class UsersService implements UsersServiceInterface
         return $this->Users->delete($user);
     }
 
-    /**
-     * 整形されたユーザー名を取得する
-     * @param EntityInterface $user
-     * @return string
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getUserName(EntityInterface $user)
-    {
-        if (!empty($user->nickname)) {
-            return $user->nickname;
-        }
-        $userName = [];
-        if (!empty($user->real_name_1)) {
-            $userName[] = $user->real_name_1;
-        }
-        if (!empty($user->real_name_2)) {
-            $userName[] = $user->real_name_2;
-        }
-        $userName = implode(' ', $userName);
-        return $userName;
-    }
-
 }

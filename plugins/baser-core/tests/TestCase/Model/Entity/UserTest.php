@@ -28,6 +28,8 @@ class UserTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.Users',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.UserGroups',
     ];
 
     /**
@@ -44,7 +46,7 @@ class UserTest extends BcTestCase
     {
         parent::setUp();
         $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
-        $this->User = $this->getTableLocator()->get('Users', $config)->get(1);
+        $this->User = $this->getTableLocator()->get('Users', $config)->get(1, ['contain' => 'UserGroups']);
     }
 
     /**
@@ -72,7 +74,35 @@ class UserTest extends BcTestCase
      */
     public function testIsAdmin()
     {
-        $this->assertNotEquals(true, $this->User->isAdmin());
+        $this->assertTrue($this->User->isAdmin());
     }
 
+    /**
+     * ユーザー名を整形して表示する
+     * @param string $nickname
+     * @param string $realName1
+     * @param string $realName2
+     * @param string $expect
+     * @return void
+     * @dataProvider getUserNameDataProvider
+     */
+    public function testGetDisplayName($nickname, $realName1, $realName2, $expect)
+    {
+        $userTable = $this->getTableLocator()->get('Users');
+        $user = $userTable->newEntity([
+            'nickname' => $nickname,
+            'real_name_1' => $realName1,
+            'real_name_2' => $realName2,
+        ]);
+        $result = $user->getDisplayName();
+        $this->assertEquals($expect, $result);
+    }
+    public function getUserNameDataProvider()
+    {
+        return [
+            ['aiueo', 'yamada', 'tarou', 'aiueo'],
+            ['', 'yamada', 'tarou', 'yamada tarou'],
+            ['', '', '', ''],
+        ];
+    }
 }

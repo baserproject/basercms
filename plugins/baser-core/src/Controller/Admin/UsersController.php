@@ -119,7 +119,7 @@ class UsersController extends BcAdminAppController
      * @checked
      * @unitTest
      */
-    public function login(UserManageServiceInterface $userManage)
+    public function login()
     {
         // TODO 未実装
         /* >>>
@@ -152,7 +152,7 @@ class UsersController extends BcAdminAppController
                     // クッキーを追加
                     $this->setCookieAutoLoginKey($loginStore->store_key);
                 }
-                $this->BcMessage->setInfo(__d('baser', 'ようこそ、' . $userManage->getUserName($user) . 'さん。'));
+                $this->BcMessage->setInfo(__d('baser', 'ようこそ、' . $user->getDisplayName() . 'さん。'));
                 $this->redirect($target);
                 return;
             }
@@ -410,7 +410,7 @@ class UsersController extends BcAdminAppController
                 }
             }
             <<< */
-            if (!$userManage->isAdmin(BcUtil::loginUser()) && $userManage->willChangeSelfGroup($this->getRequest()->getData())) {
+            if (!BcUtil::loginUser()->isAdmin() && $userManage->willChangeSelfGroup($this->getRequest()->getData())) {
                 $this->BcMessage->setError(__d('baser', '自分のアカウントのグループは変更できません。'));
             } else {
                 if ($user = $userManage->update($user, $this->request->getData())) {

@@ -64,11 +64,4 @@ interface UsersServiceInterface
      */
     public function delete(int $id);
 
-    /**
-     * 整形されたユーザー名を取得する
-     * @param EntityInterface $user
-     * @return string
-     */
-    public function getUserName(EntityInterface $user);
-
 }
