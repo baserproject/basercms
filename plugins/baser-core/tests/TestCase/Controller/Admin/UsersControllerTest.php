@@ -12,10 +12,13 @@
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Controller\Admin\UsersController;
+use BaserCore\Controller\BcAppController;
 use BaserCore\Service\UserManageService;
+use BaserCore\Service\UsersService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**
@@ -160,9 +163,7 @@ class UsersControllerTest extends BcTestCase
             'email' => 'test2@example.com',
             'nickname' => 'Lorem ipsum dolor sit amet',
         ];
-        $controller = new UsersController($this->getRequest('/baser/admin/baser-core/users/add', $data, 'POST'));
-        $controller->beforeFilter(new Event('beforeFilter'));
-        $controller->add(new UserManageService());
+        $this->post('/baser/admin/baser-core/users/add', $data);
         $query = $users->find()->where(['name' => 'etc']);
         $this->assertEquals(1, $query->count());
     }
@@ -181,6 +182,28 @@ class UsersControllerTest extends BcTestCase
         ];
         $this->post('/baser/admin/baser-core/users/edit/1', $data);
         $this->assertResponseSuccess();
+
+        // イベントテスト
+        $this->entryControllerEventToMock('Controller.Users.afterEdit', function(Event $event) {
+            $user = $event->getData('user');
+            $users = TableRegistry::getTableLocator()->get('Users');
+            $user->name = 'etc';
+            $users->save($user);
+        });
+        $data = [
+            'id' => 1,
+            'name' => 'Test_test_Man2',
+            'password_1' => 'Lorem ipsum dolor sit amet',
+            'password_2' => 'Lorem ipsum dolor sit amet',
+            'real_name_1' => 'Lorem ipsum dolor sit amet',
+            'real_name_2' => 'Lorem ipsum dolor sit amet',
+            'email' => 'test2@example.com',
+            'nickname' => 'Lorem ipsum dolor sit amet',
+        ];
+        $this->post('/baser/admin/baser-core/users/edit/1', $data);
+        $users = $this->getTableLocator()->get('Users');
+        $query = $users->find()->where(['name' => 'etc']);
+        $this->assertEquals(1, $query->count());
     }
 
     /**
