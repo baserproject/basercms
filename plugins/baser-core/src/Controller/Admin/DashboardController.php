@@ -53,7 +53,7 @@ class DashboardController extends BcAdminAppController
         $plugins = Plugin::loaded();
         if ($plugins) {
             foreach($plugins as $plugin) {
-                $templates = BcUtil::getTemplateList('element/Admin/Dashboard', $plugin, $this->siteConfigs['theme']);
+                $templates = BcUtil::getTemplateList('Admin/element/Dashboard', $plugin);
                 $panels[$plugin] = $templates;
             }
         }

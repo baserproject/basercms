@@ -57,5 +57,8 @@ class DashboardControllerTest extends TestCase
     {
         $this->get('/baser/admin/');
         $this->assertResponseOk();
+        $this->assertResponseContains('baserCMSニュース');
+        $this->assertResponseContains('コンテンツ情報');
+        $this->assertResponseContains('最近の動き');
     }
 }

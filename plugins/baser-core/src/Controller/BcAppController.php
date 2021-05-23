@@ -202,7 +202,8 @@ class BcAppController extends AppController
         // TODO siteConfigs代替措置
         // $config = $this->getTableLocator()->exists('SiteConfigs')? [] : ['className' => 'BaserCore\Model\Table\SiteConfigsTable'];
         // $this->siteConfigs = TableRegistry::getTableLocator()->get('SiteConfigs');
-        $this->siteConfigs['theme'] = 'bc_sample';
+        // テーマがプラグインに含まれるため一旦コメントアウト
+        // $this->siteConfigs['theme'] = 'bc_sample';
         // TODO 未確認のため代替措置
         // >>>
         return;
