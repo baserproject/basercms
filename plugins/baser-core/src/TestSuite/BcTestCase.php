@@ -61,6 +61,7 @@ class BcTestCase extends TestCase
      * @param string $url
      * @return ServerRequest
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function getRequest($url = '/', $data = [], $method = 'GET')
@@ -85,6 +86,7 @@ class BcTestCase extends TestCase
      *
      * @param string $group
      * @checked
+     * @unitTest
      * @noTodo
      */
     protected function getUser($id = 1)
@@ -101,8 +103,9 @@ class BcTestCase extends TestCase
      * 管理画面にログインする
      *
      * @param string $group
-     * @return array $user
+     * @return object $user
      * @checked
+     * @unitTest
      * @noTodo
      */
     protected function loginAdmin($id = 1)
