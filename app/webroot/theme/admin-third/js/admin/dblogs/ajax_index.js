@@ -22,7 +22,7 @@ $(function () {
                 $('#DblogList').hide();
                 $('#DblogList').html(response);
                 $('#DblogList').slideDown(500);
-                var link = $('#DblogList .pagination a, #DblogList .list-num a');
+                let link = $('#DblogList .pagination a, #DblogList .list-num a');
                 link.unbind();
                 link.click(loadDblogs);
                 $.bcToken.replaceLinkToSubmitToken("#DblogList a.submit-token");

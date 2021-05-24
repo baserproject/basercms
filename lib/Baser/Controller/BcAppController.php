@@ -1146,21 +1146,19 @@ class BcAppController extends Controller
 	 * 画面の情報をセットする
 	 *
 	 * @param array $filterModels
-	 * @param array $options オプション
+	 * @param array $extraOption オプション
 	 * @return    void
 	 * @access    public
 	 */
-	protected function setViewConditions($filterModels = [], $options = [])
+	protected function setViewConditions($filterModels = [], $extraOption = [])
 	{
-		$_options = ['type' => 'post', 'session' => true];
-		$options = am($_options, $options);
-		extract($options);
-		if ($type === 'post' && $session == true) {
-			$this->_saveViewConditions($filterModels, $options);
-		} elseif ($type === 'get') {
-			$options['session'] = false;
+		$option = am(['type' => 'post', 'session' => true], $extraOption);
+		if ($option['type'] === 'post' && $option['session'] == true) {
+			$this->_saveViewConditions($filterModels, $option);
+		} elseif ($option['type'] === 'get') {
+			$option['session'] = false;
 		}
-		$this->_loadViewConditions($filterModels, $options);
+		$this->_loadViewConditions($filterModels, $option);
 	}
 
 	/**
