@@ -422,11 +422,19 @@ class BcBaserHelperTest extends BcTestCase {
      * Test url
      *
      * @return void
-     * @todo メソッド未実装
      */
     public function testUrl()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        $url = '/sampletest';
+        // フルパスかどうか
+        $isFull = [false,true];
+        foreach($isFull as $full) {
+            ob_start();
+            $this->BcBaser->url($url, $full);
+            $result = ob_get_clean();
+            $expected = $this->Url->build($url, ['fullBase' => $full]);
+            $this->assertEquals($expected, $result);
+        }
     }
 
     /**

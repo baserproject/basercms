@@ -550,6 +550,7 @@ class BcBaserHelper extends Helper
      * @param bool $sessionId セションIDを付加するかどうか
      * @return void
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function url($url = null, $full = false, $sessionId = true)
