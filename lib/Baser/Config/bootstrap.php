@@ -314,13 +314,6 @@ if (BC_INSTALLED || isConsole()) {
 }
 
 /**
- * アセットの場合負荷を軽減するため以降の処理を終了
- */
-if(Configure::read('BcRequest.asset')) {
-	return;
-}
-
-/**
  * プラグインをCake側で有効化
  *
  * カレントテーマのプラグインも読み込む
@@ -342,6 +335,13 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	}
 	$plugins = Hash::extract($plugins, '{n}.Plugin.name');
 	Configure::write('BcStatus.enablePlugins', $plugins);
+
+	/**
+	 * アセットの場合負荷を軽減するため以降の処理を終了
+	 */
+	if(Configure::read('BcRequest.asset')) {
+		return;
+	}
 
 	/**
 	 * イベント登録
