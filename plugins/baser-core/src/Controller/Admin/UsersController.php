@@ -160,7 +160,7 @@ class UsersController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser', 'Eメール、または、パスワードが間違っています。'));
             }
         } else {
-            if ($this->Authentication->getResult()) {
+            if ($this->Authentication->getResult()->isValid()) {
                 $this->redirect(Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect')));
             }
         }
