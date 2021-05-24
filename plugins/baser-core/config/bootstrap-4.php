@@ -124,7 +124,6 @@ if (preg_match($nonAssets, $uri) === 0) {
 				'bootstrap' => file_exists(CakePlugin::path($plugin['Plugin']['name']) . 'Config' . DS . 'bootstrap.php')
 			]);
 		}
-		return;
 	}
 }
 
@@ -298,6 +297,16 @@ if (BC_INSTALLED) {
 	}
 	Configure::write('BcRequest.isUpdater', $isUpdater);
 }
+
+/**
+ * テーマヘルパーのパスを追加する
+ */
+if (BC_INSTALLED || isConsole()) {
+	App::build([
+		'View/Helper' => [BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Helper' . DS]
+	], App::PREPEND);
+}
+
 /**
  * プラグインをCake側で有効化
  *
@@ -320,6 +329,29 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	}
 	$plugins = Hash::extract($plugins, '{n}.Plugin.name');
 	Configure::write('BcStatus.enablePlugins', $plugins);
+
+	/**
+	 * アセットの場合負荷を軽減するため以降の処理を終了
+	 */
+	if(Configure::read('BcRequest.asset')) {
+		return;
+	}
+
+	/**
+	 * イベント登録
+	 */
+	App::uses('CakeEventManager', 'Event');
+	App::uses('BcControllerEventDispatcher', 'Event');
+	App::uses('BcModelEventDispatcher', 'Event');
+	App::uses('BcViewEventDispatcher', 'Event');
+	App::uses('PagesControllerEventListener', 'Event');
+	App::uses('ContentFoldersControllerEventListener', 'Event');
+	$CakeEvent = CakeEventManager::instance();
+	$CakeEvent->attach(new BcControllerEventDispatcher());
+	$CakeEvent->attach(new BcModelEventDispatcher());
+	$CakeEvent->attach(new BcViewEventDispatcher());
+	$CakeEvent->attach(new PagesControllerEventListener());
+	$CakeEvent->attach(new ContentFoldersControllerEventListener());
 
 	/**
 	 * テーマの bootstrap を実行する
@@ -388,11 +420,3 @@ if (Configure::read('Cache.check')) {
 	}
 }
 
-/**
- * テーマヘルパーのパスを追加する
- */
-if (BC_INSTALLED || isConsole()) {
-	App::build([
-		'View/Helper' => [BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Helper' . DS]
-	], App::PREPEND);
-}
