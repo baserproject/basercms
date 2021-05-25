@@ -22,39 +22,39 @@ return;
 class BcRedirectSubSiteFilter extends DispatcherFilter
 {
 
-	/**
-	 * 優先順位
-	 *
-	 * 先にキャッシュを読まれると意味がない為
-	 * BcCacheDispatcherより先に呼び出される必要がある
-	 *
-	 * @var int
-	 */
-	public $priority = 4;
+    /**
+     * 優先順位
+     *
+     * 先にキャッシュを読まれると意味がない為
+     * BcCacheDispatcherより先に呼び出される必要がある
+     *
+     * @var int
+     */
+    public $priority = 4;
 
-	/**
-	 * Before Dispatch
-	 *
-	 * @param \Cake\Event\Event $event containing the request and response object
-	 * @return void
-	 */
-	public function beforeDispatch(\Cake\Event\Event $event)
-	{
+    /**
+     * Before Dispatch
+     *
+     * @param \Cake\Event\Event $event containing the request and response object
+     * @return void
+     */
+    public function beforeDispatch(\Cake\Event\Event $event)
+    {
 
-		$request = $event->getData('request');
-		if (Configure::read('BcRequest.isUpdater')) {
-			return;
-		}
-		$response = $event->getData('response');
-		if ($request->is('admin')) {
-			return;
-		}
-		$subSite = BcSite::findCurrentSub();
-		if (!is_null($subSite) && $subSite->shouldRedirects($request)) {
-			$response->header('Location', $request->base . $subSite->makeUrl($request));
-			$response->statusCode(302);
-			return $response;
-		}
-	}
+        $request = $event->getData('request');
+        if (Configure::read('BcRequest.isUpdater')) {
+            return;
+        }
+        $response = $event->getData('response');
+        if ($request->is('admin')) {
+            return;
+        }
+        $subSite = BcSite::findCurrentSub();
+        if (!is_null($subSite) && $subSite->shouldRedirects($request)) {
+            $response->header('Location', $request->base . $subSite->makeUrl($request));
+            $response->statusCode(302);
+            return $response;
+        }
+    }
 
 }

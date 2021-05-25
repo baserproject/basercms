@@ -23,32 +23,32 @@ App::uses('CakeEventManager', 'Event');
 class CakeEventManagerTest extends BcTestCase
 {
 
-	/**
-	 * set up
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	/**
-	 * Dispatches a new event to all configured listeners
-	 */
-	public function testDispatch()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * Dispatches a new event to all configured listeners
+     */
+    public function testDispatch()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
 }

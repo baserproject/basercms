@@ -27,6 +27,7 @@ class BcHtmlHelper extends HtmlHelper
 
 // CUSTOMIZE ADD 2014/07/03 ryuring
 // >>>
+
     /**
      * Trait
      */
@@ -62,7 +63,7 @@ class BcHtmlHelper extends HtmlHelper
      */
     public function setScript($variable, $value, $options = []): string
     {
-        if(isset($options['inline'])) {
+        if (isset($options['inline'])) {
             trigger_error('オプション inline は利用できなくなりました。 block を利用してください。', E_USER_WARNING);
         }
         $options = array_merge([

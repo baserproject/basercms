@@ -1,4 +1,5 @@
 <?php
+
 class ContentLinksSchema extends CakeSchema
 {
     public $file = 'content_links.php';

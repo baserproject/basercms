@@ -53,10 +53,10 @@ class UsersController extends BcAdminAppController
      *
      * @var array
      */
-     // TODO 未実装
-     /* >>>
-	public $components = ['BcReplacePrefix'];
-    <<< */
+    // TODO 未実装
+    /* >>>
+   public $components = ['BcReplacePrefix'];
+   <<< */
 
     /**
      * initialize

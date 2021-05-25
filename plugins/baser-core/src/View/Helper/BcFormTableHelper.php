@@ -29,54 +29,54 @@ class BcFormTableHelper extends Helper
      */
     use BcEventDispatcherTrait;
 
-	/**
-	 * テーブル前発火
-	 *
-	 * @return string
+    /**
+     * テーブル前発火
+     *
+     * @return string
      * @checked
-	 */
-	public function dispatchBefore()
-	{
+     */
+    public function dispatchBefore()
+    {
 
-	    // TODO 未実装のため代替措置
-	    // >>>
-	    return '';
-	    // <<<
+        // TODO 未実装のため代替措置
+        // >>>
+        return '';
+        // <<<
 
-		$event = $this->dispatchLayerEvent('before', [
-			'id' => $this->_View->BcForm->getId(),
-			'out' => ''
-		], ['class' => 'BcFormTable', 'plugin' => '']);
-		$output = '';
-		if ($event !== false) {
-			$output = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
-		}
-		return $output;
-	}
+        $event = $this->dispatchLayerEvent('before', [
+            'id' => $this->_View->BcForm->getId(),
+            'out' => ''
+        ], ['class' => 'BcFormTable', 'plugin' => '']);
+        $output = '';
+        if ($event !== false) {
+            $output = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
+        }
+        return $output;
+    }
 
-	/**
-	 * テーブル後発火
-	 *
-	 * @return string
+    /**
+     * テーブル後発火
+     *
+     * @return string
      * @checked
-	 */
-	public function dispatchAfter()
-	{
+     */
+    public function dispatchAfter()
+    {
 
-	    // TODO 未実装のため代替措置
-	    // >>>
-	    return '';
-	    // <<<
+        // TODO 未実装のため代替措置
+        // >>>
+        return '';
+        // <<<
 
-		$event = $this->dispatchLayerEvent('after', [
-			'id' => $this->_View->BcForm->getId(),
-			'out' => ''
-		], ['class' => 'BcFormTable', 'plugin' => '']);
-		$output = '';
-		if ($event !== false) {
-			$output = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
-		}
-		return $output;
-	}
+        $event = $this->dispatchLayerEvent('after', [
+            'id' => $this->_View->BcForm->getId(),
+            'out' => ''
+        ], ['class' => 'BcFormTable', 'plugin' => '']);
+        $output = '';
+        if ($event !== false) {
+            $output = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
+        }
+        return $output;
+    }
 
 }

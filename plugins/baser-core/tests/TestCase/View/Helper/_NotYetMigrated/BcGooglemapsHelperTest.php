@@ -26,43 +26,43 @@ App::uses('Component', 'Controller');
 class BcGooglemapsHelperTest extends BcTestCase
 {
 
-	/**
-	 * Fixtures
-	 * @var array
-	 */
-	public $fixtures = [
-		'baser.Default.Site',
-		'baser.Default.SiteConfig'
-	];
+    /**
+     * Fixtures
+     * @var array
+     */
+    public $fixtures = [
+        'baser.Default.Site',
+        'baser.Default.SiteConfig'
+    ];
 
-	public function setUp()
-	{
-		parent::setUp();
-		$View = new View();
-		$this->BcGooglemaps = new BcGooglemapsHelper($View);
-	}
+    public function setUp()
+    {
+        parent::setUp();
+        $View = new View();
+        $this->BcGooglemaps = new BcGooglemapsHelper($View);
+    }
 
-	public function tearDown()
-	{
-		unset($this->BcGooglemaps);
-		parent::tearDown();
-	}
+    public function tearDown()
+    {
+        unset($this->BcGooglemaps);
+        parent::tearDown();
+    }
 
 
-	/**
-	 * Google マップ を読み込む
-	 *
-	 * @param string $address
-	 * @param int $width
-	 * @param int $height
-	 * @param string $expected 期待値
-	 * 2018/07/19 ryuring GoogleMapsAPIがAPIキー必須となった為コメントアウト
-	 * @todo 処理内容を変える等の検討が必要
-	 */
-	public function testLoad()
+    /**
+     * Google マップ を読み込む
+     *
+     * @param string $address
+     * @param int $width
+     * @param int $height
+     * @param string $expected 期待値
+     * 2018/07/19 ryuring GoogleMapsAPIがAPIキー必須となった為コメントアウト
+     * @todo 処理内容を変える等の検討が必要
+     */
+    public function testLoad()
 //	public function testLoad($address, $width, $height, $expected)
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
 //		ob_start();
 //		$result = $this->BcGooglemaps->load($address, $width, $height);
 //		$output = ob_get_clean();
@@ -78,7 +78,7 @@ class BcGooglemapsHelperTest extends BcTestCase
 //			$this->assertRegExp('/' . $expected . '/', $output, 'Google マップを正しく出力できません');
 //		}
 
-	}
+    }
 
 //	public function loadDataProvider()
 //	{

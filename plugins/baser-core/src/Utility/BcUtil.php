@@ -591,13 +591,13 @@ class BcUtil
         }
         $templatePaths = [];
         $templatePath = self::getTemplatePath($plugin);
-        if($templatePath) {
+        if ($templatePath) {
             $templatePaths[] = $templatePath;
         }
 
         if ($theme) {
             $templatePath = self::getTemplatePath($theme);
-            if($templatePath) {
+            if ($templatePath) {
                 $templatePaths[] = $templatePath;
             }
         }
@@ -607,7 +607,7 @@ class BcUtil
             $folder = new Folder($templatePath . $path . DS);
             $files = $folder->read(true, true);
             if ($files[1]) {
-                $_templates = $_templates ? array_merge($_templates, $files[1]) : $files[1];
+                $_templates = $_templates? array_merge($_templates, $files[1]) : $files[1];
             }
         }
         $templates = [];
@@ -619,6 +619,7 @@ class BcUtil
         }
         return $templates;
     }
+
     /**
      * テンプレートのpathを返す
      *
@@ -630,7 +631,7 @@ class BcUtil
      */
     public static function getTemplatePath(string $plugin): string
     {
-        if(Plugin::isLoaded($plugin)) {
+        if (Plugin::isLoaded($plugin)) {
             return Plugin::path($plugin) . 'templates/';
         } else {
             return false;

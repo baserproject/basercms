@@ -50,7 +50,7 @@ class PluginsController extends BcAdminAppController
      * @unitTest
      * @noTodo
      */
-    public function initialize():void
+    public function initialize(): void
     {
         parent::initialize();
         $this->loadComponent('RequestHandler');
@@ -89,18 +89,18 @@ class PluginsController extends BcAdminAppController
             }
         }
 
-		if (!empty($this->request->getQuery('sortmode'))) {
-		    //並び替えモードの場合はDBにデータが登録されていないプラグインを表示しない
-			$sortmode = true;
-			$plugins = $registered;
-		} else {
+        if (!empty($this->request->getQuery('sortmode'))) {
+            //並び替えモードの場合はDBにデータが登録されていないプラグインを表示しない
+            $sortmode = true;
+            $plugins = $registered;
+        } else {
             $sortmode = false;
             $plugins = array_merge($registered, $unregistered);
-		}
+        }
 
         $this->set('plugins', $plugins);
 
-        if($this->RequestHandler->prefers('json')) {
+        if ($this->RequestHandler->prefers('json')) {
             $this->viewBuilder()->setOption('serialize', ['plugins']);
             return;
         }
@@ -149,7 +149,7 @@ class PluginsController extends BcAdminAppController
         BcUtil::includePluginClass($name);
         $plugins = Plugin::getCollection();
         $plugin = $plugins->create($name);
-        if(!method_exists($plugin, 'install')) {
+        if (!method_exists($plugin, 'install')) {
             $this->BcMessage->setError(__d('baser', 'プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。'));
             return;
         }
@@ -214,7 +214,7 @@ class PluginsController extends BcAdminAppController
         BcUtil::includePluginClass($name);
         $plugins = Plugin::getCollection();
         $plugin = $plugins->create($name);
-        if(!method_exists($plugin, 'uninstall')) {
+        if (!method_exists($plugin, 'uninstall')) {
             $this->BcMessage->setError(__d('baser', 'プラグインに Plugin クラスが存在しません。手動で削除してください。'));
             return;
         }
@@ -348,13 +348,13 @@ class PluginsController extends BcAdminAppController
         if (!($baserPlugins = Cache::read('baserMarketPlugins', '_bc_env_'))) {
             $Xml = new Xml();
             try {
-				$client = new Client([
+                $client = new Client([
                     'host' => ''
                 ]);
-				$response = $client->get(Configure::read('BcApp.marketPluginRss'));
-				if ($response->getStatusCode() !== 200) {
+                $response = $client->get(Configure::read('BcApp.marketPluginRss'));
+                if ($response->getStatusCode() !== 200) {
                     return;
-				}
+                }
                 $baserPlugins = $Xml->build($response->getBody()->getContents());
                 $baserPlugins = $Xml->toArray($baserPlugins->channel);
                 $baserPlugins = $baserPlugins['channel']['item'];
@@ -467,7 +467,7 @@ class PluginsController extends BcAdminAppController
         BcUtil::includePluginClass($plugin->name);
         $plugins = Plugin::getCollection();
         $pluginClass = $plugins->create($plugin->name);
-        if(!method_exists($pluginClass, 'rollbackDb')) {
+        if (!method_exists($pluginClass, 'rollbackDb')) {
             $this->BcMessage->setError(__d('baser', 'プラグインに Plugin クラスが存在しません。手動で削除してください。'));
             return;
         }
@@ -500,7 +500,7 @@ class PluginsController extends BcAdminAppController
     public function batch()
     {
         $this->autoRender = false;
-        if($this->request->getData('ListTool.batch') !== 'detach') {
+        if ($this->request->getData('ListTool.batch') !== 'detach') {
             return;
         }
         foreach($this->request->getData('ListTool.batch_targets') as $id) {

@@ -63,6 +63,7 @@ class SiteConfigsTable extends AppTable
     {
         parent::initialize($config);
     }
+
     /**
      * Validation Default
      *
@@ -72,36 +73,36 @@ class SiteConfigsTable extends AppTable
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-        ->integer('id')
-        ->allowEmptyString('id', null, 'create');
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
 
         $validator
-        ->scalar('name')
-        ->maxLength('name', 255, __d('baser', '255文字以内で入力してください。'))
-        ->notEmptyString('name', __d('baser', 'を入力してください。'))
-        // __constructから移動
-        ->add('name', [
-            'formal_name' => [
-                'rule' => ['notBlank'], 'message' => __d('baser', 'Webサイト名を入力してください。'), 'required' => true],
-            'name' => [
-                'rule' => ['notBlank'], 'message' => __d('baser', 'Webサイトタイトルを入力してください。'), 'required' => true],
-            'email' => [
-                ['rule' => ['emails'], 'message' => __d('baser', '管理者メールアドレスの形式が不正です。')],
-                ['rule' => ['notBlank'], 'message' => __d('baser', '管理者メールアドレスを入力してください。')]],
-            'mail_encode' => [
-                'rule' => ['notBlank'], 'message' => __d('baser', 'メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。'), 'required' => true],
-            'site_url' => [
-                'rule' => ['notBlank'], 'message' => __d('baser', 'WebサイトURLを入力してください。'), 'required' => true],
-            'admin_ssl' => [
-                'rule' => ['sslUrlExists'], 'message' => __d('baser', '管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。')],
-            'main_site_display_name' => [
-                'rule' => ['notBlank'], 'message' => __d('baser', 'メインサイト表示名を入力してください。'), 'required' => false]
-        ]);
+            ->scalar('name')
+            ->maxLength('name', 255, __d('baser', '255文字以内で入力してください。'))
+            ->notEmptyString('name', __d('baser', 'を入力してください。'))
+            // __constructから移動
+            ->add('name', [
+                'formal_name' => [
+                    'rule' => ['notBlank'], 'message' => __d('baser', 'Webサイト名を入力してください。'), 'required' => true],
+                'name' => [
+                    'rule' => ['notBlank'], 'message' => __d('baser', 'Webサイトタイトルを入力してください。'), 'required' => true],
+                'email' => [
+                    ['rule' => ['emails'], 'message' => __d('baser', '管理者メールアドレスの形式が不正です。')],
+                    ['rule' => ['notBlank'], 'message' => __d('baser', '管理者メールアドレスを入力してください。')]],
+                'mail_encode' => [
+                    'rule' => ['notBlank'], 'message' => __d('baser', 'メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。'), 'required' => true],
+                'site_url' => [
+                    'rule' => ['notBlank'], 'message' => __d('baser', 'WebサイトURLを入力してください。'), 'required' => true],
+                'admin_ssl' => [
+                    'rule' => ['sslUrlExists'], 'message' => __d('baser', '管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。')],
+                'main_site_display_name' => [
+                    'rule' => ['notBlank'], 'message' => __d('baser', 'メインサイト表示名を入力してください。'), 'required' => false]
+            ]);
 
         $validator
-        ->scalar('text')
-        ->maxLength('name', 65535, __d('baser', '65535文字以内で入力してください。'))
-        ->notEmptyString('text', __d('baser', 'テキストを入力してください。'));
+            ->scalar('text')
+            ->maxLength('name', 65535, __d('baser', '65535文字以内で入力してください。'))
+            ->notEmptyString('text', __d('baser', 'テキストを入力してください。'));
 
         return $validator;
     }
@@ -167,7 +168,7 @@ class SiteConfigsTable extends AppTable
         if (!empty($siteConfigs['contents_sort_last_modified'])) {
             $user = BcUtil::loginUser();
             $lastModified = $siteConfigs['contents_sort_last_modified'];
-            list($lastModified, $userId) = explode('|', $lastModified);
+            [$lastModified, $userId] = explode('|', $lastModified);
             $lastModified = strtotime($lastModified);
             if ($user['id'] != $userId) {
                 $listDisplayed = strtotime($listDisplayed);

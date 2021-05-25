@@ -18,23 +18,23 @@ App::uses('BcLayoutHelper', 'View/Helper');
 class BcLayoutHelperTest extends CakeTestCase
 {
 
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	public function testDispatchContentsHeader()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    public function testDispatchContentsHeader()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	public function testDispatchContentsFooter()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    public function testDispatchContentsFooter()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }

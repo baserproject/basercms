@@ -1,4 +1,5 @@
 <?php
+
 class ContentsSchema extends CakeSchema
 {
     public $file = 'contents.php';

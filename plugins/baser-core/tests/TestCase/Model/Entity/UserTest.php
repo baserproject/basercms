@@ -97,6 +97,7 @@ class UserTest extends BcTestCase
         $result = $user->getDisplayName();
         $this->assertEquals($expect, $result);
     }
+
     public function getUserNameDataProvider()
     {
         return [

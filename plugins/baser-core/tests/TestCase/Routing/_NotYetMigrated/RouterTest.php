@@ -23,32 +23,32 @@ App::uses('Router', 'Routing');
 class RouterTest extends BcTestCase
 {
 
-	/**
-	 * set up
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	/**
-	 * Finds URL for specified action.
-	 */
-	public function testUrl()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * Finds URL for specified action.
+     */
+    public function testUrl()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
 }

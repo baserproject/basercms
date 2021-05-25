@@ -23,57 +23,57 @@ App::uses('PagesControllerEventListener', 'Event');
 class PagesControllerEventListenerTest extends BcTestCase
 {
 
-	/**
-	 * set up
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	/**
-	 * Contents Before Move
-	 */
-	public function testContentsBeforeMove()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * Contents Before Move
+     */
+    public function testContentsBeforeMove()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * Contents After Move
-	 */
-	public function testContentsAfterMove()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * Contents After Move
+     */
+    public function testContentsAfterMove()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * Contents Before Delete
-	 */
-	public function testContentsBeforeDelete()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * Contents Before Delete
+     */
+    public function testContentsBeforeDelete()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * Contents After Trash Return
-	 */
-	public function testContentsAfterTrashReturn()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * Contents After Trash Return
+     */
+    public function testContentsAfterTrashReturn()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
 
 }

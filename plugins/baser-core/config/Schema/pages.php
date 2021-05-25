@@ -22,7 +22,7 @@ class PagesSchema extends CakeSchema
         }
 
         if (isset($event['create'])) {
-            switch ($event['create']) {
+            switch($event['create']) {
                 case 'pages':
                     $tableName = $db->config['prefix'] . 'pages';
                     $db->query("ALTER TABLE {$tableName} CHANGE contents contents LONGTEXT");
@@ -33,14 +33,14 @@ class PagesSchema extends CakeSchema
     }
 
     public $pages = [
-        'id'              => ['type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'],
-        'contents'        => ['type' => 'text', 'null' => true, 'default' => null],
-        'draft'           => ['type' => 'text', 'null' => true, 'default' => null],
-        'page_template'   => ['type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'],
-        'code'            => ['type' => 'text', 'null' => true, 'default' => null],
-        'modified'        => ['type' => 'datetime', 'null' => true, 'default' => null],
-        'created'         => ['type' => 'datetime', 'null' => true, 'default' => null],
-        'indexes'         => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
+        'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'],
+        'contents' => ['type' => 'text', 'null' => true, 'default' => null],
+        'draft' => ['type' => 'text', 'null' => true, 'default' => null],
+        'page_template' => ['type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'],
+        'code' => ['type' => 'text', 'null' => true, 'default' => null],
+        'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
+        'created' => ['type' => 'datetime', 'null' => true, 'default' => null],
+        'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
         'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci']
     ];
 }

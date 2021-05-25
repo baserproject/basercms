@@ -22,32 +22,32 @@ App::uses('CakeSchema', 'Model');
  */
 class CakeSchemaTest extends BaserTestCase
 {
-	/**
-	 * set up
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	/**
-	 * Compares two sets of schemas.
-	 */
-	public function testCompare()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * Compares two sets of schemas.
+     */
+    public function testCompare()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
 }

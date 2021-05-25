@@ -21,6 +21,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Utility\BcUtil;
 use Cake\Http\Exception\NotFoundException;
+
 /**
  * Class BcAdminAppController
  * @package BaserCore\Controller\Admin
@@ -198,7 +199,7 @@ class BcAdminAppController extends BcAppController
      */
     public function beforeRender(EventInterface $event): void
     {
-        if(!isset($this->RequestHandler) || !$this->RequestHandler->prefers('json')) {
+        if (!isset($this->RequestHandler) || !$this->RequestHandler->prefers('json')) {
             $this->viewBuilder()->setClassName('BaserCore.BcAdminApp');
         }
         $this->viewBuilder()->setTheme('BcAdminThird');

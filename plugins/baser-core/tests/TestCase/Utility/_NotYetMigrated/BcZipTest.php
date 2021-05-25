@@ -21,40 +21,40 @@ App::uses('BcZip', 'Lib');
 class BcZipTest extends BcTestCase
 {
 
-	/**
-	 * setUp
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * setUp
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	/**
-	 * BcZip constructor.
-	 */
-	public function test__construct()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * BcZip constructor.
+     */
+    public function test__construct()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * ZIP を展開する
-	 */
-	public function testExtract()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * ZIP を展開する
+     */
+    public function testExtract()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
 }

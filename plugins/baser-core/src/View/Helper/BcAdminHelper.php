@@ -39,47 +39,47 @@ class BcAdminHelper extends Helper
      */
     public $helpers = ['BcBaser'];
 
-	/**
-	 * 管理システムグローバルメニューの利用可否確認
-	 *
-	 * @return bool
-	 */
-	public function isAdminGlobalmenuUsed()
-	{
-	    return true;
-	    // TODO 要コード確認
-	    /* >>>
-		if (!BC_INSTALLED) {
-			return false;
-		}
-		if (Configure::read('BcRequest.isUpdater')) {
-			return false;
-		}
-		$user = $this->_View->get('user');
-		if (!$user) {
-			return false;
-		}
-		$UserGroup = ClassRegistry::init('UserGroup');
-		return $UserGroup->isAdminGlobalmenuUsed($user['user_group_id']);
-	    <<< */
-	}
+    /**
+     * 管理システムグローバルメニューの利用可否確認
+     *
+     * @return bool
+     */
+    public function isAdminGlobalmenuUsed()
+    {
+        return true;
+        // TODO 要コード確認
+        /* >>>
+        if (!BC_INSTALLED) {
+            return false;
+        }
+        if (Configure::read('BcRequest.isUpdater')) {
+            return false;
+        }
+        $user = $this->_View->get('user');
+        if (!$user) {
+            return false;
+        }
+        $UserGroup = ClassRegistry::init('UserGroup');
+        return $UserGroup->isAdminGlobalmenuUsed($user['user_group_id']);
+        <<< */
+    }
 
-	/**
-	 * ログインユーザーがシステム管理者かチェックする
-	 *
-	 * @return boolean
-	 */
-	public function isSystemAdmin()
-	{
-		$user = $this->_View->getVar('user');
-		if ($this->request->getParam['prefix'] === 'Admin' || !$user) {
-			return false;
-		}
-		if ($user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
-			return true;
-		}
-		return false;
-	}
+    /**
+     * ログインユーザーがシステム管理者かチェックする
+     *
+     * @return boolean
+     */
+    public function isSystemAdmin()
+    {
+        $user = $this->_View->getVar('user');
+        if ($this->request->getParam['prefix'] === 'Admin' || !$user) {
+            return false;
+        }
+        if ($user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * JSON形式でメニューデータを取得する

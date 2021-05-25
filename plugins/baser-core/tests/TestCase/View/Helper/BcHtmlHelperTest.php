@@ -94,7 +94,8 @@ class BcHtmlHelperTest extends BcTestCase
         $this->assertEquals('<script>var bcI18n = [];</script>', $result);
     }
 
-    public function testI18nScript() {
+    public function testI18nScript()
+    {
         $result = $this->BcHtml->i18nScript(['a' => 'b', 'c' => 'd'], ['block' => false]);
         $this->assertEquals("<script>bcI18n.a = \"b\";</script>\n<script>bcI18n.c = \"d\";</script>\n", $result);
     }

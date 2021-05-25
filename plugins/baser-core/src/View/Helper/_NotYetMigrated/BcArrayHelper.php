@@ -31,74 +31,74 @@ class BcArrayHelper extends Helper
      */
     use BcEventDispatcherTrait;
 
-	/**
-	 * 配列の最初の要素かどうか調べる
-	 *
-	 * @param array $array 配列
-	 * @param mixed $key 現在のキー
-	 * @return boolean
-	 */
-	public function first($array, $key)
-	{
-		reset($array);
-		$first = key($array);
-		if ($key === $first) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    /**
+     * 配列の最初の要素かどうか調べる
+     *
+     * @param array $array 配列
+     * @param mixed $key 現在のキー
+     * @return boolean
+     */
+    public function first($array, $key)
+    {
+        reset($array);
+        $first = key($array);
+        if ($key === $first) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	/**
-	 * 配列の最後の要素かどうか調べる
-	 *
-	 * @param array $array 配列
-	 * @param mixed $key 現在のキー
-	 * @return boolean
-	 */
-	public function last($array, $key)
-	{
-		end($array);
-		$end = key($array);
-		if ($key === $end) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    /**
+     * 配列の最後の要素かどうか調べる
+     *
+     * @param array $array 配列
+     * @param mixed $key 現在のキー
+     * @return boolean
+     */
+    public function last($array, $key)
+    {
+        end($array);
+        $end = key($array);
+        if ($key === $end) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	/**
-	 * 配列にテキストを追加する
-	 *
-	 * @param array $array
-	 * @param string $prefix
-	 * @param string $suffix
-	 * @return    array
-	 * @access    public
-	 */
-	public function addText($array, $prefix = '', $suffix = '')
-	{
-		if ($prefix || $suffix) {
-			array_walk($array, [$this, '__addText'], $prefix . ',' . $suffix);
-		}
-		return $array;
-	}
+    /**
+     * 配列にテキストを追加する
+     *
+     * @param array $array
+     * @param string $prefix
+     * @param string $suffix
+     * @return    array
+     * @access    public
+     */
+    public function addText($array, $prefix = '', $suffix = '')
+    {
+        if ($prefix || $suffix) {
+            array_walk($array, [$this, '__addText'], $prefix . ',' . $suffix);
+        }
+        return $array;
+    }
 
-	/**
-	 * addTextToArrayのコールバックメソッド
-	 *
-	 * @param string $value
-	 * @param string $key
-	 * @param string $add
-	 * @return    string
-	 * @access    private
-	 */
-	private function __addText(&$value, $key, $add)
-	{
-		if ($add) {
-			[$prefix, $suffix] = explode(',', $add);
-		}
-		$value = $prefix . $value . $suffix;
-	}
+    /**
+     * addTextToArrayのコールバックメソッド
+     *
+     * @param string $value
+     * @param string $key
+     * @param string $add
+     * @return    string
+     * @access    private
+     */
+    private function __addText(&$value, $key, $add)
+    {
+        if ($add) {
+            [$prefix, $suffix] = explode(',', $add);
+        }
+        $value = $prefix . $value . $suffix;
+    }
 
 }

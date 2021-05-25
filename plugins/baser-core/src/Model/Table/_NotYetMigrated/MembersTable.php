@@ -24,18 +24,18 @@ App::uses('User', 'Model');
 class Member extends User
 {
 
-	/**
-	 * クラス名
-	 *
-	 * @var string
-	 */
-	public $name = 'Member';
+    /**
+     * クラス名
+     *
+     * @var string
+     */
+    public $name = 'Member';
 
-	/**
-	 * テーブル名
-	 *
-	 * @var string
-	 */
-	public $useTable = 'users';
+    /**
+     * テーブル名
+     *
+     * @var string
+     */
+    public $useTable = 'users';
 
 }

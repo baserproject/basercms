@@ -31,7 +31,8 @@ use Cake\Routing\Router;
  * @property FlashHelper $Flash
  * @property UrlHelper $Url
  */
-class BcBaserHelperTest extends BcTestCase {
+class BcBaserHelperTest extends BcTestCase
+{
 
     /**
      * Fixtures
@@ -85,6 +86,7 @@ class BcBaserHelperTest extends BcTestCase {
     {
         parent::__construct($name, $data, $dataName);
     }
+
     /**
      * setUp method
      *
@@ -124,10 +126,11 @@ class BcBaserHelperTest extends BcTestCase {
         Router::reload();
         parent::tearDown();
     }
+
     /**
      * Test BcBaser->jsが適切な<script>を取得できているかテスト
-     * @todo basercms4系を統合する
      * @return void
+     * @todo basercms4系を統合する
      */
     public function testJs()
     {
@@ -144,7 +147,7 @@ class BcBaserHelperTest extends BcTestCase {
         $this->assertEquals($expected, $result);
     }
 
-        /**
+    /**
      * JSの読み込みタグを出力する
      * @param string $expected 期待値
      * @param string $url URL
@@ -187,8 +190,8 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * Test BcBaser->getElementが適切なelementを取得できているかテスト
-     * @todo basercms4系と統合する
      * @return void
+     * @todo basercms4系と統合する
      */
     public function testGetElement()
     {
@@ -225,8 +228,8 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * Test BcBaser->imgが適切な画像を出力できてるかテスト
-     * @todo basercms4系統合が必要
      * @return void
+     * @todo basercms4系統合が必要
      */
     public function testImg()
     {
@@ -252,8 +255,8 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * Test BcBaser->getImgが適切な画像を取得できているかテスト
-     * @todo basercms4系統合必要
      * @return void
+     * @todo basercms4系統合必要
      */
     public function testgetImg()
     {
@@ -302,10 +305,11 @@ class BcBaserHelperTest extends BcTestCase {
         $expected = $this->Html->link($link);
         $this->assertEquals($expected, $result);
     }
+
     /**
      * Test BcBaser->getLinkが適切なリンクを取得できているかテスト
-     * @todo basercms4統合必要
      * @return void
+     * @todo basercms4統合必要
      */
     public function testGeLink()
     {
@@ -367,7 +371,7 @@ class BcBaserHelperTest extends BcTestCase {
     public function testIsAdminUser($id, $expected)
     {
         $this->loginAdmin();
-        $user = $id ? $this->getuser($id) : null;
+        $user = $id? $this->getuser($id) : null;
         $result = $this->BcBaser->isAdminUser($user);
         $this->assertEquals($expected, $result);
     }
@@ -500,8 +504,8 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * コンテンツタイトルを取得する
-     * @todo メソッド未実装
      * @return void
+     * @todo メソッド未実装
      */
     public function testGetContentsTitle()
     {
@@ -529,8 +533,8 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * Test BcBaser->getContentsNameが適切なコンテンツ名を取得してるかテスト
-     * @todo basercms4系を統合する
      * @return void
+     * @todo basercms4系を統合する
      */
     public function testGetContentsName()
     {
@@ -655,14 +659,14 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * Test BcBaser->getUrlが適切なURLを取得してるかテスト
-     * @todo testGetUrl_basercms4を統合する
      * @return void
+     * @todo testGetUrl_basercms4を統合する
      */
     public function testGetUrl()
     {
         $url = '/sampletest';
         // フルパスかどうか
-        $isFull = [false,true];
+        $isFull = [false, true];
         foreach($isFull as $full) {
             $result = $this->BcBaser->getUrl($url, $full);
             $expected = $this->Url->build($url, ['fullBase' => $full]);
@@ -672,8 +676,8 @@ class BcBaserHelperTest extends BcTestCase {
 
     /**
      * Test BcBaser->getUrlが適切なURLを取得してるかテスト
-     * @todo testGetUrlに統合する
      * @return void
+     * @todo testGetUrlに統合する
      */
     public function testGetUrl_Version4()
     {
@@ -767,7 +771,8 @@ class BcBaserHelperTest extends BcTestCase {
 
         $this->BcBaser->set('user', '');
     }
-        /**
+
+    /**
      * タイトルを設定する
      * @return void
      */
@@ -837,7 +842,7 @@ class BcBaserHelperTest extends BcTestCase {
         $this->assertEquals('baserCMS,国産,オープンソース', $this->BcBaser->getKeywords());
     }
 
-        /**
+    /**
      * meta タグの説明文を設定する
      * @return void
      */
@@ -957,7 +962,7 @@ class BcBaserHelperTest extends BcTestCase {
         ];
     }
 
-        /**
+    /**
      * タイトルタグを取得する
      * @return void
      */
@@ -1698,6 +1703,7 @@ class BcBaserHelperTest extends BcTestCase {
         $ContentType = $result[2];
         $this->assertRegExp('/' . $type . '/', $ContentType, 'キャッシュの対象を指定できません');
     }
+
     public function cacheHeaderDataProvider()
     {
         return [
@@ -1791,6 +1797,7 @@ class BcBaserHelperTest extends BcTestCase {
             [2, '<a href="\/s\/">トップページ.*<\/li>.*<\/ul>']
         ];
     }
+
     /**
      * Flashを表示する
      *
@@ -2075,6 +2082,7 @@ class BcBaserHelperTest extends BcTestCase {
         $this->expectOutputRegex('/' . $expect . '/s');
         $this->BcBaser->mainImage($options);
     }
+
     /**
      * mainImage用のデータプロバイダ
      *
@@ -2453,7 +2461,7 @@ class BcBaserHelperTest extends BcTestCase {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->BcBaser->getCurrentContent();
         $this->assertEquals($this->BcBaser->getContentByEntityId($result['entity_id'], 'Page')['Content'], $result);
-        $this->BcBaser->request = $this->BcBaser->request->withParam('Content',  '');
+        $this->BcBaser->request = $this->BcBaser->request->withParam('Content', '');
         $this->assertEquals('', $this->BcBaser->getCurrentContent());
     }
 
@@ -2490,48 +2498,48 @@ class BcBaserHelperTest extends BcTestCase {
         $this->assertRegExp('/<link rel="apple-touch-icon/s', $result);
     }
 
-	/**
-	 * testSetAlternateUrl
-	 * @dataProvider setAlternateUrlDataProvider
-	 */
-	public function testSetAlternateUrl($url, $expected)
-	{
-	    $this->markTestIncomplete('このテストは、まだ実装されていません。');
-		Configure::write('BcSite.use_site_device_setting', true);
-		$this->BcBaser->request = $this->_getRequest($url);
-		$this->BcBaser->setAlternateUrl();
-		$this->assertEquals($expected, $this->_View->fetch('meta'));
-	}
+    /**
+     * testSetAlternateUrl
+     * @dataProvider setAlternateUrlDataProvider
+     */
+    public function testSetAlternateUrl($url, $expected)
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        Configure::write('BcSite.use_site_device_setting', true);
+        $this->BcBaser->request = $this->_getRequest($url);
+        $this->BcBaser->setAlternateUrl();
+        $this->assertEquals($expected, $this->_View->fetch('meta'));
+    }
 
-	public function setAlternateUrlDataProvider()
-	{
-		return [
-			['/', '<link href="http://localhost/s/" rel="alternate" media="only screen and (max-width: 640px)"/>'],
-			['/s/', '']
-		];
-	}
+    public function setAlternateUrlDataProvider()
+    {
+        return [
+            ['/', '<link href="http://localhost/s/" rel="alternate" media="only screen and (max-width: 640px)"/>'],
+            ['/s/', '']
+        ];
+    }
 
-	/**
-	 * testSetAlternateUrl
-	 * @dataProvider setCanonicalUrlDataProvider
-	 */
-	public function testSetCanonicalUrl($url, $expected)
-	{
-	    $this->markTestIncomplete('このテストは、まだ実装されていません。');
-		Configure::write('BcSite.use_site_device_setting', true);
-		$this->BcBaser->request = $this->_getRequest($url);
-		$this->BcBaser->setCanonicalUrl();
-		$this->assertEquals($expected, $this->_View->fetch('meta'));
-	}
+    /**
+     * testSetAlternateUrl
+     * @dataProvider setCanonicalUrlDataProvider
+     */
+    public function testSetCanonicalUrl($url, $expected)
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        Configure::write('BcSite.use_site_device_setting', true);
+        $this->BcBaser->request = $this->_getRequest($url);
+        $this->BcBaser->setCanonicalUrl();
+        $this->assertEquals($expected, $this->_View->fetch('meta'));
+    }
 
-	public function setCanonicalUrlDataProvider()
-	{
-		return [
-			['/', '<link href="http://localhost/" rel="canonical"/>'],
-			['/index.html', '<link href="http://localhost/" rel="canonical"/>'],
-			['/about/index.html', '<link href="http://localhost/about/" rel="canonical"/>'],
-			['/s/', '<link href="http://localhost/" rel="canonical"/>'],
-		];
-	}
+    public function setCanonicalUrlDataProvider()
+    {
+        return [
+            ['/', '<link href="http://localhost/" rel="canonical"/>'],
+            ['/index.html', '<link href="http://localhost/" rel="canonical"/>'],
+            ['/about/index.html', '<link href="http://localhost/about/" rel="canonical"/>'],
+            ['/s/', '<link href="http://localhost/" rel="canonical"/>'],
+        ];
+    }
 
 }

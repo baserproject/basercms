@@ -25,145 +25,145 @@ App::uses('BcContentsController', 'Controller');
 class ContentFoldersController extends AppController
 {
 
-	/**
-	 * コンポーネント
-	 * @var array
-	 */
-	public $components = ['Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => ['useForm' => true]];
+    /**
+     * コンポーネント
+     * @var array
+     */
+    public $components = ['Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => ['useForm' => true]];
 
-	/**
-	 * モデル
-	 *
-	 * @var array
-	 */
-	public $uses = ['ContentFolder', 'Page'];
+    /**
+     * モデル
+     *
+     * @var array
+     */
+    public $uses = ['ContentFolder', 'Page'];
 
-	/**
-	 * Before Filter
-	 */
-	public function beforeFilter()
-	{
-		parent::beforeFilter();
-		$this->BcAuth->allow('view');
-	}
+    /**
+     * Before Filter
+     */
+    public function beforeFilter()
+    {
+        parent::beforeFilter();
+        $this->BcAuth->allow('view');
+    }
 
-	/**
-	 * コンテンツを登録する
-	 *
-	 * @return void
-	 */
-	public function admin_add()
-	{
-		if (!$this->request->data) {
-			$this->ajaxError(500, __d('baser', '無効な処理です。'));
-		}
-		$data = $this->ContentFolder->save($this->request->data);
-		if (!$data) {
-			$this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
-			exit;
-		}
+    /**
+     * コンテンツを登録する
+     *
+     * @return void
+     */
+    public function admin_add()
+    {
+        if (!$this->request->data) {
+            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+        }
+        $data = $this->ContentFolder->save($this->request->data);
+        if (!$data) {
+            $this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
+            exit;
+        }
 
-		$this->BcMessage->setSuccess(
-			sprintf(
-				__d('baser', 'フォルダ「%s」を追加しました。'),
-				$this->request->getData('Content.title')
-			),
-			true,
-			false
-		);
-		exit(json_encode($data['Content']));
-	}
+        $this->BcMessage->setSuccess(
+            sprintf(
+                __d('baser', 'フォルダ「%s」を追加しました。'),
+                $this->request->getData('Content.title')
+            ),
+            true,
+            false
+        );
+        exit(json_encode($data['Content']));
+    }
 
-	/**
-	 * コンテンツを更新する
-	 *
-	 * @return void
-	 */
-	public function admin_edit($entityId)
-	{
-		$this->setTitle(__d('baser', 'フォルダ編集'));
-		if ($this->request->is(['post', 'put'])) {
-			if ($this->ContentFolder->isOverPostSize()) {
-				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
-				$this->redirect(['action' => 'edit', $entityId]);
-			}
-			if ($this->ContentFolder->save($this->request->data, ['reconstructSearchIndices' => true])) {
-				clearViewCache();
-				$this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $this->request->getData('Content.title')));
-				$this->redirect([
-					'plugin' => '',
-					'controller' => 'content_folders',
-					'action' => 'edit',
-					$entityId
-				]);
-			} else {
-				$this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
-			}
-		} else {
-			$this->request->data = $this->ContentFolder->read(null, $entityId);
-			if (!$this->request->data) {
-				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
-				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
-			}
-		}
+    /**
+     * コンテンツを更新する
+     *
+     * @return void
+     */
+    public function admin_edit($entityId)
+    {
+        $this->setTitle(__d('baser', 'フォルダ編集'));
+        if ($this->request->is(['post', 'put'])) {
+            if ($this->ContentFolder->isOverPostSize()) {
+                $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+                $this->redirect(['action' => 'edit', $entityId]);
+            }
+            if ($this->ContentFolder->save($this->request->data, ['reconstructSearchIndices' => true])) {
+                clearViewCache();
+                $this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $this->request->getData('Content.title')));
+                $this->redirect([
+                    'plugin' => '',
+                    'controller' => 'content_folders',
+                    'action' => 'edit',
+                    $entityId
+                ]);
+            } else {
+                $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
+            }
+        } else {
+            $this->request->data = $this->ContentFolder->read(null, $entityId);
+            if (!$this->request->data) {
+                $this->BcMessage->setError(__d('baser', '無効な処理です。'));
+                $this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+            }
+        }
 
-		$theme = [$this->siteConfigs['theme']];
-		$site = BcSite::findById($this->request->getData('Content.site_id'));
-		if (!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
-			$theme[] = $site->theme;
-		}
-		$site = BcSite::findById($this->request->getData('Content.site_id'));
-		$this->set('folderTemplateList', $this->ContentFolder->getFolderTemplateList($this->request->getData('Content.id'), $theme));
-		$this->set('pageTemplateList', $this->Page->getPageTemplateList($this->request->getData('Content.id'), $theme));
-		$this->set('publishLink', $this->Content->getUrl($this->request->getData('Content.url'), true, $site->useSubDomain));
-	}
+        $theme = [$this->siteConfigs['theme']];
+        $site = BcSite::findById($this->request->getData('Content.site_id'));
+        if (!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
+            $theme[] = $site->theme;
+        }
+        $site = BcSite::findById($this->request->getData('Content.site_id'));
+        $this->set('folderTemplateList', $this->ContentFolder->getFolderTemplateList($this->request->getData('Content.id'), $theme));
+        $this->set('pageTemplateList', $this->Page->getPageTemplateList($this->request->getData('Content.id'), $theme));
+        $this->set('publishLink', $this->Content->getUrl($this->request->getData('Content.url'), true, $site->useSubDomain));
+    }
 
-	/**
-	 * コンテンツを削除する
-	 *
-	 * @return bool
-	 */
-	public function admin_delete()
-	{
-		if (empty($this->request->getData('entityId'))) {
-			return false;
-		}
-		if ($this->ContentFolder->delete($this->request->getData('entityId'))) {
-			return true;
-		}
-		return false;
-	}
+    /**
+     * コンテンツを削除する
+     *
+     * @return bool
+     */
+    public function admin_delete()
+    {
+        if (empty($this->request->getData('entityId'))) {
+            return false;
+        }
+        if ($this->ContentFolder->delete($this->request->getData('entityId'))) {
+            return true;
+        }
+        return false;
+    }
 
-	/**
-	 * コンテンツを表示する
-	 *
-	 * @return void
-	 */
-	public function view()
-	{
-		if (empty($this->request->getParam('entityId'))) {
-			$this->notFound();
-		}
-		$data = $this->ContentFolder->find('first', ['conditions' => ['ContentFolder.id' => $this->request->getParam('entityId')]]);
-		if (empty($data)) {
-			$this->notFound();
-		}
-		$this->ContentFolder->Content->Behaviors->Tree->settings['Content']['scope'] = ['Content.site_root' => false] + $this->ContentFolder->Content->getConditionAllowPublish();
-		// 公開期間を条件に入れている為、キャッシュをオフにしないとキャッシュが無限増殖してしまう
-		$this->ContentFolder->Content->Behaviors->unload('BcCache');
-		$children = $this->ContentFolder->Content->children($data['Content']['id'], true, [], 'lft');
-		$this->ContentFolder->Content->Behaviors->load('BcCache');
-		$this->ContentFolder->Content->Behaviors->Tree->settings['Content']['scope'] = null;
-		if ($this->BcContents->preview && !empty($this->request->getData('Content'))) {
-			$data['Content'] = $this->request->getData('Content');
-		}
-		$this->set(compact('data', 'children'));
-		$folderTemplate = $data['ContentFolder']['folder_template'];
-		if (!$folderTemplate) {
-			$folderTemplate = $this->ContentFolder->getParentTemplate($data['Content']['id'], 'folder');
-		}
-		$this->set('editLink', ['admin' => true, 'plugin' => '', 'controller' => 'content_folders', 'action' => 'edit', $data['ContentFolder']['id'], 'content_id' => $data['Content']['id']]);
-		$this->render($folderTemplate);
-	}
+    /**
+     * コンテンツを表示する
+     *
+     * @return void
+     */
+    public function view()
+    {
+        if (empty($this->request->getParam('entityId'))) {
+            $this->notFound();
+        }
+        $data = $this->ContentFolder->find('first', ['conditions' => ['ContentFolder.id' => $this->request->getParam('entityId')]]);
+        if (empty($data)) {
+            $this->notFound();
+        }
+        $this->ContentFolder->Content->Behaviors->Tree->settings['Content']['scope'] = ['Content.site_root' => false] + $this->ContentFolder->Content->getConditionAllowPublish();
+        // 公開期間を条件に入れている為、キャッシュをオフにしないとキャッシュが無限増殖してしまう
+        $this->ContentFolder->Content->Behaviors->unload('BcCache');
+        $children = $this->ContentFolder->Content->children($data['Content']['id'], true, [], 'lft');
+        $this->ContentFolder->Content->Behaviors->load('BcCache');
+        $this->ContentFolder->Content->Behaviors->Tree->settings['Content']['scope'] = null;
+        if ($this->BcContents->preview && !empty($this->request->getData('Content'))) {
+            $data['Content'] = $this->request->getData('Content');
+        }
+        $this->set(compact('data', 'children'));
+        $folderTemplate = $data['ContentFolder']['folder_template'];
+        if (!$folderTemplate) {
+            $folderTemplate = $this->ContentFolder->getParentTemplate($data['Content']['id'], 'folder');
+        }
+        $this->set('editLink', ['admin' => true, 'plugin' => '', 'controller' => 'content_folders', 'action' => 'edit', $data['ContentFolder']['id'], 'content_id' => $data['Content']['id']]);
+        $this->render($folderTemplate);
+    }
 
 }

@@ -61,7 +61,7 @@ class UserGroupsControllerTest extends BcTestCase
     {
         $this->get('/baser/api/baser-core/user_groups/index.json?token=' . $this->token);
         $this->assertResponseOk();
-        $result = json_decode((string) $this->_response->getBody());
+        $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('admins', $result->userGroups[0]->name);
     }
 
@@ -122,7 +122,7 @@ class UserGroupsControllerTest extends BcTestCase
     {
         $this->get('/baser/api/baser-core/user_groups/view/1.json?token=' . $this->token);
         $this->assertResponseOk();
-        $result = json_decode((string) $this->_response->getBody());
+        $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('admins', $result->userGroups->name);
     }
 

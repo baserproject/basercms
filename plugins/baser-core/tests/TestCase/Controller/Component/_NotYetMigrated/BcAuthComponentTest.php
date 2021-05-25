@@ -23,48 +23,48 @@ App::uses('Controller', 'Controller');
 class BcAuthComponentTest extends BcTestCase
 {
 
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	public function testDeleteSerial()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    public function testDeleteSerial()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	public function testGetSerial()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    public function testGetSerial()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	public function testSaveSerial()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    public function testSaveSerial()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	public function testSetSessionKey()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    public function testSetSessionKey()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	public function testLogin()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    public function testLogin()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	public function testLogout()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    public function testLogout()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	public function testRelogin()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    public function testRelogin()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }

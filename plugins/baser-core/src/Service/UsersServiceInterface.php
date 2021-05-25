@@ -34,7 +34,7 @@ interface UsersServiceInterface
      * @param array $queryParams
      * @return Query
      */
-    public function getIndex(Array $queryParams): Query;
+    public function getIndex(array $queryParams): Query;
 
     /**
      * 新しいデータの初期値を取得する
@@ -47,7 +47,7 @@ interface UsersServiceInterface
      * @param array $postData
      * @return EntityInterface|false
      */
-    public function create(Array $postData);
+    public function create(array $postData);
 
     /**
      * 編集する
@@ -55,7 +55,7 @@ interface UsersServiceInterface
      * @param array $postData
      * @return mixed
      */
-    public function update(EntityInterface $target, Array $postData);
+    public function update(EntityInterface $target, array $postData);
 
     /**
      * 削除する

@@ -24,53 +24,53 @@ App::uses('BcSmartphoneHelper', 'View/Helper');
 class BcSmartphoneHelperTest extends BcTestCase
 {
 
-	public $fixtures = [
-		'baser.Default.Content',
-		'baser.Default.SiteConfig',
-		'baser.Default.User',
-		'baser.Default.Site',
-	];
+    public $fixtures = [
+        'baser.Default.Content',
+        'baser.Default.SiteConfig',
+        'baser.Default.User',
+        'baser.Default.Site',
+    ];
 
 
-	/**
-	 * setUp method
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-		$this->View = new BcAppView();
-		$this->BcSmartphone = new BcSmartphoneHelper($this->View);
-	}
+    /**
+     * setUp method
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->View = new BcAppView();
+        $this->BcSmartphone = new BcSmartphoneHelper($this->View);
+    }
 
-	/**
-	 * tearDown method
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		unset($this->BcSmartphone);
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        unset($this->BcSmartphone);
 
-		parent::tearDown();
-	}
+        parent::tearDown();
+    }
 
-	/**
-	 * afterLayout
-	 *
-	 * @return void
-	 */
-	public function testAfterLayout()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+    /**
+     * afterLayout
+     *
+     * @return void
+     */
+    public function testAfterLayout()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
 
-		//afterLayoutの条件分岐、$this->request->params['Site']をempty以外にしたい
-		$this->_getRequest('/s/');
-		$site = BcSite::findCurrent();
-		pr($site->device);
-		$this->BcSmartphone->afterLayout('');
+        //afterLayoutの条件分岐、$this->request->params['Site']をempty以外にしたい
+        $this->_getRequest('/s/');
+        $site = BcSite::findCurrent();
+        pr($site->device);
+        $this->BcSmartphone->afterLayout('');
 
-	}
+    }
 
 }

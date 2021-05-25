@@ -24,27 +24,27 @@ App::uses('UsersController', 'Controller');
 class MembersController extends UsersController
 {
 
-	/**
-	 * クラス名
-	 *
-	 * @var string
-	 */
-	public $name = 'Members';
+    /**
+     * クラス名
+     *
+     * @var string
+     */
+    public $name = 'Members';
 
-	/**
-	 * モデル
-	 *
-	 * @var array
-	 */
-	public $uses = ['Member', 'UserGroup'];
+    /**
+     * モデル
+     *
+     * @var array
+     */
+    public $uses = ['Member', 'UserGroup'];
 
-	/**
-	 * [MYPAGE] メンバー編集
-	 *
-	 */
-	public function mypage_index()
-	{
-		$this->setTitle(__d('baser', 'メンバーマイページ'));
-	}
+    /**
+     * [MYPAGE] メンバー編集
+     *
+     */
+    public function mypage_index()
+    {
+        $this->setTitle(__d('baser', 'メンバーマイページ'));
+    }
 
 }

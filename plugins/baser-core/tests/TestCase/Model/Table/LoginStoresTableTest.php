@@ -54,7 +54,7 @@ class LoginStoresTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('LoginStores') ?
+        $config = $this->getTableLocator()->exists('LoginStores')?
             [] : ['className' => 'BaserCore\Model\Table\LoginStoresTable'];
         $this->LoginStores = $this->getTableLocator()->get('LoginStores', $config);
 

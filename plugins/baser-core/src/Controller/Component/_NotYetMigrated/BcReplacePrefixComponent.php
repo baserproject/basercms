@@ -44,156 +44,156 @@ return;
 class BcReplacePrefixComponent extends Component
 {
 
-	/**
-	 * プレフィックス置き換えを許可するアクション
-	 * プレフィックスなしの純粋なアクション名を指定する
-	 *
-	 * @var array
-	 */
-	public $allowedPureActions = [];
+    /**
+     * プレフィックス置き換えを許可するアクション
+     * プレフィックスなしの純粋なアクション名を指定する
+     *
+     * @var array
+     */
+    public $allowedPureActions = [];
 
-	/**
-	 * 置き換え後のプレフィックス
-	 *
-	 * @var string
-	 */
-	public $replacedPrefix = 'admin';
+    /**
+     * 置き換え後のプレフィックス
+     *
+     * @var string
+     */
+    public $replacedPrefix = 'admin';
 
-	/**
-	 * 対象コントローラーのメソッド
-	 *
-	 * @var array
-	 * @access    protected
-	 */
-	protected $_methods;
+    /**
+     * 対象コントローラーのメソッド
+     *
+     * @var array
+     * @access    protected
+     */
+    protected $_methods;
 
-	/**
-	 * Initializes
-	 *
-	 * @param Controller $Controller
-	 * @return void
-	 */
-	public function initialize(Controller $Controller)
-	{
-		$this->_methods = $Controller->methods;
-	}
+    /**
+     * Initializes
+     *
+     * @param Controller $Controller
+     * @return void
+     */
+    public function initialize(Controller $Controller)
+    {
+        $this->_methods = $Controller->methods;
+    }
 
-	/**
-	 * プレフィックスの置き換えを許可するアクションを設定する
-	 *
-	 * $this->Replace->allow('action', 'action',...);
-	 *
-	 * @param string $action
-	 * @param string $action
-	 * @param string ... etc.
-	 * @return void
-	 */
-	public function allow()
-	{
-		$args = func_get_args();
-		if (isset($args[0]) && is_array($args[0])) {
-			$args = $args[0];
-		}
-		$this->allowedPureActions = array_merge($this->allowedPureActions, $args);
-	}
+    /**
+     * プレフィックスの置き換えを許可するアクションを設定する
+     *
+     * $this->Replace->allow('action', 'action',...);
+     *
+     * @param string $action
+     * @param string $action
+     * @param string ... etc.
+     * @return void
+     */
+    public function allow()
+    {
+        $args = func_get_args();
+        if (isset($args[0]) && is_array($args[0])) {
+            $args = $args[0];
+        }
+        $this->allowedPureActions = array_merge($this->allowedPureActions, $args);
+    }
 
-	/**
-	 * startup
-	 *
-	 * @return    void
-	 * @access    public
-	 */
-	public function startup(Controller $Controller)
-	{
-		if (in_array($Controller->action, $this->_methods)) {
-			return;
-		}
+    /**
+     * startup
+     *
+     * @return    void
+     * @access    public
+     */
+    public function startup(Controller $Controller)
+    {
+        if (in_array($Controller->action, $this->_methods)) {
+            return;
+        }
 
-		if (!$Controller->request->getParam('prefix')) {
-			$requestedPrefix = '';
-		} else {
-			$requestedPrefix = $Controller->request->getParam('prefix');
-		}
+        if (!$Controller->request->getParam('prefix')) {
+            $requestedPrefix = '';
+        } else {
+            $requestedPrefix = $Controller->request->getParam('prefix');
+        }
 
-		$prefix = [];
-		foreach(Configure::read('BcAuthPrefix') as $authPrefix) {
-			if (isset($authPrefix['alias'])) {
-				$prefix[] = $authPrefix['alias'];
-			} else {
-				$prefix[] = '';
-			}
-		}
-		if (!in_array($requestedPrefix, $prefix)) {
-			return;
-		}
+        $prefix = [];
+        foreach(Configure::read('BcAuthPrefix') as $authPrefix) {
+            if (isset($authPrefix['alias'])) {
+                $prefix[] = $authPrefix['alias'];
+            } else {
+                $prefix[] = '';
+            }
+        }
+        if (!in_array($requestedPrefix, $prefix)) {
+            return;
+        }
 
-		$pureAction = preg_replace('/^' . $requestedPrefix . '_/', '', $Controller->action);
+        $pureAction = preg_replace('/^' . $requestedPrefix . '_/', '', $Controller->action);
 
-		if (!in_array($pureAction, $this->allowedPureActions)) {
-			return;
-		}
-		if (!in_array($this->replacedPrefix . '_' . $pureAction, $this->_methods)) {
-			return;
-		}
-		if ($requestedPrefix) {
-			$Controller->request = $Controller->request->withParam('prefix',  $requestedPrefix);
-		} else {
-			$Controller->request = $Controller->request->withParam('prefix',  'front');
-		}
-		$Controller->action = $this->replacedPrefix . '_' . $pureAction;
-		$Controller->layoutPath = $this->replacedPrefix;    // Baserに依存
-		$Controller->subDir = $this->replacedPrefix;        // Baserに依存
+        if (!in_array($pureAction, $this->allowedPureActions)) {
+            return;
+        }
+        if (!in_array($this->replacedPrefix . '_' . $pureAction, $this->_methods)) {
+            return;
+        }
+        if ($requestedPrefix) {
+            $Controller->request = $Controller->request->withParam('prefix', $requestedPrefix);
+        } else {
+            $Controller->request = $Controller->request->withParam('prefix', 'front');
+        }
+        $Controller->action = $this->replacedPrefix . '_' . $pureAction;
+        $Controller->layoutPath = $this->replacedPrefix;    // Baserに依存
+        $Controller->subDir = $this->replacedPrefix;        // Baserに依存
 
-		if ($requestedPrefix != $this->replacedPrefix) {
-			// viewファイルが存在すればリクエストされたプレフィックスを優先する
-			$existsLoginView = false;
-			$viewPaths = $this->getViewPaths($Controller);
-			$prefixPath = str_replace('_', DS, $requestedPrefix);
-			foreach($viewPaths as $path) {
-				if ($prefixPath) {
-					$file = $path . $Controller->name . DS . $prefixPath . DS . $pureAction . $Controller->ext;
-				} else {
-					$file = $path . $Controller->name . DS . $pureAction . $Controller->ext;
-				}
-				if (file_exists($file)) {
-					$existsLoginView = true;
-					break;
-				}
-			}
+        if ($requestedPrefix != $this->replacedPrefix) {
+            // viewファイルが存在すればリクエストされたプレフィックスを優先する
+            $existsLoginView = false;
+            $viewPaths = $this->getViewPaths($Controller);
+            $prefixPath = str_replace('_', DS, $requestedPrefix);
+            foreach($viewPaths as $path) {
+                if ($prefixPath) {
+                    $file = $path . $Controller->name . DS . $prefixPath . DS . $pureAction . $Controller->ext;
+                } else {
+                    $file = $path . $Controller->name . DS . $pureAction . $Controller->ext;
+                }
+                if (file_exists($file)) {
+                    $existsLoginView = true;
+                    break;
+                }
+            }
 
-			if ($existsLoginView) {
-				$Controller->subDir = $prefixPath;
-				$Controller->layoutPath = $prefixPath;
-			}
-		}
-	}
+            if ($existsLoginView) {
+                $Controller->subDir = $prefixPath;
+                $Controller->layoutPath = $prefixPath;
+            }
+        }
+    }
 
-	/**
-	 * Before Render
-	 * パラメータ `prefix` に `front` が設定されていた場合、空に再設定
-	 * @param Controller $controller
-	 */
-	public function beforeRender(Controller $controller)
-	{
-		parent::beforeRender($controller);
-		if (!empty($controller->request->getParam('prefix')) && $controller->request->getParam('prefix') == 'front') {
-			$controller->request = $this->request->withParam('prefix', '');
-		}
-	}
+    /**
+     * Before Render
+     * パラメータ `prefix` に `front` が設定されていた場合、空に再設定
+     * @param Controller $controller
+     */
+    public function beforeRender(Controller $controller)
+    {
+        parent::beforeRender($controller);
+        if (!empty($controller->request->getParam('prefix')) && $controller->request->getParam('prefix') == 'front') {
+            $controller->request = $this->request->withParam('prefix', '');
+        }
+    }
 
-	/**
-	 * Return all possible paths to find view files in order
-	 *
-	 * @param string $plugin
-	 * @return array paths
-	 */
-	public function getViewPaths($Controller)
-	{
-		$paths = array_merge(App::path('View', $Controller->plugin), App::path('View'));
-		if (!empty($Controller->theme)) {
-			array_unshift($paths, WWW_ROOT . 'theme' . DS . $Controller->theme . DS);
-		}
-		return $paths;
-	}
+    /**
+     * Return all possible paths to find view files in order
+     *
+     * @param string $plugin
+     * @return array paths
+     */
+    public function getViewPaths($Controller)
+    {
+        $paths = array_merge(App::path('View', $Controller->plugin), App::path('View'));
+        if (!empty($Controller->theme)) {
+            array_unshift($paths, WWW_ROOT . 'theme' . DS . $Controller->theme . DS);
+        }
+        return $paths;
+    }
 
 }

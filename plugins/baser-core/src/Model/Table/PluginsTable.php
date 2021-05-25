@@ -228,7 +228,8 @@ class PluginsTable extends Table
         return true;
     }
 
-    public function isDbInit($name) {
+    public function isDbInit($name)
+    {
 
     }
 

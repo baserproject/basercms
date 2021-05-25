@@ -23,80 +23,80 @@ App::uses('EditorTemplatesController', 'Controller');
 class EditorTemplatesControllerTest extends BcTestCase
 {
 
-	/**
-	 * set up
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	/**
-	 * beforeFilter
-	 */
-	public function testBeforeFilter()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * beforeFilter
+     */
+    public function testBeforeFilter()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * [ADMIN] 一覧
-	 */
-	public function testAdmin_index()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * [ADMIN] 一覧
+     */
+    public function testAdmin_index()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * [ADMIN] 新規登録
-	 */
-	public function testAdmin_add()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * [ADMIN] 新規登録
+     */
+    public function testAdmin_add()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * [ADMIN] 編集
-	 */
-	public function testAdmin_edit()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * [ADMIN] 編集
+     */
+    public function testAdmin_edit()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * [ADMIN] 削除
-	 */
-	public function testAdmin_delete()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * [ADMIN] 削除
+     */
+    public function testAdmin_delete()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * [ADMIN AJAX] 削除
-	 */
-	public function testAdmin_ajax_delete()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * [ADMIN AJAX] 削除
+     */
+    public function testAdmin_ajax_delete()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * [ADMIN] CKEditor用テンプレート用のjavascriptを出力する
-	 */
-	public function testAdmin_js()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * [ADMIN] CKEditor用テンプレート用のjavascriptを出力する
+     */
+    public function testAdmin_js()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
 }

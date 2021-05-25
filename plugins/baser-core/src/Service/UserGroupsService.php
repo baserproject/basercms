@@ -83,7 +83,7 @@ class UserGroupsService implements UserGroupsServiceInterface
     {
         $userGroup = $this->UserGroups->newEmptyEntity();
         $authPrefix = $request->getData('auth_prefix');
-        $request = $request->withData('auth_prefix', !$authPrefix ? 'Admin' : implode(',', $authPrefix));
+        $request = $request->withData('auth_prefix', !$authPrefix? 'Admin' : implode(',', $authPrefix));
         $userGroup = $this->UserGroups->patchEntity($userGroup, $request->getData());
         return $this->UserGroups->save($userGroup);
     }

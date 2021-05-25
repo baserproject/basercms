@@ -9,7 +9,7 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
- namespace BaserCore\Controller\Api;
+namespace BaserCore\Controller\Api;
 
 use BaserCore\Controller\AppController;
 use BaserCore\Annotation\UnitTest;

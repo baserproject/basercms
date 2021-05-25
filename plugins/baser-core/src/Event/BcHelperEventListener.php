@@ -34,11 +34,11 @@ App::uses('BcEventListener', 'Event');
 class BcHelperEventListener extends BcEventListener
 {
 
-	/**
-	 * レイヤー名
-	 *
-	 * @var string
-	 */
-	public $layer = 'Helper';
+    /**
+     * レイヤー名
+     *
+     * @var string
+     */
+    public $layer = 'Helper';
 
 }

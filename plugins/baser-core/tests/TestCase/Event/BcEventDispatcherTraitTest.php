@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Test\TestCase\Event;
+
 use BaserCore\Event\BcControllerEventDispatcher;
 use BaserCore\Event\BcControllerEventListener;
 use BaserCore\Event\BcEventDispatcherTrait;
@@ -26,30 +27,30 @@ use Cake\Event\EventManager;
 class BcEventDispatcherTraitTest extends BcTestCase
 {
 
-	/**
-	 * set up
-	 *
-	 * @return void
-	 */
-	public function setUp(): void
-	{
-		parent::setUp();
-	}
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+    }
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown(): void
-	{
-		parent::tearDown();
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
 
     /**
      * testDispatchLayerEvent
      */
-	public function testDispatchLayerEvent()
+    public function testDispatchLayerEvent()
     {
         $listener = $this->getMockBuilder(BcControllerEventListener::class)
             ->onlyMethods(['implementedEvents'])
@@ -64,7 +65,9 @@ class BcEventDispatcherTraitTest extends BcTestCase
 
         EventManager::instance()->on($listener);
 
-        $class = new class extends Controller { use BcEventDispatcherTrait; };
+        $class = new class extends Controller {
+            use BcEventDispatcherTrait;
+        };
         $class->setName('Test');
         $class->dispatchLayerEvent('test', [], []);
     }

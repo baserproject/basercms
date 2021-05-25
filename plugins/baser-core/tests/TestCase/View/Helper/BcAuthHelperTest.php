@@ -21,7 +21,8 @@ use Cake\Core\Configure;
  * @package BaserCore\Test\TestCase\View\Helper
  * @property BcAuthHelper $BcAuth
  */
-class BcAuthHelperTest extends BcTestCase {
+class BcAuthHelperTest extends BcTestCase
+{
 
     /**
      * Fixtures
@@ -33,6 +34,7 @@ class BcAuthHelperTest extends BcTestCase {
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
     ];
+
     /**
      * setUp method
      *
@@ -87,7 +89,7 @@ class BcAuthHelperTest extends BcTestCase {
         // その他の場合
         $this->BcAuth->getView()->setRequest($this->getRequest()->withParam('prefix', null));
         $currentPrefix = $this->BcAuth->getCurrentPrefix();
-        Configure::write('BcPrefixAuth.' . $currentPrefix,[]);
+        Configure::write('BcPrefixAuth.' . $currentPrefix, []);
         $result = $this->BcAuth->getCurrentPrefixSetting();
         $this->assertEmpty($result);
     }
@@ -109,6 +111,7 @@ class BcAuthHelperTest extends BcTestCase {
         $this->assertEquals($expected, $result);
 
     }
+
     /**
      * Test getCurrentUserPrefixSettings
      * @return void
@@ -119,6 +122,7 @@ class BcAuthHelperTest extends BcTestCase {
         $result = $this->BcAuth->getCurrentUserPrefixSettings();
         $this->assertEquals(['admin'], $result);
     }
+
     /**
      * Test isCurrentUserAdminAvailable
      * @return void
@@ -128,6 +132,7 @@ class BcAuthHelperTest extends BcTestCase {
         $result = $this->BcAuth->isCurrentUserAdminAvailable();
         $this->assertTrue($result);
     }
+
     /**
      * Test getCurrentLoginAction
      * @return void
@@ -136,6 +141,7 @@ class BcAuthHelperTest extends BcTestCase {
     {
         $this->markTestIncomplete('テスト対象のメソッドが未実装です');
     }
+
     /**
      * Test getCurrentName
      * @return void
@@ -147,6 +153,7 @@ class BcAuthHelperTest extends BcTestCase {
         $result = $this->BcAuth->getCurrentName();
         $this->assertEquals($expected, $result);
     }
+
     /**
      * Test isAdminLogin
      * @return void
@@ -161,6 +168,7 @@ class BcAuthHelperTest extends BcTestCase {
         $result = $this->BcAuth->isAdminLogin();
         $this->assertTrue($result);
     }
+
     /**
      * Test getCurrentLogoutUrl
      * @return void
@@ -177,6 +185,7 @@ class BcAuthHelperTest extends BcTestCase {
         $result = $this->BcAuth->getCurrentLogoutUrl();
         $this->assertEquals($expected, $result);
     }
+
     /**
      * Test getCurrentLoginRedirectUrl
      * @return void
@@ -193,6 +202,7 @@ class BcAuthHelperTest extends BcTestCase {
         $result = $this->BcAuth->getCurrentLoginRedirectUrl();
         $this->assertEquals($expected, $result);
     }
+
     /**
      * Test getCurrentLoginUser
      * @return void
@@ -200,7 +210,7 @@ class BcAuthHelperTest extends BcTestCase {
     public function testGetCurrentLoginUser()
     {
         $ids = [1, 2];
-        foreach ($ids as $id) {
+        foreach($ids as $id) {
             $expected = $this->getUser($id);
 
             $this->loginAdmin($id);
@@ -208,6 +218,7 @@ class BcAuthHelperTest extends BcTestCase {
             $this->assertEquals($result, $expected);
         }
     }
+
     /**
      * Test isSuperUser
      * @dataProvider isSuperUserDataProvider
@@ -215,12 +226,13 @@ class BcAuthHelperTest extends BcTestCase {
      */
     public function testIsSuperUser($id, $expected)
     {
-        if($id) {
+        if ($id) {
             $this->loginAdmin($id);
         }
         $result = $this->BcAuth->isSuperUser();
         $this->assertEquals($result, $expected);
     }
+
     public function isSuperUserDataProvider()
     {
         return [

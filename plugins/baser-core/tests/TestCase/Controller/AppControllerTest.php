@@ -21,6 +21,7 @@ use BaserCore\Controller\AppController;
 class AppControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
+
     /**
      * set up
      */

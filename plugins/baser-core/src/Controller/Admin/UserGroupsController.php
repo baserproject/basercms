@@ -54,7 +54,8 @@ class UserGroupsController extends BcAdminAppController
         ?string $name = null,
         ?EventManagerInterface $eventManager = null,
         ?ComponentRegistry $components = null
-    ) {
+    )
+    {
         parent::__construct($request, $response, $name, $eventManager, $components);
         $this->crumbs = [
             ['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
@@ -210,7 +211,7 @@ class UserGroupsController extends BcAdminAppController
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            if($userGroup = $UserGroupManage->update($userGroup, $this->request)) {
+            if ($userGroup = $UserGroupManage->update($userGroup, $this->request)) {
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name));
                 // TODO 未実装
                 /* >>>

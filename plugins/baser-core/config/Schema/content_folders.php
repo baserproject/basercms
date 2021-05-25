@@ -1,4 +1,5 @@
 <?php
+
 class ContentFoldersSchema extends CakeSchema
 {
     public $file = 'content_folders.php';

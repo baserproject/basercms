@@ -90,7 +90,7 @@ define('BASER_WEBROOT', BASER . 'webroot' . DS);
  * Baserテーマ
  */
 if (is_dir(WWW_ROOT . 'theme')) {
-	define('BASER_THEMES', WWW_ROOT . 'theme' . DS);
+    define('BASER_THEMES', WWW_ROOT . 'theme' . DS);
 } elseif (is_dir(ROOT . DS . 'theme')) {
-	define('BASER_THEMES', ROOT . DS . 'theme' . DS);
+    define('BASER_THEMES', ROOT . DS . 'theme' . DS);
 }

@@ -27,35 +27,35 @@ App::uses('Dblog', 'Model');
 class DblogTest extends BaserTestCase
 {
 
-	public $fixtures = [
-		'baser.Default.Dblog',
-	];
+    public $fixtures = [
+        'baser.Default.Dblog',
+    ];
 
-	public function setUp()
-	{
-		parent::setUp();
-		$this->Dblog = ClassRegistry::init('Dblog');
-	}
+    public function setUp()
+    {
+        parent::setUp();
+        $this->Dblog = ClassRegistry::init('Dblog');
+    }
 
-	public function tearDown()
-	{
-		unset($this->Dblog);
-		parent::tearDown();
-	}
+    public function tearDown()
+    {
+        unset($this->Dblog);
+        parent::tearDown();
+    }
 
-	/**
-	 * validate
-	 */
-	public function test空白チェック()
-	{
-		$this->Dblog->create([
-			'Dblog' => [
-				'name' => '',
-			]
-		]);
-		$this->assertFalse($this->Dblog->validates());
-		$this->assertArrayHasKey('name', $this->Dblog->validationErrors);
-		$this->assertEquals('ログ内容を入力してください。', current($this->Dblog->validationErrors['name']));
-	}
+    /**
+     * validate
+     */
+    public function test空白チェック()
+    {
+        $this->Dblog->create([
+            'Dblog' => [
+                'name' => '',
+            ]
+        ]);
+        $this->assertFalse($this->Dblog->validates());
+        $this->assertArrayHasKey('name', $this->Dblog->validationErrors);
+        $this->assertEquals('ログ内容を入力してください。', current($this->Dblog->validationErrors['name']));
+    }
 
 }

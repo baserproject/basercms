@@ -22,41 +22,41 @@ return;
 class Dblog extends AppModel
 {
 
-	/**
-	 * クラス名
-	 *
-	 * @var string
-	 */
-	public $name = 'Dblog';
+    /**
+     * クラス名
+     *
+     * @var string
+     */
+    public $name = 'Dblog';
 
-	/**
-	 * ビヘイビア
-	 *
-	 * @var array
-	 */
-	public $actsAs = ['BcCache'];
+    /**
+     * ビヘイビア
+     *
+     * @var array
+     */
+    public $actsAs = ['BcCache'];
 
-	/**
-	 * belongsTo
-	 *
-	 * @var array
-	 */
-	public $belongsTo = [
-		'User' => [
-			'className' => 'User',
-			'foreignKey' => 'user_id'
-		]];
+    /**
+     * belongsTo
+     *
+     * @var array
+     */
+    public $belongsTo = [
+        'User' => [
+            'className' => 'User',
+            'foreignKey' => 'user_id'
+        ]];
 
-	public function __construct($id = false, $table = null, $ds = null)
-	{
-		parent::__construct($id, $table, $ds);
-		$this->validate = [
-			'name' => [
-				['rule' => ['notBlank'],
-					'message' => __d('baser', 'ログ内容を入力してください。'),
-					'required' => true]
-			]
-		];
-	}
+    public function __construct($id = false, $table = null, $ds = null)
+    {
+        parent::__construct($id, $table, $ds);
+        $this->validate = [
+            'name' => [
+                ['rule' => ['notBlank'],
+                    'message' => __d('baser', 'ログ内容を入力してください。'),
+                    'required' => true]
+            ]
+        ];
+    }
 
 }

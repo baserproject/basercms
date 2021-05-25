@@ -22,18 +22,18 @@ return;
 class Updater extends AppModel
 {
 
-	/**
-	 * クラス名
-	 *
-	 * @var string
-	 */
-	public $name = 'Updater';
+    /**
+     * クラス名
+     *
+     * @var string
+     */
+    public $name = 'Updater';
 
-	/**
-	 * テーブル
-	 *
-	 * @var string
-	 */
-	public $useTable = false;
+    /**
+     * テーブル
+     *
+     * @var string
+     */
+    public $useTable = false;
 
 }

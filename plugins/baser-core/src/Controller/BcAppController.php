@@ -193,7 +193,8 @@ class BcAppController extends AppController
         ?string $name = null,
         ?EventManagerInterface $eventManager = null,
         ?ComponentRegistry $components = null
-    ) {
+    )
+    {
         parent::__construct($request, $response, $name, $eventManager, $components);
 
         if (BcUtil::isConsole()) {

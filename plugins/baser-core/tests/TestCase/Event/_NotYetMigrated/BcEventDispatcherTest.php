@@ -23,34 +23,34 @@ App::uses('BcEventDispatcher', 'Event');
 class BcEventDispatcherTest extends BcTestCase
 {
 
-	/**
-	 * set up
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	/**
-	 * dispatch
-	 *
-	 * 命名規則に従ったイベント名で、イベントをディスパッチする
-	 */
-	public function testDispatch()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * dispatch
+     *
+     * 命名規則に従ったイベント名で、イベントをディスパッチする
+     */
+    public function testDispatch()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
 }

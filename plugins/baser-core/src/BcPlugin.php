@@ -59,7 +59,7 @@ class BcPlugin extends BasePlugin
      *  - `connection` : コネクション名
      * @checked
      */
-    public function install($options = []) : bool
+    public function install($options = []): bool
     {
         $options = array_merge([
             'plugin' => $this->getName(),
@@ -73,7 +73,7 @@ class BcPlugin extends BasePlugin
         try {
             $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
             $plugin = $plugins->findByName($pluginName)->first();
-            if(!$plugin || !$plugin->db_init) {
+            if (!$plugin || !$plugin->db_init) {
                 if (is_dir($pluginPath . 'config' . DS . 'Migrations')) {
                     $this->migrations->migrate($options);
                 }
@@ -98,7 +98,7 @@ class BcPlugin extends BasePlugin
      * @noTodo
      * @unitTest
      */
-    public function uninstall($options = []) : bool
+    public function uninstall($options = []): bool
     {
         $options = array_merge([
             'plugin' => $this->getName(),
@@ -110,7 +110,7 @@ class BcPlugin extends BasePlugin
         $this->rollbackDb($options);
 
         $pluginPath = BcUtil::getPluginPath($pluginName);
-        if($pluginPath) {
+        if ($pluginPath) {
             $Folder = new Folder();
             $Folder->delete($pluginPath);
         }
@@ -131,7 +131,7 @@ class BcPlugin extends BasePlugin
      * @noTodo
      * @unitTest
      */
-    public function rollbackDb($options = []) : bool
+    public function rollbackDb($options = []): bool
     {
         $options = array_merge([
             'plugin' => $this->getName(),
@@ -167,7 +167,7 @@ class BcPlugin extends BasePlugin
         $routes->prefix(
             'Admin',
             ['path' => $baserCorePrefix . Configure::read('BcApp.adminPrefix')],
-            function(RouteBuilder $routes)  use ($plugin) {
+            function(RouteBuilder $routes) use ($plugin) {
                 $routes->connect('', ['plugin' => 'BaserCore', 'controller' => 'Dashboard', 'action' => 'index']);
                 $routes->plugin(
                     $plugin,
@@ -197,7 +197,7 @@ class BcPlugin extends BasePlugin
         $routes->prefix(
             'Api',
             ['path' => $baserCorePrefix . '/api'],
-            function(RouteBuilder $routes)  use ($plugin) {
+            function(RouteBuilder $routes) use ($plugin) {
                 $routes->plugin(
                     $plugin,
                     ['path' => '/' . Inflector::dasherize($plugin)],

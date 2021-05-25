@@ -117,7 +117,7 @@ class UserGroupsController extends BcApiController
     public function delete(UserGroupsServiceInterface $UserGroups, $id)
     {
         $userGroups = $UserGroups->get($id);
-        if($this->request->is(['post', 'delete'])) {
+        if ($this->request->is(['post', 'delete'])) {
             try {
                 if ($UserGroups->delete($id)) {
                     $message = __d('baser', 'ユーザー: {0} を削除しました。', $userGroups->name);

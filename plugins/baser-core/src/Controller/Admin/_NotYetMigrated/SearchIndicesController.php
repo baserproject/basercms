@@ -27,231 +27,231 @@ App::uses('HttpSocket', 'Core.Network/Http');
 class SearchIndicesController extends AppController
 {
 
-	/**
-	 * クラス名
-	 *
-	 * @var array
-	 */
-	public $name = 'SearchIndices';
+    /**
+     * クラス名
+     *
+     * @var array
+     */
+    public $name = 'SearchIndices';
 
-	/**
-	 * モデル
-	 *
-	 * @var array
-	 */
-	public $uses = ['SearchIndex', 'Page', 'Site', 'Content'];
+    /**
+     * モデル
+     *
+     * @var array
+     */
+    public $uses = ['SearchIndex', 'Page', 'Site', 'Content'];
 
-	/**
-	 * コンポーネント
-	 *
-	 * @var array
-	 */
-	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
+    /**
+     * コンポーネント
+     *
+     * @var array
+     */
+    public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
-	/**
-	 * ヘルパー
-	 *
-	 * @var array
-	 */
-	public $helpers = ['BcText', 'BcForm', 'BcSearchIndex'];
+    /**
+     * ヘルパー
+     *
+     * @var array
+     */
+    public $helpers = ['BcText', 'BcForm', 'BcSearchIndex'];
 
-	/**
-	 * サブメニュー
-	 *
-	 * @var array
-	 */
-	public $subMenuElements = ['site_configs', 'search_indices'];
+    /**
+     * サブメニュー
+     *
+     * @var array
+     */
+    public $subMenuElements = ['site_configs', 'search_indices'];
 
-	/**
-	 * beforeFilter
-	 *
-	 * @return void
-	 */
-	public function beforeFilter()
-	{
-		parent::beforeFilter();
+    /**
+     * beforeFilter
+     *
+     * @return void
+     */
+    public function beforeFilter()
+    {
+        parent::beforeFilter();
 
-		// 認証設定
-		$this->BcAuth->allow('search', 'smartphone_search');
+        // 認証設定
+        $this->BcAuth->allow('search', 'smartphone_search');
 
-		if ($this->request->getParam('prefix') === 'Admin') {
-			$this->crumbs = [
-				['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
-				['name' => __d('baser', '検索インデックス管理'), 'url' => ['controller' => 'search_indices', 'action' => 'index']]
-			];
-		}
+        if ($this->request->getParam('prefix') === 'Admin') {
+            $this->crumbs = [
+                ['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
+                ['name' => __d('baser', '検索インデックス管理'), 'url' => ['controller' => 'search_indices', 'action' => 'index']]
+            ];
+        }
 
-		if (BcUtil::isAdminSystem()) {
-			return;
-		}
+        if (BcUtil::isAdminSystem()) {
+            return;
+        }
 
-		$Content = ClassRegistry::init('Content');
-		$currentSite = BcSite::findCurrent(true);
-		$url = '/';
-		if ($this->request->getParam('action') !== 'search') {
-			$prefix = str_replace('_search', '', $this->request->getParam('action'));
-			if ($prefix == $currentSite->name) {
-				$url = '/' . $currentSite->alias . '/';
-				$this->request = $this->request->withParam('action',  'search');
-				$this->action = 'search';
-			}
-		}
-		$content = $Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
-		if (is_null($content['Site']['id'])) {
-			$content['Site'] = $this->Site->getRootMain()['Site'];
-		}
-		$this->request = $this->request->withParam('Content',  $content['Content']);
-		$this->request = $this->request->withParam('Site',  $content['Site']);
+        $Content = ClassRegistry::init('Content');
+        $currentSite = BcSite::findCurrent(true);
+        $url = '/';
+        if ($this->request->getParam('action') !== 'search') {
+            $prefix = str_replace('_search', '', $this->request->getParam('action'));
+            if ($prefix == $currentSite->name) {
+                $url = '/' . $currentSite->alias . '/';
+                $this->request = $this->request->withParam('action', 'search');
+                $this->action = 'search';
+            }
+        }
+        $content = $Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
+        if (is_null($content['Site']['id'])) {
+            $content['Site'] = $this->Site->getRootMain()['Site'];
+        }
+        $this->request = $this->request->withParam('Content', $content['Content']);
+        $this->request = $this->request->withParam('Site', $content['Site']);
 
-	}
+    }
 
-	/**
-	 * コンテンツ検索
-	 *
-	 * @return void
-	 */
-	public function search()
-	{
-		$datas = [];
-		$query = [];
+    /**
+     * コンテンツ検索
+     *
+     * @return void
+     */
+    public function search()
+    {
+        $datas = [];
+        $query = [];
 
-		$default = ['named' => ['num' => 10]];
-		$this->setViewConditions('SearchIndex', ['default' => $default, 'type' => 'get']);
+        $default = ['named' => ['num' => 10]];
+        $this->setViewConditions('SearchIndex', ['default' => $default, 'type' => 'get']);
 
-		if (!empty($this->request->getData('SearchIndex'))) {
-			foreach($this->request->getData('SearchIndex') as $key => $value) {
-				$this->request = $this->request->withData('SearchIndex.' . $key, h($value));
-			}
-		}
-		if (isset($this->request->query['q'][0])) {
-			$this->paginate = [
-				'conditions' => $this->_createSearchConditions($this->request->data),
-				'order' => 'SearchIndex.priority DESC, SearchIndex.modified DESC, SearchIndex.id',
-				'limit' => $this->passedArgs['num']
-			];
+        if (!empty($this->request->getData('SearchIndex'))) {
+            foreach($this->request->getData('SearchIndex') as $key => $value) {
+                $this->request = $this->request->withData('SearchIndex.' . $key, h($value));
+            }
+        }
+        if (isset($this->request->query['q'][0])) {
+            $this->paginate = [
+                'conditions' => $this->_createSearchConditions($this->request->data),
+                'order' => 'SearchIndex.priority DESC, SearchIndex.modified DESC, SearchIndex.id',
+                'limit' => $this->passedArgs['num']
+            ];
 
-			$datas = $this->paginate('SearchIndex');
-			$query = $this->_parseQuery($this->request->query['q']);
-		}
-		$this->set('query', $query);
-		$this->set('datas', $datas);
-		$this->setTitle(__d('baser', '検索結果一覧'));
-	}
+            $datas = $this->paginate('SearchIndex');
+            $query = $this->_parseQuery($this->request->query['q']);
+        }
+        $this->set('query', $query);
+        $this->set('datas', $datas);
+        $this->setTitle(__d('baser', '検索結果一覧'));
+    }
 
-	/**
-	 * [SMARTPHONE] コンテンツ検索
-	 */
-	public function smartphone_search()
-	{
-		$this->setAction('search');
-	}
+    /**
+     * [SMARTPHONE] コンテンツ検索
+     */
+    public function smartphone_search()
+    {
+        $this->setAction('search');
+    }
 
-	/**
-	 * 検索キーワードを分解し配列に変換する
-	 *
-	 * @param string $query
-	 * @return array
-	 */
-	protected function _parseQuery($query)
-	{
-		$query = str_replace('　', ' ', $query);
-		if (strpos($query, ' ') !== false) {
-			$query = explode(' ', $query);
-		} else {
-			$query = [$query];
-		}
-		return h($query);
-	}
+    /**
+     * 検索キーワードを分解し配列に変換する
+     *
+     * @param string $query
+     * @return array
+     */
+    protected function _parseQuery($query)
+    {
+        $query = str_replace('　', ' ', $query);
+        if (strpos($query, ' ') !== false) {
+            $query = explode(' ', $query);
+        } else {
+            $query = [$query];
+        }
+        return h($query);
+    }
 
-	/**
-	 * 検索条件を生成する
-	 *
-	 * @param array $data
-	 * @return    array    $conditions
-	 * @access    protected
-	 */
-	protected function _createSearchConditions($data)
-	{
-		$conditions = $this->SearchIndex->getConditionAllowPublish();
-		$query = '';
-		if (!empty($data['SearchIndex']['q'])) {
-			$query = $data['SearchIndex']['q'];
-		}
-		if (!empty($data['SearchIndex']['cf'])) {
-			$conditions['SearchIndex.content_filter_id'] = $data['SearchIndex']['cf'];
-		}
-		if (!empty($data['SearchIndex']['m'])) {
-			$conditions['SearchIndex.model'] = $data['SearchIndex']['m'];
-		}
-		if (isset($data['SearchIndex']['s'])) {
-			$conditions['SearchIndex.site_id'] = $data['SearchIndex']['s'];
-		}
-		if (isset($data['SearchIndex']['c'])) {
-			$conditions['SearchIndex.content_id'] = $data['SearchIndex']['c'];
-		}
-		if (!empty($data['SearchIndex']['f'])) {
-			$content = $this->Content->find('first', ['fields' => ['lft', 'rght'], 'conditions' => ['Content.id' => $data['SearchIndex']['f']], 'recursive' => -1]);
-			$conditions['SearchIndex.rght <='] = $content['Content']['rght'];
-			$conditions['SearchIndex.lft >='] = $content['Content']['lft'];
-		}
-		if ($query) {
-			$query = $this->_parseQuery($query);
-			foreach($query as $key => $value) {
-				$conditions['and'][$key]['or'][] = ['SearchIndex.title LIKE' => "%{$value}%"];
-				$conditions['and'][$key]['or'][] = ['SearchIndex.detail LIKE' => "%{$value}%"];
-			}
-		}
+    /**
+     * 検索条件を生成する
+     *
+     * @param array $data
+     * @return    array    $conditions
+     * @access    protected
+     */
+    protected function _createSearchConditions($data)
+    {
+        $conditions = $this->SearchIndex->getConditionAllowPublish();
+        $query = '';
+        if (!empty($data['SearchIndex']['q'])) {
+            $query = $data['SearchIndex']['q'];
+        }
+        if (!empty($data['SearchIndex']['cf'])) {
+            $conditions['SearchIndex.content_filter_id'] = $data['SearchIndex']['cf'];
+        }
+        if (!empty($data['SearchIndex']['m'])) {
+            $conditions['SearchIndex.model'] = $data['SearchIndex']['m'];
+        }
+        if (isset($data['SearchIndex']['s'])) {
+            $conditions['SearchIndex.site_id'] = $data['SearchIndex']['s'];
+        }
+        if (isset($data['SearchIndex']['c'])) {
+            $conditions['SearchIndex.content_id'] = $data['SearchIndex']['c'];
+        }
+        if (!empty($data['SearchIndex']['f'])) {
+            $content = $this->Content->find('first', ['fields' => ['lft', 'rght'], 'conditions' => ['Content.id' => $data['SearchIndex']['f']], 'recursive' => -1]);
+            $conditions['SearchIndex.rght <='] = $content['Content']['rght'];
+            $conditions['SearchIndex.lft >='] = $content['Content']['lft'];
+        }
+        if ($query) {
+            $query = $this->_parseQuery($query);
+            foreach($query as $key => $value) {
+                $conditions['and'][$key]['or'][] = ['SearchIndex.title LIKE' => "%{$value}%"];
+                $conditions['and'][$key]['or'][] = ['SearchIndex.detail LIKE' => "%{$value}%"];
+            }
+        }
 
-		return $conditions;
-	}
+        return $conditions;
+    }
 
-	/**
-	 * [ADMIN] 検索インデックス
-	 *
-	 * @return void
-	 */
-	public function admin_index()
-	{
-		$this->setTitle(__d('baser', '検索インデックス一覧'));
+    /**
+     * [ADMIN] 検索インデックス
+     *
+     * @return void
+     */
+    public function admin_index()
+    {
+        $this->setTitle(__d('baser', '検索インデックス一覧'));
 
-		/* 画面情報設定 */
-		$default = [
-			'named' => ['num' => $this->siteConfigs['admin_list_num']],
-			'SearchIndex' => ['site_id' => 0]
-		];
-		$this->setViewConditions('SearchIndex', ['default' => $default]);
-		$conditions = $this->_createAdminIndexConditions($this->request->data);
-		$this->paginate = [
-			'conditions' => $conditions,
-			'fields' => [],
-			'order' => 'SearchIndex.priority DESC, SearchIndex.modified DESC, SearchIndex.id',
-			'limit' => $this->passedArgs['num']
-		];
-		$this->set('datas', $this->paginate('SearchIndex'));
+        /* 画面情報設定 */
+        $default = [
+            'named' => ['num' => $this->siteConfigs['admin_list_num']],
+            'SearchIndex' => ['site_id' => 0]
+        ];
+        $this->setViewConditions('SearchIndex', ['default' => $default]);
+        $conditions = $this->_createAdminIndexConditions($this->request->data);
+        $this->paginate = [
+            'conditions' => $conditions,
+            'fields' => [],
+            'order' => 'SearchIndex.priority DESC, SearchIndex.modified DESC, SearchIndex.id',
+            'limit' => $this->passedArgs['num']
+        ];
+        $this->set('datas', $this->paginate('SearchIndex'));
 
-		if ($this->request->is('ajax') || !empty($this->request->query['ajax'])) {
-			$this->render('ajax_index');
-			return;
-		}
+        if ($this->request->is('ajax') || !empty($this->request->query['ajax'])) {
+            $this->render('ajax_index');
+            return;
+        }
 
-		$this->set('folders', $this->Content->getContentFolderList((int)$this->request->getData('SearchIndex.site_id'), ['conditions' => ['Content.site_root' => false]]));
-		$this->set('sites', $this->Site->getSiteList());
-		$this->setSearch('search_indices_index');
-		$this->setHelp('search_indices_index');
-	}
+        $this->set('folders', $this->Content->getContentFolderList((int)$this->request->getData('SearchIndex.site_id'), ['conditions' => ['Content.site_root' => false]]));
+        $this->set('sites', $this->Site->getSiteList());
+        $this->setSearch('search_indices_index');
+        $this->setHelp('search_indices_index');
+    }
 
-	/**
-	 * [ADMIN] 検索インデックス登録
-	 *
-	 * TODO 2013/8/8 ryuring
-	 * この機能は、URLより、baserCMSで管理されたコンテンツのタイトルとコンテンツ本体を取得し、検索インデックスに登録する為の機能だったが、
-	 * CakePHP２より、Viewの扱いが変更となった（ClassRegistryで管理されなくなった）為、requestAction 時のタイトルを取得できなくなった。
-	 * よって機能自体を一旦廃止する事とする。
-	 * 実装の際は、自動取得ではなく、手動で、タイトルとコンテンツ本体等を取得する仕様に変更する。
-	 *
-	 * @return    void
-	 * @access    public
-	 */
+    /**
+     * [ADMIN] 検索インデックス登録
+     *
+     * TODO 2013/8/8 ryuring
+     * この機能は、URLより、baserCMSで管理されたコンテンツのタイトルとコンテンツ本体を取得し、検索インデックスに登録する為の機能だったが、
+     * CakePHP２より、Viewの扱いが変更となった（ClassRegistryで管理されなくなった）為、requestAction 時のタイトルを取得できなくなった。
+     * よって機能自体を一旦廃止する事とする。
+     * 実装の際は、自動取得ではなく、手動で、タイトルとコンテンツ本体等を取得する仕様に変更する。
+     *
+     * @return    void
+     * @access    public
+     */
 //	public function admin_add() {
 //		$this->setTitle('検索インデックス登録');
 //
@@ -325,156 +325,156 @@ class SearchIndicesController extends AppController
 //		$this->setHelp('search_indices_add');
 //	}
 
-	/**
-	 * [ADMIN] 検索インデックス削除　(ajax)
-	 *
-	 * @param int $id
-	 * @return    void
-	 * @access    public
-	 */
-	public function admin_ajax_delete($id = null)
-	{
-		$this->_checkSubmitToken();
-		if (!$id) {
-			$this->ajaxError(500, __d('baser', '無効な処理です。'));
-		}
+    /**
+     * [ADMIN] 検索インデックス削除　(ajax)
+     *
+     * @param int $id
+     * @return    void
+     * @access    public
+     */
+    public function admin_ajax_delete($id = null)
+    {
+        $this->_checkSubmitToken();
+        if (!$id) {
+            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+        }
 
-		/* 削除処理 */
-		if ($this->SearchIndex->delete($id)) {
-			$message = sprintf(__d('baser', '検索インデックスより NO.%s を削除しました。'), $id);
-			$this->SearchIndex->saveDbLog($message);
-			exit(true);
-		}
-		exit();
-	}
+        /* 削除処理 */
+        if ($this->SearchIndex->delete($id)) {
+            $message = sprintf(__d('baser', '検索インデックスより NO.%s を削除しました。'), $id);
+            $this->SearchIndex->saveDbLog($message);
+            exit(true);
+        }
+        exit();
+    }
 
-	/**
-	 * [ADMIN] 検索インデックス一括削除
-	 *
-	 * @param $ids
-	 * @return bool
-	 * @access    public
-	 */
-	protected function _batch_del($ids)
-	{
-		if (!$ids) {
-			return true;
-		}
-		foreach($ids as $id) {
-			/* 削除処理 */
-			if ($this->SearchIndex->delete($id)) {
-				$message = sprintf(__d('baser', '検索インデックスより NO.%s を削除しました。'), $id);
-				$this->SearchIndex->saveDbLog($message);
-			}
-		}
-		return true;
-	}
+    /**
+     * [ADMIN] 検索インデックス一括削除
+     *
+     * @param $ids
+     * @return bool
+     * @access    public
+     */
+    protected function _batch_del($ids)
+    {
+        if (!$ids) {
+            return true;
+        }
+        foreach($ids as $id) {
+            /* 削除処理 */
+            if ($this->SearchIndex->delete($id)) {
+                $message = sprintf(__d('baser', '検索インデックスより NO.%s を削除しました。'), $id);
+                $this->SearchIndex->saveDbLog($message);
+            }
+        }
+        return true;
+    }
 
-	/**
-	 * [AJAX] 優先順位を変更する
-	 *
-	 * @return void
-	 * @throws Exception
-	 */
-	public function admin_ajax_change_priority()
-	{
-		if ($this->request->data) {
-			$this->SearchIndex->set($this->request->data);
-			if ($this->SearchIndex->save()) {
-				echo true;
-			}
-		}
-		exit();
-	}
+    /**
+     * [AJAX] 優先順位を変更する
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function admin_ajax_change_priority()
+    {
+        if ($this->request->data) {
+            $this->SearchIndex->set($this->request->data);
+            if ($this->SearchIndex->save()) {
+                echo true;
+            }
+        }
+        exit();
+    }
 
-	/**
-	 * 管理画面ページ一覧の検索条件を取得する
-	 *
-	 * @param array $data
-	 * @return array
-	 * @access    protected
-	 */
-	protected function _createAdminIndexConditions($data)
-	{
-		if (empty($data['SearchIndex'])) {
-			return [];
-		}
-		/* 条件を生成 */
-		$conditions = [];
+    /**
+     * 管理画面ページ一覧の検索条件を取得する
+     *
+     * @param array $data
+     * @return array
+     * @access    protected
+     */
+    protected function _createAdminIndexConditions($data)
+    {
+        if (empty($data['SearchIndex'])) {
+            return [];
+        }
+        /* 条件を生成 */
+        $conditions = [];
 
-		$type = $status = $keyword = $folderId = $siteId = null;
-		if (isset($data['SearchIndex']['type'])) {
-			$type = $data['SearchIndex']['type'];
-		}
-		if (isset($data['SearchIndex']['status'])) {
-			$status = $data['SearchIndex']['status'];
-		}
-		if (isset($data['SearchIndex']['keyword'])) {
-			$keyword = $data['SearchIndex']['keyword'];
-		}
-		if (isset($data['SearchIndex']['folder_id'])) {
-			$folderId = $data['SearchIndex']['folder_id'];
-		}
-		if (isset($data['SearchIndex']['site_id'])) {
-			$siteId = $data['SearchIndex']['site_id'];
-		}
+        $type = $status = $keyword = $folderId = $siteId = null;
+        if (isset($data['SearchIndex']['type'])) {
+            $type = $data['SearchIndex']['type'];
+        }
+        if (isset($data['SearchIndex']['status'])) {
+            $status = $data['SearchIndex']['status'];
+        }
+        if (isset($data['SearchIndex']['keyword'])) {
+            $keyword = $data['SearchIndex']['keyword'];
+        }
+        if (isset($data['SearchIndex']['folder_id'])) {
+            $folderId = $data['SearchIndex']['folder_id'];
+        }
+        if (isset($data['SearchIndex']['site_id'])) {
+            $siteId = $data['SearchIndex']['site_id'];
+        }
 
-		unset($data['SearchIndex']['type']);
-		unset($data['SearchIndex']['status']);
-		unset($data['SearchIndex']['keyword']);
-		unset($data['SearchIndex']['folder_id']);
-		unset($data['SearchIndex']['site_id']);
-		unset($data['SearchIndex']['site_id']);
-		unset($data['SearchIndex']['open']);
-		unset($data['ListTool']);
-		if (empty($data['SearchIndex']['priority'])) {
-			unset($data['SearchIndex']['priority']);
-		}
-		foreach($data['SearchIndex'] as $key => $value) {
-			if (preg_match('/priority_[0-9]+$/', $key)) {
-				unset($data['SearchIndex'][$key]);
-			}
-		}
-		if (isset($data['SearchIndex']['priority'])) {
-			$conditions['SearchIndex.priority'] = $data['SearchIndex']['priority'];
-		}
-		if ($type) {
-			$conditions['SearchIndex.type'] = $type;
-		}
-		if ($siteId) {
-			$conditions['SearchIndex.site_id'] = $siteId;
-		} else {
-			$conditions['SearchIndex.site_id'] = 0;
-		}
-		if ($folderId) {
-			$content = $this->Content->find('first', ['fields' => ['lft', 'rght'], 'conditions' => ['Content.id' => $folderId], 'recursive' => -1]);
-			$conditions['SearchIndex.rght <'] = $content['Content']['rght'];
-			$conditions['SearchIndex.lft >'] = $content['Content']['lft'];
-		}
-		if ($status != '') {
-			$conditions['SearchIndex.status'] = $status;
-		}
-		if ($keyword) {
-			$conditions['and']['or'] = [
-				'SearchIndex.title LIKE' => '%' . $keyword . '%',
-				'SearchIndex.detail LIKE' => '%' . $keyword . '%'
-			];
-		}
+        unset($data['SearchIndex']['type']);
+        unset($data['SearchIndex']['status']);
+        unset($data['SearchIndex']['keyword']);
+        unset($data['SearchIndex']['folder_id']);
+        unset($data['SearchIndex']['site_id']);
+        unset($data['SearchIndex']['site_id']);
+        unset($data['SearchIndex']['open']);
+        unset($data['ListTool']);
+        if (empty($data['SearchIndex']['priority'])) {
+            unset($data['SearchIndex']['priority']);
+        }
+        foreach($data['SearchIndex'] as $key => $value) {
+            if (preg_match('/priority_[0-9]+$/', $key)) {
+                unset($data['SearchIndex'][$key]);
+            }
+        }
+        if (isset($data['SearchIndex']['priority'])) {
+            $conditions['SearchIndex.priority'] = $data['SearchIndex']['priority'];
+        }
+        if ($type) {
+            $conditions['SearchIndex.type'] = $type;
+        }
+        if ($siteId) {
+            $conditions['SearchIndex.site_id'] = $siteId;
+        } else {
+            $conditions['SearchIndex.site_id'] = 0;
+        }
+        if ($folderId) {
+            $content = $this->Content->find('first', ['fields' => ['lft', 'rght'], 'conditions' => ['Content.id' => $folderId], 'recursive' => -1]);
+            $conditions['SearchIndex.rght <'] = $content['Content']['rght'];
+            $conditions['SearchIndex.lft >'] = $content['Content']['lft'];
+        }
+        if ($status != '') {
+            $conditions['SearchIndex.status'] = $status;
+        }
+        if ($keyword) {
+            $conditions['and']['or'] = [
+                'SearchIndex.title LIKE' => '%' . $keyword . '%',
+                'SearchIndex.detail LIKE' => '%' . $keyword . '%'
+            ];
+        }
 
-		return $conditions;
-	}
+        return $conditions;
+    }
 
-	/**
-	 * 検索インデックスを再構築する
-	 */
-	public function admin_reconstruct()
-	{
-		set_time_limit(0);
-		if ($this->SearchIndex->reconstruct()) {
-			$this->BcMessage->setSuccess('検索インデックスの再構築に成功しました。');
-		} else {
-			$this->BcMessage->setError('検索インデックスの再構築に失敗しました。');
-		}
-		$this->redirect(['action' => 'index']);
-	}
+    /**
+     * 検索インデックスを再構築する
+     */
+    public function admin_reconstruct()
+    {
+        set_time_limit(0);
+        if ($this->SearchIndex->reconstruct()) {
+            $this->BcMessage->setSuccess('検索インデックスの再構築に成功しました。');
+        } else {
+            $this->BcMessage->setError('検索インデックスの再構築に失敗しました。');
+        }
+        $this->redirect(['action' => 'index']);
+    }
 }

@@ -21,23 +21,23 @@ App::uses('Controller', 'Controller');
  */
 class BcEmailComponentTest extends BcTestCase
 {
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	public function testSend()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    public function testSend()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	public function testMdFold()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    public function testMdFold()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }

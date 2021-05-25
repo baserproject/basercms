@@ -29,130 +29,130 @@ class BcListTableHelper extends Helper
      */
     use BcEventDispatcherTrait;
 
-	/**
-	 * カラム数
-	 *
-	 * @var int
-	 */
-	protected $_columnNumber = 0;
+    /**
+     * カラム数
+     *
+     * @var int
+     */
+    protected $_columnNumber = 0;
 
-	/**
-	 * カラム数を設定する
-	 *
-	 * @param int $number カラム数
+    /**
+     * カラム数を設定する
+     *
+     * @param int $number カラム数
      * @checked
      * @noTodo
-	 */
-	public function setColumnNumber($number)
-	{
-		$this->_columnNumber = $number;
-	}
+     */
+    public function setColumnNumber($number)
+    {
+        $this->_columnNumber = $number;
+    }
 
-	/**
-	 * カラム数を取得する
-	 *
-	 * @return int カラム数
+    /**
+     * カラム数を取得する
+     *
+     * @return int カラム数
      * @checked
      * @noTodo
-	 */
-	public function getColumnNumber()
-	{
-		return $this->_columnNumber;
-	}
+     */
+    public function getColumnNumber()
+    {
+        return $this->_columnNumber;
+    }
 
-	/**
-	 * リスト見出し発火
-	 *
-	 * @return string
-	 */
-	public function dispatchShowHead()
-	{
+    /**
+     * リスト見出し発火
+     *
+     * @return string
+     */
+    public function dispatchShowHead()
+    {
 
-	    // TODO 未実装のため代替措置
-	    // >>>
-	    return '';
-	    // <<<
+        // TODO 未実装のため代替措置
+        // >>>
+        return '';
+        // <<<
 
-		$request = $this->_View->request;
-		$id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
-		$event = $this->dispatchLayerEvent('showHead', ['id' => $id, 'fields' => []], ['class' => 'BcListTable', 'plugin' => '']);
-		$output = '';
-		if ($event !== false) {
-			if (!empty($event->getData('fields'))) {
-				foreach($event->getData('fields') as $field) {
-					$output .= "<th class=\"bca-table-listup__thead-th\">" . $field . "</th>\n";
-				}
-				$this->_columnNumber += count($event->getData('fields'));
-			}
-		}
-		return $output;
-	}
+        $request = $this->_View->request;
+        $id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
+        $event = $this->dispatchLayerEvent('showHead', ['id' => $id, 'fields' => []], ['class' => 'BcListTable', 'plugin' => '']);
+        $output = '';
+        if ($event !== false) {
+            if (!empty($event->getData('fields'))) {
+                foreach($event->getData('fields') as $field) {
+                    $output .= "<th class=\"bca-table-listup__thead-th\">" . $field . "</th>\n";
+                }
+                $this->_columnNumber += count($event->getData('fields'));
+            }
+        }
+        return $output;
+    }
 
-	/**
-	 * リスト行発火
-	 *
-	 * @param $data
-	 * @return string
-	 */
-	public function dispatchShowRow($data)
-	{
+    /**
+     * リスト行発火
+     *
+     * @param $data
+     * @return string
+     */
+    public function dispatchShowRow($data)
+    {
 
-	    // TODO 未実装のため代替措置
-	    // >>>
-	    return '';
-	    // <<<
+        // TODO 未実装のため代替措置
+        // >>>
+        return '';
+        // <<<
 
-		$request = $this->_View->request;
-		$id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
-		$event = $this->dispatchLayerEvent('showRow', ['id' => $id, 'data' => $data, 'fields' => []], ['class' => 'BcListTable', 'plugin' => '']);
-		$output = '';
-		if ($event !== false) {
-			if (!empty($event->getData('fields'))) {
-				foreach($event->getData('fields') as $field) {
-					$output .= "<td class=\"bca-table-listup__tbody-td\">" . $field . "</td>\n";
-				}
-			}
-		}
-		return $output;
-	}
+        $request = $this->_View->request;
+        $id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
+        $event = $this->dispatchLayerEvent('showRow', ['id' => $id, 'data' => $data, 'fields' => []], ['class' => 'BcListTable', 'plugin' => '']);
+        $output = '';
+        if ($event !== false) {
+            if (!empty($event->getData('fields'))) {
+                foreach($event->getData('fields') as $field) {
+                    $output .= "<td class=\"bca-table-listup__tbody-td\">" . $field . "</td>\n";
+                }
+            }
+        }
+        return $output;
+    }
 
-	/**
-	 * Row Class
-	 *
-	 * @param bool $isPublish 公開しているかどうか
-	 * @param array $record レコード
-	 * @param array $options オプション
-	 *    - `class` : 追加するクラス
-	 */
-	public function rowClass($isPublish, $record = [], $options = [])
-	{
+    /**
+     * Row Class
+     *
+     * @param bool $isPublish 公開しているかどうか
+     * @param array $record レコード
+     * @param array $options オプション
+     *    - `class` : 追加するクラス
+     */
+    public function rowClass($isPublish, $record = [], $options = [])
+    {
 
-	    // TODO 未実装のため代替措置
-	    // >>>
-	    return '';
-	    // <<<
+        // TODO 未実装のため代替措置
+        // >>>
+        return '';
+        // <<<
 
-		$options = array_merge([
-			'class' => ['bca-table-listup__tbody-tr']
-		], $options);
-		if (!$isPublish) {
-			$classies = ['unpublish', 'disablerow'];
-		} else {
-			$classies = ['publish'];
-		}
-		if (!empty($options['class'])) {
-			$classies = array_merge($classies, $options['class']);
-		}
+        $options = array_merge([
+            'class' => ['bca-table-listup__tbody-tr']
+        ], $options);
+        if (!$isPublish) {
+            $classies = ['unpublish', 'disablerow'];
+        } else {
+            $classies = ['publish'];
+        }
+        if (!empty($options['class'])) {
+            $classies = array_merge($classies, $options['class']);
+        }
 
-		// EVENT BcListTable.rowClass
-		$event = $this->dispatchLayerEvent('rowClass', [
-			'classies' => $classies,
-			'record' => $record
-		], ['class' => 'BcListTable', 'plugin' => '']);
-		if ($event !== false) {
-			$classies = ($event->getResult() === null || $event->getResult() === true)? $event->getData('classies') : $event->getResult();
-		}
-		echo ' class="' . implode(' ', $classies) . '"';
-	}
+        // EVENT BcListTable.rowClass
+        $event = $this->dispatchLayerEvent('rowClass', [
+            'classies' => $classies,
+            'record' => $record
+        ], ['class' => 'BcListTable', 'plugin' => '']);
+        if ($event !== false) {
+            $classies = ($event->getResult() === null || $event->getResult() === true)? $event->getData('classies') : $event->getResult();
+        }
+        echo ' class="' . implode(' ', $classies) . '"';
+    }
 
 }

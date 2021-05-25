@@ -349,7 +349,7 @@ class AppTable extends Table
             if ($options['loadCsv']) {
                 $theme = $pattern = null;
                 if ($dbDataPattern) {
-                    list($theme, $pattern) = explode('.', $dbDataPattern);
+                    [$theme, $pattern] = explode('.', $dbDataPattern);
                 }
                 $path = BcUtil::getDefaultDataPath($pluginName, $theme, $pattern);
                 if ($path) {
@@ -514,7 +514,7 @@ class AppTable extends Table
         if (strpos($field, '.') === false) {
             $modelName = $this->alias;
         } else {
-            list($modelName, $field) = explode('\.', $field);
+            [$modelName, $field] = explode('\.', $field);
         }
 
         $db = ConnectionManager::get($this->useDbConfig);
@@ -1007,7 +1007,7 @@ class AppTable extends Table
                 if ($val == 'wareki' && !empty($data['wareki'])) {
                     $warekis = ['m' => 1867, 't' => 1911, 's' => 1925, 'h' => 1988, 'r' => 2018];
                     if (!empty($data['year'])) {
-                        list($wareki, $year) = explode('-', $data['year']);
+                        [$wareki, $year] = explode('-', $data['year']);
                         $data['year'] = $year + $warekis[$wareki];
                     }
                 }

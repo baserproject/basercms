@@ -16,24 +16,24 @@ App::uses('BcAppView', 'View');
 class BcAppViewTest extends BcTestCase
 {
 
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	public function testDispatchEvent()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    public function testDispatchEvent()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	public function testEvaluate()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    public function testEvaluate()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
 }

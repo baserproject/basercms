@@ -22,73 +22,73 @@ App::uses('DispatcherFilter', 'Routing');
 class BcCacheDispatcher extends DispatcherFilter
 {
 
-	/**
-	 * Default priority for all methods in this filter
-	 * This filter should run before the request gets parsed by router
-	 *
-	 * @var int
-	 */
-	// CUSTOMIZE MODIFY 2017/01/07 ryuring
-	// >>>
-	// public $priority = 9;
-	// ---
-	public $priority = 5;
-	// <<<
+    /**
+     * Default priority for all methods in this filter
+     * This filter should run before the request gets parsed by router
+     *
+     * @var int
+     */
+    // CUSTOMIZE MODIFY 2017/01/07 ryuring
+    // >>>
+    // public $priority = 9;
+    // ---
+    public $priority = 5;
+    // <<<
 
-	/**
-	 * Checks whether the response was cached and set the body accordingly.
-	 *
-	 * @param \Cake\Event\Event $event containing the request and response object
-	 * @return CakeResponse with cached content if found, null otherwise
-	 */
-	public function beforeDispatch(Cake\Event\Event $event)
-	{
-		if (Configure::read('Cache.check') !== true) {
-			return null;
-		}
+    /**
+     * Checks whether the response was cached and set the body accordingly.
+     *
+     * @param \Cake\Event\Event $event containing the request and response object
+     * @return CakeResponse with cached content if found, null otherwise
+     */
+    public function beforeDispatch(Cake\Event\Event $event)
+    {
+        if (Configure::read('Cache.check') !== true) {
+            return null;
+        }
 
-		// CUSTOMIZE 2014/08/11 ryuring
-		// $this->request->here で、URLを取得する際、URL末尾の 「index」の有無に関わらず
-		// 同一ファイルを参照すべきだが、別々のURLを出力してしまう為、
-		// 正規化された URLを取得するメソッドに変更
-		// >>>
-		//$path = $event->getData('request')->here();
-		// ---
-		$path = $event->getData('request')->normalizedHere();
-		// <<<
+        // CUSTOMIZE 2014/08/11 ryuring
+        // $this->request->here で、URLを取得する際、URL末尾の 「index」の有無に関わらず
+        // 同一ファイルを参照すべきだが、別々のURLを出力してしまう為、
+        // 正規化された URLを取得するメソッドに変更
+        // >>>
+        //$path = $event->getData('request')->here();
+        // ---
+        $path = $event->getData('request')->normalizedHere();
+        // <<<
 
-		if ($path === '/') {
-			// CUSTOMIZE 2017/01/07 ryuring
-			// CakePHP 2.10.6 へのアップデートの際に変更となっていた事に気づいた
-			// 仕様として必要かどうかは未確認
-			// >>>
-			// $path = 'home';
-			// ---
-			$path = 'index';
-			// <<<
-		}
-		$prefix = Configure::read('Cache.viewPrefix');
-		if ($prefix) {
-			$path = $prefix . '_' . $path;
-		}
-		$path = strtolower(Inflector::slug($path));
+        if ($path === '/') {
+            // CUSTOMIZE 2017/01/07 ryuring
+            // CakePHP 2.10.6 へのアップデートの際に変更となっていた事に気づいた
+            // 仕様として必要かどうかは未確認
+            // >>>
+            // $path = 'home';
+            // ---
+            $path = 'index';
+            // <<<
+        }
+        $prefix = Configure::read('Cache.viewPrefix');
+        if ($prefix) {
+            $path = $prefix . '_' . $path;
+        }
+        $path = strtolower(Inflector::slug($path));
 
-		$filename = CACHE . 'views' . DS . $path . '.php';
+        $filename = CACHE . 'views' . DS . $path . '.php';
 
-		if (!file_exists($filename)) {
-			$filename = CACHE . 'views' . DS . $path . '_index.php';
-		}
-		if (file_exists($filename)) {
-			$controller = null;
-			$view = new View($controller);
-			$view->response = $event->getData('response');
-			$result = $view->renderCache($filename, microtime(true));
-			if ($result !== false) {
-				$event->stopPropagation();
-				$event->getData('response')->body($result);
-				return $event->getData('response');
-			}
-		}
-	}
+        if (!file_exists($filename)) {
+            $filename = CACHE . 'views' . DS . $path . '_index.php';
+        }
+        if (file_exists($filename)) {
+            $controller = null;
+            $view = new View($controller);
+            $view->response = $event->getData('response');
+            $result = $view->renderCache($filename, microtime(true));
+            if ($result !== false) {
+                $event->stopPropagation();
+                $event->getData('response')->body($result);
+                return $event->getData('response');
+            }
+        }
+    }
 
 }

@@ -19,14 +19,14 @@ class EditorTemplatesSchema extends CakeSchema
     }
 
     public $editor_templates = [
-        'id'              => ['type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'],
-        'name'            => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 50],
-        'image'           => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 50],
-        'description'     => ['type' => 'string', 'null' => true, 'default' => null],
-        'html'            => ['type' => 'text', 'null' => true, 'default' => null],
-        'modified'        => ['type' => 'datetime', 'null' => true, 'default' => null],
-        'created'         => ['type' => 'datetime', 'null' => true, 'default' => null],
-        'indexes'         => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
+        'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'],
+        'name' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 50],
+        'image' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 50],
+        'description' => ['type' => 'string', 'null' => true, 'default' => null],
+        'html' => ['type' => 'text', 'null' => true, 'default' => null],
+        'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
+        'created' => ['type' => 'datetime', 'null' => true, 'default' => null],
+        'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
         'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci']
     ];
 }

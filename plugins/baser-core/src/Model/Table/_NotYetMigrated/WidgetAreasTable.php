@@ -22,49 +22,49 @@ return;
 class WidgetArea extends AppModel
 {
 
-	/**
-	 * クラス名
-	 * @var string
-	 */
-	public $name = 'WidgetArea';
+    /**
+     * クラス名
+     * @var string
+     */
+    public $name = 'WidgetArea';
 
-	/**
-	 * ビヘイビア
-	 *
-	 * @var array
-	 */
-	public $actsAs = ['BcCache'];
+    /**
+     * ビヘイビア
+     *
+     * @var array
+     */
+    public $actsAs = ['BcCache'];
 
-	/**
-	 * WidgetArea constructor.
-	 *
-	 * @param bool $id
-	 * @param null $table
-	 * @param null $ds
-	 */
-	public function __construct($id = false, $table = null, $ds = null)
-	{
-		parent::__construct($id, $table, $ds);
-		$this->validate = [
-			'name' => [
-				'notBlank' => ['rule' => ['notBlank'], 'message' => __d('baser', 'ウィジェットエリア名を入力してください。')],
-				'maxLength' => ['rule' => ['maxLength', 255], 'message' => __d('baser', 'ウィジェットエリア名は255文字以内で入力してください。')]]
-		];
-	}
+    /**
+     * WidgetArea constructor.
+     *
+     * @param bool $id
+     * @param null $table
+     * @param null $ds
+     */
+    public function __construct($id = false, $table = null, $ds = null)
+    {
+        parent::__construct($id, $table, $ds);
+        $this->validate = [
+            'name' => [
+                'notBlank' => ['rule' => ['notBlank'], 'message' => __d('baser', 'ウィジェットエリア名を入力してください。')],
+                'maxLength' => ['rule' => ['maxLength', 255], 'message' => __d('baser', 'ウィジェットエリア名は255文字以内で入力してください。')]]
+        ];
+    }
 
-	/**
-	 * コントロールソース取得
-	 * @param string $field
-	 * @return array
-	 */
-	public function getControlSource($field)
-	{
-		$controllSource['id'] = $this->find('list');
-		if (isset($controllSource[$field])) {
-			return $controllSource[$field];
-		} else {
-			return [];
-		}
-	}
+    /**
+     * コントロールソース取得
+     * @param string $field
+     * @return array
+     */
+    public function getControlSource($field)
+    {
+        $controllSource['id'] = $this->find('list');
+        if (isset($controllSource[$field])) {
+            return $controllSource[$field];
+        } else {
+            return [];
+        }
+    }
 
 }

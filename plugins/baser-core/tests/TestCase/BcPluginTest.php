@@ -104,7 +104,8 @@ class BcPluginTest extends BcTestCase
     /**
      * testRollback
      */
-    public function testRollback() {
+    public function testRollback()
+    {
         $this->BcPlugin->install(['connection' => 'test']);
         $this->BcPlugin->rollbackDb(['connection' => 'test']);
         $collection = ConnectionManager::get('default')->getSchemaCollection();

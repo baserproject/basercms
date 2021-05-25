@@ -72,60 +72,60 @@ class BcMessageComponentTest extends BcTestCase
     public function testSet()
     {
         // notice message
-		$this->BcMessage->set('test');
-		$this->assertEquals('test', $_SESSION['Flash']['flash'][0]['message']);
-		$this->assertEquals('notice-message', $_SESSION['Flash']['flash'][0]['params']['class']);
+        $this->BcMessage->set('test');
+        $this->assertEquals('test', $_SESSION['Flash']['flash'][0]['message']);
+        $this->assertEquals('notice-message', $_SESSION['Flash']['flash'][0]['params']['class']);
 
-		// multi message
-		$this->BcMessage->set('test');
-		$this->assertEquals(2, count($_SESSION['Flash']['flash']));
+        // multi message
+        $this->BcMessage->set('test');
+        $this->assertEquals(2, count($_SESSION['Flash']['flash']));
         $_SESSION['Flash'] = null;
-		// alert message
-		$a = $this->BcMessage->set('test', true);
-		$this->assertEquals('alert-message', $_SESSION['Flash']['flash'][0]['params']['class']);
+        // alert message
+        $a = $this->BcMessage->set('test', true);
+        $this->assertEquals('alert-message', $_SESSION['Flash']['flash'][0]['params']['class']);
         $_SESSION['Flash'] = null;
-		// TODO:set db log
-		/* @var Dblog $dbLogModel */
+        // TODO:set db log
+        /* @var Dblog $dbLogModel */
 
-		// not flash message
-		$this->BcMessage->set('test', false, false, false);
-		$this->assertEquals(null, $_SESSION['Flash']);
+        // not flash message
+        $this->BcMessage->set('test', false, false, false);
+        $this->assertEquals(null, $_SESSION['Flash']);
     }
 
-	/**
-	 * setSuccess
-	 */
-	public function testSetSuccess()
-	{
-		$this->BcMessage->setSuccess('test');
-		$this->assertEquals('notice-message', $_SESSION['Flash']['flash'][0]['params']['class']);
-	}
+    /**
+     * setSuccess
+     */
+    public function testSetSuccess()
+    {
+        $this->BcMessage->setSuccess('test');
+        $this->assertEquals('notice-message', $_SESSION['Flash']['flash'][0]['params']['class']);
+    }
 
-	/**
-	 * setError
-	 */
-	public function testSetError()
-	{
-		$this->BcMessage->setError('test');
-		$this->assertEquals('alert-message', $_SESSION['Flash']['flash'][0]['params']['class']);
-	}
+    /**
+     * setError
+     */
+    public function testSetError()
+    {
+        $this->BcMessage->setError('test');
+        $this->assertEquals('alert-message', $_SESSION['Flash']['flash'][0]['params']['class']);
+    }
 
-	/**
-	 * setWarning
-	 */
-	public function testSetWarning()
-	{
-		$this->BcMessage->setWarning('test');
-		$this->assertEquals('warning-message', $_SESSION['Flash']['flash'][0]['params']['class']);
-	}
+    /**
+     * setWarning
+     */
+    public function testSetWarning()
+    {
+        $this->BcMessage->setWarning('test');
+        $this->assertEquals('warning-message', $_SESSION['Flash']['flash'][0]['params']['class']);
+    }
 
-	/**
-	 * setInfo
-	 */
-	public function testSetInfo()
-	{
-		$this->BcMessage->setInfo('test');
-		$this->assertEquals('info-message', $_SESSION['Flash']['flash'][0]['params']['class']);
-	}
+    /**
+     * setInfo
+     */
+    public function testSetInfo()
+    {
+        $this->BcMessage->setInfo('test');
+        $this->assertEquals('info-message', $_SESSION['Flash']['flash'][0]['params']['class']);
+    }
 
 }

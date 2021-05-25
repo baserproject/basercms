@@ -22,82 +22,82 @@ return;
 class Favorite extends AppModel
 {
 
-	/**
-	 * クラス名
-	 *
-	 * @var string
-	 */
-	public $name = 'Favorite';
+    /**
+     * クラス名
+     *
+     * @var string
+     */
+    public $name = 'Favorite';
 
-	/**
-	 * belongsTo
-	 *
-	 * @var array
-	 */
-	public $belongsTo = [
-		'User' => [
-			'className' => 'User',
-			'foreignKey' => 'user_id'
-		]];
+    /**
+     * belongsTo
+     *
+     * @var array
+     */
+    public $belongsTo = [
+        'User' => [
+            'className' => 'User',
+            'foreignKey' => 'user_id'
+        ]];
 
-	/**
-	 * ビヘイビア
-	 *
-	 * @var array
-	 */
-	public $actsAs = ['BcCache'];
+    /**
+     * ビヘイビア
+     *
+     * @var array
+     */
+    public $actsAs = ['BcCache'];
 
-	/**
-	 * セッション
-	 *
-	 * @var Session
-	 */
-	public $_Session;
+    /**
+     * セッション
+     *
+     * @var Session
+     */
+    public $_Session;
 
-	/**
-	 * Favorite constructor.
-	 *
-	 * @param bool $id
-	 * @param null $table
-	 * @param null $ds
-	 */
-	public function __construct($id = false, $table = null, $ds = null)
-	{
-		parent::__construct($id, $table, $ds);
-		$this->validate = [
-			'url' => [
-				['rule' => ['isPermitted'], 'message' => __d('baser', 'このURLの登録は許可されていません。')]]
-		];
-	}
+    /**
+     * Favorite constructor.
+     *
+     * @param bool $id
+     * @param null $table
+     * @param null $ds
+     */
+    public function __construct($id = false, $table = null, $ds = null)
+    {
+        parent::__construct($id, $table, $ds);
+        $this->validate = [
+            'url' => [
+                ['rule' => ['isPermitted'], 'message' => __d('baser', 'このURLの登録は許可されていません。')]]
+        ];
+    }
 
-	/**
-	 * セッションをセットする
-	 *
-	 * @param SessionComponent $Session
-	 */
-	public function setSession(SessionComponent $Session)
-	{
-		$this->_Session = $Session;
-	}
+    /**
+     * セッションをセットする
+     *
+     * @param SessionComponent $Session
+     */
+    public function setSession(SessionComponent $Session)
+    {
+        $this->_Session = $Session;
+    }
 
-	/**
-	 * アクセス権があるかチェックする
-	 *
-	 * @param array $check
-	 */
-	public function isPermitted($check)
-	{
-		if (!$this->_Session) {
-			return true;
-		}
-		$url = $check[key($check)];
-		$prefix = BcUtil::authSessionKey('admin');
-		$userGroupId = $this->_Session->read('Auth.' . $prefix . '.user_group_id');
-		if ($userGroupId == Configure::read('BcApp.adminGroupId')) {
-			return true;
-		}
-		$Permission = ClassRegistry::init('Permission');
-		return $Permission->check($url, $userGroupId);
-	}
+    /**
+     * アクセス権があるかチェックする
+     *
+     * @param array $check
+     */
+    public function isPermitted($check)
+    {
+        if (!$this->_Session) {
+            return true;
+        }
+        $url = $check[key($check)];
+        $prefix = BcUtil::authSessionKey('admin');
+        $userGroupId = $this->_Session->read('Auth.' . $prefix . '.user_group_id');
+        if ($userGroupId == Configure::read('BcApp.adminGroupId')) {
+            return true;
+        }
+        $Permission = ClassRegistry::init('Permission');
+        return $Permission->check($url, $userGroupId);
+    }
 
 }

@@ -29,15 +29,15 @@ $fileName = str_replace('/', DS, $_SERVER['SCRIPT_FILENAME']);
  */
 // 通常パターン
 if (@is_dir(dirname(dirname(dirname($fileName))) . DS . 'lib' . DS . 'Cake')) {
-	define('ROOT', dirname(dirname(dirname($fileName))));
+    define('ROOT', dirname(dirname(dirname($fileName))));
 
 // app内にcakeを配置 パターン
-/*}elseif(is_dir(dirname(dirname($fileName)).DS.'cake')){
-	define('ROOT', dirname(dirname($fileName)));*/
+    /*}elseif(is_dir(dirname(dirname($fileName)).DS.'cake')){
+        define('ROOT', dirname(dirname($fileName)));*/
 
 // WEBROOT配置パターン
 } elseif (is_dir(dirname($fileName) . DS . 'lib' . DS . 'Cake')) {
-	define('ROOT', dirname($fileName));
+    define('ROOT', dirname($fileName));
 }
 
 /**

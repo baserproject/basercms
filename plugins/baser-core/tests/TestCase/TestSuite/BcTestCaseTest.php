@@ -18,12 +18,12 @@ use Cake\Core\Configure;
 use Cake\Routing\Router;
 
 /**
- * BaserCore\TestSuite\BcTestCase 
+ * BaserCore\TestSuite\BcTestCase
  *
  */
 class BcTestCaseTest extends BcTestCase
 {
-        /**
+    /**
      * Fixtures
      *
      * @var array
@@ -34,6 +34,7 @@ class BcTestCaseTest extends BcTestCase
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.LoginStores',
     ];
+
     /**
      * Set Up
      */
@@ -41,6 +42,7 @@ class BcTestCaseTest extends BcTestCase
     {
         parent::setUp();
     }
+
     /**
      * tearDown
      */

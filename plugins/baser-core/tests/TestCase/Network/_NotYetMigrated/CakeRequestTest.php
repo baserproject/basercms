@@ -22,48 +22,48 @@ App::uses('CakeRequest', 'Network');
 class CakeRequestTest extends BcTestCase
 {
 
-	public $fixtures = [
-		'baser.Default.Page',
-		'baser.Default.Content',
-		'baser.Default.Site',
-		'baser.Default.User',
-		'baser.Default.SiteConfig',
-	];
+    public $fixtures = [
+        'baser.Default.Page',
+        'baser.Default.Content',
+        'baser.Default.Site',
+        'baser.Default.User',
+        'baser.Default.SiteConfig',
+    ];
 
-	/**
-	 * Get the host that the request was handled on.
-	 */
-	public function testHost()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * Get the host that the request was handled on.
+     */
+    public function testHost()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * normalizedHere
-	 *
-	 * @param string $url URL
-	 * @param string $expect 正規化されたURL
-	 * @return void
-	 * @dataProvider normalizedHereDataProvider
-	 */
-	public function testNormalizedHere($url, $expect)
-	{
-		$request = $this->_getRequest($url);
-		$this->assertEquals($expect, $request->normalizedHere());
-	}
+    /**
+     * normalizedHere
+     *
+     * @param string $url URL
+     * @param string $expect 正規化されたURL
+     * @return void
+     * @dataProvider normalizedHereDataProvider
+     */
+    public function testNormalizedHere($url, $expect)
+    {
+        $request = $this->_getRequest($url);
+        $this->assertEquals($expect, $request->normalizedHere());
+    }
 
-	/**
-	 * normalizedHere用のデータプロバイダ
-	 *
-	 * @return array
-	 */
-	public function normalizedHereDataProvider()
-	{
-		return [
-			['/', '/index'],
-			['/news/index', '/news/index'],
-			['/news/', '/news/index'],
-			['/news', '/news/index']
-		];
-	}
+    /**
+     * normalizedHere用のデータプロバイダ
+     *
+     * @return array
+     */
+    public function normalizedHereDataProvider()
+    {
+        return [
+            ['/', '/index'],
+            ['/news/index', '/news/index'],
+            ['/news/', '/news/index'],
+            ['/news', '/news/index']
+        ];
+    }
 }

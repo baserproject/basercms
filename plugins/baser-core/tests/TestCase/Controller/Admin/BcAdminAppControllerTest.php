@@ -18,12 +18,13 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use ReflectionClass;
 use \Cake\Http\Exception\NotFoundException;
+
 /**
  * BaserCore\Controller\BcAdminAppController Test Case
  */
 class BcAdminAppControllerTest extends BcTestCase
 {
-   use IntegrationTestTrait;
+    use IntegrationTestTrait;
 
     /**
      * set up
@@ -184,7 +185,7 @@ class BcAdminAppControllerTest extends BcTestCase
      */
     public function testCheckReferer($referer, $expected)
     {
-        Configure::write('BcEnv.host', $referer ? parse_url($referer)['host'] : null);
+        Configure::write('BcEnv.host', $referer? parse_url($referer)['host'] : null);
         $_SERVER['HTTP_REFERER'] = $referer;
         $ref = new ReflectionClass($this->BcAdminApp);
         $method = $ref->getMethod('_checkReferer');

@@ -16,47 +16,47 @@ App::uses('DblogsController', 'Controller');
 
 /**
  * Class DblogsControllerTest
-*
+ *
  * @package Baser.Test.Case.Controller
  * @property  DblogsController $DblogsController
  */
 class DblogsControllerTest extends BcTestCase
 {
 
-	/**
-	 * set up
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * set up
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	/**
-	 * 一覧を取得
-	 */
-	public function testAdmin_ajax_index()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * 一覧を取得
+     */
+    public function testAdmin_ajax_index()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * [ADMIN] 最近の動きを削除
-	 */
-	public function testAdmin_del()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * [ADMIN] 最近の動きを削除
+     */
+    public function testAdmin_del()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
 }

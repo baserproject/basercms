@@ -8,6 +8,7 @@
  * @since         5.0.0
  * @license       http://basercms.net/license/index.html MIT License
  */
+
 namespace BaserCore\Controller;
 
 use Cake\Filesystem\File;
@@ -104,13 +105,13 @@ class AnalyseController extends AppController
             if (preg_match('/^[a-z]/', $fileName) || !preg_match('/\.php$/', $fileName)) {
                 $file = new File($path);
                 $code = $file->read();
-                if(preg_match('/@checked/', $code)) {
+                if (preg_match('/@checked/', $code)) {
                     $meta['checked'] = true;
                 }
-                if(preg_match('/@noTodo/', $code)) {
+                if (preg_match('/@noTodo/', $code)) {
                     $meta['checked'] = true;
                 }
-                if(preg_match('/@noTodo/', $code)) {
+                if (preg_match('/@noTodo/', $code)) {
                     $meta['unitTest'] = true;
                 }
                 $metas[] = $meta;

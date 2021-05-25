@@ -66,6 +66,7 @@ class PluginsControllerTest extends BcTestCase
     {
         $this->assertNotEmpty($this->PluginsController->RequestHandler);
     }
+
     /**
      * beforeFilterテスト
      */
@@ -75,6 +76,7 @@ class PluginsControllerTest extends BcTestCase
         $this->PluginsController->beforeFilter($event);
         $this->assertEquals($this->PluginsController->Security->getConfig('unlockedActions'), ['reset_db', 'update_sort', 'batch']);
     }
+
     /**
      * プラグインをアップロードしてインストールする
      */
@@ -195,6 +197,7 @@ class PluginsControllerTest extends BcTestCase
         ]);
         $this->assertFlashMessage('ブログ プラグインのデータを初期化しました。');
     }
+
     /**
      * 一括処理できてるかテスト
      */

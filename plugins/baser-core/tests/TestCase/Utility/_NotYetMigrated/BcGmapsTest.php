@@ -22,34 +22,34 @@ App::uses('BcGmaps', 'Lib');
 class BcGmapsTest extends BcTestCase
 {
 
-	/**
-	 * setUp
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-		$this->BcGmaps = new BcGmaps(Configure::read('BcSite.google_maps_api_key'));
-	}
+    /**
+     * setUp
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->BcGmaps = new BcGmaps(Configure::read('BcSite.google_maps_api_key'));
+    }
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	/**
-	 * getInfoLocation
-	 * 2018/07/09 ryuring TravisCI環境にて、タイミングにより、データを取得できず処理に失敗するので一旦コメントアウト
-	 */
-	public function testGetInfoLocation()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+    /**
+     * getInfoLocation
+     * 2018/07/09 ryuring TravisCI環境にて、タイミングにより、データを取得できず処理に失敗するので一旦コメントアウト
+     */
+    public function testGetInfoLocation()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
 //		$result = $this->BcGmaps->getInfoLocation('日本');
 //		$this->assertNotEmpty($result, 'getInfoLocationで情報を取得できません');
 //
@@ -61,6 +61,6 @@ class BcGmapsTest extends BcTestCase
 //
 //		$result = $this->BcGmaps->getInfoLocation('');
 //		$this->assertNull($result, 'getInfoLocationに空のアドレスに値が返ってきます');
-	}
+    }
 
 }

@@ -22,27 +22,27 @@ return;
 class ContentLink extends AppModel
 {
 
-	/**
-	 * Behavior Setting
-	 *
-	 * @var array
-	 */
-	public $actsAs = ['BcContents'];
+    /**
+     * Behavior Setting
+     *
+     * @var array
+     */
+    public $actsAs = ['BcContents'];
 
-	/**
-	 * ContentLink constructor.
-	 *
-	 * @param bool $id
-	 * @param null $table
-	 * @param null $ds
-	 */
-	public function __construct($id = false, $table = null, $ds = null)
-	{
-		parent::__construct($id, $table, $ds);
-		$this->validate = [
-			'url' => [
-				['rule' => ['notBlank'], 'message' => __d('baser', 'リンク先URLを入力してください。')]]
-		];
-	}
+    /**
+     * ContentLink constructor.
+     *
+     * @param bool $id
+     * @param null $table
+     * @param null $ds
+     */
+    public function __construct($id = false, $table = null, $ds = null)
+    {
+        parent::__construct($id, $table, $ds);
+        $this->validate = [
+            'url' => [
+                ['rule' => ['notBlank'], 'message' => __d('baser', 'リンク先URLを入力してください。')]]
+        ];
+    }
 
 }

@@ -25,65 +25,65 @@ App::uses('BcWidgetAreaHelper', 'View/Helper');
 class BcWidgetAreaHelperTest extends BcTestCase
 {
 
-	/**
-	 * Fixtures
-	 * @var array
-	 */
-	public $fixtures = [
-		'baser.Default.WidgetArea',
-	];
+    /**
+     * Fixtures
+     * @var array
+     */
+    public $fixtures = [
+        'baser.Default.WidgetArea',
+    ];
 
-	public function setUp()
-	{
-		parent::setUp();
-		$View = new View();
-		$this->BcWidgetArea = new BcWidgetAreaHelper($View);
-	}
+    public function setUp()
+    {
+        parent::setUp();
+        $View = new View();
+        $this->BcWidgetArea = new BcWidgetAreaHelper($View);
+    }
 
-	public function tearDown()
-	{
-		unset($this->BcWidgetArea);
-		parent::tearDown();
-	}
+    public function tearDown()
+    {
+        unset($this->BcWidgetArea);
+        parent::tearDown();
+    }
 
-	/**
-	 * ウィジェットエリアを表示する
-	 *
-	 * @param $no ウィジェットエリアNO
-	 * @param array $options オプション
-	 * @param string $expected 期待値
-	 * @dataProvider showDataProvider
-	 *
-	 * MEMO: $pathがわからないため保留
-	 */
-	public function testShow($fileName, $no, $expected)
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$path = APP . 'Elements/widgets/' . $fileName . '.ctp';
-		$fh = fopen($path, 'w');
-		fwrite($fh, '東京' . PHP_EOL . '埼玉' . PHP_EOL . '大阪' . PHP_EOL);
-		fclose($fh);
+    /**
+     * ウィジェットエリアを表示する
+     *
+     * @param $no ウィジェットエリアNO
+     * @param array $options オプション
+     * @param string $expected 期待値
+     * @dataProvider showDataProvider
+     *
+     * MEMO: $pathがわからないため保留
+     */
+    public function testShow($fileName, $no, $expected)
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $path = APP . 'Elements/widgets/' . $fileName . '.ctp';
+        $fh = fopen($path, 'w');
+        fwrite($fh, '東京' . PHP_EOL . '埼玉' . PHP_EOL . '大阪' . PHP_EOL);
+        fclose($fh);
 
-		ob_start();
-		//エラーでファイルが残留するため,tryで確実に削除を実行
-		try {
-			$this->BcWidgetArea->show($no);
-		} catch (Exception $e) {
-			echo 'error: ', $e->getMessage(), "\n";
-		}
-		$result = ob_get_clean();
-		unlink($path);
+        ob_start();
+        //エラーでファイルが残留するため,tryで確実に削除を実行
+        try {
+            $this->BcWidgetArea->show($no);
+        } catch (Exception $e) {
+            echo 'error: ', $e->getMessage(), "\n";
+        }
+        $result = ob_get_clean();
+        unlink($path);
 
-		pr($result);
-		$this->assertEquals($expected, $result);
-	}
+        pr($result);
+        $this->assertEquals($expected, $result);
+    }
 
-	public function showDataProvider()
-	{
-		return [
-			['test', 1, ''],
-			['test', 2, '']
-		];
-	}
+    public function showDataProvider()
+    {
+        return [
+            ['test', 1, ''],
+            ['test', 2, '']
+        ];
+    }
 
 }

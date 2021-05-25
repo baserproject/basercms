@@ -20,55 +20,55 @@ return;
 class BcSearchIndexManagerBehaviorTest extends BaserTestCase
 {
 
-	public $fixtures = [];
+    public $fixtures = [];
 
-	/**
-	 * setUp
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * setUp
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
 
-	/**
-	 * コンテンツデータを登録する
-	 *
-	 * @param Model $model
-	 * @param array $data
-	 * @return boolean
-	 */
-	public function testSaveSearchIndex()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * コンテンツデータを登録する
+     *
+     * @param Model $model
+     * @param array $data
+     * @return boolean
+     */
+    public function testSaveSearchIndex()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * コンテンツデータを削除する
-	 */
-	public function testDeleteSearchIndex()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * コンテンツデータを削除する
+     */
+    public function testDeleteSearchIndex()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * コンテンツメタ情報を更新する
-	 */
-	public function testUpdateSearchIndexMeta()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * コンテンツメタ情報を更新する
+     */
+    public function testUpdateSearchIndexMeta()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
 }

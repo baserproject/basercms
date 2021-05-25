@@ -23,7 +23,7 @@ App::uses('Controller', 'Controller');
 class BcGmapsTestController extends Controller
 {
 
-	public $components = ['BcGmaps'];
+    public $components = ['BcGmaps'];
 
 }
 
@@ -36,47 +36,47 @@ class BcGmapsTestController extends Controller
 class BcGmapsComponentTest extends BcTestCase
 {
 
-	public $fixtures = [];
+    public $fixtures = [];
 
-	public $components = ['BcGmaps'];
+    public $components = ['BcGmaps'];
 
-	public function setUp()
-	{
-		parent::setUp();
+    public function setUp()
+    {
+        parent::setUp();
 
-		// コンポーネントと偽のテストコントローラをセットアップする
-		$request = new CakeRequest();
-		$response = $this->getMock('CakeResponse');
-		$this->Controller = new BcGmapsTestController($request, $response);
+        // コンポーネントと偽のテストコントローラをセットアップする
+        $request = new CakeRequest();
+        $response = $this->getMock('CakeResponse');
+        $this->Controller = new BcGmapsTestController($request, $response);
 
-		$collection = new ComponentCollection();
-		$collection->init($this->Controller);
-		$this->BcGmaps = new BcGmapsComponent($collection);
-		$this->BcGmaps->request = $request;
-		$this->BcGmaps->response = $response;
+        $collection = new ComponentCollection();
+        $collection->init($this->Controller);
+        $this->BcGmaps = new BcGmapsComponent($collection);
+        $this->BcGmaps->request = $request;
+        $this->BcGmaps->response = $response;
 
-		$this->Controller->Components->init($this->Controller);
+        $this->Controller->Components->init($this->Controller);
 
-		Router::reload();
-		Router::connect('/:controller/:action/*');
-	}
+        Router::reload();
+        Router::connect('/:controller/:action/*');
+    }
 
-	public function tearDown()
-	{
-		parent::tearDown();
-		unset($this->Controller);
-		unset($this->BcGmaps);
-	}
+    public function tearDown()
+    {
+        parent::tearDown();
+        unset($this->Controller);
+        unset($this->BcGmaps);
+    }
 
-	public function test_connect()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-	/**
-	 * getInfoLocation
-	 * 2018/05/15 ryuring TravisCI環境にて、タイミングにより、データを取得できず処理に失敗するので一旦コメントアウト
-	 * @todo 処理内容を変える等の検討が必要
-	 */
+    public function test_connect()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+    /**
+     * getInfoLocation
+     * 2018/05/15 ryuring TravisCI環境にて、タイミングにより、データを取得できず処理に失敗するので一旦コメントアウト
+     * @todo 処理内容を変える等の検討が必要
+     */
 //	public function testGetInfoLocation() {
 //		$this->BcGmaps->getInfoLocation('日本');
 //		$lat = round($this->BcGmaps->getLatitude(), 1);

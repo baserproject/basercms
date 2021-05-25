@@ -25,80 +25,80 @@ App::uses('BcMobileHelper', 'View/Helper');
 class BcMobileHelperTest extends BcTestCase
 {
 
-	/**
-	 * Fixtures
-	 * @var array
-	 */
-	public $fixtures = [
-		'baser.Default.Page',
-		'baser.Default.Site',
-		'baser.Default.SiteConfig',
-		'baser.Default.Content',
-		'baser.Default.User'
-	];
+    /**
+     * Fixtures
+     * @var array
+     */
+    public $fixtures = [
+        'baser.Default.Page',
+        'baser.Default.Site',
+        'baser.Default.SiteConfig',
+        'baser.Default.Content',
+        'baser.Default.User'
+    ];
 
-	/**
-	 * setUp method
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-		$this->View = new BcAppView();
-		$this->BcMobile = new BcMobileHelper($this->View);
-		$this->BcMobile->request = $this->_getRequest('/m/');
-	}
+    /**
+     * setUp method
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->View = new BcAppView();
+        $this->BcMobile = new BcMobileHelper($this->View);
+        $this->BcMobile->request = $this->_getRequest('/m/');
+    }
 
-	/**
-	 * tearDown method
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		unset($this->BcMobile);
-		parent::tearDown();
-	}
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        unset($this->BcMobile);
+        parent::tearDown();
+    }
 
-	/**
-	 * afterLayout
-	 *
-	 * @return void
-	 */
-	public function testAfterLayout()
-	{
-		$_SERVER['HTTP_USER_AGENT'] = 'SoftBank';
-		$site = BcSite::findCurrent(true);
-		$this->View->output = '＞＜＆＆1２＠＠';
-		$expected = '&gt;&lt;&amp;&amp;12@@';
+    /**
+     * afterLayout
+     *
+     * @return void
+     */
+    public function testAfterLayout()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'SoftBank';
+        $site = BcSite::findCurrent(true);
+        $this->View->output = '＞＜＆＆1２＠＠';
+        $expected = '&gt;&lt;&amp;&amp;12@@';
 
-		$this->BcMobile->afterLayout('');
-		$result = $this->View->output;
+        $this->BcMobile->afterLayout('');
+        $result = $this->View->output;
 
-		$this->assertEquals($expected, $result);
-	}
+        $this->assertEquals($expected, $result);
+    }
 
-	/**
-	 * コンテンツタイプを出力
-	 *
-	 * header()が実行できないためテスト不可
-	 * 原因:このメソッド実行前にechoやprintなどのアウトプット or 既にheaderを送信 or UTF-8BOM?
-	 * headers_sent() headers_list()で確認可
-	 *
-	 * @return void
-	 */
-	public function testHeader()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$this->BcMobile->request->params['Site']['device'] = 'mobile';
-		$this->BcMobile->header();
+    /**
+     * コンテンツタイプを出力
+     *
+     * header()が実行できないためテスト不可
+     * 原因:このメソッド実行前にechoやprintなどのアウトプット or 既にheaderを送信 or UTF-8BOM?
+     * headers_sent() headers_list()で確認可
+     *
+     * @return void
+     */
+    public function testHeader()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->BcMobile->request->params['Site']['device'] = 'mobile';
+        $this->BcMobile->header();
 
-	}
+    }
 
-	public function testAfterRender()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    public function testAfterRender()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
 }

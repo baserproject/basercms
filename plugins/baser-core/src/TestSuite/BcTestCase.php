@@ -70,11 +70,11 @@ class BcTestCase extends TestCase
             'url' => $url,
             'environment' => [
                 'REQUEST_METHOD' => $method
-        ]];
+            ]];
         $request = new ServerRequest($config);
         $params = Router::parseRequest($request);
         $request = $request->withAttribute('params', $params);
-        if($data) {
+        if ($data) {
             $request = $request->withParsedBody($data);
         }
         Router::setRequest($request);

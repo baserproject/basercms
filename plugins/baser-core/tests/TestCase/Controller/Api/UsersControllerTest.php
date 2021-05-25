@@ -61,7 +61,7 @@ class UsersControllerTest extends BcTestCase
     {
         $this->get('/baser/api/baser-core/users/index.json?token=' . $this->token);
         $this->assertResponseOk();
-        $result = json_decode((string) $this->_response->getBody());
+        $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('baser admin', $result->users[0]->name);
     }
 
@@ -126,7 +126,7 @@ class UsersControllerTest extends BcTestCase
     {
         $this->get('/baser/api/baser-core/users/view/1.json?token=' . $this->token);
         $this->assertResponseOk();
-        $result = json_decode((string) $this->_response->getBody());
+        $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('baser admin', $result->user->name);
     }
 

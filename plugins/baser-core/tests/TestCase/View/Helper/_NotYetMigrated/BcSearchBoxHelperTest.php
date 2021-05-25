@@ -18,19 +18,19 @@ App::uses('BcSearchBoxHelper', 'View/Helper');
 class BcSearchBoxHelperTest extends CakeTestCase
 {
 
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	public function testDispatchShowField()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    public function testDispatchShowField()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 }
 

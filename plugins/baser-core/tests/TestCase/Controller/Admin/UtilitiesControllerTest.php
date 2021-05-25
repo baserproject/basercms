@@ -23,6 +23,7 @@ use BaserCore\Controller\Admin\UtilitiesController;
 class UtilitiesControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
+
     /**
      * set up
      */

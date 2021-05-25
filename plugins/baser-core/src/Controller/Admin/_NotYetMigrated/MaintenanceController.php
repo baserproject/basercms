@@ -22,55 +22,55 @@ return;
 class MaintenanceController extends AppController
 {
 
-	/**
-	 * クラス名
-	 *
-	 * @var string
-	 */
-	public $name = 'Maintenance';
+    /**
+     * クラス名
+     *
+     * @var string
+     */
+    public $name = 'Maintenance';
 
-	/**
-	 * モデル
-	 *
-	 * @var array
-	 */
-	public $uses = null;
+    /**
+     * モデル
+     *
+     * @var array
+     */
+    public $uses = null;
 
-	/**
-	 * ぱんくずナビ
-	 *
-	 * @var array
-	 */
-	public $crumbs = [];
+    /**
+     * ぱんくずナビ
+     *
+     * @var array
+     */
+    public $crumbs = [];
 
-	/**
-	 * サブメニューエレメント
-	 *
-	 * @var array
-	 */
-	public $subMenuElements = [];
+    /**
+     * サブメニューエレメント
+     *
+     * @var array
+     */
+    public $subMenuElements = [];
 
-	/**
-	 * メンテナンス中ページを表示する
-	 *
-	 * @return void
-	 * @access    public
-	 */
-	public function index()
-	{
-		$this->setTitle(__d('baser', 'メンテナンス中'));
-		$this->response->statusCode(503);
-	}
+    /**
+     * メンテナンス中ページを表示する
+     *
+     * @return void
+     * @access    public
+     */
+    public function index()
+    {
+        $this->setTitle(__d('baser', 'メンテナンス中'));
+        $this->response->statusCode(503);
+    }
 
-	/**
-	 * [スマートフォン] メンテナンス中ページを表示する
-	 *
-	 * @return void
-	 * @access public
-	 */
-	public function smartphone_index()
-	{
-		$this->setAction('index');
-	}
+    /**
+     * [スマートフォン] メンテナンス中ページを表示する
+     *
+     * @return void
+     * @access public
+     */
+    public function smartphone_index()
+    {
+        $this->setAction('index');
+    }
 
 }

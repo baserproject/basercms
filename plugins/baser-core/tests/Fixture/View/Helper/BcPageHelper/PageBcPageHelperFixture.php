@@ -1,28 +1,29 @@
 <?php
 // TODO : コード確認要
 return;
+
 /**
  * PageBcPageHelperFixture
  */
 class PageBcPageHelperFixture extends BaserTestFixture
 {
 
-	/**
-	 * Name of the object
-	 *
-	 * @var string
-	 */
-	public $name = 'Page';
+    /**
+     * Name of the object
+     *
+     * @var string
+     */
+    public $name = 'Page';
 
-	/**
-	 * Records
-	 *
-	 * @var array
-	 */
-	public $records = [
-		[
-			'id' => 1,
-			'contents' => '<section class="mainHeadline">
+    /**
+     * Records
+     *
+     * @var array
+     */
+    public $records = [
+        [
+            'id' => 1,
+            'contents' => '<section class="mainHeadline">
 <h2>シングルページデザインで<br />
 <span class="fcGreen">見やすくカッコいい</span>Webサイトへ！</h2>
 </section>
@@ -39,14 +40,14 @@ class PageBcPageHelperFixture extends BaserTestFixture
 <?php echo $this->BcBaser->js(\'/feed/ajax/1\'); ?>
 </section>
 </div><!-- /information -->',
-			'draft' => '',
-			'code' => '',
-			'modified' => null,
-			'created' => '2015-01-27 12:56:52'
-		],
-		[
-			'id' => 2,
-			'contents' => '<div class="articleArea" id="company">
+            'draft' => '',
+            'code' => '',
+            'modified' => null,
+            'created' => '2015-01-27 12:56:52'
+        ],
+        [
+            'id' => 2,
+            'contents' => '<div class="articleArea" id="company">
 <article class="mainWidth">
 <h2 class="fontawesome-circle-arrow-down">Company Profile <span>会社案内</span></h2>
 
@@ -84,14 +85,14 @@ class PageBcPageHelperFixture extends BaserTestFixture
 </section>
 </article>
 <?php $this->BcBaser->googleMaps(array("width" => "100%","height" => 500)) ?></div>',
-			'draft' => '',
-			'code' => '',
-			'modified' => null,
-			'created' => '2015-01-27 12:56:52'
-		],
-		[
-			'id' => 3,
-			'contents' => '<div class="articleArea bgGray" id="service">
+            'draft' => '',
+            'code' => '',
+            'modified' => null,
+            'created' => '2015-01-27 12:56:52'
+        ],
+        [
+            'id' => 3,
+            'contents' => '<div class="articleArea bgGray" id="service">
 <article class="mainWidth">
 <h2 class="fontawesome-circle-arrow-down">Service <span>事業案内</span></h2>
 
@@ -104,14 +105,14 @@ class PageBcPageHelperFixture extends BaserTestFixture
 <figure class="imgArea"><?php $this->BcBaser->img(\'img_service.jpg\',array(\'alt\'=>\'事業内容の写真\')) ?></figure>
 </article>
 </div>',
-			'draft' => '',
-			'code' => '',
-			'modified' => null,
-			'created' => '2015-01-27 12:56:52'
-		],
-		[
-			'id' => 4,
-			'contents' => '<div class="articleArea" id="recruit">
+            'draft' => '',
+            'code' => '',
+            'modified' => null,
+            'created' => '2015-01-27 12:56:52'
+        ],
+        [
+            'id' => 4,
+            'contents' => '<div class="articleArea" id="recruit">
 <article class="mainWidth">
 <h2 class="fontawesome-circle-arrow-down">Recruit <span>採用情報</span></h2>
 <p>baserCMS inc. [デモ]では現在、下記の職種を募集しています。皆様のご応募をお待ちしております。</p>
@@ -157,14 +158,14 @@ class PageBcPageHelperFixture extends BaserTestFixture
 </table>
 </article>
 </div>',
-			'draft' => '',
-			'code' => '',
-			'modified' => null,
-			'created' => '2015-01-27 12:56:52'
-		],
-		[
-			'id' => 5,
-			'contents' => '<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
+            'draft' => '',
+            'code' => '',
+            'modified' => null,
+            'created' => '2015-01-27 12:56:52'
+        ],
+        [
+            'id' => 5,
+            'contents' => '<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">メインメニュー</span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <span style="color:#8ABE08">■</span>
@@ -180,14 +181,14 @@ class PageBcPageHelperFixture extends BaserTestFixture
 <div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">baserCMS NEWS</span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <?php $this->BcBaser->feed(1) ?>',
-			'draft' => '',
-			'code' => '',
-			'modified' => null,
-			'created' => '2015-01-27 12:56:52'
-		],
-		[
-			'id' => 6,
-			'contents' => '<div id="news" class="clearfix">
+            'draft' => '',
+            'code' => '',
+            'modified' => null,
+            'created' => '2015-01-27 12:56:52'
+        ],
+        [
+            'id' => 6,
+            'contents' => '<div id="news" class="clearfix">
 <div class="news" style="margin-right:28px;">
 <h2 id="newsHead01">NEWS RELEASE</h2>
 <div class="body">
@@ -201,14 +202,14 @@ class PageBcPageHelperFixture extends BaserTestFixture
 </div>
 </div>
 </div>',
-			'draft' => '',
-			'code' => '',
-			'modified' => null,
-			'created' => '2015-01-27 12:56:52'
-		],
-		[
-			'id' => 7,
-			'contents' => '<h2 class="contents-head">会社案内</h2>
+            'draft' => '',
+            'code' => '',
+            'modified' => null,
+            'created' => '2015-01-27 12:56:52'
+        ],
+        [
+            'id' => 7,
+            'contents' => '<h2 class="contents-head">会社案内</h2>
 <h3 class="contents-head">会社データ</h3>
 <div class="section">
 <table class="row-table-01" cellspacing="0" cellpadding="0">
@@ -224,14 +225,14 @@ WEBシステム開発事業（ダミー）</td></tr>
 <div class="section">
 <?php $this->BcBaser->googleMaps(array("width" => 585)) ?>
 </div>',
-			'draft' => '',
-			'code' => '',
-			'modified' => null,
-			'created' => '2015-01-27 12:56:52'
-		],
-		[
-			'id' => 8,
-			'contents' => '<h2 class="contents-head">サービス</h2>
+            'draft' => '',
+            'code' => '',
+            'modified' => null,
+            'created' => '2015-01-27 12:56:52'
+        ],
+        [
+            'id' => 8,
+            'contents' => '<h2 class="contents-head">サービス</h2>
 <div class="section">
 <p>
 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
@@ -256,27 +257,27 @@ WEBシステム開発事業（ダミー）</td></tr>
 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
 </p>
 </div>',
-			'draft' => '',
-			'code' => '',
-			'modified' => null,
-			'created' => '2015-01-27 12:56:52'
-		],
-		[
-			'id' => 9,
-			'contents' => '<h2 class="contents-head">サイトマップ</h2>
+            'draft' => '',
+            'code' => '',
+            'modified' => null,
+            'created' => '2015-01-27 12:56:52'
+        ],
+        [
+            'id' => 9,
+            'contents' => '<h2 class="contents-head">サイトマップ</h2>
 <?php $this->BcBaser->sitemap() ?>
 <ul class="section sitemap">
 	<li><?php $this->BcBaser->link("新着情報","/s/news/index") ?></li>
 	<li><?php $this->BcBaser->link("お問い合わせ","/s/contact/index") ?>	</li>
 </ul>',
-			'draft' => '',
-			'code' => '',
-			'modified' => null,
-			'created' => '2015-01-27 12:56:52'
-		],
-		[
-			'id' => 10,
-			'contents' => '<h2>
+            'draft' => '',
+            'code' => '',
+            'modified' => null,
+            'created' => '2015-01-27 12:56:52'
+        ],
+        [
+            'id' => 10,
+            'contents' => '<h2>
 	アイコンの使い方</h2>
 <h3>
 	50種類のアイコンを自由にカスタマイズしよう。</h3>
@@ -371,14 +372,14 @@ WEBシステム開発事業（ダミー）</td></tr>
 	&nbsp;</p>
 <p style="text-align: center;">
 	<?php $this->BcBaser->img(\'icons/about_007.png\', array(\'style\' => \'width: 656px; height: 278px;\')) ?></p>',
-			'draft' => '',
-			'code' => '',
-			'modified' => null,
-			'created' => '2015-01-27 12:56:52'
-		],
-		[
-			'id' => 11,
-			'contents' => '<h2 class="contents-head">会社案内</h2>
+            'draft' => '',
+            'code' => '',
+            'modified' => null,
+            'created' => '2015-01-27 12:56:52'
+        ],
+        [
+            'id' => 11,
+            'contents' => '<h2 class="contents-head">会社案内</h2>
 <h3 class="contents-head">会社データ</h3>
 <div class="section">
 <table class="row-table-01" cellspacing="0" cellpadding="0">
@@ -394,18 +395,18 @@ WEBシステム開発事業（ダミー）</td></tr>
 <div class="section">
 <?php $this->BcBaser->googleMaps(array("width" => 585)) ?>
 </div>',
-			'draft' => '',
-			'code' => '',
-			'modified' => null,
-			'created' => '2015-01-27 12:56:52'
-		],
-		[
-			'id' => 12,
-			'contents' => '<h2 class="contents-head">会社案内</h2>',
-			'draft' => '',
-			'code' => '',
-			'modified' => null,
-			'created' => '2015-01-27 12:56:52'
-		],
-	];
+            'draft' => '',
+            'code' => '',
+            'modified' => null,
+            'created' => '2015-01-27 12:56:52'
+        ],
+        [
+            'id' => 12,
+            'contents' => '<h2 class="contents-head">会社案内</h2>',
+            'draft' => '',
+            'code' => '',
+            'modified' => null,
+            'created' => '2015-01-27 12:56:52'
+        ],
+    ];
 }

@@ -26,32 +26,32 @@ class BcSearchBoxHelper extends AppHelper
      */
     use BcEventDispatcherTrait;
 
-	/**
-	 * 検索フィールド発火
-	 *
-	 * @return string
-	 */
-	public function dispatchShowField()
-	{
-		$request = $this->_View->request;
-		$id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
-		$event = $this->dispatchLayerEvent('showField', ['id' => $id, 'fields' => []], ['class' => 'BcSearchBox', 'plugin' => '']);
-		$output = '';
-		if ($event !== false) {
-			if (!empty($event->getData('fields'))) {
-				foreach($event->getData('fields') as $field) {
-					$output .= "<span class=\"bca-search__input-item\">";
-					if (!empty($field['title'])) {
-						$output .= $field['title'] . "&nbsp;";
-					}
-					if (!empty($field['input'])) {
-						$output .= $field['input'] . "&nbsp;";
-					}
-					$output .= "</span>　\n";
-				}
-			}
-		}
-		return $output;
-	}
+    /**
+     * 検索フィールド発火
+     *
+     * @return string
+     */
+    public function dispatchShowField()
+    {
+        $request = $this->_View->request;
+        $id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
+        $event = $this->dispatchLayerEvent('showField', ['id' => $id, 'fields' => []], ['class' => 'BcSearchBox', 'plugin' => '']);
+        $output = '';
+        if ($event !== false) {
+            if (!empty($event->getData('fields'))) {
+                foreach($event->getData('fields') as $field) {
+                    $output .= "<span class=\"bca-search__input-item\">";
+                    if (!empty($field['title'])) {
+                        $output .= $field['title'] . "&nbsp;";
+                    }
+                    if (!empty($field['input'])) {
+                        $output .= $field['input'] . "&nbsp;";
+                    }
+                    $output .= "</span>　\n";
+                }
+            }
+        }
+        return $output;
+    }
 
 }

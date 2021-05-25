@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Controller;
+
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -21,18 +22,18 @@ use BaserCore\Annotation\Checked;
 class BcFormController extends AppController
 {
 
-	/**
-	 * セキュリティトークンを取得する
-	 *
-	 * @return mixed
+    /**
+     * セキュリティトークンを取得する
+     *
+     * @return mixed
      * @checked
-	 * @unitTest
+     * @unitTest
      * @noTodo
-	 */
-	public function get_token()
-	{
-		$this->autoRender = false;
-		return $this->response->withStringBody($this->request->getAttribute('csrfToken'));
-	}
+     */
+    public function get_token()
+    {
+        $this->autoRender = false;
+        return $this->response->withStringBody($this->request->getAttribute('csrfToken'));
+    }
 
 }

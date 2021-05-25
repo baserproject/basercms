@@ -82,7 +82,7 @@ class UsersService implements UsersServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getIndex(Array $queryParams): Query
+    public function getIndex(array $queryParams): Query
     {
         $options = [];
         if (!empty($queryParams['num'])) {
@@ -108,7 +108,7 @@ class UsersService implements UsersServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function create(Array $postData)
+    public function create(array $postData)
     {
         $user = $this->Users->newEmptyEntity();
         $user = $this->Users->patchEntity($user, $postData, ['validate' => 'new']);
@@ -124,7 +124,7 @@ class UsersService implements UsersServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function update(EntityInterface $target, Array $postData)
+    public function update(EntityInterface $target, array $postData)
     {
         $user = $this->Users->patchEntity($target, $postData);
         return $this->Users->save($user);
@@ -142,7 +142,7 @@ class UsersService implements UsersServiceInterface
     public function delete($id)
     {
         $user = $this->Users->get($id, ['contain' => ['UserGroups']]);
-        if($user->isAdmin()) {
+        if ($user->isAdmin()) {
             $count = $this->Users
                 ->find('all', ['conditions' => ['UsersUserGroups.user_group_id' => Configure::read('BcApp.adminGroupId')]])
                 ->join(['table' => 'users_user_groups',

@@ -28,101 +28,101 @@ class BcGooglemapsHelper extends AppHelper
      */
     use BcEventDispatcherTrait;
 
-	/**
-	 * タイトル
-	 *
-	 * @var string
-	 */
-	public $title = '';
+    /**
+     * タイトル
+     *
+     * @var string
+     */
+    public $title = '';
 
-	/**
-	 * マーカーテキスト
-	 * @var string
-	 */
-	public $markerText = '';
+    /**
+     * マーカーテキスト
+     * @var string
+     */
+    public $markerText = '';
 
-	/**
-	 * ヘルパー
-	 *
-	 * @var array
-	 */
-	public $helpers = ['BcBaser'];
+    /**
+     * ヘルパー
+     *
+     * @var array
+     */
+    public $helpers = ['BcBaser'];
 
-	/**
-	 * 地図を表示するDOM ID
-	 *
-	 * @var string
-	 */
-	public $mapId = 'map';
+    /**
+     * 地図を表示するDOM ID
+     *
+     * @var string
+     */
+    public $mapId = 'map';
 
-	/**
-	 * 住所
-	 *
-	 * @var string
-	 */
-	public $address = '';
+    /**
+     * 住所
+     *
+     * @var string
+     */
+    public $address = '';
 
-	/**
-	 * latitude
-	 *
-	 * @var string
-	 */
-	public $latitude = '';
+    /**
+     * latitude
+     *
+     * @var string
+     */
+    public $latitude = '';
 
-	/**
-	 * longitude
-	 *
-	 * @var string
-	 */
-	public $longitude = '';
+    /**
+     * longitude
+     *
+     * @var string
+     */
+    public $longitude = '';
 
-	/**
-	 * ズーム
-	 * @var int
-	 */
-	public $zoom = 16;
+    /**
+     * ズーム
+     * @var int
+     */
+    public $zoom = 16;
 
-	/**
-	 * Google マップ を読み込む
-	 *
-	 * @param string $address
-	 * @param int $width
-	 * @param int $height
-	 * @return boolean
-	 */
-	public function load($address = '', $width = null, $height = null)
-	{
-		if ($address) {
-			$this->address = $address;
-		}
-		$script = $this->_getScript();
-		if ($script) {
-			if ($width || $height) {
-				echo '<div id="' . $this->mapId . '" style="width: ' . $width . 'px; height:' . $height . 'px"><noscript>※ ' . __d('baser', 'JavaScript を有効にしてください。') . '</noscript></div>';
-			} else {
-				echo '<div id="' . $this->mapId . '"><noscript>※ ' . __d('baser', 'JavaScript を有効にしてください。') . '</noscript></div>';
-			}
-			echo $script;
-			return true;
-		} else {
-			return false;
-		}
-	}
+    /**
+     * Google マップ を読み込む
+     *
+     * @param string $address
+     * @param int $width
+     * @param int $height
+     * @return boolean
+     */
+    public function load($address = '', $width = null, $height = null)
+    {
+        if ($address) {
+            $this->address = $address;
+        }
+        $script = $this->_getScript();
+        if ($script) {
+            if ($width || $height) {
+                echo '<div id="' . $this->mapId . '" style="width: ' . $width . 'px; height:' . $height . 'px"><noscript>※ ' . __d('baser', 'JavaScript を有効にしてください。') . '</noscript></div>';
+            } else {
+                echo '<div id="' . $this->mapId . '"><noscript>※ ' . __d('baser', 'JavaScript を有効にしてください。') . '</noscript></div>';
+            }
+            echo $script;
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	/**
-	 * Google マップ読み込み用のjavascriptを生成する
-	 * @return string
-	 * @todo リファクタリング
-	 */
-	protected function _getScript()
-	{
+    /**
+     * Google マップ読み込み用のjavascriptを生成する
+     * @return string
+     * @todo リファクタリング
+     */
+    protected function _getScript()
+    {
 
-		if (!$this->mapId) {
-			return false;
-		}
-		$apiKey = empty($this->BcBaser->siteConfig['google_maps_api_key'])? "" : h($this->BcBaser->siteConfig['google_maps_api_key']);
-		$address = $this->address;
-		$script = <<< DOC_END
+        if (!$this->mapId) {
+            return false;
+        }
+        $apiKey = empty($this->BcBaser->siteConfig['google_maps_api_key'])? "" : h($this->BcBaser->siteConfig['google_maps_api_key']);
+        $address = $this->address;
+        $script = <<< DOC_END
 			var geo = new google.maps.Geocoder();
 			var lat = '{$this->latitude}';
 			var lng = '{$this->longitude}';
@@ -165,14 +165,14 @@ class BcGooglemapsHelper extends AppHelper
 				}
 			}
 DOC_END;
-		$apiKey = empty($this->BcBaser->siteConfig['google_maps_api_key'])? "" : $this->BcBaser->siteConfig['google_maps_api_key'];
-		if (empty($apiKey)) {
-			$adminLink = $this->BcBaser->getUrl(["admin" => true, 'plugin' => '', 'controller' => 'site_configs', 'action' => 'form']);
-			echo sprintf(__d('baser', 'Googleマップを利用するには、Google Maps APIのキーの登録が必要です。<a href="https://developers.google.com/maps/web/" target="_blank">キーを取得</a>して、<a href="%s">システム管理</a>より設定してください。'), $adminLink);
-		}
-		$apiUrl = 'https://maps.google.com/maps/api/js';
-		$googleScript = '<script src="' . $apiUrl . '?key=' . $apiKey . '"></script>';
-		return $googleScript . '<script>' . $script . '</script>';
-	}
+        $apiKey = empty($this->BcBaser->siteConfig['google_maps_api_key'])? "" : $this->BcBaser->siteConfig['google_maps_api_key'];
+        if (empty($apiKey)) {
+            $adminLink = $this->BcBaser->getUrl(["admin" => true, 'plugin' => '', 'controller' => 'site_configs', 'action' => 'form']);
+            echo sprintf(__d('baser', 'Googleマップを利用するには、Google Maps APIのキーの登録が必要です。<a href="https://developers.google.com/maps/web/" target="_blank">キーを取得</a>して、<a href="%s">システム管理</a>より設定してください。'), $adminLink);
+        }
+        $apiUrl = 'https://maps.google.com/maps/api/js';
+        $googleScript = '<script src="' . $apiUrl . '?key=' . $apiKey . '"></script>';
+        return $googleScript . '<script>' . $script . '</script>';
+    }
 
 }

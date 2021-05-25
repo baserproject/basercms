@@ -22,6 +22,7 @@ use BaserCore\Controller\AnalyseController;
 class AnalyseControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
+
     /**
      * set up
      */
@@ -90,8 +91,8 @@ class AnalyseControllerTest extends BcTestCase
 
     /**
      * Test getAnnotations
-     * @see BaserCore\Controller\AnalyseController @method index
      * @return void
+     * @see BaserCore\Controller\AnalyseController @method index
      */
     public function testGetAnnotations()
     {
@@ -108,8 +109,8 @@ class AnalyseControllerTest extends BcTestCase
     /**
      * Test getTraitMethod
      * 指定したclassのtraitが持つメソッドを取得するかのテスト
-     * @see Cake\TestSuite\IntegrationTestTrait
      * @return void
+     * @see Cake\TestSuite\IntegrationTestTrait
      */
     public function testGetTraitMethod()
     {
@@ -135,6 +136,7 @@ class AnalyseControllerTest extends BcTestCase
         $result = $method->invokeArgs($this->Controller, [$path]);
         $this->assertEquals($result, $expected);
     }
+
     public function pathToClassDataProvider()
     {
         return [

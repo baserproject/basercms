@@ -227,7 +227,7 @@ function getUrlParamFromEnv()
     $url = getUrlFromEnv();
     $url = preg_replace('/^\//', '', $url);
     if (strpos($url, '?') !== false) {
-        list($url) = explode('?', $url);
+        [$url] = explode('?', $url);
     }
     return $url;
 }
@@ -299,7 +299,7 @@ function getPureUrl($Request)
         $url = '';
     }
     if (strpos($url, '?') !== false) {
-        list($url) = explode('?', $url);
+        [$url] = explode('?', $url);
     }
     return $url;
 }
@@ -650,13 +650,13 @@ function addSessionId($url, $force = false)
                         $aryUrl = explode('&', $_url[1]);
                         foreach($aryUrl as $pass) {
                             if (strpos($pass, '=') !== false) {
-                                list($key, $value) = explode('=', $pass);
+                                [$key, $value] = explode('=', $pass);
                                 $args[$key] = $value;
                             }
                         }
                     } else {
                         if (strpos($_url[1], '=') !== false) {
-                            list($key, $value) = explode('=', $_url[1]);
+                            [$key, $value] = explode('=', $_url[1]);
                             $args[$key] = $value;
                         }
                     }

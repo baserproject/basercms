@@ -30,21 +30,20 @@ App::uses('Shell', 'Console');
  *
  * @package Baser.Console.Command
  */
-
 class BcAppShell extends Shell
 {
 
-	/**
-	 * startup
-	 */
-	public function startup()
-	{
-		$this->clear();
-		$this->out("<info>Welcome to baserCMS v" . getVersion() . " Console</info>");
-		$this->hr();
-		$this->out('App : ' . APP_DIR);
-		$this->out('Path: ' . APP);
-		$this->hr();
-	}
+    /**
+     * startup
+     */
+    public function startup()
+    {
+        $this->clear();
+        $this->out("<info>Welcome to baserCMS v" . getVersion() . " Console</info>");
+        $this->hr();
+        $this->out('App : ' . APP_DIR);
+        $this->out('Path: ' . APP);
+        $this->hr();
+    }
 
 }

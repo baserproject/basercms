@@ -2902,76 +2902,78 @@ END_FLASH;
         if (empty($this->request->getParam('Site'))) {
             return;
         }
- 		$this->setCanonicalUrl();
-		$this->setAlternateUrl();
+        $this->setCanonicalUrl();
+        $this->setAlternateUrl();
     }
 
 
-	/**
-	 * setCanonicalUrl
-	 * PCサイトの場合
-	 *  	- .html付：.htmlなしのカノニカルを出力
-	 *  	- .html無：自身のカノニカルを出力
-	 * スマホサイトの場合
-	 * 		- PCサイトが存在する場合、canonicalを出力
-	 */
-	public function setCanonicalUrl() {
-		$currentSite = BcSite::findCurrent();
-		if (!$currentSite) {
-			return;
-		}
-		if($currentSite->device === 'smartphone') {
-			$mainSite = BcSite::findCurrentMain();
-			$url = $mainSite->makeUrl(new CakeRequest($this->BcContents->getPureUrl(
-				$this->request->url,
-				$this->request->params['Site']['id']
-			)));
+    /**
+     * setCanonicalUrl
+     * PCサイトの場合
+     *    - .html付：.htmlなしのカノニカルを出力
+     *    - .html無：自身のカノニカルを出力
+     * スマホサイトの場合
+     *        - PCサイトが存在する場合、canonicalを出力
+     */
+    public function setCanonicalUrl()
+    {
+        $currentSite = BcSite::findCurrent();
+        if (!$currentSite) {
+            return;
+        }
+        if ($currentSite->device === 'smartphone') {
+            $mainSite = BcSite::findCurrentMain();
+            $url = $mainSite->makeUrl(new CakeRequest($this->BcContents->getPureUrl(
+                $this->request->url,
+                $this->request->params['Site']['id']
+            )));
 
-		} else {
-			$url = '/' . $this->request->url;
-		}
-		$url = preg_replace('/\.html$/', '', $url);
-		$url = preg_replace('/\\/index$/', '/', $url);
-		$this->_View->set('meta',
-			$this->BcHtml->meta('canonical',
-				$this->BcHtml->url($url, true),
-				[
-					'rel' => 'canonical',
-					'type' => null,
-					'title' => null,
-					'inline' => false
-				]
-			)
-		);
-	}
+        } else {
+            $url = '/' . $this->request->url;
+        }
+        $url = preg_replace('/\.html$/', '', $url);
+        $url = preg_replace('/\\/index$/', '/', $url);
+        $this->_View->set('meta',
+            $this->BcHtml->meta('canonical',
+                $this->BcHtml->url($url, true),
+                [
+                    'rel' => 'canonical',
+                    'type' => null,
+                    'title' => null,
+                    'inline' => false
+                ]
+            )
+        );
+    }
 
-	/**
-	 * alternate タグ出力
-	 * スマホサイトが存在し、別URLの場合に出力する
-	 * @param $contentUrl
-	 */
-	public function setAlternateUrl() {
-		$subSite = BcSite::findCurrentSub(false, BcAgent::find('smartphone'));
-		if (!$subSite || $subSite->sameMainUrl) {
-			return;
-		}
-		$url = $subSite->makeUrl(new CakeRequest($this->BcContents->getPureUrl(
-			$this->request->url,
-			$this->request->params['Site']['id']
-		)));
-		$this->_View->set('meta',
-			$this->BcHtml->meta('alternate',
-				$this->BcHtml->url($url, true),
-				[
-					'rel' => 'alternate',
-					'media' => 'only screen and (max-width: 640px)',
-					'type' => null,
-					'title' => null,
-					'inline' => false
-				]
-			)
-		);
-	}
+    /**
+     * alternate タグ出力
+     * スマホサイトが存在し、別URLの場合に出力する
+     * @param $contentUrl
+     */
+    public function setAlternateUrl()
+    {
+        $subSite = BcSite::findCurrentSub(false, BcAgent::find('smartphone'));
+        if (!$subSite || $subSite->sameMainUrl) {
+            return;
+        }
+        $url = $subSite->makeUrl(new CakeRequest($this->BcContents->getPureUrl(
+            $this->request->url,
+            $this->request->params['Site']['id']
+        )));
+        $this->_View->set('meta',
+            $this->BcHtml->meta('alternate',
+                $this->BcHtml->url($url, true),
+                [
+                    'rel' => 'alternate',
+                    'media' => 'only screen and (max-width: 640px)',
+                    'type' => null,
+                    'title' => null,
+                    'inline' => false
+                ]
+            )
+        );
+    }
 
     /**
      * トップページのタイトルをセットする

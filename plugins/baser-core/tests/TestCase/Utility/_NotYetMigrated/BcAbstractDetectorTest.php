@@ -21,48 +21,48 @@ App::uses('BcAbstractDetector', 'Lib');
 class BcAbstractDetectorTest extends BcTestCase
 {
 
-	/**
-	 * setUp
-	 *
-	 * @return void
-	 */
-	public function setUp()
-	{
-		parent::setUp();
-	}
+    /**
+     * setUp
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	/**
-	 * tearDown
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		parent::tearDown();
-	}
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 
-	/**
-	 * 名前をキーとしてインスタンスを探す
-	 */
-	public function testFind()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * 名前をキーとしてインスタンスを探す
+     */
+    public function testFind()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * 設定ファイルに存在する全てのインスタンスを返す
-	 */
-	public function testFindAll()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * 設定ファイルに存在する全てのインスタンスを返す
+     */
+    public function testFindAll()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
-	/**
-	 * 現在の環境の判定キーの値に合致するインスタンスを返す
-	 */
-	public function testFindCurrent()
-	{
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+    /**
+     * 現在の環境の判定キーの値に合致するインスタンスを返す
+     */
+    public function testFindCurrent()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
 
 }
