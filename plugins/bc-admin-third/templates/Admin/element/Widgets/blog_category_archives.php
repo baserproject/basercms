@@ -18,21 +18,21 @@ $description = __d('baser', 'カテゴリ一覧を表示します。');
 ?>
 
 <script type="text/javascript">
-	$(function () {
-		var key = "<?php echo $key ?>";
-		$("#" + key + "ByYear").click(function () {
-			if ($("#" + key + "ByYear").prop('checked')) {
-				$("#" + key + "Depth").val(1);
-				$("#Span" + key + "Depth").slideUp(200);
-			} else {
-				$("#Span" + key + "Depth").slideDown(200);
-			}
-		});
-		if ($("#" + key + "ByYear").prop('checked')) {
-			$("#" + key + "Depth").val(1);
-			$("#Span" + key + "Depth").hide();
-		}
-	});
+  $(function () {
+    var key = "<?php echo $key ?>";
+    $("#" + key + "ByYear").click(function () {
+      if ($("#" + key + "ByYear").prop('checked')) {
+        $("#" + key + "Depth").val(1);
+        $("#Span" + key + "Depth").slideUp(200);
+      } else {
+        $("#Span" + key + "Depth").slideDown(200);
+      }
+    });
+    if ($("#" + key + "ByYear").prop('checked')) {
+      $("#" + key + "Depth").val(1);
+      $("#Span" + key + "Depth").hide();
+    }
+  });
 </script>
 
 <?php echo $this->BcForm->label($key . '.limit', __d('baser', '表示数')) ?>&nbsp;
@@ -40,10 +40,11 @@ $description = __d('baser', 'カテゴリ一覧を表示します。');
 <?php echo $this->BcForm->label($key . '.view_count', __d('baser', '記事数表示')) ?>&nbsp;
 <?php echo $this->BcAdminForm->control($key . '.view_count', ['type' => 'radio', 'options' => $this->BcText->booleanDoList(''), 'legend' => false, 'default' => 0]) ?>
 <br/>
-<?php echo $this->BcAdminForm->control($key . '.by_year', ['type' => 'checkbox', 'label' => __d('baser', '年別に表示する')]) ?><br/>
+<?php echo $this->BcAdminForm->control($key . '.by_year', ['type' => 'checkbox', 'label' => __d('baser', '年別に表示する')]) ?>
+<br/>
 <p id="Span<?php echo $key ?>Depth"><?php echo $this->BcForm->label($key . '.depth', __d('baser', '深さ')) ?>&nbsp;
-	<?php echo $this->BcAdminForm->control($key . '.depth', ['type' => 'text', 'size' => 6, 'default' => 1]) ?>
-	&nbsp;<?php echo __d('baser', '階層') ?></p>
+  <?php echo $this->BcAdminForm->control($key . '.depth', ['type' => 'text', 'size' => 6, 'default' => 1]) ?>
+  &nbsp;<?php echo __d('baser', '階層') ?></p>
 <?php echo $this->BcForm->label($key . '.blog_content_id', __d('baser', 'ブログ')) ?>&nbsp;
 <?php echo $this->BcAdminForm->control($key . '.blog_content_id', ['type' => 'select', 'options' => $this->BcForm->getControlSource('Blog.BlogContent.id')]) ?>
 <br/>

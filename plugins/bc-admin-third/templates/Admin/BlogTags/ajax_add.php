@@ -13,11 +13,11 @@
 
 
 <?php if ($result): ?>
-	<?php echo $this->BcAdminForm->control('BlogTag.BlogTag', [
-		'type' => 'select',
-		'multiple' => 'checkbox',
-		'options' => $result,
-		'hiddenField' => false,
-		'value' => true
-	]); ?>
+  <?php echo $this->BcAdminForm->control('BlogTag.BlogTag', [
+    'type' => 'select',
+    'multiple' => 'checkbox',
+    'options' => $result,
+    'hiddenField' => false,
+    'value' => true
+  ]); ?>
 <?php endif ?>

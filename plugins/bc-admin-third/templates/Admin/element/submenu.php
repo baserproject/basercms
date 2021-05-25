@@ -14,23 +14,23 @@
  * [PUBLISH] サブメニュー
  */
 if (!empty($user)) {
-	$elementPath = 'submenus' . DS;
-	if (!empty($subMenuElements)) {
-		?>
-		<div id="SubMenu" class="bca-submenu">
-			<table class="sub-menu bca-table-submenu">
-				<?php
-				foreach($subMenuElements as $subMenuElement) {
-					$plugin = '';
-					if (strpos($subMenuElement, '.') !== false) {
-						list($plugin, $subMenuElement) = explode('.', $subMenuElement);
-						$plugin .= '.';
-					}
-					$this->BcBaser->element($plugin . $elementPath . $subMenuElement);
-				}
-				?>
-			</table>
-		</div>
-		<?php
-	}
+  $elementPath = 'submenus' . DS;
+  if (!empty($subMenuElements)) {
+    ?>
+    <div id="SubMenu" class="bca-submenu">
+      <table class="sub-menu bca-table-submenu">
+        <?php
+        foreach($subMenuElements as $subMenuElement) {
+          $plugin = '';
+          if (strpos($subMenuElement, '.') !== false) {
+            [$plugin, $subMenuElement] = explode('.', $subMenuElement);
+            $plugin .= '.';
+          }
+          $this->BcBaser->element($plugin . $elementPath . $subMenuElement);
+        }
+        ?>
+      </table>
+    </div>
+    <?php
+  }
 }

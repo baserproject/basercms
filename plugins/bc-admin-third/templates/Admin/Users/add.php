@@ -27,17 +27,17 @@ $this->BcAdmin->setHelp('users_form');
 <?php $this->BcBaser->element('Users/form') ?>
 
 <div class="submit section bca-actions">
-    <div class="bca-actions__main">
-        <?= $this->BcAdminForm->button(
-                __d('baser', '保存'),
-                 ['div' => false,
-                 'class' => 'button bca-btn bca-actions__item',
-                 'data-bca-btn-type' => 'save',
-                 'data-bca-btn-size' => 'lg',
-                 'data-bca-btn-width' => 'lg',
-                 'id' => 'BtnSave']
-            ) ?>
-    </div>
+  <div class="bca-actions__main">
+    <?= $this->BcAdminForm->button(
+      __d('baser', '保存'),
+      ['div' => false,
+        'class' => 'button bca-btn bca-actions__item',
+        'data-bca-btn-type' => 'save',
+        'data-bca-btn-size' => 'lg',
+        'data-bca-btn-width' => 'lg',
+        'id' => 'BtnSave']
+    ) ?>
+  </div>
 </div>
 
 <?= $this->BcAdminForm->end() ?>

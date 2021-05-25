@@ -19,14 +19,14 @@
 <h2><?php echo __d('baser', 'baserCMS環境') ?></h2>
 
 <ul class="section">
-	<li><?php echo __d('baser', '設置フォルダ') ?>： <?php echo ROOT . DS ?></li>
-	<li><?php echo __d('baser', 'セーフモード') ?>：<?php if ($safeModeOn): ?>On<?php else: ?>Off<?php endif ?>
-	<li><?php echo __d('baser', 'データベース') ?>： <?php echo $datasource ?></li>
-	<li><?php echo __d('baser', 'baserCMSバージョン') ?>： <?php echo $baserVersion ?></li>
-	<li><?php echo __d('baser', 'CakePHPバージョン') ?>： <?php echo $cakeVersion ?></li>
+  <li><?php echo __d('baser', '設置フォルダ') ?>： <?php echo ROOT . DS ?></li>
+  <li><?php echo __d('baser', 'セーフモード') ?>：<?php if ($safeModeOn): ?>On<?php else: ?>Off<?php endif ?>
+  <li><?php echo __d('baser', 'データベース') ?>： <?php echo $datasource ?></li>
+  <li><?php echo __d('baser', 'baserCMSバージョン') ?>： <?php echo $baserVersion ?></li>
+  <li><?php echo __d('baser', 'CakePHPバージョン') ?>： <?php echo $cakeVersion ?></li>
 </ul>
 
 <h2><?php echo __d('baser', 'PHP環境') ?></h2>
 
 <iframe src="<?php $this->BcBaser->url(['action' => 'phpinfo']) ?>" class="phpinfo" width="100%" height="100%"
-		style="min-height:600px"></iframe>
+        style="min-height:600px"></iframe>

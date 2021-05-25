@@ -10,7 +10,7 @@
  * @license         https://basercms.net/license/index.html
  */
 if ($layoutType == 'table') {
-	$this->BcBaser->element('uploader_files/index_list');
+  $this->BcBaser->element('uploader_files/index_list');
 } else {
-	$this->BcBaser->element('uploader_files/index_panel');
+  $this->BcBaser->element('uploader_files/index_panel');
 }

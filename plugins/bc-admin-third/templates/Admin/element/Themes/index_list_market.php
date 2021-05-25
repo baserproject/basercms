@@ -17,18 +17,18 @@
 
 
 <script type="text/javascript">
-	$(function () {
-		$(".theme-popup").colorbox({inline: true, width: "60%"});
-	});
+  $(function () {
+    $(".theme-popup").colorbox({inline: true, width: "60%"});
+  });
 </script>
 
 <ul class="list-panel bca-list-panel">
-	<?php if (!empty($baserThemes)): ?>
-		<?php $key = 0 ?>
-		<?php foreach($baserThemes as $data): ?>
-			<?php $this->BcBaser->element('themes/index_row_market', ['data' => $data, 'key' => $key++]) ?>
-		<?php endforeach; ?>
-	<?php else: ?>
-		<li class="no-data"><?php echo __d('baser', 'baserマーケットのテーマを読み込めませんでした。') ?></li>
-	<?php endif; ?>
+  <?php if (!empty($baserThemes)): ?>
+    <?php $key = 0 ?>
+    <?php foreach($baserThemes as $data): ?>
+      <?php $this->BcBaser->element('themes/index_row_market', ['data' => $data, 'key' => $key++]) ?>
+    <?php endforeach; ?>
+  <?php else: ?>
+    <li class="no-data"><?php echo __d('baser', 'baserマーケットのテーマを読み込めませんでした。') ?></li>
+  <?php endif; ?>
 </ul>

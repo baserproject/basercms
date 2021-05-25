@@ -11,21 +11,21 @@
  */
 
 $this->BcBaser->i18nScript([
-	'message1' => __d('baser', "テーマをアップロードします。よろしいですか？\n※ アップロード後、改めてテーマの適用作業が必要です。")
+  'message1' => __d('baser', "テーマをアップロードします。よろしいですか？\n※ アップロード後、改めてテーマの適用作業が必要です。")
 ]);
 ?>
 
 
 <script>
-	$(function () {
-		$("#BtnSave").click(function () {
-			if (confirm(bcI18n.message1)) {
-				$.bcUtil.showLoader();
-				return true;
-			}
-			return false;
-		});
-	});
+  $(function () {
+    $("#BtnSave").click(function () {
+      if (confirm(bcI18n.message1)) {
+        $.bcUtil.showLoader();
+        return true;
+      }
+      return false;
+    });
+  });
 </script>
 
 
@@ -33,8 +33,8 @@ $this->BcBaser->i18nScript([
 <?php echo $this->BcAdminForm->create('Theme', ['type' => 'file']) ?>
 
 <div class="submit">
-	<?php echo $this->BcAdminForm->control('Theme.file', ['type' => 'file']) ?>
-	<?php echo $this->BcForm->submit(__d('baser', '適用'), ['class' => 'button bca-btn', 'div' => false, 'id' => 'BtnSave']) ?>
+  <?php echo $this->BcAdminForm->control('Theme.file', ['type' => 'file']) ?>
+  <?php echo $this->BcForm->submit(__d('baser', '適用'), ['class' => 'button bca-btn', 'div' => false, 'id' => 'BtnSave']) ?>
 </div>
 
 <?php echo $this->BcAdminForm->end() ?>

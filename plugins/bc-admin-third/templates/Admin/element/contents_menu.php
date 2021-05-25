@@ -24,22 +24,22 @@ use BaserCore\View\BcAdminAppView;
 
 
 <?php if ($isLogin): ?>
-<div id="ContentsMenu" class="bca-content-menu">
+  <div id="ContentsMenu" class="bca-content-menu">
     <ul>
+      <li class="bca-content-menu__item">
+        <?php // TODO: button要素に変更 ?>
+        <?php //$this->BcBaser->link(__d('baser', 'お気に入りに追加'), 'javascript:void(0)', ['id' => 'BtnFavoriteAdd', 'data-bca-fn' => 'BtnFavoriteAdd', 'class' => 'bca-content-menu__link bca-icon--plus-square']) ?></li>
+      <?php if ($isHelp): ?>
         <li class="bca-content-menu__item">
-            <?php // TODO: button要素に変更 ?>
-            <?php //$this->BcBaser->link(__d('baser', 'お気に入りに追加'), 'javascript:void(0)', ['id' => 'BtnFavoriteAdd', 'data-bca-fn' => 'BtnFavoriteAdd', 'class' => 'bca-content-menu__link bca-icon--plus-square']) ?></li>
-    <?php if ($isHelp): ?>
-            <li class="bca-content-menu__item">
-                <?php // TODO: button要素に変更 ?>
-                <?php $this->BcBaser->link(__d('baser', 'ヘルプ'), 'javascript:void(0)', ['id' => 'BtnMenuHelp', 'class' => 'bca-content-menu__link bca-icon--help']) ?></li>
-    <?php endif ?>
-    <?php if ($isLogin): ?>
-            <li class="bca-content-menu__item">
-                <?php // TODO: button要素に変更 ?>
-                <?php // TODO アクセス制限を実装 ?>
-                <?php //$this->BcBaser->link(__d('baser', '制限'), 'javascript:void(0)', ['id' => 'BtnMenuPermission', 'class' => 'bca-content-menu__link bca-icon--permission']) ?></li>
-    <?php endif ?>
+          <?php // TODO: button要素に変更 ?>
+          <?php $this->BcBaser->link(__d('baser', 'ヘルプ'), 'javascript:void(0)', ['id' => 'BtnMenuHelp', 'class' => 'bca-content-menu__link bca-icon--help']) ?></li>
+      <?php endif ?>
+      <?php if ($isLogin): ?>
+        <li class="bca-content-menu__item">
+          <?php // TODO: button要素に変更 ?>
+          <?php // TODO アクセス制限を実装 ?>
+          <?php //$this->BcBaser->link(__d('baser', '制限'), 'javascript:void(0)', ['id' => 'BtnMenuPermission', 'class' => 'bca-content-menu__link bca-icon--permission']) ?></li>
+      <?php endif ?>
     </ul>
-</div>
+  </div>
 <?php endif ?>

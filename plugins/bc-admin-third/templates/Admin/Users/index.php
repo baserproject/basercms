@@ -17,8 +17,8 @@ use BaserCore\View\{AppView as AppViewAlias};
  */
 
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
-	'url' => ['action' => 'add'],
-	'title' => __d('baser', '新規追加'),
+  'url' => ['action' => 'add'],
+  'title' => __d('baser', '新規追加'),
 ]);
 $this->BcAdmin->setTitle(__d('baser', 'ユーザー一覧'));
 $this->BcAdmin->setSearch('users_index');
@@ -28,5 +28,5 @@ $this->BcBaser->js('admin/users/index.bundle', false);
 
 
 <section id="DataList">
-    <?php $this->BcBaser->element('Users/index_list') ?>
+  <?php $this->BcBaser->element('Users/index_list') ?>
 </section>

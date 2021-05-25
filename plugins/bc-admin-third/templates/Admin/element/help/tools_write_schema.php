@@ -20,12 +20,12 @@
 <p><?php echo __d('baser', 'コアパッケージやプラグインの新規テーブル作成、テーブル構造変更の際に利用すると便利です。') ?></p>
 <p><?php echo __d('baser', '新規インストール時に利用するファイルは、次のフォルダ内に配置します。') ?></p>
 <ul>
-	<li><?php echo __d('baser', 'baserCMSコア・・・/lib/Baser/Config/Schema/') ?></li>
-	<li><?php echo __d('baser', 'プラグイン・・・/{プラグインフォルダ}/Config/Schema/') ?></li>
+  <li><?php echo __d('baser', 'baserCMSコア・・・/lib/Baser/Config/Schema/') ?></li>
+  <li><?php echo __d('baser', 'プラグイン・・・/{プラグインフォルダ}/Config/Schema/') ?></li>
 </ul>
 
 <p><?php echo __d('baser', 'アップデート時に利用するファイルは、次のフォルダ内に配置します。') ?></p>
 <ul>
-	<li><?php echo __d('baser', 'baserCMSコア・・・/lib/Baser/Config/update/{バージョン番号}/') ?></li>
-	<li><?php echo __d('baser', 'プラグイン・・・/{プラグインフォルダ}/config/update/{バージョン番号}/') ?></li>
+  <li><?php echo __d('baser', 'baserCMSコア・・・/lib/Baser/Config/update/{バージョン番号}/') ?></li>
+  <li><?php echo __d('baser', 'プラグイン・・・/{プラグインフォルダ}/config/update/{バージョン番号}/') ?></li>
 </ul>

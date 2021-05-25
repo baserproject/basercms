@@ -17,6 +17,6 @@ use BaserCore\View\AppView;
 ?>
 
 <div class="section">
-	<p><?php echo __d('baser', 'パスワードを変更しました。')?></p>
-    <p><?php echo $this->BcBaser->link(__d('baser', 'ログイン'), ['controller' => 'users', 'action' => 'login']); ?> </p>
+  <p><?php echo __d('baser', 'パスワードを変更しました。') ?></p>
+  <p><?php echo $this->BcBaser->link(__d('baser', 'ログイン'), ['controller' => 'users', 'action' => 'login']); ?> </p>
 </div>

@@ -24,13 +24,13 @@ use BaserCore\View\BcAdminAppView;
 
 <div id="Help" class="clearfix bca-help">
 
-	<h2 class="head bca-help__title">
-		<i class="bca-icon--question-circle" data-bca-btn-size="md"></i>
-		<?php echo __d('baser', 'ヘルプ') ?>
-	</h2>
+  <h2 class="head bca-help__title">
+    <i class="bca-icon--question-circle" data-bca-btn-size="md"></i>
+    <?php echo __d('baser', 'ヘルプ') ?>
+  </h2>
 
-	<div class="body bca-help__body">
-		<?php $this->BcBaser->element('help/' . $help) ?>
-	</div>
+  <div class="body bca-help__body">
+    <?php $this->BcBaser->element('help/' . $help) ?>
+  </div>
 
-<!-- / #Help --></div>
+  <!-- / #Help --></div>

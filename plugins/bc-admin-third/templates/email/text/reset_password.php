@@ -15,10 +15,10 @@
  */
 ?>
 
-                                           <?php echo date('Y-m-d H:i:s') ?>　
+<?php echo date('Y-m-d H:i:s') ?>　
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-　　　　　　◆◇　<?php echo __d('baser', 'パスワードのリセット')?>　◇◆
+　　　　　　◆◇　<?php echo __d('baser', 'パスワードのリセット') ?>　◇◆
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-　 <?php echo $email.  __d('baser', ' の新しいパスワードは、 '); ?>
-　 <?php echo $password. __d('baser', ' です。'); ?>
+　 <?php echo $email . __d('baser', ' の新しいパスワードは、 '); ?>
+　 <?php echo $password . __d('baser', ' です。'); ?>

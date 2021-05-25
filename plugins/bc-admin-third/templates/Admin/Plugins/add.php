@@ -11,21 +11,21 @@
  */
 
 $this->BcBaser->i18nScript([
-	'message1' => __d('baser', 'プラグインをアップロードし、そのままインストールします。よろしいですか？'),
+  'message1' => __d('baser', 'プラグインをアップロードし、そのままインストールします。よろしいですか？'),
 ]);
 ?>
 
 
 <script>
-	$(function () {
-		$("#BtnSave").click(function () {
-			if (confirm(bcI18n.message1)) {
-				$.bcUtil.showLoader();
-				return true;
-			}
-			return false;
-		});
-	});
+  $(function () {
+    $("#BtnSave").click(function () {
+      if (confirm(bcI18n.message1)) {
+        $.bcUtil.showLoader();
+        return true;
+      }
+      return false;
+    });
+  });
 </script>
 
 
@@ -33,8 +33,8 @@ $this->BcBaser->i18nScript([
 <?php echo $this->BcAdminForm->create('Plugin', ['type' => 'file']) ?>
 
 <div class="submit">
-	<?php echo $this->BcAdminForm->control('Plugin.file', ['type' => 'file']) ?>
-	<?php echo $this->BcForm->submit(__d('baser', 'インストール'), ['class' => 'button bca-btn', 'div' => false, 'data-bca-btn-status' => 'primary']) ?>
+  <?php echo $this->BcAdminForm->control('Plugin.file', ['type' => 'file']) ?>
+  <?php echo $this->BcForm->submit(__d('baser', 'インストール'), ['class' => 'button bca-btn', 'div' => false, 'data-bca-btn-status' => 'primary']) ?>
 </div>
 
 <?php echo $this->BcAdminForm->end() ?>

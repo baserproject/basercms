@@ -14,9 +14,9 @@ header('Content-type: text/html; charset=utf-8');
 
 
 <?php if ($datas): ?>
-	<div id="ContentsTreeList" style="display:none">
-		<?php $this->BcBaser->element('contents/index_list_tree'); ?>
-	</div>
+  <div id="ContentsTreeList" style="display:none">
+    <?php $this->BcBaser->element('contents/index_list_tree'); ?>
+  </div>
 <?php else: ?>
-	<div class="tree-empty"><?php echo __d('baser', 'データが登録されていません。') ?></div>
+  <div class="tree-empty"><?php echo __d('baser', 'データが登録されていません。') ?></div>
 <?php endif ?>

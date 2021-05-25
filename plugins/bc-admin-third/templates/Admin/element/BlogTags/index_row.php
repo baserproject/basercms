@@ -17,22 +17,23 @@
 
 
 <tr>
-	<td class="row-tools bca-table-listup__tbody-td">
-		<?php if ($this->BcBaser->isAdminUser()): ?>
-			<?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $data['BlogTag']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['BlogTag']['id']]) ?>
-		<?php endif ?>
-	</td>
-	<td class="bca-table-listup__tbody-td"><?php echo $data['BlogTag']['id'] ?></td>
+  <td class="row-tools bca-table-listup__tbody-td">
+    <?php if ($this->BcBaser->isAdminUser()): ?>
+      <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $data['BlogTag']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['BlogTag']['id']]) ?>
+    <?php endif ?>
+  </td>
+  <td class="bca-table-listup__tbody-td"><?php echo $data['BlogTag']['id'] ?></td>
 
-	<td class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['BlogTag']['name'], ['action' => 'edit', $data['BlogTag']['id']], ['escape' => true]) ?></td>
+  <td
+    class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['BlogTag']['name'], ['action' => 'edit', $data['BlogTag']['id']], ['escape' => true]) ?></td>
 
-	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
+  <?php echo $this->BcListTable->dispatchShowRow($data) ?>
 
-	<td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format($data['BlogTag']['created'], 'yyyy-MM-dd'); ?>
-		<br/>
-		<?php echo $this->BcTime->format($data['BlogTag']['modified'], 'yyyy-MM-dd'); ?></td>
-	<td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
-		<?php $this->BcBaser->link('', ['action' => 'edit', $data['BlogTag']['id']], ['title' => __d('baser', '編集'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
-		<?php $this->BcBaser->link('', ['action' => 'ajax_delete', $data['BlogTag']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
-	</td>
+  <td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format($data['BlogTag']['created'], 'yyyy-MM-dd'); ?>
+    <br/>
+    <?php echo $this->BcTime->format($data['BlogTag']['modified'], 'yyyy-MM-dd'); ?></td>
+  <td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
+    <?php $this->BcBaser->link('', ['action' => 'edit', $data['BlogTag']['id']], ['title' => __d('baser', '編集'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
+    <?php $this->BcBaser->link('', ['action' => 'ajax_delete', $data['BlogTag']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
+  </td>
 </tr>

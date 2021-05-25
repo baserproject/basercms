@@ -17,5 +17,5 @@ use BaserCore\View\AppView;
 ?>
 
 <div class="section">
-	<p><?php echo __d('baser', 'ページの有効期限が切れているか、もしくは誤ったURLにアクセスしています。')?></p>
+  <p><?php echo __d('baser', 'ページの有効期限が切れているか、もしくは誤ったURLにアクセスしています。') ?></p>
 </div>

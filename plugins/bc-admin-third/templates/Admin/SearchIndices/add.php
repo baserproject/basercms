@@ -20,34 +20,34 @@
 
 <!-- form -->
 <div class="section">
-	<table class="list-table" id="ListTable">
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('SearchIndex.title', __d('baser', 'タイトル')) ?>
-				&nbsp;<span class="required">*</span></th>
-			<td class="col-input">
-				<?php echo $this->BcAdminForm->control('SearchIndex.title', ['type' => 'text', 'size' => 60, 'maxlength' => 255]) ?>
-				<?php echo $this->BcForm->error('SearchIndex.title') ?>
-			</td>
-		</tr>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('SearchIndex.url', 'URL') ?>&nbsp;<span
-					class="required">*</span></th>
-			<td class="col-input">
-				<?php echo $this->BcAdminForm->control('SearchIndex.url', ['type' => 'text', 'size' => 60, 'maxlength' => 255, 'autofocus' => true]) ?>
-				<i class="bca-icon--question-circle btn help bca-help"></i>
-				<?php echo $this->BcForm->error('SearchIndex.url') ?>
-				<div id="helptextUrl" class="helptext">
-					<ul>
-						<li><?php echo __d('baser', 'サイト内で検索インデックスとして登録したいURLを指定します。') ?></li>
-						<li><?php echo __d('baser', 'baserCMSの設置URL部分は省略する事ができます。<br>http://{baserCMS設置URL}/company/index<br>	→ /company/index<br><small>※ 省略時、スマートURLオフの場合、URL上の「/index.php」 は含めないようにします。</small>') ?></li>
-					</ul>
-				</div>
-			</td>
-		</tr>
-	</table>
+  <table class="list-table" id="ListTable">
+    <tr>
+      <th class="col-head"><?php echo $this->BcForm->label('SearchIndex.title', __d('baser', 'タイトル')) ?>
+        &nbsp;<span class="required">*</span></th>
+      <td class="col-input">
+        <?php echo $this->BcAdminForm->control('SearchIndex.title', ['type' => 'text', 'size' => 60, 'maxlength' => 255]) ?>
+        <?php echo $this->BcForm->error('SearchIndex.title') ?>
+      </td>
+    </tr>
+    <tr>
+      <th class="col-head"><?php echo $this->BcForm->label('SearchIndex.url', 'URL') ?>&nbsp;<span
+          class="required">*</span></th>
+      <td class="col-input">
+        <?php echo $this->BcAdminForm->control('SearchIndex.url', ['type' => 'text', 'size' => 60, 'maxlength' => 255, 'autofocus' => true]) ?>
+        <i class="bca-icon--question-circle btn help bca-help"></i>
+        <?php echo $this->BcForm->error('SearchIndex.url') ?>
+        <div id="helptextUrl" class="helptext">
+          <ul>
+            <li><?php echo __d('baser', 'サイト内で検索インデックスとして登録したいURLを指定します。') ?></li>
+            <li><?php echo __d('baser', 'baserCMSの設置URL部分は省略する事ができます。<br>http://{baserCMS設置URL}/company/index<br>	→ /company/index<br><small>※ 省略時、スマートURLオフの場合、URL上の「/index.php」 は含めないようにします。</small>') ?></li>
+          </ul>
+        </div>
+      </td>
+    </tr>
+  </table>
 </div>
 <div class="submit">
-	<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'btnSave', 'data-bca-btn-type' => 'save']) ?>
+  <?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'btnSave', 'data-bca-btn-type' => 'save']) ?>
 </div>
 
 <?php echo $this->BcAdminForm->end() ?>

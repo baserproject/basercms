@@ -17,31 +17,31 @@
 
 
 <div id="PermissionDialog" title="アクセス制限登録" style="display:none">
-	<?php echo $this->BcAdminForm->create('Permission', ['url' => ['plugin' => null, 'action' => 'ajax_add']]) ?>
-	<?php echo $this->BcAdminForm->control('Permission.id') ?>
-	<dl>
-		<dt><?php echo $this->BcForm->label('Permission.user_group_id', __d('baser', 'ユーザーグループ')) ?></dt>
-		<dd class="col-input">
-			<?php echo $this->BcAdminForm->control('Permission.user_group_id', ['type' => 'select', 'options' => $this->BcForm->getControlSource('Permission.user_group_id')]) ?>
-		</dd>
-		<dt><?php echo $this->BcForm->label('Permission.name', __d('baser', 'ルール名')) ?></dt>
-		<dd><?php echo $this->BcAdminForm->control('Permission.name', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?></dd>
-		<dt><?php echo $this->BcForm->label('Permission.url', __d('baser', 'URL設定')) ?></dt>
-		<dd><strong id="PermissionAdmin"><?php echo '/' . Configure::read('Routing.prefixes.0') . '/' ?></strong>
-			<?php echo $this->BcAdminForm->control('Permission.url', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?>
-		</dd>
-		<dt><?php echo $this->BcForm->label('Permission.auth', __d('baser', 'アクセス')) ?></dt>
-		<dd>
-			<?php
-			echo $this->BcAdminForm->control('Permission.auth', [
-				'type' => 'radio',
-				'options' => $this->BcForm->getControlSource('Permission.auth'),
-				'legend' => false,
-				'value' => 0,
-				'separator' => '　'])
-			?>
-			<?php echo $this->BcForm->error('Permission.auth') ?>
-		</dd>
-	</dl>
-	<?php echo $this->BcAdminForm->end() ?>
+  <?php echo $this->BcAdminForm->create('Permission', ['url' => ['plugin' => null, 'action' => 'ajax_add']]) ?>
+  <?php echo $this->BcAdminForm->control('Permission.id') ?>
+  <dl>
+    <dt><?php echo $this->BcForm->label('Permission.user_group_id', __d('baser', 'ユーザーグループ')) ?></dt>
+    <dd class="col-input">
+      <?php echo $this->BcAdminForm->control('Permission.user_group_id', ['type' => 'select', 'options' => $this->BcForm->getControlSource('Permission.user_group_id')]) ?>
+    </dd>
+    <dt><?php echo $this->BcForm->label('Permission.name', __d('baser', 'ルール名')) ?></dt>
+    <dd><?php echo $this->BcAdminForm->control('Permission.name', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?></dd>
+    <dt><?php echo $this->BcForm->label('Permission.url', __d('baser', 'URL設定')) ?></dt>
+    <dd><strong id="PermissionAdmin"><?php echo '/' . Configure::read('Routing.prefixes.0') . '/' ?></strong>
+      <?php echo $this->BcAdminForm->control('Permission.url', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?>
+    </dd>
+    <dt><?php echo $this->BcForm->label('Permission.auth', __d('baser', 'アクセス')) ?></dt>
+    <dd>
+      <?php
+      echo $this->BcAdminForm->control('Permission.auth', [
+        'type' => 'radio',
+        'options' => $this->BcForm->getControlSource('Permission.auth'),
+        'legend' => false,
+        'value' => 0,
+        'separator' => '　'])
+      ?>
+      <?php echo $this->BcForm->error('Permission.auth') ?>
+    </dd>
+  </dl>
+  <?php echo $this->BcAdminForm->end() ?>
 </div>

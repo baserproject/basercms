@@ -18,12 +18,12 @@ $favorite['Favorite']['url'] = preg_replace('/^\/admin\//', '/' . BcUtil::getAdm
 
 
 <li id="FavoriteRow<?php echo h($favorite['Favorite']['name']) ?>" class="bca-nav-favorite-list-item">
-	<?php $this->BcBaser->link(
-		'<span class="bca-nav-favorite-list-item-label">' . h($favorite['Favorite']['name']) . '</span>',
-		$favorite['Favorite']['url'],
-		['title' => Router::url($favorite['Favorite']['url'], true)]
-	) ?>
-	<?php echo $this->BcAdminForm->control('Favorite.id.' . $favorite['Favorite']['id'], ['type' => 'hidden', 'value' => $favorite['Favorite']['id'], 'class' => 'favorite-id']) ?>
-	<?php echo $this->BcAdminForm->control('Favorite.name.' . $favorite['Favorite']['id'], ['type' => 'hidden', 'value' => $favorite['Favorite']['name'], 'class' => 'favorite-name']) ?>
-	<?php echo $this->BcAdminForm->control('Favorite.url.' . $favorite['Favorite']['id'], ['type' => 'hidden', 'value' => $favorite['Favorite']['url'], 'class' => 'favorite-url']) ?>
+  <?php $this->BcBaser->link(
+    '<span class="bca-nav-favorite-list-item-label">' . h($favorite['Favorite']['name']) . '</span>',
+    $favorite['Favorite']['url'],
+    ['title' => Router::url($favorite['Favorite']['url'], true)]
+  ) ?>
+  <?php echo $this->BcAdminForm->control('Favorite.id.' . $favorite['Favorite']['id'], ['type' => 'hidden', 'value' => $favorite['Favorite']['id'], 'class' => 'favorite-id']) ?>
+  <?php echo $this->BcAdminForm->control('Favorite.name.' . $favorite['Favorite']['id'], ['type' => 'hidden', 'value' => $favorite['Favorite']['name'], 'class' => 'favorite-name']) ?>
+  <?php echo $this->BcAdminForm->control('Favorite.url.' . $favorite['Favorite']['id'], ['type' => 'hidden', 'value' => $favorite['Favorite']['url'], 'class' => 'favorite-url']) ?>
 </li>

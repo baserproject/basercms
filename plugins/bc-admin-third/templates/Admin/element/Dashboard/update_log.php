@@ -14,7 +14,7 @@
  * @var BcAppView $this
  */
 $this->BcBaser->i18nScript([
-	'alertMessage1' => __d('baser', '処理に失敗しました。')
+  'alertMessage1' => __d('baser', '処理に失敗しました。')
 ]);
 // TODO:　dblogsController未実装
 // $this->BcBaser->js('admin/dblogs/ajax_index', false);

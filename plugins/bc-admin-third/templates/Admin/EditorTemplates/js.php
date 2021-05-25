@@ -18,16 +18,16 @@ CKEDITOR.addTemplates('default',{
 imagesPath:CKEDITOR.getUrl('<?php echo $this->BcBaser->webroot('/files/editor/') ?>'),
 templates:[
 <?php if ($templates): ?>
-	<?php foreach($templates as $key => $template): ?>
-		{
-		title:'<?php echo $template['EditorTemplate']['name'] ?>',
-		<?php if (file_exists(WWW_ROOT . 'files' . DS . 'editor' . DS . $template['EditorTemplate']['image'])): ?>
-			image:'<?php echo $template['EditorTemplate']['image'] ?>',
-		<?php endif ?>
-		description:'<?php echo preg_replace("/(\n|\r)/", "", nl2br($template['EditorTemplate']['description'])) ?>',
-		html:'<?php echo preg_replace('/(\n|\r)/', '', $template['EditorTemplate']['html']) ?>'
-		}<?php if (!$this->BcArray->last($templates, $key)): ?>, <?php endif ?>
-	<?php endforeach ?>
+  <?php foreach($templates as $key => $template): ?>
+    {
+    title:'<?php echo $template['EditorTemplate']['name'] ?>',
+    <?php if (file_exists(WWW_ROOT . 'files' . DS . 'editor' . DS . $template['EditorTemplate']['image'])): ?>
+      image:'<?php echo $template['EditorTemplate']['image'] ?>',
+    <?php endif ?>
+    description:'<?php echo preg_replace("/(\n|\r)/", "", nl2br($template['EditorTemplate']['description'])) ?>',
+    html:'<?php echo preg_replace('/(\n|\r)/', '', $template['EditorTemplate']['html']) ?>'
+    }<?php if (!$this->BcArray->last($templates, $key)): ?>, <?php endif ?>
+  <?php endforeach ?>
 <?php endif ?>
 ]
 });

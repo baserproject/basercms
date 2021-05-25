@@ -17,33 +17,33 @@ use BaserCore\View\AppView;
 ?>
 
 <div class="section">
-	<p><?php echo __d('baser', '新しいパスワードを入力してください。')?></p>
+  <p><?php echo __d('baser', '新しいパスワードを入力してください。') ?></p>
 
-	<?= $this->BcAdminForm->create($user, ['novalidate' => true]) ?>
-	<div class="submit">
-        <p>
-            <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => '50', 'maxlength' => 255, 'placeholder' => 'パスワード']) ?>
-            <?php echo $this->BcAdminForm->error('password') ?>
-        </p>
-        <p>
-            <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => '50', 'maxlength' => 255, 'placeholder' => '再入力']) ?>
-        </p>
+  <?= $this->BcAdminForm->create($user, ['novalidate' => true]) ?>
+  <div class="submit">
+    <p>
+      <?php echo $this->BcAdminForm->control('password_1', ['type' => 'password', 'size' => '50', 'maxlength' => 255, 'placeholder' => 'パスワード']) ?>
+      <?php echo $this->BcAdminForm->error('password') ?>
+    </p>
+    <p>
+      <?php echo $this->BcAdminForm->control('password_2', ['type' => 'password', 'size' => '50', 'maxlength' => 255, 'placeholder' => '再入力']) ?>
+    </p>
 
-        <?= $this->BcAdminForm->button(
-                __d('baser', '保存'),
-                 ['div' => false,
-                 'class' => 'button bca-btn bca-actions__item',
-                 'data-bca-btn-type' => 'save',
-                 'data-bca-btn-size' => 'lg',
-                 'data-bca-btn-width' => 'lg',
-                 'id' => 'BtnSave']
-            ) ?>
-        <?php echo $this->BcAdminForm->error('email') ?>
-	</div>
-    <?= $this->BcAdminForm->end() ?>
+    <?= $this->BcAdminForm->button(
+      __d('baser', '保存'),
+      ['div' => false,
+        'class' => 'button bca-btn bca-actions__item',
+        'data-bca-btn-type' => 'save',
+        'data-bca-btn-size' => 'lg',
+        'data-bca-btn-width' => 'lg',
+        'id' => 'BtnSave']
+    ) ?>
+    <?php echo $this->BcAdminForm->error('email') ?>
+  </div>
+  <?= $this->BcAdminForm->end() ?>
 </div>
 <script>
-(function(){
+  (function () {
     document.getElementById('email').focus();
-})();
+  })();
 </script>
