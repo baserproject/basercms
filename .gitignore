@@ -60,7 +60,6 @@ nbproject/*
 !/plugins/BcSample
 /plugins/*/vendor
 /plugins/*/composer.lock
-/plugins/*/config/Migrations/schema-dump-default.lock
 # docker
 /docker/.docker-sync
 /docs/baserproject.github.io
@@ -68,7 +67,7 @@ nbproject/*
 # vagrant
 /.vagrant
 /Vagrantfile
-
+# node
 node_modules
 # etc
 LOCAL_TODO.md
