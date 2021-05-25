@@ -669,13 +669,11 @@ class BcBaserHelperTest extends BcTestCase {
     public function testGetUrl()
     {
         $url = '/sampletest';
+        $result = $this->BcBaser->getUrl($url, false);
+        $this->assertEquals('/sampletest', $result);
         // フルパスかどうか
-        $isFull = [false,true];
-        foreach($isFull as $full) {
-            $result = $this->BcBaser->getUrl($url, $full);
-            $expected = $this->Url->build($url, ['fullBase' => $full]);
-            $this->assertEquals($expected, $result);
-        }
+        $result = $this->BcBaser->getUrl($url, true);
+        $this->assertEquals("http://localhost/sampletest", $result);
     }
 
     /**
