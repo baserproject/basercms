@@ -16,6 +16,8 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcUtil;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
+use Cake\Routing\RouteBuilder;
+use Cake\Routing\RouteCollection;
 
 /**
  * Class BcPluginTest
@@ -62,11 +64,11 @@ class BcPluginTest extends BcTestCase
     }
 
     /**
-     * testRoutes
+     * testInitialize
      */
-    public function testRoutes()
+    public function testInitialize()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->assertNotEmpty($this->BcPlugin->migrations);
     }
 
     /**
@@ -113,4 +115,26 @@ class BcPluginTest extends BcTestCase
         $this->assertNotContains('blog_posts', $tables);
     }
 
+    /**
+     * testRoutes
+     */
+    public function testRoutes()
+    {
+        $collection = new RouteCollection();
+        $routes = new RouteBuilder($collection, '/');
+        $this->BcPlugin->routes($routes);
+        $all = $collection->routes();
+        // connect・fallbacksにより3つコネクションあり|拡張子jsonあり
+        $this->assertEquals($all[0]->defaults, ['plugin' => 'BcBlog', 'action' => 'index']);
+        $this->assertEquals($all[0]->getExtensions()[0], "json");
+        // connect・fallbacksにより3つコネクションあり|拡張子jsonあり
+        $this->assertEquals($all[3]->defaults, ['plugin' => 'BcBlog', 'action' => 'index', 'prefix' => 'Api']);
+        $this->assertEquals($all[3]->getExtensions()[0], "json");
+        // connect・fallbacksにより3つコネクションあり|拡張子jsonなし
+        $this->assertEquals($all[6]->defaults, ['plugin' => 'BcBlog', 'action' => 'index', 'prefix' => 'Admin']);
+        $this->assertEmpty($all[6]->getExtensions());
+        // connectにより1つコネクションあり|拡張子jsonなし
+        $this->assertEquals($all[9]->defaults, ['plugin' => 'BaserCore', 'controller' => 'Dashboard', 'action' => 'index', 'prefix' => 'Admin']);
+        $this->assertEmpty($all[9]->getExtensions());
+    }
 }

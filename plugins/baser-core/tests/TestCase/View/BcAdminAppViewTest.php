@@ -50,6 +50,7 @@ class BcAdminAppViewTest extends BcTestCase
         $this->assertNotEmpty($this->BcAdminAppView->BcBaser);
         $this->assertNotEmpty($this->BcAdminAppView->BcAuth);
         $this->assertNotEmpty($this->BcAdminAppView->BcAdmin);
+        $this->assertNotEmpty($this->BcAdminAppView->BcUserManage);
         $this->assertEquals($this->BcAdminAppView->get('title'), 'Undefined');
 
     }
