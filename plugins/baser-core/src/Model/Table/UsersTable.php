@@ -251,6 +251,7 @@ class UsersTable extends Table
      * @param Validator $validator
      * @return Validator
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function validationPasswordUpdate(Validator $validator): Validator
