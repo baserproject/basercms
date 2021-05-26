@@ -1519,28 +1519,25 @@ class BcBaserHelper extends Helper
      *
      * @param mixed $path CSSファイルのパス（css フォルダからの相対パス）拡張子は省略可
      * @param mixed $options オプション
-     *    （配列の場合）
-     *    - `rel` : rel属性（初期値 : 'stylesheet'）
-     *    - `inline` : コンテンツ内にCSSを出力するかどうか（初期値 : true）
-     *  ※ その他のパラメータについては、HtmlHelper::css() を参照。
-     *    ※ false を指定した場合、inline が false となる。
+     * ※💣inline=false→block=trueに変更になったため注意 @see https://book.cakephp.org/4/ja/views/helpers/html.html#css
+     * ※ その他のパラメータについては、HtmlHelper::css() を参照。
+     * 
+     * 下記のbasercms4系引数は残したまま
+     * - 'inline'=trueを指定する (代替:$options['block']にnullが入る)
+     * - 'inline'=falseを指定する (代替:$options['block']にtrueが入る)
      * @return string|void
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function css($path, $options = [])
     {
-        if ($options === false) {
-            $options['inline'] = false;
+        if (isset($options['inline'])) {
+            $options['block'] = $options['inline'] ? null : true;
         }
-        $options = array_merge([
-            'rel' => 'stylesheet',
-            'inline' => true
-        ], $options);
         $result = $this->BcHtml->css($path, $options);
-        if ($options['inline']) {
-            echo $result;
-        }
+
+        echo $result;
     }
 
     /**

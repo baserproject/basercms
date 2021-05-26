@@ -1462,31 +1462,29 @@ class BcBaserHelperTest extends BcTestCase
      */
     public function testCss()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
         // ノーマル
         ob_start();
         $this->BcBaser->css('admin/import');
         $result = ob_get_clean();
-        $expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
+        $expected = '<link rel="stylesheet" href="css/admin/import.css"/>';
         $this->assertEquals($expected, $result);
-        // 拡張子あり
+        // // 拡張子あり
         ob_start();
         $this->BcBaser->css('admin/import.css');
         $result = ob_get_clean();
-        $expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
+        $expected = '<link rel="stylesheet" href="css/admin/import.css"/>';
+        $this->assertEquals($expected, $result);
+        // ブロックオン（array）
+        ob_start();
+        $this->BcBaser->css('admin/import2.css', ['block' => null]);
+        $result = ob_get_clean();
+        $expected = '<link rel="stylesheet" href="css/admin/import2.css"/>';
         $this->assertEquals($expected, $result);
         // インラインオフ（array）
-        $this->BcBaser->css('admin/import.css', ['inline' => false]);
-        $expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
-        $result = $this->_View->Blocks->get('css');
-        $this->assertEquals($expected, $result);
-        $this->_View->Blocks->end();
-        // インラインオフ（boolean）
-        $this->BcBaser->css('admin/import.css', false);
-        $expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
-        $this->_View->assign('css', '');
-        $this->assertEquals($expected, $result);
+        ob_start();
+        $this->BcBaser->css('admin/import3.css', ['inline' => false]);
+        $result = ob_get_clean();
+        $this->assertEmpty($result);
     }
 
     /**
