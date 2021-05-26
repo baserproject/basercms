@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Model\Entity;
 
 use BaserCore\Model\Entity\PasswordRequest;
 use BaserCore\TestSuite\BcTestCase;
+use ReflectionClass;
 
 /**
  * Class PasswordRequest
@@ -51,7 +52,7 @@ class PasswordRequestTest extends BcTestCase
     /**
      * Test setRequestKey
      */
-    public function testRequestKey()
+    public function testSetRequestKey()
     {
         $this->PasswordRequest->setRequestKey();
         $requestKey1 = $this->PasswordRequest->request_key;
@@ -61,6 +62,18 @@ class PasswordRequestTest extends BcTestCase
         $this->assertNotEquals($requestKey1, $requestKey2);
         $this->assertIsString($requestKey1);
         $this->assertGreaterThan(40, strlen($requestKey1));
+    }
+
+    /**
+     * Test makeRequestKey
+     */
+    public function testMakeRequestKey()
+    {
+        $ref = new ReflectionClass($this->PasswordRequest);
+        $method = $ref->getMethod('makeRequestKey');
+        $method->setAccessible(true);
+        $requestKey= $method->invokeArgs($this->PasswordRequest, []);
+        $this->assertEquals('48', strlen($requestKey));
     }
 
 }
