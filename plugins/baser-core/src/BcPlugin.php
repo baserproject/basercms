@@ -42,6 +42,7 @@ class BcPlugin extends BasePlugin
     /**
      * Initialize
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function initialize(): void
@@ -57,6 +58,8 @@ class BcPlugin extends BasePlugin
      * @param array $options
      *  - `plugin` : プラグイン名
      *  - `connection` : コネクション名
+     * @unitTest
+     * @noTodo
      * @checked
      */
     public function install($options = []): bool
@@ -66,9 +69,7 @@ class BcPlugin extends BasePlugin
             'connection' => 'default'
         ], $options);
         $pluginName = $options['plugin'];
-
-        // TODO clearAllCache 未実装
-        // clearAllCache();
+        BcUtil::clearAllCache();
         $pluginPath = BcUtil::getPluginPath($options['plugin']);
         try {
             $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
@@ -156,6 +157,7 @@ class BcPlugin extends BasePlugin
     /**
      * @param \Cake\Routing\RouteBuilder $routes
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function routes($routes): void
@@ -182,7 +184,7 @@ class BcPlugin extends BasePlugin
         );
 
         // プラグインのフロントエンド用ルーティング
-        Router::plugin(
+        $routes->plugin(
             $plugin,
             ['path' => $baserCorePrefix . '/' . Inflector::dasherize($plugin)],
             function(RouteBuilder $routes) {
