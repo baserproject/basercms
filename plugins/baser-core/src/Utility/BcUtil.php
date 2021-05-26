@@ -325,7 +325,7 @@ class BcUtil
      * @param string $prefix ログイン認証プレフィックス
      * @return bool|mixed ユーザーグループ情報
      */
-    public static function loginUserGroup($prefix = 'admin')
+    public static function loginUserGroup($prefix = 'Admin')
     {
         $loginUser = self::loginUser($prefix);
         if (!empty($loginUser['UserGroup'])) {
