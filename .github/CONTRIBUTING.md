@@ -13,6 +13,7 @@
 - [開発方針](https://docs.google.com/document/d/1QAmScc65CwMyn8QuwWKE9q_8HnSKcW9oefI9RrHoUYY/edit)
 - [ロードマップ](https://docs.google.com/spreadsheets/d/1TZ71-O_9KiQM9xAB_a_jnSFVrH2dsyKowMLkyGLcI9g/edit#gid=2131306554)
 - [システム要件](https://github.com/baserproject/ucmitz/blob/dev/docs/basic/system.md)
+- [DB情報とマイルストーン](https://github.com/baserproject/ucmitz/blob/dev/docs/basic/db_milestone.md)
 
 　
 
