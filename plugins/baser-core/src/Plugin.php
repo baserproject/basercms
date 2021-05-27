@@ -70,6 +70,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      * @param PluginApplicationInterface $application
      * @param string $plugin
      * @return bool
+     * @unitTest
      * @checked
      */
     function loadPlugin(PluginApplicationInterface $application, $plugin, $priority)

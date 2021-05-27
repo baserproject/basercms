@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase;
 
+use App\Application;
 use BaserCore\Plugin;
 use BaserCore\TestSuite\BcTestCase;
 
@@ -44,7 +45,8 @@ class PluginTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->Plugin = new Plugin();
+        $this->application = new Application(CONFIG);
+        $this->Plugin = new Plugin(['name' => 'BcBlog']);
     }
 
     /**
@@ -54,6 +56,7 @@ class PluginTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        unset($this->application);
         unset($this->Plugin);
         parent::tearDown();
     }
@@ -75,7 +78,9 @@ class PluginTest extends BcTestCase
      */
     public function testLoadPlugin(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $priority = 1;
+        $plugin = $this->Plugin->getName();
+        $this->assertTrue($this->Plugin->loadPlugin($this->application, $plugin, $priority));
     }
 
     /**
