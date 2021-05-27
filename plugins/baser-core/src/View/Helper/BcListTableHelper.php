@@ -41,6 +41,7 @@ class BcListTableHelper extends Helper
      *
      * @param int $number カラム数
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function setColumnNumber($number)
@@ -53,6 +54,7 @@ class BcListTableHelper extends Helper
      *
      * @return int カラム数
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function getColumnNumber()

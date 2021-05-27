@@ -1,36 +1,40 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.View.Helper
- * @since           baserCMS v 3.0.6
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('BcAppView', 'View');
-App::uses('BcListTableHelper', 'View/Helper');
+namespace BaserCore\Test\TestCase\View\Helper;
+
+use BaserCore\View\AppView;
+use BaserCore\View\Helper\BcListTableHelper;
+use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class BcLIstTableHelperTest
  *
  * @property BcListTableHelper $BcListTable
  */
-class BcLIstTableHelperTest extends CakeTestCase
+class BcLIstTableHelperTest extends BcTestCase
 {
-
-    public function setUp()
+    /**
+     * Set Up
+     *
+     * @return void
+     */
+    public function setUp(): void
     {
         parent::setUp();
-        $View = new View();
+        $View = new AppView();
         $this->BcListTable = new BcListTableHelper($View);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->BcListTable);
         parent::tearDown();
@@ -53,8 +57,9 @@ class BcLIstTableHelperTest extends CakeTestCase
      */
     public function testRowClass($isPublished, $expected)
     {
-        $this->BcListTable->rowClass($isPublished);
-        $this->expectOutputRegex('/' . $expected . '/s');
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // $this->BcListTable->rowClass($isPublished);
+        // $this->expectOutputRegex('/' . $expected . '/s');
     }
 
     public function rowClassDataProvider()
