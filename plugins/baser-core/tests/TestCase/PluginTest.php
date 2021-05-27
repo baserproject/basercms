@@ -14,6 +14,8 @@ namespace BaserCore\Test\TestCase;
 use App\Application;
 use BaserCore\Plugin;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Http\MiddlewareQueue;
+use Authentication\Middleware\AuthenticationMiddleware;
 
 /**
  * Class PluginTest
@@ -90,7 +92,9 @@ class PluginTest extends BcTestCase
      */
     public function testMiddleware(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $middleware = new MiddlewareQueue();
+        $middlewareQueue = $this->Plugin->middleware($middleware);
+        $this->assertInstanceOf(AuthenticationMiddleware::class, $middlewareQueue->current());
     }
 
     /**
