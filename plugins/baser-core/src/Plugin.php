@@ -135,6 +135,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      * @param \Psr\Http\Message\ServerRequestInterface $request Request
      * @return \Authentication\AuthenticationServiceInterface
      * @checked
+     * @unitTest
      * @noTodo
      */
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
