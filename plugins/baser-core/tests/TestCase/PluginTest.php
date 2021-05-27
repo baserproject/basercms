@@ -16,6 +16,7 @@ use BaserCore\Plugin;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Http\MiddlewareQueue;
 use Authentication\Middleware\AuthenticationMiddleware;
+use Cake\Routing\Router;
 
 /**
  * Class PluginTest
@@ -99,10 +100,42 @@ class PluginTest extends BcTestCase
 
     /**
      * test getAuthenticationService
+     * @param string $prefix (Api|Admin|それ以外)
+     * @param array $authenticators サービスの認証
+     * @param string $identifiers サービスの識別
+     * @param array $config サービスの設定
+     * @var Authentication\AuthenticationService $service
+     * @return void
+     * @dataProvider getAuthenticationServiceDataProvider
      */
-    public function testGetAuthenticationService(): void
+    public function testGetAuthenticationService($prefix, $authenticators, $identifiers, $config): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $request = $this->getRequest()->withParam('prefix', $prefix);
+        $service = $this->Plugin->getAuthenticationService($request);
+
+        if($config) {
+            foreach ($config as $key => $value) {
+                $this->assertEquals($service->getConfig($key), $value);
+            }
+        }
+        foreach($authenticators as $authenticator) {
+            $this->assertNotEmpty($service->authenticators()->get($authenticator));
+        }
+
+        if ($identifiers) {
+            $this->assertNotEmpty($service->identifiers()->get($identifiers));
+        }
+    }
+    public function getAuthenticationServiceDataProvider()
+    {
+        return [
+            // APIの場合
+            ['Api', ['Token'], 'Token', ['unauthenticatedRedirect' => '/']],
+            // Adminの場合
+            ['Admin', ['Session', 'Form'], 'Password', ['unauthenticatedRedirect' => Router::url('/baser/admin/baser-core/users/login', true)]],
+            // // それ以外の場合
+            ['', ['Form'], '', []]
+        ];
     }
 
     /**
