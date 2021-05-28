@@ -17,6 +17,7 @@ use BaserCore\Annotation\Checked;
  * bootstrap
  *
  * @checked
+ * @unitTest
  */
 
 use BaserCore\Event\BcControllerEventDispatcher;

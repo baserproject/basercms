@@ -17,6 +17,7 @@ use BaserCore\Annotation\Checked;
  * bc_form
  *
  * @checked
+ * @unitTest
  * @noTodo
  */
 return [

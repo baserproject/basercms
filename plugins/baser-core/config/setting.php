@@ -16,6 +16,7 @@ use BaserCore\Annotation\Checked;
 
 /**
  * @checked
+ * @unitTest
  */
 $baserCorePrefix = '/baser';
 $adminPrefix = '/admin';
