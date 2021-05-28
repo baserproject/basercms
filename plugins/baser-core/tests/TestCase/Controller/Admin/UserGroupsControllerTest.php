@@ -53,6 +53,23 @@ class UserGroupsControllerTest extends BcTestCase
         $this->UserGroupsController = new UserGroupsController($this->getRequest());
     }
 
+    public function tearDown(): void
+    {
+        unset($this->UserGroupsController);
+        parent::tearDown();
+    }
+
+    /**
+     * Test constructor
+     *
+     * @return void
+     */
+    public function testConstruct()
+    {
+        $UserGroupsController = new UserGroupsController();
+        $this->assertNotEmpty($UserGroupsController->crumbs);
+    }
+
     /**
      * Test index method
      *
