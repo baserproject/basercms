@@ -598,7 +598,8 @@ class BcUtilTest extends BcTestCase
      */
     public function testIsConsole()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // テストはCliから実行するためtrue
+        $this->assertTrue(BcUtil::isConsole());
     }
 
     /**

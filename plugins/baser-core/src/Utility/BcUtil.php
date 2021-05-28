@@ -564,12 +564,14 @@ class BcUtil
      * コンソールから実行されているかチェックする
      *
      * @return bool
+     * @checked
+     * @unitTest
      */
     public static function isConsole()
     {
         // TODO isConsoleのCAKEPHP_SHELLが非推奨&&未定義のため代替措置
         // return defined('CAKEPHP_SHELL') && CAKEPHP_SHELL;
-        return substr(php_sapi_name(), 0, 3) == 'cgi';
+        return substr(php_sapi_name(), 0, 3) == 'cli';
 
     }
 

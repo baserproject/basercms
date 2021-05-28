@@ -196,10 +196,10 @@ class BcAppController extends AppController
     )
     {
         parent::__construct($request, $response, $name, $eventManager, $components);
-
-        if (BcUtil::isConsole()) {
-            unset($this->components['Session']);
-        }
+        // TODO $componentsが未定義のため一旦コメントアウト
+        // if (BcUtil::isConsole()) {
+        //     unset($this->components['Session']);
+        // }
         // TODO siteConfigs代替措置
         // $config = $this->getTableLocator()->exists('SiteConfigs')? [] : ['className' => 'BaserCore\Model\Table\SiteConfigsTable'];
         // $this->siteConfigs = TableRegistry::getTableLocator()->get('SiteConfigs');
