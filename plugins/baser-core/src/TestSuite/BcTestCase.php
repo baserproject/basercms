@@ -25,6 +25,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Utility\Inflector;
+use ReflectionClass;
 
 /**
  * Class BcTestCase
@@ -143,6 +144,25 @@ class BcTestCase extends TestCase
             ->willReturn($this->returnCallback($callback));
         EventManager::instance()->on($listener);
         return $listener;
+    }
+
+    /**
+     * private・protectedメソッドを実行する
+     * @param object $class 対象クラス
+     * @param string $method 対象メソッド
+     * @param array $args 対象メソッドに必要な引数
+     * @return mixed $value
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    protected function execPrivateMethod(object $class, string $method, array $args = [])
+    {
+        $ref = new ReflectionClass($class);
+        $method = $ref->getMethod($method);
+        $method->setAccessible(true);
+        $value = $method->invokeArgs($class, $args);
+        return $value;
     }
 
 }

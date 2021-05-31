@@ -11,11 +11,11 @@
 
 namespace BaserCore\Test\TestCase\TestSuite;
 
-use Cake\TestSuite\TestCase;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
+use BaserCore\Controller\AnalyseController;
 
 /**
  * BaserCore\TestSuite\BcTestCase
@@ -98,4 +98,16 @@ class BcTestCaseTest extends BcTestCase
         $this->assertSession($this->loginAdmin(2), Configure::read('BcPrefixAuth.Admin.sessionKey'));
     }
 
+    /**
+     * 管理画面にログインするのテスト
+     *
+     * @return void
+     */
+    public function testExecPrivateMethod(): void
+    {
+        $sampleClass = new AnalyseController();
+        $samplePrivateMethod = 'pathToClass';
+        $result = $this->execPrivateMethod($sampleClass, $samplePrivateMethod, [ROOT . DS . "plugins"]);
+        $this->assertEquals("", $result);
+    }
 }
