@@ -14,7 +14,9 @@ namespace BaserCore\Service;
 use Cake\Datasource\EntityInterface;
 use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
-
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 /**
  * Class UserGroupManageService
  * @package BaserCore\Service
@@ -26,6 +28,9 @@ class UserGroupManageService extends UserGroupsService implements UserGroupManag
      * ユーザーグループを取得する
      * @param int $id
      * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
 
     public function get($id): EntityInterface
@@ -37,6 +42,9 @@ class UserGroupManageService extends UserGroupsService implements UserGroupManag
      * ユーザーグループ全件取得する
      * @param array $options
      * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getIndex($options = []): Query
     {
@@ -47,6 +55,9 @@ class UserGroupManageService extends UserGroupsService implements UserGroupManag
      * 新規登録する
      * @param ServerRequest $request
      * @return EntityInterface|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function create(ServerRequest $request)
     {
@@ -58,6 +69,9 @@ class UserGroupManageService extends UserGroupsService implements UserGroupManag
      * @param EntityInterface $target
      * @param ServerRequest $request
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function update(EntityInterface $target, ServerRequest $request)
     {
@@ -68,6 +82,9 @@ class UserGroupManageService extends UserGroupsService implements UserGroupManag
      * 削除する
      * @param int $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete($id)
     {
