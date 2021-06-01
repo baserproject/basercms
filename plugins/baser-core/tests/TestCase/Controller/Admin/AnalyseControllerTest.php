@@ -30,7 +30,6 @@ class AnalyseControllerTest extends BcTestCase
     {
         parent::setUp();
         $this->Controller = new AnalyseController($this->getRequest());
-        $this->ref = new ReflectionClass($this->Controller);
     }
 
     /**
@@ -41,18 +40,6 @@ class AnalyseControllerTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
-    }
-
-    /**
-     * プライベートメソッドを使用する
-     * @param string $name メソッド名
-     * @return ReflectionMethod $method
-     */
-    private function usePrivateMethod($name)
-    {
-        $method = $this->ref->getMethod($name);
-        $method->setAccessible(true);
-        return $method;
     }
 
     /**
@@ -75,8 +62,7 @@ class AnalyseControllerTest extends BcTestCase
     public function testGetList()
     {
         $path = ROOT . DS . 'plugins' . DS . 'baser-core';
-        $method = $this->usePrivateMethod('getList');
-        $result = $method->invokeArgs($this->Controller, [$path]);
+        $result = $this->execPrivateMethod($this->Controller, 'getList', [$path]);
         $expected = [
             "file" => "content_folders.php",
             "path" => "/plugins/baser-core/config/Schema/content_folders.php",
@@ -96,8 +82,7 @@ class AnalyseControllerTest extends BcTestCase
      */
     public function testGetAnnotations()
     {
-        $method = $this->usePrivateMethod('getAnnotations');
-        $result = $method->invokeArgs($this->Controller, ["\BaserCore\Controller\AnalyseController", "index"]);
+        $result = $this->execPrivateMethod($this->Controller, 'getAnnotations', ["\BaserCore\Controller\AnalyseController", "index"]);
         $expected = [
             "checked" => true,
             "unitTest" => true,
@@ -114,10 +99,9 @@ class AnalyseControllerTest extends BcTestCase
      */
     public function testGetTraitMethod()
     {
-        $method = $this->usePrivateMethod('getTraitMethod');
         // AnalyseControllerTestのIntegrationTestTraitでテスト
         $class = new ReflectionClass($this);
-        $result = $method->invokeArgs($this->Controller, [$class]);
+        $result = $this->execPrivateMethod($this->Controller, 'getTraitMethod', [$class]);
         $expected = "assertResponseOk";
         $this->assertContains($expected, $result);
     }
@@ -132,8 +116,7 @@ class AnalyseControllerTest extends BcTestCase
      */
     public function testPathToClass($path, $expected)
     {
-        $method = $this->usePrivateMethod('pathToClass');
-        $result = $method->invokeArgs($this->Controller, [$path]);
+        $result = $this->execPrivateMethod($this->Controller, 'pathToClass', [$path]);
         $this->assertEquals($result, $expected);
     }
 
