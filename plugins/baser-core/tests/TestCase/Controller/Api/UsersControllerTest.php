@@ -36,10 +36,16 @@ class UsersControllerTest extends BcTestCase
     ];
 
     /**
-     * Token
+     * Access Token
      * @var string
      */
-    public $token = null;
+    public $accessToken = null;
+
+    /**
+     * Refresh Token
+     * @var null
+     */
+    public $refreshToken = null;
 
     /**
      * set up
@@ -47,7 +53,9 @@ class UsersControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->token = $this->apiLoginAdmin(1);
+        $token = $this->apiLoginAdmin(1);
+        $this->accessToken = $token['access_token'];
+        $this->refreshToken = $token['refresh_token'];
     }
 
     /**
@@ -70,8 +78,8 @@ class UsersControllerTest extends BcTestCase
         $this->post('/baser/api/baser-core/users/login.json', ['email' => 'testuser1@example.com', 'password' => 'password']);
         $this->assertResponseOk();
         $body = json_decode($this->_getBodyAsString());
-        $this->get('/baser/api/baser-core/users/refresh_token.json?token=' . $body->token);
-        $this->assertResponseContains('token');
+        $this->get('/baser/api/baser-core/users/refresh_token.json?token=' . $body->refresh_token);
+        $this->assertResponseContains('access_token');
     }
 
     /**
@@ -81,7 +89,7 @@ class UsersControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->get('/baser/api/baser-core/users/index.json?token=' . $this->token);
+        $this->get('/baser/api/baser-core/users/index.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('baser admin', $result->users[0]->name);
@@ -105,7 +113,7 @@ class UsersControllerTest extends BcTestCase
             'email' => 'test@example.com',
             'nickname' => 'Lorem ipsum dolor sit amet',
         ];
-        $this->post('/baser/api/baser-core/users/add.json?token=' . $this->token, $data);
+        $this->post('/baser/api/baser-core/users/add.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();
         $users = $this->getTableLocator()->get('Users');
         $query = $users->find()->where(['name' => $data['name']]);
@@ -124,7 +132,7 @@ class UsersControllerTest extends BcTestCase
         $data = [
             'name' => 'Test_test_Man'
         ];
-        $this->post('/baser/api/baser-core/users/edit/1.json?token=' . $this->token, $data);
+        $this->post('/baser/api/baser-core/users/edit/1.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();
     }
 
@@ -137,7 +145,7 @@ class UsersControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->post('/baser/admin/baser-core/users/delete/1?token=' . $this->token);
+        $this->post('/baser/admin/baser-core/users/delete/1?token=' . $this->accessToken);
         $this->assertResponseSuccess();
     }
 
@@ -146,7 +154,7 @@ class UsersControllerTest extends BcTestCase
      */
     public function testView()
     {
-        $this->get('/baser/api/baser-core/users/view/1.json?token=' . $this->token);
+        $this->get('/baser/api/baser-core/users/view/1.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('baser admin', $result->user->name);

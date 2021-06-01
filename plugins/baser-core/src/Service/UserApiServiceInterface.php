@@ -24,5 +24,5 @@ interface UserApiServiceInterface
      * @param ResultInterface $result
      * @return array
      */
-    public function getLoginToken(ResultInterface $result): array;
+    public function getAccessToken(ResultInterface $result): array;
 }

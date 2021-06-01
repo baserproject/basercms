@@ -66,10 +66,11 @@ class UserApiServiceTest extends BcTestCase
      */
     public function testGetLoginToken()
     {
-        $result = $this->UserApi->getLoginToken(new Result($this->UserApi->get(1), Result::SUCCESS));
-        $this->assertArrayHasKey('token', $result);
-        $this->assertEquals(3, count(explode('.', $result['token'])));
-        $result = $this->UserApi->getLoginToken(new Result(null, Result::FAILURE_CREDENTIALS_INVALID));
+        $result = $this->UserApi->getAccessToken(new Result($this->UserApi->get(1), Result::SUCCESS));
+        $this->assertArrayHasKey('access_token', $result);
+        $this->assertArrayHasKey('refresh_token', $result);
+        $this->assertEquals(3, count(explode('.', $result['access_token'])));
+        $result = $this->UserApi->getAccessToken(new Result(null, Result::FAILURE_CREDENTIALS_INVALID));
         $this->assertEquals([], $result);
     }
 

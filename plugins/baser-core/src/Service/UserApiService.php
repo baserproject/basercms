@@ -22,22 +22,34 @@ use Firebase\JWT\JWT;
 class UserApiService extends UsersService implements UserApiServiceInterface
 {
     /**
-     * ログイントークンを取得する
+     * トークンを取得する
      * @param ResultInterface $result
      * @return array
      */
-    public function getLoginToken(ResultInterface $result): array
+    public function getAccessToken(ResultInterface $result): array
     {
         if ($result->isValid()) {
+            $algorithm = Configure::read('Jwt.algorithm');
+            $privateKey = file_get_contents(Configure::read('Jwt.privateKeyPath'));
             $user = $result->getData();
             return [
-                'token' => JWT::encode([
-                    'iss' => Configure::read('Jwt.iss'),
-                    'sub' => $user->id,
-                    'exp' => time() + Configure::read('Jwt.expire'),
-                ],
-                    file_get_contents(Configure::read('Jwt.privateKeyPath')),
-                    Configure::read('Jwt.algorithm')
+                'access_token' => JWT::encode([
+                        'token_type' => 'access_token',
+                        'iss' => Configure::read('Jwt.iss'),
+                        'sub' => $user->id,
+                        'exp' => time() + Configure::read('Jwt.accessTokenExpire'),
+                    ],
+                    $privateKey,
+                    $algorithm
+                ),
+                'refresh_token' => JWT::encode([
+                        'token_type' => 'refresh_token',
+                        'iss' => Configure::read('Jwt.iss'),
+                        'sub' => $user->id,
+                        'exp' => time() + Configure::read('Jwt.refreshTokenExpire'),
+                    ],
+                    $privateKey,
+                    $algorithm
                 ),
             ];
         } else {

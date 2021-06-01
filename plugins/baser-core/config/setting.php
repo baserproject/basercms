@@ -212,8 +212,10 @@ return [
         'iss' => 'baser',
         // アルゴリズム：RS256 / HS256
         'algorithm' => 'RS256',
-        // 有効期限（秒）
-        'expire' => '60',
+        // アクセストークン有効期間（秒：30分間）
+        'accessTokenExpire' => 60 * 30,
+        // リフレッシュトークン有効期間（秒：14日間）
+        'refreshTokenExpire' => 60 * 60 * 24 * 14,
         // 秘密鍵のパス
         'privateKeyPath' => CONFIG . 'jwt.key',
         // 公開鍵のパス

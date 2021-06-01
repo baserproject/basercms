@@ -45,8 +45,8 @@ class UsersController extends BcApiController
      */
     public function login(UserApiServiceInterface $userApi)
     {
-        if (!$json = $userApi->getLoginToken($this->Authentication->getResult())) {
-            $this->response = $this->response->withStatus(401);
+        if (!$json = $userApi->getAccessToken($this->Authentication->getResult())) {
+            $this->setResponse($this->response->withStatus(401));
         }
         $this->set('json', $json);
         $this->viewBuilder()->setOption('serialize', 'json');
@@ -57,8 +57,10 @@ class UsersController extends BcApiController
      */
     public function refresh_token(UserApiServiceInterface $userApi)
     {
-        if (!$json = $userApi->getLoginToken($this->Authentication->getResult())) {
-            $this->response = $this->response->withStatus(401);
+        $json = [];
+        $payload = $this->Authentication->getAuthenticationService()->getAuthenticationProvider()->getPayload();
+        if ($payload->token_type !== 'refresh_token' || !$json = $userApi->getAccessToken($this->Authentication->getResult())) {
+            $this->setResponse($this->response->withStatus(401));
         }
         $this->set('json', $json);
         $this->viewBuilder()->setOption('serialize', 'json');

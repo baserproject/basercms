@@ -126,16 +126,16 @@ class BcTestCase extends TestCase
     /**
      * Api Login
      * @param int $id
-     * @return string
+     * @return array
      */
     protected function apiLoginAdmin($id = 1)
     {
         $userApi = new UserApiService();
         $user = $this->getUser($id);
         if($user) {
-            return $userApi->getLoginToken(new Result($this->getUser($id), Result::SUCCESS))['token'];
+            return $userApi->getAccessToken(new Result($this->getUser($id), Result::SUCCESS));
         } else {
-            return '';
+            return [];
         }
     }
 

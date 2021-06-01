@@ -36,10 +36,16 @@ class UserGroupsControllerTest extends BcTestCase
     ];
 
     /**
-     * Token
+     * Access Token
      * @var string
      */
-    public $token = null;
+    public $accessToken = null;
+
+    /**
+     * Refresh Token
+     * @var null
+     */
+    public $refreshToken = null;
 
     /**
      * set up
@@ -47,7 +53,9 @@ class UserGroupsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->token = $this->apiLoginAdmin(1);
+        $token = $this->apiLoginAdmin(1);
+        $this->accessToken = $token['access_token'];
+        $this->refreshToken = $token['refresh_token'];
     }
 
     /**
@@ -57,7 +65,7 @@ class UserGroupsControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->get('/baser/api/baser-core/user_groups/index.json?token=' . $this->token);
+        $this->get('/baser/api/baser-core/user_groups/index.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('admins', $result->userGroups[0]->name);
@@ -77,7 +85,7 @@ class UserGroupsControllerTest extends BcTestCase
             'title' => 'ucmitzグループ',
             'use_move_contents' => '1',
         ];
-        $this->post('/baser/api/baser-core/user_groups/add.json?token=' . $this->token, $data);
+        $this->post('/baser/api/baser-core/user_groups/add.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();
         $UserGroups = $this->getTableLocator()->get('UserGroups');
         $query = $UserGroups->find()->where(['name' => $data['name']]);
@@ -96,7 +104,7 @@ class UserGroupsControllerTest extends BcTestCase
         $data = [
             'name' => 'Test_test_Man'
         ];
-        $this->post('/baser/api/baser-core/user_groups/edit/1.json?token=' . $this->token, $data);
+        $this->post('/baser/api/baser-core/user_groups/edit/1.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();
     }
 
@@ -109,7 +117,7 @@ class UserGroupsControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->post('/baser/admin/baser-core/UserGroups/delete/1.json?token=' . $this->token);
+        $this->post('/baser/admin/baser-core/UserGroups/delete/1.json?token=' . $this->accessToken);
         $this->assertResponseSuccess();
     }
 
@@ -118,7 +126,7 @@ class UserGroupsControllerTest extends BcTestCase
      */
     public function testView()
     {
-        $this->get('/baser/api/baser-core/user_groups/view/1.json?token=' . $this->token);
+        $this->get('/baser/api/baser-core/user_groups/view/1.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('admins', $result->userGroups->name);
