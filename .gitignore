@@ -74,4 +74,6 @@ LOCAL_TODO.md
 # symlink
 /webroot/bc_admin_third
 /webroot/bc_sample
-
+# jwt
+/config/jwt.key
+/config/jwt.pem

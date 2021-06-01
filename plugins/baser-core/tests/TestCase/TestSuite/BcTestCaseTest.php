@@ -12,7 +12,6 @@
 namespace BaserCore\Test\TestCase\TestSuite;
 
 use BaserCore\TestSuite\BcTestCase;
-use Cake\TestSuite\IntegrationTestTrait;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use BaserCore\Controller\AnalyseController;
@@ -99,7 +98,16 @@ class BcTestCaseTest extends BcTestCase
     }
 
     /**
-     * 管理画面にログインするのテスト
+     * test apiLoginAdmin
+     */
+    public function testApiLoginAdmin(): void
+    {
+        $this->assertNotEmpty($this->apiLoginAdmin(1));
+        $this->assertEmpty($this->apiLoginAdmin(100));
+    }
+
+    /**
+     * test プライベートメソッド実行
      *
      * @return void
      */
@@ -110,4 +118,5 @@ class BcTestCaseTest extends BcTestCase
         $result = $this->execPrivateMethod($sampleClass, $samplePrivateMethod, [ROOT . DS . "plugins"]);
         $this->assertEquals("", $result);
     }
+
 }

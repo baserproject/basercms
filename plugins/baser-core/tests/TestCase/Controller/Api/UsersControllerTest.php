@@ -47,9 +47,31 @@ class UsersControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        Configure::config('baser', new PhpConfig());
-        Configure::load('BaserCore.setting', 'baser');
-        $this->token = Configure::read('BcApp.apiToken');
+        $this->token = $this->apiLoginAdmin(1);
+    }
+
+    /**
+     * Tear Down
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        Configure::clear();
+        parent::tearDown();
+    }
+
+    public function testLoginAndRefreshToken()
+    {
+        $this->get('/baser/api/baser-core/users/login.json');
+        $this->assertResponseCode(401);
+        $this->post('/baser/api/baser-core/users/login.json');
+        $this->assertResponseCode(401);
+        $this->post('/baser/api/baser-core/users/login.json', ['email' => 'testuser1@example.com', 'password' => 'password']);
+        $this->assertResponseOk();
+        $body = json_decode($this->_getBodyAsString());
+        $this->get('/baser/api/baser-core/users/refresh_token.json?token=' . $body->token);
+        $this->assertResponseContains('token');
     }
 
     /**

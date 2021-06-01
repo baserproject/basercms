@@ -30,7 +30,7 @@ class UsersFixture extends TestFixture
         [
             'id' => 1,
             'name' => 'baser admin',
-            'password' => 'Lorem ipsum dolor sit amet',
+            'password' => '$2y$10$x6WQstawmuyS7XrqutyDjOSOLxJp3dv72O73B7lhqzP8XvVlmcx4G',
             'real_name_1' => 'baser',
             'real_name_2' => 'admin',
             'email' => 'testuser1@example.com',

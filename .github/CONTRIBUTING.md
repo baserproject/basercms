@@ -111,7 +111,7 @@ ucmitz は、現在、CMSとしての機能はありませんが、Webアプリ�
 - [ucmitzをCakePHP4のプロジェクトで利用する](https://github.com/baserproject/ucmitz/wiki/ucmitz%E3%82%92CakePHP4%E3%81%AE%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%81%A7%E5%88%A9%E7%94%A8%E3%81%99%E3%82%8B)
 - [ucmitzを利用して管理画面を作る](https://github.com/baserproject/ucmitz/wiki/ucmitz%E3%82%92%E5%88%A9%E7%94%A8%E3%81%97%E3%81%A6%E7%AE%A1%E7%90%86%E7%94%BB%E9%9D%A2%E3%82%92%E4%BD%9C%E3%82%8B)
 - [ucmitzのプラグインを開発する](https://github.com/baserproject/ucmitz/wiki/ucmitz%E3%81%AE%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%92%E9%96%8B%E7%99%BA%E3%81%99%E3%82%8B)
-
+- [ucmitzの REST API を利用する](https://github.com/baserproject/ucmitz/wiki/ucmitz%E3%81%AE-REST-API-%E3%82%92%E5%88%A9%E7%94%A8%E3%81%99%E3%82%8B)
 　　
 ## その他のドキュメント
 

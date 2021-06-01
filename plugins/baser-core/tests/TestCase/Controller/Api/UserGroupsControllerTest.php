@@ -47,9 +47,7 @@ class UserGroupsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        Configure::config('baser', new PhpConfig());
-        Configure::load('BaserCore.setting', 'baser');
-        $this->token = Configure::read('BcApp.apiToken');
+        $this->token = $this->apiLoginAdmin(1);
     }
 
     /**

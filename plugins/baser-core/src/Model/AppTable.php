@@ -65,8 +65,13 @@ class AppTable extends Table
      *
      * @return void
      */
-    public function __construct($id = false, $table = null, $ds = null)
+    public function __construct(array $config = [])
     {
+        // TODO 暫定措置
+        // >>>
+        parent::__construct($config);
+        return;
+        // <<<
         $db = ConnectionManager::get('default');
         if (Configure::read('BcRequest.asset')) {
             parent::__construct($id, $table, $ds);
@@ -97,6 +102,10 @@ class AppTable extends Table
      */
     public function beforeSave($options = [])
     {
+        // TODO 暫定措置
+        // >>>
+        return true;
+        // <<<
         $result = parent::beforeSave($options);
         // 日付フィールドが空の場合、nullを保存する
         foreach($this->_schema as $key => $field) {

@@ -11,8 +11,11 @@
 
 namespace BaserCore\Controller\Api;
 
+use Authentication\Controller\Component\AuthenticationComponent;
+use BaserCore\Service\UserApiServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
 use Cake\Core\Exception\Exception;
+use Firebase\JWT\JWT;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -23,9 +26,43 @@ use BaserCore\Annotation\Checked;
  * https://localhost/baser/api/baser-core/users/action_name.json で呼び出す
  *
  * @package BaserCore\Controller\Api
+ * @property AuthenticationComponent $Authentication
  */
 class UsersController extends BcApiController
 {
+
+    /**
+     * Initialize
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['login']);
+    }
+
+    /**
+     * ログイン
+     */
+    public function login(UserApiServiceInterface $userApi)
+    {
+        if (!$json = $userApi->getLoginToken($this->Authentication->getResult())) {
+            $this->response = $this->response->withStatus(401);
+        }
+        $this->set('json', $json);
+        $this->viewBuilder()->setOption('serialize', 'json');
+    }
+
+    /**
+     * リフレッシュトークン取得
+     */
+    public function refresh_token(UserApiServiceInterface $userApi)
+    {
+        if (!$json = $userApi->getLoginToken($this->Authentication->getResult())) {
+            $this->response = $this->response->withStatus(401);
+        }
+        $this->set('json', $json);
+        $this->viewBuilder()->setOption('serialize', 'json');
+    }
 
     /**
      * ユーザー情報一覧取得

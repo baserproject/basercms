@@ -17,6 +17,7 @@ use BaserCore\TestSuite\BcTestCase;
 use Cake\Http\MiddlewareQueue;
 use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Routing\Router;
+use Cake\Utility\Security;
 
 /**
  * Class PluginTest
@@ -112,7 +113,6 @@ class PluginTest extends BcTestCase
     {
         $request = $this->getRequest()->withParam('prefix', $prefix);
         $service = $this->Plugin->getAuthenticationService($request);
-
         if($config) {
             foreach ($config as $key => $value) {
                 $this->assertEquals($service->getConfig($key), $value);
@@ -130,7 +130,7 @@ class PluginTest extends BcTestCase
     {
         return [
             // APIの場合
-            ['Api', ['Token'], 'Token', ['unauthenticatedRedirect' => '/']],
+            ['Api', ['Jwt', 'Form'], 'JwtSubject', []],
             // Adminの場合
             ['Admin', ['Session', 'Form'], 'Password', ['unauthenticatedRedirect' => Router::url('/baser/admin/baser-core/users/login', true)]],
             // // それ以外の場合

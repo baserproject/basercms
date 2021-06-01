@@ -416,4 +416,14 @@ class UsersTable extends Table
         return $this->Favorite->deleteAll(['Favorite.user_id' => $userId], false);
     }
 
+    /**
+     * 利用可能なユーザーを取得する
+     * @param Query $query
+     * @return Query
+     */
+    public function findAvailable(Query $query)
+    {
+        return $query->where(['status' => true]);
+    }
+
 }
