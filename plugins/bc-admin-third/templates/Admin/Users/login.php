@@ -26,11 +26,11 @@ use BaserCore\View\AppView;
     <div id="AlertMessage" class="message" hidden></div>
     <?= $this->BcAdminForm->create() ?>
     <div class="login-input bca-login-form-item">
-      <?php echo $this->BcForm->label('email', __d('baser', 'Eメール')) ?>
+      <?php echo $this->BcAdminForm->label('email', __d('baser', 'Eメール')) ?>
       <?= $this->BcAdminForm->control('email', ['type' => 'text', 'tabindex' => 1, 'autofocus' => true]) ?>
     </div>
     <div class="login-input bca-login-form-item">
-      <?php echo $this->BcForm->label('password', __d('baser', 'パスワード')) ?>
+      <?php echo $this->BcAdminForm->label('password', __d('baser', 'パスワード')) ?>
       <?= $this->BcAdminForm->control('password', ['type' => 'password', 'tabindex' => 2]) ?>
     </div>
     <div class="submit bca-login-form-btn-group">

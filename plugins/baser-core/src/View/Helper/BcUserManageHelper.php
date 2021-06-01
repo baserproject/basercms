@@ -11,7 +11,8 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Service\UserManageService;
+use BaserCore\Service\UserManageServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -24,9 +25,11 @@ use BaserCore\Annotation\Checked;
 class BcUserManageHelper extends Helper
 {
 
+    use BcContainerTrait;
+
     /**
      * User Manage Service
-     * @var UserManageService
+     * @var UserManageServiceInterface
      */
     public $UserManage;
 
@@ -40,7 +43,7 @@ class BcUserManageHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->UserManage = new UserManageService();
+        $this->UserManage = $this->getService(UserManageServiceInterface::class);
     }
 
     /**
