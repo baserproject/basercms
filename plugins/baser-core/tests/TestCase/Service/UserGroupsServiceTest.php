@@ -111,11 +111,9 @@ class UserGroupsServiceTest extends BcTestCase
      */
     public function testUpdate()
     {
-        $request = $this->getRequest('/');
         $data = ['name' => 'ucmitzGroup'];
-        $request = $request->withParsedBody($data);
         $userGroup = $this->UserGroups->get(1);
-        $this->UserGroups->update($userGroup, $request);
+        $this->UserGroups->update($userGroup, $data);
         $group = $this->UserGroups->getIndex();
         $this->assertEquals($group->first()->name, $data['name']);
     }

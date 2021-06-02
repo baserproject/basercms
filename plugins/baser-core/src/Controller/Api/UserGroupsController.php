@@ -93,7 +93,7 @@ class UserGroupsController extends BcApiController
     {
         $userGroups = $UserGroups->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            if ($userGroups = $UserGroups->update($userGroups, $this->request)) {
+            if ($userGroups = $UserGroups->update($userGroups, $this->request->getData())) {
                 $message = __d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroups->name);
             } else {
                 $message = __d('baser', '入力エラーです。内容を修正してください。');

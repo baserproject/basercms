@@ -67,15 +67,15 @@ class UserGroupManageService extends UserGroupsService implements UserGroupManag
     /**
      * 編集する
      * @param EntityInterface $target
-     * @param ServerRequest $request
+     * @param array $postData
      * @return mixed
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function update(EntityInterface $target, ServerRequest $request)
+    public function update(EntityInterface $target, array $postData)
     {
-        return parent::update($target, $request);
+        return parent::update($target, $postData);
     }
 
     /**

@@ -212,7 +212,7 @@ class UserGroupsController extends BcAdminAppController
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            if ($userGroup = $UserGroupManage->update($userGroup, $this->request)) {
+            if ($userGroup = $UserGroupManage->update($userGroup, $this->request->getData())) {
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name));
                 // TODO 未実装
                 /* >>>

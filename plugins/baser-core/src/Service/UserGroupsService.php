@@ -90,15 +90,15 @@ class UserGroupsService implements UserGroupsServiceInterface
     /**
      * ユーザーグループ情報を更新する
      * @param EntityInterface $target
-     * @param ServerRequest $request
+     * @param array $postData
      * @return EntityInterface|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function update(EntityInterface $target, ServerRequest $request)
+    public function update(EntityInterface $target, array $postData)
     {
-        $userGroup = $this->UserGroups->patchEntity($target, $request->getData());
+        $userGroup = $this->UserGroups->patchEntity($target, $postData);
         return $this->UserGroups->save($userGroup);
     }
 
