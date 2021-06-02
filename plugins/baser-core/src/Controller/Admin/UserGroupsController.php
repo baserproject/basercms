@@ -159,7 +159,7 @@ class UserGroupsController extends BcAdminAppController
         $this->setHelp('user_groups_form');
 
         if ($this->request->is('post')) {
-            if ($userGroup = $UserGroupManage->create($this->request)) {
+            if ($userGroup = $UserGroupManage->create($this->request->getData())) {
                 $this->BcMessage->setSuccess(__d('baser', '新規ユーザーグループ「{0}」を追加しました。', $userGroup->name));
                 return $this->redirect(['action' => 'index']);
             } else {
@@ -212,7 +212,7 @@ class UserGroupsController extends BcAdminAppController
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            if ($userGroup = $UserGroupManage->update($userGroup, $this->request)) {
+            if ($userGroup = $UserGroupManage->update($userGroup, $this->request->getData())) {
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name));
                 // TODO 未実装
                 /* >>>

@@ -73,33 +73,32 @@ class UserGroupsService implements UserGroupsServiceInterface
 
     /**
      * ユーザーグループ登録
-     * @param ServerRequest $request
+     * @param array $postData
      * @return \Cake\Datasource\EntityInterface|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function create(ServerRequest $request)
+    public function create(array $postData)
     {
+        $postData['auth_prefix' ] = $postData['auth_prefix' ] ?? "Admin";
         $userGroup = $this->UserGroups->newEmptyEntity();
-        $authPrefix = $request->getData('auth_prefix');
-        $request = $request->withData('auth_prefix', !$authPrefix? 'Admin' : implode(',', $authPrefix));
-        $userGroup = $this->UserGroups->patchEntity($userGroup, $request->getData());
+        $userGroup = $this->UserGroups->patchEntity($userGroup, $postData);
         return $this->UserGroups->save($userGroup);
     }
 
     /**
      * ユーザーグループ情報を更新する
      * @param EntityInterface $target
-     * @param ServerRequest $request
+     * @param array $postData
      * @return EntityInterface|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function update(EntityInterface $target, ServerRequest $request)
+    public function update(EntityInterface $target, array $postData)
     {
-        $userGroup = $this->UserGroups->patchEntity($target, $request->getData());
+        $userGroup = $this->UserGroups->patchEntity($target, $postData);
         return $this->UserGroups->save($userGroup);
     }
 
