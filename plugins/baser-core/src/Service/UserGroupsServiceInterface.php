@@ -38,10 +38,10 @@ interface UserGroupsServiceInterface
 
     /**
      * 新規登録する
-     * @param ServerRequest $request
+     * @param array $postData
      * @return EntityInterface|false
      */
-    public function create(ServerRequest $request);
+    public function create(array $postData);
 
     /**
      * 編集する

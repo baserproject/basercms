@@ -81,19 +81,29 @@ class UserGroupManageServiceTest extends BcTestCase
 
     /**
      * Test create
+     * @dataProvider createDataProvider
      */
-    public function testCreate()
+    public function testCreate($authPrefix, $expected)
     {
-        $request = $this->getRequest('/');
         $data = [
             'name' => 'ucmitzGroup',
             'title' => 'ucmitzグループ',
             'use_move_contents' => '1',
+            'auth_prefix' => $authPrefix
         ];
-        $request = $request->withParsedBody($data);
-        $this->UserGroups->create($request);
+        $a = $this->UserGroups->create($data);
         $group = $this->UserGroups->getIndex();
         $this->assertEquals($group->last()->name, $data['name']);
+        $this->assertEquals($group->last()->auth_prefix, $expected);
+    }
+    public function createDataProvider()
+    {
+        return [
+            // auth_prefixがすでにある場合
+            ['test', 'test'],
+            // auth_prefixがない場合
+            [null, 'Admin'],
+        ];
     }
 
     /**

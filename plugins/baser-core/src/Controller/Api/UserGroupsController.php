@@ -68,7 +68,7 @@ class UserGroupsController extends BcApiController
     public function add(UserGroupsServiceInterface $UserGroups)
     {
         if ($this->request->is('post')) {
-            if ($userGroups = $UserGroups->create($this->request)) {
+            if ($userGroups = $UserGroups->create($this->request->getData())) {
                 $message = __d('baser', 'ユーザーグループ「{0}」を追加しました。', $userGroups->name);
             } else {
                 $message = __d('baser', '入力エラーです。内容を修正してください。');

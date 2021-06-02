@@ -53,15 +53,15 @@ class UserGroupManageService extends UserGroupsService implements UserGroupManag
 
     /**
      * 新規登録する
-     * @param ServerRequest $request
+     * @param array $postData
      * @return EntityInterface|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function create(ServerRequest $request)
+    public function create(array $postData)
     {
-        return parent::create($request);
+        return parent::create($postData);
     }
 
     /**
