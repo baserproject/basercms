@@ -13,8 +13,7 @@
         "doctrine/annotations": "^1.12",
         "firebase/php-jwt": "^5.2",
         "josegonzalez/dotenv": "^3.2",
-        "mobiledetect/mobiledetectlib": "^2.8",
-        "ext-openssl": "*"
+        "mobiledetect/mobiledetectlib": "^2.8"
     },
     "require-dev": {
         "cakephp/bake": "^2.0.3",
