@@ -77,48 +77,13 @@ class PluginsTable extends Table
     }
 
     /**
-     * 利用可能なプラグインの一覧を取得
-     *
-     * @return array
-     * @checked
-     * @unitTest
-     * @noTodo
-     */
-    public function getAvailable()
-    {
-
-        $result = $this->find()
-            ->order(['priority'])
-            ->all();
-        $pluginConfigs = [];
-        foreach($result as $plugin) {
-            $pluginConfigs[$plugin->name] = $this->getPluginConfig($plugin->name);
-        }
-        $registered = array_keys($pluginConfigs);
-
-        // プラグインフォルダーのチェックを行う
-        $paths = App::path('plugins');
-        foreach($paths as $path) {
-            $Folder = new Folder($path);
-            $files = $Folder->read(true, true, true);
-            foreach($files[0] as $file) {
-                $name = Inflector::camelize(Inflector::underscore(basename($file)));
-                if (!in_array(basename($file), Configure::read('BcApp.core')) && !in_array($name, $registered)) {
-                    $pluginConfigs[$name] = $this->getPluginConfig($name);
-                }
-            }
-        }
-        return array_values($pluginConfigs);
-    }
-
-    /**
      * プラグイン情報を取得する
      *
      * @param string $name プラグイン名
      * @return \BaserCore\Model\Entity\Plugin|\Cake\Datasource\EntityInterface
      * @checked
      * @unitTest
-     * @noTodo
+     * @todo PluginsServiceと統一する
      */
     public function getPluginConfig($name)
     {

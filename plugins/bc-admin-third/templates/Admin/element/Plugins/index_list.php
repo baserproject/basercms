@@ -13,7 +13,6 @@
  * Plugin Index
  *
  * @var AppView $this
- * @var bool $sortmode
  * @var array $plugins
  */
 
@@ -40,7 +39,7 @@ use BaserCore\View\AppView;
       <?php if ($this->BcBaser->isAdminUser()): ?>
         <?php echo $this->BcAdminForm->control('ListTool.checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
       <?php endif ?>
-      <?php if (!$sortmode): ?>
+      <?php if (!$this->request->getQuery('sortmode')): ?>
         <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', '並び替え'), ['?' => ['sortmode' => 1]], ['escape' => false]) ?>
       <?php else: ?>
         <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', 'ノーマル'), ['?' => ['sortmode' => 0]], ['escape' => false]) ?>

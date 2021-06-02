@@ -26,9 +26,9 @@ if (!$data['MailField']['use_field']) {
     <?php if ($this->BcBaser->isAdminUser()): ?>
       <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $data['MailField']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['MailField']['id']]) ?>
     <?php endif ?>
-    <?php if ($sortmode): ?>
+    <?php if ($this->request->getQuery('sortmode')): ?>
       <span class="sort-handle"><i class="bca-btn-icon-text"
-                                   data-bca-btn-type="draggable"></i><?php echo __d('baser', 'ドラッグ可能') ?></span>
+                                  data-bca-btn-type="draggable"></i><?php echo __d('baser', 'ドラッグ可能') ?></span>
       <?php echo $this->BcForm->hidden('Sort.id' . $data['MailField']['id'], ['class' => 'id', 'value' => $data['MailField']['id']]) ?>
     <?php endif ?>
   </td>

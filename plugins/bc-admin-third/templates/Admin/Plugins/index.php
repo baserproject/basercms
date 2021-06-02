@@ -21,6 +21,8 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
   'title' => __d('baser', '新規追加'),
 ]);
+$this->BcAdmin->setTitle(__d('baser', 'プラグイン一覧'));
+$this->BcAdmin->setHelp('plugins_index');
 ?>
 
 

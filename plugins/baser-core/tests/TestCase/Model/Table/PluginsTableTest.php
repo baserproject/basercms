@@ -71,41 +71,6 @@ class PluginsTableTest extends BcTestCase
     }
 
     /**
-     * testGetAvailable
-     */
-    public function testGetAvailable()
-    {
-        $plugins = $this->Plugins->getAvailable();
-        $pluginNames = [];
-        foreach($plugins as $plugin) {
-            $pluginNames[] = $plugin->name;
-        }
-        $this->assertContains('BcBlog', $pluginNames);
-
-        $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
-        $folder = new Folder($pluginPath);
-        $folder->create($pluginPath, 0777);
-
-        $plugins = $this->Plugins->getAvailable();
-        $pluginNames = [];
-        foreach($plugins as $plugin) {
-            $pluginNames[] = $plugin->name;
-        }
-        $this->assertContains('BcTest', $pluginNames);
-
-        $folder->delete($pluginPath);
-    }
-
-    /**
-     * testGetPluginConfig
-     */
-    public function testGetPluginConfig()
-    {
-        $plugin = $this->Plugins->getPluginConfig('BaserCore');
-        $this->assertEquals('BaserCore', $plugin->name);
-    }
-
-    /**
      * testIsInstallable
      */
     public function testIsInstallable()

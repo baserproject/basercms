@@ -53,8 +53,10 @@ class BcServiceProviderTest extends BcTestCase
         $this->Provider->services($container);
         $usersService = $container->get('BaserCore\Service\UsersServiceInterface');
         $userGroupsService = $container->get('BaserCore\Service\UserGroupsServiceInterface');
+        $pluginsService = $container->get('BaserCore\Service\PluginsServiceInterface');
         $this->assertEquals('BaserCore\Service\UsersService', get_class($usersService));
         $this->assertEquals('BaserCore\Service\UserGroupsService', get_class($userGroupsService));
+        $this->assertEquals('BaserCore\Service\PluginsService', get_class($pluginsService));
     }
 
 }

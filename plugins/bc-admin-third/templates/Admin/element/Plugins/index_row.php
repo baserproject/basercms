@@ -13,7 +13,6 @@
  * [ADMIN] プラグイン一覧　行
  *
  * @var AppView $this
- * @var bool $sortmode
  * @var array $corePlugins
  * @var \BaserCore\Model\Entity\Plugin $plugin
  */
@@ -42,9 +41,9 @@ $class = ' class="' . implode(' ', $classies) . '"';
         'escape' => false
       ]) ?>
     <?php endif ?>
-    <?php if ($sortmode): ?>
+    <?php if ($this->request->getQuery('sortmode')): ?>
       <span class="sort-handle"><i class="bca-btn-icon-text"
-                                   data-bca-btn-type="draggable"></i><?php echo __d('baser', 'ドラッグ可能') ?></span>
+                                  data-bca-btn-type="draggable"></i><?php echo __d('baser', 'ドラッグ可能') ?></span>
       <?php echo $this->BcAdminForm->control('Sort.id' . $plugin->id, ['type' => 'hidden', 'class' => 'id', 'value' => $plugin->id]) ?>
     <?php endif ?>
   </td>

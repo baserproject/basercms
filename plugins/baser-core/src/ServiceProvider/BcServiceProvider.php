@@ -21,6 +21,10 @@ use BaserCore\Service\UserGroupManageService;
 use BaserCore\Service\UserGroupManageServiceInterface;
 use BaserCore\Service\UserGroupsService;
 use BaserCore\Service\UserGroupsServiceInterface;
+use BaserCore\Service\PluginsServiceInterface;
+use BaserCore\Service\PluginsService;
+use BaserCore\Service\PluginManageServiceInterface;
+use BaserCore\Service\PluginManageService;
 use Cake\Core\ServiceProvider;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -43,6 +47,9 @@ class BcServiceProvider extends ServiceProvider
         UserApiServiceInterface::class,
         UserGroupsServiceInterface::class,
         UserGroupManageServiceInterface::class,
+        PluginsServiceInterface::class,
+        PluginManageServiceInterface::class,
+
     ];
 
     /**
@@ -61,6 +68,10 @@ class BcServiceProvider extends ServiceProvider
         // UserGroupsサービス
         $container->add(UserGroupsServiceInterface::class, UserGroupsService::class, true);
         $container->add(UserGroupManageServiceInterface::class, UserGroupManageService::class, true);
+        // Pluginsサービス
+        $container->add(PluginsServiceInterface::class, PluginsService::class, true);
+        $container->add(PluginManageServiceInterface::class, PluginManageService::class, true);
+
     }
 
 }

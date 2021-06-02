@@ -14,7 +14,6 @@
  * [ADMIN] アクセス制限設定一覧　行
  *
  * @var BcAppView $this
- * @var bool $sortmode
  */
 ?>
 
@@ -29,9 +28,9 @@
     <?php if ($this->BcBaser->isAdminUser()): ?>
       <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $data['Permission']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['Permission']['id']]) ?>
     <?php endif ?>
-    <?php if ($sortmode): ?>
+    <?php if ($this->request->getQuery('sortmode')): ?>
       <span class="sort-handle"><i class="bca-btn-icon-text"
-                                   data-bca-btn-type="draggable"></i><?php echo __d('baser', 'ドラッグ可能') ?></span>
+                                  data-bca-btn-type="draggable"></i><?php echo __d('baser', 'ドラッグ可能') ?></span>
       <?php echo $this->BcAdminForm->control('Sort.id' . $data['Permission']['id'], ['type' => 'hidden', 'class' => 'id', 'value' => $data['Permission']['id']]) ?>
     <?php endif ?>
   </td>

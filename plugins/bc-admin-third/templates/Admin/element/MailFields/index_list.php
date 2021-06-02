@@ -34,7 +34,7 @@ $this->BcListTable->setColumnNumber(8);
   <tr>
     <th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select"><?php // 一括選択 ?>
       <?php echo $this->BcAdminForm->control('ListTool.checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
-      <?php if (!$sortmode): ?>
+      <?php if (!$this->request->getQuery('sortmode')): ?>
         <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', '並び替え'), ['sortmode' => 1, $this->request->params['pass'][0]]) ?>
       <?php else: ?>
         <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', 'ノーマル'), ['sortmode' => 0, $this->request->params['pass'][0]]) ?>
