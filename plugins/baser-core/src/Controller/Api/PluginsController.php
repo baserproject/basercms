@@ -84,23 +84,30 @@ class PluginsController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['plugin', 'message']);
     }
 
+    /**
+     * アンインストール
+     * @param PluginsServiceInterface $plugins
+     * @param $name
+     * @return \Cake\Http\Response|void|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
     public function uninstall(PluginsServiceInterface $plugins, $name)
     {
-        BcUtil::includePluginClass($name);
-        $plugins = Plugin::getCollection();
-        $plugin = $plugins->create($name);
-        if (!method_exists($plugin, 'uninstall')) {
-            $this->BcMessage->setError(__d('baser', 'プラグインに Plugin クラスが存在しません。手動で削除してください。'));
-            return;
-        }
-
+        $this->request->allowMethod(['post']);
+        $plugin = $plugins->getByName($name);
         try {
-            $pluginManage->uninstall($name, $this->request->getData());
-            $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を削除しました。'), $name));
+            $plugins->uninstall($name, $this->request->getData());
+            $message = sprintf(__d('baser', 'プラグイン「%s」を削除しました。'), $name);
         } catch (\Exception $e) {
-            $this->BcMessage->setError(__d('baser', 'プラグインの削除に失敗しました。' . $e->getMessage()));
+            $message = __d('baser', 'プラグインの削除に失敗しました。' . $e->getMessage());
         }
-        return $this->redirect(['action' => 'index']);
+        $this->set([
+            'message' => $message,
+            'plugin' => $plugin
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['plugin', 'message']);
     }
 
 }
