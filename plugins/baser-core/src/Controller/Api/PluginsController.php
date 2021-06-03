@@ -26,6 +26,20 @@ use BaserCore\Annotation\Checked;
  */
 class PluginsController extends BcApiController
 {
+
+    /**
+     * プラグイン情報取得
+     * @param PluginsServiceInterface $plugins
+     * @param $id
+     */
+    public function view(PluginsServiceInterface $plugins, $id)
+    {
+        $this->set([
+            'plugin' => $plugins->get($id)
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['plugin']);
+    }
+
     /**
      * プラグイン情報一覧取得
      * @param PluginsServiceInterface $plugins

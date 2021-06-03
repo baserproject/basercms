@@ -70,6 +70,17 @@ class PluginsControllerTest extends BcTestCase
     }
 
     /**
+     * test view
+     */
+    public function testView()
+    {
+        $this->get('/baser/api/baser-core/plugins/view/1.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('BcBlog', $result->plugin->name);
+    }
+
+    /**
      * Test index method
      *
      * @return void
