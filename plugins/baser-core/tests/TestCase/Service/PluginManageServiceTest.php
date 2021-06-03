@@ -79,4 +79,29 @@ class PluginManageServiceTest extends BcTestCase
         ];
     }
 
+    /**
+     * testGetPluginConfig
+     */
+    public function testGetPluginConfig()
+    {
+        $plugin = $this->PluginManage->getPluginConfig('BaserCore');
+        $this->assertEquals('BaserCore', $plugin->name);
+    }
+
+    /**
+     * testIsInstallable
+     */
+    public function testIsInstallable()
+    {
+        $this->expectExceptionMessage('既にインストール済のプラグインです。');
+        $this->PluginManage->isInstallable('BcBlog');
+        $this->expectExceptionMessage('インストールしようとしているプラグインのフォルダが存在しません。');
+        $this->PluginManage->isInstallable('BcTest');
+        $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
+        $folder = new Folder($pluginPath);
+        $folder->create($pluginPath, 0777);
+        $this->assertEquals(true, $this->Plugins->isInstallable('BcTest'));
+        $folder->delete($pluginPath);
+    }
+
 }

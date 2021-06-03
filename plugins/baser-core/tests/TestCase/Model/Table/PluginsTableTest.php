@@ -71,22 +71,6 @@ class PluginsTableTest extends BcTestCase
     }
 
     /**
-     * testIsInstallable
-     */
-    public function testIsInstallable()
-    {
-        $this->expectExceptionMessage('既にインストール済のプラグインです。');
-        $this->Plugins->isInstallable('BcBlog');
-        $this->expectExceptionMessage('インストールしようとしているプラグインのフォルダが存在しません。');
-        $this->Plugins->isInstallable('BcTest');
-        $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
-        $folder = new Folder($pluginPath);
-        $folder->create($pluginPath, 0777);
-        $this->assertEquals(true, $this->Plugins->isInstallable('BcTest'));
-        $folder->delete($pluginPath);
-    }
-
-    /**
      * testInstall and testUninstall
      */
     public function testInstallAndUninstall()

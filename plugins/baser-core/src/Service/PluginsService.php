@@ -17,7 +17,7 @@ use Cake\Core\Configure;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\App;
 use Cake\Filesystem\Folder;
-use BaserCore\Model\Entity\Plugin;
+use Cake\Core\Plugin;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -45,7 +45,7 @@ class PluginsService implements PluginsServiceInterface
     }
 
     /**
-     * ユーザー一覧を取得
+     * プラグイン一覧を取得
      * @param string $sortMode
      * @return array $plugins
      * @checked
@@ -80,10 +80,30 @@ class PluginsService implements PluginsServiceInterface
     }
 
     /**
+     * @param string $name プラグイン名
+     * @return EntityInterface
+     * プラグインをインストールする
+     */
+    public function install($name, $data = [])
+    {
+        // プラグインをインストール
+        BcUtil::includePluginClass($name);
+        $plugins = Plugin::getCollection();
+        $plugin = $plugins->create($name);
+
+        if (!method_exists($plugin, 'install')) {
+            return null;
+        } else {
+            return $plugin->install($data);
+        }
+    }
+
+
+    /**
      * プラグイン情報を取得する
      *
      * @param string $name プラグイン名
-     * @return Plugin|EntityInterface
+     * @return EntityInterface
      * @checked
      * @unitTest
      * @noTodo

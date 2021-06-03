@@ -82,6 +82,21 @@ class PluginsControllerTest extends BcTestCase
         $this->assertEquals('BcSample', $result->plugins[0]->name);
     }
 
+    /**
+     * Test install
+     *
+     * @return void
+     */
+    public function testInstall()
+    {
+        // $this->enableSecurityToken();
+        // $this->enableCsrfToken();
+        $this->post('/baser/api/baser-core/plugins/install/BcSample.json?token=' . $this->accessToken, ['connection' => 'test']);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals("プラグイン「BcSample」をインストールしました。", $result->message);
+    }
+
 
 
 

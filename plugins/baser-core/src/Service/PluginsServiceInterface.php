@@ -18,9 +18,17 @@ namespace BaserCore\Service;
 interface PluginsServiceInterface
 {
     /**
-     * ユーザー一覧を取得
+     * プラグイン一覧を取得
      * @param string $sortMode
      * @return array $plugins
      */
     public function getIndex(string $sortMode): array;
+        /**
+     * プラグイン一覧を取得
+     * @param string $name プラグイン名
+     * @return EntityInterface
+     */
+    public function install($name, $data = []);
+
+    public function getPluginConfig($name);
 }

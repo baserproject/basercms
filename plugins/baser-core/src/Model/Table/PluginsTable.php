@@ -11,14 +11,13 @@
 
 namespace BaserCore\Model\Table;
 
-use BaserCore\Error\BcException;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Utility\BcUtil;
-use Cake\Core\App;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
 use Cake\ORM\Table;
+use BaserCore\Model\AppTable;
 use Cake\Utility\Inflector;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -28,7 +27,7 @@ use BaserCore\Annotation\Checked;
  * Class PluginsTable
  * @package BaserCore\Model\Table
  */
-class PluginsTable extends Table
+class PluginsTable extends AppTable
 {
 
     /**
@@ -140,58 +139,6 @@ class PluginsTable extends Table
         return $pluginRecord;
     }
 
-    /**
-     * インストール可能かチェックする
-     *
-     * @param $pluginName
-     * @return bool
-     * @checked
-     * @unitTest
-     * @noTodo
-     */
-    public function isInstallable($pluginName)
-    {
-        $installedPlugin = $this->find()->where([
-            'name' => $pluginName,
-            'status' => true,
-        ])->first();
-
-        // 既にプラグインがインストール済み
-        if ($installedPlugin) {
-            throw new BcException('既にインストール済のプラグインです。');
-        }
-
-        $paths = App::path('plugins');
-        $existsPluginFolder = false;
-        $folder = $pluginName;
-        foreach($paths as $path) {
-            if (!is_dir($path . $folder)) {
-                $dasherize = Inflector::dasherize($folder);
-                if (!is_dir($path . $dasherize)) {
-                    continue;
-                }
-                $folder = $dasherize;
-            }
-            $existsPluginFolder = true;
-            $configPath = $path . $folder . DS . 'config.php';
-            if (file_exists($configPath)) {
-                $config = include $configPath;
-            }
-            break;
-        }
-
-        // プラグインのフォルダが存在しない
-        if (!$existsPluginFolder) {
-            throw new BcException('インストールしようとしているプラグインのフォルダが存在しません。');
-        }
-
-        // インストールしようとしているプラグイン名と、設定ファイル内のプラグイン名が違う
-        if (!empty($config['name']) && $pluginName !== $config['name']) {
-            throw new BcException('このプラグイン名のフォルダ名を' . $config['name'] . 'にしてください。');
-        }
-
-        return true;
-    }
 
     public function isDbInit($name)
     {
