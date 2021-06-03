@@ -132,4 +132,19 @@ class PluginsController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['plugin', 'message']);
     }
 
+    /**
+     * baserマーケットのプラグインデータを取得する
+     * @param PluginsServiceInterface $pluginManage
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function get_market_plugins(PluginsServiceInterface $plugins)
+    {
+        $this->set([
+            'plugins' => $plugins->getMarketPlugins()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['plugins']);
+    }
+
 }

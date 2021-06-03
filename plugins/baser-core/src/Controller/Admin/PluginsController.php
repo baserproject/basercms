@@ -296,36 +296,16 @@ class PluginsController extends BcAdminAppController
 
     /**
      * baserマーケットのプラグインデータを取得する
-     *
      * @return void
+     * @param PluginManageServiceInterface $pluginManage
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function get_market_plugins()
+    public function get_market_plugins(PluginManageServiceInterface $pluginManage)
     {
         $this->viewBuilder()->disableAutoLayout();
-        if (Configure::read('debug') > 0) {
-            Cache::delete('baserMarketPlugins');
-        }
-        if (!($baserPlugins = Cache::read('baserMarketPlugins', '_bc_env_'))) {
-            $Xml = new Xml();
-            try {
-                $client = new Client([
-                    'host' => ''
-                ]);
-                $response = $client->get(Configure::read('BcApp.marketPluginRss'));
-                if ($response->getStatusCode() !== 200) {
-                    return;
-                }
-                $baserPlugins = $Xml->build($response->getBody()->getContents());
-                $baserPlugins = $Xml->toArray($baserPlugins->channel);
-                $baserPlugins = $baserPlugins['channel']['item'];
-            } catch (Exception $e) {
-
-            }
-            Cache::write('baserMarketPlugins', $baserPlugins, '_bc_env_');
-        }
+        $baserPlugins = $pluginManage->getMarketPlugins();
         if ($baserPlugins) {
             $this->set('baserPlugins', $baserPlugins);
         }

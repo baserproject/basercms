@@ -15,6 +15,10 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Model\Table\PluginsTable;
+use Cake\Cache\Cache;
+use Cake\Core\Configure;
+use Cake\Http\Client;
+use Cake\Utility\Xml;
 use Exception;
 
 /**
@@ -86,6 +90,18 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
             $options = [];
         }
         parent::uninstall(urldecode($name), $options);
+    }
+
+    /**
+     * baserマーケットのプラグイン一覧を取得する
+     * @return array|mixed
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getMarketPlugins(): array
+    {
+        return parent::getMarketPlugins();
     }
 
 }

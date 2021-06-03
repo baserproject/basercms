@@ -12,7 +12,8 @@
 namespace BaserCore\Service;
 
 use BaserCore\Model\Table\PluginsTable;
-use Cake\Core\Exception\CakeException;
+use Cake\Cache\Cache;
+use Cake\Http\Client;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Core\Configure;
@@ -25,6 +26,7 @@ use Cake\Datasource\EntityInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Utility\Xml;
 use Exception;
 
 /**
@@ -254,6 +256,39 @@ class PluginsService implements PluginsServiceInterface
         $result = $this->Plugins->changePriority($id, $offset, $conditions);
         BcUtil::clearAllCache();
         return $result;
+    }
+
+    /**
+     * baserマーケットのプラグイン一覧を取得する
+     * @return array|mixed
+     */
+    public function getMarketPlugins(): array
+    {
+        if (Configure::read('debug') > 0) {
+            Cache::delete('baserMarketPlugins');
+        }
+        if (!($baserPlugins = Cache::read('baserMarketPlugins', '_bc_env_'))) {
+            $Xml = new Xml();
+            try {
+                $client = new Client([
+                    'host' => ''
+                ]);
+                $response = $client->get(Configure::read('BcApp.marketPluginRss'));
+                if ($response->getStatusCode() !== 200) {
+                    return [];
+                }
+                $baserPlugins = $Xml->build($response->getBody()->getContents());
+                $baserPlugins = $Xml->toArray($baserPlugins->channel);
+                $baserPlugins = $baserPlugins['channel']['item'];
+            } catch (Exception $e) {
+                return [];
+            }
+            Cache::write('baserMarketPlugins', $baserPlugins, '_bc_env_');
+        }
+        if ($baserPlugins) {
+            return $baserPlugins;
+        }
+        return [];
     }
 
 }

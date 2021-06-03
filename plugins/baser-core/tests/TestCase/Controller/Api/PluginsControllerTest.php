@@ -113,12 +113,26 @@ class PluginsControllerTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
+    /**
+     * test update_sort
+     */
     public function testUpdateSort()
     {
         $this->post('/baser/api/baser-core/plugins/update_sort/BcBlog.json?offset=1&token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('プラグイン「BcBlog」の並び替えを更新しました。', $result->message);
+    }
+
+    /**
+     * test get_market_plugins
+     */
+    public function testGetMarketPlugins()
+    {
+        $this->post('/baser/api/baser-core/plugins/get_market_plugins.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertIsArray($result->plugins);
     }
 
 }

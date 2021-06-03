@@ -72,4 +72,10 @@ interface PluginManageServiceInterface
      */
     public function changePriority(int $id, int $offset, array $conditions = []): bool;
 
+    /**
+     * baserマーケットのプラグイン一覧を取得する
+     * @return array|mixed
+     */
+    public function getMarketPlugins(): array;
+
 }
