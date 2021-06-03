@@ -111,7 +111,14 @@ class PluginsServiceTest extends BcTestCase
         $this->assertEquals('BaserCore', $plugin->name);
     }
 
-
+    /**
+     * test getByName
+     */
+    public function testGetByName()
+    {
+        $this->assertEquals('BcBlog', $this->Plugins->getByName('BcBlog')->name);
+        $this->assertNull($this->Plugins->getByName('Test')->name);
+    }
 
 
 }
