@@ -110,4 +110,26 @@ class PluginsController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['plugin', 'message']);
     }
 
+    /**
+     * 並び替えを更新する
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function update_sort(PluginsServiceInterface $plugins, $name)
+    {
+        $this->request->allowMethod(['post']);
+        $plugin = $plugins->getByName($name);
+        if (!$plugins->changePriority($plugin->id, $this->request->getQuery('offset'))) {
+            $message = __d('baser', '一度リロードしてから再実行してみてください。');
+        } else {
+            $message = sprintf(__d('baser', 'プラグイン「%s」の並び替えを更新しました。'), $name);
+        }
+        $this->set([
+            'message' => $message,
+            'plugin' => $plugin
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['plugin', 'message']);
+    }
+
 }

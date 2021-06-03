@@ -50,6 +50,19 @@ class PluginsService implements PluginsServiceInterface
     }
 
     /**
+     * プラグインを取得する
+     * @param int $id
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function get($id): EntityInterface
+    {
+        return $this->Plugins->get($id);
+    }
+
+    /**
      * ユーザー一覧を取得
      * @param string $sortMode
      * @return array $plugins
@@ -224,6 +237,23 @@ class PluginsService implements PluginsServiceInterface
         if (!$plugin->uninstall($options)) {
             throw new Exception(__d('baser', 'プラグインの削除に失敗しました。'));
         }
+    }
+
+    /**
+     * 優先度を変更する
+     * @param int $id
+     * @param int $offset
+     * @param array $conditions
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function changePriority(int $id, int $offset, array $conditions = []): bool
+    {
+        $result = $this->Plugins->changePriority($id, $offset, $conditions);
+        BcUtil::clearAllCache();
+        return $result;
     }
 
 }

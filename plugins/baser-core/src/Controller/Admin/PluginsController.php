@@ -338,7 +338,7 @@ class PluginsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function update_sort()
+    public function update_sort(PluginManageServiceInterface $pluginManage)
     {
         $this->disableAutoRender();
         if (!$this->request->getData()) {
@@ -346,7 +346,7 @@ class PluginsController extends BcAdminAppController
             return;
         }
 
-        if (!$this->Plugins->changePriority($this->request->getData('Sort.id'), $this->request->getData('Sort.offset'))) {
+        if (!$pluginManage->changePriority($this->request->getData('Sort.id'), $this->request->getData('Sort.offset'))) {
             $this->ajaxError(500, __d('baser', '一度リロードしてから再実行してみてください。'));
             return;
         }
