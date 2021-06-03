@@ -15,6 +15,7 @@ use BaserCore\Service\PluginManageServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Table\PluginsTable;
+use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
@@ -425,37 +426,22 @@ class PluginsController extends BcAdminAppController
      * @checked
      * @unitTest
      */
-    public function reset_db()
+    public function reset_db(PluginsServiceInterface $plugins)
     {
         if (!$this->request->is('put')) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
             return;
         }
-        $plugin = $this->Plugins->find()
-            ->where(['name' => $this->request->getData('name')])
-            ->first();
-
-        BcUtil::includePluginClass($plugin->name);
-        $plugins = Plugin::getCollection();
-        $pluginClass = $plugins->create($plugin->name);
-        if (!method_exists($pluginClass, 'rollbackDb')) {
-            $this->BcMessage->setError(__d('baser', 'プラグインに Plugin クラスが存在しません。手動で削除してください。'));
-            return;
+        $plugin = $plugins->getByName($this->request->getData('name'));
+        try {
+            $plugins->resetDb($this->request->getData('name'));
+            // $this->BcAuth->relogin();
+            $this->BcMessage->setSuccess(
+                sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $plugin->title)
+            );
+        } catch(\Exception $e) {
+            $this->BcMessage->setError(__d('baser', 'リセット処理中にエラーが発生しました。') . $e->getMessage());
         }
-
-        $plugin->db_init = false;
-        $data = $this->request->getData();
-        unset($data['name'], $data['title'], $data['status'], $data['version'], $data['permission']);
-        if (!$pluginClass->rollbackDb($data) || !$this->Plugins->save($plugin)) {
-            $this->BcMessage->setError(__d('baser', '処理中にエラーが発生しました。プラグインの開発者に確認してください。'));
-            return;
-        }
-        BcUtil::clearAllCache();
-        // TODO
-        // $this->BcAuth->relogin();
-        $this->BcMessage->setSuccess(
-            sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $plugin->title)
-        );
         $this->redirect(['action' => 'install', $plugin->name]);
     }
 

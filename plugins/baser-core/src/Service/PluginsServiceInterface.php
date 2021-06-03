@@ -12,6 +12,7 @@
 namespace BaserCore\Service;
 
 use Cake\Datasource\EntityInterface;
+use Exception;
 
 /**
  * Interface PluginsServiceInterface
@@ -38,5 +39,13 @@ interface PluginsServiceInterface
      * @return array|EntityInterface|null
      */
     public function getByName(string $name);
+
+    /**
+     * データベースをリセットする
+     * @param string $name
+     * @param array $options
+     * @throws Exception
+     */
+    public function resetDb(string $name, $options = []):void;
 
 }

@@ -117,8 +117,24 @@ class PluginsServiceTest extends BcTestCase
     public function testGetByName()
     {
         $this->assertEquals('BcBlog', $this->Plugins->getByName('BcBlog')->name);
-        $this->assertNull($this->Plugins->getByName('Test')->name);
+        $this->assertNull($this->Plugins->getByName('Test'));
     }
 
+    /**
+     * test resetDb
+     * @throws \Exception
+     */
+    public function testResetDb()
+    {
+        $this->markTestIncomplete('テストが未実装です');
+        // TODO インストールが実装できしだい
+        $this->Plugins->install('BcBlog');
+        $blogPosts = $this->getTableLocator()->get('BcBlog.BlogPosts');
+        $blogPosts->save($blogPosts->newEntity([
+            'name' => 'test'
+        ]));
+        $this->Plugins->resetDb('BcBlog', ['connection' => 'test']);
+        $this->assertEquals(0, $blogPosts->find()->where(['name' => 'test'])->count());
+    }
 
 }

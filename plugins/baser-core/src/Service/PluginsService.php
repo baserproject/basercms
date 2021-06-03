@@ -12,6 +12,7 @@
 namespace BaserCore\Service;
 
 use BaserCore\Model\Table\PluginsTable;
+use Cake\Core\Exception\CakeException;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Core\Configure;
@@ -19,10 +20,13 @@ use BaserCore\Utility\BcUtil;
 use Cake\Core\App;
 use Cake\Filesystem\Folder;
 use BaserCore\Model\Entity\Plugin;
+use Cake\Core\Plugin as CakePlugin;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Exception;
+
 /**
  * Class PluginsService
  * @package BaserCore\Service
@@ -164,6 +168,37 @@ class PluginsService implements PluginsServiceInterface
     public function getByName(string $name)
     {
         return $this->Plugins->find()->where(['name' => $name])->first();
+    }
+
+    /**
+     * データベースをリセットする
+     *
+     * @param string $name
+     * @param array $options
+     * @throws Exception
+     */
+    public function resetDb(string $name, $options = []):void
+    {
+        $options = array_merge([
+            'connection' => 'default'
+        ], $options);
+
+        $plugin = $this->Plugins->find()
+            ->where(['name' => $name])
+            ->first();
+
+        BcUtil::includePluginClass($plugin->name);
+        $plugins = CakePlugin::getCollection();
+        $pluginClass = $plugins->create($plugin->name);
+        if (!method_exists($pluginClass, 'rollbackDb')) {
+            throw new Exception(__d('baser', 'プラグインに Plugin クラスが存在しません。手動で削除してください。'));
+        }
+
+        $plugin->db_init = false;
+        if (!$pluginClass->rollbackDb($options) || !$this->Plugins->save($plugin)) {
+            throw new Exception(__d('baser', '処理中にエラーが発生しました。プラグインの開発者に確認してください。'));
+        }
+        BcUtil::clearAllCache();
     }
 
 }
