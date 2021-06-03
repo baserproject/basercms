@@ -434,7 +434,7 @@ class PluginsController extends BcAdminAppController
         }
         $plugin = $plugins->getByName($this->request->getData('name'));
         try {
-            $plugins->resetDb($this->request->getData('name'));
+            $plugins->resetDb($this->request->getData('name'), $this->request->getData());
             // $this->BcAuth->relogin();
             $this->BcMessage->setSuccess(
                 sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $plugin->title)

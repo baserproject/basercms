@@ -93,4 +93,15 @@ class PluginsControllerTest extends BcTestCase
         $this->assertEquals('プラグイン「BcBlog」を無効にしました。', $result->message);
     }
 
+    /**
+     * test reset_db
+     */
+    public function testRestDb()
+    {
+        $this->put('/baser/api/baser-core/plugins/reset_db/BcBlog.json?token=' . $this->accessToken, ['connection' => 'test']);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('ブログ プラグインのデータを初期化しました。', $result->message);
+    }
+
 }

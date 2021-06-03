@@ -62,4 +62,26 @@ class PluginsController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['plugin', 'message']);
     }
 
+    /**
+     * プラグインのデータベースを初期化する
+     * @param PluginsServiceInterface $plugins
+     * @param $name
+     */
+    public function reset_db(PluginsServiceInterface $plugins, $name)
+    {
+        $this->request->allowMethod(['put']);
+        $plugin = $plugins->getByName($name);
+        try {
+            $plugins->resetDb($name, $this->request->getData());
+            $message = sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $plugin->title);
+        } catch(\Exception $e) {
+            $message = __d('baser', 'リセット処理中にエラーが発生しました。') . $e->getMessage();
+        }
+        $this->set([
+            'message' => $message,
+            'plugin' => $plugin
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['plugin', 'message']);
+    }
+
 }
