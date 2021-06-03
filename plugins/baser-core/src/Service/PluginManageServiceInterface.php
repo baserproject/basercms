@@ -11,6 +11,9 @@
 
 namespace BaserCore\Service;
 
+use Cake\Datasource\EntityInterface;
+use Exception;
+
 /**
  * Interface PluginManageServiceInterface
  * @package BaserCore\Service
@@ -29,5 +32,27 @@ interface PluginManageServiceInterface
      * @param string $name
      */
     public function detach(string $name): bool;
+
+    /**
+     * プラグイン名からプラグインエンティティを取得
+     * @param string $name
+     * @return array|EntityInterface|null
+     */
+    public function getByName(string $name);
+
+    /**
+     * データベースをリセットする
+     * @param string $name
+     * @param array $options
+     * @throws Exception
+     */
+    public function resetDb(string $name, $options = []):void;
+
+    /**
+     * プラグインを削除する
+     * @param string $name
+     * @param array $options
+     */
+    public function uninstall(string $name, array $options = []): void;
 
 }

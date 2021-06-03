@@ -104,4 +104,13 @@ class PluginsControllerTest extends BcTestCase
         $this->assertEquals('ブログ プラグインのデータを初期化しました。', $result->message);
     }
 
+    /**
+     * test uninstall
+     */
+    public function testUninstall()
+    {
+        // TODO インストールの処理とまとめる予定
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
 }

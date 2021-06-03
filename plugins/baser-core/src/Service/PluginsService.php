@@ -182,7 +182,7 @@ class PluginsService implements PluginsServiceInterface
         $options = array_merge([
             'connection' => 'default'
         ], $options);
-
+        unset($options['name']);
         $plugin = $this->Plugins->find()
             ->where(['name' => $name])
             ->first();
@@ -199,6 +199,31 @@ class PluginsService implements PluginsServiceInterface
             throw new Exception(__d('baser', '処理中にエラーが発生しました。プラグインの開発者に確認してください。'));
         }
         BcUtil::clearAllCache();
+    }
+
+    /**
+     * プラグインを削除する
+     * @param string $name
+     * @param array $options
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function uninstall(string $name, array $options = []): void
+    {
+        $options = array_merge([
+            'connection' => 'default'
+        ], $options);
+        $name = urldecode($name);
+        BcUtil::includePluginClass($name);
+        $plugins = CakePlugin::getCollection();
+        $plugin = $plugins->create($name);
+        if (!method_exists($plugin, 'uninstall')) {
+            throw new Exception(__d('baser', 'プラグインに Plugin クラスが存在しません。手動で削除してください。'));
+        }
+        if (!$plugin->uninstall($options)) {
+            throw new Exception(__d('baser', 'プラグインの削除に失敗しました。'));
+        }
     }
 
 }

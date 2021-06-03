@@ -46,6 +46,13 @@ interface PluginsServiceInterface
      * @param array $options
      * @throws Exception
      */
-    public function resetDb(string $name, $options = []):void;
+    public function resetDb(string $name, $options = []): void;
+
+    /**
+     * プラグインを削除する
+     * @param string $name
+     * @param array $options
+     */
+    public function uninstall(string $name, array $options = []): void;
 
 }

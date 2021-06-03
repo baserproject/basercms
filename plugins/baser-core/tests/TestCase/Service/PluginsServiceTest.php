@@ -137,4 +137,10 @@ class PluginsServiceTest extends BcTestCase
         $this->assertEquals(0, $blogPosts->find()->where(['name' => 'test'])->count());
     }
 
+    public function testUninstall()
+    {
+        // TODO インストールの処理とまとめる予定
+        $this->markTestIncomplete('テストが未実装です');
+    }
+
 }

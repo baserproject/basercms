@@ -84,4 +84,23 @@ class PluginsController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['plugin', 'message']);
     }
 
+    public function uninstall(PluginsServiceInterface $plugins, $name)
+    {
+        BcUtil::includePluginClass($name);
+        $plugins = Plugin::getCollection();
+        $plugin = $plugins->create($name);
+        if (!method_exists($plugin, 'uninstall')) {
+            $this->BcMessage->setError(__d('baser', 'プラグインに Plugin クラスが存在しません。手動で削除してください。'));
+            return;
+        }
+
+        try {
+            $pluginManage->uninstall($name, $this->request->getData());
+            $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を削除しました。'), $name));
+        } catch (\Exception $e) {
+            $this->BcMessage->setError(__d('baser', 'プラグインの削除に失敗しました。' . $e->getMessage()));
+        }
+        return $this->redirect(['action' => 'index']);
+    }
+
 }

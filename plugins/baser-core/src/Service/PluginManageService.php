@@ -15,6 +15,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Model\Table\PluginsTable;
+use Exception;
 
 /**
  * Class PluginManageService
@@ -47,6 +48,44 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
     public function detach(string $name): bool
     {
         return parent::detach(urldecode($name));
+    }
+
+    /**
+     * データベースをリセットする
+     *
+     * @param string $name
+     * @param array $options
+     * @throws Exception
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function resetDb(string $name, $options = []):void
+    {
+        if(isset($options['connection'])) {
+            $options = ['connection' => $options['connection']];
+        } else {
+            $options = [];
+        }
+        parent::resetDb($name, $options);
+    }
+
+    /**
+     * プラグインを削除する
+     * @param string $name
+     * @param array $options
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function uninstall(string $name, array $options = []): void
+    {
+        if(isset($options['connection'])) {
+            $options = ['connection' => $options['connection']];
+        } else {
+            $options = [];
+        }
+        parent::uninstall(urldecode($name), $options);
     }
 
 }

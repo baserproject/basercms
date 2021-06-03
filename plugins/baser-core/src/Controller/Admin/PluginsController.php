@@ -175,26 +175,17 @@ class PluginsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function uninstall($name)
+    public function uninstall(PluginManageServiceInterface $pluginManage, $name)
     {
-        $name = urldecode($name);
         if (!$this->request->is('post')) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
             return $this->redirect(['action' => 'index']);
         }
-
-        BcUtil::includePluginClass($name);
-        $plugins = Plugin::getCollection();
-        $plugin = $plugins->create($name);
-        if (!method_exists($plugin, 'uninstall')) {
-            $this->BcMessage->setError(__d('baser', 'プラグインに Plugin クラスが存在しません。手動で削除してください。'));
-            return;
-        }
-
-        if ($plugin->uninstall($this->request->getData())) {
+        try {
+            $pluginManage->uninstall($name, $this->request->getData());
             $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を削除しました。'), $name));
-        } else {
-            $this->BcMessage->setError(__d('baser', 'プラグインの削除に失敗しました。'));
+        } catch (\Exception $e) {
+            $this->BcMessage->setError(__d('baser', 'プラグインの削除に失敗しました。' . $e->getMessage()));
         }
         return $this->redirect(['action' => 'index']);
     }
@@ -426,7 +417,7 @@ class PluginsController extends BcAdminAppController
      * @checked
      * @unitTest
      */
-    public function reset_db(PluginsServiceInterface $plugins)
+    public function reset_db(PluginManageServiceInterface $plugins)
     {
         if (!$this->request->is('put')) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
