@@ -11,24 +11,85 @@
 
 namespace BaserCore\Service;
 
+use Cake\Datasource\EntityInterface;
+use Exception;
+
 /**
  * Interface PluginsServiceInterface
  * @package BaserCore\Service
  */
 interface PluginsServiceInterface
 {
+
+    /**
+     * プラグインを取得する
+     * @param int $id
+     * @return EntityInterface
+     */
+    public function get($id): EntityInterface;
+
     /**
      * プラグイン一覧を取得
      * @param string $sortMode
      * @return array $plugins
      */
     public function getIndex(string $sortMode): array;
-        /**
-     * プラグイン一覧を取得
-     * @param string $name プラグイン名
-     * @return EntityInterface
-     */
-    public function install($name, $data = []);
 
-    public function getPluginConfig($name);
+    /**
+     * プラグインをインストールする
+     * @param string $name プラグイン名
+     * @param string $data test connection指定用
+     * @return bool|null
+     */
+    public function install($name, $data = []): ?bool;
+
+        /**
+     * プラグイン情報を取得する
+     * @param string $name プラグイン名
+     * @return EntityInterface|Plugin
+     */
+    public function getPluginConfig($name): EntityInterface;
+
+    /**
+     * プラグインを無効にする
+     * @param string $name
+     */
+    public function detach(string $name): bool;
+
+    /**
+     * プラグイン名からプラグインエンティティを取得
+     * @param string $name
+     * @return array|EntityInterface|null
+     */
+    public function getByName(string $name);
+
+    /**
+     * データベースをリセットする
+     * @param string $name
+     * @param array $options
+     * @throws Exception
+     */
+    public function resetDb(string $name, $options = []): void;
+
+    /**
+     * プラグインを削除する
+     * @param string $name
+     * @param array $options
+     */
+    public function uninstall(string $name, array $options = []): void;
+
+    /**
+     * 優先度を変更する
+     * @param int $id
+     * @param int $offset
+     * @param array $conditions
+     * @return bool
+     */
+    public function changePriority(int $id, int $offset, array $conditions = []): bool;
+
+    /**
+     * baserマーケットのプラグイン一覧を取得する
+     * @return array|mixed
+     */
+    public function getMarketPlugins(): array;
 }

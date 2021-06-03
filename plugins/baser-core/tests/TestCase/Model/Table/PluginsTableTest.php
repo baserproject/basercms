@@ -78,10 +78,10 @@ class PluginsTableTest extends BcTestCase
         // test Install
         $this->Plugins->install('BcTest');
         $plugin = $this->Plugins->find()->where(['name' => 'BcTest'])->first();
-        $this->assertEquals(4, $plugin->priority);
+        $this->assertEquals(3, $plugin->priority);
         // test Uninstall
         $this->Plugins->uninstall('BcTest');
-        $this->assertEquals(3, $this->Plugins->find()->count());
+        $this->assertEquals(2, $this->Plugins->find()->count());
     }
 
     /**
@@ -100,10 +100,10 @@ class PluginsTableTest extends BcTestCase
      */
     public function testChangePriority()
     {
-        $this->Plugins->changePriority(1, 1);
+        $this->Plugins->changePriority(1, 2);
         $this->assertEquals(2, $this->Plugins->get(1)->priority);
-        $this->Plugins->changePriority(3, -1);
-        $this->assertEquals(2, $this->Plugins->get(3)->priority);
+        $this->Plugins->changePriority(2, -1);
+        $this->assertEquals(1, $this->Plugins->get(2)->priority);
     }
 
 }

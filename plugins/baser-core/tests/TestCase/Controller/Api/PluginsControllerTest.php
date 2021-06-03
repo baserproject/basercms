@@ -13,6 +13,8 @@ namespace BaserCore\Test\TestCase\Controller\Api;
 
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
+use Cake\Filesystem\Folder;
+use Cake\Core\App;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -70,6 +72,17 @@ class PluginsControllerTest extends BcTestCase
     }
 
     /**
+     * test view
+     */
+    public function testView()
+    {
+        $this->get('/baser/api/baser-core/plugins/view/1.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('BcBlog', $result->plugin->name);
+    }
+
+    /**
      * Test index method
      *
      * @return void
@@ -86,20 +99,85 @@ class PluginsControllerTest extends BcTestCase
      * Test install
      *
      * @return void
+     * @dataProvider installDataProvider
      */
-    public function testInstall()
+    public function testInstall($pluginName, $response, $message)
     {
-        // $this->enableSecurityToken();
-        // $this->enableCsrfToken();
-        $this->post('/baser/api/baser-core/plugins/install/BcSample.json?token=' . $this->accessToken, ['connection' => 'test']);
-        $this->assertResponseOk();
+        // フォルダはあるがインストールできない場合
+        $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
+        $folder = new Folder($pluginPath);
+        $folder->create($pluginPath, 0777);
+        $this->post('/baser/api/baser-core/plugins/install/' . $pluginName .'.json?token=' . $this->accessToken, ['connection' => 'test']);
+        if ($response) {
+            $this->assertResponseSuccess();
+        } else {
+            $this->assertResponseFailure();
+        }
+
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals("プラグイン「BcSample」をインストールしました。", $result->message);
+        $this->assertEquals($message, $result->message);
+        $folder->delete($pluginPath);
+    }
+    public function installDataProvider()
+    {
+        return [
+            ["BcUploader",true, "プラグイン「BcUploader」をインストールしました。"],
+            ["UnKnown",false, "Plugin UnKnown could not be found."],
+            ["BcTest",true, "プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。"],
+            // ["BcTest2",false, "プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。"],
+        ];
     }
 
+    /**
+     * test detach
+     */
+    public function testDetach()
+    {
+        $this->post('/baser/api/baser-core/plugins/detach/BcBlog.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('プラグイン「BcBlog」を無効にしました。', $result->message);
+    }
 
+    /**
+     * test reset_db
+     */
+    public function testRestDb()
+    {
+        $this->put('/baser/api/baser-core/plugins/reset_db/BcBlog.json?token=' . $this->accessToken, ['connection' => 'test']);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('ブログ プラグインのデータを初期化しました。', $result->message);
+    }
 
+    /**
+     * test uninstall
+     */
+    public function testUninstall()
+    {
+        // TODO インストールの処理とまとめる予定
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+    /**
+     * test update_sort
+     */
+    public function testUpdateSort()
+    {
+        $this->post('/baser/api/baser-core/plugins/update_sort/BcBlog.json?offset=1&token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('プラグイン「BcBlog」の並び替えを更新しました。', $result->message);
+    }
 
-
+    /**
+     * test get_market_plugins
+     */
+    public function testGetMarketPlugins()
+    {
+        $this->post('/baser/api/baser-core/plugins/get_market_plugins.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertIsArray($result->plugins);
+    }
 
 }

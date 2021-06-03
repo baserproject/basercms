@@ -15,6 +15,7 @@ use BaserCore\Service\PluginManageServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Table\PluginsTable;
+use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
@@ -94,28 +95,16 @@ class PluginsController extends BcAdminAppController
     public function install(PluginManageServiceInterface $PluginManage, $name)
     {
         $name = urldecode($name);
-        $installMessage = '';
-
-        try {
-            if ($PluginManage->isInstallable($name)) {
-                $isInstallable = true;
-            }
-        } catch (BcException $e) {
-            $isInstallable = false;
-            $installMessage = $e->getMessage();
-        }
+        
+        $installStatus = $PluginManage->installStatus($name);
 
         $pluginEntity = $PluginManage->getPluginConfig($name);
 
-        $this->set('installMessage', $installMessage);
-        $this->set('isInstallable', $isInstallable);
-        $this->set('dbInit', $pluginEntity->db_init);
+        $this->set('installStatus', $installStatus);
         $this->set('plugin', $pluginEntity);
-        $this->setTitle(__d('baser', '新規プラグイン登録'));
-        $this->setHelp('plugins_install');
 
 
-        if (!$isInstallable || !$this->request->is(['put', 'post'])) {
+        if (!$installStatus['status'] || !$this->request->is(['put', 'post'])) {
             return;
         } else {
             $data = $this->request->getData();
@@ -133,7 +122,6 @@ class PluginsController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser', 'プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。'));
             }
         }
-
     }
 
     /**
@@ -144,15 +132,14 @@ class PluginsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function detach($name)
+    public function detach(PluginManageServiceInterface $pluginManage, $name)
     {
-        $name = urldecode($name);
         if (!$this->request->is('post')) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
             return $this->redirect(['action' => 'index']);
         }
-        if ($this->Plugins->detach($name)) {
-            $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を無効にしました。'), $name));
+        if ($pluginManage->detach($name)) {
+            $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を無効にしました。'), urldecode($name)));
         } else {
             $this->BcMessage->setError(__d('baser', 'プラグインの無効化に失敗しました。'));
         }
@@ -171,26 +158,17 @@ class PluginsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function uninstall($name)
+    public function uninstall(PluginManageServiceInterface $pluginManage, $name)
     {
-        $name = urldecode($name);
         if (!$this->request->is('post')) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
             return $this->redirect(['action' => 'index']);
         }
-
-        BcUtil::includePluginClass($name);
-        $plugins = Plugin::getCollection();
-        $plugin = $plugins->create($name);
-        if (!method_exists($plugin, 'uninstall')) {
-            $this->BcMessage->setError(__d('baser', 'プラグインに Plugin クラスが存在しません。手動で削除してください。'));
-            return;
-        }
-
-        if ($plugin->uninstall($this->request->getData())) {
+        try {
+            $pluginManage->uninstall($name, $this->request->getData());
             $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を削除しました。'), $name));
-        } else {
-            $this->BcMessage->setError(__d('baser', 'プラグインの削除に失敗しました。'));
+        } catch (\Exception $e) {
+            $this->BcMessage->setError(__d('baser', 'プラグインの削除に失敗しました。' . $e->getMessage()));
         }
         return $this->redirect(['action' => 'index']);
     }
@@ -300,36 +278,16 @@ class PluginsController extends BcAdminAppController
 
     /**
      * baserマーケットのプラグインデータを取得する
-     *
      * @return void
+     * @param PluginManageServiceInterface $pluginManage
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function get_market_plugins()
+    public function get_market_plugins(PluginManageServiceInterface $pluginManage)
     {
         $this->viewBuilder()->disableAutoLayout();
-        if (Configure::read('debug') > 0) {
-            Cache::delete('baserMarketPlugins');
-        }
-        if (!($baserPlugins = Cache::read('baserMarketPlugins', '_bc_env_'))) {
-            $Xml = new Xml();
-            try {
-                $client = new Client([
-                    'host' => ''
-                ]);
-                $response = $client->get(Configure::read('BcApp.marketPluginRss'));
-                if ($response->getStatusCode() !== 200) {
-                    return;
-                }
-                $baserPlugins = $Xml->build($response->getBody()->getContents());
-                $baserPlugins = $Xml->toArray($baserPlugins->channel);
-                $baserPlugins = $baserPlugins['channel']['item'];
-            } catch (Exception $e) {
-
-            }
-            Cache::write('baserMarketPlugins', $baserPlugins, '_bc_env_');
-        }
+        $baserPlugins = $pluginManage->getMarketPlugins();
         if ($baserPlugins) {
             $this->set('baserPlugins', $baserPlugins);
         }
@@ -342,7 +300,7 @@ class PluginsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function update_sort()
+    public function update_sort(PluginManageServiceInterface $pluginManage)
     {
         $this->disableAutoRender();
         if (!$this->request->getData()) {
@@ -350,7 +308,7 @@ class PluginsController extends BcAdminAppController
             return;
         }
 
-        if (!$this->Plugins->changePriority($this->request->getData('Sort.id'), $this->request->getData('Sort.offset'))) {
+        if (!$pluginManage->changePriority($this->request->getData('Sort.id'), $this->request->getData('Sort.offset'))) {
             $this->ajaxError(500, __d('baser', '一度リロードしてから再実行してみてください。'));
             return;
         }
@@ -421,37 +379,22 @@ class PluginsController extends BcAdminAppController
      * @checked
      * @unitTest
      */
-    public function reset_db()
+    public function reset_db(PluginManageServiceInterface $plugins)
     {
         if (!$this->request->is('put')) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
             return;
         }
-        $plugin = $this->Plugins->find()
-            ->where(['name' => $this->request->getData('name')])
-            ->first();
-
-        BcUtil::includePluginClass($plugin->name);
-        $plugins = Plugin::getCollection();
-        $pluginClass = $plugins->create($plugin->name);
-        if (!method_exists($pluginClass, 'rollbackDb')) {
-            $this->BcMessage->setError(__d('baser', 'プラグインに Plugin クラスが存在しません。手動で削除してください。'));
-            return;
+        $plugin = $plugins->getByName($this->request->getData('name'));
+        try {
+            $plugins->resetDb($this->request->getData('name'), $this->request->getData());
+            // $this->BcAuth->relogin();
+            $this->BcMessage->setSuccess(
+                sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $plugin->title)
+            );
+        } catch(\Exception $e) {
+            $this->BcMessage->setError(__d('baser', 'リセット処理中にエラーが発生しました。') . $e->getMessage());
         }
-
-        $plugin->db_init = false;
-        $data = $this->request->getData();
-        unset($data['name'], $data['title'], $data['status'], $data['version'], $data['permission']);
-        if (!$pluginClass->rollbackDb($data) || !$this->Plugins->save($plugin)) {
-            $this->BcMessage->setError(__d('baser', '処理中にエラーが発生しました。プラグインの開発者に確認してください。'));
-            return;
-        }
-        BcUtil::clearAllCache();
-        // TODO
-        // $this->BcAuth->relogin();
-        $this->BcMessage->setSuccess(
-            sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $plugin->title)
-        );
         $this->redirect(['action' => 'install', $plugin->name]);
     }
 

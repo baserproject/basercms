@@ -215,7 +215,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetEnablePlugins(): void
     {
-        $expects = ['BcBlog', 'BcMail', 'BcUploader'];
+        $expects = ['BcBlog', 'BcMail'];
         $result = BcUtil::getEnablePlugins();
         foreach($result as $key => $value) {
             $result[$key] = $value->name;

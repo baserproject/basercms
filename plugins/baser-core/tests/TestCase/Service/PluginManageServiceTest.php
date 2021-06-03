@@ -19,7 +19,7 @@ use Cake\Core\App;
 /**
  * Class PluginManageServiceTest
  * @package BaserCore\Test\TestCase\Service
- * @property PluginManageService $Plugins
+ * @property PluginManageService $PluginManage
  */
 class PluginManageServiceTest extends BcTestCase
 {
@@ -75,7 +75,7 @@ class PluginManageServiceTest extends BcTestCase
             // 普通の場合
             ["0", "4"],
             // ソートモードの場合
-            ["1", "3"],
+            ["1", "2"],
         ];
     }
 
@@ -89,19 +89,52 @@ class PluginManageServiceTest extends BcTestCase
     }
 
     /**
-     * testIsInstallable
+     * test install
      */
-    public function testIsInstallable()
+    public function testInstall()
     {
-        $this->expectExceptionMessage('既にインストール済のプラグインです。');
-        $this->PluginManage->isInstallable('BcBlog');
-        $this->expectExceptionMessage('インストールしようとしているプラグインのフォルダが存在しません。');
-        $this->PluginManage->isInstallable('BcTest');
+        // 正常な場合
+        $this->assertTrue($this->PluginManage->install('BcUploader', ['connection' => 'test']));
+        // プラグインがない場合
+        try {
+            $this->PluginManage->install('UnKnown', ['connection' => 'test']);
+        } catch (\Exception $e) {
+            $this->assertEquals("Plugin UnKnown could not be found.", $e->getMessage());
+        };
+        // フォルダはあるがインストールできない場合
         $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
         $folder = new Folder($pluginPath);
         $folder->create($pluginPath, 0777);
-        $this->assertEquals(true, $this->Plugins->isInstallable('BcTest'));
+        $this->assertNull($this->PluginManage->install('BcTest', ['connection' => 'test']));
         $folder->delete($pluginPath);
+    }
+
+
+    /**
+     * test installStatus
+     */
+    public function testInstallStatus()
+    {
+        $this->assertEquals('既にインストール済のプラグインです。', $this->PluginManage->installStatus('BcBlog')['message']);
+        $this->assertEquals('インストールしようとしているプラグインのフォルダが存在しません。', $this->PluginManage->installStatus('BcTest')['message']);
+        $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
+        $folder = new Folder($pluginPath);
+        $folder->create($pluginPath, 0777);
+        $this->assertEquals(true, $this->PluginManage->installStatus('BcTest')['status']);
+        $folder->delete($pluginPath);
+    }
+
+    /**
+     * test detach
+     */
+    public function testDetach()
+    {
+        $plugins = $this->getTableLocator()->get('BaserCore.Plugins');
+        $plugins->save($plugins->newEntity([
+            'name' => 'あいうえお',
+            'status' => true
+        ]));
+        $this->assertEquals(true, $this->PluginManage->detach(urlencode('あいうえお')));
     }
 
 }

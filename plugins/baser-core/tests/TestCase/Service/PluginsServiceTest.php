@@ -98,10 +98,29 @@ class PluginsServiceTest extends BcTestCase
             // 普通の場合 | DBに登録されてるプラグインとプラグインファイル全て
             ["0", 'BcTest', "5"],
             // ソートモードの場合 | DBに登録されてるプラグインのみ
-            ["1", 'BcBlog', "3"],
+            ["1", 'BcBlog', "2"],
         ];
     }
-
+    /**
+     * test install
+     */
+    public function testInstall()
+    {
+        // 正常な場合
+        $this->assertTrue($this->Plugins->install('BcUploader', ['connection' => 'test']));
+        // プラグインがない場合
+        try {
+            $this->Plugins->install('UnKnown', ['connection' => 'test']);
+        } catch (\Exception $e) {
+            $this->assertEquals("Plugin UnKnown could not be found.", $e->getMessage());
+        };
+        // フォルダはあるがインストールできない場合
+        $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
+        $folder = new Folder($pluginPath);
+        $folder->create($pluginPath, 0777);
+        $this->assertNull($this->Plugins->install('BcTest', ['connection' => 'test']));
+        $folder->delete($pluginPath);
+    }
     /**
      * testGetPluginConfig
      */
@@ -111,7 +130,47 @@ class PluginsServiceTest extends BcTestCase
         $this->assertEquals('BaserCore', $plugin->name);
     }
 
+    /**
+     * test getByName
+     */
+    public function testGetByName()
+    {
+        $this->assertEquals('BcBlog', $this->Plugins->getByName('BcBlog')->name);
+        $this->assertNull($this->Plugins->getByName('Test'));
+    }
+    /**
+     * test resetDb
+     * @throws \Exception
+     */
+    public function testResetDb()
+    {
+        $this->markTestIncomplete('テストが未実装です');
+        // TODO インストールが実装できしだい
+        $this->Plugins->install('BcBlog');
+        $blogPosts = $this->getTableLocator()->get('BcBlog.BlogPosts');
+        $blogPosts->save($blogPosts->newEntity([
+            'name' => 'test'
+        ]));
+        $this->Plugins->resetDb('BcBlog', ['connection' => 'test']);
+        $this->assertEquals(0, $blogPosts->find()->where(['name' => 'test'])->count());
+    }
 
+    /**
+     * test uninstall
+     */
+    public function testUninstall()
+    {
+        // TODO インストールの処理とまとめる予定
+        $this->markTestIncomplete('テストが未実装です');
+    }
 
+    /**
+     * test get
+     */
+    public function testGet()
+    {
+        $plugin = $this->Plugins->get(1);
+        $this->assertEquals('BcBlog', $plugin->name);
+    }
 
 }
