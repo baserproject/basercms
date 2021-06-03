@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Model\Table\PluginsTable;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Core\Configure;
@@ -142,4 +143,17 @@ class PluginsService implements PluginsServiceInterface
         }
         return $pluginRecord;
     }
+
+    /**
+     * プラグインを無効にする
+     * @param string $name
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function detach(string $name):bool
+    {
+        return $this->Plugins->detach($name);
+    }
+
 }

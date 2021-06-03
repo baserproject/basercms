@@ -23,4 +23,11 @@ interface PluginsServiceInterface
      * @return array $plugins
      */
     public function getIndex(string $sortMode): array;
+
+    /**
+     * プラグインを無効にする
+     * @param string $name
+     */
+    public function detach(string $name): bool;
+
 }

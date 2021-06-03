@@ -19,7 +19,7 @@ use Cake\Core\App;
 /**
  * Class PluginManageServiceTest
  * @package BaserCore\Test\TestCase\Service
- * @property PluginManageService $Plugins
+ * @property PluginManageService $PluginManage
  */
 class PluginManageServiceTest extends BcTestCase
 {
@@ -77,6 +77,19 @@ class PluginManageServiceTest extends BcTestCase
             // ソートモードの場合
             ["1", "3"],
         ];
+    }
+
+    /**
+     * test detach
+     */
+    public function testDetach()
+    {
+        $plugins = $this->getTableLocator()->get('BaserCore.Plugins');
+        $plugins->save($plugins->newEntity([
+            'name' => 'あいうえお',
+            'status' => true
+        ]));
+        $this->assertEquals(true, $this->PluginManage->detach(urlencode('あいうえお')));
     }
 
 }

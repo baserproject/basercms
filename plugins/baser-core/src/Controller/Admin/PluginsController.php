@@ -148,15 +148,14 @@ class PluginsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function detach($name)
+    public function detach(PluginManageServiceInterface $pluginManage, $name)
     {
-        $name = urldecode($name);
         if (!$this->request->is('post')) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
             return $this->redirect(['action' => 'index']);
         }
-        if ($this->Plugins->detach($name)) {
-            $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を無効にしました。'), $name));
+        if ($pluginManage->detach($name)) {
+            $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を無効にしました。'), urldecode($name)));
         } else {
             $this->BcMessage->setError(__d('baser', 'プラグインの無効化に失敗しました。'));
         }

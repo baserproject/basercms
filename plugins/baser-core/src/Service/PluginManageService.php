@@ -14,6 +14,8 @@ namespace BaserCore\Service;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Model\Table\PluginsTable;
+
 /**
  * Class PluginManageService
  * @package BaserCore\Service
@@ -34,4 +36,17 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
     {
         return parent::getIndex($sortMode);
     }
+
+    /**
+     * プラグインを無効にする
+     * @param string $name
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function detach(string $name): bool
+    {
+        return parent::detach(urldecode($name));
+    }
+
 }
