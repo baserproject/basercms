@@ -40,4 +40,26 @@ class PluginsController extends BcApiController
         ]);
         $this->viewBuilder()->setOption('serialize', ['plugins']);
     }
+
+    /**
+     * プラグインを無効化する
+     * @param PluginsServiceInterface $plugins
+     * @param $name
+     */
+    public function detach(PluginsServiceInterface $plugins, $name)
+    {
+        $this->request->allowMethod(['post']);
+        $plugin = $plugins->getByName($name);
+        if ($plugins->detach($name)) {
+            $message = sprintf(__d('baser', 'プラグイン「%s」を無効にしました。'), $name);
+        } else {
+            $message = __d('baser', 'プラグインの無効化に失敗しました。');
+        }
+        $this->set([
+            'message' => $message,
+            'plugin' => $plugin
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['plugin', 'message']);
+    }
+
 }

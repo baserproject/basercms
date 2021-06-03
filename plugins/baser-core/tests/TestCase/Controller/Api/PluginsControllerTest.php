@@ -82,9 +82,15 @@ class PluginsControllerTest extends BcTestCase
         $this->assertEquals('BcSample', $result->plugins[0]->name);
     }
 
-
-
-
-
+    /**
+     * test detach
+     */
+    public function testDetach()
+    {
+        $this->post('/baser/api/baser-core/plugins/detach/BcBlog.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('プラグイン「BcBlog」を無効にしました。', $result->message);
+    }
 
 }

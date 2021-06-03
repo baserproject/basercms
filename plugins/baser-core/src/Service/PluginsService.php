@@ -156,4 +156,14 @@ class PluginsService implements PluginsServiceInterface
         return $this->Plugins->detach($name);
     }
 
+    /**
+     * プラグイン名からプラグインエンティティを取得
+     * @param string $name
+     * @return array|EntityInterface|null
+     */
+    public function getByName(string $name)
+    {
+        return $this->Plugins->find()->where(['name' => $name])->first();
+    }
+
 }

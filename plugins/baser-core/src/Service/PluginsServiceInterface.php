@@ -11,6 +11,8 @@
 
 namespace BaserCore\Service;
 
+use Cake\Datasource\EntityInterface;
+
 /**
  * Interface PluginsServiceInterface
  * @package BaserCore\Service
@@ -29,5 +31,12 @@ interface PluginsServiceInterface
      * @param string $name
      */
     public function detach(string $name): bool;
+
+    /**
+     * プラグイン名からプラグインエンティティを取得
+     * @param string $name
+     * @return array|EntityInterface|null
+     */
+    public function getByName(string $name);
 
 }
