@@ -68,22 +68,21 @@ class PluginsController extends BcApiController
      * @param PluginsServiceInterface $Plugins
      * @checked
      * @unitTest
-     * @noTodo
      */
     public function install(PluginsServiceInterface $plugins, $name)
     {
         $this->request->allowMethod(['post', 'put']);
-        // install に $this->request->getData() を引数とするのはユニットテストで connection を test として設定するため
-        $data = $this->request->getData();
-        unset($data['name'], $data['title'], $data['status'], $data['version'], $data['permission']);
-        $plugin = $plugins->install($name, $data);
-
-        if($plugin) {
-            $message = sprintf(__d('baser', 'プラグイン「%s」をインストールしました。'), $name);
-        } elseif (is_null($plugin)) {
-            $message = __d('baser', 'プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。');
-        } else {
-            $message = __d('baser', 'プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。');
+        $plugin = $plugins->getByName($name);
+        try {
+            if($plugins->install($name, $this->request->getData('connection'))) {
+                $message = sprintf(__d('baser', 'プラグイン「%s」をインストールしました。'), $name);
+                // TODO: アクセス権限を追加する
+                // $this->_addPermission($this->request->data);
+            } else {
+                $message = __d('baser', 'プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。');
+            }
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
         }
         $this->set([
             'message' => $message,
@@ -123,7 +122,7 @@ class PluginsController extends BcApiController
         $this->request->allowMethod(['put']);
         $plugin = $plugins->getByName($name);
         try {
-            $plugins->resetDb($name, $this->request->getData());
+            $plugins->resetDb($name, $this->request->getData('connection'));
             $message = sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $plugin->title);
         } catch(\Exception $e) {
             $message = __d('baser', 'リセット処理中にエラーが発生しました。') . $e->getMessage();
@@ -149,7 +148,7 @@ class PluginsController extends BcApiController
         $this->request->allowMethod(['post']);
         $plugin = $plugins->getByName($name);
         try {
-            $plugins->uninstall($name, $this->request->getData());
+            $plugins->uninstall($name, $this->request->getData('connection'));
             $message = sprintf(__d('baser', 'プラグイン「%s」を削除しました。'), $name);
         } catch (\Exception $e) {
             $message = __d('baser', 'プラグインの削除に失敗しました。' . $e->getMessage());

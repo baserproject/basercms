@@ -49,29 +49,30 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
     /**
      * プラグインをインストールする
      * @param string $name プラグイン名
+     * @param string $connection test connection指定用
      * @return bool|null
-     * @param string $data test connection指定用
+     * @throws Exception
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function install($name, $data = []): ?bool
+    public function install($name, $connection = 'default'): ?bool
     {
-        return parent::install($name, $data);
+        return parent::install($name, $connection);
     }
 
     /**
      * プラグイン情報を取得する
      *
      * @param string $name プラグイン名
-     * @return EntityInterface|Plugin
+     * @return EntityInterface
      * @checked
      * @unitTest
      * @noTodo
      */
     public function getPluginConfig($name): EntityInterface
     {
-        return parent::getPluginConfig($name);
+        return parent::getPluginConfig(urlencode($name));
     }
 
     /**
@@ -85,6 +86,7 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
      */
     public function installStatus($pluginName): array
     {
+        $pluginName = urldecode($pluginName);
         $installedPlugin = $this->Plugins->find()->where([
             'name' => $pluginName,
             'status' => true,
@@ -124,7 +126,7 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
             return ['message' => 'このプラグイン名のフォルダ名を' . $config['name'] . 'にしてください。', 'status' => false];
         }
         return ['message' => '', 'status' => true];
-    }   
+    }
 
     /**
      * プラグインを無効にする
@@ -142,38 +144,28 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
      * データベースをリセットする
      *
      * @param string $name
-     * @param array $options
+     * @param string $connection
      * @throws Exception
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function resetDb(string $name, $options = []):void
+    public function resetDb(string $name, $connection = 'default'):void
     {
-        if(isset($options['connection'])) {
-            $options = ['connection' => $options['connection']];
-        } else {
-            $options = [];
-        }
-        parent::resetDb($name, $options);
+        parent::resetDb($name, $connection);
     }
 
     /**
      * プラグインを削除する
      * @param string $name
-     * @param array $options
+     * @param string $connection
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function uninstall(string $name, array $options = []): void
+    public function uninstall(string $name, $connection = 'default'): void
     {
-        if(isset($options['connection'])) {
-            $options = ['connection' => $options['connection']];
-        } else {
-            $options = [];
-        }
-        parent::uninstall(urldecode($name), $options);
+        parent::uninstall(urldecode($name), $connection);
     }
 
     /**

@@ -101,19 +101,14 @@ class PluginsControllerTest extends BcTestCase
      * @return void
      * @dataProvider installDataProvider
      */
-    public function testInstall($pluginName, $response, $message)
+    public function testInstall($pluginName, $message)
     {
         // フォルダはあるがインストールできない場合
         $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
         $folder = new Folder($pluginPath);
         $folder->create($pluginPath, 0777);
         $this->post('/baser/api/baser-core/plugins/install/' . $pluginName .'.json?token=' . $this->accessToken, ['connection' => 'test']);
-        if ($response) {
-            $this->assertResponseSuccess();
-        } else {
-            $this->assertResponseFailure();
-        }
-
+        $this->assertResponseSuccess();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals($message, $result->message);
         $folder->delete($pluginPath);
@@ -121,10 +116,9 @@ class PluginsControllerTest extends BcTestCase
     public function installDataProvider()
     {
         return [
-            ["BcUploader",true, "プラグイン「BcUploader」をインストールしました。"],
-            ["UnKnown",false, "Plugin UnKnown could not be found."],
-            ["BcTest",true, "プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。"],
-            // ["BcTest2",false, "プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。"],
+            ["BcUploader", "プラグイン「BcUploader」をインストールしました。"],
+            ["UnKnown", "Plugin UnKnown could not be found."],
+            ["BcTest", "プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。"],
         ];
     }
 

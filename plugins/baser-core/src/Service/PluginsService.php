@@ -103,24 +103,24 @@ class PluginsService implements PluginsServiceInterface
      * プラグインをインストールする
      * @param string $name プラグイン名
      * @return bool|null
-     * @param string $data test connection指定用
+     * @param string $connection test connection指定用
      * @checked
      * @noTodo
      * @unitTest
+     * @throws Exception
      */
-    public function install($name, $data = []): ?bool
+    public function install($name, $connection = 'default'): ?bool
     {
+        $options = ['connection' => $connection];
         BcUtil::includePluginClass($name);
         $plugins = CakePlugin::getCollection();
         $plugin = $plugins->create($name);
-
         if (!method_exists($plugin, 'install')) {
-            return null;
+            throw new Exception(__d('baser', 'プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。'));
         } else {
-            return $plugin->install($data);
+            return $plugin->install($options);
         }
     }
-
 
     /**
      * プラグイン情報を取得する
@@ -212,14 +212,12 @@ class PluginsService implements PluginsServiceInterface
      * データベースをリセットする
      *
      * @param string $name
-     * @param array $options
+     * @param string $connection
      * @throws Exception
      */
-    public function resetDb(string $name, $options = []):void
+    public function resetDb(string $name, $connection = 'default'): void
     {
-        $options = array_merge([
-            'connection' => 'default'
-        ], $options);
+        $options = ['connection' => $connection];
         unset($options['name']);
         $plugin = $this->Plugins->find()
             ->where(['name' => $name])
@@ -242,16 +240,14 @@ class PluginsService implements PluginsServiceInterface
     /**
      * プラグインを削除する
      * @param string $name
-     * @param array $options
+     * @param array $connection
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function uninstall(string $name, array $options = []): void
+    public function uninstall(string $name, $connection = 'default'): void
     {
-        $options = array_merge([
-            'connection' => 'default'
-        ], $options);
+        $options = ['connection' => $connection];
         $name = urldecode($name);
         BcUtil::includePluginClass($name);
         $plugins = CakePlugin::getCollection();

@@ -38,15 +38,15 @@ interface PluginManageServiceInterface
     /**
      * プラグインをインストールする
      * @param string $name プラグイン名
+     * @param string $connection test connection指定用
      * @return bool|null
-     * @param string $data test connection指定用
      */
-    public function install($name, $data): ?bool;
+    public function install($name, $connection = 'default'): ?bool;
 
     /**
      * プラグイン情報を取得する
      * @param string $name
-     * @return EntityInterface|Plugin
+     * @return EntityInterface
      */
     public function getPluginConfig($name): EntityInterface;
 
@@ -73,17 +73,17 @@ interface PluginManageServiceInterface
     /**
      * データベースをリセットする
      * @param string $name
-     * @param array $options
+     * @param string $connection
      * @throws Exception
      */
-    public function resetDb(string $name, $options = []):void;
+    public function resetDb(string $name, $connection = 'default'):void;
 
     /**
      * プラグインを削除する
      * @param string $name
-     * @param array $options
+     * @param string $connection
      */
-    public function uninstall(string $name, array $options = []): void;
+    public function uninstall(string $name, $connection = 'default'): void;
 
     /**
      * 優先度を変更する

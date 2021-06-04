@@ -29,7 +29,7 @@ class PluginsServiceTest extends BcTestCase
      *
      * @var array
      */
-    protected $fixtures = [
+    public $fixtures = [
         'plugin.BaserCore.Plugins',
     ];
 
@@ -107,18 +107,22 @@ class PluginsServiceTest extends BcTestCase
     public function testInstall()
     {
         // 正常な場合
-        $this->assertTrue($this->Plugins->install('BcUploader', ['connection' => 'test']));
+        $this->assertTrue($this->Plugins->install('BcUploader', 'test'));
         // プラグインがない場合
         try {
-            $this->Plugins->install('UnKnown', ['connection' => 'test']);
+            $this->Plugins->install('UnKnown', 'test');
         } catch (\Exception $e) {
             $this->assertEquals("Plugin UnKnown could not be found.", $e->getMessage());
-        };
+        }
         // フォルダはあるがインストールできない場合
         $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
         $folder = new Folder($pluginPath);
         $folder->create($pluginPath, 0777);
-        $this->assertNull($this->Plugins->install('BcTest', ['connection' => 'test']));
+        try {
+            $this->assertNull($this->Plugins->install('BcTest', ['connection' => 'test']));
+        } catch (\Exception $e) {
+            $this->assertEquals("プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。", $e->getMessage());
+        }
         $folder->delete($pluginPath);
     }
     /**
@@ -146,12 +150,12 @@ class PluginsServiceTest extends BcTestCase
     {
         $this->markTestIncomplete('テストが未実装です');
         // TODO インストールが実装できしだい
-        $this->Plugins->install('BcBlog');
+        $this->Plugins->install('BcBlog', 'test');
         $blogPosts = $this->getTableLocator()->get('BcBlog.BlogPosts');
         $blogPosts->save($blogPosts->newEntity([
             'name' => 'test'
         ]));
-        $this->Plugins->resetDb('BcBlog', ['connection' => 'test']);
+        $this->Plugins->resetDb('BcBlog', 'test');
         $this->assertEquals(0, $blogPosts->find()->where(['name' => 'test'])->count());
     }
 
