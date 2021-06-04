@@ -18,7 +18,6 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Model\Table\PluginsTable;
-use Cake\Datasource\EntityInterface;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Http\Client;
@@ -59,20 +58,6 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
     public function install($name, $connection = 'default'): ?bool
     {
         return parent::install($name, $connection);
-    }
-
-    /**
-     * プラグイン情報を取得する
-     *
-     * @param string $name プラグイン名
-     * @return EntityInterface
-     * @checked
-     * @unitTest
-     * @noTodo
-     */
-    public function getPluginConfig($name): EntityInterface
-    {
-        return parent::getPluginConfig(urlencode($name));
     }
 
     /**

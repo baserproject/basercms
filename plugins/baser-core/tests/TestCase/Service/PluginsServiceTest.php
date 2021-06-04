@@ -125,14 +125,6 @@ class PluginsServiceTest extends BcTestCase
         }
         $folder->delete($pluginPath);
     }
-    /**
-     * testGetPluginConfig
-     */
-    public function testGetPluginConfig()
-    {
-        $plugin = $this->Plugins->getPluginConfig('BaserCore');
-        $this->assertEquals('BaserCore', $plugin->name);
-    }
 
     /**
      * test getByName

@@ -80,12 +80,24 @@ class PluginManageServiceTest extends BcTestCase
     }
 
     /**
-     * testGetPluginConfig
+     * test install
      */
-    public function testGetPluginConfig()
+    public function testInstall()
     {
-        $plugin = $this->PluginManage->getPluginConfig('BaserCore');
-        $this->assertEquals('BaserCore', $plugin->name);
+        // 正常な場合
+        $this->assertTrue($this->PluginManage->install('BcUploader', ['connection' => 'test']));
+        // プラグインがない場合
+        try {
+            $this->PluginManage->install('UnKnown', ['connection' => 'test']);
+        } catch (\Exception $e) {
+            $this->assertEquals("Plugin UnKnown could not be found.", $e->getMessage());
+        };
+        // フォルダはあるがインストールできない場合
+        $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
+        $folder = new Folder($pluginPath);
+        $folder->create($pluginPath, 0777);
+        $this->assertNull($this->PluginManage->install('BcTest', ['connection' => 'test']));
+        $folder->delete($pluginPath);
     }
 
     /**

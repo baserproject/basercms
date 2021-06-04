@@ -85,6 +85,15 @@ class PluginsTableTest extends BcTestCase
     }
 
     /**
+     * testGetPluginConfig
+     */
+    public function testGetPluginConfig()
+    {
+        $plugin = $this->Plugins->getPluginConfig('BaserCore');
+        $this->assertEquals('BaserCore', $plugin->name);
+    }
+
+    /**
      * testDetach
      */
     public function testDetach()
