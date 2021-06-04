@@ -15,6 +15,7 @@ use BaserCore\View\AppView;
  * login
  * @var AppView $this
  */
+$this->BcAdmin->setTitle(__d('baser', 'ログイン'))
 ?>
 
 

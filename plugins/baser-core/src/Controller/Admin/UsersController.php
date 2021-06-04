@@ -41,27 +41,16 @@ use BaserCore\Annotation\Checked;
  */
 class UsersController extends BcAdminAppController
 {
+
     /**
      * サイト基本設定
-     *
      * @var array
      */
     public $siteConfigs = [];
 
     /**
-     * コンポーネント
-     *
-     * @var array
-     */
-    // TODO 未実装
-    /* >>>
-   public $components = ['BcReplacePrefix'];
-   <<< */
-
-    /**
      * initialize
      * ログインページ認証除外
-     *
      * @return void
      * @checked
      * @unitTest
@@ -95,47 +84,18 @@ class UsersController extends BcAdminAppController
                 $this->set('usePermission', $this->UserGroup->checkOtherAdmins());
             }
         }
-        $this->BcReplacePrefix->allow('login', 'logout', 'reset_password');
         <<< */
     }
 
     /**
      * 管理画面へログインする
-     * - link
-     *    - パスワード再発行
-     *
-     * - viewVars
-     *  - title
-     *  - savedEnable
-     *
-     * - input
-     *    - User.name or User.email
-     *    - User.password
-     *    - User.saved
-     *  - remember login
-     *  - submit
-     *
      * @return void
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function login()
     {
-        // TODO 未実装
-        /* >>>
-        if ($this->BcAuth->loginAction != ('/' . $this->request->url)) {
-            $this->notFound();
-        }
-        <<< */
-        $pageTitle = __d('baser', 'ログイン');
-        // TODO 未実装
-        /* >>>
-        $prefixAuth = Configure::read('BcAuthPrefix.' . $this->request->getParam('prefix'));
-        if ($prefixAuth && isset($prefixAuth['loginTitle'])) {
-            $pageTitle = $prefixAuth['loginTitle'];
-        }
-        <<< */
-        $this->setTitle($pageTitle);
         $this->set('savedEnable', $this->request->is('ssl'));
         $result = $this->Authentication->getResult();
         if ($this->request->is('post')) {
@@ -168,9 +128,7 @@ class UsersController extends BcAdminAppController
 
     /**
      * 代理ログイン
-     *
      * 別のユーザにログインできる
-     *
      * @param string|null $id User id.
      * @return Response|void Redirects
      * @throws RecordNotFoundException When record not found.
@@ -205,62 +163,28 @@ class UsersController extends BcAdminAppController
 
     /**
      * 代理ログイン解除
-     *
      * @return Response
      * @unitTest
+     * @noTodo
      * @checked
      */
     public function back_agent()
     {
         $session = Router::getRequest()->getSession();
         $user = $session->read('AuthAgent.User');
-        // TODO 未精査
-        /* >>>
-        $configs = Configure::read('BcAuthPrefix');
-        <<< */
         if (empty($user)) {
             $this->BcMessage->setError(__d('baser', '対象データが見つかりません。'));
-            // TODO 未実装
-            /* >>>
-            if (!empty($this->request->getParam('prefix'))) {
-                $authPrefix = $this->request->getParam('prefix');
-            } else {
-                $authPrefix = 'front';
-            }
-            if (!empty($configs[$authPrefix])) {
-                $redirect = Router::url($configs[$authPrefix]['loginRedirect']);
-            } else {
-                $redirect = '/';
-            }
-            return $this->redirect($redirect);
-            <<< */
             return $this->redirect(['action' => 'index']);
         }
-
         $this->Authentication->setIdentity($user);
         $this->BcMessage->setInfo(__d('baser', '元のユーザーに戻りました。'));
-
-        // TODO 未実装
-        /* >>>
-        $authPrefix = explode(',', $user['UserGroup']['auth_prefix']);
-        $authPrefix = $authPrefix[0];
-        if (!empty($configs[$authPrefix])) {
-            $redirect = Router::url($configs[$authPrefix]['loginRedirect']);
-        } else {
-            $redirect = '/';
-        }
-        <<< */
         $target = $session->read('AuthAgent.referer') ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
-
         $session->delete('AuthAgent');
         return $this->redirect($target);
     }
 
     /**
      * ログイン状態のセッションを破棄する
-     *
-     * - redirect
-     *   - login
      * @return void
      * @checked
      * @unitTest
@@ -281,22 +205,7 @@ class UsersController extends BcAdminAppController
 
     /**
      * ログインユーザーリスト
-     *
      * 管理画面にログインすることができるユーザーの一覧を表示する
-     *
-     * - list view
-     *  - User.id
-     *    - User.name
-     *  - User.nickname
-     *  - UserGroup.title
-     *  - User.real_name_1 && User.real_name_2
-     *  - User.created && User.modified
-     *
-     * - search input
-     *    - User.user_group_id
-     *
-     * - pagination
-     * - view num
      * @param UserManageServiceInterface $userManage
      * @checked
      * @noTodo
@@ -324,18 +233,7 @@ class UsersController extends BcAdminAppController
 
     /**
      * ログインユーザー新規追加
-     *
      * 管理画面にログインすることができるユーザーの各種情報を新規追加する
-     *
-     * - input
-     *  - User.name
-     *  - User.mail
-     *  - User.password
-     *  - User.real_name_1
-     *  - User.real_name_2
-     *  - User.nickname
-     *  - UserGroup
-     *  - submit
      * @param UserManageServiceInterface $userManage
      * @return Response|null|void Redirects on successful add, renders view otherwise.
      * @checked
@@ -362,30 +260,7 @@ class UsersController extends BcAdminAppController
 
     /**
      * ログインユーザー編集
-     *
      * 管理画面にログインすることができるユーザーの各種情報を編集する
-     *
-     * - viewVars
-     *  - User.no
-     *  - User.name
-     *  - User.mail
-     *  - User.password
-     *  - User.real_name_1
-     *  - User.real_name_2
-     *  - User.nickname
-     *  - User.user_group_id
-     *
-     * - input
-     *  - User.name
-     *  - User.mail
-     *  - User.password
-     *  - User.real_name_1
-     *  - User.real_name_2
-     *  - User.nickname
-     *  - User.user_group_id
-     *  - submit
-     *  - delete
-     *
      * @param UserManageServiceInterface $userManage
      * @param string|null $id User id.
      * @return Response|null|void Redirects on successful edit, renders view otherwise.
@@ -438,9 +313,7 @@ class UsersController extends BcAdminAppController
 
     /**
      * ログインユーザー削除
-     *
      * 管理画面にログインすることができるユーザーを削除する
-     *
      * @param UserManageServiceInterface $userManage
      * @param string|null $id User id.
      * @return Response|null|void Redirects to index.
