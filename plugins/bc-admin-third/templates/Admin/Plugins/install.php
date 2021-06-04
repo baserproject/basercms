@@ -10,15 +10,12 @@
  * @license         https://basercms.net/license/index.html
  */
 
-use BaserCore\View\AppView;
+use BaserCore\View\BcAdminAppView;
 
 /**
  * プラグインインストール
- * @var AppView $this
- * @var string $installStatus['message'] インストールメッセージ
- * @var bool $installStatus['status'] インストール可能かどうか
+ * @var BcAdminAppView $this
  * @var \BaserCore\Model\Entity\Plugin $plugin
- * @var bool $plugin->db_init
  */
 $this->BcBaser->i18nScript([
   'message1' => __d('baser', 'プラグインのデータを初期化します。よろしいですか？'),
@@ -33,14 +30,15 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 ]);
 $this->BcAdmin->setTitle(__d('baser', '新規プラグイン登録'));
 $this->BcAdmin->setHelp('plugins_install');
+$installStatusMessage = $this->BcPluginManage->getInstallStatusMessage($plugin->name);
 ?>
 
 
-<?php if ($installStatus['message']): ?>
-  <div id="UpdateMessage"><?php echo $installStatus['message'] ?></div>
+<?php if ($installStatusMessage): ?>
+  <div id="UpdateMessage"><?php echo $installStatusMessage ?></div>
 <?php endif ?>
 
-<?php if ($installStatus['status']): ?>
+<?php if (!$installStatusMessage): ?>
   <?php echo $this->BcAdminForm->create($plugin, ['url' => [$plugin->name], 'id' => 'AdminPluginInstallForm']) ?>
   <?php echo $this->BcAdminForm->control('name', ['type' => 'hidden']) ?>
   <?php echo $this->BcAdminForm->control('title', ['type' => 'hidden']) ?>

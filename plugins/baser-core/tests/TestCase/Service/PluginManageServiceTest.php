@@ -105,12 +105,12 @@ class PluginManageServiceTest extends BcTestCase
      */
     public function testInstallStatus()
     {
-        $this->assertEquals('既にインストール済のプラグインです。', $this->PluginManage->installStatus('BcBlog')['message']);
-        $this->assertEquals('インストールしようとしているプラグインのフォルダが存在しません。', $this->PluginManage->installStatus('BcTest')['message']);
+        $this->assertEquals('既にインストール済のプラグインです。', $this->PluginManage->getInstallStatusMessage('BcBlog'));
+        $this->assertEquals('インストールしようとしているプラグインのフォルダが存在しません。', $this->PluginManage->getInstallStatusMessage('BcTest'));
         $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
         $folder = new Folder($pluginPath);
         $folder->create($pluginPath, 0777);
-        $this->assertEquals(true, $this->PluginManage->installStatus('BcTest')['status']);
+        $this->assertEquals('', $this->PluginManage->getInstallStatusMessage('BcTest'));
         $folder->delete($pluginPath);
     }
 

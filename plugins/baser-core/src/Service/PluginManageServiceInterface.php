@@ -46,9 +46,9 @@ interface PluginManageServiceInterface
     /**
      * インストール時の状態を返す
      * @param string $pluginName
-     * @return array [string message, bool status]
+     * @return string
      */
-    public function installStatus($pluginName): array;
+    public function getInstallStatusMessage($pluginName): string;
 
     /**
      * プラグインを無効にする
@@ -92,4 +92,5 @@ interface PluginManageServiceInterface
      * @return array|mixed
      */
     public function getMarketPlugins(): array;
+
 }

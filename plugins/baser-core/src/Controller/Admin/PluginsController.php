@@ -94,10 +94,8 @@ class PluginsController extends BcAdminAppController
      */
     public function install(PluginManageServiceInterface $PluginManage, $name)
     {
-        $installStatus = $PluginManage->installStatus($name);
-        $this->set('installStatus', $installStatus);
         $this->set('plugin', $this->Plugins->getPluginConfig($name));
-        if (!$installStatus['status'] || !$this->request->is(['put', 'post'])) {
+        if ($PluginManage->getInstallStatusMessage($name) || !$this->request->is(['put', 'post'])) {
             return;
         } else {
             try {

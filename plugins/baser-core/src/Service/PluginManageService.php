@@ -64,12 +64,12 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
      * インストール可能かチェックする
      *
      * @param $pluginName
-     * @return array [string message, bool status]
+     * @return string
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function installStatus($pluginName): array
+    public function getInstallStatusMessage($pluginName): string
     {
         $pluginName = urldecode($pluginName);
         $installedPlugin = $this->Plugins->find()->where([
@@ -79,7 +79,7 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
 
         // 既にプラグインがインストール済み
         if ($installedPlugin) {
-            return ['message' => '既にインストール済のプラグインです。', 'status' => false];
+            return '既にインストール済のプラグインです。';
         }
 
         $paths = App::path('plugins');
@@ -103,14 +103,14 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
 
         // プラグインのフォルダが存在しない
         if (!$existsPluginFolder) {
-            return ['message' => 'インストールしようとしているプラグインのフォルダが存在しません。', 'status' => false];
+            return 'インストールしようとしているプラグインのフォルダが存在しません。';
         }
 
         // インストールしようとしているプラグイン名と、設定ファイル内のプラグイン名が違う
         if (!empty($config['name']) && $pluginName !== $config['name']) {
-            return ['message' => 'このプラグイン名のフォルダ名を' . $config['name'] . 'にしてください。', 'status' => false];
+            return 'このプラグイン名のフォルダ名を' . $config['name'] . 'にしてください。';
         }
-        return ['message' => '', 'status' => true];
+        return '';
     }
 
     /**

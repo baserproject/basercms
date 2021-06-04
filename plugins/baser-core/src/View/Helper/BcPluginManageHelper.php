@@ -11,12 +11,13 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Service\PluginsService;
+use BaserCore\Service\PluginManageService;
+use BaserCore\Service\PluginManageServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use Cake\Core\Configure;
 
 /**
  * Class BcPluginManageHelper
@@ -26,8 +27,36 @@ class BcPluginManageHelper extends Helper
 {
 
     /**
+     * BcContainerTrait
+     */
+    use BcContainerTrait;
+
+    /**
      * Plugin Manage Service
      * @var PluginManageService
      */
     public $PluginManage;
+
+    /**
+     * initialize
+     * @param array $config
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+        $this->PluginManage = $this->getService(PluginManageServiceInterface::class);
+    }
+
+    /**
+     * プラグインインストールについてのメッセージを取得する
+     * @param string $name
+     */
+    public function getInstallStatusMessage($name): string
+    {
+        return $this->PluginManage->getInstallStatusMessage($name);
+    }
+
 }
