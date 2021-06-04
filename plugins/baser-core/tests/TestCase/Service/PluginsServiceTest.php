@@ -29,7 +29,7 @@ class PluginsServiceTest extends BcTestCase
      *
      * @var array
      */
-    protected $fixtures = [
+    public $fixtures = [
         'plugin.BaserCore.Plugins',
     ];
 
@@ -98,17 +98,32 @@ class PluginsServiceTest extends BcTestCase
             // 普通の場合 | DBに登録されてるプラグインとプラグインファイル全て
             ["0", 'BcTest', "5"],
             // ソートモードの場合 | DBに登録されてるプラグインのみ
-            ["1", 'BcBlog', "3"],
+            ["1", 'BcBlog', "2"],
         ];
     }
-
     /**
-     * testGetPluginConfig
+     * test install
      */
-    public function testGetPluginConfig()
+    public function testInstall()
     {
-        $plugin = $this->Plugins->getPluginConfig('BaserCore');
-        $this->assertEquals('BaserCore', $plugin->name);
+        // 正常な場合
+        $this->assertTrue($this->Plugins->install('BcUploader', 'test'));
+        // プラグインがない場合
+        try {
+            $this->Plugins->install('UnKnown', 'test');
+        } catch (\Exception $e) {
+            $this->assertEquals("Plugin UnKnown could not be found.", $e->getMessage());
+        }
+        // フォルダはあるがインストールできない場合
+        $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
+        $folder = new Folder($pluginPath);
+        $folder->create($pluginPath, 0777);
+        try {
+            $this->assertNull($this->Plugins->install('BcTest', ['connection' => 'test']));
+        } catch (\Exception $e) {
+            $this->assertEquals("プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。", $e->getMessage());
+        }
+        $folder->delete($pluginPath);
     }
 
     /**
@@ -119,7 +134,6 @@ class PluginsServiceTest extends BcTestCase
         $this->assertEquals('BcBlog', $this->Plugins->getByName('BcBlog')->name);
         $this->assertNull($this->Plugins->getByName('Test'));
     }
-
     /**
      * test resetDb
      * @throws \Exception
@@ -128,12 +142,12 @@ class PluginsServiceTest extends BcTestCase
     {
         $this->markTestIncomplete('テストが未実装です');
         // TODO インストールが実装できしだい
-        $this->Plugins->install('BcBlog');
+        $this->Plugins->install('BcBlog', 'test');
         $blogPosts = $this->getTableLocator()->get('BcBlog.BlogPosts');
         $blogPosts->save($blogPosts->newEntity([
             'name' => 'test'
         ]));
-        $this->Plugins->resetDb('BcBlog', ['connection' => 'test']);
+        $this->Plugins->resetDb('BcBlog', 'test');
         $this->assertEquals(0, $blogPosts->find()->where(['name' => 'test'])->count());
     }
 

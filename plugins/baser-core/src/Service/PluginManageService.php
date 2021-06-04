@@ -11,6 +11,9 @@
 
 namespace BaserCore\Service;
 
+use Cake\Core\App;
+use BaserCore\Error\BcException;
+use Cake\Utility\Inflector;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -30,7 +33,7 @@ use Exception;
 class PluginManageService extends PluginsService implements PluginManageServiceInterface
 {
     /**
-     * ユーザー一覧を取得
+     * プラグイン一覧を取得
      * @param string $sortMode
      * @return array $plugins
      * @checked
@@ -40,6 +43,74 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
     public function getIndex(string $sortMode): array
     {
         return parent::getIndex($sortMode);
+    }
+
+    /**
+     * プラグインをインストールする
+     * @param string $name プラグイン名
+     * @param string $connection test connection指定用
+     * @return bool|null
+     * @throws Exception
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function install($name, $connection = 'default'): ?bool
+    {
+        return parent::install($name, $connection);
+    }
+
+    /**
+     * インストール可能かチェックする
+     *
+     * @param $pluginName
+     * @return array [string message, bool status]
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function installStatus($pluginName): array
+    {
+        $pluginName = urldecode($pluginName);
+        $installedPlugin = $this->Plugins->find()->where([
+            'name' => $pluginName,
+            'status' => true,
+        ])->first();
+
+        // 既にプラグインがインストール済み
+        if ($installedPlugin) {
+            return ['message' => '既にインストール済のプラグインです。', 'status' => false];
+        }
+
+        $paths = App::path('plugins');
+        $existsPluginFolder = false;
+        $folder = $pluginName;
+        foreach($paths as $path) {
+            if (!is_dir($path . $folder)) {
+                $dasherize = Inflector::dasherize($folder);
+                if (!is_dir($path . $dasherize)) {
+                    continue;
+                }
+                $folder = $dasherize;
+            }
+            $existsPluginFolder = true;
+            $configPath = $path . $folder . DS . 'config.php';
+            if (file_exists($configPath)) {
+                $config = include $configPath;
+            }
+            break;
+        }
+
+        // プラグインのフォルダが存在しない
+        if (!$existsPluginFolder) {
+            return ['message' => 'インストールしようとしているプラグインのフォルダが存在しません。', 'status' => false];
+        }
+
+        // インストールしようとしているプラグイン名と、設定ファイル内のプラグイン名が違う
+        if (!empty($config['name']) && $pluginName !== $config['name']) {
+            return ['message' => 'このプラグイン名のフォルダ名を' . $config['name'] . 'にしてください。', 'status' => false];
+        }
+        return ['message' => '', 'status' => true];
     }
 
     /**
@@ -58,38 +129,28 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
      * データベースをリセットする
      *
      * @param string $name
-     * @param array $options
+     * @param string $connection
      * @throws Exception
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function resetDb(string $name, $options = []):void
+    public function resetDb(string $name, $connection = 'default'):void
     {
-        if(isset($options['connection'])) {
-            $options = ['connection' => $options['connection']];
-        } else {
-            $options = [];
-        }
-        parent::resetDb($name, $options);
+        parent::resetDb($name, $connection);
     }
 
     /**
      * プラグインを削除する
      * @param string $name
-     * @param array $options
+     * @param string $connection
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function uninstall(string $name, array $options = []): void
+    public function uninstall(string $name, $connection = 'default'): void
     {
-        if(isset($options['connection'])) {
-            $options = ['connection' => $options['connection']];
-        } else {
-            $options = [];
-        }
-        parent::uninstall(urldecode($name), $options);
+        parent::uninstall(urldecode($name), $connection);
     }
 
     /**
@@ -103,5 +164,4 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
     {
         return parent::getMarketPlugins();
     }
-
 }

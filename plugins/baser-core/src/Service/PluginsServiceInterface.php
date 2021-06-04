@@ -29,11 +29,19 @@ interface PluginsServiceInterface
     public function get($id): EntityInterface;
 
     /**
-     * ユーザー一覧を取得
+     * プラグイン一覧を取得
      * @param string $sortMode
      * @return array $plugins
      */
     public function getIndex(string $sortMode): array;
+
+    /**
+     * プラグインをインストールする
+     * @param string $name プラグイン名
+     * @param string $connection test connection指定用
+     * @return bool|null
+     */
+    public function install($name, $connection = 'default'): ?bool;
 
     /**
      * プラグインを無効にする
@@ -51,17 +59,17 @@ interface PluginsServiceInterface
     /**
      * データベースをリセットする
      * @param string $name
-     * @param array $options
+     * @param array $connection
      * @throws Exception
      */
-    public function resetDb(string $name, $options = []): void;
+    public function resetDb(string $name, $connection = 'default'): void;
 
     /**
      * プラグインを削除する
      * @param string $name
-     * @param array $options
+     * @param string $connection
      */
-    public function uninstall(string $name, array $options = []): void;
+    public function uninstall(string $name, $connection = 'default'): void;
 
     /**
      * 優先度を変更する
@@ -77,5 +85,4 @@ interface PluginsServiceInterface
      * @return array|mixed
      */
     public function getMarketPlugins(): array;
-
 }

@@ -91,7 +91,7 @@ class PluginsService implements PluginsServiceInterface
                 foreach($files[0] as $file) {
                     $name = Inflector::camelize(Inflector::underscore(basename($file)));
                     if (!in_array(basename($file), Configure::read('BcApp.core'))) {
-                        $pluginConfigs[$name] = $this->getPluginConfig($name);
+                        $pluginConfigs[$name] = $this->Plugins->getPluginConfig($name);
                     }
                 }
             }
@@ -100,67 +100,26 @@ class PluginsService implements PluginsServiceInterface
     }
 
     /**
-     * プラグイン情報を取得する
-     *
+     * プラグインをインストールする
      * @param string $name プラグイン名
-     * @return Plugin|EntityInterface
+     * @return bool|null
+     * @param string $connection test connection指定用
      * @checked
-     * @unitTest
      * @noTodo
+     * @unitTest
+     * @throws Exception
      */
-    public function getPluginConfig($name)
+    public function install($name, $connection = 'default'): ?bool
     {
-
-        $pluginName = Inflector::camelize($name, '-');
-
-        // プラグインのバージョンを取得
-        $corePlugins = Configure::read('BcApp.corePlugins');
-        if (in_array($pluginName, $corePlugins)) {
-            $core = true;
-            $version = BcUtil::getVersion();
+        $options = ['connection' => $connection];
+        BcUtil::includePluginClass($name);
+        $plugins = CakePlugin::getCollection();
+        $plugin = $plugins->create($name);
+        if (!method_exists($plugin, 'install')) {
+            throw new Exception(__d('baser', 'プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。'));
         } else {
-            $core = false;
-            $version = BcUtil::getVersion($pluginName);
+            return $plugin->install($options);
         }
-
-        $result = $this->Plugins->find()
-            ->order(['priority'])
-            ->where(['name' => $pluginName])
-            ->first();
-
-        if ($result) {
-            $pluginRecord = $result;
-            $this->Plugins->patchEntity($pluginRecord, [
-                'update' => false,
-                'core' => $core,
-                'permission' => 1,
-                'registered' => true
-            ]);
-            if (BcUtil::verpoint($pluginRecord->version) < BcUtil::verpoint($version) &&
-                !in_array($pluginRecord->name, Configure::read('BcApp.corePlugins'))
-            ) {
-                $pluginRecord->update = true;
-            }
-        } else {
-            $pluginRecord = $this->Plugins->newEntity([
-                'id' => '',
-                'name' => $pluginName,
-                'created' => '',
-                'version' => $version,
-                'status' => false,
-                'update' => false,
-                'core' => $core,
-                'permission' => 1,
-                'registered' => false,
-            ]);
-        }
-
-        // 設定ファイル読み込み
-        $appConfigPath = BcUtil::getPluginPath($name) . 'config.php';
-        if (file_exists($appConfigPath)) {
-            $this->Plugins->patchEntity($pluginRecord, include $appConfigPath);
-        }
-        return $pluginRecord;
     }
 
     /**
@@ -189,14 +148,12 @@ class PluginsService implements PluginsServiceInterface
      * データベースをリセットする
      *
      * @param string $name
-     * @param array $options
+     * @param string $connection
      * @throws Exception
      */
-    public function resetDb(string $name, $options = []):void
+    public function resetDb(string $name, $connection = 'default'): void
     {
-        $options = array_merge([
-            'connection' => 'default'
-        ], $options);
+        $options = ['connection' => $connection];
         unset($options['name']);
         $plugin = $this->Plugins->find()
             ->where(['name' => $name])
@@ -219,16 +176,14 @@ class PluginsService implements PluginsServiceInterface
     /**
      * プラグインを削除する
      * @param string $name
-     * @param array $options
+     * @param array $connection
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function uninstall(string $name, array $options = []): void
+    public function uninstall(string $name, $connection = 'default'): void
     {
-        $options = array_merge([
-            'connection' => 'default'
-        ], $options);
+        $options = ['connection' => $connection];
         $name = urldecode($name);
         BcUtil::includePluginClass($name);
         $plugins = CakePlugin::getCollection();

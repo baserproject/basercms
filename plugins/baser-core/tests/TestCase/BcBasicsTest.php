@@ -616,8 +616,7 @@ class BcBasicsTest extends BcTestCase
         $result = getEnablePlugins();
         $pluginNames = [
             $result[0]['Plugin']['name'],
-            $result[1]['Plugin']['name'],
-            $result[2]['Plugin']['name']
+            $result[1]['Plugin']['name']
         ];
         $expect = ['Blog', 'Feed', 'Mail'];
         $this->assertEquals($expect, $pluginNames, '利用可能なプラグインのリストを正しく取得できません');

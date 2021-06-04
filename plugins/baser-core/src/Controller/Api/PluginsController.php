@@ -41,8 +41,16 @@ class PluginsController extends BcApiController
     }
 
     /**
+     * Initialize
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+    }
+
+    /**
      * プラグイン情報一覧取得
-     * @param PluginsServiceInterface $plugins
+     * @param PluginsServiceInterface $Plugins
      * @checked
      * @unitTest
      * @noTodo
@@ -53,6 +61,34 @@ class PluginsController extends BcApiController
             'plugins' => $plugins->getIndex($this->request->getQuery('sortmode') ?? '0')
         ]);
         $this->viewBuilder()->setOption('serialize', ['plugins']);
+    }
+
+    /**
+     * プラグインをインストールする
+     * @param PluginsServiceInterface $Plugins
+     * @checked
+     * @unitTest
+     */
+    public function install(PluginsServiceInterface $plugins, $name)
+    {
+        $this->request->allowMethod(['post', 'put']);
+        $plugin = $plugins->getByName($name);
+        try {
+            if($plugins->install($name, $this->request->getData('connection'))) {
+                $message = sprintf(__d('baser', 'プラグイン「%s」をインストールしました。'), $name);
+                // TODO: アクセス権限を追加する
+                // $this->_addPermission($this->request->data);
+            } else {
+                $message = __d('baser', 'プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。');
+            }
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+        }
+        $this->set([
+            'message' => $message,
+            'plugin' => $plugin
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['plugin', 'message']);
     }
 
     /**
@@ -86,7 +122,7 @@ class PluginsController extends BcApiController
         $this->request->allowMethod(['put']);
         $plugin = $plugins->getByName($name);
         try {
-            $plugins->resetDb($name, $this->request->getData());
+            $plugins->resetDb($name, $this->request->getData('connection'));
             $message = sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $plugin->title);
         } catch(\Exception $e) {
             $message = __d('baser', 'リセット処理中にエラーが発生しました。') . $e->getMessage();
@@ -112,7 +148,7 @@ class PluginsController extends BcApiController
         $this->request->allowMethod(['post']);
         $plugin = $plugins->getByName($name);
         try {
-            $plugins->uninstall($name, $this->request->getData());
+            $plugins->uninstall($name, $this->request->getData('connection'));
             $message = sprintf(__d('baser', 'プラグイン「%s」を削除しました。'), $name);
         } catch (\Exception $e) {
             $message = __d('baser', 'プラグインの削除に失敗しました。' . $e->getMessage());
@@ -160,5 +196,4 @@ class PluginsController extends BcApiController
         ]);
         $this->viewBuilder()->setOption('serialize', ['plugins']);
     }
-
 }

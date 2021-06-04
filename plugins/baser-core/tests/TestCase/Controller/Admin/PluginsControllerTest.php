@@ -42,6 +42,12 @@ class PluginsControllerTest extends BcTestCase
     ];
 
     /**
+     * PluginsController
+     * @var PluginsController
+     */
+    public $PluginsController;
+
+    /**
      * Set up
      */
     public function setUp(): void
