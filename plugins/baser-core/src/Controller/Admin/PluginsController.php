@@ -98,7 +98,7 @@ class PluginsController extends BcAdminAppController
         
         $installStatus = $PluginManage->installStatus($name);
 
-        $pluginEntity = $PluginManage->getPluginConfig($name);
+        $pluginEntity = $this->Plugins->getPluginConfig($name);
 
         $this->set('installStatus', $installStatus);
         $this->set('plugin', $pluginEntity);

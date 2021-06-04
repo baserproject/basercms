@@ -82,7 +82,7 @@ class PluginsTable extends AppTable
      * @return \BaserCore\Model\Entity\Plugin|\Cake\Datasource\EntityInterface
      * @checked
      * @unitTest
-     * @todo PluginsServiceと統一する
+     * @noTodo
      */
     public function getPluginConfig($name)
     {

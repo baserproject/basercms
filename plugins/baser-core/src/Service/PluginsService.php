@@ -91,7 +91,7 @@ class PluginsService implements PluginsServiceInterface
                 foreach($files[0] as $file) {
                     $name = Inflector::camelize(Inflector::underscore(basename($file)));
                     if (!in_array(basename($file), Configure::read('BcApp.core'))) {
-                        $pluginConfigs[$name] = $this->getPluginConfig($name);
+                        $pluginConfigs[$name] = $this->Plugins->getPluginConfig($name);
                     }
                 }
             }
@@ -119,71 +119,6 @@ class PluginsService implements PluginsServiceInterface
         } else {
             return $plugin->install($data);
         }
-    }
-
-
-    /**
-     * プラグイン情報を取得する
-     *
-     * @param string $name プラグイン名
-     * @return EntityInterface|Plugin
-     * @checked
-     * @unitTest
-     * @noTodo
-     */
-    public function getPluginConfig($name): EntityInterface
-    {
-
-        $pluginName = Inflector::camelize($name, '-');
-
-        // プラグインのバージョンを取得
-        $corePlugins = Configure::read('BcApp.corePlugins');
-        if (in_array($pluginName, $corePlugins)) {
-            $core = true;
-            $version = BcUtil::getVersion();
-        } else {
-            $core = false;
-            $version = BcUtil::getVersion($pluginName);
-        }
-
-        $result = $this->Plugins->find()
-            ->order(['priority'])
-            ->where(['name' => $pluginName])
-            ->first();
-
-        if ($result) {
-            $pluginRecord = $result;
-            $this->Plugins->patchEntity($pluginRecord, [
-                'update' => false,
-                'core' => $core,
-                'permission' => 1,
-                'registered' => true
-            ]);
-            if (BcUtil::verpoint($pluginRecord->version) < BcUtil::verpoint($version) &&
-                !in_array($pluginRecord->name, Configure::read('BcApp.corePlugins'))
-            ) {
-                $pluginRecord->update = true;
-            }
-        } else {
-            $pluginRecord = $this->Plugins->newEntity([
-                'id' => '',
-                'name' => $pluginName,
-                'created' => '',
-                'version' => $version,
-                'status' => false,
-                'update' => false,
-                'core' => $core,
-                'permission' => 1,
-                'registered' => false,
-            ]);
-        }
-
-        // 設定ファイル読み込み
-        $appConfigPath = BcUtil::getPluginPath($name) . 'config.php';
-        if (file_exists($appConfigPath)) {
-            $this->Plugins->patchEntity($pluginRecord, include $appConfigPath);
-        }
-        return $pluginRecord;
     }
 
     /**

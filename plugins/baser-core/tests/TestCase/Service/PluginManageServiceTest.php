@@ -80,15 +80,6 @@ class PluginManageServiceTest extends BcTestCase
     }
 
     /**
-     * testGetPluginConfig
-     */
-    public function testGetPluginConfig()
-    {
-        $plugin = $this->PluginManage->getPluginConfig('BaserCore');
-        $this->assertEquals('BaserCore', $plugin->name);
-    }
-
-    /**
      * test install
      */
     public function testInstall()

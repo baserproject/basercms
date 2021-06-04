@@ -121,14 +121,6 @@ class PluginsServiceTest extends BcTestCase
         $this->assertNull($this->Plugins->install('BcTest', ['connection' => 'test']));
         $folder->delete($pluginPath);
     }
-    /**
-     * testGetPluginConfig
-     */
-    public function testGetPluginConfig()
-    {
-        $plugin = $this->Plugins->getPluginConfig('BaserCore');
-        $this->assertEquals('BaserCore', $plugin->name);
-    }
 
     /**
      * test getByName

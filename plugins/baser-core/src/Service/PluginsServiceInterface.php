@@ -43,13 +43,6 @@ interface PluginsServiceInterface
      */
     public function install($name, $data = []): ?bool;
 
-        /**
-     * プラグイン情報を取得する
-     * @param string $name プラグイン名
-     * @return EntityInterface|Plugin
-     */
-    public function getPluginConfig($name): EntityInterface;
-
     /**
      * プラグインを無効にする
      * @param string $name
