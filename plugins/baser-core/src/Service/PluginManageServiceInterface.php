@@ -29,11 +29,33 @@ interface PluginManageServiceInterface
     public function get($id): EntityInterface;
 
     /**
-     * ユーザー一覧を取得
+     * プラグイン一覧を取得
      * @param string $sortMode
      * @return array $plugins
      */
     public function getIndex(string $sortMode): array;
+
+    /**
+     * プラグインをインストールする
+     * @param string $name プラグイン名
+     * @return bool|null
+     * @param string $data test connection指定用
+     */
+    public function install($name, $data): ?bool;
+
+    /**
+     * プラグイン情報を取得する
+     * @param string $name
+     * @return EntityInterface|Plugin
+     */
+    public function getPluginConfig($name): EntityInterface;
+
+    /**
+     * インストール時の状態を返す
+     * @param string $pluginName
+     * @return array [string message, bool status]
+     */
+    public function installStatus($pluginName): array;
 
     /**
      * プラグインを無効にする
@@ -77,5 +99,4 @@ interface PluginManageServiceInterface
      * @return array|mixed
      */
     public function getMarketPlugins(): array;
-
 }

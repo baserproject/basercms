@@ -75,8 +75,53 @@ class PluginManageServiceTest extends BcTestCase
             // 普通の場合
             ["0", "4"],
             // ソートモードの場合
-            ["1", "3"],
+            ["1", "2"],
         ];
+    }
+
+    /**
+     * testGetPluginConfig
+     */
+    public function testGetPluginConfig()
+    {
+        $plugin = $this->PluginManage->getPluginConfig('BaserCore');
+        $this->assertEquals('BaserCore', $plugin->name);
+    }
+
+    /**
+     * test install
+     */
+    public function testInstall()
+    {
+        // 正常な場合
+        $this->assertTrue($this->PluginManage->install('BcUploader', ['connection' => 'test']));
+        // プラグインがない場合
+        try {
+            $this->PluginManage->install('UnKnown', ['connection' => 'test']);
+        } catch (\Exception $e) {
+            $this->assertEquals("Plugin UnKnown could not be found.", $e->getMessage());
+        };
+        // フォルダはあるがインストールできない場合
+        $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
+        $folder = new Folder($pluginPath);
+        $folder->create($pluginPath, 0777);
+        $this->assertNull($this->PluginManage->install('BcTest', ['connection' => 'test']));
+        $folder->delete($pluginPath);
+    }
+
+
+    /**
+     * test installStatus
+     */
+    public function testInstallStatus()
+    {
+        $this->assertEquals('既にインストール済のプラグインです。', $this->PluginManage->installStatus('BcBlog')['message']);
+        $this->assertEquals('インストールしようとしているプラグインのフォルダが存在しません。', $this->PluginManage->installStatus('BcTest')['message']);
+        $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
+        $folder = new Folder($pluginPath);
+        $folder->create($pluginPath, 0777);
+        $this->assertEquals(true, $this->PluginManage->installStatus('BcTest')['status']);
+        $folder->delete($pluginPath);
     }
 
     /**

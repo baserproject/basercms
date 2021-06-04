@@ -13,6 +13,8 @@ namespace BaserCore\Test\TestCase\Controller\Api;
 
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
+use Cake\Filesystem\Folder;
+use Cake\Core\App;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\TestSuite\IntegrationTestTrait;
 
@@ -94,6 +96,39 @@ class PluginsControllerTest extends BcTestCase
     }
 
     /**
+     * Test install
+     *
+     * @return void
+     * @dataProvider installDataProvider
+     */
+    public function testInstall($pluginName, $response, $message)
+    {
+        // フォルダはあるがインストールできない場合
+        $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
+        $folder = new Folder($pluginPath);
+        $folder->create($pluginPath, 0777);
+        $this->post('/baser/api/baser-core/plugins/install/' . $pluginName .'.json?token=' . $this->accessToken, ['connection' => 'test']);
+        if ($response) {
+            $this->assertResponseSuccess();
+        } else {
+            $this->assertResponseFailure();
+        }
+
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals($message, $result->message);
+        $folder->delete($pluginPath);
+    }
+    public function installDataProvider()
+    {
+        return [
+            ["BcUploader",true, "プラグイン「BcUploader」をインストールしました。"],
+            ["UnKnown",false, "Plugin UnKnown could not be found."],
+            ["BcTest",true, "プラグインに Plugin クラスが存在しません。src ディレクトリ配下に作成してください。"],
+            // ["BcTest2",false, "プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。"],
+        ];
+    }
+
+    /**
      * test detach
      */
     public function testDetach()
@@ -123,7 +158,6 @@ class PluginsControllerTest extends BcTestCase
         // TODO インストールの処理とまとめる予定
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
-
     /**
      * test update_sort
      */

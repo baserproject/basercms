@@ -11,10 +11,14 @@
 
 namespace BaserCore\Service;
 
+use Cake\Core\App;
+use BaserCore\Error\BcException;
+use Cake\Utility\Inflector;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Model\Table\PluginsTable;
+use Cake\Datasource\EntityInterface;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Http\Client;
@@ -30,7 +34,7 @@ use Exception;
 class PluginManageService extends PluginsService implements PluginManageServiceInterface
 {
     /**
-     * ユーザー一覧を取得
+     * プラグイン一覧を取得
      * @param string $sortMode
      * @return array $plugins
      * @checked
@@ -41,6 +45,86 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
     {
         return parent::getIndex($sortMode);
     }
+
+    /**
+     * プラグインをインストールする
+     * @param string $name プラグイン名
+     * @return bool|null
+     * @param string $data test connection指定用
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function install($name, $data = []): ?bool
+    {
+        return parent::install($name, $data);
+    }
+
+    /**
+     * プラグイン情報を取得する
+     *
+     * @param string $name プラグイン名
+     * @return EntityInterface|Plugin
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function getPluginConfig($name): EntityInterface
+    {
+        return parent::getPluginConfig($name);
+    }
+
+    /**
+     * インストール可能かチェックする
+     *
+     * @param $pluginName
+     * @return array [string message, bool status]
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function installStatus($pluginName): array
+    {
+        $installedPlugin = $this->Plugins->find()->where([
+            'name' => $pluginName,
+            'status' => true,
+        ])->first();
+
+        // 既にプラグインがインストール済み
+        if ($installedPlugin) {
+            return ['message' => '既にインストール済のプラグインです。', 'status' => false];
+        }
+
+        $paths = App::path('plugins');
+        $existsPluginFolder = false;
+        $folder = $pluginName;
+        foreach($paths as $path) {
+            if (!is_dir($path . $folder)) {
+                $dasherize = Inflector::dasherize($folder);
+                if (!is_dir($path . $dasherize)) {
+                    continue;
+                }
+                $folder = $dasherize;
+            }
+            $existsPluginFolder = true;
+            $configPath = $path . $folder . DS . 'config.php';
+            if (file_exists($configPath)) {
+                $config = include $configPath;
+            }
+            break;
+        }
+
+        // プラグインのフォルダが存在しない
+        if (!$existsPluginFolder) {
+            return ['message' => 'インストールしようとしているプラグインのフォルダが存在しません。', 'status' => false];
+        }
+
+        // インストールしようとしているプラグイン名と、設定ファイル内のプラグイン名が違う
+        if (!empty($config['name']) && $pluginName !== $config['name']) {
+            return ['message' => 'このプラグイン名のフォルダ名を' . $config['name'] . 'にしてください。', 'status' => false];
+        }
+        return ['message' => '', 'status' => true];
+    }   
 
     /**
      * プラグインを無効にする
@@ -103,5 +187,4 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
     {
         return parent::getMarketPlugins();
     }
-
 }

@@ -100,15 +100,38 @@ class PluginsService implements PluginsServiceInterface
     }
 
     /**
+     * プラグインをインストールする
+     * @param string $name プラグイン名
+     * @return bool|null
+     * @param string $data test connection指定用
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function install($name, $data = []): ?bool
+    {
+        BcUtil::includePluginClass($name);
+        $plugins = CakePlugin::getCollection();
+        $plugin = $plugins->create($name);
+
+        if (!method_exists($plugin, 'install')) {
+            return null;
+        } else {
+            return $plugin->install($data);
+        }
+    }
+
+
+    /**
      * プラグイン情報を取得する
      *
      * @param string $name プラグイン名
-     * @return Plugin|EntityInterface
+     * @return EntityInterface|Plugin
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function getPluginConfig($name)
+    public function getPluginConfig($name): EntityInterface
     {
 
         $pluginName = Inflector::camelize($name, '-');
