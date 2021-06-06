@@ -12,16 +12,11 @@
 namespace BaserCore\Service;
 
 use Cake\Core\App;
-use BaserCore\Error\BcException;
 use Cake\Utility\Inflector;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Model\Table\PluginsTable;
-use Cake\Cache\Cache;
-use Cake\Core\Configure;
-use Cake\Http\Client;
-use Cake\Utility\Xml;
 use Exception;
 
 /**

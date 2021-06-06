@@ -11,14 +11,11 @@
 
 namespace BaserCore\Service;
 
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
-
 /**
- * Class UserGroupManageService
+ * Interface SiteConfigsServiceInterface
  * @package BaserCore\Service
  */
-class UserGroupManageService extends UserGroupsService implements UserGroupManageServiceInterface
+interface SiteConfigsServiceInterface
 {
+    public function value($fieldName);
 }

@@ -12,12 +12,16 @@
 namespace BaserCore\TestSuite;
 
 use App\Application;
+use Authentication\AuthenticationService;
 use Authentication\Authenticator\Result;
 use BaserCore\Event\BcControllerEventListener;
 use BaserCore\Plugin;
 use BaserCore\Service\UserApiService;
+use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Event\EventManager;
+use Cake\Http\BaseApplication;
+use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
@@ -42,6 +46,16 @@ class BcTestCase extends TestCase
     use IntegrationTestTrait;
 
     /**
+     * @var Application
+     */
+    public $Application;
+
+    /**
+     * @var Plugin
+     */
+    public $BaserCore;
+
+    /**
      * Set Up
      * @checked
      * @noTodo
@@ -49,13 +63,14 @@ class BcTestCase extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $application = new Application(CONFIG);
-        $application->bootstrap();
+        $this->Application = new Application(CONFIG);
+        $this->Application->bootstrap();
+        $this->Application->getContainer();
         $builder = Router::createRouteBuilder('/');
-        $application->routes($builder);
-        $plugin = new Plugin();
-        $plugin->bootstrap($application);
-        $plugin->routes($builder);
+        $this->Application->routes($builder);
+        $this->BaserCore = new Plugin();
+        $this->BaserCore->bootstrap($this->Application);
+        $this->BaserCore->routes($builder);
     }
 
     /**
@@ -80,6 +95,8 @@ class BcTestCase extends TestCase
         if ($data) {
             $request = $request->withParsedBody($data);
         }
+        $authentication = $this->BaserCore->getAuthenticationService($request);
+        $request = $request->withAttribute('authentication', $authentication);
         Router::setRequest($request);
         return $request;
     }
@@ -106,21 +123,27 @@ class BcTestCase extends TestCase
      * 管理画面にログインする
      *
      * @param string $group
-     * @return object $user
+     * @return ServerRequest
      * @checked
      * @unitTest
      * @noTodo
      */
-    protected function loginAdmin($id = 1)
+    protected function loginAdmin(ServerRequest $request, $id = 1)
     {
         $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
         $user = $this->getUser($id);
         $this->session([$sessionKey => $user]);
-        // IntegrationTestTrait が提供するsession だけでは、テスト中に取得できないテストがあったため
-        // request から取得する session でも書き込むようにした
-        $session = $this->getRequest()->getSession();
-        $session->write($sessionKey, $user);
-        return $user;
+        $authentication = $request->getAttribute('authentication');
+        if(!$authentication) {
+            $authentication = $this->getAuthenticationService($request);
+            $request = $request->withAttribute('authentication', $authentication);
+        }
+        $reflectionClass = new ReflectionClass($authentication);
+        $result = $reflectionClass->getProperty('_result');
+        $result->setAccessible(true);
+        $result->setValue($authentication, new Result($user, Result::SUCCESS));
+        $request = $authentication->persistIdentity($request, new Response, $user)['request'];
+        return $request;
     }
 
     /**

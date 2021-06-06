@@ -15,13 +15,10 @@ use BaserCore\Model\Entity\UserGroup;
 use BaserCore\Service\UserGroupManageServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\UserGroupsTable;
-use Cake\Controller\ComponentRegistry;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Datasource\ResultSetInterface;
 use Cake\Event\EventInterface;
-use Cake\Event\EventManagerInterface;
 use Cake\Http\Response;
-use Cake\Http\ServerRequest;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -36,33 +33,6 @@ use BaserCore\Annotation\Checked;
 class UserGroupsController extends BcAdminAppController
 {
     public $siteConfigs = [];
-
-    /**
-     * UserGroupsController constructor.
-     *
-     * @param \Cake\Http\ServerRequest|null $request Request object for this controller. Can be null for testing,
-     *   but expect that features that use the request parameters will not work.
-     * @param \Cake\Http\Response|null $response Response object for this controller.
-     * @param string|null $name Override the name useful in testing when using mocks.
-     * @param \Cake\Event\EventManagerInterface|null $eventManager The event manager. Defaults to a new instance.
-     * @param \Cake\Controller\ComponentRegistry|null $components The component registry. Defaults to a new instance.
-     * @checked
-     * @unitTest
-     */
-    public function __construct(
-        ?ServerRequest $request = null,
-        ?Response $response = null,
-        ?string $name = null,
-        ?EventManagerInterface $eventManager = null,
-        ?ComponentRegistry $components = null
-    )
-    {
-        parent::__construct($request, $response, $name, $eventManager, $components);
-        $this->crumbs = [
-            ['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
-            ['name' => __d('baser', 'ユーザーグループ管理'), 'url' => ['controller' => 'user_groups', 'action' => 'index']]
-        ];
-    }
 
     /**
      * beforeFilter
@@ -80,10 +50,6 @@ class UserGroupsController extends BcAdminAppController
         $this->siteConfigs['admin_list_num'] = 30;
         return;
         // <<<
-
-        if ($this->request->getParam('prefix') === 'admin') {
-            $this->set('usePermission', $this->UserGroup->checkOtherAdmins());
-        }
 
         $authPrefixes = [];
         foreach(Configure::read('BcAuthPrefix') as $key => $authPrefix) {

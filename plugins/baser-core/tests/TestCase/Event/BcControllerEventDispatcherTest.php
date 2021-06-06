@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Event;
 
 use BaserCore\Controller\Admin\UsersController;
+use BaserCore\Controller\BcAppController;
 use BaserCore\Event\BcControllerEventDispatcher;
 use BaserCore\Event\BcControllerEventListener;
 use BaserCore\TestSuite\BcTestCase;
@@ -28,6 +29,17 @@ class BcControllerEventDispatcherTest extends BcTestCase
 {
 
     /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.UserGroups',
+    ];
+
+    /**
      * @var EventManager|null
      */
     public $eventManager;
@@ -36,6 +48,11 @@ class BcControllerEventDispatcherTest extends BcTestCase
      * @var BcControllerEventDispatcher|null
      */
     public $bcControllerEventDispatcher;
+
+    /**
+     * @var UsersController
+     */
+    public $UsersController;
 
     /**
      * set up
@@ -50,6 +67,7 @@ class BcControllerEventDispatcherTest extends BcTestCase
         foreach($this->bcControllerEventDispatcher->implementedEvents() as $key => $event) {
             $this->eventManager->off($key);
         }
+        $this->UsersController = new UsersController($this->loginAdmin($this->getRequest('/baser/admin/baser-core/users/')));
     }
 
     /**
@@ -83,7 +101,7 @@ class BcControllerEventDispatcherTest extends BcTestCase
             ->getMock();
 
         $listener->method('implementedEvents')
-            ->willReturn(['Controller.Users.initialize' => ['callable' => 'usersInitialize']]);
+            ->willReturn(['Controller.BaserCore.Users.initialize' => ['callable' => 'usersInitialize']]);
 
         $listener->expects($this->once())
             ->method('usersInitialize');
@@ -91,7 +109,7 @@ class BcControllerEventDispatcherTest extends BcTestCase
         $this->eventManager
             ->on($listener)
             ->on($this->bcControllerEventDispatcher)
-            ->dispatch(new Event('Controller.initialize', new UsersController(), []));
+            ->dispatch(new Event('Controller.initialize', $this->UsersController, []));
     }
 
     /**
@@ -105,7 +123,7 @@ class BcControllerEventDispatcherTest extends BcTestCase
             ->getMock();
 
         $listener->method('implementedEvents')
-            ->willReturn(['Controller.Users.startup' => ['callable' => 'usersStartup']]);
+            ->willReturn(['Controller.BaserCore.Users.startup' => ['callable' => 'usersStartup']]);
 
         $listener->expects($this->once())
             ->method('usersStartup');
@@ -113,7 +131,7 @@ class BcControllerEventDispatcherTest extends BcTestCase
         $this->eventManager
             ->on($listener)
             ->on($this->bcControllerEventDispatcher)
-            ->dispatch(new Event('Controller.startup', new UsersController(), []));
+            ->dispatch(new Event('Controller.startup', $this->UsersController, []));
     }
 
     /**
@@ -127,7 +145,7 @@ class BcControllerEventDispatcherTest extends BcTestCase
             ->getMock();
 
         $listener->method('implementedEvents')
-            ->willReturn(['Controller.Users.beforeRender' => ['callable' => 'usersBeforeRender']]);
+            ->willReturn(['Controller.BaserCore.Users.beforeRender' => ['callable' => 'usersBeforeRender']]);
 
         $listener->expects($this->once())
             ->method('usersBeforeRender');
@@ -135,7 +153,7 @@ class BcControllerEventDispatcherTest extends BcTestCase
         $this->eventManager
             ->on($listener)
             ->on($this->bcControllerEventDispatcher)
-            ->dispatch(new Event('Controller.beforeRender', new UsersController(), []));
+            ->dispatch(new Event('Controller.beforeRender', $this->UsersController, []));
     }
 
     /**
@@ -149,7 +167,7 @@ class BcControllerEventDispatcherTest extends BcTestCase
             ->getMock();
 
         $listener->method('implementedEvents')
-            ->willReturn(['Controller.Users.beforeRedirect' => ['callable' => 'usersBeforeRedirect']]);
+            ->willReturn(['Controller.BaserCore.Users.beforeRedirect' => ['callable' => 'usersBeforeRedirect']]);
 
         $listener->expects($this->once())
             ->method('usersBeforeRedirect');
@@ -157,7 +175,7 @@ class BcControllerEventDispatcherTest extends BcTestCase
         $this->eventManager
             ->on($listener)
             ->on($this->bcControllerEventDispatcher)
-            ->dispatch(new Event('Controller.beforeRedirect', new UsersController(), []));
+            ->dispatch(new Event('Controller.beforeRedirect', $this->UsersController, []));
     }
 
     /**
@@ -171,7 +189,7 @@ class BcControllerEventDispatcherTest extends BcTestCase
             ->getMock();
 
         $listener->method('implementedEvents')
-            ->willReturn(['Controller.Users.shutdown' => ['callable' => 'usersShutdown']]);
+            ->willReturn(['Controller.BaserCore.Users.shutdown' => ['callable' => 'usersShutdown']]);
 
         $listener->expects($this->once())
             ->method('usersShutdown');
@@ -179,7 +197,7 @@ class BcControllerEventDispatcherTest extends BcTestCase
         $this->eventManager
             ->on($listener)
             ->on($this->bcControllerEventDispatcher)
-            ->dispatch(new Event('Controller.shutdown', new UsersController(), []));
+            ->dispatch(new Event('Controller.shutdown', $this->UsersController, []));
     }
 
 }

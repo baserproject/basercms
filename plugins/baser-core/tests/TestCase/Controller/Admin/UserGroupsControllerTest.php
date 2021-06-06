@@ -49,25 +49,13 @@ class UserGroupsControllerTest extends BcTestCase
         } else {
             $this->loadFixtures('UserGroups');
         }
-        $this->loginAdmin();
-        $this->UserGroupsController = new UserGroupsController($this->getRequest());
+        $this->UserGroupsController = new UserGroupsController($this->loginAdmin($this->getRequest()));
     }
 
     public function tearDown(): void
     {
         unset($this->UserGroupsController);
         parent::tearDown();
-    }
-
-    /**
-     * Test constructor
-     *
-     * @return void
-     */
-    public function testConstruct()
-    {
-        $UserGroupsController = new UserGroupsController();
-        $this->assertNotEmpty($UserGroupsController->crumbs);
     }
 
     /**

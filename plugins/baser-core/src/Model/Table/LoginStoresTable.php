@@ -117,7 +117,7 @@ class LoginStoresTable extends Table
      */
     public function getEnableLoginStore($key): ?Entity
     {
-        $loginStoreList = $this->find('all')
+        $loginStoreList = $this->find()
             ->where(['store_key' => $key])
             ->orderAsc('created');
         foreach($loginStoreList as $loginStore) {

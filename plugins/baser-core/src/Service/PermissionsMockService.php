@@ -11,14 +11,21 @@
 
 namespace BaserCore\Service;
 
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
-
 /**
- * Class UserGroupManageService
+ * Class PermissionsMockService
  * @package BaserCore\Service
  */
-class UserGroupManageService extends UserGroupsService implements UserGroupManageServiceInterface
+class PermissionsMockService implements PermissionsServiceInterface
 {
+    /**
+     * URLの権限チェックを行う
+     * @param string $url
+     * @param array $userGroupId
+     * @return bool
+     */
+    public function check($url, $userGroupId): bool
+    {
+        // TODO 未実装
+        return true;
+    }
 }

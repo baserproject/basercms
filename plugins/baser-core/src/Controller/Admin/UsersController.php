@@ -13,7 +13,6 @@ namespace BaserCore\Controller\Admin;
 
 use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Model\Entity\User;
-use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\Service\UserManageServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Controller\Component\BcMessageComponent;
@@ -22,11 +21,9 @@ use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\Event;
-use Cake\Event\EventInterface;
 use Cake\Routing\Router;
 use Cake\Http\Response;
 use Cake\Http\Exception\ForbiddenException;
-use Cake\Http\Cookie\Cookie;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -37,16 +34,9 @@ use BaserCore\Annotation\Checked;
  * @property UsersTable $Users
  * @property AuthenticationComponent $Authentication
  * @property BcMessageComponent $BcMessage
- * @property LoginStoresTable $loginStores
  */
 class UsersController extends BcAdminAppController
 {
-
-    /**
-     * サイト基本設定
-     * @var array
-     */
-    public $siteConfigs = [];
 
     /**
      * initialize
@@ -60,31 +50,6 @@ class UsersController extends BcAdminAppController
     {
         parent::initialize();
         $this->Authentication->allowUnauthenticated(['login']);
-        $this->loadModel('BaserCore.LoginStores');
-    }
-
-    /**
-     * beforeFilter
-     * @param EventInterface $event
-     * @return Response|void|null
-     * @checked
-     * @unitTest
-     */
-    public function beforeFilter(EventInterface $event)
-    {
-        parent::beforeFilter($event);
-        // TODO 未実装、取り急ぎ動作させるためのコード
-        // >>>
-        $this->siteConfigs['admin_list_num'] = 30;
-        // <<<
-        // TODO 未実装
-        /* >>>
-        if (BC_INSTALLED) {
-            if (isset($this->UserGroup)) {
-                $this->set('usePermission', $this->UserGroup->checkOtherAdmins());
-            }
-        }
-        <<< */
     }
 
     /**
@@ -94,7 +59,7 @@ class UsersController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function login()
+    public function login(UserManageServiceInterface $userManage)
     {
         $this->set('savedEnable', $this->request->is('ssl'));
         $result = $this->Authentication->getResult();
@@ -102,15 +67,10 @@ class UsersController extends BcAdminAppController
             if ($result->isValid()) {
                 $target = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
                 $user = $result->getData();
-                // グループ情報等データセットを付与
-                $user = $this->Users->getLoginFormatData($user->id);
-                $this->Authentication->setIdentity($user);
-                $this->LoginStores->removeKey('Admin', $user->id);
-                // 自動ログイン保存
+                $userManage->removeLoginKey($user->id);
                 if ($this->request->is('ssl') && $this->request->getData('saved') == '1') {
-                    $loginStore = $this->LoginStores->addKey('Admin', $user->id);
-                    // クッキーを追加
-                    $this->setCookieAutoLoginKey($loginStore->store_key);
+                    // 自動ログイン保存
+                    $this->response = $userManage->setCookieAutoLoginKey($this->response, $user->id);
                 }
                 $this->BcMessage->setInfo(__d('baser', 'ようこそ、' . $user->getDisplayName() . 'さん。'));
                 $this->redirect($target);
@@ -136,29 +96,19 @@ class UsersController extends BcAdminAppController
      * @unitTest
      * @noTodo
      */
-    public function login_agent($id): ?Response
+    public function login_agent(UserManageServiceInterface $userManage, $id): ?Response
     {
-        $session = Router::getRequest()->getSession();
-        $user = BcUtil::loginUser();
-
         // 特権確認
         if (BcUtil::isSuperUser() === false) {
             throw new ForbiddenException();
         }
-
         // 既に代理ログイン済み
         if (BcUtil::isAgentUser()) {
             $this->BcMessage->setError(__d('baser', '既に代理ログイン中のため失敗しました。'));
             return $this->redirect(['action' => 'index']);
         }
-
-        // 対象ユーザデータ取得
-        $agentUser = $this->Users->getLoginFormatData($id);
-        $this->Authentication->setIdentity($agentUser);
-        $session->write('AuthAgent.User', $user);
-        $session->write('AuthAgent.referer', $this->referer());
-        $target = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
-        return $this->redirect($target);
+        $userManage->loginToAgent($this->request, $this->response, $id, $this->referer());
+        return $this->redirect($this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect')));
     }
 
     /**
@@ -168,19 +118,16 @@ class UsersController extends BcAdminAppController
      * @noTodo
      * @checked
      */
-    public function back_agent()
+    public function back_agent(UserManageServiceInterface $userManage)
     {
-        $session = Router::getRequest()->getSession();
-        $user = $session->read('AuthAgent.User');
-        if (empty($user)) {
-            $this->BcMessage->setError(__d('baser', '対象データが見つかりません。'));
-            return $this->redirect(['action' => 'index']);
+        try {
+            $redirectUrl = $userManage->returnLoginUserFromAgent($this->request, $this->response);
+            $this->BcMessage->setInfo(__d('baser', '元のユーザーに戻りました。'));
+            return $this->redirect($redirectUrl);
+        } catch (\Exception $e) {
+            $this->BcMessage->setError($e->getMessage());
+            return $this->redirect($this->referer());
         }
-        $this->Authentication->setIdentity($user);
-        $this->BcMessage->setInfo(__d('baser', '元のユーザーに戻りました。'));
-        $target = $session->read('AuthAgent.referer') ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
-        $session->delete('AuthAgent');
-        return $this->redirect($target);
     }
 
     /**
@@ -190,15 +137,11 @@ class UsersController extends BcAdminAppController
      * @unitTest
      * @noTodo
      */
-    public function logout()
+    public function logout(UserManageServiceInterface $userManage)
     {
-        // ログイン状態保存のデータ削除
-        $user = $this->Authentication->getIdentity();
         /* @var User $user */
-        $this->LoginStores->removeKey('Admin', $user->id);
-        $this->response = $this->response->withExpiredCookie(new Cookie($this->LoginStores::KEY_NAME));
-        $session = Router::getRequest()->getSession();
-        $session->delete('AuthAgent');
+        $user = $this->Authentication->getIdentity();
+        $userManage->logout($this->request, $this->response, $user->id);
         $this->BcMessage->setInfo(__d('baser', 'ログアウトしました'));
         $this->redirect($this->Authentication->logout());
     }
@@ -214,7 +157,7 @@ class UsersController extends BcAdminAppController
     public function index(UserManageServiceInterface $userManage): void
     {
         $this->setViewConditions('User', ['default' => ['query' => [
-            'num' => $this->siteConfigs['admin_list_num'],
+            'num' => $userManage->getAdminListNum(),
             'sort' => 'id',
             'direction' => 'asc',
         ]]]);
@@ -266,6 +209,7 @@ class UsersController extends BcAdminAppController
      * @return Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws RecordNotFoundException When record not found.
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function edit(UserManageServiceInterface $userManage, $id = null)
@@ -276,15 +220,6 @@ class UsersController extends BcAdminAppController
         }
         $user = $userManage->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            // TODO: 未実装 非特権ユーザは該当ユーザの編集権限があるか確認
-            /* >>>
-            if ($user['user_group_id'] !== Configure::read('BcApp.adminGroupId')) {
-                $loginUser = BcUtil::loginUser();
-                if (!$this->UserGroup->Permission->check('/admin/users/edit/' . $this->request->getData('id'), $loginUser['user_group_id'])) {
-                    $updatable = false;
-                }
-            }
-            <<< */
             if (!BcUtil::loginUser()->isAdmin() && $userManage->willChangeSelfGroup($this->getRequest()->getData())) {
                 $this->BcMessage->setError(__d('baser', '自分のアカウントのグループは変更できません。'));
             } else {
@@ -293,17 +228,11 @@ class UsersController extends BcAdminAppController
                         'user' => $user
                     ]));
                     if ($userManage->isSelfUpdate($user->id)) {
-                        $this->Authentication->setIdentity($this->Users->getLoginFormatData($user->id));
+                        $this->Authentication->setIdentity($userManage->get($user->id));
                     }
                     $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を更新しました。', $user->name));
                     return $this->redirect(['action' => 'edit', $user->id]);
                 } else {
-                    // TODO: よく使う項目のデータを再セット
-                    /* >>>
-                    $user = $this->User->find('first', ['conditions' => ['User.id' => $id]]);
-                    unset($user['User']);
-                    $this->request->data = array_merge($user, $this->request->data);
-                    <<< */
                     $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
                 }
             }

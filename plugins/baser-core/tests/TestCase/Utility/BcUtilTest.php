@@ -69,7 +69,7 @@ class BcUtilTest extends BcTestCase
     public function testLoginUser($isLogin, $expects): void
     {
         if ($isLogin) {
-            $this->loginAdmin();
+            $this->loginAdmin($this->getRequest());
         }
         $result = BcUtil::loginUser();
         if ($result) {
@@ -96,7 +96,7 @@ class BcUtilTest extends BcTestCase
     public function testIsSuperUser($id, $expects): void
     {
         if ($id) {
-            $this->loginAdmin($id);
+            $this->loginAdmin($this->getRequest(), $id);
         }
         $result = BcUtil::isSuperUser();
         $this->assertEquals($expects, $result);
@@ -123,7 +123,7 @@ class BcUtilTest extends BcTestCase
     {
 
         if ($id) {
-            $user = $this->loginAdmin($id);
+            $user = $this->loginAdmin($this->getRequest(), $id);
             $session = $this->request->getSession();
             $session->write('AuthAgent.User', $user);
         }

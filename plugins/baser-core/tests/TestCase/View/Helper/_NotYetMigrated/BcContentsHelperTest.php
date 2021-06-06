@@ -338,7 +338,7 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testGetJsonSettings()
     {
-        $this->_loginAdmin();
+        $this->loginAdmin($this->getRequest());
         App::uses('BcContentsComponent', 'Controller/Component');
         $BcContentsComponent = new BcContentsComponent(new ComponentCollection());
         $BcContentsComponent->setupAdmin();
@@ -359,7 +359,7 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testGetJsonSettingsEquals($expect, $no)
     {
-        $this->_loginAdmin();
+        $this->loginAdmin($this->getRequest());
         App::uses('BcContentsComponent', 'Controller/Component');
         $BcContentsComponent = new BcContentsComponent(new ComponentCollection());
         $BcContentsComponent->setupAdmin();

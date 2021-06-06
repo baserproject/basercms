@@ -11,12 +11,15 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use App\Application;
 use BaserCore\Controller\Admin\UsersController;
 use BaserCore\Controller\BcAppController;
+use BaserCore\Plugin;
 use BaserCore\Service\UserManageService;
 use BaserCore\Service\UsersService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Event\Event;
+use Cake\Http\BaseApplication;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -55,15 +58,15 @@ class UsersControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-
         $this->loadFixtures('UsersUserGroups', 'UserGroups');
         if ($this->getName() == 'testIndex_pagination') {
             $this->loadFixtures('Controller\UsersController\UsersPagination');
         } else {
             $this->loadFixtures('Users', 'LoginStores');
         }
-        $this->loginAdmin();
-        $this->UsersController = new UsersController($this->getRequest());
+        $request = $this->getRequest();
+        $request = $this->loginAdmin($request);
+        $this->UsersController = new UsersController($request);
         $this->UsersController->loadModel('BaserCore.Users');
     }
 
@@ -85,7 +88,6 @@ class UsersControllerTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertNotEmpty($this->UsersController->LoginStores);
         $this->assertEquals($this->UsersController->Authentication->getUnauthenticatedActions(), ['login']);
         $this->assertNotEmpty($this->UsersController->Authentication->getConfig('logoutRedirect'));
     }
@@ -105,11 +107,10 @@ class UsersControllerTest extends BcTestCase
             $request = $event->getData('request');
             return $request->withQueryParams(['num' => 1]);
         });
-        // アクション実行（requestの変化を判定するため $this->get() ではなくクラスを初期化）
-        $controller = new UsersController($this->getRequest('/baser/admin/baser-core/users/'));
-        $controller->beforeFilter(new Event('beforeFilter'));
-        $controller->index(new UserManageService());
-        $this->assertEquals(1, $controller->getRequest()->getQuery('num'));
+        // アクション実行（requestの変化を判定するため $this->get() ではなくクラスを直接利用）
+        $this->UsersController->beforeFilter(new Event('beforeFilter'));
+        $this->UsersController->index(new UserManageService());
+        $this->assertEquals(1, $this->UsersController->getRequest()->getQuery('num'));
     }
 
     /**
@@ -226,26 +227,6 @@ class UsersControllerTest extends BcTestCase
     }
 
     /**
-     * beforeFilter
-     */
-    public function testBeforeFilter()
-    {
-        $event = new Event('Controller.beforeRender', $this->UsersController);
-        $this->UsersController->beforeFilter($event);
-        $this->assertEquals($this->UsersController->siteConfigs['admin_list_num'], 30);
-    }
-
-    /**
-     * ログイン処理を行う
-     * ・リダイレクトは行わない
-     * ・requestActionから呼び出す
-     */
-    public function testLogin_exec()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * [ADMIN] 管理者ログイン後ログアウト
      */
     public function testLoginAndLogout()
@@ -256,7 +237,6 @@ class UsersControllerTest extends BcTestCase
         $this->assertRedirect('/baser/admin');
         $this->post('/baser/admin/baser-core/users/logout');
         $this->assertRedirect('/baser/admin/baser-core/users/login');
-
     }
 
     /**
@@ -267,12 +247,12 @@ class UsersControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         // 代理元 id:1 (admin)
-        $user = $this->loginAdmin();
+        $request = $this->loginAdmin($this->getRequest());
         // 一旦ログイン
         $this->post('/baser/admin/baser-core/users/login');
         // 代理先 id:2 (operator)
         $this->get('/baser/admin/baser-core/users/login_agent/2');
-        $this->assertSession($user, 'AuthAgent.User');
+        $this->assertSession($request->getAttribute('authentication')->getIdentity()->getOriginalData(), 'AuthAgent.User');
         $this->assertRedirect('/baser/admin');
     }
 
@@ -281,36 +261,11 @@ class UsersControllerTest extends BcTestCase
      */
     public function testBack_agent()
     {
-        $user = $this->loginAdmin();
-        $this->session(['AuthAgent.User' => $user]);
+        $request = $this->loginAdmin($this->getRequest());
+        $this->session(['AuthAgent.User' => $request->getAttribute('authentication')->getIdentity()->getOriginalData()]);
         $this->get('/baser/admin/baser-core/users/back_agent');
         $this->assertSession(null, 'AuthAgent');
         $this->assertRedirect('/baser/admin');
-    }
-
-    /**
-     * 認証クッキーをセットする
-     */
-    public function testSetAuthCookie()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * [ADMIN] ユーザー情報削除 (ajax)
-     */
-    public function testAjax_delete()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * ログインパスワードをリセットする
-     * 新しいパスワードを生成し、指定したメールアドレス宛に送信する
-     */
-    public function testReset_password()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
 }

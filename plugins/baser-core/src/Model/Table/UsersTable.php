@@ -304,22 +304,6 @@ class UsersTable extends Table
     }
 
     /**
-     * ログイン時のユーザデータを取得する
-     *
-     * @param [type] $id
-     * @return User
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getLoginFormatData($id): User
-    {
-        return $this->get($id, [
-            'contain' => ['UserGroups'],
-        ]);
-    }
-
-    /**
      * ユーザーリストを取得する
      * 条件を指定する場合は引数を指定する
      *
@@ -423,7 +407,7 @@ class UsersTable extends Table
      */
     public function findAvailable(Query $query)
     {
-        return $query->where(['status' => true]);
+        return $query->where(['status' => true])->contain('UserGroups');
     }
 
 }

@@ -11,6 +11,10 @@
 
 namespace BaserCore\ServiceProvider;
 
+use BaserCore\Service\PermissionsMockService;
+use BaserCore\Service\PermissionsServiceInterface;
+use BaserCore\Service\SiteConfigsMockService;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\UserApiService;
 use BaserCore\Service\UserApiServiceInterface;
 use BaserCore\Service\UserManageService;
@@ -49,7 +53,8 @@ class BcServiceProvider extends ServiceProvider
         UserGroupManageServiceInterface::class,
         PluginsServiceInterface::class,
         PluginManageServiceInterface::class,
-
+        SiteConfigsServiceInterface::class,
+        PermissionsServiceInterface::class
     ];
 
     /**
@@ -71,7 +76,12 @@ class BcServiceProvider extends ServiceProvider
         // Pluginsサービス
         $container->add(PluginsServiceInterface::class, PluginsService::class, true);
         $container->add(PluginManageServiceInterface::class, PluginManageService::class, true);
-
+        // SiteConfigsサービス
+        // TODO 未実装のためモックを利用
+        $container->add(SiteConfigsServiceInterface::class, SiteConfigsMockService::class, true);
+        // Permissionsサービス
+        // TODO 未実装のためモックを利用
+        $container->add(PermissionsServiceInterface::class, PermissionsMockService::class, true);
     }
 
 }

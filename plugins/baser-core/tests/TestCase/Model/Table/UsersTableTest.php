@@ -204,13 +204,4 @@ class UsersTableTest extends BcTestCase
         $this->assertEquals('システム管理', $list[0]);
     }
 
-    /**
-     * Test getLoginFormatData
-     */
-    public function testGetLoginFormatData()
-    {
-        $user = $this->Users->getLoginFormatData(1)->toArray();
-        $this->assertEquals(1, $user['user_groups'][0]['id']);
-    }
-
 }

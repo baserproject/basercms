@@ -608,7 +608,7 @@ class PageTest extends BaserTestCase
      */
     public function testCopy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId, $message = null)
     {
-        $this->_loginAdmin();
+        $this->loginAdmin($this->getRequest());
         $result = $this->Page->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
 
         // コピーしたファイル存在チェック

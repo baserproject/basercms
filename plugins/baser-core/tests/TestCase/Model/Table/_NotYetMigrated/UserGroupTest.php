@@ -151,15 +151,6 @@ class UserGroupTest extends BaserTestCase
     }
 
     /**
-     * 管理者グループ以外のグループが存在するかチェックする
-     */
-    public function testCheckOtherAdmins()
-    {
-        $result = $this->UserGroup->checkOtherAdmins();
-        $this->assertEquals(true, $result, '管理者グループ以外のグループは存在します');
-    }
-
-    /**
      * 認証プレフィックスを取得する
      *
      * @param int $id ユーザーグループID

@@ -11,14 +11,23 @@
 
 namespace BaserCore\Service;
 
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
-
 /**
- * Class UserGroupManageService
+ * Class SiteConfigsMockService
  * @package BaserCore\Service
  */
-class UserGroupManageService extends UserGroupsService implements UserGroupManageServiceInterface
+class SiteConfigsMockService implements SiteConfigsServiceInterface
 {
+    /**
+     * フィールドの値を取得する
+     * @param $fieldName
+     * @return mixed
+     */
+    public function value($fieldName)
+    {
+        // TODO 未実装
+        if ($fieldName === 'admin_list_num') {
+            return 30;
+        }
+        return null;
+    }
 }

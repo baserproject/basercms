@@ -27,12 +27,23 @@ class BcAdminAppControllerTest extends BcTestCase
     use IntegrationTestTrait;
 
     /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.UserGroups',
+    ];
+
+    /**
      * set up
      */
     public function setUp(): void
     {
         parent::setUp();
-        $this->BcAdminApp = new BcAdminAppController($this->getRequest());
+        $this->BcAdminApp = new BcAdminAppController($this->loginAdmin($this->getRequest()));
         $this->RequestHandler = $this->BcAdminApp->components()->load('RequestHandler');
     }
 

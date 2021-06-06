@@ -164,7 +164,7 @@ class BcAuthHelperTest extends BcTestCase
         $result = $this->BcAuth->isAdminLogin();
         $this->assertFalse($result);
         // ログインした場合
-        $this->loginAdmin();
+        $this->loginAdmin($this->getRequest());
         $result = $this->BcAuth->isAdminLogin();
         $this->assertTrue($result);
     }
@@ -213,7 +213,7 @@ class BcAuthHelperTest extends BcTestCase
         foreach($ids as $id) {
             $expected = $this->getUser($id);
 
-            $this->loginAdmin($id);
+            $this->loginAdmin($this->getRequest(), $id);
             $result = $this->BcAuth->getCurrentLoginUser();
             $this->assertEquals($result, $expected);
         }
@@ -227,7 +227,7 @@ class BcAuthHelperTest extends BcTestCase
     public function testIsSuperUser($id, $expected)
     {
         if ($id) {
-            $this->loginAdmin($id);
+            $this->loginAdmin($this->getRequest(), $id);
         }
         $result = $this->BcAuth->isSuperUser();
         $this->assertEquals($result, $expected);

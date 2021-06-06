@@ -11,7 +11,9 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\Service\UserManageService;
+use Cake\Http\Response;
 
 /**
  * Class UserManageServiceTest
@@ -67,9 +69,9 @@ class UserManageServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testIsSelfUpdate($loginId, $postId, $expected)
     {
-        $this->getRequest();
+        $request = $this->getRequest();
         if ($loginId) {
-            $this->loginAdmin($loginId);
+            $this->loginAdmin($request, $loginId);
         }
         $result = $this->UserManage->isSelfUpdate($postId);
         $this->assertEquals($expected, $result);
@@ -94,9 +96,9 @@ class UserManageServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testIsEditable($loginId, $postId, $expected)
     {
-        $this->getRequest();
+        $request = $this->getRequest();
         if ($loginId) {
-            $this->loginAdmin($loginId);
+            $this->loginAdmin($request, $loginId);
         }
         $result = $this->UserManage->isEditable($postId);
         $this->assertEquals($expected, $result);
@@ -122,9 +124,9 @@ class UserManageServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testIsDeletable($loginId, $postId, $expected)
     {
-        $this->getRequest();
+        $request = $this->getRequest();
         if ($loginId) {
-            $this->loginAdmin($loginId);
+            $this->loginAdmin($request, $loginId);
         }
         $result = $this->UserManage->isDeletable($postId);
         $this->assertEquals($expected, $result);
@@ -158,9 +160,9 @@ class UserManageServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testWillChangeSelfGroup($loginId, $userGroupId, $expected)
     {
-        $this->getRequest();
+        $request = $this->getRequest();
         if ($loginId) {
-            $this->loginAdmin($loginId);
+            $this->loginAdmin($request, $loginId);
         }
         $postData = [
             'user_groups' => ['_ids' => $userGroupId]
@@ -175,6 +177,82 @@ class UserManageServiceTest extends \BaserCore\TestSuite\BcTestCase
             [1, [0 => 1], false],
             [1, [0 => 1, 1 => 2], true],
         ];
+    }
+
+    /**
+     * test Login
+     */
+    public function testLoginAndLogout()
+    {
+        $request = $this->getRequest('/baser/admin/users/index');
+        $authentication = $this->BaserCore->getAuthenticationService($request);
+        $request = $request->withAttribute('authentication', $authentication);
+        $response = new Response();
+        $request = $this->UserManage->login($request, $response, 1)['request'];
+        $this->assertEquals(1, $request->getAttribute('identity')->id);
+        $this->assertEquals(1, $request->getSession()->read('AuthAdmin')->id);
+        $this->UserManage->logout($request, $response, 1);
+        $this->assertNull($request->getSession()->read('AuthAdmin'));
+    }
+
+    /**
+     * test getAuthSessionKey
+     */
+    public function testGetAuthSessionKey()
+    {
+        $this->assertEquals('AuthAdmin', $this->UserManage->getAuthSessionKey('Admin'));
+        $this->assertFalse($this->UserManage->getAuthSessionKey('baser'));
+    }
+
+    /**
+     * test reLogin
+     */
+    public function testReLogin()
+    {
+        $request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/users/index'));
+        $this->UserManage->update($request->getAttribute('identity')->getOriginalData(), ['name' => 'test']);
+        $request = $this->UserManage->reLogin($request, new Response())['request'];
+        $this->assertEquals('test', $request->getAttribute('identity')->name);
+    }
+
+    /**
+     * test setCookieAutoLoginKey
+     */
+    public function testSetCookieAutoLoginKey()
+    {
+        $response = $this->UserManage->setCookieAutoLoginKey(new Response(), 1);
+        $cookie = $response->getCookie(LoginStoresTable::KEY_NAME);
+        $this->assertNotEmpty($cookie['value']);
+    }
+
+    /**
+     * test checkAutoLogin
+     */
+    public function testCheckAutoLogin()
+    {
+        $response = $this->UserManage->setCookieAutoLoginKey(new Response(), 1);
+        $request = $this->getRequest('/baser/admin/users/');
+        $beforeCookie = $response->getCookie(LoginStoresTable::KEY_NAME);
+        $request = $request->withCookieParams([LoginStoresTable::KEY_NAME => $beforeCookie['value']]);
+        $response = $this->UserManage->checkAutoLogin($request, $response);
+        $afterCookie = $response->getCookie(LoginStoresTable::KEY_NAME);
+        $this->assertNotEmpty($afterCookie['value']);
+        $this->assertNotEquals($beforeCookie['value'], $afterCookie['value']);
+    }
+
+    /**
+     * test loginToAgent
+     */
+    public function testLoginToAgentAndReturnLoginUserFromAgent()
+    {
+        $request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/users/'));
+        $response = new Response();
+        $this->UserManage->loginToAgent($request, $response, 2);
+        $this->assertSession(1, 'AuthAgent.User.id');
+        $this->assertSession(2, 'AuthAdmin.id');
+        $this->UserManage->returnLoginUserFromAgent($request, $response);
+        $this->assertSession(null, 'AuthAgent.User.id');
+        $this->assertSession(1, 'AuthAdmin.id');
     }
 
 }

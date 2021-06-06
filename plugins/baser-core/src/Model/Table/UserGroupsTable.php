@@ -246,19 +246,6 @@ class UserGroupsTable extends Table //TODO AppTableに変更必
     }
 
     /**
-     * 管理者グループ以外のグループが存在するかチェックする
-     * @return    boolean
-     */
-    public function checkOtherAdmins()
-    {
-        if ($this->find('first', ['conditions' => ['UserGroup.id <>' => 1]])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * 認証プレフィックスを取得する
      *
      * @param int $id ユーザーグループID

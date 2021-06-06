@@ -153,7 +153,7 @@ class ContentFolderTest extends BaserTestCase
     {
         Configure::write('BcAuthPrefix.admin.previewRedirect', '');
         $_SERVER['REQUEST_URI'] = '/';
-        $this->_loginAdmin();
+        $this->loginAdmin($this->getRequest());
 
         $pageModel = ClassRegistry::init('Page');
         // ディレクトリを追加

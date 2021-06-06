@@ -91,10 +91,10 @@ class BcTestCaseTest extends BcTestCase
     public function testLoginAdmin(): void
     {
         // デフォルト引数が1かテスト
-        $this->assertEquals($this->loginAdmin()->id, "1");
+        $this->assertEquals($this->loginAdmin($this->getRequest())->getAttribute('authentication')->getIdentity()->getOriginalData()->id, "1");
         // session書かれているかテスト
-        $this->assertSession($this->loginAdmin(1), Configure::read('BcPrefixAuth.Admin.sessionKey'));
-        $this->assertSession($this->loginAdmin(2), Configure::read('BcPrefixAuth.Admin.sessionKey'));
+        $this->assertSession($this->loginAdmin($this->getRequest())->getAttribute('authentication')->getIdentity()->getOriginalData(), Configure::read('BcPrefixAuth.Admin.sessionKey'));
+        $this->assertSession($this->loginAdmin($this->getRequest(), 2)->getAttribute('authentication')->getIdentity()->getOriginalData(), Configure::read('BcPrefixAuth.Admin.sessionKey'));
     }
 
     /**

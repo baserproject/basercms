@@ -77,6 +77,7 @@ class PluginsController extends BcApiController
             if($plugins->install($name, $this->request->getData('connection'))) {
                 $message = sprintf(__d('baser', 'プラグイン「%s」をインストールしました。'), $name);
                 // TODO: アクセス権限を追加する
+                // PermissionsServiceに移動し、PluginsService::install() 内より呼び出す
                 // $this->_addPermission($this->request->data);
             } else {
                 $message = __d('baser', 'プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。');
@@ -95,6 +96,9 @@ class PluginsController extends BcApiController
      * プラグインを無効化する
      * @param PluginsServiceInterface $plugins
      * @param $name
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function detach(PluginsServiceInterface $plugins, $name)
     {
@@ -116,6 +120,9 @@ class PluginsController extends BcApiController
      * プラグインのデータベースを初期化する
      * @param PluginsServiceInterface $plugins
      * @param $name
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function reset_db(PluginsServiceInterface $plugins, $name)
     {
