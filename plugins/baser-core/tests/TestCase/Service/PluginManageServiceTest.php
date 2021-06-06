@@ -11,7 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
-use BaserCore\Service\PluginManageService;
+use BaserCore\Service\Admin\PluginManageService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Filesystem\Folder;
 use Cake\Core\App;

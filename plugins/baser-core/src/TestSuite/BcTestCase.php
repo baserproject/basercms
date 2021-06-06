@@ -16,7 +16,7 @@ use Authentication\AuthenticationService;
 use Authentication\Authenticator\Result;
 use BaserCore\Event\BcControllerEventListener;
 use BaserCore\Plugin;
-use BaserCore\Service\UserApiService;
+use BaserCore\Service\Api\UserApiService;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Event\EventManager;

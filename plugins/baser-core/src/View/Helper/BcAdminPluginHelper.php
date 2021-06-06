@@ -11,8 +11,8 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Service\PluginManageService;
-use BaserCore\Service\PluginManageServiceInterface;
+use BaserCore\Service\Admin\PluginManageService;
+use BaserCore\Service\Admin\PluginManageServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
@@ -20,10 +20,10 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 
 /**
- * Class BcPluginManageHelper
+ * Class BcAdminPluginHelper
  * @package BaserCore\View\Helper
  */
-class BcPluginManageHelper extends Helper
+class BcAdminPluginHelper extends Helper
 {
 
     /**

@@ -40,7 +40,7 @@ $this->BcAdmin->setHelp('users_form');
         'id' => 'BtnSave']
     ) ?>
   </div>
-  <?php if ($this->BcUserManage->isDeletable($user->id)): ?>
+  <?php if ($this->BcAdminUser->isDeletable($user->id)): ?>
     <div class="bca-actions__sub">
       <?= $this->BcAdminForm->postLink(
         __d('baser', '削除'),

@@ -9,9 +9,10 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Service;
+namespace BaserCore\Service\Api;
 
 use Authentication\Authenticator\ResultInterface;
+use BaserCore\Service\UsersService;
 use Cake\Core\Configure;
 use Firebase\JWT\JWT;
 

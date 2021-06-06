@@ -11,24 +11,24 @@
 
 namespace BaserCore\ServiceProvider;
 
+use BaserCore\Service\Admin\PluginManageService;
+use BaserCore\Service\Admin\UserGroupManageService;
+use BaserCore\Service\Admin\UserManageService;
+use BaserCore\Service\Api\UserApiService;
+use BaserCore\Service\Api\UserApiServiceInterface;
 use BaserCore\Service\PermissionsMockService;
 use BaserCore\Service\PermissionsServiceInterface;
 use BaserCore\Service\SiteConfigsMockService;
 use BaserCore\Service\SiteConfigsServiceInterface;
-use BaserCore\Service\UserApiService;
-use BaserCore\Service\UserApiServiceInterface;
-use BaserCore\Service\UserManageService;
-use BaserCore\Service\UserManageServiceInterface;
+use BaserCore\Service\Admin\UserManageServiceInterface;
 use BaserCore\Service\UsersService;
 use BaserCore\Service\UsersServiceInterface;
-use BaserCore\Service\UserGroupManageService;
-use BaserCore\Service\UserGroupManageServiceInterface;
+use BaserCore\Service\Admin\UserGroupManageServiceInterface;
 use BaserCore\Service\UserGroupsService;
 use BaserCore\Service\UserGroupsServiceInterface;
 use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Service\PluginsService;
-use BaserCore\Service\PluginManageServiceInterface;
-use BaserCore\Service\PluginManageService;
+use BaserCore\Service\Admin\PluginManageServiceInterface;
 use Cake\Core\ServiceProvider;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;

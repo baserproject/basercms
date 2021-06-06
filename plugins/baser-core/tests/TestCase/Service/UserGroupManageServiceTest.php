@@ -11,7 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
-use BaserCore\Service\UserGroupManageService;
+use BaserCore\Service\Admin\UserGroupManageService;
 use BaserCore\TestSuite\BcTestCase;
 
 /**

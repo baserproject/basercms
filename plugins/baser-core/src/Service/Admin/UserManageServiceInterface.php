@@ -9,7 +9,7 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Service;
+namespace BaserCore\Service\Admin;
 
 use BaserCore\Model\Entity\User;
 use Cake\Datasource\EntityInterface;

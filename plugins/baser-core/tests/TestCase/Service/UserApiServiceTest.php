@@ -12,7 +12,7 @@
 namespace BaserCore\Test\TestCase\Service;
 
 use Authentication\Authenticator\Result;
-use BaserCore\Service\UserApiService;
+use BaserCore\Service\Api\UserApiService;
 use BaserCore\TestSuite\BcTestCase;
 
 /**

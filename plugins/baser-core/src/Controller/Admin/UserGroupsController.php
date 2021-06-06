@@ -12,7 +12,7 @@
 namespace BaserCore\Controller\Admin;
 
 use BaserCore\Model\Entity\UserGroup;
-use BaserCore\Service\UserGroupManageServiceInterface;
+use BaserCore\Service\Admin\UserGroupManageServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\UserGroupsTable;
 use Cake\Datasource\Exception\RecordNotFoundException;

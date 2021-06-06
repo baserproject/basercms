@@ -11,9 +11,7 @@
 
 namespace BaserCore\Service;
 
-use BaserCore\Model\Entity\UserGroup;
 use Cake\Datasource\EntityInterface;
-use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
 
 /**

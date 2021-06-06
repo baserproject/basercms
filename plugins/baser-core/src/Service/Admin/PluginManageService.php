@@ -9,15 +9,16 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Service;
+namespace BaserCore\Service\Admin;
 
+use BaserCore\Service\PluginsService;
 use Cake\Core\App;
 use Cake\Utility\Inflector;
+use BaserCore\Model\Table\PluginsTable;
+use Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use BaserCore\Model\Table\PluginsTable;
-use Exception;
 
 /**
  * Class PluginManageService

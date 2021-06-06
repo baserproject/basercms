@@ -12,7 +12,7 @@
 namespace BaserCore\Controller\Admin;
 
 use BaserCore\Controller\BcAppController;
-use BaserCore\Service\UserManageServiceInterface;
+use BaserCore\Service\Admin\UserManageServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;

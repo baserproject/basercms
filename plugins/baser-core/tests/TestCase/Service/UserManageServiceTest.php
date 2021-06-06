@@ -12,7 +12,7 @@
 namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Model\Table\LoginStoresTable;
-use BaserCore\Service\UserManageService;
+use BaserCore\Service\Admin\UserManageService;
 use Cake\Http\Response;
 
 /**

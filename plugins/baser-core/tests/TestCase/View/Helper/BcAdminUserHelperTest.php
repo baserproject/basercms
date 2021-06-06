@@ -12,23 +12,23 @@
 namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\View\BcAdminAppView;
-use BaserCore\View\Helper\BcUserManageHelper;
+use BaserCore\View\Helper\BcAdminUserHelper;
 
 /**
- * Class BcUserManageHelperTest
+ * Class BcAdminUserHelperTest
  *
  * 基本的に UserManageService のラッパークラスのため、ラップしたメソッドのテストは書かない
  *
  * @package BaserCore\Test\TestCase\View\Helper
  */
-class BcUserManageHelperTest extends \BaserCore\TestSuite\BcTestCase
+class BcAdminUserHelperTest extends \BaserCore\TestSuite\BcTestCase
 {
     /**
-     * BcUserManageHelper
-     * @var BcUserManageHelper
+     * BcAdminUserHelper
+     * @var BcAdminUserHelper
      */
 
-    public $BcUserManage;
+    public $BcAdminUser;
 
     /**
      * setUp
@@ -36,7 +36,7 @@ class BcUserManageHelperTest extends \BaserCore\TestSuite\BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->BcUserManage = new BcUserManageHelper(new BcAdminAppView($this->getRequest('/')));
+        $this->BcAdminUser = new BcAdminUserHelper(new BcAdminAppView($this->getRequest('/')));
     }
 
     /**
@@ -44,7 +44,7 @@ class BcUserManageHelperTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function tearDown(): void
     {
-        unset($this->BcUserManage);
+        unset($this->BcAdminUser);
         parent::tearDown();
     }
 
@@ -53,7 +53,7 @@ class BcUserManageHelperTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertTrue(isset($this->BcUserManage->UserManage));
+        $this->assertTrue(isset($this->BcAdminUser->UserManage));
     }
 
 }

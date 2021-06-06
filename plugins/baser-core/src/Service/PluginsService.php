@@ -20,7 +20,6 @@ use Cake\Core\Configure;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\App;
 use Cake\Filesystem\Folder;
-use BaserCore\Model\Entity\Plugin;
 use Cake\Core\Plugin as CakePlugin;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Annotation\UnitTest;

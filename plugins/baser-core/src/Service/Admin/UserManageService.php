@@ -9,28 +9,27 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Service;
+namespace BaserCore\Service\Admin;
 
 use Authentication\Identity;
-use BaserCore\Model\Entity\User;
 use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\Model\Table\UsersTable;
+use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Service\UsersService;
 use Cake\Core\Configure;
 use Cake\Http\Cookie\Cookie;
 use Cake\Http\ServerRequest;
-use Cake\ORM\Query;
-use Cake\Datasource\EntityInterface;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
 use DateTime;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class UsersService

@@ -30,7 +30,7 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 ]);
 $this->BcAdmin->setTitle(__d('baser', '新規プラグイン登録'));
 $this->BcAdmin->setHelp('plugins_install');
-$installStatusMessage = $this->BcPluginManage->getInstallStatusMessage($plugin->name);
+$installStatusMessage = $this->BcAdminPlugin->getInstallStatusMessage($plugin->name);
 ?>
 
 

@@ -15,7 +15,7 @@ use App\Application;
 use BaserCore\Controller\Admin\UsersController;
 use BaserCore\Controller\BcAppController;
 use BaserCore\Plugin;
-use BaserCore\Service\UserManageService;
+use BaserCore\Service\Admin\UserManageService;
 use BaserCore\Service\UsersService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Event\Event;

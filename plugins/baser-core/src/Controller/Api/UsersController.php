@@ -12,7 +12,7 @@
 namespace BaserCore\Controller\Api;
 
 use Authentication\Controller\Component\AuthenticationComponent;
-use BaserCore\Service\UserApiServiceInterface;
+use BaserCore\Service\Api\UserApiServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
 use Cake\Core\Exception\Exception;
 use Firebase\JWT\JWT;

@@ -13,7 +13,7 @@ namespace BaserCore\Controller\Admin;
 
 use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Model\Entity\User;
-use BaserCore\Service\UserManageServiceInterface;
+use BaserCore\Service\Admin\UserManageServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\UsersTable;

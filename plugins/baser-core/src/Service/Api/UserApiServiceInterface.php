@@ -9,16 +9,20 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Service;
+namespace BaserCore\Service\Api;
 
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
+use Authentication\Authenticator\ResultInterface;
 
 /**
- * Class UserGroupManageService
+ * Interface UserApiServiceInterface
  * @package BaserCore\Service
  */
-class UserGroupManageService extends UserGroupsService implements UserGroupManageServiceInterface
+interface UserApiServiceInterface
 {
+    /**
+     * ログイントークンを取得する
+     * @param ResultInterface $result
+     * @return array
+     */
+    public function getAccessToken(ResultInterface $result): array;
 }
