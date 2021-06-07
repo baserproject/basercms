@@ -20,7 +20,7 @@
 サービスクラスを作成する際は、まずインターフェイスを定義します。
 
 ```php
-// baser-core/src/Service/UserManageServiceInterface.php
+// baser-core/src/Service/Admin/UserManageServiceInterface.php
 interface UserManageServiceInterface
 {
     public function get($id): EntityInterface;
@@ -28,7 +28,7 @@ interface UserManageServiceInterface
 ```
 作成したインターフェイスを実装するようにサービスクラスを定義します。
 ```php
-// baser-core/src/Service/UserManageService.php
+// baser-core/src/Service/Admin/UserManageService.php
 class UserManageService implements UserManageServiceInterface
 {
     public function get($id)
@@ -38,7 +38,19 @@ class UserManageService implements UserManageServiceInterface
 }
 ```
 
-なお、サービスクラスは状態を持たないように実装する。
+管理画面用として利用するサービスクラスの名前空間は次のようにしてください。
+
+```php
+namespace BaserCore\Service\Admin;
+```
+
+API用として利用するサービスクラスの名前空間は次のようにしてください。
+
+```php
+namespace BaserCore\Service\Api;
+```
+
+なお、サービスクラスは状態を持たないように実装します。
 
 　
 ## 利用するサービスの定義
@@ -97,18 +109,21 @@ class UsersController extends BcAdminAppController
 　
 ## ヘルパーの実装
 
-ヘルパーについて、ビジネスロジックに関するものは、内部的にサービスクラスを利用し、サービスクラスのラッパーとなるように実装します。
+ヘルパーについて、ビジネスロジックに関するものは、内部的にサービスクラスを利用し、サービスクラスのラッパーとなるように実装します。  
+なお、CakePHP4では、ヘルパでのDIコンテナの利用ができませんので、代替措置として `BcContainerTrait ` を利用します。
 
 ```php
-// baser-core/src/View/Helper/UserManageHelper.php
-class UserManageHelper extends Helper
+// baser-core/src/View/Helper/BcAdminUserHelper.php
+class BcAdminUserHelper extends Helper
 {
+    use \BaserCore\Utility\BcContainerTrait;
+    
     public $userManageService;
     
     public function initialize(array $config)
     {
         parent::initialize($config);
-        $this->userManageService = new UserManageService();
+        $this->userManageService = $this->getService(UserManageServiceInterface::class)
     }
     
     public function get($id)
@@ -118,7 +133,13 @@ class UserManageHelper extends Helper
 }
 ```
 
-ラッパーとして実装したメソッドについては、サービスクラス側でテストを書き、ヘルパー側ではテストを書いたものとし、ヘルパーではテストは書きません。
+管理画面用のサービスクラスを利用するヘルパーのクラス名は次のようにしてください。
+
+```php
+BcAdmin{EntityName}Helper
+```
+
+なお、ラッパーとして実装したメソッドについては、サービスクラス側でテストを書き、ヘルパー側ではテストを書いたものとし、ヘルパーではテストは書きません。
 
 　
 ## APIの実装
