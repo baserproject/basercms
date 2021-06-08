@@ -15,6 +15,8 @@ use BaserCore\Model\Entity\UserGroup;
 use BaserCore\Service\Admin\UserGroupManageServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\UserGroupsTable;
+use BaserCore\Service\Admin\UserManageServiceInterface;
+use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Datasource\ResultSetInterface;
 use Cake\Event\EventInterface;
@@ -44,18 +46,7 @@ class UserGroupsController extends BcAdminAppController
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-
-        // TODO 取り急ぎ動作させるためのコード
-        // >>>
-        $this->siteConfigs['admin_list_num'] = 30;
-        return;
-        // <<<
-
-        $authPrefixes = [];
-        foreach(Configure::read('BcAuthPrefix') as $key => $authPrefix) {
-            $authPrefixes[$key] = $authPrefix['name'];
-        }
-        if (count($authPrefixes) <= 1) {
+        if (count(Configure::read('BcAuthPrefix')) === 1) {
             $this->UserGroup->validator()->remove('auth_prefix');
         }
     }
@@ -85,7 +76,7 @@ class UserGroupsController extends BcAdminAppController
     public function index(UserGroupManageServiceInterface $UserGroupManage): void
     {
         $this->setViewConditions('UserGroup', ['default' => ['query' => [
-            'num' => $this->siteConfigs['admin_list_num'],
+            'num' => $UserGroupManage->getAdminListNum(),
             'sort' => 'id',
             'direction' => 'asc',
         ]]]);
@@ -164,7 +155,7 @@ class UserGroupsController extends BcAdminAppController
      * @checked
      * @unitTest
      */
-    public function edit(UserGroupManageServiceInterface $UserGroupManage, $id = null)
+    public function edit(UserGroupManageServiceInterface $UserGroupManage, UserManageServiceInterface $userManage, $id = null)
     {
 
         if ($id) {
@@ -180,10 +171,7 @@ class UserGroupsController extends BcAdminAppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             if ($userGroup = $UserGroupManage->update($userGroup, $this->request->getData())) {
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name));
-                // TODO 未実装
-                /* >>>
-                $this->BcAuth->relogin();
-                <<< */
+                $userManage->reLogin($this->request, $this->response);
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
@@ -207,12 +195,6 @@ class UserGroupsController extends BcAdminAppController
      */
     public function delete(UserGroupManageServiceInterface $UserGroupManage, $id = null)
     {
-        // TODO 未実装
-        /* >>>
-        $this->_checkSubmitToken();
-        <<< */
-
-        /* 除外処理 */
         if ($id) {
             $this->request->allowMethod(['post', 'delete']);
             $userGroup = $UserGroupManage->get($id);

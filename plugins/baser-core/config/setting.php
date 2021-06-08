@@ -203,7 +203,7 @@ return [
             'userModel' => 'BaserCore.Users',
             // セッションキー
             'sessionKey' => 'AuthAdmin',
-        ]
+        ],
     ],
     'Jwt' => [
         // kid（鍵の識別子）

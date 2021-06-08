@@ -55,4 +55,11 @@ interface UserGroupManageServiceInterface
      * @return mixed
      */
     public function delete(int $id);
+
+    /**
+     * 管理画面の一覧の表示件数を取得する
+     * @return mixed
+     */
+    public function getAdminListNum(): int;
+
 }

@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service\Admin;
 
+use BaserCore\Service\SiteConfigsTrait;
 use BaserCore\Service\UserGroupsService;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -22,4 +23,10 @@ use BaserCore\Annotation\Checked;
  */
 class UserGroupManageService extends UserGroupsService implements UserGroupManageServiceInterface
 {
+
+    /**
+     * SiteConfigsTrait
+     */
+    use SiteConfigsTrait;
+
 }

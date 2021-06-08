@@ -14,8 +14,7 @@ namespace BaserCore\Service\Admin;
 use Authentication\Identity;
 use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\Model\Table\UsersTable;
-use BaserCore\Service\SiteConfigsServiceInterface;
-use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Service\SiteConfigsTrait;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Service\UsersService;
 use Cake\Core\Configure;
@@ -40,9 +39,9 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
 {
 
     /**
-     * BcContainerTrait
+     * SiteConfigsTrait
      */
-    use BcContainerTrait;
+    use SiteConfigsTrait;
 
     /**
      * LoginStoresTable
@@ -355,16 +354,6 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
         $redirectUrl = $session->read('AuthAgent.referer') ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
         $session->delete('AuthAgent');
         return $redirectUrl;
-    }
-
-    /**
-     * 管理画面の一覧の表示件数を取得する
-     * @return mixed
-     */
-    public function getAdminListNum(): int
-    {
-        $siteConfigs = $this->getService(SiteConfigsServiceInterface::class);
-        return (int) $siteConfigs->value('admin_list_num');
     }
 
 }
