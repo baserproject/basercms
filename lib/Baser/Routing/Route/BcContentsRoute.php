@@ -63,7 +63,7 @@ class BcContentsRoute extends CakeRoute
 			@header('Vary: User-Agent');
 		} else {
 			$site = BcSite::findCurrent(true);
-			if (!is_null($site->name)) {
+			if ($site && !is_null($site->name)) {
 				if ($site->useSubDomain) {
 					$checkUrl = '/' . $site->alias . (($url)? $url : '/');
 				} else {
