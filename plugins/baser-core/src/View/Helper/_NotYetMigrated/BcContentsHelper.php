@@ -113,7 +113,7 @@ class BcContentsHelper extends AppHelper
 
             // routes
             foreach(['manage', 'add', 'edit', 'delete', 'copy', 'dblclick'] as $method) {
-                if (empty($setting['routes'][$method]) && !in_array($method, ['copy', 'manage', 'dblclick'])) {
+                if (empty($setting['routes'][$method]) && !in_array($method, ['add', 'copy', 'manage', 'dblclick'])) {
                     $setting['routes'][$method] = ['admin' => true, 'controller' => 'contents', 'action' => $method];
                 }
                 if (!empty($setting['routes'][$method])) {
@@ -122,7 +122,11 @@ class BcContentsHelper extends AppHelper
                 }
             }
             // disabled
-            $setting['addDisabled'] = !($this->_Permission->check($setting['url']['add'], $user['user_group_id']));
+			if(!empty($setting['url']['add'])) {
+				$setting['addDisabled'] = !($this->_Permission->check($setting['url']['add'], $user['user_group_id']));
+			} else {
+				$setting['addDisabled'] = true;
+			}
             $settings[$type] = $setting;
         }
         $this->settings = $settings;
