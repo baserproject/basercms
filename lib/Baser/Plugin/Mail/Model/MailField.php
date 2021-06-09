@@ -65,8 +65,8 @@ class MailField extends MailAppModel
 					'message' => __d('baser', '入力されたフィールド名は既に登録されています。')
 				],
 				[
-					'rule' => ['maxLength', 255],
-					'message' => __d('baser', 'フィールド名は255文字以内で入力してください。')
+					'rule' => ['maxLength', 50],
+					'message' => __d('baser', 'フィールド名は50文字以内で入力してください。')
 				]
 			],
 			'type' => [
