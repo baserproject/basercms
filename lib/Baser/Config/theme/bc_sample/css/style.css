@@ -465,11 +465,6 @@ body {
   margin: 0 auto;
   padding: 0 40px;
   z-index: 15; }
-  @media screen and (max-width: 1260px) {
-    .bs-global-menu {
-        width: auto;
-        padding-right: 0;
-    } }
   @media screen and (max-width: 768px) {
     .bs-global-menu {
       width: 100%;
@@ -489,6 +484,11 @@ body {
         color: #000; }
       .bs-global-menu .ul-level-3 a:hover {
         color: #555; }
+
+@media screen and (max-width: 1260px) {
+  .bs-global-menu {
+    width: auto;
+    padding-right: 0; } }
 
 /* Global Menu Item
 ----------------------------------------------- */
@@ -1001,6 +1001,18 @@ body {
   background-color: #C30;
   font-weight: normal;
   border-radius: 10px; }
+
+#flashMessage.alert-message {
+  color: #fff;
+  background-color: #f20014; }
+
+#flashMessage.warning-message {
+  color: #fff;
+  background-color: #ffd24d; }
+
+#flashMessage.info-message {
+  color: #fff;
+  background-color: #0087bc; }
 
 /* Clear
 ----------------------------------------------- */

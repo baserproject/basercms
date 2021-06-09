@@ -308,6 +308,19 @@
   border-radius: 10px;
 }
 
+#flashMessage.alert-message {
+  color: #fff;
+  background-color: #f20014;
+}
+#flashMessage.warning-message {
+  color: #fff;
+  background-color: #ffd24d;
+}
+#flashMessage.info-message {
+  color: #fff;
+  background-color: #0087bc;
+}
+
 /* Clear
 ----------------------------------------------- */
 
