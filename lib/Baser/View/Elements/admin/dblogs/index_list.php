@@ -14,6 +14,7 @@
  * [ADMIN] 最近の動き一覧 テーブル
  * <div class="bca-action-table-listup">
  */
+$this->BcListTable->setColumnNumber(4);
 ?>
 <div class="bca-data-list__top">
 	<?php if (BcUtil::isAdminUser()): ?>
