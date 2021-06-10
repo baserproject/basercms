@@ -186,7 +186,8 @@ class UsersController extends BcAdminAppController
     public function add(UserManageServiceInterface $userManage)
     {
         if ($this->request->is('post')) {
-            if ($user = $userManage->create($this->request->getData())) {
+            $user = $userManage->create($this->request->getData());
+            if (!$user->getErrors()) {
                 // EVENT Users.afterAdd
                 $this->getEventManager()->dispatch(new Event('Controller.Users.afterAdd', $this, [
                     'user' => $user
@@ -223,7 +224,8 @@ class UsersController extends BcAdminAppController
             if (!BcUtil::loginUser()->isAdmin() && $userManage->willChangeSelfGroup($this->getRequest()->getData())) {
                 $this->BcMessage->setError(__d('baser', '自分のアカウントのグループは変更できません。'));
             } else {
-                if ($user = $userManage->update($user, $this->request->getData())) {
+                $user = $userManage->update($user, $this->request->getData());
+                if (!$user->getErrors()) {
                     $this->getEventManager()->dispatch(new Event('Controller.Users.afterEdit', $this, [
                         'user' => $user
                     ]));

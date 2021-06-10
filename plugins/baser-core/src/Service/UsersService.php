@@ -112,7 +112,7 @@ class UsersService implements UsersServiceInterface
     {
         $user = $this->Users->newEmptyEntity();
         $user = $this->Users->patchEntity($user, $postData, ['validate' => 'new']);
-        return $this->Users->save($user);
+        return ($result = $this->Users->save($user))? $result : $user;
     }
 
     /**
@@ -127,7 +127,7 @@ class UsersService implements UsersServiceInterface
     public function update(EntityInterface $target, array $postData)
     {
         $user = $this->Users->patchEntity($target, $postData);
-        return $this->Users->save($user);
+        return ($result = $this->Users->save($target))? $result : $user;
     }
 
     /**
