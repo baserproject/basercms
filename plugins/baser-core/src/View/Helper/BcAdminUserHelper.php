@@ -54,7 +54,7 @@ class BcAdminUserHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function isSelfUpdate(int $id)
+    public function isSelfUpdate(?int $id)
     {
         return $this->UserManage->isSelfUpdate($id);
     }
@@ -67,7 +67,7 @@ class BcAdminUserHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function isEditable(int $id)
+    public function isEditable(?int $id)
     {
         return $this->UserManage->isEditable($id);
     }

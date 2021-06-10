@@ -34,22 +34,6 @@ use BaserCore\Annotation\Checked;
  */
 class UserGroupsController extends BcAdminAppController
 {
-    public $siteConfigs = [];
-
-    /**
-     * beforeFilter
-     * @param EventInterface $event
-     * @return Response|void|null
-     * @checked
-     * @unitTest
-     */
-    public function beforeFilter(EventInterface $event)
-    {
-        parent::beforeFilter($event);
-        if (count(Configure::read('BcAuthPrefix')) === 1) {
-            $this->UserGroup->validator()->remove('auth_prefix');
-        }
-    }
 
     /**
      * ログインユーザーグループリスト
@@ -116,18 +100,17 @@ class UserGroupsController extends BcAdminAppController
         $this->setHelp('user_groups_form');
 
         if ($this->request->is('post')) {
-            if ($userGroup = $UserGroupManage->create($this->request->getData())) {
+            $userGroup = $UserGroupManage->create($this->request->getData());
+            if (!$userGroup->getErrors()) {
                 $this->BcMessage->setSuccess(__d('baser', '新規ユーザーグループ「{0}」を追加しました。', $userGroup->name));
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
-                return;
             }
         } else {
-            $userGroup = $this->UserGroups->newEmptyEntity();
-            $this->set(compact('userGroup'));
-            return;
+            $userGroup = $UserGroupManage->getNew();
         }
+        $this->set(compact('userGroup'));
     }
 
     /**
@@ -169,7 +152,8 @@ class UserGroupsController extends BcAdminAppController
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            if ($userGroup = $UserGroupManage->update($userGroup, $this->request->getData())) {
+            $userGroup = $UserGroupManage->update($userGroup, $this->request->getData());
+            if (!$userGroup->getErrors()) {
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name));
                 $userManage->reLogin($this->request, $this->response);
                 return $this->redirect(['action' => 'index']);

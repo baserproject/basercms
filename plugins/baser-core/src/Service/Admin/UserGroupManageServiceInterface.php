@@ -13,6 +13,7 @@ namespace BaserCore\Service\Admin;
 
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
+use BaserCore\Model\Entity\UserGroup;
 
 /**
  * Interface UserGroupsServiceInterface
@@ -27,6 +28,11 @@ interface UserGroupManageServiceInterface
      */
     public function get($id): EntityInterface;
 
+    /**
+     * ユーザーグループの新規データ用の初期値を含んだエンティティを取得する
+     * @return UserGroup
+     */
+    public function getNew(): UserGroup;
     /**
      * ユーザーグループ全件取得する
      * @param array $options

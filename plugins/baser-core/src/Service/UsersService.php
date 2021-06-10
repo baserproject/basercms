@@ -103,7 +103,7 @@ class UsersService implements UsersServiceInterface
     /**
      * ユーザー登録
      * @param array $data
-     * @return \Cake\Datasource\EntityInterface|false
+     * @return \Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
      * @unitTest
@@ -119,7 +119,7 @@ class UsersService implements UsersServiceInterface
      * ユーザー情報を更新する
      * @param EntityInterface $target
      * @param array $postData
-     * @return EntityInterface|false
+     * @return EntityInterface
      * @checked
      * @noTodo
      * @unitTest

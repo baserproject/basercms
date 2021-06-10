@@ -45,7 +45,7 @@ interface UsersServiceInterface
     /**
      * 新規登録する
      * @param array $postData
-     * @return EntityInterface|false
+     * @return EntityInterface
      */
     public function create(array $postData);
 

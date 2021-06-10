@@ -13,6 +13,7 @@ namespace BaserCore\Service;
 
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
+use BaserCore\Model\Entity\UserGroup;
 
 /**
  * Interface UserGroupsServiceInterface
@@ -28,6 +29,12 @@ interface UserGroupsServiceInterface
     public function get($id): EntityInterface;
 
     /**
+     * ユーザーグループの新規データ用のエンティティを取得する
+     * @return UserGroup
+     */
+    public function getNew(): UserGroup;
+
+    /**
      * ユーザーグループ全件取得する
      * @param array $options
      * @return Query
@@ -37,7 +44,7 @@ interface UserGroupsServiceInterface
     /**
      * 新規登録する
      * @param array $postData
-     * @return EntityInterface|false
+     * @return EntityInterface
      */
     public function create(array $postData);
 

@@ -62,6 +62,14 @@ class UserGroupManageServiceTest extends BcTestCase
     }
 
     /**
+     * Test getNew
+     */
+    public function testGetNew()
+    {
+        $this->assertEquals('Admin', $this->UserGroups->getNew()->auth_prefix);
+    }
+
+    /**
      * Test get
      */
     public function testGet()
@@ -91,7 +99,7 @@ class UserGroupManageServiceTest extends BcTestCase
             'use_move_contents' => '1',
             'auth_prefix' => $authPrefix
         ];
-        $a = $this->UserGroups->create($data);
+        $this->UserGroups->create($data);
         $group = $this->UserGroups->getIndex();
         $this->assertEquals($group->last()->name, $data['name']);
         $this->assertEquals($group->last()->auth_prefix, $expected);
@@ -100,7 +108,9 @@ class UserGroupManageServiceTest extends BcTestCase
     {
         return [
             // auth_prefixがすでにある場合
-            ['test', 'test'],
+            [['test'], 'test'],
+            // auth_prefixが複数ある場合
+            [['test1', 'test2'], 'test1,test2'],
             // auth_prefixがない場合
             [null, 'Admin'],
         ];

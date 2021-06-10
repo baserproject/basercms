@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Model\Entity\UserGroup;
 use BaserCore\Model\Table\UserGroupsTable;
 use Cake\ORM\TableRegistry;
 use Cake\Datasource\EntityInterface;
@@ -18,6 +19,7 @@ use Cake\ORM\Query;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Core\Configure;
 
 /**
  * Class UserGroupsService
@@ -57,6 +59,20 @@ class UserGroupsService implements UserGroupsServiceInterface
     }
 
     /**
+     * ユーザーグループの新規データ用の初期値を含んだエンティティを取得する
+     * @return UserGroup
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getNew(): UserGroup
+    {
+        return $this->UserGroups->newEntity([
+            'auth_prefix' => 'Admin',
+        ]);
+    }
+
+    /**
      * ユーザーグループ全件取得する
      * @param array $options
      * @return Query
@@ -72,24 +88,23 @@ class UserGroupsService implements UserGroupsServiceInterface
     /**
      * ユーザーグループ登録
      * @param array $postData
-     * @return \Cake\Datasource\EntityInterface|false
+     * @return \Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
      * @unitTest
      */
     public function create(array $postData)
     {
-        $postData['auth_prefix' ] = $postData['auth_prefix' ] ?? "Admin";
+        $postData['auth_prefix'] = isset($postData['auth_prefix']) ? implode(',', $postData['auth_prefix']) : "Admin";
         $userGroup = $this->UserGroups->newEmptyEntity();
         $userGroup = $this->UserGroups->patchEntity($userGroup, $postData);
-        return $this->UserGroups->save($userGroup);
+        return ($result = $this->UserGroups->save($userGroup))? $result : $userGroup;
     }
 
     /**
      * ユーザーグループ情報を更新する
      * @param EntityInterface $target
-     * @param array $postData
-     * @return EntityInterface|false
+     * @param array $postData     * @return EntityInterface
      * @checked
      * @noTodo
      * @unitTest
@@ -97,7 +112,7 @@ class UserGroupsService implements UserGroupsServiceInterface
     public function update(EntityInterface $target, array $postData)
     {
         $userGroup = $this->UserGroups->patchEntity($target, $postData);
-        return $this->UserGroups->save($userGroup);
+        return ($result = $this->UserGroups->save($userGroup))? $result : $userGroup;
     }
 
     /**

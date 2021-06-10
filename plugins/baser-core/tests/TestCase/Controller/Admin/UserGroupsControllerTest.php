@@ -58,6 +58,7 @@ class UserGroupsControllerTest extends BcTestCase
         parent::tearDown();
     }
 
+
     /**
      * Test index method
      *
@@ -162,15 +163,6 @@ class UserGroupsControllerTest extends BcTestCase
         $this->assertEquals(1, $query->count());
     }
 
-    /**
-     * beforeFilter
-     */
-    public function testBeforeFilter()
-    {
-        $event = new Event('Controller.beforeRender', $this->UserGroupsController);
-        $this->UserGroupsController->beforeFilter($event);
-        $this->assertEquals($this->UserGroupsController->siteConfigs['admin_list_num'], 30);
-    }
 
     /**
      * ユーザーグループのよく使う項目の初期値を登録する
