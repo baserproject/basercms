@@ -27,9 +27,7 @@
 		<dt><h4><?php echo $this->BcForm->label('Permission.name', __d('baser', 'ルール名')) ?></h4></dt>
 		<dd><?php echo $this->BcForm->input('Permission.name', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?></dd>
 		<dt><?php echo $this->BcForm->label('Permission.url', __d('baser', 'URL設定')) ?></dt>
-		<dd><strong id="PermissionAdmin">/<?php echo Configure::read('Routing.prefixes.0') ?>
-				/</strong><?php echo $this->BcForm->input('Permission.url', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?>
-		</dd>
+		<dd><strong id="PermissionAdmin">/<?php echo Configure::read('Routing.prefixes.0') ?>/</strong><?php echo $this->BcForm->input('Permission.url', ['type' => 'text', 'size' => 30, 'class' => 'required']) ?></dd>
 		<dt><?php echo $this->BcForm->label('Permission.auth', __d('baser', 'アクセス')) ?></dt>
 		<dd>
 			<?php
