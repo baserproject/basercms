@@ -1372,6 +1372,8 @@ class AppTable extends Table
      */
     public function exists($conditions): bool
     {
+        return parent::exists($conditions);
+
         // TODO 未実装の為コメントアウト
         /* >>>
         if ($this->Behaviors->loaded('SoftDelete')) {

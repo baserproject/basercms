@@ -136,6 +136,7 @@ class UserGroupsController extends BcAdminAppController
      * @return Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws RecordNotFoundException When record not found.
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function edit(UserGroupManageServiceInterface $UserGroupManage, UserManageServiceInterface $userManage, $id = null)
@@ -175,6 +176,7 @@ class UserGroupsController extends BcAdminAppController
      * @return Response|null|void Redirects to index.
      * @throws RecordNotFoundException When record not found.
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function delete(UserGroupManageServiceInterface $UserGroupManage, $id = null)
