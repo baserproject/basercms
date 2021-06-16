@@ -107,16 +107,19 @@ class UsersController extends BcApiController
     public function add(UsersServiceInterface $users)
     {
         $this->request->allowMethod(['post', 'delete']);
-        if ($user = $users->create($this->request->getData())) {
+        $user = $users->create($this->request->getData());
+        if (!$user->getErrors()) {
             $message = __d('baser', 'ユーザー「{0}」を追加しました。', $user->name);
         } else {
+            $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '入力エラーです。内容を修正してください。');
         }
         $this->set([
             'message' => $message,
-            'user' => $user
+            'user' => $user,
+            'errors' => $user->getErrors(),
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'user']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'user', 'errors']);
     }
 
     /**
@@ -130,17 +133,19 @@ class UsersController extends BcApiController
     public function edit(UsersServiceInterface $users, $id)
     {
         $this->request->allowMethod(['post', 'put']);
-        $user = $users->get($id);
-        if ($user = $users->update($user, $this->request->getData())) {
+        $user = $users->update($users->get($id), $this->request->getData());
+        if (!$user->getErrors()) {
             $message = __d('baser', 'ユーザー「{0}」を更新しました。', $user->name);
         } else {
+            $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '入力エラーです。内容を修正してください。');
         }
         $this->set([
             'message' => $message,
-            'user' => $user
+            'user' => $user,
+            'errors' => $user->getErrors(),
         ]);
-        $this->viewBuilder()->setOption('serialize', ['user', 'message']);
+        $this->viewBuilder()->setOption('serialize', ['user', 'message', 'errors']);
     }
 
     /**
@@ -160,6 +165,7 @@ class UsersController extends BcApiController
                 $message = __d('baser', 'ユーザー: {0} を削除しました。', $user->name);
             }
         } catch (Exception $e) {
+            $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
         $this->set([
