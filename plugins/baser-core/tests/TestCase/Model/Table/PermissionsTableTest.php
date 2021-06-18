@@ -56,7 +56,8 @@ class PermissionsTableTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->Permission = $this->getTableLocator()->get('Permissions');
+        $config = $this->getTableLocator()->exists('Permissions')? [] : ['className' => 'BaserCore\Model\Table\PermissionsTable'];
+        $this->Permission = $this->getTableLocator()->get('Permissions', $config);
     }
 
     /**
@@ -76,7 +77,11 @@ class PermissionsTableTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertEquals('permissions', $this->Permission->getTable());
+        $this->assertEquals('id', $this->Permission->getPrimaryKey());
+        $this->assertTrue($this->Permission->hasBehavior('Timestamp'));
+        $this->assertEquals('UserGroups', $this->Permission->getAssociation('UserGroups')->getName());
+
     }
 
     /**

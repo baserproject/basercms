@@ -15,6 +15,9 @@ use BaserCore\Model\AppTable;
 use Cake\Core\Configure;
 use BaserCore\Utility\BcUtil;
 use Cake\Validation\Validator;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class Permission
@@ -30,6 +33,9 @@ class PermissionsTable extends AppTable
      *
      * @param array $config テーブル設定
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {

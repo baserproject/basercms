@@ -83,6 +83,7 @@ class UserGroupsTable extends Table //TODO AppTableに変更必
      * @param array $config The configuration for the Table.
      * @return void
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function initialize(array $config): void

@@ -79,7 +79,7 @@ class UsersTableTest extends BcTestCase
         $this->assertEquals('users', $this->Users->getTable());
         $this->assertEquals('name', $this->Users->getDisplayField());
         $this->assertEquals('id', $this->Users->getPrimaryKey());
-        $this->assertIsBool($this->Users->hasBehavior('Timestamp'));
+        $this->assertTrue($this->Users->hasBehavior('Timestamp'));
         $this->assertEquals('UserGroups', $this->Users->getAssociation('UserGroups')->getName());
     }
 
