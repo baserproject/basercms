@@ -565,14 +565,12 @@ class BcUtil
      *
      * @return bool
      * @checked
+     * @noTodo
      * @unitTest
      */
     public static function isConsole()
     {
-        // TODO isConsoleのCAKEPHP_SHELLが非推奨&&未定義のため代替措置
-        // return defined('CAKEPHP_SHELL') && CAKEPHP_SHELL;
         return substr(php_sapi_name(), 0, 3) == 'cli';
-
     }
 
     /**
