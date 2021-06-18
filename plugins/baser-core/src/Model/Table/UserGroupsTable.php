@@ -93,7 +93,6 @@ class UserGroupsTable extends Table //TODO AppTableに変更必
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
-        // $this->addBehavior('BcCache'); //TODO 未実装
         $this->belongsToMany('Users', [
             'className' => 'BaserCore.Users',
             'foreignKey' => 'user_group_id',

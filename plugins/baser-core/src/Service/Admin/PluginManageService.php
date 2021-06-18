@@ -160,4 +160,16 @@ class PluginManageService extends PluginsService implements PluginManageServiceI
     {
         return parent::getMarketPlugins();
     }
+    /**
+     * ユーザーグループにアクセス許可設定を追加する
+     *
+     * @param array $data リクエストデータ
+     * @return void
+     * @checked
+     * @unitTest
+     */
+    public function allow($data): void
+    {
+        parent::allow($data);
+    }
 }

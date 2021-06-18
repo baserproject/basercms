@@ -245,4 +245,50 @@ class PluginsService implements PluginsServiceInterface
         return [];
     }
 
+    /**
+     * ユーザーグループにアクセス許可設定を追加する
+     *
+     * @param array $data リクエストデータ
+     * @return void
+     * @checked
+     * @unitTest
+     */
+    public function allow($data): void
+    {
+        $permissions = TableRegistry::getTableLocator()->get('BaserCore.Permissions');
+        $userGroups = $permissions->UserGroups->find('all')->where(['UserGroups.id <>' => Configure::read('BcApp.adminGroupId')]);
+        if (!$userGroups) {
+            return;
+        }
+
+        foreach($userGroups as $userGroup) {
+            //$permissionAuthPrefix = $Permission->UserGroup->getAuthPrefix($userGroup['UserGroup']['id']);
+            // TODO 現在 admin 固定、今後、mypage 等にも対応する
+            $permissionAuthPrefix = 'admin';
+            $url = '/baser/' . $permissionAuthPrefix . '/' . Inflector::underscore($data['name']) . '/*';
+
+            $prePermissions = $permissions->find()->where(['url' => $url])->first();
+            switch($data['permission']) {
+                case 1:
+                    if (!$prePermissions) {
+                        $permission = $permissions->newEmptyEntity();
+                        $permission->name = $data['title'] . ' ' . __d('baser', '管理');
+                        $permission->user_group_id = $userGroup->id;
+                        $permission->auth = 1;
+                        $permission->status = 1;
+                        $permission->url = $url;
+                        $permission->no = $permissions->getMax('no', ['user_group_id' => $userGroup->id]) + 1;
+                        $permission->sort = $permissions->getMax('no', ['user_group_id' => $userGroup->id]) + 1;
+                        $permissions->save($permission);
+                    }
+                    break;
+                case 2:
+                    if ($prePermissions) {
+                        $permissions->delete($prePermissions->id);
+                    }
+                    break;
+            }
+        }
+    }
+
 }

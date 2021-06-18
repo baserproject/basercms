@@ -35,6 +35,7 @@ class PluginsControllerTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.Plugins',
+        'plugin.BaserCore.Permissions',
     ];
 
     /**
@@ -104,10 +105,18 @@ class PluginsControllerTest extends BcTestCase
     public function testInstall($pluginName, $message)
     {
         // フォルダはあるがインストールできない場合
+        $data = [
+            'connection' => 'test',
+            'name' => $pluginName,
+            'title' => $pluginName,
+            'status' => "0",
+            'version' => "1.0.0",
+            'permission' => "1"
+        ];
         $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
         $folder = new Folder($pluginPath);
         $folder->create($pluginPath, 0777);
-        $this->post('/baser/api/baser-core/plugins/install/' . $pluginName .'.json?token=' . $this->accessToken, ['connection' => 'test']);
+        $this->post('/baser/api/baser-core/plugins/install/' . $pluginName .'.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals($message, $result->message);

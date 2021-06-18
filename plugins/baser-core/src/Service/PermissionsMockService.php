@@ -28,4 +28,5 @@ class PermissionsMockService implements PermissionsServiceInterface
         // TODO 未実装
         return true;
     }
+
 }

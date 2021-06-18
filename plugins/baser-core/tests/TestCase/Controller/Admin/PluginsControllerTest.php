@@ -38,7 +38,8 @@ class PluginsControllerTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Plugins'
+        'plugin.BaserCore.Plugins',
+        'plugin.BaserCore.Permissions',
     ];
 
     /**
@@ -143,8 +144,15 @@ class PluginsControllerTest extends BcTestCase
         $this->assertFlashMessage('プラグインの無効化に失敗しました。');
         $this->post('/baser/admin/baser-core/plugins/detach/BcBlog');
         $this->assertFlashMessage('プラグイン「BcBlog」を無効にしました。');
-
-        $this->put('/baser/admin/baser-core/plugins/install/BcBlog', ['connection' => 'test']);
+        $data = [
+            'connection' => 'test',
+            'name' => 'BcBlog',
+            'title' => 'ブログ',
+            'status' => "0",
+            'version' => "1.0.0",
+            'permission' => "1"
+        ];
+        $this->put('/baser/admin/baser-core/plugins/install/BcBlog', $data);
         $this->assertRedirect([
             'plugin' => 'BaserCore',
             'prefix' => 'Admin',
@@ -161,7 +169,7 @@ class PluginsControllerTest extends BcTestCase
             'mode' => 0777
         ]);
         $folder->create($from, 0777);
-        $this->post('/baser/admin/baser-core/plugins/uninstall/BcBlog', ['connection' => 'test']);
+        $this->post('/baser/admin/baser-core/plugins/uninstall/BcBlog', $data);
         $this->assertRedirect([
             'plugin' => 'BaserCore',
             'prefix' => 'Admin',
@@ -175,14 +183,6 @@ class PluginsControllerTest extends BcTestCase
             'schema' => Folder::OVERWRITE
         ]);
 
-    }
-
-    /**
-     * アクセス制限設定を追加する
-     */
-    public function test_addPermission()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**

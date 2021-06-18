@@ -15,6 +15,7 @@ use BaserCore\Service\Admin\PluginManageService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Filesystem\Folder;
 use Cake\Core\App;
+use Cake\ORM\TableRegistry;
 
 /**
  * Class PluginManageServiceTest
@@ -31,6 +32,8 @@ class PluginManageServiceTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.Plugins',
+        'plugin.BaserCore.Permissions',
+        'plugin.BaserCore.UserGroups'
     ];
 
     /**
@@ -130,6 +133,26 @@ class PluginManageServiceTest extends BcTestCase
             'status' => true
         ]));
         $this->assertEquals(true, $this->PluginManage->detach(urlencode('あいうえお')));
+    }
+
+    /**
+     * アクセス制限設定を追加する
+     */
+    public function testAllow()
+    {
+        $data = [
+            'name' => 'BcTest',
+            'title' => 'テスト',
+            'status' => "0",
+            'version' => "1.0.0",
+            'permission' => "1"
+        ];
+
+        $this->PluginManage->allow($data);
+        $permissions = TableRegistry::getTableLocator()->get('BaserCore.Permissions');
+        $result = $permissions->find('all')->all();
+        
+        $this->assertEquals($data['title'] ." 管理", $result->last()->name);
     }
 
 }

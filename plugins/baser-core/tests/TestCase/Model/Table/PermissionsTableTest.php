@@ -1,52 +1,92 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Model
- * @since           baserCMS v 3.0.0-beta
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
-App::uses('Permission', 'Model');
+
+namespace BaserCore\Test\TestCase\Model\Table;
+
+use BaserCore\Model\Table\PermissionsTable;
+use BaserCore\TestSuite\BcTestCase;
+use Cake\Validation\Validator;
 
 /**
- * Class PermissionTest
+ * BaserCore\Model\Table\PermissionsTable Test Case
  *
- * class NonAssosiationPermission extends Permission {
- *  public $name = 'Permission';
- *  public $belongsTo = array();
- *  public $hasMany = array();
- * }
- *
- * @property Permission $Permission
+ * @property PermissionsTable $Permissions
  */
-class PermissionTest extends BaserTestCase
+class PermissionsTableTest extends BcTestCase
 {
 
-    public $fixtures = [
-        'baser.Default.Page',
-        'baser.Model.Permission.PermissionPermissionModel',
-        'baser.Default.UserGroup',
-        'baser.Default.Site',
-        'baser.Default.SiteConfig',
-        'baser.Default.Content',
-        'baser.Default.User'
+    /**
+     * Test subject
+     *
+     * @var PermissionsTable
+     */
+    public $Permissions;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BaserCore.Permissions',
+        'plugin.BaserCore.UserGroups',
+        // basercms4系
+        // 'baser.Default.Page',
+        // 'baser.Model.Permission.PermissionPermissionModel',
+        // 'baser.Default.UserGroup',
+        // 'baser.Default.Site',
+        // 'baser.Default.SiteConfig',
+        // 'baser.Default.Content',
+        // 'baser.Default.User'
     ];
 
-    public function setUp()
+        /**
+     * Set Up
+     *
+     * @return void
+     */
+    public function setUp(): void
     {
         parent::setUp();
-        $this->Permission = ClassRegistry::init('Permission');
+        $this->Permission = $this->getTableLocator()->get('Permissions');
     }
 
-    public function tearDown()
+    /**
+     * Tear Down
+     *
+     * @return void
+     */
+    public function tearDown(): void
     {
-        unset($this->Permission);
         parent::tearDown();
+    }
+
+    /**
+     * Test initialize
+     *
+     * @return void
+     */
+    public function testInitialize()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * Test validationDefault
+     *
+     * @return void
+     */
+    public function testValidationDefault()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
@@ -54,6 +94,7 @@ class PermissionTest extends BaserTestCase
      */
     public function test必須チェック()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->Permission->create([
             'Permission' => [
                 'name' => '',
@@ -71,6 +112,7 @@ class PermissionTest extends BaserTestCase
 
     public function test桁数チェック正常系()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->Permission->create([
             'Permission' => [
                 'name' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
@@ -83,6 +125,7 @@ class PermissionTest extends BaserTestCase
 
     public function test桁数チェック異常系()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->Permission->create([
             'Permission' => [
                 'name' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
@@ -99,6 +142,7 @@ class PermissionTest extends BaserTestCase
 
     public function testアクセス拒否チェック異常系()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->_getRequest('/admin');
         $this->Permission->create([
             'Permission' => [
@@ -113,6 +157,7 @@ class PermissionTest extends BaserTestCase
 
     public function testアクセス拒否チェック正常系()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->Permission->create([
             'Permission' => [
                 'user_group_id' => '1',
@@ -122,39 +167,6 @@ class PermissionTest extends BaserTestCase
         $this->assertTrue($this->Permission->validates());
     }
 
-
-    /**
-     * 設定をチェックする
-     *
-     * @param array $check チェックするURL
-     * @param array $expected 期待値
-     * @param string $message テストが失敗した時に表示されるメッセージ
-     * @dataProvider checkUrlDataProvider
-     */
-    public function testCheckUrl($check, $expected, $message = null)
-    {
-        $result = $this->Permission->checkUrl($check);
-        $this->assertEquals($expected, $result, $message);
-    }
-
-    public function checkUrlDataProvider()
-    {
-        return [
-            [[1], false, '適当なURLです'],
-            [['hoge'], false, '適当なURLです'],
-            [['/hoge'], false, '適当なURLです'],
-            [['hoge/'], false, '適当なURLです'],
-            [['/hoge/'], false, '適当なURLです'],
-            [['/hoge/*'], false, '適当なURLです'],
-            [['admin'], true, '権限の必要なURLです'],
-            [['/admin'], true, '権限の必要なURLです'],
-            [['admin/'], true, '権限の必要なURLです'],
-            [['admin/*'], true, '権限の必要なURLです'],
-            [['/admin/*'], true, '権限の必要なURLです'],
-            [['/admin/dashboard/'], true, '権限の必要なURLです'],
-            [['/admin/dashboard/*'], true, '権限の必要なURLです'],
-        ];
-    }
 
 
     /**
@@ -167,6 +179,7 @@ class PermissionTest extends BaserTestCase
      */
     public function testGetAuthPrefix($id, $expected, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Permission->getAuthPrefix($id);
         $this->assertEquals($expected, $result, $message);
     }
@@ -185,6 +198,7 @@ class PermissionTest extends BaserTestCase
      */
     public function testGetDefaultValue()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Permission->getDefaultValue();
         $expected = [
             'Permission' => [
@@ -205,6 +219,7 @@ class PermissionTest extends BaserTestCase
      */
     public function testGetControlSource($field, $expected, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Permission->getControlSource($field);
         $this->assertEquals($expected, $result, $message);
     }
@@ -228,6 +243,7 @@ class PermissionTest extends BaserTestCase
      */
     public function testBeforeSave($url, $expectedUrl, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->Permission->data = [
             'Permission' => [
                 'url' => $url,
@@ -263,6 +279,7 @@ class PermissionTest extends BaserTestCase
      */
     public function testCheck($url, $userGroupId, $expected, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Permission->check($url, $userGroupId);
         $this->assertEquals($expected, $result, $message);
     }
@@ -291,6 +308,7 @@ class PermissionTest extends BaserTestCase
      */
     public function testCopy($id, $data, $expected, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $record = $this->Permission->copy($id, $data);
         $result = null;
         if (isset($record['Permission']['name'])) {
@@ -330,5 +348,7 @@ class PermissionTest extends BaserTestCase
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
+
+
 
 }

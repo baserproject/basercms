@@ -16,6 +16,7 @@ use Cake\Core\Configure;
 use Cake\Log\Log;
 use Cake\Utility\Hash;
 use BaserCore\Utility\BcUtil;
+use Cake\Routing\Router;
 use BaserCore\Model\AppTable;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -533,6 +534,38 @@ class BcValidation extends Validation
             return false;
         }
         if (preg_match('/href=\s*?("|\')[^"\']*?javascript\s*?:/i', $value)) {
+            return false;
+        }
+        return true;
+    }
+
+        /**
+     * 権限の必要なURLかチェックする
+     *
+     * @param array $check チェックするURL
+     * @return boolean True if the operation should continue, false if it should abort
+     * @checked
+     * @unitTest
+     */
+    public function checkUrl($check)
+    {
+        if (!$check[key($check)]) {
+            return true;
+        }
+        $url = $check[key($check)];
+
+        if (preg_match('/^[^\/]/is', $url)) {
+            $url = '/' . $url;
+        }
+        // ルーティング設定に合わせて変換
+        // TODO: Routing.prefixesはBaser4系なので、変更する
+        $url = preg_replace('/^\/admin\//', '/' . Configure::read('Routing.prefixes.0') . '/', $url);
+        if (preg_match('/^(\/[a-z_]+)\*$/is', $url, $matches)) {
+            $url = $matches[1] . '/' . '*';
+        }
+        $params = Router::getRouteCollection()->parse($url);
+        // TODO: $params['prefix']は出力されないので、別の方法で実装する
+        if (empty($params['prefix'])) {
             return false;
         }
         return true;

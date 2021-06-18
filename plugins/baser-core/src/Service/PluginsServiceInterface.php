@@ -85,4 +85,12 @@ interface PluginsServiceInterface
      * @return array|mixed
      */
     public function getMarketPlugins(): array;
+
+    /**
+     * ユーザーグループにアクセス許可設定を追加する
+     *
+     * @param array $data リクエストデータ
+     * @return void
+     */
+    public function allow($data): void;
 }

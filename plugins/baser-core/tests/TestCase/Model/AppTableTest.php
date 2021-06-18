@@ -13,6 +13,8 @@ namespace BaserCore\Test\TestCase\Model;
 
 use BaserCore\Model\AppTable;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Model\PermissionsTable;
+use BaserCore\Model\Table\PermissionsTable as TablePermissionsTable;
 
 /**
  * Class AppTableTest
@@ -27,7 +29,14 @@ class AppTableTest extends BcTestCase
      * @var AppTable
      */
     public $App;
-
+        /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BaserCore.Permissions'
+    ];
     /**
      * Set Up
      *
@@ -110,5 +119,18 @@ class AppTableTest extends BcTestCase
         $this->assertEquals(1073741824, $this->App->convertSize('1', 'K', 'T'));
         $this->assertEquals(0, $this->App->convertSize(null));
     }
+
+    /**
+     * Test getMax
+     *
+     * @return void
+     */
+    public function testGetMax()
+    {
+        $Permission = new TablePermissionsTable();
+        $max = $Permission->getMax('no', []);
+        $this->assertEquals(19, $max);
+    }
+
 
 }

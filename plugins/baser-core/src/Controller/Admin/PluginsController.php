@@ -91,6 +91,7 @@ class PluginsController extends BcAdminAppController
      * @param string $name プラグイン名
      * @return Response|void
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function install(PluginManageServiceInterface $PluginManage, $name)
@@ -101,9 +102,8 @@ class PluginsController extends BcAdminAppController
         } else {
             try {
                 if ($PluginManage->install($name, $this->request->getData('connection'))) {
+                    $PluginManage->allow($this->request->getData());
                     $this->BcMessage->setSuccess(sprintf(__d('baser', '新規プラグイン「%s」を baserCMS に登録しました。'), $name));
-                    // TODO: アクセス権限を追加する
-                    // $this->_addPermission($this->request->data);
                     return $this->redirect(['action' => 'index']);
                 } else {
                     $this->BcMessage->setError(__d('baser', 'プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。'));
@@ -307,60 +307,6 @@ class PluginsController extends BcAdminAppController
         return $this->response->withStringBody('true');
     }
 
-    /**
-     * アクセス制限設定を追加する
-     *
-     * @param array $data リクエストデータ
-     * @return void
-     */
-    public function _addPermission($data)
-    {
-        if (ClassRegistry::isKeySet('Permission')) {
-            $Permission = ClassRegistry::getObject('Permission');
-        } else {
-            $Permission = ClassRegistry::init('Permission');
-        }
-
-        $userGroups = $Permission->UserGroup->find('all', ['conditions' => ['UserGroup.id <>' => Configure::read('BcApp.adminGroupId')], 'recursive' => -1]);
-        if (!$userGroups) {
-            return;
-        }
-
-        foreach($userGroups as $userGroup) {
-            //$permissionAuthPrefix = $Permission->UserGroup->getAuthPrefix($userGroup['UserGroup']['id']);
-            // TODO 現在 admin 固定、今後、mypage 等にも対応する
-            $permissionAuthPrefix = 'admin';
-            $url = '/' . $permissionAuthPrefix . '/' . Inflector::underscore($data['Plugin']['name']) . '/*';
-            $permission = $Permission->find(
-                'first',
-                [
-                    'conditions' => ['Permission.url' => $url],
-                    'recursive' => -1
-                ]
-            );
-            switch($data['Plugin']['permission']) {
-                case 1:
-                    if (!$permission) {
-                        $Permission->create([
-                            'name' => $data['Plugin']['title'] . ' ' . __d('baser', '管理'),
-                            'user_group_id' => $userGroup['UserGroup']['id'],
-                            'auth' => true,
-                            'status' => true,
-                            'url' => $url,
-                            'no' => $Permission->getMax('no', ['user_group_id' => $userGroup['UserGroup']['id']]) + 1,
-                            'sort' => $Permission->getMax('sort', ['user_group_id' => $userGroup['UserGroup']['id']]) + 1
-                        ]);
-                        $Permission->save();
-                    }
-                    break;
-                case 2:
-                    if ($permission) {
-                        $Permission->delete($permission['Permission']['id']);
-                    }
-                    break;
-            }
-        }
-    }
 
     /**
      * データベースをリセットする
