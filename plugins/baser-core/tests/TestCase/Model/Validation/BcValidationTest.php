@@ -456,39 +456,4 @@ class BcValidationTest extends BcTestCase
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
-
-    /**
-     * 設定をチェックする
-     *
-     * @param array $check チェックするURL
-     * @param array $expected 期待値
-     * @param string $message テストが失敗した時に表示されるメッセージ
-     * @dataProvider checkUrlDataProvider
-     */
-    public function testCheckUrl($check, $expected, $message = null)
-    {
-        $result = $this->BcValidation->checkUrl($check);
-        $this->assertEquals($expected, $result, $message);
-    }
-
-    public function checkUrlDataProvider()
-    {
-        return [
-            [[1], false, '適当なURLです'],
-            [['hoge'], false, '適当なURLです'],
-            [['/hoge'], false, '適当なURLです'],
-            [['hoge/'], false, '適当なURLです'],
-            [['/hoge/'], false, '適当なURLです'],
-            [['/hoge/*'], false, '適当なURLです'],
-            // TODO: router設定でのprefix設定できてないため
-            // [['admin'], true, '権限の必要なURLです'],
-            // [['/admin'], true, '権限の必要なURLです'],
-            // [['admin/'], true, '権限の必要なURLです'],
-            // [['admin/*'], true, '権限の必要なURLです'],
-            // [['/admin/*'], true, '権限の必要なURLです'],
-            // [['/admin/dashboard/'], true, '権限の必要なURLです'],
-            // [['/admin/dashboard/*'], true, '権限の必要なURLです'],
-        ];
-    }
-
 }

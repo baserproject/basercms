@@ -88,10 +88,52 @@ class PermissionsTableTest extends BcTestCase
      * Test validationDefault
      *
      * @return void
+     * @dataProvider validationDefaultDataProvider
      */
-    public function testValidationDefault()
+    public function testValidationDefault($fields, $messages)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $permission = $this->Permission->newEntity($fields);
+        $this->assertSame($messages, $permission->getErrors());
+    }
+    public function validationDefaultDataProvider()
+    {
+        $maxName = str_repeat("a", 255);
+        $maxUrl = '/' . str_repeat("a", 254);
+
+        return [
+            // 空の場合
+            [
+                // フィールド
+                [
+                    'name' => '',
+                    'user_group_id' => '',
+                    'url' => ''
+                ],
+                // エラーメッセージ
+                [
+                    'name' => ['_empty' => '設定名を入力してください。'],
+                    'user_group_id' => ['_empty' => 'ユーザーグループを選択してください。'],
+                    'url' => ['_empty' => '設定URLを入力してください。'],
+                ]
+            ],
+            // 文字数が超過する場合&&user_group_idフィールドが存在しない場合&&checkUrl失敗
+            [
+                // フィールド
+                [
+                    'name' => $maxName . 'a',
+                    'url' => ['url' => $maxUrl . 'a']
+                ],
+                // エラーメッセージ
+                [
+                    'name' => ['maxLength' => '設定名は255文字以内で入力してください。'],
+                    'user_group_id' => ['_required' => 'This field is required'],
+                    'url' => [
+                        'maxLength' => '設定URLは255文字以内で入力してください。',
+                        'checkUrl' => 'アクセス拒否として設定できるのは認証ページだけです。'
+                    ],
+                ]
+            ],
+        ];
     }
 
     /**
