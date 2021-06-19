@@ -13,6 +13,8 @@ namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Service\DblogsServiceInterface;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\View\Helper;
@@ -32,6 +34,7 @@ class BcAdminHelper extends Helper
      * Trait
      */
     use BcEventDispatcherTrait;
+    use BcContainerTrait;
 
     /**
      * Helper
@@ -96,7 +99,7 @@ class BcAdminHelper extends Helper
             $contents = $adminMenuGroups['Contents'];
             $systems = $adminMenuGroups['Systems'];
             $plugins = $adminMenuGroups['Plugins'] ?? [];
-    
+
             unset($adminMenuGroups['Contents'], $adminMenuGroups['Systems'], $adminMenuGroups['Plugins']);
             if ($plugins) {
                 foreach($plugins['menus'] as $plugin) {
@@ -122,7 +125,7 @@ class BcAdminHelper extends Helper
         $url = $request->getUri();
         $currentUrl = '/' . $url;
         $params = null;
-        
+
         if (strpos($currentUrl, '?') !== false) {
             [$currentUrl, $params] = explode('?', $currentUrl);
         }
@@ -234,7 +237,7 @@ class BcAdminHelper extends Helper
      * @unitTest
      */
     public function getJsonMenu()
-    {       
+    {
         $adminMenuGroups = $this->getAdminMenuGroups();
         if($adminMenuGroups === false) return null;
 
@@ -392,6 +395,21 @@ class BcAdminHelper extends Helper
             'isHelp' => (bool)($this->_View->get('help')),
             'isLogin' => (bool)(BcUtil::loginUser())
         ]);
+    }
+
+    /**
+     * 最近の動きを取得
+     *
+     * @param int limit
+     * @return object
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getDblogs($limit): object
+    {
+        $DblogsService = $this->getService(DblogsServiceInterface::class);
+        return $DblogsService->getDblogs($limit);
     }
 
 }

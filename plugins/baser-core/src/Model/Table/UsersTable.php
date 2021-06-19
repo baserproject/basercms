@@ -290,6 +290,12 @@ class UsersTable extends Table
     public function getControlSource($field, $options = [])
     {
         switch($field) {
+            case 'id':
+                $controlSources['id'] = $this->find('list', [
+                    'keyField' => 'id',
+                    'valueField' => 'name'
+                ]);
+                break;
             case 'user_group_id':
                 $controlSources['user_group_id'] = $this->UserGroups->find('list', [
                     'keyField' => 'id',

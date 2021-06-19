@@ -11,6 +11,8 @@
 
 namespace BaserCore\Service;
 
+use Cake\ORM\Query;
+
 /**
  * Interface DblogsServiceInterface
  * @package BaserCore\Service
@@ -21,8 +23,27 @@ interface DblogsServiceInterface
     /**
      * 新規登録する
      * @param array $data
-     * @return EntityInterface
+     * @return object
      */
-    public function create(array $data);
+    public function create(array $data): object;
+
+    /**
+     * DBログ一覧を取得
+     * @param array $queryParams
+     * @return Query
+     */
+    public function getIndex(array $queryParams): Query;
+
+    /**
+     * 最新のDBログ一覧を取得
+     * @param int $limit
+     */
+    public function getDblogs(int $limit): object;
+
+    /**
+     * DBログをすべて削除
+     * @return int
+     */
+    public function deleteAll(): int;
 
 }
