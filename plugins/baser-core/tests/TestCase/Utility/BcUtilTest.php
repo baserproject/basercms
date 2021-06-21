@@ -706,6 +706,16 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals('/baser', $result);
     }
 
+    /**
+     * 
+     * プレフィックス全体を取得する
+     */
+    public function testGetPrefix()
+    {
+        $result = BcUtil::getPrefix();
+        $this->assertEquals('/baser/admin', $result);
+    }
+
 
     /**
      * 現在のドメインを取得する

@@ -55,34 +55,33 @@ class PermissionValidationTest extends BcTestCase
     /**
      * 設定をチェックする
      *
-     * @param array $check チェックするURL
+     * @param string $check チェックするURL
      * @param array $expected 期待値
      * @param string $message テストが失敗した時に表示されるメッセージ
      * @dataProvider checkUrlDataProvider
      */
-    public function testCheckUrl($check, $expected, $message = null)
+    public function testCheckUrl($url, $expected, $message = null)
     {
-        $result = $this->PermissionValidation->checkUrl($check);
+        $result = $this->PermissionValidation->checkUrl($url);
         $this->assertEquals($expected, $result, $message);
     }
 
     public function checkUrlDataProvider()
     {
         return [
-            [[1], false, '適当なURLです'],
-            [['hoge'], false, '適当なURLです'],
-            [['/hoge'], false, '適当なURLです'],
-            [['hoge/'], false, '適当なURLです'],
-            [['/hoge/'], false, '適当なURLです'],
-            [['/hoge/*'], false, '適当なURLです'],
-            // TODO: router設定でのprefix設定できてないため
-            // [['admin'], true, '権限の必要なURLです'],
-            // [['/admin'], true, '権限の必要なURLです'],
-            // [['admin/'], true, '権限の必要なURLです'],
-            // [['admin/*'], true, '権限の必要なURLです'],
-            // [['/admin/*'], true, '権限の必要なURLです'],
-            // [['/admin/dashboard/'], true, '権限の必要なURLです'],
-            // [['/admin/dashboard/*'], true, '権限の必要なURLです'],
+            ['1', false, '適当なURLです'],
+            ['hoge', false, '適当なURLです'],
+            ['/hoge', false, '適当なURLです'],
+            ['hoge/', false, '適当なURLです'],
+            ['/hoge/', false, '適当なURLです'],
+            ['/hoge/*', false, '適当なURLです'],
+            ['baser/admin', true, '権限の必要なURLです'],
+            ['/baser/admin', true, '権限の必要なURLです'],
+            ['baser/admin/', true, '権限の必要なURLです'],
+            ['baser/admin/*', true, '権限の必要なURLです'],
+            ['/baser/admin/*', true, '権限の必要なURLです'],
+            ['/baser/admin/dashboard/', true, '権限の必要なURLです'],
+            ['/baser/admin/dashboard/*', true, '権限の必要なURLです'],
         ];
     }
 }

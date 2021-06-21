@@ -31,6 +31,7 @@ class PermissionValidation extends Validation
      * @param string $url チェックするURL
      * @return boolean True if the operation should continue, false if it should abort
      * @checked
+     * @noTodo
      * @unitTest
      */
     public static function checkUrl($url)
@@ -40,12 +41,11 @@ class PermissionValidation extends Validation
             $url = '/' . $url;
         }
         // ルーティング設定に合わせて変換
-        $url = preg_replace('/^\/baser\/admin\//', BcUtil::getBaserCorePrefix() . BcUtil::getAdminPrefix() . '/', $url);
+        $url = preg_replace('/^\/baser\/admin\//', BcUtil::getPrefix() . '/', $url);
         if (preg_match('/^(\/[a-z_]+)\*$/is', $url, $matches)) {
             $url = $matches[1] . '/' . '*';
         }
         $params = Router::getRouteCollection()->parse($url);
-        // TODO: $params['prefix']は出力されないので、別の方法で実装する
         if (empty($params['prefix'])) {
             return false;
         }
