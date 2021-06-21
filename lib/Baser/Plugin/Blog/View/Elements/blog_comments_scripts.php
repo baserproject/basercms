@@ -1,7 +1,8 @@
-<?php $this->BcBaser->js('admin/libs/jquery.baseUrl.js', false, ['once' => true]); ?>
-<?php $this->BcBaser->js('admin/libs/jquery.bcUtil.js', false, ['once' => true]); ?>
-<?php $this->BcBaser->js('admin/libs/jquery.bcToken.js', false, ['once' => true]); ?>
-<?php $this->BcBaser->js('Blog.blog_comments_scripts.js', false, [
+<?php $this->BcBaser->js('admin/libs/jquery.baseUrl.js', true, ['once' => true, 'defer']); ?>
+<?php $this->BcBaser->js('admin/libs/jquery.bcUtil.js', true, ['once' => true, 'defer']); ?>
+<?php $this->BcBaser->js('admin/libs/jquery.bcToken.js', true, ['once' => true, 'defer']); ?>
+<?php $this->BcBaser->js('Blog.blog_comments_scripts.js', true, [
+	'defer',
 	'once' => true,
 	'id' => 'BlogCommentsScripts',
 	'data-alertMessageName' => __('お名前を入力してください'),
@@ -16,12 +17,4 @@
 <script>
 	authCaptcha = <?php echo $blogContent['BlogContent']['auth_captcha']? 'true' : 'false'; ?>;
 	commentApprove = <?php echo $blogContent['BlogContent']['comment_approve']? 'true' : 'false'; ?>;
-
-	$(function () {
-		loadAuthCaptcha();
-		$("#BlogCommentAddButton").click(function () {
-			sendComment();
-			return false;
-		});
-	});
 </script>

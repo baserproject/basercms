@@ -13,8 +13,8 @@
 /**
  * [ADMIN] ツールバー
  */
-// JSの出力について、ツールバーはフロントエンドでも利用するため、inlineに出力する
-$this->BcBaser->js(['admin/vendors/outerClick', 'admin/vendors/jquery.fixedMenu', 'admin/toolbar']);
+// inlineで出力しないとプルダウンが動作しない
+$this->BcBaser->js(['admin/vendors/outerClick', 'admin/vendors/jquery.fixedMenu', 'admin/toolbar'], true, ['defer']);
 App::uses('AuthComponent', 'Controller/Component');
 $loginUrl = '';
 $currentAuthPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);

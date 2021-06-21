@@ -9,23 +9,11 @@
  * @since           baserCMS v 0.1.0
  * @license         https://basercms.net/license/index.html
  */
+echo $this->Html->script(
+	$this->request->is('ajax') ? 'Mail.mail_token_ajax' : 'Mail.mail_token',
+	['defer']
+);
 ?>
-
-
-<script type="text/javascript">
-$(function(){
-	$('input[type="submit"]').prop('disabled', true);
-});
-<?php if($this->request->is('ajax')): ?>
-$(function(){
-<?php else: ?>
-$(window).on('load', function() {
-<?php endif ?>
-	let getTokenUrl = '<?php echo $this->BcBaser->getUrl('/bc_form/ajax_get_token?requestview=false') ?>';
-	$.ajaxSetup({cache: false});
-	$.get(getTokenUrl, function(result) {
-		$('input[name="data[_Token][key]"]').val(result);
-		$('input[type="submit"]').removeAttr('disabled');
-	});
-});
+<script>
+	var getTokenUrl = '<?php echo $this->BcBaser->getUrl('/bc_form/ajax_get_token?requestview=false') ?>';
 </script>
