@@ -10,6 +10,7 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use Cake\Core\Configure;
 // CakeRequest 判定できる関数があるが、CakeRequest での判定は、
 // routes.php の処理が完了している事が前提である為利用できない
 $isMaintenance = Configure::read('BcRequest.isMaintenance');

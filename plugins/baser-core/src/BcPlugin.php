@@ -161,13 +161,12 @@ class BcPlugin extends BasePlugin
      */
     public function routes($routes): void
     {
-        $baserCorePrefix = Configure::read('BcApp.baserCorePrefix');
         $plugin = $this->getName();
 
         // プラグインの管理画面用ルーティング
         $routes->prefix(
             'Admin',
-            ['path' => $baserCorePrefix . Configure::read('BcApp.adminPrefix')],
+            ['path' => BcUtil::getPrefix()],
             function(RouteBuilder $routes) use ($plugin) {
                 $routes->connect('', ['plugin' => 'BaserCore', 'controller' => 'Dashboard', 'action' => 'index']);
                 $routes->plugin(
@@ -185,7 +184,7 @@ class BcPlugin extends BasePlugin
         // プラグインのフロントエンド用ルーティング
         $routes->plugin(
             $plugin,
-            ['path' => $baserCorePrefix . '/' . Inflector::dasherize($plugin)],
+            ['path' => BcUtil:: getBaserCorePrefix() . '/' . Inflector::dasherize($plugin)],
             function(RouteBuilder $routes) {
                 // AnalyseController で利用
                 $routes->setExtensions(['json']);
@@ -197,7 +196,7 @@ class BcPlugin extends BasePlugin
         // API用ルーティング
         $routes->prefix(
             'Api',
-            ['path' => $baserCorePrefix . '/api'],
+            ['path' => BcUtil::getBaserCorePrefix() . '/api'],
             function(RouteBuilder $routes) use ($plugin) {
                 $routes->plugin(
                     $plugin,

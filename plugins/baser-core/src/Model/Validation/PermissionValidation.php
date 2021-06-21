@@ -12,8 +12,8 @@
 namespace BaserCore\Model\Validation;
 
 use Cake\Validation\Validation;
-use Cake\Core\Configure;
 use Cake\Routing\Router;
+use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -27,29 +27,24 @@ class PermissionValidation extends Validation
     /**
      * 権限の必要なURLかチェックする
      *
-     * @param array $check チェックするURL
+     * @param string $url チェックするURL
      * @return boolean True if the operation should continue, false if it should abort
      * @checked
+     * @noTodo
      * @unitTest
      */
-    public static function checkUrl($check)
+    public static function checkUrl($url): bool
     {
-        if (!$check[key($check)]) {
-            return true;
-        }
-        $url = $check[key($check)];
 
         if (preg_match('/^[^\/]/is', $url)) {
             $url = '/' . $url;
         }
         // ルーティング設定に合わせて変換
-        // TODO: Routing.prefixesはBaser4系なので、変更する
-        $url = preg_replace('/^\/admin\//', '/' . Configure::read('Routing.prefixes.0') . '/', $url);
+        $url = preg_replace('/^\/baser\/admin\//', BcUtil::getPrefix() . '/', $url);
         if (preg_match('/^(\/[a-z_]+)\*$/is', $url, $matches)) {
             $url = $matches[1] . '/' . '*';
         }
         $params = Router::getRouteCollection()->parse($url);
-        // TODO: $params['prefix']は出力されないので、別の方法で実装する
         if (empty($params['prefix'])) {
             return false;
         }

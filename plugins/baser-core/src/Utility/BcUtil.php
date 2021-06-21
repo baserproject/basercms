@@ -189,6 +189,32 @@ class BcUtil
     }
 
     /**
+     * baserCore用のプレフィックスを取得する
+     *
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function getBaserCorePrefix()
+    {
+        return Configure::read('BcApp.baserCorePrefix');
+    }
+
+    /**
+     * プレフィックス全体を取得する
+     *
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function getPrefix()
+    {
+        return self::getBaserCorePrefix() . self::getAdminPrefix();
+    }
+
+    /**
      * 利用可能なプラグインのリストを取得する
      *
      * ClassRegistry::removeObject('Plugin'); で一旦 Plugin オブジェクトを削除

@@ -82,7 +82,7 @@ class PermissionsTable extends AppTable
             ->notEmptyString('user_group_id',  __d('baser', 'ユーザーグループを選択してください。'))
             ->requirePresence('user_group_id', true);
         $validator
-            ->isArray('url')
+            ->scalar('url')
             ->maxLength('url', 255, __d('baser', '設定URLは255文字以内で入力してください。'))
             ->notEmptyString('url', __d('baser', '設定URLを入力してください。'))
             ->add('url', 'checkUrl', [
