@@ -692,7 +692,18 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetAdminPrefix()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = BcUtil::getAdminPrefix();
+        $this->assertEquals('/admin', $result);
+    }
+
+    /**
+     * 
+     * baserコア用のプレフィックスを取得する
+     */
+    public function testGetBaserCorePrefix()
+    {
+        $result = BcUtil::getBaserCorePrefix();
+        $this->assertEquals('/baser', $result);
     }
 
 
