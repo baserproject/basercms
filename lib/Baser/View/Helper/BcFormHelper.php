@@ -605,6 +605,9 @@ DOC_END;
 		$secure = $options['secure'];
 		unset($options['secure']);
 
+		// 明示的にフィールド名を指定
+		$this->setEntity($fieldName);
+
 		// CUSTOMIZE ADD 2010/07/24 ryuring
 		// セキュリティコンポーネントのトークン生成の仕様として、
 		// ・hiddenタグ以外はフィールド情報のみ
