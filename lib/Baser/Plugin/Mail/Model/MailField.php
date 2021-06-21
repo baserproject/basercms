@@ -189,6 +189,7 @@ class MailField extends MailAppModel
 			'VALID_FILE_EXT' => __d('baser', 'ファイル拡張子チェック'),
 			'VALID_ZENKAKU_KATAKANA' => __d('baser', '全角カタカナチェック'),
 			'VALID_ZENKAKU_HIRAGANA' => __d('baser', '全角ひらがなチェック'),
+			'VALID_NOT_EMOJI' 		=> __d('baser', '絵文字を含めない'),
 			'VALID_REGEX' => __d('baser', '正規表現チェック'),
 		];
 		$source['auto_convert'] = ['CONVERT_HANKAKU' => __d('baser', '半角変換')];
