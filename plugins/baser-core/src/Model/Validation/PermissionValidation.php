@@ -12,7 +12,6 @@
 namespace BaserCore\Model\Validation;
 
 use Cake\Validation\Validation;
-use Cake\Core\Configure;
 use Cake\Routing\Router;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
@@ -34,7 +33,7 @@ class PermissionValidation extends Validation
      * @noTodo
      * @unitTest
      */
-    public static function checkUrl($url)
+    public static function checkUrl($url): bool
     {
 
         if (preg_match('/^[^\/]/is', $url)) {
