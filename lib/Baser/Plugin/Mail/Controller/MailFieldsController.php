@@ -241,6 +241,9 @@ class MailFieldsController extends MailAppController
 			}
 		}
 
+		$autoCompleteOptions = $this->_createAutoCompleteOptions();
+		$this->set('autoCompleteOptions', $autoCompleteOptions);
+
 		$this->subMenuElements = ['mail_fields'];
 		$this->pageTitle = sprintf(
 			__d('baser', '%s｜新規メールフィールド登録'), $this->request->param('Content.title')
@@ -305,6 +308,9 @@ class MailFieldsController extends MailAppController
 				$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 			}
 		}
+
+		$autoCompleteOptions = $this->_createAutoCompleteOptions();
+		$this->set('autoCompleteOptions', $autoCompleteOptions);
 
 		/* 表示設定 */
 		$this->subMenuElements = ['mail_fields'];
@@ -650,4 +656,30 @@ class MailFieldsController extends MailAppController
 		return true;
 	}
 
+	protected function _createAutoCompleteOptions()
+	{
+		$autoCompleteDatas = Configure::read('Mail.autoComplete');
+
+		$autoCompleteOptions = [];
+		foreach ($autoCompleteDatas as $data) {
+			$autoCompleteOptions[$data['name']] = $data['title'];
+			if (isset($data['child'])) {
+				foreach ($data['child'] as $dataChild1) {
+					$autoCompleteOptions[$dataChild1['name']] = '　└' . $dataChild1['title'];
+					if (isset($dataChild1['child'])) {
+						foreach ($dataChild1['child'] as $dataChild2) {
+							$autoCompleteOptions[$dataChild2['name']] = '　　└' . $dataChild2['title'];
+							if (isset($dataChild2['child'])) {
+								foreach ($dataChild2['child'] as $dataChild3) {
+									$autoCompleteOptions[$dataChild3['name']] = '　　　└' . $dataChild3['title'];
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return $autoCompleteOptions;
+	}
 }

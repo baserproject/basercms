@@ -36,6 +36,7 @@ class MailFieldsSchema extends CakeSchema
 		'rows' => ['type' => 'integer', 'null' => true, 'default' => null],
 		'maxlength' => ['type' => 'integer', 'null' => true, 'default' => null],
 		'options' => ['type' => 'string', 'null' => true, 'default' => null],
+		'auto_complete' => ['type' => 'string', 'null' => true, 'default' => null],
 		'class' => ['type' => 'string', 'null' => true, 'default' => null],
 		'separator' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 255],
 		'default_value' => ['type' => 'string', 'null' => true, 'default' => null],
@@ -54,5 +55,4 @@ class MailFieldsSchema extends CakeSchema
 		'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
 		'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci']
 	];
-
 }
