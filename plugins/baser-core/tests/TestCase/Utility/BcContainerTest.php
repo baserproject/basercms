@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\Utility;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainer;
 use Cake\Core\Container;
+use ReflectionClass;
 
 /**
  * Class BcContainerTraitTest
@@ -48,5 +49,15 @@ class BcContainerTest extends BcTestCase
         BcContainer::set(new Container());
         $this->assertEquals('Cake\Core\Container', get_class(BcContainer::get()));
     }
-
+    
+    /**
+     * test clear
+     */
+    public function testClear()
+    {
+        BcContainer::get();
+        BcContainer::clear();
+        $class = new ReflectionClass('BaserCore\Utility\BcContainer');
+        $this->assertNull($class->getStaticPropertyValue('container'));
+    }
 }

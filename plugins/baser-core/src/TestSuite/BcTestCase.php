@@ -32,6 +32,8 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Utility\Inflector;
 use ReflectionClass;
+use BaserCore\Utility\BcContainer;
+use BaserCore\ServiceProvider\BcServiceProvider;
 
 /**
  * Class BcTestCase
@@ -71,6 +73,18 @@ class BcTestCase extends TestCase
         $this->BaserCore = new Plugin();
         $this->BaserCore->bootstrap($this->Application);
         $this->BaserCore->routes($builder);
+        $container = BcContainer::get();
+        $container->addServiceProvider(new BcServiceProvider());
+    }
+    /**
+     * Tear Down
+     * @checked
+     * @noTodo
+     */
+    public function tearDown(): void
+    {
+        BcContainer::clear();
+        parent::tearDown();
     }
 
     /**

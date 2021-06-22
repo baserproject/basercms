@@ -12,6 +12,9 @@
 namespace BaserCore\Utility;
 
 use Cake\Core\Container;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcContainer
@@ -28,6 +31,9 @@ class BcContainer
     /**
      * Set Container
      * @param $container
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     static public function set($container): void
     {
@@ -37,6 +43,9 @@ class BcContainer
     /**
      * Get Container
      * @return Container
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     static public function get(): Container
     {
@@ -44,5 +53,17 @@ class BcContainer
             self::$container = new Container();
         }
         return self::$container;
+    }
+
+    /**
+     * Clear Container
+     * @return void
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    static public function clear(): void
+    {
+        self::$container = null;
     }
 }
