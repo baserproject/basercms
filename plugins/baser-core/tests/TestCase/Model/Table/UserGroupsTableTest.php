@@ -37,6 +37,7 @@ class UserGroupsTableTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.Permissions',
     ];
 
     /**
@@ -96,10 +97,11 @@ class UserGroupsTableTest extends BcTestCase
      */
     public function testCopy()
     {
-        $this->UserGroups->copy(1);
-        $originalUserGroup = $this->UserGroups->get(1);
+        $copied = $this->UserGroups->copy(2);
+        $originalUserGroup = $this->UserGroups->get(2);
         $query = $this->UserGroups->find()->where(['name' => $originalUserGroup->name . '_copy']);
         $this->assertEquals(1, $query->count());
+        $this->assertEquals(3, $copied->id);
     }
 
 }

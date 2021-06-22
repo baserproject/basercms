@@ -99,6 +99,13 @@ class UserGroupsTable extends AppTable
             'targetForeignKey' => 'user_id',
             'joinTable' => 'users_user_groups',
         ]);
+        $this->hasMany('Permissions', [
+            'className' => 'BaserCore.Permissions',
+            'order' => 'id',
+            'foreignKey' => 'user_group_id',
+            'dependent' => true,
+            'exclusive' => false,
+        ]);
     }
 
     /**
@@ -161,61 +168,39 @@ class UserGroupsTable extends AppTable
      * ユーザーグループデータをコピーする
      *
      * @param int $id ユーザーグループID
-     * @param array $data DBに挿入するデータ
-     * @param bool $recursive 関連したPermissionもcopyするかしないか
-     * @return mixed UserGroups Or false
+     * @return EntityInterface|false
      * @throws CopyFailedException When copy failed.
      * @checked
+     * @noTodo
      * @unitTest
      */
-    public function copy($id = null, $data = [], $recursive = true)
+    public function copy($id)
     {
-        if ($id && is_numeric($id)) {
-            $data = $this->get($id)->toArray();
-        } else {
-            if (!empty($data['id'])) {
-                $id = $data['id'];
-            }
-        }
-        $data['name'] .= '_copy';
-        $data['title'] .= '_copy';
+        if (is_numeric($id)) {
+            $userGroup = $this->get($id);
+        } 
 
-        unset($data['id']);
-        unset($data['created']);
-        unset($data['modified']);
+        $userGroup->name .= '_copy';
+        $userGroup->title .= '_copy';
 
-        $entity = $this->newEntity($data);
-        $errors = $entity->getErrors();
-        if ($errors) {
+        unset($userGroup->id, $userGroup->created, $userGroup->modified);
+
+        $entity = $this->newEntity($userGroup->toArray());
+        if ($errors = $entity->getErrors()) {
             $exception = new CopyFailedException(__d('baser', '処理に失敗しました。'));
             $exception->setErrors($errors);
             throw $exception;
         }
 
-        $result = $this->save($entity);
-        if ($result) {
-            // TODO: Permissionのコピー
-            // $result['UserGroup']['id'] = $this->getInsertID();
-            // if ($recursive) {
-            //     $permissions = $this->Permission->find('all', [
-            //         'conditions' => ['Permission.user_group_id' => $id],
-            //         'order' => ['Permission.sort'],
-            //         'recursive' => -1
-            //     ]);
-            //     if ($permissions) {
-            //         foreach($permissions as $permission) {
-            //             $permission['Permission']['user_group_id'] = $result['UserGroup']['id'];
-            //             $this->Permission->copy(null, $permission);
-            //         }
-            //     }
-            // }
-            return $result;
-        } else {
-            if (!isset($errors['name'])) {
-                return $this->copy(null, $data, $recursive);
-            } else {
-                return false;
+        if ($result = $this->save($entity)) {
+            $permissions = $this->Permissions->find()->where(['user_group_id' => $id])->order(['sort'])->all();
+            if ($permissions) {
+                foreach($permissions as $permission) {
+                    $permission->user_group_id = $result->id;
+                    $this->Permissions->copy(null, $permission->toArray());
+                }
             }
+            return $result;
         }
     }
 

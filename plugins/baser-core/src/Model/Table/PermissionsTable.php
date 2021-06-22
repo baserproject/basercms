@@ -234,7 +234,7 @@ class PermissionsTable extends AppTable
     public function copy($id, $data = [])
     {
         if ($id) {
-            $data = $this->find()->where(['id' => $id])->first()->toArray();
+            $data = $this->get($id)->toArray();
         }
 
         if (empty($data['user_group_id']) || empty($data['name'])) {
