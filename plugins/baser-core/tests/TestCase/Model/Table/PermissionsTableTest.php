@@ -355,28 +355,36 @@ class PermissionsTableTest extends BcTestCase
      */
     public function testCopy($id, $data, $expected, $message = null)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $record = $this->Permission->copy($id, $data);
-        $result = null;
-        if (isset($record['Permission']['name'])) {
-            $result = $record['Permission']['name'];
-        }
+        $result = $expected ? $record->name : $record;  
         $this->assertEquals($expected, $result, $message);
     }
 
     public function copyDataProvider()
     {
         return [
+            // id指定の場合
             [1, [], 'システム管理_copy', 'id指定でデータをコピーできません'],
-            [null,
-                ['Permission' => [
+            // フィールド指定の場合
+            [
+                null,
+                [
                     'user_group_id' => '3',
                     'name' => 'hoge',
-                ]
+                    'url' => '/baser/admin/*',
+                    'auth' => '1',
+                    'status' => '1'
                 ],
-                'hoge', 'data指定でデータをコピーできません'],
-            [99, [], false, '存在しないIDです'],
-            [null, ['Permission' => ['user_group_id' => '', 'name' => '']], false, 'コピーできないデータです'],
+                'hoge', 
+                'data指定でデータをコピーできません'
+            ],
+            // 最低限必要なフィールドがない場合
+            [
+                null,
+                ['user_group_id' => '', 'name' => ''],
+                false,
+                'コピーできないデータです'
+            ],
         ];
     }
 

@@ -278,7 +278,7 @@ class PluginsService implements PluginsServiceInterface
                         $permission->status = 1;
                         $permission->url = $url;
                         $permission->no = $permissions->getMax('no', ['user_group_id' => $userGroup->id]) + 1;
-                        $permission->sort = $permissions->getMax('no', ['user_group_id' => $userGroup->id]) + 1;
+                        $permission->sort = $permissions->getMax('sort', ['user_group_id' => $userGroup->id]) + 1;
                         $permissions->save($permission);
                     }
                     break;

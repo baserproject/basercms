@@ -18,6 +18,7 @@ use Cake\Validation\Validator;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Model\Table\Exception\CopyFailedException;
 
 /**
  * Class Permission
@@ -89,7 +90,7 @@ class PermissionsTable extends AppTable
                 'rule' => 'checkUrl',
                 'provider' => 'permission',
                 'message' => __d('baser', 'アクセス拒否として設定できるのは認証ページだけです。')]);
-        
+
         return $validator;
     }
 
@@ -225,37 +226,42 @@ class PermissionsTable extends AppTable
      *
      * @param int $id
      * @param array $data
-     * @return mixed UserGroup Or false
+     * @return mixed $permission | false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function copy($id, $data = [])
     {
         if ($id) {
-            $data = $this->find('first', ['conditions' => ['Permission.id' => $id], 'recursive' => -1]);
+            $data = $this->find()->where(['id' => $id])->first()->toArray();
         }
 
-        if (!isset($data['Permission']['user_group_id']) || !isset($data['Permission']['name'])) {
+        if (empty($data['user_group_id']) || empty($data['name'])) {
             return false;
         }
+        // $idが存在する場合アクセス制限コピー
+        $idExists = $this->find()->where([
+            'Permissions.user_group_id' => $data['user_group_id'],
+            'Permissions.name' => $data['name'],
+            ])->count();
 
-        if ($this->find('count', ['conditions' => ['Permission.user_group_id' => $data['Permission']['user_group_id'], 'Permission.name' => $data['Permission']['name']]])) {
-            $data['Permission']['name'] .= '_copy';
-            return $this->copy(null, $data); // 再帰処理
+        if ($idExists) {
+            $data['name'] .= '_copy';
+            return $this->copy(null, $data);
         }
-
-        unset($data['Permission']['id']);
-        unset($data['Permission']['modified']);
-        unset($data['Permission']['created']);
-
-        $data['Permission']['no'] = $this->getMax('no', ['user_group_id' => $data['Permission']['user_group_id']]) + 1;
-        $data['Permission']['sort'] = $this->getMax('sort', ['user_group_id' => $data['Permission']['user_group_id']]) + 1;
-        $this->create($data);
-        $result = $this->save();
-        if ($result) {
-            $result['Permission']['id'] = $this->getInsertID();
-            return $result;
-        } else {
-            return false;
+        // $idがない場合新規でアクセス制限作成
+        unset($data['id'], $data['modified'], $data['created']);
+        // 新規の場合
+        $data['no'] = $this->getMax('no', ['user_group_id' => $data['user_group_id']]) + 1;
+        $data['sort'] = $this->getMax('sort', ['user_group_id' => $data['user_group_id']]) + 1;
+        $permission = $this->newEntity($data);
+        if ($errors = $permission->getErrors()) {
+            $exception = new CopyFailedException(__d('baser', '処理に失敗しました。'));
+            $exception->setErrors($errors);
+            throw $exception;
         }
+        return ($result = $this->save($permission)) ? $result : false;
     }
 
     /**
