@@ -79,6 +79,7 @@ class PluginsController extends BcApiController
                 $plugins->allow($this->request->getData());
                 $message = sprintf(__d('baser', 'プラグイン「%s」をインストールしました。'), $name);
             } else {
+                $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser', 'プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。');
             }
         } catch (\Exception $e) {
@@ -106,6 +107,7 @@ class PluginsController extends BcApiController
         if ($plugins->detach($name)) {
             $message = sprintf(__d('baser', 'プラグイン「%s」を無効にしました。'), $name);
         } else {
+            $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', 'プラグインの無効化に失敗しました。');
         }
         $this->set([
@@ -131,6 +133,7 @@ class PluginsController extends BcApiController
             $plugins->resetDb($name, $this->request->getData('connection'));
             $message = sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $plugin->title);
         } catch(\Exception $e) {
+            $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', 'リセット処理中にエラーが発生しました。') . $e->getMessage();
         }
         $this->set([
@@ -157,6 +160,7 @@ class PluginsController extends BcApiController
             $plugins->uninstall($name, $this->request->getData('connection'));
             $message = sprintf(__d('baser', 'プラグイン「%s」を削除しました。'), $name);
         } catch (\Exception $e) {
+            $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', 'プラグインの削除に失敗しました。' . $e->getMessage());
         }
         $this->set([
@@ -177,6 +181,7 @@ class PluginsController extends BcApiController
         $this->request->allowMethod(['post']);
         $plugin = $plugins->getByName($name);
         if (!$plugins->changePriority($plugin->id, $this->request->getQuery('offset'))) {
+            $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '一度リロードしてから再実行してみてください。');
         } else {
             $message = sprintf(__d('baser', 'プラグイン「%s」の並び替えを更新しました。'), $name);

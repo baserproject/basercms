@@ -28,7 +28,7 @@ use BaserCore\Annotation\Checked;
 class UserGroupsController extends BcApiController
 {
     /**
-     * ユーザー情報一覧取得
+     * ユーザーグループ一覧取得
      * @param UserGroupsServiceInterface $UserGroups
      * @checked
      * @noTodo
@@ -43,7 +43,7 @@ class UserGroupsController extends BcApiController
     }
 
     /**
-     * ユーザー情報取得
+     * ユーザーグループ取得
      * @param UserGroupsServiceInterface $UserGroups
      * @param $id
      * @checked
@@ -59,7 +59,7 @@ class UserGroupsController extends BcApiController
     }
 
     /**
-     * ユーザー情報登録
+     * ユーザーグループ登録
      * @param UserGroupsServiceInterface $UserGroups
      * @checked
      * @noTodo
@@ -68,21 +68,24 @@ class UserGroupsController extends BcApiController
     public function add(UserGroupsServiceInterface $UserGroups)
     {
         if ($this->request->is('post')) {
-            if ($userGroups = $UserGroups->create($this->request->getData())) {
+            $userGroups = $UserGroups->create($this->request->getData());
+            if (!$userGroups->getErrors()) {
                 $message = __d('baser', 'ユーザーグループ「{0}」を追加しました。', $userGroups->name);
             } else {
+                $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser', '入力エラーです。内容を修正してください。');
             }
         }
         $this->set([
             'message' => $message,
-            'userGroups' => $userGroups
+            'userGroups' => $userGroups,
+            'errors' => $userGroups->getErrors(),
         ]);
         $this->viewBuilder()->setOption('serialize', ['message', 'userGroups']);
     }
 
     /**
-     * ユーザー情報編集
+     * ユーザーグループ編集
      * @param UserGroupsServiceInterface $UserGroups
      * @param $id
      * @checked
@@ -93,21 +96,24 @@ class UserGroupsController extends BcApiController
     {
         $userGroups = $UserGroups->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            if ($userGroups = $UserGroups->update($userGroups, $this->request->getData())) {
+            $userGroups = $UserGroups->update($userGroups, $this->request->getData());
+            if (!$userGroups->getErrors()) {
                 $message = __d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroups->name);
             } else {
+                $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser', '入力エラーです。内容を修正してください。');
             }
         }
         $this->set([
             'message' => $message,
-            'userGroups' => $userGroups
+            'userGroups' => $userGroups,
+            'errors' => $userGroups->getErrors(),
         ]);
         $this->viewBuilder()->setOption('serialize', ['userGroups', 'message']);
     }
 
     /**
-     * ユーザー情報削除
+     * ユーザーグループ削除
      * @param UserGroupsServiceInterface $UserGroups
      * @param $id
      * @checked
@@ -132,4 +138,17 @@ class UserGroupsController extends BcApiController
         ]);
         $this->viewBuilder()->setOption('serialize', ['userGroups', 'message']);
     }
+
+    /**
+     * リスト出力
+     * @param UserGroupsServiceInterface $userGroups
+     */
+    public function list(UserGroupsServiceInterface $userGroups)
+    {
+        $this->set([
+            'userGroups' => $userGroups->list()
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['userGroups']);
+    }
+
 }

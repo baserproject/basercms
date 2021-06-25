@@ -16,6 +16,7 @@ use App\Controller\AppController as BaseController;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Event\EventInterface;
 
 /**
  * Class AppController
@@ -23,4 +24,9 @@ use BaserCore\Annotation\Checked;
  */
 class AppController extends BaseController
 {
+    public function beforeRender(EventInterface $event): void
+    {
+        $this->viewBuilder()->setClassName('BcSample.App');
+        $this->viewBuilder()->setTheme('BcAdminThird');
+    }
 }

@@ -242,6 +242,7 @@ class UsersTable extends Table
     public function validationNew(Validator $validator): Validator
     {
         $this->validationDefault($validator)
+            ->requirePresence('password', 'create', __d('baser', 'パスワードを入力してください。'))
             ->notEmptyString('password', __d('baser', 'パスワードを入力してください。'));
         return $validator;
     }

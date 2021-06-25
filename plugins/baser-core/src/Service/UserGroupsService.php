@@ -128,4 +128,14 @@ class UserGroupsService implements UserGroupsServiceInterface
         $userGroup = $this->UserGroups->get($id);
         return $this->UserGroups->delete($userGroup);
     }
+
+    /**
+     * リストを取得する
+     * @return array
+     */
+    public function list(): array
+    {
+        return $this->UserGroups->find('list', ['keyField' => 'id', 'valueField' => 'title'])->toArray();
+    }
+
 }

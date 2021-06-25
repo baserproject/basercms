@@ -15,6 +15,8 @@ use Authentication\Identity;
 use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\Model\Table\UsersTable;
 use BaserCore\Service\SiteConfigsTrait;
+use BaserCore\Service\UserGroupsServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Service\UsersService;
 use Cake\Core\Configure;
@@ -118,7 +120,8 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
      */
     public function getUserGroupList()
     {
-        return $this->Users->UserGroups->find('list', ['keyField' => 'id', 'valueField' => 'title'])->toArray();
+        $userGroups = $this->getService(UserGroupsServiceInterface::class);
+        return $userGroups->list();
     }
 
     /**

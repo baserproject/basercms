@@ -62,4 +62,11 @@ interface UserGroupsServiceInterface
      * @return mixed
      */
     public function delete(int $id);
+
+    /**
+     * リストを取得する
+     * @return array
+     */
+    public function list(): array;
+
 }
