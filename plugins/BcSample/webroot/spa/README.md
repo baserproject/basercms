@@ -2,7 +2,7 @@
 
 ucmitz の REST API と vue.js を利用する場合のサンプルアプリケーションです。
 
-次のURLにアクセスすることで、管理者ログインとユーザー管理を確認することができます。
+管理画面より、BcSample プラグインをインストールし、次のURLにアクセスすることで、管理者ログインとユーザー管理を確認することができます。
 
 https://localhost/bc_sample/spa/admin.html
 
