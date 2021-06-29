@@ -28,6 +28,8 @@ use BaserCore\Service\UserGroupsService;
 use BaserCore\Service\UserGroupsServiceInterface;
 use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Service\PluginsService;
+use BaserCore\Service\DblogsServiceInterface;
+use BaserCore\Service\DblogsService;
 use BaserCore\Service\Admin\PluginManageServiceInterface;
 use Cake\Core\ServiceProvider;
 use BaserCore\Annotation\UnitTest;
@@ -54,7 +56,8 @@ class BcServiceProvider extends ServiceProvider
         PluginsServiceInterface::class,
         PluginManageServiceInterface::class,
         SiteConfigsServiceInterface::class,
-        PermissionsServiceInterface::class
+        PermissionsServiceInterface::class,
+        DblogsServiceInterface::class,
     ];
 
     /**
@@ -82,6 +85,8 @@ class BcServiceProvider extends ServiceProvider
         // Permissionsサービス
         // TODO 未実装のためモックを利用
         $container->add(PermissionsServiceInterface::class, PermissionsMockService::class, true);
+        // Dblogsサービス
+        $container->add(DblogsServiceInterface::class, DblogsService::class, true);
     }
 
 }

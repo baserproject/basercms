@@ -21,7 +21,9 @@ use BaserCore\Model\Table\LoginStoresTable;
 use Cake\Http\Cookie\Cookie;
 use DateTime;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Service\DblogsServiceInterface;
 use Cake\Core\Configure;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -36,6 +38,11 @@ use BaserCore\Annotation\Checked;
  */
 class BcAppController extends AppController
 {
+
+    /**
+     * BcContainerTrait
+     */
+    use BcContainerTrait;
 
     /**
      * view
@@ -1595,4 +1602,26 @@ class BcAppController extends AppController
         }
     }
 
+    /**
+     * データベースログを記録する
+     *
+     * @param string $message
+     * @return \Cake\Datasource\EntityInterface
+     * @checked
+     */
+    protected function saveDblog($message)
+    {
+        $DblogsService = $this->getService(DblogsServiceInterface::class);
+        $data = [
+            'message' => $message,
+            'controller' => $this->request->getParam('controller'),
+            'action' => $this->request->getParam('action')
+        ];
+        // TODO フロントでのログイン対応のためBcUtilではなくBcAuthComponentを使用する
+        $user = BcUtil::loginUser();
+        if ($user) {
+            $data['user_id'] = $user->id;
+        }
+        return $DblogsService->create($data);
+    }
 }
