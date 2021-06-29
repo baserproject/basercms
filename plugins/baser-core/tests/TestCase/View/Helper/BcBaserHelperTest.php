@@ -445,11 +445,19 @@ class BcBaserHelperTest extends BcTestCase
      * Test i18nScript
      *
      * @return void
-     * @todo メソッド未実装
      */
     public function testi18nScript()
     {
-        $this->markTestIncomplete('テストが未実装です');
+        $this->BcBaser->i18nScript([
+            'commonCancel' => __d('baser', 'キャンセル'),
+            'commonSave' => __d('baser', '保存')
+        ]);
+        $encoded1 = "commonCancel = ". json_encode('キャンセル');
+        $encoded2 = "commonSave = " . json_encode('保存');
+
+        $result = $this->BcAdminAppView->fetch('script');
+        $this->assertStringContainsString($encoded1, $result);
+        $this->assertStringContainsString($encoded2, $result);
     }
 
     /**
