@@ -70,6 +70,36 @@ class BcFreezeHelper extends BcFormHelper
 	}
 
 	/**
+	 * テキストボックスを表示する
+	 *
+	 * @param string $fieldName フィールド文字列
+	 * @param array $attributes html属性
+	 * - 凍結時に、$attributes["value"]が指定されている場合、その値がvalueになる。
+	 * 　指定されてない場合、$this->request->data[$model][$field]がvalueになる。
+	 * @return	string	htmlタグ
+	 * @access	public
+	 */
+	public function email($fieldName, $attributes = [])
+	{
+		if ($this->freezed) {
+			list($model, $field) = explode('.', $fieldName);
+			if (isset($attributes)) {
+				$attributes = $attributes + ['type' => 'hidden'];
+			} else {
+				$attributes = ['type' => 'hidden'];
+			}
+			if (isset($attributes["value"])) {
+				$value = $attributes["value"];
+			} else {
+				$value = $this->request->data[$model][$field];
+			}
+			return parent::text($fieldName, $attributes) . h($value);
+		} else {
+			return parent::email($fieldName, $attributes);
+		}
+	}
+
+	/**
 	 * select プルダウンメニューを表示
 	 *
 	 * @param string $fieldName フィールド文字列
