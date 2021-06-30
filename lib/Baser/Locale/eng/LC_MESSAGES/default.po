@@ -651,6 +651,198 @@ msgstr "The reception is suspended now."
 msgid "baser"
 msgstr "baser"
 
+#: View/Helper/BcTextHelper.php:114
+msgid "都道府県"
+msgstr "Prefectures"
+
+#: View/Helper/BcTextHelper.php:118
+msgid "北海道"
+msgstr "Hokkaido"
+
+#: View/Helper/BcTextHelper.php:118
+msgid "青森県"
+msgstr "Aomori"
+
+#: View/Helper/BcTextHelper.php:118
+msgid "岩手県"
+msgstr "Iwate"
+
+#: View/Helper/BcTextHelper.php:118
+msgid "宮城県"
+msgstr "Miyagi"
+
+#: View/Helper/BcTextHelper.php:118
+msgid "秋田県"
+msgstr "Akita"
+
+#: View/Helper/BcTextHelper.php:118
+msgid "山形県"
+msgstr "Yamagata"
+
+#: View/Helper/BcTextHelper.php:118
+msgid "福島県"
+msgstr "Fukushima"
+
+#: View/Helper/BcTextHelper.php:119
+msgid "茨城県"
+msgstr "Ibaraki"
+
+#: View/Helper/BcTextHelper.php:119
+msgid "栃木県"
+msgstr "Tochigi"
+
+#: View/Helper/BcTextHelper.php:119
+msgid "群馬県"
+msgstr "Gunma"
+
+#: View/Helper/BcTextHelper.php:119
+msgid "埼玉県"
+msgstr "Saitama"
+
+#: View/Helper/BcTextHelper.php:119
+msgid "千葉県"
+msgstr "Chiba"
+
+#: View/Helper/BcTextHelper.php:119
+msgid "東京都"
+msgstr "Tokyo"
+
+#: View/Helper/BcTextHelper.php:119
+msgid "神奈川県"
+msgstr "Kanagawa"
+
+#: View/Helper/BcTextHelper.php:120
+msgid "新潟県"
+msgstr "Niigata"
+
+#: View/Helper/BcTextHelper.php:120
+msgid "富山県"
+msgstr "Toyama"
+
+#: View/Helper/BcTextHelper.php:120
+msgid "石川県"
+msgstr "Ishikawa"
+
+#: View/Helper/BcTextHelper.php:120
+msgid "福井県"
+msgstr "Fukui"
+
+#: View/Helper/BcTextHelper.php:120
+msgid "山梨県"
+msgstr "Yamanashi"
+
+#: View/Helper/BcTextHelper.php:120
+msgid "長野県"
+msgstr "Nagano"
+
+#: View/Helper/BcTextHelper.php:120
+msgid "岐阜県"
+msgstr "Gifu"
+
+#: View/Helper/BcTextHelper.php:121
+msgid "静岡県"
+msgstr "Shizuoka"
+
+#: View/Helper/BcTextHelper.php:121
+msgid "愛知県"
+msgstr "Aichi"
+
+#: View/Helper/BcTextHelper.php:121
+msgid "三重県"
+msgstr "Mie"
+
+#: View/Helper/BcTextHelper.php:121
+msgid "滋賀県"
+msgstr "Shigia"
+
+#: View/Helper/BcTextHelper.php:121
+msgid "京都府"
+msgstr "Kyoto"
+
+#: View/Helper/BcTextHelper.php:121
+msgid "大阪府"
+msgstr "Osaka"
+
+#: View/Helper/BcTextHelper.php:121
+msgid "兵庫県"
+msgstr "Hyogo"
+
+#: View/Helper/BcTextHelper.php:122
+msgid "奈良県"
+msgstr "Nara"
+
+#: View/Helper/BcTextHelper.php:122
+msgid "和歌山県"
+msgstr "Wakayama"
+
+#: View/Helper/BcTextHelper.php:122
+msgid "鳥取県"
+msgstr "Tottori"
+
+#: View/Helper/BcTextHelper.php:122
+msgid "島根県"
+msgstr "Shimane"
+
+#: View/Helper/BcTextHelper.php:122
+msgid "岡山県"
+msgstr "Okayama"
+
+#: View/Helper/BcTextHelper.php:122
+msgid "広島県"
+msgstr "Hiroshima"
+
+#: View/Helper/BcTextHelper.php:122
+msgid "山口県"
+msgstr "Yamaguchi"
+
+#: View/Helper/BcTextHelper.php:123
+msgid "徳島県"
+msgstr "Tokushima"
+
+#: View/Helper/BcTextHelper.php:123
+msgid "香川県"
+msgstr "Kagawa"
+
+#: View/Helper/BcTextHelper.php:123
+msgid "愛媛県"
+msgstr "Ehime"
+
+#: View/Helper/BcTextHelper.php:123
+msgid "高知県"
+msgstr "Kochi"
+
+#: View/Helper/BcTextHelper.php:123
+msgid "福岡県"
+msgstr "Fukuoka"
+
+#: View/Helper/BcTextHelper.php:123
+msgid "佐賀県"
+msgstr "Saga"
+
+#: View/Helper/BcTextHelper.php:123
+msgid "長崎県"
+msgstr "Nagasaki"
+
+#: View/Helper/BcTextHelper.php:124
+msgid "熊本県"
+msgstr "Kumamoto"
+
+#: View/Helper/BcTextHelper.php:124
+msgid "大分県"
+msgstr "Oita"
+
+#: View/Helper/BcTextHelper.php:124
+msgid "宮崎県"
+msgstr "Miyazaki"
+
+#: View/Helper/BcTextHelper.php:124
+msgid "鹿児島県"
+msgstr "Kagoshima"
+
+#: View/Helper/BcTextHelper.php:124
+msgid "沖縄県"
+msgstr "Okinawa"
+
 #~ msgid "コメントを受付けました"
 #~ msgstr "Accepted Comment"
 
