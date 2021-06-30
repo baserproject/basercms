@@ -137,6 +137,7 @@ class MailField extends MailAppModel
 				[
 					'rule' => ['naturalNumber'],
 					'message' => __d('baser', '最大値は半角数字のみで入力してください。'),
+					'allowEmpty' => true,
 				],
 				[
 					'rule' => ['maxLength', 9],
