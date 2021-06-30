@@ -111,6 +111,38 @@ class MailField extends MailAppModel
 					'message' => __d('baser', 'オプションは255文字以内で入力してください。')
 				]
 			],
+			'size' => [
+				[
+					'rule' => ['naturalNumber'],
+					'message' => __d('baser', '表示サイズは半角数字のみで入力してください。'),
+					'allowEmpty' => true,
+				],
+				[
+					'rule' => ['maxLength', 9],
+					'message' => __d('baser', '表示サイズは9文字以内で入力してください。')
+				]
+			],
+			'rows' => [
+				[
+					'rule' => ['naturalNumber'],
+					'message' => __d('baser', '行数は半角数字のみで入力してください。'),
+					'allowEmpty' => true,
+				],
+				[
+					'rule' => ['maxLength', 9],
+					'message' => __d('baser', '行数は9文字以内で入力してください。')
+				]
+			],
+			'maxlength' => [
+				[
+					'rule' => ['naturalNumber'],
+					'message' => __d('baser', '最大値は半角数字のみで入力してください。'),
+				],
+				[
+					'rule' => ['maxLength', 9],
+					'message' => __d('baser', '最大値は9文字以内で入力してください。')
+				]
+			],
 			'class' => [
 				[
 					'rule' => ['maxLength', 255],
