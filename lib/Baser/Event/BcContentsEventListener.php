@@ -59,14 +59,14 @@ class BcContentsEventListener extends CakeObject implements CakeEventListener
 	public function formAfterCreate(CakeEvent $event)
 	{
 		if (!BcUtil::isAdminSystem()) {
-			return;
+			return '';
 		}
 		$View = $event->subject();
-		if ($event->data['id'] == 'FavoriteAdminEditForm' || $event->data['id'] == 'PermissionAdminEditForm') {
-			return;
+		if ($event->data['id'] === 'FavoriteAdminEditForm' || $event->data['id'] === 'PermissionAdminEditForm') {
+			return '';
 		}
-		if (!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->data['id'])) {
-			return;
+		if (!preg_match('/(AdminAddForm|AdminEditForm|AdminEditAliasForm)$/', $event->data['id'])) {
+			return '';
 		}
 		return $event->data['out'] . "\n" . $View->element('admin/content_fields');
 	}
@@ -88,14 +88,14 @@ class BcContentsEventListener extends CakeObject implements CakeEventListener
 		/* @var BcAppView $View */
 		$View = $event->subject();
 		$data = $View->request->data;
-		if (!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->data['id'])) {
+		if (!preg_match('/(AdminAddForm|AdminEditForm|AdminEditAliasForm)$/', $event->data['id'])) {
 			return $event->data['out'];
 		}
 		$setting = Configure::read('BcContents.items.' . $data['Content']['plugin'] . '.' . $data['Content']['type']);
 
 		$PermissionModel = ClassRegistry::init('Permission');
-		$isAvailablePreview = (!empty($setting['preview']) && $data['Content']['type'] != 'ContentFolder');
-		$isAvailableDelete = (empty($data['Content']['site_root']) && $PermissionModel->check('/' . Configure::read('Routing.prefixes.0') . '/contents/delete', $View->viewVars['user']['user_group_id']));
+		$isAvailablePreview = (!empty($data['Content']['id']) && !empty($setting['preview']) && $data['Content']['type'] !== 'ContentFolder');
+		$isAvailableDelete = (!empty($data['Content']['id']) && empty($data['Content']['site_root']) && $PermissionModel->check('/' . Configure::read('Routing.prefixes.0') . '/contents/delete', $View->viewVars['user']['user_group_id']));
 
 		$event->data['out'] = implode("\n", [
 			$View->element('admin/content_options'),

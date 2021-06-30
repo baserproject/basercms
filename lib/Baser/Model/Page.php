@@ -958,4 +958,40 @@ class Page extends AppModel
 		return $path . $url;
 	}
 
+	/**
+	 * 初期値を取得する
+	 *
+	 * @return array 初期値データ
+	 */
+	public function getDefaultValue($parentId, $name = '')
+	{
+		if($name) {
+			$title = $name;
+			$name = BcUtil::urlencode(mb_substr($name, 0, 230, 'UTF-8'));
+		} else {
+			$title = '';
+		}
+		$parent = $this->Content->find('first', ['conditions' => [
+			'Content.type' => 'ContentFolder',
+			'Content.id' => $parentId,
+		], 'recursive' => -1]);
+		if (!$parent) {
+			return [];
+		} else {
+			return [
+				'Content' => [
+					'name' => $name,
+					'title' => $title,
+					'type' => 'Page',
+					'plugin' => 'Core',
+					'alias_id' => null,
+					'site_root' => false,
+					'site_id' => $parent['Content']['site_id'],
+					'parent_id' => $parent['Content']['id'],
+					'self_status' => false
+				]
+			];
+		}
+	}
+
 }

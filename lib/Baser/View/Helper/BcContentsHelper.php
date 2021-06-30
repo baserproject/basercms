@@ -626,8 +626,17 @@ class BcContentsHelper extends AppHelper
 	 */
 	public function getFolderLinkedUrl($content)
 	{
-		$urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $content['Content']['url']));
-		unset($urlArray[count($urlArray) - 1]);
+		if(!empty($content['Content']['url'])) {
+			$urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $content['Content']['url']));
+			unset($urlArray[count($urlArray) - 1]);
+		} elseif($content['Content']['parent_id']) {
+			$parent = $this->_Content->findById($content['Content']['parent_id']);
+			$urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $parent['Content']['url']));
+		}
+		if(count($urlArray) === 1 && !$urlArray[0]) {
+			$urlArray = [];
+		}
+
 		if ($content['Site']['same_main_url']) {
 			$site = BcSite::findById($content['Site']['main_site_id']);
 			array_shift($urlArray);

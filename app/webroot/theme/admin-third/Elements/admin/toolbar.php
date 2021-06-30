@@ -137,6 +137,16 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix !== 'front') {
 					<?php $this->BcBaser->editLink() ?>
 				</div>
 			<?php endif ?>
+			<?php if(!empty($this->request->params['Content']['type']) && $this->request->params['Content']['type'] === 'ContentFolder'): ?>
+				<div class="bca-toolbar__tools-button bca-toolbar__tools-button-add">
+					<?php $this->BcBaser->link(__d('baser', '新規ページ追加'), [
+						'plugin' => '',
+						'admin' => true,
+						'controller' => 'pages',
+						'action' => 'add', $this->request->params['Content']['id']
+					], ['class' => 'tool-menu']); ?>
+				</div>
+			<?php endif ?>
 			<?php if ($this->BcBaser->existsPublishLink()): ?>
 				<div class="bca-toolbar__tools-button bca-toolbar__tools-button-publish">
 					<?php $this->BcBaser->publishLink() ?>

@@ -120,6 +120,89 @@ class PagesController extends AppController
 	}
 
 	/**
+	 * 固定ページ新規追加
+	 *
+	 * @param int $parentContentId 親コンテンツID
+	 * @return void
+	 */
+	public function admin_add($parentContentId, $name = '')
+	{
+		if (!$parentContentId) {
+			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
+			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+		}
+
+		if ($this->request->is(['post', 'put'])) {
+			if ($this->Page->isOverPostSize()) {
+				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
+				$this->redirect(['contents', 'action' => 'index']);
+			}
+
+			// EVENT Pages.beforeAdd
+			$event = $this->dispatchEvent('beforeAdd', [
+				'data' => $this->request->data
+			]);
+			if ($event !== false) {
+				$this->request->data = $event->result === true? $event->data['data'] : $event->result;
+			}
+
+			$this->Page->set($this->request->data);
+			if ($data = $this->Page->save()) {
+
+				// 完了メッセージ
+				$site = BcSite::findById($data['Content']['site_id']);
+				$url = $this->Content->getUrl($data['Content']['url'], true, $site->useSubDomain);
+				$this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を登録しました。\n%s"), $data['Content']['name'], urldecode($url)));
+
+				// EVENT Pages.afterAdd
+				$this->dispatchEvent('afterAdd', [
+					'data' => $data
+				]);
+
+				// 同固定ページへリダイレクト
+				$this->redirect(['action' => 'edit', $this->Page->id]);
+				return;
+			}
+
+			$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+		} else {
+			$this->request->data = $this->Page->getDefaultValue($parentContentId, $name);
+			if(!$this->request->data) {
+				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
+				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+				return;
+			}
+		}
+
+		// エディタオプション
+		$editorOptions = ['editorDisableDraft' => true];
+		if (!empty($this->siteConfigs['editor_styles'])) {
+			App::uses('CKEditorStyleParser', 'Vendor');
+			$CKEditorStyleParser = new CKEditorStyleParser();
+			$editorOptions = array_merge($editorOptions, [
+				'editorStylesSet' => 'default',
+				'editorStyles' => [
+					'default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles'])
+				]
+			]);
+		}
+
+		// ページテンプレートリスト
+		$theme = [$this->siteConfigs['theme']];
+		$site = BcSite::findById($this->request->data['Content']['site_id']);
+		if (!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
+			$theme[] = $site->theme;
+		}
+		$pageTemplateList = [];
+		$publishLink = '';
+		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink'));
+
+		$this->pageTitle = __d('baser', '固定ページ情報新規追加');
+		$this->help = 'pages_form';
+		$this->render('form');
+	}
+
+	/**
 	 * [ADMIN] 固定ページ情報編集
 	 *
 	 * @param int $id (page_id)
@@ -138,9 +221,6 @@ class PagesController extends AppController
 				$this->redirect(['action' => 'edit', $id]);
 			}
 			$isChangedStatus = $this->Content->isChangedStatus($id, $this->request->data);
-			if (empty($this->request->data['Page']['page_type'])) {
-				$this->request->data['Page']['page_type'] = 1;
-			}
 
 			// EVENT Pages.beforeEdit
 			$event = $this->dispatchEvent('beforeEdit', [

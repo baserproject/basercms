@@ -51,6 +51,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 		</div>
 		<div class="bca-collapse" id="pageSettingBody" data-bca-state="">
 			<table class="form-table bca-form-table" data-bca-table-type="type2">
+	<?php if($pageTemplateList): ?>
 				<tr>
 					<th class="bca-form-table__label"><?php echo $this->BcForm->label('Page.page_template', __d('baser', '固定ページテンプレート')) ?></th>
 					<td class="col-input bca-form-table__input">
@@ -60,6 +61,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 						<?php echo $this->BcForm->error('Page.page_template') ?>
 					</td>
 				</tr>
+	<?php endif ?>
 				<tr>
 					<th class="bca-form-table__label"><?php echo $this->BcForm->label('Page.code', __d('baser', 'コード')) ?></th>
 					<td class="col-input bca-form-table__input">

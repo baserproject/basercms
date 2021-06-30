@@ -17,6 +17,10 @@
  * @var array $sites サイトリスト
  * @var int $currentSiteId 現在のサイトID
  */
+
+if(empty($this->request->data['Content']['url'])) {
+	return;
+}
 $pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'], $this->request->data['Site']['id']);
 ?>
 

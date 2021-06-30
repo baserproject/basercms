@@ -55,6 +55,15 @@ class BcContentsComponent extends Component
 	public $editAction = 'admin_edit';
 
 	/**
+	 * コンテンツ新規登録用のアクション名
+	 * 判定に利用
+	 * settings で指定する
+	 *
+	 * @var string
+	 */
+	public $addAction = 'admin_add';
+
+	/**
 	 * コンテンツタイプ
 	 * settings で指定する
 	 *
@@ -211,9 +220,17 @@ class BcContentsComponent extends Component
 			} else {
 				$controller->subMenuElements = ['contents'];
 			}
-			if ($this->useForm && in_array($controller->request->action, [$this->editAction, 'admin_edit_alias']) && !empty($controller->request->data['Content'])) {
+			if ($this->useForm && in_array($controller->request->action, [$this->editAction, $this->addAction, 'admin_edit_alias']) && !empty($controller->request->data['Content'])) {
+				$siteId = 0;
+				$id = null;
+				if($controller->request->data('Content.site_id')) {
+					$siteId = $controller->request->data('Content.site_id');
+				}
+				if($controller->request->data('Content.id')) {
+					$id = $controller->request->data('Content.id');
+				}
 				// フォームをセット
-				$this->settingForm($controller, $controller->request->data['Content']['site_id'], $controller->request->data['Content']['id']);
+				$this->settingForm($controller, $siteId, $id);
 				// フォームを読み込む為のイベントを設定
 				// 内部で useForm を参照できない為、ここに記述。
 				// フォームの設定しかできないイベントになってしまっている。
@@ -260,7 +277,7 @@ class BcContentsComponent extends Component
 			BcUtil::getTemplateList('Layouts', '', $theme),
 			BcUtil::getTemplateList('Layouts', $this->_Controller->plugin, $theme)
 		);
-		if ($data['Content']['id'] != 1) {
+		if (!empty($data['Content']['id']) && $data['Content']['id'] != 1) {
 			$parentTemplate = $this->getParentLayoutTemplate($data['Content']['id']);
 			if (in_array($parentTemplate, $templates)) {
 				unset($templates[$parentTemplate]);
@@ -275,18 +292,25 @@ class BcContentsComponent extends Component
 		$controller->set('parentContents', $controller->Content->getContentFolderList($currentSiteId, $options));
 		$controller->set('authors', $controller->User->getUserList());
 		$Site = ClassRegistry::init('Site');
-		$site = $controller->Content->find('first', ['conditions' => ['Content.id' => $data['Content']['id']]]);
+		if(!empty($data['Content']['id'])) {
+			$site = $controller->Content->find('first', ['conditions' => ['Content.id' => $data['Content']['id']]]);
+			$relatedContents = $Site->getRelatedContents($data['Content']['id']);
+		} else {
+			$site = $controller->Content->find('first', ['conditions' => ['Content.id' => $data['Content']['parent_id']]]);
+			$relatedContents = [];
+		}
 		if (!is_null($site['Site']['main_site_id'])) {
 			$mainSiteId = $site['Site']['main_site_id'];
 		} else {
 			$mainSiteId = 0;
 		}
+
 		$siteList = [0 => ''] + $controller->Content->Site->find('list', ['fields' => ['id', 'display_name']]);
 		$controller->set('sites', $siteList);
 		$controller->set('mainSiteDisplayName', $controller->siteConfigs['main_site_display_name']);
 		$data['Site'] = $site['Site'];
 		$controller->set('mainSiteId', $mainSiteId);
-		$controller->set('relatedContents', $Site->getRelatedContents($data['Content']['id']));
+		$controller->set('relatedContents', $relatedContents);
 		$related = false;
 		if (($data['Site']['relate_main_site'] && $data['Content']['main_site_content_id'] && $data['Content']['alias_id']) ||
 			$data['Site']['relate_main_site'] && $data['Content']['main_site_content_id'] && $data['Content']['type'] == 'ContentFolder') {

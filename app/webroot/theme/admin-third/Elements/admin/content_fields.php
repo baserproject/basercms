@@ -19,13 +19,18 @@
  *                                        上記に一致する場合、URLに関わるコンテンツ名は編集できない
  * @var bool $disableEditContent コンテンツ編集不可かどうか
  */
-if ($this->request->data['Site']['use_subdomain']) {
-	$targetSite = BcSite::findByUrl($this->request->data['Content']['url']);
-	$previewUrl = $this->BcBaser->getUrl($targetSite->getPureUrl($this->request->data['Content']['url']) . '?host=' . $targetSite->host);
-} else {
-	$previewUrl = $this->BcBaser->getUrl($this->BcContents->getUrl($this->request->data['Content']['url'], false, false, false));
+
+$fullUrl = $previewUrl = '';
+if(!empty($this->request->data['Content']['url'])) {
+	if ($this->request->data['Site']['use_subdomain']) {
+		$targetSite = BcSite::findByUrl($this->request->data['Content']['url']);
+		$previewUrl = $this->BcBaser->getUrl($targetSite->getPureUrl($this->request->data['Content']['url']) . '?host=' . $targetSite->host);
+	} else {
+		$previewUrl = $this->BcBaser->getUrl($this->BcContents->getUrl($this->request->data['Content']['url'], false, false, false));
+	}
+	$fullUrl = $this->BcContents->getUrl($this->request->data['Content']['url'], true, $this->request->data['Site']['use_subdomain']);
 }
-$fullUrl = $this->BcContents->getUrl($this->request->data['Content']['url'], true, $this->request->data['Site']['use_subdomain']);
+
 $this->BcBaser->js('admin/contents/edit', false, ['id' => 'AdminContentsEditScript',
 	'data-previewurl' => $previewUrl,
 	'data-fullurl' => $fullUrl,
@@ -87,6 +92,7 @@ if ($this->BcContents->isEditable()) {
 <?php echo $this->BcForm->hidden('Content.main_site_content_id') ?>
 
 
+<?php if($fullUrl): ?>
 <div class="bca-section bca-section__post-top">
   <span class="bca-post__url">
 	  <a href="<?php echo h($fullUrl) ?>" class="bca-text-url" target="_blank" data-toggle="tooltip"
@@ -101,6 +107,8 @@ if ($this->BcContents->isEditable()) {
 		  'data-bca-btn-size' => 'sm'
 	  ]) ?>
 </div>
+<?php endif ?>
+
 
 <section id="BasicSetting" class="bca-section">
 	<table class="form-table bca-form-table" data-bca-table-type="type2">
