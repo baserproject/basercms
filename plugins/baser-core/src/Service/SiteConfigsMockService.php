@@ -27,6 +27,8 @@ class SiteConfigsMockService implements SiteConfigsServiceInterface
         // TODO 未実装
         if ($fieldName === 'admin_list_num') {
             return 30;
+        } elseif($fieldName === 'name') {
+            return 'baserCMS';
         }
         return null;
     }

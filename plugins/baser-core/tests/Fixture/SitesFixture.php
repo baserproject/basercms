@@ -54,7 +54,7 @@ class SitesFixture extends TestFixture
             'title' => 'baserCMS inc.｜スマホ',
             'alias' => 's',
             'theme' => '',
-            'status' => 1,
+            'status' => 0,
             'device' => 'smartphone',
             'lang' => '',
             'auto_redirect' => true,

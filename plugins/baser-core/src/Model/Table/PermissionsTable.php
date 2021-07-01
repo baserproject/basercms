@@ -11,9 +11,12 @@
  */
 namespace BaserCore\Model\Table;
 
+use ArrayObject;
 use BaserCore\Model\AppTable;
 use Cake\Core\Configure;
 use BaserCore\Utility\BcUtil;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\Event;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -146,12 +149,14 @@ class PermissionsTable extends AppTable
      * beforeSave
      * urlの先頭に / を付けて絶対パスにする
      *
-     * @param object $options
+     * @param Event $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      * @return boolean
      */
-    public function beforeSave($options = [])
+    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
-        $data = $options->getData();
+        $data = $event->getData();
         if (preg_match('/^[^\/]/is', $data["entity"]->get("url"))) {
             $data["entity"]->set("url", '/' . $data["entity"]->get("url"));
         }

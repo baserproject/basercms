@@ -167,9 +167,10 @@ interface UserManageServiceInterface
     public function returnLoginUserFromAgent(ServerRequest $request, ResponseInterface $response);
 
     /**
-     * 管理画面の一覧の表示件数を取得する
+     * サイト全体の設定値を取得する
+     * @param string $name
      * @return mixed
      */
-    public function getAdminListNum(): int;
+    public function getSiteConfig($name);
 
 }

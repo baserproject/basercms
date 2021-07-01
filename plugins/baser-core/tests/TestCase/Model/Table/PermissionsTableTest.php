@@ -57,7 +57,7 @@ class PermissionsTableTest extends BcTestCase
     {
         parent::setUp();
         $config = $this->getTableLocator()->exists('Permissions')? [] : ['className' => 'BaserCore\Model\Table\PermissionsTable'];
-        $this->Permission = $this->getTableLocator()->get('Permissions', $config);
+        $this->Permissions = $this->getTableLocator()->get('Permissions', $config);
     }
 
     /**
@@ -77,10 +77,10 @@ class PermissionsTableTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertEquals('permissions', $this->Permission->getTable());
-        $this->assertEquals('id', $this->Permission->getPrimaryKey());
-        $this->assertTrue($this->Permission->hasBehavior('Timestamp'));
-        $this->assertEquals('UserGroups', $this->Permission->getAssociation('UserGroups')->getName());
+        $this->assertEquals('permissions', $this->Permissions->getTable());
+        $this->assertEquals('id', $this->Permissions->getPrimaryKey());
+        $this->assertTrue($this->Permissions->hasBehavior('Timestamp'));
+        $this->assertEquals('UserGroups', $this->Permissions->getAssociation('UserGroups')->getName());
 
     }
 
@@ -92,7 +92,7 @@ class PermissionsTableTest extends BcTestCase
      */
     public function testValidationDefault($fields, $messages)
     {
-        $permission = $this->Permission->newEntity($fields);
+        $permission = $this->Permissions->newEntity($fields);
         $this->assertSame($messages, $permission->getErrors());
     }
     public function validationDefaultDataProvider()
@@ -142,76 +142,76 @@ class PermissionsTableTest extends BcTestCase
     public function test必須チェック()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->Permission->create([
+        $this->Permissions->create([
             'Permission' => [
                 'name' => '',
                 'url' => '',
             ]
         ]);
-        $this->assertFalse($this->Permission->validates());
-        $this->assertArrayHasKey('name', $this->Permission->validationErrors);
-        $this->assertEquals('設定名を入力してください。', current($this->Permission->validationErrors['name']));
-        $this->assertArrayHasKey('user_group_id', $this->Permission->validationErrors);
-        $this->assertEquals('ユーザーグループを選択してください。', current($this->Permission->validationErrors['user_group_id']));
-        $this->assertArrayHasKey('url', $this->Permission->validationErrors);
-        $this->assertEquals('設定URLを入力してください。', current($this->Permission->validationErrors['url']));
+        $this->assertFalse($this->Permissions->validates());
+        $this->assertArrayHasKey('name', $this->Permissions->validationErrors);
+        $this->assertEquals('設定名を入力してください。', current($this->Permissions->validationErrors['name']));
+        $this->assertArrayHasKey('user_group_id', $this->Permissions->validationErrors);
+        $this->assertEquals('ユーザーグループを選択してください。', current($this->Permissions->validationErrors['user_group_id']));
+        $this->assertArrayHasKey('url', $this->Permissions->validationErrors);
+        $this->assertEquals('設定URLを入力してください。', current($this->Permissions->validationErrors['url']));
     }
 
     public function test桁数チェック正常系()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->Permission->create([
+        $this->Permissions->create([
             'Permission' => [
                 'name' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
                 'user_group_id' => '1',
                 'url' => '/admin/12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
             ]
         ]);
-        $this->assertTrue($this->Permission->validates());
+        $this->assertTrue($this->Permissions->validates());
     }
 
     public function test桁数チェック異常系()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->Permission->create([
+        $this->Permissions->create([
             'Permission' => [
                 'name' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
                 'user_group_id' => '1',
                 'url' => '/admin/1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
             ]
         ]);
-        $this->assertFalse($this->Permission->validates());
-        $this->assertArrayHasKey('name', $this->Permission->validationErrors);
-        $this->assertEquals('設定名は255文字以内で入力してください。', current($this->Permission->validationErrors['name']));
-        $this->assertArrayHasKey('url', $this->Permission->validationErrors);
-        $this->assertEquals('設定URLは255文字以内で入力してください。', current($this->Permission->validationErrors['url']));
+        $this->assertFalse($this->Permissions->validates());
+        $this->assertArrayHasKey('name', $this->Permissions->validationErrors);
+        $this->assertEquals('設定名は255文字以内で入力してください。', current($this->Permissions->validationErrors['name']));
+        $this->assertArrayHasKey('url', $this->Permissions->validationErrors);
+        $this->assertEquals('設定URLは255文字以内で入力してください。', current($this->Permissions->validationErrors['url']));
     }
 
     public function testアクセス拒否チェック異常系()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->_getRequest('/admin');
-        $this->Permission->create([
+        $this->Permissions->create([
             'Permission' => [
                 'user_group_id' => '1',
                 'url' => '/index',
             ]
         ]);
-        $this->assertFalse($this->Permission->validates());
-        $this->assertArrayHasKey('url', $this->Permission->validationErrors);
-        $this->assertEquals('アクセス拒否として設定できるのは認証ページだけです。', current($this->Permission->validationErrors['url']));
+        $this->assertFalse($this->Permissions->validates());
+        $this->assertArrayHasKey('url', $this->Permissions->validationErrors);
+        $this->assertEquals('アクセス拒否として設定できるのは認証ページだけです。', current($this->Permissions->validationErrors['url']));
     }
 
     public function testアクセス拒否チェック正常系()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->Permission->create([
+        $this->Permissions->create([
             'Permission' => [
                 'user_group_id' => '1',
                 'url' => '/admin/index',
             ]
         ]);
-        $this->assertTrue($this->Permission->validates());
+        $this->assertTrue($this->Permissions->validates());
     }
 
 
@@ -227,7 +227,7 @@ class PermissionsTableTest extends BcTestCase
     public function testGetAuthPrefix($id, $expected, $message = null)
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->Permission->getAuthPrefix($id);
+        $result = $this->Permissions->getAuthPrefix($id);
         $this->assertEquals($expected, $result, $message);
     }
 
@@ -246,7 +246,7 @@ class PermissionsTableTest extends BcTestCase
     public function testGetDefaultValue()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->Permission->getDefaultValue();
+        $result = $this->Permissions->getDefaultValue();
         $expected = [
             'Permission' => [
                 'auth' => 0,
@@ -267,7 +267,7 @@ class PermissionsTableTest extends BcTestCase
     public function testGetControlSource($field, $expected, $message = null)
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->Permission->getControlSource($field);
+        $result = $this->Permissions->getControlSource($field);
         $this->assertEquals($expected, $result, $message);
     }
 
@@ -291,13 +291,13 @@ class PermissionsTableTest extends BcTestCase
     public function testBeforeSave($url, $expectedUrl, $message = null)
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->Permission->data = [
+        $this->Permissions->data = [
             'Permission' => [
                 'url' => $url,
             ]
         ];
-        $this->Permission->beforeSave();
-        $result = $this->Permission->data;
+        $this->Permissions->beforeSave();
+        $result = $this->Permissions->data;
 
         $expected = [
             'Permission' => [
@@ -327,7 +327,7 @@ class PermissionsTableTest extends BcTestCase
     public function testCheck($url, $userGroupId, $expected, $message = null)
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->Permission->check($url, $userGroupId);
+        $result = $this->Permissions->check($url, $userGroupId);
         $this->assertEquals($expected, $result, $message);
     }
 
@@ -355,8 +355,8 @@ class PermissionsTableTest extends BcTestCase
      */
     public function testCopy($id, $data, $expected, $message = null)
     {
-        $record = $this->Permission->copy($id, $data);
-        $result = $expected ? $record->name : $record;  
+        $record = $this->Permissions->copy($id, $data);
+        $result = $expected ? $record->name : $record;
         $this->assertEquals($expected, $result, $message);
     }
 
@@ -375,7 +375,7 @@ class PermissionsTableTest extends BcTestCase
                     'auth' => '1',
                     'status' => '1'
                 ],
-                'hoge', 
+                'hoge',
                 'data指定でデータをコピーできません'
             ],
             // 最低限必要なフィールドがない場合

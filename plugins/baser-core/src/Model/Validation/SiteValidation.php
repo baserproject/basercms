@@ -30,7 +30,7 @@ class SiteValidation extends Validation
      * @param string $alias
      * @return bool
      */
-    public function aliasSlashChecks($alias)
+    public static function aliasSlashChecks($alias)
     {
         if (preg_match('/(^\/|[\/]{2,}|\/$)/', $alias)) {
             return false;

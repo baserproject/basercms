@@ -165,7 +165,7 @@ class BcValidation extends Validation
      * @noTodo
      * @unitTest
      */
-    public function notInList($value, $list)
+    public static function notInList($value, $list)
     {
         return !in_array($value, $list);
     }
@@ -518,7 +518,7 @@ class BcValidation extends Validation
      * @param array $value
      * @return boolean
      */
-    public function containsScript($value)
+    public static function containsScript($value)
     {
         $events = ['onclick', 'ondblclick', 'onmousedown', 'onmouseup', 'onmouseover', 'onmousemove',
             'onmouseout', 'onkeypress', 'onkeydown', 'onkeyup', 'onload', 'onunload',

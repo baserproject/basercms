@@ -1,40 +1,41 @@
 <?php
-// TODO : コード確認要
-use BaserCore\Event\BcEventDispatcherTrait;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Model
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+
+namespace BaserCore\Model\Table;
+
+use ArrayObject;
+use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Model\AppTable;
+use BaserCore\Model\Entity\Site;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\Event;
+use Cake\Validation\Validator;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class Site
  *
- * サブサイトモデル
- *
+ * サイトモデル
+ * @method Site newEntity($data = null, array $options = [])
  * @package Baser.Model
  */
-class Site extends AppModel
+class SitesTable extends AppTable
 {
+
     /**
      * Trait
      */
     use BcEventDispatcherTrait;
-
-    /**
-     * ビヘイビア
-     *
-     * @var array
-     */
-    public $actsAs = ['BcCache'];
-
 
     /**
      * 保存時にエイリアスが変更されたかどうか
@@ -44,50 +45,63 @@ class Site extends AppModel
     private $__changedAlias = false;
 
     /**
-     * Site constructor.
+     * Validation Default
      *
-     * @param bool $id
-     * @param null $table
-     * @param null $ds
+     * @param Validator $validator
+     * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function __construct($id = false, $table = null, $ds = null)
+    public function validationDefault(Validator $validator): Validator
     {
-        parent::__construct($id, $table, $ds);
-        $this->validate = [
-            'name' => [
-                ['rule' => ['notBlank'], 'message' => __d('baser', '識別名称を入力してください。')],
-                ['rule' => ['maxLength', 50], 'message' => __d('baser', '識別名称は50文字以内で入力してください。')],
-                ['rule' => ['alphaNumericPlus'], 'message' => __d('baser', '識別名称は、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。')],
-                ['rule' => ['duplicate'], 'message' => __d('baser', '既に利用されている識別名称です。別の名称に変更してください。')]],
-            'display_name' => [
-                ['rule' => ['notBlank'], 'message' => __d('baser', 'サブサイト名を入力してください。')],
-                ['rule' => ['maxLength', 50], 'message' => __d('baser', 'サブサイト名は50文字以内で入力してください。')]],
-            'alias' => [
-                ['rule' => ['maxLength', 50], 'message' => __d('baser', 'エイリアスは50文字以内で入力してください。')],
-                ['rule' => ['alphaNumericPlus', ['/', '.']], 'message' => __d('baser', 'エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・スラッシュ（/）・ドット（.）で入力してください。')],
-                ['rule' => ['duplicate'], 'message' => __d('baser', '既に利用されているエイリアス名です。別の名称に変更してください。')],
-                ['rule' => ['aliasSlashChecks'], 'message' => __d('baser', 'エイリアスには先頭と末尾にスラッシュ（/）は入力できず、また、連続して入力する事もできません。')]],
-            'title' => [
-                ['rule' => ['notBlank'], 'message' => __d('baser', 'サブサイトタイトルを入力してください。')],
-                ['rule' => ['maxLength', 255], 'message' => __d('baser', 'サブサイトタイトルは255文字以内で入力してください。')]]
-        ];
-    }
+        $validator->setProvider('site', 'BaserCore\Model\Validation\SiteValidation');
+        $validator->requirePresence(['name', 'display_name', 'alias', 'title'], 'create');
 
-    /**
-     * エイリアスのスラッシュをチェックする
-     *
-     * - 連続してスラッシュは入力できない
-     * - 先頭と末尾にスラッシュは入力できない
-     * @param $check
-     * @return bool
-     */
-    public function aliasSlashChecks($check)
-    {
-        $alias = $check[key($check)];
-        if (preg_match('/(^\/|[\/]{2,}|\/$)/', $alias)) {
-            return false;
-        }
-        return true;
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
+        $validator
+            ->scalar('name')
+            ->maxLength('name', 50, __d('baser', '識別名称は50文字以内で入力してください。'))
+            ->notEmptyString('name', __d('baser', '識別名称を入力してください。'))
+            ->add('name', [
+                'nameUnique' => [
+                    'rule' => 'validateUnique',
+                    'provider' => 'table',
+                    'message' => __d('baser', '既に利用されている識別名称です。別の名称に変更してください。')
+                ]])
+            ->add('name', [
+                'nameAlphaNumericPlus' => [
+                    'rule' => ['alphaNumericPlus'],
+                    'provider' => 'bc',
+                    'message' => __d('baser', '識別名称は、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。')
+                ]]);
+        $validator
+            ->scalar('display_name')
+            ->maxLength('display_name', 50, __d('baser', 'サブサイト名は50文字以内で入力してください。'))
+            ->notEmptyString('display_name', __d('baser', 'サイト名を入力してください。'));
+        $validator
+            ->scalar('alias')
+            ->maxLength('alias', 50, __d('baser', 'エイリアスは50文字以内で入力してください。'))
+            ->notEmptyString('alias', __d('baser', 'サイト名を入力してください。'))
+            ->add('alias', [
+                'aliasUnique' => [
+                    'rule' => 'validateUnique',
+                    'provider' => 'table',
+                    'message' => __d('baser', '既に利用されているエイリアス名です。別の名称に変更してください。')
+                ]])
+            ->add('alias', [
+                'aliasSlashChecks' => [
+                    'rule' => 'aliasSlashChecks',
+                    'provider' => 'site',
+                    'message' => __d('baser', 'エイリアスには先頭と末尾にスラッシュ（/）は入力できず、また、連続して入力する事もできません。')
+                ]]);
+        $validator
+            ->scalar('title')
+            ->maxLength('title', 255, __d('baser', 'サイトタイトルは255文字以内で入力してください。'))
+            ->notEmptyString('title', __d('baser', 'サイトタイトルを入力してください。'));
+        return $validator;
     }
 
     /**
@@ -318,12 +332,16 @@ class Site extends AppModel
     /**
      * After Save
      *
-     * @param bool $created
-     * @param array $options
+     * @param Event $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      */
-    public function afterSave($created, $options = [])
+    public function afterSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
-        parent::afterSave($created, $options);
+        // TODO 未確認のため暫定措置
+        // >>>
+        return;
+        // <<<
         App::uses('AuthComponent', 'Controller/Component');
         $user = AuthComponent::user();
         $ContentFolder = ClassRegistry::init('ContentFolder');
@@ -357,10 +375,17 @@ class Site extends AppModel
 
     /**
      * After Delete
+     *
+     * @param Event $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      */
-    public function afterDelete()
+    public function afterDelete(Event $event, EntityInterface $entity, ArrayObject $options)
     {
-        parent::afterDelete();
+        // TODO 未確認のため暫定措置
+        // >>>
+        return;
+        // <<<
         $Content = ClassRegistry::init('Content');
         $id = $Content->field('id', [
             'Content.site_id' => $this->id,
@@ -613,14 +638,17 @@ class Site extends AppModel
     /**
      * Before Save
      *
-     * @param array $options
+     * @param Event $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      * @return bool
      */
-    public function beforeSave($options = [])
+    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
-        if (!empty($this->data[$this->alias]['id']) && !empty($this->data[$this->alias]['alias'])) {
-            $oldAlias = $this->field('alias', ['Site.id' => $this->data[$this->alias]['id']]);
-            if ($oldAlias != $this->data[$this->alias]['alias']) {
+        // エイリアスに変更があったかチェックする
+        if ($entity->id && $entity->alias) {
+            $oldSite = $this->find()->where(['id' => $entity->id])->first();
+            if ($oldSite && $oldSite->alias !== $entity->alias) {
                 $this->__changedAlias = true;
             }
         }
