@@ -9,7 +9,7 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Test\TestCase\Service;
+namespace BaserCore\Test\TestCase\Service\Api;
 
 use Authentication\Authenticator\Result;
 use BaserCore\Service\Api\UserApiService;
@@ -62,9 +62,9 @@ class UserApiServiceTest extends BcTestCase
     }
 
     /**
-     * Test getLoginToken
+     * Test getAccessToken
      */
-    public function testGetLoginToken()
+    public function testGetAccessToken()
     {
         $result = $this->UserApi->getAccessToken(new Result($this->UserApi->get(1), Result::SUCCESS));
         $this->assertArrayHasKey('access_token', $result);
