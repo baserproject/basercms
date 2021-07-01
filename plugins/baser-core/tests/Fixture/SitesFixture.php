@@ -1,12 +1,25 @@
 <?php
-// TODO : コード確認要
-return;
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ *
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
+ */
+
+namespace BaserCore\Test\Fixture;
+
+use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * SiteFixture
  */
-class SiteFixture extends BaserTestFixture
+class SitesFixture extends TestFixture
 {
+
+    public $import = ['table' => 'sites'];
 
     /**
      * Records
@@ -41,7 +54,7 @@ class SiteFixture extends BaserTestFixture
             'title' => 'baserCMS inc.｜スマホ',
             'alias' => 's',
             'theme' => '',
-            'status' => 1,
+            'status' => 0,
             'device' => 'smartphone',
             'lang' => '',
             'auto_redirect' => true,

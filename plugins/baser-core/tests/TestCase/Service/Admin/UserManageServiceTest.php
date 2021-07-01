@@ -9,7 +9,7 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Test\TestCase\Service;
+namespace BaserCore\Test\TestCase\Service\Admin;
 
 use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\Service\Admin\UserManageService;

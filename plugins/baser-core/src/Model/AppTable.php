@@ -11,6 +11,8 @@
 
 namespace BaserCore\Model;
 
+use ArrayObject;
+use Cake\Event\Event;
 use Cake\ORM\Table;
 use Cake\ORM\Query;
 use Cake\Core\Configure;
@@ -96,17 +98,18 @@ class AppTable extends Table
     }
 
     /**
-     * beforeSave
-     *
-     * @return    boolean
+     * Before Save
+     * @param Event $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
+     * @return bool
      */
-    public function beforeSave($options = [])
+    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
         // TODO 暫定措置
         // >>>
         return true;
         // <<<
-        $result = parent::beforeSave($options);
         // 日付フィールドが空の場合、nullを保存する
         foreach($this->_schema as $key => $field) {
             if (('date' == $field['type'] ||
@@ -118,7 +121,7 @@ class AppTable extends Table
                 }
             }
         }
-        return $result;
+        return true;
     }
 
     /**

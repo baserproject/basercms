@@ -9,41 +9,39 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Service\Admin;
+namespace BaserCore\Service;
 
+use BaserCore\Model\Entity\Site;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
-use BaserCore\Model\Entity\UserGroup;
 
-/**
- * Interface UserGroupsServiceInterface
- * @package BaserCore\Service
- */
-interface UserGroupManageServiceInterface
+interface SitesServiceInterface
 {
+
     /**
-     * ユーザーグループを取得する
+     * サイトを取得する
      * @param int $id
      * @return EntityInterface
      */
     public function get($id): EntityInterface;
 
     /**
-     * ユーザーグループの新規データ用の初期値を含んだエンティティを取得する
-     * @return UserGroup
-     */
-    public function getNew(): UserGroup;
-    /**
-     * ユーザーグループ全件取得する
-     * @param array $options
+     * サイト一覧を取得
+     * @param array $queryParams
      * @return Query
      */
-    public function getIndex($options = []): Query;
+    public function getIndex(array $queryParams): Query;
+
+    /**
+     * 新しいデータの初期値を取得する
+     * @return EntityInterface
+     */
+    public function getNew(): Site;
 
     /**
      * 新規登録する
      * @param array $postData
-     * @return EntityInterface|false
+     * @return EntityInterface
      */
     public function create(array $postData);
 
@@ -61,12 +59,5 @@ interface UserGroupManageServiceInterface
      * @return mixed
      */
     public function delete(int $id);
-
-    /**
-     * サイト全体の設定値を取得する
-     * @param string $name
-     * @return mixed
-     */
-    public function getSiteConfig($name);
 
 }

@@ -9,7 +9,7 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Test\TestCase\Service;
+namespace BaserCore\Test\TestCase\Service\Admin;
 
 use BaserCore\Service\Admin\PluginManageService;
 use BaserCore\TestSuite\BcTestCase;
@@ -151,7 +151,7 @@ class PluginManageServiceTest extends BcTestCase
         $this->PluginManage->allow($data);
         $permissions = TableRegistry::getTableLocator()->get('BaserCore.Permissions');
         $result = $permissions->find('all')->all();
-        
+
         $this->assertEquals($data['title'] ." 管理", $result->last()->name);
     }
 

@@ -9,7 +9,7 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Test\TestCase\Service;
+namespace BaserCore\Test\TestCase\Service\Admin;
 
 use BaserCore\Service\Admin\UserGroupManageService;
 use BaserCore\TestSuite\BcTestCase;

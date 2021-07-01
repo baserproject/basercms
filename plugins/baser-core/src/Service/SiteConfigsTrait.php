@@ -25,12 +25,14 @@ trait SiteConfigsTrait
     use BcContainerTrait;
 
     /**
-     * 管理画面の一覧の表示件数を取得する
+     * サイト全体の設定値を取得する
+     * @param string $name
      * @return mixed
      */
-    public function getAdminListNum(): int
+    public function getSiteConfig($name)
     {
         $siteConfigs = $this->getService(SiteConfigsServiceInterface::class);
-        return (int)$siteConfigs->value('admin_list_num');
+        return (int)$siteConfigs->value($name);
     }
+
 }
