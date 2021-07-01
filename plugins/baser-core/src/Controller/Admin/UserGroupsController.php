@@ -16,10 +16,8 @@ use BaserCore\Service\Admin\UserGroupManageServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\UserGroupsTable;
 use BaserCore\Service\Admin\UserManageServiceInterface;
-use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Datasource\ResultSetInterface;
-use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -60,7 +58,7 @@ class UserGroupsController extends BcAdminAppController
     public function index(UserGroupManageServiceInterface $UserGroupManage): void
     {
         $this->setViewConditions('UserGroup', ['default' => ['query' => [
-            'num' => $UserGroupManage->getAdminListNum(),
+            'num' => $UserGroupManage->getSiteConfig('admin_list_num'),
             'sort' => 'id',
             'direction' => 'asc',
         ]]]);
