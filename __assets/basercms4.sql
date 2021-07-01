@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_blog_categories`
+-- テーブルの構造 `blog_categories`
 --
 
-CREATE TABLE `mysite_blog_categories` (
+CREATE TABLE `blog_categories` (
   `id` int(8) NOT NULL,
   `blog_content_id` int(8) DEFAULT NULL,
   `no` int(8) DEFAULT NULL,
@@ -43,19 +43,19 @@ CREATE TABLE `mysite_blog_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_blog_categories`
+-- テーブルのデータのダンプ `blog_categories`
 --
 
-INSERT INTO `mysite_blog_categories` (`id`, `blog_content_id`, `no`, `name`, `title`, `status`, `parent_id`, `lft`, `rght`, `owner_id`, `created`, `modified`) VALUES
+INSERT INTO `blog_categories` (`id`, `blog_content_id`, `no`, `name`, `title`, `status`, `parent_id`, `lft`, `rght`, `owner_id`, `created`, `modified`) VALUES
 (1, 1, 1, 'release', 'プレスリリース', 1, NULL, 1, 2, NULL, '2016-08-12 00:48:33', NULL);
 
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_blog_comments`
+-- テーブルの構造 `blog_comments`
 --
 
-CREATE TABLE `mysite_blog_comments` (
+CREATE TABLE `blog_comments` (
   `id` int(11) NOT NULL,
   `blog_content_id` int(8) DEFAULT NULL,
   `blog_post_id` int(8) DEFAULT NULL,
@@ -72,20 +72,20 @@ CREATE TABLE `mysite_blog_comments` (
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_blog_configs`
+-- テーブルの構造 `blog_configs`
 --
 
-CREATE TABLE `mysite_blog_configs` (
+CREATE TABLE `blog_configs` (
   `id` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_blog_contents`
+-- テーブルの構造 `blog_contents`
 --
 
-CREATE TABLE `mysite_blog_contents` (
+CREATE TABLE `blog_contents` (
   `id` int(8) NOT NULL,
   `description` text,
   `template` varchar(20) DEFAULT NULL,
@@ -104,20 +104,20 @@ CREATE TABLE `mysite_blog_contents` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_blog_contents`
+-- テーブルのデータのダンプ `blog_contents`
 --
 
-INSERT INTO `mysite_blog_contents` (`id`, `description`, `template`, `list_count`, `list_direction`, `feed_count`, `tag_use`, `comment_use`, `comment_approve`, `auth_captcha`, `widget_area`, `eye_catch_size`, `use_content`, `created`, `modified`) VALUES
+INSERT INTO `blog_contents` (`id`, `description`, `template`, `list_count`, `list_direction`, `feed_count`, `tag_use`, `comment_use`, `comment_approve`, `auth_captcha`, `widget_area`, `eye_catch_size`, `use_content`, `created`, `modified`) VALUES
 (1, '<p>このコンテンツはブログ機能により作られており、この文章については管理画面の [NEWS] &rarr; [設定] より更新ができます。また、ブログは [コンテンツ管理] よりいくつでも作成することができます。</p>', 'default', 10, 'DESC', 10, 1, 1, 0, 1, 2, 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7czozOiIzMDAiO3M6MTI6InRodW1iX2hlaWdodCI7czozOiIzMDAiO3M6MTg6Im1vYmlsZV90aHVtYl93aWR0aCI7czozOiIxMDAiO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO3M6MzoiMTAwIjt9', 1, '2016-08-07 23:10:38', '2020-09-14 19:27:57'),
 (2, NULL, 'default', 10, 'DESC', 10, 0, 1, 0, 1, NULL, 'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7aTo2MDA7czoxMjoidGh1bWJfaGVpZ2h0IjtpOjYwMDtzOjE4OiJtb2JpbGVfdGh1bWJfd2lkdGgiO2k6MTUwO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO2k6MTUwO30=', 1, '2020-12-14 14:26:56', '2020-12-14 14:26:56');
 
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_blog_posts`
+-- テーブルの構造 `blog_posts`
 --
 
-CREATE TABLE `mysite_blog_posts` (
+CREATE TABLE `blog_posts` (
   `id` int(11) NOT NULL,
   `blog_content_id` int(8) DEFAULT NULL,
   `no` int(11) DEFAULT NULL,
@@ -139,20 +139,20 @@ CREATE TABLE `mysite_blog_posts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_blog_posts`
+-- テーブルのデータのダンプ `blog_posts`
 --
 
-INSERT INTO `mysite_blog_posts` (`id`, `blog_content_id`, `no`, `name`, `content`, `detail`, `blog_category_id`, `user_id`, `status`, `posts_date`, `content_draft`, `detail_draft`, `publish_begin`, `publish_end`, `exclude_search`, `eye_catch`, `created`, `modified`) VALUES
+INSERT INTO `blog_posts` (`id`, `blog_content_id`, `no`, `name`, `content`, `detail`, `blog_category_id`, `user_id`, `status`, `posts_date`, `content_draft`, `detail_draft`, `publish_begin`, `publish_end`, `exclude_search`, `eye_catch`, `created`, `modified`) VALUES
 (1, 1, 1, 'メールフォーム機能について説明します', '', '<p>baserCMSのメールフォームでは、管理画面上にて入力項目を自由に変更することができ、受信したメールを管理画面で閲覧することができます。</p>\r\n\r\n<h3>入力項目の変更</h3>\r\n\r\n<p>メールフォームの各入力項目をフィールドと呼びます。フィールドを削除したり新しく追加するには、まず、管理画面より、[お問い合わせ] &rarr; [フィールド] と移動し、登録されているフィールドを確認しましょう。その画面よりフィールドの新規登録や変更、削除が行えます。</p>\r\n\r\n<h3>受信メールの確認</h3>\r\n\r\n<p>管理画面より、[お問い合わせ] &rarr; [受信メール] と移動すると、受信したメールを一覧で確認できます。データベースに受信したメールを保存しない場合は、[お問い合わせ] &rarr; [設定] &rarr; [詳細設定] より、[送信情報をデータベースに保存しない] にチェックを入れて保存します。</p>\r\n', 1, 1, 1, '2020-12-03 14:41:46', '', '', NULL, NULL, 1, '', '2016-08-12 00:48:33', '2020-12-14 14:40:51'),
 (2, 1, 2, 'ブログ機能について説明します', '<p>この文章はブログ記事の [概要] 欄に入力されています。ブログ記事の一覧にて概要だけを表示する場合に利用しますが、テーマの構成上で利用しない場合は、各ブログの [設定] より、 [概要] 欄を利用しないようにする事もできます。ちなみにこのサンプルテーマではブログ記事一覧において概要を利用していません。</p>\r\n', '<p>ここからは、ブログ記事の [本文] 欄に入力されている文章となります。</p>\r\n\r\n<h3>カテゴリ・タグ機能</h3>\r\n\r\n<p>baserCMSでのカテゴリとタグは少し仕様が違います。一つの記事は複数のタグを付けることができますが、複数のカテゴリに属すことはできません。また、タグは全ブログ共通ですが、カテゴリは各ブログごとに分けて作ることができます。</p>\r\n\r\n<p>なお、タグやカテゴリを利用するにはテーマ側が対応している必要があります。このサンプルテーマでは、タグの利用を想定していません。</p>\r\n\r\n<h3>ブログコメント機能</h3>\r\n\r\n<p>ブログの各記事には一般ユーザーがコメントを付ける機能がありますが、利用しない場合は、各ブログの [設定] 画面より簡単に非表示にすることができます。</p>\r\n', 1, 1, 1, '2020-12-03 14:41:46', '', '', NULL, NULL, 0, '2020/12/00000002_eye_catch.jpg', '2016-08-12 00:48:33', '2020-12-05 10:14:26');
 
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_blog_posts_blog_tags`
+-- テーブルの構造 `blog_posts_blog_tags`
 --
 
-CREATE TABLE `mysite_blog_posts_blog_tags` (
+CREATE TABLE `blog_posts_blog_tags` (
   `id` int(8) NOT NULL,
   `blog_post_id` int(8) DEFAULT NULL,
   `blog_tag_id` int(8) DEFAULT NULL,
@@ -161,19 +161,19 @@ CREATE TABLE `mysite_blog_posts_blog_tags` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_blog_posts_blog_tags`
+-- テーブルのデータのダンプ `blog_posts_blog_tags`
 --
 
-INSERT INTO `mysite_blog_posts_blog_tags` (`id`, `blog_post_id`, `blog_tag_id`, `created`, `modified`) VALUES
+INSERT INTO `blog_posts_blog_tags` (`id`, `blog_post_id`, `blog_tag_id`, `created`, `modified`) VALUES
 (16, 2, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_blog_tags`
+-- テーブルの構造 `blog_tags`
 --
 
-CREATE TABLE `mysite_blog_tags` (
+CREATE TABLE `blog_tags` (
   `id` int(8) NOT NULL,
   `name` varchar(100) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
@@ -181,19 +181,19 @@ CREATE TABLE `mysite_blog_tags` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_blog_tags`
+-- テーブルのデータのダンプ `blog_tags`
 --
 
-INSERT INTO `mysite_blog_tags` (`id`, `name`, `created`, `modified`) VALUES
+INSERT INTO `blog_tags` (`id`, `name`, `created`, `modified`) VALUES
 (1, '新製品', '2016-08-12 00:48:33', NULL);
 
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_contents`
+-- テーブルの構造 `contents`
 --
 
-CREATE TABLE `mysite_contents` (
+CREATE TABLE `contents` (
   `id` int(8) NOT NULL,
   `name` text,
   `plugin` varchar(255) DEFAULT NULL,
@@ -231,10 +231,10 @@ CREATE TABLE `mysite_contents` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_contents`
+-- テーブルのデータのダンプ `contents`
 --
 
-INSERT INTO `mysite_contents` (`id`, `name`, `plugin`, `type`, `entity_id`, `url`, `site_id`, `alias_id`, `main_site_content_id`, `parent_id`, `lft`, `rght`, `level`, `title`, `description`, `eyecatch`, `author_id`, `layout_template`, `status`, `publish_begin`, `publish_end`, `self_status`, `self_publish_begin`, `self_publish_end`, `exclude_search`, `created_date`, `modified_date`, `site_root`, `deleted_date`, `deleted`, `exclude_menu`, `blank_link`, `created`, `modified`) VALUES
+INSERT INTO `contents` (`id`, `name`, `plugin`, `type`, `entity_id`, `url`, `site_id`, `alias_id`, `main_site_content_id`, `parent_id`, `lft`, `rght`, `level`, `title`, `description`, `eyecatch`, `author_id`, `layout_template`, `status`, `publish_begin`, `publish_end`, `self_status`, `self_publish_begin`, `self_publish_end`, `exclude_search`, `created_date`, `modified_date`, `site_root`, `deleted_date`, `deleted`, `exclude_menu`, `blank_link`, `created`, `modified`) VALUES
 (1, '', 'Core', 'ContentFolder', 1, '/', 0, NULL, NULL, NULL, 1, 32, 0, 'baserCMSサンプル', '', '', 1, 'default', 1, NULL, NULL, 1, NULL, NULL, 0, NULL, '2019-06-11 12:27:01', 1, NULL, 0, 0, 0, '2016-07-29 18:02:53', '2020-12-14 14:51:08'),
 (4, 'index', 'Core', 'Page', 1, '/index', 0, NULL, NULL, 1, 2, 3, 1, 'トップページ', '', '', 1, '', 1, NULL, NULL, 1, NULL, NULL, 0, '2016-07-29 18:13:03', '2020-09-14 20:13:10', 0, NULL, 0, 0, 0, '2016-07-29 18:13:03', '2020-09-14 20:13:25'),
 (5, 'about', 'Core', 'Page', 2, '/about', 0, NULL, NULL, 1, 12, 13, 1, '会社案内', '', '', 1, '', 1, NULL, NULL, 1, NULL, NULL, 0, '2016-07-29 18:13:55', '2020-09-14 19:52:55', 0, NULL, 0, 0, 0, '2016-07-29 18:13:56', '2020-09-14 19:53:48'),
@@ -255,10 +255,10 @@ INSERT INTO `mysite_contents` (`id`, `name`, `plugin`, `type`, `entity_id`, `url
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_content_folders`
+-- テーブルの構造 `content_folders`
 --
 
-CREATE TABLE `mysite_content_folders` (
+CREATE TABLE `content_folders` (
   `id` int(8) NOT NULL,
   `folder_template` varchar(255) DEFAULT NULL,
   `page_template` varchar(255) DEFAULT NULL,
@@ -267,10 +267,10 @@ CREATE TABLE `mysite_content_folders` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_content_folders`
+-- テーブルのデータのダンプ `content_folders`
 --
 
-INSERT INTO `mysite_content_folders` (`id`, `folder_template`, `page_template`, `created`, `modified`) VALUES
+INSERT INTO `content_folders` (`id`, `folder_template`, `page_template`, `created`, `modified`) VALUES
 (1, '', '', '2019-06-11 12:24:28', '2020-12-14 14:51:08'),
 (2, '', '', '2019-06-11 12:24:28', '2020-09-14 21:10:40'),
 (3, '', '', '2019-06-11 12:24:28', '2020-09-14 21:10:40'),
@@ -281,10 +281,10 @@ INSERT INTO `mysite_content_folders` (`id`, `folder_template`, `page_template`, 
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_content_links`
+-- テーブルの構造 `content_links`
 --
 
-CREATE TABLE `mysite_content_links` (
+CREATE TABLE `content_links` (
   `id` int(8) NOT NULL,
   `url` text,
   `created` datetime DEFAULT NULL,
@@ -294,10 +294,10 @@ CREATE TABLE `mysite_content_links` (
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_dblogs`
+-- テーブルの構造 `dblogs`
 --
 
-CREATE TABLE `mysite_dblogs` (
+CREATE TABLE `dblogs` (
   `id` int(8) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `user_id` int(8) DEFAULT NULL,
@@ -306,10 +306,10 @@ CREATE TABLE `mysite_dblogs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_dblogs`
+-- テーブルのデータのダンプ `dblogs`
 --
 
-INSERT INTO `mysite_dblogs` (`id`, `name`, `user_id`, `created`, `modified`) VALUES
+INSERT INTO `dblogs` (`id`, `name`, `user_id`, `created`, `modified`) VALUES
 (1, '新規プラグイン「CuCustomField」を baserCMS に登録しました。', 1, '2020-12-04 12:38:25', '2020-12-04 12:38:25'),
 (2, 'CuCustomFieldConfigsを追加しました。', 1, '2020-12-04 12:38:50', '2020-12-04 12:38:50'),
 (3, 'フィールド定義「氏名」の追加が完了しました。', 1, '2020-12-04 12:41:31', '2020-12-04 12:41:31'),
@@ -414,10 +414,10 @@ INSERT INTO `mysite_dblogs` (`id`, `name`, `user_id`, `created`, `modified`) VAL
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_editor_templates`
+-- テーブルの構造 `editor_templates`
 --
 
-CREATE TABLE `mysite_editor_templates` (
+CREATE TABLE `editor_templates` (
   `id` int(8) NOT NULL,
   `name` varchar(50) DEFAULT NULL,
   `image` varchar(50) DEFAULT NULL,
@@ -428,10 +428,10 @@ CREATE TABLE `mysite_editor_templates` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_editor_templates`
+-- テーブルのデータのダンプ `editor_templates`
 --
 
-INSERT INTO `mysite_editor_templates` (`id`, `name`, `image`, `description`, `html`, `modified`, `created`) VALUES
+INSERT INTO `editor_templates` (`id`, `name`, `image`, `description`, `html`, `modified`, `created`) VALUES
 (1, '画像（左）とテキスト', 'template1.gif', '画像を左に配置し、その右にテキストを配置するブロックです。', '<div class=\"template-image-float-left clearfix\">\n	<div class=\"image\">ここに画像を挿入します</div>\n	<div class=\"text\">\n		<h2>見出しを挿入します。</h2>\n		<p>1段落目のテキストを挿入します。</p>\n		<p>2段落目のテキストを挿入します。</p>\n	</div>\n</div>\n<p>新しいブロックを挿入します。不要な場合はこの段落を削除します</p>', NULL, '2015-06-26 20:34:05'),
 (2, '画像（右）とテキスト', 'template2.gif', '画像を右に配置し、その左にテキストを配置するブロックです。', '<div class=\"template-image-float-right clearfix\">\n	<div class=\"image\">ここに画像を挿入します</div>\n	<div class=\"text\">\n		<h2>見出しを挿入します。</h2>\n		<p>1段落目のテキストを挿入します。</p>\n		<p>2段落目のテキストを挿入します。</p>\n	</div>\n</div>\n<p>新しいブロックを挿入します。不要な場合はこの段落を削除します</p>', NULL, '2015-06-26 20:34:05'),
 (3, 'テキスト２段組', 'template3.gif', 'テキストを左右に２段組するブロックです。', '<div class=\"template-two-block clearfix\">\n	<div class=\"block-left\">\n		<h2>\n			見出しを挿入します。</h2>\n		<p>\n			1段落目のテキストを挿入します。</p>\n		<p>\n			2段落目のテキストを挿入します。</p>\n	</div>\n	<div class=\"block-right\">\n		<h2>\n			見出しを挿入します。</h2>\n		<p>\n			1段落目のテキストを挿入します。</p>\n		<p>\n			2段落目のテキストを挿入します。</p>\n	</div>\n</div>\n<p>\n	新しいブロックを挿入します。不要な場合はこの段落を削除します</p>', NULL, '2015-06-26 20:34:05');
@@ -439,10 +439,10 @@ INSERT INTO `mysite_editor_templates` (`id`, `name`, `image`, `description`, `ht
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_favorites`
+-- テーブルの構造 `favorites`
 --
 
-CREATE TABLE `mysite_favorites` (
+CREATE TABLE `favorites` (
   `id` int(8) NOT NULL,
   `user_id` int(8) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -453,10 +453,10 @@ CREATE TABLE `mysite_favorites` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_favorites`
+-- テーブルのデータのダンプ `favorites`
 --
 
-INSERT INTO `mysite_favorites` (`id`, `user_id`, `name`, `url`, `sort`, `created`, `modified`) VALUES
+INSERT INTO `favorites` (`id`, `user_id`, `name`, `url`, `sort`, `created`, `modified`) VALUES
 (1, 1, 'クレジット', 'javascript:credit();', 1, '2020-12-03 14:41:39', '2020-12-03 14:41:39'),
 (2, 1, 'カスタムフィールドプラグイン 管理', '/admin/cu_custom_field/cu_custom_field_configs/', 2, '2020-12-04 12:38:26', '2020-12-04 12:38:26'),
 (3, 1, '静的HTML出力プラグイン 管理', '/admin/cu_static/cu_statics/', 3, '2020-12-04 12:55:05', '2020-12-04 12:55:05');
@@ -464,10 +464,10 @@ INSERT INTO `mysite_favorites` (`id`, `user_id`, `name`, `url`, `sort`, `created
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_feed_configs`
+-- テーブルの構造 `feed_configs`
 --
 
-CREATE TABLE `mysite_feed_configs` (
+CREATE TABLE `feed_configs` (
   `id` int(8) NOT NULL,
   `name` varchar(50) DEFAULT NULL,
   `feed_title_index` varchar(255) DEFAULT NULL,
@@ -479,19 +479,19 @@ CREATE TABLE `mysite_feed_configs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_feed_configs`
+-- テーブルのデータのダンプ `feed_configs`
 --
 
-INSERT INTO `mysite_feed_configs` (`id`, `name`, `feed_title_index`, `category_index`, `template`, `display_number`, `created`, `modified`) VALUES
+INSERT INTO `feed_configs` (`id`, `name`, `feed_title_index`, `category_index`, `template`, `display_number`, `created`, `modified`) VALUES
 (1, 'baserCMS最新情報', '', '', 'default', 3, '2016-08-12 00:48:33', '2020-09-14 19:50:02');
 
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_feed_details`
+-- テーブルの構造 `feed_details`
 --
 
-CREATE TABLE `mysite_feed_details` (
+CREATE TABLE `feed_details` (
   `id` int(8) NOT NULL,
   `feed_config_id` int(8) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
@@ -503,19 +503,19 @@ CREATE TABLE `mysite_feed_details` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_feed_details`
+-- テーブルのデータのダンプ `feed_details`
 --
 
-INSERT INTO `mysite_feed_details` (`id`, `feed_config_id`, `name`, `url`, `category_filter`, `cache_time`, `created`, `modified`) VALUES
+INSERT INTO `feed_details` (`id`, `feed_config_id`, `name`, `url`, `category_filter`, `cache_time`, `created`, `modified`) VALUES
 (1, 1, 'baserCMS最新情報', 'https://basercms.net/news/index.rss?site=http://localhost/', '', '+30 minutes', '2016-08-12 00:48:33', '2020-12-03 14:41:46');
 
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_mail_configs`
+-- テーブルの構造 `mail_configs`
 --
 
-CREATE TABLE `mysite_mail_configs` (
+CREATE TABLE `mail_configs` (
   `id` int(11) NOT NULL,
   `site_name` varchar(50) DEFAULT NULL,
   `site_url` varchar(255) DEFAULT NULL,
@@ -527,19 +527,19 @@ CREATE TABLE `mysite_mail_configs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_mail_configs`
+-- テーブルのデータのダンプ `mail_configs`
 --
 
-INSERT INTO `mysite_mail_configs` (`id`, `site_name`, `site_url`, `site_email`, `site_tel`, `site_fax`, `created`, `modified`) VALUES
+INSERT INTO `mail_configs` (`id`, `site_name`, `site_url`, `site_email`, `site_tel`, `site_fax`, `created`, `modified`) VALUES
 (1, 'baserCMS - Based Website Development Project -', 'http://basercms.net/', 'info@basercms.net', '', '', '2016-08-12 00:48:33', NULL);
 
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_mail_contents`
+-- テーブルの構造 `mail_contents`
 --
 
-CREATE TABLE `mysite_mail_contents` (
+CREATE TABLE `mail_contents` (
   `id` int(8) NOT NULL,
   `description` text,
   `sender_1` text,
@@ -561,20 +561,20 @@ CREATE TABLE `mysite_mail_contents` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_mail_contents`
+-- テーブルのデータのダンプ `mail_contents`
 --
 
-INSERT INTO `mysite_mail_contents` (`id`, `description`, `sender_1`, `sender_2`, `sender_name`, `subject_user`, `subject_admin`, `form_template`, `mail_template`, `redirect_url`, `auth_captcha`, `widget_area`, `ssl_on`, `save_info`, `publish_begin`, `publish_end`, `created`, `modified`) VALUES
+INSERT INTO `mail_contents` (`id`, `description`, `sender_1`, `sender_2`, `sender_name`, `subject_user`, `subject_admin`, `form_template`, `mail_template`, `redirect_url`, `auth_captcha`, `widget_area`, `ssl_on`, `save_info`, `publish_begin`, `publish_end`, `created`, `modified`) VALUES
 (1, '<p>このコンテンツはメールフォーム機能により作られており、この文章については管理画面の [お問い合わせ] &rarr; [設定] より更新ができます。また、メールフォームは [コンテンツ管理] よりいくつでも作成することができます。</p>', '', '', 'baserCMSサンプル', '【baserCMS】お問い合わせ頂きありがとうございます。', '【baserCMS】お問い合わせを受け付けました', 'default', 'mail_default', '/', 1, NULL, 0, 1, NULL, NULL, '2016-08-07 23:10:38', '2020-09-14 19:37:11'),
 (2, NULL, NULL, NULL, '送信先名を入力してください', 'お問い合わせ頂きありがとうございます', 'お問い合わせを頂きました', 'default', 'mail_default', NULL, 0, NULL, 0, 1, NULL, NULL, '2020-12-14 14:27:12', '2020-12-14 14:27:12');
 
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_mail_fields`
+-- テーブルの構造 `mail_fields`
 --
 
-CREATE TABLE `mysite_mail_fields` (
+CREATE TABLE `mail_fields` (
   `id` int(11) NOT NULL,
   `mail_content_id` int(11) DEFAULT NULL,
   `no` int(11) DEFAULT NULL,
@@ -608,10 +608,10 @@ CREATE TABLE `mysite_mail_fields` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_mail_fields`
+-- テーブルのデータのダンプ `mail_fields`
 --
 
-INSERT INTO `mysite_mail_fields` (`id`, `mail_content_id`, `no`, `name`, `field_name`, `type`, `head`, `attention`, `before_attachment`, `after_attachment`, `source`, `size`, `rows`, `maxlength`, `options`, `class`, `separator`, `default_value`, `description`, `group_field`, `group_valid`, `valid`, `valid_ex`, `auto_convert`, `not_empty`, `use_field`, `no_send`, `sort`, `created`, `modified`) VALUES
+INSERT INTO `mail_fields` (`id`, `mail_content_id`, `no`, `name`, `field_name`, `type`, `head`, `attention`, `before_attachment`, `after_attachment`, `source`, `size`, `rows`, `maxlength`, `options`, `class`, `separator`, `default_value`, `description`, `group_field`, `group_valid`, `valid`, `valid_ex`, `auto_convert`, `not_empty`, `use_field`, `no_send`, `sort`, `created`, `modified`) VALUES
 (1, 1, 1, '姓', 'name_1', 'text', 'お名前', '', '', '', '', NULL, NULL, 255, 'placeholder|姓', '', '', '', '', 'name', 'name', 'VALID_NOT_EMPTY', '', '', 1, 1, 0, 1, '2016-08-12 00:48:34', '2020-09-14 19:41:09'),
 (2, 1, 2, '名', 'name_2', 'text', 'お名前', '', '', '', '', NULL, NULL, 255, 'placeholder|名', '', '', '', '', 'name', 'name', 'VALID_NOT_EMPTY', '', '', 1, 1, 0, 2, '2016-08-12 00:48:34', '2020-09-14 19:41:24'),
 (5, 1, 5, '性別', 'sex', 'radio', '性別', '', '', '', '男性|女性', 0, 0, 0, '', '', '', '', '', '', '', '', '', '', 0, 1, 0, 5, '2016-08-12 00:48:34', NULL),
@@ -630,10 +630,10 @@ INSERT INTO `mysite_mail_fields` (`id`, `mail_content_id`, `no`, `name`, `field_
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_mail_messages`
+-- テーブルの構造 `mail_messages`
 --
 
-CREATE TABLE `mysite_mail_messages` (
+CREATE TABLE `mail_messages` (
   `id` int(11) NOT NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
@@ -642,10 +642,10 @@ CREATE TABLE `mysite_mail_messages` (
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_mail_message_1`
+-- テーブルの構造 `mail_message_1`
 --
 
-CREATE TABLE `mysite_mail_message_1` (
+CREATE TABLE `mail_message_1` (
   `id` int(8) NOT NULL,
   `modified` datetime DEFAULT NULL,
   `created` datetime DEFAULT NULL,
@@ -667,10 +667,10 @@ CREATE TABLE `mysite_mail_message_1` (
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_mail_message_2`
+-- テーブルの構造 `mail_message_2`
 --
 
-CREATE TABLE `mysite_mail_message_2` (
+CREATE TABLE `mail_message_2` (
   `id` int(8) NOT NULL,
   `modified` datetime DEFAULT NULL,
   `created` datetime DEFAULT NULL,
@@ -680,10 +680,10 @@ CREATE TABLE `mysite_mail_message_2` (
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_pages`
+-- テーブルの構造 `pages`
 --
 
-CREATE TABLE `mysite_pages` (
+CREATE TABLE `pages` (
   `id` int(8) NOT NULL,
   `contents` longtext,
   `draft` longtext,
@@ -694,10 +694,10 @@ CREATE TABLE `mysite_pages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_pages`
+-- テーブルのデータのダンプ `pages`
 --
 
-INSERT INTO `mysite_pages` (`id`, `contents`, `draft`, `page_template`, `code`, `modified`, `created`) VALUES
+INSERT INTO `pages` (`id`, `contents`, `draft`, `page_template`, `code`, `modified`, `created`) VALUES
 (1, '<h2>baserCMSサンプルテーマ</h2>\n\n<p>これは、baserCMSのサンプルテーマです。<br>\nトップページのこの部分は、固定ページで作られており、NEWS と baserCMS最新情報の部分は、テンプレートで作成されています。<br>\n変更する場合は、/Elements/top_info.php を変更してください。</p>\n\n<h3>グローバルメニューについて</h3>\n\n<p>グローバルメニューは、管理画面の [コンテンツ管理] のツリー構造と連動しています。ツリー構造上においてドラック＆ドロップで並び替えることができ、グローバルメニューに表示したくない場合は、対象コンテンツの編集画面より、[オプション] を開き、[公開ページのメニューより除外する] を選択し保存してください。</p>\n\n<p>また、グローバルメニュー部分を変更する場合は、/Elements/header.php を編集してください。</p>\n\n<h3>サイドバーについて</h3>\n\n<p>サイドバーはウィジェットエリア機能を利用して作られています。管理画面の [設定] &rarr; [ユーティリティ] &rarr; [ウィジェットエリア] より、カスタマイズが可能です。ブログでは「ブログサイドバー」を利用していますが、それ以外のコンテンツでは、「標準サイドバー」を利用しています。</p>\n\n<p>サイト基本設定は、各ブログの [設定] より利用するウィジェットエリアを変更することができます。</p>\n\n<p>また、サイドバー部分を変更する場合は、/Elements/widget_area.php を編集してください。</p>\n\n<h3>初期データについて</h3>\n\n<p>このサンプルテーマは２つの初期データを提供しています。現在利用しているものは「default」でサンプルのデータが入っているものになります。</p>\n\n<p>サンプルデータを入っていないものを利用したい場合は、テーマ管理より「empty」を選択し「初期データ読込」ボタンをクリックしてください。</p>', '', '', '', '2020-10-02 20:33:09', '2015-06-26 20:34:06'),
 (2, '<h2>会社案内</h2>\n\n<h3>会社データ</h3>\n\n<table>\n	<tbody>\n		<tr>\n			<th>会社名</th>\n			<td>baserCMSサンプル</td>\n		</tr>\n		<tr>\n			<th>設立</th>\n			<td>2020年9月</td>\n		</tr>\n		<tr>\n			<th>所在地</th>\n			<td>福岡県福岡市</td>\n		</tr>\n		<tr>\n			<th>事業内容</th>\n			<td>\n			<ul>\n				<li>事業内容１</li>\n				<li>事業内容２</li>\n				<li>事業内容３</li>\n			</ul>\n			</td>\n		</tr>\n	</tbody>\n</table>\n\n<h3>アクセスマップ</h3>\n<?php $this->BcBaser->googleMaps([\"width\" => 585]) ?>', '', '', '', '2020-09-14 19:53:48', '2015-06-26 20:34:06'),
 (3, '<h2>サービス１</h2>\n\n<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>\n\n<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>\n\n<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>', '', '', '', '2016-08-12 00:58:02', '2015-06-26 20:34:06'),
@@ -710,10 +710,10 @@ INSERT INTO `mysite_pages` (`id`, `contents`, `draft`, `page_template`, `code`, 
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_permissions`
+-- テーブルの構造 `permissions`
 --
 
-CREATE TABLE `mysite_permissions` (
+CREATE TABLE `permissions` (
   `id` int(8) NOT NULL,
   `no` int(8) DEFAULT NULL,
   `sort` int(8) DEFAULT NULL,
@@ -727,10 +727,10 @@ CREATE TABLE `mysite_permissions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_permissions`
+-- テーブルのデータのダンプ `permissions`
 --
 
-INSERT INTO `mysite_permissions` (`id`, `no`, `sort`, `name`, `user_group_id`, `url`, `auth`, `status`, `modified`, `created`) VALUES
+INSERT INTO `permissions` (`id`, `no`, `sort`, `name`, `user_group_id`, `url`, `auth`, `status`, `modified`, `created`) VALUES
 (1, 1, 1, 'システム管理', 2, '/admin/*', 0, 1, NULL, '2015-09-30 01:21:40'),
 (2, 2, 2, 'よく使う項目', 2, '/admin/favorites/*', 1, 1, NULL, '2015-09-30 01:21:40'),
 (3, 3, 3, 'ページ管理', 2, '/admin/pages/*', 1, 1, NULL, '2015-09-30 01:21:40'),
@@ -751,10 +751,10 @@ INSERT INTO `mysite_permissions` (`id`, `no`, `sort`, `name`, `user_group_id`, `
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_plugins`
+-- テーブルの構造 `plugins`
 --
 
-CREATE TABLE `mysite_plugins` (
+CREATE TABLE `plugins` (
   `id` int(8) NOT NULL,
   `name` varchar(50) DEFAULT NULL,
   `title` varchar(50) DEFAULT NULL,
@@ -767,10 +767,10 @@ CREATE TABLE `mysite_plugins` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_plugins`
+-- テーブルのデータのダンプ `plugins`
 --
 
-INSERT INTO `mysite_plugins` (`id`, `name`, `title`, `version`, `status`, `db_inited`, `priority`, `created`, `modified`) VALUES
+INSERT INTO `plugins` (`id`, `name`, `title`, `version`, `status`, `db_inited`, `priority`, `created`, `modified`) VALUES
 (1, 'Blog', 'ブログ', '4.4.3-dev', 1, 1, 1, '2020-12-03 14:41:41', '2020-12-03 14:41:46'),
 (2, 'Feed', 'フィードリーダー', '4.4.3-dev', 1, 1, 2, '2020-12-03 14:41:41', '2020-12-03 14:41:46'),
 (3, 'Mail', 'メールフォーム', '4.4.3-dev', 1, 1, 3, '2020-12-03 14:41:41', '2020-12-03 14:41:51'),
@@ -781,10 +781,10 @@ INSERT INTO `mysite_plugins` (`id`, `name`, `title`, `version`, `status`, `db_in
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_search_indices`
+-- テーブルの構造 `search_indices`
 --
 
-CREATE TABLE `mysite_search_indices` (
+CREATE TABLE `search_indices` (
   `id` int(8) NOT NULL,
   `type` varchar(100) DEFAULT NULL,
   `model` varchar(50) DEFAULT NULL,
@@ -806,10 +806,10 @@ CREATE TABLE `mysite_search_indices` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_search_indices`
+-- テーブルのデータのダンプ `search_indices`
 --
 
-INSERT INTO `mysite_search_indices` (`id`, `type`, `model`, `model_id`, `site_id`, `content_id`, `content_filter_id`, `lft`, `rght`, `title`, `detail`, `url`, `status`, `priority`, `publish_begin`, `publish_end`, `created`, `modified`) VALUES
+INSERT INTO `search_indices` (`id`, `type`, `model`, `model_id`, `site_id`, `content_id`, `content_filter_id`, `lft`, `rght`, `title`, `detail`, `url`, `status`, `priority`, `publish_begin`, `publish_end`, `created`, `modified`) VALUES
 (1, 'ページ', 'Page', 1, 0, 4, NULL, 26, 27, 'トップページ', 'baserCMSサンプルテーマこれは、baserCMSのサンプルテーマです。トップページのこの部分は、固定ページで作られており、NEWS と baserCMS最新情報の部分は、テンプレートで作成されています。変更する場合は、/Elements/top_info.php を変更してください。グローバルメニューについてグローバルメニューは、管理画面の [コンテンツ管理] のツリー構造と連動しています。ツリー構造上においてドラック＆ドロップで並び替えることができ、グローバルメニューに表示したくない場合は、対象コンテンツの編集画面より、[オプション] を開き、[公開ページのメニューより除外する] を選択し保存してください。また、グローバルメニュー部分を変更する場合は、/Elements/header.php を編集してください。サイドバーについてサイドバーはウィジェットエリア機能を利用して作られています。管理画面の [設定] &rarr; [ユーティリティ] &rarr; [ウィジェットエリア] より、カスタマイズが可能です。ブログでは「ブログサイドバー」を利用していますが、それ以外のコンテンツでは、「標準サイドバー」を利用しています。サイト基本設定は、各ブログの [設定] より利用するウィジェットエリアを変更することができます。また、サイドバー部分を変更する場合は、/Elements/widget_area.php を編集してください。', '/index', 1, '0.5', NULL, NULL, '2016-10-06 01:20:12', '2020-09-14 20:13:25'),
 (2, 'ブログ', 'BlogContent', 1, 0, 10, NULL, 28, 29, 'NEWS', 'このコンテンツはブログ機能により作られており、この文章については管理画面の [NEWS] &rarr; [設定] より更新ができます。また、ブログは [コンテンツ管理] よりいくつでも作成することができます。', '/news/', 1, '0.5', NULL, NULL, '2016-10-06 01:20:25', '2020-09-14 19:27:58'),
 (4, 'ブログ', 'BlogPost', 2, 0, 10, 1, 4, 5, 'ブログ機能について説明します', 'この文章はブログ記事の [概要] 欄に入力されています。ブログ記事の一覧にて概要だけを表示する場合に利用しますが、テーマの構成上で利用しない場合は、各ブログの [設定] より、 [概要] 欄を利用しないようにする事もできます。ちなみにこのサンプルテーマではブログ記事一覧において概要を利用していません。 ここからは、ブログ記事の [本文] 欄に入力されている文章となります。カテゴリ・タグ機能baserCMSでのカテゴリとタグは少し仕様が違います。一つの記事は複数のタグを付けることができますが、複数のカテゴリに属すことはできません。また、タグは全ブログ共通ですが、カテゴリは各ブログごとに分けて作ることができます。なお、タグやカテゴリを利用するにはテーマ側が対応している必要があります。このサンプルテーマでは、タグの利用を想定していません。ブログコメント機能ブログの各記事には一般ユーザーがコメントを付ける機能がありますが、利用しない場合は、各ブログの [設定] 画面より簡単に非表示にすることができます。', '/news/archives/2', 1, '0.5', NULL, NULL, '2016-10-06 01:20:25', '2020-12-05 10:15:43'),
@@ -825,10 +825,10 @@ INSERT INTO `mysite_search_indices` (`id`, `type`, `model`, `model_id`, `site_id
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_sites`
+-- テーブルの構造 `sites`
 --
 
-CREATE TABLE `mysite_sites` (
+CREATE TABLE `sites` (
   `id` int(8) NOT NULL,
   `main_site_id` int(8) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
@@ -852,19 +852,19 @@ CREATE TABLE `mysite_sites` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_sites`
+-- テーブルのデータのダンプ `sites`
 --
 
-INSERT INTO `mysite_sites` (`id`, `main_site_id`, `name`, `display_name`, `title`, `alias`, `theme`, `status`, `keyword`, `description`, `use_subdomain`, `relate_main_site`, `device`, `lang`, `same_main_url`, `auto_redirect`, `auto_link`, `domain_type`, `created`, `modified`) VALUES
+INSERT INTO `sites` (`id`, `main_site_id`, `name`, `display_name`, `title`, `alias`, `theme`, `status`, `keyword`, `description`, `use_subdomain`, `relate_main_site`, `device`, `lang`, `same_main_url`, `auto_redirect`, `auto_link`, `domain_type`, `created`, `modified`) VALUES
 (1, 0, 'en', '英語サイト', '英語サイト', 'en', '', 1, '', '', 0, 0, NULL, NULL, 0, 0, 0, 0, '2020-12-14 14:48:33', '2020-12-14 14:48:33');
 
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_site_configs`
+-- テーブルの構造 `site_configs`
 --
 
-CREATE TABLE `mysite_site_configs` (
+CREATE TABLE `site_configs` (
   `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `value` text,
@@ -873,10 +873,10 @@ CREATE TABLE `mysite_site_configs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_site_configs`
+-- テーブルのデータのダンプ `site_configs`
 --
 
-INSERT INTO `mysite_site_configs` (`id`, `name`, `value`, `created`, `modified`) VALUES
+INSERT INTO `site_configs` (`id`, `name`, `value`, `created`, `modified`) VALUES
 (1, 'name', 'baserCMSサンプル', '2019-06-11 12:24:32', '2020-12-14 14:51:08'),
 (2, 'keyword', 'baser,CMS,コンテンツマネジメントシステム,開発支援', '2019-06-11 12:24:32', '2020-12-14 14:51:08'),
 (3, 'description', 'baserCMS（ベーサーシーエムエス）とは、直感的な操作と高いメンテナンス性を実現し、Webサイトを自由にカスタマイズできる国産CMS（コンテンツ・マネージメント・システム）です。日本人が日本人のために、みんなで作っているオープンソース・ソフトウェアです。無料で利用でき、様々なサーバーで動作可能で、インストールも簡単です。', '2019-06-11 12:24:32', '2020-12-14 14:51:08'),
@@ -915,10 +915,10 @@ INSERT INTO `mysite_site_configs` (`id`, `name`, `value`, `created`, `modified`)
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_theme_configs`
+-- テーブルの構造 `theme_configs`
 --
 
-CREATE TABLE `mysite_theme_configs` (
+CREATE TABLE `theme_configs` (
   `id` int(8) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `value` text,
@@ -927,10 +927,10 @@ CREATE TABLE `mysite_theme_configs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_theme_configs`
+-- テーブルのデータのダンプ `theme_configs`
 --
 
-INSERT INTO `mysite_theme_configs` (`id`, `name`, `value`, `created`, `modified`) VALUES
+INSERT INTO `theme_configs` (`id`, `name`, `value`, `created`, `modified`) VALUES
 (1, 'logo', '', '2015-06-26 20:34:06', NULL),
 (2, 'logo_alt', 'baserCMS', '2015-06-26 20:34:06', '2020-12-13 11:54:15'),
 (3, 'logo_link', '/', '2015-06-26 20:34:06', '2020-12-13 11:54:15'),
@@ -957,10 +957,10 @@ INSERT INTO `mysite_theme_configs` (`id`, `name`, `value`, `created`, `modified`
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_uploader_categories`
+-- テーブルの構造 `uploader_categories`
 --
 
-CREATE TABLE `mysite_uploader_categories` (
+CREATE TABLE `uploader_categories` (
   `id` int(8) NOT NULL,
   `name` varchar(50) DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
@@ -970,10 +970,10 @@ CREATE TABLE `mysite_uploader_categories` (
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_uploader_configs`
+-- テーブルの構造 `uploader_configs`
 --
 
-CREATE TABLE `mysite_uploader_configs` (
+CREATE TABLE `uploader_configs` (
   `id` int(8) NOT NULL,
   `name` varchar(255) NOT NULL,
   `value` text NOT NULL,
@@ -982,10 +982,10 @@ CREATE TABLE `mysite_uploader_configs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_uploader_configs`
+-- テーブルのデータのダンプ `uploader_configs`
 --
 
-INSERT INTO `mysite_uploader_configs` (`id`, `name`, `value`, `created`, `modified`) VALUES
+INSERT INTO `uploader_configs` (`id`, `name`, `value`, `created`, `modified`) VALUES
 (1, 'large_width', '500', '2016-08-12 00:48:35', NULL),
 (2, 'large_height', '500', '2016-08-12 00:48:35', NULL),
 (3, 'midium_width', '300', '2016-08-12 00:48:35', NULL),
@@ -1004,10 +1004,10 @@ INSERT INTO `mysite_uploader_configs` (`id`, `name`, `value`, `created`, `modifi
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_uploader_files`
+-- テーブルの構造 `uploader_files`
 --
 
-CREATE TABLE `mysite_uploader_files` (
+CREATE TABLE `uploader_files` (
   `id` int(8) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `alt` text,
@@ -1022,10 +1022,10 @@ CREATE TABLE `mysite_uploader_files` (
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_users`
+-- テーブルの構造 `users`
 --
 
-CREATE TABLE `mysite_users` (
+CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
@@ -1039,20 +1039,20 @@ CREATE TABLE `mysite_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_users`
+-- テーブルのデータのダンプ `users`
 --
 
-INSERT INTO `mysite_users` (`id`, `name`, `password`, `real_name_1`, `real_name_2`, `email`, `user_group_id`, `nickname`, `created`, `modified`) VALUES
+INSERT INTO `users` (`id`, `name`, `password`, `real_name_1`, `real_name_2`, `email`, `user_group_id`, `nickname`, `created`, `modified`) VALUES
 (1, 'admin', 'a6af980fef22d99166be95f1dcefc2760ed9bd67', 'admin', NULL, 'egashira@catchup.co.jp', 1, NULL, '2020-12-03 14:41:39', '2020-12-03 14:41:39'),
 (2, 'bbb', 'bc433e3fbd3c79e03422733c6e86ca8d40b638f8', 'bbb', '', '', 2, '', '2020-12-14 14:37:25', '2020-12-14 14:37:25');
 
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_user_groups`
+-- テーブルの構造 `user_groups`
 --
 
-CREATE TABLE `mysite_user_groups` (
+CREATE TABLE `user_groups` (
   `id` int(8) NOT NULL,
   `name` varchar(50) DEFAULT NULL,
   `title` varchar(50) DEFAULT NULL,
@@ -1065,20 +1065,20 @@ CREATE TABLE `mysite_user_groups` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_user_groups`
+-- テーブルのデータのダンプ `user_groups`
 --
 
-INSERT INTO `mysite_user_groups` (`id`, `name`, `title`, `auth_prefix`, `use_admin_globalmenu`, `default_favorites`, `use_move_contents`, `modified`, `created`) VALUES
+INSERT INTO `user_groups` (`id`, `name`, `title`, `auth_prefix`, `use_admin_globalmenu`, `default_favorites`, `use_move_contents`, `modified`, `created`) VALUES
 (1, 'admins', 'システム管理', 'admin', 1, 'YToxOntpOjA7YToyOntzOjQ6Im5hbWUiO3M6MTU6IuOCr+ODrOOCuOODg+ODiCI7czozOiJ1cmwiO3M6MjA6ImphdmFzY3JpcHQ6Y3JlZGl0KCk7Ijt9fQ==', 1, '2019-06-11 12:28:04', '2015-06-26 20:34:07'),
 (2, 'operators', 'サイト運営', 'admin', 0, '', 0, NULL, '2015-06-26 20:34:07');
 
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `mysite_widget_areas`
+-- テーブルの構造 `widget_areas`
 --
 
-CREATE TABLE `mysite_widget_areas` (
+CREATE TABLE `widget_areas` (
   `id` int(4) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `widgets` text,
@@ -1087,10 +1087,10 @@ CREATE TABLE `mysite_widget_areas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- テーブルのデータのダンプ `mysite_widget_areas`
+-- テーブルのデータのダンプ `widget_areas`
 --
 
-INSERT INTO `mysite_widget_areas` (`id`, `name`, `widgets`, `modified`, `created`) VALUES
+INSERT INTO `widget_areas` (`id`, `name`, `widgets`, `modified`, `created`) VALUES
 (1, '標準サイドバー', 'YTo0OntpOjA7YToxOntzOjc6IldpZGdldDEiO2E6OTp7czoyOiJpZCI7czoxOiIxIjtzOjQ6InR5cGUiO3M6MTI6IuODhuOCreOCueODiCI7czo3OiJlbGVtZW50IjtzOjQ6InRleHQiO3M6NjoicGx1Z2luIjtzOjA6IiI7czo0OiJzb3J0IjtpOjQ7czo0OiJuYW1lIjtzOjk6IuODquODs+OCryI7czo0OiJ0ZXh0IjtzOjQ0MDoiPHAgc3R5bGU9Im1hcmdpbi1ib3R0b206MjBweDt0ZXh0LWFsaWduOiBjZW50ZXIiPiA8YSBocmVmPSJodHRwOi8vYmFzZXJjbXMubmV0IiB0YXJnZXQ9Il9ibGFuayI+PGltZyBzcmM9Imh0dHA6Ly9iYXNlcmNtcy5uZXQvaW1nL2Jucl9iYXNlcmNtcy5qcGciIGFsdD0i44Kz44O844Od44Os44O844OI44K144Kk44OI44Gr44Gh44KH44GG44Gp44GE44GEQ01T44CBYmFzZXJDTVMiLz48L2E+PC9wPjxwIGNsYXNzPSJjdXN0b21pemUtbmF2aSBjb3JuZXIxMCI+PHNtYWxsPuOBk+OBrumDqOWIhuOBr+OAgeeuoeeQhueUu+mdouOBriBb6Kit5a6aXSDihpIgW+ODpuODvOODhuOCo+ODquODhuOCo10g4oaSIFvjgqbjgqPjgrjjgqfjg4Pjg4jjgqjjg6rjgqJdIOKGkiBb5qiZ5rqW44K144Kk44OJ44OQ44O8XSDjgojjgornt6jpm4bjgafjgY3jgb7jgZnjgII8L3NtYWxsPjwvcD4iO3M6OToidXNlX3RpdGxlIjtzOjE6IjEiO3M6Njoic3RhdHVzIjtzOjE6IjEiO319aToxO2E6MTp7czo3OiJXaWRnZXQyIjthOjg6e3M6MjoiaWQiO3M6MToiMiI7czo0OiJ0eXBlIjtzOjE4OiLjgrXjgqTjg4jlhoXmpJzntKIiO3M6NzoiZWxlbWVudCI7czo2OiJzZWFyY2giO3M6NjoicGx1Z2luIjtzOjA6IiI7czo0OiJzb3J0IjtpOjM7czo0OiJuYW1lIjtzOjE4OiLjgrXjgqTjg4jlhoXmpJzntKIiO3M6OToidXNlX3RpdGxlIjtzOjE6IjEiO3M6Njoic3RhdHVzIjtzOjE6IjEiO319aToyO2E6MTp7czo3OiJXaWRnZXQzIjthOjk6e3M6MjoiaWQiO3M6MToiMyI7czo0OiJ0eXBlIjtzOjMzOiLjg63jg7zjgqvjg6vjg4rjg5PjgrLjg7zjgrfjg6fjg7MiO3M6NzoiZWxlbWVudCI7czoxMDoibG9jYWxfbmF2aSI7czo2OiJwbHVnaW4iO3M6MDoiIjtzOjQ6InNvcnQiO2k6MjtzOjQ6Im5hbWUiO3M6MzQ6IuODreODvOOCq+ODq+ODiuODk+OCsuODvOOCt+ODp+ODszEiO3M6NToiY2FjaGUiO3M6MToiMSI7czo5OiJ1c2VfdGl0bGUiO3M6MToiMSI7czo2OiJzdGF0dXMiO3M6MToiMSI7fX1pOjM7YToxOntzOjc6IldpZGdldDQiO2E6OTp7czoyOiJpZCI7czoxOiI0IjtzOjQ6InR5cGUiO3M6MTI6IuODhuOCreOCueODiCI7czo3OiJlbGVtZW50IjtzOjQ6InRleHQiO3M6NjoicGx1Z2luIjtzOjA6IiI7czo0OiJzb3J0IjtpOjE7czo0OiJuYW1lIjtzOjEzOiLjg4bjgq3jgrnjg4gyIjtzOjQ6InRleHQiO3M6MjQ6IuOBguOBguOBguOBguOBguOBguOBguOBgiI7czo5OiJ1c2VfdGl0bGUiO3M6MToiMSI7czo2OiJzdGF0dXMiO3M6MToiMSI7fX19', '2020-12-14 14:34:10', '2015-06-26 20:34:07'),
 (2, 'ブログサイドバー', 'YTo2OntpOjA7YToxOntzOjc6IldpZGdldDEiO2E6OTp7czoyOiJpZCI7czoxOiIxIjtzOjQ6InR5cGUiO3M6MjQ6IuODluODreOCsOOCq+ODrOODs+ODgOODvCI7czo3OiJlbGVtZW50IjtzOjEzOiJibG9nX2NhbGVuZGFyIjtzOjY6InBsdWdpbiI7czo0OiJCbG9nIjtzOjQ6InNvcnQiO2k6MTtzOjQ6Im5hbWUiO3M6MjQ6IuODluODreOCsOOCq+ODrOODs+ODgOODvCI7czoxNToiYmxvZ19jb250ZW50X2lkIjtzOjE6IjEiO3M6OToidXNlX3RpdGxlIjtzOjE6IjAiO3M6Njoic3RhdHVzIjtzOjE6IjEiO319aToxO2E6MTp7czo3OiJXaWRnZXQyIjthOjEwOntzOjI6ImlkIjtzOjE6IjIiO3M6NDoidHlwZSI7czozMDoi44OW44Ot44Kw44Kr44OG44K044Oq44O85LiA6KanIjtzOjc6ImVsZW1lbnQiO3M6MjI6ImJsb2dfY2F0ZWdvcnlfYXJjaGl2ZXMiO3M6NjoicGx1Z2luIjtzOjQ6IkJsb2ciO3M6NDoic29ydCI7aToyO3M6NDoibmFtZSI7czoyMToi44Kr44OG44K044Oq44O85LiA6KanIjtzOjU6ImNvdW50IjtzOjE6IjEiO3M6MTU6ImJsb2dfY29udGVudF9pZCI7czoxOiIxIjtzOjk6InVzZV90aXRsZSI7czoxOiIxIjtzOjY6InN0YXR1cyI7czoxOiIxIjt9fWk6MjthOjE6e3M6NzoiV2lkZ2V0MyI7YToxMTp7czoyOiJpZCI7czoxOiIzIjtzOjQ6InR5cGUiO3M6Mjc6IuaciOWIpeOCouODvOOCq+OCpOODluS4gOimpyI7czo3OiJlbGVtZW50IjtzOjIxOiJibG9nX21vbnRobHlfYXJjaGl2ZXMiO3M6NjoicGx1Z2luIjtzOjQ6IkJsb2ciO3M6NDoic29ydCI7aTo1O3M6NDoibmFtZSI7czoyNzoi5pyI5Yil44Ki44O844Kr44Kk44OW5LiA6KanIjtzOjU6ImNvdW50IjtzOjI6IjEyIjtzOjEwOiJ2aWV3X2NvdW50IjtzOjE6IjEiO3M6MTU6ImJsb2dfY29udGVudF9pZCI7czoxOiIxIjtzOjk6InVzZV90aXRsZSI7czoxOiIxIjtzOjY6InN0YXR1cyI7czoxOiIxIjt9fWk6MzthOjE6e3M6NzoiV2lkZ2V0NCI7YToxMDp7czoyOiJpZCI7czoxOiI0IjtzOjQ6InR5cGUiO3M6MTU6IuacgOi/keOBruaKleeovyI7czo3OiJlbGVtZW50IjtzOjE5OiJibG9nX3JlY2VudF9lbnRyaWVzIjtzOjY6InBsdWdpbiI7czo0OiJCbG9nIjtzOjQ6InNvcnQiO2k6MztzOjQ6Im5hbWUiO3M6MTU6IuacgOi/keOBruaKleeovyI7czo1OiJjb3VudCI7czoxOiI1IjtzOjE1OiJibG9nX2NvbnRlbnRfaWQiO3M6MToiMSI7czo5OiJ1c2VfdGl0bGUiO3M6MToiMSI7czo2OiJzdGF0dXMiO3M6MToiMSI7fX1pOjQ7YToxOntzOjc6IldpZGdldDUiO2E6MTA6e3M6MjoiaWQiO3M6MToiNSI7czo0OiJ0eXBlIjtzOjI0OiLjg5bjg63jgrDmipXnqL/ogIXkuIDopqciO3M6NzoiZWxlbWVudCI7czoyMDoiYmxvZ19hdXRob3JfYXJjaGl2ZXMiO3M6NjoicGx1Z2luIjtzOjQ6IkJsb2ciO3M6NDoic29ydCI7aTo0O3M6NDoibmFtZSI7czoyNDoi44OW44Ot44Kw5oqV56i/6ICF5LiA6KanIjtzOjEwOiJ2aWV3X2NvdW50IjtzOjE6IjAiO3M6MTU6ImJsb2dfY29udGVudF9pZCI7czoxOiIxIjtzOjk6InVzZV90aXRsZSI7czoxOiIxIjtzOjY6InN0YXR1cyI7czoxOiIxIjt9fWk6NTthOjE6e3M6NzoiV2lkZ2V0NiI7YToxMTp7czoyOiJpZCI7czoxOiI2IjtzOjQ6InR5cGUiO3M6Mjc6IuW5tOWIpeOCouODvOOCq+OCpOODluS4gOimpyI7czo3OiJlbGVtZW50IjtzOjIwOiJibG9nX3llYXJseV9hcmNoaXZlcyI7czo2OiJwbHVnaW4iO3M6NDoiQmxvZyI7czo0OiJzb3J0IjtpOjY7czo0OiJuYW1lIjtzOjI3OiLlubTliKXjgqLjg7zjgqvjgqTjg5bkuIDopqciO3M6NToibGltaXQiO3M6MDoiIjtzOjEwOiJ2aWV3X2NvdW50IjtzOjE6IjAiO3M6MTU6ImJsb2dfY29udGVudF9pZCI7czoxOiIxIjtzOjk6InVzZV90aXRsZSI7czoxOiIxIjtzOjY6InN0YXR1cyI7czoxOiIxIjt9fX0=', '2020-09-14 20:16:49', '2015-06-26 20:34:07');
 
@@ -1099,207 +1099,207 @@ INSERT INTO `mysite_widget_areas` (`id`, `name`, `widgets`, `modified`, `created
 --
 
 --
--- テーブルのインデックス `mysite_blog_categories`
+-- テーブルのインデックス `blog_categories`
 --
-ALTER TABLE `mysite_blog_categories`
+ALTER TABLE `blog_categories`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_blog_comments`
+-- テーブルのインデックス `blog_comments`
 --
-ALTER TABLE `mysite_blog_comments`
+ALTER TABLE `blog_comments`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_blog_configs`
+-- テーブルのインデックス `blog_configs`
 --
-ALTER TABLE `mysite_blog_configs`
+ALTER TABLE `blog_configs`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_blog_contents`
+-- テーブルのインデックス `blog_contents`
 --
-ALTER TABLE `mysite_blog_contents`
+ALTER TABLE `blog_contents`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_blog_posts`
+-- テーブルのインデックス `blog_posts`
 --
-ALTER TABLE `mysite_blog_posts`
+ALTER TABLE `blog_posts`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_blog_posts_blog_tags`
+-- テーブルのインデックス `blog_posts_blog_tags`
 --
-ALTER TABLE `mysite_blog_posts_blog_tags`
+ALTER TABLE `blog_posts_blog_tags`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_blog_tags`
+-- テーブルのインデックス `blog_tags`
 --
-ALTER TABLE `mysite_blog_tags`
+ALTER TABLE `blog_tags`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_contents`
+-- テーブルのインデックス `contents`
 --
-ALTER TABLE `mysite_contents`
+ALTER TABLE `contents`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_content_folders`
+-- テーブルのインデックス `content_folders`
 --
-ALTER TABLE `mysite_content_folders`
+ALTER TABLE `content_folders`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_content_links`
+-- テーブルのインデックス `content_links`
 --
-ALTER TABLE `mysite_content_links`
+ALTER TABLE `content_links`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_dblogs`
+-- テーブルのインデックス `dblogs`
 --
-ALTER TABLE `mysite_dblogs`
+ALTER TABLE `dblogs`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_editor_templates`
+-- テーブルのインデックス `editor_templates`
 --
-ALTER TABLE `mysite_editor_templates`
+ALTER TABLE `editor_templates`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_favorites`
+-- テーブルのインデックス `favorites`
 --
-ALTER TABLE `mysite_favorites`
+ALTER TABLE `favorites`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_feed_configs`
+-- テーブルのインデックス `feed_configs`
 --
-ALTER TABLE `mysite_feed_configs`
+ALTER TABLE `feed_configs`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_feed_details`
+-- テーブルのインデックス `feed_details`
 --
-ALTER TABLE `mysite_feed_details`
+ALTER TABLE `feed_details`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_mail_configs`
+-- テーブルのインデックス `mail_configs`
 --
-ALTER TABLE `mysite_mail_configs`
+ALTER TABLE `mail_configs`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_mail_contents`
+-- テーブルのインデックス `mail_contents`
 --
-ALTER TABLE `mysite_mail_contents`
+ALTER TABLE `mail_contents`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_mail_fields`
+-- テーブルのインデックス `mail_fields`
 --
-ALTER TABLE `mysite_mail_fields`
+ALTER TABLE `mail_fields`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_mail_messages`
+-- テーブルのインデックス `mail_messages`
 --
-ALTER TABLE `mysite_mail_messages`
+ALTER TABLE `mail_messages`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_mail_message_1`
+-- テーブルのインデックス `mail_message_1`
 --
-ALTER TABLE `mysite_mail_message_1`
+ALTER TABLE `mail_message_1`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_mail_message_2`
+-- テーブルのインデックス `mail_message_2`
 --
-ALTER TABLE `mysite_mail_message_2`
+ALTER TABLE `mail_message_2`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_pages`
+-- テーブルのインデックス `pages`
 --
-ALTER TABLE `mysite_pages`
+ALTER TABLE `pages`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_permissions`
+-- テーブルのインデックス `permissions`
 --
-ALTER TABLE `mysite_permissions`
+ALTER TABLE `permissions`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_plugins`
+-- テーブルのインデックス `plugins`
 --
-ALTER TABLE `mysite_plugins`
+ALTER TABLE `plugins`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_search_indices`
+-- テーブルのインデックス `search_indices`
 --
-ALTER TABLE `mysite_search_indices`
+ALTER TABLE `search_indices`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_sites`
+-- テーブルのインデックス `sites`
 --
-ALTER TABLE `mysite_sites`
+ALTER TABLE `sites`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_site_configs`
+-- テーブルのインデックス `site_configs`
 --
-ALTER TABLE `mysite_site_configs`
+ALTER TABLE `site_configs`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_theme_configs`
+-- テーブルのインデックス `theme_configs`
 --
-ALTER TABLE `mysite_theme_configs`
+ALTER TABLE `theme_configs`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_uploader_categories`
+-- テーブルのインデックス `uploader_categories`
 --
-ALTER TABLE `mysite_uploader_categories`
+ALTER TABLE `uploader_categories`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_uploader_configs`
+-- テーブルのインデックス `uploader_configs`
 --
-ALTER TABLE `mysite_uploader_configs`
+ALTER TABLE `uploader_configs`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_uploader_files`
+-- テーブルのインデックス `uploader_files`
 --
-ALTER TABLE `mysite_uploader_files`
+ALTER TABLE `uploader_files`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_users`
+-- テーブルのインデックス `users`
 --
-ALTER TABLE `mysite_users`
+ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_user_groups`
+-- テーブルのインデックス `user_groups`
 --
-ALTER TABLE `mysite_user_groups`
+ALTER TABLE `user_groups`
   ADD PRIMARY KEY (`id`);
 
 --
--- テーブルのインデックス `mysite_widget_areas`
+-- テーブルのインデックス `widget_areas`
 --
-ALTER TABLE `mysite_widget_areas`
+ALTER TABLE `widget_areas`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1307,207 +1307,207 @@ ALTER TABLE `mysite_widget_areas`
 --
 
 --
--- テーブルのAUTO_INCREMENT `mysite_blog_categories`
+-- テーブルのAUTO_INCREMENT `blog_categories`
 --
-ALTER TABLE `mysite_blog_categories`
+ALTER TABLE `blog_categories`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_blog_comments`
+-- テーブルのAUTO_INCREMENT `blog_comments`
 --
-ALTER TABLE `mysite_blog_comments`
+ALTER TABLE `blog_comments`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_blog_configs`
+-- テーブルのAUTO_INCREMENT `blog_configs`
 --
-ALTER TABLE `mysite_blog_configs`
+ALTER TABLE `blog_configs`
   MODIFY `id` int(2) NOT NULL AUTO_INCREMENT;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_blog_contents`
+-- テーブルのAUTO_INCREMENT `blog_contents`
 --
-ALTER TABLE `mysite_blog_contents`
+ALTER TABLE `blog_contents`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_blog_posts`
+-- テーブルのAUTO_INCREMENT `blog_posts`
 --
-ALTER TABLE `mysite_blog_posts`
+ALTER TABLE `blog_posts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_blog_posts_blog_tags`
+-- テーブルのAUTO_INCREMENT `blog_posts_blog_tags`
 --
-ALTER TABLE `mysite_blog_posts_blog_tags`
+ALTER TABLE `blog_posts_blog_tags`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_blog_tags`
+-- テーブルのAUTO_INCREMENT `blog_tags`
 --
-ALTER TABLE `mysite_blog_tags`
+ALTER TABLE `blog_tags`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_contents`
+-- テーブルのAUTO_INCREMENT `contents`
 --
-ALTER TABLE `mysite_contents`
+ALTER TABLE `contents`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_content_folders`
+-- テーブルのAUTO_INCREMENT `content_folders`
 --
-ALTER TABLE `mysite_content_folders`
+ALTER TABLE `content_folders`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_content_links`
+-- テーブルのAUTO_INCREMENT `content_links`
 --
-ALTER TABLE `mysite_content_links`
+ALTER TABLE `content_links`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_dblogs`
+-- テーブルのAUTO_INCREMENT `dblogs`
 --
-ALTER TABLE `mysite_dblogs`
+ALTER TABLE `dblogs`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_editor_templates`
+-- テーブルのAUTO_INCREMENT `editor_templates`
 --
-ALTER TABLE `mysite_editor_templates`
+ALTER TABLE `editor_templates`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_favorites`
+-- テーブルのAUTO_INCREMENT `favorites`
 --
-ALTER TABLE `mysite_favorites`
+ALTER TABLE `favorites`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_feed_configs`
+-- テーブルのAUTO_INCREMENT `feed_configs`
 --
-ALTER TABLE `mysite_feed_configs`
+ALTER TABLE `feed_configs`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_feed_details`
+-- テーブルのAUTO_INCREMENT `feed_details`
 --
-ALTER TABLE `mysite_feed_details`
+ALTER TABLE `feed_details`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_mail_configs`
+-- テーブルのAUTO_INCREMENT `mail_configs`
 --
-ALTER TABLE `mysite_mail_configs`
+ALTER TABLE `mail_configs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_mail_contents`
+-- テーブルのAUTO_INCREMENT `mail_contents`
 --
-ALTER TABLE `mysite_mail_contents`
+ALTER TABLE `mail_contents`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_mail_fields`
+-- テーブルのAUTO_INCREMENT `mail_fields`
 --
-ALTER TABLE `mysite_mail_fields`
+ALTER TABLE `mail_fields`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_mail_messages`
+-- テーブルのAUTO_INCREMENT `mail_messages`
 --
-ALTER TABLE `mysite_mail_messages`
+ALTER TABLE `mail_messages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_mail_message_1`
+-- テーブルのAUTO_INCREMENT `mail_message_1`
 --
-ALTER TABLE `mysite_mail_message_1`
+ALTER TABLE `mail_message_1`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_mail_message_2`
+-- テーブルのAUTO_INCREMENT `mail_message_2`
 --
-ALTER TABLE `mysite_mail_message_2`
+ALTER TABLE `mail_message_2`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_pages`
+-- テーブルのAUTO_INCREMENT `pages`
 --
-ALTER TABLE `mysite_pages`
+ALTER TABLE `pages`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_permissions`
+-- テーブルのAUTO_INCREMENT `permissions`
 --
-ALTER TABLE `mysite_permissions`
+ALTER TABLE `permissions`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_plugins`
+-- テーブルのAUTO_INCREMENT `plugins`
 --
-ALTER TABLE `mysite_plugins`
+ALTER TABLE `plugins`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_search_indices`
+-- テーブルのAUTO_INCREMENT `search_indices`
 --
-ALTER TABLE `mysite_search_indices`
+ALTER TABLE `search_indices`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_sites`
+-- テーブルのAUTO_INCREMENT `sites`
 --
-ALTER TABLE `mysite_sites`
+ALTER TABLE `sites`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_site_configs`
+-- テーブルのAUTO_INCREMENT `site_configs`
 --
-ALTER TABLE `mysite_site_configs`
+ALTER TABLE `site_configs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_theme_configs`
+-- テーブルのAUTO_INCREMENT `theme_configs`
 --
-ALTER TABLE `mysite_theme_configs`
+ALTER TABLE `theme_configs`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_uploader_categories`
+-- テーブルのAUTO_INCREMENT `uploader_categories`
 --
-ALTER TABLE `mysite_uploader_categories`
+ALTER TABLE `uploader_categories`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_uploader_configs`
+-- テーブルのAUTO_INCREMENT `uploader_configs`
 --
-ALTER TABLE `mysite_uploader_configs`
+ALTER TABLE `uploader_configs`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_uploader_files`
+-- テーブルのAUTO_INCREMENT `uploader_files`
 --
-ALTER TABLE `mysite_uploader_files`
+ALTER TABLE `uploader_files`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_users`
+-- テーブルのAUTO_INCREMENT `users`
 --
-ALTER TABLE `mysite_users`
+ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_user_groups`
+-- テーブルのAUTO_INCREMENT `user_groups`
 --
-ALTER TABLE `mysite_user_groups`
+ALTER TABLE `user_groups`
   MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- テーブルのAUTO_INCREMENT `mysite_widget_areas`
+-- テーブルのAUTO_INCREMENT `widget_areas`
 --
-ALTER TABLE `mysite_widget_areas`
+ALTER TABLE `widget_areas`
   MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
