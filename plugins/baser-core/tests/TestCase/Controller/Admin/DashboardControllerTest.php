@@ -27,6 +27,7 @@ class DashboardControllerTest extends TestCase
      * @var array
      */
     public $fixtures = [
+        'plugin.BaserCore.Dblogs',
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
@@ -41,7 +42,7 @@ class DashboardControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->loadFixtures('Users', 'UsersUserGroups', 'UserGroups');
+        $this->loadFixtures('Dblogs', 'Users', 'UsersUserGroups', 'UserGroups');
 
         $config = $this->getTableLocator()->exists('Users')? [] : ['className' => 'BaserCore\Model\Table\UsersTable'];
         $Users = $this->getTableLocator()->get('Users', $config);
