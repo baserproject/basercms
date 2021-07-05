@@ -22,10 +22,12 @@ class CreatePermissions extends AbstractMigration
         ]);
         $table->addColumn('no', 'integer', [
             'default' => null,
+            'limit' => 11,
             'null' => false,
         ]);
         $table->addColumn('sort', 'integer', [
             'default' => null,
+            'limit' => 11,
             'null' => false,
         ]);
         $table->addColumn('name', 'string', [
@@ -35,6 +37,7 @@ class CreatePermissions extends AbstractMigration
         ]);
         $table->addColumn('user_group_id', 'integer', [
             'default' => null,
+            'limit' => 11,
             'null' => false,
         ]);
         $table->addColumn('url', 'string', [
@@ -42,17 +45,22 @@ class CreatePermissions extends AbstractMigration
             'limit' => 255,
             'null' => false,
         ]);
-        $table->addColumn('auth', 'integer', [
+        $table->addColumn('auth', 'boolean', [
             'default' => null,
             'null' => false,
         ]);
-        $table->addColumn('status', 'integer', [
+        $table->addColumn('method', 'string', [
+            'default' => null,
+            'limit' => 10,
+            'null' => true,
+        ]);
+        $table->addColumn('status', 'boolean', [
             'default' => null,
             'null' => false,
         ]);
         $table->addColumn('created', 'datetime', [
             'default' => null,
-            'null' => true,
+            'null' => false,
         ]);
         $table->addColumn('modified', 'datetime', [
             'default' => null,
