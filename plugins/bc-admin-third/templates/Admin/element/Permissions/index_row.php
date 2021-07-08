@@ -36,7 +36,7 @@
   </td>
   <td class="bca-table-listup__tbody-td"><?php echo $data['Permission']['no']; ?></td>
   <td class="bca-table-listup__tbody-td">
-    <?php $this->BcBaser->link($data['Permission']['name'], ['action' => 'edit', $this->request->params['pass'][0], $data['Permission']['id']], ['escape' => true]) ?>
+    <?php $this->BcBaser->link($data['Permission']['name'], ['action' => 'edit', $userGroupId, $data['Permission']['id']], ['escape' => true]) ?>
     <br>
     <?php echo $data['Permission']['url']; ?>
   </td>
@@ -50,8 +50,8 @@
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
     <?php $this->BcBaser->link('', ['action' => 'ajax_unpublish', $data['Permission']['id']], ['title' => __d('baser', '無効'), 'class' => 'btn-unpublish bca-btn-icon', 'data-bca-btn-type' => 'unpublish', 'data-bca-btn-size' => 'lg']) ?>
     <?php $this->BcBaser->link('', ['action' => 'ajax_publish', $data['Permission']['id']], ['title' => __d('baser', '有効'), 'class' => 'btn-publish bca-btn-icon', 'data-bca-btn-type' => 'publish', 'data-bca-btn-size' => 'lg']) ?>
-    <?php $this->BcBaser->link('', ['action' => 'edit', $this->request->params['pass'][0], $data['Permission']['id']], ['title' => __d('baser', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
-    <?php $this->BcBaser->link('', ['action' => 'ajax_copy', $this->request->params['pass'][0], $data['Permission']['id']], ['title' => __d('baser', 'コピー'), 'class' => 'btn-copy bca-icon--copy bca-btn-icon', 'data-bca-btn-type' => 'copy', 'data-bca-btn-size' => 'lg']) ?>
+    <?php $this->BcBaser->link('', ['action' => 'edit', $userGroupId, $data['Permission']['id']], ['title' => __d('baser', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
+    <?php $this->BcBaser->link('', ['action' => 'ajax_copy', $userGroupId, $data['Permission']['id']], ['title' => __d('baser', 'コピー'), 'class' => 'btn-copy bca-icon--copy bca-btn-icon', 'data-bca-btn-type' => 'copy', 'data-bca-btn-size' => 'lg']) ?>
     <?php if ($data['Permission']['name'] != 'admins'): ?>
       <?php $this->BcBaser->link('', ['action' => 'ajax_delete', $data['Permission']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
     <?php endif ?>

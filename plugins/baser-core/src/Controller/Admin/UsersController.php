@@ -221,7 +221,7 @@ class UsersController extends BcAdminAppController
         }
         $user = $userManage->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            if (!BcUtil::loginUser()->isAdmin() && $userManage->willChangeSelfGroup($this->getRequest()->getData())) {
+            if (!BcUtil::isAdminUser() && $userManage->willChangeSelfGroup($this->getRequest()->getData())) {
                 $this->BcMessage->setError(__d('baser', '自分のアカウントのグループは変更できません。'));
             } else {
                 $user = $userManage->update($user, $this->request->getData());
