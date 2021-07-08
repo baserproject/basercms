@@ -58,8 +58,10 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 			<div id="Source">
 
 				<h2><?php echo __d('baser', '利用できるウィジェット') ?></h2>
+				<div id="WidgetsType">
 				<?php foreach($widgetInfos as $widgetInfo) : ?>
 					<h3><?php echo h($widgetInfo['title']) ?></h3>
+					<div class="WidgetsTypeSection">
 					<?php
 					$widgets = [];
 					foreach($widgetInfo['paths'] as $path) {
@@ -118,7 +120,9 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 							</div>
 						</div>
 					<?php endforeach ?>
+					</div>
 				<?php endforeach ?>
+				</div>
 			</div>
 		</div>
 

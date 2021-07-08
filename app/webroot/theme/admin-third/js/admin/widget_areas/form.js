@@ -11,6 +11,11 @@
 
 $(function () {
 
+    $('#WidgetsType').accordion({
+        collapsible: true,
+        heightStyle: "content"
+    });
+
     var delWidgetUrl = $("#AdminWidgetFormScript").attr('data-delWidgetUrl');
     var currentAction = $("#AdminWidgetFormScript").attr('data-currentAction');
     var sortableOptions = {
