@@ -220,6 +220,19 @@ class PermissionsFixture extends TestFixture
                 'created' => '2021-05-06 15:25:59',
                 'modified' => '2021-05-06 15:25:59',
             ],
+            [
+                'id' => 20,
+                'no' => 20,
+                'sort' => 20,
+                'name' => 'システム管理(Admin)',
+                'user_group_id' => 1,
+                'url' => '/baser/admin/*',
+                'auth' => 1,
+                'status' => 1,
+                'method' => 'ALL',
+                'created' => '2021-07-07 15:25:59',
+                'modified' => '2021-07-07 15:25:59',
+            ],
         ];
         parent::init();
     }

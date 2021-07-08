@@ -129,7 +129,7 @@ class AppTableTest extends BcTestCase
     {
         $Permission = new TablePermissionsTable();
         $max = $Permission->getMax('no', []);
-        $this->assertEquals(19, $max);
+        $this->assertEquals(20, $max);
     }
 
 
