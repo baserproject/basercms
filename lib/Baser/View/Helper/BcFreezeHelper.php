@@ -625,7 +625,7 @@ class BcFreezeHelper extends BcFormHelper
 			if (!empty($attributes["multiple"]) && $attributes["multiple"] !== 'checkbox') {
 				$value = $this->request->data[$model];
 			} else {
-				if (!empty($this->request->data[$model][$field])) {
+				if (isset($this->request->data[$model][$field])) {
 					$value = $this->request->data[$model][$field];
 				} else {
 					$value = null;
