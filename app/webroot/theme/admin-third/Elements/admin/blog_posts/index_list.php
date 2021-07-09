@@ -48,11 +48,8 @@ $this->BcListTable->setColumnNumber(9);
 <table class="list-table bca-table-listup" id="ListTable">
 	<thead class="bca-table-listup__thead">
 	<tr>
-		<th class="list-tool bca-table-listup__thead-th  bca-table-listup__thead-th--select">
-			<?php echo $this->BcForm->input(
-				'ListTool.checkall',
-				['type' => 'checkbox', 'label' => __d('baser', '一括選択')]
-			) ?>
+		<th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select" title="<?php echo __d('baser', '一括選択') ?>">
+			<?php echo $this->BcForm->input('ListTool.checkall', ['type' => 'checkbox', 'label' => ' ', 'title' => __d('baser', '一括選択')]) ?>
 		</th>
 		<th class="bca-table-listup__thead-th"><?php // No ?>
 			<?php echo $this->Paginator->sort('no',

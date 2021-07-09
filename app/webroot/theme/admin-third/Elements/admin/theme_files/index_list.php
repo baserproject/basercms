@@ -46,11 +46,10 @@ $this->BcListTable->setColumnNumber(3);
 <table class="list-table bca-table-listup" id="ListTable">
 	<thead class="bca-table-listup__thead">
 	<tr>
-		<th class="list-tool bca-table-listup__thead-th  bca-table-listup__thead-th--select">
+		<th class="list-tool bca-table-listup__thead-th bca-table-listup__thead-th--select"<?php if ($this->BcBaser->isAdminUser() && $theme != 'core'): ?> title="<?php echo __d('baser', '一括選択') ?>"<?php endif ?>>
 			<?php if ($this->BcBaser->isAdminUser() && $theme != 'core'): ?>
-				<?php echo $this->BcForm->input('ListTool.checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
+				<?php echo $this->BcForm->input('ListTool.checkall', ['type' => 'checkbox', 'label' => ' ', 'title' => __d('baser', '一括選択')]) ?>
 			<?php endif ?>
-
 			<?php if ($path): ?>
 				<?php $this->BcBaser->link('', ['action' => 'index', $theme, $plugin, $type, dirname($path)], [
 					'title' => __d('baser', '上へ移動'),
