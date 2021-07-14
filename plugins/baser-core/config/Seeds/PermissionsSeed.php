@@ -1,30 +1,26 @@
 <?php
 declare(strict_types=1);
 
-namespace BaserCore\Test\Fixture;
-
-use Cake\TestSuite\Fixture\TestFixture;
+use Migrations\AbstractSeed;
 
 /**
- * PermissionsFixture
+ * Permissions seed.
  */
-class PermissionsFixture extends TestFixture
+class PermissionsSeed extends AbstractSeed
 {
     /**
-     * Import
+     * Run Method.
      *
-     * @var array
-     */
-    public $import = ['table' => 'permissions'];
-
-    /**
-     * Init method
+     * Write your database seeder using this method.
+     *
+     * More information on writing seeds is available here:
+     * https://book.cakephp.org/phinx/0/en/seeding.html
      *
      * @return void
      */
-    public function init(): void
+    public function run()
     {
-        $this->records = [
+        $data = [
             [
                 'id' => 1,
                 'no' => 1,
@@ -220,20 +216,9 @@ class PermissionsFixture extends TestFixture
                 'created' => '2021-05-06 15:25:59',
                 'modified' => '2021-05-06 15:25:59',
             ],
-            [
-                'id' => 20,
-                'no' => 20,
-                'sort' => 20,
-                'name' => 'システム管理(Admin)',
-                'user_group_id' => 1,
-                'url' => '/baser/admin/*',
-                'auth' => 1,
-                'status' => 1,
-                'method' => 'ALL',
-                'created' => '2021-07-07 15:25:59',
-                'modified' => '2021-07-07 15:25:59',
-            ],
         ];
-        parent::init();
+
+        $table = $this->table('permissions');
+        $table->insert($data)->save();
     }
 }

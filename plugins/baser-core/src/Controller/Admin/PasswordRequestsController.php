@@ -54,6 +54,7 @@ class PasswordRequestsController extends BcAdminAppController
      *  - title
      *  - PasswordRequest.[]
      *
+     * @return void
      * @checked
      * @noTodo
      * @unitTest

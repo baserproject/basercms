@@ -137,6 +137,16 @@ class PermissionsTableTest extends BcTestCase
     }
 
     /**
+     * testValidationPlain
+     *
+     * @return void
+     */
+    public function testValidationPlain()
+    {
+        $permission = $this->Permissions->newEntity(['user_group_id' => 2], ['validate' => 'plain']);
+        $this->assertFalse($permission->hasErrors());
+    }
+    /**
      * validate
      */
     public function test必須チェック()

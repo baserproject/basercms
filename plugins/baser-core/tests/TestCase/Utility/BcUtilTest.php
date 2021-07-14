@@ -697,7 +697,7 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
-     * 
+     *
      * baserコア用のプレフィックスを取得する
      */
     public function testGetBaserCorePrefix()
@@ -707,7 +707,7 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
-     * 
+     *
      * プレフィックス全体を取得する
      */
     public function testGetPrefix()

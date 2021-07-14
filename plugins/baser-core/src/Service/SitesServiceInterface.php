@@ -31,7 +31,6 @@ interface SitesServiceInterface
      * @return Query
      */
     public function getIndex(array $queryParams): Query;
-
     /**
      * 新しいデータの初期値を取得する
      * @return EntityInterface
@@ -59,5 +58,4 @@ interface SitesServiceInterface
      * @return mixed
      */
     public function delete(int $id);
-
 }
