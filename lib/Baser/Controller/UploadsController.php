@@ -79,7 +79,7 @@ class UploadsController extends AppController
 		}
 
 		if (!$size) {
-			$data = $this->Session->read('Upload.' . $sessioName . '.data');
+			$data = base64_decode($this->Session->read('Upload.' . $sessioName . '.data'));
 		} else {
 
 			if (is_dir(TMP . 'uploads')) {
@@ -89,7 +89,7 @@ class UploadsController extends AppController
 
 			$path = TMP . 'uploads' . DS . $name;
 			$file = new File($path, true);
-			$file->write($this->Session->read('Upload.' . $sessioName . '.data'), 'wb');
+			$file->write(base64_decode($this->Session->read('Upload.' . $sessioName . '.data')), 'wb');
 			$file->close();
 
 			$thumb = false;

@@ -425,7 +425,7 @@ class BcUploadBehavior extends ModelBehavior
 		$fileName = $Model->data[$Model->alias][$fieldName . '_tmp'];
 		$sessionKey = str_replace(['.', '/'], ['_', '_'], $fileName);
 		$tmpName = $this->savePath[$Model->alias] . $sessionKey;
-		$fileData = $this->Session->read('Upload.' . $sessionKey . '.data');
+		$fileData = base64_decode($this->Session->read('Upload.' . $sessionKey . '.data'));
 		$fileType = $this->Session->read('Upload.' . $sessionKey . '.type');
 		$this->Session->delete('Upload.' . $sessionKey);
 
@@ -494,7 +494,7 @@ class BcUploadBehavior extends ModelBehavior
 			$_fileName = str_replace(['.', '/'], ['_', '_'], $fileName);
 			$this->Session->write('Upload.' . $_fileName, $field);
 			$this->Session->write('Upload.' . $_fileName . '.type', $file['type']);
-			$this->Session->write('Upload.' . $_fileName . '.data', file_get_contents($file['tmp_name']));
+			$this->Session->write('Upload.' . $_fileName . '.data', base64_encode(file_get_contents($file['tmp_name'])));
 			return $fileName;
 		}
 

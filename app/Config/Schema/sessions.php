@@ -54,4 +54,9 @@ class SessionsSchema extends CakeSchema {
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
 
+	// -------------------------------------------------------------
+	// データベースが MySQL の場合
+	// dataのカラムを text型 → longtext型 に変更してください。
+	// -------------------------------------------------------------
+
 }
