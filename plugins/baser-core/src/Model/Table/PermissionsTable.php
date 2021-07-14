@@ -9,6 +9,7 @@
  * @since           baserCMS v 0.1.0
  * @license         https://basercms.net/license/index.html
  */
+
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
@@ -24,13 +25,18 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Model\Table\Exception\CopyFailedException;
 
 /**
- * Class Permission
- * パーミッションモデル
+ * Class PermissionTable
  *
- * @package Baser.Model
+ * @package BaserCore\Model\Table
  */
 class PermissionsTable extends AppTable
 {
+    // 許可/拒否する対象メソッド
+    const METHOD_LIST = [
+        '*' => 'ALL',
+        'GET' => 'GET',
+        'POST' => 'POST',
+    ];
 
     /**
      * Initialize
@@ -55,15 +61,41 @@ class PermissionsTable extends AppTable
             'joinType' => 'left'
         ]);
     }
+
     /**
      * permissionsTmp
      * ログインしているユーザーの拒否URLリスト
      * キャッシュ用
+     * TODO 未確認
      *
      * @var mixed
      */
     public $permissionsTmp = -1;
-
+    /**
+     * Permission constructor.
+     * // TODO 未確認
+     *
+     * @param bool $id
+     * @param null $table
+     * @param null $ds
+     */
+    // public function __construct($id = false, $table = null, $ds = null)
+    // {
+    //     // TODO 未確認
+    //     return;
+    // 	parent::__construct($id, $table, $ds);
+    // 	$this->validate = [
+    // 		'name' => [
+    // 			['rule' => ['notBlank'], 'message' => __d('baser', '設定名を入力してください。')],
+    // 			['rule' => ['maxLength', 255], 'message' => __d('baser', '設定名は255文字以内で入力してください。')]],
+    // 		'user_group_id' => [
+    // 			['rule' => ['notBlank'], 'message' => __d('baser', 'ユーザーグループを選択してください。'), 'required' => true]],
+    // 		'url' => [
+    // 			['rule' => ['notBlank'], 'message' => __d('baser', '設定URLを入力してください。')],
+    // 			['rule' => ['maxLength', 255], 'message' => __d('baser', '設定URLは255文字以内で入力してください。')],
+    // 			['rule' => ['checkUrl'], 'message' => __d('baser', 'アクセス拒否として設定できるのは認証ページだけです。')]]
+    // 	];
+    // }
     /**
      * Validation Default
      *
@@ -76,14 +108,13 @@ class PermissionsTable extends AppTable
     public function validationDefault(Validator $validator): Validator
     {
         $validator->setProvider('permission', 'BaserCore\Model\Validation\PermissionValidation');
-
         $validator
             ->scalar('name')
-            ->maxLength('name', 255,  __d('baser', '設定名は255文字以内で入力してください。'))
+            ->maxLength('name', 255, __d('baser', '設定名は255文字以内で入力してください。'))
             ->notEmptyString('name', __d('baser', '設定名を入力してください。'));
         $validator
             ->integer('user_group_id')
-            ->notEmptyString('user_group_id',  __d('baser', 'ユーザーグループを選択してください。'))
+            ->notEmptyString('user_group_id', __d('baser', 'ユーザーグループを選択してください。'))
             ->requirePresence('user_group_id', true);
         $validator
             ->scalar('url')
@@ -93,10 +124,8 @@ class PermissionsTable extends AppTable
                 'rule' => 'checkUrl',
                 'provider' => 'permission',
                 'message' => __d('baser', 'アクセス拒否として設定できるのは認証ページだけです。')]);
-
         return $validator;
     }
-
 
     /**
      * 認証プレフィックスを取得する
@@ -175,16 +204,13 @@ class PermissionsTable extends AppTable
         if ($userGroupId == Configure::read('BcApp.adminGroupId')) {
             return true;
         }
-
         $this->setCheck($userGroupId);
         $permissions = $this->permissionsTmp;
-
         if ($url != '/') {
             $url = preg_replace('/^\//is', '', $url);
         }
         $adminPrefix = Configure::read('Routing.prefixes.0');
         $url = preg_replace("/^{$adminPrefix}\//", 'admin/', $url);
-
         // ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
         $allows = [
             '/^admin$/',
@@ -198,13 +224,11 @@ class PermissionsTable extends AppTable
         if (!empty($_SESSION['Auth'][$sessionKey]['id'])) {
             $allows[] = '/^admin\/users\/edit\/' . $_SESSION['Auth'][$sessionKey]['id'] . '$/';
         }
-
         foreach($allows as $allow) {
             if (preg_match($allow, $url)) {
                 return true;
             }
         }
-
         $ret = true;
         foreach($permissions as $permission) {
             if (!$permission['Permission']['status']) {
@@ -241,7 +265,6 @@ class PermissionsTable extends AppTable
         if ($id) {
             $data = $this->get($id)->toArray();
         }
-
         if (empty($data['user_group_id']) || empty($data['name'])) {
             return false;
         }
@@ -249,8 +272,7 @@ class PermissionsTable extends AppTable
         $idExists = $this->find()->where([
             'Permissions.user_group_id' => $data['user_group_id'],
             'Permissions.name' => $data['name'],
-            ])->count();
-
+        ])->count();
         if ($idExists) {
             $data['name'] .= '_copy';
             return $this->copy(null, $data);
@@ -266,7 +288,7 @@ class PermissionsTable extends AppTable
             $exception->setErrors($errors);
             throw $exception;
         }
-        return ($result = $this->save($permission)) ? $result : false;
+        return ($result = $this->save($permission))? $result : false;
     }
 
     /**

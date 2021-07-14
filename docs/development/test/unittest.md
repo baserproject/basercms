@@ -7,7 +7,7 @@ ucmitz では、[CakePHPのテストの仕組み](https://book.cakephp.org/4/ja/
 事前にコンテナにログインし Composer で、PHPUnit などをインストールしておく必要があります。
 
 ```shell
-composeer install
+composer install
 ```
 
 　
