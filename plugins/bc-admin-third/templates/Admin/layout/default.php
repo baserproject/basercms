@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS User Community <https://basercms.net/community/>
@@ -115,7 +115,7 @@ $base = $attributes['base'];
 
         <div class="bca-main__header">
 
-          <h1 class="bca-main__header-title"><? $this->BcAdmin->title() ?></h1>
+          <h1 class="bca-main__header-title"><?php $this->BcAdmin->title() ?></h1>
 
           <div class="bca-main__header-actions">
             <?php $this->BcBaser->element('main_body_header_links'); ?>

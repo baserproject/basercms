@@ -22,7 +22,7 @@ use BaserCore\Model\Entity\EntityInterface;
 
 <?= $this->BcAdminForm->create($permission, ['novalidate' => true]) ?>
 
-<? $this->BcBaser->element('Permissions/form') ?>
+<?php $this->BcBaser->element('Permissions/form') ?>
 
 <div class="submit section bca-actions">
     <div class="bca-actions__main">

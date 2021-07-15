@@ -21,7 +21,7 @@ use BaserCore\Model\Entity\UserGroup;
 
 <?= $this->BcAdminForm->create($userGroup, ['novalidate' => true]) ?>
 
-<? $this->BcBaser->element('UserGroups/form') ?>
+<?php $this->BcBaser->element('UserGroups/form') ?>
 
 <div class="submit bc-align-center section bca-actions">
   <div class="bca-actions__main">
