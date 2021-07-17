@@ -29,6 +29,9 @@ class SiteValidation extends Validation
      * - 先頭と末尾にスラッシュは入力できない
      * @param string $alias
      * @return bool
+     * @unitTest
+     * @noTodo
+     * @checked
      */
     public static function aliasSlashChecks($alias)
     {

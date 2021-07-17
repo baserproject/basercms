@@ -1,18 +1,19 @@
 <?php
-// TODO : コード確認要
-use BaserCore\Event\BcEventDispatcherTrait;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View.Helper
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+
+namespace BaserCore\View\Helper;
+
+use BaserCore\Event\BcEventDispatcherTrait;
+use Cake\View\Helper;
+use Cake\View\View;
 
 /**
  * コンテンツヘルパ
@@ -21,8 +22,9 @@ return;
  * @property Content $_Content
  * @property Permission $_Permission
  */
-class BcContentsHelper extends AppHelper
+class BcContentsHelper extends Helper
 {
+
     /**
      * Trait
      */
@@ -49,14 +51,17 @@ class BcContentsHelper extends AppHelper
      * @return    void
      * @access    public
      */
-    public function __construct(View $View, $settings = [])
+    public function __construct(View $view, array $config = [])
     {
-        parent::__construct($View, $settings);
-        $this->_Content = ClassRegistry::init('Content');
-        $this->_Permission = ClassRegistry::init('Permission');
-        if (BcUtil::isAdminSystem()) {
-            $this->setup();
-        }
+        parent::__construct($view, $config);
+        // TODO 未実装のため代替措置
+        // >>>
+//        $this->_Content = ClassRegistry::init('Content');
+//        $this->_Permission = ClassRegistry::init('Permission');
+//        if (BcUtil::isAdminSystem()) {
+//            $this->setup();
+//        }
+        // <<<
     }
 
     /**
@@ -263,7 +268,12 @@ class BcContentsHelper extends AppHelper
      */
     public function getUrl($url, $full = false, $useSubDomain = false, $base = true)
     {
-        return $this->_Content->getUrl($url, $full, $useSubDomain, $base);
+        // TODO 未実装のため代替措置
+        // >>>
+//        return $this->_Content->getUrl($url, $full, $useSubDomain, $base);
+        // ---
+        return '';
+        // <<<
     }
 
     /**

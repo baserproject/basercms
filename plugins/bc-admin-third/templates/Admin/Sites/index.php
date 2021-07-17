@@ -11,12 +11,10 @@
  */
 
 /**
- * サブサイト一覧
+ * サイト一覧
+ * @var \BaserCore\View\BcAdminAppView $this
  */
-$this->BcBaser->js([
-  'admin/libs/jquery.baser_ajax_data_list',
-  'admin/libs/baser_ajax_data_list_config',
-], false);
+$this->BcAdmin->setTitle(__d('baser', 'サイト一覧'));
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add'],
   'title' => __d('baser', '新規追加'),
@@ -24,16 +22,6 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 ?>
 
 
-<script type="text/javascript">
-  $(function () {
-    $.baserAjaxDataList.init();
-  });
-</script>
-
-
-<div id="AlertMessage" class="message" style="display:none"></div>
-<div id="MessageBox" style="display:none">
-  <div id="flashMessage" class="notice-message"></div>
+<div id="DataList" class="bca-data-list">
+  <?php $this->BcBaser->element('Sites/index_list') ?>
 </div>
-
-<div id="DataList" class="bca-data-list"><?php $this->BcBaser->element('sites/index_list') ?></div>

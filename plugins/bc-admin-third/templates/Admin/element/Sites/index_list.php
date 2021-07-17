@@ -10,23 +10,18 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use BaserCore\View\BcAdminAppView;
+
 /**
  * サブサイト一覧
  *
- * @var BcAppView $this
+ * @var BcAdminAppView $this
  */
 
 $this->BcListTable->setColumnNumber(8);
-$agents = Configure::read('BcAgent');
-$devices = [];
-foreach($agents as $key => $agent) {
-  $devices[$key] = $agent['name'];
-}
-$languages = Configure::read('BcLang');
-$langs = [];
-foreach($languages as $key => $lang) {
-  $langs[$key] = $lang['name'];
-}
+$devices = $this->BcAdminSite->getDevices();
+$langs = $this->BcAdminSite->getLangs();
+$siteList = $this->BcAdminSite->getSiteList();
 ?>
 
 
@@ -129,9 +124,15 @@ foreach($languages as $key => $lang) {
   </tr>
   </thead>
   <tbody class="bca-table-listup__tbody">
-  <?php if (!empty($datas)): ?>
-    <?php foreach($datas as $key => $data): ?>
-      <?php $this->BcBaser->element('sites/index_row', ['data' => $data, 'count' => ($key + 1), 'langs' => $langs, 'devices' => $devices]) ?>
+  <?php if (!empty($sites)): ?>
+    <?php foreach($sites as $key => $site): ?>
+      <?php $this->BcBaser->element('Sites/index_row', [
+        'site' => $site,
+        'count' => ($key + 1),
+        'langs' => $langs,
+        'devices' => $devices,
+        'siteList' => $siteList
+      ]) ?>
     <?php endforeach; ?>
   <?php else: ?>
     <tr>

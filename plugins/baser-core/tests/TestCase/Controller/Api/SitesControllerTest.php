@@ -11,16 +11,15 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
-use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
-use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\TestSuite\IntegrationTestTrait;
 
-/**
- * BaserCore\Controller\Api\UsersController Test Case
- */
-class UsersControllerTest extends BcTestCase
+class SitesControllerTest extends \BaserCore\TestSuite\BcTestCase
 {
+
+    /**
+     * IntegrationTestTrait
+     */
     use IntegrationTestTrait;
 
     /**
@@ -32,7 +31,7 @@ class UsersControllerTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.LoginStores'
+        'plugin.BaserCore.Sites'
     ];
 
     /**
@@ -69,17 +68,15 @@ class UsersControllerTest extends BcTestCase
         parent::tearDown();
     }
 
-    public function testLoginAndRefreshToken()
+    /**
+     * test View
+     */
+    public function testView(): void
     {
-        $this->get('/baser/api/baser-core/users/login.json');
-        $this->assertResponseCode(401);
-        $this->post('/baser/api/baser-core/users/login.json');
-        $this->assertResponseCode(401);
-        $this->post('/baser/api/baser-core/users/login.json', ['email' => 'testuser1@example.com', 'password' => 'password']);
+        $this->get('/baser/api/baser-core/sites/view/2.json?token=' . $this->accessToken);
         $this->assertResponseOk();
-        $body = json_decode($this->_getBodyAsString());
-        $this->get('/baser/api/baser-core/users/refresh_token.json?token=' . $body->refresh_token);
-        $this->assertResponseContains('access_token');
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('smartphone', $result->site->name);
     }
 
     /**
@@ -89,10 +86,10 @@ class UsersControllerTest extends BcTestCase
      */
     public function testIndex()
     {
-        $this->get('/baser/api/baser-core/users/index.json?token=' . $this->accessToken);
+        $this->get('/baser/api/baser-core/sites/index.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('baser admin', $result->users[0]->name);
+        $this->assertEquals('', $result->sites[0]->name);
     }
 
     /**
@@ -105,18 +102,15 @@ class UsersControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $data = [
-            'name' => 'Test_test_Man',
-            'password_1' => 'Lorem ipsum dolor sit amet',
-            'password_2' => 'Lorem ipsum dolor sit amet',
-            'real_name_1' => 'Lorem ipsum dolor sit amet',
-            'real_name_2' => 'Lorem ipsum dolor sit amet',
-            'email' => 'test@example.com',
-            'nickname' => 'Lorem ipsum dolor sit amet',
+            'name' => 'chinese',
+            'display_name' => '中国語サイト',
+            'title' => '中国語',
+            'alias' => 'zh'
         ];
-        $this->post('/baser/api/baser-core/users/add.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/baser-core/sites/add.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();
-        $users = $this->getTableLocator()->get('Users');
-        $query = $users->find()->where(['name' => $data['name']]);
+        $sites = $this->getTableLocator()->get('Sites');
+        $query = $sites->find()->where(['name' => $data['name']]);
         $this->assertEquals(1, $query->count());
     }
 
@@ -132,8 +126,11 @@ class UsersControllerTest extends BcTestCase
         $data = [
             'name' => 'Test_test_Man'
         ];
-        $this->post('/baser/api/baser-core/users/edit/1.json?token=' . $this->accessToken, $data);
+        $this->post('/baser/api/baser-core/sites/edit/1.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();
+        $sites = $this->getTableLocator()->get('Sites');
+        $query = $sites->find()->where(['name' => $data['name']]);
+        $this->assertEquals(1, $query->count());
     }
 
     /**
@@ -145,19 +142,11 @@ class UsersControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->post('/baser/api/baser-core/users/delete/2.json?token=' . $this->accessToken);
+        $this->post('/baser/api/baser-core/sites/delete/2.json?token=' . $this->accessToken);
         $this->assertResponseSuccess();
-    }
-
-    /**
-     * Test View
-     */
-    public function testView()
-    {
-        $this->get('/baser/api/baser-core/users/view/1.json?token=' . $this->accessToken);
-        $this->assertResponseOk();
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('baser admin', $result->user->name);
+        $sites = $this->getTableLocator()->get('Sites');
+        $query = $sites->find()->where(['id' => 2]);
+        $this->assertEquals(0, $query->count());
     }
 
 }

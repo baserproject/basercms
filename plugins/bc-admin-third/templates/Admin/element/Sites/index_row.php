@@ -10,51 +10,61 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use BaserCore\Model\Entity\Site;
+use BaserCore\View\BcAdminAppView;
+
 /**
  * サブサイト一覧（行）
+ * @var BcAdminAppView $this
+ * @var int $count
+ * @var Site $site
+ * @var array $devices
+ * @var array $langs
+ * @var array $siteList
  */
+
 $classies = [];
-if ($data['Site']['status']) {
+if ($site->status) {
   $classies = ['publish'];
 } else {
   $classies = ['unpublish', 'disablerow'];
 }
 $class = ' class="' . implode(' ', $classies) . '"';
-$url = $this->BcContents->getUrl('/' . $data['Site']['alias'] . '/', true, $data['Site']['use_subdomain']);
+$url = $this->BcContents->getUrl('/' . $site->alias . '/', true, $site->use_subdomain);
 ?>
 
 
 <tr id="Row<?php echo $count ?>" <?php echo $class; ?>>
-  <td class="bca-table-listup__tbody-td" style="width:5%"><?php echo $data['Site']['id']; ?></td>
-  <td class="bca-table-listup__tbody-td"><?php echo h($data['Site']['display_name']) ?></td>
+  <td class="bca-table-listup__tbody-td" style="width:5%"><?php echo $site->id; ?></td>
+  <td class="bca-table-listup__tbody-td"><?php echo h($site->display_name) ?></td>
   <td
-    class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['Site']['name'], ['action' => 'edit', $data['Site']['id']]); ?>
+    class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($site->name, ['action' => 'edit', $site->id]); ?>
     <br>
-    <?php echo $data['Site']['alias'] ?>
+    <?php echo $site->alias ?>
   </td>
   <td class="bca-table-listup__tbody-td" style="width:5%;" class="bc-align-center status">
-    <?php echo $this->BcText->booleanMark($data['Site']['status']); ?><br>
+    <?php echo $this->BcText->booleanMark($site->status); ?><br>
   </td>
   <td class="bca-table-listup__tbody-td" class="bc-align-center">
-    <?php echo $this->BcText->arrayValue($data['Site']['device'], $devices, ''); ?><br>
-    <?php echo $this->BcText->arrayValue($data['Site']['lang'], $langs, ''); ?>
+    <?php echo $this->BcText->arrayValue($site->device, $devices, ''); ?><br>
+    <?php echo $this->BcText->arrayValue($site->lang, $langs, ''); ?>
   </td>
   <td
-    class="bca-table-listup__tbody-td"><?php echo h($this->BcText->arrayValue($data['Site']['main_site_id'], $mainSites, '')); ?>
+    class="bca-table-listup__tbody-td"><?php echo h($this->BcText->arrayValue($site->main_site_id, $siteList, '')); ?>
     <br>
-    <?php echo $this->BcText->noValue($data['Site']['theme'], $this->BcBaser->siteConfig['theme']) ?>
+    <?php echo $site->theme ?>
   </td>
-  <?php echo $this->BcListTable->dispatchShowRow($data) ?>
+  <?php echo $this->BcListTable->dispatchShowRow($site) ?>
   <td class="bca-table-listup__tbody-td" style="width:10%;white-space: nowrap">
-    <?php echo $this->BcTime->format($data['Site']['created'], 'yyyy-MM-dd') ?><br>
-    <?php echo $this->BcTime->format($data['Site']['modified'], 'yyyy-MM-dd') ?>
+    <?php echo $this->BcTime->format($site->created, 'yyyy-MM-dd') ?><br>
+    <?php echo $this->BcTime->format($site->modified, 'yyyy-MM-dd') ?>
   </td>
   <td class="row-tools bca-table-listup__tbody-td bca-table-listup__tbody-td--actions" style="width:15%">
-    <?php $this->BcBaser->link('', ['action' => 'ajax_unpublish', $data['Site']['id']], ['title' => __d('baser', '非公開'), 'class' => 'btn-unpublish bca-btn-icon', 'data-bca-btn-type' => 'unpublish', 'data-bca-btn-size' => 'lg']) ?>
-    <?php $this->BcBaser->link('', ['action' => 'ajax_publish', $data['Site']['id']], ['title' => __d('baser', '公開'), 'class' => 'btn-publish bca-btn-icon', 'data-bca-btn-type' => 'publish', 'data-bca-btn-size' => 'lg']) ?>
-    <?php if ($data['Site']['status']) : ?>
+    <?php $this->BcBaser->link('', ['action' => 'ajax_unpublish', $site->id], ['title' => __d('baser', '非公開'), 'class' => 'btn-unpublish bca-btn-icon', 'data-bca-btn-type' => 'unpublish', 'data-bca-btn-size' => 'lg']) ?>
+    <?php $this->BcBaser->link('', ['action' => 'ajax_publish', $site->id], ['title' => __d('baser', '公開'), 'class' => 'btn-publish bca-btn-icon', 'data-bca-btn-type' => 'publish', 'data-bca-btn-size' => 'lg']) ?>
+    <?php if ($site->status) : ?>
       <?php $this->BcBaser->link('', $url, ['title' => __d('baser', '確認'), 'target' => '_blank', 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'preview', 'data-bca-btn-size' => 'lg']) ?>
     <?php endif ?>
-    <?php $this->BcBaser->link('', ['action' => 'edit', $data['Site']['id']], ['title' => __d('baser', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
+    <?php $this->BcBaser->link('', ['action' => 'edit', $site->id], ['title' => __d('baser', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
   </td>
 </tr>

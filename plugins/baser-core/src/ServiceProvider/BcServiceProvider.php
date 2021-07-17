@@ -12,6 +12,8 @@
 namespace BaserCore\ServiceProvider;
 
 use BaserCore\Service\Admin\PluginManageService;
+use BaserCore\Service\Admin\SiteManageService;
+use BaserCore\Service\Admin\SiteManageServiceInterface;
 use BaserCore\Service\Admin\UserGroupManageService;
 use BaserCore\Service\Admin\UserManageService;
 use BaserCore\Service\Api\UserApiService;
@@ -19,6 +21,8 @@ use BaserCore\Service\Api\UserApiServiceInterface;
 use BaserCore\Service\SiteConfigsMockService;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\Admin\UserManageServiceInterface;
+use BaserCore\Service\SitesService;
+use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Service\UsersService;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Service\Admin\UserGroupManageServiceInterface;
@@ -55,6 +59,8 @@ class BcServiceProvider extends ServiceProvider
         UserGroupManageServiceInterface::class,
         PluginsServiceInterface::class,
         PluginManageServiceInterface::class,
+        SitesServiceInterface::class,
+        SiteManageServiceInterface::class,
         SiteConfigsServiceInterface::class,
         PermissionsServiceInterface::class,
         DblogsServiceInterface::class,
@@ -79,6 +85,9 @@ class BcServiceProvider extends ServiceProvider
         // Pluginsサービス
         $container->add(PluginsServiceInterface::class, PluginsService::class, true);
         $container->add(PluginManageServiceInterface::class, PluginManageService::class, true);
+        // Sites サービス
+        $container->add(SitesServiceInterface::class, SitesService::class, true);
+        $container->add(SiteManageServiceInterface::class, SiteManageService::class, true);
         // SiteConfigsサービス
         // TODO 未実装のためモックを利用
         $container->add(SiteConfigsServiceInterface::class, SiteConfigsMockService::class, true);

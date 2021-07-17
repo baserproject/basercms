@@ -9,7 +9,9 @@
  * @since           baserCMS v 0.1.0
  * @license         https://basercms.net/license/index.html
  */
+
 namespace BaserCore\Model\Table;
+
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\Core\Configure;
@@ -22,6 +24,7 @@ use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ConnectionManager;
 use BaserCore\Model\Table\Exception\CopyFailedException;
+
 /**
  * Class PermissionTable
  *
@@ -59,40 +62,41 @@ class PermissionsTable extends AppTable
             'joinType' => 'left'
         ]);
     }
-	/**
-	 * permissionsTmp
-	 * ログインしているユーザーの拒否URLリスト
-	 * キャッシュ用
+
+    /**
+     * permissionsTmp
+     * ログインしているユーザーの拒否URLリスト
+     * キャッシュ用
      * TODO 未確認
-	 *
-	 * @var mixed
-	 */
+     *
+     * @var mixed
+     */
     public $permissionsTmp = -1;
     /**
-	 * Permission constructor.
+     * Permission constructor.
      * // TODO 未確認
-	 *
-	 * @param bool $id
-	 * @param null $table
-	 * @param null $ds
-	 */
-	// public function __construct($id = false, $table = null, $ds = null)
-	// {
+     *
+     * @param bool $id
+     * @param null $table
+     * @param null $ds
+     */
+    // public function __construct($id = false, $table = null, $ds = null)
+    // {
     //     // TODO 未確認
     //     return;
-	// 	parent::__construct($id, $table, $ds);
-	// 	$this->validate = [
-	// 		'name' => [
-	// 			['rule' => ['notBlank'], 'message' => __d('baser', '設定名を入力してください。')],
-	// 			['rule' => ['maxLength', 255], 'message' => __d('baser', '設定名は255文字以内で入力してください。')]],
-	// 		'user_group_id' => [
-	// 			['rule' => ['notBlank'], 'message' => __d('baser', 'ユーザーグループを選択してください。'), 'required' => true]],
-	// 		'url' => [
-	// 			['rule' => ['notBlank'], 'message' => __d('baser', '設定URLを入力してください。')],
-	// 			['rule' => ['maxLength', 255], 'message' => __d('baser', '設定URLは255文字以内で入力してください。')],
-	// 			['rule' => ['checkUrl'], 'message' => __d('baser', 'アクセス拒否として設定できるのは認証ページだけです。')]]
-	// 	];
-	// }
+    // 	parent::__construct($id, $table, $ds);
+    // 	$this->validate = [
+    // 		'name' => [
+    // 			['rule' => ['notBlank'], 'message' => __d('baser', '設定名を入力してください。')],
+    // 			['rule' => ['maxLength', 255], 'message' => __d('baser', '設定名は255文字以内で入力してください。')]],
+    // 		'user_group_id' => [
+    // 			['rule' => ['notBlank'], 'message' => __d('baser', 'ユーザーグループを選択してください。'), 'required' => true]],
+    // 		'url' => [
+    // 			['rule' => ['notBlank'], 'message' => __d('baser', '設定URLを入力してください。')],
+    // 			['rule' => ['maxLength', 255], 'message' => __d('baser', '設定URLは255文字以内で入力してください。')],
+    // 			['rule' => ['checkUrl'], 'message' => __d('baser', 'アクセス拒否として設定できるのは認証ページだけです。')]]
+    // 	];
+    // }
     /**
      * Validation Default
      *
@@ -112,7 +116,7 @@ class PermissionsTable extends AppTable
             ->requirePresence('name', true);
         $validator
             ->integer('user_group_id')
-            ->notEmptyString('user_group_id',  __d('baser', 'ユーザーグループを選択してください。'))
+            ->notEmptyString('user_group_id', __d('baser', 'ユーザーグループを選択してください。'))
             ->requirePresence('user_group_id', true);
         $validator
             ->scalar('url')
@@ -153,6 +157,7 @@ class PermissionsTable extends AppTable
         }
         return $validator;
     }
+
     /**
      * 認証プレフィックスを取得する
      *
@@ -171,6 +176,7 @@ class PermissionsTable extends AppTable
             return '';
         }
     }
+
     /**
      * 初期値を取得する
      * @return array
@@ -181,6 +187,7 @@ class PermissionsTable extends AppTable
         $data['Permission']['status'] = 1;
         return $data;
     }
+
     /**
      * コントロールソースを取得する
      *
@@ -197,6 +204,7 @@ class PermissionsTable extends AppTable
             return false;
         }
     }
+
     /**
      * beforeSave
      * urlの先頭に / を付けて絶対パスにする
@@ -214,6 +222,7 @@ class PermissionsTable extends AppTable
         }
         return true;
     }
+
     /**
      * 権限チェックを行う
      *
@@ -271,6 +280,7 @@ class PermissionsTable extends AppTable
         }
         return (boolean)$ret;
     }
+
     /**
      * アクセス制限データをコピーする
      *
@@ -294,7 +304,7 @@ class PermissionsTable extends AppTable
         $idExists = $this->find()->where([
             'Permissions.user_group_id' => $data['user_group_id'],
             'Permissions.name' => $data['name'],
-            ])->count();
+        ])->count();
         if ($idExists) {
             $data['name'] .= '_copy';
             return $this->copy(null, $data);
@@ -310,8 +320,9 @@ class PermissionsTable extends AppTable
             $exception->setErrors($errors);
             throw $exception;
         }
-        return ($result = $this->save($permission)) ? $result : false;
+        return ($result = $this->save($permission))? $result : false;
     }
+
     /**
      * 権限チェックの準備をする
      *
@@ -334,6 +345,7 @@ class PermissionsTable extends AppTable
             }
         }
     }
+
     /**
      * 権限チェック対象を追加する
      *
@@ -351,4 +363,5 @@ class PermissionsTable extends AppTable
             ]
         ];
     }
+
 }
