@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Service\Admin;
 
 use BaserCore\Model\Table\LoginStoresTable;
+use BaserCore\Model\Table\UsersTable;
 use BaserCore\Service\Admin\UserManageService;
 use Cake\Http\Response;
 
@@ -253,6 +254,37 @@ class UserManageServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->UserManage->returnLoginUserFromAgent($request, $response);
         $this->assertSession(null, 'AuthAgent.User.id');
         $this->assertSession(1, 'AuthAdmin.id');
+    }
+    
+    /**
+     * test reload
+     *
+     * @return void
+     */
+    public function testReload()
+    {
+        // 未ログイン
+        $request = $this->getRequest('/baser/admin/users/index');
+        $noLoginUser = $this->UserManage->reload($request);
+        $this->assertTrue($noLoginUser);
+        
+        $authentication = $this->BaserCore->getAuthenticationService($request);
+        $request = $request->withAttribute('authentication', $authentication);
+        $response = new Response();
+        $request = $this->UserManage->login($request, $response, 1)['request'];
+        
+        // 通常読込
+        $users = $this->getTableLocator()->get('Users');
+        $user = $users->get(1);
+        $user->name = 'modified name';
+        $users->save($user);
+        $this->UserManage->reload($request);
+        $this->assertSession('modified name', 'AuthAdmin.name');
+        
+        // 削除
+        $users->delete($user);
+        $deleteRealaodUser = $this->UserManage->reload($request);
+        $this->assertFalse($deleteRealaodUser);
     }
 
 }

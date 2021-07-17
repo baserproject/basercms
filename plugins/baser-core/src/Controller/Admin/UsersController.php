@@ -229,9 +229,6 @@ class UsersController extends BcAdminAppController
                     $this->getEventManager()->dispatch(new Event('Controller.Users.afterEdit', $this, [
                         'user' => $user
                     ]));
-                    if ($userManage->isSelfUpdate($user->id)) {
-                        $this->Authentication->setIdentity($userManage->get($user->id));
-                    }
                     $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を更新しました。', $user->name));
                     return $this->redirect(['action' => 'edit', $user->id]);
                 } else {

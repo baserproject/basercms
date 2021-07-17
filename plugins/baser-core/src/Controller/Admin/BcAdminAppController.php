@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
+use Exception;
 use BaserCore\Controller\BcAppController;
 use BaserCore\Service\Admin\UserManageServiceInterface;
 use BaserCore\Service\Admin\UserManageService;
@@ -52,6 +53,11 @@ class BcAdminAppController extends BcAppController
         /** @var UserManageService $userManage */
         $userManage = $this->getService(UserManageServiceInterface::class);
         $this->response = $userManage->checkAutoLogin($this->request, $this->response);
+        
+        // ログインユーザ再読込
+        if (!$userManage->reload($this->request)) {
+            $this->redirect($this->Authentication->logout());
+        }
     }
 
     /**
