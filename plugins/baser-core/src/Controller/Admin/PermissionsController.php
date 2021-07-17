@@ -200,7 +200,7 @@ class PermissionsController extends BcAdminAppController
         $this->set('userGroup', $userGroup);
         $this->set('methodList', $permissions->getMethodList());
         $this->setHelp('permissions_form');
-        $this->setTitle(sprintf(__d('baser', '%s｜新規アクセス制限設定登録'), $userGroup['UserGroup']['title']));
+        $this->setTitle(sprintf(__d('baser', '%s｜新規アクセス制限設定登録'), $userGroup->title));
 	}
 
 	/**
