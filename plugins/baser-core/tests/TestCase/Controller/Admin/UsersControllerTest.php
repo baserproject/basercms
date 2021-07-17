@@ -11,17 +11,11 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
-use App\Application;
 use BaserCore\Controller\Admin\UsersController;
-use BaserCore\Controller\BcAppController;
-use BaserCore\Plugin;
 use BaserCore\Service\Admin\UserManageService;
-use BaserCore\Service\UsersService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Event\Event;
-use Cake\Http\BaseApplication;
 use Cake\ORM\TableRegistry;
-use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**

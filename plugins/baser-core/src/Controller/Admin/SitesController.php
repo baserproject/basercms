@@ -1,93 +1,76 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Controller
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+
+namespace BaserCore\Controller\Admin;
+
+use BaserCore\Service\Admin\SiteManageServiceInterface;
+use Cake\Event\Event;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class SitesController
- *
- * サイトコントローラー
- *
- * @package Baser.Controller
- * @property Site $Site
- * @property BcManagerComponent $BcManager
+ * @package BaserCore\Controller\Admin
  */
-class SitesController extends AppController
+class SitesController extends BcAdminAppController
 {
 
     /**
-     * Components
-     *
-     * @var array
+     * サイト一覧
+     * @param SiteManageServiceInterface $siteManage
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public $components = ['Cookie', 'BcAuth', 'BcAuthConfigure', 'BcManager'];
-
-    /**
-     * サブメニュー
-     *
-     * @var array
-     */
-    public $subMenuElements = ['site_configs', 'sites'];
-
-    /**
-     * Before Filter
-     */
-    public function beforeFilter()
+    public function index(SiteManageServiceInterface $siteManage)
     {
-        parent::beforeFilter();
-        $this->crumbs = [
-            ['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
-            ['name' => __d('baser', 'サブサイト管理'), 'url' => ['controller' => 'sites', 'action' => 'index']]
-        ];
+        $this->setViewConditions('Site', ['default' => ['query' => [
+            'num' => $siteManage->getSiteConfig('admin_list_num'),
+            'sort' => 'id',
+            'direction' => 'asc',
+        ]]]);
+
+        // EVENT Sites.searchIndex
+        $event = $this->getEventManager()->dispatch(new Event('Controller.Sites.searchIndex', $this, [
+            'request' => $this->request
+        ]));
+        if ($event !== false) {
+            $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
+        }
+
+        $this->set('sites', $this->paginate($siteManage->getIndex($this->request->getQueryParams())));
+        $this->request = $this->request->withParsedBody($this->request->getQuery());
     }
 
     /**
-     * サブサイト一覧
+     * サイト追加
      */
-    public function admin_index()
-    {
-        $this->setTitle(__d('baser', 'サブサイト一覧'));
-        $this->paginate = ['order' => 'id'];
-        $default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
-        $this->setViewConditions('Site', ['default' => $default, 'action' => 'admin_index']);
-        $this->paginate = [
-            'order' => ['Site.id' => 'ASC'],
-            'limit' => $this->passedArgs['num']
-        ];
-        $datas = $this->paginate('Site');
-        $this->set('mainSites', $this->Site->getSiteList());
-        $this->set('datas', $datas);
-    }
-
-    /**
-     * サブサイト追加
-     */
-    public function admin_add()
+    public function add()
     {
 
-        if (!$this->request->data) {
-            $this->request->data = ['Site' => [
-                'title' => $this->siteConfigs['name'],
-                'status' => false
-            ]];
+        if (!$this->request->getData()) {
+//            $this->request->data = ['Site' => [
+//                'title' => $this->siteConfigs['name'],
+//                'status' => false
+//            ]];
         } else {
             /*** Sites.beforeAdd ** */
             $event = $this->dispatchLayerEvent('beforeAdd', [
-                'data' => $this->request->data
+                'data' => $this->request->getData()
             ]);
             if ($event !== false) {
-                $this->request->data = $event->getResult() === true? $event->getData('data') : $event->getResult();
+                $this->request = $this->request->withParsedBody(($event->getResult() === null || $event->getResult() === true)? $event->getData('data') : $event->getResult());
             }
-            if ($data = $this->Site->save($this->request->data)) {
+            if ($data = $this->Site->save($this->request->getData())) {
                 /*** Sites.afterAdd ***/
                 $this->dispatchLayerEvent('afterAdd', [
                     'data' => $data
@@ -95,13 +78,13 @@ class SitesController extends AppController
                 if (!empty($data['Site']['theme'])) {
                     $this->BcManager->installThemesPlugins($data['Site']['theme']);
                 }
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'サブサイト「%s」を追加しました。'), $this->request->getData('Site.name')));
+                $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を追加しました。'), $this->request->getData('Site.name')));
                 $this->redirect(['controller' => 'sites', 'action' => 'edit', $this->Site->id]);
             } else {
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
         }
-        $this->setTitle(__d('baser', 'サブサイト新規登録'));
+        $this->setTitle(__d('baser', 'サイト新規登録'));
         $defaultThemeName = __d('baser', 'サイト基本設定に従う');
         if (!empty($this->siteConfigs['theme'])) {
             $defaultThemeName .= '（' . $this->siteConfigs['theme'] . '）';
@@ -116,30 +99,30 @@ class SitesController extends AppController
     }
 
     /**
-     * サブサイト情報編集
+     * サイト情報編集
      *
      * @param $id
      */
-    public function admin_edit($id)
+    public function edit($id)
     {
         if (!$id) {
             $this->notFound();
         }
-        if (!$this->request->data) {
-            $this->request->data = $this->Site->find('first', ['conditions' => ['Site.id' => $id], 'recursive' => -1]);
-            if (!$this->request->data) {
+        if (!$this->request->getData()) {
+//            $this->request->data = $this->Site->find('first', ['conditions' => ['Site.id' => $id], 'recursive' => -1]);
+            if (!$this->request->getData()) {
                 $this->notFound();
             }
         } else {
             /*** Sites.beforeEdit ** */
             $event = $this->dispatchLayerEvent('beforeEdit', [
-                'data' => $this->request->data
+                'data' => $this->request->getData()
             ]);
             if ($event !== false) {
-                $this->request->data = $event->getResult() === true? $event->getData('data') : $event->getResult();
+                $this->request = $this->request->withParsedBody(($event->getResult() === null || $event->getResult() === true)? $event->getData('data') : $event->getResult());
             }
             $beforeSite = $this->Site->find('first', ['conditions' => ['Site.id' => $this->request->getData('Site.id')]]);
-            if ($data = $this->Site->save($this->request->data)) {
+            if ($data = $this->Site->save($this->request->getData())) {
                 /*** Sites.afterEdit ***/
                 $this->dispatchLayerEvent('afterEdit', [
                     'data' => $data
@@ -147,13 +130,13 @@ class SitesController extends AppController
                 if (!empty($data['Site']['theme']) && $beforeSite['Site']['theme'] !== $data['Site']['theme']) {
                     $this->BcManager->installThemesPlugins($data['Site']['theme']);
                 }
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'サブサイト「%s」を更新しました。'), $this->request->getData('Site.name')));
+                $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を更新しました。'), $this->request->getData('Site.name')));
                 $this->redirect(['controller' => 'sites', 'action' => 'edit', $id]);
             } else {
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
         }
-        $this->setTitle(__d('baser', 'サブサイト編集'));
+        $this->setTitle(__d('baser', 'サイト編集'));
         $defaultThemeName = __d('baser', 'サイト基本設定に従う');
         if (!empty($this->siteConfigs['theme'])) {
             $defaultThemeName .= '（' . $this->siteConfigs['theme'] . '）';
@@ -173,7 +156,7 @@ class SitesController extends AppController
      * @param string $id
      * @return bool
      */
-    public function admin_ajax_unpublish($id)
+    public function ajax_unpublish($id)
     {
         $this->_checkSubmitToken();
         $this->autoRender = false;
@@ -193,7 +176,7 @@ class SitesController extends AppController
      * @param string $id
      * @return bool
      */
-    public function admin_ajax_publish($id)
+    public function ajax_publish($id)
     {
         $this->_checkSubmitToken();
         $this->autoRender = false;
@@ -226,7 +209,7 @@ class SitesController extends AppController
         $statusText = $statusTexts[$status];
         $this->BcMessage->setSuccess(
             sprintf(
-                __d('baser', 'サブサイト「%s」 を、%s に設定しました。'),
+                __d('baser', 'サイト「%s」 を、%s に設定しました。'),
                 $data['Site']['name'],
                 $statusText
             ),
@@ -239,7 +222,7 @@ class SitesController extends AppController
     /**
      * 削除する
      */
-    public function admin_delete()
+    public function delete()
     {
         if (empty($this->request->getData('Site.id'))) {
             $this->notFound();
@@ -249,7 +232,7 @@ class SitesController extends AppController
             $this->redirect(['action' => 'edit', $this->request->getData('Site.id')]);
             return;
         }
-        $this->BcMessage->setSuccess(sprintf(__d('baser', 'サブサイト「%s」 を削除しました。'), $this->request->getData('Site.name')));
+        $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」 を削除しました。'), $this->request->getData('Site.name')));
         $this->redirect(['action' => 'index']);
     }
 
@@ -260,7 +243,7 @@ class SitesController extends AppController
      * @param int $currentSiteId 現在のサイトID
      * @return string
      */
-    public function admin_ajax_get_selectable_devices_and_lang($mainSiteId, $currentSiteId = null)
+    public function ajax_get_selectable_devices_and_lang($mainSiteId, $currentSiteId = null)
     {
         $this->autoRender = false;
         Configure::write('debug', 0);
