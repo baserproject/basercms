@@ -65,7 +65,7 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
     public function testGet()
     {
         $user = $this->Sites->get(1);
-        $this->assertEquals('mobile', $user->name);
+        $this->assertEquals('', $user->name);
     }
 
     /**
@@ -76,7 +76,7 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $request = $this->getRequest('/');
 
         $users = $this->Sites->getIndex($request->getQueryParams());
-        $this->assertEquals('mobile', $users->first()->name);
+        $this->assertEquals('', $users->first()->name);
 
         $request = $this->getRequest('/?name=smart');
         $users = $this->Sites->getIndex($request->getQueryParams());
@@ -88,7 +88,7 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
 
         $request = $this->getRequest('/?status=1');
         $users = $this->Sites->getIndex($request->getQueryParams());
-        $this->assertEquals(1, $users->all()->count());
+        $this->assertEquals(2, $users->all()->count());
     }
 
     /**
@@ -98,13 +98,13 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
     {
         $request = $this->getRequest('/');
         $request = $request->withParsedBody([
-            'name' => 'english',
-            'display_name' => '英語サイト',
-            'title' => 'baserの英語サイト',
-            'alias' => 'en'
+            'name' => 'chinese',
+            'display_name' => '中国サイト',
+            'title' => 'baserの中国サイト',
+            'alias' => 'zh'
         ]);
         $this->Sites->create($request->getData());
-        $request = $this->getRequest('/?name=english');
+        $request = $this->getRequest('/?name=chinese');
         $users = $this->Sites->getIndex($request->getQueryParams());
         $this->assertEquals(1, $users->all()->count());
     }
@@ -133,6 +133,6 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->Sites->delete(2);
         $request = $this->getRequest('/');
         $users = $this->Sites->getIndex($request->getQueryParams());
-        $this->assertEquals(1, $users->all()->count());
+        $this->assertEquals(2, $users->all()->count());
     }
 }

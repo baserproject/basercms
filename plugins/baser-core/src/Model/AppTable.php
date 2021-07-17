@@ -1402,29 +1402,6 @@ class AppTable extends Table
         return $result;
     }
 
-    public function dataIter(&$results, $callback)
-    {
-        if (!$isVector = isset($results[0])) {
-            $results = [$results];
-        }
-        $modeled = array_key_exists($this->alias, $results[0]);
-        foreach($results as &$value) {
-            if (!$modeled) {
-                $value = [$this->alias => $value];
-            }
-            $continue = $callback($value, $this);
-            if (!$modeled) {
-                $value = $value[$this->alias];
-            }
-            if (!is_null($continue) && !$continue) {
-                break;
-            }
-        }
-        if (!$isVector) {
-            $results = $results[0];
-        }
-    }
-
     /**
      * コンテンツのURLにマッチする候補を取得する
      *

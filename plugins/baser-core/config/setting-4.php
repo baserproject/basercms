@@ -300,58 +300,6 @@ $config['BcEmail'] = [
 ];
 
 /**
- * エージェント設定
- */
-$config['BcAgent'] = [
-    'mobile' => [
-        'name' => __d('baser', 'ケータイ'),
-        'helper' => 'BcMobile',
-        'agents' => [
-            'Googlebot-Mobile',
-            'Y!J-SRD',
-            'Y!J-MBS',
-            'DoCoMo',
-            'SoftBank',
-            'Vodafone',
-            'J-PHONE',
-            'UP.Browser'
-        ],
-        'sessionId' => true
-    ],
-    'smartphone' => [
-        'name' => __d('baser', 'スマートフォン'),
-        'helper' => 'BcSmartphone',
-        'agents' => [
-            'iPhone',            // Apple iPhone
-            'iPod',                // Apple iPod touch
-            'Android',            // 1.5+ Android
-            'dream',            // Pre 1.5 Android
-            'CUPCAKE',            // 1.5+ Android
-            'blackberry9500',    // Storm
-            'blackberry9530',    // Storm
-            'blackberry9520',    // Storm v2
-            'blackberry9550',    // Storm v2
-            'blackberry9800',    // Torch
-            'webOS',            // Palm Pre Experimental
-            'incognito',        // Other iPhone browser
-            'webmate'            // Other iPhone browser
-        ]
-    ]
-];
-
-/**
- * 言語設定
- */
-$config['BcLang'] = [
-    'english' => [
-        'name' => __d('baser', '英語'),
-        'langs' => [
-            'en'
-        ]
-    ]
-];
-
-/**
  * コンテンツ設定
  */
 $config['BcContents'] = [

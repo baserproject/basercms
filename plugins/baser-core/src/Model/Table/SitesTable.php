@@ -15,7 +15,9 @@ use ArrayObject;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\AppTable;
 use BaserCore\Model\Entity\Site;
+use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\ResultSetInterface;
 use Cake\Event\Event;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\UnitTest;
@@ -107,19 +109,14 @@ class SitesTable extends AppTable
     /**
      * 公開されている全てのサイトを取得する
      *
-     * @return array
+     * @return ResultSetInterface
+     * @noTodo
+     * @checked
+     * @unitTest
      */
-    public function getPublishedAll()
+    public function getPublishedAll(): ResultSetInterface
     {
-        $conditions = ['Site.status' => true];
-        $sites = $this->find('all', ['conditions' => $conditions]);
-        $main = $this->getRootMain();
-        if ($sites) {
-            array_unshift($sites, $main);
-        } else {
-            $sites = [$main];
-        }
-        return $sites;
+        return $this->find()->where(['status' => true])->all();
     }
 
     /**
@@ -127,13 +124,18 @@ class SitesTable extends AppTable
      *
      * @param bool $mainSiteId メインサイトID
      * @param array $options
-     *    `excludeIds` 除外するID（初期値：なし）
+     *  - `excludeIds` : 除外するID（初期値：なし）
+     *  - `status` : 有効かどうか（初期値：true）
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getSiteList($mainSiteId = null, $options = [])
     {
         $options = array_merge([
-            'excludeIds' => []
+            'excludeIds' => [],
+            'status' => true
         ], $options);
 
         // EVENT Site.beforeGetSiteList
@@ -144,14 +146,13 @@ class SitesTable extends AppTable
             $options = $event->getResult() === true? $event->getData('options') : $event->getResult();
         }
 
-        $conditions = ['Site.status' => true];
-        if (!is_null($mainSiteId)) {
-            $conditions['Site.main_site_id'] = $mainSiteId;
+        if(!is_null($options['status'])) {
+            $conditions = ['status' => $options['status']];
         }
 
-        $rootMain = [];
-        $excludeKey = false;
-        $includeKey = true;
+        if (!is_null($mainSiteId)) {
+            $conditions['main_site_id'] = $mainSiteId;
+        }
 
         if (isset($options['excludeIds'])) {
             if (!is_array($options['excludeIds'])) {
@@ -162,7 +163,7 @@ class SitesTable extends AppTable
                 unset($options['excludeIds'][$excludeKey]);
             }
             if ($options['excludeIds']) {
-                $conditions[]['NOT']['Site.id'] = $options['excludeIds'];
+                $conditions[]['id NOT IN'] = $options['excludeIds'];
             }
         }
 
@@ -175,68 +176,39 @@ class SitesTable extends AppTable
                 unset($options['includeIds'][$includeKey]);
             }
             if ($options['includeIds']) {
-                $conditions[]['Site.id'] = $options['includeIds'];
+                $conditions[]['id IN'] = $options['includeIds'];
             }
         }
 
-        if ($includeKey !== false && $excludeKey === false && is_null($mainSiteId)) {
-            $rootMainTmp = $this->getRootMain();
-            $rootMain = [$rootMainTmp['Site']['id'] => $rootMainTmp['Site']['display_name']];
-        }
-        return $rootMain + $this->find('list', ['fields' => ['id', 'display_name'], 'conditions' => $conditions]);
+        $this->setDisplayField('display_name');
+        return $this->find('list')->where($conditions)->toArray();
     }
 
     /**
      * メインサイトのデータを取得する
      *
-     * @param mixed $options 取得するフィールド
+     * @param mixed $options
+     *  - `fields` : 取得するフィールド
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getRootMain($options = [])
     {
         $options += [
             'fields' => []
         ];
-        // =============================================================
-        // テストの際、Fixture のロード前に、設定 BcSite を、DBから読む為、
-        // テストデータが利用できないので、テストの際には、直接DBより取得させる
-        // =============================================================
-        if ($this->useDbConfig == 'test') {
-            $SiteConfig = ClassRegistry::init('SiteConfig');
-            $siteConfigs = $SiteConfig->findExpanded();
-        } else {
-            loadSiteConfig();
-            $siteConfigs = Configure::read('BcSite');
-        }
-        $site = ['Site' => [
-            'id' => 0,
-            'main_site_id' => null,
-            'name' => null,
-            'display_name' => $siteConfigs['main_site_display_name'],
-            'title' => $siteConfigs['name'],
-            'alias' => null,
-            'theme' => $siteConfigs['theme'],
-            'status' => !$siteConfigs['maintenance'],
-            'use_subdomain' => false,
-            'domain_type' => false,
-            'relate_main_site' => null,
-            'device' => null,
-            'same_main_url' => false,
-            'auto_redirect' => false,
-            'auto_link' => false,
-            'lang' => null,
-            'created' => null,
-            'modified' => null
-        ]];
+        $site = $this->find()->where(['main_site_id IS' => null])->first()->toArray();
         if ($options['fields']) {
             if (!is_array($options['fields'])) {
                 $options['fields'] = [$options['fields']];
             }
             $siteTmp = [];
             foreach($options['fields'] as $field) {
-                $siteTmp[$field] = $site['Site'][$field];
+                $siteTmp[$field] = $site[$field];
             }
-            $site = ['Site' => $siteTmp];
+            $site = $siteTmp;
         }
         return $site;
     }
@@ -302,13 +274,13 @@ class SitesTable extends AppTable
      *
      * @param $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isMain($id)
     {
-        if ($id == null) {
-            $id = 0;
-        }
-        return (bool)$this->children($id);
+        return is_null($this->find()->where(['id' => $id])->first()->main_site_id);
     }
 
     /**
@@ -316,17 +288,19 @@ class SitesTable extends AppTable
      *
      * @param $id
      * @param array $options
-     * @return array|null
+     * @return ResultSetInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function children($id, $options = [])
     {
-        $options = array_merge([
+        $options = array_merge_recursive([
             'conditions' => [
-                'Site.main_site_id' => $id
-            ],
-            'recursive' => -1
+                'main_site_id' => $id
+            ]
         ], $options);
-        return $this->find('all', $options);
+        return $this->find()->where($options['conditions'])->all();
     }
 
     /**
@@ -335,6 +309,7 @@ class SitesTable extends AppTable
      * @param Event $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
+     * @checked
      */
     public function afterSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
@@ -379,6 +354,7 @@ class SitesTable extends AppTable
      * @param Event $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
+     * @checked
      */
     public function afterDelete(Event $event, EntityInterface $entity, ArrayObject $options)
     {
@@ -414,27 +390,20 @@ class SitesTable extends AppTable
      * プレフィックスを取得する
      *
      * @param mixed $id | $data
-     * @return mixed
+     * @return false|string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getPrefix($id)
     {
-        if (!is_array($id)) {
-            $data = $this->find('first', ['fields' => ['name', 'alias'], 'conditions' => ['Site.id' => $id], 'recursive' => -1]);
-        } else {
-            $data = $id;
+        $site = $this->find()->select(['name', 'alias'])->where(['id' => $id])->first();
+        if(!$site) {
+            return false;
         }
-        if (!$data) {
-            return '';
-        }
-        if (isset($data['Site'])) {
-            $data = $data['Site'];
-        }
-        if (empty($data['name'])) {
-            return '';
-        }
-        $prefix = $data['name'];
-        if ($data['alias']) {
-            $prefix = $data['alias'];
+        $prefix = $site->name;
+        if ($site->alias) {
+            $prefix = $site->alias;
         }
         return $prefix;
     }
@@ -459,83 +428,82 @@ class SitesTable extends AppTable
      *
      * @param string $url
      * @return array|bool|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function findByUrl($url)
     {
         if ($url === false || $url === "") {
             return $this->getRootMain();
         }
+        $url = preg_replace('/^\//', '', $url);
         $params = explode('/', $url);
         if (empty($params[0])) {
             return false;
         }
-        $site = $this->find('first', ['conditions' => [
+        $site = $this->find()->where([
             'or' => [
-                'Site.name' => $params[0],
-                'Site.alias' => $params[0]
+                'name' => $params[0],
+                'alias' => $params[0]
             ]
-        ], 'recursive' => -1]);
+        ])->first();
         if (!$site) {
-            $site = $this->getRootMain();
+            return $this->getRootMain();
+        } else {
+            return $site->toArray();
         }
-        return $site;
     }
 
     /**
      * メインサイトを取得する
      *
      * @param int $id
-     * @return array|null
+     * @return array|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getMain($id)
     {
-        $mainSiteId = $this->field('main_site_id', [
-            'Site.id' => $id
-        ]);
-        if ($mainSiteId == 0) {
+        $currentSite = $this->find()->where(['id' => $id])->first();
+        if(!$currentSite) {
+            return false;
+        }
+        if (is_null($currentSite->main_site_id)) {
             return $this->getRootMain();
         }
-        return $this->find('first', ['conditions' => [
-            'Site.main_site_id' => $mainSiteId
-        ], 'recursive' => -1]);
-    }
-
-    /**
-     * After Find
-     *
-     * @param mixed $results
-     * @param bool $primary
-     * @return mixed
-     */
-    public function afterFind($results, $primary = false)
-    {
-        $results = parent::afterFind($results, $primary = false);
-        $this->dataIter($results, function(&$entity, &$model) {
-            if (isset($entity['Site']['alias']) && $entity['Site']['alias'] === '' && !empty($entity['Site']['name'])) {
-                $entity['Site']['alias'] = $entity['Site']['name'];
-            }
-        });
-        return $results;
+        $mainSite = $this->find()->where([
+            'id' => $currentSite->main_site_id
+        ])->first();
+        if(!$mainSite) {
+            return false;
+        }
+        return $mainSite->toArray();
     }
 
     /**
      * 選択可能なデバイスの一覧を取得する
      *
+     * 現在のサイトとすでに利用されいているデバイスは除外する
+     *
      * @param int $mainSiteId メインサイトID
      * @param int $currentSiteId 現在のサイトID
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getSelectableDevices($mainSiteId, $currentSiteId)
     {
         $agents = Configure::read('BcAgent');
         $devices = ['' => __d('baser', '指定しない')];
-        $selected = $this->find('list', [
-            'fields' => ['id', 'device'],
-            'conditions' => [
-                'Site.main_site_id' => $mainSiteId,
-                'Site.id <>' => $currentSiteId
-            ]
-        ]);
+        $this->setDisplayField('device');
+        $selected = $this->find('list')
+            ->where([
+                'main_site_id' => $mainSiteId,
+                'id <>' => $currentSiteId
+            ])->toArray();
         foreach($agents as $key => $agent) {
             if (in_array($key, $selected)) {
                 continue;
@@ -551,18 +519,20 @@ class SitesTable extends AppTable
      * @param int $mainSiteId メインサイトID
      * @param int $currentSiteId 現在のサイトID
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getSelectableLangs($mainSiteId, $currentSiteId)
     {
         $langs = Configure::read('BcLang');
         $devices = ['' => __d('baser', '指定しない')];
-        $selected = $this->find('list', [
-            'fields' => ['id', 'lang'],
-            'conditions' => [
-                'Site.main_site_id' => $mainSiteId,
-                'Site.id <>' => $currentSiteId
-            ]
-        ]);
+        $this->setDisplayField('lang');
+        $selected = $this->find('list')
+            ->where([
+                'main_site_id' => $mainSiteId,
+                'id <>' => $currentSiteId
+            ])->toArray();
         foreach($langs as $key => $lang) {
             if (in_array($key, $selected)) {
                 continue;
@@ -576,30 +546,32 @@ class SitesTable extends AppTable
      * デバイス設定をリセットする
      *
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function resetDevice()
     {
-        $sites = $this->find('all', ['recursive' => -1]);
+        $sites = $this->find()->all();
         $result = true;
         if ($sites) {
-            $this->getDataSource()->begin();
+            $this->getConnection()->begin();
             foreach($sites as $site) {
-                $site['Site']['device'] = '';
-                $site['Site']['auto_link'] = false;
-                if (!$site['Site']['lang']) {
-                    $site['Site']['same_main_url'] = false;
-                    $site['Site']['auto_redirect'] = false;
+                $site->device = '';
+                $site->auto_link = false;
+                if (!$site->lang) {
+                    $site->same_main_url = false;
+                    $site->auto_redirect = false;
                 }
-                $this->set($site);
-                if (!$this->save()) {
+                if (!$this->save($site)) {
                     $result = false;
                 }
             }
         }
         if (!$result) {
-            $this->getDataSource()->rollback();
+            $this->getConnection()->rollback();
         } else {
-            $this->getDataSource()->commit();
+            $this->getConnection()->commit();
         }
         return $result;
     }
@@ -608,29 +580,31 @@ class SitesTable extends AppTable
      * 言語設定をリセットする
      *
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function resetLang()
     {
-        $sites = $this->find('all', ['recursive' => -1]);
+        $sites = $this->find()->all();
         $result = true;
         if ($sites) {
-            $this->getDataSource()->begin();
+            $this->getConnection()->begin();
             foreach($sites as $site) {
-                $site['Site']['lang'] = '';
-                if (!$site['Site']['device']) {
-                    $site['Site']['same_main_url'] = false;
-                    $site['Site']['auto_redirect'] = false;
+                $site->lang = '';
+                if (!$site->device) {
+                    $site->same_main_url = false;
+                    $site->auto_redirect = false;
                 }
-                $this->set($site);
-                if (!$this->save()) {
+                if (!$this->save($site)) {
                     $result = false;
                 }
             }
         }
         if (!$result) {
-            $this->getDataSource()->rollback();
+            $this->getConnection()->rollback();
         } else {
-            $this->getDataSource()->commit();
+            $this->getConnection()->commit();
         }
         return $result;
     }
@@ -642,6 +616,9 @@ class SitesTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
