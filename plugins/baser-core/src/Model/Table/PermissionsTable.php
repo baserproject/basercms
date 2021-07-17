@@ -108,7 +108,6 @@ class PermissionsTable extends AppTable
      */
     public function validationDefault(Validator $validator): Validator
     {
-        $validator->setProvider('permission', 'BaserCore\Model\Validation\PermissionValidation');
         $validator
             ->scalar('name')
             ->maxLength('name', 255,  __d('baser', '設定名は255文字以内で入力してください。'))
@@ -122,11 +121,7 @@ class PermissionsTable extends AppTable
             ->scalar('url')
             ->maxLength('url', 255, __d('baser', '設定URLは255文字以内で入力してください。'))
             ->notEmptyString('url', __d('baser', '設定URLを入力してください。'))
-            ->requirePresence('user_group_id', true)
-            ->add('url', 'checkUrl', [
-                'rule' => 'checkUrl',
-                'provider' => 'permission',
-                'message' => __d('baser', 'アクセス拒否として設定できるのは認証ページだけです。')]);
+            ->requirePresence('user_group_id', true);
         return $validator;
     }
 

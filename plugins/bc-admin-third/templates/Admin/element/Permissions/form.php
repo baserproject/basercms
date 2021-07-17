@@ -44,7 +44,7 @@ $this->BcBaser->js('admin/permissions/form', false);
 				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
 			</th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
+				<?php echo $this->BcAdminForm->control('name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true, 'placeholder' => 'ユーザー管理']) ?>
 
                 <i class="bca-icon--question-circle btn help bca-help"></i>
                 <div id="helptextName" class="helptext"><?php echo __d('baser', 'ルール名には日本語が利用できます。特定しやすいわかりやすい名称を入力してください。') ?></div>
@@ -57,16 +57,13 @@ $this->BcBaser->js('admin/permissions/form', false);
 				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
 			</th>
 			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcAdminForm->control('url', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
+				<?php echo $this->BcAdminForm->control('url', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true, 'placeholder' => '/baser/admin/baser-core/users/index']) ?>
 
                 <i class="bca-icon--question-circle btn help bca-help"></i>
                 <div id="helptextUrl" class="helptext">
                     <ul>
-						<li><?php echo __d('baser', 'スラッシュから始まるURLを入力してください。<br>（例）/admin/users/index') ?></li>
-                        <?php /*
-						<li><?php echo __d('baser', '管理画面など認証がかかっているURLしか登録できません。') ?></li>
-                        */ ?>
-						<li><?php echo __d('baser', '特定のフォルダ配下に対しアクセスできないようにする場合などにはワイルドカード（*）を利用します。<br>（例）ユーザー管理内のURL全てアクセスさせない場合： /admin/users* ') ?></li>
+						<li><?php echo __d('baser', 'スラッシュから始まるURLを入力してください。') ?></li>
+						<li><?php echo __d('baser', '特定のフォルダ配下に対しアクセスできないようにする場合などにはワイルドカード（*）を利用します。<br>（例）ユーザー管理内のURL全てアクセスさせない場合： <br />/baser/admin/baser-core/users/* ') ?></li>
 					</ul>
                 </div>
                 <?php echo $this->BcAdminForm->error('url') ?>
@@ -78,14 +75,6 @@ $this->BcBaser->js('admin/permissions/form', false);
 			<td class="col-input bca-form-table__input">
 				<?php echo $this->BcAdminForm->control('method', ['type' => 'select', 'options' => $methodList]) ?>
 				<?php echo $this->BcForm->error('method') ?>
-			</td>
-		</tr>
-
-		<tr>
-			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Permission.auth', __d('baser', 'アクセス')) ?></th>
-			<td class="col-input bca-form-table__input">
-				<?php echo $this->BcAdminForm->control('auth', ['type' => 'radio', 'options' => $this->BcText->booleanAllowList(__d('baser', 'アクセス'))]) ?>
-				<?php echo $this->BcForm->error('auth') ?>
 			</td>
 		</tr>
 		<tr>

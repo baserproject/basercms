@@ -168,7 +168,15 @@ class PermissionsController extends BcAdminAppController
 
 	/**
 	 * [ADMIN] 登録処理
-	 *
+     * 
+     * @param PermissionsServiceInterface $userManage
+     * @param UserGroupsServiceInterface $userGroups
+     * @param UserGroupsServiceInterface $userGroups
+     * @param int $userGroupId
+     * 
+     * @checked
+     * @noTodo
+     * @unitTest
 	 * @return void
 	 */
 	public function add(PermissionsServiceInterface $permissions, UserGroupsServiceInterface $userGroups, $userGroupId)
@@ -177,10 +185,11 @@ class PermissionsController extends BcAdminAppController
 
         if ($this->request->is('post')) {
             $permission = $permissions->set($this->request->withData('user_group_id', $userGroup->id)->getData());
+            $permission->auth = true;
             if (empty($permission->getErrors()) === true) {
                 $permissions->create($permission);
                 $this->BcMessage->setSuccess(sprintf(__d('baser', '新規アクセス制限設定「%s」を追加しました。'), $permission->name));
-                $this->redirect(['action' => 'index', $userGroupId]);
+                return $this->redirect(['action' => 'index', $userGroupId]);
             }
             $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
         } else {
@@ -192,11 +201,6 @@ class PermissionsController extends BcAdminAppController
         $this->set('methodList', $permissions->getMethodList());
         $this->setHelp('permissions_form');
         $this->setTitle(sprintf(__d('baser', '%s｜新規アクセス制限設定登録'), $userGroup['UserGroup']['title']));
-
-        // TODO 現在 admin 固定、今後、mypage 等にも対応する
-        // $permissionAuthPrefix = 'admin';
-        // $this->request = $this->request->withData('Permission.url', preg_replace('/^(\/' . $permissionAuthPrefix . '\/|\/)/', '', $this->request->getData('Permission.url')));
-        // $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 	}
 
 	/**

@@ -1,44 +1,47 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Controller
- * @since           baserCMS v 4.0.9
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('PermissionsController', 'Controller');
+namespace BaserCore\Test\TestCase\Controller\Admin;
+
+use BaserCore\TestSuite\BcTestCase;
+use Cake\TestSuite\IntegrationTestTrait;
+
 
 /**
- * Class PermissionsControllerTest
- *
- * @package Baser.Test.Case.Controller
- * @property  PermissionsController $PermissionsController
+ * BaserCore\Controller\Admin\PermissionsController Test Case
  */
 class PermissionsControllerTest extends BcTestCase
 {
-
+    use IntegrationTestTrait;
+    
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    
     /**
      * set up
-     *
-     * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+        $request = $this->getRequest();
+        $request = $this->loginAdmin($request);
     }
 
     /**
-     * tearDown
-     *
-     * @return void
+     * Tear down
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
@@ -60,11 +63,24 @@ class PermissionsControllerTest extends BcTestCase
     }
 
     /**
-     * [ADMIN] 登録処理
+     * Test add method
+     *
+     * @return void
      */
-    public function testAdmin_add()
+    public function testAdd()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = [
+            'name' => 'テストルール名',
+            'url' => '/baser/admin/baser-core/users/index/?test',
+            'method' => '*',
+            'status' => 1,
+        ];
+        $this->post('/baser/admin/baser-core/permissions/add/2', $data);
+        $permissions = $this->getTableLocator()->get('Permissions');
+        $permission = $permissions->find()->order(['id' => 'DESC'])->first();
+        $this->assertEquals('テストルール名', $permission->name);
     }
 
     /**
