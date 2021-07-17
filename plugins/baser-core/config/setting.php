@@ -109,17 +109,17 @@ return [
                         ],
                     ]
                 ],
-                //			'Sites' => [
-                //				'title' => __d('baser', 'サブサイト管理'),
-                //				'type' => 'system',
-                //				'menus' => [
-                //					'Sites' => [
-                //						'title' => __d('baser', 'サブサイト'),
-                //						'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'sites', 'action' => 'index'],
-                //						'currentRegex' => '/\/sites\/.+?/s'
-                //					],
-                //				]
-                //			],
+                'Sites' => [
+                    'title' => __d('baser', 'サブサイト管理'),
+                    'type' => 'system',
+                    'menus' => [
+                        'Sites' => [
+                            'title' => __d('baser', 'サブサイト'),
+                            'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'sites', 'action' => 'index'],
+                            'currentRegex' => '/\/sites\/.+?/s'
+                        ],
+                    ]
+                ],
                 //			'Theme' => [
                 //				'title' => __d('baser', 'テーマ管理'),
                 //				'type' => 'system',
