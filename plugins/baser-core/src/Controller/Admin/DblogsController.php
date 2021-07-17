@@ -40,7 +40,7 @@ class DblogsController extends BcAdminAppController
     public function index(DblogsServiceInterface $DblogsService, UserManageServiceInterface $userManage)
     {
         $this->setViewConditions('Dblog', ['default' => ['query' => [
-            'num' => $userManage->getSiteCOnfig('admin_list_num'),
+            'num' => $userManage->getSiteConfig('admin_list_num'),
             'sort' => 'id',
             'direction' => 'desc',
         ]]]);
