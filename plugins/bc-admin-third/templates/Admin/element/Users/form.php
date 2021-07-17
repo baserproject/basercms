@@ -87,7 +87,7 @@ $userGroups = $this->BcAdminUser->getUserGroupList();
         class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('user_group_id', __d('baser', 'グループ')) ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
       <td class="col-input bca-form-table__input">
-        <?php if ($this->BcAdminUser->isEditable($user->id)): ?>
+        <?php if ($user->id === null || $this->BcAdminUser->isEditable($user->id)): ?>
           <?php echo $this->BcAdminForm->control('user_groups._ids', ['type' => 'multiCheckbox', 'options' => $userGroups, 'error' => false]); ?>
           <i class="bca-icon--question-circle btn help bca-help"></i>
           <div id="helptextUserGroupId"
