@@ -75,6 +75,12 @@ cd /vagrant/docker
 docker exec -it bc5-php /bin/bash
 ```
 
+## データベースのマイグレーションを実行
+次のコマンドを実行してデータベースを初期化します。
+```shell script
+bin/cake migrations migrate --plugin BaserCore
+bin/cake migrations seed --plugin BaserCore
+```
 　
 ## データベース情報
 | name | value |
