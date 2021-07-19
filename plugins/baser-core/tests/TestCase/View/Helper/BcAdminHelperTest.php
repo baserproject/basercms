@@ -31,6 +31,7 @@ class BcAdminHelperTest extends BcTestCase
      */
     public $fixtures = [
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.Dblogs',
     ];
 
     /**
@@ -366,5 +367,14 @@ class BcAdminHelperTest extends BcTestCase
             ['1', 1, true, '管理ユーザーのシステム管理者チェックが正しくありません'],
             ['1', 2, false, '運営ユーザーのシステム管理者チェックが正しくありません'],
         ];
+    }
+
+    /**
+     * Test getDblogs
+     */
+    public function testGetDblogs()
+    {
+        $dblogs = $this->BcAdmin->getDblogs(2);
+        $this->assertEquals(2, count($dblogs));
     }
 }

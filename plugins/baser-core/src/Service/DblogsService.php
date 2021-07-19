@@ -12,6 +12,7 @@
 namespace BaserCore\Service;
 
 use Cake\ORM\TableRegistry;
+use Cake\ORM\Query;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -40,12 +41,12 @@ class DblogsService implements DblogsServiceInterface
     /**
      * DBログ登録
      * @param array $data
-     * @return \Cake\Datasource\EntityInterface
+     * @return object
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function create(array $data)
+    public function create(array $data): object
     {
         $dblog = $this->Dblogs->newEntity($data);
         $savedDblog = $this->Dblogs->save($dblog);
@@ -55,4 +56,57 @@ class DblogsService implements DblogsServiceInterface
         return $savedDblog;
     }
 
+    /**
+     * DBログ一覧を取得
+     * @param array $queryParams
+     * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getIndex(array $queryParams): Query
+    {
+        $options = [];
+        $query = $this->Dblogs
+            ->find('all', $options)
+            ->contain('Users');
+
+        if (!empty($queryParams['message'])) {
+            $query->where(['message LIKE' => '%' . $queryParams['message'] . '%']);
+        }
+        if (!empty($queryParams['user_id'])) {
+            $query->where(['user_id' => $queryParams['user_id']]);
+        }
+
+        return $query;
+    }
+
+    /**
+     * 最新のDBログ一覧を取得
+     * @param int $limit
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getDblogs(int $limit): object
+    {
+        return $this->Dblogs
+            ->find('all')
+            ->contain('Users')
+            ->order(['Dblogs.id' => 'DESC'])
+            ->limit($limit)
+            ->all();
+    }
+
+    /**
+     * DBログをすべて削除
+     * @return int
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function deleteAll(): int
+    {
+        return $this->Dblogs->deleteAll(['1']);
+    }
 }

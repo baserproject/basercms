@@ -29,10 +29,16 @@ class DblogsFixture extends TestFixture
     public $records = [
         [
             'id' => 1,
-            'name' => 'dblogs test message1',
+            'message' => 'dblogs test message1',
+            'user_id' => '1',
         ], [
             'id' => 2,
-            'name' => 'dblogs test message2',
+            'message' => 'dblogs test message2',
+            'user_id' => '2',
+        ], [
+            'id' => 3,
+            'message' => 'dblogs test message3',
+            'user_id' => '3',
         ],
     ];
 }
