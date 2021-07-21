@@ -304,7 +304,9 @@ class BlogController extends BlogAppController
 
 			/* 投稿者別記事一覧 */
 			case 'author':
-
+				if(count($pass) > 2) {
+					$this->notFound();
+				}
 				$author = isset($pass[1])? $pass[1] : '';
 				$existsAuthor = $this->User->hasAny(['name' => $author]);
 				if ($existsAuthor === false) {
@@ -323,7 +325,9 @@ class BlogController extends BlogAppController
 
 			/* タグ別記事一覧 */
 			case 'tag':
-
+				if(count($pass) > 2) {
+					$this->notFound();
+				}
 				$tag = isset($pass[1])? $pass[1] : '';
 				$existsTag = $this->BlogTag->hasAny(['name' => urldecode($tag)]);
 				if (empty($this->blogContent['BlogContent']['tag_use']) || $existsTag === false) {
@@ -339,7 +343,9 @@ class BlogController extends BlogAppController
 
 			/* 月別アーカイブ一覧 */
 			case 'date':
-
+				if(count($pass) > 4) {
+					$this->notFound();
+				}
 				$year = $month = $day = null;
 				if (isset($pass[1]) && preg_match('/^\d{4}$/', $pass[1])) {
 					$year = $pass[1];
@@ -375,7 +381,9 @@ class BlogController extends BlogAppController
 
 			/* 単ページ */
 			default:
-
+				if(count($pass) > 1) {
+					$this->notFound();
+				}
 				if (!empty($pass[0])) {
 					$id = $pass[0];
 				}

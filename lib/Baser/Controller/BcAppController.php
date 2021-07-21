@@ -179,6 +179,7 @@ class BcAppController extends Controller
 		if (isConsole()) {
 			unset($this->components['Session']);
 		}
+
 		// テンプレートの拡張子
 		$this->ext = Configure::read('BcApp.templateExt');
 		$isRequestView = $request->is('requestview');
@@ -273,6 +274,12 @@ class BcAppController extends Controller
 	public function beforeFilter()
 	{
 		parent::beforeFilter();
+
+		// index.php をつけたURLの場合、base の値が正常でなくなり、
+		// 内部リンクが影響を受けておかしくなってしまうため強制的に Not Found とする
+		if(preg_match('/\/index\.php\//', $this->request->base)) {
+			$this->notFound();
+		}
 
 		$isRequestView = $this->request->is('requestview');
 		$isUpdate = $this->request->is('update');
