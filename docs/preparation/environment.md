@@ -81,6 +81,8 @@ docker exec -it bc5-php /bin/bash
 bin/cake migrations migrate --plugin BaserCore
 bin/cake migrations seed --plugin BaserCore
 ```
+詳しくは[データベースにおける注意点](https://github.com/baserproject/ucmitz/blob/dev/docs/development/migration_point/database.md)を参照してください。
+
 　
 ## データベース情報
 | name | value |
