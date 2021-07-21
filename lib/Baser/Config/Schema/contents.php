@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ContentsSchema extends CakeSchema {
 
 	public $file = 'contents.php';
@@ -14,11 +14,11 @@ class ContentsSchema extends CakeSchema {
 
 	public $contents = [
 		'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'unsigned' => false, 'key' => 'primary'],
-		'name' => ['type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'],
-		'plugin' => ['type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'],
-		'type' => ['type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'],
+		'name' => ['type' => 'text', 'null' => true, 'default' => null],
+		'plugin' => ['type' => 'string', 'null' => true, 'default' => null],
+		'type' => ['type' => 'string', 'null' => true, 'default' => null],
 		'entity_id' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8, 'unsigned' => false],
-		'url' => ['type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'],
+		'url' => ['type' => 'text', 'null' => true, 'default' => null],
 		'site_id' => ['type' => 'integer', 'null' => true, 'default' => 0, 'length' => 8, 'unsigned' => false],
 		'alias_id' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8, 'unsigned' => false],
 		'main_site_content_id' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8, 'unsigned' => false],
@@ -26,11 +26,11 @@ class ContentsSchema extends CakeSchema {
 		'lft' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8, 'unsigned' => false],
 		'rght' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8, 'unsigned' => false],
 		'level' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8, 'unsigned' => false],
-		'title' => ['type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'],
-		'description' => ['type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'],
-		'eyecatch' => ['type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'],
+		'title' => ['type' => 'string', 'null' => true, 'default' => null],
+		'description' => ['type' => 'text', 'null' => true, 'default' => null],
+		'eyecatch' => ['type' => 'string', 'null' => true, 'default' => null],
 		'author_id' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8, 'unsigned' => false],
-		'layout_template' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'],
+		'layout_template' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 50],
 		'status' => ['type' => 'boolean', 'null' => true, 'default' => null],
 		'publish_begin' => ['type' => 'datetime', 'null' => true, 'default' => null],
 		'publish_end' => ['type' => 'datetime', 'null' => true, 'default' => null],
@@ -50,7 +50,6 @@ class ContentsSchema extends CakeSchema {
 		'indexes' => [
 			'PRIMARY' => ['column' => 'id', 'unique' => 1]
 		],
-		'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB']
 	];
 
 }
