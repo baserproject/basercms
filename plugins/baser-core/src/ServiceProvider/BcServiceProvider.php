@@ -34,6 +34,8 @@ use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Service\PluginsService;
 use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Service\DblogsService;
+use BaserCore\Service\Admin\ContentManageServiceInterface;
+use BaserCore\Service\Admin\ContentManageService;
 use BaserCore\Service\Admin\PluginManageServiceInterface;
 use Cake\Core\ServiceProvider;
 use BaserCore\Annotation\UnitTest;
@@ -64,6 +66,7 @@ class BcServiceProvider extends ServiceProvider
         SiteConfigsServiceInterface::class,
         PermissionsServiceInterface::class,
         DblogsServiceInterface::class,
+        ContentManageServiceInterface::class,
     ];
 
     /**
@@ -95,6 +98,9 @@ class BcServiceProvider extends ServiceProvider
         $container->add(PermissionsServiceInterface::class, PermissionsService::class);
         // Dblogsサービス
         $container->add(DblogsServiceInterface::class, DblogsService::class, true);
+        // Contentsサービス
+        $container->add(ContentManageServiceInterface::class, ContentManageService::class, true);
+        
     }
 
 }

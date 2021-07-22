@@ -1,18 +1,18 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Controller
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('BcContentsController', 'Controller');
+namespace BaserCore\Controller\Admin;
+
+use BaserCore\Service\Admin\ContentManageServiceInterface;
+use Cake\Event\EventInterface;
 
 /**
  * Class ContentsController
@@ -29,7 +29,7 @@ App::uses('BcContentsController', 'Controller');
  * @property User $User
  * @property BcContentsComponent $BcContents
  */
-class ContentsController extends AppController
+class ContentsController extends \BaserCore\Controller\Admin\BcAdminAppController
 {
 
     /**
@@ -43,13 +43,21 @@ class ContentsController extends AppController
      * コンポーネント
      *
      * @var array
+     * 
      */
-    public $components = ['Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => ['useForm' => true]];
+    // TODO 未実装のためコメントアウト
+    /* >>>
+    public $components = ['BcContents' => ['useForm' => true]];
+    <<< */
 
-    public function beforeFilter()
+    public function beforeFilter(EventInterface $event):void
     {
-        parent::beforeFilter();
+        parent::beforeFilter($event);
+       // TODO 未実装のためコメントアウト
+        /* >>>
         $this->BcAuth->allow('view');
+        }
+        <<< */
     }
 
     /**
@@ -837,22 +845,10 @@ class ContentsController extends AppController
     /**
      * コンテンツ情報を取得する
      */
-    public function admin_ajax_contents_info()
+    public function ajax_contents_info(ContentManageServiceInterface $contentManage)
     {
-        $this->autoLayout = false;
-        $sites = $this->Site->getPublishedAll();
-        foreach($sites as $key => $site) {
-            $sites[$key]['published'] = $this->Content->find(
-                'count',
-                ['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => true]]
-            );
-            $sites[$key]['unpublished'] = $this->Content->find(
-                'count',
-                ['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => false]]
-            );
-            $sites[$key]['total'] = $sites[$key]['published'] + $sites[$key]['unpublished'];
-        }
-        $this->set('sites', $sites);
+        $this->autoLayout = false;   
+        $this->set('sites', $contentManage->getContensInfo());
     }
 
     public function admin_ajax_get_full_url($id)
