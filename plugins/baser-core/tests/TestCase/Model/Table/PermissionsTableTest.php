@@ -128,8 +128,7 @@ class PermissionsTableTest extends BcTestCase
                     'name' => ['maxLength' => '設定名は255文字以内で入力してください。'],
                     'user_group_id' => ['_required' => 'This field is required'],
                     'url' => [
-                        'maxLength' => '設定URLは255文字以内で入力してください。',
-                        'checkUrl' => 'アクセス拒否として設定できるのは認証ページだけです。'
+                        'maxLength' => '設定URLは255文字以内で入力してください。'
                     ],
                 ]
             ],

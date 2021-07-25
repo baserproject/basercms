@@ -168,12 +168,12 @@ class PermissionsController extends BcAdminAppController
 
 	/**
 	 * [ADMIN] 登録処理
-     * 
+     *
      * @param PermissionsServiceInterface $userManage
      * @param UserGroupsServiceInterface $userGroups
      * @param UserGroupsServiceInterface $userGroups
      * @param int $userGroupId
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -181,13 +181,10 @@ class PermissionsController extends BcAdminAppController
 	 */
 	public function add(PermissionsServiceInterface $permissions, UserGroupsServiceInterface $userGroups, $userGroupId)
 	{
-		$userGroup = $userGroups->get($userGroupId);
-
+		$currentUserGroup = $userGroups->get($userGroupId);
         if ($this->request->is('post')) {
-            $permission = $permissions->set($this->request->withData('user_group_id', $userGroup->id)->getData());
-            $permission->auth = true;
+            $permission = $permissions->create($this->request->withData('user_group_id', $currentUserGroup->id)->getData());
             if (empty($permission->getErrors()) === true) {
-                $permissions->create($permission);
                 $this->BcMessage->setSuccess(sprintf(__d('baser', '新規アクセス制限設定「%s」を追加しました。'), $permission->name));
                 return $this->redirect(['action' => 'index', $userGroupId]);
             }
@@ -195,12 +192,8 @@ class PermissionsController extends BcAdminAppController
         } else {
             $permission = $permissions->getNew($userGroupId);
         }
-
         $this->set('permission', $permission);
-        $this->set('userGroup', $userGroup);
-        $this->set('methodList', $permissions->getMethodList());
-        $this->setHelp('permissions_form');
-        $this->setTitle(sprintf(__d('baser', '%s｜新規アクセス制限設定登録'), $userGroup->title));
+        $this->set('currentUserGroup', $currentUserGroup);
 	}
 
 	/**

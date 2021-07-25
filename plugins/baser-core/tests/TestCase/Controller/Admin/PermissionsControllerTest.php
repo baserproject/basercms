@@ -21,13 +21,19 @@ use Cake\TestSuite\IntegrationTestTrait;
 class PermissionsControllerTest extends BcTestCase
 {
     use IntegrationTestTrait;
-    
+
     /**
      * Fixtures
      *
      * @var array
      */
-    
+    public $fixtures = [
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.Permissions',
+    ];
+
     /**
      * set up
      */
@@ -35,7 +41,7 @@ class PermissionsControllerTest extends BcTestCase
     {
         parent::setUp();
         $request = $this->getRequest();
-        $request = $this->loginAdmin($request);
+        $this->loginAdmin($request);
     }
 
     /**
@@ -76,6 +82,7 @@ class PermissionsControllerTest extends BcTestCase
             'url' => '/baser/admin/baser-core/users/index/?test',
             'method' => '*',
             'status' => 1,
+            'auth' => true
         ];
         $this->post('/baser/admin/baser-core/permissions/add/2', $data);
         $permissions = $this->getTableLocator()->get('Permissions');

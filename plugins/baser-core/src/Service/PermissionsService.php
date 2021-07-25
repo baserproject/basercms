@@ -55,9 +55,10 @@ class PermissionsService implements PermissionsServiceInterface
     public function getNew($userGroupId): EntityInterface
     {
         return $this->Permissions->newEntity([
+                'auth' => true,
                 'user_group_id' => $userGroupId,
                 'status' => 1,
-            ], 
+            ],
             [
                 'validate' => 'plain'
             ]

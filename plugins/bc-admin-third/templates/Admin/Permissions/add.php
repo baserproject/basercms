@@ -10,19 +10,22 @@
  */
 
 use BaserCore\View\{AppView as AppViewAlias};
-use BaserCore\Model\Entity\EntityInterface;
+use BaserCore\Model\Entity\Permission;
 
 /**
  * Permissions Add
  * @var AppViewAlias $this
  * @var Permission $permission
+ * @var array $currentUserGroup
  */
+$this->BcAdmin->setHelp('permissions_form');
+$this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜新規アクセス制限設定登録'), $currentUserGroup->title));
 ?>
 
 
 <?= $this->BcAdminForm->create($permission, ['novalidate' => true]) ?>
 
-<?php $this->BcBaser->element('Permissions/form') ?>
+<?php $this->BcBaser->element('Permissions/form', ['currentUserGroup' => $currentUserGroup]) ?>
 
 <div class="submit section bca-actions">
     <div class="bca-actions__main">
