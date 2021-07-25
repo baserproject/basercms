@@ -246,7 +246,7 @@ class UsersControllerTest extends BcTestCase
         $this->post('/baser/admin/baser-core/users/login');
         // 代理先 id:2 (operator)
         $this->get('/baser/admin/baser-core/users/login_agent/2');
-        $this->assertSession($request->getAttribute('authentication')->getIdentity()->getOriginalData(), 'AuthAgent.User');
+        $this->assertEquals(1, $_SESSION['AuthAgent']['User']->id);
         $this->assertRedirect('/baser/admin');
     }
 

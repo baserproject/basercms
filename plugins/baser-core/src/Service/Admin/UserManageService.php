@@ -70,6 +70,7 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
      */
     public function isSelfUpdate(?int $id)
     {
+        // TODO PermissionのServiceかModelに置き換えるべき
         $loginUser = BcUtil::loginUser();
         return (!empty($id) && !empty($loginUser->id) && $loginUser->id === $id);
     }
@@ -85,6 +86,7 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
      */
     public function isEditable(?int $id)
     {
+        // TODO PermissionのServiceかModelに置き換えるべき
         $user = BcUtil::loginUser();
         if (empty($id) || empty($user)) {
             return false;
@@ -95,7 +97,7 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
 
     /**
      * 削除できるかどうか
-     * 管理者であること、また、自身は削除できない
+     * 自身は削除できない
      * @param int $id
      * @return false
      * @checked
@@ -108,7 +110,7 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
         if (empty($id) || empty($user)) {
             return false;
         }
-        return ($user->isAdmin() && !$this->isSelfUpdate($id));
+        return !$this->isSelfUpdate($id);
     }
 
     /**
@@ -358,5 +360,31 @@ class UserManageService extends UsersService implements UserManageServiceInterfa
         $session->delete('AuthAgent');
         return $redirectUrl;
     }
-
+    
+    /**
+     * ログイン情報をリロードする
+     *
+     * @param ServerRequest $request
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function reload(ServerRequest $request)
+    {
+        $prefix = $request->getParam('prefix');
+        $sessionUser = BcUtil::loginUser($prefix);
+        if ($sessionUser === null) {
+            return true;
+        }
+        try {
+            $user = $this->get($sessionUser->id);
+            $session = $request->getSession();
+            $sessionKey = Configure::read('BcPrefixAuth.' . $prefix . '.sessionKey');
+            $session->write($sessionKey, $user);
+        } catch (Exception $e) {
+            return false;
+        }
+        return true;
+    }
 }
