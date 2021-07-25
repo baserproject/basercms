@@ -11,9 +11,11 @@
 
 namespace BaserCore\Test\TestCase\Model\Table;
 
-use BaserCore\Model\Table\PermissionsTable;
-use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Model\Entity\Permission;
+use Cake\ORM\Query;
 use Cake\Validation\Validator;
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Model\Table\PermissionsTable;
 
 /**
  * BaserCore\Model\Table\PermissionsTable Test Case
@@ -37,7 +39,9 @@ class PermissionsTableTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.Permissions',
+        'plugin.BaserCore.Users',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
         // basercms4系
         // 'baser.Default.Page',
         // 'baser.Model.Permission.PermissionPermissionModel',
@@ -333,7 +337,6 @@ class PermissionsTableTest extends BcTestCase
      */
     public function testCheck($url, $userGroupId, $expected, $message = null)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Permissions->check($url, $userGroupId);
         $this->assertEquals($expected, $result, $message);
     }
@@ -343,11 +346,11 @@ class PermissionsTableTest extends BcTestCase
         return [
             ['hoge', 1, true, 'システム管理者は権限をもっています'],
             ['hoge', 2, true, 'サイト運営者は権限をもっています'],
-            ['/admin/*', 1, true, 'サイト運営者は権限をもっています'],
-            ['/admin/*', 2, false, 'サイト運営者は権限をもっていません'],
-            ['/admin/', 2, true, 'サイト運営者は権限をもっています'],
-            ['/admin/dashboard', 2, false, 'サイト運営者は権限をもっていません'],
-            ['/admin/dashboard/', 2, true, 'サイト運営者は権限をもっています'],
+            ['/baser/admin/*', 1, true, 'サイト運営者は権限をもっています'],
+            ['/baser/admin/*', 2, false, 'サイト運営者は権限をもっていません'],
+            ['/baser/admin/', 2, true, 'サイト運営者は権限をもっています'],
+            ['/baser/admin/dashboard', 2, false, 'サイト運営者は権限をもっていません'],
+            ['/baser/admin/dashboard/', 2, true, 'サイト運営者は権限をもっています'],
         ];
     }
 
@@ -397,11 +400,25 @@ class PermissionsTableTest extends BcTestCase
 
     /**
      * 権限チェックの準備をする
+     * @param int $userGroupId
+     * @param array $expected
+     * @return void
+     * @dataProvider setCheckDataProvider
      */
-    public function testSetCheck()
+    public function testSetCheck($userGroupId, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->Permissions->setCheck($userGroupId);
+        $result = $this->Permissions->permissionsTmp;
+        $this->assertEquals($expected, $result->count());
     }
+    public function setCheckDataProvider()
+    {
+        return [
+            [2, 15],
+            [100, 0]
+        ];
+    }
+
 
     /**
      * 権限チェック対象を追加する
@@ -409,6 +426,8 @@ class PermissionsTableTest extends BcTestCase
     public function testAddCheck()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loginAdmin($this->getRequest());
+        $this->Permissions->addCheck("/baser/admin/*", true);
     }
 
 
