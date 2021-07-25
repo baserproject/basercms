@@ -232,6 +232,9 @@ class PermissionsTable extends AppTable
      * @param array $url
      * @param string $userGroupId
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function check($url, $userGroupId)
     {
@@ -243,20 +246,20 @@ class PermissionsTable extends AppTable
         if ($url != '/') {
             $url = preg_replace('/^\//is', '', $url);
         }
-        $adminPrefix = Configure::read('Routing.prefixes.0');
-        $url = preg_replace("/^{$adminPrefix}\//", 'admin/', $url);
+        $adminPrefix = str_replace('/', '\/',  substr(BcUtil::getPrefix(), 1));
+        $url = preg_replace("/^{$adminPrefix}\//", 'baser/admin/', $url);
         // ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
         $allows = [
-            '/^admin$/',
-            '/^admin\/$/',
-            '/^admin\/dashboard\/.*?/',
-            '/^admin\/dblogs\/.*?/',
-            '/^admin\/users\/logout$/',
-            '/^admin\/user_groups\/set_default_favorites$/'
+            '/^baser\/admin$/',
+            '/^baser\/admin\/$/',
+            '/^baser\/admin\/dashboard\/.*?/',
+            '/^baser\/admin\/dblogs\/.*?/',
+            '/^baser\/admin\/users\/logout$/',
+            '/^baser\/admin\/user_groups\/set_default_favorites$/'
         ];
         $sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
         if (!empty($_SESSION['Auth'][$sessionKey]['id'])) {
-            $allows[] = '/^admin\/users\/edit\/' . $_SESSION['Auth'][$sessionKey]['id'] . '$/';
+            $allows[] = '/^baser\/admin\/users\/edit\/' . $_SESSION['Auth'][$sessionKey]['id'] . '$/';
         }
         foreach($allows as $allow) {
             if (preg_match($allow, $url)) {
@@ -265,20 +268,20 @@ class PermissionsTable extends AppTable
         }
         $ret = true;
         foreach($permissions as $permission) {
-            if (!$permission['Permission']['status']) {
+            if (!$permission->status) {
                 continue;
             }
-            if ($permission['Permission']['url'] != '/') {
-                $pattern = preg_replace('/^\//is', '', $permission['Permission']['url']);
+            if ($permission->url != '/') {
+                $pattern = preg_replace('/^\//is', '', $permission->url);
             } else {
-                $pattern = $permission['Permission']['url'];
+                $pattern = $permission->url;
             }
             $pattern = addslashes($pattern);
             $pattern = str_replace('/', '\/', $pattern);
             $pattern = str_replace('*', '.*?', $pattern);
             $pattern = '/^' . str_replace('\/.*?', '(|\/.*?)', $pattern) . '$/is';
             if (preg_match($pattern, $url)) {
-                $ret = $permission['Permission']['auth'];
+                $ret = $permission->auth;
             }
         }
         return (boolean)$ret;
@@ -330,22 +333,17 @@ class PermissionsTable extends AppTable
      * 権限チェックの準備をする
      *
      * @param $userGroupId
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function setCheck($userGroupId)
     {
         if ($this->permissionsTmp === -1) {
-            $conditions = ['Permission.user_group_id' => $userGroupId];
-            $permissions = $this->find('all', [
-                'fields' => ['url', 'auth', 'status'],
-                'conditions' => $conditions,
-                'order' => 'sort',
-                'recursive' => -1
-            ]);
-            if ($permissions) {
-                $this->permissionsTmp = $permissions;
-            } else {
-                $this->permissionsTmp = [];
-            }
+            $this->permissionsTmp = $this->find('all')
+                ->select(['url', 'auth', 'status'])
+                ->where(['Permissions.user_group_id' => $userGroupId])
+                ->order('sort');
         }
     }
 
@@ -354,10 +352,11 @@ class PermissionsTable extends AppTable
      *
      * @param string $url
      * @param bool $auth
+     * @noTodo
      */
     public function addCheck($url, $auth)
     {
-        $this->setCheck(BcUtil::loginUser('admin')['user_group_id']);
+        $this->setCheck(BcUtil::loginUser('Admin')->user_groups[0]->id);
         $this->permissionsTmp[] = [
             'Permission' => [
                 'url' => $url,
