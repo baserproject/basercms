@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 
 /**
@@ -23,9 +24,9 @@ interface DblogsServiceInterface
     /**
      * 新規登録する
      * @param array $data
-     * @return object
+     * @return EntityInterface
      */
-    public function create(array $data): object;
+    public function create(string $message): EntityInterface;
 
     /**
      * DBログ一覧を取得

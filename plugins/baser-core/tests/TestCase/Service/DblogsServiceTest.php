@@ -11,12 +11,14 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
-use BaserCore\Service\DblogsService;
 use BaserCore\Model\Table\DblogsTable;
+use BaserCore\Service\DblogsService;
 use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class DblogsServiceTest
+ * @property DblogsService $DblogsService
+ * @property DblogsTable $Dblogs
  */
 class DblogsServiceTest extends BcTestCase
 {
@@ -60,9 +62,8 @@ class DblogsServiceTest extends BcTestCase
      */
     public function testCreate()
     {
-        $dblog = $this->DblogsService->create([
-            'message' => 'Test Message',
-        ]);
+        $this->getRequest();
+        $dblog = $this->DblogsService->create('Test Message');
         $savedDblog = $this->Dblogs->get($dblog->id);
         $this->assertEquals('Test Message', $savedDblog->message);
     }

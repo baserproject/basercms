@@ -11,12 +11,15 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Utility\BcUtil;
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\TableRegistry;
 use Cake\ORM\Query;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Error\BcException;
+use Cake\Routing\Router;
 
 /**
  * Class DblogsService
@@ -41,13 +44,24 @@ class DblogsService implements DblogsServiceInterface
     /**
      * DBログ登録
      * @param array $data
-     * @return object
+     * @return EntityInterface
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function create(array $data): object
+    public function create(string $message): EntityInterface
     {
+        $request = Router::getRequest();
+        $data = [
+            'message' => $message,
+            'controller' => $request->getParam('controller'),
+            'action' => $request->getParam('action')
+        ];
+        // TODO フロントでのログイン対応のためBcUtilではなくBcAuthComponentを使用する
+        $user = BcUtil::loginUser();
+        if ($user) {
+            $data['user_id'] = $user->id;
+        }
         $dblog = $this->Dblogs->newEntity($data);
         $savedDblog = $this->Dblogs->save($dblog);
         if (!$savedDblog) {
@@ -109,4 +123,5 @@ class DblogsService implements DblogsServiceInterface
     {
         return $this->Dblogs->deleteAll(['1']);
     }
+
 }

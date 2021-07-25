@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Controller\Component;
 
+use BaserCore\Model\Table\DblogsTable;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Controller\Controller;
 use Cake\Controller\ComponentRegistry;
@@ -24,10 +25,6 @@ use BaserCore\Controller\Component\BcMessageComponent;
  */
 class BcMessageTestController extends Controller
 {
-    /**
-     * @var BaserCore\Controller\Component\BcMessageComponent;
-     */
-
     public function initialize(): void
     {
         parent::initialize();
@@ -44,11 +41,21 @@ class BcMessageComponentTest extends BcTestCase
 {
 
     /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BaserCore.Dblogs',
+    ];
+
+    /**
      * set up
      */
     public function setUp(): void
     {
         parent::setUp();
+        $this->getRequest();
         $this->Controller = new BcMessageTestController();
         $this->ComponentRegistry = new ComponentRegistry($this->Controller);
         $this->BcMessage = new BcMessageComponent($this->ComponentRegistry);
@@ -80,12 +87,19 @@ class BcMessageComponentTest extends BcTestCase
         $this->BcMessage->set('test');
         $this->assertEquals(2, count($_SESSION['Flash']['flash']));
         $_SESSION['Flash'] = null;
+
         // alert message
-        $a = $this->BcMessage->set('test', true);
+        $this->BcMessage->set('test', true);
         $this->assertEquals('alert-message', $_SESSION['Flash']['flash'][0]['params']['class']);
         $_SESSION['Flash'] = null;
-        // TODO:set db log
-        /* @var Dblog $dbLogModel */
+
+        // save db log
+        /* @var DblogsTable $dblogs */
+        $this->BcMessage->set('test', true, true);
+        $dblogs = $this->getTableLocator()->get('BaserCore.Dblogs');
+        $dblog = $dblogs->find()->last();
+        $this->assertEquals('test', $dblog->message);
+        unset($_SESSION['Flash']);
 
         // not flash message
         $this->BcMessage->set('test', false, false, false);

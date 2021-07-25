@@ -12,6 +12,8 @@
 namespace BaserCore\Controller\Component;
 
 use BaserCore\Error\BcException;
+use BaserCore\Service\DblogsServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use Cake\Controller\Component;
 use Cake\Controller\Component\FlashComponent;
 use BaserCore\Annotation\UnitTest;
@@ -26,6 +28,11 @@ use BaserCore\Annotation\Checked;
  */
 class BcMessageComponent extends Component
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * @var array
@@ -59,9 +66,8 @@ class BcMessageComponent extends Component
         }
 
         if ($saveDblog) {
-            // TODO: DbLogの仕組み未実装
-            // $AppModel = ClassRegistry::init('AppModel');
-            // $AppModel->saveDblog($message);
+            $dblogs = $this->getService(DblogsServiceInterface::class);
+            $dblogs->create($message);
         }
     }
 

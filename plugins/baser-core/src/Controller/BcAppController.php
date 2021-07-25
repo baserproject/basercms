@@ -1609,20 +1609,11 @@ class BcAppController extends AppController
      * @param string $message
      * @return \Cake\Datasource\EntityInterface
      * @checked
+     * @noTodo
      */
     protected function saveDblog($message)
     {
         $DblogsService = $this->getService(DblogsServiceInterface::class);
-        $data = [
-            'message' => $message,
-            'controller' => $this->request->getParam('controller'),
-            'action' => $this->request->getParam('action')
-        ];
-        // TODO フロントでのログイン対応のためBcUtilではなくBcAuthComponentを使用する
-        $user = BcUtil::loginUser();
-        if ($user) {
-            $data['user_id'] = $user->id;
-        }
-        return $DblogsService->create($data);
+        return $DblogsService->create($message);
     }
 }

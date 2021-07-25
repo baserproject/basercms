@@ -13,7 +13,6 @@ namespace BaserCore\Model\Entity;
 
 use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\Core\Configure;
-use Cake\Datasource\EntityInterface;
 use Cake\I18n\Time as TimeAlias;
 use Cake\ORM\Entity as EntityAlias;
 use BaserCore\Annotation\UnitTest;
