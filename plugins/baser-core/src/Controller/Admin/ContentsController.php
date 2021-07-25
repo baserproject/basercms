@@ -20,7 +20,7 @@ use BaserCore\Service\SiteConfigsTrait;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Service\Admin\SiteManageServiceInterface;
-
+use BaserCore\Service\Admin\ContentManageServiceInterface;
 
 /**
  * Class ContentsController
@@ -37,6 +37,7 @@ use BaserCore\Service\Admin\SiteManageServiceInterface;
  * @property User $User
  * @property BcContentsComponent $BcContents
  */
+
 class ContentsController extends BcAdminAppController
 {
     /**
@@ -59,8 +60,9 @@ class ContentsController extends BcAdminAppController
      * コンポーネント
      *
      * @var array
+     *
      */
-    // public $components = ['Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => ['useForm' => true]];
+    public $components = ['BcContents' => ['useForm' => true]];
 
     /**
      * beforeFilter
@@ -74,7 +76,10 @@ class ContentsController extends BcAdminAppController
         $this->loadModel('BaserCore.Sites');
         $this->loadModel('BaserCore.SiteConfigs');
         $this->loadModel('BaserCore.ContentFolders');
+        // TODO 未実装のためコメントアウト
+        /* >>>
         // $this->BcAuth->allow('view');
+        <<< */
     }
 
     /**
@@ -862,22 +867,10 @@ class ContentsController extends BcAdminAppController
     /**
      * コンテンツ情報を取得する
      */
-    public function admin_ajax_contents_info()
+    public function ajax_contents_info(ContentManageServiceInterface $contentManage)
     {
         $this->autoLayout = false;
-        $sites = $this->Site->getPublishedAll();
-        foreach($sites as $key => $site) {
-            $sites[$key]['published'] = $this->Content->find(
-                'count',
-                ['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => true]]
-            );
-            $sites[$key]['unpublished'] = $this->Content->find(
-                'count',
-                ['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => false]]
-            );
-            $sites[$key]['total'] = $sites[$key]['published'] + $sites[$key]['unpublished'];
-        }
-        $this->set('sites', $sites);
+        $this->set('sites', $contentManage->getContensInfo());
     }
 
     public function admin_ajax_get_full_url($id)
