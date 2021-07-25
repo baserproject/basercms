@@ -94,28 +94,20 @@ class PermissionsService implements PermissionsServiceInterface
     }
 
     /**
-     * パーミッションを設定する
-     * @param array $data
-     * @return \Cake\Datasource\EntityInterface
-     * @noTodo
-     * @unitTest
-     */
-    public function set($data): EntityInterface
-    {
-        $additionalData = $this->autoFillRecord($data);
-        $permission = $this->Permissions->newEmptyEntity();
-        return $this->Permissions->patchEntity($permission, $additionalData, ['validate' => 'default']);
-    }
-
-    /**
      * パーミッション登録
      * @param ServerRequest $request
      * @return \Cake\Datasource\EntityInterface|false
      * @noTodo
      * @unitTest
      */
-    public function create(EntityInterface $permission)
+    public function create(array $postData)
     {
+        if(empty($postData['no'])) {
+            $postData['no'] = $this->Permissions->getMax('no', ['user_group_id' => $postData['user_group_id']]) + 1;
+            $postData['sort'] = $this->Permissions->getMax('sort', ['user_group_id' => $postData['user_group_id']]) + 1;
+        }
+        $permission = $this->Permissions->newEmptyEntity();
+        $permission = $this->Permissions->patchEntity($permission, $postData, ['validate' => 'default']);
         return $this->Permissions->save($permission);
     }
 

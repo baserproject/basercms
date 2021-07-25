@@ -15,6 +15,7 @@ use BaserCore\Model\Entity\Permission;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
+
 /**
  * Interface PermissionsServiceInterface
  * @package BaserCore\Service
@@ -44,18 +45,11 @@ interface PermissionsServiceInterface
     public function getNew($userGroupId): EntityInterface;
 
     /**
-     * パーミッションを設定する
-     * @param array $data
-     * @return \Cake\Datasource\EntityInterface
-     */
-    public function set($data): EntityInterface;
-
-    /**
      * 新規登録する
      * @param EntityInterface $permission
      * @return EntityInterface|false
      */
-    public function create(EntityInterface $permission);
+    public function create(array $postData);
 
     /**
      * 編集する
@@ -64,6 +58,7 @@ interface PermissionsServiceInterface
      * @return mixed
      */
     public function update(EntityInterface $target, array $data);
+
     /**
      * 削除する
      * @param int $id
@@ -76,4 +71,5 @@ interface PermissionsServiceInterface
      * @return array
      */
     public function getMethodList(): array;
+
 }

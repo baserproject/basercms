@@ -526,9 +526,7 @@ class AppTable extends Table
     public function getMax($field, $conditions = [])
     {
         $max = $this->find()->where($conditions)->max($field);
-        // TODO: cacheが必要になり次第実装
-        // $max->cache('recent_max');
-        return $max[$field] ?? 0;
+        return $max->{$field} ?? 0;
     }
 
     /**
