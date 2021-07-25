@@ -149,7 +149,7 @@ class BcTestCase extends TestCase
         $this->session([$sessionKey => $user]);
         $authentication = $request->getAttribute('authentication');
         if(!$authentication) {
-            $authentication = $this->getAuthenticationService($request);
+            $authentication = $this->BaserCore->getAuthenticationService($request);
             $request = $request->withAttribute('authentication', $authentication);
         }
         $reflectionClass = new ReflectionClass($authentication);
