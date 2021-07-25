@@ -298,23 +298,21 @@ class PermissionsTableTest extends BcTestCase
      * @param string $message テストが失敗した時に表示されるメッセージ
      * @dataProvider beforeSaveDataProvider
      */
-    public function testBeforeSave($url, $expectedUrl, $message = null)
+    public function testBeforeSave($url, $expected, $message = null)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->Permissions->data = [
-            'Permission' => [
-                'url' => $url,
-            ]
+        $data = [
+            'no' => 100,
+            'sort' => 100,
+            'name' => 'パーミッションテスト',
+            'user_group_id' => '100',
+            'auth' => true,
+            'method' => 'ALL',
+            'status' => true,
         ];
-        $this->Permissions->beforeSave();
-        $result = $this->Permissions->data;
-
-        $expected = [
-            'Permission' => [
-                'url' => $expectedUrl
-            ]
-        ];
-        $this->assertEquals($expected, $result, $message);
+        $permission = $this->Permissions->newEntity($data);
+        $permission->url = $url;
+        $result = $this->Permissions->save($permission);
+        $this->assertEquals($expected, $result->url, $message);
     }
 
     public function beforeSaveDataProvider()

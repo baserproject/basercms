@@ -208,6 +208,9 @@ class PermissionsTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {

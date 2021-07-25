@@ -17,15 +17,17 @@ use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
 
 /**
- * Class Plugin
+ * Class Permission
  * @package BaserCore\Model\Entity
  * @property int $id
+ * @property int $no
+ * @property int $sort
  * @property string $name
- * @property string|null $title
- * @property string|null $version
+ * @property int $user_group_id
+ * @property string $url
+ * @property bool $auth
+ * @property string $method
  * @property bool $status
- * @property bool $db_init
- * @property int $priority
  * @property FrozenTime|null $modified
  * @property FrozenTime|null $created
  */

@@ -11,11 +11,15 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Utility\BcUtil;
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\TableRegistry;
+use Cake\ORM\Query;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Error\BcException;
+use Cake\Routing\Router;
 
 /**
  * Class DblogsService
@@ -40,19 +44,84 @@ class DblogsService implements DblogsServiceInterface
     /**
      * DBログ登録
      * @param array $data
-     * @return \Cake\Datasource\EntityInterface
+     * @return EntityInterface
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function create(array $data)
+    public function create(string $message): EntityInterface
     {
+        $request = Router::getRequest();
+        $data = [
+            'message' => $message,
+            'controller' => $request->getParam('controller'),
+            'action' => $request->getParam('action')
+        ];
+        // TODO フロントでのログイン対応のためBcUtilではなくBcAuthComponentを使用する
+        $user = BcUtil::loginUser();
+        if ($user) {
+            $data['user_id'] = $user->id;
+        }
         $dblog = $this->Dblogs->newEntity($data);
         $savedDblog = $this->Dblogs->save($dblog);
         if (!$savedDblog) {
             throw new BcException(__d('baser', 'DBログの保存に失敗しました。'));
         }
         return $savedDblog;
+    }
+
+    /**
+     * DBログ一覧を取得
+     * @param array $queryParams
+     * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getIndex(array $queryParams): Query
+    {
+        $options = [];
+        $query = $this->Dblogs
+            ->find('all', $options)
+            ->contain('Users');
+
+        if (!empty($queryParams['message'])) {
+            $query->where(['message LIKE' => '%' . $queryParams['message'] . '%']);
+        }
+        if (!empty($queryParams['user_id'])) {
+            $query->where(['user_id' => $queryParams['user_id']]);
+        }
+
+        return $query;
+    }
+
+    /**
+     * 最新のDBログ一覧を取得
+     * @param int $limit
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getDblogs(int $limit): object
+    {
+        return $this->Dblogs
+            ->find('all')
+            ->contain('Users')
+            ->order(['Dblogs.id' => 'DESC'])
+            ->limit($limit)
+            ->all();
+    }
+
+    /**
+     * DBログをすべて削除
+     * @return int
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function deleteAll(): int
+    {
+        return $this->Dblogs->deleteAll(['1']);
     }
 
 }

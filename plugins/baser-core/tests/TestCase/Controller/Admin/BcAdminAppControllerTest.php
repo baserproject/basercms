@@ -68,6 +68,7 @@ class BcAdminAppControllerTest extends BcTestCase
         $this->assertNotEmpty($this->BcAdminApp->BcMessage);
         $this->assertNotEmpty($this->BcAdminApp->Authentication);
         $this->assertNotEmpty($this->BcAdminApp->Paginator);
+        // ログインしているユーザが削除された場合ログアウトされる
     }
 
     /**

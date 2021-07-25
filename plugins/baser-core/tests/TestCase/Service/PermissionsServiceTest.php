@@ -100,31 +100,6 @@ class PermissionsServiceTest extends BcTestCase
         $permissions = $this->PermissionsService->getIndex($request->getQueryParams());
         $this->assertnull($permissions->first());
     }
-    /**
-     * Test set
-     *
-     * @return void
-     */
-    public function testSet()
-    {
-        // 正常な場合
-        $data = [
-            'name' => 'testSet',
-            'user_group_id' => '3',
-            'url' => '/baser/admin/*'
-        ];
-        $permission = $this->PermissionsService->set($data);
-        $this->assertEquals("testSet", $permission->name);
-        $this->assertEquals(21, $permission->no);
-        // 異常な場合
-        $data = [
-            'name' => '',
-            'user_group_id' => '',
-            'url' => ''
-        ];
-        $permission = $this->PermissionsService->set($data);
-        $this->assertTrue($permission->hasErrors());
-    }
 
     /**
      * Test create
@@ -133,14 +108,15 @@ class PermissionsServiceTest extends BcTestCase
      */
     public function testCreate()
     {
-        $data = $this->PermissionsService->set([
+        $data = [
             'name' => 'testCreate',
             'user_group_id' => '3',
-            'url' => '/baser/admin/*'
-        ]);
-
+            'auth' => true,
+            'url' => '/baser/admin/*',
+            'status' => true
+        ];
         $permission = $this->PermissionsService->create($data);
-        $newRecord = $this->PermissionsService->Permissions->find('all')->all()->last();
+        $newRecord = $this->PermissionsService->Permissions->find()->all()->last();
         $this->assertEquals($newRecord->name, $permission->name);
     }
 
