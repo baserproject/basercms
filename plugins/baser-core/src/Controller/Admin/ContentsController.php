@@ -1,18 +1,26 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Controller
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('BcContentsController', 'Controller');
+namespace BaserCore\Controller\Admin;
+
+use Cake\Core\Configure;
+use Cake\Event\EventInterface;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Service\SiteConfigsTrait;
+use BaserCore\Model\Table\ContentsTable;
+use BaserCore\Controller\Admin\BcAdminAppController;
+use BaserCore\Service\Admin\SiteManageServiceInterface;
+
 
 /**
  * Class ContentsController
@@ -29,27 +37,44 @@ App::uses('BcContentsController', 'Controller');
  * @property User $User
  * @property BcContentsComponent $BcContents
  */
-class ContentsController extends AppController
+class ContentsController extends BcAdminAppController
 {
+    /**
+     * SiteConfigsTrait
+     */
+    use SiteConfigsTrait;
 
     /**
-     * モデル
-     *
-     * @var array
+     * initialize
+     * ログインページ認証除外
+     * @return void
      */
-    public $uses = ['Content', 'Site', 'SiteConfig', 'ContentFolder'];
+    public function initialize(): void
+    {
+        parent::initialize();
+    }
+
 
     /**
      * コンポーネント
      *
      * @var array
      */
-    public $components = ['Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => ['useForm' => true]];
+    // public $components = ['Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => ['useForm' => true]];
 
-    public function beforeFilter()
+    /**
+     * beforeFilter
+     *
+     * @return void
+     * @checked
+     */
+    public function beforeFilter(EventInterface $event)
     {
-        parent::beforeFilter();
-        $this->BcAuth->allow('view');
+        parent::beforeFilter($event);
+        $this->loadModel('BaserCore.Sites');
+        $this->loadModel('BaserCore.SiteConfigs');
+        $this->loadModel('BaserCore.ContentFolders');
+        // $this->BcAuth->allow('view');
     }
 
     /**
@@ -58,21 +83,20 @@ class ContentsController extends AppController
      * @param integer $parentId
      * @param void
      */
-    public function admin_index()
+    public function index(SiteManageServiceInterface $siteManage)
     {
-
-        switch($this->request->action) {
-            case 'admin_index':
+        switch($this->request->getParam('action')) {
+            case 'index':
                 $this->setTitle(__d('baser', 'コンテンツ一覧'));
                 break;
-            case 'admin_trash_index':
+            case 'trash_index':
                 $this->setTitle(__d('baser', 'ゴミ箱'));
                 break;
         }
 
         $this->setViewConditions('Content', ['default' => [
             'named' => [
-                'num' => $this->siteConfigs['admin_list_num'],
+                'num' => $this->getSiteConfig('admin_list_num'),
                 'site_id' => 0,
                 'list_type' => 1,
                 'sort' => 'id',
@@ -81,23 +105,23 @@ class ContentsController extends AppController
         ]]);
 
         if (empty($this->request->getParam('named.sort'))) {
-            $this->request = $this->request->withParam('named.sort', $this->passedArgs['sort']);
+            $this->request = $this->request->withParam('named.sort', $this->request->getParam('pass')['sort']);
         }
-        if (empty($this->request->params['named']['direction'])) {
-            $this->request = $this->request->withParam('named.direction', $this->passedArgs['direction']);
+        if (empty($this->request->getParam('named.direction'))) {
+            $this->request = $this->request->withParam('named.direction', $this->request->getParam('pass')['direction']);
         }
 
-        $sites = $this->Site->getSiteList();
+        $sites = $siteManage->getSiteList();
         if ($sites) {
-            if (!$this->passedArgs['site_id'] || !in_array($this->passedArgs['site_id'], array_keys($sites))) {
+            if (!$this->request->getParam('pass')['site_id'] || !in_array($this->request->getParam('pass')['site_id'], array_keys($sites))) {
                 reset($sites);
-                $this->passedArgs['site_id'] = key($sites);
+                $this->request->getParam('pass')['site_id'] = key($sites);
             }
         } else {
-            $this->passedArgs['site_id'] = null;
+            $this->request->getParam('pass')['site_id'] = null;
         }
-        $currentSiteId = $this->passedArgs['site_id'];
-        $currentListType = $this->passedArgs['list_type'];
+        $currentSiteId = $this->request->getParam('pass')['site_id'];
+        $currentListType = $this->request->getParam('pass')['list_type'];
         $this->request = $this->request->withData('ViewSetting.site_id', $currentSiteId);
         $this->request = $this->request->withData('ViewSetting.list_type', $currentListType);
 
@@ -105,7 +129,7 @@ class ContentsController extends AppController
             $template = null;
             $datas = [];
             switch($this->request->getParam('action')) {
-                case 'admin_index':
+                case 'index':
                     switch($currentListType) {
                         case 1:
                             $conditions = $this->_createAdminIndexConditionsByTree($currentSiteId);
@@ -117,9 +141,9 @@ class ContentsController extends AppController
                         case 2:
                             $conditions = $this->_createAdminIndexConditionsByTable($currentSiteId, $this->request->data);
                             $options = [
-                                'order' => 'Content.' . $this->passedArgs['sort'] . ' ' . $this->passedArgs['direction'],
+                                'order' => 'Content.' . $this->request->getParam('pass')['sort'] . ' ' . $this->request->getParam('pass')['direction'],
                                 'conditions' => $conditions,
-                                'limit' => $this->passedArgs['num'],
+                                'limit' => $this->request->getParam('pass')['num'],
                                 'recursive' => 2
                             ];
 
@@ -138,7 +162,7 @@ class ContentsController extends AppController
                             break;
                     }
                     break;
-                case 'admin_trash_index':
+                case 'trash_index':
                     $this->Content->Behaviors->unload('SoftDelete');
                     $conditions = $this->_createAdminIndexConditionsByTrash();
                     $datas = $this->Content->find('threaded', ['order' => ['Content.site_id', 'Content.lft'], 'conditions' => $conditions, 'recursive' => 0]);
@@ -150,11 +174,12 @@ class ContentsController extends AppController
             $this->render($template);
             return;
         }
-        $this->ContentFolder->getEventManager()->attach($this->ContentFolder);
+        $this->ContentFolders->getEventManager()->on($this->ContentFolders);
         $this->set('editInIndexDisabled', false);
-        $this->set('contentTypes', $this->BcContents->getTypes());
-        $this->set('authors', $this->User->getUserList());
-        $this->set('folders', $this->Content->getContentFolderList((int)$currentSiteId, ['conditions' => ['Content.site_root' => false]]));
+        // $this->set('contentTypes', $this->BcContents->getTypes());
+        // $this->set('authors', $this->Users->getUserList());
+        /** @var ContentsTable $this->Contents */
+        $this->set('folders', $this->Contents->getContentFolderList($currentSiteId, ['conditions' => ['site_root' => false]]));
         $this->set('listTypes', [1 => __d('baser', 'ツリー形式'), 2 => __d('baser', '表形式')]);
         $this->set('sites', $sites);
         $this->setSearch('contents_index');

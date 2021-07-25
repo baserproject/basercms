@@ -78,14 +78,14 @@ return [
                     'type' => 'dashboard',
                     'url' => $baserCorePrefix . $adminPrefix,
                 ],
-                //			'Contents' => [
-                //				'title' => __d('baser', 'コンテンツ管理'),
-                //				'type' => 'contents',
-                //				'menus' => [
-                //					'Contents' => ['title' => __d('baser', 'コンテンツ'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'contents', 'action' => 'index']],
-                //					'ContentsTrash' => ['title' => __d('baser', 'ゴミ箱'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'contents', 'action' => 'trash_index']],
-                //				]
-                //			],
+                            'Contents' => [
+                                'title' => __d('baser', 'コンテンツ管理'),
+                                'type' => 'contents',
+                                'menus' => [
+                                    'Contents' => ['title' => __d('baser', 'コンテンツ'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'contents', 'action' => 'index']],
+                                    'ContentsTrash' => ['title' => __d('baser', 'ゴミ箱'), 'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'contents', 'action' => 'trash_index']],
+                                ]
+                            ],
             ],
             'Systems' => [
                 //			'SiteConfigs' => [

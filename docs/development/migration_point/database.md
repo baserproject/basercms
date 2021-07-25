@@ -29,3 +29,5 @@ bin/cake migrations seed --seed SamplesSeed --plugin BaserCore
 ```
 bin/cake bake fixture -r -f -n 20 -s samples --plugin BaserCore
 ```
+
+### ※[一部スキーマをマイグレーションファイルに変更する方法](https://github.com/baserproject/ucmitz/tools/SchemeCoverter/README.md)

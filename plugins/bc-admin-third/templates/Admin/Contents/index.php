@@ -10,6 +10,7 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use BaserCore\Utility\BcUtil;
 /**
  * [ADMIN] 統合コンテンツ一覧
  * @var BcAppView $this
@@ -75,7 +76,7 @@ echo $this->BcAdminForm->control('BcManageContent', ['type' => 'hidden', 'value'
   <div id="flashMessage" class="notice-message"></div>
 </div>
 
-<?php $this->BcBaser->element('contents/index_view_setting') ?>
+<?php # $this->BcBaser->element('contents/index_view_setting') ?>
 
 <div id="DataList" class="bca-data-list">&nbsp;</div>
 

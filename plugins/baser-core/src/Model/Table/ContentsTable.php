@@ -11,57 +11,61 @@
 
 namespace BaserCore\Model\Table;
 
-use Cake\ORM\Table;
+use ArrayObject;
+use Cake\Event\Event;
+use BaserCore\Model\AppTable;
+use BaserCore\Utility\BcUtil;
+use Cake\Validation\Validator;
+use Cake\Datasource\EntityInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class ContentsTable
  */
-class ContentsTable extends Table
+class ContentsTable extends AppTable
 {
 
     /**
-     * ビヘイビア
+     * Initialize
      *
-     * @var array
+     * @param array $config テーブル設定
+     * @return void
+     * @checked
+     * @unitTest
      */
-    public $actsAs = [
-        'Tree' => ['level' => 'level'],
-        'BcCache',
-        'SoftDelete',
-        'BcUpload' => [
-            'saveDir' => "contents",
-            'fields' => [
-                'eyecatch' => [
-                    'type' => 'image',
-                    'namefield' => 'id',
-                    'nameadd' => true,
-                    'nameformat' => '%08d',
-                    'subdirDateFormat' => 'Y/m',
-                    //'imageresize' => array('width' => '800', 'height' => '800'),
-                    'imagecopy' => [
-                        'thumb' => ['suffix' => '_thumb', 'width' => '300', 'height' => '300'],
-                        'medium' => ['suffix' => '_midium', 'width' => '800', 'height' => '800']
-                    ]
-                ]
-            ]
-        ]
-    ];
-
-    /**
-     * Belongs To
-     *
-     * @var array
-     */
-    public $belongsTo = [
-        'Site' => [
-            'className' => 'Site',
-            'foreignKey' => 'site_id'
-        ],
-        'User' => [
-            'className' => 'User',
-            'foreignKey' => 'author_id'
-        ]
-    ];
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+         /** TODO: soft deleteはTraitで実装する @see https://github.com/salines/cakephp4-soft-delete */
+        $this->addBehavior('Tree', ['level' => 'level']);
+        // TODO: BcUploadBehavior 未追加
+        // $this->addBehavior('BcUpload', [
+        //     'saveDir' => "contents",
+        //     'fields' => [
+        //         'eyecatch' => [
+        //             'type' => 'image',
+        //             'namefield' => 'id',
+        //             'nameadd' => true,
+        //             'nameformat' => '%08d',
+        //             'subdirDateFormat' => 'Y/m',
+        //             //'imageresize' => array('width' => '800', 'height' => '800'),
+        //             'imagecopy' => [
+        //                 'thumb' => ['suffix' => '_thumb', 'width' => '300', 'height' => '300'],
+        //                 'medium' => ['suffix' => '_midium', 'width' => '800', 'height' => '800']
+        //             ]
+        //         ]
+        //     ]]);
+        $this->belongsTo('Sites', [
+            'className' => 'BaserCore.Sites',
+            'foreignKey' => 'site_id',
+        ]);
+        $this->belongsTo('Users', [
+            'className' => 'BaserCore.Users',
+            'foreignKey' => 'author_id',
+        ]);
+    }
 
     /**
      * 関連データを更新する
@@ -104,8 +108,8 @@ class ContentsTable extends Table
     public function implementedEvents(): array
     {
         return [
-            'Model.beforeFind' => ['callable' => 'beforeFind', 'passParams' => true],
-            'Model.afterFind' => ['callable' => 'afterFind', 'passParams' => true],
+            // 'Model.beforeFind' => ['callable' => 'beforeFind', 'passParams' => true],
+            // 'Model.afterFind' => ['callable' => 'afterFind', 'passParams' => true],
             'Model.beforeValidate' => ['callable' => 'beforeValidate', 'passParams' => true],
             'Model.afterValidate' => ['callable' => 'afterValidate'],
             'Model.beforeSave' => ['callable' => 'beforeSave', 'passParams' => true],
@@ -114,43 +118,107 @@ class ContentsTable extends Table
             'Model.afterDelete' => ['callable' => 'afterDelete'],
         ];
     }
-
     /**
-     * Content constructor.
+     * Validation Default
      *
-     * @param bool $id
-     * @param null $table
-     * @param null $ds
+     * @param Validator $validator
+     * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function __construct($id = false, $table = null, $ds = null)
+    public function validationDefault(Validator $validator): Validator
     {
-        parent::__construct($id, $table, $ds);
-        $this->validate = [
-            'id' => [
-                ['rule' => 'numeric', 'on' => 'update', 'message' => __d('baser', 'IDに不正な値が利用されています。')]],
-            'name' => [
-                ['rule' => ['notBlank'], 'message' => __d('baser', 'URLを入力してください。')],
-                ['rule' => ['bcUtileUrlencodeBlank'], 'message' => __d('baser', 'URLはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')],
-                ['rule' => ['notBlank'], 'message' => __d('baser', 'スラッグを入力してください。')],
-                ['rule' => ['maxLength', 2083], 'message' => __d('baser', 'タイトルは230文字以内で入力してください。')],
-                ['rule' => ['duplicateRelatedSiteContent'], 'message' => __d('baser', '連携しているサブサイトでスラッグが重複するコンテンツが存在します。重複するコンテンツのスラッグ名を先に変更してください。')]],
-            'title' => [
-                ['rule' => ['bcUtileUrlencodeBlank'], 'message' => __d('baser', 'タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')],
-                ['rule' => '/\A(?!.*(\t)).*\z/', 'message' => __d('baser', 'タイトルはタブを含む名前は付けられません。')],
-                ['rule' => ['notBlank'], 'message' => __d('baser', 'タイトルを入力してください。')],
-                ['rule' => ['maxLength', 230], 'message' => __d('baser', 'タイトルは230文字以内で入力してください。')]],
-            'eyecatch' => [
-                ['rule' => ['fileCheck', $this->convertSize(ini_get('upload_max_filesize'))], 'message' => __d('baser', 'ファイルのアップロードに失敗しました。')]],
-            'self_publish_begin' => [
-                ['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '公開開始日に不正な文字列が入っています。')]],
-            'self_publish_end' => [
-                ['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '公開終了日に不正な文字列が入っています。')],
-                ['rule' => ['checkDateAfterThan', 'self_publish_begin'], 'message' => __d('baser', '公開終了日は、公開開始日より新しい日付で入力してください。')]],
-            'created_date' => [
-                ['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '作成日に不正な文字列が入っています。')]],
-            'modified_date' => [
-                ['rule' => ['checkDate'], 'allowEmpty' => true, 'message' => __d('baser', '更新日に不正な文字列が入っています。')]],
-        ];
+        $validator
+        ->integer('id')
+        ->allowEmptyString('id', null, 'create')
+        ->numeric('id', __d('baser', 'IDに不正な値が利用されています。'), 'update');
+
+        $validator
+        ->scalar('name')
+        ->notEmptyString('name', __d('baser', 'URLを入力してください。'))
+        ->maxLength('name', 230, __d('baser', '名前は230文字以内で入力してください。'))
+        ->add('name', [
+            'bcUtileUrlencodeBlank' => [
+                'rule' => ['bcUtileUrlencodeBlank'],
+                'provider' => 'bc',
+                'message' => __d('baser', 'URLはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
+            ]
+        ])
+        ->notEmptyString('name', __d('baser', 'スラッグを入力してください。'))
+        ->add('name', [
+            'duplicateRelatedSiteContent' => [
+                'rule' => [$this, 'duplicateRelatedSiteContent'],
+                'message' => __d('baser', '連携しているサブサイトでスラッグが重複するコンテンツが存在します。重複するコンテンツのスラッグ名を先に変更してください。'),
+            ]
+        ]);
+
+        $validator
+        ->scalar('title')
+        ->notEmptyString('title', __d('baser', 'タイトルを入力してください。'))
+        ->maxLength('title', 230, __d('baser', 'タイトルは230文字以内で入力してください。'))
+        ->regex('title', '/\A(?!.*(\t)).*\z/', __d('baser', 'タイトルはタブを含む名前は付けられません。'))
+        ->add('title', [
+            'bcUtileUrlencodeBlank' => [
+                'rule' => ['bcUtileUrlencodeBlank'],
+                'provider' => 'bc',
+                'message' => __d('baser', 'タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
+            ]
+        ]);
+
+        $validator
+        ->add('eyecatch', [
+            'fileCheck' => [
+                'rule' => ['fileCheck', $this->convertSize(ini_get('upload_max_filesize'))],
+                'provider' => 'bc',
+                'message' => __d('baser', 'ファイルのアップロードに失敗しました。')
+            ]
+        ]);
+        $validator
+        ->allowEmptyDateTime('self_publish_begin')
+        ->add('self_publish_begin', [
+            'checkDate' => [
+                'rule' => ['checkDate'],
+                'provider' => 'bc',
+                'message' => __d('baser', '公開開始日に不正な文字列が入っています。')
+            ]
+        ]);
+
+        $validator
+        ->allowEmptyDateTime('self_publish_end')
+        ->add('self_publish_end', [
+            'checkDate' => [
+                'rule' => ['checkDate'],
+                'provider' => 'bc',
+                'message' => __d('baser', '公開終了日に不正な文字列が入っています。')
+            ]
+        ])
+        ->add('self_publish_end', [
+            'checkDateAfterThan' => [
+                'rule' => ['checkDateAfterThan'],
+                'provider' => 'bc',
+                'message' => __d('baser', '公開終了日は、公開開始日より新しい日付で入力してください。')
+            ]
+        ]);
+        $validator
+        ->allowEmptyDateTime('created_date')
+        ->add('created_date', [
+            'checkDate' => [
+                'rule' => ['checkDate'],
+                'provider' => 'bc',
+                'message' => __d('baser', '作成日に不正な文字列が入っています。')
+            ]
+        ]);
+        $validator
+        ->allowEmptyDateTime('modified_date')
+        ->add('modified_date', [
+            'checkDate' => [
+                'rule' => ['checkDate'],
+                'provider' => 'bc',
+                'message' => __d('baser', '更新日に不正な文字列が入っています。')
+            ]
+        ]);
+        return $validator;
     }
 
     /**
@@ -203,72 +271,76 @@ class ContentsTable extends Table
     }
 
     /**
-     * Before Validate
+     * Before Marshal
      *
-     * @param array $options Options passed from Model::save().
-     * @return bool True if validate operation should continue, false to abort
+     * @param Event $event
+     * @param ArrayObject $data
+     * @param ArrayObject $options
+     * @return void
      */
-    public function beforeValidate($options = [])
+    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
     {
         // コンテンツ一覧にて、コンテンツを登録した直後のリネーム処理までは新規追加とみなして処理を行う為、$create で判定させる
         $create = false;
-        if (empty($this->data['Content']['id']) || !empty($options['firstCreate'])) {
+        if (empty($data['id']) || !empty($options['firstCreate'])) {
             $create = true;
         }
         // タイトルは強制的に255文字でカット
-        if (!empty($this->data['Content']['title'])) {
-            $this->data['Content']['title'] = mb_substr($this->data['Content']['title'], 0, 254, 'UTF-8');
+        if (!empty($data['title'])) {
+            $data['title'] = mb_substr($data['title'], 0, 254, 'UTF-8');
         }
         if ($create) {
             // IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
-            if (!isset($this->data['Content']['name'])) {
-                $this->data['Content']['name'] = BcUtil::urlencode(mb_substr($this->data['Content']['title'], 0, 230, 'UTF-8'));
+            if (!isset($data['name'])) {
+                $data['name'] = BcUtil::urlencode(mb_substr($data['title'], 0, 230, 'UTF-8'));
             }
-            if (!isset($this->data['Content']['self_status'])) {
-                $this->data['Content']['self_status'] = false;
+            if (!isset($data['self_status'])) {
+                $data['self_status'] = false;
             }
-            if (!isset($this->data['Content']['self_publish_begin'])) {
-                $this->data['Content']['self_publish_begin'] = null;
+            if (!isset($data['self_publish_begin'])) {
+                $data['self_publish_begin'] = null;
             }
-            if (!isset($this->data['Content']['self_publish_end'])) {
-                $this->data['Content']['self_publish_end'] = null;
+            if (!isset($data['self_publish_end'])) {
+                $data['self_publish_end'] = null;
             }
-            if (!isset($this->data['Content']['deleted'])) {
-                $this->data['Content']['deleted'] = false;
+            if (!isset($data['deleted'])) {
+                $data['deleted'] = false;
             }
-            if (!isset($this->data['Content']['created_date'])) {
-                $this->data['Content']['created_date'] = date('Y-m-d H:i:s');
+            if (!isset($data['created_date'])) {
+                $data['created_date'] = date('Y-m-d H:i:s');
             }
-            if (!isset($this->data['Content']['site_root'])) {
-                $this->data['Content']['site_root'] = 0;
+            if (!isset($data['site_root'])) {
+                $data['site_root'] = 0;
             }
-            if (!isset($this->data['Content']['exclude_search'])) {
-                $this->data['Content']['exclude_search'] = 0;
+            if (!isset($data['exclude_search'])) {
+                $data['exclude_search'] = 0;
             }
-            if (!isset($this->data['Content']['author_id'])) {
-                $user = BcUtil::loginUser('admin');
-                $this->data['Content']['author_id'] = $user['id'];
+            if (!isset($data['author_id'])) {
+                $user = BcUtil::loginUser('Admin');
+                $data['author_id'] = $user['id'];
             }
         } else {
-            if (empty($this->data['Content']['modified_date'])) {
-                $this->data['Content']['modified_date'] = date('Y-m-d H:i:s');
+            if (empty($data['modified_date'])) {
+                $data['modified_date'] = date('Y-m-d H:i:s');
             }
-            if (isset($this->data['Content']['name'])) {
-                $this->data['Content']['name'] = BcUtil::urlencode(mb_substr($this->data['Content']['name'], 0, 230, 'UTF-8'));
+            if (isset($data['name'])) {
+                $data['name'] = BcUtil::urlencode(mb_substr($data['name'], 0, 230, 'UTF-8'));
             }
-            if ($this->data['Content']['id'] == 1) {
-                unset($this->validate['name']);
+            if ($data['id'] == 1) {
+                $validator = new Validator();
+                $validator = $this->validationDefault($validator);
+                $validator->remove('name');
+                return $validator;
             }
         }
         // name の 重複チェック＆リネーム
-        if (!empty($this->data['Content']['name'])) {
+        if (!empty($data['name'])) {
             $contentId = null;
-            if (!empty($this->data['Content']['id'])) {
-                $contentId = $this->data['Content']['id'];
+            if (!empty($data['id'])) {
+                $contentId = $data['id'];
             }
-            $this->data['Content']['name'] = $this->getUniqueName($this->data['Content']['name'], $this->data['Content']['parent_id'], $contentId);
+            $data['name'] = $this->getUniqueName($data['name'], $data['parent_id'], $contentId);
         }
-        return true;
     }
 
     /**
@@ -336,16 +408,17 @@ class ContentsTable extends Table
 
     /**
      * Before Save
-     *
-     * @param array $options
+     * @param Event $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      * @return bool
      */
-    public function beforeSave($options = [])
+    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
         if (!empty($this->data['Content']['id'])) {
             $this->beforeSaveParentId = $this->field('parent_id', ['Content.id' => $this->data['Content']['id']]);
         }
-        return parent::beforeSave($options);
+        return parent::beforeSave($event, $entity, $options);
     }
 
     /**
@@ -897,9 +970,10 @@ class ContentsTable extends Table
         ], $options);
 
         $conditions = [
-            'type' => 'ContentFolder',
-            'alias_id' => null
+            'type' => 'ContentFolders',
+            'alias_id' => 'IS NULL'
         ];
+
         if (!is_null($siteId)) {
             $conditions['site_id'] = $siteId;
         }
@@ -909,9 +983,14 @@ class ContentsTable extends Table
         if (!empty($options['conditions'])) {
             $conditions = array_merge($conditions, $options['conditions']);
         }
-        $folders = $this->generateTreeList($conditions);
+        $folders = $this->find('treeList', [
+            'keyPath' => null,
+            'valuePath' => null,
+            'spacer' => '_'
+            ])->where([$conditions]);
         if ($folders) {
-            return $this->convertTreeList($folders);
+            return $folders;
+            // return $this->convertTreeList($folders->all()->toArray());
         }
         return false;
     }

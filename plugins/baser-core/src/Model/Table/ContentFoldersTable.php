@@ -11,13 +11,13 @@
 
 namespace BaserCore\Model\Table;
 
-use Cake\ORM\Table;
+use BaserCore\Model\AppTable;
 
 /**
  * Class ContentFoldersTable
  * @package BaserCore\Model\Table
  */
-class ContentFoldersTable extends Table
+class ContentFoldersTable extends AppTable
 {
 
     /**

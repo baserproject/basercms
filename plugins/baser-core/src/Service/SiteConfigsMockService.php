@@ -25,11 +25,15 @@ class SiteConfigsMockService implements SiteConfigsServiceInterface
     public function value($fieldName)
     {
         // TODO 未実装
-        if ($fieldName === 'admin_list_num') {
-            return 30;
-        } elseif($fieldName === 'name') {
-            return 'baserCMS';
+        switch($fieldName) {
+            case 'admin_list_num':
+                return 30;
+                break;
+            case 'name':
+                return 'baserCMS';
+                break;
+            default:
+                return null;
         }
-        return null;
     }
 }

@@ -1,35 +1,40 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Model
- * @since           baserCMS v 4.0.1
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('Content', 'Model');
+namespace BaserCore\Test\TestCase\Model\Table;
 
+use Cake\Core\Configure;
+use Cake\Routing\Router;
+use Cake\Validation\Validator;
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Model\Table\ContentsTable;
 /**
  * Class ContentTest
  *
  * @package Baser.Test.Case.Model
  * @property Content $Content
  */
-class ContentTest extends BaserTestCase
+class ContentsTableTest extends BcTestCase
 {
 
     public $fixtures = [
-        'baser.Model.Content.ContentIsMovable',
-        'baser.Model.Content.ContentStatusCheck',
-        'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',
-        'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',
-        'baser.Default.SiteConfig',
-        'baser.Default.User',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
+        // 'baser.Model.Content.ContentIsMovable',
+        // 'baser.Model.Content.ContentStatusCheck',
+        // 'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',
+        // 'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',
+        // 'baser.Default.SiteConfig',
+        // 'baser.Default.User',
     ];
 
     /**
@@ -37,12 +42,53 @@ class ContentTest extends BaserTestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->Content = ClassRegistry::init('Content');
-        BcSite::flash();
+        $config = $this->getTableLocator()->exists('Contents')? [] : ['className' => 'BaserCore\Model\Table\ContentsTable'];
+        $this->Contents = $this->getTableLocator()->get('Contents', $config);
     }
+
+    /**
+     * Tear Down
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        unset($this->Contents);
+        // BcSite::flash();
+        parent::tearDown();
+    }
+
+    /**
+     * Test initialize
+     *
+     * @return void
+     */
+    public function testInitialize()
+    {
+        $this->assertEquals('contents', $this->Contents->getTable());
+        $this->assertTrue($this->Contents->hasBehavior('Tree'));
+        $this->assertTrue($this->Contents->hasAssociation('Sites'));
+        $this->assertTrue($this->Contents->hasAssociation('Users'));
+    }
+
+    /**
+     * Test validationDefault
+     *
+     * @return void
+     */
+    public function testValidationDefault()
+    {
+        $validator = $this->Contents->validationDefault(new Validator());
+        $fields = [];
+        foreach($validator->getIterator() as $key => $value) {
+            $fields[] = $key;
+        }
+        $this->assertEquals(['id', 'name', 'title', 'eyecatch', 'self_publish_begin', 'self_publish_end', 'created_date', 'modified_date'], $fields);
+    }
+
 
     /**
      * Implemented Events
@@ -63,6 +109,7 @@ class ContentTest extends BaserTestCase
      */
     public function testDuplicateRelatedSiteContent($data, $expected)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->Content->set(['Content' => $data]);
         $this->assertEquals($expected, $this->Content->duplicateRelatedSiteContent(['name' => $data['name']]));
     }
@@ -100,6 +147,7 @@ class ContentTest extends BaserTestCase
      */
     public function testGetUniqueName($name, $parent_id, $expected)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $result = $this->Content->getUniqueName($name, $parent_id);
         $this->assertEquals($expected, $result);
     }
@@ -189,6 +237,7 @@ class ContentTest extends BaserTestCase
      */
     public function testPureUrl($url, $siteId, $expected)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $result = $this->Content->pureUrl($url, $siteId);
         $this->assertEquals($expected, $result);
     }
@@ -208,6 +257,7 @@ class ContentTest extends BaserTestCase
      */
     public function testCreateContent()
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->loginAdmin($this->getRequest());
         $content = ['title' => 'hoge', 'parent_id' => ''];
         $type = 'Content';
@@ -226,6 +276,7 @@ class ContentTest extends BaserTestCase
      */
     public function testCreateUrl($id, $expects)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->assertEquals($this->Content->createUrl($id), $expects);
     }
 
@@ -314,6 +365,7 @@ class ContentTest extends BaserTestCase
      */
     public function testFindByType($type, $entityId, $expects)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $result = $this->Content->findByType($type, $entityId);
         if ($result) {
             $result = $result['Content']['id'];
@@ -338,7 +390,9 @@ class ContentTest extends BaserTestCase
      */
     public function testGetContentFolderList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $siteId = 1;
+
+        $this->Contents->getContentFolderList();
     }
 
     /**
@@ -400,6 +454,7 @@ class ContentTest extends BaserTestCase
      */
     public function testGetUrlById($id, $full, $expects)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $siteUrl = Configure::read('BcEnv.siteUrl');
         Configure::write('BcEnv.siteUrl', 'http://main.com');
         $result = $this->Content->getUrlById($id, $full);
@@ -431,6 +486,7 @@ class ContentTest extends BaserTestCase
      */
     public function testGetUrl($host, $ua, $url, $full, $useSubDomain, $expects)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $siteUrl = Configure::read('BcEnv.siteUrl');
         Configure::write('BcEnv.siteUrl', 'http://main.com');
         if ($ua) {
@@ -487,6 +543,7 @@ class ContentTest extends BaserTestCase
      */
     public function testGetUrlBase($url, $base, $useBase, $expects)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         Configure::write('app.baseUrl', $base);
         $request = $this->_getRequest('/');
         $request->base = $base;
@@ -521,6 +578,7 @@ class ContentTest extends BaserTestCase
      */
     public function testCopy($id, $entityId, $newTitle, $newAuthorId, $newSiteId, $titleExpected)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->loginAdmin($this->getRequest());
         $result = $this->Content->copy($id, $entityId, $newTitle, $newAuthorId, $newSiteId)['Content'];
         $this->assertEquals($result['site_id'], $newSiteId);
@@ -578,6 +636,7 @@ class ContentTest extends BaserTestCase
      */
     public function testIsPublish($status, $publishBegin, $publishEnd, $expected)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $result = $this->Content->isPublish($status, $publishBegin, $publishEnd);
         $this->assertEquals($expected, $result);
     }
@@ -603,6 +662,7 @@ class ContentTest extends BaserTestCase
      */
     public function testIsMovable($siteRelated, $currentId, $parentId, $expects)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->loadFixtures('ContentIsMovable');
         if (!$siteRelated) {
             $site = $this->Content->Site->find('first', [
@@ -646,6 +706,7 @@ class ContentTest extends BaserTestCase
      */
     public function testGetSiteRoot($siteId, $expects)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $result = $this->Content->getSiteRoot($siteId);
         if ($result) {
             $result = $result['Content']['id'];
@@ -729,6 +790,7 @@ class ContentTest extends BaserTestCase
      */
     public function testGetCacheTime($data, $cacheTime)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         // publish_end が viewDuration より早い場合
         if ($cacheTime == 'oneHourlater') {
             Configure::write('BcCache.viewDuration', '+1 hour');
@@ -805,6 +867,7 @@ class ContentTest extends BaserTestCase
      */
     public function testFindByUrl($expected, $url, $publish = true, $extend = false, $sameUrl = false, $useSubDomain = false)
     {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $this->loadFixtures('ContentStatusCheck');
         $result = (bool)$this->Content->findByUrl($url, $publish, $extend, $sameUrl, $useSubDomain);
         $this->assertEquals($expected, $result);
