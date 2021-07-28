@@ -448,6 +448,17 @@
   font-size:$label_font_size_large;
   font-weight: normal;
 }
+
+#WidgetSetting #WidgetsType h3 {
+	padding-left: 30px;
+	border: 1px solid #eeeeea !important;
+	margin-top: 0px;
+}
+#WidgetSetting #WidgetsType .WidgetsTypeSection {
+	margin: 0px;
+	padding: 10px;
+}
+
 /* ==================================================================== */
 /*    Pages
 /* ==================================================================== */
