@@ -71,7 +71,7 @@ class MaildataHelper extends BcTextHelper
 				return '';
 
 			case 'multi_check':
-				if (empty($value)) {
+				if ($value === '') {
 					return '';
 				}
 
