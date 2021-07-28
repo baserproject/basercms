@@ -81,7 +81,7 @@ class SitesController extends BcAdminAppController
                 }
                 <<< */
 
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を追加しました。'), $site->name));
+                $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を追加しました。'), $site->display_name));
                 return $this->redirect(['action' => 'edit', $site->id]);
             }
             $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
@@ -96,51 +96,45 @@ class SitesController extends BcAdminAppController
      *
      * @param $id
      */
-    public function edit($id)
+    public function edit(SiteManageServiceInterface $siteManage, $id)
     {
         if (!$id) {
             $this->notFound();
         }
-        if (!$this->request->getData()) {
-//            $this->request->data = $this->Site->find('first', ['conditions' => ['Site.id' => $id], 'recursive' => -1]);
-            if (!$this->request->getData()) {
-                $this->notFound();
-            }
-        } else {
+        $site = $siteManage->get($id);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+
             /*** Sites.beforeEdit ** */
-            $event = $this->dispatchLayerEvent('beforeEdit', [
+            $event = $this->getEventManager()->dispatch(new Event('Controller.Sites.beforeEdit', $this, [
                 'data' => $this->request->getData()
-            ]);
+            ]));
             if ($event !== false) {
                 $this->request = $this->request->withParsedBody(($event->getResult() === null || $event->getResult() === true)? $event->getData('data') : $event->getResult());
             }
-            $beforeSite = $this->Site->find('first', ['conditions' => ['Site.id' => $this->request->getData('Site.id')]]);
-            if ($data = $this->Site->save($this->request->getData())) {
+
+            $beforeSite = clone $site;
+            $site = $siteManage->update($site, $this->request->getData());
+            if (!$site->getErrors()) {
+
                 /*** Sites.afterEdit ***/
                 $this->dispatchLayerEvent('afterEdit', [
-                    'data' => $data
+                    'site' => $site
                 ]);
-                if (!empty($data['Site']['theme']) && $beforeSite['Site']['theme'] !== $data['Site']['theme']) {
-                    $this->BcManager->installThemesPlugins($data['Site']['theme']);
+
+                // TODO 未実装のためコメントアウト
+                /* >>>
+                if (!empty($site->theme) && $beforeSite->theme !== $site->theme) {
+                    $this->BcManager->installThemesPlugins($site->theme);
                 }
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を更新しました。'), $this->request->getData('Site.name')));
-                $this->redirect(['controller' => 'sites', 'action' => 'edit', $id]);
+                <<< */
+
+                $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を更新しました。'), $site->display_name));
+                $this->redirect(['action' => 'edit', $id]);
             } else {
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
         }
-        $this->setTitle(__d('baser', 'サイト編集'));
-        $defaultThemeName = __d('baser', 'サイト基本設定に従う');
-        if (!empty($this->siteConfigs['theme'])) {
-            $defaultThemeName .= '（' . $this->siteConfigs['theme'] . '）';
-        }
-        $themes = BcUtil::getThemeList();
-        if (in_array($this->siteConfigs['theme'], $themes)) {
-            unset($themes[$this->siteConfigs['theme']]);
-        }
-        $this->set('mainSites', $this->Site->getSiteList(null, ['excludeIds' => $this->request->getData('Site.id')]));
-        $this->set('themes', array_merge(['' => $defaultThemeName], $themes));
-        $this->setHelp('sites_form');
+        $this->set('site', $site);
     }
 
     /**

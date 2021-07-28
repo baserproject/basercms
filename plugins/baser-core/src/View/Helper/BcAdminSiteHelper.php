@@ -11,6 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
+use BaserCore\Model\Entity\Site;
 use BaserCore\Service\Admin\SiteManageServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\View\Helper;
@@ -72,26 +73,29 @@ class BcAdminSiteHelper extends Helper
 
     /**
      * サイトのリストを取得
+     * @param array $options
+     *  - `excludeId` : 除外するサイトID（初期値：なし）
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getSiteList(): array
+    public function getSiteList($options = []): array
     {
-        return $this->SiteManage->getSiteList();
+        return $this->SiteManage->getSiteList($options);
     }
 
     /**
      * テーマのリストを取得
+     * @param Site $site
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getThemeList(): array
+    public function getThemeList($site): array
     {
-        return $this->SiteManage->getThemeList();
+        return $this->SiteManage->getThemeList($site);
     }
 
     /**
@@ -116,6 +120,16 @@ class BcAdminSiteHelper extends Helper
     public function isUseSiteLangSetting(): bool
     {
         return $this->SiteManage->isUseSiteLangSetting();
+    }
+
+    /**
+     * 現在の画面で表示しているものがメインサイトかどうか
+     * @param Site $site
+     * @return bool
+     */
+    public function isMainOnCurrentDisplay($site): bool
+    {
+        return $this->SiteManage->isMainOnCurrentDisplay($site);
     }
 
 }

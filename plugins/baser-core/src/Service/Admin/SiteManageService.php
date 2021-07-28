@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service\Admin;
 
+use BaserCore\Model\Entity\Site;
 use BaserCore\Service\SiteConfigsTrait;
 use BaserCore\Service\SitesService;
 use BaserCore\Annotation\UnitTest;
@@ -18,6 +19,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 
 /**
  * Class UserGroupManageService
@@ -67,32 +69,37 @@ class SiteManageService extends SitesService implements SiteManageServiceInterfa
 
     /**
      * サイトのリストを取得
+     * @param array $options
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getSiteList(): array
+    public function getSiteList($options = []): array
     {
-        return $this->Sites->getSiteList();
+        return $this->Sites->getSiteList(null, $options);
     }
 
     /**
      * テーマのリストを取得する
+     * @param Site $site
      * @return array
      */
-    public function getThemeList(): array
+    public function getThemeList(Site $site): array
     {
-        $defaultThemeName = __d('baser', 'メインサイトに従う');
-        $mainTheme = $this->Sites->getRootMain(['theme'])['theme'];
-        if (!empty($this->siteConfigs['theme'])) {
-            $defaultThemeName .= '（' . $mainTheme . '）';
-        }
         $themes = BcUtil::getThemeList();
-        if (in_array($mainTheme, $themes)) {
-            unset($themes[$mainTheme]);
+        if(!$this->isMainOnCurrentDisplay($site)) {
+            $defaultThemeName = __d('baser', 'メインサイトに従う');
+            $mainTheme = $this->Sites->getRootMain(['theme'])['theme'];
+            if (!empty($mainTheme)) {
+                if (in_array($mainTheme, $themes)) {
+                    unset($themes[$mainTheme]);
+                }
+                $defaultThemeName .= '（' . $mainTheme . '）';
+            }
+            $themes = array_merge(['' => $defaultThemeName], $themes);
         }
-        return array_merge(['' => $defaultThemeName], $themes);
+        return $themes;
     }
 
     /**
@@ -111,6 +118,26 @@ class SiteManageService extends SitesService implements SiteManageServiceInterfa
     public function isUseSiteLangSetting(): bool
     {
         return (bool) $this->getSiteConfig('use_site_lang_setting');
+    }
+
+    /**
+     * 現在の画面で表示しているものがメインサイトかどうか
+     * @param Site $site
+     * @return bool
+     */
+    public function isMainOnCurrentDisplay($site): bool
+    {
+        if(!empty($site->main_site_id)) {
+            return false;
+        }
+        $request = Router::getRequest();
+        if(!$request) {
+            return true;
+        }
+        if($request->getParam('controller') === 'Sites' && $request->getParam('action') === 'add') {
+            return false;
+        }
+        return true;
     }
 
 }

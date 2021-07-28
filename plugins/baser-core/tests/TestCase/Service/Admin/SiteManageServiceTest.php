@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Service\Admin;
 
+use BaserCore\Model\Entity\Site;
 use BaserCore\Service\Admin\SiteManageServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
@@ -135,6 +136,20 @@ class SiteManageServiceTest extends BcTestCase
         $siteConfig->value = true;
         $siteConfigs->save($siteConfig);
         $this->assertTrue($this->SiteManage->isUseSiteLangSetting());
+    }
+
+    /**
+     * test isMainOnCurrentDisplay
+     */
+    public function testIsMainOnCurrentDisplay()
+    {
+        $site = new Site(['id' => 1, 'main_site_id' => null]);
+        $this->assertTrue($this->SiteManage->isMainOnCurrentDisplay($site));
+        $site = new Site(['id' => 1, 'main_site_id' => null]);
+        $this->getRequest('/baser/admin/baser-core/sites/add');
+        $this->assertFalse($this->SiteManage->isMainOnCurrentDisplay($site));
+        $site = new Site(['id' => 2, 'main_site_id' => 1]);
+        $this->assertFalse($this->SiteManage->isMainOnCurrentDisplay($site));
     }
 
 }

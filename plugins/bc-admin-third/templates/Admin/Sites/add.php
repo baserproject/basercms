@@ -29,7 +29,7 @@ $this->BcBaser->js('admin/sites/form.bundle', false);
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
-<?php $this->BcBaser->element('Sites/form') ?>
+<?php $this->BcBaser->element('Sites/form', ['siteListOptions' => []]) ?>
 
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 

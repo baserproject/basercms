@@ -85,15 +85,17 @@ interface SiteManageServiceInterface
 
     /**
      * サイトのリストを取得
+     * @param array $options
      * @return array
      */
-    public function getSiteList(): array;
+    public function getSiteList($options = []): array;
 
     /**
      * テーマのリストを取得する
+     * @param Site $site
      * @return array
      */
-    public function getThemeList(): array;
+    public function getThemeList(Site $site): array;
 
     /**
      * デバイス設定を利用するかどうか
@@ -126,5 +128,12 @@ interface SiteManageServiceInterface
      * @return array
      */
     public function getSelectableLangs($mainSiteId, $currentSiteId = null): array;
+
+    /**
+     * 現在の画面で表示しているものがメインサイトかどうか
+     * @param Site $site
+     * @return bool
+     */
+    public function isMainOnCurrentDisplay($site): bool;
 
 }

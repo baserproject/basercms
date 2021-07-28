@@ -16,6 +16,8 @@ use BaserCore\View\BcAdminAppView;
  *
  * @var BcAdminAppView $this
  * @var array $themes
+ * @var array $siteListOptions
+ * @var \BaserCore\Model\Entity\Site $site
  */
 $useSiteDeviceSetting = $this->BcAdminSite->isUseSiteDeviceSetting();
 $useSiteLangSetting = $this->BcAdminSite->isUseSiteLangSetting();
@@ -33,6 +35,7 @@ $useSiteLangSetting = $this->BcAdminSite->isUseSiteLangSetting();
       </td>
     </tr>
   <?php endif ?>
+  <?php if(!$this->BcAdminSite->isMainOnCurrentDisplay($site)): ?>
   <tr>
     <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('name', __d('baser', '識別名称')) ?>
       &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
@@ -51,6 +54,7 @@ $useSiteLangSetting = $this->BcAdminSite->isUseSiteLangSetting();
       <?php echo $this->BcAdminForm->error('alias') ?>
     </td>
   </tr>
+  <?php endif ?>
   <tr>
     <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('display_name', __d('baser', 'サイト名')) ?>
       &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span></th>
@@ -94,11 +98,12 @@ $useSiteLangSetting = $this->BcAdminSite->isUseSiteLangSetting();
       <?php echo $this->BcAdminForm->error('description') ?>
     </td>
   </tr>
+  <?php if(!$this->BcAdminSite->isMainOnCurrentDisplay($site)): ?>
   <tr>
     <th
       class="bca-form-table__label"><?php echo $this->BcAdminForm->label('main_site_id', __d('baser', 'メインサイト')) ?></th>
     <td class=" bca-form-table__input">
-      <?php echo $this->BcAdminForm->control('main_site_id', ['type' => 'select', 'options' => $this->BcAdminSite->getSiteList()]) ?>
+      <?php echo $this->BcAdminForm->control('main_site_id', ['type' => 'select', 'options' => $this->BcAdminSite->getSiteList($siteListOptions)]) ?>
       <?php echo $this->BcAdminForm->control('relate_main_site', ['type' => 'checkbox', 'label' => __d('baser', 'エイリアスを利用してメインサイトと自動連携する')]) ?>
       <i class="bca-icon--question-circle btn help bca-help"></i>
       <div class="helptext">
@@ -108,6 +113,7 @@ $useSiteLangSetting = $this->BcAdminSite->isUseSiteLangSetting();
       <?php echo $this->BcAdminForm->error('main_site_id') ?>
     </td>
   </tr>
+  <?php endif ?>
   <?php if ($useSiteDeviceSetting || $useSiteLangSetting): ?>
     <tr>
       <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('device', __d('baser', 'デバイス・言語')) ?></th>
@@ -160,7 +166,7 @@ $useSiteLangSetting = $this->BcAdminSite->isUseSiteLangSetting();
   <tr>
     <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('theme', __d('baser', 'テーマ')) ?></th>
     <td class=" bca-form-table__input">
-      <?php echo $this->BcAdminForm->control('theme', ['type' => 'select', 'options' => $this->BcAdminSite->getThemeList()]) ?>
+      <?php echo $this->BcAdminForm->control('theme', ['type' => 'select', 'options' => $this->BcAdminSite->getThemeList($site)]) ?>
       <i class="bca-icon--question-circle btn help bca-help"></i>
       <div
         class="helptext"><?php echo __d('baser', 'サブサイトのテンプレートは、各テンプレートの配置フォルダ内にサイト名のサブフォルダを作成する事で別途配置する事ができますが、テーマフォルダ自体を別にしたい場合はここでテーマを指定します。') ?></div>
