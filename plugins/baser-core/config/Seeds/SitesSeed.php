@@ -23,7 +23,7 @@ class SitesSeed extends AbstractSeed
         $data = [
             [
                 'id' => '1',
-                'main_site_id' => '0',
+                'main_site_id' => NULL,
                 'name' => 'en',
                 'display_name' => '英語サイト',
                 'title' => '英語サイト',

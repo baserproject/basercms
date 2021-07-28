@@ -1,42 +1,53 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
 /**
  * サブサイト新規登録
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var \BaserCore\Model\Entity\Site $site
  */
+$this->BcAdmin->setTitle(__d('baser', 'サイト新規登録'));
+$this->BcAdmin->setHelp('sites_form');
 $this->BcBaser->i18nScript([
   'confirmMessage1' => __d('baser', "サブサイトを削除してもよろしいですか？\nサブサイトに関連しているコンテンツは全てゴミ箱に入ります。"),
   'confirmMessage2' => __d('baser', 'エイリアスを本当に変更してもいいですか？<br><br>エイリアスを変更する場合、サイト全体のURLが変更となる為、保存に時間がかかりますのでご注意ください。'),
   'confirmTitle1' => __d('baser', 'エイリアス変更')
 ]);
-$this->BcBaser->js('admin/sites/edit', false);
+$this->BcBaser->js('admin/sites/form.bundle', false);
 ?>
 
 
-<?php echo $this->BcAdminForm->create('Site') ?>
+<?php echo $this->BcAdminForm->create($site, ['novalidate' => true]) ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
-<?php $this->BcBaser->element('sites/form') ?>
+<?php $this->BcBaser->element('Sites/form') ?>
 
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit bca-actions">
-  <?php echo $this->BcForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn',
+  <?php echo $this->BcForm->button(__d('baser', '保存'), [
+    'div' => false,
+    'class' => 'button bca-btn',
     'data-bca-btn-type' => 'save',
     'data-bca-btn-size' => 'lg',
     'data-bca-btn-width' => 'lg',
   ]) ?>
 </div>
-<?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), ['plugin' => '', 'admin' => true, 'controller' => 'sites', 'action' => 'index'], ['class' => 'button bca-btn', 'data-bca-btn-type' => 'back-to-list']) ?>
+<?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'),
+  ['admin' => true, 'controller' => 'sites', 'action' => 'index'],
+  [
+    'class' => 'button bca-btn',
+    'data-bca-btn-type' => 'back-to-list'
+  ]
+) ?>
 
 <?php echo $this->BcAdminForm->end() ?>

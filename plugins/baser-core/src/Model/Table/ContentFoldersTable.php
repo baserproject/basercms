@@ -11,7 +11,10 @@
 
 namespace BaserCore\Model\Table;
 
+use ArrayObject;
 use BaserCore\Model\AppTable;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\Event;
 
 /**
  * Class ContentFoldersTable
@@ -106,14 +109,14 @@ class ContentFoldersTable extends AppTable
      *
      * @param array $options
      */
-    public function beforeSave($options = [])
+    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
         // 変更前のURLを取得
         if (!empty($this->data['ContentFolder']['id']) && ($this->isMovableTemplate || !empty($options['reconstructSearchIndices']))) {
             $this->isMovableTemplate = false;
             $this->setBeforeRecord($this->data['ContentFolder']['id']);
         }
-        return parent::beforeSave($options);
+        return parent::beforeSave($event, $entity, $options);
     }
 
     /**

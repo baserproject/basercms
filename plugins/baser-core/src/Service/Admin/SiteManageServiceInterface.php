@@ -75,18 +75,56 @@ interface SiteManageServiceInterface
      * 言語リストを取得
      * @return array
      */
-    public function getLangs(): array;
+    public function getLangList(): array;
 
     /**
      * デバイスリストを取得
      * @return array
      */
-    public function getDevices(): array;
+    public function getDeviceList(): array;
 
     /**
      * サイトのリストを取得
      * @return array
      */
     public function getSiteList(): array;
+
+    /**
+     * テーマのリストを取得する
+     * @return array
+     */
+    public function getThemeList(): array;
+
+    /**
+     * デバイス設定を利用するかどうか
+     * @return bool
+     */
+    public function isUseSiteDeviceSetting(): bool;
+
+    /**
+     * 言語設定を利用するかどうか
+     * @return bool
+     */
+    public function isUseSiteLangSetting(): bool;
+
+    /**
+     * 選択可能なデバイスの一覧を取得する
+     *
+     * 現在のサイトとすでに利用されいているデバイスは除外する
+     *
+     * @param int $mainSiteId メインサイトID
+     * @param int $currentSiteId 現在のサイトID
+     * @return array
+     */
+    public function getSelectableDevices($mainSiteId, $currentSiteId = null): array;
+
+    /**
+     * 選択可能が言語の一覧を取得する
+     *
+     * @param int $mainSiteId メインサイトID
+     * @param int $currentSiteId 現在のサイトID
+     * @return array
+     */
+    public function getSelectableLangs($mainSiteId, $currentSiteId = null): array;
 
 }

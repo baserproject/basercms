@@ -12,6 +12,7 @@
 namespace BaserCore\Controller\Admin;
 
 use BaserCore\Service\Admin\SiteManageServiceInterface;
+use BaserCore\Utility\BcUtil;
 use Cake\Event\Event;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -54,48 +55,40 @@ class SitesController extends BcAdminAppController
     /**
      * サイト追加
      */
-    public function add()
+    public function add(SiteManageServiceInterface $siteManage)
     {
+        if ($this->request->is('post')) {
 
-        if (!$this->request->getData()) {
-//            $this->request->data = ['Site' => [
-//                'title' => $this->siteConfigs['name'],
-//                'status' => false
-//            ]];
-        } else {
             /*** Sites.beforeAdd ** */
-            $event = $this->dispatchLayerEvent('beforeAdd', [
+            $event = $this->getEventManager()->dispatch(new Event('Controller.Sites.beforeAdd', $this, [
                 'data' => $this->request->getData()
-            ]);
+            ]));
             if ($event !== false) {
                 $this->request = $this->request->withParsedBody(($event->getResult() === null || $event->getResult() === true)? $event->getData('data') : $event->getResult());
             }
-            if ($data = $this->Site->save($this->request->getData())) {
+
+            $site = $siteManage->create($this->request->getData());
+            if (!$site->getErrors()) {
                 /*** Sites.afterAdd ***/
-                $this->dispatchLayerEvent('afterAdd', [
-                    'data' => $data
-                ]);
-                if (!empty($data['Site']['theme'])) {
-                    $this->BcManager->installThemesPlugins($data['Site']['theme']);
+                $this->getEventManager()->dispatch(new Event('Controller.Sites.afterAdd', $this, [
+                    'site' => $site
+                ]));
+
+                // TODO 未実装のためコメントアウト
+                /* >>>
+                if (!empty($site->theme)) {
+                    $this->BcManager->installThemesPlugins($site->theme);
                 }
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を追加しました。'), $this->request->getData('Site.name')));
-                $this->redirect(['controller' => 'sites', 'action' => 'edit', $this->Site->id]);
-            } else {
-                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+                <<< */
+
+                $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を追加しました。'), $site->name));
+                return $this->redirect(['action' => 'edit', $site->id]);
             }
+            $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
+        } else {
+            $site = $siteManage->getNew();
         }
-        $this->setTitle(__d('baser', 'サイト新規登録'));
-        $defaultThemeName = __d('baser', 'サイト基本設定に従う');
-        if (!empty($this->siteConfigs['theme'])) {
-            $defaultThemeName .= '（' . $this->siteConfigs['theme'] . '）';
-        }
-        $themes = BcUtil::getThemeList();
-        if (in_array($this->siteConfigs['theme'], $themes)) {
-            unset($themes[$this->siteConfigs['theme']]);
-        }
-        $this->set('mainSites', $this->Site->getSiteList());
-        $this->set('themes', array_merge(['' => $defaultThemeName], $themes));
-        $this->setHelp('sites_form');
+        $this->set('site', $site);
     }
 
     /**
@@ -243,14 +236,14 @@ class SitesController extends BcAdminAppController
      * @param int $currentSiteId 現在のサイトID
      * @return string
      */
-    public function ajax_get_selectable_devices_and_lang($mainSiteId, $currentSiteId = null)
+    public function ajax_get_selectable_devices_and_lang(SiteManageServiceInterface $sites, $mainSiteId, $currentSiteId = null)
     {
         $this->autoRender = false;
-        Configure::write('debug', 0);
-        return json_encode([
-            'devices' => $this->Site->getSelectableDevices($mainSiteId, $currentSiteId),
-            'langs' => $this->Site->getSelectableLangs($mainSiteId, $currentSiteId),
+        $this->set([
+            'devices' => $sites->getSelectableDevices($mainSiteId, $currentSiteId),
+            'langs' => $sites->getSelectableLangs($mainSiteId, $currentSiteId),
         ]);
+        $this->viewBuilder()->setOption('serialize', ['devices', 'langs']);
     }
 
 }

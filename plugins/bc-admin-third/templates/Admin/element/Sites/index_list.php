@@ -19,8 +19,8 @@ use BaserCore\View\BcAdminAppView;
  */
 
 $this->BcListTable->setColumnNumber(8);
-$devices = $this->BcAdminSite->getDevices();
-$langs = $this->BcAdminSite->getLangs();
+$devices = $this->BcAdminSite->getDeviceList();
+$langs = $this->BcAdminSite->getLangList();
 $siteList = $this->BcAdminSite->getSiteList();
 ?>
 

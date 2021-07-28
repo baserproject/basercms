@@ -22,6 +22,11 @@
         baseUrl: null,
 
         /**
+         * BaserCoreプレフィックス
+         */
+        baserCorePrefix: null,
+
+        /**
          * 管理画面用URLプレフィックス
          */
         adminPrefix: null,
@@ -34,6 +39,7 @@
         init: function (config) {
             var adminScript = $("#AdminScript");
             $.bcUtil.baseUrl = adminScript.attr('data-baseUrl');
+            $.bcUtil.baserCorePrefix = adminScript.attr('data-baserCorePrefix');
             $.bcUtil.adminPrefix = adminScript.attr('data-adminPrefix');
             if (config.baseUrl !== undefined) {
                 $.bcUtil.baseUrl = config.baseUrl;
@@ -94,12 +100,12 @@
                     break;
                 case 'inner':
                     var div = $('<div>').css({'text-align': 'center'}).attr('id', key);
-                    var img = $('<img>').attr('src', $.baseUrl + '/img/admin/ajax-loader.gif');
+                    var img = $('<img>').attr('src', $.baseUrl() + '/img/admin/ajax-loader.gif');
                     div.html(img);
                     $(selector).html(div);
                     break;
                 case 'after':
-                    var img = $('<img>').attr('src', $.baseUrl + '/img/admin/ajax-loader-s.gif').attr('id', key);
+                    var img = $('<img>').attr('src', $.baseUrl() + '/img/admin/ajax-loader-s.gif').attr('id', key);
                     $(selector).after(img);
                     break;
                 case 'target':

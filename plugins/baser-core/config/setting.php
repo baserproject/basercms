@@ -110,11 +110,11 @@ return [
                     ]
                 ],
                 'Sites' => [
-                    'title' => __d('baser', 'サブサイト管理'),
+                    'title' => __d('baser', 'サイト管理'),
                     'type' => 'system',
                     'menus' => [
                         'Sites' => [
-                            'title' => __d('baser', 'サブサイト'),
+                            'title' => __d('baser', 'サイト'),
                             'url' => ['prefix' => 'Admin', 'plugin' => 'BaserCore', 'controller' => 'sites', 'action' => 'index'],
                             'currentRegex' => '/\/sites\/.+?/s'
                         ],

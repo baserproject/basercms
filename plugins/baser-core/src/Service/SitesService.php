@@ -142,4 +142,36 @@ class SitesService implements SitesServiceInterface
         return $this->Sites->delete($site);
     }
 
+    /**
+     * 選択可能なデバイスの一覧を取得する
+     *
+     * 現在のサイトとすでに利用されいているデバイスは除外する
+     *
+     * @param int $mainSiteId メインサイトID
+     * @param int $currentSiteId 現在のサイトID
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getSelectableDevices($mainSiteId, $currentSiteId = null): array
+    {
+        return $this->Sites->getSelectableDevices($mainSiteId, $currentSiteId);
+    }
+
+    /**
+     * 選択可能が言語の一覧を取得する
+     *
+     * @param int $mainSiteId メインサイトID
+     * @param int $currentSiteId 現在のサイトID
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getSelectableLangs($mainSiteId, $currentSiteId = null): array
+    {
+        return $this->Sites->getSelectableLangs($mainSiteId, $currentSiteId);
+    }
+
 }

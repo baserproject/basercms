@@ -1,11 +1,11 @@
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
 /**
@@ -13,7 +13,7 @@
  */
 
 $(function () {
-    var alias = $("#SiteAlias").val();
+    var alias = $("#alias").val();
     $("#BtnDelete").click(function () {
         if (confirm(bcI18n.confirmMessage1)) {
             var form = $(this).parents('form');
@@ -23,7 +23,7 @@ $(function () {
         return false;
     });
     $("#BtnSave").click(function () {
-        if (alias && alias != $("#SiteAlias").val()) {
+        if (alias && alias != $("#alias").val()) {
             $.bcConfirm.show({
                 'title': bcI18n.confirmTitle1,
                 'message': bcI18n.confirmMessage2,
@@ -37,9 +37,9 @@ $(function () {
         $.bcUtil.showLoader();
     });
 
-    $("#SiteMainSiteId").change(loadDeviceAndLang);
-    $("#SiteDevice, #SiteLang").change(loadOptions);
-    $('input[name="data[Site][same_main_url]"]').click(loadOptions);
+    $("#main-site-id").change(loadDeviceAndLang);
+    $("#device, #lang").change(loadOptions);
+    $('input[name="same_main_url"]').click(loadOptions);
 
     loadDeviceAndLang();
 
@@ -47,9 +47,13 @@ $(function () {
      * デバイスと言語の表示設定
      */
     function loadDeviceAndLang() {
-        $.bcUtil.ajax($.baseUrl + '/' + $.bcUtil.adminPrefix + '/sites/ajax_get_selectable_devices_and_lang/' + $("#SiteMainSiteId").val() + '/' + $("#SiteId").val(), function (result) {
-            var selectDevice = $("#SiteDevice");
-            var selectLang = $("#SiteLang");
+        var url = $.bcUtil.baseUrl + $.bcUtil.baserCorePrefix + $.bcUtil.adminPrefix + '/baser-core/sites/ajax_get_selectable_devices_and_lang/' + $("#main-site-id").val();
+        if($("#id").val() !== undefined) {
+            url += '/' + $("#id").val();
+        }
+        $.bcUtil.ajax(url, function (result) {
+            var selectDevice = $("#device");
+            var selectLang = $("#lang");
             var device = selectDevice.val();
             var lang = selectLang.val();
             selectDevice.find('option').remove();
@@ -62,19 +66,19 @@ $(function () {
                 selectLang.append($('<option>').val(value).text(name).prop('selected', (value === lang)));
             });
             loadOptions();
-        }, {type: 'GET', loaderType: 'after', loaderSelector: '#SiteMainSiteId'});
+        }, {type: 'GET', loaderType: 'after', loaderSelector: '#main-site-id'});
     }
 
     /**
      * デバイスと言語のオプションの表示設定
      */
     function loadOptions() {
-        var autoRedirect = $("#SiteAutoRedirect");
-        var sameMainUrl = $("#SiteSameMainUrl");
-        var autoLink = $("#SiteAutoLink");
+        var autoRedirect = $("#auto-redirect");
+        var sameMainUrl = $("#same-main-url");
+        var autoLink = $("#auto-link");
         var spanAutoRedirect = $("#SpanSiteAutoRedirect");
         var spanAutoLink = $("#SpanSiteAutoLink");
-        if ($("#SiteDevice").val() || $("#SiteLang").val()) {
+        if ($("#device").val() || $("#lang").val()) {
             $("#SectionAccessType").show();
         } else {
             $("#SectionAccessType").hide();
@@ -89,7 +93,7 @@ $(function () {
             spanAutoLink.hide();
         } else {
             spanAutoRedirect.show();
-            if ($("#SiteDevice").val() == 'mobile' || $("#SiteDevice").val() == 'smartphone') {
+            if ($("#device").val() == 'mobile' || $("#device").val() == 'smartphone') {
                 spanAutoLink.show();
             } else {
                 spanAutoLink.hide();

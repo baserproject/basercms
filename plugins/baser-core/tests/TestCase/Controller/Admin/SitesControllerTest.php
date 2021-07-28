@@ -40,7 +40,8 @@ class SitesControllerTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Sites'
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Dblogs'
     ];
 
     /**
@@ -87,7 +88,71 @@ class SitesControllerTest extends BcTestCase
      */
     public function testAdd()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $sites = $this->getTableLocator()->get('BaserCore.Sites');
+        $data = [
+            'name' => 'test',
+            'display_name' => 'test',
+            'alias' => 'test',
+            'title' => 'test',
+            'status' => true
+        ];
+        $this->post('/baser/admin/baser-core/sites/add', $data);
+        $this->assertResponseSuccess();
+        $query = $sites->find()->where(['name' => $data['name']]);
+        $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * Test beforeAddEvent
+     */
+    public function testBeforeAddEvent()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryControllerEventToMock('Controller.Sites.beforeAdd', function(Event $event) {
+            $data = $event->getData('data');
+            $data['name'] = 'etc';
+            $event->setData('data', $data);
+        });
+        $data = [
+            'name' => 'test2',
+            'display_name' => 'test',
+            'alias' => 'test',
+            'title' => 'test',
+            'status' => true
+        ];
+        $this->post('/baser/admin/baser-core/sites/add', $data);
+        $sites = $this->getTableLocator()->get('BaserCore.Sites');
+        $query = $sites->find()->where(['name' => 'etc']);
+        $this->assertEquals(1, $query->count());
+    }
+
+    /**
+     * Test afterAddEvent
+     */
+    public function testAfterAddEvent()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->entryControllerEventToMock('Controller.Sites.afterAdd', function(Event $event) {
+            $site = $event->getData('site');
+            $sites = $this->getTableLocator()->get('Sites');
+            $site->name = 'etc';
+            $sites->save($site);
+        });
+        $data = [
+            'name' => 'test2',
+            'display_name' => 'test',
+            'alias' => 'test',
+            'title' => 'test',
+            'status' => true
+        ];
+        $this->post('/baser/admin/baser-core/sites/add', $data);
+        $sites = $this->getTableLocator()->get('BaserCore.Sites');
+        $query = $sites->find()->where(['name' => 'etc']);
+        $this->assertEquals(1, $query->count());
     }
 
     /**

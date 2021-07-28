@@ -53,9 +53,9 @@ class BcAdminSiteHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function getDevices(): array
+    public function getDeviceList(): array
     {
-        return $this->SiteManage->getDevices();
+        return $this->SiteManage->getDeviceList();
     }
 
     /**
@@ -65,9 +65,9 @@ class BcAdminSiteHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function getlangs(): array
+    public function getLangList(): array
     {
-        return $this->SiteManage->getlangs();
+        return $this->SiteManage->getLangList();
     }
 
     /**
@@ -80,6 +80,42 @@ class BcAdminSiteHelper extends Helper
     public function getSiteList(): array
     {
         return $this->SiteManage->getSiteList();
+    }
+
+    /**
+     * テーマのリストを取得
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getThemeList(): array
+    {
+        return $this->SiteManage->getThemeList();
+    }
+
+    /**
+     * デバイス設定を利用するかどうか
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isUseSiteDeviceSetting(): bool
+    {
+        return $this->SiteManage->isUseSiteDeviceSetting();
+    }
+
+    /**
+     * 言語設定を利用するかどうか
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isUseSiteLangSetting(): bool
+    {
+        return $this->SiteManage->isUseSiteLangSetting();
     }
 
 }

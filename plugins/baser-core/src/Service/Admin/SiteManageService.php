@@ -16,6 +16,7 @@ use BaserCore\Service\SitesService;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 
 /**
@@ -37,7 +38,7 @@ class SiteManageService extends SitesService implements SiteManageServiceInterfa
      * @noTodo
      * @unitTest
      */
-    public function getLangs(): array
+    public function getLangList(): array
     {
         $languages = Configure::read('BcLang');
         $langs = [];
@@ -54,7 +55,7 @@ class SiteManageService extends SitesService implements SiteManageServiceInterfa
      * @noTodo
      * @unitTest
      */
-    public function getDevices(): array
+    public function getDeviceList(): array
     {
         $agents = Configure::read('BcAgent');
         $devices = [];
@@ -74,6 +75,42 @@ class SiteManageService extends SitesService implements SiteManageServiceInterfa
     public function getSiteList(): array
     {
         return $this->Sites->getSiteList();
+    }
+
+    /**
+     * テーマのリストを取得する
+     * @return array
+     */
+    public function getThemeList(): array
+    {
+        $defaultThemeName = __d('baser', 'メインサイトに従う');
+        $mainTheme = $this->Sites->getRootMain(['theme'])['theme'];
+        if (!empty($this->siteConfigs['theme'])) {
+            $defaultThemeName .= '（' . $mainTheme . '）';
+        }
+        $themes = BcUtil::getThemeList();
+        if (in_array($mainTheme, $themes)) {
+            unset($themes[$mainTheme]);
+        }
+        return array_merge(['' => $defaultThemeName], $themes);
+    }
+
+    /**
+     * デバイス設定を利用するかどうか
+     * @return bool
+     */
+    public function isUseSiteDeviceSetting(): bool
+    {
+        return (bool) $this->getSiteConfig('use_site_device_setting');
+    }
+
+    /**
+     * 言語設定を利用するかどうか
+     * @return bool
+     */
+    public function isUseSiteLangSetting(): bool
+    {
+        return (bool) $this->getSiteConfig('use_site_lang_setting');
     }
 
 }

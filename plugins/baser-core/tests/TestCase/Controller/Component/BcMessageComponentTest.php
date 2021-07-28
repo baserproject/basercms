@@ -103,7 +103,7 @@ class BcMessageComponentTest extends BcTestCase
 
         // not flash message
         $this->BcMessage->set('test', false, false, false);
-        $this->assertEquals(null, $_SESSION['Flash']);
+        $this->assertFalse(isset($_SESSION['Flash']));
     }
 
     /**

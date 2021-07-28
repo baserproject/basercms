@@ -20,7 +20,7 @@ use BaserCore\Model\Table\ContentsTable;
  * Class ContentTest
  *
  * @package Baser.Test.Case.Model
- * @property Content $Content
+ * @property ContentsTable $Contents
  */
 class ContentsTableTest extends BcTestCase
 {
@@ -390,6 +390,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testGetContentFolderList()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $siteId = 1;
 
         $this->Contents->getContentFolderList();
