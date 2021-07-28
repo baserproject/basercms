@@ -41,6 +41,9 @@ class MailfieldHelper extends AppHelper
 		} elseif ($data['type'] === 'tel') {
 			$attributes['type'] = 'tel';
 		}
+		if ($data['auto_complete'] != 'none') {
+			$attributes['autocomplete'] = $data['auto_complete'];
+		}
 		if (!empty($data['options'])) {
 			$options = preg_split('/(?<!\\\)\|/', $data['options']);
 			$options = call_user_func_array('aa', $options);
