@@ -134,5 +134,7 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $request = $this->getRequest('/');
         $users = $this->Sites->getIndex($request->getQueryParams());
         $this->assertEquals(2, $users->all()->count());
+        $this->expectException("Exception");
+        $this->Sites->delete(1);
     }
 }

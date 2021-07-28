@@ -13,6 +13,7 @@ namespace BaserCore\Controller\Admin;
 
 use BaserCore\Service\Admin\SiteManageServiceInterface;
 use BaserCore\Utility\BcUtil;
+use Cake\Core\Exception\Exception;
 use Cake\Event\Event;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -54,6 +55,9 @@ class SitesController extends BcAdminAppController
 
     /**
      * サイト追加
+     *
+     * @checked
+     * @unitTest
      */
     public function add(SiteManageServiceInterface $siteManage)
     {
@@ -95,6 +99,8 @@ class SitesController extends BcAdminAppController
      * サイト情報編集
      *
      * @param $id
+     * @checked
+     * @unitTest
      */
     public function edit(SiteManageServiceInterface $siteManage, $id)
     {
@@ -117,9 +123,9 @@ class SitesController extends BcAdminAppController
             if (!$site->getErrors()) {
 
                 /*** Sites.afterEdit ***/
-                $this->dispatchLayerEvent('afterEdit', [
+                $this->getEventManager()->dispatch(new Event('Controller.Sites.afterEdit', $this, [
                     'site' => $site
-                ]);
+                ]));
 
                 // TODO 未実装のためコメントアウト
                 /* >>>
@@ -138,89 +144,27 @@ class SitesController extends BcAdminAppController
     }
 
     /**
-     * 公開状態にする
-     *
-     * @param string $id
-     * @return bool
-     */
-    public function ajax_unpublish($id)
-    {
-        $this->_checkSubmitToken();
-        $this->autoRender = false;
-        if (!$id) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-        if (!$this->_changeStatus($id, false)) {
-            $this->ajaxError(500, $this->Site->validationErrors);
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * 非公開状態にする
-     *
-     * @param string $id
-     * @return bool
-     */
-    public function ajax_publish($id)
-    {
-        $this->_checkSubmitToken();
-        $this->autoRender = false;
-        if (!$id) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-        if (!$this->_changeStatus($id, true)) {
-            $this->ajaxError(500, $this->Site->validationErrors);
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * ステータスを変更する
-     *
-     * @param int $id
-     * @param boolean $status
-     * @return boolean
-     */
-    protected function _changeStatus($id, $status)
-    {
-        $statusTexts = [0 => __d('baser', '非公開'), 1 => __d('baser', '公開')];
-        $data = $this->Site->find('first', ['conditions' => ['Site.id' => $id], 'recursive' => -1]);
-        $data['Site']['status'] = $status;
-        if (!$this->Site->save($data)) {
-            return false;
-        }
-
-        $statusText = $statusTexts[$status];
-        $this->BcMessage->setSuccess(
-            sprintf(
-                __d('baser', 'サイト「%s」 を、%s に設定しました。'),
-                $data['Site']['name'],
-                $statusText
-            ),
-            true,
-            false
-        );
-        return true;
-    }
-
-    /**
      * 削除する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function delete()
+    public function delete(SiteManageServiceInterface $siteManage, $id)
     {
-        if (empty($this->request->getData('Site.id'))) {
-            $this->notFound();
+        if (!$id) {
+            $this->BcMessage->setError(__d('baser', '無効なIDです。'));
+            $this->redirect(['action' => 'index']);
         }
-        if (!$this->Site->delete($this->request->getData('Site.id'))) {
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
-            $this->redirect(['action' => 'edit', $this->request->getData('Site.id')]);
-            return;
+        $this->request->allowMethod(['post', 'delete']);
+        $site = $siteManage->get($id);
+        try {
+            if ($siteManage->delete($id)) {
+                $this->BcMessage->setSuccess(__d('baser', 'サイト: {0} を削除しました。', $site->name));
+            }
+        } catch (Exception $e) {
+            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
-        $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」 を削除しました。'), $this->request->getData('Site.name')));
-        $this->redirect(['action' => 'index']);
+        return $this->redirect(['action' => 'index']);
     }
 
     /**
@@ -228,7 +172,8 @@ class SitesController extends BcAdminAppController
      *
      * @param int $mainSiteId メインサイトID
      * @param int $currentSiteId 現在のサイトID
-     * @return string
+     * @checked
+     * @noTodo
      */
     public function ajax_get_selectable_devices_and_lang(SiteManageServiceInterface $sites, $mainSiteId, $currentSiteId = null)
     {

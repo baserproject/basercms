@@ -11,9 +11,11 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\SitesTable;
 use Cake\Core\Configure;
+use Cake\Core\Exception\CakeException;
 use Cake\Core\Exception\Exception;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
@@ -136,9 +138,12 @@ class SitesService implements SitesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function delete($id)
+    public function delete(int $id)
     {
         $site = $this->get($id);
+        if(!$site->main_site_id) {
+            throw new Exception(__d('baser', 'メインサイトは削除できません。'));
+        }
         return $this->Sites->delete($site);
     }
 

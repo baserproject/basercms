@@ -16,6 +16,7 @@ use BaserCore\Service\Admin\SiteManageServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**
@@ -160,7 +161,35 @@ class SitesControllerTest extends BcTestCase
      */
     public function testEdit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = [
+            'display_name' => 'Test_test_Man'
+        ];
+        $this->post('/baser/admin/baser-core/sites/edit/1', $data);
+        $this->assertResponseSuccess();
+
+        // イベントテスト
+        $this->entryControllerEventToMock('Controller.Sites.afterEdit', function(Event $event) {
+            $site = $event->getData('site');
+            $sites = $this->getTableLocator()->get('BaserCore.Sites');
+            $site->display_name = 'etc';
+            $sites->save($site);
+        });
+        $data = [
+            'id' => 1,
+            'name' => 'Test_test_Man2',
+            'password_1' => 'Lorem ipsum dolor sit amet',
+            'password_2' => 'Lorem ipsum dolor sit amet',
+            'real_name_1' => 'Lorem ipsum dolor sit amet',
+            'real_name_2' => 'Lorem ipsum dolor sit amet',
+            'email' => 'test2@example.com',
+            'nickname' => 'Lorem ipsum dolor sit amet',
+        ];
+        $this->post('/baser/admin/baser-core/sites/edit/1', $data);
+        $sites = $this->getTableLocator()->get('BaserCore.Sites');
+        $query = $sites->find()->where(['display_name' => 'etc']);
+        $this->assertEquals(1, $query->count());
     }
 
     /**
@@ -168,7 +197,16 @@ class SitesControllerTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/baser-core/sites/delete/1');
+        $this->assertResponseSuccess();
+        $this->assertRedirect([
+            'plugin' => 'BaserCore',
+            'prefix' => 'Admin',
+            'controller' => 'sites',
+            'action' => 'index'
+        ]);
     }
 
 }

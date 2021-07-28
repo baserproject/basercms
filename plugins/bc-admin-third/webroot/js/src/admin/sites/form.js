@@ -14,14 +14,6 @@
 
 $(function () {
     var alias = $("#alias").val();
-    $("#BtnDelete").click(function () {
-        if (confirm(bcI18n.confirmMessage1)) {
-            var form = $(this).parents('form');
-            form.attr('action', $(this).data('action'));
-            form.submit();
-        }
-        return false;
-    });
     $("#BtnSave").click(function () {
         if (alias && alias != $("#alias").val()) {
             $.bcConfirm.show({
