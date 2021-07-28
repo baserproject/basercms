@@ -51,7 +51,7 @@ $(function () {
         form.submit();
         form.attr('target', '_self');
         form.attr('action', action);
-        $.get($.baseUrl + '/bc_form/ajax_get_token?requestview=false', function (result) {
+        $.get($.baseUrl() + '/bc_form/ajax_get_token?requestview=false', function (result) {
             $('input[name="_csrfToken"]').val(result);
         });
         return false;
@@ -66,7 +66,7 @@ $(function () {
             $("#BtnDelete").prop("disabled", true);
             $.bcUtil.showLoader();
             var form = $(this).parents('form');
-            form.attr('action', $.baseUrl + '/' + $.bcUtil.adminPrefix + '/contents/delete');
+            form.attr('action', $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/contents/delete');
             form.submit();
         }
         return false;
@@ -90,7 +90,7 @@ $(function () {
         if (confirm(bcI18n.contentsEditConfirmMessage3.sprintf(displayName))) {
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.baseUrl + '/' + $.bcUtil.adminPrefix + '/contents/exists_content_by_url',
+                    url: $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/contents/exists_content_by_url',
                     type: 'POST',
                     data: {
                         data: {url: targetUrl},
@@ -106,7 +106,7 @@ $(function () {
                             $.bcToken.key = null;
                             $.bcToken.check(function () {
                                 return $.ajax({
-                                    url: $.baseUrl + '/' + $.bcUtil.adminPrefix + '/contents/add/1',
+                                    url: $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/contents/add/1',
                                     type: 'POST',
                                     data: $.extend(data, {
                                         _Token: {
@@ -119,7 +119,7 @@ $(function () {
                                     },
                                     success: function (result) {
                                         $.bcUtil.showNoticeMessage(bcI18n.contentsEditInfoMessage1);
-                                        location.href = $.baseUrl + '/' + $.bcUtil.adminPrefix + '/contents/edit_alias/' + result.id;
+                                        location.href = $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/contents/edit_alias/' + result.id;
                                     },
                                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                                         $.bcUtil.hideLoader();
@@ -159,7 +159,7 @@ $(function () {
         if (confirm(bcI18n.contentsEditConfirmMessage4.sprintf(displayName))) {
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.baseUrl + '/' + $.bcUtil.adminPrefix + '/contents/exists_content_by_url',
+                    url: $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/contents/exists_content_by_url',
                     type: 'POST',
                     data: {
                         data: {url: targetUrl},

@@ -11,7 +11,7 @@
 $(function () {
     $("#SearchIndexSiteId").change(function () {
         $.ajax({
-            url: $.baseUrl + '/' + $.bcUtil.adminPrefix + '/contents/ajax_get_content_folder_list/' + $(this).val(),
+            url: $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/contents/ajax_get_content_folder_list/' + $(this).val(),
             type: "GET",
             dataType: "json",
             beforeSend: function () {

@@ -67,7 +67,7 @@ $(function () {
         $.bcToken.check(function () {
             return $.ajax({
                 type: 'POST',
-                url: $.baseUrl + '/' + $.bcUtil.adminPrefix + '/site_configs/check_sendmail',
+                url: $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/site_configs/check_sendmail',
                 data: $("#SiteConfigFormForm").serialize(),
                 beforeSend: function () {
                     $("#ResultCheckSendmail").hide();

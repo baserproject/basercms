@@ -34,7 +34,7 @@ $(function () {
             siteId = 0;
         }
         // メニューを再構築する必要があるため、ajax ではなく遷移させる
-        location.href = $.baseUrl + '/' + $.bcTree.config.adminPrefix + '/contents/index/site_id:' + siteId + '/list_type:1';
+        location.href = $.baseUrl() + '/' + $.bcTree.config.adminPrefix + '/contents/index/site_id:' + siteId + '/list_type:1';
     });
 
     // 表示変更時
@@ -77,7 +77,7 @@ $(function () {
         $.bcUtil.showNoticeMessage(bcI18n.infoMessage1.sprintf($.parseJSON(result).title));
     };
     $.baserAjaxDataList.init();
-    $.baserAjaxBatch.init({url: $.baseUrl + '/' + $.bcTree.config.adminPrefix + '/contents/ajax_batch'});
+    $.baserAjaxBatch.init({url: $.baseUrl() + '/' + $.bcTree.config.adminPrefix + '/contents/ajax_batch'});
 
     //$("#Search").before($("#ViewSetting"));
 
@@ -109,7 +109,7 @@ $(function () {
         if (e !== undefined && e.target.id == 'ViewSettingSiteId') {
             $("#BtnSearchClear").click();
             $.ajax({
-                url: $.baseUrl + '/' + $.bcTree.config.adminPrefix + '/contents/ajax_get_content_folder_list/' + $(this).val(),
+                url: $.baseUrl() + '/' + $.bcTree.config.adminPrefix + '/contents/ajax_get_content_folder_list/' + $(this).val(),
                 type: "GET",
                 dataType: "json",
                 beforeSend: function () {
@@ -163,7 +163,7 @@ $(function () {
      * 表形式のリストをロードする
      */
     function loadTable() {
-        url = $.baseUrl + '/' + $.bcTree.config.adminPrefix + '/contents/index/site_id:' + $("#ViewSettingSiteId").val() + '/list_type:2';
+        url = $.baseUrl() + '/' + $.bcTree.config.adminPrefix + '/contents/index/site_id:' + $("#ViewSettingSiteId").val() + '/list_type:2';
         $("#ContentIndexForm").attr('action', url);
         $.baserAjaxDataList.search();
     }

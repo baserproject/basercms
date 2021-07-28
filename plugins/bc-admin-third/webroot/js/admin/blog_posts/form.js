@@ -45,7 +45,7 @@ $(function () {
         form.submit();
         form.attr('target', '_self');
         form.attr('action', action);
-        $.get($.baseUrl + '/bc_form/ajax_get_token?requestview=false', function (result) {
+        $.get($.baseUrl() + '/bc_form/ajax_get_token?requestview=false', function (result) {
             $('input[name="_csrfToken"]').val(result);
         });
         return false;

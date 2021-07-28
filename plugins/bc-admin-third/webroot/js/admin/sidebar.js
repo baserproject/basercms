@@ -53,7 +53,7 @@ window.addEventListener('DOMContentLoaded', function () {
             el: tmpl,
             data: {
                 systemExpanded: isSystemSettingPage,
-                baseURL: $.baseUrl,
+                baseURL: $.baseUrl(),
                 currentSiteId: data.currentSiteId,
                 contentList: contentList,
                 isSystemSettingPage: isSystemSettingPage,

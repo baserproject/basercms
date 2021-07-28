@@ -15,7 +15,7 @@ $(function () {
     function loadDblogs() {
         var ajaxurl = $(this).attr('href');
         if (ajaxurl == undefined) {
-            ajaxurl = $.baseUrl + '/' + $.bcUtil.adminPrefix + '/dblogs/ajax_index';
+            ajaxurl = $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/dblogs/ajax_index';
         }
         $.bcUtil.ajax(ajaxurl, function (response, status) {
             if (response) {

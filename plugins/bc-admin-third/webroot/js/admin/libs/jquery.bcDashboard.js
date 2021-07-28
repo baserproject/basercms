@@ -11,7 +11,7 @@
 (function ($) {
     $.bcDashboard = {
         ajax: function (url, selector) {
-            $.bcUtil.ajax($.baseUrl + url, function (result) {
+            $.bcUtil.ajax($.baseUrl() + url, function (result) {
                 if (result) {
                     $(selector).hide();
                     $(selector).html(result);
