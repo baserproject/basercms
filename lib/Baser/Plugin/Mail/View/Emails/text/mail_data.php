@@ -16,7 +16,7 @@
 $group_field = null;
 foreach ($mailFields as $field) {
 	$field = $field['MailField'];
-	if ($field['use_field'] && isset($message[$field['field_name']]) && ($group_field != $field['group_field'] || (!$group_field && !$field['group_field']))) {
+	if ($field['use_field'] && ($group_field != $field['group_field'] || (!$group_field && !$field['group_field']))) {
 ?>
 
 
