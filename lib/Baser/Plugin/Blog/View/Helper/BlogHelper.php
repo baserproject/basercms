@@ -586,10 +586,12 @@ class BlogHelper extends AppHelper
 				$path[] = urldecode($category['BlogCategory']['name']);
 			}
 		}
-		if ($options['named']) {
-			$path = array_merge($path, $options['named']);
-		}
 		$url = $contentUrl . 'archives/' . implode('/', $path);
+		if ($options['named']) {
+			foreach($options['named'] as $key => $value) {
+				$url .= sprintf('/%s:%s', $key, $value);
+			}
+		}
 		if ($options['base']) {
 			return $this->url($url);
 		} else {
