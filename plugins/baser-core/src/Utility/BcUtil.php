@@ -321,7 +321,7 @@ class BcUtil
         if (!$url) {
             $request = Router::getRequest(true);
             if ($request) {
-                $url = $request->url;
+                $url = $request->getUri();
             } else {
                 return false;
             }
