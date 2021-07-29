@@ -12,19 +12,20 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
-use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Model\Entity\User;
-use Cake\Datasource\EntityInterface;
-use Cake\Event\Event;
-use Cake\ORM\Association\BelongsTo;
-use Cake\ORM\Behavior\TimestampBehavior;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
+use Cake\Event\Event;
+use BaserCore\View\AppView;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
+use BaserCore\Model\Entity\User;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use Cake\ORM\Association\BelongsTo;
+use Cake\Datasource\EntityInterface;
+use Cake\ORM\Behavior\TimestampBehavior;
+use BaserCore\Event\BcEventDispatcherTrait;
 
 /**
  * Class UsersTable
@@ -102,9 +103,9 @@ class UsersTable extends Table
         return true;
         // <<<
 
-        if (isset($this->data[$this->alias]['password'])) {
+        if (isset($this->data[$this->getAlias()]['password'])) {
             App::uses('AuthComponent', 'Controller/Component');
-            $this->data[$this->alias]['password'] = AuthComponent::password($this->data[$this->alias]['password']);
+            $this->data[$this->getAlias()]['password'] = AuthComponent::password($this->data[$this->getAlias()]['password']);
         }
         return true;
     }
@@ -146,7 +147,7 @@ class UsersTable extends Table
 
         parent::afterSave($created);
         if ($created && !empty($this->UserGroup)) {
-            $this->applyDefaultFavorites($this->getLastInsertID(), $this->data[$this->alias]['user_group_id']);
+            $this->applyDefaultFavorites($this->getLastInsertID(), $this->data[$this->getAlias()]['user_group_id']);
         }
     }
 
@@ -322,14 +323,13 @@ class UsersTable extends Table
         $users = $this->find("all", [
             'fields' => ['id', 'real_name_1', 'real_name_2', 'nickname'],
             'conditions' => $conditions,
-            'recursive' => -1
         ]);
         $list = [];
         if ($users) {
-            App::uses('BcBaserHelper', 'View/Helper');
-            $BcBaser = new BcBaserHelper(new View());
+            $appView = new AppView();
+            $appView->loadHelper('BaserCore.BcBaser');
             foreach($users as $key => $user) {
-                $list[$user[$this->alias]['id']] = $BcBaser->getUserName($user);
+                $list[$user[$this->getAlias()]['id']] = $appView->BcBaser->getUserName($user);
             }
         }
         return $list;
@@ -342,7 +342,7 @@ class UsersTable extends Table
      */
     public function getDefaultValue()
     {
-        $data[$this->alias]['user_group_id'] = Configure::read('BcApp.adminGroupId');
+        $data[$this->getAlias()]['user_group_id'] = Configure::read('BcApp.adminGroupId');
         return $data;
     }
 
@@ -355,7 +355,7 @@ class UsersTable extends Table
     public function getAuthPrefix($userName)
     {
         $user = $this->find('first', [
-            'conditions' => ["{$this->alias}.name" => $userName],
+            'conditions' => ["{$this->getAlias()}.name" => $userName],
             'recursive' => 1
         ]);
 

@@ -63,6 +63,7 @@ class BcAdminAppView extends AppView
         $this->loadHelper('BaserCore.BcAuth');
         $this->loadHelper('BaserCore.BcAdmin');
         $this->loadHelper('BaserCore.BcAdminUser');
+        $this->loadHelper('BaserCore.BcContents');
         if (!$this->get('title')) {
             $this->set('title', 'Undefined');
         }
