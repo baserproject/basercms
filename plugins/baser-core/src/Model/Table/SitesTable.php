@@ -62,6 +62,7 @@ class SitesTable extends AppTable
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
+        $this->setDisplayField('display_name');
     }
 
     /**
@@ -197,7 +198,6 @@ class SitesTable extends AppTable
             }
         }
 
-        $this->setDisplayField('display_name');
         return $this->find('list')->where($conditions)->toArray();
     }
 
