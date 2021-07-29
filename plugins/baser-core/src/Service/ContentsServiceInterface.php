@@ -9,18 +9,18 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Service\Admin;
+namespace BaserCore\Service;
 
+use BaserCore\Model\Entity\Content;
+use Cake\Http\ServerRequest;
+use Cake\Datasource\EntityInterface;
+use Cake\ORM\Query;
 
 /**
- * Interface PluginManageServiceInterface
+ * Interface ContentsServiceInterface
  * @package BaserCore\Service
  */
-interface ContentManageServiceInterface
+interface ContentsServiceInterface
 {
-    /**
-      * コンテンツ情報を取得する
-      * @return array
-      */
-    public function getContensInfo ();
+
 }

@@ -318,6 +318,145 @@ return [
                 'es'
             ]
         ]
-    ]
+    ],
+    /**
+     * コンテンツ設定
+     */
+    'BcContents' => [
+        'items' => [
+            'Core' => [
+                'Default' => [
+                    'title' => __d('baser', '無所属コンテンツ'),
+                    'omitViewAction' => true,
+                    'routes' => [
+                        'add' => [
+                            'admin' => true,
+                            'controller' => 'contents',
+                            'action' => 'add'
+                        ],
+                        'edit' => [
+                            'admin' => true,
+                            'controller' => 'contents',
+                            'action' => 'edit'
+                        ],
+                        'delete' => [
+                            'admin' => true,
+                            'controller' => 'contents',
+                            'action' => 'empty'
+                        ],
+                        'view' => [
+                            'controller' => 'contents',
+                            'action' => 'view'
+                        ]
+                    ],
+                    'icon' => 'bca-icon--file',
+                ],
+                'ContentFolder' => [
+                    'multiple' => true,
+                    'preview' => true,
+                    'title' => __d('baser', 'フォルダー'),
+                    'routes' => [
+                        'add' => [
+                            'admin' => true,
+                            'controller' => 'content_folders',
+                            'action' => 'add'
+                        ],
+                        'edit' => [
+                            'admin' => true,
+                            'controller' => 'content_folders',
+                            'action' => 'edit'
+                        ],
+                        'delete' => [
+                            'admin' => true,
+                            'controller' => 'content_folders',
+                            'action' => 'delete'
+                        ],
+                        'view' => [
+                            'controller' => 'content_folders',
+                            'action' => 'view'
+                        ]
+                    ],
+                    'icon' => 'bca-icon--folder',
+                ],
+                'ContentAlias' => [
+                    'multiple' => true,
+                    'title' => __d('baser', 'エイリアス'),
+                    'icon' => 'bca-icon--alias',
+                    'routes' => [
+                        'add' => [
+                            'admin' => true,
+                            'controller' => 'contents',
+                            'action' => 'add',
+                            1
+                        ],
+                        'edit' => [
+                            'admin' => true,
+                            'controller' => 'contents',
+                            'action' => 'edit_alias'
+                        ]
+                    ],
+                ],
+                'ContentLink' => [
+                    'multiple' => true,
+                    'title' => __d('baser', 'リンク'),
+                    'omitViewAction' => true,
+                    'routes' => [
+                        'add' => [
+                            'admin' => true,
+                            'controller' => 'content_links',
+                            'action' => 'add'
+                        ],
+                        'edit' => [
+                            'admin' => true,
+                            'controller' => 'content_links',
+                            'action' => 'edit'
+                        ],
+                        'delete' => [
+                            'admin' => true,
+                            'controller' => 'content_links',
+                            'action' => 'delete'
+                        ],
+                        'view' => [
+                            'controller' => 'content_links',
+                            'action' => 'view'
+                        ]
+                    ],
+                    'icon' => 'bca-icon--link',
+                ],
+                'Page' => [
+                    'title' => __d('baser', '固定ページ'),
+                    'multiple' => true,
+                    'preview' => true,
+                    'icon' => 'bca-icon--file',
+                    'omitViewAction' => true,
+                    'routes' => [
+                        'add' => [
+                            'admin' => true,
+                            'controller' => 'pages',
+                            'action' => 'ajax_add'
+                        ],
+                        'edit' => [
+                            'admin' => true,
+                            'controller' => 'pages',
+                            'action' => 'edit'
+                        ],
+                        'delete' => [
+                            'admin' => true,
+                            'controller' => 'pages',
+                            'action' => 'delete'
+                        ],
+                        'view' => [
+                            'controller' => 'pages',
+                            'action' => 'display'
+                        ],
+                        'copy' => [
+                            'admin' => true,
+                            'controller' => 'pages',
+                            'action' => 'ajax_copy'
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ],
 ];
-

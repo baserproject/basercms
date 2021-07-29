@@ -20,7 +20,7 @@ use BaserCore\TestSuite\BcTestCase;
  */
 class ContentManageServiceTest extends BcTestCase
 {
-     
+
     /**
      * Fixtures
      *
@@ -57,7 +57,8 @@ class ContentManageServiceTest extends BcTestCase
           $result = $this->ContentManage->getContensInfo();
           $this->assertTrue(isset($result[0]['unpublished']));
           $this->assertTrue(isset($result[0]['published']));
-          $this->assertTrue(isset($result[0]['total']));     
+          $this->assertTrue(isset($result[0]['total']));
+          $this->assertTrue(isset($result[0]['display_name']));
      }
 
 }
