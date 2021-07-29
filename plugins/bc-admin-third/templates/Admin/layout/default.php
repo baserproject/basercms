@@ -81,7 +81,9 @@ $base = $attributes['base'];
     'id' => 'AdminScript',
     'data-baseUrl' => h($base),
     'data-adminPrefix' => BcUtil::getAdminPrefix(),
-    'data-baserCorePrefix' => Inflector::underscore(BcUtil::getBaserCorePrefix())
+    'data-baserCorePrefix' => Inflector::underscore(BcUtil::getBaserCorePrefix()),
+    'data-ajaxLoaderPath' => $this->Html->Url->image('admin/ajax-loader.gif'),
+    'data-ajaxLoaderSmallPath' => $this->Html->Url->image('admin/ajax-loader-s.gif'),
   ]) ?>
   <?php $this->BcBaser->js([
     'admin/startup.bundle'
