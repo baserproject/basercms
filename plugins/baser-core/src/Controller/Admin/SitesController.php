@@ -167,22 +167,4 @@ class SitesController extends BcAdminAppController
         return $this->redirect(['action' => 'index']);
     }
 
-    /**
-     * 選択可能なデバイスと言語の一覧を取得する
-     *
-     * @param int $mainSiteId メインサイトID
-     * @param int $currentSiteId 現在のサイトID
-     * @checked
-     * @noTodo
-     */
-    public function ajax_get_selectable_devices_and_lang(SiteManageServiceInterface $sites, $mainSiteId, $currentSiteId = null)
-    {
-        $this->autoRender = false;
-        $this->set([
-            'devices' => $sites->getSelectableDevices($mainSiteId, $currentSiteId),
-            'langs' => $sites->getSelectableLangs($mainSiteId, $currentSiteId),
-        ]);
-        $this->viewBuilder()->setOption('serialize', ['devices', 'langs']);
-    }
-
 }

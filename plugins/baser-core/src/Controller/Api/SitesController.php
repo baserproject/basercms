@@ -133,4 +133,22 @@ class SitesController extends BcApiController
         $this->viewBuilder()->setOption('serialize', ['site', 'message']);
     }
 
+    /**
+     * 選択可能なデバイスと言語の一覧を取得する
+     *
+     * @param int $mainSiteId メインサイトID
+     * @param int $currentSiteId 現在のサイトID
+     * @checked
+     * @noTodo
+     */
+    public function get_selectable_devices_and_lang(SitesServiceInterface $sites, $mainSiteId, $currentSiteId = null)
+    {
+        $this->autoRender = false;
+        $this->set([
+            'devices' => $sites->getSelectableDevices($mainSiteId, $currentSiteId),
+            'langs' => $sites->getSelectableLangs($mainSiteId, $currentSiteId),
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['devices', 'langs']);
+    }
+
 }

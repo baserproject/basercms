@@ -213,6 +213,11 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                     ],
                     'contain' => 'UserGroups',
                 ]);
+                // ログインセッションを保有している際も認証済とする
+                // Webの管理画面よりAPIにアクセスできるようにするため
+                $service->loadAuthenticator('Authentication.Session', [
+                    'sessionKey' => $authSetting['sessionKey'],
+                ]);
                 break;
 
             default:
