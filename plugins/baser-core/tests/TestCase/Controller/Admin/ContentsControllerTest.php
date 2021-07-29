@@ -1,19 +1,18 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Controller
- * @since           baserCMS v 4.0.9
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('ContentsController', 'Controller');
+namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BaserCore\Controller\Admin\ContentsController;
+use BaserCore\TestSuite\BcTestCase;
 /**
  * Class ContentsControllerTest
  *
@@ -22,25 +21,43 @@ App::uses('ContentsController', 'Controller');
  */
 class ContentsControllerTest extends BcTestCase
 {
-
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Sites',
+    ];
     /**
      * set up
-     *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+        $this->ContentsController = new ContentsController($this->getRequest());
     }
 
     /**
-     * tearDown
+     * Tear Down
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
+    }
+
+    /**
+     * test initialize
+     *
+     * @return void
+     */
+    public function testInitialize(): void
+    {
+        $this->assertNotEmpty($this->ContentsController->BcContents);
     }
 
     /**
@@ -193,9 +210,10 @@ class ContentsControllerTest extends BcTestCase
     /**
      * コンテンツ情報を取得する
      */
-    public function testAdmin_ajax_contents_info()
+    public function test_ajax_contents_info()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->get('/baser/admin/baser-core/contents/ajax_contents_info/');
+        $this->assertResponseSuccess();
     }
 
     /**
