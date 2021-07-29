@@ -32,6 +32,16 @@
         adminPrefix: null,
 
         /**
+         * 管理画面用のベースURL
+         */
+        adminBaseUrl: null,
+
+        /**
+         * API用のベースURL
+         */
+        apiBaseUrl: null,
+
+        /**
          * Ajaxローダーのパス
          */
         ajaxLoaderPath: null,
@@ -68,6 +78,8 @@
             if (config.ajaxLoaderSmallPath !== undefined) {
                 $.bcUtil.ajaxLoaderSmallPath = config.ajaxLoaderSmallPath;
             }
+            $.bcUtil.adminBaseUrl = $.bcUtil.baseUrl + $.bcUtil.baserCorePrefix + $.bcUtil.adminPrefix + '/';
+            $.bcUtil.apiBaseUrl = $.bcUtil.baseUrl + $.bcUtil.baserCorePrefix + 'api/';
         },
         /**
          * アラートメッセージを表示
