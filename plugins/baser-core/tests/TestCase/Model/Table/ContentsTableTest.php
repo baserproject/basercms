@@ -365,10 +365,9 @@ class ContentsTableTest extends BcTestCase
      */
     public function testFindByType($type, $entityId, $expects)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $result = $this->Content->findByType($type, $entityId);
+        $result = $this->Contents->findByType($type, $entityId);
         if ($result) {
-            $result = $result['Content']['id'];
+            $result = $result->id;
         }
         $this->assertEquals($expects, $result);
     }
@@ -376,11 +375,11 @@ class ContentsTableTest extends BcTestCase
     public function findByTypeDataProvider()
     {
         return [
-            ['Blog.BlogContent', null, 8],    // entityId指定なし
-            ['Blog.BlogContent', 2, 17],    // entityId指定あり
-            ['Page', 12, 34],                // プラグイン指定なし
-            ['Blog.BlogComment', null, []],    // 存在しないタイプ
-            [false, null, []]                // 異常系
+            ['Mail.MailContent', null, 15],    // entityId指定なし
+            ['Blog.BlogContent', 1, 16],    // entityId指定あり
+            ['Page', 3, 6],                // プラグイン指定なし
+            ['Blog.BlogComment', null, null],    // 存在しないタイプ
+            [false, null, null]                // 異常系
         ];
     }
 

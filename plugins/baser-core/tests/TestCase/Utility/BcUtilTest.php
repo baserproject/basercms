@@ -714,6 +714,9 @@ class BcUtilTest extends BcTestCase
     {
         $result = BcUtil::getPrefix();
         $this->assertEquals('/baser/admin', $result);
+        // $regex = trueの場合
+        $result = BcUtil::getPrefix(true);
+        $this->assertRegExp('/^(|\/)' . $result .'/', '/baser/admin');
     }
 
 

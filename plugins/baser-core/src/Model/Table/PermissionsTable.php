@@ -241,7 +241,7 @@ class PermissionsTable extends AppTable
         if ($url != '/') {
             $url = preg_replace('/^\//is', '', $url);
         }
-        $adminPrefix = str_replace('/', '\/',  substr(BcUtil::getPrefix(), 1));
+        $adminPrefix = BcUtil::getPrefix(true);
         $url = preg_replace("/^{$adminPrefix}\//", 'baser/admin/', $url);
         // ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
         $allows = [

@@ -106,8 +106,10 @@ class ContentFoldersTable extends AppTable
 
     /**
      * Before Save
-     *
-     * @param array $options
+     * @param Event $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
+     * @return bool
      */
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {

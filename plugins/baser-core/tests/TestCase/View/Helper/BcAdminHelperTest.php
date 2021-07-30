@@ -30,6 +30,7 @@ class BcAdminHelperTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
+        'plugin.BaserCore.Users',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.Dblogs',
     ];

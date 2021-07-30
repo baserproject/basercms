@@ -1,6 +1,4 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -11,8 +9,15 @@ return;
  * @since           baserCMS v 3.0.6
  * @license         https://basercms.net/license/index.html
  */
-App::uses('BcAppView', 'View');
-App::uses('BcContentsHelper', 'View/Helper');
+
+namespace BaserCore\Test\TestCase\View\Helper;
+
+use Cake\Core\Configure;
+use Cake\Routing\Router;
+use Cake\Http\ServerRequest;
+use BaserCore\View\BcAdminAppView;
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\Helper\BcContentsHelper;
 
 /**
  * BcPage helper library.
@@ -28,46 +33,47 @@ class BcContentsHelperTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
-        'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
-        'baser.Default.SiteConfig',
-        'baser.Default.Site',
-        'baser.Default.User',
-        'baser.Default.UserGroup',
-        'baser.Default.Favorite',
-        'baser.Default.Permission',
-        'baser.Default.ThemeConfig',
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Sites',
     ];
-
     /**
-     * View
-     *
-     * @var View
-     */
-    protected $_View;
-
-    /**
-     * setUp
+     * setUp method
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->_View = new BcAppView();
-        $this->_View->helpers = ['BcContents'];
-        $this->_View->loadHelpers();
-        $this->BcContents = $this->_View->BcContents;
+        $this->BcContents = new BcContentsHelper(new BcAdminAppView($this->getRequest('/')));
     }
 
     /**
-     * tearDown
+     * Tear Down
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
+        unset($this->BcAdminAppView);
+        unset($this->BcContents);
         Router::reload();
         parent::tearDown();
+    }
+
+    /**
+     * testInitialize
+     *
+     * @return void
+     */
+    public function testInitialize(): void
+    {
+        // $this->assertNotEmpty($this->BcContents->_Contents);
+        // $this->assertNotEmpty($this->BcContents->_Permissions);
+        $this->assertContains('BcBaser', $this->BcContents->helpers);
+
     }
 
     /**
@@ -82,6 +88,7 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testGetTree($id, $level, $expectedCount, $expectedTitle, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->BcContents->getTree($id, $level);
         $resultTitle = null;
         $resultCount = null;
@@ -168,6 +175,7 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testIsActionAvailable($type, $action, $entityId, $userGroup, $expect)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $_SESSION['Auth'][BcUtil::authSessionKey('admin')]['user_group_id'] = $userGroup;
         App::uses('BcContentsComponent', 'Controller/Component');
         $BcContentsComponent = new BcContentsComponent(new ComponentCollection());
@@ -242,7 +250,8 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testGetCurrentRelatedSiteUrl($siteName, $expect)
     {
-        $this->BcContents->request = $this->_getRequest('/');
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->BcContents->request = $this->getRequest('/');
         $_SERVER['HTTP_USER_AGENT'] = 'iPhone';
         $result = $this->BcContents->getCurrentRelatedSiteUrl($siteName);
         $this->assertEquals($expect, $result);
@@ -271,7 +280,8 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testGetRelatedSiteContents($id, $options, $expect)
     {
-        $this->BcContents->request = $this->_getRequest('/');
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->BcContents->request = $this->getRequest('/');
         $_SERVER['HTTP_USER_AGENT'] = 'iPhone';
         $result = $this->BcContents->getRelatedSiteContents($id, $options);
         if (!empty($result[1]['Content']['id'])) {
@@ -308,6 +318,7 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testGetRelatedSiteLinks($id, $options, $expect)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->BcContents->request = $this->_getRequest('/');
         $_SERVER['HTTP_USER_AGENT'] = 'iPhone';
         $result = $this->BcContents->getRelatedSiteLinks($id, $options);
@@ -338,6 +349,7 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testGetJsonSettings()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->loginAdmin($this->getRequest());
         App::uses('BcContentsComponent', 'Controller/Component');
         $BcContentsComponent = new BcContentsComponent(new ComponentCollection());
@@ -359,6 +371,7 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testGetJsonSettingsEquals($expect, $no)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->loginAdmin($this->getRequest());
         App::uses('BcContentsComponent', 'Controller/Component');
         $BcContentsComponent = new BcContentsComponent(new ComponentCollection());
@@ -401,6 +414,7 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testGetParent($expected, $id, $direct)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         if (is_string($id)) {
             $this->BcContents->request = $this->_getRequest($id);
             $id = null;
@@ -459,6 +473,7 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testGetSiteRootId($siteId, $expect)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->BcContents->getSiteRootId($siteId);
         $this->assertEquals($expect, $result);
     }
@@ -491,6 +506,7 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testgetContentByEntityId($expect, $id, $contentType, $field)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->BcContents->getContentByEntityId($id, $contentType, $field);
         $this->assertEquals($expect, $result);
     }
@@ -527,6 +543,7 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testgetContentByUrl($expect, $url, $contentType, $field)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->BcContents->getContentByUrl($url, $contentType, $field);
         $this->assertEquals($expect, $result);
     }
@@ -557,6 +574,7 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testIsParentId($id, $parentId, $expects)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertEquals($expects, $this->BcContents->isParentId($id, $parentId));
     }
 
@@ -588,6 +606,7 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testIsFolder($url, $expects)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->BcContents->request = $this->_getRequest($url);
         $this->assertEquals($expects, $this->BcContents->isFolder());
     }
@@ -614,6 +633,7 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testGetFolderLinkedUrl($url, $expected)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $content = ClassRegistry::init('Content')->find('first', [
             'conditions' => ['url' => $url],
             'recursive' => 0

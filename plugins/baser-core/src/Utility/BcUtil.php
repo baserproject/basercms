@@ -11,20 +11,22 @@
 
 namespace BaserCore\Utility;
 
-use Cake\Cache\Cache;
 use Cake\Core\App;
+use BcAuthComponent;
+use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
-use Cake\Database\Exception;
-use Cake\Datasource\ConnectionManager;
+use Cake\Routing\Router;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
-use Cake\Routing\Router;
 use Cake\Utility\Inflector;
-use BaserCore\Annotation\UnitTest;
+use Cake\Database\Exception;
 use BaserCore\Annotation\NoTodo;
+use BaserCore\Model\Entity\User;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * Class BcUtil
@@ -203,15 +205,16 @@ class BcUtil
 
     /**
      * プレフィックス全体を取得する
-     *
+     * @param bool $regex 正規表現時にエスケープするかどうか
      * @return string
      * @checked
      * @noTodo
      * @unitTest
      */
-    public static function getPrefix()
+    public static function getPrefix($regex = false)
     {
-        return self::getBaserCorePrefix() . self::getAdminPrefix();
+        $prefix = self::getBaserCorePrefix() . self::getAdminPrefix();
+        return $regex ? str_replace('/', '\/',  substr($prefix, 1)) : $prefix;
     }
 
     /**
@@ -313,20 +316,21 @@ class BcUtil
      * 処理の内容にCakeRequest や、Router::parse() を使おうとしたが、
      * Router::parse() を利用すると、Routing情報が書き換えられてしまうので利用できない。
      * Router::reload() や、Router::setRequestInfo() で調整しようとしたがうまくいかなかった。
-     *
+     * @todo Testable humuhimi
      * @return boolean
      */
     public static function isAdminSystem($url = null)
     {
         if (!$url) {
-            $request = Router::getRequest(true);
+            $request = Router::getRequest();
             if ($request) {
                 $url = $request->getUri();
             } else {
                 return false;
             }
         }
-        $adminPrefix = Configure::read('Routing.prefixes.0');
+
+        $adminPrefix = BcUtil::getPrefix(true);
         return (boolean)(preg_match('/^(|\/)' . $adminPrefix . '\//', $url) || preg_match('/^(|\/)' . $adminPrefix . '$/', $url));
     }
 
@@ -340,6 +344,7 @@ class BcUtil
      */
     public static function isAdminUser($user = null): bool
     {
+        /** @var User $User */
         $User = $user? $user : self::loginUser('Admin');
         return $User->isAdmin();
     }
