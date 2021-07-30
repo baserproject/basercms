@@ -74,12 +74,12 @@ class SitesControllerTest extends BcTestCase
         $this->get('/baser/admin/baser-core/sites/');
         $this->assertResponseOk();
         // イベントテスト
-        $this->entryControllerEventToMock('Controller.Sites.searchIndex', function(Event $event) {
+        $this->entryControllerEventToMock('Controller.BaserCore.Sites.searchIndex', function(Event $event) {
             $request = $event->getData('request');
             return $request->withQueryParams(['num' => 1]);
         });
         // アクション実行（requestの変化を判定するため $this->get() ではなくクラスを直接利用）
-        $sitesController = new SitesController($this->getRequest());
+        $sitesController = new SitesController($this->getRequest('/baser/admin/baser-core/sites/'));
         $sitesController->index($this->getService(SiteManageServiceInterface::class));
         $this->assertEquals(1, $sitesController->getRequest()->getQuery('num'));
     }
@@ -112,7 +112,7 @@ class SitesControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->entryControllerEventToMock('Controller.Sites.beforeAdd', function(Event $event) {
+        $this->entryControllerEventToMock('Controller.BaserCore.Sites.beforeAdd', function(Event $event) {
             $data = $event->getData('data');
             $data['name'] = 'etc';
             $event->setData('data', $data);
@@ -137,7 +137,7 @@ class SitesControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->entryControllerEventToMock('Controller.Sites.afterAdd', function(Event $event) {
+        $this->entryControllerEventToMock('Controller.BaserCore.Sites.afterAdd', function(Event $event) {
             $site = $event->getData('site');
             $sites = $this->getTableLocator()->get('Sites');
             $site->name = 'etc';
@@ -170,7 +170,7 @@ class SitesControllerTest extends BcTestCase
         $this->assertResponseSuccess();
 
         // イベントテスト
-        $this->entryControllerEventToMock('Controller.Sites.afterEdit', function(Event $event) {
+        $this->entryControllerEventToMock('Controller.BaserCore.Sites.afterEdit', function(Event $event) {
             $site = $event->getData('site');
             $sites = $this->getTableLocator()->get('BaserCore.Sites');
             $site->display_name = 'etc';

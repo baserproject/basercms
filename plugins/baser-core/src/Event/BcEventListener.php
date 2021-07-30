@@ -61,7 +61,8 @@ class BcEventListener implements EventListenerInterface
      */
     public function __construct()
     {
-        $class = get_class($this);
+        $classArray = explode('\\', get_class($this));
+        $class = $classArray[count($classArray) -1];
         $this->plugin = str_replace($this->layer . 'EventListener', '', $class);
     }
 

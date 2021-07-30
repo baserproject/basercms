@@ -20,7 +20,6 @@ use BaserCore\Model\Table\UsersTable;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
 use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\Event\Event;
 use Cake\Routing\Router;
 use Cake\Http\Response;
 use Cake\Http\Exception\ForbiddenException;
@@ -163,9 +162,9 @@ class UsersController extends BcAdminAppController
         ]]]);
 
         // EVENT Users.searchIndex
-        $event = $this->getEventManager()->dispatch(new Event('Controller.Users.searchIndex', $this, [
+        $event = $this->dispatchLayerEvent('searchIndex', [
             'request' => $this->request
-        ]));
+        ]);
         if ($event !== false) {
             $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
         }
@@ -189,9 +188,9 @@ class UsersController extends BcAdminAppController
             $user = $userManage->create($this->request->getData());
             if (!$user->getErrors()) {
                 // EVENT Users.afterAdd
-                $this->getEventManager()->dispatch(new Event('Controller.Users.afterAdd', $this, [
+                $this->dispatchLayerEvent('afterAdd', [
                     'user' => $user
-                ]));
+                ]);
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を追加しました。', $user->name));
                 return $this->redirect(['action' => 'edit', $user->id]);
             }
@@ -226,9 +225,9 @@ class UsersController extends BcAdminAppController
             } else {
                 $user = $userManage->update($user, $this->request->getData());
                 if (!$user->getErrors()) {
-                    $this->getEventManager()->dispatch(new Event('Controller.Users.afterEdit', $this, [
+                    $this->dispatchLayerEvent('afterEdit', [
                         'user' => $user
-                    ]));
+                    ]);
                     $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を更新しました。', $user->name));
                     return $this->redirect(['action' => 'edit', $user->id]);
                 } else {

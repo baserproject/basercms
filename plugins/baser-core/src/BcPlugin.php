@@ -14,7 +14,6 @@ namespace BaserCore;
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\BasePlugin;
-use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;

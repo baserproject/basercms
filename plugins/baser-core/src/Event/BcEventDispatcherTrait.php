@@ -33,6 +33,7 @@ trait BcEventDispatcherTrait
      * @return bool|\Cake\Event\Event
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function dispatchLayerEvent($name, $data = [], $options = [])
     {
@@ -46,6 +47,10 @@ trait BcEventDispatcherTrait
             $classArray = explode('\\', $class);
             $class = str_replace('Table', '', $classArray[count($classArray) - 1]);
             $layer = 'Model';
+            $alias = $this->getRegistryAlias();
+            if(strpos($alias, '.') !== false) {
+                $plugin = explode('.', $alias)[0];
+            }
         } elseif (is_a($this, 'Cake\View\View')) {
             $layer = 'View';
         } elseif (is_a($this, 'Cake\View\Helper')) {
@@ -53,8 +58,6 @@ trait BcEventDispatcherTrait
             $class = str_replace('Helper', '', $class);
             $subject = $this->_View;
         }
-        // TODO Tableクラスはプラグイン名を持たないため、自動でプラグイン名を取得することができない
-        // 一旦空文字列とする
         $options = array_merge([
             'modParams' => 0,
             'plugin' => $plugin,
