@@ -79,7 +79,7 @@
                 $.bcUtil.ajaxLoaderSmallPath = config.ajaxLoaderSmallPath;
             }
             $.bcUtil.adminBaseUrl = $.bcUtil.baseUrl + $.bcUtil.baserCorePrefix + $.bcUtil.adminPrefix + '/';
-            $.bcUtil.apiBaseUrl = $.bcUtil.baseUrl + $.bcUtil.baserCorePrefix + 'api/';
+            $.bcUtil.apiBaseUrl = $.bcUtil.baseUrl + $.bcUtil.baserCorePrefix + '/api/';
         },
         /**
          * アラートメッセージを表示
