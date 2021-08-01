@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Utility\BcUtil;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -310,7 +312,7 @@ class BcBasicsTest extends BcTestCase
         $dataCache = new File(CACHE . 'datas' . DS . 'cache', true);
 
         // キャッシュ削除
-        clearAllCache();
+        BcUtil::clearAllCache();
 
         $this->assertFalse($coreCache->exists());
         $this->assertFalse($modelCache->exists());

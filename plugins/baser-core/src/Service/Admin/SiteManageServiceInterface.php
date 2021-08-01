@@ -33,7 +33,7 @@ interface SiteManageServiceInterface
      * 新規データ用の初期値を含んだエンティティを取得する
      * @return Site
      */
-    public function getNew(): Site;
+    public function getNew(): EntityInterface;
 
     /**
      * 全件取得する

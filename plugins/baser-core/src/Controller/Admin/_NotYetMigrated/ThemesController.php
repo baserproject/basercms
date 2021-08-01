@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Utility\BcUtil;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -268,7 +270,7 @@ class ThemesController extends AppController
             }
         }
 
-        clearAllCache();
+        BcUtil::clearAllCache();
 
         // メール受信テーブルの作成
         App::uses('MailMessage', 'Mail.Model');
@@ -277,7 +279,7 @@ class ThemesController extends AppController
             $this->log(__d('baser', 'メールプラグインのメール受信用テーブルの生成に失敗しました。'));
             $result = false;
         }
-        clearAllCache();
+        BcUtil::clearAllCache();
         ClassRegistry::flush();
         BcSite::flash();
 
@@ -584,7 +586,7 @@ class ThemesController extends AppController
         $Folder = new Folder();
         $Folder->create($tmpDir);
         emptyFolder($tmpDir);
-        clearAllCache();
+        BcUtil::clearAllCache();
         $excludes = ['plugins', 'dblogs', 'users', 'favorites'];
         $this->_writeCsv('core', $tmpDir, $excludes);
         /* プラグインのCSVを生成 */

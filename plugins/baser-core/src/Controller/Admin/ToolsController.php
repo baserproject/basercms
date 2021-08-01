@@ -1,82 +1,36 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Controller
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('Simplezip', 'Vendor');
+namespace BaserCore\Controller\Admin;
+
+use BaserCore\Utility\BcUtil;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class ToolsController
- *
- * ツールコントローラー
- *
- * @package Baser.Controller
- * @property Tool $Tool
- * @property Page $Page
- * @property BcManagerComponent $BcManager
  */
-class ToolsController extends AppController
+class ToolsController extends BcAdminAppController
 {
-
-    /**
-     * クラス名
-     *
-     * @var string
-     */
-    public $name = 'Tools';
-
-    /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = ['Tool', 'Page'];
 
     /**
      * コンポーネント
      *
      * @var array
      */
-    public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager'];
-
-    /**
-     * ヘルパ
-     *
-     * @var array
-     */
-    public $helpers = ['BcForm'];
-
-    /**
-     * サブメニュー
-     *
-     * @var array
-     * @access public
-     */
-    public $subMenuElements = ['site_configs', 'tools'];
-
-    /**
-     * ToolsController constructor.
-     *
-     * @param \CakeRequest $request
-     * @param \CakeRequest $response
-     */
-    public function __construct($request = null, $response = null)
-    {
-        parent::__construct($request, $response);
-        $this->crumbs = [
-            ['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
-            ['name' => __d('baser', 'ユーティリティ'), 'url' => ['controller' => 'tools', 'action' => 'index']]
-        ];
-    }
+    // TODO 未実装のため代替措置
+    /* >>>
+    public $components = ['BcManager'];
+    <<< */
 
     /**
      * ユーティリティ
@@ -84,6 +38,35 @@ class ToolsController extends AppController
     public function admin_index()
     {
         $this->setTitle(__d('baser', 'ユーティリティトップ'));
+    }
+
+    /**
+     * [ADMIN] PHPINFOを表示する
+     */
+    public function info()
+    {
+        $this->setTitle(__d('baser', '環境情報'));
+        $datasources = ['csv' => 'CSV', 'sqlite' => 'SQLite', 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL'];
+        $db = ConnectionManager::getDataSource('default');
+        [$type, $name] = explode('/', $db->config['datasource'], 2);
+        $datasource = preg_replace('/^bc/', '', strtolower($name));
+        $this->set('datasource', @$datasources[$datasource]);
+        $this->set('baserVersion', $this->siteConfigs['version']);
+        $this->set('cakeVersion', Configure::version());
+        $this->subMenuElements = ['site_configs', 'tools'];
+        $this->crumbs = [
+            ['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'index']],
+            ['name' => __d('baser', 'ユーティリティ'), 'url' => ['controller' => 'tools', 'action' => 'index']]
+        ];
+    }
+
+    /**
+     * PHP INFO
+     */
+    public function phpinfo()
+    {
+        phpinfo();
+        exit();
     }
 
     /**
@@ -98,19 +81,19 @@ class ToolsController extends AppController
         switch($mode) {
             case 'backup':
                 set_time_limit(0);
-                $this->_backupDb($this->request->query['backup_encoding']);
+                $this->_backupDb($this->request->getQuery('backup_encoding'));
                 break;
             case 'restore':
                 set_time_limit(0);
                 $messages = [];
-                if (!$this->request->data) {
+                if (!$this->request->getData()) {
                     if ($this->Tool->isOverPostSize()) {
                         $messages[] = __d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size'));
                     } else {
                         $this->notFound();
                     }
                 }
-                if ($this->_restoreDb($this->request->data)) {
+                if ($this->_restoreDb($this->request->getData())) {
                     $messages[] = __d('baser', 'データの復元が完了しました。');
                     $error = false;
                 } else {
@@ -130,7 +113,7 @@ class ToolsController extends AppController
                         $this->BcMessage->setInfo(implode("\n", $messages));
                     }
                 }
-                clearAllCache();
+                BcUtil::clearAllCache();
                 $this->redirect(['action' => 'maintenance']);
                 break;
         }
@@ -180,7 +163,7 @@ class ToolsController extends AppController
             $db->rollback();
         }
         $this->_resetTmpSchemaFolder();
-        clearAllCache();
+        BcUtil::clearAllCache();
 
         return $result;
     }
@@ -260,7 +243,7 @@ class ToolsController extends AppController
         $tmpDir = TMP . 'schemas' . DS;
         $version = str_replace(' ', '_', $this->getBaserVersion());
         $this->_resetTmpSchemaFolder();
-        clearAllCache();
+        BcUtil::clearAllCache();
         $this->_writeBackup($tmpDir . 'core' . DS, '', $encoding);
         $Plugin = ClassRegistry::init('Plugin');
         $plugins = $Plugin->find('all');
@@ -319,7 +302,7 @@ class ToolsController extends AppController
         $this->setTitle(__d('baser', 'スキーマファイル生成'));
         $this->setHelp('tools_write_schema');
 
-        if (!$this->request->data) {
+        if (!$this->request->getData()) {
             $this->request = $this->request->withData('Tool.connection', 'core');
             return;
         }
@@ -333,7 +316,7 @@ class ToolsController extends AppController
             $this->BcMessage->setError('フォルダ：' . $path . ' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
             $this->redirect(['action' => 'write_schema']);
         }
-        if (!$this->Tool->writeSchema($this->request->data, $path)) {
+        if (!$this->Tool->writeSchema($this->request->getData(), $path)) {
             $this->BcMessage->setError(__d('baser', 'スキーマファイルの生成に失敗しました。'));
             return;
         }
@@ -375,7 +358,7 @@ class ToolsController extends AppController
             $this->BcMessage->setError('フォルダ：' . $path . ' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。');
             $this->redirect(['action' => 'load_schema']);
         }
-        if (!$this->Tool->loadSchemaFile($this->request->data, $path)) {
+        if (!$this->Tool->loadSchemaFile($this->request->getData(), $path)) {
             $this->BcMessage->setError(__d('baser', 'スキーマファイルの読み込みに失敗しました。'));
             return;
         }

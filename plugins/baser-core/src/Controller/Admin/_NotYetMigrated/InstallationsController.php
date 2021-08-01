@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Utility\BcUtil;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -142,7 +144,7 @@ class InstallationsController extends AppController
     public function index()
     {
         $this->setTitle(__d('baser', 'baserCMSのインストール'));
-        clearAllCache();
+        BcUtil::clearAllCache();
     }
 
     /**
@@ -189,7 +191,7 @@ class InstallationsController extends AppController
         $dbsource = $this->_getDbSource();
 
         if (!$this->request->data) {
-            clearAllCache();
+            BcUtil::clearAllCache();
             $this->request->data = $this->_getDefaultValuesStep3();
             $this->set('dbDataPatterns', $this->BcManager->getAllDefaultDataPatterns());
             $this->setTitle(__d('baser', 'baserCMSのインストール｜ステップ３'));
@@ -382,7 +384,7 @@ class InstallationsController extends AppController
                 $Db->updateSequence();
             }
 
-            clearAllCache();
+            BcUtil::clearAllCache();
             if (function_exists('opcache_reset')) {
                 opcache_reset();
             }

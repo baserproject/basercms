@@ -47,7 +47,11 @@ class BcUtil
      */
     public static function loginUser($prefix = 'Admin')
     {
-        $session = Router::getRequest()->getSession();
+        $request = Router::getRequest();
+        if(!$request) {
+            return false;
+        }
+        $session = $request->getSession();
         $sessionKey = Configure::read('BcPrefixAuth.' . $prefix . '.sessionKey');
         $user = isset($_SESSION[$sessionKey])? $session->read($sessionKey) : null;
         return $user;

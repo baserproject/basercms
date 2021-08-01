@@ -32,7 +32,7 @@ trait SiteConfigsTrait
     public function getSiteConfig($name)
     {
         $siteConfigs = $this->getService(SiteConfigsServiceInterface::class);
-        return $siteConfigs->value($name);
+        return $siteConfigs->getValue($name);
     }
 
 }

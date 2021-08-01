@@ -750,7 +750,7 @@ function loadSiteConfig($force = false)
     } catch (Exception $ex) {
         return false;
     }
-    Configure::write('BcSite', $SiteConfig->findExpanded());
+    Configure::write('BcSite', $SiteConfig->getKeyValue());
     ClassRegistry::removeObject('SiteConfig');
     return true;
 }

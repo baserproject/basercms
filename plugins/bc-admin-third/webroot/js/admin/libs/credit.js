@@ -22,7 +22,7 @@ $(function () {
 function credit() {
 
     $.ajax({
-        url: $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/site_configs/ajax_credit',
+        url: $.bcUtil.apiBaseUrl + 'baser-core/tools/credit.json',
         type: "GET",
         success: function (result) {
             var hideTarget;

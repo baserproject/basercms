@@ -62,10 +62,13 @@
     }
     &:checked + label:before {
       background: $color_primary;
-      box-shadow: 0 0 0px 4px #fff inset;
+      box-shadow: 0 0 0 4px #fff inset;
+    }
+    &:checked:disabled + label:before {
+      background: #ddd;
     }
     &:focus + label:before {
-      box-shadow: 0 0 0px 4px #fff inset, $focus_shadow;
+      box-shadow: 0 0 0 4px #fff inset, $focus_shadow;
       border-color: $color_primary;
       border-width: 1px;
     }

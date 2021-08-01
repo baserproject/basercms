@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Utility\BcUtil;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -244,7 +246,7 @@ class PagesController extends AppController
         $this->_checkSubmitToken();
         $pagesPath = APP . 'View' . DS . 'Pages';
         $result = $this->Page->entryPageFiles($pagesPath);
-        clearAllCache();
+        BcUtil::clearAllCache();
         $this->BcMessage->setInfo(
             sprintf(__d('baser', '%s ページ中 %s ページの新規登録、 %s ページの更新、 %s フォルダの新規登録、 %s フォルダの更新に成功しました。'), $result['all'], $result['insert'], $result['update'], $result['insert_folder'], $result['update_folder'])
         );

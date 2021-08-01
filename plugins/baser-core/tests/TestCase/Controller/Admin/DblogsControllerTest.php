@@ -28,6 +28,7 @@ class DblogsControllerTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.SiteConfigs',
     ];
 
     /**

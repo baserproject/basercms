@@ -80,11 +80,35 @@ $(function () {
      * bcToken 初期化
      */
     $.bcToken.init();
+
+    /**
+     * collapse　オプション、詳細設定の折りたたみ開閉
+     */
+    $("[data-bca-collapse='collapse']").on({
+        'click': function () {
+            const target = $(this).attr('data-bca-target');
+            // data-bca-state属性でtoggle
+            if ($(target).attr('data-bca-state') == 'open') {
+                // 対象ID要素:非表示
+                $(target).attr('data-bca-state', '').slideUp();
+                // ボタンの制御
+                $(this).attr('data-bca-state', '').attr('aria-expanded', 'true');
+            } else {
+                // 対象ID要素:表示
+                $(target).attr('data-bca-state', 'open').slideDown();
+                // ボタンの制御
+                $(this).attr('data-bca-state', 'open').attr('aria-expanded', 'false');
+            }
+            return false;
+        }
+    });
+
     /**
      * Cake\View\Helper\FormHelper
      * @method error()
      * `error`, `errorList` and `errorItem` templatesのclassをjsで変更する
      */
     $(".error-message:has(ul)").removeClass("error-message").addClass("error-wrap");
+
 });
 

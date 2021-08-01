@@ -55,10 +55,9 @@ class SitesService implements SitesServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getNew(): Site
+    public function getNew(): EntityInterface
     {
         return $this->Sites->newEntity([
-            'title' => $this->getSiteConfig('name'),
             'status' => false,
         ]);
     }

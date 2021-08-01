@@ -2394,7 +2394,7 @@ END_FLASH;
     public function getThemeImage($name, $options = [])
     {
         $ThemeConfig = ClassRegistry::init('ThemeConfig');
-        $data = $ThemeConfig->findExpanded();
+        $data = $ThemeConfig->getKeyValue();
 
         $url = $imgPath = $uploadUrl = $uploadThumbUrl = $originUrl = '';
         $thumbSuffix = '_thumb';

@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Model\AppTable;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -21,7 +23,7 @@ App::uses('Imageresizer', 'Vendor');
  *
  * @package Baser.Model
  */
-class ThemeConfig extends AppModel
+class ThemeConfig extends AppTable
 {
 
     /**
@@ -52,6 +54,18 @@ class ThemeConfig extends AppModel
     }
 
     /**
+     * Initialize
+     *
+     * @param array $config テーブル設定
+     * @return void
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+        $this->addBehavior('BaserCore.BcKeyValue');
+    }
+
+    /**
      * 画像を保存する
      *
      * @param array $data
@@ -64,7 +78,7 @@ class ThemeConfig extends AppModel
         $saveDir = WWW_ROOT . 'files' . DS . 'theme_configs' . DS;
         $images = ['logo', 'main_image_1', 'main_image_2', 'main_image_3', 'main_image_4', 'main_image_5'];
         $thumbSuffix = '_thumb';
-        $old = $this->findExpanded();
+        $old = $this->getKeyValue();
 
         foreach($images as $image) {
             if (!empty($data['ThemeConfig'][$image]['tmp_name'])) {
@@ -97,7 +111,7 @@ class ThemeConfig extends AppModel
         $saveDir = WWW_ROOT . 'files' . DS . 'theme_configs' . DS;
         $images = ['logo', 'main_image_1', 'main_image_2', 'main_image_3', 'main_image_4', 'main_image_5'];
         $thumbSuffix = '_thumb';
-        $old = $this->findExpanded();
+        $old = $this->getKeyValue();
         foreach($images as $image) {
             if (!empty($data['ThemeConfig'][$image . '_delete'])) {
                 @unlink($saveDir . $old[$image]);

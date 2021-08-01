@@ -122,8 +122,7 @@ class BcAdminHelper extends Helper
     {
         $request = $this->_View->getRequest();
         $base = $request->getAttributes()['base'];
-        $url = $request->getUri();
-        $currentUrl = '/' . $url;
+        $currentUrl = $request->getPath();
         $params = null;
 
         if (strpos($currentUrl, '?') !== false) {

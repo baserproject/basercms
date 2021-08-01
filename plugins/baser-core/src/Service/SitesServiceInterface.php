@@ -11,7 +11,6 @@
 
 namespace BaserCore\Service;
 
-use BaserCore\Model\Entity\Site;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 
@@ -35,7 +34,7 @@ interface SitesServiceInterface
      * 新しいデータの初期値を取得する
      * @return EntityInterface
      */
-    public function getNew(): Site;
+    public function getNew(): EntityInterface;
 
     /**
      * 新規登録する

@@ -60,9 +60,11 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         $application->addPlugin('BcAdminThird');
 
         $plugins = BcUtil::getEnablePlugins();
-        foreach($plugins as $plugin) {
-            if (BcUtil::includePluginClass($plugin->name)) {
-                $this->loadPlugin($application, $plugin->name, $plugin->priority);
+        if($plugins) {
+            foreach($plugins as $plugin) {
+                if (BcUtil::includePluginClass($plugin->name)) {
+                    $this->loadPlugin($application, $plugin->name, $plugin->priority);
+                }
             }
         }
     }

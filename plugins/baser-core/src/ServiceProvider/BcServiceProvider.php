@@ -11,6 +11,8 @@
 
 namespace BaserCore\ServiceProvider;
 
+use BaserCore\Service\Admin\SiteConfigManageService;
+use BaserCore\Service\Admin\SiteConfigManageServiceInterface;
 use Cake\Core\ServiceProvider;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -26,7 +28,7 @@ use BaserCore\Service\PermissionsService;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Service\DblogsServiceInterface;
-use BaserCore\Service\SiteConfigsMockService;
+use BaserCore\Service\SiteConfigsService;
 use BaserCore\Service\Admin\SiteManageService;
 use BaserCore\Service\Admin\UserManageService;
 use BaserCore\Service\PluginsServiceInterface;
@@ -66,6 +68,7 @@ class BcServiceProvider extends ServiceProvider
         SitesServiceInterface::class,
         SiteManageServiceInterface::class,
         SiteConfigsServiceInterface::class,
+        SiteConfigManageServiceInterface::class,
         PermissionsServiceInterface::class,
         DblogsServiceInterface::class,
         ContentManageServiceInterface::class,
@@ -95,8 +98,8 @@ class BcServiceProvider extends ServiceProvider
         $container->add(SitesServiceInterface::class, SitesService::class, true);
         $container->add(SiteManageServiceInterface::class, SiteManageService::class, true);
         // SiteConfigsサービス
-        // TODO 未実装のためモックを利用
-        $container->add(SiteConfigsServiceInterface::class, SiteConfigsMockService::class, true);
+        $container->add(SiteConfigsServiceInterface::class, SiteConfigsService::class, true);
+        $container->add(SiteConfigManageServiceInterface::class, SiteConfigManageService::class, true);
         // Permissionsサービス
         $container->add(PermissionsServiceInterface::class, PermissionsService::class);
         // Dblogsサービス

@@ -11,11 +11,62 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Model\Entity\SiteConfig;
+use Cake\Datasource\EntityInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+
 /**
  * Interface SiteConfigsServiceInterface
  * @package BaserCore\Service
  */
 interface SiteConfigsServiceInterface
 {
-    public function value($fieldName);
+
+    /**
+     * フィールドの値を取得する
+     * @param $fieldName
+     * @return string
+     */
+    public function getValue($fieldName): string;
+
+    /**
+     * データをキーバリュー形式で取得する
+     * @return array
+     */
+    public function get(): SiteConfig;
+
+    /**
+     * データをキーバリュー形式で保存する
+     * @return EntityInterface
+     */
+    public function update(array $postData): SiteConfig;
+
+    /**
+     * .env が書き込み可能かどうか
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isWritableEnv(): bool;
+
+    /**
+     * .env に設定値を書き込む
+     * @param $key
+     * @param $value
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function putEnv($key, $value): bool;
+
+    /**
+     * アプリケーションモードリストを取得
+     * @return array
+     */
+    public function getModeList(): array;
+
 }

@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Utility\BcUtil;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -104,7 +106,7 @@ class UpdatersController extends AppController
             $this->notFound();
         }
 
-        clearAllCache();
+        BcUtil::clearAllCache();
 
         $targetPlugins = Configure::read('BcApp.corePlugins');
         $targets = $this->Plugin->find('list', ['fields' => ['Plugin.name'], 'conditions' => ['Plugin.status' => true, 'Plugin.name' => $targetPlugins]]);
@@ -121,7 +123,7 @@ class UpdatersController extends AppController
 
         /* スクリプト実行 */
         if ($this->request->data) {
-            clearAllCache();
+            BcUtil::clearAllCache();
             @unlink($updateLogFile);
             if (function_exists('ini_set')) {
                 ini_set('max_excution_time', 0);
@@ -154,7 +156,7 @@ class UpdatersController extends AppController
                 $this->Plugin->save();
             }
 
-            clearAllCache();
+            BcUtil::clearAllCache();
 
             $this->BcMessage->setInfo(__d('baser', '全てのアップデート処理が完了しました。/app/tmp/logs/update.log にログを出力しています。'));
             $this->_writeUpdateLog();
@@ -196,7 +198,7 @@ class UpdatersController extends AppController
         if ($this->request->data) {
             $this->setUpdateLog(__d('baser', 'アップデートスクリプトの実行します。'));
             if ($this->_execScript($this->request->getData('Updater.plugin'), $this->request->getData('Updater.version'))) {
-                clearAllCache();
+                BcUtil::clearAllCache();
                 $this->BcManager->deployAdminAssets();
                 $this->setUpdateLog(__d('baser', 'アップデートスクリプトの実行が完了しました。'));
                 $this->_writeUpdateLog();
@@ -236,7 +238,7 @@ class UpdatersController extends AppController
             $this->notFound();
         }
 
-        clearAllCache();
+        BcUtil::clearAllCache();
 
         /* スクリプトの有無を確認 */
         $scriptNum = count($this->_getUpdaters($name));
@@ -244,11 +246,11 @@ class UpdatersController extends AppController
 
         /* スクリプト実行 */
         if ($this->request->data) {
-            clearAllCache();
+            BcUtil::clearAllCache();
             $this->_update($name);
             $this->BcMessage->setInfo(__d('baser', 'アップデート処理が完了しました。画面下部のアップデートログを確認してください。'));
             $this->_writeUpdateLog();
-            clearAllCache();
+            BcUtil::clearAllCache();
             $this->redirect(['action' => 'plugin', $name]);
         }
 
@@ -536,7 +538,7 @@ class UpdatersController extends AppController
         }
         // アップデートの場合 drop field は実行しない
         $result = $this->Updater->loadSchema('default', $path, $filterTable, $filterType, ['updater.php'], false);
-        clearAllCache();
+        BcUtil::clearAllCache();
         return $result;
     }
 

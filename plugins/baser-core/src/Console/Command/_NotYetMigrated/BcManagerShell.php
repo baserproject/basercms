@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Utility\BcUtil;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -129,7 +131,7 @@ class BcManagerShell extends AppShell
         if (!$this->_reset()) {
             $result = false;
         }
-        clearAllCache();
+        BcUtil::clearAllCache();
         if (!$this->_install()) {
             $result = false;
         }

@@ -16,6 +16,9 @@
     &[data-bca-select-size=sm] {
       font-size: $button_font_size_small;
     }
+    &:disabled {
+      background-color: #EEE;
+    }
     &:focus {
       box-shadow: $focus_shadow;
       border-color: $color_primary;

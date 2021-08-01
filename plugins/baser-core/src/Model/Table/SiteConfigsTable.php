@@ -12,16 +12,14 @@
 namespace BaserCore\Model\Table;
 
 use BaserCore\Event\BcEventDispatcherTrait;
-use Cake\ORM\Query;
 use BaserCore\Model\AppTable;
-use Cake\ORM\TableRegistry;
+use BaserCore\Model\Behavior\BcKeyValueBehavior;
+use BaserCore\Model\Entity\SiteConfig;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Utility\BcUtil;
-use Cake\Utility\Inflector;
-use Cake\Filesystem\Folder;
 
 /**
  * Class SiteConfig
@@ -29,39 +27,30 @@ use Cake\Filesystem\Folder;
  * システム設定モデル
  *
  * @package Baser.Model
+ * @mixin BcKeyValueBehavior
+ * @method SiteConfig newEntity($data = null, array $options = [])
  */
 class SiteConfigsTable extends AppTable
 {
+
     /**
      * Trait
      */
     use BcEventDispatcherTrait;
 
     /**
-     * ビヘイビア
-     * // TODO 暫定措置
-     * @var array
-     */
-    // public $actsAs = ['BcCache'];
-
-    /**
-     * SiteConfig constructor.
-     * @param array $config
-     */
-    public function __construct($config)
-    {
-        parent::__construct($config);
-    }
-
-    /**
      * Initialize
      *
      * @param array $config テーブル設定
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {
         parent::initialize($config);
+        $this->addBehavior('BaserCore.BcKeyValue');
     }
 
     /**
@@ -69,72 +58,74 @@ class SiteConfigsTable extends AppTable
      *
      * @param Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->integer('id')
-            ->allowEmptyString('id', null, 'create');
-
-        $validator
             ->scalar('name')
             ->maxLength('name', 255, __d('baser', '255文字以内で入力してください。'))
-            ->notEmptyString('name', __d('baser', 'を入力してください。'))
-            // __constructから移動
-            ->add('name', [
-                'formal_name' => [
-                    'rule' => ['notBlank'], 'message' => __d('baser', 'Webサイト名を入力してください。'), 'required' => true],
-                'name' => [
-                    'rule' => ['notBlank'], 'message' => __d('baser', 'Webサイトタイトルを入力してください。'), 'required' => true],
-                'email' => [
-                    ['rule' => ['emails'], 'message' => __d('baser', '管理者メールアドレスの形式が不正です。')],
-                    ['rule' => ['notBlank'], 'message' => __d('baser', '管理者メールアドレスを入力してください。')]],
-                'mail_encode' => [
-                    'rule' => ['notBlank'], 'message' => __d('baser', 'メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。'), 'required' => true],
-                'site_url' => [
-                    'rule' => ['notBlank'], 'message' => __d('baser', 'WebサイトURLを入力してください。'), 'required' => true],
-                'admin_ssl' => [
-                    'rule' => ['sslUrlExists'], 'message' => __d('baser', '管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。')],
-                'main_site_display_name' => [
-                    'rule' => ['notBlank'], 'message' => __d('baser', 'メインサイト表示名を入力してください。'), 'required' => false]
-            ]);
-
+            ->notEmptyString('name', __d('baser', '設定名を入力してください。'));
         $validator
-            ->scalar('text')
-            ->maxLength('name', 65535, __d('baser', '65535文字以内で入力してください。'))
-            ->notEmptyString('text', __d('baser', 'テキストを入力してください。'));
-
+            ->scalar('value')
+            ->maxLength('value', 65535, __d('baser', '65535文字以内で入力してください。'));
         return $validator;
     }
 
     /**
-     * テーマの一覧を取得する
-     * @return array
+     * Validation Default
+     *
+     * @param Validator $validator
+     * @return Validator
+     * @noTodo
+     * @checked
+     * @unitTest
      */
-    public function getThemes()
+    public function validationKeyValue(Validator $validator): Validator
     {
-        $themes = [];
-        $themeFolder = new Folder(APP . 'View' . DS . 'theme' . DS);
-        $_themes = $themeFolder->read(true, true);
-        foreach($_themes[0] as $theme) {
-            $themes[$theme] = Inflector::camelize($theme);
-        }
-        $themeFolder = new Folder(WWW_ROOT . 'theme' . DS);
-        $_themes = array_merge($themes, $themeFolder->read(true, true));
-        foreach($_themes[0] as $theme) {
-            $themes[$theme] = Inflector::camelize($theme);
-        }
-        return $themes;
+        $validator->setProvider('siteConfig', 'BaserCore\Model\Validation\SiteConfigValidation');
+
+        $validator
+            ->scalar('email')
+            ->email('email', 255, __d('baser', '管理者メールアドレスの形式が不正です。'))
+            ->notEmptyString('email', __d('baser', '管理者メールアドレスを入力してください。'));
+        $validator
+            ->scalar('mail_encode')
+            ->notEmptyString('mail_encode', __d('baser', 'メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。'));
+        $validator
+            ->scalar('main_site_display_name')
+            ->notEmptyString('main_site_display_name', __d('baser', 'メインサイト表示名を入力してください。'));
+        $validator
+            ->scalar('site_url')
+            ->notEmptyString('site_url', __d('baser', 'WebサイトURLを入力してください。'));
+        $validator
+            ->scalar('admin_ssl')
+            ->add('admin_ssl', [
+                'adminSSlSslUrlExists' => [
+                    'rule' => 'sslUrlExists',
+                    'provider' => 'siteConfig',
+                    'message' => __d('baser', '管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。')
+                ]]);
+        return $validator;
     }
 
     /**
      * コントロールソースを取得する
      * @param string $field
-     * @return mixed array | false
+     * @return mixed array|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getControlSource($field = null)
+    public function getControlSource($field)
     {
-        $controlSources['mode'] = [-1 => __d('baser', 'インストールモード'), 0 => __d('baser', 'ノーマルモード'), 1 => __d('baser', 'デバッグモード１'), 2 => __d('baser', 'デバッグモード２')];
+        $controlSources = [
+            'mode' => [
+                0 => __d('baser', 'ノーマルモード'),
+                1 => __d('baser', 'デバッグモード')
+        ]];
         if (isset($controlSources[$field])) {
             return $controlSources[$field];
         } else {
@@ -143,36 +134,27 @@ class SiteConfigsTable extends AppTable
     }
 
     /**
-     * SSL用のURLが設定されているかチェックする
-     * @param mixed $check
-     * @return boolean
-     */
-    public function sslUrlExists($check)
-    {
-        $sslOn = $check[key($check)];
-        if ($sslOn && empty($this->data['SiteConfig']['ssl_url'])) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * コンテンツ一覧を表示してから、コンテンツの並び順が変更されていないかどうか
+     * 60秒をブラウザのロード時間を加味したバッファとする
      * @param $listDisplayed
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isChangedContentsSortLastModified($listDisplayed)
     {
-        $siteConfigs = $this->findExpanded();
+        $lastModified = $this->getValue('contents_sort_last_modified');
         $changed = false;
-        if (!empty($siteConfigs['contents_sort_last_modified'])) {
+        if ($lastModified) {
             $user = BcUtil::loginUser();
-            $lastModified = $siteConfigs['contents_sort_last_modified'];
+            if(!$user) {
+                return false;
+            }
             [$lastModified, $userId] = explode('|', $lastModified);
             $lastModified = strtotime($lastModified);
-            if ($user['id'] != $userId) {
+            if ($user->id !== (int) $userId) {
                 $listDisplayed = strtotime($listDisplayed);
-                // 60秒はブラウザのロード時間を加味したバッファ
                 if ($lastModified >= ($listDisplayed - 60)) {
                     $changed = true;
                 }
@@ -183,22 +165,33 @@ class SiteConfigsTable extends AppTable
 
     /**
      * コンテンツ並び順変更時間を更新する
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function updateContentsSortLastModified()
     {
-        $siteConfigs = $this->findExpanded();
         $user = BcUtil::loginUser();
-        $siteConfigs['contents_sort_last_modified'] = date('Y-m-d H:i:s') . '|' . $user['id'];
-        $this->saveKeyValue($siteConfigs);
+        if(!$user) {
+            return false;
+        }
+        return $this->saveValue(
+            'contents_sort_last_modified',
+            date('Y-m-d H:i:s') . '|' . $user->id
+        );
     }
 
     /**
      * コンテンツ並び替え順変更時間をリセットする
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function resetContentsSortLastModified()
     {
-        $siteConfigs['contents_sort_last_modified'] = '';
-        $this->saveKeyValue($siteConfigs);
+        return $this->saveValue('contents_sort_last_modified', '');
     }
 
     /**
@@ -207,10 +200,13 @@ class SiteConfigsTable extends AppTable
      * @param string $field フィールド名
      * @param string $value 値
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isChange($field, $value)
     {
-        $siteConfig = $this->findExpanded();
+        $siteConfig = $this->getKeyValue();
         if (isset($siteConfig[$field])) {
             return !($siteConfig[$field] === $value);
         } else {
