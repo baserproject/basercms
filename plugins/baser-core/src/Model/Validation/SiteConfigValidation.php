@@ -30,7 +30,7 @@ class SiteConfigValidation extends Validation
      */
     public static function sslUrlExists($adminSsl, $context)
     {
-        if ($adminSsl && empty($context['ssl_url'])) {
+        if ($adminSsl && empty($context['data']['ssl_url'])) {
             return false;
         }
         return true;
