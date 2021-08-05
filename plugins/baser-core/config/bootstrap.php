@@ -35,6 +35,7 @@ use Cake\Validation\Validator;
  */
 Configure::config('baser', new PhpConfig());
 Configure::load('BaserCore.setting', 'baser');
+Configure::load('setting', 'baser');
 
 /**
  * キャッシュ設定
