@@ -34,6 +34,7 @@ $base = $attributes['base'];
     'vendor/jquery-ui/jquery-ui.min',
     'vendor/jquery.timepicker',
     'admin/style',
+    '../js/admin/vendors/jquery.jstree-3.3.8/themes/proton/style.min',
   ]) ?>
   <?= $this->fetch('css') ?>
   <?= $this->BcBaser->declarationI18n() ?>
@@ -76,6 +77,7 @@ $base = $attributes['base'];
     'vendor/jquery-ui-1.11.4.min.js',
     'vendor/i18n/ui.datepicker-ja',
     'vendor/jquery.timepicker',
+    'admin/functions',
   ]) ?>
   <?php $this->BcBaser->js('admin/common.bundle', true, [
     'id' => 'AdminScript',

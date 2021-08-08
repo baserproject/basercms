@@ -15,15 +15,17 @@
  * @var array $sites
  */
 
-if ($this->action == 'admin_index') {
-  echo $this->BcForm->hidden('ViewSetting.mode', ['value' => 'index']);
-} elseif ($this->action = 'admin_trash_index') {
-  echo $this->BcForm->hidden('ViewSetting.mode', ['value' => 'trash']);
+$listTypes = [1 => __d('baser', 'ツリー形式'), 2 => __d('baser', '表形式')];
+
+if ($this->request->getParam('action') == 'index') {
+  echo $this->BcAdminForm->control('ViewSetting.mode', ['type' => 'hidden', 'value' => 'index']);
+} elseif ($this->request->getParam('action') == 'trash_index') {
+  echo $this->BcAdminForm->control('ViewSetting.mode', ['type' => 'hidden', 'value' => 'trash']);
 }
 ?>
 
 
-<?php if ($this->action == 'admin_index'): ?>
+<?php if ($this->request->getParam('action') == 'index'): ?>
   <div class="panel-box bca-panel-box" id="ViewSetting">
     <div class="bca-panel-box__inline-fields">
       <?php if (count($sites) >= 2): ?>

@@ -1,25 +1,26 @@
 <?php
-// TODO : コード確認要
-use BaserCore\Event\BcEventDispatcherTrait;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View.Helper
- * @since           baserCMS v 4.0.5
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+
+namespace BaserCore\View\Helper;
+
+use Cake\View\Helper;
+use Cake\Utility\Inflector;
+use BaserCore\Event\BcEventDispatcherTrait;
 
 /**
  * 検索ボックスヘルパ
- *
- * @package Baser.View.Helper
+ * Class BcSearchBoxHelper
+ * @package BaserCore\View\Helper
  */
-class BcSearchBoxHelper extends AppHelper
+class BcSearchBoxHelper extends Helper
 {
     /**
      * Trait
@@ -31,9 +32,8 @@ class BcSearchBoxHelper extends AppHelper
      *
      * @return string
      */
-    public function dispatchShowField()
+    public function dispatchShowField($request)
     {
-        $request = $this->_View->request;
         $id = Inflector::camelize($request->getParam('controller')) . '.' . Inflector::camelize($request->getParam('action'));
         $event = $this->dispatchLayerEvent('showField', ['id' => $id, 'fields' => []], ['class' => 'BcSearchBox', 'plugin' => '']);
         $output = '';
@@ -47,7 +47,7 @@ class BcSearchBoxHelper extends AppHelper
                     if (!empty($field['input'])) {
                         $output .= $field['input'] . "&nbsp;";
                     }
-                    $output .= "</span>　\n";
+                    $output .= "</span>\n";
                 }
             }
         }

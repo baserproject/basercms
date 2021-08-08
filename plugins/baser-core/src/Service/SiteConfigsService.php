@@ -50,12 +50,12 @@ class SiteConfigsService implements SiteConfigsServiceInterface
     /**
      * フィールドの値を取得する
      * @param string $fieldName
-     * @return string
+     * @return string|null
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getValue($fieldName): string
+    public function getValue($fieldName): ?string
     {
         $siteConfig = $this->get();
         return $siteConfig->{$fieldName};

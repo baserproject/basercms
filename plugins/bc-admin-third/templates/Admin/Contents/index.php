@@ -10,13 +10,34 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 /**
  * [ADMIN] 統合コンテンツ一覧
  * @var BcAppView $this
  * @var bool $editInIndexDisabled
  */
-$currentUser = BcUtil::loginUser('admin');
+
+switch($this->request->getParam('action')) {
+  case 'index':
+      $this->BcAdmin->setTitle(__d('baser', 'コンテンツ一覧'));
+      break;
+  case 'trash_index':
+      $this->BcAdmin->setTitle(__d('baser', 'ゴミ箱'));
+      break;
+}
+
+$this->BcAdmin->setSearch('contents_index');
+$this->BcAdmin->setHelp('contents_index');
+
+$editInIndexDisabled = false;
+$currentUser = BcUtil::loginUser('Admin');
+$isUseMoveContents = false;
+
+foreach ($currentUser->user_groups as $group) {
+  if ($isUseMoveContents = $group->use_move_contents) break;
+}
+
 $this->BcBaser->js('admin/vendors/jquery.jstree-3.3.8/jstree.min', false);
 $this->BcBaser->i18nScript([
   'confirmMessage1' => __d('baser', 'コンテンツをゴミ箱に移動してもよろしいですか？'),
@@ -52,23 +73,23 @@ $this->BcBaser->i18nScript([
 $this->BcBaser->js('admin/contents/index', false, [
   'id' => 'AdminContentsIndexScript',
   'data-isAdmin' => BcUtil::isAdminUser(),
-  'data-isUseMoveContents' => (bool)$currentUser['UserGroup']['use_move_contents'],
+  'data-isUseMoveContents' => $isUseMoveContents,
   'data-adminPrefix' => BcUtil::getAdminPrefix(),
-  'data-editInIndexDisabled' => (bool)$editInIndexDisabled
+  'data-baserCorePrefix' => Inflector::underscore(BcUtil::getBaserCorePrefix()),
+  'data-pluginName' => Inflector::dasherize($this->request->getParam('plugin')),
+  'data-editInIndexDisabled' => $editInIndexDisabled
 ]);
-$this->BcBaser->js('admin/libs/jquery.bcTree', false);
 $this->BcBaser->js([
   'admin/libs/jquery.baser_ajax_data_list',
-  'admin/libs/jquery.baser_ajax_batch',
   'admin/libs/baser_ajax_data_list_config',
+  'admin/libs/jquery.baser_ajax_batch',
   'admin/libs/baser_ajax_batch_config'
 ]);
+$this->BcBaser->js('admin/libs/jquery.bcTree', false);
 echo $this->BcAdminForm->control('BcManageContent', ['type' => 'hidden', 'value' => $this->BcContents->getJsonSettings()]);
 ?>
 
-
 <script type="text/javascript">
-
 </script>
 
 <div id="AlertMessage" class="message" style="display:none"></div>
@@ -76,8 +97,6 @@ echo $this->BcAdminForm->control('BcManageContent', ['type' => 'hidden', 'value'
   <div id="flashMessage" class="notice-message"></div>
 </div>
 
-<?php # $this->BcBaser->element('contents/index_view_setting') ?>
+<?php $this->BcBaser->element('Contents/index_view_setting') ?>
 
 <div id="DataList" class="bca-data-list">&nbsp;</div>
-
-

@@ -9,13 +9,13 @@
  * @since           baserCMS v 4.0.0
  * @license         https://basercms.net/license/index.html
  */
-header('Content-type: text/html; charset=utf-8');
+// header('Content-type: text/html; charset=utf-8');
 ?>
 
 
-<?php if ($datas): ?>
+<?php if (!$datas->isEmpty()): ?>
   <div id="ContentsTreeList" style="display:none">
-    <?php $this->BcBaser->element('contents/index_list_tree'); ?>
+    <?php $this->BcBaser->element('Contents/index_list_tree'); ?>
   </div>
 <?php else: ?>
   <div class="tree-empty"><?php echo __d('baser', 'データが登録されていません。') ?></div>

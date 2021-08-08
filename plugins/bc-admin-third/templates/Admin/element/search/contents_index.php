@@ -1,13 +1,12 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
 /**
@@ -19,32 +18,30 @@
  * @var array $authors
  */
 ?>
-<?php
-/*
-<?php echo $this->BcAdminForm->create('Content', ['url' => ['action' => 'index']]) ?>
-<?php echo $this->BcForm->hidden('Content.open', ['value' => true]) ?>
+<?= $this->BcAdminForm->create(null, ['url' => ['action' => 'index'], 'id' => 'ContentIndexForm'], ) ?>
+<?= $this->BcAdminForm->control('Contents.open', ['type' => 'hidden', 'value' => true]) ?>
 <p class="bca-search__input-list">
 	<span class="bca-search__input-item">
-		<?php echo $this->BcForm->label('Content.folder_id', __d('baser', 'フォルダ'), ['class' => 'bca-search__input-item-label']) ?>
-    <?php echo $this->BcAdminForm->control('Content.folder_id', ['type' => 'select', 'options' => $folders, 'empty' => __d('baser', '指定なし')]) ?>
+		<?= $this->BcAdminForm->label('Contents.folder_id', __d('baser', 'フォルダ'), ['class' => 'bca-search__input-item-label']) ?>
+    <?= $this->BcAdminForm->control('Contents.folder_id', ['type' => 'select', 'options' => $folders, 'empty' => __d('baser', '指定なし')]) ?>
 	</span>
   <span class="bca-search__input-item">
-		<?php echo $this->BcForm->label('Content.name', __d('baser', '名称'), ['class' => 'bca-search__input-item-label']) ?>
-    <?php echo $this->BcAdminForm->control('Content.name', ['type' => 'text', 'size' => 20]) ?>
+		<?= $this->BcAdminForm->label('Contents.name', __d('baser', '名称'), ['class' => 'bca-search__input-item-label']) ?>
+    <?= $this->BcAdminForm->control('Contents.name', ['type' => 'text', 'size' => 20]) ?>
 	</span>
   <span class="bca-search__input-item">
-		<?php echo $this->BcForm->label('Content.type', __d('baser', 'タイプ'), ['class' => 'bca-search__input-item-label']) ?>
-    <?php echo $this->BcAdminForm->control('Content.type', ['type' => 'select', 'options' => $contentTypes, 'empty' => __d('baser', '指定なし')]) ?>
+		<?= $this->BcAdminForm->label('Contents.type', __d('baser', 'タイプ'), ['class' => 'bca-search__input-item-label']) ?>
+    <?= $this->BcAdminForm->control('Contents.type', ['type' => 'select', 'options' => $contentTypes, 'empty' => __d('baser', '指定なし')]) ?>
 	</span>
   <span class="bca-search__input-item">
-		<?php echo $this->BcForm->label('Content.self_status', __d('baser', '公開状態'), ['class' => 'bca-search__input-item-label']) ?>
-    <?php echo $this->BcAdminForm->control('Content.self_status', ['type' => 'select', 'options' => $this->BcText->booleanMarkList(), 'empty' => __d('baser', '指定なし')]) ?>
+		<?= $this->BcAdminForm->label('Contents.self_status', __d('baser', '公開状態'), ['class' => 'bca-search__input-item-label']) ?>
+    <?= $this->BcAdminForm->control('Contents.self_status', ['type' => 'select', 'options' => $this->BcText->booleanMarkList(), 'empty' => __d('baser', '指定なし')]) ?>
 	</span>
   <span class="bca-search__input-item">
-		<?php echo $this->BcForm->label('Content.author_id', __d('baser', '作成者'), ['class' => 'bca-search__input-item-label']) ?>
-    <?php echo $this->BcAdminForm->control('Content.author_id', ['type' => 'select', 'options' => $authors, 'empty' => __d('baser', '指定なし')]) ?>
+		<?= $this->BcAdminForm->label('Contents.author_id', __d('baser', '作成者'), ['class' => 'bca-search__input-item-label']) ?>
+    <?= $this->BcAdminForm->control('Contents.author_id', ['type' => 'select', 'options' => $authors, 'empty' => __d('baser', '指定なし')]) ?>
 	</span>
-  <?php echo $this->BcSearchBox->dispatchShowField() ?>
+  <?= $this->BcSearchBox->dispatchShowField($this->request); ?>
 </p>
 <div class="button bca-search__btns">
   <div
@@ -52,4 +49,4 @@
   <div
     class="bca-search__btns-item"><?php $this->BcBaser->link(__d('baser', 'クリア'), "javascript:void(0)", ['id' => 'BtnSearchClear', 'class' => 'bca-btn', 'data-bca-btn-type' => 'clear']) ?></div>
 </div>
-<?php echo $this->BcAdminForm->end() ?>
+<?= $this->BcAdminForm->end() ?>

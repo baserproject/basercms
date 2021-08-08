@@ -39,11 +39,11 @@ $this->BcListTable->setColumnNumber(6);
       <?php endif; ?>
       <?php if (!$this->request->getQuery('sortmode')): ?>
         <?php
-          $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', '並び替え'), ['sortmode' => 1, $userGroupId])
+          $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', '並び替え'), ['sortmode' => 1, $userGroupId], ['escape' => false])
           ?>
       <?php else: ?>
         <?php
-          $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', 'ノーマル'), ['sortmode' => 0, $userGroupId])
+          $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', 'ノーマル'), ['sortmode' => 0, $userGroupId], ['escape' => false])
         ?>
       <?php endif ?>
     </th>

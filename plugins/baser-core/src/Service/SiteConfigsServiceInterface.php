@@ -27,9 +27,9 @@ interface SiteConfigsServiceInterface
     /**
      * フィールドの値を取得する
      * @param $fieldName
-     * @return string
+     * @return string|null
      */
-    public function getValue($fieldName): string;
+    public function getValue($fieldName): ?string;
 
     /**
      * データをキーバリュー形式で取得する

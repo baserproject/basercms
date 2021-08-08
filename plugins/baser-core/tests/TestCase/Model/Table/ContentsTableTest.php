@@ -375,32 +375,12 @@ class ContentsTableTest extends BcTestCase
     public function findByTypeDataProvider()
     {
         return [
-            ['Mail.MailContent', null, 15],    // entityId指定なし
-            ['Blog.BlogContent', 1, 16],    // entityId指定あり
-            ['Page', 3, 6],                // プラグイン指定なし
+            ['Mail.MailContent', null, 9],    // entityId指定なし
+            ['Blog.BlogContent', 1, 10],    // entityId指定あり
+            ['Page', 3, 11],                // プラグイン指定なし
             ['Blog.BlogComment', null, null],    // 存在しないタイプ
             [false, null, null]                // 異常系
         ];
-    }
-
-    /**
-     * コンテンツフォルダーのリストを取得
-     * コンボボックス用
-     */
-    public function testGetContentFolderList()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $siteId = 1;
-
-        $this->Contents->getContentFolderList();
-    }
-
-    /**
-     * ツリー構造のデータを コンボボックスのデータ用に変換する
-     */
-    public function testConvertTreeList()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**

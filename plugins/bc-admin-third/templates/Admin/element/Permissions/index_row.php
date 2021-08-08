@@ -26,7 +26,7 @@
 <tr<?php echo $class; ?>>
   <td class="row-tools bca-table-listup__tbody-td ">
     <?php if ($this->BcBaser->isAdminUser()): ?>
-      <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $data['Permission']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['Permission']['id']]) ?>
+      <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $data['Permission']['id'], ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data['Permission']['id'], 'escape' => false]) ?>
     <?php endif ?>
     <?php if ($this->request->getQuery('sortmode')): ?>
       <span class="sort-handle"><i class="bca-btn-icon-text"

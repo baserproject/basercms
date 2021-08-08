@@ -20,25 +20,26 @@ $(function () {
         isAdmin: $("#AdminContentsIndexScript").attr('data-isAdmin'),
         isUseMoveContents: $("#AdminContentsIndexScript").attr('data-isUseMoveContents'),
         adminPrefix: $("#AdminContentsIndexScript").attr('data-adminPrefix'),
-        editInIndexDisabled: $("#AdminContentsIndexScript").attr('data-editInIndexDisabled')
+        baserCorePrefix: $("#AdminContentsIndexScript").attr('data-baserCorePrefix'),
+        editInIndexDisabled: $("#AdminContentsIndexScript").attr('data-editInIndexDisabled'),
     });
 
     // マウスダウンイベント
     $(window).bind("mousedown", $.bcTree.updateShiftAndCtrlOnAnchor);
 
     // サイト変更時
-    $("#ViewSettingSiteId").change(function () {
+    $("#viewsetting-site-id").change(function () {
         $.bcUtil.showLoader();
-        var siteId = $("#ViewSettingSiteId").val();
+        var siteId = $("#viewsetting-site-id").val();
         if (siteId == undefined) {
             siteId = 0;
         }
         // メニューを再構築する必要があるため、ajax ではなく遷移させる
-        location.href = $.baseUrl() + '/' + $.bcTree.config.adminPrefix + '/contents/index/site_id:' + siteId + '/list_type:1';
+        location.href = $.baseUrl() + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/' + 'baser-core' + '/contents/index?site_id=' + siteId + '\&list_type=1';
     });
 
     // 表示変更時
-    $("input[name='data[ViewSetting][list_type]']").click(loadView);
+    $("input[name='ViewSetting[list_type]']").click(loadView);
 
     // 新規追加クリック時
     $("#BtnAddContent").click($.bcTree.showMenuByOuter);
@@ -77,7 +78,7 @@ $(function () {
         $.bcUtil.showNoticeMessage(bcI18n.infoMessage1.sprintf($.parseJSON(result).title));
     };
     $.baserAjaxDataList.init();
-    $.baserAjaxBatch.init({url: $.baseUrl() + '/' + $.bcTree.config.adminPrefix + '/contents/ajax_batch'});
+    $.baserAjaxBatch.init({url: $.baseUrl() + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/' + 'baser-core' + '/contents/ajax_batch'});
 
     //$("#Search").before($("#ViewSetting"));
 
@@ -85,7 +86,7 @@ $(function () {
     // ここで検索処理を登録する代わりに basreAjaxDataList側のイベントを削除
     $("#BtnSearchSubmit").click(function () {
         contentsIndexSearchOpened = true;
-        $("input[name='data[ViewSetting][list_type]']:eq(1)").prop('checked', true);
+        $("input[name='ViewSetting[list_type]']:eq(1)").prop('checked', true);
         loadView();
         return false;
     });
@@ -106,10 +107,10 @@ $(function () {
     function loadView(e) {
 
         // サイトが変わった場合はリセット
-        if (e !== undefined && e.target.id == 'ViewSettingSiteId') {
+        if (e !== undefined && e.target.id == 'viewsetting-site-id') {
             $("#BtnSearchClear").click();
             $.ajax({
-                url: $.baseUrl() + '/' + $.bcTree.config.adminPrefix + '/contents/ajax_get_content_folder_list/' + $(this).val(),
+                url: $.baseUrl() + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/' + 'baser-core' + '/contents/ajax_get_content_folder_list/' + $(this).val(),
                 type: "GET",
                 dataType: "json",
                 beforeSend: function () {
@@ -129,8 +130,8 @@ $(function () {
                 }
             });
         }
-        var mode = $("#ViewSettingMode").val();
-        var listType = $("input[name='data[ViewSetting][list_type]']:checked").val();
+        var mode = $("#viewsetting-mode").val();
+        var listType = $("input[name='ViewSetting[list_type]']:checked").val();
         if (listType == undefined || mode == 'trash') {
             listType = "1";
         }
@@ -163,7 +164,7 @@ $(function () {
      * 表形式のリストをロードする
      */
     function loadTable() {
-        url = $.baseUrl() + '/' + $.bcTree.config.adminPrefix + '/contents/index/site_id:' + $("#ViewSettingSiteId").val() + '/list_type:2';
+        url = $.baseUrl() + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/' + 'baser-core' + '/contents/index?site_id=' + $("#viewsetting-site-id").val() + '\&list_type=2';
         $("#ContentIndexForm").attr('action', url);
         $.baserAjaxDataList.search();
     }

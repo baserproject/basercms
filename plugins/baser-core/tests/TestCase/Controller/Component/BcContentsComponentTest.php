@@ -82,7 +82,7 @@ class BcContentsComponentTest extends BcTestCase
     public function testInitialize()
     {
         $this->assertEquals('BcContentsTest', $this->BcContents->_Controller->getName());
-        $this->assertEquals($this->BcContents->_Controller->getPlugin() . '.' . $this->BcContents->_Controller->getName(), $this->BcContents->type);
+        $this->assertEquals($this->BcContents->_Controller->getName(), $this->BcContents->type);
         $this->assertInstanceOf('Cake\Http\ServerRequest', $this->BcContents->ControllerRequest);
         // baser/admin/contents 管理システム設定の場合
         $this->assertNotEmpty($this->BcContents->getConfig('items'));
@@ -110,7 +110,6 @@ class BcContentsComponentTest extends BcTestCase
 
     public function testGetContent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $content = $this->BcContents->getContent(1);
         $this->assertEquals('BcContentsテスト', $content->name);
         $this->assertNull($this->BcContents->getContent(2));

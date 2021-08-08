@@ -96,7 +96,7 @@ $this->BcListTable->setColumnNumber(8);
   <?php if (!empty($datas)): ?>
     <?php $count = 0; ?>
     <?php foreach($datas as $data): ?>
-      <?php $this->BcBaser->element('contents/index_row_table', ['data' => $data, 'count' => $count]) ?>
+      <?php $this->BcBaser->element('Contents/index_row_table', ['data' => $data, 'count' => $count]) ?>
       <?php $count++; ?>
     <?php endforeach; ?>
   <?php else: ?>

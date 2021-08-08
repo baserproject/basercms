@@ -13,9 +13,9 @@ header('Content-type: text/html; charset=utf-8');
 ?>
 
 
-<?php if ($datas): ?>
+<?php if (!$datas->isEmpty()): ?>
   <div id="ContentsTreeList" style="display:none">
-    <?php $this->BcBaser->element('contents/index_list_tree'); ?>
+    <?php $this->BcBaser->element('Contents/index_list_tree'); ?>
   </div>
 <?php else: ?>
   <div class="tree-empty"><?php echo __d('baser', 'ゴミ箱は空です') ?></div>

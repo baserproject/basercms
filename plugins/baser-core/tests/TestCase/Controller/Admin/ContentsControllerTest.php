@@ -11,8 +11,12 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
-use BaserCore\Controller\Admin\ContentsController;
+use Cake\Event\Event;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Service\SiteConfigsTrait;
+use BaserCore\Service\Admin\SiteManageService;
+use BaserCore\Service\Admin\ContentManageService;
+use BaserCore\Controller\Admin\ContentsController;
 /**
  * Class ContentsControllerTest
  *
@@ -21,6 +25,7 @@ use BaserCore\TestSuite\BcTestCase;
  */
 class ContentsControllerTest extends BcTestCase
 {
+
     /**
      * Fixtures
      *
@@ -29,6 +34,8 @@ class ContentsControllerTest extends BcTestCase
     protected $fixtures = [
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Users',
     ];
     /**
      * set up
@@ -38,6 +45,11 @@ class ContentsControllerTest extends BcTestCase
     {
         parent::setUp();
         $this->ContentsController = new ContentsController($this->getRequest());
+        $this->ContentsController->setName('Admin/Contents');
+        $this->ContentsController->loadModel('BaserCore.ContentFolders');
+        $this->ContentsController->loadModel('BaserCore.Users');
+        $this->ContentsController->loadComponent('BaserCore.BcContents');
+        $this->ContentsController->BcContents->setConfig('items', ["test" => ['title' => 'test']]);
     }
 
     /**
@@ -48,6 +60,7 @@ class ContentsControllerTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+        unset($this->ContentsController);
     }
 
     /**
@@ -65,7 +78,13 @@ class ContentsControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $event = new Event('Controller.beforeFilter', $this->ContentsController);
+        $this->ContentsController->beforeFilter($event);
+        $this->assertNotEmpty($this->ContentsController->Sites);
+        $this->assertNotEmpty($this->ContentsController->SiteConfigs);
+        $this->assertNotEmpty($this->ContentsController->ContentFolders);
+        $this->assertNotEmpty($this->ContentsController->Users);
+        $this->assertEquals($this->ContentsController->Security->getConfig('unlockedActions'), ['index']);
     }
 
     /**
@@ -79,9 +98,21 @@ class ContentsControllerTest extends BcTestCase
     /**
      * ゴミ箱内のコンテンツ一覧を表示する
      */
-    public function testAdmin_trash_index()
+    public function testTrash_index()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // requestテスト
+        // $this->get('/baser/admin/baser-core/contents/trash_index/');
+        // $this->assertResponseSuccess();
+        // setAction先のindexの環境準備
+        // ->withEnv('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest')
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $request = $this->getRequest()->withParam('action', 'trash_index');
+        $this->ContentsController->setRequest($request);
+        $this->ContentsController->trash_index(new ContentManageService(), new SiteManageService());
+        // indexアクションにリダイレクトしてるか判定
+        $this->assertEquals(0, $this->ContentsController->getRequest()->getData('ViewSetting.site_id'));
+        $this->assertEquals(1, $this->ContentsController->getRequest()->getData('ViewSetting.list_type'));
+        // ajaxならリダイレクトしない
     }
 
     /**

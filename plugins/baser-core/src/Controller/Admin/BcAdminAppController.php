@@ -53,7 +53,7 @@ class BcAdminAppController extends BcAppController
         /** @var UserManageService $userManage */
         $userManage = $this->getService(UserManageServiceInterface::class);
         $this->response = $userManage->checkAutoLogin($this->request, $this->response);
-        
+
         // ログインユーザ再読込
         if (!$userManage->reload($this->request)) {
             $this->redirect($this->Authentication->logout());
@@ -92,7 +92,8 @@ class BcAdminAppController extends BcAppController
             'group' => '',
             'post' => true,
             'get' => true,
-            'named' => true
+            'named' => true,
+            'query' => true,
         ], $options);
 
         if (!$options['action']) {
@@ -126,14 +127,26 @@ class BcAdminAppController extends BcAppController
         if ($options['get'] && $this->request->getQuery()) {
             $session->write("BcApp.viewConditions.{$contentsName}.query", $this->request->getQuery());
         }
-
-        if ($options['named'] && $this->request->getParam('named')) {
+        if (($options['named']) && $this->request->getParam('named')) {
             if ($session->check("BcApp.viewConditions.{$contentsName}.named")) {
                 $named = array_merge($session->read("BcApp.viewConditions.{$contentsName}.named"), $this->request->getParam('named'));
             } else {
                 $named = $this->request->getParam('named');
             }
             $session->write("BcApp.viewConditions.{$contentsName}.named", $named);
+        }
+        if ($options['query'] && $this->request->getQuery()) {
+            if (isset($options['default']['query'])) {
+                if ($session->check("BcApp.viewConditions.{$contentsName}.query")) {
+                    $query = array_merge($options['default']['query'], $this->request->getQueryParams());
+                } else {
+                    $query = $options['default']['query'];
+                }
+            } else {
+                $query = $this->request->getQueryParams();
+            }
+
+            $session->write("BcApp.viewConditions.{$contentsName}.query", $query);
         }
     }
 

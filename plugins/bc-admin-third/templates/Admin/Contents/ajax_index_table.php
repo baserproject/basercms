@@ -13,4 +13,4 @@ header('Content-type: text/html; charset=utf-8');
 ?>
 
 
-<?php $this->BcBaser->element('contents/index_list_table'); ?>
+<?php $this->BcBaser->element('Contents/index_list_table'); ?>

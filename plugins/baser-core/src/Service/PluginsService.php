@@ -64,7 +64,7 @@ class PluginsService implements PluginsServiceInterface
     }
 
     /**
-     * ユーザー一覧を取得
+     * プラグイン一覧を取得
      * @param string $sortMode
      * @return array $plugins
      * @checked

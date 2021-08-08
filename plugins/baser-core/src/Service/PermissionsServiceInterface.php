@@ -31,7 +31,7 @@ interface PermissionsServiceInterface
     public function get($id): EntityInterface;
 
     /**
-     * ユーザー一覧を取得
+     * パーミッション一覧を取得
      * @param array $queryParams
      * @return Query
      */

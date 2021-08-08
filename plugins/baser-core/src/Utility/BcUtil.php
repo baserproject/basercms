@@ -836,4 +836,26 @@ class BcUtil
         return false;
     }
 
+    /**
+     * getContentsItem
+     * コンテンツ一覧用にアイテムを整形して返す
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function getContentsItem(): array
+    {
+        $items = Configure::read('BcContents.items');
+        $createdSettings = [];
+        foreach($items as $name => $settings) {
+            foreach($settings as $type => $setting) {
+                $setting['plugin'] = $name;
+                $setting['type'] = $type;
+                $createdSettings[$type] = $setting;
+            }
+        }
+        return $createdSettings;
+    }
+
 }

@@ -17,6 +17,7 @@ use Cake\Routing\Router;
 use Cake\Http\ServerRequest;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcContentsHelper;
 
 /**
@@ -70,9 +71,31 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testInitialize(): void
     {
+        // protectedによりアクセスできない
         // $this->assertNotEmpty($this->BcContents->_Contents);
         // $this->assertNotEmpty($this->BcContents->_Permissions);
         $this->assertContains('BcBaser', $this->BcContents->helpers);
+
+    }
+
+    /**
+     * testSetUp
+     *
+     * @return void
+     */
+    public function testSetUp(): void
+    {
+        // $settingsがないの場合
+        $this->BcContents->setUp();
+        $result = $this->BcContents->getConfig('settings');
+        $this->assertNull($result);
+        // $settingsがある場合
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $View = new BcAdminAppView($this->getRequest('/'));
+        $View->set('contentsSettings', BcUtil::getContentsItem());
+        $this->BcContents = new BcContentsHelper($View);
+        $this->BcContents->setUp();
+
 
     }
 

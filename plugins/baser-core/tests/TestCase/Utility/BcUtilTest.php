@@ -793,4 +793,15 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals('BcSample', BcUtil::getPluginDir('BcSample'));
     }
 
+    public function testGetContentsItem()
+    {
+        $result = BcUtil::getContentsItem();
+        $list = ['Default', 'ContentFolder', 'ContentAlias', 'ContentLink', 'Page'];
+        foreach($list as $key) {
+            $this->assertArrayHasKey($key, $result);
+        }
+        $this->assertEquals('Core', $result['Default']['plugin']);
+        $this->assertEquals('Default', $result['Default']['type']);
+    }
+
 }

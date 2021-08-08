@@ -29,6 +29,7 @@ use BaserCore\View\Helper\BcHtmlHelper;
 use BaserCore\View\Helper\BcListTableHelper;
 use BaserCore\View\Helper\BcTextHelper;
 use BaserCore\View\Helper\BcTimeHelper;
+use BaserCore\View\Helper\BcContentsHelper;
 
 /**
  * Class BcAdminAppView
@@ -48,6 +49,7 @@ use BaserCore\View\Helper\BcTimeHelper;
  * @property BcAdminSiteHelper $BcAdminSite
  * @property BcAdminPermissionHelper $BcAdminPermission
  * @property BcAdminSiteConfigHelper $BcAdminSiteConfig
+ * @property BcContentsHelper $BcContents
  */
 class BcAdminAppView extends AppView
 {

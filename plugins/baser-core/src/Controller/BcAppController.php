@@ -1519,10 +1519,10 @@ class BcAppController extends AppController
     {
         // CUSTOMIZE ADD 2012/04/22 ryuring
         // >>>
-        $_action = $this->request->action;
+        $_action = $this->request->getParam('action');
         // <<<
 
-        $this->request->action = $action;
+        $this->request->withParam('action', $action);
         $args = func_get_args();
         unset($args[0]);
 
@@ -1531,7 +1531,7 @@ class BcAppController extends AppController
         //return call_user_func_array(array($this, $action), $args);
         // ---
         $return = call_user_func_array([$this, $action], $args);
-        $this->request->action = $_action;
+        $this->request->withParam('action', $_action);
         return $return;
         // <<<
     }

@@ -11,16 +11,35 @@
 
 namespace BaserCore\Service\Admin;
 
+use Cake\ORM\Query;
 
+use BaserCore\Service\ContentsService;
+use BaserCore\Service\ContentsServiceInterface;
 /**
  * Interface PluginManageServiceInterface
  * @package BaserCore\Service
  */
-interface ContentManageServiceInterface
+interface ContentManageServiceInterface extends ContentsServiceInterface
 {
     /**
       * コンテンツ情報を取得する
       * @return array
       */
     public function getContensInfo ();
+
+    /**
+     * getAdminTableConditions
+     *
+     * @param  array $searchData
+     * @return array
+     */
+    public function getAdminTableConditions($searchData): array;
+
+    /**
+     * リクエストに応じてajax処理時に必要なIndexとテンプレートを取得する
+     *
+     * @param  array $searchData
+     * @return array
+     */
+    public function getAdminAjaxIndex(array $searchData): array;
 }

@@ -96,7 +96,11 @@ class BcContentsComponent extends Component
         // $controller->uses[] = 'Contents';↓
         // $this->_Controller->Contents = new ContentsController();
         if (!$this->type) {
-            $this->type = $this->_Controller->getPlugin() . '.' . $this->_Controller->getName();
+            if($this->_Controller->getPlugin()) {
+                $this->type = $this->_Controller->getPlugin() . '.' . $this->_Controller->getName();
+            } else {
+                $this->type = $this->_Controller->getName();
+            }
         }
         if (BcUtil::isAdminSystem(Router::url(null, false))) {
             // 管理システム設定
@@ -117,15 +121,7 @@ class BcContentsComponent extends Component
      */
     public function setupAdmin()
     {
-        $items = Configure::read('BcContents.items');
-        $createdSettings = [];
-        foreach($items as $name => $settings) {
-            foreach($settings as $type => $setting) {
-                $setting['plugin'] = $name;
-                $setting['type'] = $type;
-                $createdSettings[$type] = $setting;
-            }
-        }
+        $createdSettings = BcUtil::getContentsItem();
         $this->setConfig('items', $createdSettings);
     }
 
@@ -216,7 +212,7 @@ class BcContentsComponent extends Component
     public function beforeRender()
     {
         $controller = $this->getController();
-        if (BcUtil::isAdminSystem()) {
+        if (BcUtil::isAdminSystem(Router::url())) {
             $controller->set('contentsSettings', $this->getConfig('items'));
             // パンくずをセット
             array_unshift($controller->crumbs, ['name' => __d('baser', 'コンテンツ一覧'), 'url' => ['plugin' => null, 'controller' => 'contents', 'action' => 'index']]);

@@ -11,24 +11,29 @@
 
 namespace BaserCore\View\Helper;
 
+use Exception;
 use Cake\View\View;
 use Cake\View\Helper;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
-use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Model\Table\ContentsTable;
+use BaserCore\Model\Table\PermissionsTable;
 
 
 /**
  * コンテンツヘルパ
  *
- * @package Baser.View.Helper
- * @property Content $_Content
- * @property Permission $_Permissions
+ * @package BaserCore\View\Helper
+ * @var BcContentsHelper $this
+ * @property ContentsTable $_Contents
+ * @property PermissionsTable $_Permissions
  */
 class BcContentsHelper extends Helper
 {
@@ -46,9 +51,7 @@ class BcContentsHelper extends Helper
     public $helpers = ['BcBaser'];
 
     /**
-     * Content Model
      *
-     * @var Contents
      */
     protected $_Contents = null;
     protected $_Permissions = null;
@@ -67,18 +70,18 @@ class BcContentsHelper extends Helper
         parent::initialize($config);
         $this->_Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         $this->_Permissions = TableRegistry::getTableLocator()->get('BaserCore.Permissions');
-        if (BcUtil::isAdminSystem()) {
+        if (BcUtil::isAdminSystem(Router::url())) {
             $this->setup();
         }
     }
 
     /**
-     * @todo Testable humuhimi
      * セットアップ
      */
     public function setup()
     {
         $settings = $this->_View->get('contentsSettings');
+        // $settings = $this->_View->get('items');
 
         if (!$settings) {
             return;
@@ -155,22 +158,29 @@ class BcContentsHelper extends Helper
      */
     public function isActionAvailable($type, $action, $entityId)
     {
-        $user = BcUtil::loginUser('admin');
+        $user = BcUtil::loginUser('Admin');
         if (!isset($this->getConfig('settings')[$type]['url'][$action])) {
             return false;
         }
         $url = $this->getConfig('settings')[$type]['url'][$action] . '/' . $entityId;
-        return $this->_Permissions->check($url, $user['user_group_id']);
+
+        if ($userGroups = $user->fields->user_groups) {
+            foreach ($userGroups as $group) {
+                if ($this->_Permissions->check($url, $group)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /**
      * シングルコンテンツで既に登録済のタイトルを取得する
-     * @todo Testable humuhimi
      * @return array
      */
     protected function _getExistsTitles()
     {
-        $items = Configure::read('BcContents.items');
+        $items = BcUtil::getContentsItem();
         // シングルコンテンツの存在チェック
         $conditions = [];
         foreach($items as $name => $settings) {
