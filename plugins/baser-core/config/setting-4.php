@@ -199,22 +199,6 @@ $config['BcRequire'] = [
 ];
 
 /**
- * 環境設定
- */
-$config['BcEnv'] = [
-    // テストDBプレフィックス
-    'testDbPrefix' => 'test_',
-    // WebサイトURL（インストーラーで install.php 自動設定される、システム設定で変更可）
-    'siteUrl' => '',
-    // SSLのWebサイトURL（システム設定で変更可）
-    'sslUrl' => '',
-    // 復数のWebサイトを管理する場合のメインとなるドメイン
-    'mainDomain' => '',
-    // 現在のリクエストのホスト
-    'host' => @$_SERVER['HTTP_HOST']
-];
-
-/**
  * 認証プレフィックス設定
  * ※ CSVは非対応
  */

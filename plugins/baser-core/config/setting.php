@@ -29,7 +29,15 @@ return [
         /**
          * SSL URL
          */
-        'sslUrl' => env('SSL_URL', 'https://localhost/')
+        'sslUrl' => env('SSL_URL', 'https://localhost/'),
+        /**
+         * 復数のWebサイトを管理する場合のメインとなるドメイン
+         */
+        'mainDomain' => '',
+        /**
+         * 現在のリクエストのホスト
+         */
+        'host' => @$_SERVER['HTTP_HOST']
     ],
     'BcApp' => [
         /**

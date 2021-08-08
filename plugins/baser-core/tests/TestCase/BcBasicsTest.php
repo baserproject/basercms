@@ -38,7 +38,6 @@ class BcBasicsTest extends BcTestCase
     public function setUp()
     {
         parent::setUp();
-        BcSite::flash();
     }
 
     public function tearDown()

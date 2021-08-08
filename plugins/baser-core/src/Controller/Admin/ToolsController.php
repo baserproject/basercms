@@ -102,7 +102,6 @@ class ToolsController extends BcAdminAppController
                 }
                 // Pageモデルがレストア処理でAppModelで初期化されClassRegistryにセットされている為
                 ClassRegistry::flush();
-                BcSite::flash();
                 if (!$error && !$this->Page->createAllPageTemplate()) {
                     $messages[] = __d('baser', "ページテンプレートの生成に失敗しました。\n表示できないページはページ管理より更新処理を行ってください。");
                 }

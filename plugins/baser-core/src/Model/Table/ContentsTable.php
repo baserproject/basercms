@@ -1817,7 +1817,7 @@ class ContentsTable extends AppTable
         $mainSite = $this->Site->getRootMain();
         foreach($contents as $key => $content) {
             if ($content['Content']['site_id'] == 0) {
-                $contents[$key]['Site'] = $mainSite['Site'];
+                $contents[$key]['Site'] = $mainSite;
             }
         }
         return $contents;
@@ -2042,8 +2042,9 @@ class ContentsTable extends AppTable
             return false;
         }
         if ($content && empty($content['Site']['id'])) {
-            $content['Site'] = $this->Site->getRootMain()['Site'];
+            $content['Site'] = $this->Site->getRootMain();
         }
         return $content;
     }
+
 }

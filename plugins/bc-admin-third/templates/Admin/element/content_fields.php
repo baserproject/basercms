@@ -10,20 +10,21 @@
  * @license            https://basercms.net/license/index.html
  */
 
-use Cake\ORM\TableRegistry;
+use BaserCore\Model\Entity\Content;
+use BaserCore\View\BcAdminAppView;
 
 /**
  * [ADMIN] 統合コンテンツフォーム
  *
- * @var BcAppView $this
+ * @var BcAdminAppView $this
  * @var array $parentContents
  * @var bool $related 親サイトに連携する設定で、エイリアス、もしくはフォルダであるかどうか
  *                                        上記に一致する場合、URLに関わるコンテンツ名は編集できない
  * @var bool $disableEditContent コンテンツ編集不可かどうか
+ * @var Content $content
  */
 if ($this->request->getData('Site.use_subdomain')) {
-  $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-  $targetSite = $sites->findByUrl($this->request->getData('Content.url'));
+  $targetSite = $this->BcAdminSite->findByUrl($content->url);
   $previewUrl = $this->BcBaser->getUrl($targetSite->getPureUrl($this->request->getData('Content.url')) . '?host=' . $targetSite->host);
 } else {
   $previewUrl = $this->BcBaser->getUrl($this->BcContents->getUrl($this->request->getData('Content.url'), false, false, false));
@@ -32,7 +33,7 @@ $fullUrl = $this->BcContents->getUrl($this->request->getData('Content.url'), tru
 $this->BcBaser->js('admin/contents/edit', false, ['id' => 'AdminContentsEditScript',
   'data-previewurl' => $previewUrl,
   'data-fullurl' => $fullUrl,
-  'data-current' => json_encode($this->request->data),
+  'data-current' => json_encode($this->request->getData()),
   'data-settings' => $this->BcContents->getJsonSettings()
 ]);
 $this->BcBaser->i18nScript([

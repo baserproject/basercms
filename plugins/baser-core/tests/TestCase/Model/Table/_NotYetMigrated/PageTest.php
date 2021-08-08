@@ -736,7 +736,6 @@ class PageTest extends BaserTestCase
      */
     public function testGetContentFolderPath($id, $expects)
     {
-        BcSite::flash();
         $this->assertEquals($expects, $this->Page->getContentFolderPath($id));
     }
 

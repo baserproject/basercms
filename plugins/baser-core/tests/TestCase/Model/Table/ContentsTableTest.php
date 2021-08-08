@@ -57,7 +57,6 @@ class ContentsTableTest extends BcTestCase
     public function tearDown(): void
     {
         unset($this->Contents);
-        // BcSite::flash();
         parent::tearDown();
     }
 

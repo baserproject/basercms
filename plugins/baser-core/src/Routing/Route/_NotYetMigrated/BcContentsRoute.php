@@ -2,6 +2,9 @@
 // TODO : コード確認要
 
 
+use BaserCore\Service\Front\SiteFrontServiceInterface;
+use BaserCore\Service\SitesServiceInterface;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -286,7 +289,7 @@ class BcContentsRoute extends CakeRoute
         }
 
         // URL生成
-        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $sites = $this->getService(SitesServiceInterface::class);
         $site = $sites->findByUrl($strUrl);
         if ($site && $site->use_subdomain) {
             $strUrl = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/', $strUrl);

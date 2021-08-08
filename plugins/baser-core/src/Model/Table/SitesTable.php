@@ -15,16 +15,10 @@ use ArrayObject;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\AppTable;
 use BaserCore\Model\Entity\Site;
-use BaserCore\Utility\BcUtil;
-use BcAbstractDetector;
-use BcAgent;
-use BcLang;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ResultSetInterface;
 use Cake\Event\Event;
-use Cake\Http\ServerRequest;
-use Cake\Routing\Router;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -170,7 +164,7 @@ class SitesTable extends AppTable
             $options = $event->getResult() === true? $event->getData('options') : $event->getResult();
         }
 
-        if(!is_null($options['status'])) {
+        if (!is_null($options['status'])) {
             $conditions = ['status' => $options['status']];
         }
 
@@ -212,28 +206,14 @@ class SitesTable extends AppTable
      *
      * @param mixed $options
      *  - `fields` : 取得するフィールド
-     * @return array
+     * @return EntityInterface
      * @checked
      * @noTodo
      * @unitTest
      */
     public function getRootMain($options = [])
     {
-        $options += [
-            'fields' => []
-        ];
-        $site = $this->find()->where(['main_site_id IS' => null])->first()->toArray();
-        if ($options['fields']) {
-            if (!is_array($options['fields'])) {
-                $options['fields'] = [$options['fields']];
-            }
-            $siteTmp = [];
-            foreach($options['fields'] as $field) {
-                $siteTmp[$field] = $site[$field];
-            }
-            $site = $siteTmp;
-        }
-        return $site;
+        return $this->find()->where(['main_site_id IS' => null])->first();
     }
 
     /**
@@ -421,7 +401,7 @@ class SitesTable extends AppTable
     public function getPrefix($id)
     {
         $site = $this->find()->select(['name', 'alias'])->where(['id' => $id])->first();
-        if(!$site) {
+        if (!$site) {
             return false;
         }
         $prefix = $site->name;
@@ -450,7 +430,7 @@ class SitesTable extends AppTable
      * URLよりサイトを取得する
      *
      * @param string $url
-     * @return array|bool|null
+     * @return EntityInterface
      * @checked
      * @noTodo
      * @unitTest
@@ -465,8 +445,8 @@ class SitesTable extends AppTable
             unset($urlAry[$i - 1]);
         }
         $result = $this->find()->where($where)->order(['alias DESC']);
-        if($result->count()) {
-            return $result->first()->toArray();
+        if ($result->count()) {
+            return $result->first();
         } else {
             return $this->getRootMain();
         }
@@ -476,7 +456,7 @@ class SitesTable extends AppTable
      * メインサイトを取得する
      *
      * @param int $id
-     * @return array|false
+     * @return EntityInterface|false
      * @checked
      * @noTodo
      * @unitTest
@@ -484,7 +464,7 @@ class SitesTable extends AppTable
     public function getMain($id)
     {
         $currentSite = $this->find()->where(['id' => $id])->first();
-        if(!$currentSite) {
+        if (!$currentSite) {
             return false;
         }
         if (is_null($currentSite->main_site_id)) {
@@ -493,10 +473,10 @@ class SitesTable extends AppTable
         $mainSite = $this->find()->where([
             'id' => $currentSite->main_site_id
         ])->first();
-        if(!$mainSite) {
+        if (!$mainSite) {
             return false;
         }
-        return $mainSite->toArray();
+        return $mainSite;
     }
 
     /**

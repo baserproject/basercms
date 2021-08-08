@@ -281,7 +281,6 @@ class ThemesController extends AppController
         }
         BcUtil::clearAllCache();
         ClassRegistry::flush();
-        BcSite::flash();
 
         if ($currentTheme) {
             $siteConfigs = ['SiteConfig' => ['theme' => $currentTheme]];

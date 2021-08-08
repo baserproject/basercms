@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Service\Front\SiteFrontServiceInterface;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -21,6 +23,11 @@ return;
  */
 class BcRedirectSubSiteFilter extends DispatcherFilter
 {
+
+    /**
+     * Trait
+     */
+    use \BaserCore\Utility\BcContainerTrait;
 
     /**
      * 優先順位
@@ -49,7 +56,8 @@ class BcRedirectSubSiteFilter extends DispatcherFilter
         if ($request->is('admin')) {
             return;
         }
-        $subSite = BcSite::サイト();
+        $siteFront = $this->getService(SiteFrontServiceInterface::class);
+        $subSite = $siteFront->findCurrentSub();
         if (!is_null($subSite) && $subSite->shouldRedirects($request)) {
             $response->header('Location', $request->base . $subSite->makeUrl($request));
             $response->statusCode(302);

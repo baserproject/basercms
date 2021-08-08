@@ -941,7 +941,7 @@ class PagesTable extends Table
             return false;
         }
         if ($record && empty($record['Site']['id'])) {
-            $record['Site'] = $this->Content->Site->getRootMain()['Site'];
+            $record['Site'] = $this->Content->Site->getRootMain();
         }
         return $record;
     }

@@ -14,7 +14,6 @@ namespace BaserCore\Test\TestCase\Model\Table;
 use ArrayObject;
 use BaserCore\Model\Table\SitesTable;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Core\Configure;
 use Cake\Event\Event;
 use ReflectionClass;
 
@@ -98,8 +97,7 @@ class SitesTableTest extends BcTestCase
      */
     public function testGetRootMain()
     {
-        $this->assertEquals(1, $this->Sites->getRootMain()['id']);
-        $this->assertEquals(2, count($this->Sites->getRootMain(['fields' => ['name', 'display_name']])));
+        $this->assertEquals(1, $this->Sites->getRootMain()->id);
     }
 
     /**
@@ -170,10 +168,11 @@ class SitesTableTest extends BcTestCase
     public function testFindByUrl($url, $expected)
     {
         $site = $this->Sites->findByUrl($url);
-        $this->assertEquals($expected, $site['id']);
+        $this->assertEquals($expected, $site->id);
     }
 
-    public function findByUrlDataProvider() {
+    public function findByUrlDataProvider()
+    {
         return [
             ['', 1],
             ['/s/index', 2],
@@ -187,8 +186,8 @@ class SitesTableTest extends BcTestCase
      */
     public function testGetMain()
     {
-        $this->assertEquals(1, $this->Sites->getMain(1)['id']);
-        $this->assertEquals(1, $this->Sites->getMain(2)['id']);
+        $this->assertEquals(1, $this->Sites->getMain(1)->id);
+        $this->assertEquals(1, $this->Sites->getMain(2)->id);
         $this->assertEquals(false, $this->Sites->getMain(6));
     }
 

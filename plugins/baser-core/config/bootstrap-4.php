@@ -316,7 +316,8 @@ if (BC_INSTALLED || isConsole()) {
  */
 
 if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
-    $sites = BcSite::findAll();
+    $sitesTable = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
+    $sites = $sitesTable->find()->all();
     $pluginPaths = [ROOT . DS . 'Plugin' . DS];
     foreach($sites as $site) {
         if ($site->theme) {

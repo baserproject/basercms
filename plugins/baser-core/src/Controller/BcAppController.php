@@ -11,17 +11,14 @@
 
 namespace BaserCore\Controller;
 
-use BaserCore\Controller\Component\BcMessageComponent;
-use BaserCore\Service\Front\SiteFrontServiceInterface;
+use BaserCore\Service\SitesServiceInterface;
 use Cake\Controller\ComponentRegistry;
+use Cake\Core\Exception\Exception;
 use Cake\Event\EventInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
-use BaserCore\Model\Table\LoginStoresTable;
-use Cake\Http\Cookie\Cookie;
-use DateTime;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Service\DblogsServiceInterface;
 use Cake\Core\Configure;
@@ -275,13 +272,13 @@ class BcAppController extends AppController
 
             // サブサイト用のエラー
             try {
-                $Site = ClassRegistry::init('Site');
-                $site = $Site->findByUrl($this->request->url);
-                if (!empty($site['Site']['name'])) {
-                    $this->layoutPath = $site['Site']['name'];
-                    if ($site['Site']['name'] === 'mobile') {
+                $sites = $this->getService(SitesServiceInterface::class);
+                $site = $sites->findByUrl($this->request->getPath());
+                if (!empty($site->name)) {
+                    $this->layoutPath = $site->name;
+                    if ($site->name === 'mobile') {
                         $this->helpers[] = 'BcMobile';
-                    } elseif ($site['Site']['name'] === 'smartphone') {
+                    } elseif ($site->name === 'smartphone') {
                         $this->helpers[] = 'BcSmartphone';
                     }
                 }

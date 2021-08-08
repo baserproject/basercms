@@ -446,7 +446,6 @@ class AppTable extends Table
             }
         }
         ClassRegistry::flush();
-        BcSite::flash();
         BcUtil::clearAllCache();
         return $result;
         <<< */
@@ -492,7 +491,6 @@ class AppTable extends Table
             }
         }
         ClassRegistry::flush();
-        BcSite::flash();
         BcUtil::clearAllCache();
         return $result;
         <<< */
@@ -556,7 +554,6 @@ class AppTable extends Table
         $ret = $db->addColumn($options);
         $this->deleteModelCache();
         ClassRegistry::flush();
-        BcSite::flash();
         return $ret;
         <<< */
     }
@@ -587,7 +584,6 @@ class AppTable extends Table
         $ret = $db->changeColumn($options);
         $this->deleteModelCache();
         ClassRegistry::flush();
-        BcSite::flash();
         return $ret;
         <<< */
     }
@@ -618,7 +614,6 @@ class AppTable extends Table
         $ret = $db->dropColumn($options);
         $this->deleteModelCache();
         ClassRegistry::flush();
-        BcSite::flash();
         return $ret;
         <<< */
     }
@@ -650,7 +645,6 @@ class AppTable extends Table
         $ret = $db->renameColumn($options);
         $this->deleteModelCache();
         ClassRegistry::flush();
-        BcSite::flash();
         return $ret;
         <<< */
     }

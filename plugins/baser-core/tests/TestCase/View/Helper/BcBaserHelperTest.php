@@ -2392,7 +2392,6 @@ class BcBaserHelperTest extends BcTestCase
     public function testGetContentsUrl()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        BcSite::flash();
         $this->loadFixtures('ContentBcContentsRoute', 'SiteBcContentsRoute');
         // URLが設定されていない場合
         $this->BcBaser->request = $this->_getRequest('/news/');

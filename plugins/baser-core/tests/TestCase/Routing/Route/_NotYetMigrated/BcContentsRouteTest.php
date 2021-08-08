@@ -48,7 +48,6 @@ class BcContentsRouteTest extends BcTestCase
             [],
             []
         );
-        BcSite::flash();
     }
 
     /**

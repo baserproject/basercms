@@ -449,7 +449,6 @@ class UpdatersController extends AppController
         }
 
         ClassRegistry::flush();
-        BcSite::flash();
 
         if (!isset($updaters['test'])) {
             if (!$plugin) {
@@ -490,7 +489,6 @@ class UpdatersController extends AppController
     public function _execScript($__plugin, $__version)
     {
         ClassRegistry::flush();
-        BcSite::flash();
         $__path = $this->_getUpdateFolder($__plugin) . $__version . DS . 'updater.php';
 
         if (!file_exists($__path)) {

@@ -179,12 +179,12 @@ class SitesService implements SitesServiceInterface
      * URLよりサイトを取得する
      *
      * @param string $url
-     * @return array|bool|null
+     * @return EntityInterface
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function findByUrl($url)
+    public function findByUrl($url): EntityInterface
     {
         return $this->Sites->findByUrl($url);
     }

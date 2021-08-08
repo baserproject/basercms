@@ -78,4 +78,12 @@ interface SitesServiceInterface
      */
     public function getSelectableLangs($mainSiteId, $currentSiteId = null): array;
 
+    /**
+     * URLよりサイトを取得する
+     *
+     * @param string $url
+     * @return EntityInterface
+     */
+    public function findByUrl($url): EntityInterface;
+
 }

@@ -90,7 +90,7 @@ class SiteManageService extends SitesService implements SiteManageServiceInterfa
         $themes = BcUtil::getThemeList();
         if(!$this->isMainOnCurrentDisplay($site)) {
             $defaultThemeName = __d('baser', 'メインサイトに従う');
-            $mainTheme = $this->Sites->getRootMain(['theme'])['theme'];
+            $mainTheme = $this->Sites->getRootMain()->theme;
             if (!empty($mainTheme)) {
                 if (in_array($mainTheme, $themes)) {
                     unset($themes[$mainTheme]);

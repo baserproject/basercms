@@ -14,6 +14,7 @@ namespace BaserCore\View\Helper;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Service\Admin\SiteManageServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Datasource\EntityInterface;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -130,6 +131,16 @@ class BcAdminSiteHelper extends Helper
     public function isMainOnCurrentDisplay($site): bool
     {
         return $this->SiteManage->isMainOnCurrentDisplay($site);
+    }
+
+    /**
+     * URLよりサイトを取得する
+     * @param $url
+     * @return Site
+     */
+    public function findByUrl($url): EntityInterface
+    {
+        return $this->SiteManage->findByUrl($url);
     }
 
 }

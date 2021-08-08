@@ -104,7 +104,7 @@ class SearchIndicesController extends AppController
         }
         $content = $Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
         if (is_null($content['Site']['id'])) {
-            $content['Site'] = $this->Site->getRootMain()['Site'];
+            $content['Site'] = $this->Site->getRootMain();
         }
         $this->request = $this->request->withParam('Content', $content['Content']);
         $this->request = $this->request->withParam('Site', $content['Site']);
