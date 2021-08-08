@@ -13,6 +13,8 @@ namespace BaserCore\ServiceProvider;
 
 use BaserCore\Service\Admin\SiteConfigManageService;
 use BaserCore\Service\Admin\SiteConfigManageServiceInterface;
+use BaserCore\Service\Front\SiteFrontService;
+use BaserCore\Service\Front\SiteFrontServiceInterface;
 use Cake\Core\ServiceProvider;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -67,6 +69,7 @@ class BcServiceProvider extends ServiceProvider
         PluginManageServiceInterface::class,
         SitesServiceInterface::class,
         SiteManageServiceInterface::class,
+        SiteFrontServiceInterface::class,
         SiteConfigsServiceInterface::class,
         SiteConfigManageServiceInterface::class,
         PermissionsServiceInterface::class,
@@ -97,6 +100,7 @@ class BcServiceProvider extends ServiceProvider
         // Sites サービス
         $container->add(SitesServiceInterface::class, SitesService::class, true);
         $container->add(SiteManageServiceInterface::class, SiteManageService::class, true);
+        $container->add(SiteFrontServiceInterface::class, SiteFrontService::class, true);
         // SiteConfigsサービス
         $container->add(SiteConfigsServiceInterface::class, SiteConfigsService::class, true);
         $container->add(SiteConfigManageServiceInterface::class, SiteConfigManageService::class, true);

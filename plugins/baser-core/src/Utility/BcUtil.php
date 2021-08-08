@@ -858,4 +858,22 @@ class BcUtil
         return $createdSettings;
     }
 
+
+    /**
+     * baserCMSのインストールが完了しているかチェックする
+     * @return    boolean
+     * @checked
+     */
+    public static function isInstalled()
+    {
+        // TODO 未移行のため暫定措置
+        // >>>
+        return true;
+        // <<<
+        if (getDbConfig() && file_exists(APP . 'Config' . DS . 'install.php')) {
+            return true;
+        }
+        return false;
+    }
+
 }

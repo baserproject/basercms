@@ -10,6 +10,8 @@
  * @license            https://basercms.net/license/index.html
  */
 
+use Cake\ORM\TableRegistry;
+
 /**
  * [ADMIN] 統合コンテンツフォーム
  *
@@ -20,7 +22,8 @@
  * @var bool $disableEditContent コンテンツ編集不可かどうか
  */
 if ($this->request->getData('Site.use_subdomain')) {
-  $targetSite = BcSite::findByUrl($this->request->getData('Content.url'));
+  $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+  $targetSite = $sites->findByUrl($this->request->getData('Content.url'));
   $previewUrl = $this->BcBaser->getUrl($targetSite->getPureUrl($this->request->getData('Content.url')) . '?host=' . $targetSite->host);
 } else {
   $previewUrl = $this->BcBaser->getUrl($this->BcContents->getUrl($this->request->getData('Content.url'), false, false, false));

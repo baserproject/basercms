@@ -88,7 +88,7 @@ class SiteManageServiceTest extends BcTestCase
      */
     public function testGetSiteList()
     {
-        $this->assertEquals(2, count($this->SiteManage->getSiteList()));
+        $this->assertEquals(4, count($this->SiteManage->getSiteList()));
         $this->SiteManage->create([
             'name' => 'test',
             'display_name' => 'test',
@@ -96,7 +96,7 @@ class SiteManageServiceTest extends BcTestCase
             'title' => 'test',
             'status' => true
         ]);
-        $this->assertEquals(3, count($this->SiteManage->getSiteList()));
+        $this->assertEquals(5, count($this->SiteManage->getSiteList()));
     }
 
     /**

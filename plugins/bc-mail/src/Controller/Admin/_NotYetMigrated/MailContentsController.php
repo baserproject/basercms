@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use Cake\ORM\TableRegistry;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -224,7 +226,8 @@ class MailContentsController extends MailAppController
 
         $this->request->param('Content', $this->BcContents->getContent($id)['Content']);
         if ($this->request->getData('Content.status')) {
-            $site = BcSite::findById($this->request->getData('Content.site_id'));
+            $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+            $site = $sites->findById($this->request->getData('Content.site_id'))->first();
             $this->set(
                 'publishLink',
                 $this->Content->getUrl(

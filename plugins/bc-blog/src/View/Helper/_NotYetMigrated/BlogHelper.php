@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use Cake\ORM\TableRegistry;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -784,7 +786,8 @@ class BlogHelper extends AppHelper
      */
     public function getBlogTemplates($siteId = 0)
     {
-        $site = BcSite::findById($siteId);
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->findById($siteId)->first();
         $theme = $this->BcBaser->siteConfig['theme'];
         if ($site->theme) {
             $theme = $site->theme;

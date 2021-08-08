@@ -11,11 +11,8 @@
 
 namespace BaserCore\Service;
 
-use BaserCore\Error\BcException;
 use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\SitesTable;
-use Cake\Core\Configure;
-use Cake\Core\Exception\CakeException;
 use Cake\Core\Exception\Exception;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
@@ -176,6 +173,20 @@ class SitesService implements SitesServiceInterface
     public function getSelectableLangs($mainSiteId, $currentSiteId = null): array
     {
         return $this->Sites->getSelectableLangs($mainSiteId, $currentSiteId);
+    }
+
+    /**
+     * URLよりサイトを取得する
+     *
+     * @param string $url
+     * @return array|bool|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function findByUrl($url)
+    {
+        return $this->Sites->findByUrl($url);
     }
 
 }

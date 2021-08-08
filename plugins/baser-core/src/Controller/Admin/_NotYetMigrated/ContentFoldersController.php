@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use Cake\ORM\TableRegistry;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -108,11 +110,12 @@ class ContentFoldersController extends AppController
         }
 
         $theme = [$this->siteConfigs['theme']];
-        $site = BcSite::findById($this->request->getData('Content.site_id'));
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->findById($this->request->getData('Content.site_id'))->first();
         if (!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
             $theme[] = $site->theme;
         }
-        $site = BcSite::findById($this->request->getData('Content.site_id'));
+        $site = $sites->findById($this->request->getData('Content.site_id'))->first();
         $this->set('folderTemplateList', $this->ContentFolder->getFolderTemplateList($this->request->getData('Content.id'), $theme));
         $this->set('pageTemplateList', $this->Page->getPageTemplateList($this->request->getData('Content.id'), $theme));
         $this->set('publishLink', $this->Content->getUrl($this->request->getData('Content.url'), true, $site->useSubDomain));

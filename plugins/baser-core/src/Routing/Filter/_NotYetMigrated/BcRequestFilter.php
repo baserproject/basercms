@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Service\Front\SiteFrontServiceInterface;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -30,6 +32,11 @@ class BcRequestFilter extends DispatcherFilter
 {
 
     /**
+     * Trait
+     */
+    use \BaserCore\Utility\BcContainerTrait;
+
+    /**
      * Default priority for all methods in this filter
      * This filter should run before the request gets parsed by router
      * @var int
@@ -58,7 +65,8 @@ class BcRequestFilter extends DispatcherFilter
         }
 
         // URLからエージェントを取得
-        $site = BcSite::findCurrent(true);
+        $siteFront = $this->getService(SiteFrontServiceInterface::class);
+        $site = $siteFront->findCurrent();
         if ($site && $site->device) {
             /*
              * =========================================================

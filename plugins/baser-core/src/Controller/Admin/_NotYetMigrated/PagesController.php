@@ -1,6 +1,7 @@
 <?php
 // TODO : コード確認要
 use BaserCore\Utility\BcUtil;
+use Cake\ORM\TableRegistry;
 
 return;
 /**
@@ -107,7 +108,8 @@ class PagesController extends AppController
         $this->dispatchLayerEvent('afterAdd', [
             'data' => $data
         ]);
-        $site = BcSite::findById($data['Content']['site_id']);
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->findById($data['Content']['site_id'])->first();
         $url = $this->Content->getUrl($data['Content']['url'], true, $site->useSubDomain);
         $message = sprintf(
             __d(
@@ -134,6 +136,7 @@ class PagesController extends AppController
             $this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
         }
 
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         if ($this->request->is(['post', 'put'])) {
             if ($this->Page->isOverPostSize()) {
                 $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
@@ -162,7 +165,7 @@ class PagesController extends AppController
                 }
 
                 // 完了メッセージ
-                $site = BcSite::findById($data['Content']['site_id']);
+                $site = $sites->findById($data['Content']['site_id'])->first();
                 $url = $this->Content->getUrl($data['Content']['url'], true, $site->useSubDomain);
                 $this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), rawurldecode($data['Content']['name']), urldecode($url)));
 
@@ -189,7 +192,7 @@ class PagesController extends AppController
         // 公開リンク
         $publishLink = '';
         if ($this->request->getData('Content.status')) {
-            $site = BcSite::findById($this->request->getData('Content.site_id'));
+            $site = $sites->findById($this->request->getData('Content.site_id'))->first();
             $publishLink = $this->Content->getUrl($this->request->getData('Content.url'), true, $site->useSubDomain);
         }
         // エディタオプション
@@ -206,7 +209,7 @@ class PagesController extends AppController
         }
         // ページテンプレートリスト
         $theme = [$this->siteConfigs['theme']];
-        $site = BcSite::findById($this->request->getData('Content.site_id'));
+        $site = $sites->findById($this->request->getData('Content.site_id'))->first();
         if (!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
             $theme[] = $site->theme;
         }
@@ -292,7 +295,8 @@ class PagesController extends AppController
         }
 
         if ($this->request->getParam('Site.alias')) {
-            $site = BcSite::findByUrl($urlTmp);
+            $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+            $site = $sites->findByUrl($urlTmp);
             if ($site && ($site->alias == $this->request->getParam('Site.alias'))) {
                 $urlTmp = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/' . $this->request->getParam('Site.name') . '/', $urlTmp);
             }

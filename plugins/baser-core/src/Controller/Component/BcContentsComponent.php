@@ -252,7 +252,8 @@ class BcContentsComponent extends Component
         $data = $this->ControllerRequest->getData();
 
         $theme = $this->_Controller->siteConfigs['theme'];
-        $site = BcSite::findById($data['Content']['site_id']);
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->findById($data['Content']['site_id'])->first();
         if ($site->theme) {
             $theme = $site->theme;
         }

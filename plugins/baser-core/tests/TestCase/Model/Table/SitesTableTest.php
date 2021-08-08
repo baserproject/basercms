@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\Model\Table;
 use ArrayObject;
 use BaserCore\Model\Table\SitesTable;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use ReflectionClass;
 
@@ -57,11 +58,11 @@ class SitesTableTest extends BcTestCase
      */
     public function testGetPublishedAll()
     {
-        $this->assertEquals(2, count($this->Sites->getPublishedAll()));
+        $this->assertEquals(4, count($this->Sites->getPublishedAll()));
         $site = $this->Sites->find()->where(['id' => 2])->first();
         $site->status = true;
         $this->Sites->save($site);
-        $this->assertEquals(3, count($this->Sites->getPublishedAll()));
+        $this->assertEquals(5, count($this->Sites->getPublishedAll()));
     }
 
     /**
@@ -82,11 +83,11 @@ class SitesTableTest extends BcTestCase
     public function getSiteListDataProvider()
     {
         return [
-            [null, [], [1 => 'メインサイト', 3 => '英語サイト'], '全てのサイトリストの取得ができません。'],
-            [1, [], [3 => '英語サイト'], 'メインサイトの指定ができません。'],
+            [null, [], [1 => 'メインサイト', 3 => '英語サイト', 4 => '別ドメイン', 5 => 'サブドメイン'], '全てのサイトリストの取得ができません。'],
+            [1, [], [3 => '英語サイト', 4 => '別ドメイン', 5 => 'サブドメイン'], 'メインサイトの指定ができません。'],
             [2, [], [], 'メインサイトの指定ができません。'],
-            [null, ['excludeIds' => [1]], [3 => '英語サイト'], '除外指定ができません。'],
-            [null, ['excludeIds' => 1], [3 => '英語サイト'], '除外指定ができません。'],
+            [null, ['excludeIds' => [1]], [3 => '英語サイト', 4 => '別ドメイン', 5 => 'サブドメイン'], '除外指定ができません。'],
+            [null, ['excludeIds' => 1], [3 => '英語サイト', 4 => '別ドメイン', 5 => 'サブドメイン'], '除外指定ができません。'],
             [null, ['includeIds' => [1, 2], 'status' => null], [1 => 'メインサイト', 2 => 'スマホサイト'], 'ID指定ができません。'],
             [null, ['status' => false], [2 => 'スマホサイト'], 'ステータス指定ができません。'],
         ];
@@ -123,9 +124,9 @@ class SitesTableTest extends BcTestCase
      */
     public function testChildren()
     {
-        $this->assertEquals(2, $this->Sites->children(1)->count());
+        $this->assertEquals(4, $this->Sites->children(1)->count());
         $this->assertEquals(0, $this->Sites->children(2)->count());
-        $this->assertEquals(1, $this->Sites->children(1, ['conditions' => ['status' => true]])->count());
+        $this->assertEquals(3, $this->Sites->children(1, ['conditions' => ['status' => true]])->count());
     }
 
     /**
@@ -151,7 +152,7 @@ class SitesTableTest extends BcTestCase
     {
         $this->assertEquals('', $this->Sites->getPrefix(1));
         $this->assertEquals('s', $this->Sites->getPrefix(2));
-        $this->assertEquals(false, $this->Sites->getPrefix(4));
+        $this->assertEquals(false, $this->Sites->getPrefix(6));
     }
 
     /**
@@ -188,7 +189,7 @@ class SitesTableTest extends BcTestCase
     {
         $this->assertEquals(1, $this->Sites->getMain(1)['id']);
         $this->assertEquals(1, $this->Sites->getMain(2)['id']);
-        $this->assertEquals(false, $this->Sites->getMain(4));
+        $this->assertEquals(false, $this->Sites->getMain(6));
     }
 
     /**

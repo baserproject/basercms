@@ -10,6 +10,8 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use BaserCore\Service\Front\SiteFrontService;
+
 require CORE_PATH . 'Baser' . DS . 'Config' . DS . 'paths.php';
 require BASER . 'basics.php';
 require BASER . 'Error' . DS . 'exceptions.php';
@@ -101,7 +103,6 @@ define('BC_BASE_URL', baseUrl());
 /**
  * インストール状態
  */
-define('BC_INSTALLED', isInstalled());
 Configure::write('BcRequest.isInstalled', BC_INSTALLED); // UnitTest用
 
 /**
@@ -414,8 +415,9 @@ if (Configure::read('debug') == 0) {
 
 // サブサイトの際にキャッシュがメインサイトと重複しないように調整
 if (Configure::read('Cache.check')) {
-    $site = BcSite::findCurrent();
-    if ($site->useSubDomain) {
+    $siteFront = new SiteFrontService();
+    $site = $siteFront->findCurrent();
+    if ($site->use_subdomain) {
         Configure::write('Cache.viewPrefix', $site->alias);
     }
 }

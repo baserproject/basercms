@@ -12,6 +12,7 @@
 namespace BaserCore\Controller;
 
 use BaserCore\Controller\Component\BcMessageComponent;
+use BaserCore\Service\Front\SiteFrontServiceInterface;
 use Cake\Controller\ComponentRegistry;
 use Cake\Event\EventInterface;
 use Cake\Event\EventManagerInterface;
@@ -228,7 +229,8 @@ class BcAppController extends AppController
         }
 
         // 言語設定
-        $currentSite = BcSite::findCurrent();
+        $siteFront = $this->getService(SiteFrontServiceInterface::class);
+        $currentSite = $siteFront->findCurrent();
         if ($currentSite) {
             $lang = Configure::read('BcLang.' . $currentSite->lang);
         }
@@ -565,7 +567,8 @@ class BcAppController extends AppController
             $theme = $this->request->getParam('Site.theme');
         }
         if (!$theme) {
-            $site = BcSite::findCurrent();
+            $siteFront = $this->getService(SiteFrontServiceInterface::class);
+            $site = $siteFront->findCurrent();
             if (!empty($site->theme)) {
                 $theme = $site->theme;
             }

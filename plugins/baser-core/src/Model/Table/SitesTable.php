@@ -15,10 +15,16 @@ use ArrayObject;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\AppTable;
 use BaserCore\Model\Entity\Site;
+use BaserCore\Utility\BcUtil;
+use BcAbstractDetector;
+use BcAgent;
+use BcLang;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ResultSetInterface;
 use Cake\Event\Event;
+use Cake\Http\ServerRequest;
+use Cake\Routing\Router;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -451,24 +457,18 @@ class SitesTable extends AppTable
      */
     public function findByUrl($url)
     {
-        if ($url === false || $url === "") {
-            return $this->getRootMain();
+        $url = preg_replace('/(^\/|\/$)/', '', $url);
+        $urlAry = explode('/', $url);
+        $where = [];
+        for($i = count($urlAry); $i > 0; $i--) {
+            $where['or'][] = ['alias' => implode('/', $urlAry)];
+            unset($urlAry[$i - 1]);
         }
-        $url = preg_replace('/^\//', '', $url);
-        $params = explode('/', $url);
-        if (empty($params[0])) {
-            return false;
-        }
-        $site = $this->find()->where([
-            'or' => [
-                'name' => $params[0],
-                'alias' => $params[0]
-            ]
-        ])->first();
-        if (!$site) {
-            return $this->getRootMain();
+        $result = $this->find()->where($where)->order(['alias DESC']);
+        if($result->count()) {
+            return $result->first()->toArray();
         } else {
-            return $site->toArray();
+            return $this->getRootMain();
         }
     }
 

@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use Cake\ORM\TableRegistry;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -71,7 +73,8 @@ class MailHelper extends AppHelper
      */
     public function getFormTemplates($siteId = 0)
     {
-        $site = BcSite::findById($siteId);
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->findById($siteId)->first();
         $theme = $this->BcBaser->siteConfig['theme'];
         if ($site->theme) {
             $theme = $site->theme;
@@ -117,7 +120,8 @@ class MailHelper extends AppHelper
      */
     public function getMailTemplates($siteId = 0)
     {
-        $site = BcSite::findById($siteId);
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->findById($siteId)->first();
         $theme = $this->BcBaser->siteConfig['theme'];
         if ($site->theme) {
             $theme = $site->theme;

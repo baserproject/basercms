@@ -14,6 +14,7 @@ namespace BaserCore\Model\Table;
 use BaserCore\Event\BcEventDispatcherTrait;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 
 /**
  * Class PagesTable
@@ -240,7 +241,8 @@ class PagesTable extends Table
 
         $host = '';
         $url = $content['url'];
-        $site = BcSite::findById($content['site_id']);
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->findById($content['site_id'])->first();
         if ($site->useSubDomain) {
             $host = $site->alias;
             if ($site->domainType == 1) {
@@ -361,7 +363,8 @@ class PagesTable extends Table
         }
         if ($url != '/') {
             if ($data['Content']['site_id'] != 0) {
-                $site = BcSite::findByUrl($url);
+                $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+                $site = $sites->findByUrl($url);
                 if ($site) {
                     $url = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/' . $site->name . '/', $url);
                 }
@@ -962,7 +965,8 @@ class PagesTable extends Table
         }
         if ($url != '/') {
             if ($content['Content']['site_id'] != 0) {
-                $site = BcSite::findByUrl($url);
+                $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+                $site = $sites->findByUrl($url);
                 if ($site) {
                     $url = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/' . $site->name . '/', $url);
                 }

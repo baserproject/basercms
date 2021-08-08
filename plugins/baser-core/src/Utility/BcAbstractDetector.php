@@ -1,14 +1,17 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Lib
- * @since           baserCMS v 3.0.7
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+
+namespace BaserCore\Utility;
+
+use Cake\Core\Configure;
 
 /**
  * Class BcAbstractDetector
@@ -76,7 +79,6 @@ abstract class BcAbstractDetector
         }
         return new static($name, Configure::read($key));
     }
-
 
     /**
      * 設定ファイルに存在する全てのインスタンスを返す

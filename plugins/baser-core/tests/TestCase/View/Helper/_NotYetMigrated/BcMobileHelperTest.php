@@ -69,7 +69,6 @@ class BcMobileHelperTest extends BcTestCase
     public function testAfterLayout()
     {
         $_SERVER['HTTP_USER_AGENT'] = 'SoftBank';
-        $site = BcSite::findCurrent(true);
         $this->View->output = '＞＜＆＆1２＠＠';
         $expected = '&gt;&lt;&amp;&amp;12@@';
 

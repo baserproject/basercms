@@ -671,7 +671,8 @@ class BcContentsHelper extends Helper
         $urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $content['Content']['url']));
         unset($urlArray[count($urlArray) - 1]);
         if ($content['Site']['same_main_url']) {
-            $site = BcSite::findById($content['Site']['main_site_id']);
+            $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+            $site = $sites->findById($content['Site']['main_site_id'])->first();
             array_shift($urlArray);
             if ($site->alias) {
                 $urlArray = explode('/', $site->alias) + $urlArray;

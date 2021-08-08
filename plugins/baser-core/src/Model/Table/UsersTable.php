@@ -329,7 +329,7 @@ class UsersTable extends Table
             $appView = new AppView();
             $appView->loadHelper('BaserCore.BcBaser');
             foreach($users as $key => $user) {
-                $list[$user[$this->getAlias()]['id']] = $appView->BcBaser->getUserName($user);
+                $list[$user->id] = $appView->BcBaser->getUserName($user);
             }
         }
         return $list;

@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use Cake\ORM\TableRegistry;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -82,7 +84,8 @@ class MailFieldsController extends MailAppController
             ]
         ];
         if ($this->request->param('Content.status')) {
-            $site = BcSite::findById($this->request->param('Content.site_id'));
+            $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+            $site = $sites->findById($this->request->param('Content.site_id'))->first();
             $this->set(
                 'publishLink',
                 $this->Content->getUrl(

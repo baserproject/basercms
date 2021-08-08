@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use Cake\ORM\TableRegistry;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -215,7 +217,8 @@ class BlogContentsController extends BlogAppController
                 ]);
             }
         }
-        $site = BcSite::findById($this->request->getData('Content.site_id'));
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->findById($this->request->getData('Content.site_id'))->first();
         if (!empty($this->request->getData('Content.status'))) {
             $this->set(
                 'publishLink',

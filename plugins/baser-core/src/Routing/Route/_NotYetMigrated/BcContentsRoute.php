@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -22,6 +24,8 @@ App::uses('BcSite', 'Lib');
  */
 class BcContentsRoute extends CakeRoute
 {
+
+    use \BaserCore\Utility\BcContainerTrait;
 
     /**
      * Parses a string URL into an array. If a plugin key is found, it will be copied to the
@@ -55,18 +59,18 @@ class BcContentsRoute extends CakeRoute
                 Configure::write('BcEnv.host', '');
             }
         }
-
+        $siteFront = $this->getService(SiteFrontServiceInterface::class);
         $sameUrl = false;
-        $site = BcSite::findCurrentSub(true);
+        $site = $siteFront->findCurrentSub(true);
         if ($site) {
             // 同一URL対応
             $sameUrl = true;
             $checkUrl = $site->makeUrl($request);
             @header('Vary: User-Agent');
         } else {
-            $site = BcSite::findCurrent(true);
+            $site = $siteFront->findCurrent();
             if (!is_null($site->name)) {
-                if ($site->useSubDomain) {
+                if ($site->use_subdomain) {
                     $checkUrl = '/' . $site->alias . (($url)? $url : '/');
                 } else {
                     $checkUrl = (($url)? $url : '/');
@@ -78,7 +82,7 @@ class BcContentsRoute extends CakeRoute
                     // 別ドメインの際に、固定ページのプレビューで、正しくサイト情報を取得できない。
                     // そのため、文字列でリクエストアクションを送信し、URLでホストを判定する。
                     // =================================================================================================
-                    $tmpSite = BcSite::findByUrl($url);
+                    $tmpSite = $siteFront->findByUrl($url);
                     if (!is_null($tmpSite)) {
                         $site = $tmpSite;
                     }
@@ -88,9 +92,9 @@ class BcContentsRoute extends CakeRoute
         }
 
         $Content = ClassRegistry::init('Content');
-        $content = $Content->findByUrl($checkUrl, $publish, false, $sameUrl, $site->useSubDomain);
+        $content = $Content->findByUrl($checkUrl, $publish, false, $sameUrl, $site->use_subdomain);
         if (!$content) {
-            $content = $Content->findByUrl($checkUrl, $publish, true, $sameUrl, $site->useSubDomain);
+            $content = $Content->findByUrl($checkUrl, $publish, true, $sameUrl, $site->use_subdomain);
         }
 
         if (!$content) {
@@ -282,8 +286,9 @@ class BcContentsRoute extends CakeRoute
         }
 
         // URL生成
-        $site = BcSite::findByUrl($strUrl);
-        if ($site && $site->useSubDomain) {
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->findByUrl($strUrl);
+        if ($site && $site->use_subdomain) {
             $strUrl = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/', $strUrl);
         }
         $pass = [];

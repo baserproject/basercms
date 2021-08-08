@@ -403,19 +403,6 @@ function clearAllCache()
 }
 
 /**
- * baserCMSのインストールが完了しているかチェックする
- * @return    boolean
- */
-function isInstalled()
-{
-
-    if (getDbConfig() && file_exists(APP . 'Config' . DS . 'install.php')) {
-        return true;
-    }
-    return false;
-}
-
-/**
  * DBセッティングが存在するかチェックする
  *
  * @param string $name
@@ -635,7 +622,8 @@ function addSessionId($url, $force = false)
 
     $site = null;
     if (!Configure::read('BcRequest.isUpdater')) {
-        $site = BcSite::findCurrent();
+        $siteFront = new \BaserCore\Service\Front\SiteFrontService();
+        $site = $siteFront->findCurrent();
     }
     // use_trans_sid が有効になっている場合、２重で付加されてしまう
     if ($site && $site->device == 'mobile' && Configure::read('BcAgent.mobile.sessionId') && (!ini_get('session.use_trans_sid') || $force)) {

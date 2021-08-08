@@ -49,7 +49,7 @@ class BcRedirectSubSiteFilter extends DispatcherFilter
         if ($request->is('admin')) {
             return;
         }
-        $subSite = BcSite::findCurrentSub();
+        $subSite = BcSite::サイト();
         if (!is_null($subSite) && $subSite->shouldRedirects($request)) {
             $response->header('Location', $request->base . $subSite->makeUrl($request));
             $response->statusCode(302);

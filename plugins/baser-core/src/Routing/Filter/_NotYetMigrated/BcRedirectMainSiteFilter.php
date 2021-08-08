@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Service\Front\SiteFrontServiceInterface;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -25,6 +27,11 @@ return;
  */
 class BcRedirectMainSiteFilter extends DispatcherFilter
 {
+
+    /**
+     * Trait
+     */
+    use \BaserCore\Utility\BcContainerTrait;
 
     /**
      * priority
@@ -53,7 +60,8 @@ class BcRedirectMainSiteFilter extends DispatcherFilter
                 return;
             }
         }
-        $site = BcSite::findCurrent();
+        $siteFront = $this->getService(SiteFrontServiceInterface::class);
+        $site = $siteFront->findCurrent();
         if (!$site || !$site->enabled) {
             return;
         }

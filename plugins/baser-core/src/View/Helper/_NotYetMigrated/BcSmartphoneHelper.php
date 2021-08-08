@@ -1,6 +1,7 @@
 <?php
 // TODO : コード確認要
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Service\Front\SiteFrontServiceInterface;
 
 return;
 /**
@@ -25,6 +26,7 @@ class BcSmartphoneHelper extends Helper
      * Trait
      */
     use BcEventDispatcherTrait;
+    use \BaserCore\Utility\BcContainerTrait;
 
     /**
      * ヘルパ
@@ -46,13 +48,14 @@ class BcSmartphoneHelper extends Helper
         } else {
             $rss = false;
         }
-        $site = BcSite::findCurrent();
+        $siteFront = $this->getService(SiteFrontServiceInterface::class);
+        $site = $siteFront->findCurrent();
         if (!$rss && $site->device == 'smartphone' && $this->_View->layoutPath != 'Emails' . DS . 'text') {
             if (empty($this->request->getParam('Site'))) {
                 return;
             }
             // 内部リンクの自動変換
-            if ($site->autoLink) {
+            if ($site->auto_link) {
                 $siteUrl = Configure::read('BcEnv.siteUrl');
                 $sslUrl = Configure::read('BcEnv.sslUrl');
                 $currentAlias = $this->request->getParam('Site.alias');

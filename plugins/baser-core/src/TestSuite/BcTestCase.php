@@ -23,6 +23,7 @@ use Cake\Event\EventManager;
 use Cake\Http\BaseApplication;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
+use Cake\Http\ServerRequestFactory;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -98,13 +99,31 @@ class BcTestCase extends TestCase
      */
     public function getRequest($url = '/', $data = [], $method = 'GET')
     {
-        $config = [
-            'url' => $url,
-            'environment' => [
-                'REQUEST_METHOD' => $method
-            ]];
-        $request = new ServerRequest($config);
-        $params = Router::parseRequest($request);
+        if(preg_match('/^http/', $url)) {
+            $parseUrl = parse_url($url);
+            Configure::write('BcEnv.host', $parseUrl['host']);
+            $request = new ServerRequest([
+                'uri' => ServerRequestFactory::createUri([
+                    'HTTP_HOST' => $parseUrl['host'],
+                    'REQUEST_URI' => $url,
+                    'REQUEST_METHOD' => $method
+            ])]);
+        } else {
+            $request = new ServerRequest([
+                'url' => $url,
+                'environment' => [
+                    'REQUEST_METHOD' => $method
+                ]]
+            );
+        }
+
+        try {
+            $params = Router::parseRequest($request);
+        } catch (\Exception $e) {
+            Router::setRequest($request);
+            return $request;
+        }
+
         $request = $request->withAttribute('params', $params);
         if ($data) {
             $request = $request->withParsedBody($data);

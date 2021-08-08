@@ -28,6 +28,11 @@ class SearchIndicesController extends AppController
 {
 
     /**
+     * Trait
+     */
+    use \BaserCore\Utility\BcContainerTrait;
+
+    /**
      * クラス名
      *
      * @var array
@@ -86,7 +91,8 @@ class SearchIndicesController extends AppController
         }
 
         $Content = ClassRegistry::init('Content');
-        $currentSite = BcSite::findCurrent(true);
+        $siteFront = $this->getService(SiteFrontServiceInterface::class);
+        $currentSite = $siteFront->findCurrent();
         $url = '/';
         if ($this->request->getParam('action') !== 'search') {
             $prefix = str_replace('_search', '', $this->request->getParam('action'));
