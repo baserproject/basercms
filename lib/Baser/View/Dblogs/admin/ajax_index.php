@@ -28,11 +28,15 @@ if (empty($dblogs)) {
 			</span>
 			<small>
 				<?= $this->BcTime->format('H:i:s', Hash::get($record, 'Dblog.created')) ?>&nbsp;
-				<?php
-				if (Hash::get($record, 'User.name')) {
-					echo sprintf('[%s]', h(Hash::get($record, 'User.name')));
-				}
-				?>
+				<?php if ($record['Dblog']['user_id']): ?>
+					<?php if ($this->BcBaser->getUserName($record['User'])): ?>
+						[<?php echo h($this->BcBaser->getUserName($record['User'])) ?>]
+					<?php else: ?>
+						[<?= Hash::get($record, 'User.name', '削除ユーザー') ?>]
+					<?php endif; ?>
+				<?php else: ?>
+					[*system]
+				<?php endif; ?>
 			</small><br/>
 			<?php echo nl2br(h(Hash::get($record, 'Dblog.name'))) ?>
 		</li>

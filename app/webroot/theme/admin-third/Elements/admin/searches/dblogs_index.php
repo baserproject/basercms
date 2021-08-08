@@ -45,11 +45,11 @@
 			'Dblogs.user_id',
 			[
 				'type' => 'select',
-				'options' => Hash::combine($this->get('logs'), '{n}.User.id', '{n}.User.name'),
+				'options' => $this->get('userList'),
 				'empty' => __d('baser', '指定しない')
 			]
 		);
-		?>　
+		?>
 	</span>
 	<?php echo $this->BcSearchBox->dispatchShowField() ?>
 </p>
