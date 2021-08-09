@@ -13,7 +13,6 @@ namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use Cake\Event\Event;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Service\SiteConfigsTrait;
 use BaserCore\Service\Admin\SiteManageService;
 use BaserCore\Service\Admin\ContentManageService;
 use BaserCore\Controller\Admin\ContentsController;
@@ -36,6 +35,9 @@ class ContentsControllerTest extends BcTestCase
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
+
     ];
     /**
      * set up
@@ -73,10 +75,13 @@ class ContentsControllerTest extends BcTestCase
         $this->assertNotEmpty($this->ContentsController->BcContents);
     }
 
+
     /**
-     * beforeFilter
+     * testBeforeFilter
+     *
+     * @return void
      */
-    public function testBeforeFilter()
+    public function testBeforeFilter(): void
     {
         $event = new Event('Controller.beforeFilter', $this->ContentsController);
         $this->ContentsController->beforeFilter($event);
@@ -87,22 +92,52 @@ class ContentsControllerTest extends BcTestCase
         $this->assertEquals($this->ContentsController->Security->getConfig('unlockedActions'), ['index']);
     }
 
+
     /**
-     * コンテンツ一覧
+     * testIndex
+     *
+     * @return void
      */
-    public function testAdmin_index()
+    public function testIndex(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loginAdmin($this->getRequest());
+        $this->get('/baser/admin/baser-core/contents/index/');
+        $this->assertResponseOk();
+        // リクエストの変化をテスト
+        $this->ContentsController->index(new ContentManageService(), new SiteManageService());
+        $this->assertArrayHasKey('num', $this->ContentsController->getRequest()->getQueryParams());
+        $this->assertNotNull($this->ContentsController->getRequest()->getData('ViewSetting.site_id'));
+        $this->assertNotNull($this->ContentsController->getRequest()->getData('ViewSetting.list_type'));
+        $this->assertNotNull($this->ContentsController->getRequest()->getData('Param.action'));
+
     }
 
     /**
-     * ゴミ箱内のコンテンツ一覧を表示する
+     * testAjax_index
+     *
+     * @return void
+     */
+    public function testAjax_index(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // イベントテスト
+        $this->entryControllerEventToMock('Controller.BaserCore.Users.searchIndex', function(Event $event) {
+            $request = $event->getData('request');
+            return $request->withQueryParams(['num' => 1]);
+        });
+    }
+
+
+
+    /**
+     * ゴミ箱内のコンテンツ一覧を表示するテスト
      */
     public function testTrash_index()
     {
         // requestテスト
-        // $this->get('/baser/admin/baser-core/contents/trash_index/');
-        // $this->assertResponseSuccess();
+        $this->loginAdmin($this->getRequest());
+        $this->get('/baser/admin/baser-core/contents/trash_index/');
+        $this->assertResponseOk();
         // setAction先のindexの環境準備
         // ->withEnv('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest')
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
@@ -243,8 +278,7 @@ class ContentsControllerTest extends BcTestCase
      */
     public function test_ajax_contents_info()
     {
-        $this->get('/baser/admin/baser-core/contents/ajax_contents_info/');
-        $this->assertResponseSuccess();
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
