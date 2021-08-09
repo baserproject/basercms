@@ -91,6 +91,8 @@ class ContentsController extends BcAdminAppController
      * コンテンツ一覧
      * @param integer $parentId
      * @param void
+     * @checked
+     * @unitTest
      */
     public function index(ContentManageServiceInterface $contentManage, SiteManageServiceInterface $siteManage)
     {
@@ -109,7 +111,7 @@ class ContentsController extends BcAdminAppController
 
         $currentListType = $this->request->getQuery('list_type') ?? 1;
         $this->setViewConditions('Contents', ['default' => [
-            'named' => [
+            'query' => [
                 'num' => $this->getSiteConfig('admin_list_num'),
                 'site_id' => $currentSiteId,
                 'list_type' => $currentListType,
@@ -135,7 +137,7 @@ class ContentsController extends BcAdminAppController
     }
 
     /**
-     * ajax_index
+     * コンテンツ一覧のajax処理部分
      *
      * @param  ContentManageService $contentManage
      * @return void
@@ -156,7 +158,7 @@ class ContentsController extends BcAdminAppController
                             $datas = $this->paginate($datas);
                             $this->request = $this->request->withQueryParams(['conditions' => $contentManage->getAdminTableConditions($this->request->getData('Contents'))]);
                             // EVENT Contents.searchIndex
-                            $event = $this->dispatchLayerEvent('searchIndex', [
+                            $event = $this->dispatchLayerEvent('Contents.searchIndex', [
                                 'request' => $this->request
                             ]);
                             if ($event !== false) {
