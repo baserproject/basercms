@@ -174,6 +174,9 @@ class ContentsController extends BcAdminAppController
     }
     /**
      * ゴミ箱内のコンテンツ一覧を表示する
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function trash_index(ContentManageServiceInterface $contentManage, SiteManageServiceInterface $siteManage)
     {
