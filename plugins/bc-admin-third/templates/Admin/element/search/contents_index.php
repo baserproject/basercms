@@ -35,13 +35,14 @@
 	</span>
   <span class="bca-search__input-item">
 		<?= $this->BcAdminForm->label('Contents.self_status', __d('baser', '公開状態'), ['class' => 'bca-search__input-item-label']) ?>
-    <?= $this->BcAdminForm->control('Contents.self_status', ['type' => 'select', 'options' => $this->BcText->booleanMarkList(), 'empty' => __d('baser', '指定なし')]) ?>
+    <? # echo $this->BcAdminForm->control('Contents.self_status', ['type' => 'select', 'options' => $this->BcText->booleanMarkList(), 'empty' => __d('baser', '指定なし')]) ?>
+    <?= $this->BcAdminForm->control('Contents.self_status', ['type' => 'select', 'options' => '', 'empty' => __d('baser', '指定なし')]) ?>
 	</span>
   <span class="bca-search__input-item">
 		<?= $this->BcAdminForm->label('Contents.author_id', __d('baser', '作成者'), ['class' => 'bca-search__input-item-label']) ?>
     <?= $this->BcAdminForm->control('Contents.author_id', ['type' => 'select', 'options' => $authors, 'empty' => __d('baser', '指定なし')]) ?>
 	</span>
-  <?= $this->BcSearchBox->dispatchShowField($this->request); ?>
+  <? # echo $this->BcSearchBox->dispatchShowField($this->request); ?>
 </p>
 <div class="button bca-search__btns">
   <div

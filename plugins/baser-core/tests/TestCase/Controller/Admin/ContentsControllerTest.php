@@ -16,6 +16,7 @@ use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\Admin\SiteManageService;
 use BaserCore\Service\Admin\ContentManageService;
 use BaserCore\Controller\Admin\ContentsController;
+
 /**
  * Class ContentsControllerTest
  *
@@ -46,8 +47,9 @@ class ContentsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->ContentsController = new ContentsController($this->getRequest());
-        $this->ContentsController->setName('Admin/Contents');
+        $this->request = $this->loginAdmin($this->getRequest())->withParam('prefix', 'Admin');
+        $this->ContentsController = new ContentsController($this->request);
+        $this->ContentsController->setName('Contents');
         $this->ContentsController->loadModel('BaserCore.ContentFolders');
         $this->ContentsController->loadModel('BaserCore.Users');
         $this->ContentsController->loadComponent('BaserCore.BcContents');
@@ -100,7 +102,6 @@ class ContentsControllerTest extends BcTestCase
      */
     public function testIndex(): void
     {
-        $this->loginAdmin($this->getRequest());
         $this->get('/baser/admin/baser-core/contents/index/');
         $this->assertResponseOk();
         // リクエストの変化をテスト
@@ -127,27 +128,44 @@ class ContentsControllerTest extends BcTestCase
         });
     }
 
-
-
     /**
-     * ゴミ箱内のコンテンツ一覧を表示するテスト
+     * ゴミ箱内のコンテンツ一覧を表示する
+     *
+     * @return void
      */
-    public function testTrash_index()
+    public function testTrash_index(): void
     {
-        // requestテスト
-        $this->loginAdmin($this->getRequest());
-        $this->get('/baser/admin/baser-core/contents/trash_index/');
-        $this->assertResponseOk();
-        // setAction先のindexの環境準備
-        // ->withEnv('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest')
-        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
-        $request = $this->getRequest()->withParam('action', 'trash_index');
+        $request = $this->request->withParam('action', 'trash_index');
         $this->ContentsController->setRequest($request);
         $this->ContentsController->trash_index(new ContentManageService(), new SiteManageService());
-        // indexアクションにリダイレクトしてるか判定
+        $this->assertEquals('index', $this->ContentsController->viewBuilder()->getTemplate());
         $this->assertEquals(0, $this->ContentsController->getRequest()->getData('ViewSetting.site_id'));
         $this->assertEquals(1, $this->ContentsController->getRequest()->getData('ViewSetting.list_type'));
-        // ajaxならリダイレクトしない
+    }
+
+    /**
+     * ゴミ箱内のコンテンツ一覧を表示する(ajaxの場合)
+     *
+     * @return void
+     */
+    public function testTrash_index_ajax(): void
+    {
+        $request = $this->request->withParam('action', 'trash_index')->withEnv('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest');
+        $this->ContentsController->setRequest($request);
+        $this->ContentsController->trash_index(new ContentManageService(), new SiteManageService());
+        $this->assertEquals("ajax_index_trash", $this->ContentsController->viewBuilder()->getTemplate());
+    }
+
+    /**
+     * ゴミ箱内のコンテンツ一覧を表示する(リクエストテスト)
+     *
+     * @return void
+     */
+    public function testTrash_index_getRequest(): void
+    {
+        // requestテスト
+        $this->get('/baser/admin/baser-core/contents/trash_index/');
+        $this->assertResponseOk();
     }
 
     /**
