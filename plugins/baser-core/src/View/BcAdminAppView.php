@@ -66,10 +66,13 @@ class BcAdminAppView extends AppView
         $this->loadHelper('BaserCore.BcAdminForm', ['templates' => 'BaserCore.bc_form']);
         $this->loadHelper('BaserCore.BcBaser');
         $this->loadHelper('BaserCore.BcAuth');
+        $this->loadHelper('BaserCore.BcText');
+        $this->loadHelper('BaserCore.BcTime');
         $this->loadHelper('BaserCore.BcAdmin');
         $this->loadHelper('BaserCore.BcAdminUser');
         $this->loadHelper('BaserCore.BcAdminSiteConfig');
         $this->loadHelper('BaserCore.BcContents');
+        $this->loadHelper('BaserCore.BcListTable');
         if (!$this->get('title')) {
             $this->set('title', 'Undefined');
         }

@@ -141,6 +141,8 @@ class ContentsController extends BcAdminAppController
      *
      * @param  ContentManageService $contentManage
      * @return void
+     * @checked
+     * @unitTest
      */
     protected function ajax_index($contentManage): void
     {
@@ -158,7 +160,8 @@ class ContentsController extends BcAdminAppController
                             $datas = $this->paginate($datas);
                             $this->request = $this->request->withQueryParams(['conditions' => $contentManage->getAdminTableConditions($this->request->getData('Contents'))]);
                             // EVENT Contents.searchIndex
-                            $event = $this->dispatchLayerEvent('Contents.searchIndex', [
+                            // TODO: うまく動かない
+                            $event = $this->dispatchLayerEvent('searchIndex', [
                                 'request' => $this->request
                             ]);
                             if ($event !== false) {
