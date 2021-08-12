@@ -9,11 +9,11 @@
  * @since           baserCMS v 4.0.0
  * @license         https://basercms.net/license/index.html
  */
-
+use BaserCore\View\BcAdminAppView;
 /**
  * コンテンツ一覧 テーブル行
  *
- * @var BcAppView $this
+ * @var BcAdminAppView $this
  */
 
 $isSiteRelated = $this->BcContents->isSiteRelated($data);

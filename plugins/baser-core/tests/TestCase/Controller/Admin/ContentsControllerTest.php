@@ -64,7 +64,7 @@ class ContentsControllerTest extends BcTestCase
     public function tearDown(): void
     {
         parent::tearDown();
-        unset($this->ContentsController);
+        unset($this->ContentsController, $this->request);
     }
 
     /**
@@ -115,17 +115,57 @@ class ContentsControllerTest extends BcTestCase
 
     /**
      * testAjax_index
-     *
+     * @dataProvider ajaxIndexDataProvider
      * @return void
      */
-    public function testAjax_index(): void
+    public function testAjax_index($listType, $action, $expected): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // イベントテスト
-        $this->entryControllerEventToMock('Controller.BaserCore.Users.searchIndex', function(Event $event) {
-            $request = $event->getData('request');
-            return $request->withQueryParams(['num' => 1]);
-        });
+        $this->request = $this->request
+            ->withData('ViewSetting.site_id', 0)
+            ->withData('ViewSetting.list_type', $listType)
+            ->withData('Param.action', $action)
+            ->withParam('action', $action);
+
+        if ($expected === "ajax_index_table") {
+            // Contents条件検索設定
+            $this->request = $this->request->withData('Contents',
+            [
+                'open' => '1',
+                'folder_id' => '',
+                'name' => '',
+                'type' => '',
+                'self_status' => '',
+                'author_id' => '',
+            ]);
+            // イベント設定
+            $this->entryControllerEventToMock('Controller.BaserCore.Contents.searchIndex', function(Event $event) {
+                $this->request = $event->getData('request');
+                    return $this->request->withQueryParams(['num' => 1]);
+            });
+        }
+        $ContentsController = $this->ContentsController->setRequest($this->request);
+        // index_row_table.phpでエラーがでるため、変数を補完
+        if ($expected === "ajax_index_table") $ContentsController->viewBuilder()->setVar('authors', '');
+
+        $this->execPrivateMethod($ContentsController, "ajax_index", [new ContentManageService()]);
+        $this->assertFalse($ContentsController->viewBuilder()->isAutoLayoutEnabled());
+        $this->assertEquals($expected, $ContentsController->viewBuilder()->getTemplate());
+
+        if ($expected !== "ajax_index_table") {
+            $this->assertInstanceOf('Cake\ORM\Query', $ContentsController->viewBuilder()->getVar('datas'));
+        } else {
+            // FIXME:　うまくいかない　イベント登録正常かテスト
+            // $this->assertEquals(1, $ContentsController->getRequest()->getQuery('num'));
+            $this->assertInstanceOf('Cake\ORM\ResultSet', $ContentsController->viewBuilder()->getVar('datas'));
+        }
+    }
+    public function ajaxIndexDataProvider()
+    {
+        return [
+            [1, "index", "ajax_index_tree"],
+            [1, "trash_index", "ajax_index_trash"],
+            [2, "index", "ajax_index_table"],
+        ];
     }
 
     /**
