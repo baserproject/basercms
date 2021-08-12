@@ -54,21 +54,6 @@ class ContentManageServiceTest extends BcTestCase
         unset($this->ContentManage);
     }
 
-    public function testgetIndex()
-    {
-        $searchData = [
-            'open' => '1',
-            'folder_id' => '6',
-            'name' => 'サービス',
-            'type' => 'Page',
-            'self_status' => '',
-            'author_id' => '',
-        ];
-        $site_id = 0;
-        $result = $this->ContentManage->getIndex($searchData);
-        $this->assertEquals(3, $result->count());
-    }
-
     /**
      * testGetAdminAjaxIndex
      * @dataProvider getAdminAjaxIndexDataProvider

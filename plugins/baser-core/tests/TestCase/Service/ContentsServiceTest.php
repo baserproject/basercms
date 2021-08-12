@@ -136,6 +136,15 @@ class ContentsServiceTest extends BcTestCase
                 'self_status' => '1',
                 'author_id' => '',
             ], 2],
+            [[
+                'site_id' => 0,
+                'open' => '1',
+                'folder_id' => '6',
+                'name' => 'サービス',
+                'type' => 'Page',
+                'self_status' => '',
+                'author_id' => '',
+            ], 3],
         ];
     }
     /**
