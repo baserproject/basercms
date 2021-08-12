@@ -123,9 +123,6 @@ class ContentsController extends BcAdminAppController
         if ($this->request->is('ajax')) {
             $this->ajax_index($contentManage);
         }
-
-
-
         $this->ContentFolders->getEventManager()->on($this->ContentFolders);
         $this->set('contentTypes', $this->BcContents->getTypes());
         $this->set('authors', $this->Users->getUserList());
@@ -155,7 +152,7 @@ class ContentsController extends BcAdminAppController
                             break;
                         case 2:
                             $datas = $this->paginate($datas);
-                            $this->request = $this->request->withQueryParams(['conditions' => $contentManage->getAdminTableConditions($this->request->getQueryParams())]);
+                            $this->request = $this->request->withQueryParams(['conditions' => $contentManage->getTableConditions($this->request->getQueryParams())]);
                             // EVENT Contents.searchIndex
                             // TODO: うまく動かない
                             $event = $this->dispatchLayerEvent('searchIndex', [

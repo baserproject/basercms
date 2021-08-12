@@ -47,42 +47,6 @@ class ContentManageService extends ContentsService implements ContentManageServi
     }
 
     /**
-     * getAdminTableConditions
-     *
-     * @param  array $queryParams
-     * @return array
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getAdminTableConditions(array $queryParams): array
-    {
-        $conditions = [];
-        if ($queryParams['name']) {
-            $conditions['OR'] = [
-                'name LIKE' => '%' . $queryParams['name'] . '%',
-                'title LIKE' => '%' . $queryParams['name'] . '%'
-            ];
-        }
-        if ($queryParams['folder_id']) {
-            $Contents = $this->Contents->find('all')->select(['lft', 'rght'])->where(['id' => $queryParams['folder_id']]);
-            $conditions['rght <'] = $Contents->first()->rght;
-            $conditions['lft >'] = $Contents->first()->lft;
-        }
-        if ($queryParams['author_id']) {
-            $conditions['author_id'] = $queryParams['author_id'];
-        }
-        if ($queryParams['self_status'] !== '') {
-            $conditions['self_status'] = $queryParams['self_status'];
-        }
-        if ($queryParams['type']) {
-            $conditions['type'] = $queryParams['type'];
-        }
-
-        return $conditions;
-    }
-
-    /**
      * リクエストに応じてajax処理時に必要なIndexとテンプレートを取得する
      *
      * @param  array $queryParams
@@ -94,21 +58,17 @@ class ContentManageService extends ContentsService implements ContentManageServi
     public function getAdminAjaxIndex(array $queryParams): array
     {
         $dataset = [];
-
-        $action = $queryParams['action'];
-        $listType = $queryParams['list_type'];
         // TODO: 一時措置
-        $siteId = 0;
-        // $siteId = $queryParams['site_id'];
+        $queryParams['site_id'] = 0;
 
-        switch($action) {
+        switch($queryParams['action']) {
             case 'index':
-                switch($listType) {
+                switch($queryParams['list_type']) {
                     case 1:
-                        $dataset = ['ajax_index_tree' => $this->getTreeIndex($siteId)];
+                        $dataset = ['ajax_index_tree' => $this->getTreeIndex($queryParams['site_id'])];
                         break;
                     case 2:
-                        $dataset = ['ajax_index_table' => $this->getIndex($siteId, $this->getAdminTableConditions($queryParams))];
+                        $dataset = ['ajax_index_table' => $this->getIndex($queryParams)];
                         break;
                 }
                 break;

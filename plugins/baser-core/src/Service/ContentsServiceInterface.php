@@ -47,11 +47,18 @@ interface ContentsServiceInterface
     /**
      * getIndex
      *
-     * @param  int $siteId
-     * @param  array $searchData
+     * @param  array $queryParams
      * @return Query
      */
-    public function getIndex($siteId, $searchData): Query;
+    public function getIndex(array $queryParams): Query;
+
+    /**
+     * getTableConditions
+     *
+     * @param  array $queryParams
+     * @return array
+     */
+    public function getTableConditions(array $queryParams): array;
 
     /**
      * getTrashIndex

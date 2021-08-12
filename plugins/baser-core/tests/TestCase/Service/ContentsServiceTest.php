@@ -74,21 +74,68 @@ class ContentsServiceTest extends BcTestCase
     }
 
     /**
+     * testGetTableConditions
+     *
+     * @return void
+     */
+    public function testGetTableConditions()
+    {
+
+        $request = $this->getRequest()->withQueryParams([
+            'site_id' => 0,
+            'open' => '1',
+            'folder_id' => '6',
+            'name' => 'テスト',
+            'type' => 'ContentFolder',
+            'self_status' => '1',
+            'author_id' => '',
+        ]);
+        $result = $this->ContentsService->getTableConditions($request->getQueryParams());
+        $this->assertEquals([
+            'OR' => [
+            'name LIKE' => '%テスト%',
+            'title LIKE' => '%テスト%',
+            ],
+            'rght <' => (int) 15,
+            'lft >' => (int) 8,
+            'self_status' => '1',
+            'type' => 'ContentFolder',
+            'site_id' => 0
+            ], $result);
+    }
+
+    /**
      * testgetIndex
      *
      * @return void
      * @dataProvider getIndexDataProvider
      */
-    public function testgetIndex($site_id, $conditions, $expected): void
+    public function testgetIndex($conditions, $expected): void
     {
-        $result = $this->ContentsService->getIndex($site_id, $conditions);
+        $result = $this->ContentsService->getIndex($conditions);
         $this->assertEquals($expected, $result->count());
     }
     public function getIndexDataProvider()
     {
         return [
-            [0, [], 10],
-            [0, ['level' => 1], 6],
+            [[
+                'site_id' => 0,
+                'open' => '1',
+                'folder_id' => '',
+                'name' => '',
+                'type' => '',
+                'self_status' => '1',
+                'author_id' => '',
+            ], 10],
+            [[
+                'site_id' => 0,
+                'open' => '1',
+                'folder_id' => '',
+                'name' => '',
+                'type' => 'ContentFolder',
+                'self_status' => '1',
+                'author_id' => '',
+            ], 2],
         ];
     }
     /**

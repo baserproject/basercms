@@ -78,20 +78,55 @@ class ContentsService implements ContentsServiceInterface
     }
 
     /**
+     * getTableConditions
+     *
+     * @param  array $queryParams
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getTableConditions(array $queryParams): array
+    {
+
+        $conditions['site_id'] = $queryParams['site_id'];
+
+        if ($queryParams['name']) {
+            $conditions['OR'] = [
+                'name LIKE' => '%' . $queryParams['name'] . '%',
+                'title LIKE' => '%' . $queryParams['name'] . '%'
+            ];
+        }
+        if ($queryParams['folder_id']) {
+            $Contents = $this->Contents->find('all')->select(['lft', 'rght'])->where(['id' => $queryParams['folder_id']]);
+            $conditions['rght <'] = $Contents->first()->rght;
+            $conditions['lft >'] = $Contents->first()->lft;
+        }
+        if ($queryParams['author_id']) {
+            $conditions['author_id'] = $queryParams['author_id'];
+        }
+        if ($queryParams['self_status'] !== '') {
+            $conditions['self_status'] = $queryParams['self_status'];
+        }
+        if ($queryParams['type']) {
+            $conditions['type'] = $queryParams['type'];
+        }
+
+        return $conditions;
+    }
+
+    /**
      * getIndex
      *
-     * @param  int $siteId
-     * @param  array $searchData
+     * @param  array $queryParams
      * @return Query
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getIndex($siteId, $conditions): Query
+    public function getIndex(array $queryParams): Query
     {
-        $conditions = array_merge(['site_id' => $siteId], $conditions);
-
-        return $this->Contents->find('all')->where($conditions);
+        return $this->Contents->find('all')->where($this->getTableConditions($queryParams));
     }
 
     /**

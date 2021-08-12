@@ -65,36 +65,8 @@ class ContentManageServiceTest extends BcTestCase
             'author_id' => '',
         ];
         $site_id = 0;
-        $result = $this->ContentManage->getIndex($site_id, $this->ContentManage->getAdminTableConditions($searchData));
+        $result = $this->ContentManage->getIndex($searchData);
         $this->assertEquals(3, $result->count());
-    }
-
-    /**
-     * testGetAdminTableConditions
-     *
-     * @return void
-     */
-    public function testGetAdminTableConditions()
-    {
-        $searchData = [
-            'open' => '1',
-            'folder_id' => '6',
-            'name' => 'テスト',
-            'type' => 'ContentFolder',
-            'self_status' => '1',
-            'author_id' => '',
-        ];
-        $result = $this->ContentManage->getAdminTableConditions($searchData);
-        $this->assertEquals([
-            'OR' => [
-            'name LIKE' => '%テスト%',
-            'title LIKE' => '%テスト%',
-            ],
-            'rght <' => (int) 15,
-            'lft >' => (int) 8,
-            'self_status' => '1',
-            'type' => 'ContentFolder',
-            ], $result);
     }
 
     /**
@@ -109,17 +81,8 @@ class ContentManageServiceTest extends BcTestCase
      */
     public function testGetAdminAjaxIndex($action, $listType, $siteId, $content, $template): void
     {
-        $requestData = [
-            'Param' => [
-                'action' => $action,
-            ],
-            'ViewSetting' => [
-                'list_type' => $listType,
-                'site_id' => $siteId,
-            ],
-            'Contents' => $content
-        ];
-        $result = $this->ContentManage->getAdminAjaxIndex($requestData);
+        $request = $this->getRequest()->withQueryParams(array_merge(['action' => $action, 'list_type' => $listType, 'site_id' => $siteId], $content));
+        $result = $this->ContentManage->getAdminAjaxIndex($request->getQueryParams());
         $this->assertEquals($template, key($result));
         $data = array_shift($result);
         $this->assertInstanceOf('Cake\ORM\Query', $data);

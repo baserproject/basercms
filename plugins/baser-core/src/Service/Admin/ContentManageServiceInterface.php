@@ -28,14 +28,6 @@ interface ContentManageServiceInterface extends ContentsServiceInterface
     public function getContensInfo ();
 
     /**
-     * getAdminTableConditions
-     *
-     * @param  array $queryParams
-     * @return array
-     */
-    public function getAdminTableConditions(array $queryParams): array;
-
-    /**
      * リクエストに応じてajax処理時に必要なIndexとテンプレートを取得する
      *
      * @param  array $queryParams
