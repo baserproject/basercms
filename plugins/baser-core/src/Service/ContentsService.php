@@ -78,7 +78,7 @@ class ContentsService implements ContentsServiceInterface
     }
 
     /**
-     * getTableIndex
+     * getIndex
      *
      * @param  int $siteId
      * @param  array $searchData
@@ -87,7 +87,7 @@ class ContentsService implements ContentsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getTableIndex($siteId, $conditions): Query
+    public function getIndex($siteId, $conditions): Query
     {
         $conditions = array_merge(['site_id' => $siteId], $conditions);
 

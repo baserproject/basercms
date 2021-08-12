@@ -108,7 +108,7 @@ class ContentManageService extends ContentsService implements ContentManageServi
                         break;
                     case 2:
                         $conditions = $this->getAdminTableConditions($requestData['Contents']);
-                        $dataset = ['ajax_index_table' => $this->getTableIndex($siteId, $conditions)];
+                        $dataset = ['ajax_index_table' => $this->getIndex($siteId, $conditions)];
                         break;
                 }
                 break;

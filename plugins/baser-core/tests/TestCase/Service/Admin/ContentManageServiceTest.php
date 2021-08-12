@@ -54,7 +54,7 @@ class ContentManageServiceTest extends BcTestCase
         unset($this->ContentManage);
     }
 
-    public function testGetTableIndex()
+    public function testgetIndex()
     {
         $searchData = [
             'open' => '1',
@@ -65,7 +65,7 @@ class ContentManageServiceTest extends BcTestCase
             'author_id' => '',
         ];
         $site_id = 0;
-        $result = $this->ContentManage->getTableIndex($site_id, $this->ContentManage->getAdminTableConditions($searchData));
+        $result = $this->ContentManage->getIndex($site_id, $this->ContentManage->getAdminTableConditions($searchData));
         $this->assertEquals(3, $result->count());
     }
 

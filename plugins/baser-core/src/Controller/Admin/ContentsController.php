@@ -133,7 +133,6 @@ class ContentsController extends BcAdminAppController
         $this->set('authors', $this->Users->getUserList());
         $this->set('folders', $contentManage->getContentFolderList($currentSiteId, ['conditions' => ['site_root' => false]]));
         $this->set('sites', $sites);
-        $this->subMenuElements = ['contents'];
     }
 
     /**

@@ -33,7 +33,7 @@ class ContentsController extends BcApiController
     public function index(ContentsServiceInterface $contents)
     {
         $this->set([
-            'contents' => $this->paginate($contents->getTableIndex($this->request->getQueryParams()))
+            'contents' => $this->paginate($contents->getIndex($this->request->getQueryParams()))
         ]);
         $this->viewBuilder()->setOption('serialize', ['contents']);
     }

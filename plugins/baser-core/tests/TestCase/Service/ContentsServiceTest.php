@@ -74,17 +74,17 @@ class ContentsServiceTest extends BcTestCase
     }
 
     /**
-     * testGetTableIndex
+     * testgetIndex
      *
      * @return void
-     * @dataProvider getTableIndexDataProvider
+     * @dataProvider getIndexDataProvider
      */
-    public function testGetTableIndex($site_id, $conditions, $expected): void
+    public function testgetIndex($site_id, $conditions, $expected): void
     {
-        $result = $this->ContentsService->getTableIndex($site_id, $conditions);
+        $result = $this->ContentsService->getIndex($site_id, $conditions);
         $this->assertEquals($expected, $result->count());
     }
-    public function getTableIndexDataProvider()
+    public function getIndexDataProvider()
     {
         return [
             [0, [], 10],

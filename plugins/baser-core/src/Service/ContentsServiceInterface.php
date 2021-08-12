@@ -45,13 +45,13 @@ interface ContentsServiceInterface
     public function getTreeIndex($siteId): Query;
 
     /**
-     * getTableIndex
+     * getIndex
      *
      * @param  int $siteId
      * @param  array $searchData
      * @return Query
      */
-    public function getTableIndex($siteId, $searchData): Query;
+    public function getIndex($siteId, $searchData): Query;
 
     /**
      * getTrashIndex
