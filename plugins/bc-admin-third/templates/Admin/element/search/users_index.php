@@ -20,7 +20,7 @@ $userGroupList = $this->BcAdminForm->getControlSource('Users.user_group_id');
 ?>
 
 
-<?php echo $this->BcAdminForm->create(null, ['novalidate' => true, 'method' => 'get', 'url' => ['action' => 'index']]) ?>
+<?php echo $this->BcAdminForm->create(null, ['novalidate' => true, 'type' => 'get', 'url' => ['action' => 'index']]) ?>
 <p class="bca-search__input-list">
 	<span class="bca-search__input-item">
 		<?php echo $this->BcAdminForm->label('user_group_id', __d('baser', 'ユーザーグループ'), ['class' => 'bca-search__input-item-label']) ?>

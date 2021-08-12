@@ -17,6 +17,11 @@
 
 $listTypes = [1 => __d('baser', 'ツリー形式'), 2 => __d('baser', '表形式')];
 
+// ContentsControllerから移行 必要なければ削除
+// $this->request = $this->request
+// ->withData('ViewSetting.site_id', $this->request->getQuery('site_id'))
+// ->withData('ViewSetting.list_type', $this->request->getQuery('list_type'));
+
 if ($this->request->getParam('action') == 'index') {
   echo $this->BcAdminForm->control('ViewSetting.mode', ['type' => 'hidden', 'value' => 'index']);
 } elseif ($this->request->getParam('action') == 'trash_index') {

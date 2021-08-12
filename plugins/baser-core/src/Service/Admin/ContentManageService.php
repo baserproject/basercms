@@ -49,34 +49,34 @@ class ContentManageService extends ContentsService implements ContentManageServi
     /**
      * getAdminTableConditions
      *
-     * @param  array $searchData
+     * @param  array $queryParams
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getAdminTableConditions($searchData): array
+    public function getAdminTableConditions(array $queryParams): array
     {
         $conditions = [];
-        if ($searchData['name']) {
+        if ($queryParams['name']) {
             $conditions['OR'] = [
-                'name LIKE' => '%' . $searchData['name'] . '%',
-                'title LIKE' => '%' . $searchData['name'] . '%'
+                'name LIKE' => '%' . $queryParams['name'] . '%',
+                'title LIKE' => '%' . $queryParams['name'] . '%'
             ];
         }
-        if ($searchData['folder_id']) {
-            $Contents = $this->Contents->find('all')->select(['lft', 'rght'])->where(['id' => $searchData['folder_id']]);
+        if ($queryParams['folder_id']) {
+            $Contents = $this->Contents->find('all')->select(['lft', 'rght'])->where(['id' => $queryParams['folder_id']]);
             $conditions['rght <'] = $Contents->first()->rght;
             $conditions['lft >'] = $Contents->first()->lft;
         }
-        if ($searchData['author_id']) {
-            $conditions['author_id'] = $searchData['author_id'];
+        if ($queryParams['author_id']) {
+            $conditions['author_id'] = $queryParams['author_id'];
         }
-        if ($searchData['self_status'] !== '') {
-            $conditions['self_status'] = $searchData['self_status'];
+        if ($queryParams['self_status'] !== '') {
+            $conditions['self_status'] = $queryParams['self_status'];
         }
-        if ($searchData['type']) {
-            $conditions['type'] = $searchData['type'];
+        if ($queryParams['type']) {
+            $conditions['type'] = $queryParams['type'];
         }
 
         return $conditions;
@@ -85,20 +85,21 @@ class ContentManageService extends ContentsService implements ContentManageServi
     /**
      * リクエストに応じてajax処理時に必要なIndexとテンプレートを取得する
      *
-     * @param  array $requestData
+     * @param  array $queryParams
      * @param  int $listType
      * @return array
      * @checked
-     * @noTodo
      * @unitTest
      */
-    public function getAdminAjaxIndex(array $requestData): array
+    public function getAdminAjaxIndex(array $queryParams): array
     {
         $dataset = [];
 
-        $action = $requestData['Param']['action'];
-        $listType = $requestData['ViewSetting']['list_type'];
-        $siteId = $requestData['ViewSetting']['site_id'];
+        $action = $queryParams['action'];
+        $listType = $queryParams['list_type'];
+        // TODO: 一時措置
+        $siteId = 0;
+        // $siteId = $queryParams['site_id'];
 
         switch($action) {
             case 'index':
@@ -107,8 +108,7 @@ class ContentManageService extends ContentsService implements ContentManageServi
                         $dataset = ['ajax_index_tree' => $this->getTreeIndex($siteId)];
                         break;
                     case 2:
-                        $conditions = $this->getAdminTableConditions($requestData['Contents']);
-                        $dataset = ['ajax_index_table' => $this->getIndex($siteId, $conditions)];
+                        $dataset = ['ajax_index_table' => $this->getIndex($siteId, $this->getAdminTableConditions($queryParams))];
                         break;
                 }
                 break;

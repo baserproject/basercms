@@ -92,42 +92,40 @@ class ContentsController extends BcAdminAppController
      * @param integer $parentId
      * @param void
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function index(ContentManageServiceInterface $contentManage, SiteManageServiceInterface $siteManage)
     {
-        // TODO: コンテンツはsite ID=0にしかないので一時措置
-        // $currentSiteId = $this->request->getQuery('site_id') ?? 0;
-        $currentSiteId = 0;
+        $currentSiteId = $this->request->getQuery('site_id') ?? 0;
         $sites = $siteManage->getSiteList();
-        // if ($sites) {
-        //     if (!$this->request->getQuery('site_id') || !in_array($this->request->getQuery('site_id'), array_keys($sites))) {
-        //         reset($sites);
-        //         $this->request = $this->request->withQueryParams(['site_id' =>key($sites)]);
-        //     }
-        // } else {
-        //     $this->request = $this->request->withQueryParams(['site_id' => null]);
-        // }
-
+        if ($sites) {
+            if (!$this->request->getQuery('site_id') || !in_array($this->request->getQuery('site_id'), array_keys($sites))) {
+                reset($sites);
+                $this->request = $this->request->withQueryParams(['site_id' =>key($sites)]);
+            }
+        } else {
+            $this->request = $this->request->withQueryParams(['site_id' => null]);
+        }
         $currentListType = $this->request->getQuery('list_type') ?? 1;
+
         $this->setViewConditions('Contents', ['default' => [
             'query' => [
                 'num' => $this->getSiteConfig('admin_list_num'),
                 'site_id' => $currentSiteId,
                 'list_type' => $currentListType,
                 'sort' => 'id',
-                'direction' => 'asc'
+                'direction' => 'asc',
+                'action' => $this->request->getParam('action'),
             ]
         ]]);
-
-        $this->request = $this->request
-            ->withData('ViewSetting.site_id', $currentSiteId)
-            ->withData('ViewSetting.list_type', $currentListType)
-            ->withData('Param.action', $this->request->getParam('action'));
 
         if ($this->request->is('ajax')) {
             $this->ajax_index($contentManage);
         }
+
+
+
         $this->ContentFolders->getEventManager()->on($this->ContentFolders);
         $this->set('contentTypes', $this->BcContents->getTypes());
         $this->set('authors', $this->Users->getUserList());
@@ -146,18 +144,18 @@ class ContentsController extends BcAdminAppController
     protected function ajax_index($contentManage): void
     {
             $this->viewBuilder()->disableAutoLayout();
-            $dataset = $contentManage->getAdminAjaxIndex($this->request->getData());
+            $dataset = $contentManage->getAdminAjaxIndex($this->request->getQueryParams());
             $template = key($dataset);
             $datas = array_shift($dataset);
-            if($this->request->getParam('action') == "index") {
-                    switch($this->request->getData('ViewSetting.list_type')) {
+            if($this->request->getQuery('action') == "index") {
+                    switch($this->request->getQuery('list_type')) {
                         case 1:
                             // 並び替え最終更新時刻をリセット
                             // $this->SiteConfigs->resetContentsSortLastModified();
                             break;
                         case 2:
                             $datas = $this->paginate($datas);
-                            $this->request = $this->request->withQueryParams(['conditions' => $contentManage->getAdminTableConditions($this->request->getData('Contents'))]);
+                            $this->request = $this->request->withQueryParams(['conditions' => $contentManage->getAdminTableConditions($this->request->getQueryParams())]);
                             // EVENT Contents.searchIndex
                             // TODO: うまく動かない
                             $event = $this->dispatchLayerEvent('searchIndex', [
