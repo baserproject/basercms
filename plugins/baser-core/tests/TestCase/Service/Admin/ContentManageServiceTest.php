@@ -77,7 +77,14 @@ class ContentManageServiceTest extends BcTestCase
     {
         return [
             // tree形式の場合
-            ['index', '1', '0', [], "ajax_index_tree"],
+            ['index', '1', '0', [
+                'open' => '1',
+                'folder_id' => '',
+                'name' => '',
+                'type' => '',
+                'self_status' => '',
+                'author_id' => '',
+            ], "ajax_index_tree"],
             // Table形式の場合(content条件なし)
             ['index', '2', '0',
             [

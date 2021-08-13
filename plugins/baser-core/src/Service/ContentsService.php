@@ -58,23 +58,23 @@ class ContentsService implements ContentsServiceInterface
     /**
      * getTreeIndex
      *
-     * @param  int $siteId
+     * @param  array $queryParams
      * @return Query
      * @checked
      * @unitTest
      */
-    public function getTreeIndex($siteId): Query
+    public function getTreeIndex(array $queryParams): Query
     {
-        if ($siteId === 'all') {
-            $conditions = ['or' => [
+        if ($queryParams['site_id'] === 'all') {
+            $queryParams = ['or' => [
                 ['Sites.use_subdomain' => false],
                 ['Contents.site_id' => 0]
             ]];
-        } else {
-            $conditions = ['Contents.site_id' => $siteId];
         }
+
         // TODO: contain(['Sites'])動かない
-        return $this->Contents->find('threaded')->where([$conditions])->order(['lft'])->contain(['Sites']);
+        // return $this->getIndex($queryParams, 'threaded')->order(['lft'])->contain(['Sites']);
+        return $this->getIndex($queryParams, 'threaded')->order(['lft']);
     }
 
     /**
@@ -167,9 +167,9 @@ class ContentsService implements ContentsServiceInterface
             'author_id' => '',
         ];
         if ($queryParams) {
-            $conditions = array_merge($conditions, $queryParams);
+            $queryParams = array_merge($conditions, $queryParams);
         }
-        return $this->getIndex($this->getTableConditions($conditions));
+        return $this->getIndex($this->getTableConditions($queryParams));
     }
 
 

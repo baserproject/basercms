@@ -68,8 +68,8 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testGetTreeIndex(): void
     {
-        $site_id = 0;
-        $result = $this->ContentsService->getTreeIndex($site_id);
+        $request = $this->getRequest('/?site_id=0');
+        $result = $this->ContentsService->getTreeIndex($request->getQueryParams());
         $this->assertEquals("baserCMSサンプル", $result->first()->title);
     }
 

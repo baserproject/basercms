@@ -63,11 +63,19 @@ class ContentManageService extends ContentsService implements ContentManageServi
         $action = $queryParams['action'];
         $listType = $queryParams['list_type'];
         unset($queryParams['action'], $queryParams['list_type'], $queryParams['sort'], $queryParams['direction']);
+
+        if ($listType != 2) {
+            // thread形式の場合不要な条件を除外
+            unset($queryParams['folder_id'], $queryParams['open']);
+            if (isset($queryParams['self_status'])) {
+                $queryParams['self_status'] = $queryParams['self_status'] ? (bool) $queryParams['self_status'] : false;
+            }
+        }
         switch($action) {
             case 'index':
                 switch($listType) {
                     case 1:
-                        $dataset = ['ajax_index_tree' => $this->getTreeIndex($queryParams['site_id'])];
+                        $dataset = ['ajax_index_tree' => $this->getTreeIndex($queryParams)];
                         break;
                     case 2:
                         $dataset = ['ajax_index_table' => $this->getTableIndex($queryParams)];
@@ -75,10 +83,6 @@ class ContentManageService extends ContentsService implements ContentManageServi
                 }
                 break;
             case 'trash_index':
-                unset($queryParams['folder_id'], $queryParams['open']);
-                if (isset($queryParams['self_status'])) {
-                    $queryParams['self_status'] = $queryParams['self_status'] ? (bool) $queryParams['self_status'] : false;
-                }
                 $dataset = ['ajax_index_trash' => $this->getTrashIndex($queryParams)];
                 break;
         }

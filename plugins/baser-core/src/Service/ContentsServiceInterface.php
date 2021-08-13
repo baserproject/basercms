@@ -32,10 +32,10 @@ interface ContentsServiceInterface
     /**
      * getTreeIndex
      *
-     * @param  int $siteId
+     * @param  array $queryParams
      * @return Query
      */
-    public function getTreeIndex($siteId): Query;
+    public function getTreeIndex(array $queryParams): Query;
 
     /**
      * コンテンツ管理の一覧用のデータを取得
