@@ -75,10 +75,24 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testIndex()
     {
+        // indexテスト
         $this->get('/baser/api/baser-core/contents/index.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('', $result->contents[0]->name);
+        // trashテスト
+        $this->get('/baser/api/baser-core/contents/index/trash.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertTrue($result->contents[0]->deleted);
+        // treeテスト
+        $this->get('/baser/api/baser-core/contents/index/tree.json?site_id=0&token=' . $this->accessToken);
+        $this->assertResponseOk();
+        // tableテスト
+        $this->get('/baser/api/baser-core/contents/index/table.json?site_id=0&folder_id=6&name=サービス&type=Page&token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals(3, count($result->contents));
     }
 
 }

@@ -33,10 +33,24 @@ class ContentsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function index(ContentsServiceInterface $contents)
+    public function index(ContentsServiceInterface $contents, $type="index")
     {
+        switch ($type) {
+            case "index":
+                $data = $this->paginate($contents->getIndex($this->request->getQueryParams()));
+                break;
+            case "trash":
+                $data = $this->paginate($contents->getTrashIndex($this->request->getQueryParams()));
+                break;
+            case "tree":
+                $data = $this->paginate($contents->getTreeIndex($this->request->getQueryParams()));
+                break;
+            case "table":
+                $data = $this->paginate($contents->getTableIndex($this->request->getQueryParams()));
+                break;
+        }
         $this->set([
-            'contents' => $this->paginate($contents->getIndex($this->request->getQueryParams()))
+            'contents' => $data
         ]);
         $this->viewBuilder()->setOption('serialize', ['contents']);
     }
