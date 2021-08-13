@@ -13,12 +13,13 @@ namespace BaserCore\Service;
 
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
-use Cake\Datasource\EntityInterface;
-use BaserCore\Model\Table\SitesTable;
-use BaserCore\Model\Table\ContentsTable;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\EntityInterface;
+use BaserCore\Model\Table\SitesTable;
+use Cake\Datasource\ConnectionManager;
+use BaserCore\Model\Table\ContentsTable;
 
 class ContentsService implements ContentsServiceInterface
 {
@@ -42,6 +43,7 @@ class ContentsService implements ContentsServiceInterface
         $this->Contents = TableRegistry::getTableLocator()->get("BaserCore.Contents");
         $this->Sites = TableRegistry::getTableLocator()->get("BaserCore.Sites");
     }
+
 
     /**
      * コンテンツを取得する
@@ -128,22 +130,30 @@ class ContentsService implements ContentsServiceInterface
     {
         $options = [];
 
-        if (!empty($queryParams['num'])) {
-            $options = ['limit' => $queryParams['num']];
-            unset($queryParams['num']);
-        }
+        $columns = ConnectionManager::get('default')->getSchemaCollection()->describe('contents')->columns();
+        $allowed = array_merge($columns, ['OR', 'NOT']);
+
+        $query = $this->Contents->find($type, $options);
 
         if (!empty($queryParams['name'])) {
-            $queryParams['OR'] = [
-                'name LIKE' => '%' . $queryParams['name'] . '%',
-                'title LIKE' => '%' . $queryParams['name'] . '%'
-            ];
+            $query = $query->where(['name LIKE' => '%' . $queryParams['name'] . '%']);
         }
 
-        if (isset($queryParams['status'])) {
-            $queryParams['status'] =  $queryParams['status'];
+        if (!empty($queryParams['title'])) {
+            $query = $query->where(['title LIKE' => '%' . $queryParams['name'] . '%']);
         }
-        return $this->Contents->find($type, $options)->where([$queryParams]);
+
+        foreach($queryParams as $key => $value) {
+            if (in_array($key, $allowed)) {
+                $query = $query->where([$key => $value]);
+            }
+        }
+
+        if (!empty($queryParams['num'])) {
+            $query = $query->limit($queryParams['num']);
+        }
+
+        return $query;
     }
 
     /**

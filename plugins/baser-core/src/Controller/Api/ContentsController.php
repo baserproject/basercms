@@ -25,10 +25,13 @@ class ContentsController extends BcApiController
 {
 
     /**
-     * index
+     * コンテンツ情報一覧取得
      *
      * @param  ContentsServiceInterface $contents
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function index(ContentsServiceInterface $contents)
     {
