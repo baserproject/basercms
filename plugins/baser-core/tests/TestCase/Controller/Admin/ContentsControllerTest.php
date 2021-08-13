@@ -107,9 +107,6 @@ class ContentsControllerTest extends BcTestCase
         // リクエストの変化をテスト
         $this->ContentsController->index(new ContentManageService(), new SiteManageService());
         $this->assertArrayHasKey('num', $this->ContentsController->getRequest()->getQueryParams());
-        $this->assertNotNull($this->ContentsController->getRequest()->getData('ViewSetting.site_id'));
-        $this->assertNotNull($this->ContentsController->getRequest()->getData('ViewSetting.list_type'));
-        $this->assertNotNull($this->ContentsController->getRequest()->getData('Param.action'));
 
     }
 
@@ -120,16 +117,11 @@ class ContentsControllerTest extends BcTestCase
      */
     public function testAjax_index($listType, $action, $expected): void
     {
-        $this->request = $this->request
-            ->withData('ViewSetting.site_id', 0)
-            ->withData('ViewSetting.list_type', $listType)
-            ->withData('Param.action', $action)
-            ->withParam('action', $action);
-
-        if ($expected === "ajax_index_table") {
-            // Contents条件検索設定
-            $this->request = $this->request->withData('Contents',
+        $this->request = $this->request->withQueryParams(
             [
+                'action' => $action,
+                'site_id' => 0,
+                'list_type' => $listType,
                 'open' => '1',
                 'folder_id' => '',
                 'name' => '',
@@ -137,6 +129,7 @@ class ContentsControllerTest extends BcTestCase
                 'self_status' => '',
                 'author_id' => '',
             ]);
+        if ($expected === "ajax_index_table") {
             // イベント設定
             $this->entryControllerEventToMock('Controller.BaserCore.Contents.searchIndex', function(Event $event) {
                 $this->request = $event->getData('request');
@@ -179,8 +172,8 @@ class ContentsControllerTest extends BcTestCase
         $this->ContentsController->setRequest($request);
         $this->ContentsController->trash_index(new ContentManageService(), new SiteManageService());
         $this->assertEquals('index', $this->ContentsController->viewBuilder()->getTemplate());
-        $this->assertEquals(0, $this->ContentsController->getRequest()->getData('ViewSetting.site_id'));
-        $this->assertEquals(1, $this->ContentsController->getRequest()->getData('ViewSetting.list_type'));
+        $this->assertEquals('trash_index', $this->ContentsController->getRequest()->getQuery('action'));
+        $this->assertArrayHasKey('num', $this->ContentsController->getRequest()->getQueryParams());
     }
 
     /**

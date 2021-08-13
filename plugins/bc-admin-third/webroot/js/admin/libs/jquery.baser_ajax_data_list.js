@@ -262,10 +262,10 @@
             var config = $.baserAjaxDataList.config;
             $.bcToken.check(function () {
                 var form = $(config.searchBox + " form");
-                form.append($('meta[name="csrfToken"]').attr('content'));
-                var data = form.serialize();
+                form.append($.bcToken.getHiddenToken());
+                var data = decodeURI(form.serialize());
                 return $.ajax({
-                    type: "POST",
+                    type: "GET",
                     url: $(config.searchBox + " form").attr('action'),
                     data: data,
                     dataType: "html",
@@ -286,7 +286,7 @@
                         $($.baserAjaxDataList).trigger('searchLoaded');
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        // console.log(jqXHR.responseText.substr(50, 300));
+                        // console.log(jqXHR.responseText.substr(0, 600));
                         // console.log(textStatus);
                         // console.log(errorThrown);
                         $.bcToken.key = null;

@@ -392,6 +392,7 @@ class ContentsFixture extends TestFixture
                 'name' => 'BcContentsテスト',
                 'type' => "BcContentsTest",
                 'entity_id' => 1,
+                'deleted' => true,
             ],
         ];
         parent::init();

@@ -54,49 +54,6 @@ class ContentManageServiceTest extends BcTestCase
         unset($this->ContentManage);
     }
 
-    public function testGetTableIndex()
-    {
-        $searchData = [
-            'open' => '1',
-            'folder_id' => '6',
-            'name' => 'サービス',
-            'type' => 'Page',
-            'self_status' => '',
-            'author_id' => '',
-        ];
-        $site_id = 0;
-        $result = $this->ContentManage->getTableIndex($site_id, $this->ContentManage->getAdminTableConditions($searchData));
-        $this->assertEquals(3, $result->count());
-    }
-
-    /**
-     * testGetAdminTableConditions
-     *
-     * @return void
-     */
-    public function testGetAdminTableConditions()
-    {
-        $searchData = [
-            'open' => '1',
-            'folder_id' => '6',
-            'name' => 'テスト',
-            'type' => 'ContentFolder',
-            'self_status' => '1',
-            'author_id' => '',
-        ];
-        $result = $this->ContentManage->getAdminTableConditions($searchData);
-        $this->assertEquals([
-            'OR' => [
-            'name LIKE' => '%テスト%',
-            'title LIKE' => '%テスト%',
-            ],
-            'rght <' => (int) 15,
-            'lft >' => (int) 8,
-            'self_status' => '1',
-            'type' => 'ContentFolder',
-            ], $result);
-    }
-
     /**
      * testGetAdminAjaxIndex
      * @dataProvider getAdminAjaxIndexDataProvider
@@ -109,17 +66,8 @@ class ContentManageServiceTest extends BcTestCase
      */
     public function testGetAdminAjaxIndex($action, $listType, $siteId, $content, $template): void
     {
-        $requestData = [
-            'Param' => [
-                'action' => $action,
-            ],
-            'ViewSetting' => [
-                'list_type' => $listType,
-                'site_id' => $siteId,
-            ],
-            'Contents' => $content
-        ];
-        $result = $this->ContentManage->getAdminAjaxIndex($requestData);
+        $request = $this->getRequest()->withQueryParams(array_merge(['action' => $action, 'list_type' => $listType, 'site_id' => $siteId], $content));
+        $result = $this->ContentManage->getAdminAjaxIndex($request->getQueryParams());
         $this->assertEquals($template, key($result));
         $data = array_shift($result);
         $this->assertInstanceOf('Cake\ORM\Query', $data);
@@ -129,7 +77,14 @@ class ContentManageServiceTest extends BcTestCase
     {
         return [
             // tree形式の場合
-            ['index', '1', '0', [], "ajax_index_tree"],
+            ['index', '1', '0', [
+                'open' => '1',
+                'folder_id' => '',
+                'name' => '',
+                'type' => '',
+                'self_status' => '',
+                'author_id' => '',
+            ], "ajax_index_tree"],
             // Table形式の場合(content条件なし)
             ['index', '2', '0',
             [
@@ -142,7 +97,13 @@ class ContentManageServiceTest extends BcTestCase
             ]
             , "ajax_index_table"],
             // trash形式の場合
-            ['trash_index', '1', '0', [], "ajax_index_trash"],
+            ['trash_index', '1', '0',
+            [
+                'name' => '',
+                'type' => '',
+                'self_status' => true,
+                'author_id' => '',
+            ], "ajax_index_trash"],
         ];
     }
 

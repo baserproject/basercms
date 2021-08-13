@@ -29,36 +29,44 @@ interface ContentsServiceInterface
      */
     public function get($id): EntityInterface;
 
-    // /**
-    //  * getIndex
-    //  *
-    //  * @return array
-    //  */
-    // public function getIndex(): array;
-
     /**
      * getTreeIndex
      *
-     * @param  int $siteId
+     * @param  array $queryParams
      * @return Query
      */
-    public function getTreeIndex($siteId): Query;
+    public function getTreeIndex(array $queryParams): Query;
 
     /**
-     * getTableIndex
-     *
-     * @param  int $siteId
-     * @param  array $searchData
+     * コンテンツ管理の一覧用のデータを取得
+     * @param array $queryParams
+     * @param string $type
      * @return Query
      */
-    public function getTableIndex($siteId, $searchData): Query;
+    public function getIndex(array $queryParams, ?string $type="all"): Query;
+
+    /**
+     * getTableConditions
+     *
+     * @param  array $queryParams
+     * @return array
+     */
+    public function getTableConditions(array $queryParams): array;
+
+    /**
+     * テーブル用のコンテンツ管理の一覧データを取得
+     *
+     * @param  array $queryParams
+     * @return Query
+     */
+    public function getTableIndex(array $queryParams): Query;
 
     /**
      * getTrashIndex
-     *
+     * @param  array $queryParams
      * @return Query
      */
-    public function getTrashIndex(): Query;
+    public function getTrashIndex(array $queryParams): Query;
 
     /**
      * コンテンツフォルダーのリストを取得

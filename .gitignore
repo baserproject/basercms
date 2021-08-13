@@ -2,6 +2,7 @@
 ##########################
 /config/app_local.php
 /config/.env
+/config/.env.bak
 /logs/*
 /tmp/*
 /vendor/*
