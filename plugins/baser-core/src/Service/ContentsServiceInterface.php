@@ -29,13 +29,6 @@ interface ContentsServiceInterface
      */
     public function get($id): EntityInterface;
 
-    // /**
-    //  * getIndex
-    //  *
-    //  * @return array
-    //  */
-    // public function getIndex(): array;
-
     /**
      * getTreeIndex
      *
@@ -45,12 +38,12 @@ interface ContentsServiceInterface
     public function getTreeIndex($siteId): Query;
 
     /**
-     * getIndex
-     *
-     * @param  array $queryParams
+     * コンテンツ管理の一覧用のデータを取得
+     * @param array $queryParams
+     * @param string $type
      * @return Query
      */
-    public function getIndex(array $queryParams): Query;
+    public function getIndex(array $queryParams, ?string $type="all"): Query;
 
     /**
      * getTableConditions
@@ -59,6 +52,14 @@ interface ContentsServiceInterface
      * @return array
      */
     public function getTableConditions(array $queryParams): array;
+
+    /**
+     * テーブル用のコンテンツ管理の一覧データを取得
+     *
+     * @param  array $queryParams
+     * @return Query
+     */
+    public function getTableIndex(array $queryParams): Query;
 
     /**
      * getTrashIndex

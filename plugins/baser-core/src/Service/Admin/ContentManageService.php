@@ -68,7 +68,7 @@ class ContentManageService extends ContentsService implements ContentManageServi
                         $dataset = ['ajax_index_tree' => $this->getTreeIndex($queryParams['site_id'])];
                         break;
                     case 2:
-                        $dataset = ['ajax_index_table' => $this->getIndex($queryParams)];
+                        $dataset = ['ajax_index_table' => $this->getTableIndex($queryParams)];
                         break;
                 }
                 break;

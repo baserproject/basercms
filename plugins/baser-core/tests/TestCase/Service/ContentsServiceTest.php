@@ -105,27 +105,21 @@ class ContentsServiceTest extends BcTestCase
     }
 
     /**
-     * testgetIndex
+     * testgetTableIndex
      *
      * @return void
-     * @dataProvider getIndexDataProvider
+     * @dataProvider getTableIndexDataProvider
      */
-    public function testgetIndex($conditions, $expected): void
+    public function testgetTableIndex($conditions, $expected): void
     {
-        $result = $this->ContentsService->getIndex($conditions);
+        $result = $this->ContentsService->getTableIndex($conditions);
         $this->assertEquals($expected, $result->count());
     }
-    public function getIndexDataProvider()
+    public function getTableIndexDataProvider()
     {
         return [
             [[
                 'site_id' => 0,
-                'open' => '1',
-                'folder_id' => '',
-                'name' => '',
-                'type' => '',
-                'self_status' => '1',
-                'author_id' => '',
             ], 10],
             [[
                 'site_id' => 0,
@@ -146,6 +140,25 @@ class ContentsServiceTest extends BcTestCase
                 'author_id' => '',
             ], 3],
         ];
+    }
+    public function testGetIndex(): void
+    {
+        $request = $this->getRequest('/');
+        $contents = $this->ContentsService->getIndex($request->getQueryParams());
+        $this->assertEquals('', $contents->first()->name);
+
+        $request = $this->getRequest('/?name=index');
+        $contents = $this->ContentsService->getIndex($request->getQueryParams());
+        $this->assertEquals('index', $contents->first()->name);
+        $this->assertEquals('トップページ', $contents->first()->title);
+
+        $request = $this->getRequest('/?num=1');
+        $contents = $this->ContentsService->getIndex($request->getQueryParams());
+        $this->assertEquals(1, $contents->all()->count());
+
+        $request = $this->getRequest('/?status=1');
+        $contents = $this->ContentsService->getIndex($request->getQueryParams());
+        $this->assertEquals(10, $contents->all()->count());
     }
     /**
      * testGetTrashIndex

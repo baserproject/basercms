@@ -116,7 +116,38 @@ class ContentsService implements ContentsServiceInterface
     }
 
     /**
-     * getIndex
+     * コンテンツ管理の一覧用のデータを取得
+     * @param array $queryParams
+     * @param string $type
+     * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getIndex(array $queryParams, ?string $type="all"): Query
+    {
+        $options = [];
+
+        if (!empty($queryParams['num'])) {
+            $options = ['limit' => $queryParams['num']];
+            unset($queryParams['num']);
+        }
+
+        if (!empty($queryParams['name'])) {
+            $queryParams['OR'] = [
+                'name LIKE' => '%' . $queryParams['name'] . '%',
+                'title LIKE' => '%' . $queryParams['name'] . '%'
+            ];
+        }
+
+        if (isset($queryParams['status'])) {
+            $queryParams['status'] =  $queryParams['status'];
+        }
+        return $this->Contents->find($type, $options)->where([$queryParams]);
+    }
+
+    /**
+     * テーブル用のコンテンツ管理の一覧データを取得
      *
      * @param  array $queryParams
      * @return Query
@@ -124,10 +155,23 @@ class ContentsService implements ContentsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getIndex(array $queryParams): Query
+    public function getTableIndex(array $queryParams): Query
     {
-        return $this->Contents->find('all')->where($this->getTableConditions($queryParams));
+
+        $conditions = [
+            'open' => '1',
+            'name' => '',
+            'folder_id' => '',
+            'type' => '',
+            'self_status' => '1',
+            'author_id' => '',
+        ];
+        if ($queryParams) {
+            $conditions = array_merge($conditions, $queryParams);
+        }
+        return $this->getIndex($this->getTableConditions($conditions));
     }
+
 
     /**
      * getTrashIndex
