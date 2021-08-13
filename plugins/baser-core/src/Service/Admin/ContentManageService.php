@@ -60,10 +60,12 @@ class ContentManageService extends ContentsService implements ContentManageServi
         $dataset = [];
         // TODO: 一時措置
         $queryParams['site_id'] = 0;
-
-        switch($queryParams['action']) {
+        $action = $queryParams['action'];
+        $listType = $queryParams['list_type'];
+        unset($queryParams['action'], $queryParams['list_type'], $queryParams['sort'], $queryParams['direction']);
+        switch($action) {
             case 'index':
-                switch($queryParams['list_type']) {
+                switch($listType) {
                     case 1:
                         $dataset = ['ajax_index_tree' => $this->getTreeIndex($queryParams['site_id'])];
                         break;
@@ -73,7 +75,11 @@ class ContentManageService extends ContentsService implements ContentManageServi
                 }
                 break;
             case 'trash_index':
-                $dataset = ['ajax_index_trash' => $this->getTrashIndex()];
+                unset($queryParams['folder_id'], $queryParams['open']);
+                if (isset($queryParams['self_status'])) {
+                    $queryParams['self_status'] = $queryParams['self_status'] ? (bool) $queryParams['self_status'] : false;
+                }
+                $dataset = ['ajax_index_trash' => $this->getTrashIndex($queryParams)];
                 break;
         }
         return $dataset;

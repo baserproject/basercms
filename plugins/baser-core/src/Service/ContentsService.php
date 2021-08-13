@@ -78,7 +78,7 @@ class ContentsService implements ContentsServiceInterface
     }
 
     /**
-     * getTableConditions
+     * テーブルインデックス用の条件を返す
      *
      * @param  array $queryParams
      * @return array
@@ -175,16 +175,16 @@ class ContentsService implements ContentsServiceInterface
 
     /**
      * getTrashIndex
-     *
+     * @param  array $queryParams
      * @return Query
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getTrashIndex(): Query
+    public function getTrashIndex(array $queryParams): Query
     {
-        // $this->Contents->Behaviors->unload('SoftDelete');
-        return $this->Contents->find('threaded')->where(['deleted' => true])->order(['site_id', 'lft']);
+        $queryParams = array_merge($queryParams, ['deleted' => true]);
+        return $this->getIndex($queryParams, 'threaded')->order(['site_id', 'lft']);
     }
 
     /**

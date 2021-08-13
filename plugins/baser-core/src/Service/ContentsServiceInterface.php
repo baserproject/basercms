@@ -63,10 +63,10 @@ interface ContentsServiceInterface
 
     /**
      * getTrashIndex
-     *
+     * @param  array $queryParams
      * @return Query
      */
-    public function getTrashIndex(): Query;
+    public function getTrashIndex(array $queryParams): Query;
 
     /**
      * コンテンツフォルダーのリストを取得

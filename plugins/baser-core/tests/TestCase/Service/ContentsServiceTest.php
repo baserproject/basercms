@@ -167,8 +167,9 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testGetTrashIndex(): void
     {
-        $result = $this->ContentsService->getTrashIndex();
-        $this->assertTrue($result->isEmpty());
+        $request = $this->getRequest('/');
+        $result = $this->ContentsService->getTrashIndex($request->getQueryParams());
+        $this->assertTrue($result->first()->deleted);
     }
 
     /**

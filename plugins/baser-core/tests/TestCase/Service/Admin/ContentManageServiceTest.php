@@ -90,7 +90,13 @@ class ContentManageServiceTest extends BcTestCase
             ]
             , "ajax_index_table"],
             // trash形式の場合
-            ['trash_index', '1', '0', [], "ajax_index_trash"],
+            ['trash_index', '1', '0',
+            [
+                'name' => '',
+                'type' => '',
+                'self_status' => true,
+                'author_id' => '',
+            ], "ajax_index_trash"],
         ];
     }
 
