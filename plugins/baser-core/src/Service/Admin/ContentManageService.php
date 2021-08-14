@@ -47,73 +47,43 @@ class ContentManageService extends ContentsService implements ContentManageServi
     }
 
     /**
-     * getAdminTableConditions
-     *
-     * @param  array $searchData
-     * @return array
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getAdminTableConditions($searchData): array
-    {
-        $conditions = [];
-        if ($searchData['name']) {
-            $conditions['OR'] = [
-                'name LIKE' => '%' . $searchData['name'] . '%',
-                'title LIKE' => '%' . $searchData['name'] . '%'
-            ];
-        }
-        if ($searchData['folder_id']) {
-            $Contents = $this->Contents->find('all')->select(['lft', 'rght'])->where(['id' => $searchData['folder_id']]);
-            $conditions['rght <'] = $Contents->first()->rght;
-            $conditions['lft >'] = $Contents->first()->lft;
-        }
-        if ($searchData['author_id']) {
-            $conditions['author_id'] = $searchData['author_id'];
-        }
-        if ($searchData['self_status'] !== '') {
-            $conditions['self_status'] = $searchData['self_status'];
-        }
-        if ($searchData['type']) {
-            $conditions['type'] = $searchData['type'];
-        }
-
-        return $conditions;
-    }
-
-    /**
      * リクエストに応じてajax処理時に必要なIndexとテンプレートを取得する
      *
-     * @param  array $requestData
+     * @param  array $queryParams
      * @param  int $listType
      * @return array
      * @checked
-     * @noTodo
      * @unitTest
      */
-    public function getAdminAjaxIndex(array $requestData): array
+    public function getAdminAjaxIndex(array $queryParams): array
     {
         $dataset = [];
+        // TODO: 一時措置
+        $queryParams['site_id'] = 0;
+        $action = $queryParams['action'];
+        $listType = $queryParams['list_type'];
+        unset($queryParams['action'], $queryParams['list_type'], $queryParams['sort'], $queryParams['direction']);
 
-        $action = $requestData['Param']['action'];
-        $listType = $requestData['ViewSetting']['list_type'];
-        $siteId = $requestData['ViewSetting']['site_id'];
-
+        if ($listType != 2) {
+            // thread形式の場合不要な条件を除外
+            unset($queryParams['folder_id'], $queryParams['open']);
+            if (isset($queryParams['self_status'])) {
+                $queryParams['self_status'] = $queryParams['self_status'] ? (bool) $queryParams['self_status'] : false;
+            }
+        }
         switch($action) {
             case 'index':
                 switch($listType) {
                     case 1:
-                        $dataset = ['ajax_index_tree' => $this->getTreeIndex($siteId)];
+                        $dataset = ['ajax_index_tree' => $this->getTreeIndex($queryParams)];
                         break;
                     case 2:
-                        $conditions = $this->getAdminTableConditions($requestData['Contents']);
-                        $dataset = ['ajax_index_table' => $this->getTableIndex($siteId, $conditions)];
+                        $dataset = ['ajax_index_table' => $this->getTableIndex($queryParams)];
                         break;
                 }
                 break;
             case 'trash_index':
-                $dataset = ['ajax_index_trash' => $this->getTrashIndex()];
+                $dataset = ['ajax_index_trash' => $this->getTrashIndex($queryParams)];
                 break;
         }
         return $dataset;

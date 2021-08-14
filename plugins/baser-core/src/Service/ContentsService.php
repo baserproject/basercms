@@ -13,12 +13,13 @@ namespace BaserCore\Service;
 
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
-use Cake\Datasource\EntityInterface;
-use BaserCore\Model\Table\SitesTable;
-use BaserCore\Model\Table\ContentsTable;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\EntityInterface;
+use BaserCore\Model\Table\SitesTable;
+use Cake\Datasource\ConnectionManager;
+use BaserCore\Model\Table\ContentsTable;
 
 class ContentsService implements ContentsServiceInterface
 {
@@ -43,6 +44,7 @@ class ContentsService implements ContentsServiceInterface
         $this->Sites = TableRegistry::getTableLocator()->get("BaserCore.Sites");
     }
 
+
     /**
      * コンテンツを取得する
      * @param int $id
@@ -58,54 +60,141 @@ class ContentsService implements ContentsServiceInterface
     /**
      * getTreeIndex
      *
-     * @param  int $siteId
+     * @param  array $queryParams
      * @return Query
      * @checked
      * @unitTest
      */
-    public function getTreeIndex($siteId): Query
+    public function getTreeIndex(array $queryParams): Query
     {
-        if ($siteId === 'all') {
-            $conditions = ['or' => [
+        if ($queryParams['site_id'] === 'all') {
+            $queryParams = ['or' => [
                 ['Sites.use_subdomain' => false],
                 ['Contents.site_id' => 0]
             ]];
-        } else {
-            $conditions = ['Contents.site_id' => $siteId];
         }
+
         // TODO: contain(['Sites'])動かない
-        return $this->Contents->find('threaded')->where([$conditions])->order(['lft'])->contain(['Sites']);
+        // return $this->getIndex($queryParams, 'threaded')->order(['lft'])->contain(['Sites']);
+        return $this->getIndex($queryParams, 'threaded')->order(['lft']);
     }
 
     /**
-     * getTableIndex
+     * テーブルインデックス用の条件を返す
      *
-     * @param  int $siteId
-     * @param  array $searchData
+     * @param  array $queryParams
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getTableConditions(array $queryParams): array
+    {
+
+        $conditions['site_id'] = $queryParams['site_id'];
+
+        if ($queryParams['name']) {
+            $conditions['OR'] = [
+                'name LIKE' => '%' . $queryParams['name'] . '%',
+                'title LIKE' => '%' . $queryParams['name'] . '%'
+            ];
+        }
+        if ($queryParams['folder_id']) {
+            $Contents = $this->Contents->find('all')->select(['lft', 'rght'])->where(['id' => $queryParams['folder_id']]);
+            $conditions['rght <'] = $Contents->first()->rght;
+            $conditions['lft >'] = $Contents->first()->lft;
+        }
+        if ($queryParams['author_id']) {
+            $conditions['author_id'] = $queryParams['author_id'];
+        }
+        if ($queryParams['self_status'] !== '') {
+            $conditions['self_status'] = $queryParams['self_status'];
+        }
+        if ($queryParams['type']) {
+            $conditions['type'] = $queryParams['type'];
+        }
+
+        return $conditions;
+    }
+
+    /**
+     * コンテンツ管理の一覧用のデータを取得
+     * @param array $queryParams
+     * @param string $type
      * @return Query
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getTableIndex($siteId, $conditions): Query
+    public function getIndex(array $queryParams, ?string $type="all"): Query
     {
-        $conditions = array_merge(['site_id' => $siteId], $conditions);
+        $options = [];
 
-        return $this->Contents->find('all')->where($conditions);
+        $columns = ConnectionManager::get('default')->getSchemaCollection()->describe('contents')->columns();
+        $allowed = array_merge($columns, ['OR', 'NOT']);
+
+        $query = $this->Contents->find($type, $options);
+
+        if (!empty($queryParams['name'])) {
+            $query = $query->where(['name LIKE' => '%' . $queryParams['name'] . '%']);
+        }
+
+        if (!empty($queryParams['title'])) {
+            $query = $query->where(['title LIKE' => '%' . $queryParams['name'] . '%']);
+        }
+
+        foreach($queryParams as $key => $value) {
+            if (in_array($key, $allowed)) {
+                $query = $query->where([$key => $value]);
+            }
+        }
+
+        if (!empty($queryParams['num'])) {
+            $query = $query->limit($queryParams['num']);
+        }
+
+        return $query;
     }
+
+    /**
+     * テーブル用のコンテンツ管理の一覧データを取得
+     *
+     * @param  array $queryParams
+     * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getTableIndex(array $queryParams): Query
+    {
+
+        $conditions = [
+            'open' => '1',
+            'name' => '',
+            'folder_id' => '',
+            'type' => '',
+            'self_status' => '1',
+            'author_id' => '',
+        ];
+        if ($queryParams) {
+            $queryParams = array_merge($conditions, $queryParams);
+        }
+        return $this->getIndex($this->getTableConditions($queryParams));
+    }
+
 
     /**
      * getTrashIndex
-     *
+     * @param  array $queryParams
      * @return Query
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getTrashIndex(): Query
+    public function getTrashIndex(array $queryParams): Query
     {
-        // $this->Contents->Behaviors->unload('SoftDelete');
-        return $this->Contents->find('threaded')->where(['deleted' => true])->order(['site_id', 'lft']);
+        $queryParams = array_merge($queryParams, ['deleted' => true]);
+        return $this->getIndex($queryParams, 'threaded')->order(['site_id', 'lft']);
     }
 
     /**

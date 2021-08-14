@@ -12,9 +12,10 @@
 
 use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
+use BaserCore\View\BcAdminAppView;
 /**
  * [ADMIN] 統合コンテンツ一覧
- * @var BcAppView $this
+ * @var BcAdminAppView $this
  * @var bool $editInIndexDisabled
  */
 
@@ -76,7 +77,6 @@ $this->BcBaser->js('admin/contents/index', false, [
   'data-isUseMoveContents' => $isUseMoveContents,
   'data-adminPrefix' => BcUtil::getAdminPrefix(),
   'data-baserCorePrefix' => Inflector::underscore(BcUtil::getBaserCorePrefix()),
-  'data-pluginName' => Inflector::dasherize($this->request->getParam('plugin')),
   'data-editInIndexDisabled' => $editInIndexDisabled
 ]);
 $this->BcBaser->js([
