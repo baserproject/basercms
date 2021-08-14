@@ -11,8 +11,10 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use Cake\Event\Event;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\TestSuite\IntegrationTestTrait;
+use BaserCore\Controller\Admin\PermissionsController;
 
 
 /**
@@ -32,6 +34,7 @@ class PermissionsControllerTest extends BcTestCase
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Permissions',
+        'plugin.BaserCore.SiteConfigs',
     ];
 
     /**
@@ -42,6 +45,7 @@ class PermissionsControllerTest extends BcTestCase
         parent::setUp();
         $request = $this->getRequest();
         $this->loginAdmin($request);
+        $this->PermissionsController = new PermissionsController($request);
     }
 
     /**
@@ -49,7 +53,17 @@ class PermissionsControllerTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        unset($this->PermissionsController);
         parent::tearDown();
+    }
+
+    /**
+     * beforeFilter
+     */
+    public function testInitialize()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // $this->assertNotEmpty($this->PermissionsController->BcAuth);
     }
 
     /**
@@ -57,15 +71,22 @@ class PermissionsControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $event = new Event('Controller.beforeFilter', $this->PermissionsController);
+        $this->PermissionsController->beforeFilter($event);
+        $this->assertNotEmpty($this->PermissionsController->Permissions);
+        $this->assertNotEmpty($this->PermissionsController->viewBuilder()->getHelpers('BcTime'));
+
     }
 
     /**
      * アクセス制限設定の一覧を表示する
      */
-    public function testAdmin_index()
+    public function testIndex()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->get('/baser/admin/baser-core/permissions/index');
+        $this->assertRedirect('/baser/admin/baser-core/user_groups/index');
+        $this->get('/baser/admin/baser-core/permissions/index/1');
+        $this->assertResponseOk();
     }
 
     /**

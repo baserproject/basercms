@@ -11,15 +11,15 @@
 
 namespace BaserCore\Controller\Admin;
 
-use Authentication\Controller\Component\AuthenticationComponent;
-use BaserCore\Model\Table\PermissionsTable;
-use BaserCore\Model\Table\UserGroupsTable;
-use BaserCore\Service\PermissionsServiceInterface;
-use BaserCore\Service\UserGroupsServiceInterface;
-// use BaserCore\Utility\BcUtil;
-use BaserCore\Controller\Component\BcMessageComponent;
-// use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
+use BaserCore\Utility\BcUtil;
+use Cake\Event\EventInterface;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+// use BaserCore\Utility\BcUtil;
+use BaserCore\Annotation\UnitTest;
+// use Cake\Controller\ComponentRegistry;
+use BaserCore\Service\SiteConfigsTrait;
 // use Cake\Core\Exception\Exception;
 // use Cake\Datasource\Exception\RecordNotFoundException;
 // use Cake\Event\Event;
@@ -30,9 +30,12 @@ use Cake\Core\Configure;
 // use Cake\Http\Response;
 // use Cake\Http\Exception\ForbiddenException;
 // use Cake\Http\Cookie\Cookie;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
+use BaserCore\Model\Table\UserGroupsTable;
+use BaserCore\Model\Table\PermissionsTable;
+use BaserCore\Service\UserGroupsServiceInterface;
+use BaserCore\Service\PermissionsServiceInterface;
+use BaserCore\Controller\Component\BcMessageComponent;
+use Authentication\Controller\Component\AuthenticationComponent;
 
 /**
  * Class PermissionsController
@@ -45,87 +48,61 @@ use BaserCore\Annotation\Checked;
 class PermissionsController extends BcAdminAppController
 {
     /**
-     * クラス名
-     *
-     * @var string
+     * SiteConfigsTrait
      */
-    // public $name = 'Permissions';
+    use SiteConfigsTrait;
 
     /**
-     * モデル
+     * initialize
      *
-     * @var array
+     * @return void
      */
-    // public $uses = ['Permission'];
-
-	/**
-	 * コンポーネント
-	 * TODO 未確認
-	 * @var array
-	 */
-	// public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
-
-	/**
-	 * ヘルパ
-	 * TODO 未確認
-	 *
-	 * @var array
-	 */
-	// public $helpers = ['BcTime', 'BcFreeze'];
-
-    /**
-     * サブメニューエレメント
-     *
-     * @var array
-     */
-    // public $subMenuElements = ['site_configs', 'users', 'permissions'];
+    public function initialize(): void
+    {
+        parent::initialize();
+        // $this->loadComponent('BaserCore.BcAuth');
+        // $this->loadComponent('BaserCore.BcAuthConfigure');
+    }
 
 	/**
 	 * beforeFilter
-     * // TODO 未確認
-	 *
+     *
 	 * @return void
 	 */
-	// public function beforeFilter()
-	// {
-    //     return;
-    //     // TODO 未確認
+	public function beforeFilter(EventInterface $event)
+	{
+		parent::beforeFilter($event);
+        $this->loadModel('BaserCore.Permissions');
+        $this->viewBuilder()->setHelpers(
+            ['BcTime',
+            // 'BcFreeze'
+        ]);
 
-	// 	// parent::beforeFilter();
-	// 	$this->crumbs = [
-	// 		['name' => __d('baser', 'ユーザー管理'), 'url' => ['controller' => 'users', 'action' => 'index']],
-	// 		['name' => __d('baser', 'ユーザーグループ管理'), 'url' => ['controller' => 'user_groups', 'action' => 'index']]
-	// 	];
-	// 	if ($this->request->getParam('prefix') === 'admin') {
-	// 		$this->set('usePermission', true);
-	// 	}
-	// 	if (!$this->request->is('ajax')) {
-	// 		$this->crumbs[] = ['name' => __d('baser', 'アクセス制限設定管理'), 'url' => ['controller' => 'permissions', 'action' => 'index', $this->request->params['pass'][0]]];
-	// 	}
-	// }
+		if ($this->request->getParam('prefix') === 'admin') {
+			$this->set('usePermission', true);
+		}
+	}
 
 	/**
 	 * アクセス制限設定の一覧を表示する
 	 *
 	 * @return void
+     * @checked
+     * @unitTest
+     * @noTodo
 	 */
-	public function index(PermissionsServiceInterface $permissions, UserGroupsServiceInterface $userGroups, $userGroupId = null)
+	public function index(PermissionsServiceInterface $permissions, UserGroupsServiceInterface $userGroups, $userGroupId = '')
 	{
 		/* セッション処理 */
-        // TODO
-		// if (!$userGroupId) {
-		// 	$this->BcMessage->setError(__d('baser', '無効な処理です。'));
-		// 	$this->redirect(['controller' => 'user_groups', 'action' => 'index']);
-		// }
+		if (!$userGroupId) {
+			$this->BcMessage->setError(__d('baser', '無効な処理です。'));
+			return $this->redirect(['controller' => 'user_groups', 'action' => 'index']);
+		}
 
-        // TODO 未実装、取り急ぎ動作させるためのコード
         $this->request->withQueryParams(['user_group_id' => $userGroupId]);
         $userGroup = $userGroups->get($userGroupId);
-
-
-        $this->siteConfigs['admin_list_num'] = 30;
         $this->setViewConditions('Permission', ['default' => ['query' => [
-            'num' => $this->siteConfigs['admin_list_num'],
+            'num' => $this->getSiteConfig('admin_list_num'),
             'sort' => 'id',
             'direction' => 'asc',
         ]]]);
@@ -133,24 +110,12 @@ class PermissionsController extends BcAdminAppController
         $this->set('userGroupId', $userGroupId);
         $this->set('permissions', $this->paginate($permissions->getIndex($this->request->getQueryParams())));
 
-
-
-        // TODO
-		// if ($datas) {
-		// 	foreach($datas as $key => $data) {
-		// 		$datas[$key]['Permission']['url'] = preg_replace('/^\/admin\//', '/' . Configure::read('Routing.prefixes.0') . '/', $data['Permission']['url']);
-		// 	}
-		// }
 		$this->_setAdminIndexViewData();
 
-
-        // TODO
-		// if ($this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
-		// 	$this->render('ajax_index');
-		// 	return;
-		// }
-
-
+		if ($this->request->is('ajax')) {
+			$this->render('ajax_index');
+			return;
+		}
 
 		$this->setTitle(sprintf(__d('baser', '%s｜アクセス制限設定一覧'), $userGroup->title));
 		$this->setHelp('permissions_index');
