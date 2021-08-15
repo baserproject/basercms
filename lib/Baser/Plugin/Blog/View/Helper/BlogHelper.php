@@ -94,6 +94,10 @@ class BlogHelper extends AppHelper
 		}
 		if ($this->blogContent) {
 			if ($blogContentUpdated) {
+				$siteId = 0;
+				if(isset($this->request->params['Site']['id'])) {
+					$siteId = $this->request->params['Site']['id'];
+				}
 				$Content = ClassRegistry::init('Content');
 				// 現在のサイトにエイリアスが存在するのであればそちらを優先する
 				$content = [];
@@ -102,7 +106,7 @@ class BlogHelper extends AppHelper
 						'Content.entity_id' => $this->blogContent['id'],
 						'Content.type' => 'BlogContent',
 						'alias_id <>' => null,
-						'site_id' => $this->request->params['Site']['id']
+						'site_id' => $siteId
 					], 'recursive' => -1]);
 				}
 				if (!$content) {
