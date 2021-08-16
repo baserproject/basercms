@@ -31,7 +31,8 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.Contents'
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Sites'
     ];
 
     /**
@@ -69,11 +70,23 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
+     * testView
+     *
+     * @return void
+     */
+    public function testView(): void
+    {
+        $this->get('/baser/api/baser-core/contents/view/1.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('baserCMSサンプル', $result->contents->title);
+    }
+    /**
      * Test index method
      *
      * @return void
      */
-    public function testIndex()
+    public function testIndex(): void
     {
         // indexテスト
         $this->get('/baser/api/baser-core/contents/index.json?token=' . $this->accessToken);
