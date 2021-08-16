@@ -15,9 +15,9 @@
  * @var bool $related
  */
 
-if ((!empty($this->BcContents->settings[$srcContent['type']]))) {
-  $title = $this->BcContents->settings[$srcContent['type']]['title'];
-  $editLink = $this->BcContents->settings[$srcContent['type']]['routes']['edit'];
+if ((!empty($this->BcContents->getConfig('settings')[$srcContent['type']]))) {
+  $title = $this->BcContents->getConfig('settings')[$srcContent['type']]['title'];
+  $editLink = $this->BcContents->getConfig('settings')[$srcContent['type']]['routes']['edit'];
   $editLink = array_merge($editLink, [
     $srcContent['entity_id'],
     'content_id' => $srcContent['id'],

@@ -48,7 +48,7 @@ $this->BcBaser->i18nScript([
   'contentsEditAlertMessage3' => __d('baser', '指定したサイトの同じ階層上にフォルダではない同名のコンテンツが存在します。コピーの作成を実行する前に、指定したサイト上の同名コンテンツを確認し名称を変更してください。'),
   'contentsEditAlertmessage4' => __d('baser', 'コピーの作成に失敗しました。')
 ]);
-$isOmitViewAction = $this->BcContents->settings[$this->request->getData('Content.type')]['omitViewAction'];
+$isOmitViewAction = $this->BcContents->getConfig('settings')[$this->request->getData('Content.type')]['omitViewAction'];
 
 // サブドメイン
 if ($this->request->getData('Site.use_subdomain')) {
@@ -118,7 +118,7 @@ if ($this->BcContents->isEditable()) {
         <?php endif ?>
         <?php if (!$this->request->getData('Content.site_root') && !$related): ?>
           <?php echo $this->BcAdminForm->control('Content.name', ['type' => 'text', 'size' => 20, 'autofocus' => true]) ?>
-          <?php if (!$isOmitViewAction && $this->request->getData('Content.url') !== '/'): ?>/<?php endif ?>　
+          <?php if (!$isOmitViewAction && $this->request->getData('Content.url') !== '/'): ?>/<?php endif ?>
         <?php else: ?>
           <?php if (!$this->request->getData('Content.site_root')): ?>
             <?php // サイトルートの場合はコンテンツ名を表示しない ?>
@@ -140,10 +140,10 @@ if ($this->BcContents->isEditable()) {
       </th>
       <td class="col-input bca-form-table__input">
         <?php if (!$disableEdit): ?>
-          <?php echo $this->BcAdminForm->control('Content.title', ['type' => 'text', 'size' => 50]) ?>　
+          <?php echo $this->BcAdminForm->control('Content.title', ['type' => 'text', 'size' => 50]) ?>
           <?php echo $this->BcForm->error('Content.title') ?>
         <?php else: ?>
-          <?php echo h($this->BcForm->value('Content.title')) ?>　
+          <?php echo h($this->BcForm->value('Content.title')) ?>
           <?php echo $this->BcForm->hidden('Content.title') ?>
         <?php endif ?>
       </td>

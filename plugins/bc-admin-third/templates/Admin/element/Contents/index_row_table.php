@@ -20,7 +20,8 @@ $isSiteRelated = $this->BcContents->isSiteRelated($data);
 $isPublish = $this->BcContents->isAllowPublish($data, true);
 $isSiteRoot = $data->site_root;
 $isAlias = (boolean)$data->alias_id;
-if (!empty($this->BcContents->settings[$data->type])) {
+$settings = $this->BcContents->getConfig('settings');
+if (!empty($settings[$data->type])) {
   $type = $data->type;
 } else {
   $type = 'Default';
@@ -32,11 +33,11 @@ if ($isAlias) {
   $editDisabled = !$this->BcContents->isActionAvailable($data->type, 'edit', $data->entity_id);
   $manageDisabled = !$this->BcContents->isActionAvailable($data->type, 'manage', $data->entity_id);
 }
-$typeTitle = $this->BcContents->settings[$type]['title'];
-if (!empty($this->BcContents->settings[$type]['icon'])) {
-  $iconPath = $this->BcContents->settings[$type]['icon'];
+$typeTitle = $settings[$type]['title'];
+if (!empty($settings[$type]['icon'])) {
+  $iconPath = $settings[$type]['icon'];
 } else {
-  $iconPath = $this->BcContents->settings['Default']['icon'];
+  $iconPath = $settings['Default']['icon'];
 }
 $isImageIcon = false;
 if (preg_match('/^admin\//', $iconPath)) {
@@ -102,8 +103,8 @@ if ($data->self_status) {
       <a title="管理" class="btn bca-btn-icon" data-bca-btn-type="preview" data-bca-btn-size="lg"
         data-bca-btn-status="gray"></a>
     <?php endif ?>
-    <?php if (!$manageDisabled && !empty($this->BcContents->settings[$type]['routes']['manage'])): ?>
-      <?php $this->BcBaser->link('', array_merge($this->BcContents->settings[$type]['routes']['manage'], $urlParams), ['title' => __d('baser', '管理'), 'class' => 'btn-check bca-btn-icon', 'data-bca-btn-type' => 'th-list', 'data-bca-btn-size' => 'lg']) ?>
+    <?php if (!$manageDisabled && !empty($settings[$type]['routes']['manage'])): ?>
+      <?php $this->BcBaser->link('', array_merge($settings[$type]['routes']['manage'], $urlParams), ['title' => __d('baser', '管理'), 'class' => 'btn-check bca-btn-icon', 'data-bca-btn-type' => 'th-list', 'data-bca-btn-size' => 'lg']) ?>
     <?php else: ?>
       <a title="管理" class="btn bca-btn-icon" data-bca-btn-type="th-list" data-bca-btn-size="lg"
         data-bca-btn-status="gray"></a>
@@ -115,14 +116,14 @@ if ($data->self_status) {
       <a title="非公開" class="btn bca-btn-icon" data-bca-btn-type="unpublish" data-bca-btn-size="lg"
         data-bca-btn-status="gray"></a>
     <?php endif ?>
-    <?php if (!$editDisabled && $type != 'ContentFolder' && !empty($this->BcContents->settings[$type]['routes']['copy'])): ?>
-      <?php $this->BcBaser->link('', array_merge($this->BcContents->settings[$type]['routes']['copy'], $urlParams), ['title' => __d('baser', 'コピー'), 'class' => 'btn-copy bca-btn-icon', 'data-bca-btn-type' => 'copy', 'data-bca-btn-size' => 'lg']) ?>
+    <?php if (!$editDisabled && $type != 'ContentFolder' && !empty($settings[$type]['routes']['copy'])): ?>
+      <?php $this->BcBaser->link('', array_merge($settings[$type]['routes']['copy'], $urlParams), ['title' => __d('baser', 'コピー'), 'class' => 'btn-copy bca-btn-icon', 'data-bca-btn-type' => 'copy', 'data-bca-btn-size' => 'lg']) ?>
     <?php else: ?>
       <a title="コピー" class="bca-btn-icon" data-bca-btn-type="copy" data-bca-btn-size="lg"
         data-bca-btn-status="gray"></a>
     <?php endif ?>
     <?php if (!$editDisabled): ?>
-      <?php $this->BcBaser->link('', array_merge($this->BcContents->settings[$type]['routes']['edit'], $urlParams), ['title' => __d('baser', '編集'), 'class' => 'btn-edit bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
+      <?php $this->BcBaser->link('', array_merge($settings[$type]['routes']['edit'], $urlParams), ['title' => __d('baser', '編集'), 'class' => 'btn-edit bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
     <?php endif ?>
     <?php if (!$editDisabled && !$isSiteRoot): ?>
       <?php $this->BcBaser->link('', ['action' => 'ajax_delete', $data->id], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
