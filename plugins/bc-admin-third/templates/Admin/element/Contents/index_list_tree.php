@@ -41,14 +41,15 @@ $deleteDisabled = false;
     $parentId = $data->parent_id;
     $alias = false;
     $open = false;
-    if (!empty($this->BcContents->settings[$data->type]['icon'])) {
-      if (!empty($this->BcContents->settings[$data->type]['url']['icon'])) {
-        $icon = $this->BcContents->settings[$data->type]['url']['icon'];
+    $settings = $this->BcContents->getConfig('settings');
+    if (!empty($settings[$data->type]['icon'])) {
+      if (!empty($settings[$data->type]['url']['icon'])) {
+        $icon = $settings[$data->type]['url']['icon'];
       } else {
-        $icon = $this->BcContents->settings[$data->type]['icon'];
+        $icon = $settings[$data->type]['icon'];
       }
     } else {
-      $icon = $this->BcContents->settings['Default']['url']['icon'];
+      $icon = $settings['Default']['url']['icon'];
     }
     if ($data->alias_id) {
       $alias = true;
