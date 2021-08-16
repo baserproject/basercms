@@ -62,6 +62,17 @@ class ContentsServiceTest extends BcTestCase
     }
 
     /**
+     * testGet
+     *
+     * @return void
+     */
+    public function testGet(): void
+    {
+        $result = $this->ContentsService->get(1);
+        $this->assertEquals("baserCMSサンプル", $result->title);
+
+    }
+    /**
      * testGetTreeIndex
      *
      * @return void

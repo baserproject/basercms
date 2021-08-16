@@ -49,9 +49,12 @@ class ContentsService implements ContentsServiceInterface
      * コンテンツを取得する
      * @param int $id
      * @return EntityInterface
+     * @checked
+     * @unitTest
      */
     public function get($id): EntityInterface
     {
+        // TODO: Sitesが含まれてない
         return $this->Contents->get($id, [
             'contain' => ['Sites'],
         ]);

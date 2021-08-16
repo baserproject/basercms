@@ -25,6 +25,22 @@ class ContentsController extends BcApiController
 {
 
     /**
+     * コンテンツ情報取得
+     * @param ContentsServiceInterface $Contents
+     * @param $id
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function view(ContentsServiceInterface $contents, $id)
+    {
+        $this->set([
+            'contents' => $contents->get($id)
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['contents']);
+    }
+
+    /**
      * コンテンツ情報一覧取得
      *
      * @param  ContentsServiceInterface $contents
