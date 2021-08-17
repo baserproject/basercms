@@ -255,5 +255,20 @@ class ContentsService implements ContentsServiceInterface
         }
         return $nodes;
     }
+
+    /**
+     * コンテンツ登録
+     * @param array $data
+     * @return \Cake\Datasource\EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function create(array $postData)
+    {
+        $content = $this->Contents->newEmptyEntity();
+        $content = $this->Contents->patchEntity($content, $postData, ['validate' => 'default']);
+        return ($result = $this->Contents->save($content)) ? $result : $content;
+    }
 }
 

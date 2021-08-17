@@ -12,6 +12,8 @@
 namespace BaserCore\Controller\Admin;
 
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
+use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -26,7 +28,6 @@ use BaserCore\Service\Admin\ContentManageService;
 use BaserCore\Controller\Component\BcContentsComponent;
 use BaserCore\Service\Admin\SiteManageServiceInterface;
 use BaserCore\Service\Admin\ContentManageServiceInterface;
-use Cake\ORM\TableRegistry;
 
 /**
  * Class ContentsController
@@ -215,14 +216,15 @@ class ContentsController extends BcAdminAppController
      *
      * @return void
      */
-    public function admin_add($alias = false)
+    public function add(ContentManageServiceInterface $contentManage, $alias = false)
     {
 
-        if (!$this->request->data) {
+        if (!$this->request->getData()) {
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
         }
 
         $srcContent = [];
+        // TODO: 一旦alias無視
         if ($alias) {
             if ($this->request->getData('Content.alias_id')) {
                 $conditions = ['id' => $this->request->getData('Content.alias_id')];
@@ -244,8 +246,9 @@ class ContentsController extends BcAdminAppController
 
         }
 
-        $user = $this->BcAuth->user();
-        $this->request = $this->request->withData('Content.author_id', $user['id']);
+        $user = $currentUser = BcUtil::loginUser('Admin');
+        $this->request = $this->request->withData('author_id', $user->id);
+        $contentManage->create($this->request->getData());
         $this->Content->create(false);
         $data = $this->Content->save($this->request->data);
         if (!$data) {

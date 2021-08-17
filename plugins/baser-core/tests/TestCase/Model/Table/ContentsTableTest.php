@@ -88,6 +88,37 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals(['id', 'name', 'title', 'eyecatch', 'self_publish_begin', 'self_publish_end', 'created_date', 'modified_date'], $fields);
     }
 
+    /**
+     * testValidationDefaultWithEntity
+     *
+     * @param  mixed $fields
+     * @param  mixed $messages
+     * @return void
+     * @dataProvider validationDefaultWithEntityDataProvider
+     */
+    public function testValidationDefaultWithEntity($fields, $messages): void
+    {
+        $contents = $this->Contents->newEntity($fields);
+        $this->assertSame($messages, $contents->getErrors());
+    }
+    public function validationDefaultWithEntityDataProvider()
+    {
+        return [
+            [
+                [
+                    'id' => 'aaa', // 空の場合通る
+                    'name' => '',
+                    'title' => '',
+                ],
+                [
+                    'id' => ['integer' => "The provided value is invalid"],
+                    'name' => ['_empty' => 'スラッグを入力してください。'],
+                    'title' => ['_empty' => 'タイトルを入力してください。'],
+                ]
+            ]
+        ];
+    }
+
 
     /**
      * Implemented Events

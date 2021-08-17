@@ -13,14 +13,16 @@ namespace BaserCore\Model\Table;
 
 use ArrayObject;
 use Cake\Event\Event;
+use Cake\Utility\Hash;
+use Cake\ORM\TableRegistry;
 use BaserCore\Model\AppTable;
 use BaserCore\Utility\BcUtil;
-use Cake\ORM\TableRegistry;
+use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
-use Cake\Datasource\EntityInterface;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\EntityInterface;
 
 /**
  * Class ContentsTable
@@ -114,7 +116,7 @@ class ContentsTable extends AppTable
             'Model.beforeValidate' => ['callable' => 'beforeValidate', 'passParams' => true],
             'Model.afterValidate' => ['callable' => 'afterValidate'],
             'Model.beforeSave' => ['callable' => 'beforeSave', 'passParams' => true],
-            'Model.afterSave' => ['callable' => 'afterSave', 'passParams' => true],
+            // 'Model.afterSave' => ['callable' => 'afterSave', 'passParams' => true],
             'Model.beforeDelete' => ['callable' => 'beforeDelete', 'passParams' => true, 'priority' => 1],
             'Model.afterDelete' => ['callable' => 'afterDelete'],
         ];
@@ -234,40 +236,40 @@ class ContentsTable extends AppTable
      */
     public function duplicateRelatedSiteContent($check)
     {
-        $name = $check[key($check)];
-        if (!$this->Site->isMain($this->data['Content']['site_id'])) {
-            return true;
-        }
-        $parents = $this->getPath($this->data['Content']['parent_id'], ['name'], -1);
-        $parents = Hash::extract($parents, "{n}.Content.name");
-        unset($parents[0]);
-        if ($this->data['Content']['site_id']) {
-            unset($parents[1]);
-        }
-        $baseUrl = '/';
-        if ($parents) {
-            $baseUrl = '/' . implode('/', $parents) . '/';
-        }
-        $sites = $this->Site->find('all', ['conditions' => ['Site.main_site_id' => $this->data['Content']['site_id'], 'relate_main_site' => true]]);
-        // URLを取得
-        $urlAry = [];
-        foreach($sites as $site) {
-            $prefix = $site['Site']['name'];
-            if ($site['Site']['alias']) {
-                $prefix = $site['Site']['alias'];
-            }
-            $urlAry[] = '/' . $prefix . $baseUrl . $name;
-        }
-        $conditions = ['Content.url' => $urlAry];
-        if (!empty($this->data['Content']['id'])) {
-            $conditions = array_merge($conditions, [
-                ['or' => ['Content.alias_id <>' => $this->data['Content']['id'], 'Content.alias_id' => null]],
-                ['or' => ['Content.main_site_content_id <>' => $this->data['Content']['id'], 'Content.main_site_content_id' => null]]
-            ]);
-        }
-        if ($this->find('count', ['conditions' => $conditions])) {
-            return false;
-        }
+        // TODO: 代替措置
+        // if (!$this->Sites->isMain($this->data['Content']['site_id'])) {
+        //     return true;
+        // }
+        // $parents = $this->getPath($this->data['Content']['parent_id'], ['name'], -1);
+        // $parents = Hash::extract($parents, "{n}.Content.name");
+        // unset($parents[0]);
+        // if ($this->data['Content']['site_id']) {
+        //     unset($parents[1]);
+        // }
+        // $baseUrl = '/';
+        // if ($parents) {
+        //     $baseUrl = '/' . implode('/', $parents) . '/';
+        // }
+        // $sites = $this->Sites->find('all', ['conditions' => ['Site.main_site_id' => $this->data['Content']['site_id'], 'relate_main_site' => true]]);
+        // // URLを取得
+        // $urlAry = [];
+        // foreach($sites as $site) {
+        //     $prefix = $site['Site']['name'];
+        //     if ($site['Site']['alias']) {
+        //         $prefix = $site['Site']['alias'];
+        //     }
+        //     $urlAry[] = '/' . $prefix . $baseUrl . $check;
+        // }
+        // $conditions = ['Content.url' => $urlAry];
+        // if (!empty($this->data['Content']['id'])) {
+        //     $conditions = array_merge($conditions, [
+        //         ['or' => ['Content.alias_id <>' => $this->data['Content']['id'], 'Content.alias_id' => null]],
+        //         ['or' => ['Content.main_site_content_id <>' => $this->data['Content']['id'], 'Content.main_site_content_id' => null]]
+        //     ]);
+        // }
+        // if ($this->find('count', ['conditions' => $conditions])) {
+        //     return false;
+        // }
         return true;
     }
 
@@ -429,26 +431,26 @@ class ContentsTable extends AppTable
      * @param array $options
      * @return void
      */
-    public function afterSave($created, $options = [])
-    {
-        parent::afterSave($created, $options);
-        $this->deleteAssocCache($this->data);
-        if ($this->updatingSystemData) {
-            $this->updateSystemData($this->data);
-        }
-        if ($this->updatingRelated) {
-            // ゴミ箱から戻す場合、 type の定義がないが問題なし
-            if (!empty($this->data['Content']['type']) && $this->data['Content']['type'] == 'ContentFolder') {
-                $this->updateChildren($this->data['Content']['id']);
-            }
-            $this->updateRelateSubSiteContent($this->data);
-            if (!empty($this->data['Content']['parent_id']) && $this->beforeSaveParentId != $this->data['Content']['parent_id']) {
-                $SiteConfig = ClassRegistry::init('SiteConfig');
-                $SiteConfig->updateContentsSortLastModified();
-                $this->beforeSaveParentId = null;
-            }
-        }
-    }
+    // public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    // {
+    //     TODO: 代替措置
+    //     $this->deleteAssocCache($this->data);
+    //     if ($this->updatingSystemData) {
+    //         $this->updateSystemData($this->data);
+    //     }
+    //     if ($this->updatingRelated) {
+    //         // ゴミ箱から戻す場合、 type の定義がないが問題なし
+    //         if (!empty($this->data['Content']['type']) && $this->data['Content']['type'] == 'ContentFolder') {
+    //             $this->updateChildren($this->data['Content']['id']);
+    //         }
+    //         $this->updateRelateSubSiteContent($this->data);
+    //         if (!empty($this->data['Content']['parent_id']) && $this->beforeSaveParentId != $this->data['Content']['parent_id']) {
+    //             $SiteConfig = ClassRegistry::init('SiteConfig');
+    //             $SiteConfig->updateContentsSortLastModified();
+    //             $this->beforeSaveParentId = null;
+    //         }
+    //     }
+    // }
 
     /**
      * 関連するコンテンツ本体のデータキャッシュを削除する
@@ -556,11 +558,11 @@ class ContentsTable extends AppTable
             return;
         }
         // メインサイトか確認し、メインサイトでない場合は終了
-        if (!$this->Site->isMain($data['Content']['site_id'])) {
+        if (!$this->Sites->isMain($data['Content']['site_id'])) {
             return;
         }
         // 連携設定となっている小サイトを取得
-        $sites = $this->Site->find('all', ['conditions' => ['Site.main_site_id' => $data['Content']['site_id'], 'relate_main_site' => true], 'recursive' => -1]);
+        $sites = $this->Sites->find('all', ['conditions' => ['Site.main_site_id' => $data['Content']['site_id'], 'relate_main_site' => true], 'recursive' => -1]);
         if (!$sites) {
             return;
         }
@@ -607,11 +609,11 @@ class ContentsTable extends AppTable
         }
 
         // メインサイトか確認し、メインサイトでない場合は終了
-        if (!$this->Site->isMain($data['Content']['site_id'])) {
+        if (!$this->Sites->isMain($data['Content']['site_id'])) {
             return true;
         }
         // 連携設定となっている小サイトを取得
-        $sites = $this->Site->find('all', ['conditions' => ['Site.main_site_id' => $data['Content']['site_id'], 'relate_main_site' => true]]);
+        $sites = $this->Sites->find('all', ['conditions' => ['Site.main_site_id' => $data['Content']['site_id'], 'relate_main_site' => true]]);
         if (!$sites) {
             return true;
         }
@@ -639,7 +641,7 @@ class ContentsTable extends AppTable
                 continue;
             }
             $url = $pureUrl;
-            $prefix = $this->Site->getPrefix($site);
+            $prefix = $this->Sites->getPrefix($site);
             if ($prefix) {
                 $url = '/' . $prefix . $url;
             }
@@ -838,7 +840,7 @@ class ContentsTable extends AppTable
             }
         }
 
-        $site = $this->Site->find('first', ['conditions' => ['Site.id' => $data['Content']['site_id']]]);
+        $site = $this->Sites->find('first', ['conditions' => ['Site.id' => $data['Content']['site_id']]]);
 
         // URLを更新
         $data['Content']['url'] = $this->createUrl($data['Content']['id'], $data['Content']['plugin'], $data['Content']['type']);
@@ -875,7 +877,7 @@ class ContentsTable extends AppTable
                 $prefix = $site['Site']['alias'];
             }
             $url = preg_replace('/^\/' . preg_quote($prefix, '/') . '\//', '/', $data['Content']['url']);
-            $mainSitePrefix = $this->Site->getPrefix($site['Site']['main_site_id']);
+            $mainSitePrefix = $this->Sites->getPrefix($site['Site']['main_site_id']);
             if ($mainSitePrefix) {
                 $url = '/' . $mainSitePrefix . $url;
             }
@@ -1215,7 +1217,7 @@ class ContentsTable extends AppTable
         $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         if ($useSubDomain && !is_array($url)) {
             $subDomain = '';
-            $site = $this->Sites->findByUrl($url);
+            $site = $this->Sitess->findByUrl($url);
             $originUrl = $url;
             if ($site) {
                 $subDomain = $site->alias;
@@ -1249,7 +1251,7 @@ class ContentsTable extends AppTable
         } else {
             if (BC_INSTALLED) {
                 if (!is_array($url)) {
-                    $site = $this->Sites->findByUrl($url);
+                    $site = $this->Sitess->findByUrl($url);
                     if ($site && $site->same_main_url) {
                         $mainSite = $sites->findById($site->main_site_id)->first();
                         $alias = $mainSite->alias;
@@ -1291,7 +1293,7 @@ class ContentsTable extends AppTable
         if (!$currentId) {
             return false;
         }
-        $prefix = $this->Site->getPrefix($targetSiteId);
+        $prefix = $this->Sites->getPrefix($targetSiteId);
         $path = $this->getPath($currentId, null, -1);
         if (!$path) {
             return false;
@@ -1301,7 +1303,7 @@ class ContentsTable extends AppTable
             $url .= $prefix . '/';
         }
         unset($path[0]);
-        $parentId = $this->Site->getRootContentId($targetSiteId);
+        $parentId = $this->Sites->getRootContentId($targetSiteId);
         /* @var ContentFolder $ContentFolder */
         $ContentFolder = ClassRegistry::init('ContentFolder');
         foreach($path as $currentContentFolder) {
@@ -1517,7 +1519,7 @@ class ContentsTable extends AppTable
         $parentId[] = $parentCuntent['Content']['id'];
 
         // 関連コンテンツで移動先と同じ階層のフォルダを確認
-        $childrenSite = $this->Site->children($currentContent['Content']['site_id'], [
+        $childrenSite = $this->Sites->children($currentContent['Content']['site_id'], [
             'conditions' => ['relate_main_site' => true]
         ]);
         if ($childrenSite) {
@@ -1671,11 +1673,11 @@ class ContentsTable extends AppTable
             return true;
         }
         // メインサイトか確認し、メインサイトでない場合は終了
-        if (!$this->Site->isMain($data['Content']['site_id'])) {
+        if (!$this->Sites->isMain($data['Content']['site_id'])) {
             return true;
         }
         // 連携設定となっている小サイトを取得
-        $sites = $this->Site->find('all', ['conditions' => ['Site.main_site_id' => $data['Content']['site_id'], 'relate_main_site' => true]]);
+        $sites = $this->Sites->find('all', ['conditions' => ['Site.main_site_id' => $data['Content']['site_id'], 'relate_main_site' => true]]);
         if (!$sites) {
             return true;
         }
@@ -1814,7 +1816,7 @@ class ContentsTable extends AppTable
             'order' => ['Content.id'],
             'recursive' => 0
         ]);
-        $mainSite = $this->Site->getRootMain();
+        $mainSite = $this->Sites->getRootMain();
         foreach($contents as $key => $content) {
             if ($content['Content']['site_id'] == 0) {
                 $contents[$key]['Site'] = $mainSite;
@@ -2042,7 +2044,7 @@ class ContentsTable extends AppTable
             return false;
         }
         if ($content && empty($content['Site']['id'])) {
-            $content['Site'] = $this->Site->getRootMain();
+            $content['Site'] = $this->Sites->getRootMain();
         }
         return $content;
     }

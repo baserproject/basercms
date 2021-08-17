@@ -85,6 +85,12 @@ interface ContentsServiceInterface
      */
     public function convertTreeList($nodes);
 
+        /**
+     * コンテンツ登録
+     * @param array $data
+     * @return \Cake\Datasource\EntityInterface
+     */
+    public function create(array $postData);
 
 
 

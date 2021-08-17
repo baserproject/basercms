@@ -202,4 +202,18 @@ class ContentsServiceTest extends BcTestCase
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
+
+    /**
+     * Test create
+     */
+    public function testCreate()
+    {
+        $request = $this->getRequest('/');
+        $request = $request->withParsedBody([
+            'name' => 'テストcreate',
+        ]);
+        $result = $this->ContentsService->create($request->getData());
+        $expected = $this->ContentsService->Contents->find()->last();
+        $this->assertEquals($expected->name, $result->name);
+    }
 }
