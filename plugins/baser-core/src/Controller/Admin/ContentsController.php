@@ -98,7 +98,7 @@ class ContentsController extends BcAdminAppController
      */
     public function index(ContentManageServiceInterface $contentManage, SiteManageServiceInterface $siteManage)
     {
-        $currentSiteId = $this->request->getQuery('site_id') ?? 0;
+        $currentSiteId = $siteManage->getCurrentSite()->id;
         $sites = $siteManage->getSiteList();
         if ($sites) {
             if (!$this->request->getQuery('site_id') || !in_array($this->request->getQuery('site_id'), array_keys($sites))) {

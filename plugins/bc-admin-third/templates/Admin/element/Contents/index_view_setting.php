@@ -10,15 +10,17 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use BaserCore\View\BcAdminAppView;
+
 /**
- * @var BcAppView $this
+ * @var BcAdminAppView $this
  * @var array $sites
  */
 
 $listTypes = [1 => __d('baser', 'ツリー形式'), 2 => __d('baser', '表形式')];
 
 $this->request = $this->request
-  ->withData('ViewSetting.site_id', $this->request->getQuery('site_id'))
+  ->withData('ViewSetting.site_id', $this->BcAdminSite->getCurrentSite()->id)
   ->withData('ViewSetting.list_type', $this->request->getQuery('list_type'));
 
 if ($this->request->getParam('action') == 'index') {

@@ -10,14 +10,16 @@
  */
 
 use BaserCore\Utility\BcUtil;
+use BaserCore\View\BcAdminAppView;
 use Cake\Core\Configure;
-use BaserCore\View\AppView;
 
 /**
  * toolbar
- * @var AppView $this
+ * @var BcAdminAppView $this
  */
 
+$currentSite = $this->BcAdminSite->getCurrentSite();
+$otherSites = $this->BcAdminSite->getOtherSiteList();
 // JSの出力について、ツールバーはフロントエンドでも利用するため、inlineに出力する
 $this->BcBaser->js(['vendor/jquery.fixedMenu', 'vendor/outerClick', 'admin/toolbar.bundle']);
 $authName = $this->BcAuth->getCurrentName();
@@ -33,12 +35,12 @@ $logoLinkSettings = [
     'options' => ['target' => '_blank', 'class' => 'bca-toolbar__logo-link']
   ],
   'normal' => [
-    'text' => $this->BcBaser->siteConfig['formal_name'],
+    'text' => 'サイト表示',
     'link' => '/',
     'options' => ['class' => 'bca-toolbar__logo-link', 'escapeTitle' => false]
   ],
   'frontAdminAvailable' => [
-    'text' => $this->BcBaser->siteConfig['formal_name'],
+    'text' => 'ダッシュボード',
     'link' => ['admin' => true, 'controller' => 'dashboard', 'action' => 'index'],
     'options' => ['class' => 'bca-toolbar__logo-link', 'escapeTitle' => false]
   ],
@@ -126,16 +128,38 @@ if ($loginUser) {
       <?php endif ?>
       <?php if ($modeLabelKey): ?>
         <div class="bca-toolbar__tools-mode">
-                    <span id="DebugMode" class="bca-debug-mode"
-                          title="<?php echo h($modeLabelSettings[$modeLabelKey]['description']) ?>">
-                        <?php echo h($modeLabelSettings[$modeLabelKey]['title']) ?>
-                    </span>
+          <span id="DebugMode" class="bca-debug-mode" title="<?php echo h($modeLabelSettings[$modeLabelKey]['description']) ?>">
+              <?php echo h($modeLabelSettings[$modeLabelKey]['title']) ?>
+          </span>
         </div>
       <?php endif ?>
     </div>
 
     <div id="UserMenu" class="bca-toolbar__users">
       <ul class="clearfix">
+        <li>
+          <?php $this->BcBaser->link(
+            h($currentSite->display_name) . ' ' .
+              $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
+            'javascript:void(0)', [
+              'class' => 'title',
+              'escapeTitle' => false
+          ]) ?>
+          <?php if($otherSites): ?>
+          <ul>
+            <?php foreach($otherSites as $key => $value): ?>
+            <li>
+              <?php $this->BcBaser->link($value, [
+                'admin' => true,
+                'controller' => 'contents',
+                'action' => 'index',
+                '?' => ['current_site_id' => $key]
+              ]) ?>
+            </li>
+            <?php endforeach ?>
+          </ul>
+          <?php endif ?>
+        </li>
         <li>
           <?php if ($this->BcAuth->isAdminLogin()): ?>
             <?php $this->BcBaser->link(h($this->BcBaser->getUserName($loginUser)) . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title', 'escapeTitle' => false]) ?>

@@ -33,11 +33,11 @@ if ($isAlias) {
   $editDisabled = !$this->BcContents->isActionAvailable($data->type, 'edit', $data->entity_id);
   $manageDisabled = !$this->BcContents->isActionAvailable($data->type, 'manage', $data->entity_id);
 }
-$typeTitle = $settings[$type]['title'];
+$typeTitle = @$settings[$type]['title'];
 if (!empty($settings[$type]['icon'])) {
   $iconPath = $settings[$type]['icon'];
 } else {
-  $iconPath = $settings['Default']['icon'];
+  $iconPath = @$settings['Default']['icon'];
 }
 $isImageIcon = false;
 if (preg_match('/^admin\//', $iconPath)) {
@@ -50,7 +50,7 @@ $urlParams = ['content_id' => $data->id];
 if ($data->entity_id) {
   $urlParams = array_merge($urlParams, [$data->entity_id]);
 }
-$fullUrl = $this->BcContents->getUrl($data->url, true, $data['Site']['use_subdomain']);
+$fullUrl = $this->BcContents->getUrl($data->url, true, @$data['Site']['use_subdomain']);
 $toStatus = 'publish';
 if ($data->self_status) {
   $toStatus = 'unpublish';

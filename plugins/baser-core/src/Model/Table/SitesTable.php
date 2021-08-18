@@ -149,7 +149,7 @@ class SitesTable extends AppTable
      * @noTodo
      * @unitTest
      */
-    public function getSiteList($mainSiteId = null, $options = [])
+    public function getList($mainSiteId = null, $options = [])
     {
         $options = array_merge([
             'excludeIds' => [],

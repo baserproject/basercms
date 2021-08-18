@@ -127,6 +127,9 @@ class BcAdminSiteHelper extends Helper
      * 現在の画面で表示しているものがメインサイトかどうか
      * @param Site $site
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isMainOnCurrentDisplay($site): bool
     {
@@ -137,10 +140,37 @@ class BcAdminSiteHelper extends Helper
      * URLよりサイトを取得する
      * @param $url
      * @return Site
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function findByUrl($url): EntityInterface
     {
         return $this->SiteManage->findByUrl($url);
+    }
+
+    /**
+     * 現在の管理対象のサイトを取得する
+     * @return Site
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getCurrentSite(): ?Site
+    {
+        return $this->SiteManage->getCurrentSite();
+    }
+
+    /**
+     * 現在の管理対象のサイト以外のリストを取得する
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getOtherSiteList(): array
+    {
+        return $this->SiteManage->getOtherSiteList();
     }
 
 }

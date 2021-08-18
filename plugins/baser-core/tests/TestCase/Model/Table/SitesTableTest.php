@@ -71,15 +71,15 @@ class SitesTableTest extends BcTestCase
      * @param array $options
      * @param array $expects
      * @param string $message
-     * @dataProvider getSiteListDataProvider
+     * @dataProvider getListDataProvider
      */
-    public function testGetSiteList($mainSiteId, $options, $expects, $message)
+    public function testGetList($mainSiteId, $options, $expects, $message)
     {
-        $result = $this->Sites->getSiteList($mainSiteId, $options);
+        $result = $this->Sites->getList($mainSiteId, $options);
         $this->assertEquals($expects, $result, $message);
     }
 
-    public function getSiteListDataProvider()
+    public function getListDataProvider()
     {
         return [
             [null, [], [1 => 'メインサイト', 3 => '英語サイト', 4 => '別ドメイン', 5 => 'サブドメイン'], '全てのサイトリストの取得ができません。'],

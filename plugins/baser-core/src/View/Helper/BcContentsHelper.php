@@ -433,8 +433,8 @@ class BcContentsHelper extends Helper
      */
     public function isSiteRelated($data)
     {
-        if (($data['Site']['relate_main_site'] && $data['Content']['main_site_content_id'] && $data['Content']['alias_id']) ||
-            $data['Site']['relate_main_site'] && $data['Content']['main_site_content_id'] && $data['Content']['type'] == 'ContentFolder') {
+        if ((@$data['Site']['relate_main_site'] && @$data['Content']['main_site_content_id'] && @$data['Content']['alias_id']) ||
+            @$data['Site']['relate_main_site'] && @$data['Content']['main_site_content_id'] && @$data['Content']['type'] == 'ContentFolder') {
             return true;
         } else {
             return false;

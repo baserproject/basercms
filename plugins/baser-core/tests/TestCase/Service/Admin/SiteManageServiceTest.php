@@ -113,8 +113,6 @@ class SiteManageServiceTest extends BcTestCase
      */
     public function testIsUseSiteDeviceSetting()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // TODO テストの実装は完了したが、SiteConfigsMockService::value() を実装しないと動作しない
         $this->assertTrue($this->SiteManage->isUseSiteDeviceSetting());
         $siteConfigs = $this->getTableLocator()->get('BaserCore.SiteConfigs');
         $siteConfig = $siteConfigs->find()->where(['name' => 'use_site_device_setting'])->first();
@@ -128,8 +126,6 @@ class SiteManageServiceTest extends BcTestCase
      */
     public function testIsUseSiteLangSetting()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // TODO テストの実装は完了したが、SiteConfigsMockService::value() を実装しないと動作しない
         $this->assertFalse($this->SiteManage->isUseSiteLangSetting());
         $siteConfigs = $this->getTableLocator()->get('BaserCore.SiteConfigs');
         $siteConfig = $siteConfigs->find()->where(['name' => 'use_site_lang_setting'])->first();
@@ -150,6 +146,27 @@ class SiteManageServiceTest extends BcTestCase
         $this->assertFalse($this->SiteManage->isMainOnCurrentDisplay($site));
         $site = new Site(['id' => 2, 'main_site_id' => 1]);
         $this->assertFalse($this->SiteManage->isMainOnCurrentDisplay($site));
+    }
+
+    /**
+     * test setCurrentSite And getCurrentSite
+     */
+    public function testSetCurrentSiteAndGetCurrentSite()
+    {
+        $this->getRequest('/?current_site_id=3');
+        $this->SiteManage->setCurrentSite();
+        $this->assertEquals(3, $this->SiteManage->getCurrentSite()->id);
+    }
+
+    /**
+     * test getOtherSiteList
+     */
+    public function testGetOtherSiteList()
+    {
+        $this->getRequest('/?current_site_id=3');
+        $this->SiteManage->setCurrentSite();
+        $siteList = $this->SiteManage->getOtherSiteList();
+        $this->assertArrayNotHasKey(3, $siteList);
     }
 
 }

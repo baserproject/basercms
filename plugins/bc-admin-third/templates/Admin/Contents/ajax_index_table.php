@@ -9,7 +9,6 @@
  * @since           baserCMS v 4.0.0
  * @license         https://basercms.net/license/index.html
  */
-header('Content-type: text/html; charset=utf-8');
 ?>
 
 

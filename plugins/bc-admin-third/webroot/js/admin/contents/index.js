@@ -35,7 +35,7 @@ $(function () {
             siteId = 0;
         }
         // メニューを再構築する必要があるため、ajax ではなく遷移させる
-        location.href = $.baseUrl() + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/' + 'baser-core' + '/contents/index?site_id=' + siteId + '\&list_type=1';
+        location.href = $.baseUrl() + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/' + 'baser-core' + '/contents/index?current_site_id=' + siteId + '\&list_type=1';
     });
 
     // 表示変更時
@@ -164,7 +164,7 @@ $(function () {
      * 表形式のリストをロードする
      */
     function loadTable() {
-        url = $.baseUrl() + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/' + 'baser-core' + '/contents/index?site_id=' + $("#viewsetting-site-id").val() + '\&list_type=2';
+        url = $.baseUrl() + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/' + 'baser-core' + '/contents/index?current_site_id=' + $("#viewsetting-site-id").val() + '\&list_type=2';
         $("#ContentIndexForm").attr('action', url);
         $.baserAjaxDataList.search();
     }

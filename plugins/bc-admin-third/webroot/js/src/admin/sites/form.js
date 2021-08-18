@@ -39,7 +39,11 @@ $(function () {
      * デバイスと言語の表示設定
      */
     function loadDeviceAndLang() {
-        var url = $.bcUtil.apiBaseUrl + 'baser-core/sites/get_selectable_devices_and_lang/' + $("#main-site-id").val() + '.json';
+        var siteId = $("#main-site-id").val();
+        if(siteId === undefined) {
+            siteId = 0;
+        }
+        var url = $.bcUtil.apiBaseUrl + 'baser-core/sites/get_selectable_devices_and_lang/' + siteId + '.json';
         if($("#id").val() !== undefined) {
             url += '/' + $("#id").val();
         }

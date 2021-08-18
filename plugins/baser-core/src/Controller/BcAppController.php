@@ -39,11 +39,6 @@ class BcAppController extends AppController
 {
 
     /**
-     * BcContainerTrait
-     */
-    use BcContainerTrait;
-
-    /**
      * view
      *
      * @var string

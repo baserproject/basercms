@@ -33,6 +33,7 @@ class BcAdminHelperTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.Dblogs',
+        'plugin.BaserCore.Sites',
     ];
 
     /**
@@ -219,7 +220,7 @@ class BcAdminHelperTest extends BcTestCase
     {
         $jsonMenu = json_decode($this->BcAdmin->getJsonMenu());
         // $currentSiteIdのテスト
-        $this->assertEquals($jsonMenu->currentSiteId, "0");
+        $this->assertEquals($jsonMenu->currentSiteId, 1);
         // $adminMenuGroupsの取得
         $adminMenuGroups = $this->execPrivateMethod($this->BcAdmin, 'getAdminMenuGroups');
         // $menuListに項目が入ってるかテスト

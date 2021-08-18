@@ -77,13 +77,15 @@ class SiteManageService extends SitesService implements SiteManageServiceInterfa
      */
     public function getSiteList($options = []): array
     {
-        return $this->Sites->getSiteList(null, $options);
+        return $this->Sites->getList(null, $options);
     }
 
     /**
      * テーマのリストを取得する
      * @param Site $site
      * @return array
+     * @checked
+     * @noTodo
      */
     public function getThemeList(Site $site): array
     {
@@ -105,6 +107,9 @@ class SiteManageService extends SitesService implements SiteManageServiceInterfa
     /**
      * デバイス設定を利用するかどうか
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isUseSiteDeviceSetting(): bool
     {
@@ -114,6 +119,9 @@ class SiteManageService extends SitesService implements SiteManageServiceInterfa
     /**
      * 言語設定を利用するかどうか
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isUseSiteLangSetting(): bool
     {
@@ -124,6 +132,9 @@ class SiteManageService extends SitesService implements SiteManageServiceInterfa
      * 現在の画面で表示しているものがメインサイトかどうか
      * @param Site $site
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isMainOnCurrentDisplay($site): bool
     {
@@ -138,6 +149,51 @@ class SiteManageService extends SitesService implements SiteManageServiceInterfa
             return false;
         }
         return true;
+    }
+
+    /**
+     * 現在の管理対象のサイトを設定する
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function setCurrentSite(): void
+    {
+        $request = Router::getRequest();
+        $session = $request->getSession();
+        $currentSiteId = 1;
+        $queryCurrentSiteId = $request->getQuery('current_site_id');
+        if (!$session->check('BcApp.Admin.currentSite') || $queryCurrentSiteId) {
+            if ($queryCurrentSiteId) {
+                $currentSiteId = $queryCurrentSiteId;
+            }
+            $session->write('BcApp.Admin.currentSite', $this->Sites->get($currentSiteId));
+        }
+    }
+
+    /**
+     * 現在の管理対象のサイトを取得する
+     * @return Site
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getCurrentSite(): Site
+    {
+        $site = Router::getRequest()->getSession()->read('BcApp.Admin.currentSite');
+        if(!$site) {
+            $site = $this->Sites->getRootMain();
+        }
+        return $site;
+    }
+
+    /**
+     * 現在の管理対象のサイト以外のリストを取得する
+     * @return array
+     */
+    public function getOtherSiteList(): array
+    {
+        return $this->getSiteList(['excludeIds' => [$this->getCurrentSite()->id]]);
     }
 
 }
