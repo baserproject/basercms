@@ -1,46 +1,65 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Controller
- * @since           baserCMS v 4.0.9
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('ContentFoldersController', 'Controller');
+namespace BaserCore\Test\TestCase\Controller\Admin;
+
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Controller\Admin\ContentFoldersController;
 
 /**
  * Class ContentFoldersControllerTest
  *
  * @package Baser.Test.Case.Controller
- * @property ContentFoldersController $ContentFoldersController
+ * @property  ContentFoldersController $ContentFoldersController
  */
 class ContentFoldersControllerTest extends BcTestCase
 {
 
     /**
-     * set up
+     * Fixtures
      *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BaserCore.ContentFolders',
+    ];
+    /**
+     * set up
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
+        $this->ContentFoldersController = new ContentFoldersController($this->getRequest());
     }
 
     /**
-     * tearDown
+     * Tear Down
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
+        unset($this->ContentFoldersController);
+    }
+
+    /**
+     * test initialize
+     *
+     * @return void
+     */
+    public function testInitialize(): void
+    {
+        $this->assertNotEmpty($this->ContentsController->BcContents);
     }
 
     /**

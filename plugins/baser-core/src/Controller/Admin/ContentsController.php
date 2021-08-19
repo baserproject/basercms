@@ -224,7 +224,6 @@ class ContentsController extends BcAdminAppController
         }
 
         $srcContent = [];
-        // TODO: 一旦alias無視
         if ($alias) {
             if ($this->request->getData('Content.alias_id')) {
                 $conditions = ['id' => $this->request->getData('Content.alias_id')];

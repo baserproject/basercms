@@ -1,52 +1,53 @@
 <?php
-// TODO : コード確認要
-use Cake\ORM\TableRegistry;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Controller
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('BcContentsController', 'Controller');
+namespace BaserCore\Controller\Admin;
+
+use Cake\Event\EventInterface;
+use BaserCore\Controller\Admin\BcAdminAppController;
 
 /**
  * Class ContentFoldersController
  *
  * フォルダ コントローラー
  *
- * @package Baser.Controller
- * @property ContentFolder $ContentFolder
+ * @package BaserCore.Controller
+ * @property ContentFoldersTable $ContentFolders
  */
-class ContentFoldersController extends AppController
+class ContentFoldersController extends BcAdminAppController
 {
 
     /**
-     * コンポーネント
-     * @var array
+     * initialize
+     * @return void
      */
-    public $components = ['Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => ['useForm' => true]];
-
-    /**
-     * モデル
-     *
-     * @var array
-     */
-    public $uses = ['ContentFolder', 'Page'];
-
-    /**
-     * Before Filter
-     */
-    public function beforeFilter()
+    public function initialize(): void
     {
-        parent::beforeFilter();
-        $this->BcAuth->allow('view');
+        parent::initialize();
+        // $this->loadComponent('BaserCore.BcAuth');
+        // $this->loadComponent('BaserCore.BcAuthConfigure');
+        $this->loadComponent('BaserCore.BcContents', ['useForm' => true]);
+    }
+
+    /**
+     * beforeFilter
+     *
+     * @return void
+     */
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        // $this->loadModel('BaserCore.Pages');
+        $this->loadModel('BaserCore.ContentFolders');
+        // $this->BcAuth->allow('view');
     }
 
     /**
@@ -54,12 +55,12 @@ class ContentFoldersController extends AppController
      *
      * @return void
      */
-    public function admin_add()
+    public function add()
     {
-        if (!$this->request->data) {
+        if (!$this->request->getData()) {
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
         }
-        $data = $this->ContentFolder->save($this->request->data);
+        $data = $this->ContentFolder->save($this->request->getData());
         if (!$data) {
             $this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
             exit;
@@ -68,7 +69,7 @@ class ContentFoldersController extends AppController
         $this->BcMessage->setSuccess(
             sprintf(
                 __d('baser', 'フォルダ「%s」を追加しました。'),
-                $this->request->getData('Content.title')
+                $this->request->getData('Contents.title')
             ),
             true,
             false
