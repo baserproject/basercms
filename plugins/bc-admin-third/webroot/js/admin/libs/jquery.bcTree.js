@@ -921,6 +921,9 @@
                                     alias_id: data.contentAliasId,
                                     entity_id: data.contentEntityId
                                 },
+                                _Token: {
+                                    key: $.bcToken.key
+                                }
                             }
                         },
                         dataType: 'json',
