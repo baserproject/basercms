@@ -12,9 +12,11 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
-use BaserCore\Model\AppTable;
-use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
+use BaserCore\Model\AppTable;
+use Cake\Event\EventInterface;
+use Cake\Validation\Validator;
+use Cake\Datasource\EntityInterface;
 
 /**
  * Class ContentFoldersTable
@@ -22,14 +24,6 @@ use Cake\Event\Event;
  */
 class ContentFoldersTable extends AppTable
 {
-
-    /**
-     * Behavior Setting
-     *
-     * @var array
-     */
-    public $actsAs = ['BcContents'];
-
     /**
      * 変更前URL
      *
@@ -51,6 +45,24 @@ class ContentFoldersTable extends AppTable
      */
     public $isMovableTemplate = true;
 
+        /**
+     * Initialize
+     *
+     * @param array $config テーブル設定
+     * @return void
+     * @checked
+     * @unitTest
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+        // $this->addBehavior('BcContents');
+        $this->belongsTo('Contents', [
+            'className' => 'BaserCore.Sites',
+            'foreignKey' => 'site_id',
+        ]);
+    }
+
     /**
      * Implemented Events
      *
@@ -64,20 +76,21 @@ class ContentFoldersTable extends AppTable
         ]);
     }
 
+
     /**
-     * ContentFolder constructor.
+     * validationDefault
      *
-     * @param bool $id
-     * @param null $table
-     * @param null $ds
+     * @param  Validator $validator
+     * @return Validator
      */
-    public function __construct($id = false, $table = null, $ds = null)
+    public function validationDefault(Validator $validator): Validator
     {
-        parent::__construct($id, $table, $ds);
-        $this->validate = [
-            'id' => [
-                ['rule' => 'numeric', 'on' => 'update', 'message' => __d('baser', 'IDに不正な値が利用されています。')]
-            ]];
+        $validator
+        ->integer('id')
+        ->allowEmptyString('id', null, 'create')
+        ->add('id', 'valid', ['rule' => 'numeric', 'message' => __d('baser', 'IDに不正な値が利用されています。')]);
+
+        return $validator;
     }
 
     /**
@@ -114,9 +127,9 @@ class ContentFoldersTable extends AppTable
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
         // 変更前のURLを取得
-        if (!empty($this->data['ContentFolder']['id']) && ($this->isMovableTemplate || !empty($options['reconstructSearchIndices']))) {
+        if (!empty($event->getData('entity')->get('id')) && ($this->isMovableTemplate || !empty($options['reconstructSearchIndices']))) {
             $this->isMovableTemplate = false;
-            $this->setBeforeRecord($this->data['ContentFolder']['id']);
+            $this->setBeforeRecord($event->getData('entity')->get('id'));
         }
         return parent::beforeSave($event, $entity, $options);
     }
@@ -128,17 +141,17 @@ class ContentFoldersTable extends AppTable
      * @param array $options
      * @param bool
      */
-    public function afterSave($created, $options = [])
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        parent::afterSave($created, $options);
-        if (!empty($this->data['Content']['url']) && $this->beforeUrl) {
-            $this->movePageTemplates($this->data['Content']['url']);
-            $this->isMovableTemplate = true;
-        }
-        if (!empty($options['reconstructSearchIndices']) && $this->beforeStatus !== $this->data['Content']['status']) {
-            $searchIndexModel = ClassRegistry::init('SearchIndex');
-            $searchIndexModel->reconstruct($this->data['Content']['id']);
-        }
+        // TODO: 一時措置
+        // if (!empty($this->data['Content']['url']) && $this->beforeUrl) {
+        //     $this->movePageTemplates($this->data['Content']['url']);
+        //     $this->isMovableTemplate = true;
+        // }
+        // if (!empty($options['reconstructSearchIndices']) && $this->beforeStatus !== $this->data['Content']['status']) {
+        //     $searchIndexModel = ClassRegistry::init('SearchIndex');
+        //     $searchIndexModel->reconstruct($this->data['Content']['id']);
+        // }
         return true;
     }
 

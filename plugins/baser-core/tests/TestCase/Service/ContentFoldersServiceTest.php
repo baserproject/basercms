@@ -66,11 +66,10 @@ class ContentFoldersServiceTest extends BcTestCase
      */
     public function testCreate()
     {
-        $request = $this->getRequest('/');
-        $request = $request->withParsedBody([
-            'name' => 'テストcreate',
-        ]);
-        $result = $this->ContentFoldersService->create($request->getData());
+        $data = [
+            'folder_template' => 'テストcreate',
+        ];
+        $result = $this->ContentFoldersService->create($data);
         $expected = $this->ContentFoldersService->ContentFolders->find()->last();
         $this->assertEquals($expected->name, $result->name);
     }
