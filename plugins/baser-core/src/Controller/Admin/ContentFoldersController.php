@@ -35,6 +35,7 @@ class ContentFoldersController extends BcAdminAppController
         // $this->loadComponent('BaserCore.BcAuth');
         // $this->loadComponent('BaserCore.BcAuthConfigure');
         $this->loadComponent('BaserCore.BcContents', ['useForm' => true]);
+        $this->Security->setConfig('unlockedActions', ['add']);
     }
 
     /**
