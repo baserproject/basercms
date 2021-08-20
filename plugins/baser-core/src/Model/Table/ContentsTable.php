@@ -1187,17 +1187,8 @@ class ContentsTable extends AppTable
      */
     public function getUrlById($id, $full = false)
     {
-        if (!is_int($id)) {
-            $id = (int)$id;
-            if ($id === 0) {
-                return '';
-            }
-        }
-        $data = $this->find()->where(['id' => $id])->first();
-        if ($data) {
-            return $this->getUrl($data->url, $full, $data->site->use_subdomain);
-        }
-        return '';
+        $data = $this->findById($id)->contain(['Sites'])->first();
+        return $data ? $this->getUrl($data->url, $full, $data->site->use_subdomain) : "";
     }
 
     /**
@@ -1251,7 +1242,7 @@ class ContentsTable extends AppTable
         } else {
             if (BC_INSTALLED) {
                 if (!is_array($url)) {
-                    $site = $this->Sitess->findByUrl($url);
+                    $site = $this->Sites->findByUrl($url);
                     if ($site && $site->same_main_url) {
                         $mainSite = $sites->findById($site->main_site_id)->first();
                         $alias = $mainSite->alias;
