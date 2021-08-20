@@ -787,10 +787,10 @@ class ContentsController extends BcAdminAppController
         $this->set('sites', $contentManage->getContensInfo());
     }
 
-    public function admin_ajax_get_full_url($id)
+    public function ajax_get_full_url($id)
     {
         $this->autoRender = false;
         Configure::write('debug', 0);
-        return $this->Content->getUrlById($id, true);
+        return $this->Contents->getUrlById($id, true);
     }
 }

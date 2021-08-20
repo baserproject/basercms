@@ -13,6 +13,7 @@ namespace BaserCore\Model\Table;
 
 use ArrayObject;
 use Cake\Event\Event;
+use Cake\Filesystem\Folder;
 use BaserCore\Model\AppTable;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
@@ -57,10 +58,14 @@ class ContentFoldersTable extends AppTable
     {
         parent::initialize($config);
         // $this->addBehavior('BcContents');
-        $this->belongsTo('Contents', [
-            'className' => 'BaserCore.Sites',
-            'foreignKey' => 'site_id',
-        ]);
+        // TODO: 本来はBcContentsBehaviorで設定する箇所だが、一時措置として直接下記に設定
+        $this->hasOne('Contents', ['className' => 'BaserCore.Contents'])
+            ->setForeignKey('entity_id')
+            ->setDependent(false)
+            ->setConditions([
+                'Contents.type' => 'ContentFolder',
+                'Contents.alias_id IS NULL'
+            ]);
     }
 
     /**
@@ -143,11 +148,11 @@ class ContentFoldersTable extends AppTable
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
+        if (!empty($entity->content->url) && $this->beforeUrl) {
+            $this->movePageTemplates($entity->content->url);
+            $this->isMovableTemplate = true;
+        }
         // TODO: 一時措置
-        // if (!empty($this->data['Content']['url']) && $this->beforeUrl) {
-        //     $this->movePageTemplates($this->data['Content']['url']);
-        //     $this->isMovableTemplate = true;
-        // }
         // if (!empty($options['reconstructSearchIndices']) && $this->beforeStatus !== $this->data['Content']['status']) {
         //     $searchIndexModel = ClassRegistry::init('SearchIndex');
         //     $searchIndexModel->reconstruct($this->data['Content']['id']);

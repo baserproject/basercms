@@ -48,6 +48,7 @@ class ContentFoldersServiceTest extends BcTestCase
     {
         parent::setUp();
         $this->ContentFoldersService = new ContentFoldersService();
+        $this->Contents = $this->getTableLocator()->get('Contents');
     }
 
     /**
@@ -68,9 +69,20 @@ class ContentFoldersServiceTest extends BcTestCase
     {
         $data = [
             'folder_template' => 'テストcreate',
+            'content' => [
+                "parent_id" => "1",
+                "title" => "新しい フォルダー",
+                "plugin" => "Core",
+                "type" => "ContentFolder",
+                "site_id" => "0",
+                "alias_id" => "",
+                "entity_id" => "",
+            ]
         ];
         $result = $this->ContentFoldersService->create($data);
-        $expected = $this->ContentFoldersService->ContentFolders->find()->last();
-        $this->assertEquals($expected->name, $result->name);
+        $folderExpected = $this->ContentFoldersService->ContentFolders->find()->last();
+        $contentExpected = $this->Contents->find()->last();
+        $this->assertEquals($folderExpected->name, $result->name);
+        $this->assertEquals("新しい フォルダー", $contentExpected->title);
     }
 }

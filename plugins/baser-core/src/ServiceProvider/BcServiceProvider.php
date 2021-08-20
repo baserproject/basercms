@@ -47,6 +47,10 @@ use BaserCore\Service\Admin\UserManageServiceInterface;
 use BaserCore\Service\Admin\PluginManageServiceInterface;
 use BaserCore\Service\Admin\ContentManageServiceInterface;
 use BaserCore\Service\Admin\UserGroupManageServiceInterface;
+use BaserCore\Service\Admin\ContentFolderManageService;
+use BaserCore\Service\Admin\ContentFolderManageServiceInterface;
+use BaserCore\Service\ContentFoldersService;
+use BaserCore\Service\ContentFoldersServiceInterface;
 
 /**
  * Class BcServiceProvider
@@ -76,6 +80,8 @@ class BcServiceProvider extends ServiceProvider
         DblogsServiceInterface::class,
         ContentManageServiceInterface::class,
         ContentsServiceInterface::class,
+        ContentFoldersServiceInterface::class,
+        ContentFolderManageServiceInterface::class,
     ];
 
     /**
@@ -111,6 +117,9 @@ class BcServiceProvider extends ServiceProvider
         // Contentsサービス
         $container->add(ContentManageServiceInterface::class, ContentManageService::class, true);
         $container->add(ContentsServiceInterface::class, ContentsService::class, true);
+        // ContentFoldersサービス
+        $container->add(ContentFolderManageServiceInterface::class, ContentFolderManageService::class, true);
+        $container->add(ContentFoldersServiceInterface::class, ContentFoldersService::class, true);
 
     }
 

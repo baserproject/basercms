@@ -48,7 +48,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
     public function create(array $postData)
     {
         $contentFolder = $this->ContentFolders->newEmptyEntity();
-        $contentFolder = $this->ContentFolders->patchEntity($contentFolder, $postData);
+        $contentFolder = $this->ContentFolders->patchEntity($contentFolder, $postData,  ['associated' => ['Contents']]);
         return ($result = $this->ContentFolders->save($contentFolder)) ? $result : $contentFolder;
     }
 }

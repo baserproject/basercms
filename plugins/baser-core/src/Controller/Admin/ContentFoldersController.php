@@ -13,6 +13,7 @@ namespace BaserCore\Controller\Admin;
 
 use Cake\Event\EventInterface;
 use BaserCore\Controller\Admin\BcAdminAppController;
+use BaserCore\Service\Admin\ContentFolderManageServiceInterface;
 
 /**
  * Class ContentFoldersController
@@ -56,13 +57,12 @@ class ContentFoldersController extends BcAdminAppController
      *
      * @return void
      */
-    public function add()
+    public function add(ContentFolderManageServiceInterface $contentFolderManage)
     {
         if (!$this->request->getData()) {
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
         }
-        $data = $this->ContentFolder->save($this->request->getData());
-        if (!$data) {
+        if (!$contentFolder = $contentFolderManage->create($this->request->getData())) {
             $this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
             exit;
         }
@@ -70,12 +70,12 @@ class ContentFoldersController extends BcAdminAppController
         $this->BcMessage->setSuccess(
             sprintf(
                 __d('baser', 'フォルダ「%s」を追加しました。'),
-                $this->request->getData('Contents.title')
+                $contentFolder->content->title,
             ),
             true,
             false
         );
-        exit(json_encode($data['Content']));
+        exit(json_encode($contentFolder->content));
     }
 
     /**

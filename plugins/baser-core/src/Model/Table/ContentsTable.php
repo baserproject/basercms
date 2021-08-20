@@ -418,8 +418,8 @@ class ContentsTable extends AppTable
      */
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
-        if (!empty($this->data['Content']['id'])) {
-            $this->beforeSaveParentId = $this->field('parent_id', ['Content.id' => $this->data['Content']['id']]);
+        if (!empty($entity->id)) {
+            $this->beforeSaveParentId = $this->field('parent_id', ['Contents.id' => $entity->id]);
         }
         return parent::beforeSave($event, $entity, $options);
     }
@@ -1193,9 +1193,9 @@ class ContentsTable extends AppTable
                 return '';
             }
         }
-        $data = $this->find('first', ['conditions' => ['Content.id' => $id]]);
+        $data = $this->find()->where(['id' => $id])->first();
         if ($data) {
-            return $this->getUrl($data['Content']['url'], $full, $data['Site']['use_subdomain']);
+            return $this->getUrl($data->url, $full, $data->site->use_subdomain);
         }
         return '';
     }
@@ -1217,7 +1217,7 @@ class ContentsTable extends AppTable
         $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         if ($useSubDomain && !is_array($url)) {
             $subDomain = '';
-            $site = $this->Sitess->findByUrl($url);
+            $site = $this->Sites->findByUrl($url);
             $originUrl = $url;
             if ($site) {
                 $subDomain = $site->alias;
