@@ -14,6 +14,8 @@ namespace BaserCore\Model\Table;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\Utility\Hash;
+use Cake\Core\Configure;
+use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
 use BaserCore\Model\AppTable;
 use BaserCore\Utility\BcUtil;
@@ -1184,11 +1186,17 @@ class ContentsTable extends AppTable
      *
      * @param int $id
      * @return string URL
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function getUrlById($id, $full = false)
     {
+        if (!is_numeric($id)) return '';
         $data = $this->findById($id)->contain(['Sites'])->first();
-        return $data ? $this->getUrl($data->url, $full, $data->site->use_subdomain) : "";
+        // TODO: containが動かないため一旦false
+        return $data ? $this->getUrl($data->url, $full, false) : "";
+        // return $data ? $this->getUrl($data->url, $full, $data->site->use_subdomain) : "";
     }
 
     /**
