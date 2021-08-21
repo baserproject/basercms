@@ -103,7 +103,6 @@ class PermissionsControllerTest extends BcTestCase
             'url' => '/baser/admin/baser-core/users/index/?test',
             'method' => '*',
             'status' => 1,
-            'auth' => true
         ];
         $this->post('/baser/admin/baser-core/permissions/add/2', $data);
         $permissions = $this->getTableLocator()->get('Permissions');

@@ -108,13 +108,14 @@ class PermissionService implements PermissionServiceInterface
      */
     public function create(array $postData)
     {
-        if(empty($postData['no'])) {
-            $postData['no'] = $this->Permissions->getMax('no', ['user_group_id' => $postData['user_group_id']]) + 1;
-            $postData['sort'] = $this->Permissions->getMax('sort', ['user_group_id' => $postData['user_group_id']]) + 1;
-        }
+        $postData = $this->autoFillRecord($postData);
         $permission = $this->Permissions->newEmptyEntity();
         $permission = $this->Permissions->patchEntity($permission, $postData, ['validate' => 'default']);
-        return $this->Permissions->save($permission);
+
+        if ($this->Permissions->save($permission)) {
+            return true;
+        }
+        return $permission;
     }
 
     /**
@@ -127,8 +128,7 @@ class PermissionService implements PermissionServiceInterface
      */
     public function update(EntityInterface $target, array $data)
     {
-        $additionalData = $this->autoFillRecord($data);
-        $Permission = $this->Permissions->patchEntity($target, $additionalData);
+        $Permission = $this->Permissions->patchEntity($target, $data);
         return $this->Permissions->save($Permission);
     }
 
@@ -181,7 +181,7 @@ class PermissionService implements PermissionServiceInterface
             $data['sort'] = $this->Permissions->getMax('sort') + 1;
         }
         if (empty($data['auth'])) {
-            $data['auth'] = false;
+            $data['auth'] = true;
         }
         if (empty($data['method'])) {
             $data['method'] = $this->getMethodList()['*'];

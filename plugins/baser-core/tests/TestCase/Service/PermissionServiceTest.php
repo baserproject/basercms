@@ -111,7 +111,6 @@ class PermissionServiceTest extends BcTestCase
         $data = [
             'name' => 'testCreate',
             'user_group_id' => '3',
-            'auth' => true,
             'url' => '/baser/admin/*',
             'status' => true
         ];
