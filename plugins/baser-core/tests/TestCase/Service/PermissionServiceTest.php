@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\PermissionService;
+use phpDocumentor\Reflection\PseudoTypes\True_;
 
 /**
  * BaserCore\Model\Table\PermissionsTable Test Case
@@ -132,9 +133,34 @@ class PermissionServiceTest extends BcTestCase
             'url' => '/baser/admin/*'
         ];
         $record = $this->PermissionService->Permissions->get(1);
-        $permission = $this->PermissionService->update($record, $data);
-        $this->assertEquals('testUpdate', $permission->name);
-        $this->assertEquals(21, $permission->no);
+        $beforeId = $record->id;
+        $beforeName = $record->name;
+        $this->PermissionService->update($record, $data);
+        $record = $this->PermissionService->Permissions->get(1);
+
+        $this->assertEquals($beforeId, $record->id);
+        $this->assertNotEquals($beforeName, $record->name);
+    }
+
+    /**
+     * Test copy
+     *
+     * @return void
+     */
+    public function testCopy()
+    {
+        $permissions = $this->getTableLocator()->get('Permissions');
+
+        $permission = $permissions->find()->order(['id' => 'DESC'])->first();
+        $copyPermission = $this->PermissionService->copy($permission->id);
+
+        $this->assertGreaterThan($permission->no, $copyPermission->no);
+        $this->assertGreaterThan($permission->sort, $copyPermission->sort);
+        $this->assertEquals($permission->name, $copyPermission->name);
+        $this->assertEquals($permission->url, $copyPermission->url);
+        $this->assertEquals($permission->auth, $copyPermission->auth);
+        $this->assertEquals($permission->method, $copyPermission->method);
+        $this->assertEquals($permission->status, $copyPermission->status);
     }
 
     /**
@@ -144,18 +170,52 @@ class PermissionServiceTest extends BcTestCase
      */
     public function testDelete()
     {
-        // group_idが1出ない場合
-        $this->PermissionService->delete(1);
-        $permissions = $this->PermissionService->Permissions->find('all');
-        $this->assertEquals(2, $permissions->first()->id);
-        // Adminのgroup_idが最後の1つの場合
-        $this->expectException("Exception");
-        $this->expectExceptionMessage("最後のシステム管理者は削除できません");
-        $this->PermissionService->delete(20);
+        $permissions = $this->getTableLocator()->get('Permissions');
+
+        $permission = $permissions->find()->order(['id' => 'ASC'])->first();
+        $beforeId = $permission->id;
+        $this->PermissionService->delete($beforeId);
+
+        $permission = $permissions->find()->order(['id' => 'ASC'])->first();
+        $this->assertNotEquals($beforeId, $permission->id);
     }
 
     /**
-     * Test delete
+     * Test publish
+     *
+     * @return void
+     */
+    public function testPublish()
+    {
+        $permissions = $this->getTableLocator()->get('Permissions');
+
+        $permission = $permissions->find()->order(['id' => 'ASC'])->first();
+        $permission->status = false;
+        $permissions->save($permission);
+
+        $permission = $this->PermissionService->publish($permission->id);
+        $this->assertTrue($permission->status);
+    }
+
+    /**
+     * Test unpublish
+     *
+     * @return void
+     */
+    public function testUnpublish()
+    {
+        $permissions = $this->getTableLocator()->get('Permissions');
+
+        $permission = $permissions->find()->order(['id' => 'ASC'])->first();
+        $permission->status = true;
+        $permissions->save($permission);
+
+        $permission = $this->PermissionService->unpublish($permission->id);
+        $this->assertFalse($permission->status);
+    }
+
+    /**
+     * Test getMethodList
      *
      * @return void
      */
@@ -167,6 +227,35 @@ class PermissionServiceTest extends BcTestCase
             'GET' => 'GET',
             'POST' => 'POST',]
         );
+    }
+
+    /**
+     * Test autoFillRecord
+     *
+     * @return void
+     */
+    public function testAutoFillRecord()
+    {
+        $reflection = new \ReflectionClass($this->PermissionService);
+        $method = $reflection->getMethod('autoFillRecord');
+        $method->setAccessible(true);
+
+        $data = $method->invokeArgs($this->PermissionService, [[]]);
+        $this->assertGreaterThan(0, $data['no']);
+        $this->assertGreaterThan(0, $data['sort']);
+        $this->assertTrue($data['auth']);
+        $this->assertEquals('*', $data['method']);
+        $this->assertTrue($data['status']);
+
+        $data = $method->invokeArgs($this->PermissionService, [[
+            'auth' => false,
+            'status' => false,
+            'method' => 'GET',
+        ]]);
+        $this->assertFalse($data['auth']);
+        $this->assertFalse($data['status']);
+        $this->assertEquals('GET', $data['method']);
+
     }
 
 }

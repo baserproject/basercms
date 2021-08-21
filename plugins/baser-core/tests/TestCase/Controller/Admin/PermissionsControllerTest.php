@@ -35,6 +35,7 @@ class PermissionsControllerTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Permissions',
         'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Dblogs',
     ];
 
     /**
@@ -84,7 +85,7 @@ class PermissionsControllerTest extends BcTestCase
     public function testIndex()
     {
         $this->get('/baser/admin/baser-core/permissions/index');
-        $this->assertRedirect('/baser/admin/baser-core/user_groups/index');
+        $this->assertResponseError();
         $this->get('/baser/admin/baser-core/permissions/index/1');
         $this->assertResponseOk();
     }
@@ -105,6 +106,8 @@ class PermissionsControllerTest extends BcTestCase
             'status' => 1,
         ];
         $this->post('/baser/admin/baser-core/permissions/add/2', $data);
+        $this->assertResponseSuccess();
+
         $permissions = $this->getTableLocator()->get('Permissions');
         $permission = $permissions->find()->order(['id' => 'DESC'])->first();
         $this->assertEquals('テストルール名', $permission->name);
@@ -121,25 +124,39 @@ class PermissionsControllerTest extends BcTestCase
     /**
      * [ADMIN] 編集処理
      */
-    public function testAdmin_edit()
+    public function testEdit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $permissions = $this->getTableLocator()->get('Permissions');
+        $permission = $permissions->find()->order(['id' => 'ASC'])->last();
+        $permissionBeforeName = $permission->name;
+        $permissionUgi = $permission->user_group_id;
+        $permission->name .= '変更';
+        $this->post('/baser/admin/baser-core/permissions/edit/2/' . $permission->id, $permission->toArray());
+        $this->assertResponseSuccess();
 
-    /**
-     * [ADMIN] 削除処理　(ajax)
-     */
-    public function testAdmin_ajax_delete()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $permission = $permissions->find()->order(['id' => 'ASC'])->last();
+
+        $this->assertNotEquals($permission->name, $permissionBeforeName);
+        $this->assertEquals($permission->name, $permissionBeforeName . '変更');
     }
 
     /**
      * [ADMIN] 削除処理
      */
-    public function testAdmin_delete()
+    public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $permissions = $this->getTableLocator()->get('Permissions');
+        $permission = $permissions->find()->order(['id' => 'ASC'])->last();
+        $permissionId = $permission->id;
+        $this->post('/baser/admin/baser-core/permissions/delete/' . $permission->id);
+        $this->assertResponseSuccess();
+
+        $permission = $permissions->find()->where(['id' => $permissionId])->last();
+        $this->assertNull($permission);
     }
 
     /**
@@ -153,25 +170,59 @@ class PermissionsControllerTest extends BcTestCase
     /**
      * [ADMIN] データコピー（AJAX）
      */
-    public function testAdmin_ajax_copy()
+    public function testCopy()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $permissions = $this->getTableLocator()->get('Permissions');
+        $permission = $permissions->find()->order(['id' => 'ASC'])->last();
+        $permissionId = $permission->id;
+        $this->post('/baser/admin/baser-core/permissions/copy/' . $permission->id);
+        $this->assertResponseSuccess();
+
+        $permission = $permissions->find()->order(['id' => 'ASC'])->last();
+        $this->assertGreaterThan($permissionId, $permission->id);
+
     }
 
     /**
      * [ADMIN] 無効状態にする（AJAX）
      */
-    public function testAdmin_ajax_unpublish()
+    public function testUnpublish()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $permissions = $this->getTableLocator()->get('Permissions');
+        $permission = $permissions->find()->order(['id' => 'ASC'])->last();
+        $permissionId = $permission->id;
+        $permissionUgi = $permission->user_group_id;
+        $permission->status = true;
+        $permissions->save($permission);
+        $this->post('/baser/admin/baser-core/permissions/unpublish/' . $permission->id);
+        $this->assertRedirect('/baser/admin/baser-core/permissions/index/' . $permissionUgi);
+
+        $permission = $permissions->find()->where(['id' => $permissionId])->last();
+        $this->assertFalse($permission->status);
     }
 
     /**
      * [ADMIN] 有効状態にする（AJAX）
      */
-    public function testAdmin_ajax_publish()
+    public function testPublish()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $permissions = $this->getTableLocator()->get('Permissions');
+        $permission = $permissions->find()->order(['id' => 'ASC'])->last();
+        $permissionId = $permission->id;
+        $permissionUgi = $permission->user_group_id;
+        $permission->status = false;
+        $permissions->save($permission);
+        $this->post('/baser/admin/baser-core/permissions/publish/' . $permission->id);
+        $this->assertRedirect('/baser/admin/baser-core/permissions/index/' . $permissionUgi);
+
+        $permission = $permissions->find()->where(['id' => $permissionId])->last();
+        $this->assertTrue($permission->status);
     }
 
 

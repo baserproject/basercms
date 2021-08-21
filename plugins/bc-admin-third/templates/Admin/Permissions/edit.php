@@ -10,13 +10,16 @@
  */
 
 use BaserCore\View\{AppView as AppViewAlias};
-use BaserCore\Model\Entity\EntityInterface;
+use BaserCore\Model\Entity\Permission;
 
 /**
  * Permissions Add
  * @var AppViewAlias $this
  * @var Permission $permission
+ * @var array $currentUserGroup
  */
+$this->BcAdmin->setHelp('permissions_form');
+$this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜アクセス制限設定編集'), $currentUserGroup->title));
 ?>
 
 
@@ -35,17 +38,6 @@ use BaserCore\Model\Entity\EntityInterface;
                  'data-bca-btn-width' => 'lg',
                  'id' => 'BtnSave']
             ) ?>
-    </div>
-    <div class="bca-actions__sub">
-        <?= $this->BcAdminForm->postLink(
-                __d('baser', '削除'),
-                ['action' => 'delete', $permission->id],
-                ['block' => true,
-                'confirm' => __d('baser', '{0} を本当に削除してもいいですか？', $permission->name),
-                'class' => 'submit-token button bca-btn bca-actions__item',
-                'data-bca-btn-type' => 'delete',
-                'data-bca-btn-size' => 'sm']
-        ) ?>
     </div>
 </div>
 

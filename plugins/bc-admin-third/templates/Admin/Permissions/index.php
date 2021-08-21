@@ -16,30 +16,36 @@
  * @var BcAppView $this
  */
 
-$this->BcBaser->i18nScript([
-  'sorttableAlertMessage1' => __d('baser', '並び替えの保存に失敗しました。')
-]);
-$this->BcBaser->js('admin/libs/sorttable', false);
-$this->BcBaser->js([
-  'admin/libs/jquery.baser_ajax_data_list',
-  'admin/libs/jquery.baser_ajax_batch',
-  'admin/libs/jquery.baser_ajax_sort_table',
-  'admin/libs/baser_ajax_data_list_config',
-  'admin/libs/baser_ajax_batch_config'
-]);
+use BaserCore\View\{AppView as AppViewAlias};
+
+// $this->BcBaser->i18nScript([
+//   'sorttableAlertMessage1' => __d('baser', '並び替えの保存に失敗しました。')
+// ]);
+// $this->BcBaser->js('admin/libs/sorttable', false);
+// $this->BcBaser->js([
+//   'admin/libs/jquery.baser_ajax_data_list',
+//   'admin/libs/jquery.baser_ajax_batch',
+//   'admin/libs/jquery.baser_ajax_sort_table',
+//   'admin/libs/baser_ajax_data_list_config',
+//   'admin/libs/baser_ajax_batch_config'
+// ]);
+
+$this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜アクセス制限設定一覧'), $currentUserGroup->title));
+$this->BcAdmin->setHelp('permissions_index');
+
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
-  'url' => ['action' => 'add', $userGroupId],
+  'url' => ['action' => 'add', $currentUserGroup->id],
   'title' => __d('baser', '新規追加'),
 ]);
 ?>
 
 <script type="text/javascript">
-  $(function () {
-    $("#PermissionsSearchBody").show();
-    $.baserAjaxDataList.init();
-    $.baserAjaxSortTable.init({url: $("#AjaxSorttableUrl").html()});
-    $.baserAjaxBatch.init({url: $("#AjaxBatchUrl").html()});
-  });
+  // $(function () {
+  //   $("#PermissionsSearchBody").show();
+  //   $.baserAjaxDataList.init();
+  //   $.baserAjaxSortTable.init({url: $("#AjaxSorttableUrl").html()});
+  //   $.baserAjaxBatch.init({url: $("#AjaxBatchUrl").html()});
+  // });
 </script>
 
 <?php /*
@@ -56,4 +62,5 @@ $this->BcAdmin->addAdminMainBodyHeaderLinks([
 ?>
 <section id="DataList">
     <?php $this->BcBaser->element('Permissions/index_list') ?>
+    <?= $this->fetch('postLink') ?>
 </section>
