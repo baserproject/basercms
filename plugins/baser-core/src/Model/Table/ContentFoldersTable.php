@@ -18,6 +18,9 @@ use BaserCore\Model\AppTable;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
 use Cake\Datasource\EntityInterface;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class ContentFoldersTable
@@ -51,8 +54,6 @@ class ContentFoldersTable extends AppTable
      *
      * @param array $config テーブル設定
      * @return void
-     * @checked
-     * @unitTest
      */
     public function initialize(array $config): void
     {

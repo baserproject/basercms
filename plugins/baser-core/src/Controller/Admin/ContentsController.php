@@ -791,11 +791,6 @@ class ContentsController extends BcAdminAppController
     {
         $this->autoRender = false;
         Configure::write('debug', 0);
-        $url = $this->Contents->getUrlById($id, true);
-        return $url;
-        // $this->set([
-        //     'url' => $this->Contents->getUrlById($id, true),
-        // ]);
-        // $this->viewBuilder()->setOption('serialize', 'url');
+        return $this->response->withType("application/json")->withStringBody($this->Contents->getUrlById($id, true));
     }
 }

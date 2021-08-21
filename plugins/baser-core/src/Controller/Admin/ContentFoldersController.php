@@ -14,7 +14,9 @@ namespace BaserCore\Controller\Admin;
 use Cake\Event\EventInterface;
 use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Service\Admin\ContentFolderManageServiceInterface;
-
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 /**
  * Class ContentFoldersController
  *
@@ -56,6 +58,9 @@ class ContentFoldersController extends BcAdminAppController
      * コンテンツを登録する
      *
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(ContentFolderManageServiceInterface $contentFolderManage)
     {
@@ -75,7 +80,8 @@ class ContentFoldersController extends BcAdminAppController
             true,
             false
         );
-        exit(json_encode($contentFolder->content));
+
+        return $this->response->withType("application/json")->withStringBody(json_encode($contentFolder->content));
     }
 
     /**
