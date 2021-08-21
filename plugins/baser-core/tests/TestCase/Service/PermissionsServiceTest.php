@@ -12,20 +12,20 @@
 namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Service\PermissionsService;
+use BaserCore\Service\PermissionService;
 
 /**
  * BaserCore\Model\Table\PermissionsTable Test Case
  *
- * @property PermissionsService $PermissionsService
+ * @property PermissionService $PermissionService
  */
-class PermissionsServiceTest extends BcTestCase
+class PermissionServiceTest extends BcTestCase
 {
 
     /**
      * Test subject
      *
-     * @var PermissionsService
+     * @var PermissionService
      */
     public $Permissions;
 
@@ -47,7 +47,7 @@ class PermissionsServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->PermissionsService = new PermissionsService();
+        $this->PermissionService = new PermissionService();
     }
 
     /**
@@ -57,7 +57,7 @@ class PermissionsServiceTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        unset($this->PermissionsService);
+        unset($this->PermissionService);
         parent::tearDown();
     }
 
@@ -68,7 +68,7 @@ class PermissionsServiceTest extends BcTestCase
      */
     public function testGetNew()
     {
-        $permission = $this->PermissionsService->getNew(1);
+        $permission = $this->PermissionService->getNew(1);
         $this->assertEquals(1, $permission->user_group_id);
         $this->assertFalse($permission->hasErrors());
     }
@@ -79,7 +79,7 @@ class PermissionsServiceTest extends BcTestCase
      */
     public function testGet()
     {
-        $permission = $this->PermissionsService->get(1);
+        $permission = $this->PermissionService->get(1);
         $this->assertEquals('システム管理', $permission->name);
         $this->assertEquals(2, $permission->user_group->id);
     }
@@ -92,12 +92,12 @@ class PermissionsServiceTest extends BcTestCase
     {
         // user_group_idがある場合
         $request = $this->getRequest('/')->withQueryParams(['user_group_id' => 2]);
-        $permissions = $this->PermissionsService->getIndex($request->getQueryParams());
+        $permissions = $this->PermissionService->getIndex($request->getQueryParams());
         $this->assertEquals('システム管理', $permissions->first()->name);
         $this->assertEquals(15, $permissions->count());
         // user_group_idがない場合
         $request = $this->getRequest('/')->withQueryParams(['user_group_id' => 999]);
-        $permissions = $this->PermissionsService->getIndex($request->getQueryParams());
+        $permissions = $this->PermissionService->getIndex($request->getQueryParams());
         $this->assertnull($permissions->first());
     }
 
@@ -115,8 +115,8 @@ class PermissionsServiceTest extends BcTestCase
             'url' => '/baser/admin/*',
             'status' => true
         ];
-        $permission = $this->PermissionsService->create($data);
-        $newRecord = $this->PermissionsService->Permissions->find()->all()->last();
+        $permission = $this->PermissionService->create($data);
+        $newRecord = $this->PermissionService->Permissions->find()->all()->last();
         $this->assertEquals($newRecord->name, $permission->name);
     }
 
@@ -132,8 +132,8 @@ class PermissionsServiceTest extends BcTestCase
             'user_group_id' => '2',
             'url' => '/baser/admin/*'
         ];
-        $record = $this->PermissionsService->Permissions->get(1);
-        $permission = $this->PermissionsService->update($record, $data);
+        $record = $this->PermissionService->Permissions->get(1);
+        $permission = $this->PermissionService->update($record, $data);
         $this->assertEquals('testUpdate', $permission->name);
         $this->assertEquals(21, $permission->no);
     }
@@ -146,13 +146,13 @@ class PermissionsServiceTest extends BcTestCase
     public function testDelete()
     {
         // group_idが1出ない場合
-        $this->PermissionsService->delete(1);
-        $permissions = $this->PermissionsService->Permissions->find('all');
+        $this->PermissionService->delete(1);
+        $permissions = $this->PermissionService->Permissions->find('all');
         $this->assertEquals(2, $permissions->first()->id);
         // Adminのgroup_idが最後の1つの場合
         $this->expectException("Exception");
         $this->expectExceptionMessage("最後のシステム管理者は削除できません");
-        $this->PermissionsService->delete(20);
+        $this->PermissionService->delete(20);
     }
 
     /**
@@ -163,7 +163,7 @@ class PermissionsServiceTest extends BcTestCase
     public function testGetMethodList()
     {
         $this->assertEquals(
-            $this->PermissionsService->getMethodList(),
+            $this->PermissionService->getMethodList(),
             ['*' => 'ALL',
             'GET' => 'GET',
             'POST' => 'POST',]

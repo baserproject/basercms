@@ -17,10 +17,10 @@ use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 
 /**
- * Interface PermissionsServiceInterface
+ * Interface PermissionServiceInterface
  * @package BaserCore\Service
  */
-interface PermissionsServiceInterface
+interface PermissionServiceInterface
 {
 
     /**

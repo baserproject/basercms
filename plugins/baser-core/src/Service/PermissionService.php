@@ -25,11 +25,11 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 
 /**
- * Class PermissionsService
+ * Class PermissionService
  * @package BaserCore\Service
  * @property PermissionsTable $Permissions
  */
-class PermissionsService implements PermissionsServiceInterface
+class PermissionService implements PermissionServiceInterface
 {
 
     /**
@@ -39,7 +39,7 @@ class PermissionsService implements PermissionsServiceInterface
     public $Permissions;
 
     /**
-     * PermissionsService constructor.
+     * PermissionService constructor.
      */
     public function __construct()
     {

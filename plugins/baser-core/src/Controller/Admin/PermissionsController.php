@@ -33,7 +33,7 @@ use BaserCore\Service\SiteConfigsTrait;
 use BaserCore\Model\Table\UserGroupsTable;
 use BaserCore\Model\Table\PermissionsTable;
 use BaserCore\Service\UserGroupsServiceInterface;
-use BaserCore\Service\PermissionsServiceInterface;
+use BaserCore\Service\Admin\PermissionManageServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use Authentication\Controller\Component\AuthenticationComponent;
 
@@ -91,7 +91,7 @@ class PermissionsController extends BcAdminAppController
      * @unitTest
      * @noTodo
 	 */
-	public function index(PermissionsServiceInterface $permissions, UserGroupsServiceInterface $userGroups, $userGroupId = '')
+	public function index(PermissionManageServiceInterface $permissions, UserGroupsServiceInterface $userGroups, $userGroupId = '')
 	{
 		/* セッション処理 */
 		if (!$userGroupId) {
@@ -134,7 +134,7 @@ class PermissionsController extends BcAdminAppController
 	/**
 	 * [ADMIN] 登録処理
      *
-     * @param PermissionsServiceInterface $userManage
+     * @param PermissionServiceInterface $userManage
      * @param UserGroupsServiceInterface $userGroups
      * @param UserGroupsServiceInterface $userGroups
      * @param int $userGroupId
@@ -144,18 +144,20 @@ class PermissionsController extends BcAdminAppController
      * @unitTest
 	 * @return void
 	 */
-	public function add(PermissionsServiceInterface $permissions, UserGroupsServiceInterface $userGroups, $userGroupId)
+	public function add(PermissionManageServiceInterface $permissionManage, UserGroupsServiceInterface $userGroups, $userGroupId)
 	{
 		$currentUserGroup = $userGroups->get($userGroupId);
         if ($this->request->is('post')) {
-            $permission = $permissions->create($this->request->withData('user_group_id', $currentUserGroup->id)->getData());
+            $permission = $permissionManage->create($this->request->withData('user_group_id', $currentUserGroup->id)->getData());
+            var_dump($permission);
+            exit;
             if (empty($permission->getErrors()) === true) {
                 $this->BcMessage->setSuccess(sprintf(__d('baser', '新規アクセス制限設定「%s」を追加しました。'), $permission->name));
                 return $this->redirect(['action' => 'index', $userGroupId]);
             }
             $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
         } else {
-            $permission = $permissions->getNew($userGroupId);
+            $permission = $permissionManage->getNew($userGroupId);
         }
         $this->set('permission', $permission);
         $this->set('currentUserGroup', $currentUserGroup);
