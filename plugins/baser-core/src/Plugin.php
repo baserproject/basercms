@@ -84,7 +84,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     {
         $application->addPlugin($plugin);
         $pluginPath = BcUtil::getPluginPath($plugin);
-        if (file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
+        if (file_exists($pluginPath . 'config' . DS . 'setting.php')) {
             // DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
             // ※ プラグインの setting.php で、DBへの接続処理が書かれている可能性がある為
             try {
