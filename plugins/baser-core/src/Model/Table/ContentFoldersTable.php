@@ -253,6 +253,11 @@ class ContentFoldersTable extends AppTable
      */
     public function getParentTemplate($id, $type)
     {
+        // TODO ucmitz 暫定措置
+        // >>>
+        return 'default';
+        // <<<
+
         $this->Content->bindModel(
             ['belongsTo' => [
                 'ContentFolder' => [

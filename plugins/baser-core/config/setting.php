@@ -364,28 +364,28 @@ return [
      */
     'BcContents' => [
         'items' => [
-            'Core' => [
+            'BaserCore' => [
                 'Default' => [
                     'title' => __d('baser', '無所属コンテンツ'),
                     'omitViewAction' => true,
                     'routes' => [
                         'add' => [
                             'admin' => true,
-                            'controller' => 'contents',
+                            'controller' => 'Contents',
                             'action' => 'add'
                         ],
                         'edit' => [
                             'admin' => true,
-                            'controller' => 'contents',
+                            'controller' => 'Contents',
                             'action' => 'edit'
                         ],
                         'delete' => [
                             'admin' => true,
-                            'controller' => 'contents',
+                            'controller' => 'Contents',
                             'action' => 'empty'
                         ],
                         'view' => [
-                            'controller' => 'contents',
+                            'controller' => 'Contents',
                             'action' => 'view'
                         ]
                     ],
@@ -398,21 +398,21 @@ return [
                     'routes' => [
                         'add' => [
                             'admin' => true,
-                            'controller' => 'content_folders',
+                            'controller' => 'ContentFolders',
                             'action' => 'add'
                         ],
                         'edit' => [
                             'admin' => true,
-                            'controller' => 'content_folders',
+                            'controller' => 'ContentFolders',
                             'action' => 'edit'
                         ],
                         'delete' => [
                             'admin' => true,
-                            'controller' => 'content_folders',
+                            'controller' => 'ContentFolders',
                             'action' => 'delete'
                         ],
                         'view' => [
-                            'controller' => 'content_folders',
+                            'controller' => 'ContentFolders',
                             'action' => 'view'
                         ]
                     ],
@@ -425,13 +425,13 @@ return [
                     'routes' => [
                         'add' => [
                             'admin' => true,
-                            'controller' => 'contents',
+                            'controller' => 'Contents',
                             'action' => 'add',
                             1
                         ],
                         'edit' => [
                             'admin' => true,
-                            'controller' => 'contents',
+                            'controller' => 'Contents',
                             'action' => 'edit_alias'
                         ]
                     ],
@@ -443,21 +443,21 @@ return [
                     'routes' => [
                         'add' => [
                             'admin' => true,
-                            'controller' => 'content_links',
+                            'controller' => 'ContentLinks',
                             'action' => 'add'
                         ],
                         'edit' => [
                             'admin' => true,
-                            'controller' => 'content_links',
+                            'controller' => 'ContentLinks',
                             'action' => 'edit'
                         ],
                         'delete' => [
                             'admin' => true,
-                            'controller' => 'content_links',
+                            'controller' => 'ContentLinks',
                             'action' => 'delete'
                         ],
                         'view' => [
-                            'controller' => 'content_links',
+                            'controller' => 'ContentLinks',
                             'action' => 'view'
                         ]
                     ],
@@ -472,26 +472,26 @@ return [
                     'routes' => [
                         'add' => [
                             'admin' => true,
-                            'controller' => 'pages',
+                            'controller' => 'Pages',
                             'action' => 'ajax_add'
                         ],
                         'edit' => [
                             'admin' => true,
-                            'controller' => 'pages',
+                            'controller' => 'Pages',
                             'action' => 'edit'
                         ],
                         'delete' => [
                             'admin' => true,
-                            'controller' => 'pages',
+                            'controller' => 'Pages',
                             'action' => 'delete'
                         ],
                         'view' => [
-                            'controller' => 'pages',
+                            'controller' => 'Pages',
                             'action' => 'display'
                         ],
                         'copy' => [
                             'admin' => true,
-                            'controller' => 'pages',
+                            'controller' => 'Pages',
                             'action' => 'ajax_copy'
                         ]
                     ]

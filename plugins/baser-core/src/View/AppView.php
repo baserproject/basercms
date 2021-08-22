@@ -12,6 +12,7 @@
 namespace BaserCore\View;
 
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\View\Helper\BcPageHelper;
 use Cake\View\View;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -20,6 +21,7 @@ use BaserCore\Annotation\Checked;
 /**
  * Class AppView
  * @package BaserCore\View
+ * @property BcPageHelper $BcPage
  */
 class AppView extends View
 {
@@ -28,4 +30,41 @@ class AppView extends View
      * Trait
      */
     use BcEventDispatcherTrait;
+
+    /**
+     * initialize
+     * @checked
+     * @noTodo
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->loadHelper('BaserCore.BcPage');
+    }
+
+    /**
+     * テンプレートを描画する
+     * 固定ページで利用
+     *
+     * @param string $templateFile Filename of the template.
+     * @return string Rendered output
+     */
+    public function evaluate(string $templateFile): string
+    {
+        $dataForView = [];
+        foreach($this->getVars() as $key) {
+            $dataForView[$key] = $this->get($key);
+        }
+        return parent::_evaluate($templateFile, $dataForView);
+    }
+
+    /**
+     * 拡張子を取得する
+     * @return string
+     */
+    public function getExt(): string
+    {
+        return $this->_ext;
+    }
+
 }

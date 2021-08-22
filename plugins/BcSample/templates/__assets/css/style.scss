@@ -1,0 +1,28 @@
+@charset "utf-8";
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ *
+ * @copyright       Copyright (c) baserCMS Users Community
+ * @link			https://basercms.net baserCMS Project
+ * @package         Baser.View
+ * @since           baserCMS v 4.4.0
+ * @license         https://basercms.net/license/index.html
+ */
+
+/**
+ * デフォルトスタイル
+ */
+
+@import "common/mixin";
+@import "common/normalize";
+@import "common/base";
+@import "common/main";
+@import "common/header";
+@import "common/footer";
+@import "common/sub";
+@import "common/parts";
+@import "page/top";
+@import "page/blog";
+@import "page/mail";
+@import "page/search";

@@ -32,6 +32,8 @@ class BcTestCaseTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.LoginStores',
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
     ];
 
     /**
@@ -58,7 +60,7 @@ class BcTestCaseTest extends BcTestCase
     public function testGetRequest(): void
     {
         // デフォルトURL $url = '/'
-        $urlList = ['' => '/', '/test' => '/{controller}', '/test/test' => '/{controller}/{action}/*'];
+        $urlList = ['' => '/*', '/about' => '/*', '/baser/admin/users/login' => '/baser/admin/{controller}/{action}/*'];
         foreach($urlList as $url => $route) {
             $request = $this->getRequest($url);
             $this->assertEquals($route, $request->getParam('_matchedRoute'));

@@ -38,6 +38,10 @@ class AnalyseController extends AppController
         '.min.js', '.mo', '.po', '.pot', '.eot', '.svg', '.ttf', '.woff', '.woff2', '.map', '.html', '.bundle.js', '.txt'
     ];
 
+    private const CONVERT_CLASS_NAME = [
+        '\BaserCore\Routing\RouteCollection' => '\Cake\Routing\RouteCollection'
+    ];
+
     /**
      * 解析したファイル情報一覧
      *
@@ -119,6 +123,9 @@ class AnalyseController extends AppController
             }
             try {
                 $className = $this->pathToClass($path);
+                if(!empty(self::CONVERT_CLASS_NAME[$className])) {
+                    $className = self::CONVERT_CLASS_NAME[$className];
+                }
                 $meta['class'] = $className;
                 $class = new ReflectionClass($className);
                 $traitMethodsArray = $this->getTraitMethod($class);

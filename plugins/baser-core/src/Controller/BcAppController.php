@@ -22,7 +22,6 @@ use Cake\Http\ServerRequest;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Service\DblogsServiceInterface;
 use Cake\Core\Configure;
-use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -608,7 +607,7 @@ class BcAppController extends AppController
      *
      * @return    void
      */
-    public function beforeRender(EventInterface $event)
+    public function beforeRender(EventInterface $event): void
     {
         parent::beforeRender($event);
 

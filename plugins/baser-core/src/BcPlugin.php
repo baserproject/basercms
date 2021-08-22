@@ -162,6 +162,20 @@ class BcPlugin extends BasePlugin
     {
         $plugin = $this->getName();
 
+        /**
+         * コンテンツ管理ルーティング
+         */
+        $routes->plugin(
+            $plugin,
+            ['path' => '/'],
+            function(RouteBuilder $routes) {
+                $routes->setRouteClass('BaserCore.BcContentsRoute');
+                $routes->connect('/', []);
+                $routes->connect('/{controller}/index', []);
+                $routes->connect('/:controller/:action/*', []);
+            }
+        );
+
         // プラグインの管理画面用ルーティング
         $routes->prefix(
             'Admin',

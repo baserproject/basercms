@@ -1,0 +1,97 @@
+/**
+ * Mail Form
+ */
+
+/* Mail Title Sub
+----------------------------------------------- */
+
+.bs-mail-title-sub {
+  font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+  padding: 0 !important;;
+  background: none !important;
+  font-size: 24px !important;
+}
+
+/* Mail Form
+----------------------------------------------- */
+
+.bs-mail-form {
+  .form-error {
+    background-color: #FCF5EB;
+  }
+  .error-message {
+    color: #C30;
+    font-weight: bold;
+    font-size: small;
+    font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+    padding: 5px;
+
+    &:before {
+      content: "！";
+    }
+  }
+}
+
+/* Mail Form Body
+----------------------------------------------- */
+
+.bs-mail-form-body {
+  font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+
+  input[type=text],
+  input[type=email],
+  textarea {
+    box-sizing: border-box;
+    width: 100% !important;
+  }
+  .required {
+    color: #FFF;
+    font-size: 10px;
+    background-color: #C30;
+    padding: 4px 5px;
+    font-weight: bold;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    white-space: nowrap;
+    margin-left: 5px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+  .normal {
+    color: #FFF;
+    font-size: 10px;
+    background-color: #CCC;
+    padding: 4px 5px;
+    font-weight: bold;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    white-space: nowrap;
+    margin-left: 5px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+}
+
+.bs-mail-form-auth-captcha {
+  .auth-captcha-image {
+    vertical-align:middle;
+  }
+}
+
+/* Mail Form Submit
+----------------------------------------------- */
+
+.bs-mail-form-submit {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  input[type=submit],
+  input[type=reset] {
+    @include bs-button();
+    @include bs-mq() {
+      width: 100%;
+      margin: 10px 0;
+    }
+  }
+}

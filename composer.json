@@ -30,7 +30,8 @@
             "BcBlog\\": "plugins/bc-blog/src/",
             "BcMail\\": "plugins/bc-mail/src/",
             "BcSample\\": "plugins/BcSample/src/",
-            "BcUploader\\": "plugins/bc-uploader/src/"
+            "BcUploader\\": "plugins/bc-uploader/src/",
+            "Cake\\Routing\\": "plugins/baser-core/src/Routing"
         }
     },
     "autoload-dev": {

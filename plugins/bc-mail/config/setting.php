@@ -11,6 +11,9 @@
  * @license         https://basercms.net/license/index.html
  */
 
+// TODO ucmitz 未移行のため暫定措置
+return [];
+
 /**
  * システムナビ
  */
@@ -51,7 +54,7 @@ foreach ($mailContents as $mailContent) {
     ];
 }
 
-$config['BcContents']['items']['Mail'] = [
+$config['BcContents']['items']['BcMail'] = [
     'MailContent' => [
         'title' => __d('baser', 'メールフォーム'),
         'multiple' => true,

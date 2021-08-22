@@ -949,7 +949,7 @@ class ContentsTable extends AppTable
     {
         [$plugin, $type] = pluginSplit($type);
         if (!$plugin) {
-            $plugin = 'Core';
+            $plugin = 'BaserCore';
         }
         $conditions = [
             'Contents.plugin' => $plugin,
@@ -1388,17 +1388,25 @@ class ContentsTable extends AppTable
      * 公開済の conditions を取得
      *
      * @return array 公開条件（conditions 形式）
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getConditionAllowPublish()
     {
-        $conditions[$this->alias . '.status'] = true;
-        $conditions[] = ['or' => [[$this->alias . '.publish_begin <=' => date('Y-m-d H:i:s')],
-            [$this->alias . '.publish_begin' => null],
-            [$this->alias . '.publish_begin' => '0000-00-00 00:00:00']]];
-        $conditions[] = ['or' => [[$this->alias . '.publish_end >=' => date('Y-m-d H:i:s')],
-            [$this->alias . '.publish_end' => null],
-            [$this->alias . '.publish_end' => '0000-00-00 00:00:00']]];
-        return $conditions;
+        return [
+            'Contents.status' => true,
+            ['or' => [
+                ['Contents.publish_begin <=' => date('Y-m-d H:i:s')],
+                ['Contents.publish_begin IS' => null],
+                ['Contents.publish_begin' => '0000-00-00 00:00:00']
+            ]],
+            ['or' => [
+                ['Contents.publish_end >=' => date('Y-m-d H:i:s')],
+                ['Contents.publish_end IS' => null],
+                ['Contents.publish_end' => '0000-00-00 00:00:00']
+            ]]
+        ];
     }
 
     /**
@@ -1977,6 +1985,7 @@ class ContentsTable extends AppTable
 
     /**
      * URLに関連するコンテンツ情報を取得する
+     * サイト情報を含む
      *
      * @param string $url 検索対象のURL
      * @param bool $publish 公開状態かどうか
@@ -1984,10 +1993,14 @@ class ContentsTable extends AppTable
      * @param bool $sameUrl 対象をメインサイトと同一URLで表示するサイト設定内のコンテンツするかどうか
      * @param bool $useSubDomain 対象をサブドメインを利用しているサイト設定内のコンテンツをするかどうか
      * @return mixed false|array Content データ
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function findByUrl($url, $publish = true, $extend = false, $sameUrl = false, $useSubDomain = false)
     {
         $url = preg_replace('/^\//', '', $url);
+        $query = $this->find()->order(['url' => 'DESC'])->contain('Sites');
         if ($extend) {
             $params = explode('/', $url);
             $condUrls = [];
@@ -2000,51 +2013,31 @@ class ContentsTable extends AppTable
                 $condUrls[] = '/' . $path;
             }
             // 固定ページはURL拡張はしない
-            $conditions = [
-                'Content.type <>' => 'Page',
-                'Content.url' => $condUrls,
-                ['or' => [
-                    ['Site.status' => true],
-                    ['Site.status' => null]
-                ]],
-                ['or' => [
-                    ['Site.same_main_url' => $sameUrl],
-                    ['Site.same_main_url' => null]
-                ]],
-                ['or' => [
-                    ['Site.use_subdomain' => $useSubDomain],
-                    ['Site.use_subdomain' => null]
-                ]]
-            ];
+            $query->where([
+                'Contents.type <>' => 'Page',
+                'Contents.url IN' => $condUrls
+            ]);
         } else {
-            $conditions = [
-                'Content.url' => $this->getUrlPattern($url),
-                ['or' => [
-                    ['Site.status' => true],
-                    ['Site.status' => null]
-                ]],
-                ['or' => [
-                    ['Site.same_main_url' => $sameUrl],
-                    ['Site.same_main_url' => null]
-                ]],
-                ['or' => [
-                    ['Site.use_subdomain' => $useSubDomain],
-                    ['Site.use_subdomain' => null]
-                ]]
-            ];
+            $query->where([
+                'Contents.url IN' => $this->getUrlPattern($url)
+            ]);
         }
+        $query->innerJoinWith('Sites', function($q) use($sameUrl, $useSubDomain) {
+            return $q->where([
+                ['Sites.status' => true],
+                ['Sites.same_main_url' => $sameUrl],
+                ['Sites.use_subdomain' => $useSubDomain]
+            ]);
+        });
         if ($publish) {
-            $conditions = array_merge($conditions, $this->getConditionAllowPublish());
+            $query->where($this->getConditionAllowPublish());
         }
-        $content = $this->find('first', ['conditions' => $conditions, 'order' => 'Content.url DESC', 'cache' => false]);
+        $content = $query->first();
         if (!$content) {
             return false;
         }
-        if ($extend && $content['Content']['type'] == 'ContentFolder') {
+        if ($extend && $content->type == 'ContentFolder') {
             return false;
-        }
-        if ($content && empty($content['Site']['id'])) {
-            $content['Site'] = $this->Sites->getRootMain();
         }
         return $content;
     }

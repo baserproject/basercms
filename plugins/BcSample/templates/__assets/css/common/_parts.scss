@@ -1,0 +1,398 @@
+/**
+ * Parts
+ */
+
+/* List Number
+----------------------------------------------- */
+
+.bs-list-num {
+  text-align: right;
+  margin-bottom: 20px;
+
+  strong {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+
+  a:link, a:visited {
+    color: #000 !important;
+    text-decoration: underline;
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+
+  .current {
+    font-weight: bold;
+  }
+
+  &__number {
+    font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif;
+  }
+}
+
+
+/* Button Small
+----------------------------------------------- */
+
+.bs-button-small {
+  padding: 8px 15px;
+  margin-bottom: 0;
+  font-size: 1em;
+  line-height: 18px;
+  vertical-align: middle;
+  cursor: pointer;
+  font-weight: normal;
+  font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+  text-decoration: none !important;
+  display: inline-block;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  background-color: #f5f5f5;
+  background-image: -ms-linear-gradient(top, #fff, #e6e6e6);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#e6e6e6));
+  background-image: -webkit-linear-gradient(top, #fff, #e6e6e6);
+  background-image: -o-linear-gradient(top, #fff, #e6e6e6);
+  background-image: linear-gradient(top, #fff, #e6e6e6);
+  background-image: -moz-linear-gradient(top, #fff, #e6e6e6);
+  background-repeat: repeat-x;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+
+  &:hover {
+    color: #333;
+    text-decoration: none;
+    background-color: #e6e6e6;
+    background-position: 0 -15px;
+    transition: background-position .1s linear;
+  }
+
+  &:active {
+    color: #333;
+    border: 1px solid #CCC;
+    text-decoration: none;
+    background: #cdcdcd;
+    background: -moz-linear-gradient(top, #cdcdcd, #eee 100%);
+    background: -webkit-gradient(linear, left top, left bottom, from(#cdcdcd), color-stop(100%, #eee));
+    background: -o-linear-gradient(top, #cdcdcd, #eee 100%);
+  }
+}
+
+/* Pagination
+----------------------------------------------- */
+
+.bs-pagination {
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  margin: 100px 0 100px;
+  font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+  font-size: 14px;
+
+  a {
+    text-decoration: none;
+    color: #fff !important;
+    background-color: #001800;
+
+    &:hover {
+      transition: all 300ms;
+      background-color: #555;
+    }
+  }
+
+  &__prev,
+  &__next {
+    a {
+      border: 1px solid #ddd;
+      display: block;
+      padding: 4px 20px;
+    }
+
+    &.disabled {
+      border: 1px solid #ddd;
+      display: block;
+      padding: 4px 20px;
+      color: #DDD;
+    }
+  }
+
+  &__prev {
+    a,
+    &.disabled {
+      border-radius: 5px 0 0 5px;
+    }
+  }
+
+  &__next {
+    a,
+    &.disabled {
+      border-radius: 0 5px 5px 0;
+      @include bs-mq() {
+        border-left: none;
+      }
+    }
+  }
+
+  &__number {
+    display: inline-block;
+    @include bs-mq() {
+      display: none;
+    }
+
+    &:not(:last-child) {
+      border-right: 1px solid #ddd;
+    }
+
+    &.current,
+    a {
+      display: inline-block;
+      padding: 4px 11px;
+      @include bs-mq() {
+        display: none;
+      }
+    }
+
+    &.current {
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+      color: #000;
+      font-weight: bold;
+    }
+  }
+}
+
+/* Crumbs
+----------------------------------------------- */
+
+.bs-crumbs {
+  font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+  width: 1260px;
+  margin: 0 auto;
+  padding: 15px 20px;
+  font-size: 12px;
+  color: #CCC;
+  box-sizing: border-box;
+  line-height: 2em;
+  @include bs-mq() {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 15px 20px;
+  }
+
+  strong {
+    font-weight: bold;
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
+
+    &:visited {
+      color: #000;
+    }
+
+    &:hover {
+      color: #555;
+    }
+  }
+
+  ul {
+    display: flex;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+    flex-wrap: wrap;
+  }
+}
+
+/* Contents Navigation
+----------------------------------------------- */
+
+.bs-contents-navi {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin: 160px 0 0 0;
+  font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+  font-size: 14px;
+
+  a {
+    transition: all 300ms;
+    width: 47%;
+    display: block;
+    text-decoration: none;
+    @include bs-mq() {
+      font-size: 12px;
+    }
+
+    &:link,
+    &:visited {
+      color: #000 !important;
+    }
+
+    &:hover {
+      color: #555 !important;
+    }
+  }
+
+  .next-link {
+    padding: 20px 0 20px 2%;
+    float: right;
+    text-align: left;
+  }
+
+  .prev-link {
+    padding: 20px 2% 20px 0;
+    float: left;
+    text-align: right;
+  }
+}
+
+/* Toolbar
+----------------------------------------------- */
+
+.bca-toolbar {
+  letter-spacing: 0;
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+/* Edit Link
+----------------------------------------------- */
+
+.edit-link {
+  margin-bottom: 10px;
+  text-align: right;
+  font-size: 12px;
+
+  a {
+    border: 1px solid #1C98D4;
+    color: #1C98D4;
+    padding: 5px 10px;
+    text-decoration: none;
+
+    &:hover {
+      color: #1C98D4;
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Upload File
+----------------------------------------------- */
+
+.upload-file {
+  input[type=file] {
+    margin-bottom: 5px;
+  }
+
+  a {
+    padding: 5px;
+    background-color: #F1F1F1;
+    display: inline-block;
+  }
+}
+
+/* Message
+----------------------------------------------- */
+
+#flashMessage,
+#ResultMessage {
+  font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+  padding: 10px 20px;
+  margin: 20px auto 40px !important;
+  color: #fff;
+  background-color: #C30;
+  font-weight: normal;
+  border-radius: 10px;
+}
+
+#flashMessage.alert-message {
+  color: #fff;
+  background-color: #f20014;
+}
+#flashMessage.warning-message {
+  color: #fff;
+  background-color: #ffd24d;
+}
+#flashMessage.info-message {
+  color: #fff;
+  background-color: #0087bc;
+}
+
+/* Clear
+----------------------------------------------- */
+
+.clear {
+  clear: both;
+}
+
+.clearfix {
+  display: block;
+
+  &:after {
+    content: " ";
+    display: block;
+    clear: both;
+    height: 0;
+  }
+}
+
+/* Sql Log
+----------------------------------------------- */
+
+table.cake-sql-log {
+  width: 90%;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-bottom: 1px solid #666;
+  border-right: 1px solid #666;
+  color: #333;
+  background-color: #fff;
+  clear: both;
+  padding: 0;
+  margin: 0 0 1em 0;
+  white-space: normal;
+  border-collapse: separate;
+  margin: 20px auto;
+
+  caption {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  th {
+    background-color: #e2e2e2;
+    padding: 4px 8px;
+    font-weight: bold;
+    text-align: center;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: #FFFFFF;
+    border-right-color: #666;
+    border-bottom-color: #666;
+    border-left-color: #FFFFFF;
+    font-size: 0.8em;
+  }
+
+  td {
+    background-color: #F7F7F7;
+    padding: 6px 8px;
+    vertical-align: top;
+    text-align: left;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-right-color: #ccc;
+    border-bottom-color: #ccc;
+    font-size: 0.8em;
+  }
+}

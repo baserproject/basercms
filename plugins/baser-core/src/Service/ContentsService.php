@@ -70,10 +70,11 @@ class ContentsService implements ContentsServiceInterface
      */
     public function getTreeIndex(array $queryParams): Query
     {
+        $site = $this->Contents->Sites->getRootMain();
         if ($queryParams['site_id'] === 'all') {
             $queryParams = ['or' => [
                 ['Sites.use_subdomain' => false],
-                ['Contents.site_id' => 0]
+                ['Contents.site_id' => $site->id]
             ]];
         }
 

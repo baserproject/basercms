@@ -1,19 +1,25 @@
 <?php
-// TODO : コード確認要
-return;
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ *
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
+ */
+
+namespace BaserCore\Test\Fixture\Routing\Route\BcContentsRoute;
+
+use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * ContentFixture
  */
-class ContentBcContentsRouteFixture extends BaserTestFixture
+class ContentBcContentsRouteFixture extends TestFixture
 {
 
-    /**
-     * Name of the object
-     *
-     * @var string
-     */
-    public $name = 'Content';
+    public $import = ['table' => 'contents'];
 
     /**
      * Records
@@ -24,11 +30,11 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '1',
             'name' => '',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'entity_id' => '1',
             'url' => '/',
-            'site_id' => '0',
+            'site_id' => '1',
             'alias_id' => null,
             'main_site_content_id' => null,
             'parent_id' => null,
@@ -60,7 +66,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '2',
             'name' => 'm',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'entity_id' => '2',
             'url' => '/m/',
@@ -96,7 +102,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '3',
             'name' => 's',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'entity_id' => '3',
             'url' => '/s/',
@@ -132,11 +138,11 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '4',
             'name' => 'index',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'Page',
             'entity_id' => '1',
             'url' => '/index',
-            'site_id' => '0',
+            'site_id' => '1',
             'alias_id' => null,
             'main_site_content_id' => null,
             'parent_id' => '1',
@@ -168,11 +174,11 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '5',
             'name' => 'service',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'entity_id' => '4',
             'url' => '/service/',
-            'site_id' => '0',
+            'site_id' => '1',
             'alias_id' => null,
             'main_site_content_id' => null,
             'parent_id' => '1',
@@ -204,7 +210,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '6',
             'name' => 'index',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'Page',
             'entity_id' => '4',
             'url' => '/m/index',
@@ -244,7 +250,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
             'type' => 'MailContent',
             'entity_id' => '1',
             'url' => '/service/contact/',
-            'site_id' => '0',
+            'site_id' => '1',
             'alias_id' => null,
             'main_site_content_id' => null,
             'parent_id' => '5',
@@ -276,11 +282,11 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '8',
             'name' => 'news',
-            'plugin' => 'Blog',
+            'plugin' => 'BcBlog',
             'type' => 'BlogContent',
             'entity_id' => '1',
             'url' => '/news/',
-            'site_id' => '0',
+            'site_id' => '1',
             'alias_id' => null,
             'main_site_content_id' => null,
             'parent_id' => '1',
@@ -312,11 +318,11 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '9',
             'name' => 'service1',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'Page',
             'entity_id' => '3',
             'url' => '/service/service1',
-            'site_id' => '0',
+            'site_id' => '1',
             'alias_id' => null,
             'main_site_content_id' => null,
             'parent_id' => '5',
@@ -348,7 +354,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '10',
             'name' => 'index',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'Page',
             'entity_id' => '1',
             'url' => '/s/index',
@@ -384,7 +390,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '11',
             'name' => 'news',
-            'plugin' => 'Blog',
+            'plugin' => 'BcBlog',
             'type' => 'BlogContent',
             'entity_id' => '1',
             'url' => '/s/news/',
@@ -420,7 +426,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '12',
             'name' => 'service',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'entity_id' => '4',
             'url' => '/s/service/',
@@ -456,7 +462,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '13',
             'name' => 'en',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'entity_id' => '5',
             'url' => '/en/',
@@ -492,7 +498,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '14',
             'name' => 'sub',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'entity_id' => '6',
             'url' => '/sub/',
@@ -528,7 +534,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '15',
             'name' => 'another.com',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'entity_id' => '7',
             'url' => '/another.com/',
@@ -600,7 +606,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '17',
             'name' => 'news',
-            'plugin' => 'Blog',
+            'plugin' => 'BcBlog',
             'type' => 'BlogContent',
             'entity_id' => '2',
             'url' => '/m/news/',
@@ -636,7 +642,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '18',
             'name' => 'news',
-            'plugin' => 'Blog',
+            'plugin' => 'BcBlog',
             'type' => 'BlogContent',
             'entity_id' => '3',
             'url' => '/en/news/',
@@ -672,7 +678,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '19',
             'name' => 'news',
-            'plugin' => 'Blog',
+            'plugin' => 'BcBlog',
             'type' => 'BlogContent',
             'entity_id' => '4',
             'url' => '/sub/news/',
@@ -708,7 +714,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '20',
             'name' => 'news',
-            'plugin' => 'Blog',
+            'plugin' => 'BcBlog',
             'type' => 'BlogContent',
             'entity_id' => '5',
             'url' => '/another.com/news/',
@@ -744,7 +750,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '21',
             'name' => 'service',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'entity_id' => '8',
             'url' => '/en/service/',
@@ -780,7 +786,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '22',
             'name' => 'service1',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'Page',
             'entity_id' => '8',
             'url' => '/en/service/service1',
@@ -816,7 +822,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '23',
             'name' => 'service',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'entity_id' => '9',
             'url' => '/sub/service/',
@@ -852,7 +858,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '24',
             'name' => 'service1',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'Page',
             'entity_id' => '9',
             'url' => '/sub/service/service1',
@@ -888,7 +894,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '25',
             'name' => 'service',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'entity_id' => '10',
             'url' => '/another.com/service/',
@@ -924,7 +930,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '26',
             'name' => 'service',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'entity_id' => '11',
             'url' => '/m/service/',
@@ -1104,7 +1110,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '31',
             'name' => 'service1',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'Page',
             'entity_id' => '10',
             'url' => '/m/service/service1',
@@ -1140,7 +1146,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '32',
             'name' => 'service1',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'Page',
             'entity_id' => '3',
             'url' => '/s/service/service1',
@@ -1176,7 +1182,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '33',
             'name' => 'service1',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'Page',
             'entity_id' => '11',
             'url' => '/another.com/service/service1',
@@ -1212,7 +1218,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '34',
             'name' => 'index',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'Page',
             'entity_id' => '12',
             'url' => '/en/index',
@@ -1248,7 +1254,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '35',
             'name' => 'index',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'Page',
             'entity_id' => '13',
             'url' => '/sub/index',
@@ -1284,7 +1290,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '36',
             'name' => 'index',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'Page',
             'entity_id' => '14',
             'url' => '/another.com/index',
@@ -1320,7 +1326,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '37',
             'name' => 'another.com/s',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'entity_id' => '12',
             'url' => '/another.com/s/',
@@ -1356,7 +1362,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '38',
             'name' => 'index',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'Page',
             'entity_id' => '15',
             'url' => '/another.com/s/index',
@@ -1392,7 +1398,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '39',
             'name' => 'news',
-            'plugin' => 'Blog',
+            'plugin' => 'BcBlog',
             'type' => 'BlogContent',
             'entity_id' => '6',
             'url' => '/another.com/s/news/',
@@ -1428,7 +1434,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '40',
             'name' => 'service',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'entity_id' => '13',
             'url' => '/another.com/s/service/',
@@ -1464,7 +1470,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture
         [
             'id' => '41',
             'name' => 'service1',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'Page',
             'entity_id' => '16',
             'url' => '/another.com/s/service/service1',

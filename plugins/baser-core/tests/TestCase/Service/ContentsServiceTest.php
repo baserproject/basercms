@@ -79,7 +79,7 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testGetTreeIndex(): void
     {
-        $request = $this->getRequest('/?site_id=0');
+        $request = $this->getRequest('/?site_id=1');
         $result = $this->ContentsService->getTreeIndex($request->getQueryParams());
         $this->assertEquals("baserCMSサンプル", $result->first()->title);
     }
@@ -130,10 +130,10 @@ class ContentsServiceTest extends BcTestCase
     {
         return [
             [[
-                'site_id' => 0,
+                'site_id' => 1,
             ], 10],
             [[
-                'site_id' => 0,
+                'site_id' => 1,
                 'open' => '1',
                 'folder_id' => '',
                 'name' => '',
@@ -142,7 +142,7 @@ class ContentsServiceTest extends BcTestCase
                 'author_id' => '',
             ], 2],
             [[
-                'site_id' => 0,
+                'site_id' => 1,
                 'open' => '1',
                 'folder_id' => '6',
                 'name' => 'サービス',
@@ -152,6 +152,10 @@ class ContentsServiceTest extends BcTestCase
             ], 3],
         ];
     }
+
+    /**
+     * test getIndex
+     */
     public function testGetIndex(): void
     {
         $request = $this->getRequest('/');

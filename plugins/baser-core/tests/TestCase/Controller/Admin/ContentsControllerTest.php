@@ -102,6 +102,7 @@ class ContentsControllerTest extends BcTestCase
      */
     public function testIndex(): void
     {
+        $request = $this->getRequest();
         $this->get('/baser/admin/baser-core/contents/index/');
         $this->assertResponseOk();
         // リクエストの変化をテスト

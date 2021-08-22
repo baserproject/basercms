@@ -16,6 +16,7 @@ use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Event\EventInterface;
 
 /**
  * Class AppController
@@ -40,6 +41,24 @@ class AppController extends BaseController
         $this->loadComponent('BaserCore.BcMessage');
         $this->loadComponent('Security');
         $this->loadComponent('Paginator');
+    }
+
+    /**
+     * Before Render
+     * @param EventInterface $event
+     * @return \Cake\Http\Response|void|null
+     * @checked
+     * @noTodo
+     */
+    public function beforeRender(EventInterface $event): void
+    {
+        if (!isset($this->RequestHandler) || !$this->RequestHandler->prefers('json')) {
+            $this->viewBuilder()->setClassName('BaserCore.App');
+            $site = $this->getRequest()->getParam('Site');
+            if($site) {
+                $this->viewBuilder()->setTheme($site->theme);
+            }
+        }
     }
 
 }

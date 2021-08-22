@@ -1,0 +1,294 @@
+/**
+ * Blog
+ */
+
+/* Blog Title
+----------------------------------------------- */
+
+.bs-blog-category-title,
+.bs-blog-post-title {
+  font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+  padding: 0 !important;;
+  background: none !important;
+  font-size: 24px !important;
+}
+
+/* Blog Post Title
+----------------------------------------------- */
+
+.bs-blog-post-title {
+  margin: 56px 0 5px 0 !important;
+}
+
+/* Blog Description
+----------------------------------------------- */
+
+.bs-blog-description {
+  margin-bottom: 60px;
+}
+
+/* Blog Post
+----------------------------------------------- */
+
+.bs-blog-post {
+  letter-spacing: .05rem;
+  line-height: 1.6;
+  &__item {
+    border-bottom: 1px solid #ddd;
+    margin: 0 !important;
+    padding: 20px 0 20px !important;
+    list-style: none;
+    font-size: 14px;
+
+    &::before {
+      content: none !important;
+    }
+
+    a {
+      transition: all 300ms;
+      text-decoration: none;
+
+      &:link,
+      &:visited {
+        color: #000 !important;
+      }
+
+      &:hover {
+        color: #555 !important;
+      }
+    }
+
+    &-eye-catch {
+      transition: all 300ms;
+      float: left;
+      display: block;
+      margin-right: 20px !important;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
+    &-title {
+      font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+      display: block;
+      padding: 10px 0;
+      font-size: 16px;
+      line-height: 1.6 !important;
+      font-weight:bold;
+    }
+
+    &-category {
+      font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+      font-size: 10px;
+      border: 1px solid #000;
+      padding: 2px 5px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    &-date {
+      margin: 0 !important;
+      padding-right: 10px;
+      font-size: 13px;
+      letter-spacing: 0;
+      color: #a0a2a8;
+      font-style: italic;
+      font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif;
+      @include bs-mq() {
+        margin-bottom: 6px !important;;
+      }
+    }
+  }
+}
+
+/* Blog Single Post
+----------------------------------------------- */
+
+.bs-single-post {
+  margin-bottom: 80px;
+
+  &__meta {
+    text-align: right;
+    margin-bottom: 30px;
+    @include bs-mq() {
+      margin-bottom: 40px;
+      padding-right: 10px;
+    }
+
+    a {
+      transition: all 300ms;
+      text-decoration: none;
+
+      &:link,
+      &:visited {
+        color: #000 !important;
+      }
+
+      &:hover {
+        color: #555 !important;
+      }
+    }
+
+    &-category {
+      font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+      font-size: 10px;
+      border: 1px solid #000;
+      padding: 2px 5px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    &-date {
+      margin: 0 0 0 10px !important;
+      padding-right: 10px;
+      font-size: 13px;
+      letter-spacing: 0;
+      color: #a0a2a8;
+      font-style: italic;
+      font-family: YakuHanJP, "Barlow", "Noto Sans JP", YuGothic, "游ゴシック Medium", "Yu Gothic Medium", "游ゴシック", "Yu Gothic", "メイリオ", sans-serif;
+      @include bs-mq() {
+        padding-left: 10px;
+      }
+    }
+  }
+
+  &__eye-catch img {
+    transition: all 300ms;
+    display: block;
+    width: 100%;
+    margin-bottom: 40px !important;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+/* Blog Contents Navigation
+----------------------------------------------- */
+
+.bs-blog-contents-navi {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin: 160px 0 0 0;
+  font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+  font-size: 14px;
+
+  a {
+    transition: all 300ms;
+    width: 47%;
+    display: block;
+    text-decoration: none;
+    @include bs-mq() {
+      font-size: 12px;
+    }
+
+    &:link,
+    &:visited {
+      color: #000 !important;
+    }
+
+    &:hover {
+      color: #555 !important;
+    }
+  }
+
+  .next-link {
+    padding: 20px 0 20px 2%;
+    float: right;
+    text-align: left;
+  }
+
+  .prev-link {
+    padding: 20px 2% 20px 0;
+    float: left;
+    text-align: right;
+  }
+}
+
+
+/* Blog Comment
+----------------------------------------------- */
+
+.bs-blog-comment {
+  margin-top: 160px;
+
+  &__head {
+    font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+  }
+
+  &__list {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+
+    &-item {
+      &:first-child {
+        padding-top: 20px;
+      }
+
+      padding: 40px 0;
+      margin: 0 40px;
+      border-bottom: 1px #CCC dotted;
+
+      &-name {
+        font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+        font-weight: bold;
+        margin-bottom: 10px;
+
+        a:visited,
+        a:visited {
+          color: #000 !important;
+        }
+      }
+    }
+  }
+
+  &__auth-captcha {
+    input {
+      display: block;
+    }
+  }
+
+  &__submit {
+    text-align: center;
+    padding: 20px 0;
+  }
+}
+
+/* Blog Comment Add Form
+----------------------------------------------- */
+
+#BlogCommentAddForm {
+  .required {
+    color: #FFF;
+    font-size: 10px;
+    background-color: #C30;
+    padding: 4px 5px;
+    font-weight: bold;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    white-space: nowrap;
+    margin-left: 5px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  .normal {
+    color: #FFF;
+    font-size: 10px;
+    background-color: #CCC;
+    padding: 4px 5px;
+    font-weight: bold;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    white-space: nowrap;
+    margin-left: 5px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  .button {
+    @include bs-button();
+  }
+}

@@ -1,0 +1,2 @@
+﻿"id","description","sender_1","sender_2","sender_name","subject_user","subject_admin","form_template","mail_template","redirect_url","auth_captcha","widget_area","ssl_on","save_info","publish_begin","publish_end","created","modified"
+"1","<p>このコンテンツはメールフォーム機能により作られており、この文章については管理画面の [お問い合わせ] &rarr; [設定] より更新ができます。また、メールフォームは [コンテンツ管理] よりいくつでも作成することができます。</p>","","","baserCMSサンプル","【baserCMS】お問い合わせ頂きありがとうございます。","【baserCMS】お問い合わせを受け付けました","default","mail_default","/","1","","","1","","","2016-08-07 23:10:38","2020-09-14 19:37:11"

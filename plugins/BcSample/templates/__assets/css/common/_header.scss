@@ -1,0 +1,273 @@
+/**
+ * Header
+ */
+
+/* Header
+----------------------------------------------- */
+
+.bs-header {
+  background-color: #FFF;
+
+  &__inner {
+    width: 1260px;
+    margin: 0 auto;
+    padding: 0 40px;
+    box-sizing: border-box;
+
+    @include bs-mq() {
+      width: 100%;
+      padding: 0 20px;
+    }
+  }
+
+  &__logo {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    vertical-align: bottom;
+    max-height: 36px;
+    max-width: 200px;
+
+    &:hover {
+      opacity: 0.7;
+      transition: all 300ms 0s ease;
+    }
+
+    @include bs-mq() {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__menu-button {
+    display: none;
+    position: absolute;
+    top: 24px;
+    right: 20px;
+    width: 36px;
+    height: 28px;
+    cursor: pointer;
+
+    span {
+      position: absolute;
+      width: 100%;
+      height: 3px;
+      border-radius: 9999px;
+      background-color: #555;
+      transition: all 300ms 0s ease;
+
+      &:nth-child(2) {
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      &:nth-child(3) {
+        bottom: 0;
+      }
+    }
+
+    &.bs-open span {
+      &:nth-child(1) {
+        transform-origin: left;
+        transform: rotate(45deg);
+      }
+
+      &:nth-child(2) {
+        background-color: rgba(255, 255, 255, 0);
+      }
+
+      &:nth-child(3) {
+        transform-origin: left;
+        transform: rotate(-45deg);
+      }
+    }
+
+    @include bs-mq() {
+      display: block;
+    }
+  }
+
+  &__nav {
+    font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+    background-color: #001800;
+    @include bs-mq() {
+      position: absolute;
+      transform: translateX(100%);
+      width: 100vw;
+      transition: all 300ms 0s ease;
+      z-index: 9999;
+
+      &.bs-open {
+        transform: translateX(0);
+      }
+    }
+  }
+}
+
+/* Global Menu
+----------------------------------------------- */
+
+.bs-global-menu {
+  width: 1260px;
+  display: block;
+  position: relative;
+  list-style: none;
+  margin: 0 auto;
+  padding: 0 40px;
+  z-index: 15;
+
+  @include bs-mq() {
+    width: 100%;
+    padding: 0;
+  }
+
+  .ul-level-2 {
+    a {
+      padding: 10px 20px !important;
+
+      &:link,
+      &:visited {
+        color: #000;
+      }
+
+      &:hover {
+        color: #555;
+      }
+    }
+  }
+
+  .ul-level-3 {
+    margin-left: 80px !important;
+    margin-bottom: 20px !important;
+
+    a {
+      padding: 0 !important;
+
+      &:link,
+      &:visited {
+        color: #000;
+      }
+
+      &:hover {
+        color: #555;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1260px) {
+  .bs-global-menu {
+      width: auto;
+      padding-right: 0;
+  }
+}
+
+/* Global Menu Item
+----------------------------------------------- */
+
+.bs-global-menu-item {
+  list-style: none;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+
+  @include bs-mq() {
+    display: block;
+  }
+
+  a {
+    display: block;
+    font-size: 14px;
+    padding: 25px 10px;
+    text-decoration: none;
+    font-weight: bold;
+
+    @include bs-mq() {
+      width: 100%;
+      padding: 25px 0;
+      text-align: center;
+    }
+  }
+
+  a:link,
+  a:visited {
+    color: #fff;
+    @include bs-mq() {
+      color: #fff;
+    }
+  }
+
+  > a {
+    position: relative;
+    display: inline-block;
+    padding: 25px 15px;
+    margin: 0 0 -1px 0;
+    border: 1px solid transparent;
+
+    @include bs-mq() {
+      display: block;
+      width: 100%;
+      padding: 25px 0;
+      text-align: center;
+    }
+  }
+
+  a:hover {
+    color: #999;
+  }
+
+  > a:focus,
+  > a.open {
+    border: 1px solid #dedede;
+
+    @include bs-mq() {
+      border: 1px solid transparent;
+    }
+  }
+
+  > a.open {
+    background-color: #fff;
+    border-bottom: none;
+    z-index: 2;
+    color: #000;
+
+    @include bs-mq() {
+      background-color: transparent;
+      border: 1px solid transparent;
+      z-index: auto;
+      color: #999;
+    }
+  }
+}
+
+/* Global Menu Sub
+----------------------------------------------- */
+
+.bs-global-menu-sub {
+  position: absolute;
+  display: none;
+  padding: 20px;
+  border: 1px solid #dedede;
+  background-color: #fff;
+  z-index: 1;
+
+  ul {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 1em 0 0;
+    padding: 0;
+  }
+
+  li {
+    display: block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &.open {
+    display: block;
+    @include bs-mq() {
+      display: none;
+    }
+  }
+}

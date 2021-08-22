@@ -16,7 +16,6 @@ use BaserCore\Service\Admin\SiteManageServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Event\Event;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**

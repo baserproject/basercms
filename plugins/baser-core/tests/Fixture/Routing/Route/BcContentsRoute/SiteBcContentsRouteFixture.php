@@ -1,19 +1,25 @@
 <?php
-// TODO : コード確認要
-return;
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ *
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
+ */
+
+namespace BaserCore\Test\Fixture\Routing\Route\BcContentsRoute;
+
+use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * Site Fixture
  */
-class SiteBcContentsRouteFixture extends BaserTestFixture
+class SiteBcContentsRouteFixture extends TestFixture
 {
 
-    /**
-     * Name of the object
-     *
-     * @var string
-     */
-    public $name = 'Site';
+    public $import = ['table' => 'sites'];
 
     /**
      * Records
@@ -23,12 +29,12 @@ class SiteBcContentsRouteFixture extends BaserTestFixture
     public $records = [
         [
             'id' => '1',
-            'main_site_id' => '0',
-            'name' => 'mobile',
-            'display_name' => 'ケータイ',
-            'title' => 'baserCMS inc.｜ケータイ',
-            'alias' => 'm',
-            'theme' => '',
+            'main_site_id' => null,
+            'name' => '',
+            'display_name' => 'メイン',
+            'title' => 'メイン',
+            'alias' => '',
+            'theme' => 'BcSample',
             'status' => 1,
             'use_subdomain' => 0,
             'relate_main_site' => 0,

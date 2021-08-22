@@ -85,7 +85,7 @@ class BcAdminAppControllerTest extends BcTestCase
         $this->testLoadViewConditions();
 
         // Requestテスト
-        $request = $this->BcAdminApp->getRequest();
+        $request = $this->getRequest('/baser/admin/users/login');
         $BcAdminApp = new BcAdminAppController($this->loginAdmin($request));
 
             // namedオプションの場合
@@ -124,10 +124,10 @@ class BcAdminAppControllerTest extends BcTestCase
     {
         $query = ['test' => 'test'];
         $named = ['test'];
-        $request = $this->BcAdminApp->getRequest();
+        $request = $this->getRequest('/baser/admin/users/login');
         $session = $request->getSession();
-        $session->write('BcApp.viewConditions.PagesDisplay.named', $named);
-        $session->write('BcApp.viewConditions.PagesDisplay.query', $query);
+        $session->write('BcApp.viewConditions.UsersLogin.named', $named);
+        $session->write('BcApp.viewConditions.UsersLogin.query', $query);
         $BcAdminApp = new BcAdminAppController($this->loginAdmin($request));
         $this->execPrivateMethod($BcAdminApp, 'loadViewConditions');
         $this->assertEquals($named[0], $BcAdminApp->getRequest()->getParam('pass')[0]);
@@ -151,11 +151,11 @@ class BcAdminAppControllerTest extends BcTestCase
                 'direction' => 'asc'
             ]
         ];
-        $request = $this->BcAdminApp->getRequest();
+        $request = $this->getRequest('/baser/admin/users/login');
         $BcAdminApp = new BcAdminAppController($this->loginAdmin($request));
         $BcAdminApp->setRequest($request->withParam('named', $named));
         $this->execPrivateMethod($BcAdminApp, 'saveViewConditions', ['testModel', ['default' => $named]]);
-        $this->assertSession($named, 'BcApp.viewConditions.PagesDisplay.named');
+        $this->assertSession($named, 'BcApp.viewConditions.UsersLogin.named');
 
         // 実際のクエリパラメータ
         $query = [
@@ -169,7 +169,7 @@ class BcAdminAppControllerTest extends BcTestCase
         ];
         $BcAdminApp->setRequest($request->withQueryParams($query));
         $this->execPrivateMethod($BcAdminApp, 'saveViewConditions', ['testModel', ['default' => $savedQuery]]);
-        $this->assertSession(array_merge($savedQuery['query'], $query), 'BcApp.viewConditions.PagesDisplay.query');
+        $this->assertSession(array_merge($savedQuery['query'], $query), 'BcApp.viewConditions.UsersLogin.query');
     }
 
     /**

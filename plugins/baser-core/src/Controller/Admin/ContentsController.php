@@ -55,7 +55,6 @@ class ContentsController extends BcAdminAppController
 
     /**
      * initialize
-     * ログインページ認証除外
      * @return void
      * @checked
      * @noTodo
@@ -98,6 +97,7 @@ class ContentsController extends BcAdminAppController
      */
     public function index(ContentManageServiceInterface $contentManage, SiteManageServiceInterface $siteManage)
     {
+        $siteManage->setCurrentSite();
         $currentSiteId = $siteManage->getCurrentSite()->id;
         $sites = $siteManage->getSiteList();
         if ($sites) {

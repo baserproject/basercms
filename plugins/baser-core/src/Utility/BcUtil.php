@@ -16,6 +16,7 @@ use BcAuthComponent;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
+use Cake\Http\ServerRequestFactory;
 use Cake\Routing\Router;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
@@ -322,18 +323,22 @@ class BcUtil
      * Router::reload() や、Router::setRequestInfo() で調整しようとしたがうまくいかなかった。
      * @todo Testable humuhimi
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public static function isAdminSystem($url = null)
     {
         if (!$url) {
-            $request = Router::getRequest();
+            if(!$request = Router::getRequest()) {
+                $request = ServerRequestFactory::fromGlobals();
+            }
             if ($request) {
-                $url = $request->getUri();
+                $url = $request->getPath();
             } else {
                 return false;
             }
         }
-
         $adminPrefix = BcUtil::getPrefix(true);
         return (boolean)(preg_match('/^(|\/)' . $adminPrefix . '\//', $url) || preg_match('/^(|\/)' . $adminPrefix . '$/', $url));
     }
