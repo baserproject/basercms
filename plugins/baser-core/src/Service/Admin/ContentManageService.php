@@ -58,8 +58,6 @@ class ContentManageService extends ContentsService implements ContentManageServi
     public function getAdminAjaxIndex(array $queryParams): array
     {
         $dataset = [];
-        // TODO: 一時措置
-        $queryParams['site_id'] = 0;
         $action = $queryParams['action'];
         $listType = $queryParams['list_type'];
         unset($queryParams['action'], $queryParams['list_type'], $queryParams['sort'], $queryParams['direction']);

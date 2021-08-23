@@ -472,10 +472,9 @@ class ContentsTableTest extends BcTestCase
      */
     public function testGetUrlById($id, $full, $expects)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $siteUrl = Configure::read('BcEnv.siteUrl');
         Configure::write('BcEnv.siteUrl', 'http://main.com');
-        $result = $this->Content->getUrlById($id, $full);
+        $result = $this->Contents->getUrlById($id, $full);
         $this->assertEquals($expects, $result);
         Configure::write('BcEnv.siteUrl', $siteUrl);
     }

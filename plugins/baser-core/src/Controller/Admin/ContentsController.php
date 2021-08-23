@@ -112,7 +112,8 @@ class ContentsController extends BcAdminAppController
 
         $this->setViewConditions('Contents', ['default' => [
             'query' => [
-                'num' => $siteManage->getSiteConfig('admin_list_num'),
+                'num' => 30,
+                // 'num' => $siteManage->getSiteConfig('admin_list_num'),
                 'site_id' => $currentSiteId,
                 'list_type' => $currentListType,
                 'sort' => 'id',
@@ -224,7 +225,6 @@ class ContentsController extends BcAdminAppController
         }
 
         $srcContent = [];
-        // TODO: 一旦alias無視
         if ($alias) {
             if ($this->request->getData('Content.alias_id')) {
                 $conditions = ['id' => $this->request->getData('Content.alias_id')];
@@ -788,10 +788,10 @@ class ContentsController extends BcAdminAppController
         $this->set('sites', $contentManage->getContensInfo());
     }
 
-    public function admin_ajax_get_full_url($id)
+    public function ajax_get_full_url($id)
     {
         $this->autoRender = false;
         Configure::write('debug', 0);
-        return $this->Content->getUrlById($id, true);
+        return $this->response->withType("application/json")->withStringBody($this->Contents->getUrlById($id, true));
     }
 }

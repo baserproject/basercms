@@ -14,6 +14,8 @@ namespace BaserCore\Model\Table;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\Utility\Hash;
+use Cake\Core\Configure;
+use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
 use BaserCore\Model\AppTable;
 use BaserCore\Utility\BcUtil;
@@ -285,51 +287,51 @@ class ContentsTable extends AppTable
     {
         // コンテンツ一覧にて、コンテンツを登録した直後のリネーム処理までは新規追加とみなして処理を行う為、$create で判定させる
         $create = false;
-        if (empty($data['id']) || !empty($options['firstCreate'])) {
+        if (empty($data['content']['id']) || !empty($options['firstCreate'])) {
             $create = true;
         }
         // タイトルは強制的に255文字でカット
-        if (!empty($data['title'])) {
-            $data['title'] = mb_substr($data['title'], 0, 254, 'UTF-8');
+        if (!empty($data['content']['title'])) {
+            $data['content']['title'] = mb_substr($data['content']['title'], 0, 254, 'UTF-8');
         }
         if ($create) {
             // IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
-            if (!isset($data['name'])) {
-                $data['name'] = BcUtil::urlencode(mb_substr($data['title'], 0, 230, 'UTF-8'));
+            if (!isset($data['content']['name'])) {
+                $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['title'], 0, 230, 'UTF-8'));
             }
-            if (!isset($data['self_status'])) {
-                $data['self_status'] = false;
+            if (!isset($data['content']['self_status'])) {
+                $data['content']['self_status'] = false;
             }
-            if (!isset($data['self_publish_begin'])) {
-                $data['self_publish_begin'] = null;
+            if (!isset($data['content']['self_publish_begin'])) {
+                $data['content']['self_publish_begin'] = null;
             }
-            if (!isset($data['self_publish_end'])) {
-                $data['self_publish_end'] = null;
+            if (!isset($data['content']['self_publish_end'])) {
+                $data['content']['self_publish_end'] = null;
             }
-            if (!isset($data['deleted'])) {
-                $data['deleted'] = false;
+            if (!isset($data['content']['deleted'])) {
+                $data['content']['deleted'] = false;
             }
-            if (!isset($data['created_date'])) {
-                $data['created_date'] = date('Y-m-d H:i:s');
+            if (!isset($data['content']['created_date'])) {
+                $data['content']['created_date'] = date('Y-m-d H:i:s');
             }
-            if (!isset($data['site_root'])) {
-                $data['site_root'] = 0;
+            if (!isset($data['content']['site_root'])) {
+                $data['content']['site_root'] = 0;
             }
-            if (!isset($data['exclude_search'])) {
-                $data['exclude_search'] = 0;
+            if (!isset($data['content']['exclude_search'])) {
+                $data['content']['exclude_search'] = 0;
             }
-            if (!isset($data['author_id'])) {
+            if (!isset($data['content']['author_id'])) {
                 $user = BcUtil::loginUser('Admin');
-                $data['author_id'] = $user['id'];
+                $data['content']['author_id'] = $user['id'];
             }
         } else {
-            if (empty($data['modified_date'])) {
-                $data['modified_date'] = date('Y-m-d H:i:s');
+            if (empty($data['content']['modified_date'])) {
+                $data['content']['modified_date'] = date('Y-m-d H:i:s');
             }
-            if (isset($data['name'])) {
-                $data['name'] = BcUtil::urlencode(mb_substr($data['name'], 0, 230, 'UTF-8'));
+            if (isset($data['content']['name'])) {
+                $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['name'], 0, 230, 'UTF-8'));
             }
-            if ($data['id'] == 1) {
+            if ($data['content']['id'] == 1) {
                 $validator = new Validator();
                 $validator = $this->validationDefault($validator);
                 $validator->remove('name');
@@ -337,12 +339,12 @@ class ContentsTable extends AppTable
             }
         }
         // name の 重複チェック＆リネーム
-        if (!empty($data['name'])) {
+        if (!empty($data['content']['name'])) {
             $contentId = null;
-            if (!empty($data['id'])) {
-                $contentId = $data['id'];
+            if (!empty($data['content']['id'])) {
+                $contentId = $data['content']['id'];
             }
-            $data['name'] = $this->getUniqueName($data['name'], $data['parent_id'], $contentId);
+            $data['content']['name'] = $this->getUniqueName($data['content']['name'], $data['content']['parent_id'], $contentId);
         }
     }
 
@@ -369,14 +371,14 @@ class ContentsTable extends AppTable
 
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
         $conditions = [
-            'Content.name LIKE' => $name . '%',
-            'Content.parent_id' => $parentId
+            'Contents.name LIKE' => $name . '%',
+            'Contents.parent_id' => $parentId
         ];
         if ($contentId) {
-            $conditions['Content.id <>'] = $contentId;
+            $conditions['Contents.id <>'] = $contentId;
         }
-        $datas = $this->find('all', ['conditions' => $conditions, 'fields' => ['name'], 'order' => "Content.name", 'recursive' => -1]);
-        $datas = Hash::extract($datas, "{n}.Content.name");
+        $datas = $this->find('all', ['conditions' => $conditions, 'fields' => ['name'], 'order' => "Contents.name"])->all()->toArray();
+        $datas = Hash::extract($datas, "{n}.name");
         $numbers = [];
 
         if ($datas) {
@@ -418,8 +420,8 @@ class ContentsTable extends AppTable
      */
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
-        if (!empty($this->data['Content']['id'])) {
-            $this->beforeSaveParentId = $this->field('parent_id', ['Content.id' => $this->data['Content']['id']]);
+        if (!empty($entity->id)) {
+            $this->beforeSaveParentId = $this->field('parent_id', ['Contents.id' => $entity->id]);
         }
         return parent::beforeSave($event, $entity, $options);
     }
@@ -431,26 +433,26 @@ class ContentsTable extends AppTable
      * @param array $options
      * @return void
      */
-    // public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
-    // {
-    //     TODO: 代替措置
-    //     $this->deleteAssocCache($this->data);
-    //     if ($this->updatingSystemData) {
-    //         $this->updateSystemData($this->data);
-    //     }
-    //     if ($this->updatingRelated) {
-    //         // ゴミ箱から戻す場合、 type の定義がないが問題なし
-    //         if (!empty($this->data['Content']['type']) && $this->data['Content']['type'] == 'ContentFolder') {
-    //             $this->updateChildren($this->data['Content']['id']);
-    //         }
-    //         $this->updateRelateSubSiteContent($this->data);
-    //         if (!empty($this->data['Content']['parent_id']) && $this->beforeSaveParentId != $this->data['Content']['parent_id']) {
-    //             $SiteConfig = ClassRegistry::init('SiteConfig');
-    //             $SiteConfig->updateContentsSortLastModified();
-    //             $this->beforeSaveParentId = null;
-    //         }
-    //     }
-    // }
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        // TODO: 代替措置
+        $this->deleteAssocCache($this->data);
+        if ($this->updatingSystemData) {
+            $this->updateSystemData($this->data);
+        }
+        if ($this->updatingRelated) {
+            // ゴミ箱から戻す場合、 type の定義がないが問題なし
+            if (!empty($this->data['Content']['type']) && $this->data['Content']['type'] == 'ContentFolder') {
+                $this->updateChildren($this->data['Content']['id']);
+            }
+            $this->updateRelateSubSiteContent($this->data);
+            if (!empty($this->data['Content']['parent_id']) && $this->beforeSaveParentId != $this->data['Content']['parent_id']) {
+                $SiteConfig = ClassRegistry::init('SiteConfig');
+                $SiteConfig->updateContentsSortLastModified();
+                $this->beforeSaveParentId = null;
+            }
+        }
+    }
 
     /**
      * 関連するコンテンツ本体のデータキャッシュを削除する
@@ -1184,20 +1186,17 @@ class ContentsTable extends AppTable
      *
      * @param int $id
      * @return string URL
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function getUrlById($id, $full = false)
     {
-        if (!is_int($id)) {
-            $id = (int)$id;
-            if ($id === 0) {
-                return '';
-            }
-        }
-        $data = $this->find('first', ['conditions' => ['Content.id' => $id]]);
-        if ($data) {
-            return $this->getUrl($data['Content']['url'], $full, $data['Site']['use_subdomain']);
-        }
-        return '';
+        if (!is_numeric($id)) return '';
+        $data = $this->findById($id)->contain(['Sites'])->first();
+        // TODO: containが動かないため一旦false
+        return $data ? $this->getUrl($data->url, $full, false) : "";
+        // return $data ? $this->getUrl($data->url, $full, $data->site->use_subdomain) : "";
     }
 
     /**
@@ -1217,7 +1216,7 @@ class ContentsTable extends AppTable
         $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         if ($useSubDomain && !is_array($url)) {
             $subDomain = '';
-            $site = $this->Sitess->findByUrl($url);
+            $site = $this->Sites->findByUrl($url);
             $originUrl = $url;
             if ($site) {
                 $subDomain = $site->alias;
@@ -1251,7 +1250,7 @@ class ContentsTable extends AppTable
         } else {
             if (BC_INSTALLED) {
                 if (!is_array($url)) {
-                    $site = $this->Sitess->findByUrl($url);
+                    $site = $this->Sites->findByUrl($url);
                     if ($site && $site->same_main_url) {
                         $mainSite = $sites->findById($site->main_site_id)->first();
                         $alias = $mainSite->alias;
