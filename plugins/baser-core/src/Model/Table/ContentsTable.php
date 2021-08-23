@@ -371,14 +371,14 @@ class ContentsTable extends AppTable
 
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
         $conditions = [
-            'Content.name LIKE' => $name . '%',
-            'Content.parent_id' => $parentId
+            'Contents.name LIKE' => $name . '%',
+            'Contents.parent_id' => $parentId
         ];
         if ($contentId) {
-            $conditions['Content.id <>'] = $contentId;
+            $conditions['Contents.id <>'] = $contentId;
         }
-        $datas = $this->find('all', ['conditions' => $conditions, 'fields' => ['name'], 'order' => "Content.name", 'recursive' => -1]);
-        $datas = Hash::extract($datas, "{n}.Content.name");
+        $datas = $this->find('all', ['conditions' => $conditions, 'fields' => ['name'], 'order' => "Contents.name"])->all()->toArray();
+        $datas = Hash::extract($datas, "{n}.name");
         $numbers = [];
 
         if ($datas) {

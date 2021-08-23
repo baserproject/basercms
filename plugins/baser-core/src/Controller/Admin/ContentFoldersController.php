@@ -12,18 +12,18 @@
 namespace BaserCore\Controller\Admin;
 
 use Cake\Event\EventInterface;
-use BaserCore\Controller\Admin\BcAdminAppController;
 use BaserCore\Service\Admin\ContentFolderManageServiceInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Http\Response;
+
 /**
  * Class ContentFoldersController
  *
  * フォルダ コントローラー
  *
  * @package BaserCore.Controller
- * @property ContentFoldersTable $ContentFolders
  */
 class ContentFoldersController extends BcAdminAppController
 {
@@ -57,7 +57,7 @@ class ContentFoldersController extends BcAdminAppController
     /**
      * コンテンツを登録する
      *
-     * @return void
+     * @return Response
      * @checked
      * @noTodo
      * @unitTest

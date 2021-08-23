@@ -59,7 +59,7 @@ class ContentManageService extends ContentsService implements ContentManageServi
     {
         $dataset = [];
         // TODO: 一時措置
-        $queryParams['site_id'] = 0;
+        $queryParams['site_id'] = 1;
         $action = $queryParams['action'];
         $listType = $queryParams['list_type'];
         unset($queryParams['action'], $queryParams['list_type'], $queryParams['sort'], $queryParams['direction']);
