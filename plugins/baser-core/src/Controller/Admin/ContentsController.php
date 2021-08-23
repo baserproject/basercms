@@ -112,7 +112,8 @@ class ContentsController extends BcAdminAppController
 
         $this->setViewConditions('Contents', ['default' => [
             'query' => [
-                'num' => $siteManage->getSiteConfig('admin_list_num'),
+                'num' => 30,
+                // 'num' => $siteManage->getSiteConfig('admin_list_num'),
                 'site_id' => $currentSiteId,
                 'list_type' => $currentListType,
                 'sort' => 'id',

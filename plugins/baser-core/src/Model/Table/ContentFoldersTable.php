@@ -21,6 +21,7 @@ use Cake\Datasource\EntityInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\ORM\TableRegistry;
 
 /**
  * Class ContentFoldersTable
@@ -80,6 +81,20 @@ class ContentFoldersTable extends AppTable
             'Controller.Contents.beforeMove' => ['callable' => 'beforeMove'],
             'Controller.Contents.afterMove' => ['callable' => 'afterMove']
         ]);
+    }
+
+    /**
+     * Before Marshal
+     *
+     * @param Event $event
+     * @param ArrayObject $data
+     * @param ArrayObject $options
+     * @return void
+     */
+    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
+    {
+        $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $Contents->beforeMarshal($event, $data, $options);
     }
 
 
