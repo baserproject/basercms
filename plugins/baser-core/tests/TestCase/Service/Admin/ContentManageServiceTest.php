@@ -56,7 +56,7 @@ class ContentManageServiceTest extends BcTestCase
 
     /**
      * testGetAdminAjaxIndex
-     * @dataProvider getAdminAjaxIndexDataProvider
+     * @dataProvider getAdminIndexDataProvider
      * @param  string $action
      * @param  string $listType
      * @param  string $siteId
@@ -64,16 +64,16 @@ class ContentManageServiceTest extends BcTestCase
      * @param  string $template
      * @return void
      */
-    public function testGetAdminAjaxIndex($action, $listType, $siteId, $content, $template): void
+    public function testGetAdminIndex($action, $listType, $siteId, $content, $template): void
     {
         $request = $this->getRequest()->withQueryParams(array_merge(['action' => $action, 'list_type' => $listType, 'site_id' => $siteId], $content));
-        $result = $this->ContentManage->getAdminAjaxIndex($request->getQueryParams());
+        $result = $this->ContentManage->getAdminIndex($request->getQueryParams());
         $this->assertEquals($template, key($result));
         $data = array_shift($result);
         $this->assertInstanceOf('Cake\ORM\Query', $data);
     }
 
-    public function getAdminAjaxIndexDataProvider()
+    public function getAdminIndexDataProvider()
     {
         return [
             // tree形式の場合

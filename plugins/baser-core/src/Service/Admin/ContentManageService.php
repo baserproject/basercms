@@ -61,7 +61,7 @@ class ContentManageService extends ContentsService implements ContentManageServi
      * @checked
      * @unitTest
      */
-    public function getAdminAjaxIndex(array $queryParams): array
+    public function getAdminIndex(array $queryParams): array
     {
         $dataset = [];
         $action = $queryParams['action'];
