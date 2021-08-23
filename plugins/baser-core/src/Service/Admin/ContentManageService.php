@@ -17,6 +17,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Service\ContentsService;
+use BaserCore\Utility\BcUtil;
 
 
 /**
@@ -101,7 +102,12 @@ class ContentManageService extends ContentsService implements ContentManageServi
      */
     public function getTypes(): array
     {
-        return $this->Contents->getTypes();
+        $createdSettings = BcUtil::getContentsItem();
+        $types = [];
+        foreach($createdSettings as $key => $value) {
+            $types[$key] = $value['title'];
+        }
+        return $types;
     }
 
     /**

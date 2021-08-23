@@ -35,6 +35,8 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use ReflectionClass;
+use ReflectionMethod;
+use ReflectionProperty;
 
 /**
  * Class plugin
@@ -270,8 +272,15 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
 
         if(!BcUtil::isConsole()) {
             // ユニットテストでは実行しない
-            Router::reload();
-            $routes = Router::createRouteBuilder('/');
+            $property = new ReflectionProperty(get_class($routes), '_collection');
+            $property->setAccessible(true);
+            $collection = $property->getValue($routes);
+            $property = new ReflectionProperty(get_class($collection), '_routeTable');
+            $property->setAccessible(true);
+            $property->setValue($collection, []);
+            $property = new ReflectionProperty(get_class($collection), '_paths');
+            $property->setAccessible(true);
+            $property->setValue($collection, []);
         }
 
         $routes->connect('/*', [], ['routeClass' => 'BaserCore.BcContentsRoute']);
