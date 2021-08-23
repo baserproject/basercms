@@ -10,13 +10,15 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use BaserCore\View\BcAdminAppView;
+
 /**
  * コンテンツ一覧 テーブル
  *
- * @var BcAppView $this
+ * @var BcAdminAppView $this
  */
-
 $this->BcListTable->setColumnNumber(8);
+$authors = $this->BcAdminContent->getAuthors();
 ?>
 
 <div class="bca-data-list__top">
@@ -96,7 +98,7 @@ $this->BcListTable->setColumnNumber(8);
   <?php if (!empty($datas)): ?>
     <?php $count = 0; ?>
     <?php foreach($datas as $data): ?>
-      <?php $this->BcBaser->element('Contents/index_row_table', ['data' => $data, 'count' => $count]) ?>
+      <?php $this->BcBaser->element('Contents/index_row_table', ['data' => $data, 'count' => $count, 'authors' => $authors]) ?>
       <?php $count++; ?>
     <?php endforeach; ?>
   <?php else: ?>

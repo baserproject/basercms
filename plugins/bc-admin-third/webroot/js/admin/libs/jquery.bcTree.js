@@ -95,11 +95,11 @@
             }
             $.bcTree._inited = true;
         },
-
         /**
          * ツリーを読み込む
          */
         load: function () {
+            $.bcUtil.showLoader();
             if (!$.bcTree._inited) {
                 return;
             }
@@ -114,25 +114,11 @@
             } else if (mode == 'trash') {
                 url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/trash_index';
             }
-            $.ajax({
-                type: "GET",
-                url: url,
-                beforeSend: function () {
-                    $.bcUtil.showLoader();
-                },
-                success: function (result) {
-                    if (result) {
-                        $.bcTree.listDisplayed = getNowDateTime();
-                        $.bcTree.destroy();
-                        $("#DataList").html(result);
-                        $.bcTree._init();
-                        $($.bcTree).trigger('loaded');
-                    }
-                },
-                complete: function () {
-                    $.bcUtil.hideLoader();
-                }
-            });
+            $.bcTree.listDisplayed = getNowDateTime();
+            $.bcTree.destroy();
+            $.bcTree._init();
+            $($.bcTree).trigger('loaded');
+            $.bcUtil.hideLoader();
         },
 
         /**

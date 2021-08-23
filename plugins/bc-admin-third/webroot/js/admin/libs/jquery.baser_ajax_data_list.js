@@ -236,7 +236,7 @@
                     if (data) {
                         $(config.dataList).html(data);
                         $.baserAjaxDataList.initList();
-                        // $.yuga.stripe();
+                        $.yuga.stripe();
                     } else {
                         $(config.alertBox).html(bcI18n.commonGetDataFailedMessage);
                         $(config.alertBox).fadeIn(500);

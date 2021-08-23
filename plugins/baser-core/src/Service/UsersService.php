@@ -157,4 +157,13 @@ class UsersService implements UsersServiceInterface
         return $this->Users->delete($user);
     }
 
+    /**
+     * ユーザーリストを取得する
+     * @return mixed
+     */
+    public function getList(): array
+    {
+        return $this->Users->getUserList();
+    }
+
 }

@@ -84,7 +84,7 @@ class ContentManageServiceTest extends BcTestCase
                 'type' => '',
                 'self_status' => '',
                 'author_id' => '',
-            ], "ajax_index_tree"],
+            ], "index_tree"],
             // Table形式の場合(content条件なし)
             ['index', '2', '0',
             [
@@ -95,7 +95,7 @@ class ContentManageServiceTest extends BcTestCase
                 'self_status' => '',
                 'author_id' => '',
             ]
-            , "ajax_index_table"],
+            , "index_table"],
             // trash形式の場合
             ['trash_index', '1', '0',
             [
@@ -103,7 +103,7 @@ class ContentManageServiceTest extends BcTestCase
                 'type' => '',
                 'self_status' => true,
                 'author_id' => '',
-            ], "ajax_index_trash"],
+            ], "index_trash"],
         ];
     }
 

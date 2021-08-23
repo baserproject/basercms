@@ -34,4 +34,17 @@ interface ContentManageServiceInterface extends ContentsServiceInterface
      * @return array
      */
     public function getAdminAjaxIndex(array $queryParams): array;
+
+    /**
+     * 登録されているタイプの一覧を取得する
+     * @return array
+     */
+    public function getTypes(): array;
+
+    /**
+     * コンテンツの作成者一覧を取得
+     * @return array
+     */
+    public function getAuthors(): array;
+
 }

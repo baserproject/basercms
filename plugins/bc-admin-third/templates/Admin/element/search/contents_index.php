@@ -9,15 +9,18 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
+use BaserCore\View\BcAdminAppView;
+
 /**
  * コンテンツ一覧
  *
- * @var BcAppView $this
+ * @var BcAdminAppView $this
  * @var array $folders
- * @var array $contentTypes
  * @var array $authors
  */
 ?>
+
+
 <?= $this->BcAdminForm->create(null, ['type' => 'get', 'url' => ['action' => 'index'], 'id' => 'ContentIndexForm'], ) ?>
 <?= $this->BcAdminForm->control('open', ['type' => 'hidden', 'value' => true]) ?>
 <p class="bca-search__input-list">
@@ -31,7 +34,7 @@
 	</span>
   <span class="bca-search__input-item">
 		<?= $this->BcAdminForm->label('type', __d('baser', 'タイプ'), ['class' => 'bca-search__input-item-label']) ?>
-    <?= $this->BcAdminForm->control('type', ['type' => 'select', 'options' => $contentTypes, 'empty' => __d('baser', '指定なし')]) ?>
+    <?= $this->BcAdminForm->control('type', ['type' => 'select', 'options' => $this->BcAdminContent->getTypes(), 'empty' => __d('baser', '指定なし')]) ?>
 	</span>
   <span class="bca-search__input-item">
 		<?= $this->BcAdminForm->label('self_status', __d('baser', '公開状態'), ['class' => 'bca-search__input-item-label']) ?>
@@ -40,7 +43,7 @@
 	</span>
   <span class="bca-search__input-item">
 		<?= $this->BcAdminForm->label('author_id', __d('baser', '作成者'), ['class' => 'bca-search__input-item-label']) ?>
-    <?= $this->BcAdminForm->control('author_id', ['type' => 'select', 'options' => $authors, 'empty' => __d('baser', '指定なし')]) ?>
+    <?= $this->BcAdminForm->control('author_id', ['type' => 'select', 'options' => $this->BcAdminContent->getAuthors(), 'empty' => __d('baser', '指定なし')]) ?>
 	</span>
   <? # echo $this->BcSearchBox->dispatchShowField($this->request); ?>
 </p>

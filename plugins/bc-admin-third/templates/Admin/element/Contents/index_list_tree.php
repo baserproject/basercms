@@ -37,7 +37,7 @@ $deleteDisabled = false;
       $treeItemType = 'folder';
     }
 
-    $fullUrl = $this->BcContents->getUrl($data->url, true, $data['Site']['use_subdomain']);
+    $fullUrl = $this->BcContents->getUrl($data->url, true, $data->site->use_subdomain);
     $parentId = $data->parent_id;
     $alias = false;
     $open = false;
@@ -49,7 +49,8 @@ $deleteDisabled = false;
         $icon = $settings[$data->type]['icon'];
       }
     } else {
-      $icon = $settings['Default']['url']['icon'];
+      // TODO: iconがない場合があるため見直す
+      $icon = $settings['Default']['url']['icon'] ?? '';
     }
     if ($data->alias_id) {
       $alias = true;

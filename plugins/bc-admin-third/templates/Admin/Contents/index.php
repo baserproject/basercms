@@ -71,7 +71,7 @@ $this->BcBaser->i18nScript([
   'bcTreeNewTitle' => __d('baser', '新しい %s'),
 
 ]);
-$this->BcBaser->js('admin/contents/index', false, [
+$this->BcBaser->js('admin/contents/index.bundle', false, [
   'id' => 'AdminContentsIndexScript',
   'data-isAdmin' => BcUtil::isAdminUser(),
   'data-isUseMoveContents' => $isUseMoveContents,
@@ -99,4 +99,6 @@ echo $this->BcAdminForm->control('BcManageContent', ['type' => 'hidden', 'value'
 
 <?php $this->BcBaser->element('Contents/index_view_setting') ?>
 
-<div id="DataList" class="bca-data-list">&nbsp;</div>
+<div id="DataList" class="bca-data-list">
+    <?php $this->BcBaser->element("Contents/${template}"); ?>
+</div>

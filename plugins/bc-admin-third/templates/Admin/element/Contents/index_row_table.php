@@ -14,6 +14,7 @@ use BaserCore\View\BcAdminAppView;
  * コンテンツ一覧 テーブル行
  *
  * @var BcAdminAppView $this
+ * @var array $authors
  */
 
 $isSiteRelated = $this->BcContents->isSiteRelated($data);

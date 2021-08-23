@@ -10,10 +10,10 @@
  */
 
 use BaserCore\Utility\BcUtil;
-use BaserCore\View\AppView;
+use BaserCore\View\BcAdminAppView;
 use Cake\Utility\Inflector;
 /**
- * @var AppView $this
+ * @var BcAdminAppView $this
  * @var string $title
  */
 

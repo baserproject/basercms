@@ -64,4 +64,10 @@ interface UsersServiceInterface
      */
     public function delete(int $id);
 
+    /**
+     * ユーザーリストを取得する
+     * @return mixed
+     */
+    public function getList(): array;
+
 }

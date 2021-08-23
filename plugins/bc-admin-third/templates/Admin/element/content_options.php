@@ -11,15 +11,16 @@
  */
 
 /**
+ * @var \BaserCore\View\BcAdminAppView $this
  * コンテンツオプション
  * @var bool $disableEditContent コンテンツ編集不可かどうか
- * @var array $authors 作成者リスト
  * @var array $layoutTemplates レイアウトテンプレートリスト
  */
 $disableEdit = false;
 if ($this->BcContents->isEditable()) {
   $disableEdit = true;
 }
+$authors = $this->BcAdminContent->getAuthors();
 ?>
 
 

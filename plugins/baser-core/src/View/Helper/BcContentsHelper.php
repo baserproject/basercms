@@ -164,7 +164,8 @@ class BcContentsHelper extends Helper
         }
         $url = $this->getConfig('settings')[$type]['url'][$action] . '/' . $entityId;
 
-        if ($userGroups = $user->fields->user_groups) {
+        if (isset($user->fields->user_groups)) {
+            $userGroups = $user->fields->user_groups;
             foreach ($userGroups as $group) {
                 if ($this->_Permissions->check($url, $group)) {
                     return true;

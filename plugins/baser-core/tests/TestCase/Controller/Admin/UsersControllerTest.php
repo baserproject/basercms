@@ -36,6 +36,8 @@ class UsersControllerTest extends BcTestCase
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.LoginStores',
         'plugin.BaserCore.Dblogs',
+        'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Sites',
         'plugin.BaserCore.Controller/UsersController/UsersPagination',
     ];
 
@@ -53,7 +55,7 @@ class UsersControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadFixtures('UsersUserGroups', 'UserGroups', 'Dblogs');
+        $this->loadFixtures('UsersUserGroups', 'UserGroups', 'Dblogs', 'SiteConfigs', 'Sites');
         if ($this->getName() == 'testIndex_pagination') {
             $this->loadFixtures('Controller\UsersController\UsersPagination');
         } else {
