@@ -26,7 +26,6 @@ use BaserCore\Service\PluginsService;
 use BaserCore\Service\ContentsService;
 use BaserCore\Service\UserGroupsService;
 use BaserCore\Service\Api\UserApiService;
-use BaserCore\Service\PermissionsService;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Service\DblogsServiceInterface;
@@ -39,7 +38,10 @@ use BaserCore\Service\Admin\PluginManageService;
 use BaserCore\Service\Admin\ContentManageService;
 use BaserCore\Service\UserGroupsServiceInterface;
 use BaserCore\Service\Api\UserApiServiceInterface;
-use BaserCore\Service\PermissionsServiceInterface;
+use BaserCore\Service\PermissionServiceInterface;
+use BaserCore\Service\PermissionService;
+use BaserCore\Service\Admin\PermissionManageServiceInterface;
+use BaserCore\Service\Admin\PermissionManageService;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\Admin\UserGroupManageService;
 use BaserCore\Service\Admin\SiteManageServiceInterface;
@@ -76,7 +78,8 @@ class BcServiceProvider extends ServiceProvider
         SiteFrontServiceInterface::class,
         SiteConfigsServiceInterface::class,
         SiteConfigManageServiceInterface::class,
-        PermissionsServiceInterface::class,
+        PermissionServiceInterface::class,
+        PermissionManageServiceInterface::class,
         DblogsServiceInterface::class,
         ContentManageServiceInterface::class,
         ContentsServiceInterface::class,
@@ -111,7 +114,8 @@ class BcServiceProvider extends ServiceProvider
         $container->add(SiteConfigsServiceInterface::class, SiteConfigsService::class, true);
         $container->add(SiteConfigManageServiceInterface::class, SiteConfigManageService::class, true);
         // Permissionsサービス
-        $container->add(PermissionsServiceInterface::class, PermissionsService::class);
+        $container->add(PermissionServiceInterface::class, PermissionService::class);
+        $container->add(PermissionManageServiceInterface::class, PermissionManageService::class);
         // Dblogsサービス
         $container->add(DblogsServiceInterface::class, DblogsService::class, true);
         // Contentsサービス

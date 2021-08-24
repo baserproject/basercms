@@ -17,10 +17,10 @@ use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 
 /**
- * Interface PermissionsServiceInterface
+ * Interface PermissionServiceInterface
  * @package BaserCore\Service
  */
-interface PermissionsServiceInterface
+interface PermissionServiceInterface
 {
 
     /**
@@ -47,17 +47,41 @@ interface PermissionsServiceInterface
     /**
      * 新規登録する
      * @param EntityInterface $permission
-     * @return EntityInterface|false
+     * @return EntityInterface
      */
-    public function create(array $postData);
+    public function create(array $postData): EntityInterface;
 
     /**
      * 編集する
      * @param EntityInterface $target
      * @param array $data
-     * @return mixed
+     * @return EntityInterface
      */
-    public function update(EntityInterface $target, array $data);
+    public function update(EntityInterface $target, array $data): EntityInterface;
+
+    /**
+     * 有効状態にする
+     * @param int $id
+     *
+     * @return EntityInterface
+     */
+    public function publish(int $id): EntityInterface;
+
+    /**
+     * 無効状態にする
+     * @param int $id
+     *
+     * @return EntityInterface
+     */
+    public function unpublish(int $id): EntityInterface;
+
+    /**
+     * 複製する
+     * @param int $permissionId
+     *
+     * @return EntityInterface
+     */
+    public function copy(int $permissionId): EntityInterface;
 
     /**
      * 削除する

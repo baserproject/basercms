@@ -20,11 +20,4 @@ use BaserCore\Model\Entity\UserGroup;
  */
 interface PermissionManageServiceInterface
 {
-
-    /**
-     * アクセス制限におけるメソッドのリストを取得
-     * @return array
-     */
-    public function getMethodList(): array;
-
 }

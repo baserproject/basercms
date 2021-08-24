@@ -12,14 +12,13 @@
 
 namespace BaserCore\Service\Admin;
 
-use BaserCore\Service\PermissionsService;
+use BaserCore\Service\PermissionService;
 
 /**
  * Interface PermissionManageServiceInterface
  * @package BaserCore\Service\Admin
  */
-class PermissionManageService extends PermissionsService implements PermissionManageServiceInterface
+class PermissionManageService extends PermissionService implements PermissionManageServiceInterface
 {
-
 }
 

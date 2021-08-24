@@ -25,7 +25,7 @@ $this->BcAdmin->setTitle(sprintf(__d('baser', '%s｜新規アクセス制限設�
 
 <?= $this->BcAdminForm->create($permission, ['novalidate' => true]) ?>
 
-<?php $this->BcBaser->element('Permissions/form', ['currentUserGroup' => $currentUserGroup]) ?>
+<?php $this->BcBaser->element('Permissions/form') ?>
 
 <div class="submit section bca-actions">
     <div class="bca-actions__main">

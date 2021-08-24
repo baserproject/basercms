@@ -25,11 +25,11 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 
 /**
- * Class PermissionsService
+ * Class PermissionService
  * @package BaserCore\Service
  * @property PermissionsTable $Permissions
  */
-class PermissionsService implements PermissionsServiceInterface
+class PermissionService implements PermissionServiceInterface
 {
 
     /**
@@ -39,7 +39,7 @@ class PermissionsService implements PermissionsServiceInterface
     public $Permissions;
 
     /**
-     * PermissionsService constructor.
+     * PermissionService constructor.
      */
     public function __construct()
     {
@@ -50,18 +50,16 @@ class PermissionsService implements PermissionsServiceInterface
      * パーミッションの新規データ用の初期値を含んだエンティティを取得する
      * @param int $userGroupId
      * @return Permission
+     *
+     * @checked
      * @noTodo
+     * @unitTest
      */
     public function getNew($userGroupId): EntityInterface
     {
-        return $this->Permissions->newEntity([
-                'auth' => true,
-                'user_group_id' => $userGroupId,
-                'status' => 1,
-            ],
-            [
-                'validate' => 'plain'
-            ]
+        return $this->Permissions->newEntity(
+            $this->autoFillRecord(['user_group_id' => $userGroupId]),
+            ['validate' => 'plain']
         );
     }
 
@@ -69,6 +67,8 @@ class PermissionsService implements PermissionsServiceInterface
      * パーミッションを取得する
      * @param int $id
      * @return EntityInterface
+     *
+     * @checked
      * @noTodo
      * @unitTest
      */
@@ -83,15 +83,14 @@ class PermissionsService implements PermissionsServiceInterface
      * パーミッション管理の一覧用のデータを取得
      * @param array $queryParams
      * @return Query
+     *
+     * @checked
      * @noTodo
      * @unitTest
      */
     public function getIndex(array $queryParams): Query
     {
         $options = [];
-        if (!empty($queryParams['num'])) {
-            $options = ['limit' => $queryParams['num']];
-        }
         if (!empty($queryParams['user_group_id'])) {
             $options = ['conditions' => ['Permissions.user_group_id' => $queryParams['user_group_id']]];
         }
@@ -102,56 +101,108 @@ class PermissionsService implements PermissionsServiceInterface
     /**
      * パーミッション登録
      * @param ServerRequest $request
-     * @return \Cake\Datasource\EntityInterface|false
+     * @return EntityInterface
+     *
+     * @checked
      * @noTodo
      * @unitTest
      */
-    public function create(array $postData)
+    public function create(array $postData): EntityInterface
     {
-        if(empty($postData['no'])) {
-            $postData['no'] = $this->Permissions->getMax('no', ['user_group_id' => $postData['user_group_id']]) + 1;
-            $postData['sort'] = $this->Permissions->getMax('sort', ['user_group_id' => $postData['user_group_id']]) + 1;
-        }
+        $postData = $this->autoFillRecord($postData);
         $permission = $this->Permissions->newEmptyEntity();
         $permission = $this->Permissions->patchEntity($permission, $postData, ['validate' => 'default']);
-        return $this->Permissions->save($permission);
+        $this->Permissions->save($permission);
+        return $permission;
     }
 
     /**
      * パーミッション情報を更新する
      * @param EntityInterface $target
      * @param array $data
-     * @return EntityInterface|false
+     * @return EntityInterface
+     *
+     * @checked
      * @noTodo
      * @unitTest
      */
-    public function update(EntityInterface $target, array $data)
+    public function update(EntityInterface $target, array $data): EntityInterface
     {
-        $additionalData = $this->autoFillRecord($data);
-        $Permission = $this->Permissions->patchEntity($target, $additionalData);
-        return $this->Permissions->save($Permission);
+        $data = $this->autoFillRecord($data);
+        $permission = $this->Permissions->patchEntity($target, $data);
+        $this->Permissions->save($permission);
+        return $permission;
     }
 
     /**
+     * 有効状態にする
+     *
+     * @param int $id
+     * @return EntityInterface
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function publish($id): EntityInterface
+    {
+        $permission = $this->get($id);
+        $permission->status = true;
+        return $this->Permissions->save($permission);
+    }
+
+    /**
+     * 無効状態にする
+     *
+     * @param int $id
+     * @return EntityInterface
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function unpublish($id): EntityInterface
+    {
+        $permission = $this->get($id);
+        $permission->status = false;
+        return $this->Permissions->save($permission);
+    }
+
+    /**
+     * 複製する
+     *
+     * @param int $permissionId
+     * @return EntityInterface
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function copy(int $permissionId): EntityInterface
+    {
+        $permission = $this->get($permissionId);
+        $permission->id = null;
+        $permission->no = null;
+        $permission->sort = null;
+        $data = $permission->toarray();
+        $data = $this->autoFillRecord($data);
+        return $this->create($data);
+    }
+
+
+
+    /**
      * パーミッション情報を削除する
-     * 最後のシステム管理者でなければ削除
      * @param int $id
      * @return bool
+     *
+     * @checked
      * @noTodo
      * @unitTest
      */
     public function delete($id)
     {
         $Permission = $this->get($id);
-        if($Permission->user_group_id === Configure::read('BcApp.adminGroupId')) {
-            $count = $this->Permissions
-                ->find('all')
-                ->where(['Permissions.user_group_id' => Configure::read('BcApp.adminGroupId')])
-                ->count();
-            if ($count === 1) {
-                throw new Exception(__d('baser', '最後のシステム管理者は削除できません'));
-            }
-        }
         return $this->Permissions->delete($Permission);
     }
 
@@ -167,26 +218,31 @@ class PermissionsService implements PermissionsServiceInterface
     {
         return $this->Permissions::METHOD_LIST;
     }
+
     /**
      *  レコード作成に必要なデータを代入する
      * @param array $data
      * @return array $data
+     *
+     * @noTodo
+     * @unitTest
      * @checked
      */
-    protected function autoFillRecord($data): array
+    protected function autoFillRecord($data = []): array
     {
-        // TODO: default値の設定後ほど正確な値に変更する
-        if(empty($data['no']) || empty($data['sort'])) {
+        if (empty($data['no'])) {
             $data['no'] = $this->Permissions->getMax('no') + 1;
+        }
+        if (empty($data['sort'])) {
             $data['sort'] = $this->Permissions->getMax('sort') + 1;
         }
-        if (empty($data['auth'])) {
-            $data['auth'] = false;
+        if (!isset($data['auth']) || $data['auth'] === null) {
+            $data['auth'] = true;
         }
         if (empty($data['method'])) {
-            $data['method'] = $this->getMethodList()['*'];
+            $data['method'] = '*';
         }
-        if (empty($data['status'])) {
+        if (!isset($data['status']) || $data['status'] === null) {
             $data['status'] = true;
         }
         return $data;

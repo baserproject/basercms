@@ -16,8 +16,6 @@ use BaserCore\View\BcAdminAppView;
  *
  * @var BcAdminAppView $this
  */
-// Permissions Controllerのpreg_replaceから移行↓
-$data->url = preg_replace('/^\/admin\//', BcUtil::getPrefix() . "/", $data->url);
 ?>
 
 
@@ -39,7 +37,7 @@ $data->url = preg_replace('/^\/admin\//', BcUtil::getPrefix() . "/", $data->url)
   </td>
   <td class="bca-table-listup__tbody-td"><?php echo $data->no; ?></td>
   <td class="bca-table-listup__tbody-td">
-    <?php $this->BcBaser->link($data->name, ['action' => 'edit', $userGroupId, $data->id], ['escape' => true]) ?>
+    <?php $this->BcBaser->link($data->name, ['action' => 'edit', $currentUserGroup->id, $data->id], ['escape' => true]) ?>
     <br>
     <?php echo $data->url; ?>
   </td>
@@ -51,12 +49,47 @@ $data->url = preg_replace('/^\/admin\//', BcUtil::getPrefix() . "/", $data->url)
     <?php echo $this->BcTime->format($data->modified, 'yyyy-MM-dd'); ?>
   </td>
   <td class="bca-table-listup__tbody-td bca-table-listup__tbody-td--actions">
-    <?php $this->BcBaser->link('', ['action' => 'ajax_unpublish', $data->id], ['title' => __d('baser', '無効'), 'class' => 'btn-unpublish bca-btn-icon', 'data-bca-btn-type' => 'unpublish', 'data-bca-btn-size' => 'lg']) ?>
-    <?php $this->BcBaser->link('', ['action' => 'ajax_publish', $data->id], ['title' => __d('baser', '有効'), 'class' => 'btn-publish bca-btn-icon', 'data-bca-btn-type' => 'publish', 'data-bca-btn-size' => 'lg']) ?>
-    <?php $this->BcBaser->link('', ['action' => 'edit', $userGroupId, $data->id], ['title' => __d('baser', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
-    <?php $this->BcBaser->link('', ['action' => 'ajax_copy', $userGroupId, $data->id], ['title' => __d('baser', 'コピー'), 'class' => 'btn-copy bca-icon--copy bca-btn-icon', 'data-bca-btn-type' => 'copy', 'data-bca-btn-size' => 'lg']) ?>
-    <?php if ($data->name != 'admins'): ?>
-      <?php $this->BcBaser->link('', ['action' => 'ajax_delete', $data->id], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
-    <?php endif ?>
+    <?php if ($data->status): ?>
+    <?= $this->BcForm->postLink(
+      '',
+      ['action' => 'unpublish', $data->id],
+      ['block' => true,
+        'title' => __d('baser', '無効'),
+        'class' => 'btn-unpublish bca-btn-icon',
+        'data-bca-btn-type' => 'unpublish',
+        'data-bca-btn-size' => 'lg']
+    ) ?>
+    <?php else: ?>
+    <?= $this->BcForm->postLink(
+      '',
+      ['action' => 'publish', $data->id],
+      ['block' => true,
+        'title' => __d('baser', '有効'),
+        'class' => 'btn-publish bca-btn-icon',
+        'data-bca-btn-type' => 'publish',
+        'data-bca-btn-size' => 'lg']
+    ) ?>
+    <?php endif; ?>
+    <?php $this->BcBaser->link('', ['action' => 'edit', $currentUserGroup->id, $data->id], ['title' => __d('baser', '編集'), 'class' => ' bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
+    <?= $this->BcForm->postLink(
+      '',
+      ['action' => 'copy', $data->id],
+      ['block' => true,
+        'confirm' => __d('baser', "{0} を複製してもいいですか？", $data->name),
+        'title' => __d('baser', '複製'),
+        'class' => 'btn-copy bca-btn-icon',
+        'data-bca-btn-type' => 'copy',
+        'data-bca-btn-size' => 'lg']
+    ) ?>
+    <?= $this->BcForm->postLink(
+      '',
+      ['action' => 'delete', $data->id],
+      ['block' => true,
+        'confirm' => __d('baser', "{0} を本当に削除してもいいですか？", $data->name),
+        'title' => __d('baser', '削除'),
+        'class' => 'btn-delete bca-btn-icon',
+        'data-bca-btn-type' => 'delete',
+        'data-bca-btn-size' => 'lg']
+    ) ?>
   </td>
 </tr>
