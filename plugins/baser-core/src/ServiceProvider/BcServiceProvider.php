@@ -40,8 +40,6 @@ use BaserCore\Service\UserGroupsServiceInterface;
 use BaserCore\Service\Api\UserApiServiceInterface;
 use BaserCore\Service\PermissionServiceInterface;
 use BaserCore\Service\PermissionService;
-use BaserCore\Service\Admin\PermissionManageServiceInterface;
-use BaserCore\Service\Admin\PermissionManageService;
 use BaserCore\Service\SiteConfigsServiceInterface;
 use BaserCore\Service\Admin\UserGroupManageService;
 use BaserCore\Service\Admin\SiteManageServiceInterface;
@@ -79,7 +77,6 @@ class BcServiceProvider extends ServiceProvider
         SiteConfigsServiceInterface::class,
         SiteConfigManageServiceInterface::class,
         PermissionServiceInterface::class,
-        PermissionManageServiceInterface::class,
         DblogsServiceInterface::class,
         ContentManageServiceInterface::class,
         ContentsServiceInterface::class,
@@ -115,7 +112,6 @@ class BcServiceProvider extends ServiceProvider
         $container->add(SiteConfigManageServiceInterface::class, SiteConfigManageService::class, true);
         // Permissionsサービス
         $container->add(PermissionServiceInterface::class, PermissionService::class);
-        $container->add(PermissionManageServiceInterface::class, PermissionManageService::class);
         // Dblogsサービス
         $container->add(DblogsServiceInterface::class, DblogsService::class, true);
         // Contentsサービス
