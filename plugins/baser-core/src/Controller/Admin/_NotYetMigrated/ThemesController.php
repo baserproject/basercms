@@ -539,7 +539,7 @@ class ThemesController extends AppController
             $this->BcManager->installPlugin($plugin);
         }
 
-        $path = BcUtil::getDefaultDataPath('Core', $theme);
+        $path = BcUtil::getDefaultDataPath('BaserCore', $theme);
         if (strpos($path, '/theme/' . $theme . '/') !== false) {
             if ($info) {
                 $info = array_merge($info, ['']);

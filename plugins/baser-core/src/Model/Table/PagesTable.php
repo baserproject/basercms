@@ -357,7 +357,7 @@ class PagesTable extends Table
             chmod($path, 0777);
         }
 
-        $url = $this->Content->createUrl($data['Content']['parent_id'], 'Core', 'ContentFolder');
+        $url = $this->Content->createUrl($data['Content']['parent_id'], 'BaserCore', 'ContentFolder');
         if (!$url) {
             return false;
         }
@@ -959,7 +959,7 @@ class PagesTable extends Table
         if (empty($content['Content']['id'])) {
             return false;
         }
-        $url = $this->Content->createUrl($id, 'Core', 'ContentFolder');
+        $url = $this->Content->createUrl($id, 'BaserCore', 'ContentFolder');
         if (!$url) {
             return false;
         }

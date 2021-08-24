@@ -90,11 +90,7 @@ class BcShortCodeEventListener extends CakeObject implements CakeEventListener
                         if (isset($View->{$func[0]})) {
                             $Helper = $View->{$func[0]};
                         } else {
-                            if ($plugin == 'Core') {
-                                $plugin = '';
-                            } else {
-                                $plugin .= '.';
-                            }
+                            $plugin .= '.';
                             $className = $func[0] . 'Helper';
                             App::uses($className, $plugin . 'View/Helper');
                             $Helper = new $className($View);

@@ -182,9 +182,6 @@ class BcContentsRoute extends Route
                     }
                 }
             }
-            if ($plugin == 'Core') {
-                $plugin = 'BaserCore';
-            }
             $controllerClass = Inflector::camelize($viewParams['controller']) . 'Controller';
             $controllerClass = ($plugin)? $plugin . '\\Controller\\' . $controllerClass : 'App\\Controller\\' . $controllerClass;
             $methods = get_class_methods($controllerClass);
@@ -223,7 +220,7 @@ class BcContentsRoute extends Route
 
         // プラグイン確定
         if (empty($url['plugin'])) {
-            $plugin = 'Core';
+            $plugin = 'BaserCore';
         } else {
             $plugin = Inflector::camelize($url['plugin']);
         }

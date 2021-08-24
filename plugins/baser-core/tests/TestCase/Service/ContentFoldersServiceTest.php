@@ -49,6 +49,7 @@ class ContentFoldersServiceTest extends BcTestCase
         parent::setUp();
         $this->ContentFoldersService = new ContentFoldersService();
         $this->Contents = $this->getTableLocator()->get('Contents');
+        $this->loginAdmin($this->getRequest());
     }
 
     /**
@@ -72,7 +73,7 @@ class ContentFoldersServiceTest extends BcTestCase
             'content' => [
                 "parent_id" => "1",
                 "title" => "新しい フォルダー",
-                "plugin" => "Core",
+                "plugin" => 'BaserCore',
                 "type" => "ContentFolder",
                 "site_id" => "0",
                 "alias_id" => "",

@@ -271,7 +271,7 @@ $config['BcEmail'] = [
  */
 $config['BcContents'] = [
     'items' => [
-        'Core' => [
+        'BaserCore' => [
             'Default' => [
                 'title' => __d('baser', '無所属コンテンツ'),
                 'omitViewAction' => true,
@@ -410,7 +410,7 @@ $config['BcContents'] = [
 /**
  * ショートコード設定
  */
-$config['BcShortCode']['Core'] = [
+$config['BcShortCode']['BaserCore'] = [
     'BcBaser.getSitemap',
     'BcBaser.getRelatedSiteLinks',
     'BcBaser.getWidgetArea',

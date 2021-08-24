@@ -588,7 +588,7 @@ class BcManagerComponent extends Component
 
         [$theme, $pattern] = explode('.', $dbDataPattern);
 
-        if (!$this->constructionTable('Core', 'default', $dbConfig)) {
+        if (!$this->constructionTable('BaserCore', 'default', $dbConfig)) {
             $this->log(__d('baser', 'コアテーブルの構築に失敗しました。'));
             return false;
         }
@@ -657,9 +657,9 @@ class BcManagerComponent extends Component
         extract($options);
 
         $themePath = $dataPath = $title = '';
-        $dataPath = dirname(BcUtil::getDefaultDataPath('Core', $theme));
+        $dataPath = dirname(BcUtil::getDefaultDataPath('BaserCore', $theme));
 
-        if ($theme != 'core' && $dataPath == dirname(BcUtil::getDefaultDataPath('Core'))) {
+        if ($theme != 'core' && $dataPath == dirname(BcUtil::getDefaultDataPath('BaserCore'))) {
             return [];
         }
 

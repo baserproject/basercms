@@ -84,7 +84,7 @@ class SearchIndex extends AppModel
                     if (ClassRegistry::isKeySet($content['Content']['type'])) {
                         $models[$content['Content']['type']] = $modelClass = ClassRegistry::getObject($content['Content']['type']);
                     } else {
-                        if ($content['Content']['plugin'] == 'Core') {
+                        if ($content['Content']['plugin'] == 'BaserCore') {
                             $modelName = $content['Content']['type'];
                         } else {
                             $modelName = $content['Content']['plugin'] . '.' . $content['Content']['type'];

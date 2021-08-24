@@ -24,7 +24,7 @@ class ContentMultiBlogFixture extends BaserTestFixture
             'id' => '1',
             'site_id' => '0',
             'name' => '',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'url' => '/',
             'parent_id' => null,

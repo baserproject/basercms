@@ -95,7 +95,7 @@ class ContentFoldersControllerTest extends BcTestCase
             'content'=> [
                 'parent_id'=>"1",
                 'title'=>"testFolderAdd",
-                'plugin'=>"Core",
+                'plugin'=>'BaserCore',
                 'type'=>"ContentFolder",
                 'site_id'=>"0",
                 'alias_id'=>"",

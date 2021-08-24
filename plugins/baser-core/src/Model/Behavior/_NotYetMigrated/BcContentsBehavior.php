@@ -119,7 +119,7 @@ class BcContentsBehavior extends ModelBehavior
         unset($data['lft']);
         unset($data['rght']);
         if ($created) {
-            $data = $model->Content->createContent($data, ($model->plugin)? $model->plugin : "Core", $model->name, $model->id, false);
+            $data = $model->Content->createContent($data, ($model->plugin)? : "BaserCore", $model->name, $model->id, false);
         } else {
             $model->Content->clear();
             $data = $model->Content->save($data, false);

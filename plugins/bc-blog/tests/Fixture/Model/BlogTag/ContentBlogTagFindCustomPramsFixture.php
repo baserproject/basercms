@@ -23,7 +23,7 @@ class ContentBlogTagFindCustomPramsFixture extends CakeTestFixture
         [
             'id' => '1',
             'name' => '',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'entity_id' => '1',
             'url' => '/',
@@ -59,7 +59,7 @@ class ContentBlogTagFindCustomPramsFixture extends CakeTestFixture
         [
             'id' => '3',
             'name' => 's',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
             'entity_id' => '3',
             'url' => '/s/',

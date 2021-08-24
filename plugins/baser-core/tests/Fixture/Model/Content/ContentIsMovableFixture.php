@@ -34,7 +34,7 @@ class ContentIsMovableFixture extends BaserTestFixture
             'level' => 0,
             'site_id' => '0',
             'site_root' => 1,
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'deleted' => 0
         ],
         [
@@ -50,7 +50,7 @@ class ContentIsMovableFixture extends BaserTestFixture
             'level' => 0,
             'site_id' => '0',
             'site_root' => 0,
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'deleted' => 0
         ],
         [
@@ -65,7 +65,7 @@ class ContentIsMovableFixture extends BaserTestFixture
             'rght' => '7',
             'level' => 0,
             'site_id' => '0',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'site_root' => 0,
             'deleted' => 0
         ],
@@ -81,7 +81,7 @@ class ContentIsMovableFixture extends BaserTestFixture
             'rght' => '6',
             'level' => 1,
             'site_id' => '0',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'site_root' => 0,
             'deleted' => 0
         ],
@@ -97,7 +97,7 @@ class ContentIsMovableFixture extends BaserTestFixture
             'rght' => '11',
             'level' => 0,
             'site_id' => '0',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'site_root' => 0,
             'deleted' => 0
         ],
@@ -113,7 +113,7 @@ class ContentIsMovableFixture extends BaserTestFixture
             'rght' => '10',
             'level' => 1,
             'site_id' => '0',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'site_root' => 0,
             'deleted' => 0
         ],
@@ -129,7 +129,7 @@ class ContentIsMovableFixture extends BaserTestFixture
             'rght' => '15',
             'level' => 0,
             'site_id' => '0',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'site_root' => 0,
             'deleted' => 0
         ],
@@ -145,7 +145,7 @@ class ContentIsMovableFixture extends BaserTestFixture
             'rght' => '14',
             'level' => 1,
             'site_id' => '0',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'site_root' => 0,
             'deleted' => 0
         ],
@@ -161,7 +161,7 @@ class ContentIsMovableFixture extends BaserTestFixture
             'rght' => '21',
             'level' => 1,
             'site_id' => '2',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'site_root' => 1,
             'deleted' => 0
         ],
@@ -177,7 +177,7 @@ class ContentIsMovableFixture extends BaserTestFixture
             'rght' => '20',
             'level' => 2,
             'site_id' => '2',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'site_root' => 0,
             'deleted' => 0
         ],
@@ -193,7 +193,7 @@ class ContentIsMovableFixture extends BaserTestFixture
             'rght' => '19',
             'level' => 3,
             'site_id' => '2',
-            'plugin' => 'Core',
+            'plugin' => 'BaserCore',
             'site_root' => 0,
             'deleted' => 0
         ],

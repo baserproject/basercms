@@ -464,7 +464,7 @@ class ContentsTable extends AppTable
             $data = $this->find('first', ['fields' => ['Content.plugin', 'Content.type'], 'conditions' => ['Content.id' => $data['Content']['id']], 'recursive' => -1]);
         }
         $assoc = $data['Content']['type'];
-        if ($data['Content']['plugin'] != 'Core') {
+        if ($data['Content']['plugin'] != 'BaserCore') {
             if (!CakePlugin::loaded($data['Content']['plugin'])) {
                 return;
             }
@@ -1163,7 +1163,7 @@ class ContentsTable extends AppTable
     {
         [$plugin, $type] = pluginSplit($type);
         if (!$plugin) {
-            $plugin = 'Core';
+            $plugin = 'BaserCore';
         }
         $conditions = [
             'plugin' => $plugin,
@@ -1326,7 +1326,7 @@ class ContentsTable extends AppTable
                         'name' => $currentContentFolder['Content']['name'],
                         'title' => $currentContentFolder['Content']['title'],
                         'parent_id' => $parentId,
-                        'plugin' => 'Core',
+                        'plugin' => 'BaserCore',
                         'type' => 'ContentFolder',
                         'site_id' => $targetSiteId,
                         'self_status' => true

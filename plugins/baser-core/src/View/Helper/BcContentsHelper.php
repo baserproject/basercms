@@ -219,13 +219,11 @@ class BcContentsHelper extends Helper
     {
         $imageBaseUrl = Configure::read('App.imageBaseUrl');
         if ($file) {
-            if ($plugin != 'Core') {
-                $file = $plugin . '.' . $file;
-            }
+            $file = $plugin . '.' . $file;
         } else {
             $icon = 'admin/icon_' . Inflector::underscore($type) . $suffix . '.png';
             $defaultIcon = 'admin/icon_content' . $suffix . '.png';
-            if ($plugin == 'Core') {
+            if ($plugin == 'BaserCore') {
                 $iconPath = WWW_ROOT . $imageBaseUrl . DS . $icon;
                 if (file_exists($iconPath)) {
                     $file = $icon;

@@ -450,12 +450,12 @@ class BcUtil
     {
 
         if (!$plugin) {
-            $plugin = 'Core';
+            $plugin = 'BaserCore';
         } else {
             $plugin = Inflector::camelize($plugin);
         }
 
-        if ($plugin == 'Core') {
+        if ($plugin == 'BaserCore') {
             return BASER_CONFIGS . 'Schema';
         }
 
@@ -485,22 +485,22 @@ class BcUtil
     {
 
         if (!$plugin) {
-            $plugin = 'Core';
+            $plugin = 'BaserCore';
         } else {
             $plugin = Inflector::camelize($plugin);
         }
 
         if (!$theme) {
-            $theme = 'core';
+            $theme = 'BcSample';
         }
 
         if (!$pattern) {
             $pattern = 'default';
         }
 
-        if ($plugin == 'Core') {
+        if ($plugin == 'BaserCore') {
             $paths = [BASER_CONFIGS . 'data' . DS . $pattern];
-            if ($theme != 'core') {
+            if ($theme != 'BcSample') {
                 $paths = array_merge([
                     BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
                     BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern,
@@ -530,7 +530,7 @@ class BcUtil
                 $pluginPath . DS . 'Config' . DS . 'data' . DS . 'default',
                 $pluginPath . DS . 'Config' . DS . 'Data' . DS . 'default',
             ];
-            if ($theme != 'core') {
+            if ($theme != 'BcSample') {
                 $paths = array_merge([
                     BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
                     BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern . DS . $plugin,

@@ -43,7 +43,7 @@ if (!empty($settings[$type]['icon'])) {
 $isImageIcon = false;
 if (preg_match('/^admin\//', $iconPath)) {
   $isImageIcon = true;
-  if ($data->plugin != 'Core' && $type != 'Default') {
+  if ($data->plugin != 'BaserCore' && $type != 'Default') {
     $iconPath = $data->plugin . '.' . $iconPath;
   }
 }

@@ -54,7 +54,7 @@ class ContentsControllerTest extends BcTestCase
         $this->ContentsController->loadModel('BaserCore.ContentFolders');
         $this->ContentsController->loadModel('BaserCore.Users');
         $this->ContentsController->loadComponent('BaserCore.BcContents');
-        $this->ContentsController->BcContents->setConfig('items', ["test" => ['title' => 'test']]);
+        $this->ContentsController->BcContents->setConfig('items', ["test" => ['title' => 'test', 'plugin' => 'BaserCore']]);
     }
 
     /**
@@ -92,7 +92,6 @@ class ContentsControllerTest extends BcTestCase
         $this->assertNotEmpty($this->ContentsController->SiteConfigs);
         $this->assertNotEmpty($this->ContentsController->ContentFolders);
         $this->assertNotEmpty($this->ContentsController->Users);
-        $this->assertEquals($this->ContentsController->Security->getConfig('unlockedActions'), ['index']);
     }
 
 

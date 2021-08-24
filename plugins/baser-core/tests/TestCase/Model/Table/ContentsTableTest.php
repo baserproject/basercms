@@ -472,6 +472,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testGetUrlById($id, $full, $expects)
     {
+        $this->loadFixtures('Sites');
         $siteUrl = Configure::read('BcEnv.siteUrl');
         Configure::write('BcEnv.siteUrl', 'http://main.com');
         $result = $this->Contents->getUrlById($id, $full);
