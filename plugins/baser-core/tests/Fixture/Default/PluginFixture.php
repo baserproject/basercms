@@ -38,7 +38,7 @@ class PluginFixture extends BaserTestFixture
         ],
         [
             'id' => '3',
-            'name' => 'Mail',
+            'name' => 'BcMail',
             'title' => 'メールフォーム',
             'version' => '3.0.6.1',
             'status' => 1,

@@ -41,14 +41,14 @@ class MailContentsController extends MailAppController
      *
      * @var array
      */
-    public $uses = ["Mail.MailContent", 'Mail.MailMessage'];
+    public $uses = ['BcMail.MailContent", 'BcMail.MailMessage'];
 
     /**
      * ヘルパー
      *
      * @var array
      */
-    public $helpers = ['BcHtml', 'BcTime', 'BcForm', 'BcText', 'Mail.Mail'];
+    public $helpers = ['BcHtml', 'BcTime', 'BcForm', 'BcText', 'BcMail.Mail'];
 
     /**
      * コンポーネント
@@ -274,7 +274,7 @@ class MailContentsController extends MailAppController
         $type = 'Emails';
         $path = 'text' . DS . $template . $this->ext;
         $target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $type . DS . $path;
-        $sorces = [BASER_PLUGINS . 'Mail' . DS . 'View' . DS . $type . DS . $path];
+        $sorces = [BASER_PLUGINS . 'BcMail' . DS . 'View' . DS . $type . DS . $path];
         if ($this->siteConfigs['theme']) {
             if (!file_exists($target)) {
                 foreach ($sorces as $source) {
@@ -321,7 +321,7 @@ class MailContentsController extends MailAppController
     {
         $path = 'Mail' . DS . $template;
         $target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $path;
-        $sorces = [BASER_PLUGINS . 'Mail' . DS . 'View' . DS . $path];
+        $sorces = [BASER_PLUGINS . 'BcMail' . DS . 'View' . DS . $path];
         if ($this->siteConfigs['theme']) {
             if (!file_exists($target . DS . 'index' . $this->ext)) {
                 foreach ($sorces as $source) {

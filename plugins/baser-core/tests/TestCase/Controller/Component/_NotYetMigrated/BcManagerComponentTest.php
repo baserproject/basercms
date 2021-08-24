@@ -204,7 +204,7 @@ class BcManagerComponentTest extends BcTestCase
         $File = new File($testPluginConfigPath, true);
         $File->write('<?php $title = "テスト";');
 
-        Configure::write('BcApp.corePlugins', ['Blog', 'Feed', 'Mail', 'Test']);
+        Configure::write('BcApp.corePlugins', ['BcBlog', 'BcFeed', 'BcMail', 'Test']);
 
 
         // 初期更新を実行

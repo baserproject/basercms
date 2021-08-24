@@ -42,7 +42,7 @@ class MailContent extends MailAppModel
      */
     public $hasMany = ['MailField' =>
     [
-        'className' => 'Mail.MailField',
+        'className' => 'BcMail.MailField',
         'order' => 'sort',
         'foreignKey' => 'mail_content_id',
         'dependent' => true,
@@ -316,8 +316,8 @@ class MailContent extends MailAppModel
                 $mailField['MailField']['mail_content_id'] = $result['MailContent']['id'];
                 $this->MailField->copy(null, $mailField, ['sortUpdateOff' => true]);
             }
-            App::uses('MailMessage', 'Mail.Model');
-            $MailMessage = ClassRegistry::init('Mail.MailMessage');
+            App::uses('MailMessage', 'BcMail.Model');
+            $MailMessage = ClassRegistry::init('BcMail.MailMessage');
             $MailMessage->setup($result['MailContent']['id']);
             $MailMessage->_sourceConfigured = true; // 設定しておかないと、下記の処理にて内部的にgetDataSouceが走る際にエラーとなってしまう。
             $MailMessage->construction($result['MailContent']['id']);

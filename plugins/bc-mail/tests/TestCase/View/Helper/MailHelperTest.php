@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('MailHelper', 'Mail.View/Helper');
+App::uses('MailHelper', 'BcMail.View/Helper');
 App::uses('BcBaserHelper', 'View/Helper');
 App::uses('BcAppView', 'View');
 
@@ -95,7 +95,7 @@ class MailHelperTest extends BaserTestCase
      */
     public function testGetForm()
     {
-        $MailMessage = ClassRegistry::init('Mail.MailMessage');
+        $MailMessage = ClassRegistry::init('BcMail.MailMessage');
         $MailMessage->createTable(1);
         ClassRegistry::flush();
         $result = $this->Mail->getForm();

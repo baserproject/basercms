@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('MailMessage', 'Mail.Model');
+App::uses('MailMessage', 'BcMail.Model');
 
 /**
  * Class MailMessageTest
@@ -34,7 +34,7 @@ class MailMessageTest extends BaserTestCase
 
     public function setUp()
     {
-        $this->MailMessage = ClassRegistry::init('Mail.MailMessage');
+        $this->MailMessage = ClassRegistry::init('BcMail.MailMessage');
         parent::setUp();
     }
 
@@ -527,7 +527,7 @@ class MailMessageTest extends BaserTestCase
         // 二回目
         $this->MailMessage->construction($id);
 
-        $this->MailField = ClassRegistry::init('Mail.MailField');
+        $this->MailField = ClassRegistry::init('BcMail.MailField');
         $expectColumns = $this->MailField->find('list', [
             'fields' => 'field_name',
             'conditions' => ['mail_content_id' => 1],

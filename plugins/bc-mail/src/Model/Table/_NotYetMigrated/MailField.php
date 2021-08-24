@@ -371,7 +371,7 @@ class MailField extends MailAppModel
     {
         parent::afterDelete();
         // フロントエンドでは、MailContentのキャッシュを利用する為削除しておく
-        $MailContent = ClassRegistry::init('Mail.MailContent');
+        $MailContent = ClassRegistry::init('BcMail.MailContent');
         $MailContent->delCache();
     }
 
@@ -385,7 +385,7 @@ class MailField extends MailAppModel
     {
         parent::afterSave($created, $options);
         // フロントエンドでは、MailContentのキャッシュを利用する為削除しておく
-        $MailContent = ClassRegistry::init('Mail.MailContent');
+        $MailContent = ClassRegistry::init('BcMail.MailContent');
         $MailContent->delCache();
     }
 }

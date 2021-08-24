@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('MailContent', 'Mail.Model');
+App::uses('MailContent', 'BcMail.Model');
 
 /**
  * Class MailContentTest
@@ -36,7 +36,7 @@ class MailContentTest extends BaserTestCase
 
     public function setUp()
     {
-        $this->MailContent = ClassRegistry::init('Mail.MailContent');
+        $this->MailContent = ClassRegistry::init('BcMail.MailContent');
         parent::setUp();
     }
 

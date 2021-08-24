@@ -143,7 +143,7 @@ $config['BcApp'] = [
         ]
     ],
     // コアプラグイン
-    'corePlugins' => ['Blog', 'Feed', 'Mail', 'Uploader'],
+    'corePlugins' => ['BcBlog', 'BcFeed', 'BcMail', 'BcUploader'],
     // アップデートキー
     'updateKey' => 'update',
     // 管理者グループID

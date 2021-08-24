@@ -55,7 +55,7 @@ class MailHelper extends AppHelper
             return;
         }
         if ($mailContentId) {
-            $MailContent = ClassRegistry::init('Mail.MailContent');
+            $MailContent = ClassRegistry::init('BcMail.MailContent');
             $MailContent->reduceAssociations([]);
             $this->mailContent = Hash::extract($MailContent->read(null, $mailContentId), 'MailContent');
         } elseif (isset($this->_View->viewVars['mailContent'])) {
@@ -219,7 +219,7 @@ class MailHelper extends AppHelper
      */
     public function getToken()
     {
-        return $this->BcBaser->getElement('Mail.mail_token');
+        return $this->BcBaser->getElement('BcMail.mail_token');
     }
 
     /**
@@ -240,7 +240,7 @@ class MailHelper extends AppHelper
      */
     public function getForm($id = null)
     {
-        $MailContent = ClassRegistry::init('Mail.MailContent');
+        $MailContent = ClassRegistry::init('BcMail.MailContent');
         $conditions = [];
         if ($id) {
             $conditions = [

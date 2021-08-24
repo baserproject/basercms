@@ -2292,7 +2292,7 @@ END_FLASH;
      *
      * 《利用例》
      * $this->BcBaser->includeCore('Users/admin/form')
-     * $this->BcBaser->includeCore('Mail.MailFields/admin/form')
+     * $this->BcBaser->includeCore('BcMail.MailFields/admin/form')
      *
      * @param string $name テンプレート名
      * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）

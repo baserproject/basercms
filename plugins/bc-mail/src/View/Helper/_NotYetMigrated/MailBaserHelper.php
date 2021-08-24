@@ -33,7 +33,7 @@ class MailBaserHelper extends AppHelper
         if (!Hash::get($this->request->params, 'Content.plugin')) {
             return false;
         }
-        if (Hash::get($this->request->params, 'Content.plugin') !== 'Mail') {
+        if (Hash::get($this->request->params, 'Content.plugin') !== 'BcMail') {
             return false;
         }
         return true;

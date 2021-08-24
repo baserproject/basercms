@@ -25,7 +25,7 @@ $config['BcApp.adminNavigation'] = [
     ]
 ];
 /* @var MailContent $MailContent */
-$MailContent = ClassRegistry::init('Mail.MailContent');
+$MailContent = ClassRegistry::init('BcMail.MailContent');
 $mailContents = $MailContent->find('all', [
     'conditions' => [
         $MailContent->Content->getConditionAllowPublish()
@@ -103,6 +103,6 @@ $config['BcContents']['items']['BcMail'] = [
 /**
  * ショートコード
  */
-$config['BcShortCode']['Mail'] = [
-    'Mail.getForm'
+$config['BcShortCode']['BcMail'] = [
+    'BcMail.getForm'
 ];

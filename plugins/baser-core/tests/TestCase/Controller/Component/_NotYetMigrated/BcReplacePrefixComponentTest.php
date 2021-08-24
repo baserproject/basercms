@@ -25,7 +25,7 @@ class BcReplacePrefixTestController extends Controller
 
     public $components = ['BcReplacePrefix'];
 
-    public $plugin = ['Mail', 'admin'];
+    public $plugin = ['BcMail', 'admin'];
 
 }
 
@@ -185,7 +185,7 @@ class BcReplacePrefixComponentTest extends BcTestCase
     {
 
         $this->Controller->theme = 'hoge-theme';
-        $this->Controller->plugin = 'Mail';
+        $this->Controller->plugin = 'BcMail';
 
         $result = $this->BcReplacePrefix->getViewPaths($this->Controller);
         $expected = [

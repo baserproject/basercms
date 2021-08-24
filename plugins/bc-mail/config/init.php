@@ -14,12 +14,12 @@
 /**
  * データベース初期化
  */
-$this->Plugin->initDb('Mail');
+$this->Plugin->initDb('BcMail');
 
 /**
  * メッセージテーブル構築
  */
-App::uses('MailMessage', 'Mail.Model');
+App::uses('MailMessage', 'BcMail.Model');
 $MailMessage = new MailMessage();
 $MailMessage->reconstructionAll();
 

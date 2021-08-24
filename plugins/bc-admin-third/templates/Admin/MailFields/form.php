@@ -13,7 +13,7 @@
 /**
  * [ADMIN] メールフィールド フォーム
  */
-$this->BcBaser->js('Mail.admin/mail_fields/form', false);
+$this->BcBaser->js('BcMail.admin/mail_fields/form', false);
 ?>
 
 

@@ -32,14 +32,14 @@ class MailMessagesController extends MailAppController
      *
      * @var array
      */
-    public $uses = ['Mail.MailContent', 'Mail.MailField', 'Mail.MailMessage'];
+    public $uses = ['BcMail.MailContent', 'BcMail.MailField', 'BcMail.MailMessage'];
 
     /**
      * ヘルパー
      *
      * @var array
      */
-    public $helpers = ['Mail.Maildata', 'Mail.Mailfield', 'BcText', 'BcArray'];
+    public $helpers = ['BcMail.Maildata', 'BcMail.Mailfield', 'BcText', 'BcArray'];
 
     /**
      * コンポーネント
@@ -75,7 +75,7 @@ class MailMessagesController extends MailAppController
             $this->notFound();
         }
         $this->mailContent = $this->MailContent->read(null, $this->request->param('pass.0'));
-        App::uses('MailMessage', 'Mail.Model');
+        App::uses('MailMessage', 'BcMail.Model');
         $this->MailMessage = new MailMessage();
         $this->MailMessage->setup($this->mailContent['MailContent']['id']);
         $mailContentId = $this->request->param('pass.0');

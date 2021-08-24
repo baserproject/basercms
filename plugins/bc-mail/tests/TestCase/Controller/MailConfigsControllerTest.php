@@ -12,8 +12,8 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('MailAppController', 'Mail.Controller');
-App::uses('MailConfigsController', 'Mail.Controller');
+App::uses('MailAppController', 'BcMail.Controller');
+App::uses('MailConfigsController', 'BcMail.Controller');
 App::uses('SessionComponent', 'Controller/Component');
 
 class MailConfigsControllerTest extends BaserTestCase

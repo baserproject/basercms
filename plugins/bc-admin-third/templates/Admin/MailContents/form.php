@@ -18,7 +18,7 @@ $this->BcBaser->i18nScript([
   'confirmMessage2' => __d('baser', 'メールフォーム設定を保存して、メールフォームテンプレート %s の編集画面に移動します。よろしいですか？'),
   'confirmMessage3' => __d('baser', 'メールフォーム設定を保存して、送信メールテンプレート %s の編集画面に移動します。よろしいですか？')
 ]);
-$this->BcBaser->js('Mail.admin/mail_contents/edit', false);
+$this->BcBaser->js('BcMail.admin/mail_contents/edit', false);
 ?>
 
 

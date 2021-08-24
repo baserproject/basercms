@@ -1180,7 +1180,7 @@ class BlogHelper extends AppHelper
      */
     public function mailFormLink($title, $contentsName, $datas = [], $options = [])
     {
-        App::uses('MailHelper', 'Mail.View/Helper');
+        App::uses('MailHelper', 'BcMail.View/Helper');
         $MailHelper = new MailHelper($this->_View);
         $MailHelper->link($title, $contentsName, $datas, $options);
     }

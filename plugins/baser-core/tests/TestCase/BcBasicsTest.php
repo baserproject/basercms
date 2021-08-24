@@ -619,7 +619,7 @@ class BcBasicsTest extends BcTestCase
             $result[0]['Plugin']['name'],
             $result[1]['Plugin']['name']
         ];
-        $expect = ['Blog', 'Feed', 'Mail'];
+        $expect = ['BcBlog', 'BcFeed', 'BcMail'];
         $this->assertEquals($expect, $pluginNames, '利用可能なプラグインのリストを正しく取得できません');
     }
 

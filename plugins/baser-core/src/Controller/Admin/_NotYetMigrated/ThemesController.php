@@ -273,7 +273,7 @@ class ThemesController extends AppController
         BcUtil::clearAllCache();
 
         // メール受信テーブルの作成
-        App::uses('MailMessage', 'Mail.Model');
+        App::uses('MailMessage', 'BcMail.Model');
         $MailMessage = new MailMessage();
         if (!$MailMessage->reconstructionAll()) {
             $this->log(__d('baser', 'メールプラグインのメール受信用テーブルの生成に失敗しました。'));

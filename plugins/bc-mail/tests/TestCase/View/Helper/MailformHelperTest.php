@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('MailformHelper', 'Mail.View/Helper');
+App::uses('MailformHelper', 'BcMail.View/Helper');
 
 class MailformHelperTest extends BaserTestCase
 {

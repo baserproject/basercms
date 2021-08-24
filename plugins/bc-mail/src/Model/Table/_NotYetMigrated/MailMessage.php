@@ -12,9 +12,9 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('MailAppModel', 'Mail.Model');
-App::uses('MailField', 'Mail.Model');
-App::uses('MailContent', 'Mail.Model');
+App::uses('MailAppModel', 'BcMail.Model');
+App::uses('MailField', 'BcMail.Model');
+App::uses('MailContent', 'BcMail.Model');
 
 /**
  * メッセージモデル
@@ -71,8 +71,8 @@ class MailMessage extends MailAppModel
         // テーブル名の設定
         $this->setUseTable($mailContentId);
         // 利用するメールフィールド取得
-        App::uses('MailField', 'Mail.Model');
-        $MailContent = ClassRegistry::init('Mail.MailContent');
+        App::uses('MailField', 'BcMail.Model');
+        $MailContent = ClassRegistry::init('BcMail.MailContent');
         $mailContent = $MailContent->find('first', [
             'conditions' => ['MailContent.id' => $mailContentId],
             'recursive' => 0
@@ -872,7 +872,7 @@ class MailMessage extends MailAppModel
      */
     public function construction($mailContentId)
     {
-        $mailFieldClass = ClassRegistry::init('Mail.MailField');
+        $mailFieldClass = ClassRegistry::init('BcMail.MailField');
         // フィールドリストを取得
         $mailFields = $mailFieldClass->find('all', ['conditions' => ['MailField.mail_content_id' => $mailContentId]]);
         if (!$this->tableExists($this->createFullTableName($mailContentId))) {
@@ -905,15 +905,15 @@ class MailMessage extends MailAppModel
      */
     public function convertMessageToCsv($id, $messages)
     {
-        App::uses('MailField', 'Mail.Model');
+        App::uses('MailField', 'BcMail.Model');
         $mailFieldClass = new MailField();
 
         // フィールドの一覧を取得する
         $mailFields = $mailFieldClass->find('all', ['conditions' => ['MailField.mail_content_id' => $id], 'order' => 'sort']);
 
         // フィールド名とデータの変換に必要なヘルパーを読み込む
-        App::uses('MaildataHelper', 'Mail.View/Helper');
-        App::uses('MailfieldHelper', 'Mail.View/Helper');
+        App::uses('MaildataHelper', 'BcMail.View/Helper');
+        App::uses('MailfieldHelper', 'BcMail.View/Helper');
         $Maildata = new MaildataHelper(new View());
         $Mailfield = new MailfieldHelper(new View());
 
@@ -948,7 +948,7 @@ class MailMessage extends MailAppModel
     {
 
         // メール受信テーブルの作成
-        $MailContent = ClassRegistry::init('Mail.MailContent');
+        $MailContent = ClassRegistry::init('BcMail.MailContent');
         $contents = $MailContent->find('all', ['recursive' => -1]);
 
         $result = true;

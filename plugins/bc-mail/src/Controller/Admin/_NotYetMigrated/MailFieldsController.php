@@ -38,7 +38,7 @@ class MailFieldsController extends MailAppController
      *
      * @var array
      */
-    public $uses = ['Mail.MailField', 'Mail.MailContent', 'Mail.MailMessage'];
+    public $uses = ['BcMail.MailField', 'BcMail.MailContent', 'BcMail.MailMessage'];
 
     /**
      * ヘルパー
@@ -52,7 +52,7 @@ class MailFieldsController extends MailAppController
      *
      * @var array
      */
-    public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents' => ['type' => 'Mail.MailContent']];
+    public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents' => ['type' => 'BcMail.MailContent']];
 
     /**
      * サブメニューエレメント

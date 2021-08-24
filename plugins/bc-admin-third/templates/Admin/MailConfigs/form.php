@@ -13,7 +13,7 @@
 /**
  * [ADMIN] メール設定 フォーム
  */
-$this->BcBaser->js('Mail.admin/mail_configs/form', false);
+$this->BcBaser->js('BcMail.admin/mail_configs/form', false);
 ?>
 <!-- form -->
 <?php echo $this->BcAdminForm->create('MailConfig', ['url' => ['action' => 'form']]) ?>

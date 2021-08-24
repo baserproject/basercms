@@ -246,7 +246,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '7',
             'name' => 'contact',
-            'plugin' => 'Mail',
+            'plugin' => 'BcMail',
             'type' => 'MailContent',
             'entity_id' => '1',
             'url' => '/service/contact/',
@@ -570,7 +570,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '16',
             'name' => 'contact',
-            'plugin' => 'Mail',
+            'plugin' => 'BcMail',
             'type' => 'MailContent',
             'entity_id' => '1',
             'url' => '/s/service/contact/',
@@ -966,7 +966,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '27',
             'name' => 'contact',
-            'plugin' => 'Mail',
+            'plugin' => 'BcMail',
             'type' => 'MailContent',
             'entity_id' => '1',
             'url' => '/m/service/contact/',
@@ -1002,7 +1002,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '28',
             'name' => 'contact',
-            'plugin' => 'Mail',
+            'plugin' => 'BcMail',
             'type' => 'MailContent',
             'entity_id' => '1',
             'url' => '/en/service/contact/',
@@ -1038,7 +1038,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '29',
             'name' => 'contact',
-            'plugin' => 'Mail',
+            'plugin' => 'BcMail',
             'type' => 'MailContent',
             'entity_id' => '1',
             'url' => '/sub/service/contact/',
@@ -1074,7 +1074,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '30',
             'name' => 'contact',
-            'plugin' => 'Mail',
+            'plugin' => 'BcMail',
             'type' => 'MailContent',
             'entity_id' => '1',
             'url' => '/another.com/service/contact/',
@@ -1506,7 +1506,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '42',
             'name' => 'contact',
-            'plugin' => 'Mail',
+            'plugin' => 'BcMail',
             'type' => 'MailContent',
             'entity_id' => '2',
             'url' => '/another.com/s/service/contact/',

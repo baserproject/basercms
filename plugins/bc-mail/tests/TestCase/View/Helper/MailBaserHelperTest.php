@@ -64,7 +64,7 @@ class MailBaserHelperTest extends BaserTestCase
      */
     public function testIsMail($expected, $url)
     {
-        $MailBaser = $this->BcBaser->getPluginBaser('Mail');
+        $MailBaser = $this->BcBaser->getPluginBaser('BcMail');
         $MailBaser->request = $this->_getRequest($url);
         $this->assertEquals($expected, $this->BcBaser->isMail());
     }

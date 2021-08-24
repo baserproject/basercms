@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('MailContentsController', 'Mail.Controller');
+App::uses('MailContentsController', 'BcMail.Controller');
 
 class MailContentsControllerTest extends BaserTestCase
 {

@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('MailAppController', 'Mail.Controller');
+App::uses('MailAppController', 'BcMail.Controller');
 
 /**
  * お問い合わせメールフォーム用コントローラー
@@ -45,7 +45,7 @@ class MailController extends MailAppController
      *
      * @var array
      */
-    public $uses = ['Mail.MailMessage', 'Mail.MailContent', 'Mail.MailField', 'Mail.MailConfig', 'Content'];
+    public $uses = ['BcMail.MailMessage', 'BcMail.MailContent', 'BcMail.MailField', 'BcMail.MailConfig', 'Content'];
 
     /**
      * ヘルパー
@@ -53,7 +53,7 @@ class MailController extends MailAppController
      * @var array
      */
     public $helpers = [
-        'BcFreeze', 'BcArray', 'BcTime', 'Mail.Mailform', 'Mail.Maildata', 'Mail.Mailfield', 'Mail.Mail', 'Js'
+        'BcFreeze', 'BcArray', 'BcTime', 'BcMail.Mailform', 'BcMail.Maildata', 'BcMail.Mailfield', 'BcMail.Mail', 'Js'
     ];
 
     /**
@@ -220,7 +220,7 @@ class MailController extends MailAppController
             $this->request->param('Content.eyecatch', $this->request->getData('Content.eyecatch'));
         }
 
-        $this->Session->write('Mail.valid', true);
+        $this->Session->write('BcMail.valid', true);
 
         // 初期値を取得
         if (!$this->request->getData('MailMessage')) {
@@ -265,7 +265,7 @@ class MailController extends MailAppController
             $this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
             return;
         }
-        if (!$this->Session->read('Mail.valid')) {
+        if (!$this->Session->read('BcMail.valid')) {
             $this->BcMessage->setError('エラーが発生しました。もう一度操作してください。');
             $this->redirect($this->request->param('Content.url') . '/index');
         }
@@ -341,7 +341,7 @@ class MailController extends MailAppController
             $this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
             return;
         }
-        if (!$this->Session->read('Mail.valid')) {
+        if (!$this->Session->read('BcMail.valid')) {
             $this->BcMessage->setError('エラーが発生しました。もう一度操作してください。');
             $this->redirect($this->request->param('Content.url') . '/index');
         }
@@ -438,7 +438,7 @@ class MailController extends MailAppController
                             $this->MailMessage->deleteFiles($fileRecords);
                         }
 
-                        $this->Session->delete('Mail.valid');
+                        $this->Session->delete('BcMail.valid');
 
                         /*** Mail.afterSendEmail ***/
                         $this->dispatchEvent('afterSendEmail', [
@@ -457,7 +457,7 @@ class MailController extends MailAppController
                     $this->redirect($this->request->param('Content.url'));
                 }
 
-                $this->Session->write('Mail.MailContent', $this->dbDatas['mailContent']);
+                $this->Session->write('BcMail.MailContent', $this->dbDatas['mailContent']);
                 $this->redirect($this->request->param('Content.url') . '/thanks');
 
                 // 入力検証エラー
@@ -508,7 +508,7 @@ class MailController extends MailAppController
             return;
         }
 
-        $mailContent = $this->Session->consume('Mail.MailContent');
+        $mailContent = $this->Session->consume('BcMail.MailContent');
         if (!$mailContent) {
             $this->notFound();
         }
@@ -658,7 +658,7 @@ class MailController extends MailAppController
                         // カンマ区切りで複数設定されていた場合先頭のアドレスをreplayToに利用
                         'replyTo' => strpos($userMail, ',') === false ? $userMail : strstr($userMail, ',', true),
                         'from' => $fromAdmin,
-                        'template' => 'Mail.' . $mailContent['mail_template'],
+                        'template' => 'BcMail.' . $mailContent['mail_template'],
                         'bcc' => $mailContent['sender_2'],
                         'agentTemplate' => false,
                         'attachments' => $attachments,
@@ -684,7 +684,7 @@ class MailController extends MailAppController
                     [
                         'fromName' => $mailContent['sender_name'],
                         'from' => $fromAdmin,
-                        'template' => 'Mail.' . $mailContent['mail_template'],
+                        'template' => 'BcMail.' . $mailContent['mail_template'],
                         'replyTo' => $fromAdmin,
                         'agentTemplate' => ($site && $site->device) ? true : false,
                         // 'additionalParameters' => '-f ' . $fromAdmin,

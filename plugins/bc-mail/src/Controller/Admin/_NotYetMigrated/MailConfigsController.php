@@ -32,7 +32,7 @@ class MailConfigsController extends MailAppController
      *
      * @var array
      */
-    public $uses = ['Mail.MailConfig'];
+    public $uses = ['BcMail.MailConfig'];
 
     /**
      * コンポーネント

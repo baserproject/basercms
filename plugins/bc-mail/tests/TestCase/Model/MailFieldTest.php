@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('MailField', 'Mail.Model');
+App::uses('MailField', 'BcMail.Model');
 
 /**
  * @property MailField $MailField
@@ -30,7 +30,7 @@ class MailFieldTest extends BaserTestCase
 
     public function setUp()
     {
-        $this->MailField = ClassRegistry::init('Mail.MailField');
+        $this->MailField = ClassRegistry::init('BcMail.MailField');
         parent::setUp();
     }
 
