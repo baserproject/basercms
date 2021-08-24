@@ -11,10 +11,10 @@
  */
 
 
-Router::connect('/rss/index', ['plugin' => 'blog', 'controller' => 'blog', 'action' => 'index']);
-Router::connect('/tags/*', ['plugin' => 'blog', 'controller' => 'blog', 'action' => 'tags']);
+Router::connect('/rss/index', ['plugin' => 'BcBlog', 'controller' => 'blog', 'action' => 'index']);
+Router::connect('/tags/*', ['plugin' => 'BcBlog', 'controller' => 'blog', 'action' => 'tags']);
 $request = new CakeRequest();
 $site = BcSite::findByUrl($request->url);
 if ($site) {
-    Router::connect("/{$site->alias}/tags/*", ['prefix' => $site->name, 'plugin' => 'blog', 'controller' => 'blog', 'action' => 'tags'], 'Blog');
+    Router::connect("/{$site->alias}/tags/*", ['prefix' => $site->name, 'plugin' => 'BcBlog', 'controller' => 'blog', 'action' => 'tags'], 'Blog');
 }

@@ -12,7 +12,7 @@ class BlogCategoryTreeFixture extends CakeTestFixture
      *
      * @var array
      */
-    public $import = ['model' => 'Blog.BlogCategory'];
+    public $import = ['model' => 'BcBlog.BlogCategory'];
 
     /**
      * Records

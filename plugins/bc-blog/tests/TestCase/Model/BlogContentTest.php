@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BlogContent', 'Blog.Model');
+App::uses('BlogContent', 'BcBlog.Model');
 
 /**
  * Class BlogContentTest
@@ -39,7 +39,7 @@ class BlogContentTest extends BaserTestCase
 
     public function setUp()
     {
-        $this->BlogContent = ClassRegistry::init('Blog.BlogContent');
+        $this->BlogContent = ClassRegistry::init('BcBlog.BlogContent');
         parent::setUp();
     }
 
@@ -257,7 +257,7 @@ class BlogContentTest extends BaserTestCase
         $this->BlogContent->save();
 
         if (!$exclude_search) {
-            $BlogContent = ClassRegistry::init('Blog.BlogContent');
+            $BlogContent = ClassRegistry::init('BcBlog.BlogContent');
             $result = $BlogContent->find('count', [
                 'conditions' => ['Content.name' => 'test-name'],
             ]);

@@ -33,14 +33,14 @@ class BlogContentsController extends BlogAppController
      *
      * @var
      */
-    public $uses = ['Blog.BlogContent', 'SiteConfig', 'Blog.BlogCategory'];
+    public $uses = ['BcBlog.BlogContent', 'SiteConfig', 'BcBlog.BlogCategory'];
 
     /**
      * ヘルパー
      *
      * @var array
      */
-    public $helpers = ['BcHtml', 'BcTime', 'BcForm', 'Blog.Blog'];
+    public $helpers = ['BcHtml', 'BcTime', 'BcForm', 'BcBlog.Blog'];
 
     /**
      * コンポーネント

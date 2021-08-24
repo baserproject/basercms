@@ -105,7 +105,7 @@ class PluginTest extends BaserTestCase
     {
         $this->Plugin->create([
             'Plugin' => [
-                'name' => 'Blog',
+                'name' => 'BcBlog',
             ]
         ]);
         $this->assertFalse($this->Plugin->validates());

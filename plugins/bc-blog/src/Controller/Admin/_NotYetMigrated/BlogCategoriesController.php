@@ -34,14 +34,14 @@ class BlogCategoriesController extends BlogAppController
      *
      * @var array
      */
-    public $uses = ['Blog.BlogCategory', 'Blog.BlogContent'];
+    public $uses = ['BcBlog.BlogCategory', 'BcBlog.BlogContent'];
 
     /**
      * ヘルパー
      *
      * @var array
      */
-    public $helpers = ['BcText', 'BcTime', 'BcForm', 'Blog.Blog'];
+    public $helpers = ['BcText', 'BcTime', 'BcForm', 'BcBlog.Blog'];
 
     /**
      * コンポーネント
@@ -52,7 +52,7 @@ class BlogCategoriesController extends BlogAppController
         'BcAuth',
         'Cookie',
         'BcAuthConfigure',
-        'BcContents' => ['type' => 'Blog.BlogContent']
+        'BcContents' => ['type' => 'BcBlog.BlogContent']
     ];
 
     /**

@@ -16,10 +16,10 @@ App::uses('BcAppView', 'View');
 App::uses('Helper', 'View');
 App::uses('HtmlHelper', 'View.Helper');
 App::uses('BcTimeHelper', 'View.Helper');
-App::uses('BlogHelper', 'Blog.View/Helper');
-App::uses('BlogPost', 'Blog.Model');
-App::uses('BlogContent', 'Blog.Model');
-App::uses('BlogCategory', 'Blog.Model');
+App::uses('BlogHelper', 'BcBlog.View/Helper');
+App::uses('BlogPost', 'BcBlog.Model');
+App::uses('BlogContent', 'BcBlog.Model');
+App::uses('BlogCategory', 'BcBlog.Model');
 
 /**
  * Blog helper library.
@@ -106,7 +106,7 @@ class BlogHelperTest extends BaserTestCase
         ]);
         $this->Blog = new BlogHelper($this->View);
 
-        $this->BlogContent = ClassRegistry::init('Blog.BlogContent');
+        $this->BlogContent = ClassRegistry::init('BcBlog.BlogContent');
         $this->BlogContent->reduceAssociations([]);
         $this->Blog->setContent(1);
     }
@@ -460,7 +460,7 @@ class BlogHelperTest extends BaserTestCase
     public function testGetCategoryList($depth, $count, $options, $expected)
     {
         /* @var BlogCategory $BlogCategory */
-        $BlogCategory = ClassRegistry::init('Blog.BlogCategory');
+        $BlogCategory = ClassRegistry::init('BcBlog.BlogCategory');
         $categories = $BlogCategory->getCategoryList(1, ['viewCount' => true, 'depth' => 3, 'siteId' => 0]);
         $result = $this->Blog->getCategoryList($categories, $depth, $count, $options);
         $this->assertEquals($result, $expected, 'カテゴリーの一覧をリストタグで正しく取得できません');

@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BlogAppModel', 'Blog.Model');
+App::uses('BlogAppModel', 'BcBlog.Model');
 
 /**
  * ブログタグモデル
@@ -43,7 +43,7 @@ class BlogTag extends BlogAppModel
      */
     public $hasAndBelongsToMany = [
         'BlogPost' => [
-            'className' => 'Blog.BlogPost',
+            'className' => 'BcBlog.BlogPost',
             'joinTable' => 'blog_posts_blog_tags',
             'foreignKey' => 'blog_tag_id',
             'associationForeignKey' => 'blog_post_id',

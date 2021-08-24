@@ -22,7 +22,7 @@ $(function(){
 			<?php $this->Blog->postTitle($post) ?>
 			</h3>
 		<?php $this->Blog->postContent($post, true, true) ?>
-			<div class="meta"> 
+			<div class="meta">
 				<span class="date">
 		<?php $this->Blog->postDate($post) ?>
 				</span>
@@ -32,7 +32,7 @@ $(function(){
 		<?php $this->Blog->author($post) ?>
 				</span>
 		    </div>
-		<?php $this->BcBaser->element('Blog.blog_tag', array('post' => $post)) ?>
+		<?php $this->BcBaser->element('BcBlog.blog_tag', array('post' => $post)) ?>
 		</div>
 	<?php endforeach; ?>
 <?php else: ?>

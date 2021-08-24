@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BlogCategory', 'Blog.Model');
+App::uses('BlogCategory', 'BcBlog.Model');
 
 /**
  * Class BlogCategoryTest
@@ -40,7 +40,7 @@ class BlogCategoryTest extends BaserTestCase
 
     public function setUp()
     {
-        $this->BlogCategory = ClassRegistry::init('Blog.BlogCategory');
+        $this->BlogCategory = ClassRegistry::init('BcBlog.BlogCategory');
         parent::setUp();
     }
 
@@ -218,7 +218,7 @@ class BlogCategoryTest extends BaserTestCase
         ]];
         $this->BlogCategory->delete();
 
-        $BlogPost = ClassRegistry::init('Blog.BlogPost');
+        $BlogPost = ClassRegistry::init('BcBlog.BlogPost');
         $result = $BlogPost->find('first', [
             'conditions' => ['blog_category_id' => 1]
         ]);

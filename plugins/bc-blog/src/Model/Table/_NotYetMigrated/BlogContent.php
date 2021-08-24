@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BlogAppModel', 'Blog.Model');
+App::uses('BlogAppModel', 'BcBlog.Model');
 
 /**
  * ブログコンテンツモデル
@@ -47,7 +47,7 @@ class BlogContent extends BlogAppModel
      */
     public $hasMany = [
         'BlogPost' => [
-            'className' => 'Blog.BlogPost',
+            'className' => 'BcBlog.BlogPost',
             'order' => 'id DESC',
             'limit' => 10,
             'foreignKey' => 'blog_content_id',
@@ -56,7 +56,7 @@ class BlogContent extends BlogAppModel
             'finderQuery' => ''
         ],
         'BlogCategory' => [
-            'className' => 'Blog.BlogCategory',
+            'className' => 'BcBlog.BlogCategory',
             'order' => 'id',
             'limit' => 10,
             'foreignKey' => 'blog_content_id',
@@ -151,7 +151,7 @@ class BlogContent extends BlogAppModel
                         'title',
                     ],
                     'conditions' => [
-                        'plugin' => 'Blog',
+                        'plugin' => 'BcBlog',
                         'type' => 'BlogContent',
                     ],
                     'recursive' => -1,
@@ -333,10 +333,10 @@ class BlogContent extends BlogAppModel
         $data['BlogContent']['auth_captcha'] = 1;
         $data['BlogContent']['tag_use'] = false;
         $data['BlogContent']['status'] = false;
-        $data['BlogContent']['eye_catch_size_thumb_width'] = Configure::read("Blog.eye_catch_size_thumb_width");
-        $data['BlogContent']['eye_catch_size_thumb_height'] = Configure::read("Blog.eye_catch_size_thumb_height");
-        $data['BlogContent']['eye_catch_size_mobile_thumb_width'] = Configure::read("Blog.eye_catch_size_mobile_thumb_width");
-        $data['BlogContent']['eye_catch_size_mobile_thumb_height'] = Configure::read("Blog.eye_catch_size_mobile_thumb_height");
+        $data['BlogContent']['eye_catch_size_thumb_width'] = Configure::read('BcBlog.eye_catch_size_thumb_width");
+        $data['BlogContent']['eye_catch_size_thumb_height'] = Configure::read('BcBlog.eye_catch_size_thumb_height");
+        $data['BlogContent']['eye_catch_size_mobile_thumb_width'] = Configure::read('BcBlog.eye_catch_size_mobile_thumb_width");
+        $data['BlogContent']['eye_catch_size_mobile_thumb_height'] = Configure::read('BcBlog.eye_catch_size_mobile_thumb_height");
         $data['BlogContent']['use_content'] = true;
 
         return $data;

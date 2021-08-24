@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BlogTagsController', 'Blog.Controller');
+App::uses('BlogTagsController', 'BcBlog.Controller');
 
 /**
  * Class BlogTagsControllerTest

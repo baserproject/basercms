@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BlogPost', 'Blog.Model');
+App::uses('BlogPost', 'BcBlog.Model');
 
 /**
  * Class BlogPostTest
@@ -42,7 +42,7 @@ class BlogPostTest extends BaserTestCase
 
     public function setUp()
     {
-        $this->BlogPost = ClassRegistry::init('Blog.BlogPost');
+        $this->BlogPost = ClassRegistry::init('BcBlog.BlogPost');
         parent::setUp();
     }
 

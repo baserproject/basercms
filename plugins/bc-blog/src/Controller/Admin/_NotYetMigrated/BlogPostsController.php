@@ -37,14 +37,14 @@ class BlogPostsController extends BlogAppController
      *
      * @var array
      */
-    public $uses = ['Blog.BlogPost', 'Blog.BlogCategory', 'Blog.BlogContent'];
+    public $uses = ['BcBlog.BlogPost', 'BcBlog.BlogCategory', 'BcBlog.BlogContent'];
 
     /**
      * ヘルパー
      *
      * @var array
      */
-    public $helpers = ['Blog.Blog'];
+    public $helpers = ['BcBlog.Blog'];
 
     /**
      * コンポーネント
@@ -56,7 +56,7 @@ class BlogPostsController extends BlogAppController
         'Cookie',
         'BcAuthConfigure',
         'BcEmail',
-        'BcContents' => ['type' => 'Blog.BlogContent']
+        'BcContents' => ['type' => 'BcBlog.BlogContent']
     ];
 
     /**

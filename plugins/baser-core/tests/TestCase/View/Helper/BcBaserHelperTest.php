@@ -1971,7 +1971,7 @@ class BcBaserHelperTest extends BcTestCase
     public function testGetWidgetArea($url, $no, $expected)
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        App::uses('BlogHelper', 'Blog.View/Helper');
+        App::uses('BlogHelper', 'BcBlog.View/Helper');
         $this->BcBaser->request = $this->_getRequest($url);
         $this->assertRegExp('/' . $expected . '/', $this->BcBaser->getWidgetArea($no));
     }
@@ -2380,7 +2380,7 @@ class BcBaserHelperTest extends BcTestCase
     public function testGetPluginBaser()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $PluginBaser = $this->BcBaser->getPluginBaser('Blog');
+        $PluginBaser = $this->BcBaser->getPluginBaser('BcBlog');
         $this->assertEquals('BlogBaserHelper', get_class($PluginBaser));
         $this->assertFalse($this->BcBaser->getPluginBaser('hoge'));
     }

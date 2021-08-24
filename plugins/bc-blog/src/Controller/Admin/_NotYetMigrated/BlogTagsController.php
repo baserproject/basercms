@@ -36,7 +36,7 @@ class BlogTagsController extends BlogAppController
      *
      * @var array
      */
-    public $uses = ['Blog.BlogCategory', 'Blog.BlogTag'];
+    public $uses = ['BcBlog.BlogCategory', 'BcBlog.BlogTag'];
 
     /**
      * コンポーネント

@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BlogComment', 'Blog.Model');
+App::uses('BlogComment', 'BcBlog.Model');
 
 class BlogCommentTest extends BaserTestCase
 {
@@ -24,7 +24,7 @@ class BlogCommentTest extends BaserTestCase
 
     public function setUp()
     {
-        $this->BlogComment = ClassRegistry::init('Blog.BlogComment');
+        $this->BlogComment = ClassRegistry::init('BcBlog.BlogComment');
         parent::setUp();
     }
 

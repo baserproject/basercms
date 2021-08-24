@@ -12,7 +12,7 @@ class BlogPostBlogTagFindCustomPramsFixture extends CakeTestFixture
      *
      * @var array
      */
-    public $import = ['model' => 'Blog.BlogPost'];
+    public $import = ['model' => 'BcBlog.BlogPost'];
 
     /**
      * BlogPostFixture constructor.
@@ -23,7 +23,7 @@ class BlogPostBlogTagFindCustomPramsFixture extends CakeTestFixture
         // PostgreSQLの場合、プライマリーキー以外のインデックスが設定されている場合
         // テスト用のテーブルを作成する際に本体用のインデックスとの重複エラーとなってしまうため
         // 別名のインデックス名として作成しなおす
-        include_once BASER_PLUGINS . 'Blog' . DS . 'Config' . DS . 'Schema' . DS . 'blog_posts.php';
+        include_once BASER_PLUGINS . 'BcBlog' . DS . 'Config' . DS . 'Schema' . DS . 'blog_posts.php';
         $schema = new BlogPostsSchema();
         $schema->tables['blog_posts']['indexes']['test_blog_content_id_no_index'] = $schema->tables['blog_posts']['indexes']['blog_content_id_no_index'];
         unset($schema->tables['blog_posts']['indexes']['blog_content_id_no_index']);

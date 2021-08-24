@@ -59,7 +59,7 @@ class BlogBaserHelperTest extends BaserTestCase
         parent::setUp();
         $this->View = new BcAppView();
         $this->BcBaser = new BcBaserHelper($this->View);
-        $this->BlogBaser = $this->BcBaser->getPluginBaser('Blog');
+        $this->BlogBaser = $this->BcBaser->getPluginBaser('BcBlog');
     }
 
     /**

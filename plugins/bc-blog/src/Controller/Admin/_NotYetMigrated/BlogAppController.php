@@ -53,7 +53,7 @@ class BlogAppController extends AppController
             ),
             $data,
             [
-                'template' => 'Blog.blog_comment_admin',
+                'template' => 'BcBlog.blog_comment_admin',
                 'agentTemplate' => false
             ]
         );
@@ -110,7 +110,7 @@ class BlogAppController extends AppController
                 sprintf(__('【%s】コメントが投稿されました'), $this->siteConfigs['name']),
                 $data,
                 [
-                    'template' => 'Blog.blog_comment_contributor',
+                    'template' => 'BcBlog.blog_comment_contributor',
                     'agentTemplate' => false
                 ]
             );

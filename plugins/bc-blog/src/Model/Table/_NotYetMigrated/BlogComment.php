@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BlogAppModel', 'Blog.Model');
+App::uses('BlogAppModel', 'BcBlog.Model');
 
 /**
  * ブログコメントモデル
@@ -42,7 +42,7 @@ class BlogComment extends BlogAppModel
      * @var array
      */
     public $belongsTo = ['BlogPost' => [
-        'className' => 'Blog.BlogPost',
+        'className' => 'BcBlog.BlogPost',
         'foreignKey' => 'blog_post_id'
     ]];
 

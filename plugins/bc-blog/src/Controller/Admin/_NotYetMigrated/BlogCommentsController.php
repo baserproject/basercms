@@ -28,7 +28,7 @@ class BlogCommentsController extends BlogAppController
      *
      * @var array
      */
-    public $uses = ['Blog.BlogCategory', 'Blog.BlogComment', 'Blog.BlogPost'];
+    public $uses = ['BcBlog.BlogCategory', 'BcBlog.BlogComment', 'BcBlog.BlogPost'];
 
     /**
      * コンポーネント
@@ -43,7 +43,7 @@ class BlogCommentsController extends BlogAppController
         'BcEmail',
         'Security',
         'BcCaptcha',
-        'BcContents' => ['type' => 'Blog.BlogContent']
+        'BcContents' => ['type' => 'BcBlog.BlogContent']
     ];
 
     /**
@@ -433,7 +433,7 @@ class BlogCommentsController extends BlogAppController
         }
 
         $content = $this->BlogPost->BlogContent->Content->findByType(
-            'Blog.BlogContent',
+            'BcBlog.BlogContent',
             $this->blogContent['BlogContent']['id']
         );
         $this->request = $this->request->withData('Content',  $content['Content']);

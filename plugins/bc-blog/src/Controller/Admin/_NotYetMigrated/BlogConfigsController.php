@@ -33,9 +33,9 @@ class BlogConfigsController extends BlogAppController
      */
     public $uses = [
         'User',
-        'Blog.BlogCategory',
-        'Blog.BlogConfig',
-        'Blog.BlogContent'
+        'BcBlog.BlogCategory',
+        'BcBlog.BlogConfig',
+        'BcBlog.BlogContent'
     ];
 
     /**

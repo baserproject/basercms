@@ -77,7 +77,7 @@ class BlogHelper extends AppHelper
                         $blogContentUpdated = true;
                     }
                 } else {
-                    $BlogContent = ClassRegistry::init('Blog.BlogContent');
+                    $BlogContent = ClassRegistry::init('BcBlog.BlogContent');
                     $BlogContent->unbindModel(['hasMany' => ['BlogPost', 'BlogCategory']]);
                     $blogContent = $BlogContent->find('first', ['conditions' => ['BlogContent.id' => $blogContentId], 'recursive' => -1]);
                     $this->blogContent = Hash::extract($blogContent, 'BlogContent');
@@ -113,7 +113,7 @@ class BlogHelper extends AppHelper
                 }
                 $this->content = Hash::extract($content, 'Content');
             }
-            $BlogPost = ClassRegistry::init('Blog.BlogPost');
+            $BlogPost = ClassRegistry::init('BcBlog.BlogPost');
             $BlogPost->setupUpload($this->blogContent['id']);
         } else {
             $this->content = null;
@@ -275,7 +275,7 @@ class BlogHelper extends AppHelper
             'title' => $title,
             'options' => $options,
             'url' => $url,
-        ], ['class' => 'Blog', 'plugin' => 'Blog']);
+        ], ['class' => 'Blog', 'plugin' => 'BcBlog']);
         if ($event !== false) {
             $options = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('options') : $event->getResult();
             $post = $event->getData('post');
@@ -291,7 +291,7 @@ class BlogHelper extends AppHelper
             'title' => $title,
             'out' => $out,
             'url' => $url,
-        ], ['class' => 'Blog', 'plugin' => 'Blog']);
+        ], ['class' => 'Blog', 'plugin' => 'BcBlog']);
         if ($event !== false) {
             $out = ($event->getResult() === null || $event->getResult() === true) ? $event->getData('out') : $event->getResult();
         }
@@ -572,7 +572,7 @@ class BlogHelper extends AppHelper
             'base' => true
         ], $options);
         if (!isset($this->BlogCategory)) {
-            $this->BlogCategory = ClassRegistry::init('Blog.BlogCategory');
+            $this->BlogCategory = ClassRegistry::init('BcBlog.BlogCategory');
         }
         $categoryPath = $this->BlogCategory->getPath($blogCategoryId);
         $blogContentId = $categoryPath[0]['BlogCategory']['blog_content_id'];
@@ -937,7 +937,7 @@ class BlogHelper extends AppHelper
             return null;
         }
 
-        $BlogCategory = ClassRegistry::init('Blog.BlogCategory');
+        $BlogCategory = ClassRegistry::init('BcBlog.BlogCategory');
         return $BlogCategory->getParentNode($post['BlogCategory']['id']);
     }
 
@@ -967,7 +967,7 @@ class BlogHelper extends AppHelper
         foreach ($post['BlogTag'] as $tag) {
             $tagNames[] = urldecode($tag['name']);
         }
-        $BlogTag = ClassRegistry::init('Blog.BlogTag');
+        $BlogTag = ClassRegistry::init('BcBlog.BlogTag');
         $tags = $BlogTag->find('all', [
             'conditions' => ['BlogTag.name' => $tagNames],
             'recursive' => 1
@@ -979,7 +979,7 @@ class BlogHelper extends AppHelper
 
         $ids = array_unique(Hash::extract($tags, '{n}.BlogPost.{n}.id'));
 
-        $BlogPost = ClassRegistry::init('Blog.BlogPost');
+        $BlogPost = ClassRegistry::init('BcBlog.BlogPost');
 
         $conditions = [
             ['BlogPost.id' => $ids],
@@ -1202,7 +1202,7 @@ class BlogHelper extends AppHelper
      */
     public function getNextPost($post)
     {
-        $BlogPost = ClassRegistry::init('Blog.BlogPost');
+        $BlogPost = ClassRegistry::init('BcBlog.BlogPost');
         // 投稿日が年月日時分秒が同一のデータの対応のため、投稿日が同じでIDが小さいデータを検索
         $conditions = [];
         $conditions['BlogPost.id >'] = $post['BlogPost']['id'];
@@ -1239,7 +1239,7 @@ class BlogHelper extends AppHelper
      */
     public function getPrevPost($post)
     {
-        $BlogPost = ClassRegistry::init('Blog.BlogPost');
+        $BlogPost = ClassRegistry::init('BcBlog.BlogPost');
         // 投稿日が年月日時分秒が同一のデータの対応のため、投稿日が同じでIDが大きいデータを検索
         $conditions = [];
         $conditions['BlogPost.id <'] = $post['BlogPost']['id'];
@@ -1326,7 +1326,7 @@ class BlogHelper extends AppHelper
         $blogContentId = $options['blogContentId'];
         unset($options['blogContentId']);
         /* @var BlogCategory $BlogCategory */
-        $BlogCategory = ClassRegistry::init('Blog.BlogCategory');
+        $BlogCategory = ClassRegistry::init('BcBlog.BlogCategory');
         return $BlogCategory->getCategoryList($blogContentId, $options);
     }
 
@@ -1338,7 +1338,7 @@ class BlogHelper extends AppHelper
      */
     public function hasChildCategory($id)
     {
-        $BlogCategory = ClassRegistry::init('Blog.BlogCategory');
+        $BlogCategory = ClassRegistry::init('BcBlog.BlogCategory');
         return $BlogCategory->hasChild($id);
     }
 
@@ -1377,7 +1377,7 @@ class BlogHelper extends AppHelper
             }
         }
         /** @var \BlogTag $BlogTag */
-        $BlogTag = ClassRegistry::init('Blog.BlogTag');
+        $BlogTag = ClassRegistry::init('BcBlog.BlogTag');
         $tags = $BlogTag->find('customParams', $options);
         // 公開記事数のカウントを追加
         if ($options['postCount']) {
@@ -1413,7 +1413,7 @@ class BlogHelper extends AppHelper
                 $blogContentId = $Content->field('entity_id', ['Content.url' => $url]);
             }
         }
-        $this->BcBaser->element('Blog.blog_tag_list', [
+        $this->BcBaser->element('BcBlog.blog_tag_list', [
             'tags' => $tags,
             'blogContentId' => $blogContentId,
             'postCount' => $options['postCount']
@@ -1874,7 +1874,7 @@ class BlogHelper extends AppHelper
      */
     public function isBlog()
     {
-        return (!empty($this->request->params['Content']['plugin']) && $this->request->params['Content']['plugin'] == 'Blog');
+        return (!empty($this->request->params['Content']['plugin']) && $this->request->params['Content']['plugin'] == 'BcBlog');
     }
 
     /**

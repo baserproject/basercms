@@ -12,7 +12,7 @@ class BlogTagBlogTagFindCustomPramsFixture extends CakeTestFixture
      *
      * @var array
      */
-    public $import = ['model' => 'Blog.BlogTag'];
+    public $import = ['model' => 'BcBlog.BlogTag'];
 
     /**
      * Records

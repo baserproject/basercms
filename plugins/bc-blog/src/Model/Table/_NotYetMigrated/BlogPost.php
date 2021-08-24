@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BlogAppModel', 'Blog.Model');
+App::uses('BlogAppModel', 'BcBlog.Model');
 
 /**
  * 記事モデル
@@ -72,7 +72,7 @@ class BlogPost extends BlogAppModel
      */
     public $belongsTo = [
         'BlogCategory' => [
-            'className' => 'Blog.BlogCategory',
+            'className' => 'BcBlog.BlogCategory',
             'foreignKey' => 'blog_category_id'
         ],
         'User' => [
@@ -80,7 +80,7 @@ class BlogPost extends BlogAppModel
             'foreignKey' => 'user_id'
         ],
         'BlogContent' => [
-            'className' => 'Blog.BlogContent',
+            'className' => 'BcBlog.BlogContent',
             'foreignKey' => 'blog_content_id'
         ]
     ];
@@ -92,7 +92,7 @@ class BlogPost extends BlogAppModel
      */
     public $hasMany = [
         'BlogComment' => [
-            'className' => 'Blog.BlogComment',
+            'className' => 'BcBlog.BlogComment',
             'order' => 'created',
             'foreignKey' => 'blog_post_id',
             'dependent' => true,
@@ -108,7 +108,7 @@ class BlogPost extends BlogAppModel
      */
     public $hasAndBelongsToMany = [
         'BlogTag' => [
-            'className' => 'Blog.BlogTag',
+            'className' => 'BcBlog.BlogTag',
             'joinTable' => 'blog_posts_blog_tags',
             'foreignKey' => 'blog_post_id',
             'associationForeignKey' => 'blog_tag_id',
@@ -586,7 +586,7 @@ class BlogPost extends BlogAppModel
         if (isset($data['BlogPost'])) {
             $data = $data['BlogPost'];
         }
-        $content = $this->BlogContent->Content->findByType('Blog.BlogContent', $data['blog_content_id']);
+        $content = $this->BlogContent->Content->findByType('BcBlog.BlogContent', $data['blog_content_id']);
         if (!$content) {
             return false;
         }

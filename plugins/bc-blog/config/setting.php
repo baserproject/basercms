@@ -32,7 +32,7 @@
 /* @var BlogContent $BlogContent */
 // TODO ucmitz 未実装のためコメントアウト
 /* >>>
-$BlogContent = ClassRegistry::init('Blog.BlogContent');
+$BlogContent = ClassRegistry::init('BcBlog.BlogContent');
 $blogContents = $BlogContent->find('all', [
     'conditions' => [
         $BlogContent->Content->getConditionAllowPublish()
@@ -141,7 +141,7 @@ foreach ($blogContents as $blogContent) {
             ]
         ]
     ],
-    'Blog' => [
+    'BcBlog' => [
         // ブログアイキャッチサイズの初期値
         'eye_catch_size_thumb_width' => 600,
         'eye_catch_size_thumb_height' => 600,

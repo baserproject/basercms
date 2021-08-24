@@ -20,12 +20,12 @@
 /**
  * データベース初期化
  */
-$this->Plugin->initDb('Blog');
+$this->Plugin->initDb('BcBlog');
 
 /**
  * ブログ記事の投稿日を更新
  */
-$BlogPost = ClassRegistry::init('Blog.BlogPost');
+$BlogPost = ClassRegistry::init('BcBlog.BlogPost');
 $BlogPost->contentSaving = false;
 $datas = $BlogPost->find('all', ['recursive' => -1]);
 if ($datas) {

@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BlogAppController', 'Blog.Controller');
+App::uses('BlogAppController', 'BcBlog.Controller');
 
 /**
  * ブログ記事コントローラー
@@ -42,11 +42,11 @@ class BlogController extends BlogAppController
      * @var array
      */
     public $uses = [
-        'Blog.BlogCategory',
-        'Blog.BlogPost',
-        'Blog.BlogContent',
+        'BcBlog.BlogCategory',
+        'BcBlog.BlogPost',
+        'BcBlog.BlogContent',
         'Content',
-        'Blog.BlogTag'
+        'BcBlog.BlogTag'
     ];
 
     /**
@@ -54,7 +54,7 @@ class BlogController extends BlogAppController
      *
      * @var array
      */
-    public $helpers = ['BcText', 'BcTime', 'BcFreeze', 'BcArray', 'Paginator', 'Blog.Blog'];
+    public $helpers = ['BcText', 'BcTime', 'BcFreeze', 'BcArray', 'Paginator', 'BcBlog.Blog'];
 
     /**
      * コンポーネント
@@ -68,7 +68,7 @@ class BlogController extends BlogAppController
         'RequestHandler',
         'BcEmail',
         'Security',
-        'BcContents' => ['type' => 'Blog.BlogContent', 'useViewCache' => false]
+        'BcContents' => ['type' => 'BcBlog.BlogContent', 'useViewCache' => false]
     ];
 
     /**

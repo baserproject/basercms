@@ -654,7 +654,7 @@ class BcBasicsTest extends BcTestCase
         $Bcversion = substr($version[0], 0, -1);
         $this->assertEquals($Bcversion, $result, 'BaserCMSコアのバージョンを正しく取得できません');
 
-        $result = getVersion('Blog');
+        $result = getVersion('BcBlog');
         $this->assertEquals($Bcversion, $result, 'BaserCMSコアのバージョンを正しく取得できません');
 
         // プラグインのバージョンを取得
@@ -801,8 +801,8 @@ class BlogControllerEventListener extends BcControllerEventListener {
     public function loadPluginDataProvider()
     {
         return [
-            ['Blog', null, true],
-            ['Blog', 1, true],
+            ['BcBlog', null, true],
+            ['BcBlog', 1, true],
             ['Hoge', null, false],
         ];
     }

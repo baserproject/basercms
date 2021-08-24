@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('BlogAppModel', 'Blog.Model');
+App::uses('BlogAppModel', 'BcBlog.Model');
 
 /**
  * ブログカテゴリモデル
@@ -51,7 +51,7 @@ class BlogCategory extends BlogAppModel
      */
     public $hasMany = ['BlogPost' =>
     [
-        'className' => 'Blog.BlogPost',
+        'className' => 'BcBlog.BlogPost',
         'order' => 'id DESC',
         'limit' => 10,
         'foreignKey' => 'blog_category_id',
