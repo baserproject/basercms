@@ -22,7 +22,7 @@ class ContentBlogPostFixture extends BaserTestFixture
     public $records = [
         [
             'id' => '1',
-            'site_id' => '0',
+            'site_id' => '1',
             'name' => '',
             'plugin' => 'BaserCore',
             'type' => 'ContentFolder',
@@ -130,7 +130,7 @@ class ContentBlogPostFixture extends BaserTestFixture
         ],
         [
             'id' => '4',
-            'site_id' => '0',
+            'site_id' => '1',
             'name' => 'news',
             'plugin' => 'BcBlog',
             'type' => 'BlogContent',
@@ -238,7 +238,7 @@ class ContentBlogPostFixture extends BaserTestFixture
         ],
         [
             'id' => '7',
-            'site_id' => '0',
+            'site_id' => '1',
             'name' => 'topics',
             'plugin' => 'BcBlog',
             'type' => 'BlogContent',

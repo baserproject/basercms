@@ -467,7 +467,7 @@ class BlogPostTest extends BaserTestCase
             'SearchIndex' => [
                 'type' => 'ブログ',
                 'model_id' => false,
-                'site_id' => '0',
+                'site_id' => '1',
                 'title' => 'test-name',
                 'detail' => 'test-content test-detail',
                 'url' => '/news/archives/1',

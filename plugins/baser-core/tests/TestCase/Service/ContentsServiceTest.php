@@ -93,7 +93,7 @@ class ContentsServiceTest extends BcTestCase
     {
 
         $request = $this->getRequest()->withQueryParams([
-            'site_id' => 0,
+            'site_id' => 1,
             'open' => '1',
             'folder_id' => '6',
             'name' => 'テスト',
@@ -111,7 +111,7 @@ class ContentsServiceTest extends BcTestCase
             'lft >' => (int) 8,
             'self_status' => '1',
             'type' => 'ContentFolder',
-            'site_id' => 0
+            'site_id' => 1
             ], $result);
     }
 

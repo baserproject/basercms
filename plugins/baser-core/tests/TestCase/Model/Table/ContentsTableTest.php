@@ -154,9 +154,9 @@ class ContentsTableTest extends BcTestCase
     public function duplicateRelatedSiteContentDataProvider()
     {
         return [
-            [['id' => null, 'name' => 'hoge', 'parent_id' => 5, 'site_id' => 0], true],        // 新規・存在しない
-            [['id' => null, 'name' => 'index', 'parent_id' => 1, 'site_id' => 0], false],        // 新規・存在する（alias_id / main_site_content_id あり）
-            [['id' => 4, 'name' => 'index', 'parent_id' => 1, 'site_id' => 0], true],        // 既存・存在する（alias_id / main_site_content_id あり）
+            [['id' => null, 'name' => 'hoge', 'parent_id' => 5, 'site_id' => 1], true],        // 新規・存在しない
+            [['id' => null, 'name' => 'index', 'parent_id' => 1, 'site_id' => 1], false],        // 新規・存在する（alias_id / main_site_content_id あり）
+            [['id' => 4, 'name' => 'index', 'parent_id' => 1, 'site_id' => 1], true],        // 既存・存在する（alias_id / main_site_content_id あり）
             [['id' => null, 'name' => null, 'parent_id' => null, 'site_id' => 6], true],    // メインサイトでない場合はエラーとしない
         ];
     }

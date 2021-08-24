@@ -249,7 +249,7 @@ class BlogContentTest extends BaserTestCase
                 'title' => 'test-title',
                 'exclude_search' => $exclude_search,
                 'status' => 1,
-                'site_id' => 0,
+                'site_id' => 1,
                 'entity_id' => $id
             ]
         ]);

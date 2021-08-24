@@ -177,7 +177,7 @@ class PageTest extends BaserTestCase
             'Content' => [
                 'name' => $name,
                 'parent_id' => $parentId,
-                'site_id' => 0
+                'site_id' => 1
             ]
         ];
         $result = $this->Page->checkOpenPageFile($data);

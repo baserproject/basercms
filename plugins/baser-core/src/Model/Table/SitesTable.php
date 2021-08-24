@@ -373,7 +373,7 @@ class SitesTable extends AppTable
 
         $children = $Content->children($id, false);
         foreach($children as $child) {
-            $child['Content']['site_id'] = 0;
+            $child['Content']['site_id'] = 1;
             // バリデートすると name が変換されてしまう
             $Content->save($child, false);
         }
