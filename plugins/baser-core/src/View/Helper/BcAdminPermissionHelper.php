@@ -12,7 +12,7 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Service\Admin\PermissionServiceInterface;
+use BaserCore\Service\PermissionServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\View\View;
 

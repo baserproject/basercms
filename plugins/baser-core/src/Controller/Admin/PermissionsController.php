@@ -89,7 +89,7 @@ class PermissionsController extends BcAdminAppController
      * @unitTest
      * @noTodo
 	 */
-	public function index(PermissionServiceInterface $permissions, UserGroupsServiceInterface $userGroups, $userGroupId = '')
+	public function index(PermissionServiceInterface $permissionService, UserGroupsServiceInterface $userGroups, $userGroupId = '')
 	{
 		$currentUserGroup = $userGroups->get($userGroupId);
 
@@ -100,7 +100,7 @@ class PermissionsController extends BcAdminAppController
         ]]]);
 
         $this->set('currentUserGroup', $currentUserGroup);
-        $this->set('permissions', $permissions->getIndex($this->request->getQueryParams()));
+        $this->set('permissions', $permissionService->getIndex($this->request->getQueryParams()));
 
 		$this->_setAdminIndexViewData();
 	}
