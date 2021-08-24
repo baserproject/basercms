@@ -35,7 +35,7 @@ class ContentsSeed extends AbstractSeed
                 'lft' => '1',
                 'rght' => '18',
                 'level' => '0',
-                'title' => 'ryuring.com',
+                'title' => 'メインサイト',
                 'description' => '',
                 'eyecatch' => '',
                 'author_id' => '1',
