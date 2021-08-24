@@ -21,7 +21,7 @@ $config['BcApp.adminNavigation'] = [
         ]
     ],
     'Contents' => [
-        'Uploader' => [
+        'BcUploader' => [
             'title' => __d('baser', 'アップロード管理'),
             'type' => 'uploader',
             'icon' => 'bca-icon--uploader',
@@ -37,7 +37,7 @@ $config['BcApp.adminNavigation'] = [
     ],
 ];
 
-$config['Uploader'] = [
+$config['BcUploader'] = [
     // システム管理者によるアップロードでいかなる拡張子も許可する
     'allowedAdmin' => false,
     // システム管理者グループ以外のユーザーがアップロード可能なファイル（拡張子をカンマ区切りで指定する）

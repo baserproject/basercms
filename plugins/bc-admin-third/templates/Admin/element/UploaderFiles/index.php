@@ -25,7 +25,7 @@ echo $this->BcBaser->i18nScript([
   'uploaderAlertMessage4' => __d('baser', 'サーバーでの処理に失敗しました。'),
   'uploaderConfirmMessage1' => __d('baser', '本当に削除してもよろしいですか？')
 ], ['inline' => true]);
-$this->BcBaser->js(['Uploader.admin/uploader_files/uploader_list']);
+$this->BcBaser->js(['BcUploader.admin/uploader_files/uploader_list']);
 if (!isset($listId)) {
   $listId = '';
 }

@@ -21,14 +21,6 @@ class UploaderConfig extends AppModel
 {
 
     /**
-     * プラグイン名
-     *
-     * @var        string
-     * @access    public
-     */
-    public $plugin = 'Uploader';
-
-    /**
      * バリデート
      *
      * @var        array

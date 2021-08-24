@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('UploaderConfigsController', 'Uploader.Controller');
+App::uses('UploaderConfigsController', 'BcUploader.Controller');
 
 /**
  * Class UploaderConfigsControllerTest

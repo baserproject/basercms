@@ -21,13 +21,6 @@ class UploaderFile extends AppModel
 {
 
     /**
-     * プラグイン名
-     *
-     * @var string
-     */
-    public $plugin = 'Uploader';
-
-    /**
      * behaviors
      *
      * @var array
@@ -80,17 +73,17 @@ class UploaderFile extends AppModel
                 ]
             ]
         ];
-        if (!BcUtil::isAdminUser() || !Configure::read('Uploader.allowedAdmin')) {
+        if (!BcUtil::isAdminUser() || !Configure::read('BcUploader.allowedAdmin')) {
             $this->validate['name'] = [
                 'fileExt' => [
-                    'rule' => ['fileExt', Configure::read('Uploader.allowedExt')],
+                    'rule' => ['fileExt', Configure::read('BcUploader.allowedExt')],
                     'message' => __d('baser', '許可されていないファイル形式です。')
                 ]
             ];
         }
         parent::__construct($id, $table, $ds);
         $sizes = ['large', 'midium', 'small', 'mobile_large', 'mobile_small'];
-        $UploaderConfig = ClassRegistry::init('Uploader.UploaderConfig');
+        $UploaderConfig = ClassRegistry::init('BcUploader.UploaderConfig');
         $uploaderConfigs = $UploaderConfig->findExpanded();
         $imagecopy = [];
 
@@ -212,7 +205,7 @@ class UploaderFile extends AppModel
                 $User = ClassRegistry::getObject('User');
                 return $User->getUserList($options);
             case 'uploader_category_id':
-                $UploaderCategory = ClassRegistry::init('Uploader.UploaderCategory');
+                $UploaderCategory = ClassRegistry::init('BcUploader.UploaderCategory');
                 return $UploaderCategory->find('list', ['order' => 'UploaderCategory.id']);
         }
         return false;

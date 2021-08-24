@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('UploaderViewEventListener', 'Uploader.Event');
+App::uses('UploaderViewEventListener', 'BcUploader.Event');
 
 /**
  * Class UploaderViewEventListenerTest

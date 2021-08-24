@@ -33,7 +33,7 @@ class UploaderCategoriesController extends AppController
      * @var        array
      * @access    public
      */
-    public $uses = ['Plugin', 'Uploader.UploaderCategory'];
+    public $uses = ['Plugin', 'BcUploader.UploaderCategory'];
     /**
      * コンポーネント
      *

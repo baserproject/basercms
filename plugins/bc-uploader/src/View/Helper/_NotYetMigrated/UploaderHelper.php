@@ -92,7 +92,7 @@ class UploaderHelper extends AppHelper
             }
             return $this->Html->image($imgUrl, $options);
         } else {
-            $imgUrl = 'Uploader.icon_upload_file.png';
+            $imgUrl = 'BcUploader.icon_upload_file.png';
             return $this->Html->image($imgUrl, $options);
         }
     }

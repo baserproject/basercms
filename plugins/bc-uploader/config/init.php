@@ -14,7 +14,7 @@
 /**
  * データベース初期化
  */
-$this->Plugin->initDb('Uploader');
+$this->Plugin->initDb('BcUploader');
 
 /**
  * 必要フォルダ初期化

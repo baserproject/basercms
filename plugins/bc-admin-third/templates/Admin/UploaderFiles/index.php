@@ -9,7 +9,7 @@
  * @since           baserCMS v 3.0.10
  * @license         https://basercms.net/license/index.html
  */
-$this->BcBaser->css('Uploader.uploader', ['inline' => false]);
+$this->BcBaser->css('BcUploader.uploader', ['inline' => false]);
 ?>
 
 <?php $this->BcBaser->element('uploader_files/index') ?>

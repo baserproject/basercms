@@ -39,7 +39,7 @@ class UploaderFilesController extends AppController
      * @var        array
      * @access    public
      */
-    public $helpers = ['BcText', 'BcTime', 'BcForm', 'Uploader.Uploader', 'BcUpload'];
+    public $helpers = ['BcText', 'BcTime', 'BcForm', 'BcUploader.Uploader', 'BcUpload'];
     /**
      * ページタイトル
      *
@@ -53,7 +53,7 @@ class UploaderFilesController extends AppController
      * @var        array
      * @access    public
      */
-    public $uses = ['Plugin', 'Uploader.UploaderFile', 'Uploader.UploaderConfig'];
+    public $uses = ['Plugin', 'BcUploader.UploaderFile', 'BcUploader.UploaderConfig'];
 
     /**
      * サブメニューエレメント

@@ -12,7 +12,7 @@ return;
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('UploaderHelper', 'Uploader.View.Helper');
+App::uses('UploaderHelper', 'BcUploader.View.Helper');
 
 /**
  * Class UploaderHelperTest

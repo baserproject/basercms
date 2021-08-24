@@ -10,7 +10,7 @@
  * @license         https://basercms.net/license/index.html
  */
 
-$uploaderCategories = $this->BcForm->getControlSource("Uploader.UploaderFile.uploader_category_id");
+$uploaderCategories = $this->BcForm->getControlSource('BcUploader.UploaderFile.uploader_category_id");
 if (!isset($listId)) {
   $listId = $this->getVar('listId');
 }

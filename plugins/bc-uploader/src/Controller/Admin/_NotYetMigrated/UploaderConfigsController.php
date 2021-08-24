@@ -32,7 +32,7 @@ class UploaderConfigsController extends AppController
      * @var        array
      * @access    public
      */
-    public $uses = ['Plugin', 'Uploader.UploaderConfig'];
+    public $uses = ['Plugin', 'BcUploader.UploaderConfig'];
     /**
      * コンポーネント
      *
