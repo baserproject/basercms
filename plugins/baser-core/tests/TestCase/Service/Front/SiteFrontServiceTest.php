@@ -11,14 +11,14 @@
 
 namespace BaserCore\Test\TestCase\Service\Front;
 
-use BaserCore\Service\Front\SiteFrontService;
+use BaserCore\Service\Front\BcFrontService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\ORM\TableRegistry;
 
 /**
- * SiteFrontServiceTest
+ * BcFrontServiceTest
  */
-class SiteFrontServiceTest extends BcTestCase
+class BcFrontServiceTest extends BcTestCase
 {
 
     /**
@@ -37,7 +37,7 @@ class SiteFrontServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->Sites = new SiteFrontService();
+        $this->Sites = new BcFrontService();
     }
 
     /**

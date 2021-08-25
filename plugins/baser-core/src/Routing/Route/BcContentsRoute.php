@@ -11,7 +11,7 @@
 
 namespace BaserCore\Routing\Route;
 
-use BaserCore\Service\Front\SiteFrontService;
+use BaserCore\Service\Front\BcFrontService;
 use BaserCore\Service\SitesService;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
@@ -64,7 +64,7 @@ class BcContentsRoute extends Route
 
         // サービスクラスなのでDIを経由させるべきだが
         // BcContentsRoute::parse() が、サービスプロバイダーの登録よりタイミングが早いため直接初期化
-        $siteFront = new SiteFrontService();
+        $siteFront = new BcFrontService();
         $sameUrl = false;
         $site = $siteFront->findCurrentSub(true);
         if ($site) {

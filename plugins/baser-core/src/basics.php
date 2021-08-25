@@ -622,7 +622,7 @@ function addSessionId($url, $force = false)
 
     $site = null;
     if (!Configure::read('BcRequest.isUpdater')) {
-        $siteFront = new \BaserCore\Service\Front\SiteFrontService();
+        $siteFront = new \BaserCore\Service\Front\BcFrontService();
         $site = $siteFront->findCurrent();
     }
     // use_trans_sid が有効になっている場合、２重で付加されてしまう

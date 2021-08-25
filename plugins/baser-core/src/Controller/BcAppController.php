@@ -11,7 +11,9 @@
 
 namespace BaserCore\Controller;
 
+use BaserCore\Service\BcFrontServiceInterface;
 use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\Exception\Exception;
 use Cake\Event\EventInterface;
@@ -36,6 +38,11 @@ use BaserCore\Annotation\Checked;
  */
 class BcAppController extends AppController
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * view
@@ -220,7 +227,7 @@ class BcAppController extends AppController
         }
 
         // 言語設定
-        $siteFront = $this->getService(SiteFrontServiceInterface::class);
+        $siteFront = $this->getService(BcFrontServiceInterface::class);
         $currentSite = $siteFront->findCurrent();
         if ($currentSite) {
             $lang = Configure::read('BcLang.' . $currentSite->lang);
@@ -558,7 +565,7 @@ class BcAppController extends AppController
             $theme = $this->request->getParam('Site.theme');
         }
         if (!$theme) {
-            $siteFront = $this->getService(SiteFrontServiceInterface::class);
+            $siteFront = $this->getService(BcFrontServiceInterface::class);
             $site = $siteFront->findCurrent();
             if (!empty($site->theme)) {
                 $theme = $site->theme;

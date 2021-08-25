@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Service\BcFrontServiceInterface;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -72,7 +74,7 @@ class BcSmartphoneHelperTest extends BcTestCase
 
         //afterLayoutの条件分岐、$this->request->params['Site']をempty以外にしたい
         $this->_getRequest('/s/');
-        $siteFront = $this->getService(SiteFrontServiceInterface::class);
+        $siteFront = $this->getService(BcFrontServiceInterface::class);
         $site = $siteFront->findCurrent();
         pr($site->device);
         $this->BcSmartphone->afterLayout('');

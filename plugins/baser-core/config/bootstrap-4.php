@@ -10,7 +10,7 @@
  * @license         https://basercms.net/license/index.html
  */
 
-use BaserCore\Service\Front\SiteFrontService;
+use BaserCore\Service\Front\BcFrontService;
 
 require CORE_PATH . 'Baser' . DS . 'Config' . DS . 'paths.php';
 require BASER . 'basics.php';
@@ -416,7 +416,7 @@ if (Configure::read('debug') == 0) {
 
 // サブサイトの際にキャッシュがメインサイトと重複しないように調整
 if (Configure::read('Cache.check')) {
-    $siteFront = new SiteFrontService();
+    $siteFront = new BcFrontService();
     $site = $siteFront->findCurrent();
     if ($site->use_subdomain) {
         Configure::write('Cache.viewPrefix', $site->alias);

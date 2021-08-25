@@ -1,6 +1,6 @@
 <?php
 // TODO : コード確認要
-use BaserCore\Service\Front\SiteFrontServiceInterface;
+use BaserCore\Service\BcFrontServiceInterface;
 
 return;
 /**
@@ -65,7 +65,7 @@ class BcRequestFilter extends DispatcherFilter
         }
 
         // URLからエージェントを取得
-        $siteFront = $this->getService(SiteFrontServiceInterface::class);
+        $siteFront = $this->getService(BcFrontServiceInterface::class);
         $site = $siteFront->findCurrent();
         if ($site && $site->device) {
             /*

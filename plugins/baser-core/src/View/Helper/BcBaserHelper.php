@@ -12,8 +12,8 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Service\Admin\SiteManageServiceInterface;
-use BaserCore\Service\Front\SiteFrontServiceInterface;
+use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Service\BcFrontServiceInterface;
 use BaserCore\Utility\BcAgent;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
@@ -837,7 +837,7 @@ class BcBaserHelper extends Helper
     public function publishLink()
     {
         if ($this->existsPublishLink()) {
-            $siteManage = $this->getService(SiteManageServiceInterface::class);
+            $siteManage = $this->getService(SitesServiceInterface::class);
             $site = $siteManage->findByUrl($this->_View->viewVars['publishLink']);
             $useSubdomain = $fullUrl = false;
             if ($site && $site->name) {
@@ -1195,7 +1195,7 @@ class BcBaserHelper extends Helper
         if (empty($this->request->getParam('Site'))) {
             return false;
         }
-        $siteFront = $this->getService(SiteFrontServiceInterface::class);
+        $siteFront = $this->getService(BcFrontServiceInterface::class);
         $site = $siteFront->findCurrent();
         if (!$site->alias || $site->same_main_url || $site->use_subdomain) {
             return (
@@ -2927,13 +2927,13 @@ END_FLASH;
      */
     public function setCanonicalUrl()
     {
-        $siteFront = $this->getService(SiteFrontServiceInterface::class);
+        $siteFront = $this->getService(BcFrontServiceInterface::class);
         $currentSite = $siteFront->findCurrent();
         if (!$currentSite) {
             return;
         }
         if ($currentSite->device === 'smartphone') {
-            $siteFront = $this->getService(SiteFrontServiceInterface::class);
+            $siteFront = $this->getService(BcFrontServiceInterface::class);
             $mainSite = $siteFront->findCurrentMain();
             $url = $mainSite->makeUrl(new CakeRequest($this->BcContents->getPureUrl(
                 $this->request->url,
@@ -2965,7 +2965,7 @@ END_FLASH;
      */
     public function setAlternateUrl()
     {
-        $siteFront = $this->getService(SiteFrontServiceInterface::class);
+        $siteFront = $this->getService(BcFrontServiceInterface::class);
         $subSite = $siteFront->findCurrentSub(false, BcAgent::find('smartphone'));
         if (!$subSite || $subSite->same_main_url) {
             return;
@@ -3043,7 +3043,7 @@ END_FLASH;
             }
         }
         if (is_null($useSubDomain)) {
-            $siteFront = $this->getService(SiteFrontServiceInterface::class);
+            $siteFront = $this->getService(BcFrontServiceInterface::class);
             $site = $siteFront->findCurrent();
             $useSubDomain = $site->use_subdomain;
         }

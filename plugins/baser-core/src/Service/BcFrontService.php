@@ -26,9 +26,9 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 
 /**
- * SiteFrontService
+ * BcFrontService
  */
-class SiteFrontService extends SitesService
+class BcFrontService extends SitesService
 {
 
     use SiteConfigsTrait;

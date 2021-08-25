@@ -9,7 +9,7 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Service\Front;
+namespace BaserCore\Service;
 
 use BaserCore\Model\Entity\Site;
 use BaserCore\Utility\BcAbstractDetector;
@@ -18,9 +18,9 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 
 /**
- * SiteFrontServiceInterface
+ * BcFrontServiceInterface
  */
-interface SiteFrontServiceInterface
+interface BcFrontServiceInterface
 {
 
     /**

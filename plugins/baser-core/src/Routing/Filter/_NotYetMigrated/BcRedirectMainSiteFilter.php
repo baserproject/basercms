@@ -1,6 +1,6 @@
 <?php
 // TODO : コード確認要
-use BaserCore\Service\Front\SiteFrontServiceInterface;
+use BaserCore\Service\BcFrontServiceInterface;
 
 return;
 /**
@@ -60,7 +60,7 @@ class BcRedirectMainSiteFilter extends DispatcherFilter
                 return;
             }
         }
-        $siteFront = $this->getService(SiteFrontServiceInterface::class);
+        $siteFront = $this->getService(BcFrontServiceInterface::class);
         $site = $siteFront->findCurrent();
         if (!$site || !$site->enabled) {
             return;

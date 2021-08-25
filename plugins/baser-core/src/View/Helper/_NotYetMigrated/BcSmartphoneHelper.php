@@ -1,7 +1,7 @@
 <?php
 // TODO : コード確認要
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Service\Front\SiteFrontServiceInterface;
+use BaserCore\Service\BcFrontServiceInterface;
 
 return;
 /**
@@ -48,7 +48,7 @@ class BcSmartphoneHelper extends Helper
         } else {
             $rss = false;
         }
-        $siteFront = $this->getService(SiteFrontServiceInterface::class);
+        $siteFront = $this->getService(BcFrontServiceInterface::class);
         $site = $siteFront->findCurrent();
         if (!$rss && $site->device == 'smartphone' && $this->_View->layoutPath != 'Emails' . DS . 'text') {
             if (empty($this->request->getParam('Site'))) {

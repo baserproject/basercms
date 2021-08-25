@@ -1,6 +1,6 @@
 <?php
 // TODO : コード確認要
-use BaserCore\Service\Front\SiteFrontServiceInterface;
+use BaserCore\Service\BcFrontServiceInterface;
 
 return;
 /**
@@ -56,7 +56,7 @@ class BcRedirectSubSiteFilter extends DispatcherFilter
         if ($request->is('admin')) {
             return;
         }
-        $siteFront = $this->getService(SiteFrontServiceInterface::class);
+        $siteFront = $this->getService(BcFrontServiceInterface::class);
         $subSite = $siteFront->findCurrentSub();
         if (!is_null($subSite) && $subSite->shouldRedirects($request)) {
             $response->header('Location', $request->base . $subSite->makeUrl($request));
