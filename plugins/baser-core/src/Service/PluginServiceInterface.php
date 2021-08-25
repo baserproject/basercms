@@ -15,10 +15,10 @@ use Cake\Datasource\EntityInterface;
 use Exception;
 
 /**
- * Interface PluginsServiceInterface
+ * Interface PluginServiceInterface
  * @package BaserCore\Service
  */
-interface PluginsServiceInterface
+interface PluginServiceInterface
 {
 
     /**

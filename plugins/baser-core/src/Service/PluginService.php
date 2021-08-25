@@ -29,11 +29,11 @@ use Cake\Utility\Xml;
 use Exception;
 
 /**
- * Class PluginsService
+ * Class PluginService
  * @package BaserCore\Service
  * @property PluginsTable $Plugins
  */
-class PluginsService implements PluginsServiceInterface
+class PluginService implements PluginServiceInterface
 {
 
     /**
@@ -43,7 +43,7 @@ class PluginsService implements PluginsServiceInterface
     public $Plugins;
 
     /**
-     * PluginsService constructor.
+     * PluginService constructor.
      */
     public function __construct()
     {

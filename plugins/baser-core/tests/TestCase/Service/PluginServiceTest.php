@@ -11,18 +11,18 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
-use BaserCore\Service\PluginsService;
+use BaserCore\Service\PluginService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Filesystem\Folder;
 use Cake\Core\App;
 use Cake\ORM\TableRegistry;
 
 /**
- * Class PluginsServiceTest
+ * Class PluginServiceTest
  * @package BaserCore\Test\TestCase\Service
- * @property PluginsService $Plugins
+ * @property PluginService $Plugins
  */
-class PluginsServiceTest extends BcTestCase
+class PluginServiceTest extends BcTestCase
 {
 
     /**
@@ -37,7 +37,7 @@ class PluginsServiceTest extends BcTestCase
     ];
 
     /**
-     * @var PluginsService|null
+     * @var PluginService|null
      */
     public $Plugins = null;
 
@@ -49,7 +49,7 @@ class PluginsServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->Plugins = new PluginsService();
+        $this->Plugins = new PluginService();
     }
 
     /**

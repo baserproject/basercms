@@ -15,7 +15,6 @@ use BaserCore\Service\PluginServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Table\PluginsTable;
-use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
