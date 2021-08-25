@@ -25,13 +25,12 @@ use BaserCore\Model\Table\SitesTable;
 use BaserCore\Model\Table\UsersTable;
 use BaserCore\Service\SiteConfigsTrait;
 use BaserCore\Model\Table\ContentsTable;
-use Cake\Http\Exception\NotFoundException;
 use BaserCore\Model\Table\SiteConfigsTable;
 use BaserCore\Model\Table\ContentFoldersTable;
-use BaserCore\Service\Admin\ContentManageService;
+use BaserCore\Service\ContentService;
 use BaserCore\Controller\Component\BcContentsComponent;
 use BaserCore\Service\Admin\SiteManageServiceInterface;
-use BaserCore\Service\Admin\ContentManageServiceInterface;
+use BaserCore\Service\ContentServiceInterface;
 
 /**
  * Class ContentsController
@@ -98,7 +97,7 @@ class ContentsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function index(ContentManageServiceInterface $contentManage, SiteManageServiceInterface $siteManage)
+    public function index(ContentServiceInterface $contentService, SiteManageServiceInterface $siteManage)
     {
         $siteManage->setCurrentSite();
         $currentSiteId = $siteManage->getCurrentSite()->id;
@@ -132,7 +131,7 @@ class ContentsController extends BcAdminAppController
                     $this->request = $this->request->withQueryParams(
                         Hash::merge(
                             $this->request->getQueryParams(),
-                            $contentManage->getTableConditions($this->request->getQueryParams())
+                            $contentService->getTableConditions($this->request->getQueryParams())
                         ));
                     // EVENT Contents.searchIndex
                     $event = $this->dispatchLayerEvent('searchIndex', [
@@ -145,37 +144,37 @@ class ContentsController extends BcAdminAppController
             }
         }
         $this->ContentFolders->getEventManager()->on($this->ContentFolders);
-        $this->set('contents', $this->_getContents($contentManage));
+        $this->set('contents', $this->_getContents($contentService));
         $this->set('template', $this->_getTemplate());
-        $this->set('folders', $contentManage->getContentFolderList($currentSiteId, ['conditions' => ['site_root' => false]]));
+        $this->set('folders', $contentService->getContentFolderList($currentSiteId, ['conditions' => ['site_root' => false]]));
         $this->set('sites', $sites);
     }
 
     /**
      * リクエストに応じたコンテンツを返す
      *
-     * @param  ContentManageServiceInterface $contentManage
+     * @param  ContentServiceInterface $contentService
      * @return Query|ResultSet
      * @checked
      * @noTodo
      * @unitTest
      */
-    private function _getContents($contentManage)
+    private function _getContents($contentService)
     {
         switch($this->request->getParam('action')) {
             case 'index':
                 switch($this->request->getQuery('list_type')) {
                     case 1:
-                        return $contentManage->getTreeIndex($this->request->getQueryParams());
+                        return $contentService->getTreeIndex($this->request->getQueryParams());
                     case 2:
-                        return $this->paginate($contentManage->getTableIndex($this->request->getQueryParams()));
+                        return $this->paginate($contentService->getTableIndex($this->request->getQueryParams()));
                     default:
-                        return $contentManage->getEmptyIndex();
+                        return $contentService->getEmptyIndex();
                 }
             case 'trash_index':
-                return $contentManage->getTrashIndex($this->request->getQueryParams());
+                return $contentService->getTrashIndex($this->request->getQueryParams());
             default:
-                return $contentManage->getEmptyIndex();
+                return $contentService->getEmptyIndex();
         }
     }
 
@@ -212,9 +211,9 @@ class ContentsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function trash_index(ContentManageServiceInterface $contentManage, SiteManageServiceInterface $siteManage)
+    public function trash_index(ContentServiceInterface $contentService, SiteManageServiceInterface $siteManage)
     {
-        $this->setAction('index', $contentManage, $siteManage);
+        $this->setAction('index', $contentService, $siteManage);
         $this->render('index');
     }
 
@@ -250,7 +249,7 @@ class ContentsController extends BcAdminAppController
      *
      * @return void
      */
-    public function add(ContentManageServiceInterface $contentManage, $alias = false)
+    public function add(ContentServiceInterface $contentService, $alias = false)
     {
 
         if (!$this->request->getData()) {
@@ -281,7 +280,7 @@ class ContentsController extends BcAdminAppController
 
         $user = $currentUser = BcUtil::loginUser('Admin');
         $this->request = $this->request->withData('author_id', $user->id);
-        $contentManage->create($this->request->getData());
+        $contentService->create($this->request->getData());
         $this->Content->create(false);
         $data = $this->Content->save($this->request->data);
         if (!$data) {
@@ -795,15 +794,15 @@ class ContentsController extends BcAdminAppController
 
     /**
      * サイトに紐付いたフォルダリストを取得
-     * @param ContentManageServiceInterface $contentManage
+     * @param ContentServiceInterface $contentService
      * @param $siteId
      */
-    public function admin_ajax_get_content_folder_list(ContentManageServiceInterface $contentManage, $siteId)
+    public function admin_ajax_get_content_folder_list(ContentServiceInterface $contentService, $siteId)
     {
         $this->autoRender = false;
         Configure::write('debug', 0);
         return json_encode(
-            $contentManage->getContentFolderList(
+            $contentService->getContentFolderList(
                 (int)$siteId,
                 [
                     'conditions' => ['Content.site_root' => false]
@@ -815,10 +814,10 @@ class ContentsController extends BcAdminAppController
     /**
      * コンテンツ情報を取得する
      */
-    public function ajax_contents_info(ContentManageServiceInterface $contentManage)
+    public function ajax_contents_info(ContentServiceInterface $contentService)
     {
         $this->autoLayout = false;
-        $this->set('sites', $contentManage->getContensInfo());
+        $this->set('sites', $contentService->getContensInfo());
     }
 
     public function ajax_get_full_url($id)

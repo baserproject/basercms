@@ -14,7 +14,7 @@ namespace BaserCore\Test\TestCase\Controller\Admin;
 use Cake\Event\Event;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\Admin\SiteManageService;
-use BaserCore\Service\Admin\ContentManageService;
+use BaserCore\Service\ContentService;
 use BaserCore\Controller\Admin\ContentsController;
 
 /**
@@ -109,7 +109,7 @@ class ContentsControllerTest extends BcTestCase
         $this->get('/baser/admin/baser-core/contents/index/');
         $this->assertResponseOk();
         // リクエストの変化をテスト
-        $this->ContentsController->index(new ContentManageService(), new SiteManageService());
+        $this->ContentsController->index(new ContentService(), new SiteManageService());
         $this->assertArrayHasKey('num', $this->ContentsController->getRequest()->getQueryParams());
     }
 
@@ -143,7 +143,7 @@ class ContentsControllerTest extends BcTestCase
 
         $ContentsController = $this->ContentsController->setRequest($this->request);
         $ContentsController->viewBuilder()->setVar('authors', '');
-        $ContentsController->index(new ContentManageService(), new SiteManageService());
+        $ContentsController->index(new ContentService(), new SiteManageService());
         $this->assertNotEquals('', $ContentsController->viewBuilder()->getVar('template'));
         $this->assertNotEmpty($ContentsController->viewBuilder()->getVar('contents'));
 
@@ -174,7 +174,7 @@ class ContentsControllerTest extends BcTestCase
     {
         $request = $this->request->withParam('action', $action)->withQueryParams(array_merge(['list_type' => $listType], $search));
         $ContentsController = $this->ContentsController->setRequest($request);
-        $contents = $this->execPrivateMethod($ContentsController, '_getContents', [new ContentManageService()]);
+        $contents = $this->execPrivateMethod($ContentsController, '_getContents', [new ContentService()]);
         $this->assertInstanceOf($expected, $contents);
         $this->assertEquals($count, $contents->count());
     }
@@ -212,7 +212,7 @@ class ContentsControllerTest extends BcTestCase
     {
         $request = $this->request->withParam('action', $action)->withQueryParams(['list_type' => $listType]);
         $ContentsController = $this->ContentsController->setRequest($request);
-        $template = $this->execPrivateMethod($ContentsController, '_getTemplate', [new ContentManageService()]);
+        $template = $this->execPrivateMethod($ContentsController, '_getTemplate', [new ContentService()]);
         $this->assertEquals($expected, $template);
     }
     public function getTemplateDataProvider()
@@ -236,7 +236,7 @@ class ContentsControllerTest extends BcTestCase
     {
         $request = $this->request->withParam('action', 'trash_index')->withParam('prefix', 'Admin');
         $this->ContentsController->setRequest($request);
-        $this->ContentsController->trash_index(new ContentManageService(), new SiteManageService());
+        $this->ContentsController->trash_index(new ContentService(), new SiteManageService());
         $this->assertEquals('index', $this->ContentsController->viewBuilder()->getTemplate());
         $this->assertArrayHasKey('num', $this->ContentsController->getRequest()->getQueryParams());
     }
