@@ -10,10 +10,17 @@
  */
 
 namespace BaserCore\Test\TestCase\Service;
+use BaserCore\Service\BcAdminServiceInterface;
 use BaserCore\Service\SitesService;
+use BaserCore\Utility\BcContainerTrait;
 
 class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * Fixtures
@@ -137,4 +144,49 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->expectException("Exception");
         $this->Sites->delete(1);
     }
+
+
+    /**
+     * Test getLangList
+     */
+    public function testGetLangList()
+    {
+        $langs = $this->Sites->getLangList();
+        $this->assertEquals('english', key($langs));
+    }
+
+    /**
+     * Test getDeviceList
+     */
+    public function testGetDeviceList()
+    {
+        $devices = $this->Sites->getDeviceList();
+        $this->assertEquals('mobile', key($devices));
+    }
+
+    /**
+     * Test getSiteList
+     */
+    public function testGetSiteList()
+    {
+        $this->assertEquals(4, count($this->Sites->getList()));
+        $this->Sites->create([
+            'name' => 'test',
+            'display_name' => 'test',
+            'alias' => 'test',
+            'title' => 'test',
+            'status' => true
+        ]);
+        $this->assertEquals(5, count($this->Sites->getList()));
+    }
+
+    /**
+     * Test getThemeList
+     */
+    public function testGetThemeList()
+    {
+        // TODO BcUtil::getAllThemeList() を実装しないとテストができない
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
 }

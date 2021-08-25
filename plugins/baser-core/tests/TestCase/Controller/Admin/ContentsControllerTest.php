@@ -11,6 +11,8 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use BaserCore\Service\BcAdminService;
+use BaserCore\Service\SitesService;
 use Cake\Event\Event;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\Admin\SiteManageService;
@@ -105,7 +107,7 @@ class ContentsControllerTest extends BcTestCase
         $this->get('/baser/admin/baser-core/contents/index/');
         $this->assertResponseOk();
         // リクエストの変化をテスト
-        $this->ContentsController->index(new ContentService(), new SiteManageService());
+        $this->ContentsController->index(new ContentService(), new SitesService(), new BcAdminService());
         $this->assertArrayHasKey('num', $this->ContentsController->getRequest()->getQueryParams());
     }
 
@@ -116,7 +118,7 @@ class ContentsControllerTest extends BcTestCase
      */
     public function testIndex($listType, $action): void
     {
-        $search = [
+         $search = [
             'site_id' => 1,
             'list_type' => $listType,
             'open' => '1',
@@ -139,7 +141,7 @@ class ContentsControllerTest extends BcTestCase
 
         $ContentsController = $this->ContentsController->setRequest($this->request);
         $ContentsController->viewBuilder()->setVar('authors', '');
-        $ContentsController->index(new ContentService(), new SiteManageService());
+        $ContentsController->index(new ContentService(), new SitesService(), new BcAdminService());
         $this->assertNotEquals('', $ContentsController->viewBuilder()->getVar('template'));
         $this->assertNotEmpty($ContentsController->viewBuilder()->getVar('contents'));
 
@@ -232,7 +234,7 @@ class ContentsControllerTest extends BcTestCase
     {
         $request = $this->request->withParam('action', 'trash_index')->withParam('prefix', 'Admin');
         $this->ContentsController->setRequest($request);
-        $this->ContentsController->trash_index(new ContentService(), new SiteManageService());
+        $this->ContentsController->trash_index(new ContentService(), new SitesService(), new BcAdminService());
         $this->assertEquals('index', $this->ContentsController->viewBuilder()->getTemplate());
         $this->assertArrayHasKey('num', $this->ContentsController->getRequest()->getQueryParams());
     }

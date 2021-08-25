@@ -11,7 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Service\Admin\SiteManageServiceInterface;
+use BaserCore\Service\SitesServiceInterface;
 use Cake\Core\Exception\Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -26,15 +26,15 @@ class SitesController extends BcAdminAppController
 
     /**
      * サイト一覧
-     * @param SiteManageServiceInterface $siteManage
+     * @param SitesServiceInterface $sitesService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(SiteManageServiceInterface $siteManage)
+    public function index(SitesServiceInterface $sitesService)
     {
         $this->setViewConditions('Site', ['default' => ['query' => [
-            'num' => $siteManage->getSiteConfig('admin_list_num'),
+            'num' => $sitesService->getSiteConfig('admin_list_num'),
             'sort' => 'id',
             'direction' => 'asc',
         ]]]);
@@ -47,7 +47,7 @@ class SitesController extends BcAdminAppController
             $this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
         }
 
-        $this->set('sites', $this->paginate($siteManage->getIndex($this->request->getQueryParams())));
+        $this->set('sites', $this->paginate($sitesService->getIndex($this->request->getQueryParams())));
         $this->request = $this->request->withParsedBody($this->request->getQuery());
     }
 
@@ -57,7 +57,7 @@ class SitesController extends BcAdminAppController
      * @checked
      * @unitTest
      */
-    public function add(SiteManageServiceInterface $siteManage)
+    public function add(SitesServiceInterface $sitesService)
     {
         if ($this->request->is('post')) {
 
@@ -69,7 +69,7 @@ class SitesController extends BcAdminAppController
                 $this->request = $this->request->withParsedBody(($event->getResult() === null || $event->getResult() === true)? $event->getData('data') : $event->getResult());
             }
 
-            $site = $siteManage->create($this->request->getData());
+            $site = $sitesService->create($this->request->getData());
             if (!$site->getErrors()) {
                 /*** Sites.afterAdd ***/
                 $this->dispatchLayerEvent('afterAdd', [
@@ -88,7 +88,7 @@ class SitesController extends BcAdminAppController
             }
             $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
         } else {
-            $site = $siteManage->getNew();
+            $site = $sitesService->getNew();
         }
         $this->set('site', $site);
     }
@@ -100,12 +100,12 @@ class SitesController extends BcAdminAppController
      * @checked
      * @unitTest
      */
-    public function edit(SiteManageServiceInterface $siteManage, $id)
+    public function edit(SitesServiceInterface $sitesService, $id)
     {
         if (!$id) {
             $this->notFound();
         }
-        $site = $siteManage->get($id);
+        $site = $sitesService->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
 
             /*** Sites.beforeEdit ** */
@@ -117,7 +117,7 @@ class SitesController extends BcAdminAppController
             }
 
             $beforeSite = clone $site;
-            $site = $siteManage->update($site, $this->request->getData());
+            $site = $sitesService->update($site, $this->request->getData());
             if (!$site->getErrors()) {
 
                 /*** Sites.afterEdit ***/
@@ -147,16 +147,16 @@ class SitesController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function delete(SiteManageServiceInterface $siteManage, $id)
+    public function delete(SitesServiceInterface $sitesService, $id)
     {
         if (!$id) {
             $this->BcMessage->setError(__d('baser', '無効なIDです。'));
             $this->redirect(['action' => 'index']);
         }
         $this->request->allowMethod(['post', 'delete']);
-        $site = $siteManage->get($id);
+        $site = $sitesService->get($id);
         try {
-            if ($siteManage->delete($id)) {
+            if ($sitesService->delete($id)) {
                 $this->BcMessage->setSuccess(__d('baser', 'サイト: {0} を削除しました。', $site->name));
             }
         } catch (Exception $e) {
