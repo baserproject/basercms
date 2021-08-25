@@ -92,6 +92,9 @@ interface ContentsServiceInterface
      */
     public function create(array $postData);
 
-
-
+    /**
+      * コンテンツ情報を取得する
+      * @return array
+      */
+    public function getContensInfo();
 }

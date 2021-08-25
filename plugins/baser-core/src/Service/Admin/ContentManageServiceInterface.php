@@ -21,11 +21,6 @@ use BaserCore\Service\ContentsServiceInterface;
  */
 interface ContentManageServiceInterface extends ContentsServiceInterface
 {
-    /**
-      * コンテンツ情報を取得する
-      * @return array
-      */
-    public function getContensInfo ();
 
     /**
      * リクエストに応じてajax処理時に必要なIndexとテンプレートを取得する
@@ -34,17 +29,5 @@ interface ContentManageServiceInterface extends ContentsServiceInterface
      * @return array
      */
     public function getAdminIndex(array $queryParams): array;
-
-    /**
-     * 登録されているタイプの一覧を取得する
-     * @return array
-     */
-    public function getTypes(): array;
-
-    /**
-     * コンテンツの作成者一覧を取得
-     * @return array
-     */
-    public function getAuthors(): array;
 
 }

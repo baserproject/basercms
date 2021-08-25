@@ -10,17 +10,19 @@
  */
 namespace BaserCore\View\Helper;
 
-use BaserCore\Service\Admin\ContentManageService;
-use BaserCore\Service\Admin\ContentManageServiceInterface;
-use BaserCore\Utility\BcContainerTrait;
 use Cake\View\Helper;
-use BaserCore\Annotation\UnitTest;
+use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Service\UsersServiceInterface;
+use BaserCore\Service\ContentsService;
+use BaserCore\Service\ContentsServiceInterface;
 
 /**
  * BcAdminContentHelper
- * @property ContentManageService $ContentManage
+ * @property ContentsService $ContentService
  */
 class BcAdminContentHelper extends Helper
 {
@@ -39,20 +41,33 @@ class BcAdminContentHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->ContentManage = $this->getService(ContentManageServiceInterface::class);
+        $this->ContentService = $this->getService(ContentsServiceInterface::class);
     }
 
     /**
      * 登録されているタイプの一覧を取得する
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getTypes()
+    public function getTypes(): array
     {
-        return $this->ContentManage->getTypes();
+        $createdSettings = BcUtil::getContentsItem();
+        $types = [];
+        foreach($createdSettings as $key => $value) {
+            $types[$key] = $value['title'];
+        }
+        return $types;
     }
 
-    public function getAuthors()
+    /**
+     * コンテンツの作成者一覧を取得
+     * @return array
+     */
+    public function getAuthors(): array
     {
-        return $this->ContentManage->getAuthors();
+        $users = $this->getService(UsersServiceInterface::class);
+        return $users->getList();
     }
 }

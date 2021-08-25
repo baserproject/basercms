@@ -27,32 +27,6 @@ class ContentManageService extends ContentsService implements ContentManageServi
 {
 
     /**
-     * Trait
-     */
-    use BcContainerTrait;
-
-    /**
-      * コンテンツ情報を取得する
-      * @return array
-      */
-    public function getContensInfo ()
-    {
-        $sites = $this->Sites->getPublishedAll();
-        $contentsInfo = [];
-        foreach($sites as $key => $site) {
-            $contentsInfo[$key]['published'] = $this->Contents->find()
-                    ->where(['site_id' => $site->id, 'status' => true])
-                    ->count();
-            $contentsInfo[$key]['unpublished'] = $this->Contents->find()
-                    ->where(['site_id' => $site->id, 'status' => false])
-                    ->count();
-            $contentsInfo[$key]['total'] = $contentsInfo[$key]['published'] + $contentsInfo[$key]['unpublished'];
-            $contentsInfo[$key]['display_name'] = $site->display_name;
-        }
-        return $contentsInfo;
-    }
-
-    /**
      * リクエストに応じてajax処理時に必要なIndexとテンプレートを取得する
      *
      * @param  array $queryParams
@@ -91,33 +65,6 @@ class ContentManageService extends ContentsService implements ContentManageServi
                 break;
         }
         return $dataset;
-    }
-
-    /**
-     * 登録されているタイプの一覧を取得する
-     * @return array
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getTypes(): array
-    {
-        $createdSettings = BcUtil::getContentsItem();
-        $types = [];
-        foreach($createdSettings as $key => $value) {
-            $types[$key] = $value['title'];
-        }
-        return $types;
-    }
-
-    /**
-     * コンテンツの作成者一覧を取得
-     * @return array
-     */
-    public function getAuthors(): array
-    {
-        $users = $this->getService(UsersServiceInterface::class);
-        return $users->getList();
     }
 
 }
