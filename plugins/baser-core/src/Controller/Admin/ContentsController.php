@@ -11,7 +11,9 @@
 
 namespace BaserCore\Controller\Admin;
 
+use Cake\ORM\Query;
 use Cake\Utility\Hash;
+use Cake\ORM\ResultSet;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
@@ -23,6 +25,7 @@ use BaserCore\Model\Table\SitesTable;
 use BaserCore\Model\Table\UsersTable;
 use BaserCore\Service\SiteConfigsTrait;
 use BaserCore\Model\Table\ContentsTable;
+use Cake\Http\Exception\NotFoundException;
 use BaserCore\Model\Table\SiteConfigsTable;
 use BaserCore\Model\Table\ContentFoldersTable;
 use BaserCore\Service\Admin\ContentManageService;
@@ -112,20 +115,13 @@ class ContentsController extends BcAdminAppController
 
         $this->setViewConditions('Contents', ['default' => [
             'query' => [
-                'num' => 30,
-                // 'num' => $siteManage->getSiteConfig('admin_list_num'),
+                'num' => $siteManage->getSiteConfig('admin_list_num'),
                 'site_id' => $currentSiteId,
                 'list_type' => $currentListType,
                 'sort' => 'id',
                 'direction' => 'asc',
-                'action' => $this->request->getParam('action'),
             ]
         ]]);
-
-        $dataset = $contentManage->getAdminIndex($this->request->getQueryParams());
-        $template = key($dataset) ?? "index_tree";
-        $datas = array_shift($dataset);
-
         if($this->request->getParam('action') == "index") {
             switch($this->request->getQuery('list_type')) {
                 case 1:
@@ -133,7 +129,6 @@ class ContentsController extends BcAdminAppController
                     // $this->SiteConfigs->resetContentsSortLastModified();
                     break;
                 case 2:
-                    $datas = $this->paginate($datas);
                     $this->request = $this->request->withQueryParams(
                         Hash::merge(
                             $this->request->getQueryParams(),
@@ -149,12 +144,66 @@ class ContentsController extends BcAdminAppController
                     break;
             }
         }
-
         $this->ContentFolders->getEventManager()->on($this->ContentFolders);
-        $this->set('datas', $datas);
-        $this->set('template', $template);
+        $this->set('contents', $this->_getContents($contentManage));
+        $this->set('template', $this->_getTemplate());
         $this->set('folders', $contentManage->getContentFolderList($currentSiteId, ['conditions' => ['site_root' => false]]));
         $this->set('sites', $sites);
+    }
+
+    /**
+     * リクエストに応じたコンテンツを返す
+     *
+     * @param  ContentManageServiceInterface $contentManage
+     * @return Query|ResultSet
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    private function _getContents($contentManage)
+    {
+        switch($this->request->getParam('action')) {
+            case 'index':
+                switch($this->request->getQuery('list_type')) {
+                    case 1:
+                        return $contentManage->getTreeIndex($this->request->getQueryParams());
+                    case 2:
+                        return $this->paginate($contentManage->getTableIndex($this->request->getQueryParams()));
+                    default:
+                        return $contentManage->getEmptyIndex();
+                }
+            case 'trash_index':
+                return $contentManage->getTrashIndex($this->request->getQueryParams());
+            default:
+                return $contentManage->getEmptyIndex();
+        }
+    }
+
+    /**
+     * リクエストに応じたテンプレートを取得する
+     *
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    private function _getTemplate(): string
+    {
+        switch($this->request->getParam('action')) {
+            case 'index':
+                switch($this->request->getQuery('list_type')) {
+                    case 1:
+                        return 'index_tree';
+                    case 2:
+                        return 'index_table';
+                    default:
+                        return '';
+                }
+            case 'trash_index':
+                return 'index_trash';
+            default:
+                return '';
+        }
     }
 
     /**

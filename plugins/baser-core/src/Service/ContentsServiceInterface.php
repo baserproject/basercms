@@ -30,6 +30,13 @@ interface ContentsServiceInterface
     public function get($id): EntityInterface;
 
     /**
+     * 空のQueryを返す
+     *
+     * @return Query
+     */
+    public function getEmptyIndex(): Query;
+
+    /**
      * getTreeIndex
      *
      * @param  array $queryParams

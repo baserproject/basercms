@@ -67,6 +67,16 @@ class ContentsService implements ContentsServiceInterface
     }
 
     /**
+     * 空のQueryを返す
+     *
+     * @return Query
+     */
+    public function getEmptyIndex(): Query
+    {
+        return $this->getIndex(['site_id' => 0]);
+    }
+
+    /**
      * getTreeIndex
      *
      * @param  array $queryParams

@@ -22,12 +22,4 @@ use BaserCore\Service\ContentsServiceInterface;
 interface ContentManageServiceInterface extends ContentsServiceInterface
 {
 
-    /**
-     * リクエストに応じてajax処理時に必要なIndexとテンプレートを取得する
-     *
-     * @param  array $queryParams
-     * @return array
-     */
-    public function getAdminIndex(array $queryParams): array;
-
 }

@@ -48,7 +48,10 @@ class ContentsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/contents/index'))->withParam('prefix', 'Admin');
+        // $this->request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/'))->withParam('prefix', 'Admin');
+        // $this->request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/'));
+        // $this->request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/contents/index'))->withParam('prefix', 'Admin');
+        $this->request = $this->loginAdmin($this->getRequest('/baser/admin'));
         $this->ContentsController = new ContentsController($this->request);
         $this->ContentsController->setName('Contents');
         $this->ContentsController->loadModel('BaserCore.ContentFolders');
@@ -100,7 +103,7 @@ class ContentsControllerTest extends BcTestCase
      *
      * @return void
      */
-    public function testIndex(): void
+    public function testIndexRequest(): void
     {
         $request = $this->getRequest();
         $this->get('/baser/admin/baser-core/contents/index/');
@@ -108,57 +111,119 @@ class ContentsControllerTest extends BcTestCase
         // リクエストの変化をテスト
         $this->ContentsController->index(new ContentManageService(), new SiteManageService());
         $this->assertArrayHasKey('num', $this->ContentsController->getRequest()->getQueryParams());
-
     }
 
     /**
      * testAjax_index
-     * @dataProvider ajaxIndexDataProvider
+     * @dataProvider indexDataProvider
      * @return void
      */
-    public function testIndexContents($listType, $action, $expected): void
+    public function testIndex($listType, $action): void
     {
+        $search = [
+            'site_id' => 1,
+            'list_type' => $listType,
+            'open' => '1',
+            'folder_id' => '',
+            'name' => '',
+            'type' => '',
+            'self_status' => '',
+            'author_id' => '',
+        ];
         // 初期パラメーター
-        $this->request = $this->request->withQueryParams(
-            [
-                'site_id' => 0,
-                'list_type' => $listType,
-                'open' => '1',
-                'folder_id' => '',
-                'name' => '',
-                'type' => '',
-                'self_status' => '',
-                'author_id' => '',
-            ])->withParam('action', $action);
+        $this->request = $this->request->withQueryParams($search)->withParam('action', $action);
 
-        if ($expected === "index_table") {
+        if ($action === 'index' && $listType === 2) {
             // イベント設定
             $this->entryControllerEventToMock('Controller.BaserCore.Contents.searchIndex', function(Event $event) {
                 $this->request = $event->getData('request');
-                return $this->request->withQueryParams(['num' => 1]);
+                return $this->request->withQueryParams(array_merge($this->request->getQueryParams(), ['num' => 1]));
             });
         }
 
         $ContentsController = $this->ContentsController->setRequest($this->request);
-        // index_row_table.phpでエラーがでるため、変数を補完
-        if ($expected === "index_table") $ContentsController->viewBuilder()->setVar('authors', '');
-
+        $ContentsController->viewBuilder()->setVar('authors', '');
         $ContentsController->index(new ContentManageService(), new SiteManageService());
-        $this->assertEquals($expected, $ContentsController->viewBuilder()->getVar('template'));
-        if ($expected !== "index_table") {
-            $this->assertInstanceOf('Cake\ORM\Query', $ContentsController->viewBuilder()->getVar('datas'));
-        } else {
+        $this->assertNotEquals('', $ContentsController->viewBuilder()->getVar('template'));
+        $this->assertNotEmpty($ContentsController->viewBuilder()->getVar('contents'));
+
+        if ($action === 'index' && $listType === 2) {
             $this->assertEquals(1, $ContentsController->getRequest()->getQuery('num'));
-            $this->assertInstanceOf('Cake\ORM\ResultSet', $ContentsController->viewBuilder()->getVar('datas'));
         }
     }
 
-    public function ajaxIndexDataProvider()
+    public function indexDataProvider()
     {
         return [
-            [1, "index", "index_tree"],
-            [1, "trash_index", "index_trash"],
-            [2, "index", "index_table"],
+            [1, "index"],
+            [1, "trash_index"],
+            [2, "index"],
+        ];
+    }
+
+    /**
+     * testGetContents
+     *
+     * @param  string $action
+     * @param  string $listType
+     * @param  string $expected
+     * @return void
+     * @dataProvider getContentsDataProvider
+     */
+    public function testGetContents($action, $listType, $search, $expected, $count): void
+    {
+        $request = $this->request->withParam('action', $action)->withQueryParams(array_merge(['list_type' => $listType], $search));
+        $ContentsController = $this->ContentsController->setRequest($request);
+        $contents = $this->execPrivateMethod($ContentsController, '_getContents', [new ContentManageService()]);
+        $this->assertInstanceOf($expected, $contents);
+        $this->assertEquals($count, $contents->count());
+    }
+    public function getContentsDataProvider()
+    {
+        $search = [
+            'site_id' => 1,
+            'open' => '1',
+            'folder_id' => '',
+            'name' => '',
+            'type' => '',
+            'self_status' => '',
+            'author_id' => '',
+        ];
+        return [
+            ['index', '1', [], "Cake\ORM\Query", 11],
+            ['index', '2', $search, 'Cake\ORM\ResultSet', 10],
+            ['trash_index', '1', [], 'Cake\ORM\Query', 1],
+            // 足りない場合は空のindexを返す
+            ['index', '', [], 'Cake\ORM\Query', 0],
+            ['', '1', [], 'Cake\ORM\Query', 0],
+        ];
+    }
+
+    /**
+     * testGetTemplate
+     *
+     * @param  string $action
+     * @param  string $listType
+     * @param  string $expected
+     * @return void
+     * @dataProvider getTemplateDataProvider
+     */
+    public function testGetTemplate($action, $listType, $expected): void
+    {
+        $request = $this->request->withParam('action', $action)->withQueryParams(['list_type' => $listType]);
+        $ContentsController = $this->ContentsController->setRequest($request);
+        $template = $this->execPrivateMethod($ContentsController, '_getTemplate', [new ContentManageService()]);
+        $this->assertEquals($expected, $template);
+    }
+    public function getTemplateDataProvider()
+    {
+        return [
+            ['index', '1', 'index_tree'],
+            ['index', '2', 'index_table'],
+            ['trash_index', '1', 'index_trash'],
+            // 足りない場合空文字列を返す
+            ['index', '', ''],
+            ['', '1', ''],
         ];
     }
 
@@ -169,11 +234,10 @@ class ContentsControllerTest extends BcTestCase
      */
     public function testTrash_index(): void
     {
-        $request = $this->request->withParam('action', 'trash_index');
+        $request = $this->request->withParam('action', 'trash_index')->withParam('prefix', 'Admin');
         $this->ContentsController->setRequest($request);
         $this->ContentsController->trash_index(new ContentManageService(), new SiteManageService());
         $this->assertEquals('index', $this->ContentsController->viewBuilder()->getTemplate());
-        $this->assertEquals('trash_index', $this->ContentsController->getRequest()->getQuery('action'));
         $this->assertArrayHasKey('num', $this->ContentsController->getRequest()->getQueryParams());
     }
 
