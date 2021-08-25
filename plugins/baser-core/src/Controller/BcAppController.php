@@ -20,7 +20,7 @@ use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use BaserCore\Utility\BcUtil;
-use BaserCore\Service\DblogsServiceInterface;
+use BaserCore\Service\DblogServiceInterface;
 use Cake\Core\Configure;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -1607,7 +1607,7 @@ class BcAppController extends AppController
      */
     protected function saveDblog($message)
     {
-        $DblogsService = $this->getService(DblogsServiceInterface::class);
-        return $DblogsService->create($message);
+        $DblogService = $this->getService(DblogServiceInterface::class);
+        return $DblogService->create($message);
     }
 }

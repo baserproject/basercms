@@ -11,7 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Service\DblogsServiceInterface;
+use BaserCore\Service\DblogServiceInterface;
 use BaserCore\Service\SiteConfigsTrait;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Annotation\UnitTest;
@@ -37,7 +37,7 @@ class DblogsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function index(DblogsServiceInterface $DblogsService, UsersServiceInterface $userService)
+    public function index(DblogServiceInterface $DblogService, UsersServiceInterface $userService)
     {
         $this->setViewConditions('Dblog', ['default' => ['query' => [
             'num' => $userService->getSiteConfig('admin_list_num'),
@@ -50,7 +50,7 @@ class DblogsController extends BcAdminAppController
             $this->paginate['limit'] = $queryParams['num'];
         }
 
-        $this->set('dblogs', $this->paginate($DblogsService->getIndex($queryParams)));
+        $this->set('dblogs', $this->paginate($DblogService->getIndex($queryParams)));
         $this->request = $this->request->withParsedBody($this->request->getQuery());
     }
 
@@ -62,13 +62,13 @@ class DblogsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function delete_all(DblogsServiceInterface $DblogsService)
+    public function delete_all(DblogServiceInterface $DblogService)
     {
         if (!$this->request->is('post')) {
             $this->notFound();
         }
 
-        if ($DblogsService->deleteAll()) {
+        if ($DblogService->deleteAll()) {
             $this->BcMessage->setInfo(__d('baser', '最近の動きのログを削除しました。'));
         } else {
             $this->BcMessage->setError(__d('baser', '最近の動きのログ削除に失敗しました。'));

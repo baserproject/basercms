@@ -22,9 +22,9 @@ use BaserCore\Error\BcException;
 use Cake\Routing\Router;
 
 /**
- * Class DblogsService
+ * Class DblogService
  */
-class DblogsService implements DblogsServiceInterface
+class DblogService implements DblogServiceInterface
 {
 
     /**
@@ -34,7 +34,7 @@ class DblogsService implements DblogsServiceInterface
     private $Dblogs;
 
     /**
-     * DblogsService constructor.
+     * DblogService constructor.
      */
     public function __construct()
     {

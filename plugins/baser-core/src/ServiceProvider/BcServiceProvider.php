@@ -21,13 +21,13 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Service\SitesService;
 use BaserCore\Service\UsersService;
-use BaserCore\Service\DblogsService;
+use BaserCore\Service\DblogService;
 use BaserCore\Service\PluginsService;
 use BaserCore\Service\ContentService;
 use BaserCore\Service\UserGroupsService;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
-use BaserCore\Service\DblogsServiceInterface;
+use BaserCore\Service\DblogServiceInterface;
 use BaserCore\Service\SiteConfigsService;
 use BaserCore\Service\Admin\SiteManageService;
 use BaserCore\Service\PluginsServiceInterface;
@@ -66,7 +66,7 @@ class BcServiceProvider extends ServiceProvider
         SiteConfigsServiceInterface::class,
         SiteConfigManageServiceInterface::class,
         PermissionServiceInterface::class,
-        DblogsServiceInterface::class,
+        DblogServiceInterface::class,
         ContentServiceInterface::class,
         ContentFoldersServiceInterface::class,
         ContentFolderManageServiceInterface::class,
@@ -98,7 +98,7 @@ class BcServiceProvider extends ServiceProvider
         // Permissionsサービス
         $container->add(PermissionServiceInterface::class, PermissionService::class);
         // Dblogsサービス
-        $container->add(DblogsServiceInterface::class, DblogsService::class, true);
+        $container->add(DblogServiceInterface::class, DblogService::class, true);
         // Contentsサービス
         $container->add(ContentServiceInterface::class, ContentService::class, true);
         // ContentFoldersサービス

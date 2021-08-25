@@ -15,10 +15,10 @@ use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 
 /**
- * Interface DblogsServiceInterface
+ * Interface DblogServiceInterface
  * @package BaserCore\Service
  */
-interface DblogsServiceInterface
+interface DblogServiceInterface
 {
 
     /**

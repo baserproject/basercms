@@ -12,7 +12,7 @@
 namespace BaserCore\Controller\Component;
 
 use BaserCore\Error\BcException;
-use BaserCore\Service\DblogsServiceInterface;
+use BaserCore\Service\DblogServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Controller\Component;
 use Cake\Controller\Component\FlashComponent;
@@ -66,7 +66,7 @@ class BcMessageComponent extends Component
         }
 
         if ($saveDblog) {
-            $dblogs = $this->getService(DblogsServiceInterface::class);
+            $dblogs = $this->getService(DblogServiceInterface::class);
             $dblogs->create($message);
         }
     }
