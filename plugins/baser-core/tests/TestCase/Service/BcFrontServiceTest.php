@@ -9,9 +9,9 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Test\TestCase\Service\Front;
+namespace BaserCore\Test\TestCase\Service;
 
-use BaserCore\Service\Front\BcFrontService;
+use BaserCore\Service\BcFrontService;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\ORM\TableRegistry;
 

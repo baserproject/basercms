@@ -11,7 +11,7 @@
 
 namespace BaserCore\Routing\Route;
 
-use BaserCore\Service\Front\BcFrontService;
+use BaserCore\Service\BcFrontService;
 use BaserCore\Service\SitesService;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;

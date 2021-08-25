@@ -41,6 +41,7 @@ class SitesControllerTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.Dblogs'
     ];
 

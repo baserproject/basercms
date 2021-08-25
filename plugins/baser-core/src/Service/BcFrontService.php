@@ -9,11 +9,9 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Service\Front;
+namespace BaserCore\Service;
 
 use BaserCore\Model\Entity\Site;
-use BaserCore\Service\SiteConfigsTrait;
-use BaserCore\Service\SitesService;
 use BaserCore\Utility\BcAbstractDetector;
 use BaserCore\Utility\BcAgent;
 use BaserCore\Utility\BcLang;

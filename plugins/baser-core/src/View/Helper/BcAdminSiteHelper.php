@@ -85,7 +85,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getSiteList($options = []): array
     {
-        return $this->SitesService->getList(null, $options);
+        return $this->SitesService->getList($options);
     }
 
     /**

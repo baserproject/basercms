@@ -10,7 +10,7 @@
  * @license         https://basercms.net/license/index.html
  */
 
-use BaserCore\Service\Front\BcFrontService;
+use BaserCore\Service\BcFrontService;
 
 require CORE_PATH . 'Baser' . DS . 'Config' . DS . 'paths.php';
 require BASER . 'basics.php';
