@@ -41,10 +41,4 @@ interface ContentManageServiceInterface extends ContentsServiceInterface
      */
     public function getTypes(): array;
 
-    /**
-     * コンテンツの作成者一覧を取得
-     * @return array
-     */
-    public function getAuthors(): array;
-
 }

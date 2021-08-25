@@ -39,7 +39,7 @@ class BcContainerEventListener implements EventListenerInterface
      * コンテナをシングルトンとしてヘルパなどで利用できるようにしている
      * 利用時は、BaserCore\Utility\BcContainerTrait を実装することで getService() にて
      * インターフェイスを指定して取得できる
-     * 例）$this->getService(UserManageServiceInterface::class);
+     * 例）$this->getService(UsersServiceInterface::class);
      * @param Event $event
      */
     public function buildContainer(Event $event)

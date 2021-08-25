@@ -15,7 +15,7 @@ use BaserCore\Model\Entity\UserGroup;
 use BaserCore\Service\Admin\UserGroupManageServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\UserGroupsTable;
-use BaserCore\Service\Admin\UserManageServiceInterface;
+use BaserCore\Service\UsersServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Datasource\ResultSetInterface;
 use Cake\Http\Response;
@@ -137,7 +137,7 @@ class UserGroupsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function edit(UserGroupManageServiceInterface $UserGroupManage, UserManageServiceInterface $userManage, $id = null)
+    public function edit(UserGroupManageServiceInterface $UserGroupManage, UsersServiceInterface $userService, $id = null)
     {
 
         if ($id) {
@@ -154,7 +154,7 @@ class UserGroupsController extends BcAdminAppController
             $userGroup = $UserGroupManage->update($userGroup, $this->request->getData());
             if (!$userGroup->getErrors()) {
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name));
-                $userManage->reLogin($this->request, $this->response);
+                $userService->reLogin($this->request, $this->response);
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));

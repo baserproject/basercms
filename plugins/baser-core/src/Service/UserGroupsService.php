@@ -65,7 +65,7 @@ class UserGroupsService implements UserGroupsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getNew(): UserGroup
+    public function getNew(): EntityInterface
     {
         return $this->UserGroups->newEntity([
             'auth_prefix' => 'Admin',
@@ -133,7 +133,7 @@ class UserGroupsService implements UserGroupsServiceInterface
      * リストを取得する
      * @return array
      */
-    public function list(): array
+    public function getList(): array
     {
         return $this->UserGroups->find('list', ['keyField' => 'id', 'valueField' => 'title'])->toArray();
     }

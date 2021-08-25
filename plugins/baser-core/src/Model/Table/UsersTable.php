@@ -162,6 +162,8 @@ class UsersTable extends Table
      */
     public function validationDefault(Validator $validator): Validator
     {
+        $validator->setProvider('user', 'BaserCore\Model\Validation\UserValidation');
+
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create');
@@ -199,6 +201,14 @@ class UsersTable extends Table
                     'rule' => 'notEmptyMultiple',
                     'provider' => 'bc',
                     'message' => __d('baser', 'グループを選択してください。')
+                ]
+            ])
+            ->add('user_groups', [
+                'willChangeSelfGroup' => [
+                    'rule' => 'willChangeSelfGroup',
+                    'provider' => 'user',
+                    'on' => 'update',
+                    'message' => __d('baser', '自分のアカウントのグループは変更できません。')
                 ]
             ]);
         $validator

@@ -110,15 +110,5 @@ class ContentManageService extends ContentsService implements ContentManageServi
         return $types;
     }
 
-    /**
-     * コンテンツの作成者一覧を取得
-     * @return array
-     */
-    public function getAuthors(): array
-    {
-        $users = $this->getService(UsersServiceInterface::class);
-        return $users->getList();
-    }
-
 }
 

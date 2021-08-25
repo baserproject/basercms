@@ -11,8 +11,9 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Service\Admin\UserManageServiceInterface;
+use BaserCore\Service\UserGroupsServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcUtil;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -25,26 +26,10 @@ use BaserCore\Annotation\Checked;
 class BcAdminUserHelper extends Helper
 {
 
+    /**
+     * Trait
+     */
     use BcContainerTrait;
-
-    /**
-     * User Manage Service
-     * @var UserManageServiceInterface
-     */
-    public $UserManage;
-
-    /**
-     * initialize
-     * @param array $config
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function initialize(array $config): void
-    {
-        parent::initialize($config);
-        $this->UserManage = $this->getService(UserManageServiceInterface::class);
-    }
 
     /**
      * ログインユーザー自身の更新かどうか
@@ -56,7 +41,9 @@ class BcAdminUserHelper extends Helper
      */
     public function isSelfUpdate(?int $id)
     {
-        return $this->UserManage->isSelfUpdate($id);
+        // TODO PermissionのServiceかModelに置き換えるべき
+        $loginUser = BcUtil::loginUser();
+        return (!empty($id) && !empty($loginUser->id) && $loginUser->id === $id);
     }
 
     /**
@@ -69,7 +56,13 @@ class BcAdminUserHelper extends Helper
      */
     public function isEditable(?int $id)
     {
-        return $this->UserManage->isEditable($id);
+        // TODO PermissionのServiceかModelに置き換えるべき
+        $user = BcUtil::loginUser();
+        if (empty($id) || empty($user)) {
+            return false;
+        } else {
+            return ($this->isSelfUpdate($id) || $user->isAdmin());
+        }
     }
 
     /**
@@ -80,9 +73,13 @@ class BcAdminUserHelper extends Helper
      * @noTodo
      * @unitTest
      */
-    public function isDeletable(int $id)
+    public function isDeletable(?int $id)
     {
-        return $this->UserManage->isDeletable($id);
+        $user = BcUtil::loginUser();
+        if (empty($id) || empty($user)) {
+            return false;
+        }
+        return !$this->isSelfUpdate($id);
     }
 
     /**
@@ -94,7 +91,7 @@ class BcAdminUserHelper extends Helper
      */
     public function getUserGroupList()
     {
-        return $this->UserManage->getUserGroupList();
+        return $this->getService(UserGroupsServiceInterface::class)->getList();
     }
 
 }

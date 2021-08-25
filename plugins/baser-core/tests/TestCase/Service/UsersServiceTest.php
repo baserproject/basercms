@@ -11,8 +11,10 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use BaserCore\Model\Table\LoginStoresTable;
 use BaserCore\Service\UsersService;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Http\Response;
 
 /**
  * Class UsersServiceTest
@@ -156,6 +158,104 @@ class UsersServiceTest extends BcTestCase
     {
         $this->expectException("Cake\Core\Exception\Exception");
         $this->Users->delete(1);
+    }
+
+    /**
+     * test Login
+     */
+    public function testLoginAndLogout()
+    {
+        $request = $this->getRequest('/baser/admin/users/index');
+        $authentication = $this->BaserCore->getAuthenticationService($request);
+        $request = $request->withAttribute('authentication', $authentication);
+        $response = new Response();
+        $request = $this->Users->login($request, $response, 1)['request'];
+        $this->assertEquals(1, $request->getAttribute('identity')->id);
+        $this->assertEquals(1, $request->getSession()->read('AuthAdmin')->id);
+        $this->Users->logout($request, $response, 1);
+        $this->assertNull($request->getSession()->read('AuthAdmin'));
+    }
+
+    /**
+     * test reLogin
+     */
+    public function testReLogin()
+    {
+        $request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/users/index'));
+        $this->Users->update($request->getAttribute('identity')->getOriginalData(), ['name' => 'test']);
+        $request = $this->Users->reLogin($request, new Response())['request'];
+        $this->assertEquals('test', $request->getAttribute('identity')->name);
+    }
+
+    /**
+     * test setCookieAutoLoginKey
+     */
+    public function testSetCookieAutoLoginKey()
+    {
+        $response = $this->Users->setCookieAutoLoginKey(new Response(), 1);
+        $cookie = $response->getCookie(LoginStoresTable::KEY_NAME);
+        $this->assertNotEmpty($cookie['value']);
+    }
+
+    /**
+     * test checkAutoLogin
+     */
+    public function testCheckAutoLogin()
+    {
+        $response = $this->Users->setCookieAutoLoginKey(new Response(), 1);
+        $request = $this->getRequest('/baser/admin/users/');
+        $beforeCookie = $response->getCookie(LoginStoresTable::KEY_NAME);
+        $request = $request->withCookieParams([LoginStoresTable::KEY_NAME => $beforeCookie['value']]);
+        $response = $this->Users->checkAutoLogin($request, $response);
+        $afterCookie = $response->getCookie(LoginStoresTable::KEY_NAME);
+        $this->assertNotEmpty($afterCookie['value']);
+        $this->assertNotEquals($beforeCookie['value'], $afterCookie['value']);
+    }
+
+    /**
+     * test loginToAgent
+     */
+    public function testLoginToAgentAndReturnLoginUserFromAgent()
+    {
+        $request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/users/'));
+        $response = new Response();
+        $this->Users->loginToAgent($request, $response, 2);
+        $this->assertSession(1, 'AuthAgent.User.id');
+        $this->assertSession(2, 'AuthAdmin.id');
+        $this->Users->returnLoginUserFromAgent($request, $response);
+        $this->assertSession(null, 'AuthAgent.User.id');
+        $this->assertSession(1, 'AuthAdmin.id');
+    }
+
+    /**
+     * test reload
+     *
+     * @return void
+     */
+    public function testReload()
+    {
+        // 未ログイン
+        $request = $this->getRequest('/baser/admin/users/index');
+        $noLoginUser = $this->Users->reload($request);
+        $this->assertTrue($noLoginUser);
+
+        $authentication = $this->BaserCore->getAuthenticationService($request);
+        $request = $request->withAttribute('authentication', $authentication);
+        $response = new Response();
+        $request = $this->Users->login($request, $response, 1)['request'];
+
+        // 通常読込
+        $users = $this->getTableLocator()->get('Users');
+        $user = $users->get(1);
+        $user->name = 'modified name';
+        $users->save($user);
+        $this->Users->reload($request);
+        $this->assertSession('modified name', 'AuthAdmin.name');
+
+        // 削除
+        $users->delete($user);
+        $deleteRealaodUser = $this->Users->reload($request);
+        $this->assertFalse($deleteRealaodUser);
     }
 
 }

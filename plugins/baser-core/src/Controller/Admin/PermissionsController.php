@@ -118,7 +118,7 @@ class PermissionsController extends BcAdminAppController
 	/**
 	 * [ADMIN] 登録処理
      *
-     * @param PermissionServiceInterface $userManage
+     * @param PermissionServiceInterface $userService
      * @param UserGroupsServiceInterface $userGroups
      * @param int $userGroupId
      * @return void
@@ -147,7 +147,7 @@ class PermissionsController extends BcAdminAppController
     /**
      * [ADMIN] 編集処理
      *
-     * @param PermissionServiceInterface $userManage
+     * @param PermissionServiceInterface $userService
      * @param UserGroupsServiceInterface $userGroups
      * @param int $userGroupId
      * @param int $permissionId
@@ -282,7 +282,7 @@ class PermissionsController extends BcAdminAppController
     /**
      * [ADMIN] 複製処理
      *
-     * @param PermissionServiceInterface $userManage
+     * @param PermissionServiceInterface $userService
      * @param int $userGroupId
      * @param int $permissionId
      * @return void

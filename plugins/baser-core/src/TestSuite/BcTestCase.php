@@ -12,15 +12,12 @@
 namespace BaserCore\TestSuite;
 
 use App\Application;
-use Authentication\AuthenticationService;
 use Authentication\Authenticator\Result;
 use BaserCore\Event\BcControllerEventListener;
 use BaserCore\Plugin;
-use BaserCore\Service\Api\UserApiService;
-use Cake\Core\App;
+use BaserCore\Utility\BcApiUtil;
 use Cake\Core\Configure;
 use Cake\Event\EventManager;
-use Cake\Http\BaseApplication;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\Http\ServerRequestFactory;
@@ -186,10 +183,9 @@ class BcTestCase extends TestCase
      */
     protected function apiLoginAdmin($id = 1)
     {
-        $userApi = new UserApiService();
         $user = $this->getUser($id);
         if($user) {
-            return $userApi->getAccessToken(new Result($this->getUser($id), Result::SUCCESS));
+            return BcApiUtil::createAccessToken($id);
         } else {
             return [];
         }

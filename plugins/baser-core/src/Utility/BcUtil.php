@@ -354,8 +354,8 @@ class BcUtil
     public static function isAdminUser($user = null): bool
     {
         /** @var User $User */
-        $User = $user ?? self::loginUser('Admin');
-        return $User->isAdmin();
+        $loginUser = $user ?? self::loginUser('Admin');
+        return ($loginUser)? $loginUser->isAdmin() : false;
     }
 
     /**

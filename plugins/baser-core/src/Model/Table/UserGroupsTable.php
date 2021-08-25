@@ -44,7 +44,7 @@ use BaserCore\Annotation\Checked;
  * @mixin TimestampBehaviorAlias
  * @uses UserGroupsTable
  */
-class UserGroupsTable extends AppTable 
+class UserGroupsTable extends AppTable
 {
 
     /**
@@ -178,7 +178,7 @@ class UserGroupsTable extends AppTable
     {
         if (is_numeric($id)) {
             $userGroup = $this->get($id);
-        } 
+        }
 
         $userGroup->name .= '_copy';
         $userGroup->title .= '_copy';

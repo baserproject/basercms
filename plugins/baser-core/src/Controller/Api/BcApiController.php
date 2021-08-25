@@ -12,12 +12,16 @@
 namespace BaserCore\Controller\Api;
 
 use Authentication\Authenticator\JwtAuthenticator;
+use Authentication\Authenticator\ResultInterface;
 use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Controller\AppController;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Utility\BcApiUtil;
+use Cake\Core\Configure;
 use Cake\Event\EventInterface;
+use Firebase\JWT\JWT;
 
 /**
  * Class BcApiController
@@ -38,6 +42,20 @@ class BcApiController extends AppController
         parent::initialize();
         $this->loadComponent('Authentication.Authentication');
         $this->Security->setConfig('validatePost', false);
+    }
+
+    /**
+     * トークンを取得する
+     * @param ResultInterface $result
+     * @return array
+     */
+    public function getAccessToken(ResultInterface $result): array
+    {
+        if ($result->isValid()) {
+            return BcApiUtil::createAccessToken($result->getData()->id);
+        } else {
+            return [];
+        }
     }
 
     /**

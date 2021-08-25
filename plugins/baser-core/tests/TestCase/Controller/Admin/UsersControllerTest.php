@@ -12,8 +12,9 @@
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Controller\Admin\UsersController;
-use BaserCore\Service\Admin\UserManageService;
+use BaserCore\Service\UsersServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -23,7 +24,12 @@ use Cake\TestSuite\IntegrationTestTrait;
  */
 class UsersControllerTest extends BcTestCase
 {
+
+    /**
+     * Trait
+     */
     use IntegrationTestTrait;
+    use BcContainerTrait;
 
     /**
      * Fixtures
@@ -106,7 +112,7 @@ class UsersControllerTest extends BcTestCase
         });
         // アクション実行（requestの変化を判定するため $this->get() ではなくクラスを直接利用）
         $this->UsersController->beforeFilter(new Event('beforeFilter'));
-        $this->UsersController->index(new UserManageService());
+        $this->UsersController->index($this->getService(UsersServiceInterface::class));
         $this->assertEquals(1, $this->UsersController->getRequest()->getQuery('num'));
     }
 

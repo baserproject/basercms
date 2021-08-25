@@ -12,7 +12,9 @@ namespace BaserCore\View\Helper;
 
 use BaserCore\Service\Admin\ContentManageService;
 use BaserCore\Service\Admin\ContentManageServiceInterface;
+use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\ORM\TableRegistry;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -51,8 +53,13 @@ class BcAdminContentHelper extends Helper
         return $this->ContentManage->getTypes();
     }
 
+    /**
+     * 作成者一覧を取得する
+     * @return mixed
+     */
     public function getAuthors()
     {
-        return $this->ContentManage->getAuthors();
+        return $this->getService(UsersServiceInterface::class)->getList();
     }
+
 }
