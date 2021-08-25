@@ -12,20 +12,20 @@
 namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Service\ContentsService;
+use BaserCore\Service\ContentService;
 
 /**
  * BaserCore\Model\Table\ContentsTable Test Case
  *
- * @property ContentsService $ContentsService
+ * @property ContentService $ContentService
  */
-class ContentsServiceTest extends BcTestCase
+class ContentServiceTest extends BcTestCase
 {
 
     /**
      * Test subject
      *
-     * @var ContentsService
+     * @var ContentService
      */
     public $Contents;
 
@@ -47,7 +47,7 @@ class ContentsServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->ContentsService = new ContentsService();
+        $this->ContentService = new ContentService();
     }
 
     /**
@@ -57,7 +57,7 @@ class ContentsServiceTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        unset($this->ContentsService);
+        unset($this->ContentService);
         parent::tearDown();
     }
 
@@ -68,7 +68,7 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testGet(): void
     {
-        $result = $this->ContentsService->get(1);
+        $result = $this->ContentService->get(1);
         $this->assertEquals("baserCMSサンプル", $result->title);
 
     }
@@ -80,7 +80,7 @@ class ContentsServiceTest extends BcTestCase
     public function testGetTreeIndex(): void
     {
         $request = $this->getRequest('/?site_id=1');
-        $result = $this->ContentsService->getTreeIndex($request->getQueryParams());
+        $result = $this->ContentService->getTreeIndex($request->getQueryParams());
         $this->assertEquals("baserCMSサンプル", $result->first()->title);
     }
 
@@ -101,7 +101,7 @@ class ContentsServiceTest extends BcTestCase
             'self_status' => '1',
             'author_id' => '',
         ]);
-        $result = $this->ContentsService->getTableConditions($request->getQueryParams());
+        $result = $this->ContentService->getTableConditions($request->getQueryParams());
         $this->assertEquals([
             'OR' => [
             'name LIKE' => '%テスト%',
@@ -123,7 +123,7 @@ class ContentsServiceTest extends BcTestCase
      */
     public function testgetTableIndex($conditions, $expected): void
     {
-        $result = $this->ContentsService->getTableIndex($conditions);
+        $result = $this->ContentService->getTableIndex($conditions);
         $this->assertEquals($expected, $result->count());
     }
     public function getTableIndexDataProvider()
@@ -159,20 +159,20 @@ class ContentsServiceTest extends BcTestCase
     public function testGetIndex(): void
     {
         $request = $this->getRequest('/');
-        $contents = $this->ContentsService->getIndex($request->getQueryParams());
+        $contents = $this->ContentService->getIndex($request->getQueryParams());
         $this->assertEquals('', $contents->first()->name);
 
         $request = $this->getRequest('/?name=index');
-        $contents = $this->ContentsService->getIndex($request->getQueryParams());
+        $contents = $this->ContentService->getIndex($request->getQueryParams());
         $this->assertEquals('index', $contents->first()->name);
         $this->assertEquals('トップページ', $contents->first()->title);
 
         $request = $this->getRequest('/?num=1');
-        $contents = $this->ContentsService->getIndex($request->getQueryParams());
+        $contents = $this->ContentService->getIndex($request->getQueryParams());
         $this->assertEquals(1, $contents->all()->count());
 
         $request = $this->getRequest('/?status=1');
-        $contents = $this->ContentsService->getIndex($request->getQueryParams());
+        $contents = $this->ContentService->getIndex($request->getQueryParams());
         $this->assertEquals(10, $contents->all()->count());
     }
     /**
@@ -183,7 +183,7 @@ class ContentsServiceTest extends BcTestCase
     public function testGetTrashIndex(): void
     {
         $request = $this->getRequest('/');
-        $result = $this->ContentsService->getTrashIndex($request->getQueryParams());
+        $result = $this->ContentService->getTrashIndex($request->getQueryParams());
         $this->assertTrue($result->first()->deleted);
     }
 
@@ -196,7 +196,7 @@ class ContentsServiceTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $siteId = 1;
 
-        $this->ContentsService->getContentFolderList();
+        $this->ContentService->getContentFolderList();
     }
 
     /**
@@ -216,8 +216,22 @@ class ContentsServiceTest extends BcTestCase
         $request = $request->withParsedBody([
             'name' => 'テストcreate',
         ]);
-        $result = $this->ContentsService->create($request->getData());
-        $expected = $this->ContentsService->Contents->find()->last();
+        $result = $this->ContentService->create($request->getData());
+        $expected = $this->ContentService->Contents->find()->last();
         $this->assertEquals($expected->name, $result->name);
+    }
+
+    /**
+     * testGetContentsInfo
+     *
+     * @return void
+     */
+    public function testGetContentsInfo()
+    {
+        $result = $this->ContentService->getContensInfo();
+        $this->assertTrue(isset($result[0]['unpublished']));
+        $this->assertTrue(isset($result[0]['published']));
+        $this->assertTrue(isset($result[0]['total']));
+        $this->assertTrue(isset($result[0]['display_name']));
     }
 }

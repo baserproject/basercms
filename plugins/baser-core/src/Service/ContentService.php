@@ -20,9 +20,15 @@ use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Table\SitesTable;
 use Cake\Datasource\ConnectionManager;
 use BaserCore\Model\Table\ContentsTable;
+use BaserCore\Utility\BcContainerTrait;
 
-class ContentsService implements ContentsServiceInterface
+class ContentService implements ContentServiceInterface
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * Contents
@@ -58,6 +64,16 @@ class ContentsService implements ContentsServiceInterface
         return $this->Contents->get($id, [
             'contain' => ['Sites'],
         ]);
+    }
+
+    /**
+     * 空のQueryを返す
+     *
+     * @return Query
+     */
+    public function getEmptyIndex(): Query
+    {
+        return $this->getIndex(['site_id' => 0]);
     }
 
     /**
@@ -268,6 +284,27 @@ class ContentsService implements ContentsServiceInterface
         $content = $this->Contents->newEmptyEntity();
         $content = $this->Contents->patchEntity($content, $postData, ['validate' => 'default']);
         return ($result = $this->Contents->save($content)) ? $result : $content;
+    }
+
+    /**
+      * コンテンツ情報を取得する
+      * @return array
+      */
+    public function getContensInfo ()
+    {
+        $sites = $this->Sites->getPublishedAll();
+        $contentsInfo = [];
+        foreach($sites as $key => $site) {
+            $contentsInfo[$key]['published'] = $this->Contents->find()
+                    ->where(['site_id' => $site->id, 'status' => true])
+                    ->count();
+            $contentsInfo[$key]['unpublished'] = $this->Contents->find()
+                    ->where(['site_id' => $site->id, 'status' => false])
+                    ->count();
+            $contentsInfo[$key]['total'] = $contentsInfo[$key]['published'] + $contentsInfo[$key]['unpublished'];
+            $contentsInfo[$key]['display_name'] = $site->display_name;
+        }
+        return $contentsInfo;
     }
 }
 

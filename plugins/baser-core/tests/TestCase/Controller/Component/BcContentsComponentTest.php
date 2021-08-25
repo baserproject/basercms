@@ -129,9 +129,4 @@ class BcContentsComponentTest extends BcTestCase
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
-
-    public function testGetType()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
 }

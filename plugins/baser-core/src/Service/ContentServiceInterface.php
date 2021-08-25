@@ -17,10 +17,10 @@ use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 
 /**
- * Interface ContentsServiceInterface
+ * Interface ContentServiceInterface
  * @package BaserCore\Service
  */
-interface ContentsServiceInterface
+interface ContentServiceInterface
 {
     /**
      * コンテンツを取得する
@@ -28,6 +28,13 @@ interface ContentsServiceInterface
      * @return EntityInterface
      */
     public function get($id): EntityInterface;
+
+    /**
+     * 空のQueryを返す
+     *
+     * @return Query
+     */
+    public function getEmptyIndex(): Query;
 
     /**
      * getTreeIndex
@@ -92,6 +99,9 @@ interface ContentsServiceInterface
      */
     public function create(array $postData);
 
-
-
+    /**
+      * コンテンツ情報を取得する
+      * @return array
+      */
+    public function getContensInfo();
 }

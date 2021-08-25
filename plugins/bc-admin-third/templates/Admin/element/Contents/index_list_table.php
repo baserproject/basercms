@@ -95,10 +95,10 @@ $authors = $this->BcAdminContent->getAuthors();
   </tr>
   </thead>
   <tbody>
-  <?php if (!empty($datas)): ?>
+  <?php if (!empty($contents)): ?>
     <?php $count = 0; ?>
-    <?php foreach($datas as $data): ?>
-      <?php $this->BcBaser->element('Contents/index_row_table', ['data' => $data, 'count' => $count, 'authors' => $authors]) ?>
+    <?php foreach($contents as $content): ?>
+      <?php $this->BcBaser->element('Contents/index_row_table', ['content' => $content, 'count' => $count, 'authors' => $authors]) ?>
       <?php $count++; ?>
     <?php endforeach; ?>
   <?php else: ?>
