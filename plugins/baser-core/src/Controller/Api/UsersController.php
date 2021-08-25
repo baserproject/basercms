@@ -12,10 +12,8 @@
 namespace BaserCore\Controller\Api;
 
 use Authentication\Controller\Component\AuthenticationComponent;
-use BaserCore\Service\Api\UserApiServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
 use Cake\Core\Exception\Exception;
-use Firebase\JWT\JWT;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -43,9 +41,9 @@ class UsersController extends BcApiController
     /**
      * ログイン
      */
-    public function login(UserApiServiceInterface $userApi)
+    public function login()
     {
-        if (!$json = $userApi->getAccessToken($this->Authentication->getResult())) {
+        if (!$json = $this->getAccessToken($this->Authentication->getResult())) {
             $this->setResponse($this->response->withStatus(401));
         }
         $this->set('json', $json);
@@ -55,11 +53,11 @@ class UsersController extends BcApiController
     /**
      * リフレッシュトークン取得
      */
-    public function refresh_token(UserApiServiceInterface $userApi)
+    public function refresh_token()
     {
         $json = [];
         $payload = $this->Authentication->getAuthenticationService()->getAuthenticationProvider()->getPayload();
-        if ($payload->token_type !== 'refresh_token' || !$json = $userApi->getAccessToken($this->Authentication->getResult())) {
+        if ($payload->token_type !== 'refresh_token' || !$json = $this->getAccessToken($this->Authentication->getResult())) {
             $this->setResponse($this->response->withStatus(401));
         }
         $this->set('json', $json);

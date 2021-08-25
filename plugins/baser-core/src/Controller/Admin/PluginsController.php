@@ -16,7 +16,7 @@ use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Error\BcException;
 use BaserCore\Model\Table\PluginsTable;
 use BaserCore\Service\PluginsServiceInterface;
-use BaserCore\Service\Admin\UserManageServiceInterface;
+use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
@@ -316,7 +316,7 @@ class PluginsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function reset_db(PluginManageServiceInterface $plugins, UserManageServiceInterface $userManage)
+    public function reset_db(PluginManageServiceInterface $plugins, UsersServiceInterface $userService)
     {
         if (!$this->request->is('put')) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
@@ -325,7 +325,7 @@ class PluginsController extends BcAdminAppController
         $plugin = $plugins->getByName($this->request->getData('name'));
         try {
             $plugins->resetDb($this->request->getData('name'), $this->request->getData('connection'));
-            $userManage->reLogin($this->request, $this->response);
+            $userService->reLogin($this->request, $this->response);
             $this->BcMessage->setSuccess(
                 sprintf(__d('baser', '%s プラグインのデータを初期化しました。'), $plugin->title)
             );

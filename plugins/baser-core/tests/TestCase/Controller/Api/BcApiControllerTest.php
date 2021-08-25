@@ -11,8 +11,11 @@
 
 namespace BaserCore\Test\TestCase\Controller\Api;
 
+use Authentication\Authenticator\Result;
 use BaserCore\Controller\Api\BcApiController;
+use BaserCore\Service\UsersServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Utility\BcContainerTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 
 /**
@@ -20,7 +23,12 @@ use Cake\TestSuite\IntegrationTestTrait;
  */
 class BcApiControllerTest extends BcTestCase
 {
+
+    /**
+     * Trait
+     */
     use IntegrationTestTrait;
+    use BcContainerTrait;
 
     /**
      * Fixtures
@@ -58,6 +66,19 @@ class BcApiControllerTest extends BcTestCase
         $controller = new BcApiController();
         $this->assertTrue(isset($controller->Authentication));
         $this->assertFalse($controller->Security->getConfig('validatePost'));
+    }
+
+    /**
+     * test getAccessToken
+     */
+    public function testGetAccessToken()
+    {
+        $user = $this->getService(UsersServiceInterface::class);
+        $controller = new BcApiController();
+        $result = $controller->getAccessToken(new Result($user->get(1), Result::SUCCESS));
+        $this->assertArrayHasKey('access_token', $result);
+        $result = $controller->getAccessToken(new Result(null, Result::FAILURE_CREDENTIALS_INVALID));
+        $this->assertEquals([], $result);
     }
 
     /**

@@ -11,19 +11,17 @@
 
 namespace BaserCore\Test\TestCase\Utility;
 
-use App\Application;
-use BaserCore\Service\UsersServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcApiUtil;
 
 /**
  * Class BcContainerTraitTest
  * @package BaserCore\Test\TestCase\Utility
  */
-class BcContainerTraitTest extends BcTestCase
+class BcApiUtilTest extends BcTestCase
 {
 
-   /**
+    /**
      * set up
      */
     public function setUp(): void
@@ -42,14 +40,14 @@ class BcContainerTraitTest extends BcTestCase
     }
 
     /**
-     * test getService
+     * test createAccessToken
      */
-    public function testGetService()
+    public function testCreateAccessToken()
     {
-        $app = new Application(ROOT . '/config');
-        $app->getContainer();
-        $bcContainerTrait = new class { use BcContainerTrait; };
-        $this->assertEquals('BaserCore\Service\UsersService', get_class($bcContainerTrait->getService(UsersServiceInterface::class)));
+        $result = BcApiUtil::createAccessToken(1);
+        $this->assertArrayHasKey('access_token', $result);
+        $this->assertArrayHasKey('refresh_token', $result);
+        $this->assertEquals(3, count(explode('.', $result['access_token'])));
     }
 
 }

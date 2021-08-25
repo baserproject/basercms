@@ -19,7 +19,6 @@ use Cake\ORM\Query;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use Cake\Core\Configure;
 
 /**
  * Class UserGroupsService
@@ -28,6 +27,11 @@ use Cake\Core\Configure;
  */
 class UserGroupsService implements UserGroupsServiceInterface
 {
+
+    /**
+     * Trait
+     */
+    use SiteConfigsTrait;
 
     /**
      * UserGroups Table
@@ -65,7 +69,7 @@ class UserGroupsService implements UserGroupsServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getNew(): UserGroup
+    public function getNew(): EntityInterface
     {
         return $this->UserGroups->newEntity([
             'auth_prefix' => 'Admin',
@@ -133,7 +137,7 @@ class UserGroupsService implements UserGroupsServiceInterface
      * リストを取得する
      * @return array
      */
-    public function list(): array
+    public function getList(): array
     {
         return $this->UserGroups->find('list', ['keyField' => 'id', 'valueField' => 'title'])->toArray();
     }

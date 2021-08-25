@@ -146,7 +146,7 @@ class UserGroupsController extends BcApiController
     public function list(UserGroupsServiceInterface $userGroups)
     {
         $this->set([
-            'userGroups' => $userGroups->list()
+            'userGroups' => $userGroups->getList()
         ]);
         $this->viewBuilder()->setOption('serialize', ['userGroups']);
     }

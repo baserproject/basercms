@@ -62,12 +62,12 @@ class BcAdminContentHelper extends Helper
     }
 
     /**
-     * コンテンツの作成者一覧を取得
-     * @return array
+     * 作成者一覧を取得する
+     * @return mixed
      */
-    public function getAuthors(): array
+    public function getAuthors()
     {
-        $users = $this->getService(UsersServiceInterface::class);
-        return $users->getList();
+        return $this->getService(UsersServiceInterface::class)->getList();
     }
+
 }

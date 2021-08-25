@@ -92,7 +92,7 @@ $userGroups = $this->BcAdminUser->getUserGroupList();
           <i class="bca-icon--question-circle btn help bca-help"></i>
           <div id="helptextUserGroupId"
                class="helptext"><?php echo sprintf(__d('baser', 'ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには%sより新しいグループを追加しアクセス制限の設定をおこないます。'), $this->BcBaser->getLink(__d('baser', 'ユーザーグループ管理'), ['controller' => 'user_groups', 'action' => 'index'])) ?></div>
-          <?php echo $this->BcAdminForm->error('user_groups', __d('baser', 'グループを選択してください')) ?>
+          <?php echo $this->BcAdminForm->error('user_groups') ?>
         <?php else: ?>
           <?php foreach($user->user_groups as $group): ?>
             <span><?php echo h($group->title) ?></span>

@@ -25,28 +25,22 @@ use BaserCore\Service\DblogsService;
 use BaserCore\Service\PluginsService;
 use BaserCore\Service\ContentService;
 use BaserCore\Service\UserGroupsService;
-use BaserCore\Service\Api\UserApiService;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Service\DblogsServiceInterface;
 use BaserCore\Service\SiteConfigsService;
 use BaserCore\Service\Admin\SiteManageService;
-use BaserCore\Service\Admin\UserManageService;
 use BaserCore\Service\PluginsServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Service\Admin\PluginManageService;
 use BaserCore\Service\Admin\ContentManageService;
 use BaserCore\Service\UserGroupsServiceInterface;
-use BaserCore\Service\Api\UserApiServiceInterface;
 use BaserCore\Service\PermissionServiceInterface;
 use BaserCore\Service\PermissionService;
 use BaserCore\Service\SiteConfigsServiceInterface;
-use BaserCore\Service\Admin\UserGroupManageService;
 use BaserCore\Service\Admin\SiteManageServiceInterface;
-use BaserCore\Service\Admin\UserManageServiceInterface;
 use BaserCore\Service\Admin\PluginManageServiceInterface;
 use BaserCore\Service\Admin\ContentManageServiceInterface;
-use BaserCore\Service\Admin\UserGroupManageServiceInterface;
 use BaserCore\Service\Admin\ContentFolderManageService;
 use BaserCore\Service\Admin\ContentFolderManageServiceInterface;
 use BaserCore\Service\ContentFoldersService;
@@ -65,10 +59,7 @@ class BcServiceProvider extends ServiceProvider
      */
     protected $provides = [
         UsersServiceInterface::class,
-        UserManageServiceInterface::class,
-        UserApiServiceInterface::class,
         UserGroupsServiceInterface::class,
-        UserGroupManageServiceInterface::class,
         PluginsServiceInterface::class,
         PluginManageServiceInterface::class,
         SitesServiceInterface::class,
@@ -95,11 +86,8 @@ class BcServiceProvider extends ServiceProvider
     {
         // Usersサービス
         $container->add(UsersServiceInterface::class, UsersService::class);
-        $container->add(UserManageServiceInterface::class, UserManageService::class);
-        $container->add(UserApiServiceInterface::class, UserApiService::class);
         // UserGroupsサービス
         $container->add(UserGroupsServiceInterface::class, UserGroupsService::class, true);
-        $container->add(UserGroupManageServiceInterface::class, UserGroupManageService::class, true);
         // Pluginsサービス
         $container->add(PluginsServiceInterface::class, PluginsService::class, true);
         $container->add(PluginManageServiceInterface::class, PluginManageService::class, true);
