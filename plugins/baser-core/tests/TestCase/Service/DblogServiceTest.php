@@ -12,15 +12,15 @@
 namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\Model\Table\DblogsTable;
-use BaserCore\Service\DblogsService;
+use BaserCore\Service\DblogService;
 use BaserCore\TestSuite\BcTestCase;
 
 /**
- * Class DblogsServiceTest
- * @property DblogsService $DblogsService
+ * Class DblogServiceTest
+ * @property DblogService $DblogService
  * @property DblogsTable $Dblogs
  */
-class DblogsServiceTest extends BcTestCase
+class DblogServiceTest extends BcTestCase
 {
 
     /**
@@ -41,7 +41,7 @@ class DblogsServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->DblogsService = new DblogsService();
+        $this->DblogService = new DblogService();
         $this->Dblogs = $this->getTableLocator()->get('Dblogs');
     }
 
@@ -52,7 +52,7 @@ class DblogsServiceTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        unset($this->DblogsService);
+        unset($this->DblogService);
         unset($this->Dblogs);
         parent::tearDown();
     }
@@ -63,7 +63,7 @@ class DblogsServiceTest extends BcTestCase
     public function testCreate()
     {
         $this->getRequest();
-        $dblog = $this->DblogsService->create('Test Message');
+        $dblog = $this->DblogService->create('Test Message');
         $savedDblog = $this->Dblogs->get($dblog->id);
         $this->assertEquals('Test Message', $savedDblog->message);
     }
@@ -74,15 +74,15 @@ class DblogsServiceTest extends BcTestCase
     public function testGetIndex()
     {
         $request = $this->getRequest('/');
-        $dblogs = $this->DblogsService->getIndex($request->getQueryParams());
+        $dblogs = $this->DblogService->getIndex($request->getQueryParams());
         $this->assertEquals('dblogs test message1', $dblogs->first()->message);
 
         $request = $this->getRequest('/?message=message2');
-        $dblogs = $this->DblogsService->getIndex($request->getQueryParams());
+        $dblogs = $this->DblogService->getIndex($request->getQueryParams());
         $this->assertEquals('dblogs test message2', $dblogs->first()->message);
 
         $request = $this->getRequest('/?user_id=3');
-        $dblogs = $this->DblogsService->getIndex($request->getQueryParams());
+        $dblogs = $this->DblogService->getIndex($request->getQueryParams());
         $this->assertEquals('dblogs test message3', $dblogs->first()->message);
     }
 
@@ -91,7 +91,7 @@ class DblogsServiceTest extends BcTestCase
      */
     public function testGetDblogs()
     {
-        $dblogs = $this->DblogsService->getDblogs(2)->toArray();
+        $dblogs = $this->DblogService->getDblogs(2)->toArray();
         $this->assertEquals(2, count($dblogs));
         $this->assertEquals(3, $dblogs[0]->id);
     }
@@ -101,10 +101,10 @@ class DblogsServiceTest extends BcTestCase
      */
     public function testDeleteAll()
     {
-        $dblogs = $this->DblogsService->getDblogs(1)->toArray();
+        $dblogs = $this->DblogService->getDblogs(1)->toArray();
         $this->assertEquals(true, count($dblogs));
-        $this->DblogsService->deleteAll();
-        $dblogs = $this->DblogsService->getDblogs(1)->toArray();
+        $this->DblogService->deleteAll();
+        $dblogs = $this->DblogService->getDblogs(1)->toArray();
         $this->assertEquals(0, count($dblogs));
     }
 }

@@ -16,7 +16,7 @@ use BaserCore\Service\Admin\SiteManageService;
 use BaserCore\Service\Admin\SiteManageServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Service\DblogsServiceInterface;
+use BaserCore\Service\DblogServiceInterface;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\View\Helper;
@@ -409,8 +409,8 @@ class BcAdminHelper extends Helper
      */
     public function getDblogs($limit): object
     {
-        $DblogsService = $this->getService(DblogsServiceInterface::class);
-        return $DblogsService->getDblogs($limit);
+        $DblogService = $this->getService(DblogServiceInterface::class);
+        return $DblogService->getDblogs($limit);
     }
 
 }
