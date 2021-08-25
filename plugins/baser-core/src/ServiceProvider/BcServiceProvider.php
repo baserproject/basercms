@@ -22,7 +22,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Service\SitesService;
 use BaserCore\Service\UsersService;
 use BaserCore\Service\DblogService;
-use BaserCore\Service\PluginsService;
+use BaserCore\Service\PluginService;
 use BaserCore\Service\ContentService;
 use BaserCore\Service\UserGroupsService;
 use BaserCore\Service\SitesServiceInterface;
@@ -30,15 +30,13 @@ use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Service\DblogServiceInterface;
 use BaserCore\Service\SiteConfigsService;
 use BaserCore\Service\Admin\SiteManageService;
-use BaserCore\Service\PluginsServiceInterface;
+use BaserCore\Service\PluginServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
-use BaserCore\Service\Admin\PluginManageService;
 use BaserCore\Service\UserGroupsServiceInterface;
 use BaserCore\Service\PermissionServiceInterface;
 use BaserCore\Service\PermissionService;
 use BaserCore\Service\SiteConfigsServiceInterface;
-use BaserCore\Service\Admin\SiteManageServiceInterface;
-use BaserCore\Service\Admin\PluginManageServiceInterface;
+use BaserCore\Service\Admin\SiteManageServiceInterface;;
 use BaserCore\Service\Admin\ContentFolderManageService;
 use BaserCore\Service\Admin\ContentFolderManageServiceInterface;
 use BaserCore\Service\ContentFoldersService;
@@ -58,8 +56,8 @@ class BcServiceProvider extends ServiceProvider
     protected $provides = [
         UsersServiceInterface::class,
         UserGroupsServiceInterface::class,
-        PluginsServiceInterface::class,
-        PluginManageServiceInterface::class,
+        PluginServiceInterface::class,
+        PluginServiceInterface::class,
         SitesServiceInterface::class,
         SiteManageServiceInterface::class,
         SiteFrontServiceInterface::class,
@@ -86,8 +84,7 @@ class BcServiceProvider extends ServiceProvider
         // UserGroupsサービス
         $container->add(UserGroupsServiceInterface::class, UserGroupsService::class, true);
         // Pluginsサービス
-        $container->add(PluginsServiceInterface::class, PluginsService::class, true);
-        $container->add(PluginManageServiceInterface::class, PluginManageService::class, true);
+        $container->add(PluginServiceInterface::class, PluginService::class, true);
         // Sites サービス
         $container->add(SitesServiceInterface::class, SitesService::class, true);
         $container->add(SiteManageServiceInterface::class, SiteManageService::class, true);

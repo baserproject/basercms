@@ -11,7 +11,7 @@
 
 namespace BaserCore\Controller\Api;
 
-use BaserCore\Service\PluginsServiceInterface;
+use BaserCore\Service\PluginServiceInterface;
 use Cake\Core\Exception\Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -29,10 +29,10 @@ class PluginsController extends BcApiController
 
     /**
      * プラグイン情報取得
-     * @param PluginsServiceInterface $plugins
+     * @param PluginServiceInterface $plugins
      * @param $id
      */
-    public function view(PluginsServiceInterface $plugins, $id)
+    public function view(PluginServiceInterface $plugins, $id)
     {
         $this->set([
             'plugin' => $plugins->get($id)
@@ -50,12 +50,12 @@ class PluginsController extends BcApiController
 
     /**
      * プラグイン情報一覧取得
-     * @param PluginsServiceInterface $Plugins
+     * @param PluginServiceInterface $Plugins
      * @checked
      * @unitTest
      * @noTodo
      */
-    public function index(PluginsServiceInterface $plugins)
+    public function index(PluginServiceInterface $plugins)
     {
         $this->set([
             'plugins' => $plugins->getIndex($this->request->getQuery('sortmode') ?? '0')
@@ -65,12 +65,12 @@ class PluginsController extends BcApiController
 
     /**
      * プラグインをインストールする
-     * @param PluginsServiceInterface $Plugins
+     * @param PluginServiceInterface $Plugins
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function install(PluginsServiceInterface $plugins, $name)
+    public function install(PluginServiceInterface $plugins, $name)
     {
         $this->request->allowMethod(['post', 'put']);
         $plugin = $plugins->getByName($name);
@@ -94,13 +94,13 @@ class PluginsController extends BcApiController
 
     /**
      * プラグインを無効化する
-     * @param PluginsServiceInterface $plugins
+     * @param PluginServiceInterface $plugins
      * @param $name
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function detach(PluginsServiceInterface $plugins, $name)
+    public function detach(PluginServiceInterface $plugins, $name)
     {
         $this->request->allowMethod(['post']);
         $plugin = $plugins->getByName($name);
@@ -119,13 +119,13 @@ class PluginsController extends BcApiController
 
     /**
      * プラグインのデータベースを初期化する
-     * @param PluginsServiceInterface $plugins
+     * @param PluginServiceInterface $plugins
      * @param $name
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function reset_db(PluginsServiceInterface $plugins, $name)
+    public function reset_db(PluginServiceInterface $plugins, $name)
     {
         $this->request->allowMethod(['put']);
         $plugin = $plugins->getByName($name);
@@ -145,14 +145,14 @@ class PluginsController extends BcApiController
 
     /**
      * アンインストール
-     * @param PluginsServiceInterface $plugins
+     * @param PluginServiceInterface $plugins
      * @param $name
      * @return \Cake\Http\Response|void|null
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function uninstall(PluginsServiceInterface $plugins, $name)
+    public function uninstall(PluginServiceInterface $plugins, $name)
     {
         $this->request->allowMethod(['post']);
         $plugin = $plugins->getByName($name);
@@ -176,7 +176,7 @@ class PluginsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function update_sort(PluginsServiceInterface $plugins, $name)
+    public function update_sort(PluginServiceInterface $plugins, $name)
     {
         $this->request->allowMethod(['post']);
         $plugin = $plugins->getByName($name);
@@ -195,12 +195,12 @@ class PluginsController extends BcApiController
 
     /**
      * baserマーケットのプラグインデータを取得する
-     * @param PluginsServiceInterface $pluginManage
+     * @param PluginServiceInterface $pluginService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function get_market_plugins(PluginsServiceInterface $plugins)
+    public function get_market_plugins(PluginServiceInterface $plugins)
     {
         $this->set([
             'plugins' => $plugins->getMarketPlugins()
