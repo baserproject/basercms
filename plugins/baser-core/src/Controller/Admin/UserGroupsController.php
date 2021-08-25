@@ -12,9 +12,10 @@
 namespace BaserCore\Controller\Admin;
 
 use BaserCore\Model\Entity\UserGroup;
-use BaserCore\Service\Admin\UserGroupManageServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
+use BaserCore\Model\Table\Exception\CopyFailedException;
 use BaserCore\Model\Table\UserGroupsTable;
+use BaserCore\Service\UserGroupsServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Datasource\ResultSetInterface;
@@ -49,16 +50,16 @@ class UserGroupsController extends BcAdminAppController
      *
      * - pagination
      * - view num
-     * @param UserGroupManageServiceInterface $UserGroupManage
+     * @param UserGroupsServiceInterface $userGroupsService
      * @return Response|null|void Renders view
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(UserGroupManageServiceInterface $UserGroupManage): void
+    public function index(UserGroupsServiceInterface $userGroupsService): void
     {
         $this->setViewConditions('UserGroup', ['default' => ['query' => [
-            'num' => $UserGroupManage->getSiteConfig('admin_list_num'),
+            'num' => $userGroupsService->getSiteConfig('admin_list_num'),
             'sort' => 'id',
             'direction' => 'asc',
         ]]]);
@@ -67,7 +68,7 @@ class UserGroupsController extends BcAdminAppController
         ];
 
         $this->set([
-            'userGroups' => $this->paginate($UserGroupManage->getIndex($this->paginate)),
+            'userGroups' => $this->paginate($userGroupsService->getIndex($this->paginate)),
             '_serialize' => ['userGroups']
         ]);
 
@@ -86,19 +87,19 @@ class UserGroupsController extends BcAdminAppController
      *  - UserGroup.use_admin_globalmenu
      *  - UserGroup.use_move_contents
      *  - submit
-     * @param UserGroupManageServiceInterface $UserGroupManage
+     * @param UserGroupsServiceInterface $userGroupsService
      * @return Response|null|void Redirects on successful add, renders view otherwise.
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function add(UserGroupManageServiceInterface $UserGroupManage)
+    public function add(UserGroupsServiceInterface $userGroupsService)
     {
         $this->setTitle(__d('baser', '新規ユーザーグループ登録'));
         $this->setHelp('user_groups_form');
 
         if ($this->request->is('post')) {
-            $userGroup = $UserGroupManage->create($this->request->getData());
+            $userGroup = $userGroupsService->create($this->request->getData());
             if (!$userGroup->getErrors()) {
                 $this->BcMessage->setSuccess(__d('baser', '新規ユーザーグループ「{0}」を追加しました。', $userGroup->name));
                 return $this->redirect(['action' => 'index']);
@@ -106,7 +107,7 @@ class UserGroupsController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
         } else {
-            $userGroup = $UserGroupManage->getNew();
+            $userGroup = $userGroupsService->getNew();
         }
         $this->set(compact('userGroup'));
     }
@@ -129,7 +130,7 @@ class UserGroupsController extends BcAdminAppController
      *  - UserGroup.use_admin_globalmenu
      *  - UserGroup.use_move_contents
      *  - submit
-     * @param UserGroupManageServiceInterface $UserGroupManage
+     * @param UserGroupsServiceInterface $userGroupsService
      * @param string|null $id User Group id.
      * @return Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws RecordNotFoundException When record not found.
@@ -137,11 +138,11 @@ class UserGroupsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function edit(UserGroupManageServiceInterface $UserGroupManage, UsersServiceInterface $userService, $id = null)
+    public function edit(UserGroupsServiceInterface $userGroupsService, UsersServiceInterface $userService, $id = null)
     {
 
         if ($id) {
-            $userGroup = $UserGroupManage->get($id);
+            $userGroup = $userGroupsService->get($id);
             $this->setTitle(__d('baser', 'ユーザーグループ編集'));
             $this->setHelp('user_groups_form');
         } else {
@@ -151,7 +152,7 @@ class UserGroupsController extends BcAdminAppController
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $userGroup = $UserGroupManage->update($userGroup, $this->request->getData());
+            $userGroup = $userGroupsService->update($userGroup, $this->request->getData());
             if (!$userGroup->getErrors()) {
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name));
                 $userService->reLogin($this->request, $this->response);
@@ -169,7 +170,7 @@ class UserGroupsController extends BcAdminAppController
      * ユーザーグループ削除
      *
      * ユーザーグループを削除する
-     * @param UserGroupManageServiceInterface $UserGroupManage
+     * @param UserGroupsServiceInterface $userGroupsService
      * @param string|null $id User Group id.
      * @return Response|null|void Redirects to index.
      * @throws RecordNotFoundException When record not found.
@@ -177,13 +178,13 @@ class UserGroupsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function delete(UserGroupManageServiceInterface $UserGroupManage, $id = null)
+    public function delete(UserGroupsServiceInterface $userGroupsService, $id = null)
     {
         if ($id) {
             $this->request->allowMethod(['post', 'delete']);
-            $userGroup = $UserGroupManage->get($id);
+            $userGroup = $userGroupsService->get($id);
 
-            if ($UserGroupManage->delete($id)) {
+            if ($userGroupsService->delete($id)) {
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」を削除しました。', $userGroup->name));
             } else {
                 $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。'));
@@ -199,7 +200,7 @@ class UserGroupsController extends BcAdminAppController
      * ユーザーグループコピー
      *
      * ユーザーグループをコピーする
-     * @param UserGroupManageServiceInterface $UserGroupManage
+     * @param UserGroupsServiceInterface $userGroupsService
      * @param string|null $id User Group id.
      * @return Response|null|void Redirects to index.
      * @throws RecordNotFoundException When record not found.
@@ -208,14 +209,14 @@ class UserGroupsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function copy(UserGroupManageServiceInterface $UserGroupManage, $id = null)
+    public function copy(UserGroupsServiceInterface $userGroupsService, $id = null)
     {
         $this->request->allowMethod(['post']);
         if (!$id || !is_numeric($id)) {
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
             return $this->redirect(['action' => 'index']);
         }
-        $userGroup = $UserGroupManage->get($id);
+        $userGroup = $userGroupsService->get($id);
         try {
             if ($this->UserGroups->copy($id)) {
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」をコピーしました。', $userGroup->name));

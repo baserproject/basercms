@@ -22,7 +22,7 @@ use Cake\Core\Configure;
 use Cake\Routing\Router;
 
 /**
- * Class UserGroupManageService
+ * Class SiteManageService
  * @package BaserCore\Service
  */
 class SiteManageService extends SitesService implements SiteManageServiceInterface

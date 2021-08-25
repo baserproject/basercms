@@ -19,7 +19,6 @@ use Cake\ORM\Query;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use Cake\Core\Configure;
 
 /**
  * Class UserGroupsService
@@ -28,6 +27,11 @@ use Cake\Core\Configure;
  */
 class UserGroupsService implements UserGroupsServiceInterface
 {
+
+    /**
+     * Trait
+     */
+    use SiteConfigsTrait;
 
     /**
      * UserGroups Table

@@ -38,11 +38,9 @@ use BaserCore\Service\UserGroupsServiceInterface;
 use BaserCore\Service\PermissionServiceInterface;
 use BaserCore\Service\PermissionService;
 use BaserCore\Service\SiteConfigsServiceInterface;
-use BaserCore\Service\Admin\UserGroupManageService;
 use BaserCore\Service\Admin\SiteManageServiceInterface;
 use BaserCore\Service\Admin\PluginManageServiceInterface;
 use BaserCore\Service\Admin\ContentManageServiceInterface;
-use BaserCore\Service\Admin\UserGroupManageServiceInterface;
 use BaserCore\Service\Admin\ContentFolderManageService;
 use BaserCore\Service\Admin\ContentFolderManageServiceInterface;
 use BaserCore\Service\ContentFoldersService;
@@ -62,7 +60,6 @@ class BcServiceProvider extends ServiceProvider
     protected $provides = [
         UsersServiceInterface::class,
         UserGroupsServiceInterface::class,
-        UserGroupManageServiceInterface::class,
         PluginsServiceInterface::class,
         PluginManageServiceInterface::class,
         SitesServiceInterface::class,
@@ -91,7 +88,6 @@ class BcServiceProvider extends ServiceProvider
         $container->add(UsersServiceInterface::class, UsersService::class);
         // UserGroupsサービス
         $container->add(UserGroupsServiceInterface::class, UserGroupsService::class, true);
-        $container->add(UserGroupManageServiceInterface::class, UserGroupManageService::class, true);
         // Pluginsサービス
         $container->add(PluginsServiceInterface::class, PluginsService::class, true);
         $container->add(PluginManageServiceInterface::class, PluginManageService::class, true);
