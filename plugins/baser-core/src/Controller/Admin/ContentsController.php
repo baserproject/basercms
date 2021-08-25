@@ -11,6 +11,8 @@
 
 namespace BaserCore\Controller\Admin;
 
+use BaserCore\Service\BcAdminServiceInterface;
+use BaserCore\Service\SitesServiceInterface;
 use Cake\ORM\Query;
 use Cake\Utility\Hash;
 use Cake\ORM\ResultSet;
@@ -27,9 +29,8 @@ use BaserCore\Service\SiteConfigsTrait;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Table\SiteConfigsTable;
 use BaserCore\Model\Table\ContentFoldersTable;
-use BaserCore\Service\ContentService;
 use BaserCore\Controller\Component\BcContentsComponent;
-use BaserCore\Service\Admin\SiteManageServiceInterface;
+use BaserCore\Service\ContentService;
 use BaserCore\Service\ContentServiceInterface;
 
 /**
@@ -97,11 +98,11 @@ class ContentsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function index(ContentServiceInterface $contentService, SiteManageServiceInterface $siteManage)
+    public function index(ContentServiceInterface $contentService, SitesServiceInterface $siteService, BcAdminServiceInterface $bcAdminService)
     {
-        $siteManage->setCurrentSite();
-        $currentSiteId = $siteManage->getCurrentSite()->id;
-        $sites = $siteManage->getSiteList();
+        $bcAdminService->setCurrentSite();
+        $currentSiteId = $bcAdminService->getCurrentSite()->id;
+        $sites = $siteService->getList();
         if ($sites) {
             if (!$this->request->getQuery('site_id') || !in_array($this->request->getQuery('site_id'), array_keys($sites))) {
                 reset($sites);
@@ -114,7 +115,7 @@ class ContentsController extends BcAdminAppController
 
         $this->setViewConditions('Contents', ['default' => [
             'query' => [
-                'num' => $siteManage->getSiteConfig('admin_list_num'),
+                'num' => $siteService->getSiteConfig('admin_list_num'),
                 'site_id' => $currentSiteId,
                 'list_type' => $currentListType,
                 'sort' => 'id',
@@ -213,9 +214,9 @@ class ContentsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function trash_index(ContentServiceInterface $contentService, SiteManageServiceInterface $siteManage)
+    public function trash_index(ContentServiceInterface $contentManage, SitesServiceInterface $sitesService, BcAdminServiceInterface $bcAdminService)
     {
-        $this->setAction('index', $contentService, $siteManage);
+        $this->setAction('index', $contentManage, $sitesService, $bcAdminService);
         $this->render('index');
     }
 

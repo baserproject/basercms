@@ -16,7 +16,7 @@ use Cake\ORM\Query;
 use BaserCore\Service\ContentFoldersService;
 use BaserCore\Service\ContentFoldersServiceInterface;
 /**
- * Interface PluginManageServiceInterface
+ * Interface PluginServiceInterface
  * @package BaserCore\Service
  */
 interface ContentFolderManageServiceInterface extends ContentFoldersServiceInterface

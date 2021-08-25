@@ -12,9 +12,11 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Model\Entity\Site;
-use BaserCore\Service\Admin\SiteManageServiceInterface;
-use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Service\BcAdminServiceInterface;
+use BaserCore\Service\SiteConfigsTrait;
+use BaserCore\Service\SitesServiceInterface;
 use Cake\Datasource\EntityInterface;
+use Cake\Routing\Router;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -27,13 +29,13 @@ use BaserCore\Annotation\Checked;
 class BcAdminSiteHelper extends Helper
 {
 
-    use BcContainerTrait;
+    use SiteConfigsTrait;
 
     /**
-     * User Manage Service
-     * @var SiteManageServiceInterface
+     * Sites Service
+     * @var SitesServiceInterface
      */
-    public $SiteManage;
+    public $SitesService;
 
     /**
      * initialize
@@ -45,7 +47,7 @@ class BcAdminSiteHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->SiteManage = $this->getService(SiteManageServiceInterface::class);
+        $this->SitesService = $this->getService(SitesServiceInterface::class);
     }
 
     /**
@@ -57,7 +59,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getDeviceList(): array
     {
-        return $this->SiteManage->getDeviceList();
+        return $this->SitesService->getDeviceList();
     }
 
     /**
@@ -69,7 +71,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getLangList(): array
     {
-        return $this->SiteManage->getLangList();
+        return $this->SitesService->getLangList();
     }
 
     /**
@@ -83,7 +85,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getSiteList($options = []): array
     {
-        return $this->SiteManage->getSiteList($options);
+        return $this->SitesService->getList(null, $options);
     }
 
     /**
@@ -96,7 +98,19 @@ class BcAdminSiteHelper extends Helper
      */
     public function getThemeList($site): array
     {
-        return $this->SiteManage->getThemeList($site);
+        $themes = $this->SitesService->getThemeList($site);
+        if(!$this->isMainOnCurrentDisplay($site)) {
+            $defaultThemeName = __d('baser', 'メインサイトに従う');
+            $mainTheme = $this->Sites->getRootMain()->theme;
+            if (!empty($mainTheme)) {
+                if (in_array($mainTheme, $themes)) {
+                    unset($themes[$mainTheme]);
+                }
+                $defaultThemeName .= '（' . $mainTheme . '）';
+            }
+            $themes = array_merge(['' => $defaultThemeName], $themes);
+        }
+        return $themes;
     }
 
     /**
@@ -108,7 +122,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function isUseSiteDeviceSetting(): bool
     {
-        return $this->SiteManage->isUseSiteDeviceSetting();
+        return (bool) $this->getSiteConfig('use_site_device_setting');
     }
 
     /**
@@ -120,7 +134,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function isUseSiteLangSetting(): bool
     {
-        return $this->SiteManage->isUseSiteLangSetting();
+        return (bool) $this->getSiteConfig('use_site_lang_setting');
     }
 
     /**
@@ -133,7 +147,17 @@ class BcAdminSiteHelper extends Helper
      */
     public function isMainOnCurrentDisplay($site): bool
     {
-        return $this->SiteManage->isMainOnCurrentDisplay($site);
+        if(!empty($site->main_site_id)) {
+            return false;
+        }
+        $request = Router::getRequest();
+        if(!$request) {
+            return true;
+        }
+        if($request->getParam('controller') === 'Sites' && $request->getParam('action') === 'add') {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -146,7 +170,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function findByUrl($url): EntityInterface
     {
-        return $this->SiteManage->findByUrl($url);
+        return $this->SitesService->findByUrl($url);
     }
 
     /**
@@ -158,7 +182,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getCurrentSite(): ?Site
     {
-        return $this->SiteManage->getCurrentSite();
+        return $this->getService(BcAdminServiceInterface::class)->getCurrentSite();
     }
 
     /**
@@ -170,7 +194,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getOtherSiteList(): array
     {
-        return $this->SiteManage->getOtherSiteList();
+        return $this->getService(BcAdminServiceInterface::class)->getOtherSiteList();
     }
 
 }

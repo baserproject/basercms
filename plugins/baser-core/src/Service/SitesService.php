@@ -13,6 +13,9 @@ namespace BaserCore\Service;
 
 use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\SitesTable;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
@@ -29,6 +32,9 @@ use BaserCore\Annotation\Checked;
 class SitesService implements SitesServiceInterface
 {
 
+    /**
+     * Trait
+     */
     use SiteConfigsTrait;
 
     /**
@@ -187,6 +193,66 @@ class SitesService implements SitesServiceInterface
     public function findByUrl($url): EntityInterface
     {
         return $this->Sites->findByUrl($url);
+    }
+
+
+    /**
+     * 言語リストを取得
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getLangList(): array
+    {
+        $languages = Configure::read('BcLang');
+        $langs = [];
+        foreach($languages as $key => $lang) {
+            $langs[$key] = $lang['name'];
+        }
+        return $langs;
+    }
+
+    /**
+     * デバイスリストを取得
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getDeviceList(): array
+    {
+        $agents = Configure::read('BcAgent');
+        $devices = [];
+        foreach($agents as $key => $agent) {
+            $devices[$key] = $agent['name'];
+        }
+        return $devices;
+    }
+
+    /**
+     * サイトのリストを取得
+     * @param array $options
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getList($options = []): array
+    {
+        return $this->Sites->getList(null, $options);
+    }
+
+    /**
+     * テーマのリストを取得する
+     * @param Site $site
+     * @return array
+     * @checked
+     * @noTodo
+     */
+    public function getThemeList(Site $site): array
+    {
+        return BcUtil::getThemeList();
     }
 
 }

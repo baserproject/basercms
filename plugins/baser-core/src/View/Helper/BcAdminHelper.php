@@ -14,6 +14,7 @@ namespace BaserCore\View\Helper;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Service\Admin\SiteManageService;
 use BaserCore\Service\Admin\SiteManageServiceInterface;
+use BaserCore\Service\BcAdminServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Service\DblogServiceInterface;
@@ -249,7 +250,7 @@ class BcAdminHelper extends Helper
         $currentSiteId = (string)$this->_View->getRequest()
                         ->getSession()
                         ->read('Baser.viewConditions.ContentsAdminIndex.named.site_id');
-        $currentSiteId = $this->getService(SiteManageServiceInterface::class)->getCurrentSite()->id;
+        $currentSiteId = $this->getService(BcAdminServiceInterface::class)->getCurrentSite()->id;
 
         $covertedAdminMenuGroups = $this->convertAdminMenuGroups($adminMenuGroups);
 

@@ -164,6 +164,7 @@ class SitesTable extends AppTable
             $options = $event->getResult() === true? $event->getData('options') : $event->getResult();
         }
 
+        $conditions = [];
         if (!is_null($options['status'])) {
             $conditions = ['status' => $options['status']];
         }

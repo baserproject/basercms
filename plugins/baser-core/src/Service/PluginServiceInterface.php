@@ -9,16 +9,16 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Service\Admin;
+namespace BaserCore\Service;
 
 use Cake\Datasource\EntityInterface;
 use Exception;
 
 /**
- * Interface PluginManageServiceInterface
+ * Interface PluginServiceInterface
  * @package BaserCore\Service
  */
-interface PluginManageServiceInterface
+interface PluginServiceInterface
 {
 
     /**
@@ -44,13 +44,6 @@ interface PluginManageServiceInterface
     public function install($name, $connection = 'default'): ?bool;
 
     /**
-     * インストール時の状態を返す
-     * @param string $pluginName
-     * @return string
-     */
-    public function getInstallStatusMessage($pluginName): string;
-
-    /**
      * プラグインを無効にする
      * @param string $name
      */
@@ -66,10 +59,10 @@ interface PluginManageServiceInterface
     /**
      * データベースをリセットする
      * @param string $name
-     * @param string $connection
+     * @param array $connection
      * @throws Exception
      */
-    public function resetDb(string $name, $connection = 'default'):void;
+    public function resetDb(string $name, $connection = 'default'): void;
 
     /**
      * プラグインを削除する
@@ -101,4 +94,11 @@ interface PluginManageServiceInterface
      */
     public function allow($data): void;
 
+
+    /**
+     * インストール時の状態を返す
+     * @param string $pluginName
+     * @return string
+     */
+    public function getInstallStatusMessage($pluginName): string;
 }

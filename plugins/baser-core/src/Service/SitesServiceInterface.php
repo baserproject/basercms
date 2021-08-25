@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Model\Entity\Site;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 
@@ -85,5 +86,38 @@ interface SitesServiceInterface
      * @return EntityInterface
      */
     public function findByUrl($url): EntityInterface;
+
+    /**
+     * サイト全体の設定値を取得する
+     * @param string $name
+     * @return mixed
+     */
+    public function getSiteConfig($name);
+
+    /**
+     * 言語リストを取得
+     * @return array
+     */
+    public function getLangList(): array;
+
+    /**
+     * デバイスリストを取得
+     * @return array
+     */
+    public function getDeviceList(): array;
+
+    /**
+     * サイトのリストを取得
+     * @param array $options
+     * @return array
+     */
+    public function getList($options = []): array;
+
+    /**
+     * テーマのリストを取得する
+     * @param Site $site
+     * @return array
+     */
+    public function getThemeList(Site $site): array;
 
 }

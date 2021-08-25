@@ -11,8 +11,8 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Service\Admin\PluginManageService;
-use BaserCore\Service\Admin\PluginManageServiceInterface;
+use BaserCore\Service\PluginService;
+use BaserCore\Service\PluginServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
@@ -33,7 +33,7 @@ class BcAdminPluginHelper extends Helper
 
     /**
      * Plugin Manage Service
-     * @var PluginManageService
+     * @var PluginService
      */
     public $PluginManage;
 
@@ -47,7 +47,7 @@ class BcAdminPluginHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->PluginManage = $this->getService(PluginManageServiceInterface::class);
+        $this->PluginManage = $this->getService(PluginServiceInterface::class);
     }
 
     /**
