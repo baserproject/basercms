@@ -48,9 +48,6 @@ class ContentsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        // $this->request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/'))->withParam('prefix', 'Admin');
-        // $this->request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/'));
-        // $this->request = $this->loginAdmin($this->getRequest('/baser/admin/baser-core/contents/index'))->withParam('prefix', 'Admin');
         $this->request = $this->loginAdmin($this->getRequest('/baser/admin'));
         $this->ContentsController = new ContentsController($this->request);
         $this->ContentsController->setName('Contents');
@@ -105,7 +102,6 @@ class ContentsControllerTest extends BcTestCase
      */
     public function testIndexRequest(): void
     {
-        $request = $this->getRequest();
         $this->get('/baser/admin/baser-core/contents/index/');
         $this->assertResponseOk();
         // リクエストの変化をテスト
