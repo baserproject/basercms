@@ -195,7 +195,7 @@ class PluginsController extends BcApiController
 
     /**
      * baserマーケットのプラグインデータを取得する
-     * @param PluginsServiceInterface $pluginManage
+     * @param PluginsServiceInterface $pluginService
      * @checked
      * @noTodo
      * @unitTest
