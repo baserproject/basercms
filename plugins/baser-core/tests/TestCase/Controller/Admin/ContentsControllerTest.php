@@ -218,8 +218,8 @@ class ContentsControllerTest extends BcTestCase
             ['index', '2', 'index_table'],
             ['trash_index', '1', 'index_trash'],
             // 足りない場合空文字列を返す
-            ['index', '', ''],
-            ['', '1', ''],
+            ['index', '', 'index_tree'],
+            ['', '1', 'index_tree'],
         ];
     }
 

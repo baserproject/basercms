@@ -196,12 +196,14 @@ class ContentsController extends BcAdminAppController
                     case 2:
                         return 'index_table';
                     default:
-                        return '';
+                        $this->BcMessage->setError(__d('baser', '指定されたテンプレートは存在しません'));
+                        return 'index_tree';
                 }
             case 'trash_index':
                 return 'index_trash';
             default:
-                return '';
+                $this->BcMessage->setError(__d('baser', '指定されたテンプレートは存在しません'));
+                return 'index_tree';
         }
     }
 
