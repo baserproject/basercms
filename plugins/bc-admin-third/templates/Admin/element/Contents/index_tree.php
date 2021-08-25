@@ -13,7 +13,7 @@
 ?>
 
 
-<?php if (!$datas->isEmpty()): ?>
+<?php if (!$contents->isEmpty()): ?>
   <div id="ContentsTreeList">
     <?php $this->BcBaser->element('Contents/index_list_tree'); ?>
   </div>
