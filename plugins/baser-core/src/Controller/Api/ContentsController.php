@@ -11,7 +11,7 @@
 
 namespace BaserCore\Controller\Api;
 
-use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\ContentServiceInterface;
 use Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -26,13 +26,13 @@ class ContentsController extends BcApiController
 
     /**
      * コンテンツ情報取得
-     * @param ContentsServiceInterface $Contents
+     * @param ContentServiceInterface $Contents
      * @param $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function view(ContentsServiceInterface $contents, $id)
+    public function view(ContentServiceInterface $contents, $id)
     {
         $this->set([
             'contents' => $contents->get($id)
@@ -43,13 +43,13 @@ class ContentsController extends BcApiController
     /**
      * コンテンツ情報一覧取得
      *
-     * @param  ContentsServiceInterface $contents
+     * @param  ContentServiceInterface $contents
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(ContentsServiceInterface $contents, $type="index")
+    public function index(ContentServiceInterface $contents, $type="index")
     {
         switch ($type) {
             case "index":

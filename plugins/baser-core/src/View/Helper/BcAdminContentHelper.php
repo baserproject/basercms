@@ -17,12 +17,12 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Service\UsersServiceInterface;
-use BaserCore\Service\ContentsService;
-use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\ContentService;
+use BaserCore\Service\ContentServiceInterface;
 
 /**
  * BcAdminContentHelper
- * @property ContentsService $ContentService
+ * @property ContentService $ContentService
  */
 class BcAdminContentHelper extends Helper
 {
@@ -41,7 +41,7 @@ class BcAdminContentHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->ContentService = $this->getService(ContentsServiceInterface::class);
+        $this->ContentService = $this->getService(ContentServiceInterface::class);
     }
 
     /**

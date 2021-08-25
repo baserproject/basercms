@@ -13,13 +13,13 @@ namespace BaserCore\Service\Admin;
 
 use Cake\ORM\Query;
 
-use BaserCore\Service\ContentsService;
-use BaserCore\Service\ContentsServiceInterface;
+use BaserCore\Service\ContentService;
+use BaserCore\Service\ContentServiceInterface;
 /**
  * Interface PluginManageServiceInterface
  * @package BaserCore\Service
  */
-interface ContentManageServiceInterface extends ContentsServiceInterface
+interface ContentManageServiceInterface extends ContentServiceInterface
 {
 
 }

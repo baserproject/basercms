@@ -967,7 +967,7 @@ class ContentsTable extends AppTable
     /**
      * コンテンツフォルダーのリストを取得
      * コンボボックス用
-     *TODO: ContentsServiceと統一する
+     *TODO: ContentServiceと統一する
      * @param int $siteId
      * @param array $options
      * @return array|bool
@@ -1001,7 +1001,7 @@ class ContentsTable extends AppTable
 
     /**
      * ツリー構造のデータを コンボボックスのデータ用に変換する
-     *TODO: ContentsServiceと統一する
+     *TODO: ContentServiceと統一する
      * @param $nodes
      * @return array
      */

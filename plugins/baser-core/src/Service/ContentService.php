@@ -22,7 +22,7 @@ use Cake\Datasource\ConnectionManager;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Utility\BcContainerTrait;
 
-class ContentsService implements ContentsServiceInterface
+class ContentService implements ContentServiceInterface
 {
 
     /**

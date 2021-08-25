@@ -16,14 +16,14 @@ use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Service\ContentsService;
+use BaserCore\Service\ContentService;
 use BaserCore\Utility\BcUtil;
 
 
 /**
  * ContentManageService
  */
-class ContentManageService extends ContentsService implements ContentManageServiceInterface
+class ContentManageService extends ContentService implements ContentManageServiceInterface
 {
 
 }

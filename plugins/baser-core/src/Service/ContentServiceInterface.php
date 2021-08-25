@@ -17,10 +17,10 @@ use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 
 /**
- * Interface ContentsServiceInterface
+ * Interface ContentServiceInterface
  * @package BaserCore\Service
  */
-interface ContentsServiceInterface
+interface ContentServiceInterface
 {
     /**
      * コンテンツを取得する
