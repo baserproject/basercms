@@ -44,13 +44,6 @@ interface PluginManageServiceInterface
     public function install($name, $connection = 'default'): ?bool;
 
     /**
-     * インストール時の状態を返す
-     * @param string $pluginName
-     * @return string
-     */
-    public function getInstallStatusMessage($pluginName): string;
-
-    /**
      * プラグインを無効にする
      * @param string $name
      */
@@ -86,12 +79,6 @@ interface PluginManageServiceInterface
      * @return bool
      */
     public function changePriority(int $id, int $offset, array $conditions = []): bool;
-
-    /**
-     * baserマーケットのプラグイン一覧を取得する
-     * @return array|mixed
-     */
-    public function getMarketPlugins(): array;
 
     /**
      * ユーザーグループにアクセス許可設定を追加する

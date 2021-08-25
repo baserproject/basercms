@@ -128,7 +128,7 @@ class PluginsController extends BcAdminAppController
             $this->BcMessage->setError(__d('baser', '無効な処理です。'));
             return $this->redirect(['action' => 'index']);
         }
-        if ($pluginManage->detach($name)) {
+        if ($pluginManage->detach(urldecode($name))) {
             $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を無効にしました。'), urldecode($name)));
         } else {
             $this->BcMessage->setError(__d('baser', 'プラグインの無効化に失敗しました。'));
@@ -155,7 +155,7 @@ class PluginsController extends BcAdminAppController
             return $this->redirect(['action' => 'index']);
         }
         try {
-            $pluginManage->uninstall($name, $this->request->getData('connection'));
+            $pluginManage->uninstall(urldecode($name), $this->request->getData('connection'));
             $this->BcMessage->setSuccess(sprintf(__d('baser', 'プラグイン「%s」を削除しました。'), $name));
         } catch (\Exception $e) {
             $this->BcMessage->setError(__d('baser', 'プラグインの削除に失敗しました。' . $e->getMessage()));

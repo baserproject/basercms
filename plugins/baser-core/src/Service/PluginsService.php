@@ -103,10 +103,10 @@ class PluginsService implements PluginsServiceInterface
      * @param string $name プラグイン名
      * @return bool|null
      * @param string $connection test connection指定用
+     * @throws Exception
      * @checked
      * @noTodo
      * @unitTest
-     * @throws Exception
      */
     public function install($name, $connection = 'default'): ?bool
     {
@@ -289,6 +289,59 @@ class PluginsService implements PluginsServiceInterface
                     break;
             }
         }
+    }
+
+    /**
+     * インストール可能かチェックする
+     *
+     * @param $pluginName
+     * @return string
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function getInstallStatusMessage($pluginName): string
+    {
+        $pluginName = urldecode($pluginName);
+        $installedPlugin = $this->Plugins->find()->where([
+            'name' => $pluginName,
+            'status' => true,
+        ])->first();
+
+        // 既にプラグインがインストール済み
+        if ($installedPlugin) {
+            return '既にインストール済のプラグインです。';
+        }
+
+        $paths = App::path('plugins');
+        $existsPluginFolder = false;
+        $folder = $pluginName;
+        foreach($paths as $path) {
+            if (!is_dir($path . $folder)) {
+                $dasherize = Inflector::dasherize($folder);
+                if (!is_dir($path . $dasherize)) {
+                    continue;
+                }
+                $folder = $dasherize;
+            }
+            $existsPluginFolder = true;
+            $configPath = $path . $folder . DS . 'config.php';
+            if (file_exists($configPath)) {
+                $config = include $configPath;
+            }
+            break;
+        }
+
+        // プラグインのフォルダが存在しない
+        if (!$existsPluginFolder) {
+            return 'インストールしようとしているプラグインのフォルダが存在しません。';
+        }
+
+        // インストールしようとしているプラグイン名と、設定ファイル内のプラグイン名が違う
+        if (!empty($config['name']) && $pluginName !== $config['name']) {
+            return 'このプラグイン名のフォルダ名を' . $config['name'] . 'にしてください。';
+        }
+        return '';
     }
 
 }

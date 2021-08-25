@@ -93,4 +93,12 @@ interface PluginsServiceInterface
      * @return void
      */
     public function allow($data): void;
+
+
+    /**
+     * インストール時の状態を返す
+     * @param string $pluginName
+     * @return string
+     */
+    public function getInstallStatusMessage($pluginName): string;
 }

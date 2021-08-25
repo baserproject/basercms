@@ -188,8 +188,21 @@ class PluginsServiceTest extends BcTestCase
         $this->Plugins->allow($data);
         $permissions = TableRegistry::getTableLocator()->get('BaserCore.Permissions');
         $result = $permissions->find('all')->all();
-        
+
         $this->assertEquals($data['title'] ." 管理", $result->last()->name);
     }
 
+    /**
+     * test getInstallStatusMessage
+     */
+    public function testGetInstallStatusMessage()
+    {
+        $this->assertEquals('既にインストール済のプラグインです。', $this->Plugins->getInstallStatusMessage('BcBlog'));
+        $this->assertEquals('インストールしようとしているプラグインのフォルダが存在しません。', $this->Plugins->getInstallStatusMessage('BcTest'));
+        $pluginPath = App::path('plugins')[0] . DS . 'BcTest';
+        $folder = new Folder($pluginPath);
+        $folder->create($pluginPath, 0777);
+        $this->assertEquals('', $this->Plugins->getInstallStatusMessage('BcTest'));
+        $folder->delete($pluginPath);
+    }
 }
