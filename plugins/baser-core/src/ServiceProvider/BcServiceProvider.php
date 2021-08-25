@@ -11,8 +11,6 @@
 
 namespace BaserCore\ServiceProvider;
 
-use BaserCore\Service\Admin\SiteConfigManageService;
-use BaserCore\Service\Admin\SiteConfigManageServiceInterface;
 use BaserCore\Service\BcAdminService;
 use BaserCore\Service\BcAdminServiceInterface;
 use BaserCore\Service\Front\SiteFrontService;
@@ -31,14 +29,12 @@ use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
 use BaserCore\Service\DblogServiceInterface;
 use BaserCore\Service\SiteConfigsService;
-use BaserCore\Service\Admin\SiteManageService;
 use BaserCore\Service\PluginServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Service\UserGroupsServiceInterface;
 use BaserCore\Service\PermissionServiceInterface;
 use BaserCore\Service\PermissionService;
 use BaserCore\Service\SiteConfigsServiceInterface;
-use BaserCore\Service\Admin\SiteManageServiceInterface;;
 use BaserCore\Service\Admin\ContentFolderManageService;
 use BaserCore\Service\Admin\ContentFolderManageServiceInterface;
 use BaserCore\Service\ContentFoldersService;
@@ -64,7 +60,6 @@ class BcServiceProvider extends ServiceProvider
         SitesServiceInterface::class,
         SiteFrontServiceInterface::class,
         SiteConfigsServiceInterface::class,
-        SiteConfigManageServiceInterface::class,
         PermissionServiceInterface::class,
         DblogServiceInterface::class,
         ContentServiceInterface::class,
@@ -94,7 +89,6 @@ class BcServiceProvider extends ServiceProvider
         $container->add(SiteFrontServiceInterface::class, SiteFrontService::class, true);
         // SiteConfigsサービス
         $container->add(SiteConfigsServiceInterface::class, SiteConfigsService::class, true);
-        $container->add(SiteConfigManageServiceInterface::class, SiteConfigManageService::class, true);
         // Permissionsサービス
         $container->add(PermissionServiceInterface::class, PermissionService::class);
         // Dblogsサービス
