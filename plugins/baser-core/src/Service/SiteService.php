@@ -25,17 +25,17 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 
 /**
- * Class SitesService
+ * Class SiteService
  * @package BaserCore\Service
  * @property SitesTable $Sites
  */
-class SitesService implements SitesServiceInterface
+class SiteService implements SiteServiceInterface
 {
 
     /**
      * Trait
      */
-    use SiteConfigsTrait;
+    use SiteConfigTrait;
 
     /**
      * Sites Table
@@ -44,7 +44,7 @@ class SitesService implements SitesServiceInterface
     public $Sites;
 
     /**
-     * SitesService constructor.
+     * SiteService constructor.
      */
     public function __construct()
     {

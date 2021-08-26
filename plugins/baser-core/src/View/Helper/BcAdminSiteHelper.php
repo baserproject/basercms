@@ -13,8 +13,8 @@ namespace BaserCore\View\Helper;
 
 use BaserCore\Model\Entity\Site;
 use BaserCore\Service\BcAdminServiceInterface;
-use BaserCore\Service\SiteConfigsTrait;
-use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Service\SiteConfigTrait;
+use BaserCore\Service\SiteServiceInterface;
 use Cake\Datasource\EntityInterface;
 use Cake\Routing\Router;
 use Cake\View\Helper;
@@ -29,13 +29,13 @@ use BaserCore\Annotation\Checked;
 class BcAdminSiteHelper extends Helper
 {
 
-    use SiteConfigsTrait;
+    use SiteConfigTrait;
 
     /**
      * Sites Service
-     * @var SitesServiceInterface
+     * @var SiteServiceInterface
      */
-    public $SitesService;
+    public $SiteService;
 
     /**
      * initialize
@@ -47,7 +47,7 @@ class BcAdminSiteHelper extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->SitesService = $this->getService(SitesServiceInterface::class);
+        $this->SiteService = $this->getService(SiteServiceInterface::class);
     }
 
     /**
@@ -59,7 +59,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getDeviceList(): array
     {
-        return $this->SitesService->getDeviceList();
+        return $this->SiteService->getDeviceList();
     }
 
     /**
@@ -71,7 +71,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getLangList(): array
     {
-        return $this->SitesService->getLangList();
+        return $this->SiteService->getLangList();
     }
 
     /**
@@ -85,7 +85,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getSiteList($options = []): array
     {
-        return $this->SitesService->getList($options);
+        return $this->SiteService->getList($options);
     }
 
     /**
@@ -98,7 +98,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getThemeList($site): array
     {
-        $themes = $this->SitesService->getThemeList($site);
+        $themes = $this->SiteService->getThemeList($site);
         if(!$this->isMainOnCurrentDisplay($site)) {
             $defaultThemeName = __d('baser', 'メインサイトに従う');
             $mainTheme = $this->Sites->getRootMain()->theme;
@@ -170,7 +170,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function findByUrl($url): EntityInterface
     {
-        return $this->SitesService->findByUrl($url);
+        return $this->SiteService->findByUrl($url);
     }
 
     /**

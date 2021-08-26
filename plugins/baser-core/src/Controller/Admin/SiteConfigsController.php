@@ -11,7 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Service\SiteConfigServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -37,7 +37,7 @@ class SiteConfigsController extends BcAdminAppController
     /**
      * 基本設定
      */
-    public function index(SiteConfigsServiceInterface $siteConfigs)
+    public function index(SiteConfigServiceInterface $siteConfigs)
     {
         if ($this->request->is('post')) {
             $siteConfig = $siteConfigs->update($this->getRequest()->getData());

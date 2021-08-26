@@ -13,7 +13,7 @@ namespace BaserCore\Controller\Admin;
 
 use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Model\Entity\User;
-use BaserCore\Service\UsersServiceInterface;
+use BaserCore\Service\UserServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\UsersTable;
@@ -58,7 +58,7 @@ class UsersController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function login(UsersServiceInterface $userService)
+    public function login(UserServiceInterface $userService)
     {
         $this->set('savedEnable', $this->request->is('ssl'));
         $result = $this->Authentication->getResult();
@@ -95,7 +95,7 @@ class UsersController extends BcAdminAppController
      * @unitTest
      * @noTodo
      */
-    public function login_agent(UsersServiceInterface $userService, $id): ?Response
+    public function login_agent(UserServiceInterface $userService, $id): ?Response
     {
         // 特権確認
         if (BcUtil::isSuperUser() === false) {
@@ -117,7 +117,7 @@ class UsersController extends BcAdminAppController
      * @noTodo
      * @checked
      */
-    public function back_agent(UsersServiceInterface $userService)
+    public function back_agent(UserServiceInterface $userService)
     {
         try {
             $redirectUrl = $userService->returnLoginUserFromAgent($this->request, $this->response);
@@ -136,7 +136,7 @@ class UsersController extends BcAdminAppController
      * @unitTest
      * @noTodo
      */
-    public function logout(UsersServiceInterface $userService)
+    public function logout(UserServiceInterface $userService)
     {
         /* @var User $user */
         $user = $this->Authentication->getIdentity();
@@ -148,12 +148,12 @@ class UsersController extends BcAdminAppController
     /**
      * ログインユーザーリスト
      * 管理画面にログインすることができるユーザーの一覧を表示する
-     * @param UsersServiceInterface $userService
+     * @param UserServiceInterface $userService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(UsersServiceInterface $userService): void
+    public function index(UserServiceInterface $userService): void
     {
         $this->setViewConditions('User', ['default' => ['query' => [
             'num' => $userService->getSiteConfig('admin_list_num'),
@@ -176,13 +176,13 @@ class UsersController extends BcAdminAppController
     /**
      * ログインユーザー新規追加
      * 管理画面にログインすることができるユーザーの各種情報を新規追加する
-     * @param UsersServiceInterface $userService
+     * @param UserServiceInterface $userService
      * @return Response|null|void Redirects on successful add, renders view otherwise.
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function add(UsersServiceInterface $userService)
+    public function add(UserServiceInterface $userService)
     {
         if ($this->request->is('post')) {
             $user = $userService->create($this->request->getData());
@@ -204,7 +204,7 @@ class UsersController extends BcAdminAppController
     /**
      * ログインユーザー編集
      * 管理画面にログインすることができるユーザーの各種情報を編集する
-     * @param UsersServiceInterface $userService
+     * @param UserServiceInterface $userService
      * @param string|null $id User id.
      * @return Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws RecordNotFoundException When record not found.
@@ -212,7 +212,7 @@ class UsersController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function edit(UsersServiceInterface $userService, $id = null)
+    public function edit(UserServiceInterface $userService, $id = null)
     {
         if (!$id && empty($this->request->getData())) {
             $this->BcMessage->setError(__d('baser', '無効なIDです。'));
@@ -237,7 +237,7 @@ class UsersController extends BcAdminAppController
     /**
      * ログインユーザー削除
      * 管理画面にログインすることができるユーザーを削除する
-     * @param UsersServiceInterface $userService
+     * @param UserServiceInterface $userService
      * @param string|null $id User id.
      * @return Response|null|void Redirects to index.
      * @throws RecordNotFoundException When record not found.
@@ -245,7 +245,7 @@ class UsersController extends BcAdminAppController
      * @unitTest
      * @noTodo
      */
-    public function delete(UsersServiceInterface $userService, $id = null)
+    public function delete(UserServiceInterface $userService, $id = null)
     {
         if (!$id) {
             $this->BcMessage->setError(__d('baser', '無効なIDです。'));

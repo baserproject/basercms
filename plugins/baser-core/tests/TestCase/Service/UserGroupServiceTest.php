@@ -11,15 +11,15 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
-use BaserCore\Service\UserGroupsService;
+use BaserCore\Service\UserGroupService;
 use BaserCore\TestSuite\BcTestCase;
 
 /**
- * Class UserGroupsServiceTest
+ * Class UserGroupServiceTest
  * @package BaserCore\Test\TestCase\Service
- * @property UserGroupsService $UserGroups
+ * @property UserGroupService $UserGroups
  */
-class UserGroupsServiceTest extends BcTestCase
+class UserGroupServiceTest extends BcTestCase
 {
 
     /**
@@ -35,7 +35,7 @@ class UserGroupsServiceTest extends BcTestCase
     ];
 
     /**
-     * @var UserGroupsService|null
+     * @var UserGroupService|null
      */
     public $UserGroups = null;
 
@@ -47,7 +47,7 @@ class UserGroupsServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->UserGroups = new UserGroupsService();
+        $this->UserGroups = new UserGroupService();
     }
 
     /**

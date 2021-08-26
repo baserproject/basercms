@@ -11,10 +11,10 @@
 
 namespace BaserCore\Test\TestCase\Service;
 use BaserCore\Service\BcAdminServiceInterface;
-use BaserCore\Service\SitesService;
+use BaserCore\Service\SiteService;
 use BaserCore\Utility\BcContainerTrait;
 
-class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
+class SiteServiceTest extends \BaserCore\TestSuite\BcTestCase
 {
 
     /**
@@ -32,7 +32,7 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
     ];
 
     /**
-     * @var SitesService|null
+     * @var SiteService|null
      */
     public $Sites = null;
 
@@ -44,7 +44,7 @@ class SitesServiceTest extends \BaserCore\TestSuite\BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->Sites = new SitesService();
+        $this->Sites = new SiteService();
     }
 
     /**

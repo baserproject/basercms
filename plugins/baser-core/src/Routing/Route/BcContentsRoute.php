@@ -12,7 +12,7 @@
 namespace BaserCore\Routing\Route;
 
 use BaserCore\Service\BcFrontService;
-use BaserCore\Service\SitesService;
+use BaserCore\Service\SiteService;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
@@ -293,7 +293,7 @@ class BcContentsRoute extends Route
         }
 
         // URL生成
-        $sites = new SitesService();
+        $sites = new SiteService();
         $site = $sites->findByUrl($strUrl);
         if ($site && $site->use_subdomain) {
             $strUrl = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/', $strUrl);

@@ -16,7 +16,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Service\UsersServiceInterface;
+use BaserCore\Service\UserServiceInterface;
 use BaserCore\Service\ContentService;
 use BaserCore\Service\ContentServiceInterface;
 
@@ -67,7 +67,7 @@ class BcAdminContentHelper extends Helper
      */
     public function getAuthors()
     {
-        return $this->getService(UsersServiceInterface::class)->getList();
+        return $this->getService(UserServiceInterface::class)->getList();
     }
 
 }

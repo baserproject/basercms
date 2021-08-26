@@ -11,10 +11,10 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
-use BaserCore\Service\SiteConfigsService;
+use BaserCore\Service\SiteConfigService;
 use josegonzalez\Dotenv\Loader;
 
-class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
+class SiteConfigServiceTest extends \BaserCore\TestSuite\BcTestCase
 {
 
     /**
@@ -27,7 +27,7 @@ class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
     ];
 
     /**
-     * @var SiteConfigsService|null
+     * @var SiteConfigService|null
      */
     public $SiteConfigs = null;
 
@@ -39,7 +39,7 @@ class SiteConfigsServiceTest extends \BaserCore\TestSuite\BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->SiteConfigs = new SiteConfigsService();
+        $this->SiteConfigs = new SiteConfigService();
     }
 
     /**

@@ -14,10 +14,10 @@ namespace BaserCore\Service;
 use BaserCore\Utility\BcContainerTrait;
 
 /**
- * Class SiteConfigsTrait
+ * Class SiteConfigTrait
  * @package BaserCore\Service
  */
-trait SiteConfigsTrait
+trait SiteConfigTrait
 {
     /**
      * BcContainerTrait
@@ -31,7 +31,7 @@ trait SiteConfigsTrait
      */
     public function getSiteConfig($name)
     {
-        $siteConfigs = $this->getService(SiteConfigsServiceInterface::class);
+        $siteConfigs = $this->getService(SiteConfigServiceInterface::class);
         return $siteConfigs->getValue($name);
     }
 
