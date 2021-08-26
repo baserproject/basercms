@@ -29,7 +29,7 @@ use BaserCore\Annotation\Checked;
 class BcFrontService extends SiteService
 {
 
-    use SiteConfigsTrait;
+    use SiteConfigTrait;
 
     /**
      * 現在のURLからサイトを取得する

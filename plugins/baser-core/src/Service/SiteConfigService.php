@@ -25,7 +25,7 @@ use BaserCore\Annotation\Checked;
  * Class SiteConfigsMockService
  * @package BaserCore\Service
  */
-class SiteConfigsService implements SiteConfigsServiceInterface
+class SiteConfigService implements SiteConfigServiceInterface
 {
 
     /**
@@ -40,7 +40,7 @@ class SiteConfigsService implements SiteConfigsServiceInterface
     public $SiteConfigs;
 
     /**
-     * SiteConfigsService constructor.
+     * SiteConfigService constructor.
      */
     public function __construct()
     {

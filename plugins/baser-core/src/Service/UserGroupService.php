@@ -31,7 +31,7 @@ class UserGroupService implements UserGroupServiceInterface
     /**
      * Trait
      */
-    use SiteConfigsTrait;
+    use SiteConfigTrait;
 
     /**
      * UserGroups Table

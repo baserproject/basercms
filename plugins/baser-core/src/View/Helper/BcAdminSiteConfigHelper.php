@@ -11,8 +11,8 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Service\SiteConfigsService;
-use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Service\SiteConfigService;
+use BaserCore\Service\SiteConfigServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
@@ -22,7 +22,7 @@ use BaserCore\Annotation\Checked;
 
 /**
  * BcAdminSiteConfigHelper
- * @property SiteConfigsService $SiteConfigsService
+ * @property SiteConfigService $SiteConfigService
  */
 class BcAdminSiteConfigHelper extends \Cake\View\Helper
 {
@@ -42,7 +42,7 @@ class BcAdminSiteConfigHelper extends \Cake\View\Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->SiteConfigsService = $this->getService(SiteConfigsServiceInterface::class);
+        $this->SiteConfigService = $this->getService(SiteConfigServiceInterface::class);
     }
 
     /**
@@ -54,7 +54,7 @@ class BcAdminSiteConfigHelper extends \Cake\View\Helper
      */
     public function isWritableEnv()
     {
-        return $this->SiteConfigsService->isWritableEnv();
+        return $this->SiteConfigService->isWritableEnv();
     }
 
     /**
@@ -118,7 +118,7 @@ class BcAdminSiteConfigHelper extends \Cake\View\Helper
      */
     public function getModeList()
     {
-        return $this->SiteConfigsService->getModeList();
+        return $this->SiteConfigService->getModeList();
     }
 
 }

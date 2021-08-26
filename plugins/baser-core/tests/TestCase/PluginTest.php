@@ -13,7 +13,7 @@ namespace BaserCore\Test\TestCase;
 
 use App\Application;
 use BaserCore\Plugin;
-use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Service\SiteConfigServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Container;
 use Cake\Http\MiddlewareQueue;
@@ -185,7 +185,7 @@ class PluginTest extends BcTestCase
     {
         $container = new Container();
         $this->Plugin->services($container);
-        $this->assertTrue($container->has(SiteConfigsServiceInterface::class));
+        $this->assertTrue($container->has(SiteConfigServiceInterface::class));
     }
 
 }

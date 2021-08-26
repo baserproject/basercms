@@ -25,7 +25,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Model\Table\SitesTable;
 use BaserCore\Model\Table\UsersTable;
-use BaserCore\Service\SiteConfigsTrait;
+use BaserCore\Service\SiteConfigTrait;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Table\SiteConfigsTable;
 use BaserCore\Model\Table\ContentFoldersTable;
@@ -53,9 +53,9 @@ use BaserCore\Service\ContentServiceInterface;
 class ContentsController extends BcAdminAppController
 {
     /**
-     * SiteConfigsTrait
+     * SiteConfigTrait
      */
-    use SiteConfigsTrait;
+    use SiteConfigTrait;
 
     /**
      * initialize

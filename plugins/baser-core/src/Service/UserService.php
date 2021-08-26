@@ -43,7 +43,7 @@ class UserService implements UserServiceInterface
     /**
      * Trait
      */
-    use SiteConfigsTrait;
+    use SiteConfigTrait;
 
     /**
      * UserService constructor.

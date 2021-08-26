@@ -13,7 +13,7 @@ namespace BaserCore\View\Helper;
 
 use BaserCore\Model\Entity\Site;
 use BaserCore\Service\BcAdminServiceInterface;
-use BaserCore\Service\SiteConfigsTrait;
+use BaserCore\Service\SiteConfigTrait;
 use BaserCore\Service\SiteServiceInterface;
 use Cake\Datasource\EntityInterface;
 use Cake\Routing\Router;
@@ -29,7 +29,7 @@ use BaserCore\Annotation\Checked;
 class BcAdminSiteHelper extends Helper
 {
 
-    use SiteConfigsTrait;
+    use SiteConfigTrait;
 
     /**
      * Sites Service

@@ -19,7 +19,7 @@ use BaserCore\Annotation\Checked;
 // use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
 // use Cake\Controller\ComponentRegistry;
-use BaserCore\Service\SiteConfigsTrait;
+use BaserCore\Service\SiteConfigTrait;
 // use Cake\Core\Exception\Exception;
 // use Cake\Datasource\Exception\RecordNotFoundException;
 // use Cake\Event\Event;
@@ -48,9 +48,9 @@ use Authentication\Controller\Component\AuthenticationComponent;
 class PermissionsController extends BcAdminAppController
 {
     /**
-     * SiteConfigsTrait
+     * SiteConfigTrait
      */
-    use SiteConfigsTrait;
+    use SiteConfigTrait;
 
     /**
      * initialize

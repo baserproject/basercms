@@ -35,7 +35,7 @@ class SiteService implements SiteServiceInterface
     /**
      * Trait
      */
-    use SiteConfigsTrait;
+    use SiteConfigTrait;
 
     /**
      * Sites Table

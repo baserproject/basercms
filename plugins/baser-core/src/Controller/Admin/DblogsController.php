@@ -12,7 +12,7 @@
 namespace BaserCore\Controller\Admin;
 
 use BaserCore\Service\DblogServiceInterface;
-use BaserCore\Service\SiteConfigsTrait;
+use BaserCore\Service\SiteConfigTrait;
 use BaserCore\Service\UserServiceInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -25,9 +25,9 @@ use BaserCore\Annotation\Checked;
 class DblogsController extends BcAdminAppController
 {
     /**
-     * SiteConfigsTrait
+     * SiteConfigTrait
      */
-    use SiteConfigsTrait;
+    use SiteConfigTrait;
 
     /**
      * [ADMIN] DBログ一覧
