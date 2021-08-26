@@ -9,17 +9,20 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Service\Admin;
+namespace BaserCore\Service;
 
-use Cake\ORM\Query;
 
-use BaserCore\Service\ContentFoldersService;
-use BaserCore\Service\ContentFoldersServiceInterface;
+use Cake\Datasource\EntityInterface;
 /**
- * Interface PluginServiceInterface
+ * Interface ContentFolderServiceInterface
  * @package BaserCore\Service
  */
-interface ContentFolderManageServiceInterface extends ContentFoldersServiceInterface
+interface ContentFolderServiceInterface
 {
-
+    /**
+     * コンテンツフォルダー登録
+     * @param array $data
+     * @return \Cake\Datasource\EntityInterface
+     */
+    public function create(array $postData);
 }
