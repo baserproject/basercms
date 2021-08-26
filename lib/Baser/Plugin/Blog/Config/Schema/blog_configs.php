@@ -23,7 +23,6 @@ class BlogConfigsSchema extends CakeSchema
 	public $blog_configs = [
 		'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'length' => 2, 'key' => 'primary'],
 		'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
-		'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci']
 	];
 
 }

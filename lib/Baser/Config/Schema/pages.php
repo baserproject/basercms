@@ -36,12 +36,11 @@ class PagesSchema extends CakeSchema {
 		'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'],
 		'contents' => ['type' => 'text', 'null' => true, 'default' => null],
 		'draft' => ['type' => 'text', 'null' => true, 'default' => null],
-		'page_template' => ['type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'],
+		'page_template' => ['type' => 'string', 'null' => true, 'default' => null],
 		'code' => ['type' => 'text', 'null' => true, 'default' => null],
 		'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
 		'created' => ['type' => 'datetime', 'null' => true, 'default' => null],
 		'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
-		'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci']
 	];
 
 }

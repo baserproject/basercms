@@ -31,7 +31,6 @@ class MailMessageFixture extends BaserTestFixture
 		'indexes' => [
 			'PRIMARY' => ['column' => 'id', 'unique' => 1]
 		],
-		'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB']
 	];
 
 	/**
