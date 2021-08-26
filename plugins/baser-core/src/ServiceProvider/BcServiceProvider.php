@@ -24,14 +24,14 @@ use BaserCore\Service\UserService;
 use BaserCore\Service\DblogService;
 use BaserCore\Service\PluginService;
 use BaserCore\Service\ContentService;
-use BaserCore\Service\UserGroupsService;
+use BaserCore\Service\UserGroupService;
 use BaserCore\Service\SitesServiceInterface;
 use BaserCore\Service\UserServiceInterface;
 use BaserCore\Service\DblogServiceInterface;
 use BaserCore\Service\SiteConfigsService;
 use BaserCore\Service\PluginServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
-use BaserCore\Service\UserGroupsServiceInterface;
+use BaserCore\Service\UserGroupServiceInterface;
 use BaserCore\Service\PermissionServiceInterface;
 use BaserCore\Service\PermissionService;
 use BaserCore\Service\SiteConfigsServiceInterface;
@@ -54,7 +54,7 @@ class BcServiceProvider extends ServiceProvider
     protected $provides = [
         BcAdminServiceInterface::class,
         UserServiceInterface::class,
-        UserGroupsServiceInterface::class,
+        UserGroupServiceInterface::class,
         PluginServiceInterface::class,
         PluginServiceInterface::class,
         SitesServiceInterface::class,
@@ -81,7 +81,7 @@ class BcServiceProvider extends ServiceProvider
         // Usersサービス
         $container->add(UserServiceInterface::class, UserService::class);
         // UserGroupsサービス
-        $container->add(UserGroupsServiceInterface::class, UserGroupsService::class, true);
+        $container->add(UserGroupServiceInterface::class, UserGroupService::class, true);
         // Pluginsサービス
         $container->add(PluginServiceInterface::class, PluginService::class, true);
         // Sites サービス

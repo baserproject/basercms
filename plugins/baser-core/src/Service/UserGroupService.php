@@ -21,11 +21,11 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 
 /**
- * Class UserGroupsService
+ * Class UserGroupService
  * @package BaserCore\Service
  * @property UserGroupsTable $UserGroups
  */
-class UserGroupsService implements UserGroupsServiceInterface
+class UserGroupService implements UserGroupServiceInterface
 {
 
     /**
@@ -40,7 +40,7 @@ class UserGroupsService implements UserGroupsServiceInterface
     public $UserGroups;
 
     /**
-     * UserGroupsService constructor.
+     * UserGroupService constructor.
      */
     public function __construct()
     {

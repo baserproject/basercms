@@ -15,10 +15,10 @@ use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 
 /**
- * Interface UserGroupsServiceInterface
+ * Interface UserGroupServiceInterface
  * @package BaserCore\Service
  */
-interface UserGroupsServiceInterface
+interface UserGroupServiceInterface
 {
     /**
      * ユーザーグループを取得する

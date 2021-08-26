@@ -15,7 +15,7 @@ use BaserCore\Model\Entity\UserGroup;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\Exception\CopyFailedException;
 use BaserCore\Model\Table\UserGroupsTable;
-use BaserCore\Service\UserGroupsServiceInterface;
+use BaserCore\Service\UserGroupServiceInterface;
 use BaserCore\Service\UserServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Datasource\ResultSetInterface;
@@ -50,13 +50,13 @@ class UserGroupsController extends BcAdminAppController
      *
      * - pagination
      * - view num
-     * @param UserGroupsServiceInterface $userGroupsService
+     * @param UserGroupServiceInterface $userGroupsService
      * @return Response|null|void Renders view
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(UserGroupsServiceInterface $userGroupsService): void
+    public function index(UserGroupServiceInterface $userGroupsService): void
     {
         $this->setViewConditions('UserGroup', ['default' => ['query' => [
             'num' => $userGroupsService->getSiteConfig('admin_list_num'),
@@ -87,13 +87,13 @@ class UserGroupsController extends BcAdminAppController
      *  - UserGroup.use_admin_globalmenu
      *  - UserGroup.use_move_contents
      *  - submit
-     * @param UserGroupsServiceInterface $userGroupsService
+     * @param UserGroupServiceInterface $userGroupsService
      * @return Response|null|void Redirects on successful add, renders view otherwise.
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function add(UserGroupsServiceInterface $userGroupsService)
+    public function add(UserGroupServiceInterface $userGroupsService)
     {
         $this->setTitle(__d('baser', '新規ユーザーグループ登録'));
         $this->setHelp('user_groups_form');
@@ -130,7 +130,7 @@ class UserGroupsController extends BcAdminAppController
      *  - UserGroup.use_admin_globalmenu
      *  - UserGroup.use_move_contents
      *  - submit
-     * @param UserGroupsServiceInterface $userGroupsService
+     * @param UserGroupServiceInterface $userGroupsService
      * @param string|null $id User Group id.
      * @return Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws RecordNotFoundException When record not found.
@@ -138,7 +138,7 @@ class UserGroupsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function edit(UserGroupsServiceInterface $userGroupsService, UserServiceInterface $userService, $id = null)
+    public function edit(UserGroupServiceInterface $userGroupsService, UserServiceInterface $userService, $id = null)
     {
 
         if ($id) {
@@ -170,7 +170,7 @@ class UserGroupsController extends BcAdminAppController
      * ユーザーグループ削除
      *
      * ユーザーグループを削除する
-     * @param UserGroupsServiceInterface $userGroupsService
+     * @param UserGroupServiceInterface $userGroupsService
      * @param string|null $id User Group id.
      * @return Response|null|void Redirects to index.
      * @throws RecordNotFoundException When record not found.
@@ -178,7 +178,7 @@ class UserGroupsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function delete(UserGroupsServiceInterface $userGroupsService, $id = null)
+    public function delete(UserGroupServiceInterface $userGroupsService, $id = null)
     {
         if ($id) {
             $this->request->allowMethod(['post', 'delete']);
@@ -200,7 +200,7 @@ class UserGroupsController extends BcAdminAppController
      * ユーザーグループコピー
      *
      * ユーザーグループをコピーする
-     * @param UserGroupsServiceInterface $userGroupsService
+     * @param UserGroupServiceInterface $userGroupsService
      * @param string|null $id User Group id.
      * @return Response|null|void Redirects to index.
      * @throws RecordNotFoundException When record not found.
@@ -209,7 +209,7 @@ class UserGroupsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function copy(UserGroupsServiceInterface $userGroupsService, $id = null)
+    public function copy(UserGroupServiceInterface $userGroupsService, $id = null)
     {
         $this->request->allowMethod(['post']);
         if (!$id || !is_numeric($id)) {
