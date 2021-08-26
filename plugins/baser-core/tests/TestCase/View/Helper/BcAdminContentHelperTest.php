@@ -30,6 +30,18 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
     public $BcAdminContent;
 
     /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.Plugins',
+    ];
+
+    /**
      * setUp
      */
     public function setUp(): void
@@ -55,14 +67,21 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertTrue(isset($this->BcAdminContent->ContentService));
     }
 
-    public function testGetType()
+    /**
+     * testGetType
+     *
+     * @return void
+     */
+    public function testGetType(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $expected = [
+            'Default' => '無所属コンテンツ',
+            'ContentFolder' => 'フォルダー',
+            'ContentAlias' => 'エイリアス',
+            'ContentLink' => 'リンク',
+            'Page' => '固定ページ',
+            'BlogContent' => 'ブログ'
+        ];
+        $this->assertEquals($expected, $this->BcAdminContent->getTypes());
     }
-
-    public function testGetAuthors()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
 }

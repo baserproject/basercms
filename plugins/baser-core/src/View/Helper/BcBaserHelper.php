@@ -11,21 +11,22 @@
 
 namespace BaserCore\View\Helper;
 
+use Cake\View\View;
+use Cake\ORM\Entity;
+use Cake\View\Helper;
+use Cake\Core\Configure;
+use BaserCore\Utility\BcUtil;
+use BaserCore\Utility\BcAgent;
+use Cake\View\Helper\UrlHelper;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Model\Entity\User;
+use BaserCore\Annotation\Checked;
+use Cake\View\Helper\FlashHelper;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Service\BcFrontServiceInterface;
-use BaserCore\Utility\BcAgent;
-use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Utility\BcUtil;
-use Cake\Core\Configure;
-use Cake\ORM\Entity;
-use Cake\View\Helper;
-use Cake\View\Helper\FlashHelper;
-use Cake\View\Helper\UrlHelper;
-use Cake\View\View;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
 
 /**
  * Class BcBaserHelper
@@ -573,7 +574,7 @@ class BcBaserHelper extends Helper
      * 姓と名を結合して取得
      * ニックネームがある場合にはニックネームを優先する
      *
-     * @param Entity $user ユーザーデータ
+     * @param User $user ユーザーデータ
      * @return string $userName ユーザー名
      * @checked
      * @noTodo

@@ -37,6 +37,7 @@ class BcAdminContentHelper extends Helper
      * @param array $config
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {
@@ -64,6 +65,9 @@ class BcAdminContentHelper extends Helper
     /**
      * 作成者一覧を取得する
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getAuthors()
     {

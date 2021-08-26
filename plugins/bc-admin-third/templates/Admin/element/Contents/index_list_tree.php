@@ -19,7 +19,7 @@ use BaserCore\View\BcAdminAppView;
  * [ADMIN] 統合コンテンツ一覧
  *
  * @var BcAdminAppView $this
- * @var array $contents
+ * @var Query $contents
  */
 
 $PermissionModel = TableRegistry::getTableLocator()->get('BaserCore.Permissions');
@@ -90,8 +90,8 @@ $deleteDisabled = false;
 }'<?php if ($open): ?> class="jstree-open"<?php endif ?>
     ><?php
       echo h($content->title);
-      if (!empty($content['children'])) {
-        $this->BcBaser->element('Contents/index_list_tree', ['contents' => $content['children']]);
+      if (!empty($content->children)) {
+        $this->BcBaser->element('Contents/index_list_tree', ['contents' => $content->children]);
       }
       ?></li>
   <?php endforeach ?>
