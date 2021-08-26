@@ -14,16 +14,16 @@ namespace BaserCore\Service;
 
 use Cake\ORM\TableRegistry;
 use BaserCore\Model\Table\ContentFoldersTable;
-use BaserCore\Service\ContentFoldersServiceInterface;
+use BaserCore\Service\ContentFolderServiceInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 /**
- * Class ContentFoldersService
+ * Class ContentFolderService
  * @package BaserCore\Service
  * @property ContentFoldersTable $ContentFolders
  */
-class ContentFoldersService implements ContentFoldersServiceInterface
+class ContentFolderService implements ContentFolderServiceInterface
 {
 
     /**
@@ -33,7 +33,7 @@ class ContentFoldersService implements ContentFoldersServiceInterface
     public $ContentFolders;
 
     /**
-     * ContentFoldersService constructor.
+     * ContentFolderService constructor.
      */
     public function __construct()
     {

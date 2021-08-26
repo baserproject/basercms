@@ -12,20 +12,20 @@
 namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Service\ContentFoldersService;
+use BaserCore\Service\ContentFolderService;
 
 /**
  * BaserCore\Model\Table\ContentFoldersTable Test Case
  *
- * @property ContentFoldersService $ContentFoldersService
+ * @property ContentFolderService $ContentFolderService
  */
-class ContentFoldersServiceTest extends BcTestCase
+class ContentFolderServiceTest extends BcTestCase
 {
 
     /**
      * Test subject
      *
-     * @var ContentFoldersService
+     * @var ContentFolderService
      */
     public $ContentFolders;
 
@@ -47,7 +47,7 @@ class ContentFoldersServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->ContentFoldersService = new ContentFoldersService();
+        $this->ContentFolderService = new ContentFolderService();
         $this->Contents = $this->getTableLocator()->get('Contents');
         $this->loginAdmin($this->getRequest());
     }
@@ -59,7 +59,7 @@ class ContentFoldersServiceTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        unset($this->ContentFoldersService);
+        unset($this->ContentFolderService);
         parent::tearDown();
     }
 
@@ -80,8 +80,8 @@ class ContentFoldersServiceTest extends BcTestCase
                 "entity_id" => "",
             ]
         ];
-        $result = $this->ContentFoldersService->create($data);
-        $folderExpected = $this->ContentFoldersService->ContentFolders->find()->last();
+        $result = $this->ContentFolderService->create($data);
+        $folderExpected = $this->ContentFolderService->ContentFolders->find()->last();
         $contentExpected = $this->Contents->find()->last();
         $this->assertEquals($folderExpected->name, $result->name);
         $this->assertEquals("新しい フォルダー", $contentExpected->title);

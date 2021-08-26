@@ -12,7 +12,7 @@
 namespace BaserCore\Controller\Admin;
 
 use Cake\Event\EventInterface;
-use BaserCore\Service\Admin\ContentFolderManageServiceInterface;
+use BaserCore\Service\ContentFolderServiceInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -62,12 +62,12 @@ class ContentFoldersController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function add(ContentFolderManageServiceInterface $contentFolderManage)
+    public function add(ContentFolderServiceInterface $contentFolderService)
     {
         if (!$this->request->getData()) {
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
         }
-        if (!$contentFolder = $contentFolderManage->create($this->request->getData())) {
+        if (!$contentFolder = $contentFolderService->create($this->request->getData())) {
             $this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
             exit;
         }
