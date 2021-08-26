@@ -15,14 +15,14 @@
  * @var array $file
  * @var string $size
  */
-$url = h($this->BcBaser->getUrl($this->Uploader->getFileUrl($file['UploaderFile']['name'])));
+$url = $this->BcBaser->getUrl($this->Uploader->getFileUrl($file['UploaderFile']['name']));
 ?>
 
 
 <p class="url">
-	<a href="<?php echo $url ?>" target="_blank"><?php echo Router::url($url, true) ?></a>
+	<a href="<?php echo h($url) ?>" target="_blank"><?php echo h(Router::url($url, true)) ?></a>
 </p>
 <p class="image">
-	<a href="<?php echo $url ?>"
+	<a href="<?php echo h($url) ?>"
 	   target="_blank"><?php echo $this->Uploader->file($file, ['size' => $size, 'alt' => $file['UploaderFile']['name']]) ?></a>
 </p>
