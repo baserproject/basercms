@@ -48,5 +48,4 @@ class BcAdminPermissionHelper extends \Cake\View\Helper
     {
         return $this->PermissionService->getMethodList();
     }
-
 }

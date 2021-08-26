@@ -13,6 +13,7 @@
 use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\BcAdminAppView;
+
 /**
  * [ADMIN] 統合コンテンツ一覧
  * @var BcAdminAppView $this
@@ -39,7 +40,6 @@ foreach ($currentUser->user_groups as $group) {
   if ($isUseMoveContents = $group->use_move_contents) break;
 }
 
-$this->BcBaser->js('admin/vendors/jquery.jstree-3.3.8/jstree.min', false);
 $this->BcBaser->i18nScript([
   'confirmMessage1' => __d('baser', 'コンテンツをゴミ箱に移動してもよろしいですか？'),
   'confirmMessage2' => __d('baser', "選択したデータを全てゴミ箱に移動します。よろしいですか？\n※ エイリアスは直接削除します。"),
@@ -85,20 +85,16 @@ $this->BcBaser->js([
   'admin/libs/jquery.baser_ajax_batch',
   'admin/libs/baser_ajax_batch_config'
 ]);
-$this->BcBaser->js('admin/libs/jquery.bcTree', false);
+$this->BcBaser->js(['admin/libs/jquery.bcTree', 'admin/vendors/jquery.jstree-3.3.8/jstree.min'], false);
 echo $this->BcAdminForm->control('BcManageContent', ['type' => 'hidden', 'value' => $this->BcContents->getJsonSettings()]);
 ?>
-
 <script type="text/javascript">
 </script>
-
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="MessageBox" style="display:none">
   <div id="flashMessage" class="notice-message"></div>
 </div>
-
 <?php $this->BcBaser->element('Contents/index_view_setting') ?>
-
 <div id="DataList" class="bca-data-list">
     <?php $this->BcBaser->element("Contents/${template}"); ?>
 </div>

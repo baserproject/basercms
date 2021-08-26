@@ -247,4 +247,66 @@ class PermissionService implements PermissionServiceInterface
         }
         return $data;
     }
+
+    /**
+     * 権限チェックを行う
+     *
+     * @param array $url
+     * @param string $userGroupId
+     * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function check($url, $userGroupId)
+    {
+        if ($userGroupId == Configure::read('BcApp.adminGroupId')) {
+            return true;
+        }
+        // TODO: setpermissionsTmpやgetpermissionsTmpを使う
+        $this->Permissions->setCheck($userGroupId);
+        $permissions = $this->Permissions->permissionsTmp;
+        if ($url != '/') {
+            $url = preg_replace('/^\//is', '', $url);
+        }
+        $adminPrefix = BcUtil::getPrefix(true);
+        $url = preg_replace("/^{$adminPrefix}\//", 'baser/admin/', $url);
+        // ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
+        $allows = [
+            '/^baser\/admin$/',
+            '/^baser\/admin\/$/',
+            '/^baser\/admin\/dashboard\/.*?/',
+            '/^baser\/admin\/dblogs\/.*?/',
+            '/^baser\/admin\/users\/logout$/',
+            '/^baser\/admin\/user_groups\/set_default_favorites$/'
+        ];
+        $sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
+        if (!empty($_SESSION['Auth'][$sessionKey]['id'])) {
+            $allows[] = '/^baser\/admin\/users\/edit\/' . $_SESSION['Auth'][$sessionKey]['id'] . '$/';
+        }
+        foreach($allows as $allow) {
+            if (preg_match($allow, $url)) {
+                return true;
+            }
+        }
+        $ret = true;
+        foreach($permissions as $permission) {
+            if (!$permission->status) {
+                continue;
+            }
+            if ($permission->url != '/') {
+                $pattern = preg_replace('/^\//is', '', $permission->url);
+            } else {
+                $pattern = $permission->url;
+            }
+            $pattern = addslashes($pattern);
+            $pattern = str_replace('/', '\/', $pattern);
+            $pattern = str_replace('*', '.*?', $pattern);
+            $pattern = '/^' . str_replace('\/.*?', '(|\/.*?)', $pattern) . '$/is';
+            if (preg_match($pattern, $url)) {
+                $ret = $permission->auth;
+            }
+        }
+        return (boolean)$ret;
+    }
 }

@@ -255,7 +255,34 @@ class PermissionServiceTest extends BcTestCase
         $this->assertFalse($data['auth']);
         $this->assertFalse($data['status']);
         $this->assertEquals('GET', $data['method']);
+    }
 
+    /**
+     * 権限チェックを行う
+     *
+     * @param array $url
+     * @param string $userGroupId
+     * @param array $expected 期待値
+     * @param string $message テストが失敗した時に表示されるメッセージ
+     * @dataProvider checkDataProvider
+     */
+    public function testCheck($url, $userGroupId, $expected, $message = null)
+    {
+        $result = $this->PermissionService->check($url, $userGroupId);
+        $this->assertEquals($expected, $result, $message);
+    }
+
+    public function checkDataProvider()
+    {
+        return [
+            ['hoge', 1, true, 'システム管理者は権限をもっています'],
+            ['hoge', 2, true, 'サイト運営者は権限をもっています'],
+            ['/baser/admin/*', 1, true, 'サイト運営者は権限をもっています'],
+            ['/baser/admin/*', 2, false, 'サイト運営者は権限をもっていません'],
+            ['/baser/admin/', 2, true, 'サイト運営者は権限をもっています'],
+            ['/baser/admin/dashboard', 2, false, 'サイト運営者は権限をもっていません'],
+            ['/baser/admin/dashboard/', 2, true, 'サイト運営者は権限をもっています'],
+        ];
     }
 
 }

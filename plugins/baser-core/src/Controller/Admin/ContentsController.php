@@ -95,7 +95,6 @@ class ContentsController extends BcAdminAppController
      * @param integer $parentId
      * @param void
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function index(ContentServiceInterface $contentService, SiteServiceInterface $siteService, BcAdminServiceInterface $bcAdminService)
@@ -125,6 +124,7 @@ class ContentsController extends BcAdminAppController
         if($this->request->getParam('action') == "index") {
             switch($this->request->getQuery('list_type')) {
                 case 1:
+                    // TODO: 未実装
                     // 並び替え最終更新時刻をリセット
                     // $this->SiteConfigs->resetContentsSortLastModified();
                     break;

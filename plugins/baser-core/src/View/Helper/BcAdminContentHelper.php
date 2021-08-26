@@ -23,6 +23,7 @@ use BaserCore\Service\ContentServiceInterface;
 /**
  * BcAdminContentHelper
  * @property ContentService $ContentService
+ * @property PermissionService $PermissionService
  */
 class BcAdminContentHelper extends Helper
 {
@@ -43,6 +44,7 @@ class BcAdminContentHelper extends Helper
     {
         parent::initialize($config);
         $this->ContentService = $this->getService(ContentServiceInterface::class);
+        $this->PermissionService = $this->getService(PermissionServiceInterface::class);
     }
 
     /**
@@ -72,6 +74,23 @@ class BcAdminContentHelper extends Helper
     public function getAuthors()
     {
         return $this->getService(UserServiceInterface::class)->getList();
+    }
+
+    /**
+     * コンテンツが削除可能かどうか
+     *
+     * @return bool
+     * @checked
+     */
+    public function isContentDeletable(): bool
+    {
+        // TODO: true falseどっちを返すか仕様を確認する
+        if ($userGroups = BcUtil::loginUser()->user_groups) {
+            foreach ($userGroups as $userGroup) {
+                if ($this->PermissionService->check('/' . BcUtil::getPrefix() . '/contents/delete', $userGroup)) return false;
+            }
+        }
+        return true;
     }
 
 }
