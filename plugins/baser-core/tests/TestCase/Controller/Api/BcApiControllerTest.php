@@ -13,7 +13,7 @@ namespace BaserCore\Test\TestCase\Controller\Api;
 
 use Authentication\Authenticator\Result;
 use BaserCore\Controller\Api\BcApiController;
-use BaserCore\Service\UsersServiceInterface;
+use BaserCore\Service\UserServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\TestSuite\IntegrationTestTrait;
@@ -73,7 +73,7 @@ class BcApiControllerTest extends BcTestCase
      */
     public function testGetAccessToken()
     {
-        $user = $this->getService(UsersServiceInterface::class);
+        $user = $this->getService(UserServiceInterface::class);
         $controller = new BcApiController();
         $result = $controller->getAccessToken(new Result($user->get(1), Result::SUCCESS));
         $this->assertArrayHasKey('access_token', $result);

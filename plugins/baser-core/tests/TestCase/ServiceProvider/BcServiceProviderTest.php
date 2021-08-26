@@ -51,7 +51,7 @@ class BcServiceProviderTest extends BcTestCase
     {
         $container = new Container();
         $this->Provider->services($container);
-        $usersService = $container->get('BaserCore\Service\UsersServiceInterface');
+        $userService = $container->get('BaserCore\Service\UserServiceInterface');
         $userGroupsService = $container->get('BaserCore\Service\UserGroupsServiceInterface');
         $pluginService = $container->get('BaserCore\Service\PluginServiceInterface');
         $permissionService = $container->get('BaserCore\Service\PermissionServiceInterface');
@@ -59,7 +59,7 @@ class BcServiceProviderTest extends BcTestCase
         $sitesService = $container->get('BaserCore\Service\SitesServiceInterface');
         $ContentService = $container->get('BaserCore\Service\ContentServiceInterface');
         $contentFoldersService = $container->get('BaserCore\Service\ContentFoldersServiceInterface');
-        $this->assertEquals('BaserCore\Service\UsersService', get_class($usersService));
+        $this->assertEquals('BaserCore\Service\UserService', get_class($userService));
         $this->assertEquals('BaserCore\Service\UserGroupsService', get_class($userGroupsService));
         $this->assertEquals('BaserCore\Service\PluginService', get_class($pluginService));
         $this->assertEquals('BaserCore\Service\PermissionService', get_class($permissionService));

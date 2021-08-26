@@ -16,7 +16,7 @@ use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Model\Table\Exception\CopyFailedException;
 use BaserCore\Model\Table\UserGroupsTable;
 use BaserCore\Service\UserGroupsServiceInterface;
-use BaserCore\Service\UsersServiceInterface;
+use BaserCore\Service\UserServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Datasource\ResultSetInterface;
 use Cake\Http\Response;
@@ -138,7 +138,7 @@ class UserGroupsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function edit(UserGroupsServiceInterface $userGroupsService, UsersServiceInterface $userService, $id = null)
+    public function edit(UserGroupsServiceInterface $userGroupsService, UserServiceInterface $userService, $id = null)
     {
 
         if ($id) {
