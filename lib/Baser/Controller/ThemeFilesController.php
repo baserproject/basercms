@@ -866,7 +866,7 @@ class ThemeFilesController extends AppController
 		if (copy($fullpath, $themePath)) {
 			chmod($themePath, 0666);
 			$_themePath = str_replace(ROOT, '', $themePath);
-			$this->setMessage('コアファイル ' . basename($path) . ' を テーマ ' . Inflector::camelize($this->siteConfigs['theme']) . " の次のパスとしてコピーしました。\n" . $_themePath);
+			$this->BcMessage->set('コアファイル ' . basename($path) . ' を テーマ ' . Inflector::camelize($this->siteConfigs['theme']) . " の次のパスとしてコピーしました。\n" . $_themePath);
 			// 現在のテーマにリダイレクトする場合、混乱するおそれがあるのでとりあえずそのまま
 			//$this->redirect(array_merge(array('action' => 'edit', $this->siteConfigs['theme'], $type), explode('/', $path)));
 		} else {

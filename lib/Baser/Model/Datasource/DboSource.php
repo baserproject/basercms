@@ -4470,6 +4470,11 @@ class DboSource extends DataSource {
 					if (!$this->execute($sql)) {
 						return false;
 					}
+					if ($this->config['datasource'] === 'Database/BcPostgres') {
+						if (!$this->resetSequence($table, $indexField)) {
+							return false;
+						}
+					}
 				} catch (Exception $e) {
 					$this->log($e->getMessage());
 					return false;

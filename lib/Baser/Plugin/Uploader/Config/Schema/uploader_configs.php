@@ -26,7 +26,6 @@ class UploaderConfigsSchema extends CakeSchema
 		'created' => ['type' => 'datetime', 'null' => true],
 		'modified' => ['type' => 'datetime', 'null' => true],
 		'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
-		'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB']
 	];
 }
 

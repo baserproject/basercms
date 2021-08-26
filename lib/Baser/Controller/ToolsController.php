@@ -427,7 +427,7 @@ class ToolsController extends AppController
 				}
 
 				if ($messages) {
-					$this->setMessage(implode("\n", $messages), $error);
+					$this->BcMessage->set(implode("\n", $messages), $error);
 				}
 				$this->redirect(['action' => 'log']);
 				break;

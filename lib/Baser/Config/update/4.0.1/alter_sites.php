@@ -1,4 +1,4 @@
-<?php 
+<?php
 class SitesSchema extends CakeSchema {
 
 	public $file = 'sites.php';
@@ -13,16 +13,16 @@ class SitesSchema extends CakeSchema {
 	public $sites = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'unsigned' => false, 'key' => 'primary'),
 		'main_site_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 8, 'unsigned' => false),
-		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'display_name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'title' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'alias' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'theme' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
+		'display_name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
+		'title' => array('type' => 'string', 'null' => true, 'default' => null),
+		'alias' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
+		'theme' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
 		'status' => array('type' => 'boolean', 'null' => true, 'default' => null),
 		'use_subdomain' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
 		'relate_main_site' => array('type' => 'boolean', 'null' => true, 'default' => null),
-		'device' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'lang' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'device' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
+		'lang' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
 		'same_main_url' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
 		'auto_redirect' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
 		'auto_link' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
@@ -32,7 +32,6 @@ class SitesSchema extends CakeSchema {
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 
 }
