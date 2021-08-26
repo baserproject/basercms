@@ -57,7 +57,14 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
 
     public function testGetType()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $expected = [
+            'Default' => '無所属コンテンツ',
+            'ContentFolder' => 'フォルダー',
+            'ContentAlias' => 'エイリアス',
+            'ContentLink' => 'リンク',
+            'Page' => '固定ページ',
+        ];
+        $this->assertEquals($expected, $this->BcAdminContent->getTypes());
     }
 
     public function testGetAuthors()

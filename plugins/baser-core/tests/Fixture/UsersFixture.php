@@ -34,7 +34,7 @@ class UsersFixture extends TestFixture
             'real_name_1' => 'baser',
             'real_name_2' => 'admin',
             'email' => 'testuser1@example.com',
-            'nickname' => 'Lorem ipsum dolor sit amet',
+            'nickname' => 'ニックネーム1',
             'created' => '2017-05-03 10:57:07',
             'modified' => '2017-05-03 10:57:07'
         ],
@@ -45,7 +45,7 @@ class UsersFixture extends TestFixture
             'real_name_1' => 'baser',
             'real_name_2' => 'operator',
             'email' => 'testuser2@example.com',
-            'nickname' => 'Lorem ipsum dolor sit amet',
+            'nickname' => 'ニックネーム2',
             'created' => '2017-05-03 10:57:07',
             'modified' => '2017-05-03 10:57:07'
         ],

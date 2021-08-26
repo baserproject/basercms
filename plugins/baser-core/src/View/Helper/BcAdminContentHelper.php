@@ -64,6 +64,9 @@ class BcAdminContentHelper extends Helper
     /**
      * 作成者一覧を取得する
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getAuthors()
     {

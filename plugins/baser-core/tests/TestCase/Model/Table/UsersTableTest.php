@@ -204,4 +204,16 @@ class UsersTableTest extends BcTestCase
         $this->assertEquals('システム管理', $list[0]);
     }
 
+    /**
+     * testGetUserList
+     *
+     * @return void
+     */
+    public function testGetUserList(): void
+    {
+        $result = $this->Users->getUserList(['name' => 'baser admin']);
+        $this->assertCount(1, $result);
+        $this->assertEquals('ニックネーム1', $result[1]);
+    }
+
 }
