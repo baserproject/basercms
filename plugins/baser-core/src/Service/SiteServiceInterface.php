@@ -15,7 +15,7 @@ use BaserCore\Model\Entity\Site;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 
-interface SitesServiceInterface
+interface SiteServiceInterface
 {
 
     /**

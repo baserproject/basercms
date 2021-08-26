@@ -11,7 +11,7 @@
 
 namespace BaserCore\Controller\Api;
 
-use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Service\SiteServiceInterface;
 use Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -26,13 +26,13 @@ class SitesController extends BcApiController
 
     /**
      * サイト情報取得
-     * @param SitesServiceInterface $sites
+     * @param SiteServiceInterface $sites
      * @param $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function view(SitesServiceInterface $sites, $id)
+    public function view(SiteServiceInterface $sites, $id)
     {
         $this->set([
             'site' => $sites->get($id)
@@ -42,12 +42,12 @@ class SitesController extends BcApiController
 
     /**
      * サイト情報一覧取得
-     * @param SitesServiceInterface $sites
+     * @param SiteServiceInterface $sites
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(SitesServiceInterface $sites)
+    public function index(SiteServiceInterface $sites)
     {
         $this->set([
             'sites' => $this->paginate($sites->getIndex($this->request->getQueryParams()))
@@ -57,12 +57,12 @@ class SitesController extends BcApiController
 
     /**
      * サイト情報登録
-     * @param SitesServiceInterface $sites
+     * @param SiteServiceInterface $sites
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function add(SitesServiceInterface $sites)
+    public function add(SiteServiceInterface $sites)
     {
         $this->request->allowMethod(['post', 'delete']);
         $site = $sites->create($this->request->getData());
@@ -82,13 +82,13 @@ class SitesController extends BcApiController
 
     /**
      * サイト情報編集
-     * @param SitesServiceInterface $sites
+     * @param SiteServiceInterface $sites
      * @param $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function edit(SitesServiceInterface $sites, $id)
+    public function edit(SiteServiceInterface $sites, $id)
     {
         $this->request->allowMethod(['post', 'put']);
         $site = $sites->update($sites->get($id), $this->request->getData());
@@ -108,13 +108,13 @@ class SitesController extends BcApiController
 
     /**
      * サイト情報削除
-     * @param SitesServiceInterface $sites
+     * @param SiteServiceInterface $sites
      * @param $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function delete(SitesServiceInterface $sites, $id)
+    public function delete(SiteServiceInterface $sites, $id)
     {
         $this->request->allowMethod(['post', 'delete']);
         $site = $sites->get($id);
@@ -141,7 +141,7 @@ class SitesController extends BcApiController
      * @checked
      * @noTodo
      */
-    public function get_selectable_devices_and_lang(SitesServiceInterface $sites, $mainSiteId, $currentSiteId = null)
+    public function get_selectable_devices_and_lang(SiteServiceInterface $sites, $mainSiteId, $currentSiteId = null)
     {
         $this->set([
             'devices' => $sites->getSelectableDevices($mainSiteId, $currentSiteId),

@@ -12,7 +12,7 @@
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use BaserCore\Service\BcAdminService;
-use BaserCore\Service\SitesService;
+use BaserCore\Service\SiteService;
 use Cake\Event\Event;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentService;
@@ -106,7 +106,7 @@ class ContentsControllerTest extends BcTestCase
         $this->get('/baser/admin/baser-core/contents/index/');
         $this->assertResponseOk();
         // リクエストの変化をテスト
-        $this->ContentsController->index(new ContentService(), new SitesService(), new BcAdminService());
+        $this->ContentsController->index(new ContentService(), new SiteService(), new BcAdminService());
         $this->assertArrayHasKey('num', $this->ContentsController->getRequest()->getQueryParams());
     }
 
@@ -140,7 +140,7 @@ class ContentsControllerTest extends BcTestCase
 
         $ContentsController = $this->ContentsController->setRequest($this->request);
         $ContentsController->viewBuilder()->setVar('authors', '');
-        $ContentsController->index(new ContentService(), new SitesService(), new BcAdminService());
+        $ContentsController->index(new ContentService(), new SiteService(), new BcAdminService());
         $this->assertNotEquals('', $ContentsController->viewBuilder()->getVar('template'));
         $this->assertNotEmpty($ContentsController->viewBuilder()->getVar('contents'));
 
@@ -233,7 +233,7 @@ class ContentsControllerTest extends BcTestCase
     {
         $request = $this->request->withParam('action', 'trash_index')->withParam('prefix', 'Admin');
         $this->ContentsController->setRequest($request);
-        $this->ContentsController->trash_index(new ContentService(), new SitesService(), new BcAdminService());
+        $this->ContentsController->trash_index(new ContentService(), new SiteService(), new BcAdminService());
         $this->assertEquals('index', $this->ContentsController->viewBuilder()->getTemplate());
         $this->assertArrayHasKey('num', $this->ContentsController->getRequest()->getQueryParams());
     }

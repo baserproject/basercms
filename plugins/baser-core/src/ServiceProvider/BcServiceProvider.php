@@ -19,13 +19,13 @@ use Cake\Core\ServiceProvider;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Service\SitesService;
+use BaserCore\Service\SiteService;
 use BaserCore\Service\UserService;
 use BaserCore\Service\DblogService;
 use BaserCore\Service\PluginService;
 use BaserCore\Service\ContentService;
 use BaserCore\Service\UserGroupService;
-use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Service\UserServiceInterface;
 use BaserCore\Service\DblogServiceInterface;
 use BaserCore\Service\SiteConfigsService;
@@ -57,7 +57,7 @@ class BcServiceProvider extends ServiceProvider
         UserGroupServiceInterface::class,
         PluginServiceInterface::class,
         PluginServiceInterface::class,
-        SitesServiceInterface::class,
+        SiteServiceInterface::class,
         BcFrontServiceInterface::class,
         SiteConfigsServiceInterface::class,
         PermissionServiceInterface::class,
@@ -85,7 +85,7 @@ class BcServiceProvider extends ServiceProvider
         // Pluginsサービス
         $container->add(PluginServiceInterface::class, PluginService::class, true);
         // Sites サービス
-        $container->add(SitesServiceInterface::class, SitesService::class, true);
+        $container->add(SiteServiceInterface::class, SiteService::class, true);
         $container->add(BcFrontServiceInterface::class, BcFrontService::class, true);
         // SiteConfigsサービス
         $container->add(SiteConfigsServiceInterface::class, SiteConfigsService::class, true);

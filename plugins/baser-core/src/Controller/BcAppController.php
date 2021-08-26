@@ -12,7 +12,7 @@
 namespace BaserCore\Controller;
 
 use BaserCore\Service\BcFrontServiceInterface;
-use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\Exception\Exception;
@@ -273,7 +273,7 @@ class BcAppController extends AppController
 
             // サブサイト用のエラー
             try {
-                $sites = $this->getService(SitesServiceInterface::class);
+                $sites = $this->getService(SiteServiceInterface::class);
                 $site = $sites->findByUrl($this->request->getPath());
                 if (!empty($site->name)) {
                     $this->layoutPath = $site->name;
