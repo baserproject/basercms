@@ -26,7 +26,11 @@
 	</td>
 	<td class="bca-table-listup__tbody-td">
 		<?php if ($row['Dblog']['user_id']): ?>
-			<?= Hash::get($row, 'User.name', '削除ユーザー') ?>
+			<?php if ($this->BcBaser->getUserName($row['User'])): ?>
+				<?php echo h($this->BcBaser->getUserName($row['User'])) ?>
+			<?php else: ?>
+				<?= Hash::get($row, 'User.name', '削除ユーザー') ?>
+			<?php endif; ?>
 		<?php else: ?>
 			*system
 		<?php endif; ?>

@@ -54,6 +54,7 @@ class DblogsController extends AppController
 			'conditions' => $conditions
 		];
 		$this->set('logs', $this->paginate('Dblog'));
+		$this->set('userList', $this->Dblog->User->getUserList());
 
 		if ($this->request->is('ajax') || !empty($this->request->query['ajax'])) {
 			Configure::write('debug', 0);
