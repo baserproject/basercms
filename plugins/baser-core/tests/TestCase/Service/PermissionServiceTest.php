@@ -38,6 +38,8 @@ class PermissionServiceTest extends BcTestCase
     protected $fixtures = [
         'plugin.BaserCore.Permissions',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UsersUserGroups',
     ];
 
         /**
@@ -255,7 +257,73 @@ class PermissionServiceTest extends BcTestCase
         $this->assertFalse($data['auth']);
         $this->assertFalse($data['status']);
         $this->assertEquals('GET', $data['method']);
+    }
 
+    /**
+     * 権限チェックを行う
+     *
+     * @param array $url
+     * @param string $userGroupId
+     * @param array $expected 期待値
+     * @param string $message テストが失敗した時に表示されるメッセージ
+     * @dataProvider checkDataProvider
+     */
+    public function testCheck($url, $userGroupId, $expected, $message = null)
+    {
+        $result = $this->PermissionService->check($url, $userGroupId);
+        $this->assertEquals($expected, $result, $message);
+    }
+
+    public function checkDataProvider()
+    {
+        return [
+            ['hoge', 1, true, 'システム管理者は権限をもっています'],
+            ['hoge', 2, true, 'サイト運営者は権限をもっています'],
+            ['/baser/admin/*', 1, true, 'サイト運営者は権限をもっています'],
+            ['/baser/admin/*', 2, false, 'サイト運営者は権限をもっていません'],
+            ['/baser/admin/', 2, true, 'サイト運営者は権限をもっています'],
+            ['/baser/admin/dashboard', 2, false, 'サイト運営者は権限をもっていません'],
+            ['/baser/admin/dashboard/', 2, true, 'サイト運営者は権限をもっています'],
+            ['/baser/admin/dashboard', 3, true, 'サイト運営者は権限をもっていません'],
+            ['/baser/admin/dashboard/', 3, true, 'サイト運営者は権限をもっていません'],
+        ];
+    }
+
+    /**
+     * 権限チェックの準備をする
+     * @param int $userGroupId
+     * @param array $expected
+     * @return void
+     * @dataProvider setCheckDataProvider
+     */
+    public function testSetCheck($userGroupId, $expected)
+    {
+        $this->PermissionService->setCheck($userGroupId);
+        $result = $this->PermissionService->Permissions->getCurrentPermissions();
+        $this->assertEquals($expected, count($result));
+    }
+    public function setCheckDataProvider()
+    {
+        return [
+            [2, 15],
+            [100, 0]
+        ];
+    }
+
+    /**
+     * 権限チェック対象を追加する
+     * @return void
+     */
+    public function testAddCheck(): void
+    {
+        $url = "/baser/admin/test/*";
+        $auth = true;
+        $this->loginAdmin($this->getRequest());
+        $this->PermissionService->addCheck($url, $auth);
+        $permissions = $this->PermissionService->Permissions->getCurrentPermissions();
+        $result = array_pop($permissions);
+        $this->assertEquals($url, $result->url);
+        $this->assertEquals($auth, $result->auth);
     }
 
 }

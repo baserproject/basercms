@@ -96,4 +96,12 @@ interface PermissionServiceInterface
      */
     public function getMethodList(): array;
 
+    /**
+     * 権限チェックを行う
+     *
+     * @param array $url
+     * @param string $userGroupId
+     * @return boolean
+     */
+    public function check($url, $userGroupId): bool;
 }

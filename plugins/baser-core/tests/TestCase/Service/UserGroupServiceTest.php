@@ -31,7 +31,8 @@ class UserGroupServiceTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
-        'plugin.BaserCore.LoginStores'
+        'plugin.BaserCore.LoginStores',
+        'plugin.BaserCore.Permissions',
     ];
 
     /**
@@ -84,7 +85,7 @@ class UserGroupServiceTest extends BcTestCase
     public function testGetIndex()
     {
         $userGroups = $this->UserGroups->getIndex();
-        $this->assertEquals(2, $userGroups->count());
+        $this->assertEquals(3, $userGroups->count());
     }
 
     /**
@@ -133,8 +134,8 @@ class UserGroupServiceTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->UserGroups->delete(2);
+        $this->UserGroups->delete(3);
         $group = $this->UserGroups->UserGroups->find('all');
-        $this->assertEquals(1, $group->count());
+        $this->assertEquals(2, $group->count());
     }
 }

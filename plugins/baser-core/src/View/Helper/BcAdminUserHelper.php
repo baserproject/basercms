@@ -41,7 +41,6 @@ class BcAdminUserHelper extends Helper
      */
     public function isSelfUpdate(?int $id)
     {
-        // TODO PermissionのServiceかModelに置き換えるべき
         $loginUser = BcUtil::loginUser();
         return (!empty($id) && !empty($loginUser->id) && $loginUser->id === $id);
     }
@@ -56,7 +55,6 @@ class BcAdminUserHelper extends Helper
      */
     public function isEditable(?int $id)
     {
-        // TODO PermissionのServiceかModelに置き換えるべき
         $user = BcUtil::loginUser();
         if (empty($id) || empty($user)) {
             return false;

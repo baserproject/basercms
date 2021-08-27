@@ -68,10 +68,10 @@ class PermissionsTable extends AppTable
      * ログインしているユーザーの拒否URLリスト
      * キャッシュ用
      * TODO 未確認
-     *
-     * @var mixed
+     * @var array $_currentPermissions
      */
-    public $permissionsTmp = -1;
+    protected $_currentPermissions = [];
+
     /**
      * Permission constructor.
      * // TODO 未確認
@@ -222,67 +222,6 @@ class PermissionsTable extends AppTable
     }
 
     /**
-     * 権限チェックを行う
-     *
-     * @param array $url
-     * @param string $userGroupId
-     * @return boolean
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function check($url, $userGroupId)
-    {
-        if ($userGroupId == Configure::read('BcApp.adminGroupId')) {
-            return true;
-        }
-        $this->setCheck($userGroupId);
-        $permissions = $this->permissionsTmp;
-        if ($url != '/') {
-            $url = preg_replace('/^\//is', '', $url);
-        }
-        $adminPrefix = BcUtil::getPrefix(true);
-        $url = preg_replace("/^{$adminPrefix}\//", 'baser/admin/', $url);
-        // ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
-        $allows = [
-            '/^baser\/admin$/',
-            '/^baser\/admin\/$/',
-            '/^baser\/admin\/dashboard\/.*?/',
-            '/^baser\/admin\/dblogs\/.*?/',
-            '/^baser\/admin\/users\/logout$/',
-            '/^baser\/admin\/user_groups\/set_default_favorites$/'
-        ];
-        $sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
-        if (!empty($_SESSION['Auth'][$sessionKey]['id'])) {
-            $allows[] = '/^baser\/admin\/users\/edit\/' . $_SESSION['Auth'][$sessionKey]['id'] . '$/';
-        }
-        foreach($allows as $allow) {
-            if (preg_match($allow, $url)) {
-                return true;
-            }
-        }
-        $ret = true;
-        foreach($permissions as $permission) {
-            if (!$permission->status) {
-                continue;
-            }
-            if ($permission->url != '/') {
-                $pattern = preg_replace('/^\//is', '', $permission->url);
-            } else {
-                $pattern = $permission->url;
-            }
-            $pattern = addslashes($pattern);
-            $pattern = str_replace('/', '\/', $pattern);
-            $pattern = str_replace('*', '.*?', $pattern);
-            $pattern = '/^' . str_replace('\/.*?', '(|\/.*?)', $pattern) . '$/is';
-            if (preg_match($pattern, $url)) {
-                $ret = $permission->auth;
-            }
-        }
-        return (boolean)$ret;
-    }
-
-    /**
      * アクセス制限データをコピーする
      *
      * @param int $id
@@ -325,40 +264,29 @@ class PermissionsTable extends AppTable
     }
 
     /**
-     * 権限チェックの準備をする
-     *
-     * @param $userGroupId
+     * currentPermissionsを設定する
+     * @param  array $permissions
+     * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function setCheck($userGroupId)
+    public function setCurrentPermissions(array $permissions)
     {
-        if ($this->permissionsTmp === -1) {
-            $this->permissionsTmp = $this->find('all')
-                ->select(['url', 'auth', 'status'])
-                ->where(['Permissions.user_group_id' => $userGroupId])
-                ->order('sort');
-        }
+        $this->_currentPermissions = $permissions;
     }
 
     /**
-     * 権限チェック対象を追加する
+     * currentPermissionsを取得する
      *
-     * @param string $url
-     * @param bool $auth
+     * @return array
+     * @checked
      * @noTodo
+     * @unitTest
      */
-    public function addCheck($url, $auth)
+    public function getCurrentPermissions(): array
     {
-        $this->setCheck(BcUtil::loginUser('Admin')->user_groups[0]->id);
-        $this->permissionsTmp[] = [
-            'Permission' => [
-                'url' => $url,
-                'auth' => $auth,
-                'status' => true
-            ]
-        ];
+        return $this->_currentPermissions;
     }
 
 }

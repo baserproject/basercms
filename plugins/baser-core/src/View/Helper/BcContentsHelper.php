@@ -22,9 +22,12 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentsTable;
+use BaserCore\Service\PermissionService;
+use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\Table\PermissionsTable;
+use BaserCore\Service\PermissionServiceInterface;
 
 
 /**
@@ -33,7 +36,7 @@ use BaserCore\Model\Table\PermissionsTable;
  * @package BaserCore\View\Helper
  * @var BcContentsHelper $this
  * @property ContentsTable $_Contents
- * @property PermissionsTable $_Permissions
+ * @property PermissionService $PermissionService
  */
 class BcContentsHelper extends Helper
 {
@@ -42,6 +45,8 @@ class BcContentsHelper extends Helper
      * Trait
      */
     use BcEventDispatcherTrait;
+    use BcContainerTrait;
+
 
     /**
      * Helper
@@ -49,12 +54,6 @@ class BcContentsHelper extends Helper
      * @var array
      */
     public $helpers = ['BcBaser'];
-
-    /**
-     *
-     */
-    protected $_Contents = null;
-    protected $_Permissions = null;
 
     /**
      * initialize
@@ -69,7 +68,7 @@ class BcContentsHelper extends Helper
     {
         parent::initialize($config);
         $this->_Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-        $this->_Permissions = TableRegistry::getTableLocator()->get('BaserCore.Permissions');
+        $this->PermissionService = $this->getService(PermissionServiceInterface::class);
         if (BcUtil::isAdminSystem(Router::url())) {
             $this->setup();
         }
@@ -140,7 +139,7 @@ class BcContentsHelper extends Helper
             }
             // disabled
 			if(!empty($setting['url']['add'])) {
-				$setting['addDisabled'] = !($this->_Permissions->check($setting['url']['add'], $user->user_groups[0]->id));
+				$setting['addDisabled'] = !($this->PermissionService->check($setting['url']['add'], $user->user_groups[0]->id));
 			} else {
 				$setting['addDisabled'] = true;
 			}
@@ -167,7 +166,7 @@ class BcContentsHelper extends Helper
         if (isset($user->fields->user_groups)) {
             $userGroups = $user->fields->user_groups;
             foreach ($userGroups as $group) {
-                if ($this->_Permissions->check($url, $group)) {
+                if ($this->PermissionService->check($url, $group)) {
                     return true;
                 }
             }

@@ -49,5 +49,16 @@ class UsersFixture extends TestFixture
             'created' => '2017-05-03 10:57:07',
             'modified' => '2017-05-03 10:57:07'
         ],
+        [
+            'id' => 3,
+            'name' => 'baser others',
+            'password' => 'Lorem ipsum dolor sit amet',
+            'real_name_1' => 'baser',
+            'real_name_2' => 'others',
+            'email' => 'testuser3@example.com',
+            'nickname' => 'ニックネーム3',
+            'created' => '2017-05-03 10:57:07',
+            'modified' => '2017-05-03 10:57:07'
+        ],
     ];
 }

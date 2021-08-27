@@ -16,10 +16,7 @@
  * @var bool $disableEditContent コンテンツ編集不可かどうか
  * @var array $layoutTemplates レイアウトテンプレートリスト
  */
-$disableEdit = false;
-if ($this->BcContents->isEditable()) {
-  $disableEdit = true;
-}
+$disableEdit = $this->BcContents->isEditable();
 $authors = $this->BcAdminContent->getAuthors();
 ?>
 

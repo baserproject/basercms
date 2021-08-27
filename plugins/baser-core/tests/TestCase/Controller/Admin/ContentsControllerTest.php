@@ -117,7 +117,7 @@ class ContentsControllerTest extends BcTestCase
      */
     public function testIndex($listType, $action): void
     {
-         $search = [
+        $search = [
             'site_id' => 1,
             'list_type' => $listType,
             'open' => '1',

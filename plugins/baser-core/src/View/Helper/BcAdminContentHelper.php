@@ -15,14 +15,17 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Service\UserServiceInterface;
 use BaserCore\Service\ContentService;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Service\PermissionService;
+use BaserCore\Service\UserServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Service\PermissionServiceInterface;
 
 /**
  * BcAdminContentHelper
  * @property ContentService $ContentService
+ * @property PermissionService $PermissionService
  */
 class BcAdminContentHelper extends Helper
 {
@@ -43,6 +46,7 @@ class BcAdminContentHelper extends Helper
     {
         parent::initialize($config);
         $this->ContentService = $this->getService(ContentServiceInterface::class);
+        $this->PermissionService = $this->getService(PermissionServiceInterface::class);
     }
 
     /**
@@ -72,6 +76,25 @@ class BcAdminContentHelper extends Helper
     public function getAuthors()
     {
         return $this->getService(UserServiceInterface::class)->getList();
+    }
+
+    /**
+     * コンテンツが削除可能かどうか
+     *
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isContentDeletable(): bool
+    {
+        $userGroups = BcUtil::loginUser()->user_groups;
+        if ($userGroups) {
+            foreach ($userGroups as $userGroup) {
+                if ($this->PermissionService->check('/' . BcUtil::getPrefix() . '/contents/delete', $userGroup->id)) return true;
+            }
+        }
+        return false;
     }
 
 }

@@ -97,11 +97,11 @@ class UserGroupsTableTest extends BcTestCase
      */
     public function testCopy()
     {
-        $copied = $this->UserGroups->copy(2);
-        $originalUserGroup = $this->UserGroups->get(2);
+        $copied = $this->UserGroups->copy(3);
+        $originalUserGroup = $this->UserGroups->get(3);
         $query = $this->UserGroups->find()->where(['name' => $originalUserGroup->name . '_copy']);
         $this->assertEquals(1, $query->count());
-        $this->assertEquals(3, $copied->id);
+        $this->assertEquals(4, $copied->id);
     }
 
 }

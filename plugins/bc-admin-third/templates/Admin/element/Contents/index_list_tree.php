@@ -1,18 +1,13 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
-
-use Cake\Core\Configure;
-use Cake\ORM\TableRegistry;
-use BaserCore\Utility\BcUtil;
 use BaserCore\View\BcAdminAppView;
 
 /**
@@ -21,13 +16,7 @@ use BaserCore\View\BcAdminAppView;
  * @var BcAdminAppView $this
  * @var Query $contents
  */
-
-$PermissionModel = TableRegistry::getTableLocator()->get('BaserCore.Permissions');
-$deleteDisabled = false;
-// loginUserGroup
-// if (!$PermissionModel->check('/' . BcUtil::getPrefix() . '/contents/delete', $this->viewVars['user']['user_group_id'])) {
-//   $deleteDisabled = true;
-// }
+$deleteDisabled = !$this->BcAdminContent->isContentDeletable();
 ?>
 <ul>
   <?php foreach($contents as $content): ?>
@@ -68,32 +57,32 @@ $deleteDisabled = false;
     }
     ?>
     <li id="node-<?= $content->id ?>" data-jstree='{
-	"icon":"<?php echo $icon ?>",
-	"name":"<?php echo urldecode($content->name) ?>",
-	"type":"<?php echo $treeItemType ?>",
-	"status":"<?php echo (bool)$status ?>",
-	"alias":"<?php echo (bool)$alias ?>",
-	"related":"<?php echo (bool)$this->BcContents->isSiteRelated($content) ?>",
-	"contentId":"<?php echo $content->id ?>",
-	"contentParentId":"<?php echo $parentId ?>",
-	"contentEntityId":"<?php echo $content->entity_id ?>",
-	"contentSiteId":"<?php echo $content->site_id ?>",
-	"contentFullUrl":"<?php echo $fullUrl ?>",
-	"contentType":"<?php echo $content->type ?>",
-	"contentAliasId":"<?php echo $content->alias_id ?>",
-	"contentPlugin":"<?php echo $content->plugin ?>",
-	"contentTitle":"<?php echo h(str_replace('"', '\"', $content->title)) ?>",
-	"contentSiteRoot":"<?php echo (bool)$content->site_root ?>",
-	"editDisabled":"<?php echo $editDisabled ?>",
-	"manageDisabled":"<?php echo $manageDisabled ?>",
-	"deleteDisabled":"<?php echo $deleteDisabled ?>"
-}'<?php if ($open): ?> class="jstree-open"<?php endif ?>
-    ><?php
-      echo h($content->title);
-      if (!empty($content->children)) {
-        $this->BcBaser->element('Contents/index_list_tree', ['contents' => $content->children]);
-      }
-      ?></li>
+      "icon":"<?php echo $icon ?>",
+      "name":"<?php echo urldecode($content->name) ?>",
+      "type":"<?php echo $treeItemType ?>",
+      "status":"<?php echo (bool)$status ?>",
+      "alias":"<?php echo (bool)$alias ?>",
+      "related":"<?php echo (bool)$this->BcContents->isSiteRelated($content) ?>",
+      "contentId":"<?php echo $content->id ?>",
+      "contentParentId":"<?php echo $parentId ?>",
+      "contentEntityId":"<?php echo $content->entity_id ?>",
+      "contentSiteId":"<?php echo $content->site_id ?>",
+      "contentFullUrl":"<?php echo $fullUrl ?>",
+      "contentType":"<?php echo $content->type ?>",
+      "contentAliasId":"<?php echo $content->alias_id ?>",
+      "contentPlugin":"<?php echo $content->plugin ?>",
+      "contentTitle":"<?php echo h(str_replace('"', '\"', $content->title)) ?>",
+      "contentSiteRoot":"<?php echo (bool)$content->site_root ?>",
+      "editDisabled":"<?php echo $editDisabled ?>",
+      "manageDisabled":"<?php echo $manageDisabled ?>",
+      "deleteDisabled":"<?php echo $deleteDisabled ?>",
+    }'<?php if ($open): ?> class="jstree-open"<?php endif ?>
+    >
+      <?php echo h($content->title);
+        if (!empty($content->children)) {
+          $this->BcBaser->element('Contents/index_list_tree', ['contents' => $content->children]);
+      }?>
+    </li>
   <?php endforeach ?>
 </ul>
 

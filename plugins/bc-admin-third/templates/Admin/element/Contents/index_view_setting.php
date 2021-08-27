@@ -30,7 +30,6 @@ if ($this->request->getParam('action') == 'index') {
 }
 ?>
 
-
 <?php if ($this->request->getParam('action') == 'index'): ?>
   <div class="panel-box bca-panel-box" id="ViewSetting">
     <div class="bca-panel-box__inline-fields">
@@ -50,7 +49,6 @@ if ($this->request->getParam('action') == 'index') {
       <div class="bca-panel-box__inline-fields-separator"></div>
       <div id="GrpChangeTreeOpenClose">
         <button id="BtnOpenTree" class="button-small"><?php echo __d('baser', '全て展開') ?></button>
-        　
         <button id="BtnCloseTree" class="button-small"><?php echo __d('baser', '全て閉じる') ?></button>
       </div>
     </div>
