@@ -264,27 +264,27 @@ class PermissionsTable extends AppTable
     }
 
     /**
-     * curentPermissionsを設定する
+     * currentPermissionsを設定する
      * @param  array $permissions
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function setCurentPermissions(array $permissions)
+    public function setCurrentPermissions(array $permissions)
     {
         $this->_currentPermissions = $permissions;
     }
 
     /**
-     * curentPermissionsを取得する
+     * currentPermissionsを取得する
      *
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getCurentPermissions(): array
+    public function getCurrentPermissions(): array
     {
         return $this->_currentPermissions;
     }

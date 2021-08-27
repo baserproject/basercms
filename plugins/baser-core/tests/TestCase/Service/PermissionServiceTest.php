@@ -299,7 +299,7 @@ class PermissionServiceTest extends BcTestCase
     public function testSetCheck($userGroupId, $expected)
     {
         $this->PermissionService->setCheck($userGroupId);
-        $result = $this->PermissionService->Permissions->getCurentPermissions();
+        $result = $this->PermissionService->Permissions->getCurrentPermissions();
         $this->assertEquals($expected, count($result));
     }
     public function setCheckDataProvider()
@@ -320,7 +320,7 @@ class PermissionServiceTest extends BcTestCase
         $auth = true;
         $this->loginAdmin($this->getRequest());
         $this->PermissionService->addCheck($url, $auth);
-        $permissions = $this->PermissionService->Permissions->getCurentPermissions();
+        $permissions = $this->PermissionService->Permissions->getCurrentPermissions();
         $result = array_pop($permissions);
         $this->assertEquals($url, $result->url);
         $this->assertEquals($auth, $result->auth);

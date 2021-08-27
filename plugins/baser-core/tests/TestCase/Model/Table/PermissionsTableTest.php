@@ -371,25 +371,25 @@ class PermissionsTableTest extends BcTestCase
     }
 
     /**
-     * testGetCurentPermissions
+     * testGetCurrentPermissions
      *
      * @return void
      */
-    public function testGetCurentPermissions(): void
+    public function testGetCurrentPermissions(): void
     {
-        $this->assertEquals(-1, $this->Permissions->getCurentPermissions());
+        $this->assertEquals(-1, $this->Permissions->getCurrentPermissions());
     }
 
     /**
-     * testGetCurentPermissions
+     * testGetCurrentPermissions
      *
      * @return void
      */
-    public function testSetCurentPermissions(): void
+    public function testSetCurrentPermissions(): void
     {
         $data = ['Permission' => []];
-        $this->Permissions->setCurentPermissions($data);
-        $this->assertEquals($data, $this->Permissions->getCurentPermissions());
+        $this->Permissions->setCurrentPermissions($data);
+        $this->assertEquals($data, $this->Permissions->getCurrentPermissions());
     }
 
 

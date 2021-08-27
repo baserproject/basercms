@@ -264,7 +264,7 @@ class PermissionService implements PermissionServiceInterface
             return true;
         }
         $this->setCheck($userGroupId);
-        $permissions = $this->Permissions->getCurentPermissions();
+        $permissions = $this->Permissions->getCurrentPermissions();
         if ($url != '/') {
             $url = preg_replace('/^\//is', '', $url);
         }
@@ -321,12 +321,13 @@ class PermissionService implements PermissionServiceInterface
      */
     public function setCheck($userGroupId): void
     {
-        if (empty($this->Permissions->getCurentPermissions())) {
+        $currentPermissions = $this->Permissions->getCurrentPermissions();
+        if (empty($currentPermissions)) {
             $permissions = $this->Permissions->find('all')
                 ->select(['url', 'auth', 'status'])
                 ->where(['Permissions.user_group_id' => $userGroupId])
                 ->order('sort');
-            $this->Permissions->setCurentPermissions($permissions->toArray());
+            $this->Permissions->setCurrentPermissions($permissions->toArray());
         }
     }
 
@@ -342,13 +343,14 @@ class PermissionService implements PermissionServiceInterface
      */
     public function addCheck($url, $auth)
     {
-        $this->setCheck(BcUtil::loginUser('Admin')->user_groups[0]->id);
+        $userGroups = BcUtil::loginUser('Admin')->user_groups;
+        $this->setCheck($userGroups[0]->id);
         $permission = new Permission([
             'url' => $url,
             'auth' => $auth,
             'status' => true
         ]);
-        $permissions = array_merge($this->Permissions->getCurentPermissions(), [$permission]);
-        $this->Permissions->setCurentPermissions($permissions);
+        $permissions = array_merge($this->Permissions->getCurrentPermissions(), [$permission]);
+        $this->Permissions->setCurrentPermissions($permissions);
     }
 }
