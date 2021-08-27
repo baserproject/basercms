@@ -100,7 +100,7 @@ class UserServiceTest extends BcTestCase
 
         $request = $this->getRequest('/?name=baser');
         $users = $this->Users->getIndex($request->getQueryParams());
-        $this->assertEquals(2, $users->all()->count());
+        $this->assertEquals(3, $users->all()->count());
     }
 
     /**
@@ -145,10 +145,10 @@ class UserServiceTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->Users->delete(2);
+        $this->Users->delete(3);
         $request = $this->getRequest('/');
         $users = $this->Users->getIndex($request->getQueryParams());
-        $this->assertEquals(1, $users->all()->count());
+        $this->assertEquals(2, $users->all()->count());
     }
 
     /**
