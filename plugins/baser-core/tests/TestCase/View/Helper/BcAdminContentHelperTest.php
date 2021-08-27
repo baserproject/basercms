@@ -104,7 +104,7 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
         return [
             [1, true],
             [2, true],
-            [3, false],
+            [3, true],
         ];
     }
 }

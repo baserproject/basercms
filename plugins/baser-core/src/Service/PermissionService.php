@@ -288,8 +288,7 @@ class PermissionService implements PermissionServiceInterface
                 return true;
             }
         }
-        //  $permissionsが0の場合はfalseを返す
-        $ret = count($permissions) > 0 ? true : false;
+        $ret = true;
         foreach($permissions as $permission) {
             if (!$permission->status) {
                 continue;

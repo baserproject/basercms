@@ -284,7 +284,7 @@ class PermissionServiceTest extends BcTestCase
             ['/baser/admin/', 2, true, 'サイト運営者は権限をもっています'],
             ['/baser/admin/dashboard', 2, false, 'サイト運営者は権限をもっていません'],
             ['/baser/admin/dashboard/', 2, true, 'サイト運営者は権限をもっています'],
-            ['/baser/admin/dashboard', 3, false, 'サイト運営者は権限をもっていません'],
+            ['/baser/admin/dashboard', 3, true, 'サイト運営者は権限をもっていません'],
             ['/baser/admin/dashboard/', 3, true, 'サイト運営者は権限をもっていません'],
         ];
     }
