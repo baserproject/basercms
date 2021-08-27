@@ -371,36 +371,27 @@ class PermissionsTableTest extends BcTestCase
     }
 
     /**
-     * 権限チェックの準備をする
-     * @param int $userGroupId
-     * @param array $expected
+     * testGetCurentPermissions
+     *
      * @return void
-     * @dataProvider setCheckDataProvider
      */
-    public function testSetCheck($userGroupId, $expected)
+    public function testGetCurentPermissions(): void
     {
-        $this->Permissions->setCheck($userGroupId);
-        $result = $this->Permissions->permissionsTmp;
-        $this->assertEquals($expected, $result->count());
+        $this->assertEquals(-1, $this->Permissions->getCurentPermissions());
     }
-    public function setCheckDataProvider()
-    {
-        return [
-            [2, 15],
-            [100, 0]
-        ];
-    }
-
 
     /**
-     * 権限チェック対象を追加する
+     * testGetCurentPermissions
+     *
+     * @return void
      */
-    public function testAddCheck()
+    public function testSetCurentPermissions(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->loginAdmin($this->getRequest());
-        $this->Permissions->addCheck("/baser/admin/*", true);
+        $data = ['Permission' => []];
+        $this->Permissions->setCurentPermissions($data);
+        $this->assertEquals($data, $this->Permissions->getCurentPermissions());
     }
+
 
 
 

@@ -68,10 +68,10 @@ class PermissionsTable extends AppTable
      * ログインしているユーザーの拒否URLリスト
      * キャッシュ用
      * TODO 未確認
-     *
-     * @var mixed
+     * @var array $_currentPermissions
      */
-    public $permissionsTmp = -1;
+    protected $_currentPermissions = [];
+
     /**
      * Permission constructor.
      * // TODO 未確認
@@ -264,40 +264,29 @@ class PermissionsTable extends AppTable
     }
 
     /**
-     * 権限チェックの準備をする
-     *
-     * @param $userGroupId
+     * curentPermissionsを設定する
+     * @param  array $permissions
+     * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function setCheck($userGroupId)
+    public function setCurentPermissions(array $permissions)
     {
-        if ($this->permissionsTmp === -1) {
-            $this->permissionsTmp = $this->find('all')
-                ->select(['url', 'auth', 'status'])
-                ->where(['Permissions.user_group_id' => $userGroupId])
-                ->order('sort');
-        }
+        $this->_currentPermissions = $permissions;
     }
 
     /**
-     * 権限チェック対象を追加する
+     * curentPermissionsを取得する
      *
-     * @param string $url
-     * @param bool $auth
+     * @return array
+     * @checked
      * @noTodo
+     * @unitTest
      */
-    public function addCheck($url, $auth)
+    public function getCurentPermissions(): array
     {
-        $this->setCheck(BcUtil::loginUser('Admin')->user_groups[0]->id);
-        $this->permissionsTmp[] = [
-            'Permission' => [
-                'url' => $url,
-                'auth' => $auth,
-                'status' => true
-            ]
-        ];
+        return $this->_currentPermissions;
     }
 
 }

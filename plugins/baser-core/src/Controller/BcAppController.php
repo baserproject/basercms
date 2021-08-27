@@ -542,7 +542,7 @@ class BcAppController extends AppController
         if (!$user) {
             return;
         }
-
+        // TODO: サービス注入に変更する
         if (!$Permission->check($this->request->url, $user['user_group_id'])) {
             $this->BcMessage->setError(__d('baser', '指定されたページへのアクセスは許可されていません。'));
             $this->redirect($this->BcAuth->loginRedirect);

@@ -258,14 +258,13 @@ class PermissionService implements PermissionServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function check($url, $userGroupId)
+    public function check($url, $userGroupId): bool
     {
         if ($userGroupId == Configure::read('BcApp.adminGroupId')) {
             return true;
         }
-        // TODO: setpermissionsTmpやgetpermissionsTmpを使う
-        $this->Permissions->setCheck($userGroupId);
-        $permissions = $this->Permissions->permissionsTmp;
+        $this->setCheck($userGroupId);
+        $permissions = $this->Permissions->getCurentPermissions();
         if ($url != '/') {
             $url = preg_replace('/^\//is', '', $url);
         }
@@ -289,7 +288,8 @@ class PermissionService implements PermissionServiceInterface
                 return true;
             }
         }
-        $ret = true;
+        //  $permissionsが0の場合はfalseを返す
+        $ret = count($permissions) > 0 ? true : false;
         foreach($permissions as $permission) {
             if (!$permission->status) {
                 continue;
@@ -308,5 +308,47 @@ class PermissionService implements PermissionServiceInterface
             }
         }
         return (boolean)$ret;
+    }
+
+    /**
+     * 権限チェックの準備をする
+     *
+     * @param int $userGroupId
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function setCheck($userGroupId): void
+    {
+        if (empty($this->Permissions->getCurentPermissions())) {
+            $permissions = $this->Permissions->find('all')
+                ->select(['url', 'auth', 'status'])
+                ->where(['Permissions.user_group_id' => $userGroupId])
+                ->order('sort');
+            $this->Permissions->setCurentPermissions($permissions->toArray());
+        }
+    }
+
+    /**
+     * 権限チェック対象を追加する
+     *
+     * @param string $url
+     * @param bool $auth
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function addCheck($url, $auth)
+    {
+        $this->setCheck(BcUtil::loginUser('Admin')->user_groups[0]->id);
+        $permission = new Permission([
+            'url' => $url,
+            'auth' => $auth,
+            'status' => true
+        ]);
+        $permissions = array_merge($this->Permissions->getCurentPermissions(), [$permission]);
+        $this->Permissions->setCurentPermissions($permissions);
     }
 }

@@ -15,10 +15,12 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Service\UserServiceInterface;
 use BaserCore\Service\ContentService;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Service\PermissionService;
+use BaserCore\Service\UserServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Service\PermissionServiceInterface;
 
 /**
  * BcAdminContentHelper
@@ -81,16 +83,18 @@ class BcAdminContentHelper extends Helper
      *
      * @return bool
      * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isContentDeletable(): bool
     {
-        // TODO: true falseどっちを返すか仕様を確認する
-        if ($userGroups = BcUtil::loginUser()->user_groups) {
+        $userGroups = BcUtil::loginUser()->user_groups;
+        if ($userGroups) {
             foreach ($userGroups as $userGroup) {
-                if ($this->PermissionService->check('/' . BcUtil::getPrefix() . '/contents/delete', $userGroup)) return false;
+                if ($this->PermissionService->check('/' . BcUtil::getPrefix() . '/contents/delete', $userGroup->id)) return true;
             }
         }
-        return true;
+        return false;
     }
 
 }

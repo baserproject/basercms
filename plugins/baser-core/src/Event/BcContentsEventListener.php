@@ -1,7 +1,9 @@
 <?php
 // TODO : コード確認要
-use BaserCore\Utility\BcUtil;
 use Cake\Event\Event;
+use Cake\Core\Configure;
+use BaserCore\Utility\BcUtil;
+use BaserCore\Service\PermissionServiceInterface;
 
 return;
 /**
@@ -85,7 +87,7 @@ class BcContentsEventListener extends CakeObject implements CakeEventListener
      * @param Event $event
      * @return string
      */
-    public function formAfterSubmit(Event $event)
+    public function formAfterSubmit(Event $event, PermissionServiceInterface $permissionService)
     {
         if (!BcUtil::isAdminSystem()) {
             return $event->getData('out');
@@ -97,10 +99,8 @@ class BcContentsEventListener extends CakeObject implements CakeEventListener
             return $event->getData('out');
         }
         $setting = Configure::read('BcContents.items.' . $data['Content']['plugin'] . '.' . $data['Content']['type']);
-
-        $PermissionModel = ClassRegistry::init('Permission');
         $isAvailablePreview = (!empty($setting['preview']) && $data['Content']['type'] != 'ContentFolder');
-        $isAvailableDelete = (empty($data['Content']['site_root']) && $PermissionModel->check('/' . Configure::read('Routing.prefixes.0') . '/contents/delete', $View->viewVars['user']['user_group_id']));
+        $isAvailableDelete = (empty($data['Content']['site_root']) && $permissionService->check('/' . Configure::read('Routing.prefixes.0') . '/contents/delete', $View->viewVars['user']['user_group_id']));
 
         $event->setData('out', implode("\n", [
             $View->element('admin/content_options'),

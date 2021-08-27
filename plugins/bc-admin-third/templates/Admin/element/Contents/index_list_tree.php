@@ -1,13 +1,12 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 use BaserCore\View\BcAdminAppView;
 
@@ -17,6 +16,7 @@ use BaserCore\View\BcAdminAppView;
  * @var BcAdminAppView $this
  * @var Query $contents
  */
+$deleteDisabled = !$this->BcAdminContent->isContentDeletable();
 ?>
 <ul>
   <?php foreach($contents as $content): ?>
@@ -75,7 +75,7 @@ use BaserCore\View\BcAdminAppView;
       "contentSiteRoot":"<?php echo (bool)$content->site_root ?>",
       "editDisabled":"<?php echo $editDisabled ?>",
       "manageDisabled":"<?php echo $manageDisabled ?>",
-      "deleteDisabled":"<?php echo $this->BcAdminContent->isContentDeletable(); ?>"
+      "deleteDisabled":"<?php echo $deleteDisabled ?>",
     }'<?php if ($open): ?> class="jstree-open"<?php endif ?>
     >
       <?php echo h($content->title);

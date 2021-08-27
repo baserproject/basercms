@@ -39,6 +39,7 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Plugins',
+        'plugin.BaserCore.Permissions',
     ];
 
     /**
@@ -83,5 +84,27 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
             'BlogContent' => 'ブログ'
         ];
         $this->assertEquals($expected, $this->BcAdminContent->getTypes());
+    }
+
+    /**
+     * testIsContentDeletable
+     *
+     * @param  int $id
+     * @param  bool $expected
+     * @return void
+     * @dataProvider isContentDeletableDataProvider
+     */
+    public function testIsContentDeletable($id, $expected): void
+    {
+        $this->loginAdmin($this->getRequest(), $id);
+        $this->assertEquals($expected, $this->BcAdminContent->isContentDeletable());
+    }
+    public function isContentDeletableDataProvider()
+    {
+        return [
+            [1, true],
+            [2, true],
+            [3, false],
+        ];
     }
 }
