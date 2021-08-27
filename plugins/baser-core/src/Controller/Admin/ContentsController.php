@@ -12,7 +12,7 @@
 namespace BaserCore\Controller\Admin;
 
 use BaserCore\Service\BcAdminServiceInterface;
-use BaserCore\Service\SitesServiceInterface;
+use BaserCore\Service\SiteServiceInterface;
 use Cake\ORM\Query;
 use Cake\Utility\Hash;
 use Cake\ORM\ResultSet;
@@ -25,7 +25,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Model\Table\SitesTable;
 use BaserCore\Model\Table\UsersTable;
-use BaserCore\Service\SiteConfigsTrait;
+use BaserCore\Service\SiteConfigTrait;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Table\SiteConfigsTable;
 use BaserCore\Model\Table\ContentFoldersTable;
@@ -53,9 +53,9 @@ use BaserCore\Service\ContentServiceInterface;
 class ContentsController extends BcAdminAppController
 {
     /**
-     * SiteConfigsTrait
+     * SiteConfigTrait
      */
-    use SiteConfigsTrait;
+    use SiteConfigTrait;
 
     /**
      * initialize
@@ -98,7 +98,7 @@ class ContentsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function index(ContentServiceInterface $contentService, SitesServiceInterface $siteService, BcAdminServiceInterface $bcAdminService)
+    public function index(ContentServiceInterface $contentService, SiteServiceInterface $siteService, BcAdminServiceInterface $bcAdminService)
     {
         $bcAdminService->setCurrentSite();
         $currentSiteId = $bcAdminService->getCurrentSite()->id;
@@ -214,9 +214,9 @@ class ContentsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function trash_index(ContentServiceInterface $contentManage, SitesServiceInterface $sitesService, BcAdminServiceInterface $bcAdminService)
+    public function trash_index(ContentServiceInterface $contentService, SiteServiceInterface $siteService, BcAdminServiceInterface $bcAdminService)
     {
-        $this->setAction('index', $contentManage, $sitesService, $bcAdminService);
+        $this->setAction('index', $contentService, $siteService, $bcAdminService);
         $this->render('index');
     }
 

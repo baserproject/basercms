@@ -11,7 +11,7 @@
 
 namespace BaserCore\Controller\Api;
 
-use BaserCore\Service\SiteConfigsServiceInterface;
+use BaserCore\Service\SiteConfigServiceInterface;
 use Cake\Core\Configure;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -25,9 +25,9 @@ class SiteConfigsController extends BcApiController
 
     /**
      * システム基本設定を取得
-     * @param SiteConfigsServiceInterface $siteConfigs
+     * @param SiteConfigServiceInterface $siteConfigs
      */
-    public function view(SiteConfigsServiceInterface $siteConfigs) {
+    public function view(SiteConfigServiceInterface $siteConfigs) {
         $this->set([
             'siteConfig' => $siteConfigs->get()
         ]);
@@ -36,9 +36,9 @@ class SiteConfigsController extends BcApiController
 
     /**
      * システム基本設定を編集する
-     * @param SiteConfigsServiceInterface $siteConfigs
+     * @param SiteConfigServiceInterface $siteConfigs
      */
-    public function edit(SiteConfigsServiceInterface $siteConfigs)
+    public function edit(SiteConfigServiceInterface $siteConfigs)
     {
         $this->request->allowMethod(['post', 'put']);
         $siteConfig = $siteConfigs->update($this->request->getData());

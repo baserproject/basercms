@@ -18,10 +18,10 @@ use Cake\ORM\Query;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Interface UsersServiceInterface
+ * Interface UserServiceInterface
  * @package BaserCore\Service
  */
-interface UsersServiceInterface
+interface UserServiceInterface
 {
 
     /**

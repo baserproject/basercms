@@ -35,7 +35,7 @@ class BcAdminPluginHelper extends Helper
      * Plugin Manage Service
      * @var PluginService
      */
-    public $PluginManage;
+    public $PluginService;
 
     /**
      * initialize

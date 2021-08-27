@@ -18,10 +18,10 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 
 /**
- * Interface SiteConfigsServiceInterface
+ * Interface SiteConfigServiceInterface
  * @package BaserCore\Service
  */
-interface SiteConfigsServiceInterface
+interface SiteConfigServiceInterface
 {
 
     /**

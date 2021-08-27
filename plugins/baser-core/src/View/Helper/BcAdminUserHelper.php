@@ -11,7 +11,7 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Service\UserGroupsServiceInterface;
+use BaserCore\Service\UserGroupServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\View\Helper;
@@ -91,7 +91,7 @@ class BcAdminUserHelper extends Helper
      */
     public function getUserGroupList()
     {
-        return $this->getService(UserGroupsServiceInterface::class)->getList();
+        return $this->getService(UserGroupServiceInterface::class)->getList();
     }
 
 }

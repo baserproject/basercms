@@ -11,18 +11,28 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Utility\BcContainerTrait;
 
-use Cake\Datasource\EntityInterface;
 /**
- * Interface ContentFoldersServiceInterface
+ * Class SiteConfigTrait
  * @package BaserCore\Service
  */
-interface ContentFoldersServiceInterface
+trait SiteConfigTrait
 {
     /**
-     * コンテンツフォルダー登録
-     * @param array $data
-     * @return \Cake\Datasource\EntityInterface
+     * BcContainerTrait
      */
-    public function create(array $postData);
+    use BcContainerTrait;
+
+    /**
+     * サイト全体の設定値を取得する
+     * @param string $name
+     * @return mixed
+     */
+    public function getSiteConfig($name)
+    {
+        $siteConfigs = $this->getService(SiteConfigServiceInterface::class);
+        return $siteConfigs->getValue($name);
+    }
+
 }

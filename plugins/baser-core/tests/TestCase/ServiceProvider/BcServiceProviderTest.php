@@ -51,23 +51,22 @@ class BcServiceProviderTest extends BcTestCase
     {
         $container = new Container();
         $this->Provider->services($container);
-        $usersService = $container->get('BaserCore\Service\UsersServiceInterface');
-        $userGroupsService = $container->get('BaserCore\Service\UserGroupsServiceInterface');
+        $userService = $container->get('BaserCore\Service\UserServiceInterface');
+        $userGroupService = $container->get('BaserCore\Service\UserGroupServiceInterface');
         $pluginService = $container->get('BaserCore\Service\PluginServiceInterface');
         $permissionService = $container->get('BaserCore\Service\PermissionServiceInterface');
         $DblogService = $container->get('BaserCore\Service\DblogServiceInterface');
-        $sitesService = $container->get('BaserCore\Service\SitesServiceInterface');
+        $siteService = $container->get('BaserCore\Service\SiteServiceInterface');
         $ContentService = $container->get('BaserCore\Service\ContentServiceInterface');
-        $contentFoldersService = $container->get('BaserCore\Service\ContentFoldersServiceInterface');
-        $this->assertEquals('BaserCore\Service\UsersService', get_class($usersService));
-        $this->assertEquals('BaserCore\Service\UserGroupsService', get_class($userGroupsService));
+        $contentFolderService = $container->get('BaserCore\Service\ContentFolderServiceInterface');
+        $this->assertEquals('BaserCore\Service\UserService', get_class($userService));
+        $this->assertEquals('BaserCore\Service\UserGroupService', get_class($userGroupService));
         $this->assertEquals('BaserCore\Service\PluginService', get_class($pluginService));
         $this->assertEquals('BaserCore\Service\PermissionService', get_class($permissionService));
         $this->assertEquals('BaserCore\Service\DblogService', get_class($DblogService));
-        $this->assertEquals('BaserCore\Service\SitesService', get_class($sitesService));
+        $this->assertEquals('BaserCore\Service\SiteService', get_class($siteService));
         $this->assertEquals('BaserCore\Service\ContentService', get_class($ContentService));
-        $this->assertEquals('BaserCore\Service\ContentFoldersService', get_class($contentFoldersService));
-        $this->assertEquals('BaserCore\Service\ContentFoldersService', get_class($contentFoldersService));
+        $this->assertEquals('BaserCore\Service\ContentFolderService', get_class($contentFolderService));
     }
 
 }

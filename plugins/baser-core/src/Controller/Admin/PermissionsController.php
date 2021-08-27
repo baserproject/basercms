@@ -19,7 +19,7 @@ use BaserCore\Annotation\Checked;
 // use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
 // use Cake\Controller\ComponentRegistry;
-use BaserCore\Service\SiteConfigsTrait;
+use BaserCore\Service\SiteConfigTrait;
 // use Cake\Core\Exception\Exception;
 // use Cake\Datasource\Exception\RecordNotFoundException;
 // use Cake\Event\Event;
@@ -33,7 +33,7 @@ use BaserCore\Service\SiteConfigsTrait;
 use BaserCore\Model\Table\UserGroupsTable;
 use BaserCore\Model\Table\PermissionsTable;
 use BaserCore\Service\PermissionServiceInterface;
-use BaserCore\Service\UserGroupsServiceInterface;
+use BaserCore\Service\UserGroupServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use Authentication\Controller\Component\AuthenticationComponent;
 
@@ -48,9 +48,9 @@ use Authentication\Controller\Component\AuthenticationComponent;
 class PermissionsController extends BcAdminAppController
 {
     /**
-     * SiteConfigsTrait
+     * SiteConfigTrait
      */
-    use SiteConfigsTrait;
+    use SiteConfigTrait;
 
     /**
      * initialize
@@ -89,7 +89,7 @@ class PermissionsController extends BcAdminAppController
      * @unitTest
      * @noTodo
 	 */
-	public function index(PermissionServiceInterface $permissionService, UserGroupsServiceInterface $userGroups, $userGroupId = '')
+	public function index(PermissionServiceInterface $permissionService, UserGroupServiceInterface $userGroups, $userGroupId = '')
 	{
 		$currentUserGroup = $userGroups->get($userGroupId);
 
@@ -119,7 +119,7 @@ class PermissionsController extends BcAdminAppController
 	 * [ADMIN] 登録処理
      *
      * @param PermissionServiceInterface $userService
-     * @param UserGroupsServiceInterface $userGroups
+     * @param UserGroupServiceInterface $userGroups
      * @param int $userGroupId
      * @return void
      *
@@ -127,7 +127,7 @@ class PermissionsController extends BcAdminAppController
      * @noTodo
      * @unitTest
 	 */
-	public function add(PermissionServiceInterface $permissionService, UserGroupsServiceInterface $userGroups, $userGroupId)
+	public function add(PermissionServiceInterface $permissionService, UserGroupServiceInterface $userGroups, $userGroupId)
 	{
 		$currentUserGroup = $userGroups->get($userGroupId);
         if ($this->request->is('post')) {
@@ -148,7 +148,7 @@ class PermissionsController extends BcAdminAppController
      * [ADMIN] 編集処理
      *
      * @param PermissionServiceInterface $userService
-     * @param UserGroupsServiceInterface $userGroups
+     * @param UserGroupServiceInterface $userGroups
      * @param int $userGroupId
      * @param int $permissionId
      * @return void
@@ -158,7 +158,7 @@ class PermissionsController extends BcAdminAppController
      * @unitTest
      */
 
-	public function edit(PermissionServiceInterface $permissionService, UserGroupsServiceInterface $userGroups, $userGroupId, $permissionId)
+	public function edit(PermissionServiceInterface $permissionService, UserGroupServiceInterface $userGroups, $userGroupId, $permissionId)
     {
 		$currentUserGroup = $userGroups->get($userGroupId);
         $permission = $permissionService->get($permissionId);

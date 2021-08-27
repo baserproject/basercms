@@ -32,21 +32,21 @@ use DateTime;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class UsersService
+ * Class UserService
  * @package BaserCore\Service
  * @property UsersTable $Users
  * @property LoginStoresTable $LoginStores
  */
-class UsersService implements UsersServiceInterface
+class UserService implements UserServiceInterface
 {
 
     /**
      * Trait
      */
-    use SiteConfigsTrait;
+    use SiteConfigTrait;
 
     /**
-     * UsersService constructor.
+     * UserService constructor.
      */
     public function __construct()
     {
