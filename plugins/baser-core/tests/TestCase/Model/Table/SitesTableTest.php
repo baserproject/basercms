@@ -15,6 +15,7 @@ use ArrayObject;
 use BaserCore\Model\Table\SitesTable;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 use ReflectionClass;
 
 /**
@@ -32,6 +33,7 @@ class SitesTableTest extends BcTestCase
      */
     public $fixtures = [
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs'
     ];
 
     /**
@@ -167,6 +169,7 @@ class SitesTableTest extends BcTestCase
      */
     public function testFindByUrl($url, $expected)
     {
+        $this->getRequest($url);
         $site = $this->Sites->findByUrl($url);
         $this->assertEquals($expected, $site->id);
     }
@@ -176,9 +179,48 @@ class SitesTableTest extends BcTestCase
         return [
             ['', 1],
             ['/s/index', 2],
+            ['/s/test', 2],
+            ['/en/index', 3],
             ['/en/about', 3],
-            ['/test/a', 1]
+            ['/test/a', 1], // 存在しない場合はルートメインサイトを返す
+            ['http://basercms.net/about', 4],
+            ['http://sub.localhost/about', 5],
         ];
+    }
+
+    /**
+     * test getMainByUrl
+     */
+    public function testGetMainByUrl()
+    {
+        $site = $this->Sites->getMainByUrl('/');
+        $this->assertNull($site);
+        $site = $this->Sites->getMainByUrl('/en/');
+        $this->assertEquals(1, $site->id);
+    }
+
+
+    /**
+     * test getSubByUrl
+     */
+    public function testGetSubByUrl()
+    {
+        // スマホ
+        $siteConfigs = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
+        $siteConfigs->saveValue('use_site_device_setting', true);
+        $_SERVER['HTTP_USER_AGENT'] = 'iPhone';
+        $site = $this->Sites->get(2);
+
+        $site = $this->Sites->patchEntity($site, ['status' => true]);
+        $this->Sites->save($site);
+        $site = $this->Sites->getSubByUrl('/');
+        $this->assertEquals('s', $site->alias);
+
+        // 英語
+        $siteConfigs->saveValue('use_site_lang_setting', true);
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'en';
+        $site = $this->Sites->getSubByUrl('/');
+        $this->assertEquals('en', $site->alias);
     }
 
     /**

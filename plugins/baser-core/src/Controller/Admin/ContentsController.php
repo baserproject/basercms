@@ -97,10 +97,9 @@ class ContentsController extends BcAdminAppController
      * @checked
      * @unitTest
      */
-    public function index(ContentServiceInterface $contentService, SiteServiceInterface $siteService, BcAdminServiceInterface $bcAdminService)
+    public function index(ContentServiceInterface $contentService, SiteServiceInterface $siteService)
     {
-        $bcAdminService->setCurrentSite();
-        $currentSiteId = $bcAdminService->getCurrentSite()->id;
+        $currentSiteId = $this->request->getAttribute('currentSite')->id;
         $sites = $siteService->getList();
         if ($sites) {
             if (!$this->request->getQuery('site_id') || !in_array($this->request->getQuery('site_id'), array_keys($sites))) {
@@ -214,9 +213,9 @@ class ContentsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function trash_index(ContentServiceInterface $contentService, SiteServiceInterface $siteService, BcAdminServiceInterface $bcAdminService)
+    public function trash_index(ContentServiceInterface $contentService, SiteServiceInterface $siteService)
     {
-        $this->setAction('index', $contentService, $siteService, $bcAdminService);
+        $this->setAction('index', $contentService, $siteService);
         $this->render('index');
     }
 

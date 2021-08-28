@@ -416,8 +416,8 @@ if (Configure::read('debug') == 0) {
 
 // サブサイトの際にキャッシュがメインサイトと重複しないように調整
 if (Configure::read('Cache.check')) {
-    $siteFront = new BcFrontService();
-    $site = $siteFront->findCurrent();
+    $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
+    $site = $sites->findByUrl($_SERVER['REQUEST_URI']);
     if ($site->use_subdomain) {
         Configure::write('Cache.viewPrefix', $site->alias);
     }

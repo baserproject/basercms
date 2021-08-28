@@ -123,7 +123,8 @@ class BlogController extends BlogAppController
         $blogContentId = null;
 
         if (preg_match('/tags$/', $this->request->getParam('action'))) {
-            $currentSite = BcSite::findCurrent(true);
+            $sites = $this->getTableLocator()->get('BaserCore.Sites');
+            $currentSite = $sites->findByUrl($this->getRequest()->getPath());
             $url = '/';
             if ($this->request->getParam('action') !== 'tags') {
                 $prefix = str_replace('_tags', '', $this->request->getParam('action'));
@@ -487,7 +488,9 @@ class BlogController extends BlogAppController
                     // プレビューでは利用しない事。
                     // コメント送信時、キャッシュはクリアされるが、モバイルの場合、このメソッドに対してデータを送信する為、
                     // キャッシュがあるとデータが処理されないので、キャッシュは全く作らない設定とする
-                    if (BcSite::findCurrent()->device !== 'mobile') {
+                    $sites = $this->getTableLocator()->get('BaserCore.Sites');
+                    $currentSite = $sites->findByUrl($this->getRequest()->getPath());
+                    if ($currentSite->device !== 'mobile') {
                         $this->BcContents->useViewCache = true;
                     }
                 }

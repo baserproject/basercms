@@ -65,8 +65,8 @@ class BcRequestFilter extends DispatcherFilter
         }
 
         // URLからエージェントを取得
-        $siteFront = $this->getService(BcFrontServiceInterface::class);
-        $site = $siteFront->findCurrent();
+        $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->findByUrl($request->getPath());
         if ($site && $site->device) {
             /*
              * =========================================================

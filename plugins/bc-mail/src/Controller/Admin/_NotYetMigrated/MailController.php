@@ -674,7 +674,8 @@ class MailController extends MailAppController
 
         // ユーザーに送信
         if (!empty($userMail)) {
-            $site = BcSite::findCurrent();
+            $sites = $this->getTableLocator()->get('BaserCore.Sites');
+            $site = $sites->findByUrl($this->getRequest()->getPath());
             $data['other']['mode'] = 'user';
             $sendResult = $this->sendMail(
                 $userMail,

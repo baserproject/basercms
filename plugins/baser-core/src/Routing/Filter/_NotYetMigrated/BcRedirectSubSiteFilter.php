@@ -47,7 +47,6 @@ class BcRedirectSubSiteFilter extends DispatcherFilter
      */
     public function beforeDispatch(\Cake\Event\Event $event)
     {
-
         $request = $event->getData('request');
         if (Configure::read('BcRequest.isUpdater')) {
             return;
@@ -56,8 +55,9 @@ class BcRedirectSubSiteFilter extends DispatcherFilter
         if ($request->is('admin')) {
             return;
         }
-        $siteFront = $this->getService(BcFrontServiceInterface::class);
-        $subSite = $siteFront->findCurrentSub();
+
+        $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $subSite = $sites->getSubByUrl($request->getPath());
         if (!is_null($subSite) && $subSite->shouldRedirects($request)) {
             $response->header('Location', $request->base . $subSite->makeUrl($request));
             $response->statusCode(302);

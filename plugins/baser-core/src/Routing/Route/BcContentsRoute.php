@@ -62,18 +62,16 @@ class BcContentsRoute extends Route
             }
         }
 
-        // サービスクラスなのでDIを経由させるべきだが
-        // BcContentsRoute::parse() が、サービスプロバイダーの登録よりタイミングが早いため直接初期化
-        $siteFront = new BcFrontService();
         $sameUrl = false;
-        $site = $siteFront->findCurrentSub(true);
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->getSubByUrl($url, true);
         if ($site) {
             // 同一URL対応
             $sameUrl = true;
             $checkUrl = $site->makeUrl($request);
             @header('Vary: User-Agent');
         } else {
-            $site = $siteFront->findCurrent();
+            $site = $sites->findByUrl($url);
             if (!is_null($site->name)) {
                 if ($site->use_subdomain) {
                     $checkUrl = '/' . $site->alias . (($url)? $url : '/');
@@ -87,7 +85,7 @@ class BcContentsRoute extends Route
                     // 別ドメインの際に、固定ページのプレビューで、正しくサイト情報を取得できない。
                     // そのため、文字列でリクエストアクションを送信し、URLでホストを判定する。
                     // =================================================================================================
-                    $tmpSite = $siteFront->findByUrl($url);
+                    $tmpSite = $sites->findByUrl($url);
                     if (!is_null($tmpSite)) {
                         $site = $tmpSite;
                     }

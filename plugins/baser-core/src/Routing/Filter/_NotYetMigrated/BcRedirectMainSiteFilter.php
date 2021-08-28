@@ -60,8 +60,8 @@ class BcRedirectMainSiteFilter extends DispatcherFilter
                 return;
             }
         }
-        $siteFront = $this->getService(BcFrontServiceInterface::class);
-        $site = $siteFront->findCurrent();
+        $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->findByUrl($request->getPath());
         if (!$site || !$site->enabled) {
             return;
         }

@@ -93,8 +93,8 @@ class SearchIndicesController extends AppController
         }
 
         $Content = ClassRegistry::init('Content');
-        $siteFront = $this->getService(BcFrontServiceInterface::class);
-        $currentSite = $siteFront->findCurrent();
+        $sites = $this->getTableLocator()->get('BaserCore.Sites');
+        $currentSite = $sites->findByUrl($this->getRequest()->getPath());
         $url = '/';
         if ($this->request->getParam('action') !== 'search') {
             $prefix = str_replace('_search', '', $this->request->getParam('action'));

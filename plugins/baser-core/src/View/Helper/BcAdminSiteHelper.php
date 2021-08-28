@@ -16,6 +16,7 @@ use BaserCore\Service\BcAdminServiceInterface;
 use BaserCore\Service\SiteConfigTrait;
 use BaserCore\Service\SiteServiceInterface;
 use Cake\Datasource\EntityInterface;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Router;
 use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
@@ -101,7 +102,8 @@ class BcAdminSiteHelper extends Helper
         $themes = $this->SiteService->getThemeList($site);
         if(!$this->isMainOnCurrentDisplay($site)) {
             $defaultThemeName = __d('baser', 'メインサイトに従う');
-            $mainTheme = $this->Sites->getRootMain()->theme;
+            $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+            $mainTheme = $sites->getRootMain()->theme;
             if (!empty($mainTheme)) {
                 if (in_array($mainTheme, $themes)) {
                     unset($themes[$mainTheme]);
@@ -182,7 +184,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function getCurrentSite(): ?Site
     {
-        return $this->getService(BcAdminServiceInterface::class)->getCurrentSite();
+        return $this->_View->getRequest()->getAttribute('currentSite');
     }
 
     /**
@@ -194,7 +196,9 @@ class BcAdminSiteHelper extends Helper
      */
     public function getOtherSiteList(): array
     {
-        return $this->getService(BcAdminServiceInterface::class)->getOtherSiteList();
+        return $this->SiteService->getList([
+            'excludeIds' => $this->getCurrentSite()->id
+        ]);
     }
 
 }

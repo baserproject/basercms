@@ -14,11 +14,13 @@ namespace BaserCore\TestSuite;
 use App\Application;
 use Authentication\Authenticator\Result;
 use BaserCore\Event\BcControllerEventListener;
+use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\Plugin;
 use BaserCore\Utility\BcApiUtil;
 use Cake\Core\Configure;
 use Cake\Event\EventManager;
 use Cake\Http\Response;
+use Cake\Http\Runner;
 use Cake\Http\ServerRequest;
 use Cake\Http\ServerRequestFactory;
 use Cake\ORM\TableRegistry;
@@ -122,6 +124,9 @@ class BcTestCase extends TestCase
         }
 
         $request = $request->withAttribute('params', $params);
+        if($request->getParam('prefix') === 'Admin') {
+            $request = $this->execPrivateMethod(new BcAdminMiddleware(), 'setCurrentSite', [$request]);
+        }
         if ($data) {
             $request = $request->withParsedBody($data);
         }

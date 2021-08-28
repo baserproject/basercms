@@ -1444,7 +1444,8 @@ class BlogHelper extends AppHelper
         }
         if (!$url) {
             $url = '/tags/' . $tag['name'];
-            $site = BcSite::findCurrent(true);
+            $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+            $site = $sites->findByUrl($this->_View->getRequest()->getPath());
             if ($site && $site->alias && !$site->useSubDomain) {
                 $url = '/' . $site->alias . $url;
             }

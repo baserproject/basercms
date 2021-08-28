@@ -15,6 +15,11 @@ use ArrayObject;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Model\AppTable;
 use BaserCore\Model\Entity\Site;
+use BaserCore\Service\SiteConfigTrait;
+use BaserCore\Utility\BcAbstractDetector;
+use BaserCore\Utility\BcAgent;
+use BaserCore\Utility\BcLang;
+use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ResultSetInterface;
@@ -38,6 +43,7 @@ class SitesTable extends AppTable
      * Trait
      */
     use BcEventDispatcherTrait;
+    use SiteConfigTrait;
 
     /**
      * 保存時にエイリアスが変更されたかどうか
@@ -438,12 +444,46 @@ class SitesTable extends AppTable
      */
     public function findByUrl($url)
     {
+        if (!$url) {
+            $url = '/';
+        }
+        $parseUrl = parse_url($url);
+        if (empty($parseUrl['path'])) {
+            return $this->getRootMain();
+        }
+        $url = $parseUrl['path'];
         $url = preg_replace('/(^\/|\/$)/', '', $url);
         $urlAry = explode('/', $url);
+        $domain = BcUtil::getCurrentDomain();
+        $subDomain = BcUtil::getSubDomain();
         $where = [];
         for($i = count($urlAry); $i > 0; $i--) {
             $where['or'][] = ['alias' => implode('/', $urlAry)];
+            if ($subDomain) {
+                $where['or'][] = [
+                    'domain_type' => 1,
+                    'alias' => $subDomain . '/' . implode('/', $urlAry),
+                ];
+            }
+            if ($domain) {
+                $where['or'][] = [
+                    'domain_type' => 2,
+                    'alias' => $domain . '/' . implode('/', $urlAry),
+                ];
+            }
             unset($urlAry[$i - 1]);
+        }
+        if ($subDomain) {
+            $where['or'][] = [
+                'domain_type' => 1,
+                'alias' => $subDomain,
+            ];
+        }
+        if ($domain) {
+            $where['or'][] = [
+                'domain_type' => 2,
+                'alias' => $domain,
+            ];
         }
         $result = $this->find()->where($where)->order(['alias DESC']);
         if ($result->count()) {
@@ -451,6 +491,84 @@ class SitesTable extends AppTable
         } else {
             return $this->getRootMain();
         }
+    }
+
+    /**
+     * URLに関連するメインサイトを取得する
+     * @param $url
+     * @return array|EntityInterface|null
+     */
+    public function getMainByUrl($url)
+    {
+        $site = $this->findByUrl($url);
+        if ($site->main_site_id) {
+            return $this->find()->where(['id' => $site->main_site_id])->first();
+        }
+        return null;
+    }
+
+    /**
+     * URLに関連するサブサイトを取得する
+     * @param $url
+     * @param false $sameMainUrl
+     * @param BcAbstractDetector|null $agent
+     * @param BcAbstractDetector|null $lang
+     * @return mixed|null
+     */
+    public function getSubByUrl(
+        $url,
+        $sameMainUrl = false,
+        BcAbstractDetector $agent = null,
+        BcAbstractDetector $lang = null
+    )
+    {
+
+        $currentSite = $this->findByUrl($url);
+        $sites = $this->find()->all();
+
+        if (!$lang) {
+            $lang = BcLang::findCurrent();
+        }
+        if (!$agent) {
+            $agent = BcAgent::findCurrent();
+        }
+
+        // 言語の一致するサイト候補に絞り込む
+        $langSubSites = [];
+        if ($lang && $this->getSiteConfig('use_site_lang_setting')) {
+            foreach($sites as $site) {
+                if (!$site->status) {
+                    continue;
+                }
+                if (!$sameMainUrl || ($sameMainUrl && $site->same_main_url)) {
+                    if ($site->lang == $lang->name && $currentSite->id == $site->main_site_id) {
+                        $langSubSites[] = $site;
+                        break;
+                    }
+                }
+            }
+        }
+        if ($langSubSites) {
+            $subSites = $langSubSites;
+        } else {
+            $subSites = $sites;
+        }
+        if ($agent && $this->getSiteConfig('use_site_device_setting')) {
+            foreach($subSites as $subSite) {
+                if (!$subSite->status) {
+                    continue;
+                }
+                if (!$sameMainUrl || ($sameMainUrl && $subSite->same_main_url)) {
+                    if ($subSite->device == $agent->name && $currentSite->id == $subSite->main_site_id) {
+                        return $subSite;
+                    }
+                }
+            }
+        }
+        if ($langSubSites) {
+            return $langSubSites[0];
+        }
+        return null;
     }
 
     /**

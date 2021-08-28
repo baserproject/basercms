@@ -1196,8 +1196,7 @@ class BcBaserHelper extends Helper
         if (empty($this->request->getParam('Site'))) {
             return false;
         }
-        $siteFront = $this->getService(BcFrontServiceInterface::class);
-        $site = $siteFront->findCurrent();
+        $site = $this->_View->getRequest()->getAttribute('currentSite');
         if (!$site->alias || $site->same_main_url || $site->use_subdomain) {
             return (
                 $this->request->url == false ||
@@ -1532,21 +1531,21 @@ class BcBaserHelper extends Helper
      *
      * @param mixed $path CSSファイルのパス（css フォルダからの相対パス）拡張子は省略可
      * @param mixed $options オプション
-     * ※💣inline=false→block=trueに変更になったため注意 @see https://book.cakephp.org/4/ja/views/helpers/html.html#css
+     * ※💣inline=false→block=trueに変更になったため注意 @return string|void
+     * @checked
+     * @unitTest
+     * @noTodo
+     * @see https://book.cakephp.org/4/ja/views/helpers/html.html#css
      * ※ その他のパラメータについては、HtmlHelper::css() を参照。
      *
      * 下記のbasercms4系引数は残したまま
      * - 'inline'=trueを指定する (代替:$options['block']にnullが入る)
      * - 'inline'=falseを指定する (代替:$options['block']にtrueが入る)
-     * @return string|void
-     * @checked
-     * @unitTest
-     * @noTodo
      */
     public function css($path, $options = [])
     {
         if (isset($options['inline'])) {
-            $options['block'] = $options['inline'] ? null : true;
+            $options['block'] = $options['inline']? null : true;
         }
         $result = $this->BcHtml->css($path, $options);
 
@@ -2928,14 +2927,13 @@ END_FLASH;
      */
     public function setCanonicalUrl()
     {
-        $siteFront = $this->getService(BcFrontServiceInterface::class);
-        $currentSite = $siteFront->findCurrent();
+        $currentSite = $this->_View->getRequest()->getAttribute('currentSite');
         if (!$currentSite) {
             return;
         }
         if ($currentSite->device === 'smartphone') {
-            $siteFront = $this->getService(BcFrontServiceInterface::class);
-            $mainSite = $siteFront->findCurrentMain();
+            $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
+            $mainSite = $sites->getMainByUrl($this->_View->getRequest()->getPath());
             $url = $mainSite->makeUrl(new CakeRequest($this->BcContents->getPureUrl(
                 $this->request->url,
                 $this->request->params['Site']['id']
@@ -2966,8 +2964,9 @@ END_FLASH;
      */
     public function setAlternateUrl()
     {
-        $siteFront = $this->getService(BcFrontServiceInterface::class);
-        $subSite = $siteFront->findCurrentSub(false, BcAgent::find('smartphone'));
+
+        $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $subSite = $sites->getSubByUrl($this->_View->getRequest()->getPath(), false, BcAgent::find('smartphone'));
         if (!$subSite || $subSite->same_main_url) {
             return;
         }
@@ -3044,8 +3043,7 @@ END_FLASH;
             }
         }
         if (is_null($useSubDomain)) {
-            $siteFront = $this->getService(BcFrontServiceInterface::class);
-            $site = $siteFront->findCurrent();
+            $site = $this->_View->getRequest()->getAttribute('currentSite');
             $useSubDomain = $site->use_subdomain;
         }
         return $this->BcContents->getUrl($url, $full, $useSubDomain, $base);

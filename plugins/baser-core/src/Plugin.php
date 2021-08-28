@@ -15,6 +15,7 @@ use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Middleware\AuthenticationMiddleware;
+use BaserCore\Middleware\BcAdminMiddleware;
 use BaserCore\ServiceProvider\BcServiceProvider;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
@@ -133,7 +134,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     {
         $middlewareQueue
             // Authorization (AuthComponent to Authorization)
-            ->add(new AuthenticationMiddleware($this));
+            ->add(new AuthenticationMiddleware($this))
+            ->add(new BcAdminMiddleware());
 
         // APIへのアクセスの場合、CSRFを強制的に利用しない設定に変更
         $ref = new ReflectionClass($middlewareQueue);

@@ -227,8 +227,7 @@ class BcAppController extends AppController
         }
 
         // 言語設定
-        $siteFront = $this->getService(BcFrontServiceInterface::class);
-        $currentSite = $siteFront->findCurrent();
+        $currentSite = $this->getRequest()->getAttribute('currentSite');
         if ($currentSite) {
             $lang = Configure::read('BcLang.' . $currentSite->lang);
         }
@@ -565,8 +564,7 @@ class BcAppController extends AppController
             $theme = $this->request->getParam('Site.theme');
         }
         if (!$theme) {
-            $siteFront = $this->getService(BcFrontServiceInterface::class);
-            $site = $siteFront->findCurrent();
+            $site = $this->getRequest()->getAttribute('currentSite');
             if (!empty($site->theme)) {
                 $theme = $site->theme;
             }

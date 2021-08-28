@@ -48,8 +48,8 @@ class BcSmartphoneHelper extends Helper
         } else {
             $rss = false;
         }
-        $siteFront = $this->getService(BcFrontServiceInterface::class);
-        $site = $siteFront->findCurrent();
+        $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->findByUrl($this->_View->getRequest()->getPath());
         if (!$rss && $site->device == 'smartphone' && $this->_View->layoutPath != 'Emails' . DS . 'text') {
             if (empty($this->request->getParam('Site'))) {
                 return;

@@ -622,8 +622,9 @@ function addSessionId($url, $force = false)
 
     $site = null;
     if (!Configure::read('BcRequest.isUpdater')) {
-        $siteFront = new \BaserCore\Service\BcFrontService();
-        $site = $siteFront->findCurrent();
+        $currentUrl = \Cake\Routing\Router::getRequest()->getPath();
+        $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
+        $site = $sites->findByUrl($currentUrl);
     }
     // use_trans_sid が有効になっている場合、２重で付加されてしまう
     if ($site && $site->device == 'mobile' && Configure::read('BcAgent.mobile.sessionId') && (!ini_get('session.use_trans_sid') || $force)) {

@@ -71,14 +71,6 @@ class BcSmartphoneHelperTest extends BcTestCase
     public function testAfterLayout()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-        //afterLayoutの条件分岐、$this->request->params['Site']をempty以外にしたい
-        $this->_getRequest('/s/');
-        $siteFront = $this->getService(BcFrontServiceInterface::class);
-        $site = $siteFront->findCurrent();
-        pr($site->device);
-        $this->BcSmartphone->afterLayout('');
-
     }
 
 }
