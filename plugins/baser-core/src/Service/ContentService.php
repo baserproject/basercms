@@ -222,6 +222,9 @@ class ContentService implements ContentServiceInterface
      * @param int $siteId
      * @param array $options
      * @return array|bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getContentFolderList($siteId = null, $options = [])
     {
@@ -252,8 +255,11 @@ class ContentService implements ContentServiceInterface
 
     /**
      * ツリー構造のデータを コンボボックスのデータ用に変換する
-     * @param $nodes
+     * @param array $nodes
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function convertTreeList($nodes)
     {
