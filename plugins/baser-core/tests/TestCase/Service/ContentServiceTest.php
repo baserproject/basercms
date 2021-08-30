@@ -193,10 +193,11 @@ class ContentServiceTest extends BcTestCase
      */
     public function testGetContentFolderList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $siteId = 1;
-
-        $this->ContentService->getContentFolderList();
+        $result = $this->ContentService->getContentFolderList($siteId);
+        $this->assertEquals([1 => "", 6 => "　　　└service"], $result);
+        $result = $this->ContentService->getContentFolderList($siteId, ['conditions' => ['site_root' => false]]);
+        $this->assertEquals([6 => 'service'], $result);
     }
 
     /**
@@ -204,7 +205,9 @@ class ContentServiceTest extends BcTestCase
      */
     public function testConvertTreeList()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertEquals([], $this->ContentService->convertTreeList([]));
+        // 空でない場合
+        $this->assertEquals([6 => "　　　└service"], $this->ContentService->convertTreeList([6 => '_service']));
     }
 
     /**
