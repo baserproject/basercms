@@ -15,12 +15,12 @@
  * @var array $file
  * @var string $size
  */
-$url = $this->BcBaser->getUrl($this->Uploader->getFileUrl($file['UploaderFile']['name']));
+$url = rtrim(Configure::read('BcEnv.siteUrl'), '/') . $this->Uploader->getFileUrl($file['UploaderFile']['name']);
 ?>
 
 
 <p class="url">
-	<a href="<?php echo h($url) ?>" target="_blank"><?php echo h(Router::url($url, true)) ?></a>
+	<a href="<?php echo h($url) ?>" target="_blank"><?php echo h($url) ?></a>
 </p>
 <p class="image">
 	<a href="<?php echo h($url) ?>"
