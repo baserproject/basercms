@@ -100,6 +100,22 @@ interface ContentServiceInterface
     public function create(array $postData);
 
     /**
+     * コンテンツ情報を削除する
+     * @param int $id
+     * @return bool
+     *
+     */
+    public function delete($id);
+
+        /**
+     * 該当するコンテンツ情報をすべて削除する
+     *
+     * @param  array $conditions
+     * @return int
+     */
+    public function deleteAll(array $conditions): int;
+
+    /**
       * コンテンツ情報を取得する
       * @return array
       */

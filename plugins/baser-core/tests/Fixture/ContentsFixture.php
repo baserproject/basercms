@@ -37,7 +37,7 @@ class ContentsFixture extends TestFixture
                 'main_site_content_id' => null,
                 'parent_id' => null,
                 'lft' => 1,
-                'rght' => 20,
+                'rght' => 22,
                 'level' => 0,
                 'title' => 'baserCMSサンプル',
                 'description' => '',
@@ -393,6 +393,12 @@ class ContentsFixture extends TestFixture
                 'type' => "BcContentsTest",
                 'entity_id' => 1,
                 'deleted' => true,
+                'parent_id' => 6,
+                'lft' => 20,
+                'rght' => 21,
+                'level' => 2,
+                'title' => 'BcContentsテスト',
+                'description' => '',
             ],
         ];
         parent::init();

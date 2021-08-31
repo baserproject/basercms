@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use Exception;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
@@ -19,8 +20,8 @@ use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Table\SitesTable;
 use Cake\Datasource\ConnectionManager;
-use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Model\Table\ContentsTable;
 
 class ContentService implements ContentServiceInterface
 {
@@ -94,7 +95,7 @@ class ContentService implements ContentServiceInterface
 //                ['Contents.site_id' => 1]
 //            ]];
 //        }
-        return $this->getIndex($queryParams, 'threaded')->order(['lft'])->contain(['Sites']);
+        return $this->getIndex($queryParams, 'threaded')->order(['lft']);
     }
 
     /**
@@ -151,7 +152,7 @@ class ContentService implements ContentServiceInterface
         $columns = ConnectionManager::get('default')->getSchemaCollection()->describe('contents')->columns();
         $allowed = array_merge($columns, ['OR', 'NOT']);
 
-        $query = $this->Contents->find($type, $options);
+        $query = $this->Contents->find($type, $options)->contain(['Sites']);
 
         if (!empty($queryParams['name'])) {
             $query = $query->where(['name LIKE' => '%' . $queryParams['name'] . '%']);
@@ -290,6 +291,38 @@ class ContentService implements ContentServiceInterface
         $content = $this->Contents->newEmptyEntity();
         $content = $this->Contents->patchEntity($content, $postData, ['validate' => 'default']);
         return ($result = $this->Contents->save($content)) ? $result : $content;
+    }
+
+    /**
+     * コンテンツ情報を削除する
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete($id)
+    {
+        $content = $this->get($id);
+        if(!$content->deleted) {
+            throw new Exception(__d('baser', 'ゴミ箱以外は削除できません。'));
+        }
+        return $this->Contents->delete($content);
+    }
+
+    /**
+     * 該当するコンテンツ情報をすべて削除する
+     *
+     * @param  array $conditions
+     * @return int
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function deleteAll(array $conditions=[]): int
+    {
+        $conditions = array_merge(['deleted' => true], $conditions);
+        return $this->Contents->deleteAll($conditions);
     }
 
     /**

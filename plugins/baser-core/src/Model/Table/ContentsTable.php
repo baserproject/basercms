@@ -120,7 +120,7 @@ class ContentsTable extends AppTable
             'Model.beforeSave' => ['callable' => 'beforeSave', 'passParams' => true],
             // 'Model.afterSave' => ['callable' => 'afterSave', 'passParams' => true],
             'Model.beforeDelete' => ['callable' => 'beforeDelete', 'passParams' => true, 'priority' => 1],
-            'Model.afterDelete' => ['callable' => 'afterDelete'],
+            // 'Model.afterDelete' => ['callable' => 'afterDelete'],
         ];
     }
     /**
@@ -487,16 +487,17 @@ class ContentsTable extends AppTable
      */
     public function beforeDelete($cascade = true)
     {
-        if (!parent::beforeDelete($cascade)) {
-            return false;
-        }
-        $data = $this->find('first', [
-            'conditions' => [$this->alias . '.id' => $this->id]
-        ]);
-        $this->__deleteTarget = $data;
-        if (!$this->softDelete(null)) {
-            return true;
-        }
+        // TODO: 一時的にコメントアウト
+        // if (!parent::beforeDelete($cascade)) {
+        //     return false;
+        // }
+        // $data = $this->find('first', [
+        //     'conditions' => [$this->alias . '.id' => $this->id]
+        // ]);
+        // $this->__deleteTarget = $data;
+        // if (!$this->softDelete(null)) {
+        //     return true;
+        // }
         return true;
     }
 
@@ -505,17 +506,18 @@ class ContentsTable extends AppTable
      *
      * 関連コンテンツのキャッシュを削除する
      */
-    public function afterDelete()
-    {
-        parent::afterDelete();
-        $data = $this->__deleteTarget;
-        $this->__deleteTarget = null;
-        if ($data) {
-            $this->deleteRelateSubSiteContent($data);
-            $this->deleteAlias($data);
-        }
-        $this->deleteAssocCache($data);
-    }
+    // TODO: 一時的にコメントアウト
+    // public function afterDelete()
+    // {
+    //     parent::afterDelete();
+    //     $data = $this->__deleteTarget;
+    //     $this->__deleteTarget = null;
+    //     if ($data) {
+    //         $this->deleteRelateSubSiteContent($data);
+    //         $this->deleteAlias($data);
+    //     }
+    //     $this->deleteAssocCache($data);
+    // }
 
     /**
      * 自データのエイリアスを削除する

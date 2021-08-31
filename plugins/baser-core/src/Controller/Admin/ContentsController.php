@@ -569,13 +569,14 @@ class ContentsController extends BcAdminAppController
      *
      * @return bool
      */
-    public function admin_ajax_trash_empty()
+    public function trash_empty(ContentServiceInterface $contentService)
     {
-        if (!$this->request->data) {
+        if (!$this->request->getData()) {
             $this->notFound();
         }
-        $this->autoRender = false;
-        $this->Content->softDelete(false);
+
+        $this-> disableAutoRender();
+
         $contents = $this->Content->find('all', ['conditions' => ['Content.deleted'], 'order' => ['Content.plugin', 'Content.type'], 'recursive' => -1]);
         $result = true;
 
