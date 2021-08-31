@@ -30,7 +30,6 @@ use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Table\SiteConfigsTable;
 use BaserCore\Model\Table\ContentFoldersTable;
 use BaserCore\Controller\Component\BcContentsComponent;
-use BaserCore\Service\ContentService;
 use BaserCore\Service\ContentServiceInterface;
 
 /**
@@ -84,6 +83,7 @@ class ContentsController extends BcAdminAppController
         $this->loadModel('BaserCore.SiteConfigs');
         $this->loadModel('BaserCore.ContentFolders');
         $this->loadModel('BaserCore.Users');
+        $this->Security->setConfig('unlockedActions', ['delete']);
         // TODO 未実装のためコメントアウト
         /* >>>
         // $this->BcAuth->allow('view');
@@ -388,7 +388,7 @@ class ContentsController extends BcAdminAppController
      *
      * @return boolean
      */
-    public function admin_ajax_delete()
+    public function ajax_delete()
     {
         $this->autoRender = false;
         if (empty($this->request->getData('contentId'))) {
