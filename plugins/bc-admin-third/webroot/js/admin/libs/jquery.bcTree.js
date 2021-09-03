@@ -946,7 +946,7 @@
             var data = node.data.jstree;
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/delete',
+                    url: $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/ajax_delete',
                     type: 'POST',
                     data: {
                         contentId: data.contentId,

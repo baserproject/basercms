@@ -184,7 +184,7 @@ class ContentServiceTest extends BcTestCase
     {
         $request = $this->getRequest('/');
         $result = $this->ContentService->getTrashIndex($request->getQueryParams());
-        $this->assertTrue($result->first()->deleted);
+        $this->assertNotNull($result->first()->deleted_date);
     }
 
     /**

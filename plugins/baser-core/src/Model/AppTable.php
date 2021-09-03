@@ -1304,12 +1304,10 @@ class AppTable extends Table
     {
         $result = parent::delete($entity, $options);
         // TODO 未実装の為コメントアウト
-        /* >>>
-        if ($result === false && $this->Behaviors->enabled('SoftDelete')) {
-            $this->getEventManager()->dispatch(new CakeEvent('Model.afterDelete', $this));
-            return (bool)$this->field('deleted', ['deleted' => 1]);
-        }
-        <<< */
+        // if ($result === false && $this->Behaviors->enabled('SoftDelete')) {
+        //     $this->getEventManager()->dispatch(new CakeEvent('Model.afterDelete', $this));
+        //     return (bool)$this->field('deleted', ['deleted' => 1]);
+        // }
         return $result;
     }
 

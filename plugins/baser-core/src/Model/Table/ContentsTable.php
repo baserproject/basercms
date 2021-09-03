@@ -12,6 +12,7 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
+use Cake\Core\Plugin;
 use Cake\Event\Event;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
@@ -24,13 +25,18 @@ use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Model\Entity\Content;
 use Cake\Datasource\EntityInterface;
+use SoftDelete\Model\Table\SoftDeleteTrait;
 
 /**
  * Class ContentsTable
  */
 class ContentsTable extends AppTable
 {
+    use SoftDeleteTrait;
+
+    protected $softDeleteField = 'deleted_date';
 
     /**
      * Initialize
@@ -421,7 +427,7 @@ class ContentsTable extends AppTable
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
         if (!empty($entity->id)) {
-            $this->beforeSaveParentId = $this->field('parent_id', ['Contents.id' => $entity->id]);
+            $this->beforeSaveParentId = $entity->parent_id;
         }
         return parent::beforeSave($event, $entity, $options);
     }
@@ -456,24 +462,24 @@ class ContentsTable extends AppTable
 
     /**
      * 関連するコンテンツ本体のデータキャッシュを削除する
-     * @param $data
+     * @param Content $content
      */
-    public function deleteAssocCache($data)
+    public function deleteAssocCache($content)
     {
-        if (empty($data['Content']['plugin']) || empty($data['Content']['type'])) {
-            $data = $this->find('first', ['fields' => ['Content.plugin', 'Content.type'], 'conditions' => ['Content.id' => $data['Content']['id']], 'recursive' => -1]);
+        if (empty($content->plugin) || empty($content->type)) {
+            $content = $this->find()->select(['plugin', 'type'])->where(['id' => $content->id])->first();
         }
-        $assoc = $data['Content']['type'];
-        if ($data['Content']['plugin'] != 'BaserCore') {
-            if (!CakePlugin::loaded($data['Content']['plugin'])) {
+        $assoc = $content->type;
+        if ($content->plugin != 'BaserCore') {
+            if (!Plugin::isLoaded($content->plugin)) {
                 return;
             }
-            $assoc = $data['Content']['plugin'] . '.' . $assoc;
+            $assoc = $content->plugin . '.' . $assoc;
         }
-        $AssocModel = ClassRegistry::init($assoc);
-        if ($AssocModel && !empty($AssocModel->actsAs) && in_array('BcCache', $AssocModel->actsAs)) {
-            if ($AssocModel->Behaviors->hasMethod('delCache')) {
-                $AssocModel->delCache();
+        $AssocTable = TableRegistry::getTableLocator()->get($assoc);
+        if ($AssocTable && !empty($AssocTable->actsAs) && in_array('BcCache', $AssocTable->actsAs)) {
+            if ($AssocTable->Behaviors->hasMethod('delCache')) {
+                $AssocTable->delCache();
             }
         }
     }
@@ -1031,13 +1037,13 @@ class ContentsTable extends AppTable
      */
     public function softDeleteFromTree($id)
     {
-        $this->softDelete(true);
-        $this->Behaviors->unload('BcCache');
-        $this->Behaviors->unload('BcUpload');
+        // $this->softDelete(true);
+        // $this->Behaviors->unload('BcCache');
+        // $this->Behaviors->unload('BcUpload');
         $result = $this->deleteRecursive($id);
-        $this->Behaviors->load('BcCache');
-        $this->Behaviors->load('BcUpload');
-        $this->delAssockCache();
+        // $this->Behaviors->load('BcCache');
+        // $this->Behaviors->load('BcUpload');
+        $this->delAssockCache(); //FIXME: unknown
         return $result;
     }
 
@@ -1054,35 +1060,33 @@ class ContentsTable extends AppTable
         if (!$id) {
             return false;
         }
-        $children = $this->children($id, true);
+        $children = $this->find('children', ['for' => $id])->all();
         $result = true;
         if ($children) {
             foreach($children as $child) {
-                if (!$this->deleteRecursive($child['Content']['id'])) {
+                if (!$this->deleteRecursive($child->id)) {
                     $result = false;
                 }
             }
         }
         if ($result) {
-            $content = $this->find('first', [
-                'conditions' => ['Content.id' => $id],
-                'recursive' => -1
-            ]);
-            if (empty($content['Content']['alias_id'])) {
+            $content = $this->get($id);
+            if (empty($content->alias_id)) {
                 // エイリアス以外の場合
                 // 一旦階層構造から除外しリセットしてゴミ箱に移動（論理削除）
-                $content['Content']['parent_id'] = null;
-                $content['Content']['url'] = '';
-                $content['Content']['status'] = false;
-                $content['Content']['self_status'] = false;
-                unset($content['Content']['lft']);
-                unset($content['Content']['rght']);
+                $content->parent_id = null;
+                $content->url = '';
+                $content->status = false;
+                $content->self_status = false;
+                unset($content->lft);
+                unset($content->rght);
                 $this->updatingSystemData = false;
                 // ここでは callbacks を false にすると lft rght が更新されないので callbacks は true に設定する（default: true）
-                $this->clear();
-                $this->save($content, ['validate' => false]);
+                // $this->clear(); // TODO: これは何か再確認する humuhimi
+                $this->save($content, ['validate' => false]); // 論理削除用のvalidationを用意するべき
                 $this->updatingSystemData = true;
-                $result = $this->delete($id);
+                // TODO: humuhimi deletedフラグがついてない
+                $result = $this->delete($content);
                 // =====================================================================
                 // 通常の削除の際、afterDelete で、関連コンテンツのキャッシュを削除しているが、
                 // 論理削除の場合、afterDelete が呼ばれない為、ここで削除する
@@ -1091,10 +1095,7 @@ class ContentsTable extends AppTable
                 return $result;
             } else {
                 // エイリアスの場合、直接削除
-                $softDelete = $this->softDelete(null);
-                $this->softDelete(false);
-                $result = $this->removeFromTree($content['Content']['id'], true);
-                $this->softDelete($softDelete);
+                $result = $this->removeFromTree($content);
                 return $result;
             }
         }

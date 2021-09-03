@@ -97,7 +97,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->get('/baser/api/baser-core/contents/index/trash.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertTrue($result->contents[0]->deleted);
+        $this->assertNotNull($result->contents[0]->deleted_date);
         // treeテスト
         $this->get('/baser/api/baser-core/contents/index/tree.json?site_id=1&token=' . $this->accessToken);
         $this->assertResponseOk();

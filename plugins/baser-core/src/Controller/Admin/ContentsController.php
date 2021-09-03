@@ -83,7 +83,8 @@ class ContentsController extends BcAdminAppController
         $this->loadModel('BaserCore.SiteConfigs');
         $this->loadModel('BaserCore.ContentFolders');
         $this->loadModel('BaserCore.Users');
-        $this->Security->setConfig('unlockedActions', ['delete']);
+        $this->loadModel('BaserCore.Contents');
+        $this->Security->setConfig('unlockedActions', ['ajax_delete']);
         // TODO 未実装のためコメントアウト
         /* >>>
         // $this->BcAuth->allow('view');
@@ -388,13 +389,13 @@ class ContentsController extends BcAdminAppController
      *
      * @return boolean
      */
-    public function ajax_delete()
+    public function ajax_delete(ContentServiceInterface $contentService)
     {
-        $this->autoRender = false;
+        $this->disableAutoRender();
         if (empty($this->request->getData('contentId'))) {
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
         }
-        if (!$this->_delete($this->request->getData('contentId'), false)) {
+        if (!$this->_delete($contentService, $this->request->getData('contentId'), false)) {
             $this->ajaxError(500, __d('baser', '削除中にエラーが発生しました。'));
             return false;
         }
@@ -405,12 +406,12 @@ class ContentsController extends BcAdminAppController
     /**
      * コンテンツ削除（論理削除）
      */
-    public function admin_delete()
+    public function admin_delete(ContentServiceInterface $contentService)
     {
         if (empty($this->request->getData('Content.id'))) {
             $this->notFound();
         }
-        if ($this->_delete($this->request->getData('Content.id'), true)) {
+        if ($this->_delete($contentService, $this->request->getData('Content.id'), true)) {
             $this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
         } else {
             $this->BcMessage->setError('削除中にエラーが発生しました。');
@@ -426,29 +427,25 @@ class ContentsController extends BcAdminAppController
      * @param bool $useFlashMessage
      * @return bool
      */
-    protected function _delete($id, $useFlashMessage = false)
+    protected function _delete($contentService, $id, $useFlashMessage = false)
     {
-        $content = $this->Content->find('first', ['conditions' => ['Content.id' => $id], 'recursive' => -1]);
+        $content = $contentService->get($id);
         if (!$content) {
             return false;
         }
-        $content = $content['Content'];
-        $typeName = Configure::read('BcContents.items.' . $content['plugin'] . '.' . $content['type'] . '.title');
+        $typeName = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title');
 
         // EVENT Contents.beforeDelete
         $this->dispatchLayerEvent('beforeDelete', [
             'data' => $id
         ]);
 
-        if (!$content['alias_id']) {
-            $result = $this->Content->softDeleteFromTree($id);
-            $message = $typeName . sprintf(__d('baser', '「%s」をゴミ箱に移動しました。'), $content['title']);
+        if (!$content->alias_id) {
+            $result = $this->Contents->softDeleteFromTree($id);
+            $message = $typeName . sprintf(__d('baser', '「%s」をゴミ箱に移動しました。'), $content->title);
         } else {
-            $softDelete = $this->Content->softDelete(null);
-            $this->Content->softDelete(false);
-            $result = $this->Content->removeFromTree($id, true);
-            $this->Content->softDelete($softDelete);
-            $message = sprintf(__d('baser', '%s のエイリアス「%s」を削除しました。'), $typeName, $content['title']);
+            $result = $this->Contents->removeFromTree($content);
+            $message = sprintf(__d('baser', '%s のエイリアス「%s」を削除しました。'), $typeName, $content->title);
         }
         if ($result) {
             $this->BcMessage->setSuccess($message, true, $useFlashMessage);
@@ -469,11 +466,11 @@ class ContentsController extends BcAdminAppController
      * @return boolean
      * @access protected
      */
-    protected function _batch_del($ids)
+    protected function _batch_del(ContentServiceInterface $contentService, $ids)
     {
         if ($ids) {
             foreach($ids as $id) {
-                $this->_delete($id, false);
+                $this->_delete($contentService, $id, false);
             }
         }
         return true;

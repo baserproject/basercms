@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\Model\Table;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\Validation\Validator;
+use BaserCore\Model\Entity\Content;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\ContentsTable;
 /**
@@ -26,22 +27,21 @@ class ContentsTableTest extends BcTestCase
 {
 
     public $fixtures = [
-        'plugin.BaserCore.Contents',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
         // 'baser.Model.Content.ContentIsMovable',
-         'plugin.BaserCore.Model/Content/ContentStatusCheck',
+        // 'plugin.BaserCore.Model/Content/ContentStatusCheck',
         // 'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',
         // 'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',
         // 'baser.Default.SiteConfig',
         // 'baser.Default.User',
     ];
 
-    /**
-     * Auto Fixtures
-     * @var bool
-     */
-    public $autoFixtures = false;
+    // /**
+    //  * Auto Fixtures
+    //  * @var bool
+    //  */
+    // public $autoFixtures = false;
 
     /**
      * set up
@@ -220,7 +220,8 @@ class ContentsTableTest extends BcTestCase
      */
     public function testDeleteAssocCache()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $content = new Content();
+        $this->Contents->deleteAssocCache($content);
     }
 
     /**
@@ -427,6 +428,7 @@ class ContentsTableTest extends BcTestCase
     public function testSoftDeleteFromTree()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->Contents->softDeleteFromTree(1);
     }
 
     /**
@@ -436,7 +438,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testDeleteRecursive()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->Contents->deleteRecursive(1);
     }
 
     /**

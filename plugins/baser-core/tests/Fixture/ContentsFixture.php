@@ -392,6 +392,7 @@ class ContentsFixture extends TestFixture
                 'name' => 'BcContentsテスト',
                 'type' => "BcContentsTest",
                 'entity_id' => 1,
+                'deleted_date' => 'some day',
                 'deleted' => true,
                 'parent_id' => 6,
                 'lft' => 20,

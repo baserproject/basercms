@@ -14,7 +14,8 @@
         "josegonzalez/dotenv": "^3.2",
         "mobiledetect/mobiledetectlib": "^2.8",
         "ext-json": "*",
-        "baserproject/bc-admin-third": "0.0.4"
+        "baserproject/bc-admin-third": "0.0.4",
+        "imo-tikuwa/cakephp3-soft-delete": "^2.0"
     },
     "require-dev": {
         "cakephp/bake": "^2.0.3",
