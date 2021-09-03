@@ -84,7 +84,7 @@ class ContentsController extends BcAdminAppController
         $this->loadModel('BaserCore.ContentFolders');
         $this->loadModel('BaserCore.Users');
         $this->loadModel('BaserCore.Contents');
-        $this->Security->setConfig('unlockedActions', ['ajax_delete']);
+        $this->Security->setConfig('unlockedActions', ['ajax_delete', 'trash_empty']);
         // TODO 未実装のためコメントアウト
         /* >>>
         // $this->BcAuth->allow('view');
@@ -173,7 +173,7 @@ class ContentsController extends BcAdminAppController
                         return $contentService->getEmptyIndex();
                 }
             case 'trash_index':
-                return $contentService->getTrashIndex($this->request->getQueryParams());
+                return $contentService->getTrashIndex($this->request->getQueryParams(), 'threaded')->order(['site_id', 'lft']);
             default:
                 return $contentService->getEmptyIndex();
         }
@@ -574,7 +574,7 @@ class ContentsController extends BcAdminAppController
 
         $this-> disableAutoRender();
 
-        $contents = $this->Content->find('all', ['conditions' => ['Content.deleted'], 'order' => ['Content.plugin', 'Content.type'], 'recursive' => -1]);
+        $contents = $contentService->getTrashIndex([])->order(['plugin', 'type']);
         $result = true;
 
         // EVENT Contents.beforeTrashEmpty

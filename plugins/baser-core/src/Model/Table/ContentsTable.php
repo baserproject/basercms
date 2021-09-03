@@ -1037,13 +1037,14 @@ class ContentsTable extends AppTable
      */
     public function softDeleteFromTree($id)
     {
+        // TODO:　キャッシュ系をオフにする
         // $this->softDelete(true);
         // $this->Behaviors->unload('BcCache');
         // $this->Behaviors->unload('BcUpload');
         $result = $this->deleteRecursive($id);
         // $this->Behaviors->load('BcCache');
         // $this->Behaviors->load('BcUpload');
-        $this->delAssockCache(); //FIXME: unknown
+        // $this->delAssockCache();
         return $result;
     }
 

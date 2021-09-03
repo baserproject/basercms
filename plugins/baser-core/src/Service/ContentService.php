@@ -117,6 +117,7 @@ class ContentService implements ContentServiceInterface
                 'name LIKE' => '%' . $queryParams['name'] . '%',
                 'title LIKE' => '%' . $queryParams['name'] . '%'
             ];
+            $conditions['name'] = $queryParams['name'];
         }
         if ($queryParams['folder_id']) {
             $Contents = $this->Contents->find('all')->select(['lft', 'rght'])->where(['id' => $queryParams['folder_id']]);
@@ -140,31 +141,33 @@ class ContentService implements ContentServiceInterface
      * コンテンツ管理の一覧用のデータを取得
      * @param array $queryParams
      * @param string $type
+     * @param array $options
      * @return Query
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getIndex(array $queryParams, ?string $type="all"): Query
+    public function getIndex(array $queryParams, ?string $type="all", array $options=[]): Query
     {
-        $options = [];
-
         $columns = ConnectionManager::get('default')->getSchemaCollection()->describe('contents')->columns();
-        $allowed = array_merge($columns, ['OR', 'NOT']);
 
         $query = $this->Contents->find($type, $options)->contain(['Sites']);
 
         if (!empty($queryParams['name'])) {
-            $query = $query->where(['name LIKE' => '%' . $queryParams['name'] . '%']);
+            $query = $query->where(['OR' => [
+                'Contents.name LIKE' => '%' . $queryParams['name'] . '%',
+                'Contents.title LIKE' => '%' . $queryParams['name'] . '%'
+            ]]);
+            unset($queryParams['name']);
         }
 
         if (!empty($queryParams['title'])) {
-            $query = $query->where(['title LIKE' => '%' . $queryParams['name'] . '%']);
+            $query = $query->andWhere(['Contents.title LIKE' => '%' . $queryParams['title'] . '%']);
         }
 
         foreach($queryParams as $key => $value) {
-            if (in_array($key, $allowed)) {
-                $query = $query->where([$key => $value]);
+            if (in_array($key, $columns)) {
+                $query = $query->andWhere(['Contents.' . $key => $value]);
             }
         }
 
@@ -204,16 +207,16 @@ class ContentService implements ContentServiceInterface
 
     /**
      * getTrashIndex
-     * @param  array $queryParams
+     * @param array $queryParams
+     * @param string $type
      * @return Query
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getTrashIndex(array $queryParams): Query
+    public function getTrashIndex(array $queryParams=[], string $type="all"): Query
     {
-        $queryParams = array_merge($queryParams, ['deleted' => true]);
-        return $this->getIndex($queryParams, 'threaded')->order(['site_id', 'lft']);
+        return $this->getIndex($queryParams, $type, ['withDeleted'])->where(['deleted_date IS NOT NULL']);
     }
 
     /**

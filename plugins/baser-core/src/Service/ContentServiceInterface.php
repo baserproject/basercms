@@ -48,9 +48,10 @@ interface ContentServiceInterface
      * コンテンツ管理の一覧用のデータを取得
      * @param array $queryParams
      * @param string $type
+     * @param array $options
      * @return Query
      */
-    public function getIndex(array $queryParams, ?string $type="all"): Query;
+    public function getIndex(array $queryParams, ?string $type="all", array $options=[]): Query;
 
     /**
      * getTableConditions
@@ -70,10 +71,11 @@ interface ContentServiceInterface
 
     /**
      * getTrashIndex
-     * @param  array $queryParams
+     * @param array $queryParams
+     * @param string $type
      * @return Query
      */
-    public function getTrashIndex(array $queryParams): Query;
+    public function getTrashIndex(array $queryParams, string $type="all"): Query;
 
     /**
      * コンテンツフォルダーのリストを取得

@@ -524,7 +524,7 @@
                                         if (confirm(bcI18n.bcTreeConfirmMessage1)) {
                                             $.bcToken.check(function () {
                                                 return $.ajax({
-                                                    url: $.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix  + '/' + 'baser-core' +  '/contents/ajax_trash_empty',
+                                                    url: $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/trash_empty',
                                                     type: 'POST',
                                                     dataType: 'json',
                                                     data: {
@@ -741,7 +741,7 @@
         returnContent: function (node) {
             $.bcToken.check(function () {
                 $.ajax({
-                    url: $.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix  + '/' + 'baser-core' + '/contents/ajax_trash_return',
+                    url: $.baseUrl() + '/' + $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/ajax_trash_return',
                     type: 'POST',
                     data: {
                         id: node.data.jstree.contentId,
