@@ -121,8 +121,7 @@ class BcContentsComponent extends Component
      */
     public function setupAdmin()
     {
-        $createdSettings = BcUtil::getContentsItem();
-        $this->setConfig('items', $createdSettings);
+        $this->setConfig('items', BcUtil::getContentsItem());
     }
 
     /**

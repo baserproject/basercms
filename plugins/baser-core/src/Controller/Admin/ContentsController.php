@@ -574,14 +574,13 @@ class ContentsController extends BcAdminAppController
 
         $this-> disableAutoRender();
 
-        $contents = $contentService->getTrashIndex([])->order(['plugin', 'type']);
+        $contents = $contentService->getTrashIndex()->order(['plugin', 'type']);
         $result = true;
 
         // EVENT Contents.beforeTrashEmpty
         $this->dispatchLayerEvent('beforeTrashEmpty', [
             'data' => $contents
         ]);
-
         if ($contents) {
             foreach($contents as $content) {
                 if (!empty($this->BcContents->getConfig('settings')['items'][$content['Content']['type']]['routes']['delete'])) {

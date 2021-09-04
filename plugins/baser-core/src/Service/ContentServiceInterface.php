@@ -75,7 +75,7 @@ interface ContentServiceInterface
      * @param string $type
      * @return Query
      */
-    public function getTrashIndex(array $queryParams, string $type="all"): Query;
+    public function getTrashIndex(array $queryParams=[], string $type="all"): Query;
 
     /**
      * コンテンツフォルダーのリストを取得
