@@ -91,7 +91,6 @@ class ContentServiceTest extends BcTestCase
      */
     public function testGetTableConditions()
     {
-
         $request = $this->getRequest()->withQueryParams([
             'site_id' => 1,
             'open' => '1',
@@ -239,7 +238,7 @@ class ContentServiceTest extends BcTestCase
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->ContentService->delete(14);
-        $contents = $this->ContentService->getIndex([]);
+        $contents = $this->ContentService->getIndex();
         $this->assertEquals(10, $contents->all()->count());
         $this->assertEquals(20, $this->ContentService->get(1)->rght);
         // deleted出ない場合
@@ -255,8 +254,8 @@ class ContentServiceTest extends BcTestCase
     public function testDeleteAll(): void
     {
         $this->assertEquals(1, $this->ContentService->deleteAll());
-        $contents = $this->ContentService->getIndex([]);
-        $this->assertEquals(10, $contents->all()->count());
+        $contents = $this->ContentService->getIndex();
+        $this->assertEquals(11, $contents->all()->count());
     }
 
     /**

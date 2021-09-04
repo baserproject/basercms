@@ -288,6 +288,7 @@ class ContentsControllerTest extends BcTestCase
      */
     public function testAjax_delete()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $id = 6;
         $this->request = $this->request->withData('contentId', $id);
         $ContentsController = $this->ContentsController->setRequest($this->request);

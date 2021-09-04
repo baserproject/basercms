@@ -147,7 +147,7 @@ class ContentService implements ContentServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getIndex(array $queryParams, ?string $type="all", array $options=[]): Query
+    public function getIndex(array $queryParams=[], ?string $type="all", array $options=[]): Query
     {
         $columns = ConnectionManager::get('default')->getSchemaCollection()->describe('contents')->columns();
 
@@ -324,7 +324,7 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteAll(array $conditions=[]): int
     {
-        $conditions = array_merge(['deleted' => true], $conditions);
+        $conditions = array_merge(['deleted_date IS NOT NULL'], $conditions);
         return $this->Contents->deleteAll($conditions);
     }
 

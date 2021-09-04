@@ -51,7 +51,7 @@ interface ContentServiceInterface
      * @param array $options
      * @return Query
      */
-    public function getIndex(array $queryParams, ?string $type="all", array $options=[]): Query;
+    public function getIndex(array $queryParams=[], ?string $type="all", array $options=[]): Query;
 
     /**
      * getTableConditions

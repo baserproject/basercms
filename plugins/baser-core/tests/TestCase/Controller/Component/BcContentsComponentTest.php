@@ -37,7 +37,8 @@ class BcContentsTestController extends BcAppController
 /**
  * Class BcContentsComponentTest
  *
- * @package Baser.Test.Case.Controller.Component
+ * @package BaserCore\Test\TestCase\Controller\Component
+ * @property BcContentsComponent $BcContents
  */
 class BcContentsComponentTest extends BcTestCase
 {
@@ -48,6 +49,7 @@ class BcContentsComponentTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Sites',
     ];
 
     /**
