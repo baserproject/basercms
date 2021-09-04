@@ -86,7 +86,7 @@ $this->BcBaser->js([
   'admin/libs/baser_ajax_batch_config'
 ]);
 $this->BcBaser->js(['admin/libs/jquery.bcTree', 'admin/vendors/jquery.jstree-3.3.8/jstree.min'], false);
-echo $this->BcAdminForm->control('BcManageContent', ['type' => 'hidden', 'value' => $this->BcContents->getJsonSettings()]);
+echo $this->BcAdminForm->control('BcManageContent', ['type' => 'hidden', 'value' => $this->BcContents->getJsonItems()]);
 ?>
 <script type="text/javascript">
 </script>

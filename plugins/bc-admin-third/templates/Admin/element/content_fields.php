@@ -34,7 +34,7 @@ $this->BcBaser->js('admin/contents/edit', false, ['id' => 'AdminContentsEditScri
   'data-previewurl' => $previewUrl,
   'data-fullurl' => $fullUrl,
   'data-current' => json_encode($this->request->getData()),
-  'data-settings' => $this->BcContents->getJsonSettings()
+  'data-settings' => $this->BcContents->getJsonItems()
 ]);
 $this->BcBaser->i18nScript([
   'contentsEditConfirmMessage1' => __d('baser', 'コンテンツをゴミ箱に移動してもよろしいですか？'),
@@ -48,7 +48,7 @@ $this->BcBaser->i18nScript([
   'contentsEditAlertMessage3' => __d('baser', '指定したサイトの同じ階層上にフォルダではない同名のコンテンツが存在します。コピーの作成を実行する前に、指定したサイト上の同名コンテンツを確認し名称を変更してください。'),
   'contentsEditAlertmessage4' => __d('baser', 'コピーの作成に失敗しました。')
 ]);
-$isOmitViewAction = $this->BcContents->getConfig('settings')[$this->request->getData('Content.type')]['omitViewAction'];
+$isOmitViewAction = $this->BcContents->getConfig('items')[$this->request->getData('Content.type')]['omitViewAction'];
 
 // サブドメイン
 if ($this->request->getData('Site.use_subdomain')) {
