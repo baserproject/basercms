@@ -79,73 +79,72 @@ class BcContentsHelper extends Helper
      */
     public function setup()
     {
-        $settings = $this->_View->get('contentsSettings');
-        // $settings = $this->_View->get('items');
+        $items = $this->_View->get('contentsItems');
 
-        if (!$settings) {
+        if (!$items) {
             return;
         }
 
         $existsTitles = $this->_getExistsTitles();
         $user = BcUtil::loginUser('Admin');
 
-        foreach($settings as $type => $setting) {
+        foreach($items as $type => $item) {
 
             // title
-            if (empty($setting['title'])) {
-                $setting['title'] = $type;
+            if (empty($item['title'])) {
+                $item['title'] = $type;
             }
 
             // omitViewAction
-            if (empty($setting['omitViewAction'])) {
-                $setting['omitViewAction'] = false;
+            if (empty($item['omitViewAction'])) {
+                $item['omitViewAction'] = false;
             }
 
             // exists
-            if (empty($setting['multiple'])) {
-                $setting['multiple'] = false;
-                if (array_key_exists($setting['plugin'] . '.' . $type, $existsTitles)) {
-                    $setting['exists'] = true;
-                    $setting['existsTitle'] = $existsTitles[$setting['plugin'] . '.' . $type];
+            if (empty($item['multiple'])) {
+                $item['multiple'] = false;
+                if (array_key_exists($item['plugin'] . '.' . $type, $existsTitles)) {
+                    $item['exists'] = true;
+                    $item['existsTitle'] = $existsTitles[$item['plugin'] . '.' . $type];
                 } else {
-                    $setting['exists'] = false;
-                    $setting['existsTitle'] = '';
+                    $item['exists'] = false;
+                    $item['existsTitle'] = '';
                 }
             }
 
             // icon
-            if (!empty($setting['icon'])) {
-                if (preg_match('/\.(png|jpg|gif)$/', $setting['icon'])) {
-                    $setting['url']['icon'] = $this->_getIconUrl($setting['plugin'], $setting['type'], $setting['icon']);
+            if (!empty($item['icon'])) {
+                if (preg_match('/\.(png|jpg|gif)$/', $item['icon'])) {
+                    $item['url']['icon'] = $this->_getIconUrl($item['plugin'], $item['type'], $item['icon']);
                 }
             } else {
                 // 後方互換のため判定を入れる（v4.2.0）
                 if (Configure::read('BcSite.admin_theme') === Configure::read('BcApp.defaultAdminTheme')) {
-                    $setting['icon'] = $setting['icon'] = 'bca-icon--file';
+                    $item['icon'] = $item['icon'] = 'bca-icon--file';
                 } else {
-                    $setting['url']['icon'] = $this->_getIconUrl($setting['plugin'], $setting['type'], null);
+                    $item['url']['icon'] = $this->_getIconUrl($item['plugin'], $item['type'], null);
                 }
             }
 
             // routes
             foreach(['manage', 'add', 'edit', 'delete', 'copy', 'dblclick'] as $method) {
-                if (empty($setting['routes'][$method]) && !in_array($method, ['add', 'copy', 'manage', 'dblclick'])) {
-                    $setting['routes'][$method] = ['admin' => true, 'controller' => 'contents', 'action' => $method];
+                if (empty($item['routes'][$method]) && !in_array($method, ['add', 'copy', 'manage', 'dblclick'])) {
+                    $item['routes'][$method] = ['admin' => true, 'controller' => 'contents', 'action' => $method];
                 }
-                if (!empty($setting['routes'][$method])) {
-                    $route = $setting['routes'][$method];
-                    $setting['url'][$method] = Router::url($route);
+                if (!empty($item['routes'][$method])) {
+                    $route = $item['routes'][$method];
+                    $item['url'][$method] = Router::url($route);
                 }
             }
             // disabled
-			if(!empty($setting['url']['add'])) {
-				$setting['addDisabled'] = !($this->PermissionService->check($setting['url']['add'], $user->user_groups[0]->id));
+			if(!empty($item['url']['add'])) {
+				$item['addDisabled'] = !($this->PermissionService->check($item['url']['add'], $user->user_groups[0]->id));
 			} else {
-				$setting['addDisabled'] = true;
+				$item['addDisabled'] = true;
 			}
-            $settings[$type] = $setting;
+            $items[$type] = $item;
         }
-        $this->setConfig('settings', $settings);
+        $this->setConfig('items', $items);
     }
 
     /**
@@ -158,10 +157,10 @@ class BcContentsHelper extends Helper
     public function isActionAvailable($type, $action, $entityId)
     {
         $user = BcUtil::loginUser('Admin');
-        if (!isset($this->getConfig('settings')[$type]['url'][$action])) {
+        if (!isset($this->getConfig('items')[$type]['url'][$action])) {
             return false;
         }
-        $url = $this->getConfig('settings')[$type]['url'][$action] . '/' . $entityId;
+        $url = $this->getConfig('items')[$type]['url'][$action] . '/' . $entityId;
 
         if (isset($user->fields->user_groups)) {
             $userGroups = $user->fields->user_groups;
@@ -180,12 +179,12 @@ class BcContentsHelper extends Helper
      */
     protected function _getExistsTitles()
     {
-        $items = BcUtil::getContentsItem();
+        $contentItems = BcUtil::getContentsItem();
         // シングルコンテンツの存在チェック
         $conditions = [];
-        foreach($items as $name => $settings) {
-            foreach($settings as $type => $setting) {
-                if (empty($setting['multiple'])) {
+        foreach($contentItems as $name => $items) {
+            foreach($items as $type => $item) {
+                if (empty($item['multiple'])) {
                     $conditions = [
                         'OR' => [
                             'plugin' => $name,
@@ -250,9 +249,9 @@ class BcContentsHelper extends Helper
      * コンテンツ設定を Json 形式で取得する
      * @return string
      */
-    public function getJsonSettings()
+    public function getJsonItems()
     {
-        return json_encode($this->getConfig('settings'));
+        return json_encode($this->getConfig('items'));
     }
 
     /**

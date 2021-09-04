@@ -30,16 +30,16 @@ $deleteDisabled = !$this->BcAdminContent->isContentDeletable();
     $parentId = $content->parent_id;
     $alias = false;
     $open = false;
-    $settings = $this->BcContents->getConfig('settings');
-    if (!empty($settings[$content->type]['icon'])) {
-      if (!empty($settings[$content->type]['url']['icon'])) {
-        $icon = $settings[$content->type]['url']['icon'];
+    $items = $this->BcContents->getConfig('items');
+    if (!empty($items[$content->type]['icon'])) {
+      if (!empty($items[$content->type]['url']['icon'])) {
+        $icon = $items[$content->type]['url']['icon'];
       } else {
-        $icon = $settings[$content->type]['icon'];
+        $icon = $items[$content->type]['icon'];
       }
     } else {
       // TODO: iconがない場合があるため見直す
-      $icon = $settings['Default']['url']['icon'] ?? '';
+      $icon = $items['Default']['url']['icon'] ?? '';
     }
     if ($content->alias_id) {
       $alias = true;

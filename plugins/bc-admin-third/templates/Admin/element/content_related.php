@@ -48,7 +48,7 @@ $pureUrl = $this->BcContents->getPureUrl($this->request->getData('Content.url'),
         $current = false;
         if (!empty($relatedContent['Content'])) {
           if (!$relatedContent['Content']['alias_id']) {
-            $editUrl = $this->BcContents->getConfig('settings')[$relatedContent['Content']['type']]['url']['edit'];
+            $editUrl = $this->BcContents->getConfig('items')[$relatedContent['Content']['type']]['url']['edit'];
             if ($relatedContent['Content']['entity_id']) {
               $editUrl .= '/' . $relatedContent['Content']['entity_id'];
             }
@@ -82,7 +82,7 @@ $pureUrl = $this->BcContents->getPureUrl($this->request->getData('Content.url'),
             <?php if (!empty($relatedContent['Content'])): ?>
               <?php echo h($relatedContent['Content']['title']) ?>
               <?php if (!empty($relatedContent['Content'])): ?>
-                <small>（<?php echo h($this->BcContents->getConfig('settings')[$relatedContent['Content']['type']]['title']) ?>
+                <small>（<?php echo h($this->BcContents->getConfig('items')[$relatedContent['Content']['type']]['title']) ?>
                   ）</small>
               <?php endif ?>
             <?php else: ?>

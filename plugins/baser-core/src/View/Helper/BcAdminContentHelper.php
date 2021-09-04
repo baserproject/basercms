@@ -58,9 +58,9 @@ class BcAdminContentHelper extends Helper
      */
     public function getTypes(): array
     {
-        $createdSettings = BcUtil::getContentsItem();
+        $createdItems = BcUtil::getContentsItem();
         $types = [];
-        foreach($createdSettings as $key => $value) {
+        foreach($createdItems as $key => $value) {
             $types[$key] = $value['title'];
         }
         return $types;

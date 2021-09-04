@@ -342,15 +342,15 @@ class BcContentsRoute extends Route
     protected function _getContentTypeByParams($params, $useAction = true)
     {
         $plugin = Inflector::camelize($params['plugin']);
-        $settings = Configure::read('BcContents.items.' . $plugin);
-        if (!$settings) {
+        $items = Configure::read('BcContents.items.' . $plugin);
+        if (!$items) {
             return false;
         }
-        foreach($settings as $key => $setting) {
-            if (empty($setting['routes']['view'])) {
+        foreach($items as $key => $item) {
+            if (empty($item['routes']['view'])) {
                 continue;
             }
-            $viewParams = $setting['routes']['view'];
+            $viewParams = $item['routes']['view'];
             if ($useAction) {
                 if ($params['controller'] == $viewParams['controller'] && $params['action'] == $viewParams['action']) {
                     return $key;
