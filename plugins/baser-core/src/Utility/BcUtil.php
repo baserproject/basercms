@@ -852,15 +852,15 @@ class BcUtil
     public static function getContentsItem(): array
     {
         $items = Configure::read('BcContents.items');
-        $createdSettings = [];
-        foreach($items as $name => $settings) {
-            foreach($settings as $type => $setting) {
-                $setting['plugin'] = $name;
-                $setting['type'] = $type;
-                $createdSettings[$type] = $setting;
+        $createdItems = [];
+        foreach($items as $name => $items) {
+            foreach($items as $type => $item) {
+                $item['plugin'] = $name;
+                $item['type'] = $type;
+                $createdItems[$type] = $item;
             }
         }
-        return $createdSettings;
+        return $createdItems;
     }
 
 

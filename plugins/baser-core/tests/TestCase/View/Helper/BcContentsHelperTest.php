@@ -86,14 +86,14 @@ class BcContentsHelperTest extends BcTestCase
      */
     public function testSetUp(): void
     {
-        // $settingsがないの場合
+        // $itemsがないの場合
         $this->BcContents->setUp();
-        $result = $this->BcContents->getConfig('settings');
+        $result = $this->BcContents->getConfig('items');
         $this->assertNull($result);
-        // $settingsがある場合
+        // $itemsがある場合
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $View = new BcAdminAppView($this->getRequest('/'));
-        $View->set('contentsSettings', BcUtil::getContentsItem());
+        $View->set('contentsItems', BcUtil::getContentsItem());
         $this->BcContents = new BcContentsHelper($View);
         $this->BcContents->setUp();
 
@@ -201,7 +201,7 @@ class BcContentsHelperTest extends BcTestCase
     {
         // TODO: configが設定されてない場合だとすべてtrueで通ってしまうため再確認要
         $this->loginAdmin($this->getRequest(), $userGroup);
-        $this->BcContents->setConfig('settings.' . $type . '.url.' . $action, 'sample');
+        $this->BcContents->setConfig('items.' . $type . '.url.' . $action, 'sample');
         $result = $this->BcContents->isActionAvailable($type, $action, $entityId);
         $this->assertEquals($expect, $result);
     }
@@ -362,9 +362,9 @@ class BcContentsHelperTest extends BcTestCase
 
     /**
      * コンテンツ設定を Json 形式で取得する
-     * getJsonSettings
+     * getJsonItems
      */
-    public function testGetJsonSettings()
+    public function testGetJsonItems()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->loginAdmin($this->getRequest());
@@ -372,11 +372,11 @@ class BcContentsHelperTest extends BcTestCase
         $BcContentsComponent = new BcContentsComponent(new ComponentCollection());
         $BcContentsComponent->setupAdmin();
         $View = new BcAppView();
-        $View->set('contentsSettings', $BcContentsComponent->settings['items']);
+        $View->set('contentsItems', $BcContentsComponent->getConfig('items'));
         $View->helpers = ['BcContents'];
         $View->loadHelpers();
         $View->BcContents->setup();
-        $result = $View->BcContents->getJsonSettings();
+        $result = $View->BcContents->getJsonItems();
         // JSON形式が正しいかどうか
         $this->assertTrue(is_string($result) && is_array(json_decode($result, true)) && (json_last_error() == JSON_ERROR_NONE)? true : false);
     }
@@ -384,9 +384,9 @@ class BcContentsHelperTest extends BcTestCase
     /**
      * @param string $expect 期待値
      * @param string $no
-     * @dataProvider getJsonSettingsDataProvider
+     * @dataProvider getJsonItemsDataProvider
      */
-    public function testGetJsonSettingsEquals($expect, $no)
+    public function testgetJsonItemsEquals($expect, $no)
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->loginAdmin($this->getRequest());
@@ -394,17 +394,17 @@ class BcContentsHelperTest extends BcTestCase
         $BcContentsComponent = new BcContentsComponent(new ComponentCollection());
         $BcContentsComponent->setupAdmin();
         $View = new BcAppView();
-        $View->set('contentsSettings', $BcContentsComponent->settings['items']);
+        $View->set('contentsItems', $BcContentsComponent->getConfig('items'));
         $View->helpers = ['BcContents'];
         $View->loadHelpers();
         $View->BcContents->setup();
-        // 　getJsonSettingsで取得した値がsettingsの値と等しいかどうか
-        $result = json_decode($View->BcContents->getJsonSettings(), true);
+        // 　getJsonItemsで取得した値がitemsの値と等しいかどうか
+        $result = json_decode($View->BcContents->getJsonItems(), true);
         $result = $result[$no]['title'];
         $this->assertEquals($expect, $result);
     }
 
-    public function getJsonSettingsDataProvider()
+    public function getJsonItemsDataProvider()
     {
         return [
             ['無所属コンテンツ', 'Default'],
