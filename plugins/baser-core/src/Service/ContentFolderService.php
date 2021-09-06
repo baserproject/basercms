@@ -13,15 +13,17 @@
 namespace BaserCore\Service;
 
 use Cake\ORM\TableRegistry;
-use BaserCore\Model\Table\ContentFoldersTable;
-use BaserCore\Service\ContentFolderServiceInterface;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\EntityInterface;
+use BaserCore\Model\Table\ContentFoldersTable;
+use BaserCore\Service\ContentFolderServiceInterface;
 /**
  * Class ContentFolderService
  * @package BaserCore\Service
  * @property ContentFoldersTable $ContentFolders
+ * @property ContentsTable $Contents
  */
 class ContentFolderService implements ContentFolderServiceInterface
 {
@@ -38,6 +40,20 @@ class ContentFolderService implements ContentFolderServiceInterface
     public function __construct()
     {
         $this->ContentFolders = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
+        $this->Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+    }
+
+    /**
+     * コンテンツフォルダーを取得する
+     * @param int $id
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function get($id): EntityInterface
+    {
+        return $this->ContentFolders->get($id, ['contain' => ['Contents']]);
     }
 
     /**
@@ -51,7 +67,21 @@ class ContentFolderService implements ContentFolderServiceInterface
     public function create(array $postData)
     {
         $contentFolder = $this->ContentFolders->newEmptyEntity();
-        $contentFolder = $this->ContentFolders->patchEntity($contentFolder, $postData,  ['associated' => ['Contents']]);
+        $contentFolder = $this->ContentFolders->patchEntity($contentFolder, $postData);
         return ($result = $this->ContentFolders->save($contentFolder)) ? $result : $contentFolder;
+    }
+
+    /**
+     * コンテンツフォルダーを削除する
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete($id)
+    {
+        $ContentFolder = $this->get($id);
+        return $this->Contents->hardDelete($ContentFolder->content) && $this->ContentFolders->delete($ContentFolder);
     }
 }

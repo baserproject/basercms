@@ -583,17 +583,12 @@ class ContentsController extends BcAdminAppController
         ]);
         if ($contents) {
             foreach($contents as $content) {
-                if (!empty($this->BcContents->getConfig('items')[$content['Content']['type']]['routes']['delete'])) {
-                    $route = $this->BcContents->getConfig('items')[$content['Content']['type']]['routes']['delete'];
+                if (!empty($this->BcContents->getConfig('items')[$content->type]['routes']['delete'])) {
+                    $route = $this->BcContents->getConfig('items')[$content->type]['routes']['delete'];
                 } else {
                     $route = $this->BcContents->getConfig('items')['Default']['routes']['delete'];
                 }
-                if (!$this->requestAction($route, ['data' => [
-                    'contentId' => $content['Content']['id'],
-                    'entityId' => $content['Content']['entity_id'],
-                ]])) {
-                    $result = false;
-                }
+                return $this->redirect(['controller' => "ContentFolders", 'action' => "delete", $content->id, $content->entity_id]);
             }
         }
 

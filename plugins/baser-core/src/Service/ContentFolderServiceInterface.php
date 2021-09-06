@@ -20,9 +20,24 @@ use Cake\Datasource\EntityInterface;
 interface ContentFolderServiceInterface
 {
     /**
+     * コンテンツフォルダーを取得する
+     * @param int $id
+     * @return EntityInterface
+     */
+    public function get($id): EntityInterface;
+
+    /**
      * コンテンツフォルダー登録
      * @param array $data
      * @return \Cake\Datasource\EntityInterface
      */
     public function create(array $postData);
+
+    /**
+     * コンテンツフォルダーを削除する
+     * @param int $id
+     * @return bool
+     */
+    public function delete($id);
+
 }

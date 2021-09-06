@@ -469,19 +469,19 @@ class ContentsTable extends AppTable
         if (empty($content->plugin) || empty($content->type)) {
             $content = $this->find()->select(['plugin', 'type'])->where(['id' => $content->id])->first();
         }
-        $assoc = $content->type;
+        // FIXME:　一時措置で複数形に変更
+        $assoc = $content->plugin . '.' . $content->type . "s";
         if ($content->plugin != 'BaserCore') {
             if (!Plugin::isLoaded($content->plugin)) {
                 return;
             }
-            $assoc = $content->plugin . '.' . $assoc;
         }
         $AssocTable = TableRegistry::getTableLocator()->get($assoc);
-        if ($AssocTable && !empty($AssocTable->actsAs) && in_array('BcCache', $AssocTable->actsAs)) {
-            if ($AssocTable->Behaviors->hasMethod('delCache')) {
-                $AssocTable->delCache();
-            }
-        }
+        // if ($AssocTable && !empty($AssocTable->actsAs) && in_array('BcCache', $AssocTable->actsAs)) {
+        //     if ($AssocTable->Behaviors->hasMethod('delCache')) {
+        //         $AssocTable->delCache();
+        //     }
+        // }
     }
 
     /**

@@ -12,12 +12,16 @@
 namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Service\ContentFolderService;
+use BaserCore\Model\Table\ContentFoldersTable;
 
 /**
  * BaserCore\Model\Table\ContentFoldersTable Test Case
  *
  * @property ContentFolderService $ContentFolderService
+ * @property ContentFoldersTable $ContentFolders
+ * @property ContentsTable $Contents
  */
 class ContentFolderServiceTest extends BcTestCase
 {
@@ -37,9 +41,12 @@ class ContentFolderServiceTest extends BcTestCase
     protected $fixtures = [
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
     ];
 
-        /**
+    /**
      * Set Up
      *
      * @return void
@@ -47,11 +54,11 @@ class ContentFolderServiceTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loginAdmin($this->getRequest());
         $this->ContentFolderService = new ContentFolderService();
         $this->Contents = $this->getTableLocator()->get('Contents');
-        $this->loginAdmin($this->getRequest());
+        $this->ContentFolders = $this->getTableLocator()->get('ContentFolders');
     }
-
     /**
      * Tear Down
      *
@@ -61,6 +68,18 @@ class ContentFolderServiceTest extends BcTestCase
     {
         unset($this->ContentFolderService);
         parent::tearDown();
+    }
+
+    /**
+     * Test get
+     *
+     * @return void
+     */
+    public function testGet()
+    {
+        $contentFolder = $this->ContentFolderService->get(1);
+        $this->assertEquals('フォルダーテンプレート1', $contentFolder->folder_template);
+        $this->assertEquals(1, $contentFolder->content->entity_id);
     }
 
     /**
@@ -85,5 +104,17 @@ class ContentFolderServiceTest extends BcTestCase
         $contentExpected = $this->Contents->find()->last();
         $this->assertEquals($folderExpected->name, $result->name);
         $this->assertEquals("新しい フォルダー", $contentExpected->title);
+    }
+
+    /**
+     * Test delete
+     *
+     * @return void
+     */
+    public function testDelete()
+    {
+        $content = $this->Contents->find()->where(['type' => 'ContentFolder', 'entity_id !=' => 1])->first();
+        $this->assertTrue($this->ContentFolderService->delete($content->entity_id));
+        $this->assertEquals(8, $this->Contents->find()->count());
     }
 }

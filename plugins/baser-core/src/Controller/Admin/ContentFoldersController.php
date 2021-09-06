@@ -134,15 +134,9 @@ class ContentFoldersController extends BcAdminAppController
      *
      * @return bool
      */
-    public function admin_delete()
+    public function delete(ContentFolderServiceInterface $contentFolderService, $contentId, $entityId)
     {
-        if (empty($this->request->getData('entityId'))) {
-            return false;
-        }
-        if ($this->ContentFolder->delete($this->request->getData('entityId'))) {
-            return true;
-        }
-        return false;
+        return$entityId && $contentFolderService->delete($entityId);
     }
 
     /**
