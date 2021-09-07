@@ -198,7 +198,7 @@ class BcContentsComponent extends Component
      * @noTodo
      * @unitTest
      */
-    public function getContent($entityId = null): Content
+    public function getContent($entityId = null)
     {
         return $this->_Controller->Contents->findByType($this->type, $entityId);
     }
