@@ -526,7 +526,7 @@
                                                 return $.ajax({
                                                     url: $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/trash_empty',
                                                     type: 'POST',
-                                                    dataType: 'json',
+                                                    dataType: 'html',
                                                     data: {
                                                         empty: true,
                                                         _csrfToken: $.bcToken.key,

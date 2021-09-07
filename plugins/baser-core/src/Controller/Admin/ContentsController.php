@@ -455,8 +455,8 @@ class ContentsController extends BcAdminAppController
         $this->dispatchLayerEvent('afterDelete', [
             'data' => $id
         ]);
-
-        return $result;
+        // TODO:　一時措置
+        return $this->request->withQueryParams(['delete' => true]);
     }
 
     /**
@@ -588,7 +588,7 @@ class ContentsController extends BcAdminAppController
                 } else {
                     $route = $this->BcContents->getConfig('items')['Default']['routes']['delete'];
                 }
-                return $this->redirect(['controller' => "ContentFolders", 'action' => "delete", $content->id, $content->entity_id]);
+                $this->redirect(['controller' => "ContentFolders", 'action' => "delete", $content->id, $content->entity_id]);
             }
         }
 
@@ -597,7 +597,7 @@ class ContentsController extends BcAdminAppController
             'data' => $result
         ]);
 
-        return $result;
+        // return $result;
     }
 
     /**

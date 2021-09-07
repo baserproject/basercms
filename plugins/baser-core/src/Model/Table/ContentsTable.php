@@ -16,6 +16,7 @@ use Cake\Core\Plugin;
 use Cake\Event\Event;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
+use Cake\Database\Query;
 use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
 use BaserCore\Model\AppTable;
@@ -281,6 +282,19 @@ class ContentsTable extends AppTable
         return true;
     }
 
+    /**
+     * beforeFind
+     *
+     * @param  Event $event
+     * @param  Query $query
+     * @param  ArrayObject $options
+     * @param  $primary
+     * @return void
+     */
+    public function beforeFind(Event $event, Query $query, ArrayObject $options, $primary)
+    {
+        $a = $event;
+    }
     /**
      * Before Marshal
      *

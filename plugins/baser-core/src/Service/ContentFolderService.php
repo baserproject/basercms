@@ -53,7 +53,9 @@ class ContentFolderService implements ContentFolderServiceInterface
      */
     public function get($id): EntityInterface
     {
-        return $this->ContentFolders->get($id, ['contain' => ['Contents']]);
+        $contentFolder = $this->ContentFolders->get($id, ['contain' => ['Contents']]);
+        $contentFolder->content = $contentFolder->content ?? $this->Contents->find('all', ['withDeleted'])->where(['entity_id' => $id])->first();
+        return $contentFolder;
     }
 
     /**
@@ -82,6 +84,8 @@ class ContentFolderService implements ContentFolderServiceInterface
     public function delete($id)
     {
         $ContentFolder = $this->get($id);
-        return $this->Contents->hardDelete($ContentFolder->content) && $this->ContentFolders->delete($ContentFolder);
+        $delResult = $this->ContentFolders->delete($ContentFolder);
+        $hardDelResult = $this->Contents->hardDelete($ContentFolder->content);
+        return $delResult && $hardDelResult;
     }
 }

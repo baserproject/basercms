@@ -162,7 +162,7 @@ class ContentsFixture extends TestFixture
                 'created_date' => '2016-07-29 18:14:33',
                 'modified_date' => null,
                 'site_root' => false,
-                'deleted_date' => null,
+                'deleted_date' => '2016-07-29 18:15:14',
                 'deleted' => false,
                 'exclude_menu' => false,
                 'blank_link' => false,

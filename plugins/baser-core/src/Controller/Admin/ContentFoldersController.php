@@ -136,7 +136,10 @@ class ContentFoldersController extends BcAdminAppController
      */
     public function delete(ContentFolderServiceInterface $contentFolderService, $contentId, $entityId)
     {
-        return$entityId && $contentFolderService->delete($entityId);
+        if ($entityId) {
+            $contentFolderService->delete($entityId);
+        }
+        return $this->redirect(['controller' => "Contents", 'action' => "trash_index"]);
     }
 
     /**
