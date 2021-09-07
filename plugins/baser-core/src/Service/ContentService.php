@@ -109,8 +109,15 @@ class ContentService implements ContentServiceInterface
      */
     public function getTableConditions(array $queryParams): array
     {
-
+        $options = [];
         $conditions['site_id'] = $queryParams['site_id'];
+
+        if (!empty($queryParams['hardDelete'])) {
+            $conditions['hardDelete'] = $queryParams['hardDelete'];
+            if ($conditions['hardDelete']) {
+                $options = array_merge($options, ['withDeleted']);
+            }
+        }
 
         if ($queryParams['name']) {
             $conditions['OR'] = [
@@ -120,7 +127,7 @@ class ContentService implements ContentServiceInterface
             $conditions['name'] = $queryParams['name'];
         }
         if ($queryParams['folder_id']) {
-            $Contents = $this->Contents->find('all')->select(['lft', 'rght'])->where(['id' => $queryParams['folder_id']]);
+            $Contents = $this->Contents->find('all', $options)->select(['lft', 'rght'])->where(['id' => $queryParams['folder_id']]);
             $conditions['rght <'] = $Contents->first()->rght;
             $conditions['lft >'] = $Contents->first()->lft;
         }
@@ -141,16 +148,21 @@ class ContentService implements ContentServiceInterface
      * コンテンツ管理の一覧用のデータを取得
      * @param array $queryParams
      * @param string $type
-     * @param array $options
      * @return Query
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getIndex(array $queryParams=[], ?string $type="all", array $options=[]): Query
+    public function getIndex(array $queryParams=[], ?string $type="all"): Query
     {
+        $options = [];
         $columns = ConnectionManager::get('default')->getSchemaCollection()->describe('contents')->columns();
 
+        if (!empty($queryParams['hardDelete'])) {
+            if ($queryParams['hardDelete']) {
+                $options = array_merge($options, ['withDeleted']);
+            }
+        }
         $query = $this->Contents->find($type, $options)->contain(['Sites']);
 
         if (!empty($queryParams['name'])) {
@@ -216,7 +228,8 @@ class ContentService implements ContentServiceInterface
      */
     public function getTrashIndex(array $queryParams=[], string $type="all"): Query
     {
-        return $this->getIndex($queryParams, $type, ['withDeleted'])->where(['deleted_date IS NOT NULL']);
+        $queryParams = array_merge($queryParams, ['hardDelete' => true]);
+        return $this->getIndex($queryParams, $type)->where(['deleted_date IS NOT NULL']);
     }
 
     /**

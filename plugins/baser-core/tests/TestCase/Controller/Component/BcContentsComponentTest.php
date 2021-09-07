@@ -112,7 +112,7 @@ class BcContentsComponentTest extends BcTestCase
 
     public function testGetContent()
     {
-        $content = $this->BcContents->getContent(1);
+        $content = $this->BcContents->getContent(8);
         $this->assertEquals('BcContentsテスト', $content->name);
         $this->assertNull($this->BcContents->getContent(2));
     }

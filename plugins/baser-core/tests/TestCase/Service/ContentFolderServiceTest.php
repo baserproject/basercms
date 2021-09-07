@@ -81,9 +81,9 @@ class ContentFolderServiceTest extends BcTestCase
         $this->assertEquals('フォルダーテンプレート1', $contentFolder->folder_template);
         $this->assertEquals(1, $contentFolder->content->entity_id);
         // deleted_dateがnullじゃないコンテンツエンティティと紐付いてる場合
-        $contentFolder = $this->ContentFolderService->get(4);
-        $this->assertEquals('サービステンプレート', $contentFolder->folder_template);
-        $this->assertEquals(4, $contentFolder->content->entity_id);
+        $contentFolder = $this->ContentFolderService->get(10);
+        $this->assertEquals('削除済みフォルダー', $contentFolder->folder_template);
+        $this->assertEquals(10, $contentFolder->content->entity_id);
     }
 
     /**
@@ -117,8 +117,8 @@ class ContentFolderServiceTest extends BcTestCase
      */
     public function testDelete()
     {
-        $content = $this->Contents->find()->where(['type' => 'ContentFolder', 'entity_id !=' => 1])->first();
+        $content = $this->Contents->find()->where(['type' => 'ContentFolder', 'entity_id' => 10])->first();
         $this->assertTrue($this->ContentFolderService->delete($content->entity_id));
-        $this->assertEquals(8, $this->Contents->find()->count());
+        $this->assertEquals(12, $this->Contents->find('all', ['withDeleted'])->count());
     }
 }

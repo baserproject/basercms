@@ -48,10 +48,9 @@ interface ContentServiceInterface
      * コンテンツ管理の一覧用のデータを取得
      * @param array $queryParams
      * @param string $type
-     * @param array $options
      * @return Query
      */
-    public function getIndex(array $queryParams=[], ?string $type="all", array $options=[]): Query;
+    public function getIndex(array $queryParams=[], ?string $type="all"): Query;
 
     /**
      * getTableConditions

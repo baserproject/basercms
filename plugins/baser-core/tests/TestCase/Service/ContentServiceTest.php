@@ -134,6 +134,10 @@ class ContentServiceTest extends BcTestCase
             ], 10],
             [[
                 'site_id' => 1,
+                'hardDelete' => true,
+            ], 12],
+            [[
+                'site_id' => 1,
                 'open' => '1',
                 'folder_id' => '',
                 'name' => '',
@@ -170,11 +174,14 @@ class ContentServiceTest extends BcTestCase
         $request = $this->getRequest('/?num=1');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
         $this->assertEquals(1, $contents->all()->count());
-
+        // softDeleteの場合
         $request = $this->getRequest('/?status=1');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
-        $c = $contents->toArray();
         $this->assertEquals(10, $contents->all()->count());
+        // hardDeleteの場合
+        $request = $this->getRequest('/?status=1&hardDelete=true');
+        $contents = $this->ContentService->getIndex($request->getQueryParams());
+        $this->assertEquals(12, $contents->all()->count());
     }
     /**
      * testGetTrashIndex
@@ -253,7 +260,7 @@ class ContentServiceTest extends BcTestCase
      */
     public function testDeleteAll(): void
     {
-        $this->assertEquals(1, $this->ContentService->deleteAll());
+        $this->assertEquals(3, $this->ContentService->deleteAll());
         $contents = $this->ContentService->getIndex();
         $this->assertEquals(11, $contents->all()->count());
     }

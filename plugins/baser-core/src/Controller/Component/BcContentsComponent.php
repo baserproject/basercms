@@ -18,10 +18,11 @@ use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
 use Cake\Controller\Component;
 use Cake\Controller\Controller;
-use BaserCore\Controller\Admin\ContentsController;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Model\Entity\Content;
+use BaserCore\Controller\Admin\ContentsController;
 /**
  * Class BcContentsComponent
  *
@@ -192,12 +193,12 @@ class BcContentsComponent extends Component
     /**
      * Content データを取得する
      * @param int $entityId
-     * @return array
+     * @return Content
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getContent($entityId = null)
+    public function getContent($entityId = null): Content
     {
         return $this->_Controller->Contents->findByType($this->type, $entityId);
     }

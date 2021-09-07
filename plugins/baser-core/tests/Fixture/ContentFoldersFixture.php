@@ -48,8 +48,8 @@ class ContentFoldersFixture extends TestFixture
                 'modified' => null
             ],
             [
-                'id' => '4',
-                'folder_template' => 'サービステンプレート',
+                'id' => '10',
+                'folder_template' => '削除済みフォルダー',
                 'page_template' => '',
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null
