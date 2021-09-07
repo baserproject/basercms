@@ -395,12 +395,13 @@ class ContentsController extends BcAdminAppController
         if (empty($this->request->getData('contentId'))) {
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
         }
-        if (!$this->_delete($contentService, $this->request->getData('contentId'), false)) {
+        $request = $this->_delete($contentService, $this->request->getData('contentId'), false);;
+        if (!$request->getQuery('deleted')) {
             $this->ajaxError(500, __d('baser', '削除中にエラーが発生しました。'));
-            return false;
+            // return false;
         }
-
-        return true;
+        $this->redirect(['action' => 'index']);
+        // return true;
     }
 
     /**
@@ -425,7 +426,6 @@ class ContentsController extends BcAdminAppController
      *
      * @param int $id
      * @param bool $useFlashMessage
-     * @return bool
      */
     protected function _delete($contentService, $id, $useFlashMessage = false)
     {
@@ -456,7 +456,7 @@ class ContentsController extends BcAdminAppController
             'data' => $id
         ]);
         // TODO:　一時措置
-        return $this->request->withQueryParams(['delete' => true]);
+        return $this->request->withQueryParams(['deleted' => true]);
     }
 
     /**
@@ -572,7 +572,7 @@ class ContentsController extends BcAdminAppController
             $this->notFound();
         }
 
-        $this-> disableAutoRender();
+        $this->disableAutoRender();
 
         $contents = $contentService->getTrashIndex()->order(['plugin', 'type']);
         $result = true;
@@ -582,16 +582,20 @@ class ContentsController extends BcAdminAppController
             'data' => $contents
         ]);
         if ($contents) {
+            $delList = [];
             foreach($contents as $content) {
+                $delList[] = $content->entity_id;
                 if (!empty($this->BcContents->getConfig('items')[$content->type]['routes']['delete'])) {
                     $route = $this->BcContents->getConfig('items')[$content->type]['routes']['delete'];
                 } else {
                     $route = $this->BcContents->getConfig('items')['Default']['routes']['delete'];
                 }
-                $this->redirect(['controller' => "ContentFolders", 'action' => "delete", $content->id, $content->entity_id]);
             }
         }
-
+        $session = $this->request->getSession();
+        $session->write('Contents.delList', $delList);
+        // redirect to $route
+        $this->redirect(['controller' => "ContentFolders", 'action' => "delete"]);
         // EVENT Contents.afterTrashEmpty
         $this->dispatchLayerEvent('afterTrashEmpty', [
             'data' => $result
