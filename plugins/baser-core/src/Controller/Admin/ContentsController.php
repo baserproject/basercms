@@ -413,7 +413,7 @@ class ContentsController extends BcAdminAppController
             $this->notFound();
         }
         if ($this->_delete($contentService, $this->request->getData('Content.id'), true)) {
-            $this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+            $this->redirect(['controller' => 'contents', 'action' => 'index']);
         } else {
             $this->BcMessage->setError('削除中にエラーが発生しました。');
         }
@@ -456,7 +456,7 @@ class ContentsController extends BcAdminAppController
             'data' => $id
         ]);
         // TODO:　一時措置
-        return $this->request->withQueryParams(['deleted' => true]);
+        return $this->request->withQueryParams(['deleted' => $result]);
     }
 
     /**
@@ -582,9 +582,9 @@ class ContentsController extends BcAdminAppController
             'data' => $contents
         ]);
         if ($contents) {
-            $delList = [];
+            $idList = [];
             foreach($contents as $content) {
-                $delList[] = $content->entity_id;
+                $idList[] = $content->entity_id;
                 if (!empty($this->BcContents->getConfig('items')[$content->type]['routes']['delete'])) {
                     $route = $this->BcContents->getConfig('items')[$content->type]['routes']['delete'];
                 } else {
@@ -593,9 +593,9 @@ class ContentsController extends BcAdminAppController
             }
         }
         $session = $this->request->getSession();
-        $session->write('Contents.delList', $delList);
+        $session->write('Contents.idList', $idList);
         // redirect to $route
-        $this->redirect(['controller' => "ContentFolders", 'action' => "delete"]);
+        $this->redirect(['controller' => $route['controller'], 'action' => $route['action']]);
         // EVENT Contents.afterTrashEmpty
         $this->dispatchLayerEvent('afterTrashEmpty', [
             'data' => $result

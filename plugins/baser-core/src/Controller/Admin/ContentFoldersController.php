@@ -137,10 +137,10 @@ class ContentFoldersController extends BcAdminAppController
     public function delete(ContentFolderServiceInterface $contentFolderService)
     {
         $session = $this->request->getSession();
-        foreach ($session->read('Contents.delList') as $entityId) {
+        foreach ($session->read('Contents.idList') as $entityId) {
             $contentFolderService->delete($entityId);
         }
-        $session->delete('Some.value');
+        $session->delete('Contents.idList');
         return $this->redirect(['controller' => "Contents", 'action' => "trash_index"]);
     }
 

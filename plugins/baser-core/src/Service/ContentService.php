@@ -57,11 +57,11 @@ class ContentService implements ContentServiceInterface
      * @param int $id
      * @return EntityInterface
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function get($id): EntityInterface
     {
-        // TODO: Sitesが含まれてない
         return $this->Contents->get($id, [
             'contain' => ['Sites'],
         ]);
@@ -69,8 +69,11 @@ class ContentService implements ContentServiceInterface
 
     /**
      * 空のQueryを返す
-     *
+
      * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getEmptyIndex(): Query
     {

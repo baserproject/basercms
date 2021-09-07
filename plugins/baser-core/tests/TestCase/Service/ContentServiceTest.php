@@ -70,7 +70,18 @@ class ContentServiceTest extends BcTestCase
     {
         $result = $this->ContentService->get(1);
         $this->assertEquals("baserCMSサンプル", $result->title);
+    }
 
+    /**
+     * testGetEmptyIndex
+     *
+     * @return void
+     */
+    public function testGetEmptyIndex(): void
+    {
+        $result = $this->ContentService->getEmptyIndex();
+        $this->assertTrue($result->isEmpty());
+        $this->assertInstanceOf('Cake\ORM\Query', $result);
     }
     /**
      * testGetTreeIndex
