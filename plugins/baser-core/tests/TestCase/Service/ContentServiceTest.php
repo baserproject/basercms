@@ -287,9 +287,9 @@ class ContentServiceTest extends BcTestCase
      */
     public function testDeleteAll(): void
     {
-        $this->assertEquals(3, $this->ContentService->deleteAll());
+        $this->assertEquals(11, $this->ContentService->deleteAll());
         $contents = $this->ContentService->getIndex();
-        $this->assertEquals(11, $contents->all()->count());
+        $this->assertEquals(0, $contents->all()->count());
     }
 
     /**
