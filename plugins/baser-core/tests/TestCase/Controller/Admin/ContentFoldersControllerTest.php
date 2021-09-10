@@ -11,10 +11,11 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
+use Cake\Event\Event;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Controller\Admin\ContentFoldersController;
-use BaserCore\Model\Table\ContentFoldersTable;
 use BaserCore\Model\Table\ContentsTable;
+use BaserCore\Model\Table\ContentFoldersTable;
+use BaserCore\Controller\Admin\ContentFoldersController;
 
 /**
  * Class ContentFoldersControllerTest
@@ -80,6 +81,9 @@ class ContentFoldersControllerTest extends BcTestCase
     public function testBeforeFilter()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $event = new Event('Controller.beforeFilter', $this->ContentFoldersController);
+        $this->ContentFoldersController->beforeFilter($event);
+        $this->assertNotEmpty($this->ContentFoldersController);
     }
 
     /**

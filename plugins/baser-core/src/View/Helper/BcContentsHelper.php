@@ -153,6 +153,8 @@ class BcContentsHelper extends Helper
      * @param string $type コンテンツタイプ
      * @param string $action アクション
      * @param int $entityId コンテンツを特定するID
+     * @checked
+     * @unitTest
      */
     public function isActionAvailable($type, $action, $entityId)
     {
@@ -161,11 +163,10 @@ class BcContentsHelper extends Helper
             return false;
         }
         $url = $this->getConfig('items')[$type]['url'][$action] . '/' . $entityId;
-
-        if (isset($user->fields->user_groups)) {
-            $userGroups = $user->fields->user_groups;
+        if (isset($user->user_groups)) {
+            $userGroups = $user->user_groups;
             foreach ($userGroups as $group) {
-                if ($this->PermissionService->check($url, $group)) {
+                if ($this->PermissionService->check($url, $group->id)) {
                     return true;
                 }
             }

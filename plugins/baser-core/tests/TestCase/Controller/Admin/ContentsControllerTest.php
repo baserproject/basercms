@@ -11,8 +11,9 @@
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
 
-use BaserCore\Service\SiteService;
 use Cake\Event\Event;
+use Cake\Http\ServerRequest;
+use BaserCore\Service\SiteService;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentService;
 use BaserCore\Controller\Admin\ContentsController;
@@ -22,6 +23,7 @@ use BaserCore\Controller\Admin\ContentsController;
  *
  * @package Baser.Test.Case.Controller
  * @property  ContentsController $ContentsController
+ * @property ServerRequest $request
  */
 class ContentsControllerTest extends BcTestCase
 {
@@ -188,7 +190,7 @@ class ContentsControllerTest extends BcTestCase
         return [
             ['index', '1', [], "Cake\ORM\Query", 11],
             ['index', '2', $search, 'Cake\ORM\ResultSet', 10],
-            ['trash_index', '1', [], 'Cake\ORM\Query', 1],
+            ['trash_index', '1', [], 'Cake\ORM\Query', 3],
             // 足りない場合は空のindexを返す
             ['index', '', [], 'Cake\ORM\Query', 0],
             ['', '1', [], 'Cake\ORM\Query', 0],
@@ -284,9 +286,14 @@ class ContentsControllerTest extends BcTestCase
     /**
      * コンテンツ削除（論理削除）
      */
-    public function testAdmin_ajax_delete()
+    public function testAjax_delete()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $id = 6;
+        $this->request = $this->request->withData('contentId', $id);
+        $ContentsController = $this->ContentsController->setRequest($this->request);
+        $ContentsController->loadModel('BaserCore.Contents');
+        $ContentsController->ajax_delete(new ContentService());
     }
 
     /**

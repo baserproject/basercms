@@ -39,7 +39,11 @@ $(function () {
     });
 
     if (location.pathname === "/baser/admin/baser-core/contents/index" && $("input[name='ViewSetting[list_type]']:checked").val() == 1) {
-        // 初回アクセス時
+        // 初回indexアクセス時
+        loadView();
+    }
+    if (location.pathname === "/baser/admin/baser-core/contents/trash_index") {
+        // trashアクセス時
         loadView();
     }
 

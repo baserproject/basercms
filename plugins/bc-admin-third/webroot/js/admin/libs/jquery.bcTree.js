@@ -332,9 +332,7 @@
                                                         status: 'publish',
                                                         type: data.contentType,
                                                         siteId: data.contentSiteId,
-                                                        _Token: {
-                                                            key: $.bcToken.key
-                                                        }
+                                                        _csrfToken: $.bcToken.key,
                                                     },
                                                     dataType: 'json',
                                                     beforeSend: function () {
@@ -371,9 +369,7 @@
                                                         status: 'unpublish',
                                                         type: data.contentType,
                                                         siteId: data.contentSiteId,
-                                                        _Token: {
-                                                            key: $.bcToken.key
-                                                        }
+                                                        _csrfToken: $.bcToken.key,
                                                     },
                                                     dataType: 'json',
                                                     beforeSend: function () {
@@ -528,14 +524,12 @@
                                         if (confirm(bcI18n.bcTreeConfirmMessage1)) {
                                             $.bcToken.check(function () {
                                                 return $.ajax({
-                                                    url: $.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix  + '/' + 'baser-core' +  '/contents/ajax_trash_empty',
+                                                    url: $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/trash_empty',
                                                     type: 'POST',
-                                                    dataType: 'json',
+                                                    dataType: 'html',
                                                     data: {
                                                         empty: true,
-                                                        _Token: {
-                                                            key: $.bcToken.key
-                                                        }
+                                                        _csrfToken: $.bcToken.key,
                                                     },
                                                     beforeSend: function () {
                                                         $.bcUtil.hideMessage();
@@ -747,7 +741,7 @@
         returnContent: function (node) {
             $.bcToken.check(function () {
                 $.ajax({
-                    url: $.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix  + '/' + 'baser-core' + '/contents/ajax_trash_return',
+                    url: $.baseUrl() + '/' + $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/ajax_trash_return',
                     type: 'POST',
                     data: {
                         id: node.data.jstree.contentId,
@@ -952,15 +946,13 @@
             var data = node.data.jstree;
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/contents/ajax_delete',
+                    url: $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/ajax_delete',
                     type: 'POST',
                     data: {
                         contentId: data.contentId,
                         entityId: data.contentEntityId,
                         alias: data.alias,
-                        _Token: {
-                            key: $.bcToken.key
-                        }
+                        _csrfToken: $.bcToken.key,
                     },
                     dataType: 'text',
                     beforeSend: function () {
@@ -980,6 +972,8 @@
                         $.bcTree.load();
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        console.log(textStatus);
+                        console.log($.bcToken.key);
                         $.bcToken.key = null;
                         $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage4, XMLHttpRequest, errorThrown);
                         $.bcUtil.hideLoader();

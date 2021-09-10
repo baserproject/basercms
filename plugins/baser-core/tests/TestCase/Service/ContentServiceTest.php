@@ -70,7 +70,29 @@ class ContentServiceTest extends BcTestCase
     {
         $result = $this->ContentService->get(1);
         $this->assertEquals("baserCMSサンプル", $result->title);
+    }
 
+    /**
+     * testGetTrash
+     *
+     * @return void
+     */
+    public function testGetTrash(): void
+    {
+        $result = $this->ContentService->getTrash(15);
+        $this->assertEquals("BcContentsテスト(deleted)", $result->title);
+    }
+
+    /**
+     * testGetEmptyIndex
+     *
+     * @return void
+     */
+    public function testGetEmptyIndex(): void
+    {
+        $result = $this->ContentService->getEmptyIndex();
+        $this->assertTrue($result->isEmpty());
+        $this->assertInstanceOf('Cake\ORM\Query', $result);
     }
     /**
      * testGetTreeIndex
@@ -91,7 +113,6 @@ class ContentServiceTest extends BcTestCase
      */
     public function testGetTableConditions()
     {
-
         $request = $this->getRequest()->withQueryParams([
             'site_id' => 1,
             'open' => '1',
@@ -107,6 +128,7 @@ class ContentServiceTest extends BcTestCase
             'name LIKE' => '%テスト%',
             'title LIKE' => '%テスト%',
             ],
+            'name' => 'テスト',
             'rght <' => (int) 15,
             'lft >' => (int) 8,
             'self_status' => '1',
@@ -132,6 +154,10 @@ class ContentServiceTest extends BcTestCase
             [[
                 'site_id' => 1,
             ], 10],
+            [[
+                'site_id' => 1,
+                'hardDelete' => true,
+            ], 12],
             [[
                 'site_id' => 1,
                 'open' => '1',
@@ -170,10 +196,14 @@ class ContentServiceTest extends BcTestCase
         $request = $this->getRequest('/?num=1');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
         $this->assertEquals(1, $contents->all()->count());
-
+        // softDeleteの場合
         $request = $this->getRequest('/?status=1');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
         $this->assertEquals(10, $contents->all()->count());
+        // hardDeleteの場合
+        $request = $this->getRequest('/?status=1&hardDelete=true');
+        $contents = $this->ContentService->getIndex($request->getQueryParams());
+        $this->assertEquals(12, $contents->all()->count());
     }
     /**
      * testGetTrashIndex
@@ -182,9 +212,13 @@ class ContentServiceTest extends BcTestCase
      */
     public function testGetTrashIndex(): void
     {
+        // type: all
+        $result = $this->ContentService->getTrashIndex();
+        $this->assertNotNull($result->first()->deleted_date);
+        // type: threaded
         $request = $this->getRequest('/');
-        $result = $this->ContentService->getTrashIndex($request->getQueryParams());
-        $this->assertTrue($result->first()->deleted);
+        $result = $this->ContentService->getTrashIndex($request->getQueryParams(), 'threaded');
+        $this->assertNotNull($result->first()->deleted_date);
     }
 
     /**
@@ -222,6 +256,40 @@ class ContentServiceTest extends BcTestCase
         $result = $this->ContentService->create($request->getData());
         $expected = $this->ContentService->Contents->find()->last();
         $this->assertEquals($expected->name, $result->name);
+    }
+
+    /**
+     * testDelete
+     *
+     * @return void
+     */
+    public function testDelete(): void
+    {
+        $this->assertTrue($this->ContentService->delete(14));
+        $contents = $this->ContentService->getTrash(14);
+        $this->assertNotNull($contents->deleted_date);
+    }
+
+    /**
+     * testDelete
+     *
+     * @return void
+     */
+    public function testHardDelete(): void
+    {
+        $this->assertTrue($this->ContentService->hardDelete(15, true));
+    }
+
+    /**
+     * testDeleteAll
+     *
+     * @return void
+     */
+    public function testDeleteAll(): void
+    {
+        $this->assertEquals(11, $this->ContentService->deleteAll());
+        $contents = $this->ContentService->getIndex();
+        $this->assertEquals(0, $contents->all()->count());
     }
 
     /**

@@ -130,22 +130,6 @@ class ContentFoldersController extends BcAdminAppController
     }
 
     /**
-     * コンテンツを削除する
-     *
-     * @return bool
-     */
-    public function admin_delete()
-    {
-        if (empty($this->request->getData('entityId'))) {
-            return false;
-        }
-        if ($this->ContentFolder->delete($this->request->getData('entityId'))) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * コンテンツを表示する
      *
      * @return void

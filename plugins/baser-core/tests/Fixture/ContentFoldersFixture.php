@@ -28,21 +28,28 @@ class ContentFoldersFixture extends TestFixture
         $this->records = [
             [
                 'id' => '1',
-                'folder_template' => '',
+                'folder_template' => 'フォルダーテンプレート1',
                 'page_template' => '',
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null
             ],
             [
                 'id' => '2',
-                'folder_template' => '',
+                'folder_template' => 'フォルダーテンプレート2',
                 'page_template' => '',
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null
             ],
             [
                 'id' => '3',
-                'folder_template' => '',
+                'folder_template' => 'フォルダーテンプレート3',
+                'page_template' => '',
+                'created' => '2016-08-10 02:17:28',
+                'modified' => null
+            ],
+            [
+                'id' => '10',
+                'folder_template' => '削除済みフォルダー',
                 'page_template' => '',
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null

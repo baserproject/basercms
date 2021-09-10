@@ -66,7 +66,7 @@ class ContentFoldersTable extends AppTable
             ->setDependent(false)
             ->setConditions([
                 'Contents.type' => 'ContentFolder',
-                'Contents.alias_id IS NULL'
+                'Contents.alias_id IS' => null,
             ]);
     }
 

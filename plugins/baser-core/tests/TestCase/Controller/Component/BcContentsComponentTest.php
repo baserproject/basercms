@@ -37,7 +37,8 @@ class BcContentsTestController extends BcAppController
 /**
  * Class BcContentsComponentTest
  *
- * @package Baser.Test.Case.Controller.Component
+ * @package BaserCore\Test\TestCase\Controller\Component
+ * @property BcContentsComponent $BcContents
  */
 class BcContentsComponentTest extends BcTestCase
 {
@@ -48,6 +49,7 @@ class BcContentsComponentTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Sites',
     ];
 
     /**
@@ -110,7 +112,7 @@ class BcContentsComponentTest extends BcTestCase
 
     public function testGetContent()
     {
-        $content = $this->BcContents->getContent(1);
+        $content = $this->BcContents->getContent(8);
         $this->assertEquals('BcContentsテスト', $content->name);
         $this->assertNull($this->BcContents->getContent(2));
     }

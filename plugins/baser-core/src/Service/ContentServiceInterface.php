@@ -15,6 +15,7 @@ use BaserCore\Model\Entity\Content;
 use Cake\Http\ServerRequest;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
+use Nette\Utils\DateTime;
 
 /**
  * Interface ContentServiceInterface
@@ -28,6 +29,13 @@ interface ContentServiceInterface
      * @return EntityInterface
      */
     public function get($id): EntityInterface;
+
+    /**
+     * ゴミ箱のコンテンツを取得する
+     * @param int $id
+     * @return EntityInterface
+     */
+    public function getTrash($id): EntityInterface;
 
     /**
      * 空のQueryを返す
@@ -50,7 +58,7 @@ interface ContentServiceInterface
      * @param string $type
      * @return Query
      */
-    public function getIndex(array $queryParams, ?string $type="all"): Query;
+    public function getIndex(array $queryParams=[], ?string $type="all"): Query;
 
     /**
      * getTableConditions
@@ -70,10 +78,11 @@ interface ContentServiceInterface
 
     /**
      * getTrashIndex
-     * @param  array $queryParams
+     * @param array $queryParams
+     * @param string $type
      * @return Query
      */
-    public function getTrashIndex(array $queryParams): Query;
+    public function getTrashIndex(array $queryParams=[], string $type="all"): Query;
 
     /**
      * コンテンツフォルダーのリストを取得
@@ -98,6 +107,37 @@ interface ContentServiceInterface
      * @return \Cake\Datasource\EntityInterface
      */
     public function create(array $postData);
+
+    /**
+     * コンテンツ情報を論理削除する
+     * @param int $id
+     * @return bool
+     *
+     */
+    public function delete($id);
+
+    /**
+     * コンテンツ情報を削除する
+     * @param int $id
+     * @return bool
+     */
+    public function hardDelete($id);
+
+    /**
+     * 該当するコンテンツ情報をすべて論理削除する
+     *
+     * @param  array $conditions
+     * @return int
+     */
+    public function deleteAll(array $conditions): int;
+
+    /**
+     * 指定日時以前の該当する論理削除されたコンテンツ情報をすべて削除する
+     *
+     * @param  Datetime $dateTime
+     * @return int
+     */
+    public function hardDeleteAll(Datetime $dateTime): int;
 
     /**
       * コンテンツ情報を取得する

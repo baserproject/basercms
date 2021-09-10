@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use Exception;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
@@ -19,8 +20,9 @@ use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Table\SitesTable;
 use Cake\Datasource\ConnectionManager;
-use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Model\Table\ContentsTable;
+use Nette\Utils\DateTime;
 
 class ContentService implements ContentServiceInterface
 {
@@ -56,20 +58,36 @@ class ContentService implements ContentServiceInterface
      * @param int $id
      * @return EntityInterface
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function get($id): EntityInterface
     {
-        // TODO: Sitesが含まれてない
         return $this->Contents->get($id, [
             'contain' => ['Sites'],
         ]);
     }
 
     /**
+     * ゴミ箱のコンテンツを取得する
+     * @param int $id
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getTrash($id): EntityInterface
+    {
+        return $this->getTrashIndex()->where(['Contents.id' => $id])->first();
+    }
+
+    /**
      * 空のQueryを返す
-     *
+
      * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getEmptyIndex(): Query
     {
@@ -94,7 +112,7 @@ class ContentService implements ContentServiceInterface
 //                ['Contents.site_id' => 1]
 //            ]];
 //        }
-        return $this->getIndex($queryParams, 'threaded')->order(['lft'])->contain(['Sites']);
+        return $this->getIndex($queryParams, 'threaded')->order(['lft']);
     }
 
     /**
@@ -108,17 +126,25 @@ class ContentService implements ContentServiceInterface
      */
     public function getTableConditions(array $queryParams): array
     {
-
+        $options = [];
         $conditions['site_id'] = $queryParams['site_id'];
+
+        if (!empty($queryParams['hardDelete'])) {
+            $conditions['hardDelete'] = $queryParams['hardDelete'];
+            if ($conditions['hardDelete']) {
+                $options = array_merge($options, ['withDeleted']);
+            }
+        }
 
         if ($queryParams['name']) {
             $conditions['OR'] = [
                 'name LIKE' => '%' . $queryParams['name'] . '%',
                 'title LIKE' => '%' . $queryParams['name'] . '%'
             ];
+            $conditions['name'] = $queryParams['name'];
         }
         if ($queryParams['folder_id']) {
-            $Contents = $this->Contents->find('all')->select(['lft', 'rght'])->where(['id' => $queryParams['folder_id']]);
+            $Contents = $this->Contents->find('all', $options)->select(['lft', 'rght'])->where(['id' => $queryParams['folder_id']]);
             $conditions['rght <'] = $Contents->first()->rght;
             $conditions['lft >'] = $Contents->first()->lft;
         }
@@ -144,26 +170,33 @@ class ContentService implements ContentServiceInterface
      * @noTodo
      * @unitTest
      */
-    public function getIndex(array $queryParams, ?string $type="all"): Query
+    public function getIndex(array $queryParams=[], ?string $type="all"): Query
     {
         $options = [];
-
         $columns = ConnectionManager::get('default')->getSchemaCollection()->describe('contents')->columns();
-        $allowed = array_merge($columns, ['OR', 'NOT']);
 
-        $query = $this->Contents->find($type, $options);
+        if (!empty($queryParams['hardDelete'])) {
+            if ($queryParams['hardDelete']) {
+                $options = array_merge($options, ['withDeleted']);
+            }
+        }
+        $query = $this->Contents->find($type, $options)->contain(['Sites']);
 
         if (!empty($queryParams['name'])) {
-            $query = $query->where(['name LIKE' => '%' . $queryParams['name'] . '%']);
+            $query = $query->where(['OR' => [
+                'Contents.name LIKE' => '%' . $queryParams['name'] . '%',
+                'Contents.title LIKE' => '%' . $queryParams['name'] . '%'
+            ]]);
+            unset($queryParams['name']);
         }
 
         if (!empty($queryParams['title'])) {
-            $query = $query->where(['title LIKE' => '%' . $queryParams['name'] . '%']);
+            $query = $query->andWhere(['Contents.title LIKE' => '%' . $queryParams['title'] . '%']);
         }
 
         foreach($queryParams as $key => $value) {
-            if (in_array($key, $allowed)) {
-                $query = $query->where([$key => $value]);
+            if (in_array($key, $columns)) {
+                $query = $query->andWhere(['Contents.' . $key => $value]);
             }
         }
 
@@ -203,16 +236,17 @@ class ContentService implements ContentServiceInterface
 
     /**
      * getTrashIndex
-     * @param  array $queryParams
+     * @param array $queryParams
+     * @param string $type
      * @return Query
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getTrashIndex(array $queryParams): Query
+    public function getTrashIndex(array $queryParams=[], string $type="all"): Query
     {
-        $queryParams = array_merge($queryParams, ['deleted' => true]);
-        return $this->getIndex($queryParams, 'threaded')->order(['site_id', 'lft']);
+        $queryParams = array_merge($queryParams, ['hardDelete' => true]);
+        return $this->getIndex($queryParams, $type)->where(['deleted_date IS NOT NULL']);
     }
 
     /**
@@ -290,6 +324,67 @@ class ContentService implements ContentServiceInterface
         $content = $this->Contents->newEmptyEntity();
         $content = $this->Contents->patchEntity($content, $postData, ['validate' => 'default']);
         return ($result = $this->Contents->save($content)) ? $result : $content;
+    }
+
+    /**
+     * コンテンツ情報を論理削除する
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete($id)
+    {
+        $content = $this->get($id);
+        return $this->Contents->delete($content);
+    }
+
+    /**
+     * コンテンツ情報を削除する
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function hardDelete($id)
+    {
+        $content = $this->getTrash($id);
+        if ($content->deleted_date) {
+            return $this->Contents->hardDelete($content);
+        }
+        return false;
+    }
+
+
+    /**
+     * 該当するコンテンツ情報をすべて論理削除する
+     *
+     * @param  array $conditions
+     * @return int
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function deleteAll(array $conditions=[]): int
+    {
+        $conditions = array_merge(['deleted_date IS NULL'], $conditions);
+        return $this->Contents->deleteAll($conditions);
+    }
+
+    /**
+     * 指定日時以前の該当する論理削除されたコンテンツ情報をすべて削除する
+     *
+     * @param  Datetime $dateTime
+     * @return int
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function hardDeleteAll(Datetime $dateTime): int
+    {
+        return $this->Contents->hardDeleteAll($dateTime);
     }
 
     /**
