@@ -286,7 +286,7 @@ class PagesTable extends Table
         if (function_exists('ini_set')) {
             ini_set('memory_limit', '-1');
         }
-        $pages = $this->find('all', ['conditions' => ['Content.deleted' => false], 'recursive' => 0]);
+        $pages = $this->find('all', ['conditions' => ['Content.deleted_date IS NULL'], 'recursive' => 0]);
         $result = true;
         foreach($pages as $page) {
             if (!$this->createPageTemplate($page)) {

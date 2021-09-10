@@ -45,7 +45,6 @@ class CreateContents extends AbstractMigration
         ->addColumn('modified_date', 'datetime', ['null' => true, 'default' => null, 'limit' => null])
         ->addColumn('site_root', 'boolean', ['null' => true, 'default' => null, 'limit' => null])
         ->addColumn('deleted_date', 'datetime', ['null' => true, 'default' => null, 'limit' => null])
-        ->addColumn('deleted', 'boolean', ['null' => true, 'default' => null, 'limit' => null])
         ->addColumn('exclude_menu', 'boolean', ['null' => true, 'default' => false, 'limit' => null])
         ->addColumn('blank_link', 'boolean', ['null' => true, 'default' => false, 'limit' => null])
         ->addColumn('created', 'datetime', ['null' => true, 'default' => null, 'limit' => null])
