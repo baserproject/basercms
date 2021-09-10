@@ -119,6 +119,5 @@ class ContentFolderServiceTest extends BcTestCase
     {
         $content = $this->Contents->find()->where(['type' => 'ContentFolder', 'entity_id' => 10])->first();
         $this->assertTrue($this->ContentFolderService->delete($content->entity_id));
-        $this->assertEquals(12, $this->Contents->find('all', ['withDeleted'])->count());
     }
 }

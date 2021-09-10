@@ -22,6 +22,7 @@ use BaserCore\Model\Table\SitesTable;
 use Cake\Datasource\ConnectionManager;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentsTable;
+use Nette\Utils\DateTime;
 
 class ContentService implements ContentServiceInterface
 {
@@ -65,6 +66,19 @@ class ContentService implements ContentServiceInterface
         return $this->Contents->get($id, [
             'contain' => ['Sites'],
         ]);
+    }
+
+    /**
+     * ゴミ箱のコンテンツを取得する
+     * @param int $id
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getTrash($id): EntityInterface
+    {
+        return $this->getTrashIndex()->where(['Contents.id' => $id])->first();
     }
 
     /**
@@ -313,7 +327,7 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * コンテンツ情報を削除する
+     * コンテンツ情報を論理削除する
      * @param int $id
      * @return bool
      * @checked
@@ -323,14 +337,29 @@ class ContentService implements ContentServiceInterface
     public function delete($id)
     {
         $content = $this->get($id);
-        if(!$content->deleted) {
-            throw new Exception(__d('baser', 'ゴミ箱以外は削除できません。'));
-        }
         return $this->Contents->delete($content);
     }
 
     /**
-     * 該当するコンテンツ情報をすべて削除する
+     * コンテンツ情報を削除する
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function hardDelete($id)
+    {
+        $content = $this->getTrash($id);
+        if ($content->deleted_date) {
+            return $this->Contents->hardDelete($content);
+        }
+        return false;
+    }
+
+
+    /**
+     * 該当するコンテンツ情報をすべて論理削除する
      *
      * @param  array $conditions
      * @return int
@@ -340,8 +369,22 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteAll(array $conditions=[]): int
     {
-        $conditions = array_merge(['deleted_date IS NOT NULL'], $conditions);
+        $conditions = array_merge(['deleted_date IS NULL'], $conditions);
         return $this->Contents->deleteAll($conditions);
+    }
+
+    /**
+     * 指定日時以前の該当する論理削除されたコンテンツ情報をすべて削除する
+     *
+     * @param  Datetime $dateTime
+     * @return int
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function hardDeleteAll(Datetime $dateTime): int
+    {
+        return $this->Contents->hardDeleteAll($dateTime);
     }
 
     /**

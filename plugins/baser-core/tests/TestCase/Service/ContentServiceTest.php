@@ -73,6 +73,17 @@ class ContentServiceTest extends BcTestCase
     }
 
     /**
+     * testGetTrash
+     *
+     * @return void
+     */
+    public function testGetTrash(): void
+    {
+        $result = $this->ContentService->getTrash(15);
+        $this->assertEquals("BcContentsテスト(deleted)", $result->title);
+    }
+
+    /**
      * testGetEmptyIndex
      *
      * @return void
@@ -254,14 +265,19 @@ class ContentServiceTest extends BcTestCase
      */
     public function testDelete(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->ContentService->delete(14);
-        $contents = $this->ContentService->getIndex();
-        $this->assertEquals(10, $contents->all()->count());
-        $this->assertEquals(20, $this->ContentService->get(1)->rght);
-        // deleted出ない場合
-        $this->expectException("Exception");
-        $this->ContentService->delete(13);
+        $this->assertTrue($this->ContentService->delete(14));
+        $contents = $this->ContentService->getTrash(14);
+        $this->assertNotNull($contents->deleted_date);
+    }
+
+    /**
+     * testDelete
+     *
+     * @return void
+     */
+    public function testHardDelete(): void
+    {
+        $this->assertTrue($this->ContentService->hardDelete(15, true));
     }
 
     /**

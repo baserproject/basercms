@@ -15,6 +15,7 @@ use Cake\ORM\Query;
 use Cake\Utility\Hash;
 use Cake\ORM\ResultSet;
 use Cake\Core\Configure;
+use Nette\Utils\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
@@ -31,6 +32,7 @@ use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Model\Table\ContentFoldersTable;
 use BaserCore\Service\BcAdminServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Controller\Component\BcContentsComponent;
 
 /**
@@ -48,6 +50,7 @@ use BaserCore\Controller\Component\BcContentsComponent;
  * @property UsersTable $Users
  * @property ContentFoldersTable $ContentFolders
  * @property BcContentsComponent $BcContents
+ * @property BcMessageComponent $BcMessage
  */
 
 class ContentsController extends BcAdminAppController
@@ -594,6 +597,9 @@ class ContentsController extends BcAdminAppController
                 if($target) {
                     $result = $target->delete($content->entity_id);
                 }
+            }
+            if ($count = $contentService->hardDeleteAll(new DateTime('NOW'))) {
+                $this->BcMessage->setSuccess($count . "個のコンテンツがゴミ箱から削除されました", true, false);
             }
         }
         // EVENT Contents.afterTrashEmpty

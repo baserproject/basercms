@@ -63,8 +63,7 @@ class ContentFoldersTable extends AppTable
         // TODO: 本来はBcContentsBehaviorで設定する箇所だが、一時措置として直接下記に設定
         $this->hasOne('Contents', ['className' => 'BaserCore.Contents'])
             ->setForeignKey('entity_id')
-            ->setDependent(true)
-            ->setCascadeCallbacks(true)
+            ->setDependent(false)
             ->setConditions([
                 'Contents.type' => 'ContentFolder',
                 'Contents.alias_id IS' => null,

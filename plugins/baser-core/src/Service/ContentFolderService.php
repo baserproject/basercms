@@ -84,8 +84,6 @@ class ContentFolderService implements ContentFolderServiceInterface
     public function delete($id)
     {
         $ContentFolder = $this->get($id);
-        $delResult = $this->ContentFolders->delete($ContentFolder);
-        $hardDelResult = $this->Contents->hardDelete($ContentFolder->content);
-        return $delResult && $hardDelResult;
+        return $this->ContentFolders->delete($ContentFolder);
     }
 }
