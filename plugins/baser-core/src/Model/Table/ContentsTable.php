@@ -283,19 +283,6 @@ class ContentsTable extends AppTable
     }
 
     /**
-     * beforeFind
-     *
-     * @param  Event $event
-     * @param  Query $query
-     * @param  ArrayObject $options
-     * @param  $primary
-     * @return void
-     */
-    public function beforeFind(Event $event, Query $query, ArrayObject $options, $primary)
-    {
-        $a = $event;
-    }
-    /**
      * Before Marshal
      *
      * @param Event $event

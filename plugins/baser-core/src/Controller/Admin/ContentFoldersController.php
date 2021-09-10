@@ -130,21 +130,6 @@ class ContentFoldersController extends BcAdminAppController
     }
 
     /**
-     * コンテンツを削除する
-     *
-     * @return bool
-     */
-    public function delete(ContentFolderServiceInterface $contentFolderService)
-    {
-        $session = $this->request->getSession();
-        foreach ($session->read('Contents.idList') as $entityId) {
-            $contentFolderService->delete($entityId);
-        }
-        $session->delete('Contents.idList');
-        return $this->redirect(['controller' => "Contents", 'action' => "trash_index"]);
-    }
-
-    /**
      * コンテンツを表示する
      *
      * @return void

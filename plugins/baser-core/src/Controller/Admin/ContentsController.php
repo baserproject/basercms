@@ -11,13 +11,12 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Service\BcAdminServiceInterface;
-use BaserCore\Service\SiteServiceInterface;
 use Cake\ORM\Query;
 use Cake\Utility\Hash;
 use Cake\ORM\ResultSet;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
@@ -28,9 +27,11 @@ use BaserCore\Model\Table\UsersTable;
 use BaserCore\Service\SiteConfigTrait;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Table\SiteConfigsTable;
+use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Model\Table\ContentFoldersTable;
-use BaserCore\Controller\Component\BcContentsComponent;
+use BaserCore\Service\BcAdminServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Controller\Component\BcContentsComponent;
 
 /**
  * Class ContentsController
@@ -575,33 +576,31 @@ class ContentsController extends BcAdminAppController
         $this->disableAutoRender();
 
         $contents = $contentService->getTrashIndex()->order(['plugin', 'type']);
-        $result = true;
 
         // EVENT Contents.beforeTrashEmpty
         $this->dispatchLayerEvent('beforeTrashEmpty', [
             'data' => $contents
         ]);
         if ($contents) {
-            $idList = [];
             foreach($contents as $content) {
-                $idList[] = $content->entity_id;
-                if (!empty($this->BcContents->getConfig('items')[$content->type]['routes']['delete'])) {
-                    $route = $this->BcContents->getConfig('items')[$content->type]['routes']['delete'];
+                $pluginName = $content->plugin;
+                $modelName = $content->type;
+                $service = $pluginName . '\\Service\\' . $modelName . 'ServiceInterface';
+                if(interface_exists($service)) {
+                    $target = $this->getService($service);
                 } else {
-                    $route = $this->BcContents->getConfig('items')['Default']['routes']['delete'];
+                    $target = $this->getTableLocator()->get($pluginName . Inflector::pluralize($modelName));
+                }
+                if($target) {
+                    $result = $target->delete($content->entity_id);
                 }
             }
         }
-        $session = $this->request->getSession();
-        $session->write('Contents.idList', $idList);
-        // redirect to $route
-        $this->redirect(['controller' => $route['controller'], 'action' => $route['action']]);
         // EVENT Contents.afterTrashEmpty
         $this->dispatchLayerEvent('afterTrashEmpty', [
             'data' => $result
         ]);
-
-        // return $result;
+        return $this->redirect(['action' => "trash_index"]);
     }
 
     /**
