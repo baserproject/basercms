@@ -19,6 +19,7 @@ use Cake\Core\Configure;
 use Cake\Database\Query;
 use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Inflector;
 use BaserCore\Model\AppTable;
 use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
@@ -467,8 +468,7 @@ class ContentsTable extends AppTable
         if (empty($content->plugin) || empty($content->type)) {
             $content = $this->find()->select(['plugin', 'type'])->where(['id' => $content->id])->first();
         }
-        // FIXME:　一時措置で複数形に変更
-        $assoc = $content->plugin . '.' . $content->type . "s";
+        $assoc = $content->plugin . '.' . Inflector::pluralize($content->type);
         if ($content->plugin != 'BaserCore') {
             if (!Plugin::isLoaded($content->plugin)) {
                 return;
