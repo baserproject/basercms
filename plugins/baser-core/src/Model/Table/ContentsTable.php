@@ -315,9 +315,6 @@ class ContentsTable extends AppTable
             if (!isset($data['content']['self_publish_end'])) {
                 $data['content']['self_publish_end'] = null;
             }
-            if (!isset($data['content']['deleted'])) {
-                $data['content']['deleted'] = false;
-            }
             if (!isset($data['content']['created_date'])) {
                 $data['content']['created_date'] = date('Y-m-d H:i:s');
             }
@@ -757,8 +754,9 @@ class ContentsTable extends AppTable
         $content['plugin'] = $plugin;
         $content['type'] = $type;
         $content['entity_id'] = $entityId;
-        if (!isset($content['deleted'])) {
-            $content['deleted'] = false;
+        // TODO: deleted → deleted_dateに変更
+        if (!isset($content['deleted_date'])) {
+            $content['deleted_date'] = '';
         }
         if (!isset($content['site_root'])) {
             $content['site_root'] = 0;
@@ -795,6 +793,7 @@ class ContentsTable extends AppTable
             // それまでは、SQLインジェクション対策として、値をチェックしてから利用する。
             // =========================================================================================================
             $db = $this->getDataSource();
+            // FIXME: deleted_dateに変更する
             $sql = "SELECT lft, rght FROM {$this->tablePrefix}contents AS Content WHERE id = {$id} AND deleted = " . $db->value(false, 'boolean');
             $content = $db->query($sql, false);
             if (!$content) {
@@ -805,6 +804,7 @@ class ContentsTable extends AppTable
             } else {
                 $content = $content[0][0];
             }
+            // FIXME: deleted_dateに変更する
             $sql = "SELECT name, plugin, type FROM {$this->tablePrefix}contents AS Content " .
                 "WHERE lft <= {$db->value($content['lft'], 'integer')} AND rght >= {$db->value($content['rght'], 'integer')} AND deleted =  " . $db->value(false, 'boolean') . " " .
                 "ORDER BY lft ASC";
@@ -1959,7 +1959,7 @@ class ContentsTable extends AppTable
         $this->save($mainSite, false);
         // ゴミ箱
         $this->Behaviors->unload('SoftDelete');
-        $contents = $this->find('all', ['conditions' => ['Content.deleted' => true], 'order' => 'lft', 'recursive' => -1]);
+        $contents = $this->find('all', ['conditions' => ['Content.deleted_date IS NOT NULL'], 'order' => 'lft', 'recursive' => -1]);
         if ($contents) {
             foreach($contents as $content) {
                 $count++;

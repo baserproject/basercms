@@ -44,7 +44,6 @@ class ContentsSchema extends CakeSchema
         'modified_date' => ['type' => 'datetime', 'null' => true, 'default' => null],
         'site_root' => ['type' => 'boolean', 'null' => true, 'default' => null],
         'deleted_date' => ['type' => 'datetime', 'null' => true, 'default' => null],
-        'deleted' => ['type' => 'boolean', 'null' => true, 'default' => null],
         'exclude_menu' => ['type' => 'boolean', 'null' => true, 'default' => false],
         'blank_link' => ['type' => 'boolean', 'null' => true, 'default' => false],
         'created' => ['type' => 'datetime', 'null' => true, 'default' => null],

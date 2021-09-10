@@ -54,7 +54,6 @@ class Content extends Entity
         'modified_date' => true,
         'site_root' => true,
         'deleted_date' => true,
-        'deleted' => true,
         'exclude_menu' => true,
         'blank_link' => true,
         'created' => true,
