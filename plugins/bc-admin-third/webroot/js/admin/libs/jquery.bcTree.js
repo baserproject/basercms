@@ -970,10 +970,11 @@
                         // $.bcTree.refreshTree();
                         $.bcToken.key = null;
                         $.bcTree.load();
+                        location.reload();
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        console.log(textStatus);
-                        console.log($.bcToken.key);
+                        // console.log(textStatus);
+                        // console.log($.bcToken.key);
                         $.bcToken.key = null;
                         $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage4, XMLHttpRequest, errorThrown);
                         $.bcUtil.hideLoader();

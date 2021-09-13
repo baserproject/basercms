@@ -13,6 +13,7 @@ namespace BaserCore\Service;
 
 use Exception;
 use Cake\ORM\Query;
+use Nette\Utils\DateTime;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -22,8 +23,12 @@ use BaserCore\Model\Table\SitesTable;
 use Cake\Datasource\ConnectionManager;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentsTable;
-use Nette\Utils\DateTime;
 
+/**
+ * Class ContentService
+ * @package BaserCore\Service
+ * @property ContentsTable $Contents
+ */
 class ContentService implements ContentServiceInterface
 {
 
@@ -385,6 +390,26 @@ class ContentService implements ContentServiceInterface
     public function hardDeleteAll(Datetime $dateTime): int
     {
         return $this->Contents->hardDeleteAll($dateTime);
+    }
+
+    /**
+     * コンテンツを削除する（論理削除）
+     *
+     * ※ エイリアスの場合は直接削除
+     * @param int $id
+     * @return bool
+     */
+    public function treeDelete($id): bool
+    {
+        if (empty($content = $this->get($id))) return false;
+
+        if ($content->alias_id) {
+            $result = $this->Contents->removeFromTree($content);
+        } else {
+            $result = $this->Contents->softDeleteFromTree($id);
+        }
+
+        return $result;
     }
 
     /**
