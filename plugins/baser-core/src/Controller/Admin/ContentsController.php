@@ -88,7 +88,7 @@ class ContentsController extends BcAdminAppController
         $this->loadModel('BaserCore.ContentFolders');
         $this->loadModel('BaserCore.Users');
         $this->loadModel('BaserCore.Contents');
-        $this->Security->setConfig('unlockedActions', ['ajax_delete', 'trash_empty']);
+        $this->Security->setConfig('unlockedActions', ['delete', 'trash_empty']);
         // TODO 未実装のためコメントアウト
         /* >>>
         // $this->BcAuth->allow('view');
@@ -390,48 +390,51 @@ class ContentsController extends BcAdminAppController
 
     /**
      * コンテンツ削除（論理削除）
-     *
-     * @return boolean
+     *  @param  ContentServiceInterface $contentService
+     * @return Response|null
+     * @checked
+     * @unitTest
      */
-    public function ajax_delete(ContentServiceInterface $contentService, $useFlashMessage = false)
+    public function delete(ContentServiceInterface $contentService)
     {
         $this->disableAutoRender();
-        if (empty($id = $this->request->getData('contentId'))) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+        // コンテンツIDチェック
+        if($this->request->is('ajax')) {
+            $useFlashMessage = false;
+            if (empty($id = $this->request->getData('contentId'))) {
+                $this->ajaxError(500, __d('baser', '無効な処理です。'));
+            }
+        } else {
+            $useFlashMessage = true;
+            if (empty($id = $this->request->getData('Content.id'))) {
+                $this->notFound();
+            }
         }
+        // TODO:
         // EVENT Contents.beforeDelete
-        $this->dispatchLayerEvent('beforeDelete', [
-            'data' => $id
-        ]);
+        // $this->dispatchLayerEvent('beforeDelete', [
+        //     'data' => $id
+        // ]);
         $content = $contentService->get($id);
         $typeName = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title');
-
-        if ($result = $contentService->treeDelete($id)) {
+        $result = $contentService->treeDelete($id);
+        // TODO:
+        // EVENT Contents.afterDelete
+        // $this->dispatchLayerEvent('afterDelete', [
+        //     'data' => $id
+        // ]);
+        if ($result) {
             $trashMessage = $typeName . sprintf(__d('baser', '「%s」をゴミ箱に移動しました。'), $content->title);
             $aliasMessage = sprintf(__d('baser', '%s のエイリアス「%s」を削除しました。'), $typeName, $content->title);
             $this->BcMessage->setSuccess($content->alias_id ? $aliasMessage : $trashMessage, true, $useFlashMessage);
-        }
-        // EVENT Contents.afterDelete
-        $this->dispatchLayerEvent('afterDelete', [
-            'data' => $id
-        ]);
-
-        if ($result) {
-            $this->BcMessage->setSuccess(__d('baser', 'ユーザー: {0} を削除しました。', json_decode($content->name)));
         } else {
-            $this->ajaxError(500, __d('baser', '削除中にエラーが発生しました。'));
+            if($this->request->is('ajax')) {
+                $this->ajaxError(500, __d('baser', '削除中にエラーが発生しました。'));
+            } else {
+                $this->BcMessage->setError('削除中にエラーが発生しました。');
+            }
         }
-
-        return $this->redirect(['controller' => 'contents', 'action' => 'index', '?' => ['list_type' => 2]]);
-        // FIXME: admin_deleteから移行 統合必
-        // if (empty($this->request->getData('Content.id'))) {
-        //     $this->notFound();
-        // }
-        // if ($this->_delete($contentService, $this->request->getData('Content.id'), true)) {
-        //     $this->redirect(['controller' => 'contents', 'action' => 'index']);
-        // } else {
-        //     $this->BcMessage->setError('削除中にエラーが発生しました。');
-        // }
+        return $this->redirect(['action' => 'index']);
     }
 
     /**
