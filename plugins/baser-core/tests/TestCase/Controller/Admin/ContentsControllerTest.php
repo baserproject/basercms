@@ -284,10 +284,10 @@ class ContentsControllerTest extends BcTestCase
     }
 
     /**
-     *  testDelete
+     *  testAdminDelete
      * コンテンツ削除（論理削除）
      */
-    public function testDelete()
+    public function testAdminDelete()
     {
         $id = 6;
         // 管理画面からの場合
@@ -296,6 +296,15 @@ class ContentsControllerTest extends BcTestCase
         $response = $this->ContentsController->delete(new ContentService());
         $this->assertEquals("フォルダー「サービス」をゴミ箱に移動しました。", $_SESSION['Flash']['flash'][0]['message']);
         $this->assertStringContainsString("/baser/admin/baser-core/contents/index", $response->getHeaderLine('Location'));
+    }
+
+    /**
+     *  testAjaxDelete
+     * コンテンツ削除（論理削除）
+     */
+    public function testAjaxDelete()
+    {
+        $id = 6;
         // ajaxからの場合
         $this->request = $this->request->withData('contentId', $id)->withEnv('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest');
         $this->ContentsController->setRequest($this->request);
