@@ -375,7 +375,8 @@ class ContentsControllerTest extends BcTestCase
      */
     public function testTrashEmpty()
     {
-        // $this->ContentService->
+        // BcContentsTestはコンポネントのテスト用のため、一旦復活させtrashEmptyを実行
+        $this->ContentService->restoreAll(['type' => 'BcContentsTest']);
         $this->request = $this->request->withData('test', 'テスト');
         $this->ContentsController->setRequest($this->request);
         $response = $this->ContentsController->trash_empty($this->ContentService);

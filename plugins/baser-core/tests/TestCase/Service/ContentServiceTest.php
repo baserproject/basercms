@@ -156,7 +156,7 @@ class ContentServiceTest extends BcTestCase
             ], 10],
             [[
                 'site_id' => 1,
-                'hardDelete' => true,
+                'withTrash' => true,
             ], 12],
             [[
                 'site_id' => 1,
@@ -200,10 +200,14 @@ class ContentServiceTest extends BcTestCase
         $request = $this->getRequest('/?status=1');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
         $this->assertEquals(10, $contents->all()->count());
-        // hardDeleteの場合
-        $request = $this->getRequest('/?status=1&hardDelete=true');
+        // ゴミ箱を含むの場合
+        $request = $this->getRequest('/?status=1&withTrash=true');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
         $this->assertEquals(12, $contents->all()->count());
+        // 否定の場合
+        $request = $this->getRequest('/?status=1&type!=Page');
+        $contents = $this->ContentService->getIndex($request->getQueryParams());
+        $this->assertEquals(4, $contents->all()->count());
     }
     /**
      * testGetTrashIndex
