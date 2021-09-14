@@ -140,6 +140,15 @@ interface ContentServiceInterface
     public function hardDeleteAll(Datetime $dateTime): int;
 
     /**
+     * コンテンツを削除する（論理削除）
+     *
+     * ※ エイリアスの場合は直接削除
+     * @param int $id
+     * @return bool
+     */
+    public function treeDelete($id): bool;
+
+    /**
       * コンテンツ情報を取得する
       * @return array
       */

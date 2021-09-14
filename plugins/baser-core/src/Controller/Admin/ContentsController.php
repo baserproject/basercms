@@ -88,7 +88,7 @@ class ContentsController extends BcAdminAppController
         $this->loadModel('BaserCore.ContentFolders');
         $this->loadModel('BaserCore.Users');
         $this->loadModel('BaserCore.Contents');
-        $this->Security->setConfig('unlockedActions', ['ajax_delete', 'trash_empty']);
+        $this->Security->setConfig('unlockedActions', ['delete', 'trash_empty']);
         // TODO 未実装のためコメントアウト
         /* >>>
         // $this->BcAuth->allow('view');
@@ -390,77 +390,56 @@ class ContentsController extends BcAdminAppController
 
     /**
      * コンテンツ削除（論理削除）
-     *
-     * @return boolean
+     *  @param  ContentServiceInterface $contentService
+     * @return Response|null
+     * @checked
+     * @unitTest
      */
-    public function ajax_delete(ContentServiceInterface $contentService)
+    public function delete(ContentServiceInterface $contentService)
     {
         $this->disableAutoRender();
-        if (empty($this->request->getData('contentId'))) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-        $request = $this->_delete($contentService, $this->request->getData('contentId'), false);;
-        if (!$request->getQuery('deleted')) {
-            $this->ajaxError(500, __d('baser', '削除中にエラーが発生しました。'));
-            // return false;
-        }
-        $this->redirect(['action' => 'index']);
-        // return true;
-    }
-
-    /**
-     * コンテンツ削除（論理削除）
-     */
-    public function admin_delete(ContentServiceInterface $contentService)
-    {
-        if (empty($this->request->getData('Content.id'))) {
-            $this->notFound();
-        }
-        if ($this->_delete($contentService, $this->request->getData('Content.id'), true)) {
-            $this->redirect(['controller' => 'contents', 'action' => 'index']);
+        // コンテンツIDチェック
+        if($this->request->is('ajax')) {
+            $useFlashMessage = false;
+            if (empty($id = $this->request->getData('contentId'))) {
+                $this->ajaxError(500, __d('baser', '無効な処理です。'));
+            }
         } else {
-            $this->BcMessage->setError('削除中にエラーが発生しました。');
+            $useFlashMessage = true;
+            if (empty($id = $this->request->getData('Content.id'))) {
+                $this->notFound();
+            }
         }
-    }
-
-    /**
-     * コンテンツを削除する（論理削除）
-     *
-     * ※ エイリアスの場合は直接削除
-     *
-     * @param int $id
-     * @param bool $useFlashMessage
-     */
-    protected function _delete($contentService, $id, $useFlashMessage = false)
-    {
-        $content = $contentService->get($id);
-        if (!$content) {
-            return false;
-        }
-        $typeName = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title');
-
+        // TODO:
         // EVENT Contents.beforeDelete
-        $this->dispatchLayerEvent('beforeDelete', [
-            'data' => $id
-        ]);
-
-        if (!$content->alias_id) {
-            $result = $this->Contents->softDeleteFromTree($id);
-            $message = $typeName . sprintf(__d('baser', '「%s」をゴミ箱に移動しました。'), $content->title);
-        } else {
-            $result = $this->Contents->removeFromTree($content);
-            $message = sprintf(__d('baser', '%s のエイリアス「%s」を削除しました。'), $typeName, $content->title);
+        // $this->dispatchLayerEvent('beforeDelete', [
+        //     'data' => $id
+        // ]);
+        try {
+            $content = $contentService->get($id);
+            $typeName = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title');
+            $result = $contentService->treeDelete($id);
+        } catch (\Exception $e) {
+            $result = false;
+            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
         }
-        if ($result) {
-            $this->BcMessage->setSuccess($message, true, $useFlashMessage);
-        }
-
+        // TODO:
         // EVENT Contents.afterDelete
-        $this->dispatchLayerEvent('afterDelete', [
-            'data' => $id
-        ]);
-        // TODO:　一時措置
-        return $this->request->withQueryParams(['deleted' => $result]);
+        // $this->dispatchLayerEvent('afterDelete', [
+        //     'data' => $id
+        // ]);
+        if ($result) {
+            $trashMessage = $typeName . sprintf(__d('baser', '「%s」をゴミ箱に移動しました。'), $content->title);
+            $aliasMessage = sprintf(__d('baser', '%s のエイリアス「%s」を削除しました。'), $typeName, $content->title);
+            $this->BcMessage->setSuccess($content->alias_id ? $aliasMessage : $trashMessage, true, $useFlashMessage);
+        } else {
+            if($this->request->is('ajax')) {
+                $this->ajaxError(500, __d('baser', '削除中にエラーが発生しました。'));
+            } else {
+                $this->BcMessage->setError('削除中にエラーが発生しました。');
+            }
+        }
+        return $this->redirect(['action' => 'index']);
     }
 
     /**
@@ -474,6 +453,7 @@ class ContentsController extends BcAdminAppController
     {
         if ($ids) {
             foreach($ids as $id) {
+                // FIXME: _deleteを消したので、修正する
                 $this->_delete($contentService, $id, false);
             }
         }
@@ -775,24 +755,6 @@ class ContentsController extends BcAdminAppController
         $this->autoRender = false;
         Configure::write('debug', 0);
         return $this->Content->exists($id);
-    }
-
-    /**
-     * プラグイン等と関連付けられていない素のコンテンツをゴミ箱より消去する
-     *
-     * @param $id
-     * @return bool
-     */
-    public function admin_empty()
-    {
-        if (empty($this->request->getData('contentId'))) {
-            return false;
-        }
-        $softDelete = $this->Content->softDelete(null);
-        $this->Content->softDelete(false);
-        $result = $this->Content->removeFromTree($this->request->getData('contentId'), true);
-        $this->Content->softDelete($softDelete);
-        return $result;
     }
 
     /**
