@@ -311,6 +311,17 @@ class ContentServiceTest extends BcTestCase
     }
 
     /**
+     * testRestore
+     *
+     * @return void
+     */
+    public function testRestore()
+    {
+        $this->assertNotEmpty($this->ContentService->restore(16));
+        $this->assertNotEmpty($this->ContentService->get(16));
+    }
+
+    /**
      * testGetContentsInfo
      *
      * @return void

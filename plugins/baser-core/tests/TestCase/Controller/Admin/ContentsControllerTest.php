@@ -375,7 +375,11 @@ class ContentsControllerTest extends BcTestCase
      */
     public function testTrashEmpty()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // $this->ContentService->
+        $this->request = $this->request->withData('test', 'テスト');
+        $this->ContentsController->setRequest($this->request);
+        $response = $this->ContentsController->trash_empty($this->ContentService);
+        $this->assertStringContainsString("/baser/admin/baser-core/contents/trash_index", $response->getHeaderLine('Location'));
     }
 
     /**

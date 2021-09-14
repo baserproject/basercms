@@ -33,9 +33,9 @@ interface ContentServiceInterface
     /**
      * ゴミ箱のコンテンツを取得する
      * @param int $id
-     * @return EntityInterface
+     * @return EntityInterface|array|null
      */
-    public function getTrash($id): EntityInterface;
+    public function getTrash($id);
 
     /**
      * 空のQueryを返す

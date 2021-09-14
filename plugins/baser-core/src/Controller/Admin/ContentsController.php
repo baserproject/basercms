@@ -548,7 +548,7 @@ class ContentsController extends BcAdminAppController
     /**
      * ゴミ箱を空にする
      * @param ContentServiceInterface $contentService
-     * @return bool
+     * @return Response|null
      */
     public function trash_empty(ContentServiceInterface $contentService)
     {

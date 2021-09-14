@@ -18,6 +18,7 @@ use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Model\Entity\Content;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Table\SitesTable;
 use Cake\Datasource\ConnectionManager;
@@ -77,12 +78,12 @@ class ContentService implements ContentServiceInterface
     /**
      * ゴミ箱のコンテンツを取得する
      * @param int $id
-     * @return EntityInterface
+     * @return EntityInterface|array|null
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getTrash($id): EntityInterface
+    public function getTrash($id)
     {
         return $this->getTrashIndex()->where(['Contents.id' => $id])->first();
     }
@@ -416,6 +417,36 @@ class ContentService implements ContentServiceInterface
             $result = $this->Contents->softDeleteFromTree($id);
         }
 
+        return $result;
+    }
+
+    /**
+     * restore
+     *
+     * @param  int $id
+     * @return
+     */
+    public function restore($id)
+    {
+        $trash = $this->getTrash($id);
+        return $this->Contents->restore($trash) ? $trash : null;
+    }
+
+    /**
+     * restoreAll
+     *
+     * @param  array $queryParams
+     * @return bool $result
+     */
+    public function restoreAll(array $queryParams = [])
+    {
+        $trash = $this->getTrashIndex($queryParams);
+        foreach ($trash as $entity) {
+            $result = true;
+            if (!$this->Contents->restore($entity)) {
+                $result = false;
+            }
+        }
         return $result;
     }
 
