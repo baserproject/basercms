@@ -149,6 +149,22 @@ interface ContentServiceInterface
     public function treeDelete($id): bool;
 
     /**
+     * 論理削除されたコンテンツを復元する
+     *
+     * @param  int $id
+     * @return EntityInterface|array|null $trash
+     */
+    public function restore($id);
+
+    /**
+     * ゴミ箱内のコンテンツをすべて元に戻す
+     *
+     * @param  array $queryParams
+     * @return int $count
+     */
+    public function restoreAll(array $queryParams = []): int;
+
+    /**
       * コンテンツ情報を取得する
       * @return array
       */

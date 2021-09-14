@@ -322,6 +322,17 @@ class ContentServiceTest extends BcTestCase
     }
 
     /**
+     * testRestoreAll
+     *
+     * @return void
+     */
+    public function testRestoreAll()
+    {
+        $this->assertEquals(2, $this->ContentService->restoreAll(['type' => "ContentFolder"]));
+        $this->assertTrue($this->ContentService->getTrashIndex(['type' => "ContentFolder"])->isEmpty());
+    }
+
+    /**
      * testGetContentsInfo
      *
      * @return void

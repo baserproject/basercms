@@ -421,10 +421,13 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * restore
+     * 論理削除されたコンテンツを復元する
      *
      * @param  int $id
-     * @return
+     * @return EntityInterface|array|null $trash
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function restore($id)
     {
@@ -433,21 +436,24 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * restoreAll
+     * ゴミ箱内のコンテンツをすべて元に戻す
      *
      * @param  array $queryParams
-     * @return bool $result
+     * @return int $count
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function restoreAll(array $queryParams = [])
+    public function restoreAll(array $queryParams = []): int
     {
+        $count = 0;
         $trash = $this->getTrashIndex($queryParams);
         foreach ($trash as $entity) {
-            $result = true;
-            if (!$this->Contents->restore($entity)) {
-                $result = false;
+            if ($this->Contents->restore($entity)) {
+                $count++;
             }
         }
-        return $result;
+        return $count;
     }
 
     /**
