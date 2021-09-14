@@ -12,6 +12,7 @@
 namespace BaserCore\Service;
 
 
+use Cake\ORM\Query;
 use Cake\Datasource\EntityInterface;
 /**
  * Interface ContentFolderServiceInterface
@@ -25,6 +26,13 @@ interface ContentFolderServiceInterface
      * @return EntityInterface
      */
     public function get($id): EntityInterface;
+
+    /**
+     * コンテンツフォルダー一覧用のデータを取得
+     * @param array $queryParams
+     * @return Query
+     */
+    public function getIndex(array $queryParams=[]): Query;
 
     /**
      * コンテンツフォルダー登録

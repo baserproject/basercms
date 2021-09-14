@@ -12,6 +12,7 @@
 
 namespace BaserCore\Service;
 
+use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -56,6 +57,27 @@ class ContentFolderService implements ContentFolderServiceInterface
         $contentFolder = $this->ContentFolders->get($id, ['contain' => ['Contents']]);
         $contentFolder->content = $contentFolder->content ?? $this->Contents->find('all', ['withDeleted'])->where(['entity_id' => $id])->first();
         return $contentFolder;
+    }
+
+    /**
+     * コンテンツフォルダー一覧用のデータを取得
+     * @param array $queryParams
+     * @return Query
+     */
+    public function getIndex(array $queryParams=[]): Query
+    {
+        $options = [];
+        if (!empty($queryParams['num'])) {
+            $options = ['limit' => $queryParams['num']];
+        }
+        $query = $this->ContentFolders->find('all', $options)->contain('Contents');
+        if (!empty($queryParams['folder_template'])) {
+            $query->where(['folder_template LIKE' => '%' . $queryParams['folder_template'] . '%']);
+        }
+        if (!empty($queryParams['page_template'])) {
+            $query->where(['page_template LIKE' => '%' . $queryParams['page_template'] . '%']);
+        }
+        return $query;
     }
 
     /**

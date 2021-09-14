@@ -49,7 +49,14 @@ class ContentFoldersFixture extends TestFixture
             ],
             [
                 'id' => '10',
-                'folder_template' => '削除済みフォルダー',
+                'folder_template' => '削除済みフォルダー(親)',
+                'page_template' => '',
+                'created' => '2016-08-10 02:17:28',
+                'modified' => null
+            ],
+            [
+                'id' => '11',
+                'folder_template' => '削除済みフォルダー(子)',
                 'page_template' => '',
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null
