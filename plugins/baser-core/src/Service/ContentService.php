@@ -23,6 +23,7 @@ use BaserCore\Model\Table\SitesTable;
 use Cake\Datasource\ConnectionManager;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentsTable;
+use Cake\Datasource\Exception\RecordNotFoundException;
 
 /**
  * Class ContentService
@@ -398,10 +399,16 @@ class ContentService implements ContentServiceInterface
      * ※ エイリアスの場合は直接削除
      * @param int $id
      * @return bool
+     * @checked
+     * @unitTest
      */
     public function treeDelete($id): bool
     {
-        if (empty($content = $this->get($id))) return false;
+        try {
+            $content = $this->get($id);
+        } catch (RecordNotFoundException $e) {
+            return false;
+        }
 
         if ($content->alias_id) {
             $result = $this->Contents->removeFromTree($content);

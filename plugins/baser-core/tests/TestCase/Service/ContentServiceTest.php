@@ -293,6 +293,24 @@ class ContentServiceTest extends BcTestCase
     }
 
     /**
+     * testTreeDelete
+     *
+     * @return void
+     */
+    public function testTreeDelete()
+    {
+        // エンティティが存在しない場合
+        $this->assertFalse($this->ContentService->treeDelete(0));
+        // エイリアス出ない場合
+        $this->assertTrue($this->ContentService->treeDelete(6));
+        $query = $this->ContentService->getTrashIndex(['name' => 'service']);
+        $this->assertEquals(4, $query->count());
+        // エイリアスがある場合
+        // TODO: $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // $result = $this->ContentService->treeDelete(14);
+    }
+
+    /**
      * testGetContentsInfo
      *
      * @return void
