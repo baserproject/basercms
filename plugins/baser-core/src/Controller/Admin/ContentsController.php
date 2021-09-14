@@ -415,9 +415,14 @@ class ContentsController extends BcAdminAppController
         // $this->dispatchLayerEvent('beforeDelete', [
         //     'data' => $id
         // ]);
-        $content = $contentService->get($id);
-        $typeName = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title');
-        $result = $contentService->treeDelete($id);
+        try {
+            $content = $contentService->get($id);
+            $typeName = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title');
+            $result = $contentService->treeDelete($id);
+        } catch (\Exception $e) {
+            $result = false;
+            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
+        }
         // TODO:
         // EVENT Contents.afterDelete
         // $this->dispatchLayerEvent('afterDelete', [

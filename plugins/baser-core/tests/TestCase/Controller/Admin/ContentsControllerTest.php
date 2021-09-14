@@ -332,19 +332,19 @@ class ContentsControllerTest extends BcTestCase
 
     /**
      *  testDelete
-     * treeDeleteが失敗する場合
+     * IDが存在しない場合
      *
      * @return void
      */
     public function testDeleteWithFail()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $id = 100;
         // 管理画面からの場合
         $this->request = $this->request->withData('Content.id', $id);
         $this->ContentsController->setRequest($this->request);
         $this->ContentsController->delete(new ContentService());
-        $this->assertEquals("削除中にエラーが発生しました。", $_SESSION['Flash']['flash'][0]['message']);
+        $this->assertStringContainsString("データベース処理中にエラーが発生しました。", $_SESSION['Flash']['flash'][0]['message']);
+        $this->assertStringContainsString("削除中にエラーが発生しました。", $_SESSION['Flash']['flash'][1]['message']);
     }
 
     /**
