@@ -164,7 +164,7 @@ class ContentsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    private function _getContents($contentService)
+    protected function _getContents($contentService)
     {
         switch($this->request->getParam('action')) {
             case 'index':
@@ -191,7 +191,7 @@ class ContentsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    private function _getTemplate(): string
+    protected function _getTemplate(): string
     {
         switch($this->request->getParam('action')) {
             case 'index':
@@ -547,17 +547,18 @@ class ContentsController extends BcAdminAppController
 
     /**
      * ゴミ箱を空にする
-     *
-     * @return bool
+     * @param ContentServiceInterface $contentService
+     * @return Response|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function trash_empty(ContentServiceInterface $contentService)
     {
+        $this->disableAutoRender();
         if (!$this->request->getData()) {
             $this->notFound();
         }
-
-        $this->disableAutoRender();
-
         $contents = $contentService->getTrashIndex()->order(['plugin', 'type']);
 
         // EVENT Contents.beforeTrashEmpty
@@ -565,6 +566,28 @@ class ContentsController extends BcAdminAppController
             'data' => $contents
         ]);
         if ($contents) {
+            $result = $this->_deleteTrash($contentService, $contents);
+        }
+        // EVENT Contents.afterTrashEmpty
+        $this->dispatchLayerEvent('afterTrashEmpty', [
+            'data' => $result
+        ]);
+        return $this->redirect(['action' => "trash_index"]);
+    }
+
+    /**
+     * ゴミ箱を物理削除する
+     *
+     * @param  Query $contents
+     * @param  ContentService $contentService
+     * @return bool $result
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function _deleteTrash($contentService, $contents)
+    {
+        if(!empty($contents) && !empty($contentService)) {
             foreach($contents as $content) {
                 $pluginName = $content->plugin;
                 $modelName = $content->type;
@@ -575,18 +598,16 @@ class ContentsController extends BcAdminAppController
                     $target = $this->getTableLocator()->get($pluginName . Inflector::pluralize($modelName));
                 }
                 if($target) {
+                    // Contents以外のモデルでの削除
                     $result = $target->delete($content->entity_id);
                 }
             }
+            // Contentsモデルでの全体削除
             if ($count = $contentService->hardDeleteAll(new DateTime('NOW'))) {
                 $this->BcMessage->setSuccess($count . "個のコンテンツがゴミ箱から削除されました", true, false);
             }
+            return $result;
         }
-        // EVENT Contents.afterTrashEmpty
-        $this->dispatchLayerEvent('afterTrashEmpty', [
-            'data' => $result
-        ]);
-        return $this->redirect(['action' => "trash_index"]);
     }
 
     /**

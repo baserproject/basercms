@@ -18,6 +18,7 @@ use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Model\Entity\Content;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Table\SitesTable;
 use Cake\Datasource\ConnectionManager;
@@ -77,12 +78,12 @@ class ContentService implements ContentServiceInterface
     /**
      * ゴミ箱のコンテンツを取得する
      * @param int $id
-     * @return EntityInterface
+     * @return EntityInterface|array|null
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getTrash($id): EntityInterface
+    public function getTrash($id)
     {
         return $this->getTrashIndex()->where(['Contents.id' => $id])->first();
     }
@@ -135,9 +136,9 @@ class ContentService implements ContentServiceInterface
         $options = [];
         $conditions['site_id'] = $queryParams['site_id'];
 
-        if (!empty($queryParams['hardDelete'])) {
-            $conditions['hardDelete'] = $queryParams['hardDelete'];
-            if ($conditions['hardDelete']) {
+        if (!empty($queryParams['withTrash'])) {
+            $conditions['withTrash'] = $queryParams['withTrash'];
+            if ($conditions['withTrash']) {
                 $options = array_merge($options, ['withDeleted']);
             }
         }
@@ -181,8 +182,8 @@ class ContentService implements ContentServiceInterface
         $options = [];
         $columns = ConnectionManager::get('default')->getSchemaCollection()->describe('contents')->columns();
 
-        if (!empty($queryParams['hardDelete'])) {
-            if ($queryParams['hardDelete']) {
+        if (!empty($queryParams['withTrash'])) {
+            if ($queryParams['withTrash']) {
                 $options = array_merge($options, ['withDeleted']);
             }
         }
@@ -203,6 +204,8 @@ class ContentService implements ContentServiceInterface
         foreach($queryParams as $key => $value) {
             if (in_array($key, $columns)) {
                 $query = $query->andWhere(['Contents.' . $key => $value]);
+            } elseif ($key[-1] === '!' && in_array($key = mb_substr($key, 0, -1), $columns)) {
+                $query = $query->andWhere(['Contents.' . $key . " IS NOT " => $value]);
             }
         }
 
@@ -251,7 +254,7 @@ class ContentService implements ContentServiceInterface
      */
     public function getTrashIndex(array $queryParams=[], string $type="all"): Query
     {
-        $queryParams = array_merge($queryParams, ['hardDelete' => true]);
+        $queryParams = array_merge($queryParams, ['withTrash' => true]);
         return $this->getIndex($queryParams, $type)->where(['deleted_date IS NOT NULL']);
     }
 
@@ -417,6 +420,42 @@ class ContentService implements ContentServiceInterface
         }
 
         return $result;
+    }
+
+    /**
+     * 論理削除されたコンテンツを復元する
+     *
+     * @param  int $id
+     * @return EntityInterface|array|null $trash
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function restore($id)
+    {
+        $trash = $this->getTrash($id);
+        return $this->Contents->restore($trash) ? $trash : null;
+    }
+
+    /**
+     * ゴミ箱内のコンテンツをすべて元に戻す
+     *
+     * @param  array $queryParams
+     * @return int $count
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function restoreAll(array $queryParams = []): int
+    {
+        $count = 0;
+        $trash = $this->getTrashIndex($queryParams);
+        foreach ($trash as $entity) {
+            if ($this->Contents->restore($entity)) {
+                $count++;
+            }
+        }
+        return $count;
     }
 
     /**
