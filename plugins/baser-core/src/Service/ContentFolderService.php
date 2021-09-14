@@ -63,6 +63,9 @@ class ContentFolderService implements ContentFolderServiceInterface
      * コンテンツフォルダー一覧用のデータを取得
      * @param array $queryParams
      * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getIndex(array $queryParams=[]): Query
     {
