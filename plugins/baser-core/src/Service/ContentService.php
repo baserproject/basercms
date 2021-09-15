@@ -266,7 +266,7 @@ class ContentService implements ContentServiceInterface
      * @param array $options
      * @return array|bool
      * @checked
-     * @noTodo
+
      * @unitTest
      */
     public function getContentFolderList($siteId = null, $options = [])
@@ -416,7 +416,8 @@ class ContentService implements ContentServiceInterface
         if ($content->alias_id) {
             $result = $this->Contents->removeFromTree($content);
         } else {
-            $result = $this->Contents->softDeleteFromTree($id);
+            // $result = $this->Contents->softDeleteFromTree($id); TODO: キャッシュ系が有効化されてからsoftDeleteFromTreeを使用する
+            $result = $this->Contents->deleteRecursive($id); // 一時措置
         }
 
         return $result;

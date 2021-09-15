@@ -439,8 +439,16 @@ class ContentsTableTest extends BcTestCase
      */
     public function testDeleteRecursive()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->Contents->deleteRecursive(1);
+        $Contents = $this->Contents->addBehavior('Tree', ['level' => 'level']);
+        // 子要素がない場合
+        $this->assertTrue($Contents->deleteRecursive(4));
+        $this->assertNull($Contents->findById(4)->first());
+        // 子要素がある場合
+        $children = $Contents->find('children', ['for' => 6])->all();
+        $this->assertTrue($this->Contents->deleteRecursive(6));
+        foreach ($children as $child) {
+            $this->assertNull($this->Contents->findById($child->id)->first());
+        }
     }
 
     /**

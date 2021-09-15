@@ -973,62 +973,6 @@ class ContentsTable extends AppTable
         return $this->find('all')->where([$conditions])->order(['Contents.id'])->first();
     }
 
-    /**
-     * コンテンツフォルダーのリストを取得
-     * コンボボックス用
-     *TODO: ContentServiceと統一する
-     * @param int $siteId
-     * @param array $options
-     * @return array|bool
-     */
-    public function getContentFolderList($siteId = null, $options = [])
-    {
-        $options = array_merge([
-            'excludeId' => null
-        ], $options);
-
-        $conditions = [
-            'type' => 'ContentFolder',
-            'alias_id IS NULL'
-        ];
-
-        if (!is_null($siteId)) {
-            $conditions['site_id'] = $siteId;
-        }
-        if ($options['excludeId']) {
-            $conditions['id <>'] = $options['excludeId'];
-        }
-        if (!empty($options['conditions'])) {
-            $conditions = array_merge($conditions, $options['conditions']);
-        }
-        $folders = $this->find('treeList')->where([$conditions]);
-        if ($folders) {
-            return $this->convertTreeList($folders->all()->toArray());
-        }
-        return false;
-    }
-
-    /**
-     * ツリー構造のデータを コンボボックスのデータ用に変換する
-     *TODO: ContentServiceと統一する
-     * @param $nodes
-     * @return array
-     */
-    public function convertTreeList($nodes)
-    {
-        if (!$nodes) {
-            return [];
-        }
-        foreach($nodes as $key => $value) {
-            if (preg_match("/^([_]+)/i", $value, $matches)) {
-                $value = preg_replace("/^[_]+/i", '', $value);
-                $prefix = str_replace('_', '　　　', $matches[1]);
-                $value = $prefix . '└' . $value;
-            }
-            $nodes[$key] = $value;
-        }
-        return $nodes;
-    }
 
     /**
      * ツリー構造より論理削除する
@@ -1054,17 +998,19 @@ class ContentsTable extends AppTable
      *
      * エイリアスの場合
      *
-     * @param $id
-     * @return bool
+     * @param int $id
+     * @return bool $result
+     * @checked
+     * @unitTest
      */
-    public function deleteRecursive($id)
+    public function deleteRecursive($id): bool
     {
         if (!$id) {
             return false;
         }
         $children = $this->find('children', ['for' => $id])->all();
         $result = true;
-        if ($children) {
+        if (!$children->isEmpty()) {
             foreach($children as $child) {
                 if (!$this->deleteRecursive($child->id)) {
                     $result = false;
@@ -1087,7 +1033,6 @@ class ContentsTable extends AppTable
                 // $this->clear(); // TODO: これは何か再確認する humuhimi
                 $this->save($content, ['validate' => false]); // 論理削除用のvalidationを用意するべき
                 $this->updatingSystemData = true;
-                // TODO: humuhimi deletedフラグがついてない
                 $result = $this->delete($content);
                 // =====================================================================
                 // 通常の削除の際、afterDelete で、関連コンテンツのキャッシュを削除しているが、
