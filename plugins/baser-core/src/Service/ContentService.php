@@ -548,6 +548,7 @@ class ContentService implements ContentServiceInterface
                 $content->self_status = false;
                 unset($content->lft);
                 unset($content->rght);
+                // TODO: $this->updatingSystemDataのsetter getterを用意する必要あり
                 $this->updatingSystemData = false;
                 // ここでは callbacks を false にすると lft rght が更新されないので callbacks は true に設定する（default: true）
                 // $this->clear(); // TODO: これは何か再確認する humuhimi

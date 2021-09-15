@@ -177,4 +177,16 @@ interface ContentServiceInterface
       * @return array
       */
     public function getContensInfo();
+
+    /**
+     * 再帰的に削除
+     *
+     * エイリアスの場合
+     *
+     * @param int $id
+     * @return bool $result
+     * @checked
+     * @unitTest
+     */
+    public function deleteRecursive($id): bool;
 }
