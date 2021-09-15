@@ -185,8 +185,6 @@ interface ContentServiceInterface
      *
      * @param int $id
      * @return bool $result
-     * @checked
-     * @unitTest
      */
     public function deleteRecursive($id): bool;
 }
