@@ -89,6 +89,21 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * コンテンツの子要素を取得する
+     *
+     * @param  int $id
+     * @return Query|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getChildren($id)
+    {
+        $query = $this->Contents->find('children', ['for' => $id]);
+        return $query->isEmpty() ? null : $query;
+    }
+
+    /**
      * 空のQueryを返す
 
      * @return Query

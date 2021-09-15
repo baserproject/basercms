@@ -84,6 +84,17 @@ class ContentServiceTest extends BcTestCase
     }
 
     /**
+     * testGetChildren
+     *
+     * @return void
+     */
+    public function testGetChildren(): void
+    {
+        $this->assertNull($this->ContentService->getChildren(4));
+        $this->assertEquals(3, $this->ContentService->getChildren(6)->count());
+    }
+
+    /**
      * testGetEmptyIndex
      *
      * @return void
