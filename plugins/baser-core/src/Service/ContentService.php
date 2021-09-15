@@ -89,6 +89,21 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * コンテンツの子要素を取得する
+     *
+     * @param  int $id
+     * @return Query|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getChildren($id)
+    {
+        $query = $this->Contents->find('children', ['for' => $id]);
+        return $query->isEmpty() ? null : $query;
+    }
+
+    /**
      * 空のQueryを返す
 
      * @return Query
@@ -417,7 +432,7 @@ class ContentService implements ContentServiceInterface
             $result = $this->Contents->removeFromTree($content);
         } else {
             // $result = $this->Contents->softDeleteFromTree($id); TODO: キャッシュ系が有効化されてからsoftDeleteFromTreeを使用する
-            $result = $this->Contents->deleteRecursive($id); // 一時措置
+            $result = $this->deleteRecursive($id); // 一時措置
         }
 
         return $result;
@@ -478,6 +493,81 @@ class ContentService implements ContentServiceInterface
             $contentsInfo[$key]['display_name'] = $site->display_name;
         }
         return $contentsInfo;
+    }
+
+    /**
+     * ツリー構造より論理削除する
+     * TODO: キャッシュビヘイビアー実装後復活させる
+     * @param $id
+     * @return bool
+     */
+    // public function softDeleteFromTree($id)
+    // {
+    //     // TODO:　キャッシュ系をオフにする
+    //     // $this->softDelete(true);
+    //     // $this->Behaviors->unload('BcCache');
+    //     // $this->Behaviors->unload('BcUpload');
+    //     $result = $this->deleteRecursive($id);
+    //     // $this->Behaviors->load('BcCache');
+    //     // $this->Behaviors->load('BcUpload');
+    //     // $this->delAssockCache();
+    //     return $result;
+    // }
+
+    /**
+     * 再帰的に削除
+     *
+     * エイリアスの場合
+     *
+     * @param int $id
+     * @return bool $result
+     * @checked
+     * @unitTest
+     */
+    public function deleteRecursive($id): bool
+    {
+        if (!$id) {
+            return false;
+        }
+        $result = true;
+        if ($children = $this->getChildren($id)) {
+            foreach($children as $child) {
+                if (!$this->deleteRecursive($child->id)) {
+                    $result = false;
+                }
+            }
+        }
+        if ($result) {
+            $content = $this->get($id);
+            if (empty($content->alias_id)) {
+                // エイリアス以外の場合
+                // 一旦階層構造から除外しリセットしてゴミ箱に移動（論理削除）
+                $content->parent_id = null;
+                $content->url = '';
+                $content->status = false;
+                $content->self_status = false;
+                unset($content->lft);
+                unset($content->rght);
+                // TODO: $this->updatingSystemDataのsetter getterを用意する必要あり
+                $this->updatingSystemData = false;
+                // ここでは callbacks を false にすると lft rght が更新されないので callbacks は true に設定する（default: true）
+                // $this->clear(); // TODO: これは何か再確認する humuhimi
+                $this->Contents->save($content, ['validate' => false]); // 論理削除用のvalidationを用意するべき
+                $this->updatingSystemData = true;
+                $result = $this->Contents->delete($content);
+                // =====================================================================
+                // 通常の削除の際、afterDelete で、関連コンテンツのキャッシュを削除しているが、
+                // 論理削除の場合、afterDelete が呼ばれない為、ここで削除する
+                // =====================================================================
+                $this->Contents->deleteAssocCache($content);
+                return $result;
+            } else {
+                // エイリアスの場合、直接削除
+                $result = $this->Contents->removeFromTree($content);
+                return $result;
+            }
+        }
+        return false;
     }
 }
 

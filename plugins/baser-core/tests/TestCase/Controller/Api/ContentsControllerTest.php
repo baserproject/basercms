@@ -79,7 +79,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->get('/baser/api/baser-core/contents/view/1.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('baserCMSサンプル', $result->contents->title);
+        $this->assertEquals('baserCMSサンプル', $result->content->title);
     }
     /**
      * Test index method
@@ -108,4 +108,28 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals(3, count($result->contents));
     }
 
+    /**d
+     * Test delete method
+     *
+     * @return void
+     */
+    public function testDelete()
+    {
+        // 子要素を持たない場合
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/api/baser-core/contents/delete/4.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals("コンテンツ: indexを削除しました。", $result->message);
+        $this->get('/baser/api/baser-core/contents/view/4.json?token=' . $this->accessToken);
+        $this->assertResponseError();
+        // 子要素を持つ場合
+        $this->post('/baser/api/baser-core/contents/delete/6.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $this->get('/baser/api/baser-core/contents/view/6.json?token=' . $this->accessToken); // 親要素削除チェック
+        $this->assertResponseError();
+        $this->get('/baser/api/baser-core/contents/view/11.json?token=' . $this->accessToken); // 子要素削除チェック
+        $this->assertResponseError();
+    }
 }

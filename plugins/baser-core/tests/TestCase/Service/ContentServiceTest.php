@@ -84,6 +84,17 @@ class ContentServiceTest extends BcTestCase
     }
 
     /**
+     * testGetChildren
+     *
+     * @return void
+     */
+    public function testGetChildren(): void
+    {
+        $this->assertNull($this->ContentService->getChildren(4));
+        $this->assertEquals(3, $this->ContentService->getChildren(6)->count());
+    }
+
+    /**
      * testGetEmptyIndex
      *
      * @return void
@@ -348,5 +359,32 @@ class ContentServiceTest extends BcTestCase
         $this->assertTrue(isset($result[0]['published']));
         $this->assertTrue(isset($result[0]['total']));
         $this->assertTrue(isset($result[0]['display_name']));
+    }
+
+    /**
+     * ツリー構造より論理削除する
+     */
+    public function testSoftDeleteFromTree()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // $result = $this->ContentService->softDeleteFromTree(1);
+    }
+
+    /**
+     * 再帰的に削除
+     *
+     * エイリアスの場合
+     */
+    public function testDeleteRecursive()
+    {
+        // 子要素がない場合
+        $this->assertTrue($this->ContentService->deleteRecursive(4));
+        $this->assertNotEmpty($this->ContentService->getTrash(4));
+        // 子要素がある場合
+        $children = $this->ContentService->getChildren(6);
+        $this->assertTrue($this->ContentService->deleteRecursive(6));
+        foreach ($children as $child) {
+            $this->assertNotEmpty($this->ContentService->getTrash($child->id));
+        }
     }
 }

@@ -38,6 +38,14 @@ interface ContentServiceInterface
     public function getTrash($id);
 
     /**
+     * コンテンツの子要素を取得する
+     *
+     * @param  int $id
+     * @return Query|null
+     */
+    public function getChildren($id);
+
+    /**
      * 空のQueryを返す
      *
      * @return Query
@@ -169,4 +177,14 @@ interface ContentServiceInterface
       * @return array
       */
     public function getContensInfo();
+
+    /**
+     * 再帰的に削除
+     *
+     * エイリアスの場合
+     *
+     * @param int $id
+     * @return bool $result
+     */
+    public function deleteRecursive($id): bool;
 }

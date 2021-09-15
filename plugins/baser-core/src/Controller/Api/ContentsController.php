@@ -32,42 +32,78 @@ class ContentsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function view(ContentServiceInterface $contents, $id)
+    public function view(ContentServiceInterface $contentService, $id)
     {
         $this->set([
-            'contents' => $contents->get($id)
+            'content' => $contentService->get($id)
         ]);
-        $this->viewBuilder()->setOption('serialize', ['contents']);
+        $this->viewBuilder()->setOption('serialize', ['content']);
     }
 
     /**
      * コンテンツ情報一覧取得
      *
-     * @param  ContentServiceInterface $contents
+     * @param  ContentServiceInterface $contentService
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(ContentServiceInterface $contents, $type="index")
+    public function index(ContentServiceInterface $contentService, $type="index")
     {
         switch ($type) {
             case "index":
-                $data = $this->paginate($contents->getIndex($this->request->getQueryParams()));
+                $data = $this->paginate($contentService->getIndex($this->request->getQueryParams()));
                 break;
             case "trash":
-                $data = $this->paginate($contents->getTrashIndex($this->request->getQueryParams(), 'threaded')->order(['site_id', 'lft']));
+                $data = $this->paginate($contentService->getTrashIndex($this->request->getQueryParams(), 'threaded')->order(['site_id', 'lft']));
                 break;
             case "tree":
-                $data = $this->paginate($contents->getTreeIndex($this->request->getQueryParams()));
+                $data = $this->paginate($contentService->getTreeIndex($this->request->getQueryParams()));
                 break;
             case "table":
-                $data = $this->paginate($contents->getTableIndex($this->request->getQueryParams()));
+                $data = $this->paginate($contentService->getTableIndex($this->request->getQueryParams()));
                 break;
         }
         $this->set([
             'contents' => $data
         ]);
         $this->viewBuilder()->setOption('serialize', ['contents']);
+    }
+
+    /**
+     * コンテンツ情報論理削除
+     * ※ 子要素があれば、子要素も削除する
+     * @param ContentServiceInterface $contentService
+     * @param $id
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function delete(ContentServiceInterface $contentService, $id)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $contents = $contentService->get($id);
+        $children = $contentService->getChildren($id);
+        try {
+            $text = "コンテンツ: " . $contents->name . "を削除しました。";
+            if ($children && $contentService->treeDelete($id)) {
+                $contents = array_merge([$contents], $children->toArray());
+                foreach ($children as $child) {
+                    $text .= "\nコンテンツ: " . $child->name . "を削除しました。";
+                }
+                $message = __d('baser', $text);
+            } elseif ($contentService->delete($id)) {
+                $message = __d('baser', $text);
+            }
+        } catch (Exception $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+        }
+        $this->set([
+            'message' => $message,
+            'contents' => $contents
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['contents', 'message']);
     }
 }
