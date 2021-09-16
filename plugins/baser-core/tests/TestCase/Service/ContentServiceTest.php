@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Service;
 
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentService;
+use BaserCore\Service\ContentFolderService;
 
 /**
  * BaserCore\Model\Table\ContentsTable Test Case
@@ -37,6 +38,7 @@ class ContentServiceTest extends BcTestCase
     protected $fixtures = [
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
+        'plugin.BaserCore.ContentFolders',
     ];
 
         /**
@@ -48,6 +50,7 @@ class ContentServiceTest extends BcTestCase
     {
         parent::setUp();
         $this->ContentService = new ContentService();
+        $this->ContentFolderService = new ContentFolderService();
     }
 
     /**
@@ -285,6 +288,7 @@ class ContentServiceTest extends BcTestCase
         $this->assertNotNull($contents->deleted_date);
     }
 
+
     /**
      * testDelete
      *
@@ -292,7 +296,31 @@ class ContentServiceTest extends BcTestCase
      */
     public function testHardDelete(): void
     {
-        $this->assertTrue($this->ContentService->hardDelete(15, true));
+        // treeBehavior falseの場合
+        $this->assertTrue($this->ContentService->hardDelete(15));
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentService->getTrash(15);
+        // treeBehavior trueの場合
+        $this->assertTrue($this->ContentService->hardDelete(16, true));
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentService->getTrash(16); // 親要素
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentService->getTrash(17); // 子要素
+    }
+
+    /**
+     * testHardDeleteWithAssoc
+     *
+     * @return void
+     */
+    public function testHardDeleteWithAssoc(): void
+    {
+        $content = $this->ContentService->getTrash(16);
+        $this->assertTrue($this->ContentService->hardDeleteWithAssoc(16));
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentService->getTrash(16);
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentFolderService->get($content->entity_id);
     }
 
     /**

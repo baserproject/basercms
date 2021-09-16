@@ -380,22 +380,9 @@ class ContentsControllerTest extends BcTestCase
         $this->request = $this->request->withData('test', 'テスト');
         $this->ContentsController->setRequest($this->request);
         $response = $this->ContentsController->trash_empty($this->ContentService);
-        $this->assertStringContainsString("/baser/admin/baser-core/contents/trash_index", $response->getHeaderLine('Location'));
-    }
-
-    /**
-     * testDeleteTrash
-     *
-     * @return void
-     */
-    public function testDeleteTrash()
-    {
-        $target = $this->ContentService->getTrashIndex(['type' => "ContentFolder"]);
-        $result = $this->execPrivateMethod($this->ContentsController, '_deleteTrash', [$this->ContentService, $target]);
-        $this->assertTrue($result);
         $this->assertTrue($this->ContentService->getTrashIndex(['type' => "ContentFolder"])->isEmpty());
         $this->assertEquals(3, $this->ContentFolderService->getIndex()->count());
-
+        $this->assertStringContainsString("/baser/admin/baser-core/contents/trash_index", $response->getHeaderLine('Location'));
     }
 
     /**
