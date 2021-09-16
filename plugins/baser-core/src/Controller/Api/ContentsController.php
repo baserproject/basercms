@@ -39,6 +39,21 @@ class ContentsController extends BcApiController
         ]);
         $this->viewBuilder()->setOption('serialize', ['content']);
     }
+    /**
+     * ゴミ箱情報取得
+     * @param ContentServiceInterface $Contents
+     * @param $id
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function viewTrash(ContentServiceInterface $contentService, $id)
+    {
+        $this->set([
+            'trash' => $contentService->getTrash($id)
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['trash']);
+    }
 
     /**
      * コンテンツ情報一覧取得
@@ -105,5 +120,30 @@ class ContentsController extends BcApiController
             'contents' => $contents
         ]);
         $this->viewBuilder()->setOption('serialize', ['contents', 'message']);
+    }
+
+    /**
+     * ゴミ箱内コンテンツ情報物理削除
+     * @param ContentServiceInterface $contentService
+     * @param $id
+     * @return void
+     */
+    public function deleteTrash(ContentServiceInterface $contentService, $id)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $trash = $contentService->getTrash($id);
+        try {
+            if ($contentService->hardDeleteWithAssoc($id)) {
+                $message = __d('baser', 'ゴミ箱: {0} を削除しました。', $trash->name);
+            }
+        } catch (Exception $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+        }
+        $this->set([
+            'message' => $message,
+            'trash' => $trash
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['trash', 'message']);
     }
 }

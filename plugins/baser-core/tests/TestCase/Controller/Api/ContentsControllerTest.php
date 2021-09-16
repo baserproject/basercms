@@ -32,6 +32,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.Contents',
+        'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.Sites'
     ];
 
@@ -81,6 +82,19 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('baserCMSサンプル', $result->content->title);
     }
+
+    /**
+     * testViewTrash
+     *
+     * @return void
+     */
+    public function testViewTrash(): void
+    {
+        $this->get('/baser/api/baser-core/contents/viewTrash/16.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('削除済みフォルダー(親)', $result->trash->title);
+    }
     /**
      * Test index method
      *
@@ -108,7 +122,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals(3, count($result->contents));
     }
 
-    /**d
+    /**
      * Test delete method
      *
      * @return void
@@ -130,6 +144,23 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->get('/baser/api/baser-core/contents/view/6.json?token=' . $this->accessToken); // 親要素削除チェック
         $this->assertResponseError();
         $this->get('/baser/api/baser-core/contents/view/11.json?token=' . $this->accessToken); // 子要素削除チェック
+        $this->assertResponseError();
+    }
+
+    /**
+     * Test delete method
+     *
+     * @return void
+     */
+    public function testDeleteTrash()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/api/baser-core/contents/deleteTrash/16.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals("ゴミ箱: 削除済みフォルダー(親) を削除しました。", $result->message);
+        $this->get('/baser/api/baser-core/contents/viewTrash/16.json?token=' . $this->accessToken);
         $this->assertResponseError();
     }
 }

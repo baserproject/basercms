@@ -79,14 +79,15 @@ class ContentService implements ContentServiceInterface
     /**
      * ゴミ箱のコンテンツを取得する
      * @param int $id
-     * @return EntityInterface|array|null
+     * @return EntityInterface|array
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
      * @checked
      * @noTodo
      * @unitTest
      */
     public function getTrash($id)
     {
-        return $this->getTrashIndex()->where(['Contents.id' => $id])->first();
+            return $this->getTrashIndex()->where(['Contents.id' => $id])->firstOrFail();
     }
 
     /**

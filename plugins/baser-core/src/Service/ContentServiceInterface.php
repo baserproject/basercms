@@ -33,7 +33,8 @@ interface ContentServiceInterface
     /**
      * ゴミ箱のコンテンツを取得する
      * @param int $id
-     * @return EntityInterface|array|null
+     * @return EntityInterface|array
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
      */
     public function getTrash($id);
 
