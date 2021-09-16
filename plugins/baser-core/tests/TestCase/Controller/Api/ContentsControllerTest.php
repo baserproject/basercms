@@ -163,4 +163,22 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->get('/baser/api/baser-core/contents/viewTrash/16.json?token=' . $this->accessToken);
         $this->assertResponseError();
     }
+
+    /**
+     * testTrashEmpty
+     *
+     * @return void
+     */
+    public function testTrashEmpty()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/api/baser-core/contents/trashEmpty.json?type=ContentFolder&token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals("ゴミ箱: 削除済みフォルダー(親)(ContentFolder)を削除しました。削除済みフォルダー(子)(ContentFolder)を削除しました。", $result->message);
+        $this->get('/baser/api/baser-core/contents/index/trash.json?type=ContentFolder&token=' . $this->accessToken);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEmpty($result->contents);
+    }
 }

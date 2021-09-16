@@ -391,7 +391,7 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * コンテンツ情報と紐付いてるモデルを削除する
+     * コンテンツ情報と紐付いてるモデルを物理削除する
      * @param int $id
      * @return bool
      * @checked
@@ -434,7 +434,7 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * 指定日時以前の該当する論理削除されたコンテンツ情報をすべて削除する
+     * 指定日時以前の該当する論理削除されたコンテンツ情報をすべて物理削除する
      *
      * @param  Datetime $dateTime
      * @return int
@@ -551,7 +551,7 @@ class ContentService implements ContentServiceInterface
     // }
 
     /**
-     * 再帰的に削除
+     * 再帰的に論理削除
      *
      * エイリアスの場合
      *

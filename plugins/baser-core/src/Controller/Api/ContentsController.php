@@ -127,6 +127,9 @@ class ContentsController extends BcApiController
      * @param ContentServiceInterface $contentService
      * @param $id
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function deleteTrash(ContentServiceInterface $contentService, $id)
     {
@@ -136,6 +139,37 @@ class ContentsController extends BcApiController
             if ($contentService->hardDeleteWithAssoc($id)) {
                 $message = __d('baser', 'ゴミ箱: {0} を削除しました。', $trash->name);
             }
+        } catch (Exception $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+        }
+        $this->set([
+            'message' => $message,
+            'trash' => $trash
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['trash', 'message']);
+    }
+
+    /**
+     * ゴミ箱を空にする(物理削除)
+     * @param ContentServiceInterface $contentService
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function trashEmpty(ContentServiceInterface $contentService)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $trash = $contentService->getTrashIndex($this->request->getQueryParams());
+        $text = "ゴミ箱: ";
+        try {
+            foreach ($trash as $entity) {
+                if ($contentService->hardDeleteWithAssoc($entity->id)) {
+                    $text .=  "$entity->name($entity->type)" . "を削除しました。";
+                    }
+            }
+            $message = __d('baser', $text);
         } catch (Exception $e) {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
