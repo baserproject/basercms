@@ -566,48 +566,18 @@ class ContentsController extends BcAdminAppController
             'data' => $contents
         ]);
         if ($contents) {
-            $result = $this->_deleteTrash($contentService, $contents);
+            $result = true;
+            foreach($contents as $content) {
+                if(!$contentService->hardDeleteWithAssoc($content->id)) {
+                    $result = false;
+                }
+            }
         }
         // EVENT Contents.afterTrashEmpty
         $this->dispatchLayerEvent('afterTrashEmpty', [
             'data' => $result
         ]);
         return $this->redirect(['action' => "trash_index"]);
-    }
-
-    /**
-     * ゴミ箱を物理削除する
-     *
-     * @param  Query $contents
-     * @param  ContentService $contentService
-     * @return bool $result
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    protected function _deleteTrash($contentService, $contents)
-    {
-        if(!empty($contents) && !empty($contentService)) {
-            foreach($contents as $content) {
-                $pluginName = $content->plugin;
-                $modelName = $content->type;
-                $service = $pluginName . '\\Service\\' . $modelName . 'ServiceInterface';
-                if(interface_exists($service)) {
-                    $target = $this->getService($service);
-                } else {
-                    $target = $this->getTableLocator()->get($pluginName . Inflector::pluralize($modelName));
-                }
-                if($target) {
-                    // Contents以外のモデルでの削除
-                    $result = $target->delete($content->entity_id);
-                }
-            }
-            // Contentsモデルでの全体削除
-            if ($count = $contentService->hardDeleteAll(new DateTime('NOW'))) {
-                $this->BcMessage->setSuccess($count . "個のコンテンツがゴミ箱から削除されました", true, false);
-            }
-            return $result;
-        }
     }
 
     /**

@@ -127,9 +127,17 @@ interface ContentServiceInterface
     /**
      * コンテンツ情報を削除する
      * @param int $id
+     * @param bool $enableTree(デフォルト:false) TreeBehaviorの有無
      * @return bool
      */
-    public function hardDelete($id);
+    public function hardDelete($id, $enableTree = false): bool;
+
+    /**
+     * コンテンツ情報と紐付いてるモデルを削除する
+     * @param int $id
+     * @return bool
+     */
+    public function hardDeleteWithAssoc($id): bool;
 
     /**
      * 該当するコンテンツ情報をすべて論理削除する

@@ -15,6 +15,7 @@ use Exception;
 use Cake\ORM\Query;
 use Nette\Utils\DateTime;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Inflector;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -367,18 +368,52 @@ class ContentService implements ContentServiceInterface
     /**
      * コンテンツ情報を削除する
      * @param int $id
+     * @param bool $enableTree(デフォルト:false) TreeBehaviorの有無
      * @return bool
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function hardDelete($id)
+    public function hardDelete($id, $enableTree = false): bool
     {
         $content = $this->getTrash($id);
         if ($content->deleted_date) {
+            if ($enableTree && !$this->Contents->hasBehavior('Tree')) {
+                $this->Contents->addBehavior('Tree');
+            }
+            if (!$enableTree && $this->Contents->hasBehavior('Tree')) {
+                $this->Contents->removeBehavior('Tree');
+            }
             return $this->Contents->hardDelete($content);
         }
         return false;
+    }
+
+    /**
+     * コンテンツ情報と紐付いてるモデルを削除する
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function hardDeleteWithAssoc($id): bool
+    {
+        $content = $this->getTrash($id);
+        $service = $content->plugin . '\\Service\\' . $content->type . 'ServiceInterface';
+        if(interface_exists($service)) {
+            $target = $this->getService($service);
+        } else {
+            $target = TableRegistry::getTableLocator()->get($content->plugin . Inflector::pluralize($content->type));
+        }
+        if($target) {
+            try {
+                $result = ($target->delete($content->entity_id) && $this->hardDelete($id));
+            } catch (\Exception $e) {
+                $result = false;
+            }
+        }
+        return $result;
     }
 
 
