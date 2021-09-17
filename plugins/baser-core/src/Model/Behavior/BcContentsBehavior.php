@@ -1,53 +1,57 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Model.Behavior
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+namespace BaserCore\Model\Behavior;
+
+use Cake\Datasource\EntityInterface;
+use Cake\ORM\Behavior;
 
 /**
  * Class BcContentsBehavior
- *
- * baserCMS Contents Behavior
- *
- * @package Baser.Model.Behavior
+ * @package BaserCore\Model\Table
  */
-class BcContentsBehavior extends ModelBehavior
+class BcContentsBehavior extends Behavior
 {
 
     /**
-     * 削除したデータに関連する Content ID を一時保管する為に利用
-     *
-     * @var int
-     */
-    protected $_deleteContentId = null;
-
-    /**
      * Setup
-     *
+     *　生成時
      * @param Model $model
      * @param array $config
      * @return mixed
      */
     public function setup(Model $model, $config = [])
     {
-        $model->hasOne['Content'] = [
-            'className' => 'Content',
-            'foreignKey' => 'entity_id',
-            'dependent' => false,
-            'conditions' => [
-                'Content.type' => $model->name,
-                'Content.alias_id' => null
-            ]
-        ];
+
         return true;
+    }
+
+    /**
+     * initialize
+     *
+     * @param  array $config
+     * @return void
+     */
+    public function initialize(array $config): void
+    {
+        if (!$this->table()-> __isset('hasOne')) {
+            // $model->hasOne['Content'] = [
+            //     'className' => 'Content',
+            //     'foreignKey' => 'entity_id',
+            //     'dependent' => false,
+            //     'conditions' => [
+            //         'Content.type' => $model->name,
+            //         'Content.alias_id' => null
+            //     ]
+            // ];
+        }
     }
 
     /**
