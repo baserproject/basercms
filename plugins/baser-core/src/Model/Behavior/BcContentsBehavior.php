@@ -15,42 +15,29 @@ use Cake\ORM\Behavior;
 
 /**
  * Class BcContentsBehavior
- * @package BaserCore\Model\Table
+ * @package BaserCore\Model\Behavior
  */
 class BcContentsBehavior extends Behavior
 {
-
-    /**
-     * Setup
-     *　生成時
-     * @param Model $model
-     * @param array $config
-     * @return mixed
-     */
-    public function setup(Model $model, $config = [])
-    {
-
-        return true;
-    }
-
     /**
      * initialize
      *
      * @param  array $config
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {
-        if (!$this->table()-> __isset('hasOne')) {
-            // $model->hasOne['Content'] = [
-            //     'className' => 'Content',
-            //     'foreignKey' => 'entity_id',
-            //     'dependent' => false,
-            //     'conditions' => [
-            //         'Content.type' => $model->name,
-            //         'Content.alias_id' => null
-            //     ]
-            // ];
+        if (!$this->table()-> __isset('Contents')) {
+            $this->table()->hasOne('Contents', ['className' => 'BaserCore.Contents'])
+            ->setForeignKey('entity_id')
+            ->setDependent(false)
+            ->setConditions([
+                'Contents.type' => 'ContentFolder',
+                'Contents.alias_id IS' => null,
+            ]);
         }
     }
 

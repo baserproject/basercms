@@ -13,11 +13,12 @@ namespace BaserCore\Test\TestCase\Model\Behavior;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Table\ContentFoldersTable;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Model\Behavior\BcContentsBehavior;
 
 /**
  * Class BcContentsBehaviorTest
  * @package BaserCore\Test\TestCase\Model\Behavior
- * @property ContentFoldersTable $SiteConfigs
+ * @property ContentFoldersTable $ContentsFolder
  *
  */
 class BcContentsBehaviorTest extends BcTestCase
@@ -34,6 +35,11 @@ class BcContentsBehaviorTest extends BcTestCase
     ];
 
     /**
+     * @var ContentFoldersTable|BcContentsBehavior;
+     */
+    protected $table;
+
+    /**
      * Set Up
      *
      * @return void
@@ -41,6 +47,9 @@ class BcContentsBehaviorTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->table = $this->getTableLocator()->get('BaserCore.ContentFolders');
+        $this->table->setPrimaryKey(['id']);
+        $this->table->addBehavior('BaserCore.BcContents');
     }
 
     /**
@@ -53,6 +62,15 @@ class BcContentsBehaviorTest extends BcTestCase
         parent::tearDown();
     }
 
+    /**
+     * testInitialize
+     *
+     * @return void
+     */
+    public function testInitialize(): void
+    {
+        $this->assertTrue($this->table->__isset('Contents'));
+    }
     /**
      * Setup
      */

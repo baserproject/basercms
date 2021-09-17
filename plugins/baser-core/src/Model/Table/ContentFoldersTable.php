@@ -59,15 +59,7 @@ class ContentFoldersTable extends AppTable
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        $this->addBehavior('BcContents');
-        // TODO: 本来はBcContentsBehaviorで設定する箇所だが、一時措置として直接下記に設定
-        $this->hasOne('Contents', ['className' => 'BaserCore.Contents'])
-            ->setForeignKey('entity_id')
-            ->setDependent(false)
-            ->setConditions([
-                'Contents.type' => 'ContentFolder',
-                'Contents.alias_id IS' => null,
-            ]);
+        $this->addBehavior('BaserCore.BcContents');
     }
 
     /**
