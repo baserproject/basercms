@@ -72,24 +72,41 @@ class ContentFoldersControllerTest extends BcTestCase
     }
 
     /**
+     * Test View
+     */
+    public function testView()
+    {
+        $this->get('/baser/api/baser-core/content_folders/view/1.json?token=' . $this->accessToken);
+        $this->assertResponseOk();
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals("フォルダーテンプレート1", $result->contentFolders->folder_template);
+    }
+
+    /**
      * Test add method
      *
      * @return void
      */
     public function testAdd()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $data = [
-            'name' => 'ucmitzGroup',
-            'title' => 'ucmitzグループ',
-            'use_move_contents' => '1',
+            'folder_template' => 'テストcreate',
+            'content' => [
+                "parent_id" => "1",
+                "title" => "新しい フォルダー",
+                "plugin" => 'BaserCore',
+                "type" => "ContentFolder",
+                "site_id" => "0",
+                "alias_id" => "",
+                "entity_id" => "",
+            ]
         ];
         $this->post('/baser/api/baser-core/content_folders/add.json?token=' . $this->accessToken, $data);
-        $this->assertResponseSuccess();
+        $this->assertResponseOk();
         $ContentFolders = $this->getTableLocator()->get('ContentFolders');
-        $query = $ContentFolders->find()->where(['name' => $data['name']]);
+        $query = $ContentFolders->find()->where(['folder_template' => $data['folder_template']]);
         $this->assertEquals(1, $query->count());
     }
 
@@ -100,23 +117,9 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $this->post('/baser/admin/baser-core/ContentFolders/delete/1.json?token=' . $this->accessToken);
         $this->assertResponseSuccess();
     }
-
-    /**
-     * Test View
-     */
-    public function testView()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->get('/baser/api/baser-core/content_folders/view/1.json?token=' . $this->accessToken);
-        $this->assertResponseOk();
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('admins', $result->contentFolders->name);
-    }
-
 }

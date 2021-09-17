@@ -46,6 +46,9 @@ class ContentFoldersController extends BcApiController
      * ユーザーグループ取得
      * @param ContentFolderServiceInterface $ContentFolders
      * @param $id
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function view(ContentFolderServiceInterface $ContentFolders, $id)
     {
@@ -58,13 +61,16 @@ class ContentFoldersController extends BcApiController
     /**
      * ユーザーグループ登録
      * @param ContentFolderServiceInterface $ContentFolders
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function add(ContentFolderServiceInterface $ContentFolders)
     {
         if ($this->request->is('post')) {
             $contentFolders = $ContentFolders->create($this->request->getData());
             if (!$contentFolders->getErrors()) {
-                $message = __d('baser', 'ユーザーグループ「{0}」を追加しました。', $contentFolders->name);
+                $message = __d('baser', 'コンテンツフォルダ「{0}」を追加しました。', $contentFolders->name);
             } else {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser', '入力エラーです。内容を修正してください。');
@@ -89,7 +95,7 @@ class ContentFoldersController extends BcApiController
         if ($this->request->is(['post', 'delete'])) {
             try {
                 if ($ContentFolders->delete($id)) {
-                    $message = __d('baser', 'ユーザー: {0} を削除しました。', $contentFolders->name);
+                    $message = __d('baser', 'コンテンツフォルダ: {0} を削除しました。', $contentFolders->name);
                 }
             } catch (Exception $e) {
                 $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
