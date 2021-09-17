@@ -29,8 +29,8 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public $fixtures = [
         'plugin.BaserCore.Users',
-        'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.Sites'

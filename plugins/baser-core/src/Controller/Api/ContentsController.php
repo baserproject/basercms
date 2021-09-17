@@ -87,7 +87,7 @@ class ContentsController extends BcApiController
     }
 
     /**
-     * コンテンツ情報論理削除
+     * コンテンツ情報削除(論理削除)
      * ※ 子要素があれば、子要素も削除する
      * @param ContentServiceInterface $contentService
      * @param $id
@@ -123,7 +123,7 @@ class ContentsController extends BcApiController
     }
 
     /**
-     * ゴミ箱内コンテンツ情報物理削除
+     * ゴミ箱内コンテンツ情報を削除する(物理削除)
      * @param ContentServiceInterface $contentService
      * @param $id
      * @return void

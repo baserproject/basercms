@@ -18,7 +18,9 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentFoldersTable;
+use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Service\ContentFolderServiceInterface;
 /**
  * Class ContentFolderService
@@ -28,6 +30,11 @@ use BaserCore\Service\ContentFolderServiceInterface;
  */
 class ContentFolderService implements ContentFolderServiceInterface
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * ContentFolders Table
@@ -103,12 +110,18 @@ class ContentFolderService implements ContentFolderServiceInterface
      * @param int $id
      * @return bool
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function delete($id)
     {
         $ContentFolder = $this->get($id);
-        return $this->ContentFolders->delete($ContentFolder);
+        // TODO: bccontentsBehaviorのafterDeleteでの削除に移行する
+        try {
+            $contentService = $this->getService(ContentServiceInterface::class);
+            $result =  $this->ContentFolders->delete($ContentFolder) && $contentService->hardDelete($ContentFolder->content->id);
+        } catch (\Exception $e) {
+            $result = false;
+        }
+        return $result;
     }
 }

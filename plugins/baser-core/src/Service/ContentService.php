@@ -409,7 +409,7 @@ class ContentService implements ContentServiceInterface
         }
         if($target) {
             try {
-                $result = ($target->delete($content->entity_id) && $this->hardDelete($id));
+                $result = $target->delete($content->entity_id);
             } catch (\Exception $e) {
                 $result = false;
             }
