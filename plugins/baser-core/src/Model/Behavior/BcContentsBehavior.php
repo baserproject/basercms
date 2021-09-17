@@ -10,8 +10,13 @@
  */
 namespace BaserCore\Model\Behavior;
 
-use Cake\Datasource\EntityInterface;
+use ArrayObject;
+use Cake\Event\Event;
 use Cake\ORM\Behavior;
+use Cake\Utility\Inflector;
+use Cake\Event\EventInterface;
+use Cake\Datasource\EntityInterface;
+use BaserCore\Model\Table\ContentsTable;
 
 /**
  * Class BcContentsBehavior
@@ -20,8 +25,14 @@ use Cake\ORM\Behavior;
 class BcContentsBehavior extends Behavior
 {
     /**
-     * initialize
+     * Contents
      *
+     * @var ContentsTable $Contents
+     */
+    public $Contents;
+
+    /**
+     * initialize
      * @param  array $config
      * @return void
      * @checked
@@ -30,41 +41,42 @@ class BcContentsBehavior extends Behavior
      */
     public function initialize(array $config): void
     {
-        if (!$this->table()-> __isset('Contents')) {
-            $this->table()->hasOne('Contents', ['className' => 'BaserCore.Contents'])
+        $this->table = $this->table();
+        if (!$this->table-> __isset('Contents')) {
+            $this->table->hasOne('Contents', ['className' => 'BaserCore.Contents'])
             ->setForeignKey('entity_id')
             ->setDependent(false)
             ->setConditions([
-                'Contents.type' => 'ContentFolder',
+                'Contents.type' => Inflector::classify($this->table->getTable()),
                 'Contents.alias_id IS' => null,
             ]);
         }
+        $this->Contents = $this->table->getAssociation('Contents');
     }
 
     /**
-     * Before validate
+     * BeforeMarshal
      *
      * Content のバリデーションを実行
      * 本体のバリデーションも同時に実行する為、Contentのバリデーション判定は、 beforeSave にて確認
-     *
-     * @param Model $model
-     * @param array $options
-     * @return bool
+     * @param Event $event
+     * @param ArrayObject $data
+     * @param ArrayObject $options
      */
-    public function beforeValidate(Model $model, $options = [])
+public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
     {
-        if (!empty($model->data['Content'])) {
-            $model->Content->clear();
-            $model->Content->set($model->data['Content']);
-            $model->Content->validates($options);
-            if ($model->Content->validationErrors && empty($model->data['Content']['id'])) {
-                $model->validationErrors += $model->Content->validationErrors;
+        if (!empty($data['content'])) {
+            $validateOptions = ['validate' => $options['validate'] ?? 'default'];
+            $contentEntity = $this->Contents->newEntity($data['content'], $validateOptions);
+            if ($contentEntity->hasErrors() && empty($data['content']['id'])) {
+                return $contentEntity->getErrors();
+                // $this->table->newEntity($data, $validateOptions)->setErrors($contentEntity->getErrors());
+                // $this->table->setErrors($contentEntity->getErrors());
             }
-            if (!empty($model->Content->data['Content'])) {
-                $model->data['Content'] = $model->Content->data['Content'];
+            if (!empty($contentEntity)) {
+                $data['content'] = $contentEntity->toArray();
             }
         }
-        return true;
     }
 
     /**
@@ -72,18 +84,13 @@ class BcContentsBehavior extends Behavior
      *
      * Content のバリデーション結果確認
      *
-     * @param Model $model
-     * @param array $options
+     * @param EventInterface $event
+     * @param EntityInterface $entity
      * @return bool
      */
-    public function beforeSave(Model $model, $options = [])
+    public function beforeSave(EventInterface $event, EntityInterface $entity)
     {
-        if (!empty($options['validate'])) {
-            if ($model->Content->validationErrors) {
-                return false;
-            }
-        }
-        return true;
+        return !$entity->content->hasErrors();
     }
 
     /**
@@ -95,28 +102,29 @@ class BcContentsBehavior extends Behavior
      * @param bool $created
      * @param array $options
      * @return bool
+     * FIXME:
      */
-    public function afterSave(Model $model, $created, $options = [])
+    public function afterSave(EventInterface $event, EntityInterface $entity)
     {
-        if (empty($model->Content->data['Content'])) {
-            return;
-        }
-        if (!empty($options['validate'])) {
-            // beforeValidate で調整したデータを利用する為、$model->Content->data['Content'] を利用
-            $data = $model->Content->data['Content'];
+        if (empty($entity->content)) return;
+
+        // if (!empty($options['validate'])) {
+        //     // beforeValidate で調整したデータを利用する為、$model->Content->data['Content'] を利用
+        //     $data = $this->Content->data['Content'];
+        // } else {
+        //     $data = $model->data['Content'];
+        // }
+        unset($entity->content->lft);
+        unset($entity->content->rght);
+        if ($entity->isNew()) {
+            list($plugin, $name) = explode('.', $this->table->getRegistryAlias());
+            $data = $this->Contents->createContent($entity->toArray(), $plugin ?? "BaserCore", Inflector::classify($name), $entity->id, false);
         } else {
-            $data = $model->data['Content'];
+            // $this->Contents->patchEntity($entity->content, )
+            // $data = $this->Contents->save($data, false);
         }
-        unset($data['lft']);
-        unset($data['rght']);
-        if ($created) {
-            $data = $model->Content->createContent($data, ($model->plugin)? : "BaserCore", $model->name, $model->id, false);
-        } else {
-            $model->Content->clear();
-            $data = $model->Content->save($data, false);
-        }
-        if (!empty($data['Content'])) {
-            $model->data['Content'] = $data['Content'];
+        if (!$entity->content) {
+            $this->table->content = $entity->content;
         }
     }
 

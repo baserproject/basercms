@@ -167,6 +167,7 @@ class ContentsTable extends AppTable
         ]);
 
         $validator
+        ->requirePresence('title')
         ->scalar('title')
         ->notEmptyString('title', __d('baser', 'タイトルを入力してください。'))
         ->maxLength('title', 230, __d('baser', 'タイトルは230文字以内で入力してください。'))
@@ -178,6 +179,13 @@ class ContentsTable extends AppTable
                 'message' => __d('baser', 'タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
             ]
         ]);
+
+        $validator
+        ->requirePresence('parent_id');
+        $validator
+        ->requirePresence('plugin');
+        $validator
+        ->requirePresence('type');
 
         $validator
         ->add('eyecatch', [
@@ -748,13 +756,12 @@ class ContentsTable extends AppTable
      */
     public function createContent($content, $plugin, $type, $entityId = null, $validate = true)
     {
-        if (isset($content['Content'])) {
-            $content = $content['Content'];
+        if (isset($content['content'])) {
+            $content = $content['content'];
         }
         $content['plugin'] = $plugin;
         $content['type'] = $type;
         $content['entity_id'] = $entityId;
-        // TODO: deleted → deleted_dateに変更
         if (!isset($content['deleted_date'])) {
             $content['deleted_date'] = '';
         }
@@ -767,8 +774,8 @@ class ContentsTable extends AppTable
         if (!isset($content['created_date'])) {
             $content['created_date'] = date('Y-m-d H:i:s');
         }
-        $this->create($content);
-        return $this->save(null, $validate);
+        $content = $this->newEntity($content);
+        return $this->save($content);
     }
 
     /**

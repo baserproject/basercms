@@ -71,6 +71,30 @@ class BcContentsBehaviorTest extends BcTestCase
     {
         $this->assertTrue($this->table->__isset('Contents'));
     }
+
+    /**
+    * Test beforeMarshal
+    */
+    public function testBeforeMarshal()
+    {
+        $contentFolder = $this->table->newEntity(
+            [
+            'folder_template' => 'テストBeforeMarshal',
+            'content' => [
+                "name" => "",
+                "parent_id" => "1",
+                "title" => "新しい フォルダー",
+                "plugin" => 'BaserCore',
+                "type" => "ContentFolder",
+                "site_id" => "0",
+                "alias_id" => "",
+                "entity_id" => "",
+            ]],
+            ['validate' => "default"]
+        );
+        $this->assertNotEmpty($contentFolder->content->name);
+    }
+
     /**
      * Setup
      */
