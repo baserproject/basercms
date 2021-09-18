@@ -35,6 +35,7 @@ class PermissionsControllerTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Permissions',
         'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Sites',
         'plugin.BaserCore.Dblogs',
     ];
 
@@ -44,8 +45,8 @@ class PermissionsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $request = $this->getRequest();
-        $this->loginAdmin($request);
+        $request = $this->getRequest('/baser/admin/baser-core/users/');
+        $request = $this->loginAdmin($request);
         $this->PermissionsController = new PermissionsController($request);
     }
 

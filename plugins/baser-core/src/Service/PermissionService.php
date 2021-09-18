@@ -128,7 +128,7 @@ class PermissionService implements PermissionServiceInterface
      */
     public function update(EntityInterface $target, array $data): EntityInterface
     {
-        $data = $this->autoFillRecord($data);
+        $target = $this->get($data['id']);
         $permission = $this->Permissions->patchEntity($target, $data);
         $this->Permissions->save($permission);
         return $permission;

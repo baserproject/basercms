@@ -60,6 +60,7 @@ class PermissionsController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
+        $this->loadComponent('RequestHandler');
     }
 
 	/**
@@ -75,10 +76,10 @@ class PermissionsController extends BcAdminAppController
             ['BcTime',
             // 'BcFreeze'
         ]);
-
-		if ($this->request->getParam('prefix') === 'admin') {
-			$this->set('usePermission', true);
-		}
+        $this->Security->setConfig('unlockedActions', [
+            'update_sort',
+            'batch'
+        ]);
 	}
 
 	/**
@@ -95,7 +96,7 @@ class PermissionsController extends BcAdminAppController
 
         $this->request->withQueryParams(['user_group_id' => $userGroupId]);
         $this->setViewConditions('Permission', ['default' => ['query' => [
-            'sort' => 'id',
+            'sort' => 'sort',
             'direction' => 'asc',
         ]]]);
 
@@ -350,6 +351,45 @@ class PermissionsController extends BcAdminAppController
         }
         return $this->redirect(['action' => 'index', $userGroupId]);
     }
+    
+    /**
+     * 一括処理
+     *
+     * @param array $ids プラグインIDの配列
+     * @return void|Response
+     */
+    public function batch(PermissionServiceInterface $permissionService)
+    {
+        $this->autoRender = false;
+        $allowMethod = [
+            'publish' => '有効化',
+            'unpublish' => '無効化',
+            'delete' => '削除',
+        ];
+        
+        $method = $this->request->getData('ListTool.batch');
+        if (!isset($allowMethod[$method])) {
+            return;
+        }
+        
+        $methodText = $allowMethod[$method];
+        
+        var_dump($method);
+        foreach($this->request->getData('ListTool.batch_targets') as $id) {
+            $permission = $permissionService->get($id);
+            $permissionService->$method($id);
+            if ($permissionService->$method($id)) {
+                var_dump("kokko");
+                $this->BcMessage->setSuccess(
+                    sprintf(__d('baser', 'プラグイン「%s」 を %sしました。'), $permission->name, $methodText),
+                    true,
+                    false
+                );
+            }
+        }
+        return $this->response->withStringBody('true');
+    }
+
 
     /**
      * 一括公開

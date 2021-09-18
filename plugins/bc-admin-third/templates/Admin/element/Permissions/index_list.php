@@ -20,13 +20,20 @@ $this->BcListTable->setColumnNumber(6);
 
 
 <div class="bca-data-list__top">
-  <!-- 一括処理 -->
-  <div class="bca-action-table-listup">
-    <?php if ($this->BcBaser->isAdminUser()): ?>
-      <?php echo $this->BcAdminForm->control('ListTool.batch', ['type' => 'select', 'options' => ['publish' => __d('baser', '有効'), 'unpublish' => __d('baser', '無効'), 'del' => __d('baser', '削除')], 'empty' => __d('baser', '一括処理'), 'data-bca-select-size' => 'lg']) ?>
-      <?php echo $this->BcForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
-    <?php endif ?>
-  </div>
+  <?php if ($this->BcBaser->isAdminUser()): ?>
+    <div>
+      <?php echo $this->BcAdminForm->control('ListTool.batch', [
+        'type' => 'select',
+        'options' => [
+          'unpublish' => __d('baser', '無効'),
+          'publish' => __d('baser', '有効'),
+          'delete' => __d('baser', '削除'),
+        ], 
+        'empty' => __d('baser', '一括処理')
+      ]) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
+    </div>
+  <?php endif ?>
 </div>
 
 
