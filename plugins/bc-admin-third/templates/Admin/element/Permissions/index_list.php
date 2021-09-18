@@ -44,14 +44,10 @@ $this->BcListTable->setColumnNumber(6);
       <?php if ($this->BcBaser->isAdminUser()): ?>
         <?php echo $this->BcAdminForm->control('ListTool.checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
       <?php endif; ?>
-      <?php if (!$this->request->getQuery('sortmode')): ?>
-        <?php
-          $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', '並び替え'), ['sortmode' => 1, $currentUserGroup->id], ['escape' => false])
-          ?>
+      <?php if ($this->request->getQuery('sortmode')): ?>
+        <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', 'ノーマル'), [$currentUserGroup->id, '?' => ['sortmode' => 0]], ['escape' => false]) ?>
       <?php else: ?>
-        <?php
-          $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', 'ノーマル'), ['sortmode' => 0, $currentUserGroup->id], ['escape' => false])
-        ?>
+        <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', '並び替え'), [$currentUserGroup->id, '?' => ['sortmode' => 1]], ['escape' => false]) ?>
       <?php endif ?>
     </th>
     <th class="bca-table-listup__thead-th">No</th>
@@ -66,8 +62,10 @@ $this->BcListTable->setColumnNumber(6);
   </thead>
   <tbody>
   <?php if (!empty($permissions)): ?>
+    <?php $count = 1 ?>
     <?php foreach($permissions as $permission): ?>
-      <?php $this->BcBaser->element('Permissions/index_row', ['data' => $permission]) ?>
+      <?php $this->BcBaser->element('Permissions/index_row', ['data' => $permission, 'count' => $count]) ?>
+      <?php $count++ ?>
     <?php endforeach; ?>
   <?php else: ?>
     <tr>

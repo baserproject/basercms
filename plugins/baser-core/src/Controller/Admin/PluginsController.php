@@ -302,7 +302,6 @@ class PluginsController extends BcAdminAppController
             return;
         }
 
-        BcUtil::clearAllCache();
         return $this->response->withStringBody('true');
     }
 

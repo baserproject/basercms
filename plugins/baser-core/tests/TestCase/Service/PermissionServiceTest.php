@@ -316,7 +316,7 @@ class PermissionServiceTest extends BcTestCase
      * 権限チェック対象を追加する
      * @return void
      */
-    public function testAddCheck(): void
+    public function testAddCheck()
     {
         $url = "/baser/admin/test/*";
         $auth = true;
@@ -326,6 +326,48 @@ class PermissionServiceTest extends BcTestCase
         $result = array_pop($permissions);
         $this->assertEquals($url, $result->url);
         $this->assertEquals($auth, $result->auth);
+    }
+    
+    public function testChangeSort()
+    {
+        $permissions = $this->getTableLocator()->get('Permissions');
+        $permissionList = $permissions
+            ->find()
+            ->order(['sort' => 'ASC'])
+            ->limit(3)
+            ->all();
+        $beforeOrderId = [];
+        foreach($permissionList as $permission) {
+            $beforeOrderId[] = $permission->id;
+        }
+        
+        $conditions = ['user_group_id' => 2];
+        $this->PermissionService->changeSort($beforeOrderId[0], 2, $conditions);
+        
+        $permissionList = $permissions
+            ->find()
+            ->order(['sort' => 'ASC'])
+            ->limit(3)
+            ->all();
+        $afterOrderId = [];
+        foreach($permissionList as $permission) {
+            $afterOrderId[] = $permission->id;
+        }
+        $this->assertEquals($beforeOrderId[0], $afterOrderId[2]);
+        $this->assertEquals($beforeOrderId[1], $afterOrderId[0]);
+        $this->assertEquals($beforeOrderId[2], $afterOrderId[1]);
+        
+        $this->PermissionService->changeSort($beforeOrderId[0], -2, $conditions);
+        $permissionList = $permissions
+            ->find()
+            ->order(['sort' => 'ASC'])
+            ->limit(3)
+            ->all();
+        $afterOrderId2 = [];
+        foreach($permissionList as $permission) {
+            $afterOrderId2[] = $permission->id;
+        }
+        $this->assertEquals($beforeOrderId, $afterOrderId2);
     }
 
 }

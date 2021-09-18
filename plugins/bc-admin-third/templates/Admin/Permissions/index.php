@@ -32,7 +32,7 @@ $(function () {
    * 並び替え機能実装
    */
   $.bcSortable.init({
-      updateSortUrl: "<?php echo $this->BcBaser->getUrl(['controller' => 'permissions', 'action' => 'update_sort']) ?>"
+      updateSortUrl: "<?php echo $this->BcBaser->getUrl(['controller' => 'permissions', 'action' => 'update_sort', $currentUserGroup->id]) ?>"
   });
   /**
    * 一括処理実装

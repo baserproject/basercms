@@ -104,4 +104,14 @@ interface PermissionServiceInterface
      * @return boolean
      */
     public function check($url, $userGroupId): bool;
+    
+    /**
+     * 優先度を変更する
+     * 
+     * @param int $id
+     * @param int $offset
+     * @return bool
+     */
+    public function changeSort(int $id, int $offset, array $conditions = []): bool;
+    
 }

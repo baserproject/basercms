@@ -44,6 +44,10 @@ class PermissionsController extends BcAdminAppController
 	 * beforeFilter
      *
 	 * @return void
+     * 
+     * @checked
+     * @noTodo
+     * @unitTest
 	 */
 	public function beforeFilter(EventInterface $event)
 	{
@@ -55,7 +59,7 @@ class PermissionsController extends BcAdminAppController
         ]);
         $this->Security->setConfig('unlockedActions', [
             'update_sort',
-            'batch'
+            'batch',
         ]);
 	}
 
@@ -80,17 +84,7 @@ class PermissionsController extends BcAdminAppController
         $this->set('currentUserGroup', $currentUserGroup);
         $this->set('permissions', $permissionService->getIndex($this->request->getQueryParams()));
 
-		$this->_setAdminIndexViewData();
-	}
-
-	/**
-	 * 一覧の表示用データをセットする
-	 *
-	 * @return void
-	 */
-	protected function _setAdminIndexViewData()
-	{
-		$this->set('sortmode', $this->request->getParam('sortmode'));
+		$this->set('sortmode', $this->request->getQuery('sortmode'));
 	}
 
 	/**
@@ -210,32 +204,6 @@ class PermissionsController extends BcAdminAppController
     }
 
     /**
-     * 並び替えを更新する [AJAX]
-     *
-     * @access    public
-     * @param $userGroupId
-     * @return void
-     */
-    public function admin_ajax_update_sort($userGroupId)
-    {
-        $this->autoRender = false;
-        if (!$this->request->data) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-            exit;
-        }
-
-        $conditions = [
-            'Permission.user_group_id' => $userGroupId
-        ];
-        if (!$this->Permission->changeSort($this->request->getData('Sort.id'), $this->request->getData('Sort.offset'), $conditions)) {
-            $this->ajaxError(500, $this->Permission->validationErrors);
-            exit;
-        }
-        echo true;
-    }
-
-
-    /**
      * [ADMIN] 複製処理
      *
      * @param PermissionServiceInterface $userService
@@ -311,10 +279,14 @@ class PermissionsController extends BcAdminAppController
      * 一括処理
      *
      * @return void|Response
+     * 
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function batch(PermissionServiceInterface $permissionService)
     {
-        $this->autoRender = false;
+        $this->disableAutoRender();
         $allowMethod = [
             'publish' => '有効化',
             'unpublish' => '無効化',
@@ -340,5 +312,37 @@ class PermissionsController extends BcAdminAppController
             }
         }
         return $this->response->withStringBody('true');
+    }
+    
+    /**
+     * 並び替えを更新する [AJAX]
+     *
+     * @access    public
+     * @param $userGroupId
+     * @return void
+     * 
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function update_sort(PermissionServiceInterface $permissionService, $userGroupId)
+    {
+        
+        $this->disableAutoRender();
+        
+        if (!$this->request->getData()) {
+            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+            return;
+        }
+        
+        $conditions = [
+            'user_group_id' => $userGroupId,
+        ];
+        if (!$permissionService->changeSort($this->request->getData('Sort.id'), $this->request->getData('Sort.offset'), $conditions)) {
+            $this->ajaxError(500, __d('baser', '一度リロードしてから再実行してみてください。'));
+            return;
+        }
+
+        return $this->response->withStringBody('1');
     }
 }
