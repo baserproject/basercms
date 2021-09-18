@@ -62,15 +62,6 @@ class PermissionsControllerTest extends BcTestCase
     /**
      * beforeFilter
      */
-    public function testInitialize()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // $this->assertNotEmpty($this->PermissionsController->BcAuth);
-    }
-
-    /**
-     * beforeFilter
-     */
     public function testBeforeFilter()
     {
         $event = new Event('Controller.beforeFilter', $this->PermissionsController);
@@ -225,6 +216,60 @@ class PermissionsControllerTest extends BcTestCase
         $permission = $permissions->find()->where(['id' => $permissionId])->last();
         $this->assertTrue($permission->status);
     }
+    
+    /**
+     * 一括処理
+     *
+     */
+    public function testBatch()
+    {
+        $this->enableCsrfToken();
+        $permissions = $this->getTableLocator()->get('Permissions');
+        
+        // 空データ送信
+        $this->post('/baser/admin/baser-core/permissions/batch', []);
+        $this->assertResponseEmpty();
+        
+        // unpublish
+        $data = [
+            'ListTool' => [
+                'batch' => 'unpublish',
+                'batch_targets' => [1],
+            ]
+        ];
+        $this->post('/baser/admin/baser-core/permissions/batch', $data);
+        $this->assertResponseNotEmpty();
+        
+        $permission = $permissions->find()->where(['id' => 1])->last();
+        $this->assertFalse($permission->status);
+       
+        // publish
+        $data = [
+            'ListTool' => [
+                'batch' => 'publish',
+                'batch_targets' => [1],
+            ]
+        ];
+        $this->post('/baser/admin/baser-core/permissions/batch', $data);
+        $this->assertResponseNotEmpty();
+        
+        $permission = $permissions->find()->where(['id' => 1])->last();
+        $this->assertTrue($permission->status);
+        
+        // delete
+        $data = [
+            'ListTool' => [
+                'batch' => 'delete',
+                'batch_targets' => [1],
+            ]
+        ];
+        $this->post('/baser/admin/baser-core/permissions/batch', $data);
+        $this->assertResponseNotEmpty();
+        
+        $permission = $permissions->find()->where(['id' => 1])->last();
+        $this->assertNull($permission);
+    }
+    
 
 
 }

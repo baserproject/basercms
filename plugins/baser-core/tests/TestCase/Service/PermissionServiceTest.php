@@ -129,18 +129,20 @@ class PermissionServiceTest extends BcTestCase
      */
     public function testUpdate()
     {
+        $record = $this->PermissionService->Permissions->find()->first();
+        $id = $record->id;
+        $beforeName = $record->name;
         $data = [
+            'id' => $id,
             'name' => 'testUpdate',
             'user_group_id' => '2',
             'url' => '/baser/admin/*'
         ];
-        $record = $this->PermissionService->Permissions->get(1);
-        $beforeId = $record->id;
-        $beforeName = $record->name;
-        $this->PermissionService->update($record, $data);
-        $record = $this->PermissionService->Permissions->get(1);
 
-        $this->assertEquals($beforeId, $record->id);
+        $this->PermissionService->update($record, $data);
+        $record = $this->PermissionService->Permissions->get($id);
+
+        $this->assertEquals($id, $record->id);
         $this->assertNotEquals($beforeName, $record->name);
     }
 

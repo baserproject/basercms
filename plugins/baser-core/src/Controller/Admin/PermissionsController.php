@@ -16,20 +16,8 @@ use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-// use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
-// use Cake\Controller\ComponentRegistry;
 use BaserCore\Service\SiteConfigTrait;
-// use Cake\Core\Exception\Exception;
-// use Cake\Datasource\Exception\RecordNotFoundException;
-// use Cake\Event\Event;
-// use Cake\Event\EventInterface;
-// use Cake\Event\EventManagerInterface;
-// use Cake\Http\ServerRequest;
-// use Cake\Routing\Router;
-// use Cake\Http\Response;
-// use Cake\Http\Exception\ForbiddenException;
-// use Cake\Http\Cookie\Cookie;
 use BaserCore\Model\Table\UserGroupsTable;
 use BaserCore\Model\Table\PermissionsTable;
 use BaserCore\Service\PermissionServiceInterface;
@@ -51,17 +39,6 @@ class PermissionsController extends BcAdminAppController
      * SiteConfigTrait
      */
     use SiteConfigTrait;
-
-    /**
-     * initialize
-     *
-     * @return void
-     */
-    public function initialize(): void
-    {
-        parent::initialize();
-        $this->loadComponent('RequestHandler');
-    }
 
 	/**
 	 * beforeFilter
@@ -176,28 +153,6 @@ class PermissionsController extends BcAdminAppController
         $this->set('permission', $permission);
         $this->set('currentUserGroup', $currentUserGroup);
     }
-
-    /**
-     * [ADMIN] 削除処理　(ajax)
-     *
-     * @param $ids
-     * @return boolean
-     */
-    protected function _batch_del($ids)
-    {
-        if ($ids) {
-            foreach($ids as $id) {
-                // メッセージ用にデータを取得
-                $post = $this->Permission->read(null, $id);
-                /* 削除処理 */
-                if ($this->Permission->delete($id)) {
-                    $message = sprintf(__d('baser', 'アクセス制限設定「%s」 を削除しました。'), $post['Permission']['name']);
-                }
-            }
-        }
-        return true;
-    }
-
 
     /**
      * [ADMIN] 削除処理
@@ -355,7 +310,6 @@ class PermissionsController extends BcAdminAppController
     /**
      * 一括処理
      *
-     * @param array $ids プラグインIDの配列
      * @return void|Response
      */
     public function batch(PermissionServiceInterface $permissionService)
@@ -374,12 +328,10 @@ class PermissionsController extends BcAdminAppController
         
         $methodText = $allowMethod[$method];
         
-        var_dump($method);
         foreach($this->request->getData('ListTool.batch_targets') as $id) {
             $permission = $permissionService->get($id);
             $permissionService->$method($id);
             if ($permissionService->$method($id)) {
-                var_dump("kokko");
                 $this->BcMessage->setSuccess(
                     sprintf(__d('baser', 'プラグイン「%s」 を %sしました。'), $permission->name, $methodText),
                     true,
@@ -388,67 +340,5 @@ class PermissionsController extends BcAdminAppController
             }
         }
         return $this->response->withStringBody('true');
-    }
-
-
-    /**
-     * 一括公開
-     *
-     * @param array $ids
-     * @return boolean
-     */
-    protected function _batch_publish($ids)
-    {
-        if ($ids) {
-            foreach($ids as $id) {
-                $this->_changeStatus($id, true);
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 一括非公開
-     *
-     * @param array $ids
-     * @return boolean
-     */
-    protected function _batch_unpublish($ids)
-    {
-        if ($ids) {
-            foreach($ids as $id) {
-                $this->_changeStatus($id, false);
-            }
-        }
-        return true;
-    }
-
-    /**
-     * ステータスを変更する
-     *
-     * @param int $id
-     * @param boolean $status
-     * @return boolean
-     */
-    protected function _changeStatus($id, $status)
-    {
-        $statusTexts = [0 => __d('baser', '無効'), 1 => __d('baser', '有効')];
-        $data = $this->Permission->find('first', ['conditions' => ['Permission.id' => $id], 'recursive' => -1]);
-        $data['Permission']['status'] = $status;
-        $this->Permission->set($data);
-
-        if (!$this->Permission->save()) {
-            return false;
-        }
-
-        $statusText = $statusTexts[$status];
-        $this->Permission->saveDbLog(
-            sprintf(
-                'アクセス制限設定「%s」 を %s に設定しました。',
-                $data['Permission']['name'],
-                $statusText
-            )
-        );
-        return true;
     }
 }
