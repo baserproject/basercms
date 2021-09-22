@@ -17,6 +17,9 @@ use Cake\Utility\Inflector;
 use Cake\Event\EventInterface;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Table\ContentsTable;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Class BcContentsBehavior
@@ -63,6 +66,7 @@ class BcContentsBehavior extends Behavior
      * @param ArrayObject $options
      * @return void
      * @checked
+     * @unitTest
      */
     public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
     {
@@ -113,24 +117,27 @@ class BcContentsBehavior extends Behavior
     /**
      * Before delete
      *
-     * 削除した Content ID を一旦保管し、afterDelete で Content より削除する
+     * afterDelete でのContents物理削除準備をする
      *
      * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @checked
+     * @noTodo
+     * @unitTest
      */
     public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // TODO: 一旦コメントアウト
-        return;
         // $data = $model->find('first', [
         //     'conditions' => [$model->alias . '.id' => $model->id]
         // ]);
         // if (!empty($data['Content']['id'])) {
         //     $this->_deleteContentId = $data['Content']['id'];
         // }
-        // return true;
+
+        if (empty($entity->content)) {
+            $entity->content = $this->Contents->find('all', ['withDeleted'])->where(['entity_id' => $entity->id])->first();
+        }
     }
 
     /**
@@ -142,11 +149,13 @@ class BcContentsBehavior extends Behavior
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @checked
+     * @noTodo
+     * @unitTest
      */
     public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        $this->table->Contents->hardDelete($entity->content);
-        $this->table->Contents->removeFromTree($entity->content);
+        $this->Contents->hardDel($entity->content);
+        // $this->Contents->removeFromTree($entity->content);
     }
 
     /**

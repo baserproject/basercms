@@ -87,7 +87,7 @@ class ContentService implements ContentServiceInterface
      */
     public function getTrash($id)
     {
-            return $this->getTrashIndex()->where(['Contents.id' => $id])->firstOrFail();
+        return $this->Contents->getTrash($id);
     }
 
     /**
@@ -196,15 +196,13 @@ class ContentService implements ContentServiceInterface
      */
     public function getIndex(array $queryParams=[], ?string $type="all"): Query
     {
-        $options = [];
         $columns = ConnectionManager::get('default')->getSchemaCollection()->describe('contents')->columns();
 
+        $query = $this->Contents->find($type)->contain(['Sites']);
+
         if (!empty($queryParams['withTrash'])) {
-            if ($queryParams['withTrash']) {
-                $options = array_merge($options, ['withDeleted']);
-            }
+            $query = $query->applyOptions(['withDeleted']);
         }
-        $query = $this->Contents->find($type, $options)->contain(['Sites']);
 
         if (!empty($queryParams['name'])) {
             $query = $query->where(['OR' => [
@@ -378,16 +376,7 @@ class ContentService implements ContentServiceInterface
     public function hardDelete($id, $enableTree = false): bool
     {
         $content = $this->getTrash($id);
-        if ($content->deleted_date) {
-            if ($enableTree && !$this->Contents->hasBehavior('Tree')) {
-                $this->Contents->addBehavior('Tree');
-            }
-            if (!$enableTree && $this->Contents->hasBehavior('Tree')) {
-                $this->Contents->removeBehavior('Tree');
-            }
-            return $this->Contents->hardDelete($content);
-        }
-        return false;
+        return $this->Contents->hardDel($content, $enableTree);
     }
 
     /**

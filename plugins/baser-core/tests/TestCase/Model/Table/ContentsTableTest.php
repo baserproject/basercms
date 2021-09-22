@@ -50,7 +50,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->loadFixtures('Contents');
+        $this->loadFixtures('Contents', 'Sites');
         parent::setUp();
         $config = $this->getTableLocator()->exists('Contents')? [] : ['className' => 'BaserCore\Model\Table\ContentsTable'];
         $this->Contents = $this->getTableLocator()->get('Contents', $config);
@@ -81,6 +81,38 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
+     * testGetTrash
+     *
+     * @return void
+     */
+    public function testGetTrash(): void
+    {
+        $result = $this->Contents->getTrash(15);
+        $this->assertEquals("BcContentsテスト(deleted)", $result->title);
+    }
+
+    /**
+     * testDelete
+     *
+     * @return void
+     */
+    public function testHardDel(): void
+    {
+        // treeBehavior falseの場合
+        $content1 = $this->Contents->getTrash(15);
+        $this->assertTrue($this->Contents->hardDel($content1));
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Contents->getTrash(15);
+        // treeBehavior trueの場合
+        $content2 = $this->Contents->getTrash(16);
+        $this->assertTrue($this->Contents->hardDel($content2, true));
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Contents->getTrash(16); // 親要素
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Contents->getTrash(17); // 子要素
+    }
+
+    /**
      * Test validationDefault
      *
      * @return void
@@ -92,7 +124,7 @@ class ContentsTableTest extends BcTestCase
         foreach($validator->getIterator() as $key => $value) {
             $fields[] = $key;
         }
-        $this->assertEquals(['id', 'name', 'title', 'eyecatch', 'self_publish_begin', 'self_publish_end', 'created_date', 'modified_date'], $fields);
+        $this->assertEquals(['id', 'name', 'title', 'parent_id', 'plugin', 'type', 'eyecatch', 'self_publish_begin', 'self_publish_end', 'created_date', 'modified_date'], $fields);
     }
 
     /**
@@ -122,6 +154,9 @@ class ContentsTableTest extends BcTestCase
                     'id' => ['integer' => "The provided value is invalid"],
                     'name' => ['_empty' => 'スラッグを入力してください。'],
                     'title' => ['_empty' => 'タイトルを入力してください。'],
+                    'parent_id' => ['_required' => 'このフィールドは必須です'],
+                    'plugin' => ['_required' => 'このフィールドは必須です'],
+                    'type' => ['_required' => 'このフィールドは必須です'],
                 ]
             ]
         ];

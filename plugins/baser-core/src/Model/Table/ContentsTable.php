@@ -181,11 +181,13 @@ class ContentsTable extends AppTable
         ]);
 
         $validator
-        ->requirePresence('parent_id');
+        ->requirePresence('parent_id', true, __d('baser', 'このフィールドは必須です'));
+
         $validator
-        ->requirePresence('plugin');
+        ->requirePresence('plugin', true, __d('baser', 'このフィールドは必須です'));
+
         $validator
-        ->requirePresence('type');
+        ->requirePresence('type', true, __d('baser', 'このフィールドは必須です'));
 
         $validator
         ->add('eyecatch', [
@@ -371,6 +373,43 @@ class ContentsTable extends AppTable
         if (empty($this->data['Content']['id']) && !empty($this->validationErrors['name'])) {
             unset($this->validationErrors['name']);
         }
+    }
+
+    /**
+     * ゴミ箱のコンテンツを取得する
+     * @param int $id
+     * @return EntityInterface|array
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getTrash($id)
+    {
+        return $this->findById($id)->applyOptions(['withDeleted'])->contain(['Sites'])->where(['Contents.deleted_date IS NOT NULL'])->firstOrFail();
+    }
+
+    /**
+     * コンテンツ情報を物理削除する
+     * @param Content $content
+     * @param bool $enableTree(デフォルト:false) TreeBehaviorの有無
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function hardDel($content, $enableTree = false): bool
+    {
+        if (!empty($content->deleted_date)) {
+            if ($enableTree && !$this->hasBehavior('Tree')) {
+                $this->addBehavior('Tree');
+            }
+            if (!$enableTree && $this->hasBehavior('Tree')) {
+                $this->removeBehavior('Tree');
+            }
+            return $this->hardDelete($content);
+        }
+        return false;
     }
 
     /**

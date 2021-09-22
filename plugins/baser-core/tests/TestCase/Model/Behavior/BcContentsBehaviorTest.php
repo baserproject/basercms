@@ -10,9 +10,11 @@
  */
 namespace BaserCore\Test\TestCase\Model\Behavior;
 
+use ArrayObject;
 use Cake\ORM\Entity;
 use Cake\ORM\Marshaller;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Service\ContentService;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Table\ContentFoldersTable;
 use BaserCore\Model\Behavior\BcContentsBehavior;
@@ -33,6 +35,7 @@ class BcContentsBehaviorTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Sites',
         'plugin.BaserCore.ContentFolders',
     ];
 
@@ -52,6 +55,7 @@ class BcContentsBehaviorTest extends BcTestCase
         $this->table = $this->getTableLocator()->get('BaserCore.ContentFolders');
         $this->table->setPrimaryKey(['id']);
         $this->table->addBehavior('BaserCore.BcContents');
+        $this->contentService = new ContentService();
     }
 
     /**
@@ -79,28 +83,27 @@ class BcContentsBehaviorTest extends BcTestCase
     */
     public function testBeforeMarshal()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $data = [
-            'folder_template' => 'テストBeforeSave',
-            'content' => [
-                "name" => "", // validation error
-                "parent_id" => "1",
-                "title" => "新しい フォルダー",
-                "plugin" => 'BaserCore',
-                "type" => "ContentFolder",
-                "site_id" => "0",
-                "alias_id" => "",
-                "entity_id" => "",
-            ]
-        ];
-        $marshall = new Marshaller($this->table);
-
-        $this->table->getEventManager()->on(
-            'Model.beforeMarshal',
-            function ($e, $data, $options) {
-            }
-        );
-        $entity = $marshall->one($data);
+        $notEmptyResult = ["" => false, "test" => null];
+        foreach ($notEmptyResult as $nameField => $result) {
+            $data = [
+                'folder_template' => 'テストBeforeSave',
+                'content' => [
+                    "name" => $nameField,
+                    "parent_id" => "1",
+                    "title" => "新しい フォルダー",
+                    "plugin" => 'BaserCore',
+                    "type" => "ContentFolder",
+                    "site_id" => "0",
+                    "alias_id" => "",
+                    "entity_id" => "",
+                ]
+            ];
+            $data = $this->table->dispatchEvent('Model.beforeMarshal', [
+                'data' => new ArrayObject($data),
+                'options' => new ArrayObject(),
+            ]);
+            $this->assertEquals($result, $data->getResult());
+        }
     }
 
     /**
@@ -173,20 +176,22 @@ class BcContentsBehaviorTest extends BcTestCase
                 "entity_id" => "",
             ]
     ]);
-    $a = $this->table->save($data);
-    // $this->assertTrue($this->table->save($data));
+        $this->assertTrue($this->table->save($data));
     }
 
     /**
      * Before delete
      *
-     * 削除した Content ID を一旦保管し、afterDelete で Content より削除する
+     * afterDelete でのContents物理削除準備をする
      */
     public function testBeforeDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $event = $this->table->dispatchEvent('Model.beforeDelete', [
+            'entity' => $this->table->get(10),
+            'options' => new ArrayObject(),
+        ]);
+        $this->assertNotEmpty($event->getData('entity')->content);
     }
-
     /**
      * After delete
      *
@@ -194,7 +199,14 @@ class BcContentsBehaviorTest extends BcTestCase
      */
     public function testAfterDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $entity = $this->table->get(10);
+        $entity->content = $this->contentService->getTrash(16);
+        $event = $this->table->dispatchEvent('Model.afterDelete', [
+            'entity' => $entity,
+            'options' => new ArrayObject(),
+        ]);
+        $this->assertTrue($this->table->Contents->find()->where(['entity_id' => 10])->isEmpty());
+
     }
 
     /**

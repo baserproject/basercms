@@ -76,17 +76,6 @@ class ContentServiceTest extends BcTestCase
     }
 
     /**
-     * testGetTrash
-     *
-     * @return void
-     */
-    public function testGetTrash(): void
-    {
-        $result = $this->ContentService->getTrash(15);
-        $this->assertEquals("BcContentsテスト(deleted)", $result->title);
-    }
-
-    /**
      * testGetChildren
      *
      * @return void
@@ -269,7 +258,11 @@ class ContentServiceTest extends BcTestCase
     {
         $request = $this->getRequest('/');
         $request = $request->withParsedBody([
+            'parent_id' => '',
+            'plugin' => 'BaserCore',
+            'type' => '',
             'name' => 'テストcreate',
+            'title' => 'テストcreate',
         ]);
         $result = $this->ContentService->create($request->getData());
         $expected = $this->ContentService->Contents->find()->last();
@@ -288,9 +281,8 @@ class ContentServiceTest extends BcTestCase
         $this->assertNotNull($contents->deleted_date);
     }
 
-
     /**
-     * testDelete
+     * testHardDelete
      *
      * @return void
      */
