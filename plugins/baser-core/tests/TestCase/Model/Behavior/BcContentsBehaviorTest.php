@@ -10,9 +10,11 @@
  */
 namespace BaserCore\Test\TestCase\Model\Behavior;
 
+use Cake\ORM\Entity;
+use Cake\ORM\Marshaller;
+use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Table\ContentFoldersTable;
-use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Behavior\BcContentsBehavior;
 
 /**
@@ -77,11 +79,11 @@ class BcContentsBehaviorTest extends BcTestCase
     */
     public function testBeforeMarshal()
     {
-        $contentFolder = $this->table->newEntity(
-            [
-            'folder_template' => 'テストBeforeMarshal',
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = [
+            'folder_template' => 'テストBeforeSave',
             'content' => [
-                "name" => "",
+                "name" => "", // validation error
                 "parent_id" => "1",
                 "title" => "新しい フォルダー",
                 "plugin" => 'BaserCore',
@@ -89,10 +91,16 @@ class BcContentsBehaviorTest extends BcTestCase
                 "site_id" => "0",
                 "alias_id" => "",
                 "entity_id" => "",
-            ]],
-            ['validate' => "default"]
+            ]
+        ];
+        $marshall = new Marshaller($this->table);
+
+        $this->table->getEventManager()->on(
+            'Model.beforeMarshal',
+            function ($e, $data, $options) {
+            }
         );
-        $this->assertNotEmpty($contentFolder->content->name);
+        $entity = $marshall->one($data);
     }
 
     /**
@@ -122,6 +130,27 @@ class BcContentsBehaviorTest extends BcTestCase
     public function testBeforeSave()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = new Entity([
+                'folder_template' => 'テストBeforeSave',
+                'content' => [
+                    "name" => "", // validation error
+                    "parent_id" => "1",
+                    "title" => "新しい フォルダー",
+                    "plugin" => 'BaserCore',
+                    "type" => "ContentFolder",
+                    "site_id" => "0",
+                    "alias_id" => "",
+                    "entity_id" => "",
+                ]
+        ]);
+        $this->assertFalse($this->table->save($data));
+        // TODO: イベント設定うまくいかないので調整する
+        // $listener = function ($event, $entity, $options) {
+        //     $options['validate'] = false;
+        // };
+        // $this->table->getEventManager()->on('Model.beforeSave', $listener);
+        // $this->assertTrue($this->table->save($data));
+
     }
 
     /**
@@ -132,6 +161,20 @@ class BcContentsBehaviorTest extends BcTestCase
     public function testAfterSave()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = new Entity([
+            'folder_template' => 'テストBeforeSave',
+            'content' => [
+                "parent_id" => "1",
+                "title" => "新しい フォルダー",
+                "plugin" => 'BaserCore',
+                "type" => "ContentFolder",
+                "site_id" => "0",
+                "alias_id" => "",
+                "entity_id" => "",
+            ]
+    ]);
+    $a = $this->table->save($data);
+    // $this->assertTrue($this->table->save($data));
     }
 
     /**

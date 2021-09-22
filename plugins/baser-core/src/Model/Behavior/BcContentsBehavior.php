@@ -57,74 +57,56 @@ class BcContentsBehavior extends Behavior
     /**
      * BeforeMarshal
      *
-     * Content のバリデーションを実行
-     * 本体のバリデーションも同時に実行する為、Contentのバリデーション判定は、 beforeSave にて確認
+     * Content のバリデーションを実行し、エラーがある場合は中止する
      * @param Event $event
      * @param ArrayObject $data
      * @param ArrayObject $options
+     * @return void
+     * @checked
      */
-public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
+    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
     {
-        if (!empty($data['content'])) {
-            $validateOptions = ['validate' => $options['validate'] ?? 'default'];
-            $contentEntity = $this->Contents->newEntity($data['content'], $validateOptions);
-            if ($contentEntity->hasErrors() && empty($data['content']['id'])) {
-                return $contentEntity->getErrors();
-                // $this->table->newEntity($data, $validateOptions)->setErrors($contentEntity->getErrors());
-                // $this->table->setErrors($contentEntity->getErrors());
-            }
-            if (!empty($contentEntity)) {
-                $data['content'] = $contentEntity->toArray();
-            }
+        // TODO: validate falseできない
+        $validateOptions = ['validate' => $options['validate'] ?? 'default'];
+        $contentEntity = $this->Contents->newEntity($data['content'], $validateOptions);
+        if ($contentEntity->hasErrors() && empty($data['content']['id'])) {
+            $event->stopPropagation();
+            $event->setResult(false);
+            return;
         }
     }
-
-    /**
-     * Before save
-     *
-     * Content のバリデーション結果確認
-     *
-     * @param EventInterface $event
-     * @param EntityInterface $entity
-     * @return bool
-     */
-    public function beforeSave(EventInterface $event, EntityInterface $entity)
-    {
-        return !$entity->content->hasErrors();
-    }
-
     /**
      * After save
      *
      * Content を保存する
      *
-     * @param Model $model
-     * @param bool $created
-     * @param array $options
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      * @return bool
-     * FIXME:
+     * @checked
      */
-    public function afterSave(EventInterface $event, EntityInterface $entity)
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if (empty($entity->content)) return;
+        // TODO: 一旦コメントアウト
+        return;
+        if (empty($entity->content)) return false;
 
         // if (!empty($options['validate'])) {
         //     // beforeValidate で調整したデータを利用する為、$model->Content->data['Content'] を利用
-        //     $data = $this->Content->data['Content'];
+        //     $data = $this->table->Content->data['Content'];
         // } else {
-        //     $data = $model->data['Content'];
+        //     $data = $this->table->data['Content'];
         // }
+
         unset($entity->content->lft);
         unset($entity->content->rght);
         if ($entity->isNew()) {
             list($plugin, $name) = explode('.', $this->table->getRegistryAlias());
-            $data = $this->Contents->createContent($entity->toArray(), $plugin ?? "BaserCore", Inflector::classify($name), $entity->id, false);
+            $data = $this->Contents->createContent($entity->content->toArray(), $plugin ?? "BaserCore", Inflector::classify($name), $entity->id, false);
         } else {
-            // $this->Contents->patchEntity($entity->content, )
-            // $data = $this->Contents->save($data, false);
-        }
-        if (!$entity->content) {
-            $this->table->content = $entity->content;
+            $content = $this->Contents->patchEntity($this->Contents->get($entity->content->id), $entity->content->toArray());
+            $data = $this->Contents->save($content, false);
         }
     }
 
@@ -133,19 +115,22 @@ public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $opti
      *
      * 削除した Content ID を一旦保管し、afterDelete で Content より削除する
      *
-     * @param Model $model
-     * @param bool $cascade
-     * @return bool
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
+     * @checked
      */
-    public function beforeDelete(Model $model, $cascade = true)
+    public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        $data = $model->find('first', [
-            'conditions' => [$model->alias . '.id' => $model->id]
-        ]);
-        if (!empty($data['Content']['id'])) {
-            $this->_deleteContentId = $data['Content']['id'];
-        }
-        return true;
+        // TODO: 一旦コメントアウト
+        return;
+        // $data = $model->find('first', [
+        //     'conditions' => [$model->alias . '.id' => $model->id]
+        // ]);
+        // if (!empty($data['Content']['id'])) {
+        //     $this->_deleteContentId = $data['Content']['id'];
+        // }
+        // return true;
     }
 
     /**
@@ -153,17 +138,15 @@ public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $opti
      *
      * 削除したデータに連携する Content を削除
      *
-     * @param Model $model
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
+     * @checked
      */
-    public function afterDelete(Model $model)
+    public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if ($this->_deleteContentId) {
-            $softDelete = $model->Content->softDelete(null);
-            $model->Content->softDelete(false);
-            $model->Content->removeFromTree($this->_deleteContentId, true);
-            $model->Content->softDelete($softDelete);
-            $this->_deleteContentId = null;
-        }
+        $this->table->Contents->hardDelete($entity->content);
+        $this->table->Contents->removeFromTree($entity->content);
     }
 
     /**

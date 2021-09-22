@@ -753,12 +753,14 @@ class ContentsTable extends AppTable
      * @param string $plugin
      * @param string $type
      * @param int $entityId
+     * @return EntityInterface|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function createContent($content, $plugin, $type, $entityId = null, $validate = true)
     {
-        if (isset($content['content'])) {
-            $content = $content['content'];
-        }
+        if (!isset($content)) return false;
         $content['plugin'] = $plugin;
         $content['type'] = $type;
         $content['entity_id'] = $entityId;

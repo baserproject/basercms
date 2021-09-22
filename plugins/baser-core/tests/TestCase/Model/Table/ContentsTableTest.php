@@ -50,6 +50,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function setUp(): void
     {
+        $this->loadFixtures('Contents');
         parent::setUp();
         $config = $this->getTableLocator()->exists('Contents')? [] : ['className' => 'BaserCore\Model\Table\ContentsTable'];
         $this->Contents = $this->getTableLocator()->get('Contents', $config);
@@ -296,14 +297,12 @@ class ContentsTableTest extends BcTestCase
      */
     public function testCreateContent()
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->loginAdmin($this->getRequest());
         $content = ['title' => 'hoge', 'parent_id' => ''];
-        $type = 'Content';
-        $result = $this->Content->createContent($content, '', $type);
+        $type = 'Contents';
+        $result = $this->Contents->createContent($content, 'BaserCore', $type);
 
-        $this->assertEquals($content['title'], $result['Content']['title']);
-        $this->assertEquals($type, $result['Content']['type']);
+        $this->assertEquals($content['title'], $result->title);
+        $this->assertEquals($type, $result->type);
     }
 
     /**

@@ -113,7 +113,7 @@ class ContentFolderServiceTest extends BcTestCase
                 "site_id" => "0",
                 "alias_id" => "",
                 "entity_id" => "",
-            ]
+            ],
         ];
         $result = $this->ContentFolderService->create($data);
         $folderExpected = $this->ContentFolderService->ContentFolders->find()->last();
