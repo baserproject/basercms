@@ -195,8 +195,8 @@ class ContentsControllerTest extends BcTestCase
             'author_id' => '',
         ];
         return [
-            ['index', '1', [], "Cake\ORM\Query", 11],
-            ['index', '2', $search, 'Cake\ORM\ResultSet', 10],
+            ['index', '1', [], "Cake\ORM\Query", 14],
+            ['index', '2', $search, 'Cake\ORM\ResultSet', 13],
             ['trash_index', '1', [], 'Cake\ORM\Query', 3],
             // 足りない場合は空のindexを返す
             ['index', '', [], 'Cake\ORM\Query', 0],

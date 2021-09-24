@@ -118,7 +118,7 @@ class ContentFolderService implements ContentFolderServiceInterface
         // TODO: bccontentsBehaviorのafterDeleteでの削除に移行する
         try {
             $contentService = $this->getService(ContentServiceInterface::class);
-            $result =  $this->ContentFolders->delete($ContentFolder) && $contentService->hardDelete($ContentFolder->content->id);
+            $result =  $this->ContentFolders->delete($ContentFolder);
         } catch (\Exception $e) {
             $result = false;
         }

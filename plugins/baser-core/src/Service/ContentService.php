@@ -87,7 +87,7 @@ class ContentService implements ContentServiceInterface
      */
     public function getTrash($id)
     {
-            return $this->getTrashIndex()->where(['Contents.id' => $id])->firstOrFail();
+        return $this->Contents->getTrash($id);
     }
 
     /**
@@ -101,7 +101,11 @@ class ContentService implements ContentServiceInterface
      */
     public function getChildren($id)
     {
-        $query = $this->Contents->find('children', ['for' => $id]);
+        try {
+            $query = $this->Contents->find('children', ['for' => $id]);
+        } catch (\Exception $e) {
+            return null;
+        }
         return $query->isEmpty() ? null : $query;
     }
 
@@ -196,15 +200,13 @@ class ContentService implements ContentServiceInterface
      */
     public function getIndex(array $queryParams=[], ?string $type="all"): Query
     {
-        $options = [];
         $columns = ConnectionManager::get('default')->getSchemaCollection()->describe('contents')->columns();
 
+        $query = $this->Contents->find($type)->contain(['Sites']);
+
         if (!empty($queryParams['withTrash'])) {
-            if ($queryParams['withTrash']) {
-                $options = array_merge($options, ['withDeleted']);
-            }
+            $query = $query->applyOptions(['withDeleted']);
         }
-        $query = $this->Contents->find($type, $options)->contain(['Sites']);
 
         if (!empty($queryParams['name'])) {
             $query = $query->where(['OR' => [
@@ -378,16 +380,7 @@ class ContentService implements ContentServiceInterface
     public function hardDelete($id, $enableTree = false): bool
     {
         $content = $this->getTrash($id);
-        if ($content->deleted_date) {
-            if ($enableTree && !$this->Contents->hasBehavior('Tree')) {
-                $this->Contents->addBehavior('Tree');
-            }
-            if (!$enableTree && $this->Contents->hasBehavior('Tree')) {
-                $this->Contents->removeBehavior('Tree');
-            }
-            return $this->Contents->hardDelete($content);
-        }
-        return false;
+        return $this->Contents->hardDel($content, $enableTree);
     }
 
     /**
@@ -550,7 +543,7 @@ class ContentService implements ContentServiceInterface
     //     return $result;
     // }
 
-    /**
+/**
      * 再帰的に論理削除
      *
      * エイリアスの場合
@@ -565,45 +558,43 @@ class ContentService implements ContentServiceInterface
         if (!$id) {
             return false;
         }
-        $result = true;
+        $parent = $this->get($id);
+
         if ($children = $this->getChildren($id)) {
-            foreach($children as $child) {
-                if (!$this->deleteRecursive($child->id)) {
-                    $result = false;
-                }
-            }
+            // 親から消していくとTreeBehaviorにより削除重複が起きるため、子要素から削除する
+            $target = array_reverse(array_merge([$parent], $children->toArray()));
+        } else {
+            $target = [$parent];
         }
-        if ($result) {
-            $content = $this->get($id);
-            if (empty($content->alias_id)) {
+
+        foreach($target as $node) {
+            if (empty($node->alias_id)) {
                 // エイリアス以外の場合
                 // 一旦階層構造から除外しリセットしてゴミ箱に移動（論理削除）
-                $content->parent_id = null;
-                $content->url = '';
-                $content->status = false;
-                $content->self_status = false;
-                unset($content->lft);
-                unset($content->rght);
+                $node->parent_id = null;
+                $node->url = '';
+                $node->status = false;
+                $node->self_status = false;
+                unset($node->lft);
+                unset($node->rght);
                 // TODO: $this->updatingSystemDataのsetter getterを用意する必要あり
                 $this->updatingSystemData = false;
                 // ここでは callbacks を false にすると lft rght が更新されないので callbacks は true に設定する（default: true）
                 // $this->clear(); // TODO: これは何か再確認する humuhimi
-                $this->Contents->save($content, ['validate' => false]); // 論理削除用のvalidationを用意するべき
+                $this->Contents->save($node, ['validate' => false]); // 論理削除用のvalidationを用意するべき
                 $this->updatingSystemData = true;
-                $result = $this->Contents->delete($content);
+                $result = $this->Contents->delete($node);
                 // =====================================================================
                 // 通常の削除の際、afterDelete で、関連コンテンツのキャッシュを削除しているが、
                 // 論理削除の場合、afterDelete が呼ばれない為、ここで削除する
                 // =====================================================================
-                $this->Contents->deleteAssocCache($content);
-                return $result;
+                $this->Contents->deleteAssocCache($node);
             } else {
                 // エイリアスの場合、直接削除
-                $result = $this->Contents->removeFromTree($content);
-                return $result;
+                $result = $this->Contents->removeFromTree($node);
             }
+            if (!$result) return false;
         }
-        return false;
+        return $result;
     }
 }
-

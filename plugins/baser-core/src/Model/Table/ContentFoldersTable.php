@@ -59,15 +59,7 @@ class ContentFoldersTable extends AppTable
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        // $this->addBehavior('BcContents');
-        // TODO: 本来はBcContentsBehaviorで設定する箇所だが、一時措置として直接下記に設定
-        $this->hasOne('Contents', ['className' => 'BaserCore.Contents'])
-            ->setForeignKey('entity_id')
-            ->setDependent(false)
-            ->setConditions([
-                'Contents.type' => 'ContentFolder',
-                'Contents.alias_id IS' => null,
-            ]);
+        $this->addBehavior('BaserCore.BcContents');
     }
 
     /**
@@ -81,20 +73,6 @@ class ContentFoldersTable extends AppTable
             'Controller.Contents.beforeMove' => ['callable' => 'beforeMove'],
             'Controller.Contents.afterMove' => ['callable' => 'afterMove']
         ]);
-    }
-
-    /**
-     * Before Marshal
-     *
-     * @param Event $event
-     * @param ArrayObject $data
-     * @param ArrayObject $options
-     * @return void
-     */
-    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
-    {
-        $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-        $Contents->beforeMarshal($event, $data, $options);
     }
 
 

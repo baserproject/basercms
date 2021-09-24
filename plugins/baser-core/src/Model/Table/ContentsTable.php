@@ -167,6 +167,7 @@ class ContentsTable extends AppTable
         ]);
 
         $validator
+        ->requirePresence('title')
         ->scalar('title')
         ->notEmptyString('title', __d('baser', 'タイトルを入力してください。'))
         ->maxLength('title', 230, __d('baser', 'タイトルは230文字以内で入力してください。'))
@@ -178,6 +179,15 @@ class ContentsTable extends AppTable
                 'message' => __d('baser', 'タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
             ]
         ]);
+
+        $validator
+        ->requirePresence('parent_id', true, __d('baser', 'このフィールドは必須です'));
+
+        $validator
+        ->requirePresence('plugin', true, __d('baser', 'このフィールドは必須です'));
+
+        $validator
+        ->requirePresence('type', true, __d('baser', 'このフィールドは必須です'));
 
         $validator
         ->add('eyecatch', [
@@ -363,6 +373,43 @@ class ContentsTable extends AppTable
         if (empty($this->data['Content']['id']) && !empty($this->validationErrors['name'])) {
             unset($this->validationErrors['name']);
         }
+    }
+
+    /**
+     * ゴミ箱のコンテンツを取得する
+     * @param int $id
+     * @return EntityInterface|array
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getTrash($id)
+    {
+        return $this->findById($id)->applyOptions(['withDeleted'])->contain(['Sites'])->where(['Contents.deleted_date IS NOT NULL'])->firstOrFail();
+    }
+
+    /**
+     * コンテンツ情報を物理削除する
+     * @param Content $content
+     * @param bool $enableTree(デフォルト:false) TreeBehaviorの有無
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function hardDel($content, $enableTree = false): bool
+    {
+        if (!empty($content->deleted_date)) {
+            if ($enableTree && !$this->hasBehavior('Tree')) {
+                $this->addBehavior('Tree');
+            }
+            if (!$enableTree && $this->hasBehavior('Tree')) {
+                $this->removeBehavior('Tree');
+            }
+            return $this->hardDelete($content);
+        }
+        return false;
     }
 
     /**
@@ -745,16 +792,17 @@ class ContentsTable extends AppTable
      * @param string $plugin
      * @param string $type
      * @param int $entityId
+     * @return EntityInterface|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function createContent($content, $plugin, $type, $entityId = null, $validate = true)
     {
-        if (isset($content['Content'])) {
-            $content = $content['Content'];
-        }
+        if (!isset($content)) return false;
         $content['plugin'] = $plugin;
         $content['type'] = $type;
         $content['entity_id'] = $entityId;
-        // TODO: deleted → deleted_dateに変更
         if (!isset($content['deleted_date'])) {
             $content['deleted_date'] = '';
         }
@@ -767,8 +815,8 @@ class ContentsTable extends AppTable
         if (!isset($content['created_date'])) {
             $content['created_date'] = date('Y-m-d H:i:s');
         }
-        $this->create($content);
-        return $this->save(null, $validate);
+        $content = $this->newEntity($content);
+        return $this->save($content);
     }
 
     /**
