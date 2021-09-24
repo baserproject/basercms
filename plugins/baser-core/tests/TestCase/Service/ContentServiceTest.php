@@ -82,6 +82,7 @@ class ContentServiceTest extends BcTestCase
      */
     public function testGetChildren(): void
     {
+        $this->assertNull($this->ContentService->getChildren(1000));
         $this->assertNull($this->ContentService->getChildren(4));
         $this->assertEquals(3, $this->ContentService->getChildren(6)->count());
     }
@@ -156,11 +157,11 @@ class ContentServiceTest extends BcTestCase
         return [
             [[
                 'site_id' => 1,
-            ], 10],
+            ], 13],
             [[
                 'site_id' => 1,
                 'withTrash' => true,
-            ], 12],
+            ], 15],
             [[
                 'site_id' => 1,
                 'open' => '1',
@@ -169,7 +170,7 @@ class ContentServiceTest extends BcTestCase
                 'type' => 'ContentFolder',
                 'self_status' => '1',
                 'author_id' => '',
-            ], 2],
+            ], 5],
             [[
                 'site_id' => 1,
                 'open' => '1',
@@ -202,15 +203,15 @@ class ContentServiceTest extends BcTestCase
         // softDeleteの場合
         $request = $this->getRequest('/?status=1');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
-        $this->assertEquals(10, $contents->all()->count());
+        $this->assertEquals(13, $contents->all()->count());
         // ゴミ箱を含むの場合
         $request = $this->getRequest('/?status=1&withTrash=true');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
-        $this->assertEquals(12, $contents->all()->count());
+        $this->assertEquals(15, $contents->all()->count());
         // 否定の場合
         $request = $this->getRequest('/?status=1&type!=Page');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
-        $this->assertEquals(4, $contents->all()->count());
+        $this->assertEquals(7, $contents->all()->count());
     }
     /**
      * testGetTrashIndex
@@ -236,9 +237,22 @@ class ContentServiceTest extends BcTestCase
     {
         $siteId = 1;
         $result = $this->ContentService->getContentFolderList($siteId);
-        $this->assertEquals([1 => "", 6 => "　　　└service"], $result);
+        $this->assertEquals(
+            [
+                1 => "",
+                6 => "　　　└service",
+                18 => '　　　　　　└ツリー階層削除用フォルダー(親)',
+                19 => '　　　　　　└ツリー階層削除用フォルダー(子)',
+                20 => '　　　　　　└ツリー階層削除用フォルダー(孫)'
+            ],
+        $result);
         $result = $this->ContentService->getContentFolderList($siteId, ['conditions' => ['site_root' => false]]);
-        $this->assertEquals([6 => 'service'], $result);
+        $this->assertEquals([
+            6 => 'service',
+            18 => '　　　└ツリー階層削除用フォルダー(親)',
+            19 => '　　　└ツリー階層削除用フォルダー(子)',
+            20 => '　　　└ツリー階層削除用フォルダー(孫)'
+        ], $result);
     }
 
     /**
@@ -322,7 +336,7 @@ class ContentServiceTest extends BcTestCase
      */
     public function testDeleteAll(): void
     {
-        $this->assertEquals(11, $this->ContentService->deleteAll());
+        $this->assertEquals(14, $this->ContentService->deleteAll());
         $contents = $this->ContentService->getIndex();
         $this->assertEquals(0, $contents->all()->count());
     }
@@ -403,6 +417,12 @@ class ContentServiceTest extends BcTestCase
         // 子要素がある場合
         $children = $this->ContentService->getChildren(6);
         $this->assertTrue($this->ContentService->deleteRecursive(6));
+        foreach ($children as $child) {
+            $this->assertNotEmpty($this->ContentService->getTrash($child->id));
+        }
+        // 子要素の階層が深い場合
+        $children = $this->ContentService->getChildren(18);
+        $this->assertTrue($this->ContentService->deleteRecursive(18));
         foreach ($children as $child) {
             $this->assertNotEmpty($this->ContentService->getTrash($child->id));
         }

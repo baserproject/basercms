@@ -78,6 +78,7 @@ class BcContentsBehavior extends Behavior
             $event->setResult(false);
             return;
         }
+        $this->Contents->beforeMarshal($event, $data, $options);
     }
     /**
      * After save
@@ -128,13 +129,6 @@ class BcContentsBehavior extends Behavior
      */
     public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // $data = $model->find('first', [
-        //     'conditions' => [$model->alias . '.id' => $model->id]
-        // ]);
-        // if (!empty($data['Content']['id'])) {
-        //     $this->_deleteContentId = $data['Content']['id'];
-        // }
-
         if (empty($entity->content)) {
             $entity->content = $this->Contents->find('all', ['withDeleted'])->where(['entity_id' => $entity->id])->first();
         }
@@ -154,8 +148,9 @@ class BcContentsBehavior extends Behavior
      */
     public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        $this->Contents->hardDel($entity->content);
-        // $this->Contents->removeFromTree($entity->content);
+        if ($entity->content) {
+            $this->Contents->hardDel($entity->content);
+        }
     }
 
     /**
