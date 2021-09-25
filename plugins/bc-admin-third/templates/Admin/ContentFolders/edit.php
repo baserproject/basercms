@@ -1,26 +1,32 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
 /**
  * @var array $folderTemplateList フォルダテンプレートリスト
  * @var array $pageTemplateList ページテンプレートリスト
  */
+use BaserCore\View\BcAdminAppView;
+
+/**
+ * ContentFolders Edit
+ * @var BcAdminAppView $this
+ */
+$this->BcAdmin->setTitle(__d('baser', 'フォルダ編集'));
 ?>
 
 
-<?php echo $this->BcAdminForm->create() ?>
+<?php echo $this->BcAdminForm->create($contentFolder, ['novalidate' => true]) ?>
+<?php $this->BcBaser->element('content_fields') ?>
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 <?php echo $this->BcForm->hidden('ContentFolder.id') ?>
-
 <table class="form-table bca-form-table" data-bca-table-type="type2">
   <tr>
     <th

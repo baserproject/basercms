@@ -11,10 +11,13 @@
 
 namespace BaserCore\Controller\Component;
 use BcSite;
+use Cake\Core\App;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
+use BcContentsEventListener;
+use Cake\Http\ServerRequest;
 use BaserCore\Utility\BcUtil;
 use Cake\Controller\Component;
 use Cake\Controller\Controller;
@@ -36,7 +39,9 @@ use BaserCore\Controller\Admin\ContentsController;
  * - コンテンツ保存フォームのデータソースを設定
  * - コンテンツ保存フォームの初期値を設定
  *
- * @package Baser.Controller.Component
+ * @package BaserCore\Controller\Component
+ * @property Controller $_Controller
+ * @property ServerRequest $ControllerRequest
  */
 class BcContentsComponent extends Component
 {
@@ -221,7 +226,7 @@ class BcContentsComponent extends Component
             } else {
                 $controller->subMenuElements = ['contents'];
             }
-            if ($this->useForm && in_array($this->ControllerRequest->action, [$this->editAction, 'admin_edit_alias']) && !empty($this->ControllerRequest->getData('Content'))) {
+            if ($this->useForm && in_array($this->ControllerRequest->getParam('action'), [$this->editAction, 'admin_edit_alias']) && !empty($this->ControllerRequest->getData('Content'))) {
                 // フォームをセット
                 $this->settingForm($controller, $this->ControllerRequest->getData('Content.site_id'), $this->ControllerRequest->getData('Content.id'));
                 // フォームを読み込む為のイベントを設定

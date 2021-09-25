@@ -72,6 +72,7 @@ nbproject/*
 node_modules
 # etc
 LOCAL_TODO.md
+LOCAL_Q&A.md
 # symlink
 /webroot/bc_admin_third
 /webroot/bc_sample

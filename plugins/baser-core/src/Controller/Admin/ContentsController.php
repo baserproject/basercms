@@ -149,8 +149,8 @@ class ContentsController extends BcAdminAppController
             }
         }
         $this->ContentFolders->getEventManager()->on($this->ContentFolders);
-        $this->set('contents', $this->_getContents($contentService));
-        $this->set('template', $this->_getTemplate());
+        $this->set('contents', $this->getContents($contentService));
+        $this->set('template', $this->getTemplate());
         $this->set('folders', $contentService->getContentFolderList($currentSiteId, ['conditions' => ['site_root' => false]]));
         $this->set('sites', $sites);
     }
@@ -164,7 +164,7 @@ class ContentsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    protected function _getContents($contentService)
+    protected function getContents($contentService)
     {
         switch($this->request->getParam('action')) {
             case 'index':
@@ -191,7 +191,7 @@ class ContentsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    protected function _getTemplate(): string
+    protected function getTemplate(): string
     {
         switch($this->request->getParam('action')) {
             case 'index':

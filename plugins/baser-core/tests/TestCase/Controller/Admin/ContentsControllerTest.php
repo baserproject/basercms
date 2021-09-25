@@ -179,7 +179,7 @@ class ContentsControllerTest extends BcTestCase
     {
         $request = $this->request->withParam('action', $action)->withQueryParams(array_merge(['list_type' => $listType], $search));
         $ContentsController = $this->ContentsController->setRequest($request);
-        $contents = $this->execPrivateMethod($ContentsController, '_getContents', [$this->ContentService]);
+        $contents = $this->execPrivateMethod($ContentsController, 'getContents', [$this->ContentService]);
         $this->assertInstanceOf($expected, $contents);
         $this->assertEquals($count, $contents->count());
     }
@@ -217,7 +217,7 @@ class ContentsControllerTest extends BcTestCase
     {
         $request = $this->request->withParam('action', $action)->withQueryParams(['list_type' => $listType]);
         $ContentsController = $this->ContentsController->setRequest($request);
-        $template = $this->execPrivateMethod($ContentsController, '_getTemplate', [$this->ContentService]);
+        $template = $this->execPrivateMethod($ContentsController, 'getTemplate', [$this->ContentService]);
         $this->assertEquals($expected, $template);
     }
     public function getTemplateDataProvider()

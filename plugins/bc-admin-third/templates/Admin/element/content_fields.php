@@ -1,13 +1,12 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright        Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package            Baser.View
- * @since            baserCMS v 4.0.0
- * @license            https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
 use BaserCore\Model\Entity\Content;
@@ -69,11 +68,12 @@ if ($this->request->getData('Site.use_subdomain')) {
     $contentsName .= '/';
   }
 }
-$linkedFullUrl = $this->BcContents->getCurrentFolderLinkedUrl() . $contentsName;
+$linkedFullUrl = $this->BcContents->getCurrentFolderLinkedUrl($this->request->getData("ContentFolder.content")) . $contentsName;
 $disableEdit = false;
-if ($this->BcContents->isEditable()) {
-  $disableEdit = true;
-}
+// TODO: エラーが出るため一時的にコメントアウト
+// if ($this->BcContents->isEditable()) {
+//   $disableEdit = true;
+// }
 ?>
 
 
@@ -198,10 +198,11 @@ if ($this->BcContents->isEditable()) {
         <?php echo $this->BcForm->error('Content.self_publish_end') ?>
         <?php if (($this->BcForm->value('Content.publish_begin') != $this->BcForm->value('Content.self_publish_begin')) ||
           ($this->BcForm->value('Content.publish_end') != $this->BcForm->value('Content.self_publish_end'))): ?>
+          <!-- TODO: $this->BcTime->formatに関してエラーが出るので一旦コメントアウト  -->
           <p>※ <?php echo __d('baser', '親フォルダの設定を継承し公開期間が設定されている状態となっています') ?><br>
-            （<?php echo $this->BcTime->format($this->BcForm->value('Content.publish_begin', 'Y/m/d H:i')) ?>
+            （<?php #echo $this->BcTime->format($this->BcForm->value('Content.publish_begin', 'Y/m/d H:i')) ?>
             〜
-            <?php echo $this->BcTime->format($this->BcForm->value('Content.publish_end', 'Y/m/d H:i')) ?>）
+            <?php #echo $this->BcTime->format($this->BcForm->value('Content.publish_end', 'Y/m/d H:i')) ?>）
           </p>
         <?php endif ?>
       </td>

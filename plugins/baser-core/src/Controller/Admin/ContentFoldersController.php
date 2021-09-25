@@ -11,12 +11,13 @@
 
 namespace BaserCore\Controller\Admin;
 
+use Cake\Http\Response;
+use Cake\ORM\TableRegistry;
 use Cake\Event\EventInterface;
-use BaserCore\Service\ContentFolderServiceInterface;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use Cake\Http\Response;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Service\ContentFolderServiceInterface;
 
 /**
  * Class ContentFoldersController
@@ -89,44 +90,52 @@ class ContentFoldersController extends BcAdminAppController
      *
      * @return void
      */
-    public function admin_edit($entityId)
+    public function edit(ContentFolderServiceInterface $contentFolderService, $id = null)
     {
-        $this->setTitle(__d('baser', 'フォルダ編集'));
+        $ContentFolders = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders'); // TODO: 一時的にテーブル呼び出し
+        $contentFolder = $contentFolderService->get($id);
         if ($this->request->is(['post', 'put'])) {
-            if ($this->ContentFolder->isOverPostSize()) {
+            if ($ContentFolders->isOverPostSize()) {
                 $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
-                $this->redirect(['action' => 'edit', $entityId]);
+                $this->redirect(['action' => 'edit', $id]);
             }
-            if ($this->ContentFolder->save($this->request->data, ['reconstructSearchIndices' => true])) {
+            if ($ContentFolders->save($this->request->data, ['reconstructSearchIndices' => true])) {
                 clearViewCache();
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $this->request->getData('Content.title')));
                 $this->redirect([
                     'plugin' => '',
                     'controller' => 'content_folders',
                     'action' => 'edit',
-                    $entityId
+                    $id
                 ]);
             } else {
                 $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
             }
         } else {
-            $this->request->data = $this->ContentFolder->read(null, $entityId);
-            if (!$this->request->data) {
+            $this->request = $this->request->withData('ContentFolder', $contentFolder)->withData('Content', $contentFolder->content);
+            if (!$this->request->getData()) {
                 $this->BcMessage->setError(__d('baser', '無効な処理です。'));
                 $this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
             }
         }
 
-        $theme = [$this->siteConfigs['theme']];
-        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $site = $sites->findById($this->request->getData('Content.site_id'))->first();
-        if (!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
+
+        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');  // TODO: 一時的にテーブル呼び出し
+        $site = $sites->findById($this->request->getData('ContentFolder.content.site_id'))->first();
+        if (!empty($site) && $site->theme) {
             $theme[] = $site->theme;
         }
-        $site = $sites->findById($this->request->getData('Content.site_id'))->first();
-        $this->set('folderTemplateList', $this->ContentFolder->getFolderTemplateList($this->request->getData('Content.id'), $theme));
-        $this->set('pageTemplateList', $this->Page->getPageTemplateList($this->request->getData('Content.id'), $theme));
-        $this->set('publishLink', $this->Content->getUrl($this->request->getData('Content.url'), true, $site->useSubDomain));
+        // siteConfigs['theme']がないためコメントアウト
+        // $theme = [$this->siteConfigs['theme']];
+        // if (!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
+        //     $theme[] = $site->theme;
+        // }
+        $Page = TableRegistry::getTableLocator()->get('BaserCore.Pages');
+        $Content = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $this->set('contentFolder', $contentFolder);
+        $this->set('folderTemplateList', $ContentFolders->getFolderTemplateList($this->request->getData('ContentFolder.content.id'), $theme));
+        $this->set('pageTemplateList', $Page->getPageTemplateList($this->request->getData('ContentFolder.content.id'), $theme));
+        // $this->set('publishLink', $Content->getUrl($this->request->getData('ContentFolder.content.url'), true, $site->useSubDomain));
     }
 
     /**
