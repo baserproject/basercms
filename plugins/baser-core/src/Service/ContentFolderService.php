@@ -60,12 +60,7 @@ class ContentFolderService implements ContentFolderServiceInterface
      */
     public function get($id): EntityInterface
     {
-        $contentFolder = $this->ContentFolders->get($id);
-        $contentFolder = $this->ContentFolders->get($id, ['contain' => ['Contents', 'Sites']]);
-        // $contentFolder->content = $this->Contents->find()->contain("Sites")->where(['entity_id' => $id])->first();
-        // FIXME: なぜかSitesがうまくContainできないため手動で入れる
-        // $contentFolder->content->site = $this->Contents->Sites->findById($contentFolder->content->site_id);
-        return $contentFolder;
+        return $this->ContentFolders->get($id, ['contain' => ['Contents' => ['Sites']]]);
     }
 
     /**
