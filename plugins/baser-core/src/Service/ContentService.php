@@ -11,6 +11,7 @@
 
 namespace BaserCore\Service;
 
+use Cake\Utility\Hash;
 use Exception;
 use Cake\ORM\Query;
 use Nette\Utils\DateTime;
@@ -597,4 +598,38 @@ class ContentService implements ContentServiceInterface
         }
         return $result;
     }
+
+    /**
+     * 直属の親フォルダのレイアウトテンプレートを取得する
+     *
+     * @param $id
+     * @return string $parentTemplate|false
+     */
+    public function getParentLayoutTemplate($id)
+    {
+        if (!$id) {
+            return false;
+        }
+        // ===========================================================================================
+        // 2016/09/22 ryuring
+        // PHP 7.0.8 環境にて、コンテンツ一覧追加時、検索インデックス作成のため、BcContentsComponent が
+        // 呼び出されるが、その際、モデルのマジックメソッドの戻り値を返すタイミングで処理がストップしてしまう。
+        // そのため、ビヘイビアのメソッドを直接実行して対処した。
+        // CakePHPも、PHP自体のエラーも発生せず、ただ止まる。PHP7のバグ？PHP側のメモリーを256Mにしても変わらず。
+        // ===========================================================================================
+        $contents = $this->Contents->find('path', ['for' => $id])->all()->toArray();
+        $contents = array_reverse($contents);
+        unset($contents[0]);
+        if (!$contents) {
+            return false;
+        }
+        $parentTemplates = Hash::extract($contents, '{n}.layout_template');
+        foreach($parentTemplates as $parentTemplate) {
+            if ($parentTemplate) {
+                break;
+            }
+        }
+        return $parentTemplate;
+    }
+
 }

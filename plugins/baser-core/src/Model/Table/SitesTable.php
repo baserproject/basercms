@@ -231,6 +231,10 @@ class SitesTable extends AppTable
      */
     public function getRelatedContents($contentId)
     {
+        // TODO ucmitz 未実装
+        // >>>
+        return [];
+        // <<<
         $Content = ClassRegistry::init('Content');
         $data = $Content->find('first', ['conditions' => ['Content.id' => $contentId]]);
         $isMainSite = $this->isMain($data['Site']['id']);

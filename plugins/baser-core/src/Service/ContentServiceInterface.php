@@ -196,4 +196,13 @@ interface ContentServiceInterface
      * @return bool $result
      */
     public function deleteRecursive($id): bool;
+
+    /**
+     * レイアウトテンプレートを取得する
+     *
+     * @param $id
+     * @return string $parentTemplate|false
+     */
+    public function getParentLayoutTemplate($id);
+
 }

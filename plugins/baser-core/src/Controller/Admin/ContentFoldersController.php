@@ -36,9 +36,7 @@ class ContentFoldersController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
-        // $this->loadComponent('BaserCore.BcAuth');
-        // $this->loadComponent('BaserCore.BcAuthConfigure');
-        $this->loadComponent('BaserCore.BcContents', ['useForm' => true]);
+        $this->loadComponent('BaserCore.BcAdminContents');
         $this->Security->setConfig('unlockedActions', ['add']);
     }
 
@@ -112,7 +110,7 @@ class ContentFoldersController extends BcAdminAppController
                 $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
             }
         } else {
-            $this->request = $this->request->withData('ContentFolder', $contentFolder)->withData('Content', $contentFolder->content);
+            $this->request = $this->request->withData('ContentFolder', $contentFolder);
             if (!$this->request->getData()) {
                 $this->BcMessage->setError(__d('baser', '無効な処理です。'));
                 $this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);

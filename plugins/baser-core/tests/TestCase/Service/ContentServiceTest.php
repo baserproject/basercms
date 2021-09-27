@@ -427,4 +427,14 @@ class ContentServiceTest extends BcTestCase
             $this->assertNotEmpty($this->ContentService->getTrash($child->id));
         }
     }
+
+    /**
+     * test getParentLayoutTemplate
+     */
+    public function testGetParentLayoutTemplate()
+    {
+        $result = $this->ContentService->getParentLayoutTemplate(6);
+        $this->assertEquals('default', $result);
+    }
+
 }

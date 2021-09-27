@@ -10,7 +10,9 @@
  */
 
 use BaserCore\Model\Entity\Content;
+use BaserCore\Model\Entity\ContentFolder;
 use BaserCore\View\BcAdminAppView;
+use Cake\Utility\Inflector;
 
 /**
  * [ADMIN] 統合コンテンツフォーム
@@ -21,14 +23,27 @@ use BaserCore\View\BcAdminAppView;
  *                                        上記に一致する場合、URLに関わるコンテンツ名は編集できない
  * @var bool $disableEditContent コンテンツ編集不可かどうか
  * @var Content $content
+ * @var ContentFolder $contentFolder
  */
+
+$entityName = Inflector::variable(Inflector::classify($this->getName()));
+$content = ${$entityName}->content;
+$site = $content->site;
+$options = [];
+if ($this->getName() === 'ContentFolders') {
+    $options['excludeId'] = $content->id;
+}
+$parentContents = $this->BcAdminContent->getContentFolderList($content->site_id, $options);
+
 if ($this->request->getData('Site.use_subdomain')) {
   $targetSite = $this->BcAdminSite->findByUrl($content->url);
-  $previewUrl = $this->BcBaser->getUrl($targetSite->getPureUrl($this->request->getData('Content.url')) . '?host=' . $targetSite->host);
+  $previewUrl = $this->BcBaser->getUrl($targetSite->getPureUrl($content->url) . '?host=' . $targetSite->host);
 } else {
-  $previewUrl = $this->BcBaser->getUrl($this->BcContents->getUrl($this->request->getData('Content.url'), false, false, false));
+  $previewUrl = $this->BcBaser->getUrl($this->BcContents->getUrl($content->url, false, false, false));
 }
-$fullUrl = $this->BcContents->getUrl($this->request->getData('Content.url'), true, $this->request->getData('Site.use_subdomain'));
+$fullUrl = $this->BcContents->getUrl($content->url, true, $site->use_subdomain);
+// TODO ucmits data-current が何に使われているか確認
+// $this->request->getData() では Content は取得できないため
 $this->BcBaser->js('admin/contents/edit', false, ['id' => 'AdminContentsEditScript',
   'data-previewurl' => $previewUrl,
   'data-fullurl' => $fullUrl,
@@ -47,28 +62,28 @@ $this->BcBaser->i18nScript([
   'contentsEditAlertMessage3' => __d('baser', '指定したサイトの同じ階層上にフォルダではない同名のコンテンツが存在します。コピーの作成を実行する前に、指定したサイト上の同名コンテンツを確認し名称を変更してください。'),
   'contentsEditAlertmessage4' => __d('baser', 'コピーの作成に失敗しました。')
 ]);
-$isOmitViewAction = $this->BcContents->getConfig('items')[$this->request->getData('Content.type')]['omitViewAction'];
+$isOmitViewAction = $this->BcContents->getConfig('items')[$content->type]['omitViewAction'];
 
 // サブドメイン
-if ($this->request->getData('Site.use_subdomain')) {
+if ($site->use_subdomain) {
   $contentsName = '';
-  if (!$this->request->getData('Content.site_root')) {
-    $contentsName = $this->BcForm->value('Content.name');
-    if (!$isOmitViewAction && $this->request->getData('Content.url') !== '/') {
+  if (!$content->site_root) {
+    $contentsName = $this->BcAdminForm->value('Content.name');
+    if (!$isOmitViewAction && $content->url !== '/') {
       $contentsName .= '/';
     }
   }
 } else {
-  if ($this->request->getData('Site.same_main_url') && $this->request->getData('Content.site_root')) {
+  if ($this->request->getData('Site.same_main_url') && $content->site_root) {
     $contentsName = '';
   } else {
-    $contentsName = $this->BcForm->value('Content.name');
+    $contentsName = $this->BcAdminForm->value('Content.name');
   }
-  if (!$isOmitViewAction && $this->request->getData('Content.url') !== '/' && $contentsName) {
+  if (!$isOmitViewAction && $content->url !== '/' && $contentsName) {
     $contentsName .= '/';
   }
 }
-$linkedFullUrl = $this->BcContents->getCurrentFolderLinkedUrl($this->request->getData("ContentFolder.content")) . $contentsName;
+$linkedFullUrl = $this->BcContents->getCurrentFolderLinkedUrl($contentFolder->content) . $contentsName;
 $disableEdit = false;
 // TODO: エラーが出るため一時的にコメントアウト
 // if ($this->BcContents->isEditable()) {
@@ -77,18 +92,18 @@ $disableEdit = false;
 ?>
 
 
-<?php echo $this->BcForm->hidden('Content.id') ?>
-<?php echo $this->BcForm->hidden('Content.plugin') ?>
-<?php echo $this->BcForm->hidden('Content.type') ?>
-<?php echo $this->BcForm->hidden('Content.entity_id') ?>
-<?php echo $this->BcForm->hidden('Content.url') ?>
-<?php echo $this->BcForm->hidden('Content.alias_id') ?>
-<?php echo $this->BcForm->hidden('Content.site_root') ?>
-<?php echo $this->BcForm->hidden('Content.site_id') ?>
-<?php echo $this->BcForm->hidden('Content.lft') ?>
-<?php echo $this->BcForm->hidden('Content.rght') ?>
-<?php echo $this->BcForm->hidden('Content.status') ?>
-<?php echo $this->BcForm->hidden('Content.main_site_content_id') ?>
+<?php echo $this->BcAdminForm->hidden('Content.id') ?>
+<?php echo $this->BcAdminForm->hidden('Content.plugin') ?>
+<?php echo $this->BcAdminForm->hidden('Content.type') ?>
+<?php echo $this->BcAdminForm->hidden('Content.entity_id') ?>
+<?php echo $this->BcAdminForm->hidden('Content.url') ?>
+<?php echo $this->BcAdminForm->hidden('Content.alias_id') ?>
+<?php echo $this->BcAdminForm->hidden('Content.site_root') ?>
+<?php echo $this->BcAdminForm->hidden('Content.site_id') ?>
+<?php echo $this->BcAdminForm->hidden('Content.lft') ?>
+<?php echo $this->BcAdminForm->hidden('Content.rght') ?>
+<?php echo $this->BcAdminForm->hidden('Content.status') ?>
+<?php echo $this->BcAdminForm->hidden('Content.main_site_content_id') ?>
 
 
 <div class="bca-section bca-section__post-top">
@@ -96,7 +111,7 @@ $disableEdit = false;
 	  <a href="<?php echo h($fullUrl) ?>" class="bca-text-url" target="_blank" data-toggle="tooltip"
        data-placement="top" title="<?php echo __d('baser', '公開URLを開きます') ?>"><i
         class="bca-icon--globe"></i><?php echo urldecode($fullUrl) ?></a>
-	  <?php echo $this->BcForm->button('', [
+	  <?php echo $this->BcAdminForm->button('', [
       'id' => 'BtnCopyUrl',
       'class' => 'bca-btn',
       'type' => 'button',
@@ -109,25 +124,25 @@ $disableEdit = false;
 <section id="BasicSetting" class="bca-section">
   <table class="form-table bca-form-table" data-bca-table-type="type2">
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Content.name', 'URL') ?>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('Content.name', 'URL') ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
-        <?php if (!$this->request->getData('Content.site_root')): ?>
+        <?php if (!$content->site_root): ?>
           <?php echo $this->BcAdminForm->control('Content.parent_id', ['type' => 'select', 'options' => $parentContents, 'escape' => true]) ?>
         <?php endif ?>
-        <?php if (!$this->request->getData('Content.site_root') && !$related): ?>
+        <?php if (!$content->site_root && !$related): ?>
           <?php echo $this->BcAdminForm->control('Content.name', ['type' => 'text', 'size' => 20, 'autofocus' => true]) ?>
-          <?php if (!$isOmitViewAction && $this->request->getData('Content.url') !== '/'): ?>/<?php endif ?>
+          <?php if (!$isOmitViewAction && $content->url !== '/'): ?>/<?php endif ?>
         <?php else: ?>
-          <?php if (!$this->request->getData('Content.site_root')): ?>
+          <?php if (!$content->site_root): ?>
             <?php // サイトルートの場合はコンテンツ名を表示しない ?>
             <?php echo h($contentsName) ?>
           <?php endif ?>
-          <?php echo $this->BcForm->hidden('Content.name') ?>
+          <?php echo $this->BcAdminForm->hidden('Content.name') ?>
         <?php endif ?>
-        <?php echo $this->BcForm->error('Content.name') ?>
-        <?php echo $this->BcForm->error('Content.parent_id') ?>
+        <?php echo $this->BcAdminForm->error('Content.name') ?>
+        <?php echo $this->BcAdminForm->error('Content.parent_id') ?>
         <span class="bca-post__url">
           			<?php echo strip_tags($linkedFullUrl, '<a>') ?>
         		</span>
@@ -135,41 +150,41 @@ $disableEdit = false;
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcForm->label('Content.title', __d('baser', 'タイトル')) ?>&nbsp;<span class="bca-label"
+        <?php echo $this->BcAdminForm->label('Content.title', __d('baser', 'タイトル')) ?>&nbsp;<span class="bca-label"
                                                                                              data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if (!$disableEdit): ?>
           <?php echo $this->BcAdminForm->control('Content.title', ['type' => 'text', 'size' => 50]) ?>
-          <?php echo $this->BcForm->error('Content.title') ?>
+          <?php echo $this->BcAdminForm->error('Content.title') ?>
         <?php else: ?>
-          <?php echo h($this->BcForm->value('Content.title')) ?>
-          <?php echo $this->BcForm->hidden('Content.title') ?>
+          <?php echo h($this->BcAdminForm->value('Content.title')) ?>
+          <?php echo $this->BcAdminForm->hidden('Content.title') ?>
         <?php endif ?>
       </td>
     </tr>
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Content.self_status', __d('baser', '公開状態')) ?>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('Content.self_status', __d('baser', '公開状態')) ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if (!$disableEdit): ?>
           <?php echo $this->BcAdminForm->control('Content.self_status', ['type' => 'radio', 'options' => $this->BcText->booleanDoList('公開')]) ?>
         <?php else: ?>
-          <?php echo $this->BcText->arrayValue($this->BcForm->value('Content.self_status'), $this->BcText->booleanDoList('公開')) ?>
-          <?php echo $this->BcForm->hidden('Content.self_status') ?>
+          <?php echo $this->BcText->arrayValue($this->BcAdminForm->value('Content.self_status'), $this->BcText->booleanDoList('公開')) ?>
+          <?php echo $this->BcAdminForm->hidden('Content.self_status') ?>
         <?php endif ?>
         <br>
-        <?php echo $this->BcForm->error('Content.self_status') ?>
-        <?php if ((bool)$this->BcForm->value('Content.status') != (bool)$this->BcForm->value('Content.self_status')): ?>
+        <?php echo $this->BcAdminForm->error('Content.self_status') ?>
+        <?php if ((bool)$this->BcAdminForm->value('Content.status') != (bool)$this->BcAdminForm->value('Content.self_status')): ?>
           <p>※ <?php echo __d('baser', '親フォルダの設定を継承し非公開状態となっています') ?></p>
         <?php endif ?>
       </td>
     </tr>
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcForm->label('Content.self_status', __d('baser', '公開日時')) ?></th>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('Content.self_status', __d('baser', '公開日時')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php if (!$disableEdit): ?>
           <?php echo $this->BcAdminForm->control('Content.self_publish_begin', [
@@ -187,22 +202,22 @@ $disableEdit = false;
             'timeLabel' => ['text' => '終了時間']
           ]) ?>
         <?php else: ?>
-          <?php if ($this->BcForm->value('Content.self_publish_begin') || $this->BcForm->value('Content.self_publish_end')): ?>
-            <?php echo $this->BcForm->value('Content.self_publish_begin') ?>&nbsp;〜&nbsp;<?php echo $this->BcForm->value('Content.self_publish_end') ?>
+          <?php if ($this->BcAdminForm->value('Content.self_publish_begin') || $this->BcAdminForm->value('Content.self_publish_end')): ?>
+            <?php echo $this->BcAdminForm->value('Content.self_publish_begin') ?>&nbsp;〜&nbsp;<?php echo $this->BcAdminForm->value('Content.self_publish_end') ?>
           <?php endif ?>
-          <?php echo $this->BcForm->hidden('Content.self_publish_begin') ?>
-          <?php echo $this->BcForm->hidden('Content.self_publish_end') ?>
+          <?php echo $this->BcAdminForm->hidden('Content.self_publish_begin') ?>
+          <?php echo $this->BcAdminForm->hidden('Content.self_publish_end') ?>
         <?php endif ?>
         <br>
-        <?php echo $this->BcForm->error('Content.self_publish_begin') ?>
-        <?php echo $this->BcForm->error('Content.self_publish_end') ?>
-        <?php if (($this->BcForm->value('Content.publish_begin') != $this->BcForm->value('Content.self_publish_begin')) ||
-          ($this->BcForm->value('Content.publish_end') != $this->BcForm->value('Content.self_publish_end'))): ?>
+        <?php echo $this->BcAdminForm->error('Content.self_publish_begin') ?>
+        <?php echo $this->BcAdminForm->error('Content.self_publish_end') ?>
+        <?php if (($this->BcAdminForm->value('Content.publish_begin') != $this->BcAdminForm->value('Content.self_publish_begin')) ||
+          ($this->BcAdminForm->value('Content.publish_end') != $this->BcAdminForm->value('Content.self_publish_end'))): ?>
           <!-- TODO: $this->BcTime->formatに関してエラーが出るので一旦コメントアウト  -->
           <p>※ <?php echo __d('baser', '親フォルダの設定を継承し公開期間が設定されている状態となっています') ?><br>
-            （<?php #echo $this->BcTime->format($this->BcForm->value('Content.publish_begin', 'Y/m/d H:i')) ?>
+            （<?php #echo $this->BcTime->format($this->BcAdminForm->value('Content.publish_begin', 'Y/m/d H:i')) ?>
             〜
-            <?php #echo $this->BcTime->format($this->BcForm->value('Content.publish_end', 'Y/m/d H:i')) ?>）
+            <?php #echo $this->BcTime->format($this->BcAdminForm->value('Content.publish_end', 'Y/m/d H:i')) ?>）
           </p>
         <?php endif ?>
       </td>

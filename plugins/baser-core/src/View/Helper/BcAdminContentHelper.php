@@ -97,4 +97,16 @@ class BcAdminContentHelper extends Helper
         return false;
     }
 
+    /**
+     * コンテンツフォルダーのリストを取得
+     *
+     * @param null $siteId
+     * @param array $options
+     * @return array|bool
+     */
+    public function getContentFolderList($siteId = null, $options = [])
+    {
+        return $this->ContentService->getContentFolderList($siteId, $options);
+    }
+
 }
