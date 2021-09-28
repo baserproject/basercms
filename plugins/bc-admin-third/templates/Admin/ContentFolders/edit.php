@@ -24,7 +24,7 @@ $this->BcAdmin->setTitle(__d('baser', 'フォルダ編集'));
 
 
 <?php echo $this->BcAdminForm->create($contentFolder, ['novalidate' => true]) ?>
-<?php $this->BcBaser->element('content_fields') ?>
+
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 <?php echo $this->BcForm->hidden('ContentFolder.id') ?>
 <table class="form-table bca-form-table" data-bca-table-type="type2">
@@ -48,7 +48,7 @@ $this->BcAdmin->setTitle(__d('baser', 'フォルダ編集'));
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit">
-  <?php echo $this->BcForm->submit(__d('baser', '保存'), [
+  <?php echo $this->BcAdminForm->submit(__d('baser', '保存'), [
     'class' => 'button bca-btn',
     'data-bca-btn-type' => 'save',
     'data-bca-btn-size' => 'lg',

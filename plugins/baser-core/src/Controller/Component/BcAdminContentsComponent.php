@@ -11,16 +11,18 @@
 
 namespace BaserCore\Controller\Component;
 
-use BaserCore\Service\ContentServiceInterface;
-use BaserCore\Service\SiteConfigTrait;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Inflector;
+use BaserCore\Event\BcContentsEventListener;
+use Cake\Event\EventManager;
 use BaserCore\Utility\BcUtil;
 use Cake\Controller\Component;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use Cake\Utility\Inflector;
+use BaserCore\Service\SiteConfigTrait;
+use BaserCore\Service\ContentServiceInterface;
 
 /**
  * Class BcContentsComponent
@@ -91,11 +93,7 @@ class BcAdminContentsComponent extends Component
             // フォームを読み込む為のイベントを設定
             // 内部で useForm を参照できない為、ここに記述。
             // フォームの設定しかできないイベントになってしまっている。
-            // TODO ucmitz 未実装
-            // >>>
-            // App::uses('BcContentsEventListener', 'Event');
-            // CakeEventManager::instance()->attach(new BcContentsEventListener());
-            // <<<
+            EventManager::instance()->on(new BcContentsEventListener());
         }
     }
 

@@ -31,7 +31,7 @@ use BaserCore\Model\Table\ContentFoldersTable;
 use BaserCore\Service\BcAdminServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
-use BaserCore\Controller\Component\BcContentsComponent;
+use BaserCore\Controller\Component\BcAdminContentsComponent;
 
 /**
  * Class ContentsController
@@ -47,7 +47,7 @@ use BaserCore\Controller\Component\BcContentsComponent;
  * @property SitesTable $Sites
  * @property UsersTable $Users
  * @property ContentFoldersTable $ContentFolders
- * @property BcContentsComponent $BcContents
+ * @property BcAdminContentsComponent $BcAdminContents
  * @property BcMessageComponent $BcMessage
  */
 
@@ -68,7 +68,7 @@ class ContentsController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('BaserCore.BcContents');
+        $this->loadComponent('BaserCore.BcAdminContents');
     }
 
     /**

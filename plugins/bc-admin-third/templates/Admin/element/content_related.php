@@ -1,15 +1,14 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
-
+use BaserCore\Utility\BcUtil;
 /**
  * 関連コンテンツ
  * @var string $mainSiteDisplayName メインサイト表示名称
@@ -17,7 +16,8 @@
  * @var array $sites サイトリスト
  * @var int $currentSiteId 現在のサイトID
  */
-$pureUrl = $this->BcContents->getPureUrl($this->request->getData('Content.url'), $this->request->getData('Site.id'));
+$content = BcUtil::extractOne($this->request->getData(), 'content');
+$pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
 ?>
 
 

@@ -11,13 +11,15 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Event\BcEventDispatcherTrait;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
-use Cake\View\Helper\FormHelper;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
+use Cake\View\Helper\FormHelper;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\EntityInterface;
+use BaserCore\Event\BcEventDispatcherTrait;
+use Cake\Utility\Inflector;
 
 /**
  * FormHelper 拡張クラス
@@ -62,7 +64,7 @@ class BcFormHelper extends FormHelper
      *
      * @var string
      */
-    private $__id = null;
+    private $formId = null;
 // <<<
 
     /**
@@ -346,15 +348,11 @@ SCRIPT_END;
      * @return string An formatted opening FORM tag.
      * @link https://book.cakephp.org/4/en/views/helpers/form.html#Cake\View\Helper\FormHelper::
      * @checked
+     * @noTodo
      */
     public function create($context = null, $options = []): string
     {
 
-        // TODO 未実装のため代替措置
-        // 第１引数の $model が $context に変わった
-        // >>>
-        return parent::create($context, $options);
-        // <<<
 
         // CUSTOMIZE ADD 2014/07/03 ryuring
         // ブラウザの妥当性のチェックを除外する
@@ -363,11 +361,11 @@ SCRIPT_END;
             'novalidate' => true
         ], $options);
 
-        $this->__id = $this->_getId($model, $options);
+        $formId = $this->setId($this->createId($context, $options));
 
         /*** beforeCreate ***/
         $event = $this->dispatchLayerEvent('beforeCreate', [
-            'id' => $this->__id,
+            'id' => $formId,
             'options' => $options
         ], ['class' => 'Form', 'plugin' => '']);
         if ($event !== false) {
@@ -375,13 +373,16 @@ SCRIPT_END;
         }
         // <<<
 
-        $out = parent::create($model, $options);
+        // 第１引数の $model が $context に変わった
+        // >>>
+        $out = parent::create($context, $options);
+        // <<<
 
         // CUSTOMIZE ADD 2014/07/03 ryuring
         // >>>
         /*** afterCreate ***/
         $event = $this->dispatchLayerEvent('afterCreate', [
-            'id' => $this->__id,
+            'id' => $formId,
             'out' => $out
         ], ['class' => 'Form', 'plugin' => '']);
         if ($event !== false) {
@@ -408,34 +409,31 @@ SCRIPT_END;
     public function end(array $secureAttributes = []): string
     {
 
-        // TODO 未実装のため代替措置
-        // 第１引数の $options が なくなった
-        // >>>
-        return parent::end($secureAttributes);
-        // <<<
-
         // CUSTOMIZE ADD 2014/07/03 ryuring
         // >>>
-        $id = $this->__id;
-        $this->__id = null;
+        $formId = $this->getId();
+        $this->setId(null);
 
         /*** beforeEnd ***/
         $event = $this->dispatchLayerEvent('beforeEnd', [
-            'id' => $id,
-            'options' => $options
+            'id' => $formId,
+            // 'options' => $options // TODO: ucmitz $secureAttributes = []どうするか考える
         ], ['class' => 'Form', 'plugin' => '']);
         if ($event !== false) {
             $options = ($event->getResult() === null || $event->getResult() === true)? $event->getData('options') : $event->getResult();
         }
         // <<<
 
-        $out = parent::end($options);
+        // 第１引数の $options が なくなった
+        // >>>
+        $out = parent::end($secureAttributes);
+        // <<<
 
         // CUSTOMIZE ADD 2014/07/03 ryuring
         // >>>
         /*** afterEnd ***/
         $event = $this->dispatchLayerEvent('afterEnd', [
-            'id' => $id,
+            'id' => $formId,
             'out' => $out
         ], ['class' => 'Form', 'plugin' => '']);
         if ($event !== false) {
@@ -979,17 +977,11 @@ DOC_END;
      */
     public function submit($caption = null, $options = []): string
     {
-
-        // TODO 暫定措置
-        // >>>
-        return parent::submit($caption, $options);
-        // <<<
-
         // CUSTOMIZE ADD 2016/06/08 ryuring
         // >>>
         /*** beforeInput ***/
         $event = $this->dispatchLayerEvent('beforeSubmit', [
-            'id' => $this->__id,
+            'id' => $this->getId(),
             'caption' => $caption,
             'options' => $options
         ], ['class' => 'Form', 'plugin' => '']);
@@ -1001,7 +993,7 @@ DOC_END;
 
         /*** afterInput ***/
         $event = $this->dispatchLayerEvent('afterSubmit', [
-            'id' => $this->__id,
+            'id' => $this->getId(),
             'caption' => $caption,
             'out' => $output
         ], ['class' => 'Form', 'plugin' => '']);
@@ -1923,33 +1915,34 @@ DOC_END;
 // CUSTOMIZE ADD 2014/07/02 ryuring
 
     /**
-     * フォームのIDを取得する
+     * フォームのIDを作成する
      * BcForm::create より呼出される事が前提
      *
-     * @param string $model
+     * @param EntityInterface $context
      * @param array $options
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    protected function _getId($model = null, $options = [])
+    protected function createId($context, $options = [])
     {
-
+        $request = $this->getView()->getRequest();
         if (!isset($options['id'])) {
-            if (empty($model) && $model !== false && !empty($this->request->getParam('models'))) {
-                $model = key($this->request->getParam('models'));
-            } elseif (empty($model) && empty($this->request->getParam('models'))) {
-                $model = false;
+            if (!empty($context)) {
+                [, $context] = pluginSplit($context->getSource());
+            } else {
+                $context = empty($request->getParam('controller')) ? false : $request->getParam('controller');
             }
-            if ($model !== false) {
-                [, $model] = pluginSplit($model, true);
-                $this->setEntity($model, true);
+            if ($domId = isset($options['url']['action'])? $options['url']['action'] : $request->getParam('action')) {
+                $formId = Inflector::classify($context) . $request->getParam('prefix') . Inflector::camelize($this->_domId($domId)) . 'Form' ;
+            } else {
+                $formId = null;
             }
-            $domId = isset($options['url']['action'])? $options['url']['action'] : $this->request->getParam('action');
-            $id = $this->domId($domId . 'Form');
         } else {
-            $id = $options['id'];
+            $formId = $options['id'];
         }
-
-        return $id;
+        return $formId;
     }
 
     /**
@@ -1958,10 +1951,28 @@ DOC_END;
      * BcFormHelper::create() の後に呼び出される事を前提とする
      *
      * @return string フォームID
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getId()
     {
-        return $this->__id;
+        return $this->formId;
+    }
+
+    /**
+     * フォームのIDを設定する
+     *
+     * BcFormHelper::create() の後に呼び出される事を前提とする
+     * @param $id フォームID
+     * @return string 新規フォームID
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function setId($id)
+    {
+        return $this->formId = $id;
     }
 
     /**

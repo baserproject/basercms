@@ -11,14 +11,15 @@
 
 namespace BaserCore\Test\TestCase\Utility;
 
-use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Utility\BcUtil;
 use Cake\Core\App;
-use Cake\Core\Configure;
+use Cake\Cache\Cache;
 use Cake\Core\Plugin;
+use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
-use Cake\Cache\Cache;
+use BaserCore\Utility\BcUtil;
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Service\ContentFolderService;
 
 /**
  * TODO: $this->getRequest();などをsetupに統一する
@@ -789,6 +790,11 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals('BcSample', BcUtil::getPluginDir('BcSample'));
     }
 
+    /**
+     * testGetContentsItem
+     *
+     * @return void
+     */
     public function testGetContentsItem()
     {
         $result = BcUtil::getContentsItem();
@@ -798,6 +804,24 @@ class BcUtilTest extends BcTestCase
         }
         $this->assertEquals('BaserCore', $result['Default']['plugin']);
         $this->assertEquals('Default', $result['Default']['type']);
+    }
+
+    /**
+     * testExtractOne
+     *
+     * @return void
+     */
+    public function testExtractOne()
+    {
+        // 配列の場合
+        $array = [
+            ['id'=> 1], ['id'=> 2],
+        ];
+        $this->assertEquals(1, BcUtil::extractOne($array, 'id'));
+        // エンティティの場合
+        $contentFolder = new ContentFolderService();
+        $content = BcUtil::extractOne([$contentFolder->get(1)], 'content');
+        $this->assertEquals("baserCMSサンプル", $content->title);
     }
 
 }

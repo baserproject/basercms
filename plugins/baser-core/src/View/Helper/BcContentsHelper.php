@@ -73,6 +73,7 @@ class BcContentsHelper extends Helper
         if (BcUtil::isAdminSystem(Router::url())) {
             $this->setup();
         }
+        $this->request = $this->getView()->getRequest();
     }
 
     /**

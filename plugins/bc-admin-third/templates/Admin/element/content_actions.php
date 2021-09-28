@@ -23,7 +23,7 @@ if ($isAlias) {
 
 <div class="bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), ['plugin' => '', 'admin' => true, 'controller' => 'contents', 'action' => 'index'], [
+    <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), ['controller' => 'contents', 'action' => 'index'], [
       'class' => 'button bca-btn',
       'data-bca-btn-type' => 'back-to-list'
     ]) ?>

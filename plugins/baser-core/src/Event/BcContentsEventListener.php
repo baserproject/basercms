@@ -1,41 +1,49 @@
 <?php
-// TODO : コード確認要
-use Cake\Event\Event;
-use Cake\Core\Configure;
-use BaserCore\Utility\BcUtil;
-use BaserCore\Service\PermissionServiceInterface;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Event
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
+namespace BaserCore\Event;
+
+use Cake\Event\Event;
+use Cake\Core\Configure;
+use Cake\Routing\Router;
+use Cake\Utility\Inflector;
+use BaserCore\Utility\BcUtil;
+use BaserCore\View\BcAdminAppView;
+use BaserCore\Event\BcEventListener;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Service\PermissionServiceInterface;
 /**
  * Class BcContentsEventListener
  *
- * baserCMS Contents Event Listener
+ * baserCMS Contents Event Listeners
  *
  * 階層コンテンツと連携したフォーム画面を表示する為のイベント
  * BcContentsComponent でコントロールされる
  *
  * @package Baser.Event
  */
-class BcContentsEventListener extends CakeObject implements CakeEventListener
+class BcContentsEventListener extends BcEventListener
 {
+
+    /**
+     * BcContainerTrait
+     */
+    use BcContainerTrait;
 
     /**
      * Implemented Events
      *
      * @return array
      */
-    public function implementedEvents()
+    public function implementedEvents(): array
     {
         return [
             'Helper.Form.beforeCreate' => ['callable' => 'formBeforeCreate'],
@@ -51,7 +59,7 @@ class BcContentsEventListener extends CakeObject implements CakeEventListener
      */
     public function formBeforeCreate(Event $event)
     {
-        if (!BcUtil::isAdminSystem()) {
+        if (!BcUtil::isAdminSystem(Router::url())) {
             return;
         }
         $event->setData('options', ['type' => 'file']);
@@ -75,7 +83,7 @@ class BcContentsEventListener extends CakeObject implements CakeEventListener
         if (!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->getData('id'))) {
             return;
         }
-        return $event->getData('out') . "\n" . $View->element('admin/content_fields');
+        return $event->getData('out') . "\n" . $View->element('content_fields');
     }
 
     /**
@@ -87,31 +95,38 @@ class BcContentsEventListener extends CakeObject implements CakeEventListener
      * @param Event $event
      * @return string
      */
-    public function formAfterSubmit(Event $event, PermissionServiceInterface $permissionService)
+    public function formAfterSubmit(Event $event)
     {
-        if (!BcUtil::isAdminSystem()) {
-            return $event->getData('out');
-        }
-        /* @var BcAppView $View */
-        $View = $event->getSubject();
-        $data = $View->request->getData();
-        if (!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->getData('id'))) {
-            return $event->getData('out');
-        }
-        $setting = Configure::read('BcContents.items.' . $data['Content']['plugin'] . '.' . $data['Content']['type']);
-        $isAvailablePreview = (!empty($setting['preview']) && $data['Content']['type'] != 'ContentFolder');
-        $isAvailableDelete = (empty($data['Content']['site_root']) && $permissionService->check('/' . Configure::read('Routing.prefixes.0') . '/contents/delete', $View->viewVars['user']['user_group_id']));
+        $preOut = $event->getData('out');
 
-        $event->setData('out', implode("\n", [
-            $View->element('admin/content_options'),
-            $View->element('admin/content_actions', [
+        if (!BcUtil::isAdminSystem()) {
+            return $preOut;
+        }
+        /**  @var BcAdminAppView $View*/
+        $View = $event->getSubject();
+        $data = $View->getRequest()->getData();
+        if (!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->getData('id'))) {
+            return $preOut;
+        }
+
+        $content = BcUtil::extractOne($data, 'content');
+        $setting = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type);
+        $isAvailablePreview = (!empty($setting['preview']) && $content->type != 'ContentFolder');
+        $path = BcUtil::getPrefix() . "/" . Inflector::dasherize($event->getSubject()->getPlugin()) . '/contents/delete';
+        $isAvailableDelete = true;
+        // TODO: user取得まだなので、一旦falseでform先にする
+        // $isAvailableDelete = (empty($content->site_root) && $this->getService(PermissionServiceInterface::class)->check($path, $View->get('user')->user_group));
+
+        $newOut = $event->setData('out', implode("\n", [
+            $View->element('content_options'),
+            $View->element('content_actions', [
                 'isAvailablePreview' => $isAvailablePreview,
                 'isAvailableDelete' => $isAvailableDelete,
-                'currentAction' => $event->getData('out'),
-                'isAlias' => ($data['Content']['alias_id'])
+                'currentAction' => $preOut,
+                'isAlias' => ($content->alias_id)
             ]),
-            $View->element('admin/content_related'),
-            $View->element('admin/content_info')
+            $View->element('content_related'),
+            $View->element('content_info')
         ]));
         return $event->getData('out');
     }

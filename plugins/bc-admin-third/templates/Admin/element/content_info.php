@@ -1,13 +1,12 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
 /**
@@ -17,7 +16,7 @@
 ?>
 
 
-<?php if ($this->request->action === 'admin_edit' || $this->request->action === 'admin_edit_alias'): ?>
+<?php if ($this->request->getParam('action') === 'admin_edit' || $this->request->getParam('action') === 'admin_edit_alias'): ?>
   <section id="EtcSetting" class="bca-section" data-bca-section-type="form-group">
     <div class="bca-collapse__action">
       <button type="button" class="bca-collapse__btn" data-bca-collapse="collapse"
