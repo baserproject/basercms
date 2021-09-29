@@ -111,18 +111,18 @@ class BcContentsEventListenerTest extends BcTestCase
             ->set("relatedContents", ['test1', 'test2']); // content_relatedで必要
         $out = "testtest";
         $event = new Event("Helper.Form.afterSubmit", $BcAdminAppView);
-        $event->setData('id', 'TestAdminEditForm')->setData('out', "testtest");
+        $event->setData('id', 'TestAdminEditForm')->setData('out', $out);
         $result = @$this->BcContentsEventListener->formAfterSubmit($event); // NOTE: 必要な要素があるかを判別するため、不要なエラーを制御
-        // outの文章が含まれているかチェック
-        $this->assertStringContainsString("testtest", $result);
-        // content_optionsの文章が含まれているかチェック
-        $this->assertStringContainsString("メニューのリンクを別ウィンドウ開く", $result);
-        // content_actionsの文章が含まれているかチェック
-        $this->assertStringContainsString("一覧に戻る", $result);
-        // content_relatedの文章が含まれているかチェック
-        $this->assertStringContainsString("関連コンテンツ", $result);
-        // content_infoの文章が含まれているかチェック
-        $this->assertStringContainsString("その他情報", $result);
+        $checkList = [
+            $out, // outの文章が含まれているかチェック
+            "メニューのリンクを別ウィンドウ開く", // content_optionsの文章が含まれているかチェック
+            "一覧に戻る", // content_actionsの文章が含まれているかチェック
+            "関連コンテンツ", // content_relatedの文章が含まれているかチェック
+            "その他情報" // content_infoの文章が含まれているかチェック
+        ];
+        foreach ($checkList as $text) {
+            $this->assertStringContainsString($text, $result);
+        }
         // 異常系 isAdminSystem()がfalseの場合 または、イベント登録されたidがマッチしない場合
         $event = new Event("Helper.Form.afterSubmit", $this->BcAdminAppView->setRequest($this->getRequest()));
         $event->setData('out', $out);

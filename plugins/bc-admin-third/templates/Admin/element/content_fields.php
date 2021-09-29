@@ -29,7 +29,7 @@ use BaserCore\Utility\BcUtil;
 
 // TODO: ucmitz ContentFolderなどからどのようにContentエンティティを毎回取得するか考える
 $entityName = Inflector::variable(Inflector::classify($this->getName()));
-if (!$content) {
+if (empty($content)) {
   $content = ${$entityName}->content;
   $site = $content->site;
 }
@@ -217,11 +217,10 @@ $disableEdit = false;
         <?php echo $this->BcAdminForm->error('Content.self_publish_end') ?>
         <?php if (($this->BcAdminForm->value('Content.publish_begin') != $this->BcAdminForm->value('Content.self_publish_begin')) ||
           ($this->BcAdminForm->value('Content.publish_end') != $this->BcAdminForm->value('Content.self_publish_end'))): ?>
-          <!-- TODO: $this->BcTime->formatに関してエラーが出るので一旦コメントアウト  -->
           <p>※ <?php echo __d('baser', '親フォルダの設定を継承し公開期間が設定されている状態となっています') ?><br>
-            （<?php #echo $this->BcTime->format($this->BcAdminForm->value('Content.publish_begin', 'Y/m/d H:i')) ?>
+            （<?php echo $this->BcTime->format($content->publish_begin, 'YYYY/MM/DD H:i') ?>
             〜
-            <?php #echo $this->BcTime->format($this->BcAdminForm->value('Content.publish_end', 'Y/m/d H:i')) ?>）
+            <?php echo $this->BcTime->format($content->publish_end, 'YYYY/MM/DD H:i') ?>）
           </p>
         <?php endif ?>
       </td>

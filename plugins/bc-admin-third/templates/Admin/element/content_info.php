@@ -40,10 +40,10 @@
             <span><?php echo __d('baser', 'コンテンツタイプ') ?></span>：<?php echo $this->request->getData('Content.type') ?>
           </li>
           <li class="bca-list__item">
-            <span><?php echo __d('baser', 'データ作成日') ?></span>：<?php #echo $this->BcTime->format($this->request->getData('Content.created', 'Y/m/d H:i:s')) ?>
+            <span><?php echo __d('baser', 'データ作成日') ?></span>：<?php echo $this->BcTime->format($this->request->getData('Content.created'), 'YYYY/MM/DD H:i:s') ?>
           </li>
           <li class="bca-list__item">
-            <span><?php echo __d('baser', 'データ更新日') ?></span>：<?php #echo $this->BcTime->format($this->request->getData('Content.modified', 'Y/m/d H:i:s')) ?>
+            <span><?php echo __d('baser', 'データ更新日') ?></span>：<?php echo $this->BcTime->format($this->request->getData('Content.modified'), 'YYYY/MM/DD H:i:s') ?>
           </li>
           <li class="bca-list__item">
             <span><?php echo __d('baser', 'サイト') ?></span>：<?php echo h($this->BcText->noValue($this->request->getData('Site.display_name'), $mainSiteDisplayName)) ?>
