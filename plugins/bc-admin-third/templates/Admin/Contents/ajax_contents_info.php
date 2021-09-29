@@ -15,7 +15,7 @@
 <?php if ($sites): ?>
   <div class="bca-content-info">
     <?php foreach($sites as $site): ?>
-      <h3 class="bca-content-info__title"><?php echo h($site['Site']['display_name']) ?></h3>
+      <h3 class="bca-content-info__title"><?php echo h($site['display_name']) ?></h3>
       <ul class="bca-content-info__list">
         <li class="bca-content-info__list-item">
           <?php echo sprintf(__d('baser', '公開中： %s ページ'), $site['published']) ?><br>

@@ -772,7 +772,7 @@ class ContentsController extends BcAdminAppController
      */
     public function ajax_contents_info(ContentServiceInterface $contentService)
     {
-        $this->autoLayout = false;
+        $this->viewBuilder()->disableAutoLayout();
         $this->set('sites', $contentService->getContensInfo());
     }
 

@@ -11,12 +11,11 @@
  */
 ?>
 
-<!-- TODO: 未実装contentsController -->
-<!-- <script>
+<script>
 	$(function () {
-		$.bcDashboard.ajax('/' + $.bcUtil.adminPrefix + '/contents/ajax_contents_info', '#ContentInfo');
+		$.bcDashboard.ajax('/baser' + $.bcUtil.adminPrefix + '/baser-core/contents/ajax_contents_info', '#ContentInfo');
 	});
-</script> -->
+</script>
 
 <h2 class="bca-panel-box__title"><?php echo __d('baser', 'コンテンツ情報') ?></h2>
 <div id="ContentInfo"></div>
