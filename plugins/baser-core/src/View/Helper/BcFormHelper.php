@@ -349,6 +349,7 @@ SCRIPT_END;
      * @link https://book.cakephp.org/4/en/views/helpers/form.html#Cake\View\Helper\FormHelper::
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function create($context = null, $options = []): string
     {
@@ -974,6 +975,9 @@ DOC_END;
      * @param array $options Array of options. See above.
      * @return string A HTML submit button
      * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::submit
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function submit($caption = null, $options = []): string
     {

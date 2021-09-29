@@ -13,6 +13,7 @@ use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\ContentFolder;
 use BaserCore\View\BcAdminAppView;
 use Cake\Utility\Inflector;
+use BaserCore\Utility\BcUtil;
 
 /**
  * [ADMIN] 統合コンテンツフォーム
@@ -26,9 +27,12 @@ use Cake\Utility\Inflector;
  * @var ContentFolder $contentFolder
  */
 
+// TODO: ucmitz ContentFolderなどからどのようにContentエンティティを毎回取得するか考える
 $entityName = Inflector::variable(Inflector::classify($this->getName()));
-$content = ${$entityName}->content;
-$site = $content->site;
+if (!$content) {
+  $content = ${$entityName}->content;
+  $site = $content->site;
+}
 $options = [];
 if ($this->getName() === 'ContentFolders') {
     $options['excludeId'] = $content->id;
@@ -83,7 +87,7 @@ if ($site->use_subdomain) {
     $contentsName .= '/';
   }
 }
-$linkedFullUrl = $this->BcContents->getCurrentFolderLinkedUrl($contentFolder->content) . $contentsName;
+$linkedFullUrl = $this->BcContents->getCurrentFolderLinkedUrl($content) . $contentsName;
 $disableEdit = false;
 // TODO: エラーが出るため一時的にコメントアウト
 // if ($this->BcContents->isEditable()) {

@@ -99,7 +99,7 @@ $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
               <?php if (!empty($relatedContent['Content'])): ?>
                 <?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', ['alt' => __d('baser', '確認')]), $relatedContent['Content']['url'], ['title' => __d('baser', '確認'), 'target' => '_blank']) ?>
                 <?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => __d('baser', '編集')]), $editUrl, ['title' => __d('baser', '編集')]) ?>
-              <?php elseif ($currentSiteId == $mainSiteId && $this->BcForm->value('Content.type') !== 'ContentFolder'): ?>
+              <?php elseif ($currentSiteId == $mainSiteId && $this->BcAdminForm->value('Content.type') !== 'ContentFolder'): ?>
                 <?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_alias.png', ['alt' => __d('baser', 'エイリアス作成')]) . '<span class="icon-add-layerd"></span>', 'javascript:void(0)', ['class' => 'create-alias', 'title' => __d('baser', 'エイリアス作成'), 'target' => '_blank', 'data-site-id' => $relatedContent['Site']['id']]) ?>
                 <?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', ['alt' => __d('baser', 'コピー作成')]) . '<span class="icon-add-layerd"></span>', 'javascript:void(0)', ['class' => 'create-copy', 'title' => __d('baser', 'コピー作成'), 'target' => '_blank', 'data-site-id' => $relatedContent['Site']['id']]) ?>
               <?php endif ?>

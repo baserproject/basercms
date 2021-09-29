@@ -11,10 +11,13 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
+use Cake\Event\EventList;
+use Cake\Event\EventManager;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcFormHelper;
 use BaserCore\Model\Entity\ContentFolder;
+use BaserCore\Event\BcContentsEventListener;
 
 /**
  * Class BcFormHelperTest
@@ -30,6 +33,8 @@ class BcFormHelperTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
     ];
 
@@ -41,7 +46,19 @@ class BcFormHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->BcForm = new BcFormHelper(new BcAdminAppView($this->getRequest('/contacts/add')));
+        $View = new BcAdminAppView($this->getRequest('/contacts/add'));
+        $eventedView = $View->setEventManager(EventManager::instance()->on(new BcContentsEventListener())->setEventList(new EventList()));
+        $this->BcForm = new BcFormHelper($eventedView);
+    }
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        unset($this->BcForm);
+        parent::tearDown();
     }
 
     /**
@@ -228,7 +245,12 @@ class BcFormHelperTest extends BcTestCase
         // 引数がない場合
         $result = $this->BcForm->create();
         $this->assertRegExp('/<form method="post" accept-charset="utf-8" novalidate="novalidate" action="\/contacts\/add">.*/', $result);
-        // $this->assertRegExp('/<form action="\/contacts\/add" novalidate="novalidate" id="addForm" method="post" accept-charset="utf-8"><div style="display:none;">.*/', $result);
+        // 引数が既存エンティティの場合の場合
+        $user = $this->getTableLocator()->get('Users')->get(1);
+        $result = $this->BcForm->create($user);
+        $this->assertRegExp('/<form method="post" accept-charset="utf-8" novalidate="novalidate" action="\/contacts\/add"><div style="display:none;"><input type="hidden" name="_method" value="PUT"\/><\/div>.*/', $result);
+        $this->assertEventFired('Helper.Form.beforeCreate');
+        $this->assertEventFired('Helper.Form.afterCreate');
     }
 
 
@@ -261,6 +283,18 @@ class BcFormHelperTest extends BcTestCase
             [null, [1, 2], '</form>'],
             [[1, 2], [1, 2], '<div class="submit"><input 1="1" 2="2" type="submit" value="Submit"/></div></form>']
         ];
+    }
+
+    /**
+     * testSubmit
+     *
+     * @return void
+     */
+    public function testSubmit()
+    {
+        $result = $this->BcForm->submit('保存');
+        $this->assertRegExp('/<div class="submit"><input type="submit" value="保存"\/><\/div>/', $result);
+        $this->assertEventFired('Helper.Form.afterSubmit');
     }
 
 
@@ -951,6 +985,17 @@ class BcFormHelperTest extends BcTestCase
         //     ['User', 'UserAddForm'],
         //     ['UserGroup', 'UserGroupAddForm']
         // ];
+    }
+    /**
+     * Paramや_registryAliasがなしの状態でフォームのIDを取得する場合（異常系）
+     *
+     */
+    public function testCreateIdWithNoParam()
+    {
+        $context = new ContentFolder();
+        $BcForm = new BcFormHelper(new BcAdminAppView($this->getRequest('/')->withParam('action', '')));
+        $result = $this->execPrivateMethod($BcForm, "createId", [$context, []]);
+        $this->assertNull($result);
     }
 
     /**

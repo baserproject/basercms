@@ -16,7 +16,7 @@
 ?>
 
 
-<?php if ($this->request->getParam('action') === 'admin_edit' || $this->request->getParam('action') === 'admin_edit_alias'): ?>
+<?php if (in_array($this->request->getParam('action'), ['edit', 'edit_alias'])): ?>
   <section id="EtcSetting" class="bca-section" data-bca-section-type="form-group">
     <div class="bca-collapse__action">
       <button type="button" class="bca-collapse__btn" data-bca-collapse="collapse"
@@ -40,25 +40,25 @@
             <span><?php echo __d('baser', 'コンテンツタイプ') ?></span>：<?php echo $this->request->getData('Content.type') ?>
           </li>
           <li class="bca-list__item">
-            <span><?php echo __d('baser', 'データ作成日') ?></span>：<?php echo $this->BcTime->format($this->request->getData('Content.created', 'Y/m/d H:i:s')) ?>
+            <span><?php echo __d('baser', 'データ作成日') ?></span>：<?php #echo $this->BcTime->format($this->request->getData('Content.created', 'Y/m/d H:i:s')) ?>
           </li>
           <li class="bca-list__item">
-            <span><?php echo __d('baser', 'データ更新日') ?></span>：<?php echo $this->BcTime->format($this->request->getData('Content.modified', 'Y/m/d H:i:s')) ?>
+            <span><?php echo __d('baser', 'データ更新日') ?></span>：<?php #echo $this->BcTime->format($this->request->getData('Content.modified', 'Y/m/d H:i:s')) ?>
           </li>
           <li class="bca-list__item">
             <span><?php echo __d('baser', 'サイト') ?></span>：<?php echo h($this->BcText->noValue($this->request->getData('Site.display_name'), $mainSiteDisplayName)) ?>
           </li>
           <li class="bca-list__item"><span><?php echo __d('baser', 'タイプ') ?></span>：
-            <?php if (!$this->BcForm->value('Content.alias_id')): ?>
-              <?php if (!empty($this->BcContents->getConfig('items')[$this->BcForm->value('Content.type')])): ?>
-                <?php echo h($this->BcContents->getConfig('items')[$this->BcForm->value('Content.type')]['title']) ?>
+            <?php if (!$this->BcAdminForm->value('Content.alias_id')): ?>
+              <?php if (!empty($this->BcContents->getConfig('items')[$this->BcAdminForm->value('Content.type')])): ?>
+                <?php echo h($this->BcContents->getConfig('items')[$this->BcAdminForm->value('Content.type')]['title']) ?>
               <?php else: ?>
                 <?php echo __d('baser', 'デフォルト') ?>
               <?php endif ?>
             <?php else: ?>
               <?php echo __d('baser', 'エイリアス') ?>
             <?php endif ?>
-            <?php if (empty($this->BcContents->getConfig('items')[$this->BcForm->value('Content.type')])): ?>
+            <?php if (empty($this->BcContents->getConfig('items')[$this->BcAdminForm->value('Content.type')])): ?>
               <p
                 class="bca-notice"><?php echo __d('baser', 'タイプ「デフォルト」は、プラグインの無効処理等が理由となり、タイプとの関連付けが外れてしまっている状態です。<br>プラグインがまだ存在する場合は有効にしてください。') ?></p>
             <?php endif ?>

@@ -13,6 +13,7 @@ namespace BaserCore\View\Helper;
 
 use Exception;
 use Cake\View\View;
+use Cake\ORM\Entity;
 use Cake\View\Helper;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
@@ -650,7 +651,7 @@ class BcContentsHelper extends Helper
      * 現在のコンテンツが属するフォルダまでのフルパスを取得する
      * フォルダ名称部分にはフォルダ編集画面へのリンクを付与する
      * コンテンツ編集画面で利用
-     * @param Content|null $content
+     * @param Entity|null $content
      * @return string
      */
     public function getCurrentFolderLinkedUrl($content)
@@ -663,10 +664,10 @@ class BcContentsHelper extends Helper
      * フォルダ名称部分にはフォルダ編集画面へのリンクを付与する
      * コンテンツ編集画面で利用
      *
-     * @param array $content コンテンツデータ
+     * @param Entity $content コンテンツデータ
      * @return string
      */
-    public function getFolderLinkedUrl(Content $content)
+    public function getFolderLinkedUrl(Entity $content)
     {
         $urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $content->url));
         unset($urlArray[count($urlArray) - 1]);

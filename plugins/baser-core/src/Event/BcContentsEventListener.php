@@ -42,6 +42,9 @@ class BcContentsEventListener extends BcEventListener
      * Implemented Events
      *
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function implementedEvents(): array
     {
@@ -56,10 +59,13 @@ class BcContentsEventListener extends BcEventListener
      * Form Before Create
      *
      * @param Event $event
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function formBeforeCreate(Event $event)
     {
-        if (!BcUtil::isAdminSystem(Router::url())) {
+        if (!BcUtil::isAdminSystem()) {
             return;
         }
         $event->setData('options', ['type' => 'file']);
@@ -70,6 +76,9 @@ class BcContentsEventListener extends BcEventListener
      *
      * @param Event $event
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function formAfterCreate(Event $event)
     {
@@ -94,6 +103,8 @@ class BcContentsEventListener extends BcEventListener
      *
      * @param Event $event
      * @return string
+     * @checked
+     * @unitTest
      */
     public function formAfterSubmit(Event $event)
     {

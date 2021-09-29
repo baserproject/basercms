@@ -47,13 +47,11 @@ $this->BcAdmin->setTitle(__d('baser', 'フォルダ編集'));
 
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
-<div class="submit">
-  <?php echo $this->BcAdminForm->submit(__d('baser', '保存'), [
+<?php echo $this->BcAdminForm->submit(__d('baser', '保存'), [
     'class' => 'button bca-btn',
     'data-bca-btn-type' => 'save',
     'data-bca-btn-size' => 'lg',
     'data-bca-btn-width' => 'lg',
     'div' => false
   ]) ?>
-</div>
 <?php echo $this->BcAdminForm->end() ?>
