@@ -32,7 +32,7 @@ class BcWidgetAreaHelper extends AppHelper
 
 		$options = array_merge([
 			'subDir' => true,
-			'cache' => (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]))
+			'cache' => false,
 		], $options);
 		if ($options['cache'] === false) {
 			unset($options['cache']);
