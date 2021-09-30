@@ -18,7 +18,7 @@ Copyright (c) baserCMS Users Community
 Documentation
 -------------
 
-- See [baserCMS Users Manual](https://basercms.net/pdf/manual/manual_v4.1.7.pdf)
+- See [baserCMS Users Manual](https://basercms.net/pdf/manual/usermanual.pdf)
 - See [baserCMS Official Guideline](http://wiki.basercms.net/)
 - See [baserCMS Development Guideline](https://github.com/baserproject/basercms/wiki/baserCMS%E3%82%B3%E3%82%A2%E3%83%91%E3%83%83%E3%82%B1%E3%83%BC%E3%82%B8%E9%96%8B%E7%99%BA%E8%80%85%E3%82%AC%E3%82%A4%E3%83%89)
 - See [baserCMS Specifications](https://github.com/baserproject/basercms-docs)
