@@ -70,6 +70,16 @@ class BcSearchIndexManagerBehavior extends ModelBehavior
 		// タグ、空白を除外
 		$data['SearchIndex']['detail'] = str_replace(["\r\n", "\r", "\n", "\t", "\s"], '', trim(strip_tags($data['SearchIndex']['detail'])));
 
+		// MySQLの場合、検索テーブル'detail'では半角65535以上の文字数は保存できないため、オーバーした分はカットする。
+		$datasources = ['csv' => 'CSV', 'sqlite' => 'SQLite', 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL'];
+		$db = ConnectionManager::getDataSource('default');
+		list($type, $name) = explode('/', $db->config['datasource'], 2);
+		$datasource = preg_replace('/^bc/', '', strtolower($name));
+		if ($datasource == 'mysql' && mb_strlen($data['SearchIndex']['detail']) >= 21845) {
+			$data['SearchIndex']['detail'] = mb_substr($data['SearchIndex']['detail'],0, 21844);
+			$this->log(strlen($data['SearchIndex']['detail']));
+		}
+
 		// 検索用データとして保存
 		$this->SearchIndex = ClassRegistry::init('SearchIndex');
 		$before = false;
