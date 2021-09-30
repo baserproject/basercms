@@ -9,6 +9,10 @@
  * @since           baserCMS v 0.1.0
  * @license         https://basercms.net/license/index.html
  */
+
+/**
+ * @var BcAppView $this
+ */
 ?>
 
 <script>
