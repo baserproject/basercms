@@ -60,8 +60,8 @@ class ContentsControllerTest extends BcTestCase
         $this->ContentsController->setName('Contents');
         $this->ContentsController->loadModel('BaserCore.ContentFolders');
         $this->ContentsController->loadModel('BaserCore.Users');
-        $this->ContentsController->loadComponent('BaserCore.BcContents');
-        $this->ContentsController->BcContents->setConfig('items', ["test" => ['title' => 'test', 'plugin' => 'BaserCore']]);
+        $this->ContentsController->loadComponent('BaserCore.BcAdminContents');
+        $this->ContentsController->BcAdminContents->setConfig('items', ["test" => ['title' => 'test', 'plugin' => 'BaserCore']]);
         $this->ContentService = new ContentService();
         $this->ContentFolderService = new ContentFolderService();
     }
@@ -84,7 +84,7 @@ class ContentsControllerTest extends BcTestCase
      */
     public function testInitialize(): void
     {
-        $this->assertNotEmpty($this->ContentsController->BcContents);
+        $this->assertNotEmpty($this->ContentsController->BcAdminContents);
     }
 
 
@@ -375,8 +375,8 @@ class ContentsControllerTest extends BcTestCase
      */
     public function testTrashEmpty()
     {
-        // BcContentsTestはコンポネントのテスト用のため、一旦復活させtrashEmptyを実行
-        $this->ContentService->restoreAll(['type' => 'BcContentsTest']);
+        // BcAdminContentsTestはコンポネントのテスト用のため、一旦復活させtrashEmptyを実行
+        $this->ContentService->restoreAll(['type' => 'BcAdminContentsTest']);
         $this->request = $this->request->withData('test', 'テスト');
         $this->ContentsController->setRequest($this->request);
         $response = $this->ContentsController->trash_empty($this->ContentService);

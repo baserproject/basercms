@@ -81,10 +81,19 @@ class ContentFolderServiceTest extends BcTestCase
         $contentFolder = $this->ContentFolderService->get(1);
         $this->assertEquals('フォルダーテンプレート1', $contentFolder->folder_template);
         $this->assertEquals(1, $contentFolder->content->entity_id);
-        // deleted_dateがnullじゃないコンテンツエンティティと紐付いてる場合
-        $contentFolder = $this->ContentFolderService->get(10);
+        $this->assertEquals('メインサイト', $contentFolder->content->site->display_name);
+    }
+    /**
+     * Test getTrash
+     *
+     * @return void
+     */
+    public function testGetTrash()
+    {
+        $contentFolder = $this->ContentFolderService->getTrash(10);
         $this->assertEquals('削除済みフォルダー(親)', $contentFolder->folder_template);
         $this->assertEquals(10, $contentFolder->content->entity_id);
+        $this->assertEquals('メインサイト', $contentFolder->content->site->display_name);
     }
 
     /**

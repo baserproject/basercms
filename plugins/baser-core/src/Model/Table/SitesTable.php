@@ -439,11 +439,11 @@ class SitesTable extends AppTable
 
     /**
      * URLよりサイトを取得する
+     * TODO: テストがエラーになる
      *
      * @param string $url
      * @return EntityInterface
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function findByUrl($url)

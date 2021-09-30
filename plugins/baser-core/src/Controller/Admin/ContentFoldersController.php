@@ -156,7 +156,7 @@ class ContentFoldersController extends BcAdminAppController
         $children = $this->ContentFolder->Content->children($data['Content']['id'], true, [], 'lft');
         $this->ContentFolder->Content->Behaviors->load('BcCache');
         $this->ContentFolder->Content->Behaviors->Tree->settings['Content']['scope'] = null;
-        if ($this->BcContents->preview && !empty($this->request->getData('Content'))) {
+        if ($this->BcAdminContents->preview && !empty($this->request->getData('Content'))) {
             $data['Content'] = $this->request->getData('Content');
         }
         $this->set(compact('data', 'children'));

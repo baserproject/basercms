@@ -69,7 +69,7 @@ class BcFrontContentsComponent extends Component
     public function setupFront()
     {
         $controller = $this->getController();
-        $request = $this->_Controller->getRequest();
+        $request = $controller->getRequest();
         // プレビュー時のデータセット
         if (!empty($request->getQuery('preview'))) {
             $this->preview = $request->getQuery('preview');

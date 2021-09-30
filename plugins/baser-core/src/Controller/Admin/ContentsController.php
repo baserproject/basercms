@@ -379,7 +379,7 @@ class ContentsController extends BcAdminAppController
         }
 
         $this->set('srcContent', $srcContent);
-        $this->BcContents->settingForm($this, $this->request->getData('Content.site_id'), $this->request->getData('Content.id'));
+        $this->BcAdminContents->settingForm($this, $this->request->getData('Content.site_id'), $this->request->getData('Content.id'));
         $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sites->findById($this->request->getData('Content.site_id'))->first();
         $this->set('publishLink', $this->Content->getUrl($this->request->getData('Content.url'), true, $site->useSubDomain));
@@ -587,7 +587,7 @@ class ContentsController extends BcAdminAppController
     public function view($plugin, $type)
     {
         $data = ['Content' => $this->request->getParam('Content')];
-        if ($this->BcContents->preview && $this->request->data) {
+        if ($this->BcAdminContents->preview && $this->request->data) {
             $data = $this->request->data;
         }
         $this->set('data', $data);
