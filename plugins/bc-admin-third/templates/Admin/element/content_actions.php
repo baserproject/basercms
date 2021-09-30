@@ -23,12 +23,12 @@ if ($isAlias) {
 
 <div class="bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), ['plugin' => '', 'admin' => true, 'controller' => 'contents', 'action' => 'index'], [
+    <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), ['controller' => 'contents', 'action' => 'index'], [
       'class' => 'button bca-btn',
       'data-bca-btn-type' => 'back-to-list'
     ]) ?>
     <?php if ($isAvailablePreview): ?>
-      <?php echo $this->BcForm->button(__d('baser', 'プレビュー'), [
+      <?php echo $this->BcAdminForm->button(__d('baser', 'プレビュー'), [
         'class' => 'button bca-btn',
         'data-bca-btn-type' => 'preview',
         'id' => 'BtnPreview'
@@ -38,7 +38,7 @@ if ($isAlias) {
   </div>
   <div class="bca-actions__sub">
     <?php if ($isAvailableDelete): ?>
-      <?php echo $this->BcForm->button($deleteButtonText, [
+      <?php echo $this->BcAdminForm->button($deleteButtonText, [
         'data-bca-btn-type' => 'delete',
         'data-bca-btn-size' => 'sm',
         'data-bca-btn-color' => 'danger',

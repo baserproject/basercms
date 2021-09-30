@@ -28,6 +28,13 @@ interface ContentFolderServiceInterface
     public function get($id): EntityInterface;
 
     /**
+     * コンテンツフォルダーをゴミ箱から取得する
+     * @param int $id
+     * @return EntityInterface|array
+     */
+    public function getTrash($id);
+
+    /**
      * コンテンツフォルダー一覧用のデータを取得
      * @param array $queryParams
      * @return Query

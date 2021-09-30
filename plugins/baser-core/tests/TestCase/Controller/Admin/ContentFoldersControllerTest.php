@@ -72,7 +72,7 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testInitialize(): void
     {
-        $this->assertNotEmpty($this->ContentFoldersController->BcContents);
+        $this->assertNotEmpty($this->ContentFoldersController->BcAdminContents);
     }
 
     /**

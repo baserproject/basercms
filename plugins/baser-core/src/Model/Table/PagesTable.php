@@ -11,10 +11,11 @@
 
 namespace BaserCore\Model\Table;
 
-use BaserCore\Event\BcEventDispatcherTrait;
-use Cake\Datasource\EntityInterface;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
+use BaserCore\Utility\BcUtil;
+use Cake\Datasource\EntityInterface;
+use BaserCore\Event\BcEventDispatcherTrait;
 
 /**
  * Class PagesTable
@@ -893,7 +894,7 @@ class PagesTable extends Table
         }
 
         if ($contentId != 1) {
-            $ContentFolder = ClassRegistry::init('ContentFolder');
+            $ContentFolder = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
             $parentTemplate = $ContentFolder->getParentTemplate($contentId, 'page');
             $searchKey = array_search($parentTemplate, $pageTemplates);
             if ($searchKey !== false) {

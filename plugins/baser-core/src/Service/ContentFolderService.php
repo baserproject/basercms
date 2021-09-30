@@ -61,9 +61,22 @@ class ContentFolderService implements ContentFolderServiceInterface
      */
     public function get($id): EntityInterface
     {
-        $contentFolder = $this->ContentFolders->get($id, ['contain' => ['Contents']]);
-        $contentFolder->content = $contentFolder->content ?? $this->Contents->find('all', ['withDeleted'])->where(['entity_id' => $id])->first();
-        return $contentFolder;
+        return $this->ContentFolders->get($id, ['contain' => ['Contents' => ['Sites']]]);
+    }
+
+    /**
+     * コンテンツフォルダーをゴミ箱から取得する
+     * @param int $id
+     * @return EntityInterface|array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getTrash($id)
+    {
+        return $this->ContentFolders->findById($id)->contain('Contents', function (Query $q) {
+            return $q->applyOptions(['withDeleted'])->contain(['Sites'])->where(['Contents.deleted_date IS NOT NULL']);
+        })->firstOrFail();
     }
 
     /**

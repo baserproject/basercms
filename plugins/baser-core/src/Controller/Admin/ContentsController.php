@@ -15,9 +15,7 @@ use Cake\ORM\Query;
 use Cake\Utility\Hash;
 use Cake\ORM\ResultSet;
 use Cake\Core\Configure;
-use Nette\Utils\DateTime;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
@@ -33,7 +31,7 @@ use BaserCore\Model\Table\ContentFoldersTable;
 use BaserCore\Service\BcAdminServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
-use BaserCore\Controller\Component\BcContentsComponent;
+use BaserCore\Controller\Component\BcAdminContentsComponent;
 
 /**
  * Class ContentsController
@@ -49,7 +47,7 @@ use BaserCore\Controller\Component\BcContentsComponent;
  * @property SitesTable $Sites
  * @property UsersTable $Users
  * @property ContentFoldersTable $ContentFolders
- * @property BcContentsComponent $BcContents
+ * @property BcAdminContentsComponent $BcAdminContents
  * @property BcMessageComponent $BcMessage
  */
 
@@ -70,7 +68,7 @@ class ContentsController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('BaserCore.BcContents');
+        $this->loadComponent('BaserCore.BcAdminContents');
     }
 
     /**
@@ -149,8 +147,8 @@ class ContentsController extends BcAdminAppController
             }
         }
         $this->ContentFolders->getEventManager()->on($this->ContentFolders);
-        $this->set('contents', $this->_getContents($contentService));
-        $this->set('template', $this->_getTemplate());
+        $this->set('contents', $this->getContents($contentService));
+        $this->set('template', $this->getTemplate());
         $this->set('folders', $contentService->getContentFolderList($currentSiteId, ['conditions' => ['site_root' => false]]));
         $this->set('sites', $sites);
     }
@@ -164,7 +162,7 @@ class ContentsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    protected function _getContents($contentService)
+    protected function getContents($contentService)
     {
         switch($this->request->getParam('action')) {
             case 'index':
@@ -191,7 +189,7 @@ class ContentsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    protected function _getTemplate(): string
+    protected function getTemplate(): string
     {
         switch($this->request->getParam('action')) {
             case 'index':
@@ -381,7 +379,7 @@ class ContentsController extends BcAdminAppController
         }
 
         $this->set('srcContent', $srcContent);
-        $this->BcContents->settingForm($this, $this->request->getData('Content.site_id'), $this->request->getData('Content.id'));
+        $this->BcAdminContents->settingForm($this, $this->request->getData('Content.site_id'), $this->request->getData('Content.id'));
         $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sites->findById($this->request->getData('Content.site_id'))->first();
         $this->set('publishLink', $this->Content->getUrl($this->request->getData('Content.url'), true, $site->useSubDomain));
@@ -589,7 +587,7 @@ class ContentsController extends BcAdminAppController
     public function view($plugin, $type)
     {
         $data = ['Content' => $this->request->getParam('Content')];
-        if ($this->BcContents->preview && $this->request->data) {
+        if ($this->BcAdminContents->preview && $this->request->data) {
             $data = $this->request->data;
         }
         $this->set('data', $data);

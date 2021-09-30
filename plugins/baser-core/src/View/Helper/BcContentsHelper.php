@@ -13,6 +13,7 @@ namespace BaserCore\View\Helper;
 
 use Exception;
 use Cake\View\View;
+use Cake\ORM\Entity;
 use Cake\View\Helper;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
@@ -22,6 +23,7 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Model\Entity\Content;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Service\PermissionService;
@@ -72,6 +74,7 @@ class BcContentsHelper extends Helper
         if (BcUtil::isAdminSystem(Router::url())) {
             $this->setup();
         }
+        $this->request = $this->getView()->getRequest();
     }
 
     /**
@@ -648,12 +651,12 @@ class BcContentsHelper extends Helper
      * 現在のコンテンツが属するフォルダまでのフルパスを取得する
      * フォルダ名称部分にはフォルダ編集画面へのリンクを付与する
      * コンテンツ編集画面で利用
-     *
+     * @param Entity|null $content
      * @return string
      */
-    public function getCurrentFolderLinkedUrl()
+    public function getCurrentFolderLinkedUrl($content)
     {
-        return $this->getFolderLinkedUrl($this->request->data);
+        return $this->getFolderLinkedUrl($content);
     }
 
     /**
@@ -661,30 +664,30 @@ class BcContentsHelper extends Helper
      * フォルダ名称部分にはフォルダ編集画面へのリンクを付与する
      * コンテンツ編集画面で利用
      *
-     * @param array $content コンテンツデータ
+     * @param Entity $content コンテンツデータ
      * @return string
      */
-    public function getFolderLinkedUrl($content)
+    public function getFolderLinkedUrl(Entity $content)
     {
-        $urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $content['Content']['url']));
+        $urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $content->url));
         unset($urlArray[count($urlArray) - 1]);
-        if ($content['Site']['same_main_url']) {
+        if ($content->site->same_main_url) {
             $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-            $site = $sites->findById($content['Site']['main_site_id'])->first();
+            $site = $sites->findById($content->site->main_site_id)->first();
             array_shift($urlArray);
             if ($site->alias) {
                 $urlArray = explode('/', $site->alias) + $urlArray;
             }
         }
-        if ($content['Site']['use_subdomain']) {
-            $host = $this->getUrl('/' . $urlArray[0] . '/', true, $content['Site']['use_subdomain']);
+        if ($content->site->use_subdomain) {
+            $host = $this->getUrl('/' . $urlArray[0] . '/', true, $content->site->use_subdomain);
             array_shift($urlArray);
         } else {
-            $host = $this->getUrl('/', true, $content['Site']['use_subdomain']);
+            $host = $this->getUrl('/', true, $content->site->use_subdomain);
         }
 
         $checkUrl = '/';
-        $Content = ClassRegistry::init('Content');
+        $Content = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         foreach($urlArray as $key => $value) {
             $checkUrl .= $value . '/';
             $entityId = $Content->field('entity_id', ['Content.url' => $checkUrl]);

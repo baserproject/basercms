@@ -83,7 +83,8 @@ return [
     // Textarea input element,
     'textarea' => '<textarea name="{{name}}"{{attrs}}>{{value}}</textarea>',
     // Container for submit buttons.
-    'submitContainer' => '<div class="submit">{{content}}</div>',
+    // 'submitContainer' => '<div class="submit">{{content}}</div>' NOTE: formAfterCreateにてデザインが崩れるため一旦コメントアウト
+    'submitContainer' => '{{content}}',
     // Confirm javascript template for postLink()
     'confirmJs' => '{{confirm}}',
     // selected class

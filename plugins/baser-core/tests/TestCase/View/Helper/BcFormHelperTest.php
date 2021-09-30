@@ -11,9 +11,13 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
-use BaserCore\TestSuite\BcTestCase;
+use Cake\Event\EventList;
+use Cake\Event\EventManager;
 use BaserCore\View\BcAdminAppView;
+use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcFormHelper;
+use BaserCore\Model\Entity\ContentFolder;
+use BaserCore\Event\BcContentsEventListener;
 
 /**
  * Class BcFormHelperTest
@@ -29,6 +33,8 @@ class BcFormHelperTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
     ];
 
@@ -40,7 +46,19 @@ class BcFormHelperTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->BcForm = new BcFormHelper(new BcAdminAppView($this->getRequest('/contacts/add')));
+        $View = new BcAdminAppView($this->getRequest('/contacts/add'));
+        $eventedView = $View->setEventManager(EventManager::instance()->on(new BcContentsEventListener())->setEventList(new EventList()));
+        $this->BcForm = new BcFormHelper($eventedView);
+    }
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        unset($this->BcForm);
+        parent::tearDown();
     }
 
     /**
@@ -224,14 +242,15 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testCreate()
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
-        $result = $this->BcAdminForm->create();
-        $this->assertRegExp('/<form action="\/contacts\/add" novalidate="novalidate" id="addForm" method="post" accept-charset="utf-8"><div style="display:none;">.*/', $result);
+        // 引数がない場合
+        $result = $this->BcForm->create();
+        $this->assertRegExp('/<form method="post" accept-charset="utf-8" novalidate="novalidate" action="\/contacts\/add">.*/', $result);
+        // 引数が既存エンティティの場合の場合
+        $user = $this->getTableLocator()->get('Users')->get(1);
+        $result = $this->BcForm->create($user);
+        $this->assertRegExp('/<form method="post" accept-charset="utf-8" novalidate="novalidate" action="\/contacts\/add"><div style="display:none;"><input type="hidden" name="_method" value="PUT"\/><\/div>.*/', $result);
+        $this->assertEventFired('Helper.Form.beforeCreate');
+        $this->assertEventFired('Helper.Form.afterCreate');
     }
 
 
@@ -264,6 +283,18 @@ class BcFormHelperTest extends BcTestCase
             [null, [1, 2], '</form>'],
             [[1, 2], [1, 2], '<div class="submit"><input 1="1" 2="2" type="submit" value="Submit"/></div></form>']
         ];
+    }
+
+    /**
+     * testSubmit
+     *
+     * @return void
+     */
+    public function testSubmit()
+    {
+        $result = $this->BcForm->submit('保存');
+        $this->assertRegExp('/<div class="submit"><input type="submit" value="保存"\/><\/div>/', $result);
+        $this->assertEventFired('Helper.Form.afterSubmit');
     }
 
 
@@ -913,42 +944,69 @@ class BcFormHelperTest extends BcTestCase
     /**
      * フォームのIDを取得する
      *
-     * @dataProvider getIdDataProvider
+     * @dataProvider createIdDataProvider
      */
-    public function testGetId($Model, $expected)
+    public function testCreateId($context, $options, $expected)
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
-        $this->BcAdminForm->create($Model);
-        $this->assertEquals($expected, $this->BcForm->getId());
+        $request = $this->getRequest('/')->withParam('prefix', 'Admin')->withParam('controller', 'testController')->withParam('action', 'test');
+        $BcForm = new BcFormHelper(new BcAdminAppView($request));
+        $result = $this->execPrivateMethod($BcForm, "createId", [$context, $options]);
+        $this->assertEquals($expected, $result);
+    }
+    public function createIdDataProvider()
+    {
+        $context = new ContentFolder();
+        $context->setSource("BaserCore.ContentFolder");
+        return [
+            // contextがない場合(Controller名が使われれるか)
+            [null, [], "TestControllerAdminTestForm"],
+            // context名が使われる場合
+            [$context, [], "ContentFolderAdminTestForm"],
+            // 指定したoptionIDが使われる場合
+            [$context, ['id' => 'testForm'], "testForm"],
+        ];
+        // return [
+        //     ['', 'addForm'],
+        //     ['hogehoge', 'hogehogeAddForm'],
+        //     ['CakeSchema', 'CakeSchemaAddForm'],
+        //     ['Content', 'ContentAddForm'],
+        //     ['EditTemplate', 'EditTemplateAddForm'],
+        //     ['Favorite', 'FavoriteAddForm'],
+        //     ['Member', 'MemberAddForm'],
+        //     ['Page', 'PageAddForm'],
+        //     ['Plugin', 'PluginAddForm'],
+        //     ['Site', 'SiteAddForm'],
+        //     ['SiteConfig', 'SiteConfigAddForm'],
+        //     ['Theme', 'ThemeAddForm'],
+        //     ['ThemeFile', 'ThemeFileAddForm'],
+        //     ['ThemeFolder', 'ThemeFolderAddForm'],
+        //     ['Tool', 'ToolAddForm'],
+        //     ['Updater', 'UpdaterAddForm'],
+        //     ['User', 'UserAddForm'],
+        //     ['UserGroup', 'UserGroupAddForm']
+        // ];
+    }
+    /**
+     * Paramや_registryAliasがなしの状態でフォームのIDを取得する場合（異常系）
+     *
+     */
+    public function testCreateIdWithNoParam()
+    {
+        $context = new ContentFolder();
+        $BcForm = new BcFormHelper(new BcAdminAppView($this->getRequest('/')->withParam('action', '')));
+        $result = $this->execPrivateMethod($BcForm, "createId", [$context, []]);
+        $this->assertNull($result);
     }
 
-    public function getIdDataProvider()
+    /**
+     * testGetIdandSetId
+     *
+     * @return void
+     */
+    public function testGetIdandSetId()
     {
-        return [
-            ['', 'addForm'],
-            ['hogehoge', 'hogehogeAddForm'],
-            ['CakeSchema', 'CakeSchemaAddForm'],
-            ['Content', 'ContentAddForm'],
-            ['EditTemplate', 'EditTemplateAddForm'],
-            ['Favorite', 'FavoriteAddForm'],
-            ['Member', 'MemberAddForm'],
-            ['Page', 'PageAddForm'],
-            ['Plugin', 'PluginAddForm'],
-            ['Site', 'SiteAddForm'],
-            ['SiteConfig', 'SiteConfigAddForm'],
-            ['Theme', 'ThemeAddForm'],
-            ['ThemeFile', 'ThemeFileAddForm'],
-            ['ThemeFolder', 'ThemeFolderAddForm'],
-            ['Tool', 'ToolAddForm'],
-            ['Updater', 'UpdaterAddForm'],
-            ['User', 'UserAddForm'],
-            ['UserGroup', 'UserGroupAddForm']
-        ];
+        $result = $this->BcForm->setId("test");
+        $this->assertEquals($this->BcForm->getId(), $result);
     }
 
 }

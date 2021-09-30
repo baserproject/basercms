@@ -11,7 +11,7 @@
 
 namespace BaserCore\Controller;
 
-use BaserCore\Controller\Component\BcContentsComponent;
+use BaserCore\Controller\Component\BcAdminContentsComponent;
 use BaserCore\Model\Entity\Page;
 use BaserCore\Model\Table\PagesTable;
 use Cake\Core\Configure;
@@ -29,7 +29,7 @@ use BaserCore\Annotation\Checked;
 /**
  * PagesController
  * @property PagesTable $Pages
- * @property BcContentsComponent $BcContents
+ * @property BcAdminContentsComponent $BcAdminContents
  */
 class PagesController extends AppController
 {
@@ -57,7 +57,7 @@ class PagesController extends AppController
 	 */
 	// TODO ucmitz 未移行
 	/* >>>
-	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['useForm' => true, 'useViewCache' => true]];
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcAdminContents' => ['useForm' => true, 'useViewCache' => true]];
     <<< */
 
     /**
@@ -67,7 +67,7 @@ class PagesController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->loadComponent('BaserCore.BcContents');
+        $this->loadComponent('BaserCore.BcAdminContents');
     }
 
 	/**
@@ -129,7 +129,7 @@ class PagesController extends AppController
 		if ($this->request->getData()) {
 			// POSTパラメータのコードに含まれるscriptタグをそのままHTMLに出力するとブラウザによりXSSと判定される
 			// 一度データをセッションに退避する
-			if ($this->BcContents->preview === 'default') {
+			if ($this->BcAdminContents->preview === 'default') {
 				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->getData('Content.entity_id');
 				$this->request = $this->request->withParsedBody($this->Content->saveTmpFiles($this->request->getData(), mt_rand(0, 99999999)));
 				$this->Session->write($sessionKey, $this->request->getData());
@@ -150,7 +150,7 @@ class PagesController extends AppController
 				return;
 			}
 
-			if ($this->BcContents->preview === 'draft') {
+			if ($this->BcAdminContents->preview === 'draft') {
 				$this->request = $this->request->withParsedBody($this->Content->saveTmpFiles($this->request->getData(), mt_rand(0, 99999999)));
 				$this->request->withParam('Content.eyecatch', $this->request->getData('Content.eyecatch'));
 				$uuid = $this->_createPreviewTemplate($this->request->getData());
@@ -161,7 +161,7 @@ class PagesController extends AppController
 		} else {
 
 			// プレビューアクセス
-			if ($this->BcContents->preview === 'default') {
+			if ($this->BcAdminContents->preview === 'default') {
 				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->getParam('Content.entity_id');
 				$previewData = $this->request->getSession()->read($sessionKey);
 				$this->request->withParam('Content.eyecatch', $previewData['Content']['eyecatch']);
@@ -175,7 +175,7 @@ class PagesController extends AppController
 			}
 
 			// 草稿アクセス
-			if ($this->BcContents->preview === 'draft') {
+			if ($this->BcAdminContents->preview === 'draft') {
 				$data = $this->Page->find('first', ['conditions' => ['Page.id' => $this->request->getParam('Content.entity_id')]]);
 				$uuid = $this->_createPreviewTemplate($data, true);
 				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . Configure::read('BcApp.templateExt'));

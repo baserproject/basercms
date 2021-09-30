@@ -85,15 +85,15 @@ class PluginServiceTest extends BcTestCase
         foreach($plugins as $plugin) {
             $pluginNames[] = $plugin->name;
         }
+        //期待されるプラグインを含むか
+        $this->assertContains($expectedPlugin, $pluginNames);
+        // プラグイン数
+        $this->assertEquals($expectedCount, count($plugins));
         $folder->delete($pluginPath);
         if ($sortMode) {
             // フォルダ内プラグインが含まれてないか
             $this->assertNotContains('BcTest', $pluginNames);
         }
-        //期待されるプラグインを含むか
-        $this->assertContains($expectedPlugin, $pluginNames);
-        // プラグイン数
-        $this->assertEquals(count($plugins), $expectedCount);
     }
     public function indexDataprovider()
     {

@@ -15,7 +15,7 @@ use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Controller\ComponentRegistry;
 use BaserCore\Controller\BcAppController;
-use BaserCore\Controller\Component\BcContentsComponent;
+use BaserCore\Controller\Component\BcAdminContentsComponent;
 
 
 /**
@@ -24,7 +24,7 @@ use BaserCore\Controller\Component\BcContentsComponent;
  * @package BaserCore\Test\TestCase\Controller\Component
  * @property BcMessageComponent $BcMessage
  */
-class BcContentsTestController extends BcAppController
+class BcAdminContentsTestController extends BcAppController
 {
     public function initialize(): void
     {
@@ -35,12 +35,12 @@ class BcContentsTestController extends BcAppController
 }
 
 /**
- * Class BcContentsComponentTest
+ * Class BcAdminContentsComponentTest
  *
  * @package BaserCore\Test\TestCase\Controller\Component
- * @property BcContentsComponent $BcContents
+ * @property BcAdminContentsComponent $BcAdminContents
  */
-class BcContentsComponentTest extends BcTestCase
+class BcAdminContentsComponentTest extends BcTestCase
 {
     /**
      * Fixtures
@@ -60,9 +60,9 @@ class BcContentsComponentTest extends BcTestCase
     {
         parent::setUp();
         $this->getRequest('baser/admin/contents');
-        $this->Controller = new BcContentsTestController();
+        $this->Controller = new BcAdminContentsTestController();
         $this->ComponentRegistry = new ComponentRegistry($this->Controller);
-        $this->BcContents = new BcContentsComponent($this->ComponentRegistry);
+        $this->BcAdminContents = new BcAdminContentsComponent($this->ComponentRegistry);
     }
 
     /**
@@ -83,11 +83,9 @@ class BcContentsComponentTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertEquals('BcContentsTest', $this->BcContents->_Controller->getName());
-        $this->assertEquals($this->BcContents->_Controller->getName(), $this->BcContents->type);
-        $this->assertInstanceOf('Cake\Http\ServerRequest', $this->BcContents->ControllerRequest);
+        $this->assertNotEmpty($this->BcAdminContents->ContentService);
         // baser/admin/contents 管理システム設定の場合
-        $this->assertNotEmpty($this->BcContents->getConfig('items'));
+        $this->assertNotEmpty($this->BcAdminContents->getConfig('items'));
     }
     /**
      * test setupAdmin
@@ -96,26 +94,10 @@ class BcContentsComponentTest extends BcTestCase
      */
     public function testSetupAdmin()
     {
-        $this->BcContents->setupAdmin();
-        $this->assertNotEmpty($this->BcContents->getConfig('items'));
+        $this->BcAdminContents->setupAdmin();
+        $this->assertNotEmpty($this->BcAdminContents->getConfig('items'));
     }
 
-    public function testSetupFront()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    public function testGetCrumbs()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    public function testGetContent()
-    {
-        $content = $this->BcContents->getContent(8);
-        $this->assertEquals('BcContentsテスト', $content->name);
-        $this->assertNull($this->BcContents->getContent(2));
-    }
 
     public function testBeforeRender()
     {

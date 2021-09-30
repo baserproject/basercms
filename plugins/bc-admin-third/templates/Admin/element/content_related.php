@@ -1,15 +1,14 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 4.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
-
+use BaserCore\Utility\BcUtil;
 /**
  * 関連コンテンツ
  * @var string $mainSiteDisplayName メインサイト表示名称
@@ -17,7 +16,8 @@
  * @var array $sites サイトリスト
  * @var int $currentSiteId 現在のサイトID
  */
-$pureUrl = $this->BcContents->getPureUrl($this->request->getData('Content.url'), $this->request->getData('Site.id'));
+$content = BcUtil::extractOne($this->request->getData(), 'content');
+$pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
 ?>
 
 
@@ -99,7 +99,7 @@ $pureUrl = $this->BcContents->getPureUrl($this->request->getData('Content.url'),
               <?php if (!empty($relatedContent['Content'])): ?>
                 <?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', ['alt' => __d('baser', '確認')]), $relatedContent['Content']['url'], ['title' => __d('baser', '確認'), 'target' => '_blank']) ?>
                 <?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => __d('baser', '編集')]), $editUrl, ['title' => __d('baser', '編集')]) ?>
-              <?php elseif ($currentSiteId == $mainSiteId && $this->BcForm->value('Content.type') !== 'ContentFolder'): ?>
+              <?php elseif ($currentSiteId == $mainSiteId && $this->BcAdminForm->value('Content.type') !== 'ContentFolder'): ?>
                 <?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_alias.png', ['alt' => __d('baser', 'エイリアス作成')]) . '<span class="icon-add-layerd"></span>', 'javascript:void(0)', ['class' => 'create-alias', 'title' => __d('baser', 'エイリアス作成'), 'target' => '_blank', 'data-site-id' => $relatedContent['Site']['id']]) ?>
                 <?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', ['alt' => __d('baser', 'コピー作成')]) . '<span class="icon-add-layerd"></span>', 'javascript:void(0)', ['class' => 'create-copy', 'title' => __d('baser', 'コピー作成'), 'target' => '_blank', 'data-site-id' => $relatedContent['Site']['id']]) ?>
               <?php endif ?>

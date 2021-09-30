@@ -321,7 +321,6 @@ class BcUtil
      * 処理の内容にCakeRequest や、Router::parse() を使おうとしたが、
      * Router::parse() を利用すると、Routing情報が書き換えられてしまうので利用できない。
      * Router::reload() や、Router::setRequestInfo() で調整しようとしたがうまくいかなかった。
-     * @todo Testable humuhimi
      * @return boolean
      * @checked
      * @noTodo
@@ -578,6 +577,25 @@ class BcUtil
             $value = unserialize($_value);
         }
         return $value;
+    }
+
+    /**
+     * extractOne
+     *
+     * @param  array $data
+     * @param   string $column
+     * @return mixed|false
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function extractOne($data, $column)
+    {
+        if ($column) {
+            $pulledGroup = array_column($data, $column);
+            return array_shift($pulledGroup);
+        }
+        return false;
     }
 
     /**

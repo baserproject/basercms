@@ -88,7 +88,7 @@ class ContentsTableTest extends BcTestCase
     public function testGetTrash(): void
     {
         $result = $this->Contents->getTrash(15);
-        $this->assertEquals("BcContentsテスト(deleted)", $result->title);
+        $this->assertEquals("BcAdminContentsテスト(deleted)", $result->title);
     }
 
     /**

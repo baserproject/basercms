@@ -60,4 +60,3 @@ class Content extends Entity
         'modified' => true,
     ];
 }
-?>
