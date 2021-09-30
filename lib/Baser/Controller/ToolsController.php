@@ -10,7 +10,7 @@
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('Simplezip', 'Vendor');
+App::uses('BcZip', 'Lib');
 
 /**
  * Class ToolsController
@@ -93,9 +93,13 @@ class ToolsController extends AppController
 	public function admin_maintenance($mode = '')
 	{
 		$this->_checkReferer();
+		$zipEnable = extension_loaded('zip');
+		if (!$zipEnable) {
+			$this->notFound();
+		}
+		
 		switch($mode) {
 			case 'backup':
-				set_time_limit(0);
 				$this->_backupDb($this->request->query['backup_encoding']);
 				break;
 			case 'restore':
@@ -155,10 +159,10 @@ class ToolsController extends AppController
 		if (!move_uploaded_file($data['Tool']['backup']['tmp_name'], $targetPath)) {
 			return false;
 		}
-
+		
 		/* ZIPファイルを解凍する */
-		$Simplezip = new Simplezip();
-		if (!$Simplezip->unzip($targetPath, $tmpPath)) {
+		$bcZip = new BcZip();
+		if (!$bcZip->extract($targetPath, $tmpPath)) {
 			return false;
 		}
 		@unlink($targetPath);
@@ -255,8 +259,12 @@ class ToolsController extends AppController
 	 */
 	protected function _backupDb($encoding)
 	{
-		$tmpDir = TMP . 'schemas' . DS;
+		set_time_limit(0);
+		
 		$version = str_replace(' ', '_', $this->getBaserVersion());
+		$tmpDir = TMP . 'schemas' . DS;
+		$distPath = TMP . 'baserbackup_' . $version . '_' . date('Ymd_His') . '.zip';
+		
 		$this->_resetTmpSchemaFolder();
 		clearAllCache();
 		$this->_writeBackup($tmpDir . 'core' . DS, '', $encoding);
@@ -267,13 +275,21 @@ class ToolsController extends AppController
 				$this->_writeBackup($tmpDir . 'plugin' . DS, $plugin['Plugin']['name'], $encoding);
 			}
 		}
+		
 		// ZIP圧縮して出力
-		$fileName = 'baserbackup_' . $version . '_' . date('Ymd_His');
-		$Simplezip = new Simplezip();
-		$Simplezip->addFolder($tmpDir);
-		$Simplezip->download($fileName);
+		$bcZip = new BcZip();
+		$bcZip->create($tmpDir, $distPath);
+		
+		header("Cache-Control: no-store");
+		header("Content-Type: application/zip");
+		header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
+		header("Content-Length: " . filesize($distPath));
+		while (ob_get_level()) { ob_end_clean(); }
+		echo readfile($distPath);
+		
+		unlink($distPath);
 		$this->_resetTmpSchemaFolder();
-		exit();
+		return true;
 	}
 
 	/**
@@ -312,6 +328,7 @@ class ToolsController extends AppController
 	public function admin_write_schema()
 	{
 		$path = TMP . 'schemas' . DS;
+		$distPath = TMP . 'schemas.zip';
 
 		/* 表示設定 */
 		$this->pageTitle = __d('baser', 'スキーマファイル生成');
@@ -336,10 +353,26 @@ class ToolsController extends AppController
 			return;
 		}
 
-		$Simplezip = new Simplezip();
-		$Simplezip->addFolder($path);
-		$Simplezip->download('schemas');
-		exit();
+		// ZIP圧縮して出力
+		set_time_limit(0);
+		$this->autoRender = false;
+		
+		// 不要ディレクトリの削除
+		rmdir($path . 'core');
+		rmdir($path . 'plugin');
+		
+		$bcZip = new BcZip();
+		$bcZip->create($path, $distPath);
+		
+		header("Cache-Control: no-store");
+		header("Content-Type: application/zip");
+		header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
+		header("Content-Length: " . filesize($distPath));
+		while (ob_get_level()) { ob_end_clean(); }
+		echo readfile($distPath);
+		
+		unlink($distPath);
+		return true;
 	}
 
 	/**
@@ -401,12 +434,16 @@ class ToolsController extends AppController
 	 */
 	public function admin_log($mode = '')
 	{
+		$zipEnable = extension_loaded('zip');
 		$errorLogPath = TMP . 'logs' . DS . 'error.log';
 		switch($mode) {
 			case 'download':
-				set_time_limit(0);
+				if (!$zipEnable) {
+					$this->notFound();
+				}
+				$this->autoRender = false;
 				if ($this->_downloadErrorLog()) {
-					exit();
+					return;
 				}
 				$this->BcMessage->setInfo('エラーログが存在しません。');
 				$this->redirect(['action' => 'log']);
@@ -441,6 +478,7 @@ class ToolsController extends AppController
 
 		$this->pageTitle = __d('baser', 'データメンテナンス');
 		$this->help = 'tools_log';
+		$this->set('zipEnable', $zipEnable);
 		$this->set('fileSize', $fileSize);
 	}
 
@@ -451,17 +489,27 @@ class ToolsController extends AppController
 	 */
 	protected function _downloadErrorLog()
 	{
+		set_time_limit(0);
+		
 		$tmpDir = TMP . 'logs' . DS;
+		$distPath = TMP . 'basercms_logs_' . date('Ymd_His') . '.zip';
 		$Folder = new Folder($tmpDir);
 		$files = $Folder->read(true, true, false);
 		if (count($files[0]) === 0 && count($files[1]) === 0) {
 			return false;
 		}
 		// ZIP圧縮して出力
-		$fileName = 'basercms_logs_' . date('Ymd_His');
-		$Simplezip = new Simplezip();
-		$Simplezip->addFolder($tmpDir);
-		$Simplezip->download($fileName);
+		$bcZip = new BcZip();
+		$bcZip->create($tmpDir, $distPath);
+		
+		header("Cache-Control: no-store");
+		header("Content-Type: application/zip");
+		header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
+		header("Content-Length: " . filesize($distPath));
+		while (ob_get_level()) { ob_end_clean(); }
+		echo readfile($distPath);
+		
+		unlink($distPath);
 		return true;
 	}
 

@@ -1387,6 +1387,7 @@ class BcManagerComponent extends Component
 			'phpGd' => extension_loaded('gd'),
 			'phpPdo' => extension_loaded('pdo'),
 			'phpXml' => extension_loaded('xml'),
+			'phpZip' => extension_loaded('zip'),
 			'apacheRewrite' => $rewriteInstalled,
 		];
 		$check = [
@@ -1394,6 +1395,7 @@ class BcManagerComponent extends Component
 			'gdOk' => $status['phpGd'],
 			'pdoOk' => $status['phpPdo'],
 			'xmlOk' => $status['phpXml'],
+			'zipOk' => $status['phpZip'],
 			'phpVersionOk' => version_compare(preg_replace('/[a-z-]/', '', $status['phpVersion']), Configure::read('BcRequire.phpVersion'), '>='),
 			'phpMemoryOk' => ((($status['phpMemory'] >= Configure::read('BcRequire.phpMemory')) || $status['phpMemory'] == -1) === true)
 		];
