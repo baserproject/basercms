@@ -38,6 +38,9 @@ class BcUtilTest extends BcTestCase
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Plugins',
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.ContentFolders',
     ];
 
     /**
@@ -670,10 +673,20 @@ class BcUtilTest extends BcTestCase
 
     /**
      * 指定したURLのドメインを取得する
+     * @dataProvider getDomainDataProvider
      */
-    public function testGetDomain()
+    public function testGetDomain($target, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = BcUtil::getDomain($target);
+        $this->assertEquals($expected, $result);
+    }
+    public function getDomainDataProvider()
+    {
+        return [
+            ['http', ''],
+            ['https://localhost/', 'localhost'],
+            ['https://localhost:8000', 'localhost:8000'],
+        ];
     }
 
     /**
@@ -681,7 +694,16 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetMainDomain()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // BcEnv.mainDomainがある場合
+        $domain = "testMainDomain";
+        Configure::write('BcEnv.mainDomain', $domain);
+        $this->assertEquals(BcUtil::getMainDomain(), $domain);
+        Configure::delete('BcEnv.mainDomain');
+        // BcEnv.mainDomainがなく、BcEnv.siteUrlがある場合
+        $siteUrl = "https://example.com:8000";
+        Configure::write('BcEnv.siteUrl', $siteUrl);
+        $this->assertEquals(BcUtil::getMainDomain(), "example.com:8000");
+
     }
 
     /**
@@ -722,12 +744,6 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetCurrentDomain()
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
         $this->assertEmpty(BcUtil::getCurrentDomain(), '$_SERVER[HTTP_HOST] の値が間違っています。');
         Configure::write('BcEnv.host', 'hoge');
         $this->assertEquals('hoge', BcUtil::getCurrentDomain(), 'ホストを変更できません。');
