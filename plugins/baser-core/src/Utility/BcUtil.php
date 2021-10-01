@@ -756,11 +756,11 @@ class BcUtil
      */
     public static function getSubDomain($host = null)
     {
-        $currentDomain = BcUtil::getCurrentDomain();
-        if (!$currentDomain && !$host) {
+        $currentDomain = self::getCurrentDomain();
+        if (empty($currentDomain) && empty($host)) {
             return '';
         }
-        if (!$host) {
+        if (empty($host)) {
             $host = $currentDomain;
         }
         if (strpos($host, '.') === false) {
@@ -770,7 +770,7 @@ class BcUtil
         if ($host == $mainHost) {
             return '';
         }
-        if (strpos($host, $mainHost) === false) {
+        if (!empty($mainHost) && strpos($host, $mainHost) === false) {
             return '';
         }
         $subDomain = str_replace($mainHost, '', $host);
@@ -785,11 +785,14 @@ class BcUtil
      *
      * @param $url URL
      * @return string
+     * @checked
+     * @notodo
+     * @unitTest
      */
     public static function getDomain($url)
     {
         $mainUrlInfo = parse_url($url);
-        $host = $mainUrlInfo['host'];
+        $host = $mainUrlInfo['host'] ?? '';
         if (!empty($mainUrlInfo['port'])) {
             $host .= ':' . $mainUrlInfo['port'];
         }
@@ -800,21 +803,23 @@ class BcUtil
      * メインとなるドメインを取得する
      *
      * @return string
+     * @checked
+     * @notodo
+     * @unitTest
      */
     public static function getMainDomain()
     {
         $mainDomain = Configure::read('BcEnv.mainDomain');
-        if ($mainDomain) {
-            return $mainDomain;
-        } else {
-            return BcUtil::getDomain(Configure::read('BcEnv.siteUrl'));
-        }
+        return !empty($mainDomain) ? $mainDomain : self::getDomain(Configure::read('BcEnv.siteUrl'));
     }
 
     /**
      * 現在のドメインを取得する
      *
      * @return string
+     * @checked
+     * @notodo
+     * @unitTest
      */
     public static function getCurrentDomain()
     {
