@@ -189,7 +189,8 @@ class PagesController extends AppController
 		$pagePath = implode('/', $path);
 		if (!$template) {
 		    $contentFolders = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
-			$template = $contentFolders->getParentTemplate($this->request->getParam('Content.id'), 'page');
+            // FIXME: サービスに移行したので確認する
+			// $template = $contentFolders->getParentTemplate($this->request->getParam('Content.id'), 'page');
 		}
 		$this->set('pagePath', $pagePath);
 

@@ -904,4 +904,50 @@ class BcUtil
         return false;
     }
 
+        /**
+     * サイズの単位を変換する
+     *
+     * @param string $size 変換前のサイズ
+     * @param string $outExt 変換後の単位
+     * @param string $inExt 変換元の単位
+     * @return int 変換後のサイズ
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function convertSize($size, $outExt = 'B', $inExt = null)
+    {
+        preg_match('/\A\d+(\.\d+)?/', $size, $num);
+        $sizeNum = (isset($num[0]))? $num[0] : 0;
+
+        $extArray = ['B', 'K', 'M', 'G', 'T'];
+        $extRegex = implode('|', $extArray);
+        if (empty($inExt)) {
+            $inExt = (preg_match("/($extRegex)B?\z/i", $size, $ext))? strtoupper($ext[1]) : 'B';
+        }
+        $inExt = (preg_match("/\A($extRegex)B?\z/i", $inExt, $ext))? strtoupper($ext[1]) : 'B';
+        $outExt = (preg_match("/\A($extRegex)B?\z/i", $outExt, $ext))? strtoupper($ext[1]) : 'B';
+
+        $index = array_search($inExt, $extArray) - array_search($outExt, $extArray);
+
+        $outSize = pow(1024, $index) * $sizeNum;
+        return $outSize;
+    }
+
+    /**
+     * 送信されたPOSTがpost_max_sizeを超えているかチェックする
+     *
+     * @return boolean
+     */
+    public static function isOverPostSize()
+    {
+        if (empty($_POST) &&
+            env('REQUEST_METHOD') === 'POST' &&
+            env('CONTENT_LENGTH') > self::convertSize(ini_get('post_max_size'))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

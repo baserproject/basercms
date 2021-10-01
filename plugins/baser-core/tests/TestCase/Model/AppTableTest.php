@@ -103,24 +103,6 @@ class AppTableTest extends BcTestCase
     }
 
     /**
-     * Test convertSize
-     *
-     * @return void
-     */
-    public function testConvertSize()
-    {
-        $this->assertEquals(1, $this->App->convertSize('1B'));
-        $this->assertEquals(1024, $this->App->convertSize('1K'));
-        $this->assertEquals(1048576, $this->App->convertSize('1M'));
-        $this->assertEquals(1073741824, $this->App->convertSize('1G'));
-        $this->assertEquals(1099511627776, $this->App->convertSize('1T'));
-        $this->assertEquals(1099511627776, $this->App->convertSize('1T', 'B'));
-        $this->assertEquals(1073741824, $this->App->convertSize('1T', 'K'));
-        $this->assertEquals(1073741824, $this->App->convertSize('1', 'K', 'T'));
-        $this->assertEquals(0, $this->App->convertSize(null));
-    }
-
-    /**
      * Test getMax
      *
      * @return void

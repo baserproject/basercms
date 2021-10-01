@@ -840,4 +840,22 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals("baserCMSサンプル", $content->title);
     }
 
+    /**
+     * Test convertSize
+     *
+     * @return void
+     */
+    public function testConvertSize()
+    {
+        $this->assertEquals(1, BcUtil::convertSize('1B'));
+        $this->assertEquals(1024, BcUtil::convertSize('1K'));
+        $this->assertEquals(1048576, BcUtil::convertSize('1M'));
+        $this->assertEquals(1073741824, BcUtil::convertSize('1G'));
+        $this->assertEquals(1099511627776, BcUtil::convertSize('1T'));
+        $this->assertEquals(1099511627776, BcUtil::convertSize('1T', 'B'));
+        $this->assertEquals(1073741824, BcUtil::convertSize('1T', 'K'));
+        $this->assertEquals(1073741824, BcUtil::convertSize('1', 'K', 'T'));
+        $this->assertEquals(0, BcUtil::convertSize(null));
+    }
+
 }

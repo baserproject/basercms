@@ -145,4 +145,56 @@ class ContentFolderServiceTest extends BcTestCase
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->Contents->get($content->id);
     }
+
+    /**
+     * Test update
+     */
+    public function testUpdate()
+    {
+        $data = [
+            'Content' => [
+                'id' => 1,
+                'name' => '',
+                'plugin' => 'BaserCore',
+                'type' => 'ContentFolder',
+                'entity_id' => 1,
+                'url' => '/',
+                'site_id' => 1,
+                'alias_id' => null,
+                'main_site_content_id' => null,
+                'parent_id' => null,
+                'lft' => 1,
+                'rght' => 34,
+                'level' => 0,
+                'title' => 'testUpdatebaserCMSサンプル',
+                'description' => '',
+                'eyecatch' => '',
+                'author_id' => 1,
+                'layout_template' => 'default',
+                'status' => true,
+                'publish_begin' => null,
+                'publish_end' => null,
+                'self_status' => true,
+                'self_publish_begin' => null,
+                'self_publish_end' => null,
+                'exclude_search' => false,
+                'created_date' => null,
+                'modified_date' => '2019-06-11 12:27:01',
+                'site_root' => true,
+                'deleted_date' => null,
+                'exclude_menu' => false,
+                'blank_link' => false,
+                'created' => '2016-07-29 18:02:53',
+                'modified' => '2020-09-14 21:10:41',
+            ],
+            'ContentFolder' => [
+                'id' => '1',
+                'folder_template' => 'フォルダーテンプレートtestUpdate',
+            ]
+        ];
+        $contentFolder = $this->ContentFolderService->get($data["ContentFolder"]["id"]);
+        $result = $this->ContentFolderService->update($contentFolder, $data);
+        $contentFolders = $this->ContentFolderService->getIndex();
+        $this->assertEquals($contentFolders->first()->name, $data['name']);
+    }
 }

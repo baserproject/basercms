@@ -192,7 +192,7 @@ class ContentsTable extends AppTable
         $validator
         ->add('eyecatch', [
             'fileCheck' => [
-                'rule' => ['fileCheck', $this->convertSize(ini_get('upload_max_filesize'))],
+                'rule' => ['fileCheck', BcUtil::convertSize(ini_get('upload_max_filesize'))],
                 'provider' => 'bc',
                 'message' => __d('baser', 'ファイルのアップロードに失敗しました。')
             ]

@@ -64,7 +64,7 @@ class BcContentsBehavior extends Behavior
      * @param Event $event
      * @param ArrayObject $data
      * @param ArrayObject $options
-     * @return void
+     * @return void|false
      * @checked
      * @unitTest
      */
@@ -72,14 +72,65 @@ class BcContentsBehavior extends Behavior
     {
         // TODO: validate falseできない
         $validateOptions = ['validate' => $options['validate'] ?? 'default'];
-        $contentEntity = $this->Contents->newEntity($data['content'], $validateOptions);
-        if ($contentEntity->hasErrors() && empty($data['content']['id'])) {
-            $event->stopPropagation();
-            $event->setResult(false);
-            return;
+        $content = $this->Contents->findById($data['Content']['id']);
+        // $contentFolder = $this->table->findById($data['ContentFolder']['id']);
+        if (empty($data['Content']['id']) || $content->isEmpty()) {
+            // 新規作成処理
+            $newContent = $this->Contents->newEntity($data['content'], $validateOptions);
+        } else {
+            // 編集処理
+            $newContent = $this->Contents->patchEntity($content->first(), $data['Content'], $validateOptions);
+            // $newContentFolder = $this->table->patchEntity($contentFolder->first(), $data['ContentFolder'], $validateOptions);
+            $data['content'] = $newContent;
+            unset($data['Content']);
+            // unset($data['ContentFolder']);
+            // $event->setData('content', $newContent);
         }
         $this->Contents->beforeMarshal($event, $data, $options);
     }
+
+        /**
+     * BeforeMarshal→afterMarshal
+     *
+     * Content のバリデーションを実行し、エラーがある場合は中止する
+     * @param Event $event
+     * @param ArrayObject $data
+     * @param ArrayObject $options
+     * @return void|false
+     */
+    public function afterMarshal(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        $a = $event;
+    }
+
+    /**
+     * beforeSave
+     *
+     * @param  EventInterface $event
+     * @param  EntityInterface $entity
+     * @return void
+     */
+    public function beforeSave(EventInterface $event, EntityInterface $entity)
+    {
+        $a = 0;
+        if ($event->getData('content')->hasErrors() && empty($event->getData('content.id'))) {
+            return false;
+        }
+        // $content = $this->ContentFolders->Contents->patchEntity($target->content, $postData['Content']);
+        // $entities = [
+        //     'Content' => $content,
+        //     'ContentFolder' => $contentFolder
+        // ];
+        // try {
+        //     if ($this->ContentFolders->save($contentFolder) && $this->ContentFolders->Contents->save($content)) {
+        //         return $entities;
+        //     }
+        // } catch (\Exception $e) {
+        //     return false;
+        // }
+        // return ($result = $this->ContentFolders->save($target))? $result : $contentFolder;
+    }
+
     /**
      * After save
      *

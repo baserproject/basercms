@@ -28,9 +28,11 @@ use BaserCore\Utility\BcUtil;
  */
 
 // TODO: ucmitz ContentFolderなどからどのようにContentエンティティを毎回取得するか考える
-$entityName = Inflector::variable(Inflector::classify($this->getName()));
+${$entityName} = Inflector::variable(Inflector::classify($this->getName()));
+$associatedName = ${$entityName};
+$contentAssociated = ${$associatedName};
 if (empty($content)) {
-  $content = ${$entityName}->content;
+  $content = ${${$entityName}}->content;
   $site = $content->site;
 }
 $options = [];
@@ -72,7 +74,7 @@ $isOmitViewAction = $this->BcContents->getConfig('items')[$content->type]['omitV
 if ($site->use_subdomain) {
   $contentsName = '';
   if (!$content->site_root) {
-    $contentsName = $this->BcAdminForm->value('Content.name');
+    $contentsName = $this->BcAdminForm->value($associatedName . '.content.name');
     if (!$isOmitViewAction && $content->url !== '/') {
       $contentsName .= '/';
     }
@@ -81,7 +83,7 @@ if ($site->use_subdomain) {
   if ($this->request->getData('Site.same_main_url') && $content->site_root) {
     $contentsName = '';
   } else {
-    $contentsName = $this->BcAdminForm->value('Content.name');
+    $contentsName = $this->BcAdminForm->value($associatedName . '.content.name');
   }
   if (!$isOmitViewAction && $content->url !== '/' && $contentsName) {
     $contentsName .= '/';
@@ -96,18 +98,18 @@ $disableEdit = false;
 ?>
 
 
-<?php echo $this->BcAdminForm->hidden('Content.id') ?>
-<?php echo $this->BcAdminForm->hidden('Content.plugin') ?>
-<?php echo $this->BcAdminForm->hidden('Content.type') ?>
-<?php echo $this->BcAdminForm->hidden('Content.entity_id') ?>
-<?php echo $this->BcAdminForm->hidden('Content.url') ?>
-<?php echo $this->BcAdminForm->hidden('Content.alias_id') ?>
-<?php echo $this->BcAdminForm->hidden('Content.site_root') ?>
-<?php echo $this->BcAdminForm->hidden('Content.site_id') ?>
-<?php echo $this->BcAdminForm->hidden('Content.lft') ?>
-<?php echo $this->BcAdminForm->hidden('Content.rght') ?>
-<?php echo $this->BcAdminForm->hidden('Content.status') ?>
-<?php echo $this->BcAdminForm->hidden('Content.main_site_content_id') ?>
+<?php echo $this->BcAdminForm->hidden($associatedName . '.content.id') ?>
+<?php echo $this->BcAdminForm->hidden($associatedName . '.content.plugin') ?>
+<?php echo $this->BcAdminForm->hidden($associatedName . '.content.type') ?>
+<?php echo $this->BcAdminForm->hidden($associatedName . '.content.entity_id') ?>
+<?php echo $this->BcAdminForm->hidden($associatedName . '.content.url') ?>
+<?php echo $this->BcAdminForm->hidden($associatedName . '.content.alias_id') ?>
+<?php echo $this->BcAdminForm->hidden($associatedName . '.content.site_root') ?>
+<?php echo $this->BcAdminForm->hidden($associatedName . '.content.site_id') ?>
+<?php echo $this->BcAdminForm->hidden($associatedName . '.content.lft') ?>
+<?php echo $this->BcAdminForm->hidden($associatedName . '.content.rght') ?>
+<?php echo $this->BcAdminForm->hidden($associatedName . '.content.status') ?>
+<?php echo $this->BcAdminForm->hidden($associatedName . '.content.main_site_content_id') ?>
 
 
 <div class="bca-section bca-section__post-top">
@@ -155,7 +157,7 @@ $disableEdit = false;
     <tr>
       <th class="col-head bca-form-table__label">
         <?php echo $this->BcAdminForm->label('Content.title', __d('baser', 'タイトル')) ?>&nbsp;<span class="bca-label"
-                                                                                             data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+                                                                                            data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if (!$disableEdit): ?>
@@ -190,6 +192,8 @@ $disableEdit = false;
       <th
         class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label('Content.self_status', __d('baser', '公開日時')) ?></th>
       <td class="col-input bca-form-table__input">
+        <?php
+        /* NOTE: 一時的にコメントアウト
         <?php if (!$disableEdit): ?>
           <?php echo $this->BcAdminForm->control('Content.self_publish_begin', [
             'type' => 'dateTimePicker',
@@ -223,6 +227,8 @@ $disableEdit = false;
             <?php echo $this->BcTime->format($content->publish_end, 'YYYY/MM/DD H:i') ?>）
           </p>
         <?php endif ?>
+      */
+      ?>
       </td>
     </tr>
   </table>

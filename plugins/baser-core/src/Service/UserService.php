@@ -72,12 +72,12 @@ class UserService implements UserServiceInterface
     /**
      * ユーザーを取得する
      * @param int $id
-     * @return EntityInterface
+     * @return User
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function get($id): EntityInterface
+    public function get($id): User
     {
         return $this->Users->get($id, [
             'contain' => ['UserGroups'],
@@ -151,7 +151,7 @@ class UserService implements UserServiceInterface
      */
     public function delete($id)
     {
-        $user = $this->Users->get($id, ['contain' => ['UserGroups']]);
+        $user = $this->get($id);
         if ($user->isAdmin()) {
             $count = $this->Users
                 ->find('all', ['conditions' => ['UsersUserGroups.user_group_id' => Configure::read('BcApp.adminGroupId')]])
