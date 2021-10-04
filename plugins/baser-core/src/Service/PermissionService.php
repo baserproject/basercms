@@ -352,14 +352,18 @@ class PermissionService implements PermissionServiceInterface
         $permissions = array_merge($this->Permissions->getCurrentPermissions(), [$permission]);
         $this->Permissions->setCurrentPermissions($permissions);
     }
-    
+
     /**
      * 優先度を変更する
-     * 
+     *
      * @param int $id
      * @param int $offset
      * @param array $conditions
      * @return bool
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function changeSort(int $id, int $offset, array $conditions = []): bool
     {
@@ -390,7 +394,7 @@ class PermissionService implements PermissionServiceInterface
             return false;
         }
         $permissions = $result->toList();
-        
+
         //データをローテーション
         $currentNewValue = $permissions[$count - 1]->sort;
         for($i = $count - 1; $i > 0; $i--) {

@@ -44,7 +44,7 @@ class PermissionsController extends BcAdminAppController
 	 * beforeFilter
      *
 	 * @return void
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -274,12 +274,12 @@ class PermissionsController extends BcAdminAppController
         }
         return $this->redirect(['action' => 'index', $userGroupId]);
     }
-    
+
     /**
      * 一括処理
      *
      * @return void|Response
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -292,17 +292,16 @@ class PermissionsController extends BcAdminAppController
             'unpublish' => '無効化',
             'delete' => '削除',
         ];
-        
+
         $method = $this->request->getData('ListTool.batch');
         if (!isset($allowMethod[$method])) {
             return;
         }
-        
+
         $methodText = $allowMethod[$method];
-        
+
         foreach($this->request->getData('ListTool.batch_targets') as $id) {
             $permission = $permissionService->get($id);
-            $permissionService->$method($id);
             if ($permissionService->$method($id)) {
                 $this->BcMessage->setSuccess(
                     sprintf(__d('baser', 'プラグイン「%s」 を %sしました。'), $permission->name, $methodText),
@@ -313,28 +312,28 @@ class PermissionsController extends BcAdminAppController
         }
         return $this->response->withStringBody('true');
     }
-    
+
     /**
      * 並び替えを更新する [AJAX]
      *
      * @access    public
      * @param $userGroupId
      * @return void
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
      */
     public function update_sort(PermissionServiceInterface $permissionService, $userGroupId)
     {
-        
+
         $this->disableAutoRender();
-        
+
         if (!$this->request->getData()) {
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
             return;
         }
-        
+
         $conditions = [
             'user_group_id' => $userGroupId,
         ];
