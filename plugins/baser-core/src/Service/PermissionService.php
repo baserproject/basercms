@@ -128,7 +128,7 @@ class PermissionService implements PermissionServiceInterface
      */
     public function update(EntityInterface $target, array $data): EntityInterface
     {
-        $data = $this->autoFillRecord($data);
+        $target = $this->get($data['id']);
         $permission = $this->Permissions->patchEntity($target, $data);
         $this->Permissions->save($permission);
         return $permission;
@@ -255,7 +255,6 @@ class PermissionService implements PermissionServiceInterface
      * @param string $userGroupId
      * @return boolean
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function check($url, $userGroupId): bool
@@ -269,6 +268,7 @@ class PermissionService implements PermissionServiceInterface
             $url = preg_replace('/^\//is', '', $url);
         }
         $adminPrefix = BcUtil::getPrefix(true);
+        // TODO 管理画面のURLを変更した場合に対応する必要がある
         $url = preg_replace("/^{$adminPrefix}\//", 'baser/admin/', $url);
         // ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
         $allows = [
@@ -352,4 +352,60 @@ class PermissionService implements PermissionServiceInterface
         $permissions = array_merge($this->Permissions->getCurrentPermissions(), [$permission]);
         $this->Permissions->setCurrentPermissions($permissions);
     }
+
+    /**
+     * 優先度を変更する
+     *
+     * @param int $id
+     * @param int $offset
+     * @param array $conditions
+     * @return bool
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function changeSort(int $id, int $offset, array $conditions = []): bool
+    {
+        $offset = intval($offset);
+        if ($offset === 0) {
+            return true;
+        }
+
+        $current = $this->get($id);
+
+        // currentを含め変更するデータを取得
+        if ($offset > 0) { // DOWN
+            $order = ["sort"];
+            $conditions["sort >="] = $current->sort;
+        } else { // UP
+            $order = ["sort DESC"];
+            $conditions["sort <="] = $current->sort;
+        }
+
+        $result = $this->Permissions->find()
+            ->where($conditions)
+            ->order($order)
+            ->limit(abs($offset) + 1)
+            ->all();
+
+        $count = $result->count();
+        if (!$count) {
+            return false;
+        }
+        $permissions = $result->toList();
+
+        //データをローテーション
+        $currentNewValue = $permissions[$count - 1]->sort;
+        for($i = $count - 1; $i > 0; $i--) {
+            $permissions[$i]->sort = $permissions[$i - 1]->sort;
+        }
+        $permissions[0]->sort = $currentNewValue;
+        if (!$this->Permissions->saveMany($permissions)) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

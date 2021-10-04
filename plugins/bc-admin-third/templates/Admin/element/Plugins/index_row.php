@@ -32,7 +32,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
 ?>
 
 
-<tr id="Row<?php echo $count ?>" <?php echo $class; ?>>
+<tr id="Row<?= h($count) ?>" <?= h($class); ?>>
   <td class="row-tools bca-table-listup__tbody-td" nowrap>
     <?php if ($this->BcBaser->isAdminUser()): ?>
       <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $plugin->id, [

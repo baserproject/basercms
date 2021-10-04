@@ -35,6 +35,7 @@ class PermissionsControllerTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Permissions',
         'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Sites',
         'plugin.BaserCore.Dblogs',
     ];
 
@@ -44,8 +45,8 @@ class PermissionsControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $request = $this->getRequest();
-        $this->loginAdmin($request);
+        $request = $this->getRequest('/baser/admin/baser-core/users/');
+        $request = $this->loginAdmin($request);
         $this->PermissionsController = new PermissionsController($request);
     }
 
@@ -61,22 +62,19 @@ class PermissionsControllerTest extends BcTestCase
     /**
      * beforeFilter
      */
-    public function testInitialize()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // $this->assertNotEmpty($this->PermissionsController->BcAuth);
-    }
-
-    /**
-     * beforeFilter
-     */
     public function testBeforeFilter()
     {
         $event = new Event('Controller.beforeFilter', $this->PermissionsController);
+        
         $this->PermissionsController->beforeFilter($event);
         $this->assertNotEmpty($this->PermissionsController->Permissions);
         $this->assertNotEmpty($this->PermissionsController->viewBuilder()->getHelpers('BcTime'));
-
+        
+        $unLockActions = $this->PermissionsController->Security->getConfig("unlockedActions");
+        $this->assertEquals($unLockActions, [
+            0 => 'update_sort',
+            1 => 'batch',
+        ]);
     }
 
     /**
@@ -160,14 +158,6 @@ class PermissionsControllerTest extends BcTestCase
     }
 
     /**
-     * 並び替えを更新する [AJAX]
-     */
-    public function testAdmin_ajax_update_sort()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * [ADMIN] データコピー（AJAX）
      */
     public function testCopy()
@@ -224,6 +214,103 @@ class PermissionsControllerTest extends BcTestCase
         $permission = $permissions->find()->where(['id' => $permissionId])->last();
         $this->assertTrue($permission->status);
     }
+    
+    /**
+     * 一括処理
+     *
+     */
+    public function testBatch()
+    {
+        $this->enableCsrfToken();
+        $permissions = $this->getTableLocator()->get('Permissions');
+        
+        // 空データ送信
+        $this->post('/baser/admin/baser-core/permissions/batch', []);
+        $this->assertResponseEmpty();
+        
+        // unpublish
+        $data = [
+            'ListTool' => [
+                'batch' => 'unpublish',
+                'batch_targets' => [1],
+            ]
+        ];
+        $this->post('/baser/admin/baser-core/permissions/batch', $data);
+        $this->assertResponseNotEmpty();
+        
+        $permission = $permissions->find()->where(['id' => 1])->last();
+        $this->assertFalse($permission->status);
+       
+        // publish
+        $data = [
+            'ListTool' => [
+                'batch' => 'publish',
+                'batch_targets' => [1],
+            ]
+        ];
+        $this->post('/baser/admin/baser-core/permissions/batch', $data);
+        $this->assertResponseNotEmpty();
+        
+        $permission = $permissions->find()->where(['id' => 1])->last();
+        $this->assertTrue($permission->status);
+        
+        // delete
+        $data = [
+            'ListTool' => [
+                'batch' => 'delete',
+                'batch_targets' => [1],
+            ]
+        ];
+        $this->post('/baser/admin/baser-core/permissions/batch', $data);
+        $this->assertResponseNotEmpty();
+        
+        $permission = $permissions->find()->where(['id' => 1])->last();
+        $this->assertNull($permission);
+    }
+    
+    /**
+     * 表示順変更
+     */
+    public function testUpdate_sort()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->post('/baser/admin/baser-core/permissions/update_sort/2');
+        $this->assertResponseFailure();
+        
+        
+        $data = [
+            'Sort' => [
+                'id' => 1,
+                'offset' => 2
+            ]
+        ];
+        $permissions = $this->getTableLocator()->get('Permissions');
+        $permissionList = $permissions
+            ->find()
+            ->order(['sort' => 'ASC'])
+            ->select('id')
+            ->limit(3)
+            ->all();
+        $beforeOrderId = [];
+        foreach($permissionList as $permission) {
+            $beforeOrderId[] = $permission->id;
+        }
+        $this->post('/baser/admin/baser-core/permissions/update_sort/2', $data);
+        $permissionList = $permissions
+            ->find()
+            ->order(['sort' => 'ASC'])
+            ->select('id')
+            ->limit(3)
+            ->all();
+        
+        $afterOrderId = [];
+        foreach($permissionList as $permission) {
+            $afterOrderId[] = $permission->id;
+        }
+        $this->assertNotEquals($beforeOrderId, $afterOrderId);
+    }
+    
 
 
 }

@@ -24,7 +24,8 @@ use BaserCore\View\BcAdminAppView;
 <?php else: ?>
   <?php $class = ' class="publish sortable"'; ?>
 <?php endif; ?>
-<tr<?php echo $class; ?>>
+
+<tr id="Row<?php echo $count ?>" <?php echo $class; ?>>
   <td class="row-tools bca-table-listup__tbody-td ">
     <?php if ($this->BcBaser->isAdminUser()): ?>
       <?php echo $this->BcAdminForm->control('ListTool.batch_targets.' . $data->id, ['type' => 'checkbox', 'label' => '<span class="bca-visually-hidden">' . __d('baser', 'チェックする') . '</span>', 'class' => 'batch-targets bca-checkbox__input', 'value' => $data->id, 'escape' => false]) ?>

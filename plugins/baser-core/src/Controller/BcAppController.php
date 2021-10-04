@@ -1569,13 +1569,13 @@ class BcAppController extends AppController
      */
     public function ajaxError($errorNo = 500, $message = '')
     {
-        header('HTTP/1.1 ' . $errorNo);
+        $this->response = $this->response->withStatus($errorNo);
         if (!$message) {
-            exit;
+            return;
         }
 
         if (!is_array($message)) {
-            exit($message);
+            return;
         }
 
         $aryMessage = [];
@@ -1586,7 +1586,8 @@ class BcAppController extends AppController
                 $aryMessage[] = $value;
             }
         }
-        exit(implode('<br />', $aryMessage));
+        echo implode('<br />', $aryMessage);
+        return;
     }
 
     /**

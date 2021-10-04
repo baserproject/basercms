@@ -20,13 +20,20 @@ $this->BcListTable->setColumnNumber(6);
 
 
 <div class="bca-data-list__top">
-  <!-- 一括処理 -->
-  <div class="bca-action-table-listup">
-    <?php if ($this->BcBaser->isAdminUser()): ?>
-      <?php echo $this->BcAdminForm->control('ListTool.batch', ['type' => 'select', 'options' => ['publish' => __d('baser', '有効'), 'unpublish' => __d('baser', '無効'), 'del' => __d('baser', '削除')], 'empty' => __d('baser', '一括処理'), 'data-bca-select-size' => 'lg']) ?>
-      <?php echo $this->BcForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
-    <?php endif ?>
-  </div>
+  <?php if ($this->BcBaser->isAdminUser()): ?>
+    <div>
+      <?php echo $this->BcAdminForm->control('ListTool.batch', [
+        'type' => 'select',
+        'options' => [
+          'unpublish' => __d('baser', '無効'),
+          'publish' => __d('baser', '有効'),
+          'delete' => __d('baser', '削除'),
+        ], 
+        'empty' => __d('baser', '一括処理')
+      ]) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
+    </div>
+  <?php endif ?>
 </div>
 
 
@@ -37,14 +44,10 @@ $this->BcListTable->setColumnNumber(6);
       <?php if ($this->BcBaser->isAdminUser()): ?>
         <?php echo $this->BcAdminForm->control('ListTool.checkall', ['type' => 'checkbox', 'label' => __d('baser', '一括選択')]) ?>
       <?php endif; ?>
-      <?php if (!$this->request->getQuery('sortmode')): ?>
-        <?php
-          $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', '並び替え'), ['sortmode' => 1, $currentUserGroup->id], ['escape' => false])
-          ?>
+      <?php if ($this->request->getQuery('sortmode')): ?>
+        <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', 'ノーマル'), [$currentUserGroup->id, '?' => ['sortmode' => 0]], ['escape' => false]) ?>
       <?php else: ?>
-        <?php
-          $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', 'ノーマル'), ['sortmode' => 0, $currentUserGroup->id], ['escape' => false])
-        ?>
+        <?php $this->BcBaser->link('<i class="bca-btn-icon-text" data-bca-btn-type="draggable"></i>' . __d('baser', '並び替え'), [$currentUserGroup->id, '?' => ['sortmode' => 1]], ['escape' => false]) ?>
       <?php endif ?>
     </th>
     <th class="bca-table-listup__thead-th">No</th>
@@ -59,8 +62,10 @@ $this->BcListTable->setColumnNumber(6);
   </thead>
   <tbody>
   <?php if (!empty($permissions)): ?>
+    <?php $count = 1 ?>
     <?php foreach($permissions as $permission): ?>
-      <?php $this->BcBaser->element('Permissions/index_row', ['data' => $permission]) ?>
+      <?php $this->BcBaser->element('Permissions/index_row', ['data' => $permission, 'count' => $count]) ?>
+      <?php $count++ ?>
     <?php endforeach; ?>
   <?php else: ?>
     <tr>
