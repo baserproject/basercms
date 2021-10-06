@@ -555,4 +555,17 @@ class ContentServiceTest extends BcTestCase
             ['/news/archives/1', '/sub', false, '/news/archives/1'],
         ];
     }
+
+    /**
+     * Test update
+     */
+    public function testUpdate()
+    {
+        $name = "testUpdate";
+        $newContent = $this->ContentService->get(4);
+        $newContent->name = $name;
+        $newContent->site->name = 'ucmitz'; // site側でエラーが出るため
+        $result = $this->ContentService->update($this->ContentService->get(4), $newContent->toArray());
+        $this->assertEquals($this->ContentService->get(4)->name, $name);
+    }
 }

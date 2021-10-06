@@ -731,4 +731,19 @@ class ContentService implements ContentServiceInterface
         return $url;
     }
 
+    /**
+     * コンテンツ情報を更新する
+     *
+     * @param  EntityInterface $content
+     * @param  array $contentData
+     * @return EntityInterface
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function update($content, $contentData)
+    {
+        $content = $this->Contents->patchEntity($content, $contentData);
+        return ($result = $this->Contents->save($content)) ? $result : $content;
+    }
 }

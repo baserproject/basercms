@@ -223,24 +223,25 @@ class ContentsTable extends AppTable
                 'message' => __d('baser', '公開終了日は、公開開始日より新しい日付で入力してください。')
             ]
         ]);
-        $validator
-        ->allowEmptyDateTime('created_date')
-        ->add('created_date', [
-            'checkDate' => [
-                'rule' => ['checkDate'],
-                'provider' => 'bc',
-                'message' => __d('baser', '作成日に不正な文字列が入っています。')
-            ]
-        ]);
-        $validator
-        ->allowEmptyDateTime('modified_date')
-        ->add('modified_date', [
-            'checkDate' => [
-                'rule' => ['checkDate'],
-                'provider' => 'bc',
-                'message' => __d('baser', '更新日に不正な文字列が入っています。')
-            ]
-        ]);
+        // TODO: frozen Time形式のルールに変更する必要があるので、一旦コメントアウト
+        // $validator
+        // ->allowEmptyDateTime('created_date')
+        // ->add('created_date', [
+        //     'checkDate' => [
+        //         'rule' => ['checkDate'],
+        //         'provider' => 'bc',
+        //         'message' => __d('baser', '作成日に不正な文字列が入っています。')
+        //     ]
+        // ]);
+        // $validator
+        // ->allowEmptyDateTime('modified_date')
+        // ->add('modified_date', [
+        //     'checkDate' => [
+        //         'rule' => ['checkDate'],
+        //         'provider' => 'bc',
+        //         'message' => __d('baser', '更新日に不正な文字列が入っています。')
+        //     ]
+        // ]);
         return $validator;
     }
 

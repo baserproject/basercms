@@ -227,4 +227,12 @@ interface ContentServiceInterface
      */
     public function getUrl($url, $full = false, $useSubDomain = false, $base = false);
 
+    /**
+     * コンテンツ情報を更新する
+     *
+     * @param  EntityInterface $content
+     * @param  array $contentData
+     * @return EntityInterface
+     */
+    public function update($content, $contentData);
 }
