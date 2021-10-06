@@ -180,23 +180,22 @@ class ContentsTable extends AppTable
             ]
         ]);
 
-        $validator
-        ->requirePresence('parent_id', true, __d('baser', 'このフィールドは必須です'));
+        // TODO: バリデーション追加検討中
+        // $validator
+        // ->requirePresence('parent_id', true, __d('baser', 'このフィールドは必須です'));
+        // $validator
+        // ->requirePresence('plugin', true, __d('baser', 'このフィールドは必須です'));
+        // $validator
+        // ->requirePresence('type', true, __d('baser', 'このフィールドは必須です'));
 
-        $validator
-        ->requirePresence('plugin', true, __d('baser', 'このフィールドは必須です'));
-
-        $validator
-        ->requirePresence('type', true, __d('baser', 'このフィールドは必須です'));
-
-        $validator
-        ->add('eyecatch', [
-            'fileCheck' => [
-                'rule' => ['fileCheck', BcUtil::convertSize(ini_get('upload_max_filesize'))],
-                'provider' => 'bc',
-                'message' => __d('baser', 'ファイルのアップロードに失敗しました。')
-            ]
-        ]);
+        // $validator
+        // ->add('eyecatch', [
+        //     'fileCheck' => [
+        //         'rule' => ['fileCheck', BcUtil::convertSize(ini_get('upload_max_filesize'))],
+        //         'provider' => 'bc',
+        //         'message' => __d('baser', 'ファイルのアップロードに失敗しました。')
+        //     ]
+        // ]);
         $validator
         ->allowEmptyDateTime('self_publish_begin')
         ->add('self_publish_begin', [

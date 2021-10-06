@@ -277,9 +277,18 @@ class ContentsControllerTest extends BcTestCase
     /**
      * コンテンツ編集
      */
-    public function testAdmin_edit()
+    public function testEdit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $id = 4;
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = [
+            'Content' => ['name' => 'testEdit', 'title' => 'testEdit'],
+        ];
+        $this->post('/baser/admin/baser-core/contents/edit/' . $id, $data);
+        $this->assertResponseSuccess();
+        $this->assertRedirect('/baser/admin/baser-core/contents/edit/' . $id);
+        $this->assertEquals('testEdit', $this->ContentService->get($id)->name);
     }
 
     /**

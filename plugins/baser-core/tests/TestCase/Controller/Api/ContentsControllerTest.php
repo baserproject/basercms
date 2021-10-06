@@ -181,4 +181,22 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEmpty($result->contents);
     }
+
+    /**
+     * Test edit method
+     *
+     * @return void
+     */
+    public function testEdit()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $contents = $this->getTableLocator()->get('Contents');
+        $data = $contents->get(4);
+        $data->name = 'TestEdit';
+        $this->post('/baser/api/baser-core/contents/edit/1.json?token=' . $this->accessToken, $data->toArray());
+        $this->assertResponseSuccess();
+        $query = $contents->find()->where(['name' => $data['name']]);
+        $this->assertEquals(1, $query->count());
+    }
 }

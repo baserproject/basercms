@@ -27,8 +27,6 @@ use BaserCore\Utility\BcUtil;
  * @var ContentFolder $contentFolder
  */
 
-// TODO: ucmitz ContentFolderなどからどのようにContentエンティティを毎回取得するか考える
-// NOTE: 共通箇所をBcAdminContentsComponentに移行
 $site = $content->site;
 $options = [];
 if ($this->getName() === 'ContentFolders') {
@@ -105,6 +103,7 @@ $disableEdit = false;
 <?php echo $this->BcAdminForm->hidden($contentPath . 'rght') ?>
 <?php echo $this->BcAdminForm->hidden($contentPath . 'status') ?>
 <?php echo $this->BcAdminForm->hidden($contentPath . 'main_site_content_id') ?>
+<?php echo $this->BcAdminForm->hidden($contentPath . 'publish_begin') ?>
 
 
 <div class="bca-section bca-section__post-top">
