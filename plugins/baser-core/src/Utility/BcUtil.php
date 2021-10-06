@@ -580,25 +580,6 @@ class BcUtil
     }
 
     /**
-     * extractOne
-     *
-     * @param  array $data
-     * @param   string $column
-     * @return mixed|false
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public static function extractOne($data, $column)
-    {
-        if ($column) {
-            $pulledGroup = array_column($data, $column);
-            return array_shift($pulledGroup);
-        }
-        return false;
-    }
-
-    /**
      * URL用に文字列を変換する
      *
      * できるだけ可読性を高める為、不要な記号は除外する

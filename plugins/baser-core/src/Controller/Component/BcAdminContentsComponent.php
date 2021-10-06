@@ -112,8 +112,8 @@ class BcAdminContentsComponent extends Component
             $content = $controller->viewBuilder()->getVar($entityName);
             $contentPath = Inflector::classify($entityName) . ".";
         } else {
-            $related = $controller->viewBuilder()->getVar($entityName);
-            $content = $related->content;
+            $associated = $controller->viewBuilder()->getVar($entityName);
+            $content = $associated->content;
             $contentPath = Inflector::classify($entityName) . ".content.";
         }
         $theme = $content->site->theme;
@@ -141,14 +141,14 @@ class BcAdminContentsComponent extends Component
         $controller->set('mainSiteDisplayName', $this->getSiteConfig('main_site_display_name'));
         $controller->set('mainSiteId', $content->site->main_site_id);
         $controller->set('relatedContents', $this->Sites->getRelatedContents($content->id));
-        $isRelated = false;
+        $related = false;
         if (($content->site->relate_main_site && $content->main_site_content_id && $content->alias_id) ||
             $content->site->relate_main_site && $content->main_site_content_id && $content->type == 'ContentFolder') {
-            $isRelated = true;
+            $related = true;
         }
         $disableEditContent = false;
 
-        if (!$entityName === "content") $related->content = $content;
+        if (!$entityName === "content") $associated->content = $content;
 
         if (!BcUtil::isAdminUser() || ($content->site->relate_main_site && $content->main_site_content_id &&
                 ($content->alias_id || $content->type == 'ContentFolder'))) {
@@ -159,7 +159,7 @@ class BcAdminContentsComponent extends Component
         $controller->set('contentPath', $contentPath);
         $controller->set('currentSiteId', $content->site_id);
         $controller->set('disableEditContent', $disableEditContent);
-        $controller->set('related', $isRelated);
+        $controller->set('related', $related);
     }
 
     /**

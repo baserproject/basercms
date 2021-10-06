@@ -134,33 +134,20 @@ class ContentFolderService implements ContentFolderServiceInterface
     }
 
     /**
-     * コンテンツホルダー情報を更新する
+     * コンテンツフォルダー情報を更新する
      * @param EntityInterface $target
-     * @param array $postData
+     * @param array $contentFolderData
+     * @param array $options
      * @return EntityInterface
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function update(EntityInterface $target, array $postData)
+    public function update(EntityInterface $target, array $contentFolderData, $options = [])
     {
-        // $contentFolder = $this->ContentFolders->patchEntity($target, $postData);
-        // return ($result = $this->ContentFolders->save($contentFolder))? $result : $contentFolder;
-        // BcContentsBehaviorを使わない場合
-        $contentFolder = $this->ContentFolders->patchEntity($target, $postData, $postData['ContentFolder']);
-        $content = $this->ContentFolders->Contents->patchEntity($target->content, $postData['Content']);
-        $entities = [
-            'Content' => $content,
-            'ContentFolder' => $contentFolder
-        ];
-        try {
-            if ($this->ContentFolders->save($contentFolder) && $this->ContentFolders->Contents->save($content)) {
-                return $entities;
-            }
-        } catch (\Exception $e) {
-            return false;
-        }
-        return ($result = $this->ContentFolders->save($target))? $result : $entities;
+        $options = array_merge(['associated' => ['Contents' => ['validate' => 'default']]], $options);
+        $contentFolder = $this->ContentFolders->patchEntity($target, $contentFolderData, $options);
+        return ($result = $this->ContentFolders->save($contentFolder))? $result : $contentFolder;
     }
 
     /**

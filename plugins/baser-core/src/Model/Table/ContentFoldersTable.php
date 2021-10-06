@@ -162,10 +162,10 @@ class ContentFoldersTable extends AppTable
      */
     private function setBeforeRecord($id)
     {
-        $record = $this->find('first', ['fields' => ['Content.url', 'Content.status'], 'conditions' => ['ContentFolder.id' => $id], 'recursive' => 0]);
-        if ($record['Content']['url']) {
-            $this->beforeUrl = $record['Content']['url'];
-            $this->beforeStatus = $record['Content']['status'];
+        $record = $this->get($id, ['contain' => ['Contents']]);
+        if ($record->content->url) {
+            $this->beforeUrl = $record->content->url;
+            $this->beforeStatus = $record->content->status;
         }
     }
 

@@ -16,8 +16,8 @@
 ?>
 
 
-<?php echo $this->BcAdminForm->create() ?>
+<?php echo $this->BcAdminForm->create($content) ?>
 <div class="submit">
-  <?php echo $this->BcForm->submit(__d('baser', '保存'), ['class' => 'button bca-btn', 'data-bca-btn-type' => 'save', 'div' => false]) ?>
+  <?php echo $this->BcAdminForm->submit(__d('baser', '保存'), ['class' => 'button bca-btn', 'data-bca-btn-type' => 'save', 'div' => false]) ?>
 </div>
 <?php echo $this->BcAdminForm->end() ?>

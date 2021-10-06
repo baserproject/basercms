@@ -187,8 +187,6 @@ $disableEdit = false;
       <th
         class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label($contentPath . 'self_status', __d('baser', '公開日時')) ?></th>
       <td class="col-input bca-form-table__input">
-        <?php
-        /* NOTE: 一時的にコメントアウト
         <?php if (!$disableEdit): ?>
           <?php echo $this->BcAdminForm->control($contentPath . 'self_publish_begin', [
             'type' => 'dateTimePicker',
@@ -222,8 +220,6 @@ $disableEdit = false;
             <?php echo $this->BcTime->format($content->publish_end, 'YYYY/MM/DD H:i') ?>）
           </p>
         <?php endif ?>
-      */
-      ?>
       </td>
     </tr>
   </table>

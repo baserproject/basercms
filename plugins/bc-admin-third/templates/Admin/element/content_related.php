@@ -16,7 +16,6 @@ use BaserCore\Utility\BcUtil;
  * @var array $sites サイトリスト
  * @var int $currentSiteId 現在のサイトID
  */
-$content = BcUtil::extractOne($this->request->getData(), 'content');
 $pureUrl = $this->BcContents->getPureUrl($content->url, $content->site_id);
 ?>
 

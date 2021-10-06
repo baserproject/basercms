@@ -56,12 +56,13 @@ interface ContentFolderServiceInterface
     public function delete($id);
 
     /**
-     * コンテンツホルダー情報を更新する
+     * コンテンツフォルダー情報を更新する
      * @param EntityInterface $target
-     * @param array $postData
+     * @param array $contentFolderData
+     * @param array $options
      * @return EntityInterface
      */
-    public function update(EntityInterface $target, array $postData);
+    public function update(EntityInterface $target, array $contentFolderData, $options = []);
 
     /**
      * フォルダのテンプレートリストを取得する
