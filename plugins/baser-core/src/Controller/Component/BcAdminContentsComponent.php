@@ -61,6 +61,7 @@ class BcAdminContentsComponent extends Component
     {
         parent::initialize($config);
         $this->ContentService = $this->getService(ContentServiceInterface::class);
+        $this->Sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $this->setupAdmin();
     }
 
@@ -99,16 +100,24 @@ class BcAdminContentsComponent extends Component
 
     /**
      * コンテンツ保存フォームを設定する
-     *
+     * @todo humuhimi contentからの場合とそれ以外の場合に分ける
      * @return void
      */
     public function settingForm()
     {
         $controller = $this->getController();
         $entityName = Inflector::variable(Inflector::classify($controller->getName()));
-        $entity = $controller->viewBuilder()->getVar($entityName);
-        $content = $entity->content;
+
+        if ($entityName === "content") {
+            $content = $controller->viewBuilder()->getVar($entityName);
+            $contentPath = Inflector::classify($entityName) . ".";
+        } else {
+            $related = $controller->viewBuilder()->getVar($entityName);
+            $content = $related->content;
+            $contentPath = Inflector::classify($entityName) . ".content.";
+        }
         $theme = $content->site->theme;
+
         $templates = array_merge(
             BcUtil::getTemplateList('Layouts', '', $theme),
             BcUtil::getTemplateList('Layouts', $controller->getPlugin(), $theme)
@@ -126,26 +135,51 @@ class BcAdminContentsComponent extends Component
         if (Configure::read('BcApp.autoUpdateContentCreatedDate')) {
             $content->modified_date = date('Y-m-d H:i:s');
         }
-        $sitesTable = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $siteList = $sitesTable->find('list', ['fields' => ['id', 'display_name']]);
+
+        $siteList = $this->Sites->find('list', ['fields' => ['id', 'display_name']]);
         $controller->set('sites', $siteList);
         $controller->set('mainSiteDisplayName', $this->getSiteConfig('main_site_display_name'));
         $controller->set('mainSiteId', $content->site->main_site_id);
-        $controller->set('relatedContents', $sitesTable->getRelatedContents($content->id));
-        $related = false;
+        $controller->set('relatedContents', $this->Sites->getRelatedContents($content->id));
+        $isRelated = false;
         if (($content->site->relate_main_site && $content->main_site_content_id && $content->alias_id) ||
             $content->site->relate_main_site && $content->main_site_content_id && $content->type == 'ContentFolder') {
-            $related = true;
+            $isRelated = true;
         }
         $disableEditContent = false;
-        $entity->content = $content;
+
+        if (!$entityName === "content") $related->content = $content;
+
         if (!BcUtil::isAdminUser() || ($content->site->relate_main_site && $content->main_site_content_id &&
                 ($content->alias_id || $content->type == 'ContentFolder'))) {
             $disableEditContent = true;
         }
+
+        $controller->set('content', $content);
+        $controller->set('contentPath', $contentPath);
         $controller->set('currentSiteId', $content->site_id);
         $controller->set('disableEditContent', $disableEditContent);
-        $controller->set('related', $related);
+        $controller->set('related', $isRelated);
+    }
+
+    /**
+     * コンテンツからアクセスが来た場合のフォーム処理準備
+     *
+     * @return void
+     */
+    protected function prepareContent()
+    {
+
+    }
+
+    /**
+     * コンテンツ以外からアクセスが来た場合のフォーム処理準備
+     *
+     * @return void
+     */
+    protected function prepareRelated()
+    {
+
     }
 
 }

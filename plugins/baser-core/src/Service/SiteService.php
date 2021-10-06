@@ -195,6 +195,20 @@ class SiteService implements SiteServiceInterface
         return $this->Sites->findByUrl($url);
     }
 
+    /**
+     * IDよりサイトを取得する
+     *
+     * @param string $id
+     * @return Query
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function findById($id): Query
+    {
+        return $this->Sites->findById($id);
+    }
+
 
     /**
      * 言語リストを取得

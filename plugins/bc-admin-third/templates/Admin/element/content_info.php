@@ -49,16 +49,16 @@
             <span><?php echo __d('baser', 'サイト') ?></span>：<?php echo h($this->BcText->noValue($this->request->getData('Site.display_name'), $mainSiteDisplayName)) ?>
           </li>
           <li class="bca-list__item"><span><?php echo __d('baser', 'タイプ') ?></span>：
-            <?php if (!$this->BcAdminForm->value('Content.alias_id')): ?>
-              <?php if (!empty($this->BcContents->getConfig('items')[$this->BcAdminForm->value('Content.type')])): ?>
-                <?php echo h($this->BcContents->getConfig('items')[$this->BcAdminForm->value('Content.type')]['title']) ?>
+            <?php if (!$this->BcAdminForm->value($contentPath . 'alias_id')): ?>
+              <?php if (!empty($this->BcContents->getConfig('items')[$this->BcAdminForm->value($contentPath . 'type')])): ?>
+                <?php echo h($this->BcContents->getConfig('items')[$this->BcAdminForm->value($contentPath . 'type')]['title']) ?>
               <?php else: ?>
                 <?php echo __d('baser', 'デフォルト') ?>
               <?php endif ?>
             <?php else: ?>
               <?php echo __d('baser', 'エイリアス') ?>
             <?php endif ?>
-            <?php if (empty($this->BcContents->getConfig('items')[$this->BcAdminForm->value('Content.type')])): ?>
+            <?php if (empty($this->BcContents->getConfig('items')[$this->BcAdminForm->value($contentPath . 'type')])): ?>
               <p
                 class="bca-notice"><?php echo __d('baser', 'タイプ「デフォルト」は、プラグインの無効処理等が理由となり、タイプとの関連付けが外れてしまっている状態です。<br>プラグインがまだ存在する場合は有効にしてください。') ?></p>
             <?php endif ?>

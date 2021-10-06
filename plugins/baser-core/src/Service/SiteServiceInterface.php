@@ -88,6 +88,14 @@ interface SiteServiceInterface
     public function findByUrl($url): EntityInterface;
 
     /**
+     * IDよりサイトを取得する
+     *
+     * @param string $id
+     * @return Query
+     */
+    public function findById($id): Query;
+
+    /**
      * サイト全体の設定値を取得する
      * @param string $name
      * @return mixed

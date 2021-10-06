@@ -306,16 +306,20 @@ class ContentsController extends BcAdminAppController
     /**
      * コンテンツ編集
      *
+     * @param  int $id
+     * @param  ContentServiceInterface $contentService
+     * @param  SiteServiceInterface $siteService
      * @return void
      */
-    public function admin_edit()
+    public function edit($id, ContentServiceInterface $contentService, SiteServiceInterface $siteService)
     {
         $this->setTitle(__d('baser', 'コンテンツ編集'));
-        if (!$this->request->data) {
-            $this->request->data = $this->Content->find('first', ['conditions' => ['Content.id' => $this->request->params['named']['content_id']]]);
-            if (!$this->request->data) {
+        if (!$this->request->getData()) {
+            $content = $contentService->get($id);
+            $this->request = $this->request->withData("Content", $content);
+            if (!$this->request->getData()) {
                 $this->BcMessage->setError(__d('baser', '無効な処理です。'));
-                $this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+                return $this->redirect(['action' => 'index']);
             }
         } else {
             if ($this->Content->save($this->request->data)) {
@@ -333,9 +337,9 @@ class ContentsController extends BcAdminAppController
                 $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
             }
         }
-        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $site = $sites->findById($this->request->getData('Content.site_id'))->first();
-        $this->set('publishLink', $this->Content->getUrl($this->request->getData('Content.url'), true, $site->useSubDomain));
+        $site = $siteService->findById($this->request->getData('Content.site_id'))->first();
+        $this->set('content', $content);
+        $this->set('publishLink', $contentService->getUrl($this->request->getData('Content.url'), true, $site->useSubDomain));
     }
 
     /**

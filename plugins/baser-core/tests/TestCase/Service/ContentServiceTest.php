@@ -11,6 +11,8 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
+use Cake\Core\Configure;
+use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentService;
 use BaserCore\Service\ContentFolderService;
@@ -437,4 +439,120 @@ class ContentServiceTest extends BcTestCase
         $this->assertEquals('default', $result);
     }
 
+        /**
+     * コンテンツIDよりURLを取得する
+     *
+     * @param int $id コンテンツID
+     * @param bool $full http からのフルのURLかどうか
+     * @param string $expects 期待するURL
+     * @dataProvider getUrlByIdDataProvider
+     */
+    public function testGetUrlById($id, $full, $expects)
+    {
+        $siteUrl = Configure::read('BcEnv.siteUrl');
+        Configure::write('BcEnv.siteUrl', 'http://main.com');
+        $result = $this->ContentService->getUrlById($id, $full);
+        $this->assertEquals($expects, $result);
+        Configure::write('BcEnv.siteUrl', $siteUrl);
+    }
+
+    public function getUrlByIdDataProvider()
+    {
+        return [
+            // ノーマルURL
+            [1, false, '/'],
+            [1, true, 'http://main.com/'],    // フルURL
+            [999, false, ''],                // 存在しないid
+            ['あ', false, '']                // 異常系
+        ];
+    }
+
+    /**
+     * testGetUrl
+     *
+     * $param string $host ホスト名
+     * $param string $ua ユーザーエージェント名
+     * @param string $url 変換前URL
+     * @param boolean $full フルURLで出力するかどうか
+     * @param boolean $useSubDomain サブドメインを利用するかどうか
+     * @param string $expects 期待するURL
+     * @dataProvider getUrlDataProvider
+     */
+    public function testGetUrl($host, $ua, $url, $full, $useSubDomain, $expects)
+    {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $siteUrl = Configure::read('BcEnv.siteUrl');
+        Configure::write('BcEnv.siteUrl', 'http://main.com');
+        if ($ua) {
+            $_SERVER['HTTP_USER_AGENT'] = $ua;
+        }
+        if ($host) {
+            Configure::write('BcEnv.host', $host);
+        }
+        Router::setRequestInfo($this->_getRequest('/m/'));
+        $result = $this->ContentService->getUrl($url, $full, $useSubDomain);
+        $this->assertEquals($result, $expects);
+        Configure::write('BcEnv.siteUrl', $siteUrl);
+    }
+
+    public function getUrlDataProvider()
+    {
+        return [
+            // ノーマルURL
+            ['main.com', '', '/', false, false, '/'],
+            ['main.com', '', '/index', false, false, '/'],
+            ['main.com', '', '/news/archives/1', false, false, '/news/archives/1'],
+            ['main.com', 'SoftBank', '/m/news/archives/1', false, false, '/m/news/archives/1'],
+            ['main.com', 'iPhone', '/news/archives/1', false, false, '/news/archives/1'],    // 同一URL
+            ['sub.main.com', '', '/sub/', false, true, '/'],
+            ['sub.main.com', '', '/sub/index', false, true, '/'],
+            ['sub.main.com', '', '/sub/news/archives/1', false, true, '/news/archives/1'],
+            ['another.com', '', '/another.com/', false, true, '/'],
+            ['another.com', '', '/another.com/index', false, true, '/'],
+            ['another.com', '', '/another.com/news/archives/1', false, true, '/news/archives/1'],
+            ['another.com', 'iPhone', '/another.com/s/news/archives/1', false, true, '/news/archives/1'],
+            // フルURL
+            ['main.com', '', '/', true, false, 'http://main.com/'],
+            ['main.com', '', '/index', true, false, 'http://main.com/'],
+            ['main.com', '', '/news/archives/1', true, false, 'http://main.com/news/archives/1'],
+            ['main.com', 'SoftBank', '/m/news/archives/1', true, false, 'http://main.com/m/news/archives/1'],
+            ['main.com', 'iPhone', '/news/archives/1', true, false, 'http://main.com/news/archives/1'],    // 同一URL
+            ['sub.main.com', '', '/sub/', true, true, 'http://sub.main.com/'],
+            ['sub.main.com', '', '/sub/index', true, true, 'http://sub.main.com/'],
+            ['sub.main.com', '', '/sub/news/archives/1', true, true, 'http://sub.main.com/news/archives/1'],
+            ['another.com', '', '/another.com/', true, true, 'http://another.com/'],
+            ['another.com', '', '/another.com/index', true, true, 'http://another.com/'],
+            ['another.com', '', '/another.com/news/archives/1', true, true, 'http://another.com/news/archives/1'],
+            ['another.com', 'iPhone', '/another.com/s/news/archives/1', true, true, 'http://another.com/news/archives/1'],
+        ];
+    }
+
+    /**
+     * testGetUrl の base テスト
+     *
+     * @param $url
+     * @param $base
+     * @param $expects
+     * @dataProvider getUrlBaseDataProvider
+     */
+    public function testGetUrlBase($url, $base, $useBase, $expects)
+    {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        Configure::write('app.baseUrl', $base);
+        $request = $this->_getRequest('/');
+        $request->base = $base;
+        Router::setRequestInfo($request);
+        $result = $this->ContentService->getUrl($url, false, false, $useBase);
+        $this->assertEquals($result, $expects);
+    }
+
+    public function getUrlBaseDataProvider()
+    {
+        return [
+            ['/news/archives/1', '', true, '/news/archives/1'],
+            ['/news/archives/1', '', false, '/news/archives/1'],
+            ['/news/archives/1', '/sub', true, '/sub/news/archives/1'],
+            ['/news/archives/1', '/sub', false, '/news/archives/1'],
+        ];
+    }
 }
