@@ -179,23 +179,20 @@ class ContentsTable extends AppTable
                 'message' => __d('baser', 'タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
             ]
         ]);
-
-        // TODO: バリデーション追加検討中
-        // $validator
-        // ->requirePresence('parent_id', true, __d('baser', 'このフィールドは必須です'));
-        // $validator
-        // ->requirePresence('plugin', true, __d('baser', 'このフィールドは必須です'));
-        // $validator
-        // ->requirePresence('type', true, __d('baser', 'このフィールドは必須です'));
-
-        // $validator
-        // ->add('eyecatch', [
-        //     'fileCheck' => [
-        //         'rule' => ['fileCheck', BcUtil::convertSize(ini_get('upload_max_filesize'))],
-        //         'provider' => 'bc',
-        //         'message' => __d('baser', 'ファイルのアップロードに失敗しました。')
-        //     ]
-        // ]);
+        $validator
+        ->requirePresence('parent_id', true, __d('baser', 'このフィールドは必須です'));
+        $validator
+        ->requirePresence('plugin', true, __d('baser', 'このフィールドは必須です'));
+        $validator
+        ->requirePresence('type', true, __d('baser', 'このフィールドは必須です'));
+        $validator
+        ->add('eyecatch', [
+            'fileCheck' => [
+                'rule' => ['fileCheck', BcUtil::convertSize(ini_get('upload_max_filesize'))],
+                'provider' => 'bc',
+                'message' => __d('baser', 'ファイルのアップロードに失敗しました。')
+            ]
+        ]);
         $validator
         ->allowEmptyDateTime('self_publish_begin')
         ->add('self_publish_begin', [
@@ -222,25 +219,24 @@ class ContentsTable extends AppTable
                 'message' => __d('baser', '公開終了日は、公開開始日より新しい日付で入力してください。')
             ]
         ]);
-        // TODO: frozen Time形式のルールに変更する必要があるので、一旦コメントアウト
-        // $validator
-        // ->allowEmptyDateTime('created_date')
-        // ->add('created_date', [
-        //     'checkDate' => [
-        //         'rule' => ['checkDate'],
-        //         'provider' => 'bc',
-        //         'message' => __d('baser', '作成日に不正な文字列が入っています。')
-        //     ]
-        // ]);
-        // $validator
-        // ->allowEmptyDateTime('modified_date')
-        // ->add('modified_date', [
-        //     'checkDate' => [
-        //         'rule' => ['checkDate'],
-        //         'provider' => 'bc',
-        //         'message' => __d('baser', '更新日に不正な文字列が入っています。')
-        //     ]
-        // ]);
+        $validator
+        ->allowEmptyDateTime('created_date')
+        ->add('created_date', [
+            'checkDate' => [
+                'rule' => ['checkDate'],
+                'provider' => 'bc',
+                'message' => __d('baser', '作成日に不正な文字列が入っています。')
+            ]
+        ]);
+        $validator
+        ->allowEmptyDateTime('modified_date')
+        ->add('modified_date', [
+            'checkDate' => [
+                'rule' => ['checkDate'],
+                'provider' => 'bc',
+                'message' => __d('baser', '更新日に不正な文字列が入っています。')
+            ]
+        ]);
         return $validator;
     }
 

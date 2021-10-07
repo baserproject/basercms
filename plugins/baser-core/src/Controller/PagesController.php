@@ -11,20 +11,23 @@
 
 namespace BaserCore\Controller;
 
-use BaserCore\Controller\Component\BcAdminContentsComponent;
-use BaserCore\Model\Entity\Page;
-use BaserCore\Model\Table\PagesTable;
+use Cake\Utility\Text;
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
-use Cake\Http\Exception\ForbiddenException;
-use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
-use Cake\Utility\Text;
-use Cake\View\Exception\MissingViewException;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
+use BaserCore\Model\Entity\Page;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Model\Table\PagesTable;
+use BaserCore\Utility\BcContainerTrait;
+use Cake\Http\Exception\NotFoundException;
+use BaserCore\Service\ContentFolderService;
+use Cake\Http\Exception\ForbiddenException;
+use Cake\View\Exception\MissingViewException;
+use BaserCore\Service\ContentFolderServiceInterface;
+use BaserCore\Controller\Component\BcAdminContentsComponent;
 
 /**
  * PagesController
@@ -33,6 +36,12 @@ use BaserCore\Annotation\Checked;
  */
 class PagesController extends AppController
 {
+
+    /**
+     * Trait
+     * NOTE: BcAppControllerにもあるので、移行時に取り除く
+     */
+    use BcContainerTrait;
 
 	/**
 	 * ヘルパー
@@ -188,9 +197,8 @@ class PagesController extends AppController
 		$template = $page->page_template;
 		$pagePath = implode('/', $path);
 		if (!$template) {
-		    $contentFolders = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
-            // FIXME: サービスに移行したので確認する
-			// $template = $contentFolders->getParentTemplate($this->request->getParam('Content.id'), 'page');
+            $contentFolderService = $this->getService(ContentFolderServiceInterface::class); // 一時措置
+			$template = $contentFolderService->getParentTemplate($this->request->getParam('Content.id'), 'page');
 		}
 		$this->set('pagePath', $pagePath);
 

@@ -71,7 +71,7 @@ class ContentsController extends BcApiController
                 $data = $this->paginate($contentService->getIndex($this->request->getQueryParams()));
                 break;
             case "trash":
-                $data = $this->paginate($contentService->getTrashIndex($this->request->getQueryParams(), 'threaded')->order(['content_id', 'lft']));
+                $data = $this->paginate($contentService->getTrashIndex($this->request->getQueryParams(), 'threaded')->order(['site_id', 'lft']));
                 break;
             case "tree":
                 $data = $this->paginate($contentService->getTreeIndex($this->request->getQueryParams()));

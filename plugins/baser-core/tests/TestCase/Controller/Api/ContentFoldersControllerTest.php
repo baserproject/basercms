@@ -134,13 +134,16 @@ class ContentFoldersControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $data = $this->ContentFolderService->get($id = 3);
-        $data->folder_template = "testUpdate";
-        $data->content->name = "testEdit";
+        $data = $this->ContentFolderService->getIndex(['folder_template' => "testEdit"])->first();
+        $data->content->name = "contentFolderTestUpdate";
+        // TODO: FrozenTimeによルエラーを修正する
+        $data->content->created_date = null; // FrozenTimeによりエラーが出るため
+        $data->content->modified_date = null; // FrozenTimeによりエラーが出るため
+        $id = $data->id;
         $this->post("/baser/api/baser-core/content_folders/edit/${id}.json?token=". $this->accessToken, $data->toArray());
         $this->assertResponseSuccess();
         $query = $this->ContentFolderService->getIndex(['folder_template' => $data['folder_template']]);
         $this->assertEquals(1, $query->all()->count());
-        $this->assertEquals("testEdit", $query->all()->first()->content->name);
+        $this->assertEquals("contentFolderTestUpdate", $query->all()->first()->content->name);
     }
 }

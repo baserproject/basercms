@@ -159,11 +159,11 @@ class ContentServiceTest extends BcTestCase
         return [
             [[
                 'site_id' => 1,
-            ], 13],
+            ], 14],
             [[
                 'site_id' => 1,
                 'withTrash' => true,
-            ], 15],
+            ], 16],
             [[
                 'site_id' => 1,
                 'open' => '1',
@@ -172,7 +172,7 @@ class ContentServiceTest extends BcTestCase
                 'type' => 'ContentFolder',
                 'self_status' => '1',
                 'author_id' => '',
-            ], 5],
+            ], 6],
             [[
                 'site_id' => 1,
                 'open' => '1',
@@ -190,6 +190,7 @@ class ContentServiceTest extends BcTestCase
      */
     public function testGetIndex(): void
     {
+        $a = $this->ContentService->getIndex(['site_id' => 1])->toArray();
         $request = $this->getRequest('/');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
         $this->assertEquals('', $contents->first()->name);
@@ -205,15 +206,15 @@ class ContentServiceTest extends BcTestCase
         // softDeleteの場合
         $request = $this->getRequest('/?status=1');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
-        $this->assertEquals(13, $contents->all()->count());
+        $this->assertEquals(14, $contents->all()->count());
         // ゴミ箱を含むの場合
         $request = $this->getRequest('/?status=1&withTrash=true');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
-        $this->assertEquals(15, $contents->all()->count());
+        $this->assertEquals(16, $contents->all()->count());
         // 否定の場合
         $request = $this->getRequest('/?status=1&type!=Page');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
-        $this->assertEquals(7, $contents->all()->count());
+        $this->assertEquals(8, $contents->all()->count());
     }
     /**
      * testGetTrashIndex
@@ -245,7 +246,8 @@ class ContentServiceTest extends BcTestCase
                 6 => "　　　└service",
                 18 => '　　　　　　└ツリー階層削除用フォルダー(親)',
                 19 => '　　　　　　└ツリー階層削除用フォルダー(子)',
-                20 => '　　　　　　└ツリー階層削除用フォルダー(孫)'
+                20 => '　　　　　　└ツリー階層削除用フォルダー(孫)',
+                21 => '　　　　　　└testEdit',
             ],
         $result);
         $result = $this->ContentService->getContentFolderList($siteId, ['conditions' => ['site_root' => false]]);
@@ -253,7 +255,8 @@ class ContentServiceTest extends BcTestCase
             6 => 'service',
             18 => '　　　└ツリー階層削除用フォルダー(親)',
             19 => '　　　└ツリー階層削除用フォルダー(子)',
-            20 => '　　　└ツリー階層削除用フォルダー(孫)'
+            20 => '　　　└ツリー階層削除用フォルダー(孫)',
+            21 => '　　　└testEdit',
         ], $result);
     }
 
@@ -338,7 +341,7 @@ class ContentServiceTest extends BcTestCase
      */
     public function testDeleteAll(): void
     {
-        $this->assertEquals(14, $this->ContentService->deleteAll());
+        $this->assertEquals(15, $this->ContentService->deleteAll());
         $contents = $this->ContentService->getIndex();
         $this->assertEquals(0, $contents->all()->count());
     }
@@ -562,10 +565,13 @@ class ContentServiceTest extends BcTestCase
     public function testUpdate()
     {
         $name = "testUpdate";
-        $newContent = $this->ContentService->get(4);
+        $newContent = $this->ContentService->getIndex(['name' => 'testEdit'])->first();
         $newContent->name = $name;
         $newContent->site->name = 'ucmitz'; // site側でエラーが出るため
-        $result = $this->ContentService->update($this->ContentService->get(4), $newContent->toArray());
-        $this->assertEquals($this->ContentService->get(4)->name, $name);
+        // TODO: FrozenTimeによルエラーを修正する
+        $newContent->created_date = null; // FrozenTimeによりエラーが出るため
+        $newContent->modified_date = null; // FrozenTimeによりエラーが出るため
+        $this->ContentService->update($this->ContentService->get($newContent->id), $newContent->toArray());
+        $this->assertEquals($this->ContentService->get($newContent->id)->name, $name);
     }
 }

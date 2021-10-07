@@ -38,7 +38,7 @@ class ContentFoldersController extends BcAdminAppController
     {
         parent::initialize();
         $this->loadComponent('BaserCore.BcAdminContents');
-        $this->Security->setConfig('unlockedActions', ['add', 'edit']);
+        $this->Security->setConfig('unlockedActions', ['add']);
     }
 
     /**
@@ -89,7 +89,6 @@ class ContentFoldersController extends BcAdminAppController
      *
      * @return void
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function edit(ContentFolderServiceInterface $contentFolderService, $id = null)
@@ -105,10 +104,10 @@ class ContentFoldersController extends BcAdminAppController
                 $this->redirect(['action' => 'edit', $id]);
             }
             $contentFolder = $contentFolderService->update($contentFolder, $this->request->getData('ContentFolder'));
-            // if ($ContentFolders->save($this->request->getData(), ['reconstructSearchIndices' => true])) { // FIXME: 'reconstructSearchIndices' => true設定する
+            // TODO: afterSaveで$optionにreconstructSearchIndicesを渡す if ($ContentFolders->save($this->request->getData(), ['reconstructSearchIndices' => true])) {
             if (!$contentFolder->hasErrors()) {
                 // clearViewCache(); TODO: 動作しないため一旦コメントアウト
-                $this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $this->request->getData('Content.title')));
+                $this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $contentFolder->content->title));
                 $this->redirect(['action' => 'edit', $id]);
             } else {
                 $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');

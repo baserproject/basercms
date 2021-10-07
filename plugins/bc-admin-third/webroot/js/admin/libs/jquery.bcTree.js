@@ -898,7 +898,7 @@
                                 parent_id: data.contentParentId,
                                 title: editNode.text,
                                 plugin: data.contentPlugin,
-                                type: data.entTypecont,
+                                type: data.contentType,
                                 site_id: data.contentSiteId,
                                 alias_id: data.contentAliasId,
                                 entity_id: data.contentEntityId

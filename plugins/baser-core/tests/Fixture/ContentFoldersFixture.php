@@ -42,7 +42,7 @@ class ContentFoldersFixture extends TestFixture
             ],
             [
                 'id' => '3',
-                'folder_template' => 'サービスフォルダーテンプレート',
+                'folder_template' => 'フォルダーテンプレート3',
                 'page_template' => '',
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null
@@ -57,6 +57,13 @@ class ContentFoldersFixture extends TestFixture
             [
                 'id' => '11',
                 'folder_template' => '削除済みフォルダー(子)',
+                'page_template' => '',
+                'created' => '2016-08-10 02:17:28',
+                'modified' => null
+            ],
+            [
+                'id' => '15',
+                'folder_template' => 'testEdit',
                 'page_template' => '',
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null

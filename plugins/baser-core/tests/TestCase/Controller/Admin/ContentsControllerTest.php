@@ -195,8 +195,8 @@ class ContentsControllerTest extends BcTestCase
             'author_id' => '',
         ];
         return [
-            ['index', '1', [], "Cake\ORM\Query", 14],
-            ['index', '2', $search, 'Cake\ORM\ResultSet', 13],
+            ['index', '1', [], "Cake\ORM\Query", 15],
+            ['index', '2', $search, 'Cake\ORM\ResultSet', 14],
             ['trash_index', '1', [], 'Cake\ORM\Query', 3],
             // 足りない場合は空のindexを返す
             ['index', '', [], 'Cake\ORM\Query', 0],
@@ -279,16 +279,17 @@ class ContentsControllerTest extends BcTestCase
      */
     public function testEdit()
     {
-        $id = 4;
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $data = [
-            'Content' => ['name' => 'testEdit', 'title' => 'testEdit'],
-        ];
-        $this->post('/baser/admin/baser-core/contents/edit/' . $id, $data);
+        $data = $this->ContentService->getIndex(['name' => 'testEdit'])->first();
+        $data->name = 'ControllerEdit';
+        $data->site->name = 'ucmitz'; // site側でエラーが出るため
+        $data->created_date = null; // FrozenTimeによりエラーが出るため
+        $data->modified_date = null; // FrozenTimeによりエラーが出るため
+        $this->post('/baser/admin/baser-core/contents/edit/' . $data->id, ["Content" => $data->toArray()]);
         $this->assertResponseSuccess();
-        $this->assertRedirect('/baser/admin/baser-core/contents/edit/' . $id);
-        $this->assertEquals('testEdit', $this->ContentService->get($id)->name);
+        $this->assertRedirect('/baser/admin/baser-core/contents/edit/' . $data->id);
+        $this->assertEquals('ControllerEdit', $this->ContentService->get($data->id)->name);
     }
 
     /**
@@ -390,7 +391,7 @@ class ContentsControllerTest extends BcTestCase
         $this->ContentsController->setRequest($this->request);
         $response = $this->ContentsController->trash_empty($this->ContentService);
         $this->assertTrue($this->ContentService->getTrashIndex(['type' => "ContentFolder"])->isEmpty());
-        $this->assertEquals(3, $this->ContentFolderService->getIndex()->count());
+        $this->assertEquals(4, $this->ContentFolderService->getIndex()->count());
         $this->assertStringContainsString("/baser/admin/baser-core/contents/trash_index", $response->getHeaderLine('Location'));
     }
 

@@ -105,7 +105,7 @@ class ContentFolderServiceTest extends BcTestCase
     {
         $contentFolders = $this->ContentFolderService->getIndex();
         $this->assertEquals('フォルダーテンプレート1', $contentFolders->first()->folder_template);
-        $this->assertEquals(5, $contentFolders->count());
+        $this->assertEquals(6, $contentFolders->count());
     }
     /**
      * Test create
@@ -151,14 +151,13 @@ class ContentFolderServiceTest extends BcTestCase
      */
     public function testUpdate()
     {
-        $id = 3;
-        $newContentFolder = $this->ContentFolderService->get($id);
-        $newContentFolder->folder_template = "サービステンプレートtestUpdate";
+        $newContentFolder = $this->ContentFolderService->getIndex(['folder_template' => "testEdit"])->first();
+        $newContentFolder->folder_template = "testUpdate";
         $newContentFolder->content->title = "contentFolderTestUpdate";
         $newContentFolder->content->name = "contentFolderTestUpdate";
-        $oldContentFolder = $this->ContentFolderService->get($id);
+        $oldContentFolder = $this->ContentFolderService->get($newContentFolder->id);
         $result = $this->ContentFolderService->update($oldContentFolder, $newContentFolder->toArray());
-        $this->assertEquals("サービステンプレートtestUpdate", $result->folder_template);
+        $this->assertEquals("testUpdate", $result->folder_template);
         $this->assertEquals("contentFolderTestUpdate", $result->content->name);
     }
 }

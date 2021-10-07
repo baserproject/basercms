@@ -123,17 +123,20 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testEdit()
     {
-        $id = 3;
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $data = [
-            'ContentFolder' => ['folder_template' => 'testEditテンプレート', 'content' => ['title' => 'contentTestEdit']],
-        ];
-        $this->post('/baser/admin/baser-core/content_folders/edit/' . $id, $data);
+        $data = $this->ContentFolderService->getIndex(['folder_template' => "testEdit"])->first();
+        $data->folder_template = 'testEditテンプレート';
+        $data->content->name = "contentFolderTestUpdate";
+        // TODO: FrozenTimeによルエラーを修正する
+        $data->content->created_date = null; // FrozenTimeによりエラーが出るため
+        $data->content->modified_date = null; // FrozenTimeによりエラーが出るため
+        $id = $data->id;
+        $this->post('/baser/admin/baser-core/content_folders/edit/' . $id, ['ContentFolder' => $data->toArray()]);
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin/baser-core/content_folders/edit/' . $id);
         $this->assertEquals('testEditテンプレート', $this->ContentFolderService->get($id)->folder_template);
-        $this->assertEquals('contentTestEdit', $this->ContentFolderService->get($id)->content->title);
+        $this->assertEquals('contentFolderTestUpdate', $this->ContentFolderService->get($id)->content->name);
     }
 
     /**
