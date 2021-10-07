@@ -194,7 +194,7 @@ class ContentsController extends BcApiController
         $this->request->allowMethod(['post', 'put']);
         $content = $contents->update($contents->get($id), $this->request->getData());
         if (!$content->getErrors()) {
-            $message = __d('baser', 'サイト「{0}」を更新しました。', $content->name);
+            $message = __d('baser', 'コンテンツ「{0}」を更新しました。', $content->name);
         } else {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '入力エラーです。内容を修正してください。');

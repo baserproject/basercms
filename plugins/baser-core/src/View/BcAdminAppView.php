@@ -14,6 +14,7 @@ namespace BaserCore\View;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\View\Helper\BcAdminContentFolderHelper;
 use BaserCore\View\Helper\BcAdminContentHelper;
 use BaserCore\View\Helper\BcAdminPermissionHelper;
 use BaserCore\View\Helper\BcAdminPluginHelper;
@@ -52,6 +53,7 @@ use BaserCore\View\Helper\BcContentsHelper;
  * @property BcAdminSiteConfigHelper $BcAdminSiteConfig
  * @property BcContentsHelper $BcContents
  * @property BcAdminContentHelper $BcAdminContent
+ * @property BcAdminContentFolderHelper $BcAdminContentFolder
  */
 class BcAdminAppView extends AppView
 {

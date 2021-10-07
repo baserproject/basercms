@@ -42,7 +42,7 @@ class ContentFoldersFixture extends TestFixture
             ],
             [
                 'id' => '3',
-                'folder_template' => 'フォルダーテンプレート3',
+                'folder_template' => 'サービスフォルダーテンプレート',
                 'page_template' => '',
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null

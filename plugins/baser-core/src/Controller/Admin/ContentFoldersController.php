@@ -88,62 +88,36 @@ class ContentFoldersController extends BcAdminAppController
      * コンテンツを更新する
      *
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function edit(ContentFolderServiceInterface $contentFolderService, $id = null)
     {
-
         if (!$id && empty($this->request->getData())) {
             $this->BcMessage->setError(__d('baser', '無効なIDです。'));
             return $this->redirect(['controller' => 'contents', 'action' => 'index']);
         }
-
         $contentFolder = $contentFolderService->get($id);
-        if ($this->request->is(['post', 'put'])) {
+        if ($this->request->is(['patch', 'post', 'put'])) {
             if (BcUtil::isOverPostSize()) {
                 $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
                 $this->redirect(['action' => 'edit', $id]);
             }
-
-            // $a = $this->request->getData('Content');
-            // $b = $c->newEntities($this->request->getData('Content'));
+            $contentFolder = $contentFolderService->update($contentFolder, $this->request->getData('ContentFolder'));
             // if ($ContentFolders->save($this->request->getData(), ['reconstructSearchIndices' => true])) { // FIXME: 'reconstructSearchIndices' => true設定する
-            if ($contentFolder = $contentFolderService->update($contentFolder, $this->request->getData('ContentFolder'))) {
-                clearViewCache();
+            if (!$contentFolder->hasErrors()) {
+                // clearViewCache(); TODO: 動作しないため一旦コメントアウト
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $this->request->getData('Content.title')));
-                $this->redirect([
-                    'plugin' => '',
-                    'controller' => 'content_folders',
-                    'action' => 'edit',
-                    $id
-                ]);
+                $this->redirect(['action' => 'edit', $id]);
             } else {
                 $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
             }
         } else {
-            $this->request = $this->request->withData('ContentFolder', $contentFolder);
-            if (!$this->request->getData()) {
-                $this->BcMessage->setError(__d('baser', '無効な処理です。'));
-                $this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
-            }
+            $this->BcMessage->setError(__d('baser', '無効な処理です。'));
         }
-
-
-        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');  // TODO: 一時的にテーブル呼び出し
-        $site = $sites->findById($this->request->getData('ContentFolder.content.site_id'))->first();
-        if (!empty($site) && $site->theme) {
-            $theme[] = $site->theme;
-        }
-        // siteConfigs['theme']がないためコメントアウト
-        // $theme = [$this->siteConfigs['theme']];
-        // if (!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
-        //     $theme[] = $site->theme;
-        // }
-        $Page = TableRegistry::getTableLocator()->get('BaserCore.Pages');
-        $Content = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $this->request = $this->request->withData("ContentFolder", $contentFolder);
         $this->set('contentFolder', $contentFolder);
-        $this->set('folderTemplateList', $contentFolderService->getFolderTemplateList($this->request->getData('ContentFolder.content.id'), $theme));
-        $this->set('pageTemplateList', $Page->getPageTemplateList($this->request->getData('ContentFolder.content.id'), $theme));
-        // $this->set('publishLink', $Content->getUrl($this->request->getData('ContentFolder.content.url'), true, $site->useSubDomain));
     }
 
     /**
