@@ -161,25 +161,4 @@ class BcAdminContentsComponent extends Component
         $controller->set('disableEditContent', $disableEditContent);
         $controller->set('related', $related);
     }
-
-    /**
-     * コンテンツからアクセスが来た場合のフォーム処理準備
-     *
-     * @return void
-     */
-    protected function prepareContent()
-    {
-
-    }
-
-    /**
-     * コンテンツ以外からアクセスが来た場合のフォーム処理準備
-     *
-     * @return void
-     */
-    protected function prepareRelated()
-    {
-
-    }
-
 }
