@@ -20,7 +20,7 @@
         "source": "https://github.com/baserproject/basercms"
     },
     "require": {
-        "php": ">=5.2.8",
+        "php": ">=5.2.8,<8.0.0",
         "ext-mcrypt": "*",
         "ext-json": "*"
     },
