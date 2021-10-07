@@ -12,6 +12,7 @@
 namespace BaserCore\Test\TestCase\Controller\Api;
 
 use Cake\Core\Configure;
+use BaserCore\Service\ContentService;
 use Cake\TestSuite\IntegrationTestTrait;
 
 class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
@@ -57,6 +58,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $token = $this->apiLoginAdmin(1);
         $this->accessToken = $token['access_token'];
         $this->refreshToken = $token['refresh_token'];
+        $this->ContentService = new ContentService();
     }
 
     /**
@@ -180,5 +182,26 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->get('/baser/api/baser-core/contents/index/trash.json?type=ContentFolder&token=' . $this->accessToken);
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEmpty($result->contents);
+    }
+
+    /**
+     * Test edit method
+     *
+     * @return void
+     */
+    public function testEdit()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = $this->ContentService->getIndex(['name' => 'testEdit'])->first();
+        $id = $data->id;
+        $data->name = 'ControllerEdit';
+        $data->site->name = 'ucmitz'; // site側でエラーが出るため
+        $data->created_date = null; // FrozenTimeによりエラーが出るため
+        $data->modified_date = null; // FrozenTimeによりエラーが出るため
+        $this->post("/baser/api/baser-core/contents/edit/${id}.json?token=" . $this->accessToken, $data->toArray());
+        $this->assertResponseSuccess();
+        $query = $this->ContentService->getIndex(['name' => 'ControllerEdit']);
+        $this->assertEquals(1, $query->count());
     }
 }

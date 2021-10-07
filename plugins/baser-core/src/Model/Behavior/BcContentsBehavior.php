@@ -58,29 +58,6 @@ class BcContentsBehavior extends Behavior
     }
 
     /**
-     * BeforeMarshal
-     *
-     * Content のバリデーションを実行し、エラーがある場合は中止する
-     * @param Event $event
-     * @param ArrayObject $data
-     * @param ArrayObject $options
-     * @return void
-     * @checked
-     * @unitTest
-     */
-    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
-    {
-        // TODO: validate falseできない
-        $validateOptions = ['validate' => $options['validate'] ?? 'default'];
-        $contentEntity = $this->Contents->newEntity($data['content'], $validateOptions);
-        if ($contentEntity->hasErrors() && empty($data['content']['id'])) {
-            $event->stopPropagation();
-            $event->setResult(false);
-            return;
-        }
-        $this->Contents->beforeMarshal($event, $data, $options);
-    }
-    /**
      * After save
      *
      * Content を保存する

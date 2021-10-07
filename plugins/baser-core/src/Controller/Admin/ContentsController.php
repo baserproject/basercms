@@ -306,36 +306,35 @@ class ContentsController extends BcAdminAppController
     /**
      * コンテンツ編集
      *
+     * @param  int $id
+     * @param  ContentServiceInterface $contentService
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function admin_edit()
+    public function edit(ContentServiceInterface $contentService, $id)
     {
-        $this->setTitle(__d('baser', 'コンテンツ編集'));
-        if (!$this->request->data) {
-            $this->request->data = $this->Content->find('first', ['conditions' => ['Content.id' => $this->request->params['named']['content_id']]]);
-            if (!$this->request->data) {
-                $this->BcMessage->setError(__d('baser', '無効な処理です。'));
-                $this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
-            }
-        } else {
-            if ($this->Content->save($this->request->data)) {
+        if (!$id && empty($this->request->getData())) {
+            $this->BcMessage->setError(__d('baser', '無効な処理です。'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $content = $contentService->get($id);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $content = $contentService->update($content, $this->request->getData('Content'));
+            if (!$content->hasErrors()) {
                 $message = Configure::read('BcContents.items.' . $this->request->getData('Content.plugin') . '.' . $this->request->getData('Content.type') . '.title') .
-                    sprintf(__d('baser', '「%s」を更新しました。'), $this->request->getData('Content.title'));
+                sprintf(__d('baser', '「%s」を更新しました。'), $this->request->getData('Content.title'));
                 $this->BcMessage->setSuccess($message);
-                $this->redirect([
-                    'plugin' => null,
-                    'controller' => 'contents',
-                    'action' => 'edit',
-                    'content_id' => $this->request->params['named']['content_id'],
-                    'parent_id' => $this->request->params['named']['parent_id']
-                ]);
+                return $this->redirect(['action' => 'edit', $content->id]);
             } else {
                 $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
             }
         }
-        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $site = $sites->findById($this->request->getData('Content.site_id'))->first();
-        $this->set('publishLink', $this->Content->getUrl($this->request->getData('Content.url'), true, $site->useSubDomain));
+        $this->request = $this->request->withData("Content", $content);
+        $this->set('content', $content);
+        $this->set('publishLink', $contentService->getUrl($content->url, true, $content->site->useSubDomain));
     }
 
     /**

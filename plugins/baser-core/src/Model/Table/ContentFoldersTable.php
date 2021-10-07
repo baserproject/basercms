@@ -162,10 +162,10 @@ class ContentFoldersTable extends AppTable
      */
     private function setBeforeRecord($id)
     {
-        $record = $this->find('first', ['fields' => ['Content.url', 'Content.status'], 'conditions' => ['ContentFolder.id' => $id], 'recursive' => 0]);
-        if ($record['Content']['url']) {
-            $this->beforeUrl = $record['Content']['url'];
-            $this->beforeStatus = $record['Content']['status'];
+        $record = $this->get($id, ['contain' => ['Contents']]);
+        if ($record->content->url) {
+            $this->beforeUrl = $record->content->url;
+            $this->beforeStatus = $record->content->status;
         }
     }
 
@@ -230,77 +230,4 @@ class ContentFoldersTable extends AppTable
             return false;
         }
     }
-
-    /**
-     * フォルダのテンプレートリストを取得する
-     *
-     * @param $contentId
-     * @param $theme
-     * @return array
-     */
-    public function getFolderTemplateList($contentId, $theme)
-    {
-        if (!is_array($theme)) {
-            $theme = [$theme];
-        }
-        $folderTemplates = [];
-        foreach($theme as $value) {
-            $folderTemplates = array_merge($folderTemplates, BcUtil::getTemplateList('ContentFolders', '', $value));
-        }
-        if ($contentId != 1) {
-            $parentTemplate = $this->getParentTemplate($contentId, 'folder');
-            $searchKey = array_search($parentTemplate, $folderTemplates);
-            if ($searchKey !== false) {
-                unset($folderTemplates[$searchKey]);
-            }
-            $folderTemplates = ['' => sprintf(__d('baser', '親フォルダの設定に従う（%s）'), $parentTemplate)] + $folderTemplates;
-        }
-        return $folderTemplates;
-    }
-
-    /**
-     * 親のテンプレートを取得する
-     *
-     * @param int $id
-     * @param string $type folder|page
-     */
-    public function getParentTemplate($id, $type)
-    {
-        // TODO ucmitz 暫定措置
-        // >>>
-        return 'default';
-        // <<<
-
-        $this->Content->bindModel(
-            ['belongsTo' => [
-                'ContentFolder' => [
-                    'className' => 'ContentFolder',
-                    'foreignKey' => 'entity_id'
-                ]
-            ]
-            ],
-            false
-        );
-        $contents = $this->Content->getPath($id, null, 0);
-        $this->Content->unbindModel(
-            ['belongsTo' => [
-                'ContentFolder'
-            ]
-            ]
-        );
-        $contents = array_reverse($contents);
-        unset($contents[0]);
-        $parentTemplates = Hash::extract($contents, '{n}.ContentFolder.' . $type . '_template');
-        $parentTemplate = '';
-        foreach($parentTemplates as $parentTemplate) {
-            if ($parentTemplate) {
-                break;
-            }
-        }
-        if (!$parentTemplate) {
-            $parentTemplate = 'default';
-        }
-        return $parentTemplate;
-    }
-
 }

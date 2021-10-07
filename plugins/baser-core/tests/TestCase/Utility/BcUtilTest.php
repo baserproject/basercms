@@ -823,21 +823,21 @@ class BcUtilTest extends BcTestCase
     }
 
     /**
-     * testExtractOne
+     * Test convertSize
      *
      * @return void
      */
-    public function testExtractOne()
+    public function testConvertSize()
     {
-        // 配列の場合
-        $array = [
-            ['id'=> 1], ['id'=> 2],
-        ];
-        $this->assertEquals(1, BcUtil::extractOne($array, 'id'));
-        // エンティティの場合
-        $contentFolder = new ContentFolderService();
-        $content = BcUtil::extractOne([$contentFolder->get(1)], 'content');
-        $this->assertEquals("baserCMSサンプル", $content->title);
+        $this->assertEquals(1, BcUtil::convertSize('1B'));
+        $this->assertEquals(1024, BcUtil::convertSize('1K'));
+        $this->assertEquals(1048576, BcUtil::convertSize('1M'));
+        $this->assertEquals(1073741824, BcUtil::convertSize('1G'));
+        $this->assertEquals(1099511627776, BcUtil::convertSize('1T'));
+        $this->assertEquals(1099511627776, BcUtil::convertSize('1T', 'B'));
+        $this->assertEquals(1073741824, BcUtil::convertSize('1T', 'K'));
+        $this->assertEquals(1073741824, BcUtil::convertSize('1', 'K', 'T'));
+        $this->assertEquals(0, BcUtil::convertSize(null));
     }
 
 }

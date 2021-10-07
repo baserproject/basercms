@@ -11,17 +11,18 @@
 
 namespace BaserCore\View\Helper;
 
+use Cake\ORM\Query;
+use Cake\View\Helper;
+use Cake\Routing\Router;
+use Cake\ORM\TableRegistry;
+use BaserCore\Annotation\NoTodo;
 use BaserCore\Model\Entity\Site;
-use BaserCore\Service\BcAdminServiceInterface;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\EntityInterface;
 use BaserCore\Service\SiteConfigTrait;
 use BaserCore\Service\SiteServiceInterface;
-use Cake\Datasource\EntityInterface;
-use Cake\ORM\TableRegistry;
-use Cake\Routing\Router;
-use Cake\View\Helper;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
+use BaserCore\Service\BcAdminServiceInterface;
 
 /**
  * Class BcAdminSiteHelper
@@ -173,6 +174,17 @@ class BcAdminSiteHelper extends Helper
     public function findByUrl($url): EntityInterface
     {
         return $this->SiteService->findByUrl($url);
+    }
+
+    /**
+     * IDよりサイトを取得する
+     *
+     * @param string $id
+     * @return Query
+     */
+    public function findById($id): Query
+    {
+        return $this->SiteService->findById($id);
     }
 
     /**

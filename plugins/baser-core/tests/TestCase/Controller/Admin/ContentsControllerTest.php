@@ -195,8 +195,8 @@ class ContentsControllerTest extends BcTestCase
             'author_id' => '',
         ];
         return [
-            ['index', '1', [], "Cake\ORM\Query", 14],
-            ['index', '2', $search, 'Cake\ORM\ResultSet', 13],
+            ['index', '1', [], "Cake\ORM\Query", 15],
+            ['index', '2', $search, 'Cake\ORM\ResultSet', 14],
             ['trash_index', '1', [], 'Cake\ORM\Query', 3],
             // 足りない場合は空のindexを返す
             ['index', '', [], 'Cake\ORM\Query', 0],
@@ -277,9 +277,19 @@ class ContentsControllerTest extends BcTestCase
     /**
      * コンテンツ編集
      */
-    public function testAdmin_edit()
+    public function testEdit()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = $this->ContentService->getIndex(['name' => 'testEdit'])->first();
+        $data->name = 'ControllerEdit';
+        $data->site->name = 'ucmitz'; // site側でエラーが出るため
+        $data->created_date = null; // FrozenTimeによりエラーが出るため
+        $data->modified_date = null; // FrozenTimeによりエラーが出るため
+        $this->post('/baser/admin/baser-core/contents/edit/' . $data->id, ["Content" => $data->toArray()]);
+        $this->assertResponseSuccess();
+        $this->assertRedirect('/baser/admin/baser-core/contents/edit/' . $data->id);
+        $this->assertEquals('ControllerEdit', $this->ContentService->get($data->id)->name);
     }
 
     /**
@@ -381,7 +391,7 @@ class ContentsControllerTest extends BcTestCase
         $this->ContentsController->setRequest($this->request);
         $response = $this->ContentsController->trash_empty($this->ContentService);
         $this->assertTrue($this->ContentService->getTrashIndex(['type' => "ContentFolder"])->isEmpty());
-        $this->assertEquals(3, $this->ContentFolderService->getIndex()->count());
+        $this->assertEquals(4, $this->ContentFolderService->getIndex()->count());
         $this->assertStringContainsString("/baser/admin/baser-core/contents/trash_index", $response->getHeaderLine('Location'));
     }
 

@@ -895,12 +895,13 @@ class PagesTable extends Table
 
         if ($contentId != 1) {
             $ContentFolder = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
-            $parentTemplate = $ContentFolder->getParentTemplate($contentId, 'page');
-            $searchKey = array_search($parentTemplate, $pageTemplates);
-            if ($searchKey !== false) {
-                unset($pageTemplates[$searchKey]);
-            }
-            $pageTemplates = ['' => sprintf(__d('baser', '親フォルダの設定に従う（%s）'), $parentTemplate)] + $pageTemplates;
+            // FIXME:
+            // $parentTemplate = $ContentFolder->getParentTemplate($contentId, 'page');
+            // $searchKey = array_search($parentTemplate, $pageTemplates);
+            // if ($searchKey !== false) {
+            //     unset($pageTemplates[$searchKey]);
+            // }
+            // $pageTemplates = ['' => sprintf(__d('baser', '親フォルダの設定に従う（%s）'), $parentTemplate)] + $pageTemplates;
         }
         return $pageTemplates;
     }

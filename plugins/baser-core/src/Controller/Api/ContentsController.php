@@ -1,6 +1,6 @@
 <?php
 /**
- * baserCMS :  Based Website Development Project <https://basercms.net>
+ * baserCMS :  Based Webcontent Development Project <https://basercms.net>
  * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
  * @copyright     Copyright (c) baserCMS User Community
@@ -179,5 +179,31 @@ class ContentsController extends BcApiController
             'trash' => $trash
         ]);
         $this->viewBuilder()->setOption('serialize', ['trash', 'message']);
+    }
+
+    /**
+     * コンテンツ情報編集
+     * @param ContentServiceInterface $contents
+     * @param $id
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function edit(ContentServiceInterface $contents, $id)
+    {
+        $this->request->allowMethod(['post', 'put']);
+        $content = $contents->update($contents->get($id), $this->request->getData());
+        if (!$content->getErrors()) {
+            $message = __d('baser', 'コンテンツ「{0}」を更新しました。', $content->name);
+        } else {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        }
+        $this->set([
+            'message' => $message,
+            'content' => $content,
+            'errors' => $content->getErrors(),
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['content', 'message', 'errors']);
     }
 }

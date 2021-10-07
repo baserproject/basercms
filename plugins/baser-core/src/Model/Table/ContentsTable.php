@@ -179,20 +179,16 @@ class ContentsTable extends AppTable
                 'message' => __d('baser', 'タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
             ]
         ]);
-
         $validator
         ->requirePresence('parent_id', true, __d('baser', 'このフィールドは必須です'));
-
         $validator
         ->requirePresence('plugin', true, __d('baser', 'このフィールドは必須です'));
-
         $validator
         ->requirePresence('type', true, __d('baser', 'このフィールドは必須です'));
-
         $validator
         ->add('eyecatch', [
             'fileCheck' => [
-                'rule' => ['fileCheck', $this->convertSize(ini_get('upload_max_filesize'))],
+                'rule' => ['fileCheck', BcUtil::convertSize(ini_get('upload_max_filesize'))],
                 'provider' => 'bc',
                 'message' => __d('baser', 'ファイルのアップロードに失敗しました。')
             ]
@@ -1101,103 +1097,6 @@ class ContentsTable extends AppTable
         $result = $this->removeFromTree($id, true);
         $this->softDelete($softDelete);
         return $result;
-    }
-
-    /**
-     * コンテンツIDよりURLを取得する
-     *
-     * @param int $id
-     * @return string URL
-     * @checked
-     * @unitTest
-     * @noTodo
-     */
-    public function getUrlById($id, $full = false)
-    {
-        if (!is_numeric($id)) return '';
-        $data = $this->findById($id)->contain(['Sites'])->first();
-        // TODO: containが動かないため一旦false
-        return $data ? $this->getUrl($data->url, $full, false) : "";
-        // return $data ? $this->getUrl($data->url, $full, $data->site->use_subdomain) : "";
-    }
-
-    /**
-     * コンテンツ管理上のURLを元に正式なURLを取得する
-     *
-     * ドメインからのフルパスでない場合、デフォルトでは、
-     * サブフォルダ設置時等の baseUrl（サブフォルダまでのパス）は含まない
-     *
-     * @param string $url コンテンツ管理上のURL
-     * @param bool $full http からのフルのURLかどうか
-     * @param bool $useSubDomain サブドメインを利用しているかどうか
-     * @param bool $base $full が false の場合、ベースとなるURLを含めるかどうか
-     * @return string URL
-     */
-    public function getUrl($url, $full = false, $useSubDomain = false, $base = false)
-    {
-        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        if ($useSubDomain && !is_array($url)) {
-            $subDomain = '';
-            $site = $this->Sites->findByUrl($url);
-            $originUrl = $url;
-            if ($site) {
-                $subDomain = $site->alias;
-                $originUrl = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/', $url);
-            }
-            if ($full) {
-                if ($site) {
-                    $fullUrl = topLevelUrl(false) . $originUrl;
-                    if ($site->domain_type == 1) {
-                        $mainDomain = BcUtil::getMainDomain();
-                        $fullUrlArray = explode('//', $fullUrl);
-                        $fullPassArray = explode('/', $fullUrlArray[1]);
-                        unset($fullPassArray[0]);
-                        $url = $fullUrlArray[0] . '//' . $subDomain . '.' . $mainDomain . '/' . implode('/', $fullPassArray);
-                    } elseif ($site->domain_type == 2) {
-                        $fullUrlArray = explode('//', $fullUrl);
-                        $urlArray = explode('/', $fullUrlArray[1]);
-                        unset($urlArray[0]);
-                        if ($site->same_main_url) {
-                            $mainSite = $sites->findById($site->main_site_id)->first();
-                            $subDomain = $mainSite->alias;
-                        }
-                        $url = $fullUrlArray[0] . '//' . $subDomain . '/' . implode('/', $urlArray);
-                    }
-                } else {
-                    $url = preg_replace('/\/$/', '', Configure::read('BcEnv.siteUrl')) . $originUrl;
-                }
-            } else {
-                $url = $originUrl;
-            }
-        } else {
-            if (BC_INSTALLED) {
-                if (!is_array($url)) {
-                    $site = $this->Sites->findByUrl($url);
-                    if ($site && $site->same_main_url) {
-                        $mainSite = $sites->findById($site->main_site_id)->first();
-                        $alias = $mainSite->alias;
-                        if ($alias) {
-                            $alias = '/' . $alias;
-                        }
-                        $url = $alias . $site->getPureUrl($url);
-                    }
-                }
-            }
-            if ($full) {
-                $mainDomain = BcUtil::getMainDomain();
-                $fullUrlArray = explode('//', Configure::read('BcEnv.siteUrl'));
-                $siteDomain = preg_replace('/\/$/', '', $fullUrlArray[1]);
-                if (preg_match('/^www\./', $siteDomain) && str_replace('www.', '', $siteDomain) === $mainDomain) {
-                    $mainDomain = $siteDomain;
-                }
-                $url = $fullUrlArray[0] . '//' . $mainDomain . Router::url($url);
-            }
-        }
-        $url = preg_replace('/\/index$/', '/', $url);
-        if (!$full && $base) {
-            $url = Router::url($url);
-        }
-        return $url;
     }
 
     /**

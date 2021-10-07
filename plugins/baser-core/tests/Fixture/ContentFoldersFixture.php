@@ -61,6 +61,13 @@ class ContentFoldersFixture extends TestFixture
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null
             ],
+            [
+                'id' => '15',
+                'folder_template' => 'testEdit',
+                'page_template' => '',
+                'created' => '2016-08-10 02:17:28',
+                'modified' => null
+            ],
         ];
         parent::init();
     }

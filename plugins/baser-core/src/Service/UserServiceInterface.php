@@ -11,10 +11,11 @@
 
 namespace BaserCore\Service;
 
+use Cake\ORM\Query;
+use Cake\Http\ServerRequest;
+use BaserCore\Model\Entity\User;
 use Cake\Core\Exception\Exception;
 use Cake\Datasource\EntityInterface;
-use Cake\Http\ServerRequest;
-use Cake\ORM\Query;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -27,9 +28,9 @@ interface UserServiceInterface
     /**
      * ユーザーを取得する
      * @param int $id
-     * @return EntityInterface
+     * @return User
      */
-    public function get($id): EntityInterface;
+    public function get($id): User;
 
     /**
      * ユーザー一覧を取得

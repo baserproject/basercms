@@ -894,7 +894,7 @@
                             // TODO: テンプレートにどの値が入るべきかを定義する
                             folder_template : '',
                             page_template : '',
-                            content: {
+                            Content: {
                                 parent_id: data.contentParentId,
                                 title: editNode.text,
                                 plugin: data.contentPlugin,

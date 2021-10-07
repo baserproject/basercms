@@ -36,6 +36,7 @@ class BcContentsEventListenerTest extends BcTestCase
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.Sites',
     ];
 
     /**
@@ -108,7 +109,7 @@ class BcContentsEventListenerTest extends BcTestCase
         $request = $this->getRequest('/baser/admin')->withData('ContentFolder.content', $this->Content)
             ->withParam('action', 'edit'); // content_infoで必要
         $BcAdminAppView = $this->BcAdminAppView->setRequest($request)->setPlugin("BcAdminThird")
-            ->set("relatedContents", ['test1', 'test2']); // content_relatedで必要
+            ->set("relatedContents", ['test1', 'test2'])->set("content", $this->Content); // content_relatedで必要
         $out = "testtest";
         $event = new Event("Helper.Form.afterSubmit", $BcAdminAppView);
         $event->setData('id', 'TestAdminEditForm')->setData('out', $out);

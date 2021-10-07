@@ -11,12 +11,15 @@
 
 namespace BaserCore\Service;
 
-use Cake\Utility\Hash;
 use Exception;
 use Cake\ORM\Query;
+use Cake\Utility\Hash;
+use Cake\Core\Configure;
+use Cake\Routing\Router;
 use Nette\Utils\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
+use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -632,4 +635,115 @@ class ContentService implements ContentServiceInterface
         return $parentTemplate;
     }
 
+    /**
+     * コンテンツIDよりURLを取得する
+     *
+     * @param int $id
+     * @return string URL
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function getUrlById($id, $full = false)
+    {
+        if (!is_numeric($id)) return '';
+        $data = $this->Contents->findById($id)->contain(['Sites'])->first();
+        // TODO: containが動かないため一旦false
+        return $data ? $this->getUrl($data->url, $full, false) : "";
+        // return $data ? $this->getUrl($data->url, $full, $data->site->use_subdomain) : "";
+    }
+
+    /**
+     * コンテンツ管理上のURLを元に正式なURLを取得する
+     *
+     * ドメインからのフルパスでない場合、デフォルトでは、
+     * サブフォルダ設置時等の baseUrl（サブフォルダまでのパス）は含まない
+     *
+     * @param string $url コンテンツ管理上のURL
+     * @param bool $full http からのフルのURLかどうか
+     * @param bool $useSubDomain サブドメインを利用しているかどうか
+     * @param bool $base $full が false の場合、ベースとなるURLを含めるかどうか
+     * @return string URL
+     */
+    public function getUrl($url, $full = false, $useSubDomain = false, $base = false)
+    {
+        if ($useSubDomain && !is_array($url)) {
+            $subDomain = '';
+            $site = $this->Sites->findByUrl($url);
+            $originUrl = $url;
+            if ($site) {
+                $subDomain = $site->alias;
+                $originUrl = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/', $url);
+            }
+            if ($full) {
+                if ($site) {
+                    $fullUrl = topLevelUrl(false) . $originUrl;
+                    if ($site->domain_type == 1) {
+                        $mainDomain = BcUtil::getMainDomain();
+                        $fullUrlArray = explode('//', $fullUrl);
+                        $fullPassArray = explode('/', $fullUrlArray[1]);
+                        unset($fullPassArray[0]);
+                        $url = $fullUrlArray[0] . '//' . $subDomain . '.' . $mainDomain . '/' . implode('/', $fullPassArray);
+                    } elseif ($site->domain_type == 2) {
+                        $fullUrlArray = explode('//', $fullUrl);
+                        $urlArray = explode('/', $fullUrlArray[1]);
+                        unset($urlArray[0]);
+                        if ($site->same_main_url) {
+                            $mainSite = $this->Sites->findById($site->main_site_id)->first();
+                            $subDomain = $mainSite->alias;
+                        }
+                        $url = $fullUrlArray[0] . '//' . $subDomain . '/' . implode('/', $urlArray);
+                    }
+                } else {
+                    $url = preg_replace('/\/$/', '', Configure::read('BcEnv.siteUrl')) . $originUrl;
+                }
+            } else {
+                $url = $originUrl;
+            }
+        } else {
+            if (BC_INSTALLED) {
+                if (!is_array($url)) {
+                    $site = $this->Sites->findByUrl($url);
+                    if ($site && $site->same_main_url) {
+                        $mainSite = $this->Sites->findById($site->main_site_id)->first();
+                        $alias = $mainSite->alias;
+                        if ($alias) {
+                            $alias = '/' . $alias;
+                        }
+                        $url = $alias . $this->Sites->getPureUrl($url);
+                    }
+                }
+            }
+            if ($full) {
+                $mainDomain = BcUtil::getMainDomain();
+                $fullUrlArray = explode('//', Configure::read('BcEnv.siteUrl'));
+                $siteDomain = preg_replace('/\/$/', '', $fullUrlArray[1]);
+                if (preg_match('/^www\./', $siteDomain) && str_replace('www.', '', $siteDomain) === $mainDomain) {
+                    $mainDomain = $siteDomain;
+                }
+                $url = $fullUrlArray[0] . '//' . $mainDomain . Router::url($url);
+            }
+        }
+        $url = preg_replace('/\/index$/', '/', $url);
+        if (!$full && $base) {
+            $url = Router::url($url);
+        }
+        return $url;
+    }
+
+    /**
+     * コンテンツ情報を更新する
+     *
+     * @param  EntityInterface $content
+     * @param  array $contentData
+     * @return EntityInterface
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function update($content, $contentData)
+    {
+        $content = $this->Contents->patchEntity($content, $contentData);
+        return ($result = $this->Contents->save($content)) ? $result : $content;
+    }
 }

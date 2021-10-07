@@ -55,4 +55,31 @@ interface ContentFolderServiceInterface
      */
     public function delete($id);
 
+    /**
+     * コンテンツフォルダー情報を更新する
+     * @param EntityInterface $target
+     * @param array $contentFolderData
+     * @param array $options
+     * @return EntityInterface
+     */
+    public function update(EntityInterface $target, array $contentFolderData, $options = []);
+
+    /**
+     * フォルダのテンプレートリストを取得する
+     *
+     * @param $contentId
+     * @param $theme
+     * @return array
+     */
+    public function getFolderTemplateList($contentId, $theme);
+
+    /**
+     * 親のテンプレートを取得する
+     *
+     * @param int $id
+     * @param string $type folder|page
+     */
+    public function getParentTemplate($id, $type);
 }
+
+

@@ -107,4 +107,30 @@ class ContentFoldersController extends BcApiController
         ]);
         $this->viewBuilder()->setOption('serialize', ['contentFolders', 'message']);
     }
+
+    /**
+     * コンテンツフォルダー情報編集
+     * @param ContentFolderServiceInterface $contents
+     * @param $id
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function edit(ContentFolderServiceInterface $contentFolders, $id)
+    {
+        $this->request->allowMethod(['post', 'put']);
+        $contentFolder = $contentFolders->update($contentFolders->get($id), $this->request->getData());
+        if (!$contentFolder->getErrors()) {
+            $message = __d('baser', 'フォルダー「{0}」を更新しました。', $contentFolder->name);
+        } else {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', '入力エラーです。内容を修正してください。');
+        }
+        $this->set([
+            'message' => $message,
+            'contentFolder' => $contentFolder,
+            'errors' => $contentFolder->getErrors(),
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['contentFolder', 'message', 'errors']);
+    }
 }

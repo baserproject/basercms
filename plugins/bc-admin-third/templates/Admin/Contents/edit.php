@@ -13,11 +13,12 @@
 /**
  * [ADMIN] 統合コンテンツ編集
  */
+$this->BcAdmin->setTitle(__d('baser', 'コンテンツ編集'));
 ?>
 
 
-<?php echo $this->BcAdminForm->create() ?>
+<?php echo $this->BcAdminForm->create($content, ['novalidate' => true]) ?>
 <div class="submit">
-  <?php echo $this->BcForm->submit(__d('baser', '保存'), ['class' => 'button bca-btn', 'data-bca-btn-type' => 'save', 'div' => false]) ?>
+  <?php echo $this->BcAdminForm->submit(__d('baser', '保存'), ['class' => 'button bca-btn', 'data-bca-btn-type' => 'save', 'div' => false]) ?>
 </div>
 <?php echo $this->BcAdminForm->end() ?>
