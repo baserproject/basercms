@@ -1018,59 +1018,6 @@ class ContentsTable extends AppTable
     }
 
     /**
-     * ゴミ箱より元に戻す
-     *
-     * @param $id
-     */
-    public function trashReturn($id)
-    {
-        return $this->trashReturnRecursive($id, true);
-    }
-
-    /**
-     * 再帰的にゴミ箱より元に戻す
-     *
-     * @param $id
-     * @return bool|int
-     */
-    public function trashReturnRecursive($id, $top = false)
-    {
-        $this->softDelete(false);
-        $children = $this->children($id, true);
-        $this->softDelete(true);
-        $result = true;
-        if ($children) {
-            foreach($children as $child) {
-                if (!$this->trashReturnRecursive($child['Content']['id'])) {
-                    $result = false;
-                }
-            }
-        }
-        $this->Behaviors->unload('Tree');
-        $this->updatingRelated = false;
-        if ($result && $this->undelete($id)) {
-            $this->Behaviors->load('Tree');
-            $this->updatingRelated = true;
-            $content = $this->find('first', ['conditions' => ['Content.id' => $id], 'recursive' => -1]);
-            if ($top) {
-                $siteRootId = $this->field('id', ['Content.site_id' => $content['Content']['site_id'], 'site_root' => true]);
-                $content['Content']['parent_id'] = $siteRootId;
-            }
-            unset($content['Content']['lft']);
-            unset($content['Content']['rght']);
-            if ($this->save($content, true)) {
-                return $content['Content']['site_id'];
-            } else {
-                $result = false;
-            }
-        } else {
-            $this->Behaviors->load('Tree');
-            $result = false;
-        }
-        return $result;
-    }
-
-    /**
      * タイプよりコンテンツを削除する
      *
      * @param string $type 例）Blog.BlogContent

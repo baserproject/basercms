@@ -100,7 +100,6 @@ class BcAdminContentsComponent extends Component
 
     /**
      * コンテンツ保存フォームを設定する
-     * @todo humuhimi contentからの場合とそれ以外の場合に分ける
      * @return void
      */
     public function settingForm()

@@ -212,6 +212,9 @@ class ContentsController extends BcAdminAppController
 
     /**
      * ゴミ箱内のコンテンツ一覧を表示する
+     *
+     * @param  ContentServiceInterface $contentService
+     * @param  SiteServiceInterface $siteService
      * @checked
      * @noTodo
      * @unitTest
@@ -225,28 +228,32 @@ class ContentsController extends BcAdminAppController
     /**
      * ゴミ箱のコンテンツを戻す
      *
-     * @return mixed Site Id Or false
+     * @param  ContentServiceInterface $contentService
+     * @param  int $id
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function admin_ajax_trash_return()
+    public function trash_return(ContentServiceInterface $contentService, $id)
     {
-        if (empty($this->request->getData('id'))) {
+        if (empty($id)) {
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
         }
-        $this->autoRender = false;
-
+        $this->disableAutoRender();
         // EVENT Contents.beforeTrashReturn
         $this->dispatchLayerEvent('beforeTrashReturn', [
-            'data' => $this->request->getData('id')
+            'data' => $id
         ]);
-
-        $siteId = $this->Content->trashReturn($this->request->getData('id'));
-
+        if ($restored = $contentService->restore($id)) {
+            $this->BcMessage->setSuccess(sprintf(__d('baser', 'ゴミ箱「%s」を戻しました。'), $restored->title));
+            // return $this->redirect(['action' => 'index']);
+        } else {
+            $this->BcMessage->setError('ゴミ箱から戻す事に失敗しました。');
+        }
         // EVENT Contents.afterTrashReturn
         $this->dispatchLayerEvent('afterTrashReturn', [
-            'data' => $this->request->getData('id')
+            'data' => $id
         ]);
-
-        return $siteId;
     }
 
     /**
@@ -777,6 +784,6 @@ class ContentsController extends BcAdminAppController
     {
         $this->autoRender = false;
         Configure::write('debug', 0);
-        return $this->response->withType("application/json")->withStringBody($this->Contents->getUrlById($id, true));
+        return $this->response->withType("application/json")->withStringBody($this->contentService->getUrlById($id, true));
     }
 }

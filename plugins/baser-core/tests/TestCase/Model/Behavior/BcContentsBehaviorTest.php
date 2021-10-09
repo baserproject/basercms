@@ -83,6 +83,14 @@ class BcContentsBehaviorTest extends BcTestCase
     */
     public function testBeforeMarshal()
     {
+        // 更新の場合はreturnされる
+        $data = [
+            'folder_template' => 'テストBeforeSave',
+            'content' => ["id" => 1]
+            ];
+        $return = $this->table->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($data), 'options' => new ArrayObject()]);
+        $this->assertNull($return->getResult());
+        // コンテンツのバリデーションに失敗する時はfalseが返る
         $notEmptyResult = ["" => false, "test" => null];
         foreach ($notEmptyResult as $nameField => $result) {
             $data = [
@@ -104,6 +112,9 @@ class BcContentsBehaviorTest extends BcTestCase
             ]);
             $this->assertEquals($result, $data->getResult());
         }
+        // Contents->beforeMarshalでデータが補填されているかを確認する
+        $array = (array) $data->getData('data')['content'];
+        $this->assertEquals(15, count($array));
     }
 
     /**

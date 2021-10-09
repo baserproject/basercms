@@ -87,6 +87,21 @@ class ContentServiceTest extends BcTestCase
         $this->assertNull($this->ContentService->getChildren(1000));
         $this->assertNull($this->ContentService->getChildren(4));
         $this->assertEquals(3, $this->ContentService->getChildren(6)->count());
+        $a = $this->ContentService->getChildren(18)->toArray();
+    }
+
+    /**
+     * testGetTrashChildren
+     *
+     * @return void
+     */
+    public function testGetTrashChildren(): void
+    {
+        // $a = $this->ContentService->getTrashChildrenInnerCalc(16);
+        $a = $this->ContentService->getTrash(16);
+        // $this->ContentService->deleteRecursive(18);
+        // $a = $this->ContentService->getTrashChildren(18);
+        // $this->assertEquals(1, $this->ContentService->getTrashChildren(16));
     }
 
     /**
@@ -190,7 +205,6 @@ class ContentServiceTest extends BcTestCase
      */
     public function testGetIndex(): void
     {
-        $a = $this->ContentService->getIndex(['site_id' => 1])->toArray();
         $request = $this->getRequest('/');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
         $this->assertEquals('', $contents->first()->name);
@@ -573,5 +587,21 @@ class ContentServiceTest extends BcTestCase
         $newContent->modified_date = null; // FrozenTimeによりエラーが出るため
         $this->ContentService->update($this->ContentService->get($newContent->id), $newContent->toArray());
         $this->assertEquals($this->ContentService->get($newContent->id)->name, $name);
+    }
+
+    /**
+     */
+    public function testTrashReturn()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * 再帰的にゴミ箱より元に戻す
+     */
+    public function testTrashReturnRecursive()
+    {
+        $trashId = $this->ContentService->getTrashIndex(['name' => '削除済みフォルダー(親)'])->first()->id;
+        $result = $this->ContentService->trashReturnRecursive($trashId);
     }
 }

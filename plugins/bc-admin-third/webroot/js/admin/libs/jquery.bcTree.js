@@ -741,20 +741,15 @@
         returnContent: function (node) {
             $.bcToken.check(function () {
                 $.ajax({
-                    url: $.baseUrl() + '/' + $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/ajax_trash_return',
-                    type: 'POST',
-                    data: {
-                        id: node.data.jstree.contentId,
-                        _Token: {
-                            key: $.bcToken.key
-                        }
-                    },
-                    dataType: 'json',
+                    url: $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/trash_return/' + node.data.jstree.contentId,
+                    type: 'GET',
+                    dataType: 'html',
                     beforeSend: function () {
                         $.bcUtil.hideMessage();
                         $.bcUtil.showLoader();
                     },
                     success: function (result) {
+                        $.bcUtil.hideLoader();
                         $.bcUtil.showNoticeMessage(bcI18n.bcTreeInfoMessage2);
                         $.bcTree.jsTree.delete_node(node);
                         if ($.bcTree.jsTree.get_json('#', {flat: true}).length == 0) {
@@ -891,10 +886,9 @@
                         type: 'POST',
                         data: {
                             _csrfToken: $.bcToken.key,
-                            // TODO: テンプレートにどの値が入るべきかを定義する
                             folder_template : '',
                             page_template : '',
-                            Content: {
+                            content: {
                                 parent_id: data.contentParentId,
                                 title: editNode.text,
                                 plugin: data.contentPlugin,

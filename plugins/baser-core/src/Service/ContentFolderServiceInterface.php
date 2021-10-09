@@ -44,9 +44,10 @@ interface ContentFolderServiceInterface
     /**
      * コンテンツフォルダー登録
      * @param array $data
+     * @param array $options
      * @return \Cake\Datasource\EntityInterface
      */
-    public function create(array $postData);
+    public function create(array $postData, $options=[]);
 
     /**
      * コンテンツフォルダーを削除する

@@ -261,9 +261,14 @@ class ContentsControllerTest extends BcTestCase
     /**
      * ゴミ箱のコンテンツを戻す
      */
-    public function testAdmin_ajax_trash_return()
+    public function testTrash_return()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->get('/baser/admin/baser-core/contents/trash_return/');
+        $this->assertResponseFailure();
+        $id = $this->ContentService->getTrashIndex()->first()->id;
+        $this->get("/baser/admin/baser-core/contents/trash_return/{$id}");
+        $this->assertResponseOk();
+        $this->assertNotEmpty($this->ContentService->get($id));
     }
 
     /**
