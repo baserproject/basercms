@@ -108,12 +108,10 @@ class ContentFoldersController extends BcAdminAppController
             if (!$contentFolder->hasErrors()) {
                 // clearViewCache(); TODO: 動作しないため一旦コメントアウト
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'フォルダ「%s」を更新しました。'), $contentFolder->content->title));
-                $this->redirect(['action' => 'edit', $id]);
+                return $this->redirect(['action' => 'edit', $id]);
             } else {
                 $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
             }
-        } else {
-            $this->BcMessage->setError(__d('baser', '無効な処理です。'));
         }
         $this->request = $this->request->withData("ContentFolder", $contentFolder);
         $this->set('contentFolder', $contentFolder);

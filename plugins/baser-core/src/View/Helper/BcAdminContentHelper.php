@@ -126,4 +126,15 @@ class BcAdminContentHelper extends Helper
         return $this->ContentService->getUrl($url, $full, $useSubDomain, $base);
     }
 
+    /**
+     * コンテンツIDよりフルURLを取得する
+     *
+     * @param int $id コンテンツID
+     * @return mixed
+     */
+    public function getUrlById($id, $full = false)
+    {
+        return $this->ContentService->getUrlById($id, $full);
+    }
+
 }

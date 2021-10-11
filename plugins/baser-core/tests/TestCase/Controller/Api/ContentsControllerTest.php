@@ -86,13 +86,13 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
-     * testViewTrash
+     * testview_trash
      *
      * @return void
      */
-    public function testViewTrash(): void
+    public function testView_trash(): void
     {
-        $this->get('/baser/api/baser-core/contents/viewTrash/16.json?token=' . $this->accessToken);
+        $this->get('/baser/api/baser-core/contents/view_trash/16.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('削除済みフォルダー(親)', $result->trash->title);
@@ -154,28 +154,28 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      *
      * @return void
      */
-    public function testDeleteTrash()
+    public function testDelete_trash()
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->post('/baser/api/baser-core/contents/deleteTrash/16.json?token=' . $this->accessToken);
+        $this->post('/baser/api/baser-core/contents/delete_trash/16.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals("ゴミ箱: 削除済みフォルダー(親) を削除しました。", $result->message);
-        $this->get('/baser/api/baser-core/contents/viewTrash/16.json?token=' . $this->accessToken);
+        $this->get('/baser/api/baser-core/contents/view_trash/16.json?token=' . $this->accessToken);
         $this->assertResponseError();
     }
 
     /**
-     * testTrashEmpty
+     * testtrash_empty
      *
      * @return void
      */
-    public function testTrashEmpty()
+    public function testTrash_empty()
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->post('/baser/api/baser-core/contents/trashEmpty.json?type=ContentFolder&token=' . $this->accessToken);
+        $this->post('/baser/api/baser-core/contents/trash_empty.json?type=ContentFolder&token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals("ゴミ箱: 削除済みフォルダー(親)(ContentFolder)を削除しました。削除済みフォルダー(子)(ContentFolder)を削除しました。", $result->message);
@@ -203,5 +203,15 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertResponseSuccess();
         $query = $this->ContentService->getIndex(['name' => 'ControllerEdit']);
         $this->assertEquals(1, $query->count());
+    }
+
+    public function testTrash_return()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $id = $this->ContentService->getTrashIndex()->first()->id;
+        $this->get("/baser/api/baser-core/contents/trash_return/{$id}.json?token=" . $this->accessToken);
+        $this->assertResponseOk();
+        $this->assertNotEmpty($this->ContentService->get($id));
     }
 }

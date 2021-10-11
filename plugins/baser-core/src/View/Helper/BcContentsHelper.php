@@ -271,17 +271,6 @@ class BcContentsHelper extends Helper
     }
 
     /**
-     * コンテンツIDよりフルURLを取得する
-     *
-     * @param int $id コンテンツID
-     * @return mixed
-     */
-    public function getUrlById($id, $full = false)
-    {
-        return $this->_Contents->getUrlById($id, $full);
-    }
-
-    /**
      * コンテンツ管理上のURLを元に正式なURLを取得する
      *
      * @param string $url コンテンツ管理上のURL

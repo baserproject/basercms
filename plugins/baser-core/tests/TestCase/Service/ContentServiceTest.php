@@ -190,7 +190,6 @@ class ContentServiceTest extends BcTestCase
      */
     public function testGetIndex(): void
     {
-        $a = $this->ContentService->getIndex(['site_id' => 1])->toArray();
         $request = $this->getRequest('/');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
         $this->assertEquals('', $contents->first()->name);
@@ -573,5 +572,20 @@ class ContentServiceTest extends BcTestCase
         $newContent->modified_date = null; // FrozenTimeによりエラーが出るため
         $this->ContentService->update($this->ContentService->get($newContent->id), $newContent->toArray());
         $this->assertEquals($this->ContentService->get($newContent->id)->name, $name);
+    }
+
+    /**
+     */
+    public function testTrashReturn()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * 再帰的にゴミ箱より元に戻す
+     */
+    public function testTrashReturnRecursive()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 }

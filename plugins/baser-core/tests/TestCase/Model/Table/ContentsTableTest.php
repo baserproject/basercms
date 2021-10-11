@@ -458,21 +458,6 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     */
-    public function testTrashReturn()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * 再帰的にゴミ箱より元に戻す
-     */
-    public function testTrashReturnRecursive()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * タイプよりコンテンツを削除する
      */
     public function testDeleteByType()

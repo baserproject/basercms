@@ -108,15 +108,16 @@ class ContentFolderService implements ContentFolderServiceInterface
     /**
      * コンテンツフォルダー登録
      * @param array $data
+     * @param array $options
      * @return \Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function create(array $postData)
+    public function create(array $postData, $options=[])
     {
         $contentFolder = $this->ContentFolders->newEmptyEntity();
-        $contentFolder = $this->ContentFolders->patchEntity($contentFolder, $postData);
+        $contentFolder = $this->ContentFolders->patchEntity($contentFolder, $postData, $options);
         return ($result = $this->ContentFolders->save($contentFolder)) ? $result : $contentFolder;
     }
 
