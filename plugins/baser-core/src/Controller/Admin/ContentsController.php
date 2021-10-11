@@ -565,8 +565,8 @@ class ContentsController extends BcAdminAppController
         }
         $contents = $contentService->getTrashIndex()->order(['plugin', 'type']);
 
-        // EVENT Contents.beforeTrashEmpty
-        $this->dispatchLayerEvent('beforeTrashEmpty', [
+        // EVENT Contents.beforetrash_empty
+        $this->dispatchLayerEvent('beforetrash_empty', [
             'data' => $contents
         ]);
         if ($contents) {
@@ -577,8 +577,8 @@ class ContentsController extends BcAdminAppController
                 }
             }
         }
-        // EVENT Contents.afterTrashEmpty
-        $this->dispatchLayerEvent('afterTrashEmpty', [
+        // EVENT Contents.aftertrash_empty
+        $this->dispatchLayerEvent('aftertrash_empty', [
             'data' => $result
         ]);
         return $this->redirect(['action' => "trash_index"]);

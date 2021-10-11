@@ -388,9 +388,9 @@ class ContentsControllerTest extends BcTestCase
     /**
      * ゴミ箱を空にする
      */
-    public function testTrashEmpty()
+    public function testTrash_empty()
     {
-        // BcAdminContentsTestはコンポネントのテスト用のため、一旦復活させtrashEmptyを実行
+        // BcAdminContentsTestはコンポネントのテスト用のため、一旦復活させtrash_emptyを実行
         $this->ContentService->restoreAll(['type' => 'BcAdminContentsTest']);
         $this->request = $this->request->withData('test', 'テスト');
         $this->ContentsController->setRequest($this->request);

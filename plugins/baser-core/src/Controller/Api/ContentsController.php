@@ -47,7 +47,7 @@ class ContentsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function viewTrash(ContentServiceInterface $contentService, $id)
+    public function view_trash(ContentServiceInterface $contentService, $id)
     {
         $this->set([
             'trash' => $contentService->getTrash($id)
@@ -131,7 +131,7 @@ class ContentsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function deleteTrash(ContentServiceInterface $contentService, $id)
+    public function delete_trash(ContentServiceInterface $contentService, $id)
     {
         $this->request->allowMethod(['post', 'delete']);
         $trash = $contentService->getTrash($id);
@@ -158,7 +158,7 @@ class ContentsController extends BcApiController
      * @noTodo
      * @unitTest
      */
-    public function trashEmpty(ContentServiceInterface $contentService)
+    public function trash_empty(ContentServiceInterface $contentService)
     {
         $this->request->allowMethod(['post', 'delete']);
         $trash = $contentService->getTrashIndex($this->request->getQueryParams());
@@ -205,5 +205,35 @@ class ContentsController extends BcApiController
             'errors' => $content->getErrors(),
         ]);
         $this->viewBuilder()->setOption('serialize', ['content', 'message', 'errors']);
+    }
+
+    /**
+     * trash_return
+     *
+     * コンテンツ情報を元に戻す
+     * @param ContentServiceInterface $contents
+     * @param $id
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function trash_return(ContentServiceInterface $contents, $id)
+    {
+        $this->request->allowMethod(['get', 'head']);
+        try {
+            if ($restored = $contents->restore($id)) {
+                $message = __d('baser', 'ゴミ箱: {0} を元に戻しました。', $restored->name);
+            } else {
+                $message = __d('baser', 'ゴミ箱の復元に失敗しました');
+            }
+        } catch (Exception $e) {
+            $this->setResponse($this->response->withStatus(400));
+            $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+        }
+        $this->set([
+            'message' => $message,
+            'content' => $restored
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['content', 'message']);
     }
 }
