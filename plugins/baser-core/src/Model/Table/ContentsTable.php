@@ -18,6 +18,7 @@ use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\Database\Query;
 use Cake\Routing\Router;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use BaserCore\Model\AppTable;
@@ -323,7 +324,7 @@ class ContentsTable extends AppTable
                 $data['content']['self_publish_end'] = null;
             }
             if (!isset($data['content']['created_date'])) {
-                $data['content']['created_date'] = date('Y-m-d H:i:s');
+                $data['content']['created_date'] = FrozenTime::now();
             }
             if (!isset($data['content']['site_root'])) {
                 $data['content']['site_root'] = 0;
@@ -337,7 +338,7 @@ class ContentsTable extends AppTable
             }
         } else {
             if (empty($data['content']['modified_date'])) {
-                $data['content']['modified_date'] = date('Y-m-d H:i:s');
+                $data['content']['modified_date'] = FrozenTime::now();
             }
             if (isset($data['content']['name'])) {
                 $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['name'], 0, 230, 'UTF-8'));
@@ -809,7 +810,7 @@ class ContentsTable extends AppTable
             $content['exclude_search'] = 0;
         }
         if (!isset($content['created_date'])) {
-            $content['created_date'] = date('Y-m-d H:i:s');
+            $content['created_date'] = FrozenTime::now();
         }
         $content = $this->newEntity($content);
         return $this->save($content);

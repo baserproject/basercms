@@ -11,9 +11,11 @@
 
 namespace BaserCore\Test\TestCase\Model\Validation;
 
-use BaserCore\Model\Validation\BcValidation;
-use BaserCore\TestSuite\BcTestCase;
+use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 use BaserCore\Model\AppTable;
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Model\Validation\BcValidation;
 
 /**
  * Class BcValidationTest
@@ -375,17 +377,19 @@ class BcValidationTest extends BcTestCase
      */
     public function testCheckDate($value, $expect)
     {
-        $result = $this->BcValidation->checkDate($value);
-        $this->assertEquals($expect, $result);
+        if ($expect === 'error') $this->expectExceptionMessage("Failed to parse time string");
+        $frozenTime = new FrozenTime($value);
+        $result = $this->BcValidation->checkDate($frozenTime);
+        if ($expect !== 'error') $this->assertEquals($expect, $result);
     }
 
     public function checkDateDataProvider()
     {
         return [
             ['2015-01-01', true],
-            ['201511', false],
+            ['201511', true], // timestamp扱いで通る
             ['2015-01-01 00:00:00', true],
-            ['2015-0101 00:00:00', false],
+            ['2015-0101 00:00:00', 'error'],
             ['1970-01-01 09:00:00', false],
         ];
     }

@@ -197,8 +197,6 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $id = $data->id;
         $data->name = 'ControllerEdit';
         $data->site->name = 'ucmitz'; // site側でエラーが出るため
-        $data->created_date = null; // FrozenTimeによりエラーが出るため
-        $data->modified_date = null; // FrozenTimeによりエラーが出るため
         $this->post("/baser/api/baser-core/contents/edit/${id}.json?token=" . $this->accessToken, $data->toArray());
         $this->assertResponseSuccess();
         $query = $this->ContentService->getIndex(['name' => 'ControllerEdit']);

@@ -16,6 +16,7 @@ use Cake\ORM\Query;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
+use Cake\I18n\FrozenTime;
 use Nette\Utils\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
