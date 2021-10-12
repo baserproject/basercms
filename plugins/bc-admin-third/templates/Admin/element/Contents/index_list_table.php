@@ -24,8 +24,16 @@ $authors = $this->BcAdminContent->getAuthors();
 <div class="bca-data-list__top">
   <?php if ($this->BcBaser->isAdminUser()): ?>
     <div class="bca-action-table-listup">
-      <?php echo $this->BcAdminForm->control('ListTool.batch', ['type' => 'select', 'options' => ['del' => __d('baser', '削除'), 'publish' => __d('baser', '公開'), 'unpublish' => __d('baser', '非公開')], 'empty' => __d('baser', '一括処理')]) ?>
-      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn']) ?>
+      <?php echo $this->BcAdminForm->control('ListTool.batch', [
+        'type' => 'select',
+        'options' => [
+          'publish' => __d('baser', '公開'),
+          'unpublish' => __d('baser', '非公開'),
+          'delete' => __d('baser', '削除'),
+        ],
+        'empty' => __d('baser', '一括処理')
+      ]) ?>
+      <?php echo $this->BcAdminForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled', 'class' => 'bca-btn', 'data-bca-btn-size' => 'lg']) ?>
     </div>
   <?php endif ?>
   <div class="bca-data-list__sub">
@@ -115,3 +123,14 @@ $authors = $this->BcAdminContent->getAuthors();
     <?php $this->BcBaser->element('list_num') ?>
   </div>
 </div>
+
+<script>
+$(function () {
+  /**
+   * 一括処理実装
+   */
+  $.bcBatch.init({
+      batchUrl: "<?php echo $this->BcBaser->getUrl(['controller' => 'contents', 'action' => 'batch']) ?>"
+  });
+});
+</script>

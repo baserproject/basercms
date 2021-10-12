@@ -158,38 +158,32 @@ class ContentService implements ContentServiceInterface
      */
     public function getTableConditions(array $queryParams): array
     {
+        $customFields = ['name', 'folder_id', 'self_status'];
         $options = [];
-        $conditions['site_id'] = $queryParams['site_id'];
-
-        if (!empty($queryParams['withTrash'])) {
-            $conditions['withTrash'] = $queryParams['withTrash'];
-            if ($conditions['withTrash']) {
-                $options = array_merge($options, ['withDeleted']);
+        foreach ($queryParams as $key => $value) {
+            if (!empty($queryParams[$key])) {
+                if (!in_array($key, $customFields)) {
+                    $conditions[$key] = $value;
+                } else {
+                    if ($key === 'name') {
+                        $conditions['OR'] = [
+                            'name LIKE' => '%' . $value . '%',
+                            'title LIKE' => '%' . $value . '%'
+                        ];
+                        $conditions['name'] = $value;
+                    }
+                    if ($key === 'folder_id') {
+                        $Contents = $this->Contents->find('all', $options)->select(['lft', 'rght'])->where(['id' => $value]);
+                        $conditions['rght <'] = $Contents->first()->rght;
+                        $conditions['lft >'] = $Contents->first()->lft;
+                    }
+                    // self_statusでうまくフィルターできないため一旦コメントアウト
+                    // if ($key === 'self_status' && $value !== '') {
+                    //     $conditions['self_status'] = $value;
+                    // }
+                }
             }
         }
-
-        if ($queryParams['name']) {
-            $conditions['OR'] = [
-                'name LIKE' => '%' . $queryParams['name'] . '%',
-                'title LIKE' => '%' . $queryParams['name'] . '%'
-            ];
-            $conditions['name'] = $queryParams['name'];
-        }
-        if ($queryParams['folder_id']) {
-            $Contents = $this->Contents->find('all', $options)->select(['lft', 'rght'])->where(['id' => $queryParams['folder_id']]);
-            $conditions['rght <'] = $Contents->first()->rght;
-            $conditions['lft >'] = $Contents->first()->lft;
-        }
-        if ($queryParams['author_id']) {
-            $conditions['author_id'] = $queryParams['author_id'];
-        }
-        if ($queryParams['self_status'] !== '') {
-            $conditions['self_status'] = $queryParams['self_status'];
-        }
-        if ($queryParams['type']) {
-            $conditions['type'] = $queryParams['type'];
-        }
-
         return $conditions;
     }
 

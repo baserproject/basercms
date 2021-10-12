@@ -113,7 +113,6 @@ class ContentsController extends BcAdminAppController
             $this->request = $this->request->withQueryParams(Hash::merge($this->request->getQueryParams(),  ['site_id' => null]));
         }
         $currentListType = $this->request->getQuery('list_type') ?? 1;
-
         $this->setViewConditions('Contents', ['default' => [
             'query' => [
                 'num' => $siteService->getSiteConfig('admin_list_num'),
@@ -447,56 +446,90 @@ class ContentsController extends BcAdminAppController
     }
 
     /**
-     * 一括削除
+     * batch
      *
-     * @param array $ids
-     * @return boolean
-     * @access protected
+     * @param  ContentServiceInterface $contentService
+     * @return void
      */
-    protected function _batch_del(ContentServiceInterface $contentService, $ids)
+    public function batch(ContentServiceInterface $contentService)
     {
-        if ($ids) {
-            foreach($ids as $id) {
-                // FIXME: _deleteを消したので、修正する
-                $this->_delete($contentService, $id, false);
-            }
-        }
-        return true;
-    }
+        $this->disableAutoRender();
+        $allowMethod = [
+            'publish' => '公開',
+            'unpublish' => '非公開',
+            'delete' => '削除',
+        ];
 
-    /**
-     * 一括公開
-     *
-     * @param array $ids
-     * @return boolean
-     * @access protected
-     */
-    protected function _batch_publish($ids)
-    {
-        if ($ids) {
-            foreach($ids as $id) {
-                $this->_changeStatus($id, true);
-            }
+        $method = $this->request->getData('ListTool.batch');
+        if (!isset($allowMethod[$method])) {
+            return;
         }
-        return true;
-    }
 
-    /**
-     * 一括非公開
-     *
-     * @param array $ids
-     * @return boolean
-     * @access protected
-     */
-    protected function _batch_unpublish($ids)
-    {
-        if ($ids) {
-            foreach($ids as $id) {
-                $this->_changeStatus($id, false);
+        $methodText = $allowMethod[$method];
+
+        foreach($this->request->getData('ListTool.batch_targets') as $id) {
+            $content = $contentService->get($id);
+            if ($contentService->$method($id)) {
+                $this->BcMessage->setSuccess(
+                    sprintf(__d('baser', 'コンテンツ「%s」 を %sしました。'), $content->name, $methodText),
+                    true,
+                    false
+                );
             }
         }
-        return true;
+        return $this->response->withStringBody('true');
     }
+    // /**
+    //  * 一括削除
+    //  *
+    //  * @param array $ids
+    //  * @return boolean
+    //  * @access protected
+    //  */
+    // protected function _batch_del(ContentServiceInterface $contentService, $ids)
+    // {
+    //     if ($ids) {
+    //         foreach($ids as $id) {
+    //             // FIXME: _deleteを消したので、修正する
+    //             $this->_delete($contentService, $id, false);
+    //         }
+    //     }
+    //     return true;
+    // }
+
+    // /**
+    //  * 一括公開
+    //  *
+    //  * @param array $ids
+    //  * @return boolean
+    //  * @access protected
+    //  */
+    // protected function _batch_publish($ids)
+    // {
+    //     if ($ids) {
+    //         foreach($ids as $id) {
+    //             $this->_changeStatus($id, true);
+    //         }
+    //     }
+    //     return true;
+    // }
+
+    // /**
+    //  * 一括非公開
+    //  *
+    //  * @param array $ids
+    //  * @return boolean
+    //  * @access protected
+    //  */
+    // protected function _batch_unpublish($ids)
+    // {
+    //     if ($ids) {
+    //         foreach($ids as $id) {
+    //             $this->_changeStatus($id, false);
+    //         }
+    //     }
+    //     return true;
+    // }
 
     /**
      * 公開状態を変更する
