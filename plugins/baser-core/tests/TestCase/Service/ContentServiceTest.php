@@ -139,7 +139,8 @@ class ContentServiceTest extends BcTestCase
             'lft >' => (int) 8,
             'self_status' => '1',
             'type' => 'ContentFolder',
-            'site_id' => 1
+            'site_id' => 1,
+            'open' => '1'
             ], $result);
     }
 

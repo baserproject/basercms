@@ -121,7 +121,6 @@
 
             $(config.listTable + " tbody td").click(function () {
                 var checkbox = $(this).parent().find(config.targetCheckbox);
-                console.log(checkbox.prop('checked'));
                 if (!checkbox.prop('checked')) {
                     checkbox.prop('checked', true);
                 } else {

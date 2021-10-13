@@ -177,10 +177,9 @@ class ContentService implements ContentServiceInterface
                         $conditions['rght <'] = $Contents->first()->rght;
                         $conditions['lft >'] = $Contents->first()->lft;
                     }
-                    // self_statusでうまくフィルターできないため一旦コメントアウト
-                    // if ($key === 'self_status' && $value !== '') {
-                    //     $conditions['self_status'] = $value;
-                    // }
+                    if ($key === 'self_status' && $value !== '') {
+                        $conditions['self_status'] = $value;
+                    }
                 }
             }
         }

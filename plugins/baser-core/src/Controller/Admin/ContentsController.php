@@ -86,7 +86,7 @@ class ContentsController extends BcAdminAppController
         $this->loadModel('BaserCore.ContentFolders');
         $this->loadModel('BaserCore.Users');
         $this->loadModel('BaserCore.Contents');
-        $this->Security->setConfig('unlockedActions', ['delete', 'trash_empty']);
+        $this->Security->setConfig('unlockedActions', ['delete', 'trash_empty', 'batch']);
         // TODO 未実装のためコメントアウト
         /* >>>
         // $this->BcAuth->allow('view');
@@ -450,6 +450,9 @@ class ContentsController extends BcAdminAppController
      *
      * @param  ContentServiceInterface $contentService
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function batch(ContentServiceInterface $contentService)
     {
@@ -479,23 +482,6 @@ class ContentsController extends BcAdminAppController
         }
         return $this->response->withStringBody('true');
     }
-    // /**
-    //  * 一括削除
-    //  *
-    //  * @param array $ids
-    //  * @return boolean
-    //  * @access protected
-    //  */
-    // protected function _batch_del(ContentServiceInterface $contentService, $ids)
-    // {
-    //     if ($ids) {
-    //         foreach($ids as $id) {
-    //             // FIXME: _deleteを消したので、修正する
-    //             $this->_delete($contentService, $id, false);
-    //         }
-    //     }
-    //     return true;
-    // }
 
     // /**
     //  * 一括公開
