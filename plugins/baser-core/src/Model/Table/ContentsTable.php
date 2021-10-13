@@ -18,6 +18,7 @@ use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\Database\Query;
 use Cake\Routing\Router;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use BaserCore\Model\AppTable;
@@ -29,6 +30,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Model\Entity\Content;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\ConnectionManager;
 use SoftDelete\Model\Table\SoftDeleteTrait;
 
 /**
@@ -50,6 +52,7 @@ class ContentsTable extends AppTable
      */
     public function initialize(array $config): void
     {
+        FrozenTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
         parent::initialize($config);
          /** TODO: soft deleteはTraitで実装する @see https://github.com/salines/cakephp4-soft-delete */
         $this->addBehavior('Tree', ['level' => 'level']);
@@ -126,6 +129,7 @@ class ContentsTable extends AppTable
             'Model.beforeValidate' => ['callable' => 'beforeValidate', 'passParams' => true],
             'Model.afterValidate' => ['callable' => 'afterValidate'],
             'Model.beforeSave' => ['callable' => 'beforeSave', 'passParams' => true],
+            'Model.afterMarshal' => 'afterMarshal',
             // 'Model.afterSave' => ['callable' => 'afterSave', 'passParams' => true],
             'Model.beforeDelete' => ['callable' => 'beforeDelete', 'passParams' => true, 'priority' => 1],
             // 'Model.afterDelete' => ['callable' => 'afterDelete'],
@@ -323,7 +327,7 @@ class ContentsTable extends AppTable
                 $data['content']['self_publish_end'] = null;
             }
             if (!isset($data['content']['created_date'])) {
-                $data['content']['created_date'] = date('Y-m-d H:i:s');
+                $data['content']['created_date'] = FrozenTime::now();
             }
             if (!isset($data['content']['site_root'])) {
                 $data['content']['site_root'] = 0;
@@ -337,7 +341,7 @@ class ContentsTable extends AppTable
             }
         } else {
             if (empty($data['content']['modified_date'])) {
-                $data['content']['modified_date'] = date('Y-m-d H:i:s');
+                $data['content']['modified_date'] = FrozenTime::now();
             }
             if (isset($data['content']['name'])) {
                 $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['name'], 0, 230, 'UTF-8'));
@@ -356,6 +360,25 @@ class ContentsTable extends AppTable
                 $contentId = $data['content']['id'];
             }
             $data['content']['name'] = $this->getUniqueName($data['content']['name'], $data['content']['parent_id'], $contentId);
+        }
+    }
+
+    /**
+     * afterMarshal
+     *
+     * @param  EventInterface $event
+     * @param  EntityInterface $entity
+     * @param  ArrayObject $options
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function afterMarshal(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        $columns = ConnectionManager::get('default')->getSchemaCollection()->describe($this->getTable())->columns();
+        foreach ($columns as $field) {
+            if ($entity->get($field) instanceof FrozenTime) $entity->set($field, $entity->get($field)->__toString());
         }
     }
 
@@ -809,7 +832,7 @@ class ContentsTable extends AppTable
             $content['exclude_search'] = 0;
         }
         if (!isset($content['created_date'])) {
-            $content['created_date'] = date('Y-m-d H:i:s');
+            $content['created_date'] = FrozenTime::now();
         }
         $content = $this->newEntity($content);
         return $this->save($content);

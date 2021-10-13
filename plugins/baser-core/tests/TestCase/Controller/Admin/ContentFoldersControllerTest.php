@@ -128,9 +128,6 @@ class ContentFoldersControllerTest extends BcTestCase
         $data = $this->ContentFolderService->getIndex(['folder_template' => "testEdit"])->first();
         $data->folder_template = 'testEditテンプレート';
         $data->content->name = "contentFolderTestUpdate";
-        // TODO: FrozenTimeによルエラーを修正する
-        $data->content->created_date = null; // FrozenTimeによりエラーが出るため
-        $data->content->modified_date = null; // FrozenTimeによりエラーが出るため
         $id = $data->id;
         $this->post('/baser/admin/baser-core/content_folders/edit/' . $id, ['ContentFolder' => $data->toArray()]);
         $this->assertResponseSuccess();

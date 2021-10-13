@@ -289,8 +289,6 @@ class ContentsControllerTest extends BcTestCase
         $data = $this->ContentService->getIndex(['name' => 'testEdit'])->first();
         $data->name = 'ControllerEdit';
         $data->site->name = 'ucmitz'; // site側でエラーが出るため
-        $data->created_date = null; // FrozenTimeによりエラーが出るため
-        $data->modified_date = null; // FrozenTimeによりエラーが出るため
         $this->post('/baser/admin/baser-core/contents/edit/' . $data->id, ["Content" => $data->toArray()]);
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin/baser-core/contents/edit/' . $data->id);

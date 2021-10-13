@@ -567,9 +567,6 @@ class ContentServiceTest extends BcTestCase
         $newContent = $this->ContentService->getIndex(['name' => 'testEdit'])->first();
         $newContent->name = $name;
         $newContent->site->name = 'ucmitz'; // site側でエラーが出るため
-        // TODO: FrozenTimeによルエラーを修正する
-        $newContent->created_date = null; // FrozenTimeによりエラーが出るため
-        $newContent->modified_date = null; // FrozenTimeによりエラーが出るため
         $this->ContentService->update($this->ContentService->get($newContent->id), $newContent->toArray());
         $this->assertEquals($this->ContentService->get($newContent->id)->name, $name);
     }
