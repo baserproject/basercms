@@ -267,7 +267,8 @@ class ContentsControllerTest extends BcTestCase
         $this->assertResponseFailure();
         $id = $this->ContentService->getTrashIndex()->first()->id;
         $this->get("/baser/admin/baser-core/contents/trash_return/{$id}");
-        $this->assertResponseOk();
+        $this->assertRedirect('/baser/admin/baser-core/contents/trash_index');
+        $this->assertResponseSuccess();
         $this->assertNotEmpty($this->ContentService->get($id));
     }
 
@@ -435,9 +436,15 @@ class ContentsControllerTest extends BcTestCase
      *
      * 新規登録時の初回リネーム時は、name にも保存する
      */
-    public function testAdmin_ajax_rename()
+    public function testRename()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->get('/baser/admin/baser-core/contents/rename/');
+        $this->assertResponseFailure();
+        $newTitle = "testRename";
+        $this->get('/baser/admin/baser-core/contents/rename/1?newTitle=' . $newTitle);
+        $this->assertRedirect('/baser/admin/baser-core/contents/index');
+        $this->assertResponseSuccess();
+        $this->assertEquals('testRename', $this->ContentService->get(1)->title);
     }
 
     /**

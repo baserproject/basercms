@@ -169,9 +169,7 @@ class ContentsTable extends AppTable
                 'message' => __d('baser', '連携しているサブサイトでスラッグが重複するコンテンツが存在します。重複するコンテンツのスラッグ名を先に変更してください。'),
             ]
         ]);
-
         $validator
-        ->requirePresence('title')
         ->scalar('title')
         ->notEmptyString('title', __d('baser', 'タイトルを入力してください。'))
         ->maxLength('title', 230, __d('baser', 'タイトルは230文字以内で入力してください。'))
@@ -183,12 +181,6 @@ class ContentsTable extends AppTable
                 'message' => __d('baser', 'タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。')
             ]
         ]);
-        $validator
-        ->requirePresence('parent_id', true, __d('baser', 'このフィールドは必須です'));
-        $validator
-        ->requirePresence('plugin', true, __d('baser', 'このフィールドは必須です'));
-        $validator
-        ->requirePresence('type', true, __d('baser', 'このフィールドは必須です'));
         $validator
         ->add('eyecatch', [
             'fileCheck' => [
@@ -365,7 +357,7 @@ class ContentsTable extends AppTable
 
     /**
      * afterMarshal
-     *
+     * FrozenTime形式のデータをバリデーション前にstringとして保存
      * @param  EventInterface $event
      * @param  EntityInterface $entity
      * @param  ArrayObject $options
