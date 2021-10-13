@@ -296,6 +296,30 @@ class ContentsControllerTest extends BcTestCase
     }
 
     /**
+     * testBatch
+     *
+     * @return void
+     */
+    public function testBatch()
+    {
+        $this->enableCsrfToken();
+        // 空データ送信
+        $this->post('/baser/admin/baser-core/contents/batch', []);
+        $this->assertResponseEmpty();
+        // delete
+        $data = [
+            'ListTool' => [
+                'batch' => 'delete',
+                'batch_targets' => [1],
+            ]
+        ];
+        $this->post('/baser/admin/baser-core/contents/batch', $data);
+        $this->assertResponseNotEmpty();
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->ContentService->get(1);
+    }
+
+    /**
      * エイリアスを編集する
      */
     public function testAdmin_edit_alias()

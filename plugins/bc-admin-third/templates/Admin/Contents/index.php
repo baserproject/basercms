@@ -82,7 +82,6 @@ $this->BcBaser->js('admin/contents/index.bundle', false, [
 $this->BcBaser->js([
   'admin/libs/jquery.baser_ajax_data_list',
   'admin/libs/baser_ajax_data_list_config',
-  'admin/libs/jquery.baser_ajax_batch',
   'admin/libs/baser_ajax_batch_config'
 ]);
 $this->BcBaser->js(['admin/libs/jquery.bcTree', 'admin/vendors/jquery.jstree-3.3.8/jstree.min'], false);
