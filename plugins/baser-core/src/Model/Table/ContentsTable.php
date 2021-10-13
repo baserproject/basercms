@@ -30,6 +30,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Model\Entity\Content;
 use Cake\Datasource\EntityInterface;
+use Cake\Datasource\ConnectionManager;
 use SoftDelete\Model\Table\SoftDeleteTrait;
 
 /**
@@ -51,6 +52,7 @@ class ContentsTable extends AppTable
      */
     public function initialize(array $config): void
     {
+        FrozenTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
         parent::initialize($config);
          /** TODO: soft deleteはTraitで実装する @see https://github.com/salines/cakephp4-soft-delete */
         $this->addBehavior('Tree', ['level' => 'level']);
@@ -127,6 +129,7 @@ class ContentsTable extends AppTable
             'Model.beforeValidate' => ['callable' => 'beforeValidate', 'passParams' => true],
             'Model.afterValidate' => ['callable' => 'afterValidate'],
             'Model.beforeSave' => ['callable' => 'beforeSave', 'passParams' => true],
+            'Model.afterMarshal' => 'afterMarshal',
             // 'Model.afterSave' => ['callable' => 'afterSave', 'passParams' => true],
             'Model.beforeDelete' => ['callable' => 'beforeDelete', 'passParams' => true, 'priority' => 1],
             // 'Model.afterDelete' => ['callable' => 'afterDelete'],
@@ -357,6 +360,25 @@ class ContentsTable extends AppTable
                 $contentId = $data['content']['id'];
             }
             $data['content']['name'] = $this->getUniqueName($data['content']['name'], $data['content']['parent_id'], $contentId);
+        }
+    }
+
+    /**
+     * afterMarshal
+     *
+     * @param  EventInterface $event
+     * @param  EntityInterface $entity
+     * @param  ArrayObject $options
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function afterMarshal(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        $columns = ConnectionManager::get('default')->getSchemaCollection()->describe($this->getTable())->columns();
+        foreach ($columns as $field) {
+            if ($entity->get($field) instanceof FrozenTime) $entity->set($field, $entity->get($field)->__toString());
         }
     }
 

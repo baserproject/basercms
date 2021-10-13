@@ -11,16 +11,15 @@
 
 namespace BaserCore\Model\Validation;
 
+use Cake\Validation\Validation;
+use Cake\Core\Configure;
 use Cake\Log\Log;
 use Cake\Utility\Hash;
-use Cake\Core\Configure;
-use Cake\I18n\FrozenTime;
-use BaserCore\Model\AppTable;
 use BaserCore\Utility\BcUtil;
-use Cake\Validation\Validation;
+use BaserCore\Model\AppTable;
+use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
 
 /**
  * Class BcValidation
@@ -416,38 +415,49 @@ class BcValidation extends Validation
     /**
      * 日付の正当性チェック
      *
-     * @param FrozenTime $value 確認する値
+     * @param string $value 確認する値
      * @return boolean
      */
-    public static function checkDate(FrozenTime $value)
+    public static function checkDate($value)
     {
-        // TODO: frozenTimeに移行したためコメントアウト
-        // timestampも通ってしまうため対策を考える必要あり
-        // if (!$value) {
-        //     return true;
-        // }
-        // $time = '';
-        // if (strpos($value, ' ') !== false) {
-        //     [$date, $time] = explode(' ', $value);
-        // } else {
-        //     $date = $value;
-        // }
-        // if (DS != '\\') {
-        //     if ($time) {
-        //         if (!strptime($value, '%Y-%m-%d %H:%M')) {
-        //             return false;
-        //         }
-        //     } else {
-        //         if (!strptime($value, '%Y-%m-%d')) {
-        //             return false;
-        //         }
-        //     }
-        // }
-        // [$Y, $m, $d] = explode('-', $date);
-        // if (checkdate($m, $d, $Y) !== true) {
-        //     return false;
-        // }
-        if ($value->lte(new FrozenTime('1970-01-01 09:00:00'))) {
+        if (!$value) {
+            return true;
+        }
+        $time = '';
+        if (strpos($value, ' ') !== false) {
+            [$date, $time] = explode(' ', $value);
+        } else {
+            $date = $value;
+        }
+        if (DS != '\\') {
+            if ($time) {
+                if (!strptime($value, '%Y-%m-%d %H:%M')) {
+                    return false;
+                }
+            } else {
+                if (!strptime($value, '%Y-%m-%d')) {
+                    return false;
+                }
+            }
+        }
+        [$Y, $m, $d] = explode('-', $date);
+        if (checkdate($m, $d, $Y) !== true) {
+            return false;
+        }
+        // TODO checktime未実装の為コメントアウト
+        /* >>>
+        if ($time) {
+            if (strpos($value, ':') !== false) {
+                list($H, $i) = explode(':', $time);
+                if (checktime($H, $i) !== true) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        <<< */
+        if (date('Y-m-d H:i:s', strtotime($value)) == '1970-01-01 09:00:00') {
             return false;
         }
         return true;

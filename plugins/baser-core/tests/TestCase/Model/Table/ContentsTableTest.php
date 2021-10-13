@@ -12,7 +12,8 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use Cake\Core\Configure;
-use Cake\Routing\Router;
+use Cake\ORM\Marshaller;
+use Cake\I18n\FrozenTime;
 use Cake\Validation\Validator;
 use BaserCore\Model\Entity\Content;
 use BaserCore\TestSuite\BcTestCase;
@@ -233,6 +234,28 @@ class ContentsTableTest extends BcTestCase
             ['index', 0, 'index'],
             ['index', 1, 'index_2'],
         ];
+    }
+
+    /**
+     * testAfterMarshal
+     *
+     * @return void
+     */
+    public function testAfterMarshal()
+    {
+        $time = new FrozenTime();
+        $data = [
+            "name" => "test",
+            "created" => $time,
+        ];
+        $marshall = new Marshaller($this->Contents);
+
+        $this->Contents->getEventManager()->on(
+            'Model.afterMarshal',
+            function ($event, $entity, $options) {}
+        );
+        $entity = $marshall->one($data);
+        $this->assertEquals($time->i18nFormat('yyyy-MM-dd HH:mm:ss'), $entity->created);
     }
 
     /**
