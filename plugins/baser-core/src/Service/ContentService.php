@@ -642,10 +642,12 @@ class ContentService implements ContentServiceInterface
     public function getUrlById($id, $full = false)
     {
         if (!is_numeric($id)) return '';
-        $data = $this->Contents->findById($id)->contain(['Sites'])->first();
-        // TODO: containが動かないため一旦false
-        return $data ? $this->getUrl($data->url, $full, false) : "";
-        // return $data ? $this->getUrl($data->url, $full, $data->site->use_subdomain) : "";
+        try {
+            $data = $this->get($id);
+        } catch (RecordNotFoundException $e) {
+            return false;
+        }
+        return $data ? $this->getUrl($data->url, $full, $data->site->use_subdomain) : "";
     }
 
     /**

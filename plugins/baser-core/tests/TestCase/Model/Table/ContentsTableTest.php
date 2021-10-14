@@ -125,7 +125,7 @@ class ContentsTableTest extends BcTestCase
         foreach($validator->getIterator() as $key => $value) {
             $fields[] = $key;
         }
-        $this->assertEquals(['id', 'name', 'title', 'parent_id', 'plugin', 'type', 'eyecatch', 'self_publish_begin', 'self_publish_end', 'created_date', 'modified_date'], $fields);
+        $this->assertEquals(['id', 'name', 'title', 'eyecatch', 'self_publish_begin', 'self_publish_end', 'created_date', 'modified_date'], $fields);
     }
 
     /**
@@ -155,9 +155,6 @@ class ContentsTableTest extends BcTestCase
                     'id' => ['integer' => "The provided value is invalid"],
                     'name' => ['_empty' => 'スラッグを入力してください。'],
                     'title' => ['_empty' => 'タイトルを入力してください。'],
-                    'parent_id' => ['_required' => 'このフィールドは必須です'],
-                    'plugin' => ['_required' => 'このフィールドは必須です'],
-                    'type' => ['_required' => 'このフィールドは必須です'],
                 ]
             ]
         ];

@@ -229,6 +229,7 @@ class ContentsController extends BcAdminAppController
      *
      * @param  ContentServiceInterface $contentService
      * @param  int $id
+     * @return Response|void
      * @checked
      * @noTodo
      * @unitTest
@@ -245,7 +246,7 @@ class ContentsController extends BcAdminAppController
         ]);
         if ($restored = $contentService->restore($id)) {
             $this->BcMessage->setSuccess(sprintf(__d('baser', 'ゴミ箱「%s」を戻しました。'), $restored->title));
-            // return $this->redirect(['action' => 'index']);
+            return $this->redirect(['action' => 'trash_index']);
         } else {
             $this->BcMessage->setError('ゴミ箱から戻す事に失敗しました。');
         }
@@ -628,22 +629,24 @@ class ContentsController extends BcAdminAppController
      *
      * 新規登録時の初回リネーム時は、name にも保存する
      */
-    public function admin_ajax_rename()
+    /**
+     * rename
+     *
+     * @param  ContentServiceInterface $contentService
+     * @param  int $id
+     * @return Response|false
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function rename(ContentServiceInterface $contentService, $id)
     {
-        $this->autoRender = false;
-        if (!$this->request->data) {
+        if (!$id) {
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
         }
-        $data = [
-            'Content' => [
-                'id' => $this->request->getData('id'),
-                'title' => $this->request->getData('newTitle'),
-                'parent_id' => $this->request->getData('parentId'),
-                'type' => $this->request->getData('type'),
-                'site_id' => $this->request->getData('siteId')
-            ]
-        ];
-        if (!$this->Content->save($data, ['firstCreate' => !empty($this->request->getData('first'))])) {
+        $oldContent = $contentService->get($id);
+        $newContent = $contentService->update($oldContent, ['title' => $this->request->getQuery('newTitle')]);
+        if ($newContent->hasErrors()) {
             $this->ajaxError(500, __d('baser', '名称変更中にエラーが発生しました。'));
             return false;
         }
@@ -654,21 +657,21 @@ class ContentsController extends BcAdminAppController
                 Configure::read(
                     sprintf(
                         'BcContents.items.%s.%s.title',
-                        $this->request->getData('plugin'),
-                        $this->request->getData('type')
+                        $oldContent->plugin,
+                        $oldContent->type
                     )
                 ),
                 sprintf(
                     __d('baser', '「%s」を「%s」に名称変更しました。'),
-                    $this->request->getData('oldTitle'),
-                    $this->request->getData('newTitle')
+                    $oldContent->title,
+                    $newContent->title
                 )
             ),
             true,
             false
         );
         Configure::write('debug', 0);
-        return $this->Content->getUrlById($this->Content->id);
+        return $this->redirect(['action' => 'index']);
     }
 
     /**
@@ -799,10 +802,17 @@ class ContentsController extends BcAdminAppController
         $this->set('sites', $contentService->getContensInfo());
     }
 
-    public function ajax_get_full_url($id)
+    /**
+     * ajax_get_full_url
+     *
+     * @param  ContentServiceInterface $contentService
+     * @param  int $id
+     * @return \Cake\Http\Response
+     */
+    public function ajax_get_full_url(ContentServiceInterface $contentService, $id)
     {
         $this->autoRender = false;
         Configure::write('debug', 0);
-        return $this->response->withType("application/json")->withStringBody($this->contentService->getUrlById($id, true));
+        return $this->response->withType("application/json")->withStringBody($contentService->getUrlById($id, true));
     }
 }

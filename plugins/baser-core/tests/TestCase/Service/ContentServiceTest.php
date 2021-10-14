@@ -474,20 +474,20 @@ class ContentServiceTest extends BcTestCase
      * testGetUrl
      *
      * $param string $host ホスト名
-     * $param string $ua ユーザーエージェント名
+     * $param string $userAgent ユーザーエージェント名
      * @param string $url 変換前URL
      * @param boolean $full フルURLで出力するかどうか
      * @param boolean $useSubDomain サブドメインを利用するかどうか
      * @param string $expects 期待するURL
      * @dataProvider getUrlDataProvider
      */
-    public function testGetUrl($host, $ua, $url, $full, $useSubDomain, $expects)
+    public function testGetUrl($host, $userAgent, $url, $full, $useSubDomain, $expects)
     {
         $this->markTestIncomplete('こちらのテストはまだ未確認です');
         $siteUrl = Configure::read('BcEnv.siteUrl');
         Configure::write('BcEnv.siteUrl', 'http://main.com');
-        if ($ua) {
-            $_SERVER['HTTP_USER_AGENT'] = $ua;
+        if ($userAgent) {
+            $_SERVER['HTTP_USER_AGENT'] = $userAgent;
         }
         if ($host) {
             Configure::write('BcEnv.host', $host);
