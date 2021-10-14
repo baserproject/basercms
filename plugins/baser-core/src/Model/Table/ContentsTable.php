@@ -182,6 +182,7 @@ class ContentsTable extends AppTable
             ]
         ]);
         $validator
+        ->allowEmptyString('eyecatch')
         ->add('eyecatch', [
             'fileCheck' => [
                 'rule' => ['fileCheck', BcUtil::convertSize(ini_get('upload_max_filesize'))],
@@ -1124,46 +1125,6 @@ class ContentsTable extends AppTable
             }
         }
         return $parentId;
-    }
-
-    /**
-     * コピーする
-     *
-     * @param $id
-     * @param $newTitle
-     * @param $newAuthorId
-     * @param $entityId
-     * @return mixed
-     */
-    public function copy($id, $entityId, $newTitle, $newAuthorId, $newSiteId = null)
-    {
-
-        $data = $this->find('first', ['conditions' => ['Content.id' => $id]]);
-        $url = $data['Content']['url'];
-        if (!is_null($newSiteId) && $data['Site']['id'] != $newSiteId) {
-            $data['Content']['site_id'] = $newSiteId;
-            $data['Content']['parent_id'] = $this->copyContentFolderPath($url, $newSiteId);
-        }
-        unset($data['Content']['id']);
-        unset($data['Content']['modified_date']);
-        unset($data['Content']['created']);
-        unset($data['Content']['modified']);
-        unset($data['Content']['main_site_content']);
-        if ($newTitle) {
-            $data['Content']['title'] = $newTitle;
-        } else {
-            $data['Content']['title'] = sprintf(__d('baser', '%s のコピー'), $data['Content']['title']);
-        }
-        $data['Content']['self_publish_begin'] = null;
-        $data['Content']['self_publish_end'] = null;
-        $data['Content']['self_status'] = false;
-        $data['Content']['author_id'] = $newAuthorId;
-        $data['Content']['created_date'] = date('Y-m-d H:i:s');
-        $data['Content']['entity_id'] = $entityId;
-        unset($data['Site']);
-        $this->create($data);
-        return $this->save($data);
-
     }
 
     /**

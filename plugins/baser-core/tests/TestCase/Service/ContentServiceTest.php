@@ -271,24 +271,6 @@ class ContentServiceTest extends BcTestCase
     }
 
     /**
-     * Test create
-     */
-    public function testCreate()
-    {
-        $request = $this->getRequest('/');
-        $request = $request->withParsedBody([
-            'parent_id' => '',
-            'plugin' => 'BaserCore',
-            'type' => '',
-            'name' => 'テストcreate',
-            'title' => 'テストcreate',
-        ]);
-        $result = $this->ContentService->create($request->getData());
-        $expected = $this->ContentService->Contents->find()->last();
-        $this->assertEquals($expected->name, $result->name);
-    }
-
-    /**
      * testDelete
      *
      * @return void
@@ -585,5 +567,63 @@ class ContentServiceTest extends BcTestCase
     public function testTrashReturnRecursive()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * コピーする
+     *
+     * @dataProvider copyDataProvider
+     */
+    public function testCopy($id, $entityId, $newTitle, $newAuthorId, $newSiteId, $titleExpected)
+    {
+        $this->markTestIncomplete('こちらのテストはまだ未確認です');
+        $this->loginAdmin($this->getRequest());
+        $result = $this->Content->copy($id, $entityId, $newTitle, $newAuthorId, $newSiteId)['Content'];
+        $this->assertEquals($result['site_id'], $newSiteId);
+        $this->assertEquals($result['entity_id'], $entityId);
+        $this->assertEquals($result['title'], $titleExpected);
+        $this->assertEquals($result['author_id'], $newAuthorId);
+    }
+    public function copyDataProvider()
+    {
+        return [
+            [1, 2, 'hoge', 3, 4, 'hoge'],
+            [1, 2, '', 3, 4, 'baserCMS inc. [デモ] のコピー'],
+        ];
+    }
+
+    /**
+     * testAlias
+     *
+     * @return void
+     */
+    public function testAlias()
+    {
+        $request = $this->getRequest('/');
+        $request = $request->withParsedBody([
+            'parent_id' => '1',
+            'plugin' => 'BaserCore',
+            'type' => 'ContentFolder',
+            'title' => 'テストエイリアス',
+        ]);
+        $content = $this->ContentService->getIndex()->last();
+        $result = $this->ContentService->alias($content->id, $request->getData());
+        $expected = $this->ContentService->Contents->find()->last();
+        $this->assertEquals($expected->name, $result->name);
+        $this->assertEquals($content->id, $result->alias_id);
+    }
+    /**
+     * testAliasDelete
+     *
+     * @return void
+     */
+    public function testAliasDelete()
+    {
+        $this->assertFalse($this->ContentService->deleteAlias(5));
+        $content = $this->ContentService->get(5);
+        $this->ContentService->update($content, ['alias_id' => 5]);
+        $this->assertTrue($this->ContentService->deleteAlias(5));
+        // ゴミ箱行きではなくちゃんと削除されてるか確認
+        $this->assertTrue($this->ContentService->getIndex(['withTrash' => true, 'id' => 5])->isEmpty());
     }
 }

@@ -338,18 +338,23 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * コンテンツ登録
-     * @param array $data
+     * aliasを作成する
+     *
+     * @param  int $id
+     * @param  array $postData
      * @return \Cake\Datasource\EntityInterface
-     * @checked
-     * @noTodo
-     * @unitTest
      */
-    public function create(array $postData)
+    public function alias(int $id, array $postData)
     {
-        $content = $this->Contents->newEmptyEntity();
-        $content = $this->Contents->patchEntity($content, $postData, ['validate' => 'default']);
-        return ($result = $this->Contents->save($content)) ? $result : $content;
+        $content = $this->get($id);
+        $data = array_merge($content->toArray(), $postData);
+        $alias = $this->Contents->newEmptyEntity();
+        unset($data['lft'], $data['rght'], $data['level'], $data['pubish_begin'], $data['publish_end'], $data['created_date'], $data['created'], $data['modified']);
+        $alias->name = $postData['name'] ?? $postData['title'];
+        $alias->alias_id = $id;
+        $alias->created_date = FrozenTime::now();
+        $alias = $this->Contents->patchEntity($alias, $postData, ['validate' => 'default']);
+        return ($result = $this->Contents->save($alias)) ? $result : $alias;
     }
 
     /**
@@ -379,6 +384,25 @@ class ContentService implements ContentServiceInterface
     {
         $content = $this->getTrash($id);
         return $this->Contents->hardDel($content, $enableTree);
+    }
+
+    /**
+     * deleteAlias
+     *
+     * @param  int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function deleteAlias($id): bool
+    {
+        $contents = $this->getIndex(['id' => $id,'alias_id!' => null, 'withTrash' => true]);
+        if (!$contents->isEmpty()) {
+            return $this->Contents->hardDelete($contents->first());
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -454,9 +478,8 @@ class ContentService implements ContentServiceInterface
         } catch (RecordNotFoundException $e) {
             return false;
         }
-
         if ($content->alias_id) {
-            $result = $this->Contents->removeFromTree($content);
+            $result = $this->delete($id) && $this->hardDelete($id);
         } else {
             // $result = $this->Contents->softDeleteFromTree($id); TODO: キャッシュ系が有効化されてからsoftDeleteFromTreeを使用する
             $result = $this->deleteRecursive($id); // 一時措置
@@ -590,7 +613,7 @@ class ContentService implements ContentServiceInterface
                 $this->Contents->deleteAssocCache($node);
             } else {
                 // エイリアスの場合、直接削除
-                $result = $this->Contents->removeFromTree($node);
+                $result = $this->hardDelete($node->id);
             }
             if (!$result) return false;
         }
@@ -804,5 +827,43 @@ class ContentService implements ContentServiceInterface
             $result = false;
         }
         return $result;
+    }
+
+    /**
+     * コピーする
+     *
+     * @param $id
+     * @param $newTitle
+     * @param $newAuthorId
+     * @param $entityId
+     * @return mixed
+     */
+    public function copy($id, $entityId, $newTitle, $newAuthorId, $newSiteId = null)
+    {
+        $content = $this->get($id);
+        $url = $content->url;
+        if (!is_null($newSiteId) && $content->site_id != $newSiteId) {
+            $content->site_id = $newSiteId;
+            // $content->parent_id = $this->copyContentFolderPath($url, $newSiteId);
+        }
+        unset($content->id);
+        unset($content->modified_date);
+        unset($content->created);
+        unset($content->modified);
+        unset($content->main_site_content);
+        if ($newTitle) {
+            $content->title = $newTitle;
+        } else {
+            $content->title = sprintf(__d('baser', '%s のコピー'), $content->title);
+        }
+        $content->self_publish_begin = null;
+        $content->self_publish_end = null;
+        $content->self_status = false;
+        $content->author_id = $newAuthorId;
+        $content->created_date = date('Y-m-d H:i:s');
+        $content->entity_id = $entityId;
+        unset($data['Site']);
+        $this->create($data);
+        return $this->save($data);
     }
 }
