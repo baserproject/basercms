@@ -373,11 +373,9 @@ class MailContent extends MailAppModel
 	public function getConditionAllowAccepting()
 	{
 		$conditions[] = ['or' => [[$this->alias . '.publish_begin <=' => date('Y-m-d H:i:s')],
-			[$this->alias . '.publish_begin' => null],
-			[$this->alias . '.publish_begin' => '0000-00-00 00:00:00']]];
+			[$this->alias . '.publish_begin' => null]]];
 		$conditions[] = ['or' => [[$this->alias . '.publish_end >=' => date('Y-m-d H:i:s')],
-			[$this->alias . '.publish_end' => null],
-			[$this->alias . '.publish_end' => '0000-00-00 00:00:00']]];
+			[$this->alias . '.publish_end' => null]]];
 		return $conditions;
 	}
 
