@@ -22,7 +22,9 @@ $this->BcListTable->setColumnNumber(4);
       ]) ?>
     </div>
   <?php endif ?>
-  <?php $this->BcBaser->element('pagination') ?>
+  <div class="bca-data-list__sub">
+    <?php $this->BcBaser->element('pagination') ?>
+  </div>
 </div>
 
 <table class="list-table bca-table-listup" id="ListTable">

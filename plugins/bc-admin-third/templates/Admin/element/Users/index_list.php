@@ -20,8 +20,11 @@ use BaserCore\View\AppView;
 $this->BcListTable->setColumnNumber(7);
 ?>
 
-
-<?php $this->BcBaser->element('pagination') ?>
+<div class="bca-data-list__top">
+  <div class="bca-data-list__sub">
+    <?php $this->BcBaser->element('pagination') ?>
+  </div>
+</div>
 
 <table class="list-table bca-table-listup" id="ListTable">
   <thead class="bca-table-listup__thead">
@@ -101,4 +104,9 @@ $this->BcListTable->setColumnNumber(7);
   </tbody>
 </table>
 
-<?php $this->BcBaser->element('list_num') ?>
+<div class="bca-data-list__bottom">
+  <div class="bca-data-list__sub">
+    <?php $this->BcBaser->element('pagination') ?>
+    <?php $this->BcBaser->element('list_num') ?>
+  </div>
+</div>
