@@ -244,7 +244,8 @@ class BcAdminHelperTest extends BcTestCase
         // ヘルプなし 未ログイン
         $expected = $this->BcAdmin->getView()->element('contents_menu', [
             'isHelp' => false,
-            'isLogin' => false
+            'isLogin' => false,
+            'isSuperUser' => false
         ]);
         ob_start();
         $this->BcAdmin->contentsMenu();
@@ -254,7 +255,8 @@ class BcAdminHelperTest extends BcTestCase
         // ヘルプあり 未ログイン
         $expectedIsHelp = $this->BcAdmin->getView()->element('contents_menu', [
             'isHelp' => true,
-            'isLogin' => false
+            'isLogin' => false,
+            'isSuperUser' => false
         ]);
         $this->BcAdmin->getView()->set('help', 'test');
         ob_start();
@@ -268,7 +270,8 @@ class BcAdminHelperTest extends BcTestCase
         // ヘルプなし ログイン済
         $expectedIsLogin = $this->BcAdmin->getView()->element('contents_menu', [
             'isHelp' => false,
-            'isLogin' => true
+            'isLogin' => true,
+            'isSuperUser' => false
         ]);
         $this->BcAdmin->getView()->set('help', null);
         ob_start();
@@ -279,13 +282,23 @@ class BcAdminHelperTest extends BcTestCase
         // ヘルプあり ログイン済
         $expectedIsHelpIsLogin = $this->BcAdmin->getView()->element('contents_menu', [
             'isHelp' => true,
-            'isLogin' => true
+            'isLogin' => true,
+            'isSuperUser' => false
         ]);
         $this->BcAdmin->setHelp('test');
         ob_start();
         $this->BcAdmin->contentsMenu();
         $actualIsHelpIsLogin = ob_get_clean();
         $this->assertEquals($expectedIsHelpIsLogin, $actualIsHelpIsLogin);
+        
+        // ヘルプあり ログイン済 スーパーユーザー
+        $expectedIsSuperUser = $this->BcAdmin->getView()->element('contents_menu', [
+            'isHelp' => true,
+            'isLogin' => true,
+            'isSuperUser' => true
+        ]);
+        $needText = '<div id="PermissionDialog" title="アクセス制限登録" style="display:none">';
+        $this->assertNotFalse(strpos($expectedIsSuperUser, $needText));
     }
 
     /**

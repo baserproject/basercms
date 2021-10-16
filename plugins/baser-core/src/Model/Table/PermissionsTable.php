@@ -16,11 +16,11 @@ use ArrayObject;
 use Cake\Event\Event;
 use Cake\Core\Configure;
 use BaserCore\Model\AppTable;
-use BaserCore\Utility\BcUtil;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\ORM\TableRegistry;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\ConnectionManager;
 use BaserCore\Model\Table\Exception\CopyFailedException;
@@ -154,50 +154,34 @@ class PermissionsTable extends AppTable
     }
 
     /**
-     * 認証プレフィックスを取得する
-     *
-     * @param int $id PermissionのID
-     * @return string
-     */
-    public function getAuthPrefix($id)
-    {
-        $data = $this->find('first', [
-            'conditions' => ['Permission.id' => $id],
-            'recursive' => 1
-        ]);
-        if (isset($data['UserGroup']['auth_prefix'])) {
-            return $data['UserGroup']['auth_prefix'];
-        } else {
-            return '';
-        }
-    }
-
-    /**
-     * 初期値を取得する
-     * @return array
-     */
-    public function getDefaultValue()
-    {
-        $data['Permission']['auth'] = 0;
-        $data['Permission']['status'] = 1;
-        return $data;
-    }
-
-    /**
      * コントロールソースを取得する
      *
      * @param string フィールド名
      * @return array コントロールソース
+     * 
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getControlSource($field = null)
     {
-        $controlSources['user_group_id'] = $this->UserGroup->find('list', ['conditions' => ['UserGroup.id <>' => Configure::read('BcApp.adminGroupId')]]);
-        $controlSources['auth'] = ['0' => __d('baser', '不可'), '1' => __d('baser', '可')];
-        if (isset($controlSources[$field])) {
-            return $controlSources[$field];
-        } else {
-            return false;
+        if ($field === 'user_group_id') {
+            $userGroups = TableRegistry::getTableLocator()->get('BaserCore.UserGroups');
+            $groupList = $userGroups->find('list', [
+                'keyField' => 'id',
+                'valueField' => 'title',
+            ])->where([
+                'UserGroups.id !=' => Configure::read('BcApp.adminGroupId')
+            ]);
+            return $groupList->toArray();
         }
+        // if ($field === 'auth') {
+        //     return [
+        //         // '0' => __d('baser', '不可'),
+        //         '1' => __d('baser', '可')
+        //     ];
+        // }
+        return false;
     }
 
     /**
