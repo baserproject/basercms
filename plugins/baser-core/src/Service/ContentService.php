@@ -510,7 +510,7 @@ class ContentService implements ContentServiceInterface
       * @noTodo
       * @unitTest
       */
-    public function getContensInfo()
+    public function getContentsInfo()
     {
         $sites = $this->Sites->getPublishedAll();
         $contentsInfo = [];

@@ -447,9 +447,10 @@ class ContentsControllerTest extends BcTestCase
     /**
      * コンテンツ情報を取得する
      */
-    public function test_ajax_contents_info()
+    public function testAjax_contents_info()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->get('/baser/admin/baser-core/contents/ajax_contents_info');
+        $this->assertResponseOk();
     }
 
     /**
