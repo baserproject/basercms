@@ -31,7 +31,7 @@ class MailContent extends MailAppModel
 	 *
 	 * @var array
 	 */
-	public $actsAs = ['BcSearchIndexManager', 'BcCache', 'BcContents'];
+	public $actsAs = ['BcSearchIndexManager', 'BcContents'];
 
 	/**
 	 * hasMany

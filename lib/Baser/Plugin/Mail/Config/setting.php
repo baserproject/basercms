@@ -27,8 +27,7 @@ $mailContents = $MailContent->find('all', [
 		$MailContent->Content->getConditionAllowPublish()
 	],
 	'recursive' => 0,
-	'order' => $MailContent->id,
-	'cache' => false,
+	'order' => $MailContent->id
 ]);
 foreach($mailContents as $mailContent) {
 	$mail = $mailContent['MailContent'];
