@@ -846,9 +846,9 @@
             data = _data;
 
             var url = '';
-            // シングルコンテンツでデータが既に存在する場合
+            // シングルコンテンツでデータが既に存在する場合 エイリアス作成の場合
             if ((!$.bcTree.settings[data.contentType]['multiple'] && $.bcTree.settings[data.contentType]['exists']) || data.contentAliasId) {
-                url = $.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/contents/add/1';
+                url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/create_alias/' + data.contentAliasId + "?aliasName=" + data.contentTitle;
                 data.alias = true;
             } else {
                 url = $.bcTree.settings[data.contentType]['url']['add']
@@ -877,7 +877,7 @@
                                 entity_id: data.contentEntityId
                             },
                         },
-                        dataType: 'json',
+                        dataType: 'html',
                         beforeSend: function () {
                             $.bcUtil.hideMessage();
                             $.bcUtil.showLoader();
@@ -905,7 +905,8 @@
                             }
                         });
                     });
-                }, {hideLoader: false});
+                }
+                , {hideLoader: false});
             });
         },
 

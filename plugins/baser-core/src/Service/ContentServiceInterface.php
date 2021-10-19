@@ -111,11 +111,13 @@ interface ContentServiceInterface
     public function convertTreeList($nodes);
 
     /**
-     * コンテンツ登録
-     * @param array $data
+     * aliasを作成する
+     *
+     * @param  int $id
+     * @param  array $postData
      * @return \Cake\Datasource\EntityInterface
      */
-    public function create(array $postData);
+    public function alias(int $id, array $postData);
 
     /**
      * コンテンツ情報を論理削除する
@@ -132,6 +134,14 @@ interface ContentServiceInterface
      * @return bool
      */
     public function hardDelete($id, $enableTree = false): bool;
+
+    /**
+     * deleteAlias
+     *
+     * @param  int $id
+     * @return bool
+     */
+    public function deleteAlias($id): bool;
 
     /**
      * コンテンツ情報と紐付いてるモデルを削除する

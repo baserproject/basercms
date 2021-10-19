@@ -495,31 +495,6 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     * コピーする
-     *
-     * @dataProvider copyDataProvider
-     */
-    public function testCopy($id, $entityId, $newTitle, $newAuthorId, $newSiteId, $titleExpected)
-    {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->loginAdmin($this->getRequest());
-        $result = $this->Content->copy($id, $entityId, $newTitle, $newAuthorId, $newSiteId)['Content'];
-        $this->assertEquals($result['site_id'], $newSiteId);
-        $this->assertEquals($result['entity_id'], $entityId);
-        $this->assertEquals($result['title'], $titleExpected);
-        $this->assertEquals($result['author_id'], $newAuthorId);
-
-    }
-
-    public function copyDataProvider()
-    {
-        return [
-            [1, 2, 'hoge', 3, 4, 'hoge'],
-            [1, 2, '', 3, 4, 'baserCMS inc. [デモ] のコピー'],
-        ];
-    }
-
-    /**
      * 公開済の conditions を取得
      */
     public function testGetConditionAllowPublish()
