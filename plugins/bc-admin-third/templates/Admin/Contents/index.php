@@ -84,7 +84,8 @@ $this->BcBaser->js([
   'admin/libs/baser_ajax_data_list_config',
   'admin/libs/baser_ajax_batch_config'
 ]);
-$this->BcBaser->js(['admin/libs/jquery.bcTree', 'admin/vendors/jquery.jstree-3.3.8/jstree.min'], false);
+$this->BcBaser->js(['vendor/jquery.jstree-3.3.8/jstree.min'], false);
+$this->BcBaser->css('../js/vendor/jquery.jstree-3.3.8/themes/proton/style.min', ['block' => true]);
 echo $this->BcAdminForm->control('BcManageContent', ['type' => 'hidden', 'value' => $this->BcContents->getJsonItems()]);
 ?>
 <script type="text/javascript">
