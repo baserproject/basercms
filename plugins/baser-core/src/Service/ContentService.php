@@ -866,4 +866,41 @@ class ContentService implements ContentServiceInterface
         $this->create($data);
         return $this->save($data);
     }
+
+    /**
+     * 公開状態にする
+     *
+     * @param int $id
+     * @return EntityInterface
+     *
+     * @checked
+     * @unitTest
+     */
+    public function publish($id): EntityInterface
+    {
+        $content = $this->get($id);
+        // 日付をどこで入れるかを確認する
+        // $content->self_publish_begin = FrozenTime::now();
+        $content->self_status = true;
+        return $this->Contents->save($content);
+    }
+
+    /**
+     * 非公開状態にする
+     *
+     * @param int $id
+     * @return EntityInterface
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function unpublish($id): EntityInterface
+    {
+        $content = $this->get($id);
+        // 日付をどこで入れるかを確認する
+        // $content->self_publish_end = FrozenTime::now();
+        $content->self_status = false;
+        return $this->Contents->save($content);
+    }
 }

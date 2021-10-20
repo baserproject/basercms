@@ -325,7 +325,7 @@
                                         "action": function (obj) {
                                             $.bcToken.check(function () {
                                                 return $.ajax({
-                                                    url: $.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/contents/ajax_change_status',
+                                                    url: $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/ajax_change_status',
                                                     type: 'POST',
                                                     data: {
                                                         contentId: data.contentId,
@@ -362,7 +362,7 @@
                                         "action": function (obj) {
                                             $.bcToken.check(function () {
                                                 return $.ajax({
-                                                    url: $.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/contents/ajax_change_status',
+                                                    url: $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/ajax_change_status',
                                                     type: 'POST',
                                                     data: {
                                                         contentId: data.contentId,

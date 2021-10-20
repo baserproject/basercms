@@ -130,7 +130,7 @@ class ContentsTable extends AppTable
             'Model.afterValidate' => ['callable' => 'afterValidate'],
             'Model.beforeSave' => ['callable' => 'beforeSave', 'passParams' => true],
             'Model.afterMarshal' => 'afterMarshal',
-            // 'Model.afterSave' => ['callable' => 'afterSave', 'passParams' => true],
+            'Model.afterSave' => ['callable' => 'afterSave', 'passParams' => true],
             'Model.beforeDelete' => ['callable' => 'beforeDelete', 'passParams' => true, 'priority' => 1],
             // 'Model.afterDelete' => ['callable' => 'afterDelete'],
         ];
@@ -491,31 +491,31 @@ class ContentsTable extends AppTable
     }
 
     /**
-     * After Save
+     * afterSave
      *
-     * @param bool $created
-     * @param array $options
+     * @param  EventInterface $event
+     * @param  EntityInterface $entity
+     * @param  ArrayObject $options
      * @return void
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // TODO: 代替措置
-        $this->deleteAssocCache($this->data);
         if ($this->updatingSystemData) {
-            $this->updateSystemData($this->data);
+            $this->updateSystemData($entity);
         }
-        if ($this->updatingRelated) {
-            // ゴミ箱から戻す場合、 type の定義がないが問題なし
-            if (!empty($this->data['Content']['type']) && $this->data['Content']['type'] == 'ContentFolder') {
-                $this->updateChildren($this->data['Content']['id']);
-            }
-            $this->updateRelateSubSiteContent($this->data);
-            if (!empty($this->data['Content']['parent_id']) && $this->beforeSaveParentId != $this->data['Content']['parent_id']) {
-                $SiteConfig = ClassRegistry::init('SiteConfig');
-                $SiteConfig->updateContentsSortLastModified();
-                $this->beforeSaveParentId = null;
-            }
-        }
+        // TODO: 未実装のため一旦コメントアウト
+        // if ($this->updatingRelated) {
+        //     // ゴミ箱から戻す場合、 type の定義がないが問題なし
+        //     if (!empty($entity->type) && $entity->type == 'ContentFolder') {
+        //         $this->updateChildren($entity->id);
+        //     }
+        //     $this->updateRelateSubSiteContent($entity);
+        //     if (!empty($entity->parent_id) && $this->beforeSaveParentId != $entity->parent_id) {
+        //         $SiteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfig');
+        //         $SiteConfig->updateContentsSortLastModified();
+        //         $this->beforeSaveParentId = null;
+        //     }
+        // }
     }
 
     /**
@@ -900,72 +900,63 @@ class ContentsTable extends AppTable
      *
      * URL / 公開状態 / メインサイトの関連コンテンツID
      *
-     * @param array $data
+     * @param Content $content
      * @return mixed
      */
-    public function updateSystemData($data)
+    public function updateSystemData($content)
     {
-        if (empty($data['Content']['name'])) {
-            if ($data['Content']['id'] != 1) {
+        if (empty($content->name)) {
+            if ($content->id != 1) {
                 return false;
             }
         }
-
-        $site = $this->Sites->find('first', ['conditions' => ['Site.id' => $data['Content']['site_id']]]);
-
         // URLを更新
-        $data['Content']['url'] = $this->createUrl($data['Content']['id'], $data['Content']['plugin'], $data['Content']['type']);
+        // TODO: 動作しないので一旦コメントアウト
+        // $content->url = $this->createUrl($content->id, $content->plugin, $content->type);
 
         // 親フォルダの公開状態に合わせて公開状態を更新（自身も含める）
-        if (isset($data['Content']['self_status'])) {
-            $data['Content']['status'] = $data['Content']['self_status'];
+        if (isset($content->self_status)) {
+            $content->status = $content->self_status;
         }
         // null の場合、isset で判定できないので array_key_exists を利用
-        if (array_key_exists('self_publish_begin', $data['Content'])) {
-            $data['Content']['publish_begin'] = $data['Content']['self_publish_begin'];
+        if (isset($content->self_publish_begin)) {
+            $content->publish_begin = $content->self_publish_begin;
         }
-        if (array_key_exists('self_publish_end', $data['Content'])) {
-            $data['Content']['publish_end'] = $data['Content']['self_publish_end'];
+        if (isset($content->self_publish_end)) {
+            $content->publish_end = $content->self_publish_end;
         }
-        if (!empty($data['Content']['parent_id'])) {
-            $parent = $this->find('first', [
-                'fields' => ['name', 'status', 'publish_begin', 'publish_end'],
-                'conditions' => ['Content.id' => $data['Content']['parent_id']],
-                'recursive' => -1
-            ]);
-            if (!$parent['Content']['status'] || $parent['Content']['publish_begin'] || $parent['Content']['publish_begin']) {
-                $data['Content']['status'] = $parent['Content']['status'];
-                $data['Content']['publish_begin'] = $parent['Content']['publish_begin'];
-                $data['Content']['publish_end'] = $parent['Content']['publish_end'];
+        if (!empty($content->parent_id)) {
+            $parent = $this->find()->select(['name', 'status', 'publish_begin', 'publish_end'])->where(['id' => $content->parent_id])->first();
+            if (!$parent->status || $parent->publish_begin || $parent->publish_begin) {
+                $content->status = $parent->status;
+                $content->publish_begin = $parent->publish_begin;
+                $content->publish_end = $parent->publish_end;
             }
         }
 
         // 主サイトの関連コンテンツIDを更新
-        if ($site) {
+        if ($content->site) {
             // 主サイトの同一階層のコンテンツを特定
-            $prefix = $site['Site']['name'];
-            if ($site['Site']['alias']) {
-                $prefix = $site['Site']['alias'];
+            $prefix = $content->site->name;
+            if ($content->site->alias) {
+                $prefix = $content->site->alias;
             }
-            $url = preg_replace('/^\/' . preg_quote($prefix, '/') . '\//', '/', $data['Content']['url']);
-            $mainSitePrefix = $this->Sites->getPrefix($site['Site']['main_site_id']);
+            $url = preg_replace('/^\/' . preg_quote($prefix, '/') . '\//', '/', $content->url);
+            $mainSitePrefix = $this->Sites->getPrefix($content->site->main_site_id);
             if ($mainSitePrefix) {
                 $url = '/' . $mainSitePrefix . $url;
             }
-            $mainSiteContentId = $this->field('id', [
-                'site_id' => $site['Site']['main_site_id'],
-                'url' => $url
-            ]);
+            $mainSiteContentId = $this->find()->select(['id'])->where(['site_id' => $content->site->main_site_id, 'url' => $url])->first();
             // main_site_content_id を更新
             if ($mainSiteContentId) {
-                $data['Content']['main_site_content_id'] = $mainSiteContentId;
+                $content->main_site_content_id = $mainSiteContentId;
             } else {
-                $data['Content']['main_site_content_id'] = null;
+                $content->main_site_content_id = null;
             }
         }
-        $data = $this->save($data, ['validate' => false, 'callbacks' => false]);
-        $this->data = $data;
-        return (bool)($data);
+        $this->updatingSystemData = false; // afterSaveが無限ループするためfalseを入れる
+        $content = $this->save($content, ['validate' => false, 'callbacks' => false]);
+        return (bool)($content);
     }
 
     /**
@@ -1175,15 +1166,13 @@ class ContentsTable extends AppTable
                 $fields[$key] = 'self_' . $field;
             }
         }
-
         $allowPublish = (int)$data[$fields['status']];
-
         // 期限を設定している場合に条件に該当しない場合は強制的に非公開とする
-        if (($data[$fields['publish_begin']] != 0 && $data[$fields['publish_begin']] >= date('Y-m-d H:i:s')) ||
-            ($data[$fields['publish_end']] != 0 && $data[$fields['publish_end']] <= date('Y-m-d H:i:s'))) {
+        $invalidBegin = $data[$fields['publish_begin']] instanceof FrozenTime && $data[$fields['publish_begin']]->isFuture();
+        $invalidEnd = $data[$fields['publish_end']] instanceof FrozenTime  && $data[$fields['publish_end']]->isPast();
+        if ($invalidBegin || $invalidEnd) {
             $allowPublish = false;
         }
-
         return $allowPublish;
     }
 

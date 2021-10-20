@@ -245,4 +245,20 @@ interface ContentServiceInterface
      * @return EntityInterface
      */
     public function update($content, $contentData);
+
+    /**
+     * 公開状態にする
+     *
+     * @param int $id
+     * @return EntityInterface
+     */
+    public function publish($id): EntityInterface;
+
+    /**
+     * 非公開状態にする
+     *
+     * @param int $id
+     * @return EntityInterface
+     */
+    public function unpublish($id): EntityInterface;
 }

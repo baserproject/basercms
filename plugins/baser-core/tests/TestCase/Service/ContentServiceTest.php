@@ -626,4 +626,38 @@ class ContentServiceTest extends BcTestCase
         // ゴミ箱行きではなくちゃんと削除されてるか確認
         $this->assertTrue($this->ContentService->getIndex(['withTrash' => true, 'id' => 5])->isEmpty());
     }
+
+    /**
+     * Test publish
+     *
+     * @return void
+     */
+    public function testPublish()
+    {
+        $contents = $this->getTableLocator()->get('Contents');
+
+        $content = $contents->find()->order(['id' => 'ASC'])->first();
+        $content->status = false;
+        $contents->save($content);
+
+        $content = $this->ContentService->publish($content->id);
+        $this->assertTrue($content->self_status);
+    }
+
+    /**
+     * Test unpublish
+     *
+     * @return void
+     */
+    public function testUnpublish()
+    {
+        $contents = $this->getTableLocator()->get('Contents');
+
+        $content = $contents->find()->order(['id' => 'ASC'])->first();
+        $content->status = true;
+        $contents->save($content);
+
+        $content = $this->ContentService->unpublish($content->id);
+        $this->assertFalse($content->self_status);
+    }
 }
