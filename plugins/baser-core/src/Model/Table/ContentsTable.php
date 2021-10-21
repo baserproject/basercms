@@ -500,9 +500,9 @@ class ContentsTable extends AppTable
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if ($this->updatingSystemData) {
-            $this->updateSystemData($entity);
-        }
+        // if ($this->updatingSystemData) {
+        //     $this->updateSystemData($entity);
+        // }
         // TODO: 未実装のため一旦コメントアウト
         // if ($this->updatingRelated) {
         //     // ゴミ箱から戻す場合、 type の定義がないが問題なし
@@ -901,7 +901,7 @@ class ContentsTable extends AppTable
      * URL / 公開状態 / メインサイトの関連コンテンツID
      *
      * @param Content $content
-     * @return mixed
+     * @return Content
      */
     public function updateSystemData($content)
     {
@@ -942,11 +942,20 @@ class ContentsTable extends AppTable
                 $prefix = $content->site->alias;
             }
             $url = preg_replace('/^\/' . preg_quote($prefix, '/') . '\//', '/', $content->url);
-            $mainSitePrefix = $this->Sites->getPrefix($content->site->main_site_id);
+            // TODO: 一時的にtry catchにしてる部分を修正する
+            try {
+                $mainSitePrefix = $this->Sites->getPrefix($content->site->main_site_id);
+            } catch (\InvalidArgumentException $e) {
+                $mainSitePrefix = false;
+            }
             if ($mainSitePrefix) {
                 $url = '/' . $mainSitePrefix . $url;
             }
-            $mainSiteContentId = $this->find()->select(['id'])->where(['site_id' => $content->site->main_site_id, 'url' => $url])->first();
+            try {
+                $mainSiteContentId = $this->find()->select(['id'])->where(['site_id' => $content->site->main_site_id, 'url' => $url])->first()->id;
+            }  catch (\InvalidArgumentException $e) {
+                $mainSiteContentId = false;
+            }
             // main_site_content_id を更新
             if ($mainSiteContentId) {
                 $content->main_site_content_id = $mainSiteContentId;
@@ -954,9 +963,7 @@ class ContentsTable extends AppTable
                 $content->main_site_content_id = null;
             }
         }
-        $this->updatingSystemData = false; // afterSaveが無限ループするためfalseを入れる
-        $content = $this->save($content, ['validate' => false, 'callbacks' => false]);
-        return (bool)($content);
+        return $this->save($content, ['validate' => false, 'callbacks' => false]);
     }
 
     /**

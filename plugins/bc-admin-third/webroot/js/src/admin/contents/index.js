@@ -197,7 +197,6 @@ $(function () {
             'name' : '',
             'folder_id' : '',
             'type' : '',
-            'self_status' : '1',
             'author_id' : '',
         };
         let extraQuery = $.param(extraParams);

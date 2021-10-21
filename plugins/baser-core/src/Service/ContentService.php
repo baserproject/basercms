@@ -244,18 +244,6 @@ class ContentService implements ContentServiceInterface
      */
     public function getTableIndex(array $queryParams): Query
     {
-
-        $conditions = [
-            'open' => '1',
-            'name' => '',
-            'folder_id' => '',
-            'type' => '',
-            'self_status' => '1',
-            'author_id' => '',
-        ];
-        if ($queryParams) {
-            $queryParams = array_merge($conditions, $queryParams);
-        }
         return $this->getIndex($this->getTableConditions($queryParams));
     }
 
@@ -874,15 +862,17 @@ class ContentService implements ContentServiceInterface
      * @return EntityInterface
      *
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function publish($id): EntityInterface
     {
         $content = $this->get($id);
         // 日付をどこで入れるかを確認する
-        // $content->self_publish_begin = FrozenTime::now();
+        $content->self_publish_begin = FrozenTime::now();
+        $content->self_publish_end = null;
         $content->self_status = true;
-        return $this->Contents->save($content);
+        return $this->Contents->save($this->Contents->updateSystemData($content));
     }
 
     /**
@@ -899,8 +889,8 @@ class ContentService implements ContentServiceInterface
     {
         $content = $this->get($id);
         // 日付をどこで入れるかを確認する
-        // $content->self_publish_end = FrozenTime::now();
+        $content->self_publish_end = FrozenTime::now();
         $content->self_status = false;
-        return $this->Contents->save($content);
+        return $this->Contents->save($this->Contents->updateSystemData($content));
     }
 }

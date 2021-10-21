@@ -307,6 +307,28 @@ class ContentsControllerTest extends BcTestCase
         // 空データ送信
         $this->post('/baser/admin/baser-core/contents/batch', []);
         $this->assertResponseEmpty();
+        // unpublish
+        $data = [
+            'ListTool' => [
+                'batch' => 'unpublish',
+                'batch_targets' => [1],
+            ]
+        ];
+        $this->post('/baser/admin/baser-core/contents/batch', $data);
+        $this->assertResponseNotEmpty();
+        $content = $this->ContentService->get(1);
+        $this->assertFalse($content->status);
+        // publish
+        $data = [
+            'ListTool' => [
+                'batch' => 'publish',
+                'batch_targets' => [1],
+            ]
+        ];
+        $this->post('/baser/admin/baser-core/contents/batch', $data);
+        $this->assertResponseNotEmpty();
+        $content = $this->ContentService->get(1);
+        $this->assertTrue($content->status);
         // delete
         $data = [
             'ListTool' => [
