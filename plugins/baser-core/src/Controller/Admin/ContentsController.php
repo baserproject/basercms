@@ -88,7 +88,7 @@ class ContentsController extends BcAdminAppController
         $this->loadModel('BaserCore.ContentFolders');
         $this->loadModel('BaserCore.Users');
         $this->loadModel('BaserCore.Contents');
-        $this->Security->setConfig('unlockedActions', ['delete', 'trash_empty', 'batch', 'add', 'create_alias']);
+        $this->Security->setConfig('unlockedActions', ['delete', 'trash_empty', 'batch', 'add', 'create_alias', 'ajax_change_status']);
         // TODO 未実装のためコメントアウト
         /* >>>
         // $this->BcAuth->allow('view');
@@ -510,89 +510,26 @@ class ContentsController extends BcAdminAppController
         return $this->response->withStringBody('true');
     }
 
-    // /**
-    //  * 一括公開
-    //  *
-    //  * @param array $ids
-    //  * @return boolean
-    //  * @access protected
-    //  */
-    // protected function _batch_publish($ids)
-    // {
-    //     if ($ids) {
-    //         foreach($ids as $id) {
-    //             $this->_changeStatus($id, true);
-    //         }
-    //     }
-    //     return true;
-    // }
-
-    // /**
-    //  * 一括非公開
-    //  *
-    //  * @param array $ids
-    //  * @return boolean
-    //  * @access protected
-    //  */
-    // protected function _batch_unpublish($ids)
-    // {
-    //     if ($ids) {
-    //         foreach($ids as $id) {
-    //             $this->_changeStatus($id, false);
-    //         }
-    //     }
-    //     return true;
-    // }
-
     /**
      * 公開状態を変更する
-     *
+     * TODO: api-controllerに持っていく
      * @return bool
      */
-    public function admin_ajax_change_status()
+    public function ajax_change_status(ContentServiceInterface $contentService)
     {
-        $this->autoRender = false;
-        if (!$this->request->data) {
+        $this->disableAutoRender();
+        if (!$this->request->getData()) {
             $this->ajaxError(500, __d('baser', '無効な処理です。'));
         }
         switch($this->request->getData('status')) {
             case 'publish':
-                $result = $this->_changeStatus($this->request->getData('contentId'), true);
+                $result = $contentService->publish($this->request->getData('contentId'));
                 break;
             case 'unpublish':
-                $result = $this->_changeStatus($this->request->getData('contentId'), false);
+                $result = $contentService->unpublish($this->request->getData('contentId'));
                 break;
         }
-        return $result;
-    }
-
-    /**
-     * 公開状態を変更する
-     *
-     * @param int $id
-     * @param bool $status
-     * @return bool|mixed
-     */
-    protected function _changeStatus($id, $status)
-    {
-        // EVENT Contents.beforeChangeStatus
-        $this->dispatchLayerEvent('beforeChangeStatus', ['id' => $id, 'status' => $status]);
-
-        $content = $this->Content->find('first', ['conditions' => ['Content.id' => $id], 'recursive' => -1]);
-        if (!$content) {
-            return false;
-        }
-        unset($content['Content']['lft']);
-        unset($content['Content']['rght']);
-        $content['Content']['self_publish_begin'] = '';
-        $content['Content']['self_publish_end'] = '';
-        $content['Content']['self_status'] = $status;
-        $result = (bool)$this->Content->save($content, false);
-
-        // EVENT Contents.afterChangeStatus
-        $this->dispatchLayerEvent('afterChangeStatus', ['id' => $id, 'result' => $result]);
-
-        return $result;
+        return $this->response->withType("application/json")->withStringBody((bool) $result);
     }
 
     /**
