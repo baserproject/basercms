@@ -318,7 +318,7 @@ class BcUploadHelper extends BcAppHelper
 							continue;
 						}
 					} else {
-						if ($options['mobile'] != preg_match('/^mobile_/', $key)) {
+						if ($options['mobile'] != preg_match('/^mobile_/', $key) && $options['imgsize'] != 'mobile_thumb') {
 							continue;
 						}
 					}
