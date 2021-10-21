@@ -203,6 +203,11 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals(1, $query->count());
     }
 
+    /**
+     * testTrash_return
+     *
+     * @return void
+     */
     public function testTrash_return()
     {
         $this->enableSecurityToken();
@@ -211,5 +216,24 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->get("/baser/api/baser-core/contents/trash_return/{$id}.json?token=" . $this->accessToken);
         $this->assertResponseOk();
         $this->assertNotEmpty($this->ContentService->get($id));
+    }
+
+    /**
+     * testChange_status
+     *
+     * @return void
+     */
+    public function testChange_status()
+    {
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = ['id' => 1, 'status' => 'unpublish'];
+        $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $this->accessToken, $data);
+        $this->assertResponseOk();
+        $this->assertFalse($this->ContentService->get($data['id'])->status);
+        $data = ['id' => 1, 'status' => 'publish'];
+        $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $this->accessToken, $data);
+        $this->assertResponseOk();
+        $this->assertTrue($this->ContentService->get($data['id'])->status);
     }
 }

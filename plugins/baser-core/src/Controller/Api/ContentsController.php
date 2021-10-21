@@ -236,4 +236,44 @@ class ContentsController extends BcApiController
         ]);
         $this->viewBuilder()->setOption('serialize', ['content', 'message']);
     }
+
+    /**
+     * 公開状態を変更する
+     * @param ContentServiceInterface $contentService
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function change_status(ContentServiceInterface $contentService)
+    {
+        $this->request->allowMethod(['post', 'put', 'patch']);
+        if ($this->request->getData('id') && $this->request->getData('status')) {
+            try {
+                switch($this->request->getData('status')) {
+                    case 'publish':
+                        $content = $contentService->publish($this->request->getData('id'));
+                        $message = __d('baser', 'コンテンツ: {0} を公開しました。', $content->name);
+                        break;
+                    case 'unpublish':
+                        $content = $contentService->unpublish($this->request->getData('id'));
+                        $message = __d('baser', 'コンテンツ: {0} を非公開にしました。', $content->name);
+                        break;
+                }
+                $result = true;
+            } catch (\Exception $e) {
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
+            }
+        } else {
+            $this->setResponse($this->response->withStatus(400));
+            $result = false;
+            $message = __d('baser',  '無効な処理です。') . "データが不足しています";
+        }
+        $this->set([
+            'message' => $message,
+            'result' => $result
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['content', 'message']);
+    }
 }

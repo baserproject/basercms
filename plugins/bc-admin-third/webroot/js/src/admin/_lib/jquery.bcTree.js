@@ -325,10 +325,10 @@
                                         "action": function (obj) {
                                             $.bcToken.check(function () {
                                                 return $.ajax({
-                                                    url: $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/ajax_change_status',
-                                                    type: 'POST',
+                                                    url: $.bcUtil.apiBaseUrl + 'baser-core' +  '/contents/change_status',
+                                                    type: 'PATCH',
                                                     data: {
-                                                        contentId: data.contentId,
+                                                        id: data.contentId,
                                                         status: 'publish',
                                                         type: data.contentType,
                                                         siteId: data.contentSiteId,
@@ -362,10 +362,10 @@
                                         "action": function (obj) {
                                             $.bcToken.check(function () {
                                                 return $.ajax({
-                                                    url: $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/ajax_change_status',
-                                                    type: 'POST',
+                                                    url: $.bcUtil.apiBaseUrl + 'baser-core' +  '/contents/change_status',
+                                                    type: 'PATCH',
                                                     data: {
-                                                        contentId: data.contentId,
+                                                        id: data.contentId,
                                                         status: 'unpublish',
                                                         type: data.contentType,
                                                         siteId: data.contentSiteId,

@@ -511,28 +511,6 @@ class ContentsController extends BcAdminAppController
     }
 
     /**
-     * 公開状態を変更する
-     * TODO: api-controllerに持っていく
-     * @return bool
-     */
-    public function ajax_change_status(ContentServiceInterface $contentService)
-    {
-        $this->disableAutoRender();
-        if (!$this->request->getData()) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-        switch($this->request->getData('status')) {
-            case 'publish':
-                $result = $contentService->publish($this->request->getData('contentId'));
-                break;
-            case 'unpublish':
-                $result = $contentService->unpublish($this->request->getData('contentId'));
-                break;
-        }
-        return $this->response->withType("application/json")->withStringBody((bool) $result);
-    }
-
-    /**
      * ゴミ箱を空にする
      * @param ContentServiceInterface $contentService
      * @return Response|null

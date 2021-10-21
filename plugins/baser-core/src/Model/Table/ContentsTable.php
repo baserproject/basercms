@@ -951,17 +951,18 @@ class ContentsTable extends AppTable
             if ($mainSitePrefix) {
                 $url = '/' . $mainSitePrefix . $url;
             }
-            try {
-                $mainSiteContentId = $this->find()->select(['id'])->where(['site_id' => $content->site->main_site_id, 'url' => $url])->first()->id;
-            }  catch (\InvalidArgumentException $e) {
-                $mainSiteContentId = false;
-            }
-            // main_site_content_id を更新
-            if ($mainSiteContentId) {
-                $content->main_site_content_id = $mainSiteContentId;
-            } else {
-                $content->main_site_content_id = null;
-            }
+            // TODO: ワーニングになるため、一旦コメントアウト
+            // try {
+            //     $mainSiteContent = $this->find()->select(['id'])->where(['site_id' => $content->site->main_site_id, 'url' => $url])->first()->id >> false;
+            // }  catch (\InvalidArgumentException $e) {
+            //     $mainSiteContentId = false;
+            // }
+            // // main_site_content_id を更新
+            // if ($mainSiteContentId) {
+            //     $content->main_site_content_id = $mainSiteContentId;
+            // } else {
+            //     $content->main_site_content_id = null;
+            // }
         }
         return $this->save($content, ['validate' => false, 'callbacks' => false]);
     }
