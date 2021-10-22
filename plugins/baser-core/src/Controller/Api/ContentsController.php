@@ -314,4 +314,19 @@ class ContentsController extends BcApiController
         $this->set(['exists' => $exists]);
         $this->viewBuilder()->setOption('serialize', ['exists']);
     }
+
+    /**
+     * サイトに紐付いたフォルダリストを取得
+     * @param ContentServiceInterface $contentService
+     * @param int $siteId
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function get_content_folder_list(ContentServiceInterface $contentService, $siteId)
+    {
+        $this->request->allowMethod(['get']);
+        $this->set(['list' => $contentService->getContentFolderList($siteId,['conditions' => ['site_root' => false]])]);
+        $this->viewBuilder()->setOption('serialize', ['list']);
+    }
 }

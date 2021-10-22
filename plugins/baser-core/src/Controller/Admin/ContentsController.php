@@ -88,7 +88,7 @@ class ContentsController extends BcAdminAppController
         $this->loadModel('BaserCore.ContentFolders');
         $this->loadModel('BaserCore.Users');
         $this->loadModel('BaserCore.Contents');
-        $this->Security->setConfig('unlockedActions', ['delete', 'trash_empty', 'batch', 'add', 'create_alias', 'ajax_change_status']);
+        $this->Security->setConfig('unlockedActions', ['delete', 'batch', 'create_alias']);
         // TODO 未実装のためコメントアウト
         /* >>>
         // $this->BcAuth->allow('view');
@@ -702,25 +702,6 @@ class ContentsController extends BcAdminAppController
         }
         Configure::write('debug', 0);
         return $this->Content->existsContentByUrl($this->request->getData('url'));
-    }
-
-    /**
-     * サイトに紐付いたフォルダリストを取得
-     * @param ContentServiceInterface $contentService
-     * @param $siteId
-     */
-    public function admin_ajax_get_content_folder_list(ContentServiceInterface $contentService, $siteId)
-    {
-        $this->autoRender = false;
-        Configure::write('debug', 0);
-        return json_encode(
-            $contentService->getContentFolderList(
-                (int)$siteId,
-                [
-                    'conditions' => ['Content.site_root' => false]
-                ]
-            )
-        );
     }
 
     /**

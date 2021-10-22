@@ -251,4 +251,16 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertResponseOk();
         $this->assertFalse(json_decode($this->_response->getBody())->exists);
     }
+
+    /**
+     * testGet_content_folder_list
+     *
+     * @return void
+     */
+    public function testGet_content_folder_list()
+    {
+        $this->get("/baser/api/baser-core/contents/get_content_folder_list/1.json?token=" . $this->accessToken);
+        $this->assertResponseOk();
+        $this->assertNotEmpty(json_decode($this->_response->getBody())->list);
+    }
 }

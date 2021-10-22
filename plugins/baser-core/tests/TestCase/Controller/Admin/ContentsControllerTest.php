@@ -503,14 +503,6 @@ class ContentsControllerTest extends BcTestCase
     }
 
     /**
-     * サイトに紐付いたフォルダリストを取得
-     */
-    public function testAdmin_ajax_get_content_folder_list()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * コンテンツ情報を取得する
      */
     public function test_ajax_contents_info()
