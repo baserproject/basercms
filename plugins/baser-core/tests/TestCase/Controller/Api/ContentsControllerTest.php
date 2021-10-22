@@ -225,10 +225,30 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertTrue($this->ContentService->get($data['id'])->status);
     }
 
+    /**
+     * testGet_full_url
+     *
+     * @return void
+     */
     public function testGet_full_url()
     {
         $this->get("/baser/api/baser-core/contents/get_full_url/1.json?token=" . $this->accessToken);
         $this->assertResponseOk();
         $this->assertEquals("https://localhost/", json_decode((string)$this->_response->getBody())->fullUrl);
+    }
+
+    /**
+     * testExists
+     *
+     * @return void
+     */
+    public function testExists()
+    {
+        $this->get("/baser/api/baser-core/contents/exists/1.json?token=" . $this->accessToken);
+        $this->assertResponseOk();
+        $this->assertTrue(json_decode($this->_response->getBody())->exists);
+        $this->get("/baser/api/baser-core/contents/exists/100.json?token=" . $this->accessToken);
+        $this->assertResponseOk();
+        $this->assertFalse(json_decode($this->_response->getBody())->exists);
     }
 }

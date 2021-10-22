@@ -279,7 +279,6 @@ class ContentsController extends BcApiController
      * @param  ContentServiceInterface $contentService
      * @param  int $id
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function get_full_url(ContentServiceInterface $contentService, $id)
@@ -294,5 +293,25 @@ class ContentsController extends BcApiController
             $this->set(['message' => __d('baser',  '無効な処理です。')]);
             $this->viewBuilder()->setOption('serialize', ['message']);
         }
+    }
+
+    /**
+     * 指定したIDのコンテンツが存在するか確認する
+     * ゴミ箱のものは無視
+     *
+     * @param  ContentServiceInterface $contentService
+     * @param $id
+     * @return Response
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function exists(ContentServiceInterface $contentService, $id)
+    {
+        $this->request->allowMethod(['get']);
+        $exists = !$contentService->getIndex(['id' => $id])->isEmpty();
+        // $exists = !$contentService->getIndex(['id' => $id, 'withTrash' => true])->isEmpty();
+        $this->set(['exists' => $exists]);
+        $this->viewBuilder()->setOption('serialize', ['exists']);
     }
 }

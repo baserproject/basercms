@@ -495,8 +495,9 @@
                                     "action": function (obj) {
                                         if (data.alias) {
                                             $.ajax({
-                                                url: $.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/contents/ajax_exists/' + data.contentAliasId,
+                                                url: $.bcUtil.apiBaseUrl + 'baser-core'  + '/contents/exists/' + data.contentAliasId,
                                                 type: 'GET',
+                                                dataType: 'json',
                                                 beforeSend: function () {
                                                     $.bcUtil.hideMessage();
                                                     $.bcUtil.showLoader();
@@ -505,7 +506,7 @@
                                                     $.bcUtil.hideLoader();
                                                 }
                                             }).done(function (result) {
-                                                if (result) {
+                                                if (result.exists) {
                                                     $.bcTree.returnContent(node);
                                                 } else {
                                                     $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage1);
@@ -997,8 +998,8 @@
                             .replace(/'/g, '&#039;')
                             .replace(/</g, '&lt;')
                             .replace(/>/g, '&gt;');
-                        $.ajax($.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/contents/ajax_get_full_url/' + data.contentId, {type: 'GET'}).done(function (result) {
-                            data.contentFullUrl = result;
+                        $.ajax($.bcUtil.apiBaseUrl + 'baser-core' + '/contents/get_full_url/' + data.contentId, {type: 'GET', dataType: 'json'}).done(function (result) {
+                            data.contentFullUrl = result.fullUrl;
                             var nodeId = $.bcTree.jsTree.create_node(parent, {
                                 text: data.contentTitle,
                                 data: {jstree: data}

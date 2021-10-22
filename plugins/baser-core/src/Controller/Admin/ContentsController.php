@@ -705,19 +705,6 @@ class ContentsController extends BcAdminAppController
     }
 
     /**
-     * 指定したIDのコンテンツが存在するか確認する
-     * ゴミ箱のものは無視
-     *
-     * @param $id
-     */
-    public function admin_ajax_exists($id)
-    {
-        $this->autoRender = false;
-        Configure::write('debug', 0);
-        return $this->Content->exists($id);
-    }
-
-    /**
      * サイトに紐付いたフォルダリストを取得
      * @param ContentServiceInterface $contentService
      * @param $siteId
