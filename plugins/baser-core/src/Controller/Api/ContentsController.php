@@ -161,7 +161,7 @@ class ContentsController extends BcApiController
     public function trash_empty(ContentServiceInterface $contentService)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $trash = $contentService->getTrashIndex($this->request->getQueryParams());
+        $trash = $contentService->getTrashIndex($this->request->getQueryParams())->order(['plugin', 'type']);
         $text = "ゴミ箱: ";
         try {
             foreach ($trash as $entity) {
@@ -180,7 +180,6 @@ class ContentsController extends BcApiController
         ]);
         $this->viewBuilder()->setOption('serialize', ['trash', 'message']);
     }
-
     /**
      * コンテンツ情報編集
      * @param ContentServiceInterface $contents
@@ -260,20 +259,40 @@ class ContentsController extends BcApiController
                         $message = __d('baser', 'コンテンツ: {0} を非公開にしました。', $content->name);
                         break;
                 }
-                $result = true;
             } catch (\Exception $e) {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             }
         } else {
             $this->setResponse($this->response->withStatus(400));
-            $result = false;
             $message = __d('baser',  '無効な処理です。') . "データが不足しています";
         }
         $this->set([
             'message' => $message,
-            'result' => $result
         ]);
         $this->viewBuilder()->setOption('serialize', ['content', 'message']);
+    }
+
+    /**
+     * get_full_url
+     *
+     * @param  ContentServiceInterface $contentService
+     * @param  int $id
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function get_full_url(ContentServiceInterface $contentService, $id)
+    {
+        $this->request->allowMethod(['get']);
+        if ($id) {
+            // TODO: bcTreeからgetUrlByIdする際に値がおかしくなるので、getUrlById自体を修正する
+            $this->set(['fullUrl' => $contentService->getUrlById($id, true)]);
+            $this->viewBuilder()->setOption('serialize', ['fullUrl']);
+        } else {
+            $this->setResponse($this->response->withStatus(400));
+            $this->set(['message' => __d('baser',  '無効な処理です。')]);
+            $this->viewBuilder()->setOption('serialize', ['message']);
+        }
     }
 }

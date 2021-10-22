@@ -132,8 +132,6 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     public function testDelete()
     {
         // 子要素を持たない場合
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $this->post('/baser/api/baser-core/contents/delete/4.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
@@ -156,8 +154,6 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testDelete_trash()
     {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $this->post('/baser/api/baser-core/contents/delete_trash/16.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
@@ -173,8 +169,6 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testTrash_empty()
     {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $this->post('/baser/api/baser-core/contents/trash_empty.json?type=ContentFolder&token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
@@ -191,8 +185,6 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testEdit()
     {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $data = $this->ContentService->getIndex(['name' => 'testEdit'])->first();
         $id = $data->id;
         $data->name = 'ControllerEdit';
@@ -210,8 +202,6 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testTrash_return()
     {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $id = $this->ContentService->getTrashIndex()->first()->id;
         $this->get("/baser/api/baser-core/contents/trash_return/{$id}.json?token=" . $this->accessToken);
         $this->assertResponseOk();
@@ -225,8 +215,6 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testChange_status()
     {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $data = ['id' => 1, 'status' => 'unpublish'];
         $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $this->accessToken, $data);
         $this->assertResponseOk();
@@ -235,5 +223,12 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $this->accessToken, $data);
         $this->assertResponseOk();
         $this->assertTrue($this->ContentService->get($data['id'])->status);
+    }
+
+    public function testGet_full_url()
+    {
+        $this->get("/baser/api/baser-core/contents/get_full_url/1.json?token=" . $this->accessToken);
+        $this->assertResponseOk();
+        $this->assertEquals("https://localhost/", json_decode((string)$this->_response->getBody())->fullUrl);
     }
 }

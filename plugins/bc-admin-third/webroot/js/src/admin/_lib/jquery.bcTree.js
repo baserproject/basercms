@@ -524,9 +524,9 @@
                                         if (confirm(bcI18n.bcTreeConfirmMessage1)) {
                                             $.bcToken.check(function () {
                                                 return $.ajax({
-                                                    url: $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/trash_empty',
-                                                    type: 'POST',
-                                                    dataType: 'html',
+                                                    url: $.bcUtil.apiBaseUrl + 'baser-core' +  '/contents/trash_empty',
+                                                    type: 'DELETE',
+                                                    dataType: 'json',
                                                     data: {
                                                         empty: true,
                                                         _csrfToken: $.bcToken.key,
@@ -542,6 +542,7 @@
                                                                 nodes.push($.bcTree.jsTree.get_node(this));
                                                             });
                                                             $.bcTree.jsTree.delete_node(nodes);
+                                                            $.bcUtil.showNoticeMessage(decodeURI(result.message));
                                                             $("#DataList").html('<div class="tree-empty">' + bcI18n.bcTreeInfoMessage1 + '</div>');
                                                         }
                                                     },
@@ -877,7 +878,7 @@
                                 entity_id: data.contentEntityId
                             },
                         },
-                        dataType: 'html',
+                        dataType: 'json',
                         beforeSend: function () {
                             $.bcUtil.hideMessage();
                             $.bcUtil.showLoader();
@@ -897,8 +898,8 @@
                             $.bcUtil.hideLoader();
                         }
                     }).then(function () {
-                        return $.bcUtil.ajax($.bcUtil.adminBaseUrl + 'baser-core' + '/contents/ajax_get_full_url/' + data.contentId, {}, {type: 'GET'}).done(function (result) {
-                            data.contentFullUrl = result;
+                        return $.bcUtil.ajax($.bcUtil.apiBaseUrl + 'baser-core' + '/contents/get_full_url/' + data.contentId, {}, {type: 'GET', dataType: 'json'}).done(function (result) {
+                            data.contentFullUrl = result.fullUrl;
                             node.data.jstree = data;
                             if (data.contentType == 'ContentFolder') {
                                 node.type = 'folder'

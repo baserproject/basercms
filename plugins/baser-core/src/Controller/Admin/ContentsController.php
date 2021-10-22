@@ -512,6 +512,7 @@ class ContentsController extends BcAdminAppController
 
     /**
      * ゴミ箱を空にする
+     * @see bcTreeの処理はApi/trash_emptyに移行
      * @param ContentServiceInterface $contentService
      * @return Response|null
      * @checked
@@ -742,19 +743,5 @@ class ContentsController extends BcAdminAppController
     {
         $this->autoLayout = false;
         $this->set('sites', $contentService->getContensInfo());
-    }
-
-    /**
-     * ajax_get_full_url
-     *
-     * @param  ContentServiceInterface $contentService
-     * @param  int $id
-     * @return \Cake\Http\Response
-     */
-    public function ajax_get_full_url(ContentServiceInterface $contentService, $id)
-    {
-        $this->autoRender = false;
-        Configure::write('debug', 0);
-        return $this->response->withType("application/json")->withStringBody($contentService->getUrlById($id, true));
     }
 }
