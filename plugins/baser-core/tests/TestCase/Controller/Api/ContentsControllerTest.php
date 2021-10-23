@@ -253,6 +253,22 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
+     * リネーム
+     *
+     * 新規登録時の初回リネーム時は、name にも保存する
+     */
+    public function testRename()
+    {
+        $this->patch("/baser/api/baser-core/contents/rename.json?token=" . $this->accessToken);
+        $this->assertResponseFailure();
+        $data = ['id' => 1, 'title' => 'testRename'];
+        $this->patch("/baser/api/baser-core/contents/rename.json?token=" . $this->accessToken, $data);
+        $this->assertResponseOk();
+        $this->assertStringContainsString('testRename', json_decode($this->_response->getBody())->message);
+        $this->assertNotNull(json_decode($this->_response->getBody())->url);
+    }
+
+    /**
      * testGet_content_folder_list
      *
      * @return void
@@ -262,5 +278,17 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->get("/baser/api/baser-core/contents/get_content_folder_list/1.json?token=" . $this->accessToken);
         $this->assertResponseOk();
         $this->assertNotEmpty(json_decode($this->_response->getBody())->list);
+    }
+
+    /**
+     * testGet_content_folder_list
+     *
+     * @return void
+     */
+    public function testExists_content_by_url()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->get("/baser/api/baser-core/contents/exists_content_by_url.json?token=" . $this->accessToken);
+        $this->assertResponseOk();
     }
 }

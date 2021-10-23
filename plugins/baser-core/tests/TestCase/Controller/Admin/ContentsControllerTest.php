@@ -454,22 +454,6 @@ class ContentsControllerTest extends BcTestCase
     }
 
     /**
-     * リネーム
-     *
-     * 新規登録時の初回リネーム時は、name にも保存する
-     */
-    public function testRename()
-    {
-        $this->get('/baser/admin/baser-core/contents/rename/');
-        $this->assertResponseFailure();
-        $newTitle = "testRename";
-        $this->get('/baser/admin/baser-core/contents/rename/1?newTitle=' . $newTitle);
-        $this->assertRedirect('/baser/admin/baser-core/contents/index');
-        $this->assertResponseSuccess();
-        $this->assertEquals('testRename', $this->ContentService->get(1)->title);
-    }
-
-    /**
      * 並び順を移動する
      */
     public function testAdmin_ajax_move()
@@ -481,15 +465,6 @@ class ContentsControllerTest extends BcTestCase
      * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
      */
     public function testAdmin_exists_content_by_url()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * 指定したIDのコンテンツが存在するか確認する
-     * ゴミ箱のものは無視
-     */
-    public function testAdmin_ajax_exists()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -509,13 +484,4 @@ class ContentsControllerTest extends BcTestCase
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
-
-    /**
-     * admin_ajax_get_full_url
-     */
-    public function testAdmin_ajax_get_full_url()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
 }

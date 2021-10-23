@@ -1041,7 +1041,33 @@
                     return false;
                 }
                 $.bcToken.check(function () {
-                    return $(location).prop('href', $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/rename/' + node.data.jstree.contentId + '?newTitle=' + newTitle)
+                    return $.ajax({
+                        url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/rename',
+                        type: 'PATCH',
+                        dataType: 'json',
+                        data: {
+                            id: node.data.jstree.contentId,
+                            title: newTitle,
+                            _csrfToken: $.bcToken.key,
+                        },
+                        beforeSend: function () {
+                            $.bcUtil.hideMessage();
+                            $.bcUtil.showLoader();
+                        },
+                        success: function (result) {
+                            $.bcUtil.showNoticeMessage(result.message);
+                            $.bcTree.settings[node.data.jstree.contentType]['existsTitle'] = editNode.text;
+                            editNode.data.jstree.contentFullUrl = result.url;
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            $.bcTree.jsTree.rename_node(editNode, defaultTitle);
+                            $.bcUtil.showAlertMessage(XMLHttpRequest.responseJSON.message);
+                            $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage5, XMLHttpRequest, errorThrown);
+                        },
+                        complete: function () {
+                            $.bcUtil.hideLoader();
+                        }
+                    })
                 }, {hideLoader: false});
             });
         },
@@ -1120,7 +1146,7 @@
             }
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/contents/ajax_move',
+                    url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/move',
                     type: 'POST',
                     data: {
                         currentId: node.data.jstree.contentId,
