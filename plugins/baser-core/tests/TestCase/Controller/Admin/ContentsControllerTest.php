@@ -345,9 +345,17 @@ class ContentsControllerTest extends BcTestCase
     /**
      * エイリアスを編集する
      */
-    public function testAdmin_edit_alias()
+    public function testEdit_alias()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = $this->ContentService->getIndex(['name' => 'testEditのエイリアス'])->first();
+        $data->name = 'ControllerEditエイリアス';
+        $data->site->name = 'ucmitz'; // site側でエラーが出るため
+        $this->post('/baser/admin/baser-core/contents/edit_alias/' . $data->id, ["Content" => $data->toArray()]);
+        $this->assertResponseSuccess();
+        $this->assertRedirect('/baser/admin/baser-core/contents/edit_alias/' . $data->id);
+        $this->assertEquals('ControllerEditエイリアス', $this->ContentService->get($data->id)->name);
     }
 
     /**

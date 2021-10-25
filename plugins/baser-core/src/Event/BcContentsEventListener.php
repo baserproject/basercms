@@ -123,12 +123,12 @@ class BcContentsEventListener extends BcEventListener
             return $preOut;
         }
         $content = $data['Content'] ?? array_column($data, 'content')[0]; // Contentエンティティ or 関連エンティティ
-        $setting = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type);
-        $isAvailablePreview = (!empty($setting['preview']) && $content->type != 'ContentFolder');
+        $setting = Configure::read('BcContents.items.' . $content['plugin'] . '.' . $content['type']);
+        $isAvailablePreview = (!empty($setting['preview']) && $content['type'] != 'ContentFolder');
         $path = BcUtil::getPrefix() . "/" . Inflector::dasherize($event->getSubject()->getPlugin()) . '/contents/delete';
         $isAvailableDelete = true;
         // TODO: user取得まだなので、一旦falseでform先にする
-        // $isAvailableDelete = (empty($content->site_root) && $this->getService(PermissionServiceInterface::class)->check($path, $View->get('user')->user_group));
+        // $isAvailableDelete = (empty($content['site_root']) && $this->getService(PermissionServiceInterface::class)->check($path, $View->get('user')->user_group));
 
         $newOut = $event->setData('out', implode("\n", [
             $View->element('content_options'),
@@ -136,7 +136,7 @@ class BcContentsEventListener extends BcEventListener
                 'isAvailablePreview' => $isAvailablePreview,
                 'isAvailableDelete' => $isAvailableDelete,
                 'currentAction' => $preOut,
-                'isAlias' => ($content->alias_id)
+                'isAlias' => ($content['alias_id'])
             ]),
             $View->element('content_related'),
             $View->element('content_info')

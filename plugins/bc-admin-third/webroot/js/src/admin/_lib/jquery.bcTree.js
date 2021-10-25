@@ -162,7 +162,7 @@
                                 }
                             }
                         } else {
-                            $.bcTree.openUrl($.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/contents/edit_alias/' + data.contentId);
+                            $.bcTree.openUrl($.bcUtil.adminBaseUrl + 'baser-core' + '/contents/edit_alias/' + data.contentId);
                         }
                     }
                 }
@@ -437,7 +437,7 @@
                                         if (!node.data.jstree.alias) {
                                             $.bcTree.openUrl($.bcTree.createLink($.bcTree.settings[data.contentType]['url']['edit'], data.contentId, data.contentParentId, data.contentEntityId));
                                         } else {
-                                            $.bcTree.openUrl($.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/contents/edit_alias/' + data.contentId);
+                                            $.bcTree.openUrl($.bcUtil.adminBaseUrl + 'baser-core' + '/contents/edit_alias/' + data.contentId);
                                         }
                                     }
                                 }

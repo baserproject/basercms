@@ -296,47 +296,49 @@ class ContentsController extends BcAdminAppController
      * エイリアスを編集する
      *
      * @param $id
+     * @param  ContentServiceInterface $contentService
+     * @return Response|null
      * @throws Exception
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function edit_alias($id)
+    public function edit_alias(ContentServiceInterface $contentService, $id)
     {
-        $this->setTitle(__d('baser', 'エイリアス編集'));
+        if (!$id && empty($this->request->getData())) {
+            $this->BcMessage->setError(__d('baser', '無効な処理です。'));
+            return $this->redirect(['action' => 'index']);
+        }
+        $alias = $contentService->get($id);
         if ($this->request->is(['post', 'put'])) {
             // if ($this->Content->isOverPostSize()) {
             //     $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
             //     $this->redirect(['action' => 'edit_alias', $id]);
             // }
-            if ($this->Content->save($this->request->data)) {
-                $srcContent = $this->Content->find('first', ['conditions' => ['Content.id' => $this->request->getData('Content.alias_id')], 'recursive' => -1]);
-                $srcContent = $srcContent['Content'];
-                $message = Configure::read('BcContents.items.' . $srcContent['plugin'] . '.' . $srcContent['type'] . '.title') .
-                    sprintf(__d('baser', '「%s」のエイリアス「%s」を編集しました。'), $srcContent['title'], $this->request->getData('Content.title'));
-                $this->BcMessage->setSuccess($message);
-                $this->redirect([
-                    'plugin' => null,
-                    'controller' => 'contents',
-                    'action' => 'edit_alias',
-                    $id
-                ]);
-            } else {
-                $this->BcMessage->setError('保存中にエラーが発生しました。入力内容を確認してください。');
+            try {
+                $newAlias = $contentService->update($alias, $this->request->getData('Content'));
+                if (!$newAlias->hasErrors()) {
+                    $content = $contentService->get($newAlias->alias_id);
+                    $message = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title') .
+                    sprintf(__d('baser', '「%s」のエイリアス「%s」を編集しました。'), $content->title, $newAlias->title);
+                    $this->BcMessage->setSuccess($message);
+                    $this->redirect(['action' => 'edit_alias', $id]);
+                } else {
+                    $this->BcMessage->setError($newAlias->getErrors());
+                }
+            } catch (\Exception $e) {
+                $this->BcMessage->setError("保存中にエラーが発生しました。入力内容を確認してください。\n" . $e->getMessage());
             }
         } else {
-            $this->request->data = $this->Content->find('first', ['conditions' => ['Content.id' => $id]]);
-            if (!$this->request->data) {
+            $this->request = $this->request->withData('Content', $alias);
+            if (!$this->request->getData()) {
                 $this->BcMessage->setError(__d('baser', '無効な処理です。'));
-                $this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+                $this->redirect(['action' => 'index']);
             }
-            $srcContent = $this->Content->find('first', ['conditions' => ['Content.id' => $this->request->getData('Content.alias_id')], 'recursive' => -1]);
-            $srcContent = $srcContent['Content'];
+            $content = $contentService->get($alias->alias_id);
         }
-
-        $this->set('srcContent', $srcContent);
+        $this->set('content', $content);
         $this->BcAdminContents->settingForm($this, $this->request->getData('Content.site_id'), $this->request->getData('Content.id'));
-        $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-        $site = $sites->findById($this->request->getData('Content.site_id'))->first();
-        $this->set('publishLink', $this->Content->getUrl($this->request->getData('Content.url'), true, $site->useSubDomain));
-
     }
 
     /**

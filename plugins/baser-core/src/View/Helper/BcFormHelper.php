@@ -1939,7 +1939,7 @@ DOC_END;
                 $context = empty($request->getParam('controller')) ? false : $request->getParam('controller');
             }
             if ($domId = isset($options['url']['action'])? $options['url']['action'] : $request->getParam('action')) {
-                $formId = Inflector::classify($context) . $request->getParam('prefix') . Inflector::camelize($this->_domId($domId)) . 'Form' ;
+                $formId = Inflector::classify($context) . $request->getParam('prefix') . Inflector::camelize($domId) . 'Form' ;
             } else {
                 $formId = null;
             }
