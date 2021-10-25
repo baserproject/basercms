@@ -261,4 +261,12 @@ interface ContentServiceInterface
      * @return EntityInterface
      */
     public function unpublish($id): EntityInterface;
+
+    /**
+     * exists
+     *
+     * @param  int $id
+     * @return bool
+     */
+    public function exists($id): bool;
 }

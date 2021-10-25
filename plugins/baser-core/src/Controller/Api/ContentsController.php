@@ -288,12 +288,11 @@ class ContentsController extends BcApiController
         if ($id) {
             // TODO: bcTreeからgetUrlByIdする際に値がおかしくなるので、getUrlById自体を修正する
             $this->set(['fullUrl' => $contentService->getUrlById($id, true)]);
-            $this->viewBuilder()->setOption('serialize', ['fullUrl']);
         } else {
             $this->setResponse($this->response->withStatus(400));
             $this->set(['message' => __d('baser',  '無効な処理です。')]);
-            $this->viewBuilder()->setOption('serialize', ['message']);
         }
+        $this->viewBuilder()->setOption('serialize', ['message', 'fullUrl']);
     }
 
     /**
@@ -310,9 +309,7 @@ class ContentsController extends BcApiController
     public function exists(ContentServiceInterface $contentService, $id)
     {
         $this->request->allowMethod(['get']);
-        $exists = !$contentService->getIndex(['id' => $id])->isEmpty();
-        // $exists = !$contentService->getIndex(['id' => $id, 'withTrash' => true])->isEmpty();
-        $this->set(['exists' => $exists]);
+        $this->set(['exists' => $contentService->exists($id)]);
         $this->viewBuilder()->setOption('serialize', ['exists']);
     }
 
@@ -396,24 +393,25 @@ class ContentsController extends BcApiController
     /**
      * 並び順を移動する
      */
-    public function move()
+    public function move(ContentServiceInterface $contentService)
     {
-
-        if (!$this->request->getData()) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+        $this->request->allowMethod(['post', 'put', 'patch']);
+        if (empty($this->request->getData())) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', '無効な処理です。');
         }
-        $this->Content->id = $this->request->getData('currentId');
-        if (!$this->Content->exists()) {
-            $this->ajaxError(500, __d('baser', 'データが存在しません。'));
-        }
-
-        if ($this->SiteConfig->isChangedContentsSortLastModified($this->request->getData('listDisplayed'))) {
-            $this->ajaxError(500, __d('baser', 'コンテンツ一覧を表示後、他のログインユーザーがコンテンツの並び順を更新しました。<br>一度リロードしてから並び替えてください。'));
+        if (!$contentService->exists($this->request->getData('origin.id'))) {
+            $message = __d('baser', 'データが存在しません。');
+            $this->setResponse($this->response->withStatus(500));
         }
 
-        if (!$this->Content->isMovable($this->request->getData('currentId'), $this->request->getData('targetParentId'))) {
-            $this->ajaxError(500, __d('baser', '同一URLのコンテンツが存在するため処理に失敗しました。（現在のサイトに存在しない場合は、関連サイトに存在します）'));
-        }
+        // if ($this->SiteConfig->isChangedContentsSortLastModified($this->request->getData('listDisplayed'))) {
+        //     $this->ajaxError(500, __d('baser', 'コンテンツ一覧を表示後、他のログインユーザーがコンテンツの並び順を更新しました。<br>一度リロードしてから並び替えてください。'));
+        // }
+
+        // if (!$this->Content->isMovable($this->request->getData('currentId'), $this->request->getData('targetParentId'))) {
+        //     $this->ajaxError(500, __d('baser', '同一URLのコンテンツが存在するため処理に失敗しました。（現在のサイトに存在しない場合は、関連サイトに存在します）'));
+        // }
 
         // // EVENT Contents.beforeMove
         // $event = $this->dispatchLayerEvent('beforeMove', [
@@ -423,43 +421,34 @@ class ContentsController extends BcApiController
         //     $this->request->getData() = $event->getResult() === true? $event->getData('data') : $event->getResult();
         // }
 
-        $data = $this->request->getData();
+        $content = $contentService->get($this->request->getData('origin.id'));
+        $beforeUrl = $content->url;
 
-        $beforeUrl = $this->Content->field('url', ['Content.id' => $data['currentId']]);
-
-        $result = $this->Content->move(
-            $data['currentId'],
-            $data['currentParentId'],
-            $data['targetSiteId'],
-            $data['targetParentId'],
-            $data['targetId']
-        );
-
-        if ($data['currentParentId'] == $data['targetParentId']) {
+        if ($this->request->getData('origin.parentId') == $this->request->getData('target.parentId')) {
             // 親が違う場合は、Contentモデルで更新してくれるが同じ場合更新しない仕様のためここで更新する
             $this->SiteConfig->updateContentsSortLastModified();
         }
-
-        if (!$result) {
-            $this->ajaxError(500, __d('baser', 'データ保存中にエラーが発生しました。'));
-            return false;
+        try {
+            $result = $contentService->move($this->request->getData('origin'), $this->request->getData('target'));
+            $result = $this->Content->move(
+                $data['currentId'],
+                $data['currentParentId'],
+                $data['targetSiteId'],
+                $data['targetParentId'],
+                $data['targetId']
+            );
+            // // EVENT Contents.afterAdd
+            // $this->dispatchLayerEvent('afterMove', [
+            //     'data' => $result
+            // ]);
+            $message = sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"), $result['Content']['title'], urldecode($beforeUrl), urldecode($result['Content']['url']));
+            $url = $contentService->getUrlById($result['Content']['id'], true);
+            $this->set(['url' => $url]);
+        } catch(Exception $e) {
+            $message = __d('baser', 'データ保存中にエラーが発生しました。' . $e->getMessage());
+            $this->setResponse($this->response->withStatus(500));
         }
-
-        // // EVENT Contents.afterAdd
-        // $this->dispatchLayerEvent('afterMove', [
-        //     'data' => $result
-        // ]);
-        $this->BcMessage->set(
-            sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"),
-                $result['Content']['title'],
-                urldecode($beforeUrl),
-                urldecode($result['Content']['url'])
-            ),
-            false,
-            true,
-            false
-        );
-
-        return json_encode($this->Content->getUrlById($result['Content']['id'], true));
+        $this->set(['message' => $message]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'url']);
     }
 }

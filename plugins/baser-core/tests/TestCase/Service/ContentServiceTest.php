@@ -660,4 +660,15 @@ class ContentServiceTest extends BcTestCase
         $content = $this->ContentService->unpublish($content->id);
         $this->assertFalse($content->self_status);
     }
+
+    /**
+     * testExists
+     *
+     * @return void
+     */
+    public function testExists()
+    {
+        $this->assertTrue($this->ContentService->exists(1));
+        $this->assertFalse($this->ContentService->exists(100));
+    }
 }

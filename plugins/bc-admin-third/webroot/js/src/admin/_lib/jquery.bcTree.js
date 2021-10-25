@@ -1061,7 +1061,6 @@
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
                             $.bcTree.jsTree.rename_node(editNode, defaultTitle);
-                            $.bcUtil.showAlertMessage(XMLHttpRequest.responseJSON.message);
                             $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage5, XMLHttpRequest, errorThrown);
                         },
                         complete: function () {
@@ -1147,15 +1146,19 @@
             $.bcToken.check(function () {
                 return $.ajax({
                     url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/move',
-                    type: 'POST',
+                    type: 'PATCH',
                     data: {
-                        currentId: node.data.jstree.contentId,
-                        currentParentId: node.data.jstree.contentParentId,
-                        currentType: node.data.jstree.contentType,
-                        entityId: node.data.jstree.contentEntityId,
-                        targetId: targetId,
-                        targetParentId: $.bcTree.dropTarget.data.jstree.contentId,
-                        targetSiteId: $.bcTree.dropTarget.data.jstree.contentSiteId,
+                        origin: {
+                            id: node.data.jstree.contentId,
+                            parentId: node.data.jstree.contentParentId,
+                            type: node.data.jstree.contentType,
+                            entityId: node.data.jstree.contentEntityId,
+                        },
+                        target: {
+                            id: targetId,
+                            parentId: $.bcTree.dropTarget.data.jstree.contentId,
+                            siteId: $.bcTree.dropTarget.data.jstree.contentSiteId,
+                        },
                         listDisplayed: $.bcTree.listDisplayed,
                         _csrfToken: $.bcToken.key,
                     },

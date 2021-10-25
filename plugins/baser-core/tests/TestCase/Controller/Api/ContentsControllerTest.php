@@ -291,4 +291,9 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->get("/baser/api/baser-core/contents/exists_content_by_url.json?token=" . $this->accessToken);
         $this->assertResponseOk();
     }
+
+    // public function testMove()
+    // {
+    //     $this->patch("/baser/api/baser-core/contents/move.json?token=" . $this->accessToken);
+    // }
 }
