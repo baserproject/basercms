@@ -88,7 +88,7 @@ class ContentsController extends BcAdminAppController
         $this->loadModel('BaserCore.ContentFolders');
         $this->loadModel('BaserCore.Users');
         $this->loadModel('BaserCore.Contents');
-        $this->Security->setConfig('unlockedActions', ['delete', 'batch', 'create_alias']);
+        $this->Security->setConfig('unlockedActions', ['delete', 'batch']);
         // TODO 未実装のためコメントアウト
         /* >>>
         // $this->BcAuth->allow('view');
@@ -256,81 +256,6 @@ class ContentsController extends BcAdminAppController
         $this->dispatchLayerEvent('afterTrashReturn', [
             'data' => $id
         ]);
-    }
-
-    /**
-     * create_alias
-     *
-     * @param  ContentServiceInterface $contentService
-     * @param  int $id
-     * @return void
-     */
-    public function create_alias(ContentServiceInterface $contentService, $id)
-    {
-        try {
-            $alias = $contentService->alias($id, $this->request->getData('content'));
-        } catch (NotFoundException $e) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-            return false;
-        }
-        if(!$alias->hasErrors()) {
-            return $this->redirect(['action' => 'index']);
-        } else {
-                $this->BcMessage->setError('保存中にエラーが発生しました。');
-        }
-    }
-    /**
-     * 新規コンテンツ登録
-     *
-     * @return void
-     */
-    public function add(ContentServiceInterface $contentService, $alias = false)
-    {
-        // NOTE: そもそもエイリアス以外の作成をここで担当するのはどうなのか?
-
-        $srcContent = [];
-        // $postData = $this->request->getData('ContentFolder');
-        $postData = $this->request->getData('Content');
-        if ($alias) {
-            if ($postData->alias_id) {
-                $conditions = ['id' => $postData->alias_id];
-            } else {
-                $conditions = [
-                    'plugin' => $postData->plugin,
-                    'type' => $postData->type
-                ];
-            }
-            // $srcContent = $this->Content->find('first', ['conditions' => $conditions, 'recursive' => -1]);
-            $srcContent = $contentService->getIndex($conditions)->first();
-            if ($srcContent) {
-                $this->request = $this->request->withData('Content.alias_id', $srcContent->id);
-            }
-
-            if (empty($postData->parent_id) && !empty($postData->url)) {
-                $this->request = $this->request->withData('Content.parent_id', $this->Content->copyContentFolderPath($postData->url, $postData->site_id));
-            }
-
-        }
-        // aliasじゃなかった場合の処理?
-        $user = $currentUser = BcUtil::loginUser('Admin');
-        $this->request = $this->request->withData('author_id', $user->id);
-
-        $contentService->create($this->request->getData());
-        $this->Content->create(false);
-        $data = $this->Content->save($this->request->getData());
-        if (!$data) {
-            $this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
-            exit;
-        }
-
-        if ($alias) {
-            $message = Configure::read('BcContents.items.' . $this->request->getData('Content.plugin') . '.' . $this->request->getData('Content.type') . '.title') .
-                sprintf(__d('baser', '「%s」のエイリアス「%s」を追加しました。'), $srcContent['title'], $this->request->getData('Content.title'));
-        } else {
-            $message = Configure::read('BcContents.items.' . $this->request->getData('Content.plugin') . '.' . $this->request->getData('Content.type') . '.title') . '「' . $this->request->getData('Content.title') . '」を追加しました。';
-        }
-        $this->BcMessage->setSuccess($message, true, false);
-        exit(json_encode($data['Content']));
     }
 
     /**

@@ -269,6 +269,32 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
+     * testadd_alias
+     *
+     * @return void
+     */
+    public function testadd_alias()
+    {
+        $content = $this->ContentService->get(1);
+        $data = [
+            'aliasId' => 1,
+            'aliasName' => 'テストエイリアス',
+            'content' => [
+                "parent_id" =>  $content->parent_id,
+                "title" => 'テストエイリアス',
+                "plugin"=> $content->plugin,
+                "type"=> $content->type,
+                "site_id"=> $content->site_id,
+                "alias_id"=> $content->alias_id,
+                "entity_id"=> $content->entity_id,
+            ]];
+        $this->post("/baser/api/baser-core/contents/add_alias.json?token=" . $this->accessToken, $data);
+        $this->assertResponseOk();
+        $this->assertNotEmpty(json_decode($this->_response->getBody())->content);
+        $this->assertEquals("テストエイリアス を作成しました。", json_decode($this->_response->getBody())->message);
+    }
+
+    /**
      * testGet_content_folder_list
      *
      * @return void

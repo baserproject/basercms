@@ -846,14 +846,24 @@
             };
             $.extend(true, _data, data);
             data = _data;
-
             var url = '';
             // シングルコンテンツでデータが既に存在する場合 エイリアス作成の場合
             if ((!$.bcTree.settings[data.contentType]['multiple'] && $.bcTree.settings[data.contentType]['exists']) || data.contentAliasId) {
-                url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/create_alias/' + data.contentAliasId + "?aliasName=" + data.contentTitle;
+                url = $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/add_alias';
                 data.alias = true;
+                var postData = {
+                    aliasId: data.contentAliasId,
+                    aliasName: data.contentTitle,
+                };
             } else {
-                url = $.bcTree.settings[data.contentType]['url']['add']
+                // TODO: api-url設定を追加する
+                // url = $.bcTree.settings[data.contentType]['url']['add'];
+                 // NOTE:一旦コンテンツフォルダの場合で試す
+                url = $.bcUtil.apiBaseUrl + 'baser-core' + '/contentFolders/add';
+                var postData = {
+                    folder_template : '',
+                    page_template : '',
+                };
             }
             var nodeId = $.bcTree.jsTree.create_node(parent, {
                 text: data.contentTitle,
@@ -861,35 +871,34 @@
             });
             var node = $.bcTree.jsTree.get_node(nodeId);
             $.bcTree.jsTree.edit(node, data.contentTitle, function (editNode) {
+                let content = {
+                    parent_id: data.contentParentId,
+                    title: editNode.text,
+                    plugin: data.contentPlugin,
+                    type: data.contentType,
+                    site_id: data.contentSiteId,
+                    alias_id: data.contentAliasId,
+                    entity_id: data.contentEntityId
+                };
+                postData.content = content;
                 $.bcToken.check(function () {
+                    postData._csrfToken = $.bcToken.key;
                     return $.ajax({
                         url: url,
                         type: 'POST',
-                        data: {
-                            _csrfToken: $.bcToken.key,
-                            folder_template : '',
-                            page_template : '',
-                            content: {
-                                parent_id: data.contentParentId,
-                                title: editNode.text,
-                                plugin: data.contentPlugin,
-                                type: data.contentType,
-                                site_id: data.contentSiteId,
-                                alias_id: data.contentAliasId,
-                                entity_id: data.contentEntityId
-                            },
-                        },
+                        data: postData,
                         dataType: 'json',
                         beforeSend: function () {
                             $.bcUtil.hideMessage();
                             $.bcUtil.showLoader();
                         },
                         success: function (result) {
+                            $.bcUtil.showNoticeMessage(result.message);
                             $.bcTree.settings[data.contentType]['exists'] = true;
                             $.bcTree.settings[data.contentType]['existsTitle'] = editNode.text;
-                            data.contentId = result.id;
-                            data.contentEntityId = result.entity_id;
-                            data.name = decodeURIComponent(result.name);
+                            data.contentId = result.content.id;
+                            data.contentEntityId = result.content.entity_id;
+                            data.name = decodeURIComponent(result.content.name);
                             node.data.jstree = data;
                             $.bcTree.refreshTree();
                         },

@@ -331,18 +331,93 @@ class ContentService implements ContentServiceInterface
      * @param  int $id
      * @param  array $postData
      * @return \Cake\Datasource\EntityInterface
+     * @checked
+     * @unitTest
      */
     public function alias(int $id, array $postData)
     {
         $content = $this->get($id);
         $data = array_merge($content->toArray(), $postData);
         $alias = $this->Contents->newEmptyEntity();
+        if (empty($data['parent_id']) && !empty($data['url'])) {
+            //TODO: copyContentFolderPath未確認
+            $data['parent_id'] = $this->copyContentFolderPath($data['url'], $data['site_id']);
+        }
         unset($data['lft'], $data['rght'], $data['level'], $data['pubish_begin'], $data['publish_end'], $data['created_date'], $data['created'], $data['modified']);
         $alias->name = $postData['name'] ?? $postData['title'];
         $alias->alias_id = $id;
         $alias->created_date = FrozenTime::now();
+        $alias->author_id = BcUtil::loginUser()->id;
         $alias = $this->Contents->patchEntity($alias, $postData, ['validate' => 'default']);
         return ($result = $this->Contents->save($alias)) ? $result : $alias;
+    }
+
+    /**
+     * 現在のフォルダのURLを元に別サイトにフォルダを生成する
+     * 最下層のIDを返却する
+     *
+     * @param $currentUrl
+     * @param $targetSiteId
+     * @return bool|null
+     */
+    public function copyContentFolderPath($currentUrl, $targetSiteId)
+    {
+
+        $current = $this->getIndex(['url' => $currentUrl]);
+        if ($current->isEmpty()) {
+            return false;
+        } else {
+            $currentId = $current->first()->id;
+        }
+        $prefix = $this->Sites->getPrefix($targetSiteId);
+        $path = $this->getPath($currentId, null, -1);
+        if (!$path) {
+            return false;
+        }
+        $url = '/';
+        if ($prefix) {
+            $url .= $prefix . '/';
+        }
+        unset($path[0]);
+        $parentId = $this->Sites->getRootContentId($targetSiteId);
+        /* @var ContentFolder $ContentFolder */
+        $ContentFolder = TableRegistry::getTableLocator()->get('ContentFolder');
+        foreach($path as $currentContentFolder) {
+            if ($currentContentFolder->type != 'ContentFolder') {
+                break;
+            }
+            if ($currentContentFolder->site_root) {
+                continue;
+            }
+            $url .= $currentContentFolder->name;
+            if ($this->findByUrl($url)) {
+                return false;
+            }
+            $url .= '/';
+            $targetContentFolder = $this->findByUrl($url);
+            if ($targetContentFolder) {
+                $parentId = $targetContentFolder->id;
+            } else {
+                $data = [
+                    'content' => [
+                        'name' => $currentContentFolder->name,
+                        'title' => $currentContentFolder->title,
+                        'parent_id' => $parentId,
+                        'plugin' => 'BaserCore',
+                        'type' => 'ContentFolder',
+                        'site_id' => $targetSiteId,
+                        'self_status' => true
+                    ]
+                ];
+                $ContentFolder->create($data);
+                if ($ContentFolder->save()) {
+                    $parentId = $ContentFolder->Content->id;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return $parentId;
     }
 
     /**

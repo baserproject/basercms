@@ -333,7 +333,7 @@ class ContentsController extends BcApiController
      *
      * 新規登録時の初回リネーム時は、name にも保存する
      * @param  ContentServiceInterface $contentService
-     * @return Response|false
+     * @return void
      * @checked
      * @noTodo
      * @unitTest
@@ -374,6 +374,35 @@ class ContentsController extends BcApiController
         }
         $this->set(['message' => $message]);
         $this->viewBuilder()->setOption('serialize', ['message', 'url']);
+    }
+
+    /**
+     * add_alias
+     *
+     * @param  ContentServiceInterface $contentService
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function add_alias(ContentServiceInterface $contentService)
+    {
+        $this->request->allowMethod(['post']);
+        try {
+            $alias = $contentService->alias($this->request->getData('aliasId'), $this->request->getData('content'));
+            if(!$alias->hasErrors()) {
+                $message = __d('baser', '{0} を作成しました。', $alias->name);
+                $this->set('content', $alias);
+            } else {
+                $this->setResponse($this->response->withStatus(400));
+                $message = __d('baser', '保存中にエラーが発生しました。');
+            }
+        } catch (Exception $e) {
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', "無効な処理です。\n" . $e->getMessage());
+        }
+        $this->set(['message' => $message]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'content']);
     }
 
     /**
