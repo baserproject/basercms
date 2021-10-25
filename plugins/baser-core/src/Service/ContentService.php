@@ -339,15 +339,15 @@ class ContentService implements ContentServiceInterface
         $content = $this->get($id);
         $data = array_merge($content->toArray(), $postData);
         $alias = $this->Contents->newEmptyEntity();
-        if (empty($data['parent_id']) && !empty($data['url'])) {
-            //TODO: copyContentFolderPath未確認
-            $data['parent_id'] = $this->copyContentFolderPath($data['url'], $data['site_id']);
-        }
+        //TODO: copyContentFolderPath未確認のため一旦コメントアウト
+        // if (empty($data['parent_id']) && !empty($data['url'])) {
+        //     $data['parent_id'] = $this->copyContentFolderPath($data['url'], $data['site_id']);
+        // }
         unset($data['lft'], $data['rght'], $data['level'], $data['pubish_begin'], $data['publish_end'], $data['created_date'], $data['created'], $data['modified']);
         $alias->name = $postData['name'] ?? $postData['title'];
         $alias->alias_id = $id;
         $alias->created_date = FrozenTime::now();
-        $alias->author_id = BcUtil::loginUser()->id;
+        $alias->author_id = BcUtil::loginUser()->id ?? null;
         $alias = $this->Contents->patchEntity($alias, $postData, ['validate' => 'default']);
         return ($result = $this->Contents->save($alias)) ? $result : $alias;
     }
@@ -542,7 +542,7 @@ class ContentService implements ContentServiceInterface
             return false;
         }
         if ($content->alias_id) {
-            $result = $this->delete($id) && $this->hardDelete($id);
+            $result = $this->Contents->hardDelete($content);
         } else {
             // $result = $this->Contents->softDeleteFromTree($id); TODO: キャッシュ系が有効化されてからsoftDeleteFromTreeを使用する
             $result = $this->deleteRecursive($id); // 一時措置
@@ -676,7 +676,7 @@ class ContentService implements ContentServiceInterface
                 $this->Contents->deleteAssocCache($node);
             } else {
                 // エイリアスの場合、直接削除
-                $result = $this->hardDelete($node->id);
+                $result = $this->Contents->hardDelete($node);
             }
             if (!$result) return false;
         }
@@ -972,15 +972,20 @@ class ContentService implements ContentServiceInterface
      * exists
      *
      * @param  int $id
+     * @param bool $withTrash ゴミ箱の物も含めるか
      * @return bool
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function exists($id): bool
+    public function exists($id, $withTrash = false): bool
     {
-        // $exists = !$contentService->getIndex(['id' => $id, 'withTrash' => true])->isEmpty();
-        return !$this->getIndex(['id' => $id])->isEmpty();
+        if ($withTrash) {
+            $exists = !$this->getIndex(['id' => $id, 'withTrash' => true])->isEmpty();
+        } else {
+            $exists = !$this->getIndex(['id' => $id])->isEmpty();
+        }
+        return $exists;
     }
 
     /**

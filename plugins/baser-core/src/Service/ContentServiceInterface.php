@@ -266,7 +266,8 @@ interface ContentServiceInterface
      * exists
      *
      * @param  int $id
+     * @param bool $withTrash ゴミ箱の物も含めるか
      * @return bool
      */
-    public function exists($id): bool;
+    public function exists($id, $withTrash = false): bool;
 }
