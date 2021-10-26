@@ -120,6 +120,7 @@ $authors = $this->BcAdminContent->getAuthors();
 
 <div class="bca-data-list__bottom">
   <div class="bca-data-list__sub">
+    <?php $this->BcBaser->element('pagination') ?>
     <?php $this->BcBaser->element('list_num') ?>
   </div>
 </div>
