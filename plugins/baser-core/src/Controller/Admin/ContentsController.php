@@ -496,10 +496,15 @@ class ContentsController extends BcAdminAppController
 
     /**
      * コンテンツ情報を取得する
+     * @param ContentServiceInterface $contentService
+     * @checked
+     * @noTodo
+     * @unitTest
+     *
      */
     public function ajax_contents_info(ContentServiceInterface $contentService)
     {
-        $this->autoLayout = false;
-        $this->set('sites', $contentService->getContensInfo());
+        $this->viewBuilder()->disableAutoLayout();
+        $this->set('sites', $contentService->getContentsInfo());
     }
 }

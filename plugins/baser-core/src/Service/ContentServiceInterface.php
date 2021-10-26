@@ -195,7 +195,7 @@ interface ContentServiceInterface
       * コンテンツ情報を取得する
       * @return array
       */
-    public function getContensInfo();
+    public function getContentsInfo();
 
     /**
      * 再帰的に削除
