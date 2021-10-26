@@ -195,8 +195,8 @@ class ContentsControllerTest extends BcTestCase
             'author_id' => '',
         ];
         return [
-            ['index', '1', [], "Cake\ORM\Query", 15],
-            ['index', '2', $search, 'Cake\ORM\ResultSet', 14],
+            ['index', '1', [], "Cake\ORM\Query", 16],
+            ['index', '2', $search, 'Cake\ORM\ResultSet', 15],
             ['trash_index', '1', [], 'Cake\ORM\Query', 3],
             // 足りない場合は空のindexを返す
             ['index', '', [], 'Cake\ORM\Query', 0],
@@ -345,9 +345,17 @@ class ContentsControllerTest extends BcTestCase
     /**
      * エイリアスを編集する
      */
-    public function testAdmin_edit_alias()
+    public function testEdit_alias()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $data = $this->ContentService->getIndex(['name' => 'testEditのエイリアス'])->first();
+        $data->name = 'ControllerEditエイリアス';
+        $data->site->name = 'ucmitz'; // site側でエラーが出るため
+        $this->post('/baser/admin/baser-core/contents/edit_alias/' . $data->id, ["Content" => $data->toArray()]);
+        $this->assertResponseSuccess();
+        $this->assertRedirect('/baser/admin/baser-core/contents/edit_alias/' . $data->id);
+        $this->assertEquals('ControllerEditエイリアス', $this->ContentService->get($data->id)->name);
     }
 
     /**
@@ -454,22 +462,6 @@ class ContentsControllerTest extends BcTestCase
     }
 
     /**
-     * リネーム
-     *
-     * 新規登録時の初回リネーム時は、name にも保存する
-     */
-    public function testRename()
-    {
-        $this->get('/baser/admin/baser-core/contents/rename/');
-        $this->assertResponseFailure();
-        $newTitle = "testRename";
-        $this->get('/baser/admin/baser-core/contents/rename/1?newTitle=' . $newTitle);
-        $this->assertRedirect('/baser/admin/baser-core/contents/index');
-        $this->assertResponseSuccess();
-        $this->assertEquals('testRename', $this->ContentService->get(1)->title);
-    }
-
-    /**
      * 並び順を移動する
      */
     public function testAdmin_ajax_move()
@@ -486,26 +478,9 @@ class ContentsControllerTest extends BcTestCase
     }
 
     /**
-     * 指定したIDのコンテンツが存在するか確認する
-     * ゴミ箱のものは無視
-     */
-    public function testAdmin_ajax_exists()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * プラグイン等と関連付けられていない素のコンテンツをゴミ箱より消去する
      */
     public function testAdmin_empty()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * サイトに紐付いたフォルダリストを取得
-     */
-    public function testAdmin_ajax_get_content_folder_list()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -517,13 +492,4 @@ class ContentsControllerTest extends BcTestCase
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
-
-    /**
-     * admin_ajax_get_full_url
-     */
-    public function testAdmin_ajax_get_full_url()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
 }

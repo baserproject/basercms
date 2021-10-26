@@ -90,35 +90,6 @@ class ContentFoldersControllerTest extends BcTestCase
     }
 
     /**
-     * コンテンツを登録する
-     */
-    public function testAdd()
-    {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
-        $data = [
-            'folder_template'=>"testFolderTemplate",
-            'page_template'=>"",
-            'content'=> [
-                'parent_id'=>"1",
-                'title'=>"testFolderAdd",
-                'plugin'=>'BaserCore',
-                'type'=>"ContentFolder",
-                'site_id'=>"0",
-                'alias_id'=>"",
-                'entity_id'=>"",
-            ],
-        ];
-        $this->post('/baser/admin/baser-core/content_folders/add', $data);
-        $this->assertResponseOk();
-        $this->assertResponseContains(json_encode($data['content']['title']));
-        $folderQuery = $this->ContentFolders->find()->where(['folder_template' => $data['folder_template']]);
-        $contentQuery = $this->Contents->find()->where(['title' => $data['content']['title']]);
-        $this->assertEquals(1, $folderQuery->count());
-        $this->assertEquals(1, $contentQuery->count());
-    }
-
-    /**
      * コンテンツ編集
      */
     public function testEdit()

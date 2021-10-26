@@ -132,8 +132,6 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     public function testDelete()
     {
         // 子要素を持たない場合
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $this->post('/baser/api/baser-core/contents/delete/4.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
@@ -156,8 +154,6 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testDelete_trash()
     {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $this->post('/baser/api/baser-core/contents/delete_trash/16.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
@@ -173,8 +169,6 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testTrash_empty()
     {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $this->post('/baser/api/baser-core/contents/trash_empty.json?type=ContentFolder&token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
@@ -191,8 +185,6 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testEdit()
     {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $data = $this->ContentService->getIndex(['name' => 'testEdit'])->first();
         $id = $data->id;
         $data->name = 'ControllerEdit';
@@ -203,13 +195,131 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertEquals(1, $query->count());
     }
 
+    /**
+     * testTrash_return
+     *
+     * @return void
+     */
     public function testTrash_return()
     {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
         $id = $this->ContentService->getTrashIndex()->first()->id;
         $this->get("/baser/api/baser-core/contents/trash_return/{$id}.json?token=" . $this->accessToken);
         $this->assertResponseOk();
         $this->assertNotEmpty($this->ContentService->get($id));
     }
+
+    /**
+     * testChange_status
+     *
+     * @return void
+     */
+    public function testChange_status()
+    {
+        $data = ['id' => 1, 'status' => 'unpublish'];
+        $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $this->accessToken, $data);
+        $this->assertResponseOk();
+        $this->assertFalse($this->ContentService->get($data['id'])->status);
+        $data = ['id' => 1, 'status' => 'publish'];
+        $this->patch("/baser/api/baser-core/contents/change_status.json?token=" . $this->accessToken, $data);
+        $this->assertResponseOk();
+        $this->assertTrue($this->ContentService->get($data['id'])->status);
+    }
+
+    /**
+     * testGet_full_url
+     *
+     * @return void
+     */
+    public function testGet_full_url()
+    {
+        $this->get("/baser/api/baser-core/contents/get_full_url/1.json?token=" . $this->accessToken);
+        $this->assertResponseOk();
+        $this->assertEquals("https://localhost/", json_decode((string)$this->_response->getBody())->fullUrl);
+    }
+
+    /**
+     * testExists
+     *
+     * @return void
+     */
+    public function testExists()
+    {
+        $this->get("/baser/api/baser-core/contents/exists/1.json?token=" . $this->accessToken);
+        $this->assertResponseOk();
+        $this->assertTrue(json_decode($this->_response->getBody())->exists);
+        $this->get("/baser/api/baser-core/contents/exists/100.json?token=" . $this->accessToken);
+        $this->assertResponseOk();
+        $this->assertFalse(json_decode($this->_response->getBody())->exists);
+    }
+
+    /**
+     * リネーム
+     *
+     * 新規登録時の初回リネーム時は、name にも保存する
+     */
+    public function testRename()
+    {
+        $this->patch("/baser/api/baser-core/contents/rename.json?token=" . $this->accessToken);
+        $this->assertResponseFailure();
+        $data = ['id' => 1, 'title' => 'testRename'];
+        $this->patch("/baser/api/baser-core/contents/rename.json?token=" . $this->accessToken, $data);
+        $this->assertResponseOk();
+        $this->assertStringContainsString('testRename', json_decode($this->_response->getBody())->message);
+        $this->assertNotNull(json_decode($this->_response->getBody())->url);
+    }
+
+    /**
+     * testadd_alias
+     *
+     * @return void
+     */
+    public function testadd_alias()
+    {
+        $content = $this->ContentService->get(1);
+        $data = [
+            'aliasId' => 1,
+            'aliasName' => 'テストエイリアス',
+            'content' => [
+                "parent_id" =>  $content->parent_id,
+                "title" => 'テストエイリアス',
+                "plugin"=> $content->plugin,
+                "type"=> $content->type,
+                "site_id"=> $content->site_id,
+                "alias_id"=> $content->alias_id,
+                "entity_id"=> $content->entity_id,
+            ]];
+        $this->post("/baser/api/baser-core/contents/add_alias.json?token=" . $this->accessToken, $data);
+        $this->assertResponseOk();
+        $this->assertNotEmpty(json_decode($this->_response->getBody())->content);
+        $this->assertEquals("テストエイリアス を作成しました。", json_decode($this->_response->getBody())->message);
+    }
+
+    /**
+     * testGet_content_folder_list
+     *
+     * @return void
+     */
+    public function testGet_content_folder_list()
+    {
+        $this->get("/baser/api/baser-core/contents/get_content_folder_list/1.json?token=" . $this->accessToken);
+        $this->assertResponseOk();
+        $this->assertNotEmpty(json_decode($this->_response->getBody())->list);
+    }
+
+    /**
+     * testGet_content_folder_list
+     *
+     * @return void
+     */
+    public function testExists_content_by_url()
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->get("/baser/api/baser-core/contents/exists_content_by_url.json?token=" . $this->accessToken);
+        $this->assertResponseOk();
+    }
+
+    // public function testMove()
+    // {
+    //     $this->patch("/baser/api/baser-core/contents/move.json?token=" . $this->accessToken);
+    // }
 }

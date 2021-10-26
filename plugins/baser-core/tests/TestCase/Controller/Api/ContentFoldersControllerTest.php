@@ -121,7 +121,7 @@ class ContentFoldersControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->post('/baser/api/baser-core/content_folders/delete/1.json?token=' . $this->accessToken);
+        $this->delete('/baser/api/baser-core/content_folders/delete/1.json?token=' . $this->accessToken);
         $this->assertResponseSuccess();
     }
 

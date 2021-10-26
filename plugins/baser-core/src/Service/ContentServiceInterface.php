@@ -261,4 +261,13 @@ interface ContentServiceInterface
      * @return EntityInterface
      */
     public function unpublish($id): EntityInterface;
+
+    /**
+     * exists
+     *
+     * @param  int $id
+     * @param bool $withTrash ゴミ箱の物も含めるか
+     * @return bool
+     */
+    public function exists($id, $withTrash = false): bool;
 }

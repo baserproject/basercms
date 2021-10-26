@@ -160,11 +160,11 @@ class ContentServiceTest extends BcTestCase
         return [
             [[
                 'site_id' => 1,
-            ], 14],
+            ], 15],
             [[
                 'site_id' => 1,
                 'withTrash' => true,
-            ], 16],
+            ], 17],
             [[
                 'site_id' => 1,
                 'open' => '1',
@@ -173,7 +173,7 @@ class ContentServiceTest extends BcTestCase
                 'type' => 'ContentFolder',
                 'self_status' => '1',
                 'author_id' => '',
-            ], 6],
+            ], 7],
             [[
                 'site_id' => 1,
                 'open' => '1',
@@ -206,15 +206,15 @@ class ContentServiceTest extends BcTestCase
         // softDeleteの場合
         $request = $this->getRequest('/?status=1');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
-        $this->assertEquals(14, $contents->all()->count());
+        $this->assertEquals(15, $contents->all()->count());
         // ゴミ箱を含むの場合
         $request = $this->getRequest('/?status=1&withTrash=true');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
-        $this->assertEquals(16, $contents->all()->count());
+        $this->assertEquals(17, $contents->all()->count());
         // 否定の場合
         $request = $this->getRequest('/?status=1&type!=Page');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
-        $this->assertEquals(8, $contents->all()->count());
+        $this->assertEquals(9, $contents->all()->count());
     }
     /**
      * testGetTrashIndex
@@ -323,7 +323,7 @@ class ContentServiceTest extends BcTestCase
      */
     public function testDeleteAll(): void
     {
-        $this->assertEquals(15, $this->ContentService->deleteAll());
+        $this->assertEquals(16, $this->ContentService->deleteAll());
         $contents = $this->ContentService->getIndex();
         $this->assertEquals(0, $contents->all()->count());
     }
@@ -341,9 +341,9 @@ class ContentServiceTest extends BcTestCase
         $this->assertTrue($this->ContentService->treeDelete(6));
         $query = $this->ContentService->getTrashIndex(['name' => 'service']);
         $this->assertEquals(4, $query->count());
-        // エイリアスがある場合
-        // TODO: $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // $result = $this->ContentService->treeDelete(14);
+        // エイリアスがある場合物理削除
+        $result = $this->ContentService->treeDelete(22);
+        $this->assertFalse($this->ContentService->exists(22, true));
     }
 
     /**
@@ -413,6 +413,9 @@ class ContentServiceTest extends BcTestCase
         foreach ($children as $child) {
             $this->assertNotEmpty($this->ContentService->getTrash($child->id));
         }
+        // エイリアスを子に持つ場合
+        $this->assertTrue($this->ContentService->deleteRecursive(21));
+        $this->assertFalse($this->ContentService->exists(22, true)); // エイリアス
     }
 
     /**
@@ -659,5 +662,16 @@ class ContentServiceTest extends BcTestCase
 
         $content = $this->ContentService->unpublish($content->id);
         $this->assertFalse($content->self_status);
+    }
+
+    /**
+     * testExists
+     *
+     * @return void
+     */
+    public function testExists()
+    {
+        $this->assertTrue($this->ContentService->exists(1));
+        $this->assertFalse($this->ContentService->exists(100));
     }
 }

@@ -55,36 +55,6 @@ class ContentFoldersController extends BcAdminAppController
     }
 
     /**
-     * コンテンツを登録する
-     *
-     * @return Response
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function add(ContentFolderServiceInterface $contentFolderService)
-    {
-        if (!$this->request->getData()) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-        if (!$contentFolder = $contentFolderService->create($this->request->getData())) {
-            $this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
-            exit;
-        }
-
-        $this->BcMessage->setSuccess(
-            sprintf(
-                __d('baser', 'フォルダ「%s」を追加しました。'),
-                $contentFolder->content->title,
-            ),
-            true,
-            false
-        );
-
-        return $this->response->withType("application/json")->withStringBody(json_encode($contentFolder->content));
-    }
-
-    /**
      * コンテンツを更新する
      *
      * @return void

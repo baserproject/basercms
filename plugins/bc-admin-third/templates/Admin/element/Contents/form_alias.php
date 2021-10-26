@@ -1,4 +1,6 @@
 <?php
+
+use BaserCore\Utility\BcUtil;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
@@ -15,20 +17,20 @@
  * @var bool $related
  */
 
-if ((!empty($this->BcContents->getConfig('items')[$srcContent['type']]))) {
-  $title = $this->BcContents->getConfig('items')[$srcContent['type']]['title'];
-  $editLink = $this->BcContents->getConfig('items')[$srcContent['type']]['routes']['edit'];
+if ((!empty($this->BcContents->getConfig('items')[$content->type]))) {
+  $title = $this->BcContents->getConfig('items')[$content->type]['title'];
+  $editLink = $this->BcContents->getConfig('items')[$content->type]['routes']['edit'];
   $editLink = array_merge($editLink, [
-    $srcContent['entity_id'],
-    'content_id' => $srcContent['id'],
-    'parent_id' => $srcContent['parent_id']
+    $content->entity_id,
+    'content_id' => $content->id,
+    'parent_id' => $content->parent_id
   ]);
 } else {
   $title = __d('baser', '無所属コンテンツ');
   $editLink = '/' . BcUtil::getAdminPrefix() . '/contents/edit';
-  if ($srcContent['entity_id']) {
-    $editLink .= '/' . $srcContent['entity_id'];
-    $editLink .= '/content_id:' . $srcContent['id'] . '/parent_id:' . $srcContent['parent_id'];
+  if ($content->entity_id) {
+    $editLink .= '/' . $content->entity_id;
+    $editLink .= '/content_id:' . $content->id . '/parent_id:' . $content->parent_id;
   }
 }
 
@@ -43,7 +45,7 @@ if ((!empty($this->BcContents->getConfig('items')[$srcContent['type']]))) {
       <?php echo $this->BcAdminForm->control('Content.alias_id', ['type' => 'hidden']) ?>
       <small>[<?php echo $title ?>]</small>&nbsp;
       &nbsp;
-      <?php $this->BcBaser->link($srcContent['title'], $editLink, ['target' => '_blank']) ?>
+      <?php $this->BcBaser->link($content->title, $editLink, ['target' => '_blank']) ?>
       <?php if ($related): ?>
         <p><?php echo __d('baser', 'このコンテンツはメインサイトの連携エイリアスです。<br>フォルダ、レイアウトテンプレート以外を編集する場合は上記リンクをクリックしてメインサイトのコンテンツを編集してください。') ?></p>
       <?php endif ?>

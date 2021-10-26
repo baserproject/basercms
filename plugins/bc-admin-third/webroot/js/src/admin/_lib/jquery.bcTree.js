@@ -162,7 +162,7 @@
                                 }
                             }
                         } else {
-                            $.bcTree.openUrl($.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/contents/edit_alias/' + data.contentId);
+                            $.bcTree.openUrl($.bcUtil.adminBaseUrl + 'baser-core' + '/contents/edit_alias/' + data.contentId);
                         }
                     }
                 }
@@ -325,10 +325,10 @@
                                         "action": function (obj) {
                                             $.bcToken.check(function () {
                                                 return $.ajax({
-                                                    url: $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/ajax_change_status',
-                                                    type: 'POST',
+                                                    url: $.bcUtil.apiBaseUrl + 'baser-core' +  '/contents/change_status',
+                                                    type: 'PATCH',
                                                     data: {
-                                                        contentId: data.contentId,
+                                                        id: data.contentId,
                                                         status: 'publish',
                                                         type: data.contentType,
                                                         siteId: data.contentSiteId,
@@ -362,10 +362,10 @@
                                         "action": function (obj) {
                                             $.bcToken.check(function () {
                                                 return $.ajax({
-                                                    url: $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/ajax_change_status',
-                                                    type: 'POST',
+                                                    url: $.bcUtil.apiBaseUrl + 'baser-core' +  '/contents/change_status',
+                                                    type: 'PATCH',
                                                     data: {
-                                                        contentId: data.contentId,
+                                                        id: data.contentId,
                                                         status: 'unpublish',
                                                         type: data.contentType,
                                                         siteId: data.contentSiteId,
@@ -437,7 +437,7 @@
                                         if (!node.data.jstree.alias) {
                                             $.bcTree.openUrl($.bcTree.createLink($.bcTree.settings[data.contentType]['url']['edit'], data.contentId, data.contentParentId, data.contentEntityId));
                                         } else {
-                                            $.bcTree.openUrl($.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/contents/edit_alias/' + data.contentId);
+                                            $.bcTree.openUrl($.bcUtil.adminBaseUrl + 'baser-core' + '/contents/edit_alias/' + data.contentId);
                                         }
                                     }
                                 }
@@ -495,8 +495,9 @@
                                     "action": function (obj) {
                                         if (data.alias) {
                                             $.ajax({
-                                                url: $.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/contents/ajax_exists/' + data.contentAliasId,
+                                                url: $.bcUtil.apiBaseUrl + 'baser-core'  + '/contents/exists/' + data.contentAliasId,
                                                 type: 'GET',
+                                                dataType: 'json',
                                                 beforeSend: function () {
                                                     $.bcUtil.hideMessage();
                                                     $.bcUtil.showLoader();
@@ -505,7 +506,7 @@
                                                     $.bcUtil.hideLoader();
                                                 }
                                             }).done(function (result) {
-                                                if (result) {
+                                                if (result.exists) {
                                                     $.bcTree.returnContent(node);
                                                 } else {
                                                     $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage1);
@@ -524,9 +525,9 @@
                                         if (confirm(bcI18n.bcTreeConfirmMessage1)) {
                                             $.bcToken.check(function () {
                                                 return $.ajax({
-                                                    url: $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/trash_empty',
-                                                    type: 'POST',
-                                                    dataType: 'html',
+                                                    url: $.bcUtil.apiBaseUrl + 'baser-core' +  '/contents/trash_empty',
+                                                    type: 'DELETE',
+                                                    dataType: 'json',
                                                     data: {
                                                         empty: true,
                                                         _csrfToken: $.bcToken.key,
@@ -542,6 +543,7 @@
                                                                 nodes.push($.bcTree.jsTree.get_node(this));
                                                             });
                                                             $.bcTree.jsTree.delete_node(nodes);
+                                                            $.bcUtil.showNoticeMessage(decodeURI(result.message));
                                                             $("#DataList").html('<div class="tree-empty">' + bcI18n.bcTreeInfoMessage1 + '</div>');
                                                         }
                                                     },
@@ -844,14 +846,24 @@
             };
             $.extend(true, _data, data);
             data = _data;
-
             var url = '';
             // シングルコンテンツでデータが既に存在する場合 エイリアス作成の場合
             if ((!$.bcTree.settings[data.contentType]['multiple'] && $.bcTree.settings[data.contentType]['exists']) || data.contentAliasId) {
-                url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/create_alias/' + data.contentAliasId + "?aliasName=" + data.contentTitle;
+                url = $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/add_alias';
                 data.alias = true;
+                var postData = {
+                    aliasId: data.contentAliasId,
+                    aliasName: data.contentTitle,
+                };
             } else {
-                url = $.bcTree.settings[data.contentType]['url']['add']
+                // TODO: api-url設定を追加する
+                // url = $.bcTree.settings[data.contentType]['url']['add'];
+                 // NOTE:一旦コンテンツフォルダの場合で試す
+                url = $.bcUtil.apiBaseUrl + 'baser-core' + '/contentFolders/add';
+                var postData = {
+                    folder_template : '',
+                    page_template : '',
+                };
             }
             var nodeId = $.bcTree.jsTree.create_node(parent, {
                 text: data.contentTitle,
@@ -859,35 +871,34 @@
             });
             var node = $.bcTree.jsTree.get_node(nodeId);
             $.bcTree.jsTree.edit(node, data.contentTitle, function (editNode) {
+                let content = {
+                    parent_id: data.contentParentId,
+                    title: editNode.text,
+                    plugin: data.contentPlugin,
+                    type: data.contentType,
+                    site_id: data.contentSiteId,
+                    alias_id: data.contentAliasId,
+                    entity_id: data.contentEntityId
+                };
+                postData.content = content;
                 $.bcToken.check(function () {
+                    postData._csrfToken = $.bcToken.key;
                     return $.ajax({
                         url: url,
                         type: 'POST',
-                        data: {
-                            _csrfToken: $.bcToken.key,
-                            folder_template : '',
-                            page_template : '',
-                            content: {
-                                parent_id: data.contentParentId,
-                                title: editNode.text,
-                                plugin: data.contentPlugin,
-                                type: data.contentType,
-                                site_id: data.contentSiteId,
-                                alias_id: data.contentAliasId,
-                                entity_id: data.contentEntityId
-                            },
-                        },
-                        dataType: 'html',
+                        data: postData,
+                        dataType: 'json',
                         beforeSend: function () {
                             $.bcUtil.hideMessage();
                             $.bcUtil.showLoader();
                         },
                         success: function (result) {
+                            $.bcUtil.showNoticeMessage(result.message);
                             $.bcTree.settings[data.contentType]['exists'] = true;
                             $.bcTree.settings[data.contentType]['existsTitle'] = editNode.text;
-                            data.contentId = result.id;
-                            data.contentEntityId = result.entity_id;
-                            data.name = decodeURIComponent(result.name);
+                            data.contentId = result.content.id;
+                            data.contentEntityId = result.content.entity_id;
+                            data.name = decodeURIComponent(result.content.name);
                             node.data.jstree = data;
                             $.bcTree.refreshTree();
                         },
@@ -897,8 +908,8 @@
                             $.bcUtil.hideLoader();
                         }
                     }).then(function () {
-                        return $.bcUtil.ajax($.bcUtil.adminBaseUrl + 'baser-core' + '/contents/ajax_get_full_url/' + data.contentId, {}, {type: 'GET'}).done(function (result) {
-                            data.contentFullUrl = result;
+                        return $.bcUtil.ajax($.bcUtil.apiBaseUrl + 'baser-core' + '/contents/get_full_url/' + data.contentId, {}, {type: 'GET', dataType: 'json'}).done(function (result) {
+                            data.contentFullUrl = result.fullUrl;
                             node.data.jstree = data;
                             if (data.contentType == 'ContentFolder') {
                                 node.type = 'folder'
@@ -996,8 +1007,8 @@
                             .replace(/'/g, '&#039;')
                             .replace(/</g, '&lt;')
                             .replace(/>/g, '&gt;');
-                        $.ajax($.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/contents/ajax_get_full_url/' + data.contentId, {type: 'GET'}).done(function (result) {
-                            data.contentFullUrl = result;
+                        $.ajax($.bcUtil.apiBaseUrl + 'baser-core' + '/contents/get_full_url/' + data.contentId, {type: 'GET', dataType: 'json'}).done(function (result) {
+                            data.contentFullUrl = result.fullUrl;
                             var nodeId = $.bcTree.jsTree.create_node(parent, {
                                 text: data.contentTitle,
                                 data: {jstree: data}
@@ -1039,7 +1050,32 @@
                     return false;
                 }
                 $.bcToken.check(function () {
-                    return $(location).prop('href', $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/rename/' + node.data.jstree.contentId + '?newTitle=' + newTitle)
+                    return $.ajax({
+                        url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/rename',
+                        type: 'PATCH',
+                        dataType: 'json',
+                        data: {
+                            id: node.data.jstree.contentId,
+                            title: newTitle,
+                            _csrfToken: $.bcToken.key,
+                        },
+                        beforeSend: function () {
+                            $.bcUtil.hideMessage();
+                            $.bcUtil.showLoader();
+                        },
+                        success: function (result) {
+                            $.bcUtil.showNoticeMessage(result.message);
+                            $.bcTree.settings[node.data.jstree.contentType]['existsTitle'] = editNode.text;
+                            editNode.data.jstree.contentFullUrl = result.url;
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            $.bcTree.jsTree.rename_node(editNode, defaultTitle);
+                            $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage5, XMLHttpRequest, errorThrown);
+                        },
+                        complete: function () {
+                            $.bcUtil.hideLoader();
+                        }
+                    })
                 }, {hideLoader: false});
             });
         },
@@ -1118,16 +1154,20 @@
             }
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.baseUrl() + '/' + $.bcTree.config.baserCorePrefix + $.bcTree.config.adminPrefix + '/contents/ajax_move',
-                    type: 'POST',
+                    url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/move',
+                    type: 'PATCH',
                     data: {
-                        currentId: node.data.jstree.contentId,
-                        currentParentId: node.data.jstree.contentParentId,
-                        currentType: node.data.jstree.contentType,
-                        entityId: node.data.jstree.contentEntityId,
-                        targetId: targetId,
-                        targetParentId: $.bcTree.dropTarget.data.jstree.contentId,
-                        targetSiteId: $.bcTree.dropTarget.data.jstree.contentSiteId,
+                        origin: {
+                            id: node.data.jstree.contentId,
+                            parentId: node.data.jstree.contentParentId,
+                            type: node.data.jstree.contentType,
+                            entityId: node.data.jstree.contentEntityId,
+                        },
+                        target: {
+                            id: targetId,
+                            parentId: $.bcTree.dropTarget.data.jstree.contentId,
+                            siteId: $.bcTree.dropTarget.data.jstree.contentSiteId,
+                        },
                         listDisplayed: $.bcTree.listDisplayed,
                         _csrfToken: $.bcToken.key,
                     },
