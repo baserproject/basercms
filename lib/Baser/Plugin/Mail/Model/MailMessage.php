@@ -912,12 +912,12 @@ class MailMessage extends MailAppModel
 			$this->cacheSources = false;
 			ClassRegistry::flush();
 			$schema = $this->schema();
-			$mailFieldColumnList = [];
+			$mailFieldNameList = [];
 
 			$messageFields = array_keys($schema);
 			foreach($mailFields as $mailField) {
 				if (!in_array($mailField['MailField']['field_name'], $messageFields)) {
-					$mailFieldColumnList[$mailField['MailField']['field_name']] = [
+					$mailFieldNameList[$mailField['MailField']['field_name']] = [
 						'type' => 'text', 'null' => null, 'default' => null, 'length' => null,
 					];
 				}
@@ -928,7 +928,7 @@ class MailMessage extends MailAppModel
 				$this->dropTable($mailContentId);
 				$db = $this->getDataSource();
 				// id,create,modifiedカラムとフォームのメールフィールド全部を併せたテーブルを作る
-				$db->createTable(array('schema' => array_merge($schema, $mailFieldColumnList), 'table' => $this->createFullTableName($mailContentId)));
+				$db->createTable(['schema' => array_merge($schema, $mailFieldNameList), 'table' => $this->createFullTableName($mailContentId)]);
 				$this->deleteModelCache();
 			}
 		}
