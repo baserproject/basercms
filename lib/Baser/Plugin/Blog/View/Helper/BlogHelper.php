@@ -66,20 +66,19 @@ class BlogHelper extends AppHelper
 	public function setContent($blogContentId = null)
 	{
 		$blogContentUpdated = false;
-		if (empty($this->blogContent) || ($blogContentId != $this->blogContent['id'])) {
-			if ($blogContentId) {
-				if (!empty($this->request->query['preview']) && $this->request->query['preview'] == 'default' && $this->request->data) {
-					if (!empty($this->request->data['BlogContent'])) {
-						$this->blogContent = $this->request->data['BlogContent'];
-						$blogContentUpdated = true;
-					}
-				} else {
-					$BlogContent = ClassRegistry::init('Blog.BlogContent');
-					$BlogContent->unbindModel(['hasMany' => ['BlogPost', 'BlogCategory']]);
-					$blogContent = $BlogContent->find('first', ['conditions' => ['BlogContent.id' => $blogContentId], 'recursive' => -1]);
-					$this->blogContent = Hash::extract($blogContent, 'BlogContent');
-					$blogContentUpdated = true;
-				}
+		if ($blogContentId && ($blogContentId != $this->blogContent['id'])) {
+			$BlogContent = ClassRegistry::init('Blog.BlogContent');
+			$BlogContent->unbindModel(['hasMany' => ['BlogPost', 'BlogCategory']]);
+			$blogContent = $BlogContent->find('first', ['conditions' => ['BlogContent.id' => $blogContentId], 'recursive' => -1]);
+			$this->blogContent = Hash::extract($blogContent, 'BlogContent');
+			$blogContentUpdated = true;
+		}
+
+		if (empty($this->blogContent)) {
+			if (!empty($this->request->query['preview']) && $this->request->query['preview'] == 'default' && $this->request->data['BlogContent']) {
+				$this->blogContent = $this->request->data['BlogContent'];
+				$blogContentUpdated = true;
+
 			} elseif (isset($this->_View->viewVars['blogContent']['BlogContent'])) {
 				$this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
 				if ($this->request->params['Content']['type'] === 'BlogContent') {
@@ -92,6 +91,8 @@ class BlogHelper extends AppHelper
 				}
 			}
 		}
+
+
 		if ($this->blogContent) {
 			if ($blogContentUpdated) {
 				$siteId = 0;
