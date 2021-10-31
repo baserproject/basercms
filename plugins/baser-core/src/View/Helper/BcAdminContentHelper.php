@@ -136,5 +136,4 @@ class BcAdminContentHelper extends Helper
     {
         return $this->ContentService->getUrlById($id, $full);
     }
-
 }

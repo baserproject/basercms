@@ -271,25 +271,6 @@ class BcContentsHelper extends Helper
     }
 
     /**
-     * コンテンツ管理上のURLを元に正式なURLを取得する
-     *
-     * @param string $url コンテンツ管理上のURL
-     * @param bool $full http からのフルのURLかどうか
-     * @param bool $useSubDomain サブドメインを利用しているかどうか
-     * @param bool $base $full が false の場合、ベースとなるURLを含めるかどうか
-     * @return string URL
-     */
-    public function getUrl($url, $full = false, $useSubDomain = false, $base = true)
-    {
-        // TODO 未実装のため代替措置
-        // >>>
-//        return $this->_Contents->getUrl($url, $full, $useSubDomain, $base);
-        // ---
-        return '';
-        // <<<
-    }
-
-    /**
      * プレフィックスなしのURLを取得する
      *
      * @param string $url

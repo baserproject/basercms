@@ -840,4 +840,23 @@ class BcUtilTest extends BcTestCase
         $this->assertEquals(0, BcUtil::convertSize(null));
     }
 
+    /**
+     * サイトのトップレベルのURLを取得する
+     *
+     * @return void
+     */
+    public function testTopLevelUrl()
+    {
+        if (BcUtil::isConsole()) {
+            $this->assertEquals('http://localhost', BcUtil::topLevelUrl());
+        } else {
+            $this->assertRegExp('/^http:\/\/.*\/$/', BcUtil::topLevelUrl());
+            $this->assertRegExp('/^http:\/\/.*[^\/]$/', BcUtil::topLevelUrl(false));
+
+            // httpsの場合
+            $_SERVER['HTTPS'] = 'on';
+            $this->assertRegExp('/^https:\/\//', BcUtil::topLevelUrl());
+        }
+    }
+
 }

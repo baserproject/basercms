@@ -51,7 +51,7 @@ $urlParams = ['content_id' => $content->id];
 if ($content->entity_id) {
   $urlParams = array_merge($urlParams, [$content->entity_id]);
 }
-$fullUrl = $this->BcContents->getUrl($content->url, true, @$content['Site']['use_subdomain']);
+$fullUrl = $this->BcAdminContent->getUrl($content->url, true, @$content['Site']['use_subdomain']);
 $toStatus = 'publish';
 if ($content->self_status) {
   $toStatus = 'unpublish';

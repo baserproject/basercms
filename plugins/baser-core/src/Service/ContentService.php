@@ -750,12 +750,14 @@ class ContentService implements ContentServiceInterface
      * @param bool $useSubDomain サブドメインを利用しているかどうか
      * @param bool $base $full が false の場合、ベースとなるURLを含めるかどうか
      * @return string URL
+     * @checked
+     * @unitTest
      */
     public function getUrl($url, $full = false, $useSubDomain = false, $base = false)
     {
         if ($useSubDomain && !is_array($url)) {
             $subDomain = '';
-            $site = $this->Sites->findByUrl($url);
+            $site = $this->Sites->findByUrl($url); // TODO: BcSiteと違う点に注意
             $originUrl = $url;
             if ($site) {
                 $subDomain = $site->alias;
@@ -763,7 +765,7 @@ class ContentService implements ContentServiceInterface
             }
             if ($full) {
                 if ($site) {
-                    $fullUrl = topLevelUrl(false) . $originUrl;
+                    $fullUrl = BcUtil::topLevelUrl(false) . $originUrl;
                     if ($site->domain_type == 1) {
                         $mainDomain = BcUtil::getMainDomain();
                         $fullUrlArray = explode('//', $fullUrl);

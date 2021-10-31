@@ -845,7 +845,7 @@ class BcBaserHelper extends Helper
                 $useSubdomain = $site->use_subdomain;
                 $fullUrl = true;
             }
-            $url = $this->BcContents->getUrl($this->_View->viewVars['publishLink'], $fullUrl, $useSubdomain, false);
+            $url = $this->BcAdminContent->getUrl($this->_View->viewVars['publishLink'], $fullUrl, $useSubdomain, false);
             $this->link(__d('baser', 'サイト確認'), $url, ['class' => 'tool-menu']);
         }
     }
@@ -3046,7 +3046,7 @@ END_FLASH;
             $site = $this->_View->getRequest()->getAttribute('currentSite');
             $useSubDomain = $site->use_subdomain;
         }
-        return $this->BcContents->getUrl($url, $full, $useSubDomain, $base);
+        return $this->BcAdminContent->getUrl($url, $full, $useSubDomain, $base);
     }
 
     /**

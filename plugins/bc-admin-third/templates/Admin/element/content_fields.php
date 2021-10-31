@@ -38,9 +38,9 @@ if ($this->request->getData('Site.use_subdomain')) {
   $targetSite = $this->BcAdminSite->findByUrl($content->url);
   $previewUrl = $this->BcBaser->getUrl($targetSite->getPureUrl($content->url) . '?host=' . $targetSite->host);
 } else {
-  $previewUrl = $this->BcBaser->getUrl($this->BcContents->getUrl($content->url, false, false, false));
+  $previewUrl = $this->BcBaser->getUrl($this->BcAdminContent->getUrl($content->url, false, false, false));
 }
-$fullUrl = $this->BcContents->getUrl($content->url, true, $site->use_subdomain);
+$fullUrl = $this->BcAdminContent->getUrl($content->url, true, $site->use_subdomain);
 // TODO ucmits data-current が何に使われているか確認
 // $this->request->getData() では Content は取得できないため
 $this->BcBaser->js('admin/contents/edit', false, ['id' => 'AdminContentsEditScript',

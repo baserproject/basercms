@@ -25,8 +25,7 @@ $deleteDisabled = !$this->BcAdminContent->isContentDeletable();
     if ($content->type == 'ContentFolder') {
       $treeItemType = 'folder';
     }
-
-    $fullUrl = $this->BcContents->getUrl($content->url, true, $content->site->use_subdomain);
+    $fullUrl = $this->BcAdminContent->getUrl($content->url, true, $content->site->use_subdomain);
     $parentId = $content->parent_id;
     $alias = $content->alias_id ? true : false;
     $open = false;

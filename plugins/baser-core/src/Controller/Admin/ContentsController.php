@@ -475,26 +475,6 @@ class ContentsController extends BcAdminAppController
     }
 
     /**
-     * コンテンツ表示
-     *
-     * @param $plugin
-     * @param $type
-     */
-    public function view($plugin, $type)
-    {
-        $data = ['Content' => $this->request->getParam('Content')];
-        if ($this->BcAdminContents->preview && $this->request->data) {
-            $data = $this->request->data;
-        }
-        $this->set('data', $data);
-        if (!$data['Content']['alias_id']) {
-            $this->set('editLink', ['admin' => true, 'plugin' => '', 'controller' => 'contents', 'action' => 'edit', 'content_id' => $data['Content']['id']]);
-        } else {
-            $this->set('editLink', ['admin' => true, 'plugin' => '', 'controller' => 'contents', 'action' => 'edit_alias', $data['Content']['id']]);
-        }
-    }
-
-    /**
      * コンテンツ情報を取得する
      * @param ContentServiceInterface $contentService
      * @checked
