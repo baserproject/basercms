@@ -13,6 +13,7 @@ namespace BaserCore\Controller\Api;
 
 use Exception;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -421,63 +422,58 @@ class ContentsController extends BcApiController
 
     /**
      * 並び順を移動する
+     * @param  ContentServiceInterface $contentService
+     * @return void
+     * @checked
+     * @unitTest
      */
     public function move(ContentServiceInterface $contentService)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
+        $siteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
         if (empty($this->request->getData())) {
-            $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', '無効な処理です。');
-        }
-        if (!$contentService->exists($this->request->getData('origin.id'))) {
+            $this->setResponse($this->response->withStatus(500));
+        } elseif(!$contentService->exists($this->request->getData('origin.id'))) {
             $message = __d('baser', 'データが存在しません。');
             $this->setResponse($this->response->withStatus(500));
-        }
-
-        // if ($this->SiteConfig->isChangedContentsSortLastModified($this->request->getData('listDisplayed'))) {
-        //     $this->ajaxError(500, __d('baser', 'コンテンツ一覧を表示後、他のログインユーザーがコンテンツの並び順を更新しました。<br>一度リロードしてから並び替えてください。'));
-        // }
-
-        // if (!$this->Content->isMovable($this->request->getData('currentId'), $this->request->getData('targetParentId'))) {
-        //     $this->ajaxError(500, __d('baser', '同一URLのコンテンツが存在するため処理に失敗しました。（現在のサイトに存在しない場合は、関連サイトに存在します）'));
-        // }
-
-        // // EVENT Contents.beforeMove
-        // $event = $this->dispatchLayerEvent('beforeMove', [
-        //     'data' => $this->request->getData()
-        // ]);
-        // if ($event !== false) {
-        //     $this->request->getData() = $event->getResult() === true? $event->getData('data') : $event->getResult();
-        // }
-
-        $content = $contentService->get($this->request->getData('origin.id'));
-        $beforeUrl = $content->url;
-
-        if ($this->request->getData('origin.parentId') == $this->request->getData('target.parentId')) {
-            // 親が違う場合は、Contentモデルで更新してくれるが同じ場合更新しない仕様のためここで更新する
-            $this->SiteConfig->updateContentsSortLastModified();
-        }
-        try {
-            $result = $contentService->move($this->request->getData('origin'), $this->request->getData('target'));
-            $result = $this->Content->move(
-                $data['currentId'],
-                $data['currentParentId'],
-                $data['targetSiteId'],
-                $data['targetParentId'],
-                $data['targetId']
-            );
-            // // EVENT Contents.afterAdd
-            // $this->dispatchLayerEvent('afterMove', [
-            //     'data' => $result
-            // ]);
-            $message = sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"), $result['Content']['title'], urldecode($beforeUrl), urldecode($result['Content']['url']));
-            $url = $contentService->getUrlById($result['Content']['id'], true);
-            $this->set(['url' => $url]);
-        } catch(Exception $e) {
-            $message = __d('baser', 'データ保存中にエラーが発生しました。' . $e->getMessage());
+        } elseif($siteConfig->isChangedContentsSortLastModified($this->request->getData('listDisplayed'))) {
+            $message = __d('baser', 'コンテンツ一覧を表示後、他のログインユーザーがコンテンツの並び順を更新しました。<br>一度リロードしてから並び替えてください。');
             $this->setResponse($this->response->withStatus(500));
+        } elseif (!$contentService->isMovable($this->request->getData('origin.id'), $this->request->getData('target.parentId'))) {
+            $message = __d('baser', '同一URLのコンテンツが存在するため処理に失敗しました。（現在のサイトに存在しない場合は、関連サイトに存在します）');
+            $this->setResponse($this->response->withStatus(500));;
+        } else {
+            // 正常系
+            // // EVENT Contents.beforeMove
+            // $event = $this->dispatchLayerEvent('beforeMove', [
+            //     'data' => $this->request->getData()
+            // ]);
+            // if ($event !== false) {
+            //     $this->request->getData() = $event->getResult() === true? $event->getData('data') : $event->getResult();
+            // }
+            $content = $contentService->get($this->request->getData('origin.id'));
+            $beforeUrl = $content->url;
+            try {
+                $result = $contentService->move($this->request->getData('origin'), $this->request->getData('target'));
+                if ($this->request->getData('origin.parentId') == $this->request->getData('target.parentId')) {
+                    // 親が違う場合は、Contentモデルで更新してくれるが同じ場合更新しない仕様のためここで更新する
+                    $siteConfig->updateContentsSortLastModified();
+                }
+                // // EVENT Contents.afterAdd
+                // $this->dispatchLayerEvent('afterMove', [
+                //     'data' => $result
+                // ]);
+                $message = sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"), $result->title, urldecode($beforeUrl), urldecode($result->url));
+                $url = $contentService->getUrlById($result->id, true);
+                $this->set(['url' => $url]);
+                $this->set(['content' => $result]);
+            } catch(Exception $e) {
+                $message = __d('baser', 'データ保存中にエラーが発生しました。' . $e->getMessage());
+                $this->setResponse($this->response->withStatus(500));
+            }
         }
         $this->set(['message' => $message]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'url']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'url', 'content']);
     }
 }

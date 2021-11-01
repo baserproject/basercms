@@ -34,7 +34,8 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
-        'plugin.BaserCore.Sites'
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs',
     ];
 
     /**
@@ -318,8 +319,36 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertResponseOk();
     }
 
-    // public function testMove()
-    // {
-    //     $this->patch("/baser/api/baser-core/contents/move.json?token=" . $this->accessToken);
-    // }
+    /**
+     * testMove
+     *
+     * @return void
+     */
+    public function testMove()
+    {
+        // postDataがない場合
+        $this->patch("/baser/api/baser-core/contents/move.json?token=" . $this->accessToken);
+        $this->assertEquals('無効な処理です。', json_decode($this->_response->getBody())->message);
+        // サービス1をサービス2の後ろに移動する場合
+        $title = 'サービス１';
+        $originEntity = $this->ContentService->getIndex(['title' => $title])->first();
+        $targetEntity = $this->ContentService->getIndex(['title' => 'サービス３'])->first();
+        $data = [
+            // 移動元
+            'origin' => [
+                'id' => $originEntity->id,
+                'parentId' => $originEntity->parent_id
+            ],
+            // 移動先
+            'target' => [
+                'id' => $targetEntity->id,
+                'parentId' => "1",
+                'siteId' => "1",
+            ]
+        ];
+        $this->patch("/baser/api/baser-core/contents/move.json?token=" . $this->accessToken, $data);
+        $this->assertEquals("コンテンツ「${title}」の配置を移動しました。\n/service/service1 > /service/service1", json_decode($this->_response->getBody())->message);
+        $service2Left = $this->ContentService->get(($originEntity->id + $targetEntity->id) / 2)->lft;
+        $this->assertGreaterThan($service2Left, json_decode($this->_response->getBody())->content->lft);
+    }
 }

@@ -124,14 +124,3 @@ $authors = $this->BcAdminContent->getAuthors();
     <?php $this->BcBaser->element('list_num') ?>
   </div>
 </div>
-
-<script>
-$(function () {
-  /**
-   * 一括処理実装
-   */
-  $.bcBatch.init({
-      batchUrl: "<?php echo $this->BcBaser->getUrl(['controller' => 'contents', 'action' => 'batch']) ?>"
-  });
-});
-</script>

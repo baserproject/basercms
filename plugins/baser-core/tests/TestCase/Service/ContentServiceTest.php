@@ -674,4 +674,52 @@ class ContentServiceTest extends BcTestCase
         $this->assertTrue($this->ContentService->exists(1));
         $this->assertFalse($this->ContentService->exists(100));
     }
+
+    /**
+     * testMove
+     *
+     * @return void
+     */
+    public function testMove()
+    {
+        // 移動元のエンティティ
+        $originEntity = $this->ContentService->getIndex(['parent_id' => 1])->order('lft')->first();
+        $origin = [
+            'id' => $originEntity->id,
+            'parentId' => $originEntity->parent_id
+        ];
+        // target idが指定されてない場合 親要素内の最後に移動
+        $target1 = [
+            'id' => "",
+            'parentId' => "1",
+            'siteId' => "1",
+        ];
+        $result = $this->ContentService->move($origin, $target1);
+        $lastEntity = $this->ContentService->getIndex(['parent_id' => 1])->order('lft')->last();
+        $this->assertEquals($result->title, $originEntity->title);
+        $this->assertEquals($result->title, $lastEntity->title);
+        // targetIdが指定されてる場合
+        // 対象が同じ要素の2番目のエンティティなので、直前つまり最初に移動
+        $target2 = [
+            'id' => "10",
+            'parentId' => "1",
+            'siteId' => "1",
+        ];
+        $result = $this->ContentService->move($origin, $target2);
+        $firstEntity = $this->ContentService->getIndex(['parent_id' => 1])->order('lft')->first();
+        $this->assertEquals($result->title, $originEntity->title);
+        $this->assertEquals($result->title, $firstEntity->title);
+    }
+
+    /**
+     * メインサイトの場合、連携設定がされている子サイトも移動する
+     *
+     *  @return void
+     *  @todo 子サイトが複数ある状況のテストを追加する
+     */
+    public function testMoveRelateSubSiteContent()
+    {
+        $result = $this->execPrivateMethod($this->ContentService, 'moveRelateSubSiteContent', ['12', '6', '']);
+        $this->assertTrue($result);
+    }
 }

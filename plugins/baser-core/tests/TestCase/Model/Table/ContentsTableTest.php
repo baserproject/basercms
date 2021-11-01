@@ -630,6 +630,32 @@ class ContentsTableTest extends BcTestCase
         ];
     }
 
+    /**
+     * オフセットを元にコンテンツを移動する
+     * @param  mixed $id
+     * @param  mixed $offset
+     * @dataProvider moveOffsetDataProvider
+     */
+    public function testMoveOffset($id, $offset)
+    {
+        $target = $this->Contents->moveOffset($id, $offset);
+        $origin = $this->Contents->get($id + $offset);
+        if ($offset > 0) {
+            $this->assertGreaterThan($origin->lft, $target->lft);
+        } else {
+            $this->assertLessThan($origin->lft, $target->lft);
+        }
+    }
+
+    public function moveOffsetDataProvider()
+    {
+        return [
+            // サービス2でテスト
+            [12, 1],
+            [12, -1]
+        ];
+    }
+
 
     /**
      * 親のテンプレートを取得する
@@ -651,29 +677,18 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     * メインサイトの場合、連携設定がされている子サイトも移動する
-     */
-    public function testMoveRelateSubSiteContent()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * オフセットを元にコンテンツを移動する
-     */
-    public function testMoveOffset()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * 同じ階層における並び順を取得
      *
      * id が空の場合は、一番最後とみなす
      */
     public function testGetOrderSameParent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // parent_id=6の全体数
+        $this->assertEquals(9, $this->Contents->getOrderSameParent("", "6"));
+        // parent_id=6のコンテンツ順序
+        $this->assertEquals(1, $this->Contents->getOrderSameParent("11", "6"));
+        $this->assertEquals(2, $this->Contents->getOrderSameParent("12", "6"));
+        $this->assertEquals(3, $this->Contents->getOrderSameParent("13", "6"));
     }
 
     /**

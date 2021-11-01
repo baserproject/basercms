@@ -1174,66 +1174,6 @@ class ContentsTable extends AppTable
     }
 
     /**
-     * 移動元のコンテンツと移動先のディレクトリから移動が可能かチェックする
-     *
-     * @param $currentId int 移動元コンテンツID
-     * @param $targetParentId int 移動先コンテンツID (ContentFolder)
-     * @return bool
-     */
-    public function isMovable($currentId, $targetParentId)
-    {
-        $currentContent = $this->find('first', [
-            'conditions' => ['id' => $currentId],
-            'recursive' => -1
-        ]);
-        if ($currentContent['Content']['parent_id'] === $targetParentId) {
-            return true;
-        }
-        $parentCuntent = $this->find('first', [
-            'conditions' => ['id' => $targetParentId],
-            'recursive' => -1
-        ]);
-
-        // 指定コンテンツが存在しない
-        if (!$currentContent || !$parentCuntent) {
-            return false;
-        }
-
-        $parentId[] = $parentCuntent['Content']['id'];
-
-        // 関連コンテンツで移動先と同じ階層のフォルダを確認
-        $childrenSite = $this->Sites->children($currentContent['Content']['site_id'], [
-            'conditions' => ['relate_main_site' => true]
-        ]);
-        if ($childrenSite) {
-            $pureUrl = $this->pureUrl($parentCuntent['Content']['url'], $parentCuntent['Content']['site_id']);
-            $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-            foreach($childrenSite as $site) {
-                $site = $sites->findById($site['Site']['id'])->first();
-                $url = $site->makeUrl(new CakeRequest($pureUrl));
-                $id = $this->field('id', ['url' => $url]);
-                if ($id) {
-                    $parentId[] = $id;
-                }
-            }
-        }
-
-        // 移動先に同一コンテンツが存在するか確認
-        $movedContent = $this->find('first', [
-            'conditions' => [
-                'parent_id' => $parentId,
-                'name' => $currentContent['Content']['name'],
-                'id !=' => $currentContent['Content']['id']
-            ],
-            'recursive' => -1
-        ]);
-        if ($movedContent) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * タイトル、URL、公開状態が更新されているか確認する
      *
      * @param int $id コンテンツID
@@ -1542,4 +1482,60 @@ class ContentsTable extends AppTable
         return $content;
     }
 
+    /**
+     * 同じ階層における並び順を取得
+     *
+     * id が空の場合は、一番最後とみなす
+     *
+     * @param string $id
+     * @param int $parentId
+     * @return bool|int|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getOrderSameParent($id, $parentId)
+    {
+        $contents = $this->find()->select(['id', 'parent_id', 'title'])->where(['parent_id' => $parentId])->order('lft');
+        $order = null;
+        if (!$contents->isEmpty()) {
+            if ($id) {
+                foreach($contents as $key => $data) {
+                    if ($id == $data->id) {
+                        $order = $key + 1;
+                        break;
+                    }
+                }
+            } else {
+                return $contents->all()->count();
+            }
+        } else {
+            return false;
+        }
+        return $order;
+    }
+
+    /**
+     * オフセットを元にコンテンツを移動する
+     *
+     * @param $id
+     * @param $offset
+     * @return Content|bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function moveOffset($id, $offset)
+    {
+        $offset = (int)$offset;
+        $content = $this->get($id);
+        if ($offset > 0) {
+            $result = $this->moveDown($content, abs($offset));
+        } elseif ($offset < 0) {
+            $result = $this->moveUp($content, abs($offset));
+        } else {
+            $result = true;
+        }
+        return $result ? $content : false;
+    }
 }

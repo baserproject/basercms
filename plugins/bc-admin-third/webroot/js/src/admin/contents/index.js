@@ -85,17 +85,6 @@ $(function () {
     $($.baserAjaxDataList).bind('searchLoaded', function () {
         $.bcUtil.disabledHideMessage = false;
     });
-
-    $.baserAjaxDataList.config.methods.del.confirm = bcI18n.confirmMessage1;
-    $.baserAjaxBatch.config.methods.del.confirm = bcI18n.confirmMessage2;
-    $.baserAjaxBatch.config.methods.unpublish.result = function () {
-        $.bcUtil.showLoader();
-        loadTable();
-    };
-    $.baserAjaxBatch.config.methods.publish.result = function () {
-        $.bcUtil.showLoader();
-        loadTable();
-    };
     $.baserAjaxDataList.config.methods.publish.result = null;
     $.baserAjaxDataList.config.methods.unpublish.result = null;
     $.baserAjaxDataList.config.methods.copy.result = function (row, result) {
@@ -106,7 +95,8 @@ $(function () {
         $.bcUtil.showNoticeMessage(bcI18n.infoMessage1.sprintf($.parseJSON(result).title));
     };
     $.baserAjaxDataList.init();
-    $.baserAjaxBatch.init({url: $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/batch'});
+    // 一括処理
+    $.bcBatch.init({batchUrl: $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/batch'});
 
     //$("#Search").before($("#ViewSetting"));
 
