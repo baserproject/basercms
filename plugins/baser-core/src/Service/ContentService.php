@@ -20,6 +20,7 @@ use Cake\I18n\FrozenTime;
 use Nette\Utils\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
+use Cake\Http\ServerRequest;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -997,52 +998,54 @@ class ContentService implements ContentServiceInterface
      * 基本的に targetId の上に移動する前提となる
      * targetId が空の場合は、同親中、一番下に移動する
      *
-     * @param $currentId
-     * @param $type
-     * @param $targetSiteId
-     * @param $targetParentId
-     * @param $targetId
+     * @param array $origin
+     * @param array $target
      * @return Content|bool|false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function move($currentId, $currentParentId, $targetSiteId, $targetParentId, $targetId)
+    public function move($origin, $target)
     {
-        $this->moveRelateSubSiteContent($currentId, $targetParentId, $targetId);
-        $targetSort = $this->Contents->getOrderSameParent($targetId, $targetParentId);
-        if ($currentParentId != $targetParentId) {
-            $content = $this->get($currentId);
+        $this->moveRelateSubSiteContent($origin['id'], $target['parentId'], $target['id']);
+        $targetSort = $this->Contents->getOrderSameParent($target['id'], $target['parentId']);
+        if ($origin['parentId'] != $target['parentId']) {
+            $content = $this->get($origin['id']);
             // 親を変更
             $content = $this->update($content, [
-                'id' => $currentId,
+                'id' => $origin['id'],
                 'name' => $content->name,
                 'title' => $content->title,
                 'plugin' => $content->plugin,
                 'type' => $content->type,
-                'parent_id' => $targetParentId,
-                'site_id' => $targetSiteId
+                'parent_id' => $target['parentId'],
+                'site_id' => $target['siteId']
             ]);
             // フォルダにコンテンツがない場合、targetId が空で一番後を指定の場合は、親を変更して終了
-            if (!$targetSort || !$targetId) {
+            if (!$targetSort || !$target['id']) {
                 return $content;
             }
-            $currentSort = $this->Contents->getOrderSameParent(null, $targetParentId);
+            $currentSort = $this->Contents->getOrderSameParent(null, $target['parentId']);
         } else {
-            $currentSort = $this->Contents->getOrderSameParent($currentId, $targetParentId);
+            $currentSort = $this->Contents->getOrderSameParent($origin['id'], $target['parentId']);
         }
         // 親変更後のオフセットを取得
         $offset = $targetSort - $currentSort;
-        if ($currentParentId == $targetParentId && $targetId && $offset > 0) {
+        if ($origin['parentId'] == $target['parentId'] && $target['id'] && $offset > 0) {
             $offset--;
         }
         // オフセットを元に移動
-        return $this->Contents->moveOffset($currentId, $offset);
+        return $this->Contents->moveOffset($origin['id'], $offset);
     }
 
     /**
      * メインサイトの場合、連携設定がされている子サイトも移動する
      *
      * @param $data
+     * @checked
+     * @unitTest
      */
-    public function moveRelateSubSiteContent($mainCurrentId, $mainTargetParentId, $mainTargetId)
+    protected function moveRelateSubSiteContent($mainCurrentId, $mainTargetParentId, $mainTargetId)
     {
         $data = $this->get($mainCurrentId);
         // 自身がエイリアスか確認し、エイリアスの場合は終了
@@ -1061,37 +1064,88 @@ class ContentService implements ContentServiceInterface
         $result = true;
         foreach($sites as $site) {
             // 自信をメインコンテンツとしているデータを取得
-            $current = $this->Contents->find()->where(['main_site_content_id' => $mainCurrentId, 'site_id' => $site->id])->first();
-            if (!$current) {
+            // currentの設定
+            try {
+                $currentEntity = $this->Contents->find()->where(['main_site_content_id' => $mainCurrentId, 'site_id' => $site->id])->firstOrFail();
+                $current['id'] = $currentEntity->id;
+                $current['parentId'] = $currentEntity->parent_id;
+            } catch (\Exception $e) {
                 continue;
             }
-            $currentId = $current->id;
-            $currentParentId = $current->parent_id;
-            $target = null;
-            $targetId = "";
-            $targetParentId = "";
-            if ($mainTargetId) {
-                $target = $this->Contents->find()->where(['main_site_content_id' => $mainTargetId, 'site_id' => $site->id])->first();
-                if ($target) {
-                    $targetId = $target->id;
-                    $targetParentId = $target->parent_id;
-                }
+            // targetの設定
+            if (!empty($targetEntity)) {
+                unset($targetEntity);
+                unset($target);
             }
-            if (!$target) {
-                // ターゲットが見つからない場合は親IDより取得
-                $target = $this->Contents->find()->where(['main_site_content_id' => $mainTargetId, 'site_id' => $site->id])->first();
-                if ($target) {
-                    $targetParentId = $target->id;
+            try {
+                if ($mainTargetId) {
+                    $targetEntity = $this->Contents->find()->where(['main_site_content_id' => $mainTargetId, 'site_id' => $site->id])->first();
+                    if ($targetEntity) {
+                        $target['id'] = $targetEntity->id;
+                        $target['parentId'] = $targetEntity->parent_id;
+                        $target['siteId'] = $targetEntity->site_id;
+                    } else {
+                        // ターゲットが見つからない場合は親IDより取得
+                        $targetEntity = $this->Contents->find()->where(['main_site_content_id' => $mainTargetParentId, 'site_id' => $site->id])->firstOrFail();
+                        if ($targetEntity) {
+                            $target['id'] = $targetEntity->id;
+                        }
+                    }
                 }
-            }
-            if (!$target) {
+            } catch (\Exception $e) {
                 continue;
             }
-            $targetSiteId = $target->site_id;
-            if (!$this->move($currentId, $currentParentId, $targetSiteId, $targetParentId, $targetId)) {
+            if (!$this->move($current, $target)) {
                 $result = false;
             }
         }
         return $result;
+    }
+
+    /**
+     * 移動元のコンテンツと移動先のディレクトリから移動が可能かチェックする
+     *
+     * @param int $currentId int 移動元コンテンツID
+     * @param int $targetParentId int 移動先コンテンツID (ContentFolder)
+     * @return bool
+     */
+    public function isMovable($currentId, $targetParentId)
+    {
+        $currentContent = $this->get($currentId);
+        if ($currentContent->parent_id === $targetParentId) {
+            return true;
+        }
+        $parentCuntent = $this->get($targetParentId);
+
+        // 指定コンテンツが存在しない
+        if (!$currentContent || !$parentCuntent) {
+            return false;
+        }
+
+        $parentId = $parentCuntent->id;
+
+        // 関連コンテンツで移動先と同じ階層のフォルダを確認
+        $childrenSite = $this->Sites->children($currentContent->site_id, [
+            'conditions' => ['relate_main_site' => true]
+        ]);
+        if ($childrenSite) {
+            $pureUrl = $this->Contents->pureUrl($parentCuntent->url, $parentCuntent->site_id);
+            foreach($childrenSite as $site) {
+                $site = $this->Sites->findById($site->id)->first();
+                $url = $site->makeUrl(new ServerRequest($pureUrl));
+                $id = $this->Contents->find()->select('id')->where(['url' => $url]);
+                if ($id) {
+                    $parentId = $id;
+                }
+            }
+        }
+        // 移動先に同一コンテンツが存在するか確認
+        $movedContent = $this->Contents->find()
+            ->where(['parent_id' => $parentId, 'name' => $currentContent->name, 'id !=' => $currentContent->id])
+            ->first();
+        if ($movedContent) {
+            return false;
+        }
+        return true;
     }
 }

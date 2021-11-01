@@ -277,12 +277,18 @@ interface ContentServiceInterface
      * 基本的に targetId の上に移動する前提となる
      * targetId が空の場合は、同親中、一番下に移動する
      *
-     * @param $currentId
-     * @param $type
-     * @param $targetSiteId
-     * @param $targetParentId
-     * @param $targetId
+     * @param array $origin
+     * @param array $target
      * @return Content|bool|false
      */
-    public function move($currentId, $currentParentId, $targetSiteId, $targetParentId, $targetId);
+    public function move($origin, $target);
+
+    /**
+     * 移動元のコンテンツと移動先のディレクトリから移動が可能かチェックする
+     *
+     * @param int $currentId int 移動元コンテンツID
+     * @param int $targetParentId int 移動先コンテンツID (ContentFolder)
+     * @return bool
+     */
+    public function isMovable($currentId, $targetParentId);
 }

@@ -677,14 +677,6 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     * メインサイトの場合、連携設定がされている子サイトも移動する
-     */
-    public function testMoveRelateSubSiteContent()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * 同じ階層における並び順を取得
      *
      * id が空の場合は、一番最後とみなす

@@ -1177,13 +1177,10 @@
                         $.bcUtil.showLoader();
                     },
                     success: function (result) {
-                        if (!result) {
-                            $.bcUtil.showAjaxError(bcI18n.commonSortSaveFailedMessage);
-                        } else {
-                            node.data.jstree.contentFullUrl = result;
-                            $.bcTree.refreshTree(true);
-                            node.data.jstree.contentParentId = $.bcTree.dropTarget.data.jstree.contentId;
-                        }
+                        node.data.jstree.contentFullUrl = result.url;
+                        $.bcTree.refreshTree(true);
+                        node.data.jstree.contentParentId = $.bcTree.dropTarget.data.jstree.contentId;
+                        $.bcUtil.showNoticeMessage(result.message);
                         $.bcUtil.hideLoader();
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
