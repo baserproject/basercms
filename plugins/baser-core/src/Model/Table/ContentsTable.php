@@ -1542,4 +1542,27 @@ class ContentsTable extends AppTable
         return $content;
     }
 
+    /**
+     * オフセットを元にコンテンツを移動する
+     *
+     * @param $id
+     * @param $offset
+     * @return Content|bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function moveOffset($id, $offset)
+    {
+        $offset = (int)$offset;
+        $content = $this->get($id);
+        if ($offset > 0) {
+            $result = $this->moveDown($content, abs($offset));
+        } elseif ($offset < 0) {
+            $result = $this->moveUp($content, abs($offset));
+        } else {
+            $result = true;
+        }
+        return $result ? $content : false;
+    }
 }

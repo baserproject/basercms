@@ -270,4 +270,19 @@ interface ContentServiceInterface
      * @return bool
      */
     public function exists($id, $withTrash = false): bool;
+
+    /**
+     * コンテンツを移動する
+     *
+     * 基本的に targetId の上に移動する前提となる
+     * targetId が空の場合は、同親中、一番下に移動する
+     *
+     * @param $currentId
+     * @param $type
+     * @param $targetSiteId
+     * @param $targetParentId
+     * @param $targetId
+     * @return Content|bool|false
+     */
+    public function move($currentId, $currentParentId, $targetSiteId, $targetParentId, $targetId);
 }

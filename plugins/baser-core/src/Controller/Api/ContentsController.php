@@ -13,6 +13,7 @@ namespace BaserCore\Controller\Api;
 
 use Exception;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
@@ -452,26 +453,26 @@ class ContentsController extends BcApiController
 
         $content = $contentService->get($this->request->getData('origin.id'));
         $beforeUrl = $content->url;
-
-        if ($this->request->getData('origin.parentId') == $this->request->getData('target.parentId')) {
-            // 親が違う場合は、Contentモデルで更新してくれるが同じ場合更新しない仕様のためここで更新する
-            $this->SiteConfig->updateContentsSortLastModified();
-        }
         try {
-            $result = $contentService->move($this->request->getData('origin'), $this->request->getData('target'));
-            $result = $this->Content->move(
-                $data['currentId'],
-                $data['currentParentId'],
-                $data['targetSiteId'],
-                $data['targetParentId'],
-                $data['targetId']
+            // $result = $contentService->move($this->request->getData('origin'), $this->request->getData('target'));
+            $result = $contentService->move(
+                $this->request->getData('origin.id'),
+                $this->request->getData('origin.parentId'),
+                $this->request->getData('target.siteId'),
+                $this->request->getData('target.parentId'),
+                $this->request->getData('target.id')
             );
+            if ($this->request->getData('origin.parentId') == $this->request->getData('target.parentId')) {
+                // 親が違う場合は、Contentモデルで更新してくれるが同じ場合更新しない仕様のためここで更新する
+                $siteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
+                $siteConfig->updateContentsSortLastModified();
+            }
             // // EVENT Contents.afterAdd
             // $this->dispatchLayerEvent('afterMove', [
             //     'data' => $result
             // ]);
-            $message = sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"), $result['Content']['title'], urldecode($beforeUrl), urldecode($result['Content']['url']));
-            $url = $contentService->getUrlById($result['Content']['id'], true);
+            $message = sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"), $result->title, urldecode($beforeUrl), urldecode($result->url));
+            $url = $contentService->getUrlById($result->id, true);
             $this->set(['url' => $url]);
         } catch(Exception $e) {
             $message = __d('baser', 'データ保存中にエラーが発生しました。' . $e->getMessage());

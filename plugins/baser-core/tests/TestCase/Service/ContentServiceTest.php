@@ -674,4 +674,9 @@ class ContentServiceTest extends BcTestCase
         $this->assertTrue($this->ContentService->exists(1));
         $this->assertFalse($this->ContentService->exists(100));
     }
+
+    public function testMove()
+    {
+        $this->ContentService->move("12", "6", "1", "6", "");
+    }
 }
