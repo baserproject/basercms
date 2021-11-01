@@ -1007,7 +1007,7 @@ class ContentService implements ContentServiceInterface
     public function move($currentId, $currentParentId, $targetSiteId, $targetParentId, $targetId)
     {
         $this->moveRelateSubSiteContent($currentId, $targetParentId, $targetId);
-        $targetSort = $this->getOrderSameParent($targetId, $targetParentId);
+        $targetSort = $this->Contents->getOrderSameParent($targetId, $targetParentId);
         if ($currentParentId != $targetParentId) {
             $content = $this->get($currentId);
             // 親を変更
@@ -1024,9 +1024,9 @@ class ContentService implements ContentServiceInterface
             if (!$targetSort || !$targetId) {
                 return $content;
             }
-            $currentSort = $this->getOrderSameParent(null, $targetParentId);
+            $currentSort = $this->Contents->getOrderSameParent(null, $targetParentId);
         } else {
-            $currentSort = $this->getOrderSameParent($currentId, $targetParentId);
+            $currentSort = $this->Contents->getOrderSameParent($currentId, $targetParentId);
         }
         // 親変更後のオフセットを取得
         $offset = $targetSort - $currentSort;
@@ -1093,35 +1093,5 @@ class ContentService implements ContentServiceInterface
             }
         }
         return $result;
-    }
-
-    /**
-     * 同じ階層における並び順を取得
-     *
-     * id が空の場合は、一番最後とみなす
-     *
-     * @param $id
-     * @param $parentId
-     * @return bool|int|null|string
-     */
-    public function getOrderSameParent($id, $parentId)
-    {
-        $contents = $this->Contents->find()->select(['id', 'parent_id', 'title'])->where(['parent_id' => $parentId])->order('lft');
-        $order = null;
-        if (!$contents->isEmpty()) {
-            if ($id) {
-                foreach($contents as $key => $data) {
-                    if ($id == $data->id) {
-                        $order = $key + 1;
-                        break;
-                    }
-                }
-            } else {
-                return $contents->all()->count();
-            }
-        } else {
-            return false;
-        }
-        return $order;
     }
 }

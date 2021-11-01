@@ -1542,6 +1542,39 @@ class ContentsTable extends AppTable
         return $content;
     }
 
+        /**
+     * 同じ階層における並び順を取得
+     *
+     * id が空の場合は、一番最後とみなす
+     *
+     * @param string $id
+     * @param int $parentId
+     * @return bool|int|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getOrderSameParent($id, $parentId)
+    {
+        $contents = $this->find()->select(['id', 'parent_id', 'title'])->where(['parent_id' => $parentId])->order('lft');
+        $order = null;
+        if (!$contents->isEmpty()) {
+            if ($id) {
+                foreach($contents as $key => $data) {
+                    if ($id == $data->id) {
+                        $order = $key + 1;
+                        break;
+                    }
+                }
+            } else {
+                return $contents->all()->count();
+            }
+        } else {
+            return false;
+        }
+        return $order;
+    }
+
     /**
      * オフセットを元にコンテンツを移動する
      *

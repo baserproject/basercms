@@ -691,7 +691,12 @@ class ContentsTableTest extends BcTestCase
      */
     public function testGetOrderSameParent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // parent_id=6の全体数
+        $this->assertEquals(9, $this->Contents->getOrderSameParent("", "6"));
+        // parent_id=6のコンテンツ順序
+        $this->assertEquals(1, $this->Contents->getOrderSameParent("11", "6"));
+        $this->assertEquals(2, $this->Contents->getOrderSameParent("12", "6"));
+        $this->assertEquals(3, $this->Contents->getOrderSameParent("13", "6"));
     }
 
     /**
