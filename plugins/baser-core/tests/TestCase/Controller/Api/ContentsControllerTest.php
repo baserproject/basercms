@@ -133,14 +133,16 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     public function testDelete()
     {
         // 子要素を持たない場合
-        $this->post('/baser/api/baser-core/contents/delete/4.json?token=' . $this->accessToken);
+        $data = ['contentId' => 4];
+        $this->post('/baser/api/baser-core/contents/delete.json?token=' . $this->accessToken, $data);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals("コンテンツ: indexを削除しました。", $result->message);
         $this->get('/baser/api/baser-core/contents/view/4.json?token=' . $this->accessToken);
         $this->assertResponseError();
         // 子要素を持つ場合
-        $this->post('/baser/api/baser-core/contents/delete/6.json?token=' . $this->accessToken);
+        $data = ['contentId' => 6];
+        $this->post('/baser/api/baser-core/contents/delete.json?token=' . $this->accessToken, $data);
         $this->assertResponseOk();
         $this->get('/baser/api/baser-core/contents/view/6.json?token=' . $this->accessToken); // 親要素削除チェック
         $this->assertResponseError();

@@ -92,35 +92,33 @@ class ContentsController extends BcApiController
      * コンテンツ情報削除(論理削除)
      * ※ 子要素があれば、子要素も削除する
      * @param ContentServiceInterface $contentService
-     * @param $id
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function delete(ContentServiceInterface $contentService, $id)
+    public function delete(ContentServiceInterface $contentService)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $contents = $contentService->get($id);
+        $id = $this->request->getData('contentId');
+        $content = $contentService->get($id);
         $children = $contentService->getChildren($id);
         try {
-            $text = "コンテンツ: " . $contents->name . "を削除しました。";
-            if ($children && $contentService->treeDelete($id)) {
-                $contents = array_merge([$contents], $children->toArray());
-                foreach ($children as $child) {
-                    $text .= "\nコンテンツ: " . $child->name . "を削除しました。";
+            if($contentService->deleteRecursive($id)) {
+                $text = "コンテンツ: " . $content->name . "を削除しました。";
+                if ($children) {
+                    $content = array_merge([$content], $children->toArray());
+                    foreach ($children as $child) {
+                        $text .= "\nコンテンツ: " . $child->name . "を削除しました。";
+                    }
                 }
                 $message = __d('baser', $text);
-            } elseif ($contentService->delete($id)) {
-                $message = __d('baser', $text);
+                $this->set(['content' => $content]);
             }
         } catch (Exception $e) {
-            $this->setResponse($this->response->withStatus(400));
+            $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
-        $this->set([
-            'message' => $message,
-            'contents' => $contents
-        ]);
+        $this->set(['message' => $message]);
         $this->viewBuilder()->setOption('serialize', ['contents', 'message']);
     }
 
@@ -142,7 +140,7 @@ class ContentsController extends BcApiController
                 $message = __d('baser', 'ゴミ箱: {0} を削除しました。', $trash->name);
             }
         } catch (Exception $e) {
-            $this->setResponse($this->response->withStatus(400));
+            $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
         $this->set([
@@ -173,7 +171,7 @@ class ContentsController extends BcApiController
             }
             $message = __d('baser', $text);
         } catch (Exception $e) {
-            $this->setResponse($this->response->withStatus(400));
+            $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
         $this->set([
@@ -228,7 +226,7 @@ class ContentsController extends BcApiController
                 $message = __d('baser', 'ゴミ箱の復元に失敗しました');
             }
         } catch (Exception $e) {
-            $this->setResponse($this->response->withStatus(400));
+            $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
         }
         $this->set([
@@ -262,7 +260,7 @@ class ContentsController extends BcApiController
                         break;
                 }
             } catch (\Exception $e) {
-                $this->setResponse($this->response->withStatus(400));
+                $this->setResponse($this->response->withStatus(500));
                 $message = __d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage();
             }
         } else {
@@ -433,7 +431,7 @@ class ContentsController extends BcApiController
         $siteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
         if (empty($this->request->getData())) {
             $message = __d('baser', '無効な処理です。');
-            $this->setResponse($this->response->withStatus(500));
+            $this->setResponse($this->response->withStatus(400));
         } elseif(!$contentService->exists($this->request->getData('origin.id'))) {
             $message = __d('baser', 'データが存在しません。');
             $this->setResponse($this->response->withStatus(500));
