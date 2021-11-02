@@ -931,7 +931,7 @@
             var data = node.data.jstree;
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.bcUtil.adminBaseUrl + 'baser-core' +  '/contents/delete',
+                    url: $.bcUtil.apiBaseUrl + 'baser-core' +  '/contents/delete',
                     type: 'POST',
                     data: {
                         contentId: data.contentId,
@@ -939,12 +939,13 @@
                         alias: data.alias,
                         _csrfToken: $.bcToken.key,
                     },
-                    dataType: 'text',
+                    dataType: 'json',
                     beforeSend: function () {
                         $.bcUtil.hideMessage();
                         $.bcUtil.showLoader();
                     },
-                    success: function () {
+                    success: function (result) {
+                        $.bcUtil.showNoticeMessage(result.message);
                         // 削除対象のエイリアスを一度に削除する場合もあり実装が面倒なので
                         // 一旦、load() で読み直す
 
@@ -952,14 +953,12 @@
                         // if (!$.bcTree.settings[data.contentType]['multiple'] && !data.alias) {
                         // 	$.bcTree.settings[data.contentType]['exists'] = false;
                         // }
-                        // $.bcTree.refreshTree();
+                        $.bcTree.refreshTree();
                         $.bcToken.key = null;
                         $.bcTree.load();
                         location.reload();
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        // console.log(textStatus);
-                        // console.log($.bcToken.key);
                         $.bcToken.key = null;
                         $.bcUtil.showAjaxError(bcI18n.bcTreeAlertMessage4, XMLHttpRequest, errorThrown);
                         $.bcUtil.hideLoader();

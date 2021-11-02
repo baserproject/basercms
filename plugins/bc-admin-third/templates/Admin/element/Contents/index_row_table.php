@@ -127,17 +127,17 @@ if ($content->self_status) {
       <?php $this->BcBaser->link('', array_merge($items[$type]['routes']['edit'], $urlParams), ['title' => __d('baser', '編集'), 'class' => 'btn-edit bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
     <?php endif ?>
     <?php if (!$editDisabled && !$isSiteRoot): ?>
-      <?php $this->BcBaser->link('', ['action' => 'ajax_delete', $content->id], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
+      <?php $this->BcBaser->link('', ['action' => 'delete', $content->id], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
     <?php endif ?>
     <form>
-      <input type="hidden" name="data[contentId]" value="<?= $content->id ?>">
-      <input type="hidden" name="data[type]" value="<?= $content->type ?>">
-      <input type="hidden" name="data[entityId]" value="<?= $content->entity_id ?>">
-      <input type="hidden" name="data[parentId]" value="<?= $content->parent_id ?>">
-      <input type="hidden" name="data[title]" value="<?= h($content->title) ?>">
-      <input type="hidden" name="data[siteId]" value="<?= $content->site_id ?>">
-      <input type="hidden" name="data[status]" value="<?= $toStatus ?>">
-      <input type="hidden" name="data[alias]" value="<?= (bool)$content->alias_id ?>">
+      <input type="hidden" name="contentId" value="<?= $content->id ?>">
+      <input type="hidden" name="type" value="<?= $content->type ?>">
+      <input type="hidden" name="entityId" value="<?= $content->entity_id ?>">
+      <input type="hidden" name="parentId" value="<?= $content->parent_id ?>">
+      <input type="hidden" name="title" value="<?= h($content->title) ?>">
+      <input type="hidden" name="siteId" value="<?= $content->site_id ?>">
+      <input type="hidden" name="status" value="<?= $toStatus ?>">
+      <input type="hidden" name="alias" value="<?= (bool)$content->alias_id ?>">
     </form>
   </td>
 </tr>

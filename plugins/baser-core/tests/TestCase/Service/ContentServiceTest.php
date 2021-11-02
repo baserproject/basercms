@@ -280,6 +280,12 @@ class ContentServiceTest extends BcTestCase
         $this->assertTrue($this->ContentService->delete(14));
         $contents = $this->ContentService->getTrash(14);
         $this->assertNotNull($contents->deleted_date);
+        // aliasの場合
+        $content = $this->ContentService->get(5);
+        $this->ContentService->update($content, ['alias_id' => 5]);
+        $this->assertTrue($this->ContentService->delete(5));
+        // ゴミ箱行きではなくちゃんと削除されてるか確認
+        $this->assertTrue($this->ContentService->getIndex(['withTrash' => true, 'id' => 5])->isEmpty());
     }
 
     /**
@@ -329,24 +335,6 @@ class ContentServiceTest extends BcTestCase
     }
 
     /**
-     * testTreeDelete
-     *
-     * @return void
-     */
-    public function testTreeDelete()
-    {
-        // エンティティが存在しない場合
-        $this->assertFalse($this->ContentService->treeDelete(0));
-        // エイリアス出ない場合
-        $this->assertTrue($this->ContentService->treeDelete(6));
-        $query = $this->ContentService->getTrashIndex(['name' => 'service']);
-        $this->assertEquals(4, $query->count());
-        // エイリアスがある場合物理削除
-        $result = $this->ContentService->treeDelete(22);
-        $this->assertFalse($this->ContentService->exists(22, true));
-    }
-
-    /**
      * testRestore
      *
      * @return void
@@ -393,8 +381,7 @@ class ContentServiceTest extends BcTestCase
 
     /**
      * 再帰的に削除
-     *
-     * エイリアスの場合
+     * エイリアスの場合物理削除
      */
     public function testDeleteRecursive()
     {
@@ -416,6 +403,9 @@ class ContentServiceTest extends BcTestCase
         // エイリアスを子に持つ場合
         $this->assertTrue($this->ContentService->deleteRecursive(21));
         $this->assertFalse($this->ContentService->exists(22, true)); // エイリアス
+        // エンティティが存在しない場合
+        $this->expectExceptionMessage('idが指定されてません');
+        $this->assertFalse($this->ContentService->deleteRecursive(0));
     }
 
     /**
@@ -614,20 +604,6 @@ class ContentServiceTest extends BcTestCase
         $expected = $this->ContentService->Contents->find()->last();
         $this->assertEquals($expected->name, $result->name);
         $this->assertEquals($content->id, $result->alias_id);
-    }
-    /**
-     * testAliasDelete
-     *
-     * @return void
-     */
-    public function testAliasDelete()
-    {
-        $this->assertFalse($this->ContentService->deleteAlias(5));
-        $content = $this->ContentService->get(5);
-        $this->ContentService->update($content, ['alias_id' => 5]);
-        $this->assertTrue($this->ContentService->deleteAlias(5));
-        // ゴミ箱行きではなくちゃんと削除されてるか確認
-        $this->assertTrue($this->ContentService->getIndex(['withTrash' => true, 'id' => 5])->isEmpty());
     }
 
     /**

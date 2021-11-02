@@ -91,6 +91,9 @@ class ContentFoldersController extends BcApiController
      * ユーザーグループ削除
      * @param ContentFolderServiceInterface $ContentFolders
      * @param $id
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delete(ContentFolderServiceInterface $ContentFolders, $id)
     {

@@ -136,14 +136,6 @@ interface ContentServiceInterface
     public function hardDelete($id, $enableTree = false): bool;
 
     /**
-     * deleteAlias
-     *
-     * @param  int $id
-     * @return bool
-     */
-    public function deleteAlias($id): bool;
-
-    /**
      * コンテンツ情報と紐付いてるモデルを削除する
      * @param int $id
      * @return bool
@@ -165,15 +157,6 @@ interface ContentServiceInterface
      * @return int
      */
     public function hardDeleteAll(Datetime $dateTime): int;
-
-    /**
-     * コンテンツを削除する（論理削除）
-     *
-     * ※ エイリアスの場合は直接削除
-     * @param int $id
-     * @return bool
-     */
-    public function treeDelete($id): bool;
 
     /**
      * 論理削除されたコンテンツを復元する
@@ -199,10 +182,10 @@ interface ContentServiceInterface
 
     /**
      * 再帰的に削除
-     *
-     * エイリアスの場合
-     *
+     *※ エイリアスの場合は直接削除
      * @param int $id
+     * @return void
+     * @throws Exception
      * @return bool $result
      */
     public function deleteRecursive($id): bool;

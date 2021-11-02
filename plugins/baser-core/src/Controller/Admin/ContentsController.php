@@ -352,14 +352,17 @@ class ContentsController extends BcAdminAppController
     {
         $this->disableAutoRender();
         // コンテンツIDチェック
+        $id = $this->request->getData('Content.id');
         if($this->request->is('ajax')) {
-            $useFlashMessage = false;
-            if (empty($id = $this->request->getData('contentId'))) {
-                $this->ajaxError(500, __d('baser', '無効な処理です。'));
+            if ($this->request->is(['post', 'put', 'delete'])) {
+                $useFlashMessage = false;
+                if (empty($id)) {
+                    $this->ajaxError(500, __d('baser', '無効な処理です。'));
+                }
             }
         } else {
             $useFlashMessage = true;
-            if (empty($id = $this->request->getData('Content.id'))) {
+            if (empty($id)) {
                 $this->notFound();
             }
         }
@@ -370,12 +373,8 @@ class ContentsController extends BcAdminAppController
         // ]);
         try {
             $content = $contentService->get($id);
-            if ($content->alias_id) {
-                $result = $contentService->deleteAlias($id);
-            } else {
-                $typeName = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title');
-                $result = $contentService->treeDelete($id);
-            }
+            $typeName = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title');
+            $result = $contentService->deleteRecursive($id);
         } catch (\Exception $e) {
             $result = false;
             $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
