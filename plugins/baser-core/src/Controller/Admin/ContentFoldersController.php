@@ -33,18 +33,22 @@ class ContentFoldersController extends BcAdminAppController
     /**
      * initialize
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {
         parent::initialize();
         $this->loadComponent('BaserCore.BcAdminContents');
-        $this->Security->setConfig('unlockedActions', ['add']);
     }
 
     /**
      * beforeFilter
      *
      * @return void
+     * @checked
+     * @unitTest
      */
     public function beforeFilter(EventInterface $event)
     {

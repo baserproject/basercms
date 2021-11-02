@@ -83,10 +83,11 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $event = new Event('Controller.beforeFilter', $this->ContentFoldersController);
         $this->ContentFoldersController->beforeFilter($event);
         $this->assertNotEmpty($this->ContentFoldersController);
+        $this->assertNotEmpty($this->ContentFoldersController->ContentFolders);
+
     }
 
     /**
