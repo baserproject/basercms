@@ -130,14 +130,14 @@ if ($content->self_status) {
       <?php $this->BcBaser->link('', ['action' => 'delete', $content->id], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
     <?php endif ?>
     <form>
-      <input type="hidden" name="contentId" value="<?= $content->id ?>">
-      <input type="hidden" name="type" value="<?= $content->type ?>">
-      <input type="hidden" name="entityId" value="<?= $content->entity_id ?>">
-      <input type="hidden" name="parentId" value="<?= $content->parent_id ?>">
-      <input type="hidden" name="title" value="<?= h($content->title) ?>">
-      <input type="hidden" name="siteId" value="<?= $content->site_id ?>">
-      <input type="hidden" name="status" value="<?= $toStatus ?>">
-      <input type="hidden" name="alias" value="<?= (bool)$content->alias_id ?>">
+      <input type="hidden" name="Content[id]" value="<?= $content->id ?>">
+      <input type="hidden" name="Content[type]" value="<?= $content->type ?>">
+      <input type="hidden" name="Content[entity_id]" value="<?= $content->entity_id ?>">
+      <input type="hidden" name="Content[parent_id]" value="<?= $content->parent_id ?>">
+      <input type="hidden" name="Content[title]" value="<?= h($content->title) ?>">
+      <input type="hidden" name="Content[site_id]" value="<?= $content->site_id ?>">
+      <input type="hidden" name="Content[status]" value="<?= $toStatus ?>">
+      <input type="hidden" name="Content[alias_id]" value="<?= (bool)$content->alias_id ?>">
     </form>
   </td>
 </tr>

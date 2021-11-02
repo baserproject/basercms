@@ -342,61 +342,43 @@ class ContentsController extends BcAdminAppController
     }
 
     /**
-     * コンテンツ削除（論理削除）
-     *  @param  ContentServiceInterface $contentService
-     * @return Response|null
-     * @checked
-     * @unitTest
-     */
-    public function delete(ContentServiceInterface $contentService)
-    {
+	 * コンテンツ削除（論理削除）
+     * @param  ContentServiceInterface $contentService
+	 */
+	public function delete(ContentServiceInterface $contentService)
+	{
         $this->disableAutoRender();
-        // コンテンツIDチェック
-        $id = $this->request->getData('Content.id');
-        if($this->request->is('ajax')) {
-            if ($this->request->is(['post', 'put', 'delete'])) {
-                $useFlashMessage = false;
-                if (empty($id)) {
-                    $this->ajaxError(500, __d('baser', '無効な処理です。'));
-                }
-            }
-        } else {
-            $useFlashMessage = true;
-            if (empty($id)) {
-                $this->notFound();
-            }
-        }
-        // TODO:
-        // EVENT Contents.beforeDelete
-        // $this->dispatchLayerEvent('beforeDelete', [
-        //     'data' => $id
-        // ]);
-        try {
-            $content = $contentService->get($id);
-            $typeName = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title');
-            $result = $contentService->deleteRecursive($id);
-        } catch (\Exception $e) {
-            $result = false;
-            $this->BcMessage->setError(__d('baser', 'データベース処理中にエラーが発生しました。') . $e->getMessage());
-        }
-        // TODO:
-        // EVENT Contents.afterDelete
-        // $this->dispatchLayerEvent('afterDelete', [
-        //     'data' => $id
-        // ]);
-        if ($result) {
-            $trashMessage = $typeName . sprintf(__d('baser', '「%s」をゴミ箱に移動しました。'), $content->title);
-            $aliasMessage = sprintf(__d('baser', '%s のエイリアス「%s」を削除しました。'), $typeName, $content->title);
-            $this->BcMessage->setSuccess($content->alias_id ? $aliasMessage : $trashMessage, true, $useFlashMessage);
-        } else {
-            if($this->request->is('ajax')) {
-                $this->ajaxError(500, __d('baser', '削除中にエラーが発生しました。'));
+        $this->viewBuilder()->disableAutoLayout();
+		if (empty($this->request->getData())) {
+			$this->notFound();
+		}
+        if ($this->request->is(['post', 'put', 'delete'])) {
+            //     // TODO:
+            //     // EVENT Contents.beforeDelete
+            //     // $this->dispatchLayerEvent('beforeDelete', [
+            //     //     'data' => $id
+            //     // ]);
+            // TODO: フォルダー以外実装時に汎用化する
+            $content = $this->request->getData('Content') ?? $this->request->getData('ContentFolder.content');
+            $entity = $contentService->get($content['id']);
+            if ($contentService->delete($content['id'])) {
+                //     // TODO:
+                //     // EVENT Contents.afterDelete
+                //     // $this->dispatchLayerEvent('afterDelete', [
+                //     //     'data' => $id
+                //     // ]);
+                $typeName = Configure::read('BcContents.items.' . $entity->plugin . '.' . $entity->type . '.title');
+                $trashMessage = $typeName . sprintf(__d('baser', '「%s」をゴミ箱に移動しました。'), $entity->title);
+                $aliasMessage = sprintf(__d('baser', '%s のエイリアス「%s」を削除しました。'), $typeName, $entity->title);
+                $this->BcMessage->setSuccess($entity->alias_id ? $aliasMessage : $trashMessage, true);
+                $this->redirect(['action' => 'index']);
             } else {
                 $this->BcMessage->setError('削除中にエラーが発生しました。');
             }
+        } else {
+            $this->BcMessage->setError('不正なリクエストです。');
         }
-        return $this->redirect(['action' => 'index']);
-    }
+	}
 
     /**
      * batch

@@ -66,7 +66,7 @@ $(function () {
             $("#BtnDelete").prop("disabled", true);
             $.bcUtil.showLoader();
             var form = $(this).parents('form');
-            form.attr('action', $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/contents/delete');
+            form.attr('action', $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/delete');
             form.submit();
         }
         return false;

@@ -362,29 +362,16 @@ class ContentsControllerTest extends BcTestCase
      *  testAdminDelete
      * コンテンツ削除（論理削除）
      */
-    public function testAdminDelete()
+    public function testDelete()
     {
-        $id = 6;
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
         // 管理画面からの場合
-        $this->request = $this->request->withData('Content.id', $id);
-        $this->ContentsController->setRequest($this->request);
-        $response = $this->ContentsController->delete($this->ContentService);
+        $this->post('/baser/admin/baser-core/contents/delete/', ['Content' => ['id' => 6]]);
+        $this->assertResponseSuccess();
+        $this->assertRedirect("/baser/admin/baser-core/contents/index");
         $this->assertEquals("フォルダー「サービス」をゴミ箱に移動しました。", $_SESSION['Flash']['flash'][0]['message']);
-        $this->assertStringContainsString("/baser/admin/baser-core/contents/index", $response->getHeaderLine('Location'));
-    }
-
-    /**
-     *  testAjaxDelete
-     * コンテンツ削除（論理削除）
-     */
-    public function testAjaxDelete()
-    {
-        $id = 6;
-        // ajaxからの場合
-        $this->request = $this->request->withData('contentId', $id)->withEnv('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest');
-        $this->ContentsController->setRequest($this->request);
-        $response = $this->ContentsController->delete($this->ContentService);
-        $this->assertStringContainsString("/baser/admin/baser-core/contents/index", $response->getHeaderLine('Location'));
+        $this->assertStringContainsString("/baser/admin/baser-core/contents/index", $this->_response->getHeaderLine('Location'));
     }
 
     /**
@@ -399,10 +386,6 @@ class ContentsControllerTest extends BcTestCase
         $this->expectException("Cake\Http\Exception\NotFoundException");
         $this->expectExceptionMessage("見つかりませんでした。");
         $this->ContentsController->delete($this->ContentService);
-        // ajaxからの場合(TODO: exitのテスト)
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->request = $this->request->withEnv('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest');
-        $this->ContentsController->setRequest($this->request);
     }
 
     /**
@@ -418,16 +401,7 @@ class ContentsControllerTest extends BcTestCase
         $this->request = $this->request->withData('Content.id', $id);
         $this->ContentsController->setRequest($this->request);
         $this->ContentsController->delete($this->ContentService);
-        $this->assertStringContainsString("データベース処理中にエラーが発生しました。", $_SESSION['Flash']['flash'][0]['message']);
-        $this->assertStringContainsString("削除中にエラーが発生しました。", $_SESSION['Flash']['flash'][1]['message']);
-    }
-
-    /**
-     * コンテンツ削除（論理削除）
-     */
-    public function testAdmin_delete()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertStringContainsString("不正なリクエストです。", $_SESSION['Flash']['flash'][0]['message']);
     }
 
     /**
