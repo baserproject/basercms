@@ -61,6 +61,7 @@ class BcContentsBehavior extends Behavior
      * BeforeMarshal
      *
      * 新規のデータの場合時のみContent のバリデーションを実行し、エラーがある場合は中止する
+     * $data['content']がある場合のみ実行する
      * @param Event $event
      * @param ArrayObject $data
      * @param ArrayObject $options
@@ -71,15 +72,17 @@ class BcContentsBehavior extends Behavior
      */
     public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
     {
-        if (!empty($data['content']['id'])) {
-            if (!$this->Contents->findById($data['content']['id'])->first()->isNew()) return;
+        if (!empty($data['content'])) {
+            if (!empty($data['content']['id'])) {
+                if (!$this->Contents->findById($data['content']['id'])->first()->isNew()) return;
+            }
+            $validateOptions = ['validate' => $options['validate'] ?? 'default'];
+            $contentEntity = $this->Contents->newEntity($data['content'], $validateOptions);
+            if ($contentEntity->hasErrors() && empty($data['content']['id'])) {
+                return false;
+            }
+            $this->Contents->beforeMarshal($event, $data, $options);
         }
-        $validateOptions = ['validate' => $options['validate'] ?? 'default'];
-        $contentEntity = $this->Contents->newEntity($data['content'], $validateOptions);
-        if ($contentEntity->hasErrors() && empty($data['content']['id'])) {
-            return false;
-        }
-        $this->Contents->beforeMarshal($event, $data, $options);
     }
 
     /**
