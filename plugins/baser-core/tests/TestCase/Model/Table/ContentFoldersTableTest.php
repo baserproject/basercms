@@ -11,8 +11,9 @@
 
 namespace BaserCore\Test\TestCase\Model\Table;
 
-use BaserCore\Model\Table\ContentFoldersTable;
+use ReflectionClass;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Model\Table\ContentFoldersTable;
 
 /**
  * Class ContentFoldersTableTest
@@ -26,6 +27,7 @@ class ContentFoldersTableTest extends BcTestCase
      * @var array
      */
     protected $fixtures = [
+        'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
     ];
 
@@ -76,5 +78,41 @@ class ContentFoldersTableTest extends BcTestCase
                 'valid' => 'IDに不正な値が利用されています。'
             ],
         ], $contentFolder->getErrors());
+    }
+
+    /**
+     * testBeforeSave
+     *
+     * @return void
+     */
+    public function testBeforeSave(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * testAfterSave
+     *
+     * @return void
+     */
+    public function testAfterSave(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * testSetBeforeRecord
+     *
+     * @return void
+     */
+    public function testSetBeforeRecord(): void
+    {
+        $this->execPrivateMethod($this->ContentFolders, "setBeforeRecord", [1]);
+        $reflection = new ReflectionClass($this->ContentFolders);
+        $property = $reflection->getProperty('beforeStatus');
+        $property->setAccessible(true);
+        $beforeStatus =  $property->getValue($this->ContentFolders);
+        $this->assertEquals("/", $this->ContentFolders->beforeUrl);
+        $this->assertTrue($beforeStatus);
     }
 }
