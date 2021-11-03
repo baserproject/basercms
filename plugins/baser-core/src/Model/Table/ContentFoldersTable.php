@@ -56,6 +56,9 @@ class ContentFoldersTable extends AppTable
      *
      * @param array $config テーブル設定
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {
@@ -82,6 +85,9 @@ class ContentFoldersTable extends AppTable
      *
      * @param  Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -147,11 +153,10 @@ class ContentFoldersTable extends AppTable
             $this->movePageTemplates($entity->content->url);
             $this->isMovableTemplate = true;
         }
-        // TODO: 一時措置
-        // if (!empty($options['reconstructSearchIndices']) && $this->beforeStatus !== $this->data['Content']['status']) {
-        //     $searchIndexModel = ClassRegistry::init('SearchIndex');
-        //     $searchIndexModel->reconstruct($this->data['Content']['id']);
-        // }
+        if (!empty($options['reconstructSearchIndices']) && $this->beforeStatus !== $entity->content->status) {
+            $searchIndexModel = TableRegistry::getTableLocator()->get('SearchIndex');
+            $searchIndexModel->reconstruct($entity->content->id);
+        }
         return true;
     }
 
@@ -159,6 +164,9 @@ class ContentFoldersTable extends AppTable
      * 保存前のURLをセットする
      *
      * @param int $id
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     private function setBeforeRecord($id)
     {
