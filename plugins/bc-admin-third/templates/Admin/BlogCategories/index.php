@@ -20,7 +20,8 @@ if (isset($user['user_group_id'])) {
 $this->BcBaser->js([
   'admin/libs/jquery.baser_ajax_data_list',
   'admin/libs/jquery.baser_ajax_batch',
-  'admin/libs/baser_ajax_data_list_config'
+  'admin/libs/baser_ajax_data_list_config',
+  'admin/libs/baser_ajax_batch_config'
 ]);
 $this->BcAdmin->addAdminMainBodyHeaderLinks([
   'url' => ['action' => 'add', $this->request->params['pass'][0]],

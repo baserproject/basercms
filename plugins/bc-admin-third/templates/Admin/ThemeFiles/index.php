@@ -20,7 +20,8 @@ if ((is_dir($fullpath) && !is_writable($fullpath)) || $theme == 'core') {
 $this->BcBaser->js([
   'admin/libs/jquery.baser_ajax_data_list',
   'admin/libs/jquery.baser_ajax_batch',
-  'admin/libs/baser_ajax_data_list_config'
+  'admin/libs/baser_ajax_data_list_config',
+  'admin/libs/baser_ajax_batch_config'
 ]);
 $params = explode('/', $path);
 ?>
