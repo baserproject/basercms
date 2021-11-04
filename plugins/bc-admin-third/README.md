@@ -6,6 +6,15 @@ baserCMSの管理画面テーマのプロジェクト
 
 Javascript の開発は、Gulp でファイルを監視し Webpack を利用して開発します。
 
+### Javascriptファイルの移行
+
+admin/vendorsをvendor/直下に移行
+
+admin/libsにおいてajaxでhtmlを取得する処理は廃止し、json化していく予定
+- baser_ajax_batch_config.js
+- baser_ajax_data_list_config.js
+- baser_ajax_data_list.js
+
 ### 事前準備
 事前に Node.js をインストールしておき、npm コマンドが利用できるようにしておきます。
 
