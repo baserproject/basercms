@@ -126,7 +126,7 @@ class ContentsTable extends AppTable
         return [
             // 'Model.beforeFind' => ['callable' => 'beforeFind', 'passParams' => true],
             // 'Model.afterFind' => ['callable' => 'afterFind', 'passParams' => true],
-            'Model.beforeValidate' => ['callable' => 'beforeValidate', 'passParams' => true],
+            'Model.beforeMarshal' => 'beforeMarshal',
             'Model.afterValidate' => ['callable' => 'afterValidate'],
             'Model.beforeSave' => ['callable' => 'beforeSave', 'passParams' => true],
             'Model.afterMarshal' => 'afterMarshal',
@@ -293,14 +293,14 @@ class ContentsTable extends AppTable
      * @param ArrayObject $data
      * @param ArrayObject $options
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
     {
         // コンテンツ一覧にて、コンテンツを登録した直後のリネーム処理までは新規追加とみなして処理を行う為、$create で判定させる
-        $create = false;
-        if (empty($data['content']['id']) || !empty($options['firstCreate'])) {
-            $create = true;
-        }
+        $create = empty($data['content']['id']);
         // タイトルは強制的に255文字でカット
         if (!empty($data['content']['title'])) {
             $data['content']['title'] = mb_substr($data['content']['title'], 0, 254, 'UTF-8');
@@ -338,12 +338,6 @@ class ContentsTable extends AppTable
             }
             if (isset($data['content']['name'])) {
                 $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['name'], 0, 230, 'UTF-8'));
-            }
-            if ($data['content']['id'] == 1) {
-                $validator = new Validator();
-                $validator = $this->validationDefault($validator);
-                $validator->remove('name');
-                return $validator;
             }
         }
         // name の 重複チェック＆リネーム
@@ -429,20 +423,20 @@ class ContentsTable extends AppTable
      *
      * @param string $name name フィールドの値
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getUniqueName($name, $parentId, $contentId = null)
     {
 
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
-        $conditions = [
-            'Contents.name LIKE' => $name . '%',
-            'Contents.parent_id' => $parentId
-        ];
+        $query = $this->find()->where(['name LIKE' => $name . '%', 'parent_id' => $parentId]);
         if ($contentId) {
-            $conditions['Contents.id <>'] = $contentId;
+            $query = $query->andWhere(['id <>' => $contentId]);
         }
-        $datas = $this->find('all', ['conditions' => $conditions, 'fields' => ['name'], 'order' => "Contents.name"])->all()->toArray();
-        $datas = Hash::extract($datas, "{n}.name");
+        $datas = $query->select('name')->order('name')->all()->toArray();
+        $datas = Hash::extract($datas, '{n}.name');
         $numbers = [];
 
         if ($datas) {
@@ -788,13 +782,19 @@ class ContentsTable extends AppTable
      *
      * @param string $url
      * @param int $siteId
-     * @return mixed
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function pureUrl($url, $siteId)
     {
+        if (empty($url)) {
+            $url = '/';
+        }
         $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sites->findById($siteId)->first();
-        return $site->getPureUrl($url);
+        return $site ? $site->getPureUrl($url) : $url;
     }
 
     /**
