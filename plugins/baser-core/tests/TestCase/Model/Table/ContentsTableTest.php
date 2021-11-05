@@ -12,9 +12,11 @@
 namespace BaserCore\Test\TestCase\Model\Table;
 
 use ArrayObject;
+use Cake\ORM\Entity;
 use Cake\Core\Configure;
 use Cake\ORM\Marshaller;
 use Cake\I18n\FrozenTime;
+use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
 use BaserCore\Model\Entity\Content;
 use BaserCore\TestSuite\BcTestCase;
@@ -313,7 +315,12 @@ class ContentsTableTest extends BcTestCase
      */
     public function testBeforeSave()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = new Entity([
+            'id' => 100,
+            'parent_id' => 6,
+        ]);
+        $this->Contents->dispatchEvent('Model.beforeSave', ['entity' => $data, 'options' => new ArrayObject()]);
+        $this->assertEquals(6, $this->Contents->beforeSaveParentId);
     }
 
     /**

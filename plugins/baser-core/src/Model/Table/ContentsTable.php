@@ -475,6 +475,9 @@ class ContentsTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
