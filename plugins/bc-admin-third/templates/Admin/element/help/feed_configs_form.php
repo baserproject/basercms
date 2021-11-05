@@ -33,6 +33,6 @@
     <p><?php echo __d('baser', 'また、フィードの読み込みにはjQueryが必要ですので事前に読み込んでおく必要があります。') ?></p>
     <h4><?php echo __d('baser', 'jQueryの読み込み例') ?></h4>
     <textarea cols="100" rows="2" onclick="this.select(0,this.value.length)"
-              readonly="readonly"><?php echo $this->BcHtml->script('admin/vendors/jquery-2.1.4.min', ['once' => false]) ?></textarea>
+              readonly="readonly"><?php echo $this->BcHtml->script('vendor/jquery-3.5.1.min', ['once' => false]) ?></textarea>
   </div>
 <?php endif ?>
