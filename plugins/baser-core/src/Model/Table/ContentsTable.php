@@ -839,61 +839,71 @@ class ContentsTable extends AppTable
      *
      * @param int $id コンテンツID
      * @return mixed URL | false
+     * @checked
+     * @unitTest
      */
     public function createUrl($id)
     {
-        $id = (int)$id;
-        if (!$id) {
-            return false;
-        } elseif ($id == 1) {
-            $url = '/';
-        } else {
-            // =========================================================================================================
-            // サイト全体のURLを変更する場合、TreeBehavior::getPath() を利用するとかなりの時間がかかる為、DataSource::query() を利用する
-            // 2018/02/04 ryuring
-            // プリペアドステートメントを利用する為、fetchAll() を利用しようとしたが、SQLite のドライバが対応してない様子。
-            // CakePHP３系に対応する際、SQLite を標準のドライバに変更してから、プリペアドステートメントに書き換えていく。
-            // それまでは、SQLインジェクション対策として、値をチェックしてから利用する。
-            // =========================================================================================================
-            $db = $this->getDataSource();
-            // FIXME: deleted_dateに変更する
-            $sql = "SELECT lft, rght FROM {$this->tablePrefix}contents AS Content WHERE id = {$id} AND deleted = " . $db->value(false, 'boolean');
-            $content = $db->query($sql, false);
-            if (!$content) {
+        switch ((int)$id) {
+            case null:
                 return false;
-            }
-            if (isset($content[0]['Content'])) {
-                $content = $content[0]['Content'];
-            } else {
-                $content = $content[0][0];
-            }
-            // FIXME: deleted_dateに変更する
-            $sql = "SELECT name, plugin, type FROM {$this->tablePrefix}contents AS Content " .
-                "WHERE lft <= {$db->value($content['lft'], 'integer')} AND rght >= {$db->value($content['rght'], 'integer')} AND deleted =  " . $db->value(false, 'boolean') . " " .
-                "ORDER BY lft ASC";
-            $parents = $db->query($sql, false);
-            unset($parents[0]);
-            if (!$parents) {
-                return false;
-            }
-            $names = [];
-            $content = null;
-            foreach($parents as $parent) {
-                if (isset($parent['Content'])) {
-                    $parent = $parent['Content'];
+            case 1:
+                $url = '/';
+                break;
+            default:
+                // =========================================================================================================
+                // サイト全体のURLを変更する場合、TreeBehavior::getPath() を利用するとかなりの時間がかかる為、DataSource::query() を利用する
+                // 2018/02/04 ryuring
+                // プリペアドステートメントを利用する為、fetchAll() を利用しようとしたが、SQLite のドライバが対応してない様子。
+                // CakePHP３系に対応する際、SQLite を標準のドライバに変更してから、プリペアドステートメントに書き換えていく。
+                // それまでは、SQLインジェクション対策として、値をチェックしてから利用する。
+                // =========================================================================================================
+                $connection = ConnectionManager::get('default');
+                $content = $connection
+                    ->newQuery()
+                    ->select(['lft', 'rght'])
+                    ->from('contents')
+                    ->where(['id' => $id, 'deleted_date IS' => null])
+                    ->execute()
+                    ->fetchAll('assoc');
+                if ($content) {
+                    // TODO: $content[0][0]がなぜ必要か未確認
+                    $content = isset($content[0]) ? $content[0] : $content[0][0];
                 } else {
-                    $parent = $parent[0];
+                    return false;
                 }
-                $names[] = $parent['name'];
-                $content = $parent;
-            }
-            $plugin = $content['plugin'];
-            $type = $content['type'];
-            $url = '/' . implode('/', $names);
-            $setting = $omitViewAction = Configure::read('BcContents.items.' . $plugin . '.' . $type);
-            if ($type == 'ContentFolder' || empty($setting['omitViewAction'])) {
-                $url .= '/';
-            }
+                $parents = $connection
+                    ->newQuery()
+                    ->select(['name', 'plugin', 'type'])
+                    ->from('contents')
+                    ->where(['lft <=' => $content['lft'], 'rght >=' => $content['rght'],'deleted_date IS' => null])
+                    ->order(['lft' => 'ASC'])
+                    ->execute()
+                    ->fetchAll('assoc');
+                unset($parents[0]);
+                if (!$parents) {
+                    return false;
+                } else {
+                    $names = [];
+                    unset($content);
+                    foreach($parents as $parent) {
+                        if (isset($parent)) {
+                            $parent = $parent;
+                        } else {
+                            $parent = $parent[0];
+                        }
+                        $names[] = $parent['name'];
+                        $content = $parent;
+                    }
+                    $plugin = $content['plugin'];
+                    $type = $content['type'];
+                    $url = '/' . implode('/', $names);
+                    $setting = Configure::read('BcContents.items.' . $plugin . '.' . $type);
+                    if ($type == 'ContentFolder' || empty($setting['omitViewAction'])) {
+                        $url .= '/';
+                    }
+                }
+                break;
         }
         return $url;
     }
@@ -914,9 +924,7 @@ class ContentsTable extends AppTable
             }
         }
         // URLを更新
-        // TODO: 動作しないので一旦コメントアウト
-        // $content->url = $this->createUrl($content->id, $content->plugin, $content->type);
-
+        $content->url = $this->createUrl($content->id);
         // 親フォルダの公開状態に合わせて公開状態を更新（自身も含める）
         if (isset($content->self_status)) {
             $content->status = $content->self_status;

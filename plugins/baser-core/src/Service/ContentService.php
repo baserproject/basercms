@@ -579,19 +579,19 @@ class ContentService implements ContentServiceInterface
      * @param $id
      * @return bool
      */
-    // public function softDeleteFromTree($id)
-    // {
+    public function softDeleteFromTree($id)
+    {
         // TODO: キャッシュ系が有効化されてからsoftDeleteFromTreeを使用する
     //     // TODO:　キャッシュ系をオフにする
-    //     // $this->softDelete(true);
-    //     // $this->Behaviors->unload('BcCache');
-    //     // $this->Behaviors->unload('BcUpload');
-    //     $result = $this->deleteRecursive($id);
-    //     // $this->Behaviors->load('BcCache');
-    //     // $this->Behaviors->load('BcUpload');
-    //     // $this->delAssockCache();
-    //     return $result;
-    // }
+        $this->softDelete(true);
+        $this->Behaviors->unload('BcCache');
+        $this->Behaviors->unload('BcUpload');
+        $result = $this->deleteRecursive($id);
+        $this->Behaviors->load('BcCache');
+        $this->Behaviors->load('BcUpload');
+        $this->delAssockCache();
+        return $result;
+    }
 
     /**
      * 再帰的に論理削除
