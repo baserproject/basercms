@@ -18,6 +18,7 @@ use Cake\ORM\Marshaller;
 use Cake\I18n\FrozenTime;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
+use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Entity\Content;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\ContentsTable;
@@ -492,7 +493,43 @@ class ContentsTableTest extends BcTestCase
      */
     public function testUpdateSystemData()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // idが1以外でnameがない場合はエラー
+        $content = new Content(['id' => 100, 'name' => '']);
+        $this->assertFalse($this->Contents->updateSystemData($content));
+        // self_*を元にstatusなど補完する
+        $data = [
+            'id' => 100,
+            'name' => 'test',
+            'status' => null,
+            'publish_begin' => null,
+            'publish_end' => null,
+            'self_status' => true,
+            'self_publish_begin' => FrozenTime::now(),
+            'self_publish_end' => FrozenTime::now(),
+            'parent_id' => 1,
+        ];
+        $content = new Content($data);
+        $this->Contents->updateSystemData($content);
+        $content = $this->Contents->get(100);
+        $this->assertTrue($content->status);
+        $this->assertNotEmpty($content->publish_begin);
+        $this->assertNotEmpty($content->publish_end);
+        // 親のstatusがfalseになれば、子にも反映
+        $parent = $this->Contents->get(1);
+        $parent->status = false;
+        $this->Contents->save($parent);
+        $this->Contents->updateSystemData($content);
+        $content = $this->Contents->get(100);
+        $this->assertFalse($content->status);
+        $this->assertNull($content->publish_begin);
+        $this->assertNull($content->publish_end);
+        // siteがある場合 未実装
+        // $content = $this->Contents->get(100);
+        // $content->site = new Site([
+        //     'name' => 'testSite',
+        //     'main_site_id' => 1,
+        // ]);
+        // $this->Contents->updateSystemData($content);
     }
 
     /**

@@ -915,6 +915,8 @@ class ContentsTable extends AppTable
      *
      * @param Content $content
      * @return Content
+     * @checked
+     * @unitTest
      */
     public function updateSystemData($content)
     {
@@ -944,7 +946,7 @@ class ContentsTable extends AppTable
                 $content->publish_end = $parent->publish_end;
             }
         }
-
+        // TODO: siteに関しての更新未確認
         // 主サイトの関連コンテンツIDを更新
         if ($content->site) {
             // 主サイトの同一階層のコンテンツを特定
@@ -953,7 +955,6 @@ class ContentsTable extends AppTable
                 $prefix = $content->site->alias;
             }
             $url = preg_replace('/^\/' . preg_quote($prefix, '/') . '\//', '/', $content->url);
-            // TODO: 一時的にtry catchにしてる部分を修正する
             try {
                 $mainSitePrefix = $this->Sites->getPrefix($content->site->main_site_id);
             } catch (\InvalidArgumentException $e) {
@@ -962,18 +963,17 @@ class ContentsTable extends AppTable
             if ($mainSitePrefix) {
                 $url = '/' . $mainSitePrefix . $url;
             }
-            // TODO: ワーニングになるため、一旦コメントアウト
-            // try {
-            //     $mainSiteContent = $this->find()->select(['id'])->where(['site_id' => $content->site->main_site_id, 'url' => $url])->first()->id >> false;
-            // }  catch (\InvalidArgumentException $e) {
-            //     $mainSiteContentId = false;
-            // }
-            // // main_site_content_id を更新
-            // if ($mainSiteContentId) {
-            //     $content->main_site_content_id = $mainSiteContentId;
-            // } else {
-            //     $content->main_site_content_id = null;
-            // }
+            try {
+                $mainSiteContentId = $this->find()->select(['id'])->where(['site_id' => $content->site->main_site_id, 'url' => $url])->first()->id;
+            }  catch (\InvalidArgumentException $e) {
+                $mainSiteContentId = false;
+            }
+            // main_site_content_id を更新
+            if ($mainSiteContentId) {
+                $content->main_site_content_id = $mainSiteContentId;
+            } else {
+                $content->main_site_content_id = null;
+            }
         }
         return $this->save($content, ['validate' => false, 'callbacks' => false]);
     }
