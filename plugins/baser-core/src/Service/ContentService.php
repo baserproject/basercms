@@ -1107,4 +1107,15 @@ class ContentService implements ContentServiceInterface
         }
         return true;
     }
+
+    /**
+     * ID を指定して公開状態かどうか判定する
+     *
+     * @param $id
+     * @return bool
+     */
+    public function isPublishById($id)
+    {
+        return !$this->Contents->findById($id)->where([$this->Contents->getConditionAllowPublish()])->isEmpty();
+    }
 }

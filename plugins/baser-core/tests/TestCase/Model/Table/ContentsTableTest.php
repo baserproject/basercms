@@ -533,14 +533,6 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     * ID を指定して公開状態かどうか判定する
-     */
-    public function testIsPublishById()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * 子ノードのURLを全て更新する
      */
     public function testUpdateChildren()

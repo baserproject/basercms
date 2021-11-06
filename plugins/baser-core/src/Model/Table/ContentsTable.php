@@ -299,54 +299,56 @@ class ContentsTable extends AppTable
      */
     public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
     {
-        // コンテンツ一覧にて、コンテンツを登録した直後のリネーム処理までは新規追加とみなして処理を行う為、$create で判定させる
-        $create = empty($data['content']['id']);
-        // タイトルは強制的に255文字でカット
-        if (!empty($data['content']['title'])) {
-            $data['content']['title'] = mb_substr($data['content']['title'], 0, 254, 'UTF-8');
-        }
-        if ($create) {
-            // IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
-            if (!isset($data['content']['name'])) {
-                $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['title'], 0, 230, 'UTF-8'));
+        if (!empty($data['content'])) {
+            // コンテンツ一覧にて、コンテンツを登録した直後のリネーム処理までは新規追加とみなして処理を行う為、$create で判定させる
+            $create = empty($data['content']['id']);
+            // タイトルは強制的に255文字でカット
+            if (!empty($data['content']['title'])) {
+                $data['content']['title'] = mb_substr($data['content']['title'], 0, 254, 'UTF-8');
             }
-            if (!isset($data['content']['self_status'])) {
-                $data['content']['self_status'] = false;
+            if ($create) {
+                // IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
+                if (!isset($data['content']['name'])) {
+                    $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['title'], 0, 230, 'UTF-8'));
+                }
+                if (!isset($data['content']['self_status'])) {
+                    $data['content']['self_status'] = false;
+                }
+                if (!isset($data['content']['self_publish_begin'])) {
+                    $data['content']['self_publish_begin'] = null;
+                }
+                if (!isset($data['content']['self_publish_end'])) {
+                    $data['content']['self_publish_end'] = null;
+                }
+                if (!isset($data['content']['created_date'])) {
+                    $data['content']['created_date'] = FrozenTime::now();
+                }
+                if (!isset($data['content']['site_root'])) {
+                    $data['content']['site_root'] = 0;
+                }
+                if (!isset($data['content']['exclude_search'])) {
+                    $data['content']['exclude_search'] = 0;
+                }
+                if (!isset($data['content']['author_id'])) {
+                    $user = BcUtil::loginUser('Admin');
+                    $data['content']['author_id'] = $user['id'];
+                }
+            } else {
+                if (empty($data['content']['modified_date'])) {
+                    $data['content']['modified_date'] = FrozenTime::now();
+                }
+                if (isset($data['content']['name'])) {
+                    $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['name'], 0, 230, 'UTF-8'));
+                }
             }
-            if (!isset($data['content']['self_publish_begin'])) {
-                $data['content']['self_publish_begin'] = null;
+            // name の 重複チェック＆リネーム
+            if (!empty($data['content']['name'])) {
+                $contentId = null;
+                if (!empty($data['content']['id'])) {
+                    $contentId = $data['content']['id'];
+                }
+                $data['content']['name'] = $this->getUniqueName($data['content']['name'], $data['content']['parent_id'], $contentId);
             }
-            if (!isset($data['content']['self_publish_end'])) {
-                $data['content']['self_publish_end'] = null;
-            }
-            if (!isset($data['content']['created_date'])) {
-                $data['content']['created_date'] = FrozenTime::now();
-            }
-            if (!isset($data['content']['site_root'])) {
-                $data['content']['site_root'] = 0;
-            }
-            if (!isset($data['content']['exclude_search'])) {
-                $data['content']['exclude_search'] = 0;
-            }
-            if (!isset($data['content']['author_id'])) {
-                $user = BcUtil::loginUser('Admin');
-                $data['content']['author_id'] = $user['id'];
-            }
-        } else {
-            if (empty($data['content']['modified_date'])) {
-                $data['content']['modified_date'] = FrozenTime::now();
-            }
-            if (isset($data['content']['name'])) {
-                $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['name'], 0, 230, 'UTF-8'));
-            }
-        }
-        // name の 重複チェック＆リネーム
-        if (!empty($data['content']['name'])) {
-            $contentId = null;
-            if (!empty($data['content']['id'])) {
-                $contentId = $data['content']['id'];
-            }
-            $data['content']['name'] = $this->getUniqueName($data['content']['name'], $data['content']['parent_id'], $contentId);
         }
     }
 
@@ -979,15 +981,16 @@ class ContentsTable extends AppTable
     }
 
     /**
+     * TODO: サービスに移行してるので、ContentsTable経由で呼び出される箇所を修正する
      * ID を指定して公開状態かどうか判定する
-     *
      * @param $id
      * @return bool
      */
     public function isPublishById($id)
     {
-        $conditions = array_merge(['Content.id' => $id], $this->getConditionAllowPublish());
-        return (bool)$this->find('first', ['conditions' => $conditions, 'recursive' => -1]);
+        // $conditions = array_merge(['Content.id' => $id], $this->getConditionAllowPublish());
+        // return (bool)$this->find('first', ['conditions' => $conditions, 'recursive' => -1]);
+        return !$this->Contents->findById($id)->where([$this->Contents->getConditionAllowPublish()])->isEmpty();
     }
 
     /**
@@ -1096,7 +1099,6 @@ class ContentsTable extends AppTable
             ]]
         ];
     }
-
     /**
      * 公開状態を取得する
      *

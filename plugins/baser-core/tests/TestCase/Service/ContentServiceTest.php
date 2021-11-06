@@ -698,4 +698,14 @@ class ContentServiceTest extends BcTestCase
         $result = $this->execPrivateMethod($this->ContentService, 'moveRelateSubSiteContent', ['12', '6', '']);
         $this->assertTrue($result);
     }
+
+    /**
+     * ID を指定して公開状態かどうか判定する
+     */
+    public function testIsPublishById()
+    {
+        $this->assertTrue($this->ContentService->isPublishById(4));
+        $this->ContentService->update($this->ContentService->get(4), ['status' => false]);
+        $this->assertFalse($this->ContentService->isPublishById(4));
+    }
 }
