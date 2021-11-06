@@ -274,4 +274,20 @@ interface ContentServiceInterface
      * @return bool
      */
     public function isMovable($currentId, $targetParentId);
+
+    /**
+     * ID を指定して公開状態かどうか判定する
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function isPublishById($id);
+
+    /**
+     * 公開状態を取得する
+     *
+     * @param Content $content コンテンツデータ
+     * @return bool 公開状態
+     */
+    public function isAllowPublish($content, $self = false);
 }

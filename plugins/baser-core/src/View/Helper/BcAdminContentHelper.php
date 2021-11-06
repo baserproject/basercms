@@ -136,4 +136,16 @@ class BcAdminContentHelper extends Helper
     {
         return $this->ContentService->getUrlById($id, $full);
     }
+
+    /**
+     * データが公開状態にあるか確認する
+     *
+     * @param array $data コンテンツデータ
+     * @param bool $self コンテンツ自身の公開状態かどうか
+     * @return mixed
+     */
+    public function isAllowPublish($data, $self = false)
+    {
+        return $this->ContentService->isAllowPublish($data, $self);
+    }
 }

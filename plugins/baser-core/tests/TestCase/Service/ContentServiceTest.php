@@ -708,4 +708,13 @@ class ContentServiceTest extends BcTestCase
         $this->ContentService->update($this->ContentService->get(4), ['status' => false]);
         $this->assertFalse($this->ContentService->isPublishById(4));
     }
+
+    /**
+     * 公開状態を取得する
+     */
+    public function testIsAllowPublish()
+    {
+        $content = $this->ContentService->get(1);
+        $this->assertTrue($this->ContentService->isAllowPublish($content));
+    }
 }

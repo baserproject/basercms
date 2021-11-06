@@ -259,18 +259,6 @@ class BcContentsHelper extends Helper
     }
 
     /**
-     * データが公開状態にあるか確認する
-     *
-     * @param array $data コンテンツデータ
-     * @param bool $self コンテンツ自身の公開状態かどうか
-     * @return mixed
-     */
-    public function isAllowPublish($data, $self = false)
-    {
-        return $this->_Contents->isAllowPublish($data, $self);
-    }
-
-    /**
      * プレフィックスなしのURLを取得する
      *
      * @param string $url

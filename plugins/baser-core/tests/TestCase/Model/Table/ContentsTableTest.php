@@ -602,14 +602,6 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     * 公開状態を取得する
-     */
-    public function testIsAllowPublish()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
      */
     public function testExistsContentByUrl()

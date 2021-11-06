@@ -1111,11 +1111,45 @@ class ContentService implements ContentServiceInterface
     /**
      * ID を指定して公開状態かどうか判定する
      *
-     * @param $id
+     * @param int $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isPublishById($id)
     {
         return !$this->Contents->findById($id)->where([$this->Contents->getConditionAllowPublish()])->isEmpty();
+    }
+
+    /**
+     * 公開状態を取得する
+     *
+     * @param Content $content コンテンツデータ
+     * @return bool 公開状態
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isAllowPublish($content, $self = false)
+    {
+        $fields = [
+            'status' => 'status',
+            'publish_begin' => 'publish_begin',
+            'publish_end' => 'publish_end'
+        ];
+        if ($self) {
+            foreach($fields as $key => $field) {
+                $fields[$key] = 'self_' . $field;
+            }
+        }
+        $allowPublish = $content[$fields['status']];
+        // 期限を設定している場合に条件に該当しない場合は強制的に非公開とする
+        $invalidBegin = $content[$fields['publish_begin']] instanceof FrozenTime && $content[$fields['publish_begin']]->isFuture();
+        $invalidEnd = $content[$fields['publish_end']] instanceof FrozenTime  && $content[$fields['publish_end']]->isPast();
+        if ($invalidBegin || $invalidEnd) {
+            $allowPublish = false;
+        }
+        return $allowPublish;
     }
 }

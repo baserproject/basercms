@@ -1099,38 +1099,6 @@ class ContentsTable extends AppTable
             ]]
         ];
     }
-    /**
-     * 公開状態を取得する
-     *
-     * @param array $data コンテンツデータ
-     * @return boolean 公開状態
-     */
-    public function isAllowPublish($data, $self = false)
-    {
-
-        if (isset($data['Content'])) {
-            $data = $data['Content'];
-        }
-
-        $fields = [
-            'status' => 'status',
-            'publish_begin' => 'publish_begin',
-            'publish_end' => 'publish_end'
-        ];
-        if ($self) {
-            foreach($fields as $key => $field) {
-                $fields[$key] = 'self_' . $field;
-            }
-        }
-        $allowPublish = (int)$data[$fields['status']];
-        // 期限を設定している場合に条件に該当しない場合は強制的に非公開とする
-        $invalidBegin = $data[$fields['publish_begin']] instanceof FrozenTime && $data[$fields['publish_begin']]->isFuture();
-        $invalidEnd = $data[$fields['publish_end']] instanceof FrozenTime  && $data[$fields['publish_end']]->isPast();
-        if ($invalidBegin || $invalidEnd) {
-            $allowPublish = false;
-        }
-        return $allowPublish;
-    }
 
     /**
      * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認

@@ -414,14 +414,6 @@ class BcContentsHelperTest extends BcTestCase
     }
 
     /**
-     * データが公開状態にあるか確認する
-     *
-     * public function testIsAllowPublish() {
-     * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドのためスキップします。');
-     * }
-     */
-
-    /**
      * 親フォルダを取得する
      *
      * @param $expected
