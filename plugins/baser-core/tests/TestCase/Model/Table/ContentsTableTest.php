@@ -625,8 +625,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testIsPublish($status, $publishBegin, $publishEnd, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $result = $this->Content->isPublish($status, $publishBegin, $publishEnd);
+        $result = $this->Contents->isPublish($status, $publishBegin, $publishEnd);
         $this->assertEquals($expected, $result);
     }
 
@@ -683,7 +682,9 @@ class ContentsTableTest extends BcTestCase
      */
     public function testIsChangedStatus()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // idが存在しない場合はtrueを返す
+        $this->assertTrue($this->Contents->isChangedStatus(100, []));
+        // TODO: 存在する場合を書く
     }
 
     /**

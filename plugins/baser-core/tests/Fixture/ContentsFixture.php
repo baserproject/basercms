@@ -48,7 +48,7 @@ class ContentsFixture extends TestFixture
                 'publish_begin' => null,
                 'publish_end' => null,
                 'self_status' => true,
-                'self_publish_begin' => null,
+                'self_publish_begin' => '2019-06-11 12:27:01',
                 'self_publish_end' => null,
                 'exclude_search' => false,
                 'created_date' => null,

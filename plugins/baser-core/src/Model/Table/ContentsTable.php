@@ -1135,9 +1135,12 @@ class ContentsTable extends AppTable
      * @param string $publishBegin 公開開始日時
      * @param string $publishEnd 公開終了日時
      * @return    bool
+     * @checked
+     * @unitTest
      */
     public function isPublish($status, $publishBegin, $publishEnd)
     {
+        // TODO: frozenTime形式に移行するべき
         if (!$status) {
             return false;
         }
@@ -1159,16 +1162,20 @@ class ContentsTable extends AppTable
      *
      * @param int $id コンテンツID
      * @param array $newData 新しいコンテンツデータ
+     * @checked
+     * @unitTest
      */
     public function isChangedStatus($id, $newData)
     {
-        $before = $this->find('first', ['conditions' => ['Content.id' => $id]]);
-        if (!$before) {
+        try {
+        $before = $this->get($id);
+        } catch(\Cake\Datasource\Exception\RecordNotFoundException $e) {
             return true;
         }
-        $beforeStatus = $this->isPublish($before['Content']['self_status'], $before['Content']['self_publish_begin'], $before['Content']['self_publish_end']);
-        $afterStatus = $this->isPublish($newData['Content']['self_status'], $newData['Content']['self_publish_begin'], $newData['Content']['self_publish_end']);
-        if ($beforeStatus != $afterStatus || $before['Content']['title'] != $newData['Content']['title'] || $before['Content']['url'] != $newData['Content']['url']) {
+        // TODO: PagesController使用時に再確認する
+        $beforeStatus = $this->isPublish($before->self_status,  $before->self_publish_begin, $before->self_publish_end);
+        $afterStatus = $this->isPublish($newData['self_status'], $newData['self_publish_begin'], $newData['self_publish_end']);
+        if ($beforeStatus != $afterStatus || $before->title  != $newData['title'] || $before->url != $newData['url']) {
             return true;
         }
         return false;
