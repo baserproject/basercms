@@ -148,4 +148,34 @@ class BcAdminContentHelper extends Helper
     {
         return $this->ContentService->isAllowPublish($data, $self);
     }
+
+    /**
+     * サイトIDからサイトルートとなるコンテンツを取得する
+     *
+     * @param int $siteId
+     * @return Content
+     */
+    public function getSiteRoot($siteId)
+    {
+        return $this->ContentService->getSiteRoot($siteId);
+    }
+
+    /**
+     * サイトIDからサイトルートとなるコンテンツIDを取得する
+     *
+     * @param int $siteId
+     * @return string|bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getSiteRootId($siteId)
+    {
+        $content = $this->getSiteRoot($siteId);
+        if ($content) {
+            return $content->id;
+        } else {
+            return false;
+        }
+    }
 }

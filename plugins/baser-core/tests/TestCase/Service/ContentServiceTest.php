@@ -717,4 +717,29 @@ class ContentServiceTest extends BcTestCase
         $content = $this->ContentService->get(1);
         $this->assertTrue($this->ContentService->isAllowPublish($content));
     }
+
+    /**
+     * サイトルートコンテンツを取得する
+     *
+     * @param int $siteId
+     * @param mixed $expects 期待するコンテントのid (存在しない場合はから配列)
+     * @dataProvider getSiteRootDataProvider
+     */
+    public function testGetSiteRoot($siteId, $expects)
+    {
+        $result = $this->ContentService->getSiteRoot($siteId);
+        if ($result) {
+            $result = $result->id;
+        }
+
+        $this->assertEquals($expects, $result);
+    }
+
+    public function getSiteRootDataProvider()
+    {
+        return [
+            [1, 1],
+            [7, null],        // 存在しないsiteId
+        ];
+    }
 }

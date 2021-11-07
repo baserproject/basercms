@@ -40,6 +40,7 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Plugins',
         'plugin.BaserCore.Permissions',
+        'plugin.BaserCore.Contents',
     ];
 
     /**
@@ -105,6 +106,29 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
             [1, true],
             [2, true],
             [3, true],
+        ];
+    }
+
+    /**
+     * サイトIDからコンテンツIDを取得する
+     * getSiteRootId
+     *
+     * @param int $siteId
+     * @param string|bool $expect 期待値
+     * @dataProvider getSiteRootIdDataProvider
+     */
+    public function testGetSiteRootId($siteId, $expect)
+    {
+        $result = $this->BcAdminContent->getSiteRootId($siteId);
+        $this->assertEquals($expect, $result);
+    }
+    public function getSiteRootIdDataProvider()
+    {
+        return [
+            // 存在するサイトID（0~2）を指定した場合
+            [1, 1],
+            // 存在しないサイトIDを指定した場合
+            [3, false],
         ];
     }
 }

@@ -464,32 +464,6 @@ class BcContentsHelper extends Helper
         return $this->_Contents->getContentFolderList($siteId, $options);
     }
 
-    /**
-     * サイトIDからサイトルートとなるコンテンツを取得する
-     *
-     * @param int $siteId
-     * @return array
-     */
-    public function getSiteRoot($siteId)
-    {
-        return $this->_Contents->getSiteRoot($siteId);
-    }
-
-    /**
-     * サイトIDからサイトルートとなるコンテンツIDを取得する
-     *
-     * @param int $siteId
-     * @return string|bool
-     */
-    public function getSiteRootId($siteId)
-    {
-        $content = $this->getSiteRoot($siteId);
-        if ($content) {
-            return $content['Content']['id'];
-        } else {
-            return false;
-        }
-    }
 
     /**
      * コンテンツが編集可能かどうか確認

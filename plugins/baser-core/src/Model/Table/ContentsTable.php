@@ -1182,21 +1182,6 @@ class ContentsTable extends AppTable
     }
 
     /**
-     * サイトルートコンテンツを取得する
-     *
-     * @param $siteId
-     * @return array|null
-     */
-    public function getSiteRoot($siteId)
-    {
-        return $this->find('first', [
-            'conditions' => [
-                'Content.site_id' => $siteId,
-                'Content.site_root' => true
-            ], 'recursive' => -1]);
-    }
-
-    /**
      * 親のテンプレートを取得する
      *
      * @param $id

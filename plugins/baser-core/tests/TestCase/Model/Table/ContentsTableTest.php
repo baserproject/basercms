@@ -688,34 +688,6 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     * サイトルートコンテンツを取得する
-     *
-     * @param int $siteId
-     * @param mixed $expects 期待するコンテントのid (存在しない場合はから配列)
-     * @dataProvider getSiteRootDataProvider
-     */
-    public function testGetSiteRoot($siteId, $expects)
-    {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $result = $this->Content->getSiteRoot($siteId);
-        if ($result) {
-            $result = $result['Content']['id'];
-        }
-
-        $this->assertEquals($expects, $result);
-    }
-
-    public function getSiteRootDataProvider()
-    {
-        return [
-            [0, 1],
-            [1, 2],
-            [2, 3],
-            [7, []],        // 存在しないsiteId
-        ];
-    }
-
-    /**
      * オフセットを元にコンテンツを移動する
      * @param  mixed $id
      * @param  mixed $offset

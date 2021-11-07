@@ -1152,4 +1152,18 @@ class ContentService implements ContentServiceInterface
         }
         return $allowPublish;
     }
+
+    /**
+     * サイトルートコンテンツを取得する
+     *
+     * @param int $siteId
+     * @return Content|null
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function getSiteRoot($siteId)
+    {
+        return $this->Contents->find()->where(['site_id' => $siteId, 'site_root' => true])->first();
+    }
 }
