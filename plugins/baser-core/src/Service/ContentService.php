@@ -1166,4 +1166,35 @@ class ContentService implements ContentServiceInterface
     {
         return $this->Contents->find()->where(['site_id' => $siteId, 'site_root' => true])->first();
     }
+
+    /**
+     * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
+     *
+     * @param $url
+     * @return bool
+     * @checked
+     * @unitTest
+     */
+    public function existsContentByUrl($url)
+    {
+        $urlAry = explode('/', preg_replace('/(^\/|\/$)/', '', $url));
+        if (!$url) {
+            return false;
+        }
+        $url = '/';
+        $last = count($urlAry);
+        foreach($urlAry as $key => $name) {
+            $url .= $name;
+            //TODO: $conditionsをどこで使うのか?
+            // $conditions = ['Content.url' => $url];
+            // if (($key + 1) != $last) {
+            //     $conditions['Content.type <>'] = 'ContentFolder';
+            // }
+            if ($this->Contents->find()->where(['url' => $url, 'type <>' => 'ContentFolder'])->first()) {
+                return true;
+            }
+            $url .= '/';
+        }
+        return false;
+    }
 }

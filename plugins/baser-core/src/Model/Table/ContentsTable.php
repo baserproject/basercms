@@ -1101,34 +1101,6 @@ class ContentsTable extends AppTable
     }
 
     /**
-     * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
-     *
-     * @param $url
-     * @return bool
-     */
-    public function existsContentByUrl($url)
-    {
-        $urlAry = explode('/', preg_replace('/(^\/|\/$)/', '', $url));
-        if (!$url) {
-            return false;
-        }
-        $url = '/';
-        $last = count($urlAry);
-        foreach($urlAry as $key => $name) {
-            $url .= $name;
-            $conditions = ['Content.url' => $url];
-            if (($key + 1) != $last) {
-                $conditions['Content.type <>'] = 'ContentFolder';
-            }
-            if ($this->find('first', ['conditions' => ['Content.url' => $url, 'Content.type <>' => 'ContentFolder'], 'recursive' => -1])) {
-                return true;
-            }
-            $url .= '/';
-        }
-        return false;
-    }
-
-    /**
      * データが公開済みかどうかチェックする
      *
      * @param boolean $status 公開ステータス

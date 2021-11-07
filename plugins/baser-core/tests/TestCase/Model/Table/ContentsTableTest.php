@@ -602,14 +602,6 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
-     */
-    public function testExistsContentByUrl()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * 公開されたURLが存在するか確認する
      */
     public function testExistsPublishUrl()

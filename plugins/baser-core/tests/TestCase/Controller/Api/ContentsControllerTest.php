@@ -316,9 +316,13 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testExists_content_by_url()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->get("/baser/api/baser-core/contents/exists_content_by_url.json?token=" . $this->accessToken);
-        $this->assertResponseOk();
+        $this->post("/baser/api/baser-core/contents/exists_content_by_url.json?token=" . $this->accessToken);
+        $this->assertResponseFailure();
+        $this->assertEquals('無効な処理です。', json_decode($this->_response->getBody())->message);
+        $this->post("/baser/api/baser-core/contents/exists_content_by_url.json?token=" . $this->accessToken, ['url' => 'aaaa']);
+        $this->assertResponseError();
+        $this->assertEquals('データが見つかりません', json_decode($this->_response->getBody())->message);
+        $this->post("/baser/api/baser-core/contents/exists_content_by_url.json?token=" . $this->accessToken, ['url' => '/service/service2']);
     }
 
     /**

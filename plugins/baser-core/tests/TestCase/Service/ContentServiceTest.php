@@ -742,4 +742,15 @@ class ContentServiceTest extends BcTestCase
             [7, null],        // 存在しないsiteId
         ];
     }
+
+    /**
+     * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
+     */
+    public function testExistsContentByUrl()
+    {
+        $content = $this->ContentService->get(6);
+        $this->assertFalse($this->ContentService->existsContentByUrl($content->url));
+        $content = $this->ContentService->get(12);
+        $this->assertTrue($this->ContentService->existsContentByUrl($content->url));
+    }
 }

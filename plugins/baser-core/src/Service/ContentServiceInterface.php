@@ -290,4 +290,12 @@ interface ContentServiceInterface
      * @return bool 公開状態
      */
     public function isAllowPublish($content, $self = false);
+
+    /**
+     * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
+     *
+     * @param $url
+     * @return bool
+     */
+    public function existsContentByUrl($url);
 }

@@ -406,16 +406,27 @@ class ContentsController extends BcApiController
 
     /**
      * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
-     *
-     * @return mixed
+     * @param  ContentServiceInterface $contentService
+     * @checked
+     * @unitTest
      */
-    public function exists_content_by_url()
+    public function exists_content_by_url(ContentServiceInterface $contentService)
     {
-        return; // TODO: 未実装のため確認必
+        $this->request->allowMethod(['post']);
         if (!$this->request->getData('url')) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
+            $this->setResponse($this->response->withStatus(500));
+            $message = __d('baser', "無効な処理です。");
+        } else {
+            // FIXME: どの形で受け取るか調査必
+            if ($contentService->existsContentByUrl($this->request->getData('url'))) {
+                $this->setResponse($this->response->withStatus(200));
+            } else {
+                $this->setResponse($this->response->withStatus(404));
+                $message = __d('baser', "データが見つかりません");
+            }
         }
-        return $this->Content->existsContentByUrl($this->request->getData('url'));
+        if(!empty($message)) $this->set(['message' => $message]);
+        $this->viewBuilder()->setOption('serialize', ['message']);
     }
 
     /**
