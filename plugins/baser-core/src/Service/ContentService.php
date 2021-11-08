@@ -579,19 +579,19 @@ class ContentService implements ContentServiceInterface
      * @param $id
      * @return bool
      */
-    // public function softDeleteFromTree($id)
-    // {
+    public function softDeleteFromTree($id)
+    {
         // TODO: キャッシュ系が有効化されてからsoftDeleteFromTreeを使用する
     //     // TODO:　キャッシュ系をオフにする
-    //     // $this->softDelete(true);
-    //     // $this->Behaviors->unload('BcCache');
-    //     // $this->Behaviors->unload('BcUpload');
-    //     $result = $this->deleteRecursive($id);
-    //     // $this->Behaviors->load('BcCache');
-    //     // $this->Behaviors->load('BcUpload');
-    //     // $this->delAssockCache();
-    //     return $result;
-    // }
+        $this->softDelete(true);
+        $this->Behaviors->unload('BcCache');
+        $this->Behaviors->unload('BcUpload');
+        $result = $this->deleteRecursive($id);
+        $this->Behaviors->load('BcCache');
+        $this->Behaviors->load('BcUpload');
+        $this->delAssockCache();
+        return $result;
+    }
 
     /**
      * 再帰的に論理削除
@@ -1106,5 +1106,95 @@ class ContentService implements ContentServiceInterface
             return false;
         }
         return true;
+    }
+
+    /**
+     * ID を指定して公開状態かどうか判定する
+     *
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isPublishById($id)
+    {
+        return !$this->Contents->findById($id)->where([$this->Contents->getConditionAllowPublish()])->isEmpty();
+    }
+
+    /**
+     * 公開状態を取得する
+     *
+     * @param Content $content コンテンツデータ
+     * @return bool 公開状態
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isAllowPublish($content, $self = false)
+    {
+        $fields = [
+            'status' => 'status',
+            'publish_begin' => 'publish_begin',
+            'publish_end' => 'publish_end'
+        ];
+        if ($self) {
+            foreach($fields as $key => $field) {
+                $fields[$key] = 'self_' . $field;
+            }
+        }
+        $allowPublish = $content[$fields['status']];
+        // 期限を設定している場合に条件に該当しない場合は強制的に非公開とする
+        $invalidBegin = $content[$fields['publish_begin']] instanceof FrozenTime && $content[$fields['publish_begin']]->isFuture();
+        $invalidEnd = $content[$fields['publish_end']] instanceof FrozenTime  && $content[$fields['publish_end']]->isPast();
+        if ($invalidBegin || $invalidEnd) {
+            $allowPublish = false;
+        }
+        return $allowPublish;
+    }
+
+    /**
+     * サイトルートコンテンツを取得する
+     *
+     * @param int $siteId
+     * @return Content|null
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function getSiteRoot($siteId)
+    {
+        return $this->Contents->find()->where(['site_id' => $siteId, 'site_root' => true])->first();
+    }
+
+    /**
+     * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
+     *
+     * @param $url
+     * @return bool
+     * @checked
+     * @unitTest
+     */
+    public function existsContentByUrl($url)
+    {
+        $urlAry = explode('/', preg_replace('/(^\/|\/$)/', '', $url));
+        if (!$url) {
+            return false;
+        }
+        $url = '/';
+        $last = count($urlAry);
+        foreach($urlAry as $key => $name) {
+            $url .= $name;
+            //TODO: $conditionsをどこで使うのか?
+            // $conditions = ['Content.url' => $url];
+            // if (($key + 1) != $last) {
+            //     $conditions['Content.type <>'] = 'ContentFolder';
+            // }
+            if ($this->Contents->find()->where(['url' => $url, 'type <>' => 'ContentFolder'])->first()) {
+                return true;
+            }
+            $url .= '/';
+        }
+        return false;
     }
 }

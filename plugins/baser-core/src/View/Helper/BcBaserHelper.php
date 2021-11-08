@@ -1920,8 +1920,8 @@ EOD;
     public function getContentsMenu($id = null, $level = null, $currentId = null, $options = [])
     {
         if (!$id) {
-            $Content = ClassRegistry::init('Content');
-            $siteRoot = $Content->getSiteRoot($this->request->params['Content']['site_id']);
+            // $Content = ClassRegistry::init('Content');
+            $siteRoot = $this->BcAdminContent->getSiteRoot($this->request->params['Content']['site_id']);
             $id = $siteRoot['Content']['id'];
         }
         $options = array_merge([
@@ -2002,7 +2002,7 @@ EOD;
         if (!empty($this->request->params['Content']['site_id'])) {
             $siteId = $this->request->params['Content']['site_id'];
         }
-        $siteRoot = $Content->getSiteRoot($siteId);
+        $siteRoot = $this->BcAdminContent->getSiteRoot($siteId);
         $id = $siteRoot['Content']['id'];
         $currentId = null;
         if (!empty($this->request->getParam('Content.id'))) {

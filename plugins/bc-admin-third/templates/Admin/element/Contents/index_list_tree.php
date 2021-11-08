@@ -39,7 +39,7 @@ $deleteDisabled = !$this->BcAdminContent->isContentDeletable();
     } else {
       $icon = $items['Default']['url']['icon'] ?? '';
     }
-    $status = $this->BcContents->isAllowPublish($content, true);
+    $status = $this->BcAdminContent->isAllowPublish($content, true);
     if ($content->site_root) {
       $open = true;
     }

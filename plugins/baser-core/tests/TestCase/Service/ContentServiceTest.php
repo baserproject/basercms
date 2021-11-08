@@ -698,4 +698,59 @@ class ContentServiceTest extends BcTestCase
         $result = $this->execPrivateMethod($this->ContentService, 'moveRelateSubSiteContent', ['12', '6', '']);
         $this->assertTrue($result);
     }
+
+    /**
+     * ID を指定して公開状態かどうか判定する
+     */
+    public function testIsPublishById()
+    {
+        $this->assertTrue($this->ContentService->isPublishById(4));
+        $this->ContentService->update($this->ContentService->get(4), ['status' => false]);
+        $this->assertFalse($this->ContentService->isPublishById(4));
+    }
+
+    /**
+     * 公開状態を取得する
+     */
+    public function testIsAllowPublish()
+    {
+        $content = $this->ContentService->get(1);
+        $this->assertTrue($this->ContentService->isAllowPublish($content));
+    }
+
+    /**
+     * サイトルートコンテンツを取得する
+     *
+     * @param int $siteId
+     * @param mixed $expects 期待するコンテントのid (存在しない場合はから配列)
+     * @dataProvider getSiteRootDataProvider
+     */
+    public function testGetSiteRoot($siteId, $expects)
+    {
+        $result = $this->ContentService->getSiteRoot($siteId);
+        if ($result) {
+            $result = $result->id;
+        }
+
+        $this->assertEquals($expects, $result);
+    }
+
+    public function getSiteRootDataProvider()
+    {
+        return [
+            [1, 1],
+            [7, null],        // 存在しないsiteId
+        ];
+    }
+
+    /**
+     * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
+     */
+    public function testExistsContentByUrl()
+    {
+        $content = $this->ContentService->get(6);
+        $this->assertFalse($this->ContentService->existsContentByUrl($content->url));
+        $content = $this->ContentService->get(12);
+        $this->assertTrue($this->ContentService->existsContentByUrl($content->url));
+    }
 }

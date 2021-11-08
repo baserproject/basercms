@@ -126,7 +126,7 @@ class ContentsTable extends AppTable
         return [
             // 'Model.beforeFind' => ['callable' => 'beforeFind', 'passParams' => true],
             // 'Model.afterFind' => ['callable' => 'afterFind', 'passParams' => true],
-            'Model.beforeValidate' => ['callable' => 'beforeValidate', 'passParams' => true],
+            'Model.beforeMarshal' => 'beforeMarshal',
             'Model.afterValidate' => ['callable' => 'afterValidate'],
             'Model.beforeSave' => ['callable' => 'beforeSave', 'passParams' => true],
             'Model.afterMarshal' => 'afterMarshal',
@@ -293,66 +293,62 @@ class ContentsTable extends AppTable
      * @param ArrayObject $data
      * @param ArrayObject $options
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
     {
-        // コンテンツ一覧にて、コンテンツを登録した直後のリネーム処理までは新規追加とみなして処理を行う為、$create で判定させる
-        $create = false;
-        if (empty($data['content']['id']) || !empty($options['firstCreate'])) {
-            $create = true;
-        }
-        // タイトルは強制的に255文字でカット
-        if (!empty($data['content']['title'])) {
-            $data['content']['title'] = mb_substr($data['content']['title'], 0, 254, 'UTF-8');
-        }
-        if ($create) {
-            // IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
-            if (!isset($data['content']['name'])) {
-                $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['title'], 0, 230, 'UTF-8'));
+        if (!empty($data['content'])) {
+            // コンテンツ一覧にて、コンテンツを登録した直後のリネーム処理までは新規追加とみなして処理を行う為、$create で判定させる
+            $create = empty($data['content']['id']);
+            // タイトルは強制的に255文字でカット
+            if (!empty($data['content']['title'])) {
+                $data['content']['title'] = mb_substr($data['content']['title'], 0, 254, 'UTF-8');
             }
-            if (!isset($data['content']['self_status'])) {
-                $data['content']['self_status'] = false;
+            if ($create) {
+                // IEのURL制限が2083文字のため、全て全角文字を想定し231文字でカット
+                if (!isset($data['content']['name'])) {
+                    $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['title'], 0, 230, 'UTF-8'));
+                }
+                if (!isset($data['content']['self_status'])) {
+                    $data['content']['self_status'] = false;
+                }
+                if (!isset($data['content']['self_publish_begin'])) {
+                    $data['content']['self_publish_begin'] = null;
+                }
+                if (!isset($data['content']['self_publish_end'])) {
+                    $data['content']['self_publish_end'] = null;
+                }
+                if (!isset($data['content']['created_date'])) {
+                    $data['content']['created_date'] = FrozenTime::now();
+                }
+                if (!isset($data['content']['site_root'])) {
+                    $data['content']['site_root'] = 0;
+                }
+                if (!isset($data['content']['exclude_search'])) {
+                    $data['content']['exclude_search'] = 0;
+                }
+                if (!isset($data['content']['author_id'])) {
+                    $user = BcUtil::loginUser('Admin');
+                    $data['content']['author_id'] = $user['id'];
+                }
+            } else {
+                if (empty($data['content']['modified_date'])) {
+                    $data['content']['modified_date'] = FrozenTime::now();
+                }
+                if (isset($data['content']['name'])) {
+                    $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['name'], 0, 230, 'UTF-8'));
+                }
             }
-            if (!isset($data['content']['self_publish_begin'])) {
-                $data['content']['self_publish_begin'] = null;
+            // name の 重複チェック＆リネーム
+            if (!empty($data['content']['name'])) {
+                $contentId = null;
+                if (!empty($data['content']['id'])) {
+                    $contentId = $data['content']['id'];
+                }
+                $data['content']['name'] = $this->getUniqueName($data['content']['name'], $data['content']['parent_id'], $contentId);
             }
-            if (!isset($data['content']['self_publish_end'])) {
-                $data['content']['self_publish_end'] = null;
-            }
-            if (!isset($data['content']['created_date'])) {
-                $data['content']['created_date'] = FrozenTime::now();
-            }
-            if (!isset($data['content']['site_root'])) {
-                $data['content']['site_root'] = 0;
-            }
-            if (!isset($data['content']['exclude_search'])) {
-                $data['content']['exclude_search'] = 0;
-            }
-            if (!isset($data['content']['author_id'])) {
-                $user = BcUtil::loginUser('Admin');
-                $data['content']['author_id'] = $user['id'];
-            }
-        } else {
-            if (empty($data['content']['modified_date'])) {
-                $data['content']['modified_date'] = FrozenTime::now();
-            }
-            if (isset($data['content']['name'])) {
-                $data['content']['name'] = BcUtil::urlencode(mb_substr($data['content']['name'], 0, 230, 'UTF-8'));
-            }
-            if ($data['content']['id'] == 1) {
-                $validator = new Validator();
-                $validator = $this->validationDefault($validator);
-                $validator->remove('name');
-                return $validator;
-            }
-        }
-        // name の 重複チェック＆リネーム
-        if (!empty($data['content']['name'])) {
-            $contentId = null;
-            if (!empty($data['content']['id'])) {
-                $contentId = $data['content']['id'];
-            }
-            $data['content']['name'] = $this->getUniqueName($data['content']['name'], $data['content']['parent_id'], $contentId);
         }
     }
 
@@ -429,20 +425,20 @@ class ContentsTable extends AppTable
      *
      * @param string $name name フィールドの値
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getUniqueName($name, $parentId, $contentId = null)
     {
 
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
-        $conditions = [
-            'Contents.name LIKE' => $name . '%',
-            'Contents.parent_id' => $parentId
-        ];
+        $query = $this->find()->where(['name LIKE' => $name . '%', 'parent_id' => $parentId]);
         if ($contentId) {
-            $conditions['Contents.id <>'] = $contentId;
+            $query = $query->andWhere(['id <>' => $contentId]);
         }
-        $datas = $this->find('all', ['conditions' => $conditions, 'fields' => ['name'], 'order' => "Contents.name"])->all()->toArray();
-        $datas = Hash::extract($datas, "{n}.name");
+        $datas = $query->select('name')->order('name')->all()->toArray();
+        $datas = Hash::extract($datas, '{n}.name');
         $numbers = [];
 
         if ($datas) {
@@ -481,6 +477,9 @@ class ContentsTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
@@ -788,13 +787,19 @@ class ContentsTable extends AppTable
      *
      * @param string $url
      * @param int $siteId
-     * @return mixed
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function pureUrl($url, $siteId)
     {
+        if (empty($url)) {
+            $url = '/';
+        }
         $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $site = $sites->findById($siteId)->first();
-        return $site->getPureUrl($url);
+        return $site ? $site->getPureUrl($url) : $url;
     }
 
     /**
@@ -836,61 +841,71 @@ class ContentsTable extends AppTable
      *
      * @param int $id コンテンツID
      * @return mixed URL | false
+     * @checked
+     * @unitTest
      */
     public function createUrl($id)
     {
-        $id = (int)$id;
-        if (!$id) {
-            return false;
-        } elseif ($id == 1) {
-            $url = '/';
-        } else {
-            // =========================================================================================================
-            // サイト全体のURLを変更する場合、TreeBehavior::getPath() を利用するとかなりの時間がかかる為、DataSource::query() を利用する
-            // 2018/02/04 ryuring
-            // プリペアドステートメントを利用する為、fetchAll() を利用しようとしたが、SQLite のドライバが対応してない様子。
-            // CakePHP３系に対応する際、SQLite を標準のドライバに変更してから、プリペアドステートメントに書き換えていく。
-            // それまでは、SQLインジェクション対策として、値をチェックしてから利用する。
-            // =========================================================================================================
-            $db = $this->getDataSource();
-            // FIXME: deleted_dateに変更する
-            $sql = "SELECT lft, rght FROM {$this->tablePrefix}contents AS Content WHERE id = {$id} AND deleted = " . $db->value(false, 'boolean');
-            $content = $db->query($sql, false);
-            if (!$content) {
+        switch ((int)$id) {
+            case null:
                 return false;
-            }
-            if (isset($content[0]['Content'])) {
-                $content = $content[0]['Content'];
-            } else {
-                $content = $content[0][0];
-            }
-            // FIXME: deleted_dateに変更する
-            $sql = "SELECT name, plugin, type FROM {$this->tablePrefix}contents AS Content " .
-                "WHERE lft <= {$db->value($content['lft'], 'integer')} AND rght >= {$db->value($content['rght'], 'integer')} AND deleted =  " . $db->value(false, 'boolean') . " " .
-                "ORDER BY lft ASC";
-            $parents = $db->query($sql, false);
-            unset($parents[0]);
-            if (!$parents) {
-                return false;
-            }
-            $names = [];
-            $content = null;
-            foreach($parents as $parent) {
-                if (isset($parent['Content'])) {
-                    $parent = $parent['Content'];
+            case 1:
+                $url = '/';
+                break;
+            default:
+                // =========================================================================================================
+                // サイト全体のURLを変更する場合、TreeBehavior::getPath() を利用するとかなりの時間がかかる為、DataSource::query() を利用する
+                // 2018/02/04 ryuring
+                // プリペアドステートメントを利用する為、fetchAll() を利用しようとしたが、SQLite のドライバが対応してない様子。
+                // CakePHP３系に対応する際、SQLite を標準のドライバに変更してから、プリペアドステートメントに書き換えていく。
+                // それまでは、SQLインジェクション対策として、値をチェックしてから利用する。
+                // =========================================================================================================
+                $connection = ConnectionManager::get('default');
+                $content = $connection
+                    ->newQuery()
+                    ->select(['lft', 'rght'])
+                    ->from('contents')
+                    ->where(['id' => $id, 'deleted_date IS' => null])
+                    ->execute()
+                    ->fetchAll('assoc');
+                if ($content) {
+                    // TODO: $content[0][0]がなぜ必要か未確認
+                    $content = isset($content[0]) ? $content[0] : $content[0][0];
                 } else {
-                    $parent = $parent[0];
+                    return false;
                 }
-                $names[] = $parent['name'];
-                $content = $parent;
-            }
-            $plugin = $content['plugin'];
-            $type = $content['type'];
-            $url = '/' . implode('/', $names);
-            $setting = $omitViewAction = Configure::read('BcContents.items.' . $plugin . '.' . $type);
-            if ($type == 'ContentFolder' || empty($setting['omitViewAction'])) {
-                $url .= '/';
-            }
+                $parents = $connection
+                    ->newQuery()
+                    ->select(['name', 'plugin', 'type'])
+                    ->from('contents')
+                    ->where(['lft <=' => $content['lft'], 'rght >=' => $content['rght'],'deleted_date IS' => null])
+                    ->order(['lft' => 'ASC'])
+                    ->execute()
+                    ->fetchAll('assoc');
+                unset($parents[0]);
+                if (!$parents) {
+                    return false;
+                } else {
+                    $names = [];
+                    unset($content);
+                    foreach($parents as $parent) {
+                        if (isset($parent)) {
+                            $parent = $parent;
+                        } else {
+                            $parent = $parent[0];
+                        }
+                        $names[] = $parent['name'];
+                        $content = $parent;
+                    }
+                    $plugin = $content['plugin'];
+                    $type = $content['type'];
+                    $url = '/' . implode('/', $names);
+                    $setting = Configure::read('BcContents.items.' . $plugin . '.' . $type);
+                    if ($type == 'ContentFolder' || empty($setting['omitViewAction'])) {
+                        $url .= '/';
+                    }
+                }
+                break;
         }
         return $url;
     }
@@ -902,6 +917,8 @@ class ContentsTable extends AppTable
      *
      * @param Content $content
      * @return Content
+     * @checked
+     * @unitTest
      */
     public function updateSystemData($content)
     {
@@ -911,9 +928,7 @@ class ContentsTable extends AppTable
             }
         }
         // URLを更新
-        // TODO: 動作しないので一旦コメントアウト
-        // $content->url = $this->createUrl($content->id, $content->plugin, $content->type);
-
+        $content->url = $this->createUrl($content->id);
         // 親フォルダの公開状態に合わせて公開状態を更新（自身も含める）
         if (isset($content->self_status)) {
             $content->status = $content->self_status;
@@ -933,7 +948,7 @@ class ContentsTable extends AppTable
                 $content->publish_end = $parent->publish_end;
             }
         }
-
+        // TODO: siteに関しての更新未確認
         // 主サイトの関連コンテンツIDを更新
         if ($content->site) {
             // 主サイトの同一階層のコンテンツを特定
@@ -942,7 +957,6 @@ class ContentsTable extends AppTable
                 $prefix = $content->site->alias;
             }
             $url = preg_replace('/^\/' . preg_quote($prefix, '/') . '\//', '/', $content->url);
-            // TODO: 一時的にtry catchにしてる部分を修正する
             try {
                 $mainSitePrefix = $this->Sites->getPrefix($content->site->main_site_id);
             } catch (\InvalidArgumentException $e) {
@@ -951,32 +965,32 @@ class ContentsTable extends AppTable
             if ($mainSitePrefix) {
                 $url = '/' . $mainSitePrefix . $url;
             }
-            // TODO: ワーニングになるため、一旦コメントアウト
-            // try {
-            //     $mainSiteContent = $this->find()->select(['id'])->where(['site_id' => $content->site->main_site_id, 'url' => $url])->first()->id >> false;
-            // }  catch (\InvalidArgumentException $e) {
-            //     $mainSiteContentId = false;
-            // }
-            // // main_site_content_id を更新
-            // if ($mainSiteContentId) {
-            //     $content->main_site_content_id = $mainSiteContentId;
-            // } else {
-            //     $content->main_site_content_id = null;
-            // }
+            try {
+                $mainSiteContentId = $this->find()->select(['id'])->where(['site_id' => $content->site->main_site_id, 'url' => $url])->first()->id;
+            }  catch (\InvalidArgumentException $e) {
+                $mainSiteContentId = false;
+            }
+            // main_site_content_id を更新
+            if ($mainSiteContentId) {
+                $content->main_site_content_id = $mainSiteContentId;
+            } else {
+                $content->main_site_content_id = null;
+            }
         }
         return $this->save($content, ['validate' => false, 'callbacks' => false]);
     }
 
     /**
+     * TODO: サービスに移行してるので、ContentsTable経由で呼び出される箇所を修正する
      * ID を指定して公開状態かどうか判定する
-     *
      * @param $id
      * @return bool
      */
     public function isPublishById($id)
     {
-        $conditions = array_merge(['Content.id' => $id], $this->getConditionAllowPublish());
-        return (bool)$this->find('first', ['conditions' => $conditions, 'recursive' => -1]);
+        // $conditions = array_merge(['Content.id' => $id], $this->getConditionAllowPublish());
+        // return (bool)$this->find('first', ['conditions' => $conditions, 'recursive' => -1]);
+        return !$this->Contents->findById($id)->where([$this->Contents->getConditionAllowPublish()])->isEmpty();
     }
 
     /**
@@ -1087,76 +1101,18 @@ class ContentsTable extends AppTable
     }
 
     /**
-     * 公開状態を取得する
-     *
-     * @param array $data コンテンツデータ
-     * @return boolean 公開状態
-     */
-    public function isAllowPublish($data, $self = false)
-    {
-
-        if (isset($data['Content'])) {
-            $data = $data['Content'];
-        }
-
-        $fields = [
-            'status' => 'status',
-            'publish_begin' => 'publish_begin',
-            'publish_end' => 'publish_end'
-        ];
-        if ($self) {
-            foreach($fields as $key => $field) {
-                $fields[$key] = 'self_' . $field;
-            }
-        }
-        $allowPublish = (int)$data[$fields['status']];
-        // 期限を設定している場合に条件に該当しない場合は強制的に非公開とする
-        $invalidBegin = $data[$fields['publish_begin']] instanceof FrozenTime && $data[$fields['publish_begin']]->isFuture();
-        $invalidEnd = $data[$fields['publish_end']] instanceof FrozenTime  && $data[$fields['publish_end']]->isPast();
-        if ($invalidBegin || $invalidEnd) {
-            $allowPublish = false;
-        }
-        return $allowPublish;
-    }
-
-    /**
-     * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
-     *
-     * @param $url
-     * @return bool
-     */
-    public function existsContentByUrl($url)
-    {
-        $urlAry = explode('/', preg_replace('/(^\/|\/$)/', '', $url));
-        if (!$url) {
-            return false;
-        }
-        $url = '/';
-        $last = count($urlAry);
-        foreach($urlAry as $key => $name) {
-            $url .= $name;
-            $conditions = ['Content.url' => $url];
-            if (($key + 1) != $last) {
-                $conditions['Content.type <>'] = 'ContentFolder';
-            }
-            if ($this->find('first', ['conditions' => ['Content.url' => $url, 'Content.type <>' => 'ContentFolder'], 'recursive' => -1])) {
-                return true;
-            }
-            $url .= '/';
-        }
-        return false;
-    }
-
-    /**
      * データが公開済みかどうかチェックする
      *
      * @param boolean $status 公開ステータス
      * @param string $publishBegin 公開開始日時
      * @param string $publishEnd 公開終了日時
      * @return    bool
+     * @checked
+     * @unitTest
      */
     public function isPublish($status, $publishBegin, $publishEnd)
     {
+        // TODO: frozenTime形式に移行するべき
         if (!$status) {
             return false;
         }
@@ -1178,34 +1134,23 @@ class ContentsTable extends AppTable
      *
      * @param int $id コンテンツID
      * @param array $newData 新しいコンテンツデータ
+     * @checked
+     * @unitTest
      */
     public function isChangedStatus($id, $newData)
     {
-        $before = $this->find('first', ['conditions' => ['Content.id' => $id]]);
-        if (!$before) {
+        try {
+        $before = $this->get($id);
+        } catch(\Cake\Datasource\Exception\RecordNotFoundException $e) {
             return true;
         }
-        $beforeStatus = $this->isPublish($before['Content']['self_status'], $before['Content']['self_publish_begin'], $before['Content']['self_publish_end']);
-        $afterStatus = $this->isPublish($newData['Content']['self_status'], $newData['Content']['self_publish_begin'], $newData['Content']['self_publish_end']);
-        if ($beforeStatus != $afterStatus || $before['Content']['title'] != $newData['Content']['title'] || $before['Content']['url'] != $newData['Content']['url']) {
+        // TODO: PagesController使用時に再確認する
+        $beforeStatus = $this->isPublish($before->self_status,  $before->self_publish_begin, $before->self_publish_end);
+        $afterStatus = $this->isPublish($newData['self_status'], $newData['self_publish_begin'], $newData['self_publish_end']);
+        if ($beforeStatus != $afterStatus || $before->title  != $newData['title'] || $before->url != $newData['url']) {
             return true;
         }
         return false;
-    }
-
-    /**
-     * サイトルートコンテンツを取得する
-     *
-     * @param $siteId
-     * @return array|null
-     */
-    public function getSiteRoot($siteId)
-    {
-        return $this->find('first', [
-            'conditions' => [
-                'Content.site_id' => $siteId,
-                'Content.site_root' => true
-            ], 'recursive' => -1]);
     }
 
     /**

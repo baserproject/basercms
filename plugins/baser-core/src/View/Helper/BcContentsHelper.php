@@ -259,18 +259,6 @@ class BcContentsHelper extends Helper
     }
 
     /**
-     * データが公開状態にあるか確認する
-     *
-     * @param array $data コンテンツデータ
-     * @param bool $self コンテンツ自身の公開状態かどうか
-     * @return mixed
-     */
-    public function isAllowPublish($data, $self = false)
-    {
-        return $this->_Contents->isAllowPublish($data, $self);
-    }
-
-    /**
      * プレフィックスなしのURLを取得する
      *
      * @param string $url
@@ -476,32 +464,6 @@ class BcContentsHelper extends Helper
         return $this->_Contents->getContentFolderList($siteId, $options);
     }
 
-    /**
-     * サイトIDからサイトルートとなるコンテンツを取得する
-     *
-     * @param int $siteId
-     * @return array
-     */
-    public function getSiteRoot($siteId)
-    {
-        return $this->_Contents->getSiteRoot($siteId);
-    }
-
-    /**
-     * サイトIDからサイトルートとなるコンテンツIDを取得する
-     *
-     * @param int $siteId
-     * @return string|bool
-     */
-    public function getSiteRootId($siteId)
-    {
-        $content = $this->getSiteRoot($siteId);
-        if ($content) {
-            return $content['Content']['id'];
-        } else {
-            return false;
-        }
-    }
 
     /**
      * コンテンツが編集可能かどうか確認

@@ -414,14 +414,6 @@ class BcContentsHelperTest extends BcTestCase
     }
 
     /**
-     * データが公開状態にあるか確認する
-     *
-     * public function testIsAllowPublish() {
-     * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドのためスキップします。');
-     * }
-     */
-
-    /**
      * 親フォルダを取得する
      *
      * @param $expected
@@ -471,42 +463,6 @@ class BcContentsHelperTest extends BcTestCase
      * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドのためスキップします。');
      * }
      */
-
-    /**
-     * サイトIDからサイトルートとなるコンテンツを取得する
-     *
-     * public function testGetSiteRoot() {
-     * $this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドのためスキップします。');
-     * }
-     */
-
-    /**
-     * サイトIDからコンテンツIDを取得する
-     * getSiteRootId
-     *
-     * @param int $siteId
-     * @param string|bool $expect 期待値
-     * @dataProvider getSiteRootIdDataProvider
-     */
-    public function testGetSiteRootId($siteId, $expect)
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->BcContents->getSiteRootId($siteId);
-        $this->assertEquals($expect, $result);
-    }
-
-    public function getSiteRootIdDataProvider()
-    {
-        return [
-            // 存在するサイトID（0~2）を指定した場合
-            [0, 1],
-            [1, 2],
-            [2, 3],
-            // 存在しないサイトIDを指定した場合
-            [3, false],
-            [99, false],
-        ];
-    }
 
     /**
      * エンティティIDからコンテンツの情報を取得
