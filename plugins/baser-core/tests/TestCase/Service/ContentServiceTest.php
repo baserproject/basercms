@@ -122,7 +122,6 @@ class ContentServiceTest extends BcTestCase
         $request = $this->getRequest()->withQueryParams([
             'site_id' => 1,
             'open' => '1',
-            'folder_id' => '6',
             'name' => 'テスト',
             'type' => 'ContentFolder',
             'self_status' => '1',
@@ -135,8 +134,6 @@ class ContentServiceTest extends BcTestCase
             'title LIKE' => '%テスト%',
             ],
             'name' => 'テスト',
-            'rght <' => (int) 15,
-            'lft >' => (int) 8,
             'self_status' => '1',
             'type' => 'ContentFolder',
             'site_id' => 1,
@@ -215,6 +212,10 @@ class ContentServiceTest extends BcTestCase
         $request = $this->getRequest('/?status=1&type!=Page');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
         $this->assertEquals(9, $contents->all()->count());
+        // フォルダIDを指定する場合
+        $request = $this->getRequest('/?status=1&folder_id=6');
+        $contents = $this->ContentService->getIndex($request->getQueryParams());
+        $this->assertEquals(3, $contents->all()->count());
     }
     /**
      * testGetTrashIndex
@@ -242,9 +243,9 @@ class ContentServiceTest extends BcTestCase
         $result = $this->ContentService->getContentFolderList($siteId);
         $this->assertEquals(
             [
-                1 => "",
-                6 => "　　　└service",
-                18 => '　　　　　　└ツリー階層削除用フォルダー(親)',
+                1 => "baserCMSサンプル",
+                6 => "　　　└サービス",
+                18 => '　　　　　　└フォルダー(親)',
                 19 => '　　　　　　└ツリー階層削除用フォルダー(子)',
                 20 => '　　　　　　└ツリー階層削除用フォルダー(孫)',
                 21 => '　　　　　　└testEdit',
@@ -252,8 +253,8 @@ class ContentServiceTest extends BcTestCase
         $result);
         $result = $this->ContentService->getContentFolderList($siteId, ['conditions' => ['site_root' => false]]);
         $this->assertEquals([
-            6 => 'service',
-            18 => '　　　└ツリー階層削除用フォルダー(親)',
+            6 => 'サービス',
+            18 => '　　　└フォルダー(親)',
             19 => '　　　└ツリー階層削除用フォルダー(子)',
             20 => '　　　└ツリー階層削除用フォルダー(孫)',
             21 => '　　　└testEdit',

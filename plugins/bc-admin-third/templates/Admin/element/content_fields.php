@@ -43,7 +43,7 @@ if ($this->request->getData('Site.use_subdomain')) {
 $fullUrl = $this->BcAdminContent->getUrl($content->url, true, $site->use_subdomain);
 // TODO ucmits data-current が何に使われているか確認
 // $this->request->getData() では Content は取得できないため
-$this->BcBaser->js('admin/contents/edit', false, ['id' => 'AdminContentsEditScript',
+$this->BcBaser->js('admin/contents/edit.bundle', false, ['id' => 'AdminContentsEditScript',
   'data-previewurl' => $previewUrl,
   'data-fullurl' => $fullUrl,
   'data-current' => json_encode($this->request->getData()),
