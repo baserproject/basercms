@@ -129,31 +129,36 @@ class ContentFoldersTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
         // 変更前のURLを取得
-        if (!empty($event->getData('entity')->get('id')) && ($this->isMovableTemplate || !empty($options['reconstructSearchIndices']))) {
+        if (!empty($entity->id) && ($this->isMovableTemplate || !empty($options['reconstructSearchIndices']))) {
             $this->isMovableTemplate = false;
-            $this->setBeforeRecord($event->getData('entity')->get('id'));
+            $this->setBeforeRecord($entity->id);
         }
         return parent::beforeSave($event, $entity, $options);
     }
 
     /**
      * After Save
-     *
-     * @param bool $created
-     * @param array $options
+     * @param Event $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      * @param bool
+     * @checked
+     * @unitTest
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if (!empty($entity->content->url) && $this->beforeUrl) {
-            $this->movePageTemplates($entity->content->url);
             $this->isMovableTemplate = true;
         }
         if (!empty($options['reconstructSearchIndices']) && $this->beforeStatus !== $entity->content->status) {
+            // TODO: テスト未実装
             $searchIndexModel = TableRegistry::getTableLocator()->get('SearchIndex');
             $searchIndexModel->reconstruct($entity->content->id);
         }
@@ -177,27 +182,27 @@ class ContentFoldersTable extends AppTable
         }
     }
 
-    /**
-     * 固定ページテンプレートを移動する
-     *
-     * @param string $afterUrl
-     * @return bool
-     */
-    public function movePageTemplates($afterUrl)
-    {
-        if ($this->beforeUrl && $this->beforeUrl != $afterUrl) {
-            $basePath = APP . 'View' . DS . 'Pages' . DS;
-            if (is_dir($basePath . $this->beforeUrl)) {
-                (new Folder())->move([
-                    'to' => $basePath . $afterUrl,
-                    'from' => $basePath . $this->beforeUrl,
-                    'chmod' => 0777
-                ]);
-            }
-        }
-        $this->beforeUrl = null;
-        return true;
-    }
+    // /**
+    //  * 固定ページテンプレートを移動する
+    //  *
+    //  * @param string $afterUrl
+    //  * @return bool
+    //  */
+    // public function movePageTemplates($afterUrl)
+    // {
+    //     if ($this->beforeUrl && $this->beforeUrl != $afterUrl) {
+    //         $basePath = APP . 'View' . DS . 'Pages' . DS;
+    //         if (is_dir($basePath . $this->beforeUrl)) {
+    //             (new Folder())->move([
+    //                 'to' => $basePath . $afterUrl,
+    //                 'from' => $basePath . $this->beforeUrl,
+    //                 'chmod' => 0777
+    //             ]);
+    //         }
+    //     }
+    //     $this->beforeUrl = null;
+    //     return true;
+    // }
 
     /**
      * サイトルートフォルダを保存
