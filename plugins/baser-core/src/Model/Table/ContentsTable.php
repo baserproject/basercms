@@ -289,7 +289,7 @@ class ContentsTable extends AppTable
     /**
      * Before Marshal
      *
-     * @param Event $event
+     * @param EventInterface $event
      * @param ArrayObject $data
      * @param ArrayObject $options
      * @return void
@@ -297,7 +297,7 @@ class ContentsTable extends AppTable
      * @noTodo
      * @unitTest
      */
-    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
     {
         if (!empty($data['content'])) {
             // コンテンツ一覧にて、コンテンツを登録した直後のリネーム処理までは新規追加とみなして処理を行う為、$create で判定させる
@@ -473,7 +473,7 @@ class ContentsTable extends AppTable
 
     /**
      * Before Save
-     * @param Event $event
+     * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @return bool
@@ -481,7 +481,7 @@ class ContentsTable extends AppTable
      * @noTodo
      * @unitTest
      */
-    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if (!empty($entity->id)) {
             $this->beforeSaveParentId = $entity->parent_id;

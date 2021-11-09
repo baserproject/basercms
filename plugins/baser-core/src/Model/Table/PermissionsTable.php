@@ -17,6 +17,7 @@ use Cake\Event\Event;
 use Cake\Core\Configure;
 use BaserCore\Model\AppTable;
 use BaserCore\Utility\BcUtil;
+use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -204,7 +205,7 @@ class PermissionsTable extends AppTable
      * beforeSave
      * urlの先頭に / を付けて絶対パスにする
      *
-     * @param Event $event
+     * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @return boolean
@@ -212,7 +213,7 @@ class PermissionsTable extends AppTable
      * @noTodo
      * @unitTest
      */
-    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         $data = $event->getData();
         if (preg_match('/^[^\/]/is', $data["entity"]->get("url"))) {

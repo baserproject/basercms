@@ -12,22 +12,23 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
-use BaserCore\Event\BcEventDispatcherTrait;
+use Cake\Event\Event;
+use Cake\Core\Configure;
 use BaserCore\Model\AppTable;
-use BaserCore\Model\Entity\Site;
-use BaserCore\Service\SiteConfigTrait;
-use BaserCore\Utility\BcAbstractDetector;
-use BaserCore\Utility\BcAgent;
 use BaserCore\Utility\BcLang;
 use BaserCore\Utility\BcUtil;
-use Cake\Core\Configure;
-use Cake\Datasource\EntityInterface;
-use Cake\Datasource\ResultSetInterface;
-use Cake\Event\Event;
+use BaserCore\Utility\BcAgent;
+use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
+use BaserCore\Model\Entity\Site;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\EntityInterface;
+use BaserCore\Service\SiteConfigTrait;
+use Cake\Datasource\ResultSetInterface;
+use BaserCore\Utility\BcAbstractDetector;
+use BaserCore\Event\BcEventDispatcherTrait;
 
 /**
  * Class Site
@@ -320,12 +321,12 @@ class SitesTable extends AppTable
     /**
      * After Save
      *
-     * @param Event $event
+     * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @checked
      */
-    public function afterSave(Event $event, EntityInterface $entity, ArrayObject $options)
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         // TODO 未確認のため暫定措置
         // >>>
@@ -365,12 +366,12 @@ class SitesTable extends AppTable
     /**
      * After Delete
      *
-     * @param Event $event
+     * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @checked
      */
-    public function afterDelete(Event $event, EntityInterface $entity, ArrayObject $options)
+    public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         // TODO 未確認のため暫定措置
         // >>>
@@ -732,7 +733,7 @@ class SitesTable extends AppTable
     /**
      * Before Save
      *
-     * @param Event $event
+     * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @return bool
@@ -740,7 +741,7 @@ class SitesTable extends AppTable
      * @noTodo
      * @unitTest
      */
-    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         // エイリアスに変更があったかチェックする
         if ($entity->id && $entity->alias) {

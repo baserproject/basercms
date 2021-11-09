@@ -23,6 +23,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
+use BaserCore\Model\Entity\ContentFolder;
 
 /**
  * Class ContentFoldersTable
@@ -101,10 +102,13 @@ class ContentFoldersTable extends AppTable
 
     /**
      * Before Move
-     *
-     * @param \Cake\Event\Event $event
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
+     * @checked
+     * @unitTest
      */
-    public function beforeMove(\Cake\Event\Event $event)
+    public function beforeMove(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if ($event->getData('data.currentType') == 'ContentFolder') {
             $this->setBeforeRecord($event->getData('data.entityId'));
@@ -113,19 +117,23 @@ class ContentFoldersTable extends AppTable
 
     /**
      * After Move
-     *
-     * @param \\Cake\Event\Event $event
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
+     * @checked
      */
-    public function afterMove(\Cake\Event\Event $event)
+    public function afterMove(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if (!empty($event->getData('data.Content')) && $event->getData('data.Content.type') == 'ContentFolder') {
-            $this->movePageTemplates($event->getData('data.Content.url'));
-        }
+        // TODO: movePageTemplatesがなくなったので、一時措置
+        return true;
+        // if (!empty($event->getData('data.Content')) && $event->getData('data.Content.type') == 'ContentFolder') {
+        //     $this->movePageTemplates($event->getData('data.Content.url'));
+        // }
     }
 
     /**
      * Before Save
-     * @param Event $event
+     * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @return bool
@@ -133,7 +141,7 @@ class ContentFoldersTable extends AppTable
      * @noTodo
      * @unitTest
      */
-    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         // 変更前のURLを取得
         if (!empty($entity->id) && ($this->isMovableTemplate || !empty($options['reconstructSearchIndices']))) {
@@ -145,7 +153,7 @@ class ContentFoldersTable extends AppTable
 
     /**
      * After Save
-     * @param Event $event
+     * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @param bool
@@ -182,9 +190,9 @@ class ContentFoldersTable extends AppTable
         }
     }
 
+    // NOTE: 以前までapp/View/Pages/about.phpなど固定ページの内容をphpファイルで維持していたが、廃止になったのでメソッド削除
     // /**
     //  * 固定ページテンプレートを移動する
-    //  *
     //  * @param string $afterUrl
     //  * @return bool
     //  */
