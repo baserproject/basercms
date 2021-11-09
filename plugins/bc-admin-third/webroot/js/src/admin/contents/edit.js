@@ -90,7 +90,6 @@ $(function () {
         if (confirm(bcI18n.contentsEditConfirmMessage3.sprintf(displayName))) {
             $.bcToken.check(function () {
                 return $.ajax({
-                    // TODO:使用されてるか確認櫃
                     url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/exists_content_by_url',
                     type: 'POST',
                     data: {
@@ -99,7 +98,6 @@ $(function () {
                             key: $.bcToken.key
                         }
                     },
-                    dataType: 'json',
                     beforeSend: function () {
                         $.bcUtil.showLoader();
                     },

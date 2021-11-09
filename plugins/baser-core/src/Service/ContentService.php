@@ -175,9 +175,7 @@ class ContentService implements ContentServiceInterface
                         $conditions['name'] = $value;
                     }
                     if ($key === 'folder_id') {
-                        $Contents = $this->Contents->find('all', $options)->select(['lft', 'rght'])->where(['id' => $value]);
-                        $conditions['rght <'] = $Contents->first()->rght;
-                        $conditions['lft >'] = $Contents->first()->lft;
+                        $conditions['folder_id'] = $value;
                     }
                     if ($key === 'self_status' && $value !== '') {
                         $conditions['self_status'] = $value;
@@ -217,6 +215,11 @@ class ContentService implements ContentServiceInterface
 
         if (!empty($queryParams['title'])) {
             $query = $query->andWhere(['Contents.title LIKE' => '%' . $queryParams['title'] . '%']);
+        }
+
+        if (!empty($queryParams['folder_id'])) {
+            $folder = $this->Contents->find()->select(['lft', 'rght'])->where(['id' => $queryParams['folder_id']])->first();
+            $query = $query->andWhere(['rght <' => $folder->rght, 'lft >' => $folder->lft]);
         }
 
         foreach($queryParams as $key => $value) {
@@ -272,7 +275,6 @@ class ContentService implements ContentServiceInterface
      * @param array $options
      * @return array|bool
      * @checked
-
      * @unitTest
      */
     public function getContentFolderList($siteId = null, $options = [])
@@ -295,7 +297,7 @@ class ContentService implements ContentServiceInterface
         if (!empty($options['conditions'])) {
             $conditions = array_merge($conditions, $options['conditions']);
         }
-        $folders = $this->Contents->find('treeList')->where([$conditions]);
+        $folders = $this->Contents->find('treeList', ['valuePath' => 'title'])->where([$conditions]);
         if ($folders) {
             return $this->convertTreeList($folders->all()->toArray());
         }
