@@ -13,6 +13,9 @@ namespace BaserCore\Event;
 
 use BaserCore\Utility\BcUtil;
 use Cake\Controller\Controller;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Class BcControllerEventListener
@@ -48,13 +51,16 @@ class BcControllerEventListener extends BcEventListener
      * @param Controller $controller
      * @param $siteId
      * @return bool
+     * @unitTest
+     * @noTodo
+     * @checked
      */
     public function setAdminCurrentSite(Controller $controller, $siteId)
     {
         if (!BcUtil::isAdminSystem()) {
             return false;
         }
-        $controller->passedArgs['site_id'] = $siteId;
+        $controller->setRequest($controller->getRequest()->withParam('site_id', $siteId));
         return true;
     }
 
@@ -62,17 +68,18 @@ class BcControllerEventListener extends BcEventListener
      * コントローラーにヘルパーを追加する
      *
      * @param Controller $controller
-     * @param string $helper
+     * @param string|array $helper
+     * @unitTest
+     * @noTodo
+     * @checked
      */
     public function addHelper(Controller $controller, $helper)
     {
-        if (!is_array($helper)) {
-            $helper = [$helper];
-        }
-        foreach($helper as $value) {
-            if (!in_array($value, $controller->helpers)) {
-                $controller->helpers[] = $value;
-            }
+        $builder = $controller->viewBuilder();
+        if (is_array($helper)) {
+            $builder->setHelpers($helper);
+        } else {
+            $builder->addHelper($helper);
         }
     }
 

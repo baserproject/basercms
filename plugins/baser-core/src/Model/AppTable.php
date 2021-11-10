@@ -12,19 +12,20 @@
 namespace BaserCore\Model;
 
 use ArrayObject;
-use BaserCore\Utility\BcUtil;
-use Cake\Event\Event;
-use Cake\ORM\Table;
 use Cake\ORM\Query;
+use Cake\ORM\Table;
+use Cake\Event\Event;
 use Cake\Core\Configure;
-use Cake\Datasource\EntityInterface;
-use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use Cake\Http\ServerRequest;
-use BaserCore\Controller\AppController;
-use BaserCore\Annotation\UnitTest;
+use BaserCore\Utility\BcUtil;
+use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\EntityInterface;
+use Cake\Datasource\ConnectionManager;
+use BaserCore\Controller\AppController;
 
 /**
  * Class AppTable
@@ -100,12 +101,12 @@ class AppTable extends Table
 
     /**
      * Before Save
-     * @param Event $event
+     * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @return bool
      */
-    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         // TODO 暫定措置
         // >>>

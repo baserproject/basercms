@@ -11,8 +11,13 @@
 
 namespace BaserCore\Test\TestCase\Model\Table;
 
+use ArrayObject;
+use Cake\ORM\Entity;
 use ReflectionClass;
+use Cake\Event\Event;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Datasource\EntityInterface;
+use BaserCore\Model\Entity\ContentFolder;
 use BaserCore\Model\Table\ContentFoldersTable;
 
 /**
@@ -87,7 +92,9 @@ class ContentFoldersTableTest extends BcTestCase
      */
     public function testBeforeSave(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = new Entity(['id' => 1]);
+        $this->ContentFolders->dispatchEvent('Model.beforeSave', ['entity' => $data, 'options' => new ArrayObject()]);
+        $this->assertEquals("/", $this->ContentFolders->beforeUrl);
     }
 
     /**
@@ -96,6 +103,31 @@ class ContentFoldersTableTest extends BcTestCase
      * @return void
      */
     public function testAfterSave(): void
+    {
+        $this->ContentFolders->beforeUrl = 'test';
+        $contentFolder = $this->ContentFolders->get(1, ['contain' => ['Contents']]);
+        $this->ContentFolders->save($contentFolder);
+        $this->assertTrue($this->ContentFolders->isMovableTemplate);
+        // TODO: reconstructSearchIndicesのテスト
+    }
+
+    /**
+     * testBeforeMove
+     *
+     * @return void
+     */
+    public function testBeforeMove(): void
+    {
+        $this->ContentFolders->dispatchEvent('Controller.Contents.beforeMove', [new ContentFolder(), new ArrayObject(), 'data.currentType' => 'ContentFolder', 'data.entityId' => 1]);
+        $this->assertEquals("/", $this->ContentFolders->beforeUrl);
+    }
+
+    /**
+     * testAfterMove
+     *
+     * @return void
+     */
+    public function testAfterMove(): void
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
