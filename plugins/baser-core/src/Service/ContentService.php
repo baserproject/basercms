@@ -584,7 +584,6 @@ class ContentService implements ContentServiceInterface
     public function softDeleteFromTree($id)
     {
         // TODO: キャッシュ系が有効化されてからsoftDeleteFromTreeを使用する
-    //     // TODO:　キャッシュ系をオフにする
         $this->softDelete(true);
         $this->Behaviors->unload('BcCache');
         $this->Behaviors->unload('BcUpload');

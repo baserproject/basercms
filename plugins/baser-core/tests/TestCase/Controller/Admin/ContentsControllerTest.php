@@ -16,7 +16,10 @@ use Cake\Http\ServerRequest;
 use BaserCore\Service\SiteService;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentService;
+use BaserCore\Utility\BcContainerTrait;
+use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\Service\ContentFolderService;
+use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Controller\Admin\ContentsController;
 
 /**
@@ -30,6 +33,12 @@ use BaserCore\Controller\Admin\ContentsController;
  */
 class ContentsControllerTest extends BcTestCase
 {
+
+    /**
+     * Trait
+     */
+    use IntegrationTestTrait;
+    use BcContainerTrait;
 
     /**
      * Fixtures
@@ -372,6 +381,35 @@ class ContentsControllerTest extends BcTestCase
         $this->assertRedirect("/baser/admin/baser-core/contents/index");
         $this->assertEquals("フォルダー「サービス」をゴミ箱に移動しました。", $_SESSION['Flash']['flash'][0]['message']);
         $this->assertStringContainsString("/baser/admin/baser-core/contents/index", $this->_response->getHeaderLine('Location'));
+    }
+
+    /**
+     * testDeleteWithEvent
+     *
+     * @return void
+     */
+    public function testDeleteWithEvent()
+    {
+        // beforeDeleteイベントテスト(id1の代わりに4が削除されるか)
+        $this->entryControllerEventToMock('Controller.BaserCore.Contents.beforeDelete', function(Event $event) {
+            $id = 4;
+            return $id;
+        });
+        // afterDeleteイベントテスト(削除されたコンテンツの名前をイベントで更新できるか)
+        $this->entryControllerEventToMock('Controller.BaserCore.Contents.afterDelete', function(Event $event) {
+            $content = $event->getData('content');
+            $content = $this->ContentService->update($content, ['name' => 'testAfterDelete']);
+            return $content;
+        });
+        $request = $this->getRequest('/baser/admin/baser-core/content/')->withEnv('REQUEST_METHOD', 'POST')->withData('Content.id', 1);
+        $contentsController = new ContentsController($request);
+        $contentsController->setName('Contents');
+        $contentsController->delete($this->getService(ContentServiceInterface::class));
+        $trash = $this->ContentService->getTrash(4);
+        // beforeDeleteテスト
+        $this->assertNotEmpty($trash);
+        // afterDeleteテスト
+        $this->assertEquals('testAfterDelete', $trash->name);
     }
 
     /**
