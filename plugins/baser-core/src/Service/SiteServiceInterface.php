@@ -11,9 +11,10 @@
 
 namespace BaserCore\Service;
 
+use Cake\ORM\Query;
 use BaserCore\Model\Entity\Site;
 use Cake\Datasource\EntityInterface;
-use Cake\ORM\Query;
+use BaserCore\Model\Entity\SiteConfig;
 
 interface SiteServiceInterface
 {
@@ -101,6 +102,23 @@ interface SiteServiceInterface
      * @return mixed
      */
     public function getSiteConfig($name);
+
+    /**
+     * サイト全体の設定値を更新する
+     *
+     * @param  string $name
+     * @param  string $value
+     * @return SiteConfig
+     */
+    public function setSiteConfig($name, $value);
+
+    /**
+     * サイト全体の設定値をリセットする
+     *
+     * @param  string $name
+     * @return SiteConfig
+     */
+    public function resetSiteConfig($name);
 
     /**
      * 言語リストを取得
