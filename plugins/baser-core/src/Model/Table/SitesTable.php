@@ -288,13 +288,13 @@ class SitesTable extends AppTable
     /**
      * メインサイトかどうか判定する
      *
-     * @param $id
+     * @param int $id
      * @return bool
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function isMain($id)
+    public function isMain(int $id)
     {
         return is_null($this->find()->where(['id' => $id])->first()->main_site_id);
     }

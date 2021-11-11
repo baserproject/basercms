@@ -1095,7 +1095,7 @@ class ContentService implements ContentServiceInterface
             $pureUrl = $this->Contents->pureUrl($parentCuntent->url, $parentCuntent->site_id);
             foreach($childrenSite as $site) {
                 $site = $this->Sites->findById($site->id)->first();
-                $url = $site->makeUrl(new ServerRequest($pureUrl));
+                $url = $site->makeUrl(new ServerRequest(['url' => $pureUrl]));
                 $id = $this->Contents->find()->select('id')->where(['url' => $url]);
                 if ($id) {
                     $parentId = $id;

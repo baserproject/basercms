@@ -95,7 +95,7 @@ class SiteServiceTest extends \BaserCore\TestSuite\BcTestCase
 
         $request = $this->getRequest('/?status=1');
         $users = $this->Sites->getIndex($request->getQueryParams());
-        $this->assertEquals(4, $users->all()->count());
+        $this->assertEquals(5, $users->all()->count());
     }
 
     /**
@@ -140,7 +140,7 @@ class SiteServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->Sites->delete(2);
         $request = $this->getRequest('/');
         $users = $this->Sites->getIndex($request->getQueryParams());
-        $this->assertEquals(4, $users->all()->count());
+        $this->assertEquals(5, $users->all()->count());
         $this->expectException("Exception");
         $this->Sites->delete(1);
     }
@@ -169,7 +169,7 @@ class SiteServiceTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testGetSiteList()
     {
-        $this->assertEquals(4, count($this->Sites->getList()));
+        $this->assertEquals(5, count($this->Sites->getList()));
         $this->Sites->create([
             'name' => 'test',
             'display_name' => 'test',
@@ -177,7 +177,7 @@ class SiteServiceTest extends \BaserCore\TestSuite\BcTestCase
             'title' => 'test',
             'status' => true
         ]);
-        $this->assertEquals(5, count($this->Sites->getList()));
+        $this->assertEquals(6, count($this->Sites->getList()));
     }
 
     /**

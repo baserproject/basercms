@@ -615,7 +615,7 @@ class ContentsFixture extends TestFixture
                 'type' => "ContentFolder",
                 'entity_id' => 15,
                 'deleted_date' => null,
-                'parent_id' => 1,
+                'parent_id' => 21,
                 'lft' => 35,
                 'rght' => 36,
                 'level' => 1,

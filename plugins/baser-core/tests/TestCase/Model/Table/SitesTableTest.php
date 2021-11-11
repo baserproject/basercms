@@ -60,11 +60,11 @@ class SitesTableTest extends BcTestCase
      */
     public function testGetPublishedAll()
     {
-        $this->assertEquals(4, count($this->Sites->getPublishedAll()));
+        $this->assertEquals(5, count($this->Sites->getPublishedAll()));
         $site = $this->Sites->find()->where(['id' => 2])->first();
         $site->status = true;
         $this->Sites->save($site);
-        $this->assertEquals(5, count($this->Sites->getPublishedAll()));
+        $this->assertEquals(6, count($this->Sites->getPublishedAll()));
     }
 
     /**
@@ -125,9 +125,9 @@ class SitesTableTest extends BcTestCase
      */
     public function testChildren()
     {
-        $this->assertEquals(4, $this->Sites->children(1)->count());
+        $this->assertEquals(5, $this->Sites->children(1)->count());
         $this->assertEquals(0, $this->Sites->children(2)->count());
-        $this->assertEquals(3, $this->Sites->children(1, ['conditions' => ['status' => true]])->count());
+        $this->assertEquals(4, $this->Sites->children(1, ['conditions' => ['status' => true]])->count());
     }
 
     /**
@@ -153,7 +153,7 @@ class SitesTableTest extends BcTestCase
     {
         $this->assertEquals('', $this->Sites->getPrefix(1));
         $this->assertEquals('s', $this->Sites->getPrefix(2));
-        $this->assertEquals(false, $this->Sites->getPrefix(6));
+        $this->assertEquals(false, $this->Sites->getPrefix(7));
     }
 
     /**
@@ -231,7 +231,7 @@ class SitesTableTest extends BcTestCase
     {
         $this->assertEquals(1, $this->Sites->getMain(1)->id);
         $this->assertEquals(1, $this->Sites->getMain(2)->id);
-        $this->assertEquals(false, $this->Sites->getMain(6));
+        $this->assertEquals(false, $this->Sites->getMain(7));
     }
 
     /**

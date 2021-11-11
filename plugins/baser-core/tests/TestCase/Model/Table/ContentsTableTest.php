@@ -355,15 +355,15 @@ class ContentsTableTest extends BcTestCase
      *
      * 関連コンテンツのキャッシュを削除する
      */
-    // public function testAfterDelete()
-    // {
-    //     $alias = $this->Contents->find()->where(['alias_id IS NOT' => null])->first();
-    //     $aliased = $this->Contents->get($alias->alias_id);
-    //     $this->Contents->dispatchEvent('Model.afterDelete', [$aliased, new ArrayObject()]);
-    //     // エイリアスが削除されてるか確認
-    //     $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-    //     $this->Contents->get($alias->id);
-    // }
+    public function testAfterDelete()
+    {
+        $alias = $this->Contents->find()->where(['alias_id IS NOT' => null])->first();
+        $aliased = $this->Contents->get($alias->alias_id);
+        $this->Contents->dispatchEvent('Model.afterDelete', [$aliased, new ArrayObject()]);
+        // エイリアスが削除されてるか確認
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Contents->get($alias->id);
+    }
 
     /**
      * 自データのエイリアスを削除する
@@ -382,10 +382,26 @@ class ContentsTableTest extends BcTestCase
 
     /**
      * メインサイトの場合、連携設定がされている子サイトのエイリアス削除する
+     * ※ 自身のエイリアスだった場合削除する
      */
-    public function testDeleteRelateSubSiteContent()
+    public function testDeleteRelateSubSiteContentWithAlias()
+    {
+        $content = $this->Contents->get(6);
+        $mockContent = $this->Contents->save(new Content(['site_id' => 6, 'main_site_content_id' => 6, 'alias_id' => 23, 'plugin' => 'BaserCore', 'type' => 'test']));
+        $this->execPrivateMethod($this->Contents, 'deleteRelateSubSiteContent', [$content]);
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Contents->get($mockContent->id);
+    }
+    /**
+     * メインサイトの場合、連携設定がされている子サイトのエイリアス削除する
+     * ※ コンテンツフォルダだった場合子要素をupdateChildrenする
+     */
+    public function testDeleteRelateSubSiteContentWithChildren()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $content = $this->Contents->get(6);
+        $mockContent = $this->Contents->save(new Content(['site_id' => 6, 'main_site_content_id' => 6, 'plugin' => 'BaserCore', 'type' => 'ContentFolder']));
+        $$this->execPrivateMethod($this->Contents, 'deleteRelateSubSiteContent', [$content]);
     }
 
     /**
@@ -548,6 +564,8 @@ class ContentsTableTest extends BcTestCase
     public function testUpdateChildren()
     {
         $this->Contents->updateChildren(18);
+        // 孫のurlが更新されてるか確認
+        $this->assertEquals("/ツリー階層削除用フォルダー(親)/ツリー階層削除用フォルダー(子)/ツリー階層削除用フォルダー(孫)/", $this->Contents->get(20)->url);
     }
 
     /**

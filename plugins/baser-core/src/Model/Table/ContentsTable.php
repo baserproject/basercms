@@ -123,7 +123,7 @@ class ContentsTable extends AppTable
             'Model.beforeSave' => ['callable' => 'beforeSave', 'passParams' => true],
             'Model.afterMarshal' => 'afterMarshal',
             'Model.afterSave' => ['callable' => 'afterSave', 'passParams' => true],
-            // 'Model.afterDelete' => 'afterDelete',
+            'Model.afterDelete' => 'afterDelete',
         ];
     }
     /**
@@ -543,14 +543,14 @@ class ContentsTable extends AppTable
      * @noTodo
      * @unitTest
      */
-    // public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
-    // {
-    //     if ($entity) {
-    //         $this->deleteRelateSubSiteContent($entity);
-    //         $this->deleteAlias($entity);
-    //     }
-    //     $this->deleteAssocCache($entity);
-    // }
+    public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        if ($entity) {
+            $this->deleteRelateSubSiteContent($entity);
+            $this->deleteAlias($entity);
+        }
+        $this->deleteAssocCache($entity);
+    }
 
     /**
      * 自データのエイリアスを削除する
@@ -566,11 +566,14 @@ class ContentsTable extends AppTable
     protected function deleteAlias($content): void
     {
         if (empty($content->alias_id)) {
-            $contents = $this->find()->select('id')->where(['Contents.alias_id' => $content->id]);
+            $contents = $this->find()->select('id')->where(['Contents.alias_id' => $content->id])->applyOptions(['callbacks' => false]);
             if (!$contents->isEmpty()) {
+                // afterDeleteのループを防ぐ
+                $events = $this->getEventManager()->matchingListeners('afterDelete');
+                if ($events) $this->getEventManager()->off('Model.afterDelete');
                 foreach($contents as $content) {
                     $this->removeFromTree($content);
-                    $this->hardDelete($content);
+                    $this->hardDelete($content, ['callbacks' => false]);
                 }
             }
         }
@@ -579,33 +582,39 @@ class ContentsTable extends AppTable
     /**
      * メインサイトの場合、連携設定がされている子サイトのエイリアス削除する
      *
-     * @param $data
+     * @param Content $content
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function deleteRelateSubSiteContent($data)
+    protected function deleteRelateSubSiteContent($content)
     {
         // 自身がエイリアスか確認し、エイリアスの場合は終了
-        if ($data->alias_id) {
-            return;
-        }
-        // メインサイトか確認し、メインサイトでない場合は終了
-        if (!$this->Sites->isMain($data->site_id)) {
-            return;
-        }
-        // 連携設定となっている小サイトを取得
-        $sites = $this->Sites->find()->where(['Site.main_site_id' => $data->site_id, 'relate_main_site' => true]);
-        if ($sites->isEmpty()) {
-            return;
-        }
-        // 同階層に同名のコンテンツがあるか確認
-        foreach($sites as $site) {
-            $content = $this->find()->where(['Contents.site_id' => $site->id, 'Contents.main_site_content_id' => $data->id])->first();
-            if ($content) {
-                // 存在する場合は、自身のエイリアスかどうか確認し削除する
-                if ($content->alias_id == $data->id) {
-                    $this->removeFromTree($content->id, true);
-                    $this->hardDelete($content);
-                } elseif ($content->type == 'ContentFolder') {
-                    $this->updateChildren($content->id);
+        if (!$content->alias_id) {
+            // メインサイトか確認し、メインサイトでない場合は終了
+            if (is_null($content->site_id) || !$this->Sites->isMain($content->site_id)) {
+                return;
+            }
+            // 連携設定となっている小サイトを取得
+            $sites = $this->Sites->find()->where(['main_site_id' => $content->site_id, 'relate_main_site' => true]);
+            if ($sites->isEmpty()) {
+                return;
+            }
+            // 同階層に同名のコンテンツがあるか確認
+            foreach($sites as $site) {
+                $content = $this->find()->where(['site_id' => $site->id, 'main_site_content_id' => $content->id])->first();
+                if ($content) {
+                    // afterDeleteのループを防ぐ
+                    $events = $this->getEventManager()->matchingListeners('afterDelete');
+                    if ($events) $this->getEventManager()->off('Model.afterDelete');
+                    // 存在する場合は、自身のエイリアスかどうか確認し削除する
+                    if ($content->alias_id == $content->id) {
+                        $this->removeFromTree($content);
+                        $this->hardDelete($content);
+                    } elseif ($content->type == 'ContentFolder') {
+                        $this->updateChildren($content->id);
+                    }
                 }
             }
         }
@@ -955,6 +964,9 @@ class ContentsTable extends AppTable
      *
      * @param $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function updateChildren($id)
     {
