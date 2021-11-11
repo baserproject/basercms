@@ -245,19 +245,19 @@ class ContentServiceTest extends BcTestCase
             [
                 1 => "baserCMSサンプル",
                 6 => "　　　└サービス",
-                18 => '　　　　　　└フォルダー(親)',
+                18 => '　　　└ツリー階層削除用フォルダー(親)',
                 19 => '　　　　　　└ツリー階層削除用フォルダー(子)',
-                20 => '　　　　　　└ツリー階層削除用フォルダー(孫)',
-                21 => '　　　　　　└testEdit',
+                20 => '　　　　　　　　　└ツリー階層削除用フォルダー(孫)',
+                21 => '　　　└testEdit',
             ],
         $result);
         $result = $this->ContentService->getContentFolderList($siteId, ['conditions' => ['site_root' => false]]);
         $this->assertEquals([
             6 => 'サービス',
-            18 => '　　　└フォルダー(親)',
+            18 => 'ツリー階層削除用フォルダー(親)',
             19 => '　　　└ツリー階層削除用フォルダー(子)',
-            20 => '　　　└ツリー階層削除用フォルダー(孫)',
-            21 => '　　　└testEdit',
+            20 => '　　　　　　└ツリー階層削除用フォルダー(孫)',
+            21 => 'testEdit',
         ], $result);
     }
 

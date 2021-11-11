@@ -13,6 +13,9 @@ namespace BaserCore\Service;
 
 use BaserCore\Model\Entity\SiteConfig;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class SiteConfigTrait
@@ -52,7 +55,7 @@ trait SiteConfigTrait
     public function setSiteConfig($name, $value)
     {
         $siteConfigs = $this->getService(SiteConfigServiceInterface::class);
-        return $siteConfigs->update([$name, $value]);
+        return $siteConfigs->update([$name => $value]);
     }
 
     /**

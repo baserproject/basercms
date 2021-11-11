@@ -355,10 +355,15 @@ class ContentsTableTest extends BcTestCase
      *
      * 関連コンテンツのキャッシュを削除する
      */
-    public function testAfterDelete()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
+    // public function testAfterDelete()
+    // {
+    //     $alias = $this->Contents->find()->where(['alias_id IS NOT' => null])->first();
+    //     $aliased = $this->Contents->get($alias->alias_id);
+    //     $this->Contents->dispatchEvent('Model.afterDelete', [$aliased, new ArrayObject()]);
+    //     // エイリアスが削除されてるか確認
+    //     $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+    //     $this->Contents->get($alias->id);
+    // }
 
     /**
      * 自データのエイリアスを削除する
@@ -367,7 +372,12 @@ class ContentsTableTest extends BcTestCase
      */
     public function testDeleteAlias()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $alias = $this->Contents->find()->where(['alias_id IS NOT' => null])->first();
+        $aliased = $this->Contents->get($alias->alias_id);
+        $this->execPrivateMethod($this->Contents, 'deleteAlias', [$aliased]);
+        // エイリアスが削除されてるか確認
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Contents->get($alias->id);
     }
 
     /**
@@ -537,7 +547,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testUpdateChildren()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->Contents->updateChildren(18);
     }
 
     /**
@@ -724,7 +734,7 @@ class ContentsTableTest extends BcTestCase
     public function testGetOrderSameParent()
     {
         // parent_id=6の全体数
-        $this->assertEquals(9, $this->Contents->getOrderSameParent("", "6"));
+        $this->assertEquals(3, $this->Contents->getOrderSameParent("", "6"));
         // parent_id=6のコンテンツ順序
         $this->assertEquals(1, $this->Contents->getOrderSameParent("11", "6"));
         $this->assertEquals(2, $this->Contents->getOrderSameParent("12", "6"));
