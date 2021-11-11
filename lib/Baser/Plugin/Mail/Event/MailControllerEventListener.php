@@ -81,7 +81,11 @@ class MailControllerEventListener extends BcControllerEventListener
 		$id = $event->data;
 		$data = $this->MailContent->find('first', ['conditions' => ['Content.id' => $id]]);
 		if ($data) {
-			$this->MailContent->saveSearchIndex($this->MailContent->createSearchIndex($data));
+			if (empty($data['Content']['exclude_search'])) {
+				$this->MailContent->saveSearchIndex($this->MailContent->createSearchIndex($data));
+			} else {
+				$this->MailContent->deleteSearchIndex($data['MailContent']['id']);
+			}
 		}
 	}
 
@@ -99,7 +103,11 @@ class MailControllerEventListener extends BcControllerEventListener
 		}
 		$id = $event->data['id'];
 		$data = $this->MailContent->find('first', ['conditions' => ['Content.id' => $id]]);
-		$this->MailContent->saveSearchIndex($this->MailContent->createSearchIndex($data));
+		if (empty($data['Content']['exclude_search'])) {
+			$this->MailContent->saveSearchIndex($this->MailContent->createSearchIndex($data));
+		} else {
+			$this->MailContent->deleteSearchIndex($data['MailContent']['id']);
+		}
 	}
 
 }
