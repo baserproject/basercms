@@ -14,6 +14,7 @@ namespace BaserCore\Model\Table;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use BaserCore\Model\AppTable;
 use BaserCore\Utility\BcLang;
 use BaserCore\Utility\BcUtil;
@@ -427,15 +428,18 @@ class SitesTable extends AppTable
      * サイトのルートとなるコンテンツIDを取得する
      *
      * @param $id
-     * @return mixed
+     * @return int
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getRootContentId($id)
     {
         if ($id == 0) {
             return 1;
         }
-        $Content = ClassRegistry::init('Content');
-        return $Content->field('id', ['Content.site_root' => true, 'Content.site_id' => $id]);
+        $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        return $Contents->find()->select(['id'])->where(['Contents.site_root' => true, 'Contents.site_id' => $id])->first()->id;
     }
 
     /**

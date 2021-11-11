@@ -335,6 +335,7 @@ class ContentService implements ContentServiceInterface
      * @param  array $postData
      * @return \Cake\Datasource\EntityInterface
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function alias(int $id, array $postData)
@@ -342,10 +343,9 @@ class ContentService implements ContentServiceInterface
         $content = $this->get($id);
         $data = array_merge($content->toArray(), $postData);
         $alias = $this->Contents->newEmptyEntity();
-        //TODO: copyContentFolderPath未確認のため一旦コメントアウト
-        // if (empty($data['parent_id']) && !empty($data['url'])) {
-        //     $data['parent_id'] = $this->copyContentFolderPath($data['url'], $data['site_id']);
-        // }
+        if (empty($data['parent_id']) && !empty($data['url'])) {
+            $data['parent_id'] = $this->copyContentFolderPath($data['url'], $data['site_id']);
+        }
         unset($data['lft'], $data['rght'], $data['level'], $data['pubish_begin'], $data['publish_end'], $data['created_date'], $data['created'], $data['modified']);
         $alias->name = $postData['name'] ?? $postData['title'];
         $alias->alias_id = $id;
@@ -362,6 +362,9 @@ class ContentService implements ContentServiceInterface
      * @param $currentUrl
      * @param $targetSiteId
      * @return bool|null
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function copyContentFolderPath($currentUrl, $targetSiteId)
     {
@@ -373,7 +376,7 @@ class ContentService implements ContentServiceInterface
             $currentId = $current->first()->id;
         }
         $prefix = $this->Sites->getPrefix($targetSiteId);
-        $path = $this->getPath($currentId, null, -1);
+        $path = $this->Contents->find('path', ['for' => $currentId])->toArray();
         if (!$path) {
             return false;
         }
@@ -393,11 +396,11 @@ class ContentService implements ContentServiceInterface
                 continue;
             }
             $url .= $currentContentFolder->name;
-            if ($this->findByUrl($url)) {
+            if ($this->Contents->findByUrl($url)) {
                 return false;
             }
             $url .= '/';
-            $targetContentFolder = $this->findByUrl($url);
+            $targetContentFolder = $this->Contents->findByUrl($url);
             if ($targetContentFolder) {
                 $parentId = $targetContentFolder->id;
             } else {
@@ -413,7 +416,7 @@ class ContentService implements ContentServiceInterface
                     ]
                 ];
                 $ContentFolder->create($data);
-                if ($ContentFolder->save()) {
+                if ($ContentFolder->Contents->save()) {
                     $parentId = $ContentFolder->Content->id;
                 } else {
                     return false;

@@ -754,4 +754,16 @@ class ContentServiceTest extends BcTestCase
         $content = $this->ContentService->get(12);
         $this->assertTrue($this->ContentService->existsContentByUrl($content->url));
     }
+
+    /**
+     * 現在のフォルダのURLを元に別サイトにフォルダを生成する
+     * 最下層のIDを返却する
+     */
+    public function testCopyContentFolderPath()
+    {
+        $parent_id = $this->ContentService->copyContentFolderPath('/service/service1', 1);
+        $this->assertEquals(6, $parent_id);
+        $parent_id = $this->ContentService->copyContentFolderPath('/about', 1);
+        $this->assertEquals(1, $parent_id);
+    }
 }

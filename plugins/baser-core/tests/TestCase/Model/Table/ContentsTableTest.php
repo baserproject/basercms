@@ -578,15 +578,6 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     * 現在のフォルダのURLを元に別サイトにフォルダを生成する
-     * 最下層のIDを返却する
-     */
-    public function testCopyContentFolderPath()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * 公開済の conditions を取得
      */
     public function testGetConditionAllowPublish()

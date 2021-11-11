@@ -33,7 +33,8 @@ class SitesTableTest extends BcTestCase
      */
     public $fixtures = [
         'plugin.BaserCore.Sites',
-        'plugin.BaserCore.SiteConfigs'
+        'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Contents',
     ];
 
     /**
@@ -160,7 +161,7 @@ class SitesTableTest extends BcTestCase
      */
     public function testGetRootContentId()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertEquals(1, $this->Sites->getRootContentId(1));
     }
 
     /**
