@@ -205,7 +205,7 @@ class ContentsControllerTest extends BcTestCase
         ];
         return [
             ['index', '1', [], "Cake\ORM\Query", 16],
-            ['index', '2', $search, 'Cake\ORM\ResultSet', 15],
+            ['index', '2', $search, 'Cake\ORM\ResultSet', 16],
             ['trash_index', '1', [], 'Cake\ORM\Query', 3],
             // 足りない場合は空のindexを返す
             ['index', '', [], 'Cake\ORM\Query', 0],
@@ -316,28 +316,6 @@ class ContentsControllerTest extends BcTestCase
         // 空データ送信
         $this->post('/baser/admin/baser-core/contents/batch', []);
         $this->assertResponseEmpty();
-        // unpublish
-        $data = [
-            'ListTool' => [
-                'batch' => 'unpublish',
-                'batch_targets' => [1],
-            ]
-        ];
-        $this->post('/baser/admin/baser-core/contents/batch', $data);
-        $this->assertResponseNotEmpty();
-        $content = $this->ContentService->get(1);
-        $this->assertFalse($content->status);
-        // publish
-        $data = [
-            'ListTool' => [
-                'batch' => 'publish',
-                'batch_targets' => [1],
-            ]
-        ];
-        $this->post('/baser/admin/baser-core/contents/batch', $data);
-        $this->assertResponseNotEmpty();
-        $content = $this->ContentService->get(1);
-        $this->assertTrue($content->status);
         // delete
         $data = [
             'ListTool' => [
@@ -349,6 +327,49 @@ class ContentsControllerTest extends BcTestCase
         $this->assertResponseNotEmpty();
         $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
         $this->ContentService->get(1);
+    }
+    /**
+     * testBatchUnpublish
+     * NOTE: publishとunPublishのテストを同じ場所に書くとupdateDataが走らないため分離
+     *
+     * @return void
+     */
+    public function testBatchUnpublish()
+    {
+        $this->enableCsrfToken();
+        // unpublish
+        $data = [
+            'ListTool' => [
+                'batch' => 'unpublish',
+                'batch_targets' => [1],
+            ]
+        ];
+        $this->post('/baser/admin/baser-core/contents/batch', $data);
+        $this->assertResponseNotEmpty();
+        $content = $this->ContentService->get(1);
+        $this->assertFalse($content->status);
+    }
+
+    /**
+     * testBatchUnpublish
+     *
+     * @return void
+     */
+    public function testBatchPublish()
+    {
+        $this->enableCsrfToken();
+        $this->ContentService->update($this->ContentService->get(1), ['status' => false]);
+        // publish
+        $data = [
+            'ListTool' => [
+                'batch' => 'publish',
+                'batch_targets' => [1],
+            ]
+        ];
+        $this->post('/baser/admin/baser-core/contents/batch', $data);
+        $this->assertResponseNotEmpty();
+        $content = $this->ContentService->get(1);
+        $this->assertTrue($content->status);
     }
 
     /**

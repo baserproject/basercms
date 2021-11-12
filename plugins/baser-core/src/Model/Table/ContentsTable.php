@@ -35,6 +35,7 @@ use SoftDelete\Model\Table\SoftDeleteTrait;
 
 /**
  * Class ContentsTable
+ * @property SitesTable $Sites
  */
 class ContentsTable extends AppTable
 {
@@ -490,9 +491,7 @@ class ContentsTable extends AppTable
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if ($this->updatingSystemData) {
-            $this->updateSystemData($entity);
-        }
+        $this->updateSystemData($entity);
         // TODO: 未実装のため一旦コメントアウト
         if ($this->updatingRelated) {
             // ゴミ箱から戻す場合、 type の定義がないが問題なし
@@ -501,7 +500,7 @@ class ContentsTable extends AppTable
             }
             $this->updateRelateSubSiteContent($entity);
             if (!empty($entity->parent_id) && $this->beforeSaveParentId != $entity->parent_id) {
-                $SiteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfig');
+                $SiteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
                 $SiteConfig->updateContentsSortLastModified();
                 $this->beforeSaveParentId = null;
             }
@@ -629,9 +628,11 @@ class ContentsTable extends AppTable
      *
      * @param Content $data
      * @return bool
+     * @checked
      */
-    protected function updateRelateSubSiteContent($data)
+    public function updateRelateSubSiteContent($data)
     {
+        // TODO: 後ほどprotectedに変更する
         // 自身がエイリアスか確認し、エイリアスの場合は終了
         if (!empty($data->alias_id) || !isset($data->site_id)) {
             return true;
@@ -647,10 +648,14 @@ class ContentsTable extends AppTable
         if ($sites->isEmpty()) {
             return true;
         }
+        // TODO: コンテンツないのに通ってしまうため内部コンテンツがあるかを確認し、なければ処理を終了するよう一時措置
+        if ($this->find()->where(['site_id' => $sites->first()->id])->isEmpty()) {
+            return true;
+        }
 
         $_data = $this->find()->where(['id' => $data->id])->first();
         if ($_data) {
-            $data = $this->patchEntity($_data, $data->toArray());
+            $data = $this->patchEntity($_data, $data->toArray(), ['validate' => false]);
         }
 
         // URLが空の場合はゴミ箱へ移動する処理のため、連携更新を行わない
@@ -735,7 +740,7 @@ class ContentsTable extends AppTable
                     $content->alias_id = $data->id;
                 }
                 $content->parent_id = $this->copyContentFolderPath($url, $site->id);
-                $content = $this->newEntity($content->toArray());
+                $content = $this->newEntity($content->toArray(), ['validate' => false]);
                 if (!$this->save($content)) {
                     $result = false;
                 }
@@ -952,13 +957,17 @@ class ContentsTable extends AppTable
      * @return Content
      * @checked
      * @unitTest
+     * @noTodo
      */
-    public function updateSystemData($content)
+    protected function updateSystemData($content)
     {
         if (empty($content->name)) {
             if ($content->id != 1) {
                 return false;
             }
+        }
+        if ($content->site_id) {
+            $site = $this->Sites->find()->where(['id' => $content->site_id])->first();
         }
         // URLを更新
         $content->url = $this->createUrl($content->id);
@@ -981,36 +990,29 @@ class ContentsTable extends AppTable
                 $content->publish_end = $parent->publish_end;
             }
         }
-        // TODO: siteに関しての更新未確認
         // 主サイトの関連コンテンツIDを更新
-        if ($content->site) {
+        if (!empty($site)) {
             // 主サイトの同一階層のコンテンツを特定
-            $prefix = $content->site->name;
-            if ($content->site->alias) {
-                $prefix = $content->site->alias;
+            $prefix = $site->name;
+            if ($site->alias) {
+                $prefix = $site->alias;
             }
             $url = preg_replace('/^\/' . preg_quote($prefix, '/') . '\//', '/', $content->url);
-            try {
-                $mainSitePrefix = $this->Sites->getPrefix($content->site->main_site_id);
-            } catch (\InvalidArgumentException $e) {
-                $mainSitePrefix = false;
-            }
+            $mainSitePrefix = $this->Sites->getPrefix($site->main_site_id);
             if ($mainSitePrefix) {
                 $url = '/' . $mainSitePrefix . $url;
             }
-            try {
-                $mainSiteContentId = $this->find()->select(['id'])->where(['site_id' => $content->site->main_site_id, 'url' => $url])->first()->id;
-            }  catch (\InvalidArgumentException $e) {
-                $mainSiteContentId = false;
-            }
             // main_site_content_id を更新
-            if ($mainSiteContentId) {
-                $content->main_site_content_id = $mainSiteContentId;
+            if ($site->main_site_id) {
+                $mainSiteContent = $this->find()->select(['id'])->where(['site_id' => $site->main_site_id, 'url' => $url])->first();
+                $content->main_site_content_id = $mainSiteContent->id;
             } else {
                 $content->main_site_content_id = null;
             }
         }
-        return $this->save($content, ['validate' => false, 'callbacks' => false]);
+        $event = $this->getEventManager()->matchingListeners('afterSave');
+        if ($event) $this->getEventManager()->off('Model.afterSave');
+        return $this->save($content, ['validate' => false]);
     }
 
     /**

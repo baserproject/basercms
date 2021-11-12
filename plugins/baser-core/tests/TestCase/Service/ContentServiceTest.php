@@ -157,11 +157,11 @@ class ContentServiceTest extends BcTestCase
         return [
             [[
                 'site_id' => 1,
-            ], 15],
+            ], 16],
             [[
                 'site_id' => 1,
                 'withTrash' => true,
-            ], 17],
+            ], 19],
             [[
                 'site_id' => 1,
                 'open' => '1',
@@ -706,7 +706,7 @@ class ContentServiceTest extends BcTestCase
     public function testIsPublishById()
     {
         $this->assertTrue($this->ContentService->isPublishById(4));
-        $this->ContentService->update($this->ContentService->get(4), ['status' => false]);
+        $this->ContentService->update($this->ContentService->get(4), ['self_status' => false]);
         $this->assertFalse($this->ContentService->isPublishById(4));
     }
 

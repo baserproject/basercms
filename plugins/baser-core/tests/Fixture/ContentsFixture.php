@@ -382,6 +382,7 @@ class ContentsFixture extends TestFixture
                 'name' => 'BcAdminContentsテスト',
                 'type' => "BcAdminContentsTest",
                 'entity_id' => 8,
+                'site_id' => 1,
                 'deleted_date' => null,
                 'parent_id' => 1,
                 'lft' => 20,
@@ -393,6 +394,7 @@ class ContentsFixture extends TestFixture
             [
                 'id' => 15,
                 'plugin' => 'BaserCore',
+                'site_id' => 1,
                 'name' => 'BcAdminContentsテスト(deleted)',
                 'type' => "BcAdminContentsTest",
                 'entity_id' => 9,

@@ -296,7 +296,9 @@ class SitesTable extends AppTable
      */
     public function isMain(int $id)
     {
-        return is_null($this->find()->where(['id' => $id])->first()->main_site_id);
+        // return is_null($this->find()->where(['id' => $id])->first()->main_site_id);
+        // NOTE: 上記だと、メインサイトを持つかどうかのメソッドになってるため
+        return !$this->find()->where(['main_site_id' => $id])->isEmpty();
     }
 
     /**
@@ -413,6 +415,8 @@ class SitesTable extends AppTable
      */
     public function getPrefix($id)
     {
+        if (is_null($id)) return '';
+
         $site = $this->find()->select(['name', 'alias'])->where(['id' => $id])->first();
         if (!$site) {
             return false;
@@ -439,7 +443,8 @@ class SitesTable extends AppTable
             return 1;
         }
         $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-        return $Contents->find()->select(['id'])->where(['Contents.site_root' => true, 'Contents.site_id' => $id])->first()->id;
+        // NOTE: なければ1を返す
+        return $Contents->find()->select(['id'])->where(['Contents.site_root' => true, 'Contents.site_id' => $id])->first()->id ?? 1;
     }
 
     /**

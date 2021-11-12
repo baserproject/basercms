@@ -162,6 +162,8 @@ class SitesTableTest extends BcTestCase
     public function testGetRootContentId()
     {
         $this->assertEquals(1, $this->Sites->getRootContentId(1));
+        $this->assertEquals(1, $this->Sites->getRootContentId(0));
+        $this->assertEquals(1, $this->Sites->getRootContentId(100));
     }
 
     /**

@@ -344,7 +344,7 @@ class ContentService implements ContentServiceInterface
         $data = array_merge($content->toArray(), $postData);
         $alias = $this->Contents->newEmptyEntity();
         if (empty($data['parent_id']) && !empty($data['url'])) {
-            $data['parent_id'] = $this->copyContentFolderPath($data['url'], $data['site_id']);
+            $data['parent_id'] = $this->Contents->copyContentFolderPath($data['url'], $data['site_id']);
         }
         unset($data['lft'], $data['rght'], $data['level'], $data['pubish_begin'], $data['publish_end'], $data['created_date'], $data['created'], $data['modified']);
         $alias->name = $postData['name'] ?? $postData['title'];
@@ -843,7 +843,7 @@ class ContentService implements ContentServiceInterface
         $content->self_publish_begin = FrozenTime::now();
         $content->self_publish_end = null;
         $content->self_status = true;
-        return $this->Contents->save($this->Contents->updateSystemData($content));
+        return $this->Contents->save($content);
     }
 
     /**
@@ -861,7 +861,7 @@ class ContentService implements ContentServiceInterface
         // 日付をどこで入れるかを確認する
         $content->self_publish_end = FrozenTime::now();
         $content->self_status = false;
-        return $this->Contents->save($this->Contents->updateSystemData($content));
+        return $this->Contents->save($content);
     }
 
     /**

@@ -410,6 +410,8 @@ class ContentsTableTest extends BcTestCase
     public function testUpdateRelateSubSiteContent()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $content = $this->Contents->get(21);
+        $this->Contents->updateRelateSubSiteContent($content);
     }
 
     /**
@@ -534,10 +536,12 @@ class ContentsTableTest extends BcTestCase
     {
         // idが1以外でnameがない場合はエラー
         $content = new Content(['id' => 100, 'name' => '']);
-        $this->assertFalse($this->Contents->updateSystemData($content));
+        $result = $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
+        $this->assertFalse($result);
         // self_*を元にstatusなど補完する
         $data = [
             'id' => 100,
+            'site_id' => 1,
             'name' => 'test',
             'status' => null,
             'publish_begin' => null,
@@ -548,7 +552,7 @@ class ContentsTableTest extends BcTestCase
             'parent_id' => 1,
         ];
         $content = new Content($data);
-        $this->Contents->updateSystemData($content);
+        $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
         $content = $this->Contents->get(100);
         $this->assertTrue($content->status);
         $this->assertNotEmpty($content->publish_begin);
@@ -557,18 +561,29 @@ class ContentsTableTest extends BcTestCase
         $parent = $this->Contents->get(1);
         $parent->status = false;
         $this->Contents->save($parent);
-        $this->Contents->updateSystemData($content);
+        $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
         $content = $this->Contents->get(100);
         $this->assertFalse($content->status);
         $this->assertNull($content->publish_begin);
         $this->assertNull($content->publish_end);
-        // siteがある場合 未実装
-        // $content = $this->Contents->get(100);
-        // $content->site = new Site([
-        //     'name' => 'testSite',
-        //     'main_site_id' => 1,
-        // ]);
-        // $this->Contents->updateSystemData($content);
+        // siteがある場合
+        // サブコンテンツとして更新
+        $subContent = $this->Contents->get(100);
+        $subContent->title = 'subContent';
+        $subContent->url = 'test';
+        $subContent->site_id = 6;
+        $this->Contents->save($subContent);
+        // 関連するメインコンテンツを生成
+        $new = $this->Contents->newEntity([
+            'id' => 101,
+            'title' => 'relatedMainContent',
+            'url' => '/test/',
+            'site_id' => 1,
+        ]);
+        $mainContent = $this->Contents->save($new);
+        $this->execPrivateMethod($this->Contents, 'updateSystemData', [$subContent]);
+        // main_site_content_idが設定されてるか確認
+        $this->assertEquals($mainContent->id, $this->Contents->get(100)->main_site_content_id);
     }
 
     /**

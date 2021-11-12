@@ -140,7 +140,7 @@ class SitesFixture extends TestFixture
         [
             'id' => '6',
             'main_site_id' => 1,
-            'name' => 'en',
+            'name' => 'related',
             'display_name' => '関連メインサイト用',
             'title' => 'baserCMS inc.｜Related',
             'alias' => '',
