@@ -490,22 +490,22 @@ class ContentsTable extends AppTable
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // if ($this->updatingSystemData) {
-        //     $this->updateSystemData($entity);
-        // }
+        if ($this->updatingSystemData) {
+            $this->updateSystemData($entity);
+        }
         // TODO: 未実装のため一旦コメントアウト
-        // if ($this->updatingRelated) {
-        //     // ゴミ箱から戻す場合、 type の定義がないが問題なし
-        //     if (!empty($entity->type) && $entity->type == 'ContentFolder') {
-        //         $this->updateChildren($entity->id);
-        //     }
-        //     $this->updateRelateSubSiteContent($entity);
-        //     if (!empty($entity->parent_id) && $this->beforeSaveParentId != $entity->parent_id) {
-        //         $SiteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfig');
-        //         $SiteConfig->updateContentsSortLastModified();
-        //         $this->beforeSaveParentId = null;
-        //     }
-        // }
+        if ($this->updatingRelated) {
+            // ゴミ箱から戻す場合、 type の定義がないが問題なし
+            if (!empty($entity->type) && $entity->type == 'ContentFolder') {
+                $this->updateChildren($entity->id);
+            }
+            $this->updateRelateSubSiteContent($entity);
+            if (!empty($entity->parent_id) && $this->beforeSaveParentId != $entity->parent_id) {
+                $SiteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfig');
+                $SiteConfig->updateContentsSortLastModified();
+                $this->beforeSaveParentId = null;
+            }
+        }
     }
 
     /**
@@ -568,9 +568,11 @@ class ContentsTable extends AppTable
         if (empty($content->alias_id)) {
             $contents = $this->find()->select('id')->where(['Contents.alias_id' => $content->id])->applyOptions(['callbacks' => false]);
             if (!$contents->isEmpty()) {
-                // afterDeleteのループを防ぐ
-                $events = $this->getEventManager()->matchingListeners('afterDelete');
-                if ($events) $this->getEventManager()->off('Model.afterDelete');
+                // afterDelete・afterSaveのループを防ぐ
+                foreach (['afterSave', 'afterDelete'] as $eventName) {
+                    $event = $this->getEventManager()->matchingListeners($eventName);
+                    if ($event) $this->getEventManager()->off('Model.' . $eventName);
+                }
                 foreach($contents as $content) {
                     $this->removeFromTree($content);
                     $this->hardDelete($content, ['callbacks' => false]);
@@ -605,9 +607,11 @@ class ContentsTable extends AppTable
             foreach($sites as $site) {
                 $content = $this->find()->where(['site_id' => $site->id, 'main_site_content_id' => $content->id])->first();
                 if ($content) {
-                    // afterDeleteのループを防ぐ
-                    $events = $this->getEventManager()->matchingListeners('afterDelete');
-                    if ($events) $this->getEventManager()->off('Model.afterDelete');
+                    // afterDelete・afterSaveのループを防ぐ
+                    foreach (['afterSave', 'afterDelete'] as $eventName) {
+                        $event = $this->getEventManager()->matchingListeners($eventName);
+                        if ($event) $this->getEventManager()->off('Model.' . $eventName);
+                    }
                     // 存在する場合は、自身のエイリアスかどうか確認し削除する
                     if ($content->alias_id == $content->id) {
                         $this->removeFromTree($content);
@@ -623,90 +627,85 @@ class ContentsTable extends AppTable
     /**
      * メインサイトの場合、連携設定がされている子サイトのエイリアスを追加・更新する
      *
-     * @param $data
+     * @param Content $data
+     * @return bool
      */
-    public function updateRelateSubSiteContent($data)
+    protected function updateRelateSubSiteContent($data)
     {
-        // 他のデータを更新する為、一旦退避
-        $dataTmp = $this->data;
-        $idTmp = $this->id;
         // 自身がエイリアスか確認し、エイリアスの場合は終了
-        if (!empty($data['Content']['alias_id']) || !isset($data['Content']['site_id'])) {
+        if (!empty($data->alias_id) || !isset($data->site_id)) {
             return true;
         }
 
-        $isContentFolder = false;
-        if (!empty($data['Content']['type']) && $data['Content']['type'] == 'ContentFolder') {
-            $isContentFolder = true;
-        }
-
+        $isContentFolder = (bool) (!empty($data->type) && $data->type == 'ContentFolder');
         // メインサイトか確認し、メインサイトでない場合は終了
-        if (!$this->Sites->isMain($data['Content']['site_id'])) {
+        if (!$this->Sites->isMain($data->site_id)) {
             return true;
         }
         // 連携設定となっている小サイトを取得
-        $sites = $this->Sites->find('all', ['conditions' => ['Site.main_site_id' => $data['Content']['site_id'], 'relate_main_site' => true]]);
-        if (!$sites) {
+        $sites = $this->Sites->find()->where(['main_site_id' => $data->site_id, 'relate_main_site' => true]);
+        if ($sites->isEmpty()) {
             return true;
         }
 
-        $_data = $this->find('first', ['conditions' => ['Content.id' => $data['Content']['id']], 'recursive' => -1]);
+        $_data = $this->find()->where(['id' => $data->id])->first();
         if ($_data) {
-            $data = ['Content' => array_merge($_data['Content'], $data['Content'])];
+            $data = $this->patchEntity($_data, $data->toArray());
         }
 
         // URLが空の場合はゴミ箱へ移動する処理のため、連携更新を行わない
-        if (!$data['Content']['url']) {
+        if (!$data->url) {
             return true;
         }
 
-        $CreateModel = $this;
-        if ($isContentFolder) {
-            $CreateModel = ClassRegistry::init('ContentFolder');
-        }
+        // TODO: 未確認
+        // $CreateModel = $this;
+        // if ($isContentFolder) {
+        //     $CreateModel = TableRegistry::getTableLocator()->get('BaserCore.ContentFolder');
+        // }
 
-        $pureUrl = $this->pureUrl($data['Content']['url'], $data['Content']['site_id']);
+        $pureUrl = $this->pureUrl($data->url, $data->site_id);
         // 同階層に同名のコンテンツがあるか確認
         $result = true;
         foreach($sites as $site) {
-            if (!$site['Site']['status']) {
+            if (!$site->status) {
                 continue;
             }
             $url = $pureUrl;
-            $prefix = $this->Sites->getPrefix($site);
+            $prefix = $this->Sites->getPrefix($site->id);
             if ($prefix) {
                 $url = '/' . $prefix . $url;
             }
-            $content = $this->find('first', ['conditions' => [
-                'Content.site_id' => $site['Site']['id'],
+            $content = $this->find()->where([
+                'site_id' => $site->id,
                 'or' => [
-                    'Content.main_site_content_id' => $data['Content']['id'],
-                    'Content.url' => $url
-                ]
-            ], 'recursive' => -1]);
+                    'main_site_content_id' => $data->id,
+                    'url' => $url
+                ],
+            ])->first();
             if ($content) {
                 // 存在する場合は、自身のエイリアスかどうか確認し、エイリアスの場合は、公開状態とタイトル、説明文、アイキャッチ、更新日を更新
                 // フォルダの場合も更新する
-                if ($content['Content']['alias_id'] == $data['Content']['id'] || ($content['Content']['type'] == 'ContentFolder' && $isContentFolder)) {
-                    $content['Content']['name'] = urldecode($data['Content']['name']);
-                    $content['Content']['title'] = $data['Content']['title'];
-                    $content['Content']['description'] = $data['Content']['description'];
-                    $content['Content']['self_status'] = $data['Content']['self_status'];
-                    $content['Content']['self_publish_begin'] = $data['Content']['self_publish_begin'];
-                    $content['Content']['self_publish_end'] = $data['Content']['self_publish_end'];
-                    $content['Content']['created_date'] = $data['Content']['created_date'];
-                    $content['Content']['modified_date'] = $data['Content']['modified_date'];
-                    $content['Content']['exclude_search'] = $data['Content']['exclude_search'];
-                    if (!empty($data['Content']['eyecatch'])) {
-                        $content['Content']['eyecatch'] = $data['Content']['eyecatch'];
+                if ($content->alias_id == $data->id || ($content->type == 'ContentFolder' && $isContentFolder)) {
+                    $content->name = urldecode($data->name);
+                    $content->title = $data->title;
+                    $content->description = $data->description;
+                    $content->self_status = $data->self_status;
+                    $content->self_publish_begin = $data->self_publish_begin;
+                    $content->self_publish_end = $data->self_publish_end;
+                    $content->created_date = $data->created_date;
+                    $content->modified_date = $data->modified_date;
+                    $content->exclude_search = $data->exclude_search;
+                    if (!empty($data->eyecatch)) {
+                        $content->eyecatch = $data->eyecatch;
                     }
-                    $url = $data['Content']['url'];
-                    if ($content['Content']['type'] == 'ContentFolder') {
+                    $url = $data->url;
+                    if ($content->type == 'ContentFolder') {
                         $url = preg_replace('/\/[^\/]+\/$/', '/', $url);
                     }
-                    $content['Content']['parent_id'] = $this->copyContentFolderPath($url, $site['Site']['id']);
+                    $content->parent_id = $this->copyContentFolderPath($url, $site->id);
                 } else {
-                    $content['Content']['name'] = urldecode($data['Content']['name']);
+                    $content->name = urldecode($data->name);
                 }
                 if (!$this->save($content)) {
                     $result = false;
@@ -714,38 +713,106 @@ class ContentsTable extends AppTable
             } else {
                 // 存在しない場合はエイリアスを作成
                 // フォルダの場合は実体として作成
-                $content = $data;
-                unset($content['Content']['id']);
-                unset($content['Content']['name']);
-                unset($content['Content']['url']);
-                unset($content['Content']['lft']);
-                unset($content['Content']['rght']);
-                unset($content['Content']['created_date']);
-                unset($content['Content']['modified_date']);
-                unset($content['Content']['created']);
-                unset($content['Content']['modified']);
-                unset($content['Content']['layout_template']);
-                $content['Content']['name'] = $data['Content']['name'];
-                $content['Content']['main_site_content_id'] = $data['Content']['id'];
-                $content['Content']['site_id'] = $site['Site']['id'];
-                $url = $data['Content']['url'];
-                if ($content['Content']['type'] == 'ContentFolder') {
+                $content = clone($data);
+                unset($content->id);
+                unset($content->name);
+                unset($content->url);
+                unset($content->lft);
+                unset($content->rght);
+                unset($content->created_date);
+                unset($content->modified_date);
+                unset($content->created);
+                unset($content->modified);
+                unset($content->layout_template);
+                $content->name = $data->name;
+                $content->main_site_content_id = $data->id;
+                $content->site_id = $site->id;
+                $url = $data->url;
+                if ($content->type == 'ContentFolder') {
                     $url = preg_replace('/\/[^\/]+\/$/', '/', $url);
-                    unset($content['Content']['entity_id']);
+                    unset($content->entity_id);
                 } else {
-                    $content['Content']['alias_id'] = $data['Content']['id'];
+                    $content->alias_id = $data->id;
                 }
-                $content['Content']['parent_id'] = $this->copyContentFolderPath($url, $site['Site']['id']);
-                $CreateModel->create($content);
-                if (!$CreateModel->save()) {
+                $content->parent_id = $this->copyContentFolderPath($url, $site->id);
+                $content = $this->newEntity($content->toArray());
+                if (!$this->save($content)) {
                     $result = false;
                 }
             }
         }
-        // 退避したデータを戻す
-        $this->data = $dataTmp;
-        $this->id = $idTmp;
         return $result;
+    }
+
+    /**
+     * 現在のフォルダのURLを元に別サイトにフォルダを生成する
+     * 最下層のIDを返却する
+     *
+     * @param $currentUrl
+     * @param $targetSiteId
+     * @return bool|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function copyContentFolderPath($currentUrl, $targetSiteId)
+    {
+
+        $current = $this->find()->where(['url' => $currentUrl]);
+        if ($current->isEmpty()) {
+            return false;
+        } else {
+            $currentId = $current->first()->id;
+        }
+        $prefix = $this->Sites->getPrefix($targetSiteId);
+        $path = $this->find('path', ['for' => $currentId])->toArray();
+        if (!$path) {
+            return false;
+        }
+        $url = '/';
+        if ($prefix) {
+            $url .= $prefix . '/';
+        }
+        unset($path[0]);
+        $parentId = $this->Sites->getRootContentId($targetSiteId);
+        /* @var ContentFolder $ContentFolder */
+        $ContentFolder = TableRegistry::getTableLocator()->get('ContentFolder');
+        foreach($path as $currentContentFolder) {
+            if ($currentContentFolder->type != 'ContentFolder') {
+                break;
+            }
+            if ($currentContentFolder->site_root) {
+                continue;
+            }
+            $url .= $currentContentFolder->name;
+            if ($this->findByUrl($url)) {
+                return false;
+            }
+            $url .= '/';
+            $targetContentFolder = $this->findByUrl($url);
+            if ($targetContentFolder) {
+                $parentId = $targetContentFolder->id;
+            } else {
+                $data = [
+                    'content' => [
+                        'name' => $currentContentFolder->name,
+                        'title' => $currentContentFolder->title,
+                        'parent_id' => $parentId,
+                        'plugin' => 'BaserCore',
+                        'type' => 'ContentFolder',
+                        'site_id' => $targetSiteId,
+                        'self_status' => true
+                    ]
+                ];
+                $ContentFolder->create($data);
+                if ($ContentFolder->save()) {
+                    $parentId = $ContentFolder->Content->id;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return $parentId;
     }
 
     /**

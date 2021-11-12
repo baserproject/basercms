@@ -413,6 +413,18 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
+     * 現在のフォルダのURLを元に別サイトにフォルダを生成する
+     * 最下層のIDを返却する
+     */
+    public function testCopyContentFolderPath()
+    {
+        $parent_id = $this->Contents->copyContentFolderPath('/service/service1', 1);
+        $this->assertEquals(6, $parent_id);
+        $parent_id = $this->Contents->copyContentFolderPath('/about', 1);
+        $this->assertEquals(1, $parent_id);
+    }
+
+    /**
      * サブサイトのプレフィックスがついていない純粋なURLを取得
      *
      * @dataProvider pureUrlDataProvider
@@ -438,7 +450,8 @@ class ContentsTableTest extends BcTestCase
      */
     public function testCreateContent()
     {
-        $content = ['title' => 'hoge', 'parent_id' => ''];
+        $content = ['title' => 'hoge', 'parent_id' => '', 'site_id' => 1, 'url' => '/hoge'];
+        // $type = 'ContentFolder';
         $type = 'Contents';
         $result = $this->Contents->createContent($content, 'BaserCore', $type);
 
