@@ -204,6 +204,7 @@ class MailField extends MailAppModel
 			'date_time_wareki' => __d('baser', '和暦日付'),
 			'date_time_calender' => __d('baser', 'カレンダー'),
 			'tel' => __d('baser', '電話番号'),
+			'number' => __d('baser', '数値'),
 			'password' => __d('baser', 'パスワード'),
 			'hidden' => __d('baser', '隠しフィールド')
 		];

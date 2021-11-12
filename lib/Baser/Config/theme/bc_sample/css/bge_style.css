@@ -473,17 +473,28 @@
 .bs-sub-contents option {
   font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif"; }
 
-.bs-main-contents input[type=text], .bs-main-contents input[type=email], .bs-main-contents textarea, .bs-main-contents select,
+.bs-main-contents input[type=text],
+.bs-main-contents input[type=email],
+.bs-main-contents input[type=tel],
+.bs-main-contents input[type=number],
+.bs-main-contents textarea,
+.bs-main-contents select,
 .bge-contents input[type=text],
 .bge-contents input[type=email],
+.bge-contents input[type=tel],
+.bge-contents input[type=number],
 .bge-contents textarea,
 .bge-contents select,
 .cke_editable input[type=text],
 .cke_editable input[type=email],
+.cke_editable input[type=tel],
+.cke_editable input[type=number],
 .cke_editable textarea,
 .cke_editable select,
 .bs-sub-contents input[type=text],
 .bs-sub-contents input[type=email],
+.bs-sub-contents input[type=tel],
+.bs-sub-contents input[type=number],
 .bs-sub-contents textarea,
 .bs-sub-contents select {
   margin: 3px 2px;
@@ -533,21 +544,33 @@
   margin: 3px 2px;
   font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif"; }
 
-.bs-main-contents input[type=text], .bs-main-contents input[type=email],
+.bs-main-contents input[type=text], .bs-main-contents input[type=email], .bs-main-contents input[type=tel], .bs-main-contents input[type=number],
 .bge-contents input[type=text],
 .bge-contents input[type=email],
+.bge-contents input[type=tel],
+.bge-contents input[type=number],
 .cke_editable input[type=text],
 .cke_editable input[type=email],
+.cke_editable input[type=tel],
+.cke_editable input[type=number],
 .bs-sub-contents input[type=text],
-.bs-sub-contents input[type=email] {
+.bs-sub-contents input[type=email],
+.bs-sub-contents input[type=tel],
+.bs-sub-contents input[type=number] {
   font-size: 1em; }
-  .bs-main-contents input[type=text]::placeholder, .bs-main-contents input[type=email]::placeholder,
+  .bs-main-contents input[type=text]::placeholder, .bs-main-contents input[type=email]::placeholder, .bs-main-contents input[type=tel]::placeholder, .bs-main-contents input[type=number]::placeholder,
   .bge-contents input[type=text]::placeholder,
   .bge-contents input[type=email]::placeholder,
+  .bge-contents input[type=tel]::placeholder,
+  .bge-contents input[type=number]::placeholder,
   .cke_editable input[type=text]::placeholder,
   .cke_editable input[type=email]::placeholder,
+  .cke_editable input[type=tel]::placeholder,
+  .cke_editable input[type=number]::placeholder,
   .bs-sub-contents input[type=text]::placeholder,
-  .bs-sub-contents input[type=email]::placeholder {
+  .bs-sub-contents input[type=email]::placeholder,
+  .bs-sub-contents input[type=tel]::placeholder,
+  .bs-sub-contents input[type=number]::placeholder {
     color: #ccc; }
 
 .bs-main-contents input:active, .bs-main-contents input:focus,
@@ -585,15 +608,21 @@
     box-shadow: 0 0 5px 1px #fa9696;
     outline: none; }
 
-.bs-main-contents input[type=text], .bs-main-contents input[type=email], .bs-main-contents input[type=password],
+.bs-main-contents input[type=text], .bs-main-contents input[type=email], .bs-main-contents input[type=tel], .bs-main-contents input[type=number], .bs-main-contents input[type=password],
 .bge-contents input[type=text],
 .bge-contents input[type=email],
+.bge-contents input[type=tel],
+.bge-contents input[type=number],
 .bge-contents input[type=password],
 .cke_editable input[type=text],
 .cke_editable input[type=email],
+.cke_editable input[type=tel],
+.cke_editable input[type=number],
 .cke_editable input[type=password],
 .bs-sub-contents input[type=text],
 .bs-sub-contents input[type=email],
+.bs-sub-contents input[type=tel],
+.bs-sub-contents input[type=number],
 .bs-sub-contents input[type=password] {
   line-height: 1em; }
 

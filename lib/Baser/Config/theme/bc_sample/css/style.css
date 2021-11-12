@@ -1468,6 +1468,8 @@ table.cake-sql-log {
   font-family: "SF Pro JP", "SF Pro Text", "SF Pro Icons", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "Helvetica Neue", "Helvetica", "Arial", "sans-serif"; }
   .bs-mail-form-body input[type=text],
   .bs-mail-form-body input[type=email],
+  .bs-mail-form-body input[type=tel],
+  .bs-mail-form-body input[type=number],
   .bs-mail-form-body textarea {
     box-sizing: border-box;
     width: 100% !important; }
