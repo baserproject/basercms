@@ -22,9 +22,6 @@ $config['BcApp.adminNavigation'] = [
 /* @var BlogContent $BlogContent */
 $BlogContent = ClassRegistry::init('Blog.BlogContent');
 $blogContents = $BlogContent->find('all', [
-	'conditions' => [
-		$BlogContent->Content->getConditionAllowPublish()
-	],
 	'recursive' => 0,
 	'order' => $BlogContent->id,
 ]);
