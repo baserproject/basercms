@@ -454,6 +454,7 @@ class SitesTable extends AppTable
      * @param string $url
      * @return EntityInterface
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function findByUrl($url)

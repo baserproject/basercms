@@ -476,7 +476,7 @@ class ContentServiceTest extends BcTestCase
     public function getUrlDataProvider()
     {
         return [
-            //TODO: another.comがそもそもSiteに無いため一旦コメントアウト
+            //NOTE: another.comがそもそもSiteに無いため一旦コメントアウト
             // ノーマルURL
             ['main.com', '', '/', false, false, '/'],
             ['main.com', '', '/index', false, false, '/'],
@@ -546,21 +546,6 @@ class ContentServiceTest extends BcTestCase
         $newContent->site->name = 'ucmitz'; // site側でエラーが出るため
         $this->ContentService->update($this->ContentService->get($newContent->id), $newContent->toArray());
         $this->assertEquals($this->ContentService->get($newContent->id)->name, $name);
-    }
-
-    /**
-     */
-    public function testTrashReturn()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * 再帰的にゴミ箱より元に戻す
-     */
-    public function testTrashReturnRecursive()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
     /**
@@ -698,16 +683,6 @@ class ContentServiceTest extends BcTestCase
     {
         $result = $this->execPrivateMethod($this->ContentService, 'moveRelateSubSiteContent', ['12', '6', '']);
         $this->assertTrue($result);
-    }
-
-    /**
-     * ID を指定して公開状態かどうか判定する
-     */
-    public function testIsPublishById()
-    {
-        $this->assertTrue($this->ContentService->isPublishById(4));
-        $this->ContentService->update($this->ContentService->get(4), ['self_status' => false]);
-        $this->assertFalse($this->ContentService->isPublishById(4));
     }
 
     /**

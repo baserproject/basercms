@@ -187,7 +187,7 @@ class SitesTableTest extends BcTestCase
             ['/en/about', 3],
             ['/test/a', 1], // 存在しない場合はルートメインサイトを返す
             ['http://basercms.net/about', 4],
-            // ['http://sub.localhost/about', 5], //TODO: テストが失敗するため一旦確認する
+            ['http://sub.localhost/about', 5]
         ];
     }
 

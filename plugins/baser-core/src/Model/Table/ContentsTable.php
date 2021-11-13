@@ -55,7 +55,6 @@ class ContentsTable extends AppTable
     {
         FrozenTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
         parent::initialize($config);
-         /** TODO: soft deleteはTraitで実装する @see https://github.com/salines/cakephp4-soft-delete */
         $this->addBehavior('Tree', ['level' => 'level']);
         // TODO: BcUploadBehavior 未追加
         // $this->addBehavior('BcUpload', [
@@ -96,7 +95,7 @@ class ContentsTable extends AppTable
      *
      * @var bool
      */
-    public $updatingSystemData = true;
+    protected $updatingSystemData = true;
 
     /**
      * 保存前の親ID
@@ -494,7 +493,9 @@ class ContentsTable extends AppTable
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        $this->updateSystemData($entity);
+        if ($this->updatingSystemData) {
+            $this->updateSystemData($entity);
+        }
         if ($this->updatingRelated) {
             // ゴミ箱から戻す場合、 type の定義がないが問題なし
             if (!empty($entity->type) && $entity->type == 'ContentFolder') {
@@ -1017,16 +1018,16 @@ class ContentsTable extends AppTable
     }
 
     /**
-     * TODO: サービスに移行してるので、ContentsTable経由で呼び出される箇所を修正する
      * ID を指定して公開状態かどうか判定する
      * @param $id
      * @return bool
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function isPublishById($id)
     {
-        // $conditions = array_merge(['Content.id' => $id], $this->getConditionAllowPublish());
-        // return (bool)$this->find('first', ['conditions' => $conditions, 'recursive' => -1]);
-        return !$this->Contents->findById($id)->where([$this->Contents->getConditionAllowPublish()])->isEmpty();
+        return !$this->findById($id)->where([$this->getConditionAllowPublish()])->isEmpty();
     }
 
     /**
@@ -1515,5 +1516,18 @@ class ContentsTable extends AppTable
             $result = true;
         }
         return $result ? $content : false;
+    }
+
+    /**
+     * disableUpdatingSystemData
+     *
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function disableUpdatingSystemData()
+    {
+        $this->updatingSystemData = false;
     }
 }

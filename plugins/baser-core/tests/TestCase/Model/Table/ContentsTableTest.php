@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Model\Table;
 
 use ArrayObject;
 use Cake\ORM\Entity;
+use ReflectionClass;
 use Cake\Core\Configure;
 use Cake\ORM\Marshaller;
 use Cake\I18n\FrozenTime;
@@ -653,6 +654,19 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals('0000-00-00 00:00:00', $result[1]['or'][2]['Contents.publish_end']);
     }
 
+
+    /**
+     * ID を指定して公開状態かどうか判定する
+     */
+    public function testIsPublishById()
+    {
+        $this->assertTrue($this->Contents->isPublishById(4));
+        $content = $this->Contents->get(4);
+        $content->self_status = false;
+        $this->Contents->save($content);
+        $this->assertFalse($this->Contents->isPublishById(4));
+    }
+
     /**
      * 公開されたURLが存在するか確認する
      */
@@ -905,4 +919,17 @@ class ContentsTableTest extends BcTestCase
         ];
     }
 
+    /**
+     * testDisableUpdatingSystemData
+     *
+     * @return void
+     */
+    public function testDisableUpdatingSystemData()
+    {
+        $this->Contents->disableUpdatingSystemData();
+        $reflection = new ReflectionClass($this->Contents);
+        $property = $reflection->getProperty('updatingSystemData');
+        $property->setAccessible(true);
+        $this->assertFalse($property->getValue($this->Contents));
+    }
 }
