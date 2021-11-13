@@ -329,7 +329,12 @@ class ContentsTableTest extends BcTestCase
      */
     public function testAfterSave()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $content = $this->Contents->get(6); // サービスフォルダ
+        $content->self_status = false;
+        $this->Contents->dispatchEvent('Model.afterSave', [$content, new ArrayObject()]);
+        $content = $this->Contents->get(6);
+        // updateSystemDataが適応されてるかテスト
+        $this->assertFalse($content->status);
     }
 
     /**

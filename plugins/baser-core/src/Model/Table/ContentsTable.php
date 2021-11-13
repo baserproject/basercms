@@ -488,11 +488,13 @@ class ContentsTable extends AppTable
      * @param  EntityInterface $entity
      * @param  ArrayObject $options
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         $this->updateSystemData($entity);
-        // TODO: 未実装のため一旦コメントアウト
         if ($this->updatingRelated) {
             // ゴミ箱から戻す場合、 type の定義がないが問題なし
             if (!empty($entity->type) && $entity->type == 'ContentFolder') {
@@ -630,9 +632,8 @@ class ContentsTable extends AppTable
      * @return bool
      * @checked
      */
-    public function updateRelateSubSiteContent($data)
+    protected function updateRelateSubSiteContent($data)
     {
-        // TODO: 後ほどprotectedに変更する
         // 自身がエイリアスか確認し、エイリアスの場合は終了
         if (!empty($data->alias_id) || !isset($data->site_id)) {
             return true;
