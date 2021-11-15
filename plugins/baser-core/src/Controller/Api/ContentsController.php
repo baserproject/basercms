@@ -17,6 +17,8 @@ use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Service\ContentService;
+use BaserCore\Model\Table\SiteConfigsTable;
 use BaserCore\Service\ContentServiceInterface;
 
 /**
@@ -408,6 +410,7 @@ class ContentsController extends BcApiController
      * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
      * @param  ContentServiceInterface $contentService
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function exists_content_by_url(ContentServiceInterface $contentService)
@@ -417,7 +420,6 @@ class ContentsController extends BcApiController
             $this->setResponse($this->response->withStatus(500));
             $message = __d('baser', "無効な処理です。");
         } else {
-            // FIXME: どの形で受け取るか調査必
             if ($contentService->existsContentByUrl($this->request->getData('url'))) {
                 $this->setResponse($this->response->withStatus(200));
             } else {
@@ -434,6 +436,7 @@ class ContentsController extends BcApiController
      * @param  ContentServiceInterface $contentService
      * @return void
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function move(ContentServiceInterface $contentService)
@@ -454,13 +457,28 @@ class ContentsController extends BcApiController
             $this->setResponse($this->response->withStatus(500));;
         } else {
             // 正常系
-            // // EVENT Contents.beforeMove
-            // $event = $this->dispatchLayerEvent('beforeMove', [
-            //     'data' => $this->request->getData()
-            // ]);
-            // if ($event !== false) {
-            //     $this->request->getData() = $event->getResult() === true? $event->getData('data') : $event->getResult();
-            // }
+            $message = $this->execMove($contentService, $siteConfig);
+        }
+        $this->set(['message' => $message]);
+        $this->viewBuilder()->setOption('serialize', ['message', 'url', 'content']);
+    }
+
+    /**
+     * execMove
+     *
+     * @param  ContentService $contentService
+     * @param  SiteConfigsTable $siteConfig
+     * @return string
+     */
+    protected function execMove($contentService, $siteConfig)
+    {
+            // EVENT Contents.beforeMove
+            $beforeEvent = $this->dispatchLayerEvent('beforeMove', [
+                'request' => $this->request
+            ]);
+            if ($beforeEvent !== false) {
+                $this->request = ($beforeEvent->getResult() === null || $beforeEvent->getResult() === true)? $beforeEvent->getData('request') : $beforeEvent->getResult();
+            }
             $content = $contentService->get($this->request->getData('origin.id'));
             $beforeUrl = $content->url;
             try {
@@ -469,10 +487,13 @@ class ContentsController extends BcApiController
                     // 親が違う場合は、Contentモデルで更新してくれるが同じ場合更新しない仕様のためここで更新する
                     $siteConfig->updateContentsSortLastModified();
                 }
-                // // EVENT Contents.afterAdd
-                // $this->dispatchLayerEvent('afterMove', [
-                //     'data' => $result
-                // ]);
+                // EVENT Contents.afterMove
+                $afterEvent = $this->dispatchLayerEvent('afterMove', [
+                    'result' => $result
+                ]);
+                if ($afterEvent !== false) {
+                    $this->request = ($afterEvent->getResult() === null || $afterEvent->getResult() === true)? $afterEvent->getData('result') : $afterEvent->getResult();
+                }
                 $message = sprintf(__d('baser', "コンテンツ「%s」の配置を移動しました。\n%s > %s"), $result->title, urldecode($beforeUrl), urldecode($result->url));
                 $url = $contentService->getUrlById($result->id, true);
                 $this->set(['url' => $url]);
@@ -481,8 +502,6 @@ class ContentsController extends BcApiController
                 $message = __d('baser', 'データ保存中にエラーが発生しました。' . $e->getMessage());
                 $this->setResponse($this->response->withStatus(500));
             }
-        }
-        $this->set(['message' => $message]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'url', 'content']);
+            return $message;
     }
 }

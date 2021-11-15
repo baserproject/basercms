@@ -14,6 +14,7 @@ namespace BaserCore\Model\Table;
 use ArrayObject;
 use Cake\Event\Event;
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use BaserCore\Model\AppTable;
 use BaserCore\Utility\BcLang;
 use BaserCore\Utility\BcUtil;
@@ -287,15 +288,17 @@ class SitesTable extends AppTable
     /**
      * メインサイトかどうか判定する
      *
-     * @param $id
+     * @param int $id
      * @return bool
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function isMain($id)
+    public function isMain(int $id)
     {
-        return is_null($this->find()->where(['id' => $id])->first()->main_site_id);
+        // return is_null($this->find()->where(['id' => $id])->first()->main_site_id);
+        // NOTE: 上記だと、メインサイトを持つかどうかのメソッドになってるため
+        return !$this->find()->where(['main_site_id' => $id])->isEmpty();
     }
 
     /**
@@ -412,6 +415,8 @@ class SitesTable extends AppTable
      */
     public function getPrefix($id)
     {
+        if (is_null($id)) return '';
+
         $site = $this->find()->select(['name', 'alias'])->where(['id' => $id])->first();
         if (!$site) {
             return false;
@@ -427,15 +432,19 @@ class SitesTable extends AppTable
      * サイトのルートとなるコンテンツIDを取得する
      *
      * @param $id
-     * @return mixed
+     * @return int
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getRootContentId($id)
     {
         if ($id == 0) {
             return 1;
         }
-        $Content = ClassRegistry::init('Content');
-        return $Content->field('id', ['Content.site_root' => true, 'Content.site_id' => $id]);
+        $Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        // NOTE: なければ1を返す
+        return $Contents->find()->select(['id'])->where(['Contents.site_root' => true, 'Contents.site_id' => $id])->first()->id ?? 1;
     }
 
     /**
@@ -445,6 +454,7 @@ class SitesTable extends AppTable
      * @param string $url
      * @return EntityInterface
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function findByUrl($url)

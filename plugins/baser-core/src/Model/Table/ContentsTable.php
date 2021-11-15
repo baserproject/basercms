@@ -35,6 +35,7 @@ use SoftDelete\Model\Table\SoftDeleteTrait;
 
 /**
  * Class ContentsTable
+ * @property SitesTable $Sites
  */
 class ContentsTable extends AppTable
 {
@@ -54,7 +55,6 @@ class ContentsTable extends AppTable
     {
         FrozenTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
         parent::initialize($config);
-         /** TODO: soft deleteはTraitで実装する @see https://github.com/salines/cakephp4-soft-delete */
         $this->addBehavior('Tree', ['level' => 'level']);
         // TODO: BcUploadBehavior 未追加
         // $this->addBehavior('BcUpload', [
@@ -95,7 +95,7 @@ class ContentsTable extends AppTable
      *
      * @var bool
      */
-    public $updatingSystemData = true;
+    protected $updatingSystemData = true;
 
     /**
      * 保存前の親ID
@@ -105,14 +105,6 @@ class ContentsTable extends AppTable
      * @var null
      */
     public $beforeSaveParentId = null;
-
-    /**
-     * 削除時の削除対象レコード
-     *
-     * afterDelete で利用する為、beforeDelete で取得し保存する
-     * @var []
-     */
-    private $__deleteTarget;
 
     /**
      * Implemented Events
@@ -131,8 +123,7 @@ class ContentsTable extends AppTable
             'Model.beforeSave' => ['callable' => 'beforeSave', 'passParams' => true],
             'Model.afterMarshal' => 'afterMarshal',
             'Model.afterSave' => ['callable' => 'afterSave', 'passParams' => true],
-            'Model.beforeDelete' => ['callable' => 'beforeDelete', 'passParams' => true, 'priority' => 1],
-            // 'Model.afterDelete' => ['callable' => 'afterDelete'],
+            'Model.afterDelete' => 'afterDelete',
         ];
     }
     /**
@@ -496,25 +487,27 @@ class ContentsTable extends AppTable
      * @param  EntityInterface $entity
      * @param  ArrayObject $options
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // if ($this->updatingSystemData) {
-        //     $this->updateSystemData($entity);
-        // }
-        // TODO: 未実装のため一旦コメントアウト
-        // if ($this->updatingRelated) {
-        //     // ゴミ箱から戻す場合、 type の定義がないが問題なし
-        //     if (!empty($entity->type) && $entity->type == 'ContentFolder') {
-        //         $this->updateChildren($entity->id);
-        //     }
-        //     $this->updateRelateSubSiteContent($entity);
-        //     if (!empty($entity->parent_id) && $this->beforeSaveParentId != $entity->parent_id) {
-        //         $SiteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfig');
-        //         $SiteConfig->updateContentsSortLastModified();
-        //         $this->beforeSaveParentId = null;
-        //     }
-        // }
+        if ($this->updatingSystemData) {
+            $this->updateSystemData($entity);
+        }
+        if ($this->updatingRelated) {
+            // ゴミ箱から戻す場合、 type の定義がないが問題なし
+            if (!empty($entity->type) && $entity->type == 'ContentFolder') {
+                $this->updateChildren($entity->id);
+            }
+            $this->updateRelateSubSiteContent($entity);
+            if (!empty($entity->parent_id) && $this->beforeSaveParentId != $entity->parent_id) {
+                $SiteConfig = TableRegistry::getTableLocator()->get('BaserCore.SiteConfigs');
+                $SiteConfig->updateContentsSortLastModified();
+                $this->beforeSaveParentId = null;
+            }
+        }
     }
 
     /**
@@ -524,7 +517,7 @@ class ContentsTable extends AppTable
     public function deleteAssocCache($content)
     {
         if (empty($content->plugin) || empty($content->type)) {
-            $content = $this->find()->select(['plugin', 'type'])->where(['id' => $content->id])->first();
+            $content = $this->find()->applyOptions(['withDeleted'])->select(['plugin', 'type'])->where(['id' => $content->id])->first();
         }
         $assoc = $content->plugin . '.' . Inflector::pluralize($content->type);
         if ($content->plugin != 'BaserCore') {
@@ -541,206 +534,185 @@ class ContentsTable extends AppTable
     }
 
     /**
-     * Before Delete
-     *
-     * 論理削除の場合、
-     * @param bool $cascade
-     * @return bool
-     */
-    public function beforeDelete($cascade = true)
-    {
-        // TODO: 一時的にコメントアウト
-        // if (!parent::beforeDelete($cascade)) {
-        //     return false;
-        // }
-        // $data = $this->find('first', [
-        //     'conditions' => [$this->alias . '.id' => $this->id]
-        // ]);
-        // $this->__deleteTarget = $data;
-        // if (!$this->softDelete(null)) {
-        //     return true;
-        // }
-        return true;
-    }
-
-    /**
      * After Delete
      *
      * 関連コンテンツのキャッシュを削除する
+     * @param  EventInterface $event
+     * @param  EntityInterface $entity
+     * @param  ArrayObject $options
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    // TODO: 一時的にコメントアウト
-    // public function afterDelete()
-    // {
-    //     parent::afterDelete();
-    //     $data = $this->__deleteTarget;
-    //     $this->__deleteTarget = null;
-    //     if ($data) {
-    //         $this->deleteRelateSubSiteContent($data);
-    //         $this->deleteAlias($data);
-    //     }
-    //     $this->deleteAssocCache($data);
-    // }
+    public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
+    {
+        if ($entity) {
+            $this->deleteRelateSubSiteContent($entity);
+            $this->deleteAlias($entity);
+        }
+        $this->deleteAssocCache($entity);
+    }
 
     /**
      * 自データのエイリアスを削除する
      *
      * 全サイトにおけるエイリアスを全て削除
      *
-     * @param $data
+     * @param Content $content
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function deleteAlias($data)
+    protected function deleteAlias($content): void
     {
-        //自身がエイリアスか確認し、エイリアスの場合は終了
-        if ($data['Content']['alias_id']) {
-            return;
+        if (empty($content->alias_id)) {
+            $contents = $this->find()->select('id')->where(['Contents.alias_id' => $content->id])->applyOptions(['callbacks' => false]);
+            if (!$contents->isEmpty()) {
+                // afterDelete・afterSaveのループを防ぐ
+                foreach (['afterSave', 'afterDelete'] as $eventName) {
+                    $event = $this->getEventManager()->matchingListeners($eventName);
+                    if ($event) $this->getEventManager()->off('Model.' . $eventName);
+                }
+                foreach($contents as $content) {
+                    $this->removeFromTree($content);
+                    $this->hardDelete($content, ['callbacks' => false]);
+                }
+            }
         }
-        $contents = $this->find('all', [
-            'fields' => ['Content.id'],
-            'conditions' => [
-                'Content.alias_id' => $data['Content']['id']
-            ], 'recursive' => -1]);
-        if (!$contents) {
-            return;
-        }
-        foreach($contents as $content) {
-            $softDelete = $this->softDelete(null);
-            $this->softDelete(false);
-            $this->removeFromTree($content['Content']['id'], true);
-            $this->softDelete($softDelete);
-        }
-        $this->data = $data;
-        $this->id = $data['Content']['id'];
     }
 
     /**
      * メインサイトの場合、連携設定がされている子サイトのエイリアス削除する
      *
-     * @param $data
+     * @param Content $content
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function deleteRelateSubSiteContent($data)
+    protected function deleteRelateSubSiteContent($content)
     {
         // 自身がエイリアスか確認し、エイリアスの場合は終了
-        if ($data['Content']['alias_id']) {
-            return;
-        }
-        // メインサイトか確認し、メインサイトでない場合は終了
-        if (!$this->Sites->isMain($data['Content']['site_id'])) {
-            return;
-        }
-        // 連携設定となっている小サイトを取得
-        $sites = $this->Sites->find('all', ['conditions' => ['Site.main_site_id' => $data['Content']['site_id'], 'relate_main_site' => true], 'recursive' => -1]);
-        if (!$sites) {
-            return;
-        }
-        // 同階層に同名のコンテンツがあるか確認
-        foreach($sites as $site) {
-            $content = $this->find('first', ['conditions' => [
-                'Content.site_id' => $site['Site']['id'],
-                'Content.main_site_content_id' => $data['Content']['id']
-            ], 'recursive' => -1]);
-            if ($content) {
-                // 存在する場合は、自身のエイリアスかどうか確認し削除する
-                if ($content['Content']['alias_id'] == $data['Content']['id']) {
-                    $softDelete = $this->softDelete(null);
-                    $this->softDelete(false);
-                    $this->removeFromTree($content['Content']['id'], true);
-                    $this->softDelete($softDelete);
-                } elseif ($content['Content']['type'] == 'ContentFolder') {
-                    $this->updateChildren($content['Content']['id']);
+        if (!$content->alias_id) {
+            // メインサイトか確認し、メインサイトでない場合は終了
+            if (is_null($content->site_id) || !$this->Sites->isMain($content->site_id)) {
+                return;
+            }
+            // 連携設定となっている小サイトを取得
+            $sites = $this->Sites->find()->where(['main_site_id' => $content->site_id, 'relate_main_site' => true]);
+            if ($sites->isEmpty()) {
+                return;
+            }
+            // 同階層に同名のコンテンツがあるか確認
+            foreach($sites as $site) {
+                $content = $this->find()->where(['site_id' => $site->id, 'main_site_content_id' => $content->id])->first();
+                if ($content) {
+                    // afterDelete・afterSaveのループを防ぐ
+                    foreach (['afterSave', 'afterDelete'] as $eventName) {
+                        $event = $this->getEventManager()->matchingListeners($eventName);
+                        if ($event) $this->getEventManager()->off('Model.' . $eventName);
+                    }
+                    // 存在する場合は、自身のエイリアスかどうか確認し削除する
+                    if ($content->alias_id == $content->id) {
+                        $this->removeFromTree($content);
+                        $this->hardDelete($content);
+                    } elseif ($content->type == 'ContentFolder') {
+                        $this->updateChildren($content->id);
+                    }
                 }
             }
         }
-        $this->data = $data;
-        $this->id = $data['Content']['id'];
     }
 
     /**
      * メインサイトの場合、連携設定がされている子サイトのエイリアスを追加・更新する
      *
-     * @param $data
+     * @param Content $data
+     * @return bool
+     * @checked
      */
-    public function updateRelateSubSiteContent($data)
+    protected function updateRelateSubSiteContent($data)
     {
-        // 他のデータを更新する為、一旦退避
-        $dataTmp = $this->data;
-        $idTmp = $this->id;
         // 自身がエイリアスか確認し、エイリアスの場合は終了
-        if (!empty($data['Content']['alias_id']) || !isset($data['Content']['site_id'])) {
+        if (!empty($data->alias_id) || !isset($data->site_id)) {
             return true;
         }
 
-        $isContentFolder = false;
-        if (!empty($data['Content']['type']) && $data['Content']['type'] == 'ContentFolder') {
-            $isContentFolder = true;
-        }
-
+        $isContentFolder = (bool) (!empty($data->type) && $data->type == 'ContentFolder');
         // メインサイトか確認し、メインサイトでない場合は終了
-        if (!$this->Sites->isMain($data['Content']['site_id'])) {
+        if (!$this->Sites->isMain($data->site_id)) {
             return true;
         }
         // 連携設定となっている小サイトを取得
-        $sites = $this->Sites->find('all', ['conditions' => ['Site.main_site_id' => $data['Content']['site_id'], 'relate_main_site' => true]]);
-        if (!$sites) {
+        $sites = $this->Sites->find()->where(['main_site_id' => $data->site_id, 'relate_main_site' => true]);
+        if ($sites->isEmpty()) {
+            return true;
+        }
+        // TODO: コンテンツないのに通ってしまうため内部コンテンツがあるかを確認し、なければ処理を終了するよう一時措置
+        if ($this->find()->where(['site_id' => $sites->first()->id])->isEmpty()) {
             return true;
         }
 
-        $_data = $this->find('first', ['conditions' => ['Content.id' => $data['Content']['id']], 'recursive' => -1]);
+        $_data = $this->find()->where(['id' => $data->id])->first();
         if ($_data) {
-            $data = ['Content' => array_merge($_data['Content'], $data['Content'])];
+            $data = $this->patchEntity($_data, $data->toArray(), ['validate' => false]);
         }
 
         // URLが空の場合はゴミ箱へ移動する処理のため、連携更新を行わない
-        if (!$data['Content']['url']) {
+        if (!$data->url) {
             return true;
         }
 
-        $CreateModel = $this;
-        if ($isContentFolder) {
-            $CreateModel = ClassRegistry::init('ContentFolder');
-        }
+        // TODO: 未確認
+        // $CreateModel = $this;
+        // if ($isContentFolder) {
+        //     $CreateModel = TableRegistry::getTableLocator()->get('BaserCore.ContentFolder');
+        // }
 
-        $pureUrl = $this->pureUrl($data['Content']['url'], $data['Content']['site_id']);
+        $pureUrl = $this->pureUrl($data->url, $data->site_id);
         // 同階層に同名のコンテンツがあるか確認
         $result = true;
         foreach($sites as $site) {
-            if (!$site['Site']['status']) {
+            if (!$site->status) {
                 continue;
             }
             $url = $pureUrl;
-            $prefix = $this->Sites->getPrefix($site);
+            $prefix = $this->Sites->getPrefix($site->id);
             if ($prefix) {
                 $url = '/' . $prefix . $url;
             }
-            $content = $this->find('first', ['conditions' => [
-                'Content.site_id' => $site['Site']['id'],
+            $content = $this->find()->where([
+                'site_id' => $site->id,
                 'or' => [
-                    'Content.main_site_content_id' => $data['Content']['id'],
-                    'Content.url' => $url
-                ]
-            ], 'recursive' => -1]);
+                    'main_site_content_id' => $data->id,
+                    'url' => $url
+                ],
+            ])->first();
             if ($content) {
                 // 存在する場合は、自身のエイリアスかどうか確認し、エイリアスの場合は、公開状態とタイトル、説明文、アイキャッチ、更新日を更新
                 // フォルダの場合も更新する
-                if ($content['Content']['alias_id'] == $data['Content']['id'] || ($content['Content']['type'] == 'ContentFolder' && $isContentFolder)) {
-                    $content['Content']['name'] = urldecode($data['Content']['name']);
-                    $content['Content']['title'] = $data['Content']['title'];
-                    $content['Content']['description'] = $data['Content']['description'];
-                    $content['Content']['self_status'] = $data['Content']['self_status'];
-                    $content['Content']['self_publish_begin'] = $data['Content']['self_publish_begin'];
-                    $content['Content']['self_publish_end'] = $data['Content']['self_publish_end'];
-                    $content['Content']['created_date'] = $data['Content']['created_date'];
-                    $content['Content']['modified_date'] = $data['Content']['modified_date'];
-                    $content['Content']['exclude_search'] = $data['Content']['exclude_search'];
-                    if (!empty($data['Content']['eyecatch'])) {
-                        $content['Content']['eyecatch'] = $data['Content']['eyecatch'];
+                if ($content->alias_id == $data->id || ($content->type == 'ContentFolder' && $isContentFolder)) {
+                    $content->name = urldecode($data->name);
+                    $content->title = $data->title;
+                    $content->description = $data->description;
+                    $content->self_status = $data->self_status;
+                    $content->self_publish_begin = $data->self_publish_begin;
+                    $content->self_publish_end = $data->self_publish_end;
+                    $content->created_date = $data->created_date;
+                    $content->modified_date = $data->modified_date;
+                    $content->exclude_search = $data->exclude_search;
+                    if (!empty($data->eyecatch)) {
+                        $content->eyecatch = $data->eyecatch;
                     }
-                    $url = $data['Content']['url'];
-                    if ($content['Content']['type'] == 'ContentFolder') {
+                    $url = $data->url;
+                    if ($content->type == 'ContentFolder') {
                         $url = preg_replace('/\/[^\/]+\/$/', '/', $url);
                     }
-                    $content['Content']['parent_id'] = $this->copyContentFolderPath($url, $site['Site']['id']);
+                    $content->parent_id = $this->copyContentFolderPath($url, $site->id);
                 } else {
-                    $content['Content']['name'] = urldecode($data['Content']['name']);
+                    $content->name = urldecode($data->name);
                 }
                 if (!$this->save($content)) {
                     $result = false;
@@ -748,38 +720,106 @@ class ContentsTable extends AppTable
             } else {
                 // 存在しない場合はエイリアスを作成
                 // フォルダの場合は実体として作成
-                $content = $data;
-                unset($content['Content']['id']);
-                unset($content['Content']['name']);
-                unset($content['Content']['url']);
-                unset($content['Content']['lft']);
-                unset($content['Content']['rght']);
-                unset($content['Content']['created_date']);
-                unset($content['Content']['modified_date']);
-                unset($content['Content']['created']);
-                unset($content['Content']['modified']);
-                unset($content['Content']['layout_template']);
-                $content['Content']['name'] = $data['Content']['name'];
-                $content['Content']['main_site_content_id'] = $data['Content']['id'];
-                $content['Content']['site_id'] = $site['Site']['id'];
-                $url = $data['Content']['url'];
-                if ($content['Content']['type'] == 'ContentFolder') {
+                $content = clone($data);
+                unset($content->id);
+                unset($content->name);
+                unset($content->url);
+                unset($content->lft);
+                unset($content->rght);
+                unset($content->created_date);
+                unset($content->modified_date);
+                unset($content->created);
+                unset($content->modified);
+                unset($content->layout_template);
+                $content->name = $data->name;
+                $content->main_site_content_id = $data->id;
+                $content->site_id = $site->id;
+                $url = $data->url;
+                if ($content->type == 'ContentFolder') {
                     $url = preg_replace('/\/[^\/]+\/$/', '/', $url);
-                    unset($content['Content']['entity_id']);
+                    unset($content->entity_id);
                 } else {
-                    $content['Content']['alias_id'] = $data['Content']['id'];
+                    $content->alias_id = $data->id;
                 }
-                $content['Content']['parent_id'] = $this->copyContentFolderPath($url, $site['Site']['id']);
-                $CreateModel->create($content);
-                if (!$CreateModel->save()) {
+                $content->parent_id = $this->copyContentFolderPath($url, $site->id);
+                $content = $this->newEntity($content->toArray(), ['validate' => false]);
+                if (!$this->save($content)) {
                     $result = false;
                 }
             }
         }
-        // 退避したデータを戻す
-        $this->data = $dataTmp;
-        $this->id = $idTmp;
         return $result;
+    }
+
+    /**
+     * 現在のフォルダのURLを元に別サイトにフォルダを生成する
+     * 最下層のIDを返却する
+     *
+     * @param $currentUrl
+     * @param $targetSiteId
+     * @return bool|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function copyContentFolderPath($currentUrl, $targetSiteId)
+    {
+
+        $current = $this->find()->where(['url' => $currentUrl]);
+        if ($current->isEmpty()) {
+            return false;
+        } else {
+            $currentId = $current->first()->id;
+        }
+        $prefix = $this->Sites->getPrefix($targetSiteId);
+        $path = $this->find('path', ['for' => $currentId])->toArray();
+        if (!$path) {
+            return false;
+        }
+        $url = '/';
+        if ($prefix) {
+            $url .= $prefix . '/';
+        }
+        unset($path[0]);
+        $parentId = $this->Sites->getRootContentId($targetSiteId);
+        /* @var ContentFolder $ContentFolder */
+        $ContentFolder = TableRegistry::getTableLocator()->get('ContentFolder');
+        foreach($path as $currentContentFolder) {
+            if ($currentContentFolder->type != 'ContentFolder') {
+                break;
+            }
+            if ($currentContentFolder->site_root) {
+                continue;
+            }
+            $url .= $currentContentFolder->name;
+            if ($this->findByUrl($url)) {
+                return false;
+            }
+            $url .= '/';
+            $targetContentFolder = $this->findByUrl($url);
+            if ($targetContentFolder) {
+                $parentId = $targetContentFolder->id;
+            } else {
+                $data = [
+                    'content' => [
+                        'name' => $currentContentFolder->name,
+                        'title' => $currentContentFolder->title,
+                        'parent_id' => $parentId,
+                        'plugin' => 'BaserCore',
+                        'type' => 'ContentFolder',
+                        'site_id' => $targetSiteId,
+                        'self_status' => true
+                    ]
+                ];
+                $ContentFolder->create($data);
+                if ($ContentFolder->save()) {
+                    $parentId = $ContentFolder->Content->id;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return $parentId;
     }
 
     /**
@@ -919,13 +959,17 @@ class ContentsTable extends AppTable
      * @return Content
      * @checked
      * @unitTest
+     * @noTodo
      */
-    public function updateSystemData($content)
+    protected function updateSystemData($content)
     {
         if (empty($content->name)) {
             if ($content->id != 1) {
                 return false;
             }
+        }
+        if ($content->site_id) {
+            $site = $this->Sites->find()->where(['id' => $content->site_id])->first();
         }
         // URLを更新
         $content->url = $this->createUrl($content->id);
@@ -948,49 +992,42 @@ class ContentsTable extends AppTable
                 $content->publish_end = $parent->publish_end;
             }
         }
-        // TODO: siteに関しての更新未確認
         // 主サイトの関連コンテンツIDを更新
-        if ($content->site) {
+        if (!empty($site)) {
             // 主サイトの同一階層のコンテンツを特定
-            $prefix = $content->site->name;
-            if ($content->site->alias) {
-                $prefix = $content->site->alias;
+            $prefix = $site->name;
+            if ($site->alias) {
+                $prefix = $site->alias;
             }
             $url = preg_replace('/^\/' . preg_quote($prefix, '/') . '\//', '/', $content->url);
-            try {
-                $mainSitePrefix = $this->Sites->getPrefix($content->site->main_site_id);
-            } catch (\InvalidArgumentException $e) {
-                $mainSitePrefix = false;
-            }
+            $mainSitePrefix = $this->Sites->getPrefix($site->main_site_id);
             if ($mainSitePrefix) {
                 $url = '/' . $mainSitePrefix . $url;
             }
-            try {
-                $mainSiteContentId = $this->find()->select(['id'])->where(['site_id' => $content->site->main_site_id, 'url' => $url])->first()->id;
-            }  catch (\InvalidArgumentException $e) {
-                $mainSiteContentId = false;
-            }
             // main_site_content_id を更新
-            if ($mainSiteContentId) {
-                $content->main_site_content_id = $mainSiteContentId;
+            if ($site->main_site_id) {
+                $mainSiteContent = $this->find()->select(['id'])->where(['site_id' => $site->main_site_id, 'url' => $url])->first();
+                $content->main_site_content_id = $mainSiteContent->id;
             } else {
                 $content->main_site_content_id = null;
             }
         }
-        return $this->save($content, ['validate' => false, 'callbacks' => false]);
+        $event = $this->getEventManager()->matchingListeners('afterSave');
+        if ($event) $this->getEventManager()->off('Model.afterSave');
+        return $this->save($content, ['validate' => false]);
     }
 
     /**
-     * TODO: サービスに移行してるので、ContentsTable経由で呼び出される箇所を修正する
      * ID を指定して公開状態かどうか判定する
      * @param $id
      * @return bool
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function isPublishById($id)
     {
-        // $conditions = array_merge(['Content.id' => $id], $this->getConditionAllowPublish());
-        // return (bool)$this->find('first', ['conditions' => $conditions, 'recursive' => -1]);
-        return !$this->Contents->findById($id)->where([$this->Contents->getConditionAllowPublish()])->isEmpty();
+        return !$this->findById($id)->where([$this->getConditionAllowPublish()])->isEmpty();
     }
 
     /**
@@ -998,24 +1035,21 @@ class ContentsTable extends AppTable
      *
      * @param $id
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function updateChildren($id)
     {
-        // 他のデータを更新する為一旦退避
-        $dataTmp = $this->data;
-        $idTmp = $this->id;
-        $children = $this->children($id, false, null, 'Content.lft');
+        $children = $this->find('children', ['for' => $id])->order('lft');
         $result = true;
-        if ($children) {
+        if (!$children->isEmpty()) {
             foreach($children as $child) {
                 if (!$this->updateSystemData($child)) {
                     $result = false;
                 }
             }
         }
-        // 退避したデータを戻す
-        $this->data = $dataTmp;
-        $this->id = $idTmp;
         return $result;
     }
 
@@ -1482,5 +1516,18 @@ class ContentsTable extends AppTable
             $result = true;
         }
         return $result ? $content : false;
+    }
+
+    /**
+     * disableUpdatingSystemData
+     *
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function disableUpdatingSystemData()
+    {
+        $this->updatingSystemData = false;
     }
 }

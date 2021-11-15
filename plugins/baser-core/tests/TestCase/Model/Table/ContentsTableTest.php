@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Model\Table;
 
 use ArrayObject;
 use Cake\ORM\Entity;
+use ReflectionClass;
 use Cake\Core\Configure;
 use Cake\ORM\Marshaller;
 use Cake\I18n\FrozenTime;
@@ -329,7 +330,12 @@ class ContentsTableTest extends BcTestCase
      */
     public function testAfterSave()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $content = $this->Contents->get(6); // サービスフォルダ
+        $content->self_status = false;
+        $this->Contents->dispatchEvent('Model.afterSave', [$content, new ArrayObject()]);
+        $content = $this->Contents->get(6);
+        // updateSystemDataが適応されてるかテスト
+        $this->assertFalse($content->status);
     }
 
     /**
@@ -357,7 +363,12 @@ class ContentsTableTest extends BcTestCase
      */
     public function testAfterDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $alias = $this->Contents->find()->where(['alias_id IS NOT' => null])->first();
+        $aliased = $this->Contents->get($alias->alias_id);
+        $this->Contents->dispatchEvent('Model.afterDelete', [$aliased, new ArrayObject()]);
+        // エイリアスが削除されてるか確認
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Contents->get($alias->id);
     }
 
     /**
@@ -367,15 +378,36 @@ class ContentsTableTest extends BcTestCase
      */
     public function testDeleteAlias()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $alias = $this->Contents->find()->where(['alias_id IS NOT' => null])->first();
+        $aliased = $this->Contents->get($alias->alias_id);
+        $this->execPrivateMethod($this->Contents, 'deleteAlias', [$aliased]);
+        // エイリアスが削除されてるか確認
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Contents->get($alias->id);
     }
 
     /**
      * メインサイトの場合、連携設定がされている子サイトのエイリアス削除する
+     * ※ 自身のエイリアスだった場合削除する
      */
-    public function testDeleteRelateSubSiteContent()
+    public function testDeleteRelateSubSiteContentWithAlias()
+    {
+        $content = $this->Contents->get(6);
+        $mockContent = $this->Contents->save(new Content(['site_id' => 6, 'main_site_content_id' => 6, 'alias_id' => 23, 'plugin' => 'BaserCore', 'type' => 'test']));
+        $this->execPrivateMethod($this->Contents, 'deleteRelateSubSiteContent', [$content]);
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Contents->get($mockContent->id);
+    }
+    /**
+     * メインサイトの場合、連携設定がされている子サイトのエイリアス削除する
+     * ※ コンテンツフォルダだった場合子要素をupdateChildrenする
+     */
+    public function testDeleteRelateSubSiteContentWithChildren()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $content = $this->Contents->get(6);
+        $mockContent = $this->Contents->save(new Content(['site_id' => 6, 'main_site_content_id' => 6, 'plugin' => 'BaserCore', 'type' => 'ContentFolder']));
+        $$this->execPrivateMethod($this->Contents, 'deleteRelateSubSiteContent', [$content]);
     }
 
     /**
@@ -384,6 +416,20 @@ class ContentsTableTest extends BcTestCase
     public function testUpdateRelateSubSiteContent()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $content = $this->Contents->get(21);
+        $this->Contents->updateRelateSubSiteContent($content);
+    }
+
+    /**
+     * 現在のフォルダのURLを元に別サイトにフォルダを生成する
+     * 最下層のIDを返却する
+     */
+    public function testCopyContentFolderPath()
+    {
+        $parent_id = $this->Contents->copyContentFolderPath('/service/service1', 1);
+        $this->assertEquals(6, $parent_id);
+        $parent_id = $this->Contents->copyContentFolderPath('/about', 1);
+        $this->assertEquals(1, $parent_id);
     }
 
     /**
@@ -412,7 +458,8 @@ class ContentsTableTest extends BcTestCase
      */
     public function testCreateContent()
     {
-        $content = ['title' => 'hoge', 'parent_id' => ''];
+        $content = ['title' => 'hoge', 'parent_id' => '', 'site_id' => 1, 'url' => '/hoge'];
+        // $type = 'ContentFolder';
         $type = 'Contents';
         $result = $this->Contents->createContent($content, 'BaserCore', $type);
 
@@ -495,10 +542,12 @@ class ContentsTableTest extends BcTestCase
     {
         // idが1以外でnameがない場合はエラー
         $content = new Content(['id' => 100, 'name' => '']);
-        $this->assertFalse($this->Contents->updateSystemData($content));
+        $result = $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
+        $this->assertFalse($result);
         // self_*を元にstatusなど補完する
         $data = [
             'id' => 100,
+            'site_id' => 1,
             'name' => 'test',
             'status' => null,
             'publish_begin' => null,
@@ -509,7 +558,7 @@ class ContentsTableTest extends BcTestCase
             'parent_id' => 1,
         ];
         $content = new Content($data);
-        $this->Contents->updateSystemData($content);
+        $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
         $content = $this->Contents->get(100);
         $this->assertTrue($content->status);
         $this->assertNotEmpty($content->publish_begin);
@@ -518,18 +567,29 @@ class ContentsTableTest extends BcTestCase
         $parent = $this->Contents->get(1);
         $parent->status = false;
         $this->Contents->save($parent);
-        $this->Contents->updateSystemData($content);
+        $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
         $content = $this->Contents->get(100);
         $this->assertFalse($content->status);
         $this->assertNull($content->publish_begin);
         $this->assertNull($content->publish_end);
-        // siteがある場合 未実装
-        // $content = $this->Contents->get(100);
-        // $content->site = new Site([
-        //     'name' => 'testSite',
-        //     'main_site_id' => 1,
-        // ]);
-        // $this->Contents->updateSystemData($content);
+        // siteがある場合
+        // サブコンテンツとして更新
+        $subContent = $this->Contents->get(100);
+        $subContent->title = 'subContent';
+        $subContent->url = 'test';
+        $subContent->site_id = 6;
+        $this->Contents->save($subContent);
+        // 関連するメインコンテンツを生成
+        $new = $this->Contents->newEntity([
+            'id' => 101,
+            'title' => 'relatedMainContent',
+            'url' => '/test/',
+            'site_id' => 1,
+        ]);
+        $mainContent = $this->Contents->save($new);
+        $this->execPrivateMethod($this->Contents, 'updateSystemData', [$subContent]);
+        // main_site_content_idが設定されてるか確認
+        $this->assertEquals($mainContent->id, $this->Contents->get(100)->main_site_content_id);
     }
 
     /**
@@ -537,7 +597,9 @@ class ContentsTableTest extends BcTestCase
      */
     public function testUpdateChildren()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->Contents->updateChildren(18);
+        // 孫のurlが更新されてるか確認
+        $this->assertEquals("/ツリー階層削除用フォルダー(親)/ツリー階層削除用フォルダー(子)/ツリー階層削除用フォルダー(孫)/", $this->Contents->get(20)->url);
     }
 
     /**
@@ -578,15 +640,6 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     * 現在のフォルダのURLを元に別サイトにフォルダを生成する
-     * 最下層のIDを返却する
-     */
-    public function testCopyContentFolderPath()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * 公開済の conditions を取得
      */
     public function testGetConditionAllowPublish()
@@ -599,6 +652,19 @@ class ContentsTableTest extends BcTestCase
         $this->assertArrayHasKey('Contents.publish_end >=', $result[1]['or'][0]);
         $this->assertEquals(null, $result[1]['or'][1]['Contents.publish_end IS']);
         $this->assertEquals('0000-00-00 00:00:00', $result[1]['or'][2]['Contents.publish_end']);
+    }
+
+
+    /**
+     * ID を指定して公開状態かどうか判定する
+     */
+    public function testIsPublishById()
+    {
+        $this->assertTrue($this->Contents->isPublishById(4));
+        $content = $this->Contents->get(4);
+        $content->self_status = false;
+        $this->Contents->save($content);
+        $this->assertFalse($this->Contents->isPublishById(4));
     }
 
     /**
@@ -733,7 +799,7 @@ class ContentsTableTest extends BcTestCase
     public function testGetOrderSameParent()
     {
         // parent_id=6の全体数
-        $this->assertEquals(9, $this->Contents->getOrderSameParent("", "6"));
+        $this->assertEquals(3, $this->Contents->getOrderSameParent("", "6"));
         // parent_id=6のコンテンツ順序
         $this->assertEquals(1, $this->Contents->getOrderSameParent("11", "6"));
         $this->assertEquals(2, $this->Contents->getOrderSameParent("12", "6"));
@@ -853,4 +919,17 @@ class ContentsTableTest extends BcTestCase
         ];
     }
 
+    /**
+     * testDisableUpdatingSystemData
+     *
+     * @return void
+     */
+    public function testDisableUpdatingSystemData()
+    {
+        $this->Contents->disableUpdatingSystemData();
+        $reflection = new ReflectionClass($this->Contents);
+        $property = $reflection->getProperty('updatingSystemData');
+        $property->setAccessible(true);
+        $this->assertFalse($property->getValue($this->Contents));
+    }
 }

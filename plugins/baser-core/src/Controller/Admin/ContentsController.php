@@ -56,11 +56,6 @@ use BaserCore\Controller\Component\BcAdminContentsComponent;
 class ContentsController extends BcAdminAppController
 {
     /**
-     * SiteConfigTrait
-     */
-    use SiteConfigTrait;
-
-    /**
      * initialize
      * @return void
      * @checked
@@ -78,6 +73,7 @@ class ContentsController extends BcAdminAppController
      *
      * @return void
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function beforeFilter(EventInterface $event)
@@ -89,10 +85,6 @@ class ContentsController extends BcAdminAppController
         $this->loadModel('BaserCore.Users');
         $this->loadModel('BaserCore.Contents');
         $this->Security->setConfig('unlockedActions', ['delete', 'batch']);
-        // TODO 未実装のためコメントアウト
-        /* >>>
-        // $this->BcAuth->allow('view');
-        <<< */
     }
 
     /**
@@ -100,6 +92,7 @@ class ContentsController extends BcAdminAppController
      * @param integer $parentId
      * @param void
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function index(ContentServiceInterface $contentService, SiteServiceInterface $siteService)
@@ -127,9 +120,8 @@ class ContentsController extends BcAdminAppController
         if($this->request->getParam('action') == "index") {
             switch($this->request->getQuery('list_type')) {
                 case 1:
-                    // TODO: 未実装
                     // 並び替え最終更新時刻をリセット
-                    // $this->SiteConfigs->resetContentsSortLastModified();
+                    $siteService->resetSiteConfig('contents_sort_last_modified');
                     break;
                 case 2:
                     $this->request = $this->request->withQueryParams(
@@ -353,24 +345,29 @@ class ContentsController extends BcAdminAppController
 			$this->notFound();
 		}
         if ($this->request->is(['post', 'put', 'delete'])) {
-            //     // TODO:
-            //     // EVENT Contents.beforeDelete
-            //     // $this->dispatchLayerEvent('beforeDelete', [
-            //     //     'data' => $id
-            //     // ]);
-            // TODO: フォルダー以外実装時に汎用化する
-            $content = $this->request->getData('Content') ?? $this->request->getData('ContentFolder.content');
-            $entity = $contentService->get($content['id']);
-            if ($contentService->delete($content['id'])) {
-                //     // TODO:
-                //     // EVENT Contents.afterDelete
-                //     // $this->dispatchLayerEvent('afterDelete', [
-                //     //     'data' => $id
-                //     // ]);
-                $typeName = Configure::read('BcContents.items.' . $entity->plugin . '.' . $entity->type . '.title');
-                $trashMessage = $typeName . sprintf(__d('baser', '「%s」をゴミ箱に移動しました。'), $entity->title);
-                $aliasMessage = sprintf(__d('baser', '%s のエイリアス「%s」を削除しました。'), $typeName, $entity->title);
-                $this->BcMessage->setSuccess($entity->alias_id ? $aliasMessage : $trashMessage, true);
+            // TODO: ページ実装時に汎用化する
+            $data = $this->request->getData('Content') ?? $this->request->getData('ContentFolder.content');
+            $id = $data['id'];
+            // EVENT Contents.beforeDelete
+            $beforeEvent = $this->dispatchLayerEvent('beforeDelete', [
+                'id' => $id
+            ]);
+            if ($beforeEvent !== false) {
+                $id = ($beforeEvent->getResult() === null || $beforeEvent->getResult() === true)? $beforeEvent->getData('id') : $beforeEvent->getResult();
+            }
+            $content = $contentService->get($id);
+            if ($contentService->delete($id)) {
+                // EVENT Contents.afterDelete
+                $afterEvent = $this->dispatchLayerEvent('afterDelete', [
+                    'content' => $content
+                ]);
+                if ($afterEvent !== false) {
+                    $content = ($afterEvent->getResult() === null || $afterEvent->getResult() === true)? $afterEvent->getData('content') : $afterEvent->getResult();
+                }
+                $typeName = Configure::read('BcContents.items.' . $content->plugin . '.' . $content->type . '.title');
+                $trashMessage = $typeName . sprintf(__d('baser', '「%s」をゴミ箱に移動しました。'), $content->title);
+                $aliasMessage = sprintf(__d('baser', '%s のエイリアス「%s」を削除しました。'), $typeName, $content->title);
+                $this->BcMessage->setSuccess($content->alias_id ? $aliasMessage : $trashMessage, true);
                 $this->redirect(['action' => 'index']);
             } else {
                 $this->BcMessage->setError('削除中にエラーが発生しました。');
