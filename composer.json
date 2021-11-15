@@ -12,7 +12,7 @@
         "cakephp/migrations": "^3.1",
         "doctrine/annotations": "^1.12",
         "firebase/php-jwt": "^5.3",
-        "imo-tikuwa/cakephp3-soft-delete": "2.*",
+        "imo-tikuwa/cakephp3-soft-delete": "^2.0",
         "josegonzalez/dotenv": "^3.2",
         "mobiledetect/mobiledetectlib": "^2.8"
     },
@@ -31,8 +31,7 @@
             "BcBlog\\": "plugins/bc-blog/src/",
             "BcMail\\": "plugins/bc-mail/src/",
             "BcSample\\": "plugins/BcSample/src/",
-            "BcUploader\\": "plugins/bc-uploader/src/",
-            "Cake\\Routing\\": "plugins/baser-core/src/Routing"
+            "BcUploader\\": "plugins/bc-uploader/src/"
         }
     },
     "autoload-dev": {
