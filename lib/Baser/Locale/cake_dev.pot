@@ -13,23 +13,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: Configure/BcThemeConfigReader.php:70
+#: Configure/BcThemeConfigReader.php:75
 msgid "テーマの設定ファイルが存在しません : %s"
 msgstr ""
 
-#: Console/Command/BaserTestShell.php:45
+#: Console/Command/BaserTestShell.php:46
 msgid "Please install PHPUnit framework <info>(http://www.phpunit.de)</info>"
 msgstr ""
 
-#: Console/Command/BaserTestShell.php:205
+#: Console/Command/BaserTestShell.php:210
 msgid "Test case %s cannot be run via this shell"
 msgstr ""
 
-#: Console/Command/BaserTestShell.php:218;230;245
+#: Console/Command/BaserTestShell.php:223;234;252
 msgid "Test case %s not found"
 msgstr ""
 
-#: Event/CakeEventManager.php:102
+#: Event/CakeEventManager.php:103
 msgid "The eventKey variable is required"
 msgstr ""
 
@@ -41,31 +41,31 @@ msgstr ""
 msgid "Referenced fixture class %s not found"
 msgstr ""
 
-#: Model/CakeSchema.php:634
+#: Model/CakeSchema.php:636
 msgid "Schema generation error: invalid column type %s for %s.%s does not exist in DBO"
 msgstr ""
 
-#: Model/Datasource/DboSource.php:279
+#: Model/Datasource/DboSource.php:286
 msgid "Selected driver is not enabled"
 msgstr ""
 
-#: Model/Datasource/DboSource.php:1356
+#: Model/Datasource/DboSource.php:1396
 msgid "Error in Model %s"
 msgstr ""
 
-#: Model/Datasource/DboSource.php:3361
+#: Model/Datasource/DboSource.php:3402
 msgid "Invalid schema object"
 msgstr ""
 
-#: Model/Datasource/DboSource.php:3471
+#: Model/Datasource/DboSource.php:3512
 msgid "Column name or type not defined in schema"
 msgstr ""
 
-#: Model/Datasource/DboSource.php:3476
+#: Model/Datasource/DboSource.php:3517
 msgid "Column type %s does not exist"
 msgstr ""
 
-#: Network/CakeRequest.php:492
+#: Network/CakeRequest.php:503
 msgid "Method %s does not exist"
 msgstr ""
 
@@ -78,7 +78,7 @@ msgid "Fatal Error"
 msgstr ""
 
 #: View/Errors/fatal_error.php:21
-#: View/Errors/missing_action.php:19;23
+#: View/Errors/missing_action.php:15;19
 #: View/Errors/missing_connection.php:21;32
 msgid "Error"
 msgstr ""
@@ -92,26 +92,26 @@ msgid "Line"
 msgstr ""
 
 #: View/Errors/fatal_error.php:33
-#: View/Errors/missing_action.php:38
+#: View/Errors/missing_action.php:34
 #: View/Errors/missing_connection.php:37
 msgid "Notice"
 msgstr ""
 
 #: View/Errors/fatal_error.php:34
-#: View/Errors/missing_action.php:39
+#: View/Errors/missing_action.php:35
 #: View/Errors/missing_connection.php:38
 msgid "If you want to customize this error message, create %s"
 msgstr ""
 
-#: View/Errors/missing_action.php:18
+#: View/Errors/missing_action.php:14
 msgid "Missing Method in %s"
 msgstr ""
 
-#: View/Errors/missing_action.php:20
+#: View/Errors/missing_action.php:16
 msgid "The action %1$s is not defined in controller %2$s"
 msgstr ""
 
-#: View/Errors/missing_action.php:24
+#: View/Errors/missing_action.php:20
 msgid "Create %1$s%2$s in file: %3$s."
 msgstr ""
 

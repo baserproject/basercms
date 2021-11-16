@@ -168,7 +168,7 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
 <?php endif ?>
 
 <section class="bca-section bca-section__post-detail">
-	<label for="BlogPostDetailTmp" class="bca-form-table__label -label">本文</label>
+	<label for="BlogPostDetailTmp" class="bca-form-table__label -label"><?php echo __d('baser', '本文') ?></label>
 	<span class="bca-form-table__input-wrap">
   <?php echo $this->BcForm->editor('BlogPost.detail', array_merge([
 	  'type' => 'editor',
@@ -233,8 +233,8 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
 				'type' => 'dateTimePicker',
 				'size' => 12,
 				'maxlength' => 10,
-				'dateLabel' => ['text' => '開始日付'],
-				'timeLabel' => ['text' => '開始時間']
+				'dateLabel' => ['text' => __d('baser', '開始日付')],
+				'timeLabel' => ['text' => __d('baser', '開始時間')]
 			], true) ?>
           </span>
           <span class="bca-datetimepicker__delimiter">〜</span>
@@ -243,8 +243,8 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
 				'type' => 'dateTimePicker',
 				'size' => 12,
 				'maxlength' => 10,
-				'dateLabel' => ['text' => '終了日付'],
-				'timeLabel' => ['text' => '終了時間']
+				'dateLabel' => ['text' => __d('baser', '終了日付')],
+				'timeLabel' => ['text' => __d('baser', '終了時間')]
 			], true) ?>
             </span>
         </span>
