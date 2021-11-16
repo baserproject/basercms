@@ -22,10 +22,9 @@ class BcExceptionRenderer extends ExceptionRenderer
         $controller = parent::_getController();
         if (!$controller->viewBuilder()->getTheme()) {
             $params = Router::getRequest()->getAttribute('params');
-            if ($params['prefix'] === 'Admin') {
+            if (!empty($params) && $params['prefix'] === 'Admin') {
                 $controller->viewBuilder()->setTheme('BcAdminThird');
             }
-
             // TODO: フロントのデフォルトエラー画面とそれを上書きできる仕組み
         }
         return $controller;

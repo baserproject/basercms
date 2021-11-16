@@ -55,6 +55,17 @@ class BcContentsRouteTest extends BcTestCase
     }
 
     /**
+     * tear down
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        unset($this->BcContentsRoute);
+        parent::tearDown();
+    }
+
+    /**
      * コンテンツに関連するパラメーター情報を取得する
      */
     public function testGetParams()
