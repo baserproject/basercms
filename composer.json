@@ -38,6 +38,6 @@
             "@test"
         ],
         "install": "php ./app/Console/cake.php bc_manager install \"https://localhost\" \"mysql\" \"admin\" \"basercms\" \"webmaster@example.org\" --host \"bc-db\" --database \"basercms\" --login \"root\" --password \"root\" --prefix \"mysite_\" --data \"bc_sample.default\"",
-        "test": "php ./app/Console/cake.php baser_test baser BcAll --color=always"
+        "test": "php ./app/Console/cake.php baser_test baser BcAll"
     }
 }
