@@ -81,6 +81,7 @@ class ContentsTable extends AppTable
             'className' => 'BaserCore.Users',
             'foreignKey' => 'author_id',
         ]);
+        $this->addBehavior('Timestamp');
     }
 
     /**

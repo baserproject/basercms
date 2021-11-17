@@ -85,6 +85,7 @@ class ContentsTableTest extends BcTestCase
     {
         $this->assertEquals('contents', $this->Contents->getTable());
         $this->assertTrue($this->Contents->hasBehavior('Tree'));
+        $this->assertTrue($this->Contents->hasBehavior('Timestamp'));
         $this->assertTrue($this->Contents->hasAssociation('Sites'));
         $this->assertTrue($this->Contents->hasAssociation('Users'));
     }
