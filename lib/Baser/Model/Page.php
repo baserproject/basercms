@@ -238,7 +238,7 @@ class Page extends AppModel
 		$host = '';
 		$url = $content['url'];
 		$site = BcSite::findById($content['site_id']);
-		if ($site->useSubDomain) {
+		if ($site && $site->useSubDomain) {
 			$host = $site->alias;
 			if ($site->domainType == 1) {
 				$host .= '.' . BcUtil::getMainDomain();

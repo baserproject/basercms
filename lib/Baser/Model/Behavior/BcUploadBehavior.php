@@ -190,7 +190,7 @@ class BcUploadBehavior extends ModelBehavior
 			if (!empty($Model->data[$Model->name])) {
 				$data = $Model->data[$Model->name];
 			}
-			if (!empty($data[$field['name']]) && is_array($data[$field['name']]) && $data[$field['name']]['error'] == 0) {
+			if (!empty($data[$field['name']]) && is_array($data[$field['name']]) && @$data[$field['name']]['error'] == 0) {
 				if (!empty($data[$field['name']]['name'])) {
 					$upload = true;
 				}
