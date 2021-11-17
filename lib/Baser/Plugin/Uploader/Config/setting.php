@@ -16,7 +16,7 @@
 $config['BcApp.adminNavigation'] = [
 	'Plugins' => [
 		'menus' => [
-			'UploaderConfigs' => ['title' => 'アップローダー基本設定', 'url' => ['admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_configs', 'action' => 'index']],
+			'UploaderConfigs' => ['title' => __d('baser', 'アップローダー基本設定'), 'url' => ['admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_configs', 'action' => 'index']],
 		]
 	],
 	'Contents' => [

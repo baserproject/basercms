@@ -192,17 +192,6 @@ class BcAppController extends Controller
 			$this->redirect('/');
 		}
 
-		// 言語設定
-		$currentSite = BcSite::findCurrent();
-		if ($currentSite) {
-			$lang = Configure::read('BcLang.' . $currentSite->lang);
-		}
-		if (Configure::read('BcApp.systemMessageLangFromSiteSetting') && isset($lang['langs'][0])) {
-			Configure::write('Config.language', $lang['langs'][0]);
-		} else {
-			Configure::write('Config.language', BcLang::parseLang(@$_SERVER['HTTP_ACCEPT_LANGUAGE']));
-		}
-
 		// コンソールベースのインストールの際のページテンプレート生成において、
 		// BC_INSTALLEDが true でない為、コンソールの場合も実行する
 		if ((BC_INSTALLED || isConsole()) && $isRequestView) {

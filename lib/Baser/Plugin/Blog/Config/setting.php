@@ -16,7 +16,7 @@
 $config['BcApp.adminNavigation'] = [
 	'Plugins' => [
 		'menus' => [
-			'BlogTags' => ['title' => 'ブログタグ設定', 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'index']],
+			'BlogTags' => ['title' => __d('baser', 'ブログタグ設定'), 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'index']],
 		]
 	]];
 /* @var BlogContent $BlogContent */
@@ -37,30 +37,30 @@ foreach($blogContents as $blogContent) {
 			'admin' => true, 'plugin' => 'blog', 'action' => 'index', $blog['id']
 		];
 		$menus['BlogPosts' . $blog['id']] = [
-			'title' => '記事',
+			'title' => __d('baser', '記事'),
 			'url' => array_merge($route, ['controller' => 'blog_posts']),
 			'currentRegex' => '{/blog/blog_posts/[^/]+?/' . $blog['id'] . '($|/)}s'
 		];
 		$menus['BlogCategories' . $blog['id']] = [
-			'title' => 'カテゴリ',
+			'title' => __d('baser', 'カテゴリ'),
 			'url' => array_merge($route, ['controller' => 'blog_categories']),
 			'currentRegex' => '{/blog/blog_categories/[^/]+?/' . $blog['id'] . '($|/)}s'
 		];
 		if ($blog['tag_use']) {
 			$menus['BlogTags' . $blog['id']] = [
-				'title' => 'タグ',
+				'title' => __d('baser', 'タグ'),
 				'url' => array_merge($route, ['controller' => 'blog_tags']),
 				'currentRegex' => '{/blog/blog_tags/[^/]+?/}s'
 			];
 		}
 		if ($blog['comment_use']) {
 			$menus['BlogComments' . $blog['id']] = [
-				'title' => 'コメント',
+				'title' => __d('baser', 'コメント'),
 				'url' => array_merge($route, ['controller' => 'blog_comments'])
 			];
 		}
 		$menus['BlogContentsEdit' . $blog['id']] = [
-			'title' => '設定',
+			'title' => __d('baser', '設定'),
 			'url' => array_merge($route, ['controller' => 'blog_contents', 'action' => 'edit'])
 		];
 		return $menus;

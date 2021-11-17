@@ -58,8 +58,8 @@ $this->BcListTable->setColumnNumber(6);
 			);
 			?>
 		</th>
-		<th class="bca-table-listup__thead-th" style="white-space: nowrap">受信内容</th>
-		<th class="bca-table-listup__thead-th" style="white-space: nowrap">添付</th>
+		<th class="bca-table-listup__thead-th" style="white-space: nowrap"><?php echo __d('baser', '受信内容') ?></th>
+		<th class="bca-table-listup__thead-th" style="white-space: nowrap"><?php echo __d('baser', '添付') ?></th>
 		<?php echo $this->BcListTable->dispatchShowHead() ?>
 		<th class="bca-table-listup__thead-th"><?php echo __d('baser', 'アクション') ?></th>
 	</tr>

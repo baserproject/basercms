@@ -89,8 +89,8 @@ class BcTextHelper extends TextHelper
 	public function booleanDoList($doText = null)
 	{
 		return [
-			0 => sprintf(__d('baser', '%s しない'), $doText),
-			1 => sprintf(__d('baser', '%s する'), $doText)
+			0 => sprintf('%s しない', $doText),
+			1 => sprintf('%s する', $doText)
 		];
 	}
 

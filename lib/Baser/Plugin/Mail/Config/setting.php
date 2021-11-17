@@ -16,7 +16,7 @@
 $config['BcApp.adminNavigation'] = [
 	'Plugins' => [
 		'menus' => [
-			'MailConfigs' => ['title' => 'メール基本設定', 'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_configs', 'action' => 'form']],
+			'MailConfigs' => ['title' => __d('baser', 'メール基本設定'), 'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_configs', 'action' => 'form']],
 		]
 	]
 ];
@@ -38,13 +38,13 @@ foreach($mailContents as $mailContent) {
 		'type' => 'mail-content',
 		'icon' => 'bca-icon--mail',
 		'menus' => [
-			'MailMessages' . $mail['id'] => ['title' => '受信メール', 'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_messages', 'action' => 'index', $mail['id']]],
+			'MailMessages' . $mail['id'] => ['title' => __d('baser', '受信メール'), 'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_messages', 'action' => 'index', $mail['id']]],
 			'MailFields' . $mail['id'] => [
-				'title' => 'フィールド',
+				'title' => __d('baser', 'フィールド'),
 				'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mail['id']],
 				'currentRegex' => '/\/mail\/mail_fields\/[^\/]+?\/' . $mail['id'] . '($|\/)/s'
 			],
-			'MailContents' . $mail['id'] => ['title' => '設定', 'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $mail['id']]]
+			'MailContents' . $mail['id'] => ['title' => __d('baser', '設定'), 'url' => ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $mail['id']]]
 		]
 	];
 }

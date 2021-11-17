@@ -49,7 +49,7 @@ $this->BcBaser->i18nScript([
 	<div class="bca-collapse__action">
 		<button type="button" class="bca-collapse__btn" data-bca-collapse="collapse"
 				data-bca-target="#blogContentsSettingBody" aria-expanded="false"
-				aria-controls="blogContentsSettingBody">詳細設定&nbsp;&nbsp;<i
+				aria-controls="blogContentsSettingBody"><?php echo __d('baser', '詳細設定') ?>&nbsp;&nbsp;<i
 				class="bca-icon--chevron-down bca-collapse__btn-icon"></i></button>
 	</div>
 	<div class="bca-collapse" id="blogContentsSettingBody" data-bca-state="">

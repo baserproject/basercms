@@ -46,7 +46,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 	<section class="bca-section" data-bca-section-type="form-group">
 		<div class="bca-collapse__action">
 			<button type="button" class="bca-collapse__btn" data-bca-collapse="collapse"
-					data-bca-target="#pageSettingBody" aria-expanded="false" aria-controls="pageSettingBody">詳細設定&nbsp;&nbsp;<i
+					data-bca-target="#pageSettingBody" aria-expanded="false" aria-controls="pageSettingBody"><?php echo __d('baser', '詳細設定') ?>&nbsp;&nbsp;<i
 					class="bca-icon--chevron-down bca-collapse__btn-icon"></i></button>
 		</div>
 		<div class="bca-collapse" id="pageSettingBody" data-bca-state="">
