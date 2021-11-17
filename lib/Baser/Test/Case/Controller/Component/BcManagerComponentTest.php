@@ -865,12 +865,11 @@ class BcManagerComponentTest extends BaserTestCase
 	/**
 	 * DB接続チェック
 	 * checkDbConnection()の PDOException 例外のテスト
-	 *
-	 * @expectedException PDOException
-	 * @expectedExceptionMessage SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
 	 */
 	public function testCheckDbConnectionPDOException()
 	{
+		$this->expectExceptionMessage("SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known");
+		$this->expectException('PDOException');
 
 		// でたらめな入力
 		$config = [
