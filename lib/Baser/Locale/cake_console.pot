@@ -13,11 +13,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: Console/Command/BaserTestShell.php:318
+#: Console/Command/BaserTestShell.php:327
 msgid "App : %s"
 msgstr ""
 
-#: Console/Command/BaserTestShell.php:319
+#: Console/Command/BaserTestShell.php:328
 msgid "Path: %s"
 msgstr ""
 

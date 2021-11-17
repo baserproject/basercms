@@ -161,6 +161,12 @@ App::uses('BcPluginAppModel', 'Model');
 // <<<
 
 /**
+ * 言語設定
+ * ブラウザよりベースとなる言語を設定
+ */
+Configure::write('Config.language', BcLang::parseLang(@$_SERVER['HTTP_ACCEPT_LANGUAGE']));
+
+/**
  * 設定ファイル読み込み
  * install.php で設定している為、一旦読み込んで再設定
  */
@@ -181,6 +187,18 @@ if (BC_INSTALLED && $baserSettings) {
 			}
 		}
 	}
+}
+
+/**
+ * フロントページ用言語設定
+ * systemMessageLangFromSiteSetting を読み込んだ上で言語設定を再設定する
+ */
+$currentSite = BcSite::findCurrent();
+if ($currentSite) {
+	$lang = Configure::read('BcLang.' . $currentSite->lang);
+}
+if (Configure::read('BcApp.systemMessageLangFromSiteSetting') && isset($lang['langs'][0])) {
+	Configure::write('Config.language', $lang['langs'][0]);
 }
 
 /**

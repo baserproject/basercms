@@ -84,8 +84,8 @@ $this->BcListTable->setColumnNumber(8);
 		<th class="bca-table-listup__thead-th"><?php echo __d('baser', 'タイプ') ?><br><?php echo __d('baser', 'タイトル') ?>
 		</th>
 		<th class="bca-table-listup__thead-th"><?php echo __d('baser', 'コンテンツ内容') ?></th>
-		<th class="bca-table-listup__thead-th"><?php echo __d('baesr', '公開状態') ?></th>
-		<th class="bca-table-listup__thead-th"><?php echo __d('baesr', '公開期間') ?></th>
+		<th class="bca-table-listup__thead-th"><?php echo __d('baser', '公開状態') ?></th>
+		<th class="bca-table-listup__thead-th"><?php echo __d('baser', '公開期間') ?></th>
 		<?php echo $this->BcListTable->dispatchShowHead() ?>
 		<th class="bca-table-listup__thead-th"><?php echo __d('baser', '登録日') ?><br><?php echo __d('baser', '更新日') ?>
 		</th>

@@ -475,7 +475,7 @@ $config['BcApp'] = [
 	// システムメッセージの言語につてサイト設定を利用する
 	// 	- false：ブラウザ
 	// 	- true：サイト設定
-	'systemMessageLangFromSiteSetting' => false
+	'systemMessageLangFromSiteSetting' => true
 ];
 
 /**

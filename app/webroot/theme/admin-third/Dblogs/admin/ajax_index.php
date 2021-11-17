@@ -43,8 +43,8 @@ if (empty($dblogs)) {
 		<?php endforeach; ?>
 	</ul>
 	<div class="align-right">
-		<a
-			href="<?= Router::url(['controller'=>'dblogs','action'=>'/']) ?>/"
-		>&gt; 全てのログを見る</a>
+		<a href="<?= Router::url(['controller'=>'dblogs','action'=>'/']) ?>/">
+			&gt; <?php echo __d('baser', '全てのログを見る') ?>
+		</a>
 	</div>
 </div>
