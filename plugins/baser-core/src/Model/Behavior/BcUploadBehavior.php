@@ -1,18 +1,19 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Model.Behavior
- * @since           baserCMS v 1.5.3
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+namespace BaserCore\Model\Behavior;
 
-App::uses('Imageresizer', 'Vendor');
+use Cake\Http\Session;
+use Cake\ORM\Behavior;
+use Cake\Utility\Hash;
+use Cake\Filesystem\Folder;
 
 /**
  * Class BcUploadBehavior
@@ -47,7 +48,7 @@ App::uses('Imageresizer', 'Vendor');
  *
  * @package Baser.Model.Behavior
  */
-class BcUploadBehavior extends ModelBehavior
+class BcUploadBehavior extends Behavior
 {
 
     /**
@@ -101,46 +102,43 @@ class BcUploadBehavior extends ModelBehavior
      * @var array
      */
     public $uploaded = [];
-
     /**
-     * セットアップ
-     *
-     * @param Model $Model
-     * @param array $settings actsAsの設定
+     * initialize
+     * @param  array $config
+     * @return void
      */
-    public function setup(Model $Model, $settings = [])
+    public function initialize(array $config): void
     {
-        $this->settings[$Model->alias] = Hash::merge([
+        $this->table = $this->table();
+        $setting = Hash::merge([
             'saveDir' => '',
             'existsCheckDirs' => [],
-            'fields' => []
-        ], $settings);
-        foreach($this->settings[$Model->alias]['fields'] as $key => $field) {
+            'fields' => [],
+        ], $config);
+        foreach ($setting as $key => $field) {
             if (empty($field['name'])) {
-                $this->settings[$Model->alias]['fields'][$key]['name'] = $field['name'] = $key;
+                $setting['fields'][$key]['name'] = $key;
             }
             if (!empty($field['imageresize'])) {
                 if (empty($field['imageresize']['thumb'])) {
-                    $this->settings[$Model->alias]['fields'][$key]['imageresize']['thumb'] = false;
+                    $settings['fields'][$key]['imageresize']['thumb'] = false;
                 }
             } else {
-                $this->settings[$Model->alias]['fields'][$key]['imageresize'] = false;
+                $settings['fields'][$key]['imageresize'] = false;
             }
             if (!isset($field['getUniqueFileName'])) {
-                $this->settings[$Model->alias]['fields'][$key]['getUniqueFileName'] = true;
+                $settings['fields'][$key]['getUniqueFileName'] = true;
             }
         }
-        $this->savePath[$Model->alias] = $this->getSaveDir($Model);
-        if (!is_dir($this->savePath[$Model->alias])) {
-            $Folder = new Folder();
-            $Folder->create($this->savePath[$Model->alias]);
-            $Folder->chmod($this->savePath[$Model->alias], 0777, true);
-        }
-
-        $this->existsCheckDirs[$Model->alias] = $this->getExistsCheckDirs($Model);
-
-        App::uses('SessionComponent', 'Controller/Component');
-        $this->Session = new SessionComponent(new ComponentCollection());
+        // NOTE: 同じテーブルのディレクトリがないかをチェックする箇所
+        $this->existsCheckDirs[] = $this->getExistsCheckDirs($this->table->getRegistryAlias());
+        // if (!is_dir($this->savePath[$this->table->getRegistryAlias()])) {
+        //     $Folder = new Folder();
+        //     $Folder->create($this->savePath[$this->table->getRegistryAlias()]);
+        //     $Folder->chmod($this->savePath[$this->table->getRegistryAlias()], 0777, true);
+        // }
+        $this->Session = new Session();
+        $this->setConfig('BcUploader.' . $this->table->getRegistryAlias() . '.setting', $setting);
     }
 
     /**
@@ -1069,17 +1067,19 @@ class BcUploadBehavior extends ModelBehavior
     /**
      * 保存時にファイルの重複確認を行うディレクトリのリストを取得する
      *
-     * @param Model $Model
+     * @param string $modelName
      * @return array $existsCheckDirs
      */
-    private function getExistsCheckDirs(Model $Model)
+    private function getExistsCheckDirs($modelName)
     {
         $existsCheckDirs = [];
-        $existsCheckDirs[] = $this->savePath[$Model->alias];
+        // TODO: $this->savePathがまだないためコメントアウト
+        // $existsCheckDirs[] = $this->savePath[$modelName];
 
         $basePath = WWW_ROOT . 'files' . DS;
-        if ($this->settings[$Model->alias]['existsCheckDirs']) {
-            foreach($this->settings[$Model->alias]['existsCheckDirs'] as $existsCheckDir) {
+        $existsCheckDirs = $this->getConfig("BcUpload.${modelName}.existsCheckDirs");
+        if ($existsCheckDirs) {
+            foreach($existsCheckDirs as $existsCheckDir) {
                 $existsCheckDirs[] = $basePath . $existsCheckDir . DS;
             }
         }

@@ -56,23 +56,22 @@ class ContentsTable extends AppTable
         FrozenTime::setToStringFormat('yyyy/MM/dd HH:mm:ss');
         parent::initialize($config);
         $this->addBehavior('Tree', ['level' => 'level']);
-        // TODO: BcUploadBehavior 未追加
-        // $this->addBehavior('BcUpload', [
-        //     'saveDir' => "contents",
-        //     'fields' => [
-        //         'eyecatch' => [
-        //             'type' => 'image',
-        //             'namefield' => 'id',
-        //             'nameadd' => true,
-        //             'nameformat' => '%08d',
-        //             'subdirDateFormat' => 'Y/m',
-        //             //'imageresize' => array('width' => '800', 'height' => '800'),
-        //             'imagecopy' => [
-        //                 'thumb' => ['suffix' => '_thumb', 'width' => '300', 'height' => '300'],
-        //                 'medium' => ['suffix' => '_midium', 'width' => '800', 'height' => '800']
-        //             ]
-        //         ]
-        //     ]]);
+        $this->addBehavior('BaserCore.BcUpload', [
+            'saveDir' => "contents",
+            'fields' => [
+                'eyecatch' => [
+                    'type' => 'image',
+                    'namefield' => 'id',
+                    'nameadd' => true,
+                    'nameformat' => '%08d',
+                    'subdirDateFormat' => 'Y/m',
+                    //'imageresize' => array('width' => '800', 'height' => '800'),
+                    'imagecopy' => [
+                        'thumb' => ['suffix' => '_thumb', 'width' => '300', 'height' => '300'],
+                        'medium' => ['suffix' => '_midium', 'width' => '800', 'height' => '800']
+                    ]
+                ]
+            ]]);
         $this->belongsTo('Sites', [
             'className' => 'BaserCore.Sites',
             'foreignKey' => 'site_id',
