@@ -53,7 +53,7 @@ class ContentsTable extends AppTable
      */
     public function initialize(array $config): void
     {
-        FrozenTime::setToStringFormat('yyyy-MM-dd HH:mm:ss');
+        FrozenTime::setToStringFormat('yyyy/MM/dd HH:mm:ss');
         parent::initialize($config);
         $this->addBehavior('Tree', ['level' => 'level']);
         // TODO: BcUploadBehavior 未追加

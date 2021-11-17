@@ -18,6 +18,8 @@
  */
 $disableEdit = $this->BcContents->isEditable();
 $authors = $this->BcAdminContent->getAuthors();
+$created_date = $this->BcAdminForm->getSourceValue($contentPath . 'created_date');
+$modified_date = $this->BcAdminForm->getSourceValue($contentPath . 'modified_date');
 ?>
 
 
@@ -66,16 +68,13 @@ $authors = $this->BcAdminContent->getAuthors();
           <?php if (!$disableEdit): ?>
             <?php echo $this->BcAdminForm->control($contentPath . 'author_id', ['type' => 'select', 'options' => $authors]) ?>
             <small>[<?php echo __d('baser', '作成日') ?>
-              ]</small> <?php echo $this->BcAdminForm->control($contentPath . 'created_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10]) ?>
+              ]</small> <?php echo $this->BcAdminForm->control($contentPath . 'created_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10, 'value' => $created_date]); ?>
             <small>[<?php echo __d('baser', '更新日') ?>
-              ]</small> <?php echo $this->BcAdminForm->control($contentPath . 'modified_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10]) ?>
+              ]</small> <?php echo $this->BcAdminForm->control($contentPath . 'modified_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10, 'value' => $modified_date]); ?>
           <?php else: ?>
             <?php echo h($this->BcText->arrayValue($this->BcAdminForm->getSourceValue($contentPath . 'author_id'), $authors)) ?>
-
-            <small>[<?php echo __d('baser', '作成日') ?>
-              ]</small> <?php echo $this->BcTime->format($this->BcAdminForm->getSourceValue($contentPath . 'created_date', 'Y/m/d H:i')) ?>
-            <small>[<?php echo __d('baser', '更新日') ?>
-              ]</small> <?php echo $this->BcTime->format($this->BcAdminForm->getSourceValue($contentPath . 'modified_date', 'Y/m/d H:i')) ?>
+            <small>[<?php echo __d('baser', '作成日') ?>]</small> <?= $created_date ?>
+            <small>[<?php echo __d('baser', '更新日') ?>]</small> <?= $modified_date ?>
             <?php echo $this->BcAdminForm->hidden($contentPath . 'author_id') ?>
             <?php echo $this->BcAdminForm->hidden($contentPath . 'created_date') ?>
             <?php echo $this->BcAdminForm->hidden($contentPath . 'modified_date') ?>

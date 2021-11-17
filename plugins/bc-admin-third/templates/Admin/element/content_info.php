@@ -40,11 +40,10 @@
             <span><?php echo __d('baser', 'コンテンツタイプ') ?></span>：<?php echo $this->BcAdminForm->getSourceValue($contentPath . 'type'); ?>
           </li>
           <li class="bca-list__item">
-            <!-- TODO: どれがデフォルトのi18nFormatか確認し設定する -->
-            <span><?php echo __d('baser', 'データ作成日') ?></span>：<?php echo $this->BcAdminForm->getSourceValue($contentPath . 'created')->__toString(); ?>
+            <span><?php echo __d('baser', 'データ作成日') ?></span>：<?php echo $this->BcAdminForm->getSourceValue($contentPath . 'created'); ?>
           </li>
           <li class="bca-list__item">
-            <span><?php echo __d('baser', 'データ更新日') ?></span>：<?php echo $this->BcAdminForm->getSourceValue($contentPath . 'modified')->i18nFormat('yyyy/MM/dd HH:mm:ss'); ?>
+            <span><?php echo __d('baser', 'データ更新日') ?></span>：<?php echo $this->BcAdminForm->getSourceValue($contentPath . 'modified'); ?>
           </li>
           <li class="bca-list__item">
             <span><?php echo __d('baser', 'サイト') ?></span>：<?php echo h($this->BcText->noValue($this->BcAdminForm->getSourceValue($contentPath . 'site.display_name'), $mainSiteDisplayName)) ?>
