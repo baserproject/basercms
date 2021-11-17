@@ -52,8 +52,8 @@ if ($this->request->action !== 'admin_add') {
       <td class="col-input bca-form-table__input">
         <?php if ($this->request->action != 'admin_view'): ?>
           <?php echo $this->BcAdminForm->control('ThemeFile.name', ['type' => 'text', 'size' => 30, 'maxlength' => 255, 'autofocus' => true]) ?>
-          <?php if ($this->BcForm->value('ThemeFile.ext')): ?>.<?php endif ?>
-          <?php echo h($this->BcForm->value('ThemeFile.ext')) ?>
+          <?php if ($this->BcForm->getSourceValue('ThemeFile.ext')): ?>.<?php endif ?>
+          <?php echo h($this->BcForm->getSourceValue('ThemeFile.ext')) ?>
           <?php echo $this->BcAdminForm->control('ThemeFile.ext', ['type' => 'hidden']) ?>
           <i class="bca-icon--question-circle btn help bca-help"></i>
           <?php echo $this->BcForm->error('ThemeFile.name') ?>
@@ -63,7 +63,7 @@ if ($this->request->action !== 'admin_add') {
             </ul>
           </div>
         <?php else: ?>
-          <?php echo $this->BcAdminForm->control('ThemeFile.name', ['type' => 'text', 'size' => 30, 'readonly' => 'readonly']) ?> .<?php echo $this->BcForm->value('ThemeFile.ext') ?>
+          <?php echo $this->BcAdminForm->control('ThemeFile.name', ['type' => 'text', 'size' => 30, 'readonly' => 'readonly']) ?> .<?php echo $this->BcForm->getSourceValue('ThemeFile.ext') ?>
           <?php echo $this->BcAdminForm->control('ThemeFile.ext', ['type' => 'hidden']) ?>
         <?php endif ?>
       </td>

@@ -11,10 +11,12 @@
 namespace BaserCore\View\Helper;
 
 use Cake\View\Helper;
+use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Model\Entity\Content;
 use BaserCore\Service\ContentService;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Service\PermissionService;
@@ -177,5 +179,58 @@ class BcAdminContentHelper extends Helper
         } else {
             return false;
         }
+    }
+
+    /**
+     * 現在のコンテンツが属するフォルダまでのフルパスを取得する
+     * フォルダ名称部分にはフォルダ編集画面へのリンクを付与する
+     * コンテンツ編集画面で利用
+     * @param Content|null $content
+     * @return string
+     */
+    public function getCurrentFolderLinkedUrl($content)
+    {
+        return $this->getFolderLinkedUrl($content);
+    }
+
+    /**
+     * 対象コンテンツが属するフォルダまでのフルパスを取得する
+     * フォルダ名称部分にはフォルダ編集画面へのリンクを付与する
+     * コンテンツ編集画面で利用
+     *
+     * @param Entity $content コンテンツデータ
+     * @return string
+     */
+    public function getFolderLinkedUrl(Content $content)
+    {
+        $urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $content->url));
+        unset($urlArray[count($urlArray) - 1]);
+        if ($content->site->same_main_url) {
+            $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+            $site = $sites->findById($content->site->main_site_id)->first();
+            array_shift($urlArray);
+            if ($site->alias) {
+                $urlArray = explode('/', $site->alias) + $urlArray;
+            }
+        }
+        if ($content->site->use_subdomain) {
+            $host = $this->getUrl('/' . $urlArray[0] . '/', true, $content->site->use_subdomain);
+            array_shift($urlArray);
+        } else {
+            $host = $this->getUrl('/', true, $content->site->use_subdomain);
+        }
+
+        $checkUrl = '/';
+        $Content = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        foreach($urlArray as $key => $value) {
+            $checkUrl .= $value . '/';
+            $entityId = $Content->field('entity_id', ['Content.url' => $checkUrl]);
+            $urlArray[$key] = $this->BcBaser->getLink(urldecode($value), ['admin' => true, 'plugin' => '', 'controller' => 'content_folders', 'action' => 'edit', $entityId], ['forceTitle' => true]);
+        }
+        $folderLinkedUrl = $host;
+        if ($urlArray) {
+            $folderLinkedUrl .= implode('/', $urlArray) . '/';
+        }
+        return $folderLinkedUrl;
     }
 }

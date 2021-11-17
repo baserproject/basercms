@@ -13,7 +13,7 @@
 /**
  * [ADMIN] ブログ記事 フォーム
  */
-$url = $this->request->params['Content']['url'] . 'archives/' . $this->BcForm->value('BlogPost.no');
+$url = $this->request->params['Content']['url'] . 'archives/' . $this->BcForm->getSourceValue('BlogPost.no');
 $fullUrl = $this->BcBaser->getContentsUrl($url, true, $this->request->params['Site']['use_subdomain']);
 $statuses = [0 => __d('baser', '非公開'), 1 => __d('baser', '公開')];
 $this->BcBaser->css('admin/ckeditor/editor', ['inline' => true]);
@@ -62,7 +62,7 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
 <?php if ($this->action == 'admin_add'): ?>
   <?php echo $this->BcAdminForm->create('BlogPost', ['type' => 'file', 'url' => ['controller' => 'blog_posts', 'action' => 'add', $blogContent['BlogContent']['id']], 'id' => 'BlogPostForm']) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
-  <?php echo $this->BcAdminForm->create('BlogPost', ['type' => 'file', 'url' => ['controller' => 'blog_posts', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogPost.id'), 'id' => false], 'id' => 'BlogPostForm']) ?>
+  <?php echo $this->BcAdminForm->create('BlogPost', ['type' => 'file', 'url' => ['controller' => 'blog_posts', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->getSourceValue('BlogPost.id'), 'id' => false], 'id' => 'BlogPostForm']) ?>
 <?php endif; ?>
 <?php echo $this->BcAdminForm->control('BlogPost.id', ['type' => 'hidden']) ?>
 <?php echo $this->BcAdminForm->control('BlogPost.blog_content_id', ['type' => 'hidden', 'value' => $blogContent['BlogContent']['id']]) ?>
@@ -78,16 +78,16 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
 <?php if ($this->action == 'admin_edit'): ?>
   <div class="bca-section bca-section__post-top">
   <span class="bca-post__no">
-    <?php echo $this->BcForm->label('BlogPost.no', 'No') ?> : <strong><?php echo $this->BcForm->value('BlogPost.no') ?></strong>
+    <?php echo $this->BcForm->label('BlogPost.no', 'No') ?> : <strong><?php echo $this->BcForm->getSourceValue('BlogPost.no') ?></strong>
     <?php echo $this->BcAdminForm->control('BlogPost.no', ['type' => 'hidden']) ?>
   </span>
 
     <span class="bca-post__url">
     <?php //echo $this->BcForm->label('BlogPost.url', 'URL') ?>
     <a
-      href="<?php echo $this->BcBaser->getUri(urldecode($this->request->params['Content']['url']) . '/archives/' . $this->BcForm->value('BlogPost.no')) ?>"
+      href="<?php echo $this->BcBaser->getUri(urldecode($this->request->params['Content']['url']) . '/archives/' . $this->BcForm->getSourceValue('BlogPost.no')) ?>"
       class="bca-text-url" target="_blank" data-toggle="tooltip" data-placement="top" title="公開URLを開きます"><i
-        class="bca-icon--globe"></i><?php echo $this->BcBaser->getUri(urldecode($this->request->params['Content']['url']) . '/archives/' . $this->BcForm->value('BlogPost.no')) ?></a>
+        class="bca-icon--globe"></i><?php echo $this->BcBaser->getUri(urldecode($this->request->params['Content']['url']) . '/archives/' . $this->BcForm->getSourceValue('BlogPost.no')) ?></a>
     <?php echo $this->BcForm->button('', [
       'id' => 'BtnCopyUrl',
       'class' => 'bca-btn',
@@ -286,8 +286,8 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
           ]); ?>
           <?php echo $this->BcForm->error('BlogPost.user_id') ?>
         <?php else: ?>
-          <?php if (isset($users[$this->BcForm->value('BlogPost.user_id')])): ?>
-            <?php echo h($users[$this->BcForm->value('BlogPost.user_id')]) ?>
+          <?php if (isset($users[$this->BcForm->getSourceValue('BlogPost.user_id')])): ?>
+            <?php echo h($users[$this->BcForm->getSourceValue('BlogPost.user_id')]) ?>
           <?php endif ?>
           <?php echo $this->BcForm->hidden('BlogPost.user_id') ?>
         <?php endif ?>
@@ -338,13 +338,13 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
   <?php endif ?>
   <?php if ($this->action == 'admin_edit'): ?>
     <div class="bca-actions__sub">
-      <?php $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogPost.id')],
+      <?php $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->getSourceValue('BlogPost.id')],
         [
           'class' => 'submit-token button bca-btn bca-actions__item',
           'data-bca-btn-type' => 'delete',
           'data-bca-btn-size' => 'sm',
           'data-bca-btn-color' => 'danger'
-        ], sprintf(__d('baser', '%s を本当に削除してもいいですか？\n※ ブログ記事はゴミ箱に入らず完全に消去されます。'), $this->BcForm->value('BlogPost.name')), false); ?>
+        ], sprintf(__d('baser', '%s を本当に削除してもいいですか？\n※ ブログ記事はゴミ箱に入らず完全に消去されます。'), $this->BcForm->getSourceValue('BlogPost.name')), false); ?>
     </div>
   <?php endif ?>
 </section>

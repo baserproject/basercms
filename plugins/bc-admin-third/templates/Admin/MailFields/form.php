@@ -20,7 +20,7 @@ $this->BcBaser->js('BcMail.admin/mail_fields/form', false);
 <?php if ($this->action == 'admin_add'): ?>
   <?php echo $this->BcAdminForm->create('MailField', ['url' => ['controller' => 'mail_fields', 'action' => 'add', $mailContent['MailContent']['id']]]) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
-  <?php echo $this->BcAdminForm->create('MailField', ['url' => ['controller' => 'mail_fields', 'action' => 'edit', $mailContent['MailContent']['id'], $this->BcForm->value('MailField.id'), 'id' => false]]) ?>
+  <?php echo $this->BcAdminForm->create('MailField', ['url' => ['controller' => 'mail_fields', 'action' => 'edit', $mailContent['MailContent']['id'], $this->BcForm->getSourceValue('MailField.id'), 'id' => false]]) ?>
 <?php endif; ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
@@ -35,7 +35,7 @@ $this->BcBaser->js('BcMail.admin/mail_fields/form', false);
       <tr>
         <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailField.no', 'No') ?></th>
         <td class="col-input bca-form-table__input">
-          <?php echo h($this->BcForm->value('MailField.no')) ?>
+          <?php echo h($this->BcForm->getSourceValue('MailField.no')) ?>
           <?php echo $this->BcAdminForm->control('MailField.no', ['type' => 'hidden']) ?>
         </td>
       </tr>
@@ -327,7 +327,7 @@ $this->BcBaser->js('BcMail.admin/mail_fields/form', false);
   </div>
   <?php if ($this->action == 'admin_edit'): ?>
     <div class="bca-actions__sub">
-      <?php $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $mailContent['MailContent']['id'], $this->BcForm->value('MailField.id')], ['class' => 'submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'], sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('MailField.name')), false); ?>
+      <?php $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $mailContent['MailContent']['id'], $this->BcForm->getSourceValue('MailField.id')], ['class' => 'submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'], sprintf('%s を本当に削除してもいいですか？', $this->BcForm->getSourceValue('MailField.name')), false); ?>
     </div>
   <?php endif ?>
 </div>

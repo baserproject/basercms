@@ -58,7 +58,7 @@ if (empty($popup)) {
     <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('UploaderFile.id', 'No') ?></th>
     <td class="col-input bca-form-table__input">
       <?php if (empty($popup)): ?>
-        <?php echo $this->BcForm->value('UploaderFile.id') ?>
+        <?php echo $this->BcForm->getSourceValue('UploaderFile.id') ?>
         <?php echo $this->BcAdminForm->control('UploaderFile.id', ['type' => 'hidden']) ?>
       <?php else: ?>
         <?php echo $this->BcForm->text('UploaderFile.id', ['size' => 30, 'maxlength' => 255, 'readonly' => 'readonly', 'id' => 'UploaderFileId' . $listId, 'class' => 'uploader-file-id']) ?>&nbsp;
@@ -147,9 +147,9 @@ if (empty($popup)) {
     </div>
     <div class="bca-actions__sub">
       <?php $this->BcBaser->link(__d('baser', '削除'),
-        ['action' => 'delete', $this->BcForm->value('UploaderFile.id')],
+        ['action' => 'delete', $this->BcForm->getSourceValue('UploaderFile.id')],
         ['class' => 'submit-token button bca-btn', 'data-bca-btn-type' => 'delete'],
-        sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->value('UploaderFile.name')),
+        sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->getSourceValue('UploaderFile.name')),
         false); ?>
     </div>
   </div>

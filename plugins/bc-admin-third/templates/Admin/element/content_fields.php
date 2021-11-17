@@ -41,7 +41,6 @@ if ($this->request->getData('Site.use_subdomain')) {
   $previewUrl = $this->BcBaser->getUrl($this->BcAdminContent->getUrl($content->url, false, false, false));
 }
 $fullUrl = $this->BcAdminContent->getUrl($content->url, true, $site->use_subdomain);
-// TODO ucmits data-current が何に使われているか確認
 // $this->request->getData() では Content は取得できないため
 $this->BcBaser->js('admin/contents/edit.bundle', false, ['id' => 'AdminContentsEditScript',
   'data-previewurl' => $previewUrl,
@@ -67,7 +66,7 @@ $isOmitViewAction = $this->BcContents->getConfig('items')[$content->type]['omitV
 if ($site->use_subdomain) {
   $contentsName = '';
   if (!$content->site_root) {
-    $contentsName = $this->BcAdminForm->value($contentPath . 'name');
+    $contentsName = $this->BcAdminForm->getSourceValue($contentPath . 'name');
     if (!$isOmitViewAction && $content->url !== '/') {
       $contentsName .= '/';
     }
@@ -76,18 +75,17 @@ if ($site->use_subdomain) {
   if ($this->request->getData('Site.same_main_url') && $content->site_root) {
     $contentsName = '';
   } else {
-    $contentsName = $this->BcAdminForm->value($contentPath . 'name');
+    $contentsName = $this->BcAdminForm->getSourceValue($contentPath . 'name');
   }
   if (!$isOmitViewAction && $content->url !== '/' && $contentsName) {
     $contentsName .= '/';
   }
 }
-$linkedFullUrl = $this->BcContents->getCurrentFolderLinkedUrl($content) . $contentsName;
+$linkedFullUrl = $this->BcAdminContent->getCurrentFolderLinkedUrl($content) . $contentsName;
 $disableEdit = false;
-// TODO: エラーが出るため一時的にコメントアウト
-// if ($this->BcContents->isEditable()) {
-//   $disableEdit = true;
-// }
+if ($this->BcContents->isEditable()) {
+  $disableEdit = true;
+}
 ?>
 
 
@@ -144,8 +142,8 @@ $disableEdit = false;
         <?php echo $this->BcAdminForm->error($contentPath . 'name') ?>
         <?php echo $this->BcAdminForm->error($contentPath . 'parent_id') ?>
         <span class="bca-post__url">
-          			<?php echo strip_tags($linkedFullUrl, '<a>') ?>
-        		</span>
+          <?php echo strip_tags($linkedFullUrl, '<a>') ?>
+        </span>
       </td>
     </tr>
     <tr>
@@ -158,7 +156,7 @@ $disableEdit = false;
           <?php echo $this->BcAdminForm->control($contentPath . 'title', ['type' => 'text', 'size' => 50]) ?>
           <?php echo $this->BcAdminForm->error($contentPath . 'title') ?>
         <?php else: ?>
-          <?php echo h($this->BcAdminForm->value($contentPath . 'title')) ?>
+          <?php echo h($this->BcAdminForm->getSourceValue($contentPath . 'title')) ?>
           <?php echo $this->BcAdminForm->hidden($contentPath . 'title') ?>
         <?php endif ?>
       </td>
@@ -172,12 +170,12 @@ $disableEdit = false;
         <?php if (!$disableEdit): ?>
           <?php echo $this->BcAdminForm->control($contentPath . 'self_status', ['type' => 'radio', 'options' => $this->BcText->booleanDoList('公開')]) ?>
         <?php else: ?>
-          <?php echo $this->BcText->arrayValue($this->BcAdminForm->value($contentPath . 'self_status'), $this->BcText->booleanDoList('公開')) ?>
+          <?php echo $this->BcText->arrayValue($this->BcAdminForm->getSourceValue($contentPath . 'self_status'), $this->BcText->booleanDoList('公開')) ?>
           <?php echo $this->BcAdminForm->hidden($contentPath . 'self_status') ?>
         <?php endif ?>
         <br>
         <?php echo $this->BcAdminForm->error($contentPath . 'self_status') ?>
-        <?php if ((bool)$this->BcAdminForm->value($contentPath . 'status') != (bool)$this->BcAdminForm->value($contentPath . 'self_status')): ?>
+        <?php if ((bool)$this->BcAdminForm->getSourceValue($contentPath . 'status') != (bool)$this->BcAdminForm->getSourceValue($contentPath . 'self_status')): ?>
           <p>※ <?php echo __d('baser', '親フォルダの設定を継承し非公開状態となっています') ?></p>
         <?php endif ?>
       </td>
@@ -202,8 +200,8 @@ $disableEdit = false;
             'timeLabel' => ['text' => '終了時間']
           ]) ?>
         <?php else: ?>
-          <?php if ($this->BcAdminForm->value($contentPath . 'self_publish_begin') || $this->BcAdminForm->value($contentPath . 'self_publish_end')): ?>
-            <?php echo $this->BcAdminForm->value($contentPath . 'self_publish_begin') ?>&nbsp;〜&nbsp;<?php echo $this->BcAdminForm->value($contentPath . 'self_publish_end') ?>
+          <?php if ($this->BcAdminForm->getSourceValue($contentPath . 'self_publish_begin') || $this->BcAdminForm->getSourceValue($contentPath . 'self_publish_end')): ?>
+            <?php echo $this->BcAdminForm->getSourceValue($contentPath . 'self_publish_begin') ?>&nbsp;〜&nbsp;<?php echo $this->BcAdminForm->getSourceValue($contentPath . 'self_publish_end') ?>
           <?php endif ?>
           <?php echo $this->BcAdminForm->hidden($contentPath . 'self_publish_begin') ?>
           <?php echo $this->BcAdminForm->hidden($contentPath . 'self_publish_end') ?>
@@ -211,8 +209,8 @@ $disableEdit = false;
         <br>
         <?php echo $this->BcAdminForm->error($contentPath . 'self_publish_begin') ?>
         <?php echo $this->BcAdminForm->error($contentPath . 'self_publish_end') ?>
-        <?php if (($this->BcAdminForm->value($contentPath . 'publish_begin') != $this->BcAdminForm->value($contentPath . 'self_publish_begin')) ||
-          ($this->BcAdminForm->value($contentPath . 'publish_end') != $this->BcAdminForm->value($contentPath . 'self_publish_end'))): ?>
+        <?php if (($this->BcAdminForm->getSourceValue($contentPath . 'publish_begin') != $this->BcAdminForm->getSourceValue($contentPath . 'self_publish_begin')) ||
+          ($this->BcAdminForm->getSourceValue($contentPath . 'publish_end') != $this->BcAdminForm->getSourceValue($contentPath . 'self_publish_end'))): ?>
           <p>※ <?php echo __d('baser', '親フォルダの設定を継承し公開期間が設定されている状態となっています') ?><br>
             （<?php echo $this->BcTime->format($content->publish_begin, 'YYYY/MM/DD H:i') ?>
             〜

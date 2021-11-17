@@ -14,13 +14,13 @@
  * [ADMIN] ブログカテゴリ フォーム
  */
 $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
-$fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url'], true, $this->request->params['Site']['use_subdomain']) . 'archives/category/' . $this->BcForm->value('BlogCategory.name');
+$fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url'], true, $this->request->params['Site']['use_subdomain']) . 'archives/category/' . $this->BcForm->getSourceValue('BlogCategory.name');
 ?>
 
 <?php if ($this->action == 'admin_edit'): ?>
   <div class="bca-section bca-section__post-top">
 	<span class="bca-post__no">
-		<?php echo $this->BcForm->label('BlogCategory.no', 'No') ?> : <strong><?php echo $this->BcForm->value('BlogCategory.no') ?></strong>
+		<?php echo $this->BcForm->label('BlogCategory.no', 'No') ?> : <strong><?php echo $this->BcForm->getSourceValue('BlogCategory.no') ?></strong>
 		<?php echo $this->BcAdminForm->control('BlogCategory.no', ['type' => 'hidden']) ?>
 	</span>
     <span class="bca-post__url">
@@ -42,7 +42,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 <?php if ($this->action == 'admin_add'): ?>
   <?php echo $this->BcAdminForm->create('BlogCategory', ['url' => ['controller' => 'blog_categories', 'action' => 'add', $blogContent['BlogContent']['id']]]) ?>
 <?php elseif ($this->action == 'admin_edit'): ?>
-  <?php echo $this->BcAdminForm->create('BlogCategory', ['url' => ['controller' => 'blog_categories', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id'), 'id' => false]]) ?>
+  <?php echo $this->BcAdminForm->create('BlogCategory', ['url' => ['controller' => 'blog_categories', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->getSourceValue('BlogCategory.id'), 'id' => false]]) ?>
 <?php endif; ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
@@ -139,7 +139,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
   <?php if ($this->action == 'admin_edit'): ?>
     <div class="bca-actions__sub">
       <?php
-      $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id')], ['class' => 'submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'], sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogCategory.name')), false);
+      $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->getSourceValue('BlogCategory.id')], ['class' => 'submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'], sprintf('%s を本当に削除してもいいですか？', $this->BcForm->getSourceValue('BlogCategory.name')), false);
       ?>
     </div>
   <?php endif ?>

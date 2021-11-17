@@ -56,7 +56,7 @@ if (!empty($mailFields)) {
 				echo '<span class="bs-mail-description">' . $description . '</span>';
 			}
 			/* 入力欄 */
-			if (!$freezed || $this->Mailform->value("MailMessage." . $field['field_name']) !== '') {
+			if (!$freezed || $this->Mailform->getSourceValue("MailMessage." . $field['field_name']) !== '') {
 				echo '<span class="bs-mail-before-attachment">' . $field['before_attachment'] . '</span>';
 			}
 
@@ -73,7 +73,7 @@ if (!empty($mailFields)) {
 				echo $this->Mailform->control($field['type'], "MailMessage." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
 			}
 
-			if (!$freezed || $this->Mailform->value("MailMessage." . $field['field_name']) !== '') {
+			if (!$freezed || $this->Mailform->getSourceValue("MailMessage." . $field['field_name']) !== '') {
 				echo '<span class="bs-mail-after-attachment">' . $field['after_attachment'] . '</span>';
 			}
 			if (!$freezed) {

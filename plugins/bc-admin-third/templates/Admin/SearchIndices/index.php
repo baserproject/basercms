@@ -52,7 +52,7 @@ echo $this->BcBaser->i18nScript([
 </div>
 <div id="AjaxChangePriorityUrl"
      class="display-none"><?php echo $this->BcBaser->url(['action' => 'ajax_change_priority']) ?></div>
-<div id="SearchIndexOpen" class="display-none"><?php echo $this->BcForm->value('SearchIndex.open') ?></div>
+<div id="SearchIndexOpen" class="display-none"><?php echo $this->BcForm->getSourceValue('SearchIndex.open') ?></div>
 <div id="DataList" class="bca-data-list"><?php $this->BcBaser->element('search_indices/index_list') ?></div>
 
 
