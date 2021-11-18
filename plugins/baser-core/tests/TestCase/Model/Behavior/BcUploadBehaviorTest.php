@@ -1,16 +1,17 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Model.Behavior
- * @since           baserCMS v 3.0.6
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+namespace BaserCore\Test\TestCase\Model\Behavior;
+
+use Cake\ORM\TableRegistry;
+use BaserCore\TestSuite\BcTestCase;
 
 /**
  * Class BcUploadBehaviorTest
@@ -19,12 +20,19 @@ return;
  * @property BcUploadBehavior $BcUploadBehavior
  * @property EditorTemplate $EditorTemplate
  */
-class BcUploadBehaviorTest extends BaserTestCase
+class BcUploadBehaviorTest extends BcTestCase
 {
 
-    public $fixtures = [
-        'baser.Default.EditorTemplate',
-        'baser.Default.Page',
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BaserCore.EditorTemplate',
+        'plugin.BaserCore.Pages',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.ContentFolders',
     ];
 
     /**
@@ -32,11 +40,11 @@ class BcUploadBehaviorTest extends BaserTestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->EditorTemplate = ClassRegistry::init('EditorTemplate');
-        $this->BcUploadBehavior = ClassRegistry::init('BcUploadBehavior');
+        // $this->EditorTemplate = TableRegistry::getTableLocator()->get('BaserCore.EditorTemplate');
+        // $this->BcUploadBehavior = ClassRegistry::init('BcUploadBehavior');
     }
 
     /**
@@ -44,11 +52,11 @@ class BcUploadBehaviorTest extends BaserTestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         session_unset();
-        unset($this->EditorTemplate);
-        unset($this->BcUploadBehavior);
+        // unset($this->EditorTemplate);
+        // unset($this->BcUploadBehavior);
         parent::tearDown();
     }
 

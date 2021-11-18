@@ -10,13 +10,16 @@
  */
 namespace BaserCore\Model\Behavior;
 
+use ArrayObject;
 use Cake\Http\Session;
 use Cake\ORM\Behavior;
 use Cake\Utility\Hash;
 use Cake\Filesystem\Folder;
-use BaserCore\Annotation\UnitTest;
+use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use Cake\Datasource\EntityInterface;
 
 /**
  * Class BcUploadBehavior
@@ -145,17 +148,20 @@ class BcUploadBehavior extends Behavior
     }
 
     /**
-     * Before Validate
+     * BeforeMarshal
      *
-     * @param Model $Model
-     * @param array $options
-     * @return mixed
+     * アップロード用のリクエストデータを変換する
+     * @param EventInterface $event
+     * @param ArrayObject $data
+     * @param ArrayObject $options
+     * @return void
      */
-    public function beforeValidate(Model $Model, $options = [])
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
     {
-        $this->setupRequestData($Model);
-        return parent::beforeValidate($Model, $options);
+        $this->setupRequestData($data);
+        // return parent::afterMarshal($event, $entity,$data, $options);
     }
+
 
     /**
      * Before save
@@ -183,9 +189,9 @@ class BcUploadBehavior extends Behavior
     /**
      * リクエストされたデータを処理しやすいようにセットアップする
      *
-     * @param Model $Model
+     * @param $content
      */
-    public function setupRequestData(Model $Model)
+    public function setupRequestData($content)
     {
         foreach($this->settings[$Model->alias]['fields'] as $key => $field) {
             $data = [];
