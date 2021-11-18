@@ -11,27 +11,28 @@
 
 namespace BaserCore\View;
 
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use BaserCore\View\Helper\BcAdminContentFolderHelper;
-use BaserCore\View\Helper\BcAdminContentHelper;
-use BaserCore\View\Helper\BcAdminPermissionHelper;
-use BaserCore\View\Helper\BcAdminPluginHelper;
-use BaserCore\View\Helper\BcAdminSiteConfigHelper;
-use BaserCore\View\Helper\BcAdminSiteHelper;
-use BaserCore\View\Helper\BcAdminUserHelper;
-use BaserCore\View\Helper\BcAdminFormHelper;
-use BaserCore\View\Helper\BcAdminHelper;
+use BaserCore\Annotation\UnitTest;
 use BaserCore\View\Helper\BcAuthHelper;
-use BaserCore\View\Helper\BcBaserHelper;
 use BaserCore\View\Helper\BcFormHelper;
-use BaserCore\View\Helper\BcFormTableHelper;
 use BaserCore\View\Helper\BcHtmlHelper;
-use BaserCore\View\Helper\BcListTableHelper;
 use BaserCore\View\Helper\BcTextHelper;
 use BaserCore\View\Helper\BcTimeHelper;
+use BaserCore\View\Helper\BcAdminHelper;
+use BaserCore\View\Helper\BcBaserHelper;
+use BaserCore\View\Helper\BcUploadHelper;
 use BaserCore\View\Helper\BcContentsHelper;
+use BaserCore\View\Helper\BcAdminFormHelper;
+use BaserCore\View\Helper\BcAdminSiteHelper;
+use BaserCore\View\Helper\BcAdminUserHelper;
+use BaserCore\View\Helper\BcFormTableHelper;
+use BaserCore\View\Helper\BcListTableHelper;
+use BaserCore\View\Helper\BcAdminPluginHelper;
+use BaserCore\View\Helper\BcAdminContentHelper;
+use BaserCore\View\Helper\BcAdminPermissionHelper;
+use BaserCore\View\Helper\BcAdminSiteConfigHelper;
+use BaserCore\View\Helper\BcAdminContentFolderHelper;
 
 /**
  * Class BcAdminAppView
@@ -54,6 +55,7 @@ use BaserCore\View\Helper\BcContentsHelper;
  * @property BcContentsHelper $BcContents
  * @property BcAdminContentHelper $BcAdminContent
  * @property BcAdminContentFolderHelper $BcAdminContentFolder
+ * @property BcUploadHelper $BcUpload
  */
 class BcAdminAppView extends AppView
 {

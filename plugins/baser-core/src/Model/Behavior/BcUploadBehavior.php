@@ -14,6 +14,9 @@ use Cake\Http\Session;
 use Cake\ORM\Behavior;
 use Cake\Utility\Hash;
 use Cake\Filesystem\Folder;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class BcUploadBehavior
@@ -131,14 +134,14 @@ class BcUploadBehavior extends Behavior
             }
         }
         // NOTE: 同じテーブルのディレクトリがないかをチェックする箇所
-        $this->existsCheckDirs[] = $this->getExistsCheckDirs($this->table->getRegistryAlias());
-        // if (!is_dir($this->savePath[$this->table->getRegistryAlias()])) {
+        $this->existsCheckDirs[] = $this->getExistsCheckDirs($this->table->getAlias());
+        // if (!is_dir($this->savePath[$this->table->getAlias()])) {
         //     $Folder = new Folder();
-        //     $Folder->create($this->savePath[$this->table->getRegistryAlias()]);
-        //     $Folder->chmod($this->savePath[$this->table->getRegistryAlias()], 0777, true);
+        //     $Folder->create($this->savePath[$this->table->getAlias()]);
+        //     $Folder->chmod($this->savePath[$this->table->getAlias()], 0777, true);
         // }
         $this->Session = new Session();
-        $this->setConfig('BcUploader.' . $this->table->getRegistryAlias() . '.setting', $setting);
+        $this->setConfig('setting' . $this->table->getAlias(), $setting);
     }
 
     /**
@@ -1077,7 +1080,7 @@ class BcUploadBehavior extends Behavior
         // $existsCheckDirs[] = $this->savePath[$modelName];
 
         $basePath = WWW_ROOT . 'files' . DS;
-        $existsCheckDirs = $this->getConfig("BcUpload.${modelName}.existsCheckDirs");
+        $existsCheckDirs = $this->getConfig("${modelName}.existsCheckDirs");
         if ($existsCheckDirs) {
             foreach($existsCheckDirs as $existsCheckDir) {
                 $existsCheckDirs[] = $basePath . $existsCheckDir . DS;

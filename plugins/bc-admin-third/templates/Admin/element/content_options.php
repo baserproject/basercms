@@ -52,13 +52,12 @@ $modified_date = $this->BcAdminForm->getSourceValue($contentPath . 'modified_dat
         <th
           class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label($contentPath . 'eyecatch', __d('baser', 'アイキャッチ')) ?></th>
         <td class="col-input bca-form-table__input">
-          <?php if (!$disableEdit): ?>
-            <!-- TODO: BcUploaderがまだのため一旦コメントアウト -->
-            <?php #echo $this->BcAdminForm->control($contentPath . 'eyecatch', ['type' => 'file', 'imgsize' => 'thumb',  'novalidate' => true]) ?>
+          <?php if (false): ?>
+            <?php echo $this->BcAdminForm->control($contentPath . 'eyecatch', ['type' => 'file', 'imgsize' => 'thumb',  'novalidate' => true]) ?>
           <?php else: ?>
-            <?php #echo $this->BcUpload->uploadImage($contentPath . 'eyecatch', $this->BcAdminForm->getSourceValue($contentPath . 'eyecatch'), ['imgsize' => 'thumb']); ?>
+            <?php echo $this->BcUpload->uploadImage($contentPath . 'eyecatch', $this->BcAdminForm->getSourceValue($contentPath . 'eyecatch'), ['imgsize' => 'thumb']); ?>
           <?php endif ?>
-          <?php #echo $this->BcAdminForm->error($contentPath . 'eyecatch') ?>
+          <?php echo $this->BcAdminForm->error($contentPath . 'eyecatch') ?>
         </td>
       </tr>
       <tr>

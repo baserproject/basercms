@@ -1,20 +1,22 @@
 <?php
-// TODO : コード確認要
-use BaserCore\Event\BcEventDispatcherTrait;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View.Helper
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+namespace BaserCore\View\Helper;
 
-App::uses('BcAppHelper', 'View/Helper');
+use Cake\View\Helper;
+use Cake\ORM\TableRegistry;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Error\BcException;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Event\BcEventDispatcherTrait;
 
 /**
  * アップロードヘルパー
@@ -22,7 +24,7 @@ App::uses('BcAppHelper', 'View/Helper');
  * @package Baser.View.Helper
  * @property HtmlHelper $Html
  */
-class BcUploadHelper extends BcAppHelper
+class BcUploadHelper  extends Helper
 {
     /**
      * Trait
@@ -35,6 +37,22 @@ class BcUploadHelper extends BcAppHelper
      * @var array
      */
     public $helpers = ['Html', 'BcForm'];
+
+    /**
+     * initialize
+     *
+     * @param  array $config
+     * @return void
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+        // TODO: 一旦コンテンテーブルツのみで決め打ち
+        $this->table = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        if (!$this->table->hasBehavior('BcUpload')) {
+            throw new BcException(__d('baser', 'BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。'));
+        }
+    }
 
     /**
      * ファイルへのリンクを取得する
@@ -61,11 +79,10 @@ class BcUploadHelper extends BcAppHelper
         if (strpos($fieldName, '.') === false) {
             throw new BcException(__d('baser', 'BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドットで区切って指定する必要があります。'));
         }
-        $this->setEntity($fieldName);
-        $field = $this->field();
+        // $this->setEntity($fieldName);
+        // $field = $this->field();
 
         $tmp = false;
-        $Model = ClassRegistry::init($this->model());
 
         try {
             $settings = $this->getBcUploadSetting();
@@ -97,13 +114,13 @@ class BcUploadHelper extends BcAppHelper
 
         if (is_array($value)) {
             if (empty($value['session_key']) && empty($value['name'])) {
-                $data = $Model->find('first', [
+                $data = $this->table->find('first', [
                     'conditions' => [
-                        $Model->alias . '.' . $Model->primaryKey => $Model->id
+                        $this->table->getAlias() . '.' . $this->table->getPrimaryKey() => $Model->id
                     ]
                 ]);
-                if (!empty($data[$Model->alias][$field])) {
-                    $value = $data[$Model->alias][$field];
+                if (!empty($data[$this->table->getAlias()][$field])) {
+                    $value = $data[$this->table->getAlias()][$field];
                 } else {
                     $value = '';
                 }
@@ -136,7 +153,7 @@ class BcUploadHelper extends BcAppHelper
                 } else {
                     $figcaptionOptions['class'] = 'file-name';
                 }
-                if ($uploadSettings['type'] == 'image' || in_array($ext, $Model->Behaviors->BcUpload->imgExts)) {
+                if ($uploadSettings['type'] == 'image' || in_array($ext, $this->table->getBehavior('BcUpload')->imgExts)) {
                     $imgOptions = array_merge([
                         'imgsize' => $options['imgsize'],
                         'rel' => $options['rel'],
@@ -209,9 +226,17 @@ class BcUploadHelper extends BcAppHelper
             'class' => ''
         ], $options);
 
-        $this->setEntity($fieldName);
-        $field = $this->field();
+        if (strpos($fieldName, '.') === false) {
+			throw new BcException(__d('baser', 'BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドットで区切って指定する必要があります。'));
+		}
+		// $this->setEntity($fieldName);
+		// $field = $this->field();
+        $fieldInfo = explode('.', $fieldName);
+        $field = array_pop($fieldInfo);
 
+        // TODO: 一旦コンテンテーブルツのみで決め打ち
+        // $tableName = (strpos($fieldName, 'content') || strpos($fieldName, 'Content')) ? 'Contents' : $fieldName;
+        // $model = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         try {
             $settings = $this->getBcUploadSetting();
         } catch (BcException $e) {
@@ -447,29 +472,15 @@ class BcUploadHelper extends BcAppHelper
     /**
      * アップロードの設定を取得する
      *
-     * @param string $modelName
      * @return array
      */
     protected function getBcUploadSetting()
     {
-        $Model = $this->getUploadModel();
-        return $Model->Behaviors->BcUpload->settings[$Model->name];
+        return $this->table->getBehavior('BcUpload')->getConfig("setting." . $this->table->getAlias());
     }
 
     protected function setBcUploadSetting($settings)
     {
-        $Model = $this->getUploadModel();
-        $Model->Behaviors->BcUpload->settings[$Model->name] = $settings;
+        $this->table->getBehavior('BcUpload')->setConfig("setting." . $this->table->getAlias(), $settings);
     }
-
-    protected function getUploadModel()
-    {
-        $modelName = $this->model();
-        $Model = ClassRegistry::init($modelName);
-        if (empty($Model->Behaviors->BcUpload)) {
-            throw new BcException(__d('baser', 'BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。'));
-        }
-        return $Model;
-    }
-
 }
