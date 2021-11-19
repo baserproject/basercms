@@ -10,8 +10,9 @@
  */
 namespace BaserCore\Test\TestCase\Model\Behavior;
 
-use Cake\ORM\TableRegistry;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Model\Table\ContentsTable;
+use BaserCore\Model\Behavior\BcUploadBehavior;
 
 /**
  * Class BcUploadBehaviorTest
@@ -19,6 +20,7 @@ use BaserCore\TestSuite\BcTestCase;
  * @package Baser.Test.Case.Model
  * @property BcUploadBehavior $BcUploadBehavior
  * @property EditorTemplate $EditorTemplate
+ * @property ContentsTable $ContentsTable
  */
 class BcUploadBehaviorTest extends BcTestCase
 {
@@ -29,11 +31,17 @@ class BcUploadBehaviorTest extends BcTestCase
      * @var array
      */
     protected $fixtures = [
-        'plugin.BaserCore.EditorTemplate',
+        // 'plugin.BaserCore.EditorTemplate',
         'plugin.BaserCore.Pages',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
     ];
+
+
+    /**
+     * @var ContentsTable|BcUploadBehavior
+     */
+    public $table;
 
     /**
      * setUp
@@ -43,6 +51,9 @@ class BcUploadBehaviorTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->table = $this->getTableLocator()->get('BaserCore.Contents');
+        $this->table->setPrimaryKey(['id']);
+        $this->table->addBehavior('BaserCore.BcUpload');
         // $this->EditorTemplate = TableRegistry::getTableLocator()->get('BaserCore.EditorTemplate');
         // $this->BcUploadBehavior = ClassRegistry::init('BcUploadBehavior');
     }
@@ -55,6 +66,7 @@ class BcUploadBehaviorTest extends BcTestCase
     public function tearDown(): void
     {
         session_unset();
+        unset($this->table);
         // unset($this->EditorTemplate);
         // unset($this->BcUploadBehavior);
         parent::tearDown();
@@ -134,9 +146,11 @@ class BcUploadBehaviorTest extends BcTestCase
     }
 
     /**
-     * セットアップ
+     * testInitialize
+     *
+     * @return void
      */
-    public function testSetup()
+    public function testInitialize()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -144,7 +158,7 @@ class BcUploadBehaviorTest extends BcTestCase
     /**
      * Before Validate
      */
-    public function testBeforeValidate()
+    public function testBeforeMarshal()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
@@ -201,6 +215,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testSaveTmpFiles()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->initTestSaveFiles();
         $data = $this->EditorTemplate->saveTmpFiles($this->EditorTemplate->data, 1);
         $tmpId = $this->BcUploadBehavior->tmpId;
@@ -218,7 +233,6 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testSaveFilesCanSave($tmpId, $message)
     {
-
         // TODO 2020/07/08 ryuring PHP7.4 で、gd が標準インストールされないため、テストがエラーとなるためスキップ
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
         return;
@@ -267,7 +281,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testDeleteFiles($id, $message)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->initTestSaveFiles($id);
 
         // パス情報
@@ -426,7 +440,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testMoveFileSessionToTmp()
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $tmpId = 1;
         $fieldName = 'fieldName';
         $tmp_name = 'basercms_tmp';
@@ -505,7 +519,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testSaveFile($prefix, $suffix, $namefield, $tmpId, $message = null)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $fieldName = 'fieldName';
         $tmp_name = 'tmp_file';
         $basename = 'basename';
@@ -708,6 +722,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testGetImageSize($imgName, $expected, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $imgPath = ROOT . '/lib/Baser/webroot/img/' . $imgName;
 
         $result = $this->BcUploadBehavior->getImageSize($imgPath);
@@ -829,7 +844,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testRenameToFieldBasename($oldName, $newName, $ext, $copy, $imagecopy, $message = null)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 初期化
         $this->EditorTemplate->id = $newName;
         $oldName = $oldName . '.' . $ext;
@@ -924,7 +939,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testGetFieldBasename($namefield, $basename, $modelId, $setting, $expected, $message = null)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 初期化
         $this->EditorTemplate->data['EditorTemplate'][$namefield] = $basename;
         $this->EditorTemplate->id = $modelId;
@@ -992,6 +1007,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testGetFileName($prefix, $suffix, $expected, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $setting = [
             'prefix' => $prefix,
             'suffix' => $suffix,
@@ -1023,6 +1039,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testGetBasename($prefix, $suffix, $expected, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $setting = [
             'prefix' => $prefix,
             'suffix' => $suffix,
@@ -1052,6 +1069,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testGetUniqueFileName($fieldName, $fileName, $expected, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $setting = ['ext' => 'gif'];
         $savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
         touch($savePath . 'template1.gif');
@@ -1076,7 +1094,8 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testGetSaveDir()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->table->getSaveDir($this->table->getAlias());
+        $this->assertEquals("/var/www/html/app/webroot/files/contents/", $result);
     }
 
     /**

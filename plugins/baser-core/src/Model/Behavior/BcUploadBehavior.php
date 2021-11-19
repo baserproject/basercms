@@ -14,6 +14,7 @@ use ArrayObject;
 use Cake\Http\Session;
 use Cake\ORM\Behavior;
 use Cake\Utility\Hash;
+use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
@@ -116,14 +117,15 @@ class BcUploadBehavior extends Behavior
     public function initialize(array $config): void
     {
         $this->table = $this->table();
-        $setting = Hash::merge([
+        $alias = $this->table->getAlias();
+        $settings = Hash::merge([
             'saveDir' => '',
             'existsCheckDirs' => [],
             'fields' => [],
         ], $config);
-        foreach ($setting as $key => $field) {
+        foreach ($settings['fields'] as $key => $field) {
             if (empty($field['name'])) {
-                $setting['fields'][$key]['name'] = $key;
+                $settings['fields'][$key]['name'] = $key;
             }
             if (!empty($field['imageresize'])) {
                 if (empty($field['imageresize']['thumb'])) {
@@ -136,15 +138,16 @@ class BcUploadBehavior extends Behavior
                 $settings['fields'][$key]['getUniqueFileName'] = true;
             }
         }
+        $this->setConfig('settings.' . $alias, $settings);
+        $this->savePath[$alias] = $this->getSaveDir($alias);
         // NOTE: 同じテーブルのディレクトリがないかをチェックする箇所
-        $this->existsCheckDirs[] = $this->getExistsCheckDirs($this->table->getAlias());
+        $this->existsCheckDirs[] = $this->getExistsCheckDirs($alias);
         // if (!is_dir($this->savePath[$this->table->getAlias()])) {
         //     $Folder = new Folder();
         //     $Folder->create($this->savePath[$this->table->getAlias()]);
         //     $Folder->chmod($this->savePath[$this->table->getAlias()], 0777, true);
         // }
         $this->Session = new Session();
-        $this->setConfig('setting' . $this->table->getAlias(), $setting);
     }
 
     /**
@@ -164,14 +167,15 @@ class BcUploadBehavior extends Behavior
 
 
     /**
-     * Before save
-     *
-     * @param Model $Model
-     * @param array $options
-     * @return boolean
+     * Before Save
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
+     * @return bool
      */
-    public function beforeSave(Model $Model, $options = [])
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
+        $Model = $entity; // TODO: 代用
         if ($Model->exists()) {
             $this->deleteExistingFiles($Model);
         }
@@ -193,7 +197,8 @@ class BcUploadBehavior extends Behavior
      */
     public function setupRequestData($content)
     {
-        foreach($this->settings[$Model->alias]['fields'] as $key => $field) {
+        $setting = $this->getConfig('setting' . $this->table->getAlias());
+        foreach($setting['fields'] as $key => $field) {
             $data = [];
             $upload = false;
             if (!empty($Model->data[$Model->name])) {
@@ -220,7 +225,7 @@ class BcUploadBehavior extends Behavior
             }
             if ($upload) {
                 // 拡張子を取得
-                $this->settings[$Model->alias]['fields'][$key]['ext'] = $field['ext'] = decodeContent($data[$field['name']]['type'], $data[$field['name']]['name']);
+                $setting['fields'][$key]['ext'] = $field['ext'] = decodeContent($data[$field['name']]['type'], $data[$field['name']]['name']);
                 // タイプ別除外
                 $targets = [];
                 if ($field['type'] == 'image') {
@@ -234,7 +239,7 @@ class BcUploadBehavior extends Behavior
                     $upload = false;
                 }
             }
-            $this->settings[$Model->alias]['fields'][$key]['upload'] = $upload;
+            $setting['fields'][$key]['upload'] = $upload;
         }
     }
 
@@ -1045,11 +1050,11 @@ class BcUploadBehavior extends Behavior
     /**
      * 保存先のフォルダを取得する
      *
-     * @param Model $Model
+     * @param string $alias
      * @param bool $isTheme
      * @return string $saveDir
      */
-    public function getSaveDir(Model $Model, $isTheme = false, $limited = false)
+    public function getSaveDir(string $alias, $isTheme = false, $limited = false)
     {
         if (!$isTheme) {
             $basePath = WWW_ROOT . 'files' . DS;
@@ -1065,8 +1070,8 @@ class BcUploadBehavior extends Behavior
         if ($limited) {
             $basePath = $basePath . $limited . DS;
         }
-        if ($this->settings[$Model->alias]['saveDir']) {
-            $saveDir = $basePath . $this->settings[$Model->alias]['saveDir'] . DS;
+        if ($this->getConfig("settings.${alias}.saveDir")) {
+            $saveDir = $basePath . $this->getConfig("settings.${alias}.saveDir") . DS;
         } else {
             $saveDir = $basePath;
         }
