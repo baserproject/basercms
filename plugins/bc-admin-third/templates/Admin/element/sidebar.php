@@ -69,7 +69,7 @@ use BaserCore\View\AppView;
 
   <nav class="bca-nav__main" data-js-container="AdminMenu" hidden></nav>
 
-  <?php if (!empty($this->BcBaser->siteConfig['admin_side_banner'])): ?>
+  <?php if ($this->BcAdminSiteConfig->getValue('admin_side_banner')): ?>
     <div id="BannerArea" class="bca-banners">
       <ul class="bca-banners__ul">
         <li class="bca-banners__li"><a href="https://market.basercms.net/" target="_blank"><img
