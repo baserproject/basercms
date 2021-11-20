@@ -73,10 +73,14 @@ $base = $attributes['base'];
     'vendor/vue.min',
     'vendor/jquery-3.5.1.min',
     'vendor/jquery.bt.min',
-    'vendor/jquery-ui-1.11.4.min',
+    'vendor/jquery-ui-1.13.0.min',
     'vendor/i18n/ui.datepicker-ja',
+    'vendor/jquery.validate.1.19.3.min',
+    'vendor/jquery.validate_ja',
+    'vendor/jquery.form-2.94',
     'vendor/jquery.timepicker',
     'admin/functions',
+    'admin/permission',
   ]) ?>
   <?php $this->BcBaser->js('admin/common.bundle', true, [
     'id' => 'AdminScript',

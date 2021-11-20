@@ -114,9 +114,26 @@ class PermissionsControllerTest extends BcTestCase
     /**
      * [ADMIN] 登録処理
      */
-    public function testAdmin_ajax_add()
+    public function testAjax_add()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        
+        $this->post('/baser/admin/baser-core/permissions/ajax_add');
+        $this->assertResponseFailure();
+        
+        $data = [
+            'user_group_id' => '2',
+            'name' => 'テストルール名',
+            'url' => '/baser/admin/baser-core/users/index/?test',
+            'method' => '*',
+        ];
+        $this->post('/baser/admin/baser-core/permissions/ajax_add', $data);
+        $this->assertResponseSuccess();
+        
+        $permissions = $this->getTableLocator()->get('Permissions');
+        $permission = $permissions->find()->order(['id' => 'DESC'])->first();
+        $this->assertEquals('テストルール名', $permission->name);
     }
 
     /**

@@ -34,11 +34,13 @@ use BaserCore\View\BcAdminAppView;
           <?php // TODO: button要素に変更 ?>
           <?php $this->BcBaser->link(__d('baser', 'ヘルプ'), 'javascript:void(0)', ['id' => 'BtnMenuHelp', 'class' => 'bca-content-menu__link bca-icon--help']) ?></li>
       <?php endif ?>
-      <?php if ($isLogin): ?>
+      
+      <?php if ($isSuperUser): ?>
         <li class="bca-content-menu__item">
+          <?php $this->BcBaser->element('permission') ?>
           <?php // TODO: button要素に変更 ?>
           <?php // TODO アクセス制限を実装 ?>
-          <?php //$this->BcBaser->link(__d('baser', '制限'), 'javascript:void(0)', ['id' => 'BtnMenuPermission', 'class' => 'bca-content-menu__link bca-icon--permission']) ?></li>
+          <?php $this->BcBaser->link(__d('baser', '制限'), 'javascript:void(0)', ['id' => 'BtnMenuPermission', 'class' => 'bca-content-menu__link bca-icon--permission']) ?></li>
       <?php endif ?>
     </ul>
   </div>

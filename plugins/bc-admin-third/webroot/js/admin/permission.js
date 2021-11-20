@@ -11,7 +11,6 @@
 $(function () {
 
     $("#BtnMenuPermission").click(function () {
-        $("#PermissionDialog").dialog('option', 'position', {my: "center", at: "center", of: window});
         $('#PermissionDialog').dialog('open');
         return false;
     });
@@ -22,6 +21,8 @@ $(function () {
     $("#PermissionAjaxAddForm").submit(function () {
         return false
     });
+    
+    
 
     /**
      * ダイアログを初期化
@@ -29,18 +30,12 @@ $(function () {
     $("#PermissionDialog").dialog({
         bgiframe: true,
         autoOpen: false,
-        position: [250, 150],
         width: 'auto',
         modal: true,
         open: function (event, ui) {
-            $("#PermissionName").val($("#CurrentPageName").html());
-            $("#PermissionUrl").val($("#CurrentPageUrl").html().replace($("#PermissionAdmin").html(), ''));
-            $("#PermissionAjaxAddForm").submit();
-            $("#PermissionName").focus();
+            $("#PermissionAjaxAddForm input").first().focus();
         },
         close: function () {
-            $("#PermissionName").val('');
-            $("#PermissionUrl").val('');
         },
         buttons: {
             cancel: {
@@ -52,6 +47,7 @@ $(function () {
             save: {
                 text: bcI18n.commonSave,
                 click: function () {
+                    
                     $("#PermissionAjaxAddForm").submit();
                     if ($("#PermissionAjaxAddForm").valid()) {
                         $.bcToken.check(function () {
