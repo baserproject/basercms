@@ -17,6 +17,7 @@ use BaserCore\Annotation\Checked;
  * paths
  *
  * @checked
+ * @unitTest
  * @noTodo
  */
 
@@ -30,25 +31,25 @@ if (!defined('BASER')) {
  * Baserコントローラーパス
  */
 if (!defined('BASER_CONTROLLERS')) {
-    define('BASER_CONTROLLERS', BASER . 'Controller' . DS);
+    define('BASER_CONTROLLERS', BASER . 'src' . DS . 'Controller' . DS);
 }
 /**
  * Baserモデルパス
  */
 if (!defined('BASER_MODELS')) {
-    define('BASER_MODELS', BASER . 'Model' . DS);
+    define('BASER_MODELS', BASER . 'src' . DS . 'Model' . DS);
 }
 /**
  * Baserビューパス
  */
 if (!defined('BASER_VIEWS')) {
-    define('BASER_VIEWS', BASER . 'View' . DS);
+    define('BASER_VIEWS', BASER . 'src' . DS . 'View' . DS);
 }
 /**
  * BaserVendorsパス
  */
 if (!defined('BASER_VENDORS')) {
-    define('BASER_VENDORS', BASER . 'Vendor' . DS);
+    define('BASER_VENDORS', BASER . 'src' . DS . 'Vendor' . DS);
 }
 /**
  * Baserコンポーネント
@@ -85,49 +86,37 @@ if (!defined('BASER_DATABASE')) {
  * Baserプラグイン
  */
 if (!defined('BASER_PLUGINS')) {
-    define('BASER_PLUGINS', BASER . 'Plugin' . DS);
+    define('BASER_PLUGINS', ROOT . DS . 'plugins' . DS);
 }
 /**
  * Baserコンフィグ
  */
 if (!defined('BASER_CONFIGS')) {
-    define('BASER_CONFIGS', BASER . 'Config' . DS);
+    define('BASER_CONFIGS', BASER . 'config' . DS);
 }
 /**
  * BaserLocale
  */
 if (!defined('BASER_LOCALES')) {
-    define('BASER_LOCALES', BASER . 'Locale' . DS);
+    define('BASER_LOCALES', BASER . 'src' . DS . 'Locale' . DS);
 }
 /**
  * BaserEvent
  */
 if (!defined('BASER_EVENTS')) {
-    define('BASER_EVENTS', BASER . 'Event' . DS);
+    define('BASER_EVENTS', BASER . 'src' . DS . 'Event' . DS);
 }
 /**
- * Baser Libs
+ * Baser Utility
  */
-if (!defined('BASER_LIBS')) {
-    define('BASER_LIBS', BASER . 'Lib' . DS);
-}
-/**
- * Baser TestSuite
- */
-if (!defined('BASER_TEST_SUITE')) {
-    define('BASER_TEST_SUITE', BASER_LIBS . 'TestSuite' . DS);
-}
-/**
- * Baser TestCase
- */
-if (!defined('BASER_TEST_CASES')) {
-    define('BASER_TEST_CASES', BASER . 'Test' . DS . 'Case');
+if (!defined('BASER_UTILITIES')) {
+    define('BASER_UTILITIES', BASER . 'src' . DS . 'Utility' . DS);
 }
 /**
  * Baser Console
  */
 if (!defined('BASER_CONSOLES')) {
-    define('BASER_CONSOLES', BASER . 'Console' . DS);
+    define('BASER_CONSOLES', BASER . 'src' . DS  . 'Console' . DS);
 }
 /**
  * Baser webroot
@@ -139,10 +128,6 @@ if (!defined('BASER_WEBROOT')) {
  * Baserテーマ
  */
 if (!defined('BASER_THEMES')) {
-    if (is_dir(WWW_ROOT . 'theme')) {
-        define('BASER_THEMES', WWW_ROOT . 'theme' . DS);
-    } elseif (is_dir(ROOT . DS . 'theme')) {
-        define('BASER_THEMES', ROOT . DS . 'theme' . DS);
-    }
+    define('BASER_THEMES', BASER_PLUGINS);
 }
 
