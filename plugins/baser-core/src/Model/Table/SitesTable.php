@@ -112,7 +112,7 @@ class SitesTable extends AppTable
         $validator
             ->scalar('alias')
             ->maxLength('alias', 50, __d('baser', 'エイリアスは50文字以内で入力してください。'))
-            ->notEmptyString('alias', __d('baser', 'サイト名を入力してください。'))
+            ->notEmptyString('alias', __d('baser', 'エイリアスを入力してください。'))
             ->add('alias', [
                 'aliasUnique' => [
                     'rule' => 'validateUnique',
