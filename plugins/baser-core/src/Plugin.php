@@ -43,7 +43,7 @@ use ReflectionProperty;
  * Class plugin
  * @package BaserCore
  */
-class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
+class Plugin extends BcPlugin
 {
 
     /**
@@ -134,7 +134,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     {
         $middlewareQueue
             // Authorization (AuthComponent to Authorization)
-            ->add(new AuthenticationMiddleware($this))
+//            ->add(new AuthenticationMiddleware($this))
             ->add(new BcAdminMiddleware());
 
         // APIへのアクセスの場合、CSRFを強制的に利用しない設定に変更
@@ -272,7 +272,11 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     public function routes($routes): void
     {
 
-        if(!BcUtil::isConsole()) {
+        $request = Router::getRequest();
+        if(!$request) {
+            $request = ServerRequestFactory::fromGlobals();
+        }
+        if(!BcUtil::isConsole() && !preg_match('/^\/debug-kit\//', $request->getPath())) {
             // ユニットテストでは実行しない
             $property = new ReflectionProperty(get_class($routes), '_collection');
             $property->setAccessible(true);
@@ -320,9 +324,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
              */
             try {
                 $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-                if(!$request = Router::getRequest()) {
-                    $request = ServerRequestFactory::fromGlobals();
-                }
                 $site = $sites->findByUrl($request->getPath());
                 $siteAlias = $sitePrefix = '';
                 if ($site) {
