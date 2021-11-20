@@ -67,12 +67,4 @@ interface UserGroupServiceInterface
      * @return array
      */
     public function getList(): array;
-
-    /**
-     * サイト全体の設定値を取得する
-     * @param string $name
-     * @return mixed
-     */
-    public function getSiteConfig($name);
-
 }

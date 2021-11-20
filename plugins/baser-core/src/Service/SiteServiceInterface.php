@@ -97,30 +97,6 @@ interface SiteServiceInterface
     public function findById($id): Query;
 
     /**
-     * サイト全体の設定値を取得する
-     * @param string $name
-     * @return mixed
-     */
-    public function getSiteConfig($name);
-
-    /**
-     * サイト全体の設定値を更新する
-     *
-     * @param  string $name
-     * @param  string $value
-     * @return SiteConfig
-     */
-    public function setSiteConfig($name, $value);
-
-    /**
-     * サイト全体の設定値をリセットする
-     *
-     * @param  string $name
-     * @return SiteConfig
-     */
-    public function resetSiteConfig($name);
-
-    /**
      * 言語リストを取得
      * @return array
      */

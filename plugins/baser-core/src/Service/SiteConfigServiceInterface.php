@@ -32,6 +32,24 @@ interface SiteConfigServiceInterface
     public function getValue($fieldName): ?string;
 
     /**
+     * サイト全体の設定値を更新する
+     *
+     * @param  string $name
+     * @param  string $value
+     * @return SiteConfig
+     */
+    public function setValue($name, $value);
+
+    /**
+     * サイト全体の設定値をリセットする
+     *
+     * @param  string $name
+     * @return SiteConfig
+     */
+    public function resetValue($name);
+
+
+    /**
      * データをキーバリュー形式で取得する
      * @return array
      */

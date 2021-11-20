@@ -31,12 +31,6 @@ use BaserCore\Annotation\Checked;
  */
 class SiteService implements SiteServiceInterface
 {
-
-    /**
-     * Trait
-     */
-    use SiteConfigTrait;
-
     /**
      * Sites Table
      * @var \Cake\ORM\Table

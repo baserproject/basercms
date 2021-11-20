@@ -17,7 +17,6 @@ use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Service\SiteConfigTrait;
 use BaserCore\Model\Table\UserGroupsTable;
 use BaserCore\Model\Table\PermissionsTable;
 use BaserCore\Service\PermissionServiceInterface;
@@ -35,10 +34,6 @@ use Authentication\Controller\Component\AuthenticationComponent;
  */
 class PermissionsController extends BcAdminAppController
 {
-    /**
-     * SiteConfigTrait
-     */
-    use SiteConfigTrait;
 
 	/**
 	 * beforeFilter
@@ -183,7 +178,7 @@ class PermissionsController extends BcAdminAppController
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 			return;
 		}
-        
+
         $permission = $permissionService->create($this->request->getData());
         if (empty($permission->getErrors()) === true) {
             $this->BcMessage->setSuccess(
@@ -194,7 +189,7 @@ class PermissionsController extends BcAdminAppController
             echo true;
             return;
         }
-        
+
 		$this->ajaxError(500, __d('baser', '保存に失敗しました。'));
     }
 

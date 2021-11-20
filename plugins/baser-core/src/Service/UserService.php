@@ -41,11 +41,6 @@ class UserService implements UserServiceInterface
 {
 
     /**
-     * Trait
-     */
-    use SiteConfigTrait;
-
-    /**
      * UserService constructor.
      */
     public function __construct()
