@@ -32,7 +32,7 @@
             "BcMail\\": "plugins/bc-mail/src/",
             "BcSample\\": "plugins/BcSample/src/",
             "BcUploader\\": "plugins/bc-uploader/src/",
-            "Cake\\Routing\\": "plugins/baser-core/plugins/baser-core/src/Routing"
+            "Cake\\Routing\\": "plugins/baser-core/src/Routing"
         }
     },
     "autoload-dev": {
