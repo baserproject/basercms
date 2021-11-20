@@ -65,12 +65,18 @@ $this->BcBaser->i18nScript([
 </div>
 
 
-<div class="submit">
+<div class="bca-actions">
 	<?php if ($dbInited): ?>
-		<?php echo $this->BcForm->submit(__d('baser', 'プラグインのデータを初期化する'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnReset']) ?>
-		<?php echo $this->BcForm->submit(__d('baser', '有効化'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave']) ?>
+		<div class="bca-actions__main">
+			<?php echo $this->BcForm->submit(__d('baser', '有効化'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave', 'data-bca-btn-status' => 'primary']) ?>
+		</div>
+		<div class="bca-actions__sub">
+			<?php echo $this->BcForm->submit(__d('baser', 'プラグインのデータを初期化する'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnReset']) ?>
+		</div>
 	<?php else: ?>
-		<?php echo $this->BcForm->submit(__d('baser', 'インストール'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave']) ?>
+		<div class="bca-actions__main">
+			<?php echo $this->BcForm->submit(__d('baser', 'インストール'), ['div' => false, 'class' => 'button bca-btn', 'id' => 'BtnSave', 'data-bca-btn-status' => 'primary']) ?>
+		</div>
 	<?php endif; ?>
 </div>
 
