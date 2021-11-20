@@ -11,7 +11,11 @@
 
 namespace BaserCore\Service;
 
+use BaserCore\Model\Entity\SiteConfig;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
 
 /**
  * Class SiteConfigTrait
@@ -28,6 +32,9 @@ trait SiteConfigTrait
      * サイト全体の設定値を取得する
      * @param string $name
      * @return mixed
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getSiteConfig($name)
     {
@@ -35,4 +42,33 @@ trait SiteConfigTrait
         return $siteConfigs->getValue($name);
     }
 
+    /**
+     * サイト全体の設定値を更新する
+     *
+     * @param  string $name
+     * @param  string $value
+     * @return SiteConfig
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function setSiteConfig($name, $value)
+    {
+        $siteConfigs = $this->getService(SiteConfigServiceInterface::class);
+        return $siteConfigs->update([$name => $value]);
+    }
+
+    /**
+     * サイト全体の設定値をリセットする
+     *
+     * @param  string $name
+     * @return SiteConfig
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function resetSiteConfig($name)
+    {
+        return $this->setSiteConfig($name, '');
+    }
 }

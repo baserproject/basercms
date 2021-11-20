@@ -66,7 +66,7 @@ $(function () {
             $("#BtnDelete").prop("disabled", true);
             $.bcUtil.showLoader();
             var form = $(this).parents('form');
-            form.attr('action', $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/contents/delete');
+            form.attr('action', $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/delete');
             form.submit();
         }
         return false;
@@ -90,7 +90,7 @@ $(function () {
         if (confirm(bcI18n.contentsEditConfirmMessage3.sprintf(displayName))) {
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/contents/exists_content_by_url',
+                    url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/exists_content_by_url',
                     type: 'POST',
                     data: {
                         data: {url: targetUrl},
@@ -159,7 +159,7 @@ $(function () {
         if (confirm(bcI18n.contentsEditConfirmMessage4.sprintf(displayName))) {
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/contents/exists_content_by_url',
+                    url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/exists_content_by_url',
                     type: 'POST',
                     data: {
                         data: {url: targetUrl},

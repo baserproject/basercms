@@ -231,6 +231,9 @@
             if (XMLHttpRequest !== undefined && XMLHttpRequest.status) {
                 errorMessage = '<br />(' + XMLHttpRequest.status + ') ';
             }
+            if(XMLHttpRequest !== undefined && XMLHttpRequest.responseJSON){
+                errorMessage += XMLHttpRequest.responseJSON.message;
+            }
             if (XMLHttpRequest !== undefined && XMLHttpRequest.responseText) {
                 errorMessage += XMLHttpRequest.responseText;
             } else if (errorThrown !== undefined) {

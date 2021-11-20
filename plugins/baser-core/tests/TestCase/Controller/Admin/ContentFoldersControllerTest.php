@@ -42,6 +42,7 @@ class ContentFoldersControllerTest extends BcTestCase
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Dblogs',
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs',
     ];
     /**
      * set up
@@ -83,39 +84,11 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testBeforeFilter()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $event = new Event('Controller.beforeFilter', $this->ContentFoldersController);
         $this->ContentFoldersController->beforeFilter($event);
         $this->assertNotEmpty($this->ContentFoldersController);
-    }
+        $this->assertNotEmpty($this->ContentFoldersController->ContentFolders);
 
-    /**
-     * コンテンツを登録する
-     */
-    public function testAdd()
-    {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
-        $data = [
-            'folder_template'=>"testFolderTemplate",
-            'page_template'=>"",
-            'content'=> [
-                'parent_id'=>"1",
-                'title'=>"testFolderAdd",
-                'plugin'=>'BaserCore',
-                'type'=>"ContentFolder",
-                'site_id'=>"0",
-                'alias_id'=>"",
-                'entity_id'=>"",
-            ],
-        ];
-        $this->post('/baser/admin/baser-core/content_folders/add', $data);
-        $this->assertResponseOk();
-        $this->assertResponseContains(json_encode($data['content']['title']));
-        $folderQuery = $this->ContentFolders->find()->where(['folder_template' => $data['folder_template']]);
-        $contentQuery = $this->Contents->find()->where(['title' => $data['content']['title']]);
-        $this->assertEquals(1, $folderQuery->count());
-        $this->assertEquals(1, $contentQuery->count());
     }
 
     /**

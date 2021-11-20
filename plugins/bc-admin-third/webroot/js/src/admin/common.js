@@ -15,4 +15,8 @@ import "./_lib/jquery.bcUtil.js";
 import "./_lib/jquery.bcToken.js";
 import "./_lib/jquery.bcSortable.js";
 import "./_lib/jquery.bcBatch.js";
+import "./_lib/jquery.bcTree.js";
+import "./_lib/jquery.bcConfirm.js";
+import "./_lib/jquery.bcDashboard.js";
 import "./_module/sidebar.js";
+

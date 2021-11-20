@@ -75,7 +75,7 @@ class PermissionsController extends BcAdminAppController
 	{
 		$currentUserGroup = $userGroups->get($userGroupId);
 
-        $this->request->withQueryParams(['user_group_id' => $userGroupId]);
+        $this->request = $this->request->withQueryParams(['user_group_id' => $userGroupId]);
         $this->setViewConditions('Permission', ['default' => ['query' => [
             'sort' => 'sort',
             'direction' => 'asc',

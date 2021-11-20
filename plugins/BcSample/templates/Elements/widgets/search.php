@@ -34,7 +34,7 @@ if (!empty($this->passedArgs['num'])) {
 } else {
 	$url = ['plugin' => null, 'controller' => 'search_indices', 'action' => 'search'];
 }
-$folders = $this->BcContents->getContentFolderList($siteId, ['excludeId' => $this->BcContents->getSiteRootId($siteId)]);
+$folders = $this->BcContents->getContentFolderList($siteId, ['excludeId' => $this->BcAdminContent->getSiteRootId($siteId)]);
 ?>
 
 

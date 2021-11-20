@@ -111,11 +111,13 @@ interface ContentServiceInterface
     public function convertTreeList($nodes);
 
     /**
-     * コンテンツ登録
-     * @param array $data
+     * aliasを作成する
+     *
+     * @param  int $id
+     * @param  array $postData
      * @return \Cake\Datasource\EntityInterface
      */
-    public function create(array $postData);
+    public function alias(int $id, array $postData);
 
     /**
      * コンテンツ情報を論理削除する
@@ -157,15 +159,6 @@ interface ContentServiceInterface
     public function hardDeleteAll(Datetime $dateTime): int;
 
     /**
-     * コンテンツを削除する（論理削除）
-     *
-     * ※ エイリアスの場合は直接削除
-     * @param int $id
-     * @return bool
-     */
-    public function treeDelete($id): bool;
-
-    /**
      * 論理削除されたコンテンツを復元する
      *
      * @param  int $id
@@ -185,14 +178,14 @@ interface ContentServiceInterface
       * コンテンツ情報を取得する
       * @return array
       */
-    public function getContensInfo();
+    public function getContentsInfo();
 
     /**
      * 再帰的に削除
-     *
-     * エイリアスの場合
-     *
+     *※ エイリアスの場合は直接削除
      * @param int $id
+     * @return void
+     * @throws Exception
      * @return bool $result
      */
     public function deleteRecursive($id): bool;
@@ -235,4 +228,74 @@ interface ContentServiceInterface
      * @return EntityInterface
      */
     public function update($content, $contentData);
+
+    /**
+     * 公開状態にする
+     *
+     * @param int $id
+     * @return EntityInterface
+     */
+    public function publish($id): EntityInterface;
+
+    /**
+     * 非公開状態にする
+     *
+     * @param int $id
+     * @return EntityInterface
+     */
+    public function unpublish($id): EntityInterface;
+
+    /**
+     * exists
+     *
+     * @param  int $id
+     * @param bool $withTrash ゴミ箱の物も含めるか
+     * @return bool
+     */
+    public function exists($id, $withTrash = false): bool;
+
+    /**
+     * コンテンツを移動する
+     *
+     * 基本的に targetId の上に移動する前提となる
+     * targetId が空の場合は、同親中、一番下に移動する
+     *
+     * @param array $origin
+     * @param array $target
+     * @return Content|bool|false
+     */
+    public function move($origin, $target);
+
+    /**
+     * 移動元のコンテンツと移動先のディレクトリから移動が可能かチェックする
+     *
+     * @param int $currentId int 移動元コンテンツID
+     * @param int $targetParentId int 移動先コンテンツID (ContentFolder)
+     * @return bool
+     */
+    public function isMovable($currentId, $targetParentId);
+
+    /**
+     * ID を指定して公開状態かどうか判定する
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function isPublishById($id);
+
+    /**
+     * 公開状態を取得する
+     *
+     * @param Content $content コンテンツデータ
+     * @return bool 公開状態
+     */
+    public function isAllowPublish($content, $self = false);
+
+    /**
+     * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
+     *
+     * @param $url
+     * @return bool
+     */
+    public function existsContentByUrl($url);
 }

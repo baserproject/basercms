@@ -20,6 +20,7 @@ use Cake\I18n\FrozenTime;
 use Nette\Utils\DateTime;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
+use Cake\Http\ServerRequest;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -174,9 +175,7 @@ class ContentService implements ContentServiceInterface
                         $conditions['name'] = $value;
                     }
                     if ($key === 'folder_id') {
-                        $Contents = $this->Contents->find('all', $options)->select(['lft', 'rght'])->where(['id' => $value]);
-                        $conditions['rght <'] = $Contents->first()->rght;
-                        $conditions['lft >'] = $Contents->first()->lft;
+                        $conditions['folder_id'] = $value;
                     }
                     if ($key === 'self_status' && $value !== '') {
                         $conditions['self_status'] = $value;
@@ -218,6 +217,11 @@ class ContentService implements ContentServiceInterface
             $query = $query->andWhere(['Contents.title LIKE' => '%' . $queryParams['title'] . '%']);
         }
 
+        if (!empty($queryParams['folder_id'])) {
+            $folder = $this->Contents->find()->select(['lft', 'rght'])->where(['id' => $queryParams['folder_id']])->first();
+            $query = $query->andWhere(['rght <' => $folder->rght, 'lft >' => $folder->lft]);
+        }
+
         foreach($queryParams as $key => $value) {
             if (in_array($key, $columns)) {
                 $query = $query->andWhere(['Contents.' . $key => $value]);
@@ -244,18 +248,6 @@ class ContentService implements ContentServiceInterface
      */
     public function getTableIndex(array $queryParams): Query
     {
-
-        $conditions = [
-            'open' => '1',
-            'name' => '',
-            'folder_id' => '',
-            'type' => '',
-            'self_status' => '1',
-            'author_id' => '',
-        ];
-        if ($queryParams) {
-            $queryParams = array_merge($conditions, $queryParams);
-        }
         return $this->getIndex($this->getTableConditions($queryParams));
     }
 
@@ -283,7 +275,6 @@ class ContentService implements ContentServiceInterface
      * @param array $options
      * @return array|bool
      * @checked
-
      * @unitTest
      */
     public function getContentFolderList($siteId = null, $options = [])
@@ -306,7 +297,7 @@ class ContentService implements ContentServiceInterface
         if (!empty($options['conditions'])) {
             $conditions = array_merge($conditions, $options['conditions']);
         }
-        $folders = $this->Contents->find('treeList')->where([$conditions]);
+        $folders = $this->Contents->find('treeList', ['valuePath' => 'title'])->where([$conditions]);
         if ($folders) {
             return $this->convertTreeList($folders->all()->toArray());
         }
@@ -338,22 +329,35 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * コンテンツ登録
-     * @param array $data
+     * aliasを作成する
+     *
+     * @param  int $id
+     * @param  array $postData
      * @return \Cake\Datasource\EntityInterface
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function create(array $postData)
+    public function alias(int $id, array $postData)
     {
-        $content = $this->Contents->newEmptyEntity();
-        $content = $this->Contents->patchEntity($content, $postData, ['validate' => 'default']);
-        return ($result = $this->Contents->save($content)) ? $result : $content;
+        $content = $this->get($id);
+        $data = array_merge($content->toArray(), $postData);
+        $alias = $this->Contents->newEmptyEntity();
+        if (empty($data['parent_id']) && !empty($data['url'])) {
+            $data['parent_id'] = $this->Contents->copyContentFolderPath($data['url'], $data['site_id']);
+        }
+        unset($data['lft'], $data['rght'], $data['level'], $data['pubish_begin'], $data['publish_end'], $data['created_date'], $data['created'], $data['modified']);
+        $alias->name = $postData['name'] ?? $postData['title'];
+        $alias->alias_id = $id;
+        $alias->created_date = FrozenTime::now();
+        $alias->author_id = BcUtil::loginUser()->id ?? null;
+        $alias = $this->Contents->patchEntity($alias, $postData, ['validate' => 'default']);
+        return ($result = $this->Contents->save($alias)) ? $result : $alias;
     }
 
     /**
      * コンテンツ情報を論理削除する
+     * ※ エイリアスの場合は直接削除
      * @param int $id
      * @return bool
      * @checked
@@ -363,7 +367,12 @@ class ContentService implements ContentServiceInterface
     public function delete($id)
     {
         $content = $this->get($id);
-        return $this->Contents->delete($content);
+        if ($content->alias_id) {
+            $result = $this->Contents->hardDelete($content);
+        } else {
+            $result = $this->Contents->delete($content);
+        }
+        return $result;
     }
 
     /**
@@ -439,33 +448,6 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * コンテンツを削除する（論理削除）
-     *
-     * ※ エイリアスの場合は直接削除
-     * @param int $id
-     * @return bool
-     * @checked
-     * @unitTest
-     */
-    public function treeDelete($id): bool
-    {
-        try {
-            $content = $this->get($id);
-        } catch (RecordNotFoundException $e) {
-            return false;
-        }
-
-        if ($content->alias_id) {
-            $result = $this->Contents->removeFromTree($content);
-        } else {
-            // $result = $this->Contents->softDeleteFromTree($id); TODO: キャッシュ系が有効化されてからsoftDeleteFromTreeを使用する
-            $result = $this->deleteRecursive($id); // 一時措置
-        }
-
-        return $result;
-    }
-
-    /**
      * 論理削除されたコンテンツを復元する
      *
      * @param  int $id
@@ -504,8 +486,11 @@ class ContentService implements ContentServiceInterface
     /**
       * コンテンツ情報を取得する
       * @return array
+      * @checked
+      * @noTodo
+      * @unitTest
       */
-    public function getContensInfo ()
+    public function getContentsInfo()
     {
         $sites = $this->Sites->getPublishedAll();
         $contentsInfo = [];
@@ -528,33 +513,35 @@ class ContentService implements ContentServiceInterface
      * @param $id
      * @return bool
      */
-    // public function softDeleteFromTree($id)
-    // {
-    //     // TODO:　キャッシュ系をオフにする
-    //     // $this->softDelete(true);
-    //     // $this->Behaviors->unload('BcCache');
-    //     // $this->Behaviors->unload('BcUpload');
-    //     $result = $this->deleteRecursive($id);
-    //     // $this->Behaviors->load('BcCache');
-    //     // $this->Behaviors->load('BcUpload');
-    //     // $this->delAssockCache();
-    //     return $result;
-    // }
+    public function softDeleteFromTree($id)
+    {
+        // TODO: キャッシュ系が有効化されてからsoftDeleteFromTreeを使用する
+        $this->softDelete(true);
+        $this->Behaviors->unload('BcCache');
+        $this->Behaviors->unload('BcUpload');
+        $result = $this->deleteRecursive($id);
+        $this->Behaviors->load('BcCache');
+        $this->Behaviors->load('BcUpload');
+        $this->delAssockCache();
+        return $result;
+    }
 
-/**
+    /**
      * 再帰的に論理削除
-     *
-     * エイリアスの場合
+     * ※ エイリアスの場合は直接削除
      *
      * @param int $id
+     * @return void
+     * @throws Exception
      * @return bool $result
      * @checked
+      * @noTodo
      * @unitTest
      */
     public function deleteRecursive($id): bool
     {
         if (!$id) {
-            return false;
+            throw new Exception('idが指定されてません');
         }
         $parent = $this->get($id);
 
@@ -564,34 +551,24 @@ class ContentService implements ContentServiceInterface
         } else {
             $target = [$parent];
         }
-
         foreach($target as $node) {
-            if (empty($node->alias_id)) {
-                // エイリアス以外の場合
-                // 一旦階層構造から除外しリセットしてゴミ箱に移動（論理削除）
-                $node->parent_id = null;
-                $node->url = '';
-                $node->status = false;
-                $node->self_status = false;
-                //TODO: ゴミ箱からの親子関係を取得できなくなるので一旦コメントアウト
-                unset($node->lft);
-                unset($node->rght);
-                // TODO: $this->updatingSystemDataのsetter getterを用意する必要あり
-                $this->updatingSystemData = false;
-                // ここでは callbacks を false にすると lft rght が更新されないので callbacks は true に設定する（default: true）
-                // $this->clear(); // TODO: これは何か再確認する humuhimi
-                $this->Contents->save($node, ['validate' => false]); // 論理削除用のvalidationを用意するべき
-                $this->updatingSystemData = true;
-                $result = $this->Contents->delete($node);
-                // =====================================================================
-                // 通常の削除の際、afterDelete で、関連コンテンツのキャッシュを削除しているが、
-                // 論理削除の場合、afterDelete が呼ばれない為、ここで削除する
-                // =====================================================================
-                $this->Contents->deleteAssocCache($node);
-            } else {
-                // エイリアスの場合、直接削除
-                $result = $this->Contents->removeFromTree($node);
-            }
+            // 一旦階層構造から除外しリセットしてゴミ箱に移動（論理削除）
+            // エイリアスの場合直接削除
+            $node->parent_id = null;
+            $node->url = '';
+            $node->status = false;
+            $node->self_status = false;
+            unset($node->lft);
+            unset($node->rght);
+            $this->Contents->disableUpdatingSystemData();
+            // ここでは callbacks を false にすると lft rght が更新されないので callbacks は true に設定する（default: true）
+            $this->Contents->save($node, ['validate' => false]); // 論理削除用のvalidationを用意するべき
+            $result = $this->delete($node->id);
+            // =====================================================================
+            // 通常の削除の際、afterDelete で、関連コンテンツのキャッシュを削除しているが、
+            // 論理削除の場合、afterDelete が呼ばれない為、ここで削除する
+            // =====================================================================
+            $this->Contents->deleteAssocCache($node);
             if (!$result) return false;
         }
         return $result;
@@ -661,6 +638,9 @@ class ContentService implements ContentServiceInterface
      * @param bool $useSubDomain サブドメインを利用しているかどうか
      * @param bool $base $full が false の場合、ベースとなるURLを含めるかどうか
      * @return string URL
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function getUrl($url, $full = false, $useSubDomain = false, $base = false)
     {
@@ -674,7 +654,7 @@ class ContentService implements ContentServiceInterface
             }
             if ($full) {
                 if ($site) {
-                    $fullUrl = topLevelUrl(false) . $originUrl;
+                    $fullUrl = BcUtil::topLevelUrl(false) . $originUrl;
                     if ($site->domain_type == 1) {
                         $mainDomain = BcUtil::getMainDomain();
                         $fullUrlArray = explode('//', $fullUrl);
@@ -745,64 +725,341 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * ゴミ箱より元に戻す
+     * コピーする
      *
      * @param $id
+     * @param $newTitle
+     * @param $newAuthorId
+     * @param $entityId
+     * @return mixed
      */
-    public function trashReturn($id)
+    public function copy($id, $entityId, $newTitle, $newAuthorId, $newSiteId = null)
     {
-        // TODO: ucmitz移行未完了
-        return $this->trashReturnRecursive($id, true);
+        $content = $this->get($id);
+        $url = $content->url;
+        if (!is_null($newSiteId) && $content->site_id != $newSiteId) {
+            $content->site_id = $newSiteId;
+            // $content->parent_id = $this->copyContentFolderPath($url, $newSiteId);
+        }
+        unset($content->id);
+        unset($content->modified_date);
+        unset($content->created);
+        unset($content->modified);
+        unset($content->main_site_content);
+        if ($newTitle) {
+            $content->title = $newTitle;
+        } else {
+            $content->title = sprintf(__d('baser', '%s のコピー'), $content->title);
+        }
+        $content->self_publish_begin = null;
+        $content->self_publish_end = null;
+        $content->self_status = false;
+        $content->author_id = $newAuthorId;
+        $content->created_date = date('Y-m-d H:i:s');
+        $content->entity_id = $entityId;
+        unset($data['Site']);
+        $this->create($data);
+        return $this->save($data);
     }
 
     /**
-     * 再帰的にゴミ箱より元に戻す
+     * 公開状態にする
      *
-     * @param $id
-     * @return bool|int
+     * @param int $id
+     * @return EntityInterface
+     *
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function trashReturnRecursive($id, $top = false)
+    public function publish($id): EntityInterface
     {
-        // TODO: ucmitz移行未完了
-        return;
-        $this->softDelete(false);
-        $children = $this->children($id, true);
-        $this->softDelete(true);
+        $content = $this->get($id);
+        // 日付をどこで入れるかを確認する
+        $content->self_publish_begin = FrozenTime::now();
+        $content->self_publish_end = null;
+        $content->self_status = true;
+        return $this->Contents->save($content);
+    }
 
+    /**
+     * 非公開状態にする
+     *
+     * @param int $id
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function unpublish($id): EntityInterface
+    {
+        $content = $this->get($id);
+        // 日付をどこで入れるかを確認する
+        $content->self_publish_end = FrozenTime::now();
+        $content->self_status = false;
+        return $this->Contents->save($content);
+    }
+
+    /**
+     * exists
+     *
+     * @param  int $id
+     * @param bool $withTrash ゴミ箱の物も含めるか
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function exists($id, $withTrash = false): bool
+    {
+        if ($withTrash) {
+            $exists = !$this->getIndex(['id' => $id, 'withTrash' => true])->isEmpty();
+        } else {
+            $exists = !$this->getIndex(['id' => $id])->isEmpty();
+        }
+        return $exists;
+    }
+
+    /**
+     * コンテンツを移動する
+     *
+     * 基本的に targetId の上に移動する前提となる
+     * targetId が空の場合は、同親中、一番下に移動する
+     *
+     * @param array $origin
+     * @param array $target
+     * @return Content|bool|false
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function move($origin, $target)
+    {
+        $this->moveRelateSubSiteContent($origin['id'], $target['parentId'], $target['id']);
+        $targetSort = $this->Contents->getOrderSameParent($target['id'], $target['parentId']);
+        if ($origin['parentId'] != $target['parentId']) {
+            $content = $this->get($origin['id']);
+            // 親を変更
+            $content = $this->update($content, [
+                'id' => $origin['id'],
+                'name' => $content->name,
+                'title' => $content->title,
+                'plugin' => $content->plugin,
+                'type' => $content->type,
+                'parent_id' => $target['parentId'],
+                'site_id' => $target['siteId']
+            ]);
+            // フォルダにコンテンツがない場合、targetId が空で一番後を指定の場合は、親を変更して終了
+            if (!$targetSort || !$target['id']) {
+                return $content;
+            }
+            $currentSort = $this->Contents->getOrderSameParent(null, $target['parentId']);
+        } else {
+            $currentSort = $this->Contents->getOrderSameParent($origin['id'], $target['parentId']);
+        }
+        // 親変更後のオフセットを取得
+        $offset = $targetSort - $currentSort;
+        if ($origin['parentId'] == $target['parentId'] && $target['id'] && $offset > 0) {
+            $offset--;
+        }
+        // オフセットを元に移動
+        return $this->Contents->moveOffset($origin['id'], $offset);
+    }
+
+    /**
+     * メインサイトの場合、連携設定がされている子サイトも移動する
+     *
+     * @param $data
+     * @checked
+     * @unitTest
+     */
+    protected function moveRelateSubSiteContent($mainCurrentId, $mainTargetParentId, $mainTargetId)
+    {
+        $data = $this->get($mainCurrentId);
+        // 自身がエイリアスか確認し、エイリアスの場合は終了
+        if (!empty($data->alias_id) || !isset($data->site_id) || !isset($data->type)) {
+            return true;
+        }
+        // メインサイトか確認し、メインサイトでない場合は終了
+        if (!$this->Sites->isMain($data->site_id)) {
+            return true;
+        }
+        // 連携設定となっている小サイトを取得
+        $sites = $this->Sites->find()->where(['main_site_id' => $data->site_id, 'relate_main_site' => true]);
+        if ($sites->isEmpty()) {
+            return true;
+        }
         $result = true;
-        if ($children) {
-            foreach($children as $child) {
-                if (!$this->trashReturnRecursive($child['Content']['id'])) {
-                    $result = false;
+        foreach($sites as $site) {
+            // 自信をメインコンテンツとしているデータを取得
+            // currentの設定
+            try {
+                $currentEntity = $this->Contents->find()->where(['main_site_content_id' => $mainCurrentId, 'site_id' => $site->id])->firstOrFail();
+                $current['id'] = $currentEntity->id;
+                $current['parentId'] = $currentEntity->parent_id;
+            } catch (\Exception $e) {
+                continue;
+            }
+            // targetの設定
+            if (!empty($targetEntity)) {
+                unset($targetEntity);
+                unset($target);
+            }
+            try {
+                if ($mainTargetId) {
+                    $targetEntity = $this->Contents->find()->where(['main_site_content_id' => $mainTargetId, 'site_id' => $site->id])->first();
+                    if ($targetEntity) {
+                        $target['id'] = $targetEntity->id;
+                        $target['parentId'] = $targetEntity->parent_id;
+                        $target['siteId'] = $targetEntity->site_id;
+                    } else {
+                        // ターゲットが見つからない場合は親IDより取得
+                        $targetEntity = $this->Contents->find()->where(['main_site_content_id' => $mainTargetParentId, 'site_id' => $site->id])->firstOrFail();
+                        if ($targetEntity) {
+                            $target['id'] = $targetEntity->id;
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+                continue;
+            }
+            if (!$this->move($current, $target)) {
+                $result = false;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * 移動元のコンテンツと移動先のディレクトリから移動が可能かチェックする
+     *
+     * @param int $currentId int 移動元コンテンツID
+     * @param int $targetParentId int 移動先コンテンツID (ContentFolder)
+     * @return bool
+     */
+    public function isMovable($currentId, $targetParentId)
+    {
+        $currentContent = $this->get($currentId);
+        if ($currentContent->parent_id === $targetParentId) {
+            return true;
+        }
+        $parentCuntent = $this->get($targetParentId);
+
+        // 指定コンテンツが存在しない
+        if (!$currentContent || !$parentCuntent) {
+            return false;
+        }
+
+        $parentId = $parentCuntent->id;
+
+        // 関連コンテンツで移動先と同じ階層のフォルダを確認
+        $childrenSite = $this->Sites->children($currentContent->site_id, [
+            'conditions' => ['relate_main_site' => true]
+        ]);
+        if ($childrenSite) {
+            $pureUrl = $this->Contents->pureUrl($parentCuntent->url, $parentCuntent->site_id);
+            foreach($childrenSite as $site) {
+                $site = $this->Sites->findById($site->id)->first();
+                $url = $site->makeUrl(new ServerRequest(['url' => $pureUrl]));
+                $id = $this->Contents->find()->select('id')->where(['url' => $url]);
+                if ($id) {
+                    $parentId = $id;
                 }
             }
         }
-
-        $this->Behaviors->unload('Tree');
-        // tree off
-        $this->updatingRelated = false;
-
-        if ($result && $this->undelete($id)) {
-            // restore and tree on
-            $this->Behaviors->load('Tree');
-            // 関連データの更新
-            $this->updatingRelated = true;
-            $content = $this->find('first', ['conditions' => ['Content.id' => $id], 'recursive' => -1]);
-            if ($top) {
-                $siteRootId = $this->field('id', ['Content.site_id' => $content['Content']['site_id'], 'site_root' => true]);
-                $content['Content']['parent_id'] = $siteRootId;
-            }
-            unset($content['Content']['lft']);
-            unset($content['Content']['rght']);
-            if ($this->save($content, true)) {
-                return $content['Content']['site_id'];
-            } else {
-                $result = false;
-            }
-        } else {
-            $this->Behaviors->load('Tree');
-            $result = false;
+        // 移動先に同一コンテンツが存在するか確認
+        $movedContent = $this->Contents->find()
+            ->where(['parent_id' => $parentId, 'name' => $currentContent->name, 'id !=' => $currentContent->id])
+            ->first();
+        if ($movedContent) {
+            return false;
         }
-        return $result;
+        return true;
+    }
+
+    /**
+     * ID を指定して公開状態かどうか判定する
+     *
+     * @param int $id
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isPublishById($id)
+    {
+        return $this->Contents->isPublishById($id);
+    }
+
+    /**
+     * 公開状態を取得する
+     *
+     * @param Content $content コンテンツデータ
+     * @return bool 公開状態
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isAllowPublish($content, $self = false)
+    {
+        $fields = [
+            'status' => 'status',
+            'publish_begin' => 'publish_begin',
+            'publish_end' => 'publish_end'
+        ];
+        if ($self) {
+            foreach($fields as $key => $field) {
+                $fields[$key] = 'self_' . $field;
+            }
+        }
+        $allowPublish = $content[$fields['status']];
+        // 期限を設定している場合に条件に該当しない場合は強制的に非公開とする
+        $invalidBegin = $content[$fields['publish_begin']] instanceof FrozenTime && $content[$fields['publish_begin']]->isFuture();
+        $invalidEnd = $content[$fields['publish_end']] instanceof FrozenTime  && $content[$fields['publish_end']]->isPast();
+        if ($invalidBegin || $invalidEnd) {
+            $allowPublish = false;
+        }
+        return $allowPublish;
+    }
+
+    /**
+     * サイトルートコンテンツを取得する
+     *
+     * @param int $siteId
+     * @return Content|null
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function getSiteRoot($siteId)
+    {
+        return $this->Contents->find()->where(['site_id' => $siteId, 'site_root' => true])->first();
+    }
+
+    /**
+     * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
+     *
+     * @param $url
+     * @return bool
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function existsContentByUrl($url)
+    {
+        $urlAry = explode('/', preg_replace('/(^\/|\/$)/', '', $url));
+        if (!$url) {
+            return false;
+        }
+        $url = '/';
+        $last = count($urlAry);
+        foreach($urlAry as $key => $name) {
+            $url .= $name;
+            if ($this->Contents->find()->where(['url' => $url, 'type <>' => 'ContentFolder'])->first()) {
+                return true;
+            }
+            $url .= '/';
+        }
+        return false;
     }
 }

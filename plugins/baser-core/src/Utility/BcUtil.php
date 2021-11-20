@@ -931,4 +931,31 @@ class BcUtil
         }
     }
 
+    /**
+     * サイトのトップレベルのURLを取得する
+     *
+     * @param boolean $lastSlash
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public static function topLevelUrl($lastSlash = true)
+    {
+        if (self::isConsole() && !Configure::check('BcEnv.host')) {
+            return Configure::read('App.fullBaseUrl');
+        }
+        $request = Router::getRequest();
+        $protocol = 'http://';
+        if (!empty($request) && $request->is('ssl')) {
+            $protocol = 'https://';
+        }
+        $host = Configure::read('BcEnv.host');
+        $url = $protocol . $host;
+        if ($lastSlash) {
+            $url .= '/';
+        }
+        return $url;
+    }
+
 }

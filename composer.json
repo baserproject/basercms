@@ -8,11 +8,11 @@
         "php": ">=7.2",
         "ext-json": "*",
         "cakephp/authentication": "^2.3",
-        "cakephp/cakephp": "^4.1",
+        "cakephp/cakephp": "4.2.*",
         "cakephp/migrations": "^3.1",
         "doctrine/annotations": "^1.12",
         "firebase/php-jwt": "^5.3",
-        "imo-tikuwa/cakephp3-soft-delete": "2.*",
+        "imo-tikuwa/cakephp3-soft-delete": "^2.0",
         "josegonzalez/dotenv": "^3.2",
         "mobiledetect/mobiledetectlib": "^2.8"
     },
@@ -67,7 +67,10 @@
         "phpstan/phpstan": "PHPStan focuses on finding errors in your code without actually running it. It catches whole classes of bugs even before you write tests for the code."
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "php": "7.3"
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

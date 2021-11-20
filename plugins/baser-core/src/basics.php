@@ -536,31 +536,6 @@ function fullUrl($url)
 }
 
 /**
- * サイトのトップレベルのURLを取得する
- *
- * @param boolean $lastSlash
- * @return    string
- */
-function topLevelUrl($lastSlash = true)
-{
-
-    if (isConsole() && !Configure::check('BcEnv.host')) {
-        return Configure::read('App.fullBaseUrl');
-    }
-    $request = Router::getRequest();
-    $protocol = 'http://';
-    if (!empty($request) && $request->is('ssl')) {
-        $protocol = 'https://';
-    }
-    $host = Configure::read('BcEnv.host');
-    $url = $protocol . $host;
-    if ($lastSlash) {
-        $url .= '/';
-    }
-    return $url;
-}
-
-/**
  * サイトの設置URLを取得する
  *
  * index.phpは含まない

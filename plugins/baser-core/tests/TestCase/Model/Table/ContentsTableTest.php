@@ -11,10 +11,15 @@
 
 namespace BaserCore\Test\TestCase\Model\Table;
 
+use ArrayObject;
+use Cake\ORM\Entity;
+use ReflectionClass;
 use Cake\Core\Configure;
 use Cake\ORM\Marshaller;
 use Cake\I18n\FrozenTime;
+use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
+use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Entity\Content;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\ContentsTable;
@@ -28,6 +33,9 @@ class ContentsTableTest extends BcTestCase
 {
 
     public $fixtures = [
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
         // 'baser.Model.Content.ContentIsMovable',
@@ -51,7 +59,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function setUp(): void
     {
-        $this->loadFixtures('Contents', 'Sites');
+        $this->loadFixtures('Contents', 'Sites', 'Users', 'UserGroups', 'UsersUserGroups');
         parent::setUp();
         $config = $this->getTableLocator()->exists('Contents')? [] : ['className' => 'BaserCore\Model\Table\ContentsTable'];
         $this->Contents = $this->getTableLocator()->get('Contents', $config);
@@ -196,11 +204,61 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     * Before Validate
+     * testBeforeMarshal
+     *
+     * @param  array $fields
+     * @param  array $expected
+     * @return void
+     * @dataProvider beforeMarshalDataProvider
      */
-    public function testBeforeValidate()
+    public function testBeforeMarshal($fields, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->loginAdmin($this->getRequest());
+        $data = ['content' => $fields];
+        $result = $this->Contents->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($data), 'options' => new ArrayObject()]);
+        $this->assertNull($result->getResult());
+        $content = (array) $result->getData('data')['content'];
+        if (isset($fields['title'])) {
+            $this->assertEquals($expected['limit'][0], strlen($content['title']));
+            $this->assertEquals($expected['limit'][1], strlen($content['name']));
+            foreach ($expected['auto'] as $field => $value) {
+                if ($field === "created_date") {
+                    $this->assertInstanceOf($value, $content[$field]);
+                } else {
+                    $this->assertEquals($value, $content[$field]);
+                }
+            }
+        }
+        if (isset($fields['id'])) {
+            $this->assertInstanceOf($expected[0], $content['modified_date']);
+        }
+    }
+
+    public function beforeMarshalDataProvider()
+    {
+        return [
+            // idがない場合
+            [
+                ["title" => str_repeat("a", 300), 'parent_id' => '1'],
+                [
+                    // titleが254文字&&nameが230文字に切られてるか
+                    'limit' => [254, 230],
+                    // 初期データが挿入されるか
+                    'auto' => [
+                        "self_status" => false,
+                        "self_publish_begin" => null,
+                        "created_date" => FrozenTime::class,
+                        "site_root" => 0,
+                        "author_id" => 1,
+                    ]
+                ]
+            ],
+            // idがある場合更新日が入れられてるか
+            [
+                ["id" => '1'],
+                [FrozenTime::class]
+            ],
+        ];
     }
 
     /**
@@ -218,16 +276,15 @@ class ContentsTableTest extends BcTestCase
      */
     public function testGetUniqueName($name, $parent_id, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $result = $this->Content->getUniqueName($name, $parent_id);
+        $result = $this->Contents->getUniqueName($name, $parent_id);
         $this->assertEquals($expected, $result);
     }
 
     public function getUniqueNameDataProvider()
     {
         return [
-            ['', 0, ''],
-            ['hoge', 0, 'hoge'],
+            ['', 1, ''],
+            ['hoge', 1, 'hoge'],
             ['index', 0, 'index'],
             ['index', 1, 'index_2'],
         ];
@@ -260,7 +317,12 @@ class ContentsTableTest extends BcTestCase
      */
     public function testBeforeSave()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = new Entity([
+            'id' => 100,
+            'parent_id' => 6,
+        ]);
+        $this->Contents->dispatchEvent('Model.beforeSave', ['entity' => $data, 'options' => new ArrayObject()]);
+        $this->assertEquals(6, $this->Contents->beforeSaveParentId);
     }
 
     /**
@@ -268,7 +330,12 @@ class ContentsTableTest extends BcTestCase
      */
     public function testAfterSave()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $content = $this->Contents->get(6); // サービスフォルダ
+        $content->self_status = false;
+        $this->Contents->dispatchEvent('Model.afterSave', [$content, new ArrayObject()]);
+        $content = $this->Contents->get(6);
+        // updateSystemDataが適応されてるかテスト
+        $this->assertFalse($content->status);
     }
 
     /**
@@ -296,7 +363,12 @@ class ContentsTableTest extends BcTestCase
      */
     public function testAfterDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $alias = $this->Contents->find()->where(['alias_id IS NOT' => null])->first();
+        $aliased = $this->Contents->get($alias->alias_id);
+        $this->Contents->dispatchEvent('Model.afterDelete', [$aliased, new ArrayObject()]);
+        // エイリアスが削除されてるか確認
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Contents->get($alias->id);
     }
 
     /**
@@ -306,15 +378,36 @@ class ContentsTableTest extends BcTestCase
      */
     public function testDeleteAlias()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $alias = $this->Contents->find()->where(['alias_id IS NOT' => null])->first();
+        $aliased = $this->Contents->get($alias->alias_id);
+        $this->execPrivateMethod($this->Contents, 'deleteAlias', [$aliased]);
+        // エイリアスが削除されてるか確認
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Contents->get($alias->id);
     }
 
     /**
      * メインサイトの場合、連携設定がされている子サイトのエイリアス削除する
+     * ※ 自身のエイリアスだった場合削除する
      */
-    public function testDeleteRelateSubSiteContent()
+    public function testDeleteRelateSubSiteContentWithAlias()
+    {
+        $content = $this->Contents->get(6);
+        $mockContent = $this->Contents->save(new Content(['site_id' => 6, 'main_site_content_id' => 6, 'alias_id' => 23, 'plugin' => 'BaserCore', 'type' => 'test']));
+        $this->execPrivateMethod($this->Contents, 'deleteRelateSubSiteContent', [$content]);
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Contents->get($mockContent->id);
+    }
+    /**
+     * メインサイトの場合、連携設定がされている子サイトのエイリアス削除する
+     * ※ コンテンツフォルダだった場合子要素をupdateChildrenする
+     */
+    public function testDeleteRelateSubSiteContentWithChildren()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $content = $this->Contents->get(6);
+        $mockContent = $this->Contents->save(new Content(['site_id' => 6, 'main_site_content_id' => 6, 'plugin' => 'BaserCore', 'type' => 'ContentFolder']));
+        $$this->execPrivateMethod($this->Contents, 'deleteRelateSubSiteContent', [$content]);
     }
 
     /**
@@ -323,6 +416,20 @@ class ContentsTableTest extends BcTestCase
     public function testUpdateRelateSubSiteContent()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $content = $this->Contents->get(21);
+        $this->Contents->updateRelateSubSiteContent($content);
+    }
+
+    /**
+     * 現在のフォルダのURLを元に別サイトにフォルダを生成する
+     * 最下層のIDを返却する
+     */
+    public function testCopyContentFolderPath()
+    {
+        $parent_id = $this->Contents->copyContentFolderPath('/service/service1', 1);
+        $this->assertEquals(6, $parent_id);
+        $parent_id = $this->Contents->copyContentFolderPath('/about', 1);
+        $this->assertEquals(1, $parent_id);
     }
 
     /**
@@ -332,8 +439,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testPureUrl($url, $siteId, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $result = $this->Content->pureUrl($url, $siteId);
+        $result = $this->Contents->pureUrl($url, $siteId);
         $this->assertEquals($expected, $result);
     }
 
@@ -343,7 +449,7 @@ class ContentsTableTest extends BcTestCase
             ['', '', '/'],
             ['', '1', '/'],
             ['/m/content', '', '/m/content'],
-            ['/m/content', '1', '/content'],
+            // ['/m/content', '1', '/content'], NOTE: siteがエイリアスの場合
         ];
     }
 
@@ -352,7 +458,8 @@ class ContentsTableTest extends BcTestCase
      */
     public function testCreateContent()
     {
-        $content = ['title' => 'hoge', 'parent_id' => ''];
+        $content = ['title' => 'hoge', 'parent_id' => '', 'site_id' => 1, 'url' => '/hoge'];
+        // $type = 'ContentFolder';
         $type = 'Contents';
         $result = $this->Contents->createContent($content, 'BaserCore', $type);
 
@@ -369,56 +476,60 @@ class ContentsTableTest extends BcTestCase
      */
     public function testCreateUrl($id, $expects)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->assertEquals($this->Content->createUrl($id), $expects);
+        $this->assertEquals($this->Contents->createUrl($id), $expects);
     }
 
     public function createUrlDataProvider()
     {
         return [
             ["hogehoge'/@<>1", ''],
+            ["", false],
             [1, '/'],
-            [2, '/m/'],
-            [3, '/s/'],
             [4, '/index'],
-            [5, '/service/'],
-            [6, '/m/index'],
-            [7, '/service/contact/'],
-            [8, '/news/'],
-            [9, '/service/service1'],
-            [10, '/s/index'],
-            [11, '/s/news/'],
-            [12, '/s/service/'],
-            [13, '/en/'],
-            [14, '/sub/'],
-            [15, '/another.com/'],
-            [16, '/s/service/contact/'],
-            [17, '/m/news/'],
-            [18, '/en/news/'],
-            [19, '/sub/news/'],
-            [20, '/another.com/news/'],
-            [21, '/en/service/'],
-            [22, '/en/service/service1'],
-            [23, '/sub/service/'],
-            [24, '/sub/service/service1'],
-            [25, '/another.com/service/'],
-            [26, '/m/service/'],
-            [27, '/m/service/contact/'],
-            [28, '/en/service/contact/'],
-            [29, '/sub/service/contact/'],
-            [30, '/another.com/service/contact/'],
-            [31, '/m/service/service1'],
-            [32, '/s/service/service1'],
-            [33, '/another.com/service/service1'],
-            [34, '/en/index'],
-            [35, '/sub/index'],
-            [36, '/another.com/index'],
-            [37, '/another.com/s/'],
-            [38, '/another.com/s/index'],
-            [39, '/another.com/s/news/'],
-            [40, '/another.com/s/service/'],
-            [41, '/another.com/s/service/service1'],
-            [42, '/another.com/s/service/contact/'],
+            [6, '/service/'],
+            [10, '/news/'],
+            [11, '/service/service1'],
+            // NOTE:  4系とのfixtureにおいて違いがあるため注意
+            // [2, '/m/'],
+            // [3, '/s/'],
+            // [4, '/index'],
+            // [5, '/service/'],
+            // [6, '/m/index'],
+            // [7, '/service/contact/'],
+            // [9, '/service/service1'],
+            // [10, '/s/index'],
+            // [11, '/s/news/'],
+            // [12, '/s/service/'],
+            // [13, '/en/'],
+            // [14, '/sub/'],
+            // [15, '/another.com/'],
+            // [16, '/s/service/contact/'],
+            // [17, '/m/news/'],
+            // [18, '/en/news/'],
+            // [19, '/sub/news/'],
+            // [20, '/another.com/news/'],
+            // [21, '/en/service/'],
+            // [22, '/en/service/service1'],
+            // [23, '/sub/service/'],
+            // [24, '/sub/service/service1'],
+            // [25, '/another.com/service/'],
+            // [26, '/m/service/'],
+            // [27, '/m/service/contact/'],
+            // [28, '/en/service/contact/'],
+            // [29, '/sub/service/contact/'],
+            // [30, '/another.com/service/contact/'],
+            // [31, '/m/service/service1'],
+            // [32, '/s/service/service1'],
+            // [33, '/another.com/service/service1'],
+            // [34, '/en/index'],
+            // [35, '/sub/index'],
+            // [36, '/another.com/index'],
+            // [37, '/another.com/s/'],
+            // [38, '/another.com/s/index'],
+            // [39, '/another.com/s/news/'],
+            // [40, '/another.com/s/service/'],
+            // [41, '/another.com/s/service/service1'],
+            // [42, '/another.com/s/service/contact/'],
         ];
     }
 
@@ -429,15 +540,56 @@ class ContentsTableTest extends BcTestCase
      */
     public function testUpdateSystemData()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * ID を指定して公開状態かどうか判定する
-     */
-    public function testIsPublishById()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // idが1以外でnameがない場合はエラー
+        $content = new Content(['id' => 100, 'name' => '']);
+        $result = $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
+        $this->assertFalse($result);
+        // self_*を元にstatusなど補完する
+        $data = [
+            'id' => 100,
+            'site_id' => 1,
+            'name' => 'test',
+            'status' => null,
+            'publish_begin' => null,
+            'publish_end' => null,
+            'self_status' => true,
+            'self_publish_begin' => FrozenTime::now(),
+            'self_publish_end' => FrozenTime::now(),
+            'parent_id' => 1,
+        ];
+        $content = new Content($data);
+        $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
+        $content = $this->Contents->get(100);
+        $this->assertTrue($content->status);
+        $this->assertNotEmpty($content->publish_begin);
+        $this->assertNotEmpty($content->publish_end);
+        // 親のstatusがfalseになれば、子にも反映
+        $parent = $this->Contents->get(1);
+        $parent->status = false;
+        $this->Contents->save($parent);
+        $this->execPrivateMethod($this->Contents, 'updateSystemData', [$content]);
+        $content = $this->Contents->get(100);
+        $this->assertFalse($content->status);
+        $this->assertNull($content->publish_begin);
+        $this->assertNull($content->publish_end);
+        // siteがある場合
+        // サブコンテンツとして更新
+        $subContent = $this->Contents->get(100);
+        $subContent->title = 'subContent';
+        $subContent->url = 'test';
+        $subContent->site_id = 6;
+        $this->Contents->save($subContent);
+        // 関連するメインコンテンツを生成
+        $new = $this->Contents->newEntity([
+            'id' => 101,
+            'title' => 'relatedMainContent',
+            'url' => '/test/',
+            'site_id' => 1,
+        ]);
+        $mainContent = $this->Contents->save($new);
+        $this->execPrivateMethod($this->Contents, 'updateSystemData', [$subContent]);
+        // main_site_content_idが設定されてるか確認
+        $this->assertEquals($mainContent->id, $this->Contents->get(100)->main_site_content_id);
     }
 
     /**
@@ -445,7 +597,9 @@ class ContentsTableTest extends BcTestCase
      */
     public function testUpdateChildren()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->Contents->updateChildren(18);
+        // 孫のurlが更新されてるか確認
+        $this->assertEquals("/ツリー階層削除用フォルダー(親)/ツリー階層削除用フォルダー(子)/ツリー階層削除用フォルダー(孫)/", $this->Contents->get(20)->url);
     }
 
     /**
@@ -486,40 +640,6 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     * 現在のフォルダのURLを元に別サイトにフォルダを生成する
-     * 最下層のIDを返却する
-     */
-    public function testCopyContentFolderPath()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * コピーする
-     *
-     * @dataProvider copyDataProvider
-     */
-    public function testCopy($id, $entityId, $newTitle, $newAuthorId, $newSiteId, $titleExpected)
-    {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $this->loginAdmin($this->getRequest());
-        $result = $this->Content->copy($id, $entityId, $newTitle, $newAuthorId, $newSiteId)['Content'];
-        $this->assertEquals($result['site_id'], $newSiteId);
-        $this->assertEquals($result['entity_id'], $entityId);
-        $this->assertEquals($result['title'], $titleExpected);
-        $this->assertEquals($result['author_id'], $newAuthorId);
-
-    }
-
-    public function copyDataProvider()
-    {
-        return [
-            [1, 2, 'hoge', 3, 4, 'hoge'],
-            [1, 2, '', 3, 4, 'baserCMS inc. [デモ] のコピー'],
-        ];
-    }
-
-    /**
      * 公開済の conditions を取得
      */
     public function testGetConditionAllowPublish()
@@ -534,20 +654,17 @@ class ContentsTableTest extends BcTestCase
         $this->assertEquals('0000-00-00 00:00:00', $result[1]['or'][2]['Contents.publish_end']);
     }
 
-    /**
-     * 公開状態を取得する
-     */
-    public function testIsAllowPublish()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
 
     /**
-     * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
+     * ID を指定して公開状態かどうか判定する
      */
-    public function testExistsContentByUrl()
+    public function testIsPublishById()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertTrue($this->Contents->isPublishById(4));
+        $content = $this->Contents->get(4);
+        $content->self_status = false;
+        $this->Contents->save($content);
+        $this->assertFalse($this->Contents->isPublishById(4));
     }
 
     /**
@@ -566,8 +683,7 @@ class ContentsTableTest extends BcTestCase
      */
     public function testIsPublish($status, $publishBegin, $publishEnd, $expected)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $result = $this->Content->isPublish($status, $publishBegin, $publishEnd);
+        $result = $this->Contents->isPublish($status, $publishBegin, $publishEnd);
         $this->assertEquals($expected, $result);
     }
 
@@ -624,34 +740,34 @@ class ContentsTableTest extends BcTestCase
      */
     public function testIsChangedStatus()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // idが存在しない場合はtrueを返す
+        $this->assertTrue($this->Contents->isChangedStatus(100, []));
+        // TODO: 存在する場合を書く
     }
 
     /**
-     * サイトルートコンテンツを取得する
-     *
-     * @param int $siteId
-     * @param mixed $expects 期待するコンテントのid (存在しない場合はから配列)
-     * @dataProvider getSiteRootDataProvider
+     * オフセットを元にコンテンツを移動する
+     * @param  mixed $id
+     * @param  mixed $offset
+     * @dataProvider moveOffsetDataProvider
      */
-    public function testGetSiteRoot($siteId, $expects)
+    public function testMoveOffset($id, $offset)
     {
-        $this->markTestIncomplete('こちらのテストはまだ未確認です');
-        $result = $this->Content->getSiteRoot($siteId);
-        if ($result) {
-            $result = $result['Content']['id'];
+        $target = $this->Contents->moveOffset($id, $offset);
+        $origin = $this->Contents->get($id + $offset);
+        if ($offset > 0) {
+            $this->assertGreaterThan($origin->lft, $target->lft);
+        } else {
+            $this->assertLessThan($origin->lft, $target->lft);
         }
-
-        $this->assertEquals($expects, $result);
     }
 
-    public function getSiteRootDataProvider()
+    public function moveOffsetDataProvider()
     {
         return [
-            [0, 1],
-            [1, 2],
-            [2, 3],
-            [7, []],        // 存在しないsiteId
+            // サービス2でテスト
+            [12, 1],
+            [12, -1]
         ];
     }
 
@@ -676,29 +792,18 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     * メインサイトの場合、連携設定がされている子サイトも移動する
-     */
-    public function testMoveRelateSubSiteContent()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * オフセットを元にコンテンツを移動する
-     */
-    public function testMoveOffset()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * 同じ階層における並び順を取得
      *
      * id が空の場合は、一番最後とみなす
      */
     public function testGetOrderSameParent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // parent_id=6の全体数
+        $this->assertEquals(3, $this->Contents->getOrderSameParent("", "6"));
+        // parent_id=6のコンテンツ順序
+        $this->assertEquals(1, $this->Contents->getOrderSameParent("11", "6"));
+        $this->assertEquals(2, $this->Contents->getOrderSameParent("12", "6"));
+        $this->assertEquals(3, $this->Contents->getOrderSameParent("13", "6"));
     }
 
     /**
@@ -814,4 +919,17 @@ class ContentsTableTest extends BcTestCase
         ];
     }
 
+    /**
+     * testDisableUpdatingSystemData
+     *
+     * @return void
+     */
+    public function testDisableUpdatingSystemData()
+    {
+        $this->Contents->disableUpdatingSystemData();
+        $reflection = new ReflectionClass($this->Contents);
+        $property = $reflection->getProperty('updatingSystemData');
+        $property->setAccessible(true);
+        $this->assertFalse($property->getValue($this->Contents));
+    }
 }

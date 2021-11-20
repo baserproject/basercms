@@ -1,20 +1,23 @@
 <?php
-// TODO : コード確認要
-use Cake\Event\Event;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Event
- * @since           baserCMS v 4.0.9
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('BcEventListener', 'Event');
+namespace BaserCore\Event;
+use ArrayObject;
+use Cake\ORM\TableRegistry;
+use Cake\Event\EventInterface;
+use Cake\Datasource\EntityInterface;
+use BaserCore\Event\BcControllerEventListener;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Class ContentFoldersControllerEventListener
@@ -69,9 +72,10 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener
         parent::__construct();
         // DB接続ができない場合、処理がコントローラーまで行き着かない為、try で実行
         try {
-            $this->Page = ClassRegistry::init('Page');
-            $this->ContentFolder = ClassRegistry::init('ContentFolder');
-        } catch (Exception $e) {
+            $this->Pages = TableRegistry::getTableLocator()->get('BaserCore.Pages');
+            $this->ContentFolders = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
+        } catch (\Exception $e) {
+
         }
     }
 
@@ -79,16 +83,17 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener
      * Contents Before Move
      *
      * oldPath を取得する事が目的
-     *
-     * @param Event $event
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      * @return bool
      */
-    public function contentsBeforeMove(Event $event)
+    public function contentsBeforeMove(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if ($event->getData('data.currentType') != 'ContentFolder') {
             return true;
         }
-        $this->oldPath = $this->Page->getContentFolderPath($event->getData('data.currentId'));
+        $this->oldPath = $this->Pages->getContentFolderPath($event->getData('data.currentId'));
         return true;
     }
 
@@ -96,32 +101,31 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener
      * Contents After Move
      *
      * テンプレートの移動が目的
-     *
-     * @param Event $event
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      */
-    public function contentsAfterMove(Event $event)
+    public function contentsAfterMove(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if ($event->getData('data.Content.type') != 'ContentFolder') {
             return;
         }
         $Controller = $event->getSubject();
-        $this->Page->Behaviors->unload('BcCache');
-        $contents = $Controller->Content->children($event->getData('data.Content.id'), false, ['type', 'entity_id'], 'Content.lft', null, 1, 1);
+        $contents = $Controller->Contents->children($event->getData('data.Content.id'), false, ['type', 'entity_id'], 'Content.lft', null, 1, 1);
         foreach($contents as $content) {
-            if ($content['Content']['type'] !== 'Page') {
+            if ($content->type !== 'Page') {
                 continue;
             }
-            $page = $this->Page->find('first', ['conditions' => ['Page.id' => $content['Content']['entity_id']], 'recursive' => 0]);
-            $this->Page->createPageTemplate($page);
-            $this->Page->saveSearchIndex($this->Page->createSearchIndex($page));
+            $page = $this->Pages->find()->where(['Page.id' => $content->entity_id])->first();
+            $this->Pages->createPageTemplate($page);
+            $this->Pages->saveSearchIndex($this->Pages->createSearchIndex($page));
         }
-        $this->Page->Behaviors->load('BcCache');
         // 別の階層に移動の時は元の固定ページファイルを削除（同一階層の移動の時は削除しない）
-        $nowPath = $this->Page->getContentFolderPath($event->getData('data.Content.id'));
-        if ($this->oldPath != $nowPath) {
-            $Folder = new Folder($this->oldPath);
-            $Folder->delete();
-        }
+        $nowPath = $this->Pages->getContentFolderPath($event->getData('data.Content.id'));
+        // if ($this->oldPath != $nowPath) {
+        //     $Folder = new Folder($this->oldPath);
+        //     $Folder->delete();
+        // }
     }
 
     /**
@@ -129,24 +133,27 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener
      *
      * ゴミ箱に入れた固定ページのテンプレートの削除が目的
      *
-     * @param Event $event
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      */
-    public function contentsBeforeDelete(Event $event)
+    public function contentsBeforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         $id = $event->getData('data');
-        $data = $this->ContentFolder->find('first', ['conditions' => ['Content.id' => $id]]);
+        $data = $this->ContentFolders->find()->where(['Content.id' => $id])->first();
         if ($data) {
-            $path = $this->Page->getContentFolderPath($id);
-            $Folder = new Folder($path);
-            $Folder->delete();
+            // TODO: 固定ページのファイル生成は廃止なので、一旦コメントアウト
+            // $path = $this->Pages->getContentFolderPath($id);
+            // $Folder = new Folder($path);
+            // $Folder->delete();
             $Controller = $event->getSubject();
-            $contents = $Controller->Content->children($id, false, ['type', 'entity_id'], 'Content.lft', null, 1, 1);
+            $contents = $Controller->Contents->children($id, false, ['type', 'entity_id'], 'Content.lft', null, 1, 1);
             foreach($contents as $content) {
-                if ($content['Content']['type'] !== 'Page') {
+                if ($content->type !== 'Page') {
                     continue;
                 }
-                $page = $this->Page->find('first', ['conditions' => ['Page.id' => $content['Content']['entity_id']], 'recursive' => 0]);
-                $this->Page->deleteSearchIndex($page['Page']['id']);
+                $page = $this->Pages->find()->where(['Page.id' => $content['Content']['entity_id']])->first();
+                $this->Pages->deleteSearchIndex($page->id);
             }
         }
     }
@@ -155,17 +162,18 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener
      * Contents After Change Status
      *
      * 一覧から公開設定を変更した場合に検索インデックスを更新する事が目的
-     *
-     * @param Event $event
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      */
-    public function contentsAfterChangeStatus(Event $event)
+    public function contentsAfterChangeStatus(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if (empty($event->getData('result'))) {
             return;
         }
         $id = $event->getData('id');
         /* @var SearchIndex $searchIndexModel */
-        $searchIndexModel = ClassRegistry::init('SearchIndex');
+        $searchIndexModel = TableRegistry::getTableLocator()->get('BaserCore.SearchIndex');
         $searchIndexModel->reconstruct($id);
     }
 

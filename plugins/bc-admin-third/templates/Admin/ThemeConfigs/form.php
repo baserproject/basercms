@@ -14,7 +14,7 @@
  * [ADMIN] テーマ設定編集
  */
 $this->BcBaser->css('admin/colpick', ['inline' => false]);
-$this->BcBaser->js(['admin/vendors/colpick', 'admin/theme_configs/form'], false);
+$this->BcBaser->js(['vendor/colpick', 'admin/theme_configs/form'], false);
 ?>
 
 

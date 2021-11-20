@@ -18,7 +18,7 @@ use BaserCore\View\BcAdminAppView;
  */
 
 $isSiteRelated = $this->BcContents->isSiteRelated($content);
-$isPublish = $this->BcContents->isAllowPublish($content, true);
+$isPublish = $this->BcAdminContent->isAllowPublish($content, true);
 $isSiteRoot = $content->site_root;
 $isAlias = (boolean)$content->alias_id;
 $items = $this->BcContents->getConfig('items');
@@ -51,7 +51,7 @@ $urlParams = ['content_id' => $content->id];
 if ($content->entity_id) {
   $urlParams = array_merge($urlParams, [$content->entity_id]);
 }
-$fullUrl = $this->BcContents->getUrl($content->url, true, @$content['Site']['use_subdomain']);
+$fullUrl = $this->BcAdminContent->getUrl($content->url, true, @$content['Site']['use_subdomain']);
 $toStatus = 'publish';
 if ($content->self_status) {
   $toStatus = 'unpublish';
@@ -127,17 +127,17 @@ if ($content->self_status) {
       <?php $this->BcBaser->link('', array_merge($items[$type]['routes']['edit'], $urlParams), ['title' => __d('baser', '編集'), 'class' => 'btn-edit bca-btn-icon', 'data-bca-btn-type' => 'edit', 'data-bca-btn-size' => 'lg']) ?>
     <?php endif ?>
     <?php if (!$editDisabled && !$isSiteRoot): ?>
-      <?php $this->BcBaser->link('', ['action' => 'ajax_delete', $content->id], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
+      <?php $this->BcBaser->link('', ['action' => 'delete', $content->id], ['title' => __d('baser', '削除'), 'class' => 'btn-delete bca-btn-icon', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'lg']) ?>
     <?php endif ?>
     <form>
-      <input type="hidden" name="data[contentId]" value="<?= $content->id ?>">
-      <input type="hidden" name="data[type]" value="<?= $content->type ?>">
-      <input type="hidden" name="data[entityId]" value="<?= $content->entity_id ?>">
-      <input type="hidden" name="data[parentId]" value="<?= $content->parent_id ?>">
-      <input type="hidden" name="data[title]" value="<?= h($content->title) ?>">
-      <input type="hidden" name="data[siteId]" value="<?= $content->site_id ?>">
-      <input type="hidden" name="data[status]" value="<?= $toStatus ?>">
-      <input type="hidden" name="data[alias]" value="<?= (bool)$content->alias_id ?>">
+      <input type="hidden" name="Content[id]" value="<?= $content->id ?>">
+      <input type="hidden" name="Content[type]" value="<?= $content->type ?>">
+      <input type="hidden" name="Content[entity_id]" value="<?= $content->entity_id ?>">
+      <input type="hidden" name="Content[parent_id]" value="<?= $content->parent_id ?>">
+      <input type="hidden" name="Content[title]" value="<?= h($content->title) ?>">
+      <input type="hidden" name="Content[site_id]" value="<?= $content->site_id ?>">
+      <input type="hidden" name="Content[status]" value="<?= $toStatus ?>">
+      <input type="hidden" name="Content[alias_id]" value="<?= (bool)$content->alias_id ?>">
     </form>
   </td>
 </tr>

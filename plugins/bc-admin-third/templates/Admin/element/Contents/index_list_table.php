@@ -120,17 +120,7 @@ $authors = $this->BcAdminContent->getAuthors();
 
 <div class="bca-data-list__bottom">
   <div class="bca-data-list__sub">
+    <?php $this->BcBaser->element('pagination') ?>
     <?php $this->BcBaser->element('list_num') ?>
   </div>
 </div>
-
-<script>
-$(function () {
-  /**
-   * 一括処理実装
-   */
-  $.bcBatch.init({
-      batchUrl: "<?php echo $this->BcBaser->getUrl(['controller' => 'contents', 'action' => 'batch']) ?>"
-  });
-});
-</script>

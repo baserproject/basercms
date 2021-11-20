@@ -33,8 +33,7 @@ $base = $attributes['base'];
     'vendor/bootstrap-4.1.3/bootstrap',
     'vendor/jquery-ui/jquery-ui.min',
     'vendor/jquery.timepicker',
-    'admin/style',
-    '../js/admin/vendors/jquery.jstree-3.3.8/themes/proton/style.min',
+    'admin/style'
   ]) ?>
   <?= $this->fetch('css') ?>
   <?= $this->BcBaser->declarationI18n() ?>

@@ -45,4 +45,13 @@ npm でインストールできないものは、`/webroot/js/vendor/` フォル
 （どうやら、プラグインで読み込む `$` と、endpoint で参照する `$` が別のインスタンスを指している様子。
 解決方法が分からないため、vendor に配置した jquery を、テンプレートから直接読み込んでいる。
 
+### Javascriptファイルの移行について
+
+admin/vendorsをvendor/直下に移行
+
+admin/libsにおいてajaxでhtmlを取得する処理は廃止し、json化していく予定
+- baser_ajax_batch_config.js
+- baser_ajax_data_list_config.js
+- baser_ajax_data_list.js
+
 

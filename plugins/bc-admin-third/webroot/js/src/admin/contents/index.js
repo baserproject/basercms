@@ -52,18 +52,9 @@ $(function () {
         $.bcUtil.showLoader();
         switch ($("input[name='ViewSetting[list_type]']:checked").val()) {
             case "1":
-                url =$.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?site_id=' + $("#viewsetting-site-id").val() + '\&list_type=1';
-                // FIXME:　条件をうまく取れないので確認する
-                let extraParams = {
-                    // 'name' : '',
-                    // 'type' : '',
-                    // 'self_status' : "1",
-                    // 'author_id' : '',
-                };
-                let extraQuery = $.param(extraParams);
-                location.href = url + '&' + extraQuery;
-                // $("#ContentIndexForm").attr('action', url);
-                // $.baserAjaxDataList.search();
+                let url = location.href;
+                // listTypeを変更し、空のクエリ文字列を消す処理
+                location.href = url.replace("list_type=2", "list_type=1").replace(/[^?=&]+=(&|$)/g,"").replace(/&$/,"");
                 break;
             case "2":
                 loadView();
@@ -85,17 +76,6 @@ $(function () {
     $($.baserAjaxDataList).bind('searchLoaded', function () {
         $.bcUtil.disabledHideMessage = false;
     });
-
-    $.baserAjaxDataList.config.methods.del.confirm = bcI18n.confirmMessage1;
-    $.baserAjaxBatch.config.methods.del.confirm = bcI18n.confirmMessage2;
-    $.baserAjaxBatch.config.methods.unpublish.result = function () {
-        $.bcUtil.showLoader();
-        loadTable();
-    };
-    $.baserAjaxBatch.config.methods.publish.result = function () {
-        $.bcUtil.showLoader();
-        loadTable();
-    };
     $.baserAjaxDataList.config.methods.publish.result = null;
     $.baserAjaxDataList.config.methods.unpublish.result = null;
     $.baserAjaxDataList.config.methods.copy.result = function (row, result) {
@@ -106,7 +86,8 @@ $(function () {
         $.bcUtil.showNoticeMessage(bcI18n.infoMessage1.sprintf($.parseJSON(result).title));
     };
     $.baserAjaxDataList.init();
-    $.baserAjaxBatch.init({url: $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/ajax_batch'});
+    // 一括処理
+    $.bcBatch.init({batchUrl: $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/batch'});
 
     //$("#Search").before($("#ViewSetting"));
 
@@ -114,7 +95,7 @@ $(function () {
     // ここで検索処理を登録する代わりに basreAjaxDataList側のイベントを削除
     $("#BtnSearchSubmit").click(function () {
         contentsIndexSearchOpened = true;
-        $("input[name='ViewSetting[list_type]']:eq(1)").prop('checked', true);
+        $("input[name='ViewSetting[list_type]']:eq(2)").prop('checked', true);
         loadView();
         return false;
     });
@@ -137,7 +118,7 @@ $(function () {
         if (e !== undefined && e.target.id == 'viewsetting-site-id') {
             $("#BtnSearchClear").click();
             $.ajax({
-                url: $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/ajax_get_content_folder_list/' + $(this).val(),
+                url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/get_content_folder_list/' + $(this).val(),
                 type: "GET",
                 dataType: "json",
                 beforeSend: function () {
@@ -151,7 +132,7 @@ $(function () {
                     var optionItems = [];
                     optionItems.push(new Option("指定なし", ""));
                     for (key in result) {
-                        optionItems.push(new Option(result[key].replace(/&nbsp;/g, "\u00a0"), key));
+                        optionItems.push(new Option(result.list[key].replace(/&nbsp;/g, "\u00a0"), key));
                     }
                     $("#ContentFolderId").append(optionItems);
                 }
@@ -184,26 +165,14 @@ $(function () {
                 $("#GrpChangeTreeOpenClose").hide();
                 break;
         }
-
     }
 
     /**
      * 表形式のリストをロードする
      */
     function loadTable() {
-        url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?site_id=' + $("#viewsetting-site-id").val() + '\&list_type=2';
-        let extraParams = {
-            'open' : '1',
-            'name' : '',
-            'folder_id' : '',
-            'type' : '',
-            'self_status' : '1',
-            'author_id' : '',
-        };
-        let extraQuery = $.param(extraParams);
-        location.href = url + '&' + extraQuery;
-        // $("#ContentIndexForm").attr('action', url);
-        // $.baserAjaxDataList.search();
+        let url = $.bcUtil.adminBaseUrl + 'baser-core' + '/contents/index?site_id=' + $("#viewsetting-site-id").val() + '\&list_type=2';
+        let queryParams = decodeURI($("#ContentIndexForm").serialize());
+        location.href = url + '&' + queryParams;
     }
-
 });

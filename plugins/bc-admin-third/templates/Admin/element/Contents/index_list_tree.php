@@ -25,10 +25,9 @@ $deleteDisabled = !$this->BcAdminContent->isContentDeletable();
     if ($content->type == 'ContentFolder') {
       $treeItemType = 'folder';
     }
-
-    $fullUrl = $this->BcContents->getUrl($content->url, true, $content->site->use_subdomain);
+    $fullUrl = $this->BcAdminContent->getUrl($content->url, true, $content->site->use_subdomain);
     $parentId = $content->parent_id;
-    $alias = false;
+    $alias = $content->alias_id ? true : false;
     $open = false;
     $items = $this->BcContents->getConfig('items');
     if (!empty($items[$content->type]['icon'])) {
@@ -38,13 +37,9 @@ $deleteDisabled = !$this->BcAdminContent->isContentDeletable();
         $icon = $items[$content->type]['icon'];
       }
     } else {
-      // TODO: iconがない場合があるため見直す
       $icon = $items['Default']['url']['icon'] ?? '';
     }
-    if ($content->alias_id) {
-      $alias = true;
-    }
-    $status = $this->BcContents->isAllowPublish($content, true);
+    $status = $this->BcAdminContent->isAllowPublish($content, true);
     if ($content->site_root) {
       $open = true;
     }

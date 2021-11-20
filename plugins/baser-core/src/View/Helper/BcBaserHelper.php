@@ -845,7 +845,7 @@ class BcBaserHelper extends Helper
                 $useSubdomain = $site->use_subdomain;
                 $fullUrl = true;
             }
-            $url = $this->BcContents->getUrl($this->_View->viewVars['publishLink'], $fullUrl, $useSubdomain, false);
+            $url = $this->BcAdminContent->getUrl($this->_View->viewVars['publishLink'], $fullUrl, $useSubdomain, false);
             $this->link(__d('baser', 'サイト確認'), $url, ['class' => 'tool-menu']);
         }
     }
@@ -1920,8 +1920,8 @@ EOD;
     public function getContentsMenu($id = null, $level = null, $currentId = null, $options = [])
     {
         if (!$id) {
-            $Content = ClassRegistry::init('Content');
-            $siteRoot = $Content->getSiteRoot($this->request->params['Content']['site_id']);
+            // $Content = ClassRegistry::init('Content');
+            $siteRoot = $this->BcAdminContent->getSiteRoot($this->request->params['Content']['site_id']);
             $id = $siteRoot['Content']['id'];
         }
         $options = array_merge([
@@ -2002,7 +2002,7 @@ EOD;
         if (!empty($this->request->params['Content']['site_id'])) {
             $siteId = $this->request->params['Content']['site_id'];
         }
-        $siteRoot = $Content->getSiteRoot($siteId);
+        $siteRoot = $this->BcAdminContent->getSiteRoot($siteId);
         $id = $siteRoot['Content']['id'];
         $currentId = null;
         if (!empty($this->request->getParam('Content.id'))) {
@@ -3046,7 +3046,7 @@ END_FLASH;
             $site = $this->_View->getRequest()->getAttribute('currentSite');
             $useSubDomain = $site->use_subdomain;
         }
-        return $this->BcContents->getUrl($url, $full, $useSubDomain, $base);
+        return $this->BcAdminContent->getUrl($url, $full, $useSubDomain, $base);
     }
 
     /**

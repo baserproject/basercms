@@ -33,18 +33,22 @@ class ContentFoldersController extends BcAdminAppController
     /**
      * initialize
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(): void
     {
         parent::initialize();
         $this->loadComponent('BaserCore.BcAdminContents');
-        $this->Security->setConfig('unlockedActions', ['add']);
     }
 
     /**
      * beforeFilter
      *
      * @return void
+     * @checked
+     * @unitTest
      */
     public function beforeFilter(EventInterface $event)
     {
@@ -52,36 +56,6 @@ class ContentFoldersController extends BcAdminAppController
         // $this->loadModel('BaserCore.Pages');
         $this->loadModel('BaserCore.ContentFolders');
         // $this->BcAuth->allow('view');
-    }
-
-    /**
-     * コンテンツを登録する
-     *
-     * @return Response
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function add(ContentFolderServiceInterface $contentFolderService)
-    {
-        if (!$this->request->getData()) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-        if (!$contentFolder = $contentFolderService->create($this->request->getData())) {
-            $this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
-            exit;
-        }
-
-        $this->BcMessage->setSuccess(
-            sprintf(
-                __d('baser', 'フォルダ「%s」を追加しました。'),
-                $contentFolder->content->title,
-            ),
-            true,
-            false
-        );
-
-        return $this->response->withType("application/json")->withStringBody(json_encode($contentFolder->content));
     }
 
     /**

@@ -34,6 +34,7 @@ class ContentFoldersControllerTest extends BcTestCase
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs',
     ];
 
     /**
@@ -121,7 +122,7 @@ class ContentFoldersControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->post('/baser/api/baser-core/content_folders/delete/1.json?token=' . $this->accessToken);
+        $this->delete('/baser/api/baser-core/content_folders/delete/1.json?token=' . $this->accessToken);
         $this->assertResponseSuccess();
     }
 

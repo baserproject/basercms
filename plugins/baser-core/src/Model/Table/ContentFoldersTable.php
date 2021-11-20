@@ -23,6 +23,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
+use BaserCore\Model\Entity\ContentFolder;
 
 /**
  * Class ContentFoldersTable
@@ -56,6 +57,9 @@ class ContentFoldersTable extends AppTable
      *
      * @param array $config テーブル設定
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {
@@ -82,6 +86,9 @@ class ContentFoldersTable extends AppTable
      *
      * @param  Validator $validator
      * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -95,10 +102,13 @@ class ContentFoldersTable extends AppTable
 
     /**
      * Before Move
-     *
-     * @param \Cake\Event\Event $event
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
+     * @checked
+     * @unitTest
      */
-    public function beforeMove(\Cake\Event\Event $event)
+    public function beforeMove(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if ($event->getData('data.currentType') == 'ContentFolder') {
             $this->setBeforeRecord($event->getData('data.entityId'));
@@ -107,51 +117,59 @@ class ContentFoldersTable extends AppTable
 
     /**
      * After Move
-     *
-     * @param \\Cake\Event\Event $event
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
+     * @checked
      */
-    public function afterMove(\Cake\Event\Event $event)
+    public function afterMove(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if (!empty($event->getData('data.Content')) && $event->getData('data.Content.type') == 'ContentFolder') {
-            $this->movePageTemplates($event->getData('data.Content.url'));
-        }
+        // TODO: movePageTemplatesがなくなったので、一時措置
+        return true;
+        // if (!empty($event->getData('data.Content')) && $event->getData('data.Content.type') == 'ContentFolder') {
+        //     $this->movePageTemplates($event->getData('data.Content.url'));
+        // }
     }
 
     /**
      * Before Save
-     * @param Event $event
+     * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         // 変更前のURLを取得
-        if (!empty($event->getData('entity')->get('id')) && ($this->isMovableTemplate || !empty($options['reconstructSearchIndices']))) {
+        if (!empty($entity->id) && ($this->isMovableTemplate || !empty($options['reconstructSearchIndices']))) {
             $this->isMovableTemplate = false;
-            $this->setBeforeRecord($event->getData('entity')->get('id'));
+            $this->setBeforeRecord($entity->id);
         }
         return parent::beforeSave($event, $entity, $options);
     }
 
     /**
      * After Save
-     *
-     * @param bool $created
-     * @param array $options
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      * @param bool
+     * @checked
+     * @unitTest
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if (!empty($entity->content->url) && $this->beforeUrl) {
-            $this->movePageTemplates($entity->content->url);
             $this->isMovableTemplate = true;
         }
-        // TODO: 一時措置
-        // if (!empty($options['reconstructSearchIndices']) && $this->beforeStatus !== $this->data['Content']['status']) {
-        //     $searchIndexModel = ClassRegistry::init('SearchIndex');
-        //     $searchIndexModel->reconstruct($this->data['Content']['id']);
-        // }
+        if (!empty($options['reconstructSearchIndices']) && $this->beforeStatus !== $entity->content->status) {
+            // TODO: テスト未実装
+            $searchIndexModel = TableRegistry::getTableLocator()->get('SearchIndex');
+            $searchIndexModel->reconstruct($entity->content->id);
+        }
         return true;
     }
 
@@ -159,6 +177,9 @@ class ContentFoldersTable extends AppTable
      * 保存前のURLをセットする
      *
      * @param int $id
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     private function setBeforeRecord($id)
     {
@@ -169,27 +190,27 @@ class ContentFoldersTable extends AppTable
         }
     }
 
-    /**
-     * 固定ページテンプレートを移動する
-     *
-     * @param string $afterUrl
-     * @return bool
-     */
-    public function movePageTemplates($afterUrl)
-    {
-        if ($this->beforeUrl && $this->beforeUrl != $afterUrl) {
-            $basePath = APP . 'View' . DS . 'Pages' . DS;
-            if (is_dir($basePath . $this->beforeUrl)) {
-                (new Folder())->move([
-                    'to' => $basePath . $afterUrl,
-                    'from' => $basePath . $this->beforeUrl,
-                    'chmod' => 0777
-                ]);
-            }
-        }
-        $this->beforeUrl = null;
-        return true;
-    }
+    // NOTE: 以前までapp/View/Pages/about.phpなど固定ページの内容をphpファイルで維持していたが、廃止になったのでメソッド削除
+    // /**
+    //  * 固定ページテンプレートを移動する
+    //  * @param string $afterUrl
+    //  * @return bool
+    //  */
+    // public function movePageTemplates($afterUrl)
+    // {
+    //     if ($this->beforeUrl && $this->beforeUrl != $afterUrl) {
+    //         $basePath = APP . 'View' . DS . 'Pages' . DS;
+    //         if (is_dir($basePath . $this->beforeUrl)) {
+    //             (new Folder())->move([
+    //                 'to' => $basePath . $afterUrl,
+    //                 'from' => $basePath . $this->beforeUrl,
+    //                 'chmod' => 0777
+    //             ]);
+    //         }
+    //     }
+    //     $this->beforeUrl = null;
+    //     return true;
+    // }
 
     /**
      * サイトルートフォルダを保存

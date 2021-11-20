@@ -11,7 +11,7 @@
 $(function () {
     $("#SearchIndexSiteId").change(function () {
         $.ajax({
-            url: $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/contents/ajax_get_content_folder_list/' + $(this).val(),
+            url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/get_content_folder_list/' + $(this).val(),
             type: "GET",
             dataType: "json",
             beforeSend: function () {
@@ -27,7 +27,7 @@ $(function () {
                 var optionItems = [];
                 optionItems.push(new Option("指定なし", ""));
                 for (key in result) {
-                    optionItems.push(new Option(result[key].replace(/&nbsp;/g, "\u00a0"), key));
+                    optionItems.push(new Option(result.list[key].replace(/&nbsp;/g, "\u00a0"), key));
                 }
                 $("#SearchIndexFolderId").append(optionItems);
             }
