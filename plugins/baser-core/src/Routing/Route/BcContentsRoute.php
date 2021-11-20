@@ -50,21 +50,6 @@ class BcContentsRoute extends Route
         if (!$request) {
             return null;
         }
-        // TODO: debug Kitのルートを無理やり書いてるので調整する
-        if (preg_match('/debug-kit/', $url)) {
-            $pass = explode('/debug-kit/toolbar/', $url);
-            $params = [
-                'pass' => [
-                    0 => $pass[1]
-                ],
-                'matchedRoute' => "/debug-kit/toolbar/*",
-                'plugin' => "DebugKit",
-                'action' => "view",
-                'controller' => "Requests",
-                "_ext" => "null",
-            ];
-            return $params;
-        }
 
         //管理システムにログインしているかつプレビューの場合は公開状態のステータスは無視する
         $publish = true;

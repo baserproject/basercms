@@ -272,7 +272,11 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     public function routes($routes): void
     {
 
-        if(!BcUtil::isConsole()) {
+        $request = Router::getRequest();
+        if(!$request) {
+            $request = ServerRequestFactory::fromGlobals();
+        }
+        if(!BcUtil::isConsole() && !preg_match('/^\/debug-kit\//', $request->getPath())) {
             // ユニットテストでは実行しない
             $property = new ReflectionProperty(get_class($routes), '_collection');
             $property->setAccessible(true);
@@ -320,9 +324,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
              */
             try {
                 $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
-                if(!$request = Router::getRequest()) {
-                    $request = ServerRequestFactory::fromGlobals();
-                }
                 $site = $sites->findByUrl($request->getPath());
                 $siteAlias = $sitePrefix = '';
                 if ($site) {
