@@ -43,7 +43,7 @@ use ReflectionProperty;
  * Class plugin
  * @package BaserCore
  */
-class Plugin extends BcPlugin
+class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
 {
 
     /**
@@ -134,7 +134,7 @@ class Plugin extends BcPlugin
     {
         $middlewareQueue
             // Authorization (AuthComponent to Authorization)
-//            ->add(new AuthenticationMiddleware($this))
+            ->add(new AuthenticationMiddleware($this))
             ->add(new BcAdminMiddleware());
 
         // APIへのアクセスの場合、CSRFを強制的に利用しない設定に変更
