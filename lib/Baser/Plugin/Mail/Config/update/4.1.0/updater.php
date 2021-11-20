@@ -36,6 +36,7 @@ $result = true;
 if ($mailContents) {
 	foreach ($mailContents as $content) {
 		$mailContentId = $content['MailContent']['id'];
+		ClassRegistry::flush();
 		$MailMessage = ClassRegistry::init('Mail.MailMessage');
 		$MailMessage->setup($mailContentId);
 		$types = Hash::combine($content['MailField'], '{n}.field_name', '{n}.type');
