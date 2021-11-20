@@ -18,6 +18,7 @@ use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 use BaserCore\Service\ContentFolderServiceInterface;
 
 /**
@@ -49,6 +50,7 @@ class ContentFoldersController extends BcAdminAppController
      * @return void
      * @checked
      * @unitTest
+     * @note(value="テーマを実装するまでTODO解消できない")
      */
     public function beforeFilter(EventInterface $event)
     {
@@ -64,6 +66,7 @@ class ContentFoldersController extends BcAdminAppController
      * @return void
      * @checked
      * @unitTest
+     * @note(value="検索インデックス生成処理を実装するまでTODOが解消できない")
      */
     public function edit(ContentFolderServiceInterface $contentFolderService, $id = null)
     {
