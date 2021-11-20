@@ -97,6 +97,9 @@ class AnalyseController extends AppController
             if (preg_match('/(' . str_replace(',', '|', preg_quote(implode(',', self::EXCLUDE_EXT))) . ')$/', $fileName)) {
                 continue;
             }
+            if($fileName === 'paths.php') {
+                $a = '';
+            }
             $meta = [
                 'file' => $fileName,
                 'path' => str_replace(ROOT, '', $path),
@@ -113,9 +116,9 @@ class AnalyseController extends AppController
                     $meta['checked'] = true;
                 }
                 if (preg_match('/@noTodo/', $code)) {
-                    $meta['checked'] = true;
+                    $meta['noTodo'] = true;
                 }
-                if (preg_match('/@noTodo/', $code)) {
+                if (preg_match('/@unitTest/', $code)) {
                     $meta['unitTest'] = true;
                 }
                 $metas[] = $meta;
