@@ -138,29 +138,29 @@ if ($loginUser) {
     <div id="UserMenu" class="bca-toolbar__users">
       <ul class="clearfix">
         <?php if ($this->BcAuth->isAdminLogin()): ?>
-          <li>
-            <?php $this->BcBaser->link(
-              h($currentSite->display_name) . ' ' .
-              $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
-              'javascript:void(0)', [
-              'class' => 'title',
-              'escapeTitle' => false
-            ]) ?>
-            <?php if ($otherSites): ?>
-              <ul>
-                <?php foreach($otherSites as $key => $value): ?>
-                  <li>
-                    <?php $this->BcBaser->link($value, [
-                      'admin' => true,
-                      'controller' => 'contents',
-                      'action' => 'index',
-                      '?' => ['current_site_id' => $key]
-                    ]) ?>
-                  </li>
-                <?php endforeach ?>
-              </ul>
-            <?php endif ?>
-          </li>
+          <?php if ($otherSites): ?>
+            <li>
+              <?php $this->BcBaser->link(
+                h($currentSite->display_name) . ' ' .
+                $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']),
+                'javascript:void(0)', [
+                'class' => 'title',
+                'escapeTitle' => false
+              ]) ?>
+                <ul>
+                  <?php foreach($otherSites as $key => $value): ?>
+                    <li>
+                      <?php $this->BcBaser->link($value, [
+                        'admin' => true,
+                        'controller' => 'contents',
+                        'action' => 'index',
+                        '?' => ['current_site_id' => $key]
+                      ]) ?>
+                    </li>
+                  <?php endforeach ?>
+                </ul>
+            </li>
+          <?php endif ?>
           <li>
             <?php $this->BcBaser->link(h($this->BcBaser->getUserName($loginUser)) . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title', 'escapeTitle' => false]) ?>
             <ul>
