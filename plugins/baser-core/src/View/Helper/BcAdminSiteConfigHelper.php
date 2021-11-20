@@ -12,8 +12,6 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Service\SiteConfigService;
-use BaserCore\Service\SiteConfigServiceInterface;
-use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use BaserCore\Annotation\UnitTest;
@@ -22,29 +20,9 @@ use BaserCore\Annotation\Checked;
 
 /**
  * BcAdminSiteConfigHelper
- * @property SiteConfigService $SiteConfigService
  */
-class BcAdminSiteConfigHelper extends \Cake\View\Helper
+class BcAdminSiteConfigHelper extends BcSiteConfigHelper
 {
-
-    /**
-     * Trait
-     */
-    use BcContainerTrait;
-
-    /**
-     * initialize
-     * @param array $config
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function initialize(array $config): void
-    {
-        parent::initialize($config);
-        $this->SiteConfigService = $this->getService(SiteConfigServiceInterface::class);
-    }
-
     /**
      * .env が書き込み可能かどうか
      * @return bool
