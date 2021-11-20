@@ -57,7 +57,7 @@ Configure::write('Config.language', 'jpn');
  * @see ErrorHandler for more information on error handling and configuration.
  */
 	Configure::write('Error', array(
-		'handler' => 'ErrorHandler::handleError',
+		'handler' => 'BcErrorHandler::handleError',
 		'level' => E_ALL & ~E_DEPRECATED,
 		'trace' => true
 	));
@@ -85,7 +85,7 @@ Configure::write('Config.language', 'jpn');
  * @see ErrorHandler for more information on exception handling and configuration.
  */
 	Configure::write('Exception', array(
-		'handler' => 'ErrorHandler::handleException',
+		'handler' => 'BcErrorHandler::handleException',
 		'renderer' => 'ExceptionRenderer',
 		'log' => true
 	));
