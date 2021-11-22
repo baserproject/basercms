@@ -83,6 +83,7 @@ class BcContentsBehaviorTest extends BcTestCase
     */
     public function testBeforeMarshal()
     {
+        $this->loginAdmin($this->getRequest());
         // 更新の場合はreturnされる
         $data = [
             'folder_template' => 'テストBeforeSave',

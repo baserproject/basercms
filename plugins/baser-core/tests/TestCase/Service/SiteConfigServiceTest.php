@@ -131,5 +131,25 @@ class SiteConfigServiceTest extends \BaserCore\TestSuite\BcTestCase
             1 => 'デバッグモード',
         ], $this->SiteConfigs->getModeList());
     }
+    /**
+     * testSetValue
+     *
+     * @return void
+     */
+    public function testSetValue(): void
+    {
+        $this->assertNotEmpty($this->SiteConfigs->setValue('admin_list_num', 30));
+        $this->assertEquals(30, $this->SiteConfigs->getValue('admin_list_num'));
+    }
+    /**
+     * testresetValue
+     *
+     * @return void
+     */
+    public function testResetValue(): void
+    {
+        $this->assertNotEmpty($this->SiteConfigs->resetValue('admin_list_num'));
+        $this->assertEquals('', $this->SiteConfigs->getValue('admin_list_num'));
+    }
 
 }

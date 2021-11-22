@@ -11,12 +11,12 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Service\DblogServiceInterface;
-use BaserCore\Service\SiteConfigTrait;
-use BaserCore\Service\UserServiceInterface;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Service\UserServiceInterface;
+use BaserCore\Service\DblogServiceInterface;
+use BaserCore\Service\SiteConfigServiceInterface;
 
 /**
  * Class DblogsController
@@ -24,10 +24,6 @@ use BaserCore\Annotation\Checked;
  */
 class DblogsController extends BcAdminAppController
 {
-    /**
-     * SiteConfigTrait
-     */
-    use SiteConfigTrait;
 
     /**
      * [ADMIN] DBログ一覧
@@ -37,10 +33,10 @@ class DblogsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function index(DblogServiceInterface $DblogService, UserServiceInterface $userService)
+    public function index(DblogServiceInterface $DblogService, SiteConfigServiceInterface $siteConfigService)
     {
         $this->setViewConditions('Dblog', ['default' => ['query' => [
-            'num' => $userService->getSiteConfig('admin_list_num'),
+            'num' => $siteConfigService->getValue('admin_list_num'),
             'sort' => 'id',
             'direction' => 'desc',
         ]]]);
