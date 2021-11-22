@@ -20,6 +20,7 @@ use BaserCore\Model\Entity\Site;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Service\BcAdminServiceInterface;
 use BaserCore\Service\SiteConfigServiceInterface;
@@ -30,6 +31,11 @@ use BaserCore\Service\SiteConfigServiceInterface;
  */
 class BcAdminSiteHelper extends Helper
 {
+
+    /**
+     * BcContainerTrait
+     */
+    use BcContainerTrait;
 
     /**
      * Sites Service

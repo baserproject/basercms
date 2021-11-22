@@ -14,7 +14,6 @@ namespace BaserCore\Service;
 use Cake\ORM\Query;
 use BaserCore\Model\Entity\Site;
 use Cake\Datasource\EntityInterface;
-use BaserCore\Model\Entity\SiteConfig;
 
 interface SiteServiceInterface
 {

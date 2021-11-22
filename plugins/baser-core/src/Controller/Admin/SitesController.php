@@ -28,6 +28,7 @@ class SitesController extends BcAdminAppController
     /**
      * サイト一覧
      * @param SiteServiceInterface $siteService
+     * @param SiteConfigServiceInterface $siteConfigService
      * @checked
      * @noTodo
      * @unitTest

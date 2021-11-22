@@ -112,6 +112,7 @@ class ContentFolderServiceTest extends BcTestCase
      */
     public function testCreate()
     {
+        $this->loginAdmin($this->getRequest());
         $data = [
             'folder_template' => 'テストcreate',
             'content' => [

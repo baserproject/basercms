@@ -89,8 +89,9 @@ class ContentsController extends BcAdminAppController
 
     /**
      * コンテンツ一覧
-     * @param integer $parentId
-     * @param void
+     * @param  ContentServiceInterface $contentService
+     * @param  SiteServiceInterface $siteService
+     * @param  SiteConfigServiceInterface $siteConfigService
      * @checked
      * @noTodo
      * @unitTest
@@ -208,13 +209,14 @@ class ContentsController extends BcAdminAppController
      *
      * @param  ContentServiceInterface $contentService
      * @param  SiteServiceInterface $siteService
+     * @param  SiteConfigServiceInterface $siteConfigService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function trash_index(ContentServiceInterface $contentService, SiteServiceInterface $siteService)
+    public function trash_index(ContentServiceInterface $contentService, SiteServiceInterface $siteService, SiteConfigServiceInterface $siteConfigService)
     {
-        $this->setAction('index', $contentService, $siteService);
+        $this->setAction('index', $contentService, $siteService, $siteConfigService);
         $this->render('index');
     }
 

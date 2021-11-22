@@ -23,6 +23,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcContentsEventListener;
 use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Service\SiteConfigServiceInterface;
 
 /**
  * Class BcContentsComponent

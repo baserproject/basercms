@@ -13,13 +13,14 @@ namespace BaserCore\Test\TestCase\Controller\Admin;
 
 use Cake\Event\Event;
 use Cake\Http\ServerRequest;
-use BaserCore\Service\SiteService;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Service\ContentService;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\Service\ContentFolderService;
+use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Service\SiteConfigServiceInterface;
 use BaserCore\Controller\Admin\ContentsController;
 
 /**
@@ -123,7 +124,7 @@ class ContentsControllerTest extends BcTestCase
         $this->get('/baser/admin/baser-core/contents/index/');
         $this->assertResponseOk();
         // リクエストの変化をテスト
-        $this->ContentsController->index($this->ContentService, new SiteService());
+        $this->ContentsController->index($this->getService(ContentServiceInterface::class), $this->getService(SiteServiceInterface::class), $this->getService(SiteConfigServiceInterface::class));
         $this->assertArrayHasKey('num', $this->ContentsController->getRequest()->getQueryParams());
     }
 
@@ -157,7 +158,7 @@ class ContentsControllerTest extends BcTestCase
 
         $ContentsController = $this->ContentsController->setRequest($this->request);
         $ContentsController->viewBuilder()->setVar('authors', '');
-        $ContentsController->index($this->ContentService, new SiteService());
+        $ContentsController->index($this->getService(ContentServiceInterface::class), $this->getService(SiteServiceInterface::class), $this->getService(SiteConfigServiceInterface::class));
         $this->assertNotEquals('', $ContentsController->viewBuilder()->getVar('template'));
         $this->assertNotEmpty($ContentsController->viewBuilder()->getVar('contents'));
 
@@ -250,7 +251,7 @@ class ContentsControllerTest extends BcTestCase
     {
         $request = $this->request->withParam('action', 'trash_index')->withParam('prefix', 'Admin');
         $this->ContentsController->setRequest($request);
-        $this->ContentsController->trash_index($this->ContentService, new SiteService());
+        $this->ContentsController->trash_index($this->getService(ContentServiceInterface::class), $this->getService(SiteServiceInterface::class), $this->getService(SiteConfigServiceInterface::class));
         $this->assertEquals('index', $this->ContentsController->viewBuilder()->getTemplate());
         $this->assertArrayHasKey('num', $this->ContentsController->getRequest()->getQueryParams());
     }

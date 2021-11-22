@@ -92,6 +92,7 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testAdd()
     {
+        $this->loginAdmin($this->getRequest());
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $data = [
