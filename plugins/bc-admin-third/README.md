@@ -17,6 +17,7 @@ npm install
 ### ファイル監視
 bc-admin-third ディレクトリの直下で、gulp を実行し、ファイル監視を開始します。
 ```shell script
+cd plugins/bc-admin-third
 gulp
 ```
 監視対象は、`/webroot/js/src/` 配下の javascript ファイルとなります。

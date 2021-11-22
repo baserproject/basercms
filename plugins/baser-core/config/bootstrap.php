@@ -12,12 +12,13 @@
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 
 /**
  * bootstrap
  *
  * @checked
- * @unitTest
+ * @note(value="固定ページを実装するまではTODO消化できない")
  */
 
 use BaserCore\Event\BcContainerEventListener;

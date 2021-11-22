@@ -70,7 +70,8 @@ class AnalyseControllerTest extends BcTestCase
             "method" => "",
             "checked" => false,
             "unitTest" => false,
-            "noTodo" => false
+            "noTodo" => false,
+            "note" => ""
         ];
         $this->assertContains($expected, $result);
     }

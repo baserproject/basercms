@@ -11,11 +11,12 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Service\SiteServiceInterface;
-use Cake\Core\Exception\Exception;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use Cake\Core\Exception\Exception;
+use BaserCore\Service\SiteServiceInterface;
+use BaserCore\Service\SiteConfigServiceInterface;
 
 /**
  * Class SitesController
@@ -27,14 +28,15 @@ class SitesController extends BcAdminAppController
     /**
      * サイト一覧
      * @param SiteServiceInterface $siteService
+     * @param SiteConfigServiceInterface $siteConfigService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(SiteServiceInterface $siteService)
+    public function index(SiteServiceInterface $siteService, SiteConfigServiceInterface $siteConfigService)
     {
         $this->setViewConditions('Site', ['default' => ['query' => [
-            'num' => $siteService->getSiteConfig('admin_list_num'),
+            'num' => $siteConfigService->getValue('admin_list_num'),
             'sort' => 'id',
             'direction' => 'asc',
         ]]]);

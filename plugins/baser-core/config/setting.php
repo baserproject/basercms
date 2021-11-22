@@ -13,10 +13,12 @@ use Cake\Cache\Engine\FileEngine;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 
 /**
  * @checked
  * @unitTest
+ * @note(value="テーマ管理とユーティリティを実装してからメニューを表示する")
  */
 $baserCorePrefix = '/baser';
 $adminPrefix = '/admin';

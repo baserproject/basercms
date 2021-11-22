@@ -14,15 +14,16 @@ namespace BaserCore\Controller\Component;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
-use BaserCore\Event\BcContentsEventListener;
 use Cake\Event\EventManager;
 use BaserCore\Utility\BcUtil;
 use Cake\Controller\Component;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Service\SiteConfigTrait;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Event\BcContentsEventListener;
 use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Service\SiteConfigServiceInterface;
 
 /**
  * Class BcContentsComponent
@@ -34,12 +35,7 @@ use BaserCore\Service\ContentServiceInterface;
  */
 class BcAdminContentsComponent extends Component
 {
-
-    /**
-     * Trait
-     */
-    use SiteConfigTrait;
-
+    use BcContainerTrait;
     /**
      * コンテンツ編集用のアクション名
      * 判定に利用
@@ -61,6 +57,7 @@ class BcAdminContentsComponent extends Component
     {
         parent::initialize($config);
         $this->ContentService = $this->getService(ContentServiceInterface::class);
+        $this->SiteConfigService = $this->getService(SiteConfigServiceInterface::class);
         $this->Sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
         $this->setupAdmin();
     }
@@ -137,7 +134,7 @@ class BcAdminContentsComponent extends Component
 
         $siteList = $this->Sites->find('list', ['fields' => ['id', 'display_name']]);
         $controller->set('sites', $siteList);
-        $controller->set('mainSiteDisplayName', $this->getSiteConfig('main_site_display_name'));
+        $controller->set('mainSiteDisplayName', $this->SiteConfigService->getValue('main_site_display_name'));
         $controller->set('mainSiteId', $content->site->main_site_id);
         $controller->set('relatedContents', $this->Sites->getRelatedContents($content->id));
         $related = false;

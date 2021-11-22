@@ -104,7 +104,8 @@ class AnalyseController extends AppController
                 'method' => '',
                 'checked' => false,
                 'unitTest' => false,
-                'noTodo' => false
+                'noTodo' => false,
+                'note' => ''
             ];
             if (preg_match('/^[a-z]/', $fileName) || !preg_match('/\.php$/', $fileName)) {
                 $file = new File($path);
@@ -113,10 +114,13 @@ class AnalyseController extends AppController
                     $meta['checked'] = true;
                 }
                 if (preg_match('/@noTodo/', $code)) {
-                    $meta['checked'] = true;
+                    $meta['noTodo'] = true;
                 }
-                if (preg_match('/@noTodo/', $code)) {
+                if (preg_match('/@unitTest/', $code)) {
                     $meta['unitTest'] = true;
+                }
+                if (preg_match('/@note\(value="(.+?)"\)/', $code, $matches)) {
+                    $meta['note'] = $matches[1];
                 }
                 $metas[] = $meta;
                 continue;
@@ -138,7 +142,8 @@ class AnalyseController extends AppController
                 $meta = array_merge($meta, [
                     'checked' => false,
                     'unitTest' => false,
-                    'noTodo' => false
+                    'noTodo' => false,
+                    'note' => ''
                 ]);
                 if ('\\' . $method->class === $className && !in_array($method->name, $traitMethodsArray)) {
                     $meta['method'] = $method->name;
@@ -167,10 +172,14 @@ class AnalyseController extends AppController
         $methodAnnotations = $reader->getMethodAnnotations(new ReflectionMethod($className, $methodName));
         $annotations = [];
         if ($methodAnnotations) {
-            foreach(['checked', 'unitTest', 'noTodo'] as $property) {
+            foreach(['checked', 'unitTest', 'noTodo', 'note'] as $property) {
                 foreach($methodAnnotations as $annotation) {
                     if ($property === $annotation->name) {
-                        $annotations[$property] = true;
+                        if(isset($annotation->value)) {
+                            $annotations[$property] = $annotation->value;
+                        } else {
+                            $annotations[$property] = true;
+                        }
                     }
                 }
             }

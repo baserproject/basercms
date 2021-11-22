@@ -17,7 +17,6 @@ use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Service\SiteConfigTrait;
 use BaserCore\Model\Table\UserGroupsTable;
 use BaserCore\Model\Table\PermissionsTable;
 use BaserCore\Service\PermissionServiceInterface;
@@ -35,10 +34,6 @@ use Authentication\Controller\Component\AuthenticationComponent;
  */
 class PermissionsController extends BcAdminAppController
 {
-    /**
-     * SiteConfigTrait
-     */
-    use SiteConfigTrait;
 
 	/**
 	 * beforeFilter
@@ -176,31 +171,26 @@ class PermissionsController extends BcAdminAppController
 	 *
 	 * @return void
 	 */
-	public function admin_ajax_add()
+	public function ajax_add(PermissionServiceInterface $permissionService, UserGroupServiceInterface $userGroups)
 	{
-		if (!$this->request->data) {
+        $this->disableAutoRender();
+        if (!$this->request->is(['patch', 'post', 'put'])) {
 			$this->ajaxError(500, __d('baser', '無効な処理です。'));
-			exit;
+			return;
 		}
 
-// TODO 現在 admin 固定、今後、mypage 等にも対応する
-        $authPrefix = 'admin';
-        $this->request = $this->request->withData('Permission.url', '/' . $authPrefix . '/' . $this->request->getData('Permission.url'));
-        $this->request = $this->request->withData('Permission.no', $this->Permission->getMax('no', ['user_group_id' => $this->request->getData('Permission.user_group_id')]) + 1);
-        $this->request = $this->request->withData('Permission.sort', $this->Permission->getMax('sort', ['user_group_id' => $this->request->getData('Permission.user_group_id')]) + 1);
-        $this->request = $this->request->withData('Permission.status', true);
-        $this->Permission->create($this->request->data);
-        if (!$this->Permission->save()) {
-            $this->ajaxError(500, $this->Page->validationErrors);
-            exit;
+        $permission = $permissionService->create($this->request->getData());
+        if (empty($permission->getErrors()) === true) {
+            $this->BcMessage->setSuccess(
+                sprintf(__d('baser', '新規アクセス制限設定「%s」を追加しました。'), $permission->name),
+                true,
+                false
+            );
+            echo true;
+            return;
         }
 
-        $this->Permission->saveDbLog(
-            sprintf(
-                __d('baser', '新規アクセス制限設定「%s」を追加しました。'), $this->request->getData('Permission.name')
-            )
-        );
-        exit(true);
+		$this->ajaxError(500, __d('baser', '保存に失敗しました。'));
     }
 
     /**

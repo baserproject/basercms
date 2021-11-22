@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\Model\Table;
 use BaserCore\Model\Entity\Permission;
 use Cake\ORM\Query;
 use Cake\Validation\Validator;
+use Cake\Core\Configure;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\PermissionsTable;
 
@@ -228,70 +229,24 @@ class PermissionsTableTest extends BcTestCase
     }
 
 
-
-    /**
-     * 認証プレフィックスを取得する
-     *
-     * @param int $id PermissionのID
-     * @param array $expected 期待値
-     * @param string $message テストが失敗した時に表示されるメッセージ
-     * @dataProvider getAuthPrefixDataProvider
-     */
-    public function testGetAuthPrefix($id, $expected, $message = null)
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->Permissions->getAuthPrefix($id);
-        $this->assertEquals($expected, $result, $message);
-    }
-
-    public function getAuthPrefixDataProvider()
-    {
-        return [
-            [1, 'operator', 'プレフィックスが一致しません'],
-            [16, 'admin', 'プレフィックスが一致しません'],
-            [99, false, '存在しないユーザーグループです'],
-        ];
-    }
-
-    /**
-     * 初期値を取得する
-     */
-    public function testGetDefaultValue()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->Permissions->getDefaultValue();
-        $expected = [
-            'Permission' => [
-                'auth' => 0,
-                'status' => 1
-            ]
-        ];
-        $this->assertEquals($expected, $result, '初期値が正しくありません');
-    }
-
     /**
      * コントロールソースを取得する
      *
      * @param string フィールド名
-     * @param array $expected 期待値
-     * @param string $message テストが失敗した時に表示されるメッセージ
-     * @dataProvider getControlSourceDataProvider
      */
-    public function testGetControlSource($field, $expected, $message = null)
+    public function testGetControlSource()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->Permissions->getControlSource($field);
-        $this->assertEquals($expected, $result, $message);
+        $userGroupList = $this->Permissions->getControlSource('user_group_id');
+        $this->assertGreaterThan(0, count($userGroupList));
+        $keyExist = key_exists(Configure::read('BcApp.adminGroupId'), $userGroupList);
+        $this->assertFalse($keyExist);
+        
+        $userGroupList = $this->Permissions->getControlSource('hoge');
+        $this->assertFalse($userGroupList);
     }
 
-    public function getControlSourceDataProvider()
-    {
-        return [
-            ['user_group_id', [2 => 'サイト運営'], '$controlSources["user_group_id"]が取得できません'],
-            ['auth', [0 => '不可', 1 => '可'], '$controlSources["auth"]が取得できません'],
-            ['hoge', false, '存在しないフィールドです'],
-        ];
-    }
+
+
 
     /**
      * beforeSave

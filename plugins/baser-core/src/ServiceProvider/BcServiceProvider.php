@@ -29,12 +29,12 @@ use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Service\UserServiceInterface;
 use BaserCore\Service\DblogServiceInterface;
 use BaserCore\Service\SiteConfigService;
+use BaserCore\Service\SiteConfigServiceInterface;
 use BaserCore\Service\PluginServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Service\UserGroupServiceInterface;
 use BaserCore\Service\PermissionServiceInterface;
 use BaserCore\Service\PermissionService;
-use BaserCore\Service\SiteConfigServiceInterface;
 use BaserCore\Service\ContentFolderService;
 use BaserCore\Service\ContentFolderServiceInterface;
 

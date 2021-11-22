@@ -393,7 +393,8 @@ class BcAdminHelper extends Helper
     {
         echo $this->_View->element('contents_menu', [
             'isHelp' => (bool)($this->_View->get('help')),
-            'isLogin' => (bool)(BcUtil::loginUser())
+            'isLogin' => (bool)(BcUtil::loginUser()),
+            'isSuperUser' => BcUtil::isSuperUser()
         ]);
     }
 

@@ -27,7 +27,7 @@
 	<?php $this->BcBaser->icon() ?>
 	<?php $this->BcBaser->css([
 		'style',
-		'jquery-ui/jquery-ui-1.11.4',
+		'vendor/jquery-ui/jquery-ui-1.11.4',
 		'colorbox/colorbox-1.6.1',
 		'editor'
 	]) ?>
