@@ -12,7 +12,6 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
-use Cake\Event\Event;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use BaserCore\Model\AppTable;
@@ -26,10 +25,11 @@ use BaserCore\Model\Entity\Site;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
-use BaserCore\Service\SiteConfigTrait;
+use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\ResultSetInterface;
 use BaserCore\Utility\BcAbstractDetector;
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Service\SiteConfigServiceInterface;
 
 /**
  * Class Site
@@ -45,7 +45,7 @@ class SitesTable extends AppTable
      * Trait
      */
     use BcEventDispatcherTrait;
-    use SiteConfigTrait;
+    use BcContainerTrait;
 
     /**
      * 保存時にエイリアスが変更されたかどうか
@@ -537,7 +537,7 @@ class SitesTable extends AppTable
         BcAbstractDetector $lang = null
     )
     {
-
+        $SiteConfigService = $this->getService(SiteConfigServiceInterface::class);
         $currentSite = $this->findByUrl($url);
         $sites = $this->find()->all();
 
@@ -550,7 +550,7 @@ class SitesTable extends AppTable
 
         // 言語の一致するサイト候補に絞り込む
         $langSubSites = [];
-        if ($lang && $this->getSiteConfig('use_site_lang_setting')) {
+        if ($lang && $SiteConfigService->getValue('use_site_lang_setting')) {
             foreach($sites as $site) {
                 if (!$site->status) {
                     continue;
@@ -568,7 +568,7 @@ class SitesTable extends AppTable
         } else {
             $subSites = $sites;
         }
-        if ($agent && $this->getSiteConfig('use_site_device_setting')) {
+        if ($agent && $SiteConfigService->getValue('use_site_device_setting')) {
             foreach($subSites as $subSite) {
                 if (!$subSite->status) {
                     continue;

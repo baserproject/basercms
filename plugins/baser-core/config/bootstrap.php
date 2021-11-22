@@ -18,7 +18,6 @@ use BaserCore\Annotation\Note;
  * bootstrap
  *
  * @checked
- * @unitTest
  * @note(value="固定ページを実装するまではTODO消化できない")
  */
 
