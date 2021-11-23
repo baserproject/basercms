@@ -924,12 +924,16 @@ class ContentsTableTest extends BcTestCase
      *
      * @return void
      */
-    public function testDisableUpdatingSystemData()
+    public function testDisableAndEnableUpdatingSystemData()
     {
-        $this->Contents->disableUpdatingSystemData();
         $reflection = new ReflectionClass($this->Contents);
         $property = $reflection->getProperty('updatingSystemData');
         $property->setAccessible(true);
+        // 無効化
+        $this->Contents->disableUpdatingSystemData();
         $this->assertFalse($property->getValue($this->Contents));
+        // 有効化
+        $this->Contents->enableUpdatingSystemData();
+        $this->assertTrue($property->getValue($this->Contents));
     }
 }

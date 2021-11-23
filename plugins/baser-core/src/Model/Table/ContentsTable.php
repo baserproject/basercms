@@ -1519,7 +1519,7 @@ class ContentsTable extends AppTable
     }
 
     /**
-     * disableUpdatingSystemData
+     * UpdatingSystemData無効化
      *
      * @return void
      * @checked
@@ -1529,5 +1529,18 @@ class ContentsTable extends AppTable
     public function disableUpdatingSystemData()
     {
         $this->updatingSystemData = false;
+    }
+
+    /**
+     * UpdatingSystemData有効化
+     *
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function enableUpdatingSystemData()
+    {
+        $this->updatingSystemData = true;
     }
 }
