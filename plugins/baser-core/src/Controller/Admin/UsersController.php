@@ -11,21 +11,22 @@
 
 namespace BaserCore\Controller\Admin;
 
-use Authentication\Controller\Component\AuthenticationComponent;
-use BaserCore\Model\Entity\User;
-use BaserCore\Service\UserServiceInterface;
-use BaserCore\Utility\BcUtil;
-use BaserCore\Controller\Component\BcMessageComponent;
-use BaserCore\Model\Table\UsersTable;
-use Cake\Core\Configure;
-use Cake\Core\Exception\Exception;
-use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\Routing\Router;
 use Cake\Http\Response;
-use Cake\Http\Exception\ForbiddenException;
-use BaserCore\Annotation\UnitTest;
+use Cake\Core\Configure;
+use Cake\Routing\Router;
+use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
+use BaserCore\Model\Entity\User;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use Cake\Core\Exception\Exception;
+use BaserCore\Model\Table\UsersTable;
+use BaserCore\Service\UserServiceInterface;
+use Cake\Http\Exception\ForbiddenException;
+use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Controller\Component\BcMessageComponent;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Authentication\Controller\Component\AuthenticationComponent;
 
 /**
  * Class UsersController
@@ -153,10 +154,10 @@ class UsersController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function index(UserServiceInterface $userService): void
+    public function index(UserServiceInterface $userService, SiteConfigServiceInterface $siteConfigService): void
     {
         $this->setViewConditions('User', ['default' => ['query' => [
-            'num' => $userService->getSiteConfig('admin_list_num'),
+            'num' => $siteConfigService->getValue('admin_list_num'),
             'sort' => 'id',
             'direction' => 'asc',
         ]]]);

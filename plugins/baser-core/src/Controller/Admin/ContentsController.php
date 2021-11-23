@@ -24,7 +24,6 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Model\Table\SitesTable;
 use BaserCore\Model\Table\UsersTable;
-use BaserCore\Service\SiteConfigTrait;
 use BaserCore\Model\Table\ContentsTable;
 use Cake\Http\Exception\NotFoundException;
 use BaserCore\Model\Table\SiteConfigsTable;
@@ -32,6 +31,7 @@ use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Model\Table\ContentFoldersTable;
 use BaserCore\Service\BcAdminServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Service\SiteConfigServiceInterface;
 use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Controller\Component\BcAdminContentsComponent;
 
@@ -89,13 +89,14 @@ class ContentsController extends BcAdminAppController
 
     /**
      * コンテンツ一覧
-     * @param integer $parentId
-     * @param void
+     * @param  ContentServiceInterface $contentService
+     * @param  SiteServiceInterface $siteService
+     * @param  SiteConfigServiceInterface $siteConfigService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function index(ContentServiceInterface $contentService, SiteServiceInterface $siteService)
+    public function index(ContentServiceInterface $contentService, SiteServiceInterface $siteService, SiteConfigServiceInterface $siteConfigService)
     {
         $currentSiteId = $this->request->getAttribute('currentSite')->id;
         $sites = $siteService->getList();
@@ -110,7 +111,7 @@ class ContentsController extends BcAdminAppController
         $currentListType = $this->request->getQuery('list_type') ?? 1;
         $this->setViewConditions('Contents', ['default' => [
             'query' => [
-                'num' => $siteService->getSiteConfig('admin_list_num'),
+                'num' => $siteConfigService->getValue('admin_list_num'),
                 'site_id' => $currentSiteId,
                 'list_type' => $currentListType,
                 'sort' => 'id',
@@ -121,7 +122,7 @@ class ContentsController extends BcAdminAppController
             switch($this->request->getQuery('list_type')) {
                 case 1:
                     // 並び替え最終更新時刻をリセット
-                    $siteService->resetSiteConfig('contents_sort_last_modified');
+                    $siteConfigService->resetValue('contents_sort_last_modified');
                     break;
                 case 2:
                     $this->request = $this->request->withQueryParams(
@@ -208,13 +209,14 @@ class ContentsController extends BcAdminAppController
      *
      * @param  ContentServiceInterface $contentService
      * @param  SiteServiceInterface $siteService
+     * @param  SiteConfigServiceInterface $siteConfigService
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function trash_index(ContentServiceInterface $contentService, SiteServiceInterface $siteService)
+    public function trash_index(ContentServiceInterface $contentService, SiteServiceInterface $siteService, SiteConfigServiceInterface $siteConfigService)
     {
-        $this->setAction('index', $contentService, $siteService);
+        $this->setAction('index', $contentService, $siteService, $siteConfigService);
         $this->render('index');
     }
 

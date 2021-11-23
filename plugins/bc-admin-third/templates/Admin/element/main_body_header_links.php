@@ -32,9 +32,15 @@ if (!isset($mainBodyHeaderLinks)) {
     $confirmMessage = $link['confirm'];
     unset($link['confirm']);
   }
-  $link['class'] = 'bca-btn';
-  $link['data-bca-btn-type'] = $url['action'];
-  $link['data-bca-btn-size'] = 'sm';
+  if (empty($link['class'])) {
+    $link['class'] = 'bca-btn';
+  }
+  if (empty($link['data-bca-btn-type'])) {
+    $link['data-bca-btn-type'] = $url['action'];
+  }
+  if (empty($link['data-bca-btn-size'])) {
+    $link['data-bca-btn-size'] = 'sm';
+  }
   ?>
   <?php $this->BcBaser->link($link['title'], $url, $link, $confirmMessage); ?>
 <?php endforeach; ?>

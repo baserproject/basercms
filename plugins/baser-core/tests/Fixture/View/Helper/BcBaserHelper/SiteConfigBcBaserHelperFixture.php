@@ -256,7 +256,7 @@ q {}',
         [
             'id' => '30',
             'name' => 'google_maps_api_key',
-            'value' => 'AIzaSyBeDLfQ5IY3qYm9D9T6OCscuGFB7_0WH08',
+            'value' => '',
             'created' => '2015-01-27 12:58:10',
             'modified' => '2015-01-27 12:58:25'
         ],

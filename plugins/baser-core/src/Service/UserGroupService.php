@@ -27,12 +27,6 @@ use BaserCore\Annotation\Checked;
  */
 class UserGroupService implements UserGroupServiceInterface
 {
-
-    /**
-     * Trait
-     */
-    use SiteConfigTrait;
-
     /**
      * UserGroups Table
      * @var \Cake\ORM\Table

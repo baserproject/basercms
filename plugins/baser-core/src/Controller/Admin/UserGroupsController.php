@@ -11,18 +11,19 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Model\Entity\UserGroup;
-use BaserCore\Controller\Component\BcMessageComponent;
-use BaserCore\Model\Table\Exception\CopyFailedException;
-use BaserCore\Model\Table\UserGroupsTable;
-use BaserCore\Service\UserGroupServiceInterface;
-use BaserCore\Service\UserServiceInterface;
-use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\Datasource\ResultSetInterface;
 use Cake\Http\Response;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Model\Entity\UserGroup;
+use Cake\Datasource\ResultSetInterface;
+use BaserCore\Model\Table\UserGroupsTable;
+use BaserCore\Service\UserServiceInterface;
+use BaserCore\Service\UserGroupServiceInterface;
+use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Controller\Component\BcMessageComponent;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use BaserCore\Model\Table\Exception\CopyFailedException;
 
 /**
  * Class UserGroupsController
@@ -56,10 +57,10 @@ class UserGroupsController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function index(UserGroupServiceInterface $userGroupService): void
+    public function index(UserGroupServiceInterface $userGroupService, SiteConfigServiceInterface $siteConfigService): void
     {
         $this->setViewConditions('UserGroup', ['default' => ['query' => [
-            'num' => $userGroupService->getSiteConfig('admin_list_num'),
+            'num' => $siteConfigService->getValue('admin_list_num'),
             'sort' => 'id',
             'direction' => 'asc',
         ]]]);

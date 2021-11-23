@@ -188,4 +188,32 @@ class SiteConfigService implements SiteConfigServiceInterface
         return $this->SiteConfigs->getControlSource('mode');
     }
 
+    /**
+     * サイト全体の設定値を更新する
+     *
+     * @param  string $name
+     * @param  string $value
+     * @return SiteConfig
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function setValue($name, $value)
+    {
+        return $this->update([$name => $value]);
+    }
+
+    /**
+     * サイト全体の設定値をリセットする
+     *
+     * @param  string $name
+     * @return SiteConfig
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function resetValue($name)
+    {
+        return $this->setValue($name, '');
+    }
 }

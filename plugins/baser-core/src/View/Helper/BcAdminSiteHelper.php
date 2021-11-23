@@ -20,9 +20,10 @@ use BaserCore\Model\Entity\Site;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
-use BaserCore\Service\SiteConfigTrait;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Service\BcAdminServiceInterface;
+use BaserCore\Service\SiteConfigServiceInterface;
 
 /**
  * Class BcAdminSiteHelper
@@ -31,7 +32,10 @@ use BaserCore\Service\BcAdminServiceInterface;
 class BcAdminSiteHelper extends Helper
 {
 
-    use SiteConfigTrait;
+    /**
+     * BcContainerTrait
+     */
+    use BcContainerTrait;
 
     /**
      * Sites Service
@@ -50,6 +54,7 @@ class BcAdminSiteHelper extends Helper
     {
         parent::initialize($config);
         $this->SiteService = $this->getService(SiteServiceInterface::class);
+        $this->SiteConfigService = $this->getService(SiteConfigServiceInterface::class);
     }
 
     /**
@@ -125,7 +130,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function isUseSiteDeviceSetting(): bool
     {
-        return (bool) $this->getSiteConfig('use_site_device_setting');
+        return (bool) $this->SiteConfigService->getValue('use_site_device_setting');
     }
 
     /**
@@ -137,7 +142,7 @@ class BcAdminSiteHelper extends Helper
      */
     public function isUseSiteLangSetting(): bool
     {
-        return (bool) $this->getSiteConfig('use_site_lang_setting');
+        return (bool) $this->SiteConfigService->getValue('use_site_lang_setting');
     }
 
     /**
