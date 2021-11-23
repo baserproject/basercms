@@ -6,7 +6,7 @@ RUN echo "deb http://security.debian.org jessie/updates main" >> /etc/apt/source
 RUN apt-get update \
     && apt-get install -y --allow-downgrades \
     	dialog \
-    	zlib1g=1:1.2.11.dfsg-1 \
+    	zlib1g \
     	zlib1g-dev \
     	libfreetype6-dev \
     	libfreetype6 \

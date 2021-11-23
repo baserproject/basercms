@@ -22,7 +22,7 @@ services:
     container_name: bc5-php
     image: baserproject/basercms:5-php7.4
     volumes:
-      - ../:/var/www/html:cached
+      - ../:/var/www/html:delegated
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
       COMPOSER_ALLOW_SUPERUSER: 1
