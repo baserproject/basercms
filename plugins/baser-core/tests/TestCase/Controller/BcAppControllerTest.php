@@ -85,7 +85,7 @@ class BcAppControllerTest extends BcTestCase
     public function testSaveDblog(string $message, int $userId = null): void
     {
         $request =$this->getRequest('/baser/admin/baser-core/users/');
-        if (!is_null($userId)) $this->loginAdmin($request, $userId);
+        if (isset($userId)) $this->loginAdmin($request, $userId);
 
         $result = $this->execPrivateMethod($this->BcAppController, 'saveDblog', [$message]);
 
@@ -94,7 +94,7 @@ class BcAppControllerTest extends BcTestCase
             'controller' => 'Users',
             'action' => 'index'
         ];
-        if (!is_null($userId)) {
+        if (isset($userId)) {
             $where['user_id'] = $userId;
         } else {
             $where['user_id IS'] = null;
