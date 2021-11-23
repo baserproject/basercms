@@ -512,6 +512,36 @@ class BcFreezeHelper extends BcFormHelper
 	}
 
 	/**
+	 * 数値ボックスを表示する
+	 *
+	 * @param string $fieldName フィールド文字列
+	 * @param array $attributes html属性
+	 * @return    string    htmlタグ
+	 * @access    public
+	 */
+	public function number($fieldName, $attributes = [])
+	{
+
+		if ($this->freezed) {
+			list($model, $field) = explode('.', $fieldName);
+			if (isset($attributes)) {
+				$attributes = $attributes + ['type' => 'hidden'];
+			} else {
+				$attributes = ['type' => 'hidden'];
+			}
+			if (isset($attributes["value"])) {
+				$value = $attributes["value"];
+			} else {
+				$value = $this->request->data[$model][$field];
+			}
+			$attributes['type'] = 'hidden';
+			return parent::number($fieldName, $attributes) . h($value);
+		} else {
+			return parent::number($fieldName, $attributes);
+		}
+	}
+
+	/**
 	 * パスワードボックスを表示する
 	 *
 	 * @param string $fieldName フィールド文字列

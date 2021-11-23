@@ -72,6 +72,15 @@ if ($this->request->action !== 'admin_add_folder') {
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit bca-actions">
+
+	<div class="bca-actions__before">
+	<?php if ($this->request->action == 'admin_add_folder' || $this->request->action == 'admin_edit_folder'): ?>
+		<?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', $path)), ['class' => 'btn-gray button bca-btn', 'data-bca-btn-type' => 'back-to-list']); ?>
+	<?php else: ?>
+		<?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', dirname($path))), ['class' => 'btn-gray button bca-btn', 'data-bca-btn-type' => 'back-to-list']); ?>
+	<?php endif ?>
+	</div>
+
 	<?php if ($this->request->action == 'admin_add_folder'): ?>
 		<div class="bca-actions__main">
 			<?php echo $this->BcForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn bca-actions__item', 'data-bca-btn-type' => 'save', 'data-bca-btn-size' => 'lg', 'data-bca-btn-width' => 'lg', 'id' => 'BtnSave']) ?>
@@ -95,9 +104,3 @@ if ($this->request->action !== 'admin_add_folder') {
 		<?php endif ?>
 	<?php endif ?>
 </div>
-
-<?php if ($this->request->action == 'admin_add_folder' || $this->request->action == 'admin_edit_folder'): ?>
-	<?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', $path)), ['class' => 'btn-gray button bca-btn', 'data-bca-btn-type' => 'back-to-list']); ?>
-<?php else: ?>
-	<?php $this->BcBaser->link(__d('baser', '一覧に戻る'), array_merge(['action' => 'index', $theme, $plugin, $type], explode('/', dirname($path))), ['class' => 'btn-gray button bca-btn', 'data-bca-btn-type' => 'back-to-list']); ?>
-<?php endif ?>

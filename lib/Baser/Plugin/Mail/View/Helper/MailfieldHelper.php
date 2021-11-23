@@ -40,6 +40,8 @@ class MailfieldHelper extends AppHelper
 			$attributes['multiple'] = true;
 		} elseif ($data['type'] === 'tel') {
 			$attributes['type'] = 'tel';
+		} elseif ($data['type'] === 'number') {
+			$attributes['type'] = 'number';
 		}
 		if ($data['auto_complete'] != 'none') {
 			$attributes['autocomplete'] = $data['auto_complete'];

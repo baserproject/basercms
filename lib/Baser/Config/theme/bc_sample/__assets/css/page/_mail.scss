@@ -40,6 +40,8 @@
 
   input[type=text],
   input[type=email],
+  input[type=tel],
+  input[type=number],
   textarea {
     box-sizing: border-box;
     width: 100% !important;

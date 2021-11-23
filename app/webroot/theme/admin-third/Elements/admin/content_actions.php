@@ -22,14 +22,16 @@ if ($isAlias) {
 
 
 <div class="bca-actions">
-	<div class="bca-actions__main">
+	<div class="bca-actions__before">
 		<?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), ['plugin' => '', 'admin' => true, 'controller' => 'contents', 'action' => 'index'], [
 			'class' => 'button bca-btn',
 			'data-bca-btn-type' => 'back-to-list'
 		]) ?>
+	</div>
+	<div class="bca-actions__main">
 		<?php if ($isAvailablePreview): ?>
 			<?php echo $this->BcForm->button(__d('baser', 'プレビュー'), [
-				'class' => 'button bca-btn',
+				'class' => 'button bca-btn bca-actions__item',
 				'data-bca-btn-type' => 'preview',
 				'id' => 'BtnPreview'
 			]) ?>

@@ -31,12 +31,16 @@ $this->BcBaser->js('admin/sites/edit', false);
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit bca-actions">
-	<?php echo $this->BcForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn',
-		'data-bca-btn-type' => 'save',
-		'data-bca-btn-size' => 'lg',
-		'data-bca-btn-width' => 'lg',
-	]) ?>
+	<div class="bca-actions__before">
+		<?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), ['plugin' => '', 'admin' => true, 'controller' => 'sites', 'action' => 'index'], ['class' => 'button bca-btn', 'data-bca-btn-type' => 'back-to-list']) ?>
+	</div>
+	<div class="bca-actions__main">
+		<?php echo $this->BcForm->button(__d('baser', '保存'), ['div' => false, 'class' => 'button bca-btn',
+			'data-bca-btn-type' => 'save',
+			'data-bca-btn-size' => 'lg',
+			'data-bca-btn-width' => 'lg',
+		]) ?>
+	</div>
 </div>
-<?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), ['plugin' => '', 'admin' => true, 'controller' => 'sites', 'action' => 'index'], ['class' => 'button bca-btn', 'data-bca-btn-type' => 'back-to-list']) ?>
 
 <?php echo $this->BcForm->end() ?>
