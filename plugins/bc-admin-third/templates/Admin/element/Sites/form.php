@@ -31,7 +31,7 @@ $useSiteLangSetting = $this->BcAdminSite->isUseSiteLangSetting();
     <tr>
       <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('id', 'No') ?></th>
       <td class=" bca-form-table__input">
-        <?php echo $this->BcAdminForm->value('id') ?>
+        <?php echo $this->BcAdminForm->getSourceValue('id') ?>
       </td>
     </tr>
   <?php endif ?>
@@ -148,7 +148,7 @@ $useSiteLangSetting = $this->BcAdminSite->isUseSiteLangSetting();
             id="SpanSiteAutoRedirect"><?php echo $this->BcAdminForm->control('auto_redirect', ['type' => 'checkbox', 'label' => __d('baser', 'メインサイトから自動的にリダイレクト')]) ?>&nbsp;
 					<i class="bca-icon--question-circle btn help bca-help"></i>
 					<span
-            class="helptext"><?php echo __d('baser', 'メインサイトと別URLでアクセスする際、デバイス設定や言語設定を判定し、適切なサイトへリダイレクトします。') ?></span>　
+            class="helptext"><?php echo __d('baser', 'メインサイトと別URLでアクセスする際、デバイス設定や言語設定を判定し、適切なサイトへリダイレクトします。') ?></span>
 				</span>
           <br>
           <span

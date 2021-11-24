@@ -43,6 +43,7 @@ class ContentFolderServiceTest extends BcTestCase
         'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.Users',
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs',
         'plugin.BaserCore.UserGroups',
         'plugin.BaserCore.UsersUserGroups',
     ];

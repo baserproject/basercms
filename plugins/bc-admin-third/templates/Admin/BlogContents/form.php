@@ -104,7 +104,7 @@ $this->BcBaser->i18nScript([
               <li><?php echo __d('baser', '半角数字で入力してください。') ?></li>
               <?php if ($this->action == 'admin_edit'): ?>
                 <li><?php echo __d('baser', 'RSSフィードのURL') ?>&nbsp;
-                  <?php $this->BcBaser->link(Router::url('/' . $this->BcForm->value('Content.name') . '/index.rss', true), '/' . $this->BcForm->value('Content.name') . '/index.rss', ['target' => '_blank']) ?>
+                  <?php $this->BcBaser->link(Router::url('/' . $this->BcForm->getSourceValue('Content.name') . '/index.rss', true), '/' . $this->BcForm->getSourceValue('Content.name') . '/index.rss', ['target' => '_blank']) ?>
                 </li>
               <?php endif ?>
             </ul>
@@ -185,7 +185,7 @@ $this->BcBaser->i18nScript([
           <?php
           echo $this->BcAdminForm->control('BlogContent.template', [
             'type' => 'select',
-            'options' => $this->Blog->getBlogTemplates($this->BcForm->value('Content.site_id'))])
+            'options' => $this->Blog->getBlogTemplates($this->BcForm->getSourceValue('Content.site_id'))])
           ?>
           <?php echo $this->BcAdminForm->control('BlogContent.edit_blog_template', ['type' => 'hidden']) ?>
           <?php if ($this->action == 'admin_edit'): ?>
