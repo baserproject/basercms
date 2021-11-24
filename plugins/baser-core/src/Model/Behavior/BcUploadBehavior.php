@@ -175,19 +175,21 @@ class BcUploadBehavior extends Behavior
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        $Model = $entity; // TODO: 代用
-        if ($Model->exists()) {
-            $this->deleteExistingFiles($Model);
-        }
-        $Model->data = $this->deleteFiles($Model, $Model->data);
+        // TODO: 一時措置
+        return;
+        // $Model = $entity; // TODO: 代用
+        // if ($Model->exists()) {
+        //     $this->deleteExistingFiles($Model);
+        // }
+        // $Model->data = $this->deleteFiles($Model, $Model->data);
 
-        $result = $this->saveFiles($Model, $Model->data);
-        if ($result) {
-            $Model->data = $result;
-            return true;
-        } else {
-            return false;
-        }
+        // $result = $this->saveFiles($Model, $Model->data);
+        // if ($result) {
+        //     $Model->data = $result;
+        //     return true;
+        // } else {
+        //     return false;
+        // }
     }
 
     /**
@@ -198,70 +200,73 @@ class BcUploadBehavior extends Behavior
     public function setupRequestData($content)
     {
         $setting = $this->getConfig('setting' . $this->table->getAlias());
-        foreach($setting['fields'] as $key => $field) {
-            $data = [];
-            $upload = false;
-            if (!empty($Model->data[$Model->name])) {
-                $data = $Model->data[$Model->name];
-            }
-            if (!empty($data[$field['name']]) && is_array($data[$field['name']]) && $data[$field['name']]['size'] != 0) {
-                if (!empty($data[$field['name']]['name'])) {
-                    $upload = true;
+        if (!empty($setting['fields'])) {
+            foreach($setting['fields'] as $key => $field) {
+                $data = [];
+                $upload = false;
+                if (!empty($Model->data[$Model->name])) {
+                    $data = $Model->data[$Model->name];
                 }
-            } else {
-                if (!empty($Model->data[$Model->name][$field['name'] . '_tmp'])) {
-                    // セッションに一時ファイルが保存されている場合は復元する
-                    if ($this->moveFileSessionToTmp($Model, $field['name'])) {
-                        $data = $Model->data[$Model->name];
+                if (!empty($data[$field['name']]) && is_array($data[$field['name']]) && $data[$field['name']]['size'] != 0) {
+                    if (!empty($data[$field['name']]['name'])) {
                         $upload = true;
                     }
-                } elseif (!empty($Model->data[$Model->name][$field['name'] . '_'])) {
-                    // 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
-                    if (isset($data[$field['name']]['error']) && $data[$field['name']]['error'] == UPLOAD_ERR_NO_FILE) {
-                        $Model->data[$Model->name][$field['name']] = $Model->data[$Model->name][$field['name'] . '_'];
-                        unset($Model->data[$Model->name][$field['name'] . '_']);
+                } else {
+                    if (!empty($Model->data[$Model->name][$field['name'] . '_tmp'])) {
+                        // セッションに一時ファイルが保存されている場合は復元する
+                        if ($this->moveFileSessionToTmp($Model, $field['name'])) {
+                            $data = $Model->data[$Model->name];
+                            $upload = true;
+                        }
+                    } elseif (!empty($Model->data[$Model->name][$field['name'] . '_'])) {
+                        // 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
+                        if (isset($data[$field['name']]['error']) && $data[$field['name']]['error'] == UPLOAD_ERR_NO_FILE) {
+                            $Model->data[$Model->name][$field['name']] = $Model->data[$Model->name][$field['name'] . '_'];
+                            unset($Model->data[$Model->name][$field['name'] . '_']);
+                        }
                     }
                 }
-            }
-            if ($upload) {
-                // 拡張子を取得
-                $setting['fields'][$key]['ext'] = $field['ext'] = decodeContent($data[$field['name']]['type'], $data[$field['name']]['name']);
-                // タイプ別除外
-                $targets = [];
-                if ($field['type'] == 'image') {
-                    $targets = $this->imgExts;
-                } elseif (is_array($field['type'])) {
-                    $targets = $field['type'];
-                } elseif ($field['type'] != 'all') {
-                    $targets = [$field['type']];
+                if ($upload) {
+                    // 拡張子を取得
+                    $setting['fields'][$key]['ext'] = $field['ext'] = decodeContent($data[$field['name']]['type'], $data[$field['name']]['name']);
+                    // タイプ別除外
+                    $targets = [];
+                    if ($field['type'] == 'image') {
+                        $targets = $this->imgExts;
+                    } elseif (is_array($field['type'])) {
+                        $targets = $field['type'];
+                    } elseif ($field['type'] != 'all') {
+                        $targets = [$field['type']];
+                    }
+                    if ($targets && !in_array($field['ext'], $targets)) {
+                        $upload = false;
+                    }
                 }
-                if ($targets && !in_array($field['ext'], $targets)) {
-                    $upload = false;
-                }
+                $setting['fields'][$key]['upload'] = $upload;
             }
-            $setting['fields'][$key]['upload'] = $upload;
         }
     }
 
     /**
      * After save
      *
-     * @param Model $Model
-     * @param bool $created
-     * @param array $options
-     * @return bool
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      */
-    public function afterSave(Model $Model, $created, $options = [])
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if ($this->uploaded[$Model->name]) {
-            $Model->data = $this->renameToBasenameFields($Model);
-            $Model->data = $Model->save($Model->data, ['callbacks' => false, 'validate' => false]);
-            $this->uploaded[$Model->name] = false;
-        }
-        foreach($this->settings[$Model->alias]['fields'] as $key => $value) {
-            $this->settings[$Model->alias]['fields'][$key]['upload'] = false;
-        }
-        return true;
+        // TODO: 一時措置
+        return;
+        // if ($this->uploaded[$Model->name]) {
+        //     $Model->data = $this->renameToBasenameFields($Model);
+        //     $Model->data = $Model->save($Model->data, ['callbacks' => false, 'validate' => false]);
+        //     $this->uploaded[$Model->name] = false;
+        // }
+        // foreach($this->settings[$Model->alias]['fields'] as $key => $value) {
+        //     $this->settings[$Model->alias]['fields'][$key]['upload'] = false;
+        // }
+        // return true;
     }
 
     /**
@@ -712,20 +717,21 @@ class BcUploadBehavior extends Behavior
      * Before delete
      * 画像ファイルの削除を行う
      * 削除に失敗してもデータの削除は行う
-     *
-     * @param Model $Model
-     * @param bool $cascade
-     * @return bool
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
      */
-    public function beforeDelete(Model $Model, $cascade = true)
+    public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        $Model->data = $Model->find('first', [
-            'conditions' => [
-                $Model->alias . '.' . $Model->primaryKey => $Model->id
-            ]
-        ]);
-        $this->delFiles($Model);
-        return true;
+        // TODO: 一時措置
+        return;
+        // $Model->data = $Model->find('first', [
+        //     'conditions' => [
+        //         $Model->alias . '.' . $Model->primaryKey => $Model->id
+        //     ]
+        // ]);
+        // $this->delFiles($Model);
+        // return true;
     }
 
     /**
@@ -1053,6 +1059,9 @@ class BcUploadBehavior extends Behavior
      * @param string $alias
      * @param bool $isTheme
      * @return string $saveDir
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getSaveDir(string $alias, $isTheme = false, $limited = false)
     {

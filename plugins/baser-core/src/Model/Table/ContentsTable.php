@@ -132,7 +132,6 @@ class ContentsTable extends AppTable
      * @param Validator $validator
      * @return Validator
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function validationDefault(Validator $validator): Validator
@@ -208,14 +207,15 @@ class ContentsTable extends AppTable
             ]
         ]);
         $validator
-        ->allowEmptyDateTime('created_date')
-        ->add('created_date', [
-            'checkDate' => [
-                'rule' => ['checkDate'],
-                'provider' => 'bc',
-                'message' => __d('baser', '作成日に不正な文字列が入っています。')
-            ]
-        ]);
+        ->allowEmptyDateTime('created_date');
+        // TODO: %Y-%m-%d形式か%Y/%m/%d形式か判断して、書き換える
+        // ->add('created_date', [
+        //     'checkDate' => [
+        //         'rule' => ['checkDate'],
+        //         'provider' => 'bc',
+        //         'message' => __d('baser', '作成日に不正な文字列が入っています。')
+        //     ]
+        // ]);
         $validator
         ->allowEmptyDateTime('modified_date')
         ->add('modified_date', [

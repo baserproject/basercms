@@ -82,9 +82,10 @@ class ContentFoldersController extends BcAdminAppController
                 $this->redirect(['action' => 'edit', $id]);
             }
             // TODO: Behaviorsに持っていく
-            $files = array_pop(Hash::flatten($this->request->getUploadedFiles()));
+            $uploadFiles = Hash::flatten($this->request->getUploadedFiles());
+            $files = array_pop($uploadFiles);
             // $files = $this->request->getUploadedFiles();
-            $a= $files->getClientFileName();
+            // $a= $files->getClientFileName();
             // $b = $files['ContentFolder']['content']['eyecatch']->getSize();
             // $c = $files['ContentFolder']['content']['eyecatch']->getClientFileName();
 

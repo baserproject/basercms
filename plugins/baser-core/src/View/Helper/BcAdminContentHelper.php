@@ -17,6 +17,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Model\Entity\Content;
+use Cake\Datasource\EntityInterface;
 use BaserCore\Service\ContentService;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Service\PermissionService;
@@ -185,10 +186,10 @@ class BcAdminContentHelper extends Helper
      * 現在のコンテンツが属するフォルダまでのフルパスを取得する
      * フォルダ名称部分にはフォルダ編集画面へのリンクを付与する
      * コンテンツ編集画面で利用
-     * @param Content|null $content
+     * @param EntityInterface|null $content
      * @return string
      */
-    public function getCurrentFolderLinkedUrl($content)
+    public function getCurrentFolderLinkedUrl(EntityInterface $content)
     {
         return $this->getFolderLinkedUrl($content);
     }
@@ -198,10 +199,10 @@ class BcAdminContentHelper extends Helper
      * フォルダ名称部分にはフォルダ編集画面へのリンクを付与する
      * コンテンツ編集画面で利用
      *
-     * @param Entity $content コンテンツデータ
+     * @param EntityInterface $content コンテンツデータ
      * @return string
      */
-    public function getFolderLinkedUrl(Content $content)
+    public function getFolderLinkedUrl(EntityInterface $content)
     {
         $urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $content->url));
         unset($urlArray[count($urlArray) - 1]);

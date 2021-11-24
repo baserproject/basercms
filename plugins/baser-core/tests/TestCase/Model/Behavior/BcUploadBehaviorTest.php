@@ -1094,8 +1094,9 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testGetSaveDir()
     {
+        // NOTE: WWW_ROOTが/var/www/html/appではなく、/var/www/htmlであることに注意
         $result = $this->table->getSaveDir($this->table->getAlias());
-        $this->assertEquals("/var/www/html/app/webroot/files/contents/", $result);
+        $this->assertEquals("/var/www/html/webroot/files/contents/", $result);
     }
 
     /**
