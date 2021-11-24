@@ -740,22 +740,6 @@ class BcBasicsTest extends BaserTestCase
 	 */
 	public function testLoadPlugin($plugin, $priority, $expect)
 	{
-		// Eventテスト準備
-		if ($expect) {
-			$EventFolderPath = CakePlugin::path($plugin) . 'Event' . DS;
-			$EventFilePath = $EventFolderPath . $plugin . 'Controller' . 'EventListener' . '.php';
-
-			$Folder = new Folder();
-			$Folder->create($EventFolderPath);
-
-			$EventFile = new File($EventFilePath, true);
-			$EventFile->write("<?php
-class BlogControllerEventListener extends BcControllerEventListener {
-	public \$events = array('hogeFunction');
-}");
-			$EventFile->close();
-		}
-
 		// 他のテストに影響がでるためバックアップをとる
 		$buckupPlugins = CakePlugin::loaded();
 		$buckupBlog = Configure::read('BcApp.adminNavi.blog');
@@ -765,26 +749,25 @@ class BlogControllerEventListener extends BcControllerEventListener {
 
 		// プラグインを読み込む
 		$result = loadPlugin($plugin, $priority);
-
 		$this->assertEquals($expect, $result);
 
+		/**
+		 * BlogControllerEventListenerの第１メソッドを利用してテストを実行
+		 */
 		if ($expect) {
-			$EventFile->close();
-			$Folder->delete($EventFolderPath);
-
 			// プラグインが読み込めているか
 			$this->assertContains($plugin, CakePlugin::loaded(), 'プラグインを読み込めません');
 			$this->assertNotNull(Configure::read('BcApp.adminNavi.blog'), 'プラグインの設定が正しく設定されていません');
 
-			$this->Event = new CakeEventManager();
-			$EventListeners = $this->Event->listeners('Controller.hogeFunction');
+			$event = new CakeEventManager();
+			$EventListeners = $event->listeners('Controller.Contents.beforeDelete');
 
 			// イベントリスナーに登録されているか
-			$this->assertContains('hogeFunction', $EventListeners[0]['callable'], 'プラグインイベントを正しく登録できません');
+			$this->assertContains('contentsBeforeDelete', $EventListeners[0]['callable'], 'プラグインイベントを正しく登録できません');
 
 			// プライオリティを設定できているか
 			if (!is_null($priority)) {
-				$this->assertEquals($priority, $EventListeners[1]['callable'][0]->events['hogeFunction']['priority']);
+				$this->assertEquals($priority, $EventListeners[1]['callable'][0]->events['Contents.beforeDelete']['priority']);
 			}
 		}
 

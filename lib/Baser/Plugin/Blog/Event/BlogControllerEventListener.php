@@ -41,7 +41,7 @@ class BlogControllerEventListener extends BcControllerEventListener
 	public $BlogPost = null;
 
 	/**
-	 * PagesControllerEventListener constructor.
+	 * BlogControllerEventListener constructor.
 	 */
 	public function __construct() {
 
