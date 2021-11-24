@@ -27,9 +27,9 @@ use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\ResultSetInterface;
+use BaserCore\Service\SiteConfigService;
 use BaserCore\Utility\BcAbstractDetector;
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Service\SiteConfigServiceInterface;
 
 /**
  * Class Site
@@ -537,7 +537,7 @@ class SitesTable extends AppTable
         BcAbstractDetector $lang = null
     )
     {
-        $SiteConfigService = $this->getService(SiteConfigServiceInterface::class);
+        $SiteConfigService = new SiteConfigService();
         $currentSite = $this->findByUrl($url);
         $sites = $this->find()->all();
 
