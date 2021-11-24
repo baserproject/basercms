@@ -91,11 +91,10 @@ class ContentFolderService implements ContentFolderServiceInterface
      */
     public function getIndex(array $queryParams=[]): Query
     {
-        $options = [];
-        if (!empty($queryParams['num'])) {
-            $options = ['limit' => $queryParams['num']];
+        $query = $this->ContentFolders->find('all')->contain('Contents');
+        if (!empty($queryParams['limit'])) {
+            $query->limit($queryParams['limit']);
         }
-        $query = $this->ContentFolders->find('all', $options)->contain('Contents');
         if (!empty($queryParams['folder_template'])) {
             $query->where(['folder_template LIKE' => '%' . $queryParams['folder_template'] . '%']);
         }

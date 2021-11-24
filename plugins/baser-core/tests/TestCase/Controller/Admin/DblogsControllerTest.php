@@ -67,9 +67,9 @@ class DblogsControllerTest extends BcTestCase
      */
     public function testIndex_pagination()
     {
-        $this->get('/baser/admin/baser-core/dblogs/?num=1&page=2');
+        $this->get('/baser/admin/baser-core/dblogs/?limit=1&page=2');
         $this->assertResponseOk();
-        $this->get('/baser/admin/baser-core/dblogs/?num=1&page=100');
+        $this->get('/baser/admin/baser-core/dblogs/?limit=1&page=100');
         $this->assertResponseError();
     }
 

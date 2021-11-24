@@ -22,13 +22,13 @@ if (empty($nums)) {
 if (!is_array($nums)) {
   $nums = [$nums];
 }
-if (!empty($this->request->getQuery('num'))) {
-  $currentNum = $this->request->getQuery('num');
+if (!empty($this->request->getQuery('limit'))) {
+  $currentNum = $this->request->getQuery('limit');
 }
 $links = [];
 foreach($nums as $num) {
   if ($currentNum != $num) {
-    $links[] = '<span>' . $this->BcBaser->getLink($num, ['?' => array_merge($this->request->getQuery(), ['num' => $num, 'page' => null])]) . '</span>';
+    $links[] = '<span>' . $this->BcBaser->getLink($num, ['?' => array_merge($this->request->getQuery(), ['limit' => $num, 'page' => null])]) . '</span>';
   } else {
     $links[] = '<span class="current">' . $num . '</span>';
   }
