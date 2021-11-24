@@ -16,6 +16,7 @@ use Cake\ORM\Behavior;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
+use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
@@ -162,6 +163,12 @@ class BcUploadBehavior extends Behavior
     public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
     {
         $this->setupRequestData($data);
+
+        $this->setConfig('settings.' . $this->table->getAlias() . ".uploadedFile", $data['eyecatch']);
+        // eyecatchをobjectからstringに変更
+        if ($data['eyecatch']) {
+            $data['eyecatch'] = $data['eyecatch']->getClientFileName();
+        }
         // return parent::afterMarshal($event, $entity,$data, $options);
     }
 
@@ -175,6 +182,14 @@ class BcUploadBehavior extends Behavior
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
+        if (!$entity->getErrors()) {
+            $uploadedFile = $this->getConfig('settings.' . $this->table->getAlias() . ".uploadedFile");
+            $uploadedFile->moveTo($this->savePath[$this->table->getAlias()] . $uploadedFile->getClientFileName());
+            // NOTE: 2回通ってきてしまうため、offにする
+            $event = $this->table->getEventManager()->matchingListeners('beforeSave');
+            if ($event) $this->table->getEventManager()->off('Model.beforeSave');
+            return true;
+        }
         // TODO: 一時措置
         return;
         // $Model = $entity; // TODO: 代用
@@ -199,36 +214,35 @@ class BcUploadBehavior extends Behavior
      */
     public function setupRequestData($content)
     {
-        $setting = $this->getConfig('setting' . $this->table->getAlias());
-        if (!empty($setting['fields'])) {
-            foreach($setting['fields'] as $key => $field) {
-                $data = [];
+        $settings = $this->getConfig('settings.' . $this->table->getAlias());
+        if (!empty($settings['fields'])) {
+            foreach($settings['fields'] as $key => $field) {
                 $upload = false;
-                if (!empty($Model->data[$Model->name])) {
-                    $data = $Model->data[$Model->name];
-                }
-                if (!empty($data[$field['name']]) && is_array($data[$field['name']]) && $data[$field['name']]['size'] != 0) {
-                    if (!empty($data[$field['name']]['name'])) {
+                $uploadedFile = ((array) $content)[$field['name']];
+                if (!empty($uploadedFile) && is_object($uploadedFile) && $uploadedFile->getSize() != 0) {
+                    if ($uploadedFile->getClientFileName()) {
                         $upload = true;
                     }
                 } else {
-                    if (!empty($Model->data[$Model->name][$field['name'] . '_tmp'])) {
+                    if (!empty((array) $content[$field['name'] . '_tmp'])) {
+                        // TODO: セッション未実装のため一時的にコメントアウト
                         // セッションに一時ファイルが保存されている場合は復元する
-                        if ($this->moveFileSessionToTmp($Model, $field['name'])) {
-                            $data = $Model->data[$Model->name];
-                            $upload = true;
-                        }
-                    } elseif (!empty($Model->data[$Model->name][$field['name'] . '_'])) {
+                        // if ($this->moveFileSessionToTmp($Model, $field['name'])) {
+                        //     $data = $Model->data[$Model->name];
+                        //     $upload = true;
+                        // }
+                    } elseif (!empty((array) $content[$field['name'] . '_'])) {
                         // 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
-                        if (isset($data[$field['name']]['error']) && $data[$field['name']]['error'] == UPLOAD_ERR_NO_FILE) {
-                            $Model->data[$Model->name][$field['name']] = $Model->data[$Model->name][$field['name'] . '_'];
-                            unset($Model->data[$Model->name][$field['name'] . '_']);
-                        }
+                        // TODO:  エラーに関してのデータはafterMarshal以後にて実装する
+                        // if (isset($data[$field['name']]['error']) && $data[$field['name']]['error'] == UPLOAD_ERR_NO_FILE) {
+                        //     $Model->data[$Model->name][$field['name']] = $Model->data[$Model->name][$field['name'] . '_'];
+                        //     unset($Model->data[$Model->name][$field['name'] . '_']);
+                        // }
                     }
                 }
                 if ($upload) {
                     // 拡張子を取得
-                    $setting['fields'][$key]['ext'] = $field['ext'] = decodeContent($data[$field['name']]['type'], $data[$field['name']]['name']);
+                    $settings['fields'][$key]['ext'] = $field['ext'] = BcUtil::decodeContent($uploadedFile->getClientMediaType(), $uploadedFile->getClientFileName());
                     // タイプ別除外
                     $targets = [];
                     if ($field['type'] == 'image') {
@@ -242,7 +256,7 @@ class BcUploadBehavior extends Behavior
                         $upload = false;
                     }
                 }
-                $setting['fields'][$key]['upload'] = $upload;
+                $settings['fields'][$key]['upload'] = $upload;
             }
         }
     }

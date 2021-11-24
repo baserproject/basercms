@@ -76,6 +76,8 @@ LOCAL_Q&A.md
 # symlink
 /webroot/bc_admin_third
 /webroot/bc_sample
+# uploaded files
+/webroot/files/
 # jwt
 /config/jwt.key
 /config/jwt.pem

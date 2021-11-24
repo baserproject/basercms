@@ -958,4 +958,67 @@ class BcUtil
         return $url;
     }
 
+    /**
+     * 拡張子を取得する
+     * @param string    mimeタイプ
+     * @return    string    拡張子
+     * @access    public
+     */
+    public static function decodeContent($content, $fileName = null)
+    {
+
+        $contentsMaping = [
+            "image/gif" => "gif",
+            "image/jpeg" => "jpg",
+            "image/pjpeg" => "jpg",
+            "image/x-png" => "png",
+            "image/jpg" => "jpg",
+            "image/png" => "png",
+            "application/x-shockwave-flash" => "swf",
+            /* "application/pdf" => "pdf", */ // TODO windows で ai ファイルをアップロードをした場合、headerがpdfとして出力されるのでコメントアウト
+            "application/pgp-signature" => "sig",
+            "application/futuresplash" => "spl",
+            "application/msword" => "doc",
+            "application/postscript" => "ai",
+            "application/x-bittorrent" => "torrent",
+            "application/x-dvi" => "dvi",
+            "application/x-gzip" => "gz",
+            "application/x-ns-proxy-autoconfig" => "pac",
+            "application/x-shockwave-flash" => "swf",
+            "application/x-tgz" => "tar.gz",
+            "application/x-tar" => "tar",
+            "application/zip" => "zip",
+            "audio/mpeg" => "mp3",
+            "audio/x-mpegurl" => "m3u",
+            "audio/x-ms-wma" => "wma",
+            "audio/x-ms-wax" => "wax",
+            "audio/x-wav" => "wav",
+            "image/x-xbitmap" => "xbm",
+            "image/x-xpixmap" => "xpm",
+            "image/x-xwindowdump" => "xwd",
+            "text/css" => "css",
+            "text/html" => "html",
+            "text/javascript" => "js",
+            "text/plain" => "txt",
+            "text/xml" => "xml",
+            "video/mpeg" => "mpeg",
+            "video/quicktime" => "mov",
+            "video/x-msvideo" => "avi",
+            "video/x-ms-asf" => "asf",
+            "video/x-ms-wmv" => "wmv"
+        ];
+
+        if (isset($contentsMaping[$content])) {
+            return $contentsMaping[$content];
+        } elseif ($fileName) {
+            $info = pathinfo($fileName);
+            if (!empty($info['extension'])) {
+                return $info['extension'];
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 }
