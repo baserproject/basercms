@@ -563,6 +563,7 @@ class ContentService implements ContentServiceInterface
             $this->Contents->disableUpdatingSystemData();
             // ここでは callbacks を false にすると lft rght が更新されないので callbacks は true に設定する（default: true）
             $this->Contents->save($node, ['validate' => false]); // 論理削除用のvalidationを用意するべき
+            $this->Contents->enableUpdatingSystemData();
             $result = $this->delete($node->id);
             // =====================================================================
             // 通常の削除の際、afterDelete で、関連コンテンツのキャッシュを削除しているが、
