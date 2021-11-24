@@ -90,11 +90,12 @@ class BcContentsEventListenerTest extends BcTestCase
         // 正常系
         $event = new Event("Helper.Form.afterCreate", $this->BcAdminAppView->set('content', $this->Content)); // content_fieldsの$contentが足りないため追加
         $event->setData('id', 'TestAdminEditForm')->setData('out', "testtest");
-        $result = @$this->BcContentsEventListener->formAfterCreate($event); // NOTE: 必要な要素があるかを判別するため、不要なエラーを制御
+        // NOTE: 必要な要素があるかを判別するため、不要なエラーを制御
+        $result = @$this->BcContentsEventListener->formAfterCreate($event);
         // outの文章が含まれているかチェック
         $this->assertStringContainsString("testtest", $result);
         // content_fieldsの文章が含まれているかチェック
-        $this->assertStringContainsString("親フォルダの設定を継承し公開期間が設定されている状態となっています", $result);
+        $this->assertStringContainsString("公開URLを開きます", $result);
     }
 
     /**

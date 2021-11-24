@@ -22,7 +22,7 @@
     <tr>
       <th class="bca-form-table__label"><?php echo $this->BcForm->label('UploaderCategory.id', 'No') ?></th>
       <td class="bca-form-table__input">
-        <?php echo $this->BcForm->value('UploaderCategory.id') ?>
+        <?php echo $this->BcForm->getSourceValue('UploaderCategory.id') ?>
         <?php echo $this->BcAdminForm->control('UploaderCategory.id', ['type' => 'hidden']) ?>
       </td>
     </tr>
@@ -51,9 +51,9 @@
     </div>
     <div class="bca-actions__sub">
       <?php $this->BcBaser->link(__d('baser', '削除'),
-        ['action' => 'delete', $this->BcForm->value('UploaderCategory.id')],
+        ['action' => 'delete', $this->BcForm->getSourceValue('UploaderCategory.id')],
         ['class' => 'submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'],
-        sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->value('UploaderCategory.name')),
+        sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->getSourceValue('UploaderCategory.name')),
         false); ?>
     </div>
   <?php endif ?>

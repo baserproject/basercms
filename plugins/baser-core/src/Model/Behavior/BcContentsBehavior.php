@@ -62,7 +62,7 @@ class BcContentsBehavior extends Behavior
      *
      * 新規のデータの場合時のみContent のバリデーションを実行し、エラーがある場合は中止する
      * $data['content']がある場合のみ実行する
-     * @param Event $event
+     * @param EventInterface $event
      * @param ArrayObject $data
      * @param ArrayObject $options
      * @return void
@@ -70,7 +70,7 @@ class BcContentsBehavior extends Behavior
      * @noTodo
      * @unitTest
      */
-    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
+    public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
     {
         if (!empty($data['content'])) {
             if (!empty($data['content']['id'])) {

@@ -21,7 +21,7 @@ $this->set('publishLink', $this->BcAdminContent->getUrl($this->request->getData(
 ?>
 
 
-<?php echo $this->BcAdminForm->create($content, ['url' => ['content_id' => $this->BcAdminForm->value('Content.id')]]) ?>
+<?php echo $this->BcAdminForm->create($content, ['url' => ['content_id' => $this->BcAdminForm->getSourceValue('Content.id')]]) ?>
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 <?php echo $this->BcAdminForm->control('Content.alias_id', ['type' => 'hidden']) ?>
 <?php echo $this->BcAdminForm->control('Content.site_id', ['type' => 'hidden']) ?>

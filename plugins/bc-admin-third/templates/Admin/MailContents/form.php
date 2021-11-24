@@ -233,7 +233,7 @@ $this->BcBaser->js('BcMail.admin/mail_contents/edit', false);
           &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
         </th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('MailContent.form_template', ['type' => 'select', 'options' => $this->Mail->getFormTemplates($this->BcForm->value('Content.site_id'))]) ?>
+          <?php echo $this->BcAdminForm->control('MailContent.form_template', ['type' => 'select', 'options' => $this->Mail->getFormTemplates($this->BcForm->getSourceValue('Content.site_id'))]) ?>
           <?php echo $this->BcAdminForm->control('MailContent.edit_mail_form', ['type' => 'hidden']) ?>
           <?php if ($this->action == 'admin_edit'): ?>
             <?php $this->BcBaser->link('<i class="bca-icon--edit"></i>' . __d('baser', '編集する'), 'javascript:void(0)', ['id' => 'EditForm']) ?>
@@ -254,7 +254,7 @@ $this->BcBaser->js('BcMail.admin/mail_contents/edit', false);
           &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
         </th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcAdminForm->control('MailContent.mail_template', ['type' => 'select', 'options' => $this->Mail->getMailTemplates($this->BcForm->value('Content.site_id'))]) ?>
+          <?php echo $this->BcAdminForm->control('MailContent.mail_template', ['type' => 'select', 'options' => $this->Mail->getMailTemplates($this->BcForm->getSourceValue('Content.site_id'))]) ?>
           <?php echo $this->BcAdminForm->control('MailContent.edit_mail', ['type' => 'hidden']) ?>
           <?php if ($this->action == 'admin_edit'): ?>
             <?php $this->BcBaser->link('<i class="bca-icon--edit"></i>' . __d('baser', '編集する'), 'javascript:void(0)', ['id' => 'EditMail']) ?>

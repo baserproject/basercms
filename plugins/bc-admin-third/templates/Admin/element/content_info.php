@@ -28,37 +28,37 @@
       <div class="bca-box">
         <ul class="bca-list" data-bca-list-layout="horizon" data-bca-list-type='circle'>
           <li class="bca-list__item">
-            <span><?php echo __d('baser', 'コンテンツID') ?></span>：<?php echo $this->request->getData('Content.id') ?>
+            <span><?php echo __d('baser', 'コンテンツID') ?></span>：<?php echo $this->BcAdminForm->getSourceValue($contentPath . 'id'); ?>
           </li>
           <li class="bca-list__item">
-            <span><?php echo __d('baser', '実体ID') ?></span>：<?php echo $this->request->getData('Content.entity_id') ?>
+            <span><?php echo __d('baser', '実体ID') ?></span>：<?php echo $this->BcAdminForm->getSourceValue($contentPath . 'entity_id'); ?>
           </li>
           <li class="bca-list__item">
-            <span><?php echo __d('baser', 'プラグイン') ?></span>：<?php echo $this->request->getData('Content.plugin') ?>
+            <span><?php echo __d('baser', 'プラグイン') ?></span>：<?php echo $this->BcAdminForm->getSourceValue($contentPath . 'plugin'); ?>
           </li>
           <li class="bca-list__item">
-            <span><?php echo __d('baser', 'コンテンツタイプ') ?></span>：<?php echo $this->request->getData('Content.type') ?>
+            <span><?php echo __d('baser', 'コンテンツタイプ') ?></span>：<?php echo $this->BcAdminForm->getSourceValue($contentPath . 'type'); ?>
           </li>
           <li class="bca-list__item">
-            <span><?php echo __d('baser', 'データ作成日') ?></span>：<?php echo $this->BcTime->format($this->request->getData('Content.created'), 'YYYY/MM/DD H:i:s') ?>
+            <span><?php echo __d('baser', 'データ作成日') ?></span>：<?php echo $this->BcAdminForm->getSourceValue($contentPath . 'created'); ?>
           </li>
           <li class="bca-list__item">
-            <span><?php echo __d('baser', 'データ更新日') ?></span>：<?php echo $this->BcTime->format($this->request->getData('Content.modified'), 'YYYY/MM/DD H:i:s') ?>
+            <span><?php echo __d('baser', 'データ更新日') ?></span>：<?php echo $this->BcAdminForm->getSourceValue($contentPath . 'modified'); ?>
           </li>
           <li class="bca-list__item">
-            <span><?php echo __d('baser', 'サイト') ?></span>：<?php echo h($this->BcText->noValue($this->request->getData('Site.display_name'), $mainSiteDisplayName)) ?>
+            <span><?php echo __d('baser', 'サイト') ?></span>：<?php echo h($this->BcText->noValue($this->BcAdminForm->getSourceValue($contentPath . 'site.display_name'), $mainSiteDisplayName)) ?>
           </li>
           <li class="bca-list__item"><span><?php echo __d('baser', 'タイプ') ?></span>：
-            <?php if (!$this->BcAdminForm->value($contentPath . 'alias_id')): ?>
-              <?php if (!empty($this->BcContents->getConfig('items')[$this->BcAdminForm->value($contentPath . 'type')])): ?>
-                <?php echo h($this->BcContents->getConfig('items')[$this->BcAdminForm->value($contentPath . 'type')]['title']) ?>
+            <?php if (!$this->BcAdminForm->getSourceValue($contentPath . 'alias_id')): ?>
+              <?php if (!empty($this->BcContents->getConfig('items')[$this->BcAdminForm->getSourceValue($contentPath . 'type')])): ?>
+                <?php echo h($this->BcContents->getConfig('items')[$this->BcAdminForm->getSourceValue($contentPath . 'type')]['title']) ?>
               <?php else: ?>
                 <?php echo __d('baser', 'デフォルト') ?>
               <?php endif ?>
             <?php else: ?>
               <?php echo __d('baser', 'エイリアス') ?>
             <?php endif ?>
-            <?php if (empty($this->BcContents->getConfig('items')[$this->BcAdminForm->value($contentPath . 'type')])): ?>
+            <?php if (empty($this->BcContents->getConfig('items')[$this->BcAdminForm->getSourceValue($contentPath . 'type')])): ?>
               <p
                 class="bca-notice"><?php echo __d('baser', 'タイプ「デフォルト」は、プラグインの無効処理等が理由となり、タイプとの関連付けが外れてしまっている状態です。<br>プラグインがまだ存在する場合は有効にしてください。') ?></p>
             <?php endif ?>

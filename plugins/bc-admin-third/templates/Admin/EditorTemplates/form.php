@@ -30,7 +30,7 @@ $this->BcBaser->js('admin/editor_templates/form', false);
       <tr>
         <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('EditorTemplate.id', 'No') ?></th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcForm->value('EditorTemplate.id') ?>
+          <?php echo $this->BcForm->getSourceValue('EditorTemplate.id') ?>
           <?php echo $this->BcAdminForm->control('EditorTemplate.id', ['type' => 'hidden']) ?>
         </td>
       </tr>
@@ -92,9 +92,9 @@ $this->BcBaser->js('admin/editor_templates/form', false);
   <?php if ($this->action == 'admin_edit'): ?>
     <div class="bca-actions__sub">
       <?php $this->BcBaser->link(__d('baser', '削除'),
-        ['action' => 'delete', $this->BcForm->value('EditorTemplate.id'), $this->BcForm->value('FeedDetail.id')],
+        ['action' => 'delete', $this->BcForm->getSourceValue('EditorTemplate.id'), $this->BcForm->getSourceValue('FeedDetail.id')],
         ['class' => 'submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm', 'data-bca-btn-color' => 'danger'],
-        sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->value('EditorTemplate.name'))
+        sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->getSourceValue('EditorTemplate.name'))
       ) ?>
     </div>
   <?php endif ?>
