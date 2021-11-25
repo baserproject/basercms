@@ -479,6 +479,16 @@ $config['BcApp'] = [
 ];
 
 /**
+ * Zipモジュールなし
+ */
+if (!extension_loaded('zip')) {
+	unset($config['BcApp']['adminNavigation']['Systems']['Theme']['menus']['ThemesDownload']);
+	unset($config['BcApp']['adminNavigation']['Systems']['Theme']['menus']['ThemesDownloadDefaultDataPattern']);
+	unset($config['BcApp']['adminNavigation']['Systems']['Tools']['menus']['ToolsMaintenance']);
+}
+
+
+/**
  * システム要件
  */
 $config['BcRequire'] = [
