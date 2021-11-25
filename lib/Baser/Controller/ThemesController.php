@@ -10,7 +10,7 @@
  * @license         https://basercms.net/license/index.html
  */
 
-App::uses('Simplezip', 'Vendor');
+App::uses('BcZip', 'Lib');
 
 /**
  * Class ThemesController
@@ -95,7 +95,6 @@ class ThemesController extends AppController
 
 		$name = $this->request->data['Theme']['file']['name'];
 		move_uploaded_file($this->request->data['Theme']['file']['tmp_name'], TMP . $name);
-		App::uses('BcZip', 'Lib');
 		$BcZip = new BcZip();
 		if (!$BcZip->extract(TMP . $name, BASER_THEMES)) {
 			$msg = __d('baser', 'アップロードしたZIPファイルの展開に失敗しました。');
@@ -573,11 +572,17 @@ class ThemesController extends AppController
 	 */
 	public function admin_download_default_data_pattern()
 	{
+		if (!extension_loaded('zip')) {
+			$this->notFound();
+		}
+		
+		$this->autoRender = false;
 		set_time_limit(0);
 		ini_set('memory_limit', -1);
 
 		/* コアのCSVを生成 */
 		$tmpDir = TMP . 'csv' . DS;
+		$distPath = TMP . 'default.zip';
 		$Folder = new Folder();
 		$Folder->create($tmpDir);
 		emptyFolder($tmpDir);
@@ -604,13 +609,20 @@ class ThemesController extends AppController
 		}
 		ftruncate($fp, 0);
 		fwrite($fp, implode("\n", $records));
+		
 		/* ZIPに固めてダウンロード */
-		$fileName = 'default';
-		$Simplezip = new Simplezip();
-		$Simplezip->addFolder($tmpDir);
-		$Simplezip->download($fileName);
+		$bcZip = new BcZip();
+		$bcZip->create($tmpDir, $distPath);
+		
+		header("Cache-Control: no-store");
+		header("Content-Type: application/zip");
+		header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
+		header("Content-Length: " . filesize($distPath));
+		while (ob_get_level()) { ob_end_clean(); }
+		echo readfile($distPath);
+		
 		emptyFolder($tmpDir);
-		exit();
+		unlink($distPath);
 	}
 
 	/**
@@ -671,19 +683,33 @@ class ThemesController extends AppController
 	 */
 	public function admin_download()
 	{
+		if (!extension_loaded('zip')) {
+			$this->notFound();
+		}
+		
 		$this->autoRender = false;
 		$tmpDir = TMP . 'theme' . DS;
+		$orgPath = BASER_THEMES . $this->siteConfigs['theme'] . DS;
+		$sourcePath = $tmpDir . $this->siteConfigs['theme'];
+		$distPath = $sourcePath . '.zip';
+		
 		$Folder = new Folder();
 		$Folder->create($tmpDir);
-		$path = BASER_THEMES . $this->siteConfigs['theme'] . DS;
 		$Folder->copy([
-			'from' => $path,
-			'to' => $tmpDir . $this->siteConfigs['theme'],
+			'from' => $orgPath,
+			'to' => $sourcePath,
 			'chmod' => 0777
 		]);
-		$Simplezip = new Simplezip();
-		$Simplezip->addFolder($tmpDir);
-		$Simplezip->download($this->siteConfigs['theme']);
+		$bcZip = new BcZip();
+		$bcZip->create($sourcePath, $distPath);
+		
+		header("Cache-Control: no-store");
+		header("Content-Type: application/zip");
+		header("Content-Disposition: attachment; filename=" . basename($distPath) . ";");
+		header("Content-Length: " . filesize($distPath));
+		while (ob_get_level()) { ob_end_clean(); }
+		echo readfile($distPath);
+		
 		$Folder->delete($tmpDir);
 	}
 }

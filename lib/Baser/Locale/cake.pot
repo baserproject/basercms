@@ -13,51 +13,55 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: View/Helper/BcFormHelper.php:1181
+#: View/Helper/BcFormHelper.php:1355
 msgid "January"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:1182
+#: View/Helper/BcFormHelper.php:1356
 msgid "February"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:1183
+#: View/Helper/BcFormHelper.php:1357
 msgid "March"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:1184
+#: View/Helper/BcFormHelper.php:1358
 msgid "April"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:1185
+#: View/Helper/BcFormHelper.php:1359
 msgid "May"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:1186
+#: View/Helper/BcFormHelper.php:1360
 msgid "June"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:1187
+#: View/Helper/BcFormHelper.php:1361
 msgid "July"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:1188
+#: View/Helper/BcFormHelper.php:1362
 msgid "August"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:1189
+#: View/Helper/BcFormHelper.php:1363
 msgid "September"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:1190
+#: View/Helper/BcFormHelper.php:1364
 msgid "October"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:1191
+#: View/Helper/BcFormHelper.php:1365
 msgid "November"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:1192
+#: View/Helper/BcFormHelper.php:1366
 msgid "December"
+msgstr ""
+
+#: View/Helper/BcFormHelper.php:1477
+msgid "empty"
 msgstr ""
 

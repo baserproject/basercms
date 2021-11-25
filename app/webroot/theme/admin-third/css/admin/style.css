@@ -8765,6 +8765,10 @@ table.cake-sql-log tr td {
     border-left: 1px solid #ccc; }
   .bca-actions__item {
     margin: 0 10px; }
+  .bca-actions__before {
+    margin-right: 30px;
+    padding-right: 30px;
+    border-right: 1px solid #ccc; }
   .bca-actions[data-bca-type=type2] {
     display: block; }
     .bca-actions[data-bca-type=type2] .bca-actions__form {

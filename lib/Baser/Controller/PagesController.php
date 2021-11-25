@@ -410,8 +410,16 @@ class PagesController extends AppController
 			// POSTパラメータのコードに含まれるscriptタグをそのままHTMLに出力するとブラウザによりXSSと判定される
 			// 一度データをセッションに退避する
 			if ($this->BcContents->preview === 'default') {
+				// 入力validation
+				$check = ['content_tmp' => $this->request->data['Page']['contents_tmp']];
+				if (!$this->Page->containsScript($check)) {
+					$this->BcMessage->setError(__d('baser', '本稿欄でスクリプトの入力は許可されていません。'));
+					$this->notFound();
+				}
+				
 				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->data['Content']['entity_id'];
 				$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
+				
 				$this->Session->write($sessionKey, $this->request->data);
 				$query = [];
 				if ($this->request->query) {
@@ -431,6 +439,13 @@ class PagesController extends AppController
 			}
 
 			if ($this->BcContents->preview === 'draft') {
+				// 入力validation
+				$check = ['content_tmp' => $this->request->data['Page']['contents_tmp']];
+				if (!$this->Page->containsScript($check)) {
+					$this->BcMessage->setError(__d('baser', '本稿欄でスクリプトの入力は許可されていません。'));
+					$this->notFound();
+				}
+				
 				$this->request->data = $this->Content->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
 				$this->request->params['Content']['eyecatch'] = $this->request->data['Content']['eyecatch'];
 

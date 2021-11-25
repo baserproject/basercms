@@ -6,7 +6,7 @@ RUN echo "deb http://security.debian.org jessie/updates main" >> /etc/apt/source
 RUN apt-get update \
     && apt-get install -y --allow-downgrades \
     	dialog \
-    	zlib1g=1:1.2.11.dfsg-1 \
+    	zlib1g \
     	zlib1g-dev \
     	libfreetype6-dev \
     	libfreetype6 \
@@ -15,7 +15,7 @@ RUN apt-get update \
 		libpng16-16 \
 		openssl \
 		libssl1.1 \
-		libxml2=2.9.4+dfsg1-7+deb10u1 \
+		libxml2 \
 		libxml2-dev \
 		zip unzip \
 		libzip-dev \
@@ -28,7 +28,6 @@ RUN apt-get update \
 		guile-2.0-libs \
 		libncurses5 \
 		libreadline5 \
-#		ncurses-base=5.9+20140913-1+deb8u3 \
 		libonig-dev \
 		libpq-dev \
     && docker-php-ext-install -j$(nproc) iconv pdo_mysql pdo_pgsql mbstring xml tokenizer zip intl \
@@ -57,7 +56,7 @@ RUN echo 'sendmail_path = "/usr/bin/msmtp -t"' > /usr/local/etc/php/conf.d/mail.
 	&& echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
 	&& echo "xdebug.discover_client_host=1" >> /usr/local/etc/php/conf.d/xdebug.ini \
 	&& echo "xdebug.idekey=BASERCMS" >> /usr/local/etc/php/conf.d/xdebug.ini \
-	&& echo "xdebug.client_host=10.0.2.2" >> /usr/local/etc/php/conf.d/xdebug.ini \
+	&& echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini \
 	&& echo "xdebug.client_port=9000" >> /usr/local/etc/php/conf.d/xdebug.ini \
 	&& echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/xdebug.ini \
 	&& echo "xdebug.mode=debug,develop" >> /usr/local/etc/php/conf.d/xdebug.ini \

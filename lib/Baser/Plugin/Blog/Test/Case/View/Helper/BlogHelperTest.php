@@ -431,7 +431,7 @@ class BlogHelperTest extends BaserTestCase
 			[4, [], '', false, 'http://main.com/m/news/archives/category/release'],
 			[5, [], '', false, 'http://sub.main.com/news/archives/category/release'],
 			[6, [], '', false, 'http://another.com/news/archives/category/release'],
-			[1, ['test1', 'test2'], '', false, '/news/archives/category/release/test1/test2'],
+			[1, ['a' => 'test1', 'b' => 'test2'], '', false, '/news/archives/category/release/a:test1/b:test2'],
 		];
 	}
 
@@ -799,7 +799,7 @@ class BlogHelperTest extends BaserTestCase
 		$this->expectOutputRegex($expected);
 		$this->Blog->tagList($name, $options);
 	}
-	
+
 
 	public function tagListDataProvider()
 	{

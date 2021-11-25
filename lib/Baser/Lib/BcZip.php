@@ -84,6 +84,7 @@ class BcZip
 			$archivePath = $this->Zip->getNameIndex(0);
 			$archivePathAry = explode(DS, $archivePath);
 			$this->topArchiveName = $archivePathAry[0];
+			$this->Zip->close();
 			return true;
 		} else {
 			return false;
@@ -121,16 +122,6 @@ class BcZip
 	}
 
 	/**
-	 * Destruct
-	 */
-	public function __destruct()
-	{
-		if (class_exists('ZipArchive')) {
-			$this->Zip->close();
-		}
-	}
-
-	/**
 	 * CUI 向けにパスをエスケープする
 	 *
 	 * @param $path
@@ -144,5 +135,47 @@ class BcZip
 		}
 		return implode(DS, $pathAry);
 	}
+
+	/**
+	 * zip生成
+	 *
+	 * @param string $sorce 元データ
+	 * @param string $dist 出力先
+	 * @return void
+	 */
+    public function create($sorce, $dist)
+    {
+        $za = new \ZipArchive();
+        $za->open($dist, \ZIPARCHIVE::CREATE);
+        $this->zipSub($za, $sorce);
+        $za->close();
+    }
+
+	/**
+	 * 再帰的にzip生成対象ファイルを追加する
+	 *
+	 * @param ZipArchive $za
+	 * @param string $path
+	 * @param string $parentPath
+	 * @return void
+	 */
+    private function zipSub($za, $path, $parentPath = '')
+    {
+        $dh = opendir($path);
+        while (($entry = readdir($dh)) !== false) {
+            if ($entry == '.' || $entry == '..') {
+            } else {
+                $localPath = $parentPath . $entry;
+                $fullpath = $path . DS . $entry;
+                if (is_file($fullpath)) {
+                    $za->addFile($fullpath, $localPath);
+                } else if (is_dir($fullpath)) {
+                    $za->addEmptyDir($localPath);
+                    $this->zipSub($za, $fullpath, $localPath . DS);
+                }
+            }
+        }
+        closedir($dh);
+    }
 
 }

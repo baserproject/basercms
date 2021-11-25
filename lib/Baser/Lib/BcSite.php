@@ -10,6 +10,8 @@
  * @license         https://basercms.net/license/index.html
  */
 
+App::uses('Router', 'Routing');
+
 /**
  * Class BcSite
  */

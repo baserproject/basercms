@@ -56,6 +56,7 @@ class MaildataHelper extends BcTextHelper
 			case 'select':
 			case 'email':
 			case 'tel':
+			case 'number':
 			case 'password':
 				return ' ' . $value;
 

@@ -28,12 +28,13 @@ Documentation
 
 Some Handy Links
 -------------
+
 - See [baserCMS Official](https://basercms.net/)
 - See [baserCMS Users Community](https://basercms.net/community/)
 - See [CakePHP - the rapid development PHP framework](https://cakephp.org)
 
 Get Support!
--------------MaildataHelperTest
+-------------
 
 - See [baserCMS Users Forum](https://forum.basercms.net/)
 - See [baserCMS Issues](https://github.com/baserproject/basercms/issues)

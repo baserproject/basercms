@@ -475,8 +475,18 @@ $config['BcApp'] = [
 	// システムメッセージの言語につてサイト設定を利用する
 	// 	- false：ブラウザ
 	// 	- true：サイト設定
-	'systemMessageLangFromSiteSetting' => false
+	'systemMessageLangFromSiteSetting' => true
 ];
+
+/**
+ * Zipモジュールなし
+ */
+if (!extension_loaded('zip')) {
+	unset($config['BcApp']['adminNavigation']['Systems']['Theme']['menus']['ThemesDownload']);
+	unset($config['BcApp']['adminNavigation']['Systems']['Theme']['menus']['ThemesDownloadDefaultDataPattern']);
+	unset($config['BcApp']['adminNavigation']['Systems']['Tools']['menus']['ToolsMaintenance']);
+}
+
 
 /**
  * システム要件
