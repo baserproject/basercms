@@ -1,18 +1,21 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.View.Helper
- * @since           baserCMS v 3.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('BcUploadHelper', 'View/Helper');
+namespace BaserCore\Test\TestCase\View\Helper;
+
+use CakeRequest;
+use Cake\View\View;
+use BaserCore\View\BcAdminAppView;
+use BaserCore\TestSuite\BcTestCase;
+use BaserCore\View\Helper\BcUploadHelper;
 
 /**
  * test for BcUploadHelper
@@ -28,26 +31,26 @@ class BcUploadHelperTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
-        'baser.Default.Content',
-        'baser.Default.Site',
-        'baser.Default.Page',
-        'baser.Default.SiteConfig',
+        'BaserCore.Contents',
+        'BaserCore.Sites',
+        'BaserCore.Pages',
+        'BaserCore.SiteConfigs',
     ];
 
     /**
      * setUp
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->BcUpload = new BcUploadHelper(new View);
-        $this->BcUpload->request = new CakeRequest('/', false);
+        $this->BcUpload = new BcUploadHelper(new BcAdminAppView($this->getRequest()));
+        // $this->BcUpload->request = new CakeRequest('/', false);
     }
 
     /**
      * tearDown
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->BcUpload);
         parent::tearDown();
@@ -58,6 +61,7 @@ class BcUploadHelperTest extends BcTestCase
      */
     public function testFileLink()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->BcUpload->request->data = [
             'EditorTemplate' => [
                 'id' => '1',
@@ -76,6 +80,7 @@ class BcUploadHelperTest extends BcTestCase
      */
     public function testFileLinkHasManyField()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->BcUpload->request->data = [
             'EditorTemplate' => [
                 [
@@ -96,7 +101,7 @@ class BcUploadHelperTest extends BcTestCase
      */
     public function testUploadImage()
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // オプションなし
         $result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg');
         $this->assertRegExp('/^<a href=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?><\/a>/', $result);
