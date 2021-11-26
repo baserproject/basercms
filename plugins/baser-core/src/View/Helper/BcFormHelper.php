@@ -13,19 +13,21 @@ namespace BaserCore\View\Helper;
 
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Inflector;
 use BaserCore\Annotation\NoTodo;
 use Cake\View\Helper\FormHelper;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
+use BaserCore\View\Helper\BcUploadHelper;
 use BaserCore\Event\BcEventDispatcherTrait;
-use Cake\Utility\Inflector;
 
 /**
  * FormHelper 拡張クラス
  *
  * @package Baser.View.Helper
  * @property BcHtmlHelper $BcHtml
+ * @property BcUploadHelper $BcUpload
  */
 class BcFormHelper extends FormHelper
 {
@@ -2260,19 +2262,14 @@ DOC_END;
      */
     public function file($fieldName, $options = []): string
     {
-        // TODO 未実装のため代替措置
-        // >>>
-        return parent::file($fieldName, $options);
-        // <<<
 
         $options = $this->_initInputField($fieldName, $options);
-        $entity = $this->entity();
-        $modelName = $this->model();
-        $Model = ClassRegistry::init($modelName);
-        if (empty($Model->Behaviors->BcUpload)) {
+        // TODO: テーブル名を取得する
+        $table = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        if (!$table->hasBehavior('BcUpload')) {
             return parent::file($fieldName, $options);
         }
-        $fieldName = implode('.', $entity);
+        // $fieldName = implode('.', $entity);
 
         $options = array_merge([
             'imgsize' => 'medium', // 画像サイズ

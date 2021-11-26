@@ -412,22 +412,6 @@ function emptyFolder($path)
 }
 
 /**
- * 現在のビューディレクトリのパスを取得する
- *
- * @return string
- */
-function getViewPath()
-{
-    $siteConfig = Configure::read('BcSite');
-    $theme = $siteConfig['theme'];
-    if ($theme) {
-        return WWW_ROOT . 'theme' . DS . $theme . DS;
-    } else {
-        return APP . 'View' . DS;
-    }
-}
-
-/**
  * ファイルポインタから行を取得し、CSVフィールドを処理する
  *
  * @param stream    handle
@@ -796,24 +780,6 @@ function aa()
         $i++;
     }
     return $a;
-}
-
-/**
- * 日本語ファイル名対応版basename
- *
- * @param string $str
- * @param string $suffix
- * @return type
- */
-function mb_basename($str, $suffix = null)
-{
-    $tmp = preg_split('/[\/\\\\]/', $str);
-    $res = end($tmp);
-    if (strlen($suffix)) {
-        $suffix = preg_quote($suffix);
-        $res = preg_replace("/({$suffix})$/u", "", $res);
-    }
-    return $res;
 }
 
 /**

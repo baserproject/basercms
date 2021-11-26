@@ -11,18 +11,23 @@
 namespace BaserCore\View\Helper;
 
 use Cake\View\Helper;
+use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Error\BcException;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Service\SiteConfigServiceInterface;
 
 /**
  * アップロードヘルパー
  *
  * @package Baser.View.Helper
  * @property HtmlHelper $Html
+ * @property SiteConfigServiceInterface $siteConfigService
  */
 class BcUploadHelper  extends Helper
 {
@@ -30,13 +35,14 @@ class BcUploadHelper  extends Helper
      * Trait
      */
     use BcEventDispatcherTrait;
+    use BcContainerTrait;
 
     /**
      * ヘルパ
      *
      * @var array
      */
-    public $helpers = ['Html', 'BcForm'];
+    public $helpers = ['Html', 'Form'];
 
     /**
      * initialize
@@ -52,6 +58,7 @@ class BcUploadHelper  extends Helper
         if (!$this->table->hasBehavior('BcUpload')) {
             throw new BcException(__d('baser', 'BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。'));
         }
+        $this->siteConfigService = $this->getService(SiteConfigServiceInterface::class);
     }
 
     /**
@@ -79,8 +86,8 @@ class BcUploadHelper  extends Helper
         if (strpos($fieldName, '.') === false) {
             throw new BcException(__d('baser', 'BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドットで区切って指定する必要があります。'));
         }
-        // $this->setEntity($fieldName);
-        // $field = $this->field();
+        $targetField = explode('.', $fieldName);
+        $field = array_pop($targetField);
 
         $tmp = false;
 
@@ -107,18 +114,19 @@ class BcUploadHelper  extends Helper
         $basePath = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 
         if (empty($options['value'])) {
-            $value = $this->value($fieldName);
+            $value = $this->Form->getSourceValue($fieldName);
         } else {
             $value = $options['value'];
         }
 
         if (is_array($value)) {
             if (empty($value['session_key']) && empty($value['name'])) {
-                $data = $this->table->find('first', [
-                    'conditions' => [
-                        $this->table->getAlias() . '.' . $this->table->getPrimaryKey() => $Model->id
-                    ]
-                ]);
+                $data = $this->find()->where([$this->table->getAlias() . '.' . $this->table->getPrimaryKey() => $this->table->id])->first();
+                // $data = $this->table->find('first', [
+                //     'conditions' => [
+                //         $this->table->getAlias() . '.' . $this->table->getPrimaryKey() => $Model->id
+                //     ]
+                // ]);
                 if (!empty($data[$this->table->getAlias()][$field])) {
                     $value = $data[$this->table->getAlias()][$field];
                 } else {
@@ -140,7 +148,7 @@ class BcUploadHelper  extends Helper
         if (isset($settings['saveDir'])) {
             if ($value && !is_array($value)) {
                 $uploadSettings = $settings['fields'][$field];
-                $ext = decodeContent('', $value);
+                $ext = BcUtil::decodeContent('', $value);
                 $figureOptions = $figcaptionOptions = [];
                 if (!empty($options['figcaption'])) {
                     $figcaptionOptions = $options['figcaption'];
@@ -166,14 +174,14 @@ class BcUploadHelper  extends Helper
                     if ($tmp) {
                         $imgOptions['tmp'] = true;
                     }
-                    $out = $this->Html->tag('figure', $this->uploadImage($fieldName, $value, $imgOptions) . '<br>' . $this->Html->tag('figcaption', mb_basename($value), $figcaptionOptions), $figureOptions);
+                    $out = $this->Html->tag('figure', $this->uploadImage($fieldName, $value, $imgOptions) . '<br>' . $this->Html->tag('figcaption', BcUtil::mb_basename($value), $figcaptionOptions), $figureOptions);
                 } else {
                     $filePath = $basePath . $value;
                     $linkOptions = ['target' => '_blank'];
                     if (is_array($options['link'])) {
                         $linkOptions = array_merge($linkOptions, $options['link']);
                     }
-                    $out = $this->Html->tag('figure', $this->Html->link(__d('baser', 'ダウンロード') . ' ≫', $filePath, $linkOptions) . '<br>' . $this->Html->tag('figcaption', mb_basename($value), $figcaptionOptions), $figureOptions);
+                    $out = $this->Html->tag('figure', $this->Html->link(__d('baser', 'ダウンロード') . ' ≫', $filePath, $linkOptions) . '<br>' . $this->Html->tag('figcaption', BcUtil::mb_basename($value), $figcaptionOptions), $figureOptions);
                 }
             } else {
                 $out = $value;
@@ -184,7 +192,7 @@ class BcUploadHelper  extends Helper
 
         // EVENT BcUpload.afterFileLink
         $event = $this->dispatchLayerEvent('afterFileLink', [
-            'data' => $this->request->data,
+            'data' => $this->getView()->getRequest()->getData(),
             'fieldName' => $fieldName,
             'out' => $out
         ], ['class' => 'BcUpload', 'plugin' => '']);
@@ -308,9 +316,8 @@ class BcUploadHelper  extends Helper
 
         $fileUrl = $this->getBasePath($settings);
         $fileUrlInTheme = $this->getBasePath($settings, true);
-        $Model = $this->getUploadModel();
-        $saveDir = $Model->getSaveDir(false, $options['limited']);
-        $saveDirInTheme = $Model->getSaveDir(true, $options['limited']);
+        $saveDir = $this->table->getSaveDir($this->table->getAlias(), false, $options['limited']);
+        $saveDirInTheme = $this->table->getSaveDir($this->table->getAlias(), true, $options['limited']);
 
         if (isset($settings['fields'][$field]['imagecopy'])) {
             $copySettings = $settings['fields'][$field]['imagecopy'];
@@ -434,7 +441,7 @@ class BcUploadHelper  extends Helper
 
         // EVENT BcUpload.afterUploadImage
         $event = $this->dispatchLayerEvent('afterUploadImage', [
-            'data' => $this->request->data,
+            'data' => $this->getView()->getRequest()->getData(),
             'fieldName' => $fieldName,
             'out' => $out
         ], ['class' => 'BcUpload', 'plugin' => '']);
@@ -460,12 +467,11 @@ class BcUploadHelper  extends Helper
                 throw $e;
             }
         }
-        $siteConfig = Configure::read('BcSite');
-        if (!$isTheme || empty($siteConfig['theme'])) {
+        $theme = $this->siteConfigService->getValue('theme');
+        if (!$isTheme || empty($theme)) {
             return '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
         } else {
-            $siteConfig = Configure::read('BcSite');
-            return '/theme/' . $siteConfig['theme'] . '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
+            return '/theme/' . $theme . '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
         }
     }
 
@@ -476,11 +482,11 @@ class BcUploadHelper  extends Helper
      */
     protected function getBcUploadSetting()
     {
-        return $this->table->getBehavior('BcUpload')->getConfig("setting." . $this->table->getAlias());
+        return $this->table->getBehavior('BcUpload')->getConfig("settings." . $this->table->getAlias());
     }
 
     protected function setBcUploadSetting($settings)
     {
-        $this->table->getBehavior('BcUpload')->setConfig("setting." . $this->table->getAlias(), $settings);
+        $this->table->getBehavior('BcUpload')->setConfig("settings." . $this->table->getAlias(), $settings);
     }
 }

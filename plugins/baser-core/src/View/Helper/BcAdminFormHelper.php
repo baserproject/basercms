@@ -39,6 +39,7 @@ class BcAdminFormHelper extends BcFormHelper
         'BaserCore.BcHtml',
         'BaserCore.BcTime',
         'BaserCore.BcText',
+        'BaserCore.BcUpload'
     ];
 
     /**

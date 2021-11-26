@@ -22,6 +22,8 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Service\SiteConfigServiceInterface;
 
 /**
  * Class BcUploadBehavior
@@ -58,6 +60,11 @@ use Cake\Datasource\EntityInterface;
  */
 class BcUploadBehavior extends Behavior
 {
+
+    /**
+     * BcContainerTrait
+     */
+    use BcContainerTrait;
 
     /**
      * 保存ディレクトリ
@@ -1082,12 +1089,12 @@ class BcUploadBehavior extends Behavior
         if (!$isTheme) {
             $basePath = WWW_ROOT . 'files' . DS;
         } else {
-            $siteConfig = Configure::read('BcSite');
-            $theme = $siteConfig['theme'];
+            $siteConfig = $this->getService(SiteConfigServiceInterface::class);
+            $theme = $siteConfig->getValue('theme');
             if ($theme) {
                 $basePath = WWW_ROOT . 'theme' . DS . $theme . DS . 'files' . DS;
             } else {
-                $basePath = getViewPath() . 'files' . DS;
+                $basePath = BcUtil::getViewPath() . 'files' . DS;
             }
         }
         if ($limited) {

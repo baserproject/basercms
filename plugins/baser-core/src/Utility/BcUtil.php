@@ -27,6 +27,7 @@ use BaserCore\Annotation\NoTodo;
 use BaserCore\Model\Entity\User;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Service\SiteConfigServiceInterface;
 use Cake\Datasource\ConnectionManager;
 
 /**
@@ -36,6 +37,10 @@ use Cake\Datasource\ConnectionManager;
  */
 class BcUtil
 {
+    /**
+     * BcContainerTrait
+     */
+    use BcContainerTrait;
 
     /**
      * 認証領域を指定してログインユーザーのデータを取得する
@@ -956,6 +961,40 @@ class BcUtil
             $url .= '/';
         }
         return $url;
+    }
+
+    /**
+     * 現在のビューディレクトリのパスを取得する
+     *
+     * @return string
+     */
+    public static function getViewPath()
+    {
+        $siteConfig = BcContainerTrait::getService(SiteConfigServiceInterface::class);
+        $theme = $siteConfig->getValue('theme');
+        if ($theme) {
+            return WWW_ROOT . 'theme' . DS . $theme . DS;
+        } else {
+            return APP . 'View' . DS;
+        }
+    }
+
+    /**
+     * 日本語ファイル名対応版basename
+     *
+     * @param string $str
+     * @param string $suffix
+     * @return type
+     */
+    public static function mb_basename($str, $suffix = null)
+    {
+        $tmp = preg_split('/[\/\\\\]/', $str);
+        $res = end($tmp);
+        if (strlen($suffix)) {
+            $suffix = preg_quote($suffix);
+            $res = preg_replace("/({$suffix})$/u", "", $res);
+        }
+        return $res;
     }
 
     /**
