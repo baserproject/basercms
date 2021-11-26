@@ -31,10 +31,10 @@ class BcUploadHelperTest extends BcTestCase
      * @var array
      */
     public $fixtures = [
-        'BaserCore.Contents',
-        'BaserCore.Sites',
-        'BaserCore.Pages',
-        'BaserCore.SiteConfigs',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Pages',
+        'plugin.BaserCore.SiteConfigs',
     ];
 
     /**
@@ -138,9 +138,35 @@ class BcUploadHelperTest extends BcTestCase
         $this->assertRegExp('/^\/files\/editor\/template1\.jpg\?[0-9]+/', $result);
     }
 
+    /**
+     * testGetBasePath
+     *
+     * @return void
+     */
     public function testGetBasePath()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * testGBcUploadSetting
+     *
+     * @return void
+     */
+    public function testGetBcUploadSetting()
+    {
+        $this->assertNotEmpty($this->execPrivateMethod($this->BcUpload, 'getBcUploadSetting', []));
+    }
+
+    /**
+     * testSBcUploadSetting
+     *
+     * @return void
+     */
+    public function testSetBcUploadSetting()
+    {
+        $this->execPrivateMethod($this->BcUpload, 'setBcUploadSetting', ['test']);
+        $this->assertEquals('test', $this->execPrivateMethod($this->BcUpload, 'getBcUploadSetting', []));
     }
 
 }

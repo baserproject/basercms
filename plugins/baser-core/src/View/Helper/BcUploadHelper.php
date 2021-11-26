@@ -314,10 +314,8 @@ class BcUploadHelper  extends Helper
             return false;
         }
 
-        $fileUrl = $this->getBasePath($settings);
-        $fileUrlInTheme = $this->getBasePath($settings, true);
+        $fileUrl = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
         $saveDir = $this->table->getSaveDir($this->table->getAlias(), false, $options['limited']);
-        $saveDirInTheme = $this->table->getSaveDir($this->table->getAlias(), true, $options['limited']);
 
         if (isset($settings['fields'][$field]['imagecopy'])) {
             $copySettings = $settings['fields'][$field]['imagecopy'];
@@ -383,9 +381,6 @@ class BcUploadHelper  extends Helper
                     $fileExists = false;
                     if (file_exists($saveDir . $file)) {
                         $fileExists = true;
-                    } elseif (file_exists($saveDirInTheme . $file)) {
-                        $fileExists = true;
-                        $fileUrl = $fileUrlInTheme;
                     }
 
                     if ($fileExists || $options['force']) {
@@ -452,39 +447,27 @@ class BcUploadHelper  extends Helper
     }
 
     /**
-     * アップロード先のベースパスを取得
-     *
-     * @param string $fieldName 格納されているDBのフィールド名、ex) BlogPost.eye_catch
-     * @param bool $isTheme テーマ内の初期データのパスとするかどうか
-     * @return string パス
-     */
-    public function getBasePath($settings = null, $isTheme = false)
-    {
-        if (!$settings) {
-            try {
-                $settings = $this->getBcUploadSetting();
-            } catch (BcException $e) {
-                throw $e;
-            }
-        }
-        $theme = $this->siteConfigService->getValue('theme');
-        if (!$isTheme || empty($theme)) {
-            return '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
-        } else {
-            return '/theme/' . $theme . '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
-        }
-    }
-
-    /**
      * アップロードの設定を取得する
      *
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     protected function getBcUploadSetting()
     {
         return $this->table->getBehavior('BcUpload')->getConfig("settings." . $this->table->getAlias());
     }
 
+    /**
+     * setBcUploadSetting
+     *
+     * @param  mixed $settings
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
     protected function setBcUploadSetting($settings)
     {
         $this->table->getBehavior('BcUpload')->setConfig("settings." . $this->table->getAlias(), $settings);
