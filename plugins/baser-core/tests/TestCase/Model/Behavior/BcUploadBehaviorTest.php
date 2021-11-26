@@ -10,6 +10,7 @@
  */
 namespace BaserCore\Test\TestCase\Model\Behavior;
 
+use ArrayObject;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Behavior\BcUploadBehavior;
@@ -35,6 +36,9 @@ class BcUploadBehaviorTest extends BcTestCase
         'plugin.BaserCore.Pages',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UsersUserGroups',
+        'plugin.BaserCore.UserGroups',
     ];
 
 
@@ -54,6 +58,7 @@ class BcUploadBehaviorTest extends BcTestCase
         $this->table = $this->getTableLocator()->get('BaserCore.Contents');
         $this->table->setPrimaryKey(['id']);
         $this->table->addBehavior('BaserCore.BcUpload');
+        $this->BcUploadBehavior = $this->table->getBehavior('BcUpload');
         // $this->EditorTemplate = TableRegistry::getTableLocator()->get('BaserCore.EditorTemplate');
         // $this->BcUploadBehavior = ClassRegistry::init('BcUploadBehavior');
     }
@@ -68,7 +73,7 @@ class BcUploadBehaviorTest extends BcTestCase
         session_unset();
         unset($this->table);
         // unset($this->EditorTemplate);
-        // unset($this->BcUploadBehavior);
+        unset($this->BcUploadBehavior);
         parent::tearDown();
     }
 
@@ -152,7 +157,11 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertNotEmpty($this->BcUploadBehavior->getConfig('settings.Contents'));
+        $this->assertNotEmpty($this->BcUploadBehavior->savePath);
+        $this->assertNotEmpty($this->BcUploadBehavior->existsCheckDirs);
+        // TODO: フォルダ作成チェック
+        // TODO: sessionテスト
     }
 
     /**
@@ -160,7 +169,12 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testBeforeMarshal()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $data = ['eyecatch' =>  new \Laminas\Diactoros\UploadedFile('test.png', 100, UPLOAD_ERR_OK, "test.png", "image/png")];
+        $result = $this->table->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($data), 'options' => new ArrayObject()]);
+        // setupRequestDataが実行されてるか確認
+        $this->assertNotNull($this->BcUploadBehavior->getConfig('settings.Contents.fields.eyecatch.upload'));
+        // 保存前にeyecatchをオブジェクトではなく、stringに変換してるか確認
+        $this->assertEquals("test.png", $result->getData('data')['eyecatch']);
     }
 
     /**
@@ -176,7 +190,19 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testSetupRequestData()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // upload=falseの場合のテスト
+        $data = ['eyecatch' => 'test.png'];
+        $this->BcUploadBehavior->setupRequestData($data);
+        $this->assertFalse($this->BcUploadBehavior->getConfig('settings.Contents.fields.eyecatch.upload'));
+        // upload=trueの場合のテスト
+        $data = ['eyecatch' => new \Laminas\Diactoros\UploadedFile('test.png', 100, UPLOAD_ERR_OK, "test.png", "image/png")];
+        $this->BcUploadBehavior->setupRequestData($data);
+        $this->assertTrue($this->BcUploadBehavior->getConfig('settings.Contents.fields.eyecatch.upload'));
+        $this->assertEquals("png", $this->BcUploadBehavior->getConfig('settings.Contents.fields.eyecatch.ext'));
+        // TODO: セッションに一時ファイルが保存されている場合のテスト
+        // TODO: 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻すのテスト
+
+
     }
 
     /**

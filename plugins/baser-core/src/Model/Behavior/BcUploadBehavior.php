@@ -21,6 +21,7 @@ use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Service\SiteConfigServiceInterface;
@@ -121,6 +122,9 @@ class BcUploadBehavior extends Behavior
      * initialize
      * @param  array $config
      * @return void
+     * @checked
+     * @unitTest
+     * @note(value="sessionがどこでつかわれてるかわからない")
      */
     public function initialize(array $config): void
     {
@@ -150,11 +154,10 @@ class BcUploadBehavior extends Behavior
         $this->savePath[$alias] = $this->getSaveDir($alias);
         // NOTE: 同じテーブルのディレクトリがないかをチェックする箇所
         $this->existsCheckDirs[] = $this->getExistsCheckDirs($alias);
-        // if (!is_dir($this->savePath[$this->table->getAlias()])) {
-        //     $Folder = new Folder();
-        //     $Folder->create($this->savePath[$this->table->getAlias()]);
-        //     $Folder->chmod($this->savePath[$this->table->getAlias()], 0777, true);
-        // }
+        // NOTE: is_dirの判定がどこで使われてるのかわからない
+        if (!is_dir($this->savePath[$alias])) {
+            mkdir($this->savePath[$alias], 0777, true);
+        }
         $this->Session = new Session();
     }
 
@@ -166,6 +169,9 @@ class BcUploadBehavior extends Behavior
      * @param ArrayObject $data
      * @param ArrayObject $options
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
     {
@@ -176,7 +182,6 @@ class BcUploadBehavior extends Behavior
         if ($data['eyecatch']) {
             $data['eyecatch'] = $data['eyecatch']->getClientFileName();
         }
-        // return parent::afterMarshal($event, $entity,$data, $options);
     }
 
 
@@ -218,6 +223,8 @@ class BcUploadBehavior extends Behavior
      * リクエストされたデータを処理しやすいようにセットアップする
      *
      * @param $content
+     * @checked
+     * @unitTest
      */
     public function setupRequestData($content)
     {
@@ -231,14 +238,14 @@ class BcUploadBehavior extends Behavior
                         $upload = true;
                     }
                 } else {
-                    if (!empty((array) $content[$field['name'] . '_tmp'])) {
+                    if (isset($content[$field['name'] . '_tmp'])) {
                         // TODO: セッション未実装のため一時的にコメントアウト
                         // セッションに一時ファイルが保存されている場合は復元する
                         // if ($this->moveFileSessionToTmp($Model, $field['name'])) {
                         //     $data = $Model->data[$Model->name];
                         //     $upload = true;
                         // }
-                    } elseif (!empty((array) $content[$field['name'] . '_'])) {
+                    } elseif (isset($content[$field['name'] . '_'])) {
                         // 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
                         // TODO:  エラーに関してのデータはafterMarshal以後にて実装する
                         // if (isset($data[$field['name']]['error']) && $data[$field['name']]['error'] == UPLOAD_ERR_NO_FILE) {
@@ -250,6 +257,7 @@ class BcUploadBehavior extends Behavior
                 if ($upload) {
                     // 拡張子を取得
                     $settings['fields'][$key]['ext'] = $field['ext'] = BcUtil::decodeContent($uploadedFile->getClientMediaType(), $uploadedFile->getClientFileName());
+                    $this->setConfig('settings.' . $this->table->getAlias(), $settings);
                     // タイプ別除外
                     $targets = [];
                     if ($field['type'] == 'image') {
@@ -264,6 +272,7 @@ class BcUploadBehavior extends Behavior
                     }
                 }
                 $settings['fields'][$key]['upload'] = $upload;
+                $this->setConfig('settings.' . $this->table->getAlias(), $settings);
             }
         }
     }
