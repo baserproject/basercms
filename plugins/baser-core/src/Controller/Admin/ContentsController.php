@@ -453,18 +453,4 @@ class ContentsController extends BcAdminAppController
         ]);
         return $this->redirect(['action' => "trash_index"]);
     }
-
-    /**
-     * コンテンツ情報を取得する
-     * @param ContentServiceInterface $contentService
-     * @checked
-     * @noTodo
-     * @unitTest
-     *
-     */
-    public function ajax_contents_info(ContentServiceInterface $contentService)
-    {
-        $this->viewBuilder()->disableAutoLayout();
-        $this->set('sites', $contentService->getContentsInfo());
-    }
 }
