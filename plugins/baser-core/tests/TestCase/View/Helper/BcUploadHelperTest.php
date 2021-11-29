@@ -61,18 +61,18 @@ class BcUploadHelperTest extends BcTestCase
      */
     public function testFileLink()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcUpload->request->data = [
-            'EditorTemplate' => [
-                'id' => '1',
-                'name' => '画像（左）とテキスト',
-                'image' => 'template1.jpg',
-                'description' => '説明文',
-                'modified' => '2013-07-21 01:41:12', 'created' => '2013-07-21 00:53:42',
-            ]
-        ];
-        $result = $this->BcUpload->fileLink('EditorTemplate.image');
-        $this->assertRegExp('/<a href=\"\/files\/editor\/template1\.jpg/', $result);
+        $request = $this->getRequest()->withData('EditorTemplate', [
+            'id' => '1',
+            'name' => '画像（左）とテキスト',
+            'eyecatch' => 'template1.jpg',
+            'description' => '説明文',
+            'modified' => '2013-07-21 01:41:12', 'created' => '2013-07-21 00:53:42',
+        ]);
+        $BcUpload = new BcUploadHelper(new BcAdminAppView($request));
+        $result = $BcUpload->fileLink('EditorTemplate.eyecatch');
+        $this->assertRegExp('/<a href=\"\/files\/contents\/template1\.jpg/', $result);
+        // TODO: 保存先ファイル editorが未確認のため一旦デフォルトのcontentsで代用
+        // $this->assertRegExp('/<a href=\"\/files\/editor\/template1\.jpg/', $result);
     }
 
     /**

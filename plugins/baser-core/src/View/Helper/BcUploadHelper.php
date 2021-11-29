@@ -67,6 +67,8 @@ class BcUploadHelper  extends Helper
      * @param string $fieldName
      * @param array $options
      * @return string
+     * @checked
+     * @unitTest
      */
     public function fileLink($fieldName, $options = [])
     {
@@ -237,8 +239,6 @@ class BcUploadHelper  extends Helper
         if (strpos($fieldName, '.') === false) {
 			throw new BcException(__d('baser', 'BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドットで区切って指定する必要があります。'));
 		}
-		// $this->setEntity($fieldName);
-		// $field = $this->field();
         $fieldInfo = explode('.', $fieldName);
         $field = array_pop($fieldInfo);
 

@@ -124,7 +124,6 @@ class BcUploadBehavior extends Behavior
      * @return void
      * @checked
      * @unitTest
-     * @note(value="sessionがどこでつかわれてるかわからない")
      */
     public function initialize(array $config): void
     {
@@ -202,21 +201,18 @@ class BcUploadBehavior extends Behavior
             if ($event) $this->table->getEventManager()->off('Model.beforeSave');
             return true;
         }
-        // TODO: 一時措置
-        return;
-        // $Model = $entity; // TODO: 代用
-        // if ($Model->exists()) {
-        //     $this->deleteExistingFiles($Model);
-        // }
-        // $Model->data = $this->deleteFiles($Model, $Model->data);
+        if ($entity->id) {
+            $this->deleteExistingFiles($Model);
+        }
+        $Model->data = $this->deleteFiles($Model, $Model->data);
 
-        // $result = $this->saveFiles($Model, $Model->data);
-        // if ($result) {
-        //     $Model->data = $result;
-        //     return true;
-        // } else {
-        //     return false;
-        // }
+        $result = $this->saveFiles($Model, $Model->data);
+        if ($result) {
+            $Model->data = $result;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -288,15 +284,15 @@ class BcUploadBehavior extends Behavior
     {
         // TODO: 一時措置
         return;
-        // if ($this->uploaded[$Model->name]) {
-        //     $Model->data = $this->renameToBasenameFields($Model);
-        //     $Model->data = $Model->save($Model->data, ['callbacks' => false, 'validate' => false]);
-        //     $this->uploaded[$Model->name] = false;
-        // }
-        // foreach($this->settings[$Model->alias]['fields'] as $key => $value) {
-        //     $this->settings[$Model->alias]['fields'][$key]['upload'] = false;
-        // }
-        // return true;
+        if ($this->uploaded[$Model->name]) {
+            $Model->data = $this->renameToBasenameFields($Model);
+            $Model->data = $Model->save($Model->data, ['callbacks' => false, 'validate' => false]);
+            $this->uploaded[$Model->name] = false;
+        }
+        foreach($this->settings[$Model->alias]['fields'] as $key => $value) {
+            $this->settings[$Model->alias]['fields'][$key]['upload'] = false;
+        }
+        return true;
     }
 
     /**
@@ -1142,13 +1138,12 @@ class BcUploadBehavior extends Behavior
 
     /**
      * 既に存在するデータのファイルを削除する
-     *
-     * @param Model $Model
      */
-    public function deleteExistingFiles(Model $Model)
+    public function deleteExistingFiles()
     {
-        $dataTmp = $Model->data;
-        $uploadFields = array_keys($this->settings[$Model->alias]['fields']);
+        // $dataTmp = $Model->data;
+        $settings = $this->getConfig('settings.' . $this->table->getAlias());
+        $uploadFields = array_keys($settings['fields']);
         $targetFields = [];
         foreach($uploadFields as $field) {
             if (!empty($dataTmp[$Model->alias][$field]['tmp_name'])) {
