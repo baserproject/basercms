@@ -10,16 +10,26 @@
  * @license         https://basercms.net/license/index.html
  */
 
+use BaserCore\View\BcAdminAppView;
 /**
- * @var BcAppView $this
+ * @var BcAdminAppView $this
  */
+$sites = $this->BcAdminContent->getContentsInfo();
 ?>
-
-<script>
-	$(function () {
-		$.bcDashboard.ajax('/baser' + $.bcUtil.adminPrefix + '/baser-core/contents/ajax_contents_info', '#ContentInfo');
-	});
-</script>
-
 <h2 class="bca-panel-box__title"><?php echo __d('baser', 'コンテンツ情報') ?></h2>
-<div id="ContentInfo"></div>
+<div id="ContentInfo">
+  <?php if ($sites): ?>
+    <div class="bca-content-info">
+      <?php foreach($sites as $site): ?>
+        <h3 class="bca-content-info__title"><?php echo h($site['display_name']) ?></h3>
+        <ul class="bca-content-info__list">
+          <li class="bca-content-info__list-item">
+            <?php echo sprintf(__d('baser', '公開中： %s ページ'), $site['published']) ?><br>
+            <?php echo sprintf(__d('baser', '非公開： %s ページ'), $site['unpublished']) ?><br>
+            <?php echo sprintf(__d('baser', '合計： %s ページ'), $site['total']) ?>
+          </li>
+        </ul>
+      <?php endforeach ?>
+    </div>
+  <?php endif ?>
+</div>

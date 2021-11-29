@@ -188,6 +188,9 @@ class BcAdminContentHelper extends Helper
      * コンテンツ編集画面で利用
      * @param EntityInterface|null $content
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getCurrentFolderLinkedUrl(EntityInterface $content)
     {
@@ -233,5 +236,18 @@ class BcAdminContentHelper extends Helper
             $folderLinkedUrl .= implode('/', $urlArray) . '/';
         }
         return $folderLinkedUrl;
+    }
+
+    /**
+     * コンテンツ情報を取得する
+     *
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getContentsInfo()
+    {
+        return $this->ContentService->getContentsInfo();
     }
 }
