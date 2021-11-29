@@ -2271,6 +2271,9 @@ DOC_END;
         }
         // $fieldName = implode('.', $entity);
 
+        // NOTE: idが出力されなくなったため、以前のIDが出力されるよう変更
+        // "Contact.upload" -> "ContactUpload"
+        $id = implode(array_map(function($field) { return Inflector::camelize($field); }, explode('.', $fieldName)));
         $options = array_merge([
             'imgsize' => 'medium', // 画像サイズ
             'rel' => '', // rel属性
@@ -2287,7 +2290,8 @@ DOC_END;
             'deleteLabel' => [],
             'figure' => [],
             'img' => ['class' => ''],
-            'figcaption' => []
+            'figcaption' => [],
+            'id' => $id
         ], $options);
 
         $linkOptions = [
