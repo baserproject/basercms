@@ -11,17 +11,18 @@
 namespace BaserCore\Model\Behavior;
 
 use ArrayObject;
+use BaserCore\Vendor\Imageresizer;
 use Cake\Http\Session;
 use Cake\ORM\Behavior;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Annotation\Note;
 use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\Note;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Service\SiteConfigServiceInterface;
@@ -206,7 +207,7 @@ class BcUploadBehavior extends Behavior
             $this->deleteExistingFiles();
         }
 
-        $Model->data = $this->deleteFiles($Model, $Model->data);
+        $Model->data = $this->deleteFiles($entity, $Model->data);
 
         $result = $this->saveFiles($Model, $Model->data);
         if ($result) {
@@ -660,14 +661,14 @@ class BcUploadBehavior extends Behavior
     /**
      * 画像をコピーする
      *
-     * @param Model $Model
+     * @param EntityInterface $entity
      * @param array $field 画像保存対象フィールドの設定
      * @return boolean
      */
-    public function copyImage(Model $Model, $field)
+    public function copyImage(EntityInterface $entity, $field)
     {
         // データを取得
-        $file = $Model->data[$Model->name][$field['name']];
+        $file = $entity->{$field['name']};
 
         // プレフィックス、サフィックスを取得
         $prefix = '';
@@ -683,7 +684,7 @@ class BcUploadBehavior extends Behavior
         $basename = preg_replace("/\." . $field['ext'] . "$/is", '', $file['name']);
         $fileName = $prefix . $basename . $suffix . '.' . $field['ext'];
 
-        $filePath = $this->savePath[$Model->alias] . $fileName;
+        $filePath = $this->savePath[$this->table->getAlias()] . $fileName;
 
         if (!empty($field['thumb'])) {
             $thumb = $field['thumb'];
@@ -691,7 +692,7 @@ class BcUploadBehavior extends Behavior
             $thumb = false;
         }
 
-        return $this->resizeImage($Model->data[$Model->name][$field['name']]['tmp_name'], $filePath, $field['width'], $field['height'], $thumb);
+        return $this->resizeImage($entity[$field['name']]['tmp_name'], $filePath, $field['width'], $field['height'], $thumb);
     }
 
     /**
@@ -704,6 +705,9 @@ class BcUploadBehavior extends Behavior
      * @param int $height 高さ
      * @param boolean $thumb サムネイルとしてコピーするか
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function resizeImage($source, $distination, $width = 0, $height = 0, $thumb = false)
     {
@@ -728,6 +732,9 @@ class BcUploadBehavior extends Behavior
      *
      * @param string $path 画像のパス
      * @return mixed array / false
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getImageSize($path)
     {
@@ -791,7 +798,6 @@ class BcUploadBehavior extends Behavior
     /**
      * ファイルを削除する
      *
-     * @param EntityInterface $entity
      * @param string $file
      * @param array $field 保存対象フィールドの設定
      * - ext 対象のファイル拡張子
@@ -800,7 +806,7 @@ class BcUploadBehavior extends Behavior
      * @param boolean $delImagecopy
      * @return boolean
      */
-    public function delFile(EntityInterface $entity, $file, $field, $delImagecopy = true)
+    public function delFile($file, $field, $delImagecopy = true)
     {
         if (!$file) {
             return true;
@@ -829,7 +835,7 @@ class BcUploadBehavior extends Behavior
             foreach($field['imagecopy'] as $copy) {
                 $copy['name'] = $field['name'];
                 $copy['ext'] = $field['ext'];
-                $this->delFile($entity, $file, $copy, false);
+                $this->delFile($file, $copy, false);
             }
         }
 
@@ -1140,6 +1146,7 @@ class BcUploadBehavior extends Behavior
 
     /**
      * 既に存在するデータのファイルを削除する
+     * @note $entityにのみ作用?
      */
     public function deleteExistingFiles()
     {
@@ -1157,10 +1164,10 @@ class BcUploadBehavior extends Behavior
         if (!$targetFields) {
             return;
         }
-        $Model->set($Model->find('first', [
-            'conditions' => [$Model->alias . '.' . $Model->primaryKey => $Model->data[$Model->alias][$Model->primaryKey]],
-            'recursive' => -1
-        ]));
+        // $Model->set($Model->find('first', [
+        //     'conditions' => [$Model->alias . '.' . $Model->primaryKey => $Model->data[$Model->alias][$Model->primaryKey]],
+        //     'recursive' => -1
+        // ]));
         foreach($targetFields as $field) {
             $this->delFiles($Model, $field);
         }

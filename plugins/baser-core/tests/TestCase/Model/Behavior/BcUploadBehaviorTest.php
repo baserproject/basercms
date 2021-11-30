@@ -12,6 +12,7 @@ namespace BaserCore\Test\TestCase\Model\Behavior;
 
 use ArrayObject;
 use BaserCore\TestSuite\BcTestCase;
+use Laminas\Diactoros\UploadedFile;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Model\Behavior\BcUploadBehavior;
 
@@ -169,7 +170,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testBeforeMarshal()
     {
-        $data = ['eyecatch' =>  new \Laminas\Diactoros\UploadedFile('test.png', 100, UPLOAD_ERR_OK, "test.png", "image/png")];
+        $data = ['eyecatch' =>  new UploadedFile('test.png', 100, UPLOAD_ERR_OK, "test.png", "image/png")];
         $result = $this->table->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($data), 'options' => new ArrayObject()]);
         // setupRequestDataが実行されてるか確認
         $this->assertNotNull($this->BcUploadBehavior->getConfig('settings.Contents.fields.eyecatch.upload'));
@@ -195,7 +196,7 @@ class BcUploadBehaviorTest extends BcTestCase
         $this->BcUploadBehavior->setupRequestData($data);
         $this->assertFalse($this->BcUploadBehavior->getConfig('settings.Contents.fields.eyecatch.upload'));
         // upload=trueの場合のテスト
-        $data = ['eyecatch' => new \Laminas\Diactoros\UploadedFile('test.png', 100, UPLOAD_ERR_OK, "test.png", "image/png")];
+        $data = ['eyecatch' => new UploadedFile('test.png', 100, UPLOAD_ERR_OK, "test.png", "image/png")];
         $this->BcUploadBehavior->setupRequestData($data);
         $this->assertTrue($this->BcUploadBehavior->getConfig('settings.Contents.fields.eyecatch.upload'));
         $this->assertEquals("png", $this->BcUploadBehavior->getConfig('settings.Contents.fields.eyecatch.ext'));
@@ -640,17 +641,12 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testCopyImage($prefix, $suffix, $message = null)
     {
-
-        // TODO 2020/07/08 ryuring PHP7.4 で、gd が標準インストールされないため、テストがエラーとなるためスキップ
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        return;
-
         $imgPath = ROOT . '/lib/Baser/webroot/img/';
-        $savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
+        $savePath = $this->BcUploadBehavior->savePath['Contents'];
         $fileName = 'baser.power';
 
         $field = [
-            'name' => 'image',
+            'name' => 'eyecatch',
             'prefix' => $prefix,
             'suffix' => $suffix,
             'ext' => 'gif',
@@ -658,20 +654,17 @@ class BcUploadBehaviorTest extends BcTestCase
             'height' => 100,
         ];
 
-        $this->EditorTemplate->data = [
-            'EditorTemplate' => [
-                'image' => [
-                    'name' => $fileName . '_copy' . '.' . $field['ext'],
-                    'tmp_name' => $imgPath . $fileName . '.' . $field['ext'],
-                ]
-            ]
-        ];
+        $data = ['eyecatch' => new UploadedFile(
+            $fileName . '_copy' . '.' . $field['ext'], 100, UPLOAD_ERR_OK, $fileName . '_copy' . '.' . $field['ext'], "image/" . $field['ext']
+            // 'tmp_name' => $imgPath . $fileName . '.' . $field['ext'],
+        )];
+        $entity = $this->table->newEntity($data, ['validate' => false]);
 
         // コピー先ファイルのパス
         $targetPath = $savePath . $field['prefix'] . $fileName . '_copy' . $field['suffix'] . '.' . $field['ext'];
 
         // コピー実行
-        $this->EditorTemplate->copyImage($field);
+        $this->table->copyImage($entity, $field);
         $this->assertFileExists($targetPath, $message);
 
         // コピーしたファイルを削除
@@ -701,25 +694,17 @@ class BcUploadBehaviorTest extends BcTestCase
     public function testResizeImage($width, $height, $thumb, $expected, $message = null)
     {
 
-        // TODO 2020/07/08 ryuring PHP7.4 で、gd が標準インストールされないため、テストがエラーとなるためスキップ
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        return;
-
-        $imgPath = ROOT . '/lib/Baser/webroot/img/';
+        $imgPath = ROOT . '/plugins/bc-admin-third/webroot/img/';
         $source = $imgPath . 'baser.power.gif';
         $distination = $imgPath . 'baser.power_copy.gif';
 
-        $savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
-
-
         // コピー実行
-        $this->BcUploadBehavior->resizeImage($source, $distination, $width, $height, $thumb);
+        $this->table->resizeImage($source, $distination, $width, $height, $thumb);
 
         if (!$width && !$height) {
             $this->assertFileExists($distination, $message);
-
         } else {
-            $result = $this->BcUploadBehavior->getImageSize($distination);
+            $result = $this->table->getImageSize($distination);
             $this->assertEquals($expected, $result, $message);
 
         }
@@ -748,10 +733,9 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testGetImageSize($imgName, $expected, $message = null)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $imgPath = ROOT . '/lib/Baser/webroot/img/' . $imgName;
+        $imgPath = ROOT . '/plugins/bc-admin-third/webroot/img/' . $imgName;
 
-        $result = $this->BcUploadBehavior->getImageSize($imgPath);
+        $result = $this->table->getImageSize($imgPath);
         $this->assertEquals($expected, $result, '画像のサイズを正しく取得できません');
     }
 
@@ -798,12 +782,8 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testDelFile($prefix, $suffix, $imagecopy, $message)
     {
-
         // TODO 2020/07/08 ryuring PHP7.4 で、gd が標準インストールされないため、テストがエラーとなるためスキップ
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        return;
-
-        $savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
+        $savePath = $this->BcUploadBehavior->savePath['Contents'];
         $tmpPath = TMP;
         $fileName = 'dummy';
         $field = [
@@ -823,20 +803,20 @@ class BcUploadBehaviorTest extends BcTestCase
         // copyのダミーファイルを生成
         if (is_array($field['imagecopy'])) {
             copy(ROOT . '/lib/Baser/webroot/img/baser.power.gif', $tmpPath . $fileName . '.' . $field['ext']);
-            $this->EditorTemplate->data['EditorTemplate'][$fileName] = [
+            $this->table->data['Contents'][$fileName] = [
                 'name' => $fileName . '.' . $field['ext'],
                 'tmp_name' => $tmpPath . $fileName . '.' . $field['ext'],
             ];
             foreach($field['imagecopy'] as $copy) {
                 $copy['name'] = $fileName;
                 $copy['ext'] = $field['ext'];
-                $this->EditorTemplate->copyImage($copy);
+                $this->table->copyImage($copy);
             }
 
         }
 
         // 削除を実行
-        $this->EditorTemplate->delFile($fileName, $field);
+        $this->table->delFile($fileName, $field);
 
         $this->assertFileNotExists($targetPath, $message);
 

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 画像のリサイズを行う
  *
@@ -8,6 +7,9 @@
  * @link                https://basercms.net
  * @license            MIT License
  */
+
+namespace BaserCore\Vendor;
+
 class Imageresizer
 {
     /**
