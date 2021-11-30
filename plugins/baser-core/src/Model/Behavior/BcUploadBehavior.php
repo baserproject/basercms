@@ -193,17 +193,19 @@ class BcUploadBehavior extends Behavior
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if (!$entity->getErrors()) {
-            $uploadedFile = $this->getConfig('settings.' . $this->table->getAlias() . ".uploadedFile");
-            $uploadedFile->moveTo($this->savePath[$this->table->getAlias()] . $uploadedFile->getClientFileName());
-            // NOTE: 2回通ってきてしまうため、offにする
-            $event = $this->table->getEventManager()->matchingListeners('beforeSave');
-            if ($event) $this->table->getEventManager()->off('Model.beforeSave');
-            return true;
-        }
+        // if (!$entity->getErrors()) {
+        //     $uploadedFile = $this->getConfig('settings.' . $this->table->getAlias() . ".uploadedFile");
+        //     $uploadedFile->moveTo($this->savePath[$this->table->getAlias()] . $uploadedFile->getClientFileName());
+        //     // NOTE: 2回通ってきてしまうため、offにする
+        //     $event = $this->table->getEventManager()->matchingListeners('beforeSave');
+        //     if ($event) $this->table->getEventManager()->off('Model.beforeSave');
+        //     return true;
+        // }
+
         if ($entity->id) {
-            $this->deleteExistingFiles($Model);
+            $this->deleteExistingFiles();
         }
+
         $Model->data = $this->deleteFiles($Model, $Model->data);
 
         $result = $this->saveFiles($Model, $Model->data);
@@ -289,8 +291,9 @@ class BcUploadBehavior extends Behavior
             $Model->data = $Model->save($Model->data, ['callbacks' => false, 'validate' => false]);
             $this->uploaded[$Model->name] = false;
         }
-        foreach($this->settings[$Model->alias]['fields'] as $key => $value) {
-            $this->settings[$Model->alias]['fields'][$key]['upload'] = false;
+        $settings = $this->getConfig('settings.' . $this->table->getAlias());
+        foreach($settings['fields'] as $key => $value) {
+            $settings['fields'][$key]['upload'] = false;
         }
         return true;
     }
@@ -322,26 +325,21 @@ class BcUploadBehavior extends Behavior
     /**
      * 削除対象かチェックしながらファイル群を削除する
      *
-     * @param Model $Model
+     * @param EntityInterface $entity
      * @param array $requestData
      * @return array
      */
-    public function deleteFiles(Model $Model, $requestData)
+    public function deleteFiles($entity, $requestData)
     {
-
-        $oldData = $Model->find('first', [
-            'conditions' => [
-                $Model->alias . '.' . $Model->primaryKey => $Model->id
-            ]
-        ]);
-        foreach($this->settings[$Model->alias]['fields'] as $key => $field) {
+        $settings = $this->getConfig('settings.' . $this->table->getAlias());
+        foreach($settings['fields'] as $key => $field) {
             $oldValue = '';
-            if ($oldData && !empty($oldData[$Model->name][$field['name']])) {
-                $oldValue = $oldData[$Model->name][$field['name']];
-            } elseif (!empty($Model->data[$Model->name][$field['name']]) && !is_array($Model->data[$Model->name][$field['name']])) {
-                $oldValue = $Model->data[$Model->name][$field['name']];
+            if ($entity && !empty($entity[$field['name']])) {
+                $oldValue = $entity[$field['name']];
+            } elseif (!empty($entity[$field['name']]) && !is_array($entity[$field['name']])) {
+                $oldValue = $entity[$field['name']];
             }
-            $requestData = $this->deleteFileWhileChecking($Model, $field, $requestData, $oldValue);
+            $requestData = $this->deleteFileWhileChecking($entity, $field, $requestData, $oldValue);
         }
         return $requestData;
     }
@@ -349,21 +347,21 @@ class BcUploadBehavior extends Behavior
     /**
      * 削除対象かチェックしながらファイルを削除する
      *
-     * @param Model $Model
+     * @param EntityInterface $entity
      * @param array $fieldSetting
      * @param array $requestData
      * @param string $oldValue
      * @return array $requestData
      */
-    public function deleteFileWhileChecking(Model $Model, $fieldSetting, $requestData, $oldValue = null)
+    public function deleteFileWhileChecking(EntityInterface $entity, $fieldSetting, $requestData, $oldValue = null)
     {
         $fieldName = $fieldSetting['name'];
-        if (!empty($requestData[$Model->name][$fieldName . '_delete'])) {
+        if (!empty($requestData[$this->table->getAlias()][$fieldName . '_delete'])) {
             if (!$this->tmpId) {
-                $this->delFile($Model, $oldValue, $fieldSetting);
-                $requestData[$Model->name][$fieldName] = '';
+                $this->delFile($entity, $oldValue, $fieldSetting);
+                $requestData[$this->table->getAlias()][$fieldName] = '';
             } else {
-                $requestData[$Model->name][$fieldName] = $oldValue;
+                $requestData[$this->table->getAlias()][$fieldName] = $oldValue;
             }
         }
         return $requestData;
@@ -379,7 +377,8 @@ class BcUploadBehavior extends Behavior
     public function saveFiles(Model $Model, $requestData)
     {
         $this->uploaded[$Model->name] = false;
-        foreach($this->settings[$Model->alias]['fields'] as $key => $field) {
+        $settings = $this->getConfig('settings.' . $this->table->getAlias());
+        foreach($settings['fields'] as $key => $field) {
             $result = $this->saveFileWhileChecking($Model, $field, $requestData);
             if ($result) {
                 $requestData = $result;
@@ -763,18 +762,19 @@ class BcUploadBehavior extends Behavior
     /**
      * 画像ファイル群を削除する
      *
-     * @param Model $Model
+     * @param EntityInterface $entity
      * @param string $fieldName フィールド名
      */
-    public function delFiles(Model $Model, $fieldName = null)
+    public function delFiles(EntityInterface $entity, $fieldName = null)
     {
-        foreach($this->settings[$Model->alias]['fields'] as $key => $field) {
+        $settings = $this->getConfig('settings.' . $this->table->getAlias());
+        foreach($settings['fields'] as $key => $field) {
             if (empty($field['name'])) {
                 $field['name'] = $key;
             }
             if (!$fieldName || ($fieldName && $fieldName == $field['name'])) {
-                if (!empty($Model->data[$Model->name][$field['name']])) {
-                    $file = $Model->data[$Model->name][$field['name']];
+                if (!empty($entity[$field['name']])) {
+                    $file = $entity[$field['name']];
 
                     // DBに保存されているファイル名から拡張子を取得する
                     preg_match('/\.([^.]+)\z/', $file, $match);
@@ -782,7 +782,7 @@ class BcUploadBehavior extends Behavior
                         $field['ext'] = $match[1];
                     }
 
-                    $this->delFile($Model, $file, $field);
+                    $this->delFile($entity, $file, $field);
                 }
             }
         }
@@ -791,7 +791,7 @@ class BcUploadBehavior extends Behavior
     /**
      * ファイルを削除する
      *
-     * @param Model $Model
+     * @param EntityInterface $entity
      * @param string $file
      * @param array $field 保存対象フィールドの設定
      * - ext 対象のファイル拡張子
@@ -800,7 +800,7 @@ class BcUploadBehavior extends Behavior
      * @param boolean $delImagecopy
      * @return boolean
      */
-    public function delFile(Model $Model, $file, $field, $delImagecopy = true)
+    public function delFile(EntityInterface $entity, $file, $field, $delImagecopy = true)
     {
         if (!$file) {
             return true;
@@ -824,12 +824,12 @@ class BcUploadBehavior extends Behavior
         // 保存ファイル名を生成
         $basename = preg_replace("/\." . $field['ext'] . "$/is", '', $file);
         $fileName = $prefix . $basename . $suffix . '.' . $field['ext'];
-        $filePath = $this->savePath[$Model->alias] . $fileName;
+        $filePath = $this->savePath[$this->table->getAlias()] . $fileName;
         if (!empty($field['imagecopy']) && $delImagecopy) {
             foreach($field['imagecopy'] as $copy) {
                 $copy['name'] = $field['name'];
                 $copy['ext'] = $field['ext'];
-                $this->delFile($Model, $file, $copy, false);
+                $this->delFile($entity, $file, $copy, false);
             }
         }
 
@@ -850,7 +850,8 @@ class BcUploadBehavior extends Behavior
     public function renameToBasenameFields(Model $Model, $copy = false)
     {
         $data = $Model->data;
-        foreach($this->settings[$Model->alias]['fields'] as $key => $setting) {
+        $settings = $this->getConfig('settings.' . $this->table->getAlias());
+        foreach($settings['fields'] as $key => $setting) {
             if (empty($setting['name'])) {
                 $setting['name'] = $key;
             }
@@ -962,8 +963,9 @@ class BcUploadBehavior extends Behavior
         }
 
         $subdir = '';
-        if (!empty($this->settings[$Model->alias]['subdirDateFormat'])) {
-            $subdir .= date($this->settings[$Model->alias]['subdirDateFormat']);
+        $settings = $this->getConfig('settings.' . $this->table->getAlias());
+        if (!empty($settings['subdirDateFormat'])) {
+            $subdir .= date($settings['subdirDateFormat']);
             if (!preg_match('/\/$/', $subdir)) {
                 $subdir .= '/';
             }
@@ -1145,11 +1147,13 @@ class BcUploadBehavior extends Behavior
         $settings = $this->getConfig('settings.' . $this->table->getAlias());
         $uploadFields = array_keys($settings['fields']);
         $targetFields = [];
-        foreach($uploadFields as $field) {
-            if (!empty($dataTmp[$Model->alias][$field]['tmp_name'])) {
-                $targetFields[] = $field;
-            }
-        }
+        // TODO: postの場合がなんちゃら
+        // $dataTmpを今で表すとどうなるか確認する
+        // foreach($uploadFields as $field) {
+        //     if (!empty($dataTmp[$Model->alias][$field]['tmp_name'])) {
+        //         $targetFields[] = $field;
+        //     }
+        // }
         if (!$targetFields) {
             return;
         }
