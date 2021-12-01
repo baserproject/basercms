@@ -653,11 +653,9 @@ class BcUploadBehaviorTest extends BcTestCase
             'width' => 100,
             'height' => 100,
         ];
-
-        $data = ['eyecatch' => new UploadedFile(
-            $fileName . '_copy' . '.' . $field['ext'], 100, UPLOAD_ERR_OK, $fileName . '_copy' . '.' . $field['ext'], "image/" . $field['ext']
-            // 'tmp_name' => $imgPath . $fileName . '.' . $field['ext'],
-        )];
+        $file = $fileName . '_copy' . '.' . $field['ext'];
+        // tmp_nameがないためコメントアウト: tmp_name' => $imgPath . $fileName . '.' . $field['ext']
+        $data = ['eyecatch' => new UploadedFile($file, 100, UPLOAD_ERR_OK, $file)];
         $entity = $this->table->newEntity($data, ['validate' => false]);
 
         // コピー先ファイルのパス
