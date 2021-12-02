@@ -11,6 +11,7 @@
 namespace BaserCore\Test\TestCase\Model\Behavior;
 
 use ArrayObject;
+use ReflectionClass;
 use BaserCore\TestSuite\BcTestCase;
 use Laminas\Diactoros\UploadedFile;
 use BaserCore\Model\Table\ContentsTable;
@@ -40,6 +41,7 @@ class BcUploadBehaviorTest extends BcTestCase
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.SiteConfigs',
     ];
 
 
@@ -159,8 +161,8 @@ class BcUploadBehaviorTest extends BcTestCase
     public function testInitialize()
     {
         $this->assertNotEmpty($this->BcUploadBehavior->getConfig('settings.Contents'));
-        $this->assertNotEmpty($this->BcUploadBehavior->savePath);
-        $this->assertNotEmpty($this->BcUploadBehavior->existsCheckDirs);
+        $this->assertNotEmpty($this->BcUploadBehavior->getSaveDir());
+        $this->assertNotEmpty($this->BcUploadBehavior->getDuplicateDirs());
         // TODO: フォルダ作成チェック
         // TODO: sessionテスト
     }
@@ -1107,11 +1109,56 @@ class BcUploadBehaviorTest extends BcTestCase
     /**
      * 保存先のフォルダを取得する
      */
-    public function testGetSaveDir()
+    public function testsetAndGetSaveDir()
     {
         // NOTE: WWW_ROOTが/var/www/html/appではなく、/var/www/htmlであることに注意
+        $result = $this->table->setSaveDir('contents');
         $result = $this->table->getSaveDir($this->table->getAlias());
         $this->assertEquals("/var/www/html/webroot/files/contents/", $result);
+    }
+
+    /**
+     * testIsFileExists
+     * 重複ファイルがあるか確認する
+     * @return void
+     */
+    public function testIsFileExists()
+    {
+        $fileName = 'test.txt';
+        $this->assertFalse($this->BcUploadBehavior->isFileExists($fileName));
+        $basePath = WWW_ROOT . 'files' . DS;
+        $duplicate = "test/";
+        // duplicateDirがある場合
+        try {
+            mkdir($basePath . $duplicate, 0777, false);
+            touch($basePath . $duplicate . $fileName);
+            $this->BcUploadBehavior->setDuplicateDirs([$duplicate]);
+            $this->assertTrue($this->BcUploadBehavior->isFileExists($fileName));
+        } catch (\Exception $e) {
+            $error = $e;
+        } finally {
+            if (file_exists($basePath . $duplicate . $fileName)) {
+                unlink($basePath . $duplicate . $fileName);
+                rmdir($basePath . $duplicate);
+            }
+            $this->BcUploadBehavior->setDuplicateDirs([]);
+        }
+        // saveDirがある場合
+        try {
+            touch(WWW_ROOT . 'files/contents/' . $fileName);
+            $this->BcUploadBehavior->setSaveDir('contents');
+            $this->assertTrue($this->BcUploadBehavior->isFileExists($fileName));
+        } catch (\Exception $e) {
+            $error = $e;
+        } finally {
+            if (file_exists(WWW_ROOT . 'files/contents/' . $fileName)) {
+                unlink(WWW_ROOT . 'files/contents/' . $fileName);
+            }
+            $reflection = new ReflectionClass($this->BcUploadBehavior);
+            $property = $reflection->getProperty('savePath');
+            $property->setAccessible(true);
+            $property->setValue($this->BcUploadBehavior, []);
+        }
     }
 
     /**
@@ -1146,6 +1193,20 @@ class BcUploadBehaviorTest extends BcTestCase
         ];
         $this->BcUploadBehavior->putUploadedFiles($uploaded);
         $this->assertEquals($uploaded, $this->BcUploadBehavior->getUploadedFiles());
+    }
+    /**
+     * testSetAndGetDuplicateDirs
+     *
+     * @return void
+     */
+    public function testSetAndGetDuplicateDirs()
+    {
+        $dirs = [
+            'aaa/',
+            'bbb/'
+        ];
+        $this->BcUploadBehavior->setDuplicateDirs($dirs);
+        $this->assertEquals($dirs, $this->BcUploadBehavior->getDuplicateDirs());
     }
 
 }

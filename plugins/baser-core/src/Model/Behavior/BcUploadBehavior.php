@@ -73,14 +73,14 @@ class BcUploadBehavior extends Behavior
      *
      * @var string[]
      */
-    public $savePath = [];
+    protected $savePath = [];
 
     /**
      * 保存時にファイルの重複確認を行うディレクトリ
      *
      * @var array
      */
-    public $existsCheckDirs = [];
+    protected $duplicateDirs = [];
 
     /**
      * 設定
@@ -140,9 +140,9 @@ class BcUploadBehavior extends Behavior
     {
         $this->table = $this->table();
         $this->alias = $this->table->getAlias();
+        $this->setDuplicateDirs($config['duplicateDirs']);
+        $this->setSaveDir($config['saveDir']);
         $settings = Hash::merge([
-            'saveDir' => '',
-            'existsCheckDirs' => [],
             'fields' => [],
         ], $config);
         foreach ($settings['fields'] as $key => $field) {
@@ -161,12 +161,8 @@ class BcUploadBehavior extends Behavior
             }
         }
         $this->setConfig('settings.' . $this->alias, $settings);
-        $this->savePath[$this->alias] = $this->getSaveDir($this->alias);
-        // NOTE: 同じテーブルのディレクトリがないかをチェックする箇所
-        $this->existsCheckDirs[] = $this->getExistsCheckDirs($this->alias);
-        // NOTE: is_dirの判定がどこで使われてるのかわからない
-        if (!is_dir($this->savePath[$this->alias])) {
-            mkdir($this->savePath[$this->alias], 0777, true);
+        if (!is_dir($this->getSaveDir())) {
+            mkdir($this->getSaveDir(), 0777, true);
         }
         $this->Session = new Session();
     }
@@ -585,14 +581,7 @@ class BcUploadBehavior extends Behavior
         if (!$this->tmpId) {
             $basename = preg_replace("/\." . $field['ext'] . "$/is", '', $name);
             $fileName = $prefix . $basename . $suffix . '.' . $field['ext'];
-            $existsFile = false;
-            foreach($this->existsCheckDirs[$Model->alias] as $existsCheckDir) {
-                if (file_exists($existsCheckDir . $fileName)) {
-                    $existsFile = true;
-                    break;
-                }
-            }
-            if ($existsFile) {
+            if ($this->isFileExists($fileName)) {
                 if (preg_match('/(.+_)([0-9]+)$/', $basename, $matches)) {
                     $basename = $matches[1] . ((int)$matches[2] + 1);
                 } else {
@@ -1117,15 +1106,14 @@ class BcUploadBehavior extends Behavior
 
     /**
      * 保存先のフォルダを取得する
-     *
-     * @param string $alias
+     * @param string $saveDir
      * @param bool $isTheme
-     * @return string $saveDir
+     * @param bool $limited
+     * @return void
      * @checked
-     * @noTodo
      * @unitTest
      */
-    public function getSaveDir(string $alias, $isTheme = false, $limited = false)
+    public function setSaveDir($saveDir, $isTheme = false, $limited = false)
     {
         if (!$isTheme) {
             $basePath = WWW_ROOT . 'files' . DS;
@@ -1141,35 +1129,52 @@ class BcUploadBehavior extends Behavior
         if ($limited) {
             $basePath = $basePath . $limited . DS;
         }
-        if ($this->getConfig("settings.${alias}.saveDir")) {
-            $saveDir = $basePath . $this->getConfig("settings.${alias}.saveDir") . DS;
+        // TODO: 一旦themeはなしの$basePathで実行
+        $basePath = WWW_ROOT . 'files' .DS;
+        if ($saveDir) {
+            $saveDir = $basePath . $saveDir . DS;
         } else {
             $saveDir = $basePath;
         }
-        return $saveDir;
+        $this->savePath[$this->alias] = $saveDir;
     }
 
     /**
-     * 保存時にファイルの重複確認を行うディレクトリのリストを取得する
-     *
-     * @param string $modelName
-     * @return array $existsCheckDirs
+     * 保存先のフォルダを設定する
+     * @param bool $isTheme
+     * @return string $saveDir
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    private function getExistsCheckDirs($modelName)
+    public function getSaveDir()
     {
-        $existsCheckDirs = [];
-        // TODO: $this->savePathがまだないためコメントアウト
-        // $existsCheckDirs[] = $this->savePath[$modelName];
+        return $this->savePath[$this->alias];
+    }
 
+    /**
+     * ファイルが重複しているかをチェックする
+     *
+     * @param  string $fileName
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function isFileExists($fileName)
+    {
         $basePath = WWW_ROOT . 'files' . DS;
-        $existsCheckDirs = $this->getConfig("${modelName}.existsCheckDirs");
-        if ($existsCheckDirs) {
-            foreach($existsCheckDirs as $existsCheckDir) {
-                $existsCheckDirs[] = $basePath . $existsCheckDir . DS;
+        $duplicates = $this->getDuplicateDirs();
+        if ($duplicates) {
+            // existsCheckDirが存在する場合
+            foreach($duplicates as $dir) {
+                if (file_exists($basePath . $dir . DS . $fileName)) return true;
             }
+        } else {
+            // saveDirのみの場合
+            if (file_exists($this->getSaveDir(). $fileName)) return true;
         }
-
-        return $existsCheckDirs;
+        return false;
     }
 
     /**
@@ -1254,7 +1259,7 @@ class BcUploadBehavior extends Behavior
      */
     public function putUploadedFiles($uploadedFiles)
     {
-        $this->uploadedFiles = $uploadedFiles;
+        $this->uploadedFiles[$this->alias] = $uploadedFiles;
     }
 
     /**
@@ -1267,7 +1272,32 @@ class BcUploadBehavior extends Behavior
      */
     public function getUploadedFiles()
     {
-        return $this->uploadedFiles;
+        return $this->uploadedFiles[$this->alias];
+    }
+
+    /**
+     * getDuplicateDirs
+     * 保存時にファイルの重複確認を行うディレクトリ
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function setDuplicateDirs($dirs)
+    {
+        $this->duplicateDirs[$this->alias] = $dirs;
+    }
+    /**
+     * getDuplicateDirs
+     * 保存時にファイルの重複確認を行うディレクトリ
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getDuplicateDirs()
+    {
+        return $this->duplicateDirs[$this->alias];
     }
 
 }
