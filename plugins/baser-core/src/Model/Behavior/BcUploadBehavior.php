@@ -119,6 +119,16 @@ class BcUploadBehavior extends Behavior
      * @var array
      */
     public $uploaded = [];
+
+    /**
+     * アップロードされたデータを取得する
+     *
+     * beforeMarshal時にアップロードされたデータ
+     * @todo $uploadedと統合できるか
+     * @var array
+     */
+    protected $uploadedFiles = [];
+
     /**
      * initialize
      * @param  array $config
@@ -129,7 +139,7 @@ class BcUploadBehavior extends Behavior
     public function initialize(array $config): void
     {
         $this->table = $this->table();
-        $this->alias = $this->alias;
+        $this->alias = $this->table->getAlias();
         $settings = Hash::merge([
             'saveDir' => '',
             'existsCheckDirs' => [],
@@ -176,12 +186,11 @@ class BcUploadBehavior extends Behavior
     public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
     {
         $this->setupRequestData($data);
-
         $this->setConfig('settings.' . $this->alias . ".uploadedFile", $data['eyecatch']);
-        // eyecatchをobjectからstringに変更
-        if ($data['eyecatch']) {
-            $data['eyecatch'] = $data['eyecatch']->getClientFileName();
-        }
+        // アップロードのデータをputUploadedFilesに退避する
+        $this->putUploadedFiles($data['eyecatch']);
+        // arrayをstringとして変換し、保存する
+        $data['eyecatch'] = $data['eyecatch']['name'];
     }
 
 
@@ -207,6 +216,7 @@ class BcUploadBehavior extends Behavior
         if ($entity->id) {
             $this->deleteExistingFiles();
         }
+        $a = $entity->eyecatch;
 
         $Model->data = $this->deleteFiles($entity, $Model->data);
 
@@ -1165,8 +1175,7 @@ class BcUploadBehavior extends Behavior
         $settings = $this->getConfig('settings.' . $this->alias);
         $uploadFields = array_keys($settings['fields']);
         $targetFields = [];
-        // TODO: postの場合がなんちゃら
-        // $dataTmpを今で表すとどうなるか確認する
+        // NOTE: postされたfieldと同じ物があるかを探し、あればそれを削除する
         foreach($uploadFields as $field) {
             if (!empty($dataTmp[$Model->alias][$field]['tmp_name'])) {
                 $targetFields[] = $field;
@@ -1175,10 +1184,11 @@ class BcUploadBehavior extends Behavior
         if (!$targetFields) {
             return;
         }
-        // $Model->set($Model->find('first', [
-        //     'conditions' => [$Model->alias . '.' . $Model->primaryKey => $Model->data[$Model->alias][$Model->primaryKey]],
-        //     'recursive' => -1
-        // ]));
+        // NOTE: $this->dataで取得できるようにデータをセットする
+        $Model->set($Model->find('first', [
+            'conditions' => [$Model->alias . '.' . $Model->primaryKey => $Model->data[$Model->alias][$Model->primaryKey]],
+            'recursive' => -1
+        ]));
         foreach($targetFields as $field) {
             $this->delFiles($Model, $field);
         }
@@ -1223,6 +1233,33 @@ class BcUploadBehavior extends Behavior
             }
         }
         return true;
+    }
+
+    /**
+     * putUploadedFiles
+     *
+     * @param  array $uploadedFiles
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function putUploadedFiles($uploadedFiles)
+    {
+        $this->uploadedFiles = $uploadedFiles;
+    }
+
+    /**
+     * getUploadedFiles
+     *
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getUploadedFiles()
+    {
+        return $this->uploadedFiles;
     }
 
 }

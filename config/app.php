@@ -66,7 +66,7 @@ return [
             'templates' => [ROOT . DS . 'templates' . DS],
             'locales' => [RESOURCES . 'locales' . DS],
         ],
-        // 'uploadedFilesAsObjects' => false,
+        'uploadedFilesAsObjects' => false,
     ],
 
     /*

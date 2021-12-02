@@ -43,6 +43,7 @@ class ContentFoldersController extends BcAdminAppController
     {
         parent::initialize();
         $this->loadComponent('BaserCore.BcAdminContents');
+        $this->Security->setConfig('unlockedFields', ['ContentFolder.content.eyecatch']);
     }
 
     /**
@@ -82,8 +83,8 @@ class ContentFoldersController extends BcAdminAppController
                 $this->redirect(['action' => 'edit', $id]);
             }
             // TODO: Behaviorsに持っていく
-            $uploadFiles = Hash::flatten($this->request->getUploadedFiles());
-            $files = array_pop($uploadFiles);
+            // $uploadFiles = Hash::flatten($this->request->getUploadedFiles());
+            // $files = array_pop($uploadFiles);
             // $files = $this->request->getUploadedFiles();
             // $a= $files->getClientFileName();
             // $b = $files['ContentFolder']['content']['eyecatch']->getSize();

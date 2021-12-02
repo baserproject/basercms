@@ -198,7 +198,7 @@ class BcValidation extends Validation
 
         // upload_max_filesizeと$sizeを比較し小さい数値でファイルサイズチェック
         $AppTable = new AppTable();
-        $uploadMaxSize = $AppTable->convertSize(ini_get('upload_max_filesize'));
+        $uploadMaxSize = BcUtil::convertSize(ini_get('upload_max_filesize'));
         $size = min([$size, $uploadMaxSize]);
 
         $fileErrorCode = Hash::get($file, 'error');
@@ -212,11 +212,11 @@ class BcValidation extends Validation
                 case 1:
                     // UPLOAD_ERR_INI_SIZE
                     Log::error('CODE: ' . $fileErrorCode . ' アップロードされたファイルは、php.ini の upload_max_filesize ディレクティブの値を超えています。');
-                    return __('ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', $AppTable->convertSize($size, 'M'));
+                    return __('ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', BcUtil::convertSize($size, 'M'));
                 case 2:
                     // UPLOAD_ERR_FORM_SIZE
                     Log::error('CODE: ' . $fileErrorCode . ' アップロードされたファイルは、HTMLで指定された MAX_FILE_SIZE を超えています。');
-                    return __('ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', $AppTable->convertSize($size, 'M'));
+                    return __('ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', BcUtil::convertSize($size, 'M'));
                 case 3:
                     // UPLOAD_ERR_PARTIAL
                     Log::error('CODE: ' . $fileErrorCode . ' アップロードされたファイルが不完全です。');
@@ -246,10 +246,10 @@ class BcValidation extends Validation
         if (!empty($file['name'])) {
             // サイズが空の場合は、HTMLのMAX_FILE_SIZEの制限によりサイズオーバー
             if (!$file['size']) {
-                return __('ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', $AppTable->convertSize($size, 'M'));
+                return __('ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', BcUtil::convertSize($size, 'M'));
             }
             if ($file['size'] > $size) {
-                return __('ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', $AppTable->convertSize($size, 'M'));
+                return __('ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。', BcUtil::convertSize($size, 'M'));
             }
         }
         return true;

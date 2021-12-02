@@ -170,7 +170,17 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testBeforeMarshal()
     {
-        $data = ['eyecatch' =>  new UploadedFile('test.png', 100, UPLOAD_ERR_OK, "test.png", "image/png")];
+        // UploadedFileオブジェクトだった場合
+        // $data = ['eyecatch' =>  new UploadedFile('test.png', 100, UPLOAD_ERR_OK, "test.png", "image/png")];
+        $data = [
+            'eyecatch' => [
+                "tmp_name" => "/tmp/phpElb6Hq",
+                "error" => 0,
+                "name" => "test.png",
+                "type" => "image/png",
+                "size" => 100
+            ]
+        ];
         $result = $this->table->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($data), 'options' => new ArrayObject()]);
         // setupRequestDataが実行されてるか確認
         $this->assertNotNull($this->BcUploadBehavior->getConfig('settings.Contents.fields.eyecatch.upload'));
@@ -641,6 +651,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testCopyImage($prefix, $suffix, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $imgPath = ROOT . '/lib/Baser/webroot/img/';
         $savePath = $this->BcUploadBehavior->savePath['Contents'];
         $fileName = 'baser.power';
@@ -780,6 +791,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testDelFile($prefix, $suffix, $imagecopy, $message)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // TODO 2020/07/08 ryuring PHP7.4 で、gd が標準インストールされないため、テストがエラーとなるためスキップ
         $savePath = $this->BcUploadBehavior->savePath['Contents'];
         $tmpPath = TMP;
@@ -1117,6 +1129,24 @@ class BcUploadBehaviorTest extends BcTestCase
     public function testCopyImages()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * testPutAndGetUploadedFiles
+     *
+     * @return void
+     */
+    public function testPutAndGetUploadedFiles()
+    {
+        $uploaded = [
+            "tmp_name" => "/tmp/phpElb6Hq",
+            "error" => 0,
+            "name" => "eab5d138d884900036c626a36dfa596a.png",
+            "type" => "image/png",
+            "size" => 25976
+        ];
+        $this->BcUploadBehavior->putUploadedFiles($uploaded);
+        $this->assertEquals($uploaded, $this->BcUploadBehavior->getUploadedFiles());
     }
 
 }
