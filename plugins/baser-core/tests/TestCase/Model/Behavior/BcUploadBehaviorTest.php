@@ -639,7 +639,8 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testRotateImage()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // TODO: 現在php_exifがないためfalseになる
+        $this->assertFalse($this->BcUploadBehavior->rotateImage('test.png'));
     }
 
     /**
@@ -1023,14 +1024,13 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testGetFileName($prefix, $suffix, $expected, $message = null)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $setting = [
             'prefix' => $prefix,
             'suffix' => $suffix,
         ];
         $fileName = 'hoge.gif';
 
-        $result = $this->EditorTemplate->getFileName($setting, $fileName);
+        $result = $this->BcUploadBehavior->getFileName($setting, $fileName);
         $this->assertEquals($expected, $result, $message);
     }
 
@@ -1055,14 +1055,13 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testGetBasename($prefix, $suffix, $expected, $message = null)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $setting = [
             'prefix' => $prefix,
             'suffix' => $suffix,
         ];
         $fileName = 'pre-hoge-suf.gif';
 
-        $result = $this->EditorTemplate->getBasename($setting, $fileName);
+        $result = $this->BcUploadBehavior->getBasename($setting, $fileName);
         $this->assertEquals($expected, $result, $message);
     }
 

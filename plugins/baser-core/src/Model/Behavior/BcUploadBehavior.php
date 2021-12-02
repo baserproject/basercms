@@ -616,6 +616,8 @@ class BcUploadBehavior extends Behavior
      *
      * @param $file
      * @return bool
+     * @checked
+     * @noTodo
      */
     public function rotateImage($file)
     {
@@ -1015,6 +1017,9 @@ class BcUploadBehavior extends Behavior
      * @param array $setting
      * @param string $filename
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getFileName($setting, $filename)
     {
@@ -1043,6 +1048,9 @@ class BcUploadBehavior extends Behavior
      * @param array $setting
      * @param string $filename
      * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getBasename($setting, $filename)
     {
