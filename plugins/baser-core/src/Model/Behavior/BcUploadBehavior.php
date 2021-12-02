@@ -200,14 +200,14 @@ class BcUploadBehavior extends Behavior
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // if (!$entity->getErrors()) {
-        //     $uploadedFile = $this->getConfig('settings.' . $this->alias . ".uploadedFile");
-        //     $uploadedFile->moveTo($this->savePath[$this->alias] . $uploadedFile->getClientFileName());
-        //     // NOTE: 2回通ってきてしまうため、offにする
-        //     $event = $this->table->getEventManager()->matchingListeners('beforeSave');
-        //     if ($event) $this->table->getEventManager()->off('Model.beforeSave');
-        //     return true;
-        // }
+        if (!$entity->getErrors()) {
+            $uploadedFile = $this->getConfig('settings.' . $this->alias . ".uploadedFile");
+            $uploadedFile->moveTo($this->getSaveDir() . $uploadedFile->getClientFileName());
+            // NOTE: 2回通ってきてしまうため、offにする
+            $event = $this->table->getEventManager()->matchingListeners('beforeSave');
+            if ($event) $this->table->getEventManager()->off('Model.beforeSave');
+            return true;
+        }
 
         if ($entity->id) {
             $this->deleteExistingFiles();
@@ -446,7 +446,7 @@ class BcUploadBehavior extends Behavior
             // ファイルをリサイズ
             if (!$this->tmpId) {
                 if (!empty($fieldSetting['imageresize'])) {
-                    $filePath = $this->savePath[$Model->alias] . $fileName;
+                    $filePath = $this->getSaveDir() . $fileName;
                     $this->resizeImage($filePath, $filePath, $fieldSetting['imageresize']['width'], $fieldSetting['imageresize']['height'], $fieldSetting['imageresize']['thumb']);
                 }
                 $requestData[$this->alias][$fieldSetting['name']] = $fileName;
@@ -480,7 +480,7 @@ class BcUploadBehavior extends Behavior
     {
         $fileName = $Model->data[$Model->alias][$fieldName . '_tmp'];
         $sessionKey = str_replace(['.', '/'], ['_', '_'], $fileName);
-        $tmpName = $this->savePath[$Model->alias] . $sessionKey;
+        $tmpName = $this->getSaveDir() . $sessionKey;
         $fileData = $this->Session->read('Upload.' . $sessionKey . '.data');
         $fileType = $this->Session->read('Upload.' . $sessionKey . '.type');
         $this->Session->delete('Upload.' . $sessionKey);
@@ -537,7 +537,7 @@ class BcUploadBehavior extends Behavior
         }
 
         $fileName = $this->getSaveFileName($Model, $field, $file['name']);
-        $filePath = $this->savePath[$Model->alias] . $fileName;
+        $filePath = $this->getSaveDir() . $fileName;
         $this->rotateImage($file['tmp_name']);
 
         if (!$this->tmpId) {
@@ -668,16 +668,15 @@ class BcUploadBehavior extends Behavior
     /**
      * 画像をコピーする
      *
-     * @param EntityInterface $entity
+     * @param array $uploadedFiles
      * @param array $field 画像保存対象フィールドの設定
      * @return boolean
-     * @model $field['name'] tmp_name
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function copyImage(EntityInterface $entity, $field)
+    public function copyImage(array $uploadedFiles, $field)
     {
-        // データを取得
-        $file = $entity->{$field['name']};
-
         // プレフィックス、サフィックスを取得
         $prefix = '';
         $suffix = '';
@@ -689,10 +688,10 @@ class BcUploadBehavior extends Behavior
         }
 
         // 保存ファイル名を生成
-        $basename = preg_replace("/\." . $field['ext'] . "$/is", '', $file['name']);
+        $basename = preg_replace("/\." . $field['ext'] . "$/is", '', $uploadedFiles['name']);
         $fileName = $prefix . $basename . $suffix . '.' . $field['ext'];
 
-        $filePath = $this->savePath[$this->alias] . $fileName;
+        $filePath = $this->getSaveDir() . $fileName;
 
         if (!empty($field['thumb'])) {
             $thumb = $field['thumb'];
@@ -700,7 +699,7 @@ class BcUploadBehavior extends Behavior
             $thumb = false;
         }
 
-        return $this->resizeImage($entity[$field['name']]['tmp_name'], $filePath, $field['width'], $field['height'], $thumb);
+        return $this->resizeImage($uploadedFiles['tmp_name'], $filePath, $field['width'], $field['height'], $thumb);
     }
 
     /**
@@ -815,6 +814,9 @@ class BcUploadBehavior extends Behavior
      * - suffix 対象のファイルの接尾辞
      * @param boolean $delImagecopy
      * @return boolean
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function delFile($file, $field, $delImagecopy = true)
     {
@@ -840,7 +842,7 @@ class BcUploadBehavior extends Behavior
         // 保存ファイル名を生成
         $basename = preg_replace("/\." . $field['ext'] . "$/is", '', $file);
         $fileName = $prefix . $basename . $suffix . '.' . $field['ext'];
-        $filePath = $this->savePath[$this->alias] . $fileName;
+        $filePath = $this->getSaveDir() . $fileName;
         if (!empty($field['imagecopy']) && $delImagecopy) {
             foreach($field['imagecopy'] as $copy) {
                 $copy['name'] = $field['name'];
@@ -898,7 +900,7 @@ class BcUploadBehavior extends Behavior
         if (is_array($oldName)) {
             return false;
         }
-        $saveDir = $this->savePath[$Model->alias];
+        $saveDir = $this->getSaveDir();
         $saveDirInTheme = $this->getSaveDir($Model, true);
         $oldSaveDir = '';
         if (file_exists($saveDir . $oldName)) {
@@ -989,7 +991,7 @@ class BcUploadBehavior extends Behavior
                 $subdir .= '/';
             }
             $subdir = str_replace('/', DS, $subdir);
-            $path = $this->savePath[$Model->alias] . $subdir;
+            $path = $this->getSaveDir() . $subdir;
             if (!is_dir($path)) {
                 $Folder = new Folder();
                 $Folder->create($path);
@@ -1105,7 +1107,8 @@ class BcUploadBehavior extends Behavior
     }
 
     /**
-     * 保存先のフォルダを取得する
+     * 保存先のフォルダを設定する
+     * @param null|string $alias(default : null)
      * @param string $saveDir
      * @param bool $isTheme
      * @param bool $limited
@@ -1113,7 +1116,7 @@ class BcUploadBehavior extends Behavior
      * @checked
      * @unitTest
      */
-    public function setSaveDir($saveDir, $isTheme = false, $limited = false)
+    public function setSaveDir($saveDir, $isTheme = false, $limited = false, $alias = null)
     {
         if (!$isTheme) {
             $basePath = WWW_ROOT . 'files' . DS;
@@ -1136,20 +1139,21 @@ class BcUploadBehavior extends Behavior
         } else {
             $saveDir = $basePath;
         }
-        $this->savePath[$this->alias] = $saveDir;
+        $this->savePath[$alias ?? $this->alias] = $saveDir;
     }
 
     /**
-     * 保存先のフォルダを設定する
+     * 保存先のフォルダを取得する
+     * @param null|string $alias(default : null)
      * @param bool $isTheme
      * @return string $saveDir
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getSaveDir()
+    public function getSaveDir($alias = null)
     {
-        return $this->savePath[$this->alias];
+        return $this->savePath[$alias ?? $this->alias];
     }
 
     /**
@@ -1222,7 +1226,7 @@ class BcUploadBehavior extends Behavior
         if (!$this->tmpId && ($field['type'] == 'all' || $field['type'] == 'image') && !empty($field['imagecopy']) && in_array($field['ext'], $this->imgExts)) {
             foreach($field['imagecopy'] as $copy) {
                 // コピー画像が元画像より大きい場合はスキップして作成しない
-                $size = $this->getImageSize($this->savePath[$Model->alias] . $fileName);
+                $size = $this->getImageSize($this->getSaveDir() . $fileName);
                 if ($size && $size['width'] < $copy['width'] && $size['height'] < $copy['height']) {
                     if (isset($copy['smallskip']) && $copy['smallskip'] === false) {
                         $copy['width'] = $size['width'];
@@ -1278,26 +1282,28 @@ class BcUploadBehavior extends Behavior
     /**
      * getDuplicateDirs
      * 保存時にファイルの重複確認を行うディレクトリ
+     * @param null|string $alias(default : null)
      * @return void
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function setDuplicateDirs($dirs)
+    public function setDuplicateDirs($dirs, $alias = null)
     {
-        $this->duplicateDirs[$this->alias] = $dirs;
+        $this->duplicateDirs[$alias ?? $this->alias] = $dirs;
     }
     /**
      * getDuplicateDirs
      * 保存時にファイルの重複確認を行うディレクトリ
+     * @param null|string $alias(default : null)
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getDuplicateDirs()
+    public function getDuplicateDirs($alias = null)
     {
-        return $this->duplicateDirs[$this->alias];
+        return $this->duplicateDirs[$alias ?? $this->alias];
     }
 
 }

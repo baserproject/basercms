@@ -654,9 +654,8 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testCopyImage($prefix, $suffix, $message = null)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $imgPath = ROOT . '/lib/Baser/webroot/img/';
-        $savePath = $this->BcUploadBehavior->savePath['Contents'];
+        $imgPath = ROOT . '/plugins/bc-admin-third/webroot/img/';
+        $savePath = $this->BcUploadBehavior->getSaveDir();
         $fileName = 'baser.power';
 
         $field = [
@@ -667,21 +666,18 @@ class BcUploadBehaviorTest extends BcTestCase
             'width' => 100,
             'height' => 100,
         ];
-        $file = $fileName . '_copy' . '.' . $field['ext'];
-        // tmp_nameがないためコメントアウト: tmp_name' => $imgPath . $fileName . '.' . $field['ext']
-        $data = ['eyecatch' => new UploadedFile($file, 100, UPLOAD_ERR_OK, $file)];
-        $entity = $this->table->newEntity($data, ['validate' => false]);
+        $uploadedFile = [
+            'name' => $fileName . '_copy' . '.' . $field['ext'],
+            'tmp_name' => $imgPath . $fileName . '.' . $field['ext'],
+            ];
 
         // コピー先ファイルのパス
         $targetPath = $savePath . $field['prefix'] . $fileName . '_copy' . $field['suffix'] . '.' . $field['ext'];
-
         // コピー実行
-        $this->table->copyImage($entity, $field);
+        $this->table->copyImage($uploadedFile, $field);
         $this->assertFileExists($targetPath, $message);
-
         // コピーしたファイルを削除
         @unlink($targetPath);
-
     }
 
     public function copyImageDataProvider()
@@ -794,9 +790,8 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testDelFile($prefix, $suffix, $imagecopy, $message)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // TODO 2020/07/08 ryuring PHP7.4 で、gd が標準インストールされないため、テストがエラーとなるためスキップ
-        $savePath = $this->BcUploadBehavior->savePath['Contents'];
+        $savePath = $this->BcUploadBehavior->getSaveDir();
         $tmpPath = TMP;
         $fileName = 'dummy';
         $field = [
@@ -815,26 +810,21 @@ class BcUploadBehaviorTest extends BcTestCase
 
         // copyのダミーファイルを生成
         if (is_array($field['imagecopy'])) {
-            copy(ROOT . '/lib/Baser/webroot/img/baser.power.gif', $tmpPath . $fileName . '.' . $field['ext']);
-            $this->table->data['Contents'][$fileName] = [
+            copy(ROOT . '/plugins/bc-admin-third/webroot/img/baser.power.gif', $tmpPath . $fileName . '.' . $field['ext']);
+            $uploaded = [
                 'name' => $fileName . '.' . $field['ext'],
                 'tmp_name' => $tmpPath . $fileName . '.' . $field['ext'],
             ];
             foreach($field['imagecopy'] as $copy) {
                 $copy['name'] = $fileName;
                 $copy['ext'] = $field['ext'];
-                $this->table->copyImage($copy);
+                $this->table->copyImage($uploaded, $copy);
             }
-
         }
-
         // 削除を実行
         $this->table->delFile($fileName, $field);
-
         $this->assertFileNotExists($targetPath, $message);
-
         @unlink($targetPath);
-
     }
 
     public function delFileDataProvider()
