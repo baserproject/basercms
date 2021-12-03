@@ -77,7 +77,7 @@ class UserGroupsControllerTest extends BcTestCase
      */
     public function testIndex_pagination()
     {
-        $this->get('/baser/admin/baser-core/user_groups/?num=1&page=21');
+        $this->get('/baser/admin/baser-core/user_groups/?limit=1&page=21');
         $this->assertResponseOk();
     }
 

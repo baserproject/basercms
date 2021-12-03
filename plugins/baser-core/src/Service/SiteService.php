@@ -82,11 +82,10 @@ class SiteService implements SiteServiceInterface
      */
     public function getIndex(array $queryParams): Query
     {
-        $options = [];
-        if (!empty($queryParams['num'])) {
-            $options = ['limit' => $queryParams['num']];
+        $query = $this->Sites->find('all');
+        if (!empty($queryParams['limit'])) {
+            $query->limit($queryParams['limit']);
         }
-        $query = $this->Sites->find('all', $options);
         if (!empty($queryParams['name'])) {
             $query->where(['name LIKE' => '%' . $queryParams['name'] . '%']);
         }
