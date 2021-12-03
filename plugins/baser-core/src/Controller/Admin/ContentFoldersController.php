@@ -82,14 +82,6 @@ class ContentFoldersController extends BcAdminAppController
                 $this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
                 $this->redirect(['action' => 'edit', $id]);
             }
-            // TODO: Behaviorsに持っていく
-            // $uploadFiles = Hash::flatten($this->request->getUploadedFiles());
-            // $files = array_pop($uploadFiles);
-            // $files = $this->request->getUploadedFiles();
-            // $a= $files->getClientFileName();
-            // $b = $files['ContentFolder']['content']['eyecatch']->getSize();
-            // $c = $files['ContentFolder']['content']['eyecatch']->getClientFileName();
-
             $contentFolder = $contentFolderService->update($contentFolder, $this->request->getData('ContentFolder'));
             // TODO: afterSaveで$optionにreconstructSearchIndicesを渡す if ($ContentFolders->save($this->request->getData(), ['reconstructSearchIndices' => true])) {
             if (!$contentFolder->hasErrors()) {

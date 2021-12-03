@@ -777,6 +777,7 @@ class BcUploadBehaviorTest extends BcTestCase
     public function testDelFiles()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // $this->BcUploadBehavior->deleteFiles();
     }
 
     /**
@@ -1168,11 +1169,11 @@ class BcUploadBehaviorTest extends BcTestCase
     }
 
     /**
-     * testPutAndGetUploadedFiles
+     * testSetAndGetUploadedFile
      *
      * @return void
      */
-    public function testPutAndGetUploadedFiles()
+    public function testSetAndGetUploadedFile()
     {
         $uploaded = [
             "tmp_name" => "/tmp/phpElb6Hq",
@@ -1181,8 +1182,8 @@ class BcUploadBehaviorTest extends BcTestCase
             "type" => "image/png",
             "size" => 25976
         ];
-        $this->BcUploadBehavior->putUploadedFiles($uploaded);
-        $this->assertEquals($uploaded, $this->BcUploadBehavior->getUploadedFiles());
+        $this->BcUploadBehavior->setUploadedFile($uploaded);
+        $this->assertEquals($uploaded, $this->BcUploadBehavior->getUploadedFile());
     }
     /**
      * testSetAndGetDuplicateDirs
@@ -1197,6 +1198,58 @@ class BcUploadBehaviorTest extends BcTestCase
         ];
         $this->BcUploadBehavior->setDuplicateDirs($dirs);
         $this->assertEquals($dirs, $this->BcUploadBehavior->getDuplicateDirs());
+    }
+
+    /**
+     * testSetAndGetUploadConfig
+     *
+     * @return void
+     */
+    public function testSetAndGetUploadConfig()
+    {
+        $config = [
+            'eyecatch' => [
+                'type' => 'image',
+                'namefield' => 'id',
+                'nameadd' => true,
+                'nameformat' => '%08d',
+                'subdirDateFormat' => 'Y/m',
+                'imagecopy' => [
+                    'thumb' => ['width' => 400],
+                ],
+                'name' => 'eyecatch',
+                'imagesize' => false,
+                'getUniqueFileName' => true,
+                'ext' => 'jpg',
+                'upload' => true,
+            ]
+        ];
+        $this->BcUploadBehavior->setUploadConfig($config);
+        $this->assertEquals($config, $this->BcUploadBehavior->getUploadConfig());
+    }
+
+    /**
+     * testGetUpload
+     * アップロードに関する設定と実際にアップロードされた情報が登録されているか確認
+     *
+     * @return void
+     */
+    public function testGetUpload()
+    {
+        $uploaded = [
+            "tmp_name" => "/tmp/phpElb6Hq",
+        ];
+        $this->BcUploadBehavior->setUploadedFile($uploaded);
+        $config = [
+            'eyecatch' => [
+                'type' => 'image',
+                'name' => 'eyecatch',
+            ]
+        ];
+        $this->BcUploadBehavior->setUploadConfig($config);
+        $upload = $this->BcUploadBehavior->getUpload();
+        $this->assertEquals($uploaded, $upload[$this->table->getAlias()]['uploaded']);
+        $this->assertEquals($config, $upload[$this->table->getAlias()]['config']);
     }
 
 }

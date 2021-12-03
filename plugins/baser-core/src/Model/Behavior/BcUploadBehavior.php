@@ -115,19 +115,22 @@ class BcUploadBehavior extends Behavior
      *
      * afterSave のリネーム判定に利用
      * モデルごとに設定する
-     *
      * @var array
      */
     public $uploaded = [];
 
     /**
-     * アップロードされたデータを取得する
-     *
-     * beforeMarshal時にアップロードされたデータ
-     * @todo $uploadedと統合できるか
+     * アップロードに関する情報全体
+     * 設定例
+     * $upload => [
+     *      // $config['fields']の情報
+     *      'config' => [],
+     *      // 実際にbeforeMarshal時にアップロードされた情報
+     *      'uploaded' => []
+     * ];
      * @var array
      */
-    protected $uploadedFiles = [];
+    protected $upload = [];
 
     /**
      * initialize
@@ -140,27 +143,25 @@ class BcUploadBehavior extends Behavior
     {
         $this->table = $this->table();
         $this->alias = $this->table->getAlias();
-        $this->setDuplicateDirs($config['duplicateDirs']);
+        if (isset($config['duplicateDirs'])) $this->setDuplicateDirs($config['duplicateDirs']);
         $this->setSaveDir($config['saveDir']);
-        $settings = Hash::merge([
-            'fields' => [],
-        ], $config);
-        foreach ($settings['fields'] as $key => $field) {
+        foreach ($config['fields'] as $key => $field) {
             if (empty($field['name'])) {
-                $settings['fields'][$key]['name'] = $key;
+                $config['fields'][$key]['name'] = $key;
             }
             if (!empty($field['imageresize'])) {
                 if (empty($field['imageresize']['thumb'])) {
-                    $settings['fields'][$key]['imageresize']['thumb'] = false;
+                    $config['fields'][$key]['imageresize']['thumb'] = false;
                 }
             } else {
-                $settings['fields'][$key]['imageresize'] = false;
+                $config['fields'][$key]['imageresize'] = false;
             }
             if (!isset($field['getUniqueFileName'])) {
-                $settings['fields'][$key]['getUniqueFileName'] = true;
+                $config['fields'][$key]['getUniqueFileName'] = true;
             }
         }
-        $this->setConfig('settings.' . $this->alias, $settings);
+
+        $this->setConfig('settings.' . $this->alias, $config);
         if (!is_dir($this->getSaveDir())) {
             mkdir($this->getSaveDir(), 0777, true);
         }
@@ -183,8 +184,8 @@ class BcUploadBehavior extends Behavior
     {
         $this->setupRequestData($data);
         $this->setConfig('settings.' . $this->alias . ".uploadedFile", $data['eyecatch']);
-        // アップロードのデータをputUploadedFilesに退避する
-        $this->putUploadedFiles($data['eyecatch']);
+        // アップロードのデータをsetUploadedFileに退避する
+        $this->setUploadedFile($data['eyecatch']);
         // arrayをstringとして変換し、保存する
         $data['eyecatch'] = $data['eyecatch']['name'];
     }
@@ -777,28 +778,29 @@ class BcUploadBehavior extends Behavior
     /**
      * 画像ファイル群を削除する
      *
-     * @param EntityInterface $entity
      * @param string $fieldName フィールド名
      * @model $entity[$field['name']]
      */
-    public function delFiles(EntityInterface $entity, $fieldName = null)
+    public function delFiles($fieldName = null)
     {
-        $settings = $this->getConfig('settings.' . $this->alias);
+        // FIXME: This$uploadedFilesを引数として渡すか内部で取得するかを考える
+        $uploadedFiles = $this->getUploadedFile();
+
         foreach($settings['fields'] as $key => $field) {
             if (empty($field['name'])) {
                 $field['name'] = $key;
             }
+            // eyecatchなど$field['name']に入る$uploadedFilesのもう一個上の階層をどうやって取得するか考える
             if (!$fieldName || ($fieldName && $fieldName == $field['name'])) {
-                if (!empty($entity[$field['name']])) {
-                    $file = $entity[$field['name']];
-
+                if (!empty($uploadedFiles['name'])) {
+                    $file = $uploadedFiles['name'];
                     // DBに保存されているファイル名から拡張子を取得する
                     preg_match('/\.([^.]+)\z/', $file, $match);
                     if (!empty($match[1])) {
                         $field['ext'] = $match[1];
                     }
 
-                    $this->delFile($entity, $file, $field);
+                    $this->delFile($file, $field);
                 }
             }
         }
@@ -1253,33 +1255,6 @@ class BcUploadBehavior extends Behavior
     }
 
     /**
-     * putUploadedFiles
-     *
-     * @param  array $uploadedFiles
-     * @return void
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function putUploadedFiles($uploadedFiles)
-    {
-        $this->uploadedFiles[$this->alias] = $uploadedFiles;
-    }
-
-    /**
-     * getUploadedFiles
-     *
-     * @return array
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function getUploadedFiles()
-    {
-        return $this->uploadedFiles[$this->alias];
-    }
-
-    /**
      * getDuplicateDirs
      * 保存時にファイルの重複確認を行うディレクトリ
      * @param null|string $alias(default : null)
@@ -1304,6 +1279,76 @@ class BcUploadBehavior extends Behavior
     public function getDuplicateDirs($alias = null)
     {
         return $this->duplicateDirs[$alias ?? $this->alias];
+    }
+
+    /**
+     * Behaviorの設定に関する情報を取得する
+     *
+     * @param  string $alias
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getUploadConfig($alias = null)
+    {
+        return $this->upload[$alias ?? $this->alias]['config'];
+    }
+
+    /**
+     * Behaviorの設定に関する情報を保持する
+     *
+     * @param  array $fileConfig
+     * @param  string $alias
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function setUploadConfig($fileConfig, $alias = null)
+    {
+        $this->upload[$alias ?? $this->alias]['config'] = $fileConfig;
+    }
+
+    /**
+     * 実際にアップロードされた情報を保持する
+     *
+     * @param  array $uploadedFiles
+     * @param null|string $alias(default : null)
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function setUploadedFile($uploadedFile, $alias = null)
+    {
+        $this->upload[$alias ?? $this->alias]['uploaded'] = $uploadedFile;
+    }
+
+    /**
+     * 実際にアップロードされた情報を取得する
+     * @param null|string $alias(default : null)
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getUploadedFile($alias = null)
+    {
+        return $this->upload[$alias ?? $this->alias]['uploaded'];
+    }
+
+    /**
+     * アップロードに関する情報全体(config・uploaded)を取得する
+     *
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getUpload()
+    {
+        return $this->upload;
     }
 
 }
