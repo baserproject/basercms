@@ -58,7 +58,6 @@ class ContentsTable extends AppTable
         $this->addBehavior('Tree', ['level' => 'level']);
         $this->addBehavior('BaserCore.BcUpload', [
             'saveDir' => "contents",
-            'duplicateDirs' => ['/'], // NOTE: テスト用
             'fields' => [
                 'eyecatch' => [
                     'type' => 'image',
