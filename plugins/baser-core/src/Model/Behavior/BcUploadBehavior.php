@@ -243,7 +243,7 @@ class BcUploadBehavior extends Behavior
 
         $Model->data = $this->deleteFiles($entity, $uploadedFile);
 
-        $result = $this->saveFiles($Model, $Model->data);
+        $result = $this->saveFiles($uploadedFile);
         if ($result) {
             $Model->data = $result;
             return true;
@@ -407,14 +407,13 @@ class BcUploadBehavior extends Behavior
      * @return mixed false|array
      * @model 全体
      */
-    public function saveFiles(Model $Model, $requestData)
+    public function saveFiles($uploadedFile)
     {
         $this->uploaded[$this->alias] = false;
-        $settings = $this->getConfig('settings.' . $this->alias);
-        foreach($settings['fields'] as $key => $field) {
-            $result = $this->saveFileWhileChecking($Model, $field, $requestData);
-            if ($result) {
-                $requestData = $result;
+        foreach($this->settings[$this->alias]['fields'] as $key => $field) {
+            $uploaded = $this->saveFileWhileChecking($field, $uploadedFile);
+            if ($uploaded) {
+                $requestData = $uploaded;
             } else {
                 // 失敗したら処理を中断してfalseを返す
                 return false;
@@ -432,34 +431,35 @@ class BcUploadBehavior extends Behavior
      * @return mixed bool|$requestData
      * @model 全体
      */
-    public function saveFileWhileChecking(Model $Model, $fieldSetting, $requestData, $options = [])
+    public function saveFileWhileChecking($fieldSetting, $uploadedFile, $options = [])
     {
         $options = array_merge([
             'deleteTmpFiles' => true
         ], $options);
 
-        if (empty($requestData[$this->alias][$fieldSetting['name']])
-            || !is_array($requestData[$this->alias][$fieldSetting['name']])
+        if (empty($uploadedFile)
+            || !is_array($uploadedFile)
         ) {
-            return $requestData;
+            return $uploadedFile;
         }
 
         if (!$this->tmpId && empty($fieldSetting['upload'])) {
-            if (!empty($requestData[$this->alias][$fieldSetting['name']]) && is_array($requestData[$this->alias][$fieldSetting['name']])) {
+            if (!empty($uploadedFile) && is_array($uploadedFile)) {
                 unset($requestData[$this->alias][$fieldSetting['name']]);
+                $this->setUploadedFile([]);
             }
-            return $requestData;
+            return [];
         }
         // ファイル名が重複していた場合は変更する
         if ($fieldSetting['getUniqueFileName'] && !$this->tmpId) {
-            $requestData[$this->alias][$fieldSetting['name']]['name'] = $this->getUniqueFileName($Model, $fieldSetting['name'], $requestData[$this->alias][$fieldSetting['name']]['name'], $fieldSetting);
+            $uploadedFile['name'] = $this->getUniqueFileName($Model, $fieldSetting['name'], $uploadedFile['name'], $fieldSetting);
         }
         // 画像を保存
         $tmpName = (!empty($requestData[$this->alias][$fieldSetting['name']]['tmp_name']))? $requestData[$this->alias][$fieldSetting['name']]['tmp_name'] : false;
         if (!$tmpName) {
-            return $requestData;
+            return $uploadedFile;
         }
-        $fileName = $this->saveFile($Model, $fieldSetting);
+        $fileName = $this->saveFile($uploadedFile, $fieldSetting);
         if ($fileName) {
             if (!$this->copyImages($Model, $fieldSetting, $fileName)) {
                 return false;
@@ -467,12 +467,12 @@ class BcUploadBehavior extends Behavior
             // ファイルをリサイズ
             if (!$this->tmpId) {
                 if (!empty($fieldSetting['imageresize'])) {
-                    $filePath = $this->getSaveDir() . $fileName;
+                    $filePath = $this->savePath[$this->alias] . $fileName;
                     $this->resizeImage($filePath, $filePath, $fieldSetting['imageresize']['width'], $fieldSetting['imageresize']['height'], $fieldSetting['imageresize']['thumb']);
                 }
-                $requestData[$this->alias][$fieldSetting['name']] = $fileName;
+                $uploadedFile['name'] = $fileName;
             } else {
-                $requestData[$this->alias][$fieldSetting['name']]['session_key'] = $fileName;
+                $uploadedFile['name']['session_key'] = $fileName;
             }
             // 一時ファイルを削除
             if ($options['deleteTmpFiles']) {
@@ -481,12 +481,12 @@ class BcUploadBehavior extends Behavior
             $this->uploaded[$this->alias] = true;
         } else {
             if ($this->tmpId) {
-                return $requestData;
+                return $uploadedFile;
             } else {
                 return false;
             }
         }
-        return $requestData;
+        return $uploadedFile;
     }
 
     /**
@@ -544,7 +544,6 @@ class BcUploadBehavior extends Behavior
      * @param array $field 画像保存対象フィールドの設定
      * @return mixed false|ファイル名
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function saveFile($uploadedFile, $field)
@@ -1083,9 +1082,10 @@ class BcUploadBehavior extends Behavior
      * @param string $fieldName 一意の名前を取得する元となるフィールド名
      * @param string $fileName 対象のファイル名
      * @return string
-     * @model $Model->find
+     * @checked
+     * @unitTest
      */
-    public function getUniqueFileName(Model $Model, $fieldName, $fileName, $setting = null)
+    public function getUniqueFileName($fieldName, $fileName, $setting = null)
     {
         $pathinfo = pathinfo($fileName);
         $basename = preg_replace("/\." . $pathinfo['extension'] . "$/is", '', $fileName);
@@ -1094,18 +1094,21 @@ class BcUploadBehavior extends Behavior
 
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
         $conditions[$this->alias . '.' . $fieldName . ' LIKE'] = $basename . '%' . $ext;
-        $datas = $Model->find('all', ['conditions' => $conditions, 'fields' => [$fieldName], 'order' => "{$this->alias}.{$fieldName}"]);
-        $datas = Hash::extract($datas, "{n}.{$this->alias}.{$fieldName}");
+        // FIXME: ->order("{$this->alias}.{$fieldName}")がうまく行かないので、調整する
+        // TODO: 複数テーブルがある場合の処理に変更する必要あり
+        $datas = $this->table->find()->where([$conditions])->select($fieldName)->all()->toArray();
         $numbers = [];
 
         if ($datas) {
             foreach($datas as $data) {
-                $_basename = preg_replace("/\." . $ext . "$/is", '', $data);
-                $lastPrefix = preg_replace('/^' . preg_quote($basename, '/') . '/', '', $_basename);
-                if (!$lastPrefix) {
-                    $numbers[1] = 1;
-                } elseif (preg_match("/^__([0-9]+)$/s", $lastPrefix, $matches)) {
-                    $numbers[$matches[1]] = true;
+                if (!empty($data->{$fieldName})) {
+                    $_basename = preg_replace("/\." . $ext . "$/is", '', $data->{$fieldName});
+                    $lastPrefix = preg_replace('/^' . preg_quote($basename, '/') . '/', '', $_basename);
+                    if (!$lastPrefix) {
+                        $numbers[1] = 1;
+                    } elseif (preg_match("/^__([0-9]+)$/s", $lastPrefix, $matches)) {
+                        $numbers[$matches[1]] = true;
+                    }
                 }
             }
             if ($numbers) {

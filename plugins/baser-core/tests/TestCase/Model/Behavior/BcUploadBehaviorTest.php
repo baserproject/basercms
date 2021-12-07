@@ -422,7 +422,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testSaveFileWhileChecking()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->BcUploadBehavior->saveFileWhileChecking();
     }
 
 
@@ -1145,23 +1145,20 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testGetUniqueFileName($fieldName, $fileName, $expected, $message = null)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $setting = ['ext' => 'gif'];
         $savePath = $this->BcUploadBehavior->savePath[$this->table->getAlias()];
         touch($savePath . 'template1.gif');
-
-        $result = $this->EditorTemplate->getUniqueFileName($fieldName, $fileName, $setting);
+        $result = $this->BcUploadBehavior->getUniqueFileName($fieldName, $fileName, $setting);
         $this->assertEquals($expected, $result, $message);
-
         @unlink($savePath . 'template1.gif');
     }
 
     public function getUniqueFileNameDataProvider()
     {
         return [
-            ['image', 'hoge.gif', 'hoge.gif', '一意のファイル名を正しく取得できません'],
-            ['image', 'template.gif', 'template.gif', '一意のファイル名を正しく取得できません'],
-            ['image', 'template1.gif', 'template1__2.gif', '一意のファイル名を正しく取得できません'],
+            ['eyecatch', 'hoge.gif', 'hoge.gif', '一意のファイル名を正しく取得できません'],
+            ['eyecatch', 'template.gif', 'template.gif', '一意のファイル名を正しく取得できません'],
+            ['eyecatch', 'template1.gif', 'template1__2.gif', '一意のファイル名を正しく取得できません'],
         ];
     }
 
