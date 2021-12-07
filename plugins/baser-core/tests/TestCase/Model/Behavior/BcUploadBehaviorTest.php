@@ -71,7 +71,9 @@ class BcUploadBehaviorTest extends BcTestCase
                 "name" => "test.png",
                 "type" => "image/png",
                 "size" => 100
-            ]
+            ],
+            'eyecatch_delete' => 0,
+            'eyecatch_' => '<input />',
         ];
     }
 
@@ -320,12 +322,13 @@ class BcUploadBehaviorTest extends BcTestCase
     /**
      * deleteFiles のテスト
      * ファイルを削除する
-     *
+     * @since basercms-4
      * @param string $message テストが失敗した時に表示されるメッセージ
      * @dataProvider deleteFilesDataProvider
      */
-    public function testDeleteFiles($id, $message)
+    public function _testDeleteFiles($id, $message)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->initTestSaveFiles($id);
 
         // パス情報
@@ -339,13 +342,12 @@ class BcUploadBehaviorTest extends BcTestCase
         touch($templatePath);
 
         // 削除を実行
-        $this->EditorTemplate->deleteFiles($this->EditorTemplate->data);
+        $this->BcUploadBehavior->deleteFiles($this->EditorTemplate->data);
 
         $this->assertFileNotExists($templatePath, $message);
 
         // 生成されたファイルを削除
         $this->deleteDummyOnTestSaveFiles();
-
     }
 
     public function deleteFilesDataProvider()
@@ -357,6 +359,33 @@ class BcUploadBehaviorTest extends BcTestCase
     }
 
     /**
+     * testDeleteFiles
+     *
+     * @return void
+     */
+    public function testDeleteFiles()
+    {
+        $savePath = $this->BcUploadBehavior->savePath[$this->table->getAlias()];
+        $this->BcUploadBehavior->settings[$this->table->getAlias()]['fields'] = ['eyecatch' => ['name' => 'eyecatch', 'ext' => 'gif']];
+        // 削除を実行
+        $uploadedFile = [
+            'eyecatch' => [
+                "name" => 'dummy',
+            ],
+            'eyecatch_delete' => 1,
+            'eyecatch_' => '<input />',
+        ];
+        $targetPath = $savePath . 'dummy.gif';
+        $entity = $this->table->find()->last();
+        $entity->eyecatch = 'dummy';
+        touch($targetPath);
+        $this->BcUploadBehavior->deleteFiles($entity, $uploadedFile);
+        $this->assertFileNotExists($targetPath);
+        @unlink($targetPath);
+    }
+
+
+    /**
      * 削除対象かチェックしながらファイルを削除する
      */
     public function testDeleteFileWhileChecking()
@@ -364,16 +393,18 @@ class BcUploadBehaviorTest extends BcTestCase
         // $this->tmpIdがない場合
         $savePath = $this->BcUploadBehavior->savePath[$this->table->getAlias()];
         $fieldSetting = ['name' => 'eyecatch', 'ext' => 'gif'];
-        $requestData = [
-            'Contents' => [
-                'eyecatch_delete' => 1,
-            ]
-        ];
         $fileName = 'dummy';
+        $uploadedFile = [
+            'eyecatch' => [
+                "name" => $fileName,
+            ],
+            'eyecatch_delete' => 1,
+            'eyecatch_' => '<input />',
+        ];
         $targetPath = $savePath . $fileName . '.' . $fieldSetting['ext'];
         // ダミーのファイルを生成
         touch($targetPath);
-        $this->BcUploadBehavior->deleteFileWhileChecking($fieldSetting, $requestData, $fileName);
+        $uploaded = $this->BcUploadBehavior->deleteFileWhileChecking($fieldSetting, $uploadedFile, $fileName);
         $this->assertFileNotExists($targetPath);
         @unlink($targetPath);
     }

@@ -215,7 +215,11 @@ class BcUploadBehavior extends Behavior
     public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
     {
         // アップロードのデータをsetUploadedFileに退避する
-        $this->setUploadedFile(['eyecatch' => $data['eyecatch']]);
+        $this->setUploadedFile([
+            'eyecatch' => $data['eyecatch'],
+            'eyecatch_delete' => $data['eyecatch_delete'],
+            'eyecatch_' => $data['eyecatch_']
+        ]);
         $this->setupRequestData($data);
         // arrayをstringとして変換し、保存する
         $data['eyecatch'] = $data['eyecatch']['name'];
@@ -235,8 +239,9 @@ class BcUploadBehavior extends Behavior
         if ($entity->id) {
             $this->deleteExistingFiles();
         }
+        $uploadedFile = $this->getUploadedFile();
 
-        $Model->data = $this->deleteFiles($entity);
+        $Model->data = $this->deleteFiles($entity, $uploadedFile);
 
         $result = $this->saveFiles($Model, $Model->data);
         if ($result) {
@@ -259,8 +264,8 @@ class BcUploadBehavior extends Behavior
         foreach($this->settings[$this->alias]['fields'] as $key => $field) {
             $upload = false;
             $uploadedFile = $this->getUploadedFile();
-            if (!empty($uploadedFile) && is_array($uploadedFile) && @$uploadedFile[$field['name']]['error'] == 0) {
-                if ($uploadedFile[$field['name']]['name']) {
+            if (!empty($uploadedFile) && is_array($uploadedFile) && @$entity[$field['name']]['error'] == 0) {
+                if ($entity[$field['name']]['name']) {
                     $upload = true;
                 }
             } else {
@@ -280,7 +285,7 @@ class BcUploadBehavior extends Behavior
             }
             if ($upload) {
                 // 拡張子を取得
-                $this->settings[$this->alias]['fields'][$key]['ext'] = $field['ext'] = BcUtil::decodeContent($uploadedFile[$field['name']]['type'], $uploadedFile[$field['name']]['name']);
+                $this->settings[$this->alias]['fields'][$key]['ext'] = $field['ext'] = BcUtil::decodeContent($entity[$field['name']]['type'], $entity[$field['name']]['name']);
                 // タイプ別除外
                 $targets = [];
                 if ($field['type'] == 'image') {
@@ -349,51 +354,50 @@ class BcUploadBehavior extends Behavior
 
     /**
      * 削除対象かチェックしながらファイル群を削除する
-     *
      * @param EntityInterface $entity
-     * @param array $requestData
+     * @param $uploadedFile
      * @return array
-     * @model $field['name']
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function deleteFiles($entity, $requestData)
+    public function deleteFiles($entity, $uploadedFile)
     {
-        $oldValue = $this->table->get($entity->id);
         foreach($this->settings[$this->alias]['fields'] as $key => $field) {
             $oldValue = '';
-            if ($entity && !empty($entity[$field['name']])) {
+            if (isset($entity) && !empty($entity[$field['name']])) {
                 $oldValue = $entity[$field['name']];
             } elseif (!empty($entity[$field['name']]) && !is_array($entity[$field['name']])) {
                 $oldValue = $entity[$field['name']];
             }
-            $requestData = $this->deleteFileWhileChecking($entity, $field, $requestData, $oldValue);
+            $uploadedFile = $this->deleteFileWhileChecking($field, $uploadedFile, $oldValue);
         }
-        return $requestData;
+        return $uploadedFile;
     }
 
     /**
      * 削除対象かチェックしながらファイルを削除する
      *
-     * @param EntityInterface $entity
+     * @param array $uploadedFile
      * @param array $fieldSetting
      * @param array $requestData
      * @param string $oldValue
      * @checked
      * @noTodo
      * @unitTest
-     *
      */
-    public function deleteFileWhileChecking($fieldSetting, $requestData, $oldValue = null)
+    public function deleteFileWhileChecking($fieldSetting, $uploadedFile, $oldValue = null)
     {
         $fieldName = $fieldSetting['name'];
-        if (!empty($requestData[$this->alias][$fieldName . '_delete'])) {
+        if (!empty($uploadedFile[$fieldName . '_delete'])) {
             if (!$this->tmpId) {
                 $this->delFile($oldValue, $fieldSetting);
-                $requestData[$this->alias][$fieldName] = '';
+                $uploadedFile[$fieldName] = '';
             } else {
-                $requestData[$this->alias][$fieldName] = $oldValue;
+                $uploadedFile[$fieldName] = $oldValue;
             }
         }
-        return $requestData;
+        return $uploadedFile;
     }
 
     /**
