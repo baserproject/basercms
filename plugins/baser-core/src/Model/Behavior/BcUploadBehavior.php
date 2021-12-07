@@ -264,8 +264,8 @@ class BcUploadBehavior extends Behavior
         foreach($this->settings[$this->alias]['fields'] as $key => $field) {
             $upload = false;
             $uploadedFile = $this->getUploadedFile();
-            if (!empty($uploadedFile) && is_array($uploadedFile) && @$entity[$field['name']]['error'] == 0) {
-                if ($entity[$field['name']]['name']) {
+            if (!empty($uploadedFile) && is_array($uploadedFile) && @$uploadedFile[$field['name']]['error'] == 0) {
+                if ($uploadedFile[$field['name']]['name']) {
                     $upload = true;
                 }
             } else {
@@ -285,7 +285,7 @@ class BcUploadBehavior extends Behavior
             }
             if ($upload) {
                 // 拡張子を取得
-                $this->settings[$this->alias]['fields'][$key]['ext'] = $field['ext'] = BcUtil::decodeContent($entity[$field['name']]['type'], $entity[$field['name']]['name']);
+                $this->settings[$this->alias]['fields'][$key]['ext'] = $field['ext'] = BcUtil::decodeContent($uploadedFile[$field['name']]['type'], $uploadedFile[$field['name']]['name']);
                 // タイプ別除外
                 $targets = [];
                 if ($field['type'] == 'image') {
@@ -543,26 +543,26 @@ class BcUploadBehavior extends Behavior
      * @param Model $Model
      * @param array $field 画像保存対象フィールドの設定
      * @return mixed false|ファイル名
-     * @model $field['name']
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function saveFile(Model $Model, $field)
+    public function saveFile($uploadedFile, $field)
     {
         // データを取得
-        $file = $Model->data[$Model->name][$field['name']];
-
-        if (empty($file['tmp_name'])) {
+        if (empty($uploadedFile['tmp_name'])) {
             return false;
         }
-        if (!empty($file['error']) && $file['error'] != 0) {
+        if (!empty($uploadedFile['error']) && $uploadedFile['error'] != 0) {
             return false;
         }
 
-        $fileName = $this->getSaveFileName($Model, $field, $file['name']);
-        $filePath = $this->savePath . $fileName;
-        $this->rotateImage($file['tmp_name']);
+        $fileName = $this->getSaveFileName($field, $uploadedFile['name']);
+        $filePath = $this->savePath[$this->alias] . $fileName;
+        $this->rotateImage($uploadedFile['tmp_name']);
 
         if (!$this->tmpId) {
-            if (copy($file['tmp_name'], $filePath)) {
+            if (copy($uploadedFile['tmp_name'], $filePath)) {
                 chmod($filePath, 0666);
                 $ret = $fileName;
             } else {
@@ -571,8 +571,8 @@ class BcUploadBehavior extends Behavior
         } else {
             $_fileName = str_replace(['.', '/'], ['_', '_'], $fileName);
             $this->Session->write('Upload.' . $_fileName, $field);
-            $this->Session->write('Upload.' . $_fileName . '.type', $file['type']);
-            $this->Session->write('Upload.' . $_fileName . '.data', file_get_contents($file['tmp_name']));
+            $this->Session->write('Upload.' . $_fileName . '.type', $uploadedFile['type']);
+            $this->Session->write('Upload.' . $_fileName . '.data', file_get_contents($uploadedFile['tmp_name']));
             return $fileName;
         }
 
@@ -585,9 +585,10 @@ class BcUploadBehavior extends Behavior
      * @param $field
      * @param $name
      * @return mixed|string
-     * @model $field['namefield']
+     * @checked
+     * @unitTest
      */
-    public function getSaveFileName(Model $Model, $field, $name)
+    public function getSaveFileName($field, $name)
     {
         // プレフィックス、サフィックスを取得
         $prefix = '';
@@ -608,12 +609,13 @@ class BcUploadBehavior extends Behavior
                 } else {
                     $basename = $basename . '_1';
                 }
-                $fileName = $this->getSaveFileName($Model, $field, $basename . '.' . $field['ext']);
+                $fileName = $this->getSaveFileName($field, $basename . '.' . $field['ext']);
             }
         } else {
             if (!empty($field['namefield'])) {
+                // TODO: tmpに関してのテストは未実装
                 $Model->data[$Model->alias][$field['namefield']] = $this->tmpId;
-                $fileName = $this->getFieldBasename($Model, $field, $field['ext']);
+                $fileName = $this->getFieldBasename($field, $field['ext']);
             } else {
                 $fileName = $this->tmpId . '_' . $field['name'] . '.' . $field['ext'];
             }
@@ -1189,16 +1191,15 @@ class BcUploadBehavior extends Behavior
      */
     public function isFileExists($fileName)
     {
-        $basePath = WWW_ROOT . 'files' . DS;
-        $duplicates = $this->getDuplicateDirs();
+        $duplicates = $this->existsCheckDirs[$this->alias];
         if ($duplicates) {
             // existsCheckDirが存在する場合
             foreach($duplicates as $dir) {
-                if (file_exists($basePath . $dir . DS . $fileName)) return true;
+                if (file_exists($dir . DS . $fileName)) return true;
             }
         } else {
             // saveDirのみの場合
-            if (file_exists($this->getSaveDir(). $fileName)) return true;
+            if (file_exists($this->savePath[$this->alias]. $fileName)) return true;
         }
         return false;
     }

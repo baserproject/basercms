@@ -66,7 +66,7 @@ class BcUploadBehaviorTest extends BcTestCase
         // $this->BcUploadBehavior = ClassRegistry::init('BcUploadBehavior');
         $this->eyecatchData = [
             'eyecatch' => [
-                "tmp_name" => "/tmp/phpElb6Hq",
+                "tmp_name" => "/tmp/testBcUpload.png",
                 "error" => 0,
                 "name" => "test.png",
                 "type" => "image/png",
@@ -604,86 +604,85 @@ class BcUploadBehaviorTest extends BcTestCase
      * ファイルを保存する
      *
      * @param string $message テストが失敗した時に表示されるメッセージ
-     * @dataProvider saveFileDataProvider
+     * @todo tmpの場合のテスト未完了
      */
-    public function testSaveFile($prefix, $suffix, $namefield, $tmpId, $message = null)
+    public function testSaveFile()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $fieldName = 'fieldName';
-        $tmp_name = 'tmp_file';
-        $basename = 'basename';
+        $tmpId = null;
+        $fieldName = 'eyecatch';
         $ext = 'png';
 
         // パス情報
         $savePath = $this->BcUploadBehavior->savePath[$this->table->getAlias()];
-        $tmpPath = $savePath . $tmp_name;
 
         if (!$tmpId) {
-            $targetPath = $savePath . $prefix . $basename . $suffix . '.' . $ext;
+            $targetPath = $savePath . $this->eyecatchData['eyecatch']['name'];
         } else {
-            $targetPath = $tmpId . '_' . $fieldName . '.' . $ext;
+            $targetPath = $fieldName . '.' . $ext;
         }
 
         // 初期化
         $field = [
             'name' => $fieldName,
             'ext' => $ext,
-            'prefix' => $prefix,
-            'suffix' => $suffix,
-            'namefield' => $namefield,
-        ];
-
-        $this->EditorTemplate->data['EditorTemplate'][$fieldName] = [
-            'name' => $basename,
-            'tmp_name' => $tmpPath,
-            'type' => 'basercms',
         ];
 
         $this->BcUploadBehavior->tmpId = $tmpId;
 
         // ダミーファイルの作成
-        touch($tmpPath);
+        touch($this->eyecatchData['eyecatch']['tmp_name']);
 
         // ファイル保存を実行
-        $result = $this->EditorTemplate->saveFile($field);
+        $result = $this->BcUploadBehavior->saveFile($this->eyecatchData['eyecatch'], $field);
 
         if (!$tmpId) {
-            $this->assertFileExists($targetPath, $message);
+            $this->assertFileExists($targetPath);
 
         } else {
-            $this->assertEquals($targetPath, $result, $message);
+            $this->assertEquals($targetPath, $result);
 
             // セッションをチェック
             $sessionField = $tmpId . '_' . $fieldName . '_' . $ext;
             $expected[$sessionField] = array_merge($field, ['type' => 'basercms', 'data' => '']);
             $resultSession = $this->BcUploadBehavior->Session->read('Upload');
-            $this->assertEquals($expected, $resultSession, $message);
+            $this->assertEquals($expected, $resultSession);
 
         }
 
 
         // 生成されたファイルを削除
-        @unlink($tmpPath);
+        @unlink($this->eyecatchData['eyecatch']['tmp_name']);
         @unlink($targetPath);
 
     }
 
-    public function saveFileDataProvider()
-    {
-        return [
-            ['', '', null, null, 'ファイルを保存できません'],
-            ['pre-', '-suf', null, null, 'プレフィックス付きのファイルを保存できません'],
-            ['', '', 'hoge', 1, 'tmpIdとnamefieldに指定がある場合にファイルを保存できません'],
-            ['', '', null, 1, 'tmpIdに指定がある場合にファイルを保存できません'],
-        ];
-    }
+    // TODO: 動作しないためコメントアウト
+    // public function saveFileDataProvider()
+    // {
+    //     return [
+    //         ['', '', null, null, 'ファイルを保存できません'],
+    //         ['pre-', '-suf', null, null, 'プレフィックス付きのファイルを保存できません'],
+    //         ['', '', 'hoge', 1, 'tmpIdとnamefieldに指定がある場合にファイルを保存できません'],
+    //         ['', '', null, 1, 'tmpIdに指定がある場合にファイルを保存できません'],
+    //     ];
+    // }
 
     /**
      * 保存用ファイル名を取得する
      */
     public function testGetSaveFileName()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $savePath = $this->BcUploadBehavior->savePath[$this->table->getAlias()];
+        $name = 'dummy.gif';
+        $targetPath = $savePath . $name;
+        touch($targetPath);
+        $field = [
+            'name' => 'eyecatch',
+            'ext' => 'gif',
+        ];
+        $result = $this->BcUploadBehavior->getSaveFileName($field, $name);
+        $this->assertEquals('dummy_1.gif', $result);
+        @unlink($targetPath);
     }
 
     /**
@@ -1173,16 +1172,16 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testIsFileExists()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $fileName = 'test.txt';
         $this->assertFalse($this->BcUploadBehavior->isFileExists($fileName));
         $basePath = WWW_ROOT . 'files' . DS;
         $duplicate = "test/";
-        // duplicateDirがある場合
+        // existsCheckDirsがある場合
         try {
             mkdir($basePath . $duplicate, 0777, false);
             touch($basePath . $duplicate . $fileName);
-            $this->BcUploadBehavior->setDuplicateDirs([$duplicate]);
+
+            $this->BcUploadBehavior->existsCheckDirs[$this->table->getAlias()] = [$duplicate];
             $this->assertTrue($this->BcUploadBehavior->isFileExists($fileName));
         } catch (\Exception $e) {
             $error = $e;
@@ -1191,12 +1190,12 @@ class BcUploadBehaviorTest extends BcTestCase
                 unlink($basePath . $duplicate . $fileName);
                 rmdir($basePath . $duplicate);
             }
-            $this->BcUploadBehavior->setDuplicateDirs([]);
+            $this->BcUploadBehavior->existsCheckDirs[$this->table->getAlias()] = [];
         }
-        // saveDirがある場合
+        // SavePathがある場合
         try {
             touch(WWW_ROOT . 'files/contents/' . $fileName);
-            $this->BcUploadBehavior->setSaveDir('contents');
+            $this->BcUploadBehavior->SavePath[$this->table->getAlias()] = WWW_ROOT . 'files/contents/';
             $this->assertTrue($this->BcUploadBehavior->isFileExists($fileName));
         } catch (\Exception $e) {
             $error = $e;
