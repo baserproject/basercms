@@ -450,6 +450,7 @@ class BcUploadBehavior extends Behavior
             }
             return [];
         }
+        // TODO: $entity->eyecatchが必要
         // ファイル名が重複していた場合は変更する
         if ($fieldSetting['getUniqueFileName'] && !$this->tmpId) {
             $uploadedFile['name'] = $this->getUniqueFileName($fieldSetting['name'], $uploadedFile['name'], $fieldSetting);
@@ -461,7 +462,7 @@ class BcUploadBehavior extends Behavior
         }
         $fileName = $this->saveFile($uploadedFile, $fieldSetting);
         if ($fileName) {
-            if (!$this->copyImages($Model, $fieldSetting, $fileName)) {
+            if (!$this->copyImages($fieldSetting, $fileName)) {
                 return false;
             }
             // ファイルをリサイズ
@@ -1209,33 +1210,26 @@ class BcUploadBehavior extends Behavior
 
     /**
      * 既に存在するデータのファイルを削除する
-     * @note $entityにのみ作用?
-     * @model 全体
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function deleteExistingFiles()
     {
-        // $dataTmp = $Model->data;
-        $settings = $this->getConfig('settings.' . $this->alias);
-        $uploadFields = array_keys($settings['fields']);
+        $uploadFile = $this->getUploadedFile();
+        $uploadFields = array_keys($this->settings[$this->alias]['fields']);
         $targetFields = [];
-        // NOTE: postされたfieldと同じ物があるかを探し、あればそれを削除する
         foreach($uploadFields as $field) {
-            if (!empty($dataTmp[$Model->alias][$field]['tmp_name'])) {
+            if (!empty($uploadFile[$field]['tmp_name'])) {
                 $targetFields[] = $field;
             }
         }
         if (!$targetFields) {
             return;
         }
-        // NOTE: $this->dataで取得できるようにデータをセットする
-        $Model->set($Model->find('first', [
-            'conditions' => [$Model->alias . '.' . $Model->primaryKey => $Model->data[$Model->alias][$Model->primaryKey]],
-            'recursive' => -1
-        ]));
         foreach($targetFields as $field) {
             $this->delFiles($field);
         }
-        $Model->set($dataTmp);
     }
 
     /**
@@ -1244,7 +1238,6 @@ class BcUploadBehavior extends Behavior
      * @param array $field
      * @return bool
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function copyImages($field, $fileName)

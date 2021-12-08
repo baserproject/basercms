@@ -422,7 +422,23 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testSaveFileWhileChecking()
     {
-        $this->BcUploadBehavior->saveFileWhileChecking();
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $field = [
+            'name' => 'eyecatch',
+            'ext' => 'gif',
+            'type' => 'image',
+            'upload' => true,
+            'getUniqueFileName' => false, // trueの確認
+        ];
+        $uploadedFile = [
+            'eyecatch' => [
+                "name" => 'dummy',
+            ],
+            'eyecatch_delete' => 1,
+            'eyecatch_' => '<input />',
+        ];
+        $result = $this->BcUploadBehavior->saveFileWhileChecking($field, $uploadedFile);
+
     }
 
 
@@ -845,6 +861,7 @@ class BcUploadBehaviorTest extends BcTestCase
         $this->BcUploadBehavior->settings[$this->table->getAlias()]['fields'] = $field;
         $this->BcUploadBehavior->delFiles($field['eyecatch']['name']);
         $this->assertFileNotExists($targetPath);
+        @unlink($targetPath);
     }
 
     /**
@@ -1212,7 +1229,31 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testDeleteExistingFiles()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // $uploadedされていなければ、returnで終了
+        $this->BcUploadBehavior->setUploadedFile([]);
+        $this->assertNull($this->BcUploadBehavior->deleteExistingFiles());
+        // アップロードされていれば削除処理
+        $savePath = $this->BcUploadBehavior->savePath[$this->table->getAlias()];
+        $fileName = 'dummy';
+        $field = [
+            'eyecatch' => [
+                'name' => 'eyecatch',
+                'ext' =>'gif',
+            ]
+        ];
+        $targetPath = $savePath . $fileName . '.' . $field['eyecatch']['ext'];
+
+        // ダミーのファイルを生成
+        touch($targetPath);
+        $uploaded = [
+            'name' => $fileName . '.' . $field['eyecatch']['ext'],
+            'tmp_name' => TMP . $fileName . '.' . $field['eyecatch']['ext'],
+        ];
+        $this->BcUploadBehavior->setUploadedFile(['eyecatch' => $uploaded]);
+        $this->BcUploadBehavior->settings[$this->table->getAlias()]['fields'] = $field;
+        $this->BcUploadBehavior->deleteExistingFiles();
+        $this->assertFileNotExists($targetPath);
+        @unlink($targetPath);
     }
 
     /**
