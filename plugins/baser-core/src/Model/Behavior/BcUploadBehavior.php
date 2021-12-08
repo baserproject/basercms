@@ -241,11 +241,11 @@ class BcUploadBehavior extends Behavior
         }
         $uploadedFile = $this->getUploadedFile();
 
-        $Model->data = $this->deleteFiles($entity, $uploadedFile);
+        $uploadedFile = $this->deleteFiles($entity, $uploadedFile);
 
         $result = $this->saveFiles($uploadedFile);
         if ($result) {
-            $Model->data = $result;
+            $this->setUploadedFile($uploadedFile);
             return true;
         } else {
             return false;
@@ -271,10 +271,10 @@ class BcUploadBehavior extends Behavior
             } else {
                 if (isset($content[$field['name'] . '_tmp'])) {
                     // セッションに一時ファイルが保存されている場合は復元する
-                    // if ($this->moveFileSessionToTmp($this->alias, $field['name'])) {
-                    //     // $data = $Model->data[$Model->name];
-                    //     $upload = true;
-                    // }
+                    if ($this->moveFileSessionToTmp($this->alias, $field['name'])) {
+                        // $data = $Model->data[$Model->name];
+                        $upload = true;
+                    }
                 } elseif (isset($content[$field['name'] . '_'])) {
                     // 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
                     if (isset($uploadedFile['name']['error']) && $uploadedFile['name']['error'] == UPLOAD_ERR_NO_FILE) {
@@ -313,18 +313,17 @@ class BcUploadBehavior extends Behavior
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // TODO: 一時措置
-        return;
-        if ($this->uploaded[$Model->name]) {
-            $Model->data = $this->renameToBasenameFields($Model);
-            $Model->data = $Model->save($Model->data, ['callbacks' => false, 'validate' => false]);
-            $this->uploaded[$Model->name] = false;
+
+        if ($this->uploaded[$this->alias]) {
+            $uploadedFile = $this->getUploadedFile();
+            $this->renameToBasenameFields($entity, $uploadedFile, $copy = false);
+            $this->table->save($entity, ['callbacks' => false, 'validate' => false]);
+            $this->uploaded[$this->alias] = false;
         }
-        $settings = $this->getConfig('settings.' . $this->alias);
-        foreach($settings['fields'] as $key => $value) {
-            $settings['fields'][$key]['upload'] = false;
-        }
-        return true;
+		foreach($this->settings[$this->alias]['fields'] as $key => $value) {
+			$this->settings[$this->alias]['fields'][$key]['upload'] = false;
+		}
+		return true;
     }
 
     /**
@@ -890,20 +889,18 @@ class BcUploadBehavior extends Behavior
      * @return array
      * @model 全体
      */
-    public function renameToBasenameFields(Model $Model, $copy = false)
+    public function renameToBasenameFields($entity, $uploadedFile, $copy = false)
     {
-        $data = $Model->data;
-        $settings = $this->getConfig('settings.' . $this->alias);
-        foreach($settings['fields'] as $key => $setting) {
+        foreach($this->settings[$this->alias]['fields']  as $key => $setting) {
             if (empty($setting['name'])) {
                 $setting['name'] = $key;
             }
-            $value = $this->renameToBasenameField($Model, $setting, $copy);
+            $value = $this->renameToBasenameField($entity, $uploadedFile, $setting, $copy);
             if ($value !== false) {
-                $data[$Model->alias][$setting['name']] = $value;
+                $uploadedFile[$setting['name']] = $value;
             }
         }
-        return $data;
+        return $uploadedFile;
     }
 
     /**
@@ -915,17 +912,17 @@ class BcUploadBehavior extends Behavior
      * @return bool|mixed
      * @model 全体
      */
-    public function renameToBasenameField(Model $Model, $setting, $copy = false)
+    public function renameToBasenameField($entity, $uploadedFile, $setting, $copy = false)
     {
-        if (empty($setting['namefield']) || empty($Model->data[$Model->alias][$setting['name']])) {
+        if (empty($setting['namefield']) || empty($uploadedFile[$setting['name']])) {
             return false;
         }
-        $oldName = $Model->data[$Model->alias][$setting['name']];
+        $oldName = $uploadedFile[$setting['name']];
         if (is_array($oldName)) {
             return false;
         }
-        $saveDir = $this->getSaveDir();
-        $saveDirInTheme = $this->getSaveDir($Model, true);
+        $saveDir = $this->savePath[$this->alias];
+        $saveDirInTheme = $this->getSaveDir($this->alias, true);
         $oldSaveDir = '';
         if (file_exists($saveDir . $oldName)) {
             $oldSaveDir = $saveDir;
@@ -936,7 +933,8 @@ class BcUploadBehavior extends Behavior
             return '';
         }
         $pathinfo = pathinfo($oldName);
-        $newName = $this->getFieldBasename($Model, $setting, $pathinfo['extension']);
+        $id = $entity->id;
+        $newName = $this->getFieldBasename($id, $setting, $pathinfo['extension']);
         if (!$newName) {
             return false;
         }
@@ -944,9 +942,9 @@ class BcUploadBehavior extends Behavior
             return false;
         }
         if (!empty($setting['imageresize'])) {
-            $newName = $this->getFileName($Model, $setting['imageresize'], $newName);
+            $newName = $this->getFileName($setting['imageresize'], $newName);
         } else {
-            $newName = $this->getFileName($Model, null, $newName);
+            $newName = $this->getFileName(null, $newName);
         }
 
         if (!$copy) {
@@ -956,9 +954,9 @@ class BcUploadBehavior extends Behavior
         }
         if (!empty($setting['imagecopy'])) {
             foreach($setting['imagecopy'] as $copysetting) {
-                $oldCopyname = $this->getFileName($Model, $copysetting, $oldName);
+                $oldCopyname = $this->getFileName($copysetting, $oldName);
                 if (file_exists($oldSaveDir . $oldCopyname)) {
-                    $newCopyname = $this->getFileName($Model, $copysetting, $newName);
+                    $newCopyname = $this->getFileName($copysetting, $newName);
                     if (!$copy) {
                         rename($oldSaveDir . $oldCopyname, $saveDir . $newCopyname);
                     } else {
@@ -983,20 +981,15 @@ class BcUploadBehavior extends Behavior
      * @return mixed false / string
      * @model $Model->id
      */
-    public function getFieldBasename(Model $Model, $setting, $ext)
+    public function getFieldBasename($id, $setting, $ext)
     {
         if (empty($setting['namefield'])) {
             return false;
         }
-        $data = $Model->data[$Model->alias];
-        if (!isset($data[$setting['namefield']])) {
-            if ($setting['namefield'] == 'id' && $Model->id) {
-                $basename = $Model->id;
-            } else {
-                return false;
-            }
+        if ($id) {
+            $basename = $id;
         } else {
-            $basename = $data[$setting['namefield']];
+            return false;
         }
 
         if (!empty($setting['nameformat'])) {
@@ -1008,14 +1001,13 @@ class BcUploadBehavior extends Behavior
         }
 
         $subdir = '';
-        $settings = $this->getConfig('settings.' . $this->alias);
-        if (!empty($settings['subdirDateFormat'])) {
-            $subdir .= date($settings['subdirDateFormat']);
+        if (!empty($this->settings[$this->alias]['subdirDateFormat'])) {
+            $subdir .= date($this->settings[$this->alias]['subdirDateFormat']);
             if (!preg_match('/\/$/', $subdir)) {
                 $subdir .= '/';
             }
             $subdir = str_replace('/', DS, $subdir);
-            $path = $this->getSaveDir() . $subdir;
+            $path = $this->savePath[$this->alias] . $subdir;
             if (!is_dir($path)) {
                 $Folder = new Folder();
                 $Folder->create($path);
