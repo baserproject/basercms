@@ -9,12 +9,11 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-return [
-    'type' => 'Theme',
-    'title' => __d('baser', 'サンプル'),
-    'description' => __d('baser', 'サンプルプラグイン'),
-    'author' => 'baserCMS User Community',
-    'url' => 'https://basercms.net',
-    'installMessage' => ''
-];
+/**
+ * 固定ページデフォルトテンプレート
+ *
+ * @var string $pageContent
+ */
 
+
+echo $pageContent;

@@ -14,6 +14,9 @@ namespace BaserCore;
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\BasePlugin;
+use Cake\Core\Configure;
+use Cake\Core\Configure\Engine\PhpConfig;
+use Cake\Core\PluginApplicationInterface;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
@@ -47,6 +50,26 @@ class BcPlugin extends BasePlugin
     {
         parent::initialize();
         $this->migrations = new Migrations();
+    }
+
+    /**
+     * bootstrap
+     *
+     * @param PluginApplicationInterface $application
+     */
+    public function bootstrap(PluginApplicationInterface $application): void
+    {
+        $pluginPath = BcUtil::getPluginPath($this->name);
+        if (file_exists($pluginPath . 'config' . DS . 'setting.php')) {
+            try {
+                Configure::config('baser', new PhpConfig());
+                Configure::load($this->name . '.setting', 'baser');
+            } catch (BcException $e) {
+            }
+        }
+        // 親の bootstrap は、setting の読み込みの後でなければならない
+        // bootstrap 内で、setting の値を参照する場合があるため
+        parent::bootstrap($application);
     }
 
     /**

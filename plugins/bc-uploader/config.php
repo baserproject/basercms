@@ -1,6 +1,17 @@
 <?php
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ *
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
+ */
+
 $viewFilesPath = str_replace(ROOT, '', WWW_ROOT) . 'files';
 return [
+    'type' => 'CorePlugin',
     'title' => __d('baser', 'アップローダー'),
     'description' => __d('baser', 'Webページやブログ記事で、画像等のファイルを貼り付ける事ができます。'),
     'author' => 'baserCMS User Community',

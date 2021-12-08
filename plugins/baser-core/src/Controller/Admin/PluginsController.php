@@ -100,7 +100,7 @@ class PluginsController extends BcAdminAppController
             return;
         } else {
             try {
-                if ($PluginService->install($name, $this->request->getData('connection'))) {
+                if ($PluginService->install($name, $this->request->getData('connection') ?? 'default')) {
                     $PluginService->allow($this->request->getData());
                     $this->BcMessage->setSuccess(sprintf(__d('baser', '新規プラグイン「%s」を baserCMS に登録しました。'), $name));
                     return $this->redirect(['action' => 'index']);
@@ -269,6 +269,7 @@ class PluginsController extends BcAdminAppController
      * baserマーケットのプラグインデータを取得する
      * @return void
      * @param PluginServiceInterface $pluginService
+     * @uses get_market_plugins
      * @checked
      * @noTodo
      * @unitTest
@@ -310,6 +311,7 @@ class PluginsController extends BcAdminAppController
      * データベースをリセットする
      *
      * @return void
+     * @uses reset_db
      * @checked
      * @noTodo
      * @unitTest

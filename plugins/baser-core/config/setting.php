@@ -464,39 +464,6 @@ return [
                         ]
                     ],
                     'icon' => 'bca-icon--link',
-                ],
-                'Page' => [
-                    'title' => __d('baser', '固定ページ'),
-                    'multiple' => true,
-                    'preview' => true,
-                    'icon' => 'bca-icon--file',
-                    'omitViewAction' => true,
-                    'routes' => [
-                        'add' => [
-                            'admin' => true,
-                            'controller' => 'Pages',
-                            'action' => 'ajax_add'
-                        ],
-                        'edit' => [
-                            'admin' => true,
-                            'controller' => 'Pages',
-                            'action' => 'edit'
-                        ],
-                        'delete' => [
-                            'admin' => true,
-                            'controller' => 'Pages',
-                            'action' => 'delete'
-                        ],
-                        'view' => [
-                            'controller' => 'Pages',
-                            'action' => 'display'
-                        ],
-                        'copy' => [
-                            'admin' => true,
-                            'controller' => 'Pages',
-                            'action' => 'ajax_copy'
-                        ]
-                    ]
                 ]
             ]
         ]

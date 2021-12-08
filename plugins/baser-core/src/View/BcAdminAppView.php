@@ -21,7 +21,6 @@ use BaserCore\View\Helper\BcTextHelper;
 use BaserCore\View\Helper\BcTimeHelper;
 use BaserCore\View\Helper\BcAdminHelper;
 use BaserCore\View\Helper\BcBaserHelper;
-use BaserCore\View\Helper\BcUploadHelper;
 use BaserCore\View\Helper\BcContentsHelper;
 use BaserCore\View\Helper\BcAdminFormHelper;
 use BaserCore\View\Helper\BcAdminSiteHelper;
@@ -69,7 +68,6 @@ class BcAdminAppView extends AppView
     {
         parent::initialize();
         $this->loadHelper('BaserCore.BcAdminForm', ['templates' => 'BaserCore.bc_form']);
-        $this->loadHelper('BaserCore.BcBaser');
         $this->loadHelper('BaserCore.BcAuth');
         $this->loadHelper('BaserCore.BcText');
         $this->loadHelper('BaserCore.BcTime');

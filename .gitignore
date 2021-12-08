@@ -55,6 +55,7 @@ nbproject/*
 /plugins/*
 !/plugins/baser-core
 !/plugins/bc-admin-third
+!/plugins/bc-page
 !/plugins/bc-blog
 !/plugins/bc-mail
 !/plugins/bc-uploader
@@ -76,6 +77,7 @@ LOCAL_Q&A.md
 # symlink
 /webroot/bc_admin_third
 /webroot/bc_sample
+/webroot/baser_core
 # jwt
 /config/jwt.key
 /config/jwt.pem

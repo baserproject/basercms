@@ -271,20 +271,4 @@ class BcPageHelper extends Helper
         }
     }
 
-    /**
-     * 固定ページのコンテンツを出力する
-     *
-     * @return void
-     */
-    public function content()
-    {
-        $previewTemplate = $this->_View->get('previewTemplate');
-        if ($previewTemplate) {
-            $path = $previewTemplate;
-        } else {
-            $path = ROOT . DS . 'templates' . DS . 'Pages' . DS . $this->_View->get('pagePath') . $this->_View->getExt();
-        }
-        echo $this->_View->evaluate($path);
-    }
-
 }

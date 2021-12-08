@@ -881,39 +881,6 @@ function mb_basename($str, $suffix = null)
 }
 
 /**
- * プラグインを読み込む
- *
- * @param string $plugin
- * @return bool
- */
-function loadPlugin($plugin, $priority)
-{
-    if (CakePlugin::loaded($plugin)) {
-        return true;
-    }
-    try {
-        CakePlugin::load($plugin);
-    } catch (Exception $e) {
-        return false;
-    }
-    $pluginPath = CakePlugin::path($plugin);
-    $config = [
-        'bootstrap' => file_exists($pluginPath . 'Config' . DS . 'bootstrap.php'),
-        'routes' => file_exists($pluginPath . 'Config' . DS . 'routes.php')
-    ];
-    CakePlugin::load($plugin, $config);
-    if (file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
-        // DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
-        // ※ プラグインの setting.php で、DBへの接続処理が書かれている可能性がある為
-        try {
-            Configure::load($plugin . '.setting');
-        } catch (Exception $ex) {
-        }
-    }
-    return true;
-}
-
-/**
  * 後方互換のための非推奨メッセージを生成する
  *
  * @param string $target 非推奨の対象

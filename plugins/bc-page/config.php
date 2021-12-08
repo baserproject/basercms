@@ -11,10 +11,9 @@
 
 return [
     'type' => 'CorePlugin',
-    'title' => __d('baser', 'メールフォーム'),
-    'description' => __d('baser', '複数設置可能の高機能メールフォーム'),
+    'title' => __d('baser', '固定ページ'),
+    'description' => __d('baser', '複数設置可能な単一ページ'),
     'author' => 'baserCMS User Community',
     'url' => 'https://basercms.net',
-    'adminLink' => ['plugin' => 'mail', 'controller' => 'mail_configs', 'action' => 'form'],
     'installMessage' => ''
 ];
