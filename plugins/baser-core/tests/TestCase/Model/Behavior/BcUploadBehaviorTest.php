@@ -1217,10 +1217,51 @@ class BcUploadBehaviorTest extends BcTestCase
 
     /**
      * 画像をコピーする
+     * @param array $size 画像サイズ
+     * @param bool $copied 画像がコピーされるかどうか
+     * @return void
+     * @dataProvider copyImagesDataProvider
      */
-    public function testCopyImages()
+    public function testCopyImages($size, $copied): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $savePath = ROOT . '/plugins/bc-admin-third/webroot/img/';
+        $this->BcUploadBehavior->savePath[$this->table->getAlias()] = $savePath;
+        $fileName = 'baser.power';
+        $field = [
+            'name' => 'eyecatch',
+            'ext' => 'gif',
+            'type' => 'image',
+            'imagecopy' => [
+                'thumb' => $size
+            ]
+        ];
+        $uploadedFile = [
+            'name' => $fileName . '_copy' . '.' . $field['ext'],
+            'tmp_name' => $savePath . $fileName . '.' . $field['ext'],
+            ];
+        $this->table->setUploadedFile($uploadedFile, $this->table->getAlias());
+        // コピー先ファイルのパス
+        $targetPath = $savePath . $fileName . '_copy' . '.' . $field['ext'];
+        // コピー実行
+        $result = $this->BcUploadBehavior->copyImages($field, $fileName . '.' . $field['ext']);
+        $this->assertTrue($result);
+        if ($copied) {
+            $this->assertFileExists($targetPath);
+            // コピーしたファイルを削除
+            @unlink($targetPath);
+        } else {
+            $this->assertFileNotExists($targetPath);
+        }
+    }
+
+    public function copyImagesDataProvider()
+    {
+        return [
+            // コピー画像が元画像より大きい場合はスキップして作成しない
+            [['width' => 300, 'height' => 300], false],
+            // コピーが生成される場合
+            [['width' => 20, 'height' => 20], true],
+        ];
     }
 
     /**

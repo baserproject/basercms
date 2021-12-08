@@ -452,7 +452,7 @@ class BcUploadBehavior extends Behavior
         }
         // ファイル名が重複していた場合は変更する
         if ($fieldSetting['getUniqueFileName'] && !$this->tmpId) {
-            $uploadedFile['name'] = $this->getUniqueFileName($Model, $fieldSetting['name'], $uploadedFile['name'], $fieldSetting);
+            $uploadedFile['name'] = $this->getUniqueFileName($fieldSetting['name'], $uploadedFile['name'], $fieldSetting);
         }
         // 画像を保存
         $tmpName = (!empty($requestData[$this->alias][$fieldSetting['name']]['tmp_name']))? $requestData[$this->alias][$fieldSetting['name']]['tmp_name'] : false;
@@ -1240,19 +1240,19 @@ class BcUploadBehavior extends Behavior
 
     /**
      * 画像をコピーする
-     *
-     * @param Model $Model
      * @param string $fileName
      * @param array $field
      * @return bool
-     * @model 全体
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function copyImages(Model $Model, $field, $fileName)
+    public function copyImages($field, $fileName)
     {
         if (!$this->tmpId && ($field['type'] == 'all' || $field['type'] == 'image') && !empty($field['imagecopy']) && in_array($field['ext'], $this->imgExts)) {
             foreach($field['imagecopy'] as $copy) {
                 // コピー画像が元画像より大きい場合はスキップして作成しない
-                $size = $this->getImageSize($this->getSaveDir() . $fileName);
+                $size = $this->getImageSize($this->savePath[$this->alias] . $fileName);
                 if ($size && $size['width'] < $copy['width'] && $size['height'] < $copy['height']) {
                     if (isset($copy['smallskip']) && $copy['smallskip'] === false) {
                         $copy['width'] = $size['width'];
@@ -1261,14 +1261,14 @@ class BcUploadBehavior extends Behavior
                         continue;
                     }
                 }
-
                 // ファイル名の重複を回避する為の処理、元画像ファイルと同様に、コピー画像ファイルにも対応する
-                if (isset($Model->data[$Model->alias]['name']['name']) && $fileName !== $Model->data[$Model->alias]['name']['name']) {
-                    $Model->data[$Model->alias]['name']['name'] = $fileName;
-                }
+                // TODO: ここの処理がよくわからんから聞く
+                // if (isset($Model->data[$Model->alias]['name']['name']) && $fileName !== $Model->data[$Model->alias]['name']['name']) {
+                //     $Model->data[$Model->alias]['name']['name'] = $fileName;
+                // }
                 $copy['name'] = $field['name'];
                 $copy['ext'] = $field['ext'];
-                $ret = $this->copyImage($Model, $copy);
+                $ret = $this->copyImage($this->alias, $copy);
                 if (!$ret) {
                     // 失敗したら処理を中断してfalseを返す
                     return false;
