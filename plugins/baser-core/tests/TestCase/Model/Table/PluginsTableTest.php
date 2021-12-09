@@ -78,10 +78,10 @@ class PluginsTableTest extends BcTestCase
         // test Install
         $this->Plugins->install('BcTest');
         $plugin = $this->Plugins->find()->where(['name' => 'BcTest'])->first();
-        $this->assertEquals(3, $plugin->priority);
+        $this->assertEquals(4, $plugin->priority);
         // test Uninstall
         $this->Plugins->uninstall('BcTest');
-        $this->assertEquals(2, $this->Plugins->find()->count());
+        $this->assertEquals(3, $this->Plugins->find()->count());
     }
 
     /**

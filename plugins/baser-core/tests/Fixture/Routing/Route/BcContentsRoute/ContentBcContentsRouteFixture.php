@@ -138,7 +138,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '4',
             'name' => 'index',
-            'plugin' => 'BaserCore',
+            'plugin' => 'BcPage',
             'type' => 'Page',
             'entity_id' => '1',
             'url' => '/index',
@@ -210,7 +210,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '6',
             'name' => 'index',
-            'plugin' => 'BaserCore',
+            'plugin' => 'BcPage',
             'type' => 'Page',
             'entity_id' => '4',
             'url' => '/m/index',
@@ -318,7 +318,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '9',
             'name' => 'service1',
-            'plugin' => 'BaserCore',
+            'plugin' => 'BcPage',
             'type' => 'Page',
             'entity_id' => '3',
             'url' => '/service/service1',
@@ -354,7 +354,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '10',
             'name' => 'index',
-            'plugin' => 'BaserCore',
+            'plugin' => 'BcPage',
             'type' => 'Page',
             'entity_id' => '1',
             'url' => '/s/index',
@@ -786,7 +786,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '22',
             'name' => 'service1',
-            'plugin' => 'BaserCore',
+            'plugin' => 'BcPage',
             'type' => 'Page',
             'entity_id' => '8',
             'url' => '/en/service/service1',
@@ -858,7 +858,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '24',
             'name' => 'service1',
-            'plugin' => 'BaserCore',
+            'plugin' => 'BcPage',
             'type' => 'Page',
             'entity_id' => '9',
             'url' => '/sub/service/service1',
@@ -1110,7 +1110,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '31',
             'name' => 'service1',
-            'plugin' => 'BaserCore',
+            'plugin' => 'BcPage',
             'type' => 'Page',
             'entity_id' => '10',
             'url' => '/m/service/service1',
@@ -1146,7 +1146,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '32',
             'name' => 'service1',
-            'plugin' => 'BaserCore',
+            'plugin' => 'BcPage',
             'type' => 'Page',
             'entity_id' => '3',
             'url' => '/s/service/service1',
@@ -1182,7 +1182,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '33',
             'name' => 'service1',
-            'plugin' => 'BaserCore',
+            'plugin' => 'BcPage',
             'type' => 'Page',
             'entity_id' => '11',
             'url' => '/another.com/service/service1',
@@ -1218,7 +1218,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '34',
             'name' => 'index',
-            'plugin' => 'BaserCore',
+            'plugin' => 'BcPage',
             'type' => 'Page',
             'entity_id' => '12',
             'url' => '/en/index',
@@ -1254,7 +1254,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '35',
             'name' => 'index',
-            'plugin' => 'BaserCore',
+            'plugin' => 'BcPage',
             'type' => 'Page',
             'entity_id' => '13',
             'url' => '/sub/index',
@@ -1290,7 +1290,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '36',
             'name' => 'index',
-            'plugin' => 'BaserCore',
+            'plugin' => 'BcPage',
             'type' => 'Page',
             'entity_id' => '14',
             'url' => '/another.com/index',
@@ -1362,7 +1362,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '38',
             'name' => 'index',
-            'plugin' => 'BaserCore',
+            'plugin' => 'BcPage',
             'type' => 'Page',
             'entity_id' => '15',
             'url' => '/another.com/s/index',
@@ -1470,7 +1470,7 @@ class ContentBcContentsRouteFixture extends TestFixture
         [
             'id' => '41',
             'name' => 'service1',
-            'plugin' => 'BaserCore',
+            'plugin' => 'BcPage',
             'type' => 'Page',
             'entity_id' => '16',
             'url' => '/another.com/s/service/service1',

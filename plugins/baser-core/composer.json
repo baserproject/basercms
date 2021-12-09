@@ -28,7 +28,7 @@
     "autoload": {
         "psr-4": {
             "BaserCore\\": "src",
-            "Cake\\Routing\\": "plugins/baser-core/src/Routing"
+            "Cake\\Routing\\": "src/Routing"
         }
     },
     "autoload-dev": {

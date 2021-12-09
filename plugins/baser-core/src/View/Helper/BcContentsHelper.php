@@ -221,6 +221,11 @@ class BcContentsHelper extends Helper
      */
     public function _getIconUrl($plugin, $type, $file, $suffix = null)
     {
+        // TODO ucmitz 未実装のため代替措置
+        // >>>
+        return '';
+        // <<<
+
         $imageBaseUrl = Configure::read('App.imageBaseUrl');
         if ($file) {
             $file = $plugin . '.' . $file;

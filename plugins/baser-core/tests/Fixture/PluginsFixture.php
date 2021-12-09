@@ -56,7 +56,7 @@ class PluginsFixture extends TestFixture
             'version' => '1.0.0',
             'status' => '1',
             'db_init' => '1',
-            'priority' => '2',
+            'priority' => '3',
             'created' => '2021-05-03 10:57:07',
             'modified' => '2021-05-03 10:57:07'
         ],
