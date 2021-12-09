@@ -10,12 +10,12 @@
     },
     "autoload": {
         "psr-4": {
-            "BcSample\\": "src/"
+            "BcSpaSample\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "BcSample\\Test\\": "tests/"
+            "BcSpaSample\\Test\\": "tests/"
         }
     }
 }

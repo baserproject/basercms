@@ -2,19 +2,19 @@
 
 ucmitz の REST API と vue.js を利用する場合のサンプルアプリケーションです。
 
-管理画面より、BcSample プラグインをインストールし、次のURLにアクセスすることで、管理者ログインとユーザー管理を確認することができます。
+管理画面より、BcSpaSample プラグインをインストールし、次のURLにアクセスすることで、管理者ログインとユーザー管理を確認することができます。
 
-https://localhost/bc_sample/spa/admin.html
+https://localhost/bc_spa_sample/spa/admin.html
 
 　
 ## ソースを確認する
 
-ソースファイルは、 `/plugins/BcSample/webroot/spa/src/` に配置しています。
+ソースファイルは、 `/plugins/BcSpaSample/webroot/spa/src/` に配置しています。
 
 　
 ## コンパイル
 
-webpack を使ってコンパイルします。 `/plugins/BcSample/webroot/spa/` に移動し次のコマンドを実行してください。
+webpack を使ってコンパイルします。 `/plugins/BcSpaSample/webroot/spa/` に移動し次のコマンドを実行してください。
 
 ```javascript
 npm install

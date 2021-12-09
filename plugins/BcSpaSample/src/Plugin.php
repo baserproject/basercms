@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BcSample;
+namespace BcSpaSample;
 
 use BaserCore\BcPlugin;
 use Cake\Core\Configure;
@@ -18,7 +18,7 @@ use Cake\Routing\Route\InflectedRoute;
 use Cake\Routing\RouteBuilder;
 
 /**
- * plugin for BcSample
+ * plugin for BcSpaSample
  */
 class Plugin extends BcPlugin
 {
@@ -42,10 +42,10 @@ class Plugin extends BcPlugin
             ['path' => '/baser' . Configure::read('BcApp.adminPrefix')],
             function(RouteBuilder $routes) {
                 $routes->plugin(
-                    'BcSample',
-                    ['path' => '/bc-sample'],
+                    'BcSpaSample',
+                    ['path' => '/bc-spa-sample'],
                     function(RouteBuilder $routes) {
-                        $routes->connect('', ['plugin' => 'BcSample', 'controller' => 'Spa', 'action' => 'index']);
+                        $routes->connect('', ['plugin' => 'BcSpaSample', 'controller' => 'Spa', 'action' => 'index']);
                         $routes->fallbacks(InflectedRoute::class);
                     }
                 );

@@ -50,7 +50,7 @@
 
 	<!-- /Elements/header.php -->
 	<?php $this->BcBaser->header() ?>
-<?php $this->BcBaser->element('test') ?>
+
 	<?php if ($this->BcBaser->isHome()): ?>
 		<?php $this->BcBaser->mainImage(['all' => true, 'num' => 5, 'width' => '100%', 'class' => 'bs-main-image']) ?>
 	<?php else: ?>

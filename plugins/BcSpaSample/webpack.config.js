@@ -4,10 +4,10 @@ const path = require('path');
 
 module.exports = (env, argv) => {
     return {
-        entry: ['@babel/polyfill', './src/js/main.js'],
+        entry: ['@babel/polyfill', './webroot/src/js/main.js'],
         output: {
             filename: 'bundle.js',
-            path: path.join(__dirname, 'js')
+            path: path.join(__dirname, 'webroot/js')
         },
         plugins: [
             new VueLoaderPlugin()
@@ -29,7 +29,7 @@ module.exports = (env, argv) => {
                 {
                     test: /\.vue$/,
                     exclude: /node_modules/,
-                    loader: ['vue-loader']
+                    loader: 'vue-loader'
                 }
             ]
         },

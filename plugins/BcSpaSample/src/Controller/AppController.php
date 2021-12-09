@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BcSample\Controller;
+namespace BcSpaSample\Controller;
 
 use App\Controller\AppController as BaseController;
 use BaserCore\Annotation\UnitTest;
@@ -26,7 +26,7 @@ class AppController extends BaseController
 {
     public function beforeRender(EventInterface $event): void
     {
-        $this->viewBuilder()->setClassName('BcSample.App');
+        $this->viewBuilder()->setClassName('BcSpaSample.App');
         $this->viewBuilder()->setTheme('BcAdminThird');
     }
 }

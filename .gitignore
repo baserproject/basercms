@@ -60,7 +60,7 @@ nbproject/*
 !/plugins/bc-blog
 !/plugins/bc-mail
 !/plugins/bc-uploader
-!/plugins/BcSample
+!/plugins/BcSpaSample
 /plugins/*/vendor
 /plugins/*/composer.lock
 # docker
@@ -77,7 +77,7 @@ LOCAL_TODO.md
 LOCAL_Q&A.md
 # symlink
 /webroot/bc_admin_third
-/webroot/bc_sample
+/webroot/bc_spa_sample
 /webroot/bc_front
 /webroot/baser_core
 # jwt

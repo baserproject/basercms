@@ -71,6 +71,11 @@ return [
          */
         'defaultAdminTheme' => 'bc-admin-third',
         /**
+         * 管理画面をカスタマイズするためのテーマ
+         * アッパーキャメルケースで指定する
+         */
+        'customAdminTheme' => '',
+        /**
          * コアプラグイン
          */
         'corePlugins' => ['BcBlog', 'BcMail'],

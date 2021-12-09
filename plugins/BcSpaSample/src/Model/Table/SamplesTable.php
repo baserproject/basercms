@@ -9,12 +9,13 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-return [
-    'type' => 'Theme',
-    'title' => __d('baser', 'サンプル'),
-    'description' => __d('baser', 'サンプルプラグイン'),
-    'author' => 'baserCMS User Community',
-    'url' => 'https://basercms.net',
-    'installMessage' => ''
-];
+namespace BcSpaSample\Model\Table;
+use Cake\ORM\Table;
 
+/**
+ * Class SamplesTable
+ */
+class SamplesTable extends Table
+{
+
+}

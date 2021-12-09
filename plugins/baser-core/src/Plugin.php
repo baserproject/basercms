@@ -29,6 +29,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Routing\Route\InflectedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
+use Cake\Utility\Inflector;
 use Cake\Utility\Security;
 use Exception;
 use Psr\Http\Message\ServerRequestInterface;
@@ -36,7 +37,6 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use ReflectionClass;
-use ReflectionMethod;
 use ReflectionProperty;
 
 /**
@@ -59,9 +59,12 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
             \Cake\Core\Plugin::getCollection()->remove('DebugKit');
         }
+
         $application->addPlugin('Authentication');
         $application->addPlugin('Migrations');
-        $application->addPlugin('BcAdminThird');
+        $application->addPlugin(Inflector::camelize(Configure::read('BcApp.defaultAdminTheme'), '-'));
+        $application->addPlugin(Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-'));
+
         $plugins = BcUtil::getEnablePlugins();
         if ($plugins) {
             foreach($plugins as $plugin) {
@@ -75,6 +78,9 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
 
     /**
      * デフォルトテンプレートを設定する
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function setupDefaultTemplatesPath()
     {

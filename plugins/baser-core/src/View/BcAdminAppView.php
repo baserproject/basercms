@@ -14,6 +14,7 @@ namespace BaserCore\View;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcAuthHelper;
 use BaserCore\View\Helper\BcFormHelper;
 use BaserCore\View\Helper\BcHtmlHelper;
@@ -32,6 +33,9 @@ use BaserCore\View\Helper\BcAdminContentHelper;
 use BaserCore\View\Helper\BcAdminPermissionHelper;
 use BaserCore\View\Helper\BcAdminSiteConfigHelper;
 use BaserCore\View\Helper\BcAdminContentFolderHelper;
+use Cake\Core\Configure;
+use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 
 /**
  * Class BcAdminAppView
@@ -58,6 +62,7 @@ use BaserCore\View\Helper\BcAdminContentFolderHelper;
  */
 class BcAdminAppView extends AppView
 {
+
     /**
      * initialize
      * @checked
@@ -82,4 +87,38 @@ class BcAdminAppView extends AppView
             $this->set('title', 'Undefined');
         }
     }
+
+    /**
+     * _paths
+     *
+     * 管理画面のファイルを別のテーマのテンプレートで上書きするためのパスを追加する
+     * 別のテーマは、 setting.php で、 BcApp.customAdminTheme として定義する
+     *
+     * @param string|null $plugin
+     * @param bool $cached
+     * @return array
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    protected function _paths(?string $plugin = null, bool $cached = true): array
+    {
+        $paths = parent::_paths($plugin, $cached);
+        $customAdminTheme = Configure::read('BcApp.customAdminTheme');
+        $plugins = Hash::extract(BcUtil::getEnablePlugins(), '{n}.name');
+        if(!$customAdminTheme || !in_array($customAdminTheme, $plugins)) {
+            return $paths;
+        }
+        $themes = [$customAdminTheme, Inflector::dasherize($customAdminTheme)];
+        foreach($themes as $theme) {
+            array_unshift($paths,
+                ROOT . DS
+                . 'plugins' . DS
+                . $theme . DS
+                . 'templates' . DS
+            );
+        }
+        return $paths;
+    }
+
 }

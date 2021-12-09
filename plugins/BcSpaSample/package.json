@@ -1,7 +1,7 @@
 {
-  "name": "bc-sample",
+  "name": "bc-spa-sample",
   "version": "1.0.0",
-  "description": "sample",
+  "description": "spa sample plugin for baserCMS",
   "dependencies": {
     "axios": "^0.21.1",
     "vue": "^2.6.12",
