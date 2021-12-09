@@ -110,7 +110,7 @@ class PluginsTableTest extends BcTestCase
     public function testChangePriority()
     {
         $this->Plugins->changePriority(1, 2);
-        $this->assertEquals(2, $this->Plugins->get(1)->priority);
+        $this->assertEquals(3, $this->Plugins->get(1)->priority);
         $this->Plugins->changePriority(2, -1);
         $this->assertEquals(1, $this->Plugins->get(2)->priority);
     }
