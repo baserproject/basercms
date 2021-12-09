@@ -142,11 +142,7 @@ class BcContentsRoute extends Route
     {
         $viewParams = Configure::read('BcContents.items.' . $plugin . '.' . $type . '.routes.view');
         if (!$viewParams) {
-            $params = [
-                'controller' => 'Pages',
-                'action' => 'display',
-                'pass' => ['home']
-            ];
+            return false;
         } else {
             $pass = [];
             $named = [];

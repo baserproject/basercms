@@ -63,6 +63,14 @@ return [
          */
         'core' => ['baser-core', 'bc-admin-third'],
         /**
+         * デフォルトフロントテーマ
+         */
+        'defaultFrontTheme' => 'bc-front',
+        /**
+         * デフォルト管理画面テーマ
+         */
+        'defaultAdminTheme' => 'bc-admin-third',
+        /**
          * コアプラグイン
          */
         'corePlugins' => ['BcBlog', 'BcMail'],

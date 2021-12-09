@@ -59,11 +59,9 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             // 明示的に指定がない場合、DebugKitは重すぎるのでデバッグモードでも利用しない
             \Cake\Core\Plugin::getCollection()->remove('DebugKit');
         }
-
         $application->addPlugin('Authentication');
         $application->addPlugin('Migrations');
         $application->addPlugin('BcAdminThird');
-
         $plugins = BcUtil::getEnablePlugins();
         if ($plugins) {
             foreach($plugins as $plugin) {
@@ -72,6 +70,23 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                 }
             }
         }
+        $this->setupDefaultTemplatesPath();
+    }
+
+    /**
+     * デフォルトテンプレートを設定する
+     */
+    public function setupDefaultTemplatesPath()
+    {
+        if(BcUtil::isAdminSystem()) {
+            $template = Configure::read('BcApp.defaultAdminTheme');
+        } else {
+            $template = Configure::read('BcApp.defaultFrontTheme');
+        }
+        Configure::write('App.paths.templates', array_merge(
+            [ROOT . DS . 'plugins' . DS . $template . DS . 'templates' . DS],
+            Configure::read('App.paths.templates')
+        ));
     }
 
     /**

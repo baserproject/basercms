@@ -1,0 +1,21 @@
+{
+    "name": "baserproject/bc-front",
+    "description": "BcFront plugin for baserCMS",
+    "homepage": "https://basercms.net",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.2",
+        "baserproject/baser-core": "0.0.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "BcFront\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BcFront\\Test\\": "tests/"
+        }
+    }
+}

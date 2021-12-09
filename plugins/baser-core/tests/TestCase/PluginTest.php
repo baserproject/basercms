@@ -15,6 +15,7 @@ use App\Application;
 use BaserCore\Plugin;
 use BaserCore\Service\SiteConfigServiceInterface;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Core\Configure;
 use Cake\Core\Container;
 use Cake\Http\MiddlewareQueue;
 use Authentication\Middleware\AuthenticationMiddleware;
@@ -186,6 +187,18 @@ class PluginTest extends BcTestCase
         $container = new Container();
         $this->Plugin->services($container);
         $this->assertTrue($container->has(SiteConfigServiceInterface::class));
+    }
+
+    /**
+     * test setupDefaultTemplatesPath
+     * テストの前に実行されていることが前提
+     */
+    public function testSetupDefaultTemplatesPath()
+    {
+        $this->assertEquals([
+            ROOT . DS . 'plugins' . DS . 'bc-front' . DS . 'templates' . DS,
+            ROOT . DS . 'templates' . DS
+        ], Configure::read('App.paths.templates'));
     }
 
 }
