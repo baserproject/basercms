@@ -455,11 +455,11 @@ class BcUploadBehavior extends Behavior
             $uploadedFile['name'] = $this->getUniqueFileName($fieldSetting['name'], $uploadedFile['name'], $fieldSetting);
         }
         // 画像を保存
-        $tmpName = (!empty($requestData[$this->alias][$fieldSetting['name']]['tmp_name']))? $requestData[$this->alias][$fieldSetting['name']]['tmp_name'] : false;
+        $tmpName = $uploadedFile[$fieldSetting['name']]['tmp_name'] ?? false;
         if (!$tmpName) {
             return $uploadedFile;
         }
-        $fileName = $this->saveFile($uploadedFile, $fieldSetting);
+        $fileName = $this->saveFile($uploadedFile[$fieldSetting['name']], $fieldSetting);
         if ($fileName) {
             if (!$this->copyImages($fieldSetting, $fileName)) {
                 return false;
@@ -699,7 +699,7 @@ class BcUploadBehavior extends Behavior
      */
     public function copyImage($alias, $field)
     {
-        $file = $this->getUploadedFile($alias);
+        $file = $this->getUploadedFile($alias)[$field['name']];
         // プレフィックス、サフィックスを取得
         $prefix = '';
         $suffix = '';
@@ -1247,7 +1247,7 @@ class BcUploadBehavior extends Behavior
                     }
                 }
                 // ファイル名の重複を回避する為の処理、元画像ファイルと同様に、コピー画像ファイルにも対応する
-                // TODO: ここの処理がよくわからんから聞く
+                // TODO ucmitz: ここの処理がよくわからんから聞く
                 // if (isset($Model->data[$Model->alias]['name']['name']) && $fileName !== $Model->data[$Model->alias]['name']['name']) {
                 //     $Model->data[$Model->alias]['name']['name'] = $fileName;
                 // }
