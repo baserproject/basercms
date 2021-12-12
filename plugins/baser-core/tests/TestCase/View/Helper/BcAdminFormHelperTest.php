@@ -55,7 +55,7 @@ class BcAdminFormHelperTest extends BcTestCase
      */
     public function testControl()
     {
-        $name = 'test';
+        $name = 'Contents.test';
 
         $this->assertEquals($this->BcForm->control($name), $this->BcAdminForm->control($name));
 

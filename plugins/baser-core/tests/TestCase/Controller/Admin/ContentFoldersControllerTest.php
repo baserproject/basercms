@@ -96,6 +96,7 @@ class ContentFoldersControllerTest extends BcTestCase
      */
     public function testEdit()
     {
+        $this->setUnlockedFields(['ContentFolder.content.eyecatch']);
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         $data = $this->ContentFolderService->getIndex(['folder_template' => "testEdit"])->first();

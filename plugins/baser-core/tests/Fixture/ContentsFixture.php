@@ -592,7 +592,7 @@ class ContentsFixture extends TestFixture
                 'site_id' => 1,
                 'alias_id' => null,
                 'main_site_content_id' => null,
-                'eyecatch' => 'template1.gif',
+                'eyecatch' => '',
                 'author_id' => 1,
                 'layout_template' => '',
                 'status' => true,

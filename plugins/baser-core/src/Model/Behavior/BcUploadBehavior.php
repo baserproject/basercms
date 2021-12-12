@@ -214,15 +214,23 @@ class BcUploadBehavior extends Behavior
      */
     public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
     {
-        // アップロードのデータをsetUploadedFileに退避する
-        $this->setUploadedFile([
-            'eyecatch' => $data['eyecatch'],
-            'eyecatch_delete' => $data['eyecatch_delete'],
-            'eyecatch_' => $data['eyecatch_']
-        ]);
-        $this->setupRequestData($data);
-        // arrayをstringとして変換し、保存する
-        $data['eyecatch'] = $data['eyecatch']['name'];
+        if (isset($data['eyecatch'])) {
+            if (is_array($data['eyecatch'])) {
+                // アップロードのデータをsetUploadedFileに退避する
+                $this->setUploadedFile([
+                    'eyecatch' => $data['eyecatch'],
+                    'eyecatch_delete' => $data['eyecatch_delete'],
+                    'eyecatch_' => $data['eyecatch_']
+                ]);
+                $this->setupRequestData($data);
+                // arrayをstringとして変換し、保存する
+                $data['eyecatch'] = $data['eyecatch']['name'];
+            } else if(is_string($data['eyecatch'])) {
+                $this->setUploadedFile([
+                    'eyecatch' => ['name' => $data['eyecatch']],
+                ]);
+            }
+        }
     }
 
 
@@ -232,23 +240,28 @@ class BcUploadBehavior extends Behavior
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @return bool
-     * @model 全体
+     * TODO ucmitz : モデル 全体
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if ($entity->id) {
-            $this->deleteExistingFiles();
-        }
-        $uploadedFile = $this->getUploadedFile();
+        if (!empty($this->uploadedFiles[$this->alias]['eyecatch']['name'])) {
+            if ($entity->id) {
+                $this->deleteExistingFiles();
+            }
+            $uploadedFile = $this->getUploadedFile();
 
-        $uploadedFile = $this->deleteFiles($entity, $uploadedFile);
+            $uploadedFile = $this->deleteFiles($entity, $uploadedFile);
 
-        $result = $this->saveFiles($uploadedFile);
-        if ($result) {
-            $this->setUploadedFile($uploadedFile);
-            return true;
-        } else {
-            return false;
+            $result = $this->saveFiles($uploadedFile);
+            // TODO ucmitz updateSystemDataでエラーがでるため一旦書き込み
+            $event = $this->table->getEventManager()->matchingListeners('afterSave');
+            if ($event) $this->table->getEventManager()->off('Model.afterSave');
+            if ($result) {
+                $this->setUploadedFile($uploadedFile);
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
@@ -309,21 +322,21 @@ class BcUploadBehavior extends Behavior
      * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
-     * @model 全体
+     * TODO ucmitz : モデル 全体
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
 
-        if ($this->uploaded[$this->alias]) {
-            $uploadedFile = $this->getUploadedFile();
-            $this->renameToBasenameFields($entity, $uploadedFile, $copy = false);
-            $this->table->save($entity, ['callbacks' => false, 'validate' => false]);
-            $this->uploaded[$this->alias] = false;
-        }
-		foreach($this->settings[$this->alias]['fields'] as $key => $value) {
-			$this->settings[$this->alias]['fields'][$key]['upload'] = false;
-		}
-		return true;
+        // if ($this->uploaded[$this->alias]) {
+        //     $uploadedFile = $this->getUploadedFile();
+        //     $this->renameToBasenameFields($entity, $uploadedFile, $copy = false);
+        //     $this->table->save($entity, ['callbacks' => false, 'validate' => false]);
+        //     $this->uploaded[$this->alias] = false;
+        // }
+		// foreach($this->settings[$this->alias]['fields'] as $key => $value) {
+		// 	$this->settings[$this->alias]['fields'][$key]['upload'] = false;
+		// }
+		// return true;
     }
 
     /**
@@ -333,7 +346,7 @@ class BcUploadBehavior extends Behavior
      * @param array $data
      * @param string $tmpId
      * @return mixed false|array
-     * @model 全体
+     * TODO ucmitz : モデル 全体
      */
     public function saveTmpFiles(Model $Model, $data, $tmpId)
     {
@@ -404,7 +417,7 @@ class BcUploadBehavior extends Behavior
      *
      * @param array $requestData
      * @return mixed false|array
-     * @model 全体
+     * TODO ucmitz : モデル 全体
      */
     public function saveFiles($uploadedFile)
     {
@@ -428,7 +441,7 @@ class BcUploadBehavior extends Behavior
      * @param array $options
      *    - deleteTmpFiles : 一時ファイルを削除するかどうか
      * @return mixed bool|$requestData
-     * @model 全体
+     * TODO ucmitz : モデル 全体
      */
     public function saveFileWhileChecking($fieldSetting, $uploadedFile, $options = [])
     {
@@ -444,7 +457,7 @@ class BcUploadBehavior extends Behavior
 
         if (!$this->tmpId && empty($fieldSetting['upload'])) {
             if (!empty($uploadedFile) && is_array($uploadedFile)) {
-                unset($requestData[$this->alias][$fieldSetting['name']]);
+                unset($uploadedFile[$fieldSetting['name']]);
                 $this->setUploadedFile([]);
             }
             return [];
@@ -452,7 +465,7 @@ class BcUploadBehavior extends Behavior
         // TODO: $entity->eyecatchが必要
         // ファイル名が重複していた場合は変更する
         if ($fieldSetting['getUniqueFileName'] && !$this->tmpId) {
-            $uploadedFile['name'] = $this->getUniqueFileName($fieldSetting['name'], $uploadedFile['name'], $fieldSetting);
+            $uploadedFile[$fieldSetting['name']]['name'] = $this->getUniqueFileName($fieldSetting['name'], $uploadedFile[$fieldSetting['name']]['name'], $fieldSetting);
         }
         // 画像を保存
         $tmpName = $uploadedFile[$fieldSetting['name']]['tmp_name'] ?? false;
@@ -470,9 +483,9 @@ class BcUploadBehavior extends Behavior
                     $filePath = $this->savePath[$this->alias] . $fileName;
                     $this->resizeImage($filePath, $filePath, $fieldSetting['imageresize']['width'], $fieldSetting['imageresize']['height'], $fieldSetting['imageresize']['thumb']);
                 }
-                $uploadedFile['name'] = $fileName;
+                $uploadedFile[$fieldSetting['name']]['name'] = $fileName;
             } else {
-                $uploadedFile['name']['session_key'] = $fileName;
+                $uploadedFile[$fieldSetting['name']]['name']['session_key'] = $fileName;
             }
             // 一時ファイルを削除
             if ($options['deleteTmpFiles']) {
@@ -495,7 +508,7 @@ class BcUploadBehavior extends Behavior
      * @param Model $Model
      * @param string $fieldName
      * @return boolean
-     * @model $fieldName . '_tmp'
+     * TODO ucmitz : モデル $fieldName . '_tmp'
      */
     public function moveFileSessionToTmp(Model $Model, $fieldName)
     {
@@ -782,7 +795,7 @@ class BcUploadBehavior extends Behavior
      * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
-     * @model 全体
+     * TODO ucmitz : モデル 全体
      */
     public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
@@ -887,7 +900,7 @@ class BcUploadBehavior extends Behavior
      * @param Model $Model
      * @param bool $copy
      * @return array
-     * @model 全体
+     * TODO ucmitz : モデル 全体
      */
     public function renameToBasenameFields($entity, $uploadedFile, $copy = false)
     {
@@ -910,7 +923,7 @@ class BcUploadBehavior extends Behavior
      * @param array $setting
      * @param bool $copy
      * @return bool|mixed
-     * @model 全体
+     * TODO ucmitz : モデル 全体
      */
     public function renameToBasenameField($entity, $uploadedFile, $setting, $copy = false)
     {
@@ -979,7 +992,7 @@ class BcUploadBehavior extends Behavior
      * - nameadd nameを追加しないか
      * @param string $ext ファイルの拡張子
      * @return mixed false / string
-     * @model $Model->id
+     * TODO ucmitz : モデル $Model->id
      */
     public function getFieldBasename($id, $setting, $ext)
     {
@@ -1086,10 +1099,12 @@ class BcUploadBehavior extends Behavior
         $ext = $setting['ext'];
 
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
-        $conditions[$this->alias . '.' . $fieldName . ' LIKE'] = $basename . '%' . $ext;
-        // FIXME: ->order("{$this->alias}.{$fieldName}")がうまく行かないので、調整する
+        // $conditions[$this->alias . '.' . $fieldName . ' LIKE'] = $basename . '%' . $ext;
         // TODO: 複数テーブルがある場合の処理に変更する必要あり
+        $conditions[$fieldName . ' LIKE'] = $basename . '%' . $ext;
+        // FIXME: ->order("{$this->alias}.{$fieldName}")がうまく行かないので、調整する
         $datas = $this->table->find()->where([$conditions])->select($fieldName)->all()->toArray();
+        $a = $this->table->find()->all()->toArray();
         $numbers = [];
 
         if ($datas) {
@@ -1346,6 +1361,4 @@ class BcUploadBehavior extends Behavior
     {
         return $this->uploadedFiles[$alias ?? $this->alias];
     }
-
-
 }

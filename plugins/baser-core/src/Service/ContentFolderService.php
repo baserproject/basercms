@@ -148,7 +148,7 @@ class ContentFolderService implements ContentFolderServiceInterface
     {
         $options = array_merge(['associated' => ['Contents' => ['validate' => 'default']]], $options);
         $contentFolder = $this->ContentFolders->patchEntity($target, $contentFolderData, $options);
-        return ($result = $this->ContentFolders->save($contentFolder))? $result : $contentFolder;
+        return ($result = $this->ContentFolders->save($contentFolder, ['atomic' => false]))? $result : $contentFolder;
     }
 
     /**
