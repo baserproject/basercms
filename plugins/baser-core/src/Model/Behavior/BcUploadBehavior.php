@@ -154,6 +154,9 @@ class BcUploadBehavior extends Behavior
      *
      * @param  array $config
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getSettings($config)
     {

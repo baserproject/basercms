@@ -189,6 +189,32 @@ class BcUploadBehaviorTest extends BcTestCase
     }
 
     /**
+     * testGetSettings
+     *
+     * @return void
+     */
+    public function testGetSettings()
+    {
+        $config = [
+            'saveDir' => "contents",
+            'fields' => [
+                'eyecatch' => [
+                    "type" => "image",
+                    "namefield" => "id",
+                    "nameadd" => true,
+                    "nameformat" => "%08d",
+                    "subdirDateFormat" => "Y/m",
+                    "imagecopy" => [],
+                ]
+            ]
+        ];
+        $setting = $this->BcUploadBehavior->getSettings($config);
+        $this->assertEquals("eyecatch", $setting[$this->table->getAlias()]['fields']['eyecatch']['name']);
+        $this->assertEquals(false, $setting[$this->table->getAlias()]['fields']['eyecatch']['imageresize']);
+        $this->assertEquals(true, $setting[$this->table->getAlias()]['fields']['eyecatch']['getUniqueFileName']);
+    }
+
+    /**
      * Before Validate
      */
     public function testBeforeMarshal()
