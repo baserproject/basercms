@@ -225,7 +225,6 @@ class BcUploadBehavior extends Behavior
                     'eyecatch_delete' => $data['eyecatch_delete'] ?? null,
                     'eyecatch_' => $data['eyecatch_']  ?? null
                 ]);
-                $this->setupRequestData($data);
                 // arrayをstringとして変換し、保存する
                 $data['eyecatch'] = $data['eyecatch']['name'];
             } else if(is_string($data['eyecatch'])) {
@@ -233,6 +232,7 @@ class BcUploadBehavior extends Behavior
                     'eyecatch' => ['name' => $data['eyecatch']],
                 ]);
             }
+            $this->setupRequestData($data);
         }
     }
 
@@ -260,6 +260,7 @@ class BcUploadBehavior extends Behavior
             // TODO ucmitz updateSystemDataでエラーがでるため一旦書き込み
             $event = $this->table->getEventManager()->matchingListeners('afterSave');
             if ($event) $this->table->getEventManager()->off('Model.afterSave');
+            // TODO ucmitz setUploadedFileの必要性を確認する
             if ($result) {
                 $this->setUploadedFile($uploadedFile);
                 return true;
@@ -286,6 +287,7 @@ class BcUploadBehavior extends Behavior
                     $upload = true;
                 }
             } else {
+                // TODO ucmitz elseの場合の処理未確認
                 if (isset($content[$field['name'] . '_tmp'])) {
                     // セッションに一時ファイルが保存されている場合は復元する
                     if ($this->moveFileSessionToTmp($this->alias, $field['name'])) {
@@ -294,9 +296,10 @@ class BcUploadBehavior extends Behavior
                     }
                 } elseif (isset($content[$field['name'] . '_'])) {
                     // 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
-                    if (isset($uploadedFile['name']['error']) && $uploadedFile['name']['error'] == UPLOAD_ERR_NO_FILE) {
-                        // $Model->data[$Model->name][$field['name']] = $Model->data[$Model->name][$field['name'] . '_'];
-                        // unset($Model->data[$Model->name][$field['name'] . '_']);
+                    if (isset($uploadedFile[$field['name']]['error']) && $uploadedFile[$field['name']]['error'] == UPLOAD_ERR_NO_FILE) {
+                        $uploadedFile[$field['name']] = $uploadedFile[$field['name'] . '_'];
+                        $uploadedFile[$field['name'] . '_'] = null;
+                        $this->setUploadedFile($uploadedFile);
                     }
                 }
             }
@@ -330,17 +333,18 @@ class BcUploadBehavior extends Behavior
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-
-        // if ($this->uploaded[$this->alias]) {
-        //     $uploadedFile = $this->getUploadedFile();
-        //     $this->renameToBasenameFields($entity, $uploadedFile, $copy = false);
-        //     $this->table->save($entity, ['callbacks' => false, 'validate' => false]);
-        //     $this->uploaded[$this->alias] = false;
-        // }
-		// foreach($this->settings[$this->alias]['fields'] as $key => $value) {
-		// 	$this->settings[$this->alias]['fields'][$key]['upload'] = false;
-		// }
-		// return true;
+        if (!empty($this->uploadedFiles[$this->alias]['eyecatch']['name'])) {
+            if ($this->uploaded[$this->alias]) {
+                $uploadedFile = $this->getUploadedFile();
+                $this->renameToBasenameFields($entity, $uploadedFile, $copy = false);
+                $this->table->save($entity, ['callbacks' => false, 'validate' => false]);
+                $this->uploaded[$this->alias] = false;
+            }
+            foreach($this->settings[$this->alias]['fields'] as $key => $value) {
+                $this->settings[$this->alias]['fields'][$key]['upload'] = false;
+            }
+            return true;
+        }
     }
 
     /**
