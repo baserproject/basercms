@@ -71,7 +71,7 @@ class ContentsControllerTest extends BcTestCase
         $this->ContentsController->loadModel('BaserCore.ContentFolders');
         $this->ContentsController->loadModel('BaserCore.Users');
         $this->ContentsController->loadComponent('BaserCore.BcAdminContents');
-        $this->ContentsController->BcAdminContents->setConfig('items', ["test" => ['title' => 'test', 'plugin' => 'BaserCore']]);
+        $this->ContentsController->BcAdminContents->setConfig('items', ["test" => ['title' => 'test', 'plugin' => 'BaserCore', 'type' => 'ContentFolder']]);
         $this->ContentService = new ContentService();
         $this->ContentFolderService = new ContentFolderService();
     }

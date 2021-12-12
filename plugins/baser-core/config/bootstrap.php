@@ -28,18 +28,8 @@ use BaserCore\Event\BcViewEventDispatcher;
 use BaserCore\Utility\BcUtil;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
-use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Event\EventManager;
 use Cake\Validation\Validator;
-
-/**
- * 設定ファイル読み込み
- */
-Configure::config('baser', new PhpConfig());
-Configure::load('BaserCore.setting', 'baser');
-if(file_exists(CONFIG . 'setting.php')) {
-    Configure::load('setting', 'baser');
-}
 
 /**
  * キャッシュ設定

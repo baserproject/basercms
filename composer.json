@@ -7,11 +7,11 @@
     "require": {
         "php": ">=7.2",
         "ext-json": "*",
-        "cakephp/authentication": "^2.3",
+        "cakephp/authentication": "2.3.*",
         "cakephp/cakephp": "4.2.*",
         "cakephp/migrations": "^3.1",
         "doctrine/annotations": "^1.12",
-        "firebase/php-jwt": "^5.3",
+        "firebase/php-jwt": "5.3.*",
         "imo-tikuwa/cakephp3-soft-delete": "^2.0",
         "josegonzalez/dotenv": "^3.2",
         "mobiledetect/mobiledetectlib": "^2.8"
@@ -29,8 +29,10 @@
             "BaserCore\\": "plugins/baser-core/src",
             "BcAdminThird\\": "plugins/bc-admin-third/src",
             "BcBlog\\": "plugins/bc-blog/src/",
+            "BcFront\\": "plugins/bc-front/src/",
             "BcMail\\": "plugins/bc-mail/src/",
-            "BcSample\\": "plugins/BcSample/src/",
+            "BcPage\\": "plugins/bc-page/src/",
+            "BcSpaSample\\": "plugins/BcSpaSample/src/",
             "BcUploader\\": "plugins/bc-uploader/src/",
             "Cake\\Routing\\": "plugins/baser-core/src/Routing"
         }
@@ -39,15 +41,19 @@
         "psr-4": {
             "BaserCore\\Test\\": "plugins/baser-core/tests/",
             "BcBlog\\Test\\": "plugins/bc-blog/tests/",
+            "BcFront\\Test\\": "plugins/bc-front/tests/",
             "BcMail\\Test\\": "plugins/bc-mail/tests/",
-            "BcSample\\Test\\": "plugins/BcSample/tests/",
+            "BcPage\\Test\\": "plugins/bc-page/tests/",
+            "BcSpaSample\\Test\\": "plugins/BcSpaSample/tests/",
             "BcUploader\\Test\\": "plugins/bc-uploader/tests/"
         }
     },
     "replace": {
         "baserproject/baser-core": "self.version",
         "baserproject/bc-admin-third": "self.version",
-        "baserproject/bc-blog": "self.version"
+        "baserproject/bc-blog": "self.version",
+        "baserproject/bc-front": "self.version",
+        "baserproject/bc-page": "self.version"
     },
     "scripts": {
         "post-install-cmd": "App\\Console\\Installer::postInstall",

@@ -55,10 +55,12 @@ nbproject/*
 /plugins/*
 !/plugins/baser-core
 !/plugins/bc-admin-third
+!/plugins/bc-front
+!/plugins/bc-page
 !/plugins/bc-blog
 !/plugins/bc-mail
 !/plugins/bc-uploader
-!/plugins/BcSample
+!/plugins/BcSpaSample
 /plugins/*/vendor
 /plugins/*/composer.lock
 # docker
@@ -75,9 +77,11 @@ LOCAL_TODO.md
 LOCAL_Q&A.md
 # symlink
 /webroot/bc_admin_third
-/webroot/bc_sample
 # uploaded files
 /webroot/files/
+/webroot/bc_spa_sample
+/webroot/bc_front
+/webroot/baser_core
 # jwt
 /config/jwt.key
 /config/jwt.pem

@@ -15,6 +15,7 @@
         "mobiledetect/mobiledetectlib": "^2.8",
         "ext-json": "*",
         "baserproject/bc-admin-third": "0.0.4",
+        "baserproject/bc-front": "0.0.1",
         "imo-tikuwa/cakephp3-soft-delete": "^2.0"
     },
     "require-dev": {
@@ -27,7 +28,7 @@
     "autoload": {
         "psr-4": {
             "BaserCore\\": "src",
-            "Cake\\Routing\\": "plugins/baser-core/src/Routing"
+            "Cake\\Routing\\": "src/Routing"
         }
     },
     "autoload-dev": {

@@ -29,6 +29,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Routing\Route\InflectedRoute;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
+use Cake\Utility\Inflector;
 use Cake\Utility\Security;
 use Exception;
 use Psr\Http\Message\ServerRequestInterface;
@@ -36,7 +37,6 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use ReflectionClass;
-use ReflectionMethod;
 use ReflectionProperty;
 
 /**
@@ -62,7 +62,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
 
         $application->addPlugin('Authentication');
         $application->addPlugin('Migrations');
-        $application->addPlugin('BcAdminThird');
+        $application->addPlugin(Inflector::camelize(Configure::read('BcApp.defaultAdminTheme'), '-'));
+        $application->addPlugin(Inflector::camelize(Configure::read('BcApp.defaultFrontTheme'), '-'));
 
         $plugins = BcUtil::getEnablePlugins();
         if ($plugins) {
@@ -72,6 +73,26 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                 }
             }
         }
+        $this->setupDefaultTemplatesPath();
+    }
+
+    /**
+     * デフォルトテンプレートを設定する
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function setupDefaultTemplatesPath()
+    {
+        if(BcUtil::isAdminSystem()) {
+            $template = Configure::read('BcApp.defaultAdminTheme');
+        } else {
+            $template = Configure::read('BcApp.defaultFrontTheme');
+        }
+        Configure::write('App.paths.templates', array_merge(
+            [ROOT . DS . 'plugins' . DS . $template . DS . 'templates' . DS],
+            Configure::read('App.paths.templates')
+        ));
     }
 
     /**

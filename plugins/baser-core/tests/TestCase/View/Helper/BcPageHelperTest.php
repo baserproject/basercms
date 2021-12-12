@@ -247,42 +247,6 @@ class BcPageHelperTest extends BcTestCase
      */
 
     /**
-     * 固定ページのコンテンツを出力する
-     *
-     * @param string $expected 期待値
-     * @param string $message テスト失敗時、表示するメッセージ
-     * @dataProvider contentDataProvider
-     */
-    public function testContent($fileName, $expected)
-    {
-        $path = APP . 'View/Pages/' . $fileName . '.ctp';
-        $fh = fopen($path, 'w');
-        fwrite($fh, '東京' . PHP_EOL . '埼玉' . PHP_EOL . '大阪' . PHP_EOL);
-        fclose($fh);
-        $this->BcPage->_View->viewVars['pagePath'] = $fileName;
-
-        ob_start();
-        //エラーでファイルが残留するため,tryで確実に削除を実行
-        try {
-            $this->BcPage->content();
-        } catch (Exception $e) {
-            echo 'error: ', $e->getMessage(), "\n";
-        }
-        $result = ob_get_clean();
-        unlink($path);
-
-        $this->assertRegExp('/' . $expected . '/', $result);
-    }
-
-    public function contentDataProvider()
-    {
-        return [
-            ['service', '東京\n埼玉\n大阪\n'],
-            ['service.php', '東京\n埼玉\n大阪\n']
-        ];
-    }
-
-    /**
      * ページリストを取得する
      *
      * @dataProvider getPageListDataProvider

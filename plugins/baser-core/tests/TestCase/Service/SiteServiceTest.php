@@ -89,7 +89,7 @@ class SiteServiceTest extends \BaserCore\TestSuite\BcTestCase
         $users = $this->Sites->getIndex($request->getQueryParams());
         $this->assertEquals('smartphone', $users->first()->name);
 
-        $request = $this->getRequest('/?num=1');
+        $request = $this->getRequest('/?limit=1');
         $users = $this->Sites->getIndex($request->getQueryParams());
         $this->assertEquals(1, $users->all()->count());
 

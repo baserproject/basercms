@@ -1,0 +1,21 @@
+{
+    "name": "baserproject/bc-blog",
+    "description": "BcBlog plugin for baserCMS",
+    "homepage": "https://basercms.net",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.2",
+        "baserproject/baser-core": "0.0.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "BcSpaSample\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BcSpaSample\\Test\\": "tests/"
+        }
+    }
+}

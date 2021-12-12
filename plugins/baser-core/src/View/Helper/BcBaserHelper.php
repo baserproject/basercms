@@ -12,21 +12,19 @@
 namespace BaserCore\View\Helper;
 
 use Cake\View\View;
-use Cake\ORM\Entity;
 use Cake\View\Helper;
 use Cake\Core\Configure;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcAgent;
 use Cake\View\Helper\UrlHelper;
-use BaserCore\Annotation\NoTodo;
 use BaserCore\Model\Entity\User;
-use BaserCore\Annotation\Checked;
 use Cake\View\Helper\FlashHelper;
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Service\SiteServiceInterface;
-use BaserCore\Service\BcFrontServiceInterface;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\UnitTest;
 
 /**
  * Class BcBaserHelper
@@ -399,8 +397,8 @@ class BcBaserHelper extends Helper
         }
 
         if ($options['prefix']) {
-            if (!empty($this->request->getParam('prefix')) && is_array($url)) {
-                $url[$this->request->getParam('prefix')] = true;
+            if (!empty($this->_View->getRequest()->getParam('prefix')) && is_array($url)) {
+                $url[$this->_View->getRequest()->getParam('prefix')] = true;
             }
         }
         $forceTitle = $options['forceTitle'];
@@ -419,7 +417,7 @@ class BcBaserHelper extends Helper
         }
 
         $_url = $this->getUrl($url);
-        $_url = preg_replace('/^' . preg_quote($this->request->base, '/') . '\//', '/', $_url);
+        $_url = preg_replace('/^' . preg_quote($this->_View->getRequest()->base, '/') . '\//', '/', $_url);
         $enabled = true;
 
         if ($options == false) {
@@ -427,8 +425,9 @@ class BcBaserHelper extends Helper
         }
 
         // 認証チェック
-        if (isset($this->_Permission) && !empty($this->_View->viewVars['user']['user_group_id'])) {
-            $userGroupId = $this->_View->viewVars['user']['user_group_id'];
+        $user = $this->_View->get('user');
+        if (isset($this->_Permission) && !empty($user['user_group_id'])) {
+            $userGroupId = $user['user_group_id'];
             if (!$this->_Permission->check($_url, $userGroupId)) {
                 $enabled = false;
             }
@@ -436,7 +435,7 @@ class BcBaserHelper extends Helper
 
         // コンテンツ公開チェック
         // TODO 統合コンテンツ管理のチェックに変更する
-//		if (isset($this->_Page) && $this->request->getParam['prefix'] !== 'Admin') {
+//		if (isset($this->_Page) && $this->_View->getRequest()->getParam['prefix'] !== 'Admin') {
 //			$adminPrefix = Configure::read('Routing.prefixes.0');
 //			if (isset($this->_Page) && !preg_match('/^\/' . $adminPrefix . '/', $_url)) {
 //				if ($this->_Page->isPageUrl($_url) && !$this->_Page->checkPublish($_url)) {
@@ -486,7 +485,7 @@ class BcBaserHelper extends Helper
         }
 
         if (!is_array($url)) {
-            $url = preg_replace('/^' . preg_quote($this->request->base, '/') . '\//', '/', $url);
+            $url = preg_replace('/^' . preg_quote($this->_View->getRequest()->base, '/') . '\//', '/', $url);
         }
         $out = $this->BcHtml->link($title, $url, $options, $confirmMessage);
 
@@ -713,27 +712,27 @@ class BcBaserHelper extends Helper
         $url2 = '';
         $aryUrl = [];
 
-        if (!empty($this->request->getParam('prefix'))) {
-            $prefix = h($this->request->getParam('prefix'));
+        if (!empty($this->_View->getRequest()->getParam('prefix'))) {
+            $prefix = h($this->_View->getRequest()->getParam('prefix'));
         }
-        if (!empty($this->request->getParam('plugin'))) {
-            $plugin = h($this->request->getParam('plugin'));
+        if (!empty($this->_View->getRequest()->getParam('plugin'))) {
+            $plugin = h($this->_View->getRequest()->getParam('plugin'));
         }
-        $controller = h($this->request->getParam('controller'));
+        $controller = h($this->_View->getRequest()->getParam('controller'));
         if ($prefix) {
-            $action = str_replace($prefix . '_', '', h($this->request->getParam('action')));
+            $action = str_replace($prefix . '_', '', h($this->_View->getRequest()->getParam('action')));
         } else {
-            $action = h($this->request->getParam('action'));
+            $action = h($this->_View->getRequest()->getParam('action'));
         }
-        if (!empty($this->request->getParam('pass'))) {
-            foreach($this->request->getParam('pass') as $key => $value) {
+        if (!empty($this->_View->getRequest()->getParam('pass'))) {
+            foreach($this->_View->getRequest()->getParam('pass') as $key => $value) {
                 $pass[$key] = h($value);
             }
         }
 
-        $url = explode('/', h($this->request->url));
+        $url = explode('/', h($this->_View->getRequest()->url));
 
-        if (!empty($this->request->getParam('Site.alias'))) {
+        if (!empty($this->_View->getRequest()->getParam('Site.alias'))) {
             array_shift($url);
         }
 
@@ -749,7 +748,7 @@ class BcBaserHelper extends Helper
 
         // 固定ページの場合
         if (!BcUtil::isAdminSystem()) {
-            $pageUrl = h($this->request->url);
+            $pageUrl = h($this->_View->getRequest()->url);
             if ($pageUrl === false) {
                 $pageUrl = '/';
             } else {
@@ -789,7 +788,7 @@ class BcBaserHelper extends Helper
             }
         }
 
-        if ($this->_View->name == 'CakeError') {
+        if ($this->_View->getName() == 'CakeError') {
             $contentsName = $error;
         } elseif (count($aryUrl) >= 2) {
             if (!$detail) {
@@ -824,7 +823,7 @@ class BcBaserHelper extends Helper
     public function editLink()
     {
         if ($this->existsEditLink()) {
-            $this->link(__d('baser', '編集する'), $this->_View->viewVars['editLink'], ['class' => 'tool-menu']);
+            $this->link(__d('baser', '編集する'), $this->_View->get('editLink'), ['class' => 'tool-menu']);
         }
     }
 
@@ -839,13 +838,13 @@ class BcBaserHelper extends Helper
     {
         if ($this->existsPublishLink()) {
             $siteManage = $this->getService(SiteServiceInterface::class);
-            $site = $siteManage->findByUrl($this->_View->viewVars['publishLink']);
+            $site = $siteManage->findByUrl($this->_View->get('publishLink'));
             $useSubdomain = $fullUrl = false;
-            if ($site && $site->name) {
+            if ($site && $site->getName()) {
                 $useSubdomain = $site->use_subdomain;
                 $fullUrl = true;
             }
-            $url = $this->BcAdminContent->getUrl($this->_View->viewVars['publishLink'], $fullUrl, $useSubdomain, false);
+            $url = $this->BcAdminContent->getUrl($this->_View->get('publishLink'), $fullUrl, $useSubdomain, false);
             $this->link(__d('baser', 'サイト確認'), $url, ['class' => 'tool-menu']);
         }
     }
@@ -955,8 +954,8 @@ class BcBaserHelper extends Helper
             return $keywords;
         }
 
-        if (!empty($this->request->getParam('Site.keyword'))) {
-            return $this->request->getParam('Site.keyword');
+        if (!empty($this->_View->getRequest()->getParam('Site.keyword'))) {
+            return $this->_View->getRequest()->getParam('Site.keyword');
         }
 
         if (!empty($this->siteConfig['keyword'])) {
@@ -981,8 +980,8 @@ class BcBaserHelper extends Helper
 
         if ($this->isHome()) {
 
-            if (!empty($this->request->getParam('Site.description'))) {
-                return $this->request->getParam('Site.description');
+            if (!empty($this->_View->getRequest()->getParam('Site.description'))) {
+                return $this->_View->getRequest()->getParam('Site.description');
             }
 
             if (!empty($this->siteConfig['description'])) {
@@ -1054,8 +1053,8 @@ class BcBaserHelper extends Helper
 
         // サイトタイトルを追加
         $siteName = '';
-        if (!empty($this->request->getParam('Site.title'))) {
-            $siteName = $this->request->getParam('Site.title');
+        if (!empty($this->_View->getRequest()->getParam('Site.title'))) {
+            $siteName = $this->_View->getRequest()->getParam('Site.title');
         } elseif (!empty($this->siteConfig['name'])) {
             $siteName = $this->siteConfig['name'];
         }
@@ -1110,9 +1109,9 @@ class BcBaserHelper extends Helper
         $contentsTitle = $this->getContentsTitle();
         $useCurrentTitle = true;
         // インデックスページで親カテゴリとタイトルが被る場合は重複しないようにする
-        if (!empty($this->request->getParam('Content')) &&
-            $this->request->getParam('Content.type') !== 'ContentFolder' &&
-            $this->request->getParam('Content.name') === 'index' &&
+        if (!empty($this->_View->getRequest()->getParam('Content')) &&
+            $this->_View->getRequest()->getParam('Content.type') !== 'ContentFolder' &&
+            $this->_View->getRequest()->getParam('Content.name') === 'index' &&
             $this->_categoryTitleOn) {
             $parentTitle = '';
             if ($this->_categoryTitle === true && $crumbs) {
@@ -1193,19 +1192,24 @@ class BcBaserHelper extends Helper
      */
     public function isHome()
     {
-        if (empty($this->request->getParam('Site'))) {
+        if (empty($this->_View->getRequest()->getParam('Site'))) {
             return false;
         }
+        // TODO ucmitz 未実装のため代替措置
+        // >>>
+        return false;
+        // <<<
+
         $site = $this->_View->getRequest()->getAttribute('currentSite');
         if (!$site->alias || $site->same_main_url || $site->use_subdomain) {
             return (
-                $this->request->url == false ||
-                $this->request->url == 'index'
+                $this->_View->getRequest()->url == false ||
+                $this->_View->getRequest()->url == 'index'
             );
         } else {
             return (
-                $this->request->url == $site->alias . '/' ||
-                $this->request->url == $site->alias . '/index'
+                $this->_View->getRequest()->url == $site->alias . '/' ||
+                $this->_View->getRequest()->url == $site->alias . '/index'
             );
         }
     }
@@ -1241,7 +1245,7 @@ class BcBaserHelper extends Helper
      */
     public function getRoot()
     {
-        return $this->request->base . '/';
+        return $this->_View->getRequest()->base . '/';
     }
 
     /**
@@ -1272,7 +1276,7 @@ class BcBaserHelper extends Helper
         /*** Controller.header ***/
         $event = $this->dispatchLayerEvent('header', [
             'out' => $out
-        ], ['layer' => 'View', 'class' => $this->_View->name]);
+        ], ['layer' => 'View', 'class' => $this->_View->getName()]);
         if ($event !== false) {
             $out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
@@ -1307,7 +1311,7 @@ class BcBaserHelper extends Helper
         /*** Controller.footer ***/
         $event = $this->dispatchLayerEvent('footer', [
             'out' => $out
-        ], ['layer' => 'View', 'class' => $this->_View->name]);
+        ], ['layer' => 'View', 'class' => $this->_View->getName()]);
         if ($event) {
             $out = ($event->getResult() === null || $event->getResult() === true)? $event->getData('out') : $event->getResult();
         }
@@ -1352,7 +1356,7 @@ class BcBaserHelper extends Helper
         $this->dispatchLayerEvent('contentHeader', null, ['layer' => 'View', 'class' => '', 'plugin' => '']);
 
         /*** Controller.contentHeader ***/
-        $this->dispatchLayerEvent('contentHeader', null, ['layer' => 'View', 'class' => $this->_View->name]);
+        $this->dispatchLayerEvent('contentHeader', null, ['layer' => 'View', 'class' => $this->_View->getName()]);
 
         echo $this->_View->fetch('content');
 
@@ -1360,7 +1364,7 @@ class BcBaserHelper extends Helper
         $event = $this->dispatchLayerEvent('contentFooter', null, ['layer' => 'View', 'class' => '', 'plugin' => '']);
 
         /*** Controller.contentFooter ***/
-        $event = $this->dispatchLayerEvent('contentFooter', null, ['layer' => 'View', 'class' => $this->_View->name]);
+        $event = $this->dispatchLayerEvent('contentFooter', null, ['layer' => 'View', 'class' => $this->_View->getName()]);
     }
 
     /**
@@ -1394,16 +1398,16 @@ class BcBaserHelper extends Helper
         // - Query String で、toolbar=false に定義されていない
         // - 管理画面でない
         // - ログインしている
-        if (empty($this->_View->viewVars['preview']) && $toolbar) {
-            if (!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
-                if ($this->request->getParam('prefix') !== 'Admin' && !empty($this->_View->viewVars['user'])) {
+        if (empty($this->_View->get('preview')) && $toolbar) {
+            if (!isset($this->_View->getRequest()->query['toolbar']) || ($this->_View->getRequest()->query['toolbar'] !== false && $this->_View->getRequest()->query['toolbar'] !== 'false')) {
+                if ($this->_View->getRequest()->getParam('prefix') !== 'Admin' && !empty($this->_View->get('user'))) {
                     $this->css('admin/toolbar');
                 }
             }
         }
 
-        if (empty($this->_View->viewVars['preview']) && Configure::read('BcWidget.editLinkAtFront')) {
-            if ($this->request->getParam('prefix') !== 'Admin' && !empty($this->_View->viewVars['user'])) {
+        if (empty($this->_View->get('preview')) && Configure::read('BcWidget.editLinkAtFront')) {
+            if ($this->_View->getRequest()->getParam('prefix') !== 'Admin' && !empty($this->_View->get('user'))) {
                 $this->css('admin/widget_link');
             }
         }
@@ -1425,7 +1429,7 @@ class BcBaserHelper extends Helper
         // 《表示条件》
         // - インストーラーではない
         // - /files/theme_configs/config.css が存在する
-        if (!BcUtil::isAdminSystem() && $this->params['controller'] != 'installations' && file_exists(WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css')) {
+        if (!BcUtil::isAdminSystem() && $this->_View->getRequest()->getParam('controller') != 'installations' && file_exists(WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css')) {
             $this->css('/files/theme_configs/config');
         }
 
@@ -1462,19 +1466,22 @@ class BcBaserHelper extends Helper
         // - Query String で、toolbar=false に定義されていない
         // - 管理画面でない
         // - ログインしている
-        if (empty($this->_View->viewVars['preview']) && $toolbar) {
-            if (!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
-                if ($this->request->getParam('prefix') !== 'Admin' && !empty($this->_View->viewVars['user'])) {
+        if (empty($this->_View->get('preview')) && $toolbar) {
+            if (!isset($this->_View->getRequest()->query['toolbar']) || ($this->_View->getRequest()->query['toolbar'] !== false && $this->_View->getRequest()->query['toolbar'] !== 'false')) {
+                if ($this->_View->getRequest()->getParam('prefix') !== 'Admin' && !empty($this->_View->get('user'))) {
                     $this->element('admin/toolbar', [], ['subDir' => false]);
                 }
             }
         }
 
         // デバッグ
-        if (Configure::read('debug') >= 2) {
-            $this->element('template_dump', [], ['subDir' => false]);
-            $this->element('sql_dump', [], ['subDir' => false]);
-        }
+        // TODO ucmitz 未実装のためコメントアウト
+        // >>>
+//        if (Configure::read('debug') >= 2) {
+//            $this->element('template_dump', [], ['subDir' => false]);
+//            $this->element('sql_dump', [], ['subDir' => false]);
+//        }
+        // <<<
     }
 
     /**
@@ -1496,7 +1503,7 @@ class BcBaserHelper extends Helper
      */
     public function xmlHeader($attrib = [])
     {
-        if (empty($attrib['encoding']) && !empty($this->request->getParam('Site.device')) && $this->request->getParam('Site.device') == 'mobile') {
+        if (empty($attrib['encoding']) && !empty($this->_View->getRequest()->getParam('Site.device')) && $this->_View->getRequest()->getParam('Site.device') == 'mobile') {
             $attrib['encoding'] = 'Shift-JIS';
         }
         echo $this->BcXml->header($attrib) . "\n";
@@ -1520,7 +1527,10 @@ class BcBaserHelper extends Helper
      */
     public function docType($type = 'xhtml-trans')
     {
-        echo $this->BcHtml->docType($type) . "\n";
+        // TODO ucmitz 未実装のためコメントアウト
+        // >>>
+//        echo $this->BcHtml->docType($type) . "\n";
+        // <<<
     }
 
     /**
@@ -1559,7 +1569,7 @@ class BcBaserHelper extends Helper
      */
     public function isSSL()
     {
-        return $this->request->is('ssl');
+        return $this->_View->getRequest()->is('ssl');
     }
 
     /**
@@ -1572,7 +1582,7 @@ class BcBaserHelper extends Helper
      */
     public function charset($charset = null)
     {
-        if (!$charset && !empty($this->request->getParam('Site.device')) && $this->request->getParam('Site.device') == 'mobile') {
+        if (!$charset && !empty($this->_View->getRequest()->getParam('Site.device')) && $this->_View->getRequest()->getParam('Site.device') === 'mobile') {
             $charset = 'Shift-JIS';
         }
         echo $this->BcHtml->charset($charset);
@@ -1608,7 +1618,7 @@ class BcBaserHelper extends Helper
      */
     public function setPageEditLink($id)
     {
-        if ($this->request->getParam('prefix') !== 'Admin' && !empty($this->_View->get('user'))) {
+        if ($this->_View->getRequest()->getParam('prefix') !== 'Admin' && !empty($this->_View->get('user'))) {
             $this->_View->set('editLink', ['admin' => true, 'controller' => 'pages', 'action' => 'edit', $id]);
         }
     }
@@ -1646,8 +1656,8 @@ class BcBaserHelper extends Helper
             return '';
         }
         $site = null;
-        if (!empty($this->request->getParam('Site'))) {
-            $site = $this->request->getParam('Site');
+        if (!empty($this->_View->getRequest()->getParam('Site'))) {
+            $site = $this->_View->getRequest()->getParam('Site');
         }
         $Site = ClassRegistry::init('Site');
         return $Site->getPrefix($site);
@@ -1671,10 +1681,10 @@ class BcBaserHelper extends Helper
         }
         if ($startText) {
             $homeUrl = '/';
-            if (!empty($this->request->getParam('Site.alias'))) {
-                $homeUrl = '/' . $this->request->getParam('Site.alias') . '/';
-            } elseif (!empty($this->request->getParam('Site.name'))) {
-                $homeUrl = '/' . $this->request->getParam('Site.name') . '/';
+            if (!empty($this->_View->getRequest()->getParam('Site.alias'))) {
+                $homeUrl = '/' . $this->_View->getRequest()->getParam('Site.alias') . '/';
+            } elseif (!empty($this->_View->getRequest()->getParam('Site.name'))) {
+                $homeUrl = '/' . $this->_View->getRequest()->getParam('Site.name') . '/';
             }
             array_unshift($crumbs, [
                 0 => $startText,
@@ -1921,7 +1931,7 @@ EOD;
     {
         if (!$id) {
             // $Content = ClassRegistry::init('Content');
-            $siteRoot = $this->BcAdminContent->getSiteRoot($this->request->params['Content']['site_id']);
+            $siteRoot = $this->BcAdminContent->getSiteRoot($this->_View->getRequest()->params['Content']['site_id']);
             $id = $siteRoot['Content']['id'];
         }
         $options = array_merge([
@@ -1997,16 +2007,22 @@ EOD;
      */
     public function getGlobalMenu($level = 1, $options = [])
     {
+
+        // TODO ucmitz 未実装
+        // >>>
+        return '';
+        // <<<
+
         $Content = ClassRegistry::init('Content');
         $siteId = 0;
-        if (!empty($this->request->params['Content']['site_id'])) {
-            $siteId = $this->request->params['Content']['site_id'];
+        if (!empty($this->_View->getRequest()->params['Content']['site_id'])) {
+            $siteId = $this->_View->getRequest()->params['Content']['site_id'];
         }
         $siteRoot = $this->BcAdminContent->getSiteRoot($siteId);
         $id = $siteRoot['Content']['id'];
         $currentId = null;
-        if (!empty($this->request->getParam('Content.id'))) {
-            $currentId = $this->request->getParam('Content.id');
+        if (!empty($this->_View->getRequest()->getParam('Content.id'))) {
+            $currentId = $this->_View->getRequest()->getParam('Content.id');
         }
         $options = array_merge([
             'tree' => $this->BcContents->getTree($id, $level),
@@ -2119,7 +2135,7 @@ END_FLASH;
      */
     public function isPage()
     {
-        return ($this->request->getParam('controller') == 'pages' && $this->request->getParam('action') == 'display');
+        return ($this->_View->getRequest()->getParam('controller') == 'pages' && $this->_View->getRequest()->getParam('action') == 'display');
     }
 
     /**
@@ -2131,7 +2147,7 @@ END_FLASH;
      */
     public function getHere()
     {
-        return '/' . preg_replace('/^\//', '', $this->request->url);
+        return '/' . preg_replace('/^\//', '', $this->_View->getRequest()->url);
     }
 
     /**
@@ -2173,7 +2189,7 @@ END_FLASH;
      */
     public function page($url, $params = [], $options = [])
     {
-        if (isset($this->_View->viewVars['pageRecursive']) && !$this->_View->viewVars['pageRecursive']) {
+        if (!empty($this->_View->get('pageRecursive')) && !$this->_View->get('pageRecursive')) {
             return;
         }
 
@@ -2257,8 +2273,8 @@ END_FLASH;
 
         $subDir = $options['subDir'];
 
-        if (!$no && isset($this->_View->viewVars['widgetArea'])) {
-            $no = $this->_View->viewVars['widgetArea'];
+        if (!$no && !empty($this->_View->get('widgetArea'))) {
+            $no = $this->_View->get('widgetArea');
         }
         if ($no) {
             return $this->getElement('widget_area', ['no' => $no, 'subDir' => $subDir], ['subDir' => $subDir]);
@@ -2281,7 +2297,7 @@ END_FLASH;
     {
         $pattern = '/\/$/';
         $shortenedUrl = preg_replace($pattern, '/index', $this->getUrl($url));
-        $shortenedHere = preg_replace($pattern, '/index', $this->request->here);
+        $shortenedHere = preg_replace($pattern, '/index', $this->_View->getRequest()->here);
         return ($shortenedUrl === $shortenedHere);
     }
 
@@ -2400,6 +2416,11 @@ END_FLASH;
      */
     public function getThemeImage($name, $options = [])
     {
+        // TODO ucmitz 未実装
+        // >>>
+        return '';
+        // <<<
+
         $ThemeConfig = ClassRegistry::init('ThemeConfig');
         $data = $ThemeConfig->getKeyValue();
 
@@ -2514,9 +2535,9 @@ END_FLASH;
                 $link = $originUrl;
             } elseif ($options['link']) {
                 $link = $options['link'];
-                if (!empty($this->request->getParam('Site.alias'))) {
-                    if (empty($this->request->params['Site']['same_main_url'])) {
-                        $link = '/' . $this->request->getParam('Site.alias') . $link;
+                if (!empty($this->_View->getRequest()->getParam('Site.alias'))) {
+                    if (empty($this->_View->getRequest()->params['Site']['same_main_url'])) {
+                        $link = '/' . $this->_View->getRequest()->getParam('Site.alias') . $link;
                     }
                 }
             }
@@ -2535,7 +2556,7 @@ END_FLASH;
      */
     public function getThemeUrl()
     {
-        return $this->request->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
+        return $this->_View->getRequest()->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
     }
 
     /**
@@ -2557,7 +2578,7 @@ END_FLASH;
      */
     public function getBaseUrl()
     {
-        return $this->request->base . '/';
+        return $this->_View->getRequest()->base . '/';
     }
 
     /**
@@ -2725,8 +2746,9 @@ END_FLASH;
      */
     public function getSiteName()
     {
-        if (!empty($this->_View->viewVars['siteConfig']['formal_name'])) {
-            return $this->_View->viewVars['siteConfig']['formal_name'];
+        $siteConfig = $this->_View->get('siteConfig');
+        if (!empty($siteConfig['formal_name'])) {
+            return $siteConfig['formal_name'];
         }
 
         if (!empty($this->siteConfig['formal_name'])) {
@@ -2778,10 +2800,10 @@ END_FLASH;
      */
     public function getParams()
     {
-        $params = $this->request->params;
-        $params['query'] = $this->request->query;
-        $params['url'] = $this->request->url;
-        $params['here'] = $this->request->here;
+        $params = $this->_View->getRequest()->params;
+        $params['query'] = $this->_View->getRequest()->query;
+        $params['url'] = $this->_View->getRequest()->url;
+        $params['here'] = $this->_View->getRequest()->here;
         unset($params['named']);
         unset($params['controller']);
         unset($params['action']);
@@ -2798,8 +2820,8 @@ END_FLASH;
      */
     public function getCurrentContent()
     {
-        if (!empty($this->request->getParam('Content'))) {
-            return $this->request->getParam('Content');
+        if (!empty($this->_View->getRequest()->getParam('Content'))) {
+            return $this->_View->getRequest()->getParam('Content');
         }
         return null;
     }
@@ -2811,11 +2833,11 @@ END_FLASH;
      */
     public function getCurrentPrefix()
     {
-        if (empty($this->request->getParam('Site'))) {
+        if (empty($this->_View->getRequest()->getParam('Site'))) {
             return '';
         }
         $Site = ClassRegistry::init('Site');
-        return $Site->getPrefix($this->request->getParam('Site'));
+        return $Site->getPrefix($this->_View->getRequest()->getParam('Site'));
     }
 
     /**
@@ -2909,7 +2931,7 @@ END_FLASH;
         if (BcUtil::isAdminSystem()) {
             return;
         }
-        if (empty($this->request->getParam('Site'))) {
+        if (empty($this->_View->getRequest()->getParam('Site'))) {
             return;
         }
         $this->setCanonicalUrl();
@@ -2935,12 +2957,12 @@ END_FLASH;
             $sites = \Cake\ORM\TableRegistry::getTableLocator()->get('BaserCore.Sites');
             $mainSite = $sites->getMainByUrl($this->_View->getRequest()->getPath());
             $url = $mainSite->makeUrl(new CakeRequest($this->BcContents->getPureUrl(
-                $this->request->url,
-                $this->request->params['Site']['id']
+                $this->_View->getRequest()->url,
+                $this->_View->getRequest()->params['Site']['id']
             )));
 
         } else {
-            $url = '/' . $this->request->url;
+            $url = '/' . $this->_View->getRequest()->url;
         }
         $url = preg_replace('/\.html$/', '', $url);
         $url = preg_replace('/\\/index$/', '/', $url);
@@ -2971,8 +2993,8 @@ END_FLASH;
             return;
         }
         $url = $subSite->makeUrl(new CakeRequest($this->BcContents->getPureUrl(
-            $this->request->url,
-            $this->request->params['Site']['id']
+            $this->_View->getRequest()->url,
+            $this->_View->getRequest()->params['Site']['id']
         )));
         $this->_View->set('meta',
             $this->BcHtml->meta('alternate',
@@ -3036,8 +3058,8 @@ END_FLASH;
     public function getContentsUrl($url = null, $full = false, $useSubDomain = null, $base = true)
     {
         if (!$url) {
-            if (!empty($this->request->getParam('Content.url'))) {
-                $url = $this->request->getParam('Content.url');
+            if (!empty($this->_View->getRequest()->getParam('Content.url'))) {
+                $url = $this->_View->getRequest()->getParam('Content.url');
             } else {
                 $url = '/';
             }

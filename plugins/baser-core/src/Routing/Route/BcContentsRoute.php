@@ -142,12 +142,7 @@ class BcContentsRoute extends Route
     {
         $viewParams = Configure::read('BcContents.items.' . $plugin . '.' . $type . '.routes.view');
         if (!$viewParams) {
-            $viewParams = Configure::read('BcContents.items.BaserCore.Default.routes.view');
-            $params = [
-                'controller' => $viewParams['controller'],
-                'action' => $viewParams['action'],
-                'pass' => [$plugin, $type]
-            ];
+            return false;
         } else {
             $pass = [];
             $named = [];
@@ -157,7 +152,7 @@ class BcContentsRoute extends Route
             if ($alias) {
                 $pureEntryUrl = preg_replace('/^\/' . preg_quote($alias, '/') . '\//', '/', $pureEntryUrl);
             }
-            if ($type == 'Page' || $type == 'ContentLink') {
+            if ($type === 'Page' || $type === 'ContentLink') {
                 $url = preg_replace('/^\//', '', $entryUrl);
                 $pass = explode('/', $url);
             } elseif ($requestUrl != $pureEntryUrl) {
@@ -183,7 +178,7 @@ class BcContentsRoute extends Route
             $controllerClass = Inflector::camelize($viewParams['controller']) . 'Controller';
             $controllerClass = ($plugin)? $plugin . '\\Controller\\' . $controllerClass : 'App\\Controller\\' . $controllerClass;
             $methods = get_class_methods($controllerClass);
-            if (!in_array($action, $methods)) {
+            if (!$methods || !in_array($action, $methods)) {
                 return false;
             }
             $params = [

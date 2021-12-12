@@ -49,6 +49,17 @@ class PluginsFixture extends TestFixture
             'created' => '2021-05-03 10:57:07',
             'modified' => '2021-05-03 10:57:07'
         ],
+        [
+            'id' => 3,
+            'name' => 'BcPage',
+            'title' => '固定ページ',
+            'version' => '1.0.0',
+            'status' => '1',
+            'db_init' => '1',
+            'priority' => '3',
+            'created' => '2021-05-03 10:57:07',
+            'modified' => '2021-05-03 10:57:07'
+        ],
         // [
         //     'id' => 3,
         //     'name' => 'BcUploader',

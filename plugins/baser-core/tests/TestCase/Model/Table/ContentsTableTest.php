@@ -17,9 +17,7 @@ use ReflectionClass;
 use Cake\Core\Configure;
 use Cake\ORM\Marshaller;
 use Cake\I18n\FrozenTime;
-use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
-use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Entity\Content;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Model\Table\ContentsTable;
@@ -626,7 +624,7 @@ class ContentsTableTest extends BcTestCase
         return [
             ['BcMail.MailContent', null, 9],    // entityId指定なし
             ['BcBlog.BlogContent', 1, 10],    // entityId指定あり
-            ['Page', 3, 11],                // プラグイン指定なし
+            ['ContentFolder', 1, 1],                // プラグイン指定なし
             ['BcBlog.BlogComment', null, null],    // 存在しないタイプ
             [false, null, null]                // 異常系
         ];

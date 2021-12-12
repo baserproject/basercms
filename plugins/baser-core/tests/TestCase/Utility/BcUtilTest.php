@@ -219,7 +219,7 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetEnablePlugins(): void
     {
-        $expects = ['BcBlog', 'BcMail'];
+        $expects = ['BcBlog', 'BcMail', 'BcPage'];
         $result = BcUtil::getEnablePlugins();
         foreach($result as $key => $value) {
             $result[$key] = $value->name;
@@ -793,7 +793,7 @@ class BcUtilTest extends BcTestCase
     {
         $this->assertEquals(ROOT . '/plugins/baser-core/', BcUtil::getPluginPath('BaserCore'));
         $this->assertEquals(ROOT . '/plugins/bc-blog/', BcUtil::getPluginPath('BcBlog'));
-        $this->assertEquals(ROOT . '/plugins/BcSample/', BcUtil::getPluginPath('BcSample'));
+        $this->assertEquals(ROOT . '/plugins/BcSpaSample/', BcUtil::getPluginPath('BcSpaSample'));
     }
 
     /**
@@ -803,7 +803,7 @@ class BcUtilTest extends BcTestCase
     {
         $this->assertEquals('baser-core', BcUtil::getPluginDir('BaserCore'));
         $this->assertEquals('bc-blog', BcUtil::getPluginDir('BcBlog'));
-        $this->assertEquals('BcSample', BcUtil::getPluginDir('BcSample'));
+        $this->assertEquals('BcSpaSample', BcUtil::getPluginDir('BcSpaSample'));
     }
 
     /**

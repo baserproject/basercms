@@ -63,7 +63,7 @@ class ContentsFixture extends TestFixture
             [
                 'id' => 4,
                 'name' => 'index',
-                'plugin' => 'BaserCore',
+                'plugin' => 'BcPage',
                 'type' => 'Page',
                 'entity_id' => 1,
                 'url' => '/index',
@@ -98,7 +98,7 @@ class ContentsFixture extends TestFixture
             [
                 'id' => 5,
                 'name' => 'about',
-                'plugin' => 'BaserCore',
+                'plugin' => 'BcPage',
                 'type' => 'Page',
                 'entity_id' => 2,
                 'url' => '/about',
@@ -168,7 +168,7 @@ class ContentsFixture extends TestFixture
             [
                 'id' => 7,
                 'name' => 'sample',
-                'plugin' => 'BaserCore',
+                'plugin' => 'BcPage',
                 'type' => 'Page',
                 'entity_id' => 5,
                 'url' => '/sample',
@@ -273,7 +273,7 @@ class ContentsFixture extends TestFixture
             [
                 'id' => 11,
                 'name' => 'service1',
-                'plugin' => 'BaserCore',
+                'plugin' => 'BcPage',
                 'type' => 'Page',
                 'entity_id' => 3,
                 'url' => '/service/service1',
@@ -308,7 +308,7 @@ class ContentsFixture extends TestFixture
             [
                 'id' => 12,
                 'name' => 'service2',
-                'plugin' => 'BaserCore',
+                'plugin' => 'BcPage',
                 'type' => 'Page',
                 'entity_id' => 6,
                 'url' => '/service/service2',
@@ -343,7 +343,7 @@ class ContentsFixture extends TestFixture
             [
                 'id' => 13,
                 'name' => 'service3',
-                'plugin' => 'BaserCore',
+                'plugin' => 'BcPage',
                 'type' => 'Page',
                 'entity_id' => 7,
                 'url' => '/service/service3',

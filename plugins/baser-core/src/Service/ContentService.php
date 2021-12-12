@@ -230,8 +230,8 @@ class ContentService implements ContentServiceInterface
             }
         }
 
-        if (!empty($queryParams['num'])) {
-            $query = $query->limit($queryParams['num']);
+        if (!empty($queryParams['limit'])) {
+            $query = $query->limit($queryParams['limit']);
         }
 
         return $query;

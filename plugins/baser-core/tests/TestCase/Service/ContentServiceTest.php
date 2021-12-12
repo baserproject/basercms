@@ -197,7 +197,7 @@ class ContentServiceTest extends BcTestCase
         $this->assertEquals('index', $contents->first()->name);
         $this->assertEquals('トップページ', $contents->first()->title);
 
-        $request = $this->getRequest('/?num=1');
+        $request = $this->getRequest('/?limit=1');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
         $this->assertEquals(1, $contents->all()->count());
         // softDeleteの場合
