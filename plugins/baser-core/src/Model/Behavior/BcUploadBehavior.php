@@ -219,8 +219,8 @@ class BcUploadBehavior extends Behavior
                 // アップロードのデータをsetUploadedFileに退避する
                 $this->setUploadedFile([
                     'eyecatch' => $data['eyecatch'],
-                    'eyecatch_delete' => $data['eyecatch_delete'],
-                    'eyecatch_' => $data['eyecatch_']
+                    'eyecatch_delete' => $data['eyecatch_delete'] ?? null,
+                    'eyecatch_' => $data['eyecatch_']  ?? null
                 ]);
                 $this->setupRequestData($data);
                 // arrayをstringとして変換し、保存する
@@ -250,7 +250,8 @@ class BcUploadBehavior extends Behavior
             }
             $uploadedFile = $this->getUploadedFile();
 
-            $uploadedFile = $this->deleteFiles($entity, $uploadedFile);
+            $this->deleteFiles($entity, $uploadedFile);
+            // $uploadedFile = $this->deleteFiles($entity, $uploadedFile);
 
             $result = $this->saveFiles($uploadedFile);
             // TODO ucmitz updateSystemDataでエラーがでるため一旦書き込み
@@ -1104,7 +1105,6 @@ class BcUploadBehavior extends Behavior
         $conditions[$fieldName . ' LIKE'] = $basename . '%' . $ext;
         // FIXME: ->order("{$this->alias}.{$fieldName}")がうまく行かないので、調整する
         $datas = $this->table->find()->where([$conditions])->select($fieldName)->all()->toArray();
-        $a = $this->table->find()->all()->toArray();
         $numbers = [];
 
         if ($datas) {

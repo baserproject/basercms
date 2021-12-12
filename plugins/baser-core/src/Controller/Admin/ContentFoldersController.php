@@ -43,7 +43,7 @@ class ContentFoldersController extends BcAdminAppController
     {
         parent::initialize();
         $this->loadComponent('BaserCore.BcAdminContents');
-        $this->Security->setConfig('unlockedFields', ['ContentFolder.content.eyecatch']);
+        $this->Security->setConfig('unlockedFields', ['ContentFolder.content.eyecatch', 'ContentFolder.content.eyecatch_', 'ContentFolder.content.eyecatch_delete']);
     }
 
     /**
