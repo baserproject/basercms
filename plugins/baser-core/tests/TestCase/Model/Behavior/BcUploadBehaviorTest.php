@@ -184,8 +184,11 @@ class BcUploadBehaviorTest extends BcTestCase
         $this->assertNotEmpty($this->BcUploadBehavior->settings);
         $this->assertNotEmpty($this->BcUploadBehavior->savePath);
         $this->assertNotEmpty($this->BcUploadBehavior->existsCheckDirs);
-        // TODO: フォルダ作成チェック
-        // TODO: sessionテスト
+        $this->assertNotEmpty($this->BcUploadBehavior->Session);
+        // testフォルダがない場合作られるかテスト
+        $this->BcUploadBehavior->initialize(['saveDir' => 'test']);
+        $this->assertFileExists("/var/www/html/webroot/files/test/");
+        rmdir("/var/www/html/webroot/files/test/");
     }
 
     /**

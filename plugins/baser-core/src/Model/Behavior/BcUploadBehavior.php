@@ -131,6 +131,7 @@ class BcUploadBehavior extends Behavior
      * @param  array $config
      * @return void
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function initialize(array $config): void
@@ -144,7 +145,6 @@ class BcUploadBehavior extends Behavior
 			$Folder->create($this->savePath[$this->alias]);
 			$Folder->chmod($this->savePath[$this->alias], 0777, true);
 		}
-
 		$this->existsCheckDirs[$this->alias] = $this->getExistsCheckDirs($this->alias);
         $this->Session = new Session();
     }
@@ -1145,7 +1145,7 @@ class BcUploadBehavior extends Behavior
     }
 
     /**
-     * 保存先のフォルダを設定する
+     * 保存先のフォルダを設定し、取得する
      * @param null|string $alias(default : null)
      * @param string $saveDir
      * @param bool $isTheme
