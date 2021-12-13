@@ -234,22 +234,19 @@ class BcUploadBehavior extends Behavior
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if (!empty($this->uploadedFiles[$this->alias]['eyecatch']['name'])) {
+        if (isset($this->uploadedFiles[$this->alias]['eyecatch']['name'])) {
             if ($entity->id) {
                 $this->deleteExistingFiles();
             }
             $uploadedFile = $this->getUploadedFile();
 
-            $this->deleteFiles($entity, $uploadedFile);
-            // $uploadedFile = $this->deleteFiles($entity, $uploadedFile);
+            $entity = $this->deleteFiles($entity, $uploadedFile);
 
             $result = $this->saveFiles($uploadedFile);
             // TODO ucmitz updateSystemDataでエラーがでるため一旦書き込み
-            $event = $this->table->getEventManager()->matchingListeners('afterSave');
-            if ($event) $this->table->getEventManager()->off('Model.afterSave');
             // TODO ucmitz setUploadedFileの必要性を確認する
             if ($result) {
-                $this->setUploadedFile($uploadedFile);
+                $this->setUploadedFile($result);
                 return true;
             } else {
                 return false;
@@ -329,11 +326,9 @@ class BcUploadBehavior extends Behavior
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        if (!empty($this->uploadedFiles[$this->alias]['eyecatch']['name'])) {
+        if (isset($this->uploadedFiles[$this->alias]['eyecatch']['name'])) {
             if ($this->uploaded[$this->alias]) {
-                $uploadedFile = $this->getUploadedFile();
-                $this->renameToBasenameFields($entity, $uploadedFile, $copy = false);
-                $this->table->save($entity, ['callbacks' => false, 'validate' => false]);
+                $this->renameToBasenameFields($entity, false);
                 $this->uploaded[$this->alias] = false;
             }
             foreach($this->settings[$this->alias]['fields'] as $key => $value) {
@@ -388,7 +383,9 @@ class BcUploadBehavior extends Behavior
             }
             $uploadedFile = $this->deleteFileWhileChecking($field, $uploadedFile, $oldValue);
         }
-        return $uploadedFile;
+        // eyecatchが削除されていたら、$entityのeyecatchも空にする
+        if (empty($uploadedFile[$field['name']])) $entity->eyecatch = "";
+        return $entity;
     }
 
     /**
@@ -428,14 +425,9 @@ class BcUploadBehavior extends Behavior
         $this->uploaded[$this->alias] = false;
         foreach($this->settings[$this->alias]['fields'] as $key => $field) {
             $uploaded = $this->saveFileWhileChecking($field, $uploadedFile);
-            if ($uploaded) {
-                $requestData = $uploaded;
-            } else {
-                // 失敗したら処理を中断してfalseを返す
-                return false;
-            }
+            // 失敗したら処理を中断してfalseを返す
+            return $uploaded ?? false;
         }
-        return $requestData;
     }
 
     /**
@@ -453,9 +445,7 @@ class BcUploadBehavior extends Behavior
             'deleteTmpFiles' => true
         ], $options);
 
-        if (empty($uploadedFile)
-            || !is_array($uploadedFile)
-        ) {
+        if (empty($uploadedFile[$fieldSetting['name']]['name'])) {
             return $uploadedFile;
         }
 
@@ -466,7 +456,7 @@ class BcUploadBehavior extends Behavior
             }
             return [];
         }
-        // TODO: $entity->eyecatchが必要
+        // TODO: ucmitz $entity->eyecatchが必要
         // ファイル名が重複していた場合は変更する
         if ($fieldSetting['getUniqueFileName'] && !$this->tmpId) {
             $uploadedFile[$fieldSetting['name']]['name'] = $this->getUniqueFileName($fieldSetting['name'], $uploadedFile[$fieldSetting['name']]['name'], $fieldSetting);
@@ -830,7 +820,6 @@ class BcUploadBehavior extends Behavior
             if (empty($field['name'])) {
                 $field['name'] = $key;
             }
-            // eyecatchなど$field['name']に入る$uploadedFilesのもう一個上の階層をどうやって取得するか考える
             if (!$fieldName || ($fieldName && $fieldName == $field['name'])) {
                 if (!empty($uploadedFiles[$field['name']])) {
                     $file = $uploadedFiles[$field['name']]['name'];
@@ -902,23 +891,28 @@ class BcUploadBehavior extends Behavior
     /**
      * 全フィールドのファイル名をフィールド値ベースのファイル名に変更する
      *
-     * @param Model $Model
+     * @param EntityInterface $entity
      * @param bool $copy
-     * @return array
-     * TODO ucmitz : モデル 全体
+     * @return void
      */
-    public function renameToBasenameFields($entity, $uploadedFile, $copy = false)
+    public function renameToBasenameFields($entity, $copy = false)
     {
+        $uploadedFile = $this->getUploadedFile();
         foreach($this->settings[$this->alias]['fields']  as $key => $setting) {
             if (empty($setting['name'])) {
                 $setting['name'] = $key;
             }
             $value = $this->renameToBasenameField($entity, $uploadedFile, $setting, $copy);
             if ($value !== false) {
-                $uploadedFile[$setting['name']] = $value;
+                $entity->eyecatch = $value;
+                // 保存時にbeforeSaveとafterSaveのループを防ぐ
+                $this->table->getEventManager()->off('Model.beforeSave');
+                $this->table->getEventManager()->off('Model.afterSave');
+                $this->table->save($entity, ['callbacks' => false, 'validate' => false]);
+                $uploadedFile[$setting['name']]['name'] = $value;
+                $this->setUploadedFile($uploadedFile);
             }
         }
-        return $uploadedFile;
     }
 
     /**
@@ -935,7 +929,7 @@ class BcUploadBehavior extends Behavior
         if (empty($setting['namefield']) || empty($uploadedFile[$setting['name']])) {
             return false;
         }
-        $oldName = $uploadedFile[$setting['name']];
+        $oldName = $uploadedFile[$setting['name']]['name'];
         if (is_array($oldName)) {
             return false;
         }
