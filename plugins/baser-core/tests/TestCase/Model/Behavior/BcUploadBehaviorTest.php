@@ -250,12 +250,10 @@ class BcUploadBehaviorTest extends BcTestCase
                 "type" => "image/png",
                 ]
         ];
-        $this->BcUploadBehavior->setUploadedFile($data);
-        $this->BcUploadBehavior->setupRequestData();
+        $this->BcUploadBehavior->setupRequestData($data);
         $this->assertFalse($this->BcUploadBehavior->settings['Contents']['fields']['eyecatch']['upload']);
         // upload=trueの場合のテスト
-        $this->BcUploadBehavior->setUploadedFile($this->eyecatchData);
-        $this->BcUploadBehavior->setupRequestData();
+        $this->BcUploadBehavior->setupRequestData($this->eyecatchData);
         $this->assertTrue($this->BcUploadBehavior->settings['Contents']['fields']['eyecatch']['upload']);
         $this->assertEquals("png", $this->BcUploadBehavior->settings['Contents']['fields']['eyecatch']['ext']);
         //  新しいデータが送信されず、既存データを引き継ぐ場合
@@ -266,10 +264,9 @@ class BcUploadBehaviorTest extends BcTestCase
             ],
             'eyecatch_' => 'test.png',
         ];
-        $this->BcUploadBehavior->setUploadedFile($data);
-        $this->BcUploadBehavior->setupRequestData();
+        $requestData = $this->BcUploadBehavior->setupRequestData($data);
         $this->assertFalse($this->BcUploadBehavior->settings['Contents']['fields']['eyecatch']['upload']);
-        $this->assertEquals("test.png", $this->BcUploadBehavior->getUploadedFile()['eyecatch']);
+        $this->assertEquals("test.png", $requestData['eyecatch']);
         // TODO: セッションに一時ファイルが保存されている場合のテスト
     }
 

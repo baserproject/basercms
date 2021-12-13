@@ -219,21 +219,7 @@ class BcUploadBehavior extends Behavior
     public function beforeMarshal(EventInterface $event, ArrayObject $data, ArrayObject $options)
     {
         if (isset($data['eyecatch'])) {
-            if (is_array($data['eyecatch'])) {
-                // アップロードのデータをsetUploadedFileに退避する
-                $this->setUploadedFile([
-                    'eyecatch' => $data['eyecatch'],
-                    'eyecatch_delete' => $data['eyecatch_delete'] ?? null,
-                    'eyecatch_' => $data['eyecatch_']  ?? null
-                ]);
-                // arrayをstringとして変換し、保存する
-                $data['eyecatch'] = $data['eyecatch']['name'];
-            } else if(is_string($data['eyecatch'])) {
-                $this->setUploadedFile([
-                    'eyecatch' => ['name' => $data['eyecatch']],
-                ]);
-            }
-            $this->setupRequestData();
+            $data = $this->setupRequestData($data);
         }
     }
 
@@ -273,40 +259,42 @@ class BcUploadBehavior extends Behavior
 
     /**
      * リクエストされたデータを処理しやすいようにセットアップする
-     *@return void
+     *@param array $data
+     *@return array $data
      * @checked
      * @unitTest
      */
-    public function setupRequestData()
+    public function setupRequestData($data)
     {
-        $uploadedFile = $this->getUploadedFile();
         foreach($this->settings[$this->alias]['fields'] as $key => $field) {
             $upload = false;
-            $upFile = $uploadedFile[$field['name']];
-            if (!empty($uploadedFile) && is_array($uploadedFile) && @$upFile['error'] == 0) {
-                if ($upFile['name']) {
+            $uploadedFile = $data[$field['name']];
+            if (!empty($uploadedFile) && is_array($uploadedFile) && @$uploadedFile['error'] == 0) {
+                if ($uploadedFile['name']) {
+                    // arrayをstringとして変換し、保存する
+                    $data[$field['name']] = $uploadedFile['name'];
                     $upload = true;
                 }
             } else {
-                if (isset($uploadedFile[$field['name'] . '_tmp'])) {
+                if (isset($data[$field['name'] . '_tmp'])) {
                     // TODO セッションの場合の処理未確認
                     // セッションに一時ファイルが保存されている場合は復元する
-                    if ($this->moveFileSessionToTmp($uploadedFile, $field['name'])) {
-                        $uploadedFile = $this->getUploadedFile();
+                    if ($this->moveFileSessionToTmp($data, $field['name'])) {
+                        $uploadedFile = $this->getUploadedFile()[$field['name']];
+                        $data[$field['name']] = $uploadedFile['name'];
                         $upload = true;
                     }
-                } elseif (isset($uploadedFile[$field['name'] . '_'])) {
+                } elseif (isset($data[$field['name'] . '_'])) {
                     // 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
-                    if (isset($upFile['error']) && $upFile['error'] == UPLOAD_ERR_NO_FILE) {
-                        $upFile = $uploadedFile[$field['name'] . '_'];
-                        $uploadedFile[$field['name'] . '_'] = null;
-                        $this->setUploadedFile($uploadedFile);
+                    if (isset($uploadedFile['error']) && $uploadedFile['error'] == UPLOAD_ERR_NO_FILE) {
+                        $data[$field['name']] = $data[$field['name'] . '_'];
+                        $data[$field['name'] . '_'] = null;
                     }
                 }
             }
             if ($upload) {
                 // 拡張子を取得
-                $this->settings[$this->alias]['fields'][$key]['ext'] = $field['ext'] = BcUtil::decodeContent($upFile['type'], $upFile['name']);
+                $this->settings[$this->alias]['fields'][$key]['ext'] = $field['ext'] = BcUtil::decodeContent($uploadedFile['type'], $uploadedFile['name']);
                 // タイプ別除外
                 $targets = [];
                 if ($field['type'] == 'image') {
@@ -321,6 +309,13 @@ class BcUploadBehavior extends Behavior
                 }
             }
             $this->settings[$this->alias]['fields'][$key]['upload'] = $upload;
+            // アップロードのデータをsetUploadedFileに退避する
+            $this->setUploadedFile([
+                $field['name'] => $uploadedFile,
+                $field['name'] . '_delete' => $data[$field['name'] . '_delete'] ?? null,
+                $field['name'] . '_' => $data[$field['name'] . '_']  ?? null
+            ]);
+            return $data;
         }
     }
 
@@ -514,14 +509,14 @@ class BcUploadBehavior extends Behavior
     /**
      * セッションに保存されたファイルデータをファイルとして保存する
      *
-     * @param array $uploadedFile
+     * @param array $data
      * @param string $fieldName
      * @return boolean
      * TODO ucmitz : モデル $fieldName . '_tmp'
      */
-    public function moveFileSessionToTmp($uploadedFile, $fieldName)
+    public function moveFileSessionToTmp($data, $fieldName)
     {
-        $fileName = $uploadedFile[$fieldName . '_tmp'];
+        $fileName = $data[$fieldName . '_tmp'];
         $sessionKey = str_replace(['.', '/'], ['_', '_'], $fileName);
         $tmpName = $this->savePath[$this->alias] . $sessionKey;
         $fileData = $this->Session->read('Upload.' . $sessionKey . '.data');
