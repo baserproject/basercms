@@ -11,11 +11,11 @@
 namespace BaserCore\Model\Behavior;
 
 use ArrayObject;
-use BaserCore\Vendor\Imageresizer;
 use Cake\Http\Session;
 use Cake\ORM\Behavior;
 use Cake\Utility\Hash;
 use Cake\Core\Configure;
+use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\Note;
@@ -23,6 +23,7 @@ use Cake\Event\EventInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Vendor\Imageresizer;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Service\SiteConfigServiceInterface;
@@ -232,7 +233,7 @@ class BcUploadBehavior extends Behavior
                     'eyecatch' => ['name' => $data['eyecatch']],
                 ]);
             }
-            $this->setupRequestData($data);
+            $this->setupRequestData();
         }
     }
 
@@ -272,29 +273,28 @@ class BcUploadBehavior extends Behavior
 
     /**
      * リクエストされたデータを処理しやすいようにセットアップする
-     *
-     * @param $content
+     *@return void
      * @checked
      * @unitTest
      */
-    public function setupRequestData($content)
+    public function setupRequestData()
     {
+        $uploadedFile = $this->getUploadedFile();
         foreach($this->settings[$this->alias]['fields'] as $key => $field) {
             $upload = false;
-            $uploadedFile = $this->getUploadedFile();
             if (!empty($uploadedFile) && is_array($uploadedFile) && @$uploadedFile[$field['name']]['error'] == 0) {
                 if ($uploadedFile[$field['name']]['name']) {
                     $upload = true;
                 }
             } else {
-                // TODO ucmitz elseの場合の処理未確認
-                if (isset($content[$field['name'] . '_tmp'])) {
+                if (isset($uploadedFile[$field['name'] . '_tmp'])) {
+                    // TODO セッションの場合の処理未確認
                     // セッションに一時ファイルが保存されている場合は復元する
-                    if ($this->moveFileSessionToTmp($this->alias, $field['name'])) {
-                        // $data = $Model->data[$Model->name];
+                    if ($this->moveFileSessionToTmp($uploadedFile, $field['name'])) {
+                        $uploadedFile = $this->getUploadedFile();
                         $upload = true;
                     }
-                } elseif (isset($content[$field['name'] . '_'])) {
+                } elseif (isset($uploadedFile[$field['name'] . '_'])) {
                     // 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
                     if (isset($uploadedFile[$field['name']]['error']) && $uploadedFile[$field['name']]['error'] == UPLOAD_ERR_NO_FILE) {
                         $uploadedFile[$field['name']] = $uploadedFile[$field['name'] . '_'];
@@ -513,16 +513,16 @@ class BcUploadBehavior extends Behavior
     /**
      * セッションに保存されたファイルデータをファイルとして保存する
      *
-     * @param Model $Model
+     * @param array $uploadedFile
      * @param string $fieldName
      * @return boolean
      * TODO ucmitz : モデル $fieldName . '_tmp'
      */
-    public function moveFileSessionToTmp(Model $Model, $fieldName)
+    public function moveFileSessionToTmp($uploadedFile, $fieldName)
     {
-        $fileName = $Model->data[$Model->alias][$fieldName . '_tmp'];
+        $fileName = $uploadedFile[$fieldName . '_tmp'];
         $sessionKey = str_replace(['.', '/'], ['_', '_'], $fileName);
-        $tmpName = $this->getSaveDir() . $sessionKey;
+        $tmpName = $this->savePath[$this->alias] . $sessionKey;
         $fileData = $this->Session->read('Upload.' . $sessionKey . '.data');
         $fileType = $this->Session->read('Upload.' . $sessionKey . '.type');
         $this->Session->delete('Upload.' . $sessionKey);
@@ -546,15 +546,15 @@ class BcUploadBehavior extends Behavior
         // 元の名前を取得
         /*$pos = strpos($sessionKey, '_');
         $fileName = substr($sessionKey, $pos + 1, strlen($sessionKey));*/
-
         // アップロードされたデータとしてデータを復元する
         $uploadInfo['error'] = 0;
         $uploadInfo['name'] = $fileName;
         $uploadInfo['tmp_name'] = $tmpName;
         $uploadInfo['size'] = $fileSize;
         $uploadInfo['type'] = $fileType;
-        $Model->data[$Model->alias][$fieldName] = $uploadInfo;
-        unset($Model->data[$Model->alias][$fieldName . '_tmp']);
+        $uploadedFile[$fieldName] = $uploadInfo;
+        $uploadedFile[$fieldName . '_tmp'] = null;
+        $this->setUploadedFile($uploadedFile);
         return true;
     }
 

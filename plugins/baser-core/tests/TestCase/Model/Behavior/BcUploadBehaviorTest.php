@@ -251,18 +251,26 @@ class BcUploadBehaviorTest extends BcTestCase
                 ]
         ];
         $this->BcUploadBehavior->setUploadedFile($data);
-        $this->BcUploadBehavior->setupRequestData($data);
+        $this->BcUploadBehavior->setupRequestData();
         $this->assertFalse($this->BcUploadBehavior->settings['Contents']['fields']['eyecatch']['upload']);
         // upload=trueの場合のテスト
         $this->BcUploadBehavior->setUploadedFile($this->eyecatchData);
-        $content = [];
-        $this->BcUploadBehavior->setupRequestData($content);
+        $this->BcUploadBehavior->setupRequestData();
         $this->assertTrue($this->BcUploadBehavior->settings['Contents']['fields']['eyecatch']['upload']);
         $this->assertEquals("png", $this->BcUploadBehavior->settings['Contents']['fields']['eyecatch']['ext']);
+        //  新しいデータが送信されず、既存データを引き継ぐ場合
+        $data = [
+            'eyecatch' => [
+                "type" => "image/png",
+                "error" => 4,
+            ],
+            'eyecatch_' => 'test.png',
+        ];
+        $this->BcUploadBehavior->setUploadedFile($data);
+        $this->BcUploadBehavior->setupRequestData();
+        $this->assertFalse($this->BcUploadBehavior->settings['Contents']['fields']['eyecatch']['upload']);
+        $this->assertEquals("test.png", $this->BcUploadBehavior->getUploadedFile()['eyecatch']);
         // TODO: セッションに一時ファイルが保存されている場合のテスト
-        // TODO: 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻すのテスト
-
-
     }
 
     /**
