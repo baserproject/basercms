@@ -888,7 +888,7 @@ class BcUploadBehaviorTest extends BcTestCase
      * @param Model $Model
      * @return boolean
      */
-    public function testDelFiles()
+    public function testCleanupFiles()
     {
         $savePath = $this->BcUploadBehavior->savePath[$this->table->getAlias()];
         $fileName = 'dummy';
@@ -899,16 +899,14 @@ class BcUploadBehaviorTest extends BcTestCase
             ]
         ];
         $targetPath = $savePath . $fileName . '.' . $field['eyecatch']['ext'];
-
         // ダミーのファイルを生成
         touch($targetPath);
         $uploaded = [
             'name' => $fileName . '.' . $field['eyecatch']['ext'],
             'tmp_name' => TMP . $fileName . '.' . $field['eyecatch']['ext'],
         ];
-        $this->BcUploadBehavior->setUploadedFile(['eyecatch' => $uploaded]);
         $this->BcUploadBehavior->settings[$this->table->getAlias()]['fields'] = $field;
-        $this->BcUploadBehavior->delFiles($field['eyecatch']['name']);
+        $this->BcUploadBehavior->cleanupFiles(['eyecatch' => $uploaded], $field['eyecatch']['name']);
         $this->assertFileNotExists($targetPath);
         @unlink($targetPath);
     }

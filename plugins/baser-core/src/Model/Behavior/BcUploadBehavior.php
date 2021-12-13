@@ -282,8 +282,9 @@ class BcUploadBehavior extends Behavior
         $uploadedFile = $this->getUploadedFile();
         foreach($this->settings[$this->alias]['fields'] as $key => $field) {
             $upload = false;
-            if (!empty($uploadedFile) && is_array($uploadedFile) && @$uploadedFile[$field['name']]['error'] == 0) {
-                if ($uploadedFile[$field['name']]['name']) {
+            $upFile = $uploadedFile[$field['name']];
+            if (!empty($uploadedFile) && is_array($uploadedFile) && @$upFile['error'] == 0) {
+                if ($upFile['name']) {
                     $upload = true;
                 }
             } else {
@@ -296,8 +297,8 @@ class BcUploadBehavior extends Behavior
                     }
                 } elseif (isset($uploadedFile[$field['name'] . '_'])) {
                     // 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
-                    if (isset($uploadedFile[$field['name']]['error']) && $uploadedFile[$field['name']]['error'] == UPLOAD_ERR_NO_FILE) {
-                        $uploadedFile[$field['name']] = $uploadedFile[$field['name'] . '_'];
+                    if (isset($upFile['error']) && $upFile['error'] == UPLOAD_ERR_NO_FILE) {
+                        $upFile = $uploadedFile[$field['name'] . '_'];
                         $uploadedFile[$field['name'] . '_'] = null;
                         $this->setUploadedFile($uploadedFile);
                     }
@@ -305,7 +306,7 @@ class BcUploadBehavior extends Behavior
             }
             if ($upload) {
                 // 拡張子を取得
-                $this->settings[$this->alias]['fields'][$key]['ext'] = $field['ext'] = BcUtil::decodeContent($uploadedFile[$field['name']]['type'], $uploadedFile[$field['name']]['name']);
+                $this->settings[$this->alias]['fields'][$key]['ext'] = $field['ext'] = BcUtil::decodeContent($upFile['type'], $upFile['name']);
                 // タイプ別除外
                 $targets = [];
                 if ($field['type'] == 'image') {
@@ -814,21 +815,22 @@ class BcUploadBehavior extends Behavior
                 $Model->alias . '.' . $Model->primaryKey => $Model->id
             ]
         ]);
-        $this->delFiles($Model);
+        $uploadedFiles = $this->getUploadedFile();
+        $this->cleanupFiles($uploadedFiles);
         return true;
     }
 
     /**
      * 画像ファイル群を削除する
      *
+     * @param array $uploadedFiles
      * @param string $fieldName フィールド名
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function delFiles($fieldName = null)
+    public function cleanupFiles($uploadedFiles, $fieldName = null)
     {
-        $uploadedFiles = $this->getUploadedFile();
         foreach($this->settings[$this->alias]['fields'] as $key => $field) {
             if (empty($field['name'])) {
                 $field['name'] = $key;
@@ -1242,7 +1244,7 @@ class BcUploadBehavior extends Behavior
             return;
         }
         foreach($targetFields as $field) {
-            $this->delFiles($field);
+            $this->cleanupFiles($uploadFile, $field);
         }
     }
 
