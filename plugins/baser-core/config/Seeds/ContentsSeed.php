@@ -59,7 +59,7 @@ class ContentsSeed extends AbstractSeed
             [
                 'id' => '2',
                 'name' => 'index',
-                'plugin' => 'BaserCore',
+                'plugin' => 'BcPage',
                 'type' => 'Page',
                 'entity_id' => '1',
                 'url' => '/index',

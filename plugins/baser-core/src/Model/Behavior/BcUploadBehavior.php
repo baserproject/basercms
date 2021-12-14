@@ -243,7 +243,6 @@ class BcUploadBehavior extends Behavior
             $entity = $this->deleteFiles($entity, $uploadedFile);
 
             $result = $this->saveFiles($uploadedFile);
-            // TODO ucmitz updateSystemDataでエラーがでるため一旦書き込み
             // TODO ucmitz setUploadedFileの必要性を確認する
             if ($result) {
                 $this->setUploadedFile($result);
@@ -274,7 +273,7 @@ class BcUploadBehavior extends Behavior
                 }
             } else {
                 if (isset($data[$field['name'] . '_tmp'])) {
-                    // TODO セッションの場合の処理未確認
+                    // TODO ucmitz セッションの場合の処理未確認
                     // セッションに一時ファイルが保存されている場合は復元する
                     if ($this->moveFileSessionToTmp($data, $field['name'])) {
                         $uploadedFile = $this->getUploadedFile()[$field['name']];
@@ -456,7 +455,6 @@ class BcUploadBehavior extends Behavior
             }
             return [];
         }
-        // TODO: ucmitz $entity->eyecatchが必要
         // ファイル名が重複していた場合は変更する
         if ($fieldSetting['getUniqueFileName'] && !$this->tmpId) {
             $uploadedFile[$fieldSetting['name']]['name'] = $this->getUniqueFileName($fieldSetting['name'], $uploadedFile[$fieldSetting['name']]['name'], $fieldSetting);
@@ -902,7 +900,8 @@ class BcUploadBehavior extends Behavior
             if (empty($setting['name'])) {
                 $setting['name'] = $key;
             }
-            $value = $this->renameToBasenameField($entity, $uploadedFile, $setting, $copy);
+            $id = $entity->id;
+            $value = $this->renameToBasenameField($id, $uploadedFile, $setting, $copy);
             if ($value !== false) {
                 $entity->eyecatch = $value;
                 // 保存時にbeforeSaveとafterSaveのループを防ぐ
@@ -918,13 +917,16 @@ class BcUploadBehavior extends Behavior
     /**
      * ファイル名をフィールド値ベースのファイル名に変更する
      *
-     * @param \Model $Model
+     * @param int $id
+     * @param array $uploadedFile
      * @param array $setting
      * @param bool $copy
      * @return bool|mixed
-     * TODO ucmitz : モデル 全体
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function renameToBasenameField($entity, $uploadedFile, $setting, $copy = false)
+    public function renameToBasenameField($id, $uploadedFile, $setting, $copy = false)
     {
         if (empty($setting['namefield']) || empty($uploadedFile[$setting['name']])) {
             return false;
@@ -945,7 +947,6 @@ class BcUploadBehavior extends Behavior
             return '';
         }
         $pathinfo = pathinfo($oldName);
-        $id = $entity->id;
         $newName = $this->getFieldBasename($id, $setting, $pathinfo['extension']);
         if (!$newName) {
             return false;
@@ -1099,9 +1100,9 @@ class BcUploadBehavior extends Behavior
 
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
         // $conditions[$this->alias . '.' . $fieldName . ' LIKE'] = $basename . '%' . $ext;
-        // TODO: 複数テーブルがある場合の処理に変更する必要あり
+        // TODO ucmitz:  複数テーブルがある場合の処理に変更する必要あり
         $conditions[$fieldName . ' LIKE'] = $basename . '%' . $ext;
-        // FIXME: ->order("{$this->alias}.{$fieldName}")がうまく行かないので、調整する
+        // FIXME ucmitz: ->order("{$this->alias}.{$fieldName}")がうまく行かないので、調整する
         $datas = $this->table->find()->where([$conditions])->select($fieldName)->all()->toArray();
         $numbers = [];
 
