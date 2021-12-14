@@ -238,13 +238,9 @@ class BcUploadBehavior extends Behavior
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if (isset($this->uploadedFiles[$this->alias]['eyecatch']['name'])) {
-            if ($entity->id) {
-                $this->deleteExistingFiles();
-            }
+            if ($entity->id) $this->deleteExistingFiles();
             $uploadedFile = $this->getUploadedFile();
-
             $entity = $this->deleteFiles($entity, $uploadedFile);
-
             $result = $this->saveFiles($uploadedFile);
             return $result;
         }
@@ -457,7 +453,7 @@ class BcUploadBehavior extends Behavior
         }
         // ファイル名が重複していた場合は変更する
         if ($fieldSetting['getUniqueFileName'] && !$this->tmpId) {
-            $uploadedFile[$fieldSetting['name']]['name'] = $this->getUniqueFileName($fieldSetting['name'], $uploadedFile[$fieldSetting['name']]['name'], $fieldSetting);
+            $uploadedFile[$fieldSetting['name']]['name'] = $this->getUniqueFileName($fieldSetting, $uploadedFile[$fieldSetting['name']]['name']);
         }
         // 画像を保存
         $tmpName = $uploadedFile[$fieldSetting['name']]['tmp_name'] ?? false;
@@ -1093,25 +1089,25 @@ class BcUploadBehavior extends Behavior
      * @checked
      * @unitTest
      */
-    public function getUniqueFileName($fieldName, $fileName, $setting = null)
+    public function getUniqueFileName($fields, $fileName)
     {
         $pathinfo = pathinfo($fileName);
         $basename = preg_replace("/\." . $pathinfo['extension'] . "$/is", '', $fileName);
 
-        $ext = $setting['ext'];
+        $ext = $fields['ext'];
 
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
-        // $conditions[$this->alias . '.' . $fieldName . ' LIKE'] = $basename . '%' . $ext;
+        // $conditions[$this->alias . '.' . $fields['name'] . ' LIKE'] = $basename . '%' . $ext;
         // TODO ucmitz:  複数テーブルがある場合の処理に変更する必要あり
-        $conditions[$fieldName . ' LIKE'] = $basename . '%' . $ext;
-        // FIXME ucmitz: ->order("{$this->alias}.{$fieldName}")がうまく行かないので、調整する
-        $datas = $this->table->find()->where([$conditions])->select($fieldName)->all()->toArray();
+        $conditions[$fields['name'] . ' LIKE'] = $basename . '%' . $ext;
+        // FIXME ucmitz: ->order("{$this->alias}.{$fields['name']}")がうまく行かないので、調整する
+        $datas = $this->table->find()->where([$conditions])->select($fields['name'])->all()->toArray();
         $numbers = [];
 
         if ($datas) {
             foreach($datas as $data) {
-                if (!empty($data->{$fieldName})) {
-                    $_basename = preg_replace("/\." . $ext . "$/is", '', $data->{$fieldName});
+                if (!empty($data->{$fields['name']})) {
+                    $_basename = preg_replace("/\." . $ext . "$/is", '', $data->{$fields['name']});
                     $lastPrefix = preg_replace('/^' . preg_quote($basename, '/') . '/', '', $_basename);
                     if (!$lastPrefix) {
                         $numbers[1] = 1;

@@ -11,6 +11,7 @@
 namespace BaserCore\Test\TestCase\Model\Behavior;
 
 use ArrayObject;
+use Cake\ORM\Entity;
 use ReflectionClass;
 use BaserCore\TestSuite\BcTestCase;
 use Laminas\Diactoros\UploadedFile;
@@ -243,7 +244,36 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testBeforeSave()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // 画像を新規追加する場合
+        $imgPath = ROOT . '/plugins/bc-admin-third/webroot/img/';
+        $fileName = 'baser.power';
+        $field = [
+            'name' => 'eyecatch',
+            'ext' => 'gif',
+            'width' => 100,
+            'height' => 100,
+            'upload' => true,
+            'type' => 'image',
+            'getUniqueFileName' => true,
+        ];
+        $tmp = '/tmp/baser.power.gif';
+        copy($imgPath . $fileName . '.' . $field['ext'], $tmp);
+        $uploadedFile = [
+            'eyecatch' => [
+                'name' => $fileName . '.' . $field['ext'],
+                'tmp_name' => $tmp,
+            ]
+        ];
+        $this->table->setUploadedFile($uploadedFile);
+        $this->BcUploadBehavior->settings[$this->table->getAlias()]['fields']['eyecatch'] = $field;
+        // 新規保存の場合
+        $entity = new Entity(['id' => 1, 'eyecatch' => 'test.png']);
+        $return = $this->table->dispatchEvent('Model.beforeSave', ['entity' => $entity, 'options' => new ArrayObject()]);
+        $this->assertTrue($return->getResult());
+        $this->assertFileExists($this->savePath . 'baser.power.gif');
+        @unlink($this->savePath . 'baser.power.gif');
+        // ただの保存の場合
+        // 削除保存の場合
     }
 
     /**
@@ -795,7 +825,7 @@ class BcUploadBehaviorTest extends BcTestCase
                 'name' => $fileName . '_copy' . '.' . $field['ext'],
                 'tmp_name' => $imgPath . $fileName . '.' . $field['ext'],
             ]
-            ];
+        ];
         $this->BcUploadBehavior->setUploadedFile($uploadedFile, $this->table->getAlias());
         // コピー先ファイルのパス
         $targetPath = $this->savePath . $field['prefix'] . $fileName . '_copy' . $field['suffix'] . '.' . $field['ext'];
@@ -1232,9 +1262,9 @@ class BcUploadBehaviorTest extends BcTestCase
             $content = $table->find()->last();
             $this->ContentService->update($content, ['eyecatch' => 'template1.gif']);
         }
-        $setting = ['ext' => 'gif'];
+        $setting = ['name' => $fieldName, 'ext' => 'gif'];
         touch($this->savePath . 'template1.gif');
-        $result = $this->BcUploadBehavior->getUniqueFileName($fieldName, $fileName, $setting);
+        $result = $this->BcUploadBehavior->getUniqueFileName($setting, $fileName);
         $this->assertEquals($expected, $result, $message);
         @unlink($this->savePath . 'template1.gif');
     }
