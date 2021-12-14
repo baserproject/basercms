@@ -233,7 +233,9 @@ class BcUploadBehavior extends Behavior
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @return bool
-     * TODO ucmitz : モデル 全体
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {

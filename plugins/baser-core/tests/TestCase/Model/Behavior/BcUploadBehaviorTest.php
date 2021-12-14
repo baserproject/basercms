@@ -267,13 +267,23 @@ class BcUploadBehaviorTest extends BcTestCase
         $this->table->setUploadedFile($uploadedFile);
         $this->BcUploadBehavior->settings[$this->table->getAlias()]['fields']['eyecatch'] = $field;
         // 新規保存の場合
-        $entity = new Entity(['id' => 1, 'eyecatch' => 'test.png']);
+        $entity = new Entity(['id' => 1, 'eyecatch' => 'baser.power.gif']);
         $return = $this->table->dispatchEvent('Model.beforeSave', ['entity' => $entity, 'options' => new ArrayObject()]);
         $this->assertTrue($return->getResult());
         $this->assertFileExists($this->savePath . 'baser.power.gif');
-        @unlink($this->savePath . 'baser.power.gif');
-        // ただの保存の場合
-        // 削除保存の場合
+        // 削除の場合
+        $uploadedFile = [
+            'eyecatch' => [
+                'name' => '',
+                'tmp_name' => '',
+            ],
+            'eyecatch_delete' => 1,
+        ];
+        $this->table->setUploadedFile($uploadedFile);
+        $return = $this->table->dispatchEvent('Model.beforeSave', ['entity' => $entity, 'options' => new ArrayObject()]);
+        $this->assertTrue($return->getResult());
+        $this->assertEmpty($return->getData('entity')->eyecatch);
+        $this->assertFileNotExists($this->savePath . 'baser.power.gif');
     }
 
     /**
