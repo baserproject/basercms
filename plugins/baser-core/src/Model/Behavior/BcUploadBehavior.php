@@ -188,6 +188,9 @@ class BcUploadBehavior extends Behavior
 	 *
 	 * @param Model $Model
 	 * @return array $existsCheckDirs
+     * @checked
+     * @noTodo
+     * @unitTest
 	 */
 	private function getExistsCheckDirs($alias)
 	{
@@ -432,11 +435,13 @@ class BcUploadBehavior extends Behavior
     /**
      * 保存対象かチェックしながらファイルを保存する
      * @param array $fieldSetting
-     * @param array $requestData
+     * @param array $uploadedFile
      * @param array $options
      *    - deleteTmpFiles : 一時ファイルを削除するかどうか
-     * @return mixed bool|$requestData
-     * TODO ucmitz : モデル 全体
+     * @return array $uploadedFile
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function saveFileWhileChecking($fieldSetting, $uploadedFile, $options = [])
     {
@@ -444,6 +449,7 @@ class BcUploadBehavior extends Behavior
             'deleteTmpFiles' => true
         ], $options);
 
+        // 新規画像なしでの保存など
         if (empty($uploadedFile[$fieldSetting['name']]['name'])) {
             return $uploadedFile;
         }

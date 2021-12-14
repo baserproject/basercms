@@ -216,6 +216,17 @@ class BcUploadBehaviorTest extends BcTestCase
     }
 
     /**
+     * testGetExistsCheckDirs
+     *
+     * @return void
+     */
+    public function testGetExistsCheckDirs()
+    {
+        $result = $this->execPrivateMethod($this->BcUploadBehavior, "getExistsCheckDirs", [$this->table->getAlias()]);
+        $this->assertEquals("/var/www/html/webroot/files/contents/", $result[0]);
+    }
+
+    /**
      * Before Validate
      */
     public function testBeforeMarshal()
@@ -459,23 +470,24 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testSaveFileWhileChecking()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $field = [
             'name' => 'eyecatch',
-            'ext' => 'gif',
+            'ext' => 'png',
             'type' => 'image',
             'upload' => true,
             'getUniqueFileName' => false, // trueの確認
         ];
-        $uploadedFile = [
-            'eyecatch' => [
-                "name" => 'dummy',
-            ],
-            'eyecatch_delete' => 1,
-            'eyecatch_' => '<input />',
-        ];
-        $result = $this->BcUploadBehavior->saveFileWhileChecking($field, $uploadedFile);
-
+        $filePath = $this->savePath . $this->eyecatchData['eyecatch']['name'];
+        // nameが空の場合 新規画像なしでの保存など
+        $this->BcUploadBehavior->saveFileWhileChecking($field, ["eyecatch" => ['name' => '']]);
+        $this->assertFileNotExists($filePath);
+        // nameがある場合 新規画像保存の場合
+        $tmp = $this->eyecatchData['eyecatch']['tmp_name'];
+        touch($tmp);
+        $this->BcUploadBehavior->saveFileWhileChecking($field, $this->eyecatchData);
+        $this->assertFileExists($filePath);
+        $this->assertFileNotExists($tmp);
+        unlink($filePath);
     }
 
 
