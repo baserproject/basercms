@@ -329,21 +329,15 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testAfterSave()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->EditorTemplate->data = [
-            'EditorTemplate' => [
-                'name' => '',
-                'link' => '',
-            ]
-        ];
-        $this->EditorTemplate->save([
-            'EditorTemplate' => [
-                'name' => 'hoge',
-                'link' => 'hoge',
-            ]
-        ]);
-        $data = $this->EditorTemplate->find('all');
-
+        touch($this->savePath . 'test.png');
+        $this->table->setUploadedFile(['eyecatch' => ['name' => 'test.png']]);
+        $this->BcUploadBehavior->uploaded[$this->table->getAlias()] = true;
+        $entity = $this->table->get(1);
+        $entity->eyecatch = 'test.png';
+        $return = $this->table->dispatchEvent('Model.afterSave', ['entity' => $entity, 'options' => new ArrayObject()]);
+        $this->assertTrue($return->getResult());
+        $this->assertEquals($return->getData('entity')->eyecatch, "00000001_eyecatch.png");
+        unlink($this->savePath . "00000001_eyecatch.png");
     }
 
     /**
