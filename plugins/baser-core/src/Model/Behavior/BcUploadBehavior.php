@@ -246,13 +246,7 @@ class BcUploadBehavior extends Behavior
             $entity = $this->deleteFiles($entity, $uploadedFile);
 
             $result = $this->saveFiles($uploadedFile);
-            // TODO ucmitz setUploadedFileの必要性を確認する
-            if ($result) {
-                $this->setUploadedFile($result);
-                return true;
-            } else {
-                return false;
-            }
+            return $result;
         }
     }
 
@@ -358,8 +352,7 @@ class BcUploadBehavior extends Behavior
         $Model->data = $this->deleteFiles($Model, $Model->data);
         $result = $this->saveFiles($Model, $Model->data);
         if ($result) {
-            $Model->data = $result;
-            return $Model->data;
+            return $this->getUploadedFile();
         } else {
             return false;
         }
@@ -419,16 +412,19 @@ class BcUploadBehavior extends Behavior
      * ファイル群を保存する
      *
      * @param array $requestData
-     * @return mixed false|array
-     * TODO ucmitz : モデル 全体
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function saveFiles($uploadedFile)
     {
         $this->uploaded[$this->alias] = false;
         foreach($this->settings[$this->alias]['fields'] as $key => $field) {
             $uploaded = $this->saveFileWhileChecking($field, $uploadedFile);
+            $this->setUploadedFile($uploaded);
             // 失敗したら処理を中断してfalseを返す
-            return $uploaded ?? false;
+            return $uploaded ? true : false;
         }
     }
 
@@ -448,7 +444,6 @@ class BcUploadBehavior extends Behavior
         $options = array_merge([
             'deleteTmpFiles' => true
         ], $options);
-
         // 新規画像なしでの保存など
         if (empty($uploadedFile[$fieldSetting['name']]['name'])) {
             return $uploadedFile;
@@ -457,7 +452,6 @@ class BcUploadBehavior extends Behavior
         if (!$this->tmpId && empty($fieldSetting['upload'])) {
             if (!empty($uploadedFile) && is_array($uploadedFile)) {
                 unset($uploadedFile[$fieldSetting['name']]);
-                $this->setUploadedFile([]);
             }
             return [];
         }

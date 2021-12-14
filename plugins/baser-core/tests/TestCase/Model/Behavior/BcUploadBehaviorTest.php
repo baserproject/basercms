@@ -457,12 +457,28 @@ class BcUploadBehaviorTest extends BcTestCase
         @unlink($targetPath);
     }
 
+
     /**
      * ファイル群を保存する
      */
     public function testSaveFiles()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->BcUploadBehavior->settings[$this->table->getAlias()]['fields']  = [
+            'eyecatch' => [
+                'name' => 'eyecatch',
+                'ext' => 'png',
+                'type' => 'image',
+                'upload' => true,
+                'getUniqueFileName' => false, // trueの確認
+            ]
+        ];
+        $filePath = $this->savePath . $this->eyecatchData['eyecatch']['name'];
+        $tmp = $this->eyecatchData['eyecatch']['tmp_name'];
+        touch($tmp);
+        $result = $this->BcUploadBehavior->saveFiles($this->eyecatchData);
+        $this->assertFileExists($filePath);
+        unlink($filePath);
+        $this->assertTrue($result);
     }
 
     /**
