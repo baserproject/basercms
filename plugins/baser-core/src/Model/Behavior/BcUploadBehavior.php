@@ -892,6 +892,9 @@ class BcUploadBehavior extends Behavior
      * @param EntityInterface $entity
      * @param bool $copy
      * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function renameToBasenameFields($entity, $copy = false)
     {
@@ -900,8 +903,7 @@ class BcUploadBehavior extends Behavior
             if (empty($setting['name'])) {
                 $setting['name'] = $key;
             }
-            $id = $entity->id;
-            $value = $this->renameToBasenameField($id, $uploadedFile, $setting, $copy);
+            $value = $this->renameToBasenameField($entity->id, $uploadedFile, $setting, $copy);
             if ($value !== false) {
                 $entity->eyecatch = $value;
                 // 保存時にbeforeSaveとafterSaveのループを防ぐ

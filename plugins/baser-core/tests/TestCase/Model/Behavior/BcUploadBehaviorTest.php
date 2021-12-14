@@ -977,41 +977,41 @@ class BcUploadBehaviorTest extends BcTestCase
     }
     /**
      * ファイル名をフィールド値ベースのファイル名に変更する
-     *
+     * testRenameToBasenameFields
      * @param string $expected 期待値
      * @param string $message テストが失敗した時に表示されるメッセージ
      * @dataProvider renameToFieldBasenameDataProvider
      */
-    public function testRenameToFieldBasename($oldName, $newName, $ext, $copy, $imagecopy, $message = null)
+    public function testRenameToFieldBasename($oldName, $ext, $copy, $imagecopy, $message = null)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 初期化
-        $this->EditorTemplate->id = $newName;
+        $entity = $this->table->get(1);
         $oldName = $oldName . '.' . $ext;
-        $this->EditorTemplate->data['EditorTemplate'] = ['image' => $oldName];
-        $setting = $this->BcUploadBehavior->settings['EditorTemplate']['fields']['image'];
+        $entity->eyecatch = $oldName;
+        $this->BcUploadBehavior->setUploadedFile(['eyecatch' => ['name' => $oldName]]);
+        $setting = $this->BcUploadBehavior->settings[$this->table->getAlias()]['fields']['eyecatch'];
 
         if ($imagecopy) {
-            $this->BcUploadBehavior->settings['EditorTemplate']['fields']['image']['imagecopy'] = $imagecopy;
+            $this->BcUploadBehavior->settings[$this->table->getAlias()]['fields']['eyecatch']['imagecopy'] = $imagecopy;
         }
 
         // パス情報
         $oldPath = $this->savePath . $oldName;
-        $newPath = $this->savePath . $setting['imageresize']['prefix'] . $newName . '.' . $ext;
+        $newPath = $this->savePath . "00000001_eyecatch" . '.' . $ext;
 
         // ダミーファイルの生成
         touch($oldPath);
 
         if ($imagecopy) {
             foreach($imagecopy as $copysetting) {
-                $oldCopynames = $this->EditorTemplate->getFileName($copysetting, $oldName);
+                $oldCopynames = $this->BcUploadBehavior->getFileName($copysetting, $oldName);
                 touch($this->savePath . $oldCopynames);
             }
         }
 
 
         // テスト実行
-        $this->EditorTemplate->renameToBasenameFields($copy);
+        $result = $this->BcUploadBehavior->renameToBasenameFields($entity, $copy);
         $this->assertFileExists($newPath, $message);
 
 
@@ -1026,10 +1026,10 @@ class BcUploadBehaviorTest extends BcTestCase
         }
 
         if ($imagecopy) {
-            $newName = $this->EditorTemplate->getFileName($setting['imageresize'], $newName . '.' . $ext);
+            $newName = $this->BcUploadBehavior->getFileName($setting['imageresize'], "00000001_eyecatch" . '.' . $ext);
 
             foreach($imagecopy as $copysetting) {
-                $newCopyname = $this->EditorTemplate->getFileName($copysetting, $newName);
+                $newCopyname = $this->BcUploadBehavior->getFileName($copysetting, $newName);
                 $this->assertFileExists($this->savePath . $newCopyname, $message);
                 @unlink($this->savePath . $newCopyname);
             }
@@ -1040,9 +1040,9 @@ class BcUploadBehaviorTest extends BcTestCase
     public function renameToFieldBasenameDataProvider()
     {
         return [
-            ['oldName', 'newName', 'gif', false, false, 'ファイル名をフィールド値ベースのファイル名に変更できません'],
-            ['oldName', 'newName', 'gif', true, false, 'ファイル名をフィールド値ベースのファイル名に変更してコピーができません'],
-            ['oldName', 'newName', 'gif', false, [
+            ['oldName', 'gif', false, false, 'ファイル名をフィールド値ベースのファイル名に変更できません'],
+            ['oldName', 'gif', true, false, 'ファイル名をフィールド値ベースのファイル名に変更してコピーができません'],
+            ['oldName', 'gif', false, [
                 ['prefix' => 'pre-', 'suffix' => '-suf'],
                 ['prefix' => 'pre2-', 'suffix' => '-suf2'],
             ], '複数のファイルをフィールド値ベースのファイル名に変更できません'],
