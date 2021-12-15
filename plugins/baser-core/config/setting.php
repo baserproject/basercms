@@ -60,8 +60,9 @@ return [
         'adminGroupId' => 1,
         /**
          * コアパッケージ名
+         * プラグイン一覧に表示しないようにする
          */
-        'core' => ['baser-core', 'bc-admin-third'],
+        'core' => ['baser-core', 'bc-admin-third', 'bc-front'],
         /**
          * デフォルトフロントテーマ
          */
