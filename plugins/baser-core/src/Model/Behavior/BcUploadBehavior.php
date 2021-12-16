@@ -34,36 +34,35 @@ use BaserCore\Service\SiteConfigServiceInterface;
  * ファイルアップロードビヘイビア
  *
  * 《設定例》
- * public $actsAs = array(
- *  'BcUpload' => array(
+ * public $actsAs = [
+ *  'BcUpload' => [
  *     'saveDir'  => "editor",
- *     'fields'  => array(
- *       'image'  => array(
+ *     'fields'  => [
+ *       'image'  => [
  *         'type'      => 'image',
  *         'namefield'    => 'id',
  *         'nameadd'    => false,
  *            'subdirDateFormat'    => 'Y/m'    // Or false
- *         'imageresize'  => array('prefix' => 'template', 'width' => '100', 'height' => '100'),
- *                'imagecopy'        => array(
- *                    'thumb'            => array('suffix' => 'template', 'width' => '150', 'height' => '150'),
- *                    'thumb_mobile'    => array('suffix' => 'template', 'width' => '100', 'height' => '100')
- *                )
- *       ),
- *       'pdf' => array(
+ *         'imageresize'  => ['prefix' => 'template', 'width' => '100', 'height' => '100'],
+ *                'imagecopy'        => [
+ *                    'thumb'            => ['suffix' => 'template', 'width' => '150', 'height' => '150'],
+ *                    'thumb_mobile'    => ['suffix' => 'template', 'width' => '100', 'height' => '100']
+ *                ]
+ *       ],
+ *       'pdf' => [
  *         'type'      => 'pdf',
  *         'namefield'    => 'id',
  *         'nameformat'  => '%d',
  *         'nameadd'    => false
- *       )
- *     )
- *   )
- * );
+ *       ]
+ *     ]
+ *   ]
+ * ];
  *
  * @package Baser.Model.Behavior
  */
 class BcUploadBehavior extends Behavior
 {
-
     /**
      * BcContainerTrait
      */
@@ -617,7 +616,7 @@ class BcUploadBehavior extends Behavior
             }
         } else {
             if (!empty($field['namefield'])) {
-                // TODO: tmpに関してのテストは未実装
+                // TODO ucmitz: tmpに関してのテストは未実装
                 $Model->data[$Model->alias][$field['namefield']] = $this->tmpId;
                 $fileName = $this->getFieldBasename($field, $field['ext']);
             } else {
@@ -1170,7 +1169,7 @@ class BcUploadBehavior extends Behavior
         if ($limited) {
             $basePath = $basePath . $limited . DS;
         }
-        // TODO: 一旦themeはなしの$basePathで実行
+        // TODO cumitz: 一旦themeはなしの$basePathで実行
         $basePath = WWW_ROOT . 'files' .DS;
 		if ($this->settings[$alias]['saveDir']) {
 			$saveDir = $basePath . $this->settings[$this->alias]['saveDir'] . DS;
@@ -1280,62 +1279,6 @@ class BcUploadBehavior extends Behavior
         }
         return true;
     }
-
-    // /**
-    //  * getDuplicateDirs
-    //  * 保存時にファイルの重複確認を行うディレクトリ
-    //  * @param null|string $alias(default : null)
-    //  * @return void
-    //  * @checked
-    //  * @noTodo
-    //  * @unitTest
-    //  */
-    // public function setDuplicateDirs($dirs, $alias = null)
-    // {
-    //     $this->duplicateDirs[$alias ?? $this->alias] = $dirs;
-    // }
-    // /**
-    //  * getDuplicateDirs
-    //  * 保存時にファイルの重複確認を行うディレクトリ
-    //  * @param null|string $alias(default : null)
-    //  * @return array
-    //  * @checked
-    //  * @noTodo
-    //  * @unitTest
-    //  */
-    // public function getDuplicateDirs($alias = null)
-    // {
-    //     return $this->duplicateDirs[$alias ?? $this->alias];
-    // }
-
-    // /**
-    //  * Behaviorの設定に関する情報を取得する
-    //  *
-    //  * @param  string $alias
-    //  * @return array
-    //  * @checked
-    //  * @noTodo
-    //  * @unitTest
-    //  */
-    // public function getUploadConfig($alias = null)
-    // {
-    //     return $this->upload[$alias ?? $this->alias]['config'];
-    // }
-
-    // /**
-    //  * Behaviorの設定に関する情報を保持する
-    //  *
-    //  * @param  array $fileConfig
-    //  * @param  string $alias
-    //  * @return void
-    //  * @checked
-    //  * @noTodo
-    //  * @unitTest
-    //  */
-    // public function setUploadConfig($fileConfig, $alias = null)
-    // {
-    //     $this->upload[$alias ?? $this->alias]['config'] = $fileConfig;
-    // }
 
     /**
      * 実際にアップロードされた情報を保持する
