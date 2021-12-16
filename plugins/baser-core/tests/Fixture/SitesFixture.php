@@ -34,7 +34,7 @@ class SitesFixture extends TestFixture
             'display_name' => 'メインサイト',
             'title' => 'baserCMS inc.',
             'alias' => '',
-            'theme' => 'BcSample',
+            'theme' => 'BcFront',
             'status' => true,
             'keyword' => '',
             'description' => '',

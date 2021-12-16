@@ -93,7 +93,7 @@ class PluginsControllerTest extends BcTestCase
         $this->get('/baser/api/baser-core/plugins/index.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('BcSpaSample', $result->plugins[0]->name);
+        $this->assertEquals('BcBlog', $result->plugins[0]->name);
     }
 
     /**

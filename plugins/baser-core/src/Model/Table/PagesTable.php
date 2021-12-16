@@ -9,7 +9,7 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BcPage\Model\Table;
+namespace BaserCore\Model\Table;
 
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;

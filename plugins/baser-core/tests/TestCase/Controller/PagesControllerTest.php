@@ -60,12 +60,6 @@ class PagesControllerTest extends BcTestCase
 
     public function testDisplay(): void
     {
-        $plugins = TableRegistry::getTableLocator()->get('BaserCore.Plugins');
-        $plugins->save($plugins->newEntity([
-            'name' => 'BcSample',
-            'title' => 'title',
-            'status' => true
-        ]));
         $this->get('/');
         $this->assertResponseOk();
     }

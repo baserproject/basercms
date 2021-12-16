@@ -9,11 +9,10 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BcPage\Controller;
+namespace BaserCore\Controller;
 
-use BaserCore\Controller\AppController;
 use BaserCore\Controller\Component\BcFrontContentsComponent;
-use BcPage\Model\Table\PagesTable;
+use BaserCore\Model\Table\PagesTable;
 use Cake\Utility\Text;
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
@@ -25,7 +24,6 @@ use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\View\Exception\MissingViewException;
 use BaserCore\Service\ContentFolderServiceInterface;
-use BaserCore\Controller\Component\BcAdminContentsComponent;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;

@@ -144,7 +144,7 @@ class PluginsControllerTest extends BcTestCase
     {
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->post('/baser/admin/baser-core/plugins/detach/BcSample');
+        $this->post('/baser/admin/baser-core/plugins/detach/BcSpaSample');
         $this->assertFlashMessage('プラグインの無効化に失敗しました。');
         $this->post('/baser/admin/baser-core/plugins/detach/BcBlog');
         $this->assertFlashMessage('プラグイン「BcBlog」を無効にしました。');
