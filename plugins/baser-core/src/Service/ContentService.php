@@ -136,7 +136,7 @@ class ContentService implements ContentServiceInterface
      * @return Query
      * @checked
      * @unitTest
-     * @note コンテンツ管理実装後に対応する
+     * @note(value="コンテンツ管理実装後に対応する")
      */
     public function getTreeIndex(array $queryParams): Query
     {

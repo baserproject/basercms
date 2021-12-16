@@ -52,7 +52,7 @@ class BcAdminSiteConfigHelper extends BcSiteConfigHelper
      * @return array
      * @checked
      * @unitTest
-     * @note ウィジェットエリアを実装後に対応
+     * @note(value="ウィジェットエリアを実装後に対応")
      */
     public function getWidgetAreaList()
     {

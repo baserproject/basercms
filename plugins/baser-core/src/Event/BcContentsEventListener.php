@@ -107,7 +107,7 @@ class BcContentsEventListener extends BcEventListener
      * @return string
      * @checked
      * @unitTest
-     * @note TODO内容を荒川さんに確認
+     * @note(value="TODO内容を荒川さんに確認")
      */
     public function formAfterSubmit(Event $event)
     {

@@ -60,7 +60,7 @@ class SiteConfigsController extends BcApiController
     /**
      * メールの送信テストを実行する
      * @checked
-     * @note メール送信機能を実装してから対応する
+     * @note(value="メール送信機能を実装してから対応する")
      */
     public function check_sendmail()
     {

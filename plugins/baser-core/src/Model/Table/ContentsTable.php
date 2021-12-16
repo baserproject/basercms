@@ -630,7 +630,7 @@ class ContentsTable extends AppTable
      * @param Content $data
      * @return bool
      * @checked
-     * @note TODO内容を荒川さんに確認
+     * @note(value="TODO内容を荒川さんに確認")
      */
     protected function updateRelateSubSiteContent($data)
     {
@@ -882,7 +882,7 @@ class ContentsTable extends AppTable
      * @return mixed URL | false
      * @checked
      * @unitTest
-     * @note TODO内容を荒川さんに確認
+     * @note(value="TODO内容を荒川さんに確認")
      */
     public function createUrl($id)
     {
@@ -1143,7 +1143,7 @@ class ContentsTable extends AppTable
      * @return    bool
      * @checked
      * @unitTest
-     * @note TODO内容を荒川さんに確認
+     * @note(value="TODO内容を荒川さんに確認")
      */
     public function isPublish($status, $publishBegin, $publishEnd)
     {
@@ -1171,7 +1171,7 @@ class ContentsTable extends AppTable
      * @param array $newData 新しいコンテンツデータ
      * @checked
      * @unitTest
-     * @note TODO内容を荒川さんに確認
+     * @note(value="TODO内容を荒川さんに確認")
      */
     public function isChangedStatus($id, $newData)
     {

@@ -283,7 +283,7 @@ class ContentsController extends BcApiController
      * @param  int $id
      * @checked
      * @unitTest
-     * @note TODO内容を荒川さんに確認
+     * @note(value="TODO内容を荒川さんに確認")
      */
     public function get_full_url(ContentServiceInterface $contentService, $id)
     {

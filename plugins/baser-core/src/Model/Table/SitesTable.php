@@ -329,7 +329,7 @@ class SitesTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @checked
-     * @note ContentFolder実装後に対応する
+     * @note(value="ContentFolder実装後に対応する")
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
@@ -375,7 +375,7 @@ class SitesTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @checked
-     * @note コンテンツ管理実装後に対応する
+     * @note(value="コンテンツ管理実装後に対応する")
      */
     public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {

@@ -65,7 +65,7 @@ class ContentFoldersController extends BcApiController
      * @param ContentFolderServiceInterface $ContentFolders
      * @checked
      * @unitTest
-     * @note TODOの内容を荒川さんに確認
+     * @note(value="TODOの内容を荒川さんに確認")
      */
     public function add(ContentFolderServiceInterface $ContentFolders)
     {

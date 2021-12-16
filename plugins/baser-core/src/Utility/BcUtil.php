@@ -873,7 +873,7 @@ class BcUtil
      * baserCMSのインストールが完了しているかチェックする
      * @return    boolean
      * @checked
-     * @note インストーラーを実装完了後に対応
+     * @note(value="インストーラーを実装完了後に対応")
      */
     public static function isInstalled()
     {

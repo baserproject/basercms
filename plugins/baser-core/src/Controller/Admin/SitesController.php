@@ -59,7 +59,7 @@ class SitesController extends BcAdminAppController
      *
      * @checked
      * @unitTest
-     * @note インストーラーを実装してからテーマの保有するプラグインをインストールする処理を追加する
+     * @note(value="インストーラーを実装してからテーマの保有するプラグインをインストールする処理を追加する")
      */
     public function add(SiteServiceInterface $siteService)
     {
@@ -103,7 +103,7 @@ class SitesController extends BcAdminAppController
      * @param $id
      * @checked
      * @unitTest
-     * @note インストーラーを実装してからテーマの保有するプラグインをインストールする処理を追加する
+     * @note(value="インストーラーを実装してからテーマの保有するプラグインをインストールする処理を追加する")
      */
     public function edit(SiteServiceInterface $siteService, $id)
     {

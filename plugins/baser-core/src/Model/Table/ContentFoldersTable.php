@@ -119,7 +119,7 @@ class ContentFoldersTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @checked
-     * @note TODO内容を荒川さんに確認
+     * @note(value="TODO内容を荒川さんに確認")
      */
     public function afterMove(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
@@ -158,7 +158,7 @@ class ContentFoldersTable extends AppTable
      * @param bool
      * @checked
      * @unitTest
-     * @note TODO内容を荒川さんに確認
+     * @note(value="TODO内容を荒川さんに確認")
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
