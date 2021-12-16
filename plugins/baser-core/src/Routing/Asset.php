@@ -313,7 +313,30 @@ class Asset
                 $path = $themePath . 'webroot/' . $file;
                 if (is_file($path)) {
                     $webPath = $requestWebroot . $theme . $asset[0];
+                // CUSTOMIZE MODIFIED 2021/12/16 ryuring
+                // アセットを呼び出す際、指定したテーマにアセットが存在しない場合、
+                // デフォルトテーマのアセットを参照できるようにした
+                // >>>
+                //}
+                // ---
+                } else {
+                    if(\BaserCore\Utility\BcUtil::isAdminSystem()) {
+                        $defaultThemeName = Configure::read('BcApp.defaultAdminTheme');
+                    } else {
+                        $defaultThemeName = Configure::read('BcApp.defaultFrontTheme');
+                    }
+                    $defaultTheme = static::inflectString($defaultThemeName) . '/';
+                    if (is_file(Configure::read('App.wwwRoot') . $defaultTheme . $file)) {
+                        $webPath = $requestWebroot . $defaultTheme . $asset[0];
+                    } else {
+                        $themePath = Plugin::path($defaultThemeName);
+                        $path = $themePath . 'webroot/' . $file;
+                        if (is_file($path)) {
+                            $webPath = $requestWebroot . $defaultTheme . $asset[0];
+                        }
+                    }
                 }
+                // <<<
             }
         }
         if (strpos($webPath, '//') !== false) {
