@@ -25,6 +25,7 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 use BaserCore\Model\Entity\Content;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Table\SitesTable;
@@ -135,10 +136,12 @@ class ContentService implements ContentServiceInterface
      * @return Query
      * @checked
      * @unitTest
+     * @note コンテンツ管理実装後に対応する
      */
     public function getTreeIndex(array $queryParams): Query
     {
         // ツリーの全体確認テスト用の条件（実運用では使わない）
+        // TODO ucmitz 裏機能としてクエリーパラメーターで指定できるようにする事を検討
 //        $site = $this->Contents->Sites->getRootMain();
 //        if ($queryParams['site_id'] === 'all') {
 //            $queryParams = ['or' => [
@@ -276,6 +279,7 @@ class ContentService implements ContentServiceInterface
      * @return array|bool
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function getContentFolderList($siteId = null, $options = [])
     {
@@ -829,7 +833,7 @@ class ContentService implements ContentServiceInterface
      *
      * @param array $origin
      * @param array $target
-     * @return Content|bool|false
+     * @return EntityInterface|bool|false
      * @checked
      * @noTodo
      * @unitTest
@@ -873,6 +877,7 @@ class ContentService implements ContentServiceInterface
      * @param $data
      * @checked
      * @unitTest
+     * @noTodo
      */
     protected function moveRelateSubSiteContent($mainCurrentId, $mainTargetParentId, $mainTargetId)
     {
@@ -895,6 +900,7 @@ class ContentService implements ContentServiceInterface
             // 自信をメインコンテンツとしているデータを取得
             // currentの設定
             try {
+                /* @var Content $currentEntity */
                 $currentEntity = $this->Contents->find()->where(['main_site_content_id' => $mainCurrentId, 'site_id' => $site->id])->firstOrFail();
                 $current['id'] = $currentEntity->id;
                 $current['parentId'] = $currentEntity->parent_id;
@@ -908,6 +914,7 @@ class ContentService implements ContentServiceInterface
             }
             try {
                 if ($mainTargetId) {
+                    /* @var Content $targetEntity */
                     $targetEntity = $this->Contents->find()->where(['main_site_content_id' => $mainTargetId, 'site_id' => $site->id])->first();
                     if ($targetEntity) {
                         $target['id'] = $targetEntity->id;

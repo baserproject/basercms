@@ -11,7 +11,6 @@
 
 namespace BaserCore\Controller;
 
-use BaserCore\Service\BcFrontServiceInterface;
 use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Controller\ComponentRegistry;

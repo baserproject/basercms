@@ -14,7 +14,6 @@ namespace BaserCore\Service;
 use BaserCore\Model\Entity\Permission;
 use BaserCore\Model\Table\PermissionsTable;
 use Cake\Core\Configure;
-use Cake\Core\Exception\Exception;
 use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
@@ -23,6 +22,7 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 
 /**
  * Class PermissionService
@@ -251,7 +251,7 @@ class PermissionService implements PermissionServiceInterface
     /**
      * 権限チェックを行う
      *
-     * @param array $url
+     * @param string $url
      * @param string $userGroupId
      * @return boolean
      * @checked
@@ -268,7 +268,7 @@ class PermissionService implements PermissionServiceInterface
             $url = preg_replace('/^\//is', '', $url);
         }
         $adminPrefix = BcUtil::getPrefix(true);
-        // TODO 管理画面のURLを変更した場合に対応する必要がある
+        // TODO ucmitz 管理画面のURLを変更した場合に対応する必要がある
         $url = preg_replace("/^{$adminPrefix}\//", 'baser/admin/', $url);
         // ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
         $allows = [

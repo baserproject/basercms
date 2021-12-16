@@ -103,6 +103,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      * @return bool
      * @unitTest
      * @checked
+     * @noTodo
      */
     function loadPlugin(PluginApplicationInterface $application, $plugin, $priority)
     {

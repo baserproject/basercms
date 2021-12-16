@@ -55,6 +55,7 @@ class BcFrontContentsComponent extends Component
      * @return void
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function initialize(array $config): void
     {
@@ -65,6 +66,9 @@ class BcFrontContentsComponent extends Component
 
     /**
      * フロントエンドのセットアップ
+     *
+     * @checked
+     * @note TODO内容を荒川さんに確認
      */
     public function setupFront()
     {

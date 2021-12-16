@@ -14,6 +14,7 @@ namespace BaserCore\Controller\Admin;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 use Cake\Core\Exception\Exception;
 use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Service\SiteConfigServiceInterface;
@@ -58,6 +59,7 @@ class SitesController extends BcAdminAppController
      *
      * @checked
      * @unitTest
+     * @note インストーラーを実装してからテーマの保有するプラグインをインストールする処理を追加する
      */
     public function add(SiteServiceInterface $siteService)
     {
@@ -78,7 +80,7 @@ class SitesController extends BcAdminAppController
                     'site' => $site
                 ]);
 
-                // TODO 未実装のためコメントアウト
+                // TODO ucmitz 未実装のためコメントアウト
                 /* >>>
                 if (!empty($site->theme)) {
                     $this->BcManager->installThemesPlugins($site->theme);
@@ -101,6 +103,7 @@ class SitesController extends BcAdminAppController
      * @param $id
      * @checked
      * @unitTest
+     * @note インストーラーを実装してからテーマの保有するプラグインをインストールする処理を追加する
      */
     public function edit(SiteServiceInterface $siteService, $id)
     {
@@ -127,7 +130,7 @@ class SitesController extends BcAdminAppController
                     'site' => $site
                 ]);
 
-                // TODO 未実装のためコメントアウト
+                // TODO ucmitz 未実装のためコメントアウト
                 /* >>>
                 if (!empty($site->theme) && $beforeSite->theme !== $site->theme) {
                     $this->BcManager->installThemesPlugins($site->theme);

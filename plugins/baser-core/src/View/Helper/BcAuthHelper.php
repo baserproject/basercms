@@ -20,6 +20,7 @@ use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 
 /**
  * Class BcAuthHelper
@@ -112,6 +113,7 @@ class BcAuthHelper extends Helper
      * @return bool
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function isCurrentUserAdminAvailable(): bool
     {
@@ -120,11 +122,16 @@ class BcAuthHelper extends Helper
 
     /**
      * 現在のユーザーのログインアクションを取得する
-     * TODO: 未実装
+     *
      * @return string
+     * @checked
      */
     public function getCurrentLoginAction(): string
     {
+        // TODO ucmitz 未実装
+        // >>>
+        return '';
+        // <<<
 //        $currentAuthPrefixSetting = $this->BcAuth->getCurrentPrefixSetting();
 //        if ($this->isCurrentUserAdminAvailable()) {
 //            $logoutAction = Configure::read('BcAuthPrefix.admin.logoutAction');
@@ -132,7 +139,6 @@ class BcAuthHelper extends Helper
 //            $logoutAction = $currentAuthPrefixSetting['logoutAction'];
 //        }
 //        return $logoutAction;
-        return '';
     }
 
     /**
