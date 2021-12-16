@@ -909,7 +909,7 @@ class BcUploadBehavior extends Behavior
                 // 保存時にbeforeSaveとafterSaveのループを防ぐ
                 $this->table->getEventManager()->off('Model.beforeSave');
                 $this->table->getEventManager()->off('Model.afterSave');
-                $this->table->save($entity, ['callbacks' => false, 'validate' => false]);
+                $this->table->save($entity, ['validate' => false]);
                 $uploadedFile[$setting['name']]['name'] = $value;
                 $this->setUploadedFile($uploadedFile);
             }
