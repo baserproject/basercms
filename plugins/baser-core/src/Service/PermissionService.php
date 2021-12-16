@@ -112,8 +112,7 @@ class PermissionService implements PermissionServiceInterface
         $postData = $this->autoFillRecord($postData);
         $permission = $this->Permissions->newEmptyEntity();
         $permission = $this->Permissions->patchEntity($permission, $postData, ['validate' => 'default']);
-        $this->Permissions->save($permission);
-        return $permission;
+        return $this->Permissions->saveOrFail($permission);
     }
 
     /**
@@ -128,10 +127,8 @@ class PermissionService implements PermissionServiceInterface
      */
     public function update(EntityInterface $target, array $data): EntityInterface
     {
-        $target = $this->get($data['id']);
         $permission = $this->Permissions->patchEntity($target, $data);
-        $this->Permissions->save($permission);
-        return $permission;
+        return $this->Permissions->saveOrFail($permission);
     }
 
     /**
@@ -148,7 +145,7 @@ class PermissionService implements PermissionServiceInterface
     {
         $permission = $this->get($id);
         $permission->status = true;
-        return $this->Permissions->save($permission);
+        return $this->Permissions->saveOrFail($permission);
     }
 
     /**
@@ -165,7 +162,7 @@ class PermissionService implements PermissionServiceInterface
     {
         $permission = $this->get($id);
         $permission->status = false;
-        return $this->Permissions->save($permission);
+        return $this->Permissions->saveOrFail($permission);
     }
 
     /**
