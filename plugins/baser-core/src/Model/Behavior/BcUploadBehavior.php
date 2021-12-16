@@ -782,25 +782,20 @@ class BcUploadBehavior extends Behavior
 
     /**
      * Before delete
-     * 画像ファイルの削除を行う
+     * テーブル削除時に対象の画像ファイルの削除を行う
      * 削除に失敗してもデータの削除は行う
      * @param EventInterface $event
      * @param EntityInterface $entity
      * @param ArrayObject $options
-     * TODO ucmitz : モデル 全体
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // TODO: 一時措置
-        return;
-        $Model->data = $Model->find('first', [
-            'conditions' => [
-                $Model->alias . '.' . $Model->primaryKey => $Model->id
-            ]
-        ]);
-        $uploadedFiles = $this->getUploadedFile();
-        $this->cleanupFiles($uploadedFiles);
-        return true;
+        if (isset($entity->deleted_date)) {
+            return $this->delFile($entity->eyecatch, $this->settings[$this->alias]['fields']['eyecatch']);
+        }
     }
 
     /**
@@ -808,6 +803,7 @@ class BcUploadBehavior extends Behavior
      *
      * @param array $uploadedFiles
      * @param string $fieldName フィールド名
+     * @return bool
      * @checked
      * @noTodo
      * @unitTest

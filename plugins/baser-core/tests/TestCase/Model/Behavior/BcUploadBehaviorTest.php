@@ -919,13 +919,17 @@ class BcUploadBehaviorTest extends BcTestCase
      * 画像ファイルの削除を行う
      * 削除に失敗してもデータの削除は行う
      *
-     * @param Model $Model
      * @return void
      */
     public function testBeforeDelete()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-
+        $filePath = $this->savePath . 'test.png';
+        touch($filePath);
+        $trash = $this->ContentService->getIndex(['withTrash' => true, 'deleted_date!' => null])->first();
+        $trash->eyecatch = 'test.png';
+        $this->table->dispatchEvent('Model.beforeDelete', ['entity' => $trash, 'options' => new ArrayObject()]);
+        $this->assertFileNotExists($filePath);
+        @unlink($filePath);
     }
 
     /**
