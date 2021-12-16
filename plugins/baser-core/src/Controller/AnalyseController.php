@@ -97,9 +97,11 @@ class AnalyseController extends AppController
             if (preg_match('/(' . str_replace(',', '|', preg_quote(implode(',', self::EXCLUDE_EXT))) . ')$/', $fileName)) {
                 continue;
             }
+            $pathArray = explode(DS, str_replace(ROOT . DS . 'plugins' . DS, '', $path));
             $meta = [
                 'file' => $fileName,
                 'path' => str_replace(ROOT, '', $path),
+                'type' => $pathArray[1],
                 'class' => '',
                 'method' => '',
                 'checked' => false,
