@@ -18,6 +18,7 @@ use Cake\Controller\Controller;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 
 /**
  * Class BcContentsComponent
