@@ -11,14 +11,11 @@
 
 namespace BaserCore\Test\TestCase\Routing;
 
-use BaserCore\Routing\Route\BcContentsRoute;
 use BaserCore\TestSuite\BcTestCase;
 use Cake\Routing\Router;
 
 /**
- * Class BcContentsRoute
- *
- * @property BcContentsRoute $BcContentsRoute
+ * Class RouteCollectionTest
  */
 class RouteCollectionTest extends BcTestCase
 {
