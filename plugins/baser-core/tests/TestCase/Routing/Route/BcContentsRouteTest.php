@@ -83,7 +83,6 @@ class BcContentsRouteTest extends BcTestCase
      */
     public function testMatch($current, $params, $expects)
     {
-        Router::getRouteCollection();
         Router::setRequest($this->getRequest($current));
         $this->assertEquals($expects, Router::url($params));
     }
@@ -91,17 +90,14 @@ class BcContentsRouteTest extends BcTestCase
     public function reverseRoutingDataProvider()
     {
         return [
-            // ContentFolder
-//            ['/', ['plugin' => 'BaserCore', 'controller' => 'ContentFolders', 'action' => 'view', 'entityId' => 1], '/'],
-            ['/', ['plugin' => 'BaserCore', 'controller' => 'ContentFolders', 'action' => 'view', 'entityId' => 4], '/service/'],
             // Page
-//            ['/', ['plugin' => 'BaserCore', 'controller' => 'Pages', 'action' => 'display', 'index'], '/index'],
-//            ['/', ['plugin' => 'BaserCore', 'controller' => 'Pages', 'action' => 'display', 'service', 'service1'], '/service/service1'],
+            ['/', ['plugin' => 'BaserCore', 'controller' => 'Pages', 'action' => 'display', 'index'], '/index'],
+            ['/', ['plugin' => 'BaserCore', 'controller' => 'Pages', 'action' => 'display', 'service', 'service1'], '/service/service1'],
             // Blog
-//            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'index', 'entityId' => 1], '/news/'],
-//            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'archives', 'entityId' => 1, 2], '/news/archives/2'],
-//            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'archives', 'entityId' => 1, 'page' => 2, 2], '/news/archives/2/page:2'],
-//            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'archives', 'entityId' => 1, 'category', 'release'], '/news/archives/category/release'],
+            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'index', 'entityId' => 1], '/news/'],
+            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'archives', 'entityId' => 1, 2], '/news/archives/2'],
+            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'archives', 'entityId' => 1, 'page' => 2, 2], '/news/archives/2/page:2'],
+            ['/', ['plugin' => 'BcBlog', 'controller' => 'Blog', 'action' => 'archives', 'entityId' => 1, 'category', 'release'], '/news/archives/category/release'],
         ];
     }
 
