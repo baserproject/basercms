@@ -1033,9 +1033,10 @@ class BcUploadBehaviorTest extends BcTestCase
     public function testRenameToBasenameField()
     {
         touch($this->savePath . 'test.png');
-        $id = 1;
+        $entity = new Entity();
+        $entity->id = 1;
         $setting = $this->BcUploadBehavior->settings[$this->table->getAlias()]['fields']['eyecatch'];
-        $newFileName = $this->BcUploadBehavior->renameToBasenameField($id, $this->eyecatchData, $setting, false);
+        $newFileName = $this->BcUploadBehavior->renameToBasenameField($entity, $this->eyecatchData, $setting, false);
         $this->assertEquals("00000001_eyecatch.png", $newFileName);
         $this->assertFileExists($this->savePath . DS . $newFileName);
         @unlink($this->savePath . 'test.png');
@@ -1134,24 +1135,26 @@ class BcUploadBehaviorTest extends BcTestCase
      * @param string $message テストが失敗した時に表示されるメッセージ
      * @dataProvider getFieldBasenameDataProvider
      */
-    public function testGetFieldBasename($namefield, $basename, $modelId, $setting, $expected, $message = null)
+    public function testGetFieldBasename($namefield, $basename, $id, $setting, $expected, $message = null)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 初期化
-        $this->EditorTemplate->data['EditorTemplate'][$namefield] = $basename;
-        $this->EditorTemplate->id = $modelId;
+        $entity = new Entity();
+        if ($namefield) {
+            $entity->{$namefield} = $basename;
+        }
+        $entity->id = $id;
 
         $issetSubdirDataFormat = isset($setting['subdirDateFormat']);
         if ($issetSubdirDataFormat) {
             $this->BcUploadBehavior->settings = [];
-            $this->BcUploadBehavior->settings['EditorTemplate']['subdirDateFormat'] = $setting['subdirDateFormat'];
+            $this->BcUploadBehavior->settings[$this->table->getAlias()]['subdirDateFormat'] = $setting['subdirDateFormat'];
         }
 
         $setting['namefield'] = $namefield;
 
 
         // テスト実行
-        $result = $this->EditorTemplate->getFieldBasename($setting, 'ext');
+        $result = $this->BcUploadBehavior->getFieldBasename($entity, $setting, 'ext');
 
 
         if (!$issetSubdirDataFormat) {

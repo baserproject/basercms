@@ -899,7 +899,7 @@ class BcUploadBehavior extends Behavior
             if (empty($setting['name'])) {
                 $setting['name'] = $key;
             }
-            $value = $this->renameToBasenameField($entity->id, $uploadedFile, $setting, $copy);
+            $value = $this->renameToBasenameField($entity, $uploadedFile, $setting, $copy);
             if ($value !== false) {
                 $entity->eyecatch = $value;
                 // 保存時にbeforeSaveとafterSaveのループを防ぐ
@@ -915,7 +915,7 @@ class BcUploadBehavior extends Behavior
     /**
      * ファイル名をフィールド値ベースのファイル名に変更する
      *
-     * @param int $id
+     * @param EntityInterface $entity
      * @param array $uploadedFile
      * @param array $setting
      * @param bool $copy
@@ -924,7 +924,7 @@ class BcUploadBehavior extends Behavior
      * @noTodo
      * @unitTest
      */
-    public function renameToBasenameField($id, $uploadedFile, $setting, $copy = false)
+    public function renameToBasenameField($entity, $uploadedFile, $setting, $copy = false)
     {
         if (empty($setting['namefield']) || empty($uploadedFile[$setting['name']])) {
             return false;
@@ -945,7 +945,7 @@ class BcUploadBehavior extends Behavior
             return '';
         }
         $pathinfo = pathinfo($oldName);
-        $newName = $this->getFieldBasename($id, $setting, $pathinfo['extension']);
+        $newName = $this->getFieldBasename($entity, $setting, $pathinfo['extension']);
         if (!$newName) {
             return false;
         }
@@ -982,7 +982,7 @@ class BcUploadBehavior extends Behavior
     /**
      * フィールドベースのファイル名を取得する
      *
-     * @param Model $Model
+     * @param EntityInterface $entity
      * @param array $setting
      * - namefield 対象となるファイルのベースの名前が格納されたフィールド名
      * - nameformat ファイル名のフォーマット
@@ -990,17 +990,23 @@ class BcUploadBehavior extends Behavior
      * - nameadd nameを追加しないか
      * @param string $ext ファイルの拡張子
      * @return mixed false / string
-     * TODO ucmitz : モデル $Model->id
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getFieldBasename($id, $setting, $ext)
+    public function getFieldBasename($entity, $setting, $ext)
     {
         if (empty($setting['namefield'])) {
             return false;
         }
-        if ($id) {
-            $basename = $id;
+        if (is_null($entity[$setting['namefield']])) {
+            if ($setting['namefield'] == "id" && $entity->id) {
+                $basename = $entity->id;
+            } else {
+                return false;
+            }
         } else {
-            return false;
+            $basename = $entity[$setting['namefield']];
         }
 
         if (!empty($setting['nameformat'])) {
