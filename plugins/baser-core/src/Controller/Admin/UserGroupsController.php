@@ -232,32 +232,4 @@ class UserGroupsController extends BcAdminAppController
         return $this->redirect(['action' => 'index']);
     }
 
-    /**
-     * ユーザーグループのよく使う項目の初期値を登録する
-     * ユーザー編集画面よりAjaxで呼び出される
-     *
-     * @param $id
-     * @return void
-     * @throws Exception
-     */
-    public function set_default_favorites($id)
-    {
-        if (!$this->request->is(['post', 'put'])) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-        $defaultFavorites = null;
-        if ($this->request->getData()) {
-            $defaultFavorites = BcUtil::serialize($this->request->getData());
-        }
-        $this->UserGroup->id = $id;
-        $this->UserGroup->recursive = -1;
-        $data = $this->UserGroup->read();
-        $data['UserGroup']['default_favorites'] = $defaultFavorites;
-        $this->UserGroup->set($data);
-        if ($this->UserGroup->save()) {
-            echo true;
-        }
-        exit();
-    }
-
 }

@@ -259,4 +259,31 @@ class UserServiceTest extends BcTestCase
         $this->assertFalse($deleteRealaodUser);
     }
 
+    /**
+     * Test isSelf
+     * @param int $loginId
+     * @param int $postId
+     * @param bool $expected
+     * @dataProvider isSelfUpdateDataProvider
+     */
+    public function testIsSelf($loginId, $postId, $expected)
+    {
+        $request = $this->getRequest();
+        if ($loginId) {
+            $this->loginAdmin($request, $loginId);
+        }
+        $result = $this->Users->isSelf($postId);
+        $this->assertEquals($expected, $result);
+    }
+
+    public function isSelfUpdateDataProvider()
+    {
+        return [
+            [null, null, false], // 新規登録
+            [null, 1, false],    // 更新
+            [1, 1, true],        // 自身を更新
+            [1, 2, false]        // 他人を更新
+        ];
+    }
+
 }

@@ -10,11 +10,11 @@
  */
 
 use BaserCore\Model\Entity\User;
-use BaserCore\View\AppView;
+use BaserCore\View\BcAdminAppView;
 
 /**
  * Users Form
- * @var AppView $this
+ * @var BcAdminAppView $this
  * @var User $user
  */
 $this->BcBaser->i18nScript([
@@ -24,13 +24,10 @@ $this->BcBaser->i18nScript([
   'confirmMessage2' => __d('baser', '登録されている「よく使う項目」を、このユーザーが所属するユーザーグループの初期設定として登録します。よろしいですか？'),
   'infoMessage1' => __d('baser', '登録されている「よく使う項目」を所属するユーザーグループの初期値として設定しました。'),
 ]);
+$this->BcBaser->js('admin/users/form.bundle', false);
 $userGroups = $this->BcAdminUser->getUserGroupList();
 ?>
 
-<div id="SelfUpdate" style="display: none"><?php echo $this->BcAdminUser->isSelfUpdate($user->id) ?></div>
-<div id="AlertMessage" style="display: none"></div>
-<div id="UserGroupSetDefaultFavoritesUrl"
-     style="display:none"><?php $this->BcBaser->url(['controller' => 'user_groups', 'action' => 'set_default_favorites', @$this->request->getData('UserGroup.id')]) ?></div>
 
 <?php // 自動入力を防止する為のダミーフィールド ?>
 <input type="text" name="dummy-email" style="top:-100px;left:-100px;position:fixed;">
