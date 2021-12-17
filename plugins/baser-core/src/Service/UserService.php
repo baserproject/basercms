@@ -423,7 +423,7 @@ class UserService implements UserServiceInterface
      * @param int $id
      * @return mixed
      */
-    public function isSelf(int $id)
+    public function isSelf(?int $id)
     {
         $loginUser = BcUtil::loginUser();
         return (!empty($id) && !empty($loginUser->id) && $loginUser->id === $id);

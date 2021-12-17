@@ -144,6 +144,6 @@ interface UserServiceInterface
      * @param int $id
      * @return mixed
      */
-    public function isSelf(int $id);
+    public function isSelf(?int $id);
 
 }
