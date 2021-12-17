@@ -107,7 +107,7 @@ class SiteService implements SiteServiceInterface
     {
         $site = $this->Sites->newEmptyEntity();
         $site = $this->Sites->patchEntity($site, $postData);
-        return ($result = $this->Sites->save($site))? $result : $site;
+        return $this->Sites->saveOrFail($site);
     }
 
     /**
@@ -122,7 +122,7 @@ class SiteService implements SiteServiceInterface
     public function update(EntityInterface $target, array $postData)
     {
         $site = $this->Sites->patchEntity($target, $postData);
-        return ($result = $this->Sites->save($target))? $result : $site;
+        return $this->Sites->saveOrFail($site);
     }
 
     /**

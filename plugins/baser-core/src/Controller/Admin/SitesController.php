@@ -71,8 +71,8 @@ class SitesController extends BcAdminAppController
                 $this->request = $this->request->withParsedBody(($event->getResult() === null || $event->getResult() === true)? $event->getData('data') : $event->getResult());
             }
 
-            $site = $siteService->create($this->request->getData());
-            if (!$site->getErrors()) {
+            try {
+                $site = $siteService->create($this->request->getData());
                 /*** Sites.afterAdd ***/
                 $this->dispatchLayerEvent('afterAdd', [
                     'site' => $site
@@ -87,12 +87,12 @@ class SitesController extends BcAdminAppController
 
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を追加しました。'), $site->display_name));
                 return $this->redirect(['action' => 'edit', $site->id]);
+            } catch (\Exception $e) {
+                $site = $e->getEntity();
+                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
-            $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
-        } else {
-            $site = $siteService->getNew();
         }
-        $this->set('site', $site);
+        $this->set('site', $site ?? $siteService->getNew());
     }
 
     /**
@@ -119,8 +119,8 @@ class SitesController extends BcAdminAppController
             }
 
             $beforeSite = clone $site;
-            $site = $siteService->update($site, $this->request->getData());
-            if (!$site->getErrors()) {
+            try {
+                $site = $siteService->update($site, $this->request->getData());
 
                 /*** Sites.afterEdit ***/
                 $this->dispatchLayerEvent('afterEdit', [
@@ -136,7 +136,7 @@ class SitesController extends BcAdminAppController
 
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を更新しました。'), $site->display_name));
                 $this->redirect(['action' => 'edit', $id]);
-            } else {
+            } catch (\Exception $e) {
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
         }

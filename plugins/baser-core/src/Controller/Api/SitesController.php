@@ -65,10 +65,11 @@ class SitesController extends BcApiController
     public function add(SiteServiceInterface $sites)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $site = $sites->create($this->request->getData());
-        if (!$site->getErrors()) {
+        try {
+            $site = $sites->create($this->request->getData());
             $message = __d('baser', 'サイト「{0}」を追加しました。', $site->name);
-        } else {
+        } catch (\Exception $e) {
+            $site = $e->getEntity();
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '入力エラーです。内容を修正してください。');
         }
@@ -91,10 +92,11 @@ class SitesController extends BcApiController
     public function edit(SiteServiceInterface $sites, $id)
     {
         $this->request->allowMethod(['post', 'put']);
-        $site = $sites->update($sites->get($id), $this->request->getData());
-        if (!$site->getErrors()) {
+        $site = $sites->get($id);
+        try {
+            $site = $sites->update($site, $this->request->getData());
             $message = __d('baser', 'サイト「{0}」を更新しました。', $site->name);
-        } else {
+        } catch (\Exception $e) {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '入力エラーです。内容を修正してください。');
         }

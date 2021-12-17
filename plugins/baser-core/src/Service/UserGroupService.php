@@ -96,7 +96,7 @@ class UserGroupService implements UserGroupServiceInterface
         $postData['auth_prefix'] = isset($postData['auth_prefix']) ? implode(',', $postData['auth_prefix']) : "Admin";
         $userGroup = $this->UserGroups->newEmptyEntity();
         $userGroup = $this->UserGroups->patchEntity($userGroup, $postData);
-        return ($result = $this->UserGroups->save($userGroup))? $result : $userGroup;
+        return $this->UserGroups->saveOrFail($userGroup);
     }
 
     /**
@@ -110,7 +110,7 @@ class UserGroupService implements UserGroupServiceInterface
     public function update(EntityInterface $target, array $postData)
     {
         $userGroup = $this->UserGroups->patchEntity($target, $postData);
-        return ($result = $this->UserGroups->save($userGroup))? $result : $userGroup;
+        return $this->UserGroups->saveOrFail($userGroup);
     }
 
     /**
