@@ -63,25 +63,25 @@ interface PermissionServiceInterface
      * 有効状態にする
      * @param int $id
      *
-     * @return EntityInterface
+     * @return bool
      */
-    public function publish(int $id): EntityInterface;
+    public function publish(int $id): bool;
 
     /**
      * 無効状態にする
      * @param int $id
      *
-     * @return EntityInterface
+     * @return bool
      */
-    public function unpublish(int $id): EntityInterface;
+    public function unpublish(int $id): bool;
 
     /**
      * 複製する
      * @param int $permissionId
      *
-     * @return EntityInterface
+     * @return EntityInterface|false
      */
-    public function copy(int $permissionId): EntityInterface;
+    public function copy(int $permissionId);
 
     /**
      * 削除する

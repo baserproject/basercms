@@ -1614,11 +1614,7 @@ class BcAppController extends AppController
      */
     protected function saveDblog($message)
     {
-        try {
-            $DblogService = $this->getService(DblogServiceInterface::class);
-            return $DblogService->create($message);
-        } catch (\Exception $e) {
-            return false;
-        }
+        $DblogService = $this->getService(DblogServiceInterface::class);
+        return $DblogService->create($message);
     }
 }

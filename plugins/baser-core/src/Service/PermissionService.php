@@ -135,47 +135,47 @@ class PermissionService implements PermissionServiceInterface
      * 有効状態にする
      *
      * @param int $id
-     * @return EntityInterface
+     * @return bool
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function publish($id): EntityInterface
+    public function publish($id): bool
     {
         $permission = $this->get($id);
         $permission->status = true;
-        return $this->Permissions->saveOrFail($permission);
+        return ($this->Permissions->save($permission)) ? true: false;
     }
 
     /**
      * 無効状態にする
      *
      * @param int $id
-     * @return EntityInterface
+     * @return bool
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function unpublish($id): EntityInterface
+    public function unpublish($id): bool
     {
         $permission = $this->get($id);
         $permission->status = false;
-        return $this->Permissions->saveOrFail($permission);
+        return ($this->Permissions->save($permission)) ? true: false;
     }
 
     /**
      * 複製する
      *
      * @param int $permissionId
-     * @return EntityInterface
+     * @return EntityInterface|false
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function copy(int $permissionId): EntityInterface
+    public function copy(int $permissionId)
     {
         $permission = $this->get($permissionId);
         $permission->id = null;
@@ -183,7 +183,11 @@ class PermissionService implements PermissionServiceInterface
         $permission->sort = null;
         $data = $permission->toarray();
         $data = $this->autoFillRecord($data);
-        return $this->create($data);
+        try {
+            return $this->create($data);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
 
