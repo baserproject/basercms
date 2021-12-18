@@ -26,6 +26,7 @@ class DblogsTable extends Table
      * @return void
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function initialize(array $config): void
     {

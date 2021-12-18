@@ -53,6 +53,18 @@ class DblogsTableTest extends BcTestCase
     }
 
     /**
+     * Test initialize
+     *
+     * @return void
+     */
+    public function testInitialize(): void
+    {
+        $this->assertEquals('dblogs', $this->Dblogs->getTable());
+        $this->assertTrue($this->Dblogs->hasBehavior('Timestamp'));
+        $this->assertTrue($this->Dblogs->hasAssociation('Users'));
+    }
+
+    /**
      * Test validationDefault
      */
     public function testValidationDefault()
