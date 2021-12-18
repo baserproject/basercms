@@ -87,6 +87,7 @@ class UserGroupService implements UserGroupServiceInterface
      * ユーザーグループ登録
      * @param array $postData
      * @return \Cake\Datasource\EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest
@@ -102,7 +103,9 @@ class UserGroupService implements UserGroupServiceInterface
     /**
      * ユーザーグループ情報を更新する
      * @param EntityInterface $target
-     * @param array $postData     * @return EntityInterface
+     * @param array $postData
+     * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest
