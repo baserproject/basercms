@@ -98,16 +98,16 @@ class PermissionsController extends BcAdminAppController
 	{
 		$currentUserGroup = $userGroups->get($userGroupId);
         if ($this->request->is('post')) {
-            $permission = $permissionService->create($this->request->withData('user_group_id', $currentUserGroup->id)->getData());
-            if (empty($permission->getErrors()) === true) {
+            try {
+                $permission = $permissionService->create($this->request->withData('user_group_id', $currentUserGroup->id)->getData());
                 $this->BcMessage->setSuccess(sprintf(__d('baser', '新規アクセス制限設定「%s」を追加しました。'), $permission->name));
                 return $this->redirect(['action' => 'index', $userGroupId]);
+            } catch (\Exception $e) {
+                $permission = $e->getEntity();
+                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
-            $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
-        } else {
-            $permission = $permissionService->getNew($userGroupId);
         }
-        $this->set('permission', $permission);
+        $this->set('permission', $permission ?? $permissionService->getNew($userGroupId));
         $this->set('currentUserGroup', $currentUserGroup);
 	}
 
@@ -129,14 +129,14 @@ class PermissionsController extends BcAdminAppController
     {
 		$currentUserGroup = $userGroups->get($userGroupId);
         $permission = $permissionService->get($permissionId);
-
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $permission = $permissionService->update($permission, $this->request->withData('user_group_id', $currentUserGroup->id)->getData());
-            if (empty($permission->getErrors()) === true) {
+            try {
+                $permission = $permissionService->update($permission, $this->request->withData('user_group_id', $currentUserGroup->id)->getData());
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'アクセス制限設定「%s」を更新しました。'), $permission->name));
                 return $this->redirect(['action' => 'index', $userGroupId]);
+            } catch (\Exception $e) {
+                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
-            $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
         }
 
         $this->set('permission', $permission);
@@ -211,8 +211,7 @@ class PermissionsController extends BcAdminAppController
         $userGroupId = $permission->user_group_id;
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $permission = $permissionService->copy($permissionId);
-            if (empty($permission->getErrors()) === true) {
+            if ($permissionService->copy($permissionId)) {
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'アクセス制限設定「%s」を複製しました。'), $permission->name));
                 return $this->redirect(['action' => 'index', $userGroupId]);
             }
@@ -237,8 +236,10 @@ class PermissionsController extends BcAdminAppController
         $userGroupId = $permission->user_group_id;
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $permission = $permissionService->unpublish($permissionId);
-            $this->BcMessage->setSuccess(sprintf(__d('baser', 'アクセス制限設定「%s」を無効にしました。'), $permission->name));
+            if ($permissionService->unpublish($permissionId)) {
+                $this->BcMessage->setSuccess(sprintf(__d('baser', 'アクセス制限設定「%s」を無効にしました。'),
+                    $permission->name));
+            }
         }
         return $this->redirect(['action' => 'index', $userGroupId]);
     }
@@ -259,8 +260,10 @@ class PermissionsController extends BcAdminAppController
         $userGroupId = $permission->user_group_id;
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $permission = $permissionService->publish($permissionId);
-            $this->BcMessage->setSuccess(sprintf(__d('baser', 'アクセス制限設定「%s」を有効にしました。'), $permission->name));
+            if ($permissionService->publish($permissionId)) {
+                $this->BcMessage->setSuccess(sprintf(__d('baser', 'アクセス制限設定「%s」を有効にしました。'),
+                    $permission->name));
+            }
         }
         return $this->redirect(['action' => 'index', $userGroupId]);
     }

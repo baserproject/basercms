@@ -23,6 +23,7 @@ use BaserCore\View\BcAdminAppView;
 
 $this->BcBaser->js('admin/permissions/form', false);
 $methodList = $this->BcAdminPermission->getMethodList();
+$authList = $this->BcAdminPermission->getAuthList();
 ?>
 
 
@@ -82,6 +83,13 @@ $methodList = $this->BcAdminPermission->getMethodList();
       <td class="col-input bca-form-table__input">
         <?php echo $this->BcAdminForm->control('method', ['type' => 'select', 'options' => $methodList]) ?>
         <?php echo $this->BcForm->error('method') ?>
+      </td>
+    </tr>
+    <tr>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('method', __d('baser', 'アクセス')) ?></th>
+      <td class="col-input bca-form-table__input">
+        <?php echo $this->BcAdminForm->control('auth', ['type' => 'radio', 'options' => $authList]) ?>
+        <?php echo $this->BcForm->error('auth') ?>
       </td>
     </tr>
     <tr>

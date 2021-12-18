@@ -87,6 +87,7 @@ class UserGroupService implements UserGroupServiceInterface
      * ユーザーグループ登録
      * @param array $postData
      * @return \Cake\Datasource\EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest
@@ -96,13 +97,15 @@ class UserGroupService implements UserGroupServiceInterface
         $postData['auth_prefix'] = isset($postData['auth_prefix']) ? implode(',', $postData['auth_prefix']) : "Admin";
         $userGroup = $this->UserGroups->newEmptyEntity();
         $userGroup = $this->UserGroups->patchEntity($userGroup, $postData);
-        return ($result = $this->UserGroups->save($userGroup))? $result : $userGroup;
+        return $this->UserGroups->saveOrFail($userGroup);
     }
 
     /**
      * ユーザーグループ情報を更新する
      * @param EntityInterface $target
-     * @param array $postData     * @return EntityInterface
+     * @param array $postData
+     * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest
@@ -110,7 +113,7 @@ class UserGroupService implements UserGroupServiceInterface
     public function update(EntityInterface $target, array $postData)
     {
         $userGroup = $this->UserGroups->patchEntity($target, $postData);
-        return ($result = $this->UserGroups->save($userGroup))? $result : $userGroup;
+        return $this->UserGroups->saveOrFail($userGroup);
     }
 
     /**

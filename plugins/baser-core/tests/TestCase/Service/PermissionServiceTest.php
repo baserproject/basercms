@@ -197,7 +197,9 @@ class PermissionServiceTest extends BcTestCase
         $permission->status = false;
         $permissions->save($permission);
 
-        $permission = $this->PermissionService->publish($permission->id);
+        $this->PermissionService->publish($permission->id);
+
+        $permission = $permissions->get($permission->id);
         $this->assertTrue($permission->status);
     }
 
@@ -214,7 +216,9 @@ class PermissionServiceTest extends BcTestCase
         $permission->status = true;
         $permissions->save($permission);
 
-        $permission = $this->PermissionService->unpublish($permission->id);
+        $this->PermissionService->unpublish($permission->id);
+
+        $permission = $permissions->get($permission->id);
         $this->assertFalse($permission->status);
     }
 
@@ -234,6 +238,22 @@ class PermissionServiceTest extends BcTestCase
     }
 
     /**
+     * Test getAuthList
+     *
+     * @return void
+     */
+    public function testGetAuthList()
+    {
+        $this->assertEquals(
+            $this->PermissionService->getAuthList(),
+            [
+                0 => '拒否',
+                1 => '許可',
+            ]
+        );
+    }
+
+    /**
      * Test autoFillRecord
      *
      * @return void
@@ -247,7 +267,7 @@ class PermissionServiceTest extends BcTestCase
         $data = $method->invokeArgs($this->PermissionService, [[]]);
         $this->assertGreaterThan(0, $data['no']);
         $this->assertGreaterThan(0, $data['sort']);
-        $this->assertTrue($data['auth']);
+        $this->assertFalse($data['auth']);
         $this->assertEquals('*', $data['method']);
         $this->assertTrue($data['status']);
 
@@ -327,7 +347,7 @@ class PermissionServiceTest extends BcTestCase
         $this->assertEquals($url, $result->url);
         $this->assertEquals($auth, $result->auth);
     }
-    
+
     public function testChangeSort()
     {
         $permissions = $this->getTableLocator()->get('Permissions');
@@ -340,10 +360,10 @@ class PermissionServiceTest extends BcTestCase
         foreach($permissionList as $permission) {
             $beforeOrderId[] = $permission->id;
         }
-        
+
         $conditions = ['user_group_id' => 2];
         $this->PermissionService->changeSort($beforeOrderId[0], 2, $conditions);
-        
+
         $permissionList = $permissions
             ->find()
             ->order(['sort' => 'ASC'])
@@ -356,7 +376,7 @@ class PermissionServiceTest extends BcTestCase
         $this->assertEquals($beforeOrderId[0], $afterOrderId[2]);
         $this->assertEquals($beforeOrderId[1], $afterOrderId[0]);
         $this->assertEquals($beforeOrderId[2], $afterOrderId[1]);
-        
+
         $this->PermissionService->changeSort($beforeOrderId[0], -2, $conditions);
         $permissionList = $permissions
             ->find()

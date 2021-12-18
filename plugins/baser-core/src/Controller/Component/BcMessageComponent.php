@@ -66,8 +66,15 @@ class BcMessageComponent extends Component
         }
 
         if ($saveDblog) {
-            $dblogs = $this->getService(DblogServiceInterface::class);
-            $dblogs->create($message);
+            try {
+                $dblogs = $this->getService(DblogServiceInterface::class);
+                $dblogs->create($message);
+            } catch (\Exception $e) {
+                $this->Flash->set(__d('baser', 'DBログの保存に失敗しました。'), [
+                    'element' => 'default',
+                    'params' => ['class' => 'alert-message']
+                ]);
+            }
         }
     }
 

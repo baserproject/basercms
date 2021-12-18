@@ -105,10 +105,11 @@ class UsersController extends BcApiController
     public function add(UserServiceInterface $users)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $user = $users->create($this->request->getData());
-        if (!$user->getErrors()) {
+        try {
+            $user = $users->create($this->request->getData());
             $message = __d('baser', 'ユーザー「{0}」を追加しました。', $user->name);
-        } else {
+        } catch (\Exception $e) {
+            $user = $e->getEntity();
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '入力エラーです。内容を修正してください。');
         }
@@ -131,10 +132,11 @@ class UsersController extends BcApiController
     public function edit(UserServiceInterface $users, $id)
     {
         $this->request->allowMethod(['post', 'put']);
-        $user = $users->update($users->get($id), $this->request->getData());
-        if (!$user->getErrors()) {
+        $user = $users->get($id);
+        try {
+            $user = $users->update($user, $this->request->getData());
             $message = __d('baser', 'ユーザー「{0}」を更新しました。', $user->name);
-        } else {
+        } catch (\Exception $e) {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '入力エラーです。内容を修正してください。');
         }
