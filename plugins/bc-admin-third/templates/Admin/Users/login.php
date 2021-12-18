@@ -15,7 +15,8 @@ use BaserCore\View\AppView;
  * login
  * @var AppView $this
  */
-$this->BcAdmin->setTitle(__d('baser', 'ログイン'))
+$this->BcAdmin->setTitle(__d('baser', 'ログイン'));
+$this->BcBaser->js('admin/users/login.bundle', false);
 ?>
 
 

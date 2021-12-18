@@ -32,6 +32,9 @@ $(function () {
             return $.ajax({
                 type: 'POST',
                 url: $.bcUtil.apiBaseUrl + 'baser-core/site_configs/check_sendmail.json',
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
                 data: $("#SiteConfigFormForm").serialize(),
                 beforeSend: function () {
                     $("#ResultCheckSendmail").hide();
