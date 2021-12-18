@@ -103,6 +103,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
      * @return bool
      * @unitTest
      * @checked
+     * @noTodo
      */
     function loadPlugin(PluginApplicationInterface $application, $plugin, $priority)
     {
@@ -238,11 +239,6 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                         'finder' => 'available'
                     ],
                     'contain' => 'UserGroups',
-                ]);
-                // ログインセッションを保有している際も認証済とする
-                // Webの管理画面よりAPIにアクセスできるようにするため
-                $service->loadAuthenticator('Authentication.Session', [
-                    'sessionKey' => $authSetting['sessionKey'],
                 ]);
                 break;
 

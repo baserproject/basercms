@@ -16,7 +16,7 @@ use Cake\Core\Exception\Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-
+use BaserCore\Annotation\Note;
 
 /**
  * Class ContentFoldersController
@@ -28,7 +28,7 @@ use BaserCore\Annotation\Checked;
 class ContentFoldersController extends BcApiController
 {
     /**
-     * ユーザーグループ一覧取得
+     * コンテンツフォルダ一覧取得
      * @param ContentFolderServiceInterface $ContentFolders
      * @checked
      * @noTodo
@@ -44,7 +44,7 @@ class ContentFoldersController extends BcApiController
     }
 
     /**
-     * ユーザーグループ取得
+     * コンテンツフォルダ取得
      * @param ContentFolderServiceInterface $ContentFolders
      * @param $id
      * @checked
@@ -61,10 +61,11 @@ class ContentFoldersController extends BcApiController
     }
 
     /**
-     * ユーザーグループ登録
+     * コンテンツフォルダ登録
      * @param ContentFolderServiceInterface $ContentFolders
      * @checked
      * @unitTest
+     * @note(value="TODOの内容を荒川さんに確認")
      */
     public function add(ContentFolderServiceInterface $ContentFolders)
     {
@@ -73,7 +74,7 @@ class ContentFoldersController extends BcApiController
             $contentFolders = $ContentFolders->create($this->request->getData());
             if (!$contentFolders->getErrors()) {
                 $message = __d('baser', 'コンテンツフォルダ「{0}」を追加しました。', $contentFolders->content->name);
-                // TODO: contentFOlderを追加するかどうか
+                // TODO: ucmitz contentFolderを追加するかどうか
                 $this->set('content', $contentFolders->content);
             } else {
                 $this->setResponse($this->response->withStatus(400));
@@ -88,7 +89,7 @@ class ContentFoldersController extends BcApiController
     }
 
     /**
-     * ユーザーグループ削除
+     * コンテンツフォルダ削除
      * @param ContentFolderServiceInterface $ContentFolders
      * @param $id
      * @checked

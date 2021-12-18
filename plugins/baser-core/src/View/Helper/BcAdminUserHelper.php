@@ -12,6 +12,7 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Service\UserGroupServiceInterface;
+use BaserCore\Service\UserServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\View\Helper;
@@ -41,8 +42,7 @@ class BcAdminUserHelper extends Helper
      */
     public function isSelfUpdate(?int $id)
     {
-        $loginUser = BcUtil::loginUser();
-        return (!empty($id) && !empty($loginUser->id) && $loginUser->id === $id);
+        return $this->getService(UserServiceInterface::class)->isSelf($id);
     }
 
     /**

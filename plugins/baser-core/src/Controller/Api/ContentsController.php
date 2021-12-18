@@ -17,6 +17,7 @@ use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 use BaserCore\Service\ContentService;
 use BaserCore\Model\Table\SiteConfigsTable;
 use BaserCore\Service\ContentServiceInterface;
@@ -282,12 +283,13 @@ class ContentsController extends BcApiController
      * @param  int $id
      * @checked
      * @unitTest
+     * @note(value="TODO内容を荒川さんに確認")
      */
     public function get_full_url(ContentServiceInterface $contentService, $id)
     {
         $this->request->allowMethod(['get']);
         if ($id) {
-            // TODO: bcTreeからgetUrlByIdする際に値がおかしくなるので、getUrlById自体を修正する
+            // TODO ucmitz: bcTreeからgetUrlByIdする際に値がおかしくなるので、getUrlById自体を修正する
             $this->set(['fullUrl' => $contentService->getUrlById($id, true)]);
         } else {
             $this->setResponse($this->response->withStatus(400));

@@ -226,6 +226,9 @@ class UsersController extends BcAdminAppController
                 $this->dispatchLayerEvent('afterEdit', [
                     'user' => $user
                 ]);
+                if($userService->isSelf($id)) {
+                    $userService->reLogin($this->request, $this->response);
+                }
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザー「{0}」を更新しました。', $user->name));
                 return $this->redirect(['action' => 'edit', $user->id]);
             } catch (\Exception $e) {

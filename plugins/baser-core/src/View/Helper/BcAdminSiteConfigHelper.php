@@ -11,12 +11,12 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Service\SiteConfigService;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 
 /**
  * BcAdminSiteConfigHelper
@@ -52,10 +52,11 @@ class BcAdminSiteConfigHelper extends BcSiteConfigHelper
      * @return array
      * @checked
      * @unitTest
+     * @note(value="ウィジェットエリアを実装後に対応")
      */
     public function getWidgetAreaList()
     {
-        // TODO 未実装のため代替措置
+        // TODO ucmitz 未実装のため代替措置
         // >>>
         //$this->BcAdminForm->getControlSource('WidgetArea.id'), 'empty' => __d('baser', 'なし')]
         // ---

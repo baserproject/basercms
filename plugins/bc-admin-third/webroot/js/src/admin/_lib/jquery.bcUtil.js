@@ -198,6 +198,9 @@
             }
             var ajaxConfig = {
                 url: url,
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
                 type: 'POST',
                 dataType: 'html',
                 beforeSend: function () {

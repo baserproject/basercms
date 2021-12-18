@@ -23,11 +23,12 @@ use Cake\Core\App;
 use Cake\Filesystem\Folder;
 use Cake\Core\Plugin as CakePlugin;
 use Cake\Datasource\EntityInterface;
+use Cake\Utility\Xml;
+use Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use Cake\Utility\Xml;
-use Exception;
+use BaserCore\Annotation\Note;
 
 /**
  * Class PluginService
@@ -266,7 +267,7 @@ class PluginService implements PluginServiceInterface
 
         foreach($userGroups as $userGroup) {
             //$permissionAuthPrefix = $Permission->UserGroup->getAuthPrefix($userGroup['UserGroup']['id']);
-            // TODO 現在 admin 固定、今後、mypage 等にも対応する
+            // TODO ucmitz 現在 admin 固定、今後、mypage 等にも対応する
             $permissionAuthPrefix = 'admin';
             $url = '/baser/' . $permissionAuthPrefix . '/' . Inflector::underscore($data['name']) . '/*';
 

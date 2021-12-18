@@ -47,7 +47,13 @@ $(function() {
             $('#Search').slideUp(300);
             url += '/';
         }
-        $.ajax({type: "GET", url: url});
+        $.ajax({
+            type: "GET",
+            url: url,
+            headers: {
+                "Authorization": $.bcJwt.accessToken,
+            },
+        });
     }
 
 });

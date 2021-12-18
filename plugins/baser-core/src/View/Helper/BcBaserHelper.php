@@ -25,6 +25,7 @@ use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 
 /**
  * Class BcBaserHelper
@@ -221,7 +222,7 @@ class BcBaserHelper extends Helper
         }
 
         /*** beforeElement ***/
-        // TODO 未実装
+        // TODO ucmitz 未実装
         /* >>>
         $event = $this->dispatchLayerEvent('beforeElement', [
             'name' => $name,
@@ -234,7 +235,7 @@ class BcBaserHelper extends Helper
         <<< */
 
         /*** Controller.beforeElement ***/
-        // TODO 未実装
+        // TODO ucmitz 未実装
         /* >>>
         $event = $this->dispatchLayerEvent('beforeElement', [
             'name' => $name,
@@ -246,7 +247,7 @@ class BcBaserHelper extends Helper
         }
         <<< */
 
-        // TODO 未実装
+        // TODO ucmitz 未実装
         /* >>>
         if ($options['subDir'] === false) {
             if (!$this->_subDir && $this->_View->subDir) {
@@ -263,7 +264,7 @@ class BcBaserHelper extends Helper
         $out = $this->_View->element($name, $data, $options);
 
         /*** afterElement ***/
-        // TODO 未実装
+        // TODO ucmitz 未実装
         /* >>>
         $event = $this->dispatchLayerEvent('afterElement', [
             'name' => $name,
@@ -275,7 +276,7 @@ class BcBaserHelper extends Helper
         <<< */
 
         /*** Controller.afterElement ***/
-        // TODO 未実装
+        // TODO ucmitz 未実装
         /* >>>
         $event = $this->dispatchLayerEvent('afterElement', [
             'name' => $name,
@@ -364,7 +365,7 @@ class BcBaserHelper extends Helper
     public function getLink($title, $url = null, $options = [], $confirmMessage = false)
     {
 
-        // TODO 未実装のため代替措置
+        // TODO ucmitz 未実装のため代替措置
         // >>>
         if ($confirmMessage) {
             $options['confirm'] = $confirmMessage;
@@ -681,7 +682,7 @@ class BcBaserHelper extends Helper
     public function getContentsName($detail = false, $options = [])
     {
 
-        // TODO 未実装のため代替措置
+        // TODO ucmitz 未実装のため代替措置
         // >>>
         $request = $this->_View->getRequest();
         if ($request->getParam('action') === 'login') {
@@ -865,7 +866,7 @@ class BcBaserHelper extends Helper
      */
     public function getUrl($url = null, $full = false, $sessionId = true)
     {
-        // TODO 未実装のため代替処理
+        // TODO ucmitz 未実装のため代替処理
         // $sessionId について実装検討要
         // >>>
         return $this->Url->build($url, ['fullBase' => $full]);

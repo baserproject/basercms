@@ -12,18 +12,15 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
-use Cake\Event\Event;
-use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use BaserCore\Model\AppTable;
-use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 use Cake\Datasource\EntityInterface;
-use BaserCore\Model\Entity\ContentFolder;
 
 /**
  * Class ContentFoldersTable
@@ -107,6 +104,7 @@ class ContentFoldersTable extends AppTable
      * @param ArrayObject $options
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function beforeMove(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
@@ -121,10 +119,11 @@ class ContentFoldersTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @checked
+     * @note(value="TODO内容を荒川さんに確認")
      */
     public function afterMove(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // TODO: movePageTemplatesがなくなったので、一時措置
+        // TODO ucmitz: movePageTemplatesがなくなったので、一時措置
         return true;
         // if (!empty($event->getData('data.Content')) && $event->getData('data.Content.type') == 'ContentFolder') {
         //     $this->movePageTemplates($event->getData('data.Content.url'));
@@ -159,6 +158,7 @@ class ContentFoldersTable extends AppTable
      * @param bool
      * @checked
      * @unitTest
+     * @note(value="TODO内容を荒川さんに確認")
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
@@ -166,7 +166,7 @@ class ContentFoldersTable extends AppTable
             $this->isMovableTemplate = true;
         }
         if (!empty($options['reconstructSearchIndices']) && $this->beforeStatus !== $entity->content->status) {
-            // TODO: テスト未実装
+            // TODO ucmitz: テスト未実装
             $searchIndexModel = TableRegistry::getTableLocator()->get('SearchIndex');
             $searchIndexModel->reconstruct($entity->content->id);
         }

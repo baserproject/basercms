@@ -12,26 +12,22 @@
 namespace BaserCore\View\Helper;
 
 use Exception;
-use Cake\View\View;
-use Cake\ORM\Entity;
 use Cake\View\Helper;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
-use BaserCore\Model\Entity\Content;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentsTable;
 use BaserCore\Service\PermissionService;
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Model\Table\PermissionsTable;
 use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Service\PermissionServiceInterface;
-
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 
 /**
  * コンテンツヘルパ
@@ -160,8 +156,9 @@ class BcContentsHelper extends Helper
      * @param int $entityId コンテンツを特定するID
      * @checked
      * @unitTest
+     * @noTodo
      */
-    public function isActionAvailable($type, $action, $entityId)
+    public function isActionAvailable($type, $action, $entityId) : bool
     {
         $user = BcUtil::loginUser('Admin');
         if (!isset($this->getConfig('items')[$type]['url'][$action])) {
@@ -175,8 +172,8 @@ class BcContentsHelper extends Helper
                     return true;
                 }
             }
-            return false;
         }
+        return false;
     }
 
     /**

@@ -118,7 +118,10 @@ $(function () {
         if (e !== undefined && e.target.id == 'viewsetting-site-id') {
             $("#BtnSearchClear").click();
             $.ajax({
-                url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/get_content_folder_list/' + $(this).val(),
+                url: $.bcUtil.apiBaseUrl + 'baser-core/contents/get_content_folder_list/' + $(this).val(),
+                headers: {
+                    "Authorization": $.bcJwt.accessToken,
+                },
                 type: "GET",
                 dataType: "json",
                 beforeSend: function () {

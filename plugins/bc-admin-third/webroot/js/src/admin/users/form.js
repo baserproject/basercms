@@ -8,15 +8,8 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-
-import "bootstrap";
-import "./_lib/jquery.baseUrl.js";
-import "./_lib/jquery.bcUtil.js";
-import "./_lib/jquery.bcToken.js";
-import "./_lib/jquery.bcSortable.js";
-import "./_lib/jquery.bcBatch.js";
-import "./_lib/jquery.bcTree.js";
-import "./_lib/jquery.bcConfirm.js";
-import "./_lib/jquery.bcJwt.js";
-import "./_module/sidebar.js";
-
+$(function () {
+    $("#BtnSave").click(function () {
+        $.bcUtil.showLoader();
+    });
+});

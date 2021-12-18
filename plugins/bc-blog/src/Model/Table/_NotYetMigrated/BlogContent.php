@@ -333,10 +333,10 @@ class BlogContent extends BlogAppModel
         $data['BlogContent']['auth_captcha'] = 1;
         $data['BlogContent']['tag_use'] = false;
         $data['BlogContent']['status'] = false;
-        $data['BlogContent']['eye_catch_size_thumb_width'] = Configure::read('BcBlog.eye_catch_size_thumb_width");
-        $data['BlogContent']['eye_catch_size_thumb_height'] = Configure::read('BcBlog.eye_catch_size_thumb_height");
-        $data['BlogContent']['eye_catch_size_mobile_thumb_width'] = Configure::read('BcBlog.eye_catch_size_mobile_thumb_width");
-        $data['BlogContent']['eye_catch_size_mobile_thumb_height'] = Configure::read('BcBlog.eye_catch_size_mobile_thumb_height");
+        $data['BlogContent']['eye_catch_size_thumb_width'] = Configure::read('BcBlog.eye_catch_size_thumb_width');
+        $data['BlogContent']['eye_catch_size_thumb_height'] = Configure::read('BcBlog.eye_catch_size_thumb_height');
+        $data['BlogContent']['eye_catch_size_mobile_thumb_width'] = Configure::read('BcBlog.eye_catch_size_mobile_thumb_width');
+        $data['BlogContent']['eye_catch_size_mobile_thumb_height'] = Configure::read('BcBlog.eye_catch_size_mobile_thumb_height');
         $data['BlogContent']['use_content'] = true;
 
         return $data;

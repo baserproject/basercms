@@ -11,7 +11,6 @@
 
 namespace BaserCore\Controller\Component;
 
-use BaserCore\Error\BcException;
 use BaserCore\Service\DblogServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Controller\Component;
@@ -49,6 +48,7 @@ class BcMessageComponent extends Component
      * @param null|string $class 付与するクラス名
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function set($message, $alert = false, $saveDblog = false, $setFlash = true, $class = null)
     {

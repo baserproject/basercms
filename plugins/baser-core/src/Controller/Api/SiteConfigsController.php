@@ -16,6 +16,7 @@ use Cake\Core\Configure;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 
 /**
  * SiteConfigsController
@@ -59,6 +60,7 @@ class SiteConfigsController extends BcApiController
     /**
      * メールの送信テストを実行する
      * @checked
+     * @note(value="メール送信機能を実装してから対応する")
      */
     public function check_sendmail()
     {
@@ -70,7 +72,7 @@ class SiteConfigsController extends BcApiController
         } else {
             $siteUrl = Configure::read('BcEnv.siteUrl');
         }
-        // TODO 未実装ためコメントアウト
+        // TODO ucmitz 未実装ためコメントアウト
         /* >>>
         if (!$this->sendMail(
             $siteConfigs['email'], __d('baser', 'メール送信テスト'),

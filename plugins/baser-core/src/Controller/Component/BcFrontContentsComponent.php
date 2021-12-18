@@ -18,6 +18,7 @@ use Cake\Controller\Controller;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 
 /**
  * Class BcContentsComponent
@@ -55,6 +56,7 @@ class BcFrontContentsComponent extends Component
      * @return void
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function initialize(array $config): void
     {
@@ -65,6 +67,9 @@ class BcFrontContentsComponent extends Component
 
     /**
      * フロントエンドのセットアップ
+     *
+     * @checked
+     * @note(value="TODO内容を荒川さんに確認")
      */
     public function setupFront()
     {

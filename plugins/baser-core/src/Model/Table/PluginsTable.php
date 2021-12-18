@@ -15,13 +15,12 @@ use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
-use Cake\Filesystem\Folder;
-use Cake\ORM\Table;
 use BaserCore\Model\AppTable;
 use Cake\Utility\Inflector;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 
 /**
  * Class PluginsTable

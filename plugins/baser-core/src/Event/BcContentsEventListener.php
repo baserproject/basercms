@@ -13,16 +13,15 @@ namespace BaserCore\Event;
 
 use Cake\Event\Event;
 use Cake\Core\Configure;
-use Cake\Routing\Router;
 use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 use BaserCore\View\BcAdminAppView;
-use BaserCore\Event\BcEventListener;
 use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Service\PermissionServiceInterface;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
+
 /**
  * Class BcContentsEventListener
  *
@@ -108,6 +107,7 @@ class BcContentsEventListener extends BcEventListener
      * @return string
      * @checked
      * @unitTest
+     * @note(value="TODO内容を荒川さんに確認")
      */
     public function formAfterSubmit(Event $event)
     {
@@ -127,7 +127,7 @@ class BcContentsEventListener extends BcEventListener
         $isAvailablePreview = (!empty($setting['preview']) && $content['type'] != 'ContentFolder');
         $path = BcUtil::getPrefix() . "/" . Inflector::dasherize($event->getSubject()->getPlugin()) . '/contents/delete';
         $isAvailableDelete = true;
-        // TODO: user取得まだなので、一旦falseでform先にする
+        // TODO ucmitz: user取得まだなので、一旦falseでform先にする
         // $isAvailableDelete = (empty($content['site_root']) && $this->getService(PermissionServiceInterface::class)->check($path, $View->get('user')->user_group));
 
         $newOut = $event->setData('out', implode("\n", [
