@@ -200,6 +200,11 @@ class Initial extends AbstractMigration
                 'limit' => 255,
                 'null' => true,
             ])
+            ->addColumn('use_move_contents', 'boolean', [
+                'default' => false,
+                'limit' => null,
+                'null' => true,
+            ])
             ->addColumn('created', 'datetime', [
                 'default' => null,
                 'limit' => null,
