@@ -11,7 +11,10 @@
 
 namespace BaserCore\Model\Validation;
 
+use BaserCore\Model\Entity\User;
 use BaserCore\Utility\BcUtil;
+use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Hash;
 use Cake\Validation\Validation;
 use BaserCore\Annotation\UnitTest;
@@ -36,16 +39,23 @@ class UserValidation extends Validation
      * @noTodo
      * @checked
      */
-    public static function willChangeSelfGroup($userGroup)
+    public static function willChangeSelfGroup($userGroup, $context)
     {
-        if(BcUtil::isAdminUser()) {
+        if (empty($context['data']['login_user_id'])) {
+            return false;
+        } else {
+            $loginUserId = (string) $context['data']['login_user_id'];
+        }
+        $users = TableRegistry::getTableLocator()->get('BaserCore.Users');
+        /* @var User $loginUser */
+        $loginUser = $users->find()->contain('UserGroups')->where(['id' => $loginUserId])->first();
+        $loginGroupId = Hash::extract($loginUser->user_groups, '{n}.id');
+        if(in_array(Configure::read('BcApp.adminGroupId'), $loginGroupId)) {
             return true;
         }
-        $loginUser = BcUtil::loginUser();
-        if (empty($loginUser->user_groups)) {
-            return false;
+        if($context['data']['id'] !== $loginUserId) {
+            return true;
         }
-        $loginGroupId = Hash::extract($loginUser->user_groups, '{n}.id');
         $postGroupId = array_map('intval', $userGroup['_ids']);
         return ($loginGroupId === $postGroupId);
     }

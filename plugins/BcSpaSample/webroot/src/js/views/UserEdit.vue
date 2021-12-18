@@ -1,5 +1,7 @@
 <template>
-    <user-form :access-token="accessToken"
+    <user-form
+        :access-token="accessToken"
+        :loginUserId="loginUserId"
         :user-id="$route.params.id"
         @set-message="(message, isError, isFlash) => $emit('set-message', message, isError, isFlash)"
         @clear-message="$emit('clear-message')" />
@@ -20,7 +22,8 @@ export default {
      * Props
      */
     props: {
-        accessToken: String
+        accessToken: String,
+        loginUserId: Number
     },
 
     /**
