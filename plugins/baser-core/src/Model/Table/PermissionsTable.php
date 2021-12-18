@@ -41,6 +41,12 @@ class PermissionsTable extends AppTable
         'POST' => 'POST',
     ];
 
+    // 許可/拒否
+    const AUTH_LIST = [
+        0 => '拒否',
+        1 => '許可',
+    ];
+
     /**
      * Initialize
      *
@@ -160,7 +166,7 @@ class PermissionsTable extends AppTable
      *
      * @param string フィールド名
      * @return array コントロールソース
-     * 
+     *
      * @checked
      * @noTodo
      * @unitTest
@@ -177,12 +183,6 @@ class PermissionsTable extends AppTable
             ]);
             return $groupList->toArray();
         }
-        // if ($field === 'auth') {
-        //     return [
-        //         // '0' => __d('baser', '不可'),
-        //         '1' => __d('baser', '可')
-        //     ];
-        // }
         return false;
     }
 

@@ -220,6 +220,19 @@ class PermissionService implements PermissionServiceInterface
     }
 
     /**
+     * 権限リストを取得
+     *
+     * @return array
+     * @noTodo
+     * @unitTest
+     * @checked
+     */
+    public function getAuthList() : array
+    {
+        return $this->Permissions::AUTH_LIST;
+    }
+
+    /**
      *  レコード作成に必要なデータを代入する
      * @param array $data
      * @return array $data
@@ -237,7 +250,7 @@ class PermissionService implements PermissionServiceInterface
             $data['sort'] = $this->Permissions->getMax('sort') + 1;
         }
         if (!isset($data['auth']) || $data['auth'] === null) {
-            $data['auth'] = true;
+            $data['auth'] = false;
         }
         if (empty($data['method'])) {
             $data['method'] = '*';
