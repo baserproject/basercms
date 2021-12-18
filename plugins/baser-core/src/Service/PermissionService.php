@@ -102,6 +102,7 @@ class PermissionService implements PermissionServiceInterface
      * パーミッション登録
      * @param ServerRequest $request
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      *
      * @checked
      * @noTodo
@@ -120,6 +121,7 @@ class PermissionService implements PermissionServiceInterface
      * @param EntityInterface $target
      * @param array $data
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      *
      * @checked
      * @noTodo

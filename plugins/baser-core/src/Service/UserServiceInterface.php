@@ -49,6 +49,7 @@ interface UserServiceInterface
      * 新規登録する
      * @param array $postData
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
     public function create(array $postData);
 
@@ -57,6 +58,7 @@ interface UserServiceInterface
      * @param EntityInterface $target
      * @param array $postData
      * @return mixed
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
     public function update(EntityInterface $target, array $postData);
 

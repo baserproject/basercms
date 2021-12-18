@@ -45,6 +45,7 @@ class DblogService implements DblogServiceInterface
      * DBログ登録
      * @param array $data
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest

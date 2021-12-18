@@ -48,6 +48,7 @@ interface PermissionServiceInterface
      * 新規登録する
      * @param EntityInterface $permission
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
     public function create(array $postData): EntityInterface;
 
@@ -56,6 +57,7 @@ interface PermissionServiceInterface
      * @param EntityInterface $target
      * @param array $data
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
     public function update(EntityInterface $target, array $data): EntityInterface;
 

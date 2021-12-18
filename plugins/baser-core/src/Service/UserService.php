@@ -110,6 +110,7 @@ class UserService implements UserServiceInterface
      * ユーザー登録
      * @param array $data
      * @return \Cake\Datasource\EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest
@@ -126,6 +127,7 @@ class UserService implements UserServiceInterface
      * @param EntityInterface $target
      * @param array $postData
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest
