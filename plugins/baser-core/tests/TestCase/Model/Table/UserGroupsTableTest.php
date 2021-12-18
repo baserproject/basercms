@@ -88,6 +88,8 @@ class UserGroupsTableTest extends BcTestCase
             $fields[] = $key;
         }
         $this->assertEquals(['id', 'name', 'title', 'auth_prefix', 'use_move_contents'], $fields);
+        $userGroups = $this->UserGroups->get(2);
+
     }
 
     /**
