@@ -105,11 +105,11 @@ interface PermissionServiceInterface
     /**
      * 権限チェックを行う
      *
-     * @param array $url
-     * @param string $userGroupId
+     * @param string $url
+     * @param array $userGroupId
      * @return boolean
      */
-    public function check($url, $userGroupId): bool;
+    public function check(string $url, array $userGroupId): bool;
 
     /**
      * 優先度を変更する

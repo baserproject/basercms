@@ -281,67 +281,57 @@ class PermissionServiceTest extends BcTestCase
      * 権限チェックを行う
      *
      * @param array $url
-     * @param string $userGroupId
-     * @param array $expected 期待値
-     * @param string $message テストが失敗した時に表示されるメッセージ
+     * @param array $userGroupId
+     * @param bool $expected 期待値
      * @dataProvider checkDataProvider
      */
-    public function testCheck($url, $userGroupId, $expected, $message = null)
+    public function testCheck($url, $userGroup, $expected)
     {
-        $result = $this->PermissionService->check($url, $userGroupId);
-        $this->assertEquals($expected, $result, $message);
+
+        $result = $this->PermissionService->addCheck("/fuga", false);
+        $result = $this->PermissionService->addCheck("/piyo", true);
+        $result = $this->PermissionService->check($url, $userGroup);
+        $this->assertEquals($expected, $result);
     }
 
     public function checkDataProvider()
     {
         return [
-            ['hoge', 1, true, 'システム管理者は権限をもっています'],
-            ['hoge', 2, true, 'サイト運営者は権限をもっています'],
-            ['/baser/admin/*', 1, true, 'サイト運営者は権限をもっています'],
-            ['/baser/admin/*', 2, false, 'サイト運営者は権限をもっていません'],
-            ['/baser/admin/', 2, true, 'サイト運営者は権限をもっています'],
-            ['/baser/admin/dashboard', 2, false, 'サイト運営者は権限をもっていません'],
-            ['/baser/admin/dashboard/', 2, true, 'サイト運営者は権限をもっています'],
-            ['/baser/admin/dashboard', 3, true, 'サイト運営者は権限をもっていません'],
-            ['/baser/admin/dashboard/', 3, true, 'サイト運営者は権限をもっていません'],
+            ['hoge', [1], true],
+            ['hoge', [2], false],
+            ['/fuga', [1], true],
+            ['/fuga', [2], false],
+            ['/piyo', [2], true],
+            ['/baser/admin/baser-core/users/logout', [2], true],
+            ['/baser/admin/pages/2000', [2], true],
+            ['/baser/admin/bc-blog/blog_post/edit/100', [2, 3], true],
+            ['/baser/admin/bc-blog/blog_post/edit/100', [2], false],
+            ['/baser/admin/bc-blog/blog_post/add', [2, 3], false],
+            ['/baser/admin/baser-core/contents/delete', [2, 3], true],
         ];
     }
 
-    /**
-     * 権限チェックの準備をする
-     * @param int $userGroupId
-     * @param array $expected
-     * @return void
-     * @dataProvider setCheckDataProvider
-     */
-    public function testSetCheck($userGroupId, $expected)
-    {
-        $this->PermissionService->setCheck($userGroupId);
-        $result = $this->PermissionService->Permissions->getCurrentPermissions();
-        $this->assertEquals($expected, count($result));
-    }
-    public function setCheckDataProvider()
-    {
-        return [
-            [2, 15],
-            [100, 0]
-        ];
-    }
 
     /**
      * 権限チェック対象を追加する
+     * @param string $url
+     * @param bool $expected
      * @return void
+     * @dataProvider addCheckDataProvider
      */
-    public function testAddCheck()
+    public function testAddCheck($url, $auth, $expected)
     {
-        $url = "/baser/admin/test/*";
-        $auth = true;
-        $this->loginAdmin($this->getRequest());
         $this->PermissionService->addCheck($url, $auth);
-        $permissions = $this->PermissionService->Permissions->getCurrentPermissions();
-        $result = array_pop($permissions);
-        $this->assertEquals($url, $result->url);
-        $this->assertEquals($auth, $result->auth);
+        $result = $this->PermissionService->check($url, [2]);
+        $this->assertEquals($expected, $result);
+
+    }
+    public function addCheckDataProvider()
+    {
+        return [
+            ["/baser/admin/test1/*", false, false],
+            ["/baser/admin/test2/*", true, true],
+        ];
     }
 
     public function testChangeSort()
