@@ -157,6 +157,11 @@ class Initial extends AbstractMigration
                 'limit' => 20,
                 'null' => true,
             ])
+           ->addColumn('use_move_contents', 'boolean', [
+                'default' => false,
+                'limit' => null,
+                'null' => true,
+            ])
             ->addColumn('modified', 'datetime', [
                 'default' => null,
                 'limit' => null,
@@ -198,11 +203,6 @@ class Initial extends AbstractMigration
             ->addColumn('nickname', 'string', [
                 'default' => null,
                 'limit' => 255,
-                'null' => true,
-            ])
-            ->addColumn('use_move_contents', 'boolean', [
-                'default' => false,
-                'limit' => null,
                 'null' => true,
             ])
             ->addColumn('created', 'datetime', [
