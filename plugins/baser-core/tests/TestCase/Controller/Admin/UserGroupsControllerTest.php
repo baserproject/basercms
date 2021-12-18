@@ -163,12 +163,4 @@ class UserGroupsControllerTest extends BcTestCase
         $this->assertEquals(1, $query->count());
     }
 
-
-    /**
-     * ユーザーグループのよく使う項目の初期値を登録する
-     */
-    public function testSet_default_favorites()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
 }

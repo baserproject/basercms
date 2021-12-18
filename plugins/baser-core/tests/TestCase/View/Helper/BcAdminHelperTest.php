@@ -290,7 +290,7 @@ class BcAdminHelperTest extends BcTestCase
         $this->BcAdmin->contentsMenu();
         $actualIsHelpIsLogin = ob_get_clean();
         $this->assertEquals($expectedIsHelpIsLogin, $actualIsHelpIsLogin);
-        
+
         // ヘルプあり ログイン済 スーパーユーザー
         $expectedIsSuperUser = $this->BcAdmin->getView()->element('contents_menu', [
             'isHelp' => true,
@@ -312,41 +312,6 @@ class BcAdminHelperTest extends BcTestCase
         $this->BcAdmin->addAdminMainBodyHeaderLinks($expected);
         $result = $this->BcAdmin->getView()->get('mainBodyHeaderLinks');
         $this->assertEquals($expected, array_pop($result));
-    }
-
-    /**
-     * 管理システムグローバルメニューの利用可否確認
-     *
-     * @param mixed $admin request->params['admin']の値
-     * @param int $groupId ユーザーグループID
-     * @param boolean $expected 期待値
-     * @param string $message テストが失敗した場合に表示されるメッセージ
-     * @dataProvider isAdminGlobalmenuUsedDataProvider
-     */
-    public function testIsAdminGlobalmenuUsed($admin, $groupId, $expected, $message = null)
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-        // TODO : 要コード確認
-        /* >>>
-		$this->BcAdmin->request = $this->BcAdmin->request->withParam('admin',  $admin);
-		$this->BcAdmin->_View->viewVars['user'] = [
-			'user_group_id' => $groupId
-		];
-
-		$result = $this->BcAdmin->isAdminGlobalmenuUsed();
-		$this->assertEquals($expected, $result, $message);
-        <<< */
-    }
-
-    public function isAdminGlobalmenuUsedDataProvider()
-    {
-        return [
-            ['', null, false, '管理システムグローバルメニューの利用可否確認が正しくありません'],
-            [1, null, false, '管理システムグローバルメニューの利用可否確認が正しくありません'],
-            ['', 1, true, '管理システムグローバルメニューの利用可否確認が正しくありません'],
-            ['1', 1, true, '管理ユーザーの管理システムグローバルメニューの利用可否確認が正しくありません'],
-            ['1', 2, 0, '運営ユーザーの管理システムグローバルメニューの利用可否確認が正しくありません'],
-        ];
     }
 
     /**

@@ -157,16 +157,6 @@ class Initial extends AbstractMigration
                 'limit' => 20,
                 'null' => true,
             ])
-            ->addColumn('default_favorites', 'text', [
-                'default' => null,
-                'limit' => 16777215,
-                'null' => true,
-            ])
-            ->addColumn('use_move_contents', 'boolean', [
-                'default' => false,
-                'limit' => null,
-                'null' => true,
-            ])
             ->addColumn('modified', 'datetime', [
                 'default' => null,
                 'limit' => null,
