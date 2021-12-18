@@ -28,7 +28,7 @@ class SitesSeed extends AbstractSeed
                 'display_name' => 'メインサイト',
                 'title' => 'メインサイト',
                 'alias' => '',
-                'theme' => 'BcSample',
+                'theme' => 'BcFront',
                 'status' => '1',
                 'keyword' => '',
                 'description' => '',

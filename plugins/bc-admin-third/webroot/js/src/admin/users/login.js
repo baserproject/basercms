@@ -1,4 +1,3 @@
-<?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
  * Copyright (c) baserCMS User Community <https://basercms.net/community/>
@@ -9,11 +8,9 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-return [
-    'type' => 'CorePlugin',
-    'title' => __d('baser', '固定ページ'),
-    'description' => __d('baser', '複数設置可能な単一ページ'),
-    'author' => 'baserCMS User Community',
-    'url' => 'https://basercms.net',
-    'installMessage' => ''
-];
+$(function () {
+    $("#BtnLogin").click(function () {
+        $.bcUtil.showLoader();
+        $.bcJwt.login($('#email').val(), $('#password').val());
+    });
+});

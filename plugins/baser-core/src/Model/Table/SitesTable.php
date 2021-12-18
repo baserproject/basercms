@@ -20,16 +20,17 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcAgent;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
-use BaserCore\Annotation\NoTodo;
 use BaserCore\Model\Entity\Site;
-use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Datasource\ResultSetInterface;
 use BaserCore\Service\SiteConfigService;
 use BaserCore\Utility\BcAbstractDetector;
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 
 /**
  * Class Site
@@ -328,10 +329,11 @@ class SitesTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @checked
+     * @note(value="ContentFolder実装後に対応する")
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // TODO 未確認のため暫定措置
+        // TODO ucmitz 未確認のため暫定措置
         // >>>
         return;
         // <<<
@@ -373,10 +375,11 @@ class SitesTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @checked
+     * @note(value="コンテンツ管理実装後に対応する")
      */
     public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // TODO 未確認のため暫定措置
+        // TODO ucmitz 未確認のため暫定措置
         // >>>
         return;
         // <<<

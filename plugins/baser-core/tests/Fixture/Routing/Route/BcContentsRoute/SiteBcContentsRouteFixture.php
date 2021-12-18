@@ -34,7 +34,7 @@ class SiteBcContentsRouteFixture extends TestFixture
             'display_name' => 'メイン',
             'title' => 'メイン',
             'alias' => '',
-            'theme' => 'BcSample',
+            'theme' => 'BcFront',
             'status' => 1,
             'use_subdomain' => 0,
             'relate_main_site' => 0,

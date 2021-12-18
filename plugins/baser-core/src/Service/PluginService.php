@@ -15,6 +15,7 @@ use BaserCore\Model\Table\PluginsTable;
 use Cake\Cache\Cache;
 use Cake\Http\Client;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\Core\Configure;
 use BaserCore\Utility\BcUtil;
@@ -22,11 +23,12 @@ use Cake\Core\App;
 use Cake\Filesystem\Folder;
 use Cake\Core\Plugin as CakePlugin;
 use Cake\Datasource\EntityInterface;
+use Cake\Utility\Xml;
+use Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
-use Cake\Utility\Xml;
-use Exception;
+use BaserCore\Annotation\Note;
 
 /**
  * Class PluginService
@@ -69,32 +71,35 @@ class PluginService implements PluginServiceInterface
      * @return array $plugins
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function getIndex(string $sortMode): array
     {
+        $plugins = $this->Plugins->find()
+            ->order(['priority'])
+            ->all()
+            ->toArray();
         if($sortMode) {
-            // DBに登録されてる場合
-            $registered = $this->Plugins->find()
-                ->order(['priority'])
-                ->all()
-                ->toArray();
-            return $registered;
+            return $plugins;
         } else {
+            $registeredName = Hash::extract($plugins, '{n}.name');
             // DBに登録されてないもの含めて、プラグインフォルダから取得
-            // TODO: チェック必要
+            if(!$plugins) {
+                $plugins = [];
+            }
             $paths = App::path('plugins');
-            $pluginConfigs = [];
             foreach($paths as $path) {
                 $Folder = new Folder($path);
                 $files = $Folder->read(true, true, true);
                 foreach($files[0] as $file) {
                     $name = Inflector::camelize(Inflector::underscore(basename($file)));
-                    if (!in_array(basename($file), Configure::read('BcApp.core'))) {
-                        $pluginConfigs[$name] = $this->Plugins->getPluginConfig($name);
+                    if (!in_array(basename($file), Configure::read('BcApp.core'))
+                            && !in_array($name, $registeredName)) {
+                        $plugins[] = $this->Plugins->getPluginConfig($name);
                     }
                 }
             }
-            return array_values($pluginConfigs);
+            return $plugins;
         }
     }
 
@@ -262,7 +267,7 @@ class PluginService implements PluginServiceInterface
 
         foreach($userGroups as $userGroup) {
             //$permissionAuthPrefix = $Permission->UserGroup->getAuthPrefix($userGroup['UserGroup']['id']);
-            // TODO 現在 admin 固定、今後、mypage 等にも対応する
+            // TODO ucmitz 現在 admin 固定、今後、mypage 等にも対応する
             $permissionAuthPrefix = 'admin';
             $url = '/baser/' . $permissionAuthPrefix . '/' . Inflector::underscore($data['name']) . '/*';
 

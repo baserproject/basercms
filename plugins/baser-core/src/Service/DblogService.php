@@ -45,6 +45,7 @@ class DblogService implements DblogServiceInterface
      * DBログ登録
      * @param array $data
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest
@@ -63,11 +64,7 @@ class DblogService implements DblogServiceInterface
             $data['user_id'] = $user->id;
         }
         $dblog = $this->Dblogs->newEntity($data);
-        $savedDblog = $this->Dblogs->save($dblog);
-        if (!$savedDblog) {
-            throw new BcException(__d('baser', 'DBログの保存に失敗しました。'));
-        }
-        return $savedDblog;
+        return $this->Dblogs->saveOrFail($dblog);
     }
 
     /**

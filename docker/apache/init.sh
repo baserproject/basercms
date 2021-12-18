@@ -5,6 +5,8 @@ if [ ! -e '/check' ]; then
     sleep 10
 	bin/cake migrations migrate --plugin BaserCore
 	bin/cake migrations seed --plugin BaserCore
+	bin/cake migrations migrate --plugin BcPage
+	bin/cake migrations seed --plugin BcPage
 	bin/cake plugin assets symlink
     openssl genrsa -out config/jwt.key 1024
     openssl rsa -in config/jwt.key -outform PEM -pubout -out config/jwt.pem

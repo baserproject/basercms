@@ -12,7 +12,6 @@
 namespace BaserCore\View\Helper;
 
 use BaserCore\Event\BcEventDispatcherTrait;
-use BaserCore\Service\BcAdminServiceInterface;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Service\DblogServiceInterface;
@@ -22,6 +21,7 @@ use Cake\View\Helper;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 
 /**
  * Class BcAdminHelper
@@ -241,7 +241,7 @@ class BcAdminHelper extends Helper
         $adminMenuGroups = $this->getAdminMenuGroups();
         if($adminMenuGroups === false) return null;
 
-        // TODO : 要実装 BcUtil::loginUserGroup()で代用可能?
+        // TODO ucmitz : 要実装 BcUtil::loginUserGroup()で代用可能?
         // if(empty($this->_View->viewVars['user']['user_group_id'])) {
         //     return null;
         // }

@@ -82,6 +82,11 @@ $(function () {
     $.bcToken.init();
 
     /**
+     * bcJwt 初期化
+     */
+    $.bcJwt.init();
+
+    /**
      * collapse　オプション、詳細設定の折りたたみ開閉
      */
     $("[data-bca-collapse='collapse']").on({

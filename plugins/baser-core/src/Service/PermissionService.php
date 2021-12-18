@@ -14,7 +14,6 @@ namespace BaserCore\Service;
 use BaserCore\Model\Entity\Permission;
 use BaserCore\Model\Table\PermissionsTable;
 use Cake\Core\Configure;
-use Cake\Core\Exception\Exception;
 use Cake\Http\ServerRequest;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
@@ -23,6 +22,7 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 
 /**
  * Class PermissionService
@@ -102,6 +102,7 @@ class PermissionService implements PermissionServiceInterface
      * パーミッション登録
      * @param ServerRequest $request
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      *
      * @checked
      * @noTodo
@@ -112,8 +113,7 @@ class PermissionService implements PermissionServiceInterface
         $postData = $this->autoFillRecord($postData);
         $permission = $this->Permissions->newEmptyEntity();
         $permission = $this->Permissions->patchEntity($permission, $postData, ['validate' => 'default']);
-        $this->Permissions->save($permission);
-        return $permission;
+        return $this->Permissions->saveOrFail($permission);
     }
 
     /**
@@ -121,6 +121,7 @@ class PermissionService implements PermissionServiceInterface
      * @param EntityInterface $target
      * @param array $data
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      *
      * @checked
      * @noTodo
@@ -128,57 +129,55 @@ class PermissionService implements PermissionServiceInterface
      */
     public function update(EntityInterface $target, array $data): EntityInterface
     {
-        $target = $this->get($data['id']);
         $permission = $this->Permissions->patchEntity($target, $data);
-        $this->Permissions->save($permission);
-        return $permission;
+        return $this->Permissions->saveOrFail($permission);
     }
 
     /**
      * 有効状態にする
      *
      * @param int $id
-     * @return EntityInterface
+     * @return bool
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function publish($id): EntityInterface
+    public function publish($id): bool
     {
         $permission = $this->get($id);
         $permission->status = true;
-        return $this->Permissions->save($permission);
+        return ($this->Permissions->save($permission)) ? true: false;
     }
 
     /**
      * 無効状態にする
      *
      * @param int $id
-     * @return EntityInterface
+     * @return bool
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function unpublish($id): EntityInterface
+    public function unpublish($id): bool
     {
         $permission = $this->get($id);
         $permission->status = false;
-        return $this->Permissions->save($permission);
+        return ($this->Permissions->save($permission)) ? true: false;
     }
 
     /**
      * 複製する
      *
      * @param int $permissionId
-     * @return EntityInterface
+     * @return EntityInterface|false
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function copy(int $permissionId): EntityInterface
+    public function copy(int $permissionId)
     {
         $permission = $this->get($permissionId);
         $permission->id = null;
@@ -186,7 +185,11 @@ class PermissionService implements PermissionServiceInterface
         $permission->sort = null;
         $data = $permission->toarray();
         $data = $this->autoFillRecord($data);
-        return $this->create($data);
+        try {
+            return $this->create($data);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
 
@@ -220,6 +223,19 @@ class PermissionService implements PermissionServiceInterface
     }
 
     /**
+     * 権限リストを取得
+     *
+     * @return array
+     * @noTodo
+     * @unitTest
+     * @checked
+     */
+    public function getAuthList() : array
+    {
+        return $this->Permissions::AUTH_LIST;
+    }
+
+    /**
      *  レコード作成に必要なデータを代入する
      * @param array $data
      * @return array $data
@@ -237,7 +253,7 @@ class PermissionService implements PermissionServiceInterface
             $data['sort'] = $this->Permissions->getMax('sort') + 1;
         }
         if (!isset($data['auth']) || $data['auth'] === null) {
-            $data['auth'] = true;
+            $data['auth'] = false;
         }
         if (empty($data['method'])) {
             $data['method'] = '*';
@@ -251,7 +267,7 @@ class PermissionService implements PermissionServiceInterface
     /**
      * 権限チェックを行う
      *
-     * @param array $url
+     * @param string $url
      * @param string $userGroupId
      * @return boolean
      * @checked
@@ -268,7 +284,7 @@ class PermissionService implements PermissionServiceInterface
             $url = preg_replace('/^\//is', '', $url);
         }
         $adminPrefix = BcUtil::getPrefix(true);
-        // TODO 管理画面のURLを変更した場合に対応する必要がある
+        // TODO ucmitz 管理画面のURLを変更した場合に対応する必要がある
         $url = preg_replace("/^{$adminPrefix}\//", 'baser/admin/', $url);
         // ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
         $allows = [

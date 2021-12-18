@@ -48,6 +48,7 @@ interface PermissionServiceInterface
      * 新規登録する
      * @param EntityInterface $permission
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
     public function create(array $postData): EntityInterface;
 
@@ -56,6 +57,7 @@ interface PermissionServiceInterface
      * @param EntityInterface $target
      * @param array $data
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
     public function update(EntityInterface $target, array $data): EntityInterface;
 
@@ -63,25 +65,25 @@ interface PermissionServiceInterface
      * 有効状態にする
      * @param int $id
      *
-     * @return EntityInterface
+     * @return bool
      */
-    public function publish(int $id): EntityInterface;
+    public function publish(int $id): bool;
 
     /**
      * 無効状態にする
      * @param int $id
      *
-     * @return EntityInterface
+     * @return bool
      */
-    public function unpublish(int $id): EntityInterface;
+    public function unpublish(int $id): bool;
 
     /**
      * 複製する
      * @param int $permissionId
      *
-     * @return EntityInterface
+     * @return EntityInterface|false
      */
-    public function copy(int $permissionId): EntityInterface;
+    public function copy(int $permissionId);
 
     /**
      * 削除する
@@ -97,6 +99,12 @@ interface PermissionServiceInterface
     public function getMethodList(): array;
 
     /**
+     * 権限リストを取得
+     * @return array
+     */
+    public function getAuthList(): array;
+
+    /**
      * 権限チェックを行う
      *
      * @param array $url
@@ -104,14 +112,14 @@ interface PermissionServiceInterface
      * @return boolean
      */
     public function check($url, $userGroupId): bool;
-    
+
     /**
      * 優先度を変更する
-     * 
+     *
      * @param int $id
      * @param int $offset
      * @return bool
      */
     public function changeSort(int $id, int $offset, array $conditions = []): bool;
-    
+
 }

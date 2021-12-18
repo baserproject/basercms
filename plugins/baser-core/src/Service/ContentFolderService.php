@@ -19,16 +19,15 @@ use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentFoldersTable;
-use BaserCore\Service\ContentServiceInterface;
-use BaserCore\Service\ContentFolderServiceInterface;
+
 /**
  * Class ContentFolderService
  * @package BaserCore\Service
  * @property ContentFoldersTable $ContentFolders
- * @property ContentsTable $Contents
  */
 class ContentFolderService implements ContentFolderServiceInterface
 {
@@ -126,6 +125,7 @@ class ContentFolderService implements ContentFolderServiceInterface
      * @return bool
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function delete($id)
     {

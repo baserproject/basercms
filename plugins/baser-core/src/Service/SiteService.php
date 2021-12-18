@@ -13,7 +13,6 @@ namespace BaserCore\Service;
 
 use BaserCore\Model\Entity\Site;
 use BaserCore\Model\Table\SitesTable;
-use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
@@ -23,6 +22,7 @@ use Cake\Datasource\EntityInterface;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 
 /**
  * Class SiteService
@@ -99,6 +99,7 @@ class SiteService implements SiteServiceInterface
      * サイト登録
      * @param array $data
      * @return \Cake\Datasource\EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest
@@ -107,7 +108,7 @@ class SiteService implements SiteServiceInterface
     {
         $site = $this->Sites->newEmptyEntity();
         $site = $this->Sites->patchEntity($site, $postData);
-        return ($result = $this->Sites->save($site))? $result : $site;
+        return $this->Sites->saveOrFail($site);
     }
 
     /**
@@ -115,6 +116,7 @@ class SiteService implements SiteServiceInterface
      * @param EntityInterface $target
      * @param array $postData
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest
@@ -122,7 +124,7 @@ class SiteService implements SiteServiceInterface
     public function update(EntityInterface $target, array $postData)
     {
         $site = $this->Sites->patchEntity($target, $postData);
-        return ($result = $this->Sites->save($target))? $result : $site;
+        return $this->Sites->saveOrFail($site);
     }
 
     /**

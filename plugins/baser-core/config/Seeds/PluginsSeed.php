@@ -22,17 +22,6 @@ class PluginsSeed extends AbstractSeed
     {
         $data = [
             [
-                'id' => '3',
-                'name' => 'BcPage',
-                'title' => '固定ページ',
-                'version' => NULL,
-                'status' => '1',
-                'db_init' => '1',
-                'priority' => '3',
-                'created' => NULL,
-                'modified' => '2021-12-08 18:04:22',
-            ],
-            [
                 'id' => '6',
                 'name' => 'BcSpaSample',
                 'title' => 'SPAサンプル',

@@ -68,10 +68,11 @@ class UserGroupsController extends BcApiController
     public function add(UserGroupServiceInterface $UserGroups)
     {
         if ($this->request->is('post')) {
-            $userGroups = $UserGroups->create($this->request->getData());
-            if (!$userGroups->getErrors()) {
+            try {
+                $userGroups = $UserGroups->create($this->request->getData());
                 $message = __d('baser', 'ユーザーグループ「{0}」を追加しました。', $userGroups->name);
-            } else {
+            } catch (\Exception $e) {
+                $userGroups = $e->getEntity();
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser', '入力エラーです。内容を修正してください。');
             }
@@ -81,7 +82,7 @@ class UserGroupsController extends BcApiController
             'userGroups' => $userGroups,
             'errors' => $userGroups->getErrors(),
         ]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'userGroups']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'userGroups', 'errors']);
     }
 
     /**
@@ -96,10 +97,10 @@ class UserGroupsController extends BcApiController
     {
         $userGroups = $UserGroups->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $userGroups = $UserGroups->update($userGroups, $this->request->getData());
-            if (!$userGroups->getErrors()) {
+            try {
+                $userGroups = $UserGroups->update($userGroups, $this->request->getData());
                 $message = __d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroups->name);
-            } else {
+            } catch (\Exception $e) {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser', '入力エラーです。内容を修正してください。');
             }
@@ -109,7 +110,7 @@ class UserGroupsController extends BcApiController
             'userGroups' => $userGroups,
             'errors' => $userGroups->getErrors(),
         ]);
-        $this->viewBuilder()->setOption('serialize', ['userGroups', 'message']);
+        $this->viewBuilder()->setOption('serialize', ['userGroups', 'message', 'errors']);
     }
 
     /**

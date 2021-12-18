@@ -97,17 +97,16 @@ class UserGroupsController extends BcAdminAppController
         $this->setHelp('user_groups_form');
 
         if ($this->request->is('post')) {
-            $userGroup = $userGroupService->create($this->request->getData());
-            if (!$userGroup->getErrors()) {
+            try {
+                $userGroup = $userGroupService->create($this->request->getData());
                 $this->BcMessage->setSuccess(__d('baser', '新規ユーザーグループ「{0}」を追加しました。', $userGroup->name));
                 return $this->redirect(['action' => 'index']);
-            } else {
+            } catch (\Exception $e) {
+                $userGroup = $e->getEntity();
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
-        } else {
-            $userGroup = $userGroupService->getNew();
         }
-        $this->set(compact('userGroup'));
+        $this->set('userGroup', $userGroup ?? $userGroupService->getNew());
     }
 
     /**
@@ -150,18 +149,17 @@ class UserGroupsController extends BcAdminAppController
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $userGroup = $userGroupService->update($userGroup, $this->request->getData());
-            if (!$userGroup->getErrors()) {
+            try {
+                $userGroup = $userGroupService->update($userGroup, $this->request->getData());
                 $this->BcMessage->setSuccess(__d('baser', 'ユーザーグループ「{0}」を更新しました。', $userGroup->name));
                 $userService->reLogin($this->request, $this->response);
                 return $this->redirect(['action' => 'index']);
-            } else {
+            } catch (\Exception $e) {
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
-                return;
             }
-        } else {
-            $this->set(compact('userGroup'));
         }
+
+        $this->set('userGroup', $userGroup);
     }
 
     /**
@@ -230,34 +228,6 @@ class UserGroupsController extends BcAdminAppController
             $this->BcMessage->setError(implode("\n", $message), false);
         }
         return $this->redirect(['action' => 'index']);
-    }
-
-    /**
-     * ユーザーグループのよく使う項目の初期値を登録する
-     * ユーザー編集画面よりAjaxで呼び出される
-     *
-     * @param $id
-     * @return void
-     * @throws Exception
-     */
-    public function set_default_favorites($id)
-    {
-        if (!$this->request->is(['post', 'put'])) {
-            $this->ajaxError(500, __d('baser', '無効な処理です。'));
-        }
-        $defaultFavorites = null;
-        if ($this->request->getData()) {
-            $defaultFavorites = BcUtil::serialize($this->request->getData());
-        }
-        $this->UserGroup->id = $id;
-        $this->UserGroup->recursive = -1;
-        $data = $this->UserGroup->read();
-        $data['UserGroup']['default_favorites'] = $defaultFavorites;
-        $this->UserGroup->set($data);
-        if ($this->UserGroup->save()) {
-            echo true;
-        }
-        exit();
     }
 
 }

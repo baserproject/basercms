@@ -59,34 +59,6 @@ class BcAdminUserHelperTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
-     * Test isSelfUpdate
-     * @param int $loginId
-     * @param int $postId
-     * @param bool $expected
-     * @dataProvider isSelfUpdateDataProvider
-     */
-    public function testIsSelfUpdate($loginId, $postId, $expected)
-    {
-        $request = $this->getRequest();
-        if ($loginId) {
-            $this->loginAdmin($request, $loginId);
-        }
-        $result = $this->BcAdminUser->isSelfUpdate($postId);
-        $this->assertEquals($expected, $result);
-    }
-
-    public function isSelfUpdateDataProvider()
-    {
-        return [
-            [null, null, false], // 新規登録
-            [null, 1, false],    // 更新
-            [1, 1, true],        // 自身を更新
-            [1, 2, false]        // 他人を更新
-        ];
-    }
-
-
-    /**
      * Test isEditable
      * @param int $loginId
      * @param int $postId

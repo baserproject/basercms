@@ -11,7 +11,6 @@
 namespace BaserCore\Model\Behavior;
 
 use ArrayObject;
-use Cake\Event\Event;
 use Cake\ORM\Behavior;
 use Cake\Utility\Inflector;
 use Cake\Event\EventInterface;
@@ -98,7 +97,7 @@ class BcContentsBehavior extends Behavior
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // TODO: 一旦コメントアウト
+        // TODO ucmitz: 一旦コメントアウト
         return;
         if (empty($entity->content)) return false;
 

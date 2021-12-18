@@ -48,4 +48,13 @@ class BcAdminPermissionHelper extends \Cake\View\Helper
     {
         return $this->PermissionService->getMethodList();
     }
+
+    /**
+     * アクセス制限における権限のリストを取得
+     * @return array
+     */
+    public function getAuthList()
+    {
+        return $this->PermissionService->getAuthList();
+    }
 }

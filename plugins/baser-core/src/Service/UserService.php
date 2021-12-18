@@ -110,6 +110,7 @@ class UserService implements UserServiceInterface
      * ユーザー登録
      * @param array $data
      * @return \Cake\Datasource\EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest
@@ -118,7 +119,7 @@ class UserService implements UserServiceInterface
     {
         $user = $this->Users->newEmptyEntity();
         $user = $this->Users->patchEntity($user, $postData, ['validate' => 'new']);
-        return ($result = $this->Users->save($user))? $result : $user;
+        return $this->Users->saveOrFail($user);
     }
 
     /**
@@ -126,6 +127,7 @@ class UserService implements UserServiceInterface
      * @param EntityInterface $target
      * @param array $postData
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest
@@ -133,7 +135,7 @@ class UserService implements UserServiceInterface
     public function update(EntityInterface $target, array $postData)
     {
         $user = $this->Users->patchEntity($target, $postData);
-        return ($result = $this->Users->save($target))? $result : $user;
+        return $this->Users->saveOrFail($user);
     }
 
     /**
@@ -416,6 +418,17 @@ class UserService implements UserServiceInterface
             return false;
         }
         return true;
+    }
+
+    /**
+     * ログインユーザー自身のIDか確認
+     * @param int $id
+     * @return mixed
+     */
+    public function isSelf(?int $id)
+    {
+        $loginUser = BcUtil::loginUser();
+        return (!empty($id) && !empty($loginUser->id) && $loginUser->id === $id);
     }
 
 }

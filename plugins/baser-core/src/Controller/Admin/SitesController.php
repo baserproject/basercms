@@ -14,6 +14,7 @@ namespace BaserCore\Controller\Admin;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 use Cake\Core\Exception\Exception;
 use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Service\SiteConfigServiceInterface;
@@ -58,6 +59,7 @@ class SitesController extends BcAdminAppController
      *
      * @checked
      * @unitTest
+     * @note(value="インストーラーを実装してからテーマの保有するプラグインをインストールする処理を追加する")
      */
     public function add(SiteServiceInterface $siteService)
     {
@@ -71,14 +73,14 @@ class SitesController extends BcAdminAppController
                 $this->request = $this->request->withParsedBody(($event->getResult() === null || $event->getResult() === true)? $event->getData('data') : $event->getResult());
             }
 
-            $site = $siteService->create($this->request->getData());
-            if (!$site->getErrors()) {
+            try {
+                $site = $siteService->create($this->request->getData());
                 /*** Sites.afterAdd ***/
                 $this->dispatchLayerEvent('afterAdd', [
                     'site' => $site
                 ]);
 
-                // TODO 未実装のためコメントアウト
+                // TODO ucmitz 未実装のためコメントアウト
                 /* >>>
                 if (!empty($site->theme)) {
                     $this->BcManager->installThemesPlugins($site->theme);
@@ -87,12 +89,12 @@ class SitesController extends BcAdminAppController
 
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を追加しました。'), $site->display_name));
                 return $this->redirect(['action' => 'edit', $site->id]);
+            } catch (\Exception $e) {
+                $site = $e->getEntity();
+                $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
-            $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
-        } else {
-            $site = $siteService->getNew();
         }
-        $this->set('site', $site);
+        $this->set('site', $site ?? $siteService->getNew());
     }
 
     /**
@@ -101,6 +103,7 @@ class SitesController extends BcAdminAppController
      * @param $id
      * @checked
      * @unitTest
+     * @note(value="インストーラーを実装してからテーマの保有するプラグインをインストールする処理を追加する")
      */
     public function edit(SiteServiceInterface $siteService, $id)
     {
@@ -119,15 +122,15 @@ class SitesController extends BcAdminAppController
             }
 
             $beforeSite = clone $site;
-            $site = $siteService->update($site, $this->request->getData());
-            if (!$site->getErrors()) {
+            try {
+                $site = $siteService->update($site, $this->request->getData());
 
                 /*** Sites.afterEdit ***/
                 $this->dispatchLayerEvent('afterEdit', [
                     'site' => $site
                 ]);
 
-                // TODO 未実装のためコメントアウト
+                // TODO ucmitz 未実装のためコメントアウト
                 /* >>>
                 if (!empty($site->theme) && $beforeSite->theme !== $site->theme) {
                     $this->BcManager->installThemesPlugins($site->theme);
@@ -136,7 +139,7 @@ class SitesController extends BcAdminAppController
 
                 $this->BcMessage->setSuccess(sprintf(__d('baser', 'サイト「%s」を更新しました。'), $site->display_name));
                 $this->redirect(['action' => 'edit', $id]);
-            } else {
+            } catch (\Exception $e) {
                 $this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
             }
         }

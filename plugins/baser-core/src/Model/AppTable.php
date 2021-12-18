@@ -14,7 +14,6 @@ namespace BaserCore\Model;
 use ArrayObject;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
-use Cake\Event\Event;
 use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
 use Cake\Http\ServerRequest;
@@ -522,6 +521,7 @@ class AppTable extends Table
      * @return int
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function getMax($field, $conditions = [])
     {

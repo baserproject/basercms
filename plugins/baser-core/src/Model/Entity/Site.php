@@ -170,6 +170,8 @@ class Site extends EntityAlias
      * @param ServerRequest $request
      * @return bool
      * @checked
+     * @noTodo
+     * @unitTest
      */
     public function existsUrl(ServerRequest $request)
     {
@@ -192,6 +194,7 @@ class Site extends EntityAlias
      * @param ServerRequest $request リクエスト
      * @return bool
      * @checked
+     * @noTodo
      */
     public function shouldRedirects(ServerRequest $request)
     {

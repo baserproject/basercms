@@ -28,6 +28,7 @@ class SiteTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
     ];
 
     /**
@@ -150,10 +151,26 @@ class SiteTest extends BcTestCase
 
     /**
      * test existsUrl
+     *
+     * @dataProvider existsUrlDataProvider
      */
-    public function existsUrl()
+    public function testExistsUrl($url, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $request = $this->getRequest($url);
+        $site = $this->Sites->findByUrl($url);
+        $actual = $site->existsUrl($request);
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function existsUrlDataProvider()
+    {
+        return [
+            ['/', true],
+            ['/index', true],
+            ['/index?query=1', true],
+            ['/about', true],
+            ['/404', false]
+        ];
     }
 
     /**

@@ -90,7 +90,10 @@ $(function () {
         if (confirm(bcI18n.contentsEditConfirmMessage3.sprintf(displayName))) {
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/exists_content_by_url',
+                    url: $.bcUtil.apiBaseUrl + 'baser-core/contents/exists_content_by_url',
+                    headers: {
+                        "Authorization": $.bcJwt.accessToken,
+                    },
                     type: 'POST',
                     data: {
                         data: {url: targetUrl},
@@ -106,7 +109,10 @@ $(function () {
                             $.bcToken.key = null;
                             $.bcToken.check(function () {
                                 return $.ajax({
-                                    url: $.baseUrl() + '/' + $.bcUtil.adminPrefix + '/contents/add/1',
+                                    url: $.bcUtil.apiBaseUrl + 'baser-core/contents/add/1',
+                                    headers: {
+                                        "Authorization": $.bcJwt.accessToken,
+                                    },
                                     type: 'POST',
                                     data: $.extend(data, {
                                         _Token: {
@@ -159,7 +165,10 @@ $(function () {
         if (confirm(bcI18n.contentsEditConfirmMessage4.sprintf(displayName))) {
             $.bcToken.check(function () {
                 return $.ajax({
-                    url: $.bcUtil.apiBaseUrl + 'baser-core' + '/contents/exists_content_by_url',
+                    url: $.bcUtil.apiBaseUrl + 'baser-core/contents/exists_content_by_url',
+                    headers: {
+                        "Authorization": $.bcJwt.accessToken,
+                    },
                     type: 'POST',
                     data: {
                         data: {url: targetUrl},
@@ -176,6 +185,9 @@ $(function () {
                             $.bcToken.check(function () {
                                 return $.ajax({
                                     url: bcManageContent[current.Content.type]['url']['copy'],
+                                    headers: {
+                                        "Authorization": $.bcJwt.accessToken,
+                                    },
                                     type: 'POST',
                                     data: $.extend(data, {
                                         _Token: {

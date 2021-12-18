@@ -41,7 +41,7 @@ class MailContentsController extends MailAppController
      *
      * @var array
      */
-    public $uses = ['BcMail.MailContent", 'BcMail.MailMessage'];
+    public $uses = ['BcMail.MailContent', 'BcMail.MailMessage'];
 
     /**
      * ヘルパー

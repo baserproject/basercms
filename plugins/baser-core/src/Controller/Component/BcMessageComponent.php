@@ -11,7 +11,6 @@
 
 namespace BaserCore\Controller\Component;
 
-use BaserCore\Error\BcException;
 use BaserCore\Service\DblogServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Controller\Component;
@@ -49,6 +48,7 @@ class BcMessageComponent extends Component
      * @param null|string $class 付与するクラス名
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function set($message, $alert = false, $saveDblog = false, $setFlash = true, $class = null)
     {
@@ -66,8 +66,15 @@ class BcMessageComponent extends Component
         }
 
         if ($saveDblog) {
-            $dblogs = $this->getService(DblogServiceInterface::class);
-            $dblogs->create($message);
+            try {
+                $dblogs = $this->getService(DblogServiceInterface::class);
+                $dblogs->create($message);
+            } catch (\Exception $e) {
+                $this->Flash->set(__d('baser', 'DBログの保存に失敗しました。'), [
+                    'element' => 'default',
+                    'params' => ['class' => 'alert-message']
+                ]);
+            }
         }
     }
 

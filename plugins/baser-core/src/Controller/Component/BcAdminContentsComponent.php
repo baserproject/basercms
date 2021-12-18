@@ -20,6 +20,7 @@ use Cake\Controller\Component;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcContentsEventListener;
 use BaserCore\Service\ContentServiceInterface;
@@ -52,6 +53,7 @@ class BcAdminContentsComponent extends Component
      * @return void
      * @checked
      * @unitTest
+     * @noTodo
      */
     public function initialize(array $config): void
     {
@@ -78,6 +80,7 @@ class BcAdminContentsComponent extends Component
     /**
      * Before render
      * @checked
+     * @note(value="TODO内容を荒川さんに確認")
      */
     public function beforeRender(): void
     {
@@ -87,7 +90,7 @@ class BcAdminContentsComponent extends Component
         if (in_array($request->getParam('action'), [$this->editAction, 'edit_alias'])) {
             // フォームをセット
             $this->settingForm();
-            // TODO 改善要
+            // TODO ucmitz 改善要
             // フォームを読み込む為のイベントを設定
             // 内部で useForm を参照できない為、ここに記述。
             // フォームの設定しかできないイベントになってしまっている。
