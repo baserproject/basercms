@@ -171,6 +171,7 @@ class Site extends EntityAlias
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function existsUrl(ServerRequest $request)
     {
