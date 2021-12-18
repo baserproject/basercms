@@ -170,7 +170,7 @@ if ($loginUser) {
               <?php if ($isCurrentUserAdminAvailable || !$isFront): ?>
                 <li><?php $this->BcBaser->link(__d('baser', 'アカウント設定'), $accountEditUrl) ?></li>
               <?php endif ?>
-              <li><?php $this->BcBaser->link(__d('baser', 'ログアウト'), $this->BcAuth->getCurrentLogoutUrl()) ?></li>
+              <li><?php $this->BcBaser->link(__d('baser', 'ログアウト'), $this->BcAuth->getCurrentLogoutUrl(), ['id' => 'BtnLogout']) ?></li>
             </ul>
           </li>
         <?php elseif ($this->name !== 'Installations' && !$isLoginUrl && !Configure::read('BcRequest.isUpdater')): ?>

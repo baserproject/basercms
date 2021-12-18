@@ -22,4 +22,7 @@ $(function(){
 			$(this).remove();
 		}
 	});
+	$("#BtnLogout").click(function(){
+	    $.bcJwt.logout();
+	});
 });
