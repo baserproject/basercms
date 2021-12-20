@@ -26,10 +26,13 @@ $this->BcAdmin->setHelp('sites_form');
 
 <div class="submit bca-actions">
   <div class="bca-actions__main">
-    <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), ['action' => 'index'], ['class' => 'button bca-btn', 'data-bca-btn-type' => 'back-to-list']) ?>
+    <?php echo $this->BcHtml->link(__d('baser', '一覧に戻る'), ['action' => 'index'], [
+      'class' => 'button bca-btn bca-actions__item',
+      'data-bca-btn-type' => 'back-to-list'
+    ]) ?>
     <?php echo $this->BcAdminForm->button(__d('baser', '保存'), [
       'div' => false,
-      'class' => 'button bca-btn',
+      'class' => 'button bca-btn bca-actions__item',
       'data-bca-btn-type' => 'save',
       'data-bca-btn-size' => 'lg',
       'data-bca-btn-width' => 'lg',

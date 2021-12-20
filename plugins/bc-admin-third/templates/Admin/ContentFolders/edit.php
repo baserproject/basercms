@@ -64,7 +64,7 @@ $pageTemplateList = $Page->getPageTemplateList($contentFolder->content->id, $the
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <?php echo $this->BcAdminForm->submit(__d('baser', '保存'), [
-    'class' => 'button bca-btn',
+    'class' => 'button bca-btn bca-actions__item',
     'data-bca-btn-type' => 'save',
     'data-bca-btn-size' => 'lg',
     'data-bca-btn-width' => 'lg',
