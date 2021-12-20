@@ -21,7 +21,7 @@ use BaserCore\View\BcAdminAppView;
  * @var BcAdminAppView $this
  */
 $this->BcAdmin->setTitle(__d('baser', 'フォルダ編集'));
-
+$this->BcBaser->js('admin/content_folders/edit.bundle', false);
 $site = $this->BcAdminSite->findById($contentFolder->content->site_id)->first();
 $publishLink = $this->BcAdminContent->getUrl($contentFolder->content->url, true, $site->useSubDomain);
 if (!empty($site) && $site->theme) {
@@ -68,6 +68,7 @@ $pageTemplateList = $Page->getPageTemplateList($contentFolder->content->id, $the
     'data-bca-btn-type' => 'save',
     'data-bca-btn-size' => 'lg',
     'data-bca-btn-width' => 'lg',
-    'div' => false
+    'div' => false,
+    'id' => 'BtnSave'
   ]) ?>
 <?php echo $this->BcAdminForm->end() ?>
