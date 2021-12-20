@@ -11,6 +11,7 @@
 
 namespace BaserCore\Error;
 
+use BaserCore\Controller\BcErrorController;
 use Cake\Controller\Controller;
 use Cake\Error\ExceptionRenderer;
 use Cake\Routing\Router;
@@ -26,8 +27,9 @@ class BcExceptionRenderer extends ExceptionRenderer
                 if ($params['prefix'] === 'Admin') {
                     $controller->viewBuilder()->setTheme('BcAdminThird');
                 }
+            } else {
+                return new BcErrorController();
             }
-            // TODO: フロントのデフォルトエラー画面とそれを上書きできる仕組み
         }
         return $controller;
     }

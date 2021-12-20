@@ -17,6 +17,7 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use Cake\Event\EventInterface;
+use Cake\ORM\TableRegistry;
 
 /**
  * Class AppController
@@ -55,9 +56,11 @@ class AppController extends BaseController
         if (!isset($this->RequestHandler) || !$this->RequestHandler->prefers('json')) {
             $this->viewBuilder()->setClassName('BaserCore.App');
             $site = $this->getRequest()->getParam('Site');
-            if($site) {
-                $this->viewBuilder()->setTheme($site->theme);
+            if(!$site) {
+                $sites = TableRegistry::getTableLocator()->get('BaserCore.Sites');
+                $site = $sites->getRootMain();
             }
+            $this->viewBuilder()->setTheme($site->theme);
         }
     }
 
