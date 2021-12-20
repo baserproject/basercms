@@ -29,6 +29,7 @@ class BcErrorController extends AppController
      * @return void
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function initialize(): void
     {
@@ -42,6 +43,7 @@ class BcErrorController extends AppController
      * @return \Cake\Http\Response|null
      * @noTodo
      * @checked
+     * @unitTest
      */
     public function beforeRender(EventInterface $event): void
     {

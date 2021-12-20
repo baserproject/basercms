@@ -14,22 +14,25 @@ namespace BaserCore\Error;
 use BaserCore\Controller\BcErrorController;
 use Cake\Controller\Controller;
 use Cake\Error\ExceptionRenderer;
-use Cake\Routing\Router;
 
+/**
+ * BcExceptionRenderer
+ */
 class BcExceptionRenderer extends ExceptionRenderer
 {
+
+    /**
+     * _getController
+     * @return Controller
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
     protected function _getController(): Controller
     {
         $controller = parent::_getController();
         if (!$controller->viewBuilder()->getTheme()) {
-            $params = Router::getRequest()->getAttribute('params');
-            if (isset($params['prefix'])) {
-                if ($params['prefix'] === 'Admin') {
-                    $controller->viewBuilder()->setTheme('BcAdminThird');
-                }
-            } else {
-                return new BcErrorController();
-            }
+            return new BcErrorController();
         }
         return $controller;
     }

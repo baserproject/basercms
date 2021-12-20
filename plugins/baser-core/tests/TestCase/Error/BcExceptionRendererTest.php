@@ -58,13 +58,17 @@ class BcExceptionRendererTest extends BcTestCase
 
         $this->get('/baser/admin/baser-core/users_test/');
         $this->assertResponseError();
-        $this->assertResponseContains('bca-app');
+        $this->assertResponseContains('bs-container');
         $this->assertResponseContains('Not Found');
 
         $this->post('/baser/admin/baser-core/users_test/');
         $this->assertResponseError();
-        $this->assertResponseContains('bca-app');
+        $this->assertResponseContains('bs-container');
         $this->assertResponseContains('Missing or incorrect CSRF cookie type.');
+
+        $this->get('/baser/admin/baser-core/users_test/test.js');
+        $this->assertResponseError();
+        $this->assertResponseContains('bs-container');
 
         Configure::write('debug', $debug);
     }

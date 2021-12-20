@@ -11,15 +11,15 @@
 
 namespace BaserCore\Test\TestCase\Controller;
 
+use BaserCore\Controller\BcErrorController;
 use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\TestSuite\BcTestCase;
-use BaserCore\Controller\AppController;
 
 /**
- * BaserCore\Controller\AppController Test Case
+ * BcErrorControllerTest Test Case
  */
-class AppControllerTest extends BcTestCase
+class BcErrorControllerTest extends BcTestCase
 {
 
     /**
@@ -42,7 +42,7 @@ class AppControllerTest extends BcTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->AppController = new AppController($this->getRequest());
+        $this->BcErrorController = new BcErrorController($this->getRequest());
     }
 
     /**
@@ -62,9 +62,7 @@ class AppControllerTest extends BcTestCase
      */
     public function testInitialize()
     {
-        $this->assertNotEmpty($this->AppController->BcMessage);
-        $this->assertNotEmpty($this->AppController->Security);
-        $this->assertNotEmpty($this->AppController->Paginator);
+        $this->assertNotEmpty($this->BcErrorController->RequestHandler);
     }
 
     /**
@@ -72,9 +70,8 @@ class AppControllerTest extends BcTestCase
      */
     public function testBeforeRender()
     {
-        $this->AppController->beforeRender(new Event('beforeRender'));
-        $this->assertEquals('BaserCore.App', $this->AppController->viewBuilder()->getClassName());
-        $this->assertEquals('BcFront', $this->AppController->viewBuilder()->getTheme());
+        $this->BcErrorController->beforeRender(new Event('beforeRender'));
+        $this->assertEquals('BcFront', $this->BcErrorController->viewBuilder()->getTheme());
     }
 
 }
