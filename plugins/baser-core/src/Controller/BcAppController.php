@@ -26,6 +26,7 @@ use Cake\Core\Configure;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 
 /**
  * Class BcAppController
@@ -136,13 +137,6 @@ class BcAppController extends AppController
     public $help = '';
 
     /**
-     * ページ説明文
-     *
-     * @var string
-     */
-    public $siteDescription = '';
-
-    /**
      * コンテンツタイトル
      *
      * @var string
@@ -192,6 +186,7 @@ class BcAppController extends AppController
      * @param EventManagerInterface|null $eventManager
      * @param ComponentRegistry|null $components
      * @checked
+     * @note(value="BcRequestFilterをミドルウェアに移行してから実装する")
      */
     public function __construct(
         ?ServerRequest $request = null,
@@ -202,21 +197,13 @@ class BcAppController extends AppController
     )
     {
         parent::__construct($request, $response, $name, $eventManager, $components);
-        // TODO $componentsが未定義のため一旦コメントアウト
-        // if (BcUtil::isConsole()) {
-        //     unset($this->components['Session']);
-        // }
-        // TODO siteConfigs代替措置
-        // $config = $this->getTableLocator()->exists('SiteConfigs')? [] : ['className' => 'BaserCore\Model\Table\SiteConfigsTable'];
-        // $this->siteConfigs = TableRegistry::getTableLocator()->get('SiteConfigs');
-        // テーマがプラグインに含まれるため一旦コメントアウト
-        // $this->siteConfigs['theme'] = 'bc_sample';
-        // TODO 未確認のため代替措置
+
+        // TODO ucmitz BcRequestFilter の実装が必要（ミドルウェアへの移行が必要）
         // >>>
-        return;
+        // $isInstall = $request->is('install');
+        // ---
+        $isInstall = false;
         // <<<
-        $isRequestView = $request->is('requestview');
-        $isInstall = $request->is('install');
 
         // インストールされていない場合、トップページにリダイレクトする
         // コンソールベースのインストールの際のページテンプレート生成において、
@@ -225,78 +212,6 @@ class BcAppController extends AppController
             $this->redirect('/');
         }
 
-        // 言語設定
-        $currentSite = $this->getRequest()->getAttribute('currentSite');
-        if ($currentSite) {
-            $lang = Configure::read('BcLang.' . $currentSite->lang);
-        }
-        if (Configure::read('BcApp.systemMessageLangFromSiteSetting') && isset($lang['langs'][0])) {
-            Configure::write('Config.language', $lang['langs'][0]);
-        } else {
-            Configure::write('Config.language', BcLang::parseLang(@$_SERVER['HTTP_ACCEPT_LANGUAGE']));
-        }
-
-        // コンソールベースのインストールの際のページテンプレート生成において、
-        // BC_INSTALLEDが true でない為、コンソールの場合も実行する
-        if ((BC_INSTALLED || BcUtil::isConsole()) && $isRequestView) {
-
-            // サイト基本設定の読み込み
-            // DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
-            try {
-                $SiteConfig = ClassRegistry::init('SiteConfig');
-                $this->siteConfigs = Configure::read('BcSite');
-
-                // asset ファイルの読み込みの際、bootstrap で、loadSiteConfig() を実行しない仕様となっているが、
-                // 存在しない asset ファイルを読み込んだ際に、上記理由により、Not Found ページで、テーマが適用されない為、
-                // 再度、loadSiteConfig() を実行
-                if (!$this->siteConfigs) {
-                    loadSiteConfig();
-                    $this->siteConfigs = Configure::read('BcSite');
-                }
-
-                if (empty($this->siteConfigs['version'])) {
-                    $this->siteConfigs['version'] = $this->getBaserVersion();
-                    $SiteConfig->saveKeyValue($this->siteConfigs);
-                }
-            } catch (Exception $ex) {
-                $this->siteConfigs = [];
-            }
-
-        }
-
-        // TODO beforeFilterでも定義しているので整理する
-        if ($this->name === 'CakeError') {
-
-            $this->uses = null;
-
-            // サブサイト用のエラー
-            try {
-                $sites = $this->getService(SiteServiceInterface::class);
-                $site = $sites->findByUrl($this->request->getPath());
-                if (!empty($site->name)) {
-                    $this->layoutPath = $site->name;
-                    if ($site->name === 'mobile') {
-                        $this->helpers[] = 'BcMobile';
-                    } elseif ($site->name === 'smartphone') {
-                        $this->helpers[] = 'BcSmartphone';
-                    }
-                }
-            } catch (Exception $e) {
-            }
-        }
-
-        // DebugKit プラグインが有効な場合、DebugKit Toolbar を表示
-        if (CakePlugin::loaded('DebugKit') && !in_array('DebugKit.Toolbar', $this->components)) {
-            $this->components[] = 'DebugKit.Toolbar';
-        }
-
-        /* 携帯用絵文字のモデルとコンポーネントを設定 */
-        // TODO 携帯をコンポーネントなどで判別し、携帯からのアクセスのみ実行させるようにする
-        // ※ コンストラクト時点で、$this->request->getParam('prefix')を利用できない為。
-        // TODO 2008/10/08 egashira
-        // beforeFilterに移動してみた。実際に携帯を使うサイトで使えるかどうか確認する
-        //$this->uses[] = 'EmojiData';
-        //$this->components[] = 'Emoji';
     }
 
     /**
