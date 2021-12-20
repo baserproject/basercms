@@ -134,6 +134,12 @@ class UserService implements UserServiceInterface
      */
     public function update(EntityInterface $target, array $postData)
     {
+        if(empty($postData['login_user_id'])) {
+            $loginUser = BcUtil::loginUser();
+            if(!empty($loginUser['id'])) {
+                $postData['login_user_id'] = (string) $loginUser['id'];
+            }
+        }
         $user = $this->Users->patchEntity($target, $postData);
         return $this->Users->saveOrFail($user);
     }

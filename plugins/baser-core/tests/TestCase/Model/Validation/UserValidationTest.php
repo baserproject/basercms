@@ -69,7 +69,6 @@ class UserValidationTest extends BcTestCase
      * @param int $userId ユーザーID
      * @param string $alias バリデーション対象値
      * @param array $expected 期待値
-     * @param string $message テストが失敗した時に表示されるメッセージ
      * @dataProvider willChangeSelfGroupDataProvider
      */
     public function testWillChangeSelfGroup($userId, $value, $expected)
@@ -77,7 +76,7 @@ class UserValidationTest extends BcTestCase
         if($userId) {
             $this->loginAdmin($this->getRequest(), $userId);
         }
-        $result = $this->UserValidation->willChangeSelfGroup($value);
+        $result = $this->UserValidation->willChangeSelfGroup($value, ['data' => ['id' => '2', 'login_user_id' => $userId]]);
         $this->assertEquals($expected, $result);
     }
     public function willChangeSelfGroupDataProvider()

@@ -140,16 +140,6 @@ class UsersTable extends Table
         $loginStores->deleteAll([
             'user_id' => $entity->id
         ]);
-
-        // TODO 暫定措置
-        // >>>
-        return;
-        // <<<
-
-        parent::afterSave($created);
-        if ($created && !empty($this->UserGroup)) {
-            $this->applyDefaultFavorites($this->getLastInsertID(), $this->data[$this->getAlias()]['user_group_id']);
-        }
     }
 
     /**
@@ -358,56 +348,6 @@ class UsersTable extends Table
     {
         $data[$this->getAlias()]['user_group_id'] = Configure::read('BcApp.adminGroupId');
         return $data;
-    }
-
-    /**
-     * ユーザーが許可されている認証プレフィックスを取得する
-     *
-     * @param string $userName ユーザーの名前
-     * @return string
-     */
-    public function getAuthPrefix($userName)
-    {
-        $user = $this->find('first', [
-            'conditions' => ["{$this->getAlias()}.name" => $userName],
-            'recursive' => 1
-        ]);
-
-        if (isset($user['UserGroup']['auth_prefix'])) {
-            return $user['UserGroup']['auth_prefix'];
-        } else {
-            return '';
-        }
-    }
-
-    /**
-     * よく使う項目の初期データをユーザーに適用する
-     *
-     * @param type $userId ユーザーID
-     * @param type $userGroupId ユーザーグループID
-     */
-    public function applyDefaultFavorites($userId, $userGroupId)
-    {
-        $result = true;
-        $defaultFavorites = $this->UserGroup->field('default_favorites', [
-            'UserGroup.id' => $userGroupId
-        ]);
-        if ($defaultFavorites) {
-            $defaultFavorites = BcUtil::unserialize($defaultFavorites);
-            if ($defaultFavorites) {
-                $this->deleteFavorites($userId);
-                $this->Favorite->Behaviors->detach('BcCache');
-                foreach($defaultFavorites as $favorites) {
-                    $favorites['user_id'] = $userId;
-                    $favorites['sort'] = $this->Favorite->getMax('sort', ['Favorite.user_id' => $userId]) + 1;
-                    $this->Favorite->create($favorites);
-                    if (!$this->Favorite->save()) {
-                        $result = false;
-                    }
-                }
-            }
-        }
-        return $result;
     }
 
     /**

@@ -133,8 +133,12 @@ class UserServiceTest extends BcTestCase
         $request = $this->getRequest('/');
         $request = $request->withParsedBody([
             'name' => 'ucmitz',
+            'user_groups' => ['_ids' => [1]]
         ]);
         $user = $this->Users->get(1);
+        $this->expectException('Cake\ORM\Exception\PersistenceFailedException');
+        $this->Users->update($user, $request->getData());
+        $this->loginAdmin($request);
         $this->Users->update($user, $request->getData());
         $request = $this->getRequest('/?name=ucmitz');
         $users = $this->Users->getIndex($request->getQueryParams());

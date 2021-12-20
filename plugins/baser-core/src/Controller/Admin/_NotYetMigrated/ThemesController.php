@@ -315,10 +315,6 @@ class ThemesController extends AppController
                 $result = false;
                 $this->log(__d('baser', 'ユーザーデータの初期化に失敗しました。手動で各ユーザーのユーザーグループの設定を行なってください。'));
             }
-            if (!$User->applyDefaultFavorites($userData['User']['id'], $userData['User']['user_group_id'])) {
-                $result = false;
-                $this->log(__d('baser', 'ユーザーのよく使う項目データの初期化に失敗しました。手動で各ユーザーのよく使う項目の設定を行なってください。'));
-            }
         }
         $Db = ConnectionManager::getDataSource('default');
         if ($Db->config['datasource'] === 'Database/BcPostgres') {

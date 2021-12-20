@@ -2213,6 +2213,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   /**
@@ -2645,7 +2646,8 @@ __webpack_require__.r(__webpack_exports__);
    */
   props: {
     userId: String,
-    accessToken: String
+    accessToken: String,
+    loginUserId: Number
   },
 
   /**
@@ -2735,7 +2737,8 @@ __webpack_require__.r(__webpack_exports__);
         },
         email: this.user.email,
         password_1: this.user.password_1,
-        password_2: this.user.password_2
+        password_2: this.user.password_2,
+        login_user_id: this.loginUserId
       };
 
       if (id) {
@@ -2941,6 +2944,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   /**
@@ -2995,6 +2999,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   /**
@@ -3006,7 +3012,8 @@ __webpack_require__.r(__webpack_exports__);
    * Props
    */
   props: {
-    accessToken: String
+    accessToken: String,
+    loginUserId: Number
   },
 
   /**
@@ -13649,7 +13656,10 @@ var render = function () {
               [
                 _vm.mount
                   ? _c("router-view", {
-                      attrs: { accessToken: _vm.accessToken },
+                      attrs: {
+                        accessToken: _vm.accessToken,
+                        loginUserId: _vm.loginId,
+                      },
                       on: {
                         "set-login": _vm.setLogin,
                         "set-title": _vm.setTitle,
@@ -14592,7 +14602,11 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("user-form", {
-    attrs: { "access-token": _vm.accessToken, "user-id": _vm.$route.params.id },
+    attrs: {
+      "access-token": _vm.accessToken,
+      loginUserId: _vm.loginUserId,
+      "user-id": _vm.$route.params.id,
+    },
     on: {
       "set-message": function (message, isError, isFlash) {
         return _vm.$emit("set-message", message, isError, isFlash)

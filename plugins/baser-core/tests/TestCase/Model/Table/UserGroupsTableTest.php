@@ -87,7 +87,9 @@ class UserGroupsTableTest extends BcTestCase
         foreach($validator->getIterator() as $key => $value) {
             $fields[] = $key;
         }
-        $this->assertEquals(['id', 'name', 'title', 'auth_prefix', 'use_admin_globalmenu', 'default_favorites', 'use_move_contents'], $fields);
+        $this->assertEquals(['id', 'name', 'title', 'auth_prefix', 'use_move_contents'], $fields);
+        $userGroups = $this->UserGroups->get(2);
+
     }
 
     /**

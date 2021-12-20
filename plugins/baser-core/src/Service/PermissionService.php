@@ -293,7 +293,6 @@ class PermissionService implements PermissionServiceInterface
             '/^baser\/admin\/dashboard\/.*?/',
             '/^baser\/admin\/dblogs\/.*?/',
             '/^baser\/admin\/users\/logout$/',
-            '/^baser\/admin\/user_groups\/set_default_favorites$/'
         ];
         $sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
         if (!empty($_SESSION['Auth'][$sessionKey]['id'])) {
