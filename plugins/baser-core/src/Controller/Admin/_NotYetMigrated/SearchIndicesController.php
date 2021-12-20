@@ -1,6 +1,7 @@
 <?php
 // TODO : コード確認要
 use BaserCore\Service\BcFrontServiceInterface;
+use BaserCore\Utility\BcSiteConfig;
 
 return;
 /**
@@ -224,7 +225,7 @@ class SearchIndicesController extends AppController
 
         /* 画面情報設定 */
         $default = [
-            'named' => ['num' => $this->siteConfigs['admin_list_num']],
+            'named' => ['num' => BcSiteConfig::get('admin_list_num')],
             'SearchIndex' => ['site_id' => 0]
         ];
         $this->setViewConditions('SearchIndex', ['default' => $default]);
