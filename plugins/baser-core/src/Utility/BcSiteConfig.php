@@ -19,11 +19,6 @@ class BcSiteConfig
 {
 
     /**
-     * Trait
-     */
-    use BcContainerTrait;
-
-    /**
      * Get
      *
      * @param string $key
