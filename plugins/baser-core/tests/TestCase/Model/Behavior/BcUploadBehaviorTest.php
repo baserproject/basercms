@@ -607,7 +607,7 @@ class BcUploadBehaviorTest extends BcTestCase
     }
 
     /**
-     * 保存用ファイル名を取得する
+     * 保存用ファイル名を取得する($tmpIdがない場合)
      */
     public function testGetSaveFileName()
     {
@@ -617,6 +617,23 @@ class BcUploadBehaviorTest extends BcTestCase
         $result = $this->BcUploadBehavior->getSaveFileName($this->eyecatchField, $name);
         $this->assertEquals('dummy_1.gif', $result);
         @unlink($targetPath);
+    }
+
+    /**
+     * 保存用ファイル名を取得する($tmpIdがある場合)
+     */
+    public function testGetSaveFileNameWithTmp()
+    {
+        $name = 'dummy.gif';
+        $this->BcUploadBehavior->tmpId = 1;
+        // // namefieldがない場合
+        $result = $this->BcUploadBehavior->getSaveFileName($this->eyecatchField, $name);
+        $this->assertEquals("1_eyecatch.gif", $result);
+        // namefieldがあり、idの場合
+        $this->eyecatchField['namefield'] = 'id';
+        $this->BcUploadBehavior->_entity = $this->table->get(1);
+        $result = $this->BcUploadBehavior->getSaveFileName($this->eyecatchField, $name);
+        $this->assertEquals("1_eyecatch.gif", $result);
     }
 
     /**
