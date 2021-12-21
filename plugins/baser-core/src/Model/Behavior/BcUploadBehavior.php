@@ -338,16 +338,21 @@ class BcUploadBehavior extends Behavior
      * @param array $data
      * @param string $tmpId
      * @return mixed false|array
-     * TODO ucmitz : モデル 全体
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function saveTmpFiles($entity, $tmpId)
+    public function saveTmpFiles($data, $tmpId)
     {
         $this->Session->delete('Upload');
         $this->tmpId = $tmpId;
-        $this->setupRequestData($entity->toArray());
+        $this->setupRequestData($data);
         $uploadedFile = $this->getUploadedFile();
-        $entity = $this->deleteFiles($entity, $uploadedFile);
+        $data = $this->deleteFiles($data, $uploadedFile);
+        // saveFiles内部getFieldBasenameで必要なため
+        $this->_entity = $data;
         $result = $this->saveFiles($uploadedFile);
+        unset($this->_entity);
         if ($result) {
             return $this->getUploadedFile();
         } else {
@@ -357,27 +362,27 @@ class BcUploadBehavior extends Behavior
 
     /**
      * 削除対象かチェックしながらファイル群を削除する
-     * @param EntityInterface $entity
+     * @param EntityInterface|array $data
      * @param $uploadedFile
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function deleteFiles($entity, $uploadedFile)
+    public function deleteFiles($data, $uploadedFile)
     {
         foreach($this->settings[$this->alias]['fields'] as $key => $field) {
             $oldValue = '';
-            if (isset($entity) && !empty($entity[$field['name']])) {
-                $oldValue = $entity[$field['name']];
-            } elseif (!empty($entity[$field['name']]) && !is_array($entity[$field['name']])) {
-                $oldValue = $entity[$field['name']];
+            if (isset($data) && !empty($data[$field['name']])) {
+                $oldValue = $data[$field['name']];
+            } elseif (!empty($data[$field['name']]) && !is_array($data[$field['name']])) {
+                $oldValue = $data[$field['name']];
             }
             $uploadedFile = $this->deleteFileWhileChecking($field, $uploadedFile, $oldValue);
+            // eyecatchが削除されていたら、$dataのeyecatchも空にする
+            if (empty($uploadedFile[$field['name']])) $data[$field['name']] = "";
         }
-        // eyecatchが削除されていたら、$entityのeyecatchも空にする
-        if (empty($uploadedFile[$field['name']])) $entity->eyecatch = "";
-        return $entity;
+        return $data;
     }
 
     /**
@@ -474,7 +479,7 @@ class BcUploadBehavior extends Behavior
                 }
                 $uploadedFile[$fieldSetting['name']]['name'] = $fileName;
             } else {
-                $uploadedFile[$fieldSetting['name']]['name']['session_key'] = $fileName;
+                $uploadedFile[$fieldSetting['name']]['session_key'] = $fileName;
             }
             // 一時ファイルを削除
             if ($options['deleteTmpFiles']) {
@@ -546,6 +551,7 @@ class BcUploadBehavior extends Behavior
      * @param array $field 画像保存対象フィールドの設定
      * @return mixed false|ファイル名
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function saveFile($uploadedFile, $field)
@@ -561,7 +567,6 @@ class BcUploadBehavior extends Behavior
         $fileName = $this->getSaveFileName($field, $uploadedFile['name']);
         $filePath = $this->savePath[$this->alias] . $fileName;
         $this->rotateImage($uploadedFile['tmp_name']);
-
         if (!$this->tmpId) {
             if (copy($uploadedFile['tmp_name'], $filePath)) {
                 chmod($filePath, 0666);
@@ -614,9 +619,9 @@ class BcUploadBehavior extends Behavior
             }
         } else {
             if (!empty($field['namefield'])) {
-                // TODO ucmitz: tmpに関してのテストは未実装
-                $Model->data[$Model->alias][$field['namefield']] = $this->tmpId;
-                $fileName = $this->getFieldBasename($field, $field['ext']);
+                // saveTmpFilesで$this->_entityを作成
+                $this->_entity[$field['namefield']] = $this->tmpId;
+                $fileName = $this->getFieldBasename($this->_entity, $field, $field['ext']);
             } else {
                 $fileName = $this->tmpId . '_' . $field['name'] . '.' . $field['ext'];
             }

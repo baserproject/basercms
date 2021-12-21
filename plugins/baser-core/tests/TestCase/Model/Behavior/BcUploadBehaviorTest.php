@@ -343,19 +343,19 @@ class BcUploadBehaviorTest extends BcTestCase
 
     /**
      * 一時ファイルとして保存する
-     *
+     * セッション時のテスト
      * @param Model $Model
      * @param array $data
      * @param string $tmpId
      */
     public function testSaveTmpFiles()
     {
-        $entity = $this->table->get(1);
-        $data = $this->BcUploadBehavior->saveTmpFiles($entity, 1);
+        touch($this->eyecatchData['eyecatch']['tmp_name']);
+        $data = $this->BcUploadBehavior->saveTmpFiles($this->eyecatchData, 1);
         $tmpId = $this->BcUploadBehavior->tmpId;
-        $this->assertEquals('1.gif', $data['EditorTemplate']['image']['session_key'], 'saveTmpFiles()の返り値が正しくありません');
+        $this->assertEquals("00000001_eyecatch.png", $data['eyecatch']['session_key'], 'saveTmpFiles()の返り値が正しくありません');
         $this->assertEquals(1, $tmpId, 'tmpIdが正しく設定されていません');
-        $this->deleteDummyOnTestSaveFiles();
+        @unlink($this->eyecatchData['tmp_name']);
     }
 
     /**
@@ -489,6 +489,8 @@ class BcUploadBehaviorTest extends BcTestCase
         $uploaded = $this->BcUploadBehavior->deleteFileWhileChecking($fieldSetting, $uploadedFile, $fileName);
         $this->assertFileNotExists($targetPath);
         @unlink($targetPath);
+        // TODO: tmpの場合のテストを追加
+        // $this->eyecatchData['eyecatch_delete'] = 1;
     }
 
 
@@ -751,7 +753,6 @@ class BcUploadBehaviorTest extends BcTestCase
 
         } else {
             $this->assertEquals($targetPath, $result);
-
             // セッションをチェック
             $sessionField = $tmpId . '_' . $fieldName . '_' . $ext;
             $expected[$sessionField] = array_merge($field, ['type' => 'basercms', 'data' => '']);
@@ -765,6 +766,12 @@ class BcUploadBehaviorTest extends BcTestCase
         @unlink($this->eyecatchData['eyecatch']['tmp_name']);
         @unlink($targetPath);
 
+        // TODO: tmpの場合
+        // touch($this->eyecatchData['eyecatch']['tmp_name']);
+        // $fileData = 'testtest';
+        // file_put_contents($this->eyecatchData['eyecatch']['tmp_name'], $fileData);
+        // saveFile内にてSessionが保存されているかをテスト
+        // $this->assertEquals($fileData, $this->BcUploadBehavior->Session->read('Upload.00000001_eyecatch_png.data'));
     }
 
     // TODO: 動作しないためコメントアウト
