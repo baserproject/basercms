@@ -57,6 +57,17 @@ class BcUploadHelperTest extends BcTestCase
     }
 
     /**
+     * testInitialize
+     *
+     * @return void
+     */
+    public function testInitialize()
+    {
+        $this->assertNotEmpty($this->BcUpload->table);
+        $this->assertNotEmpty($this->BcUpload->siteConfigService);
+    }
+
+    /**
      * ファイルへのリンクタグを出力する
      */
     public function testFileLink()

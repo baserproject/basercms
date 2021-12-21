@@ -49,6 +49,8 @@ class BcUploadHelper  extends Helper
      *
      * @param  array $config
      * @return void
+     * @checked
+     * @unitTest
      */
     public function initialize(array $config): void
     {
