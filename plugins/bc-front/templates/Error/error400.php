@@ -10,20 +10,20 @@
  */
 
 /**
- * @var \BaserCore\View\BcAdminAppView $this
+ * 400エラーページ
+ * 呼出箇所：エラー発生時
+ *
  * @var string $message エラーメッセージ
  * @var string $url URL
  */
-$this->layout = 'error';
-$this->BcAdmin->setTitle(__d('baser', '内部エラーが発生しました'));
 ?>
 
 
-<h2><?php echo h($message) ?></h2>
-<p class="error">
-  <strong><?php echo __d('baser', 'エラー') ?>: </strong>
-  <?php printf(
-    __d('baser', 'アドレス %s に送信されたリクエストは無効です。'),
-    "<strong>'{$url}'</strong>"
-  ); ?>
-</p>
+<h2 class="bs-error-title"><?php echo h($message) ?></h2>
+<div class="bs-error-body">
+	<strong><?php echo __('エラー'); ?>: </strong>
+	<?php printf(
+		__('アドレス %s に送信されたリクエストは無効です。'),
+		"<strong>'{$url}'</strong>"
+	); ?>
+</div>

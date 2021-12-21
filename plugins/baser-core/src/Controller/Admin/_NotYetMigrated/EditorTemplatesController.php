@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Utility\BcSiteConfig;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -57,8 +59,8 @@ class EditorTemplatesController extends AppController
             ['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
             ['name' => __d('baser', 'エディタテンプレート管理'), 'url' => ['controller' => 'editor_templates', 'action' => 'index']]
         ];
-        if (!empty($this->siteConfigs['editor']) && $this->siteConfigs['editor'] !== 'none') {
-            $this->helpers[] = $this->siteConfigs['editor'];
+        if (BcSiteConfig::get('editor') && BcSiteConfig::get('editor') !== 'none') {
+            $this->helpers[] = BcSiteConfig::get('editor');
         }
     }
 

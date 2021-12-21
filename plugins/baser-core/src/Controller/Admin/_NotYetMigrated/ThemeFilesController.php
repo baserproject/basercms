@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Utility\BcSiteConfig;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -854,23 +856,24 @@ class ThemeFilesController extends AppController
             $this->notFound();
         }
 
+        $theme = BcSiteConfig::get('theme');
         if ($type !== 'etc') {
             if ($plugin && $assets) {
-                $themePath = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $plugin . DS . $type . DS . $path;
+                $themePath = WWW_ROOT . 'theme' . DS . $theme . DS . $plugin . DS . $type . DS . $path;
             } else {
-                $themePath = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $type . DS . $path;
+                $themePath = WWW_ROOT . 'theme' . DS . $theme . DS . $type . DS . $path;
             }
         } else {
-            $themePath = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $path;
+            $themePath = WWW_ROOT . 'theme' . DS . $theme . DS . $path;
         }
         $folder = new Folder();
         $folder->create(dirname($themePath), 0777);
         if (copy($fullpath, $themePath)) {
             chmod($themePath, 0666);
             $_themePath = str_replace(ROOT, '', $themePath);
-            $this->setMessage('コアファイル ' . basename($path) . ' を テーマ ' . Inflector::camelize($this->siteConfigs['theme']) . " の次のパスとしてコピーしました。\n" . $_themePath);
+            $this->setMessage('コアファイル ' . basename($path) . ' を テーマ ' . Inflector::camelize($theme) . " の次のパスとしてコピーしました。\n" . $_themePath);
             // 現在のテーマにリダイレクトする場合、混乱するおそれがあるのでとりあえずそのまま
-            //$this->redirect(array_merge(array('action' => 'edit', $this->siteConfigs['theme'], $type), explode('/', $path)));
+            //$this->redirect(array_merge(array('action' => 'edit', $theme, $type), explode('/', $path)));
         } else {
             $this->BcMessage->setError('コアファイル ' . basename($path) . ' のコピーに失敗しました。');
         }
@@ -891,17 +894,18 @@ class ThemeFilesController extends AppController
             $this->notFound();
         }
 
+        $theme = BcSiteConfig::get('theme');
         if ($type !== 'etc') {
             if ($plugin && $assets) {
-                $themePath = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $plugin . DS . $type . DS;
+                $themePath = WWW_ROOT . 'theme' . DS . $theme . DS . $plugin . DS . $type . DS;
             } else {
-                $themePath = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $type . DS;
+                $themePath = WWW_ROOT . 'theme' . DS . $theme . DS . $type . DS;
             }
             if ($path) {
                 $themePath .= $path . DS;
             }
         } else {
-            $themePath = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $path . DS;
+            $themePath = WWW_ROOT . 'theme' . DS . $theme . DS . $path . DS;
         }
         $folder = new Folder();
         $folder->create(dirname($themePath), 0777);
@@ -916,12 +920,12 @@ class ThemeFilesController extends AppController
             sprintf(
                 'コアフォルダ %s を テーマ %s の次のパスとしてコピーしました。 %s',
                 basename($path),
-                Inflector::camelize($this->siteConfigs['theme']),
+                Inflector::camelize($theme),
                 $_themePath
             )
         );
         // 現在のテーマにリダイレクトする場合、混乱するおそれがあるのでとりあえずそのまま
-        //$this->redirect(array('action' => 'edit', $this->siteConfigs['theme'], $type, $path));
+        //$this->redirect(array('action' => 'edit', $theme, $type, $path));
         $this->redirect(
             array_merge(
                 ['action' => 'view_folder', $theme, $plugin, $type],

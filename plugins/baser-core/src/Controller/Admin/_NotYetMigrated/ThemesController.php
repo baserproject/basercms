@@ -1,5 +1,6 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 
 return;
@@ -123,9 +124,10 @@ class ThemesController extends AppController
         $themes = BcUtil::getThemeList();
         $datas = [];
         $currentTheme = null;
+        $theme = BcSiteConfig::get('theme');
         foreach($themes as $themename) {
             if ($themename !== 'core' && $themename !== '_notes') {
-                if ($themename == $this->siteConfigs['theme']) {
+                if ($themename == $theme) {
                     $currentTheme = $this->_loadThemeInfo($themename);
                 } else {
                     $datas[] = $this->_loadThemeInfo($themename);
@@ -135,7 +137,7 @@ class ThemesController extends AppController
 
         $this->set('datas', $datas);
         $this->set('currentTheme', $currentTheme);
-        $this->set('defaultDataPatterns', $this->BcManager->getDefaultDataPatterns($this->siteConfigs['theme'], ['useTitle' => false]));
+        $this->set('defaultDataPatterns', $this->BcManager->getDefaultDataPatterns($theme, ['useTitle' => false]));
         $this->subMenuElements = ['themes'];
         $this->setHelp('themes_index');
     }
@@ -208,7 +210,7 @@ class ThemesController extends AppController
     public function admin_reset_data()
     {
         $this->_checkSubmitToken();
-        $result = $this->_load_default_data_pattern('core.default', $this->siteConfigs['theme']);
+        $result = $this->_load_default_data_pattern('core.default', BcSiteConfig::get('theme'));
         if (!$result) {
             $this->BcMessage->setError(__d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'));
             $this->redirect('/admin');
@@ -322,10 +324,10 @@ class ThemesController extends AppController
         }
         // システム基本設定の更新
         $siteConfigs = ['SiteConfig' => [
-            'email' => $this->siteConfigs['email'],
-            'google_analytics_id' => $this->siteConfigs['google_analytics_id'],
+            'email' => BcSiteConfig::get('email'),
+            'google_analytics_id' => BcSiteConfig::get('google_analytics_id'),
             'first_access' => null,
-            'version' => $this->siteConfigs['version']
+            'version' => BcSiteConfig::get('version')
         ]];
         $this->SiteConfig->saveKeyValue($siteConfigs);
 
@@ -675,15 +677,16 @@ class ThemesController extends AppController
         $tmpDir = TMP . 'theme' . DS;
         $Folder = new Folder();
         $Folder->create($tmpDir);
-        $path = BASER_THEMES . $this->siteConfigs['theme'] . DS;
+        $theme = BcSiteConfig::get('theme');
+        $path = BASER_THEMES . $theme . DS;
         $Folder->copy([
             'from' => $path,
-            'to' => $tmpDir . $this->siteConfigs['theme'],
+            'to' => $tmpDir . $theme,
             'chmod' => 0777
         ]);
         $Simplezip = new Simplezip();
         $Simplezip->addFolder($tmpDir);
-        $Simplezip->download($this->siteConfigs['theme']);
+        $Simplezip->download($theme);
         $Folder->delete($tmpDir);
     }
 }

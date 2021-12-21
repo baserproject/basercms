@@ -12,6 +12,8 @@
 namespace BaserCore\Test\TestCase\View\Helper;
 
 use BaserCore\Model\Entity\Site;
+use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\View\Helper\BcAdminSiteHelper;
 
@@ -24,12 +26,18 @@ class BcAdminSiteHelperTest extends \BaserCore\TestSuite\BcTestCase
 {
 
     /**
+     * Trait
+     */
+    use BcContainerTrait;
+
+    /**
      * Fixtures
      *
      * @var array
      */
     protected $fixtures = [
-        'plugin.BaserCore.SiteConfigs'
+        'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Sites'
     ];
 
     /**
@@ -64,10 +72,10 @@ class BcAdminSiteHelperTest extends \BaserCore\TestSuite\BcTestCase
     public function testIsUseSiteDeviceSetting()
     {
         $this->assertTrue($this->BcAdminSite->isUseSiteDeviceSetting());
-        $siteConfigs = $this->getTableLocator()->get('BaserCore.SiteConfigs');
-        $siteConfig = $siteConfigs->find()->where(['name' => 'use_site_device_setting'])->first();
-        $siteConfig->value = false;
-        $siteConfigs->save($siteConfig);
+        $siteConfigService = $this->getService(SiteConfigServiceInterface::class);
+        $siteConfig = $siteConfigService->get();
+        $siteConfig->use_site_device_setting = false;
+        $siteConfigService->update($siteConfig->toArray());
         $this->assertFalse($this->BcAdminSite->isUseSiteDeviceSetting());
     }
 
@@ -77,10 +85,10 @@ class BcAdminSiteHelperTest extends \BaserCore\TestSuite\BcTestCase
     public function testIsUseSiteLangSetting()
     {
         $this->assertFalse($this->BcAdminSite->isUseSiteLangSetting());
-        $siteConfigs = $this->getTableLocator()->get('BaserCore.SiteConfigs');
-        $siteConfig = $siteConfigs->find()->where(['name' => 'use_site_lang_setting'])->first();
-        $siteConfig->value = true;
-        $siteConfigs->save($siteConfig);
+        $siteConfigService = $this->getService(SiteConfigServiceInterface::class);
+        $siteConfig = $siteConfigService->get();
+        $siteConfig->use_site_lang_setting = true;
+        $siteConfigService->update($siteConfig->toArray());
         $this->assertTrue($this->BcAdminSite->isUseSiteLangSetting());
     }
 

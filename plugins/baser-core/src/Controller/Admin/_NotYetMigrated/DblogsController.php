@@ -1,5 +1,7 @@
 <?php
 // TODO : コード確認要
+use BaserCore\Utility\BcSiteConfig;
+
 return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
@@ -33,7 +35,7 @@ class DblogsController extends AppController
     public function admin_ajax_index()
     {
         $this->autoLayout = false;
-        $default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
+        $default = ['named' => ['num' => BcSiteConfig::get('admin_list_num')]];
         $this->setViewConditions('Dblog', ['default' => $default, 'action' => 'admin_index']);
         $this->paginate = [
             'order' => ['Dblog.created ' => 'DESC', 'Dblog.id' => 'DESC'],
