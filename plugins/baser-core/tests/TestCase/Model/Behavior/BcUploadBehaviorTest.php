@@ -568,54 +568,40 @@ class BcUploadBehaviorTest extends BcTestCase
     }
 
     /**
-     * ファイルを保存する
+     * ファイルを保存する(tmpIdがない場合)
      *
-     * @param string $message テストが失敗した時に表示されるメッセージ
-     * @todo tmpの場合のテスト未完了
      */
     public function testSaveFile()
     {
-        $tmpId = null;
-        $fieldName = 'eyecatch';
         $ext = 'png';
         $this->eyecatchField['ext'] = $ext;
-        // パス情報
-        if (!$tmpId) {
-            $targetPath = $this->savePath . $this->uploadedData['eyecatch']['name'];
-        } else {
-            $targetPath = $fieldName . '.' . $ext;
-        }
-        $this->BcUploadBehavior->tmpId = $tmpId;
-
+        $targetPath = $this->savePath . $this->uploadedData['eyecatch']['name'];
         // ダミーファイルの作成
         touch($this->uploadedData['eyecatch']['tmp_name']);
-
         // ファイル保存を実行
         $result = $this->BcUploadBehavior->saveFile($this->uploadedData['eyecatch'], $this->eyecatchField);
-
-        if (!$tmpId) {
-            $this->assertFileExists($targetPath);
-
-        } else {
-            $this->assertEquals($targetPath, $result);
-            // セッションをチェック
-            $sessionField = $tmpId . '_' . $fieldName . '_' . $ext;
-            $expected[$sessionField] = array_merge($this->eyecatchField, ['type' => 'basercms', 'data' => '']);
-            $resultSession = $this->BcUploadBehavior->Session->read('Upload');
-            $this->assertEquals($expected, $resultSession);
-        }
-
-
+        $this->assertFileExists($targetPath);
         // 生成されたファイルを削除
         @unlink($this->uploadedData['eyecatch']['tmp_name']);
         @unlink($targetPath);
+    }
 
-        // TODO: tmpの場合
-        // touch($this->uploadedData['eyecatch']['tmp_name']);
-        // $fileData = 'testtest';
-        // file_put_contents($this->uploadedData['eyecatch']['tmp_name'], $fileData);
+    /**
+     * ファイルを保存する(tmpIdがある場合)
+     *
+     */
+    public function testSaveFileWithTmp()
+    {
+        // tmpIdがある場合
+        $this->BcUploadBehavior->tmpId = 1;
+        touch($this->uploadedData['eyecatch']['tmp_name']);
+        $fileData = 'testtest';
+        file_put_contents($this->uploadedData['eyecatch']['tmp_name'], $fileData);
+        // セッション書き込みを実行
+        $result = $this->BcUploadBehavior->saveFile($this->uploadedData['eyecatch'], $this->eyecatchField);
         // saveFile内にてSessionが保存されているかをテスト
-        // $this->assertEquals($fileData, $this->BcUploadBehavior->Session->read('Upload.00000001_eyecatch_png.data'));
+        $this->assertEquals($fileData, $this->BcUploadBehavior->Session->read('Upload.1_eyecatch_gif.data'));
+
     }
 
     /**
