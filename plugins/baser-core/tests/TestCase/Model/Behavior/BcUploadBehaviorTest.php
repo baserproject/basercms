@@ -355,8 +355,10 @@ class BcUploadBehaviorTest extends BcTestCase
         $uploaded = $this->BcUploadBehavior->deleteFileWhileChecking($this->eyecatchField, $uploadedFile, $fileName);
         $this->assertFileNotExists($targetPath);
         @unlink($targetPath);
-        // TODO: tmpの場合のテストを追加
-        // $this->uploadedData['eyecatch_delete'] = 1;
+        // tmpIdがある場合 oldValueが入る
+        $this->BcUploadBehavior->tmpId= 1;
+        $actual = $this->BcUploadBehavior->deleteFileWhileChecking($this->eyecatchField, $uploadedFile, $fileName);
+        $this->assertEquals($fileName, $actual['eyecatch']);
     }
 
 
