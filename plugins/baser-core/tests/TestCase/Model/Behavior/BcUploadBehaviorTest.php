@@ -379,7 +379,7 @@ class BcUploadBehaviorTest extends BcTestCase
     }
 
     /**
-     * 保存対象かチェックしながらファイルを保存する
+     * 保存対象かチェックしながらファイルを保存する(tmpIdがない場合)
      */
     public function testSaveFileWhileChecking()
     {
@@ -389,12 +389,23 @@ class BcUploadBehaviorTest extends BcTestCase
         $this->BcUploadBehavior->saveFileWhileChecking($this->eyecatchField, ["eyecatch" => ['name' => '']]);
         $this->assertFileNotExists($filePath);
         // nameがある場合 新規画像保存の場合
-        $tmp = $this->uploadedData['eyecatch']['tmp_name'];
-        touch($tmp);
+        touch($this->uploadedData['eyecatch']['tmp_name']);
         $this->BcUploadBehavior->saveFileWhileChecking($this->eyecatchField, $this->uploadedData);
         $this->assertFileExists($filePath);
-        $this->assertFileNotExists($tmp);
+        $this->assertFileNotExists($this->uploadedData['eyecatch']['tmp_name']);
         unlink($filePath);
+    }
+
+    /**
+     * 保存対象かチェックしながらファイルを保存する(tmpIdがある場合)
+     */
+    public function testSaveFileWhileCheckingWithTmp()
+    {
+        $this->eyecatchField['ext'] = 'png';
+        $this->BcUploadBehavior->tmpId = 1;
+        touch($this->uploadedData['eyecatch']['tmp_name']);
+        $uploadedFile = $this->BcUploadBehavior->saveFileWhileChecking($this->eyecatchField, $this->uploadedData);
+        $this->assertEquals("1_eyecatch.png", $uploadedFile['eyecatch']['session_key']);
     }
 
 
