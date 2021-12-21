@@ -11,7 +11,6 @@
 namespace BaserCore\View\Helper;
 
 use Cake\View\Helper;
-use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
@@ -218,6 +217,8 @@ class BcUploadHelper  extends Helper
      * @param string $fileName
      * @param array $options
      * @return string
+     * @checked
+     * @unitTest
      */
     public function uploadImage($fieldName, $fileName, $options = [])
     {

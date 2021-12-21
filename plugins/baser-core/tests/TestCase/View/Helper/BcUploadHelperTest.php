@@ -11,8 +11,6 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
-use CakeRequest;
-use Cake\View\View;
 use BaserCore\View\BcAdminAppView;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcUploadHelper;
@@ -44,7 +42,6 @@ class BcUploadHelperTest extends BcTestCase
     {
         parent::setUp();
         $this->BcUpload = new BcUploadHelper(new BcAdminAppView($this->getRequest()));
-        // $this->BcUpload->request = new CakeRequest('/', false);
     }
 
     /**
@@ -72,7 +69,7 @@ class BcUploadHelperTest extends BcTestCase
      */
     public function testFileLink()
     {
-        $request = $this->getRequest()->withData('EditorTemplate', [
+        $request = $this->getRequest()->withData('Contents', [
             'id' => '1',
             'name' => '画像（左）とテキスト',
             'eyecatch' => 'template1.jpg',
@@ -80,10 +77,8 @@ class BcUploadHelperTest extends BcTestCase
             'modified' => '2013-07-21 01:41:12', 'created' => '2013-07-21 00:53:42',
         ]);
         $BcUpload = new BcUploadHelper(new BcAdminAppView($request));
-        $result = $BcUpload->fileLink('EditorTemplate.eyecatch');
+        $result = $BcUpload->fileLink('Contents.eyecatch');
         $this->assertRegExp('/<a href=\"\/files\/contents\/template1\.jpg/', $result);
-        // TODO: 保存先ファイル editorが未確認のため一旦デフォルトのcontentsで代用
-        // $this->assertRegExp('/<a href=\"\/files\/editor\/template1\.jpg/', $result);
     }
 
     /**
@@ -91,20 +86,18 @@ class BcUploadHelperTest extends BcTestCase
      */
     public function testFileLinkHasManyField()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->BcUpload->request->data = [
-            'EditorTemplate' => [
-                [
-                    'id' => '1',
-                    'name' => '画像（左）とテキスト',
-                    'image' => 'template1.jpg',
-                    'description' => '説明文',
-                    'modified' => '2013-07-21 01:41:12', 'created' => '2013-07-21 00:53:42',
-                ],
+        $request = $this->getRequest()->withData('Contents', [
+            [
+                'id' => '1',
+                'name' => '画像（左）とテキスト',
+                'eyecatch' => 'template1.jpg',
+                'description' => '説明文',
+                'modified' => '2013-07-21 01:41:12', 'created' => '2013-07-21 00:53:42',
             ]
-        ];
-        $result = $this->BcUpload->fileLink('EditorTemplate.0.image');
-        $this->assertRegExp('/<a href=\"\/files\/editor\/template1\.jpg/', $result);
+        ]);
+        $BcUpload = new BcUploadHelper(new BcAdminAppView($request));
+        $result = $BcUpload->fileLink('Contents.0.eyecatch');
+        $this->assertRegExp('/<a href=\"\/files\/contents\/template1\.jpg/', $result);
     }
 
     /**
@@ -112,25 +105,24 @@ class BcUploadHelperTest extends BcTestCase
      */
     public function testUploadImage()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // オプションなし
-        $result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg');
-        $this->assertRegExp('/^<a href=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?><\/a>/', $result);
+        $result = $this->BcUpload->uploadImage('Contents.image', 'template1.jpg');
+        $this->assertRegExp('/^<a href=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><\/a>/', $result);
 
         // サイズ指定あり
         $options = [
             'width' => '100',
             'height' => '80',
         ];
-        $result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
+        $result = $this->BcUpload->uploadImage('Contents.image', 'template1.jpg', $options);
         $expects = '<img src="/uploads/tmp/medium/template1.jpg" alt="" width="100" height="80" />';
-        $this->assertRegExp('/^<a href=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?alt="" width="100" height="80"[^>]+?><\/a>/', $result);
+        $this->assertRegExp('/^<a href=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?alt="" width="100" height="80"[^>]+?><\/a>/', $result);
 
         // 一時ファイルへのリンク（デフォルトがリンク付だが、Aタグが出力されないのが正しい挙動）
         $options = [
             'tmp' => true
         ];
-        $result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
+        $result = $this->BcUpload->uploadImage('Contents.image', 'template1.jpg', $options);
         $expects = '<img src="/uploads/tmp/medium/template1_jpg" alt=""/>';
         $this->assertEquals($expects, $result);
 
@@ -138,25 +130,15 @@ class BcUploadHelperTest extends BcTestCase
             'link' => false,
             'output' => 'tag'
         ];
-        $result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
-        $this->assertRegExp('/^<img src=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?>/', $result);
+        $result = $this->BcUpload->uploadImage('Contents.image', 'template1.jpg', $options);
+        $this->assertRegExp('/^<img src=\"\/files\/contents\/template1\.jpg[^>]+?\"[^>]+?>/', $result);
 
         // output を urlに
         $options = [
             'output' => 'url'
         ];
-        $result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
-        $this->assertRegExp('/^\/files\/editor\/template1\.jpg\?[0-9]+/', $result);
-    }
-
-    /**
-     * testGetBasePath
-     *
-     * @return void
-     */
-    public function testGetBasePath()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->BcUpload->uploadImage('Contents.image', 'template1.jpg', $options);
+        $this->assertRegExp('/^\/files\/contents\/template1\.jpg\?[0-9]+/', $result);
     }
 
     /**
