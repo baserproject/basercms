@@ -316,7 +316,8 @@ class BcUploadBehaviorTest extends BcTestCase
         $requestData = $this->BcUploadBehavior->setupRequestData($data);
         $this->assertFalse($this->BcUploadBehavior->settings[$this->table->getAlias()]['fields']['eyecatch']['upload']);
         $this->assertEquals("test.png", $requestData['eyecatch']);
-        // TODO: セッションに一時ファイルが保存されている場合のテスト
+        // tmpIdが存在する場合
+
     }
 
     /**
@@ -349,9 +350,8 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testSaveTmpFiles()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->initTestSaveFiles();
-        $data = $this->EditorTemplate->saveTmpFiles($this->EditorTemplate->data, 1);
+        $entity = $this->table->get(1);
+        $data = $this->BcUploadBehavior->saveTmpFiles($entity, 1);
         $tmpId = $this->BcUploadBehavior->tmpId;
         $this->assertEquals('1.gif', $data['EditorTemplate']['image']['session_key'], 'saveTmpFiles()の返り値が正しくありません');
         $this->assertEquals(1, $tmpId, 'tmpIdが正しく設定されていません');

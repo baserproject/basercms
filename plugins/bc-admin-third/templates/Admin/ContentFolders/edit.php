@@ -34,7 +34,7 @@ if (!empty($site) && $site->theme) {
 // }
 $folderTemplateList = $this->BcAdminContentFolder->getFolderTemplateList($contentFolder->content->id, $theme);
 // TODO: PageService作成時にヘルパー経由で移行する
-$Page = TableRegistry::getTableLocator()->get('BcPage.Pages');
+$Page = TableRegistry::getTableLocator()->get('BaserCore.Pages');
 $pageTemplateList = $Page->getPageTemplateList($contentFolder->content->id, $theme);
 ?>
 

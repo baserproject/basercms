@@ -99,7 +99,7 @@ class BcUploadBehavior extends Behavior
     /**
      * Session
      *
-     * @var \SessionComponent
+     * @var \Session
      */
     public $Session = null;
 
@@ -267,7 +267,6 @@ class BcUploadBehavior extends Behavior
                 }
             } else {
                 if (isset($data[$field['name'] . '_tmp'])) {
-                    // TODO ucmitz セッションの場合の処理未確認
                     // セッションに一時ファイルが保存されている場合は復元する
                     if ($this->moveFileSessionToTmp($data, $field['name'])) {
                         $uploadedFile = $this->getUploadedFile()[$field['name']];
@@ -336,20 +335,19 @@ class BcUploadBehavior extends Behavior
     /**
      * 一時ファイルとして保存する
      *
-     * @param Model $Model
      * @param array $data
      * @param string $tmpId
      * @return mixed false|array
      * TODO ucmitz : モデル 全体
      */
-    public function saveTmpFiles(Model $Model, $data, $tmpId)
+    public function saveTmpFiles($entity, $tmpId)
     {
         $this->Session->delete('Upload');
-        $Model->data = $data;
         $this->tmpId = $tmpId;
-        $this->setupRequestData($Model);
-        $Model->data = $this->deleteFiles($Model, $Model->data);
-        $result = $this->saveFiles($Model, $Model->data);
+        $this->setupRequestData($entity->toArray());
+        $uploadedFile = $this->getUploadedFile();
+        $entity = $this->deleteFiles($entity, $uploadedFile);
+        $result = $this->saveFiles($uploadedFile);
         if ($result) {
             return $this->getUploadedFile();
         } else {

@@ -1,19 +1,19 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Controller
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('Imageresizer', 'Vendor');
-
+namespace BaserCore\Controller\Admin;
+use Cake\Core\Configure;
+use Cake\Filesystem\File;
+use BaserCore\Utility\BcUtil;
+use BaserCore\Vendor\Imageresizer;
 /**
  * Class UploadsController
  *
@@ -21,7 +21,7 @@ App::uses('Imageresizer', 'Vendor');
  *
  * @package Baser.Controller
  */
-class UploadsController extends AppController
+class UploadsController extends BcAdminAppController
 {
 
     /**
@@ -54,6 +54,7 @@ class UploadsController extends AppController
 
     protected function output($args, $funcNum)
     {
+        $session = $this->request->getSession();
         $size = '';
         if ($funcNum > 1) {
             $size = $args[0];
@@ -62,11 +63,11 @@ class UploadsController extends AppController
             $name = $args[0];
         }
         $sessioName = str_replace(['.', '/'], ['_', '_'], $name);
-        $sessionData = $this->Session->read('Upload.' . $sessioName);
+        $sessionData = $session->read('Upload.' . $sessioName);
 
         Configure::write('debug', 0);
         $type = $sessionData['type'];
-        $ext = decodeContent($type, $name);
+        $ext = BcUtil::decodeContent($type, $name);
         if (!$ext) {
             $this->notFound();
         }
@@ -81,7 +82,7 @@ class UploadsController extends AppController
         }
 
         if (!$size) {
-            $data = $this->Session->read('Upload.' . $sessioName . '.data');
+            $data = $session->read('Upload.' . $sessioName . '.data');
         } else {
 
             if (is_dir(TMP . 'uploads')) {
@@ -91,7 +92,7 @@ class UploadsController extends AppController
 
             $path = TMP . 'uploads' . DS . $name;
             $file = new File($path, true);
-            $file->write($this->Session->read('Upload.' . $sessioName . '.data'), 'wb');
+            $file->write($session->read('Upload.' . $sessioName . '.data'), 'wb');
             $file->close();
 
             $thumb = false;
