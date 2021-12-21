@@ -56,6 +56,16 @@ class AppControllerTest extends BcTestCase
     }
 
     /**
+     * Test construct
+     *
+     * @return void
+     */
+    public function testConstruct(): void
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
      * Test initialize method
      *
      * @return void

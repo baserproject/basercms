@@ -16,6 +16,7 @@ use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 use BaserCore\Utility\BcUtil;
 use Cake\Controller\ComponentRegistry;
 use Cake\Event\EventInterface;
