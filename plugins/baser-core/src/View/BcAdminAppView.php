@@ -83,6 +83,12 @@ class BcAdminAppView extends AppView
         $this->loadHelper('BaserCore.BcContents');
         $this->loadHelper('BaserCore.BcListTable');
         $this->loadHelper('BaserCore.BcAdminContent');
+        // TODO ucmitz 未移行のため暫定措置
+        // >>>
+//        $this->loadHelper('BaserCore.BcSearchBox');
+//        $this->loadHelper('BaserCore.BcFormTable');
+//        $this->loadHelper('BaserCore.BcLayout');
+        // <<<
         if (!$this->get('title')) {
             $this->set('title', 'Undefined');
         }

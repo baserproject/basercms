@@ -243,18 +243,6 @@ class BcAdminAppController extends BcAppController
     }
 
     /**
-     * Set Title
-     * @param string $title
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    protected function setTitle($title): void
-    {
-        $this->set('title', $title);
-    }
-
-    /**
      * Set Search
      * @param string $template
      * @checked

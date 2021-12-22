@@ -13,13 +13,10 @@ namespace BaserCore\Controller;
 
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
-use Cake\Controller\ComponentRegistry;
 use Cake\Core\Exception\Exception;
 use Cake\Event\EventInterface;
-use Cake\Event\EventManagerInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
-use Cake\Http\ServerRequest;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Service\DblogServiceInterface;
 use Cake\Core\Configure;
@@ -43,36 +40,6 @@ class BcAppController extends AppController
      * Trait
      */
     use BcContainerTrait;
-
-    /**
-     * view
-     *
-     * @var string
-     */
-    public $viewClass = 'App';
-
-    /**
-     * ページタイトル
-     *
-     * @var        string
-     * @access    public
-     */
-    public $pageTitle = '';
-
-    /**
-     * ヘルパー
-     *
-     * @var        mixed
-     * @access    public
-     */
-    // TODO 未確認のためコメントアウト
-    /*
-    public $helpers = [
-        'Session', 'BcHtml', 'Form', 'BcForm', 'BcWidgetArea',
-        'Js' => ['Jquery'], 'BcBaser', 'BcXml', 'BcArray', 'BcAdmin',
-        'BcListTable', 'BcSearchBox', 'BcFormTable', 'BcLayout'
-    ];
-    */
 
     /**
      * レイアウト

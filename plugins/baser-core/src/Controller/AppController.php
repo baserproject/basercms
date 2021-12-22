@@ -107,4 +107,16 @@ class AppController extends BaseController
         }
     }
 
+    /**
+     * Set Title
+     * @param string $title
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function setTitle($title): void
+    {
+        $this->set('title', $title);
+    }
+
 }

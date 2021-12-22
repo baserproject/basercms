@@ -99,7 +99,7 @@ class BcFrontContentsComponent extends Component
             // 説明文
             $controller->set('description', $request->getParam('Contents.description'));
             // タイトル
-            $controller->pageTitle = $request->getParam('Contents.title');
+            $controller->setTitle($request->getParam('Contents.title'));
         }
     }
 
