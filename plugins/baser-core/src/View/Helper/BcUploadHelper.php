@@ -54,7 +54,7 @@ class BcUploadHelper  extends Helper
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        // TODO: 一旦コンテンテーブルツのみで決め打ち
+        // TODO ucmitz: 一旦コンテンテーブルツのみで決め打ち
         $this->table = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         if (!$this->table->hasBehavior('BcUpload')) {
             throw new BcException(__d('baser', 'BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。'));
@@ -121,15 +121,16 @@ class BcUploadHelper  extends Helper
         } else {
             $value = $options['value'];
         }
-
         if (is_array($value)) {
             if (empty($value['session_key']) && empty($value['name'])) {
+                // TODO ucmitz: 処理がよくわからないため権藤さんに確認必
+                // $a = $this->Form->context();
                 $data = $this->find()->where([$this->table->getAlias() . '.' . $this->table->getPrimaryKey() => $this->table->id])->first();
-                // $data = $this->table->find('first', [
-                //     'conditions' => [
-                //         $this->table->getAlias() . '.' . $this->table->getPrimaryKey() => $Model->id
-                //     ]
-                // ]);
+                $data = $this->table->find('first', [
+                    'conditions' => [
+                        $this->table->getAlias() . '.' . $this->table->getPrimaryKey() => $this->Form->context()->id
+                    ]
+                ]);
                 if (!empty($data[$this->table->getAlias()][$field])) {
                     $value = $data[$this->table->getAlias()][$field];
                 } else {
@@ -245,7 +246,7 @@ class BcUploadHelper  extends Helper
         $fieldInfo = explode('.', $fieldName);
         $field = array_pop($fieldInfo);
 
-        // TODO: 一旦コンテンテーブルツのみで決め打ち
+        // TODO ucmitz: 一旦コンテンテーブルツのみで決め打ち
         // $tableName = (strpos($fieldName, 'content') || strpos($fieldName, 'Content')) ? 'Contents' : $fieldName;
         // $model = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         try {

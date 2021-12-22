@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Model\Behavior;
 use ArrayObject;
 use Cake\ORM\Entity;
 use ReflectionClass;
+use Cake\Filesystem\File;
 use BaserCore\TestSuite\BcTestCase;
 use Laminas\Diactoros\UploadedFile;
 use BaserCore\Utility\BcContainerTrait;
@@ -510,7 +511,6 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testMoveFileSessionToTmp()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $tmpId = 1;
         $fieldName = 'fieldName';
         $tmp_name = 'basercms_tmp';
@@ -533,11 +533,9 @@ class BcUploadBehaviorTest extends BcTestCase
         ];
         $this->BcUploadBehavior->tmpId = $tmpId;
 
-        $this->EditorTemplate->data['EditorTemplate'][$fieldName] = [
-            'name' => $basename,
-            'tmp_name' => $tmpPath,
-            'type' => 'basercms',
-        ];
+        $this->uploadedData['eyecatch']['name'] = $basename;
+        $this->uploadedData['eyecatch']['tmp_name'] = $tmpPath;
+        $this->uploadedData['eyecatch']['type'] = 'basercms';
 
         // ダミーファイルの作成
         $file = new File($tmpPath);
@@ -545,7 +543,7 @@ class BcUploadBehaviorTest extends BcTestCase
         $file->close();
 
         // セッションを設定
-        $this->EditorTemplate->saveFile($this->eyecatchField);
+        $this->BcUploadBehavior->saveFile($this->uploadedData['eyecatch'], $this->eyecatchField);
 
         //—————————————————————————
         // 本題
@@ -555,16 +553,15 @@ class BcUploadBehaviorTest extends BcTestCase
         $targetName = $tmpId . '_' . $fieldName . '_' . $ext;
         $targetPath = $this->savePath . $targetName;
 
-        // 初期化
-        $this->EditorTemplate->data['EditorTemplate'][$fieldName . '_tmp'] = $targetName;
-
+        $data = [
+            "${fieldName}_tmp" => $targetName,
+        ];
         // セッションからファイルを保存
-        $this->EditorTemplate->moveFileSessionToTmp($fieldName);
+        $this->BcUploadBehavior->moveFileSessionToTmp($data, $fieldName);
 
         // 判定
         $this->assertFileExists($targetPath, 'セッションに保存されたファイルデータをファイルとして保存できません');
-
-        $result = $this->EditorTemplate->data['EditorTemplate'][$fieldName];
+        $result = $this->BcUploadBehavior->getUploadedFile()[$fieldName];
         $expected = [
             'error' => 0,
             'name' => $targetName,

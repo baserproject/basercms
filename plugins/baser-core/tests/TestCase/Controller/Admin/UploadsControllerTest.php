@@ -10,6 +10,7 @@
  */
 
 namespace BaserCore\Test\TestCase\Controller\Admin;
+use Cake\ORM\TableRegistry;
 use BaserCore\TestSuite\BcTestCase;
 
 /**
@@ -38,6 +39,7 @@ class UploadsControllerTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        session_reset();
         parent::tearDown();
     }
 
@@ -47,6 +49,22 @@ class UploadsControllerTest extends BcTestCase
     public function testTmp()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+        $this->Content = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $data = [
+            'eyecatch' => [
+                "tmp_name" => "/tmp/testBcUpload.png",
+                "error" => 0,
+                "name" => "test.png",
+                "type" => "image/png",
+                "size" => 100
+            ]
+        ];
+        // ダミーファイルの作成
+        touch($data['eyecatch']['tmp_name']);
+        $this->Content->saveTmpFiles($data, 1);
+        $this->get('/baser/admin/baser-core/uploads/tmp/medium/00000001_eyecatch_png');
+        $this->assertResponseOk();
     }
-
 }

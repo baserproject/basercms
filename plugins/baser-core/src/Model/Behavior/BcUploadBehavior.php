@@ -502,7 +502,9 @@ class BcUploadBehavior extends Behavior
      * @param array $data
      * @param string $fieldName
      * @return boolean
-     * TODO ucmitz : モデル $fieldName . '_tmp'
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function moveFileSessionToTmp($data, $fieldName)
     {
@@ -547,7 +549,7 @@ class BcUploadBehavior extends Behavior
     /**
      * ファイルを保存する
      *
-     * @param Model $Model
+     * @param array $uploadedFile
      * @param array $field 画像保存対象フィールドの設定
      * @return mixed false|ファイル名
      * @checked
