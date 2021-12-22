@@ -41,7 +41,7 @@ class BcUploadHelper  extends Helper
      *
      * @var array
      */
-    public $helpers = ['Html', 'Form'];
+    public $helpers = ['Html', 'BcAdminForm'];
 
     /**
      * initialize
@@ -117,20 +117,15 @@ class BcUploadHelper  extends Helper
         $basePath = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 
         if (empty($options['value'])) {
-            $value = $this->Form->getSourceValue($fieldName);
+            $value = $this->BcAdminForm->getSourceValue($fieldName);
         } else {
             $value = $options['value'];
         }
         if (is_array($value)) {
             if (empty($value['session_key']) && empty($value['name'])) {
-                // TODO ucmitz: 処理がよくわからないため権藤さんに確認必
-                // $a = $this->Form->context();
-                $data = $this->find()->where([$this->table->getAlias() . '.' . $this->table->getPrimaryKey() => $this->table->id])->first();
-                $data = $this->table->find('first', [
-                    'conditions' => [
-                        $this->table->getAlias() . '.' . $this->table->getPrimaryKey() => $this->Form->context()->id
-                    ]
-                ]);
+                // TODO ucmitz: $contextにもContentではなく、ContentFolderになってしまうため全体の構成を変える必要あり
+                $context = $this->BcAdminForm->context();
+                $data = $this->find()->where([$this->table->getAlias() . '.' . 'id' => $context->val("id")])->first();
                 if (!empty($data[$this->table->getAlias()][$field])) {
                     $value = $data[$this->table->getAlias()][$field];
                 } else {

@@ -60,6 +60,8 @@ class BcUploadHelperTest extends BcTestCase
      */
     public function testInitialize()
     {
+        $this->assertNotEmpty($this->BcUpload->BcAdminForm);
+        $this->assertNotEmpty($this->BcUpload->Html);
         $this->assertNotEmpty($this->BcUpload->table);
         $this->assertNotEmpty($this->BcUpload->siteConfigService);
     }
