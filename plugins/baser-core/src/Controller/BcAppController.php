@@ -42,14 +42,6 @@ class BcAppController extends AppController
     use BcContainerTrait;
 
     /**
-     * レイアウト
-     *
-     * @var        string
-     * @access    public
-     */
-    public $layout = 'default';
-
-    /**
      * モデル
      *
      * @var mixed

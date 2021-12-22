@@ -90,9 +90,9 @@ class BcFrontContentsComponent extends Component
         // 表示設定
         if (!empty($request->getAttributes())) {
             // レイアウトテンプレート設定
-            $controller->layout = $request->getParam('Contents.layout_template');
-            if (!$controller->layout) {
-                $controller->layout = $this->ContentService->getParentLayoutTemplate($request->getParam('Contents.id'));
+            $controller->viewBuilder()->setLayout($request->getParam('Contents.layout_template'));
+            if (!$controller->viewBuilder()->getLayout()) {
+                $controller->viewBuilder()->setLayout($this->ContentService->getParentLayoutTemplate($request->getParam('Contents.id')));
             }
             // パンくず
             $controller->crumbs = $this->getCrumbs($request->getParam('Contents.id'));
