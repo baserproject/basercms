@@ -50,13 +50,6 @@ class BcAppController extends AppController
     public $subDir = null;
 
     /**
-     * サブメニューエレメント
-     *
-     * @var string
-     */
-    public $subMenuElements = '';
-
-    /**
      * パンくずナビ
      *
      * @var array
@@ -64,32 +57,11 @@ class BcAppController extends AppController
     public $crumbs = [];
 
     /**
-     * 検索ボックス
-     *
-     * @var string
-     */
-    public $search = '';
-
-    /**
-     * ヘルプ
-     *
-     * @var string
-     */
-    public $help = '';
-
-    /**
      * コンテンツタイトル
      *
      * @var string
      */
     public $contentsTitle = '';
-
-    /**
-     * サイトコンフィグデータ
-     *
-     * @var array
-     */
-    public $siteConfigs = [];
 
     /**
      * プレビューフラグ
@@ -572,10 +544,7 @@ class BcAppController extends AppController
      */
     private function __loadDataToView()
     {
-        $this->set('subMenuElements', $this->subMenuElements);    // サブメニューエレメント
         $this->set('crumbs', $this->crumbs);                    // パンくずなび
-        $this->set('search', $this->search);
-        $this->set('help', $this->help);
         $this->set('preview', $this->preview);
 
         if (!empty($this->request->getParam('prefix'))) {
