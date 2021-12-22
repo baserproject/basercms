@@ -259,7 +259,7 @@ class PermissionsTable extends AppTable
     public function getTargePermissions(array $userGroups): array
     {
         foreach($userGroups as $groupId) {
-            if (!isset($this->_targetPermissions[$groupId])) {
+            if (is_null($this->_targetPermissions[$groupId])) {
                 $this->setTargetPermissions($userGroups);
                 break;
             }
