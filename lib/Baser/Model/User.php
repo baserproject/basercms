@@ -81,6 +81,7 @@ class User extends AppModel
 				'confirm' => ['rule' => ['confirm', ['password_1', 'password_2']], 'message' => __d('baser', 'パスワードが同じものではありません。')]],
 			'email' => [
 				'email' => ['rule' => ['email'], 'message' => __d('baser', 'Eメールの形式が不正です。'), 'allowEmpty' => true],
+				'duplicate' => ['rule' => ['duplicate', 'email'], 'message' => __d('baser', '既に登録のあるEメールです。')],
 				'maxLength' => ['rule' => ['maxLength', 255], 'message' => __d('baser', 'Eメールは255文字以内で入力してください。')]],
 			'user_group_id' => [
 				'rule' => ['notBlank'], 'message' => __d('baser', 'グループを選択してください。')]
