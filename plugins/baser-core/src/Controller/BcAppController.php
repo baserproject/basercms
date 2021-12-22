@@ -42,24 +42,6 @@ class BcAppController extends AppController
     use BcContainerTrait;
 
     /**
-     * モデル
-     *
-     * @var mixed
-     */
-    public $uses = ['User', 'Favorite'];
-
-    /**
-     * コンポーネント
-     *
-     * @var        array
-     * @access    public
-     */
-    // TODO 未確認のためコメントアウト
-    /*
-    public $components = ['RequestHandler', 'Security', 'Session', 'BcManager', 'Email', 'Flash', 'BcEmail', 'BcMessage'];
-    */
-
-    /**
      * サブディレクトリ
      *
      * @var        string

@@ -84,6 +84,12 @@ class AppController extends BaseController
         $this->loadComponent('BaserCore.BcMessage');
         $this->loadComponent('Security');
         $this->loadComponent('Paginator');
+
+        // TODO ucmitz 未移行のためコメントアウト
+        // >>>
+//        $this->loadComponent('BaserCore.Flash');
+//        $this->loadComponent('BaserCore.BcEmail');
+        // <<<
     }
 
     /**
