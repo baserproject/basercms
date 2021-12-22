@@ -280,14 +280,13 @@ class PermissionServiceTest extends BcTestCase
     /**
      * 権限チェックを行う
      *
-     * @param array $url
+     * @param string $url
      * @param array $userGroupId
      * @param bool $expected 期待値
      * @dataProvider checkDataProvider
      */
     public function testCheck($url, $userGroup, $expected)
     {
-
         $result = $this->PermissionService->addCheck("/fuga", false);
         $result = $this->PermissionService->addCheck("/piyo", true);
         $result = $this->PermissionService->check($url, $userGroup);

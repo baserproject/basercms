@@ -288,7 +288,7 @@ class PermissionService implements PermissionServiceInterface
      * @unitTest
      * @noTodo
      */
-    public function check($url, array $userGroupId): bool
+    public function check(string $url, array $userGroupId): bool
     {
         if (in_array(Configure::read('BcApp.adminGroupId'), $userGroupId)) {
             return true;

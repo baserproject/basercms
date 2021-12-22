@@ -112,6 +112,15 @@ interface PermissionServiceInterface
     public function check(string $url, array $userGroupId): bool;
 
     /**
+     * 権限チェック対象を追加する
+     *
+     * @param string $url
+     * @param bool $auth
+     * @return void
+     */
+    public function addCheck(string $url, bool $auth);
+
+    /**
      * 優先度を変更する
      *
      * @param int $id

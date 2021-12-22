@@ -93,7 +93,7 @@ class BcAdminContentHelper extends Helper
         $userGroups = BcUtil::loginUser()->user_groups;
         if ($userGroups) {
             foreach ($userGroups as $userGroup) {
-                // TODO: ユーザグループを配列で全て渡すよう変更が必要
+                // TODO ucmitz: ユーザグループを配列で全て渡すよう変更が必要
                 if ($this->PermissionService->check(BcUtil::getPrefix() . '/baser-core/contents/delete', [$userGroup->id])) {
                     return true;
                 }
