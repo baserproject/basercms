@@ -32,8 +32,6 @@ use Authentication\Controller\Component\AuthenticationComponent;
  * Class UsersController
  * @package BaserCore\Controller\Admin
  * @property UsersTable $Users
- * @property AuthenticationComponent $Authentication
- * @property BcMessageComponent $BcMessage
  */
 class UsersController extends BcAdminAppController
 {

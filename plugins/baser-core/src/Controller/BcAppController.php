@@ -27,11 +27,6 @@ use BaserCore\Annotation\Note;
 
 /**
  * Class BcAppController
- *
- * Controller 拡張クラス
- *
- * @package Baser.Controller
- * @property BcMessageComponent $BcMessage
  */
 class BcAppController extends AppController
 {

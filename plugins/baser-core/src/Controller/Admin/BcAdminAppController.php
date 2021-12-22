@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
+use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Controller\BcAppController;
 use BaserCore\Service\UserServiceInterface;
 use BaserCore\Service\UserService;
@@ -27,7 +28,7 @@ use Cake\Http\Exception\NotFoundException;
 
 /**
  * Class BcAdminAppController
- * @package BaserCore\Controller\Admin
+ * @property AuthenticationComponent $Authentication
  */
 class BcAdminAppController extends BcAppController
 {
