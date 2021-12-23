@@ -115,5 +115,44 @@ $(function () {
      */
     $(".error-message:has(ul)").removeClass("error-message").addClass("error-wrap");
 
+    /**
+     * クリップボードにURLをコピーする
+     *
+     * @returns false
+     */
+    let fullUrl = 'testlocalhost';
+    // var fullUrl = $.bcUtil.frontFullUrl;
+    // TODO: duplicateになってるからかそもそも初期画面でhideになってしまう
+    if (!document.queryCommandSupported('copy')) {
+        $("#BtnCopyUrl").hide();
+    } else if (fullUrl) {
+        // URLコピー： クリック後にツールチップの表示内容を切替え
+        $("#BtnCopyUrl").on({
+            'click': function () {
+                var copyArea = $("<textarea style=\" opacity:0; width:1px; height:1px; margin:0; padding:0; border-style: none;\"/>");
+                copyArea.text(fullUrl);
+                $(this).after(copyArea);
+                copyArea.select();
+                document.execCommand("copy");
+                copyArea.remove();
+
+                // コピー完了のツールチップ表示 bootstrap tooltip
+                $("#BtnCopyUrl").tooltip('dispose'); // 一度削除
+                $("#BtnCopyUrl").tooltip({title: 'コピーしました'});
+                $("#BtnCopyUrl").tooltip('show');
+                return false;
+            },
+            'mouseenter': function () {
+                // console.log('マウス ホバー');
+                $("#BtnCopyUrl").tooltip('dispose'); // 一度削除
+                $("#BtnCopyUrl").tooltip({title: '公開URLをコピー'});
+                $("#BtnCopyUrl").tooltip('show');
+            },
+            'mouseleave': function () {
+                // console.log('マウス アウト');
+                $("#BtnCopyUrl").tooltip('hide');
+            }
+        });
+    }
 });
 

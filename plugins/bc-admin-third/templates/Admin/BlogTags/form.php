@@ -29,7 +29,7 @@ $this->BcBaser->js('Blog.admin/blog_tags/form', false);
         <th
           class="col-head bca-form-table__label"><?php echo $this->BcForm->label('BlogTag.id', __d('baser', 'No')) ?></th>
         <td class="col-input bca-form-table__input">
-          <?php echo $this->BcForm->value('BlogTag.id') ?>
+          <?php echo $this->BcForm->getSourceValue('BlogTag.id') ?>
           <?php echo $this->BcAdminForm->control('BlogTag.id', ['type' => 'hidden']) ?>
         </td>
       </tr>
@@ -62,7 +62,7 @@ $this->BcBaser->js('Blog.admin/blog_tags/form', false);
   <?php if ($this->action == 'admin_edit'): ?>
     <div class="bca-actions__sub">
       <?php
-      $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $this->BcForm->value('BlogTag.id')], ['class' => 'submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'], sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->value('BlogTag.name')), false);
+      $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $this->BcForm->getSourceValue('BlogTag.id')], ['class' => 'submit-token button bca-btn bca-actions__item', 'data-bca-btn-type' => 'delete', 'data-bca-btn-size' => 'sm'], sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->getSourceValue('BlogTag.name')), false);
       ?>
     </div>
   <?php endif ?>

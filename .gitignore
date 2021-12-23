@@ -77,6 +77,8 @@ LOCAL_TODO.md
 LOCAL_Q&A.md
 # symlink
 /webroot/bc_admin_third
+# uploaded files
+/webroot/files/
 /webroot/bc_spa_sample
 /webroot/bc_front
 /webroot/baser_core

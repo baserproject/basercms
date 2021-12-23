@@ -11,9 +11,9 @@
 
 namespace BaserCore\View\Helper;
 
-use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
 use BaserCore\Event\BcEventDispatcherTrait;
 
 /**
@@ -39,6 +39,7 @@ class BcAdminFormHelper extends BcFormHelper
         'BaserCore.BcHtml',
         'BaserCore.BcTime',
         'BaserCore.BcText',
+        'BaserCore.BcUpload'
     ];
 
     /**
@@ -52,7 +53,6 @@ class BcAdminFormHelper extends BcFormHelper
      */
     public function control(string $name, array $options = []): string
     {
-
         if (!empty($options['type'])) {
             $options = array_replace_recursive([
                 'label' => false,
@@ -72,7 +72,7 @@ class BcAdminFormHelper extends BcFormHelper
                         'class' => 'bca-file__input',
                         'templateVars' => ['tag' => 'span', 'class' => 'bca-file'],
                         'deleteSpan' => ['class' => 'bca-file__delete'],
-                        'deleteCheckbox' => ['class' => 'bca-file__delete-input'],
+                        'deleteCheckbox' => ['class' => 'bca-file__delete-input', 'id' => true],
                         'deleteLabel' => ['class' => 'bca-file__delete-label'],
                         'figure' => ['class' => 'bca-file__figure'],
                         'img' => ['class' => 'bca-file__img'],

@@ -30,7 +30,7 @@ RUN apt-get update \
 		libreadline5 \
 		libonig-dev \
 		libpq-dev \
-    && docker-php-ext-install -j$(nproc) iconv pdo_mysql pdo_pgsql mbstring xml tokenizer zip intl \
+    && docker-php-ext-install -j$(nproc) iconv pdo_mysql pdo_pgsql mbstring exif xml tokenizer zip intl \
     && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
 	&& apt-get clean \

@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
+use Cake\Utility\Hash;
 use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
@@ -42,6 +43,7 @@ class ContentFoldersController extends BcAdminAppController
     {
         parent::initialize();
         $this->loadComponent('BaserCore.BcAdminContents');
+        $this->Security->setConfig('unlockedFields', ['ContentFolder.content.eyecatch', 'ContentFolder.content.eyecatch_', 'ContentFolder.content.eyecatch_delete']);
     }
 
     /**

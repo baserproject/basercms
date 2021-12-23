@@ -134,7 +134,7 @@ class BcFreezeHelper extends BcFormHelper
             }
 
             if (empty($selected)) {
-                $selected = $this->value($fieldName);
+                $selected = $this->getSourceValue($fieldName);
             }
 
             if ($selected === null && $showEmpty != true) {
@@ -252,7 +252,7 @@ class BcFreezeHelper extends BcFormHelper
     {
 
         if ($this->freezed) {
-            if ((empty($selected) || $selected === true) && $value = $this->value($fieldName)) {
+            if ((empty($selected) || $selected === true) && $value = $this->getSourceValue($fieldName)) {
                 if (is_array($value)) {
                     extract($value);
                     $selected = $year;
@@ -278,7 +278,7 @@ class BcFreezeHelper extends BcFormHelper
             } elseif ($selected === false) {
                 $selected = null;
             } elseif (strpos($selected, '-') === false) {
-                $wareki = $this->BcTime->convertToWareki($this->value($fieldName));
+                $wareki = $this->BcTime->convertToWareki($this->getSourceValue($fieldName));
                 if ($wareki) {
                     $w = $this->BcTime->wareki($wareki);
                     $wyear = $this->BcTime->wyear($wareki);
@@ -288,7 +288,7 @@ class BcFreezeHelper extends BcFormHelper
                     $selected = null;
                 }
             } else {
-                $wareki = $this->BcTime->convertToWareki($this->value($fieldName));
+                $wareki = $this->BcTime->convertToWareki($this->getSourceValue($fieldName));
                 if ($wareki) {
                     $w = $this->BcTime->wareki($wareki);
                     $wyear = $this->BcTime->wyear($wareki);
@@ -383,13 +383,13 @@ class BcFreezeHelper extends BcFormHelper
     {
 
         if ($this->freezed) {
-            $value = $this->value($fieldName);
+            $value = $this->getSourceValue($fieldName);
             if (is_array($value) && isset($value['session_key'])) {
                 $value = $value['session_key'];
                 return parent::hidden($fieldName . "_tmp", ['value' => $value]) . $this->BcUpload->fileLink($fieldName, $options);
             } else {
                 if (!is_array($value)) {
-                    $delValue = $this->value($fieldName . '_delete');
+                    $delValue = $this->getSourceValue($fieldName . '_delete');
                     if ($delValue) {
                         return parent::hidden($fieldName, ['value' => $value]) . parent::hidden($fieldName . '_delete', ['value' => true]) . $this->BcUpload->fileLink($fieldName, $options) . '<br>' . __d('baser', '削除する');
                     } else {

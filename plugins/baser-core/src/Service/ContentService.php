@@ -726,7 +726,7 @@ class ContentService implements ContentServiceInterface
     public function update($content, $contentData)
     {
         $content = $this->Contents->patchEntity($content, $contentData);
-        return ($result = $this->Contents->save($content)) ? $result : $content;
+        return ($result = $this->Contents->save($content, ['atomic' => false])) ? $result : $content;
     }
 
     /**

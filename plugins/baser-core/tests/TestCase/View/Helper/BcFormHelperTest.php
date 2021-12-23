@@ -793,20 +793,11 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testFileUploadField()
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
         $fieldName = 'Contact.upload';
         $this->BcForm->setEntity($fieldName);
         // 通常
         $result = $this->BcForm->file($fieldName);
-        $expected = [
-            ['input' => ['type' => 'file', 'name' => 'data[Contact][upload]', 'id' => 'ContactUpload']],
-        ];
-        $this->assertTags($result, $expected);
+        $this->assertEquals('<input type="file" name="Contact[upload]" id="ContactUpload">', $result);
     }
 
     /**
@@ -818,47 +809,41 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testFileUploadFieldWithImageFile()
     {
-
-        // TODO ucmitz移行時に未実装のため代替措置
-        // >>>
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        // <<<
-
         $fieldName = 'Contact.eye_catch';
-        $this->BcForm->setEntity($fieldName);
-        $this->BcForm->BcUpload->request->data = [
-            'Contact' => [
-                'id' => '1',
-                'eye_catch' => 'template1.jpg',
-                'modified' => '2013-07-21 01:41:12', 'created' => '2013-07-21 00:53:42',
-            ]
-        ];
+        $request = $this->getRequest('/')->withData('Contact', [
+            'id' => '1',
+            'eye_catch' => 'template1.jpg',
+            'modified' => '2013-07-21 01:41:12', 'created' => '2013-07-21 00:53:42',
+        ]);
+        $View = new BcAdminAppView($request);
+        $BcForm = new BcFormHelper($View);
 
-        $result = $this->BcForm->file($fieldName);
-        $expected = [
-            ['input' => ['type' => 'file', 'name' => 'data[Contact][eye_catch]', 'id' => 'ContactEyeCatch']],
-            '&nbsp;',
-            ['span' => []],
-            ['input' => ['type' => 'hidden', 'name' => 'data[Contact][eye_catch_delete]', 'id' => 'ContactEyeCatchDelete_', 'value' => '0']],
-            ['input' => ['type' => 'checkbox', 'name' => 'data[Contact][eye_catch_delete]', 'value' => '1', 'id' => 'ContactEyeCatchDelete']],
-            ['label' => ['for' => 'ContactEyeCatchDelete']],
-            '削除する',
-            '/label',
-            '/span',
-            ['input' => ['type' => 'hidden', 'name' => 'data[Contact][eye_catch_]', 'value' => 'template1.jpg', 'id' => 'ContactEyeCatch']],
-            ['br' => true],
-            ['figure' => []],
-            ['a' => ['href' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'rel' => 'colorbox', 'title' => '']],
-            ['img' => ['src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '']],
-            '/a',
-            ['br' => true],
-            ['figcaption' => ['class' => 'file-name']],
-            'template1.jpg',
-            '/figcaption',
-            '/figure',
-        ];
+        $result = $BcForm->file($fieldName);
+        $this->assertEquals('<input type="file" name="Contact[eye_catch]" id="ContactEyeCatch"/>&nbsp;<span><input type="hidden" name="Contact[eye_catch_delete]" value="0"/><input type="checkbox" name="Contact[eye_catch_delete]" value="1" id="ContactEyeCatchDelete"/><label for="ContactEyeCatchDelete">削除する</label></span><input type="hidden" name="Contact[eye_catch_]" value="template1.jpg" id="ContactEyeCatch"/><br /><figure><a href="/files/template1.jpg?271873778" rel="colorbox" title=""><img src="/files/template1.jpg?570639534" alt=""/></a><br><figcaption class="file-name">template1.jpg</figcaption></figure>', $result);
 
-        $this->assertTags($result, $expected);
+        // $expected = [
+        //     ['input' => ['type' => 'file', 'name' => 'data[Contact][eye_catch]', 'id' => 'ContactEyeCatch']],
+        //     '&nbsp;',
+        //     ['span' => []],
+        //     ['input' => ['type' => 'hidden', 'name' => 'data[Contact][eye_catch_delete]', 'id' => 'ContactEyeCatchDelete_', 'value' => '0']],
+        //     ['input' => ['type' => 'checkbox', 'name' => 'data[Contact][eye_catch_delete]', 'value' => '1', 'id' => 'ContactEyeCatchDelete']],
+        //     ['label' => ['for' => 'ContactEyeCatchDelete']],
+        //     '削除する',
+        //     '/label',
+        //     '/span',
+        //     ['input' => ['type' => 'hidden', 'name' => 'data[Contact][eye_catch_]', 'value' => 'template1.jpg', 'id' => 'ContactEyeCatch']],
+        //     ['br' => true],
+        //     ['figure' => []],
+        //     ['a' => ['href' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'rel' => 'colorbox', 'title' => '']],
+        //     ['img' => ['src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '']],
+        //     '/a',
+        //     ['br' => true],
+        //     ['figcaption' => ['class' => 'file-name']],
+        //     'template1.jpg',
+        //     '/figcaption',
+        //     '/figure',
+        // ];
     }
 
     /**

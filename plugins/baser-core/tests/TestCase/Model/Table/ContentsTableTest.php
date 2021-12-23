@@ -83,6 +83,7 @@ class ContentsTableTest extends BcTestCase
     {
         $this->assertEquals('contents', $this->Contents->getTable());
         $this->assertTrue($this->Contents->hasBehavior('Tree'));
+        $this->assertTrue($this->Contents->hasBehavior('Timestamp'));
         $this->assertTrue($this->Contents->hasAssociation('Sites'));
         $this->assertTrue($this->Contents->hasAssociation('Users'));
     }
@@ -307,7 +308,7 @@ class ContentsTableTest extends BcTestCase
             function ($event, $entity, $options) {}
         );
         $entity = $marshall->one($data);
-        $this->assertEquals($time->i18nFormat('yyyy-MM-dd HH:mm:ss'), $entity->created);
+        $this->assertEquals($time->i18nFormat('yyyy/MM/dd HH:mm:ss'), $entity->created);
     }
 
     /**

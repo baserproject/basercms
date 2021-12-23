@@ -11,9 +11,10 @@
 
 namespace BaserCore\Test\TestCase\TestSuite;
 
-use BaserCore\TestSuite\BcTestCase;
+use Cake\Http\Session;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
+use BaserCore\TestSuite\BcTestCase;
 use BaserCore\Controller\AnalyseController;
 
 /**
@@ -69,6 +70,12 @@ class BcTestCaseTest extends BcTestCase
         $request = $this->getRequest();
         $this->assertObjectHasAttribute('params', $request);
         $this->assertSame($request, Router::getRequest());
+        // configを設定する場合
+        $session = new Session();
+        $session->write('test', 'testGetRequest');
+        $request = $this->getRequest('/', [], 'GET', ['session' => $session]);
+        $this->assertEquals('testGetRequest', $request->getSession()->read('test'));
+
     }
 
     /**
