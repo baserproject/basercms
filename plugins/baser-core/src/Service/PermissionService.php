@@ -311,7 +311,7 @@ class PermissionService implements PermissionServiceInterface
     }
 
     /**
-     * Undocumented function
+     * 標準アクセス許可リクエストを設定
      *
      * @return void
      */
@@ -333,7 +333,7 @@ class PermissionService implements PermissionServiceInterface
     }
 
     /**
-     * Undocumented function
+     * 標準アクセス許可リストからURLを検証
      *
      * @param string $url
      * @return boolean
@@ -352,7 +352,7 @@ class PermissionService implements PermissionServiceInterface
     }
 
     /**
-     * Undocumented function
+     * 標準アクセス拒否リストからURLを検証
      *
      * @param string $url
      * @return boolean
@@ -371,7 +371,7 @@ class PermissionService implements PermissionServiceInterface
     }
 
     /**
-     * Undocumented function
+     * パーミッションリストを検証する
      *
      * @param string $url
      * @param array $groupPermission
