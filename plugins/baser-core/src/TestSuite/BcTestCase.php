@@ -96,25 +96,26 @@ class BcTestCase extends TestCase
      * @unitTest
      * @noTodo
      */
-    public function getRequest($url = '/', $data = [], $method = 'GET')
+    public function getRequest($url = '/', $data = [], $method = 'GET', $config = [])
     {
         if(preg_match('/^http/', $url)) {
             $parseUrl = parse_url($url);
             Configure::write('BcEnv.host', $parseUrl['host']);
-            $request = new ServerRequest([
+            $defaultConfig = [
                 'uri' => ServerRequestFactory::createUri([
                     'HTTP_HOST' => $parseUrl['host'],
                     'REQUEST_URI' => $url,
                     'REQUEST_METHOD' => $method
-            ])]);
+            ])];
         } else {
-            $request = new ServerRequest([
+            $defaultConfig = [
                 'url' => $url,
                 'environment' => [
                     'REQUEST_METHOD' => $method
-                ]]
-            );
+            ]];
         }
+        $defaultConfig = array_merge($defaultConfig, $config);
+        $request = new ServerRequest($defaultConfig);
 
         try {
             Router::setRequest($request);

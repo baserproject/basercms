@@ -9,11 +9,15 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Controller\Admin;
+namespace BaserCore\Controller;
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Vendor\Imageresizer;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+
 /**
  * Class UploadsController
  *
@@ -21,7 +25,7 @@ use BaserCore\Vendor\Imageresizer;
  *
  * @package Baser.Controller
  */
-class UploadsController extends BcAdminAppController
+class UploadsController extends BcAppController
 {
 
     /**
@@ -44,14 +48,33 @@ class UploadsController extends BcAdminAppController
      */
     public function tmp()
     {
-        $this->output(func_get_args(), func_num_args());
+        echo $this->output(func_get_args(), func_num_args());
+        exit;
+        // return $this->response->withStringBody($this->output(func_get_args(), func_num_args()));
     }
 
+    /**
+     * スマートフォンのセッションに保存した一時ファイルを出力する
+     *
+     * @return void
+     */
     public function smartphone_tmp()
     {
-        $this->output(func_get_args(), func_num_args());
+        echo $this->output(func_get_args(), func_num_args());
+        exit;
+        // return $this->response->withStringBody($this->output(func_get_args(), func_num_args()));
     }
 
+    /**
+     * セッションに保存した一時ファイルを返す
+     *
+     * @param  array $args
+     * @param  int $funcNum
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
     protected function output($args, $funcNum)
     {
         $session = $this->request->getSession();
@@ -69,6 +92,7 @@ class UploadsController extends BcAdminAppController
         $type = $sessionData['type'];
         $ext = BcUtil::decodeContent($type, $name);
         if (!$ext) {
+            $this->BcMessage->setError(__d('baser', '拡張子が間違っています。'));
             $this->notFound();
         }
 
@@ -84,7 +108,6 @@ class UploadsController extends BcAdminAppController
         if (!$size) {
             $data = $session->read('Upload.' . $sessioName . '.data');
         } else {
-
             if (is_dir(TMP . 'uploads')) {
                 mkdir(TMP . 'uploads');
                 chmod(TMP . 'uploads', 0777);
@@ -110,7 +133,6 @@ class UploadsController extends BcAdminAppController
             Header("Content-disposition: attachment; filename=" . $name);
         }
         Header("Content-type: " . $type . "; name=" . $name);
-        echo $data;
-        exit();
+        return $data;
     }
 }

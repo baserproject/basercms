@@ -9,9 +9,11 @@
  * @license       http://basercms.net/license/index.html MIT License
  */
 
-namespace BaserCore\Test\TestCase\Controller\Admin;
+namespace BaserCore\Test\TestCase\Controller;
+use Cake\Http\Session;
 use Cake\ORM\TableRegistry;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Controller\UploadsController;
 
 /**
  * Class UploadsControllerTest
@@ -49,22 +51,26 @@ class UploadsControllerTest extends BcTestCase
     public function testTmp()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->get('/baser/baser-core/uploads/tmp/medium/00000001_eyecatch_png');
+    }
+    /**
+     * セッションに保存した一時ファイルを出力する
+     */
+    public function testOutput()
+    {
+        mkdir(TMP . 'uploads');
+        touch(TMP . 'uploads/test.gif');
+        copy(ROOT . '/plugins/bc-admin-third/webroot/img/baser.power.gif', TMP . 'uploads/test.gif');
         $this->enableSecurityToken();
         $this->enableCsrfToken();
-        $this->Content = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-        $data = [
-            'eyecatch' => [
-                "tmp_name" => "/tmp/testBcUpload.png",
-                "error" => 0,
-                "name" => "test.png",
-                "type" => "image/png",
-                "size" => 100
-            ]
-        ];
-        // ダミーファイルの作成
-        touch($data['eyecatch']['tmp_name']);
-        $this->Content->saveTmpFiles($data, 1);
-        $this->get('/baser/admin/baser-core/uploads/tmp/medium/00000001_eyecatch_png');
-        $this->assertResponseOk();
+        $session = new Session();
+        $session->write('Upload.test_gif.data', file_get_contents(TMP . 'uploads/test.gif'));
+        $session->write('Upload.test_gif.type', 'image/gif');
+        $session->write('Upload.test_gif.imagecopy.medium', ['width' => 100, 'height' => 100]);
+        $UploadsController = new UploadsController($this->getRequest('/baser/baser-core/uploads/', [], 'GET', ['session' => $session]));
+        $output = @$this->execPrivateMethod($UploadsController, 'output', [['medium', 'test.gif'], 2]);
+        $this->assertNotEmpty($output);
+        @unlink(TMP . 'uploads/test.gif');
+        rmdir(TMP . 'uploads');
     }
 }

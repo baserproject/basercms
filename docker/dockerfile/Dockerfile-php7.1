@@ -18,7 +18,7 @@ RUN apt-get update \
         libicu-dev \
         ssmtp \
         mailutils \
-    && docker-php-ext-install -j$(nproc) iconv mcrypt pdo_mysql mbstring xml tokenizer zip intl \
+    && docker-php-ext-install -j$(nproc) iconv mcrypt pdo_mysql mbstring exif xml tokenizer zip intl \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
 	&& apt-get clean \
@@ -32,7 +32,7 @@ COPY apache/ssl/ssl-cert-snakeoil.key /etc/ssl/private/
 COPY apache/ssl/ssl-cert-snakeoil.pem /etc/ssl/certs/
 RUN chmod 400 /etc/ssl/private/ssl-cert-snakeoil.key \
 	&& chmod 400 /etc/ssl/certs/ssl-cert-snakeoil.pem
-    
+
 # php
 RUN echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail.ini \
 	&& echo "memory_limit = 256M" >> /usr/local/etc/php/php.ini \
@@ -44,11 +44,11 @@ RUN echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail
     && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_host=10.0.2.2" >> /usr/local/etc/php/conf.d/xdebug.ini
-    
+
 # ssmtp
 RUN echo "FromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
  	&& echo "Mailhub=bc-smtp:1025" >> /etc/ssmtp/ssmtp.conf
- 	
+
 # composer
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \

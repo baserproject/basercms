@@ -642,7 +642,7 @@ class BcUploadBehavior extends Behavior
      */
     public function rotateImage($file)
     {
-        if (!function_exists('exif_read_data')) {
+        if (!extension_loaded("exif")) {
             return false;
         }
         $exif = @exif_read_data($file);
