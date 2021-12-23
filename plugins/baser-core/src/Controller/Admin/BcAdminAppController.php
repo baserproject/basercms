@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Admin;
 
+use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Controller\BcAppController;
 use BaserCore\Service\UserServiceInterface;
 use BaserCore\Service\UserService;
@@ -27,7 +28,7 @@ use Cake\Http\Exception\NotFoundException;
 
 /**
  * Class BcAdminAppController
- * @package BaserCore\Controller\Admin
+ * @property AuthenticationComponent $Authentication
  */
 class BcAdminAppController extends BcAppController
 {
@@ -40,7 +41,6 @@ class BcAdminAppController extends BcAppController
     /**
      * Initialize
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function initialize(): void
@@ -49,6 +49,12 @@ class BcAdminAppController extends BcAppController
         $this->loadComponent('Authentication.Authentication', [
             'logoutRedirect' => Router::url(Configure::read('BcPrefixAuth.Admin.loginAction'), true),
         ]);
+
+        // TODO ucmitz 未移行のためコメントアウト
+        // >>>
+//        $this->loadComponent('BaserCore.BcManager');
+        // <<<
+
         /** @var UserService $userService */
         $userService = $this->getService(UserServiceInterface::class);
         $this->response = $userService->checkAutoLogin($this->request, $this->response);
@@ -240,18 +246,6 @@ class BcAdminAppController extends BcAppController
             $this->viewBuilder()->setClassName('BaserCore.BcAdminApp');
         }
         $this->viewBuilder()->setTheme('BcAdminThird');
-    }
-
-    /**
-     * Set Title
-     * @param string $title
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    protected function setTitle($title): void
-    {
-        $this->set('title', $title);
     }
 
     /**

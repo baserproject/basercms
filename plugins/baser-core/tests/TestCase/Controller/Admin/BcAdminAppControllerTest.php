@@ -195,23 +195,6 @@ class BcAdminAppControllerTest extends BcTestCase
     }
 
     /**
-     * Test setTitle method
-     *
-     * @return void
-     */
-    public function testSetTitle()
-    {
-        $template = 'test';
-        $this->execPrivateMethod($this->BcAdminApp, 'setTitle', [$template]);
-
-        $viewBuilder = new ReflectionClass($this->BcAdminApp->viewBuilder());
-        $vars = $viewBuilder->getProperty('_vars');
-        $vars->setAccessible(true);
-        $actual = $vars->getValue($this->BcAdminApp->viewBuilder())['title'];
-        $this->assertEquals($template, $actual);
-    }
-
-    /**
      * Test setSearch method
      *
      * @return void

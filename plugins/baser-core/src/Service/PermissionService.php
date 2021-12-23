@@ -39,11 +39,28 @@ class PermissionService implements PermissionServiceInterface
     public $Permissions;
 
     /**
+     * @var string
+     */
+    public $adminUrlPrefix;
+
+    /**
+     * @var array
+     */
+    private $defaultAllows = [];
+
+    /**
+     * @var array
+     */
+    private $defaultDenies = [];
+
+    /**
      * PermissionService constructor.
      */
     public function __construct()
     {
         $this->Permissions = TableRegistry::getTableLocator()->get('BaserCore.Permissions');
+        $this->adminUrlPrefix = BcUtil::getPrefix();
+        $this->setDefaultAllow();
     }
 
     /**
@@ -268,54 +285,111 @@ class PermissionService implements PermissionServiceInterface
      * 権限チェックを行う
      *
      * @param string $url
-     * @param string $userGroupId
+     * @param array $userGroupId
+     * @return bool
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function check(string $url, array $userGroupId): bool
+    {
+        if (in_array(Configure::read('BcApp.adminGroupId'), $userGroupId)) {
+            return true;
+        }
+        if ($this->checkDefaultDeny($url)) {
+            return false;
+        }
+        if ($this->checkDefaultAllow($url)) {
+            return true;
+        }
+
+        $permissionGroupList = $this->Permissions->getTargePermissions($userGroupId);
+
+        foreach($permissionGroupList as $permissionGroup) {
+            if ($this->checkGroup($url, $permissionGroup)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 標準アクセス許可リクエストを設定
+     *
+     * @return void
+     */
+    private function setDefaultAllow(): void
+    {
+        // ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
+        $allows = [
+            '/^' . preg_quote($this->adminUrlPrefix . '/', '/') . '?$/',
+            '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/dashboard/', '/') . '.*?/',
+            '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/dblogs/', '/') . '.*?/',
+            '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/users/logout', '/') . '$/',
+            '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/user_groups/set_default_favorites', '/') . '$/',
+        ];
+        $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
+        if (!empty($_SESSION[$sessionKey]['id'])) {
+            $allows[] = '/^' . preg_quote($this->adminUrlPrefix . '/baser-core/users/edit/' . $_SESSION[$sessionKey]['id'], '/') . '$/';
+        }
+        $this->defaultAllows = $allows;
+    }
+
+    /**
+     * 標準アクセス許可リストからURLを検証
+     *
+     * @param string $url
      * @return boolean
      * @checked
      * @unitTest
+     * @noTodo
      */
-    public function check($url, $userGroupId): bool
+    private function checkDefaultAllow(string $url): bool
     {
-        if ($userGroupId == Configure::read('BcApp.adminGroupId')) {
-            return true;
-        }
-        $this->setCheck($userGroupId);
-        $permissions = $this->Permissions->getCurrentPermissions();
-        if ($url != '/') {
-            $url = preg_replace('/^\//is', '', $url);
-        }
-        $adminPrefix = BcUtil::getPrefix(true);
-        // TODO ucmitz 管理画面のURLを変更した場合に対応する必要がある
-        $url = preg_replace("/^{$adminPrefix}\//", 'baser/admin/', $url);
-        // ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
-        $allows = [
-            '/^baser\/admin$/',
-            '/^baser\/admin\/$/',
-            '/^baser\/admin\/dashboard\/.*?/',
-            '/^baser\/admin\/dblogs\/.*?/',
-            '/^baser\/admin\/users\/logout$/',
-        ];
-        $sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
-        if (!empty($_SESSION['Auth'][$sessionKey]['id'])) {
-            $allows[] = '/^baser\/admin\/users\/edit\/' . $_SESSION['Auth'][$sessionKey]['id'] . '$/';
-        }
-        foreach($allows as $allow) {
+        foreach($this->defaultAllows as $allow) {
             if (preg_match($allow, $url)) {
                 return true;
             }
         }
-        $ret = true;
-        foreach($permissions as $permission) {
-            if (!$permission->status) {
-                continue;
+        return false;
+    }
+
+    /**
+     * 標準アクセス拒否リストからURLを検証
+     *
+     * @param string $url
+     * @return boolean
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    private function checkDefaultDeny(string $url): bool
+    {
+        foreach($this->defaultDenies as $deny) {
+            if (preg_match($deny, $url)) {
+                return true;
             }
-            if ($permission->url != '/') {
-                $pattern = preg_replace('/^\//is', '', $permission->url);
-            } else {
-                $pattern = $permission->url;
-            }
-            $pattern = addslashes($pattern);
-            $pattern = str_replace('/', '\/', $pattern);
-            $pattern = str_replace('*', '.*?', $pattern);
+        }
+        return false;
+    }
+
+    /**
+     * パーミッションリストを検証する
+     *
+     * @param string $url
+     * @param array $groupPermission
+     * @return boolean
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    private function checkGroup(string $url, array $groupPermission): bool
+    {
+        $ret = false;
+        foreach($groupPermission as $permission) {
+            $pattern = $permission->url;
+            $pattern = preg_quote($pattern, '/');
+            $pattern = str_replace('\*', '.*?', $pattern);
             $pattern = '/^' . str_replace('\/.*?', '(|\/.*?)', $pattern) . '$/is';
             if (preg_match($pattern, $url)) {
                 $ret = $permission->auth;
@@ -324,26 +398,6 @@ class PermissionService implements PermissionServiceInterface
         return (boolean)$ret;
     }
 
-    /**
-     * 権限チェックの準備をする
-     *
-     * @param int $userGroupId
-     * @return void
-     * @checked
-     * @noTodo
-     * @unitTest
-     */
-    public function setCheck($userGroupId): void
-    {
-        $currentPermissions = $this->Permissions->getCurrentPermissions();
-        if (empty($currentPermissions)) {
-            $permissions = $this->Permissions->find('all')
-                ->select(['url', 'auth', 'status'])
-                ->where(['Permissions.user_group_id' => $userGroupId])
-                ->order('sort');
-            $this->Permissions->setCurrentPermissions($permissions->toArray());
-        }
-    }
 
     /**
      * 権限チェック対象を追加する
@@ -353,19 +407,18 @@ class PermissionService implements PermissionServiceInterface
      * @return void
      * @checked
      * @noTodo
-     * @unitTest
      */
-    public function addCheck($url, $auth)
+    public function addCheck(string $url, bool $auth)
     {
-        $userGroups = BcUtil::loginUser('Admin')->user_groups;
-        $this->setCheck($userGroups[0]->id);
-        $permission = new Permission([
-            'url' => $url,
-            'auth' => $auth,
-            'status' => true
-        ]);
-        $permissions = array_merge($this->Permissions->getCurrentPermissions(), [$permission]);
-        $this->Permissions->setCurrentPermissions($permissions);
+        $pattern = preg_quote($url, '/');
+        $pattern = str_replace('\*', '.*?', $pattern);
+        $pattern = '/^' . str_replace('\/.*?', '(|\/.*?)', $pattern) . '$/is';
+
+        if ($auth) {
+            $this->defaultAllows[] = $pattern;
+        } else {
+            $this->defaultDenies[] = $pattern;
+        }
     }
 
     /**

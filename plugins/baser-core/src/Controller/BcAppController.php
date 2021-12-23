@@ -13,13 +13,10 @@ namespace BaserCore\Controller;
 
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcSiteConfig;
-use Cake\Controller\ComponentRegistry;
 use Cake\Core\Exception\Exception;
 use Cake\Event\EventInterface;
-use Cake\Event\EventManagerInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
-use Cake\Http\ServerRequest;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Service\DblogServiceInterface;
 use Cake\Core\Configure;
@@ -30,11 +27,6 @@ use BaserCore\Annotation\Note;
 
 /**
  * Class BcAppController
- *
- * Controller 拡張クラス
- *
- * @package Baser.Controller
- * @property BcMessageComponent $BcMessage
  */
 class BcAppController extends AppController
 {
@@ -45,75 +37,12 @@ class BcAppController extends AppController
     use BcContainerTrait;
 
     /**
-     * view
-     *
-     * @var string
-     */
-    public $viewClass = 'App';
-
-    /**
-     * ページタイトル
-     *
-     * @var        string
-     * @access    public
-     */
-    public $pageTitle = '';
-
-    /**
-     * ヘルパー
-     *
-     * @var        mixed
-     * @access    public
-     */
-    // TODO 未確認のためコメントアウト
-    /*
-    public $helpers = [
-        'Session', 'BcHtml', 'Form', 'BcForm', 'BcWidgetArea',
-        'Js' => ['Jquery'], 'BcBaser', 'BcXml', 'BcArray', 'BcAdmin',
-        'BcListTable', 'BcSearchBox', 'BcFormTable', 'BcLayout'
-    ];
-    */
-
-    /**
-     * レイアウト
-     *
-     * @var        string
-     * @access    public
-     */
-    public $layout = 'default';
-
-    /**
-     * モデル
-     *
-     * @var mixed
-     */
-    public $uses = ['User', 'Favorite'];
-
-    /**
-     * コンポーネント
-     *
-     * @var        array
-     * @access    public
-     */
-    // TODO 未確認のためコメントアウト
-    /*
-    public $components = ['RequestHandler', 'Security', 'Session', 'BcManager', 'Email', 'Flash', 'BcEmail', 'BcMessage'];
-    */
-
-    /**
      * サブディレクトリ
      *
      * @var        string
      * @access    public
      */
     public $subDir = null;
-
-    /**
-     * サブメニューエレメント
-     *
-     * @var string
-     */
-    public $subMenuElements = '';
 
     /**
      * パンくずナビ
@@ -123,32 +52,11 @@ class BcAppController extends AppController
     public $crumbs = [];
 
     /**
-     * 検索ボックス
-     *
-     * @var string
-     */
-    public $search = '';
-
-    /**
-     * ヘルプ
-     *
-     * @var string
-     */
-    public $help = '';
-
-    /**
      * コンテンツタイトル
      *
      * @var string
      */
     public $contentsTitle = '';
-
-    /**
-     * サイトコンフィグデータ
-     *
-     * @var array
-     */
-    public $siteConfigs = [];
 
     /**
      * プレビューフラグ
@@ -631,10 +539,7 @@ class BcAppController extends AppController
      */
     private function __loadDataToView()
     {
-        $this->set('subMenuElements', $this->subMenuElements);    // サブメニューエレメント
         $this->set('crumbs', $this->crumbs);                    // パンくずなび
-        $this->set('search', $this->search);
-        $this->set('help', $this->help);
         $this->set('preview', $this->preview);
 
         if (!empty($this->request->getParam('prefix'))) {

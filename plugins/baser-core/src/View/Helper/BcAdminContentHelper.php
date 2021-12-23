@@ -86,7 +86,6 @@ class BcAdminContentHelper extends Helper
      *
      * @return bool
      * @checked
-     * @noTodo
      * @unitTest
      */
     public function isContentDeletable(): bool
@@ -94,7 +93,10 @@ class BcAdminContentHelper extends Helper
         $userGroups = BcUtil::loginUser()->user_groups;
         if ($userGroups) {
             foreach ($userGroups as $userGroup) {
-                if ($this->PermissionService->check('/' . BcUtil::getPrefix() . '/contents/delete', $userGroup->id)) return true;
+                // TODO ucmitz: ユーザグループを配列で全て渡すよう変更が必要
+                if ($this->PermissionService->check(BcUtil::getPrefix() . '/baser-core/contents/delete', [$userGroup->id])) {
+                    return true;
+                }
             }
         }
         return false;

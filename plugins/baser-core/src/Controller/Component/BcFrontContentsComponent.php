@@ -81,7 +81,7 @@ class BcFrontContentsComponent extends Component
             if (!empty($request->getData())) {
                 // TODO ucmitz request が protected になったため代入できない
                 // 何か他の方法を考える、本当にその処理が必要かも確認
-                $controller->request = $request->withParam('Contents', $request->getData());
+                $controller->request = $request->withParam('Content', $request->getData());
                 $controller->Security->validatePost = false;
                 $controller->Security->csrfCheck = false;
             }
@@ -90,16 +90,16 @@ class BcFrontContentsComponent extends Component
         // 表示設定
         if (!empty($request->getAttributes())) {
             // レイアウトテンプレート設定
-            $controller->layout = $request->getParam('Contents.layout_template');
-            if (!$controller->layout) {
-                $controller->layout = $this->ContentService->getParentLayoutTemplate($request->getParam('Contents.id'));
+            $controller->viewBuilder()->setLayout($request->getParam('Content.layout_template'));
+            if (!$controller->viewBuilder()->getLayout()) {
+                $controller->viewBuilder()->setLayout($this->ContentService->getParentLayoutTemplate($request->getParam('Content.id')));
             }
             // パンくず
-            $controller->crumbs = $this->getCrumbs($request->getParam('Contents.id'));
+            $controller->crumbs = $this->getCrumbs($request->getParam('Content.id'));
             // 説明文
-            $controller->set('description', $request->getParam('Contents.description'));
+            $controller->set('description', $request->getParam('Content.description'));
             // タイトル
-            $controller->pageTitle = $request->getParam('Contents.title');
+            $controller->setTitle($request->getParam('Content.title'));
         }
     }
 

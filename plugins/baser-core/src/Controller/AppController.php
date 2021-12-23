@@ -12,12 +12,15 @@
 namespace BaserCore\Controller;
 
 use App\Controller\AppController as BaseController;
+use BaserCore\Controller\Component\BcMessageComponent;
 use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
 use BaserCore\Utility\BcUtil;
+use Cake\Controller\Component\PaginatorComponent;
+use Cake\Controller\Component\SecurityComponent;
 use Cake\Controller\ComponentRegistry;
 use Cake\Event\EventInterface;
 use Cake\Event\EventManagerInterface;
@@ -27,7 +30,9 @@ use Cake\ORM\TableRegistry;
 
 /**
  * Class AppController
- * @package BaserCore\Controller
+ * @property BcMessageComponent $BcMessage
+ * @property SecurityComponent $Security
+ * @property PaginatorComponent $Paginator
  */
 class AppController extends BaseController
 {
@@ -84,6 +89,12 @@ class AppController extends BaseController
         $this->loadComponent('BaserCore.BcMessage');
         $this->loadComponent('Security');
         $this->loadComponent('Paginator');
+
+        // TODO ucmitz 未移行のためコメントアウト
+        // >>>
+//        $this->loadComponent('BaserCore.Flash');
+//        $this->loadComponent('BaserCore.BcEmail');
+        // <<<
     }
 
     /**
@@ -105,6 +116,18 @@ class AppController extends BaseController
             }
             $this->viewBuilder()->setTheme($site->theme);
         }
+    }
+
+    /**
+     * Set Title
+     * @param string $title
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function setTitle($title): void
+    {
+        $this->set('title', $title);
     }
 
 }
