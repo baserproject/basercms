@@ -61,7 +61,6 @@ class PagesController extends AppController
 	 *   or MissingViewException in debug mode.
      * @checked
      * @noTodo
-     * @unitTest
 	 */
 	public function display()
 	{

@@ -75,36 +75,10 @@ class PermissionsTable extends AppTable
      * permissionsTmp
      * ログインしているユーザーの拒否URLリスト
      * キャッシュ用
-     * TODO 未確認
-     * @var array $_currentPermissions
+     * @var array $_targetPermissions
      */
-    protected $_currentPermissions = [];
+    protected $_targetPermissions = [];
 
-    /**
-     * Permission constructor.
-     * // TODO 未確認
-     *
-     * @param bool $id
-     * @param null $table
-     * @param null $ds
-     */
-    // public function __construct($id = false, $table = null, $ds = null)
-    // {
-    //     // TODO 未確認
-    //     return;
-    // 	parent::__construct($id, $table, $ds);
-    // 	$this->validate = [
-    // 		'name' => [
-    // 			['rule' => ['notBlank'], 'message' => __d('baser', '設定名を入力してください。')],
-    // 			['rule' => ['maxLength', 255], 'message' => __d('baser', '設定名は255文字以内で入力してください。')]],
-    // 		'user_group_id' => [
-    // 			['rule' => ['notBlank'], 'message' => __d('baser', 'ユーザーグループを選択してください。'), 'required' => true]],
-    // 		'url' => [
-    // 			['rule' => ['notBlank'], 'message' => __d('baser', '設定URLを入力してください。')],
-    // 			['rule' => ['maxLength', 255], 'message' => __d('baser', '設定URLは255文字以内で入力してください。')],
-    // 			['rule' => ['checkUrl'], 'message' => __d('baser', 'アクセス拒否として設定できるのは認証ページだけです。')]]
-    // 	];
-    // }
     /**
      * Validation Default
      *
@@ -250,29 +224,47 @@ class PermissionsTable extends AppTable
     }
 
     /**
-     * currentPermissionsを設定する
-     * @param  array $permissions
+     * 検証対象者のPermissionsを設定する
+     * @param  array $userGroups
      * @return void
-     * @checked
-     * @noTodo
-     * @unitTest
      */
-    public function setCurrentPermissions(array $permissions)
+    public function setTargetPermissions(array $userGroups)
     {
-        $this->_currentPermissions = $permissions;
+        $permissions = $this->find('all')
+            ->select(['url', 'auth', 'method', 'user_group_id'])
+            ->where([
+                'Permissions.user_group_id in' => $userGroups,
+                'Permissions.status' => true,
+            ])
+            ->order([
+                'user_group_id' => 'asc',
+                'sort' => 'asc',
+            ]);
+        $permissionGroupList = [];
+        foreach($userGroups as $groupId) {
+            $permissionGroupList[$groupId] = [];
+        }
+        foreach($permissions as $permission) {
+            $permissionGroupList[$permission->user_group_id][] = $permission;
+        }
+        $this->_targetPermissions = $permissionGroupList;
     }
 
     /**
-     * currentPermissionsを取得する
+     * 検証対象者のPermissionsを取得する
      *
+     * @param array $userGroups
      * @return array
-     * @checked
-     * @noTodo
-     * @unitTest
      */
-    public function getCurrentPermissions(): array
+    public function getTargePermissions(array $userGroups): array
     {
-        return $this->_currentPermissions;
+        foreach($userGroups as $groupId) {
+            if (!isset($this->_targetPermissions[$groupId])) {
+                $this->setTargetPermissions($userGroups);
+                break;
+            }
+        }
+        return $this->_targetPermissions;
     }
 
 }

@@ -139,7 +139,8 @@ class BcContentsHelper extends Helper
             }
             // disabled
 			if(!empty($item['url']['add'])) {
-				$item['addDisabled'] = !($this->PermissionService->check($item['url']['add'], $user->user_groups[0]->id));
+                // TODO ucmitz: ユーザグループを配列で全て渡すよう変更が必要
+				$item['addDisabled'] = !($this->PermissionService->check($item['url']['add'], [$user->user_groups[0]->id]));
 			} else {
 				$item['addDisabled'] = true;
 			}
@@ -156,7 +157,6 @@ class BcContentsHelper extends Helper
      * @param int $entityId コンテンツを特定するID
      * @checked
      * @unitTest
-     * @noTodo
      */
     public function isActionAvailable($type, $action, $entityId) : bool
     {
@@ -168,7 +168,8 @@ class BcContentsHelper extends Helper
         if (isset($user->user_groups)) {
             $userGroups = $user->user_groups;
             foreach ($userGroups as $group) {
-                if ($this->PermissionService->check($url, $group->id)) {
+                // TODO ucmitz: ユーザグループを配列で全て渡すよう変更が必要
+                if ($this->PermissionService->check($url, [$group->id])) {
                     return true;
                 }
             }

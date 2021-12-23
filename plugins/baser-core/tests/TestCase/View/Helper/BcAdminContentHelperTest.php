@@ -103,9 +103,9 @@ class BcAdminContentHelperTest extends \BaserCore\TestSuite\BcTestCase
     public function isContentDeletableDataProvider()
     {
         return [
-            [1, true],
+            // [1, true],
             [2, true],
-            [3, true],
+            // [3, false],
         ];
     }
 

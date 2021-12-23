@@ -107,11 +107,20 @@ interface PermissionServiceInterface
     /**
      * 権限チェックを行う
      *
-     * @param array $url
-     * @param string $userGroupId
-     * @return boolean
+     * @param string $url
+     * @param array $userGroupId
+     * @return bool
      */
-    public function check($url, $userGroupId): bool;
+    public function check(string $url, array $userGroupId): bool;
+
+    /**
+     * 権限チェック対象を追加する
+     *
+     * @param string $url
+     * @param bool $auth
+     * @return void
+     */
+    public function addCheck(string $url, bool $auth);
 
     /**
      * 優先度を変更する

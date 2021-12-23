@@ -201,34 +201,6 @@ class PermissionsTableTest extends BcTestCase
         $this->assertEquals('設定URLは255文字以内で入力してください。', current($this->Permissions->validationErrors['url']));
     }
 
-    public function testアクセス拒否チェック異常系()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->_getRequest('/admin');
-        $this->Permissions->create([
-            'Permission' => [
-                'user_group_id' => '1',
-                'url' => '/index',
-            ]
-        ]);
-        $this->assertFalse($this->Permissions->validates());
-        $this->assertArrayHasKey('url', $this->Permissions->validationErrors);
-        $this->assertEquals('アクセス拒否として設定できるのは認証ページだけです。', current($this->Permissions->validationErrors['url']));
-    }
-
-    public function testアクセス拒否チェック正常系()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->Permissions->create([
-            'Permission' => [
-                'user_group_id' => '1',
-                'url' => '/admin/index',
-            ]
-        ]);
-        $this->assertTrue($this->Permissions->validates());
-    }
-
-
     /**
      * コントロールソースを取得する
      *
@@ -240,7 +212,7 @@ class PermissionsTableTest extends BcTestCase
         $this->assertGreaterThan(0, count($userGroupList));
         $keyExist = key_exists(Configure::read('BcApp.adminGroupId'), $userGroupList);
         $this->assertFalse($keyExist);
-        
+
         $userGroupList = $this->Permissions->getControlSource('hoge');
         $this->assertFalse($userGroupList);
     }
@@ -326,24 +298,26 @@ class PermissionsTableTest extends BcTestCase
     }
 
     /**
-     * testGetCurrentPermissions
+     * testGetTargePermissions
      *
      * @return void
      */
-    public function testGetCurrentPermissions(): void
+    public function testGetTargePermissions(): void
     {
-        $this->assertEquals([], $this->Permissions->getCurrentPermissions());
+        $data = $this->Permissions->getTargePermissions([3]);
+        $this->assertNotEmpty($data[3]);
     }
 
     /**
-     * testGetCurrentPermissions
+     * testSetTargetPermissions
      *
      * @return void
      */
-    public function testSetCurrentPermissions(): void
+    public function testSetTargetPermissions(): void
     {
-        $data = ['Permission' => []];
-        $this->Permissions->setCurrentPermissions($data);
-        $this->assertEquals($data, $this->Permissions->getCurrentPermissions());
+        $this->Permissions->setTargetPermissions([2, 3]);
+        $data = $this->Permissions->getTargePermissions([2, 3]);
+        $this->assertNotEmpty($data[2]);
+        $this->assertNotEmpty($data[2][0]);
     }
 }
