@@ -137,7 +137,8 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix !== 'front') {
 					<?php $this->BcBaser->editLink() ?>
 				</div>
 			<?php endif ?>
-			<?php if(!empty($this->request->params['Content']['type']) && $this->request->params['Content']['type'] === 'ContentFolder'): ?>
+			<?php if (!BcUtil::isAdminSystem()): ?>
+			<?php if(!empty($this->request->params['Content']['type']) && ($this->request->params['Content']['type'] === 'ContentFolder')): ?>
 				<div class="bca-toolbar__tools-button bca-toolbar__tools-button-add">
 					<?php $this->BcBaser->link(__d('baser', '新規ページ追加'), [
 						'plugin' => '',
@@ -146,6 +147,16 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix !== 'front') {
 						'action' => 'add', $this->request->params['Content']['id']
 					], ['class' => 'tool-menu']); ?>
 				</div>
+			<?php elseif(!empty($this->request->params['Content']['type']) && $this->request->params['Content']['type'] === 'BlogContent'): ?>
+				<div class="bca-toolbar__tools-button bca-toolbar__tools-button-add">
+					<?php $this->BcBaser->link(__d('baser', '新規記事追加'), [
+						'plugin' => 'blog',
+						'admin' => true,
+						'controller' => 'blog_posts',
+						'action' => 'add', $this->request->params['Content']['entity_id']
+					], ['class' => 'tool-menu']); ?>
+				</div>
+			<?php endif ?>
 			<?php endif ?>
 			<?php if ($this->BcBaser->existsPublishLink()): ?>
 				<div class="bca-toolbar__tools-button bca-toolbar__tools-button-publish">
