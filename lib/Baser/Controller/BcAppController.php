@@ -1031,6 +1031,7 @@ class BcAppController extends Controller
 				$from = $this->siteConfigs['email'];
 				if (strpos($from, ',') !== false) {
 					$from = explode(',', $from);
+					// $from = $from[0]; // 複数あるアドレスのうちの1つ目を取得
 				}
 			} else {
 				$from = $toAddress;
