@@ -1,7 +1,23 @@
 <?php
+/**
+ * baserCMS :  Based Website Development Project <https://basercms.net>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
+ *
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
+ */
+
+/**
+ * @var \BaserCore\View\BcAdminAppView $this
+ * @var string $message エラーメッセージ
+ * @var string $url URL
+ */
 $this->layout = 'error';
 $this->BcAdmin->setTitle(__d('baser', '内部エラーが発生しました'));
 ?>
+
 
 <h2><?php echo h($message) ?></h2>
 <p class="error">

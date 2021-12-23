@@ -150,14 +150,6 @@ class UserGroupsTable extends AppTable
             ->notEmptyString('auth_prefix', __d('baser', '認証プレフィックスを選択してください。'));
 
         $validator
-            ->boolean('use_admin_globalmenu')
-            ->allowEmptyString('use_admin_globalmenu');
-
-        $validator
-            ->scalar('default_favorites')
-            ->allowEmptyString('default_favorites');
-
-        $validator
             ->boolean('use_move_contents')
             ->allowEmptyString('use_move_contents');
 
@@ -247,17 +239,6 @@ class UserGroupsTable extends AppTable
         } else {
             return '';
         }
-    }
-
-    /**
-     * グローバルメニューを利用可否確認
-     *
-     * @param string $id ユーザーグループID
-     * @return boolean
-     */
-    public function isAdminGlobalmenuUsed($id)
-    {
-        return $this->field('use_admin_globalmenu', ['UserGroup.id' => $id]);
     }
 
 }

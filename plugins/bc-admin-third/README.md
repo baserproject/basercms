@@ -2,6 +2,11 @@
 
 baserCMSの管理画面テーマのプロジェクト
 
+## CSSの制作
+
+- [スタイルガイド](https://localhost/bc_admin_third/guide.html)
+
+　
 ## Javascriptの開発
 
 Javascript の開発は、Gulp でファイルを監視し Webpack を利用して開発します。

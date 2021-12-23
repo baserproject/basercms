@@ -69,6 +69,7 @@
                         <router-view
                             v-if="mount"
                             :accessToken="accessToken"
+                            :loginUserId="loginId"
                             @set-login="setLogin"
                             @set-title="setTitle"
                             @set-message="setMessage"

@@ -197,7 +197,9 @@ class PermissionServiceTest extends BcTestCase
         $permission->status = false;
         $permissions->save($permission);
 
-        $permission = $this->PermissionService->publish($permission->id);
+        $this->PermissionService->publish($permission->id);
+
+        $permission = $permissions->get($permission->id);
         $this->assertTrue($permission->status);
     }
 
@@ -214,7 +216,9 @@ class PermissionServiceTest extends BcTestCase
         $permission->status = true;
         $permissions->save($permission);
 
-        $permission = $this->PermissionService->unpublish($permission->id);
+        $this->PermissionService->unpublish($permission->id);
+
+        $permission = $permissions->get($permission->id);
         $this->assertFalse($permission->status);
     }
 

@@ -119,6 +119,7 @@ class PermissionService implements PermissionServiceInterface
      * パーミッション登録
      * @param ServerRequest $request
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      *
      * @checked
      * @noTodo
@@ -129,8 +130,7 @@ class PermissionService implements PermissionServiceInterface
         $postData = $this->autoFillRecord($postData);
         $permission = $this->Permissions->newEmptyEntity();
         $permission = $this->Permissions->patchEntity($permission, $postData, ['validate' => 'default']);
-        $this->Permissions->save($permission);
-        return $permission;
+        return $this->Permissions->saveOrFail($permission);
     }
 
     /**
@@ -138,6 +138,7 @@ class PermissionService implements PermissionServiceInterface
      * @param EntityInterface $target
      * @param array $data
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      *
      * @checked
      * @noTodo
@@ -145,57 +146,55 @@ class PermissionService implements PermissionServiceInterface
      */
     public function update(EntityInterface $target, array $data): EntityInterface
     {
-        $target = $this->get($data['id']);
         $permission = $this->Permissions->patchEntity($target, $data);
-        $this->Permissions->save($permission);
-        return $permission;
+        return $this->Permissions->saveOrFail($permission);
     }
 
     /**
      * 有効状態にする
      *
      * @param int $id
-     * @return EntityInterface
+     * @return bool
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function publish($id): EntityInterface
+    public function publish($id): bool
     {
         $permission = $this->get($id);
         $permission->status = true;
-        return $this->Permissions->save($permission);
+        return ($this->Permissions->save($permission)) ? true: false;
     }
 
     /**
      * 無効状態にする
      *
      * @param int $id
-     * @return EntityInterface
+     * @return bool
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function unpublish($id): EntityInterface
+    public function unpublish($id): bool
     {
         $permission = $this->get($id);
         $permission->status = false;
-        return $this->Permissions->save($permission);
+        return ($this->Permissions->save($permission)) ? true: false;
     }
 
     /**
      * 複製する
      *
      * @param int $permissionId
-     * @return EntityInterface
+     * @return EntityInterface|false
      *
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function copy(int $permissionId): EntityInterface
+    public function copy(int $permissionId)
     {
         $permission = $this->get($permissionId);
         $permission->id = null;
@@ -203,7 +202,11 @@ class PermissionService implements PermissionServiceInterface
         $permission->sort = null;
         $data = $permission->toarray();
         $data = $this->autoFillRecord($data);
-        return $this->create($data);
+        try {
+            return $this->create($data);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
 

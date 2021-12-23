@@ -25,6 +25,7 @@ interface DblogServiceInterface
      * 新規登録する
      * @param array $data
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
     public function create(string $message): EntityInterface;
 

@@ -40,6 +40,12 @@ class SiteConfigService implements SiteConfigServiceInterface
     public $SiteConfigs;
 
     /**
+     * Entity
+     * @var SiteConfig
+     */
+    protected $entity;
+
+    /**
      * SiteConfigService constructor.
      */
     public function __construct()
@@ -70,18 +76,21 @@ class SiteConfigService implements SiteConfigServiceInterface
      */
     public function get(): SiteConfig
     {
-        return $this->SiteConfigs->newEntity(array_merge($this->SiteConfigs->getKeyValue(), [
-            'mode' => Configure::read('debug'),
-            'site_url' => Configure::read('BcEnv.siteUrl'),
-            'ssl_url' => Configure::read('BcEnv.sslUrl'),
-            'admin_ssl' => (int)Configure::read('BcApp.adminSsl'),
-        ]));
+        if(!$this->entity) {
+            $this->entity = $this->SiteConfigs->newEntity(array_merge($this->SiteConfigs->getKeyValue(), [
+                'mode' => Configure::read('debug'),
+                'site_url' => Configure::read('BcEnv.siteUrl'),
+                'ssl_url' => Configure::read('BcEnv.sslUrl'),
+                'admin_ssl' => (int)Configure::read('BcApp.adminSsl'),
+            ]));
+        }
+        return $this->entity;
     }
 
     /**
      * データを更新する
      * @param array $postData
-     * @return SiteConfig
+     * @return SiteConfig|false
      * @checked
      * @noTodo
      * @unitTest
@@ -135,9 +144,10 @@ class SiteConfigService implements SiteConfigServiceInterface
         );
 
         if ($this->SiteConfigs->saveKeyValue($siteConfigArray)) {
+            $this->entity = $siteConfig;
             return $this->get();
         }
-        return $siteConfig;
+        return false;
     }
 
     /**

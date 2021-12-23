@@ -11,29 +11,22 @@
 
 namespace BaserCore\Controller;
 
-use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Utility\BcContainerTrait;
-use Cake\Controller\ComponentRegistry;
+use BaserCore\Utility\BcSiteConfig;
 use Cake\Core\Exception\Exception;
 use Cake\Event\EventInterface;
-use Cake\Event\EventManagerInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
-use Cake\Http\ServerRequest;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Service\DblogServiceInterface;
 use Cake\Core\Configure;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\Note;
 
 /**
  * Class BcAppController
- *
- * Controller 拡張クラス
- *
- * @package Baser.Controller
- * @property BcMessageComponent $BcMessage
  */
 class BcAppController extends AppController
 {
@@ -44,75 +37,12 @@ class BcAppController extends AppController
     use BcContainerTrait;
 
     /**
-     * view
-     *
-     * @var string
-     */
-    public $viewClass = 'App';
-
-    /**
-     * ページタイトル
-     *
-     * @var        string
-     * @access    public
-     */
-    public $pageTitle = '';
-
-    /**
-     * ヘルパー
-     *
-     * @var        mixed
-     * @access    public
-     */
-    // TODO 未確認のためコメントアウト
-    /*
-    public $helpers = [
-        'Session', 'BcHtml', 'Form', 'BcForm', 'BcWidgetArea',
-        'Js' => ['Jquery'], 'BcBaser', 'BcXml', 'BcArray', 'BcAdmin',
-        'BcListTable', 'BcSearchBox', 'BcFormTable', 'BcLayout'
-    ];
-    */
-
-    /**
-     * レイアウト
-     *
-     * @var        string
-     * @access    public
-     */
-    public $layout = 'default';
-
-    /**
-     * モデル
-     *
-     * @var mixed
-     */
-    public $uses = ['User', 'Favorite'];
-
-    /**
-     * コンポーネント
-     *
-     * @var        array
-     * @access    public
-     */
-    // TODO 未確認のためコメントアウト
-    /*
-    public $components = ['RequestHandler', 'Security', 'Session', 'BcManager', 'Email', 'Flash', 'BcEmail', 'BcMessage'];
-    */
-
-    /**
      * サブディレクトリ
      *
      * @var        string
      * @access    public
      */
     public $subDir = null;
-
-    /**
-     * サブメニューエレメント
-     *
-     * @var string
-     */
-    public $subMenuElements = '';
 
     /**
      * パンくずナビ
@@ -122,39 +52,11 @@ class BcAppController extends AppController
     public $crumbs = [];
 
     /**
-     * 検索ボックス
-     *
-     * @var string
-     */
-    public $search = '';
-
-    /**
-     * ヘルプ
-     *
-     * @var string
-     */
-    public $help = '';
-
-    /**
-     * ページ説明文
-     *
-     * @var string
-     */
-    public $siteDescription = '';
-
-    /**
      * コンテンツタイトル
      *
      * @var string
      */
     public $contentsTitle = '';
-
-    /**
-     * サイトコンフィグデータ
-     *
-     * @var array
-     */
-    public $siteConfigs = [];
 
     /**
      * プレビューフラグ
@@ -183,121 +85,6 @@ class BcAppController extends AppController
      * @var array
      */
     public $content = [];
-
-    /**
-     * BcAppController constructor.
-     * @param ServerRequest|null $request
-     * @param Response|null $response
-     * @param string|null $name
-     * @param EventManagerInterface|null $eventManager
-     * @param ComponentRegistry|null $components
-     * @checked
-     */
-    public function __construct(
-        ?ServerRequest $request = null,
-        ?Response $response = null,
-        ?string $name = null,
-        ?EventManagerInterface $eventManager = null,
-        ?ComponentRegistry $components = null
-    )
-    {
-        parent::__construct($request, $response, $name, $eventManager, $components);
-        // TODO $componentsが未定義のため一旦コメントアウト
-        // if (BcUtil::isConsole()) {
-        //     unset($this->components['Session']);
-        // }
-        // TODO siteConfigs代替措置
-        // $config = $this->getTableLocator()->exists('SiteConfigs')? [] : ['className' => 'BaserCore\Model\Table\SiteConfigsTable'];
-        // $this->siteConfigs = TableRegistry::getTableLocator()->get('SiteConfigs');
-        // テーマがプラグインに含まれるため一旦コメントアウト
-        // $this->siteConfigs['theme'] = 'bc_sample';
-        // TODO 未確認のため代替措置
-        // >>>
-        return;
-        // <<<
-        $isRequestView = $request->is('requestview');
-        $isInstall = $request->is('install');
-
-        // インストールされていない場合、トップページにリダイレクトする
-        // コンソールベースのインストールの際のページテンプレート生成において、
-        // BC_INSTALLED、$isInstall ともに true でない為、コンソールの場合は無視する
-        if (!(BC_INSTALLED || BcUtil::isConsole()) && !$isInstall) {
-            $this->redirect('/');
-        }
-
-        // 言語設定
-        $currentSite = $this->getRequest()->getAttribute('currentSite');
-        if ($currentSite) {
-            $lang = Configure::read('BcLang.' . $currentSite->lang);
-        }
-        if (Configure::read('BcApp.systemMessageLangFromSiteSetting') && isset($lang['langs'][0])) {
-            Configure::write('Config.language', $lang['langs'][0]);
-        } else {
-            Configure::write('Config.language', BcLang::parseLang(@$_SERVER['HTTP_ACCEPT_LANGUAGE']));
-        }
-
-        // コンソールベースのインストールの際のページテンプレート生成において、
-        // BC_INSTALLEDが true でない為、コンソールの場合も実行する
-        if ((BC_INSTALLED || BcUtil::isConsole()) && $isRequestView) {
-
-            // サイト基本設定の読み込み
-            // DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
-            try {
-                $SiteConfig = ClassRegistry::init('SiteConfig');
-                $this->siteConfigs = Configure::read('BcSite');
-
-                // asset ファイルの読み込みの際、bootstrap で、loadSiteConfig() を実行しない仕様となっているが、
-                // 存在しない asset ファイルを読み込んだ際に、上記理由により、Not Found ページで、テーマが適用されない為、
-                // 再度、loadSiteConfig() を実行
-                if (!$this->siteConfigs) {
-                    loadSiteConfig();
-                    $this->siteConfigs = Configure::read('BcSite');
-                }
-
-                if (empty($this->siteConfigs['version'])) {
-                    $this->siteConfigs['version'] = $this->getBaserVersion();
-                    $SiteConfig->saveKeyValue($this->siteConfigs);
-                }
-            } catch (Exception $ex) {
-                $this->siteConfigs = [];
-            }
-
-        }
-
-        // TODO beforeFilterでも定義しているので整理する
-        if ($this->name === 'CakeError') {
-
-            $this->uses = null;
-
-            // サブサイト用のエラー
-            try {
-                $sites = $this->getService(SiteServiceInterface::class);
-                $site = $sites->findByUrl($this->request->getPath());
-                if (!empty($site->name)) {
-                    $this->layoutPath = $site->name;
-                    if ($site->name === 'mobile') {
-                        $this->helpers[] = 'BcMobile';
-                    } elseif ($site->name === 'smartphone') {
-                        $this->helpers[] = 'BcSmartphone';
-                    }
-                }
-            } catch (Exception $e) {
-            }
-        }
-
-        // DebugKit プラグインが有効な場合、DebugKit Toolbar を表示
-        if (CakePlugin::loaded('DebugKit') && !in_array('DebugKit.Toolbar', $this->components)) {
-            $this->components[] = 'DebugKit.Toolbar';
-        }
-
-        /* 携帯用絵文字のモデルとコンポーネントを設定 */
-        // TODO 携帯をコンポーネントなどで判別し、携帯からのアクセスのみ実行させるようにする
-        // ※ コンストラクト時点で、$this->request->getParam('prefix')を利用できない為。
-        // TODO 2008/10/08 egashira
-        // beforeFilterに移動してみた。実際に携帯を使うサイトで使えるかどうか確認する
-        //$this->uses[] = 'EmojiData';
-        //$this->components[] = 'Emoji';
-    }
 
     /**
      * beforeFilter
@@ -337,7 +124,7 @@ class BcAppController extends AppController
         }
 
         // メンテナンス
-        if (!$this->request->is('ajax') && !empty($this->siteConfigs['maintenance']) && (Configure::read('debug') < 1) && !$isMaintenance && !$isAdmin && !BcUtil::isAdminUser()) {
+        if (!$this->request->is('ajax') && !empty(BcSiteConfig::get('maintenance')) && (Configure::read('debug') < 1) && !$isMaintenance && !$isAdmin && !BcUtil::isAdminUser()) {
             if (!empty($this->request->getParam('return')) && !empty($this->request->getParam('requested'))) {
                 return;
             }
@@ -552,7 +339,7 @@ class BcAppController extends AppController
      * $this->theme にセットする事
      *
      * 優先順位
-     * $this->request->getParam('Site.theme') > $site->theme > $this->siteConfigs['theme']
+     * $this->request->getParam('Site.theme') > $site->theme > BcSiteConfig::get('theme')
      *
      * @return void
      */
@@ -568,8 +355,8 @@ class BcAppController extends AppController
                 $theme = $site->theme;
             }
         }
-        if (!$theme && !empty($this->siteConfigs['theme'])) {
-            $theme = $this->siteConfigs['theme'];
+        if (!$theme && !empty(BcSiteConfig::get('theme'))) {
+            $theme = BcSiteConfig::get('theme');
         }
         if (!$theme && BcUtil::isAdminSystem() && $this->adminTheme) {
             $theme = $this->adminTheme;
@@ -582,17 +369,17 @@ class BcAppController extends AppController
      * $this->adminTheme にセットする事
      *
      * 優先順位
-     * $this->siteConfigs['admin_theme'] > Configure::read('BcApp.adminTheme')
+     * BcSiteConfig::get('admin_theme') > Configure::read('BcApp.adminTheme')
      *
      * @return void
      */
     protected function setAdminTheme()
     {
         $adminTheme = Configure::read('BcApp.adminTheme');
-        if (!$adminTheme && !empty($this->siteConfigs['admin_theme'])) {
-            $adminTheme = $this->siteConfigs['admin_theme'];
+        if (!$adminTheme && !empty(BcSiteConfig::get('admin_theme'))) {
+            $adminTheme = BcSiteConfig::get('admin_theme');
         }
-        $this->adminTheme = $this->siteConfigs['admin_theme'] = $adminTheme;
+        $this->adminTheme = $adminTheme;
     }
 
     /**
@@ -656,10 +443,7 @@ class BcAppController extends AppController
         $this->set('isSSL', $this->request->is('ssl'));
         $this->set('safeModeOn', ini_get('safe_mode'));
         $this->set('baserVersion', $this->getBaserVersion());
-        $this->set('siteConfig', $this->siteConfigs);
-        if (isset($this->siteConfigs['widget_area'])) {
-            $this->set('widgetArea', $this->siteConfigs['widget_area']);
-        }
+        $this->set('widgetArea', BcSiteConfig::get('widget_area'));
     }
 
     /**
@@ -670,7 +454,7 @@ class BcAppController extends AppController
     private function __updateFirstAccess()
     {
         // 初回アクセスメッセージ表示設定
-        if ($this->request->getParam('prefix') === "Admin" && !empty($this->siteConfigs['first_access'])) {
+        if ($this->request->getParam('prefix') === "Admin" && !empty(BcSiteConfig::get('first_access'))) {
             $data = ['SiteConfig' => ['first_access' => false]];
             $SiteConfig = ClassRegistry::init('SiteConfig', 'Model');
             $SiteConfig->saveKeyValue($data);
@@ -755,10 +539,7 @@ class BcAppController extends AppController
      */
     private function __loadDataToView()
     {
-        $this->set('subMenuElements', $this->subMenuElements);    // サブメニューエレメント
         $this->set('crumbs', $this->crumbs);                    // パンくずなび
-        $this->set('search', $this->search);
-        $this->set('help', $this->help);
         $this->set('preview', $this->preview);
 
         if (!empty($this->request->getParam('prefix'))) {
@@ -844,10 +625,10 @@ class BcAppController extends AppController
     protected function getSiteVersion($plugin = '')
     {
         if (!$plugin) {
-            if (!isset($this->siteConfigs['version'])) {
+            if (!BcSiteConfig::get('version')) {
                 return '';
             }
-            return preg_replace("/baserCMS ([0-9.]+?[\sa-z]*)/is", "$1", $this->siteConfigs['version']);
+            return preg_replace("/baserCMS ([0-9.]+?[\sa-z]*)/is", "$1", BcSiteConfig::get('version'));
         }
         $Plugin = ClassRegistry::init('Plugin');
         return $Plugin->field('version', ['name' => $plugin]);
@@ -927,13 +708,13 @@ class BcAppController extends AppController
             }
         }
 
-        if (!empty($this->siteConfigs['smtp_host'])) {
+        if (BcSiteConfig::get('smtp_host')) {
             $transport = 'Smtp';
-            $host = $this->siteConfigs['smtp_host'];
-            $port = ($this->siteConfigs['smtp_port'])? $this->siteConfigs['smtp_port'] : 25;
-            $username = ($this->siteConfigs['smtp_user'])? $this->siteConfigs['smtp_user'] : null;
-            $password = ($this->siteConfigs['smtp_password'])? $this->siteConfigs['smtp_password'] : null;
-            $tls = $this->siteConfigs['smtp_tls'] && ($this->siteConfigs['smtp_tls'] == 1);
+            $host = BcSiteConfig::get('smtp_host');
+            $port = (BcSiteConfig::get('smtp_port'))? BcSiteConfig::get('smtp_port') : 25;
+            $username = (BcSiteConfig::get('smtp_user'))? BcSiteConfig::get('smtp_user') : null;
+            $password = (BcSiteConfig::get('smtp_password'))? BcSiteConfig::get('smtp_password') : null;
+            $tls = BcSiteConfig::get('smtp_tls') && (BcSiteConfig::get('smtp_tls') == 1);
         } else {
             $transport = 'Mail';
             $host = 'localhost';
@@ -956,8 +737,8 @@ class BcAppController extends AppController
          * CakeEmailでは、return-path の正しい設定のためには additionalParameters を設定する必要がある
          * @url http://norm-nois.com/blog/archives/2865
          */
-        if (!empty($this->siteConfigs['mail_additional_parameters'])) {
-            $config = Hash::merge($config, ['additionalParameters' => $this->siteConfigs['mail_additional_parameters']]);
+        if (!BcSiteConfig::get('mail_additional_parameters')) {
+            $config = Hash::merge($config, ['additionalParameters' => BcSiteConfig::get('mail_additional_parameters')]);
         }
         if (!empty($options['additionalParameters'])) {
             $config = Hash::merge($config, ['additionalParameters' => $options['additionalParameters']]);
@@ -965,8 +746,8 @@ class BcAppController extends AppController
         $cakeEmail = new CakeEmail($config);
 
         // charset
-        if (!empty($this->siteConfigs['mail_encode'])) {
-            $encode = $this->siteConfigs['mail_encode'];
+        if (!empty(BcSiteConfig::get('mail_encode'))) {
+            $encode = BcSiteConfig::get('mail_encode');
         } else {
             $encode = 'UTF-8';
         }
@@ -1073,8 +854,8 @@ class BcAppController extends AppController
         if (!empty($options['from'])) {
             $from = $options['from'];
         } else {
-            if (!empty($this->siteConfigs['email'])) {
-                $from = $this->siteConfigs['email'];
+            if (BcSiteConfig::get('email')) {
+                $from = BcSiteConfig::get('email');
                 if (strpos($from, ',') !== false) {
                     $from = explode(',', $from);
                 }
@@ -1086,8 +867,8 @@ class BcAppController extends AppController
         if (!empty($options['fromName'])) {
             $fromName = $options['fromName'];
         } else {
-            if (!empty($this->siteConfigs['formal_name'])) {
-                $fromName = $this->siteConfigs['formal_name'];
+            if (!empty(BcSiteConfig::get('formal_name'))) {
+                $fromName = BcSiteConfig::get('formal_name');
             } else {
                 $fromName = Configure::read('BcApp.title');
             }

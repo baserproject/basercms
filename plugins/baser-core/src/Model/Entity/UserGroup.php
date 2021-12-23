@@ -23,8 +23,6 @@ use Cake\ORM\Entity;
  * @property string $name
  * @property string|null $title
  * @property string|null $auth_prefix
- * @property bool $use_admin_globalmenu
- * @property string|null $default_favorites
  * @property bool|null $use_move_contents
  * @property FrozenTime|null $modified
  * @property FrozenTime|null $created
@@ -42,8 +40,6 @@ class UserGroup extends Entity
         'name' => true,
         'title' => true,
         'auth_prefix' => true,
-        'use_admin_globalmenu' => true,
-        'default_favorites' => true,
         'use_move_contents' => true,
         'modified' => true,
         'created' => true,

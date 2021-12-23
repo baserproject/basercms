@@ -51,7 +51,7 @@ class ToolsController extends BcAdminAppController
         [$type, $name] = explode('/', $db->config['datasource'], 2);
         $datasource = preg_replace('/^bc/', '', strtolower($name));
         $this->set('datasource', @$datasources[$datasource]);
-        $this->set('baserVersion', $this->siteConfigs['version']);
+        $this->set('baserVersion', BcSiteConfig::get('version'));
         $this->set('cakeVersion', Configure::version());
         $this->subMenuElements = ['site_configs', 'tools'];
         $this->crumbs = [

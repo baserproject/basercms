@@ -217,7 +217,8 @@ export default {
      */
     props: {
         userId: String,
-        accessToken: String
+        accessToken: String,
+        loginUserId: Number
     },
 
     /**
@@ -302,6 +303,7 @@ export default {
                 email: this.user.email,
                 password_1: this.user.password_1,
                 password_2: this.user.password_2,
+                login_user_id: this.loginUserId
             }
             if (id) {
                 endPoint += 'edit/' + id + '.json'

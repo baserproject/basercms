@@ -44,6 +44,17 @@ class AppViewTest extends BcTestCase
     }
 
     /**
+     * test initialize
+     *
+     * @return void
+     */
+    public function testInitialize(): void
+    {
+        $this->assertNotEmpty($this->AppView->BcPage);
+        $this->assertNotEmpty($this->AppView->BcBaser);
+    }
+
+    /**
      * メソッドが未実装でwarningが出るためサンプルメソッド配置
      * @test
      * @return void

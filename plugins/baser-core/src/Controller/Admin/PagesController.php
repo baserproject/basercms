@@ -12,6 +12,7 @@
 namespace BaserCore\Controller\Admin;
 
 use BaserCore\Controller\AppController;
+use BaserCore\Utility\BcSiteConfig;
 use Cake\Event\EventInterface;
 
 /**
@@ -54,10 +55,9 @@ class PagesController extends AppController
 	public function beforeFilter(EventInterface $evnet)
 	{
 		parent::beforeFilter($evnet);
-		if (empty($this->siteConfigs['editor']) || $this->siteConfigs['editor'] === 'none') {
-			return;
-		}
-		$this->helpers[] = $this->siteConfigs['editor'];
+        if (BcSiteConfig::get('editor') && BcSiteConfig::get('editor') !== 'none') {
+            $this->helpers[] = BcSiteConfig::get('editor');
+        }
 	}
 
 	/**
@@ -160,21 +160,21 @@ class PagesController extends AppController
 
 		// エディタオプション
 		$editorOptions = ['editorDisableDraft' => true];
-		if (!empty($this->siteConfigs['editor_styles'])) {
+		if (BcSiteConfig::get('editor_styles')) {
 			App::uses('CKEditorStyleParser', 'Vendor');
 			$CKEditorStyleParser = new CKEditorStyleParser();
 			$editorOptions = array_merge($editorOptions, [
 				'editorStylesSet' => 'default',
 				'editorStyles' => [
-					'default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles'])
+					'default' => $CKEditorStyleParser->parse(BcSiteConfig::get('editor_styles'))
 				]
 			]);
 		}
 
 		// ページテンプレートリスト
-		$theme = [$this->siteConfigs['theme']];
+		$theme = [BcSiteConfig::get('theme')];
 		$site = BcSite::findById($this->request->data['Content']['site_id']);
-		if (!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
+		if (!empty($site) && $site->theme && $site->theme != BcSiteConfig::get('theme')) {
 			$theme[] = $site->theme;
 		}
 		$pageTemplateList = [];
@@ -256,20 +256,20 @@ class PagesController extends AppController
 		}
 		// エディタオプション
 		$editorOptions = ['editorDisableDraft' => false];
-		if (!empty($this->siteConfigs['editor_styles'])) {
+		if (BcSiteConfig::get('editor_styles')) {
 			App::uses('CKEditorStyleParser', 'Vendor');
 			$CKEditorStyleParser = new CKEditorStyleParser();
 			$editorOptions = array_merge($editorOptions, [
 				'editorStylesSet' => 'default',
 				'editorStyles' => [
-					'default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles'])
+					'default' => $CKEditorStyleParser->parse(BcSiteConfig::get('editor_styles'))
 				]
 			]);
 		}
 		// ページテンプレートリスト
-		$theme = [$this->siteConfigs['theme']];
+		$theme = [BcSiteConfig::get('theme')];
 		$site = BcSite::findById($this->request->data['Content']['site_id']);
-		if (!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
+		if (!empty($site) && $site->theme && $site->theme != BcSiteConfig::get('theme')) {
 			$theme[] = $site->theme;
 		}
 		$pageTemplateList = $this->Page->getPageTemplateList($this->request->data['Content']['id'], $theme);
