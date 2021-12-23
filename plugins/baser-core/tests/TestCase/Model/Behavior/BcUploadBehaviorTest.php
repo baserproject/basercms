@@ -176,6 +176,16 @@ class BcUploadBehaviorTest extends BcTestCase
     }
 
     /**
+     * 保存先のフォルダを取得する
+     */
+    public function testGetSaveDir()
+    {
+        // NOTE: WWW_ROOTが/var/www/html/appではなく、/var/www/htmlであることに注意
+        $result = $this->table->getSaveDir($this->table->getAlias());
+        $this->assertEquals("/var/www/html/webroot/files/contents/", $result);
+    }
+
+    /**
      * testGetExistsCheckDirs
      *
      * @return void

@@ -939,7 +939,8 @@ class BcUploadBehavior extends Behavior
             return false;
         }
         $saveDir = $this->savePath[$this->alias];
-        $saveDirInTheme = $this->getSaveDir($this->alias, true);
+        // NOTE: themeがないためtre→falseに変更
+        $saveDirInTheme = $this->getSaveDir($this->alias, false);
         $oldSaveDir = '';
         if (file_exists($saveDir . $oldName)) {
             $oldSaveDir = $saveDir;
@@ -1098,6 +1099,7 @@ class BcUploadBehavior extends Behavior
      * @param string $fileName 対象のファイル名
      * @return string
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function getUniqueFileName($fields, $fileName)
@@ -1108,10 +1110,7 @@ class BcUploadBehavior extends Behavior
         $ext = $fields['ext'];
 
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
-        // $conditions[$this->alias . '.' . $fields['name'] . ' LIKE'] = $basename . '%' . $ext;
-        // TODO ucmitz:  複数テーブルがある場合の処理に変更する必要あり
         $conditions[$fields['name'] . ' LIKE'] = $basename . '%' . $ext;
-        // FIXME ucmitz: ->order("{$this->alias}.{$fields['name']}")がうまく行かないので、調整する
         $datas = $this->table->find()->where([$conditions])->select($fields['name'])->all()->toArray();
         $numbers = [];
 
@@ -1157,6 +1156,7 @@ class BcUploadBehavior extends Behavior
      * @param bool $limited
      * @return void
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function getSaveDir($alias, $isTheme = false, $limited = false)
@@ -1175,8 +1175,6 @@ class BcUploadBehavior extends Behavior
         if ($limited) {
             $basePath = $basePath . $limited . DS;
         }
-        // TODO cumitz: 一旦themeはなしの$basePathで実行
-        $basePath = WWW_ROOT . 'files' .DS;
 		if ($this->settings[$alias]['saveDir']) {
 			$saveDir = $basePath . $this->settings[$this->alias]['saveDir'] . DS;
 		} else {
@@ -1184,20 +1182,6 @@ class BcUploadBehavior extends Behavior
 		}
 		return $saveDir;
     }
-
-    // /**
-    //  * 保存先のフォルダを取得する
-    //  * @param null|string $alias(default : null)
-    //  * @param bool $isTheme
-    //  * @return string $saveDir
-    //  * @checked
-    //  * @noTodo
-    //  * @unitTest
-    //  */
-    // public function getSaveDir($alias = null)
-    // {
-    //     return $this->savePath[$alias ?? $this->alias];
-    // }
 
     /**
      * ファイルが重複しているかをチェックする
