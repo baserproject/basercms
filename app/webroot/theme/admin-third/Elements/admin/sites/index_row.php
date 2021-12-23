@@ -31,10 +31,10 @@ $url = $this->BcContents->getUrl('/' . $data['Site']['alias'] . '/', true, $data
 		<br>
 		<?php echo $data['Site']['alias'] ?>
 	</td>
-	<td class="bca-table-listup__tbody-td" style="width:5%;" class="bc-align-center status">
+	<td class="bca-table-listup__tbody-td bc-align-center status" style="width:5%;">
 		<?php echo $this->BcText->booleanMark($data['Site']['status']); ?><br>
 	</td>
-	<td class="bca-table-listup__tbody-td" class="bc-align-center">
+	<td class="bca-table-listup__tbody-td">
 		<?php echo $this->BcText->arrayValue($data['Site']['device'], $devices, ''); ?><br>
 		<?php echo $this->BcText->arrayValue($data['Site']['lang'], $langs, ''); ?>
 	</td>
