@@ -109,7 +109,7 @@ interface PermissionServiceInterface
      *
      * @param string $url
      * @param array $userGroupId
-     * @return boolean
+     * @return bool
      */
     public function check(string $url, array $userGroupId): bool;
 

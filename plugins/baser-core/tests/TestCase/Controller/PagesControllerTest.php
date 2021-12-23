@@ -60,6 +60,7 @@ class PagesControllerTest extends BcTestCase
 
     public function testDisplay(): void
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->get('/');
         $this->assertResponseOk();
     }

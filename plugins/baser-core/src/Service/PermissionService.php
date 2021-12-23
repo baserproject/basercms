@@ -286,7 +286,7 @@ class PermissionService implements PermissionServiceInterface
      *
      * @param string $url
      * @param array $userGroupId
-     * @return boolean
+     * @return bool
      * @checked
      * @unitTest
      * @noTodo
