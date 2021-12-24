@@ -41,7 +41,8 @@ jobs:
           cd docker
           cp docker-compose.yml.default docker-compose.yml
           sed -i -e "s/basercms:5-php7.4/basercms:5-php${{ matrix.php-version }}/g" docker-compose.yml;
-          docker-compose up -d
+          docker compose pull
+          docker-compose up -d --force-recreate
 
       - name: Sleep for 10 seconds
         run: sleep 10
