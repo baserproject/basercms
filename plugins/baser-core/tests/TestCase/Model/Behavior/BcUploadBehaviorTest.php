@@ -659,8 +659,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testRotateImage()
     {
-        // TODO: 現在php_exifがないためfalseになる
-        $this->assertFalse($this->BcUploadBehavior->rotateImage('test.png'));
+        $this->assertTrue($this->BcUploadBehavior->rotateImage('test.png'));
     }
 
     /**

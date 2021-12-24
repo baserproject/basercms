@@ -639,6 +639,7 @@ class BcUploadBehavior extends Behavior
      * @return bool
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function rotateImage($file)
     {
