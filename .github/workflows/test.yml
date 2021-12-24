@@ -51,5 +51,8 @@ jobs:
           cd docker
           docker-compose logs
 
+      - name: Sleep for 10 seconds
+        run: sleep 10
+
       - name: Run test suite
         run: docker exec bc5-php composer run-script test
