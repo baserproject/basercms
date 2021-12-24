@@ -398,7 +398,6 @@ class PermissionService implements PermissionServiceInterface
         return (boolean)$ret;
     }
 
-
     /**
      * 権限チェック対象を追加する
      *
