@@ -51,7 +51,7 @@ RUN echo 'sendmail_path = "/usr/sbin/ssmtp -t"' > /usr/local/etc/php/conf.d/mail
 	&& echo "xdebug.client_host=10.0.2.2" >> /usr/local/etc/php/conf.d/xdebug.ini \
 	&& echo "xdebug.client_port=9000" >> /usr/local/etc/php/conf.d/xdebug.ini \
 	&& echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/xdebug.ini \
-	&& echo "xdebug.mode=debug,develop" >> /usr/local/etc/php/conf.d/xdebug.ini
+	&& echo "xdebug.mode=debug,develop" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "extension=mcrypt.so" >> /usr/local/etc/php/conf.d/mcrypt.ini
 
 # ssmtp
