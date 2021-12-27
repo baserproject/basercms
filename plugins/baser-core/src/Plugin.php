@@ -289,6 +289,12 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
     public function routes($routes): void
     {
 
+        // migrations コマンドの場合は実行しない
+        if(isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] === 'migrations') {
+            parent::routes($routes);
+            return;
+        }
+
         $request = Router::getRequest();
         if(!$request) {
             $request = ServerRequestFactory::fromGlobals();
