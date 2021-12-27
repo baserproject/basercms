@@ -1238,6 +1238,7 @@ class BcUploadBehavior extends Behavior
      * @param array $field
      * @return bool
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function copyImages($field, $fileName)
@@ -1254,11 +1255,6 @@ class BcUploadBehavior extends Behavior
                         continue;
                     }
                 }
-                // ファイル名の重複を回避する為の処理、元画像ファイルと同様に、コピー画像ファイルにも対応する
-                // TODO ucmitz: ここの処理がよくわからんから聞く
-                // if (isset($Model->data[$Model->alias]['name']['name']) && $fileName !== $Model->data[$Model->alias]['name']['name']) {
-                //     $Model->data[$Model->alias]['name']['name'] = $fileName;
-                // }
                 $copy['name'] = $field['name'];
                 $copy['ext'] = $field['ext'];
                 $ret = $this->copyImage($this->alias, $copy);
