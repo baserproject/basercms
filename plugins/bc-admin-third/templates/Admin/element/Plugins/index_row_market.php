@@ -39,7 +39,7 @@ use BaserCore\View\AppView;
   <td
     class="bca-table-listup__tbody-td"><?php $this->BcBaser->link($data['author'], $data['authorLink'], ['target' => '_blank', 'escape' => true]) ?></td>
   <td class="bca-table-listup__tbody-td" style="width:10%;white-space: nowrap">
-    <?php echo $this->BcTime->format($data['created'], 'YYYY-MM-dd') ?><br/>
-    <?php echo $this->BcTime->format($data['modified'], 'YYYY-MM-dd') ?>
+    <?php echo $this->BcTime->format($data['created'], 'yyyy-MM-dd') ?><br/>
+    <?php echo $this->BcTime->format($data['modified'], 'yyyy-MM-dd') ?>
   </td>
 </tr>

@@ -24,7 +24,7 @@ $dblogs = $this->BcAdmin->getDblogs(5);
         <?php foreach ($dblogs as $dblog): ?>
           <li class="bca-update-log__list-item">
             <span class="date">
-              <?php echo $this->BcTime->format($dblog->created, 'YYYY-MM-dd') ?>
+              <?php echo $this->BcTime->format($dblog->created, 'yyyy-MM-dd') ?>
             </span>
             <small>
               <?php echo $this->BcTime->format($dblog->created, 'HH:mm:ss') ?>&nbsp;

@@ -32,8 +32,8 @@ use BaserCore\View\AppView;
   </td>
   <td class="bca-table-listup__tbody-td"><?php echo h($userGroup->title) ?></td>
   <?php echo $this->BcListTable->dispatchShowRow($userGroup) ?>
-  <td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format($userGroup->created, 'YYYY-MM-dd') ?><br/>
-    <?php echo $this->BcTime->format($userGroup->modified, 'YYYY-MM-dd') ?></td>
+  <td class="bca-table-listup__tbody-td"><?php echo $this->BcTime->format($userGroup->created, 'yyyy-MM-dd') ?><br/>
+    <?php echo $this->BcTime->format($userGroup->modified, 'yyyy-MM-dd') ?></td>
   <td class="bca-table-listup__tbody-td">
     <?php if ($userGroup->name != 'admins'): ?>
       <?php $this->BcBaser->link('', ['controller' => 'permissions', 'action' => 'index', $userGroup->id], ['title' => __d('baser', '制限'), 'class' => 'bca-btn-icon', 'data-bca-btn-type' => 'permission', 'data-bca-btn-size' => 'lg']) ?>

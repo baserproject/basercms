@@ -19,5 +19,5 @@
     <?php echo h($dblog->user->name) ?>
     <?php endif ?>
   </td>
-  <td class="bca-table-listup__tbody-td" style="width:200px;"><?php echo $this->BcTime->format($dblog->created, 'YYYY-MM-dd HH:mm:ss') ?></td>
+  <td class="bca-table-listup__tbody-td" style="width:200px;"><?php echo $this->BcTime->format($dblog->created, 'yyyy-MM-dd HH:mm:ss') ?></td>
 </tr>
