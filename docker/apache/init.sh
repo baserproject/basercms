@@ -1,5 +1,5 @@
-if [ ! -e '/check' ]; then
-    touch /check
+if [ ! -e '/var/www/html/docker/check' ]; then
+    touch /var/www/html/docker/check
     composer install --no-plugins
     cp /var/www/html/config/.env.example /var/www/html/config/.env
     sleep 10
