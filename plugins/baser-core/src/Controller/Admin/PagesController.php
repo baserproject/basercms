@@ -22,20 +22,6 @@ class PagesController extends AppController
 {
 
 	/**
-	 * ヘルパー
-	 *
-	 * @var array
-	 */
-	// TODO ucmitz 未移行
-	/* >>>
-	public $helpers = [
-		'Html', 'Session', 'BcGooglemaps',
-		'BcXml', 'BcText',
-		'BcFreeze', 'BcPage'
-	];
-	<<< */
-
-	/**
 	 * コンポーネント
 	 *
 	 * @var array
@@ -52,11 +38,11 @@ class PagesController extends AppController
 	 *
 	 * @return void
 	 */
-	public function beforeFilter(EventInterface $evnet)
+	public function beforeFilter(EventInterface $event)
 	{
-		parent::beforeFilter($evnet);
+		parent::beforeFilter($event);
         if (BcSiteConfig::get('editor') && BcSiteConfig::get('editor') !== 'none') {
-            $this->helpers[] = BcSiteConfig::get('editor');
+            $this->viewBuilder()->setHelpers([BcSiteConfig::get('editor'), 'BcGooglemaps', 'BcText', 'BcFreeze']);
         }
 	}
 
