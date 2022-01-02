@@ -6,7 +6,6 @@ version: '3'
 services:
   bc5-db:
     container_name: bc5-db
-    # platform: linux/x86_64 # M1チップの際にコメントを外す
     image: mysql:5.7
     volumes:
       - ./volumes/mysql:/var/lib/mysql
