@@ -47,9 +47,6 @@ class AppView extends View
 //        $this->loadHelper('BaserCore.BcWidgetArea');
 //        $this->loadHelper('BaserCore.BcXml');
 //        $this->loadHelper('BaserCore.BcArray');
-//        $this->loadHelper('BaserCore.BcXml');
-//        $this->loadHelper('BaserCore.BcXml');
-//        $this->loadHelper('BaserCore.BcXml');
         // <<<
         $this->loadHelper('BaserCore.BcPage');
         $this->loadHelper('BaserCore.BcBaser');

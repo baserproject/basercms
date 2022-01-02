@@ -67,8 +67,8 @@ $class = ' class="' . implode(' ', $classies) . '"';
     <?php endif ?>
   </td>
   <td class="bca-table-listup__tbody-td" style="width:10%;white-space: nowrap">
-    <?php echo $this->BcTime->format($plugin->created, 'YYYY-MM-dd') ?><br/>
-    <?php echo $this->BcTime->format($plugin->modified, 'YYYY-MM-dd') ?>
+    <?php echo $this->BcTime->format($plugin->created, 'yyyy-MM-dd') ?><br/>
+    <?php echo $this->BcTime->format($plugin->modified, 'yyyy-MM-dd') ?>
   </td>
   <td class="bca-table-listup__tbody-td">
     <?php if ($plugin->update): ?>

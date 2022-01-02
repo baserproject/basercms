@@ -80,7 +80,7 @@ class BcAdminContentsComponent extends Component
     /**
      * Before render
      * @checked
-     * @note(value="TODO内容を荒川さんに確認")
+     * @note(value="TODO内容を江頭さんに確認")
      */
     public function beforeRender(): void
     {

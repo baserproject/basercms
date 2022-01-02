@@ -150,7 +150,7 @@ class SiteConfigsSeed extends AbstractSeed
             [
                 'id' => '19',
                 'name' => 'editor',
-                'value' => 'BcCkeditor',
+                'value' => 'BaserCore.BcCkeditor',
                 'created' => '2021-01-27 12:56:52',
                 'modified' => '2021-01-27 13:01:58'
             ],
@@ -263,7 +263,7 @@ q {}',
             [
                 'id' => '31',
                 'name' => 'editor',
-                'value' => 'BcCkeditor',
+                'value' => 'BaserCore.BcCkeditor',
                 'created' => '2021-01-27 12:58:10',
                 'modified' => '2021-01-27 12:58:25'
             ],
