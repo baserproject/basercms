@@ -240,6 +240,14 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
                     ],
                     'contain' => 'UserGroups',
                 ]);
+                // ログインの際のみ、管理画面へのログイン状態を維持するためセッションの設定を追加
+                // TODO ログインURLの判定方法を検討必要
+                // Api用の認証設定をAdminと分けて loginAction と リクエストのURLで判定させる
+                if($request->getParam('controller') === 'Users' && $request->getParam('action') === 'login') {
+                    $service->loadAuthenticator('Authentication.Session', [
+                        'sessionKey' => $authSetting['sessionKey'],
+                    ]);
+                }
                 break;
 
             default:

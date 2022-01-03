@@ -13,10 +13,12 @@ namespace BaserCore\Controller\Api;
 
 use Authentication\Controller\Component\AuthenticationComponent;
 use BaserCore\Service\UserServiceInterface;
+use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
+use Cake\Routing\Router;
 
 /**
  * Class UsersController
@@ -41,10 +43,21 @@ class UsersController extends BcApiController
     /**
      * ログイン
      */
-    public function login()
+    public function login(UserServiceInterface $users)
     {
-        if (!$json = $this->getAccessToken($this->Authentication->getResult())) {
+        $result = $this->Authentication->getResult();
+        $json = [];
+        if (!$result->isValid() || !$json = $this->getAccessToken($this->Authentication->getResult())) {
             $this->setResponse($this->response->withStatus(401));
+        } else {
+            $redirect = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
+            $user = $result->getData();
+            $users->removeLoginKey($user->id);
+            if ($this->request->is('ssl') && $this->request->getData('saved')) {
+                $this->response = $users->setCookieAutoLoginKey($this->response, $user->id);
+            }
+            $this->BcMessage->setInfo(__d('baser', 'ようこそ、' . $user->getDisplayName() . 'さん。'));
+            $json['redirect'] = $redirect;
         }
         $this->set('json', $json);
         $this->viewBuilder()->setOption('serialize', 'json');

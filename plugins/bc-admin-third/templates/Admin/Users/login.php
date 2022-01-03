@@ -23,9 +23,12 @@ $this->BcBaser->js('admin/users/login.bundle', false);
 <div id="Login" class="bca-login">
   <div id="LoginInner">
     <?php $this->BcBaser->flash() ?>
-    <h1
-      class="bca-login__title"><?php echo $this->BcBaser->getImg('admin/logo_large.png', ['alt' => $this->BcBaser->getContentsTitle(), 'class' => 'bca-login__logo']) ?></h1>
-    <div id="AlertMessage" class="message" hidden></div>
+
+    <div id="AlertMessage" class="message" hidden><?php echo __d('baser', 'Eメール、または、パスワードが間違っています。') ?></div>
+
+    <h1 class="bca-login__title">
+      <?php echo $this->BcBaser->getImg('admin/logo_large.png', ['alt' => $this->BcBaser->getContentsTitle(), 'class' => 'bca-login__logo']) ?>
+    </h1>
     <?= $this->BcAdminForm->create() ?>
     <div class="login-input bca-login-form-item">
       <?php echo $this->BcAdminForm->label('email', __d('baser', 'Eメール')) ?>

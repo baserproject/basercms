@@ -233,13 +233,19 @@ class UsersControllerTest extends BcTestCase
     /**
      * [ADMIN] 管理者ログイン後ログアウト
      */
-    public function testLoginAndLogout()
+    public function testLogin()
     {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
-        $this->post('/baser/admin/baser-core/users/login');
+        $this->get('/baser/admin/baser-core/users/login');
+        $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin');
-        $this->post('/baser/admin/baser-core/users/logout');
+    }
+
+    /**
+     * [ADMIN] 管理者ログイン後ログアウト
+     */
+    public function testLogout()
+    {
+        $this->get('/baser/admin/baser-core/users/logout');
         $this->assertRedirect('/baser/admin/baser-core/users/login');
     }
 
@@ -248,12 +254,6 @@ class UsersControllerTest extends BcTestCase
      */
     public function testLogin_agent()
     {
-        $this->enableSecurityToken();
-        $this->enableCsrfToken();
-        // 代理元 id:1 (admin)
-        $request = $this->loginAdmin($this->getRequest());
-        // 一旦ログイン
-        $this->post('/baser/admin/baser-core/users/login');
         // 代理先 id:2 (operator)
         $this->get('/baser/admin/baser-core/users/login_agent/2');
         $this->assertEquals(1, $_SESSION['AuthAgent']['User']->id);

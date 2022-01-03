@@ -24,7 +24,6 @@ use BaserCore\Model\Table\UsersTable;
 use BaserCore\Service\UserServiceInterface;
 use Cake\Http\Exception\ForbiddenException;
 use BaserCore\Service\SiteConfigServiceInterface;
-use BaserCore\Controller\Component\BcMessageComponent;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Authentication\Controller\Component\AuthenticationComponent;
 
@@ -57,30 +56,11 @@ class UsersController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function login(UserServiceInterface $userService)
+    public function login()
     {
         $this->set('savedEnable', $this->request->is('ssl'));
-        $result = $this->Authentication->getResult();
-        if ($this->request->is('post')) {
-            if ($result->isValid()) {
-                $target = $this->Authentication->getLoginRedirect() ?? Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect'));
-                $user = $result->getData();
-                $userService->removeLoginKey($user->id);
-                if ($this->request->is('ssl') && $this->request->getData('saved') == '1') {
-                    // 自動ログイン保存
-                    $this->response = $userService->setCookieAutoLoginKey($this->response, $user->id);
-                }
-                $this->BcMessage->setInfo(__d('baser', 'ようこそ、' . $user->getDisplayName() . 'さん。'));
-                $this->redirect($target);
-                return;
-            }
-            if ($this->request->is('post') && !$result->isValid()) {
-                $this->BcMessage->setError(__d('baser', 'Eメール、または、パスワードが間違っています。'));
-            }
-        } else {
-            if ($this->Authentication->getResult()->isValid()) {
-                $this->redirect(Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect')));
-            }
+        if ($this->Authentication->getResult()->isValid()) {
+            $this->redirect(Router::url(Configure::read('BcPrefixAuth.Admin.loginRedirect')));
         }
     }
 

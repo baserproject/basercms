@@ -21,7 +21,7 @@
          */
         init: function() {
             let refreshToken = localStorage.getItem('refreshToken');
-            if(refreshToken) {
+            if(refreshToken && refreshToken !== 'null') {
                 this.getToken(refreshToken)
             }
         },
@@ -29,22 +29,27 @@
         /**
          * Login
          */
-        login: function (email, password) {
+        login: function (email, password, saved, successCallback, errorCallback) {
             $.ajax({
                 url: $.bcUtil.apiBaseUrl + 'baser-core/users/login.json',
                 type: 'post',
-                async: false,
                 data: {
                     email: email,
-                    password: password
+                    password: password,
+                    saved: (saved !== undefined && saved)? 1 : ''
                 },
-                dataType: 'json',
+                dataType: 'json'
             }).done(function (response) {
                 if (response) {
                     this.setToken(response.access_token, response.refresh_token)
+                    if(successCallback) {
+                        successCallback(response);
+                    }
                 }
             }.bind(this)).fail(function () {
-                alert('システムエラーが発生しました。ブラウザをリロードしてください。')
+                if(errorCallback) {
+                    errorCallback()
+                }
             })
         },
 
@@ -53,6 +58,9 @@
          * @param refreshToken
          */
         getToken: function (refreshToken) {
+            if(!refreshToken) {
+                return
+            }
             $.ajax({
                 url: $.bcUtil.apiBaseUrl + 'baser-core/users/refresh_token.json',
                 type: 'get',
