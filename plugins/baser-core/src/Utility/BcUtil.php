@@ -53,7 +53,7 @@ class BcUtil
      * @noTodo
      * @unitTest
      */
-    public static function loginUser($prefix = 'Admin')
+    public static function loginUser()
     {
         $request = Router::getRequest();
         if(!$request) {
@@ -64,11 +64,6 @@ class BcUtil
         $result = $authenticator->getResult();
         if ($result->isValid()) {
             $user = $result->getData();
-            if (is_null($user)) {
-                $session = $request->getSession();
-                $sessionKey = Configure::read('BcPrefixAuth.' . $prefix . '.sessionKey');
-                $user = isset($_SESSION[$sessionKey])? $session->read($sessionKey) : null;
-            }
             return $user;
         } else {
             return false;
@@ -370,7 +365,7 @@ class BcUtil
     public static function isAdminUser($user = null): bool
     {
         /** @var User $User */
-        $loginUser = $user ?? self::loginUser('Admin');
+        $loginUser = $user ?? self::loginUser();
         return ($loginUser)? $loginUser->isAdmin() : false;
     }
 

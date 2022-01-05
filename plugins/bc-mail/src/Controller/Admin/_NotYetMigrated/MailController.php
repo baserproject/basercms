@@ -238,7 +238,7 @@ class MailController extends MailAppController
             $this->set('mailFields', $this->dbDatas['mailFields']);
         }
 
-        $user = BcUtil::loginUser('admin');
+        $user = BcUtil::loginUser();
         if (!empty($user)) {
             $this->set('editLink', ['admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']]);
         }
@@ -308,7 +308,7 @@ class MailController extends MailAppController
         if ($this->dbDatas['mailFields']) {
             $this->set('mailFields', $this->dbDatas['mailFields']);
         }
-        $user = BcUtil::loginUser('admin');
+        $user = BcUtil::loginUser();
         if (!empty($user)) {
             $this->set(
                 'editLink',
@@ -477,7 +477,7 @@ class MailController extends MailAppController
                 $this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'index');
             }
         }
-        $user = BcUtil::loginUser('admin');
+        $user = BcUtil::loginUser();
         if (!empty($user)) {
             $this->set(
                 'editLink',
@@ -541,7 +541,7 @@ class MailController extends MailAppController
         // >>> DELETE 2015/11/25 - gondoh view側で吸収するように変更
         // $this->action = 'index'; //viewのボタンの表示の切り替えに必要なため変更
         // <<<
-        $user = BcUtil::loginUser('admin');
+        $user = BcUtil::loginUser();
         if (!empty($user)) {
             $this->set(
                 'editLink',

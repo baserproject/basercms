@@ -34,7 +34,7 @@ $this->BcAdmin->setHelp('contents_index');
 
 $editInIndexDisabled = false;
 $this->BcBaser->js(['vendor/jquery.jstree-3.3.8/jstree.min'], false);
-$currentUser = BcUtil::loginUser('Admin');
+$currentUser = BcUtil::loginUser();
 $isUseMoveContents = false;
 
 foreach ($currentUser->user_groups as $group) {

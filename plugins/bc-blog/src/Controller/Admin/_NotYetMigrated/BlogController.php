@@ -275,7 +275,7 @@ class BlogController extends BlogAppController
         }
 
         $datas = $this->_getBlogPosts(['num' => $listCount]);
-        if (BcUtil::loginUser('admin')) {
+        if (BcUtil::loginUser()) {
             $this->set(
                 'editLink',
                 [
@@ -495,7 +495,7 @@ class BlogController extends BlogAppController
                     }
                 }
 
-                if (BcUtil::loginUser('admin')) {
+                if (BcUtil::loginUser()) {
                     $this->set(
                         'editLink',
                         [

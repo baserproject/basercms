@@ -87,7 +87,7 @@ class BcContentsHelper extends Helper
         }
 
         $existsTitles = $this->_getExistsTitles();
-        $user = BcUtil::loginUser('Admin');
+        $user = BcUtil::loginUser();
 
         foreach($items as $type => $item) {
 
@@ -160,7 +160,7 @@ class BcContentsHelper extends Helper
      */
     public function isActionAvailable($type, $action, $entityId) : bool
     {
-        $user = BcUtil::loginUser('Admin');
+        $user = BcUtil::loginUser();
         if (!isset($this->getConfig('items')[$type]['url'][$action])) {
             return false;
         }

@@ -319,7 +319,7 @@ class ContentsTable extends AppTable
                     $data['content']['exclude_search'] = 0;
                 }
                 if (!isset($data['content']['author_id'])) {
-                    $user = BcUtil::loginUser('Admin');
+                    $user = BcUtil::loginUser();
                     $data['content']['author_id'] = $user['id'];
                 }
             } else {
