@@ -69,7 +69,6 @@ class BcFrontContentsComponent extends Component
      * フロントエンドのセットアップ
      *
      * @checked
-     * @note(value="TODO内容を荒川さんに確認")
      */
     public function setupFront()
     {
