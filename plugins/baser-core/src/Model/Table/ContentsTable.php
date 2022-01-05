@@ -117,7 +117,6 @@ class ContentsTable extends AppTable
             // 'Model.beforeFind' => ['callable' => 'beforeFind', 'passParams' => true],
             // 'Model.afterFind' => ['callable' => 'afterFind', 'passParams' => true],
             'Model.beforeMarshal' => 'beforeMarshal',
-            'Model.afterValidate' => ['callable' => 'afterValidate'],
             'Model.beforeSave' => ['callable' => 'beforeSave', 'passParams' => true],
             'Model.afterMarshal' => 'afterMarshal',
             'Model.afterSave' => ['callable' => 'afterSave', 'passParams' => true],
@@ -357,18 +356,6 @@ class ContentsTable extends AppTable
         $columns = ConnectionManager::get('default')->getSchemaCollection()->describe($this->getTable())->columns();
         foreach ($columns as $field) {
             if ($entity->get($field) instanceof FrozenTime) $entity->set($field, $entity->get($field)->__toString());
-        }
-    }
-
-    /**
-     * After Validate
-     */
-    public function afterValidate()
-    {
-        parent::afterValidate();
-        // 新規追加の際、name は、title より自動設定される為、バリデーションエラーが発生してもエラーメッセージを表示しない
-        if (empty($this->data['Content']['id']) && !empty($this->validationErrors['name'])) {
-            unset($this->validationErrors['name']);
         }
     }
 

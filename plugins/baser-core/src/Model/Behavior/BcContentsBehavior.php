@@ -85,44 +85,9 @@ class BcContentsBehavior extends Behavior
     }
 
     /**
-     * After save
-     *
-     * Content を保存する
-     *
-     * @param EventInterface $event
-     * @param EntityInterface $entity
-     * @param ArrayObject $options
-     * @return bool
-     * @checked
-     */
-    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
-    {
-        // TODO ucmitz: 一旦コメントアウト
-        return;
-        if (empty($entity->content)) return false;
-
-        // if (!empty($options['validate'])) {
-        //     // beforeValidate で調整したデータを利用する為、$model->Content->data['Content'] を利用
-        //     $data = $this->table->Content->data['Content'];
-        // } else {
-        //     $data = $this->table->data['Content'];
-        // }
-
-        unset($entity->content->lft);
-        unset($entity->content->rght);
-        if ($entity->isNew()) {
-            list($plugin, $name) = explode('.', $this->table->getRegistryAlias());
-            $data = $this->Contents->createContent($entity->content->toArray(), $plugin ?? "BaserCore", Inflector::classify($name), $entity->id, false);
-        } else {
-            $content = $this->Contents->patchEntity($this->Contents->get($entity->content->id), $entity->content->toArray());
-            $data = $this->Contents->save($content, false);
-        }
-    }
-
-    /**
      * Before delete
      *
-     * afterDelete でのContents物理削除準備をする
+     * afterDeleteでのContents物理削除準備をする
      *
      * @param EventInterface $event
      * @param EntityInterface $entity
