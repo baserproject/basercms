@@ -11,9 +11,9 @@
 
 namespace BaserCore\Test\TestCase\View\Helper;
 
-use BaserCore\TestSuite\BcTestCase;
 use Cake\Core\Configure;
 use BaserCore\View\BcAdminAppView;
+use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcAdminHelper;
 
 /**
@@ -32,6 +32,7 @@ class BcAdminHelperTest extends BcTestCase
     public $fixtures = [
         'plugin.BaserCore.Users',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.Dblogs',
         'plugin.BaserCore.Sites',
     ];
@@ -71,13 +72,15 @@ class BcAdminHelperTest extends BcTestCase
         $results = $this->BcAdmin->isAvailableSideBar();
         $this->assertEquals(false, $results);
         // ログイン済
-        $this->BcAdmin->getView()->setRequest($this->getRequest('/baser/admin'));
+        $request = $this->loginAdmin($this->getRequest('/baser/admin'));
+        $this->BcAdmin->getView()->setRequest($request);
         $session = $this->BcAdmin->getView()->getRequest()->getSession();
         $session->write('AuthAdmin', true);
         $results = $this->BcAdmin->isAvailableSideBar();
         $this->assertEquals(true, $results);
         // ログイン画面
-        $this->BcAdmin->getView()->setRequest($this->getRequest('/baser/admin/users/login'));
+        $request = $this->getRequest('/baser/admin/users/login');
+        $this->BcAdmin->getView()->setRequest($request);
         $results = $this->BcAdmin->isAvailableSideBar();
         $this->assertEquals(false, $results);
         $results = $this->BcAdmin->isAvailableSideBar();
@@ -267,7 +270,8 @@ class BcAdminHelperTest extends BcTestCase
         $session = $this->BcAdmin->getView()->getRequest()->getSession();
         $session->write('AuthAdmin', true);
 
-        // ヘルプなし ログイン済
+        // ヘルプなし ログイン済 スーパーユーザー以外
+        $this->BcAdmin->getView()->setRequest($this->loginAdmin($this->getRequest('/baser/admin'), 2));
         $expectedIsLogin = $this->BcAdmin->getView()->element('contents_menu', [
             'isHelp' => false,
             'isLogin' => true,
@@ -279,7 +283,8 @@ class BcAdminHelperTest extends BcTestCase
         $actualIsLogin = ob_get_clean();
         $this->assertEquals($expectedIsLogin, $actualIsLogin);
 
-        // ヘルプあり ログイン済
+        // ヘルプあり ログイン済 スーパーユーザー以外
+        $this->BcAdmin->getView()->setRequest($this->loginAdmin($this->getRequest('/baser/admin'), 2));
         $expectedIsHelpIsLogin = $this->BcAdmin->getView()->element('contents_menu', [
             'isHelp' => true,
             'isLogin' => true,
@@ -292,6 +297,7 @@ class BcAdminHelperTest extends BcTestCase
         $this->assertEquals($expectedIsHelpIsLogin, $actualIsHelpIsLogin);
 
         // ヘルプあり ログイン済 スーパーユーザー
+        $this->BcAdmin->getView()->setRequest($this->loginAdmin($this->getRequest('/baser/admin')));
         $expectedIsSuperUser = $this->BcAdmin->getView()->element('contents_menu', [
             'isHelp' => true,
             'isLogin' => true,

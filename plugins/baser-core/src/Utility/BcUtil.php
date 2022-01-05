@@ -62,7 +62,7 @@ class BcUtil
         $authenticator =  $request->getAttribute('authentication');
         /** @var Result $result */
         $result = $authenticator->getResult();
-        if ($result->isValid()) {
+        if (isset($result) && $result->isValid()) {
             $user = $result->getData();
             return $user;
         } else {

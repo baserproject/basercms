@@ -17,9 +17,14 @@ use Cake\Core\Plugin;
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
+use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
 use BaserCore\TestSuite\BcTestCase;
+use Authentication\AuthenticationService;
 use BaserCore\Service\ContentFolderService;
+use Authentication\Authenticator\FormAuthenticator;
+use Authentication\Identifier\IdentifierCollection;
+use Authentication\Authenticator\SessionAuthenticator;
 
 /**
  * TODO: $this->getRequest();などをsetupに統一する
@@ -88,7 +93,7 @@ class BcUtilTest extends BcTestCase
             // ログインしている状況
             [true, 1],
             // ログインしていない状況
-            [false, null]
+            [false, false]
         ];
     }
 
@@ -328,6 +333,9 @@ class BcUtilTest extends BcTestCase
         $session = $this->request->getSession();
         $user = $this->getUser($id);
         $session->write($sessionKey, $user);
+        if ($expect) {
+            $this->loginAdmin($this->getRequest(), $id);
+        }
         $result = BcUtil::isAdminUser();
         $this->assertEquals($expect, $result);
     }
