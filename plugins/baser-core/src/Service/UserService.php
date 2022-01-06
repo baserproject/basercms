@@ -411,7 +411,7 @@ class UserService implements UserServiceInterface
     {
         $prefix = $request->getParam('prefix');
         $sessionUser = BcUtil::loginUser($prefix);
-        if ($sessionUser === null) {
+        if ($sessionUser === false) {
             return true;
         }
         try {

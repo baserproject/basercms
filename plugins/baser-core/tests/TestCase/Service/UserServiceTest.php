@@ -11,10 +11,11 @@
 
 namespace BaserCore\Test\TestCase\Service;
 
-use BaserCore\Model\Table\LoginStoresTable;
+use Cake\Http\Response;
+use Cake\Routing\Router;
 use BaserCore\Service\UserService;
 use BaserCore\TestSuite\BcTestCase;
-use Cake\Http\Response;
+use BaserCore\Model\Table\LoginStoresTable;
 
 /**
  * Class UserServiceTest
@@ -61,6 +62,7 @@ class UserServiceTest extends BcTestCase
     public function tearDown(): void
     {
         unset($this->Users);
+        Router::reload();
         parent::tearDown();
     }
 
@@ -130,15 +132,13 @@ class UserServiceTest extends BcTestCase
      */
     public function testUpdate()
     {
-        $request = $this->getRequest('/');
-        $request = $request->withParsedBody([
+        $data = [
             'name' => 'ucmitz',
             'user_groups' => ['_ids' => [1]]
-        ]);
+        ];
+        $request = $this->loginAdmin($this->getRequest('/')->withParsedBody($data));
         $user = $this->Users->get(1);
-        $this->expectException('Cake\ORM\Exception\PersistenceFailedException');
-        $this->Users->update($user, $request->getData());
-        $this->loginAdmin($request);
+        Router::setRequest($request);
         $this->Users->update($user, $request->getData());
         $request = $this->getRequest('/?name=ucmitz');
         $users = $this->Users->getIndex($request->getQueryParams());
@@ -240,7 +240,7 @@ class UserServiceTest extends BcTestCase
     public function testReload()
     {
         // 未ログイン
-        $request = $this->getRequest('/baser/admin/users/index');
+        $request = $this->loginAdmin($this->getRequest('/baser/admin/users/index'));
         $noLoginUser = $this->Users->reload($request);
         $this->assertTrue($noLoginUser);
 
@@ -274,8 +274,9 @@ class UserServiceTest extends BcTestCase
     {
         $request = $this->getRequest();
         if ($loginId) {
-            $this->loginAdmin($request, $loginId);
+            $request = $this->loginAdmin($request, $loginId);
         }
+        Router::setRequest($request);
         $result = $this->Users->isSelf($postId);
         $this->assertEquals($expected, $result);
     }
@@ -283,10 +284,10 @@ class UserServiceTest extends BcTestCase
     public function isSelfUpdateDataProvider()
     {
         return [
-            [null, null, false], // 新規登録
-            [null, 1, false],    // 更新
             [1, 1, true],        // 自身を更新
-            [1, 2, false]        // 他人を更新
+            [1, 2, false],       // 他人を更新
+            [null, null, false], // 新規登録
+            [null, 1, false]     // 更新
         ];
     }
 

@@ -16,20 +16,21 @@ use BcAuthComponent;
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 use Cake\Core\Configure;
-use Cake\Http\ServerRequestFactory;
 use Cake\Routing\Router;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Database\Exception;
+use BaserCore\Annotation\Note;
+use BaserCore\Annotation\NoTodo;
 use BaserCore\Model\Entity\User;
-use Cake\Datasource\ConnectionManager;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use Cake\Http\ServerRequestFactory;
+use Cake\Datasource\ConnectionManager;
+use Authentication\Authenticator\Result;
 use BaserCore\Service\SiteConfigServiceInterface;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Note;
 
 /**
  * Class BcUtil
@@ -47,21 +48,26 @@ class BcUtil
      * 認証領域を指定してログインユーザーのデータを取得する
      * セッションクラスが設定されていない場合にはスーパーグローバル変数を利用する
      *
-     * @return mixed Entity|null
+     * @return User|false
      * @checked
      * @noTodo
      * @unitTest
      */
-    public static function loginUser($prefix = 'Admin')
+    public static function loginUser()
     {
         $request = Router::getRequest();
         if(!$request) {
             return false;
         }
-        $session = $request->getSession();
-        $sessionKey = Configure::read('BcPrefixAuth.' . $prefix . '.sessionKey');
-        $user = isset($_SESSION[$sessionKey])? $session->read($sessionKey) : null;
-        return $user;
+        $authenticator =  $request->getAttribute('authentication');
+        /** @var Result $result */
+        $result = $authenticator->getResult();
+        if (isset($result) && $result->isValid()) {
+            $user = $result->getData();
+            return $user;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -359,7 +365,7 @@ class BcUtil
     public static function isAdminUser($user = null): bool
     {
         /** @var User $User */
-        $loginUser = $user ?? self::loginUser('Admin');
+        $loginUser = $user ?? self::loginUser();
         return ($loginUser)? $loginUser->isAdmin() : false;
     }
 

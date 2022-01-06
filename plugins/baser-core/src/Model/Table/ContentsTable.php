@@ -47,6 +47,7 @@ class ContentsTable extends AppTable
      * @param array $config テーブル設定
      * @return void
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function initialize(array $config): void
@@ -318,7 +319,7 @@ class ContentsTable extends AppTable
                     $data['content']['exclude_search'] = 0;
                 }
                 if (!isset($data['content']['author_id'])) {
-                    $user = BcUtil::loginUser('Admin');
+                    $user = BcUtil::loginUser();
                     $data['content']['author_id'] = $user['id'];
                 }
             } else {
