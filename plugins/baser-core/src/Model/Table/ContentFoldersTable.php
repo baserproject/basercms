@@ -119,15 +119,10 @@ class ContentFoldersTable extends AppTable
      * @param EntityInterface $entity
      * @param ArrayObject $options
      * @checked
-     * @note(value="TODO内容を荒川さんに確認")
      */
     public function afterMove(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-        // TODO ucmitz: movePageTemplatesがなくなったので、一時措置
         return true;
-        // if (!empty($event->getData('data.Content')) && $event->getData('data.Content.type') == 'ContentFolder') {
-        //     $this->movePageTemplates($event->getData('data.Content.url'));
-        // }
     }
 
     /**
