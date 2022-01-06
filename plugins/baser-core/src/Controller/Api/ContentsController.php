@@ -283,13 +283,12 @@ class ContentsController extends BcApiController
      * @param  int $id
      * @checked
      * @unitTest
-     * @note(value="TODO内容を荒川さんに確認")
+     * @noTodo
      */
     public function get_full_url(ContentServiceInterface $contentService, $id)
     {
         $this->request->allowMethod(['get']);
         if ($id) {
-            // TODO ucmitz: bcTreeからgetUrlByIdする際に値がおかしくなるので、getUrlById自体を修正する
             $this->set(['fullUrl' => $contentService->getUrlById($id, true)]);
         } else {
             $this->setResponse($this->response->withStatus(400));

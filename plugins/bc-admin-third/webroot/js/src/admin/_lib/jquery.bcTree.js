@@ -924,7 +924,7 @@
                         }
                     }).then(function () {
                         return $.bcUtil.ajax($.bcUtil.apiBaseUrl + 'baser-core' + '/contents/get_full_url/' + data.contentId, {}, {type: 'GET', dataType: 'json'}).done(function (result) {
-                            data.contentFullUrl = result.fullUrl;
+                            data.contentFullUrl = decodeURI(result.fullUrl);
                             node.data.jstree = data;
                             if (data.contentType == 'ContentFolder') {
                                 node.type = 'folder'
