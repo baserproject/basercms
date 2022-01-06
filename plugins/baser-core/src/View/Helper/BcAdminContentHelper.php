@@ -39,6 +39,13 @@ class BcAdminContentHelper extends Helper
     use BcContainerTrait;
 
     /**
+     * helpers
+     *
+     * @var array
+     */
+    public $helpers = ['BaserCore.BcBaser'];
+
+    /**
      * initialize
      * @param array $config
      * @checked
@@ -206,6 +213,8 @@ class BcAdminContentHelper extends Helper
      *
      * @param EntityInterface $content コンテンツデータ
      * @return string
+     * @checked
+     * @noTodo
      */
     public function getFolderLinkedUrl(EntityInterface $content)
     {
@@ -230,8 +239,8 @@ class BcAdminContentHelper extends Helper
         $Content = TableRegistry::getTableLocator()->get('BaserCore.Contents');
         foreach($urlArray as $key => $value) {
             $checkUrl .= $value . '/';
-            $entityId = $Content->field('entity_id', ['Content.url' => $checkUrl]);
-            $urlArray[$key] = $this->BcBaser->getLink(urldecode($value), ['admin' => true, 'plugin' => '', 'controller' => 'content_folders', 'action' => 'edit', $entityId], ['forceTitle' => true]);
+            $entityId = $Content->find()->select('entity_id')->where(['url' => $checkUrl])->first()->entity_id;
+            $urlArray[$key] = $this->BcBaser->getLink(urldecode($value), ['admin' => true, 'plugin' => 'BaserCore', 'controller' => 'content_folders', 'action' => 'edit', $entityId], ['forceTitle' => true]);
         }
         $folderLinkedUrl = $host;
         if ($urlArray) {

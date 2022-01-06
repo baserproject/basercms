@@ -15,12 +15,13 @@ use Cake\Event\Event;
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
-use BaserCore\View\BcAdminAppView;
-use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\Note;
+use BaserCore\View\BcAdminAppView;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Service\PermissionServiceInterface;
 
 /**
  * Class BcContentsEventListener
@@ -106,8 +107,8 @@ class BcContentsEventListener extends BcEventListener
      * @param Event $event
      * @return string
      * @checked
+     * @noTodo
      * @unitTest
-     * @note(value="TODO内容を荒川さんに確認")
      */
     public function formAfterSubmit(Event $event)
     {
@@ -126,10 +127,12 @@ class BcContentsEventListener extends BcEventListener
         $setting = Configure::read('BcContents.items.' . $content['plugin'] . '.' . $content['type']);
         $isAvailablePreview = (!empty($setting['preview']) && $content['type'] != 'ContentFolder');
         $path = BcUtil::getPrefix() . "/" . Inflector::dasherize($event->getSubject()->getPlugin()) . '/contents/delete';
-        $isAvailableDelete = true;
-        // TODO ucmitz: user取得まだなので、一旦falseでform先にする
-        // $isAvailableDelete = (empty($content['site_root']) && $this->getService(PermissionServiceInterface::class)->check($path, $View->get('user')->user_group));
-
+        $service = $this->getService(PermissionServiceInterface::class);
+        $checked = false;
+        foreach(BcUtil::loginUser()->user_groups as $index => $group) {
+            if ($service->check($path, [$index => $group->id])) $checked = true;
+        }
+        $isAvailableDelete = empty($content['site_root']) && $checked;
         $newOut = $event->setData('out', implode("\n", [
             $View->element('content_options'),
             $View->element('content_actions', [

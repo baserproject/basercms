@@ -65,7 +65,7 @@ class ContentFoldersController extends BcApiController
      * @param ContentFolderServiceInterface $ContentFolders
      * @checked
      * @unitTest
-     * @note(value="TODOの内容を荒川さんに確認")
+     * @noTodo
      */
     public function add(ContentFolderServiceInterface $ContentFolders)
     {
@@ -74,7 +74,7 @@ class ContentFoldersController extends BcApiController
             $contentFolders = $ContentFolders->create($this->request->getData());
             if (!$contentFolders->getErrors()) {
                 $message = __d('baser', 'コンテンツフォルダ「{0}」を追加しました。', $contentFolders->content->name);
-                // TODO: ucmitz contentFolderを追加するかどうか
+                $this->set("contentFolder", $contentFolders);
                 $this->set('content', $contentFolders->content);
             } else {
                 $this->setResponse($this->response->withStatus(400));
