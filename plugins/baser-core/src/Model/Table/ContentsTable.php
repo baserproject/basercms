@@ -1131,13 +1131,19 @@ class ContentsTable extends AppTable
      * @return    bool
      * @checked
      * @unitTest
-     * @note(value="TODO内容を荒川さんに確認")
+     * @noTodo
      */
     public function isPublish($status, $publishBegin, $publishEnd)
     {
-        // TODO ucmitz: frozenTime形式に移行するべき
         if (!$status) {
             return false;
+        }
+        // FrozenTimeの場合は変換
+        if ($publishBegin instanceof FrozenTime) {
+            $publishBegin = $publishBegin->i18nFormat('yyyy-MM-dd HH:mm:ss');
+        }
+        if ($publishEnd instanceof FrozenTime) {
+            $publishEnd = $publishEnd->i18nFormat('yyyy-MM-dd HH:mm:ss');
         }
         if ($publishBegin && $publishBegin != '0000-00-00 00:00:00') {
             if ($publishBegin > date('Y-m-d H:i:s')) {
@@ -1157,9 +1163,10 @@ class ContentsTable extends AppTable
      *
      * @param int $id コンテンツID
      * @param array $newData 新しいコンテンツデータ
+     * @return bool
      * @checked
      * @unitTest
-     * @note(value="TODO内容を荒川さんに確認")
+     * @noTodo
      */
     public function isChangedStatus($id, $newData)
     {
@@ -1168,7 +1175,6 @@ class ContentsTable extends AppTable
         } catch(\Cake\Datasource\Exception\RecordNotFoundException $e) {
             return true;
         }
-        // TODO ucmitz: PagesController使用時に再確認する
         $beforeStatus = $this->isPublish($before->self_status,  $before->self_publish_begin, $before->self_publish_end);
         $afterStatus = $this->isPublish($newData['self_status'], $newData['self_publish_begin'], $newData['self_publish_end']);
         if ($beforeStatus != $afterStatus || $before->title  != $newData['title'] || $before->url != $newData['url']) {

@@ -694,9 +694,11 @@ class ContentsTableTest extends BcTestCase
             [true, '0000-00-00 00:00:00', '', true],
             [true, '0000-00-00 00:00:01', '', true],
             [true, date('Y-m-d H:i:s', strtotime("+1 hour")), '', false],
+            [true, FrozenTime::now()->addHour(), '', false],
             [true, '', '0000-00-00 00:00:00', true],
             [true, '', '0000-00-00 00:00:01', false],
             [true, '', date('Y-m-d H:i:s', strtotime("+1 hour")), true],
+            [true, '', FrozenTime::now()->addHour(), true],
         ];
     }
 
@@ -736,12 +738,34 @@ class ContentsTableTest extends BcTestCase
 
     /**
      * タイトル、URL、公開状態が更新されているか確認する
+     * @dataProvider isChangedStatusDataProvider
      */
-    public function testIsChangedStatus()
+    public function testIsChangedStatus($id, $newData, $expected)
     {
-        // idが存在しない場合はtrueを返す
-        $this->assertTrue($this->Contents->isChangedStatus(100, []));
-        // TODO: 存在する場合を書く
+        $this->assertEquals($expected, $this->Contents->isChangedStatus($id, $newData));
+    }
+
+    public function isChangedStatusDataProvider()
+    {
+        return [
+            // idが存在しない場合はtrueを返す
+            [
+                100, [], true
+            ],
+            [
+                1,
+                [
+                    "self_status" => "1",
+                    "self_publish_begin_date" => "2022/01/04",
+                    "self_publish_begin_time" => "00:00:00",
+                    "self_publish_begin" => "2022-01-04 00:00:00",
+                    "self_publish_end_date" => "2022/01/07",
+                    "self_publish_end_time" => "00:00:00",
+                    "self_publish_end" => "2022-01-07 00:00:00"
+                ],
+                true
+            ]
+        ];
     }
 
     /**
