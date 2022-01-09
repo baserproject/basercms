@@ -618,7 +618,6 @@ class ContentsTable extends AppTable
      * @param Content $data
      * @return bool
      * @checked
-     * @note(value="TODO内容を荒川さんに確認")
      */
     protected function updateRelateSubSiteContent($data)
     {
@@ -637,7 +636,7 @@ class ContentsTable extends AppTable
         if ($sites->isEmpty()) {
             return true;
         }
-        // TODO ucmitz: コンテンツないのに通ってしまうため内部コンテンツがあるかを確認し、なければ処理を終了するよう一時措置
+        // 連携サイトに紐づくコンテンツがない場合は終了
         if ($this->find()->where(['site_id' => $sites->first()->id])->isEmpty()) {
             return true;
         }
@@ -870,7 +869,7 @@ class ContentsTable extends AppTable
      * @return mixed URL | false
      * @checked
      * @unitTest
-     * @note(value="TODO内容を荒川さんに確認")
+     * @noTodo
      */
     public function createUrl($id)
     {
@@ -897,8 +896,7 @@ class ContentsTable extends AppTable
                     ->execute()
                     ->fetchAll('assoc');
                 if ($content) {
-                    // TODO ucmitz: $content[0][0]がなぜ必要か未確認
-                    $content = isset($content[0]) ? $content[0] : $content[0][0];
+                    $content = $content[0];
                 } else {
                     return false;
                 }

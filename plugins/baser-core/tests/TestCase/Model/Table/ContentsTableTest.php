@@ -481,13 +481,14 @@ class ContentsTableTest extends BcTestCase
     public function createUrlDataProvider()
     {
         return [
-            ["hogehoge'/@<>1", ''],
-            ["", false],
-            [1, '/'],
-            [4, '/index'],
-            [6, '/service/'],
-            [10, '/news/'],
-            [11, '/service/service1'],
+            // ["hogehoge'/@<>1", ''],
+            // ["", false],
+            // [1, '/'],
+            // [4, '/index'],
+            // [6, '/service/'],
+            // [10, '/news/'],
+            // [11, '/service/service1'],
+            [100, '/service'],
             // NOTE:  4系とのfixtureにおいて違いがあるため注意
             // [2, '/m/'],
             // [3, '/s/'],
