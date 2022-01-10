@@ -108,6 +108,7 @@ class ContentFolderService implements ContentFolderServiceInterface
      * @param array $data
      * @param array $options
      * @return \Cake\Datasource\EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest
@@ -116,7 +117,7 @@ class ContentFolderService implements ContentFolderServiceInterface
     {
         $contentFolder = $this->ContentFolders->newEmptyEntity();
         $contentFolder = $this->ContentFolders->patchEntity($contentFolder, $postData, $options);
-        return ($result = $this->ContentFolders->save($contentFolder)) ? $result : $contentFolder;
+        return $this->ContentFolders->saveOrFail($contentFolder);
     }
 
     /**
@@ -139,6 +140,7 @@ class ContentFolderService implements ContentFolderServiceInterface
      * @param array $contentFolderData
      * @param array $options
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      * @checked
      * @noTodo
      * @unitTest
@@ -147,7 +149,7 @@ class ContentFolderService implements ContentFolderServiceInterface
     {
         $options = array_merge(['associated' => ['Contents' => ['validate' => 'default']]], $options);
         $contentFolder = $this->ContentFolders->patchEntity($target, $contentFolderData, $options);
-        return ($result = $this->ContentFolders->save($contentFolder, ['atomic' => false]))? $result : $contentFolder;
+        return $this->ContentFolders->saveOrFail($contentFolder, ['atomic' => false]);
     }
 
     /**

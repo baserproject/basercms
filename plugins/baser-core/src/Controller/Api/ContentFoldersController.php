@@ -72,20 +72,17 @@ class ContentFoldersController extends BcApiController
         $this->request->allowMethod(['post', 'put', 'patch']);
         try {
             $contentFolders = $ContentFolders->create($this->request->getData());
-            if (!$contentFolders->getErrors()) {
-                $message = __d('baser', 'コンテンツフォルダ「{0}」を追加しました。', $contentFolders->content->name);
-                $this->set("contentFolder", $contentFolders);
-                $this->set('content', $contentFolders->content);
-            } else {
-                $this->setResponse($this->response->withStatus(400));
-                $message = __d('baser', "入力エラーです。内容を修正してください。\n" . $contentFolders->getErrors());
-            }
+            $message = __d('baser', 'コンテンツフォルダ「{0}」を追加しました。', $contentFolders->content->name);
+            $this->set("contentFolder", $contentFolders);
+            $this->set('content', $contentFolders->content);
         } catch (\Exception $e) {
-            $this->setResponse($this->response->withStatus(500));
-            $message = __d('baser', "無効な処理です。\n" . $e->getMessage());
+            $contentFolders = $e->getEntity();
+            $message = __d('baser', "入力エラーです。内容を修正してください。\n");
+            $this->set(['errors' => $contentFolders->getErrors()]);
+            $this->setResponse($this->response->withStatus(400));
         }
         $this->set(['message' => $message]);
-        $this->viewBuilder()->setOption('serialize', ['message', 'content']);
+        $this->viewBuilder()->setOption('serialize', ['message', 'content', 'errors']);
     }
 
     /**
@@ -125,10 +122,10 @@ class ContentFoldersController extends BcApiController
     public function edit(ContentFolderServiceInterface $contentFolders, $id)
     {
         $this->request->allowMethod(['post', 'put', 'patch']);
-        $contentFolder = $contentFolders->update($contentFolders->get($id), $this->request->getData());
-        if (!$contentFolder->getErrors()) {
+        try {
+            $contentFolder = $contentFolders->update($contentFolders->get($id), $this->request->getData());
             $message = __d('baser', 'フォルダー「{0}」を更新しました。', $contentFolder->name);
-        } else {
+        } catch (\Exception $e) {
             $this->setResponse($this->response->withStatus(400));
             $message = __d('baser', '入力エラーです。内容を修正してください。');
         }

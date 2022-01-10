@@ -46,6 +46,7 @@ interface ContentFolderServiceInterface
      * @param array $data
      * @param array $options
      * @return \Cake\Datasource\EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
     public function create(array $postData, $options=[]);
 
@@ -62,6 +63,7 @@ interface ContentFolderServiceInterface
      * @param array $contentFolderData
      * @param array $options
      * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
     public function update(EntityInterface $target, array $contentFolderData, $options = []);
 
