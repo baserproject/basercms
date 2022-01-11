@@ -630,13 +630,13 @@ class UsersController extends AppController
 		$dataSource->begin();
 
 		if (!$this->{$userModel}->save(null, ['validate' => false])) {
-			$dataSource->roolback();
+			$dataSource->rollback();
 			$this->BcMessage->setError('新しいパスワードをデータベースに保存できませんでした。');
 			return;
 		}
 		$body = ['email' => $email, 'password' => $password];
 		if (!$this->sendMail($email, __d('baser', 'パスワードを変更しました'), $body, ['template' => 'reset_password'])) {
-			$dataSource->roolback();
+			$dataSource->rollback();
 			$this->BcMessage->setError('メール送信時にエラーが発生しました。');
 			return;
 		}
