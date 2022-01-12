@@ -67,6 +67,8 @@ class UserGroupService implements UserGroupServiceInterface
     {
         return $this->UserGroups->newEntity([
             'auth_prefix' => 'Admin',
+        ], [
+            'validate' => false,
         ]);
     }
 

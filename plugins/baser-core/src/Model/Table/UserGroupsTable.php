@@ -126,6 +126,7 @@ class UserGroupsTable extends AppTable
         $validator
             ->scalar('name')
             ->maxLength('name', 50, __d('baser', 'ユーザーグループ名は50文字以内で入力してください。'))
+            ->requirePresence('name', 'create', __d('baser', 'ユーザーグループ名を入力してください。'))
             ->notEmptyString('name', __d('baser', 'ユーザーグループ名を入力してください。'))
             ->add('name', [
                 'name_halfText' => [
@@ -143,10 +144,12 @@ class UserGroupsTable extends AppTable
         $validator
             ->scalar('title')
             ->maxLength('title', 50, __d('baser', '表示名は50文字以内で入力してください。'))
+            ->requirePresence('title', 'create', __d('baser', '表示名を入力してください。'))
             ->notEmptyString('title', __d('baser', '表示名を入力してください。'));
 
         $validator
             ->scalar('auth_prefix')
+            ->requirePresence('auth_prefix', 'create', __d('baser', '認証プレフィックスを選択してください。'))
             ->notEmptyString('auth_prefix', __d('baser', '認証プレフィックスを選択してください。'));
 
         $validator

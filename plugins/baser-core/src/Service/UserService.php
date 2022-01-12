@@ -59,8 +59,10 @@ class UserService implements UserServiceInterface
     {
         return $this->Users->newEntity([
             'user_groups' => [
-                '_ids' => [1]
-            ]]);
+                '_ids' => [1],
+            ]], [
+                'validate' => false,
+            ]);
     }
 
     /**

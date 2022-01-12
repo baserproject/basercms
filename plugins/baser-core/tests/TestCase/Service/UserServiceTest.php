@@ -117,6 +117,8 @@ class UserServiceTest extends BcTestCase
             'user_groups' => [
                 '_ids' => [1]
             ],
+            'email' => 'example@example.com',
+            'real_name_1' => 'test',
             'password_1' => 'aaaaaaaaaaaaaa',
             'password_2' => 'aaaaaaaaaaaaaa'
         ]);

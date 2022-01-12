@@ -161,6 +161,7 @@ class UsersTable extends Table
         $validator
             ->scalar('name')
             ->maxLength('name', 255, __d('baser', 'アカウント名は255文字以内で入力してください。'))
+            ->requirePresence('name', 'create', __d('baser', 'アカウント名を入力してください。'))
             ->notEmptyString('name', __d('baser', 'アカウント名を入力してください。'))
             ->add('name', [
                 'nameUnique' => [
@@ -177,6 +178,7 @@ class UsersTable extends Table
         $validator
             ->scalar('real_name_1')
             ->maxLength('real_name_1', 50, __d('baser', '名前[姓]は50文字以内で入力してください。'))
+            ->requirePresence('real_name_1', 'create', __d('baser', '名前[姓]を入力してください。'))
             ->notEmptyString('real_name_1', __d('baser', '名前[姓]を入力してください。'));
         $validator
             ->scalar('real_name_2')
@@ -187,6 +189,7 @@ class UsersTable extends Table
             ->maxLength('nickname', 255, __d('baser', 'ニックネームは255文字以内で入力してください。'))
             ->allowEmptyString('nickname');
         $validator
+            ->requirePresence('user_groups', 'create', __d('baser', 'グループを選択してください。'))
             ->add('user_groups', [
                 'userGroupsNotEmptyMultiple' => [
                     'rule' => 'notEmptyMultiple',
@@ -203,6 +206,7 @@ class UsersTable extends Table
                 ]
             ]);
         $validator
+            ->requirePresence('email', 'create', __d('baser', 'Eメールを入力してください。'))
             ->scalar('email')
             ->email('email', true, __d('baser', 'Eメールの形式が不正です。'))
             ->maxLength('email', 255, __d('baser', 'Eメールは255文字以内で入力してください。'))

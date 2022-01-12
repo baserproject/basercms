@@ -56,6 +56,8 @@ class SiteService implements SiteServiceInterface
     {
         return $this->Sites->newEntity([
             'status' => false,
+        ], [
+            'validate' => false,
         ]);
     }
 
