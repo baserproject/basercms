@@ -109,11 +109,9 @@ class BcAdminContentsComponent extends Component
 
         if ($entityName === "content") {
             $content = $controller->viewBuilder()->getVar($entityName);
-            $contentPath = Inflector::classify($entityName) . ".";
         } else {
             $associated = $controller->viewBuilder()->getVar($entityName);
             $content = $associated->content;
-            $contentPath = Inflector::classify($entityName) . ".content.";
         }
         $theme = $content->site->theme;
 
@@ -155,7 +153,6 @@ class BcAdminContentsComponent extends Component
         }
 
         $controller->set('content', $content);
-        $controller->set('contentPath', $contentPath);
         $controller->set('currentSiteId', $content->site_id);
         $controller->set('disableEditContent', $disableEditContent);
         $controller->set('related', $related);

@@ -94,6 +94,11 @@ class ContentFoldersController extends BcAdminAppController
         }
         $this->request = $this->request->withData("ContentFolder", $contentFolder);
         $this->set('contentFolder', $contentFolder);
+        $contentEntities = [
+            'ContentFolder' => $contentFolder,
+            'Content' => $contentFolder->content,
+        ];
+        $this->set('contentEntities', $contentEntities);
     }
 
     /**
