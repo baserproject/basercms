@@ -991,7 +991,7 @@ class ContentsTable extends AppTable
                 $url = '/' . $mainSitePrefix . $url;
             }
             // main_site_content_id を更新
-            if ($site->main_site_id) {
+            if (!$content->isNew() && $site->main_site_id) {
                 $mainSiteContent = $this->find()->select(['id'])->where(['site_id' => $site->main_site_id, 'url' => $url])->first();
                 $content->main_site_content_id = $mainSiteContent->id;
             } else {

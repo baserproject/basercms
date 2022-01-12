@@ -12,8 +12,6 @@
 use BaserCore\Model\Entity\Content;
 use BaserCore\Model\Entity\ContentFolder;
 use BaserCore\View\BcAdminAppView;
-use Cake\Utility\Inflector;
-use BaserCore\Utility\BcUtil;
 
 /**
  * [ADMIN] 統合コンテンツフォーム
@@ -66,7 +64,7 @@ $isOmitViewAction = $this->BcContents->getConfig('items')[$content->type]['omitV
 if ($site->use_subdomain) {
   $contentsName = '';
   if (!$content->site_root) {
-    $contentsName = $this->BcAdminForm->getSourceValue($contentPath . 'name');
+    $contentsName = $this->BcAdminForm->getSourceValue("Content.name");
     if (!$isOmitViewAction && $content->url !== '/') {
       $contentsName .= '/';
     }
@@ -75,7 +73,7 @@ if ($site->use_subdomain) {
   if ($this->request->getData('Site.same_main_url') && $content->site_root) {
     $contentsName = '';
   } else {
-    $contentsName = $this->BcAdminForm->getSourceValue($contentPath . 'name');
+    $contentsName = $this->BcAdminForm->getSourceValue("Content.name");
   }
   if (!$isOmitViewAction && $content->url !== '/' && $contentsName) {
     $contentsName .= '/';
@@ -89,19 +87,19 @@ if ($this->BcContents->isEditable()) {
 ?>
 
 
-<?php echo $this->BcAdminForm->hidden($contentPath . 'id') ?>
-<?php echo $this->BcAdminForm->hidden($contentPath . 'plugin') ?>
-<?php echo $this->BcAdminForm->hidden($contentPath . 'type') ?>
-<?php echo $this->BcAdminForm->hidden($contentPath . 'entity_id') ?>
-<?php echo $this->BcAdminForm->hidden($contentPath . 'url') ?>
-<?php echo $this->BcAdminForm->hidden($contentPath . 'alias_id') ?>
-<?php echo $this->BcAdminForm->hidden($contentPath . 'site_root') ?>
-<?php echo $this->BcAdminForm->hidden($contentPath . 'site_id') ?>
-<?php echo $this->BcAdminForm->hidden($contentPath . 'lft') ?>
-<?php echo $this->BcAdminForm->hidden($contentPath . 'rght') ?>
-<?php echo $this->BcAdminForm->hidden($contentPath . 'status') ?>
-<?php echo $this->BcAdminForm->hidden($contentPath . 'main_site_content_id') ?>
-<?php echo $this->BcAdminForm->hidden($contentPath . 'publish_begin') ?>
+<?php echo $this->BcAdminForm->hidden("Content.id") ?>
+<?php echo $this->BcAdminForm->hidden("Content.plugin") ?>
+<?php echo $this->BcAdminForm->hidden("Content.type") ?>
+<?php echo $this->BcAdminForm->hidden("Content.entity_id") ?>
+<?php echo $this->BcAdminForm->hidden("Content.url") ?>
+<?php echo $this->BcAdminForm->hidden("Content.alias_id") ?>
+<?php echo $this->BcAdminForm->hidden("Content.site_root") ?>
+<?php echo $this->BcAdminForm->hidden("Content.site_id") ?>
+<?php echo $this->BcAdminForm->hidden("Content.lft") ?>
+<?php echo $this->BcAdminForm->hidden("Content.rght") ?>
+<?php echo $this->BcAdminForm->hidden("Content.status") ?>
+<?php echo $this->BcAdminForm->hidden("Content.main_site_content_id") ?>
+<?php echo $this->BcAdminForm->hidden("Content.publish_begin") ?>
 
 
 <div class="bca-section bca-section__post-top">
@@ -122,25 +120,25 @@ if ($this->BcContents->isEditable()) {
 <section id="BasicSetting" class="bca-section">
   <table class="form-table bca-form-table" data-bca-table-type="type2">
     <tr>
-      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label($contentPath . 'name', 'URL') ?>
+      <th class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("Content.name", 'URL') ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if (!$content->site_root): ?>
-          <?php echo $this->BcAdminForm->control($contentPath . 'parent_id', ['type' => 'select', 'options' => $parentContents, 'escape' => true]) ?>
+          <?php echo $this->BcAdminForm->control("Content.parent_id", ['type' => 'select', 'options' => $parentContents, 'escape' => true]) ?>
         <?php endif ?>
         <?php if (!$content->site_root && !$related): ?>
-          <?php echo $this->BcAdminForm->control($contentPath . 'name', ['type' => 'text', 'size' => 20, 'autofocus' => true]) ?>
+          <?php echo $this->BcAdminForm->control("Content.name", ['type' => 'text', 'size' => 20, 'autofocus' => true]) ?>
           <?php if (!$isOmitViewAction && $content->url !== '/'): ?>/<?php endif ?>
         <?php else: ?>
           <?php if (!$content->site_root): ?>
             <?php // サイトルートの場合はコンテンツ名を表示しない ?>
             <?php echo h($contentsName) ?>
           <?php endif ?>
-          <?php echo $this->BcAdminForm->hidden($contentPath . 'name') ?>
+          <?php echo $this->BcAdminForm->hidden("Content.name") ?>
         <?php endif ?>
-        <?php echo $this->BcAdminForm->error($contentPath . 'name') ?>
-        <?php echo $this->BcAdminForm->error($contentPath . 'parent_id') ?>
+        <?php echo $this->BcAdminForm->error("Content.name") ?>
+        <?php echo $this->BcAdminForm->error("Content.parent_id") ?>
         <span class="bca-post__url">
           <?php echo strip_tags($linkedFullUrl, '<a>') ?>
         </span>
@@ -148,44 +146,44 @@ if ($this->BcContents->isEditable()) {
     </tr>
     <tr>
       <th class="col-head bca-form-table__label">
-        <?php echo $this->BcAdminForm->label($contentPath . 'title', __d('baser', 'タイトル')) ?>&nbsp;<span class="bca-label"
+        <?php echo $this->BcAdminForm->label("ContentFolder.content.title", __d('baser', 'タイトル')) ?>&nbsp;<span class="bca-label"
                                                                                             data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if (!$disableEdit): ?>
-          <?php echo $this->BcAdminForm->control($contentPath . 'title', ['type' => 'text', 'size' => 50]) ?>
-          <?php echo $this->BcAdminForm->error($contentPath . 'title') ?>
+          <?php echo $this->BcAdminForm->control("ContentFolder.content.title", ['type' => 'text', 'size' => 50]) ?>
+          <?php echo $this->BcAdminForm->error("ContentFolder.content.title") ?>
         <?php else: ?>
-          <?php echo h($this->BcAdminForm->getSourceValue($contentPath . 'title')) ?>
-          <?php echo $this->BcAdminForm->hidden($contentPath . 'title') ?>
+          <?php echo h($this->BcAdminForm->getSourceValue("ContentFolder.content.title")) ?>
+          <?php echo $this->BcAdminForm->hidden("ContentFolder.content.title") ?>
         <?php endif ?>
       </td>
     </tr>
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label($contentPath . 'self_status', __d('baser', '公開状態')) ?>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("Content.self_status", __d('baser', '公開状態')) ?>
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
         <?php if (!$disableEdit): ?>
-          <?php echo $this->BcAdminForm->control($contentPath . 'self_status', ['type' => 'radio', 'options' => $this->BcText->booleanDoList('公開')]) ?>
+          <?php echo $this->BcAdminForm->control("Content.self_status", ['type' => 'radio', 'options' => $this->BcText->booleanDoList('公開')]) ?>
         <?php else: ?>
-          <?php echo $this->BcText->arrayValue($this->BcAdminForm->getSourceValue($contentPath . 'self_status'), $this->BcText->booleanDoList('公開')) ?>
-          <?php echo $this->BcAdminForm->hidden($contentPath . 'self_status') ?>
+          <?php echo $this->BcText->arrayValue($this->BcAdminForm->getSourceValue("Content.self_status"), $this->BcText->booleanDoList('公開')) ?>
+          <?php echo $this->BcAdminForm->hidden("Content.self_status") ?>
         <?php endif ?>
         <br>
-        <?php echo $this->BcAdminForm->error($contentPath . 'self_status') ?>
-        <?php if ((bool)$this->BcAdminForm->getSourceValue($contentPath . 'status') != (bool)$this->BcAdminForm->getSourceValue($contentPath . 'self_status')): ?>
+        <?php echo $this->BcAdminForm->error("Content.self_status") ?>
+        <?php if ((bool)$this->BcAdminForm->getSourceValue("Content.status") != (bool)$this->BcAdminForm->getSourceValue("Content.self_status")): ?>
           <p>※ <?php echo __d('baser', '親フォルダの設定を継承し非公開状態となっています') ?></p>
         <?php endif ?>
       </td>
     </tr>
     <tr>
       <th
-        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label($contentPath . 'self_status', __d('baser', '公開日時')) ?></th>
+        class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("Content.self_status", __d('baser', '公開日時')) ?></th>
       <td class="col-input bca-form-table__input">
         <?php if (!$disableEdit): ?>
-          <?php echo $this->BcAdminForm->control($contentPath . 'self_publish_begin', [
+          <?php echo $this->BcAdminForm->control("Content.self_publish_begin", [
             'type' => 'dateTimePicker',
             'size' => 12,
             'maxlength' => 10,
@@ -193,24 +191,24 @@ if ($this->BcContents->isEditable()) {
             'timeLabel' => ['text' => '開始時間']
           ]) ?>
           &nbsp;〜&nbsp;
-          <?php echo $this->BcAdminForm->control($contentPath . 'self_publish_end', [
+          <?php echo $this->BcAdminForm->control("Content.self_publish_end", [
             'type' => 'dateTimePicker',
             'size' => 12, 'maxlength' => 10,
             'dateLabel' => ['text' => '終了日付'],
             'timeLabel' => ['text' => '終了時間']
           ]) ?>
         <?php else: ?>
-          <?php if ($this->BcAdminForm->getSourceValue($contentPath . 'self_publish_begin') || $this->BcAdminForm->getSourceValue($contentPath . 'self_publish_end')): ?>
-            <?php echo $this->BcAdminForm->getSourceValue($contentPath . 'self_publish_begin') ?>&nbsp;〜&nbsp;<?php echo $this->BcAdminForm->getSourceValue($contentPath . 'self_publish_end') ?>
+          <?php if ($this->BcAdminForm->getSourceValue("Content.self_publish_begin") || $this->BcAdminForm->getSourceValue("Content.self_publish_end")): ?>
+            <?php echo $this->BcAdminForm->getSourceValue("Content.self_publish_begin") ?>&nbsp;〜&nbsp;<?php echo $this->BcAdminForm->getSourceValue("Content.self_publish_end") ?>
           <?php endif ?>
-          <?php echo $this->BcAdminForm->hidden($contentPath . 'self_publish_begin') ?>
-          <?php echo $this->BcAdminForm->hidden($contentPath . 'self_publish_end') ?>
+          <?php echo $this->BcAdminForm->hidden("Content.self_publish_begin") ?>
+          <?php echo $this->BcAdminForm->hidden("Content.self_publish_end") ?>
         <?php endif ?>
         <br>
-        <?php echo $this->BcAdminForm->error($contentPath . 'self_publish_begin') ?>
-        <?php echo $this->BcAdminForm->error($contentPath . 'self_publish_end') ?>
-        <?php if (($this->BcAdminForm->getSourceValue($contentPath . 'publish_begin') != $this->BcAdminForm->getSourceValue($contentPath . 'self_publish_begin')) ||
-          ($this->BcAdminForm->getSourceValue($contentPath . 'publish_end') != $this->BcAdminForm->getSourceValue($contentPath . 'self_publish_end'))): ?>
+        <?php echo $this->BcAdminForm->error("Content.self_publish_begin") ?>
+        <?php echo $this->BcAdminForm->error("Content.self_publish_end") ?>
+        <?php if (($this->BcAdminForm->getSourceValue("Content.publish_begin") != $this->BcAdminForm->getSourceValue("Content.self_publish_begin")) ||
+          ($this->BcAdminForm->getSourceValue("Content.publish_end") != $this->BcAdminForm->getSourceValue("Content.self_publish_end"))): ?>
           <p>※ <?php echo __d('baser', '親フォルダの設定を継承し公開期間が設定されている状態となっています') ?><br>
             （<?php echo $this->BcTime->format($content->publish_begin, 'yyyy/MM/DD H:i') ?>
             〜

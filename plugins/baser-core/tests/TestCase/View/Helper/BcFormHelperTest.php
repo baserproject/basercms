@@ -14,6 +14,7 @@ namespace BaserCore\Test\TestCase\View\Helper;
 use Cake\Event\EventList;
 use Cake\Event\EventManager;
 use BaserCore\View\BcAdminAppView;
+use BaserCore\Model\Entity\Content;
 use BaserCore\TestSuite\BcTestCase;
 use BaserCore\View\Helper\BcFormHelper;
 use BaserCore\Model\Entity\ContentFolder;
@@ -793,11 +794,11 @@ class BcFormHelperTest extends BcTestCase
      */
     public function testFileUploadField()
     {
-        $fieldName = 'Contact.upload';
+        $fieldName = 'Content.upload';
         $this->BcForm->setEntity($fieldName);
         // 通常
         $result = $this->BcForm->file($fieldName);
-        $this->assertEquals('<input type="file" name="Contact[upload]" id="ContactUpload">', $result);
+        $this->assertEquals('<input type="file" name="Content[upload]" id="ContentUpload">', $result);
     }
 
     /**
@@ -942,11 +943,16 @@ class BcFormHelperTest extends BcTestCase
     {
         $context = new ContentFolder();
         $context->setSource("BaserCore.ContentFolder");
+        $secondContext = new Content();
+        $secondContext->setSource("BaserCore.Content");
+        $arrayContext = [$context, $secondContext];
         return [
             // contextがない場合(Controller名が使われれるか)
             [null, [], "TestControllerAdminTestForm"],
             // context名が使われる場合
             [$context, [], "ContentFolderAdminTestForm"],
+            // 複数のcontextが使用される場合１つ目のcontextがidとして使用される
+            [$arrayContext, [], "ContentFolderAdminTestForm"],
             // 指定したoptionIDが使われる場合
             [$context, ['id' => 'testForm'], "testForm"],
         ];

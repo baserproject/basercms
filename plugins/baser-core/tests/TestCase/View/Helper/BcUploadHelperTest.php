@@ -62,7 +62,6 @@ class BcUploadHelperTest extends BcTestCase
     {
         $this->assertNotEmpty($this->BcUpload->BcAdminForm);
         $this->assertNotEmpty($this->BcUpload->Html);
-        $this->assertNotEmpty($this->BcUpload->table);
         $this->assertNotEmpty($this->BcUpload->siteConfigService);
     }
 
@@ -150,6 +149,8 @@ class BcUploadHelperTest extends BcTestCase
      */
     public function testGetBcUploadSetting()
     {
+        // $this->tableの設定
+        $this->execPrivateMethod($this->BcUpload, 'initField', ['Contents.test']);
         $this->assertNotEmpty($this->execPrivateMethod($this->BcUpload, 'getBcUploadSetting', []));
     }
 
@@ -160,8 +161,21 @@ class BcUploadHelperTest extends BcTestCase
      */
     public function testSetBcUploadSetting()
     {
+        // $this->tableの設定
+        $this->execPrivateMethod($this->BcUpload, 'initField', ['Contents.test']);
         $this->execPrivateMethod($this->BcUpload, 'setBcUploadSetting', ['test']);
         $this->assertEquals('test', $this->execPrivateMethod($this->BcUpload, 'getBcUploadSetting', []));
+    }
+
+    /**
+     * testInitField
+     *
+     * @return void
+     */
+    public function testInitField()
+    {
+        $this->assertEquals('name', $this->execPrivateMethod($this->BcUpload, 'initField', ['Contents.name']));
+        $this->assertNotEmpty($this->BcUpload->table);
     }
 
 }
