@@ -12,6 +12,7 @@ namespace BaserCore\View\Helper;
 
 use Cake\View\Helper;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Inflector;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Error\BcException;
@@ -44,21 +45,25 @@ class BcUploadHelper  extends Helper
     public $helpers = ['Html', 'BcAdminForm'];
 
     /**
+     * BcUploadHelperで使用するテーブル
+     * initFieldにて$fieldNameに基づき設定
+     *
+     * @var Table
+     */
+    public $table;
+
+    /**
      * initialize
      *
      * @param  array $config
      * @return void
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function initialize(array $config): void
     {
         parent::initialize($config);
-        // TODO ucmitz: 一旦コンテンテーブルツのみで決め打ち
-        $this->table = TableRegistry::getTableLocator()->get('BaserCore.Contents');
-        if (!$this->table->hasBehavior('BcUpload')) {
-            throw new BcException(__d('baser', 'BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。'));
-        }
         $this->siteConfigService = $this->getService(SiteConfigServiceInterface::class);
     }
 
@@ -69,6 +74,7 @@ class BcUploadHelper  extends Helper
      * @param array $options
      * @return string
      * @checked
+     * @noTodo
      * @unitTest
      */
     public function fileLink($fieldName, $options = [])
@@ -89,8 +95,7 @@ class BcUploadHelper  extends Helper
         if (strpos($fieldName, '.') === false) {
             throw new BcException(__d('baser', 'BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドットで区切って指定する必要があります。'));
         }
-        $targetField = explode('.', $fieldName);
-        $field = array_pop($targetField);
+        $field = $this->initField($fieldName);
 
         $tmp = false;
 
@@ -123,11 +128,10 @@ class BcUploadHelper  extends Helper
         }
         if (is_array($value)) {
             if (empty($value['session_key']) && empty($value['name'])) {
-                // TODO ucmitz: $contextにもContentではなく、ContentFolderになってしまうため全体の構成を変える必要あり
                 $context = $this->BcAdminForm->context();
-                $data = $this->find()->where([$this->table->getAlias() . '.' . 'id' => $context->val("id")])->first();
-                if (!empty($data[$this->table->getAlias()][$field])) {
-                    $value = $data[$this->table->getAlias()][$field];
+                $data = $context->entity()[Inflector::singularize($this->table->getAlias())];
+                if (!empty($data->$field)) {
+                    $value = $data->$field;
                 } else {
                     $value = '';
                 }
@@ -238,12 +242,7 @@ class BcUploadHelper  extends Helper
         if (strpos($fieldName, '.') === false) {
 			throw new BcException(__d('baser', 'BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドットで区切って指定する必要があります。'));
 		}
-        $fieldInfo = explode('.', $fieldName);
-        $field = array_pop($fieldInfo);
-
-        // TODO ucmitz: 一旦コンテンテーブルツのみで決め打ち
-        // $tableName = (strpos($fieldName, 'content') || strpos($fieldName, 'Content')) ? 'Contents' : $fieldName;
-        // $model = TableRegistry::getTableLocator()->get('BaserCore.Contents');
+        $field = $this->initField($fieldName);
         try {
             $settings = $this->getBcUploadSetting();
         } catch (BcException $e) {
@@ -470,5 +469,28 @@ class BcUploadHelper  extends Helper
     protected function setBcUploadSetting($settings)
     {
         $this->table->getBehavior('BcUpload')->settings[$this->table->getAlias()] = $settings;
+    }
+
+    /**
+     * initField
+     *
+     * @param  string $fieldName
+     * @return string $field
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function initField($fieldName)
+    {
+        $targetField = explode('.', $fieldName);
+        $table = array_shift($targetField);
+        $field = array_pop($targetField);
+        if (is_null($this->table)) {
+            $this->table = TableRegistry::getTableLocator()->get('BaserCore.' . Inflector::pluralize($table));
+        }
+        if (!$this->table->hasBehavior('BcUpload')) {
+            throw new BcException(__d('baser', 'BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。'));
+        }
+        return $field;
     }
 }

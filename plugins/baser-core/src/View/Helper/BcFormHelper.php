@@ -14,14 +14,15 @@ namespace BaserCore\View\Helper;
 use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
+use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
 use Cake\View\Helper\FormHelper;
-use Cake\Datasource\EntityInterface;
-use BaserCore\View\Helper\BcUploadHelper;
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\Note;
+use Cake\Datasource\EntityInterface;
+use Cake\View\Form\ContextInterface;
+use BaserCore\View\Helper\BcUploadHelper;
+use BaserCore\Event\BcEventDispatcherTrait;
 
 /**
  * FormHelper 拡張クラス
@@ -1937,6 +1938,10 @@ DOC_END;
         $request = $this->getView()->getRequest();
         if (!isset($options['id'])) {
             if (!empty($context)) {
+                if (is_array($context)) {
+                    // 複数$contextに設定されてる場合先頭のエンティティを優先
+                    $context = array_shift($context);
+                }
                 [, $context] = pluginSplit($context->getSource());
             } else {
                 $context = empty($request->getParam('controller')) ? false : $request->getParam('controller');

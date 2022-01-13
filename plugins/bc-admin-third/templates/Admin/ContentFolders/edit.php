@@ -39,8 +39,7 @@ $pageTemplateList = $Page->getPageTemplateList($contentFolder->content->id, $the
 ?>
 
 
-<?php echo $this->BcAdminForm->create($contentFolder, ['novalidate' => true]) ?>
-
+<?php echo $this->BcAdminForm->create($contentEntities, ['novalidate' => true]) ?>
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 <?php echo $this->BcAdminForm->hidden('ContentFolder.id') ?>
 <table class="form-table bca-form-table" data-bca-table-type="type2">
