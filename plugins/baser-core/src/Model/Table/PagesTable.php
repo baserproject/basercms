@@ -11,11 +11,15 @@
 
 namespace BaserCore\Model\Table;
 
+use ArrayObject;
 use Cake\ORM\Table;
+use Cake\Filesystem\File;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
+use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
 use Cake\Datasource\EntityInterface;
+use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
 
 /**
@@ -27,6 +31,7 @@ class PagesTable extends Table
      * Trait
      */
     use BcEventDispatcherTrait;
+    use BcContainerTrait;
 
     /**
      * 更新前のページファイルのパス
@@ -88,6 +93,7 @@ class PagesTable extends Table
     {
         parent::initialize($config);
         $this->addBehavior('BaserCore.BcContents');
+        $this->ContentService = $this->getService(ContentServiceInterface::class);
         // $this->addBehavior('BaserCore.BcSearchIndexManager');
     }
 
@@ -156,23 +162,25 @@ class PagesTable extends Table
 
         return $validator;
     }
+
     /**
-     * beforeSave
-     *
-     * @param array $options
-     * @return boolean
+     * Before Save
+     * @param EventInterface $event
+     * @param EntityInterface $entity
+     * @param ArrayObject $options
+     * @return bool
      */
-    public function beforeSave($options = [])
+    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
         if (!$this->fileSave) {
             return true;
         }
 
         // 保存前のページファイルのパスを取得
-        if ($this->exists() && !empty($this->data['Content'])) {
+        if ($this->ContentService->exists($entity->content->id) && !empty($entity->content)) {
             $this->oldPath = $this->getPageFilePath(
                 $this->find('first', [
-                        'conditions' => ['Page.id' => $this->data['Page']['id']],
+                        'conditions' => ['Page.id' => $entity->id],
                         'recursive' => 0]
                 )
             );
@@ -182,8 +190,8 @@ class PagesTable extends Table
 
         // 新しいページファイルのパスが開けるかチェックする
         $result = true;
-        if (!empty($this->data['Content'])) {
-            if (!$this->checkOpenPageFile($this->data)) {
+        if (!empty($entity->content)) {
+            if (!$this->checkOpenPageFile($entity)) {
                 $result = false;
             }
         }
@@ -226,19 +234,20 @@ class PagesTable extends Table
     /**
      * afterSave
      *
-     * @param boolean $created
-     * @param array $options
+     * @param  EventInterface $event
+     * @param  EntityInterface $entity
+     * @param  ArrayObject $options
      * @return void
      */
-    public function afterSave($created, $options = [])
+    public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
 
-        parent::afterSave($created, $options);
+        // parent::afterSave($created, $options);
 
-        if (empty($data['Page']['id'])) {
+        if (empty($entity->id)) {
             $data = $this->read(null, $this->id);
         } else {
-            $data = $this->read(null, $data['Page']['id']);
+            $data = $this->read(null, $entity->id);
         }
 
         if ($this->fileSave) {
@@ -247,10 +256,10 @@ class PagesTable extends Table
 
         // 検索用テーブルに登録
         if ($this->searchIndexSaving) {
-            if (empty($data['Content']['exclude_search'])) {
-                $this->saveSearchIndex($this->createSearchIndex($data));
+            if (empty($entity->content->exclude_search)) {
+                $this->saveSearchIndex($this->createSearchIndex($entity));
             } else {
-                $this->deleteSearchIndex($data['Page']['id']);
+                $this->deleteSearchIndex($entity->id);
             }
         }
 

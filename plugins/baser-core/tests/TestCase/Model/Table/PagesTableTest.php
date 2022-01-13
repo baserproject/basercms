@@ -75,6 +75,7 @@ class PageTest extends BcTestCase
     public function testInitialize()
     {
         $this->assertTrue($this->Pages->hasBehavior('BcContents'));
+        $this->assertNotEmpty($this->Pages->ContentService);
     }
 
     /**
