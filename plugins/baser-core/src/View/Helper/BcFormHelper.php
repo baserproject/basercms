@@ -1939,6 +1939,7 @@ DOC_END;
         if (!isset($options['id'])) {
             if (!empty($context)) {
                 if (is_array($context)) {
+                    // 複数$contextに設定されてる場合先頭のエンティティを優先
                     $context = array_shift($context);
                 }
                 [, $context] = pluginSplit($context->getSource());
