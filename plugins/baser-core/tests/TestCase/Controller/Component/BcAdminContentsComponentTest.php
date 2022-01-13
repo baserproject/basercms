@@ -72,7 +72,7 @@ class BcAdminContentsComponentTest extends BcTestCase
      */
     public function tearDown(): void
     {
-        unset($_SESSION);
+        unset($_SESSION, $this->Controller, $this->BcAdminContents);
         Router::reload();
         parent::tearDown();
     }
@@ -112,5 +112,32 @@ class BcAdminContentsComponentTest extends BcTestCase
     public function testGetParentLayoutTemplate()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
+    }
+
+    /**
+     * testCheckContentEntities
+     *
+     * @return void
+     */
+    public function testCheckContentEntities()
+    {
+        // contentEntitiesの順番が適切でない場合順番が入れ替わってるかチェック
+        $entities = ['Content' => 'test', 'ContentFolder' => 'test'];
+        $this->Controller->viewBuilder()->setVar('contentEntities', $entities);
+        $this->execPrivateMethod($this->BcAdminContents, 'checkContentEntities', [$this->Controller]);
+        $entities = $this->Controller->viewBuilder()->getVar('contentEntities');
+        $this->assertNotEquals('Content', array_key_first($entities));
+    }
+
+    /**
+     * testCheckContentEntities
+     *
+     * @return void
+     */
+    public function testCheckContentEntitiesWithError()
+    {
+        // contentEntitiesが適切でない場合エラーができるかチェック
+        $this->expectExceptionMessage('contentEntitiesが適切に設定されていません');
+        $this->execPrivateMethod($this->BcAdminContents, 'checkContentEntities', [$this->Controller]);
     }
 }
