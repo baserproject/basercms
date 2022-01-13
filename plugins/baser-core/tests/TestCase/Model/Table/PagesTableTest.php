@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Model\Table;
 
+use Cake\Validation\Validator;
 use BaserCore\TestSuite\BcTestCase;
 
 /**
@@ -39,6 +40,7 @@ class PageTest extends BcTestCase
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.Pages',
         // 'plugin.BaserCore.Favorites'
     ];
 
@@ -75,8 +77,24 @@ class PageTest extends BcTestCase
         $this->assertTrue($this->Pages->hasBehavior('BcContents'));
     }
 
+    /**
+     * testValidationDefault
+     *
+     * @return void
+     */
+    public function testValidationDefault()
+    {
+        $validator = $this->Pages->validationDefault(new Validator());
+        $fields = [];
+        foreach($validator->getIterator() as $key => $value) {
+            $fields[] = $key;
+        }
+        $this->assertEquals(['id','contents', 'draft', 'code'], $fields);
+    }
+
     public function test既存ページチェック正常()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->Pages->create([
             'Page' => [
                 'name' => 'test',
@@ -96,6 +114,7 @@ class PageTest extends BcTestCase
      */
     public function testCotainsScriptRegular($check, $expected)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $allowedPhpOtherThanAdmins = Configure::read('BcApp.allowedPhpOtherThanAdmins');
         Configure::write('BcApp.allowedPhpOtherThanAdmins', false);
         $this->Pages->create([
@@ -152,6 +171,7 @@ class PageTest extends BcTestCase
      */
     public function testGetInsertID()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->Pages->save([
             'Page' => [
                 'name' => 'hoge',
@@ -177,6 +197,7 @@ class PageTest extends BcTestCase
      */
     public function testCheckOpenPageFile($name, $parentId, $expected, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $data = [
             'Content' => [
                 'name' => $name,
@@ -296,6 +317,7 @@ class PageTest extends BcTestCase
      */
     public function testBeforeDelete($id, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 削除したファイルを再生するため内容を取得
         $page = $this->Pages->find('first', [
                 'conditions' => ['Page.id' => $id],
@@ -333,6 +355,7 @@ class PageTest extends BcTestCase
      */
     public function testCreateAllPageTemplate()
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->Pages->createAllPageTemplate();
 
         // ファイルが生成されているか確認
@@ -363,6 +386,7 @@ class PageTest extends BcTestCase
      */
     public function testCreatePageTemplate($name, $categoryId, $expected, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $data = [
             'Page' => [
                 'contents' => '',
@@ -416,7 +440,7 @@ class PageTest extends BcTestCase
      */
     public function testDelFile($name, $categoryId, $expected, $message = null)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $data = [
             'Page' => [
                 'contents' => '',
@@ -481,6 +505,7 @@ class PageTest extends BcTestCase
      */
     public function testAddBaserPageTag($id, $contents, $title, $description, $code, $expected, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Pages->addBaserPageTag($id, $contents, $title, $description, $code);
         $this->assertRegExp('/' . $expected . '/s', $result, $message);
     }
@@ -507,6 +532,7 @@ class PageTest extends BcTestCase
      */
     public function testGetControlSource($field, $expected, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Pages->getControlSource($field);
         $this->assertEquals($expected, $result, $message);
     }
@@ -541,6 +567,7 @@ class PageTest extends BcTestCase
      */
     public function testIsPageUrl($url, $expects)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $result = $this->Pages->isPageUrl($url);
         $this->assertEquals($result, $expects);
     }
@@ -567,7 +594,7 @@ class PageTest extends BcTestCase
      */
     public function testDelete($id, $expected, $message = null)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 削除したファイルを再生するため内容を取得
         $Page = $this->Pages->find('first', [
                 'conditions' => ['Page.id' => $id],
@@ -612,6 +639,7 @@ class PageTest extends BcTestCase
      */
     public function testCopy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->loginAdmin($this->getRequest());
         $result = $this->Pages->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
 
@@ -643,6 +671,7 @@ class PageTest extends BcTestCase
      */
     public function testPhpValidSyntax($code)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertTrue($this->Pages->phpValidSyntax(['contents' => $code]));
     }
 
@@ -664,6 +693,7 @@ class PageTest extends BcTestCase
      */
     public function testPhpValidSyntaxWithInvalid($line, $code)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertContains("on line {$line}", $this->Pages->phpValidSyntax(['contents' => $code]));
     }
 
@@ -690,6 +720,7 @@ class PageTest extends BcTestCase
      */
     public function testGetPageTemplateList($contetnId, $theme, $expected)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $templates = BASER_THEMES . 'bc_sample' . DS . 'Pages' . DS . 'templates' . DS . 'hoge.php';
         touch($templates);
         $result = $this->Pages->getPageTemplateList($contetnId, $theme);
@@ -716,6 +747,7 @@ class PageTest extends BcTestCase
      */
     public function testFindByUrl($url, $publish, $expected)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->loadFixtures('ContentStatusCheck');
         $result = (bool)$this->Pages->findByUrl($url, $publish);
         $this->assertEquals($expected, $result);
@@ -740,6 +772,7 @@ class PageTest extends BcTestCase
      */
     public function testGetContentFolderPath($id, $expects)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->assertEquals($expects, $this->Pages->getContentFolderPath($id));
     }
 

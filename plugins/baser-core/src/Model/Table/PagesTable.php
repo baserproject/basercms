@@ -14,6 +14,7 @@ namespace BaserCore\Model\Table;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
+use Cake\Validation\Validator;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Event\BcEventDispatcherTrait;
 
@@ -91,32 +92,70 @@ class PagesTable extends Table
     }
 
     /**
-     * Page constructor.
+     * Validation Default
      *
-     * @param bool $id
-     * @param null $table
-     * @param null $ds
+     * @param Validator $validator
+     * @return Validator
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function __construct($id = false, $table = null, $ds = null)
+    public function validationDefault(Validator $validator): Validator
     {
-        parent::__construct($id, $table, $ds);
-        $this->validate = [
-            'id' => [
-                ['rule' => 'numeric', 'on' => 'update', 'message' => __d('baser', 'IDに不正な値が利用されています。')]],
-            'contents' => [
-                ['rule' => 'phpValidSyntax', 'allowEmpty' => true, 'message' => __d('baser', '本稿欄でPHPの構文エラーが発生しました。')],
-                ['rule' => ['maxByte', 64000], 'allowEmpty' => true, 'message' => __d('baser', '本稿欄に保存できるデータ量を超えています。')],
-                ['rule' => 'containsScript', 'allowEmpty' => true, 'message' => __d('baser', '本稿欄でスクリプトの入力は許可されていません。')]],
-            'draft' => [
-                ['rule' => 'phpValidSyntax', 'allowEmpty' => true, 'message' => __d('baser', '草稿欄でPHPの構文エラーが発生しました。')],
-                ['rule' => ['maxByte', 64000], 'allowEmpty' => true, 'message' => __d('baser', '草稿欄に保存できるデータ量を超えています。')],
-                ['rule' => 'containsScript', 'allowEmpty' => true, 'message' => __d('baser', '草稿欄でスクリプトの入力は許可されていません。')]],
-            'code' => [
-                ['rule' => 'phpValidSyntax', 'allowEmpty' => true, 'message' => __d('baser', 'PHPの構文エラーが発生しました。')],
-                ['rule' => 'containsScript', 'allowEmpty' => true, 'message' => __d('baser', 'スクリプトの入力は許可されていません。')]]
-        ];
-    }
+        $validator
+        ->integer('id')
+        ->numeric('id', __d('baser', 'IDに不正な値が利用されています。'), 'update')
+        ->requirePresence('id', true);
 
+        $validator
+        ->scalar('contents')
+        ->allowEmptyString('contents', null)
+        ->maxLengthBytes('contents', 64000, __d('baser', '本稿欄に保存できるデータ量を超えています。'))
+        ->add('contents', 'custom', [
+            'rule' => [$this, 'phpValidSyntax'],
+            'message' => __d('baser', '本稿欄でPHPの構文エラーが発生しました。')
+        ])
+        ->add('contents', [
+            'containsScript' => [
+                'rule' => ['containsScript'],
+                'provider' => 'bc',
+                'message' => __d('baser', '本稿欄でスクリプトの入力は許可されていません。')
+            ]
+        ]);
+
+        $validator
+        ->scalar('draft')
+        ->allowEmptyString('draft', null)
+        ->maxLengthBytes('draft', 64000, __d('baser', '本稿欄に保存できるデータ量を超えています。'))
+        ->add('draft', 'custom', [
+            'rule' => [$this, 'phpValidSyntax'],
+            'message' => __d('baser', '本稿欄でPHPの構文エラーが発生しました。')
+        ])
+        ->add('draft', [
+            'containsScript' => [
+                'rule' => ['containsScript'],
+                'provider' => 'bc',
+                'message' => __d('baser', '本稿欄でスクリプトの入力は許可されていません。')
+            ]
+        ]);
+
+        $validator
+        ->scalar('code')
+        ->allowEmptyString('code', null)
+        ->add('code', 'custom', [
+            'rule' => [$this, 'phpValidSyntax'],
+            'message' => __d('baser', '本稿欄でPHPの構文エラーが発生しました。')
+        ])
+        ->add('code', [
+            'containsScript' => [
+                'rule' => ['containsScript'],
+                'provider' => 'bc',
+                'message' => __d('baser', '本稿欄でスクリプトの入力は許可されていません。')
+            ]
+        ]);
+
+        return $validator;
+    }
     /**
      * beforeSave
      *
