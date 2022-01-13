@@ -28,13 +28,6 @@ class PagesTable extends Table
     use BcEventDispatcherTrait;
 
     /**
-     * ビヘイビア
-     *
-     * @var array
-     */
-    public $actsAs = ['BcSearchIndexManager', 'BcCache', 'BcContents'];
-
-    /**
      * 更新前のページファイルのパス
      *
      * @var string
@@ -81,6 +74,21 @@ class PagesTable extends Table
      * @var int
      */
     private $__pageInsertID = null;
+
+    /**
+     * Initialize
+     *
+     * @param array $config テーブル設定
+     * @return void
+     * @checked
+     * @unitTest
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+        $this->addBehavior('BaserCore.BcContents');
+        // $this->addBehavior('BaserCore.BcSearchIndexManager');
+    }
 
     /**
      * Page constructor.
