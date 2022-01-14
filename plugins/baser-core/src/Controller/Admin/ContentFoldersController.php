@@ -83,6 +83,8 @@ class ContentFoldersController extends BcAdminAppController
                 $this->redirect(['action' => 'edit', $id]);
             }
             try {
+                // postしたcontentEntitiesの情報をContentFolderに統一する
+                $this->request = $this->request->withData('ContentFolder.content', array_merge($this->request->getData('ContentFolder.content'), $this->request->getData('Content')));
                 $contentFolder = $contentFolderService->update($contentFolder, $this->request->getData('ContentFolder'));
                 // TODO: afterSaveで$optionにreconstructSearchIndicesを渡す if ($ContentFolders->save($this->request->getData(), ['reconstructSearchIndices' => true])) {
                 // clearViewCache(); TODO: 動作しないため一旦コメントアウト
