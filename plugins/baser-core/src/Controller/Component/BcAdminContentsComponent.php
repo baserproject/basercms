@@ -102,6 +102,9 @@ class BcAdminContentsComponent extends Component
     /**
      * コンテンツ保存フォームを設定する
      * @return void
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function settingForm()
     {
