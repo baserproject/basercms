@@ -13,8 +13,12 @@ namespace BaserCore\Test\TestCase\Controller\Component;
 
 use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Service\ContentService;
 use Cake\Controller\ComponentRegistry;
 use BaserCore\Controller\BcAppController;
+use BaserCore\Service\ContentFolderService;
+use BaserCore\Controller\Admin\ContentsController;
+use BaserCore\Controller\Admin\ContentFoldersController;
 use BaserCore\Controller\Component\BcAdminContentsComponent;
 
 
@@ -49,7 +53,9 @@ class BcAdminContentsComponentTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.Contents',
+        'plugin.BaserCore.ContentFolders',
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.SiteConfigs',
     ];
 
     /**
@@ -63,6 +69,8 @@ class BcAdminContentsComponentTest extends BcTestCase
         $this->Controller = new BcAdminContentsTestController();
         $this->ComponentRegistry = new ComponentRegistry($this->Controller);
         $this->BcAdminContents = new BcAdminContentsComponent($this->ComponentRegistry);
+        $this->ContentService = new ContentService();
+        $this->ContentFolderService = new ContentFolderService();
     }
 
     /**
@@ -104,14 +112,59 @@ class BcAdminContentsComponentTest extends BcTestCase
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }
 
-    public function testSettingForm()
+    /**
+     * testSettingForm
+     * ※ コントローラーがContentControllerの場合
+     * @return void
+     */
+    public function testSettingFormWithContent()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $Controller = new ContentsController();
+        $content = $this->ContentService->get(1);
+        $Controller->set('content', $content);
+        $ComponentRegistry = new ComponentRegistry($Controller);
+        $BcAdminContents = new BcAdminContentsComponent($ComponentRegistry);
+        $BcAdminContents->settingForm();
+        $vars = $Controller->viewBuilder()->getVars();
+        $this->assertIsBool($vars['related']);
+        $this->assertIsBool($vars["disableEditContent"]);
+        $this->assertIsInt($vars["currentSiteId"]);
+        $this->assertInstanceOf("BaserCore\Model\Entity\Content", $vars["content"]);
+        $this->assertIsArray($vars["relatedContents"]);
+        $this->assertEquals($content->site_id == 1 ? null : 1, $vars["mainSiteId"]);
+        $this->assertEquals("パソコン", $vars["mainSiteDisplayName"]);
+        $this->assertInstanceOf("Cake\ORM\Query", $vars["sites"]);
+        $this->assertNotNull($vars["layoutTemplates"]);
     }
 
-    public function testGetParentLayoutTemplate()
+    /**
+     * testSettingForm
+     *※ コントローラーがContentFolderControllerの場合
+     * @return void
+     */
+    public function testSettingFormWithContentFolder()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $Controller = new ContentFoldersController();
+        $contentFolder = $this->ContentFolderService->get(1);
+        $Controller->set('contentFolder', $contentFolder);
+        $Controller->set('content', $contentFolder->content);
+        $Controller->set('contentEntities', [
+            'ContentFolder' => $contentFolder,
+            'Content' => $contentFolder->content,
+        ]);
+        $ComponentRegistry = new ComponentRegistry($Controller);
+        $BcAdminContents = new BcAdminContentsComponent($ComponentRegistry);
+        $BcAdminContents->settingForm();
+        $vars = $Controller->viewBuilder()->getVars();
+        $this->assertIsBool($vars['related']);
+        $this->assertIsBool($vars["disableEditContent"]);
+        $this->assertIsInt($vars["currentSiteId"]);
+        $this->assertInstanceOf("BaserCore\Model\Entity\Content", $vars["content"]);
+        $this->assertIsArray($vars["relatedContents"]);
+        $this->assertEquals($contentFolder->content->site_id == 1 ? null : 1, $vars["mainSiteId"]);
+        $this->assertEquals("パソコン", $vars["mainSiteDisplayName"]);
+        $this->assertInstanceOf("Cake\ORM\Query", $vars["sites"]);
+        $this->assertNotNull($vars["layoutTemplates"]);
     }
 
     /**
