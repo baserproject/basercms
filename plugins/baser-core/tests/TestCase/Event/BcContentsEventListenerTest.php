@@ -112,7 +112,8 @@ class BcContentsEventListenerTest extends BcTestCase
         $BcAdminAppView = $this->BcAdminAppView->setRequest($request)->setPlugin("BcAdminThird")
             ->set("contentPath", "Contents.")
             ->set("relatedContents", ['test1', 'test2'])
-            ->set("content", $this->Content); // content_relatedで必要
+            ->set("content", $this->Content) // content_relatedで必要
+            ->set('contentEntities', ['Content' => $this->Content]);
         $out = "testtest";
         $event = new Event("Helper.Form.afterSubmit", $BcAdminAppView);
         $event->setData('id', 'TestAdminEditForm')->setData('out', $out);

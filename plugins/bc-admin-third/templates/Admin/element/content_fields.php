@@ -20,7 +20,7 @@ use BaserCore\View\BcAdminAppView;
  * @var array $parentContents
  * @var bool $related 親サイトに連携する設定で、エイリアス、もしくはフォルダであるかどうか
  *                                        上記に一致する場合、URLに関わるコンテンツ名は編集できない
- * @var bool $disableEditContent コンテンツ編集不可かどうか
+ * @var bool $editable コンテンツ編集不可かどうか
  * @var Content $content
  * @var ContentFolder $contentFolder
  */
@@ -80,10 +80,7 @@ if ($site->use_subdomain) {
   }
 }
 $linkedFullUrl = $this->BcAdminContent->getCurrentFolderLinkedUrl($content) . $contentsName;
-$disableEdit = false;
-if ($this->BcContents->isEditable()) {
-  $disableEdit = true;
-}
+$editable = $this->BcContents->isEditable();
 ?>
 
 
@@ -150,7 +147,7 @@ if ($this->BcContents->isEditable()) {
                                                                                             data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
-        <?php if (!$disableEdit): ?>
+        <?php if ($editable): ?>
           <?php echo $this->BcAdminForm->control("ContentFolder.content.title", ['type' => 'text', 'size' => 50]) ?>
           <?php echo $this->BcAdminForm->error("ContentFolder.content.title") ?>
         <?php else: ?>
@@ -165,7 +162,7 @@ if ($this->BcContents->isEditable()) {
         &nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
       </th>
       <td class="col-input bca-form-table__input">
-        <?php if (!$disableEdit): ?>
+        <?php if ($editable): ?>
           <?php echo $this->BcAdminForm->control("Content.self_status", ['type' => 'radio', 'options' => $this->BcText->booleanDoList('公開')]) ?>
         <?php else: ?>
           <?php echo $this->BcText->arrayValue($this->BcAdminForm->getSourceValue("Content.self_status"), $this->BcText->booleanDoList('公開')) ?>
@@ -182,7 +179,7 @@ if ($this->BcContents->isEditable()) {
       <th
         class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("Content.self_status", __d('baser', '公開日時')) ?></th>
       <td class="col-input bca-form-table__input">
-        <?php if (!$disableEdit): ?>
+        <?php if ($editable): ?>
           <?php echo $this->BcAdminForm->control("Content.self_publish_begin", [
             'type' => 'dateTimePicker',
             'size' => 12,

@@ -479,11 +479,9 @@ class BcContentsHelper extends Helper
     public function isEditable($data = null)
     {
         if (!$data) {
-            if (!$this->request->getData('Content') && !$this->request->getData('Site')) {
-                return false;
-            }
-            $content = $this->request->getData('Content');
-            $site = $this->request->getData('Site');
+            $content = $this->getView()->get('contentEntities')['Content'];
+            if (!$content) { return false; }
+            $site = $content->site;
         } else {
             if (isset($data['Content'])) {
                 $content = $data['Content'];
