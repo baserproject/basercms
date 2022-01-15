@@ -96,28 +96,11 @@ class BcAppController extends AppController
     {
         parent::beforeFilter($event);
 
-        $isAdmin = $this->getRequest()->is('admin');
-        if ($isAdmin) {
-            $response = $this->redirectIfIsNotSameSite();
-            if($response) {
-                return $response;
-            }
-        }
+        $response = $this->redirectIfIsNotSameSite();
+        if($response) return $response;
 
-        return;
-
-        // メンテナンス
-        if (!$this->request->is('ajax') && !empty(BcSiteConfig::get('maintenance')) && (Configure::read('debug') < 1) && !$this->getRequest()->is('maintenance') && !$isAdmin && !BcUtil::isAdminUser()) {
-            if (!empty($this->request->getParam('return')) && !empty($this->request->getParam('requested'))) {
-                return;
-            }
-
-            $redirectUrl = '/maintenance';
-            if ($this->request->getParam('Site.alias')) {
-                $redirectUrl = '/' . $this->request->getParam('Site.alias') . $redirectUrl;
-            }
-            $this->redirect($redirectUrl);
-        }
+        $response = $this->redirectIfIsRequireMaintenance();
+        if($response) return $response;
 
         // セキュリティ設定
         $this->Security->blackHoleCallback = '_blackHoleCallback';
@@ -129,6 +112,8 @@ class BcAppController extends AppController
         if (!BC_INSTALLED || $this->getRequest()->is('update')) {
             $this->Security->validatePost = false;
         }
+
+        $isAdmin = $this->getRequest()->is('admin');
         if ($isAdmin) {
             $this->Security->validatePost = false;
             $corePlugins = Configure::read('BcApp.corePlugins');
