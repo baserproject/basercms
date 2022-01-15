@@ -13,7 +13,7 @@
 /**
  * [ADMIN] パスワードリセット画面
  */
-$userModel = Configure::read('BcAuthPrefix.' . $currentPrefix . '.userModel');
+$userModel = Configure::read('BcPrefixAuth.' . $currentPrefix . '.userModel');
 if (!$userModel) {
   $userModel = 'User';
 }

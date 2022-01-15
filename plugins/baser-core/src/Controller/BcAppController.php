@@ -183,7 +183,7 @@ class BcAppController extends AppController
             } else {
                 $currentAuthPrefix = 'front';
             }
-            $authPrefixSettings = Configure::read('BcAuthPrefix');
+            $authPrefixSettings = Configure::read('BcPrefixAuth');
             foreach($authPrefixSettings as $key => $authPrefixSetting) {
                 if (isset($authPrefixSetting['alias']) && $authPrefixSetting['alias'] == $currentAuthPrefix) {
                     $authConfig = $authPrefixSetting;
@@ -201,7 +201,7 @@ class BcAppController extends AppController
             if ($authConfig) {
                 $this->BcAuthConfigure->setting($authConfig);
             } else {
-                $this->BcAuth->setSessionKey('Auth.' . Configure::read('BcAuthPrefix.admin.sessionKey'));
+                $this->BcAuth->setSessionKey('Auth.' . Configure::read('BcPrefixAuth.Admin.sessionKey'));
             }
 
             // =================================================================
@@ -518,9 +518,9 @@ class BcAppController extends AppController
         $this->set('currentPrefix', $currentPrefix);
 
         $user = BcUtil::loginUser();
-        $sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
+        $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
 
-        $authPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);
+        $authPrefix = Configure::read('BcPrefixAuth.' . $currentPrefix);
         if ($authPrefix) {
             $currentPrefixUser = BcUtil::loginUser($currentPrefix);
             if ($currentPrefixUser) {

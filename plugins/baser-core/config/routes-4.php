@@ -78,7 +78,7 @@ Router::connectNamed(['sortmode', 'num', 'page', 'sort', 'direction']);
 /**
  * 認証プレフィックス
  */
-$authPrefixes = Configure::read('BcAuthPrefix');
+$authPrefixes = Configure::read('BcPrefixAuth');
 if ($authPrefixes && is_array($authPrefixes)) {
     foreach($authPrefixes as $prefix => $authPrefix) {
         if (!empty($authPrefix['alias'])) {

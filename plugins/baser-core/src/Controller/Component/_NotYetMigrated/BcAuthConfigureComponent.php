@@ -72,7 +72,7 @@ class BcAuthConfigureComponent extends Component
             'userModel' => 'User',
             'auth_prefix' => '',
             'userScope' => '',
-            'sessionKey' => Configure::read('BcAuthPrefix.admin.sessionKey')
+            'sessionKey' => Configure::read('BcPrefixAuth.Admin.sessionKey')
         ], $config);
         if (empty($config['type'])) {
             $config['type'] = 'Form';
