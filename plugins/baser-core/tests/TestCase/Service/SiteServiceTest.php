@@ -133,6 +133,44 @@ class SiteServiceTest extends \BaserCore\TestSuite\BcTestCase
     }
 
     /**
+     * Test publish
+     *
+     * @return void
+     */
+    public function testPublish()
+    {
+        $sites = $this->getTableLocator()->get('Sites');
+
+        $site = $sites->find()->order(['id' => 'ASC'])->first();
+        $site->status = false;
+        $sites->save($site);
+
+        $this->Sites->publish($site->id);
+
+        $site = $sites->get($site->id);
+        $this->assertTrue($site->status);
+    }
+
+    /**
+     * Test unpublish
+     *
+     * @return void
+     */
+    public function testUnpublish()
+    {
+        $sites = $this->getTableLocator()->get('Sites');
+
+        $site = $sites->find()->order(['id' => 'ASC'])->first();
+        $site->status = true;
+        $sites->save($site);
+
+        $this->Sites->unpublish($site->id);
+
+        $site = $sites->get($site->id);
+        $this->assertFalse($site->status);
+    }
+
+    /**
      * Test delete
      */
     public function testDelete()
