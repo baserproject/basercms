@@ -289,7 +289,7 @@ class SearchIndicesController extends AppController
 //					App::uses('HttpSocket', 'Network/Http');
 //					$socket = new HttpSocket();
 //					// ※ Router::url() では、スマートURLオフの場合、/app/webroot/ 内のURLが正常に取得できない
-//					$HttpSocketResponse = $socket->get(siteUrl() . preg_replace('/^\//', '', $url));
+//					$HttpSocketResponse = $socket->get(BcUtil::siteUrl() . preg_replace('/^\//', '', $url));
 //					$code = $HttpSocketResponse->code;
 //					if ($code != 200) {
 //						unset($searchIndex);

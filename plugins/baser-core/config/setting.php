@@ -33,6 +33,11 @@ return [
          */
         'sslUrl' => env('SSL_URL', 'https://localhost/'),
         /**
+         * CMS URL
+         * CMSのURLが別ドメインの場合に設定する
+         */
+        'cmsUrl' => '',
+        /**
          * 復数のWebサイトを管理する場合のメインとなるドメイン
          */
         'mainDomain' => '',

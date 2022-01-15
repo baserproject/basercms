@@ -76,3 +76,7 @@ if(!defined('BC_INSTALLED')) {
     define('BC_INSTALLED', BcUtil::isInstalled());
 }
 
+// TODO ucmitz 最終的に削除する
+if(!defined('BC_DEPLOY_PATTERN')) {
+    define('BC_DEPLOY_PATTERN', 1);
+}

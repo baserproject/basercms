@@ -98,6 +98,11 @@ class BcTestCase extends TestCase
      */
     public function getRequest($url = '/', $data = [], $method = 'GET', $config = [])
     {
+        $config = array_merge([
+            'ajax' => false
+        ], $config);
+        $isAjax = (!empty($config['ajax']))? true : false;
+        unset($config['ajax']);
         if(preg_match('/^http/', $url)) {
             $parseUrl = parse_url($url);
             Configure::write('BcEnv.host', $parseUrl['host']);
@@ -105,7 +110,8 @@ class BcTestCase extends TestCase
                 'uri' => ServerRequestFactory::createUri([
                     'HTTP_HOST' => $parseUrl['host'],
                     'REQUEST_URI' => $url,
-                    'REQUEST_METHOD' => $method
+                    'REQUEST_METHOD' => $method,
+                    'HTTPS' => (preg_match('/^https/', $url))? 'on' : ''
             ])];
         } else {
             $defaultConfig = [
@@ -133,6 +139,10 @@ class BcTestCase extends TestCase
         }
         $authentication = $this->BaserCore->getAuthenticationService($request);
         $request = $request->withAttribute('authentication', $authentication);
+        $request = $request->withEnv('HTTPS', (preg_match('/^https/', $url))? 'on' : '');
+        if($isAjax) {
+            $request = $request->withEnv('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest');
+        }
         Router::setRequest($request);
         return $request;
     }

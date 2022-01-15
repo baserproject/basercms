@@ -1068,4 +1068,107 @@ class BcUtil
             return false;
         }
     }
+
+    /**
+     * サイトの設置URLを取得する
+     *
+     * index.phpは含まない
+     *
+     * @return    string
+     */
+    public static function siteUrl()
+    {
+        $baseUrl = preg_replace('/' . preg_quote(basename($_SERVER['SCRIPT_FILENAME']), '/') . '\/$/', '', BcUtil::baseUrl());
+        $topLevelUrl = BcUtil::topLevelUrl(false);
+        if ($topLevelUrl) {
+            return $topLevelUrl . $baseUrl;
+        } else {
+            return '';
+        }
+    }
+
+
+    /**
+     * WebサイトのベースとなるURLを取得する
+     *
+     * コントローラーが初期化される前など {$this->base} が利用できない場合に利用する
+     * / | /index.php/ | /subdir/ | /subdir/index.php/
+     *
+     * ※ プログラムフォルダ内の画像やCSSの読み込み時もbootstrap.php で呼び出されるのでサーバーキャッシュは利用しない
+     *
+     * @return string ベースURL
+     */
+    public static function baseUrl()
+    {
+
+        $baseUrl = Configure::read('App.baseUrl');
+        if ($baseUrl) {
+            if (!preg_match('/\/$/', $baseUrl)) {
+                $baseUrl .= '/';
+            }
+        } else {
+            $script = $_SERVER['SCRIPT_FILENAME'];
+            if (BcUtil::isConsole()) {
+                $script = str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
+            }
+            $script = str_replace(['\\', '/'], DS, $script);
+            $docroot = BcUtil::docRoot();
+            $script = str_replace($docroot, '', $script);
+            if (BC_DEPLOY_PATTERN == 1) {
+                $baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'index.php', '/') . '/', '', $script);
+                $baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'test.php', '/') . '/', '', $baseUrl);
+                // ↓ Windows Azure 対策 SCRIPT_FILENAMEに期待した値が入ってこない為
+                $baseUrl = preg_replace('/index\.php/', '', $baseUrl);
+            } elseif (BC_DEPLOY_PATTERN == 2) {
+                $baseUrl = preg_replace('/' . preg_quote(basename($_SERVER['SCRIPT_FILENAME']), '/') . '/', '', $script);
+            }
+            $baseUrl = preg_replace("/index$/", '', $baseUrl);
+        }
+
+        $baseUrl = str_replace(DS, '/', $baseUrl);
+        if (!$baseUrl) {
+            $baseUrl = '/';
+        }
+        return $baseUrl;
+
+    }
+
+    /**
+     * ドキュメントルートを取得する
+     *
+     * サブドメインの場合など、$_SERVER['DOCUMENT_ROOT'] が正常に取得できない場合に利用する
+     * UserDir に対応
+     *
+     * @return string   ドキュメントルートの絶対パス
+     */
+    public static function docRoot()
+    {
+
+        if (empty($_SERVER['SCRIPT_NAME'])) {
+            return '';
+        }
+
+        if (BcUtil::isConsole()) {
+            $script = $_SERVER['SCRIPT_NAME'];
+            return str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
+        }
+
+        if (strpos($_SERVER['SCRIPT_NAME'], '.php') === false) {
+            // さくらの場合、/index を呼びだすと、拡張子が付加されない
+            $scriptName = $_SERVER['SCRIPT_NAME'] . '.php';
+        } else {
+            $scriptName = $_SERVER['SCRIPT_NAME'];
+        }
+        $path = explode('/', $scriptName);
+        krsort($path);
+        // WINDOWS環境の場合、SCRIPT_NAMEのDIRECTORY_SEPARATORがスラッシュの場合があるので
+        // スラッシュに一旦置換してスラッシュベースで解析
+        $docRoot = str_replace('\\', '/', $_SERVER['SCRIPT_FILENAME']);
+        foreach($path as $value) {
+            $reg = "/\/" . $value . "$/";
+            $docRoot = preg_replace($reg, '', $docRoot);
+        }
+        return str_replace('/', DS, $docRoot);
+    }
+
 }

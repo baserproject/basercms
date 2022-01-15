@@ -82,7 +82,7 @@ Configure::write('Dispatcher.filters',
  * Windows対策として、「\」を「/」へ変換してチェックする
  */
 if (!defined('BC_DEPLOY_PATTERN')) {
-    if (!preg_match('/' . preg_quote(str_replace('\\', '/', docRoot()), '/') . '/', str_replace('\\', '/', ROOT))) {
+    if (!preg_match('/' . preg_quote(str_replace('\\', '/', BcUtil::docRoot()), '/') . '/', str_replace('\\', '/', ROOT))) {
         // CakePHP標準の配置
         define('BC_DEPLOY_PATTERN', 3);
     } elseif (ROOT . DS == WWW_ROOT) {
@@ -98,7 +98,7 @@ if (!defined('BC_DEPLOY_PATTERN')) {
  * baserUrl取得
  * BC_DEPLOY_PATTERN の定義より後に実行
  */
-define('BC_BASE_URL', baseUrl());
+define('BC_BASE_URL', BcUtil::baseUrl());
 
 /**
  * インストール状態
@@ -290,7 +290,7 @@ if (BC_INSTALLED) {
     } elseif (BC_INSTALLED && !$isMaintenance && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
         if (!isConsole()) {
             CakeLog::write(LOG_ERR, 'プログラムとデータベースのバージョンが異なります。');
-            header('Location: ' . topLevelUrl(false) . baseUrl() . 'maintenance/index');
+            header('Location: ' . \BaserCore\Utility\BcUtil::topLevelUrl(false) . BcUtil::baseUrl() . 'maintenance/index');
             exit();
         } else {
             throw new BcException(__d('baser', 'プログラムとデータベースのバージョンが異なるため、強制終了します。データベースのバージョンを調整して、再実行してください。'));

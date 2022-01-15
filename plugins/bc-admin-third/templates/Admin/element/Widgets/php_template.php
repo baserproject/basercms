@@ -22,7 +22,7 @@ $description = __d('baser', 'PHPコードが書かれたテンプレートの読
 <?php echo $this->BcAdminForm->control($key . '.template', ['type' => 'text', 'size' => 14]) ?> <?php echo $this->ext ?>
 <p style="text-align:left"><small>
     <?php
-    $webroot = preg_replace('/' . preg_quote(docRoot(), '/') . '/', '', WWW_ROOT, 1);
+    $webroot = preg_replace('/' . preg_quote(BcUtil::docRoot(), '/') . '/', '', WWW_ROOT, 1);
     echo sprintf(__d('baser', 'テンプレートを利用中のテーマ内の次のパスに保存してください。<br />%stheme/{テーマ名}/Elements/widgets/'), $webroot);
     ?>
   </small></p>

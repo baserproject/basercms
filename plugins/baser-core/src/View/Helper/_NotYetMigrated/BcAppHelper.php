@@ -68,7 +68,7 @@ class BcAppHelper extends Helper
         }
         $filePath = str_replace('/', DS, $filePath);
 
-        $docRoot = docRoot();
+        $docRoot = BcUtil::docRoot();
         if (file_exists(WWW_ROOT . $filePath)) {
             $webPath = $this->request->webroot . $asset[0];
         } elseif (file_exists($docRoot . DS . $filePath) && strpos($docRoot . DS . $filePath, ROOT . DS) !== false) {

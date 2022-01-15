@@ -34,7 +34,7 @@ $priorities = [
   <td class="bca-table-listup__tbody-td"><?php echo $data['SearchIndex']['id'] ?></td>
   <td class="bca-table-listup__tbody-td" style="width:15%">
     <?php echo $data['SearchIndex']['type'] ?><br>
-    <?php $this->BcBaser->link($this->BcText->noValue($data['SearchIndex']['title'], __d('baser', '設定なし')), siteUrl() . preg_replace('/^\//', '', $data['SearchIndex']['url']), ['target' => '_blank', 'escape' => true]) ?>
+    <?php $this->BcBaser->link($this->BcText->noValue($data['SearchIndex']['title'], __d('baser', '設定なし')), \BaserCore\Utility\BcUtil::siteUrl() . preg_replace('/^\//', '', $data['SearchIndex']['url']), ['target' => '_blank', 'escape' => true]) ?>
   </td>
   <td class="bca-table-listup__tbody-td"><?php echo h($this->Text->truncate($data['SearchIndex']['detail'], 50)) ?></td>
   <td class="bca-table-listup__tbody-td" style="width:10%;text-align:center">
