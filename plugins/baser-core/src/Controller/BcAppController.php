@@ -96,35 +96,18 @@ class BcAppController extends AppController
     {
         parent::beforeFilter($event);
 
-        // TODO 未確認のため代替措置
-        // >>>
-        return;
-        // <<<
-
-        $isRequestView = $this->request->is('requestview');
-        $isUpdate = $this->request->is('update');
-        $isAdmin = $this->request->is('admin');
-        $isInstall = $this->request->is('install');
-        $isMaintenance = $this->request->is('maintenance');
-
-        // 設定されたサイトURLとリクエストされたサイトURLが違う場合は設定されたサイトにリダイレクト
+        $isAdmin = $this->getRequest()->is('admin');
         if ($isAdmin) {
-            $cmsUrl = Configure::read('BcEnv.cmsUrl');
-            if ($cmsUrl) {
-                $siteUrl = Configure::read('BcEnv.cmsUrl');
-            } elseif ($this->request->is('ssl')) {
-                $siteUrl = Configure::read('BcEnv.sslUrl');
-            } else {
-                $siteUrl = Configure::read('BcEnv.siteUrl');
-            }
-            if ($siteUrl && siteUrl() != $siteUrl) {
-                $webrootReg = '/^' . preg_quote($this->request->getAttributes()['webroot'], '/') . '/';
-                $this->redirect($siteUrl . preg_replace($webrootReg, '', Router::reverse($this->request, false)));
+            $response = $this->redirectIfIsNotSameSite();
+            if($response) {
+                return $response;
             }
         }
 
+        return;
+
         // メンテナンス
-        if (!$this->request->is('ajax') && !empty(BcSiteConfig::get('maintenance')) && (Configure::read('debug') < 1) && !$isMaintenance && !$isAdmin && !BcUtil::isAdminUser()) {
+        if (!$this->request->is('ajax') && !empty(BcSiteConfig::get('maintenance')) && (Configure::read('debug') < 1) && !$this->getRequest()->is('maintenance') && !$isAdmin && !BcUtil::isAdminUser()) {
             if (!empty($this->request->getParam('return')) && !empty($this->request->getParam('requested'))) {
                 return;
             }
@@ -143,7 +126,7 @@ class BcAppController extends AppController
             $csrfExpires = "+4 hours";
         }
         $this->Security->csrfExpires = $csrfExpires;
-        if (!BC_INSTALLED || $isUpdate) {
+        if (!BC_INSTALLED || $this->getRequest()->is('update')) {
             $this->Security->validatePost = false;
         }
         if ($isAdmin) {
@@ -184,7 +167,7 @@ class BcAppController extends AppController
         $this->request = $this->request->withQueryParams($query);
 
         // コンソールから利用される場合、$isInstall だけでは判定できないので、BC_INSTALLED も判定に入れる
-        if ((!BC_INSTALLED || $isInstall || $isUpdate) && $this->name !== 'CakeError') {
+        if ((!BC_INSTALLED || $this->getRequest()->is('install') || $this->getRequest()->is('update')) && $this->name !== 'CakeError') {
             $this->theme = Configure::read('BcApp.defaultAdminTheme');
             return;
         }
@@ -279,7 +262,7 @@ class BcAppController extends AppController
             ]);
         }
 
-        if (!$isRequestView) {
+        if (!$this->getRequest()->is('requestview')) {
             return;
         }
 

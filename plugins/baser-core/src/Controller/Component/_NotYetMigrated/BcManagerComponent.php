@@ -507,7 +507,7 @@ class BcManagerComponent extends Component
         $installFileName = APP . 'Config' . DS . 'install.php';
 
         if (!$siteUrl) {
-            $siteUrl = siteUrl();
+            $siteUrl = BcUtil::siteUrl();
         }
         $installCoreData = ["<?php",
             "Configure::write('Security.salt', '{$securitySalt}');",

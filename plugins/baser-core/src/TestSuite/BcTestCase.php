@@ -105,7 +105,8 @@ class BcTestCase extends TestCase
                 'uri' => ServerRequestFactory::createUri([
                     'HTTP_HOST' => $parseUrl['host'],
                     'REQUEST_URI' => $url,
-                    'REQUEST_METHOD' => $method
+                    'REQUEST_METHOD' => $method,
+                    'HTTPS' => (preg_match('/^https/', $url))? 'on' : ''
             ])];
         } else {
             $defaultConfig = [
@@ -133,6 +134,7 @@ class BcTestCase extends TestCase
         }
         $authentication = $this->BaserCore->getAuthenticationService($request);
         $request = $request->withAttribute('authentication', $authentication);
+        $request = $request->withEnv('HTTPS', (preg_match('/^https/', $url))? 'on' : '');
         Router::setRequest($request);
         return $request;
     }

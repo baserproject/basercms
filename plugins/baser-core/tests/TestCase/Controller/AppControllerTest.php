@@ -30,6 +30,7 @@ class AppControllerTest extends BcTestCase
      */
     public $fixtures = [
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents'
     ];
 
     /**
@@ -102,6 +103,18 @@ class AppControllerTest extends BcTestCase
         $vars->setAccessible(true);
         $actual = $vars->getValue($this->AppController->viewBuilder())['title'];
         $this->assertEquals($template, $actual);
+    }
+
+    /**
+     * test redirectIfIsNotSameSite
+     */
+    public function testRedirectIfIsNotSameSite()
+    {
+        $this->getRequest('https://localhost/index');
+        $this->_response = $this->AppController->redirectIfIsNotSameSite();
+        $this->getRequest('http://localhost/index');
+        $this->_response = $this->AppController->redirectIfIsNotSameSite();
+        $this->assertRedirect('https://localhost/index');
     }
 
 }

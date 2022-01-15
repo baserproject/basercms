@@ -22,11 +22,13 @@ use BaserCore\Utility\BcUtil;
 use Cake\Controller\Component\PaginatorComponent;
 use Cake\Controller\Component\SecurityComponent;
 use Cake\Controller\ComponentRegistry;
+use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 
 /**
  * Class AppController
@@ -128,6 +130,34 @@ class AppController extends BaseController
     public function setTitle($title): void
     {
         $this->set('title', $title);
+    }
+
+    /**
+     * siteUrlや、sslUrlと現在のURLが違う場合には、そちらのURLにリダイレクトを行う
+     * setting.php にて、cmsUrlとして、cmsUrlを定義した場合にはそちらを優先する
+     * @return Response|void|null
+     */
+    public function redirectIfIsNotSameSite()
+    {
+        if (Configure::read('BcEnv.cmsUrl')) {
+            $siteUrl = Configure::read('BcEnv.cmsUrl');
+        } elseif ($this->getRequest()->is('ssl')) {
+            $siteUrl = Configure::read('BcEnv.sslUrl');
+        } else {
+            $siteUrl = Configure::read('BcEnv.siteUrl');
+        }
+        if(!$siteUrl) {
+            return;
+        }
+        if (BcUtil::siteUrl() !== $siteUrl) {
+            $params = $this->getRequest()->getAttributes()['params'];
+            unset($params['Content']);unset($params['Site']);
+            $url = Router::reverse($params, false);
+            $webroot = $this->request->getAttributes()['webroot'];
+            $webrootReg = '/^\/' . preg_quote($webroot, '/') . '/';
+            $url = preg_replace($webrootReg, '', $url);
+            return $this->redirect($siteUrl . $url);
+        }
     }
 
 }
