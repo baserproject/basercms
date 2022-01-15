@@ -804,7 +804,8 @@ $config['BcShortCode']['Core'] = [
  * セキュリティ設定
  */
 $config['BcSecurity'] = [
-	'csrfExpires' => '+4 hours'
+	'csrfExpires' => '+4 hours',
+	'passwordChangeExpire' => '+1 hours'
 ];
 
 /**
