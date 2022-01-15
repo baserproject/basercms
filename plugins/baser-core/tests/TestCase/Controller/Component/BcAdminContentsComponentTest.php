@@ -135,6 +135,7 @@ class BcAdminContentsComponentTest extends BcTestCase
         $this->assertEquals("パソコン", $vars["mainSiteDisplayName"]);
         $this->assertInstanceOf("Cake\ORM\Query", $vars["sites"]);
         $this->assertNotNull($vars["layoutTemplates"]);
+        $this->assertIsString($vars["publishLink"]);
     }
 
     /**
