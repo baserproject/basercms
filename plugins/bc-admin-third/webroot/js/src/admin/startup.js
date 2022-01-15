@@ -120,9 +120,7 @@ $(function () {
      *
      * @returns false
      */
-    let fullUrl = 'testlocalhost';
-    // var fullUrl = $.bcUtil.frontFullUrl;
-    // TODO: duplicateになってるからかそもそも初期画面でhideになってしまう
+    let fullUrl = $.bcUtil.frontFullUrl;
     if (!document.queryCommandSupported('copy')) {
         $("#BtnCopyUrl").hide();
     } else if (fullUrl) {

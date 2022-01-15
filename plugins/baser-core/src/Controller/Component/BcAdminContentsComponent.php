@@ -117,7 +117,8 @@ class BcAdminContentsComponent extends Component
             $associated = $controller->viewBuilder()->getVar($entityName);
             $content = $associated->content;
         }
-        $theme = $content->site->theme;
+        $site = $content->site;
+        $theme = $site->theme;
 
         $templates = array_merge(
             BcUtil::getTemplateList('Layouts', '', $theme),
@@ -136,15 +137,14 @@ class BcAdminContentsComponent extends Component
         if (Configure::read('BcApp.autoUpdateContentCreatedDate')) {
             $content->modified_date = date('Y-m-d H:i:s');
         }
-
         $siteList = $this->Sites->find('list', ['fields' => ['id', 'display_name']]);
         $controller->set('sites', $siteList);
         $controller->set('mainSiteDisplayName', $this->SiteConfigService->getValue('main_site_display_name'));
-        $controller->set('mainSiteId', $content->site->main_site_id);
+        $controller->set('mainSiteId', $site->main_site_id);
         $controller->set('relatedContents', $this->Sites->getRelatedContents($content->id));
         $related = false;
-        if (($content->site->relate_main_site && $content->main_site_content_id && $content->alias_id) ||
-            $content->site->relate_main_site && $content->main_site_content_id && $content->type == 'ContentFolder') {
+        if (($site->relate_main_site && $content->main_site_content_id && $content->alias_id) ||
+            $site->relate_main_site && $content->main_site_content_id && $content->type == 'ContentFolder') {
             $related = true;
         }
         if (!$entityName === "content") $associated->content = $content;
@@ -153,6 +153,7 @@ class BcAdminContentsComponent extends Component
         $controller->set('content', $content);
         $controller->set('currentSiteId', $content->site_id);
         $controller->set('related', $related);
+        $controller->set('publishLink', $this->ContentService->getUrl($content->url, true, $site->useSubDomain));
     }
 
     /**
