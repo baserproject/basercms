@@ -648,7 +648,7 @@ class SitesTable extends AppTable
     }
 
     /**
-     * 選択可能が言語の一覧を取得する
+     * 選択可能な言語の一覧を取得する
      *
      * @param int $mainSiteId メインサイトID
      * @param int $currentSiteId 現在のサイトID
