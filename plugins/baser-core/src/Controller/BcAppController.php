@@ -102,6 +102,8 @@ class BcAppController extends AppController
         $response = $this->redirectIfIsRequireMaintenance();
         if($response) return $response;
 
+        return;
+
         // セキュリティ設定
         $this->Security->blackHoleCallback = '_blackHoleCallback';
         $csrfExpires = Configure::read('BcSecurity.csrfExpires');

@@ -24,6 +24,15 @@ class AnalyseControllerTest extends BcTestCase
     use IntegrationTestTrait;
 
     /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'plugin.BaserCore.Sites'
+    ];
+
+    /**
      * set up
      */
     public function setUp(): void
