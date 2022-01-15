@@ -118,7 +118,7 @@ class BcReplacePrefixComponentTest extends BcTestCase
     public function testStartup($pre, $action, $methods, $view, $expected)
     {
 
-        Configure::write('BcAuthPrefix', array_merge(Configure::read('BcAuthPrefix'), [
+        Configure::write('BcPrefixAuth', array_merge(Configure::read('BcPrefixAuth'), [
             'pre' => ['alias' => 'pre'],
             'front' => []
         ]));

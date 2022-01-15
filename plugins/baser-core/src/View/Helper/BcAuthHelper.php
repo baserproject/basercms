@@ -134,7 +134,7 @@ class BcAuthHelper extends Helper
         // <<<
 //        $currentAuthPrefixSetting = $this->BcAuth->getCurrentPrefixSetting();
 //        if ($this->isCurrentUserAdminAvailable()) {
-//            $logoutAction = Configure::read('BcAuthPrefix.admin.logoutAction');
+//            $logoutAction = Configure::read('BcPrefixAuth.Admin.logoutAction');
 //        } else {
 //            $logoutAction = $currentAuthPrefixSetting['logoutAction'];
 //        }

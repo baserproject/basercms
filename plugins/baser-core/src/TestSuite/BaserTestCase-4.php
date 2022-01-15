@@ -87,7 +87,7 @@ class BaserTestCase extends CakeTestCase
      */
     protected function _loginAdmin($id = 1)
     {
-        $key = Configure::read('BcAuthPrefix.admin.sessionKey');
+        $key = Configure::read('BcPrefixAuth.Admin.sessionKey');
         $User = ClassRegistry::init('User', 'Model');
         $user = $User->find('first', ['conditions' => ['User.id' => $id]]);
         $user['User']['UserGroup'] = $user['UserGroup'];

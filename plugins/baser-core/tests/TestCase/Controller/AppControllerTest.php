@@ -124,10 +124,9 @@ class AppControllerTest extends BcTestCase
         $this->getRequest('http://localhost/index');
         $this->_response = $this->AppController->redirectIfIsNotSameSite();
         $this->assertRedirect('https://localhost/index');
-        // TODO ucmitz BcRequestFilter を ミドルウェアで実装が必要
-//        $this->getRequest('http://localhost/baser/admin');
-//        $this->_response = $this->AppController->redirectIfIsNotSameSite();
-//        $this->assertNull($this->_response);
+        $this->AppController->setRequest($this->getRequest('https://localhost/baser/admin'));
+        $this->_response = $this->AppController->redirectIfIsNotSameSite();
+        $this->assertNull($this->_response);
     }
 
     /**
@@ -144,17 +143,16 @@ class AppControllerTest extends BcTestCase
         Configure::write('debug', false);
         $this->_response = $this->AppController->redirectIfIsRequireMaintenance();
         $this->assertRedirect('/maintenance');
-        Configure::write('debug', true);
         $this->AppController->setRequest($this->getRequest('/', [], 'GET', ['ajax' => true]));
         $this->_response = $this->AppController->redirectIfIsRequireMaintenance();
         $this->assertNull($this->_response);
-        // TODO ucmitz BcRequestFilter を ミドルウェアで実装が必要
-//        $this->getRequest('http://localhost/baser/admin');
-//        $this->_response = $this->AppController->redirectIfIsRequireMaintenance();
-//        $this->assertNull($this->_response);
+        $this->AppController->setRequest($this->getRequest('http://localhost/baser/admin'));
+        $this->_response = $this->AppController->redirectIfIsRequireMaintenance();
+        $this->assertNull($this->_response);
         $this->loginAdmin($this->getRequest());
         $this->_response = $this->AppController->redirectIfIsRequireMaintenance();
         $this->assertNull($this->_response);
+        Configure::write('debug', true);
     }
 
 }

@@ -393,7 +393,7 @@ class BcUtil
      */
     public static function authSessionKey($prefix = 'admin')
     {
-        return Configure::read('BcAuthPrefix.' . $prefix . '.sessionKey');
+        return Configure::read('BcPrefixAuth.' . $prefix . '.sessionKey');
     }
 
     /**

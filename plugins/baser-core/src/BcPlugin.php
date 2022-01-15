@@ -186,6 +186,17 @@ class BcPlugin extends BasePlugin
         $plugin = $this->getName();
 
         /**
+         * インストーラー
+         */
+        if (!Configure::read('BcRequest.isInstalled')) {
+            $routes->connect('/', ['plugin' => 'BaserCore', 'controller' => 'Installations', 'action' => 'index']);
+            $routes->connect('/install', ['plugin' => 'BaserCore', 'controller' => 'Installations', 'action' => 'index']);
+            $routes->fallbacks(InflectedRoute::class);
+            parent::routes($routes);
+            return;
+        }
+
+        /**
          * コンテンツ管理ルーティング
          */
         $routes->plugin(

@@ -140,7 +140,6 @@ class AppController extends BaseController
      */
     public function redirectIfIsNotSameSite()
     {
-        // TODO ucmitz BcRequestFilter を ミドルウェアで実装が必要
         if($this->getRequest()->is('admin')) {
             return;
         }

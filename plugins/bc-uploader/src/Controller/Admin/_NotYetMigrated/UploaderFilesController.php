@@ -475,7 +475,7 @@ class UploaderFilesController extends AppController
     {
 
         $display = false;
-        if (!empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
+        if (!empty($_SESSION['Auth'][Configure::read('BcPrefixAuth.Admin.sessionKey')])) {
             $display = true;
         } else {
             $conditions = [

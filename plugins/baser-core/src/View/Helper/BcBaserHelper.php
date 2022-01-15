@@ -373,7 +373,7 @@ class BcBaserHelper extends Helper
         return $this->BcHtml->link($title, $url, $options);
         // <<<
 
-        $adminAlias = Configure::read('BcAuthPrefix.admin.alias');
+        $adminAlias = Configure::read('BcPrefixAuth.Admin.alias');
 
         if (!is_array($options)) {
             $options = [$options];
@@ -527,7 +527,7 @@ class BcBaserHelper extends Helper
         if (empty($this->_View->get('editLink'))) return false;
         foreach($this->_View->get('currentUserAuthPrefixes') as $currentPrefix) {
             if (Configure::read('Routing.prefixes.0') == $currentPrefix) return true;
-            if (Configure::read('Routing.prefixes.0') == Configure::read('BcAuthPrefix.' . $currentPrefix . '.alias')) return true;
+            if (Configure::read('Routing.prefixes.0') == Configure::read('BcPrefixAuth.' . $currentPrefix . '.alias')) return true;
         }
         return false;
     }
@@ -543,7 +543,7 @@ class BcBaserHelper extends Helper
         if (empty($this->_View->get('publishLink'))) return false;
         foreach($this->_View->get('currentUserAuthPrefixes') as $currentPrefix) {
             if (Configure::read('Routing.prefixes.0') == $currentPrefix) return true;
-            if (Configure::read('Routing.prefixes.0') == Configure::read('BcAuthPrefix.' . $currentPrefix . '.alias')) return true;
+            if (Configure::read('Routing.prefixes.0') == Configure::read('BcPrefixAuth.' . $currentPrefix . '.alias')) return true;
         }
         return false;
     }
@@ -1385,7 +1385,7 @@ class BcBaserHelper extends Helper
     {
 
         $currentPrefix = $this->_View->get('currentPrefix');
-        $authPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);
+        $authPrefix = Configure::read('BcPrefixAuth.' . $currentPrefix);
         $toolbar = true;
 
         if (isset($authPrefix['toolbar'])) {
@@ -1457,7 +1457,7 @@ class BcBaserHelper extends Helper
     {
 
         $currentPrefix = $this->_View->get('currentPrefix');
-        $authPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);
+        $authPrefix = Configure::read('BcPrefixAuth.' . $currentPrefix);
         $toolbar = true;
         if ($authPrefix && isset($authPrefix['toolbar'])) {
             $toolbar = $authPrefix['toolbar'];

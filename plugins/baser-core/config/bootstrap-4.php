@@ -101,11 +101,6 @@ if (!defined('BC_DEPLOY_PATTERN')) {
 define('BC_BASE_URL', BcUtil::baseUrl());
 
 /**
- * インストール状態
- */
-Configure::write('BcRequest.isInstalled', BC_INSTALLED); // UnitTest用
-
-/**
  * 静的ファイルの読み込みの場合はスキップ
  */
 $assetRegex = '/^' . preg_quote(BC_BASE_URL, '/') . '.*?(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
@@ -405,7 +400,7 @@ if (Configure::read('debug') == 0) {
         // TODO ブラウザを閉じても最初から編集ページへのリンクを表示する場合は、クッキーのチェックを行い、認証処理を行う必要があるが、
         // セキュリティ上の問題もあるので実装は検討が必要。
         // bootstrapで実装した場合、他ページへの負荷の問題もある
-        if (isset($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
+        if (isset($_SESSION['Auth'][Configure::read('BcPrefixAuth.Admin.sessionKey')])) {
             Configure::write('Cache.check', false);
         }
     }

@@ -676,7 +676,7 @@ class BlogPost extends BlogAppModel
             $data = $event->getResult() === true ? $event->getData('data') : $event->getResult();
         }
 
-        $sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
+        $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
         if (!empty($_SESSION['Auth'][$sessionKey])) {
             $data['BlogPost']['user_id'] = $_SESSION['Auth'][$sessionKey]['id'];
         }

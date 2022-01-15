@@ -105,6 +105,12 @@ return [
             'BcCkeditor' => 'CKEditor'
         ],
         /**
+         * アップデートキー
+         * アップデート時のURLに使用する
+         * 例）https://localhost/update
+         */
+        'updateKey' => env('UPDATE_KEY', 'update'),
+        /**
          * システムナビ
          *
          * 初期状態で表示するメニューは、`Contents` キー配下に定義し、「設定」内に格納する場合は、`Systems` キー配下に定義する
