@@ -66,10 +66,6 @@ class MailContent extends MailAppModel
 			],
 			'sender_name' => [
 				[
-					'rule' => ['notBlank'],
-					'message' => __d('baser', '送信先名を入力してください。')
-				],
-				[
 					'rule' => ['maxLength', 255],
 					'message' => __d('baser', '送信先名は255文字以内で入力してください。')
 				]
@@ -183,7 +179,6 @@ class MailContent extends MailAppModel
 	{
 		return [
 			'MailContent' => [
-				'sender_name' => __d('baser', '送信先名を入力してください'),
 				'subject_user' => __d('baser', 'お問い合わせ頂きありがとうございます'),
 				'subject_admin' => __d('baser', 'お問い合わせを頂きました'),
 				'layout_template' => 'default',

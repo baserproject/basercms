@@ -397,7 +397,7 @@ class MailController extends MailAppController
 					]);
 					$sendEmailOptions = [];
 					if ($event !== false) {
-						$this->request->data = $event->result === true? $event->data['data'] : $event->result;
+						$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
 						if (!empty($event->data['sendEmailOptions'])) {
 							$sendEmailOptions = $event->data['sendEmailOptions'];
 						}
@@ -590,6 +590,13 @@ class MailController extends MailAppController
 			$fromAdmin = $adminMail;
 		}
 
+		// 送信先名を取得
+		if ($mailContent['sender_name']) {
+			$fromName = $mailContent['sender_name'];
+		} else {
+			$fromName = $this->siteConfigs['name'];
+		}
+
 		$attachments = [];
 		$settings = $this->MailMessage->Behaviors->BcUpload->settings['MailMessage'];
 		foreach($this->dbDatas['mailFields'] as $mailField) {
@@ -643,7 +650,7 @@ class MailController extends MailAppController
 				$data,
 				array_merge(
 					[
-						'fromName' => $mailContent['sender_name'],
+						'fromName' => $fromName,
 						// カンマ区切りで複数設定されていた場合先頭のアドレスをreplayToに利用
 						'replyTo' => strpos($userMail, ',') === false? $userMail : strstr($userMail, ',', true),
 						'from' => $fromAdmin,
