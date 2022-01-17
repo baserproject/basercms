@@ -105,10 +105,7 @@ $currentSiteId = $siteId = $this->request->data['Site']['id'];
 if (is_null($currentSiteId)) {
 	$currentSiteId = 0;
 }
-$disableEdit = false;
-if ($this->BcContents->isEditable()) {
-	$disableEdit = true;
-}
+$editable = $this->BcContents->isEditable();
 ?>
 
 
@@ -165,7 +162,7 @@ if ($this->BcContents->isEditable()) {
 					<?php echo $this->BcForm->label('Content.title', __d('baser', 'タイトル')) ?>&nbsp;<span
 						class="required">*</span></th>
 				<td>
-					<?php if (!$disableEdit): ?>
+					<?php if ($editable): ?>
 						<?php echo $this->BcForm->input('Content.title', ['size' => 50]) ?>　
 						<?php echo $this->BcForm->error('Content.title') ?>
 					<?php else: ?>
@@ -187,14 +184,14 @@ if ($this->BcContents->isEditable()) {
 			<tr>
 				<th class="col-head"><?php echo $this->BcForm->label('Content.self_status', __d('baser', '公開状態')) ?></th>
 				<td class="col-input">
-					<?php if (!$disableEdit): ?>
+					<?php if ($editable): ?>
 						<?php echo $this->BcForm->input('Content.self_status', ['type' => 'radio', 'options' => $this->BcText->booleanDoList(__d('baser', '公開'))]) ?>
 					<?php else: ?>
 						<?php echo $this->BcText->arrayValue($this->BcForm->value('Content.self_status'), $this->BcText->booleanDoList(__d('baser', '公開'))) ?>
 						<?php echo $this->BcForm->hidden('Content.self_status') ?>
 					<?php endif ?>
 					&nbsp;&nbsp;&nbsp;&nbsp;<small>[<?php echo __d('baser', '公開期間') ?>]</small>&nbsp;
-					<?php if (!$disableEdit): ?>
+					<?php if ($editable): ?>
 						<?php echo $this->BcForm->input('Content.self_publish_begin', [
 							'type' => 'dateTimePicker',
 							'size' => 12,
@@ -241,7 +238,7 @@ if ($this->BcContents->isEditable()) {
 			<tr>
 				<th><?php echo $this->BcForm->label('Content.description', __d('baser', '説明文')) ?></th>
 				<td>
-					<?php if (!$disableEdit): ?>
+					<?php if ($editable): ?>
 						<?php echo $this->BcForm->input('Content.description', ['type' => 'textarea', 'rows' => 2]) ?>　
 					<?php else: ?>
 						<?php if ($this->BcForm->value('Content.exclude_search')): ?>
@@ -257,7 +254,7 @@ if ($this->BcContents->isEditable()) {
 			<tr>
 				<th><?php echo $this->BcForm->label('Content.eyecatch', __d('baser', 'アイキャッチ')) ?></th>
 				<td>
-					<?php if (!$disableEdit): ?>
+					<?php if ($editable): ?>
 						<?php echo $this->BcForm->input('Content.eyecatch', ['type' => 'file', 'imgsize' => 'thumb']) ?>
 					<?php else: ?>
 						<?php echo $this->BcUpload->uploadImage('Content.eyecatch', $this->BcForm->value('Content.eyecatch'), ['imgsize' => 'thumb']) ?>
@@ -268,7 +265,7 @@ if ($this->BcContents->isEditable()) {
 			<tr>
 				<th><?php echo $this->BcForm->label('Content.author_id', __d('baser', '作成者')) ?></th>
 				<td>
-					<?php if (!$disableEdit): ?>
+					<?php if ($editable): ?>
 						<?php echo $this->BcForm->input('Content.author_id', ['type' => 'select', 'options' => $authors]) ?>
 						<br>
 						<small>[<?php echo __d('baser', '作成日') ?>
@@ -302,7 +299,7 @@ if ($this->BcContents->isEditable()) {
 			<tr>
 				<th class="col-head"><?php echo $this->BcForm->label('Content.exclude_search', __d('baser', 'その他設定')) ?></th>
 				<td class="col-input">
-					<?php if (!$disableEdit): ?>
+					<?php if ($editable): ?>
 						<span
 							style="white-space: nowrap"><?php echo $this->BcForm->input('Content.exclude_search', ['type' => 'checkbox', 'label' => __d('baser', 'サイト内検索の検索結果より除外する')]) ?></span>　
 						<span
