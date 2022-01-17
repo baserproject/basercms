@@ -475,15 +475,16 @@ class BcContentsHelper extends Helper
      *
      * @param array $data コンテンツ、サイト情報を格納した配列
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isEditable($data = null)
     {
         if (!$data) {
-            if (!$this->request->getData('Content') && !$this->request->getData('Site')) {
-                return false;
-            }
-            $content = $this->request->getData('Content');
-            $site = $this->request->getData('Site');
+            $content = $this->getView()->get('contentEntities')['Content'];
+            if (!$content) { return false; }
+            $site = $content->site;
         } else {
             if (isset($data['Content'])) {
                 $content = $data['Content'];
@@ -497,7 +498,7 @@ class BcContentsHelper extends Helper
             }
         }
         // サイトルートの場合は編集不可
-        if (empty($content['site_root'])) {
+        if ($content['site_root']) {
             return false;
         }
         // サイトルート以外で、管理ユーザーの場合は、強制的に編集可
