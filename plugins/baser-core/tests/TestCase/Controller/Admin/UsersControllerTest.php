@@ -145,6 +145,9 @@ class UsersControllerTest extends BcTestCase
             'real_name_2' => 'Lorem ipsum dolor sit amet',
             'email' => 'test@example.com',
             'nickname' => 'Lorem ipsum dolor sit amet',
+            'user_groups' => [
+                '_ids' => [1]
+            ],
         ];
         $this->post('/baser/admin/baser-core/users/add', $data);
         $this->assertResponseSuccess();
@@ -167,6 +170,9 @@ class UsersControllerTest extends BcTestCase
             'real_name_2' => 'Lorem ipsum dolor sit amet',
             'email' => 'test2@example.com',
             'nickname' => 'Lorem ipsum dolor sit amet',
+            'user_groups' => [
+                '_ids' => [1]
+            ],
         ];
         $this->post('/baser/admin/baser-core/users/add', $data);
         $query = $users->find()->where(['name' => 'etc']);
