@@ -120,6 +120,9 @@ class UsersControllerTest extends BcTestCase
             'real_name_2' => 'Lorem ipsum dolor sit amet',
             'email' => 'test@example.com',
             'nickname' => 'Lorem ipsum dolor sit amet',
+            'user_groups' => [
+                '_ids' => [1]
+            ],
         ];
         $this->post('/baser/api/baser-core/users/add.json?token=' . $this->accessToken, $data);
         $this->assertResponseSuccess();

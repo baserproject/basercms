@@ -142,6 +142,7 @@ class SitesController extends BcApiController
      * @param int $currentSiteId 現在のサイトID
      * @checked
      * @noTodo
+     * @unitTest
      */
     public function get_selectable_devices_and_lang(SiteServiceInterface $sites, $mainSiteId, $currentSiteId = null)
     {

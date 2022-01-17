@@ -13,6 +13,7 @@ namespace BaserCore\Test\TestCase\Controller\Api;
 
 use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
+use ArrayObject;
 
 class SitesControllerTest extends \BaserCore\TestSuite\BcTestCase
 {
@@ -147,6 +148,36 @@ class SitesControllerTest extends \BaserCore\TestSuite\BcTestCase
         $sites = $this->getTableLocator()->get('Sites');
         $query = $sites->find()->where(['id' => 2]);
         $this->assertEquals(0, $query->count());
+    }
+
+    /**
+     * testGet_selectable_devices_and_lang
+     *
+     * @return void
+     */
+    public function testGet_selectable_devices_and_lang(): void
+    {
+        $this->get('/baser/api/baser-core/sites/get_selectable_devices_and_lang/1/4.json?token=' . $this->accessToken);
+        $this->assertResponseSuccess();
+
+        $devicesObj = new ArrayObject(json_decode($this->_response->getBody())->devices);
+        $this->assertEquals(2, $devicesObj->count());
+
+        $langsObj = new ArrayObject(json_decode($this->_response->getBody())->langs);
+        $this->assertEquals(3, $langsObj->count());
+
+        $sites = $this->getTableLocator()->get('Sites');
+        $sites->delete($sites->get(2));
+        $sites->delete($sites->get(3));
+
+        $this->get('/baser/api/baser-core/sites/get_selectable_devices_and_lang/1/4.json?token=' . $this->accessToken);
+        $this->assertResponseSuccess();
+
+        $devicesObj = new ArrayObject(json_decode($this->_response->getBody())->devices);
+        $this->assertEquals(3, $devicesObj->count());
+
+        $langsObj = new ArrayObject(json_decode($this->_response->getBody())->langs);
+        $this->assertEquals(4, $langsObj->count());
     }
 
 }
