@@ -21,6 +21,10 @@ use Cake\Validation\Validator;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Annotation\NoTodo;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Annotation\Note;
 
 /**
  * Class PagesTable
@@ -93,7 +97,6 @@ class PagesTable extends Table
     {
         parent::initialize($config);
         $this->addBehavior('BaserCore.BcContents');
-        $this->ContentService = $this->getService(ContentServiceInterface::class);
         // $this->addBehavior('BaserCore.BcSearchIndexManager');
     }
 
@@ -177,7 +180,8 @@ class PagesTable extends Table
         }
 
         // 保存前のページファイルのパスを取得
-        if ($this->ContentService->exists($entity->content->id) && !empty($entity->content)) {
+        $ContentService = $this->getService(ContentServiceInterface::class);
+        if ($ContentService->exists($entity->content->id) && !empty($entity->content)) {
             $this->oldPath = $this->getPageFilePath(
                 $this->find('first', [
                         'conditions' => ['Page.id' => $entity->id],
