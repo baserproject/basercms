@@ -62,8 +62,9 @@ class PagesController extends AppController
      * @checked
      * @noTodo
 	 */
-	public function display()
+	public function display(ContentFolderServiceInterface $contentFolderService)
 	{
+        $a = $this->Pages;
 		$path = func_get_args();
 
 		if ($this->request->getParam('Content')->alias_id) {
@@ -157,7 +158,7 @@ class PagesController extends AppController
 
 			// 草稿アクセス
 			if ($this->BcFrontContents->preview === 'draft') {
-				$data = $this->Page->find('first', ['conditions' => ['Page.id' => $this->request->getParam('Content.entity_id')]]);
+				$data = $this->Pages->find('first', ['conditions' => ['Page.id' => $this->request->getParam('Content.entity_id')]]);
 				$uuid = $this->_createPreviewTemplate($data, true);
 				// TODO ucmitz previewTemplate 不要
 				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . Configure::read('BcApp.templateExt'));
@@ -170,7 +171,6 @@ class PagesController extends AppController
 		/* @var Page $page */
 		$template = $page->page_template;
 		if (!$template) {
-            $contentFolderService = $this->getService(ContentFolderServiceInterface::class); // 一時措置
 			$template = $contentFolderService->getParentTemplate($this->request->getParam('Content.id'), 'page');
 		}
 
@@ -211,7 +211,7 @@ class PagesController extends AppController
 		} else {
 			$contents = $data['Page']['draft'];
 		}
-		$contents = $this->Page->addBaserPageTag(
+		$contents = $this->Pages->addBaserPageTag(
 			null,
 			$contents,
 			$data['Content']['title'],
