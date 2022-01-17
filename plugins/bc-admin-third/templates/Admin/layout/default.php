@@ -79,6 +79,7 @@ $base = $attributes['base'];
     'vendor/jquery.validate_ja',
     'vendor/jquery.form-2.94',
     'vendor/jquery.timepicker',
+    'vendor/bootstrap-4.1.3/bootstrap.bundle.min',
     'admin/functions',
     'admin/permission',
   ]) ?>
@@ -89,6 +90,7 @@ $base = $attributes['base'];
     'data-baserCorePrefix' => Inflector::underscore(BcUtil::getBaserCorePrefix()),
     'data-ajaxLoaderPath' => $this->Html->Url->image('admin/ajax-loader.gif'),
     'data-ajaxLoaderSmallPath' => $this->Html->Url->image('admin/ajax-loader-s.gif'),
+    'data-frontFullUrl' => (!empty($publishLink))? h($publishLink) : '',
   ]) ?>
   <?php $this->BcBaser->js([
     'admin/startup.bundle'
