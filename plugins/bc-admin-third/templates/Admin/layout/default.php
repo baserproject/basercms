@@ -90,7 +90,7 @@ $base = $attributes['base'];
     'data-baserCorePrefix' => Inflector::underscore(BcUtil::getBaserCorePrefix()),
     'data-ajaxLoaderPath' => $this->Html->Url->image('admin/ajax-loader.gif'),
     'data-ajaxLoaderSmallPath' => $this->Html->Url->image('admin/ajax-loader-s.gif'),
-    'data-frontFullUrl' => h($publishLink) ?? '',
+    'data-frontFullUrl' => (!empty($publishLink))? h($publishLink) : '',
   ]) ?>
   <?php $this->BcBaser->js([
     'admin/startup.bundle'
