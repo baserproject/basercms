@@ -151,7 +151,7 @@ class ContentFolderTest extends BaserTestCase
      */
     public function testReconstructSearchIndices()
     {
-        Configure::write('BcAuthPrefix.admin.previewRedirect', '');
+        Configure::write('BcPrefixAuth.Admin.previewRedirect', '');
         $_SERVER['REQUEST_URI'] = '/';
         $this->loginAdmin($this->getRequest());
 

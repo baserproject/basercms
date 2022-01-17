@@ -15,6 +15,7 @@ use App\Application;
 use Authentication\Authenticator\Result;
 use BaserCore\Event\BcControllerEventListener;
 use BaserCore\Middleware\BcAdminMiddleware;
+use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\Plugin;
 use BaserCore\Utility\BcApiUtil;
 use Cake\Core\Configure;
@@ -58,6 +59,15 @@ class BcTestCase extends TestCase
     public $BaserCore;
 
     /**
+     * detectors
+     *
+     * ServerRequest::_detectors を初期化する際、
+     * 一番初期の状況を保管しておくために利用
+     * @var array
+     */
+    public static $_detectors;
+
+    /**
      * Set Up
      * @checked
      * @noTodo
@@ -98,6 +108,11 @@ class BcTestCase extends TestCase
      */
     public function getRequest($url = '/', $data = [], $method = 'GET', $config = [])
     {
+        $config = array_merge([
+            'ajax' => false
+        ], $config);
+        $isAjax = (!empty($config['ajax']))? true : false;
+        unset($config['ajax']);
         if(preg_match('/^http/', $url)) {
             $parseUrl = parse_url($url);
             Configure::write('BcEnv.host', $parseUrl['host']);
@@ -105,7 +120,8 @@ class BcTestCase extends TestCase
                 'uri' => ServerRequestFactory::createUri([
                     'HTTP_HOST' => $parseUrl['host'],
                     'REQUEST_URI' => $url,
-                    'REQUEST_METHOD' => $method
+                    'REQUEST_METHOD' => $method,
+                    'HTTPS' => (preg_match('/^https/', $url))? 'on' : ''
             ])];
         } else {
             $defaultConfig = [
@@ -116,6 +132,16 @@ class BcTestCase extends TestCase
         }
         $defaultConfig = array_merge($defaultConfig, $config);
         $request = new ServerRequest($defaultConfig);
+
+        // ServerRequest::_detectors を初期化
+        // static プロパティで値が残ってしまうため
+        $ref = new ReflectionClass($request);
+        $detectors = $ref->getProperty('_detectors');
+        $detectors->setAccessible(true);
+        if(!self::$_detectors) {
+            self::$_detectors = $detectors->getValue();
+        }
+        $detectors->setValue(self::$_detectors);
 
         try {
             Router::setRequest($request);
@@ -133,6 +159,12 @@ class BcTestCase extends TestCase
         }
         $authentication = $this->BaserCore->getAuthenticationService($request);
         $request = $request->withAttribute('authentication', $authentication);
+        $request = $request->withEnv('HTTPS', (preg_match('/^https/', $url))? 'on' : '');
+        if($isAjax) {
+            $request = $request->withEnv('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest');
+        }
+        $bcRequestFilter = new BcRequestFilterMiddleware();
+        $request = $bcRequestFilter->addDetectors($request);
         Router::setRequest($request);
         return $request;
     }

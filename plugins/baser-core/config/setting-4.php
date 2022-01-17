@@ -144,8 +144,6 @@ $config['BcApp'] = [
     ],
     // コアプラグイン
     'corePlugins' => ['BcBlog', 'BcFeed', 'BcMail', 'BcUploader'],
-    // アップデートキー
-    'updateKey' => 'update',
     // 管理者グループID
     'adminGroupId' => 1,
     'testTheme' => 'bc_sample',
@@ -204,7 +202,7 @@ $config['BcRequire'] = [
  */
 $prefixes = Configure::read('Routing.prefixes');
 $adminPrefix = $prefixes[0];
-$config['BcAuthPrefix'] = [
+$config['BcPrefixAuth'] = [
     // 管理画面
     'admin' => [
         // 認証タイプ

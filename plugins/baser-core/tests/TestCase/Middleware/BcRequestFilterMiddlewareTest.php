@@ -1,62 +1,88 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Routing.Filter
- * @since           baserCMS v 3.0.0-beta
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('BcRequestFilter', 'Routing/Filter');
+namespace BaserCore\Test\TestCase\Middleware;
+
+use BaserCore\Middleware\BcRequestFilterMiddleware;
+use BaserCore\TestSuite\BcTestCase;
+use Cake\Core\Configure;
+use Cake\Http\ServerRequest;
 
 /**
- * Class BcRequestFilterTest
- *
- * @package Baser.Test.Case.Routing.Filter
+ * Class BcRequestFilterMiddlewareTest
+ * @property BcRequestFilterMiddleware $BcRequestFilterMiddleware
  */
-class BcRequestFilterTest extends BcTestCase
+class BcRequestFilterMiddlewareTest extends BcTestCase
 {
 
     /**
-     * フィクスチャ
+     * Fixtures
+     *
      * @var array
      */
-    public $fixtures = [
-        'baser.Default.Page',
-        'baser.Default.Content',
-        'baser.Default.Site',
-        'baser.Default.SiteConfig',
-        'baser.Default.User',
+    protected $fixtures = [
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Pages',
     ];
 
     /**
-     * BcRequestFilter
-     * @var BcRequestFilter
-     */
-    public $requestFilter;
-
-    /**
-     * set up
+     * Set Up
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
+        if (preg_match('/^testIsInstall/', $this->getName())) {
+            Configure::write('BcRequest.isInstalled', false);
+        } else {
+            Configure::write('BcRequest.isInstalled', true);
+        }
         parent::setUp();
-        $this->requestFilter = new BcRequestFilter();
+        $this->BcRequestFilterMiddleware = new BcRequestFilterMiddleware();
     }
 
     /**
-     * beforeDispatch Event
+     * Tear Down
+     *
+     * @return void
      */
-    public function testBeforeDispatch()
+    public function tearDown(): void
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        unset($this->BcRequestFilterMiddleware);
+        parent::tearDown();
+    }
+
+    /**
+     * Process
+     */
+    public function testProcess(): void
+    {
+        $this->_response = $this->BcRequestFilterMiddleware->process($this->getRequest(), $this->Application);
+        $this->assertResponseOk();
+        $url = '/img/test.png';
+        $this->_response = $this->BcRequestFilterMiddleware->process($this->getRequest($url), $this->Application);
+        $this->assertTrue(Configure::read('BcRequest.asset'));
+    }
+
+    /**
+     * test redirectIfIsDeviceFile
+     */
+    public function testRedirectIfIsDeviceFile()
+    {
+        $this->_response = $this->BcRequestFilterMiddleware->redirectIfIsDeviceFile($this->getRequest(), $this->Application);
+        $this->assertNull($this->_response);
+        $url = '/s/files/test.png';
+        $this->_response = $this->BcRequestFilterMiddleware->redirectIfIsDeviceFile($this->getRequest($url), $this->Application);
+        $this->assertRedirect('/files/test.png');
     }
 
     /**
@@ -64,7 +90,7 @@ class BcRequestFilterTest extends BcTestCase
      */
     public function testGetDetectorConfigs()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertTrue(is_callable($this->BcRequestFilterMiddleware->getDetectorConfigs()['admin']));
     }
 
     /**
@@ -72,7 +98,12 @@ class BcRequestFilterTest extends BcTestCase
      */
     public function testAddDetectors()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // $this->getRequest() を利用した場合、detector 設定が完了しているため
+        // あえて、直接初期化してのテストとする
+        $request = new ServerRequest(['url' => '/baser/admin']);
+        $this->assertFalse($request->is('admin'));
+        $request = $this->BcRequestFilterMiddleware->addDetectors($request);
+        $this->assertTrue($request->is('admin'));
     }
 
     /**
@@ -85,8 +116,7 @@ class BcRequestFilterTest extends BcTestCase
      */
     public function testIsAdmin($expect, $url)
     {
-        $request = new CakeRequest($url);
-        $this->assertEquals($expect, $this->requestFilter->isAdmin($request));
+        $this->assertEquals($expect, $this->BcRequestFilterMiddleware->isAdmin($this->getRequest($url)));
     }
 
     /**
@@ -97,9 +127,9 @@ class BcRequestFilterTest extends BcTestCase
     public function isAdminDataProvider()
     {
         return [
-            [true, '/admin'],
-            [true, '/admin/'],
-            [true, '/admin/users/login'],
+            [true, '/baser/admin'],
+            [true, '/baser/admin/'],
+            [true, '/baser/admin/users/login'],
             [false, '/'],
             [false, '/s/'],
             [false, '/news/index'],
@@ -117,8 +147,7 @@ class BcRequestFilterTest extends BcTestCase
      */
     public function testIsAsset($expect, $url)
     {
-        $request = new CakeRequest($url);
-        $this->assertEquals($expect, $this->requestFilter->isAsset($request));
+        $this->assertEquals($expect, $this->BcRequestFilterMiddleware->isAsset($this->getRequest($url)));
     }
 
     /**
@@ -156,9 +185,7 @@ class BcRequestFilterTest extends BcTestCase
      */
     public function testIsInstall($expect, $url)
     {
-        Configure::write('BcRequest.isInstalled', false);
-        $request = $this->_getRequest($url);
-        $this->assertEquals($expect, $this->requestFilter->isInstall($request));
+        $this->assertEquals($expect, $this->BcRequestFilterMiddleware->isInstall($this->getRequest($url)));
     }
 
     /**
@@ -188,8 +215,7 @@ class BcRequestFilterTest extends BcTestCase
      */
     public function testIsMaintenance($expect, $url)
     {
-        $request = new CakeRequest($url);
-        $this->assertEquals($expect, $this->requestFilter->isMaintenance($request));
+        $this->assertEquals($expect, $this->BcRequestFilterMiddleware->isMaintenance($this->getRequest($url)));
     }
 
     /**
@@ -219,8 +245,7 @@ class BcRequestFilterTest extends BcTestCase
      */
     public function testIsUpdate($expect, $url)
     {
-        $request = new CakeRequest($url);
-        $this->assertEquals($expect, $this->requestFilter->isUpdate($request));
+        $this->assertEquals($expect, $this->BcRequestFilterMiddleware->isUpdate($this->getRequest($url)));
     }
 
     /**
@@ -230,7 +255,7 @@ class BcRequestFilterTest extends BcTestCase
      */
     public function isUpdateDataProvider()
     {
-        $slug = Configure::read('BcApp.updateKey');
+        $slug = env('UPDATE_KEY', 'update');
         return [
             [true, "/{$slug}"],
             [true, "/{$slug}/"],
@@ -252,8 +277,7 @@ class BcRequestFilterTest extends BcTestCase
      */
     public function testIsPage($expect, $url)
     {
-        $request = $this->_getRequest($url);
-        $this->assertEquals($expect, $this->requestFilter->isPage($request));
+        $this->assertEquals($expect, $this->BcRequestFilterMiddleware->isPage($this->getRequest($url)));
     }
 
     /**
@@ -267,8 +291,8 @@ class BcRequestFilterTest extends BcTestCase
             [false, '/admin/'],
             [false, '/news/index'],
             [true, '/'],
-            [true, '/service'],
-            [true, '/about'],
+            [true, '/service/service1'],
+            [true, '/sample'],
             [false, '/recruit']
         ];
     }
@@ -278,7 +302,12 @@ class BcRequestFilterTest extends BcTestCase
      */
     public function testIsRequestView()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $url = '/';
+        $this->assertTrue($this->BcRequestFilterMiddleware->isRequestView($this->getRequest($url)));
+        $url = '/?requestview=true';
+        $this->assertTrue($this->BcRequestFilterMiddleware->isRequestView($this->getRequest($url)));
+        $url = '/?requestview=false';
+        $this->assertFalse($this->BcRequestFilterMiddleware->isRequestView($this->getRequest($url)));
     }
 
 }

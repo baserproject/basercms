@@ -46,62 +46,6 @@ class BcBasicsTest extends BcTestCase
     }
 
     /**
-     * WebサイトのベースとなるURLを取得する
-     * TODO BC_DEPLOY_PATTERNで分岐した場合のテストの追加
-     *
-     * @param string $script App.baseUrlの値
-     * @param string $script $_SERVER['SCRIPT_FILENAME']の値
-     * @param string $expect 期待値
-     * @dataProvider baseUrlDataProvider
-     */
-    public function testBaseUrl($baseUrl, $expect)
-    {
-        // 初期化
-        Configure::write('App.baseUrl', $baseUrl);
-        if (isConsole()) {
-            $_SERVER['SCRIPT_FILENAME'] = APP . 'Console' . DS . 'cake.php';
-            $_SERVER['SCRIPT_NAME'] = APP . 'Console' . DS . 'cake.php';
-        }
-        $result = baseUrl();
-        $this->assertEquals($expect, $result, 'WebサイトのベースとなるURLを正しく取得できません');
-
-    }
-
-    public function baseUrlDataProvider()
-    {
-        return [
-            ['/hoge/test', '/hoge/test/'],
-            [null, '/'],
-            ['/hoge/test', '/hoge/test/'],
-            [null, '/'],
-        ];
-    }
-
-
-    /**
-     * ドキュメントルートを取得する
-     */
-    public function testDocRoot()
-    {
-        $_SERVER['SCRIPT_FILENAME'] = WWW_ROOT . 'test.php';
-
-        if (isConsole()) {
-            $expected = str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $_SERVER['SCRIPT_NAME']);
-
-        } else {
-            $path = explode('/', $_SERVER['SCRIPT_NAME']);
-            krsort($path);
-            $expected = $_SERVER['SCRIPT_FILENAME'];
-            foreach($path as $value) {
-                $reg = "/\/" . $value . "$/";
-                $expected = preg_replace($reg, '', $expected);
-            }
-        }
-        $result = docRoot();
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
      * リビジョンを取得する
      */
     public function testRevision()
@@ -201,7 +145,7 @@ class BcBasicsTest extends BcTestCase
             ['/get/url/test', null, null, 'get/url/test', '$_GET["url"]からURLを正しく取得できません'],
             [null, '/req/', null, 'req/', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'],
             [null, '/req/test.php?a=aaa&b=bbb', null, 'req/test.php', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'],
-            [null, baseUrl() . '/req/', null, 'req/', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'],
+            [null, BcUtil::baseUrl() . '/req/', null, 'req/', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'],
             [null, '/base/req/', '/base/', 'req/', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'],
             [null, '/base/req/', '/base/url/', 'req/', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'],
         ];
@@ -519,44 +463,6 @@ class BcBasicsTest extends BcTestCase
     }
 
     /**
-     * サイトのトップレベルのURLを取得する
-     */
-    public function testTopLevelUrl()
-    {
-        if (isConsole()) {
-            $this->assertEquals('http://localhost', topLevelUrl());
-        } else {
-            $this->assertRegExp('/^http:\/\/.*\/$/', topLevelUrl());
-            $this->assertRegExp('/^http:\/\/.*[^\/]$/', topLevelUrl(false));
-
-            // httpsの場合
-            $_SERVER['HTTPS'] = 'on';
-            $this->assertRegExp('/^https:\/\//', topLevelUrl());
-        }
-    }
-
-    /**
-     * サイトの設置URLを取得する
-     */
-    public function testSiteUrl()
-    {
-        if (isConsole()) {
-            $this->assertEquals('http://localhost/', siteUrl());
-        } else {
-            $topLevelUrl = topLevelUrl(false);
-
-            Configure::write('App.baseUrl', '/test/');
-            $this->assertEquals($topLevelUrl . '/test/', siteUrl());
-
-            Configure::write('App.baseUrl', '/test/index.php');
-            $this->assertEquals($topLevelUrl . '/test/', siteUrl());
-
-            Configure::write('App.baseUrl', '/test/hoge/');
-            $this->assertEquals($topLevelUrl . '/test/hoge/', siteUrl());
-        }
-    }
-
-    /**
      * 配列を再帰的に上書きする
      */
     public function testAmr()
@@ -694,14 +600,6 @@ class BcBasicsTest extends BcTestCase
      * データベースのドライバー名を取得する
      */
     public function testGetDbDriver()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
-     * コンソールから実行されているかチェックする
-     */
-    public function testIsConsole()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
     }

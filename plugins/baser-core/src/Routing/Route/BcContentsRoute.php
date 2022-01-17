@@ -105,12 +105,12 @@ class BcContentsRoute extends Route
         }
 
         // 管理画面にログインしていないとき、リダイレクトする設定ならば処理をする
-        $redirect = Configure::read('BcAuthPrefix.admin.previewRedirect');
+        $redirect = Configure::read('BcPrefixAuth.Admin.previewRedirect');
         if ($redirect) {
             // データが存在してもプレビューで管理システムにログインしていない場合はログイン画面に遷移
             if ((!empty($request->geQuery['preview']) || !empty($request->geQuery['force'])) && !BcUtil::loginUser()) {
                 $_SESSION['Auth']['redirect'] = $_SERVER['REQUEST_URI'];
-                header('Location: ' . BcUtil::topLevelUrl(false) . baseUrl() . Configure::read('BcAuthPrefix.admin.alias') . '/users/login');
+                header('Location: ' . BcUtil::topLevelUrl(false) . BcUtil::baseUrl() . Configure::read('BcPrefixAuth.Admin.alias') . '/users/login');
                 exit();
             }
         }

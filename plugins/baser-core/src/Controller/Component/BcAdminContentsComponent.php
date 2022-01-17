@@ -147,19 +147,11 @@ class BcAdminContentsComponent extends Component
             $site->relate_main_site && $content->main_site_content_id && $content->type == 'ContentFolder') {
             $related = true;
         }
-        $disableEditContent = false;
-
         if (!$entityName === "content") $associated->content = $content;
-
-        if (!BcUtil::isAdminUser() || ($site->relate_main_site && $content->main_site_content_id &&
-                ($content->alias_id || $content->type == 'ContentFolder'))) {
-            $disableEditContent = true;
-        }
         // ContentController以外の場合適切にformIdを生成するためcontentEntitiesを確認
         if ($controller->getName() !== 'Contents') $this->checkContentEntities($controller);
         $controller->set('content', $content);
         $controller->set('currentSiteId', $content->site_id);
-        $controller->set('disableEditContent', $disableEditContent);
         $controller->set('related', $related);
         $controller->set('publishLink', $this->ContentService->getUrl($content->url, true, $site->useSubDomain));
     }

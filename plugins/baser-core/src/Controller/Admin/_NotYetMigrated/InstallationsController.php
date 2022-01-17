@@ -318,7 +318,7 @@ class InstallationsController extends AppController
     protected function _sendCompleteMail($email, $name, $password)
     {
         if (DS !== '\\') {
-            $body = ['name' => $name, 'password' => $password, 'siteUrl' => siteUrl()];
+            $body = ['name' => $name, 'password' => $password, 'siteUrl' => BcUtil::siteUrl()];
             $this->sendMail($email, __d('baser', 'baserCMSインストール完了'), $body, ['template' => 'installed', 'from' => $email]);
         }
     }

@@ -33,6 +33,11 @@ return [
          */
         'sslUrl' => env('SSL_URL', 'https://localhost/'),
         /**
+         * CMS URL
+         * CMSのURLが別ドメインの場合に設定する
+         */
+        'cmsUrl' => '',
+        /**
          * 復数のWebサイトを管理する場合のメインとなるドメイン
          */
         'mainDomain' => '',
@@ -99,6 +104,12 @@ return [
             'none' => __d('baser', 'なし'),
             'BcCkeditor' => 'CKEditor'
         ],
+        /**
+         * アップデートキー
+         * アップデート時のURLに使用する
+         * 例）https://localhost/update
+         */
+        'updateKey' => env('UPDATE_KEY', 'update'),
         /**
          * システムナビ
          *

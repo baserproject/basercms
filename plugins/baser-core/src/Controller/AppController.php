@@ -18,15 +18,18 @@ use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\Note;
+use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Utility\BcUtil;
 use Cake\Controller\Component\PaginatorComponent;
 use Cake\Controller\Component\SecurityComponent;
 use Cake\Controller\ComponentRegistry;
+use Cake\Core\Configure;
 use Cake\Event\EventInterface;
 use Cake\Event\EventManagerInterface;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use Cake\ORM\TableRegistry;
+use Cake\Routing\Router;
 
 /**
  * Class AppController
@@ -128,6 +131,76 @@ class AppController extends BaseController
     public function setTitle($title): void
     {
         $this->set('title', $title);
+    }
+
+    /**
+     * siteUrlや、sslUrlと現在のURLが違う場合には、そちらのURLにリダイレクトを行う
+     * setting.php にて、cmsUrlとして、cmsUrlを定義した場合にはそちらを優先する
+     * @return Response|void|null
+     */
+    public function redirectIfIsNotSameSite()
+    {
+        if($this->getRequest()->is('admin')) {
+            return;
+        }
+        if (Configure::read('BcEnv.cmsUrl')) {
+            $siteUrl = Configure::read('BcEnv.cmsUrl');
+        } elseif ($this->getRequest()->is('ssl')) {
+            $siteUrl = Configure::read('BcEnv.sslUrl');
+        } else {
+            $siteUrl = Configure::read('BcEnv.siteUrl');
+        }
+        if(!$siteUrl) {
+            return;
+        }
+        if (BcUtil::siteUrl() !== $siteUrl) {
+            $params = $this->getRequest()->getAttributes()['params'];
+            unset($params['Content']);unset($params['Site']);
+            $url = Router::reverse($params, false);
+            $webroot = $this->request->getAttributes()['webroot'];
+            $webrootReg = '/^\/' . preg_quote($webroot, '/') . '/';
+            $url = preg_replace($webrootReg, '', $url);
+            return $this->redirect($siteUrl . $url);
+        }
+    }
+
+    /**
+     * メンテナンス画面へのリダイレクトが必要な場合にリダイレクトする
+     * @return Response|void|null
+     */
+    public function redirectIfIsRequireMaintenance()
+    {
+        if ($this->request->is('ajax')) {
+            return;
+        }
+        if(empty(BcSiteConfig::get('maintenance'))){
+            return;
+        }
+        if(Configure::read('debug')) {
+            return;
+        }
+        if($this->getRequest()->is('maintenance')) {
+            return;
+        }
+        if($this->getRequest()->is('admin')) {
+            return;
+        }
+        if(BcUtil::isAdminUser()) {
+            return;
+        }
+
+        // TODO ucmitz 削除検討要
+        // CakePHP4 から requestAction がなくなっているので不要の可能性が高い
+        // cell 機能で呼び出された場合のスルーの処理を書いたら削除する
+        if (!empty($this->getRequest()->getParam('return')) && !empty($this->getRequest()->getParam('requested'))) {
+            return $this->getResponse();
+        }
+
+        $redirectUrl = '/maintenance';
+        if ($this->getRequest()->getParam('Site.alias')) {
+            $redirectUrl = '/' . $this->getRequest()->getParam('Site.alias') . $redirectUrl;
+        }
+        return $this->redirect($redirectUrl);
     }
 
 }

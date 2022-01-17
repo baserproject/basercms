@@ -96,45 +96,13 @@ class BcAppController extends AppController
     {
         parent::beforeFilter($event);
 
-        // TODO 未確認のため代替措置
-        // >>>
+        $response = $this->redirectIfIsNotSameSite();
+        if($response) return $response;
+
+        $response = $this->redirectIfIsRequireMaintenance();
+        if($response) return $response;
+
         return;
-        // <<<
-
-        $isRequestView = $this->request->is('requestview');
-        $isUpdate = $this->request->is('update');
-        $isAdmin = $this->request->is('admin');
-        $isInstall = $this->request->is('install');
-        $isMaintenance = $this->request->is('maintenance');
-
-        // 設定されたサイトURLとリクエストされたサイトURLが違う場合は設定されたサイトにリダイレクト
-        if ($isAdmin) {
-            $cmsUrl = Configure::read('BcEnv.cmsUrl');
-            if ($cmsUrl) {
-                $siteUrl = Configure::read('BcEnv.cmsUrl');
-            } elseif ($this->request->is('ssl')) {
-                $siteUrl = Configure::read('BcEnv.sslUrl');
-            } else {
-                $siteUrl = Configure::read('BcEnv.siteUrl');
-            }
-            if ($siteUrl && siteUrl() != $siteUrl) {
-                $webrootReg = '/^' . preg_quote($this->request->getAttributes()['webroot'], '/') . '/';
-                $this->redirect($siteUrl . preg_replace($webrootReg, '', Router::reverse($this->request, false)));
-            }
-        }
-
-        // メンテナンス
-        if (!$this->request->is('ajax') && !empty(BcSiteConfig::get('maintenance')) && (Configure::read('debug') < 1) && !$isMaintenance && !$isAdmin && !BcUtil::isAdminUser()) {
-            if (!empty($this->request->getParam('return')) && !empty($this->request->getParam('requested'))) {
-                return;
-            }
-
-            $redirectUrl = '/maintenance';
-            if ($this->request->getParam('Site.alias')) {
-                $redirectUrl = '/' . $this->request->getParam('Site.alias') . $redirectUrl;
-            }
-            $this->redirect($redirectUrl);
-        }
 
         // セキュリティ設定
         $this->Security->blackHoleCallback = '_blackHoleCallback';
@@ -143,9 +111,11 @@ class BcAppController extends AppController
             $csrfExpires = "+4 hours";
         }
         $this->Security->csrfExpires = $csrfExpires;
-        if (!BC_INSTALLED || $isUpdate) {
+        if (!BC_INSTALLED || $this->getRequest()->is('update')) {
             $this->Security->validatePost = false;
         }
+
+        $isAdmin = $this->getRequest()->is('admin');
         if ($isAdmin) {
             $this->Security->validatePost = false;
             $corePlugins = Configure::read('BcApp.corePlugins');
@@ -184,7 +154,7 @@ class BcAppController extends AppController
         $this->request = $this->request->withQueryParams($query);
 
         // コンソールから利用される場合、$isInstall だけでは判定できないので、BC_INSTALLED も判定に入れる
-        if ((!BC_INSTALLED || $isInstall || $isUpdate) && $this->name !== 'CakeError') {
+        if ((!BC_INSTALLED || $this->getRequest()->is('install') || $this->getRequest()->is('update')) && $this->name !== 'CakeError') {
             $this->theme = Configure::read('BcApp.defaultAdminTheme');
             return;
         }
@@ -215,7 +185,7 @@ class BcAppController extends AppController
             } else {
                 $currentAuthPrefix = 'front';
             }
-            $authPrefixSettings = Configure::read('BcAuthPrefix');
+            $authPrefixSettings = Configure::read('BcPrefixAuth');
             foreach($authPrefixSettings as $key => $authPrefixSetting) {
                 if (isset($authPrefixSetting['alias']) && $authPrefixSetting['alias'] == $currentAuthPrefix) {
                     $authConfig = $authPrefixSetting;
@@ -233,7 +203,7 @@ class BcAppController extends AppController
             if ($authConfig) {
                 $this->BcAuthConfigure->setting($authConfig);
             } else {
-                $this->BcAuth->setSessionKey('Auth.' . Configure::read('BcAuthPrefix.admin.sessionKey'));
+                $this->BcAuth->setSessionKey('Auth.' . Configure::read('BcPrefixAuth.Admin.sessionKey'));
             }
 
             // =================================================================
@@ -279,7 +249,7 @@ class BcAppController extends AppController
             ]);
         }
 
-        if (!$isRequestView) {
+        if (!$this->getRequest()->is('requestview')) {
             return;
         }
 
@@ -550,9 +520,9 @@ class BcAppController extends AppController
         $this->set('currentPrefix', $currentPrefix);
 
         $user = BcUtil::loginUser();
-        $sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
+        $sessionKey = Configure::read('BcPrefixAuth.Admin.sessionKey');
 
-        $authPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);
+        $authPrefix = Configure::read('BcPrefixAuth.' . $currentPrefix);
         if ($authPrefix) {
             $currentPrefixUser = BcUtil::loginUser($currentPrefix);
             if ($currentPrefixUser) {

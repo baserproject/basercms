@@ -11,6 +11,9 @@
 
 namespace BaserCore\Test\TestCase\Controller;
 
+use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Utility\BcContainer;
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\TestSuite\IntegrationTestTrait;
 use BaserCore\TestSuite\BcTestCase;
@@ -19,6 +22,7 @@ use ReflectionClass;
 
 /**
  * BaserCore\Controller\AppController Test Case
+ * @property AppController $AppController
  */
 class AppControllerTest extends BcTestCase
 {
@@ -30,6 +34,11 @@ class AppControllerTest extends BcTestCase
      */
     public $fixtures = [
         'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.SiteConfigs',
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups'
     ];
 
     /**
@@ -102,6 +111,48 @@ class AppControllerTest extends BcTestCase
         $vars->setAccessible(true);
         $actual = $vars->getValue($this->AppController->viewBuilder())['title'];
         $this->assertEquals($template, $actual);
+    }
+
+    /**
+     * test redirectIfIsNotSameSite
+     */
+    public function testRedirectIfIsNotSameSite()
+    {
+        $this->getRequest('https://localhost/index');
+        $this->_response = $this->AppController->redirectIfIsNotSameSite();
+        $this->assertNull($this->_response);
+        $this->getRequest('http://localhost/index');
+        $this->_response = $this->AppController->redirectIfIsNotSameSite();
+        $this->assertRedirect('https://localhost/index');
+        $this->AppController->setRequest($this->getRequest('https://localhost/baser/admin'));
+        $this->_response = $this->AppController->redirectIfIsNotSameSite();
+        $this->assertNull($this->_response);
+    }
+
+    /**
+     * test redirectIfIsRequireMaintenance
+     */
+    public function testRedirectIfIsRequireMaintenance()
+    {
+        $this->_response = $this->AppController->redirectIfIsRequireMaintenance();
+        $this->assertNull($this->_response);
+        $siteConfig = BcContainer::get()->get(SiteConfigServiceInterface::class);
+        $siteConfig->setValue('maintenance', true);
+        $this->_response = $this->AppController->redirectIfIsRequireMaintenance();
+        $this->assertNull($this->_response);
+        Configure::write('debug', false);
+        $this->_response = $this->AppController->redirectIfIsRequireMaintenance();
+        $this->assertRedirect('/maintenance');
+        $this->AppController->setRequest($this->getRequest('/', [], 'GET', ['ajax' => true]));
+        $this->_response = $this->AppController->redirectIfIsRequireMaintenance();
+        $this->assertNull($this->_response);
+        $this->AppController->setRequest($this->getRequest('http://localhost/baser/admin'));
+        $this->_response = $this->AppController->redirectIfIsRequireMaintenance();
+        $this->assertNull($this->_response);
+        $this->loginAdmin($this->getRequest());
+        $this->_response = $this->AppController->redirectIfIsRequireMaintenance();
+        $this->assertNull($this->_response);
+        Configure::write('debug', true);
     }
 
 }

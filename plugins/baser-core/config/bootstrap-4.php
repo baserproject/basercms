@@ -82,7 +82,7 @@ Configure::write('Dispatcher.filters',
  * Windows対策として、「\」を「/」へ変換してチェックする
  */
 if (!defined('BC_DEPLOY_PATTERN')) {
-    if (!preg_match('/' . preg_quote(str_replace('\\', '/', docRoot()), '/') . '/', str_replace('\\', '/', ROOT))) {
+    if (!preg_match('/' . preg_quote(str_replace('\\', '/', BcUtil::docRoot()), '/') . '/', str_replace('\\', '/', ROOT))) {
         // CakePHP標準の配置
         define('BC_DEPLOY_PATTERN', 3);
     } elseif (ROOT . DS == WWW_ROOT) {
@@ -98,12 +98,7 @@ if (!defined('BC_DEPLOY_PATTERN')) {
  * baserUrl取得
  * BC_DEPLOY_PATTERN の定義より後に実行
  */
-define('BC_BASE_URL', baseUrl());
-
-/**
- * インストール状態
- */
-Configure::write('BcRequest.isInstalled', BC_INSTALLED); // UnitTest用
+define('BC_BASE_URL', BcUtil::baseUrl());
 
 /**
  * 静的ファイルの読み込みの場合はスキップ
@@ -290,7 +285,7 @@ if (BC_INSTALLED) {
     } elseif (BC_INSTALLED && !$isMaintenance && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
         if (!isConsole()) {
             CakeLog::write(LOG_ERR, 'プログラムとデータベースのバージョンが異なります。');
-            header('Location: ' . topLevelUrl(false) . baseUrl() . 'maintenance/index');
+            header('Location: ' . \BaserCore\Utility\BcUtil::topLevelUrl(false) . BcUtil::baseUrl() . 'maintenance/index');
             exit();
         } else {
             throw new BcException(__d('baser', 'プログラムとデータベースのバージョンが異なるため、強制終了します。データベースのバージョンを調整して、再実行してください。'));
@@ -405,7 +400,7 @@ if (Configure::read('debug') == 0) {
         // TODO ブラウザを閉じても最初から編集ページへのリンクを表示する場合は、クッキーのチェックを行い、認証処理を行う必要があるが、
         // セキュリティ上の問題もあるので実装は検討が必要。
         // bootstrapで実装した場合、他ページへの負荷の問題もある
-        if (isset($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
+        if (isset($_SESSION['Auth'][Configure::read('BcPrefixAuth.Admin.sessionKey')])) {
             Configure::write('Cache.check', false);
         }
     }

@@ -11,8 +11,9 @@
 
 namespace BaserCore\Test\TestCase\Model\Table;
 
-use BaserCore\Model\Table\SiteConfigsTable;
+use Cake\Routing\Router;
 use BaserCore\TestSuite\BcTestCase;
+use BaserCore\Model\Table\SiteConfigsTable;
 
 /**
  * Class SiteConfigsTableTest
@@ -48,6 +49,7 @@ class SiteConfigsTableTest extends BcTestCase
     public function tearDown(): void
     {
         unset($this->SiteConfigs);
+        Router::reload();
         parent::tearDown();
     }
 
@@ -150,7 +152,7 @@ class SiteConfigsTableTest extends BcTestCase
      */
     public function testIsChangedContentsSortLastModified($isLogin, $saveValue, $listDisplayed, $expected)
     {
-        if($isLogin) $this->loginAdmin($this->getRequest());
+        if($isLogin) Router::setRequest($this->loginAdmin($this->getRequest()));
         $this->SiteConfigs->saveValue('contents_sort_last_modified', $saveValue);
         $result = $this->SiteConfigs->isChangedContentsSortLastModified($listDisplayed);
         $this->assertEquals($expected, $result);

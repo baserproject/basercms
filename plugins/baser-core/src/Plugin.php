@@ -16,6 +16,7 @@ use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Middleware\AuthenticationMiddleware;
 use BaserCore\Middleware\BcAdminMiddleware;
+use BaserCore\Middleware\BcRequestFilterMiddleware;
 use BaserCore\ServiceProvider\BcServiceProvider;
 use BaserCore\Utility\BcUtil;
 use Cake\Core\Configure;
@@ -157,7 +158,8 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         $middlewareQueue
             // Authorization (AuthComponent to Authorization)
             ->add(new AuthenticationMiddleware($this))
-            ->add(new BcAdminMiddleware());
+            ->add(new BcAdminMiddleware())
+            ->add(new BcRequestFilterMiddleware());
 
         // APIへのアクセスの場合、CSRFを強制的に利用しない設定に変更
         $ref = new ReflectionClass($middlewareQueue);
@@ -191,7 +193,7 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
         $service = new AuthenticationService();
         $prefix = $request->getParam('prefix');
         $authSetting = Configure::read('BcPrefixAuth.Admin');
-        if (!$authSetting) {
+        if (!$authSetting || !Configure::read('BcRequest.isInstalled')) {
             $service->loadAuthenticator('Authentication.Form');
             return $service;
         }
@@ -318,6 +320,14 @@ class Plugin extends BcPlugin implements AuthenticationServiceProviderInterface
             $property = new ReflectionProperty(get_class($collection), '_paths');
             $property->setAccessible(true);
             $property->setValue($collection, []);
+        }
+
+        /**
+         * インストーラー
+         */
+        if (!Configure::read('BcRequest.isInstalled')) {
+            parent::routes($routes);
+            return;
         }
 
         $routes->connect('/*', [], ['routeClass' => 'BaserCore.BcContentsRoute']);

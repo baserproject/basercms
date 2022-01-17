@@ -196,7 +196,7 @@ class AppTable extends Table
         // ログを記録する
         $Dblog = ClassRegistry::init('Dblog');
         $logdata['Dblog']['name'] = $message;
-        $logdata['Dblog']['user_id'] = @$_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]['id'];
+        $logdata['Dblog']['user_id'] = @$_SESSION['Auth'][Configure::read('BcPrefixAuth.Admin.sessionKey')]['id'];
         return $Dblog->save($logdata);
         <<< */
     }

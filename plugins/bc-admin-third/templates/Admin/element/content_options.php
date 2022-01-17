@@ -13,10 +13,10 @@
 /**
  * @var \BaserCore\View\BcAdminAppView $this
  * コンテンツオプション
- * @var bool $disableEditContent コンテンツ編集不可かどうか
+ * @var bool $editableContent コンテンツ編集不可かどうか
  * @var array $layoutTemplates レイアウトテンプレートリスト
  */
-$disableEdit = $this->BcContents->isEditable();
+$editable = $this->BcContents->isEditable();
 $authors = $this->BcAdminContent->getAuthors();
 $created_date = $this->BcAdminForm->getSourceValue("Content.created_date");
 $modified_date = $this->BcAdminForm->getSourceValue("Content.modified_date");
@@ -35,13 +35,13 @@ $modified_date = $this->BcAdminForm->getSourceValue("Content.modified_date");
         <th
           class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("Content.description", __d('baser', '説明文')) ?></th>
         <td class="col-input bca-form-table__input">
-          <?php if (!$disableEdit): ?>
+          <?php if ($editable): ?>
             <?php echo $this->BcAdminForm->control("Content.description", ['type' => 'textarea', 'cols' => 36, 'rows' => 4, 'data-input-text-size' => 'full-counter']) ?>
           <?php else: ?>
             <?php if ($this->BcAdminForm->getSourceValue("Content.exclude_search")): ?>
               <?php echo h($this->BcAdminForm->getSourceValue("Content.description")) ?>
             <?php else: ?>
-              <?php echo h($this->BcBaser->siteConfig['description']) ?>
+              <?php echo h($this->BcSiteConfig->getValue("description")) ?>
             <?php endif ?>
             <?php echo $this->BcAdminForm->hidden("Content.description") ?>
           <?php endif ?>
@@ -52,7 +52,7 @@ $modified_date = $this->BcAdminForm->getSourceValue("Content.modified_date");
         <th
           class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("Content.eyecatch", __d('baser', 'アイキャッチ')) ?></th>
         <td class="col-input bca-form-table__input">
-          <?php if (!$disableEdit): ?>
+          <?php if ($editable): ?>
             <?php echo $this->BcAdminForm->control("Content.eyecatch", ['type' => 'file', 'imgsize' => 'thumb',  'novalidate' => true]) ?>
           <?php else: ?>
             <?php echo $this->BcUpload->uploadImage("Content.eyecatch", $this->BcAdminForm->getSourceValue("Content.eyecatch"), ['imgsize' => 'thumb']); ?>
@@ -64,7 +64,7 @@ $modified_date = $this->BcAdminForm->getSourceValue("Content.modified_date");
         <th
           class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("Content.author_id", __d('baser', '作成者')) ?></th>
         <td class="col-input bca-form-table__input">
-          <?php if (!$disableEdit): ?>
+          <?php if ($editable): ?>
             <?php echo $this->BcAdminForm->control('Content.author_id', ['type' => 'select', 'options' => $authors]) ?>
             <small>[<?php echo __d('baser', '作成日') ?>
               ]</small> <?php echo $this->BcAdminForm->control('Content.created_date', ['type' => 'dateTimePicker', 'size' => 12, 'maxlength' => 10, 'value' => $created_date]); ?>
@@ -96,7 +96,7 @@ $modified_date = $this->BcAdminForm->getSourceValue("Content.modified_date");
         <th
           class="col-head bca-form-table__label"><?php echo $this->BcAdminForm->label("Content.exclude_search", __d('baser', 'その他設定')) ?></th>
         <td class="col-input bca-form-table__input">
-          <?php if (!$disableEdit): ?>
+          <?php if ($editable): ?>
             <span
               style="white-space: nowrap"><?php echo $this->BcAdminForm->control("Content.exclude_search", ['type' => 'checkbox', 'label' => __d('baser', 'サイト内検索の検索結果より除外する')]) ?></span>
             <span
