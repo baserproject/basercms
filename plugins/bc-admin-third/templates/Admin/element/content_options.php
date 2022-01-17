@@ -41,7 +41,7 @@ $modified_date = $this->BcAdminForm->getSourceValue("Content.modified_date");
             <?php if ($this->BcAdminForm->getSourceValue("Content.exclude_search")): ?>
               <?php echo h($this->BcAdminForm->getSourceValue("Content.description")) ?>
             <?php else: ?>
-              <?php echo h($this->BcBaser->siteConfig['description']) ?>
+              <?php echo h($this->BcSiteConfig->getValue("description")) ?>
             <?php endif ?>
             <?php echo $this->BcAdminForm->hidden("Content.description") ?>
           <?php endif ?>

@@ -475,6 +475,9 @@ class BcContentsHelper extends Helper
      *
      * @param array $data コンテンツ、サイト情報を格納した配列
      * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function isEditable($data = null)
     {
@@ -495,7 +498,7 @@ class BcContentsHelper extends Helper
             }
         }
         // サイトルートの場合は編集不可
-        if (empty($content['site_root'])) {
+        if ($content['site_root']) {
             return false;
         }
         // サイトルート以外で、管理ユーザーの場合は、強制的に編集可
