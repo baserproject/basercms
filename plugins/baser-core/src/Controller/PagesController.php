@@ -11,22 +11,23 @@
 
 namespace BaserCore\Controller;
 
-use BaserCore\Controller\Component\BcFrontContentsComponent;
-use BaserCore\Model\Table\PagesTable;
 use Cake\Utility\Text;
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
+use BaserCore\Annotation\NoTodo;
 use BaserCore\Model\Entity\Page;
+use BaserCore\Annotation\Checked;
+use BaserCore\Annotation\UnitTest;
+use BaserCore\Model\Table\PagesTable;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Http\Exception\NotFoundException;
+use BaserCore\Service\PageServiceInterface;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\View\Exception\MissingViewException;
 use BaserCore\Service\ContentFolderServiceInterface;
-use BaserCore\Annotation\NoTodo;
-use BaserCore\Annotation\Checked;
-use BaserCore\Annotation\UnitTest;
+use BaserCore\Controller\Component\BcFrontContentsComponent;
 
 /**
  * PagesController
@@ -54,7 +55,8 @@ class PagesController extends AppController
 
 	/**
 	 * ビューを表示する
-	 *
+	 * @param PageServiceInterface $pageService
+	 * @param ContentFolderServiceInterface $contentFolderService
 	 * @return \Cake\Http\Response|void
      * @throws ForbiddenException When a directory traversal attempt.
 	 * @throws NotFoundException When the view file could not be found
@@ -62,9 +64,8 @@ class PagesController extends AppController
      * @checked
      * @noTodo
 	 */
-	public function display(ContentFolderServiceInterface $contentFolderService)
+	public function display(PageServiceInterface $pageService, ContentFolderServiceInterface $contentFolderService)
 	{
-        $a = $this->Pages;
 		$path = func_get_args();
 
 		if ($this->request->getParam('Content')->alias_id) {
@@ -135,7 +136,7 @@ class PagesController extends AppController
 			if ($this->BcFrontContents->preview === 'draft') {
 				$this->request = $this->request->withParsedBody($this->Content->saveTmpFiles($this->request->getData(), mt_rand(0, 99999999)));
 				$this->request->withParam('Content.eyecatch', $this->request->getData('Content.eyecatch'));
-				$uuid = $this->_createPreviewTemplate($this->request->getData());
+				$uuid = $this->_createPreviewTemplate($pageService, $this->request->getData());
 				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . Configure::read('BcApp.templateExt'));
 				$previewCreated = true;
 			}
@@ -150,7 +151,7 @@ class PagesController extends AppController
 
 				if (!is_null($previewData)) {
 					$this->request->getSession()->delete($sessionKey);
-					$uuid = $this->_createPreviewTemplate($previewData);
+					$uuid = $this->_createPreviewTemplate($pageService, $previewData);
 					$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . Configure::read('BcApp.templateExt'));
 					$previewCreated = true;
 				}
@@ -158,7 +159,7 @@ class PagesController extends AppController
 
 			// 草稿アクセス
 			if ($this->BcFrontContents->preview === 'draft') {
-				$data = $this->Pages->find('first', ['conditions' => ['Page.id' => $this->request->getParam('Content.entity_id')]]);
+                $data = $pageService->get($this->request->getParam('Content.entity_id'));
 				$uuid = $this->_createPreviewTemplate($data, true);
 				// TODO ucmitz previewTemplate 不要
 				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . Configure::read('BcApp.templateExt'));
@@ -166,7 +167,7 @@ class PagesController extends AppController
 			}
 		}
 
-		$page = $this->Pages->find()->where(['Pages.id' => $this->request->getParam('Content.entity_id')])->first();
+		$page = $pageService->get($this->request->getParam('Content.entity_id'));
 
 		/* @var Page $page */
 		$template = $page->page_template;
@@ -194,12 +195,12 @@ class PagesController extends AppController
 	 *
 	 * 一時ファイルとしてビューを保存
 	 * タグ中にPHPタグが入る為、ファイルに保存する必要がある
-	 *
+	 *@param PageServiceInterface $pageService
 	 * @param $data
 	 * @param bool $isDraft
 	 * @return string uuid
 	 */
-	protected function _createPreviewTemplate($data, $isDraft = false)
+	protected function _createPreviewTemplate($pageService, $data, $isDraft = false)
 	{
 		if (!$isDraft) {
 			// postで送信される前提

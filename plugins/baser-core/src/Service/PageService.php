@@ -39,7 +39,13 @@ class PageService implements PageServiceInterface
 {
 
     /**
-     * PageService constructor.
+     * Pages Table
+     * @var PagesTable
+     */
+    public $Pages;
+
+    /**
+     * Pageservice constructor.
      */
     public function __construct()
     {
@@ -47,37 +53,37 @@ class PageService implements PageServiceInterface
     }
 
     /**
-     * ユーザーの新規データ用の初期値を含んだエンティティを取得する
-     * @return Page
-
+     * 固定ページを取得する
+     * @param int $id
+     * @return EntityInterface
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getNew(): EntityInterface
+    public function get($id): EntityInterface
     {
-        return $this->Pages->newEntity([
-            'user_groups' => [
-                '_ids' => [1],
-            ]], [
-                'validate' => false,
-            ]);
+        return $this->Pages->get($id, ['contain' => ['Contents' => ['Sites']]]);
     }
 
     /**
-     * ユーザーを取得する
+     * 固定ページをゴミ箱から取得する
      * @param int $id
-     * @return Page
-
+     * @return EntityInterface|array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function get($id): Page
+    public function getTrash($id)
     {
-        return $this->Pages->get($id, [
-        ]);
+        return $this->Pages->findById($id)->contain('Contents', function (Query $q) {
+            return $q->applyOptions(['withDeleted'])->contain(['Sites'])->where(['Contents.deleted_date IS NOT NULL']);
+        })->firstOrFail();
     }
 
     /**
      * ユーザー管理の一覧用のデータを取得
      * @param array $queryParams
      * @return Query
-
      */
     public function getIndex(array $queryParams): Query
     {
@@ -103,14 +109,13 @@ class PageService implements PageServiceInterface
      * @param array $data
      * @return \Cake\Datasource\EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
-
      */
-    public function create(array $postData)
-    {
-        $page = $this->Pages->newEmptyEntity();
-        $page = $this->Pages->patchEntity($page, $postData, ['validate' => 'new']);
-        return $this->Pages->saveOrFail($page);
-    }
+    // public function create(array $postData)
+    // {
+    //     $page = $this->Pages->newEmptyEntity();
+    //     $page = $this->Pages->patchEntity($page, $postData, ['validate' => 'new']);
+    //     return $this->Pages->saveOrFail($page);
+    // }
 
     /**
      * ユーザー情報を更新する
@@ -118,7 +123,6 @@ class PageService implements PageServiceInterface
      * @param array $postData
      * @return EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
-
      */
     public function update(EntityInterface $target, array $postData)
     {
@@ -131,7 +135,6 @@ class PageService implements PageServiceInterface
      * 最後のシステム管理者でなければ削除
      * @param int $id
      * @return bool
-
      */
     public function delete($id)
     {

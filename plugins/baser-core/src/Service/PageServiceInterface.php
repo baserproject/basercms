@@ -22,17 +22,31 @@ interface PageServiceInterface
 {
 
     /**
-     * 新規登録する
-     * @param array $data
+     * 固定ページを取得する
+     * @param int $id
      * @return EntityInterface
-     * @throws \Cake\ORM\Exception\PersistenceFailedException
      */
-    public function create(string $message): EntityInterface;
+    public function get($id): EntityInterface;
 
     /**
-     * DBログ一覧を取得
-     * @param array $queryParams
-     * @return Query
+     * 固定ページをゴミ箱から取得する
+     * @param int $id
+     * @return EntityInterface|array
      */
-    public function getIndex(array $queryParams): Query;
+    public function getTrash($id);
+
+    // /**
+    //  * 新規登録する
+    //  * @param array $data
+    //  * @return EntityInterface
+    //  * @throws \Cake\ORM\Exception\PersistenceFailedException
+    //  */
+    // public function create(string $message): EntityInterface;
+
+    // /**
+    //  * DBログ一覧を取得
+    //  * @param array $queryParams
+    //  * @return Query
+    //  */
+    // public function getIndex(array $queryParams): Query;
 }

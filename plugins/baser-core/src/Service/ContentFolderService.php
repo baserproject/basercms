@@ -49,7 +49,6 @@ class ContentFolderService implements ContentFolderServiceInterface
     public function __construct()
     {
         $this->ContentFolders = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
-        $this->Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
     }
 
     /**

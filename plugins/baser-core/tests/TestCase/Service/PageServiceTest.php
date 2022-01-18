@@ -30,6 +30,8 @@ class PageServiceTest extends BcTestCase
      */
     protected $fixtures = [
         'plugin.BaserCore.Pages',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.Sites',
         'plugin.BaserCore.Users',
     ];
 
@@ -55,6 +57,29 @@ class PageServiceTest extends BcTestCase
         unset($this->PageService);
         unset($this->Pages);
         parent::tearDown();
+    }
+
+    /**
+     * Test get
+     *
+     * @return void
+     */
+    public function testGet()
+    {
+        $page = $this->PageService->get(1);
+        $this->assertRegExp('/<section class="mainHeadline">/', $page->contents);
+    }
+    /**
+     * Test getTrash
+     *
+     * @return void
+     */
+    public function testGetTrash()
+    {
+        $page = $this->PageService->getTrash(10);
+        $this->assertEquals('削除済みフォルダー(親)', $page->folder_template);
+        $this->assertEquals(10, $page->content->entity_id);
+        $this->assertEquals('メインサイト', $page->content->site->display_name);
     }
 
     /**

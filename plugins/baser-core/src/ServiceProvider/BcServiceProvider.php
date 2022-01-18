@@ -11,31 +11,33 @@
 
 namespace BaserCore\ServiceProvider;
 
-use BaserCore\Service\BcAdminService;
-use BaserCore\Service\BcAdminServiceInterface;
-use BaserCore\Service\BcFrontService;
-use BaserCore\Service\BcFrontServiceInterface;
 use Cake\Core\ServiceProvider;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Service\PageService;
 use BaserCore\Service\SiteService;
 use BaserCore\Service\UserService;
 use BaserCore\Service\DblogService;
 use BaserCore\Service\PluginService;
+use BaserCore\Service\BcAdminService;
+use BaserCore\Service\BcFrontService;
 use BaserCore\Service\ContentService;
 use BaserCore\Service\UserGroupService;
+use BaserCore\Service\PermissionService;
+use BaserCore\Service\SiteConfigService;
+use BaserCore\Service\ContentFolderService;
+use BaserCore\Service\PageServiceInterface;
 use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Service\UserServiceInterface;
 use BaserCore\Service\DblogServiceInterface;
-use BaserCore\Service\SiteConfigService;
-use BaserCore\Service\SiteConfigServiceInterface;
 use BaserCore\Service\PluginServiceInterface;
+use BaserCore\Service\BcAdminServiceInterface;
+use BaserCore\Service\BcFrontServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Service\UserGroupServiceInterface;
 use BaserCore\Service\PermissionServiceInterface;
-use BaserCore\Service\PermissionService;
-use BaserCore\Service\ContentFolderService;
+use BaserCore\Service\SiteConfigServiceInterface;
 use BaserCore\Service\ContentFolderServiceInterface;
 
 /**
@@ -62,6 +64,7 @@ class BcServiceProvider extends ServiceProvider
         DblogServiceInterface::class,
         ContentServiceInterface::class,
         ContentFolderServiceInterface::class,
+        PageServiceInterface::class,
     ];
 
     /**
@@ -94,6 +97,8 @@ class BcServiceProvider extends ServiceProvider
         $container->add(ContentServiceInterface::class, ContentService::class, true);
         // ContentFoldersサービス
         $container->add(ContentFolderServiceInterface::class, ContentFolderService::class, true);
+        // Pagesサービス
+        $container->add(PageServiceInterface::class, PageService::class, true);
 
     }
 
