@@ -11,24 +11,25 @@
 
 namespace BaserCore\Service;
 
-use Authentication\Identity;
-use BaserCore\Model\Entity\Page;
-use BaserCore\Model\Table\LoginStoresTable;
-use BaserCore\Model\Table\PagesTable;
-use BaserCore\Utility\BcUtil;
+use DateTime;
+use Cake\ORM\Query;
 use Cake\Core\Configure;
-use Cake\Core\Exception\Exception;
+use Cake\Routing\Router;
+use Cake\ORM\TableRegistry;
+use Authentication\Identity;
 use Cake\Http\Cookie\Cookie;
 use Cake\Http\ServerRequest;
-use Cake\ORM\Query;
-use Cake\ORM\TableRegistry;
-use Cake\Datasource\EntityInterface;
-use BaserCore\Annotation\UnitTest;
+use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
+use BaserCore\Model\Entity\Page;
 use BaserCore\Annotation\Checked;
-use Cake\Routing\Router;
-use DateTime;
+use BaserCore\Annotation\UnitTest;
+use Cake\Core\Exception\Exception;
+use Cake\Datasource\EntityInterface;
+use BaserCore\Model\Table\PagesTable;
 use Psr\Http\Message\ResponseInterface;
+use BaserCore\Model\Table\LoginStoresTable;
+use Cake\Datasource\Exception\RecordNotFoundException;
 
 /**
  * Class PageService
@@ -69,15 +70,21 @@ class PageService implements PageServiceInterface
      * 固定ページをゴミ箱から取得する
      * @param int $id
      * @return EntityInterface|array
+     * @throws RecordNotFoundException
      * @checked
      * @noTodo
      * @unitTest
      */
     public function getTrash($id)
     {
-        return $this->Pages->findById($id)->contain('Contents', function (Query $q) {
+        $page = $this->Pages->findById($id)->contain('Contents', function (Query $q) {
             return $q->applyOptions(['withDeleted'])->contain(['Sites'])->where(['Contents.deleted_date IS NOT NULL']);
         })->firstOrFail();
+        if (isset($page->content)) {
+            return $page;
+        } else {
+            throw new RecordNotFoundException('Record not found in table contents');
+        }
     }
 
     /**

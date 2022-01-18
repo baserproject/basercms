@@ -624,7 +624,7 @@ class ContentsTableTest extends BcTestCase
     {
         return [
             ['BcMail.MailContent', null, 9],    // entityId指定なし
-            ['BcBlog.BlogContent', 1, 10],    // entityId指定あり
+            ['BcBlog.BlogContent', 21, 10],    // entityId指定あり
             ['ContentFolder', 1, 1],                // プラグイン指定なし
             ['BcBlog.BlogComment', null, null],    // 存在しないタイプ
             [false, null, null]                // 異常系

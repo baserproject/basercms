@@ -33,7 +33,8 @@ class PagesFixture extends TestFixture
      */
     public $records = [
         [
-            'id' => 1,
+            // NOTE: contentFixtureのトップページ
+            'id' => 2,
             'contents' => '<section class="mainHeadline">
 <h2>シングルページデザインで<br />
 <span class="fcGreen">見やすくカッコいい</span>Webサイトへ！</h2>
@@ -57,7 +58,8 @@ class PagesFixture extends TestFixture
             'created' => '2015-01-27 12:56:52'
         ],
         [
-            'id' => 2,
+            // NOTE: contentFixtureの会社案内
+            'id' => 16,
             'contents' => '<div class="articleArea" id="company">
 <article class="mainWidth">
 <h2 class="fontawesome-circle-arrow-down">Company Profile <span>会社案内</span></h2>
@@ -102,6 +104,7 @@ class PagesFixture extends TestFixture
             'created' => '2015-01-27 12:56:52'
         ],
         [
+            // NOTE: contentFixtureのサンプル
             'id' => 3,
             'contents' => '<div class="articleArea bgGray" id="service">
 <article class="mainWidth">
@@ -121,8 +124,9 @@ class PagesFixture extends TestFixture
             'modified' => null,
             'created' => '2015-01-27 12:56:52'
         ],
+        // NOTE: contentFixture準備未完了
         [
-            'id' => 4,
+            'id' => 25,
             'contents' => '<div class="articleArea" id="recruit">
 <article class="mainWidth">
 <h2 class="fontawesome-circle-arrow-down">Recruit <span>採用情報</span></h2>
@@ -175,6 +179,7 @@ class PagesFixture extends TestFixture
             'created' => '2015-01-27 12:56:52'
         ],
         [
+            // NOTE: contentFixtureのサービス１
             'id' => 5,
             'contents' => '<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">メインメニュー</span> </div>
@@ -198,6 +203,7 @@ class PagesFixture extends TestFixture
             'created' => '2015-01-27 12:56:52'
         ],
         [
+            // NOTE: contentFixtureのサービス2
             'id' => 6,
             'contents' => '<div id="news" class="clearfix">
 <div class="news" style="margin-right:28px;">
@@ -219,6 +225,7 @@ class PagesFixture extends TestFixture
             'created' => '2015-01-27 12:56:52'
         ],
         [
+            // NOTE: contentFixtureのサービス3
             'id' => 7,
             'contents' => '<h2 class="contents-head">会社案内</h2>
 <h3 class="contents-head">会社データ</h3>
@@ -241,6 +248,8 @@ WEBシステム開発事業（ダミー）</td></tr>
             'modified' => null,
             'created' => '2015-01-27 12:56:52'
         ],
+/*
+TODO ucmitz: コンテンツFixtureと整合性がとれないため一旦コメントアウト
         [
             'id' => 8,
             'contents' => '<h2 class="contents-head">サービス</h2>
@@ -411,5 +420,6 @@ WEBシステム開発事業（ダミー）</td></tr>
             'modified' => null,
             'created' => '2015-01-27 12:56:52'
         ],
+*/
     ];
 }

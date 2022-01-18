@@ -41,6 +41,9 @@ class ContentServiceTest extends BcTestCase
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
     ];
 
         /**
@@ -62,6 +65,7 @@ class ContentServiceTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        Router::reload();
         unset($this->ContentService);
         parent::tearDown();
     }
@@ -578,7 +582,8 @@ class ContentServiceTest extends BcTestCase
      */
     public function testAlias()
     {
-        $request = $this->getRequest('/');
+        $request = $this->loginAdmin($this->getRequest('/'));
+        Router::setRequest($request);
         $request = $request->withParsedBody([
             'parent_id' => '1',
             'plugin' => 'BaserCore',

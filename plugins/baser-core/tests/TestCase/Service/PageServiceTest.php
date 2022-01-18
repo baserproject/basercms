@@ -66,7 +66,7 @@ class PageServiceTest extends BcTestCase
      */
     public function testGet()
     {
-        $page = $this->PageService->get(1);
+        $page = $this->PageService->get(2);
         $this->assertRegExp('/<section class="mainHeadline">/', $page->contents);
     }
     /**
@@ -76,10 +76,15 @@ class PageServiceTest extends BcTestCase
      */
     public function testGetTrash()
     {
-        $page = $this->PageService->getTrash(10);
-        $this->assertEquals('削除済みフォルダー(親)', $page->folder_template);
-        $this->assertEquals(10, $page->content->entity_id);
-        $this->assertEquals('メインサイト', $page->content->site->display_name);
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $page = $this->PageService->getTrash(1);
+        // 論理削除されているコンテンツに紐付いている場合
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->expectExceptionMessage('Record not found in table contents');
+        $page = $this->PageService->getTrash(1);
+        // $this->assertEquals('削除済みフォルダー(親)', $page->folder_template);
+        // $this->assertEquals(10, $page->content->entity_id);
+        // $this->assertEquals('メインサイト', $page->content->site->display_name);
     }
 
     /**

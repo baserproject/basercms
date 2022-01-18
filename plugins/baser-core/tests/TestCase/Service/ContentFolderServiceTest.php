@@ -80,10 +80,11 @@ class ContentFolderServiceTest extends BcTestCase
     public function testGet()
     {
         $contentFolder = $this->ContentFolderService->get(1);
-        $this->assertEquals('フォルダーテンプレート1', $contentFolder->folder_template);
+        $this->assertEquals('baserCMSサンプル', $contentFolder->folder_template);
         $this->assertEquals(1, $contentFolder->content->entity_id);
         $this->assertEquals('メインサイト', $contentFolder->content->site->display_name);
     }
+
     /**
      * Test getTrash
      *
@@ -95,6 +96,10 @@ class ContentFolderServiceTest extends BcTestCase
         $this->assertEquals('削除済みフォルダー(親)', $contentFolder->folder_template);
         $this->assertEquals(10, $contentFolder->content->entity_id);
         $this->assertEquals('メインサイト', $contentFolder->content->site->display_name);
+        // 論理削除されているコンテンツに紐付いている場合
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->expectExceptionMessage('Record not found in table contents');
+        $this->ContentFolderService->getTrash(1);
     }
 
     /**
@@ -105,7 +110,7 @@ class ContentFolderServiceTest extends BcTestCase
     public function testGetIndex()
     {
         $contentFolders = $this->ContentFolderService->getIndex();
-        $this->assertEquals('フォルダーテンプレート1', $contentFolders->first()->folder_template);
+        $this->assertEquals('baserCMSサンプル', $contentFolders->first()->folder_template);
         $this->assertEquals(6, $contentFolders->count());
     }
     /**

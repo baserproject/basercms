@@ -15,12 +15,12 @@ use Cake\Validation\Validator;
 use BaserCore\TestSuite\BcTestCase;
 
 /**
- * Class PageTest
+ * Class PagesTable Test
  *
  * @package Baser.Test.Case.Model
  * @property Page $Page
  */
-class PageTest extends BcTestCase
+class PagesTableTest extends BcTestCase
 {
 
     public $fixtures = [

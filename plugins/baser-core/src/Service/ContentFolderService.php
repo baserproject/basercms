@@ -16,13 +16,14 @@ use Cake\ORM\Query;
 use Cake\Utility\Hash;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Annotation\Note;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\Note;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Model\Table\ContentFoldersTable;
+use Cake\Datasource\Exception\RecordNotFoundException;
 
 /**
  * Class ContentFolderService
@@ -67,16 +68,22 @@ class ContentFolderService implements ContentFolderServiceInterface
     /**
      * コンテンツフォルダーをゴミ箱から取得する
      * @param int $id
-     * @return EntityInterface|array
+     * @return EntityInterface
+     * @throws RecordNotFoundException
      * @checked
      * @noTodo
      * @unitTest
      */
     public function getTrash($id)
     {
-        return $this->ContentFolders->findById($id)->contain('Contents', function (Query $q) {
+        $contentFolder = $this->ContentFolders->findById($id)->contain('Contents', function (Query $q) {
             return $q->applyOptions(['withDeleted'])->contain(['Sites'])->where(['Contents.deleted_date IS NOT NULL']);
         })->firstOrFail();
+        if (isset($contentFolder->content)) {
+            return $contentFolder;
+        } else {
+            throw new RecordNotFoundException('Record not found in table contents');
+        }
     }
 
     /**
