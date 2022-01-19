@@ -142,7 +142,6 @@ class PagesController extends AppController
 			}
 
 		} else {
-
 			// プレビューアクセス
 			if ($this->BcFrontContents->preview === 'default') {
 				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->getParam('Content.entity_id');
@@ -212,7 +211,7 @@ class PagesController extends AppController
 		} else {
 			$contents = $data['Page']['draft'];
 		}
-		$contents = $this->Pages->addBaserPageTag(
+		$contents = $pageService->addBaserPageTag(
 			null,
 			$contents,
 			$data['Content']['title'],

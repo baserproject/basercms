@@ -49,4 +49,16 @@ interface PageServiceInterface
     //  * @return Query
     //  */
     // public function getIndex(array $queryParams): Query;
+
+    /**
+	 * 本文にbaserが管理するタグを追加する
+	 *
+	 * @param string $id ID
+	 * @param string $contents 本文
+	 * @param string $title タイトル
+	 * @param string $description 説明文
+	 * @param string $code コード
+	 * @return string 本文の先頭にbaserCMSが管理するタグを付加したデータ
+	 */
+	public function addBaserPageTag($id, $contents, $title, $description, $code);
 }

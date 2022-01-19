@@ -160,4 +160,33 @@ class PageService implements PageServiceInterface
         }
         return $this->Pages->delete($page);
     }
+
+    /**
+	 * 本文にbaserが管理するタグを追加する
+	 *
+	 * @param string $id ID
+	 * @param string $contents 本文
+	 * @param string $title タイトル
+	 * @param string $description 説明文
+	 * @param string $code コード
+	 * @return string 本文の先頭にbaserCMSが管理するタグを付加したデータ
+	 */
+	public function addBaserPageTag($id, $contents, $title, $description, $code)
+	{
+		$tag = [];
+		$tag[] = '<!-- BaserPageTagBegin -->';
+		$title = str_replace("'", "\'", str_replace("\\", "\\\\'", $title));
+		$description = str_replace("'", "\'", str_replace("\\", "\\\\'", $description));
+		$tag[] = '<?php $this->BcBaser->setTitle(\'' . $title . '\') ?>';
+		$tag[] = '<?php $this->BcBaser->setDescription(\'' . $description . '\') ?>';
+
+		if ($id) {
+			$tag[] = '<?php $this->BcBaser->setPageEditLink(' . $id . ') ?>';
+		}
+		if ($code) {
+			$tag[] = trim($code);
+		}
+		$tag[] = '<!-- BaserPageTagEnd -->';
+		return implode("\n", $tag) . "\n\n" . $contents;
+	}
 }

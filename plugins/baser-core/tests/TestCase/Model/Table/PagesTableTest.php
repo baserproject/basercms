@@ -491,33 +491,6 @@ class PagesTableTest extends BcTestCase
         ];
     }
 
-    /**
-     * 本文にbaserが管理するタグを追加する
-     *
-     * @param string $id ID
-     * @param string $contents 本文
-     * @param string $title タイトル
-     * @param string $description 説明文
-     * @param string $code コード
-     * @param array $expected 期待値
-     * @param string $message テストが失敗した時に表示されるメッセージ
-     * @dataProvider addBaserPageTagDataProvider
-     */
-    public function testAddBaserPageTag($id, $contents, $title, $description, $code, $expected, $message = null)
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $result = $this->Pages->addBaserPageTag($id, $contents, $title, $description, $code);
-        $this->assertRegExp('/' . $expected . '/s', $result, $message);
-    }
-
-    public function addBaserPageTagDataProvider()
-    {
-        return [
-            [1, 'contentdayo', 'titledayo', 'descriptiondayo', 'codedayo',
-                "<!-- BaserPageTagBegin -->.*setTitle\('titledayo'\).*setDescription\('descriptiondayo'\).*setPageEditLink\(1\).*codedayo.*contentdayo",
-                '本文にbaserが管理するタグを追加できません'],
-        ];
-    }
 
     /**
      * コントロールソースを取得する
