@@ -11,10 +11,12 @@
 
 namespace BaserCore\Controller\Admin;
 
-use BaserCore\Controller\AppController;
-use BaserCore\Utility\BcSiteConfig;
+use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
-
+use BaserCore\Utility\BcSiteConfig;
+use BaserCore\Controller\AppController;
+use BaserCore\Service\PageServiceInterface;
+use BaserCore\Service\ContentServiceInterface;
 /**
  * PagesController
  */
@@ -178,26 +180,26 @@ class PagesController extends AppController
 	 * @param int $id (page_id)
 	 * @return void
 	 */
-	public function admin_edit($id)
+	public function edit(PageServiceInterface $pageService, ContentServiceInterface $contentService, $id)
 	{
-		if (!$id && empty($this->request->data)) {
+		if (!$id && empty($this->request->getData())) {
 			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
-			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+			$this->redirect(['controller' => 'contents', 'action' => 'index']);
 		}
 
-		if ($this->request->is(['post', 'put'])) {
-			if ($this->Page->isOverPostSize()) {
+		if ($this->request->is(['patch', 'post', 'put'])) {
+			if (BcUtil::isOverPostSize()) {
 				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
 				$this->redirect(['action' => 'edit', $id]);
 			}
-			$isChangedStatus = $this->Content->isChangedStatus($id, $this->request->data);
+			$isChangedStatus = $contentService->isChangedStatus($id, $this->request->getData());
 
 			// EVENT Pages.beforeEdit
 			$event = $this->dispatchEvent('beforeEdit', [
-				'data' => $this->request->data
+				'request' => $this->request,
 			]);
 			if ($event !== false) {
-				$this->request->data = $event->result === true? $event->data['data'] : $event->result;
+				$this->request = ($event->getResult() === null || $event->getResult() === true)? $event->getData('request') : $event->getResult();
 			}
 
 			$this->Page->set($this->request->data);

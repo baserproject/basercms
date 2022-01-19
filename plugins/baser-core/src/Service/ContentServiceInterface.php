@@ -298,4 +298,13 @@ interface ContentServiceInterface
      * @return bool
      */
     public function existsContentByUrl($url);
+
+    /**
+     * タイトル、URL、公開状態が更新されているか確認する
+     *
+     * @param int $id コンテンツID
+     * @param array $newData 新しいコンテンツデータ
+     * @return bool
+     */
+    public function isChangedStatus($id, $newData);
 }
