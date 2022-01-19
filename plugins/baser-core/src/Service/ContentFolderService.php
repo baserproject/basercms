@@ -82,7 +82,7 @@ class ContentFolderService implements ContentFolderServiceInterface
         if (isset($contentFolder->content)) {
             return $contentFolder;
         } else {
-            throw new RecordNotFoundException('Record not found in table contents');
+            throw new RecordNotFoundException('Record not found in table "contents"');
         }
     }
 

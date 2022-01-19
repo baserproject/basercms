@@ -83,7 +83,7 @@ class PageService implements PageServiceInterface
         if (isset($page->content)) {
             return $page;
         } else {
-            throw new RecordNotFoundException('Record not found in table contents');
+            throw new RecordNotFoundException('Record not found in table "contents"');
         }
     }
 
