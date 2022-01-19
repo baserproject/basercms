@@ -59,17 +59,33 @@ class ContentFoldersFixture extends TestFixture
                 'modified' => null
             ],
             [
-                // NOTE ucmitz: contentFixtureのtestEdit
-                'id' => '15',
-                'folder_template' => 'testEdit',
+                // NOTE: contentFixtureのツリー階層削除用フォルダー(親)
+                'id' => '12',
+                'folder_template' => 'ツリー階層削除用フォルダー(親)',
                 'page_template' => '',
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null
             ],
             [
-                // NOTE: contentFixture準備未完了
-                'id' => '30',
-                'folder_template' => 'フォルダーテンプレート3',
+                // NOTE: contentFixtureのツリー階層削除用フォルダー(子)
+                'id' => '13',
+                'folder_template' => 'ツリー階層削除用フォルダー(子)',
+                'page_template' => '',
+                'created' => '2016-08-10 02:17:28',
+                'modified' => null
+            ],
+            [
+                // NOTE: contentFixtureのツリー階層削除用フォルダー(孫)
+                'id' => '14',
+                'folder_template' => 'ツリー階層削除用フォルダー(孫)',
+                'page_template' => '',
+                'created' => '2016-08-10 02:17:28',
+                'modified' => null
+            ],
+            [
+                // NOTE ucmitz: contentFixtureのtestEdit
+                'id' => '15',
+                'folder_template' => 'testEdit',
                 'page_template' => '',
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null

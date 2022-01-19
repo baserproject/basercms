@@ -111,7 +111,7 @@ class ContentFolderServiceTest extends BcTestCase
     {
         $contentFolders = $this->ContentFolderService->getIndex();
         $this->assertEquals('baserCMSサンプル', $contentFolders->first()->folder_template);
-        $this->assertEquals(6, $contentFolders->count());
+        $this->assertEquals(8, $contentFolders->count());
     }
     /**
      * Test create

@@ -483,7 +483,7 @@ class ContentsControllerTest extends BcTestCase
         $this->ContentsController->setRequest($this->request);
         $response = $this->ContentsController->trash_empty($this->ContentService);
         $this->assertTrue($this->ContentService->getTrashIndex(['type' => "ContentFolder"])->isEmpty());
-        $this->assertEquals(4, $this->ContentFolderService->getIndex()->count());
+        $this->assertEquals(6, $this->ContentFolderService->getIndex()->count());
         $this->assertStringContainsString("/baser/admin/baser-core/contents/trash_index", $response->getHeaderLine('Location'));
     }
 

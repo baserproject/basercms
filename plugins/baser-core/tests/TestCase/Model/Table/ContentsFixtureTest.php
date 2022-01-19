@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Model\Table;
 
+use Cake\Utility\Inflector;
 use BaserCore\TestSuite\BcTestCase;
 
 /**
@@ -82,14 +83,27 @@ class ContentsFixtureTest extends BcTestCase
      */
     public function testFixtureRelations()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $id = array_column($this->contents, 'entity_id');
-        $typeList = array_combine(array_column($this->contents, 'entity_id'), array_column($this->contents, 'type'));
-
-        // 同じものを取得できるか
-        // foreach ($this->contents as $content) {
-        //     $a = $content->type;
-        // }
+        $type = array_column($this->contents, 'type');
+        $typeCount = array_count_values($type);
+        $typeList = array_combine($id, $type);
+        // テストに含めないリスト
+        $exclude = ["BcAdminContentsTest", "MailContent", "BlogContent"];
+        // contentFixtureに存在する$entityIdがちゃんと関連するFixtureに存在するかテスト
+        foreach($typeList as $entityId => $type) {
+            if (!in_array($type, $exclude)) {
+                $table = $this->getTableLocator()->get(Inflector::pluralize($type));
+                $this->assertFalse($table->findById($entityId)->isEmpty(), "ID: $entityId 失敗");
+            }
+        }
         // 同数のエンティティが取得できるか
+        $testedType = array_diff_key($typeCount, array_flip($exclude));
+        foreach($testedType as $type => $count) {
+            $table = $this->getTableLocator()->get(Inflector::pluralize($type));
+            // エイリアスを排除した実際の個数
+            $alias_entityId = $this->Contents->find()->where(['Contents.title  LIKE' => '%エイリアス%', 'type' => $type])->all()->count();
+            $actualCount = $count - $alias_entityId;
+            $this->assertEquals($actualCount, $table->find()->all()->count(), "$type フィクスチャーのエンティティ数がコンテンツフィクスチャーと異なります");
+        }
     }
 }
