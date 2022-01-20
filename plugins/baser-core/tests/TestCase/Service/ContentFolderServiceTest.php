@@ -168,4 +168,14 @@ class ContentFolderServiceTest extends BcTestCase
         $this->assertEquals("testUpdate", $result->folder_template);
         $this->assertEquals("contentFolderTestUpdate", $result->content->name);
     }
+
+    /**
+     * 親のテンプレートを取得する
+     */
+    public function testGetParentTemplate()
+    {
+        $this->assertEquals('default', $this->ContentFolderService->getParentTemplate(1, 'folder'));
+        // 親フォルダ（サービス）のfolder_templateを取得できるか確認
+        $this->assertEquals('サービス', $this->ContentFolderService->getParentTemplate(11, 'folder'));
+    }
 }

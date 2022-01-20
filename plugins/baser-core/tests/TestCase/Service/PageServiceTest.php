@@ -143,4 +143,31 @@ class PageServiceTest extends BcTestCase
                 '本文にbaserが管理するタグを追加できません'],
         ];
     }
+
+    /**
+     * 固定ページテンプレートリストを取得する
+     *
+     * @param int $contetnId
+     * @param mixed $theme
+     * @param $expected
+     * @dataProvider getPageTemplateListDataProvider
+     */
+    public function testGetPageTemplateList($contetnId, $theme, $expected)
+    {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $templates = BASER_THEMES . 'bc_sample' . DS . 'Pages' . DS . 'templates' . DS . 'hoge.php';
+        touch($templates);
+        $result = $this->PageService->getPageTemplateList($contetnId, $theme);
+        $this->assertEquals($expected, $result);
+        unlink($templates);
+    }
+
+    public function getPageTemplateListDataProvider()
+    {
+        return [
+            [1, 'nada-icons', ['default' => 'default']],
+            [2, 'nada-icons', ['' => '親フォルダの設定に従う（default）']],
+            [2, ['nada-icons', 'bc_sample'], ['' => '親フォルダの設定に従う（default）', 'hoge' => 'hoge']]
+        ];
+    }
 }

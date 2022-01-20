@@ -1160,13 +1160,16 @@ class ContentsTable extends AppTable
      * 親のテンプレートを取得する
      *
      * @param $id
+     * @checked
+     * @unitTest
+     * @noTodo
      */
     public function getParentTemplate($id)
     {
-        $contents = $this->getPath($id, null, -1);
+        $contents = $this->find('path', ['for' => $id])->contain(['Sites'])->all()->toArray();
         $contents = array_reverse($contents);
         unset($contents[0]);
-        $parentTemplates = Hash::extract($contents, '{n}.Content.layout_template');
+        $parentTemplates = Hash::extract($contents, '{n}.layout_template');
         $parentTemplate = '';
         foreach($parentTemplates as $parentTemplate) {
             if ($parentTemplate) {

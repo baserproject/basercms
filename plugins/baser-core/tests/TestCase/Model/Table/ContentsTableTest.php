@@ -769,7 +769,10 @@ class ContentsTableTest extends BcTestCase
      */
     public function testGetParentTemplate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+        $this->assertEquals('default', $this->Contents->getParentTemplate(1));
+        // サービスフォルダ以下のサービス１からサービスフォルダのlayout_templateが取得できているかを確認
+        $this->assertEquals('serviceTemplate', $this->Contents->getParentTemplate(11));
     }
 
     /**

@@ -22,6 +22,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
+use Cake\Database\Expression\QueryExpression;
 use BaserCore\Model\Table\ContentFoldersTable;
 use Cake\Datasource\Exception\RecordNotFoundException;
 
@@ -50,6 +51,7 @@ class ContentFolderService implements ContentFolderServiceInterface
     public function __construct()
     {
         $this->ContentFolders = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
+        $this->Contents = TableRegistry::getTableLocator()->get('BaserCore.Contents');
     }
 
     /**
@@ -190,43 +192,24 @@ class ContentFolderService implements ContentFolderServiceInterface
      *
      * @param int $id
      * @param string $type folder|page
+     * @return string $parentTemplate
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getParentTemplate($id, $type)
     {
-        // TODO ucmitz 暫定措置
-        // >>>
-        return 'default';
-        // <<<
-
-        $this->Content->bindModel(
-            ['belongsTo' => [
-                'ContentFolder' => [
-                    'className' => 'ContentFolder',
-                    'foreignKey' => 'entity_id'
-                ]
-            ]
-            ],
-            false
-        );
-        $contents = $this->Content->getPath($id, null, 0);
-        $this->Content->unbindModel(
-            ['belongsTo' => [
-                'ContentFolder'
-            ]
-            ]
-        );
+        $contents = $this->Contents->find('path', ['for' => $id])->all()->toArray();
         $contents = array_reverse($contents);
         unset($contents[0]);
-        $parentTemplates = Hash::extract($contents, '{n}.ContentFolder.' . $type . '_template');
-        $parentTemplate = '';
-        foreach($parentTemplates as $parentTemplate) {
-            if ($parentTemplate) {
-                break;
-            }
+        // 配列の場合一番上のものからコンテンツフォルダーを取得する
+        $content = is_array($contents) ? array_shift($contents) : $contents;
+        if ($content) {
+            $contentFolder = $this->ContentFolders->find()->where(function (QueryExpression $exp, Query $query) use($content) {
+                return $query->newExpr()->eq('Contents.id', $content->id);
+            })->leftJoinWith('Contents')->first();
         }
-        if (!$parentTemplate) {
-            $parentTemplate = 'default';
-        }
+        $parentTemplate = $contentFolder->{$type . '_template'} ?? 'default';
         return $parentTemplate;
     }
 }

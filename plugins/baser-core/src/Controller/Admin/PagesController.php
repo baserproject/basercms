@@ -16,7 +16,10 @@ use Cake\Event\EventInterface;
 use BaserCore\Utility\BcSiteConfig;
 use BaserCore\Controller\AppController;
 use BaserCore\Service\PageServiceInterface;
+use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
+use BaserCore\Service\SiteConfigServiceInterface;
+use BaserCore\Vendor\CKEditorStyleParser;
 /**
  * PagesController
  */
@@ -77,7 +80,7 @@ class PagesController extends AppController
 		$this->dispatchEvent('afterAdd', [
 			'data' => $data
 		]);
-		$site = BcSite::findById($data['Content']['site_id']);
+		$site = $siteService->findById($data['Content']['site_id'])->first();
 		$url = $this->Content->getUrl($data['Content']['url'], true, $site->useSubDomain);
 		$message = sprintf(
 			__d(
@@ -122,7 +125,7 @@ class PagesController extends AppController
 			if ($data = $this->Page->save()) {
 
 				// 完了メッセージ
-				$site = BcSite::findById($data['Content']['site_id']);
+				$site = $siteService->findById($data['Content']['site_id'])->first();
 				$url = $this->Content->getUrl($data['Content']['url'], true, $site->useSubDomain);
 				$this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を登録しました。\n%s"), $data['Content']['name'], urldecode($url)));
 
@@ -161,7 +164,7 @@ class PagesController extends AppController
 
 		// ページテンプレートリスト
 		$theme = [BcSiteConfig::get('theme')];
-		$site = BcSite::findById($this->request->data['Content']['site_id']);
+		$site = $siteService->findById($this->request->data['Content']['site_id'])->first();
 		if (!empty($site) && $site->theme && $site->theme != BcSiteConfig::get('theme')) {
 			$theme[] = $site->theme;
 		}
@@ -176,17 +179,20 @@ class PagesController extends AppController
 
 	/**
 	 * [ADMIN] 固定ページ情報編集
-	 *
-	 * @param int $id (page_id)
+     * @param int $id (page_id)
+	 * @param PageServiceInterface $pageService
+	 * @param ContentServiceInterface $contentService
+	 * @param SiteServiceInterface $siteService
+	 * @param SiteConfigServiceInterface $siteConfigService
 	 * @return void
 	 */
-	public function edit(PageServiceInterface $pageService, ContentServiceInterface $contentService, $id)
+	public function edit($id, PageServiceInterface $pageService, ContentServiceInterface $contentService, SiteServiceInterface $siteService, SiteConfigServiceInterface $siteConfigService)
 	{
 		if (!$id && empty($this->request->getData())) {
 			$this->BcMessage->setError(__d('baser', '無効なIDです。'));
 			$this->redirect(['controller' => 'contents', 'action' => 'index']);
 		}
-
+        $page = $pageService->get($id);
 		if ($this->request->is(['patch', 'post', 'put'])) {
 			if (BcUtil::isOverPostSize()) {
 				$this->BcMessage->setError(__d('baser', '送信できるデータ量を超えています。合計で %s 以内のデータを送信してください。', ini_get('post_max_size')));
@@ -212,8 +218,8 @@ class PagesController extends AppController
 				}
 
 				// 完了メッセージ
-				$site = BcSite::findById($data['Content']['site_id']);
-				$url = $this->Content->getUrl($data['Content']['url'], true, $site->useSubDomain);
+				$site = $siteService->findById($data['Content']['site_id'])->first();
+				$url = $contentService->getUrl($data['Content']['url'], true, $site->useSubDomain);
 				$this->BcMessage->setSuccess(sprintf(__d('baser', "固定ページ「%s」を更新しました。\n%s"), rawurldecode($data['Content']['name']), urldecode($url)));
 
 				// EVENT Pages.afterEdit
@@ -228,39 +234,38 @@ class PagesController extends AppController
 
 			$this->BcMessage->setError(__d('baser', '入力エラーです。内容を修正してください。'));
 		} else {
-			$this->Page->recursive = 2;
-			$this->request->data = $this->Page->read(null, $id);
-			if (!$this->request->data) {
+			$this->request = $this->request->withData("Page", $page);
+			if (!$this->request->getData()) {
 				$this->BcMessage->setError(__d('baser', '無効な処理です。'));
-				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+				$this->redirect(['controller' => 'contents', 'action' => 'index']);
 			}
 		}
 
 		// 公開リンク
 		$publishLink = '';
-		if ($this->request->data['Content']['status']) {
-			$site = BcSite::findById($this->request->data['Content']['site_id']);
-			$publishLink = $this->Content->getUrl($this->request->data['Content']['url'], true, $site->useSubDomain);
+		if ($page->content->status) {
+			$site = $siteService->findById($page->content->site_id)->first();
+			$publishLink = $contentService->getUrl($page->content->url, true, $site->useSubDomain);
 		}
 		// エディタオプション
 		$editorOptions = ['editorDisableDraft' => false];
-		if (BcSiteConfig::get('editor_styles')) {
-			App::uses('CKEditorStyleParser', 'Vendor');
+        $editorStyles = $siteConfigService->getValue('editor_styles');
+		if ($editorStyles) {
 			$CKEditorStyleParser = new CKEditorStyleParser();
 			$editorOptions = array_merge($editorOptions, [
 				'editorStylesSet' => 'default',
 				'editorStyles' => [
-					'default' => $CKEditorStyleParser->parse(BcSiteConfig::get('editor_styles'))
+					'default' => $CKEditorStyleParser->parse($editorStyles)
 				]
 			]);
 		}
 		// ページテンプレートリスト
-		$theme = [BcSiteConfig::get('theme')];
-		$site = BcSite::findById($this->request->data['Content']['site_id']);
-		if (!empty($site) && $site->theme && $site->theme != BcSiteConfig::get('theme')) {
+		$theme = [$siteConfigService->getValue('theme')];
+		$site = $siteService->findById($page->content->site_id)->first();
+		if (!empty($site) && $site->theme && $site->theme != $theme[0]) {
 			$theme[] = $site->theme;
 		}
-		$pageTemplateList = $this->Page->getPageTemplateList($this->request->data['Content']['id'], $theme);
+		$pageTemplateList = $this->Page->getPageTemplateList($page->content->id, $theme);
 		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink'));
 
 		$this->pageTitle = __d('baser', '固定ページ情報編集');
