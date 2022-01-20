@@ -178,4 +178,18 @@ class ContentFolderServiceTest extends BcTestCase
         // 親フォルダ（サービス）のfolder_templateを取得できるか確認
         $this->assertEquals('サービス', $this->ContentFolderService->getParentTemplate(11, 'folder'));
     }
+
+
+    /**
+     * 親のテンプレートを取得する
+     */
+    public function testGetFolderTemplateList()
+    {
+        // NOTE ucmitz: themeに関してのテスト未記述
+        // idが1ならgetParentTemplateに関しての処理を飛ばす
+        $this->assertEmpty($this->ContentFolderService->getFolderTemplateList(1, ''));
+        $this->assertEquals(['' => "親フォルダの設定に従う（baserCMSサンプル）"],  $this->ContentFolderService->getFolderTemplateList(4, 'BcFront'));
+        // 親フォルダ（サービス）のfolder_templateを取得できるか確認
+        $this->assertEquals(['' => "親フォルダの設定に従う（サービス）"],  $this->ContentFolderService->getFolderTemplateList(11, 'BcFront'));
+    }
 }

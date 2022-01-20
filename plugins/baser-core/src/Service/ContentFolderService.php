@@ -166,6 +166,9 @@ class ContentFolderService implements ContentFolderServiceInterface
      * @param $contentId
      * @param $theme
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
     public function getFolderTemplateList($contentId, $theme)
     {
