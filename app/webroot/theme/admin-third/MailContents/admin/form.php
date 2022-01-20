@@ -63,8 +63,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.sender_name', __d('baser', '送信先名')) ?>
-				&nbsp;<span class="bca-label" data-bca-label-type="required"><?php echo __d('baser', '必須') ?></span>
+			<th class="col-head bca-form-table__label"><?php echo $this->BcForm->label('MailContent.sender_name', __d('baser', '送信先名')) ?></span>
 			</th>
 			<td class="col-input bca-form-table__input">
 				<?php echo $this->BcForm->input('MailContent.sender_name', ['type' => 'text', 'size' => 80, 'maxlength' => 255, 'placeholder' => '送信先名を入力してください。']) ?>
