@@ -23,6 +23,7 @@ $config['BcApp.adminNavigation'] = [
 /* @var MailContent $MailContent */
 $MailContent = ClassRegistry::init('Mail.MailContent');
 $mailContents = $MailContent->find('all', [
+	'conditions' => ['Content.deleted' => 0],
 	'recursive' => 0,
 	'order' => $MailContent->id
 ]);
