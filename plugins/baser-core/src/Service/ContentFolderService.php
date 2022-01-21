@@ -163,22 +163,17 @@ class ContentFolderService implements ContentFolderServiceInterface
     /**
      * フォルダのテンプレートリストを取得する
      *
-     * @param $contentId
-     * @param $theme
+     * @param int $contentId
+     * @param array|string $plugins
      * @return array
      * @checked
      * @noTodo
      * @unitTest
      */
-    public function getFolderTemplateList($contentId, $theme)
+    public function getFolderTemplateList($contentId, $plugins)
     {
-        if (!is_array($theme)) {
-            $theme = [$theme];
-        }
-        $folderTemplates = [];
-        foreach($theme as $value) {
-            $folderTemplates = array_merge($folderTemplates, BcUtil::getTemplateList('ContentFolders', $value));
-        }
+        $folderTemplates = BcUtil::getTemplateList('ContentFolders', $plugins);
+
         if ($contentId != 1) {
             $parentTemplate = $this->getParentTemplate($contentId, 'folder');
             $searchKey = array_search($parentTemplate, $folderTemplates);

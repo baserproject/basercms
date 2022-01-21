@@ -33,6 +33,7 @@ class PageServiceTest extends BcTestCase
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Users',
+        'plugin.BaserCore.ContentFolders',
     ];
 
     /**
@@ -148,26 +149,24 @@ class PageServiceTest extends BcTestCase
      * 固定ページテンプレートリストを取得する
      *
      * @param int $contetnId
-     * @param mixed $theme
+     * @param mixed $plugin
      * @param $expected
      * @dataProvider getPageTemplateListDataProvider
      */
-    public function testGetPageTemplateList($contetnId, $theme, $expected)
+    public function testGetPageTemplateList($contetnId, $plugin, $expected)
     {
         // BC frontに変更
-        $templates = BASER_THEMES . 'bc_sample' . DS . 'Pages' . DS . 'templates' . DS . 'hoge.php';
-        touch($templates);
-        $result = $this->PageService->getPageTemplateList($contetnId, $theme);
+        $result = $this->PageService->getPageTemplateList($contetnId, $plugin);
         $this->assertEquals($expected, $result);
-        unlink($templates);
     }
 
     public function getPageTemplateListDataProvider()
     {
         return [
-            [1, 'nada-icons', ['default' => 'default']],
-            [2, 'nada-icons', ['' => '親フォルダの設定に従う（default）']],
-            [2, ['nada-icons', 'bc_sample'], ['' => '親フォルダの設定に従う（default）', 'hoge' => 'hoge']]
+            [1, 'BcFront', ['default' => 'default']],
+            [4, 'BcFront', ['' => '親フォルダの設定に従う（default）']],
+            [4, ['BcFront', 'BaserCore'], ['' => '親フォルダの設定に従う（default）']],
+            [11, ['BcFront', 'BcAdminThrid'], ['' => '親フォルダの設定に従う（サービスページ）', 'default' => 'default']]
         ];
     }
 }

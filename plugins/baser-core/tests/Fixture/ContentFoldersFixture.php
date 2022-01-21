@@ -37,8 +37,8 @@ class ContentFoldersFixture extends TestFixture
             [
                 // NOTE: contentFixtureのサービス
                 'id' => '4',
-                'folder_template' => 'サービス',
-                'page_template' => '',
+                'folder_template' => 'サービスフォルダー',
+                'page_template' => 'サービスページ',
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null
             ],

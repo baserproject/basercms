@@ -171,25 +171,55 @@ class ContentFolderServiceTest extends BcTestCase
 
     /**
      * 親のテンプレートを取得する
+     * @param  int $id
+     * @param  string $type
+     * @param  string $expected
+     * @return void
+     * @dataProvider getParentTemplateDataProvider
      */
-    public function testGetParentTemplate()
+    public function testGetParentTemplate($id, $type, $expected)
     {
-        $this->assertEquals('default', $this->ContentFolderService->getParentTemplate(1, 'folder'));
-        // 親フォルダ（サービス）のfolder_templateを取得できるか確認
-        $this->assertEquals('サービス', $this->ContentFolderService->getParentTemplate(11, 'folder'));
+        $this->assertEquals($expected, $this->ContentFolderService->getParentTemplate($id, $type));
+    }
+
+    public function getParentTemplateDataProvider()
+    {
+        return [
+            [1, 'folder', 'default'],
+             // 親フォルダ（サービス）のfolder_templateを取得できるか確認
+            [11, 'folder', 'サービスフォルダー'],
+            [1, 'page', 'default'],
+            // 親フォルダ（サービス）のpage_templateを取得できるか確認
+            [11, 'page', 'サービスページ'],
+        ];
     }
 
 
     /**
      * 親のテンプレートを取得する
+     * @param  int $id
+     * @param  string $plugins
+     * @param  string $expected
+     * @return void
+     *
+     * @dataProvider getFolderTemplateListDataProvider
      */
-    public function testGetFolderTemplateList()
+    public function testGetFolderTemplateList($id, $plugins, $expected)
     {
-        // NOTE ucmitz: themeに関してのテスト未記述
-        // idが1ならgetParentTemplateに関しての処理を飛ばす
-        $this->assertEmpty($this->ContentFolderService->getFolderTemplateList(1, ''));
-        $this->assertEquals(['' => "親フォルダの設定に従う（baserCMSサンプル）"],  $this->ContentFolderService->getFolderTemplateList(4, 'BcFront'));
-        // 親フォルダ（サービス）のfolder_templateを取得できるか確認
-        $this->assertEquals(['' => "親フォルダの設定に従う（サービス）"],  $this->ContentFolderService->getFolderTemplateList(11, 'BcFront'));
+        $result = $this->ContentFolderService->getFolderTemplateList($id, $plugins);
+        $this->assertEquals($expected,  $result);
+    }
+
+    public function getFolderTemplateListDataProvider()
+    {
+        return [
+            // idが1ならgetParentTemplateに関しての処理を飛ばす
+            [1, '', []],
+            [4, '', ['' => "親フォルダの設定に従う（baserCMSサンプル）"]],
+            // 親フォルダ（サービス）のfolder_templateを取得できるか確認
+            [11, '', ['' => "親フォルダの設定に従う（サービスフォルダー）"]],
+            // プラグインが存在する場合
+            [4, 'BcFront', ['' => "親フォルダの設定に従う（baserCMSサンプル）", 'default' => 'default']],
+        ];
     }
 }

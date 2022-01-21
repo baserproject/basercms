@@ -23,6 +23,7 @@ use Cake\Core\Exception\Exception;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Table\PagesTable;
 use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Service\ContentFolderService;
 use BaserCore\Service\ContentFolderServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 
@@ -194,21 +195,18 @@ class PageService implements PageServiceInterface
      * 固定ページテンプレートリストを取得する
      *
      * @param int $contentId
-     * @param array|string $theme
+     * @param array|string $plugins
      * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    public function getPageTemplateList($contentId, $theme)
+    public function getPageTemplateList($contentId, $plugins)
     {
-        if (!is_array($theme)) {
-            $theme = [$theme];
-        }
-        $pageTemplates = [];
-        foreach($theme as $value) {
-            [$plugin, $className] = pluginSplit($this->Pages->getRegistryAlias());
-            $pageTemplates = array_merge($pageTemplates, BcUtil::getTemplateList('templates/Pages', $plugin, $value));
-        }
+        $pageTemplates = BcUtil::getTemplateList('Pages', $plugins);
 
         if ($contentId != 1) {
+            /** @var ContentFolderService $ContentFolderService  */
             $ContentFolderService = $this->getService(ContentFolderServiceInterface::class);
             $parentTemplate = $ContentFolderService->getParentTemplate($contentId, 'page');
             $searchKey = array_search($parentTemplate, $pageTemplates);

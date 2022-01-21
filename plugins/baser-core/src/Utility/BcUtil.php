@@ -627,37 +627,25 @@ class BcUtil
      * レイアウトテンプレートのリストを取得する
      *
      * @param string $path
-     * @param string $plugin
-     * @param string $theme
+     * @param array|string $plugin
      * @return array
      * @checked
      * @notodo
      * @unitTest
      */
-    public static function getTemplateList($path, $plugin, $theme = [])
+    public static function getTemplateList($path, $plugins)
     {
-        if (!$plugin) {
-            return [];
-        }
-        $templatePaths = [];
-        $templatePath = self::getTemplatePath($plugin);
-        if ($templatePath) {
-            $templatePaths[] = $templatePath;
-        }
-
-        if ($theme) {
-            $templatePath = self::getTemplatePath($theme);
-            if ($templatePath) {
-                $templatePaths[] = $templatePath;
-            }
-        }
+        if (!$plugins) return [];
+    if (!is_array($plugins)) $plugins = [$plugins];
 
         $_templates = [];
-        foreach($templatePaths as $templatePath) {
+        foreach($plugins as $plugin) {
+            if (is_null($plugin)) continue;
+            $templatePath = self::getTemplatePath($plugin);
             $folder = new Folder($templatePath . $path . DS);
-            $files = $folder->read(true, true);
-            if ($files[1]) {
-                $_templates = $_templates? array_merge($_templates, $files[1]) : $files[1];
+            $files = $folder->read(true, true)[1];
+            if ($files) {
+                $_templates = array_merge($_templates, $files);
             }
         }
         $templates = [];

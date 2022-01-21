@@ -65,9 +65,9 @@ interface PageServiceInterface
     /**
      * 固定ページテンプレートリストを取得する
      *
-     * @param $contentId
-     * @param $theme
+     * @param int $contentId
+     * @param array|string $plugins
      * @return array
      */
-    public function getPageTemplateList($contentId, $theme);
+    public function getPageTemplateList($contentId, $plugins);
 }
