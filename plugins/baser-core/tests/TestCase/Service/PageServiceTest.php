@@ -154,7 +154,7 @@ class PageServiceTest extends BcTestCase
      */
     public function testGetPageTemplateList($contetnId, $theme, $expected)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // BC frontに変更
         $templates = BASER_THEMES . 'bc_sample' . DS . 'Pages' . DS . 'templates' . DS . 'hoge.php';
         touch($templates);
         $result = $this->PageService->getPageTemplateList($contetnId, $theme);

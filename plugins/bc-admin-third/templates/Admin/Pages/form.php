@@ -14,6 +14,7 @@
  * [ADMIN] ページ登録・編集フォーム
  * @var BcAppView $this
  */
+use BaserCore\Utility\BcUtil;
 $this->BcBaser->css('admin/ckeditor/editor', ['inline' => true]);
 $this->BcBaser->js('admin/pages/edit', false);
 ?>
@@ -58,7 +59,7 @@ $this->BcBaser->js('admin/pages/edit', false);
           <td class="col-input bca-form-table__input">
             <?php echo $this->BcAdminForm->control('Page.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
             <div
-              class="helptext"><?php echo __d('baser', 'テーマフォルダ内の、Pages/templates テンプレートを配置する事で、ここでテンプレートを選択できます。') ?></div>
+              class="helptext"><?php echo __d('baser', 'テーマフォルダ内の、templates/Pages テンプレートを配置する事で、ここでテンプレートを選択できます。') ?></div>
             <?php echo $this->BcForm->error('Page.page_template') ?>
           </td>
         </tr>

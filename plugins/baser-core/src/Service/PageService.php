@@ -193,8 +193,8 @@ class PageService implements PageServiceInterface
     /**
      * 固定ページテンプレートリストを取得する
      *
-     * @param $contentId
-     * @param $theme
+     * @param int $contentId
+     * @param array|string $theme
      * @return array
      */
     public function getPageTemplateList($contentId, $theme)
@@ -204,7 +204,8 @@ class PageService implements PageServiceInterface
         }
         $pageTemplates = [];
         foreach($theme as $value) {
-            $pageTemplates = array_merge($pageTemplates, BcUtil::getTemplateList('Pages/templates', '', $value));
+            [$plugin, $className] = pluginSplit($this->Pages->getRegistryAlias());
+            $pageTemplates = array_merge($pageTemplates, BcUtil::getTemplateList('templates/Pages', $plugin, $value));
         }
 
         if ($contentId != 1) {

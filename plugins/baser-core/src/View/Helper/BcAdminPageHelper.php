@@ -51,7 +51,7 @@ class BcAdminPageHelper extends Helper
      * @param $theme
      * @return array
      */
-    public function getFolderTemplateList($contentId, $theme)
+    public function getPageTemplateList($contentId, $theme)
     {
         return $this->PageService->getPageTemplateList($contentId, $theme);
     }

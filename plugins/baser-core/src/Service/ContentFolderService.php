@@ -177,7 +177,7 @@ class ContentFolderService implements ContentFolderServiceInterface
         }
         $folderTemplates = [];
         foreach($theme as $value) {
-            $folderTemplates = array_merge($folderTemplates, BcUtil::getTemplateList('ContentFolders', '', $value));
+            $folderTemplates = array_merge($folderTemplates, BcUtil::getTemplateList('ContentFolders', $value));
         }
         if ($contentId != 1) {
             $parentTemplate = $this->getParentTemplate($contentId, 'folder');
@@ -211,8 +211,9 @@ class ContentFolderService implements ContentFolderServiceInterface
             $contentFolder = $this->ContentFolders->find()->where(function (QueryExpression $exp, Query $query) use($content) {
                 return $query->newExpr()->eq('Contents.id', $content->id);
             })->leftJoinWith('Contents')->first();
+            $template = $contentFolder->{$type . '_template'};
         }
-        $parentTemplate = $contentFolder->{$type . '_template'} ?? 'default';
+        $parentTemplate = !empty($template) ? $template : 'default';
         return $parentTemplate;
     }
 }
