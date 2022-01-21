@@ -11,10 +11,13 @@
 
 namespace BaserCore\View;
 
+use Cake\Utility\Hash;
+use Cake\Core\Configure;
+use Cake\Utility\Inflector;
+use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Utility\BcUtil;
 use BaserCore\View\Helper\BcAuthHelper;
 use BaserCore\View\Helper\BcFormHelper;
 use BaserCore\View\Helper\BcHtmlHelper;
@@ -28,14 +31,12 @@ use BaserCore\View\Helper\BcAdminSiteHelper;
 use BaserCore\View\Helper\BcAdminUserHelper;
 use BaserCore\View\Helper\BcFormTableHelper;
 use BaserCore\View\Helper\BcListTableHelper;
+use BaserCore\View\Helper\BcSiteConfigHelper;
 use BaserCore\View\Helper\BcAdminPluginHelper;
 use BaserCore\View\Helper\BcAdminContentHelper;
 use BaserCore\View\Helper\BcAdminPermissionHelper;
 use BaserCore\View\Helper\BcAdminSiteConfigHelper;
 use BaserCore\View\Helper\BcAdminContentFolderHelper;
-use Cake\Core\Configure;
-use Cake\Utility\Hash;
-use Cake\Utility\Inflector;
 
 /**
  * Class BcAdminAppView
@@ -59,6 +60,7 @@ use Cake\Utility\Inflector;
  * @property BcAdminContentHelper $BcAdminContent
  * @property BcAdminContentFolderHelper $BcAdminContentFolder
  * @property BcUploadHelper $BcUpload
+ * @property BcSiteConfigHelper $BcSiteConfig
  */
 class BcAdminAppView extends AppView
 {
@@ -83,6 +85,9 @@ class BcAdminAppView extends AppView
         $this->loadHelper('BaserCore.BcContents');
         $this->loadHelper('BaserCore.BcListTable');
         $this->loadHelper('BaserCore.BcAdminContent');
+        $this->loadHelper('BaserCore.BcUpload');
+        $this->loadHelper('BaserCore.BcHtml');
+        $this->loadHelper('BaserCore.BcSiteConfig');
         // TODO ucmitz 未移行のため暫定措置
         // >>>
 //        $this->loadHelper('BaserCore.BcSearchBox');

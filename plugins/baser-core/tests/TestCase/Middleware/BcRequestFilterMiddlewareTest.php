@@ -292,7 +292,7 @@ class BcRequestFilterMiddlewareTest extends BcTestCase
             [false, '/news/index'],
             [true, '/'],
             [true, '/service/service1'],
-            [true, '/sample'],
+            [false, '/sample'], // テストにて論理削除されているためfalse
             [false, '/recruit']
         ];
     }

@@ -49,7 +49,7 @@ class ContentFoldersTable extends AppTable
      */
     public $isMovableTemplate = true;
 
-        /**
+    /**
      * Initialize
      *
      * @param array $config テーブル設定

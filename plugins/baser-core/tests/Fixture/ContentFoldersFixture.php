@@ -27,27 +27,23 @@ class ContentFoldersFixture extends TestFixture
     {
         $this->records = [
             [
+                // NOTE: contentFixtureのbaserCMSサンプル
                 'id' => '1',
-                'folder_template' => 'フォルダーテンプレート1',
+                'folder_template' => 'baserCMSサンプル',
                 'page_template' => '',
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null
             ],
             [
-                'id' => '2',
-                'folder_template' => 'フォルダーテンプレート2',
+                // NOTE: contentFixtureのサービス
+                'id' => '4',
+                'folder_template' => 'サービス',
                 'page_template' => '',
                 'created' => '2016-08-10 02:17:28',
                 'modified' => null
             ],
             [
-                'id' => '3',
-                'folder_template' => 'フォルダーテンプレート3',
-                'page_template' => '',
-                'created' => '2016-08-10 02:17:28',
-                'modified' => null
-            ],
-            [
+                // NOTE: contentFixtureの削除済みフォルダー(親)
                 'id' => '10',
                 'folder_template' => '削除済みフォルダー(親)',
                 'page_template' => '',
@@ -55,6 +51,7 @@ class ContentFoldersFixture extends TestFixture
                 'modified' => null
             ],
             [
+                // NOTE: contentFixtureの削除済みフォルダー(親)
                 'id' => '11',
                 'folder_template' => '削除済みフォルダー(子)',
                 'page_template' => '',
@@ -62,6 +59,31 @@ class ContentFoldersFixture extends TestFixture
                 'modified' => null
             ],
             [
+                // NOTE: contentFixtureのツリー階層削除用フォルダー(親)
+                'id' => '12',
+                'folder_template' => 'ツリー階層削除用フォルダー(親)',
+                'page_template' => '',
+                'created' => '2016-08-10 02:17:28',
+                'modified' => null
+            ],
+            [
+                // NOTE: contentFixtureのツリー階層削除用フォルダー(子)
+                'id' => '13',
+                'folder_template' => 'ツリー階層削除用フォルダー(子)',
+                'page_template' => '',
+                'created' => '2016-08-10 02:17:28',
+                'modified' => null
+            ],
+            [
+                // NOTE: contentFixtureのツリー階層削除用フォルダー(孫)
+                'id' => '14',
+                'folder_template' => 'ツリー階層削除用フォルダー(孫)',
+                'page_template' => '',
+                'created' => '2016-08-10 02:17:28',
+                'modified' => null
+            ],
+            [
+                // NOTE ucmitz: contentFixtureのtestEdit
                 'id' => '15',
                 'folder_template' => 'testEdit',
                 'page_template' => '',

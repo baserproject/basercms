@@ -103,7 +103,7 @@ class ContentFoldersControllerTest extends BcTestCase
         $data->folder_template = 'testEditテンプレート';
         $data->content->name = "contentFolderTestUpdate";
         $id = $data->id;
-        $this->post('/baser/admin/baser-core/content_folders/edit/' . $id, ['ContentFolder' => $data->toArray()]);
+        $this->post('/baser/admin/baser-core/content_folders/edit/' . $id, ['ContentFolder' => $data->toArray(), "Content" => ['title' => $data->content->name]]);
         $this->assertResponseSuccess();
         $this->assertRedirect('/baser/admin/baser-core/content_folders/edit/' . $id);
         $this->assertEquals('testEditテンプレート', $this->ContentFolderService->get($id)->folder_template);

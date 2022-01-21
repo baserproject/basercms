@@ -71,7 +71,7 @@ class ContentFoldersControllerTest extends BcTestCase
         $this->get('/baser/api/baser-core/content_folders/index.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals("フォルダーテンプレート1", $result->contentFolders[0]->folder_template);
+        $this->assertEquals("baserCMSサンプル", $result->contentFolders[0]->folder_template);
     }
 
     /**
@@ -82,7 +82,7 @@ class ContentFoldersControllerTest extends BcTestCase
         $this->get('/baser/api/baser-core/content_folders/view/1.json?token=' . $this->accessToken);
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals("フォルダーテンプレート1", $result->contentFolders->folder_template);
+        $this->assertEquals("baserCMSサンプル", $result->contentFolders->folder_template);
     }
 
     /**

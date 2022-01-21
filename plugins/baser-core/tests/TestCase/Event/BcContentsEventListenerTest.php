@@ -112,14 +112,15 @@ class BcContentsEventListenerTest extends BcTestCase
         $BcAdminAppView = $this->BcAdminAppView->setRequest($request)->setPlugin("BcAdminThird")
             ->set("contentPath", "Contents.")
             ->set("relatedContents", ['test1', 'test2'])
-            ->set("content", $this->Content); // content_relatedで必要
+            ->set("content", $this->Content) // content_relatedで必要
+            ->set('contentEntities', ['Content' => $this->Content]);
         $out = "testtest";
         $event = new Event("Helper.Form.afterSubmit", $BcAdminAppView);
         $event->setData('id', 'TestAdminEditForm')->setData('out', $out);
         $result = @$this->BcContentsEventListener->formAfterSubmit($event); // NOTE: 必要な要素があるかを判別するため、不要なエラーを制御
         $checkList = [
             $out, // outの文章が含まれているかチェック
-            "メニューのリンクを別ウィンドウ開く", // content_optionsの文章が含まれているかチェック
+            "説明文", // content_optionsの文章が含まれているかチェック
             "一覧に戻る", // content_actionsの文章が含まれているかチェック
             "関連コンテンツ", // content_relatedの文章が含まれているかチェック
             "その他情報" // content_infoの文章が含まれているかチェック

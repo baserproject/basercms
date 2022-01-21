@@ -1,63 +1,59 @@
 <?php
-// TODO : コード確認要
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.Test.Case.Model
- * @since           baserCMS v 3.0.0-beta
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
-App::uses('Page', 'Model');
+
+namespace BaserCore\Test\TestCase\Model\Table;
+
+use Cake\Validation\Validator;
+use BaserCore\TestSuite\BcTestCase;
 
 /**
- * Class PageTest
+ * Class PagesTable Test
  *
  * @package Baser.Test.Case.Model
  * @property Page $Page
  */
-class PageTest extends BaserTestCase
+class PagesTableTest extends BcTestCase
 {
 
     public $fixtures = [
-        'baser.Model.Content.ContentStatusCheck',
-        'baser.Default.BlogContent',
-        'baser.Default.BlogCategory',
-        'baser.Default.BlogPost',
-        'baser.Default.BlogPostsBlogTag',
-        'baser.Default.BlogTag',
-        'baser.Default.SearchIndex',
-        'baser.Default.SiteConfig',
-        'baser.Model.Page.PagePageModel',
-        'baser.Default.Permission',
-        'baser.Default.Plugin',
-        'baser.Default.User',
-        'baser.Default.Site',
-        'baser.Default.Content',
-        'baser.Default.ContentFolder',
-        'baser.Default.UserGroup',
-        'baser.Default.Favorite'
+        // 'baser.Model.Content.ContentStatusCheck',
+        // 'plugin.BaserCore.BlogContents',
+        // 'plugin.BaserCore.BlogCategorys',
+        // 'plugin.BaserCore.BlogPosts',
+        // 'plugin.BaserCore.BlogPostsBlogTags',
+        // 'plugin.BaserCore.BlogTags',
+        // 'plugin.BaserCore.SearchIndexs',
+        'plugin.BaserCore.SiteConfigs',
+        // 'baser.Model.Page.PagePageModel',
+        'plugin.BaserCore.Permissions',
+        'plugin.BaserCore.Plugins',
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.Sites',
+        'plugin.BaserCore.Contents',
+        'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.Pages',
+        // 'plugin.BaserCore.Favorites'
     ];
-
-    /**
-     * Page
-     *
-     * @var Page
-     */
-    public $Page = null;
 
     /**
      * setUp
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->Page = ClassRegistry::init('Page');
+        $config = $this->getTableLocator()->exists('Pages') ? [] : ['className' => 'BaserCore\Model\Table\PagesTable'];
+        $this->Pages = $this->getTableLocator()->get('Pages', $config);
     }
 
     /**
@@ -65,21 +61,47 @@ class PageTest extends BaserTestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
-        unset($this->Page);
+        unset($this->Pages);
         parent::tearDown();
+    }
+
+    /**
+     * testInitialize
+     *
+     * @return void
+     */
+    public function testInitialize()
+    {
+        $this->assertTrue($this->Pages->hasBehavior('BcContents'));
+    }
+
+    /**
+     * testValidationDefault
+     *
+     * @return void
+     */
+    public function testValidationDefault()
+    {
+        $validator = $this->Pages->validationDefault(new Validator());
+        $fields = [];
+        foreach($validator->getIterator() as $key => $value) {
+            $fields[] = $key;
+        }
+        $this->assertEquals(['id','contents', 'draft', 'code'], $fields);
     }
 
     public function test既存ページチェック正常()
     {
-        $this->Page->create([
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->Pages->create([
             'Page' => [
                 'name' => 'test',
                 'page_category_id' => '1',
             ]
         ]);
-        $this->assertTrue($this->Page->validates());
+        $this->assertTrue($this->Pages->validates());
     }
 
     /**
@@ -92,15 +114,16 @@ class PageTest extends BaserTestCase
      */
     public function testCotainsScriptRegular($check, $expected)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $allowedPhpOtherThanAdmins = Configure::read('BcApp.allowedPhpOtherThanAdmins');
         Configure::write('BcApp.allowedPhpOtherThanAdmins', false);
-        $this->Page->create([
+        $this->Pages->create([
             'Page' => [
                 'name' => 'test',
                 'contents' => $check,
             ]
         ]);
-        $this->assertEquals($expected, $this->Page->validates());
+        $this->assertEquals($expected, $this->Pages->validates());
         Configure::write('BcApp.allowedPhpOtherThanAdmins', $allowedPhpOtherThanAdmins);
     }
 
@@ -121,15 +144,15 @@ class PageTest extends BaserTestCase
     public function testCotainsScriptIrregular()
     {
         $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->Page->create([
+        $this->Pages->create([
             'Page' => [
                 'name' => 'test',
                 'contents' => '<?php ??>',
             ]
         ]);
-        $this->assertFalse($this->Page->validates());
-        $this->assertArrayHasKey('contents', $this->Page->validationErrors);
-        $this->assertEquals("PHPの構文エラーです： \nPHP Parse error:  syntax error, unexpected '?' in - on line 1 \nErrors parsing -", current($this->Page->validationErrors['contents']));
+        $this->assertFalse($this->Pages->validates());
+        $this->assertArrayHasKey('contents', $this->Pages->validationErrors);
+        $this->assertEquals("PHPの構文エラーです： \nPHP Parse error:  syntax error, unexpected '?' in - on line 1 \nErrors parsing -", current($this->Pages->validationErrors['contents']));
     }
 
     /**
@@ -148,7 +171,8 @@ class PageTest extends BaserTestCase
      */
     public function testGetInsertID()
     {
-        $this->Page->save([
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->Pages->save([
             'Page' => [
                 'name' => 'hoge',
                 'title' => 'hoge',
@@ -158,7 +182,7 @@ class PageTest extends BaserTestCase
                 'page_category_id' => null,
             ]
         ]);
-        $result = $this->Page->getInsertID();
+        $result = $this->Pages->getInsertID();
         $this->assertEquals(16, $result, '正しく最終登録IDを取得できません');
     }
 
@@ -173,6 +197,7 @@ class PageTest extends BaserTestCase
      */
     public function testCheckOpenPageFile($name, $parentId, $expected, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $data = [
             'Content' => [
                 'name' => $name,
@@ -180,7 +205,7 @@ class PageTest extends BaserTestCase
                 'site_id' => 1
             ]
         ];
-        $result = $this->Page->checkOpenPageFile($data);
+        $result = $this->Pages->checkOpenPageFile($data);
         $this->assertEquals($expected, $result, $message);
     }
 
@@ -268,7 +293,7 @@ class PageTest extends BaserTestCase
             'status' => $status,
         ]
         ];
-        $result = $this->Page->createContent($data);
+        $result = $this->Pages->createContent($data);
         $this->assertEquals($expected, $result, $message);
     }
 
@@ -292,8 +317,9 @@ class PageTest extends BaserTestCase
      */
     public function testBeforeDelete($id, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 削除したファイルを再生するため内容を取得
-        $page = $this->Page->find('first', [
+        $page = $this->Pages->find('first', [
                 'conditions' => ['Page.id' => $id],
                 'recursive' => 0,
             ]
@@ -303,7 +329,7 @@ class PageTest extends BaserTestCase
         $content = $File->read();
 
         // 削除実行
-        $this->Page->delete($id);
+        $this->Pages->delete($id);
 
         // 元のファイルを再生成
         $File->write($content);
@@ -329,13 +355,14 @@ class PageTest extends BaserTestCase
      */
     public function testCreateAllPageTemplate()
     {
-        $this->Page->createAllPageTemplate();
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->Pages->createAllPageTemplate();
 
         // ファイルが生成されているか確認
         $result = true;
-        $pages = $this->Page->find('all', ['conditions' => ['Content.status' => true], 'recursive' => 0]);
+        $pages = $this->Pages->find('all', ['conditions' => ['Content.status' => true], 'recursive' => 0]);
         foreach($pages as $page) {
-            $path = $this->Page->getPageFilePath($page);
+            $path = $this->Pages->getPageFilePath($page);
             if (!file_exists($path)) {
                 $result = false;
             }
@@ -359,6 +386,7 @@ class PageTest extends BaserTestCase
      */
     public function testCreatePageTemplate($name, $categoryId, $expected, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $data = [
             'Page' => [
                 'contents' => '',
@@ -370,10 +398,10 @@ class PageTest extends BaserTestCase
                 'title' => ''
             ]
         ];
-        $path = $this->Page->getPageFilePath($data);
+        $path = $this->Pages->getPageFilePath($data);
 
         // ファイル生成
-        $this->Page->createPageTemplate($data);
+        $this->Pages->createPageTemplate($data);
 
         // trueなら生成されている
         $result = file_exists($path);
@@ -412,7 +440,7 @@ class PageTest extends BaserTestCase
      */
     public function testDelFile($name, $categoryId, $expected, $message = null)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $data = [
             'Page' => [
                 'contents' => '',
@@ -425,7 +453,7 @@ class PageTest extends BaserTestCase
             ]
         ];
 
-        $path = $this->Page->getPageFilePath($data);
+        $path = $this->Pages->getPageFilePath($data);
 
         $File = new File($path);
 
@@ -436,7 +464,7 @@ class PageTest extends BaserTestCase
             $tmp_content = $File->read();
 
             // ファイル削除
-            $this->Page->delFile($data);
+            $this->Pages->delFile($data);
 
             // trueなら削除済み
             $result = !file_exists($path);
@@ -445,7 +473,7 @@ class PageTest extends BaserTestCase
             $File->write($tmp_content);
 
         } else {
-            $result = $this->Page->delFile($data);
+            $result = $this->Pages->delFile($data);
 
         }
 
@@ -463,32 +491,6 @@ class PageTest extends BaserTestCase
         ];
     }
 
-    /**
-     * 本文にbaserが管理するタグを追加する
-     *
-     * @param string $id ID
-     * @param string $contents 本文
-     * @param string $title タイトル
-     * @param string $description 説明文
-     * @param string $code コード
-     * @param array $expected 期待値
-     * @param string $message テストが失敗した時に表示されるメッセージ
-     * @dataProvider addBaserPageTagDataProvider
-     */
-    public function testAddBaserPageTag($id, $contents, $title, $description, $code, $expected, $message = null)
-    {
-        $result = $this->Page->addBaserPageTag($id, $contents, $title, $description, $code);
-        $this->assertRegExp('/' . $expected . '/s', $result, $message);
-    }
-
-    public function addBaserPageTagDataProvider()
-    {
-        return [
-            [1, 'contentdayo', 'titledayo', 'descriptiondayo', 'codedayo',
-                "<!-- BaserPageTagBegin -->.*setTitle\('titledayo'\).*setDescription\('descriptiondayo'\).*setPageEditLink\(1\).*codedayo.*contentdayo",
-                '本文にbaserが管理するタグを追加できません'],
-        ];
-    }
 
     /**
      * コントロールソースを取得する
@@ -503,7 +505,8 @@ class PageTest extends BaserTestCase
      */
     public function testGetControlSource($field, $expected, $message = null)
     {
-        $result = $this->Page->getControlSource($field);
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->Pages->getControlSource($field);
         $this->assertEquals($expected, $result, $message);
     }
 
@@ -537,7 +540,8 @@ class PageTest extends BaserTestCase
      */
     public function testIsPageUrl($url, $expects)
     {
-        $result = $this->Page->isPageUrl($url);
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $result = $this->Pages->isPageUrl($url);
         $this->assertEquals($result, $expects);
     }
 
@@ -563,9 +567,9 @@ class PageTest extends BaserTestCase
      */
     public function testDelete($id, $expected, $message = null)
     {
-
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         // 削除したファイルを再生するため内容を取得
-        $Page = $this->Page->find('first', [
+        $Page = $this->Pages->find('first', [
                 'conditions' => ['Page.id' => $id],
                 'fields' => ['Content.url'],
                 'recursive' => 0
@@ -576,7 +580,7 @@ class PageTest extends BaserTestCase
         $Content = $File->read();
 
         // 削除実行
-        $this->Page->delete($id);
+        $this->Pages->delete($id);
         $this->assertFileNotExists($path, $message);
 
         // 元のファイルを再生成
@@ -584,7 +588,7 @@ class PageTest extends BaserTestCase
         $File->close();
 
         // 削除できているか確認用にデータ取得
-        $result = $this->Page->exists($id);
+        $result = $this->Pages->exists($id);
         $this->assertEquals($expected, $result, $message);
     }
 
@@ -608,8 +612,9 @@ class PageTest extends BaserTestCase
      */
     public function testCopy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId, $message = null)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->loginAdmin($this->getRequest());
-        $result = $this->Page->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
+        $result = $this->Pages->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
 
         // コピーしたファイル存在チェック
         $path = APP . 'View' . DS . 'Pages' . $result['Content']['url'] . '.php';
@@ -617,7 +622,7 @@ class PageTest extends BaserTestCase
         @unlink($path);
 
         // DBに書き込まれているかチェック
-        $exists = $this->Page->exists($result['Page']['id']);
+        $exists = $this->Pages->exists($result['Page']['id']);
         $this->assertTrue($exists);
     }
 
@@ -639,7 +644,8 @@ class PageTest extends BaserTestCase
      */
     public function testPhpValidSyntax($code)
     {
-        $this->assertTrue($this->Page->phpValidSyntax(['contents' => $code]));
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertTrue($this->Pages->phpValidSyntax(['contents' => $code]));
     }
 
     public function phpValidSyntaxDataProvider()
@@ -660,7 +666,8 @@ class PageTest extends BaserTestCase
      */
     public function testPhpValidSyntaxWithInvalid($line, $code)
     {
-        $this->assertContains("on line {$line}", $this->Page->phpValidSyntax(['contents' => $code]));
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertContains("on line {$line}", $this->Pages->phpValidSyntax(['contents' => $code]));
     }
 
     public function phpValidSyntaxWithInvalidDataProvider()
@@ -686,9 +693,10 @@ class PageTest extends BaserTestCase
      */
     public function testGetPageTemplateList($contetnId, $theme, $expected)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $templates = BASER_THEMES . 'bc_sample' . DS . 'Pages' . DS . 'templates' . DS . 'hoge.php';
         touch($templates);
-        $result = $this->Page->getPageTemplateList($contetnId, $theme);
+        $result = $this->Pages->getPageTemplateList($contetnId, $theme);
         $this->assertEquals($expected, $result);
         unlink($templates);
     }
@@ -712,8 +720,9 @@ class PageTest extends BaserTestCase
      */
     public function testFindByUrl($url, $publish, $expected)
     {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
         $this->loadFixtures('ContentStatusCheck');
-        $result = (bool)$this->Page->findByUrl($url, $publish);
+        $result = (bool)$this->Pages->findByUrl($url, $publish);
         $this->assertEquals($expected, $result);
     }
 
@@ -736,7 +745,8 @@ class PageTest extends BaserTestCase
      */
     public function testGetContentFolderPath($id, $expects)
     {
-        $this->assertEquals($expects, $this->Page->getContentFolderPath($id));
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $this->assertEquals($expects, $this->Pages->getContentFolderPath($id));
     }
 
     public function getContentFolderPathDataProvider()

@@ -63,6 +63,7 @@
             $.bcUtil.adminPrefix = adminScript.attr('data-adminPrefix');
             $.bcUtil.ajaxLoaderPath = adminScript.attr('data-ajaxLoaderPath');
             $.bcUtil.ajaxLoaderSmallPath = adminScript.attr('data-ajaxLoaderSmallPath');
+            $.bcUtil.frontFullUrl = adminScript.attr('data-frontFullUrl');
             if (config.baseUrl !== undefined) {
                 $.bcUtil.baseUrl = config.baseUrl;
             }

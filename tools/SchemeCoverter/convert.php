@@ -1,22 +1,19 @@
 <?php
 $target =
 // 例
-$permissions = [
+$pages = [
     'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'],
-    'no' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8],
-    'sort' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8],
-    'name' => ['type' => 'string', 'null' => true, 'default' => null],
-    'user_group_id' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8],
-    'url' => ['type' => 'string', 'null' => true, 'default' => null],
-    'auth' => ['type' => 'boolean', 'null' => true, 'default' => null],
-    'status' => ['type' => 'boolean', 'null' => true, 'default' => null],
+    'contents' => ['type' => 'text', 'null' => true, 'default' => null],
+    'draft' => ['type' => 'text', 'null' => true, 'default' => null],
+    'page_template' => ['type' => 'string', 'null' => true, 'default' => null],
+    'code' => ['type' => 'text', 'null' => true, 'default' => null],
     'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
     'created' => ['type' => 'datetime', 'null' => true, 'default' => null],
     'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
-    'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci']
 ];
 
 if (is_array($target)) {
+    $text = "";
     foreach ($target as $key => $value) {
         if (in_array($key, ['indexes', 'tableParameters'])) {
             continue;

@@ -41,6 +41,9 @@ class ContentServiceTest extends BcTestCase
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.ContentFolders',
+        'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
     ];
 
         /**
@@ -62,6 +65,7 @@ class ContentServiceTest extends BcTestCase
      */
     public function tearDown(): void
     {
+        Router::reload();
         unset($this->ContentService);
         parent::tearDown();
     }
@@ -157,7 +161,7 @@ class ContentServiceTest extends BcTestCase
         return [
             [[
                 'site_id' => 1,
-            ], 16],
+            ], 15],
             [[
                 'site_id' => 1,
                 'withTrash' => true,
@@ -203,7 +207,7 @@ class ContentServiceTest extends BcTestCase
         // softDeleteの場合
         $request = $this->getRequest('/?status=1');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
-        $this->assertEquals(15, $contents->all()->count());
+        $this->assertEquals(14, $contents->all()->count());
         // ゴミ箱を含むの場合
         $request = $this->getRequest('/?status=1&withTrash=true');
         $contents = $this->ContentService->getIndex($request->getQueryParams());
@@ -330,7 +334,7 @@ class ContentServiceTest extends BcTestCase
      */
     public function testDeleteAll(): void
     {
-        $this->assertEquals(16, $this->ContentService->deleteAll());
+        $this->assertEquals(15, $this->ContentService->deleteAll());
         $contents = $this->ContentService->getIndex();
         $this->assertEquals(0, $contents->all()->count());
     }
@@ -578,7 +582,8 @@ class ContentServiceTest extends BcTestCase
      */
     public function testAlias()
     {
-        $request = $this->getRequest('/');
+        $request = $this->loginAdmin($this->getRequest('/'));
+        Router::setRequest($request);
         $request = $request->withParsedBody([
             'parent_id' => '1',
             'plugin' => 'BaserCore',

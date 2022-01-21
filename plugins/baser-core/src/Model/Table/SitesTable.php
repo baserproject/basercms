@@ -93,6 +93,7 @@ class SitesTable extends AppTable
         $validator
             ->scalar('name')
             ->maxLength('name', 50, __d('baser', '識別名称は50文字以内で入力してください。'))
+            ->requirePresence('name', 'create', __d('baser', '識別名称を入力してください。'))
             ->notEmptyString('name', __d('baser', '識別名称を入力してください。'))
             ->add('name', [
                 'nameUnique' => [
@@ -109,10 +110,12 @@ class SitesTable extends AppTable
         $validator
             ->scalar('display_name')
             ->maxLength('display_name', 50, __d('baser', 'サイト名は50文字以内で入力してください。'))
+            ->requirePresence('display_name', 'create', __d('baser', 'サイト名を入力してください。'))
             ->notEmptyString('display_name', __d('baser', 'サイト名を入力してください。'));
         $validator
             ->scalar('alias')
             ->maxLength('alias', 50, __d('baser', 'エイリアスは50文字以内で入力してください。'))
+            ->requirePresence('alias', 'create', __d('baser', 'エイリアスを入力してください。'))
             ->notEmptyString('alias', __d('baser', 'エイリアスを入力してください。'))
             ->add('alias', [
                 'aliasUnique' => [
@@ -129,6 +132,7 @@ class SitesTable extends AppTable
         $validator
             ->scalar('title')
             ->maxLength('title', 255, __d('baser', 'サイトタイトルは255文字以内で入力してください。'))
+            ->requirePresence('title', 'create', __d('baser', 'サイトタイトルを入力してください。'))
             ->notEmptyString('title', __d('baser', 'サイトタイトルを入力してください。'));
         return $validator;
     }
@@ -648,7 +652,7 @@ class SitesTable extends AppTable
     }
 
     /**
-     * 選択可能が言語の一覧を取得する
+     * 選択可能な言語の一覧を取得する
      *
      * @param int $mainSiteId メインサイトID
      * @param int $currentSiteId 現在のサイトID
