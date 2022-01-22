@@ -156,7 +156,7 @@ class BcAdminContentsComponentTest extends BcTestCase
         $BcAdminContents = new BcAdminContentsComponent($ComponentRegistry);
         $BcAdminContents->settingForm();
         $vars = $Controller->viewBuilder()->getVars();
-        $this->assertIsBool($vars['related']);
+        $this->assertIsBool($vars["related"]);
         $this->assertIsInt($vars["currentSiteId"]);
         $this->assertInstanceOf("BaserCore\Model\Entity\Content", $vars["content"]);
         $this->assertIsArray($vars["relatedContents"]);
@@ -164,6 +164,7 @@ class BcAdminContentsComponentTest extends BcTestCase
         $this->assertEquals("パソコン", $vars["mainSiteDisplayName"]);
         $this->assertInstanceOf("Cake\ORM\Query", $vars["sites"]);
         $this->assertNotNull($vars["layoutTemplates"]);
+        $this->assertIsString($vars["publishLink"]);
     }
 
     /**

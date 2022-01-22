@@ -1,22 +1,20 @@
 <?php
-// TODO : コード確認要
-use BaserCore\Event\BcEventDispatcherTrait;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View.Helper
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('BcFormHelper', 'View/Helper');
-App::uses('BcUploadHelper', 'View/Helper');
+namespace BaserCore\View\Helper;
 
+use Cake\Utility\Inflector;
+use BaserCore\View\Helper\BcFormHelper;
+use BaserCore\View\Helper\BcUploadHelper;
+use BaserCore\Event\BcEventDispatcherTrait;
 /**
  * Class BcFreezeHelper
  *
@@ -88,9 +86,8 @@ class BcFreezeHelper extends BcFormHelper
      * @return    string $showEmpty htmlタグ
      * @access    public
      */
-    public function select($fieldName, $options = [], $attributes = [])
+    public function select($fieldName, $options = [], $attributes = []): string
     {
-
         if ($this->freezed) {
             return $this->freezeControll($fieldName, $options, $attributes);
         } else {
@@ -120,7 +117,7 @@ class BcFreezeHelper extends BcFormHelper
      * (例) $attributes['selected'] = array('selected' => array('year' => '2010', 'month' => '4', 'day' => '1'))
      * @return string htmlタグ
      */
-    public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $attributes = [])
+    public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $attributes = []): string
     {
 
         if ($this->freezed) {
@@ -333,7 +330,7 @@ class BcFreezeHelper extends BcFormHelper
      * @param array html属性
      * @return string htmlタグ
      */
-    public function textarea($fieldName, $attributes = [])
+    public function textarea($fieldName, $attributes = []): string
     {
 
         if ($this->freezed) {
@@ -362,7 +359,7 @@ class BcFreezeHelper extends BcFormHelper
      * @param array $attributes html属性
      * @return string htmlタグ
      */
-    public function radio($fieldName, $options = [], $attributes = [])
+    public function radio($fieldName, $options = [], $attributes = []): string
     {
 
         if ($this->freezed) {
@@ -379,7 +376,7 @@ class BcFreezeHelper extends BcFormHelper
      * @param array $options
      * @return string
      */
-    public function file($fieldName, $options = [])
+    public function file($fieldName, $options = []): string
     {
 
         if ($this->freezed) {

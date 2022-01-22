@@ -14,16 +14,16 @@ namespace BaserCore\Controller\Admin;
 use BaserCore\Utility\BcUtil;
 use Cake\Event\EventInterface;
 use BaserCore\Utility\BcSiteConfig;
-use BaserCore\Controller\AppController;
+use BaserCore\Vendor\CKEditorStyleParser;
 use BaserCore\Service\PageServiceInterface;
 use BaserCore\Service\SiteServiceInterface;
 use BaserCore\Service\ContentServiceInterface;
 use BaserCore\Service\SiteConfigServiceInterface;
-use BaserCore\Vendor\CKEditorStyleParser;
+use BaserCore\Controller\Admin\BcAdminAppController;
 /**
  * PagesController
  */
-class PagesController extends AppController
+class PagesController extends BcAdminAppController
 {
 
 	/**
@@ -47,7 +47,7 @@ class PagesController extends AppController
 	{
 		parent::beforeFilter($event);
         if (BcSiteConfig::get('editor') && BcSiteConfig::get('editor') !== 'none') {
-            $this->viewBuilder()->setHelpers([BcSiteConfig::get('editor'), 'BcGooglemaps', 'BcText', 'BcFreeze']);
+            $this->viewBuilder()->setHelpers(["BaserCore." . BcSiteConfig::get('editor'), 'BaserCore.BcGooglemaps', 'BaserCore.BcText', 'BaserCore.BcFreeze']);
         }
 	}
 
@@ -265,7 +265,7 @@ class PagesController extends AppController
 		if (!empty($site) && $site->theme && $site->theme != $theme[0]) {
 			$theme[] = $site->theme;
 		}
-		$pageTemplateList = $this->Page->getPageTemplateList($page->content->id, $theme);
+		$pageTemplateList = $pageService->getPageTemplateList($page->content->id, $theme);
 		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink'));
 
 		$this->pageTitle = __d('baser', '固定ページ情報編集');

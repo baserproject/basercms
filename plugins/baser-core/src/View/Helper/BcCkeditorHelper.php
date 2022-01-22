@@ -1,25 +1,25 @@
 <?php
-// TODO : コード確認要
-use BaserCore\Event\BcEventDispatcherTrait;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View.Helper
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
+namespace BaserCore\View\Helper;
+
+use Cake\View\Helper;
+use BaserCore\Event\BcEventDispatcherTrait;
+
 
 /**
  * Class BcCkeditorHelper
  *
  * @package Baser.View.Helper
  */
-class BcCkeditorHelper extends AppHelper
+class BcCkeditorHelper extends Helper
 {
     /**
      * Trait
@@ -93,38 +93,38 @@ class BcCkeditorHelper extends AppHelper
      * @param View $View
      * @param array $settings
      */
-    public function __construct(View $View, $settings = [])
-    {
-        parent::__construct($View, $settings);
-        $this->style = [
-            ['name' => __d('baser', '青見出し') . '(h3)',
-                'element' => 'h3',
-                'styles' => ['color' => 'Blue']],
-            ['name' => __d('baser', '赤見出し') . '(h3)',
-                'element' => 'h3',
-                'styles' => ['color' => 'Red']],
-            ['name' => __d('baser', '黄マーカー') . '(span)',
-                'element' => 'span',
-                'styles' => ['background-color' => 'Yellow']],
-            ['name' => __d('baser', '緑マーカー') . '(span)',
-                'element' => 'span',
-                'styles' => ['background-color' => 'Lime']],
-            ['name' => __d('baser', '大文字') . '(big)',
-                'element' => 'big'],
-            ['name' => __d('baser', '小文字') . '(small)',
-                'element' => 'small'],
-            ['name' => __d('baser', 'コード') . '(code)',
-                'element' => 'code'],
-            ['name' => __d('baser', '削除文') . '(del)',
-                'element' => 'del'],
-            ['name' => __d('baser', '挿入文') . '(ins)',
-                'element' => 'ins'],
-            ['name' => __d('baser', '引用') . '(cite)',
-                'element' => 'cite'],
-            ['name' => __d('baser', 'インライン') . '(q)',
-                'element' => 'q']
-        ];
-    }
+    // public function __construct(View $View, $settings = [])
+    // {
+    //     parent::__construct($View, $settings);
+    //     $this->style = [
+    //         ['name' => __d('baser', '青見出し') . '(h3)',
+    //             'element' => 'h3',
+    //             'styles' => ['color' => 'Blue']],
+    //         ['name' => __d('baser', '赤見出し') . '(h3)',
+    //             'element' => 'h3',
+    //             'styles' => ['color' => 'Red']],
+    //         ['name' => __d('baser', '黄マーカー') . '(span)',
+    //             'element' => 'span',
+    //             'styles' => ['background-color' => 'Yellow']],
+    //         ['name' => __d('baser', '緑マーカー') . '(span)',
+    //             'element' => 'span',
+    //             'styles' => ['background-color' => 'Lime']],
+    //         ['name' => __d('baser', '大文字') . '(big)',
+    //             'element' => 'big'],
+    //         ['name' => __d('baser', '小文字') . '(small)',
+    //             'element' => 'small'],
+    //         ['name' => __d('baser', 'コード') . '(code)',
+    //             'element' => 'code'],
+    //         ['name' => __d('baser', '削除文') . '(del)',
+    //             'element' => 'del'],
+    //         ['name' => __d('baser', '挿入文') . '(ins)',
+    //             'element' => 'ins'],
+    //         ['name' => __d('baser', '引用') . '(cite)',
+    //             'element' => 'cite'],
+    //         ['name' => __d('baser', 'インライン') . '(q)',
+    //             'element' => 'q']
+    //     ];
+    // }
 
     /**
      * CKEditor のスクリプトを構築する
