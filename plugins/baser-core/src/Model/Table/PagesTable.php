@@ -413,13 +413,16 @@ class PagesTable extends Table
      *
      * @param string $check チェック対象文字列
      * @return bool
+     * @checked
+     * @unitTest
+     * @note(value="BcApp.validSyntaxWithPageがsetting.phpに定義されていないためコメントアウト")
      */
     public function phpValidSyntax($check)
     {
         if (empty($check)) {
             return true;
         }
-        // TODO ucmitz: setting.phpに存在しないため一旦コメントアウト
+        // TODO ucmitz: note
         // if (!Configure::read('BcApp.validSyntaxWithPage')) {
         //     return true;
         // }

@@ -644,13 +644,13 @@ class PagesTableTest extends BcTestCase
      */
     public function testPhpValidSyntax($code)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->assertTrue($this->Pages->phpValidSyntax(['contents' => $code]));
+        $this->assertTrue($this->Pages->phpValidSyntax($code));
     }
 
     public function phpValidSyntaxDataProvider()
     {
         return [
+            [''],
             ['<?php $this->BcBaser->setTitle(\'test\');'],
         ];
     }
@@ -666,8 +666,7 @@ class PagesTableTest extends BcTestCase
      */
     public function testPhpValidSyntaxWithInvalid($line, $code)
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->assertContains("on line {$line}", $this->Pages->phpValidSyntax(['contents' => $code]));
+        $this->assertStringContainsString("on line {$line}", $this->Pages->phpValidSyntax($code));
     }
 
     public function phpValidSyntaxWithInvalidDataProvider()
