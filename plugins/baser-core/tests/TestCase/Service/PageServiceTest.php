@@ -46,6 +46,7 @@ class PageServiceTest extends BcTestCase
         parent::setUp();
         $this->PageService = new PageService();
         $this->Pages = $this->getTableLocator()->get('Pages');
+        $this->Contents = $this->getTableLocator()->get('Contents');
     }
 
     /**
@@ -115,6 +116,21 @@ class PageServiceTest extends BcTestCase
         $request = $this->getRequest('/?user_id=3');
         $Pages = $this->PageService->getIndex($request->getQueryParams());
         $this->assertEquals('Pages test message3', $Pages->first()->message);
+    }
+
+    /**
+     * Test delete
+     *
+     * @return void
+     */
+    public function testDelete()
+    {
+        $content = $this->Contents->find()->where(['type' => 'Page'])->first();
+        $this->assertTrue($this->PageService->delete($content->entity_id));
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->PageService->get($content->entity_id);
+        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
+        $this->Contents->get($content->id);
     }
 
 

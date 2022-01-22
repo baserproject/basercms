@@ -139,28 +139,42 @@ class PageService implements PageServiceInterface
     }
 
     /**
+     * 固定ページを削除する
+     * @param int $id
+     * @return bool
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function delete($id)
+    {
+        $Page = $this->get($id);
+        return $this->Pages->delete($Page);
+    }
+
+    /**
      * ユーザー情報を削除する
      * 最後のシステム管理者でなければ削除
      * @param int $id
      * @return bool
      */
-    public function delete($id)
-    {
-        $page = $this->get($id);
-        if ($page->isAdmin()) {
-            $count = $this->Pages
-                ->find('all', ['conditions' => ['PagesUserGroups.user_group_id' => Configure::read('BcApp.adminGroupId')]])
-                ->join(['table' => 'users_user_groups',
-                    'alias' => 'PagesUserGroups',
-                    'type' => 'inner',
-                    'conditions' => 'PagesUserGroups.user_id = Pages.id'])
-                ->count();
-            if ($count === 1) {
-                throw new Exception(__d('baser', '最後のシステム管理者は削除できません'));
-            }
-        }
-        return $this->Pages->delete($page);
-    }
+    // public function delete($id)
+    // {
+    //     $page = $this->get($id);
+    //     if ($page->isAdmin()) {
+    //         $count = $this->Pages
+    //             ->find('all', ['conditions' => ['PagesUserGroups.user_group_id' => Configure::read('BcApp.adminGroupId')]])
+    //             ->join(['table' => 'users_user_groups',
+    //                 'alias' => 'PagesUserGroups',
+    //                 'type' => 'inner',
+    //                 'conditions' => 'PagesUserGroups.user_id = Pages.id'])
+    //             ->count();
+    //         if ($count === 1) {
+    //             throw new Exception(__d('baser', '最後のシステム管理者は削除できません'));
+    //         }
+    //     }
+    //     return $this->Pages->delete($page);
+    // }
 
     /**
 	 * 本文にbaserが管理するタグを追加する
