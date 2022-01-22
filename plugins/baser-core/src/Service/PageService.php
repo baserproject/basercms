@@ -11,14 +11,9 @@
 
 namespace BaserCore\Service;
 
-use DateTime;
 use Cake\ORM\Query;
 use Cake\Core\Configure;
-use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
-use Authentication\Identity;
-use Cake\Http\Cookie\Cookie;
-use Cake\Http\ServerRequest;
 use BaserCore\Utility\BcUtil;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Model\Entity\Page;
@@ -27,8 +22,9 @@ use BaserCore\Annotation\UnitTest;
 use Cake\Core\Exception\Exception;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Table\PagesTable;
-use Psr\Http\Message\ResponseInterface;
-use BaserCore\Model\Table\LoginStoresTable;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Service\ContentFolderService;
+use BaserCore\Service\ContentFolderServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 
 /**
@@ -38,6 +34,11 @@ use Cake\Datasource\Exception\RecordNotFoundException;
  */
 class PageService implements PageServiceInterface
 {
+
+    /**
+     * Trait
+     */
+    use BcContainerTrait;
 
     /**
      * Pages Table
@@ -189,4 +190,31 @@ class PageService implements PageServiceInterface
 		$tag[] = '<!-- BaserPageTagEnd -->';
 		return implode("\n", $tag) . "\n\n" . $contents;
 	}
+
+    /**
+     * 固定ページテンプレートリストを取得する
+     *
+     * @param int $contentId
+     * @param array|string $plugins
+     * @return array
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    public function getPageTemplateList($contentId, $plugins)
+    {
+        $pageTemplates = BcUtil::getTemplateList('Pages', $plugins);
+
+        if ($contentId != 1) {
+            /** @var ContentFolderService $ContentFolderService  */
+            $ContentFolderService = $this->getService(ContentFolderServiceInterface::class);
+            $parentTemplate = $ContentFolderService->getParentTemplate($contentId, 'page');
+            $searchKey = array_search($parentTemplate, $pageTemplates);
+            if ($searchKey !== false) {
+                unset($pageTemplates[$searchKey]);
+            }
+            $pageTemplates = ['' => sprintf(__d('baser', '親フォルダの設定に従う（%s）'), $parentTemplate)] + $pageTemplates;
+        }
+        return $pageTemplates;
+    }
 }

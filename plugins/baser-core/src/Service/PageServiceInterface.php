@@ -61,4 +61,13 @@ interface PageServiceInterface
 	 * @return string 本文の先頭にbaserCMSが管理するタグを付加したデータ
 	 */
 	public function addBaserPageTag($id, $contents, $title, $description, $code);
+
+    /**
+     * 固定ページテンプレートリストを取得する
+     *
+     * @param int $contentId
+     * @param array|string $plugins
+     * @return array
+     */
+    public function getPageTemplateList($contentId, $plugins);
 }

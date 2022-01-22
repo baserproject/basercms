@@ -119,11 +119,7 @@ class BcAdminContentsComponent extends Component
         }
         $site = $content->site;
         $theme = $site->theme;
-
-        $templates = array_merge(
-            BcUtil::getTemplateList('Layouts', '', $theme),
-            BcUtil::getTemplateList('Layouts', $controller->getPlugin(), $theme)
-        );
+        $templates = BcUtil::getTemplateList('Layouts', [$controller->getPlugin(), $theme]);
         if ($content->id != 1) {
             $parentTemplate = $this->ContentService->getParentLayoutTemplate($content->id);
             if (in_array($parentTemplate, $templates)) {

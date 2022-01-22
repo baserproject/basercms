@@ -133,7 +133,7 @@ class BcContentsEventListener extends BcEventListener
             if ($service->check($path, [$index => $group->id])) $checked = true;
         }
         $isAvailableDelete = empty($content['site_root']) && $checked;
-        $newOut = $event->setData('out', implode("\n", [
+        $event->setData('out', implode("\n", [
             $View->element('content_options'),
             $View->element('content_actions', [
                 'isAvailablePreview' => $isAvailablePreview,

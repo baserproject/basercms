@@ -13,11 +13,12 @@
 // App::uses('EmailComponent', 'Controller/Component');
 // App::uses('BcEmailComponent', 'Controller/Component');
 // App::uses('CakeText', 'Utility');
-use Cake\Utility\Inflector;
-use Cake\Utility\Text;
 use Cake\Cache\Cache;
-use Cake\Filesystem\Folder;
+use Cake\Utility\Text;
 use Cake\Filesystem\File;
+use Cake\Filesystem\Folder;
+use Cake\Utility\Inflector;
+use BaserCore\Utility\BcUtil;
 
 /**
  * baserCMS共通関数

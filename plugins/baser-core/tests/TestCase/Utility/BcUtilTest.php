@@ -615,7 +615,11 @@ class BcUtilTest extends BcTestCase
      */
     public function testGetTemplateList()
     {
-        $result = BcUtil::getTemplateList('Admin/element/Dashboard', 'BaserCore', 'BcAdminThird');
+        // プラグインが一つの場合
+        $result = BcUtil::getTemplateList('Pages', 'BcFront');
+        $this->assertEquals(["default" => "default"], $result);
+        // 複数プラグインがある場合
+        $result = BcUtil::getTemplateList('Admin/element/Dashboard', ['BaserCore', 'BcAdminThird']);
         $expected = ['baser_news' => 'baser_news', "contents_info" => "contents_info", "update_log" => "update_log"];
         $this->assertEquals($expected, $result);
     }

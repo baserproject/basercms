@@ -33,6 +33,7 @@ class PageServiceTest extends BcTestCase
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Users',
+        'plugin.BaserCore.ContentFolders',
     ];
 
     /**
@@ -141,6 +142,31 @@ class PageServiceTest extends BcTestCase
             [1, 'contentdayo', 'titledayo', 'descriptiondayo', 'codedayo',
                 "<!-- BaserPageTagBegin -->.*setTitle\('titledayo'\).*setDescription\('descriptiondayo'\).*setPageEditLink\(1\).*codedayo.*contentdayo",
                 '本文にbaserが管理するタグを追加できません'],
+        ];
+    }
+
+    /**
+     * 固定ページテンプレートリストを取得する
+     *
+     * @param int $contetnId
+     * @param mixed $plugin
+     * @param $expected
+     * @dataProvider getPageTemplateListDataProvider
+     */
+    public function testGetPageTemplateList($contetnId, $plugin, $expected)
+    {
+        // BC frontに変更
+        $result = $this->PageService->getPageTemplateList($contetnId, $plugin);
+        $this->assertEquals($expected, $result);
+    }
+
+    public function getPageTemplateListDataProvider()
+    {
+        return [
+            [1, 'BcFront', ['default' => 'default']],
+            [4, 'BcFront', ['' => '親フォルダの設定に従う（default）']],
+            [4, ['BcFront', 'BaserCore'], ['' => '親フォルダの設定に従う（default）']],
+            [11, ['BcFront', 'BcAdminThrid'], ['' => '親フォルダの設定に従う（サービスページ）', 'default' => 'default']]
         ];
     }
 }

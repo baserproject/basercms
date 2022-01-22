@@ -451,34 +451,4 @@ class PagesTable extends Table
         $message = __d('baser', 'PHPの構文エラーです') . '： ' . PHP_EOL . implode(' ' . PHP_EOL, $output);
         return $message;
     }
-
-    /**
-     * 固定ページテンプレートリストを取得する
-     *
-     * @param $contentId
-     * @param $theme
-     * @return array
-     */
-    public function getPageTemplateList($contentId, $theme)
-    {
-        if (!is_array($theme)) {
-            $theme = [$theme];
-        }
-        $pageTemplates = [];
-        foreach($theme as $value) {
-            $pageTemplates = array_merge($pageTemplates, BcUtil::getTemplateList('Pages/templates', '', $value));
-        }
-
-        if ($contentId != 1) {
-            $ContentFolder = TableRegistry::getTableLocator()->get('BaserCore.ContentFolders');
-            // FIXME:
-            // $parentTemplate = $ContentFolder->getParentTemplate($contentId, 'page');
-            // $searchKey = array_search($parentTemplate, $pageTemplates);
-            // if ($searchKey !== false) {
-            //     unset($pageTemplates[$searchKey]);
-            // }
-            // $pageTemplates = ['' => sprintf(__d('baser', '親フォルダの設定に従う（%s）'), $parentTemplate)] + $pageTemplates;
-        }
-        return $pageTemplates;
-    }
 }

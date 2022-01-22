@@ -9128,10 +9128,10 @@ msgstr ""
 
 #: View/Pages/admin/form.php:55
 msgid ""
-"テーマフォルダ内の、Pages/templates テンプレートを配置する事で、ここでテンプ"
+"テーマフォルダ内の、templates/Pages テンプレートを配置する事で、ここでテンプ"
 "レートを選択できます。"
 msgstr ""
-"You can select Template here by placing Pages/templates Template in Theme "
+"You can select Template here by placing templates/Pages Template in Theme "
 "Folder."
 
 #: View/Pages/admin/form.php:71

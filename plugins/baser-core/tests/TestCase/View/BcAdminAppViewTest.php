@@ -59,7 +59,11 @@ class BcAdminAppViewTest extends BcTestCase
         parent::tearDown();
     }
 
-
+    /**
+     * testInitialize
+     *
+     * @return void
+     */
     public function testInitialize()
     {
         $this->assertNotEmpty($this->BcAdminAppView->BcAdminForm);
@@ -73,6 +77,8 @@ class BcAdminAppViewTest extends BcTestCase
         $this->assertNotEmpty($this->BcAdminAppView->BcHtml);
         $this->assertNotEmpty($this->BcAdminAppView->BcUpload);
         $this->assertNotEmpty($this->BcAdminAppView->BcSiteConfig);
+        $this->assertNotEmpty($this->BcAdminAppView->BcAdminPage);
+        $this->assertNotEmpty($this->BcAdminAppView->BcAdminSiteConfig);
         $this->assertEquals($this->BcAdminAppView->get('title'), 'Undefined');
     }
 
