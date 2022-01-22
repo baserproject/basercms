@@ -1,5 +1,5 @@
 {
-  "name": "bc_sample",
+  "name": "bc-front",
   "version": "1.0.0",
   "description": "baserCMS Theme",
   "main": "gulpfile.js",
@@ -9,6 +9,7 @@
   "author": "baserCMS User Community",
   "license": "MIT",
   "devDependencies": {
+    "glob-parent": ">=5.1.2",
     "gulp": "^4.0.2",
     "gulp-plumber": "^1.2.1",
     "gulp-sass": "^5.0.0",
