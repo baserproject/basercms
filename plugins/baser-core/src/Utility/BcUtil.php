@@ -1159,4 +1159,14 @@ class BcUtil
         return str_replace('/', DS, $docRoot);
     }
 
+    /**
+     * 実行環境のOSがWindowsであるかどうかを返す
+     *
+     * @return bool
+     */
+    public static function isWindows()
+    {
+        return DIRECTORY_SEPARATOR == '\\';
+    }
+
 }

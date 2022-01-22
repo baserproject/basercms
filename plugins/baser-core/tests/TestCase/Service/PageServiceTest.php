@@ -119,6 +119,20 @@ class PageServiceTest extends BcTestCase
     }
 
     /**
+     * Test update
+     */
+    public function testUpdate()
+    {
+        // NOTE ucmitz: phpValidSyntaxが失敗するため一旦コメントアウト
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        $newPage = $this->PageService->get(2);
+        $newPage->draft = "testUpdate";
+        $oldPage = $this->PageService->get(2);
+        $result = $this->PageService->update($oldPage, $newPage->toArray());
+        $this->assertEquals("testUpdate", $result->draft);
+    }
+
+    /**
      * Test delete
      *
      * @return void

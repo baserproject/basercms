@@ -43,6 +43,16 @@ interface PageServiceInterface
     //  */
     // public function create(string $message): EntityInterface;
 
+    /**
+     * ページ情報を更新する
+     * @param EntityInterface $target
+     * @param array $$pageData
+     * @param array $options
+     * @return EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
+     */
+    public function update(EntityInterface $target, array $pageData, $options = []);
+
     // /**
     //  * DBログ一覧を取得
     //  * @param array $queryParams

@@ -24,6 +24,7 @@ use Cake\Datasource\EntityInterface;
 use BaserCore\Model\Table\PagesTable;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Service\ContentFolderService;
+use Cake\ORM\Exception\PersistenceFailedException;
 use BaserCore\Service\ContentFolderServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
 
@@ -126,16 +127,20 @@ class PageService implements PageServiceInterface
     // }
 
     /**
-     * ユーザー情報を更新する
+     * ページ情報を更新する
      * @param EntityInterface $target
-     * @param array $postData
+     * @param array $pageData
+     * @param array $options
      * @return EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
+     * @checked
+     * @noTodo
      */
-    public function update(EntityInterface $target, array $postData)
+    public function update(EntityInterface $target, array $pageData, $options = [])
     {
-        $page = $this->Pages->patchEntity($target, $postData);
-        return $this->Pages->saveOrFail($page);
+        $options = array_merge(['associated' => ['Contents' => ['validate' => 'default']]], $options);
+        $page = $this->Pages->patchEntity($target, $pageData, $options);
+        return $this->Pages->saveOrFail($page, ['atomic' => false]);
     }
 
     /**

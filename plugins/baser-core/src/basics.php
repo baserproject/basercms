@@ -772,16 +772,6 @@ function base64UrlsafeDecode($val)
 }
 
 /**
- * 実行環境のOSがWindowsであるかどうかを返す
- *
- * @return bool
- */
-function isWindows()
-{
-    return DIRECTORY_SEPARATOR == '\\';
-}
-
-/**
  * 時刻の有効性チェックを行う
  *
  * @param $hour

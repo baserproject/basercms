@@ -13,18 +13,19 @@ namespace BaserCore\Model\Table;
 
 use ArrayObject;
 use Cake\ORM\Table;
+use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\ORM\TableRegistry;
 use BaserCore\Utility\BcUtil;
+use BaserCore\Annotation\Note;
 use Cake\Event\EventInterface;
 use Cake\Validation\Validator;
-use Cake\Datasource\EntityInterface;
-use BaserCore\Utility\BcContainerTrait;
-use BaserCore\Event\BcEventDispatcherTrait;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
-use BaserCore\Annotation\Note;
+use Cake\Datasource\EntityInterface;
+use BaserCore\Utility\BcContainerTrait;
+use BaserCore\Event\BcEventDispatcherTrait;
 
 /**
  * Class PagesTable
@@ -410,17 +411,18 @@ class PagesTable extends Table
     /**
      * PHP構文チェック
      *
-     * @param array $check チェック対象文字列
+     * @param string $check チェック対象文字列
      * @return bool
      */
     public function phpValidSyntax($check)
     {
-        if (empty($check[key($check)])) {
+        if (empty($check)) {
             return true;
         }
-        if (!Configure::read('BcApp.validSyntaxWithPage')) {
-            return true;
-        }
+        // TODO ucmitz: setting.phpに存在しないため一旦コメントアウト
+        // if (!Configure::read('BcApp.validSyntaxWithPage')) {
+        //     return true;
+        // }
         if (!function_exists('exec')) {
             return true;
         }
@@ -430,18 +432,18 @@ class PagesTable extends Table
             return true;
         }
 
-        if (isWindows()) {
+        if (BcUtil::isWindows()) {
             $tmpName = tempnam(TMP, "syntax");
             $tmp = new File($tmpName);
             $tmp->open("w");
-            $tmp->write($check[key($check)]);
+            $tmp->write($check);
             $tmp->close();
             $command = sprintf("php -l %s 2>&1", escapeshellarg($tmpName));
             exec($command, $output, $exit);
             $tmp->delete();
         } else {
             $format = 'echo %s | php -l 2>&1';
-            $command = sprintf($format, escapeshellarg($check[key($check)]));
+            $command = sprintf($format, escapeshellarg($check));
             exec($command, $output, $exit);
         }
 
