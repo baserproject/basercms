@@ -996,8 +996,6 @@ class ContentsTable extends AppTable
                 $content->main_site_content_id = null;
             }
         }
-        $event = $this->getEventManager()->matchingListeners('beforeSave');
-        if ($event) $this->getEventManager()->off('Model.beforeSave');
         $event = $this->getEventManager()->matchingListeners('afterSave');
         if ($event) $this->getEventManager()->off('Model.afterSave');
         return $this->save($content, ['validate' => false]);

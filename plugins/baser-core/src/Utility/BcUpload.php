@@ -1007,7 +1007,7 @@ class BcUpload
      */
     public function getUploadingFiles(): array
     {
-        return $this->uploadingFiles[$this->alias];
+        return $this->uploadingFiles[$this->alias] ?? [];
     }
 
     /**
