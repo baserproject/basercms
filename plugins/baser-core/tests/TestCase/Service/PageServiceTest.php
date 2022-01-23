@@ -33,6 +33,8 @@ class PageServiceTest extends BcTestCase
         'plugin.BaserCore.Contents',
         'plugin.BaserCore.Sites',
         'plugin.BaserCore.Users',
+        'plugin.BaserCore.UserGroups',
+        'plugin.BaserCore.UsersUserGroups',
         'plugin.BaserCore.ContentFolders',
     ];
 
@@ -123,8 +125,8 @@ class PageServiceTest extends BcTestCase
      */
     public function testUpdate()
     {
-        // NOTE ucmitz: phpValidSyntaxが失敗するため一旦コメントアウト
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+        // containsScriptを通すためアドミンとしてログイン
+        $this->loginAdmin($this->getRequest());
         $newPage = $this->PageService->get(2);
         $newPage->draft = "testUpdate";
         $oldPage = $this->PageService->get(2);

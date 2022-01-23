@@ -26,6 +26,7 @@ use BaserCore\Annotation\UnitTest;
 use Cake\Datasource\EntityInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Event\BcEventDispatcherTrait;
+use BaserCore\Service\ContentServiceInterface;
 
 /**
  * Class PagesTable
@@ -182,12 +183,10 @@ class PagesTable extends Table
 
         // 保存前のページファイルのパスを取得
         $ContentService = $this->getService(ContentServiceInterface::class);
+        return true; // TODO ucmitz: 未確認のため一時措置
         if ($ContentService->exists($entity->content->id) && !empty($entity->content)) {
             $this->oldPath = $this->getPageFilePath(
-                $this->find('first', [
-                        'conditions' => ['Page.id' => $entity->id],
-                        'recursive' => 0]
-                )
+                $this->get($entity->id)
             );
         } else {
             $this->oldPath = '';
@@ -215,7 +214,7 @@ class PagesTable extends Table
     {
 
         // parent::afterSave($created, $options);
-
+        return true; // TODO ucmitz: 未確認のため一時措置
         if (empty($entity->id)) {
             $data = $this->read(null, $this->id);
         } else {
