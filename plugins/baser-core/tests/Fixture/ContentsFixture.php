@@ -146,7 +146,7 @@ class ContentsFixture extends TestFixture
                 'level' => 1,
                 'title' => 'サービス',
                 'description' => '',
-                'eyecatch' => '',
+                'eyecatch' => '00000006_eyecatch.gif',
                 'author_id' => 1,
                 'layout_template' => '',
                 'status' => true,

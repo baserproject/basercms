@@ -36,13 +36,6 @@ class Imageresizer
         $srcHeight = $imginfo[1];
         $image_type = $imginfo[2];
 
-        /* 処理できる画像は、縦×横のピクセル数が1,900,000程度迄の場合があった。*/
-        /* アイデュのサーバーでは問題なかった */
-        /*if($srcWidth > 1600 || $srcHeight > 1200){
-            unlink($imgPath);
-            return false;
-        }*/
-
         // 元となる画像のオブジェクトを生成
         switch($image_type) {
             case IMAGETYPE_GIF:

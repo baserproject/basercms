@@ -63,8 +63,6 @@ class ContentsTable extends AppTable
                     'namefield' => 'id',
                     'nameadd' => true,
                     'nameformat' => '%08d',
-                    'subdirDateFormat' => 'Y/m',
-                    //'imageresize' => array('width' => '800', 'height' => '800'),
                     'imagecopy' => [
                         'thumb' => ['suffix' => '_thumb', 'width' => '300', 'height' => '300'],
                         'medium' => ['suffix' => '_midium', 'width' => '800', 'height' => '800']
@@ -998,6 +996,8 @@ class ContentsTable extends AppTable
                 $content->main_site_content_id = null;
             }
         }
+        $event = $this->getEventManager()->matchingListeners('beforeSave');
+        if ($event) $this->getEventManager()->off('Model.beforeSave');
         $event = $this->getEventManager()->matchingListeners('afterSave');
         if ($event) $this->getEventManager()->off('Model.afterSave');
         return $this->save($content, ['validate' => false]);

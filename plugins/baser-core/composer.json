@@ -16,7 +16,8 @@
         "ext-json": "*",
         "baserproject/bc-admin-third": "0.0.4",
         "baserproject/bc-front": "0.0.1",
-        "imo-tikuwa/cakephp3-soft-delete": "^2.0"
+        "imo-tikuwa/cakephp3-soft-delete": "^2.0",
+        "ext-gd": "*"
     },
     "require-dev": {
         "cakephp/bake": "^2.0.3",
