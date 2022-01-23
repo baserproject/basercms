@@ -1070,4 +1070,29 @@ class ContentService implements ContentServiceInterface
         }
         return false;
     }
+
+    /**
+     * タイトル、URL、公開状態が更新されているか確認する
+     *
+     * @param int $id コンテンツID
+     * @param array $newData 新しいコンテンツデータ
+     * @return bool
+     * @checked
+     * @unitTest
+     * @noTodo
+     */
+    public function isChangedStatus($id, $newData)
+    {
+        try {
+        $before = $this->get($id);
+        } catch(\Cake\Datasource\Exception\RecordNotFoundException $e) {
+            return true;
+        }
+        $beforeStatus = $this->Contents->isPublish($before->self_status,  $before->self_publish_begin, $before->self_publish_end);
+        $afterStatus = $this->Contents->isPublish($newData['self_status'], $newData['self_publish_begin'], $newData['self_publish_end']);
+        if ($beforeStatus != $afterStatus || $before->title  != $newData['title'] || $before->url != $newData['url']) {
+            return true;
+        }
+        return false;
+    }
 }

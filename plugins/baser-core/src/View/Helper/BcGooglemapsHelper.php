@@ -1,27 +1,25 @@
 <?php
-// TODO : コード確認要
-use BaserCore\Event\BcEventDispatcherTrait;
-
-return;
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View.Helper
- * @since           baserCMS v 0.1.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
 
-App::uses('BcGmapsComponent', 'Controller/Component');
+namespace BaserCore\View\Helper;
+
+use Cake\View\Helper;
+use BaserCore\Event\BcEventDispatcherTrait;
 
 /**
  * GoogleMapヘルパー
  *
  * @package Baser.View.Helper
  */
-class BcGooglemapsHelper extends AppHelper
+class BcGooglemapsHelper extends Helper
 {
     /**
      * Trait

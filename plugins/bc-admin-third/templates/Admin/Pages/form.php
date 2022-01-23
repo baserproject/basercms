@@ -1,18 +1,18 @@
 <?php
 /**
  * baserCMS :  Based Website Development Project <https://basercms.net>
- * Copyright (c) baserCMS Users Community <https://basercms.net/community/>
+ * Copyright (c) baserCMS User Community <https://basercms.net/community/>
  *
- * @copyright       Copyright (c) baserCMS Users Community
- * @link            https://basercms.net baserCMS Project
- * @package         Baser.View
- * @since           baserCMS v 2.0.0
- * @license         https://basercms.net/license/index.html
+ * @copyright     Copyright (c) baserCMS User Community
+ * @link          https://basercms.net baserCMS Project
+ * @since         5.0.0
+ * @license       http://basercms.net/license/index.html MIT License
  */
-
+use BaserCore\Utility\BcUtil;
+use BaserCore\View\BcAdminAppView;
 /**
  * [ADMIN] ページ登録・編集フォーム
- * @var BcAppView $this
+ * @var BcAdminAppView $this
  */
 $this->BcBaser->css('admin/ckeditor/editor', ['inline' => true]);
 $this->BcBaser->js('admin/pages/edit', false);
@@ -58,7 +58,7 @@ $this->BcBaser->js('admin/pages/edit', false);
           <td class="col-input bca-form-table__input">
             <?php echo $this->BcAdminForm->control('Page.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
             <div
-              class="helptext"><?php echo __d('baser', 'テーマフォルダ内の、Pages/templates テンプレートを配置する事で、ここでテンプレートを選択できます。') ?></div>
+              class="helptext"><?php echo __d('baser', 'テーマフォルダ内の、templates/Pages テンプレートを配置する事で、ここでテンプレートを選択できます。') ?></div>
             <?php echo $this->BcForm->error('Page.page_template') ?>
           </td>
         </tr>

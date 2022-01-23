@@ -7869,7 +7869,7 @@ msgid "ご迷惑をおかけしております。<br />現在メンテナンス�
 msgstr ""
 
 #: View/Pages/admin/form.php:55
-msgid "テーマフォルダ内の、Pages/templates テンプレートを配置する事で、ここでテンプレートを選択できます。"
+msgid "テーマフォルダ内の、templates/Pages テンプレートを配置する事で、ここでテンプレートを選択できます。"
 msgstr ""
 
 #: View/Pages/admin/form.php:71

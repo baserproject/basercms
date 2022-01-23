@@ -738,38 +738,6 @@ class ContentsTableTest extends BcTestCase
     }
 
     /**
-     * タイトル、URL、公開状態が更新されているか確認する
-     * @dataProvider isChangedStatusDataProvider
-     */
-    public function testIsChangedStatus($id, $newData, $expected)
-    {
-        $this->assertEquals($expected, $this->Contents->isChangedStatus($id, $newData));
-    }
-
-    public function isChangedStatusDataProvider()
-    {
-        return [
-            // idが存在しない場合はtrueを返す
-            [
-                100, [], true
-            ],
-            [
-                1,
-                [
-                    "self_status" => "1",
-                    "self_publish_begin_date" => "2022/01/04",
-                    "self_publish_begin_time" => "00:00:00",
-                    "self_publish_begin" => "2022-01-04 00:00:00",
-                    "self_publish_end_date" => "2022/01/07",
-                    "self_publish_end_time" => "00:00:00",
-                    "self_publish_end" => "2022-01-07 00:00:00"
-                ],
-                true
-            ]
-        ];
-    }
-
-    /**
      * オフセットを元にコンテンツを移動する
      * @param  mixed $id
      * @param  mixed $offset
@@ -801,7 +769,10 @@ class ContentsTableTest extends BcTestCase
      */
     public function testGetParentTemplate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+        $this->assertEquals('default', $this->Contents->getParentTemplate(1));
+        // サービスフォルダ以下のサービス１からサービスフォルダのlayout_templateが取得できているかを確認
+        $this->assertEquals('serviceTemplate', $this->Contents->getParentTemplate(11));
     }
 
     /**

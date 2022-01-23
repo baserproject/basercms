@@ -148,7 +148,8 @@ class ContentsFixture extends TestFixture
                 'description' => '',
                 'eyecatch' => '00000006_eyecatch.gif',
                 'author_id' => 1,
-                'layout_template' => '',
+                // NOTE ucmitz: layout templateテスト用
+                'layout_template' => 'serviceTemplate',
                 'status' => true,
                 'publish_begin' => null,
                 'publish_end' => null,
