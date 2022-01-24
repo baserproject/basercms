@@ -10,6 +10,7 @@
 
 
 import "bootstrap";
+import "jquery-colorbox";
 import "./_lib/jquery.baseUrl.js";
 import "./_lib/jquery.bcUtil.js";
 import "./_lib/jquery.bcToken.js";
