@@ -12,8 +12,6 @@
 namespace BaserCore\View\Helper;
 
 use Cake\Utility\Inflector;
-use BaserCore\View\Helper\BcFormHelper;
-use BaserCore\View\Helper\BcUploadHelper;
 use BaserCore\Event\BcEventDispatcherTrait;
 /**
  * Class BcFreezeHelper
@@ -378,20 +376,17 @@ class BcFreezeHelper extends BcFormHelper
      */
     public function file($fieldName, $options = []): string
     {
-
         if ($this->freezed) {
             $value = $this->getSourceValue($fieldName);
-            if (is_array($value) && isset($value['session_key'])) {
-                $value = $value['session_key'];
-                return parent::hidden($fieldName . "_tmp", ['value' => $value]) . $this->BcUpload->fileLink($fieldName, $options);
+            $sessionKey = $this->getSourceValue($fieldName . '_tmp');
+            if ($sessionKey) {
+                return parent::hidden($fieldName . "_tmp", ['value' => $sessionKey]) . $this->BcUpload->fileLink($fieldName, $options);
             } else {
-                if (!is_array($value)) {
-                    $delValue = $this->getSourceValue($fieldName . '_delete');
-                    if ($delValue) {
-                        return parent::hidden($fieldName, ['value' => $value]) . parent::hidden($fieldName . '_delete', ['value' => true]) . $this->BcUpload->fileLink($fieldName, $options) . '<br>' . __d('baser', '削除する');
-                    } else {
-                        return parent::hidden($fieldName, ['value' => $value]) . $this->BcUpload->fileLink($fieldName, $options);
-                    }
+                $delValue = $this->getSourceValue($fieldName . '_delete');
+                if ($delValue) {
+                    return parent::hidden($fieldName, ['value' => $value]) . parent::hidden($fieldName . '_delete', ['value' => true]) . $this->BcUpload->fileLink($fieldName, $options) . '<br>' . __d('baser', '削除する');
+                } else {
+                    return parent::hidden($fieldName, ['value' => $value]) . $this->BcUpload->fileLink($fieldName, $options);
                 }
             }
         } else {
