@@ -35,13 +35,14 @@ interface PageServiceInterface
      */
     public function getTrash($id);
 
-    // /**
-    //  * 新規登録する
-    //  * @param array $data
-    //  * @return EntityInterface
-    //  * @throws \Cake\ORM\Exception\PersistenceFailedException
-    //  */
-    // public function create(string $message): EntityInterface;
+    /**
+     * 固定ページ登録
+     * @param array $data
+     * @param array $options
+     * @return \Cake\Datasource\EntityInterface
+     * @throws \Cake\ORM\Exception\PersistenceFailedException
+     */
+    public function create(array $postData, $options=[]);
 
     /**
      * ページ情報を更新する

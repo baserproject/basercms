@@ -114,17 +114,21 @@ class PageService implements PageServiceInterface
     }
 
     /**
-     * ユーザー登録
+     * 固定ページ登録
      * @param array $data
+     * @param array $options
      * @return \Cake\Datasource\EntityInterface
      * @throws \Cake\ORM\Exception\PersistenceFailedException
+     * @checked
+     * @noTodo
+     * @unitTest
      */
-    // public function create(array $postData)
-    // {
-    //     $page = $this->Pages->newEmptyEntity();
-    //     $page = $this->Pages->patchEntity($page, $postData, ['validate' => 'new']);
-    //     return $this->Pages->saveOrFail($page);
-    // }
+    public function create(array $postData, $options=[])
+    {
+        $page = $this->Pages->newEmptyEntity();
+        $page = $this->Pages->patchEntity($page, $postData, $options);
+        return $this->Pages->saveOrFail($page);
+    }
 
     /**
      * ページ情報を更新する

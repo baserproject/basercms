@@ -94,11 +94,25 @@ class PageServiceTest extends BcTestCase
      */
     public function testCreate()
     {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-        $this->getRequest();
-        $Page = $this->PageService->create('Test Message');
+        $this->loginAdmin($this->getRequest('/'));
+        $data = [
+            'cotnents' => '<p>test</p>',
+            'draft' => '<p>test</p>',
+            'page_template' => 'test',
+            'code' => 'test',
+            'content' => [
+                "parent_id" => "1",
+                "title" => "新しい フォルダー",
+                "plugin" => 'BaserCore',
+                "type" => "ContentFolder",
+                "site_id" => "0",
+                "alias_id" => "",
+                "entity_id" => "",
+            ],
+        ];
+        $Page = $this->PageService->create($data);
         $savedPage = $this->Pages->get($Page->id);
-        $this->assertEquals('Test Message', $savedPage->message);
+        $this->assertEquals('test', $savedPage->code);
     }
 
     /**

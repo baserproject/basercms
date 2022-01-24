@@ -116,7 +116,7 @@ class PagesTable extends Table
         $validator
         ->integer('id')
         ->numeric('id', __d('baser', 'IDに不正な値が利用されています。'), 'update')
-        ->requirePresence('id', true);
+        ->requirePresence('id', 'update');
 
         $validator
         ->scalar('contents')
