@@ -17,7 +17,7 @@ use BaserCore\View\BcAdminAppView;
 $this->BcBaser->css('admin/ckeditor/editor', ['inline' => true]);
 $this->BcBaser->js('admin/pages/edit', false);
 $this->BcAdmin->setTitle(__d('baser', '固定ページ情報編集'));
-$this->BcAdmin->setTitle('pages_form');
+$this->BcAdmin->setHelp('pages_form');
 ?>
 
 
@@ -25,14 +25,14 @@ $this->BcAdmin->setTitle('pages_form');
   <div id="Action"><?php echo $this->request->action ?></div>
 </div>
 
-<?php echo $this->BcAdminForm->create('Page') ?>
+<?php echo $this->BcAdminForm->create($contentEntities, ['novalidate' => true]) ?>
 <?php echo $this->BcAdminForm->control('Page.mode', ['type' => 'hidden']) ?>
 <?php echo $this->BcAdminForm->control('Page.id', ['type' => 'hidden']) ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
-
 <div class="bca-section bca-section-editor-area">
-  <?php echo $this->BcForm->editor('Page.contents', array_merge([
+<?php /* TODO ucmitz: BcAdminForm->editorを修正する
+  <?php echo $this->BcAdminForm->editor('Page.contents', array_merge([
     'editor' => @$siteConfig['editor'],
     'editorUseDraft' => true,
     'editorDraftField' => 'draft',
@@ -40,8 +40,9 @@ $this->BcAdmin->setTitle('pages_form');
     'editorHeight' => '480px',
     'editorEnterBr' => @$siteConfig['editor_enter_br']
   ], $editorOptions)); ?>
-  <?php echo $this->BcForm->error('Page.contents') ?>
-  <?php echo $this->BcForm->error('Page.draft') ?>
+  <?php echo $this->BcAdminForm->error('Page.contents') ?>
+  <?php echo $this->BcAdminForm->error('Page.draft') ?>
+*/ ?>
 </div>
 
 <?php if (BcUtil::isAdminUser()): ?>
@@ -56,16 +57,16 @@ $this->BcAdmin->setTitle('pages_form');
       <table class="form-table bca-form-table" data-bca-table-type="type2">
         <tr>
           <th
-            class="bca-form-table__label"><?php echo $this->BcForm->label('Page.page_template', __d('baser', '固定ページテンプレート')) ?></th>
+            class="bca-form-table__label"><?php echo $this->BcAdminForm->label('Page.page_template', __d('baser', '固定ページテンプレート')) ?></th>
           <td class="col-input bca-form-table__input">
             <?php echo $this->BcAdminForm->control('Page.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
             <div
               class="helptext"><?php echo __d('baser', 'テーマフォルダ内の、templates/Pages テンプレートを配置する事で、ここでテンプレートを選択できます。') ?></div>
-            <?php echo $this->BcForm->error('Page.page_template') ?>
+            <?php echo $this->BcAdminForm->error('Page.page_template') ?>
           </td>
         </tr>
         <tr>
-          <th class="bca-form-table__label"><?php echo $this->BcForm->label('Page.code', __d('baser', 'コード')) ?></th>
+          <th class="bca-form-table__label"><?php echo $this->BcAdminForm->label('Page.code', __d('baser', 'コード')) ?></th>
           <td class="col-input bca-form-table__input">
             <?php echo $this->BcAdminForm->control('Page.code', [
               'type' => 'textarea',
@@ -76,10 +77,10 @@ $this->BcAdmin->setTitle('pages_form');
             <i class="bca-icon--question-circle btn help bca-help"></i>
             <div
               class="helptext"><?php echo __d('baser', '固定ページの本文には、ソースコードに切り替えてPHPやJavascriptのコードを埋め込む事ができますが、ユーザーが間違って削除してしまわないようにこちらに入力しておく事もできます。<br>入力したコードは、自動的にコンテンツ本体の上部に差し込みます。') ?></div>
-            <?php echo $this->BcForm->error('Page.code') ?>
+            <?php echo $this->BcAdminForm->error('Page.code') ?>
           </td>
         </tr>
-        <?php echo $this->BcForm->dispatchAfterForm() ?>
+        <?php echo $this->BcAdminForm->dispatchAfterForm() ?>
       </table>
     </div>
   </section>
@@ -89,7 +90,7 @@ $this->BcAdmin->setTitle('pages_form');
 
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
-<?php echo $this->BcForm->submit(__d('baser', '保存'), [
+<?php echo $this->BcAdminForm->submit(__d('baser', '保存'), [
   'div' => false,
   'class' => 'button bca-btn',
   'data-bca-btn-type' => 'save',

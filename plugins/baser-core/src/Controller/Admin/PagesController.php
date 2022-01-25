@@ -266,10 +266,12 @@ class PagesController extends BcAdminAppController
 			$theme[] = $site->theme;
 		}
 		$pageTemplateList = $pageService->getPageTemplateList($page->content->id, $theme);
-		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink'));
+        $contentEntities = [
+            'Page' => $page,
+            'Content' => $page->content,
+        ];
+		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink', 'contentEntities'));
 
-		$this->pageTitle = __d('baser', '固定ページ情報編集');
-		$this->help = 'pages_form';
 		$this->render('form');
 	}
 
