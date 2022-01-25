@@ -119,8 +119,8 @@ class BcUploadBehavior extends Behavior
      */
     public function beforeMarshal(EventInterface $event, ArrayObject $data): void
     {
-        $this->BcUpload->setupTmpData($data);
-        $this->BcUpload->setupRequestData($data);
+        $this->BcUpload->setupTmpData($this->table()->getAlias(), $data);
+        $this->BcUpload->setupRequestData($this->table()->getAlias(), $data);
     }
 
     /**
@@ -134,11 +134,11 @@ class BcUploadBehavior extends Behavior
     public function beforeSave(EventInterface $event, EntityInterface $entity)
     {
         if ($entity->id) {
-            $this->BcUpload->deleteExistingFiles($entity);
+            $this->BcUpload->deleteExistingFiles($this->table()->getAlias(), $entity);
         }
-        $this->BcUpload->saveFiles($entity);
+        $this->BcUpload->saveFiles($this->table()->getAlias(), $entity);
         if ($entity->id) {
-            $this->BcUpload->deleteFiles($entity);
+            $this->BcUpload->deleteFiles($this->table()->getAlias(), $entity);
         }
     }
 
@@ -153,9 +153,9 @@ class BcUploadBehavior extends Behavior
      */
     public function afterSave(EventInterface $event, EntityInterface $entity): void
     {
-        if ($this->BcUpload->isUploaded()) {
-            $this->BcUpload->renameToBasenameFields($entity);
-            $this->BcUpload->resetUploaded();
+        if ($this->BcUpload->isUploaded($this->table()->getAlias())) {
+            $this->BcUpload->renameToBasenameFields($this->table()->getAlias(), $entity);
+            $this->BcUpload->resetUploaded($this->table()->getAlias());
         }
     }
 
@@ -171,7 +171,7 @@ class BcUploadBehavior extends Behavior
      */
     public function beforeDelete(EventInterface $event, EntityInterface $entity)
     {
-        $this->BcUpload->deleteFiles($entity, true);
+        $this->BcUpload->deleteFiles($this->table()->getAlias(), $entity, true);
     }
 
     /**
@@ -186,7 +186,7 @@ class BcUploadBehavior extends Behavior
      */
     public function saveTmpFiles($data, $tmpId)
     {
-        return $this->BcUpload->saveTmpFiles($data, $tmpId);
+        return $this->BcUpload->saveTmpFiles($this->table()->getAlias(), $data, $tmpId);
     }
 
     /**
@@ -197,9 +197,9 @@ class BcUploadBehavior extends Behavior
      * @noTodo
      * @unitTest
      */
-    public function getSettings($alias)
+    public function getSettings()
     {
-        return $this->BcUpload->settings[$alias];
+        return $this->BcUpload->settings[$this->table()->getAlias()];
     }
 
     /**
@@ -210,9 +210,9 @@ class BcUploadBehavior extends Behavior
      * @noTodo
      * @unitTest
      */
-    public function setSettings($alias, $settings)
+    public function setSettings($settings)
     {
-        $this->BcUpload->settings[$alias] = $settings;
+        $this->BcUpload->settings[$this->table()->getAlias()] = $settings;
     }
 
     /**
@@ -224,7 +224,7 @@ class BcUploadBehavior extends Behavior
      */
     public function getSaveDir($isTheme = false, $limited = false)
     {
-        return $this->BcUpload->getSaveDir($isTheme, $limited);
+        return $this->BcUpload->getSaveDir($this->table()->getAlias(), $isTheme, $limited);
     }
 
 }

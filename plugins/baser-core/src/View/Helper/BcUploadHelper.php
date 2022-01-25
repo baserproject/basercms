@@ -440,7 +440,7 @@ class BcUploadHelper  extends Helper
      */
     protected function getBcUploadSetting()
     {
-        return $this->table->getBehavior('BcUpload')->getSettings($this->table->getAlias());
+        return $this->table->getSettings();
     }
 
     /**
@@ -454,7 +454,7 @@ class BcUploadHelper  extends Helper
      */
     protected function setBcUploadSetting($settings)
     {
-        $this->table->getBehavior('BcUpload')->setSettings($this->table->getAlias(), $settings);
+        $this->table->setSettings($settings);
     }
 
     /**
