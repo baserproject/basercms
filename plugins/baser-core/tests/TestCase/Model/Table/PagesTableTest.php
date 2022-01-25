@@ -156,17 +156,6 @@ class PagesTableTest extends BcTestCase
     }
 
     /**
-     * beforeSave
-     *
-     * @param array $options
-     * @return boolean
-     */
-    public function testBeforeSave()
-    {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    }
-
-    /**
      * 最終登録IDを取得する
      */
     public function testGetInsertID()

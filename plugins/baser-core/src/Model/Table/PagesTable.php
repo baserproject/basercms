@@ -40,22 +40,6 @@ class PagesTable extends Table
     use BcContainerTrait;
 
     /**
-     * 更新前のページファイルのパス
-     *
-     * @var string
-     */
-    public $oldPath = '';
-
-    /**
-     * ファイル保存可否
-     * true の場合、ページデータ保存の際、ページテンプレートファイルにも内容を保存する
-     * テンプレート読み込み時などはfalseにして保存しないようにする
-     *
-     * @var boolean
-     */
-    public $fileSave = true;
-
-    /**
      * 検索テーブルへの保存可否
      *
      * @var boolean
@@ -169,40 +153,6 @@ class PagesTable extends Table
     }
 
     /**
-     * Before Save
-     * @param EventInterface $event
-     * @param EntityInterface $entity
-     * @param ArrayObject $options
-     * @return bool
-     */
-    public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
-    {
-        if (!$this->fileSave) {
-            return true;
-        }
-
-        // 保存前のページファイルのパスを取得
-        $ContentService = $this->getService(ContentServiceInterface::class);
-        return true; // TODO ucmitz: 未確認のため一時措置
-        if ($ContentService->exists($entity->content->id) && !empty($entity->content)) {
-            $this->oldPath = $this->getPageFilePath(
-                $this->get($entity->id)
-            );
-        } else {
-            $this->oldPath = '';
-        }
-
-        // 新しいページファイルのパスが開けるかチェックする
-        $result = true;
-        if (!empty($entity->content)) {
-            if (!$this->checkOpenPageFile($entity)) {
-                $result = false;
-            }
-        }
-        return $result;
-    }
-
-    /**
      * afterSave
      *
      * @param  EventInterface $event
@@ -212,19 +162,6 @@ class PagesTable extends Table
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options)
     {
-
-        // parent::afterSave($created, $options);
-        return true; // TODO ucmitz: 未確認のため一時措置
-        if (empty($entity->id)) {
-            $data = $this->read(null, $this->id);
-        } else {
-            $data = $this->read(null, $entity->id);
-        }
-
-        if ($this->fileSave) {
-            $this->createPageTemplate($data);
-        }
-
         // 検索用テーブルに登録
         if ($this->searchIndexSaving) {
             if (empty($entity->content->exclude_search)) {
