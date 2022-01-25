@@ -65,10 +65,6 @@ $(function () {
     $(".slide-body").hide();
 
     /**
-     * カラーボックス
-     */
-    if ($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox({maxWidth: '60%'});
-    /**
      * ポップアップ
      */
     if ($("a[rel='popup']").colorbox) $("a[rel='popup']").colorbox({width: "60%", height: "70%", iframe: true});

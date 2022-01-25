@@ -63,8 +63,6 @@ class ContentsTable extends AppTable
                     'namefield' => 'id',
                     'nameadd' => true,
                     'nameformat' => '%08d',
-                    'subdirDateFormat' => 'Y/m',
-                    //'imageresize' => array('width' => '800', 'height' => '800'),
                     'imagecopy' => [
                         'thumb' => ['suffix' => '_thumb', 'width' => '300', 'height' => '300'],
                         'medium' => ['suffix' => '_midium', 'width' => '800', 'height' => '800']

@@ -126,24 +126,12 @@ class BcUploadHelper  extends Helper
         } else {
             $value = $options['value'];
         }
-        if (is_array($value)) {
-            if (empty($value['session_key']) && empty($value['name'])) {
-                $context = $this->BcAdminForm->context();
-                $data = $context->entity()[Inflector::singularize($this->table->getAlias())];
-                if (!empty($data->$field)) {
-                    $value = $data->$field;
-                } else {
-                    $value = '';
-                }
-            } else {
-                if (isset($value['session_key'])) {
-                    $tmp = true;
-                    $value = str_replace('/', '_', $value['session_key']);
-                    $basePath = '/uploads/tmp/';
-                } else {
-                    return false;
-                }
-            }
+
+        $sessionKey = $this->getSourceValue($fieldName . '_tmp');
+        if ($sessionKey) {
+            $tmp = true;
+            $value = str_replace('/', '_', $sessionKey);
+            $basePath = '/uploads/tmp/';
         }
 
         /* ファイルのパスを取得 */
@@ -288,13 +276,11 @@ class BcUploadHelper  extends Helper
         if (empty($linkOptions['class'])) {
             unset($linkOptions['class']);
         }
-        if (is_array($fileName)) {
-            if (isset($fileName['session_key'])) {
-                $fileName = $fileName['session_key'];
-                $options['tmp'] = true;
-            } else {
-                return '';
-            }
+
+        $sessionKey = $this->getSourceValue($fieldName . '_tmp');
+        if ($sessionKey) {
+            $fileName = $sessionKey;
+            $options['tmp'] = true;
         }
 
         if ($options['noimage']) {
@@ -454,7 +440,7 @@ class BcUploadHelper  extends Helper
      */
     protected function getBcUploadSetting()
     {
-        return $this->table->getBehavior('BcUpload')->settings[$this->table->getAlias()];
+        return $this->table->getBehavior('BcUpload')->getSettings($this->table->getAlias());
     }
 
     /**
@@ -468,7 +454,7 @@ class BcUploadHelper  extends Helper
      */
     protected function setBcUploadSetting($settings)
     {
-        $this->table->getBehavior('BcUpload')->settings[$this->table->getAlias()] = $settings;
+        $this->table->getBehavior('BcUpload')->setSettings($this->table->getAlias(), $settings);
     }
 
     /**

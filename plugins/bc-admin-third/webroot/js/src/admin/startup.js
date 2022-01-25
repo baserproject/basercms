@@ -58,6 +58,11 @@ $(function () {
     }
 
     /**
+     * カラーボックス
+     */
+    if ($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox({maxWidth: '60%'});
+
+    /**
      * ヘルプ
      */
     $('#BtnMenuHelp').click(function () {

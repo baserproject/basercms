@@ -33,6 +33,7 @@ $base = $attributes['base'];
     'vendor/bootstrap-4.1.3/bootstrap',
     'vendor/jquery-ui/jquery-ui.min',
     'vendor/jquery.timepicker',
+    'vendor/jquery-colorbox/colorbox',
     'admin/style'
   ]) ?>
   <?= $this->fetch('css') ?>
