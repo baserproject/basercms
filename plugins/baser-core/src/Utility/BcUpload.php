@@ -440,7 +440,7 @@ class BcUpload
         $fileName = $data[$fieldName . '_tmp'];
         $sessionKey = str_replace(['.', '/'], ['_', '_'], $fileName);
         $tmpName = $this->savePath[$this->alias] . $sessionKey;
-        $fileData = $this->Session->read('Upload.' . $sessionKey . '.data');
+        $fileData = base64_decode($this->Session->read('Upload.' . $sessionKey . '.data'));
         $fileType = $this->Session->read('Upload.' . $sessionKey . '.type');
         $this->Session->delete('Upload.' . $sessionKey);
 
@@ -1055,7 +1055,7 @@ class BcUpload
         $name = str_replace(['.', '/'], ['_', '_'], $fileName);
         $this->Session->write('Upload.' . $name, $setting);
         $this->Session->write('Upload.' . $name . '.type', $file['type']);
-        $this->Session->write('Upload.' . $name . '.data', file_get_contents($file['tmp_name']));
+        $this->Session->write('Upload.' . $name . '.data', base64_encode(file_get_contents($file['tmp_name'])));
         $entity->{$setting['name'] . '_tmp'} = $fileName;
         return $fileName;
     }
