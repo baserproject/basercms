@@ -348,12 +348,16 @@ class BcUpload
     {
         if (empty($entity['id'])) return $entity;
         $files = $this->getUploadingFiles();
-        // TODO
-        $query = $this->table->find()->where(['id' => $entity['id']]);
-        if ($entity instanceof \BaserCore\Model\Entity\Content) {
-            $oldEntity = $query->applyOptions(['withDeleted'])->first();
-        } else {
-            $oldEntity = $query->first();
+        if($this->table instanceof Content) {
+        	$softDelete = $this->table->Content->softDelete(null);
+			$this->table->softDelete(false);
+		}
+		$oldEntity = $this->table->find('first', [
+			'conditions' => [$this->table->alias . '.id' => $entity['id']],
+			'recursive' => -1
+		]);
+        if($this->table instanceof Content) {
+            $this->table->softDelete($softDelete);
         }
         foreach($this->settings[$this->alias]['fields'] as $setting) {
             $file = (!is_null($files[$setting['name']])) ? $files[$setting['name']] : [];
@@ -828,14 +832,16 @@ class BcUpload
         $ext = $file['ext'];
         $basename = preg_replace("/\." . $ext . "$/is", '', $file['name']);
         // 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
-        $conditions[$setting['name'] . ' LIKE'] = $basename . '%' . $ext;
-        // TODO
-        $records = $this->table->find()->where([$conditions])->select($setting['name'])->all()->toArray();
+        $records = $this->table->find('all', [
+        	'fields' => $this->table->alias . '.' . $setting['name'],
+        	'conditions' => [$this->table->alias . '.' . $setting['name'] . ' LIKE' => $basename . '%' . $ext],
+        	'recursive' => -1
+        ]);
         $numbers = [];
         if ($records) {
             foreach($records as $data) {
-                if (!empty($data->{$setting['name']})) {
-                    $_basename = preg_replace("/\." . $ext . "$/is", '', $data->{$setting['name']});
+                if (!empty($data[$this->table->alias][$setting['name']])) {
+                    $_basename = preg_replace("/\." . $ext . "$/is", '', $data[$this->table->alias][$setting['name']]);
                     $lastPrefix = preg_replace('/^' . preg_quote($basename, '/') . '/', '', $_basename);
                     if (!$lastPrefix) {
                         $numbers[1] = 1;
@@ -882,8 +888,7 @@ class BcUpload
             $request = Router::getRequest();
             $site = $request->getAttribute('currentSite');
             if ($site->theme) {
-            	// TODO
-                $basePath = ROOT . DS . 'plugins' . DS . $site->theme . DS . 'webroot' . DS . 'files' . DS;
+                $basePath = WWW_ROOT . 'theme' . DS . $site->theme . DS . 'webroot' . DS . 'files' . DS;
             } else {
                 $basePath = getViewPath() . 'files' . DS;
             }
@@ -933,8 +938,10 @@ class BcUpload
      */
     public function deleteExistingFiles($entity)
     {
-    	// TODO
-        $oldEntity = $this->table->find()->where(['id' => $entity['id']])->first();
+        $oldEntity = $this->table->find('first', [
+        	'conditions' => [$this->table->alias . '.id' => $entity['id']],
+        	'recursive' => -1
+        ]);
         if (!$oldEntity) return;
         $files = $this->getUploadingFiles();
         if (!$files) return;
@@ -1017,11 +1024,9 @@ class BcUpload
         $this->Session->delete('Upload');
         $this->tmpId = $tmpId;
         $this->setupRequestData($data);
-        // TODO
-        $entity = $this->table->patchEntity($this->table->newEmptyEntity(), $data);
         $files = $this->getUploadingFiles();
         foreach($this->settings[$this->alias]['fields'] as $setting) {
-            $files[$setting['name']] = $this->saveTmpFile($setting, $files[$setting['name']], $entity);
+            $entity[$setting['name']] = $files[$setting['name']] = $this->saveTmpFile($setting, $files[$setting['name']], $data);
         }
         $this->setUploadingFiles($files);
         return $entity;

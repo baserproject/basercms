@@ -88,7 +88,8 @@ class BcUploadHelper extends BcAppHelper
 		}
 
 		if (is_array($value)) {
-			if (empty($value['session_key']) && empty($value['name'])) {
+			$sessionKey = $this->getSourceValue($fieldName . '_tmp');
+			if (!$sessionKey && empty($value['name'])) {
 				$data = $Model->find('first', [
 					'conditions' => [
 						$Model->alias . '.' . $Model->primaryKey => $Model->id
@@ -100,9 +101,9 @@ class BcUploadHelper extends BcAppHelper
 					$value = '';
 				}
 			} else {
-				if (isset($value['session_key'])) {
+				if ($sessionKey) {
 					$tmp = true;
-					$value = str_replace('/', '_', $value['session_key']);
+					$value = str_replace('/', '_', $sessionKey);
 					$basePath = '/uploads/tmp/';
 				} else {
 					return false;
@@ -249,9 +250,11 @@ class BcUploadHelper extends BcAppHelper
 		if (empty($linkOptions['class'])) {
 			unset($linkOptions['class']);
 		}
+
 		if (is_array($fileName)) {
-			if (isset($fileName['session_key'])) {
-				$fileName = $fileName['session_key'];
+			$sessionKey = $this->value($fieldName . '_tmp');
+			if ($sessionKey) {
+				$fileName = $sessionKey;
 				$options['tmp'] = true;
 			} else {
 				return '';
@@ -445,13 +448,13 @@ class BcUploadHelper extends BcAppHelper
 	protected function getBcUploadSetting()
 	{
 		$Model = $this->getUploadModel();
-		return $Model->Behaviors->BcUpload->settings[$Model->name];
+		return $Model->getSettings($Model->name);
 	}
 
 	protected function setBcUploadSetting($settings)
 	{
 		$Model = $this->getUploadModel();
-		$Model->Behaviors->BcUpload->settings[$Model->name] = $settings;
+		$Model->setSettings($Model->name, $settings);
 	}
 
 	protected function getUploadModel()
