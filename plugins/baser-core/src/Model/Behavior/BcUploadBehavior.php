@@ -136,7 +136,7 @@ class BcUploadBehavior extends Behavior
         if ($entity->id) {
             $this->BcUpload->deleteExistingFiles($entity);
         }
-        $this->BcUpload->saveFiles();
+        $this->BcUpload->saveFiles($entity);
         if ($entity->id) {
             $this->BcUpload->deleteFiles($entity);
         }
@@ -222,9 +222,9 @@ class BcUploadBehavior extends Behavior
      * @param false $limited
      * @return string
      */
-    public function getSaveDir($alias, $isTheme = false, $limited = false)
+    public function getSaveDir($isTheme = false, $limited = false)
     {
-        return $this->BcUpload->getSaveDir($alias, $isTheme, $limited);
+        return $this->BcUpload->getSaveDir($isTheme, $limited);
     }
 
 }

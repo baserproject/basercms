@@ -299,7 +299,7 @@ class BcUploadHelper  extends Helper
         }
 
         $fileUrl = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
-        $saveDir = $this->table->getSaveDir($this->table->getAlias(), false, $options['limited']);
+        $saveDir = $this->table->getSaveDir(false, $options['limited']);
 
         if (isset($settings['fields'][$field]['imagecopy'])) {
             $copySettings = $settings['fields'][$field]['imagecopy'];
