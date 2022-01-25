@@ -448,13 +448,13 @@ class BcUploadHelper extends BcAppHelper
 	protected function getBcUploadSetting()
 	{
 		$Model = $this->getUploadModel();
-		return $Model->getSettings($Model->name);
+		return $Model->getSettings();
 	}
 
 	protected function setBcUploadSetting($settings)
 	{
 		$Model = $this->getUploadModel();
-		$Model->setSettings($Model->name, $settings);
+		$Model->setSettings($settings);
 	}
 
 	protected function getUploadModel()

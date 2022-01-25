@@ -316,6 +316,7 @@ class BcContentsComponent extends Component
 			$data['Site']['relate_main_site'] && $data['Content']['main_site_content_id'] && $data['Content']['type'] == 'ContentFolder') {
 			$related = true;
 		}
+		$controller->request->data = $data;
 		$currentSiteId = $siteId = $controller->request->data['Site']['id'];
 		if (is_null($currentSiteId)) {
 			$currentSiteId = 0;

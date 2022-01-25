@@ -45,31 +45,16 @@ App::uses('BcUpload', 'Lib');
  * );
  *
  * @package Baser.Model.Behavior
- * @property BcUpload $BcUpload
+ * @property BcUpload[] $BcUpload
  */
 class BcUploadBehavior extends ModelBehavior
 {
 
-	/**
-	 * 保存ディレクトリ
-	 *
-	 * @var string[]
-	 */
-	public $savePath = [];
-
-	/**
-	 * 保存時にファイルの重複確認を行うディレクトリ
-	 *
-	 * @var array
-	 */
-	public $existsCheckDirs = [];
-
-	/**
-	 * 設定
-	 *
-	 * @var array
-	 */
-	public $settings = null;
+    /**
+     * BcUpload
+     * @var BcUpload[]
+     */
+    public $BcUpload = [];
 
 	/**
 	 * セットアップ
@@ -79,8 +64,8 @@ class BcUploadBehavior extends ModelBehavior
 	 */
 	public function setup(Model $Model, $settings = [])
 	{
-        $this->BcUpload = new BcUpload();
-        $this->BcUpload->initialize($settings, $Model);
+		$this->BcUpload[$Model->alias] = new BcUpload();
+        $this->BcUpload[$Model->alias]->initialize($settings, $Model);
 	}
 
 	/**
@@ -92,8 +77,8 @@ class BcUploadBehavior extends ModelBehavior
 	 */
 	public function beforeValidate(Model $Model, $options = [])
 	{
-        $this->BcUpload->setupTmpData(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
-        $Model->data[$Model->alias] = $this->BcUpload->setupRequestData(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
+        $this->BcUpload[$Model->alias]->setupTmpData(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
+        $Model->data[$Model->alias] = $this->BcUpload[$Model->alias]->setupRequestData(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
         return true;
 	}
 
@@ -107,11 +92,11 @@ class BcUploadBehavior extends ModelBehavior
 	public function beforeSave(Model $Model, $options = [])
 	{
         if ($Model->exists()) {
-            $this->BcUpload->deleteExistingFiles(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
+            $this->BcUpload[$Model->alias]->deleteExistingFiles(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
         }
-        $Model->data[$Model->alias] = $this->BcUpload->saveFiles(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
+        $Model->data[$Model->alias] = $this->BcUpload[$Model->alias]->saveFiles(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
         if ($Model->exists()) {
-            $Model->data[$Model->alias] = $this->BcUpload->deleteFiles(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
+            $Model->data[$Model->alias] = $this->BcUpload[$Model->alias]->deleteFiles(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
         }
         return true;
 	}
@@ -125,9 +110,9 @@ class BcUploadBehavior extends ModelBehavior
 	 */
 	public function afterSave(Model $Model, $created, $options = [])
 	{
-        if ($this->BcUpload->isUploaded()) {
-            $Model->data[$Model->alias] = $this->BcUpload->renameToBasenameFields(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
-            $this->BcUpload->resetUploaded();
+        if ($this->BcUpload[$Model->alias]->isUploaded()) {
+            $Model->data[$Model->alias] = $this->BcUpload[$Model->alias]->renameToBasenameFields(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data);
+            $this->BcUpload[$Model->alias]->resetUploaded();
         }
 	}
 
@@ -142,7 +127,7 @@ class BcUploadBehavior extends ModelBehavior
 	 */
 	public function beforeDelete(Model $Model, $cascade = true)
 	{
-		$this->BcUpload->deleteFiles(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data, true);
+		$this->BcUpload[$Model->alias]->deleteFiles(isset($Model->data[$Model->alias])? $Model->data[$Model->alias] : $Model->data, true);
 		return true;
 	}
 
@@ -156,10 +141,14 @@ class BcUploadBehavior extends ModelBehavior
 	 */
 	public function saveTmpFiles(Model $Model, $data, $tmpId)
 	{
-		 return [$Model->alias => $this->BcUpload->saveTmpFiles(
-			isset($data[$Model->alias])? $data[$Model->alias] : $data,
-			$tmpId
-		)];
+		if(isset($data[$Model->alias])) {
+			$entity = $data[$Model->alias];
+		} else {
+			$entity = $data;
+			$data = [];
+		}
+		$data[$Model->alias] = $this->BcUpload[$Model->alias]->saveTmpFiles($entity, $tmpId);
+		return $data;
 	}
 
     /**
@@ -170,9 +159,9 @@ class BcUploadBehavior extends ModelBehavior
      * @noTodo
      * @unitTest
      */
-    public function getSettings(Model $Model, $alias)
+    public function getSettings(Model $Model)
     {
-        return $this->BcUpload->settings[$alias];
+        return $this->BcUpload[$Model->alias]->settings;
     }
 
     /**
@@ -183,9 +172,9 @@ class BcUploadBehavior extends ModelBehavior
      * @noTodo
      * @unitTest
      */
-    public function setSettings(Model $Model, $alias, $settings)
+    public function setSettings(Model $Model, $settings)
     {
-        $this->BcUpload->settings[$alias] = $settings;
+        $this->BcUpload[$Model->alias]->settings = $settings;
     }
 
     /**
@@ -197,7 +186,7 @@ class BcUploadBehavior extends ModelBehavior
      */
     public function getSaveDir(Model $Model, $isTheme = false, $limited = false)
     {
-        return $this->BcUpload->getSaveDir($isTheme, $limited);
+        return $this->BcUpload[$Model->alias]->getSaveDir($isTheme, $limited);
     }
 
 }
