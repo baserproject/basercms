@@ -88,7 +88,7 @@ class BcUploadBehaviorTest extends BcTestCase
             'type' => 'image',
             'getUniqueFileName' => true,
         ];
-        $this->savePath = $this->BcUploadBehavior->BcUpload->savePath[$this->table->getAlias()];
+        $this->savePath = $this->BcUploadBehavior->BcUpload[$this->table->getAlias()]->savePath;
     }
 
     /**
@@ -120,7 +120,7 @@ class BcUploadBehaviorTest extends BcTestCase
     {
         $result = $this->table->dispatchEvent('Model.beforeMarshal', ['data' => new ArrayObject($this->uploadedData), 'options' => new ArrayObject()]);
         // setupRequestDataが実行されてるか確認
-        $this->assertNotNull($this->BcUploadBehavior->BcUpload->getUploadingFiles());
+        $this->assertNotNull($this->BcUploadBehavior->BcUpload[$this->table->getAlias()]->getUploadingFiles());
         // 保存前にeyecatchをオブジェクトではなく、stringに変換してるか確認
         $this->assertEquals("test.png", $result->getData('data')['eyecatch']);
     }
@@ -145,8 +145,8 @@ class BcUploadBehaviorTest extends BcTestCase
                 'uploadable' => true
             ]
         ];
-        $this->BcUploadBehavior->BcUpload->setUploadingFiles($uploadedFile);
-        $this->BcUploadBehavior->settings[$this->table->getAlias()]['fields']['eyecatch'] = $this->eyecatchField;
+        $this->BcUploadBehavior->BcUpload[$this->table->getAlias()]->setUploadingFiles($uploadedFile);
+        $this->BcUploadBehavior->BcUpload[$this->table->getAlias()]->settings['fields']['eyecatch'] = $this->eyecatchField;
         // 新規保存の場合
         $entity = new Entity(['id' => 6, 'eyecatch' => 'baser.power.gif']);
         $return = $this->table->dispatchEvent('Model.beforeSave', ['entity' => $entity, 'options' => new ArrayObject()]);
@@ -163,7 +163,7 @@ class BcUploadBehaviorTest extends BcTestCase
             ]
         ];
         copy($imgPath . $fileName . '.' . $this->eyecatchField['ext'], $this->savePath . '00000006_eyecatch.gif');
-        $this->BcUploadBehavior->BcUpload->setUploadingFiles($uploadedFile);
+        $this->BcUploadBehavior->BcUpload[$this->table->getAlias()]->setUploadingFiles($uploadedFile);
         $return = $this->table->dispatchEvent('Model.beforeSave', ['entity' => $entity, 'options' => new ArrayObject()]);
         $this->assertTrue($return->getResult());
         $this->assertEmpty($return->getData('entity')->eyecatch);
@@ -174,17 +174,14 @@ class BcUploadBehaviorTest extends BcTestCase
     /**
      * After save
      *
-     * @param Model $Model
-     * @param Model $created
-     * @param Model $options
      * @return boolean
      */
     public function testAfterSave()
     {
         $this->getRequest('/baser/admin/');
         touch($this->savePath . 'test.png');
-        $this->BcUploadBehavior->BcUpload->setUploadingFiles(['eyecatch' => ['name' => 'test.png', 'ext' => 'png']]);
-        $this->BcUploadBehavior->BcUpload->uploaded[$this->table->getAlias()] = true;
+        $this->BcUploadBehavior->BcUpload[$this->table->getAlias()]->setUploadingFiles(['eyecatch' => ['name' => 'test.png', 'ext' => 'png']]);
+        $this->BcUploadBehavior->BcUpload[$this->table->getAlias()]->uploaded = true;
         $entity = $this->table->get(1);
         $entity->eyecatch = 'test.png';
         $return = $this->table->dispatchEvent('Model.afterSave', ['entity' => $entity, 'options' => new ArrayObject()]);
@@ -201,7 +198,7 @@ class BcUploadBehaviorTest extends BcTestCase
     {
         touch($this->uploadedData['eyecatch']['tmp_name']);
         $entity = $this->BcUploadBehavior->saveTmpFiles($this->uploadedData, 1);
-        $tmpId = $this->BcUploadBehavior->BcUpload->tmpId;
+        $tmpId = $this->BcUploadBehavior->BcUpload[$this->table->getAlias()]->tmpId;
         $this->assertEquals("00000001_eyecatch.png", $entity->eyecatch_tmp, 'saveTmpFiles()の返り値が正しくありません');
         $this->assertEquals(1, $tmpId, 'tmpIdが正しく設定されていません');
         @unlink($this->uploadedData['tmp_name']);
@@ -216,7 +213,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testBeforeDelete()
     {
-        $this->BcUploadBehavior->BcUpload->setupRequestData([]);
+        $this->BcUploadBehavior->BcUpload[$this->table->getAlias()]->setupRequestData([]);
         $filePath = $this->savePath . 'test.png';
         touch($filePath);
         $trash = $this->ContentService->getIndex(['withTrash' => true, 'deleted_date!' => null])->first();
@@ -232,10 +229,10 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testGetSettingsAndSetSettings()
     {
-        $settings = $this->BcUploadBehavior->getSettings($this->table->getAlias());
+        $settings = $this->BcUploadBehavior->getSettings();
         $this->assertIsArray($settings);
-        $this->BcUploadBehavior->setSettings($this->table->getAlias(), []);
-        $settings = $this->BcUploadBehavior->getSettings($this->table->getAlias());
+        $this->BcUploadBehavior->setSettings([]);
+        $settings = $this->BcUploadBehavior->getSettings();
         $this->assertEmpty($settings);
     }
 
@@ -244,7 +241,7 @@ class BcUploadBehaviorTest extends BcTestCase
      */
     public function testGetSaveDir()
     {
-        $dir = $this->BcUploadBehavior->getSaveDir($this->table->getAlias());
+        $dir = $this->BcUploadBehavior->getSaveDir();
         $this->assertEquals('/var/www/html/webroot/files/contents/', $dir);
     }
 
