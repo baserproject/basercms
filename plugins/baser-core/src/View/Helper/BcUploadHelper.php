@@ -127,7 +127,7 @@ class BcUploadHelper  extends Helper
             $value = $options['value'];
         }
 
-        $sessionKey = $this->getSourceValue($fieldName . '_tmp');
+        $sessionKey = $this->BcAdminForm->getSourceValue($fieldName . '_tmp');
         if ($sessionKey) {
             $tmp = true;
             $value = str_replace('/', '_', $sessionKey);

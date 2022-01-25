@@ -38,6 +38,16 @@ class PagesController extends BcAdminAppController
 	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['useForm' => true, 'useViewCache' => true]];
     <<< */
 
+    /**
+     * initialize
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->loadComponent('BaserCore.BcAdminContents');
+    }
+
 	/**
 	 * beforeFilter
 	 *
@@ -270,7 +280,7 @@ class PagesController extends BcAdminAppController
             'Page' => $page,
             'Content' => $page->content,
         ];
-		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink', 'contentEntities'));
+		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink', 'contentEntities', 'page'));
 
 		$this->render('form');
 	}
